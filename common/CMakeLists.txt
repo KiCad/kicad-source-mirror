@@ -275,7 +275,6 @@ set( PLUGINS_ALTIUM_SRCS
     plugins/altium/altium_parser.cpp
     )
 
-    
 set( PLUGINS_CADSTAR_SRCS
     plugins/cadstar/cadstar_archive_parser.cpp
     )

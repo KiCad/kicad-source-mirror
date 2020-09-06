@@ -89,7 +89,7 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
         { AltiumDesignerPcbFileWildcard(),      IO_MGR::ALTIUM_DESIGNER },       // Import Altium Designer board files
         { AltiumCircuitStudioPcbFileWildcard(), IO_MGR::ALTIUM_CIRCUIT_STUDIO }, // Import Altium Circuit Studio board files
         { AltiumCircuitMakerPcbFileWildcard(),  IO_MGR::ALTIUM_CIRCUIT_MAKER },  // Import Altium Circuit Maker board files
-        { CadstarArchivePcbFileWildcard(),      IO_MGR::CADSTAR_PCB_ARCHIVE },   // Import Cadstar PCB Archive board files
+        { CadstarPcbArchiveFileWildcard(),      IO_MGR::CADSTAR_PCB_ARCHIVE },   // Import Cadstar PCB Archive board files
     };
     // clang-format on
 

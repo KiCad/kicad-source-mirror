@@ -1,4 +1,3 @@
-
 # Sources for the pcbnew PLUGIN called CADSTAR_PCB_ARCHIVE_PLUGIN
 include_directories( . )
 

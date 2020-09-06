@@ -270,7 +270,7 @@ wxString EaglePcbFileWildcard()
     return _( "Eagle ver. 6.x XML PCB files" ) + AddFileExtListToFilter( { "brd" } );
 }
 
-wxString CadstarArchivePcbFileWildcard()
+wxString CadstarPcbArchiveFileWildcard()
 {
     return _( "CADSTAR PCB Archive files" ) + AddFileExtListToFilter( { "cpa" } );
 }

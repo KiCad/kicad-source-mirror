@@ -196,7 +196,7 @@ extern wxString AltiumSchematicFileWildcard();
 extern wxString EagleSchematicFileWildcard();
 extern wxString EagleFilesWildcard();
 extern wxString PCadPcbFileWildcard();
-extern wxString CadstarArchivePcbFileWildcard();
+extern wxString CadstarPcbArchiveFileWildcard();
 extern wxString AltiumDesignerPcbFileWildcard();
 extern wxString AltiumCircuitStudioPcbFileWildcard();
 extern wxString AltiumCircuitMakerPcbFileWildcard();

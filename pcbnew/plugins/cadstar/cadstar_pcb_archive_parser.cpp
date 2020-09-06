@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 Roberto Fernandez Bautista <@Qbort>
+ * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
  * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -134,6 +134,7 @@ CADSTAR_PCB_ARCHIVE_PARSER::JUSTIFICATION CADSTAR_PCB_ARCHIVE_PARSER::ParseJusti
     return JUSTIFICATION::LEFT;
 }
 
+
 CADSTAR_PCB_ARCHIVE_PARSER::READABILITY CADSTAR_PCB_ARCHIVE_PARSER::ParseReadability( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "READABILITY" ) );
@@ -149,6 +150,7 @@ CADSTAR_PCB_ARCHIVE_PARSER::READABILITY CADSTAR_PCB_ARCHIVE_PARSER::ParseReadabi
 
     return READABILITY::BOTTOM_TO_TOP;
 }
+
 
 CADSTAR_PCB_ARCHIVE_PARSER::ANGUNITS CADSTAR_PCB_ARCHIVE_PARSER::ParseAngunits( XNODE* aNode )
 {
@@ -786,6 +788,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::FONT::Parse( XNODE* aNode )
     }
 }
 
+
 void CADSTAR_PCB_ARCHIVE_PARSER::TEXTCODE::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "TEXTCODE" ) );
@@ -983,6 +986,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PAD_SHAPE::Parse( XNODE* aNode )
         break;
     }
 }
+
 
 void CADSTAR_PCB_ARCHIVE_PARSER::PADREASSIGN::Parse( XNODE* aNode )
 {
@@ -1803,6 +1807,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TEXT_LOCATION::Parse( XNODE* aNode )
     }
 }
 
+
 void CADSTAR_PCB_ARCHIVE_PARSER::TEXT::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "TEXT" ) );
@@ -2054,13 +2059,14 @@ bool CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::IsDimension( XNODE* aNode )
         return false;
 }
 
+
 void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::Parse( XNODE* aNode )
 {
     wxASSERT( IsDimension( aNode ) );
 
     std::map<wxString, TYPE> typeMap = {
-        { wxT( "LINEARDIM" ), TYPE::LINEARDIM }, /////////////////////////////////////////////
-        { wxT( "LEADERDIM" ), TYPE::LEADERDIM }, /////////////////////////////////////////////
+        { wxT( "LINEARDIM" ), TYPE::LINEARDIM },
+        { wxT( "LEADERDIM" ), TYPE::LEADERDIM },
         { wxT( "ANGLEDIM" ), TYPE::ANGLEDIM }
     };
 
@@ -2073,11 +2079,11 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::Parse( XNODE* aNode )
     wxString subTypeStr = GetXmlAttributeIDString( aNode, 2 );
 
     std::map<wxString, SUBTYPE> subTypeMap = {
-        { wxT( "DIMENSION_ORTHOGONAL" ), SUBTYPE::ORTHOGONAL }, //////////////////////////////
-        { wxT( "DIMENSION_DIRECT" ), SUBTYPE::DIRECT },         //////////////////////////////
-        { wxT( "DIMENSION_ANGLED" ), SUBTYPE::ANGLED },         //////////////////////////////
-        { wxT( "DIMENSION_DIAMETER" ), SUBTYPE::DIAMETER },     //////////////////////////////
-        { wxT( "DIMENSION_RADIUS" ), SUBTYPE::RADIUS },         //////////////////////////////
+        { wxT( "DIMENSION_ORTHOGONAL" ), SUBTYPE::ORTHOGONAL },
+        { wxT( "DIMENSION_DIRECT" ), SUBTYPE::DIRECT },
+        { wxT( "DIMENSION_ANGLED" ), SUBTYPE::ANGLED },
+        { wxT( "DIMENSION_DIAMETER" ), SUBTYPE::DIAMETER },
+        { wxT( "DIMENSION_RADIUS" ), SUBTYPE::RADIUS },
         { wxT( "DIMENSION_ANGULAR" ), SUBTYPE::ANGULAR }
     };
 
@@ -2153,6 +2159,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::Parse( XNODE* aNode )
         }
     }
 }
+
 
 void CADSTAR_PCB_ARCHIVE_PARSER::SYMDEF::Parse( XNODE* aNode )
 {
@@ -2309,6 +2316,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PART::DEFINITION::GATE::Parse( XNODE* aNode )
     CheckNoChildNodes( aNode );
 }
 
+
 CADSTAR_PCB_ARCHIVE_PARSER::PART::PIN_TYPE CADSTAR_PCB_ARCHIVE_PARSER::PART::GetPinType(
         XNODE* aNode )
 {
@@ -2317,15 +2325,15 @@ CADSTAR_PCB_ARCHIVE_PARSER::PART::PIN_TYPE CADSTAR_PCB_ARCHIVE_PARSER::PART::Get
     wxString pinTypeStr = GetXmlAttributeIDString( aNode, 0 );
 
     std::map<wxString, PIN_TYPE> pinTypeMap = {
-        { wxT( "INPUT" ), PIN_TYPE::INPUT },                 ////////////////////////////////
-        { wxT( "OUTPUT_OR" ), PIN_TYPE::OUTPUT_OR },         ////////////////////////////////
-        { wxT( "OUTPUT_NOT_OR" ), PIN_TYPE::OUTPUT_NOT_OR }, ////////////////////////////////
-        { wxT( "OUTPUT_NOT_NORM_OR" ), PIN_TYPE::OUTPUT_NOT_NORM_OR }, //////////////////////
-        { wxT( "POWER" ), PIN_TYPE::POWER },   //////////////////////////////////////////////
-        { wxT( "GROUND" ), PIN_TYPE::GROUND }, //////////////////////////////////////////////
-        { wxT( "TRISTATE_BIDIR" ), PIN_TYPE::TRISTATE_BIDIR },  /////////////////////////////
-        { wxT( "TRISTATE_INPUT" ), PIN_TYPE::TRISTATE_INPUT },  /////////////////////////////
-        { wxT( "TRISTATE_DRIVER" ), PIN_TYPE::TRISTATE_DRIVER } /////////////////////////////
+        { wxT( "INPUT" ), PIN_TYPE::INPUT },
+        { wxT( "OUTPUT_OR" ), PIN_TYPE::OUTPUT_OR },
+        { wxT( "OUTPUT_NOT_OR" ), PIN_TYPE::OUTPUT_NOT_OR },
+        { wxT( "OUTPUT_NOT_NORM_OR" ), PIN_TYPE::OUTPUT_NOT_NORM_OR },
+        { wxT( "POWER" ), PIN_TYPE::POWER },
+        { wxT( "GROUND" ), PIN_TYPE::GROUND },
+        { wxT( "TRISTATE_BIDIR" ), PIN_TYPE::TRISTATE_BIDIR },
+        { wxT( "TRISTATE_INPUT" ), PIN_TYPE::TRISTATE_INPUT },
+        { wxT( "TRISTATE_DRIVER" ), PIN_TYPE::TRISTATE_DRIVER }
     };
 
     if( pinTypeMap.find( pinTypeStr ) == pinTypeMap.end() )
@@ -2394,6 +2402,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PART::PART_PIN::Parse( XNODE* aNode )
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
     }
 }
+
 
 void CADSTAR_PCB_ARCHIVE_PARSER::PART::DEFINITION::PIN_EQUIVALENCE::Parse( XNODE* aNode )
 {
@@ -2579,6 +2588,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PARTS::Parse( XNODE* aNode )
     }
 }
 
+
 void CADSTAR_PCB_ARCHIVE_PARSER::BOARD::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "BOARD" ) );
@@ -2618,6 +2628,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::BOARD::Parse( XNODE* aNode )
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
     }
 }
+
 
 void CADSTAR_PCB_ARCHIVE_PARSER::AREA::Parse( XNODE* aNode )
 {
@@ -2885,6 +2896,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::ATTRIBUTE_LOCATION::Parse( XNODE* aNode )
     }
 }
 
+
 CADSTAR_PCB_ARCHIVE_PARSER::TESTLAND_SIDE CADSTAR_PCB_ARCHIVE_PARSER::ParseTestlandSide(
         XNODE* aNode )
 {
@@ -2980,6 +2992,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET::COPPER_TERMINAL::Parse( XNODE* aNode )
     CopperID      = GetXmlAttributeIDString( aNode, 1 );
     CopperTermNum = GetXmlAttributeIDLong( aNode, 2 );
 }
+
 
 XNODE* CADSTAR_PCB_ARCHIVE_PARSER::NET::ROUTE_VERTEX::Parse( XNODE* aNode )
 {
@@ -3078,6 +3091,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET::CONNECTION::Parse( XNODE* aNode )
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "CONN" ) );
     }
 }
+
 
 void CADSTAR_PCB_ARCHIVE_PARSER::NET::Parse( XNODE* aNode )
 {
@@ -3491,8 +3505,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYOUT::Parse( XNODE* aNode )
         if( !netSynchParsed && cNodeName == wxT( "NETSYNCH" ) )
         {
             std::map<wxString, NETSYNCH> netSynchMap = {
-                { wxT( "WARNING" ), NETSYNCH::WARNING }, //////////////////////////////////////////
-                { wxT( "FULL" ), NETSYNCH::FULL }        //////////////////////////////////////////
+                { wxT( "WARNING" ), NETSYNCH::WARNING },
+                { wxT( "FULL" ), NETSYNCH::FULL }
             };
 
             wxString nsString = GetXmlAttributeIDString( cNode, 0 );

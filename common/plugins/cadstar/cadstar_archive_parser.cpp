@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 Roberto Fernandez Bautista <@Qbort>
+ * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
  * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -293,6 +293,7 @@ void CADSTAR_ARCHIVE_PARSER::ParseChildEValue( XNODE* aNode, EVALUE& aValueToPar
     }
 }
 
+
 std::vector<CADSTAR_ARCHIVE_PARSER::POINT> CADSTAR_ARCHIVE_PARSER::ParseAllChildPoints(
         XNODE* aNode, bool aTestAllChildNodes, int aExpectedNumPoints )
 {
@@ -369,6 +370,7 @@ std::vector<CADSTAR_ARCHIVE_PARSER::CUTOUT> CADSTAR_ARCHIVE_PARSER::ParseAllChil
     return retVal;
 }
 
+
 void CADSTAR_ARCHIVE_PARSER::CUTOUT::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "CUTOUT" ) );
@@ -387,6 +389,7 @@ bool CADSTAR_ARCHIVE_PARSER::SHAPE::IsShape( XNODE* aNode )
     else
         return false;
 }
+
 
 void CADSTAR_ARCHIVE_PARSER::SHAPE::Parse( XNODE* aNode )
 {

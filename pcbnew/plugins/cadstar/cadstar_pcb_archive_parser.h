@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 Roberto Fernandez Bautista <@Qbort>
+ * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
  * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -236,6 +236,7 @@ public:
         BELOW
     };
 
+
     struct LAYER
     {
         LAYER_ID          ID;
@@ -279,6 +280,7 @@ public:
         DASHDOTDOT,
         DOT
     };
+
 
     struct LINECODE
     {
@@ -379,6 +381,7 @@ public:
 
         void Parse( XNODE* aNode );
     };
+
 
     struct SPACINGCODE
     {
@@ -611,7 +614,6 @@ public:
         void Parse( XNODE* aNode );
     };
 
-
     /**
      * @brief From CADSTAR Help: "Text Alignment enables you to define the position of an alignment
      * origin for all text items in CADSTAR. The alignment origin is a point on or within the text
@@ -643,6 +645,7 @@ public:
         BOTTOMRIGHT
     };
 
+
     static ALIGNMENT ParseAlignment( XNODE* aNode );
 
     /**
@@ -661,6 +664,7 @@ public:
         RIGHT
     };
 
+
     static JUSTIFICATION ParseJustification( XNODE* aNode );
 
     /**
@@ -676,6 +680,7 @@ public:
         BOTTOM_TO_TOP, ///< When text is vertical, show it rotated 90 degrees anticlockwise
         TOP_TO_BOTTOM  ///< When text is vertical, show it rotated 90 degrees clockwise
     };
+
 
     static READABILITY ParseReadability( XNODE* aNode );
 
@@ -698,6 +703,7 @@ public:
 
         void Parse( XNODE* aNode );
     };
+
 
     struct ATTRIBUTE_VALUE
     {
@@ -783,9 +789,11 @@ public:
         void Parse( XNODE* aNode );
     };
 
+
     //.................................
     // ASSIGNMENTS -> TECHNOLOGY
     //.................................
+
 
     enum class UNITS
     {
@@ -797,7 +805,9 @@ public:
         METER
     };
 
+
     static UNITS ParseUnits( XNODE* aNode );
+
 
     struct TECHNOLOGY_SECTION
     {
@@ -836,9 +846,11 @@ public:
         void Parse( XNODE* aNode );
     };
 
+
     //.................................
     // ASSIGNMENTS -> GRIDS
     //.................................
+
 
     enum class GRID_TYPE
     {
@@ -891,7 +903,6 @@ public:
         void Parse( XNODE* aNode );
     };
 
-
     /**
      * @brief Corresponds to "Display when" Item property. From CADSTAR
      *        Help: "This parameter enables you to make the visibility of
@@ -909,7 +920,9 @@ public:
         BOTH            ///< Always display (Mirrored and Unmirrored)
     };
 
+
     static SWAP_RULE ParseSwapRule( XNODE* aNode );
+
 
     struct REUSEBLOCK
     {
@@ -1008,7 +1021,6 @@ public:
         void Parse( XNODE* aNode );
     };
 
-
     /**
      * @brief From CADSTAR Help: "This parameter indicates the physical layers on which the selected 
      * pad is placed. Note: When you change the Side parameter in PCB Design, the Side assigned to the
@@ -1022,7 +1034,6 @@ public:
                      ///< side). Normally used for surface mount devices.
         THROUGH_HOLE ///< All physical layers currently defined
     };
-
 
     /**
      * @brief From CADSTAR help: "For specifying the directions in which routes can enter or exit the
@@ -1138,6 +1149,7 @@ public:
         RADIANS
     };
 
+
     static ANGUNITS ParseAngunits( XNODE* aNode );
 
     /**
@@ -1152,6 +1164,7 @@ public:
             ANGLEDIM   ///< Angular Dimension
         };
 
+
         enum class SUBTYPE
         {
             ORTHOGONAL, ///< An orthogonal dimension (either x or y measurement)
@@ -1165,6 +1178,7 @@ public:
             RADIUS,     ///< token=DIMENSION_RADIUS
             ANGULAR     ///< token=DIMENSION_ANGULAR
         };
+
 
         struct ARROW //"DIMARROW"
         {
@@ -1276,7 +1290,6 @@ public:
             static bool IsLine( XNODE* aNode );
             void        Parse( XNODE* aNode );
         };
-
 
         TYPE         Type;
         DIMENSION_ID ID;             ///< Some ID (doesn't seem to be used) subnode="DIMREF"
@@ -1401,6 +1414,7 @@ public:
         void Parse( XNODE* aNode );
     };
 
+
     struct PART
     {
         enum class PIN_TYPE
@@ -1417,7 +1431,9 @@ public:
             TRISTATE_DRIVER     ///< Tristate output pin
         };
 
+
         static PIN_TYPE GetPinType( XNODE* aNode );
+
 
         struct DEFINITION ///< "PARTDEFINITION" node name
         {
@@ -1484,6 +1500,7 @@ public:
                 void Parse( XNODE* aNode );
             };
 
+
             struct PIN_EQUIVALENCE ///< "PINEQUIVALENCE" Node name (represents "Equivalence")
             {
                 std::vector<PART_DEFINITION_PIN_ID> PinIDs; ///< All the pins in this vector are
@@ -1501,6 +1518,7 @@ public:
 
                 void Parse( XNODE* aNode );
             };
+
 
             struct SWAP_GROUP
             {
@@ -1583,6 +1601,7 @@ public:
         void Parse( XNODE* aNode );
     };
 
+
     struct PARTS
     {
         std::map<PART_ID, PART> PartDefinitions;
@@ -1659,6 +1678,7 @@ public:
         void Parse( XNODE* aNode );
     };
 
+
     struct COMPONENT
     {
         COMPONENT_ID ID;
@@ -1720,6 +1740,7 @@ public:
         void Parse( XNODE* aNode );
     };
 
+
     enum class TESTLAND_SIDE
     {
         NONE,
@@ -1730,6 +1751,7 @@ public:
 
 
     static TESTLAND_SIDE ParseTestlandSide( XNODE* aNode );
+
 
     struct NET
     {

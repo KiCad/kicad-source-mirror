@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 Roberto Fernandez Bautista <@Qbort>
+ * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
  * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -23,8 +23,8 @@
  * @brief Helper functions and common defines between schematic and PCB Archive files
  */
 
-#ifndef CADSTAR_ARHIVE_PARSER_H_
-#define CADSTAR_ARHIVE_PARSER_H_
+#ifndef CADSTAR_ARCHIVE_PARSER_H_
+#define CADSTAR_ARCHIVE_PARSER_H_
 
 #include <dsnlexer.h>
 #include <macros.h>
@@ -52,7 +52,7 @@
 
 /**
  * @brief Helper functions and common structures for CADSTAR PCB and Schematic archive files.
-*/
+ */
 class CADSTAR_ARCHIVE_PARSER
 {
 public:
@@ -82,7 +82,7 @@ public:
         void Parse( XNODE* aNode );
     };
 
-    
+
     struct LONGPOINT
     {
         long x = UNDEFINED_VALUE;
@@ -101,7 +101,6 @@ public:
         ANTICLOCKWISE_SEMICIRCLE
     };
 
-
     /**
      * @brief Represents a vertex in a shape. E.g. A circle is made by two semicircles with the same
      * center point.
@@ -115,7 +114,6 @@ public:
         static bool IsVertex( XNODE* aNode );
         void        Parse( XNODE* aNode );
     };
-
 
     /**
      * @brief Represents a cutout in a closed shape (e.g. OUTLINE)
@@ -170,7 +168,6 @@ public:
      */
     static bool IsValidAttribute( wxXmlAttribute* aAttribute );
 
-
     /**
      * @brief 
      * @param aNode 
@@ -179,7 +176,6 @@ public:
      * @throws IO_ERROR if attribute does not exist
      */
     static wxString GetXmlAttributeIDString( XNODE* aNode, unsigned int aID );
-
 
     /**
      * @brief 
@@ -190,14 +186,12 @@ public:
      */
     static long GetXmlAttributeIDLong( XNODE* aNode, unsigned int aID );
 
-
     /**
      * @brief 
      * @param aNode 
      * @throw IO_ERROR if a child node was found
      */
     static void CheckNoChildNodes( XNODE* aNode );
-
 
     /**
      * @brief 
@@ -206,7 +200,6 @@ public:
      */
     static void CheckNoNextNodes( XNODE* aNode );
 
-
     /**
      * @brief
      * @param aNode with a child node containing an EVALUE
@@ -214,7 +207,6 @@ public:
      * @throw IO_ERROR if unable to parse or node is not an EVALUE
      */
     static void ParseChildEValue( XNODE* aNode, EVALUE& aValueToParse );
-
 
     /**
      * @brief if no childs are present, it just returns an empty
@@ -231,7 +223,6 @@ public:
     static std::vector<POINT> ParseAllChildPoints( XNODE* aNode, bool aTestAllChildNodes = false,
             int aExpectedNumPoints = UNDEFINED_VALUE );
 
-
     /**
      * @brief if no childs are present, it just returns an empty
      *        vector (without throwing an exception)
@@ -246,7 +237,6 @@ public:
     static std::vector<VERTEX> ParseAllChildVertices(
             XNODE* aNode, bool aTestAllChildNodes = false );
 
-
     /**
      * @brief if no childs are present, it just returns an empty
      *        vector (without throwing an exception)
@@ -260,8 +250,6 @@ public:
      */
     static std::vector<CUTOUT> ParseAllChildCutouts(
             XNODE* aNode, bool aTestAllChildNodes = false );
+}; // class CADSTAR_ARCHIVE_PARSER
 
-
-}; // class CADSTAR_ARHIVE_PARSER
-
-#endif // CADSTAR_ARHIVE_PARSER_H_
+#endif // CADSTAR_ARCHIVE_PARSER_H_

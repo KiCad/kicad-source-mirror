@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 Roberto Fernandez Bautista <@Qbort>
+ * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
  * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -47,6 +47,7 @@ public:
         mNumNets                 = 0;
     }
 
+
     ~CADSTAR_PCB_ARCHIVE_LOADER()
     {
         for( std::pair<SYMDEF_ID, MODULE*> libItem : mLibraryMap )
@@ -63,6 +64,7 @@ public:
      * @param aBoard 
      */
     void Load( ::BOARD* aBoard );
+
 
 private:
     ::BOARD*                         mBoard;
@@ -119,7 +121,9 @@ private:
     void loadComponentAttributes( const COMPONENT& aComponent, MODULE* aModule );
     void loadNetTracks( const NET_ID& aCadstarNetID, const NET::ROUTE& aCadstarRoute );
     void loadNetVia( const NET_ID& aCadstarNetID, const NET::VIA& aCadstarVia );
+    void checkAndLogHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
 
+    //Helper functions for drawing /loading objects onto screen:
     /**
      * @brief 
      * @param aCadstarText 
@@ -288,15 +292,8 @@ private:
             const ATTRIBUTE_ID& aCadstarAttributeID, MODULE* aModule,
             const wxString& aAttributeValue );
 
-    /**
-     * @brief If the LineCode ID is found, returns the thickness as defined in the Linecode,
-     *  otherwise returns the default line thickness in Edge_Cuts KiCad layer
-     * @param aCadstarLineCodeID 
-     * @return 
-     */
-    int getLineThickness( const LINECODE_ID& aCadstarLineCodeID );
-
-
+    //Helper Functions for obtaining CADSTAR elements in the parsed structures
+    int        getLineThickness( const LINECODE_ID& aCadstarLineCodeID );
     COPPERCODE getCopperCode( const COPPERCODE_ID& aCadstaCopperCodeID );
     HATCHCODE  getHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
     LAYERPAIR  getLayerPair( const LAYERPAIR_ID& aCadstarLayerPairID );
@@ -305,13 +302,11 @@ private:
     ROUTECODE  getRouteCode( const ROUTECODE_ID& aCadstarRouteCodeID );
     TEXTCODE   getTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
     VIACODE    getViaCode( const VIACODE_ID& aCadstarViaCodeID );
-
-    wxString getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
-
-    wxString getAttributeValue( const ATTRIBUTE_ID&        aCadstarAttributeID,
+    wxString   getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
+    wxString  getAttributeValue( const ATTRIBUTE_ID&        aCadstarAttributeID,
             const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>& aCadstarAttributeMap );
 
-    void      checkAndLogHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
+    // Helper Functions for obtaining individual elements as KiCad elements:
     double    getHatchCodeAngleDegrees( const HATCHCODE_ID& aCadstarHatchcodeID );
     MODULE*   getModuleFromCadstarID( const COMPONENT_ID& aCadstarComponentID );
     int       getKiCadHatchCodeThickness( const HATCHCODE_ID& aCadstarHatchcodeID );
@@ -369,14 +364,12 @@ private:
      */
     NETINFO_ITEM* getKiCadNet( const NET_ID& aCadstarNetID );
 
-
     /**
      * @brief 
      * @param aLayerNum Physical / logical layer number (starts at 1)
      * @return PCB_LAYER_ID
      */
     PCB_LAYER_ID getKiCadCopperLayerID( unsigned int aLayerNum );
-
 
     /**
      * @brief 
@@ -385,14 +378,12 @@ private:
      */
     bool isLayerSet( const LAYER_ID& aCadstarLayerID );
 
-
     /**
      * @brief 
      * @param aCadstarLayerID 
      * @return PCB_LAYER_ID
      */
     PCB_LAYER_ID getKiCadLayer( const LAYER_ID& aCadstarLayerID );
-
 
     /**
      * @brief 

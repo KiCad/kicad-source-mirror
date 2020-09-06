@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 Roberto Fernandez Bautista <@Qbort>
+ * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
  * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -38,6 +38,7 @@
 #include <trigo.h>
 
 #include <limits> // std::numeric_limits
+
 
 void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
 {
@@ -397,12 +398,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
     BOARD_DESIGN_SETTINGS&                 ds = mBoard->GetDesignSettings();
     std::map<SPACINGCODE_ID, SPACINGCODE>& spacingCodes   = Assignments.Codedefs.SpacingCodes;
 
-    auto applyRule = [&]( wxString aID, int* aVal ) {
-        if( spacingCodes.find( aID ) == spacingCodes.end() )
-            wxLogWarning( _( "Design rule %s was not found. This was ignored." ) );
-        else
-            *aVal = getKiCadLength( spacingCodes.at( aID ).Spacing );
-    };
+    auto applyRule =
+        [&]( wxString aID, int* aVal )
+        {
+            if( spacingCodes.find( aID ) == spacingCodes.end() )
+                wxLogWarning( _( "Design rule %s was not found. This was ignored." ) );
+            else
+                *aVal = getKiCadLength( spacingCodes.at( aID ).Spacing );
+        };
 
     //Note: for details on the different spacing codes see SPACINGCODE::ID
 
@@ -412,7 +415,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
 
     ds.m_TrackMinWidth = Assignments.Technology.MinRouteWidth;
 
-    auto applyNetClassRule = 
+    auto applyNetClassRule =
         [&]( wxString aID, ::NETCLASS* aNetClassPtr, void (::NETCLASS::*aFunc)(int) ) 
         {
             int value = -1;
@@ -646,6 +649,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadFigures()
         //TODO process attributes when KiCad Supports attributes in figures
     }
 }
+
 
 void CADSTAR_PCB_ARCHIVE_LOADER::loadTexts()
 {
@@ -1041,6 +1045,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
     }
 }
 
+
 void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
 {
     for( std::pair<NET_ID, NET> netPair : Layout.Nets )
@@ -1208,6 +1213,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetVia(
     via->SetNet( getKiCadNet( aCadstarNetID ) );
     ///todo add netcode to the via
 }
+
 
 void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
         BOARD_ITEM_CONTAINER* aContainer, const LAYER_ID& aCadstarLayerOverride,
@@ -2186,7 +2192,6 @@ PCB_LAYER_ID CADSTAR_PCB_ARCHIVE_LOADER::getKiCadCopperLayerID( unsigned int aLa
 
     switch( aLayerNum )
     {
-    // clang-format off
     case 1:   return PCB_LAYER_ID::F_Cu;
     case 2:   return PCB_LAYER_ID::In1_Cu;
     case 3:   return PCB_LAYER_ID::In2_Cu;
@@ -2218,9 +2223,8 @@ PCB_LAYER_ID CADSTAR_PCB_ARCHIVE_LOADER::getKiCadCopperLayerID( unsigned int aLa
     case 29:  return PCB_LAYER_ID::In28_Cu;
     case 30:  return PCB_LAYER_ID::In29_Cu;
     case 31:  return PCB_LAYER_ID::In30_Cu;
-    case 32:  return PCB_LAYER_ID::B_Cu;        
+    case 32:  return PCB_LAYER_ID::B_Cu;
     }
-    // clang-format on
 
     return PCB_LAYER_ID::UNDEFINED_LAYER;
 }
