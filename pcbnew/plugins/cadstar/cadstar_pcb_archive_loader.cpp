@@ -527,20 +527,22 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF& aComponent, MODU
         switch( csPadcode.Shape.ShapeType )
         {
         case PAD_SHAPE_TYPE::ANNULUS:
-            //todo fix: use custom shape instead
+            //todo fix: use custom shape instead (Donught shape, i.e. a circle with a hole)
             pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_CIRCLE );
             pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
                     getKiCadLength( csPadcode.Shape.Size ) } );
             break;
 
         case PAD_SHAPE_TYPE::BULLET:
-            //todo fix: use custom shape instead (a bullet has the left size flat and right
-            //side rounded, before rotation is applied)
-            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_OVAL );
+            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_CHAMFERED_RECT );
             pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
                                             + (long long) csPadcode.Shape.LeftLength
                                             + (long long) csPadcode.Shape.RightLength ),
                     getKiCadLength( csPadcode.Shape.Size ) } );
+            pad->SetChamferPositions( RECT_CHAMFER_POSITIONS::RECT_CHAMFER_BOTTOM_LEFT
+                                      | RECT_CHAMFER_POSITIONS::RECT_CHAMFER_TOP_LEFT );
+            pad->SetRoundRectRadiusRatio( 0.5 );
+            pad->SetChamferRectRatio( 0.0 );
             break;
 
         case PAD_SHAPE_TYPE::CIRCLE:
@@ -727,7 +729,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
             case DIMENSION::SUBTYPE::ORTHOGONAL:
             {
                 ::DIMENSION* dimension = new ::DIMENSION( mBoard );
-                TEXTCODE&    dimText   = getTextCode( csDim.Text.TextCodeID );
+                TEXTCODE     dimText   = getTextCode( csDim.Text.TextCodeID );
                 mBoard->Add( dimension, ADD_MODE::APPEND );
 
                 dimension->SetLayer( getKiCadLayer( csDim.LayerID ) );
