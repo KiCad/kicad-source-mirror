@@ -370,6 +370,8 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     m_refill = false;
     bool inDrag = false;
 
+    frame()->UndoRedoBlock( true );
+
     BOARD_COMMIT commit( editFrame );
     LSET snapLayers = item->GetLayerSet();
 
@@ -464,6 +466,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         m_editPoints.reset();
     }
 
+    frame()->UndoRedoBlock( false );
     frame()->UpdateMsgPanel();
 
     return 0;
@@ -547,28 +550,28 @@ void POINT_EDITOR::editArcEndpointKeepTangent( DRAWSEGMENT* aArc, VECTOR2I aCent
     bool   transformCircle = false;
 
     /*                    p2
-        *                     X***  
+        *                     X***
         *                         **  <---- This is the arc
         *            y ^            **
         *              |      R       *
-        *              | <-----------> * 
-        *       x------x------>--------x p1 
+        *              | <-----------> *
+        *       x------x------>--------x p1
         *     C' <----> C      x
         *         delta
-        * 
-        * p1 does not move, and the tangent at p1 remains the same. 
+        *
+        * p1 does not move, and the tangent at p1 remains the same.
         *  => The new center, C', will be on the C-p1 axis.
         * p2 moves
-        * 
+        *
         * The radius of the new circle is delta + R
-        * 
-        * || C' p2 || = || C' P1 || 
+        *
+        * || C' p2 || = || C' P1 ||
         * is the same as :
         * ( delta + p2.x ) ^ 2 + p2.y ^ 2 = ( R + delta ) ^ 2
-        * 
+        *
         * delta = ( R^2  - p2.x ^ 2 - p2.y ^2 ) / ( 2 * p2.x - 2 * R )
-        * 
-        * We can use this equation for any point p2 with p2.x < R 
+        *
+        * We can use this equation for any point p2 with p2.x < R
         */
 
     if( v2.x == R )
