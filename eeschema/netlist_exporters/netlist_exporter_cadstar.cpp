@@ -88,7 +88,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
             ret |= fprintf( f, "%s     ", TO_UTF8( StartCmpDesc ) );
             ret |= fprintf( f, "%s", TO_UTF8( msg ) );
 
-            msg = component->GetField( VALUE )->GetShownText();
+            msg = component->GetValue( &sheetList[i] );
             msg.Replace( wxT( " " ), wxT( "_" ) );
             ret |= fprintf( f, "     \"%s\"", TO_UTF8( msg ) );
             ret |= fprintf( f, "     \"%s\"", TO_UTF8( footprint ) );

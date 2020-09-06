@@ -70,12 +70,13 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
 
     if( m_symbol )
     {
+        SCH_SHEET_PATH* currentSheet = &aParent->Schematic().CurrentSheet();
+
         label.Printf( m_matchBySelection->GetLabel(), verb );
         m_matchBySelection->SetLabel( label );
         m_newId->AppendText( FROM_UTF8( m_symbol->GetLibId().Format().c_str() ) );
-        m_specifiedReference->ChangeValue(
-                m_symbol->GetRef( &aParent->Schematic().CurrentSheet() ) );
-        m_specifiedValue->ChangeValue( m_symbol->GetField( VALUE )->GetText() );
+        m_specifiedReference->ChangeValue( m_symbol->GetRef( currentSheet ) );
+        m_specifiedValue->ChangeValue( m_symbol->GetValue( currentSheet ) );
         m_specifiedId->ChangeValue( FROM_UTF8( m_symbol->GetLibId().Format().c_str() ) );
     }
     else
@@ -216,15 +217,23 @@ bool DIALOG_CHANGE_SYMBOLS::isMatch( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aIn
     wxCHECK( frame, false );
 
     if( m_matchAll->GetValue() )
+    {
         return true;
+    }
     else if( m_matchBySelection->GetValue() )
+    {
         return aSymbol == m_symbol;
+    }
     else if( m_matchByReference->GetValue() )
+    {
         return WildCompareString( m_specifiedReference->GetValue(), aSymbol->GetRef( aInstance ),
-                false );
+                                  false );
+    }
     else if( m_matchByValue->GetValue() )
-        return WildCompareString( m_specifiedValue->GetValue(),
-                aSymbol->GetField( VALUE )->GetText(), false );
+    {
+        return WildCompareString( m_specifiedValue->GetValue(), aSymbol->GetValue( aInstance ),
+                                  false );
+    }
     else if( m_matchById )
     {
         id.Parse( m_specifiedId->GetValue(), LIB_ID::ID_SCH );

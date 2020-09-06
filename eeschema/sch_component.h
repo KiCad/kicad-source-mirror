@@ -556,9 +556,21 @@ public:
     const wxString GetValue( const SCH_SHEET_PATH* sheet ) const;
     void SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValue );
 
+    // Set the value for all instances (the default GUI behaviour)
+    void SetValue( const wxString& aValue )
+    {
+        SetValue( nullptr, aValue );
+    }
+
     // Returns the instance-specific footprint assignment for the given sheet path.
     const wxString GetFootprint( const SCH_SHEET_PATH* sheet ) const;
     void SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& aFootprint );
+
+    // Set the value for all instances (the default GUI behaviour)
+    void SetFootprint( const wxString& aFootprint )
+    {
+        SetFootprint( nullptr, aFootprint );
+    }
 
     // Geometric transforms (used in block operations):
 

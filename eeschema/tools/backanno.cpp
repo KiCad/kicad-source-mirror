@@ -86,7 +86,9 @@ void SCH_EDITOR_CONTROL::BackAnnotateFootprints( const std::string& aChangedSetO
                     // Note: it can be not unique (multiple parts per package)
                     // So we *do not* stop the search here
                     SCH_COMPONENT*  component = refs[ii].GetComp();
-                    SCH_SHEET_PATH* sheetPath = &refs[ii].GetSheetPath();
+                    // For backwards-compatibility CvPcb currently updates all instances of a
+                    // component (even though it lists these instances separately).
+                    SCH_SHEET_PATH* sheetPath = nullptr;    // &refs[ii].GetSheetPath();
                     wxString        oldfp = refs[ii].GetFootprint();
 
                     if( oldfp.IsEmpty() && component->GetField( FOOTPRINT )->IsVisible() )

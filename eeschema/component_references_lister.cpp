@@ -686,8 +686,8 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibPart,
 
     m_NumRef = -1;
 
-    if( aComponent->GetField( VALUE )->GetText().IsEmpty() )
-        aComponent->GetField( VALUE )->SetText( wxT( "~" ) );
+    if( aComponent->GetValue( &aSheetPath ).IsEmpty() )
+        aComponent->SetValue( &aSheetPath, wxT( "~" ) );
 
     m_Value = aComponent->GetValue( &aSheetPath );
 }

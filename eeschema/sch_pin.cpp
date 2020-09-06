@@ -183,8 +183,11 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     msg = MessageTextFromValue( aFrame->GetUserUnits(), m_position.y, true );
     aList.emplace_back( _( "Pos Y" ), msg, DARKMAGENTA );
 
-    aList.emplace_back( GetParentComponent()->GetField( REFERENCE )->GetShownText(),
-                        GetParentComponent()->GetField( VALUE )->GetShownText(), DARKCYAN );
+    SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
+    SCH_SHEET_PATH* currentSheet = schframe ? &schframe->GetCurrentSheet() : nullptr;
+    SCH_COMPONENT*  comp = GetParentComponent();
+
+    aList.emplace_back( comp->GetRef( currentSheet ), comp->GetValue( currentSheet ), DARKCYAN );
 
 #if defined(DEBUG)
 

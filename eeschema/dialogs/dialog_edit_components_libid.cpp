@@ -756,7 +756,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
 
             // If value is a proxy for the itemName then make sure it gets updated
             if( cmp.m_Component->GetLibId().GetLibItemName().wx_str() == value->GetText() )
-                value->SetText( id.GetLibItemName().wx_str() );
+                cmp.m_Component->SetValue( id.GetLibItemName().wx_str() );
 
             cmp.m_Component->SetLibId( id );
             cmp.m_Component->SetLibSymbol( symbol->Flatten().release() );

@@ -248,6 +248,8 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
     {
         auto component = static_cast<SCH_COMPONENT*>( item );
         component->GetField( REFERENCE )->SetText( component->GetRef( this ) );
+        component->GetField( VALUE )->SetText( component->GetValue( this ) );
+        component->GetField( FOOTPRINT )->SetText( component->GetFootprint( this ) );
         component->UpdateUnit( component->GetUnitSelection( this ) );
     }
 }

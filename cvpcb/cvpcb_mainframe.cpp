@@ -587,17 +587,9 @@ void CVPCB_MAINFRAME::SetFootprintFilter( FOOTPRINTS_LISTBOX::FP_FILTER_T aFilte
     // Apply the filter accordingly
     switch( aAction )
     {
-    case CVPCB_MAINFRAME::FILTER_DISABLE:
-        m_filteringOptions &= ~option;
-        break;
-
-    case CVPCB_MAINFRAME::FILTER_ENABLE:
-        m_filteringOptions |= option;
-        break;
-
-    case CVPCB_MAINFRAME::FILTER_TOGGLE:
-        m_filteringOptions ^= option;
-        break;
+    case CVPCB_MAINFRAME::FILTER_DISABLE: m_filteringOptions &= ~option; break;
+    case CVPCB_MAINFRAME::FILTER_ENABLE:  m_filteringOptions |= option;  break;
+    case CVPCB_MAINFRAME::FILTER_TOGGLE:  m_filteringOptions ^= option;  break;
     }
 
     wxListEvent l_event;

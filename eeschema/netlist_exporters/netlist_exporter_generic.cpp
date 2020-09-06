@@ -121,20 +121,20 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
                 // The lowest unit number wins.  User should only set fields in any one unit.
                 // remark: IsVoid() returns true for empty strings or the "~" string (empty
                 // field value)
-                if( !comp2->GetField( VALUE )->IsVoid()
+                if( !comp2->GetValue( &sheetList[i] ).IsEmpty()
                         && ( unit < minUnit || fields.value.IsEmpty() ) )
                 {
                     if( m_resolveTextVars )
-                        fields.value = comp2->GetField( VALUE )->GetShownText();
+                        fields.value = comp2->GetValue( &sheetList[i] );
                     else
                         fields.value = comp2->GetField( VALUE )->GetText();
                 }
 
-                if( !comp2->GetField( FOOTPRINT )->IsVoid()
+                if( !comp2->GetFootprint( &sheetList[i] ).IsEmpty()
                         && ( unit < minUnit || fields.footprint.IsEmpty() ) )
                 {
                     if( m_resolveTextVars )
-                        fields.footprint = comp2->GetField( FOOTPRINT )->GetShownText();
+                        fields.footprint = comp2->GetFootprint( &sheetList[i] );
                     else
                         fields.footprint = comp2->GetField( FOOTPRINT )->GetText();
                 }

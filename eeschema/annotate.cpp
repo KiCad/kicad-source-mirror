@@ -216,13 +216,13 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
             if( comp->GetUnitCount() > 1 )
                 msg.Printf( _( "Updated %s (unit %s) from %s to %s" ),
-                            comp->GetField( VALUE )->GetShownText(),
+                            comp->GetValue( sheet ),
                             LIB_PART::SubReference( comp->GetUnit(), false ),
                             prevRef,
                             newRef );
             else
                 msg.Printf( _( "Updated %s from %s to %s" ),
-                            comp->GetField( VALUE )->GetShownText(),
+                            comp->GetValue( sheet ),
                             prevRef,
                             newRef );
         }
@@ -230,12 +230,12 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
         {
             if( comp->GetUnitCount() > 1 )
                 msg.Printf( _( "Annotated %s (unit %s) as %s" ),
-                            comp->GetField( VALUE )->GetShownText(),
+                            comp->GetValue( sheet ),
                             LIB_PART::SubReference( comp->GetUnit(), false ),
                             newRef );
             else
                 msg.Printf( _( "Annotated %s as %s" ),
-                            comp->GetField( VALUE )->GetShownText(),
+                            comp->GetValue( sheet ),
                             newRef );
         }
 

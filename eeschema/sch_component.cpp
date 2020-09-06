@@ -569,7 +569,7 @@ const wxString SCH_COMPONENT::GetValue( const SCH_SHEET_PATH* sheet ) const
 
     for( const COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
-        if( instance.m_Path == path && !instance.m_Footprint.IsEmpty() )
+        if( instance.m_Path == path && !instance.m_Value.IsEmpty() )
         {
             SCH_FIELD dummy( wxDefaultPosition, VALUE, const_cast<SCH_COMPONENT*>( this ) );
             dummy.SetText( instance.m_Value );
@@ -583,6 +583,16 @@ const wxString SCH_COMPONENT::GetValue( const SCH_SHEET_PATH* sheet ) const
 
 void SCH_COMPONENT::SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValue )
 {
+    if( sheet == nullptr )
+    {
+        // Clear instance overrides and set primary field value
+        for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+            instance.m_Value = wxEmptyString;
+
+        m_Fields[ VALUE ].SetText( aValue );
+        return;
+    }
+
     KIID_PATH path = sheet->Path();
 
     // check to see if it is already there before inserting it
@@ -620,6 +630,16 @@ const wxString SCH_COMPONENT::GetFootprint( const SCH_SHEET_PATH* sheet ) const
 
 void SCH_COMPONENT::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& aFootprint )
 {
+    if( sheet == nullptr )
+    {
+        // Clear instance overrides and set primary field value
+        for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+            instance.m_Value = wxEmptyString;
+
+        m_Fields[ FOOTPRINT ].SetText( aFootprint );
+        return;
+    }
+
     KIID_PATH path = sheet->Path();
 
     // check to see if it is already there before inserting it
@@ -1298,21 +1318,18 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
     wxString msg;
 
     SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
+    SCH_SHEET_PATH* currentSheet = schframe ? &schframe->GetCurrentSheet() : nullptr;
 
     // part and alias can differ if alias is not the root
     if( m_part )
     {
         if( m_part.get() != dummy() )
         {
-            if( schframe )
-            {
-                aList.push_back( MSG_PANEL_ITEM(
-                        _( "Reference" ), GetRef( &schframe->GetCurrentSheet() ), DARKCYAN ) );
-            }
+            aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( currentSheet ), DARKCYAN ) );
 
             msg = m_part->IsPower() ? _( "Power symbol" ) : _( "Value" );
 
-            aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->GetShownText(), DARKCYAN ) );
+            aList.push_back( MSG_PANEL_ITEM( msg, GetValue( currentSheet ), DARKCYAN ) );
 
 #if 0       // Display component flags, for debug only
             aList.push_back( MSG_PANEL_ITEM( _( "flags" ),
@@ -1344,7 +1361,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
             }
 
             // Display the current associated footprint, if exists.
-            msg = GetFootprint( &schframe->GetCurrentSheet() );
+            msg = GetFootprint( currentSheet );
 
             if( msg.IsEmpty() )
                 msg = _( "<Unknown>" );
@@ -1359,14 +1376,9 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
     }
     else
     {
-        if( schframe )
-        {
-            aList.push_back( MSG_PANEL_ITEM(
-                    _( "Reference" ), GetRef( &schframe->GetCurrentSheet() ), DARKCYAN ) );
-        }
+        aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( currentSheet ), DARKCYAN ) );
 
-        aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetField( VALUE )->GetShownText(),
-                                         DARKCYAN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetValue( currentSheet ), DARKCYAN ) );
         aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetLibId().GetLibItemName(), BROWN ) );
 
         wxString libNickname = GetLibId().GetLibNickname();

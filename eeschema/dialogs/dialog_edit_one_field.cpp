@@ -393,10 +393,16 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
     SCH_ITEM*       parent = dynamic_cast<SCH_ITEM*>( aField->GetParent() );
     int             fieldType = aField->GetId();
 
-    if( parent && parent->Type() == SCH_COMPONENT_T && fieldType == REFERENCE )
+    if( parent && parent->Type() == SCH_COMPONENT_T )
     {
-        wxASSERT( aSheetPath );
-        static_cast<SCH_COMPONENT*>( parent )->SetRef( aSheetPath, m_text );
+        SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( parent );
+
+        if( fieldType == REFERENCE )
+            comp->SetRef( aSheetPath, m_text );
+        else if( fieldType == VALUE )
+            comp->SetValue( m_text );
+        else if( fieldType == FOOTPRINT )
+            comp->SetFootprint( m_text );
     }
 
     bool positioningModified = false;

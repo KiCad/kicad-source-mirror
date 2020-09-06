@@ -661,6 +661,11 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     // reference.
     m_comp->SetRef( &GetParent()->GetCurrentSheet(), m_fields->at( REFERENCE ).GetText() );
 
+    // Similar for Value and Footprint, except that the GUI behaviour is that they are kept
+    // in sync between multiple instances.
+    m_comp->SetValue( m_fields->at( VALUE ).GetText() );
+    m_comp->SetFootprint( m_fields->at( FOOTPRINT ).GetText() );
+
     m_comp->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
     m_comp->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
 

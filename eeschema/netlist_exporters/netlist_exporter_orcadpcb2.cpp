@@ -83,26 +83,20 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
             if( comp->GetPartRef() && comp->GetPartRef()->GetFootprints().GetCount() != 0  )
                 cmpList.push_back( SCH_REFERENCE( comp, comp->GetPartRef().get(), sheet ) );
 
-            if( !comp->GetField( FOOTPRINT )->IsVoid() )
-            {
-                footprint = comp->GetField( FOOTPRINT )->GetShownText();
-                footprint.Replace( wxT( " " ), wxT( "_" ) );
-            }
-            else
-            {
-                footprint = wxT( "$noname" );
-            }
-
-            field = comp->GetRef( &sheetList[i] );
+            footprint = comp->GetFootprint( &sheet );
+            footprint.Replace( wxT( " " ), wxT( "_" ) );
 
             ret |= fprintf( f, " ( %s %s",
-                            TO_UTF8( sheetList[i].PathAsString() + comp->m_Uuid.AsString() ),
-                            TO_UTF8( footprint ) );
+                            TO_UTF8( sheet.PathAsString() + comp->m_Uuid.AsString() ),
+                            TO_UTF8( footprint.IsEmpty() ? wxT( "$noname" ) : footprint ) );
+
+            field = comp->GetRef( &sheet );
 
             ret |= fprintf( f, "  %s", TO_UTF8( field ) );
 
-            field = comp->GetField( VALUE )->GetShownText();
+            field = comp->GetValue( &sheet );
             field.Replace( wxT( " " ), wxT( "_" ) );
+
             ret |= fprintf( f, " %s", TO_UTF8( field ) );
 
             ret |= fprintf( f, "\n" );
