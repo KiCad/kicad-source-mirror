@@ -479,22 +479,33 @@ void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation,
     // Test for validity of the requested footprint
     if( !fpid.empty() && !fpid.IsValid() )
     {
-        wxString msg =
-                wxString::Format( _( "\"%s\" is not a valid footprint." ), fpid.Format().wx_str() );
+        wxString msg = wxString::Format( _( "\"%s\" is not a valid footprint." ),
+                                         fpid.Format().wx_str() );
         DisplayErrorMessage( this, msg );
         return;
     }
 
-    // Set the new footprint
-    component->SetFPID( fpid );
+    const KIID& id = component->GetPath().back();
 
-    // create the new component description and set it
-    wxString description = wxString::Format( CMP_FORMAT,
-                                             aAssociation.GetComponentIndex() + 1,
-                                             component->GetReference(),
-                                             component->GetValue(),
-                                             component->GetFPID().Format().wx_str() );
-    m_compListBox->SetString( aAssociation.GetComponentIndex(), description );
+    // Set new footprint to all instances of the selected component
+    for( unsigned int idx : GetComponentIndices() )
+    {
+        COMPONENT* candidate = m_netlist.GetComponent( idx );
+
+        if( candidate->GetPath().back() == id )
+        {
+            // Set the new footprint
+            candidate->SetFPID( fpid );
+
+            // create the new component description and set it
+            wxString description = wxString::Format( CMP_FORMAT,
+                                                     idx + 1,
+                                                     candidate->GetReference(),
+                                                     candidate->GetValue(),
+                                                     candidate->GetFPID().Format().wx_str() );
+            m_compListBox->SetString( idx, description );
+        }
+    }
 
     // Mark the data as being modified
     m_modified = true;
