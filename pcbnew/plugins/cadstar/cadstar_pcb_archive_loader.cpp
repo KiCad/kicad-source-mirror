@@ -82,6 +82,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
     loadBoards();
     loadFigures();
     loadTexts();
+    loadDimensions();
     loadAreas();
     loadComponents();
     loadDocumentationSymbols();
@@ -707,6 +708,74 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTexts()
     {
         TEXT& csTxt = txtPair.second;
         drawCadstarText( csTxt, mBoard );
+    }
+}
+
+
+void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
+{
+    for( std::pair<DIMENSION_ID, DIMENSION> dimPair : Layout.Dimensions )
+    {
+        DIMENSION& csDim = dimPair.second;
+
+        switch( csDim.Type )
+        {
+        case DIMENSION::TYPE::LINEARDIM:
+            switch( csDim.Subtype )
+            {
+            case DIMENSION::SUBTYPE::DIRECT:
+            case DIMENSION::SUBTYPE::ORTHOGONAL:
+            {
+                ::DIMENSION* dimension = new ::DIMENSION( mBoard );
+                TEXTCODE&    dimText   = getTextCode( csDim.Text.TextCodeID );
+                mBoard->Add( dimension, ADD_MODE::APPEND );
+
+                dimension->SetLayer( getKiCadLayer( csDim.LayerID ) );
+                dimension->SetOrigin(
+                        getKiCadPoint( csDim.Line.Start ), csDim.Precision );
+                dimension->SetEnd( getKiCadPoint( csDim.Line.End ), csDim.Precision );
+                dimension->Text().SetTextThickness( getKiCadLength( dimText.LineWidth ) );
+                dimension->Text().SetTextSize( wxSize(
+                        getKiCadLength( dimText.Width ), getKiCadLength( dimText.Height ) ) );
+
+                switch( csDim.LinearUnits )
+                {
+                case UNITS::METER:
+                case UNITS::CENTIMETER:
+                case UNITS::MM:
+                case UNITS::MICROMETRE:
+                    dimension->SetUnits( EDA_UNITS::MILLIMETRES, false );
+                    break;
+
+                case UNITS::INCH:
+                    dimension->SetUnits( EDA_UNITS::INCHES, false );
+                    break;
+
+                case UNITS::THOU:
+                    dimension->SetUnits( EDA_UNITS::INCHES, true );
+                    break;
+                }
+
+                dimension->AdjustDimensionDetails( csDim.Precision );
+            }
+                continue;
+
+            default: //all others
+                wxLogError( wxString::Format(
+                        _( "Dimension ID %s has no KiCad equivalent. This was not imported" ),
+                        csDim.ID ) );
+                break;
+            }
+            break;
+
+        case DIMENSION::TYPE::ANGLEDIM:
+        case DIMENSION::TYPE::LEADERDIM:
+        default:
+            wxLogError( wxString::Format(
+                    _( "Dimension ID %s has no KiCad equivalent. This was not imported" ),
+                    csDim.ID ) );
+            break;
+        }
     }
 }
 
@@ -2383,7 +2452,7 @@ LSET CADSTAR_PCB_ARCHIVE_LOADER::getKiCadLayerSet( const LAYER_ID& aCadstarLayer
 void CADSTAR_PCB_ARCHIVE_LOADER::addToGroup(
         const GROUP_ID& aCadstarGroupID, BOARD_ITEM* aKiCadItem )
 {
-    wxCHECK( mGroupMap.find( aCadstarGroupID ) != mGroupMap.end() );
+    wxCHECK( mGroupMap.find( aCadstarGroupID ) != mGroupMap.end(), );
 
     PCB_GROUP* parentGroup = mGroupMap.at( aCadstarGroupID );
     parentGroup->AddItem( aKiCadItem );

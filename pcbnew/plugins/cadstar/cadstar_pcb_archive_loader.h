@@ -111,6 +111,7 @@ private:
     void loadBoards();
     void loadFigures();
     void loadTexts();
+    void loadDimensions();
     void loadAreas();
     void loadComponents();
     void loadDocumentationSymbols();
