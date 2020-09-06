@@ -1332,18 +1332,10 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 
         switch( aText->GetLabelSpinStyle() )
         {
-        case LABEL_SPIN_STYLE::LEFT:
-            text_offset.x += getShadowWidth() / 2;
-            break;
-        case LABEL_SPIN_STYLE::UP:
-            text_offset.y += getShadowWidth() / 2;
-            break;
-        case LABEL_SPIN_STYLE::RIGHT:
-            text_offset.x -= getShadowWidth() / 2;
-            break;
-        case LABEL_SPIN_STYLE::BOTTOM:
-            text_offset.y -= getShadowWidth() / 2;
-            break;
+        case LABEL_SPIN_STYLE::LEFT:   text_offset.x += getShadowWidth() / 2; break;
+        case LABEL_SPIN_STYLE::UP:     text_offset.y += getShadowWidth() / 2; break;
+        case LABEL_SPIN_STYLE::RIGHT:  text_offset.x -= getShadowWidth() / 2; break;
+        case LABEL_SPIN_STYLE::BOTTOM: text_offset.y -= getShadowWidth() / 2; break;
         }
     }
 
@@ -1353,8 +1345,10 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     }
 
     if( aText->IsDangling() )
+    {
         drawDanglingSymbol( aText->GetTextPos(), Mils2iu( DANGLING_SYMBOL_SIZE / 2 ),
                             drawingShadows );
+    }
 }
 
 

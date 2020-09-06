@@ -612,15 +612,15 @@ int SCH_SHEET::ComponentCount() const
 
     if( m_screen )
     {
-        for( auto aItem : m_screen->Items().OfType( SCH_COMPONENT_T ) )
+        for( SCH_ITEM* aItem : m_screen->Items().OfType( SCH_COMPONENT_T ) )
         {
-            SCH_COMPONENT* Cmp = (SCH_COMPONENT*) aItem;
+            SCH_COMPONENT* comp = (SCH_COMPONENT*) aItem;
 
-            if( Cmp->GetField( VALUE )->GetText().GetChar( 0 ) != '#' )
+            if( comp->GetField( VALUE )->GetText().GetChar( 0 ) != '#' )
                 n++;
         }
 
-        for( auto aItem : m_screen->Items().OfType( SCH_SHEET_T ) )
+        for( SCH_ITEM* aItem : m_screen->Items().OfType( SCH_SHEET_T ) )
             n += static_cast<const SCH_SHEET*>( aItem )->ComponentCount();
     }
 
