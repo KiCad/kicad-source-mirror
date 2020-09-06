@@ -163,13 +163,8 @@ private:
 
     void doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aForce );
 
-    /**
-     * Loads a .cmp file from CvPcb and update the footprint field of components.
-     *
-     * Prepares parameters and calls ProcessCmpToFootprintLinkFileto actually read the file and
-     * update the footprint fields
-     */
-    bool loadCmpToFootprintLinkFile();
+    void updatePastedInstances( const SCH_SHEET_PATH& aPastePath, const KIID_PATH& aClipPath,
+                                SCH_SHEET* aSheet, bool aForceKeepAnnotations );
 
     /**
      * Read the footprint info from each line in the stuff file by reference designator.
@@ -211,9 +206,11 @@ private:
     bool      m_probingPcbToSch; // Recursion guard when cross-probing to PCBNew
     EDA_ITEM* m_pickerItem;      // Current item for picker highlighting.
 
-    // A map of sheet paths --> screens for the clipboard contents.  We use these to hook up
+    // A map of sheet filename --> screens for the clipboard contents.  We use these to hook up
     // cut/paste operations for unsaved sheet content.
     std::map<wxString, SCH_SCREEN*> m_supplementaryClipboard;
+    SCH_REFERENCE_LIST              m_supplementaryClipboardInstances;
+    KIID_PATH                       m_supplementaryClipboardPath;
 };
 
 

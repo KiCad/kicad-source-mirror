@@ -1219,6 +1219,7 @@ bool SCH_EDITOR_CONTROL::doCopy()
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     EE_SELECTION&      selection = selTool->RequestSelection();
+    SCHEMATIC&         schematic = m_frame->Schematic();
 
     if( !selection.GetSize() )
         return false;
@@ -1234,6 +1235,10 @@ bool SCH_EDITOR_CONTROL::doCopy()
             m_supplementaryClipboard[ sheet->GetFileName() ] = sheet->GetScreen();
         }
     }
+
+    m_supplementaryClipboardInstances.Clear();
+    schematic.GetSheets().GetComponents( m_supplementaryClipboardInstances, true, true );
+    m_supplementaryClipboardPath = m_frame->GetCurrentSheet().Path();
 
     STRING_FORMATTER formatter;
     SCH_SEXPR_PLUGIN plugin;
@@ -1290,6 +1295,60 @@ int SCH_EDITOR_CONTROL::Copy( const TOOL_EVENT& aEvent )
 }
 
 
+void SCH_EDITOR_CONTROL::updatePastedInstances( const SCH_SHEET_PATH& aPastePath,
+                                                const KIID_PATH& aClipPath, SCH_SHEET* aSheet,
+                                                bool aForceKeepAnnotations )
+{
+    for( SCH_ITEM* item : aSheet->GetScreen()->Items() )
+    {
+        if( item->Type() == SCH_COMPONENT_T )
+        {
+            SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( item );
+
+            if( aForceKeepAnnotations )
+            {
+                KIID_PATH clipItemPath = aClipPath;
+                clipItemPath.push_back( comp->m_Uuid );
+
+                // SCH_REFERENCE_LIST doesn't include the root sheet in the path
+                clipItemPath.erase( clipItemPath.begin() );
+
+                int ii = m_supplementaryClipboardInstances.FindRefByPath( clipItemPath.AsString() );
+
+                if( ii >= 0 )
+                {
+                    SCH_REFERENCE instance = m_supplementaryClipboardInstances[ ii ];
+
+                    comp->SetUnit( instance.GetUnit() );
+                    comp->SetRef( &aPastePath, instance.GetRef() );
+                    comp->SetValue( &aPastePath, instance.GetValue() );
+                    comp->SetFootprint( &aPastePath, instance.GetFootprint() );
+                }
+                else
+                {
+                    comp->ClearAnnotation( &aPastePath );
+                }
+            }
+            else
+            {
+                comp->ClearAnnotation( &aPastePath );
+            }
+        }
+        else if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+            SCH_SHEET_PATH pastePath = aPastePath;
+            pastePath.push_back( sheet );
+
+            KIID_PATH clipPath = aClipPath;
+            clipPath.push_back( sheet->m_Uuid );
+
+            updatePastedInstances( pastePath, clipPath, sheet, aForceKeepAnnotations );
+        }
+    }
+}
+
+
 int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 {
     wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( wxWindow::FindFocus() );
@@ -1341,8 +1400,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     EDA_ITEMS       loadedItems;
     bool            sheetsPasted = false;
     SCH_SHEET_LIST  hierarchy    = m_frame->Schematic().GetSheets();
-    SCH_SHEET_PATH& currentSheet = m_frame->GetCurrentSheet();
-    wxFileName      destFn       = currentSheet.Last()->GetFileName();
+    SCH_SHEET_PATH& pasteRoot    = m_frame->GetCurrentSheet();
+    wxFileName      destFn       = pasteRoot.Last()->GetFileName();
 
     if( destFn.IsRelative() )
         destFn.MakeAbsolute( m_frame->Prj().GetProjectPath() );
@@ -1379,6 +1438,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     for( unsigned i = 0; i < loadedItems.size(); ++i )
     {
         EDA_ITEM* item = loadedItems[i];
+        KIID_PATH clipPath = m_supplementaryClipboardPath;
 
         if( item->Type() == SCH_COMPONENT_T )
         {
@@ -1399,73 +1459,70 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             if( !forceKeepAnnotations )
             {
-                const_cast<KIID&>( component->m_Uuid ) = KIID();
-
                 // clear the annotation, but preserve the selected unit
                 int unit = component->GetUnit();
                 component->ClearAnnotation( nullptr );
                 component->SetUnit( unit );
             }
         }
-        else
-        {
-            // Everything else gets a new UUID
-            const_cast<KIID&>( item->m_Uuid ) = KIID();
-        }
 
         if( item->Type() == SCH_SHEET_T )
         {
-            SCH_SHEET*      sheet                = (SCH_SHEET*) item;
-            SCH_FIELD&      nameField            = sheet->GetFields()[SHEETNAME];
-            wxFileName      fn                   = sheet->GetFileName();
-            SCH_SCREEN*     existingScreen       = nullptr;
-            bool            dropSheetAnnotations = false;
-            wxString        baseName             = nameField.GetText();
-            wxString        candidateName        = baseName;
-            int             uniquifier           = 1;
+            SCH_SHEET*  sheet          = (SCH_SHEET*) item;
+            SCH_FIELD&  nameField      = sheet->GetFields()[SHEETNAME];
+            wxFileName  fn             = sheet->GetFileName();
+            SCH_SCREEN* existingScreen = nullptr;
+            wxString    baseName       = nameField.GetText();
+            wxString    candidateName  = baseName;
+            int         uniquifier     = 1;
 
             while( hierarchy.NameExists( candidateName ) )
                 candidateName = wxString::Format( wxT( "%s%d" ), baseName, uniquifier++ );
 
             nameField.SetText( candidateName );
 
-            sheet->SetParent( currentSheet.Last() );
+            sheet->SetParent( pasteRoot.Last() );
             sheet->SetScreen( nullptr );
             sheetsPasted = true;
 
             if( !fn.IsAbsolute() )
             {
-                wxFileName currentSheetFileName = currentSheet.LastScreen()->GetFileName();
+                wxFileName currentSheetFileName = pasteRoot.LastScreen()->GetFileName();
                 fn.Normalize( wxPATH_NORM_ALL, currentSheetFileName.GetPath() );
             }
 
-            if( m_frame->Schematic().Root().SearchHierarchy(
-                        fn.GetFullPath( wxPATH_UNIX ), &existingScreen ) )
-                dropSheetAnnotations = !forceKeepAnnotations;
-            else
+            if( !m_frame->Schematic().Root().SearchHierarchy( fn.GetFullPath( wxPATH_UNIX ),
+                                                              &existingScreen ) )
+            {
                 searchSupplementaryClipboard( sheet->GetFileName(), &existingScreen );
+            }
 
             if( existingScreen )
             {
                 sheet->SetScreen( existingScreen );
-
-                SCH_SHEET_PATH sheetpath = currentSheet;
-                sheetpath.push_back( sheet );
-
-                // Clear annotation and create the AR for this path, if not exists,
-                // when the screen is shared by sheet paths.
-                // Otherwise ClearAnnotation do nothing, because the F1 field is used as
-                // reference default value and takes the latest displayed value
-                existingScreen->EnsureAlternateReferencesExist();
-
-                if( dropSheetAnnotations )
-                    existingScreen->ClearAnnotation( &sheetpath );
             }
             else
             {
-                if( !m_frame->LoadSheetFromFile( sheet, &currentSheet, fn.GetFullPath() ) )
+                if( !m_frame->LoadSheetFromFile( sheet, &pasteRoot, fn.GetFullPath() ) )
                     m_frame->InitSheet( sheet, sheet->GetFileName() );
             }
+
+            // Push it to the clipboard path while it still has its old KIID
+            clipPath.push_back( sheet->m_Uuid );
+        }
+
+        // Everything gets a new KIID
+        const_cast<KIID&>( item->m_Uuid ) = KIID();
+
+        // Once we have our new KIID we can update all pasted instances.  This will either
+        // reset the annotations or copy "kept" annotations from the supplementary clipboard.
+        if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET*     sheet = (SCH_SHEET*) item;
+            SCH_SHEET_PATH pastePath = pasteRoot;
+            pastePath.push_back( sheet );
+
+            updatePastedInstances( pastePath, clipPath, sheet, forceKeepAnnotations );
         }
 
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVED );

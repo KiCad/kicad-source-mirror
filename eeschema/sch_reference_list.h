@@ -215,7 +215,7 @@ public:
 class SCH_REFERENCE_LIST
 {
 private:
-    std::vector <SCH_REFERENCE> flatList;
+    std::vector<SCH_REFERENCE> flatList;
 
 public:
     /** Constructor
@@ -227,6 +227,11 @@ public:
     SCH_REFERENCE& operator[]( int aIndex )
     {
         return flatList[ aIndex ];
+    }
+
+    void Clear()
+    {
+        flatList.clear();
     }
 
     /**
