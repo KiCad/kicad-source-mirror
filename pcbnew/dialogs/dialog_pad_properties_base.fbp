@@ -9864,6 +9864,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
+                                        <event name="OnNotebookPageChanged">OnPreviewPageChanged</event>
                                         <object class="notebookpage" expanded="1">
                                             <property name="bitmap"></property>
                                             <property name="label">Board View</property>

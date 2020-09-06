@@ -106,11 +106,14 @@ private:
     /// Copy values from dialog field to aPad's members
     bool transferDataToPad( D_PAD* aPad );
 
+    bool Show( bool aShow ) override;
+
     // event handlers:
     void OnInitDialog( wxInitDialogEvent& event ) override;
     void OnResize( wxSizeEvent& event );
 	void OnCancel( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
+    void OnPreviewPageChanged( wxNotebookEvent& event ) override;
 
     void OnUpdateUINonCopperWarning( wxUpdateUIEvent& event ) override
     {

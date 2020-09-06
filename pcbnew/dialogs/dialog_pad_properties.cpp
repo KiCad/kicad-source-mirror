@@ -1098,6 +1098,42 @@ void DIALOG_PAD_PROPERTIES::setPadLayersList( LSET layer_mask, bool remove_uncon
 }
 
 
+bool DIALOG_PAD_PROPERTIES::Show( bool aShow )
+{
+    bool retVal = DIALOG_SHIM::Show( aShow );
+
+    if( aShow )
+    {
+        // It *should* work to set the stackup bitmap in the constructor, but it doesn't.
+        // wxWidgets needs to have these set when the panel is visible for some reason.
+        // https://gitlab.com/kicad/code/kicad/-/issues/5534
+        setPadLayersList( m_dummyPad->GetLayerSet(), m_dummyPad->GetRemoveUnconnected(),
+                          m_dummyPad->GetKeepTopBottom() );
+
+        m_stackupPanel->Layout();
+    }
+
+    return retVal;
+}
+
+
+void DIALOG_PAD_PROPERTIES::OnPreviewPageChanged( wxNotebookEvent& event )
+{
+    if( event.GetSelection() == 1 )
+    {
+        // It *should* work to set the stackup bitmap in the constructor, but it doesn't.
+        // wxWidgets needs to have these set when the panel is visible for some reason.
+        // https://gitlab.com/kicad/code/kicad/-/issues/5534
+        setPadLayersList( m_dummyPad->GetLayerSet(), m_dummyPad->GetRemoveUnconnected(),
+                          m_dummyPad->GetKeepTopBottom() );
+
+        m_stackupPanel->Layout();
+    }
+
+    event.Skip();
+}
+
+
 void DIALOG_PAD_PROPERTIES::OnSetCopperLayers( wxCommandEvent& event )
 {
     if( m_PadType->GetSelection() == 0 || m_PadType->GetSelection() == 3 )

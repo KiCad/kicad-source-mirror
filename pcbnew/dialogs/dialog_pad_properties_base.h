@@ -245,6 +245,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onDuplicatePrimitive( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onGeometryTransform( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDeletePrimitive( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPreviewPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void onChangePadMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 
