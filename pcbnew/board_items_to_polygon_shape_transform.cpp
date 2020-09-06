@@ -118,7 +118,9 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
 void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
                                                         SHAPE_POLY_SET& aCornerBuffer,
                                                         int aInflateValue, int aMaxError,
-                                                        bool aSkipNPTHPadsWihNoCopper ) const
+                                                        bool aSkipNPTHPadsWihNoCopper,
+                                                        bool aSkipPlatedPads,
+                                                        bool aSkipNonPlatedPads ) const
 {
     for( D_PAD* pad : m_pads )
     {
@@ -151,6 +153,15 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
                 }
             }
         }
+
+        const bool isPlated = ( ( aLayer == F_Cu ) && pad->IsPadOnLayer( F_Mask ) ) ||
+                              ( ( aLayer == B_Cu ) && pad->IsPadOnLayer( B_Mask ) );
+
+        if( aSkipPlatedPads && isPlated )
+            continue;
+
+        if( aSkipNonPlatedPads && !isPlated )
+            continue;
 
         wxSize clearance( aInflateValue, aInflateValue );
 

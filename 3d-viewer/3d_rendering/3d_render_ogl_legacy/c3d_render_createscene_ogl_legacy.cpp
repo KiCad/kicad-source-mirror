@@ -334,6 +334,84 @@ CLAYERS_OGL_DISP_LISTS *C3D_RENDER_OGL_LEGACY::generate_holes_display_list(
 }
 
 
+CLAYERS_OGL_DISP_LISTS* C3D_RENDER_OGL_LEGACY::generateLayerListFromContainer( const CBVHCONTAINER2D *aContainer,
+                                                                               const SHAPE_POLY_SET *aPolyList,
+                                                                               PCB_LAYER_ID aLayerId )
+{
+    if( aContainer == nullptr )
+        return nullptr;
+
+    const LIST_OBJECT2D &listObject2d = aContainer->GetList();
+
+    if( listObject2d.size() == 0 )
+        return nullptr;
+
+    float layer_z_bot = 0.0f;
+    float layer_z_top = 0.0f;
+
+    get_layer_z_pos( aLayerId, layer_z_top, layer_z_bot );
+
+    // Calculate an estimation for the nr of triangles based on the nr of objects
+    unsigned int nrTrianglesEstimation = listObject2d.size() * 8;
+
+    CLAYER_TRIANGLES *layerTriangles = new CLAYER_TRIANGLES( nrTrianglesEstimation );
+
+    // store in a list so it will be latter deleted
+    m_triangles.push_back( layerTriangles );
+
+    // Load the 2D (X,Y axis) component of shapes
+    for( LIST_OBJECT2D::const_iterator itemOnLayer = listObject2d.begin();
+         itemOnLayer != listObject2d.end();
+         ++itemOnLayer )
+    {
+        const COBJECT2D *object2d_A = static_cast<const COBJECT2D *>(*itemOnLayer);
+
+        switch( object2d_A->GetObjectType() )
+        {
+        case OBJECT2D_TYPE::FILLED_CIRCLE:
+            add_object_to_triangle_layer( (const CFILLEDCIRCLE2D *)object2d_A,
+                                          layerTriangles, layer_z_top, layer_z_bot );
+            break;
+
+        case OBJECT2D_TYPE::POLYGON4PT:
+            add_object_to_triangle_layer( (const CPOLYGON4PTS2D *)object2d_A,
+                                          layerTriangles, layer_z_top, layer_z_bot );
+            break;
+
+        case OBJECT2D_TYPE::RING:
+            add_object_to_triangle_layer( (const CRING2D *)object2d_A,
+                                          layerTriangles, layer_z_top, layer_z_bot );
+            break;
+
+        case OBJECT2D_TYPE::TRIANGLE:
+            add_object_to_triangle_layer( (const CTRIANGLE2D *)object2d_A,
+                                          layerTriangles, layer_z_top, layer_z_bot );
+            break;
+
+        case OBJECT2D_TYPE::ROUNDSEG:
+            add_object_to_triangle_layer( (const CROUNDSEGMENT2D *) object2d_A,
+                                          layerTriangles, layer_z_top, layer_z_bot );
+            break;
+
+        default:
+            wxFAIL_MSG("C3D_RENDER_OGL_LEGACY: Object type is not implemented");
+            break;
+        }
+    }
+
+    if( aPolyList )
+        if( aPolyList->OutlineCount() > 0 )
+            layerTriangles->AddToMiddleContourns( *aPolyList, layer_z_bot, layer_z_top,
+                                                  m_boardAdapter.BiuTo3Dunits(), false );
+    // Create display list
+    // /////////////////////////////////////////////////////////////////////
+    return new CLAYERS_OGL_DISP_LISTS( *layerTriangles,
+                                       m_ogl_circle_texture,
+                                       layer_z_bot,
+                                       layer_z_top );
+}
+
+
 void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter )
 {
     m_reloadRequested = false;
@@ -516,6 +594,8 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
     if( aStatusReporter )
         aStatusReporter->Report( _( "Load OpenGL: layers" ) );
 
+    const MAP_POLY &map_poly = m_boardAdapter.GetPolyMap();
+
     for( MAP_CONTAINER_2D::const_iterator ii = m_boardAdapter.GetMapLayers().begin();
          ii != m_boardAdapter.GetMapLayers().end();
          ++ii )
@@ -526,82 +606,26 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
             continue;
 
         const CBVHCONTAINER2D *container2d = static_cast<const CBVHCONTAINER2D *>(ii->second);
-        const LIST_OBJECT2D &listObject2d = container2d->GetList();
 
-        if( listObject2d.size() == 0 )
-            continue;
+        // Load the vertical (Z axis) component of shapes
+        const SHAPE_POLY_SET *aPolyList = nullptr;
 
-        float layer_z_bot = 0.0f;
-        float layer_z_top = 0.0f;
-
-        get_layer_z_pos( layer_id, layer_z_top, layer_z_bot );
-
-        // Calculate an estimation for the nr of triangles based on the nr of objects
-        unsigned int nrTrianglesEstimation = listObject2d.size() * 8;
-
-        CLAYER_TRIANGLES *layerTriangles = new CLAYER_TRIANGLES( nrTrianglesEstimation );
-
-        m_triangles[layer_id] = layerTriangles;
-
-        // Load the 2D (X,Y axis) component of shapes
-        for( LIST_OBJECT2D::const_iterator itemOnLayer = listObject2d.begin();
-             itemOnLayer != listObject2d.end();
-             ++itemOnLayer )
-        {
-            const COBJECT2D *object2d_A = static_cast<const COBJECT2D *>(*itemOnLayer);
-
-            switch( object2d_A->GetObjectType() )
-            {
-            case OBJECT2D_TYPE::FILLED_CIRCLE:
-                add_object_to_triangle_layer( (const CFILLEDCIRCLE2D *)object2d_A,
-                                              layerTriangles, layer_z_top, layer_z_bot );
-                break;
-
-            case OBJECT2D_TYPE::POLYGON4PT:
-                add_object_to_triangle_layer( (const CPOLYGON4PTS2D *)object2d_A,
-                                              layerTriangles, layer_z_top, layer_z_bot );
-                break;
-
-            case OBJECT2D_TYPE::RING:
-                add_object_to_triangle_layer( (const CRING2D *)object2d_A,
-                                              layerTriangles, layer_z_top, layer_z_bot );
-                break;
-
-            case OBJECT2D_TYPE::TRIANGLE:
-                add_object_to_triangle_layer( (const CTRIANGLE2D *)object2d_A,
-                                              layerTriangles, layer_z_top, layer_z_bot );
-                break;
-
-            case OBJECT2D_TYPE::ROUNDSEG:
-                add_object_to_triangle_layer( (const CROUNDSEGMENT2D *) object2d_A,
-                                              layerTriangles, layer_z_top, layer_z_bot );
-                break;
-
-            default:
-                wxFAIL_MSG("C3D_RENDER_OGL_LEGACY: Object type is not implemented");
-                break;
-            }
-        }
-
-        const MAP_POLY &map_poly = m_boardAdapter.GetPolyMap();
-
-        // Load the vertical (Z axis)  component of shapes
         if( map_poly.find( layer_id ) != map_poly.end() )
         {
-            const SHAPE_POLY_SET *polyList = map_poly.at( layer_id );
-
-            if( polyList->OutlineCount() > 0 )
-                layerTriangles->AddToMiddleContourns( *polyList, layer_z_bot, layer_z_top,
-                                                      m_boardAdapter.BiuTo3Dunits(), false );
+            aPolyList = map_poly.at( layer_id );
         }
 
-        // Create display list
-        // /////////////////////////////////////////////////////////////////////
-        m_ogl_disp_lists_layers[layer_id] = new CLAYERS_OGL_DISP_LISTS( *layerTriangles,
-                                                                        m_ogl_circle_texture,
-                                                                        layer_z_bot,
-                                                                        layer_z_top );
-    }// for each layer on map
+        CLAYERS_OGL_DISP_LISTS* oglList = generateLayerListFromContainer( container2d, aPolyList, layer_id );
+
+        if( oglList != nullptr )
+            m_ogl_disp_lists_layers[layer_id] = oglList;
+
+    }// for each layer on
+
+    m_ogl_disp_lists_platedPads_F_Cu = generateLayerListFromContainer( m_boardAdapter.GetPlatedPads_Front(),
+                                                                       m_boardAdapter.GetPolyPlatedPads_Front(), F_Cu );
+    m_ogl_disp_lists_platedPads_B_Cu = generateLayerListFromContainer( m_boardAdapter.GetPlatedPads_Back(),
+                                                                       m_boardAdapter.GetPolyPlatedPads_Back(), B_Cu );
 
     // Load 3D models
     // /////////////////////////////////////////////////////////////////////////

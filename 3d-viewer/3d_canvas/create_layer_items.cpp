@@ -63,6 +63,9 @@ void BOARD_ADAPTER::destroyLayers()
         m_layers_poly.clear();
     }
 
+    delete m_F_Cu_PlatedPads_poly;
+    delete m_B_Cu_PlatedPads_poly;
+
     if( !m_layers_inner_holes_poly.empty() )
     {
         for( auto& poly : m_layers_inner_holes_poly )
@@ -86,6 +89,9 @@ void BOARD_ADAPTER::destroyLayers()
 
         m_layers_container2D.clear();
     }
+
+    delete m_platedpads_container2D_F_Cu;
+    delete m_platedpads_container2D_B_Cu;
 
     if( !m_layers_holes2D.empty() )
     {
@@ -196,6 +202,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             m_layers_poly[curr_layer_id] = layerPoly;
         }
     }
+
+    m_F_Cu_PlatedPads_poly = new SHAPE_POLY_SET;
+    m_B_Cu_PlatedPads_poly = new SHAPE_POLY_SET;
+
+    m_platedpads_container2D_F_Cu = new CBVHCONTAINER2D;
+    m_platedpads_container2D_B_Cu = new CBVHCONTAINER2D;
 
     if( aStatusReporter )
         aStatusReporter->Report( _( "Create tracks and vias" ) );
@@ -512,7 +524,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                                    layerContainer,
                                                    curr_layer_id,
                                                    0,
-                                                   true );
+                                                   true,
+                                                   true,
+                                                   false );
 
             // Micro-wave modules may have items on copper layers
             AddGraphicsShapesWithClearanceToContainer( module,
@@ -520,6 +534,26 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                                        curr_layer_id,
                                                        0 );
         }
+    }
+
+    // ADD PLATED PADS
+    for( MODULE* module : m_board->Modules() )
+    {
+        AddPadsShapesWithClearanceToContainer( module,
+                                               m_platedpads_container2D_F_Cu,
+                                               F_Cu,
+                                               0,
+                                               true,
+                                               false,
+                                               true );
+
+        AddPadsShapesWithClearanceToContainer( module,
+                                               m_platedpads_container2D_B_Cu,
+                                               B_Cu,
+                                               0,
+                                               true,
+                                               false,
+                                               true );
     }
 
     // Add modules PADs poly contourns (vertical outlines)
@@ -538,12 +572,30 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 // Note: NPTH pads are not drawn on copper layers when the pad
                 // has same shape as its hole
                 module->TransformPadsShapesWithClearanceToPolygon( curr_layer_id, *layerPoly,
-                                                                   0, ARC_HIGH_DEF, true );
+                                                                   0, ARC_HIGH_DEF, true,
+                                                                   true, false );
 
                 transformGraphicModuleEdgeToPolygonSet( module, curr_layer_id, *layerPoly );
             }
         }
+
+        // ADD PLATED PADS contourns
+        for( auto module : m_board->Modules() )
+        {
+            module->TransformPadsShapesWithClearanceToPolygon( F_Cu, *m_F_Cu_PlatedPads_poly,
+                                                               0, ARC_HIGH_DEF, true,
+                                                               false, true );
+
+            //transformGraphicModuleEdgeToPolygonSet( module, F_Cu, *m_F_Cu_PlatedPads_poly );
+
+            module->TransformPadsShapesWithClearanceToPolygon( B_Cu, *m_B_Cu_PlatedPads_poly,
+                                                               0, ARC_HIGH_DEF, true,
+                                                               false, true );
+
+            //transformGraphicModuleEdgeToPolygonSet( module, B_Cu, *m_B_Cu_PlatedPads_poly );
+        }
     }
+
 
     // Add graphic item on copper layers to object containers
     for( PCB_LAYER_ID curr_layer_id : layer_id )
@@ -735,6 +787,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         while( threadsFinished < parallelThreadCount )
             std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+
+        if( m_F_Cu_PlatedPads_poly )
+            m_F_Cu_PlatedPads_poly->Simplify( SHAPE_POLY_SET::PM_FAST );
+
+        if( m_B_Cu_PlatedPads_poly )
+            m_B_Cu_PlatedPads_poly->Simplify( SHAPE_POLY_SET::PM_FAST );
     }
 
     // Simplify holes polygon contours
@@ -884,6 +942,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             else
             {
                 AddPadsShapesWithClearanceToContainer( module, layerContainer, curr_layer_id, 0,
+                                                       false,
+                                                       false,
                                                        false );
             }
 

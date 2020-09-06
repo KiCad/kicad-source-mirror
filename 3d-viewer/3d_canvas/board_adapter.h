@@ -362,6 +362,16 @@ class BOARD_ADAPTER
         return m_layers_container2D;
     }
 
+    const CBVHCONTAINER2D* GetPlatedPads_Front() const noexcept
+    {
+        return m_platedpads_container2D_F_Cu;
+    }
+
+    const CBVHCONTAINER2D* GetPlatedPads_Back() const noexcept
+    {
+        return m_platedpads_container2D_B_Cu;
+    }
+
     /**
      * @brief GetMapLayersHoles -Get the map of container that have the holes per layer
      * @return the map containers of holes from this board
@@ -536,6 +546,16 @@ class BOARD_ADAPTER
         return m_layers_poly;
     }
 
+    const SHAPE_POLY_SET *GetPolyPlatedPads_Front()
+    {
+        return m_F_Cu_PlatedPads_poly;
+    }
+
+    const SHAPE_POLY_SET *GetPolyPlatedPads_Back()
+    {
+        return m_B_Cu_PlatedPads_poly;
+    }
+
     const MAP_POLY &GetPolyMapHoles_Inner() const noexcept
     {
         return m_layers_inner_holes_poly;
@@ -571,7 +591,9 @@ class BOARD_ADAPTER
                                                 CGENERICCONTAINER2D *aDstContainer,
                                                 PCB_LAYER_ID aLayerId,
                                                 int aInflateValue,
-                                                bool aSkipNPTHPadsWihNoCopper );
+                                                bool aSkipNPTHPadsWihNoCopper,
+                                                bool aSkipPlatedPads,
+                                                bool aSkipNonPlatedPads );
 
     void AddGraphicsShapesWithClearanceToContainer( const MODULE *aModule,
                                                     CGENERICCONTAINER2D *aDstContainer,
@@ -685,6 +707,9 @@ private:
     /// It contains polygon contours for each layer
     MAP_POLY          m_layers_poly;
 
+    SHAPE_POLY_SET*   m_F_Cu_PlatedPads_poly;
+    SHAPE_POLY_SET*   m_B_Cu_PlatedPads_poly;
+
     /// It contains polygon contours for holes of each layer (outer holes)
     MAP_POLY          m_layers_outer_holes_poly;
 
@@ -711,6 +736,9 @@ private:
 
     /// It contains the 2d elements of each layer
     MAP_CONTAINER_2D  m_layers_container2D;
+
+    CBVHCONTAINER2D*  m_platedpads_container2D_F_Cu;
+    CBVHCONTAINER2D*  m_platedpads_container2D_B_Cu;
 
     /// It contains the holes per each layer
     MAP_CONTAINER_2D  m_layers_holes2D;

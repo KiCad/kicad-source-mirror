@@ -48,7 +48,7 @@
 
 
 typedef std::map< PCB_LAYER_ID, CLAYERS_OGL_DISP_LISTS* > MAP_OGL_DISP_LISTS;
-typedef std::map< PCB_LAYER_ID, CLAYER_TRIANGLES * > MAP_TRIANGLES;
+typedef std::list<CLAYER_TRIANGLES * > LIST_TRIANGLES;
 typedef std::map< wxString, C_OGL_3DMODEL * > MAP_3DMODEL;
 
 #define SIZE_OF_CIRCLE_TEXTURE 1024
@@ -77,6 +77,8 @@ private:
 
     void ogl_free_all_display_lists();
     MAP_OGL_DISP_LISTS      m_ogl_disp_lists_layers;
+    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_lists_platedPads_F_Cu;
+    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_lists_platedPads_B_Cu;
     MAP_OGL_DISP_LISTS      m_ogl_disp_lists_layers_holes_outer;
     MAP_OGL_DISP_LISTS      m_ogl_disp_lists_layers_holes_inner;
     CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_board;
@@ -93,7 +95,7 @@ private:
     //CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_vias_and_pad_holes_inner_contourn_and_caps;
     CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_vias_and_pad_holes_outer_contourn_and_caps;
 
-    MAP_TRIANGLES           m_triangles;
+    LIST_TRIANGLES m_triangles; // store pointers so can be deleted latter
 
     GLuint m_ogl_circle_texture;
 
@@ -112,6 +114,10 @@ private:
                                                          float aZtop,
                                                          float aZbot,
                                                          bool aInvertFaces );
+
+    CLAYERS_OGL_DISP_LISTS* generateLayerListFromContainer( const CBVHCONTAINER2D *aContainer,
+                                                            const SHAPE_POLY_SET *aPolyList,
+                                                            PCB_LAYER_ID aLayerId );
 
     void add_triangle_top_bot( CLAYER_TRIANGLES *aDst,
                                const SFVEC2F &v0,
@@ -197,6 +203,10 @@ private:
     // Materials
     void setupMaterials();
 
+    void setCopperMaterial();
+    void setPlatedCopperAndDepthOffset( PCB_LAYER_ID aLayer_id );
+    void unsetDepthOffset();
+
     struct
     {
         SMATERIAL m_Paste;
@@ -204,6 +214,7 @@ private:
         SMATERIAL m_SilkSTop;
         SMATERIAL m_SolderMask;
         SMATERIAL m_EpoxyBoard;
+        SMATERIAL m_NonPlatedCopper; // raw copper
         SMATERIAL m_Copper;
         SMATERIAL m_Plastic;
         SMATERIAL m_GrayMaterial;

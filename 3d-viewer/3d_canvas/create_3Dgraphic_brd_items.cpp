@@ -459,7 +459,9 @@ void BOARD_ADAPTER::AddPadsShapesWithClearanceToContainer( const MODULE* aModule
                                                            CGENERICCONTAINER2D *aDstContainer,
                                                            PCB_LAYER_ID aLayerId,
                                                            int aInflateValue,
-                                                           bool aSkipNPTHPadsWihNoCopper )
+                                                           bool aSkipNPTHPadsWihNoCopper,
+                                                           bool aSkipPlatedPads,
+                                                           bool aSkipNonPlatedPads )
 {
     for( D_PAD* pad : aModule->Pads() )
     {
@@ -494,6 +496,15 @@ void BOARD_ADAPTER::AddPadsShapesWithClearanceToContainer( const MODULE* aModule
                 }
             }
         }
+
+        const bool isPlated = ( ( aLayerId == F_Cu ) && pad->IsPadOnLayer( F_Mask ) ) ||
+                              ( ( aLayerId == B_Cu ) && pad->IsPadOnLayer( B_Mask ) );
+
+        if( aSkipPlatedPads && isPlated )
+            continue;
+
+        if( aSkipNonPlatedPads && !isPlated )
+            continue;
 
         wxSize margin( aInflateValue, aInflateValue );
 

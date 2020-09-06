@@ -119,6 +119,12 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     m_SilkScreenColorTop = SFVEC4F( 0.9, 0.9, 0.9, 1.0 );
     m_SilkScreenColorBot = SFVEC4F( 0.9, 0.9, 0.9, 1.0 );
     m_CopperColor        = SFVEC4F( 0.75, 0.61, 0.23, 1.0 );
+
+    m_platedpads_container2D_F_Cu = nullptr;
+    m_platedpads_container2D_B_Cu = nullptr;
+
+    m_F_Cu_PlatedPads_poly = nullptr;
+    m_B_Cu_PlatedPads_poly = nullptr;
 }
 
 
