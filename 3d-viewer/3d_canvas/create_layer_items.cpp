@@ -103,11 +103,9 @@ void BOARD_ADAPTER::destroyLayers()
     m_through_holes_vias_inner.Clear();
     m_through_outer_holes_poly_NPTH.RemoveAllContours();
     m_through_outer_holes_poly.RemoveAllContours();
-    //m_through_inner_holes_poly.RemoveAllContours();
 
     m_through_outer_holes_vias_poly.RemoveAllContours();
     m_through_outer_ring_holes_vias_poly.RemoveAllContours();
-    m_through_inner_holes_vias_poly.RemoveAllContours();
 }
 
 
@@ -390,9 +388,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     TransformCircleToPolygon( m_through_outer_holes_poly, via->GetStart(),
                             hole_outer_radius, ARC_HIGH_DEF );
 
-                    TransformCircleToPolygon( m_through_inner_holes_poly, via->GetStart(),
-                            holediameter / 2, ARC_HIGH_DEF );
-
                     // Add same thing for vias only
 
                     TransformCircleToPolygon( m_through_outer_holes_vias_poly,
@@ -403,11 +398,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                         TransformCircleToPolygon( m_through_outer_ring_holes_vias_poly,
                                 via->GetStart(), hole_outer_ring_radius, ARC_HIGH_DEF );
                     }
-
-                    //TransformCircleToPolygon( m_through_inner_holes_vias_poly,
-                    //                          via->GetStart(),
-                    //                          holediameter / 2,
-                    //                          GetNrSegmentsCircle( holediameter ) );
                 }
             }
         }
@@ -473,9 +463,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 m_through_holes_outer_ring.Add( createNewPadDrill( pad, inflate ) );
             }
 
-            m_through_holes_inner.Add( createNewPadDrill( pad,       0 ) );
+            m_through_holes_inner.Add( createNewPadDrill( pad, 0 ) );
         }
     }
+
     if( m_stats_nr_holes )
         m_stats_hole_med_diameter /= (float)m_stats_nr_holes;
 
@@ -496,7 +487,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             if( pad->GetAttribute () != PAD_ATTRIB_HOLE_NOT_PLATED )
             {
                 pad->TransformHoleWithClearanceToPolygon( m_through_outer_holes_poly, inflate );
-                pad->TransformHoleWithClearanceToPolygon( m_through_inner_holes_poly, 0 );
             }
             else
             {
@@ -770,12 +760,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     // End Build Copper layers
 
     // This will make a union of all added contourns
-    m_through_inner_holes_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
     m_through_outer_holes_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
     m_through_outer_holes_poly_NPTH.Simplify( SHAPE_POLY_SET::PM_FAST );
     m_through_outer_holes_vias_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
     m_through_outer_ring_holes_vias_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
-    //m_through_inner_holes_vias_poly.Simplify( SHAPE_POLY_SET::PM_FAST ); // Not in use
 
     // Build Tech layers
     // Based on: https://github.com/KiCad/kicad-source-mirror/blob/master/3d-viewer/3d_draw.cpp#L1059

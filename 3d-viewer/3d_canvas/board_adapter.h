@@ -452,29 +452,12 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetThroughHole_Vias_Inner_poly -
-     */
-    const SHAPE_POLY_SET &GetThroughHole_Vias_Inner_poly() const noexcept
-    {
-        return m_through_inner_holes_vias_poly;
-    }
-
-    /**
      * @brief GetThroughHole_Inner - Get the ThroughHole container
      * @return a container with holes
      */
     const CBVHCONTAINER2D &GetThroughHole_Inner() const noexcept
     {
         return m_through_holes_inner;
-    }
-
-    /**
-     * @brief GetThroughHole_Inner_poly -
-     * @return
-     */
-    const SHAPE_POLY_SET &GetThroughHole_Inner_poly() const noexcept
-    {
-        return m_through_inner_holes_poly;
     }
 
     /**
@@ -714,17 +697,11 @@ private:
     /// It contains polygon contours for through holes (outer cylinder)
     SHAPE_POLY_SET    m_through_outer_holes_poly;
 
-    /// It contains polygon contours for through holes (inner cylinder)
-    SHAPE_POLY_SET    m_through_inner_holes_poly;
-
     /// It contains polygon contours for through holes vias (outer cylinder)
     SHAPE_POLY_SET    m_through_outer_holes_vias_poly;
 
     /// It contains polygon contours for through holes vias (outer annular ring)
     SHAPE_POLY_SET    m_through_outer_ring_holes_vias_poly;
-
-    /// It contains polygon contours for through holes vias (inner cylinder)
-    SHAPE_POLY_SET    m_through_inner_holes_vias_poly;
 
     /// PCB board outline polygon
     SHAPE_POLY_SET    m_board_poly;
