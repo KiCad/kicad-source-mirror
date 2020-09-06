@@ -67,6 +67,40 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
 }
 
 
+bool isCtrlSlash( wxKeyEvent& aEvent )
+{
+    if( !aEvent.ControlDown() || aEvent.MetaDown() )
+        return false;
+
+    if( aEvent.GetUnicodeKey() == '/' )
+        return true;
+
+    // OK, now the wxWidgets hacks start.
+    // (We should abandon these if https://trac.wxwidgets.org/ticket/18911 gets resolved.)
+
+    // Many Latin America and European keyboars have have the / over the 7.  We know that
+    // wxWidgets messes this up and returns Shift+7 through GetUnicodeKey().  However, other
+    // keyboards (such as France and Belgium) have 7 in the shifted position, so a Shift+7
+    // *could* be legitimate.
+
+    // However, we *are* checking Ctrl, so to assume any Shift+7 is a Ctrl-/ really only
+    // disallows Ctrl+Shift+7 from doing something else, which is probably OK.  (This routine
+    // is only used in the Scintilla editor, not in the rest of Kicad.)
+
+    // The other main shifted loation of / is over : (France and Belgium), so we'll sacrifice
+    // Ctrl+Shift+: too.
+
+    if( aEvent.ShiftDown() && ( aEvent.GetUnicodeKey() == '7' || aEvent.GetUnicodeKey() == ':' ) )
+        return true;
+
+    // A few keyboards have / in an Alt position.  Since we're expressly not checking Alt for
+    // up or down, those should work.  However, if they don't, there's room below for yet
+    // another hack....
+
+    return false;
+}
+
+
 void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
 {
     wxString c = aEvent.GetUnicodeKey();
@@ -147,8 +181,7 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
         else
             m_te->DeleteRange( m_te->GetSelectionStart(), 1 );
     }
-    else if( aEvent.ControlDown() && !aEvent.MetaDown() && !aEvent.AltDown()
-            && aEvent.GetUnicodeKey() == '/' )
+    else if( isCtrlSlash( aEvent ) )
     {
         int  startLine = m_te->LineFromPosition( m_te->GetSelectionStart() );
         int  endLine = m_te->LineFromPosition( m_te->GetSelectionEnd() );
