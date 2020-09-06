@@ -74,7 +74,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
 
 
 ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone )
-        : BOARD_CONNECTED_ITEM( aZone.GetParent(), PCB_ZONE_AREA_T ),
+        : BOARD_CONNECTED_ITEM( aZone ),
         m_Poly( nullptr ),
         m_CornerSelection( nullptr )
 {
@@ -697,10 +697,14 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         if( m_FilledPolysList.count( pcbframe->GetActiveLayer() ) )
             layer = pcbframe->GetActiveLayer();
 #endif
+    auto layer_it = m_FilledPolysList.find( layer );
 
-    if( !m_FilledPolysList.at( layer ).IsEmpty() )
+    if( layer_it == m_FilledPolysList.end() )
+        layer_it = m_FilledPolysList.begin();
+
+    if( layer_it != m_FilledPolysList.end() )
     {
-        msg.Printf( wxT( "%d" ), m_FilledPolysList.at( layer ).TotalVertices() );
+        msg.Printf( wxT( "%d" ), layer_it->second.TotalVertices() );
         aList.emplace_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg, BLUE ) );
     }
 }
