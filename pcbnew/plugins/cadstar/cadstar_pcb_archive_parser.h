@@ -975,6 +975,7 @@ public:
         GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this FIGURE is part of a group
         REUSEBLOCKREF ReuseBlockRef;
         SWAP_RULE     SwapRule = SWAP_RULE::BOTH; ///< Only applicable to Figures in Components
+        bool          Fixed    = false;
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
 
         void Parse( XNODE* aNode );

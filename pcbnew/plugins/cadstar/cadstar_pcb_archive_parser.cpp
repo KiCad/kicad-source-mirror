@@ -1520,6 +1520,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::FIGURE::Parse( XNODE* aNode )
         {
             SwapRule = ParseSwapRule( cNode );
         }
+        else if( cNodeName == wxT( "FIX" ) )
+            Fixed = true;
         else if( cNodeName == wxT( "GROUPREF" ) )
             GroupID = GetXmlAttributeIDString( cNode, 0 );
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )

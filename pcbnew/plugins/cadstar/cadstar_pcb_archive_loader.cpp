@@ -78,6 +78,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
     loadBoardStackup();
     loadDesignRules();
     loadComponentLibrary();
+    loadGroups();
     loadBoards();
     loadFigures();
     loadTexts();
@@ -621,16 +622,66 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF& aComponent, MODU
 }
 
 
+void CADSTAR_PCB_ARCHIVE_LOADER::loadGroups()
+{
+    for( std::pair<GROUP_ID, GROUP> groupPair : Layout.Groups )
+    {
+        GROUP& csGroup = groupPair.second;
+
+        PCB_GROUP* kiGroup = new PCB_GROUP( mBoard );
+
+        mBoard->Add( kiGroup );
+        kiGroup->SetName( csGroup.Name );
+        kiGroup->SetLocked( csGroup.Fixed );
+
+        mGroupMap.insert( { csGroup.ID, kiGroup } );
+    }
+
+    //now add any groups to their parent group
+    for( std::pair<GROUP_ID, GROUP> groupPair : Layout.Groups )
+    {
+        GROUP& csGroup = groupPair.second;
+
+        if( !csGroup.GroupID.IsEmpty() )
+        {
+            if( mGroupMap.find( csGroup.ID ) == mGroupMap.end() )
+                THROW_IO_ERROR( wxString::Format(
+                        _( "The file appears to be corrupt. Unable to find group ID %s "
+                           "in the group definitions." ),
+                        csGroup.ID ) );
+
+            else if( mGroupMap.find( csGroup.ID ) == mGroupMap.end() )
+                THROW_IO_ERROR( wxString::Format(
+                        _( "The file appears to be corrupt. Unable to find sub group %s "
+                           "in the group map (parent group ID=%s, Name=%s)." ),
+                        csGroup.GroupID, csGroup.ID, csGroup.Name ) );
+
+            else
+            {
+                PCB_GROUP* kiCadGroup = mGroupMap.at( csGroup.ID );
+                PCB_GROUP* parentGroup = mGroupMap.at( csGroup.GroupID );
+                parentGroup->AddItem( kiCadGroup );
+            }
+        }
+    }
+}
+
+
 void CADSTAR_PCB_ARCHIVE_LOADER::loadBoards()
 {
     for( std::pair<BOARD_ID, BOARD> boardPair : Layout.Boards )
     {
         BOARD& board = boardPair.second;
+        GROUP_ID boardGroup = createUniqueGroupID( wxT( "Board" ) );
         drawCadstarShape( board.Shape, PCB_LAYER_ID::Edge_Cuts, board.LineCodeID,
-                wxString::Format( "BOARD %s", board.ID ), mBoard );
+                wxString::Format( "BOARD %s", board.ID ), mBoard, boardGroup );
 
-        //TODO process board attributes
-        //TODO process addition to a group
+        if( !board.GroupID.IsEmpty() )
+        {
+            addToGroup( board.GroupID, getKiCadGroup( boardGroup ) );
+        }
+
+        //TODO process board attributes when KiCad supports them
     }
 }
 
@@ -641,10 +692,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadFigures()
     {
         FIGURE& fig = figPair.second;
         drawCadstarShape( fig.Shape, getKiCadLayer( fig.LayerID ), fig.LineCodeID,
-                wxString::Format( "FIGURE %s", fig.ID ), mBoard );
+                wxString::Format( "FIGURE %s", fig.ID ), mBoard, fig.GroupID );
 
-        //TODO process addition to a group
-        //TODO process "swaprule"
+        //TODO process "swaprule" (doesn't seem to apply to Layout Figures?)
         //TODO process re-use block when KiCad Supports it
         //TODO process attributes when KiCad Supports attributes in figures
     }
@@ -765,6 +815,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDocumentationSymbols()
     {
         DOCUMENTATION_SYMBOL& docSymInstance = docPair.second;
 
+
         auto docSymIter = Library.ComponentDefinitions.find( docSymInstance.SymdefID );
 
         if( docSymIter == Library.ComponentDefinitions.end() )
@@ -783,6 +834,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDocumentationSymbols()
         wxPoint centreOfTransform = getKiCadPoint( docSymDefinition.Origin );
         bool    mirrorInvert      = docSymInstance.Mirror;
 
+        //create a group to store the items in
+        wxString groupName = docSymDefinition.ReferenceName;
+
+        if( !docSymDefinition.Alternate.IsEmpty() )
+            groupName += wxT( " (" ) + docSymDefinition.Alternate + wxT( ")" );
+
+        GROUP_ID groupID = createUniqueGroupID( groupName );
+
         LSEQ layers = getKiCadLayerSet( docSymInstance.LayerID ).Seq();
 
         for( PCB_LAYER_ID layer : layers )
@@ -793,7 +852,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDocumentationSymbols()
                 drawCadstarShape( fig.Shape, layer, fig.LineCodeID,
                         wxString::Format( "DOCUMENTATION SYMBOL %s, FIGURE %s",
                                 docSymDefinition.ReferenceName, fig.ID ),
-                        mBoard, moveVector, rotationAngle, scalingFactor, centreOfTransform,
+                        mBoard, groupID, moveVector, rotationAngle, scalingFactor, centreOfTransform,
                         mirrorInvert );
             }
         }
@@ -801,7 +860,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDocumentationSymbols()
         for( std::pair<TEXT_ID, TEXT> textPair : docSymDefinition.Texts )
         {
             TEXT txt = textPair.second;
-            drawCadstarText( txt, mBoard, docSymInstance.LayerID, moveVector, rotationAngle,
+            drawCadstarText( txt, mBoard, groupID, docSymInstance.LayerID, moveVector, rotationAngle,
                     scalingFactor, centreOfTransform, mirrorInvert );
         }
     }
@@ -1151,7 +1210,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks(
         dsVector.push_back( ds );
         prevEnd = v.Vertex.End;
     }
-
+    
     //Todo add real netcode to the tracks
     std::vector<TRACK*> tracks =
             makeTracksFromDrawsegments( dsVector, mBoard, getKiCadNet( aCadstarNetID ) );
@@ -1216,9 +1275,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetVia(
 
 
 void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
-        BOARD_ITEM_CONTAINER* aContainer, const LAYER_ID& aCadstarLayerOverride,
-        const wxPoint& aMoveVector, const double& aRotationAngle, const double& aScalingFactor,
-        const wxPoint& aTransformCentre, const bool& aMirrorInvert )
+        BOARD_ITEM_CONTAINER* aContainer, const GROUP_ID& aCadstarGroupID,
+        const LAYER_ID& aCadstarLayerOverride, const wxPoint& aMoveVector,
+        const double& aRotationAngle, const double& aScalingFactor, const wxPoint& aTransformCentre,
+        const bool& aMirrorInvert )
 {
     TEXTE_PCB* txt = new TEXTE_PCB( aContainer );
     aContainer->Add( txt );
@@ -1226,14 +1286,16 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
 
     wxPoint rotatedTextPos = getKiCadPoint( aCadstarText.Position );
     RotatePoint( &rotatedTextPos, aTransformCentre, aRotationAngle );
-    rotatedTextPos.x = KiROUND( (double) ( rotatedTextPos.x - aTransformCentre.x ) * aScalingFactor );
-    rotatedTextPos.y = KiROUND( (double) ( rotatedTextPos.y - aTransformCentre.y ) * aScalingFactor );
+    rotatedTextPos.x =
+            KiROUND( (double) ( rotatedTextPos.x - aTransformCentre.x ) * aScalingFactor );
+    rotatedTextPos.y =
+            KiROUND( (double) ( rotatedTextPos.y - aTransformCentre.y ) * aScalingFactor );
     rotatedTextPos += aTransformCentre;
     txt->SetTextPos( rotatedTextPos );
     txt->SetPosition( rotatedTextPos );
 
     txt->SetTextAngle( getAngleTenthDegree( aCadstarText.OrientAngle ) + aRotationAngle );
-    txt->SetMirrored( aCadstarText.Mirror );    
+    txt->SetMirrored( aCadstarText.Mirror );
 
     TEXTCODE tc = getTextCode( aCadstarText.TextCodeID );
 
@@ -1300,7 +1362,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
     {
         txt->Flip( aTransformCentre, true );
     }
-    
+
     //scale it after flipping:
     if( aScalingFactor != 1.0 )
     {
@@ -1331,23 +1393,30 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
             txt->SetLayer( layer );
             newtxt = new TEXTE_PCB( *txt );
             mBoard->Add( newtxt, ADD_MODE::APPEND );
+
+            if( !aCadstarGroupID.IsEmpty() )
+                addToGroup( aCadstarGroupID, newtxt );
         }
 
         mBoard->Remove( txt );
         delete txt;
     }
     else
+    {
         txt->SetLayer( getKiCadLayer( layersToDrawOn ) );
-
+        
+        if( !aCadstarGroupID.IsEmpty() )
+            addToGroup( aCadstarGroupID, txt );
+    }
     //TODO Handle different font types when KiCad can support it.
 }
 
 
 void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
         const PCB_LAYER_ID& aKiCadLayer, const LINECODE_ID& aCadstarLinecodeID,
-        const wxString& aShapeName, BOARD_ITEM_CONTAINER* aContainer, const wxPoint& aMoveVector,
-        const double& aRotationAngle, const double& aScalingFactor, const wxPoint& aTransformCentre,
-        const bool& aMirrorInvert )
+        const wxString& aShapeName, BOARD_ITEM_CONTAINER* aContainer,
+        const GROUP_ID& aCadstarGroupID, const wxPoint& aMoveVector, const double& aRotationAngle,
+        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
 {
     int lineThickness = getLineThickness( aCadstarLinecodeID );
 
@@ -1357,10 +1426,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
     case SHAPE_TYPE::OUTLINE:
         ///TODO update this when Polygons in KiCad can be defined with no fill
         drawCadstarVerticesAsSegments( aCadstarShape.Vertices, aKiCadLayer, lineThickness,
-                aContainer, aMoveVector, aRotationAngle, aScalingFactor, aTransformCentre,
-                aMirrorInvert );
+                aContainer, aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
+                aTransformCentre, aMirrorInvert );
         drawCadstarCutoutsAsSegments( aCadstarShape.Cutouts, aKiCadLayer, lineThickness, aContainer,
-                aMoveVector, aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert );
+                aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor, aTransformCentre,
+                aMirrorInvert );
         break;
 
     case SHAPE_TYPE::HATCHED:
@@ -1387,6 +1457,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
         ds->SetWidth( lineThickness );
         ds->SetLayer( aKiCadLayer );
         aContainer->Add( ds, ADD_MODE::APPEND );
+
+        if( !aCadstarGroupID.IsEmpty() )
+            addToGroup( aCadstarGroupID, ds );
     }
     break;
     }
@@ -1395,26 +1468,28 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
 
 void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarCutoutsAsSegments( const std::vector<CUTOUT>& aCutouts,
         const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
-        BOARD_ITEM_CONTAINER* aContainer, const wxPoint& aMoveVector, const double& aRotationAngle,
-        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
+        BOARD_ITEM_CONTAINER* aContainer, const GROUP_ID& aCadstarGroupID,
+        const wxPoint& aMoveVector, const double& aRotationAngle, const double& aScalingFactor,
+        const wxPoint& aTransformCentre, const bool& aMirrorInvert )
 {
     for( CUTOUT cutout : aCutouts )
     {
         drawCadstarVerticesAsSegments( cutout.Vertices, aKiCadLayer, aLineThickness, aContainer,
-                aMoveVector, aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert );
+                aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor, aTransformCentre,
+                aMirrorInvert );
     }
 }
 
 
 void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarVerticesAsSegments(
         const std::vector<VERTEX>& aCadstarVertices, const PCB_LAYER_ID& aKiCadLayer,
-        const int& aLineThickness, BOARD_ITEM_CONTAINER* aContainer, const wxPoint& aMoveVector,
-        const double& aRotationAngle, const double& aScalingFactor, const wxPoint& aTransformCentre,
-        const bool& aMirrorInvert )
+        const int& aLineThickness, BOARD_ITEM_CONTAINER* aContainer,
+        const GROUP_ID& aCadstarGroupID, const wxPoint& aMoveVector, const double& aRotationAngle,
+        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
 {
     std::vector<DRAWSEGMENT*> drawSegments =
-            getDrawSegmentsFromVertices( aCadstarVertices, aContainer, aMoveVector, aRotationAngle,
-                    aScalingFactor, aTransformCentre, aMirrorInvert );
+            getDrawSegmentsFromVertices( aCadstarVertices, aContainer, aCadstarGroupID, aMoveVector,
+                    aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert );
 
     for( DRAWSEGMENT* ds : drawSegments )
     {
@@ -1428,8 +1503,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarVerticesAsSegments(
 
 std::vector<DRAWSEGMENT*> CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentsFromVertices(
         const std::vector<VERTEX>& aCadstarVertices, BOARD_ITEM_CONTAINER* aContainer,
-        const wxPoint& aMoveVector, const double& aRotationAngle, const double& aScalingFactor,
-        const wxPoint& aTransformCentre, const bool& aMirrorInvert )
+        const GROUP_ID& aCadstarGroupID, const wxPoint& aMoveVector, const double& aRotationAngle,
+        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
 {
     std::vector<DRAWSEGMENT*> drawSegments;
 
@@ -1443,8 +1518,9 @@ std::vector<DRAWSEGMENT*> CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentsFromVertice
     for( size_t i = 1; i < aCadstarVertices.size(); i++ )
     {
         cur = &aCadstarVertices.at( i );
-        drawSegments.push_back( getDrawSegmentFromVertex( prev->End, *cur, aContainer, aMoveVector,
-                aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert ) );
+        drawSegments.push_back(
+                getDrawSegmentFromVertex( prev->End, *cur, aContainer, aCadstarGroupID, aMoveVector,
+                        aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert ) );
         prev = cur;
     }
 
@@ -1453,9 +1529,9 @@ std::vector<DRAWSEGMENT*> CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentsFromVertice
 
 
 DRAWSEGMENT* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& aCadstarStartPoint,
-        const VERTEX& aCadstarVertex, BOARD_ITEM_CONTAINER* aContainer, const wxPoint& aMoveVector,
-        const double& aRotationAngle, const double& aScalingFactor, const wxPoint& aTransformCentre,
-        const bool& aMirrorInvert )
+        const VERTEX& aCadstarVertex, BOARD_ITEM_CONTAINER* aContainer,
+        const GROUP_ID& aCadstarGroupID, const wxPoint& aMoveVector, const double& aRotationAngle,
+        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
 {
     DRAWSEGMENT* ds = nullptr;
     bool         cw = false;
@@ -1521,7 +1597,7 @@ DRAWSEGMENT* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& 
     //Apply transforms
     if( aMirrorInvert )
         ds->Flip( aTransformCentre, true );
-    
+
     if( aScalingFactor != 1.0 )
     {
         ds->Move( -aTransformCentre );
@@ -1537,6 +1613,9 @@ DRAWSEGMENT* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& 
 
     if( isModule( aContainer ) && ds != nullptr )
         ( (EDGE_MODULE*) ds )->SetLocalCoord();
+
+    if( !aCadstarGroupID.IsEmpty() )
+        addToGroup( aCadstarGroupID, ds );
 
     return ds;
 }
@@ -1573,8 +1652,10 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHA
         const double& aRotationAngle, const double& aScalingFactor, const wxPoint& aTransformCentre,
         const bool& aMirrorInvert )
 {
+    GROUP_ID noGroup = wxEmptyString;
+
     std::vector<DRAWSEGMENT*> outlineSegments =
-            getDrawSegmentsFromVertices( aCadstarShape.Vertices, aContainer, aMoveVector,
+            getDrawSegmentsFromVertices( aCadstarShape.Vertices, aContainer, noGroup, aMoveVector,
                     aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert );
 
     SHAPE_POLY_SET polySet( getLineChainFromDrawsegments( outlineSegments ) );
@@ -1588,8 +1669,9 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHA
 
     for( CUTOUT cutout : aCadstarShape.Cutouts )
     {
-        std::vector<DRAWSEGMENT*> cutoutSeg = getDrawSegmentsFromVertices( cutout.Vertices,
-                aContainer, aMoveVector, aRotationAngle, aScalingFactor, aTransformCentre );
+        std::vector<DRAWSEGMENT*> cutoutSeg =
+                getDrawSegmentsFromVertices( cutout.Vertices, aContainer, noGroup, aMoveVector,
+                        aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert );
 
         polySet.AddHole( getLineChainFromDrawsegments( cutoutSeg ) );
 
@@ -2011,6 +2093,14 @@ int CADSTAR_PCB_ARCHIVE_LOADER::getKiCadHatchCodeGap( const HATCHCODE_ID& aCadst
 }
 
 
+PCB_GROUP* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadGroup( const GROUP_ID& aCadstarGroupID )
+{
+    wxCHECK( mGroupMap.find( aCadstarGroupID ) != mGroupMap.end(), nullptr );
+
+    return mGroupMap.at( aCadstarGroupID );
+}
+
+
 void CADSTAR_PCB_ARCHIVE_LOADER::checkAndLogHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID )
 {
     if( mHatchcodesTested.find( aCadstarHatchcodeID ) != mHatchcodesTested.end() )
@@ -2287,4 +2377,35 @@ LSET CADSTAR_PCB_ARCHIVE_LOADER::getKiCadLayerSet( const LAYER_ID& aCadstarLayer
     default:
         return LSET( getKiCadLayer( aCadstarLayerID ) );
     }
+}
+
+
+void CADSTAR_PCB_ARCHIVE_LOADER::addToGroup(
+        const GROUP_ID& aCadstarGroupID, BOARD_ITEM* aKiCadItem )
+{
+    wxCHECK( mGroupMap.find( aCadstarGroupID ) != mGroupMap.end() );
+
+    PCB_GROUP* parentGroup = mGroupMap.at( aCadstarGroupID );
+    parentGroup->AddItem( aKiCadItem );
+}
+
+
+CADSTAR_PCB_ARCHIVE_LOADER::GROUP_ID CADSTAR_PCB_ARCHIVE_LOADER::createUniqueGroupID(
+        const wxString& aName )
+{
+    wxString groupName = aName;
+    int      num       = 0;
+
+    while( mGroupMap.find( groupName ) != mGroupMap.end() )
+    {
+        groupName = aName + wxT( "_" ) + wxString::Format( "%i", ++num );
+    }
+
+    PCB_GROUP* docSymGroup = new PCB_GROUP( mBoard );
+    mBoard->Add( docSymGroup );
+    docSymGroup->SetName( groupName );
+    GROUP_ID groupID( groupName );
+    mGroupMap.insert( { groupID, docSymGroup } );
+
+    return groupID;
 }
