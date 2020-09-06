@@ -487,7 +487,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 screen->UpdateLocalLibSymbolLinks();
 
             // Restore all of the loaded symbol instances from the root sheet screen.
-            sheetList.UpdateSymbolInstances( Schematic().RootScreen()->m_symbolInstances );
+            sheetList.UpdateSymbolInstances( Schematic().RootScreen()->GetSymbolInstances() );
         }
 
         Schematic().ConnectionGraph()->Reset();

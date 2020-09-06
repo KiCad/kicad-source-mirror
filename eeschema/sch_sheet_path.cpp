@@ -257,9 +257,9 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
 void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
                                     bool aForceIncludeOrphanComponents ) const
 {
-    for( auto item : LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+    for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
     {
-        auto component = static_cast<SCH_COMPONENT*>( item );
+        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
 
         // Skip pseudo components, which have a reference starting with #.  This mainly
         // affects power symbols.
@@ -798,7 +798,7 @@ std::vector<KIID_PATH> SCH_SHEET_LIST::GetPaths() const
 {
     std::vector<KIID_PATH> paths;
 
-    for( auto sheetPath : *this )
+    for( const SCH_SHEET_PATH& sheetPath : *this )
         paths.emplace_back( sheetPath.Path() );
 
     return paths;
@@ -817,10 +817,10 @@ void SCH_SHEET_LIST::ReplaceLegacySheetPaths( const std::vector<KIID_PATH>& aOld
 
         wxCHECK( screen, /* void */ );
 
-        for( auto symbol : screen->Items().OfType( SCH_COMPONENT_T ) )
+        for( SCH_ITEM* symbol : screen->Items().OfType( SCH_COMPONENT_T ) )
         {
             static_cast<SCH_COMPONENT*>( symbol )->ReplaceInstanceSheetPath( oldSheetPath,
-                    newSheetPath );
+                                                                             newSheetPath );
         }
     }
 }
