@@ -136,7 +136,9 @@ typedef long time_t;
 %include "kicadplugins.i"
 
 %shared_ptr(SHAPE)
+%shared_ptr(SHAPE_BASE)
 %shared_ptr(SHAPE_POLY_SET)
+%shared_ptr(SHAPE_LINE_CHAIN_BASE)
 %shared_ptr(SHAPE_LINE_CHAIN)
 
 #include <geometry/shape.h>
