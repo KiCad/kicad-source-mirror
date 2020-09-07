@@ -422,12 +422,15 @@ bool FOOTPRINT_EDITOR_SETTINGS::migrateSchema0to1()
 
     if( !m_manager )
     {
-        wxLogTrace(
-                traceSettings, "Error: FOOTPRINT_EDITOR_SETTINGS migration cannot run unmanaged!" );
+        wxLogTrace( traceSettings,
+                    "Error: FOOTPRINT_EDITOR_SETTINGS migration cannot run unmanaged!" );
         return false;
     }
 
     nlohmann::json::json_pointer theme_ptr( "/appearance/color_theme" );
+
+    if( !count( theme_ptr ) )
+        return true;
 
     wxString selected = at( theme_ptr ).get<wxString>();
     wxString search   = selected + wxT( "_footprints" );
@@ -437,7 +440,7 @@ bool FOOTPRINT_EDITOR_SETTINGS::migrateSchema0to1()
         if( settings->GetFilename() == search )
         {
             wxLogTrace( traceSettings, "Updating footprint editor theme from %s to %s",
-                    selected, search );
+                        selected, search );
             ( *this )[theme_ptr] = search;
             return true;
         }
