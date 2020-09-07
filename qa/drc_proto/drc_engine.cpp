@@ -252,6 +252,10 @@ void test::DRC_ENGINE::inferLegacyRules()
     holeClearanceConstraint.Value().SetMin( bds.m_HoleToHoleMin );
     rule->AddConstraint( holeClearanceConstraint );
 
+    DRC_CONSTRAINT courtyardClearanceConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE );
+    holeClearanceConstraint.Value().SetMin( 0 );
+    rule->AddConstraint( courtyardClearanceConstraint );
+
     // 2) micro-via specific defaults (new DRC doesn't treat microvias in any special way)
 
     priorityRangeMin++;
@@ -311,38 +315,8 @@ void test::DRC_ENGINE::inferLegacyRules()
 
     ReportAux( wxString::Format( "Importing %d legacy net classes", (int) netclasses.size() ) );
 
-#if 0
-    for( auto netclass : bds.GetNetClasses() )
-    {
-        auto className = netclass.second->GetName();
-        drc_dbg(1,"Process netclass '%s'\n", className );
-        NETCLASS_ENTRY ent;
-        ent.name = className;
-        ent.clearance = netclass.second->GetClearance();
-        ent.width = netclass.second->GetTrackWidth();
-        netclassesByClearance.push_back( ent );
-        netclassesByWidth.push_back( ent );
-    }
-
-    // create clearance rules
-
-    std::sort( netclassesByClearance.begin(), netclassesByClearance.end(), [] ( const NETCLASS_ENTRY& a, const NETCLASS_ENTRY& b ) -> bool
-    {
-        return a.clearance < b.clearance;
-    } );
-
-    std::sort( netclassesByWidth.begin(), netclassesByWidth.end(), [] ( const NETCLASS_ENTRY& a, const NETCLASS_ENTRY& b ) -> bool
-    {
-        return a.width > b.width;
-    } );
-#endif
-    
-
-#if 0
-    for( int i = 0; i <  netclassesByClearance.size(); i++ )
-    {
-#endif
     int i = 0;
+
     for( auto &nc : netclasses )
     {
         wxString className = nc->GetName();
@@ -415,7 +389,7 @@ static wxString formatConstraint( const test::DRC_CONSTRAINT& constraint )
         { test::DRC_CONSTRAINT_TYPE_SILK_TO_PAD, "silk_to_pad", formatMinMax },
         { test::DRC_CONSTRAINT_TYPE_SILK_TO_SILK, "silk_to_silk", formatMinMax },
         { test::DRC_CONSTRAINT_TYPE_TRACK_WIDTH, "track_width", formatMinMax },
-        { test::DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH, "annulus_with", formatMinMax },
+        { test::DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH, "annulus_width", formatMinMax },
         { test::DRC_CONSTRAINT_TYPE_DISALLOW, "disallow", nullptr }, // fixme
         { test::DRC_CONSTRAINT_TYPE_VIA_DIAMETER, "via_diameter", formatMinMax }
     };
