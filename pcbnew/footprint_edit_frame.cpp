@@ -158,15 +158,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     // editor: make it non visible.
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
 
-    // Must be set after calling LoadSettings() to be sure these parameters are not dependent
-    // on what is read in stored settings.  Enable one internal layer, because footprints
-    // support keepout areas that can be on internal layers only (therefore on the first internal
-    // layer).  This is needed to handle these keepout in internal layers only.
-    GetBoard()->SetCopperLayerCount( 3 );
-    GetBoard()->SetEnabledLayers( GetBoard()->GetEnabledLayers().set( In1_Cu ) );
-    GetBoard()->SetVisibleLayers( GetBoard()->GetEnabledLayers() );
-    GetBoard()->SetLayerName( In1_Cu, _( "Inner layers" ) );
-
     GetGalDisplayOptions().m_axesEnabled = true;
 
     // In modedit, set the default paper size to A4 for plot/print
@@ -191,6 +182,15 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     // parameters in m_LayersManager
     // NOTE: KifaceSettings() will return PCBNEW_SETTINGS if we started from pcbnew
     LoadSettings( GetSettings() );
+
+    // Must be set after calling LoadSettings() to be sure these parameters are not dependent
+    // on what is read in stored settings.  Enable one internal layer, because footprints
+    // support keepout areas that can be on internal layers only (therefore on the first internal
+    // layer).  This is needed to handle these keepout in internal layers only.
+    GetBoard()->SetCopperLayerCount( 3 );
+    GetBoard()->SetEnabledLayers( GetBoard()->GetEnabledLayers().set( In1_Cu ) );
+    GetBoard()->SetVisibleLayers( GetBoard()->GetEnabledLayers() );
+    GetBoard()->SetLayerName( In1_Cu, _( "Inner layers" ) );
 
     m_Layers->ReFill();
     m_Layers->ReFillRender();
