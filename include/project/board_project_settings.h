@@ -101,6 +101,13 @@ enum class NET_COLOR_MODE
     ALL         ///< Net/netclass colors are shown on all net copper
 };
 
+///> Determines how ratsnest lines are drawn
+enum class RATSNEST_MODE
+{
+    ALL,        ///< Ratsnest lines are drawn to items on all layers (default)
+    VISIBLE     ///< Ratsnest lines are drawn to items on visible layers only
+};
+
 /**
  * A saved set of layers that are visible
  */

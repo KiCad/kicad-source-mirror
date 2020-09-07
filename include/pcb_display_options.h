@@ -89,6 +89,9 @@ public:
     /// How to use color overrides on specific nets and netclasses
     NET_COLOR_MODE m_NetColorMode;
 
+    /// Ratsnest draw mode (all layers vs only visible layers)
+    RATSNEST_MODE m_RatsnestMode;
+
     int  m_MaxLinksShowed;              // in track creation: number of hairwires shown
     bool m_ShowModuleRatsnest;          // When moving a footprint: allows displaying a ratsnest
     bool m_ShowGlobalRatsnest;          // If true, show all

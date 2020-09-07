@@ -609,16 +609,17 @@ void APPEARANCE_CONTROLS::createControls()
     m_paneNetDisplayOptions->Collapse();
     m_paneNetDisplayOptions->SetBackgroundColour( m_notebook->GetThemeBackgroundColour() );
 
+    wxWindow* netDisplayPane = m_paneNetDisplayOptions->GetPane();
     wxBoxSizer* netDisplayOptionsSizer = new wxBoxSizer( wxVERTICAL );
 
-    wxWindow* netDisplayPane = m_paneNetDisplayOptions->GetPane();
+    //// Net color mode
 
-    m_staticTextNetDisplayTitle = new wxStaticText( netDisplayPane, wxID_ANY, _( "Net colors:" ),
-                                                    wxDefaultPosition, wxDefaultSize, 0 );
-    m_staticTextNetDisplayTitle->Wrap( -1 );
-    m_staticTextNetDisplayTitle->SetToolTip( _( "Choose when to show net and netclass colors" ) );
+    m_txtNetDisplayTitle = new wxStaticText( netDisplayPane, wxID_ANY, _( "Net colors:" ),
+                                             wxDefaultPosition, wxDefaultSize, 0 );
+    m_txtNetDisplayTitle->Wrap( -1 );
+    m_txtNetDisplayTitle->SetToolTip( _( "Choose when to show net and netclass colors" ) );
 
-    netDisplayOptionsSizer->Add( m_staticTextNetDisplayTitle, 0, wxEXPAND | wxBOTTOM | wxLEFT, 2 );
+    netDisplayOptionsSizer->Add( m_txtNetDisplayTitle, 0, wxEXPAND | wxBOTTOM | wxLEFT, 2 );
 
     wxBoxSizer* netColorSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -641,7 +642,35 @@ void APPEARANCE_CONTROLS::createControls()
 
     netColorSizer->Add( m_rbNetColorOff, 0, 0, 5 );
 
-    netDisplayOptionsSizer->Add( netColorSizer, 0, wxEXPAND|wxBOTTOM, 5 );
+    netDisplayOptionsSizer->Add( netColorSizer, 0, wxEXPAND | wxBOTTOM, 5 );
+
+    //// Ratsnest display
+
+    m_txtRatsnestVisibility = new wxStaticText( netDisplayPane, wxID_ANY, _( "Ratsnest display:" ),
+                                                wxDefaultPosition, wxDefaultSize, 0 );
+    m_txtRatsnestVisibility->Wrap( -1 );
+    m_txtRatsnestVisibility->SetToolTip( _( "Choose what ratsnest lines to display" ) );
+
+    netDisplayOptionsSizer->Add( m_txtRatsnestVisibility, 0, wxEXPAND | wxBOTTOM | wxLEFT, 2 );
+
+    wxBoxSizer* ratsnestDisplayModeSizer = new wxBoxSizer( wxHORIZONTAL );
+
+    m_rbRatsnestAllLayers = new wxRadioButton( netDisplayPane, wxID_ANY, _( "All layers" ),
+                                               wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+    m_rbRatsnestAllLayers->SetToolTip( _( "Ratsnest lines are shown to items on all layers" ) );
+    m_rbRatsnestAllLayers->SetValue( true );
+
+    ratsnestDisplayModeSizer->Add( m_rbRatsnestAllLayers, 0, wxRIGHT, 10 );
+
+    m_rbRatsnestVisibleLayers = new wxRadioButton( netDisplayPane, wxID_ANY, _( "Visible layers" ),
+                                                   wxDefaultPosition, wxDefaultSize, 0 );
+    m_rbRatsnestVisibleLayers->SetToolTip( _( "Ratsnest lines are shown to items on visible layers" ) );
+
+    ratsnestDisplayModeSizer->Add( m_rbRatsnestVisibleLayers, 0, wxRIGHT, 4 );
+
+    netDisplayOptionsSizer->Add( ratsnestDisplayModeSizer, 0, wxEXPAND | wxBOTTOM, 5 );
+
+    ////
 
     netDisplayPane->SetSizer( netDisplayOptionsSizer );
     netDisplayPane->Layout();
@@ -662,6 +691,11 @@ void APPEARANCE_CONTROLS::createControls()
     m_rbNetColorOff->Bind( wxEVT_RADIOBUTTON, &APPEARANCE_CONTROLS::onNetColorModeChanged, this );
     m_rbNetColorRatsnest->Bind( wxEVT_RADIOBUTTON,
                                 &APPEARANCE_CONTROLS::onNetColorModeChanged, this );
+
+    m_rbRatsnestAllLayers->Bind( wxEVT_RADIOBUTTON,
+                                 &APPEARANCE_CONTROLS::onRatsnestModeChanged, this );
+    m_rbRatsnestVisibleLayers->Bind( wxEVT_RADIOBUTTON,
+                                     &APPEARANCE_CONTROLS::onRatsnestModeChanged, this );
 }
 
 
@@ -1047,6 +1081,11 @@ void APPEARANCE_CONTROLS::UpdateDisplayOptions()
     case NET_COLOR_MODE::RATSNEST: m_rbNetColorRatsnest->SetValue( true ); break;
     case NET_COLOR_MODE::OFF:      m_rbNetColorOff->SetValue( true );      break;
     }
+
+    if( options.m_RatsnestMode == RATSNEST_MODE::ALL )
+        m_rbRatsnestAllLayers->SetValue( true );
+    else
+        m_rbRatsnestVisibleLayers->SetValue( true );
 
     wxASSERT( m_objectSettingsMap.count( LAYER_RATSNEST ) );
     APPEARANCE_SETTING* ratsnest = m_objectSettingsMap.at( LAYER_RATSNEST );
@@ -2356,6 +2395,21 @@ void APPEARANCE_CONTROLS::onNetColorModeChanged( wxCommandEvent& aEvent )
 
     m_frame->SetDisplayOptions( options );
     m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
+    passOnFocus();
+}
+
+
+void APPEARANCE_CONTROLS::onRatsnestModeChanged( wxCommandEvent& aEvent )
+{
+    PCB_DISPLAY_OPTIONS options = m_frame->GetDisplayOptions();
+
+    if( m_rbRatsnestAllLayers->GetValue() )
+        options.m_RatsnestMode = RATSNEST_MODE::ALL;
+    else
+        options.m_RatsnestMode = RATSNEST_MODE::VISIBLE;
+
+    m_frame->SetDisplayOptions( options );
+    m_frame->GetCanvas()->RedrawRatsnest();
     passOnFocus();
 }
 

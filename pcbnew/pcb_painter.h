@@ -174,6 +174,9 @@ public:
     NET_COLOR_MODE GetNetColorMode() const { return m_netColorMode; }
     void SetNetColorMode( NET_COLOR_MODE aMode ) { m_netColorMode = aMode; }
 
+    RATSNEST_MODE GetRatsnestDisplayMode() const { return m_ratsnestDisplayMode; }
+    void SetRatsnestDisplayMode( RATSNEST_MODE aMode ) { m_ratsnestDisplayMode = aMode; }
+
     std::map<wxString, KIGFX::COLOR4D>& GetNetclassColorMap() { return m_netclassColors; }
 
     std::map<int, KIGFX::COLOR4D>& GetNetColorMap() { return m_netColors; }
@@ -237,6 +240,8 @@ protected:
 
     ///> How to display inactive layers (HIGH_CONTRAST_MODE:NORMAL, DIMMED or HIDDEN )
     HIGH_CONTRAST_MODE m_contrastModeDisplay;
+
+    RATSNEST_MODE m_ratsnestDisplayMode;
 
     // These opacity overrides multiply with any opacity in the base layer color
     double m_trackOpacity;     ///< Opacity override for all tracks

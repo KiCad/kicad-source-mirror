@@ -64,6 +64,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_sketchText = false;
     m_netColorMode = NET_COLOR_MODE::RATSNEST;
     m_contrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
+    m_ratsnestDisplayMode = RATSNEST_MODE::ALL;
 
     m_trackOpacity = 1.0;
     m_viaOpacity   = 1.0;
@@ -207,6 +208,8 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
     m_contrastModeDisplay = aOptions.m_ContrastModeDisplay;
 
     m_netColorMode = aOptions.m_NetColorMode;
+
+    m_ratsnestDisplayMode = aOptions.m_RatsnestMode;
 
     m_trackOpacity = aOptions.m_TrackOpacity;
     m_viaOpacity   = aOptions.m_ViaOpacity;

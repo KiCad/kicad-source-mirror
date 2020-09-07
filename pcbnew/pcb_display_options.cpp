@@ -50,6 +50,7 @@ PCB_DISPLAY_OPTIONS::PCB_DISPLAY_OPTIONS()
                                          * 3 show netnames on tracks and pads */
     m_ContrastModeDisplay     = HIGH_CONTRAST_MODE::NORMAL;
     m_NetColorMode            = NET_COLOR_MODE::RATSNEST;
+    m_RatsnestMode            = RATSNEST_MODE::ALL;
     m_MaxLinksShowed          = 3;        // in track creation: number of hairwires shown
     m_ShowModuleRatsnest      = true;     // When moving a footprint: allows displaying a ratsnest
     m_DisplayRatsnestLinesCurved = false;

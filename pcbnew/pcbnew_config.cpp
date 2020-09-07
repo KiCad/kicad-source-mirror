@@ -133,6 +133,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     PCB_DISPLAY_OPTIONS opts   = GetDisplayOptions();
     opts.m_ContrastModeDisplay = localSettings.m_ContrastModeDisplay;
     opts.m_NetColorMode        = localSettings.m_NetColorMode;
+    opts.m_RatsnestMode        = localSettings.m_RatsnestMode;
     opts.m_TrackOpacity        = localSettings.m_TrackOpacity;
     opts.m_ViaOpacity          = localSettings.m_ViaOpacity;
     opts.m_PadOpacity          = localSettings.m_PadOpacity;
@@ -179,6 +180,7 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
 
     localSettings.m_ContrastModeDisplay = displayOpts.m_ContrastModeDisplay;
     localSettings.m_NetColorMode        = displayOpts.m_NetColorMode;
+    localSettings.m_RatsnestMode        = displayOpts.m_RatsnestMode;
     localSettings.m_TrackOpacity        = displayOpts.m_TrackOpacity;
     localSettings.m_ViaOpacity          = displayOpts.m_ViaOpacity;
     localSettings.m_PadOpacity          = displayOpts.m_PadOpacity;

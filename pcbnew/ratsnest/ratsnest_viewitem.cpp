@@ -87,6 +87,14 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();
     const std::map<int, wxString>&      netclassMap    = m_data->GetNetclassMap();
 
+    const bool onlyVisibleLayers = rs->GetRatsnestDisplayMode() == RATSNEST_MODE::VISIBLE;
+
+    LSET visibleLayers;
+
+    for( PCB_LAYER_ID layer : LSET::AllCuMask().Seq() )
+        if( aView->IsLayerVisible( layer ) )
+            visibleLayers.set( layer );
+
     const bool curved_ratsnest = rs->GetCurvedRatsnestLinesEnabled();
 
     // Draw the "dynamic" ratsnest (i.e. for objects that may be currently being moved)
@@ -185,6 +193,16 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             else
                 show = sourceNode->Parent()->GetLocalRatsnestVisible() ||
                        targetNode->Parent()->GetLocalRatsnestVisible();
+
+            if( onlyVisibleLayers && show )
+            {
+                LSET sourceLayers = sourceNode->Parent()->GetLayerSet();
+                LSET targetLayers = targetNode->Parent()->GetLayerSet();
+
+                if( !( sourceLayers & visibleLayers ).any() ||
+                    !( targetLayers & visibleLayers ).any() )
+                    show = false;
+            }
 
             if ( enable && show )
             {

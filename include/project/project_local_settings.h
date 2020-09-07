@@ -118,6 +118,9 @@ public:
     /// The current net color mode
     NET_COLOR_MODE m_NetColorMode;
 
+    /// The current ratsnest draw mode
+    RATSNEST_MODE m_RatsnestMode;
+
     /// How zones are drawn (TODO: not yet used)
     ZONE_DISPLAY_MODE m_ZoneDisplayMode;
 

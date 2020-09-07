@@ -349,10 +349,13 @@ private:
     // Net display options controls
 
     WX_COLLAPSIBLE_PANE* m_paneNetDisplayOptions;
-    wxStaticText*        m_staticTextNetDisplayTitle;
+    wxStaticText*        m_txtNetDisplayTitle;
     wxRadioButton*       m_rbNetColorAll;
     wxRadioButton*       m_rbNetColorRatsnest;
     wxRadioButton*       m_rbNetColorOff;
+    wxStaticText*        m_txtRatsnestVisibility;
+    wxRadioButton*       m_rbRatsnestAllLayers;
+    wxRadioButton*       m_rbRatsnestVisibleLayers;
 
     enum POPUP_ID
     {
@@ -423,6 +426,8 @@ private:
     wxString netclassNameFromEvent( wxEvent& aEvent );
 
     void onNetColorModeChanged( wxCommandEvent& aEvent );
+
+    void onRatsnestModeChanged( wxCommandEvent& aEvent );
 
     void onNetclassContextMenu( wxCommandEvent& aEvent );
 

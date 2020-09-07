@@ -150,6 +150,10 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                            &m_NetColorMode, NET_COLOR_MODE::RATSNEST, NET_COLOR_MODE::OFF,
                            NET_COLOR_MODE::ALL ) );
 
+    m_params.emplace_back( new PARAM_ENUM<RATSNEST_MODE>( "board.ratsnest_display_mode",
+                           &m_RatsnestMode, RATSNEST_MODE::ALL, RATSNEST_MODE::ALL,
+                           RATSNEST_MODE::VISIBLE ) );
+
     // TODO: move the rest of PCB_DISPLAY_OPTIONS that are project-specific in here
 #if 0
     m_params.emplace_back( new PARAM_ENUM<ZONE_DISPLAY_MODE>( "board.zone_display_mode",
