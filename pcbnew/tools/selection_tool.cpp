@@ -1921,32 +1921,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
             }
 
             // Otherwise, pads are selectable if any draw layer is visible
-
-            // Shortcut: check copper layer visibility
-            if( board()->IsLayerVisible( F_Cu ) && pad->IsOnLayer( F_Cu ) )
-                return true;
-
-            if( board()->IsLayerVisible( B_Cu ) && pad->IsOnLayer( B_Cu ) )
-                return true;
-
-            // Now check the non-copper layers
-
-            bool draw_layer_visible = false;
-
-            int pad_layers[KIGFX::VIEW::VIEW_MAX_LAYERS], pad_layers_count;
-            pad->ViewGetLayers( pad_layers, pad_layers_count );
-
-            for( int i = 0; i < pad_layers_count; ++i )
-            {
-                // NOTE: Only checking the regular layers (not GAL meta-layers)
-                if( ( ( pad_layers[i] < PCB_LAYER_ID_COUNT ) &&
-                      board()->IsLayerVisible( static_cast<PCB_LAYER_ID>( pad_layers[i] ) ) ) )
-                {
-                    draw_layer_visible = true;
-                }
-            }
-
-            return draw_layer_visible;
+            return ( pad->GetLayerSet() & board()->GetVisibleLayers() ).any();
         }
 
         break;
