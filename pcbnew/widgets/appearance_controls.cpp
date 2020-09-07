@@ -1953,11 +1953,10 @@ void APPEARANCE_CONTROLS::rebuildNets()
         appendNetclass( idx++, classes.at( name ) );
     }
 
-    m_netsTable->Rebuild();
-
-    //m_netsOuterSizer->Layout();
     m_netclassOuterSizer->Layout();
-    //m_netsTabSplitter->Layout();
+
+    m_netsTable->Rebuild();
+    m_panelNets->GetSizer()->Layout();
 }
 
 
