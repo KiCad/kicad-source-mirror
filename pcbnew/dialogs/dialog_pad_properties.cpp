@@ -323,7 +323,6 @@ void DIALOG_PAD_PROPERTIES::updateRoundRectCornerValues()
         m_tcChamferRatio1->ChangeValue( ratio );
     }
 
-    m_previewNotebook->ChangeSelection( 0 );
     redraw();
 }
 
