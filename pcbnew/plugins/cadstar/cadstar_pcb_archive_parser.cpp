@@ -585,6 +585,14 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYER::Parse( XNODE* aNode )
         {
             Description = GetXmlAttributeIDString( cNode, 0 );
         }
+        else if( cNodeName == wxT( "REFPLANE" ) )
+        {
+            ReferencePlane = true;
+        }
+        else if( cNodeName == wxT( "VLAYER" ) )
+        {
+            VariantLayer = true;
+        }
         else if( cNodeName == wxT( "LASUBTYP" ) )
         {
             //Process subtype
@@ -2771,6 +2779,11 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT::Parse( XNODE* aNode )
         {
             OrientAngle = GetXmlAttributeIDLong( cNode, 0 );
         }
+        else if( cNodeName == wxT( "VCOMPMASTER" ) )
+        {
+            VariantParentComponentID = GetXmlAttributeIDString( aNode, 0 );
+            VariantID                = GetXmlAttributeIDString( aNode, 1 );
+        }
         else if( cNodeName == wxT( "TEXTLOC" ) )
         {
             TEXT_LOCATION textloc;
@@ -3201,7 +3214,6 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::POURING::Parse( XNODE* aNode )
         MinDisjointCopper = GetXmlAttributeIDLong( aNode, 8 );
 
     XNODE* cNode          = aNode->GetChildren();
-    bool   fillTypeParsed = false;
 
     for( ; cNode; cNode = cNode->GetNext() )
     {
@@ -3221,23 +3233,18 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::POURING::Parse( XNODE* aNode )
             TargetForAutorouting = true;
         else if( cNodeName == wxT( "THERMALCUTOUT" ) )
             ReliefType = RELIEF_TYPE::CUTOUTS;
-        else if( !fillTypeParsed && cNodeName == wxT( "FILLED" ) )
+        else if( cNodeName == wxT( "FILLED" ) )
         {
             FillType       = COPPER_FILL_TYPE::FILLED;
-            fillTypeParsed = true;
         }
-        else if( !fillTypeParsed && cNodeName == wxT( "HATCHCODEREF" ) )
+        else if( cNodeName == wxT( "HATCHCODEREF" ) )
         {
             FillType       = COPPER_FILL_TYPE::HATCHED;
             HatchCodeID    = GetXmlAttributeIDString( cNode, 0 );
-            fillTypeParsed = true;
         }
         else
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "POURING" ) );
     }
-
-    if( !fillTypeParsed )
-        THROW_MISSING_NODE_IO_ERROR( wxT( "FILLED" ), wxT( "POURING" ) );
 }
 
 
@@ -3492,6 +3499,26 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DRILL_TABLE::Parse( XNODE* aNode )
 }
 
 
+void CADSTAR_PCB_ARCHIVE_PARSER::VARIANT::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "VMASTER" ) || aNode->GetName() == wxT( "VARIANT" ) );
+
+    ID = GetXmlAttributeIDString( aNode, 0 );
+
+    if( aNode->GetName() == wxT( "VMASTER" ) )
+    {
+        Name        = GetXmlAttributeIDString( aNode, 1 );
+        Description = GetXmlAttributeIDString( aNode, 2 );
+    }
+    else
+    {
+        ParentID    = GetXmlAttributeIDString( aNode, 1 );
+        Name        = GetXmlAttributeIDString( aNode, 2 );
+        Description = GetXmlAttributeIDString( aNode, 3 );
+    }
+}
+
+
 void CADSTAR_PCB_ARCHIVE_PARSER::LAYOUT::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "LAYOUT" ) );
@@ -3608,6 +3635,25 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYOUT::Parse( XNODE* aNode )
             DRILL_TABLE drilltable;
             drilltable.Parse( cNode );
             DrillTables.insert( std::make_pair( drilltable.ID, drilltable ) );
+        }
+        else if( cNodeName == wxT( "VHIERARCHY" ) )
+        {
+            XNODE* subNode = cNode->GetChildren();
+
+            for( ; subNode; subNode = subNode->GetNext() )
+            {
+                if( subNode->GetName() == wxT( "VMASTER" )
+                        || subNode->GetName() == wxT( "VARIANT" ) )
+                {
+                    VARIANT variant;
+                    variant.Parse( subNode );
+                    VariantHierarchy.insert( std::make_pair( variant.ID, variant ) );
+                }
+                else
+                {
+                    THROW_UNKNOWN_NODE_IO_ERROR( subNode->GetName(), cNode->GetName() );
+                }
+            }
         }
         else if( cNodeName == wxT( "ERRORMARK" ) )
         {

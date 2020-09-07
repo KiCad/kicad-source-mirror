@@ -104,6 +104,7 @@ public:
     typedef wxString AREA_ID;
     typedef wxString NET_ID;
     typedef wxString COMPONENT_ID;
+    typedef wxString VARIANT_ID;
     typedef wxString DOCUMENTATION_SYMBOL_ID;
     typedef wxString NETELEMENT_ID;
     typedef wxString TEMPLATE_ID;
@@ -253,6 +254,8 @@ public:
         long         Thickness   = 0; ///< Note: Units of length are defined in file header
         MATERIAL_ID  MaterialId;
         EMBEDDING    Embedding = EMBEDDING::NONE;
+        bool         ReferencePlane = false;
+        bool         VariantLayer   = false;
 
         void Parse( XNODE* aNode );
     };
@@ -1691,6 +1694,8 @@ public:
 
         GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this component is part of a group
         REUSEBLOCKREF ReuseBlockRef;
+        COMPONENT_ID  VariantParentComponentID  = wxEmptyString;
+        VARIANT_ID    VariantID = wxEmptyString; ///< TODO: find out what this represents
         long          OrientAngle = 0;
         bool          TestPoint   = false; ///< Indicates whether this component should be treated
                                            ///< as a testpoint. See SYMDEF_TYPE::TESTPOINT
@@ -1881,7 +1886,6 @@ public:
         {
             enum class COPPER_FILL_TYPE
             {
-                UNDEFINED,
                 FILLED,
                 HATCHED ///< This is a user defined HATCHCODE_ID
             };
@@ -1936,8 +1940,8 @@ public:
             bool AutomaticRepour      = false; ///< true when subnode "REGENERATE" is present
             bool TargetForAutorouting = false; ///< true when subnode "AUTOROUTETARGET" is present
 
-            RELIEF_TYPE      ReliefType  = RELIEF_TYPE::CROSS; ///< See RELIEF_TYPE
-            COPPER_FILL_TYPE FillType    = COPPER_FILL_TYPE::UNDEFINED;
+            RELIEF_TYPE      ReliefType  = RELIEF_TYPE::CROSS;       ///< See RELIEF_TYPE
+            COPPER_FILL_TYPE FillType    = COPPER_FILL_TYPE::FILLED; ///< Assume solid fill
             HATCHCODE_ID     HatchCodeID = wxEmptyString; ///< Only for FillType = HATCHED
 
             void Parse( XNODE* aNode );
@@ -2021,6 +2025,17 @@ public:
         void Parse( XNODE* aNode );
     };
 
+    
+    struct VARIANT ///< Nodename = "VARIANT" or "VMASTER" (master variant
+    {
+        VARIANT_ID ID = wxEmptyString;
+        VARIANT_ID ParentID = wxEmptyString; ///< if empty, then this one is the master
+        wxString   Name     = wxEmptyString;
+        wxString   Description = wxEmptyString;
+
+        void Parse( XNODE* aNode );
+    };
+
 
     struct LAYOUT
     {
@@ -2041,6 +2056,7 @@ public:
         std::map<TEXT_ID, TEXT>                                 Texts;
         std::map<DIMENSION_ID, DIMENSION>                       Dimensions;
         std::map<DRILL_TABLE_ID, DRILL_TABLE>                   DrillTables;
+        std::map<VARIANT_ID, VARIANT>                           VariantHierarchy;
 
         void Parse( XNODE* aNode );
     };
