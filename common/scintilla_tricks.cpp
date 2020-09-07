@@ -140,6 +140,10 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
     {
         m_te->Redo();
     }
+    else if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'A' )
+    {
+        m_te->SelectAll();
+    }
     else if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'X' )
     {
         m_te->Cut();
