@@ -141,6 +141,8 @@ bool test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
             int minClearance = constraint.GetValue().Min();
             int actual;
 
+            accountCheck( constraint );
+
             if( refShape->Collide( shape.get(), minClearance, &actual ) )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_COPPER_EDGE_CLEARANCE );

@@ -204,6 +204,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
         int     actual = INT_MAX;
         wxPoint pos;
 
+        accountCheck( constraint );
+
         SHAPE_SEGMENT trackSeg( track->GetStart(), track->GetEnd(), track->GetWidth() );
 
         // Fast test to detect a track segment candidate inside the text bounding box
@@ -247,8 +249,9 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
         auto constraint  = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aItem, pad );
         auto minClearance = constraint.GetValue().Min();
 
-        int actual = INT_MAX;
+        accountCheck( constraint );
 
+        int actual = INT_MAX;
         int bb_radius = pad->GetBoundingRadius() + minClearance;
 
         // Fast test to detect a pad candidate inside the text bounding box
@@ -360,6 +363,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
             int clearanceAllowed = minClearance - bds.GetDRCEpsilon();
             int actual;
 
+            accountCheck( constraint );
+
             auto padShape = pad->GetEffectiveShape();
 
             if( padShape->Collide( &refSeg, minClearance - bds.GetDRCEpsilon(), &actual ) )
@@ -430,6 +435,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
         auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aRefSeg, track );
         auto minClearance = constraint.GetValue().Min();
 
+        accountCheck( constraint );
+
         SHAPE_SEGMENT trackSeg( track->GetStart(), track->GetEnd(), track->GetWidth() );
         int actual;
 
@@ -496,6 +503,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
                 auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aRefSeg, zone );
                 auto minClearance = constraint.GetValue().Min();
                 int widths       = refSegWidth / 2;
+
+                accountCheck( constraint );
 
                 // to avoid false positive, due to rounding issues and approxiamtions
                 // in distance and clearance calculations, use a small threshold for distance
@@ -631,6 +640,8 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D
         auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aRefPad, pad );
         auto minClearance = constraint.GetValue().Min();
 
+        accountCheck( constraint );
+
         drc_dbg(4, "pad %p vs %p constraint %d\n", aRefPad, pad, minClearance );
 
         int  clearanceAllowed = minClearance - m_drcEngine->GetDesignSettings()->GetDRCEpsilon();
@@ -712,6 +723,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
             // Get clearance used in zone to zone test.
             auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, zoneRef, zoneToTest );
             auto zone2zoneClearance = constraint.GetValue().Min();
+
+            accountCheck( constraint );
 
             // Keepout areas have no clearance, so set zone2zoneClearance to 1
             // ( zone2zoneClearance = 0  can create problems in test functions)

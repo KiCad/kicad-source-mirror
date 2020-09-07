@@ -100,6 +100,8 @@ bool test::DRC_TEST_PROVIDER_ANNULUS::Run()
         test::DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems(
                 test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH, via );
 
+        accountCheck( constraint );
+
         int annulus = ( via->GetWidth() - via->GetDrillValue() ) / 2;
 
         if( constraint.Value().HasMin() )
