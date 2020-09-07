@@ -515,7 +515,7 @@ void C3D_RENDER_OGL_LEGACY::setCopperMaterial()
 void C3D_RENDER_OGL_LEGACY::setPlatedCopperAndDepthOffset( PCB_LAYER_ID aLayer_id )
 {
     glEnable( GL_POLYGON_OFFSET_FILL );
-    glPolygonOffset( -1.0f, -1.0f );
+    glPolygonOffset( 0.0f, -2.0f );
     set_layer_material( aLayer_id );
 }
 
@@ -907,7 +907,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
         // add a depth buffer offset, it will help to hide some artifacts
         // on silkscreen where the SolderMask is removed
         glEnable( GL_POLYGON_OFFSET_FILL );
-        glPolygonOffset( 0.0f, -1.0f );
+        glPolygonOffset( 0.0f, -2.0f );
 
         if( m_camera.GetPos().z > 0 )
         {
