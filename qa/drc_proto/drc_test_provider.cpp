@@ -92,6 +92,9 @@ void test::DRC_TEST_PROVIDER::accountCheck( const test::DRC_CONSTRAINT& constrai
 
 void test::DRC_TEST_PROVIDER::reportRuleStatistics()
 {
+    if( !m_isRuleDriven )
+        return;
+
     m_drcEngine->ReportAux("Rule hit statistics: ");
     for( auto stat : m_stats )
     {
