@@ -283,24 +283,24 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
                 netColor = jj->second;
         }
 
-        if( netColor != COLOR4D::UNSPECIFIED )
-        {
-            if( item->IsSelected() )
-            {
-                // Selection brightening overrides highlighting
-                netColor.Brighten( m_selectFactor );
-            }
-            else if( m_highlightEnabled )
-            {
-                // Highlight brightens objects on all layers and darkens everything else for contrast
-                if( highlighted )
-                    netColor.Brighten( m_highlightFactor );
-                else
-                    netColor.Darken( 1.0 - m_highlightFactor );
-            }
+        if( netColor == COLOR4D::UNSPECIFIED )
+            netColor = color;
 
-            color = netColor;
+        if( item->IsSelected() )
+        {
+            // Selection brightening overrides highlighting
+            netColor.Brighten( m_selectFactor );
         }
+        else if( m_highlightEnabled )
+        {
+            // Highlight brightens objects on all layers and darkens everything else for contrast
+            if( highlighted )
+                netColor.Brighten( m_highlightFactor );
+            else
+                netColor.Darken( 1.0 - m_highlightFactor );
+        }
+
+        color = netColor;
     }
     else if( !item->IsSelected() && m_highlightEnabled )
     {
