@@ -603,6 +603,13 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
         return -1;
     }
 
+    if ( !player )
+    {
+        wxMessageBox( _( "Application failed to load." ), _( "KiCad Error" ),
+                      wxOK | wxICON_ERROR, m_frame );
+        return -1;
+    }
+
     if( !player->IsVisible() )   // A hidden frame might not have the document loaded.
     {
         wxString filepath;
