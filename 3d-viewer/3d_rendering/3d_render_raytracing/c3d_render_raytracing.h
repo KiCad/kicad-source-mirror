@@ -75,6 +75,11 @@ private:
     void opengl_init_pbo();
     void opengl_delete_pbo();
     void reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
+    void createItemsFromContainer( const CBVHCONTAINER2D *aContainer2d,
+                                   PCB_LAYER_ID aLayer_id,
+                                   const CMATERIAL *aMaterialLayer,
+                                   const SFVEC3F &aLayerColor,
+                                   float aLayerZOffset );
 
     void restart_render_state();
     void rt_render_tracing( GLubyte* ptrPBO, REPORTER* aStatusReporter );
@@ -105,6 +110,7 @@ private:
         CBLINN_PHONG_MATERIAL m_SolderMask;
         CBLINN_PHONG_MATERIAL m_EpoxyBoard;
         CBLINN_PHONG_MATERIAL m_Copper;
+        CBLINN_PHONG_MATERIAL m_NonPlatedCopper;
         CBLINN_PHONG_MATERIAL m_Floor;
     }m_materials;
 

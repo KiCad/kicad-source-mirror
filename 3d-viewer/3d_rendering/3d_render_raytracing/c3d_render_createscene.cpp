@@ -113,8 +113,16 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                 0.0f,                                                   // transparency
                 0.0f );
 
+    m_materials.m_NonPlatedCopper = CBLINN_PHONG_MATERIAL(
+                    ConvertSRGBToLinear( SFVEC3F( 0.191f, 0.073f, 0.022f ) ),// ambient
+                    SFVEC3F( 0.0f, 0.0f, 0.0f ),                             // emissive
+                    SFVEC3F( 0.256f, 0.137f, 0.086f ),                       // specular
+                    0.1f * 128.0f,                                           // shiness
+                    0.0f,                                                    // transparency
+                    0.0f );
+
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
-        m_materials.m_Copper.SetNormalPerturbator( &m_copper_normal_perturbator );
+        m_materials.m_NonPlatedCopper.SetNormalPerturbator( &m_copper_normal_perturbator );
 
     m_materials.m_Paste = CBLINN_PHONG_MATERIAL(
             ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_SolderPasteColor ) *
@@ -263,6 +271,173 @@ void C3D_RENDER_RAYTRACING::create_3d_object_from( CCONTAINER& aDstContainer,
     }
 }
 
+void C3D_RENDER_RAYTRACING::createItemsFromContainer( const CBVHCONTAINER2D *aContainer2d,
+                                                      PCB_LAYER_ID aLayer_id,
+                                                      const CMATERIAL *aMaterialLayer,
+                                                      const SFVEC3F &aLayerColor,
+                                                      float aLayerZOffset )
+{
+    if( aContainer2d == nullptr )
+        return;
+
+    const LIST_OBJECT2D &listObject2d = aContainer2d->GetList();
+
+    if( listObject2d.size() == 0 )
+        return;
+
+    for( LIST_OBJECT2D::const_iterator itemOnLayer = listObject2d.begin();
+         itemOnLayer != listObject2d.end();
+         ++itemOnLayer )
+    {
+        const COBJECT2D *object2d_A = static_cast<const COBJECT2D *>(*itemOnLayer);
+
+        // not yet used / implemented (can be used in future to clip the objects in the board borders
+        COBJECT2D *object2d_C = CSGITEM_FULL;
+
+        std::vector<const COBJECT2D *> *object2d_B = CSGITEM_EMPTY;
+
+        object2d_B = new std::vector<const COBJECT2D*>();
+
+        // Subtract holes but not in SolderPaste
+        // (can be added as an option in future)
+        if( !( ( aLayer_id == B_Paste ) || ( aLayer_id == F_Paste ) ) )
+        {
+            // Check if there are any layerhole that intersects this object
+            // Eg: a segment is cutted by a via hole or THT hole.
+            // /////////////////////////////////////////////////////////////
+            const MAP_CONTAINER_2D &layerHolesMap = m_boardAdapter.GetMapLayersHoles();
+
+            if( layerHolesMap.find(aLayer_id) != layerHolesMap.end() )
+            {
+                MAP_CONTAINER_2D::const_iterator ii_hole = layerHolesMap.find(aLayer_id);
+
+                const CBVHCONTAINER2D *containerLayerHoles2d =
+                        static_cast<const CBVHCONTAINER2D *>(ii_hole->second);
+
+                CONST_LIST_OBJECT2D intersectionList;
+                containerLayerHoles2d->GetListObjectsIntersects( object2d_A->GetBBox(),
+                                                                 intersectionList );
+
+                if( !intersectionList.empty() )
+                {
+                    for( CONST_LIST_OBJECT2D::const_iterator holeOnLayer =
+                         intersectionList.begin();
+                         holeOnLayer != intersectionList.end();
+                         ++holeOnLayer )
+                    {
+                        const COBJECT2D *hole2d = static_cast<const COBJECT2D *>(*holeOnLayer);
+
+                        //if( object2d_A->Intersects( hole2d->GetBBox() ) )
+                            //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
+                                object2d_B->push_back( hole2d );
+                    }
+                }
+            }
+
+            // Check if there are any THT that intersects this object
+            // /////////////////////////////////////////////////////////////
+
+            // If we're processing a silk screen layer and the flag is set, then
+            // clip the silk screening at the outer edge of the annular ring, rather
+            // than the at the outer edge of the copper plating.
+            const CBVHCONTAINER2D& throughHoleOuter =
+                    ( m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS )
+                            && ( ( aLayer_id == B_SilkS ) || ( aLayer_id == F_SilkS ) ) ) ?
+                            m_boardAdapter.GetThroughHole_Outer_Ring() :
+                            m_boardAdapter.GetThroughHole_Outer();
+
+            if( !throughHoleOuter.GetList().empty() )
+            {
+                CONST_LIST_OBJECT2D intersectionList;
+
+                throughHoleOuter.GetListObjectsIntersects(
+                        object2d_A->GetBBox(), intersectionList );
+
+                if( !intersectionList.empty() )
+                {
+                    for( CONST_LIST_OBJECT2D::const_iterator hole = intersectionList.begin();
+                         hole != intersectionList.end();
+                         ++hole )
+                    {
+                        const COBJECT2D *hole2d = static_cast<const COBJECT2D *>(*hole);
+
+                        //if( object2d_A->Intersects( hole2d->GetBBox() ) )
+                            //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
+                                object2d_B->push_back( hole2d );
+                    }
+                }
+            }
+        }
+
+
+        const MAP_CONTAINER_2D& mapLayers = m_boardAdapter.GetMapLayers();
+
+        if( m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) &&
+            ( ( ( aLayer_id == B_SilkS ) &&
+                ( mapLayers.find( B_Mask ) != mapLayers.end() ) ) ||
+              ( ( aLayer_id == F_SilkS ) &&
+                ( mapLayers.find( F_Mask ) != mapLayers.end() ) ) ) )
+        {
+            const PCB_LAYER_ID layerMask_id = ( aLayer_id == B_SilkS ) ? B_Mask : F_Mask;
+
+            const CBVHCONTAINER2D *containerMaskLayer2d =
+                    static_cast<const CBVHCONTAINER2D*>( mapLayers.at( layerMask_id ) );
+
+            CONST_LIST_OBJECT2D intersectionList;
+
+            if( containerMaskLayer2d )  // can be null if B_Mask or F_Mask is not shown
+                containerMaskLayer2d->GetListObjectsIntersects( object2d_A->GetBBox(),
+                                                                intersectionList );
+
+            if( !intersectionList.empty() )
+            {
+                for( CONST_LIST_OBJECT2D::const_iterator objOnLayer =
+                     intersectionList.begin();
+                     objOnLayer != intersectionList.end();
+                     ++objOnLayer )
+                {
+                    const COBJECT2D* obj2d = static_cast<const COBJECT2D*>( *objOnLayer );
+
+                    object2d_B->push_back( obj2d );
+                }
+            }
+        }
+
+        if( object2d_B->empty() )
+        {
+            delete object2d_B;
+            object2d_B = CSGITEM_EMPTY;
+        }
+
+        if( (object2d_B == CSGITEM_EMPTY) &&
+            (object2d_C == CSGITEM_FULL) )
+        {
+            CLAYERITEM *objPtr = new CLAYERITEM( object2d_A,
+                                                 m_boardAdapter.GetLayerBottomZpos3DU( aLayer_id ) - aLayerZOffset,
+                                                 m_boardAdapter.GetLayerTopZpos3DU( aLayer_id ) + aLayerZOffset );
+            objPtr->SetMaterial( aMaterialLayer );
+            objPtr->SetColor( ConvertSRGBToLinear( aLayerColor ) );
+            m_object_container.Add( objPtr );
+        }
+        else
+        {
+            CITEMLAYERCSG2D *itemCSG2d = new CITEMLAYERCSG2D( object2d_A,
+                                                              object2d_B,
+                                                              object2d_C,
+                                                              object2d_A->GetBoardItem() );
+            m_containerWithObjectsToDelete.Add( itemCSG2d );
+
+            CLAYERITEM *objPtr = new CLAYERITEM( itemCSG2d,
+                                                 m_boardAdapter.GetLayerBottomZpos3DU( aLayer_id ) - aLayerZOffset,
+                                                 m_boardAdapter.GetLayerTopZpos3DU( aLayer_id ) + aLayerZOffset );
+
+            objPtr->SetMaterial( aMaterialLayer );
+            objPtr->SetColor( ConvertSRGBToLinear( aLayerColor ) );
+
+            m_object_container.Add( objPtr );
+        }
+    }
+}
 
 void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter )
 {
@@ -512,184 +687,33 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
             break;
 
             default:
-                materialLayer = &m_materials.m_Copper;
+                layerColor = m_boardAdapter.GetLayerColor( layer_id );
 
                 if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
-                    layerColor = m_boardAdapter.m_CopperColor;
-                else
-                    layerColor = m_boardAdapter.GetLayerColor( layer_id );
+                    layerColor = SFVEC3F( 184.0f / 255.0f, 115.0f / 255.0f,  50.0f / 255.0f );
+
+                materialLayer = &m_materials.m_NonPlatedCopper;
             break;
         }
 
-        const CBVHCONTAINER2D *container2d = static_cast<const CBVHCONTAINER2D *>(ii->second);
-        const LIST_OBJECT2D &listObject2d = container2d->GetList();
+        const CBVHCONTAINER2D* container2d = static_cast<const CBVHCONTAINER2D*>(ii->second);
 
-        for( LIST_OBJECT2D::const_iterator itemOnLayer = listObject2d.begin();
-             itemOnLayer != listObject2d.end();
-             ++itemOnLayer )
-        {
-            const COBJECT2D *object2d_A = static_cast<const COBJECT2D *>(*itemOnLayer);
-
-            // not yet used / implemented (can be used in future to clip the objects in the board borders
-            COBJECT2D *object2d_C = CSGITEM_FULL;
-
-            std::vector<const COBJECT2D *> *object2d_B = CSGITEM_EMPTY;
-
-            object2d_B = new std::vector<const COBJECT2D*>();
-
-            // Subtract holes but not in SolderPaste
-            // (can be added as an option in future)
-            if( !( ( layer_id == B_Paste ) || ( layer_id == F_Paste ) ) )
-            {
-                // Check if there are any layerhole that intersects this object
-                // Eg: a segment is cutted by a via hole or THT hole.
-                // /////////////////////////////////////////////////////////////
-                const MAP_CONTAINER_2D &layerHolesMap = m_boardAdapter.GetMapLayersHoles();
-
-                if( layerHolesMap.find(layer_id) != layerHolesMap.end() )
-                {
-                    MAP_CONTAINER_2D::const_iterator ii_hole = layerHolesMap.find(layer_id);
-
-                    const CBVHCONTAINER2D *containerLayerHoles2d =
-                            static_cast<const CBVHCONTAINER2D *>(ii_hole->second);
-
-                    CONST_LIST_OBJECT2D intersectionList;
-                    containerLayerHoles2d->GetListObjectsIntersects( object2d_A->GetBBox(),
-                                                                     intersectionList );
-
-                    if( !intersectionList.empty() )
-                    {
-                        for( CONST_LIST_OBJECT2D::const_iterator holeOnLayer =
-                             intersectionList.begin();
-                             holeOnLayer != intersectionList.end();
-                             ++holeOnLayer )
-                        {
-                            const COBJECT2D *hole2d = static_cast<const COBJECT2D *>(*holeOnLayer);
-
-                            //if( object2d_A->Intersects( hole2d->GetBBox() ) )
-                                //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
-                                    object2d_B->push_back( hole2d );
-                        }
-                    }
-                }
-
-                // Check if there are any THT that intersects this object
-                // /////////////////////////////////////////////////////////////
-
-                // If we're processing a silk screen layer and the flag is set, then
-                // clip the silk screening at the outer edge of the annular ring, rather
-                // than the at the outer edge of the copper plating.
-                const CBVHCONTAINER2D& throughHoleOuter =
-                        ( m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS )
-                                && ( ( layer_id == B_SilkS ) || ( layer_id == F_SilkS ) ) ) ?
-                                m_boardAdapter.GetThroughHole_Outer_Ring() :
-                                m_boardAdapter.GetThroughHole_Outer();
-
-                if( !throughHoleOuter.GetList().empty() )
-                {
-                    CONST_LIST_OBJECT2D intersectionList;
-
-                    throughHoleOuter.GetListObjectsIntersects(
-                            object2d_A->GetBBox(), intersectionList );
-
-                    if( !intersectionList.empty() )
-                    {
-                        for( CONST_LIST_OBJECT2D::const_iterator hole = intersectionList.begin();
-                             hole != intersectionList.end();
-                             ++hole )
-                        {
-                            const COBJECT2D *hole2d = static_cast<const COBJECT2D *>(*hole);
-
-                            //if( object2d_A->Intersects( hole2d->GetBBox() ) )
-                                //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
-                                    object2d_B->push_back( hole2d );
-                        }
-                    }
-                }
-            }
-
-
-            const MAP_CONTAINER_2D& mapLayers = m_boardAdapter.GetMapLayers();
-
-            if( m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) &&
-                ( ( ( layer_id == B_SilkS ) &&
-                    ( mapLayers.find( B_Mask ) != mapLayers.end() ) ) ||
-                  ( ( layer_id == F_SilkS ) &&
-                    ( mapLayers.find( F_Mask ) != mapLayers.end() ) ) ) )
-            {
-                const PCB_LAYER_ID layerMask_id = ( layer_id == B_SilkS ) ? B_Mask : F_Mask;
-
-                const CBVHCONTAINER2D *containerMaskLayer2d =
-                        static_cast<const CBVHCONTAINER2D*>( mapLayers.at( layerMask_id ) );
-
-                CONST_LIST_OBJECT2D intersectionList;
-
-                if( containerMaskLayer2d )  // can be null if B_Mask or F_Mask is not shown
-                    containerMaskLayer2d->GetListObjectsIntersects( object2d_A->GetBBox(),
-                                                                    intersectionList );
-
-                if( !intersectionList.empty() )
-                {
-                    for( CONST_LIST_OBJECT2D::const_iterator objOnLayer =
-                         intersectionList.begin();
-                         objOnLayer != intersectionList.end();
-                         ++objOnLayer )
-                    {
-                        const COBJECT2D* obj2d = static_cast<const COBJECT2D*>( *objOnLayer );
-
-                        object2d_B->push_back( obj2d );
-                    }
-                }
-            }
-
-            if( object2d_B->empty() )
-            {
-                delete object2d_B;
-                object2d_B = CSGITEM_EMPTY;
-            }
-
-            if( (object2d_B == CSGITEM_EMPTY) &&
-                (object2d_C == CSGITEM_FULL) )
-            {
-#if 0
-               create_3d_object_from( m_object_container,
-                                      object2d_A,
-                                      m_boardAdapter.GetLayerBottomZpos3DU( layer_id ),
-                                      m_boardAdapter.GetLayerTopZpos3DU( layer_id ),
-                                      materialLayer,
-                                      layerColor );
-#else
-                CLAYERITEM *objPtr = new CLAYERITEM( object2d_A,
-                                                     m_boardAdapter.GetLayerBottomZpos3DU( layer_id ),
-                                                     m_boardAdapter.GetLayerTopZpos3DU( layer_id ) );
-                objPtr->SetMaterial( materialLayer );
-                objPtr->SetColor( ConvertSRGBToLinear( layerColor ) );
-                m_object_container.Add( objPtr );
-#endif
-            }
-            else
-            {
-#if 1
-                CITEMLAYERCSG2D *itemCSG2d = new CITEMLAYERCSG2D( object2d_A,
-                                                                  object2d_B,
-                                                                  object2d_C,
-                                                                  object2d_A->GetBoardItem() );
-                m_containerWithObjectsToDelete.Add( itemCSG2d );
-
-                CLAYERITEM *objPtr = new CLAYERITEM( itemCSG2d,
-                                                     m_boardAdapter.GetLayerBottomZpos3DU( layer_id ),
-                                                     m_boardAdapter.GetLayerTopZpos3DU( layer_id ) );
-
-                objPtr->SetMaterial( materialLayer );
-                objPtr->SetColor( ConvertSRGBToLinear( layerColor ) );
-
-                m_object_container.Add( objPtr );
-#endif
-            }
-        }
+        createItemsFromContainer( container2d, layer_id, materialLayer, layerColor, 0.0f );
     }// for each layer on map
 
+    // Create plated copper
 
+    SFVEC3F layerColor_F_Cu = m_boardAdapter.GetLayerColor( F_Cu );
+    SFVEC3F layerColor_B_Cu = m_boardAdapter.GetLayerColor( B_Cu );
+
+    if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+    {
+        layerColor_F_Cu = m_boardAdapter.m_CopperColor;;
+        layerColor_B_Cu = layerColor_F_Cu;
+    }
+
+    createItemsFromContainer( m_boardAdapter.GetPlatedPads_Front(), F_Cu, &m_materials.m_Copper, layerColor_F_Cu, +m_boardAdapter.GetCopperThickness3DU() * 0.1f );
+    createItemsFromContainer( m_boardAdapter.GetPlatedPads_Back(), B_Cu, &m_materials.m_Copper, layerColor_B_Cu, -m_boardAdapter.GetCopperThickness3DU() * 0.1f );
 
     // Add Mask layer
     // Solder mask layers are "negative" layers so the elements that we have
