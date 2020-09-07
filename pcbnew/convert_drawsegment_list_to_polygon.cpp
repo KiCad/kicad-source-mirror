@@ -327,8 +327,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
     }
     else if( graphic->GetShape() == S_RECT )
     {
-        std::vector<wxPoint> pts;
-        graphic->GetRectCorners( &pts );
+        std::vector<wxPoint> pts = graphic->GetRectCorners();
 
         aPolygons.NewOutline();
 
@@ -552,8 +551,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
         }
         else if( graphic->GetShape() == S_RECT )
         {
-            std::vector<wxPoint> pts;
-            graphic->GetRectCorners( &pts );
+            std::vector<wxPoint> pts = graphic->GetRectCorners();
 
             for( const wxPoint& pt : pts )
                 aPolygons.Append( pt, -1, hole );

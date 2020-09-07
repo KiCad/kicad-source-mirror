@@ -168,7 +168,7 @@ public:
     wxPoint GetArcStart() const      { return m_End; }
     wxPoint GetArcEnd() const;
     wxPoint GetArcMid() const;
-    void GetRectCorners( std::vector<wxPoint>* pts ) const;
+    std::vector<wxPoint> GetRectCorners() const;
 
     /**
      * function GetArcAngleStart()

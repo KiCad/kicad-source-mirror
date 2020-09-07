@@ -967,8 +967,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 
     case S_RECT:
     {
-        std::vector<wxPoint> pts;
-        aSegment->GetRectCorners( &pts );
+        std::vector<wxPoint> pts = aSegment->GetRectCorners();
 
         if( aSegment->GetWidth() > 0 )
         {

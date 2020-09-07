@@ -506,8 +506,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( EDGE_MODULE* aEdge )
 
     case S_RECT:
     {
-        std::vector<wxPoint> pts;
-        aEdge->GetRectCorners( &pts );
+        std::vector<wxPoint> pts = aEdge->GetRectCorners();
 
         if( aEdge->GetWidth() > 0 )
         {
@@ -868,8 +867,7 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
 
     case S_RECT:
     {
-        std::vector<wxPoint> pts;
-        aSeg->GetRectCorners( &pts );
+        std::vector<wxPoint> pts = aSeg->GetRectCorners();
 
         if( aSeg->GetWidth() > 0 )
         {

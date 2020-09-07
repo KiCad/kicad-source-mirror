@@ -629,8 +629,7 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSe
     {
         if( aDrawSegment->GetWidth() > 0 )
         {
-            std::vector<wxPoint> pts;
-            aDrawSegment->GetRectCorners( &pts );
+            std::vector<wxPoint> pts = aDrawSegment->GetRectCorners();
 
             const SFVEC2F topLeft3DU(  pts[0].x * m_biuTo3Dunits, -pts[0].y * m_biuTo3Dunits );
             const SFVEC2F topRight3DU( pts[1].x * m_biuTo3Dunits, -pts[1].y * m_biuTo3Dunits );

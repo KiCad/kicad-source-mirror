@@ -396,8 +396,7 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
 
     case S_RECT:
     {
-        std::vector<wxPoint> pts;
-        GetRectCorners( &pts );
+        std::vector<wxPoint> pts = GetRectCorners();
 
         if( width == 0 )
         {

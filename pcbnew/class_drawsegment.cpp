@@ -565,8 +565,7 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
     {
     case S_RECT:
     {
-        std::vector<wxPoint> pts;
-        GetRectCorners( &pts );
+        std::vector<wxPoint> pts = GetRectCorners();
 
         bbox = EDA_RECT();  // re-init for merging
 
@@ -709,8 +708,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
     case S_RECT:
     {
-        std::vector<wxPoint> pts;
-        GetRectCorners( &pts );
+        std::vector<wxPoint> pts = GetRectCorners();
 
         if( m_Width == 0 )          // Filled rect hit-test
         {
@@ -814,8 +812,7 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
         }
         else
         {
-            std::vector<wxPoint> pts;
-            GetRectCorners( &pts );
+            std::vector<wxPoint> pts = GetRectCorners();
 
             // Account for the width of the lines
             arect.Inflate( GetWidth() / 2 );
@@ -952,8 +949,9 @@ const BOX2I DRAWSEGMENT::ViewBBox() const
 }
 
 
-void DRAWSEGMENT::GetRectCorners( std::vector<wxPoint>* pts ) const
+std::vector<wxPoint> DRAWSEGMENT::GetRectCorners() const
 {
+    std::vector<wxPoint> pts;
     MODULE* module = GetParentModule();
     wxPoint topLeft = GetStart();
     wxPoint botRight = GetEnd();
@@ -969,20 +967,22 @@ void DRAWSEGMENT::GetRectCorners( std::vector<wxPoint>* pts ) const
     }
 
     // Set up the un-rotated 4 corners
-    pts->emplace_back( topLeft );
-    pts->emplace_back( botRight.x, topLeft.y );
-    pts->emplace_back( botRight );
-    pts->emplace_back( topLeft.x, botRight.y );
+    pts.emplace_back( topLeft );
+    pts.emplace_back( botRight.x, topLeft.y );
+    pts.emplace_back( botRight );
+    pts.emplace_back( topLeft.x, botRight.y );
 
     // Now re-rotate the 4 corners to get a diamond
     if( module && KiROUND( module->GetOrientation() ) % 900 != 0 )
     {
-        for( wxPoint& pt : *pts )
+        for( wxPoint& pt : pts )
         {
             RotatePoint( &pt,module->GetOrientation() );
             pt += module->GetPosition();
         }
     }
+
+    return pts;
 }
 
 
@@ -1086,8 +1086,7 @@ std::vector<SHAPE*> DRAWSEGMENT::MakeEffectiveShapes() const
 
     case S_RECT:
     {
-        std::vector<wxPoint> pts;
-        GetRectCorners( &pts );
+        std::vector<wxPoint> pts = GetRectCorners();
 
         if( m_Width == 0 )
         {
