@@ -258,7 +258,7 @@ public:
 
     /**
      * Merge all basic shapes to a SHAPE_POLY_SET
-     * Note: The corners coordinates are relative to the pad position, orientation 0,
+     * Note: The results are relative to the pad position, orientation 0.
      */
     void MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer ) const;
 
@@ -268,7 +268,7 @@ public:
     void DeletePrimitivesList();
 
     /**
-     * Accessor to the basic shape list
+     * Accessor to the basic shape list for custom-shaped pads.
      */
     const std::vector<std::shared_ptr<DRAWSEGMENT>>& GetPrimitives() const
     {
@@ -284,43 +284,39 @@ public:
     void FlipPrimitives( bool aFlipLeftRight );
 
     /**
-     * Clear the current primitive list and import a basic shape (primitive) list.
-     * Each item is a duplicate of the initial items in list,
-     * so the initial list in not modified and not managed by this pad
+     * Clear the current custom shape primitives list and import a new list.  Copies the input,
+     * which is not altered.
      */
     void ReplacePrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPrimitivesList );
 
     /**
-     * Import a basic shape (primitive) list and add items to the current list.
-     * Each item is a duplicate of the initial items in list,
-     * so the initial list in not modified and not managed by this pad
+     * Import a custom shape primites list (composed of basic shapes) and add items to the
+     * current list.  Copies the input, which is not altered.
      */
     void AppendPrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPrimitivesList );
 
     /**
-     * Add items to the basic shape list
-     */
-    /**
-     * Add item to the primitive shape list
+     * Add item to the custom shape primitives list
      */
     void AddPrimitive( DRAWSEGMENT* aPrimitive );
 
     /**
      * Function SetOrientation
      * sets the rotation angle of the pad.
-     * @param aAngle is tenths of degrees, but will soon be degrees.  If it is
-     *  outside of 0 - 3600, then it will be normalized before being saved.
+     * @param aAngle in tenths of degrees.  If it is outside of 0 - 3600, then it will be
+     * normalized before being saved.
      */
     void SetOrientation( double aAngle );
 
     /**
-     * Set orientation in degrees
+     * Set orientation in degrees.
      */
     void SetOrientationDegrees( double aOrientation ) { SetOrientation( aOrientation*10.0 ); }
 
     /**
      * Function GetOrientation
-     * returns the rotation angle of the pad in tenths of degrees, but soon degrees.
+     * returns the rotation angle of the pad in a variety of units (the basic call returns
+     * tenths of degrees).
      */
     double GetOrientation() const { return m_orient; }
     double GetOrientationDegrees() const   { return m_orient/10.0; }
