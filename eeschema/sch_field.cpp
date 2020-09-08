@@ -526,9 +526,11 @@ bool SCH_FIELD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 
 void SCH_FIELD::Plot( PLOTTER* aPlotter )
 {
-    COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( GetLayer() );
-    int     penWidth = GetEffectiveTextPenWidth(
-                            aPlotter->RenderSettings()->GetDefaultPenWidth() );
+    RENDER_SETTINGS* settings = aPlotter->RenderSettings();
+    COLOR4D          color = settings->GetLayerColor( GetLayer() );
+    int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
+
+    penWidth = std::max( penWidth, settings->GetMinPenWidth() );
 
     if( !IsVisible() )
         return;

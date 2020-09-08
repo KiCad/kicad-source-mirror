@@ -749,10 +749,10 @@ void SCH_LINE::Plot( PLOTTER* aPlotter )
     default:         penWidth = GetPenWidth();                    break;
     }
 
-    penWidth = std::max( penWidth, aPlotter->RenderSettings()->GetDefaultPenWidth() );
-
     if( m_stroke.GetWidth() != 0 )
         penWidth = m_stroke.GetWidth();
+
+    penWidth = std::max( penWidth, settings->GetMinPenWidth() );
 
     aPlotter->SetCurrentLineWidth( penWidth );
     aPlotter->SetDash( GetEffectiveLineStyle() );

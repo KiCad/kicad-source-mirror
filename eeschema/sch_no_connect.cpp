@@ -177,7 +177,7 @@ void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter )
     int delta = GetSize() / 2;
     int pX = m_pos.x;
     int pY = m_pos.y;
-    int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetDefaultPenWidth() );
+    int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
 
     aPlotter->SetCurrentLineWidth( penWidth );
     aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_NOCONNECT ) );

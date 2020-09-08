@@ -39,6 +39,7 @@ RENDER_SETTINGS::RENDER_SETTINGS() :
     m_outlineWidth       = 1;
     m_worksheetLineWidth = 100000;
     m_defaultPenWidth    = 0;
+    m_minPenWidth        = 0;
     m_showPageLimits     = false;
 }
 

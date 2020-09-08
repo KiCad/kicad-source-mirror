@@ -76,8 +76,8 @@ static const wxChar DRCEpsilon[] = wxT( "DRCEpsilon" );
 
 /**
  * Used to calculate the actual hole size from the finish hole size.
- * IPC-6012 says 15-18um; Cadence says at least 0.020 for a Class 2 board and at least 0.025
- * for Class 3.
+ * IPC-6012 says 0.015-0.018mm; Cadence says at least 0.020mm for a Class 2 board and at least
+ * 0.025mm for Class 3.
  */
 static const wxChar HoleWallThickness[] = wxT( "HoleWallPlatingThickness" );
 
@@ -131,6 +131,12 @@ static const wxChar StrokeTriangulation[] = wxT( "StrokeTriangulation" );
  * When true, enable Altium Schematic import (*.SchDoc)
  */
 static const wxChar PluginAltiumSch[] = wxT( "PluginAltiumSch" );
+
+/**
+ * Absolute minimum pen width to send to the plotter.  PDF seems happy enough with 0.0212mm
+ * (which equates to 1px @ 1200dpi).
+ */
+static const wxChar MinPlotPenWidth[] = wxT( "MinPlotPenWidth" );
 
 } // namespace KEYS
 
@@ -217,13 +223,16 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_DrawTriangulationOutlines = false;
     m_PluginAltiumSch           = false;
 
-    m_extraClearance            = 0.0005;
+    m_ExtraClearance            = 0.0005;
     m_DRCEpsilon                = 0.0005;   // 500nm is small enough not to materially violate
                                             // any constraints.
 
-    m_holeWallThickness         = 0.020;    // IPC-6012 says 15-18um; Cadence says at least
+    m_HoleWallThickness         = 0.020;    // IPC-6012 says 15-18um; Cadence says at least
                                             // 0.020 for a Class 2 board and at least 0.025
                                             // for Class 3.
+
+    m_MinPlotPenWidth           = 0.0212;   // 1 pixel at 1200dpi.
+
     loadFromConfigFile();
 }
 
@@ -265,13 +274,13 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                 &m_realTimeConnectivity, true ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::ExtraFillMargin,
-                                                  &m_extraClearance, 0.0005, 0.0, 1.0 ) );
+                                                  &m_ExtraClearance, 0.0005, 0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCEpsilon,
                                                   &m_DRCEpsilon, 0.0005, 0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::HoleWallThickness,
-                                                  &m_holeWallThickness, 0.020, 0.0, 1.0 ) );
+                                                  &m_HoleWallThickness, 0.020, 0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize,
                                                &m_coroutineStackSize, AC_STACK::default_stack,
@@ -294,6 +303,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::PluginAltiumSch,
                                                 &m_PluginAltiumSch, false ) );
+
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MinPlotPenWidth,
+                                                  &m_MinPlotPenWidth, 0.0212, 0.0, 1.0 ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 

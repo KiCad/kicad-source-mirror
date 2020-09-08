@@ -581,6 +581,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
     COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( GetLayer() );
     int penWidth = GetEffectiveTextPenWidth( aPlotter->RenderSettings()->GetDefaultPenWidth() );
 
+    penWidth = std::max( penWidth, aPlotter->RenderSettings()->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
 
     if( IsMultilineAllowed() )

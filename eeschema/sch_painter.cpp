@@ -62,6 +62,7 @@
 #include <view/view.h>
 #include <kiface_i.h>
 #include <default_values.h>
+#include <advanced_config.h>
 #include "sch_painter.h"
 
 namespace KIGFX
@@ -83,6 +84,8 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS )
 {
     SetDefaultPenWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS );
+
+    m_minPenWidth = ADVANCED_CFG::GetCfg().m_MinPlotPenWidth * IU_PER_MM;
 }
 
 

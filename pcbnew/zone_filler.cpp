@@ -601,7 +601,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
     // requested clearance due to many approximations in calculations, like arc to segment
     // approx, rounding issues, etc.
     // 1 micron is a good value
-    int extra_margin = Millimeter2iu( ADVANCED_CFG::GetCfg().m_extraClearance );
+    int extra_margin = Millimeter2iu( ADVANCED_CFG::GetCfg().m_ExtraClearance );
 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     int                    zone_clearance = aZone->GetLocalClearance();

@@ -178,7 +178,7 @@ void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     if( !already_filled || pen_size > 0 )
     {
-        pen_size = std::max( pen_size, aPlotter->RenderSettings()->GetDefaultPenWidth() );
+        pen_size = std::max( pen_size, aPlotter->RenderSettings()->GetMinPenWidth() );
 
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
         aPlotter->Circle( pos, GetRadius() * 2, already_filled ? NO_FILL : m_Fill, pen_size );

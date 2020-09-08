@@ -966,7 +966,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
 
     aPlotter->SetColor( borderColor );
 
-    int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetDefaultPenWidth() );
+    int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
 
     aPlotter->MoveTo( m_pos );

@@ -395,6 +395,8 @@ void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter )
             settings->GetLayerColor( m_Layer ) : GetStrokeColor();
     int     penWidth = ( GetPenWidth() == 0 ) ? settings->GetDefaultPenWidth() : GetPenWidth();
 
+    penWidth = std::max( penWidth, settings->GetMinPenWidth() );
+
     aPlotter->SetCurrentLineWidth( penWidth );
     aPlotter->SetColor( color );
     aPlotter->SetDash( GetStrokeStyle() );

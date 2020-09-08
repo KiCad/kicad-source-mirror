@@ -287,8 +287,9 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     else
         color = COLOR4D::BLACK;
 
-    int penWidth = std::max( GetEffectiveTextPenWidth(),
-                             plotter->RenderSettings()->GetDefaultPenWidth() );
+    RENDER_SETTINGS* settings = plotter->RenderSettings();
+
+    int penWidth = std::max( GetEffectiveTextPenWidth(), settings->GetMinPenWidth() );
 
     plotter->Text( pos, color, GetText(), t1 ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT, GetTextSize(),
                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, penWidth, IsItalic(),

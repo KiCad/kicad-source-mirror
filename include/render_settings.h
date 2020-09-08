@@ -164,6 +164,9 @@ public:
     int GetDefaultPenWidth() const { return m_defaultPenWidth; }
     void SetDefaultPenWidth( int aWidth ) { m_defaultPenWidth = aWidth; }
 
+    int GetMinPenWidth() const { return m_minPenWidth; }
+    void SetMinPenWidth( int aWidth ) { m_minPenWidth = aWidth; }
+
     bool GetShowPageLimits() const { return m_showPageLimits; }
     void SetShowPageLimits( bool aDraw ) { m_showPageLimits = aDraw; }
 
@@ -268,6 +271,8 @@ protected:
     float         m_worksheetLineWidth;   // Line width used when drawing worksheet
 
     int           m_defaultPenWidth;
+    int           m_minPenWidth;          // Some clients (such as PDF) don't like ultra-thin
+                                          // lines.  This sets an absolute minimum.
     bool          m_showPageLimits;
 
     wxDC*         m_printDC;              // This can go away once we have Cairo-based printing.

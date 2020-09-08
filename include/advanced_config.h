@@ -84,20 +84,21 @@ public:
 
     /**
      * Extra fill clearance for zone fills.  Note that for zone tests this is essentially
-     * additive with m_DRCEpsilon.
+     * additive with m_DRCEpsilon.  Units are mm.
      */
-    double m_extraClearance;
+    double m_ExtraClearance;
 
     /**
      * Epsilon for DRC tests.  Note that for zone tests this is essentially additive with
-     * m_extraClearance.
+     * m_extraClearance.  Units are mm.
      */
     double m_DRCEpsilon;
 
     /**
      * Hole wall plating thickness.  Used to determine actual hole size from finish hole size.
+     * Units are mm.
      */
-    double m_holeWallThickness;
+    double m_HoleWallThickness;
 
     /**
      * Do real-time connectivity
@@ -130,6 +131,12 @@ public:
      * the current implementation is highly incomplete
      */
     bool m_PluginAltiumSch;
+
+    /**
+     * Sets an absolute minimum pen width for plotting.  Some formats (PDF, for example) don't
+     * like ultra-thin lines.  Units are mm.
+     */
+    double m_MinPlotPenWidth;
 
 private:
     ADVANCED_CFG();

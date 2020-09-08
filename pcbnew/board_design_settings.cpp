@@ -969,7 +969,7 @@ int BOARD_DESIGN_SETTINGS::GetDRCEpsilon() const
 
 int BOARD_DESIGN_SETTINGS::GetHolePlatingThickness() const
 {
-    return Millimeter2iu( ADVANCED_CFG::GetCfg().m_holeWallThickness );
+    return Millimeter2iu( ADVANCED_CFG::GetCfg().m_HoleWallThickness );
 }
 
 

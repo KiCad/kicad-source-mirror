@@ -288,7 +288,7 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     else
         color = COLOR4D::BLACK;
 
-    int penWidth = std::max( GetPenWidth(),aPlotter->RenderSettings()->GetDefaultPenWidth() );
+    int penWidth = std::max( GetPenWidth(),aPlotter->RenderSettings()->GetMinPenWidth() );
 
     aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(), hjustify, vjustify,
                     penWidth, IsItalic(), IsBold() );
