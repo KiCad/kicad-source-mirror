@@ -140,7 +140,7 @@ D_PAD& D_PAD::operator=( const D_PAD &aOther )
 
 LSET D_PAD::StandardMask()
 {
-    static LSET saved = LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask );
+    static LSET saved = LSET::AllCuMask() | LSET( 2, F_Mask, B_Mask );
     return saved;
 }
 
@@ -161,7 +161,7 @@ LSET D_PAD::ConnSMDMask()
 
 LSET D_PAD::UnplatedHoleMask()
 {
-    static LSET saved = LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask );
+    static LSET saved = LSET( 4, F_Cu, B_Cu, F_Mask, B_Mask );
     return saved;
 }
 

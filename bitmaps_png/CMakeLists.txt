@@ -543,6 +543,10 @@ set( BMAPS_BIG
     )
 
 set( BMAPS_OTHER
+    pads_npth
+    pads_npth_top_bottom
+    pads_npth_top
+    pads_npth_bottom
     pads_remove_unused
     pads_remove_unused_keep_bottom
     pads_reset_unused

@@ -929,6 +929,54 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	page3->Layout();
 	page3Sizer->Fit( page3 );
 	m_stackupImagesBook->AddPage( page3, _("a page"), false );
+	page4 = new wxPanel( m_stackupImagesBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* page4Sizer;
+	page4Sizer = new wxBoxSizer( wxVERTICAL );
+
+	m_stackupImage4 = new wxStaticBitmap( page4, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	page4Sizer->Add( m_stackupImage4, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+
+	page4->SetSizer( page4Sizer );
+	page4->Layout();
+	page4Sizer->Fit( page4 );
+	m_stackupImagesBook->AddPage( page4, _("a page"), false );
+	page5 = new wxPanel( m_stackupImagesBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* page5Sizer;
+	page5Sizer = new wxBoxSizer( wxVERTICAL );
+
+	m_stackupImage5 = new wxStaticBitmap( page5, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	page5Sizer->Add( m_stackupImage5, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+
+	page5->SetSizer( page5Sizer );
+	page5->Layout();
+	page5Sizer->Fit( page5 );
+	m_stackupImagesBook->AddPage( page5, _("a page"), false );
+	page6 = new wxPanel( m_stackupImagesBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* page6Sizer;
+	page6Sizer = new wxBoxSizer( wxVERTICAL );
+
+	m_stackupImage6 = new wxStaticBitmap( page6, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	page6Sizer->Add( m_stackupImage6, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+
+	page6->SetSizer( page6Sizer );
+	page6->Layout();
+	page6Sizer->Fit( page6 );
+	m_stackupImagesBook->AddPage( page6, _("a page"), false );
+	page7 = new wxPanel( m_stackupImagesBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* page7Sizer;
+	page7Sizer = new wxBoxSizer( wxVERTICAL );
+
+	m_stackupImage7 = new wxStaticBitmap( page7, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	page7Sizer->Add( m_stackupImage7, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+
+	page7->SetSizer( page7Sizer );
+	page7->Layout();
+	page7Sizer->Fit( page7 );
+	m_stackupImagesBook->AddPage( page7, _("a page"), false );
 
 	bSizer30->Add( m_stackupImagesBook, 0, wxEXPAND|wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 

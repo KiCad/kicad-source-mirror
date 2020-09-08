@@ -242,12 +242,16 @@ void DIALOG_PAD_PROPERTIES::OnCancel( wxCommandEvent& event )
 void DIALOG_PAD_PROPERTIES::autoSelectPreview( int aPage )
 {
     // This is the place to turn auto-select off.
+    // (Just make sure the redraw() call remains.)
 
     // We have focus issues on GTK when we try to set the notebook page while a user is
     // typing into a text control.
     wxWindow* focus = FindFocus();
 
     m_previewNotebook->ChangeSelection( aPage );
+
+    if( aPage == 0 )
+        redraw();
 
     if( focus && dynamic_cast<wxTextEntry*>( focus ) )
         focus->SetFocus();
@@ -336,9 +340,6 @@ void DIALOG_PAD_PROPERTIES::updateRoundRectCornerValues()
         m_tcChamferRatio->ChangeValue( ratio );
         m_tcChamferRatio1->ChangeValue( ratio );
     }
-
-    autoSelectPreview( 0 );
-    redraw();
 }
 
 
@@ -364,7 +365,6 @@ void DIALOG_PAD_PROPERTIES::onCornerRadiusChange( wxCommandEvent& event )
     m_tcCornerSizeRatio1->ChangeValue( ratio );
 
     autoSelectPreview( 0 );
-    redraw();
 }
 
 
@@ -450,7 +450,6 @@ void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
     }
 
     autoSelectPreview( 0 );
-    redraw();
 }
 
 
@@ -525,50 +524,50 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_PadNetSelector->SetSelectedNetcode( m_dummyPad->GetNetCode() );
 
     // Display current pad parameters units:
-    m_posX.SetValue( m_dummyPad->GetPosition().x );
-    m_posY.SetValue( m_dummyPad->GetPosition().y );
+    m_posX.ChangeValue( m_dummyPad->GetPosition().x );
+    m_posY.ChangeValue( m_dummyPad->GetPosition().y );
 
-    m_holeX.SetValue( m_dummyPad->GetDrillSize().x );
-    m_holeY.SetValue(  m_dummyPad->GetDrillSize().y );
+    m_holeX.ChangeValue( m_dummyPad->GetDrillSize().x );
+    m_holeY.ChangeValue(  m_dummyPad->GetDrillSize().y );
 
-    m_sizeX.SetValue( m_dummyPad->GetSize().x );
-    m_sizeY.SetValue( m_dummyPad->GetSize().y );
+    m_sizeX.ChangeValue( m_dummyPad->GetSize().x );
+    m_sizeY.ChangeValue( m_dummyPad->GetSize().y );
 
     m_offsetShapeOpt->SetValue( m_dummyPad->GetOffset() != wxPoint() );
-    m_offsetX.SetValue( m_dummyPad->GetOffset().x );
-    m_offsetY.SetValue( m_dummyPad->GetOffset().y );
+    m_offsetX.ChangeValue( m_dummyPad->GetOffset().x );
+    m_offsetY.ChangeValue( m_dummyPad->GetOffset().y );
 
     if( m_dummyPad->GetDelta().x )
     {
-        m_trapDelta.SetValue( m_dummyPad->GetDelta().x );
+        m_trapDelta.ChangeValue( m_dummyPad->GetDelta().x );
         m_trapAxisCtrl->SetSelection( 0 );
     }
     else
     {
-        m_trapDelta.SetValue( m_dummyPad->GetDelta().y );
+        m_trapDelta.ChangeValue( m_dummyPad->GetDelta().y );
         m_trapAxisCtrl->SetSelection( 1 );
     }
 
     m_padToDieOpt->SetValue( m_dummyPad->GetPadToDieLength() != 0 );
-    m_padToDie.SetValue( m_dummyPad->GetPadToDieLength() );
+    m_padToDie.ChangeValue( m_dummyPad->GetPadToDieLength() );
 
-    m_clearance.SetValue( m_dummyPad->GetLocalClearance() );
-    m_maskClearance.SetValue( m_dummyPad->GetLocalSolderMaskMargin() );
-    m_spokeWidth.SetValue( m_dummyPad->GetThermalWidth() );
-    m_thermalGap.SetValue( m_dummyPad->GetThermalGap() );
-    m_pasteClearance.SetValue( m_dummyPad->GetLocalSolderPasteMargin() );
+    m_clearance.ChangeValue( m_dummyPad->GetLocalClearance() );
+    m_maskClearance.ChangeValue( m_dummyPad->GetLocalSolderMaskMargin() );
+    m_spokeWidth.ChangeValue( m_dummyPad->GetThermalWidth() );
+    m_thermalGap.ChangeValue( m_dummyPad->GetThermalGap() );
+    m_pasteClearance.ChangeValue( m_dummyPad->GetLocalSolderPasteMargin() );
 
     // Prefer "-0" to "0" for normally negative values
     if( m_dummyPad->GetLocalSolderPasteMargin() == 0 )
-        m_pasteClearanceCtrl->SetValue( wxT( "-" ) + m_pasteClearanceCtrl->GetValue() );
+        m_pasteClearanceCtrl->ChangeValue( wxT( "-" ) + m_pasteClearanceCtrl->GetValue() );
 
     msg.Printf( wxT( "%f" ), m_dummyPad->GetLocalSolderPasteMarginRatio() * 100.0 );
 
     if( m_dummyPad->GetLocalSolderPasteMarginRatio() == 0.0 && msg[0] == '0' )
         // Sometimes Printf adds a sign if the value is small
-        m_SolderPasteMarginRatioCtrl->SetValue( wxT( "-" ) + msg );
+        m_SolderPasteMarginRatioCtrl->ChangeValue( wxT( "-" ) + msg );
     else
-        m_SolderPasteMarginRatioCtrl->SetValue( msg );
+        m_SolderPasteMarginRatioCtrl->ChangeValue( msg );
 
     switch( m_dummyPad->GetZoneConnection() )
     {
@@ -805,7 +804,6 @@ void DIALOG_PAD_PROPERTIES::onChangePadMode( wxCommandEvent& event )
     settings->SetContrastModeDisplay( HIGH_CONTRAST_MODE::NORMAL );
 
     autoSelectPreview( 0 );
-    redraw();
 }
 
 
@@ -830,7 +828,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 
         // A reasonable default (from  IPC-7351C)
         if( m_dummyPad->GetRoundRectRadiusRatio() == 0.0 )
-            m_tcCornerSizeRatio->SetValue( "25" );
+            m_tcCornerSizeRatio->ChangeValue( "25" );
     }
         break;
 
@@ -854,7 +852,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 
         // Reasonable defaults (corner radius from  IPC-7351C)
         if( m_dummyPad->GetRoundRectRadiusRatio() == 0.0 )
-            m_tcCornerSizeRatio->SetValue( "25" );
+            m_tcCornerSizeRatio->ChangeValue( "25" );
 
         if( m_dummyPad->GetChamferRectRatio() == 0.0 )
             m_tcChamferRatio1->ChangeValue( "20" );
@@ -905,7 +903,6 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         m_MainSizer->SetSizeHints( this );
 
     autoSelectPreview( 0 );
-    redraw();
 }
 
 
@@ -913,7 +910,6 @@ void DIALOG_PAD_PROPERTIES::OnDrillShapeSelected( wxCommandEvent& event )
 {
     transferDataToPad( m_dummyPad );
     autoSelectPreview( 0 );
-    redraw();
 }
 
 
@@ -921,7 +917,6 @@ void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
 {
     transferDataToPad( m_dummyPad );
     autoSelectPreview( 0 );
-    redraw();
 }
 
 
@@ -929,13 +924,22 @@ void DIALOG_PAD_PROPERTIES::UpdateLayersDropdown()
 {
     m_rbCopperLayersSel->Clear();
 
-    if( m_PadType->GetSelection() == 0 || m_PadType->GetSelection() == 3 )
+    if( m_PadType->GetSelection() == 0 )
     {
         m_rbCopperLayersSel->Append( _( "All copper layers" ) );
         m_rbCopperLayersSel->Append( wxString::Format( _( "%s, %s and connected layers" ),
                                                        m_board->GetLayerName( F_Cu ),
                                                        m_board->GetLayerName( B_Cu ) ) );
         m_rbCopperLayersSel->Append( _( "Connected layers only" ) );
+        m_rbCopperLayersSel->Append( _( "None" ) );
+    }
+    else if( m_PadType->GetSelection() == 3 )
+    {
+        m_rbCopperLayersSel->Append( wxString::Format( _( "%s and %s" ),
+                                                       m_board->GetLayerName( F_Cu ),
+                                                       m_board->GetLayerName( B_Cu ) ) );
+        m_rbCopperLayersSel->Append( m_board->GetLayerName( F_Cu ) );
+        m_rbCopperLayersSel->Append( m_board->GetLayerName( B_Cu ) );
         m_rbCopperLayersSel->Append( _( "None" ) );
     }
     else
@@ -970,24 +974,24 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 
     if( !hasHole )
     {
-        m_holeX.SetValue( 0 );
-        m_holeY.SetValue( 0 );
+        m_holeX.ChangeValue( 0 );
+        m_holeY.ChangeValue( 0 );
     }
     else if ( m_holeX.GetValue() == 0 && m_currentPad )
     {
-        m_holeX.SetValue( m_currentPad->GetDrillSize().x );
-        m_holeY.SetValue( m_currentPad->GetDrillSize().y );
+        m_holeX.ChangeValue( m_currentPad->GetDrillSize().x );
+        m_holeY.ChangeValue( m_currentPad->GetDrillSize().y );
     }
 
     if( !hasConnection )
     {
-        m_PadNumCtrl->SetValue( wxEmptyString );
+        m_PadNumCtrl->ChangeValue( wxEmptyString );
         m_PadNetSelector->SetSelectedNetcode( 0 );
         m_padToDieOpt->SetValue( false );
     }
     else if( m_PadNumCtrl->GetValue().IsEmpty() && m_currentPad )
     {
-        m_PadNumCtrl->SetValue( m_currentPad->GetName() );
+        m_PadNumCtrl->ChangeValue( m_currentPad->GetName() );
         m_PadNetSelector->SetSelectedNetcode( m_currentPad->GetNetCode() );
     }
 
@@ -1048,10 +1052,10 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     // Enable/disable Copper Layers control
     m_rbCopperLayersSel->Enable( ii != 4 );
 
-    if( m_PadType->GetSelection() == 0 || m_PadType->GetSelection() == 3 )
-    {
-        LSET cu_set = m_dummyPad->GetLayerSet() & LSET::AllCuMask();
+    LSET cu_set = m_dummyPad->GetLayerSet() & LSET::AllCuMask();
 
+    if( m_PadType->GetSelection() == 0 )
+    {
         if( !cu_set.any() )
             m_stackupImagesBook->SetSelection( 3 );
         else if( !m_dummyPad->GetRemoveUnconnected() )
@@ -1060,6 +1064,17 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
             m_stackupImagesBook->SetSelection( 1 );
         else
             m_stackupImagesBook->SetSelection( 2 );
+    }
+    else if( m_PadType->GetSelection() == 3 )
+    {
+        if( cu_set.test( F_Cu ) && cu_set.test( B_Cu ) )
+            m_stackupImagesBook->SetSelection( 4 );
+        else if( cu_set.test( F_Cu ) )
+            m_stackupImagesBook->SetSelection( 5 );
+        else if( cu_set.test( B_Cu ) )
+            m_stackupImagesBook->SetSelection( 6 );
+        else
+            m_stackupImagesBook->SetSelection( 7 );
     }
     else
     {
@@ -1075,7 +1090,7 @@ void DIALOG_PAD_PROPERTIES::setPadLayersList( LSET layer_mask, bool remove_uncon
 
     LSET cu_set = layer_mask & LSET::AllCuMask();
 
-    if( m_PadType->GetSelection() == 0 || m_PadType->GetSelection() == 3 )
+    if( m_PadType->GetSelection() == 0 )
     {
         if( !cu_set.any() )
             m_rbCopperLayersSel->SetSelection( 3 );
@@ -1085,6 +1100,17 @@ void DIALOG_PAD_PROPERTIES::setPadLayersList( LSET layer_mask, bool remove_uncon
             m_rbCopperLayersSel->SetSelection( 1 );
         else
             m_rbCopperLayersSel->SetSelection( 2 );
+    }
+    else if( m_PadType->GetSelection() == 3 )
+    {
+        if( cu_set.test( F_Cu ) && cu_set.test( B_Cu ) )
+            m_rbCopperLayersSel->SetSelection( 0 );
+        else if( cu_set.test( F_Cu ) )
+            m_rbCopperLayersSel->SetSelection( 1 );
+        else if( cu_set.test( B_Cu ) )
+            m_rbCopperLayersSel->SetSelection( 2 );
+        else
+            m_rbCopperLayersSel->SetSelection( 3 );
     }
     else
     {
@@ -1125,6 +1151,10 @@ bool DIALOG_PAD_PROPERTIES::Show( bool aShow )
         m_stackupImage0->SetBitmap( KiBitmap( pads_reset_unused_xpm ) );
         m_stackupImage1->SetBitmap( KiBitmap( pads_remove_unused_keep_bottom_xpm ) );
         m_stackupImage2->SetBitmap( KiBitmap( pads_remove_unused_xpm ) );
+        m_stackupImage4->SetBitmap( KiBitmap( pads_npth_top_bottom_xpm ) );
+        m_stackupImage5->SetBitmap( KiBitmap( pads_npth_top_xpm ) );
+        m_stackupImage6->SetBitmap( KiBitmap( pads_npth_bottom_xpm ) );
+        m_stackupImage7->SetBitmap( KiBitmap( pads_npth_xpm ) );
 
         m_stackupPanel->Layout();
     }
@@ -1141,6 +1171,10 @@ void DIALOG_PAD_PROPERTIES::OnPreviewPageChanged( wxNotebookEvent& event )
     m_stackupImage0->SetBitmap( KiBitmap( pads_reset_unused_xpm ) );
     m_stackupImage1->SetBitmap( KiBitmap( pads_remove_unused_keep_bottom_xpm ) );
     m_stackupImage2->SetBitmap( KiBitmap( pads_remove_unused_xpm ) );
+    m_stackupImage4->SetBitmap( KiBitmap( pads_npth_top_bottom_xpm ) );
+    m_stackupImage5->SetBitmap( KiBitmap( pads_npth_top_xpm ) );
+    m_stackupImage6->SetBitmap( KiBitmap( pads_npth_bottom_xpm ) );
+    m_stackupImage7->SetBitmap( KiBitmap( pads_npth_xpm ) );
 
     m_stackupPanel->Layout();
 
@@ -1150,19 +1184,12 @@ void DIALOG_PAD_PROPERTIES::OnPreviewPageChanged( wxNotebookEvent& event )
 
 void DIALOG_PAD_PROPERTIES::OnSetCopperLayers( wxCommandEvent& event )
 {
-    if( m_PadType->GetSelection() == 0 || m_PadType->GetSelection() == 3 )
-    {
-        autoSelectPreview( 1 );
-        m_stackupImagesBook->SetSelection( event.GetSelection() );
-    }
-    else
-    {
-        autoSelectPreview( 0 );
-        m_stackupImagesBook->SetSelection( 3 );
-    }
-
     transferDataToPad( m_dummyPad );
-    redraw();
+
+    if( m_PadType->GetSelection() == 0 || m_PadType->GetSelection() == 3 )
+        autoSelectPreview( 1 );
+    else
+        autoSelectPreview( 0 );
 }
 
 
@@ -1816,17 +1843,19 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 
     aPad->SetProperty( getSelectedProperty() );
 
-    LSET padLayerMask;
+    LSET padLayerMask = LSET();
     int  copperLayersChoice = m_rbCopperLayersSel->GetSelection();
 
-    if( m_PadType->GetSelection() == 0 || m_PadType->GetSelection() == 3 )
+    aPad->SetRemoveUnconnected( false );
+    aPad->SetKeepTopBottom( false );
+
+    if( m_PadType->GetSelection() == 0 )
     {
         switch( copperLayersChoice )
         {
         case 0:
             // All copper layers
             padLayerMask |= LSET::AllCuMask();
-            aPad->SetRemoveUnconnected( false );
             break;
 
         case 1:
@@ -1840,12 +1869,21 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
             // Connected only
             padLayerMask |= LSET::AllCuMask();
             aPad->SetRemoveUnconnected( true );
-            aPad->SetKeepTopBottom( false );
             break;
 
         case 3:
             // No copper layers
             break;
+        }
+    }
+    else if( m_PadType->GetSelection() == 3 )
+    {
+        switch( copperLayersChoice )
+        {
+        case 0: padLayerMask.set( F_Cu ).set( B_Cu ); break;
+        case 1: padLayerMask.set( F_Cu );             break;
+        case 2: padLayerMask.set( B_Cu );             break;
+        default:                                      break;
         }
     }
     else
