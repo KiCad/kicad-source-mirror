@@ -77,7 +77,7 @@ bool CONVERT_TOOL::Init()
     auto anyLines     = graphicLines || trackLines;
 
     auto anyPolys     = ( S_C::OnlyType( PCB_ZONE_AREA_T ) ||
-                          P_S_C::OnlyGraphicShapeTypes( { S_POLYGON } ) );
+                          P_S_C::OnlyGraphicShapeTypes( { S_POLYGON, S_RECT } ) );
 
     auto lineToArc    = P_S_C::OnlyGraphicShapeTypes( { S_SEGMENT } ) ||
                         S_C::OnlyType( PCB_TRACE_T );
@@ -358,6 +358,9 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                     case S_POLYGON:
                         break;
 
+                    case S_RECT:
+                        break;
+
                     default:
                         aCollector.Remove( item );
                     }
@@ -388,9 +391,33 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                     break;
 
                 case PCB_LINE_T:
-                    wxASSERT( static_cast<DRAWSEGMENT*>( aItem )->GetShape() == S_POLYGON );
-                    set = static_cast<DRAWSEGMENT*>( aItem )->GetPolyShape();
+                {
+                    DRAWSEGMENT* graphic = static_cast<DRAWSEGMENT*>( aItem );
+
+                    if( graphic->GetShape() == S_POLYGON )
+                    {
+                        set = graphic->GetPolyShape();
+                    }
+                    else if( graphic->GetShape() == S_RECT )
+                    {
+                        SHAPE_LINE_CHAIN outline;
+                        VECTOR2I start( graphic->GetStart() );
+                        VECTOR2I end( graphic->GetEnd() );
+
+                        outline.Append( start );
+                        outline.Append( VECTOR2I( end.x, start.y ) );
+                        outline.Append( end );
+                        outline.Append( VECTOR2I( start.x, end.y ) );
+                        outline.SetClosed( true );
+
+                        set.AddOutline( outline );
+                    }
+                    else
+                    {
+                        wxFAIL_MSG( "Unhandled graphic shape type in PolyToLines - getPolySet" );
+                    }
                     break;
+                }
 
                 default:
                     wxFAIL_MSG( "Unhandled type in PolyToLines - getPolySet" );
