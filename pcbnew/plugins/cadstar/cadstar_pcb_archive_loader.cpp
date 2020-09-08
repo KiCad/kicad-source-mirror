@@ -90,7 +90,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
     loadCoppers();
     loadNets();
 
-    //TODO: process all other items
+    if( Layout.VariantHierarchy.size() > 0 )
+        wxLogWarning(
+                _( "The CADSTAR design contains variants which has no KiCad equivalent. All "
+                   "components have been loaded on top of each other. " ) );
 
     wxLogMessage(
             _( "The CADSTAR design has been imported successfully.\n"
@@ -870,7 +873,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
         }
 
         loadComponentAttributes( comp, m );
-        m->SetDescription( getPart( comp.PartID ).Definition.Name );
+
+        if( !comp.PartID.IsEmpty() && comp.PartID != wxT( "NO_PART" ) )
+            m->SetDescription( getPart( comp.PartID ).Definition.Name );
 
         mComponentMap.insert( { comp.ID, m } );
     }

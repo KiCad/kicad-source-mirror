@@ -246,14 +246,14 @@ public:
         LAYER_TYPE        Type        = LAYER_TYPE::UNDEFINED;
         LAYER_SUBTYPE     SubType     = LAYER_SUBTYPE::LAYERSUBTYPE_NONE;
         PHYSICAL_LAYER_ID PhysicalLayer =
-                UNDEFINED_PHYSICAL_LAYER;              ///< If UNDEFINED, no physical layer is
-                                                       ///< assigned (e.g. documentation and
-                                                       ///< construction layers)
-        LAYER_ID     SwapLayerID = UNDEFINED_LAYER_ID; ///< If UNDEFINED_LAYER_ID, no swap layer
-        ROUTING_BIAS RoutingBias = ROUTING_BIAS::UNBIASED;
-        long         Thickness   = 0; ///< Note: Units of length are defined in file header
-        MATERIAL_ID  MaterialId;
-        EMBEDDING    Embedding = EMBEDDING::NONE;
+                UNDEFINED_PHYSICAL_LAYER;                 ///< If UNDEFINED, no physical layer is
+                                                          ///< assigned (e.g. documentation and
+                                                          ///< construction layers)
+        LAYER_ID     SwapLayerID    = UNDEFINED_LAYER_ID; ///< If UNDEFINED_LAYER_ID, no swap layer
+        ROUTING_BIAS RoutingBias    = ROUTING_BIAS::UNBIASED;
+        long         Thickness      = 0; ///< Note: Units of length are defined in file header
+        MATERIAL_ID  MaterialId     = UNDEFINED_MATERIAL_ID;
+        EMBEDDING    Embedding      = EMBEDDING::NONE;
         bool         ReferencePlane = false;
         bool         VariantLayer   = false;
 
@@ -800,6 +800,7 @@ public:
 
     enum class UNITS
     {
+        DESIGN, ///< Inherits from design units (assumed Assignments->Technology->Units)
         THOU,
         INCH,
         MICROMETRE,
@@ -1038,6 +1039,9 @@ public:
                      ///< side). Normally used for surface mount devices.
         THROUGH_HOLE ///< All physical layers currently defined
     };
+
+
+    static PAD_SIDE GetPadSide( const wxString& aPadSideString );
 
     /**
      * @brief From CADSTAR help: "For specifying the directions in which routes can enter or exit the
@@ -1683,6 +1687,19 @@ public:
     };
 
 
+    struct PADEXCEPTION
+    {
+        PAD_ID     ID;
+        PADCODE_ID PadCode = wxEmptyString; ///< If not empty, override padcode
+        bool       OverrideSide = false;
+        PAD_SIDE   Side;
+        bool       OverrideOrientation = false;
+        long       OrientAngle         = 0;
+
+        void       Parse( XNODE* aNode );
+    };
+
+
     struct COMPONENT
     {
         COMPONENT_ID ID;
@@ -1712,6 +1729,7 @@ public:
                                                               ///< to be out of sync.
                                                               ///< See PART::DEFINITION::PIN::Label
         std::map<PART_DEFINITION_PIN_ID, PIN_ATTRIBUTE> PinAttributes;
+        std::map<PAD_ID, PADEXCEPTION>                  PadExceptions;
 
         void Parse( XNODE* aNode );
     };

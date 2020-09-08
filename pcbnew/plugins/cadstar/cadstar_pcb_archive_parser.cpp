@@ -455,10 +455,15 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYER::Parse( XNODE* aNode )
         {
             wxString tempNodeName = tempNode->GetName();
 
-            if( tempNodeName == wxT( "MAKE" ) )
+            if( tempNodeName == wxT( "MAKE" ) || tempNodeName == wxT( "LAYERHEIGHT" ) )
             {
-                MaterialId = GetXmlAttributeIDString( tempNode, 0 );
-                Thickness  = GetXmlAttributeIDLong( tempNode, 1 );
+                if( tempNodeName == wxT( "LAYERHEIGHT" ) )
+                    Thickness = GetXmlAttributeIDLong( tempNode, 0 );
+                else
+                {
+                    MaterialId = GetXmlAttributeIDString( tempNode, 0 );
+                    Thickness  = GetXmlAttributeIDLong( tempNode, 1 );
+                }
 
                 XNODE* childOfTempNode = tempNode->GetChildren();
 
@@ -671,7 +676,15 @@ void CADSTAR_PCB_ARCHIVE_PARSER::HEADER::Parse( XNODE* aNode )
             Format.Parse( cNode );
 
             if( Format.Type != wxT( "LAYOUT" ) )
-                THROW_IO_ERROR( "Not a CADSTAR PCB Layout file!" );
+                if( Format.Type == wxT( "LIBRARY" ) )
+                    THROW_IO_ERROR(
+                            "The selected file is a CADSTAR Library file (as opposed to a Layout "
+                            "file). CADSTAR libraries cannot yet be imported into KiCad." );
+                else
+                    THROW_IO_ERROR(
+                            "The selected file is an unknown CADSTAR format so cannot be "
+                            "imported into KiCad." );
+            
         }
         else if( nodeName == wxT( "JOBFILE" ) )
             JobFile = GetXmlAttributeIDString( cNode, 0 );
@@ -1358,6 +1371,8 @@ CADSTAR_PCB_ARCHIVE_PARSER::UNITS CADSTAR_PCB_ARCHIVE_PARSER::ParseUnits( XNODE*
         return UNITS::MM;
     else if( unit == wxT( "THOU" ) )
         return UNITS::THOU;
+    else if( unit == wxT( "DESIGN" ) )
+        return UNITS::DESIGN;
     else
         THROW_UNKNOWN_PARAMETER_IO_ERROR( unit, wxT( "UNITS" ) );
 
@@ -1563,6 +1578,19 @@ CADSTAR_PCB_ARCHIVE_PARSER::SWAP_RULE CADSTAR_PCB_ARCHIVE_PARSER::ParseSwapRule(
     return retval;
 }
 
+CADSTAR_PCB_ARCHIVE_PARSER::PAD_SIDE CADSTAR_PCB_ARCHIVE_PARSER::GetPadSide(
+        const wxString& aPadSideString )
+{
+    if( aPadSideString == wxT( "THRU" ) )
+        return PAD_SIDE::THROUGH_HOLE;
+    else if( aPadSideString == wxT( "BOTTOM" ) )
+        return PAD_SIDE::MAXIMUM;
+    else if( aPadSideString == wxT( "TOP" ) )
+        return PAD_SIDE::MINIMUM;
+    else
+         return PAD_SIDE::THROUGH_HOLE; // Assume through hole as default
+}
+
 
 void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_COPPER::Parse( XNODE* aNode )
 {
@@ -1712,15 +1740,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PAD::Parse( XNODE* aNode )
 
     ID        = GetXmlAttributeIDLong( aNode, 0 );
     PadCodeID = GetXmlAttributeIDString( aNode, 2 );
-
-    wxString padSideStr = GetXmlAttributeIDString( aNode, 3 );
-
-    if( padSideStr == wxT( "THRU" ) )
-        Side = PAD_SIDE::THROUGH_HOLE;
-    else if( padSideStr == wxT( "BOTTOM" ) )
-        Side = PAD_SIDE::MAXIMUM;
-    else if( padSideStr == wxT( "TOP" ) )
-        Side = PAD_SIDE::MINIMUM;
+    Side      = GetPadSide( GetXmlAttributeIDString( aNode, 3 ) );    
 
     XNODE*   cNode    = aNode->GetChildren();
     wxString location = wxString::Format( "PAD %d", ID );
@@ -2740,6 +2760,40 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PIN_ATTRIBUTE::Parse( XNODE* aNode )
 }
 
 
+void CADSTAR_PCB_ARCHIVE_PARSER::PADEXCEPTION::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "PADEXCEPTION" ) );
+
+    ID = GetXmlAttributeIDLong( aNode, 0 );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        wxString cNodeName = cNode->GetName();
+
+        if( cNodeName == wxT( "PADCODEREF" ) )
+        {
+            PadCode = GetXmlAttributeIDString( cNode, 0 );
+        }
+        else if( cNodeName == wxT( "SIDE" ) )
+        {
+            OverrideSide = true;
+            Side         = GetPadSide( GetXmlAttributeIDString( cNode, 0 ) );
+        }
+        else if( cNodeName == wxT( "ORIENT" ) )
+        {
+            OverrideOrientation = true;
+            OrientAngle         = GetXmlAttributeIDLong( cNode, 0 );
+        }
+        else
+        {
+            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
+    }
+}
+
+
 void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "COMP" ) );
@@ -2807,6 +2861,12 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT::Parse( XNODE* aNode )
             PART_DEFINITION_PIN_ID pinID    = GetXmlAttributeIDLong( cNode, 0 );
             wxString               pinLabel = GetXmlAttributeIDString( cNode, 1 );
             PinLabels.insert( std::make_pair( pinID, pinLabel ) );
+        }
+        else if( cNodeName == wxT( "PADEXCEPTION" ) )
+        {
+            PADEXCEPTION padExcept;
+            padExcept.Parse( cNode );
+            PadExceptions.insert( std::make_pair( padExcept.ID, padExcept ) );
         }
         else
         {
