@@ -243,11 +243,14 @@ void DIALOG_PAD_PROPERTIES::OnCancel( wxCommandEvent& event )
 void DIALOG_PAD_PROPERTIES::autoSelectPreview( int aPage )
 {
     // This is the place to turn auto-select off.
+
+    // We have focus issues on GTK when we try to set the notebook page while a user is
+    // typing into a text control.
     wxWindow* focus = FindFocus();
 
     m_previewNotebook->ChangeSelection( aPage );
 
-    if( focus )
+    if( focus && dynamic_cast<wxTextEntry*>( focus ) )
         focus->SetFocus();
 }
 
