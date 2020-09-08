@@ -254,9 +254,9 @@ template <class T> inline T NormalizeAngle360Min( T Angle )
 template <class T>
 inline T NormalizeAngleNeg( T Angle )
 {
-    while( Angle < -3600 )
+    while( Angle <= -3600 )
         Angle += 3600;
-    while( Angle >= 0 )
+    while( Angle > 0 )
         Angle -= 3600;
     return Angle;
 }
