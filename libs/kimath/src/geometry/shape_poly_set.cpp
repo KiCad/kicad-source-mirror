@@ -1532,11 +1532,6 @@ void SHAPE_POLY_SET::Mirror( bool aX, bool aY, const VECTOR2I& aRef )
 
 void SHAPE_POLY_SET::Rotate( double aAngle, const VECTOR2I& aCenter )
 {
-    // Avoid extremely small angles
-    // TODO(snh): Extract into Advanced Config
-    if( aAngle < 0.0001 )
-        return;
-
     for( POLYGON& poly : m_polys )
     {
         for( SHAPE_LINE_CHAIN& path : poly )
