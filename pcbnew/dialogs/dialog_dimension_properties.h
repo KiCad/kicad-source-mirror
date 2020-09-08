@@ -1,0 +1,66 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef KICAD_DIALOG_DIMENSION_PROPERTIES_H
+#define KICAD_DIALOG_DIMENSION_PROPERTIES_H
+
+#include <widgets/unit_binder.h>
+#include <wx/valnum.h>
+
+#include "dialog_dimension_properties_base.h"
+
+
+class BOARD_ITEM;
+class DIMENSION;
+class PCB_BASE_EDIT_FRAME;
+
+
+class DIALOG_DIMENSION_PROPERTIES : public DIALOG_DIMENSION_PROPERTIES_BASE
+{
+public:
+    DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem );
+
+    ~DIALOG_DIMENSION_PROPERTIES();
+
+private:
+
+    PCB_BASE_EDIT_FRAME* m_frame;
+
+    DIMENSION* m_dimension;
+
+    UNIT_BINDER m_textWidth;
+    UNIT_BINDER m_textHeight;
+    UNIT_BINDER m_textThickness;
+    UNIT_BINDER m_textPosX;
+    UNIT_BINDER m_textPosY;
+
+    wxFloatingPointValidator<double> m_orientValidator;
+    double                           m_orientValue;
+
+    UNIT_BINDER m_lineThickness;
+    UNIT_BINDER m_arrowLength;
+
+    bool TransferDataToWindow() override;
+
+    bool TransferDataFromWindow() override;
+};
+
+
+#endif // KICAD_DIALOG_DIMENSION_PROPERTIES_H

@@ -65,6 +65,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_copper_zones_base.cpp
     dialogs/dialog_create_array.cpp
     dialogs/dialog_create_array_base.cpp
+    dialogs/dialog_dimension_properties.cpp
+    dialogs/dialog_dimension_properties_base.cpp
     dialogs/dialog_drc.cpp
     dialogs/dialog_drc_base.cpp
     dialogs/dialog_edit_footprint_for_BoardEditor.cpp

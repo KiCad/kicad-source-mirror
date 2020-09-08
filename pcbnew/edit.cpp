@@ -44,7 +44,7 @@
 #include <connectivity/connectivity_data.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <dialogs/dialog_text_properties.h>
+#include <dialogs/dialog_dimension_properties.h>
 
 // Handles the selection of command events.
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
@@ -169,7 +169,7 @@ void PCB_EDIT_FRAME::ShowDimensionPropertyDialog( DIMENSION* aDimension )
     if( aDimension == NULL )
         return;
 
-    DIALOG_TEXT_PROPERTIES dlg( this, aDimension );
+    DIALOG_DIMENSION_PROPERTIES dlg( this, aDimension );
     dlg.ShowModal();
 }
 
