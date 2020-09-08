@@ -36,7 +36,7 @@
 using namespace KIGFX;
 
 const double STROKE_FONT::INTERLINE_PITCH_RATIO = 1.61;
-const double STROKE_FONT::OVERBAR_POSITION_FACTOR = 1.40;
+const double STROKE_FONT::OVERBAR_POSITION_FACTOR = 1.33;
 const double STROKE_FONT::BOLD_FACTOR = 1.3;
 const double STROKE_FONT::STROKE_FONT_SCALE = 1.0 / 21.0;
 const double STROKE_FONT::ITALIC_TILT = 1.0 / 8;
