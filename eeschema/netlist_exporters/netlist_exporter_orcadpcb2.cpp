@@ -86,9 +86,12 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
             footprint = comp->GetFootprint( &sheet );
             footprint.Replace( wxT( " " ), wxT( "_" ) );
 
+            if( footprint.IsEmpty() )
+                footprint = wxT( "$noname" );
+
             ret |= fprintf( f, " ( %s %s",
                             TO_UTF8( sheet.PathAsString() + comp->m_Uuid.AsString() ),
-                            TO_UTF8( footprint.IsEmpty() ? wxString( "$noname" ) : footprint ) );
+                            TO_UTF8( footprint ) );
 
             field = comp->GetRef( &sheet );
 
