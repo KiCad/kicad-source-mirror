@@ -236,6 +236,12 @@ wxString AltiumSchematicFileWildcard()
 }
 
 
+wxString CadstarSchematicArchiveFileWildcard()
+{
+    return _( "CADSTAR Schematic Archive files" ) + AddFileExtListToFilter( { "csa" } );
+}
+
+
 wxString EagleSchematicFileWildcard()
 {
     return _( "Eagle XML schematic files" ) + AddFileExtListToFilter( { "sch" } );
