@@ -837,10 +837,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_bSizerPanelPrimitives->Fit( m_panelCustomShapePrimitives );
 	m_notebook->AddPage( m_panelCustomShapePrimitives, _("Custom Shape Primitives"), false );
 
-	bSizerUpper->Add( m_notebook, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_staticline8 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizerUpper->Add( m_staticline8, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerUpper->Add( m_notebook, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerDisplayPad;
 	bSizerDisplayPad = new wxBoxSizer( wxVERTICAL );
@@ -849,41 +846,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	bSizerDisplayPad->Add( 0, 0, 0, wxBOTTOM|wxEXPAND|wxTOP, 3 );
 
-	m_parentInfoLine1 = new wxStaticText( this, wxID_ANY, _("Footprint name"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_parentInfoLine1->Wrap( -1 );
-	m_parentInfoLine1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
-	bSizerDisplayPad->Add( m_parentInfoLine1, 0, wxTOP, 8 );
-
-	m_parentInfoLine2 = new wxStaticText( this, wxID_ANY, _("side and rotation"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_parentInfoLine2->Wrap( -1 );
-	m_parentInfoLine2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
-	bSizerDisplayPad->Add( m_parentInfoLine2, 0, wxRIGHT, 3 );
-
 
 	bSizerDisplayPad->Add( 0, 10, 0, wxEXPAND, 5 );
 
-	m_previewNotebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_previewNotebook->SetMinSize( wxSize( -1,320 ) );
-
-	m_boardViewPanel = new wxPanel( m_previewNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_padPreviewSizer = new wxBoxSizer( wxVERTICAL );
-
-	m_padPreviewSizer->SetMinSize( wxSize( 280,-1 ) );
-
-	m_boardViewPanel->SetSizer( m_padPreviewSizer );
-	m_boardViewPanel->Layout();
-	m_padPreviewSizer->Fit( m_boardViewPanel );
-	m_previewNotebook->AddPage( m_boardViewPanel, _("Board View"), false );
-	m_stackupPanel = new wxPanel( m_previewNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer30;
-	bSizer30 = new wxBoxSizer( wxVERTICAL );
-
-
-	bSizer30->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_stackupImagesBook = new wxSimplebook( m_stackupPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_stackupImagesBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE );
 	page0 = new wxPanel( m_stackupImagesBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* page0Sizer;
 	page0Sizer = new wxBoxSizer( wxVERTICAL );
@@ -978,30 +944,41 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	page7Sizer->Fit( page7 );
 	m_stackupImagesBook->AddPage( page7, _("a page"), false );
 
-	bSizer30->Add( m_stackupImagesBook, 0, wxEXPAND|wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizerDisplayPad->Add( m_stackupImagesBook, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_boardViewPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_padPreviewSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_padPreviewSizer->SetMinSize( wxSize( 280,-1 ) );
+
+	m_boardViewPanel->SetSizer( m_padPreviewSizer );
+	m_boardViewPanel->Layout();
+	m_padPreviewSizer->Fit( m_boardViewPanel );
+	bSizerDisplayPad->Add( m_boardViewPanel, 1, wxEXPAND|wxALL, 2 );
 
 
-	bSizer30->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	m_stackupPanel->SetSizer( bSizer30 );
-	m_stackupPanel->Layout();
-	bSizer30->Fit( m_stackupPanel );
-	m_previewNotebook->AddPage( m_stackupPanel, _("Stackup View"), false );
-
-	bSizerDisplayPad->Add( m_previewNotebook, 12, wxEXPAND|wxRIGHT, 5 );
-
-	m_cbShowPadOutline = new wxCheckBox( this, wxID_ANY, _("Show pad in outline mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerDisplayPad->Add( m_cbShowPadOutline, 0, wxBOTTOM|wxRIGHT|wxTOP, 5 );
-
-	m_staticline13 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerDisplayPad->Add( m_staticline13, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 10 );
-
-
-	bSizerUpper->Add( bSizerDisplayPad, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerUpper->Add( bSizerDisplayPad, 1, wxEXPAND|wxTOP|wxRIGHT, 10 );
 
 
 	m_MainSizer->Add( bSizerUpper, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bottomSizer;
+	bottomSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_parentInfo = new wxStaticText( this, wxID_ANY, _("Footprint R1 (300K), back side (mirrored), rotated 180.0º"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_parentInfo->Wrap( -1 );
+	m_parentInfo->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+
+	bottomSizer->Add( m_parentInfo, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 8 );
+
+
+	bottomSizer->Add( 20, 0, 1, wxEXPAND, 5 );
+
+	m_cbShowPadOutline = new wxCheckBox( this, wxID_ANY, _("Preview pad in sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	bottomSizer->Add( m_cbShowPadOutline, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bottomSizer->Add( 20, 0, 1, wxEXPAND, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -1010,7 +987,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	m_MainSizer->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
+	bottomSizer->Add( m_sdbSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	m_MainSizer->Add( bottomSizer, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	this->SetSizer( m_MainSizer );
@@ -1073,7 +1053,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_buttonDup->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onDuplicatePrimitive ), NULL, this );
 	m_buttonGeometry->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onGeometryTransform ), NULL, this );
 	m_buttonDel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onDeletePrimitive ), NULL, this );
-	m_previewNotebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPreviewPageChanged ), NULL, this );
 	m_cbShowPadOutline->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onChangePadMode ), NULL, this );
 	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnCancel ), NULL, this );
 }
@@ -1134,7 +1113,6 @@ DIALOG_PAD_PROPERTIES_BASE::~DIALOG_PAD_PROPERTIES_BASE()
 	m_buttonDup->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onDuplicatePrimitive ), NULL, this );
 	m_buttonGeometry->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onGeometryTransform ), NULL, this );
 	m_buttonDel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onDeletePrimitive ), NULL, this );
-	m_previewNotebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPreviewPageChanged ), NULL, this );
 	m_cbShowPadOutline->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onChangePadMode ), NULL, this );
 	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnCancel ), NULL, this );
 

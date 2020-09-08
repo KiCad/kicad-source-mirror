@@ -175,8 +175,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
     m_copperLayersLabel->SetFont( infoFont );
     m_techLayersLabel->SetFont( infoFont );
-    m_parentInfoLine1->SetFont( infoFont );
-    m_parentInfoLine2->SetFont( infoFont );
+    m_parentInfo->SetFont( infoFont );
 
     infoFont.SetStyle( wxFONTSTYLE_ITALIC );
     m_nonCopperNote->SetFont( infoFont );
@@ -236,25 +235,6 @@ void DIALOG_PAD_PROPERTIES::OnCancel( wxCommandEvent& event )
 
     // Now call default handler for wxID_CANCEL command event
     event.Skip();
-}
-
-
-void DIALOG_PAD_PROPERTIES::autoSelectPreview( int aPage )
-{
-    // This is the place to turn auto-select off.
-    // (Just make sure the redraw() call remains.)
-
-    // We have focus issues on GTK when we try to set the notebook page while a user is
-    // typing into a text control.
-    wxWindow* focus = FindFocus();
-
-    m_previewNotebook->ChangeSelection( aPage );
-
-    if( aPage == 0 )
-        redraw();
-
-    if( focus && dynamic_cast<wxTextEntry*>( focus ) )
-        focus->SetFocus();
 }
 
 
@@ -364,7 +344,7 @@ void DIALOG_PAD_PROPERTIES::onCornerRadiusChange( wxCommandEvent& event )
     m_tcCornerSizeRatio->ChangeValue( ratio );
     m_tcCornerSizeRatio1->ChangeValue( ratio );
 
-    autoSelectPreview( 0 );
+    redraw();
 }
 
 
@@ -449,7 +429,7 @@ void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
         m_cornerRadius.ChangeValue( m_dummyPad->GetRoundRectCornerRadius() );
     }
 
-    autoSelectPreview( 0 );
+    redraw();
 }
 
 
@@ -482,21 +462,18 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
         // Diplay parent footprint info
         MODULE* footprint = m_currentPad->GetParent();
-        wxString msg1, msg2;
 
         if( footprint )
         {
-            msg1.Printf( _("Footprint %s (%s),"),
+            msg.Printf( _("Footprint %s (%s), %s, rotated %.1f deg"),
                          footprint->Reference().GetShownText(),
-                         footprint->Value().GetShownText() );
-            msg2.Printf( _("%s, rotated %.1f deg"),
+                         footprint->Value().GetShownText(),
                          footprint->IsFlipped() ? _( "back side (mirrored)" )
                                                 : _( "front side" ),
                          footprint->GetOrientation() / 10.0 );
         }
 
-        m_parentInfoLine1->SetLabel( msg1 );
-        m_parentInfoLine2->SetLabel( msg2 );
+        m_parentInfo->SetLabel( msg );
     }
 
     if( m_isFlipped )
@@ -803,7 +780,7 @@ void DIALOG_PAD_PROPERTIES::onChangePadMode( wxCommandEvent& event )
     settings->SetHighContrast( false );
     settings->SetContrastModeDisplay( HIGH_CONTRAST_MODE::NORMAL );
 
-    autoSelectPreview( 0 );
+    redraw();
 }
 
 
@@ -902,21 +879,21 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     if( m_MainSizer->GetSize().y < m_MainSizer->GetMinSize().y )
         m_MainSizer->SetSizeHints( this );
 
-    autoSelectPreview( 0 );
+    redraw();
 }
 
 
 void DIALOG_PAD_PROPERTIES::OnDrillShapeSelected( wxCommandEvent& event )
 {
     transferDataToPad( m_dummyPad );
-    autoSelectPreview( 0 );
+    redraw();
 }
 
 
 void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
 {
     transferDataToPad( m_dummyPad );
-    autoSelectPreview( 0 );
+    redraw();
 }
 
 
@@ -1000,11 +977,10 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 
     m_choiceFabProperty->Enable( hasProperty );
 
-    m_previewNotebook->SetSelection( hasHole ? 1 : 0 );
-
     UpdateLayersDropdown();
 
     transferDataToPad( m_dummyPad );
+
     redraw();
 }
 
@@ -1156,40 +1132,17 @@ bool DIALOG_PAD_PROPERTIES::Show( bool aShow )
         m_stackupImage6->SetBitmap( KiBitmap( pads_npth_bottom_xpm ) );
         m_stackupImage7->SetBitmap( KiBitmap( pads_npth_xpm ) );
 
-        m_stackupPanel->Layout();
+        Layout();
     }
 
     return retVal;
 }
 
 
-void DIALOG_PAD_PROPERTIES::OnPreviewPageChanged( wxNotebookEvent& event )
-{
-    // It *should* work to set the stackup bitmaps in the constructor, but it doesn't.
-    // wxWidgets needs to have these set when the panel is visible for some reason.
-    // https://gitlab.com/kicad/code/kicad/-/issues/5534
-    m_stackupImage0->SetBitmap( KiBitmap( pads_reset_unused_xpm ) );
-    m_stackupImage1->SetBitmap( KiBitmap( pads_remove_unused_keep_bottom_xpm ) );
-    m_stackupImage2->SetBitmap( KiBitmap( pads_remove_unused_xpm ) );
-    m_stackupImage4->SetBitmap( KiBitmap( pads_npth_top_bottom_xpm ) );
-    m_stackupImage5->SetBitmap( KiBitmap( pads_npth_top_xpm ) );
-    m_stackupImage6->SetBitmap( KiBitmap( pads_npth_bottom_xpm ) );
-    m_stackupImage7->SetBitmap( KiBitmap( pads_npth_xpm ) );
-
-    m_stackupPanel->Layout();
-
-    event.Skip();
-}
-
-
 void DIALOG_PAD_PROPERTIES::OnSetCopperLayers( wxCommandEvent& event )
 {
     transferDataToPad( m_dummyPad );
-
-    if( m_PadType->GetSelection() == 0 || m_PadType->GetSelection() == 3 )
-        autoSelectPreview( 1 );
-    else
-        autoSelectPreview( 0 );
+    redraw();
 }
 
 

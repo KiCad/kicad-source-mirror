@@ -209,13 +209,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_buttonDup;
 		wxButton* m_buttonGeometry;
 		wxButton* m_buttonDel;
-		wxStaticLine* m_staticline8;
-		wxStaticText* m_parentInfoLine1;
-		wxStaticText* m_parentInfoLine2;
-		wxNotebook* m_previewNotebook;
-		wxPanel* m_boardViewPanel;
-		wxBoxSizer* m_padPreviewSizer;
-		wxPanel* m_stackupPanel;
 		wxSimplebook* m_stackupImagesBook;
 		wxPanel* page0;
 		wxStaticBitmap* m_stackupImage0;
@@ -232,8 +225,10 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticBitmap* m_stackupImage6;
 		wxPanel* page7;
 		wxStaticBitmap* m_stackupImage7;
+		wxPanel* m_boardViewPanel;
+		wxBoxSizer* m_padPreviewSizer;
+		wxStaticText* m_parentInfo;
 		wxCheckBox* m_cbShowPadOutline;
-		wxStaticLine* m_staticline13;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -260,7 +255,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onDuplicatePrimitive( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onGeometryTransform( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDeletePrimitive( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPreviewPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void onChangePadMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 

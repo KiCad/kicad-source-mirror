@@ -96,8 +96,6 @@ private:
     void updateRoundRectCornerValues();
     void enablePrimitivePage( bool aEnable );   ///< enable (or disable) the primitive page editor
 
-    void autoSelectPreview( int aPage );
-
     /**
      * Function setPadLayersList
      * updates the CheckBox states in pad layers list,
@@ -115,7 +113,6 @@ private:
     void OnResize( wxSizeEvent& event );
 	void OnCancel( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
-    void OnPreviewPageChanged( wxNotebookEvent& event ) override;
 
     void OnUpdateUINonCopperWarning( wxUpdateUIEvent& event ) override
     {
