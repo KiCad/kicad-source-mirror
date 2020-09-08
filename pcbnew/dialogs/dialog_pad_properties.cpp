@@ -191,7 +191,6 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
 
     // Initialize canvas to be able to display the dummy pad:
     prepareCanvas();
-    m_stackupImage->SetBitmap( KiBitmap( pads_remove_unused_xpm ) );
 
     SetInitialFocus( m_PadNumCtrl );
     m_sdbSizerOK->SetDefault();
@@ -685,10 +684,11 @@ void DIALOG_PAD_PROPERTIES::initValues()
     else
         m_holeShapeCtrl->SetSelection( 1 );
 
-    // Update some dialog widgets state (Enable/disable options):
-    wxCommandEvent cmd_event;
     setPadLayersList( m_dummyPad->GetLayerSet(), m_dummyPad->GetRemoveUnconnected(),
                       m_dummyPad->GetKeepTopBottom() );
+
+    // Update some dialog widgets state (Enable/disable options):
+    wxCommandEvent cmd_event;
     OnPadShapeSelection( cmd_event );
     OnOffsetCheckbox( cmd_event );
 
@@ -1047,6 +1047,24 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 
     // Enable/disable Copper Layers control
     m_rbCopperLayersSel->Enable( ii != 4 );
+
+    if( m_PadType->GetSelection() == 0 || m_PadType->GetSelection() == 3 )
+    {
+        LSET cu_set = m_dummyPad->GetLayerSet() & LSET::AllCuMask();
+
+        if( !cu_set.any() )
+            m_stackupImagesBook->SetSelection( 3 );
+        else if( !m_dummyPad->GetRemoveUnconnected() )
+            m_stackupImagesBook->SetSelection( 0 );
+        else if( m_dummyPad->GetKeepTopBottom() )
+            m_stackupImagesBook->SetSelection( 1 );
+        else
+            m_stackupImagesBook->SetSelection( 2 );
+    }
+    else
+    {
+        m_stackupImagesBook->SetSelection( 3 );
+    }
 }
 
 
@@ -1060,38 +1078,20 @@ void DIALOG_PAD_PROPERTIES::setPadLayersList( LSET layer_mask, bool remove_uncon
     if( m_PadType->GetSelection() == 0 || m_PadType->GetSelection() == 3 )
     {
         if( !cu_set.any() )
-        {
             m_rbCopperLayersSel->SetSelection( 3 );
-            m_stackupImage->SetBitmap( wxBitmap() );
-        }
         else if( !remove_unconnected )
-        {
             m_rbCopperLayersSel->SetSelection( 0 );
-            m_stackupImage->SetBitmap( KiBitmap( pads_reset_unused_xpm ) );
-        }
         else if( keep_top_bottom )
-        {
             m_rbCopperLayersSel->SetSelection( 1 );
-            m_stackupImage->SetBitmap( KiBitmap( pads_remove_unused_keep_bottom_xpm ) );
-        }
         else
-        {
             m_rbCopperLayersSel->SetSelection( 2 );
-            m_stackupImage->SetBitmap( KiBitmap( pads_remove_unused_xpm ) );
-        }
     }
     else
     {
         if( cu_set == LSET( F_Cu ) )
-        {
             m_rbCopperLayersSel->SetSelection( 0 );
-            m_stackupImage->SetBitmap( wxBitmap() );
-        }
         else
-        {
             m_rbCopperLayersSel->SetSelection( 1 );
-            m_stackupImage->SetBitmap( wxBitmap() );
-        }
     }
 
     m_PadLayerAdhCmp->SetValue( layer_mask[F_Adhes] );
@@ -1122,8 +1122,9 @@ bool DIALOG_PAD_PROPERTIES::Show( bool aShow )
         // It *should* work to set the stackup bitmap in the constructor, but it doesn't.
         // wxWidgets needs to have these set when the panel is visible for some reason.
         // https://gitlab.com/kicad/code/kicad/-/issues/5534
-        setPadLayersList( m_dummyPad->GetLayerSet(), m_dummyPad->GetRemoveUnconnected(),
-                          m_dummyPad->GetKeepTopBottom() );
+        m_stackupImage0->SetBitmap( KiBitmap( pads_reset_unused_xpm ) );
+        m_stackupImage1->SetBitmap( KiBitmap( pads_remove_unused_keep_bottom_xpm ) );
+        m_stackupImage2->SetBitmap( KiBitmap( pads_remove_unused_xpm ) );
 
         m_stackupPanel->Layout();
     }
@@ -1134,16 +1135,14 @@ bool DIALOG_PAD_PROPERTIES::Show( bool aShow )
 
 void DIALOG_PAD_PROPERTIES::OnPreviewPageChanged( wxNotebookEvent& event )
 {
-    if( event.GetSelection() == 1 )
-    {
-        // It *should* work to set the stackup bitmap in the constructor, but it doesn't.
-        // wxWidgets needs to have these set when the panel is visible for some reason.
-        // https://gitlab.com/kicad/code/kicad/-/issues/5534
-        setPadLayersList( m_dummyPad->GetLayerSet(), m_dummyPad->GetRemoveUnconnected(),
-                          m_dummyPad->GetKeepTopBottom() );
+    // It *should* work to set the stackup bitmaps in the constructor, but it doesn't.
+    // wxWidgets needs to have these set when the panel is visible for some reason.
+    // https://gitlab.com/kicad/code/kicad/-/issues/5534
+    m_stackupImage0->SetBitmap( KiBitmap( pads_reset_unused_xpm ) );
+    m_stackupImage1->SetBitmap( KiBitmap( pads_remove_unused_keep_bottom_xpm ) );
+    m_stackupImage2->SetBitmap( KiBitmap( pads_remove_unused_xpm ) );
 
-        m_stackupPanel->Layout();
-    }
+    m_stackupPanel->Layout();
 
     event.Skip();
 }
@@ -1154,19 +1153,12 @@ void DIALOG_PAD_PROPERTIES::OnSetCopperLayers( wxCommandEvent& event )
     if( m_PadType->GetSelection() == 0 || m_PadType->GetSelection() == 3 )
     {
         autoSelectPreview( 1 );
-
-        switch( event.GetSelection() )
-        {
-        case 0: m_stackupImage->SetBitmap( KiBitmap( pads_reset_unused_xpm ) );              break;
-        case 1: m_stackupImage->SetBitmap( KiBitmap( pads_remove_unused_keep_bottom_xpm ) ); break;
-        case 2: m_stackupImage->SetBitmap( KiBitmap( pads_remove_unused_xpm ) );             break;
-        case 3: m_stackupImage->SetBitmap( wxBitmap() );                                     break;
-        }
+        m_stackupImagesBook->SetSelection( event.GetSelection() );
     }
     else
     {
         autoSelectPreview( 0 );
-        m_stackupImage->SetBitmap( wxBitmap() );
+        m_stackupImagesBook->SetSelection( 3 );
     }
 
     transferDataToPad( m_dummyPad );

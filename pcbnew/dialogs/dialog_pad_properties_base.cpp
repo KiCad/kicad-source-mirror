@@ -883,8 +883,54 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	bSizer30->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_stackupImage = new wxStaticBitmap( m_stackupPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer30->Add( m_stackupImage, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_stackupImagesBook = new wxSimplebook( m_stackupPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	page0 = new wxPanel( m_stackupImagesBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* page0Sizer;
+	page0Sizer = new wxBoxSizer( wxVERTICAL );
+
+	m_stackupImage0 = new wxStaticBitmap( page0, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	page0Sizer->Add( m_stackupImage0, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+
+	page0->SetSizer( page0Sizer );
+	page0->Layout();
+	page0Sizer->Fit( page0 );
+	m_stackupImagesBook->AddPage( page0, _("a page"), false );
+	page1 = new wxPanel( m_stackupImagesBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* page1Sizer;
+	page1Sizer = new wxBoxSizer( wxVERTICAL );
+
+	m_stackupImage1 = new wxStaticBitmap( page1, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	page1Sizer->Add( m_stackupImage1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+
+	page1->SetSizer( page1Sizer );
+	page1->Layout();
+	page1Sizer->Fit( page1 );
+	m_stackupImagesBook->AddPage( page1, _("a page"), false );
+	page2 = new wxPanel( m_stackupImagesBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* page2Sizer;
+	page2Sizer = new wxBoxSizer( wxVERTICAL );
+
+	m_stackupImage2 = new wxStaticBitmap( page2, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	page2Sizer->Add( m_stackupImage2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+
+	page2->SetSizer( page2Sizer );
+	page2->Layout();
+	page2Sizer->Fit( page2 );
+	m_stackupImagesBook->AddPage( page2, _("a page"), false );
+	page3 = new wxPanel( m_stackupImagesBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* page3Sizer;
+	page3Sizer = new wxBoxSizer( wxVERTICAL );
+
+
+	page3->SetSizer( page3Sizer );
+	page3->Layout();
+	page3Sizer->Fit( page3 );
+	m_stackupImagesBook->AddPage( page3, _("a page"), false );
+
+	bSizer30->Add( m_stackupImagesBook, 0, wxEXPAND|wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 
 	bSizer30->Add( 0, 0, 1, wxEXPAND, 5 );

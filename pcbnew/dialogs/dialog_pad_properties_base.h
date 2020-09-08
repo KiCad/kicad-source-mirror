@@ -216,7 +216,14 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxPanel* m_boardViewPanel;
 		wxBoxSizer* m_padPreviewSizer;
 		wxPanel* m_stackupPanel;
-		wxStaticBitmap* m_stackupImage;
+		wxSimplebook* m_stackupImagesBook;
+		wxPanel* page0;
+		wxStaticBitmap* m_stackupImage0;
+		wxPanel* page1;
+		wxStaticBitmap* m_stackupImage1;
+		wxPanel* page2;
+		wxStaticBitmap* m_stackupImage2;
+		wxPanel* page3;
 		wxCheckBox* m_cbShowPadOutline;
 		wxStaticLine* m_staticline13;
 		wxStdDialogButtonSizer* m_sdbSizer;
