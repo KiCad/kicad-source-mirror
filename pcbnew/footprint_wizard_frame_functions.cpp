@@ -211,6 +211,9 @@ void FOOTPRINT_WIZARD_FRAME::DefaultParameters( wxCommandEvent& event )
     DisplayWizardInfos();
 }
 
+// This is a flag to avoid reentering of ParametersUpdated
+// that can happen in some cases
+static bool lock_update_prms = false;
 
 void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
 {
@@ -220,6 +223,9 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
         return;
 
     if( m_parameterGridPage < 0 )
+        return;
+
+    if( lock_update_prms )
         return;
 
     wxArrayString   prmValues = footprintWizard->GetParameterValues( m_parameterGridPage );
@@ -241,7 +247,7 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
 
     if( has_changed )
     {
-        wxString res = footprintWizard->SetParameterValues( m_parameterGridPage, prmValues );
+         wxString res = footprintWizard->SetParameterValues( m_parameterGridPage, prmValues );
 
         if( !res.IsEmpty() )
             wxMessageBox( res );
@@ -251,7 +257,19 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
 
         // The python script can have modified some other parameters.
         // So rebuild the current parameter list with new values, just in case.
+        //
+        // On wxWidgets 3.0.5, ReCreateParameterList() generates a EVT_GRID_CMD_CELL_CHANGED
+        // that call ParametersUpdated() and creating an infinite loop
+        // Note also it happens **only for languages using a comma** instead of a point
+        // for floating point separator
+        // It does not happen on wxWidgets 3.1.4
+        //
+        // So lock the next call.
+        lock_update_prms = true;
         ReCreateParameterList();
     }
+
+    // unlock ParametersUpdated() now the update is finished
+    lock_update_prms = false;
 }
 
