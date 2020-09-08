@@ -96,6 +96,8 @@ private:
     void updateRoundRectCornerValues();
     void enablePrimitivePage( bool aEnable );   ///< enable (or disable) the primitive page editor
 
+    void autoSelectPreview( int aPage );
+
     /**
      * Function setPadLayersList
      * updates the CheckBox states in pad layers list,

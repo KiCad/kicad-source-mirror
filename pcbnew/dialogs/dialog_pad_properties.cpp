@@ -240,6 +240,18 @@ void DIALOG_PAD_PROPERTIES::OnCancel( wxCommandEvent& event )
 }
 
 
+void DIALOG_PAD_PROPERTIES::autoSelectPreview( int aPage )
+{
+    // This is the place to turn auto-select off.
+    wxWindow* focus = FindFocus();
+
+    m_previewNotebook->ChangeSelection( aPage );
+
+    if( focus )
+        focus->SetFocus();
+}
+
+
 void DIALOG_PAD_PROPERTIES::enablePrimitivePage( bool aEnable )
 {
     // Enable or disable the widgets in page managing custom shape primitives
@@ -323,6 +335,7 @@ void DIALOG_PAD_PROPERTIES::updateRoundRectCornerValues()
         m_tcChamferRatio1->ChangeValue( ratio );
     }
 
+    autoSelectPreview( 0 );
     redraw();
 }
 
@@ -348,7 +361,7 @@ void DIALOG_PAD_PROPERTIES::onCornerRadiusChange( wxCommandEvent& event )
     m_tcCornerSizeRatio->ChangeValue( ratio );
     m_tcCornerSizeRatio1->ChangeValue( ratio );
 
-    m_previewNotebook->ChangeSelection( 0 );
+    autoSelectPreview( 0 );
     redraw();
 }
 
@@ -434,7 +447,7 @@ void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
         m_cornerRadius.ChangeValue( m_dummyPad->GetRoundRectCornerRadius() );
     }
 
-    m_previewNotebook->ChangeSelection( 0 );
+    autoSelectPreview( 0 );
     redraw();
 }
 
@@ -788,7 +801,7 @@ void DIALOG_PAD_PROPERTIES::onChangePadMode( wxCommandEvent& event )
     settings->SetHighContrast( false );
     settings->SetContrastModeDisplay( HIGH_CONTRAST_MODE::NORMAL );
 
-    m_previewNotebook->ChangeSelection( 0 );
+    autoSelectPreview( 0 );
     redraw();
 }
 
@@ -888,7 +901,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     if( m_MainSizer->GetSize().y < m_MainSizer->GetMinSize().y )
         m_MainSizer->SetSizeHints( this );
 
-    m_previewNotebook->ChangeSelection( 0 );
+    autoSelectPreview( 0 );
     redraw();
 }
 
@@ -896,7 +909,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 void DIALOG_PAD_PROPERTIES::OnDrillShapeSelected( wxCommandEvent& event )
 {
     transferDataToPad( m_dummyPad );
-    m_previewNotebook->ChangeSelection( 0 );
+    autoSelectPreview( 0 );
     redraw();
 }
 
@@ -904,7 +917,7 @@ void DIALOG_PAD_PROPERTIES::OnDrillShapeSelected( wxCommandEvent& event )
 void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
 {
     transferDataToPad( m_dummyPad );
-    m_previewNotebook->ChangeSelection( 0 );
+    autoSelectPreview( 0 );
     redraw();
 }
 
@@ -1137,7 +1150,7 @@ void DIALOG_PAD_PROPERTIES::OnSetCopperLayers( wxCommandEvent& event )
 {
     if( m_PadType->GetSelection() == 0 || m_PadType->GetSelection() == 3 )
     {
-        m_previewNotebook->ChangeSelection( 1 );
+        autoSelectPreview( 1 );
 
         switch( event.GetSelection() )
         {
@@ -1149,7 +1162,7 @@ void DIALOG_PAD_PROPERTIES::OnSetCopperLayers( wxCommandEvent& event )
     }
     else
     {
-        m_previewNotebook->ChangeSelection( 0 );
+        autoSelectPreview( 0 );
         m_stackupImage->SetBitmap( wxBitmap() );
     }
 
