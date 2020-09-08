@@ -1113,7 +1113,7 @@ void SCH_SEXPR_PLUGIN::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry, int aNestLev
     {
         SCH_LINE busEntryLine( aBusEntry->GetPosition(), LAYER_BUS );
 
-        busEntryLine.SetEndPoint( aBusEntry->m_End() );
+        busEntryLine.SetEndPoint( aBusEntry->GetEnd() );
         saveLine( &busEntryLine, aNestLevel );
     }
     else

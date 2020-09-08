@@ -601,10 +601,9 @@ bool SCH_LINE::CanConnect( const SCH_ITEM* aItem ) const
 }
 
 
-void SCH_LINE::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
+std::vector<wxPoint> SCH_LINE::GetConnectionPoints() const
 {
-    aPoints.push_back( m_start );
-    aPoints.push_back( m_end );
+    return { m_start, m_end };
 }
 
 

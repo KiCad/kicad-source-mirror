@@ -66,7 +66,7 @@ public:
      */
     bool IsMovableFromAnchorPoint() override { return false; }
 
-    wxPoint m_End() const;
+    wxPoint GetEnd() const;
 
     wxSize GetSize() const { return m_size; }
 
@@ -105,7 +105,7 @@ public:
 
     bool IsConnectable() const override { return true; }
 
-    void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
+    std::vector<wxPoint> GetConnectionPoints() const override;
 
     wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( const wxPoint& aPosition ) override { m_pos = aPosition; }

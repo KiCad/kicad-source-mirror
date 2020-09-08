@@ -304,7 +304,7 @@ public:
     bool IsDangling() const override { return m_isDangling; }
     void SetIsDangling( bool aIsDangling ) { m_isDangling = aIsDangling; }
 
-    void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
+    std::vector<wxPoint> GetConnectionPoints() const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 

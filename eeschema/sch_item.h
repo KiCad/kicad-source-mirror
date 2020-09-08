@@ -383,7 +383,7 @@ public:
      *
      * @param aPoints List of connection points to add to.
      */
-    virtual void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const { }
+    virtual std::vector<wxPoint> GetConnectionPoints() const { return {}; }
 
     /**
      * Clears all of the connection items from the list.

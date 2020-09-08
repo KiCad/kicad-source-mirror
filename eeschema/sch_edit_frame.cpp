@@ -1070,8 +1070,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
 
     if( !aItem->IsMoving() && aItem->IsConnectable() )
     {
-        std::vector< wxPoint > pts;
-        aItem->GetConnectionPoints( pts );
+        std::vector< wxPoint > pts = aItem->GetConnectionPoints();
 
         for( auto i = pts.begin(); i != pts.end(); i++ )
         {

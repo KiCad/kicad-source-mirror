@@ -197,7 +197,7 @@ public:
 
     bool IsConnectable() const override;
 
-    void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
+    std::vector<wxPoint> GetConnectionPoints() const override;
 
     void GetSelectedPoints( std::vector< wxPoint >& aPoints ) const;
 

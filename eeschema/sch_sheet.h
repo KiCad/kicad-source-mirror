@@ -550,7 +550,7 @@ public:
                 ( aItem->Type() == SCH_NO_CONNECT_T );
     }
 
-    void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
+    std::vector<wxPoint> GetConnectionPoints() const override;
 
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 

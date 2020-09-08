@@ -1541,8 +1541,10 @@ wxPoint SCH_COMPONENT::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
 }
 
 
-void SCH_COMPONENT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
+std::vector<wxPoint> SCH_COMPONENT::GetConnectionPoints() const
 {
+    std::vector<wxPoint> retval;
+
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
         // Collect only pins attached to the current unit and convert.
@@ -1556,8 +1558,10 @@ void SCH_COMPONENT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
         if( pin_convert > 0 && pin_convert != GetConvert() )
             continue;
 
-        aPoints.push_back( m_transform.TransformCoordinate( pin->GetLocalPosition() ) + m_Pos );
+        retval.push_back( m_transform.TransformCoordinate( pin->GetLocalPosition() ) + m_Pos );
     }
+
+    return retval;
 }
 
 

@@ -1722,7 +1722,7 @@ void SCH_PAINTER::draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
         line.SetBrightened();
 
     line.SetStartPoint( aEntry->GetPosition() );
-    line.SetEndPoint( aEntry->m_End() );
+    line.SetEndPoint( aEntry->GetEnd() );
     line.SetStroke( aEntry->GetStroke() );
 
     COLOR4D color = getRenderColor( aEntry, LAYER_WIRE, drawingShadows );
@@ -1744,7 +1744,7 @@ void SCH_PAINTER::draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
                            aEntry->GetPenWidth() + ( TARGET_BUSENTRY_RADIUS / 2 ) );
 
     if( aEntry->IsDanglingEnd() )
-        m_gal->DrawCircle( aEntry->m_End(),
+        m_gal->DrawCircle( aEntry->GetEnd(),
                            aEntry->GetPenWidth() + ( TARGET_BUSENTRY_RADIUS / 2 ) );
 }
 

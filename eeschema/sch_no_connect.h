@@ -94,7 +94,7 @@ public:
                 aItem->Type() == SCH_COMPONENT_T;
     }
 
-    void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
+    std::vector<wxPoint> GetConnectionPoints() const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override
     {

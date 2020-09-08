@@ -216,7 +216,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                             if( item->Type() == SCH_LINE_T )
                                 static_cast<SCH_LINE*>( item )->GetSelectedPoints( connections );
                             else
-                                static_cast<SCH_ITEM*>( item )->GetConnectionPoints( connections );
+                                connections = static_cast<SCH_ITEM*>( item )->GetConnectionPoints();
 
                             for( wxPoint point : connections )
                                 getConnectedDragItems( (SCH_ITEM*) item, point, m_dragAdditions );
@@ -602,8 +602,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
             // Select labels and bus entries that are connected to a wire being moved.
             if( aOriginalItem->Type() == SCH_LINE_T )
             {
-                std::vector<wxPoint> connections;
-                test->GetConnectionPoints( connections );
+                std::vector<wxPoint> connections = test->GetConnectionPoints();
 
                 for( wxPoint& point : connections )
                 {
@@ -615,10 +614,8 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
                         // A bus entry needs its wire & label as well
                         if( testType == SCH_BUS_WIRE_ENTRY_T || testType == SCH_BUS_BUS_ENTRY_T )
                         {
-                            std::vector<wxPoint> ends;
+                            std::vector<wxPoint> ends = test->GetConnectionPoints();
                             wxPoint              otherEnd;
-
-                            test->GetConnectionPoints( ends );
 
                             if( ends[0] == point )
                                 otherEnd = ends[1];

@@ -448,8 +448,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
 
     for( SCH_ITEM* item : aItemList )
     {
-        std::vector< wxPoint > points;
-        item->GetConnectionPoints( points );
+        std::vector< wxPoint > points = item->GetConnectionPoints();
         item->ConnectedItems( aSheet ).clear();
 
         if( item->Type() == SCH_SHEET_T )

@@ -80,11 +80,11 @@ EDA_ITEM* SCH_BUS_BUS_ENTRY::Clone() const
 
 bool SCH_BUS_ENTRY_BASE::doIsConnected( const wxPoint& aPosition ) const
 {
-    return ( m_pos == aPosition || m_End() == aPosition );
+    return ( m_pos == aPosition || GetEnd() == aPosition );
 }
 
 
-wxPoint SCH_BUS_ENTRY_BASE::m_End() const
+wxPoint SCH_BUS_ENTRY_BASE::GetEnd() const
 {
     return wxPoint( m_pos.x + m_size.x, m_pos.y + m_size.y );
 }
@@ -114,7 +114,7 @@ const EDA_RECT SCH_BUS_ENTRY_BASE::GetBoundingBox() const
     EDA_RECT box;
 
     box.SetOrigin( m_pos );
-    box.SetEnd( m_End() );
+    box.SetEnd( GetEnd() );
 
     box.Normalize();
     box.Inflate( ( GetPenWidth() / 2 ) + 1 );
@@ -178,7 +178,7 @@ void SCH_BUS_WIRE_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemLi
     DANGLING_END_ITEM item( WIRE_ENTRY_END, this, m_pos );
     aItemList.push_back( item );
 
-    DANGLING_END_ITEM item1( WIRE_ENTRY_END, this, m_End() );
+    DANGLING_END_ITEM item1( WIRE_ENTRY_END, this, GetEnd() );
     aItemList.push_back( item1 );
 }
 
@@ -188,7 +188,7 @@ void SCH_BUS_BUS_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemLis
     DANGLING_END_ITEM item( BUS_ENTRY_END, this, m_pos );
     aItemList.push_back( item );
 
-    DANGLING_END_ITEM item1( BUS_ENTRY_END, this, m_End() );
+    DANGLING_END_ITEM item1( BUS_ENTRY_END, this, GetEnd() );
     aItemList.push_back( item1 );
 }
 
@@ -200,8 +200,8 @@ void SCH_BUS_ENTRY_BASE::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffs
             aSettings->GetLayerColor( m_Layer ) : GetStrokeColor();
     int     penWidth = ( GetPenWidth() == 0 ) ? aSettings->GetDefaultPenWidth() : GetPenWidth();
 
-    GRLine( nullptr, DC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, m_End().x + aOffset.x,
-            m_End().y + aOffset.y, penWidth, color,
+    GRLine( nullptr, DC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, GetEnd().x + aOffset.x,
+            GetEnd().y + aOffset.y, penWidth, color,
             GetwxPenStyle( (PLOT_DASH_TYPE) GetStrokeStyle() ) );
 }
 
@@ -255,7 +255,7 @@ bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aI
         case WIRE_END_END:
             if( m_pos == each_item.GetPosition() )
                 has_wire[0] = true;
-            else if( m_End() == each_item.GetPosition() )
+            else if( GetEnd() == each_item.GetPosition() )
                 has_wire[1] = true;
 
             break;
@@ -267,7 +267,7 @@ bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aI
         case BUS_END_END:
             if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_pos ) )
                 has_bus[0] = true;
-            else if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_End() ) )
+            else if( IsPointOnSegment( seg_start, each_item.GetPosition(), GetEnd() ) )
                 has_bus[1] = true;
 
             break;
@@ -316,7 +316,7 @@ bool SCH_BUS_BUS_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aIt
         case BUS_END_END:
             if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_pos ) )
                 m_isDanglingStart = false;
-            if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_End() ) )
+            if( IsPointOnSegment( seg_start, each_item.GetPosition(), GetEnd() ) )
                 m_isDanglingEnd = false;
             break;
         default:
@@ -334,10 +334,9 @@ bool SCH_BUS_ENTRY_BASE::IsDangling() const
 }
 
 
-void SCH_BUS_ENTRY_BASE::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
+std::vector<wxPoint> SCH_BUS_ENTRY_BASE::GetConnectionPoints() const
 {
-    aPoints.push_back( m_pos );
-    aPoints.push_back( m_End() );
+    return { m_pos, GetEnd() };
 }
 
 
@@ -371,7 +370,7 @@ bool SCH_BUS_ENTRY_BASE::HitTest( const wxPoint& aPosition, int aAccuracy ) cons
     if( aAccuracy == 0 )
         aAccuracy = ( GetPenWidth() / 2 ) + 4;
 
-    return TestSegmentHit( aPosition, m_pos, m_End(), aAccuracy );
+    return TestSegmentHit( aPosition, m_pos, GetEnd(), aAccuracy );
 }
 
 
@@ -400,7 +399,7 @@ void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter )
     aPlotter->SetColor( color );
     aPlotter->SetDash( GetStrokeStyle() );
     aPlotter->MoveTo( m_pos );
-    aPlotter->FinishTo( m_End() );
+    aPlotter->FinishTo( GetEnd() );
 }
 
 
@@ -443,10 +442,10 @@ bool SCH_BUS_ENTRY_BASE::operator <( const SCH_ITEM& aItem ) const
     if( GetPosition().y != component->GetPosition().y )
         return GetPosition().y < component->GetPosition().y;
 
-    if( m_End().x != component->m_End().x )
-        return m_End().x < component->m_End().x;
+    if( GetEnd().x != component->GetEnd().x )
+        return GetEnd().x < component->GetEnd().x;
 
-    return m_End().y < component->m_End().y;
+    return GetEnd().y < component->GetEnd().y;
 }
 
 

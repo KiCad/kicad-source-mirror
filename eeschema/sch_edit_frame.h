@@ -573,9 +573,9 @@ public:
     /**
      * Collects a unique list of all possible connection points in the schematic.
      *
-     * @param aConnections vector of connections
+     * @return vector of connections
      */
-    void GetSchematicConnections( std::vector< wxPoint >& aConnections );
+    std::vector<wxPoint> GetSchematicConnections();
 
     void OnOpenPcbnew( wxCommandEvent& event );
     void OnOpenCvpcb( wxCommandEvent& event );

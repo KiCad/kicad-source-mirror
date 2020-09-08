@@ -2263,12 +2263,12 @@ void SCH_LEGACY_PLUGIN::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry )
         m_out->Print( 0, "Entry Wire Line\n\t%-4d %-4d %-4d %-4d\n",
                       Iu2Mils( aBusEntry->GetPosition().x ),
                       Iu2Mils( aBusEntry->GetPosition().y ),
-                      Iu2Mils( aBusEntry->m_End().x ), Iu2Mils( aBusEntry->m_End().y ) );
+                      Iu2Mils( aBusEntry->GetEnd().x ), Iu2Mils( aBusEntry->GetEnd().y ) );
     else
         m_out->Print( 0, "Entry Bus Bus\n\t%-4d %-4d %-4d %-4d\n",
                       Iu2Mils( aBusEntry->GetPosition().x ),
                       Iu2Mils( aBusEntry->GetPosition().y ),
-                      Iu2Mils( aBusEntry->m_End().x ), Iu2Mils( aBusEntry->m_End().y ) );
+                      Iu2Mils( aBusEntry->GetEnd().x ), Iu2Mils( aBusEntry->GetEnd().y ) );
 }
 
 

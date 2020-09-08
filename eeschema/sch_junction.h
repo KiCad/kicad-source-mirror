@@ -76,7 +76,7 @@ public:
 
     bool IsConnectable() const override { return true; }
 
-    void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
+    std::vector<wxPoint> GetConnectionPoints() const override;
 
     bool CanConnect( const SCH_ITEM* aItem ) const override
     {

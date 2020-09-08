@@ -855,10 +855,14 @@ bool SCH_SHEET::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
 }
 
 
-void SCH_SHEET::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
+std::vector<wxPoint> SCH_SHEET::GetConnectionPoints() const
 {
+    std::vector<wxPoint> retval;
+
     for( SCH_SHEET_PIN* sheetPin : m_pins )
-        aPoints.push_back( sheetPin->GetPosition() );
+        retval.push_back( sheetPin->GetPosition() );
+
+    return retval;
 }
 
 

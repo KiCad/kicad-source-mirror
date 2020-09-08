@@ -1002,11 +1002,15 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         if( !sch_item )
             continue;
 
+        if( sch_item->IsConnectable() )
+        {
+            std::vector<wxPoint> tmp_pts = sch_item->GetConnectionPoints();
+            pts.insert( pts.end(), tmp_pts.begin(), tmp_pts.end() );
+        }
+
         if( sch_item->Type() == SCH_JUNCTION_T )
         {
             sch_item->SetFlags( STRUCT_DELETED );
-            sch_item->GetConnectionPoints( pts );
-
             // clean up junctions at the end
         }
         else
@@ -1014,9 +1018,6 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             sch_item->SetFlags( STRUCT_DELETED );
             saveCopyInUndoList( item, UNDO_REDO::DELETED, appendToUndo );
             appendToUndo = true;
-
-            if( sch_item && sch_item->IsConnectable() )
-                sch_item->GetConnectionPoints( pts );
 
             updateView( sch_item );
 

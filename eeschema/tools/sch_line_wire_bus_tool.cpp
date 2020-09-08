@@ -364,7 +364,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
     m_busUnfold.entry->SetParent( m_frame->GetScreen() );
     m_frame->AddToScreen( m_busUnfold.entry, m_frame->GetScreen() );
 
-    m_busUnfold.label = new SCH_LABEL( m_busUnfold.entry->m_End(), aNet );
+    m_busUnfold.label = new SCH_LABEL( m_busUnfold.entry->GetEnd(), aNet );
     m_busUnfold.label->SetTextSize( wxSize( cfg.m_DefaultTextSize, cfg.m_DefaultTextSize ) );
     m_busUnfold.label->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
     m_busUnfold.label->SetParent( m_frame->GetScreen() );
@@ -374,9 +374,9 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
     m_busUnfold.origin = pos;
     m_busUnfold.net_name = aNet;
 
-    getViewControls()->SetCrossHairCursorPosition( m_busUnfold.entry->m_End(), false );
+    getViewControls()->SetCrossHairCursorPosition( m_busUnfold.entry->GetEnd(), false );
 
-    return startSegments( LAYER_WIRE, m_busUnfold.entry->m_End() );
+    return startSegments( LAYER_WIRE, m_busUnfold.entry->GetEnd() );
 }
 
 
@@ -638,7 +638,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
                     m_busUnfold.flipX = flipX;
 
                     m_frame->UpdateItem( entry );
-                    m_wires.front()->SetStartPoint( entry->m_End() );
+                    m_wires.front()->SetStartPoint( entry->GetEnd() );
                 }
 
                 // Update the label "ghost" position
@@ -803,9 +803,8 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     simplifyWireList();
 
     // Collect the possible connection points for the new lines
-    std::vector< wxPoint > connections;
+    std::vector< wxPoint > connections = m_frame->GetSchematicConnections();
     std::vector< wxPoint > new_ends;
-    m_frame->GetSchematicConnections( connections );
 
     // Check each new segment for possible junctions and add/split if needed
     for( auto wire : m_wires )
@@ -813,7 +812,9 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
         if( wire->HasFlag( SKIP_STRUCT ) )
             continue;
 
-        wire->GetConnectionPoints( new_ends );
+        std::vector<wxPoint> tmpends = wire->GetConnectionPoints();
+
+        new_ends.insert( new_ends.end(), tmpends.begin(), tmpends.end() );
 
         for( auto i : connections )
         {
@@ -857,8 +858,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
 
     for( auto item : m_frame->GetScreen()->Items().OfType( SCH_COMPONENT_T ) )
     {
-        std::vector< wxPoint > pts;
-        item->GetConnectionPoints( pts );
+        std::vector< wxPoint > pts = item->GetConnectionPoints();
 
         if( pts.size() > 2 )
             continue;
@@ -891,19 +891,16 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( const TOOL_EVENT& aEvent )
     EE_SELECTION* aSelection = aEvent.Parameter<EE_SELECTION*>();
 
     std::vector<wxPoint> pts;
-    std::vector<wxPoint> connections;
-
-    m_frame->GetSchematicConnections( connections );
+    std::vector<wxPoint> connections = m_frame->GetSchematicConnections();
 
     for( unsigned ii = 0; ii < aSelection->GetSize(); ii++ )
     {
         SCH_ITEM*            item = dynamic_cast<SCH_ITEM*>( aSelection->GetItem( ii ) );
-        std::vector<wxPoint> new_pts;
 
         if( !item || !item->IsConnectable() )
             continue;
 
-        item->GetConnectionPoints( new_pts );
+        std::vector<wxPoint> new_pts = item->GetConnectionPoints();
         pts.insert( pts.end(), new_pts.begin(), new_pts.end() );
 
         // If the item is a line, we also add any connection points from the rest of the schematic

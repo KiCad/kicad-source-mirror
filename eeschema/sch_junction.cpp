@@ -139,9 +139,9 @@ void SCH_JUNCTION::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-void SCH_JUNCTION::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
+std::vector<wxPoint> SCH_JUNCTION::GetConnectionPoints() const
 {
-    aPoints.push_back( m_pos );
+    return { m_pos };
 }
 
 

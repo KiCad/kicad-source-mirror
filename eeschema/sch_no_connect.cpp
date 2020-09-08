@@ -135,9 +135,9 @@ void SCH_NO_CONNECT::Rotate( wxPoint aPosition )
 }
 
 
-void SCH_NO_CONNECT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
+std::vector<wxPoint> SCH_NO_CONNECT::GetConnectionPoints() const
 {
-    aPoints.push_back( m_pos );
+    return { m_pos };
 }
 
 

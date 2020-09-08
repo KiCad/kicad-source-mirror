@@ -42,21 +42,28 @@
 #include <tools/ee_selection_tool.h>
 
 
-void SCH_EDIT_FRAME::GetSchematicConnections( std::vector< wxPoint >& aConnections )
+std::vector<wxPoint> SCH_EDIT_FRAME::GetSchematicConnections()
 {
+    std::vector<wxPoint> retval;
+
     for( auto item : GetScreen()->Items() )
     {
         // Avoid items that are changing
         if( !( item->GetEditFlags() & ( IS_DRAGGED | IS_MOVED | IS_DELETED ) ) )
-            item->GetConnectionPoints( aConnections );
+        {
+            std::vector<wxPoint> pts = item->GetConnectionPoints();
+            retval.insert( retval.end(), pts.begin(), pts.end() );
+        }
     }
 
     // We always have some overlapping connection points.  Drop duplicates here
-    std::sort( aConnections.begin(), aConnections.end(),
+    std::sort( retval.begin(), retval.end(),
             []( const wxPoint& a, const wxPoint& b ) -> bool
             { return a.x < b.x || (a.x == b.x && a.y < b.y); } );
-    aConnections.erase(
-            std::unique( aConnections.begin(), aConnections.end() ), aConnections.end() );
+    retval.erase(
+            std::unique( retval.begin(), retval.end() ), retval.end() );
+
+    return retval;
 }
 
 
@@ -357,7 +364,7 @@ bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCH_SCREEN* aScreen )
     {
         SCH_BUS_WIRE_ENTRY* entry = static_cast<SCH_BUS_WIRE_ENTRY*>( item );
         point_set.insert( entry->GetPosition() );
-        point_set.insert( entry->m_End() );
+        point_set.insert( entry->GetEnd() );
     }
 
 

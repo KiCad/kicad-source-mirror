@@ -425,13 +425,13 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
 }
 
 
-void SCH_TEXT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
+std::vector<wxPoint> SCH_TEXT::GetConnectionPoints() const
 {
     // Normal text labels do not have connection points.  All others do.
     if( Type() == SCH_TEXT_T )
-        return;
+        return {};
 
-    aPoints.push_back( GetTextPos() );
+    return { GetTextPos() };
 }
 
 
