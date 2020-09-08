@@ -23,7 +23,6 @@
 
 #include <class_board.h>
 #include <class_track.h>
-#include <class_via.h>
 #include <class_pad.h>
 
 #include <common.h>
@@ -39,7 +38,7 @@
     Errors generated:
     - DRCE_ANNULUS
 
-    Todo: 
+    Todo:
     - check pad holes too.
     - pad stack support (different IAR/OAR values depending on layer)
 */
@@ -87,7 +86,7 @@ bool test::DRC_TEST_PROVIDER_ANNULUS::Run()
 
     ReportStage( ( "Testing via annular rings" ), 0, 2 );
 
-    auto checkAnnulus = [&]( BOARD_ITEM* item ) -> bool 
+    auto checkAnnulus = [&]( BOARD_ITEM* item ) -> bool
     {
         bool fail_min = false, fail_max = false;
         int v_min, v_max;
