@@ -1191,9 +1191,9 @@ void C3D_RENDER_OGL_LEGACY::render_3D_module( const MODULE* module,
                   modelunit_to_3d_units_factor );
 
         // Get the list of model files for this model
-        for( auto& sM : module->Models () )
+        for( const MODULE_3D_SETTINGS& sM : module->Models() )
         {
-            if( sM.m_Filename.empty() )
+            if( !sM.m_Show || sM.m_Filename.empty() )
                 continue;
 
             // Check if the model is present in our cache map
