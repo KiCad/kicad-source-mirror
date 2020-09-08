@@ -684,6 +684,7 @@ void APPEARANCE_CONTROLS::createControls()
                                        Freeze();
                                        m_panelNetsAndClasses->Fit();
                                        m_sizerOuter->Layout();
+                                       passOnFocus();
                                        Thaw();
                                    } );
 
