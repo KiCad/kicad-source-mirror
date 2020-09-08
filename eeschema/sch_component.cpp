@@ -634,7 +634,7 @@ void SCH_COMPONENT::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& a
     {
         // Clear instance overrides and set primary field value
         for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
-            instance.m_Value = wxEmptyString;
+            instance.m_Footprint = wxEmptyString;
 
         m_Fields[ FOOTPRINT ].SetText( aFootprint );
         return;
