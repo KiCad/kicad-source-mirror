@@ -457,6 +457,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
 
         m->SetFPID( libID );
         loadLibraryFigures( component, m );
+        loadLibraryCoppers( component, m );
+        loadLibraryAreas( component, m );
         loadLibraryPads( component, m );
 
         mLibraryMap.insert( std::make_pair( key, m ) );
@@ -469,12 +471,70 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryFigures( const SYMDEF& aComponent, M
     for( std::pair<FIGURE_ID, FIGURE> figPair : aComponent.Figures )
     {
         FIGURE& fig = figPair.second;
-        drawCadstarShape( fig.Shape, getKiCadLayer( fig.LayerID ), fig.LineCodeID,
+        drawCadstarShape( fig.Shape, getKiCadLayer( fig.LayerID ),
+                getLineThickness( fig.LineCodeID ),
                 wxString::Format( "Component %s:%s -> Figure %s", aComponent.ReferenceName,
                         aComponent.Alternate, fig.ID ),
                 aModule );
+    }
+}
 
-        //TODO process addition to a group
+
+void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF& aComponent, MODULE* aModule )
+{
+    for( COMPONENT_COPPER compCopper : aComponent.ComponentCoppers )
+    {
+        int lineThickness = getKiCadLength( getCopperCode( compCopper.CopperCodeID ).CopperWidth );
+
+        drawCadstarShape( compCopper.Shape, getKiCadLayer( compCopper.LayerID ), lineThickness,
+                wxString::Format( "Component %s:%s -> Copper element", aComponent.ReferenceName,
+                        aComponent.Alternate ),
+                aModule );
+    }
+}
+
+
+void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryAreas( const SYMDEF& aComponent, MODULE* aModule )
+{
+    for( std::pair<COMP_AREA_ID, COMPONENT_AREA> areaPair : aComponent.ComponentAreas )
+    {
+        COMPONENT_AREA& area = areaPair.second;
+
+        if( area.NoVias || area.NoTracks )
+        {
+            ZONE_CONTAINER* zone =
+                    getZoneFromCadstarShape( area.Shape, getLineThickness( area.LineCodeID ), aModule );
+
+            aModule->Add( zone, ADD_MODE::APPEND );
+
+            if( isLayerSet( area.LayerID ) )
+                zone->SetLayerSet( getKiCadLayerSet( area.LayerID ) );
+            else
+                zone->SetLayer( getKiCadLayer( area.LayerID ) );
+
+            zone->SetIsKeepout( true );       //import all CADSTAR areas as Keepout zones
+            zone->SetDoNotAllowPads( false ); //no CADSTAR equivalent
+            zone->SetZoneName( area.ID );
+
+            //There is no distinction between tracks and copper pours in CADSTAR Keepout zones
+            zone->SetDoNotAllowTracks( area.NoTracks );
+            zone->SetDoNotAllowCopperPour( area.NoTracks );
+
+            zone->SetDoNotAllowVias( area.NoVias );
+        }
+        else
+        {
+            wxString libName = aComponent.ReferenceName;
+
+            if( !aComponent.Alternate.IsEmpty() )
+                libName << wxT( " (" ) << aComponent.Alternate << wxT( ")" );
+
+            wxLogError(
+                    wxString::Format( _( "The CADSTAR area '%s' in library component '%s' does not "
+                                         "have a KiCad equivalent. The area is neither a via or"
+                                         "route keepout area. The area was not imported. " ),
+                            area.ID, libName ) );
+        }
     }
 }
 
@@ -679,8 +739,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoards()
     {
         BOARD& board = boardPair.second;
         GROUP_ID boardGroup = createUniqueGroupID( wxT( "Board" ) );
-        drawCadstarShape( board.Shape, PCB_LAYER_ID::Edge_Cuts, board.LineCodeID,
-                wxString::Format( "BOARD %s", board.ID ), mBoard, boardGroup );
+        drawCadstarShape( board.Shape, PCB_LAYER_ID::Edge_Cuts,
+                getLineThickness( board.LineCodeID ), wxString::Format( "BOARD %s", board.ID ),
+                mBoard, boardGroup );
 
         if( !board.GroupID.IsEmpty() )
         {
@@ -697,8 +758,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadFigures()
     for( std::pair<FIGURE_ID, FIGURE> figPair : Layout.Figures )
     {
         FIGURE& fig = figPair.second;
-        drawCadstarShape( fig.Shape, getKiCadLayer( fig.LayerID ), fig.LineCodeID,
-                wxString::Format( "FIGURE %s", fig.ID ), mBoard, fig.GroupID );
+        drawCadstarShape( fig.Shape, getKiCadLayer( fig.LayerID ),
+                getLineThickness( fig.LineCodeID ), wxString::Format( "FIGURE %s", fig.ID ), mBoard,
+                fig.GroupID );
 
         //TODO process "swaprule" (doesn't seem to apply to Layout Figures?)
         //TODO process re-use block when KiCad Supports it
@@ -793,8 +855,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadAreas()
 
         if( area.NoVias || area.NoTracks || area.Keepout )
         {
-            ZONE_CONTAINER* zone =
-                    getZoneFromCadstarShape( area.Shape, getLineThickness( area.LineCodeID ) );
+            ZONE_CONTAINER* zone = getZoneFromCadstarShape(
+                    area.Shape, getLineThickness( area.LineCodeID ), mBoard );
 
             mBoard->Add( zone, ADD_MODE::APPEND );
 
@@ -925,11 +987,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDocumentationSymbols()
             for( std::pair<FIGURE_ID, FIGURE> figPair : docSymDefinition.Figures )
             {
                 FIGURE fig = figPair.second;
-                drawCadstarShape( fig.Shape, layer, fig.LineCodeID,
+                drawCadstarShape( fig.Shape, layer, getLineThickness( fig.LineCodeID ),
                         wxString::Format( "DOCUMENTATION SYMBOL %s, FIGURE %s",
                                 docSymDefinition.ReferenceName, fig.ID ),
-                        mBoard, groupID, moveVector, rotationAngle, scalingFactor, centreOfTransform,
-                        mirrorInvert );
+                        mBoard, groupID, moveVector, rotationAngle, scalingFactor,
+                        centreOfTransform, mirrorInvert );
             }
         }
 
@@ -950,7 +1012,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
         TEMPLATE& csTemplate = tempPair.second;
 
         ZONE_CONTAINER* zone = getZoneFromCadstarShape(
-                csTemplate.Shape, getLineThickness( csTemplate.LineCodeID ) );
+                csTemplate.Shape, getLineThickness( csTemplate.LineCodeID ), mBoard );
 
         mBoard->Add( zone, ADD_MODE::APPEND );
 
@@ -1075,7 +1137,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
                 int    defaultLineThicknesss =
                         mBoard->GetDesignSettings().GetLineThickness( PCB_LAYER_ID::Edge_Cuts );
                 ZONE_CONTAINER* zone =
-                        getZoneFromCadstarShape( board.Shape, defaultLineThicknesss );
+                        getZoneFromCadstarShape( board.Shape, defaultLineThicknesss, mBoard );
 
                 mBoard->Add( zone, ADD_MODE::APPEND );
 
@@ -1155,7 +1217,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
         else
         {
             ZONE_CONTAINER* zone = getZoneFromCadstarShape( csCopper.Shape,
-                    getKiCadLength( getCopperCode( csCopper.CopperCodeID ).CopperWidth ) );
+                    getKiCadLength( getCopperCode( csCopper.CopperCodeID ).CopperWidth ), mBoard );
 
             mBoard->Add( zone, ADD_MODE::APPEND );
 
@@ -1489,24 +1551,22 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
 
 
 void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
-        const PCB_LAYER_ID& aKiCadLayer, const LINECODE_ID& aCadstarLinecodeID,
-        const wxString& aShapeName, BOARD_ITEM_CONTAINER* aContainer,
-        const GROUP_ID& aCadstarGroupID, const wxPoint& aMoveVector, const double& aRotationAngle,
-        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
+        const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness, const wxString& aShapeName,
+        BOARD_ITEM_CONTAINER* aContainer, const GROUP_ID& aCadstarGroupID,
+        const wxPoint& aMoveVector, const double& aRotationAngle, const double& aScalingFactor,
+        const wxPoint& aTransformCentre, const bool& aMirrorInvert )
 {
-    int lineThickness = getLineThickness( aCadstarLinecodeID );
-
     switch( aCadstarShape.Type )
     {
     case SHAPE_TYPE::OPENSHAPE:
     case SHAPE_TYPE::OUTLINE:
         ///TODO update this when Polygons in KiCad can be defined with no fill
-        drawCadstarVerticesAsSegments( aCadstarShape.Vertices, aKiCadLayer, lineThickness,
+        drawCadstarVerticesAsSegments( aCadstarShape.Vertices, aKiCadLayer, aLineThickness,
                 aContainer, aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
                 aTransformCentre, aMirrorInvert );
-        drawCadstarCutoutsAsSegments( aCadstarShape.Cutouts, aKiCadLayer, lineThickness, aContainer,
-                aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor, aTransformCentre,
-                aMirrorInvert );
+        drawCadstarCutoutsAsSegments( aCadstarShape.Cutouts, aKiCadLayer, aLineThickness,
+                aContainer, aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
+                aTransformCentre, aMirrorInvert );
         break;
 
     case SHAPE_TYPE::HATCHED:
@@ -1530,7 +1590,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
 
         ds->SetPolyShape( getPolySetFromCadstarShape( aCadstarShape, -1, aContainer, aMoveVector,
                 aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert ) );
-        ds->SetWidth( lineThickness );
+        ds->SetWidth( aLineThickness );
         ds->SetLayer( aKiCadLayer );
         aContainer->Add( ds, ADD_MODE::APPEND );
 
@@ -1698,9 +1758,9 @@ DRAWSEGMENT* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& 
 
 
 ZONE_CONTAINER* CADSTAR_PCB_ARCHIVE_LOADER::getZoneFromCadstarShape(
-        const SHAPE& aCadstarShape, const int& aLineThickness )
+        const SHAPE& aCadstarShape, const int& aLineThickness, BOARD_ITEM_CONTAINER* aParentContainer )
 {
-    ZONE_CONTAINER* zone = new ZONE_CONTAINER( mBoard );
+    ZONE_CONTAINER* zone = new ZONE_CONTAINER( aParentContainer, isModule( aParentContainer ) );
 
     if( aCadstarShape.Type == SHAPE_TYPE::HATCHED )
     {

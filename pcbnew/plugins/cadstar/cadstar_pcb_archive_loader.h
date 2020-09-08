@@ -123,6 +123,8 @@ private:
     void logBoardStackupWarning(
             const wxString& aCadstarLayerName, const PCB_LAYER_ID& aKiCadLayer );
     void loadLibraryFigures( const SYMDEF& aComponent, MODULE* aModule );
+    void loadLibraryCoppers( const SYMDEF& aComponent, MODULE* aModule );
+    void loadLibraryAreas( const SYMDEF& aComponent, MODULE* aModule );
     void loadLibraryPads( const SYMDEF& aComponent, MODULE* aModule );
     void loadComponentAttributes( const COMPONENT& aComponent, MODULE* aModule );
     void loadNetTracks( const NET_ID& aCadstarNetID, const NET::ROUTE& aCadstarRoute );
@@ -154,7 +156,7 @@ private:
      * @brief 
      * @param aCadstarShape 
      * @param aCadstarLayerID KiCad layer to draw on
-     * @param aCadstarLinecodeID Thickness of line to draw with
+     * @param aLineThickness Thickness of line to draw with
      * @param aShapeName for reporting warnings/errors to the user
      * @param aContainer to draw on (e.g. mBoard)
      * @param aCadstarGroupID to add the shape to
@@ -165,11 +167,10 @@ private:
      * @param aMirrorInvert if true, mirrors the shape
      */
     void drawCadstarShape( const SHAPE& aCadstarShape, const PCB_LAYER_ID& aKiCadLayer,
-            const LINECODE_ID& aCadstarLinecodeID, const wxString& aShapeName,
-            BOARD_ITEM_CONTAINER* aContainer, const GROUP_ID& aCadstarGroupID = wxEmptyString,
-            const wxPoint& aMoveVector = { 0, 0 }, const double& aRotationAngle = 0.0,
-            const double& aScalingFactor = 1.0, const wxPoint& aTransformCentre = { 0, 0 },
-            const bool& aMirrorInvert = false );
+            const int& aLineThickness, const wxString& aShapeName, BOARD_ITEM_CONTAINER* aContainer,
+            const GROUP_ID& aCadstarGroupID = wxEmptyString, const wxPoint& aMoveVector = { 0, 0 },
+            const double& aRotationAngle = 0.0, const double& aScalingFactor = 1.0,
+            const wxPoint& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
 
     /**
      * @brief Uses DRAWSEGMENT to draw the cutouts on mBoard object
@@ -253,10 +254,11 @@ private:
      * @brief 
      * @param aCadstarShape 
      * @param aLineThickness Thickness of line to draw with
+     * @param aParentContainer Parent object (e.g. mBoard or a MODULE pointer)
      * @return Pointer to ZONE_CONTAINER. Caller owns the object.
      */
-    ZONE_CONTAINER* getZoneFromCadstarShape(
-            const SHAPE& aCadstarShape, const int& aLineThickness );
+    ZONE_CONTAINER* getZoneFromCadstarShape( const SHAPE& aCadstarShape, const int& aLineThickness,
+            BOARD_ITEM_CONTAINER* aParentContainer );
 
     /**
      * @brief Returns a SHAPE_POLY_SET object from a Cadstar SHAPE
