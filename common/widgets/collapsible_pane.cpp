@@ -23,6 +23,9 @@
 #include <wx/collpane.h>
 #include <wx/renderer.h>
 
+#include <algorithm>
+
+
 wxDEFINE_EVENT( WX_COLLAPSIBLE_PANE_HEADER_CHANGED, wxCommandEvent );
 wxDEFINE_EVENT( WX_COLLAPSIBLE_PANE_CHANGED, wxCommandEvent );
 
