@@ -116,6 +116,7 @@ private:
 
     CBOARDNORMAL        m_board_normal_perturbator;
     CCOPPERNORMAL       m_copper_normal_perturbator;
+    CPLATEDCOPPERNORMAL m_platedcopper_normal_perturbator;
     CSOLDERMASKNORMAL   m_solder_mask_normal_perturbator;
     CPLASTICNORMAL      m_plastic_normal_perturbator;
     CPLASTICSHINENORMAL m_plastic_shine_normal_perturbator;

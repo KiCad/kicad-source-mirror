@@ -98,7 +98,30 @@ public:
                       const HITINFO &aHitInfo ) const override;
 private:
     const CPROCEDURALGENERATOR *m_board_normal_generator;
-    PerlinNoise                 m_copper_perlin;
+    float                       m_scale;
+};
+
+class  CPLATEDCOPPERNORMAL : public CPROCEDURALGENERATOR
+{
+public:
+    CPLATEDCOPPERNORMAL() : CPROCEDURALGENERATOR()
+    {
+        m_scale = 1.0f;
+    }
+
+    CPLATEDCOPPERNORMAL( float aScale )
+    {
+        m_scale = 1.0f / aScale;
+    }
+
+    virtual ~CPLATEDCOPPERNORMAL()
+    {
+    }
+
+    // Imported from CPROCEDURALGENERATOR
+    SFVEC3F Generate( const RAY &aRay,
+                      const HITINFO &aHitInfo ) const override;
+private:
     float                       m_scale;
 };
 
@@ -140,7 +163,6 @@ public:
     SFVEC3F Generate( const RAY &aRay,
                       const HITINFO &aHitInfo ) const override;
 private:
-    PerlinNoise                 m_perlin;
     float                       m_scale;
 };
 
@@ -164,7 +186,6 @@ public:
     SFVEC3F Generate( const RAY &aRay,
                       const HITINFO &aHitInfo ) const override;
 private:
-    PerlinNoise                 m_perlin;
     float                       m_scale;
 };
 
@@ -187,7 +208,6 @@ public:
     SFVEC3F Generate( const RAY &aRay,
                       const HITINFO &aHitInfo ) const override;
 private:
-    PerlinNoise                 m_perlin;
     float                       m_scale;
 };
 

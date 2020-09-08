@@ -84,10 +84,12 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
 
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
     {
-        m_board_normal_perturbator  = CBOARDNORMAL( 0.5f * mmTo3Dunits );
+        m_board_normal_perturbator  = CBOARDNORMAL( 0.40f * mmTo3Dunits );
 
         m_copper_normal_perturbator = CCOPPERNORMAL( 4.0f * mmTo3Dunits,
                                                      &m_board_normal_perturbator );
+
+        m_platedcopper_normal_perturbator = CPLATEDCOPPERNORMAL( 0.5f * mmTo3Dunits );
 
         m_solder_mask_normal_perturbator = CSOLDERMASKNORMAL( &m_board_normal_perturbator );
 
@@ -101,23 +103,26 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
     // http://devernay.free.fr/cours/opengl/materials.html
 
     // Copper
-    m_materials.m_Copper = CBLINN_PHONG_MATERIAL(
-            ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_CopperColor ) *
-            (SFVEC3F)(0.18f),                  // ambient
-                SFVEC3F( 0.0f, 0.0f, 0.0f ),                            // emissive
-                glm::clamp( ((SFVEC3F)(1.0f) -
-                             ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_CopperColor ) ),
+    const SFVEC3F copperSpecularLinear = ConvertSRGBToLinear(
+                glm::clamp( (SFVEC3F)m_boardAdapter.m_CopperColor * 0.5f + 0.25f,
                             SFVEC3F( 0.0f ),
-                            SFVEC3F( 0.35f ) ),                         // specular
-                0.4f * 128.0f,                                          // shiness
-                0.0f,                                                   // transparency
-                0.0f );
+                            SFVEC3F( 1.0f ) ) );
+
+    m_materials.m_Copper = CBLINN_PHONG_MATERIAL( ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_CopperColor * 0.3f ), // ambient
+                                                  SFVEC3F( 0.0f ),           // emissive
+                                                  copperSpecularLinear,      // specular
+                                                  0.4f * 128.0f,             // shiness
+                                                  0.0f,                      // transparency
+                                                  0.0f );
+
+    if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
+        m_materials.m_Copper.SetNormalPerturbator( &m_platedcopper_normal_perturbator );
 
     m_materials.m_NonPlatedCopper = CBLINN_PHONG_MATERIAL(
                     ConvertSRGBToLinear( SFVEC3F( 0.191f, 0.073f, 0.022f ) ),// ambient
                     SFVEC3F( 0.0f, 0.0f, 0.0f ),                             // emissive
                     SFVEC3F( 0.256f, 0.137f, 0.086f ),                       // specular
-                    0.1f * 128.0f,                                           // shiness
+                    0.15f * 128.0f,                                          // shiness
                     0.0f,                                                    // transparency
                     0.0f );
 
@@ -157,11 +162,7 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
     m_materials.m_SolderMask = CBLINN_PHONG_MATERIAL(
             ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_SolderMaskColorTop ) * 0.10f, // ambient
             SFVEC3F( 0.0f, 0.0f, 0.0f ),                                              // emissive
-            glm::clamp(
-                    ( ( SFVEC3F )( 1.0f )
-                            - ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_SolderMaskColorTop ) ),
-                    SFVEC3F( 0.0f ),
-                    SFVEC3F( solderMask_gray * 2.0f ) ),    // specular
+            SFVEC3F( glm::clamp( solderMask_gray * 2.0f, 0.25f, 1.0f ) ),             // specular
             0.85f * 128.0f,                                 // shiness
             solderMask_transparency,                        // transparency
             0.16f );                                        // reflection
