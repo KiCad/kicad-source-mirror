@@ -1532,13 +1532,20 @@ void SHAPE_POLY_SET::Mirror( bool aX, bool aY, const VECTOR2I& aRef )
 
 void SHAPE_POLY_SET::Rotate( double aAngle, const VECTOR2I& aCenter )
 {
+    // Avoid extremely small angles
+    // TODO(snh): Extract into Advanced Config
+    if( aAngle < 0.0001 )
+        return;
+
     for( POLYGON& poly : m_polys )
     {
         for( SHAPE_LINE_CHAIN& path : poly )
             path.Rotate( aAngle, aCenter );
     }
 
-    CacheTriangulation();
+    // Don't re-cache if the triangulation is already invalid
+    if( m_triangulationValid )
+        CacheTriangulation();
 }
 
 
@@ -1989,7 +1996,7 @@ void SHAPE_POLY_SET::CacheTriangulation()
         return;
 
     SHAPE_POLY_SET tmpSet;
-    
+
     partitionPolyIntoRegularCellGrid( *this, 20, tmpSet );
 
     m_triangulatedPolys.clear();
