@@ -23,6 +23,7 @@
  */
 
 #include <tool/tool_manager.h>
+#include <tools/ee_grid_helper.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <ee_actions.h>
@@ -110,6 +111,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     controls->SetGridSnapping( m_frame->IsGridVisible() );
+    EE_GRID_HELPER   grid( m_toolMgr );
 
     m_anchorPos.reset();
 
@@ -190,7 +192,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 m_dragAdditions.clear();
                 m_specialCaseLabels.clear();
                 internalPoints.clear();
-
 
                 for( auto it : m_frame->GetScreen()->Items() )
                 {
@@ -298,23 +299,21 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 // For some items, moving the cursor to anchor is not good (for instance large
                 // hierarchical sheets or components can have the anchor outside the view)
-                else if( selection.Size() == 1 && sch_item->IsMovableFromAnchorPoint()
-                         && m_frame->GetMoveWarpsCursor() )
-                {
-                    if( sch_item->Type() == SCH_LINE_T && !sch_item->HasFlag( STARTPOINT ) )
-                        m_anchorPos = static_cast<SCH_LINE*>( sch_item )->GetEndPoint();
-                    else
-                        m_anchorPos = sch_item->GetPosition();
-
-                    getViewControls()->WarpCursor( *m_anchorPos, true, true );
-                    m_cursor = *m_anchorPos;
-                }
-                // ...otherwise modify items with regard to the grid-snapped cursor position
-                else
+                else if( selection.Size() == 1 && !sch_item->IsMovableFromAnchorPoint() )
                 {
                     m_cursor = getViewControls()->GetCursorPosition( true );
                     m_anchorPos = m_cursor;
                 }
+                else
+                {
+                    std::vector<SCH_ITEM*> items;
+
+                    for( EDA_ITEM* item : selection )
+                        items.push_back( static_cast<SCH_ITEM*>( item ) );
+
+                    m_cursor = grid.BestDragOrigin( m_cursor, items );
+                }
+
 
                 controls->SetCursorPosition( m_cursor, false );
                 m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
