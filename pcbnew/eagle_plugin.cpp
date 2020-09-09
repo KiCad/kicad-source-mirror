@@ -859,7 +859,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             if( layer != UNDEFINED_LAYER )
             {
                 const BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
-                DIMENSION* dimension = new DIMENSION( m_board );
+                ALIGNED_DIMENSION* dimension = new ALIGNED_DIMENSION( m_board );
                 m_board->Add( dimension, ADD_MODE::APPEND );
 
                 if( d.dimensionType )
@@ -881,14 +881,13 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 }
 
                 dimension->SetLayer( layer );
+                dimension->SetPrecision( DIMENSION_PRECISION );
                 // The origin and end are assumed to always be in this order from eagle
-                dimension->SetOrigin( wxPoint( kicad_x( d.x1 ), kicad_y( d.y1 ) ),
-                                      DIMENSION_PRECISION );
-                dimension->SetEnd( wxPoint( kicad_x( d.x2 ), kicad_y( d.y2 ) ),
-                                   DIMENSION_PRECISION );
+                dimension->SetStart( wxPoint( kicad_x( d.x1 ), kicad_y( d.y1 ) ) );
+                dimension->SetEnd( wxPoint( kicad_x( d.x2 ), kicad_y( d.y2 ) ) );
                 dimension->Text().SetTextSize( designSettings.GetTextSize( layer ) );
-                dimension->Text().SetTextThickness( designSettings.GetTextThickness( layer ));
-                dimension->SetWidth( designSettings.GetLineThickness( layer ) );
+                dimension->Text().SetTextThickness( designSettings.GetTextThickness( layer ) );
+                dimension->SetLineThickness( designSettings.GetLineThickness( layer ) );
                 dimension->SetUnits( EDA_UNITS::MILLIMETRES, false );
 
                 // check which axis the dimension runs in
@@ -896,11 +895,9 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 // Note the check is just if two axes are close enough to each other
                 // Eagle appears to have some rounding errors
                 if( abs( ( d.x1 - d.x2 ).ToPcbUnits() ) < 50000 )   // 50000 nm = 0.05 mm
-                    dimension->SetHeight( kicad_x( d.x3 - d.x1 ), DIMENSION_PRECISION );
+                    dimension->SetHeight( kicad_x( d.x3 - d.x1 ) );
                 else
-                    dimension->SetHeight( kicad_y( d.y3 - d.y1 ), DIMENSION_PRECISION );
-
-                dimension->AdjustDimensionDetails( DIMENSION_PRECISION );
+                    dimension->SetHeight( kicad_y( d.y3 - d.y1 ) );
             }
         }
 

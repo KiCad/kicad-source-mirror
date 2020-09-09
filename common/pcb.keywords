@@ -26,6 +26,7 @@
 
 add_net
 addsublayer
+aligned
 allowed
 anchor
 angle
@@ -36,6 +37,7 @@ arrow1a
 arrow1b
 arrow2a
 arrow2b
+arrow_length
 at
 attr
 autoplace_cost90
@@ -93,6 +95,8 @@ end
 epsilon_r
 exclude_from_pos_files
 exclude_from_bom
+extension_height
+extension_offset
 fab_layers_line_width
 fab_layers_text_dims
 feature1
@@ -103,6 +107,7 @@ filled_polygon
 filled_areas_thickness
 fillet
 font
+format
 footprints
 fp_arc
 fp_circle
@@ -130,6 +135,7 @@ hatch_smoothing_level
 hatch_smoothing_value
 hatch_border_algorithm
 hatch_min_hole_area
+height
 hide
 hole_to_hole_min
 id
@@ -146,6 +152,7 @@ last_trace_width
 layer
 layers
 left
+linear
 links
 locked
 loss_tangent
@@ -178,6 +185,7 @@ options
 other_layers_line_width
 other_layers_text_dims
 oval
+override_value
 pad
 pads
 pad_drill
@@ -203,6 +211,8 @@ placed
 plus
 polygon
 portrait
+precision
+prefix
 primitives
 priority
 pts
@@ -233,11 +243,15 @@ solder_paste_ratio
 stackup
 start
 status
+style
+suffix
+suppress_zeroes
 tags
 target
 title
 title_block
 tedit
+text_position_mode
 thermal_width
 thermal_gap
 thermal_bridge_width
@@ -257,6 +271,8 @@ thru_hole
 thru_hole_only
 tstamp
 type
+units
+units_format
 unlocked
 user
 user_diff_pair

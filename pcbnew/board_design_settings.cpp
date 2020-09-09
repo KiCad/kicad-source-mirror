@@ -119,7 +119,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_TextUpright[ LAYER_CLASS_OTHERS ] = false;
 
     m_DimensionUnits = 0;       // Inches
-    m_DimensionPrecision = 1;   // 0.001mm / 0.1 mil
+    m_DimensionPrecision = 4;
 
     m_useCustomTrackVia = false;
     m_customTrackWidth  = Millimeter2iu( DEFAULT_CUSTOMTRACKWIDTH );

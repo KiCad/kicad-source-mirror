@@ -360,7 +360,7 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
 
     DRAWSEGMENT draw;
 
-    draw.SetWidth( aDim->GetWidth() );
+    draw.SetWidth( aDim->GetLineThickness() );
     draw.SetLayer( aDim->GetLayer() );
 
     COLOR4D color = ColorSettings()->GetColor( aDim->GetLayer() );
@@ -371,33 +371,12 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
 
     PlotTextePcb( &aDim->Text() );
 
-    draw.SetStart( aDim->m_crossBarO );
-    draw.SetEnd( aDim->m_crossBarF );
-    PlotDrawSegment( &draw );
-
-    draw.SetStart( aDim->m_featureLineGO);
-    draw.SetEnd( aDim->m_featureLineGF );
-    PlotDrawSegment( &draw );
-
-    draw.SetStart( aDim->m_featureLineDO );
-    draw.SetEnd( aDim->m_featureLineDF );
-    PlotDrawSegment( &draw );
-
-    draw.SetStart( aDim->m_crossBarF );
-    draw.SetEnd( aDim->m_arrowD1F );
-    PlotDrawSegment( &draw );
-
-    draw.SetStart( aDim->m_crossBarF );
-    draw.SetEnd( aDim->m_arrowD2F );
-    PlotDrawSegment( &draw );
-
-    draw.SetStart( aDim->m_crossBarO );
-    draw.SetEnd( aDim->m_arrowG1F );
-    PlotDrawSegment( &draw );
-
-    draw.SetStart( aDim->m_crossBarO );
-    draw.SetEnd( aDim->m_arrowG2F );
-    PlotDrawSegment( &draw );
+    for( const SEG& seg : aDim->GetLines() )
+    {
+        draw.SetStart( wxPoint( seg.A ) );
+        draw.SetEnd( wxPoint( seg.B ) );
+        PlotDrawSegment( &draw );
+    }
 }
 
 

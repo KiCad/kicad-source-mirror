@@ -35,7 +35,7 @@ class FP_CACHE;
 class PCB_PARSER;
 class NETINFO_MAPPING;
 class BOARD_DESIGN_SETTINGS;
-class DIMENSION;
+class ALIGNED_DIMENSION;
 class EDGE_MODULE;
 class DRAWSEGMENT;
 class PCB_TARGET;
@@ -82,7 +82,8 @@ class TEXTE_PCB;
 //#define SEXPR_BOARD_FILE_VERSION    20200819  // Add board-level properties
 //#define SEXPR_BOARD_FILE_VERSION    20200825  // Remove host information
 //#define SEXPR_BOARD_FILE_VERSION    20200828  // Add new fabrication attributes
-#define SEXPR_BOARD_FILE_VERSION    20200829  // Remove library name from exported footprints
+//#define SEXPR_BOARD_FILE_VERSION    20200829  // Remove library name from exported footprints
+#define SEXPR_BOARD_FILE_VERSION      20200909  // Change DIMENSION format
 
 #define BOARD_FILE_HOST_VERSION     20200825    ///< Earlier files than this include the host tag
 
@@ -251,7 +252,7 @@ protected:
 private:
     void format( BOARD* aBoard, int aNestLevel = 0 ) const;
 
-    void format( DIMENSION* aDimension, int aNestLevel = 0 ) const;
+    void format( ALIGNED_DIMENSION* aDimension, int aNestLevel = 0 ) const;
 
     void format( EDGE_MODULE* aModuleDrawing, int aNestLevel = 0 ) const;
 

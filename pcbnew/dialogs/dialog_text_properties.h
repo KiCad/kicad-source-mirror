@@ -67,8 +67,6 @@ private:
     bool TransferDataFromWindow() override;
 
     void OnCharHook( wxKeyEvent& aEvent );
-    void OnDimensionTextChange( wxCommandEvent& event ) override;
-    void OnDimensionUnitsChange( wxCommandEvent& event ) override;
 };
 
 

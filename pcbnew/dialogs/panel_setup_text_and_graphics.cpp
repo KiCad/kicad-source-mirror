@@ -132,6 +132,8 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
 
     Layout();
 
+    wxASSERT_MSG( m_BrdSettings->m_DimensionPrecision <= 4, "Unhandled dimension precision!" );
+
     m_dimensionUnits->SetSelection( m_BrdSettings->m_DimensionUnits );
     m_dimensionPrecision->SetSelection( m_BrdSettings->m_DimensionPrecision );
 

@@ -38,78 +38,112 @@
 
 DIMENSION::DIMENSION( BOARD_ITEM* aParent )
         : BOARD_ITEM( aParent, PCB_DIMENSION_T ),
-          m_Width( Millimeter2iu( 0.2 ) ),
-          m_Unit( EDA_UNITS::INCHES ),
-          m_UseMils( false ),
-          m_Value( 0 ),
-          m_Height( 0 ),
-          m_Text( this )
+          m_units( EDA_UNITS::INCHES ),
+          m_useMils( false ),
+          m_autoUnits( false ),
+          m_unitsFormat( DIM_UNITS_FORMAT::BARE_SUFFIX ),
+          m_precision( 4 ),
+          m_suppressZeroes( false ),
+          m_lineThickness( Millimeter2iu( 0.2 ) ),
+          m_arrowLength( Mils2iu( 50 ) ),
+          m_extensionOffset( 0 ),
+          m_textPosition( DIM_TEXT_POSITION::OUTSIDE ),
+          m_keepTextAligned( true ),
+          m_text( this ),
+          m_measuredValue( 0 )
 {
     m_Layer = Dwgs_User;
-    m_Shape = 0;
-}
-
-
-DIMENSION::~DIMENSION()
-{
 }
 
 
 void DIMENSION::SetPosition( const wxPoint& aPos )
 {
-    m_Text.SetTextPos( aPos );
+    m_text.SetTextPos( aPos );
 }
 
 
 wxPoint DIMENSION::GetPosition() const
 {
-    return m_Text.GetTextPos();
+    return m_text.GetTextPos();
+}
+
+
+DIM_UNITS_MODE DIMENSION::GetUnitsMode() const
+{
+    if( m_autoUnits )
+        return DIM_UNITS_MODE::AUTOMATIC;
+    else if( m_units == EDA_UNITS::MILLIMETRES )
+        return DIM_UNITS_MODE::MILLIMETRES;
+    else if( m_useMils )
+        return DIM_UNITS_MODE::MILS;
+    else
+        return DIM_UNITS_MODE::INCHES;
+}
+
+
+void DIMENSION::SetUnitsMode( DIM_UNITS_MODE aMode )
+{
+    m_units     = EDA_UNITS::INCHES;
+    m_autoUnits = false;
+    m_useMils   = false;
+
+    switch( aMode )
+    {
+    case DIM_UNITS_MODE::INCHES:
+        break;
+
+    case DIM_UNITS_MODE::MILS:
+        m_useMils = true;
+        break;
+
+    case DIM_UNITS_MODE::MILLIMETRES:
+        m_units = EDA_UNITS::MILLIMETRES;
+        break;
+
+    case DIM_UNITS_MODE::AUTOMATIC:
+        m_autoUnits = true;
+        break;
+    }
 }
 
 
 void DIMENSION::SetText( const wxString& aNewText )
 {
-    m_Text.SetText( aNewText );
+    m_text.SetText( aNewText );
 }
 
 
 const wxString DIMENSION::GetText() const
 {
-    return m_Text.GetText();
+    return m_text.GetText();
 }
 
 
 void DIMENSION::SetLayer( PCB_LAYER_ID aLayer )
 {
     m_Layer = aLayer;
-    m_Text.SetLayer( aLayer );
+    m_text.SetLayer( aLayer );
 }
 
 
 void DIMENSION::Move( const wxPoint& offset )
 {
-    m_Text.Offset( offset );
+    m_text.Offset( offset );
 
-    m_crossBarO     += offset;
-    m_crossBarF     += offset;
-    m_featureLineGO += offset;
-    m_featureLineGF += offset;
-    m_featureLineDO += offset;
-    m_featureLineDF += offset;
-    m_arrowG1F  += offset;
-    m_arrowG2F  += offset;
-    m_arrowD1F  += offset;
-    m_arrowD2F  += offset;
+    m_start += offset;
+    m_end   += offset;
+
+    updateGeometry();
 }
 
 
 void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
-    wxPoint tmp = m_Text.GetTextPos();
+    wxPoint tmp = m_text.GetTextPos();
     RotatePoint( &tmp, aRotCentre, aAngle );
-    m_Text.SetTextPos( tmp );
+    m_text.SetTextPos( tmp );
 
-    double newAngle = m_Text.GetTextAngle() + aAngle;
+    double newAngle = m_text.GetTextAngle() + aAngle;
 
     if( newAngle >= 3600 )
         newAngle -= 3600;
@@ -117,18 +151,12 @@ void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
     if( newAngle > 900  &&  newAngle < 2700 )
         newAngle -= 1800;
 
-    m_Text.SetTextAngle( newAngle );
+    m_text.SetTextAngle( newAngle );
 
-    RotatePoint( &m_crossBarO, aRotCentre, aAngle );
-    RotatePoint( &m_crossBarF, aRotCentre, aAngle );
-    RotatePoint( &m_featureLineGO, aRotCentre, aAngle );
-    RotatePoint( &m_featureLineGF, aRotCentre, aAngle );
-    RotatePoint( &m_featureLineDO, aRotCentre, aAngle );
-    RotatePoint( &m_featureLineDF, aRotCentre, aAngle );
-    RotatePoint( &m_arrowG1F, aRotCentre, aAngle );
-    RotatePoint( &m_arrowG2F, aRotCentre, aAngle );
-    RotatePoint( &m_arrowD1F, aRotCentre, aAngle );
-    RotatePoint( &m_arrowD2F, aRotCentre, aAngle );
+    RotatePoint( &m_start, aRotCentre, aAngle );
+    RotatePoint( &m_end, aRotCentre, aAngle );
+
+    updateGeometry();
 }
 
 
@@ -145,247 +173,70 @@ void DIMENSION::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 void DIMENSION::Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight )
 {
     int axis = aMirrorLeftRight ? axis_pos.x : axis_pos.y;
-    wxPoint newPos = m_Text.GetTextPos();
+    wxPoint newPos = m_text.GetTextPos();
 
-#define INVERT( pos ) (pos) = axis - ( (pos) - axis )
+#define INVERT( pos ) ( ( pos ) = axis - ( ( pos ) - axis ) )
 
     if( aMirrorLeftRight )
         INVERT( newPos.x );
     else
         INVERT( newPos.y );
 
-    m_Text.SetTextPos( newPos );
+    m_text.SetTextPos( newPos );
 
     // invert angle
-    m_Text.SetTextAngle( -m_Text.GetTextAngle() );
+    m_text.SetTextAngle( -m_text.GetTextAngle() );
 
     if( aMirrorLeftRight )
     {
-        INVERT( m_crossBarO.y );
-        INVERT( m_crossBarF.y );
-        INVERT( m_featureLineGO.y );
-        INVERT( m_featureLineGF.y );
-        INVERT( m_featureLineDO.y );
-        INVERT( m_featureLineDF.y );
-        INVERT( m_arrowG1F.y );
-        INVERT( m_arrowG2F.y );
-        INVERT( m_arrowD1F.y );
-        INVERT( m_arrowD2F.y );
+        INVERT( m_start.x );
+        INVERT( m_end.x );
     }
     else
     {
-        INVERT( m_crossBarO.y );
-        INVERT( m_crossBarF.y );
-        INVERT( m_featureLineGO.y );
-        INVERT( m_featureLineGF.y );
-        INVERT( m_featureLineDO.y );
-        INVERT( m_featureLineDF.y );
-        INVERT( m_arrowG1F.y );
-        INVERT( m_arrowG2F.y );
-        INVERT( m_arrowD1F.y );
-        INVERT( m_arrowD2F.y );
-    }
-}
-
-
-void DIMENSION::SetOrigin( const wxPoint& aOrigin, int aPrecision )
-{
-    m_featureLineGO = aOrigin;
-
-    AdjustDimensionDetails( aPrecision );
-}
-
-
-void DIMENSION::SetEnd( const wxPoint& aEnd, int aPrecision )
-{
-    m_featureLineDO = aEnd;
-
-    AdjustDimensionDetails( aPrecision );
-}
-
-
-void DIMENSION::SetHeight( int aHeight, int aPrecision )
-{
-    m_Height = aHeight;
-
-    AdjustDimensionDetails( aPrecision );
-}
-
-
-void DIMENSION::UpdateHeight()
-{
-    VECTOR2D featureLine( m_crossBarO - m_featureLineGO );
-    VECTOR2D crossBar( m_featureLineDO - m_featureLineGO );
-
-    if( featureLine.Cross( crossBar ) > 0 )
-        m_Height = -featureLine.EuclideanNorm();
-    else
-        m_Height = featureLine.EuclideanNorm();
-}
-
-
-void DIMENSION::AdjustDimensionDetails( int aPrecision )
-{
-    const int   arrowz = Mils2iu( 50 );             // size of arrows
-    int         ii;
-    int         measure, deltax, deltay;            // value of the measure on X and Y axes
-    int         arrow_up_X  = 0, arrow_up_Y = 0;    // coordinates of arrow line /
-    int         arrow_dw_X  = 0, arrow_dw_Y = 0;    // coordinates of arrow line '\'
-    int         hx, hy;                             // dimension line interval
-    double      angle, angle_f;
-
-    // Init layer :
-    m_Text.SetLayer( GetLayer() );
-
-    // calculate the size of the dimension (text + line above the text)
-    ii = m_Text.GetTextHeight() + m_Text.GetEffectiveTextPenWidth() + m_Width;
-
-    deltax  = m_featureLineDO.x - m_featureLineGO.x;
-    deltay  = m_featureLineDO.y - m_featureLineGO.y;
-
-    // Calculate dimension value
-    measure = KiROUND( hypot( deltax, deltay ) );
-
-    angle = atan2( (double)deltay, (double)deltax );
-
-    // Calculation of parameters X and Y dimensions of the arrows and lines.
-    hx = hy = ii;
-
-    // Taking into account the slope of the side lines.
-    if( measure )
-    {
-        hx  = abs( KiROUND( ( (double) deltay * hx ) / measure ) );
-        hy  = abs( KiROUND( ( (double) deltax * hy ) / measure ) );
-
-        if( m_featureLineGO.x > m_crossBarO.x )
-            hx = -hx;
-
-        if( m_featureLineGO.x == m_crossBarO.x )
-            hx = 0;
-
-        if( m_featureLineGO.y > m_crossBarO.y )
-            hy = -hy;
-
-        if( m_featureLineGO.y == m_crossBarO.y )
-            hy = 0;
-
-        angle_f     = angle + DEG2RAD( 27.5 );
-        arrow_up_X  = wxRound( arrowz * cos( angle_f ) );
-        arrow_up_Y  = wxRound( arrowz * sin( angle_f ) );
-        angle_f     = angle - DEG2RAD( 27.5 );
-        arrow_dw_X  = wxRound( arrowz * cos( angle_f ) );
-        arrow_dw_Y  = wxRound( arrowz * sin( angle_f ) );
+        INVERT( m_start.y );
+        INVERT( m_end.y );
     }
 
-    int dx = KiROUND( m_Height * cos( angle + M_PI / 2 ) );
-    int dy = KiROUND( m_Height * sin( angle + M_PI / 2 ) );
-    m_crossBarO.x   = m_featureLineGO.x + dx;
-    m_crossBarO.y   = m_featureLineGO.y + dy;
-    m_crossBarF.x   = m_featureLineDO.x + dx;
-    m_crossBarF.y   = m_featureLineDO.y + dy;
-
-    m_arrowG1F.x    = m_crossBarO.x + arrow_up_X;
-    m_arrowG1F.y    = m_crossBarO.y + arrow_up_Y;
-
-    m_arrowG2F.x    = m_crossBarO.x + arrow_dw_X;
-    m_arrowG2F.y    = m_crossBarO.y + arrow_dw_Y;
-
-    /* The right arrow is symmetrical to the left.
-     *  / = -\  and  \ = -/
-     */
-    m_arrowD1F.x    = m_crossBarF.x - arrow_dw_X;
-    m_arrowD1F.y    = m_crossBarF.y - arrow_dw_Y;
-
-    m_arrowD2F.x    = m_crossBarF.x - arrow_up_X;
-    m_arrowD2F.y    = m_crossBarF.y - arrow_up_Y;
-
-    // Length of feature lines
-    double radius = ( m_Height +
-                      ( std::copysign( 1.0, m_Height ) *
-                      arrowz * sin( DEG2RAD( 27.5 ) ) ) );
-
-    m_featureLineGF.x = m_featureLineGO.x - wxRound( radius * sin( angle ) );
-    m_featureLineGF.y = m_featureLineGO.y + wxRound( radius * cos( angle ) );
-
-    m_featureLineDF.x = m_featureLineDO.x - wxRound( radius * sin( angle ) );
-    m_featureLineDF.y = m_featureLineDO.y + wxRound( radius * cos( angle ) );
-
-    // Calculate the better text position and orientation:
-    radius = ( std::copysign( 1.0, m_Height ) * ii );
-
-    wxPoint textPos;
-    textPos.x  = ( m_crossBarF.x + m_crossBarO.x ) / 2;
-    textPos.y  = ( m_crossBarF.y + m_crossBarO.y ) / 2;
-
-    textPos.x -= KiROUND( radius * sin( angle ) );
-    textPos.y += KiROUND( radius * cos( angle ) );
-
-    m_Text.SetTextPos( textPos );
-
-    double newAngle = -RAD2DECIDEG( angle );
-
-    NORMALIZE_ANGLE_POS( newAngle );
-
-    if( newAngle > 900  &&  newAngle < 2700 )
-        newAngle -= 1800;
-
-    m_Text.SetTextAngle( newAngle );
-
-    m_Value = measure;
-
-    if( m_Unit == EDA_UNITS::MILLIMETRES )
-        aPrecision += 2;
-    else if( !m_UseMils )
-        aPrecision += 3;
-
-    wxString text;
-    wxString format = wxT( "%." ) + wxString::Format( "%i", aPrecision ) + wxT( "f" );
-
-    text.Printf( format, To_User_Unit( m_Unit, m_Value, m_UseMils ) );
-    text += " ";
-    text += GetAbbreviatedUnitsLabel( m_Unit, m_UseMils );
-
-    SetText( text );
+    updateGeometry();
 }
 
 
-// see class_cotation.h
+void DIMENSION::SetStart( const wxPoint& aOrigin )
+{
+    m_start = aOrigin;
+    updateGeometry();
+}
+
+
+void DIMENSION::SetEnd( const wxPoint& aEnd )
+{
+    m_end = aEnd;
+    updateGeometry();
+}
+
+
 void DIMENSION::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     // for now, display only the text within the DIMENSION using class TEXTE_PCB.
-    m_Text.GetMsgPanelInfo( aFrame, aList );
+    m_text.GetMsgPanelInfo( aFrame, aList );
 }
 
 
 bool DIMENSION::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    if( m_Text.TextHitTest( aPosition ) )
+    if( m_text.TextHitTest( aPosition ) )
         return true;
 
-    int dist_max = aAccuracy + ( m_Width / 2 );
+    int dist_max = aAccuracy + ( m_lineThickness / 2 );
 
     // Locate SEGMENTS
 
-    if( TestSegmentHit( aPosition, m_crossBarO, m_crossBarF, dist_max ) )
-        return true;
-
-    if( TestSegmentHit( aPosition, m_featureLineGO, m_featureLineGF, dist_max ) )
-        return true;
-
-    if( TestSegmentHit( aPosition, m_featureLineDO, m_featureLineDF, dist_max ) )
-        return true;
-
-    if( TestSegmentHit( aPosition, m_crossBarF, m_arrowD1F, dist_max ) )
-        return true;
-
-    if( TestSegmentHit( aPosition, m_crossBarF, m_arrowD2F, dist_max ) )
-        return true;
-
-    if( TestSegmentHit( aPosition, m_crossBarO, m_arrowG1F, dist_max ) )
-        return true;
-
-    if( TestSegmentHit( aPosition, m_crossBarO, m_arrowG2F, dist_max ) )
-        return true;
+    for( const SEG& seg : GetLines() )
+    {
+        if( TestSegmentHit( aPosition, wxPoint( seg.A ), wxPoint( seg.B ), dist_max ) )
+            return true;
+    }
 
     return false;
 }
@@ -412,38 +263,23 @@ const EDA_RECT DIMENSION::GetBoundingBox() const
     EDA_RECT    bBox;
     int         xmin, xmax, ymin, ymax;
 
-    bBox    = m_Text.GetTextBox();
+    bBox    = m_text.GetTextBox();
     xmin    = bBox.GetX();
     xmax    = bBox.GetRight();
     ymin    = bBox.GetY();
     ymax    = bBox.GetBottom();
 
-    xmin    = std::min( xmin, m_crossBarO.x );
-    xmin    = std::min( xmin, m_crossBarF.x );
-    ymin    = std::min( ymin, m_crossBarO.y );
-    ymin    = std::min( ymin, m_crossBarF.y );
-    xmax    = std::max( xmax, m_crossBarO.x );
-    xmax    = std::max( xmax, m_crossBarF.x );
-    ymax    = std::max( ymax, m_crossBarO.y );
-    ymax    = std::max( ymax, m_crossBarF.y );
-
-    xmin    = std::min( xmin, m_featureLineGO.x );
-    xmin    = std::min( xmin, m_featureLineGF.x );
-    ymin    = std::min( ymin, m_featureLineGO.y );
-    ymin    = std::min( ymin, m_featureLineGF.y );
-    xmax    = std::max( xmax, m_featureLineGO.x );
-    xmax    = std::max( xmax, m_featureLineGF.x );
-    ymax    = std::max( ymax, m_featureLineGO.y );
-    ymax    = std::max( ymax, m_featureLineGF.y );
-
-    xmin    = std::min( xmin, m_featureLineDO.x );
-    xmin    = std::min( xmin, m_featureLineDF.x );
-    ymin    = std::min( ymin, m_featureLineDO.y );
-    ymin    = std::min( ymin, m_featureLineDF.y );
-    xmax    = std::max( xmax, m_featureLineDO.x );
-    xmax    = std::max( xmax, m_featureLineDF.x );
-    ymax    = std::max( ymax, m_featureLineDO.y );
-    ymax    = std::max( ymax, m_featureLineDF.y );
+    for( const SEG& seg : GetLines() )
+    {
+        xmin = std::min( xmin, seg.A.x );
+        xmin = std::min( xmin, seg.B.x );
+        xmax = std::max( xmax, seg.A.x );
+        xmax = std::max( xmax, seg.B.x );
+        ymin = std::min( ymin, seg.A.y );
+        ymin = std::min( ymin, seg.B.y );
+        ymax = std::max( ymax, seg.A.y );
+        ymax = std::max( ymax, seg.B.y );
+    }
 
     bBox.SetX( xmin );
     bBox.SetY( ymin );
@@ -472,23 +308,9 @@ const BOX2I DIMENSION::ViewBBox() const
 {
     BOX2I dimBBox = BOX2I( VECTOR2I( GetBoundingBox().GetPosition() ),
                            VECTOR2I( GetBoundingBox().GetSize() ) );
-    dimBBox.Merge( m_Text.ViewBBox() );
+    dimBBox.Merge( m_text.ViewBBox() );
 
     return dimBBox;
-}
-
-
-EDA_ITEM* DIMENSION::Clone() const
-{
-    return new DIMENSION( *this );
-}
-
-
-void DIMENSION::SwapData( BOARD_ITEM* aImage )
-{
-    assert( aImage->Type() == PCB_DIMENSION_T );
-
-    std::swap( *((DIMENSION*) this), *((DIMENSION*) aImage) );
 }
 
 
@@ -503,3 +325,155 @@ static struct DIMENSION_DESC
                     //&DIMENSION::SetHeight, &DIMENSION::GetHeight, PROPERTY_DISPLAY::DISTANCE ) );
     }
 } _DIMENSION_DESC;
+
+
+ALIGNED_DIMENSION::ALIGNED_DIMENSION( BOARD_ITEM* aParent ) :
+        DIMENSION( aParent ),
+        m_height( 0 )
+{
+    // To preserve look of old dimensions, initialize extension height based on default arrow length
+    m_extensionHeight = m_arrowLength * std::sin( DEG2RAD( s_arrowAngle ) );
+}
+
+
+EDA_ITEM* ALIGNED_DIMENSION::Clone() const
+{
+    return new ALIGNED_DIMENSION( *this );
+}
+
+
+void ALIGNED_DIMENSION::SwapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_DIMENSION_T );
+
+    std::swap( *static_cast<ALIGNED_DIMENSION*>( this ), *static_cast<ALIGNED_DIMENSION*>( aImage ) );
+}
+
+
+void ALIGNED_DIMENSION::SetHeight( int aHeight )
+{
+    m_height = aHeight;
+    updateGeometry();
+}
+
+
+void ALIGNED_DIMENSION::UpdateHeight( const wxPoint& aCrossbarStart, const wxPoint& aCrossbarEnd )
+{
+    VECTOR2D height( aCrossbarStart - GetStart() );
+    VECTOR2D crossBar( aCrossbarEnd - aCrossbarStart );
+
+    if( height.Cross( crossBar ) > 0 )
+        m_height = -height.EuclideanNorm();
+    else
+        m_height = height.EuclideanNorm();
+
+    updateGeometry();
+}
+
+
+void ALIGNED_DIMENSION::updateGeometry()
+{
+    m_lines.clear();
+
+    VECTOR2I dimension( m_end - m_start );
+
+    m_measuredValue = KiROUND( dimension.EuclideanNorm() );
+
+    VECTOR2I extension;
+
+    if( m_height > 0 )
+        extension = VECTOR2I( -dimension.y, dimension.x );
+    else
+        extension = VECTOR2I( dimension.y, -dimension.x );
+
+    // Add extension lines
+    int extensionHeight = std::abs( m_height ) - m_extensionOffset + m_extensionHeight;
+
+    VECTOR2I extensionStart( m_start );
+    extensionStart += extension.Resize( m_extensionOffset );
+
+    m_lines.emplace_back( SEG( extensionStart,
+                               extensionStart + extension.Resize( extensionHeight ) ) );
+
+    extensionStart = VECTOR2I( m_end );
+    extensionStart += extension.Resize( m_extensionOffset );
+
+    m_lines.emplace_back( SEG( extensionStart,
+                               extensionStart + extension.Resize( extensionHeight ) ) );
+
+    // Add crossbar
+    VECTOR2I crossBarDistance = sign( m_height ) * extension.Resize( m_height );
+    m_crossBarStart = m_start + wxPoint( crossBarDistance );
+    m_crossBarEnd   = m_end + wxPoint( crossBarDistance );
+
+    // Update text after calculating crossbar position but before adding crossbar lines
+    updateText();
+
+    // Now that we have the text updated, we can determine if the crossbar needs to be broken
+    if( m_textPosition == DIM_TEXT_POSITION::INLINE )
+    {
+
+    }
+
+    m_lines.emplace_back( SEG( m_crossBarStart, m_crossBarEnd ) );
+
+    // Add arrows
+    VECTOR2I arrowEnd( m_arrowLength, 0 );
+
+    double arrowRotPos = dimension.Angle() + DEG2RAD( s_arrowAngle );
+    double arrowRotNeg = dimension.Angle() - DEG2RAD( s_arrowAngle );
+
+    m_lines.emplace_back( SEG( m_crossBarStart,
+                               m_crossBarStart + wxPoint( arrowEnd.Rotate( arrowRotPos ) ) ) );
+
+    m_lines.emplace_back( SEG( m_crossBarStart,
+                               m_crossBarStart + wxPoint( arrowEnd.Rotate( arrowRotNeg ) ) ) );
+
+    m_lines.emplace_back( SEG( m_crossBarEnd,
+                               m_crossBarEnd - wxPoint( arrowEnd.Rotate( arrowRotPos ) ) ) );
+
+    m_lines.emplace_back( SEG( m_crossBarEnd,
+                               m_crossBarEnd - wxPoint( arrowEnd.Rotate( arrowRotNeg ) ) ) );
+}
+
+
+void ALIGNED_DIMENSION::updateText()
+{
+    VECTOR2I crossbarCenter( ( m_crossBarEnd - m_crossBarStart ) / 2 );
+
+    if( m_textPosition != DIM_TEXT_POSITION::MANUAL )
+    {
+        int textOffsetDistance = m_text.GetEffectiveTextPenWidth() + m_text.GetTextHeight();
+
+        double rotation = std::copysign( DEG2RAD( 90 ), m_height );
+        VECTOR2I textOffset = crossbarCenter.Rotate( rotation ).Resize( textOffsetDistance );
+        textOffset += crossbarCenter;
+
+        m_text.SetTextPos( m_crossBarStart + wxPoint( textOffset ) );
+    }
+
+    if( m_keepTextAligned )
+    {
+        double textAngle = 3600 - RAD2DECIDEG( crossbarCenter.Angle() );
+
+        NORMALIZE_ANGLE_POS( textAngle );
+
+        if( textAngle > 900 && textAngle < 2700 )
+            textAngle -= 1800;
+
+        m_text.SetTextAngle( textAngle );
+    }
+    else
+    {
+        m_text.SetTextAngle( 0 );
+    }
+
+    wxString text;
+    wxString format = wxT( "%." ) + wxString::Format( "%i", m_precision ) + wxT( "f" );
+
+    text.Printf( format, To_User_Unit( m_units, m_measuredValue, m_useMils ) );
+    text += " ";
+    text += GetAbbreviatedUnitsLabel( m_units, m_useMils );
+
+    SetText( text );
+}

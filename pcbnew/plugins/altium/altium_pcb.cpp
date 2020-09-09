@@ -901,6 +901,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
     }
 
     PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
+
     if( klayer == UNDEFINED_LAYER )
     {
         wxLogWarning( wxString::Format(
@@ -912,11 +913,13 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
     wxPoint referencePoint0 = aElem.referencePoint.at( 0 );
     wxPoint referencePoint1 = aElem.referencePoint.at( 1 );
 
-    DIMENSION* dimension = new DIMENSION( m_board );
+    ALIGNED_DIMENSION* dimension = new ALIGNED_DIMENSION( m_board );
     m_board->Add( dimension, ADD_MODE::APPEND );
 
+    dimension->SetPrecision( aElem.textprecission );
     dimension->SetLayer( klayer );
-    dimension->SetOrigin( referencePoint0, aElem.textprecission );
+    dimension->SetStart( referencePoint0 );
+
     if( referencePoint0 != aElem.xy1 )
     {
         /**
@@ -933,21 +936,23 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
         SEG     segm1( referencePoint0, referencePoint0 + directionNormalVector );
         SEG     segm2( referencePoint1, referencePoint1 + direction );
         wxPoint intersection( segm1.Intersect( segm2, true, true ).get() );
-        dimension->SetEnd( intersection, aElem.textprecission );
+        dimension->SetEnd( intersection );
 
         int height = static_cast<int>( EuclideanNorm( direction ) );
+
         if( direction.x <= 0 && direction.y <= 0 ) // TODO: I suspect this is not always correct
         {
             height = -height;
         }
-        dimension->SetHeight( height, aElem.textprecission );
+
+        dimension->SetHeight( height );
     }
     else
     {
-        dimension->SetEnd( referencePoint1, aElem.textprecission );
+        dimension->SetEnd( referencePoint1 );
     }
 
-    dimension->SetWidth( aElem.linewidth );
+    dimension->SetLineThickness( aElem.linewidth );
 
     dimension->Text().SetTextThickness( aElem.textlinewidth );
     dimension->Text().SetTextSize( wxSize( aElem.textheight, aElem.textheight ) );
@@ -969,8 +974,6 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
     default:
         break;
     }
-
-    dimension->AdjustDimensionDetails( aElem.textprecission );
 }
 
 void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )

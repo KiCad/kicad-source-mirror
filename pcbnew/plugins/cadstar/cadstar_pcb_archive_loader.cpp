@@ -793,14 +793,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
             case DIMENSION::SUBTYPE::DIRECT:
             case DIMENSION::SUBTYPE::ORTHOGONAL:
             {
-                ::DIMENSION* dimension = new ::DIMENSION( mBoard );
-                TEXTCODE     dimText   = getTextCode( csDim.Text.TextCodeID );
+                ::ALIGNED_DIMENSION* dimension = new ::ALIGNED_DIMENSION( mBoard );
+                TEXTCODE             dimText   = getTextCode( csDim.Text.TextCodeID );
                 mBoard->Add( dimension, ADD_MODE::APPEND );
 
                 dimension->SetLayer( getKiCadLayer( csDim.LayerID ) );
-                dimension->SetOrigin(
-                        getKiCadPoint( csDim.Line.Start ), csDim.Precision );
-                dimension->SetEnd( getKiCadPoint( csDim.Line.End ), csDim.Precision );
+                dimension->SetPrecision( csDim.Precision );
+                dimension->SetStart( getKiCadPoint( csDim.Line.Start ) );
+                dimension->SetEnd( getKiCadPoint( csDim.Line.End ) );
                 dimension->Text().SetTextThickness( getKiCadLength( dimText.LineWidth ) );
                 dimension->Text().SetTextSize( wxSize(
                         getKiCadLength( dimText.Width ), getKiCadLength( dimText.Height ) ) );
@@ -822,8 +822,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
                     dimension->SetUnits( EDA_UNITS::INCHES, true );
                     break;
                 }
-
-                dimension->AdjustDimensionDetails( csDim.Precision );
             }
                 continue;
 

@@ -1273,19 +1273,12 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
     else
     {
         // Filled mode
-        m_gal->SetLineWidth( getLineThickness( aDimension->GetWidth() ) );
+        m_gal->SetLineWidth( getLineThickness( aDimension->GetLineThickness() ) );
     }
 
-    // Draw an arrow
-    m_gal->DrawLine( VECTOR2D( aDimension->m_crossBarO ), VECTOR2D( aDimension->m_crossBarF ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_featureLineGO ),
-                     VECTOR2D( aDimension->m_featureLineGF ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_featureLineDO ),
-                     VECTOR2D( aDimension->m_featureLineDF ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_crossBarF ), VECTOR2D( aDimension->m_arrowD1F ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_crossBarF ), VECTOR2D( aDimension->m_arrowD2F ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_crossBarO ), VECTOR2D( aDimension->m_arrowG1F ) );
-    m_gal->DrawLine( VECTOR2D( aDimension->m_crossBarO ), VECTOR2D( aDimension->m_arrowG2F ) );
+    // Draw dimension shapes
+    for( const SEG& seg : aDimension->GetLines() )
+        m_gal->DrawLine( seg.A, seg.B );
 
     // Draw text
     TEXTE_PCB& text = aDimension->Text();

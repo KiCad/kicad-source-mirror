@@ -94,10 +94,10 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 	m_dimensionPrecisionLabel->Wrap( -1 );
 	fgSizer1->Add( m_dimensionPrecisionLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	wxString m_dimensionPrecisionChoices[] = { _("0.01 mm / 1 mil"), _("0.001 mm / 0.1 mil"), _("0.0001mm / 0.01 mil") };
+	wxString m_dimensionPrecisionChoices[] = { _("0"), _("0.0"), _("0.00"), _("0.000"), _("0.0000") };
 	int m_dimensionPrecisionNChoices = sizeof( m_dimensionPrecisionChoices ) / sizeof( wxString );
 	m_dimensionPrecision = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_dimensionPrecisionNChoices, m_dimensionPrecisionChoices, 0 );
-	m_dimensionPrecision->SetSelection( 0 );
+	m_dimensionPrecision->SetSelection( 4 );
 	fgSizer1->Add( m_dimensionPrecision, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 

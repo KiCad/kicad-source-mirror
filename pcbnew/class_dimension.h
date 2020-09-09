@@ -40,48 +40,262 @@ class TEXTE_PCB;
 class MSG_PANEL_ITEM;
 
 
+/// How to display the units in a dimension's text
+enum class DIM_UNITS_FORMAT
+{
+    NO_SUFFIX,      // 1234.0
+    BARE_SUFFIX,    // 1234.0 mm
+    PAREN_SUFFIX    // 1234.0 (mm)
+};
+
+/// Where to place the text on a dimension
+enum class DIM_TEXT_POSITION
+{
+    OUTSIDE,    ///< Text appears outside the dimension line (default)
+    INLINE,     ///< Text appears in line with the dimension line
+    MANUAL      ///< Text placement is manually set by the user
+};
+
 /**
- * DIMENSION
+ * Used for storing the units selection in the file because EDA_UNITS alone doesn't cut it
+ */
+enum class DIM_UNITS_MODE
+{
+    INCHES,
+    MILS,
+    MILLIMETRES,
+    AUTOMATIC
+};
+
+/**
+ * Abstract dimension API
  *
- * For better understanding of the points that make a dimension:
+ * Some notes about dimension nomenclature:
  *
- *            m_featureLineGO  m_featureLineDO
- *            |                              |
- *            |                              |
- *            |                              |
- *            |  m_arrowG2F      m_arrowD2F  |
- *            | /                          \ |
- * m_crossBarO|/____________________________\|m_crossBarF
- *            |\           m_Text           /|
- *            | \                          / |
- *            |  m_arrowG1F      m_arrowD1F  |
- *            |                              |
- *            m_featureLineGF  m_featureLineDF
+ * - "feature points" are the points being measured by the dimension.  For an example, the start
+ *   and end points of a line to be measured.  These are the first points picked when drawing a
+ *   new dimension.  Dimensions can have one or more feature points: linear dimensions (the only
+ *   type supported in KiCad 5 and earlier) have two feature points; leader dimensions have one;
+ *   and ordinate dimensions can have in theory an unlimited number of feature points.
+ *
+ * - "feature lines" are lines that coincide with feature points.  Not all dimension types have
+ *   feature lines.  The actual start and end of feature lines is calculated from dimension style
+ *   properties (offset from feature point to start of feature line, height of crossbar, and height
+ *   of feature line past crossbar, for example in linear dimensions)
+ *
+ * - "crossbar" refers to the perpendicular line (usually with arrows at each end) between feature
+ *   lines on linear dimensions
  */
 class DIMENSION : public BOARD_ITEM
 {
-    int         m_Width;        ///< Line width
-    int         m_Shape;        ///< Currently always 0.
-    EDA_UNITS   m_Unit;         ///< 0 = inches, 1 = mm
-    bool        m_UseMils;      ///< If inches, use mils.
-    int         m_Value;        ///< value of PCB dimensions.
-    int         m_Height;       ///< length of feature lines
-    TEXTE_PCB   m_Text;
+public:
+    DIMENSION( BOARD_ITEM* aParent );
+
+    /**
+     * The dimension's origin is the first feature point for the dimension.  Every dimension has
+     * one or more feature points, so every dimension has at least an origin.
+     * @return the origin point of this dimension
+     */
+    virtual const wxPoint& GetStart() const { return m_start; }
+    virtual void SetStart( const wxPoint& aPoint );
+
+    virtual const wxPoint& GetEnd() const { return m_end; }
+    virtual void SetEnd( const wxPoint& aPoint );
+
+    // These deal with the text position
+    wxPoint GetPosition() const override;
+    void SetPosition( const wxPoint& aPos ) override;
+
+    bool GetOverrideValue() const { return m_overrideValue; }
+    void SetOverrideValue( bool aOverride ) { m_overrideValue = aOverride; }
+
+    int GetMeasuredValue() const { return m_measuredValue; }
+
+    wxString GetDisplayedValue() const
+    {
+        return m_text.GetText();
+    }
+
+    wxString GetPrefix() const { return m_prefix; }
+    void SetPrefix( const wxString& aPrefix ) { m_prefix = aPrefix; }
+
+    wxString GetSuffix() const { return m_suffix; }
+    void SetSuffix( const wxString& aSuffix ) { m_suffix = aSuffix; }
+
+    void GetUnits( EDA_UNITS& aUnits, bool& aUseMils ) const
+    {
+        aUnits = m_units;
+        aUseMils = m_useMils;
+    }
+
+    void SetUnits( EDA_UNITS aUnits, bool aUseMils )
+    {
+        m_units = aUnits;
+        m_useMils = aUseMils;
+    }
+
+    DIM_UNITS_MODE GetUnitsMode() const;
+    void SetUnitsMode( DIM_UNITS_MODE aMode );
+
+    void SetAutoUnits( bool aAuto = true ) { m_autoUnits = aAuto; }
+
+    DIM_UNITS_FORMAT GetUnitsFormat() const { return m_unitsFormat; }
+    void SetUnitsFormat( const DIM_UNITS_FORMAT aFormat ) { m_unitsFormat = aFormat; }
+
+    int GetPrecision() const { return m_precision; }
+    void SetPrecision( int aPrecision ) { m_precision = aPrecision; }
+
+    bool GetSuppressZeroes() const { return m_suppressZeroes; }
+    void SetSuppressZeroes( bool aSuppress ) { m_suppressZeroes = aSuppress; }
+
+    bool GetKeepTextAligned() const { return m_keepTextAligned; }
+    void SetKeepTextAligned( bool aKeepAligned ) { m_keepTextAligned = aKeepAligned; }
+
+    void SetTextPositionMode( DIM_TEXT_POSITION aMode ) { m_textPosition = aMode; }
+    DIM_TEXT_POSITION GetTextPositionMode() const { return m_textPosition; }
+
+    int GetArrowLength() const { return m_arrowLength; }
+    void SetArrowLength( int aLength ) { m_arrowLength = aLength; }
+
+    void SetExtensionOffset( int aOffset ) { m_extensionOffset = aOffset; }
+    int GetExtensionOffset() const { return m_extensionOffset; }
+
+    int GetLineThickness() const        { return m_lineThickness; }
+    void SetLineThickness( int aWidth ) { m_lineThickness = aWidth; }
+
+    void SetLayer( PCB_LAYER_ID aLayer ) override;
+
+    void SetTextSize( const wxSize& aTextSize )
+    {
+        m_text.SetTextSize( aTextSize );
+    }
+
+    void           SetText( const wxString& aNewText );
+    const wxString GetText() const;
+
+    TEXTE_PCB&     Text() { return m_text; }
+    TEXTE_PCB&     Text() const { return *( const_cast<TEXTE_PCB*> ( &m_text ) ); }
+
+    /**
+     * @return a list of line segments that make up this dimension (for drawing, plotting, etc)
+     */
+    const std::vector<SEG>& GetLines() const { return m_lines; }
+
+    // BOARD_ITEM overrides
+
+    void Move( const wxPoint& offset ) override;
+    void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
+    void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
+
+    /**
+     * Mirror the Dimension , relative to a given horizontal axis
+     * the text is not mirrored. only its position (and angle) is mirrored
+     * the layer is not changed
+     * @param axis_pos : vertical axis position
+     */
+    void Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight = false );
+
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
+
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+
+    const EDA_RECT GetBoundingBox() const override;
+
+    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+
+    BITMAP_DEF GetMenuImage() const override;
+
+    virtual const BOX2I ViewBBox() const override;
+
+#if defined(DEBUG)
+    virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
+#endif
+
+protected:
+
+    /**
+     * Updates the cached geometry of the dimension after changing any of its properties
+     */
+    virtual void updateGeometry() = 0;
+
+    /**
+     * Updates the text field value from the current geometry (called by updateGeometry normally)
+     */
+    virtual void updateText() {}
+
+    // Value format
+    bool              m_overrideValue;   ///< Manually specify the displayed measurement value
+    wxString          m_prefix;          ///< String prepended to the value
+    wxString          m_suffix;          ///< String appended to the value
+    EDA_UNITS         m_units;           ///< 0 = inches, 1 = mm
+    bool              m_useMils;         ///< If inches, use mils.
+    bool              m_autoUnits;       ///< If true, follow the currently selected UI units
+    DIM_UNITS_FORMAT  m_unitsFormat;     ///< How to render the units suffix
+    int               m_precision;       ///< Number of digits to display after decimal
+    bool              m_suppressZeroes;  ///< Suppress trailing zeroes
+
+    // Geometry
+    int               m_lineThickness;    ///< Thickness used for all graphics in the dimension
+    int               m_arrowLength;      ///< Length of arrow shapes
+    int               m_extensionOffset;  ///< Distance from feature points to extension line start
+    DIM_TEXT_POSITION m_textPosition;     ///< How to position the text
+    bool              m_keepTextAligned;  ///< Calculate text orientation to match dimension
+
+    // Internal
+    TEXTE_PCB         m_text;             ///< The actual text object
+    int               m_measuredValue;    ///< value of PCB dimensions
+    wxPoint           m_start;
+    wxPoint           m_end;
+
+    std::vector<SEG>  m_lines;            ///< Internal cache of drawn lines
+};
+
+/**
+ * For better understanding of the points that make a dimension:
+ *
+ * Note: historically KiCad called extension lines "feature lines", and also note that what we
+ * call the "crossbar line" here is more commonly called the "dimension line"
+ *
+ *              Start (feature point 1)         End (feature point 2)
+ *                |                              |
+ *                |   <-- extension lines -->    |
+ *                |                              |
+ *                |  m_arrowG2F      m_arrowD2F  |
+ *                | /                          \ |
+ * Crossbar start |/_______crossbar line________\| Crossbar end
+ *                |\           m_text           /|
+ *                | \                          / |
+ *                |  m_arrowG1F      m_arrowD1F  |
+ *                |                              |
+ *                m_featureLineGF  m_featureLineDF
+ */
+
+/**
+ * An aligned dimension measures the distance between two feature points.  It has a crossbar
+ * (dimension line) that stays parallel with the vector between the feature points.
+ *
+ * The height (distance from features to crossbar) can be set directly, or set by manipulating the
+ * crossbar start or end point (with the point editor).
+ */
+class ALIGNED_DIMENSION : public DIMENSION
+{
+    // Geometry
+    int          m_height;           ///< Perpendicular distance from features to crossbar
+    int          m_extensionHeight;  ///< Length of extension lines past the crossbar
+
+    wxPoint      m_crossBarStart;    ///< Crossbar start control point
+    wxPoint      m_crossBarEnd;      ///< Crossbar end control point
+
+    static constexpr float s_arrowAngle = 27.5;
 
 public:
-// TODO private: These member should be private. they are public only due to legacy code
-    wxPoint     m_crossBarO, m_crossBarF;
-    wxPoint     m_featureLineGO, m_featureLineGF;
-    wxPoint     m_featureLineDO, m_featureLineDF;
-    wxPoint     m_arrowD1F, m_arrowD2F;
-    wxPoint     m_arrowG1F, m_arrowG2F;
-
-    DIMENSION( BOARD_ITEM* aParent );
+    ALIGNED_DIMENSION( BOARD_ITEM* aParent );
 
     // Do not create a copy constructor & operator=.
     // The ones generated by the compiler are adequate.
 
-    ~DIMENSION();
+    ~ALIGNED_DIMENSION() = default;
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -102,83 +316,29 @@ public:
         return false;
     }
 
-    void SetValue( int aValue ) { m_Value = aValue; }
+    EDA_ITEM* Clone() const override;
 
-    int GetValue() const { return m_Value; }
+    virtual void SwapData( BOARD_ITEM* aImage ) override;
 
-    wxPoint GetPosition() const override;
+    const wxPoint& GetCrossbarStart() const { return m_crossBarStart; }
 
-    void SetPosition( const wxPoint& aPos ) override;
-
-    void SetTextSize( const wxSize& aTextSize )
-    {
-        m_Text.SetTextSize( aTextSize );
-    }
-
-    void SetLayer( PCB_LAYER_ID aLayer ) override;
-
-    void SetShape( int aShape )         { m_Shape = aShape; }
-    int GetShape() const                { return m_Shape; }
-
-    int GetWidth() const                { return m_Width; }
-    void SetWidth( int aWidth )         { m_Width = aWidth; }
+    const wxPoint& GetCrossbarEnd() const { return m_crossBarEnd; }
 
     /**
-     * Function SetOrigin
-     * Sets a new origin of the crossbar line. All remaining lines are adjusted after that.
-     * @param aOrigin is the new point to be used as the new origin of the crossbar line.
-     * @param aPrecision number of decimal places for mils (scaled appropriately for other units).
-     */
-    void SetOrigin( const wxPoint& aOrigin, int aPrecision );
-
-    /**
-     * Function GetOrigin
-     * @return Origin of the crossbar line.
-     */
-    const wxPoint& GetOrigin() const
-    {
-        return m_featureLineGO;
-    }
-
-    /**
-     * Function SetEnd
-     * Sets a new end of the crossbar line. All remaining lines are adjusted after that.
-     * @param aEnd is the new point to be used as the new end of the crossbar line.
-     * @param aPrecision number of decimal places for mils (scaled appropriately for other units).
-     */
-    void SetEnd( const wxPoint& aEnd, int aPrecision );
-
-    /**
-     * Function GetEnd
-     * @return End of the crossbar line.
-     */
-    const wxPoint& GetEnd()
-    {
-        return m_featureLineDO;
-    }
-
-    /**
-     * Function SetHeight
-     * Sets the length of feature lines.
+     * Sets the distance from the feature points to the crossbar line
      * @param aHeight is the new height.
-     * @param aPrecision number of decimal places for mils (scaled appropriately for other units).
      */
-    void SetHeight( int aHeight, int aPrecision );
+    void SetHeight( int aHeight );
+    int GetHeight() const {  return m_height; }
 
     /**
-     * Function GetHeight
-     * Returns the length of feature lines.
-     */
-    int GetHeight() const
-    {
-        return m_Height;
-    }
-
-    /**
-     * Function UpdateHeight
      * Updates stored height basing on points coordinates.
+     * @param aCrossbarStart is the start point of the crossbar
      */
-    void UpdateHeight();
+    void UpdateHeight( const wxPoint& aCrossbarStart, const wxPoint& aCrossbarEnd );
+
+    void SetExtensionHeight( int aHeight ) { m_extensionHeight = aHeight; }
+    int GetExtensionHeight() const { return m_extensionHeight; }
 
     /**
      * Function GetAngle
@@ -187,79 +347,21 @@ public:
      */
     double GetAngle() const
     {
-        wxPoint delta( m_featureLineDO - m_featureLineGO );
+        wxPoint delta( m_end - m_start );
 
         return atan2( (double)delta.y, (double)delta.x );
     }
 
-    /**
-     * Function AdjustDimensionDetails
-     * Calculate coordinates of segments used to draw the dimension.
-     * @param aPrecision number of decimal places for mils (scaled appropriately for other units).
-     */
-    void AdjustDimensionDetails( int aPrecision );
-
-    void GetUnits( EDA_UNITS& aUnits, bool& aUseMils ) const
-    {
-        aUnits = m_Unit;
-        aUseMils = m_UseMils;
-    }
-
-    void SetUnits( EDA_UNITS aUnits, bool aUseMils )
-    {
-        m_Unit = aUnits;
-        m_UseMils = aUseMils;
-    }
-
-    void            SetText( const wxString& NewText );
-    const wxString  GetText() const;
-
-    TEXTE_PCB&      Text()  { return m_Text; }
-    TEXTE_PCB&      Text() const  { return *(const_cast<TEXTE_PCB*> (&m_Text)); }
-
-    /**
-     * Function Move
-     * @param offset : moving vector
-     */
-    void            Move( const wxPoint& offset ) override;
-    void            Rotate( const wxPoint& aRotCentre, double aAngle ) override;
-    void            Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
-
-    /**
-     * Function Mirror
-     * Mirror the Dimension , relative to a given horizontal axis
-     * the text is not mirrored. only its position (and angle) is mirrored
-     * the layer is not changed
-     * @param axis_pos : vertical axis position
-     */
-    void Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight = false );
-
-    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
-
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
-
     wxString GetClass() const override
     {
-        return wxT( "DIMENSION" );
+        return wxT( "ALIGNED_DIMENSION" );
     }
 
-    // Virtual function
-    const EDA_RECT GetBoundingBox() const override;
+protected:
 
-    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    void updateGeometry() override;
 
-    BITMAP_DEF GetMenuImage() const override;
-
-    EDA_ITEM* Clone() const override;
-
-    virtual const BOX2I ViewBBox() const override;
-
-    virtual void SwapData( BOARD_ITEM* aImage ) override;
-
-#if defined(DEBUG)
-    virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
-#endif
+    void updateText() override;
 };
 
 #endif    // DIMENSION_H_

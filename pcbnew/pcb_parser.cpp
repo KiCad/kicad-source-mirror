@@ -2353,17 +2353,30 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
 
     T token;
 
-    std::unique_ptr<DIMENSION> dimension( new DIMENSION( NULL ) );
+    std::unique_ptr<ALIGNED_DIMENSION> dimension( new ALIGNED_DIMENSION( nullptr ) );
 
-    dimension->SetValue( parseBoardUnits( "dimension value" ) );
-    NeedLEFT();
+    // skip value that used to be saved
+    if( NextTok() != T_LEFT )
+        NeedLEFT();
+
     token = NextTok();
 
-    if( token != T_width )
-        Expecting( T_width );
+    // Old format
+    if( token == T_width )
+    {
+        dimension->SetLineThickness( parseBoardUnits( "dimension width value" ) );
+        NeedRIGHT();
+    }
+    else if( token != T_type )
+    {
+        Expecting( T_type );
 
-    dimension->SetWidth( parseBoardUnits( "dimension width value" ) );
-    NeedRIGHT();
+        // This function only parses aligned dimensions for now
+        if( NextTok() != T_aligned )
+            Expecting( T_aligned );
+
+        NeedRIGHT();
+    }
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2405,49 +2418,185 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
             break;
         }
 
+        // New format: feature points
+        case T_pts:
+        {
+            wxPoint point;
+
+            parseXY( &point.x, &point.y );
+            dimension->SetStart( point );
+            parseXY( &point.x, &point.y );
+            dimension->SetEnd( point );
+
+            NeedRIGHT();
+            break;
+        }
+
+        case T_height:
+            dimension->SetHeight( parseBoardUnits( "dimension height value" ) );
+            NeedRIGHT();
+            break;
+
+        case T_format:
+        {
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                switch( token )
+                {
+                case T_LEFT:
+                    continue;
+
+                case T_prefix:
+                    NeedSYMBOLorNUMBER();
+                    dimension->SetPrefix( FromUTF8() );
+                    NeedRIGHT();
+                    break;
+
+                case T_suffix:
+                    NeedSYMBOLorNUMBER();
+                    dimension->SetSuffix( FromUTF8() );
+                    NeedRIGHT();
+                    break;
+
+                case T_units:
+                {
+                    int mode = parseInt( "dimension units mode" );
+                    dimension->SetUnitsMode( static_cast<DIM_UNITS_MODE>( mode ) );
+                    NeedRIGHT();
+                    break;
+                }
+
+                case T_units_format:
+                {
+                    int format = parseInt( "dimension units format" );
+                    dimension->SetUnitsFormat( static_cast<DIM_UNITS_FORMAT>( format ) );
+                    NeedRIGHT();
+                    break;
+                }
+
+                case T_precision:
+                    dimension->SetPrecision( parseInt( "dimension precision" ) );
+                    NeedRIGHT();
+                    break;
+
+                case T_override_value:
+                    dimension->SetOverrideValue( true );
+                    break;
+
+                default:
+                    Expecting( "prefix, suffix, units, units_format, precision, override_value" );
+                }
+            }
+            break;
+        }
+
+        case T_style:
+        {
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                switch( token )
+                {
+                case T_LEFT:
+                    continue;
+
+                case T_thickness:
+                    dimension->SetLineThickness( parseBoardUnits( "extension line thickness" ) );
+                    NeedRIGHT();
+                    break;
+
+                case T_arrow_length:
+                    dimension->SetArrowLength( parseBoardUnits( "arrow length" ) );
+                    NeedRIGHT();
+                    break;
+
+                case T_text_position_mode:
+                {
+                    int mode = parseInt( "dimension text position mode" );
+                    dimension->SetTextPositionMode( static_cast<DIM_TEXT_POSITION>( mode ) );
+                    NeedRIGHT();
+                    break;
+                }
+
+                case T_extension_height:
+                    dimension->SetExtensionHeight( parseBoardUnits( "extension height" ) );
+                    NeedRIGHT();
+                    break;
+
+                case T_extension_offset:
+                    dimension->SetExtensionOffset( parseBoardUnits( "extension offset" ) );
+                    NeedRIGHT();
+                    break;
+
+                default:
+                    Expecting( "thickness, arrow_length, text_position_mode, extension_height, "
+                               "extension_offset" );
+                }
+            }
+
+            break;
+        }
+
+        // Old format: feature1 stores a feature line.  We only care about the origin.
         case T_feature1:
+        {
             NeedLEFT();
             token = NextTok();
 
             if( token != T_pts )
                 Expecting( T_pts );
 
-            parseXY( &dimension->m_featureLineDO.x, &dimension->m_featureLineDO.y );
-            parseXY( &dimension->m_featureLineDF.x, &dimension->m_featureLineDF.y );
-            dimension->UpdateHeight();
+            wxPoint point;
+
+            parseXY( &point.x, &point.y );
+            dimension->SetStart( point );
+
+            parseXY( nullptr, nullptr ); // Ignore second point
             NeedRIGHT();
             NeedRIGHT();
             break;
+        }
 
+        // Old format: feature2 stores a feature line.  We only care about the end point.
         case T_feature2:
+        {
             NeedLEFT();
             token = NextTok();
 
             if( token != T_pts )
                 Expecting( T_pts );
 
-            parseXY( &dimension->m_featureLineGO.x, &dimension->m_featureLineGO.y );
-            parseXY( &dimension->m_featureLineGF.x, &dimension->m_featureLineGF.y );
-            dimension->UpdateHeight();
+            wxPoint point;
+
+            parseXY( &point.x, &point.y );
+            dimension->SetEnd( point );
+
+            parseXY( nullptr, nullptr ); // Ignore second point
+
             NeedRIGHT();
             NeedRIGHT();
             break;
-
+        }
 
         case T_crossbar:
+        {
             NeedLEFT();
             token = NextTok();
 
-            if( token != T_pts )
-                Expecting( T_pts );
+            if( token == T_pts )
+            {
+                // Old style: calculate height from crossbar
+                wxPoint point1, point2;
+                parseXY( &point1.x, &point1.y );
+                parseXY( &point2.x, &point2.y );
+                dimension->UpdateHeight( point2, point1 ); // Yes, backwards intentionally
+                NeedRIGHT();
+            }
 
-            parseXY( &dimension->m_crossBarO.x, &dimension->m_crossBarO.y );
-            parseXY( &dimension->m_crossBarF.x, &dimension->m_crossBarF.y );
-            dimension->UpdateHeight();
-            NeedRIGHT();
             NeedRIGHT();
             break;
+        }
 
+        // Arrow: no longer saved; no-op
         case T_arrow1a:
             NeedLEFT();
             token = NextTok();
@@ -2455,12 +2604,13 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
             if( token != T_pts )
                 Expecting( T_pts );
 
-            parseXY( &dimension->m_crossBarF.x, &dimension->m_crossBarF.y );
-            parseXY( &dimension->m_arrowD1F.x, &dimension->m_arrowD1F.y );
+            parseXY( nullptr, nullptr );
+            parseXY( nullptr, nullptr );
             NeedRIGHT();
             NeedRIGHT();
             break;
 
+        // Arrow: no longer saved; no-op
         case T_arrow1b:
             NeedLEFT();
             token = NextTok();
@@ -2468,12 +2618,13 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
             if( token != T_pts )
                 Expecting( T_pts );
 
-            parseXY( &dimension->m_crossBarF.x, &dimension->m_crossBarF.y );
-            parseXY( &dimension->m_arrowD2F.x, &dimension->m_arrowD2F.y );
+            parseXY( nullptr, nullptr );
+            parseXY( nullptr, nullptr );
             NeedRIGHT();
             NeedRIGHT();
             break;
 
+        // Arrow: no longer saved; no-op
         case T_arrow2a:
             NeedLEFT();
             token = NextTok();
@@ -2481,12 +2632,13 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
             if( token != T_pts )
                 Expecting( T_pts );
 
-            parseXY( &dimension->m_crossBarO.x, &dimension->m_crossBarO.y );
-            parseXY( &dimension->m_arrowG1F.x, &dimension->m_arrowG1F.y );
+            parseXY( nullptr, nullptr );
+            parseXY( nullptr, nullptr );
             NeedRIGHT();
             NeedRIGHT();
             break;
 
+        // Arrow: no longer saved; no-op
         case T_arrow2b:
             NeedLEFT();
             token = NextTok();
@@ -2494,14 +2646,14 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
             if( token != T_pts )
                 Expecting( T_pts );
 
-            parseXY( &dimension->m_crossBarO.x, &dimension->m_crossBarO.y );
-            parseXY( &dimension->m_arrowG2F.x, &dimension->m_arrowG2F.y );
+            parseXY( nullptr, nullptr );
+            parseXY( nullptr, nullptr );
             NeedRIGHT();
             NeedRIGHT();
             break;
 
         default:
-            Expecting( "layer, tstamp, gr_text, feature1, feature2 crossbar, arrow1a, "
+            Expecting( "layer, tstamp, gr_text, feature1, feature2, crossbar, arrow1a, "
                        "arrow1b, arrow2a, or arrow2b" );
         }
     }

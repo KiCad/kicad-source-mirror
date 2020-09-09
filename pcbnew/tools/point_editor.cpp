@@ -76,10 +76,10 @@ enum BEZIER_CURVE_POINTS
 
 enum DIMENSION_POINTS
 {
-    DIM_CROSSBARO,
-    DIM_CROSSBARF,
-    DIM_FEATUREGO,
-    DIM_FEATUREDO,
+    DIM_CROSSBARSTART,
+    DIM_CROSSBAREND,
+    DIM_START,
+    DIM_END,
 };
 
 class EDIT_POINTS_FACTORY
@@ -245,18 +245,18 @@ public:
 
         case PCB_DIMENSION_T:
         {
-            const DIMENSION* dimension = static_cast<const DIMENSION*>( aItem );
+            const ALIGNED_DIMENSION* dimension = static_cast<const ALIGNED_DIMENSION*>( aItem );
 
-            points->AddPoint( dimension->m_crossBarO );
-            points->AddPoint( dimension->m_crossBarF );
-            points->AddPoint( dimension->m_featureLineGO );
-            points->AddPoint( dimension->m_featureLineDO );
+            points->AddPoint( dimension->GetCrossbarStart() );
+            points->AddPoint( dimension->GetCrossbarEnd() );
+            points->AddPoint( dimension->GetStart() );
+            points->AddPoint( dimension->GetEnd() );
 
             // Dimension height setting - edit points should move only along the feature lines
-            points->Point( DIM_CROSSBARO ).SetConstraint( new EC_LINE( points->Point( DIM_CROSSBARO ),
-                                                                       points->Point( DIM_FEATUREGO ) ) );
-            points->Point( DIM_CROSSBARF ).SetConstraint( new EC_LINE( points->Point( DIM_CROSSBARF ),
-                                                                       points->Point( DIM_FEATUREDO ) ) );
+            points->Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( points->Point( DIM_CROSSBARSTART ),
+                                                                       points->Point( DIM_START ) ) );
+            points->Point( DIM_CROSSBAREND ).SetConstraint( new EC_LINE( points->Point( DIM_CROSSBAREND ),
+                                                                       points->Point( DIM_END ) ) );
         }
             break;
 
@@ -970,8 +970,6 @@ void POINT_EDITOR::updateItem() const
 {
     EDA_ITEM* item = m_editPoints->GetParent();
 
-    const BOARD_DESIGN_SETTINGS& boardSettings = board()->GetDesignSettings();
-
     if( !item )
         return;
 
@@ -1254,49 +1252,49 @@ void POINT_EDITOR::updateItem() const
 
     case PCB_DIMENSION_T:
     {
-        DIMENSION* dimension = static_cast<DIMENSION*>( item );
+        ALIGNED_DIMENSION* dimension = static_cast<ALIGNED_DIMENSION*>( item );
 
         // Check which point is currently modified and updated dimension's points respectively
-        if( isModified( m_editPoints->Point( DIM_CROSSBARO ) ) )
+        if( isModified( m_editPoints->Point( DIM_CROSSBARSTART ) ) )
         {
-            VECTOR2D featureLine( m_editedPoint->GetPosition() - dimension->GetOrigin() );
-            VECTOR2D crossBar( dimension->GetEnd() - dimension->GetOrigin() );
+            VECTOR2D featureLine( m_editedPoint->GetPosition() - dimension->GetStart() );
+            VECTOR2D crossBar( dimension->GetEnd() - dimension->GetStart() );
 
             if( featureLine.Cross( crossBar ) > 0 )
-                dimension->SetHeight( -featureLine.EuclideanNorm(), boardSettings.m_DimensionPrecision );
+                dimension->SetHeight( -featureLine.EuclideanNorm() );
             else
-                dimension->SetHeight( featureLine.EuclideanNorm(), boardSettings.m_DimensionPrecision );
+                dimension->SetHeight( featureLine.EuclideanNorm() );
         }
 
-        else if( isModified( m_editPoints->Point( DIM_CROSSBARF ) ) )
+        else if( isModified( m_editPoints->Point( DIM_CROSSBAREND ) ) )
         {
             VECTOR2D featureLine( m_editedPoint->GetPosition() - dimension->GetEnd() );
-            VECTOR2D crossBar( dimension->GetEnd() - dimension->GetOrigin() );
+            VECTOR2D crossBar( dimension->GetEnd() - dimension->GetStart() );
 
             if( featureLine.Cross( crossBar ) > 0 )
-                dimension->SetHeight( -featureLine.EuclideanNorm(), boardSettings.m_DimensionPrecision );
+                dimension->SetHeight( -featureLine.EuclideanNorm() );
             else
-                dimension->SetHeight( featureLine.EuclideanNorm(), boardSettings.m_DimensionPrecision );
+                dimension->SetHeight( featureLine.EuclideanNorm() );
         }
 
-        else if( isModified( m_editPoints->Point( DIM_FEATUREGO ) ) )
+        else if( isModified( m_editPoints->Point( DIM_START ) ) )
         {
-            dimension->SetOrigin( wxPoint( m_editedPoint->GetPosition().x, m_editedPoint->GetPosition().y ),
-                                  boardSettings.m_DimensionPrecision );
-            m_editPoints->Point( DIM_CROSSBARO ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARO ),
-                                                                             m_editPoints->Point( DIM_FEATUREGO ) ) );
-            m_editPoints->Point( DIM_CROSSBARF ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARF ),
-                                                                             m_editPoints->Point( DIM_FEATUREDO ) ) );
+            dimension->SetStart( wxPoint( m_editedPoint->GetPosition().x,
+                                          m_editedPoint->GetPosition().y ) );
+            m_editPoints->Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARSTART ),
+                                                                             m_editPoints->Point( DIM_START ) ) );
+            m_editPoints->Point( DIM_CROSSBAREND ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBAREND ),
+                                                                             m_editPoints->Point( DIM_END ) ) );
         }
 
-        else if( isModified( m_editPoints->Point( DIM_FEATUREDO ) ) )
+        else if( isModified( m_editPoints->Point( DIM_END ) ) )
         {
-            dimension->SetEnd( wxPoint( m_editedPoint->GetPosition().x, m_editedPoint->GetPosition().y ) ,
-                               boardSettings.m_DimensionPrecision );
-            m_editPoints->Point( DIM_CROSSBARO ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARO ),
-                                                                             m_editPoints->Point( DIM_FEATUREGO ) ) );
-            m_editPoints->Point( DIM_CROSSBARF ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARF ),
-                                                                             m_editPoints->Point( DIM_FEATUREDO ) ) );
+            dimension->SetEnd( wxPoint( m_editedPoint->GetPosition().x,
+                                        m_editedPoint->GetPosition().y ) );
+            m_editPoints->Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARSTART ),
+                                                                             m_editPoints->Point( DIM_START ) ) );
+            m_editPoints->Point( DIM_CROSSBAREND ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBAREND ),
+                                                                             m_editPoints->Point( DIM_END ) ) );
         }
 
         break;
@@ -1521,12 +1519,12 @@ void POINT_EDITOR::updatePoints()
 
     case PCB_DIMENSION_T:
     {
-        const DIMENSION* dimension = static_cast<const DIMENSION*>( item );
+        const ALIGNED_DIMENSION* dimension = static_cast<const ALIGNED_DIMENSION*>( item );
 
-        m_editPoints->Point( DIM_CROSSBARO ).SetPosition( dimension->m_crossBarO );
-        m_editPoints->Point( DIM_CROSSBARF ).SetPosition( dimension->m_crossBarF );
-        m_editPoints->Point( DIM_FEATUREGO ).SetPosition( dimension->m_featureLineGO );
-        m_editPoints->Point( DIM_FEATUREDO ).SetPosition( dimension->m_featureLineDO );
+        m_editPoints->Point( DIM_CROSSBARSTART ).SetPosition( dimension->GetCrossbarStart() );
+        m_editPoints->Point( DIM_CROSSBAREND ).SetPosition( dimension->GetCrossbarEnd() );
+        m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
+        m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );
         break;
     }
 
@@ -1627,11 +1625,11 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
     case PCB_DIMENSION_T:
     {
         // Constraint for crossbar
-        if( isModified( m_editPoints->Point( DIM_FEATUREGO ) ) )
-            return m_editPoints->Point( DIM_FEATUREDO );
+        if( isModified( m_editPoints->Point( DIM_START ) ) )
+            return m_editPoints->Point( DIM_END );
 
-        else if( isModified( m_editPoints->Point( DIM_FEATUREDO ) ) )
-            return m_editPoints->Point( DIM_FEATUREGO );
+        else if( isModified( m_editPoints->Point( DIM_END ) ) )
+            return m_editPoints->Point( DIM_START );
 
         else
             return EDIT_POINT( m_editedPoint->GetPosition() );      // no constraint

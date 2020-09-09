@@ -270,7 +270,7 @@ public:
     bool       m_TextUpright[ LAYER_CLASS_COUNT ];
 
     int        m_DimensionUnits;
-    int        m_DimensionPrecision;
+    int        m_DimensionPrecision;    ///< Number of digits after the decimal
 
     // Miscellaneous
     wxPoint    m_AuxOrigin;                 ///< origin for plot exports

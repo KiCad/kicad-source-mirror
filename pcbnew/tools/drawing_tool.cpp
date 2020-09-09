@@ -593,10 +593,9 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
 void DRAWING_TOOL::constrainDimension( DIMENSION* aDim )
 {
-    const VECTOR2I lineVector{ aDim->GetEnd() - aDim->GetOrigin() };
+    const VECTOR2I lineVector{ aDim->GetEnd() - aDim->GetStart() };
 
-    aDim->SetEnd( wxPoint( VECTOR2I( aDim->GetOrigin() ) + GetVectorSnapped45( lineVector ) ),
-                  board()->GetDesignSettings().m_DimensionPrecision );
+    aDim->SetEnd( wxPoint( VECTOR2I( aDim->GetStart() ) + GetVectorSnapped45( lineVector ) ) );
 }
 
 
@@ -605,10 +604,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     if( m_editModules && !m_frame->GetModel() )
         return 0;
 
-    POINT_EDITOR* pointEditor = m_toolMgr->GetTool<POINT_EDITOR>();
-    DIMENSION*    dimension = NULL;
-    BOARD_COMMIT  commit( m_frame );
-    GRID_HELPER   grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    POINT_EDITOR*     pointEditor = m_toolMgr->GetTool<POINT_EDITOR>();
+    ALIGNED_DIMENSION* dimension   = nullptr;
+    BOARD_COMMIT      commit( m_frame );
+    GRID_HELPER       grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     const BOARD_DESIGN_SETTINGS& boardSettings = m_board->GetDesignSettings();
 
@@ -700,7 +699,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) && step != SET_ORIGIN )
         {
             m_lineWidth += WIDTH_STEP;
-            dimension->SetWidth( m_lineWidth );
+            dimension->SetLineThickness( m_lineWidth );
             m_view->Update( &preview );
             frame()->SetMsgPanel( dimension );
         }
@@ -709,7 +708,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             if( m_lineWidth > WIDTH_STEP )
             {
                 m_lineWidth -= WIDTH_STEP;
-                dimension->SetWidth( m_lineWidth );
+                dimension->SetLineThickness( m_lineWidth );
                 m_view->Update( &preview );
                 frame()->SetMsgPanel( dimension );
             }
@@ -732,18 +731,18 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     layer = Dwgs_User;
 
                 // Init the new item attributes
-                dimension = new DIMENSION( m_board );
+                dimension = new ALIGNED_DIMENSION( m_board );
                 dimension->SetLayer( layer );
-                dimension->SetOrigin( (wxPoint) cursorPos, boardSettings.m_DimensionPrecision );
-                dimension->SetEnd( (wxPoint) cursorPos, boardSettings.m_DimensionPrecision );
+                dimension->SetPrecision( boardSettings.m_DimensionPrecision );
                 dimension->Text().SetTextSize( boardSettings.GetTextSize( layer ) );
                 dimension->Text().SetTextThickness( boardSettings.GetTextThickness( layer ) );
                 dimension->Text().SetItalic( boardSettings.GetTextItalic( layer ) );
-                dimension->SetWidth( boardSettings.GetLineThickness( layer ) );
+                dimension->SetLineThickness( boardSettings.GetLineThickness( layer ) );
                 dimension->SetUnits( boardSettings.m_DimensionUnits == 2 ? EDA_UNITS::MILLIMETRES :
                                                                            EDA_UNITS::INCHES,
-                        boardSettings.m_DimensionUnits == 1 );
-                dimension->AdjustDimensionDetails( boardSettings.m_DimensionPrecision );
+                                     boardSettings.m_DimensionUnits == 1 );
+                dimension->SetStart( (wxPoint) cursorPos );
+                dimension->SetEnd( (wxPoint) cursorPos );
 
                 preview.Add( dimension );
 
@@ -753,13 +752,13 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             break;
 
             case SET_END:
-                dimension->SetEnd( (wxPoint) cursorPos, boardSettings.m_DimensionPrecision );
+                dimension->SetEnd( (wxPoint) cursorPos );
 
                 if( !!evt->Modifier( MD_CTRL ) )
                     constrainDimension( dimension );
 
                 // Dimensions that have origin and end in the same spot are not valid
-                if( dimension->GetOrigin() == dimension->GetEnd() )
+                if( dimension->GetStart() == dimension->GetEnd() )
                     --step;
 
                 break;
@@ -768,8 +767,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             {
                 if( (wxPoint) cursorPos != dimension->GetPosition() )
                 {
-                    assert( dimension->GetOrigin() != dimension->GetEnd() );
-                    assert( dimension->GetWidth() > 0 );
+                    assert( dimension->GetStart() != dimension->GetEnd() );
+                    assert( dimension->GetLineThickness() > 0 );
 
                     preview.Remove( dimension );
 
@@ -794,7 +793,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             switch( step )
             {
             case SET_END:
-                dimension->SetEnd( (wxPoint) cursorPos, boardSettings.m_DimensionPrecision );
+                dimension->SetEnd( (wxPoint) cursorPos );
 
                 if( !!evt->Modifier( MD_CTRL ) )
                     constrainDimension( dimension );
@@ -806,9 +805,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 // Calculating the direction of travel perpendicular to the selected axis
                 double angle = dimension->GetAngle() + ( M_PI / 2 );
 
-                wxPoint delta( (wxPoint) cursorPos - dimension->m_featureLineDO );
+                wxPoint delta( (wxPoint) cursorPos - dimension->GetEnd() );
                 double  height = ( delta.x * cos( angle ) ) + ( delta.y * sin( angle ) );
-                dimension->SetHeight( height, boardSettings.m_DimensionPrecision );
+                dimension->SetHeight( height );
             }
             break;
             }

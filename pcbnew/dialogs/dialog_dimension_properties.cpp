@@ -94,7 +94,8 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
     m_cbUnits->SetSelection( units == EDA_UNITS::MILLIMETRES ? 2 : useMils ? 1 : 0 );
 
-    m_lineThickness.SetValue( m_dimension->GetWidth() );
+    m_txtPrefix->SetValue( m_dimension->GetPrefix() );
+    m_txtSuffix->SetValue( m_dimension->GetSuffix() );
 
     if( m_cbLayer->SetLayerSelection( m_dimension->GetLayer() ) < 0 )
     {
@@ -117,11 +118,72 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
     m_orientValue = text.GetTextAngleDegrees();
     m_cbMirrored->SetValue( text.IsMirrored() );
 
+    m_lineThickness.SetValue( m_dimension->GetLineThickness() );
+
     return DIALOG_DIMENSION_PROPERTIES_BASE::TransferDataToWindow();
 }
 
 
 bool DIALOG_DIMENSION_PROPERTIES::TransferDataFromWindow()
 {
+#if 0
+    switch( m_DimensionUnitsOpt->GetSelection() )
+        {
+        case 0:
+            dimension->SetUnits( EDA_UNITS::INCHES, false );
+            break;
+        case 1:
+            dimension->SetUnits( EDA_UNITS::INCHES, true );
+            break;
+        case 2:
+            dimension->SetUnits( EDA_UNITS::MILLIMETRES, false );
+            break;
+        default: break;
+        }
+#endif
     return true;
 }
+
+#if 0
+void DIALOG_TEXT_PROPERTIES::OnDimensionTextChange( wxCommandEvent& event )
+{
+    EDA_UNITS units = EDA_UNITS::UNSCALED;
+    bool useMils;
+
+    FetchUnitsFromString( m_DimensionText->GetValue(), units, useMils );
+
+    if( units != EDA_UNITS::UNSCALED )
+        m_DimensionUnitsOpt->SetSelection( units == EDA_UNITS::MILLIMETRES ? 2 : useMils ? 1 : 0 );
+}
+
+void DIALOG_TEXT_PROPERTIES::OnDimensionUnitsChange( wxCommandEvent& event )
+{
+    DIMENSION* dimension = (DIMENSION*) m_item;
+    EDA_UNITS  units;
+    bool useMils;
+
+    // Get default units in case dimension text doesn't contain units.
+    dimension->GetUnits( units, useMils );
+
+    double value = ValueFromString( units, m_DimensionText->GetValue(), useMils );
+
+    switch( event.GetSelection() )
+    {
+    case 0:
+        units = EDA_UNITS::INCHES;
+        useMils = false;
+        break;
+    case 1:
+        units = EDA_UNITS::INCHES;
+        useMils = true;
+        break;
+    case 2:
+        units = EDA_UNITS::MILLIMETRES;
+        useMils = false;
+        break;
+    default: break;
+    }
+
+    m_DimensionText->SetValue( StringFromValue( units, value, true, useMils ) );
+}
+#endif

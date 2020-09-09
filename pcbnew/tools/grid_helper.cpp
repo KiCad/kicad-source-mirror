@@ -551,11 +551,11 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
 
         case PCB_DIMENSION_T:
         {
-            const DIMENSION* dim = static_cast<const DIMENSION*>( aItem );
-            addAnchor( dim->m_crossBarF, CORNER | SNAPPABLE, aItem );
-            addAnchor( dim->m_crossBarO, CORNER | SNAPPABLE, aItem );
-            addAnchor( dim->m_featureLineGO, CORNER | SNAPPABLE, aItem );
-            addAnchor( dim->m_featureLineDO, CORNER | SNAPPABLE, aItem );
+            const ALIGNED_DIMENSION* dim = static_cast<const ALIGNED_DIMENSION*>( aItem );
+            addAnchor( dim->GetCrossbarStart(), CORNER | SNAPPABLE, aItem );
+            addAnchor( dim->GetCrossbarEnd(), CORNER | SNAPPABLE, aItem );
+            addAnchor( dim->GetStart(), CORNER | SNAPPABLE, aItem );
+            addAnchor( dim->GetEnd(), CORNER | SNAPPABLE, aItem );
             break;
         }
 

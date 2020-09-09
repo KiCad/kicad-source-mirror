@@ -30,7 +30,6 @@
 #include <widgets/unit_binder.h>
 #include <board_commit.h>
 #include <class_board.h>
-#include <class_dimension.h>
 #include <class_module.h>
 #include <class_pcb_text.h>
 #include <class_text_mod.h>
@@ -70,34 +69,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_MultiLineText->SetScrollWidth( 1 );
     m_MultiLineText->SetScrollWidthTracking( true );
 
-    m_linesThickness.Show( m_item->Type() == PCB_DIMENSION_T );
-
-    if( m_item->Type() == PCB_DIMENSION_T )
-    {
-        title = _( "Dimension Properties" );
-
-        DIMENSION* dimension = (DIMENSION*) m_item;
-        m_edaText = &dimension->Text();
-        m_pcbText = &dimension->Text();
-
-        // Since this is really the object properties for a dimension (rather than just the
-        // text properties), make some of the propertie labels more explicit.
-        for( wxStaticText* label : { m_SizeXLabel, m_SizeYLabel, m_ThicknessLabel,
-                                     m_PositionXLabel, m_PositionYLabel, m_OrientLabel } )
-        {
-            label->SetLabel( label->GetToolTipText() + wxT( ":" ) );
-        }
-
-        m_Mirrored->SetLabel( m_Mirrored->GetToolTipText() );
-
-        SetInitialFocus( m_DimensionText );
-        m_SingleLineSizer->Show( false );
-        m_MultiLineSizer->Show( false );
-
-        m_KeepUpright->Show( false );
-        m_statusLine->Show( false );
-    }
-    else if( m_item->Type() == PCB_MODULE_TEXT_T )
+    if( m_item->Type() == PCB_MODULE_TEXT_T )
     {
         title = _( "Footprint Text Properties" );
 
@@ -113,7 +85,6 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
         SetInitialFocus( m_SingleLineText );
         m_MultiLineSizer->Show( false );
-        m_DimensionTextSizer->Show( false );
     }
     else
     {
@@ -124,7 +95,6 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
         SetInitialFocus( m_MultiLineText );
         m_SingleLineSizer->Show( false );
-        m_DimensionTextSizer->Show( false );
 
         // This option make sense only for footprint texts,
         // Texts on board are always visible:
@@ -258,50 +228,6 @@ void DIALOG_TEXT_PROPERTIES::OnCharHook( wxKeyEvent& aEvent )
 }
 
 
-void DIALOG_TEXT_PROPERTIES::OnDimensionTextChange( wxCommandEvent& event )
-{
-    EDA_UNITS units = EDA_UNITS::UNSCALED;
-    bool useMils;
-
-    FetchUnitsFromString( m_DimensionText->GetValue(), units, useMils );
-
-    if( units != EDA_UNITS::UNSCALED )
-        m_DimensionUnitsOpt->SetSelection( units == EDA_UNITS::MILLIMETRES ? 2 : useMils ? 1 : 0 );
-}
-
-
-void DIALOG_TEXT_PROPERTIES::OnDimensionUnitsChange( wxCommandEvent& event )
-{
-    DIMENSION* dimension = (DIMENSION*) m_item;
-    EDA_UNITS  units;
-    bool useMils;
-
-    // Get default units in case dimension text doesn't contain units.
-    dimension->GetUnits( units, useMils );
-
-    double value = ValueFromString( units, m_DimensionText->GetValue(), useMils );
-
-    switch( event.GetSelection() )
-    {
-    case 0:
-        units = EDA_UNITS::INCHES;
-        useMils = false;
-        break;
-    case 1:
-        units = EDA_UNITS::INCHES;
-        useMils = true;
-        break;
-    case 2:
-        units = EDA_UNITS::MILLIMETRES;
-        useMils = false;
-        break;
-    default: break;
-    }
-
-    m_DimensionText->SetValue( StringFromValue( units, value, true, useMils ) );
-}
-
-
 wxString DIALOG_TEXT_PROPERTIES::convertKIIDsToReferences( const wxString& aSource )
 {
     wxString newbuf;
@@ -417,20 +343,6 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         m_MultiLineText->SetValue( convertKIIDsToReferences( m_edaText->GetText() ) );
         m_MultiLineText->SetSelection( -1, -1 );
     }
-    else if (m_DimensionText->IsShown() )
-    {
-        m_DimensionText->SetValue( m_edaText->GetText() );
-        m_DimensionText->SetSelection( -1, -1 );
-
-        DIMENSION* dimension = (DIMENSION*) m_item;
-        EDA_UNITS  units;
-        bool       useMils;
-        dimension->GetUnits( units, useMils );
-
-        m_DimensionUnitsOpt->SetSelection( units == EDA_UNITS::MILLIMETRES ? 2 : useMils ? 1 : 0 );
-
-        m_linesThickness.SetValue( dimension->GetWidth() );
-    }
 
     if( m_item->Type() == PCB_MODULE_TEXT_T && m_modText )
     {
@@ -523,31 +435,6 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 #endif
             m_edaText->SetText( txt );
         }
-    }
-    else if( m_DimensionText->IsShown() )
-    {
-        if( !m_DimensionText->GetValue().IsEmpty() )
-            m_edaText->SetText( m_DimensionText->GetValue() );
-
-        DIMENSION* dimension = (DIMENSION*) m_item;
-
-        switch( m_DimensionUnitsOpt->GetSelection() )
-        {
-        case 0:
-            dimension->SetUnits( EDA_UNITS::INCHES, false );
-            break;
-        case 1:
-            dimension->SetUnits( EDA_UNITS::INCHES, true );
-            break;
-        case 2:
-            dimension->SetUnits( EDA_UNITS::MILLIMETRES, false );
-            break;
-        default: break;
-        }
-
-        dimension->SetWidth( m_linesThickness.GetValue() );
-        dimension->AdjustDimensionDetails(
-                m_Parent->GetBoard()->GetDesignSettings().m_DimensionPrecision );
     }
 
     m_item->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );

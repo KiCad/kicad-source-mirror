@@ -399,7 +399,7 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
         break;
 
     case PCB_DIMENSION_T:
-        format( static_cast<DIMENSION*>( aItem ), aNestLevel );
+        format( static_cast<ALIGNED_DIMENSION*>( aItem ), aNestLevel );
         break;
 
     case PCB_LINE_T:
@@ -659,11 +659,9 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
+void PCB_IO::format( ALIGNED_DIMENSION* aDimension, int aNestLevel ) const
 {
-    m_out->Print( aNestLevel, "(dimension %s (width %s)",
-                  FormatInternalUnits( aDimension->GetValue() ).c_str(),
-                  FormatInternalUnits( aDimension->GetWidth() ).c_str() );
+    m_out->Print( aNestLevel, "(dimension (type aligned)" );
 
     formatLayer( aDimension );
 
@@ -671,49 +669,50 @@ void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
 
     m_out->Print( 0, "\n" );
 
+    m_out->Print( aNestLevel+1, "(pts (xy %s %s) (xy %s %s))\n",
+                  FormatInternalUnits( aDimension->GetStart().x ).c_str(),
+                  FormatInternalUnits( aDimension->GetStart().y ).c_str(),
+                  FormatInternalUnits( aDimension->GetEnd().x ).c_str(),
+                  FormatInternalUnits( aDimension->GetEnd().y ).c_str() );
+
+    m_out->Print( aNestLevel+1, "(height %s)\n",
+                  FormatInternalUnits( aDimension->GetHeight() ).c_str() );
+
     Format( &aDimension->Text(), aNestLevel+1 );
 
-    m_out->Print( aNestLevel+1, "(feature1 (pts (xy %s %s) (xy %s %s)))\n",
-                  FormatInternalUnits( aDimension->m_featureLineDO.x ).c_str(),
-                  FormatInternalUnits( aDimension->m_featureLineDO.y ).c_str(),
-                  FormatInternalUnits( aDimension->m_featureLineDF.x ).c_str(),
-                  FormatInternalUnits( aDimension->m_featureLineDF.y ).c_str() );
+    m_out->Print( aNestLevel+1, "(format" );
 
-    m_out->Print( aNestLevel+1, "(feature2 (pts (xy %s %s) (xy %s %s)))\n",
-                  FormatInternalUnits( aDimension->m_featureLineGO.x ).c_str(),
-                  FormatInternalUnits( aDimension->m_featureLineGO.y ).c_str(),
-                  FormatInternalUnits( aDimension->m_featureLineGF.x ).c_str(),
-                  FormatInternalUnits( aDimension->m_featureLineGF.y ).c_str() );
+    if( !aDimension->GetPrefix().IsEmpty() )
+        m_out->Print( 0, " (prefix %s)", TO_UTF8( aDimension->GetPrefix() ) );
 
-    m_out->Print( aNestLevel+1, "(crossbar (pts (xy %s %s) (xy %s %s)))\n",
-                  FormatInternalUnits( aDimension->m_crossBarO.x ).c_str(),
-                  FormatInternalUnits( aDimension->m_crossBarO.y ).c_str(),
-                  FormatInternalUnits( aDimension->m_crossBarF.x ).c_str(),
-                  FormatInternalUnits( aDimension->m_crossBarF.y ).c_str() );
+    if( !aDimension->GetSuffix().IsEmpty() )
+        m_out->Print( 0, " (suffix %s)", TO_UTF8( aDimension->GetSuffix() ) );
 
-    m_out->Print( aNestLevel+1, "(arrow1a (pts (xy %s %s) (xy %s %s)))\n",
-                  FormatInternalUnits( aDimension->m_crossBarF.x ).c_str(),
-                  FormatInternalUnits( aDimension->m_crossBarF.y ).c_str(),
-                  FormatInternalUnits( aDimension->m_arrowD1F.x ).c_str(),
-                  FormatInternalUnits( aDimension->m_arrowD1F.y ).c_str() );
+    m_out->Print( 0, " (units %d) (units_format %d) (precision %d)",
+                  static_cast<int>( aDimension->GetUnitsMode() ),
+                  static_cast<int>( aDimension->GetUnitsFormat() ), aDimension->GetPrecision() );
 
-    m_out->Print( aNestLevel+1, "(arrow1b (pts (xy %s %s) (xy %s %s)))\n",
-                  FormatInternalUnits( aDimension->m_crossBarF.x ).c_str(),
-                  FormatInternalUnits( aDimension->m_crossBarF.y ).c_str(),
-                  FormatInternalUnits( aDimension->m_arrowD2F.x ).c_str(),
-                  FormatInternalUnits( aDimension->m_arrowD2F.y ).c_str() );
+    if( aDimension->GetOverrideValue() )
+        m_out->Print( 0, " override_value" );
 
-    m_out->Print( aNestLevel+1, "(arrow2a (pts (xy %s %s) (xy %s %s)))\n",
-                  FormatInternalUnits( aDimension->m_crossBarO.x ).c_str(),
-                  FormatInternalUnits( aDimension->m_crossBarO.y ).c_str(),
-                  FormatInternalUnits( aDimension->m_arrowG1F.x ).c_str(),
-                  FormatInternalUnits( aDimension->m_arrowG1F.y ).c_str() );
+    if( aDimension->GetSuppressZeroes() )
+        m_out->Print( 0, " suppress_zeroes" );
 
-    m_out->Print( aNestLevel+1, "(arrow2b (pts (xy %s %s) (xy %s %s)))\n",
-                  FormatInternalUnits( aDimension->m_crossBarO.x ).c_str(),
-                  FormatInternalUnits( aDimension->m_crossBarO.y ).c_str(),
-                  FormatInternalUnits( aDimension->m_arrowG2F.x ).c_str(),
-                  FormatInternalUnits( aDimension->m_arrowG2F.y ).c_str() );
+    m_out->Print( 0, ")\n" );
+
+    m_out->Print( aNestLevel+1, "(style (thickness %s) (arrow_length %s) (text_position_mode %d)",
+                  FormatInternalUnits( aDimension->GetLineThickness() ).c_str(),
+                  FormatInternalUnits( aDimension->GetArrowLength() ).c_str(),
+                  static_cast<int>( aDimension->GetTextPositionMode() ) );
+
+    m_out->Print( 0, " (extension_height %s) (extension_offset %s)",
+                  FormatInternalUnits( aDimension->GetExtensionHeight() ).c_str(),
+                  FormatInternalUnits( aDimension->GetExtensionOffset() ).c_str() );
+
+    if( !aDimension->GetKeepTextAligned() )
+        m_out->Print( 0, " keep_upright" );
+
+    m_out->Print( 0, ")\n" );
 
     m_out->Print( aNestLevel, ")\n" );
 }

@@ -136,24 +136,15 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DIMENSION* aDimensio
 {
     AddShapeWithClearanceToContainer(&aDimension->Text(), aDstContainer, aLayerId, aClearanceValue);
 
-    const int linewidth = aDimension->GetWidth() + (2 * aClearanceValue);
+    const int linewidth = aDimension->GetLineThickness() + (2 * aClearanceValue);
 
-    std::pair<wxPoint const *, wxPoint const *> segs[] = {
-        {&aDimension->m_crossBarO,     &aDimension->m_crossBarF},
-        {&aDimension->m_featureLineGO, &aDimension->m_featureLineGF},
-        {&aDimension->m_featureLineDO, &aDimension->m_featureLineDF},
-        {&aDimension->m_crossBarF,     &aDimension->m_arrowD1F},
-        {&aDimension->m_crossBarF,     &aDimension->m_arrowD2F},
-        {&aDimension->m_crossBarO,     &aDimension->m_arrowG1F},
-        {&aDimension->m_crossBarO,     &aDimension->m_arrowG2F}};
-
-    for( auto const & ii : segs )
+    for( const SEG& seg : aDimension->GetLines() )
     {
-        const SFVEC2F start3DU(  ii.first->x * m_biuTo3Dunits,
-                                -ii.first->y * m_biuTo3Dunits );
+        const SFVEC2F start3DU(  seg.A.x * m_biuTo3Dunits,
+                                -seg.A.y * m_biuTo3Dunits );
 
-        const SFVEC2F end3DU  (  ii.second->x * m_biuTo3Dunits,
-                                -ii.second->y * m_biuTo3Dunits );
+        const SFVEC2F end3DU  (  seg.B.x * m_biuTo3Dunits,
+                                -seg.B.y * m_biuTo3Dunits );
 
         aDstContainer->Add( new CROUNDSEGMENT2D( start3DU,
                                                  end3DU,

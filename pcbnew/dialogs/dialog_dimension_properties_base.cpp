@@ -52,7 +52,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 
 	gbSizerFormat->Add( m_lblUnits, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	wxString m_cbUnitsChoices[] = { _("Inches"), _("Mils"), _("Millimeters") };
+	wxString m_cbUnitsChoices[] = { _("Inches"), _("Mils"), _("Millimeters"), _("Automatic") };
 	int m_cbUnitsNChoices = sizeof( m_cbUnitsChoices ) / sizeof( wxString );
 	m_cbUnits = new wxChoice( sbSizerFormat->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbUnitsNChoices, m_cbUnitsChoices, 0 );
 	m_cbUnits->SetSelection( 0 );

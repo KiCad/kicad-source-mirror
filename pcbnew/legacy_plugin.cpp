@@ -2732,7 +2732,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
 void LEGACY_PLUGIN::loadDIMENSION()
 {
-    unique_ptr<DIMENSION> dim( new DIMENSION( m_board ) );
+    unique_ptr<ALIGNED_DIMENSION> dim( new ALIGNED_DIMENSION( m_board ) );
 
     char*   line;
 
@@ -2749,7 +2749,8 @@ void LEGACY_PLUGIN::loadDIMENSION()
         else if( TESTLINE( "Va" ) )
         {
             BIU value = biuParse( line + SZ( "Va" ) );
-            dim->SetValue( value );
+            // unused; dimension value is calculated from coordinates
+            ( void )value;
         }
 
         else if( TESTLINE( "Ge" ) )
@@ -2761,7 +2762,8 @@ void LEGACY_PLUGIN::loadDIMENSION()
 
             dim->SetLayer( leg_layer2new( m_cu_count,  layer_num ) );
             const_cast<KIID&>( dim->m_Uuid ) = KIID( uuid );
-            dim->SetShape( shape );
+            // not used
+            ( void )shape;
         }
 
         else if( TESTLINE( "Te" ) )
@@ -2801,11 +2803,9 @@ void LEGACY_PLUGIN::loadDIMENSION()
             BIU crossBarFy = biuParse( data, &data );
             BIU width      = biuParse( data );
 
-            dim->m_crossBarO.x = crossBarOx;
-            dim->m_crossBarO.y = crossBarOy;
-            dim->m_crossBarF.x = crossBarFx;
-            dim->m_crossBarF.y = crossBarFy;
-            dim->SetWidth( width );
+            dim->SetLineThickness( width );
+            dim->UpdateHeight( wxPoint( crossBarFx, crossBarFy ),
+                               wxPoint( crossBarOx, crossBarOy ) );
             (void) ignore;
         }
 
@@ -2817,11 +2817,10 @@ void LEGACY_PLUGIN::loadDIMENSION()
             BIU featureLineDFx = biuParse( data, &data );
             BIU featureLineDFy = biuParse( data );
 
-            dim->m_featureLineDO.x = featureLineDOx;
-            dim->m_featureLineDO.y = featureLineDOy;
-            dim->m_featureLineDF.x = featureLineDFx;
-            dim->m_featureLineDF.y = featureLineDFy;
-            (void) ignore;
+            dim->SetStart( wxPoint( featureLineDOx, featureLineDOy ) );
+            ( void )ignore;
+            ( void )featureLineDFx;
+            ( void )featureLineDFy;
         }
 
         else if( TESTLINE( "Sg" ) )
@@ -2832,62 +2831,58 @@ void LEGACY_PLUGIN::loadDIMENSION()
             BIU featureLineGFx = biuParse( data, &data );
             BIU featureLineGFy = biuParse( data );
 
-            dim->m_featureLineGO.x = featureLineGOx;
-            dim->m_featureLineGO.y = featureLineGOy;
-            dim->m_featureLineGF.x = featureLineGFx;
-            dim->m_featureLineGF.y = featureLineGFy;
             (void) ignore;
+            dim->SetEnd( wxPoint( featureLineGOx, featureLineGOy ) );
+            ( void )ignore;
+            ( void )featureLineGFx;
+            ( void )featureLineGFy;
         }
 
+        // Arrow: no longer imported
         else if( TESTLINE( "S1" ) )
         {
             int ignore      = intParse( line + SZ( "S1" ), &data );
             biuParse( data, &data );    // skipping excessive data
             biuParse( data, &data );    // skipping excessive data
-            BIU arrowD1Fx   = biuParse( data, &data );
-            BIU arrowD1Fy   = biuParse( data );
+            biuParse( data, &data );
+            biuParse( data );
 
-            dim->m_arrowD1F.x = arrowD1Fx;
-            dim->m_arrowD1F.y = arrowD1Fy;
             (void) ignore;
         }
 
+        // Arrow: no longer imported
         else if( TESTLINE( "S2" ) )
         {
             int ignore    = intParse( line + SZ( "S2" ), &data );
             biuParse( data, &data );    // skipping excessive data
             biuParse( data, &data );    // skipping excessive data
-            BIU arrowD2Fx = biuParse( data, &data );
-            BIU arrowD2Fy = biuParse( data, &data );
+            biuParse( data, &data );
+            biuParse( data, &data );
 
-            dim->m_arrowD2F.x = arrowD2Fx;
-            dim->m_arrowD2F.y = arrowD2Fy;
             (void) ignore;
         }
 
+        // Arrow: no longer imported
         else if( TESTLINE( "S3" ) )
         {
             int ignore    = intParse( line + SZ( "S3" ), &data );
             biuParse( data, &data );    // skipping excessive data
             biuParse( data, &data );    // skipping excessive data
-            BIU arrowG1Fx = biuParse( data, &data );
-            BIU arrowG1Fy = biuParse( data, &data );
+            biuParse( data, &data );
+            biuParse( data, &data );
 
-            dim->m_arrowG1F.x = arrowG1Fx;
-            dim->m_arrowG1F.y = arrowG1Fy;
             (void) ignore;
         }
 
+        // Arrow: no longer imported
         else if( TESTLINE( "S4" ) )
         {
             int ignore    = intParse( line + SZ( "S4" ), &data );
             biuParse( data, &data );    // skipping excessive data
             biuParse( data, &data );    // skipping excessive data
-            BIU arrowG2Fx = biuParse( data, &data );
-            BIU arrowG2Fy = biuParse( data, &data );
+            biuParse( data, &data );
+            biuParse( data, &data );
 
-            dim->m_arrowG2F.x = arrowG2Fx;
-            dim->m_arrowG2F.y = arrowG2Fy;
             (void) ignore;
         }
     }
