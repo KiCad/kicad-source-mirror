@@ -370,8 +370,11 @@ any comment, since those are normally only in the header file. It is
 desirable to set off the function definition within the *.cpp file by
 leaving two blank lines above the function definition.
 
-### 4.2.3 If Statements ### {#if_statements}
-There should be one blank line above if statements.
+### 4.2.3 Control Statements ### {#control_statements}
+There should be one blank line before the opening statement and after
+the closing curly brace or statement for all control statement blocks
+so that it is easy to see where control blocks begin and end. This
+includes `if`, `for`, `while`, `do`, and `switch` control blocks.
 
 ## 4.3 Line Length ### {#line_length}
 The maximum line width is 99 columns. An exception to this is a long
