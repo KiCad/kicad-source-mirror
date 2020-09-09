@@ -87,7 +87,7 @@ void VIEW_CONTROLS::ApplySettings( const VC_SETTINGS& aSettings )
 {
     ShowCursor( aSettings.m_showCursor );
     CaptureCursor( aSettings.m_cursorCaptured );
-    SetSnapping( aSettings.m_snappingEnabled );
+    SetGridSnapping( aSettings.m_snappingEnabled );
     SetGrabMouse( aSettings.m_grabMouse );
     SetAutoPan( aSettings.m_autoPanEnabled );
     SetAutoPanMargin( aSettings.m_autoPanMargin );

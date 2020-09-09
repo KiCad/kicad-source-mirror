@@ -385,7 +385,7 @@ int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 
 // Grid control
 void PCBNEW_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
-                                      BOARD_ITEM* originViewItem, const VECTOR2D& aPoint )
+                                      EDA_ITEM* originViewItem, const VECTOR2D& aPoint )
 {
     aFrame->GetDesignSettings().m_GridOrigin = (wxPoint) aPoint;
     aView->GetGAL()->SetGridOrigin( aPoint );

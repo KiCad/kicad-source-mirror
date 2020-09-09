@@ -154,12 +154,12 @@ public:
     }
 
     /**
-     * Function SetSnapping()
+     * Function SetGridSnapping()
      * Enables/disables snapping cursor to grid.
      *
      * @param aEnabled says whether the opion should be enabled or disabled.
      */
-    virtual void SetSnapping( bool aEnabled )
+    virtual void SetGridSnapping( bool aEnabled )
     {
         m_settings.m_snappingEnabled = aEnabled;
     }
@@ -167,7 +167,7 @@ public:
     /**
      * @return the current state of the snapping cursor to grid.
      */
-    virtual bool GetSnappingState()
+    virtual bool GetGridSnapping()
     {
         return m_settings.m_snappingEnabled;
     }

@@ -216,7 +216,7 @@ void WS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( RENDER_SETTINGS* aSettings, const w
 }
 
 
-void WS_DRAW_ITEM_POLYPOLYGONS::SetPosition( wxPoint aPos )
+void WS_DRAW_ITEM_POLYPOLYGONS::SetPosition( const wxPoint& aPos )
 {
     // Note: m_pos is the anchor point of the shape.
     wxPoint move_vect = aPos - m_pos;

@@ -130,7 +130,7 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
     bool originSet = false;
 
     controls.ShowCursor( true );
-    controls.SetSnapping( true );
+    controls.SetGridSnapping( true );
     controls.CaptureCursor( false );
     controls.SetAutoPan( false );
 

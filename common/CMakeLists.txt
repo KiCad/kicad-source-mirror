@@ -398,6 +398,8 @@ list( APPEND COMMON_SRCS
 set( COMMON_SRCS
     ${COMMON_SRCS}
 
+    origin_viewitem.cpp
+    
     view/view.cpp
     view/view_item.cpp
     view/view_group.cpp
@@ -477,7 +479,6 @@ set( PCB_COMMON_SRCS
     eda_text.cpp
     fp_lib_table.cpp
     hash_eda.cpp
-    origin_viewitem.cpp
     page_info.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_base_frame.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_expr_evaluator.cpp

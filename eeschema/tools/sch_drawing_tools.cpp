@@ -449,7 +449,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
-    getViewControls()->SetSnapping( true );
+    getViewControls()->SetGridSnapping( true );
 
     SCH_ITEM* previewItem;
     switch( type )

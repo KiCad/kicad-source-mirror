@@ -243,6 +243,7 @@ set( EESCHEMA_SRCS
     tools/backannotate.cpp
     tools/backanno.cpp
     tools/ee_actions.cpp
+    tools/ee_grid_helper.cpp
     tools/ee_inspection_tool.cpp
     tools/ee_point_editor.cpp
     tools/ee_selection.cpp

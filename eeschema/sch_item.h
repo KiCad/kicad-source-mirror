@@ -482,13 +482,6 @@ public:
      */
     virtual void Plot( PLOTTER* aPlotter );
 
-    /**
-     * Set the schematic item position to \a aPosition.
-     *
-     * @param aPosition A reference to a wxPoint object containing the new position.
-     */
-    virtual void SetPosition( const wxPoint& aPosition ) = 0;
-
     virtual bool operator <( const SCH_ITEM& aItem ) const;
 
 private:

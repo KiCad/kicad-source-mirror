@@ -144,8 +144,6 @@ public:
      */
     virtual wxPoint GetCenter() const { return GetPosition(); }
 
-    virtual void SetPosition( const wxPoint& aPos ) = 0;
-
     void SetX( int aX )
     {
         wxPoint p( aX, GetY() );

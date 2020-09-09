@@ -93,7 +93,7 @@ public:
      * currently: do nothing in CvPcb.
      * but but be defined because it is a pure virtual in PCB_BASE_FRAME
      */
-    void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy, UNDO_REDO aTypeCommand = UNDO_REDO::UNSPECIFIED,
+    void SaveCopyInUndoList( EDA_ITEM* aItemToCopy, UNDO_REDO aTypeCommand = UNDO_REDO::UNSPECIFIED,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override
     {
     }

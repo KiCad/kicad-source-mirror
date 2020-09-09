@@ -797,7 +797,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     controls->ShowCursor( true );
-    controls->SetSnapping( true );
+    controls->SetGridSnapping( true );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
@@ -1280,7 +1280,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     view->Add( &preview );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    controls->SetSnapping( true );
+    controls->SetGridSnapping( true );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
@@ -1363,7 +1363,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     preview.Clear();
     delete target;
     view->Remove( &preview );
-    controls->SetSnapping( false );
+    controls->SetGridSnapping( false );
     return 0;
 }
 
@@ -1544,7 +1544,7 @@ int PCB_EDITOR_CONTROL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
 
 
 void PCB_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
-                                           BOARD_ITEM* originViewItem, const VECTOR2D& aPosition )
+                                           EDA_ITEM* originViewItem, const VECTOR2D& aPosition )
 {
     aFrame->GetDesignSettings().m_AuxOrigin = (wxPoint) aPosition;
     originViewItem->SetPosition( (wxPoint) aPosition );

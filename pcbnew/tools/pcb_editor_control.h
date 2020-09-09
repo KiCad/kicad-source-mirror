@@ -136,7 +136,7 @@ public:
 
     ///> Low-level access (below undo) to setting the drill origin
     static void DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
-                                  BOARD_ITEM* aItem, const VECTOR2D& aPoint );
+                                  EDA_ITEM* aItem, const VECTOR2D& aPoint );
 
     int FlipPcbView( const TOOL_EVENT& aEvent );
 

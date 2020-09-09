@@ -181,7 +181,7 @@ static void SwapItemData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     aItem->SetParent( parent );
 }
 
-void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM* aItem, UNDO_REDO aCommandType,
+void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aCommandType,
                                               const wxPoint& aTransformPoint )
 {
     PICKED_ITEMS_LIST commandToUndo;

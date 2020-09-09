@@ -571,7 +571,7 @@ int GERBVIEW_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     bool originSet = false;
 
     controls.ShowCursor( true );
-    controls.SetSnapping( true );
+    controls.SetGridSnapping( true );
 
     while( TOOL_EVENT* evt = Wait() )
     {

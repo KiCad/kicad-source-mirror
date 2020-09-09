@@ -335,6 +335,7 @@ public:
     virtual const EDA_RECT GetBoundingBox() const;
 
     virtual wxPoint GetPosition() const { return wxPoint(); }
+    virtual void SetPosition( const wxPoint& aPos ) {};
 
     /**
      * Function GetFocusPosition

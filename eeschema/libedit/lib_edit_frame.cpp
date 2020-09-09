@@ -175,7 +175,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Show( true );
 
     SyncView();
-    GetCanvas()->GetViewControls()->SetSnapping( true );
+    GetCanvas()->GetViewControls()->SetGridSnapping( true );
     GetCanvas()->GetView()->UseDrawPriority( true );
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
 

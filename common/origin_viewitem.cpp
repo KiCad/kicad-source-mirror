@@ -32,7 +32,7 @@
 using namespace KIGFX;
 
 ORIGIN_VIEWITEM::ORIGIN_VIEWITEM( const COLOR4D& aColor, MARKER_STYLE aStyle, int aSize, const VECTOR2D& aPosition ) :
-    BOARD_ITEM( nullptr, NOT_USED ),   // this item is never added to a BOARD so it needs no type
+    EDA_ITEM( nullptr, NOT_USED ),   // this item is never added to a BOARD/SCHEMATIC so it needs no type
     m_position( aPosition ),
     m_size( aSize ),
     m_color( aColor ),
@@ -43,7 +43,7 @@ ORIGIN_VIEWITEM::ORIGIN_VIEWITEM( const COLOR4D& aColor, MARKER_STYLE aStyle, in
 
 
 ORIGIN_VIEWITEM::ORIGIN_VIEWITEM( const VECTOR2D& aPosition, STATUS_FLAGS flags ) :
-    BOARD_ITEM( nullptr, NOT_USED ),   // this item is never added to a BOARD so it needs no type
+    EDA_ITEM( nullptr, NOT_USED ),   // this item is never added to a BOARD/SCHEMATIC so it needs no type
     m_position( aPosition ),
     m_size( NOT_USED ),
     m_color( UNSPECIFIED_COLOR ),
@@ -108,7 +108,7 @@ void ORIGIN_VIEWITEM::ViewDraw( int, VIEW* aView ) const
             clip.Normalize();
 
             double               theta = atan2( end.y - start.y, end.x - start.x );
-            std::array<double,2> strokes = { DASH_MARK_LEN( 1 ), DASH_GAP_LEN( 1 ) };
+            std::array<double,2> strokes = { scaledSize.x, scaledSize.x / 2 };
 
             for( size_t i = 0; i < 10000; ++i )
             {

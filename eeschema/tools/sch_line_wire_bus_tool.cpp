@@ -63,6 +63,7 @@
 #include <schematic.h>
 
 #include <ee_actions.h>
+#include <ee_grid_helper.h>
 #include <ee_point_editor.h>
 #include <ee_selection.h>
 #include <ee_selection_tool.h>
@@ -462,9 +463,14 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
     SCH_SCREEN*      screen = m_frame->GetScreen();
     EE_POINT_EDITOR* pointEditor = m_toolMgr->GetTool<EE_POINT_EDITOR>();
     SCH_LINE*        segment = nullptr;
+    EE_GRID_HELPER   grid( m_toolMgr );
+
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    getViewControls()->ShowCursor( true );
+    controls->ShowCursor( true );
+    controls->SetGridSnapping( m_frame->IsGridVisible() );
+
 
     Activate();
 
@@ -482,7 +488,12 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
         if( !pointEditor->HasPoint() )  // Set wxCursor shape when starting the tool
             m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
 
-        wxPoint cursorPos = (wxPoint) getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        controls->SetGridSnapping( m_frame->IsGridVisible() );
+        wxPoint cursorPos = wxPoint( grid.BestSnapAnchor(
+                evt->IsPrime() ? evt->Position() : controls->GetMousePosition(), nullptr ) );
+        controls->ForceCursorPosition( true, cursorPos );
+
         bool forceHV = m_frame->eeconfig()->m_Drawing.hv_lines_only;
 
         //------------------------------------------------------------------------
@@ -692,8 +703,8 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
             evt->SetPassEvent();
 
         // Enable autopanning and cursor capture only when there is a segment to be placed
-        getViewControls()->SetAutoPan( segment != nullptr );
-        getViewControls()->CaptureCursor( segment != nullptr );
+        controls->SetAutoPan( segment != nullptr );
+        controls->CaptureCursor( segment != nullptr );
     }
 
     return 0;

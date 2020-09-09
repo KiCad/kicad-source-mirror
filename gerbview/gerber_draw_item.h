@@ -194,8 +194,8 @@ public:
      * @return const wxPoint& - The position of this object.
      * This function exists mainly to satisfy the virtual GetPosition() in parent class
      */
-    wxPoint GetPosition() const override  { return m_Start; }
-    void SetPosition( const wxPoint& aPos )     {  m_Start = aPos; }
+    wxPoint GetPosition() const override                { return m_Start; }
+    void SetPosition( const wxPoint& aPos ) override    {  m_Start = aPos; }
 
     /**
      * Function GetABPosition

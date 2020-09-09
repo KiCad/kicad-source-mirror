@@ -245,7 +245,7 @@ public:
      */
     virtual void MoveTo( const wxPoint& aPosition ) = 0;
 
-    void SetPosition( const wxPoint& aPosition ) { MoveTo( aPosition ); }
+    void SetPosition( const wxPoint& aPosition ) override { MoveTo( aPosition ); }
 
     /**
      * Mirror the draw object along the horizontal (X) axis about \a aCenter point.

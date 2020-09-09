@@ -409,7 +409,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         editFrame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        controls->SetSnapping( !evt->Modifier( MD_ALT ) );
+        controls->SetGridSnapping( !evt->Modifier( MD_ALT ) );
 
         if( evt->IsAction( &PCB_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::refreshPreview )
@@ -616,7 +616,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     m_lockedSelected = false;
     controls->ForceCursorPosition( false );
     controls->ShowCursor( false );
-    controls->SetSnapping( false );
+    controls->SetGridSnapping( false );
     controls->SetAutoPan( false );
 
     m_dragging = false;

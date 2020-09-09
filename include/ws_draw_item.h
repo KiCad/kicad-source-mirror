@@ -72,7 +72,6 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    virtual void SetPosition( wxPoint aPos ) = 0;
     virtual void SetEnd( wxPoint aPos ) { /* not all types will need this */ }
 
     virtual int GetPenWidth() const
@@ -134,7 +133,7 @@ public:
     void SetEnd( wxPoint aPos ) override { m_end = aPos; }
 
     wxPoint GetPosition() const override { return GetStart(); }
-    void SetPosition( wxPoint aPos ) override { SetStart( aPos ); }
+    void SetPosition( const wxPoint& aPos ) override { SetStart( aPos ); }
 
     const EDA_RECT GetBoundingBox() const override;
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
@@ -174,7 +173,7 @@ public:
     // Accessors:
     SHAPE_POLY_SET& GetPolygons() { return m_Polygons; }
     wxPoint GetPosition() const override { return m_pos; }
-    void SetPosition( wxPoint aPos ) override;
+    void SetPosition( const wxPoint& aPos ) override;
 
     const EDA_RECT GetBoundingBox() const override;
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
@@ -214,7 +213,7 @@ public:
     void SetEnd( wxPoint aPos ) override { m_end = aPos; }
 
     wxPoint GetPosition() const override { return GetStart(); }
-    void SetPosition( wxPoint aPos ) override { SetStart( aPos ); }
+    void SetPosition( const wxPoint& aPos ) override { SetStart( aPos ); }
 
     void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
@@ -256,7 +255,7 @@ public:
     double GetMarkerSize() const { return m_markerSize; }
 
     wxPoint GetPosition() const override { return wxPoint( 0, 0 ); }
-    void SetPosition( wxPoint aPos ) override { /* do nothing */ }
+    void SetPosition( const wxPoint& aPos ) override { /* do nothing */ }
 
     void PrintWsItem( RENDER_SETTINGS* , const wxPoint&  ) override { /* do nothing */ }
 
@@ -299,7 +298,7 @@ public:
     }
 
     wxPoint GetPosition() const override { return GetTextPos(); }
-    void SetPosition( wxPoint aPos ) override { SetTextPos( aPos ); }
+    void SetPosition( const wxPoint& aPos ) override { SetTextPos( aPos ); }
 
     const EDA_RECT GetBoundingBox() const override;
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
@@ -329,7 +328,7 @@ public:
     virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_BITMAP" ); }
 
     wxPoint GetPosition() const override { return m_pos; }
-    void SetPosition( wxPoint aPos ) override { m_pos = aPos; }
+    void SetPosition( const wxPoint& aPos ) override { m_pos = aPos; }
 
     void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 

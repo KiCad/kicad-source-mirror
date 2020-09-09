@@ -28,11 +28,8 @@
 
 #include <math/box2.h>
 #include <view/view.h>
-#include <class_board_item.h>
 #include <layers_id_colors_and_visibility.h>
 #include <gal/color4d.h>
-
-class PCB_BASE_FRAME;
 
 /**
  * ORIGIN_VIEWITEM
@@ -41,7 +38,7 @@ class PCB_BASE_FRAME;
  */
 namespace KIGFX {
 
-class ORIGIN_VIEWITEM : public BOARD_ITEM
+class ORIGIN_VIEWITEM : public EDA_ITEM
 {
 public:
     ///> Marker symbol styles
@@ -93,17 +90,12 @@ public:
         m_drawAtZero = aDrawFlag;
     }
 
-    inline void SetPosition( const VECTOR2D& aPosition )
-    {
-        m_position = aPosition;
-    }
-
-    inline void SetPosition( const wxPoint& aPosition ) override
+    void SetPosition( const wxPoint& aPosition ) override
     {
         m_position = VECTOR2D( aPosition );
     }
 
-    inline wxPoint GetPosition() const override
+    wxPoint GetPosition() const override
     {
         return wxPoint( m_position.x, m_position.y );
     }
