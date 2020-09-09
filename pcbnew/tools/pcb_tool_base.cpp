@@ -50,7 +50,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
 
     // do not capture or auto-pan until we start placing an item
     controls()->ShowCursor( true );
-    controls()->SetGridSnapping( true );
+    controls()->SetGridSnapping( frame()->IsGridVisible() );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     PCBNEW_SELECTION preview;

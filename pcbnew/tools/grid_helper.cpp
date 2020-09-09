@@ -322,9 +322,7 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
 
     if( nearest && m_enableSnap )
     {
-        double snapDist = nearest->Distance( aOrigin );
-
-        if( !m_enableGrid || snapDist <= gridDist )
+        if( nearest->Distance( aOrigin ) <= snapRange )
         {
             m_viewSnapPoint.SetPosition( wxPoint( nearest->pos ) );
             m_viewSnapLine.SetPosition( wxPoint( nearest->pos ) );

@@ -62,15 +62,12 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    // To many things are off-grid in LibEdit; turn snapping off.
-    bool snap = !m_frame->IsType( FRAME_SCH_LIB_EDITOR );
-
     setControls();
 
     while( TOOL_EVENT* evt = Wait() )
     {
         m_frame->GetCanvas()->SetCurrentCursor( m_cursor );
-        VECTOR2D cursorPos = controls->GetCursorPosition( snap && !evt->Modifier( MD_ALT ) );
+        VECTOR2D cursorPos = controls->GetCursorPosition( m_frame->IsGridVisible() );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {

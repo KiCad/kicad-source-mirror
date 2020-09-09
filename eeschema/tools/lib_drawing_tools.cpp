@@ -397,7 +397,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 {
     getViewControls()->ShowCursor( true );
-    getViewControls()->SetGridSnapping( true );
+    getViewControls()->SetGridSnapping( m_frame->IsGridVisible() );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );

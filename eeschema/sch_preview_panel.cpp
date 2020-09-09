@@ -70,7 +70,7 @@ SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindo
     m_gal->SetCursorEnabled( false );
     m_gal->SetGridSize( VECTOR2D( Mils2iu( 100.0 ), Mils2iu( 100.0 ) ) );
 
-    m_viewControls->SetGridSnapping( true );
+    m_viewControls->SetGridSnapping( m_gal->GetGridVisibility() );
 
     SetEvtHandlerEnabled( true );
     SetFocus();

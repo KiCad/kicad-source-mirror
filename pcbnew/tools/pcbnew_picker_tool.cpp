@@ -59,7 +59,7 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        controls->SetGridSnapping( !evt->Modifier( MD_ALT ) );
+        controls->SetGridSnapping( frame->IsGridVisible() );
         VECTOR2I cursorPos = grid.BestSnapAnchor( controls->GetMousePosition(), nullptr );
         controls->ForceCursorPosition(true, cursorPos );
 
@@ -185,9 +185,6 @@ void PCBNEW_PICKER_TOOL::reset()
 void PCBNEW_PICKER_TOOL::setControls()
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-
-    // Ensure that the view controls do not handle our snapping as we use the GRID_HELPER
-    controls->SetGridSnapping( false );
 
     controls->CaptureCursor( false );
     controls->SetAutoPan( false );

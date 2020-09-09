@@ -70,7 +70,7 @@ void LIB_MOVE_TOOL::Reset( RESET_REASON aReason )
 int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    controls->SetGridSnapping( true );
+    controls->SetGridSnapping( m_frame->IsGridVisible() );
 
     m_anchorPos = { 0, 0 };
 
@@ -103,7 +103,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     do
     {
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
-        controls->SetGridSnapping( !evt->Modifier( MD_ALT ) );
+        controls->SetGridSnapping( m_frame->IsGridVisible() );
 
         if( evt->IsAction( &EE_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::refreshPreview )
@@ -271,7 +271,6 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     controls->ForceCursorPosition( false );
     controls->ShowCursor( false );
-    controls->SetGridSnapping( false );
     controls->SetAutoPan( false );
 
     if( !chain_commands )

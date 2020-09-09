@@ -408,7 +408,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
-    m_controls->SetGridSnapping( true );
+    m_controls->SetGridSnapping( m_frame->IsGridVisible() );
     // do not capture or auto-pan until we start placing some text
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::TEXT );
@@ -620,7 +620,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
-    m_controls->SetGridSnapping( true );
+    m_controls->SetGridSnapping( m_frame->IsGridVisible() );
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::DIMENSION );
 
@@ -650,8 +650,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        m_controls->SetGridSnapping( !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( m_frame->IsGridVisible() );
+        m_controls->SetGridSnapping( m_frame->IsGridVisible() );
         VECTOR2I cursorPos = grid.BestSnapAnchor(
                 evt->IsPrime() ? evt->Position() : m_controls->GetMousePosition(), nullptr );
         m_controls->ForceCursorPosition( true, cursorPos );
@@ -916,7 +916,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &newItems );
 
     m_controls->ShowCursor( true );
-    m_controls->SetGridSnapping( true );
+    m_controls->SetGridSnapping( m_frame->IsGridVisible() );
     m_controls->ForceCursorPosition( false );
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::DXF );
@@ -1011,7 +1011,6 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
-    m_controls->SetGridSnapping( true );
     m_controls->SetAutoPan( true );
     m_controls->CaptureCursor( false );
 
@@ -1020,8 +1019,8 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        m_controls->SetGridSnapping( !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( m_frame->IsGridVisible() );
+        m_controls->SetGridSnapping( m_frame->IsGridVisible() );
         VECTOR2I    cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), LSET::AllLayersMask() );
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -1124,8 +1123,8 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
             m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        m_controls->SetGridSnapping( !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( m_frame->IsGridVisible() );
+        m_controls->SetGridSnapping( m_frame->IsGridVisible() );
         cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), m_frame->GetActiveLayer() );
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -1383,7 +1382,6 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT** aGraphic, bo
     GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     m_controls->ShowCursor( true );
-    m_controls->SetGridSnapping( true );
 
     bool firstPoint = false;
     bool cancelled = false;
@@ -1402,8 +1400,8 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT** aGraphic, bo
 
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        m_controls->SetGridSnapping( !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( m_frame->IsGridVisible() );
+        m_controls->SetGridSnapping( m_frame->IsGridVisible() );
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), graphic );
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -1623,7 +1621,6 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     Activate();    // register for events
 
     m_controls->ShowCursor( true );
-    m_controls->SetGridSnapping( true );
 
     bool    started     = false;
     GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
@@ -1641,8 +1638,8 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         LSET layers( m_frame->GetActiveLayer() );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        m_controls->SetGridSnapping( !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( m_frame->IsGridVisible() );
+        m_controls->SetGridSnapping( m_frame->IsGridVisible() );
         VECTOR2I cursorPos = grid.BestSnapAnchor( evt->IsPrime() ? evt->Position()
                                                                  : m_controls->GetMousePosition(),
                                                   layers );

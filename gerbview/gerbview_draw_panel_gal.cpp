@@ -49,6 +49,7 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalTy
     m_view->SetPainter( m_painter.get() );
 
     m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
+    m_viewControls->SetGridSnapping( m_gal->GetGridVisibility() );
 
     setDefaultLayerDeps();
 

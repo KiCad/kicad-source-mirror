@@ -65,6 +65,7 @@ PL_DRAW_PANEL_GAL::PL_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindo
     m_view->SetLayerVisible( LAYER_WORKSHEET_PAGEn, false );
 
     m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
+    m_viewControls->SetGridSnapping( m_gal->GetGridVisibility() );
 }
 
 
