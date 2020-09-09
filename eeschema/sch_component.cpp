@@ -122,6 +122,10 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
         SetRef( sheet, m_part->GetReferenceField().GetText() + wxT( "?" ) );
     else
         m_prefix = m_part->GetReferenceField().GetText() + wxT( "?" );
+
+    // Inherit the include in bill of materials and board netlist settings from library symbol.
+    m_inBom = aPart.GetIncludeInBom();
+    m_onBoard = aPart.GetIncludeOnBoard();
 }
 
 

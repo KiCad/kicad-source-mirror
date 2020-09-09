@@ -1509,6 +1509,9 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
             aFormatter.Print( 0, ")" );
         }
 
+        aFormatter.Print( 0, " (in_bom %s)", ( aSymbol->GetIncludeInBom() ) ? "yes" : "no" );
+        aFormatter.Print( 0, " (on_board %s)", ( aSymbol->GetIncludeOnBoard() ) ? "yes" : "no" );
+
         // TODO: add atomic token here.
 
         // TODO: add required token here."
@@ -1523,7 +1526,7 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
         lastFieldId = fields.back().GetId() + 1;
 
         // @todo At some point in the future the lock status (all units interchangeable) should
-        // be set deterministically.  For now a custom lock properter is used to preserve the
+        // be set deterministically.  For now a custom lock propertery is used to preserve the
         // locked flag state.
         if( aSymbol->UnitsLocked() )
         {

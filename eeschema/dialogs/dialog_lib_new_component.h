@@ -77,6 +77,12 @@ public:
     void SetLockItems( bool enable ) { m_checkLockItems->SetValue( enable ); }
     bool GetLockItems( void ) { return m_checkLockItems->GetValue(); }
 
+    void SetIncludeInBom( bool aInclude ) { m_excludeFromBomCheckBox->SetValue( !aInclude ); }
+    bool GetIncludeInBom() const { return !m_excludeFromBomCheckBox->GetValue(); }
+
+    void SetIncludeOnBoard( bool aInclude ) { m_excludeFromBoardCheckBox->SetValue( !aInclude ); }
+    bool GetIncludeOnBoard() const { return !m_excludeFromBoardCheckBox->GetValue(); }
+
     void SetPinTextPosition( int position )
     {
         m_pinTextPosition.SetValue( position );
@@ -102,7 +108,8 @@ public:
     bool GetPinNameInside( void ) { return m_checkShowPinNameInside->GetValue(); }
 
 protected:
-    virtual void OnParentSymbolSelect( wxCommandEvent& event ) override;
+    virtual void OnParentSymbolSelect( wxCommandEvent& aEvent ) override;
+    virtual void onPowerCheckBox( wxCommandEvent& aEvent ) override;
 
 private:
     void syncControls( bool aIsDerivedPart );

@@ -37,7 +37,10 @@
 
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200820
 
-#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200827 // Remove host tag
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200827  // Remove host tag
+
+#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200908    // Add include in BOM and on board support.
+
 
 /**
  * Symbol library file version.

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jan 23 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,6 +11,7 @@
 
 BEGIN_EVENT_TABLE( DIALOG_LIB_NEW_COMPONENT_BASE, DIALOG_SHIM )
 	EVT_COMBOBOX( wxID_ANY, DIALOG_LIB_NEW_COMPONENT_BASE::_wxFB_OnParentSymbolSelect )
+	EVT_CHECKBOX( wxID_ANY, DIALOG_LIB_NEW_COMPONENT_BASE::_wxFB_onPowerCheckBox )
 END_EVENT_TABLE()
 
 DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
@@ -75,6 +76,12 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 
 	m_checkIsPowerSymbol = new wxCheckBox( this, wxID_ANY, _("Create symbol as power symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer17->Add( m_checkIsPowerSymbol, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_excludeFromBomCheckBox = new wxCheckBox( this, wxID_ANY, _("Exclude from schematic bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer17->Add( m_excludeFromBomCheckBox, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	m_excludeFromBoardCheckBox = new wxCheckBox( this, wxID_ANY, _("Exclude from board"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer17->Add( m_excludeFromBoardCheckBox, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	bSizerTop->Add( bSizer17, 0, wxBOTTOM|wxEXPAND, 5 );

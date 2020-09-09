@@ -338,6 +338,22 @@ BOOST_AUTO_TEST_CASE( Compare )
     BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
     m_part_no_data.LockUnits( false );
 
+    // Include in BOM support tests.
+    testPart.SetIncludeInBom( false );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    testPart.SetIncludeInBom( true );
+    m_part_no_data.SetIncludeInBom( false );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    m_part_no_data.SetIncludeInBom( true );
+
+    // Include on board support tests.
+    testPart.SetIncludeOnBoard( false );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    testPart.SetIncludeOnBoard( true );
+    m_part_no_data.SetIncludeOnBoard( false );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    m_part_no_data.SetIncludeOnBoard( true );
+
     // Show pin names flag comparison tests.
     m_part_no_data.SetShowPinNames( false );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );

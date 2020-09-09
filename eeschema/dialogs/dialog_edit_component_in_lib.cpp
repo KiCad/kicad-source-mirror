@@ -167,6 +167,8 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
     m_OptionPartsLocked->SetValue( m_libEntry->UnitsLocked() && m_libEntry->GetUnitCount() > 1 );
     m_AsConvertButt->SetValue( m_libEntry->HasConversion() );
     m_OptionPower->SetValue( m_libEntry->IsPower() );
+    m_excludeFromBomCheckBox->SetValue( !m_libEntry->GetIncludeInBom() );
+    m_excludeFromBoardCheckBox->SetValue( !m_libEntry->GetIncludeOnBoard() );
 
     m_ShowPinNumButt->SetValue( m_libEntry->ShowPinNumbers() );
     m_ShowPinNameButt->SetValue( m_libEntry->ShowPinNames() );
@@ -356,6 +358,9 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
         m_libEntry->SetPower();
     else
         m_libEntry->SetNormal();
+
+    m_libEntry->SetIncludeInBom( !m_excludeFromBomCheckBox->GetValue() );
+    m_libEntry->SetIncludeOnBoard( !m_excludeFromBoardCheckBox->GetValue() );
 
     m_libEntry->SetShowPinNumbers( m_ShowPinNumButt->GetValue() );
     m_libEntry->SetShowPinNames( m_ShowPinNameButt->GetValue() );
@@ -767,4 +772,21 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::syncControlStates( bool aIsAlias )
     m_inheritanceSelectCombo->Enable( aIsAlias );
     m_inheritsStaticText->Enable( aIsAlias );
     m_grid->ForceRefresh();
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::onPowerCheckBox( wxCommandEvent& aEvent )
+{
+    if( m_OptionPower->IsChecked() )
+    {
+        m_excludeFromBomCheckBox->SetValue( true );
+        m_excludeFromBoardCheckBox->SetValue( true );
+        m_excludeFromBomCheckBox->Enable( false );
+        m_excludeFromBoardCheckBox->Enable( false );
+    }
+    else
+    {
+        m_excludeFromBomCheckBox->Enable( true );
+        m_excludeFromBoardCheckBox->Enable( true );
+    }
 }

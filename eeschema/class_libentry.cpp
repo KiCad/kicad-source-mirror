@@ -87,7 +87,9 @@ struct null_deleter
 
 LIB_PART::LIB_PART( const wxString& aName, LIB_PART* aParent, PART_LIB* aLibrary ) :
     EDA_ITEM( LIB_PART_T ),
-    m_me( this, null_deleter() )
+    m_me( this, null_deleter() ),
+    m_includeInBom( true ),
+    m_includeOnBoard( true )
 {
     m_dateLastEdition     = 0;
     m_unitCount           = 1;
@@ -127,6 +129,8 @@ LIB_PART::LIB_PART( const LIB_PART& aPart, PART_LIB* aLibrary ) :
     m_unitsLocked         = aPart.m_unitsLocked;
     m_pinNameOffset       = aPart.m_pinNameOffset;
     m_showPinNumbers      = aPart.m_showPinNumbers;
+    m_includeInBom        = aPart.m_includeInBom;
+    m_includeOnBoard      = aPart.m_includeOnBoard;
     m_showPinNames        = aPart.m_showPinNames;
     m_dateLastEdition     = aPart.m_dateLastEdition;
     m_options             = aPart.m_options;
@@ -181,6 +185,8 @@ const LIB_PART& LIB_PART::operator=( const LIB_PART& aPart )
     m_pinNameOffset       = aPart.m_pinNameOffset;
     m_showPinNumbers      = aPart.m_showPinNumbers;
     m_showPinNames        = aPart.m_showPinNames;
+    m_includeInBom        = aPart.m_includeInBom;
+    m_includeOnBoard      = aPart.m_includeOnBoard;
     m_dateLastEdition     = aPart.m_dateLastEdition;
     m_options             = aPart.m_options;
     m_libId               = aPart.m_libId;
@@ -287,6 +293,12 @@ int LIB_PART::Compare( const LIB_PART& aRhs ) const
 
     if( m_showPinNumbers != aRhs.m_showPinNumbers )
         return ( m_showPinNumbers ) ? 1 : -1;
+
+    if( m_includeInBom != aRhs.m_includeInBom )
+        return ( m_includeInBom ) ? 1 : -1;
+
+    if( m_includeOnBoard != aRhs.m_includeOnBoard )
+        return ( m_includeOnBoard ) ? 1 : -1;
 
     return 0;
 }

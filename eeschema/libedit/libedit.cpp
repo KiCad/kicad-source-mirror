@@ -350,6 +350,8 @@ void LIB_EDIT_FRAME::CreateNewPart()
         new_part.SetShowPinNumbers( dlg.GetShowPinNumber() );
         new_part.SetShowPinNames( dlg.GetShowPinName() );
         new_part.LockUnits( dlg.GetLockItems() );
+        new_part.SetIncludeInBom( dlg.GetIncludeInBom() );
+        new_part.SetIncludeOnBoard( dlg.GetIncludeOnBoard() );
 
         if( dlg.GetUnitCount() < 2 )
             new_part.LockUnits( false );

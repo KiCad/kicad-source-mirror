@@ -108,6 +108,10 @@ class LIB_PART : public EDA_ITEM, public LIB_TREE_ITEM
                                             ///< one unit does not automatically change another unit.
     bool                m_showPinNames;     ///< Determines if part pin names are visible.
     bool                m_showPinNumbers;   ///< Determines if part pin numbers are visible.
+    bool                m_includeInBom;     ///< Determines if symbol should be included in
+                                            ///< schematic BOM.
+    bool                m_includeOnBoard; ///< Determines if symbol should be excluded from
+                                            ///< netlist when updating board.
     timestamp_t         m_dateLastEdition;  ///< Date of the last modification.
     LIBRENTRYOPTIONS    m_options;          ///< Special part features such as POWER or NORMAL.)
     int                 m_unitCount;        ///< Number of units (parts) per package.
@@ -571,6 +575,22 @@ public:
      */
     void SetShowPinNumbers( bool aShow ) { m_showPinNumbers = aShow; }
     bool ShowPinNumbers() { return m_showPinNumbers; }
+
+    /**
+     * Set or clear the include in schematic bill of materials flag.
+     *
+     * @param aIncludeInBom true to include symbol in schematic bill of material
+     */
+    void SetIncludeInBom( bool aIncludeInBom ) { m_includeInBom = aIncludeInBom; }
+    bool GetIncludeInBom() const { return m_includeInBom; }
+
+    /**
+     * Set or clear include in board netlist flag.
+     *
+     * @param aIncludeOnBoard true to include symbol in the board netlist
+     */
+    void SetIncludeOnBoard( bool aIncludeOnBoard ) { m_includeOnBoard = aIncludeOnBoard; }
+    bool GetIncludeOnBoard() const { return m_includeOnBoard; }
 
     /**
      * Comparison test that can be used for operators.

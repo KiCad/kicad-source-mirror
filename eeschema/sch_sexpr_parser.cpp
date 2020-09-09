@@ -188,6 +188,16 @@ LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap, int aFileV
             NeedRIGHT();
             break;
 
+        case T_in_bom:
+            symbol->SetIncludeInBom( parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_on_board:
+            symbol->SetIncludeOnBoard( parseBool() );
+            NeedRIGHT();
+            break;
+
         case T_property:
             parseProperty( symbol );
             break;

@@ -75,6 +75,9 @@ public:
     DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRAME* parent, LIB_PART* aLibEntry );
     ~DIALOG_EDIT_COMPONENT_IN_LIBRARY();
 
+protected:
+    virtual void onPowerCheckBox( wxCommandEvent& aEvent ) override;
+
 private:
     void transferAliasDataToBuffer();
 

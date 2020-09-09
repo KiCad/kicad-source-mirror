@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jan 23 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -37,6 +37,7 @@ class DIALOG_LIB_NEW_COMPONENT_BASE : public DIALOG_SHIM
 
 		// Private event handlers
 		void _wxFB_OnParentSymbolSelect( wxCommandEvent& event ){ OnParentSymbolSelect( event ); }
+		void _wxFB_onPowerCheckBox( wxCommandEvent& event ){ onPowerCheckBox( event ); }
 
 
 	protected:
@@ -51,6 +52,8 @@ class DIALOG_LIB_NEW_COMPONENT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkLockItems;
 		wxCheckBox* m_checkHasConversion;
 		wxCheckBox* m_checkIsPowerSymbol;
+		wxCheckBox* m_excludeFromBomCheckBox;
+		wxCheckBox* m_excludeFromBoardCheckBox;
 		wxStaticText* m_staticPinTextPositionLabel;
 		wxTextCtrl* m_textPinTextPosition;
 		wxStaticText* m_staticPinTextPositionUnits;
@@ -63,6 +66,7 @@ class DIALOG_LIB_NEW_COMPONENT_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnParentSymbolSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onPowerCheckBox( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

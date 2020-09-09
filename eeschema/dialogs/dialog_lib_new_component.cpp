@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ DIALOG_LIB_NEW_COMPONENT::DIALOG_LIB_NEW_COMPONENT( EDA_DRAW_FRAME* aParent,
 }
 
 
-void DIALOG_LIB_NEW_COMPONENT::OnParentSymbolSelect( wxCommandEvent& event )
+void DIALOG_LIB_NEW_COMPONENT::OnParentSymbolSelect( wxCommandEvent& aEvent )
 {
     syncControls( !m_comboInheritanceSelect->GetValue().IsEmpty() );
 }
@@ -68,6 +68,8 @@ void DIALOG_LIB_NEW_COMPONENT::syncControls( bool aIsDerivedPart )
     m_checkLockItems->Enable( !aIsDerivedPart );
     m_checkHasConversion->Enable( !aIsDerivedPart );
     m_checkIsPowerSymbol->Enable( !aIsDerivedPart );
+    m_excludeFromBomCheckBox->Enable( !aIsDerivedPart );
+    m_excludeFromBoardCheckBox->Enable( !aIsDerivedPart );
     m_staticPinTextPositionLabel->Enable( !aIsDerivedPart );
     m_textPinTextPosition->Enable( !aIsDerivedPart );
     m_staticPinTextPositionUnits->Enable( !aIsDerivedPart );
@@ -75,3 +77,21 @@ void DIALOG_LIB_NEW_COMPONENT::syncControls( bool aIsDerivedPart )
     m_checkShowPinName->Enable( !aIsDerivedPart );
     m_checkShowPinNameInside->Enable( !aIsDerivedPart );
 }
+
+
+void DIALOG_LIB_NEW_COMPONENT::onPowerCheckBox( wxCommandEvent& aEvent )
+{
+    if( m_checkIsPowerSymbol->IsChecked() )
+    {
+        m_excludeFromBomCheckBox->SetValue( true );
+        m_excludeFromBoardCheckBox->SetValue( true );
+        m_excludeFromBomCheckBox->Enable( false );
+        m_excludeFromBoardCheckBox->Enable( false );
+    }
+    else
+    {
+        m_excludeFromBomCheckBox->Enable( true );
+        m_excludeFromBoardCheckBox->Enable( true );
+    }
+}
+
