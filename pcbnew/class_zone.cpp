@@ -324,21 +324,32 @@ const EDA_RECT ZONE_CONTAINER::GetBoundingBox() const
 }
 
 
-int ZONE_CONTAINER::GetThermalReliefGap( D_PAD* aPad ) const
+int ZONE_CONTAINER::GetThermalReliefGap( D_PAD* aPad, wxString* aSource ) const
 {
-    if( aPad == NULL || aPad->GetThermalGap() == 0 )
+    if( aPad->GetEffectiveThermalGap() == 0 )
+    {
+        if( aSource )
+            *aSource = _( "zone" );
+
         return m_ThermalReliefGap;
-    else
-        return aPad->GetThermalGap();
+    }
+
+    return aPad->GetEffectiveThermalGap( aSource );
+
 }
 
 
-int ZONE_CONTAINER::GetThermalReliefCopperBridge( D_PAD* aPad ) const
+int ZONE_CONTAINER::GetThermalReliefCopperBridge( D_PAD* aPad, wxString* aSource ) const
 {
-    if( aPad == NULL || aPad->GetThermalWidth() == 0 )
+    if( aPad->GetEffectiveThermalSpokeWidth() == 0 )
+    {
+        if( aSource )
+            *aSource = _( "zone" );
+
         return m_ThermalReliefCopperBridge;
-    else
-        return aPad->GetThermalWidth();
+    }
+
+    return aPad->GetEffectiveThermalSpokeWidth( aSource );
 }
 
 
@@ -817,12 +828,19 @@ void ZONE_CONTAINER::Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight )
 }
 
 
-ZONE_CONNECTION ZONE_CONTAINER::GetPadConnection( D_PAD* aPad ) const
+ZONE_CONNECTION ZONE_CONTAINER::GetPadConnection( D_PAD* aPad, wxString* aSource ) const
 {
     if( aPad == NULL || aPad->GetEffectiveZoneConnection() == ZONE_CONNECTION::INHERITED )
+    {
+        if( aSource )
+            *aSource = _( "zone" );
+
         return m_PadConnection;
+    }
     else
-        return aPad->GetEffectiveZoneConnection();
+    {
+        return aPad->GetEffectiveZoneConnection( aSource );
+    }
 }
 
 

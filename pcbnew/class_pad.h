@@ -444,19 +444,30 @@ public:
     /**
      * Return the zone connection in effect (either locally overridden or overridden in the
      * parent module).
+     * Optionally reports on the source of the property (pad, parent footprint or zone).
      */
-    ZONE_CONNECTION GetEffectiveZoneConnection() const;
+    ZONE_CONNECTION GetEffectiveZoneConnection( wxString* aSource = nullptr ) const;
 
     /**
      * Set the width of the thermal spokes connecting the pad to a zone.  If != 0 this will
      * override similar settings in the parent footprint and zone.
      * @param aWidth
      */
-    void SetThermalWidth( int aWidth ) { m_thermalWidth = aWidth; }
-    int GetThermalWidth() const;
+    void SetThermalSpokeWidth( int aWidth ) { m_thermalWidth = aWidth; }
+    int GetThermalSpokeWidth() const { return m_thermalWidth; }
+
+    /**
+     * Return the effective thermal spoke width having resolved any inheritance.
+     */
+    int GetEffectiveThermalSpokeWidth( wxString* aSource = nullptr ) const;
 
     void SetThermalGap( int aGap ) { m_thermalGap = aGap; }
-    int GetThermalGap() const;
+    int GetThermalGap() const { return m_thermalGap; }
+
+    /**
+     * Return the effective thermal gap having resolved any inheritance.
+     */
+    int GetEffectiveThermalGap( wxString* aSource = nullptr ) const;
 
     /**
      * Function SetRoundRectCornerRadius

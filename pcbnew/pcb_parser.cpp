@@ -3408,7 +3408,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
             break;
 
         case T_thermal_width:
-            pad->SetThermalWidth( parseBoardUnits( T_thermal_width ) );
+            pad->SetThermalSpokeWidth( parseBoardUnits( T_thermal_width ) );
             NeedRIGHT();
             break;
 

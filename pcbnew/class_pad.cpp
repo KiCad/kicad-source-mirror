@@ -748,36 +748,62 @@ wxSize D_PAD::GetSolderPasteMargin() const
 }
 
 
-ZONE_CONNECTION D_PAD::GetEffectiveZoneConnection() const
+ZONE_CONNECTION D_PAD::GetEffectiveZoneConnection( wxString* aSource ) const
 {
     MODULE* module = GetParent();
 
     if( m_zoneConnection == ZONE_CONNECTION::INHERITED && module )
+    {
+        if( aSource )
+            *aSource = _( "parent footprint" );
+
         return module->GetZoneConnection();
+    }
     else
+    {
+        if( aSource )
+            *aSource = _( "pad" );
+
         return m_zoneConnection;
+    }
 }
 
 
-int D_PAD::GetThermalWidth() const
+int D_PAD::GetEffectiveThermalSpokeWidth( wxString* aSource ) const
 {
     MODULE* module = GetParent();
 
     if( m_thermalWidth == 0 && module )
+    {
+        if( aSource )
+            *aSource = _( "parent footprint" );
+
         return module->GetThermalWidth();
-    else
-        return m_thermalWidth;
+    }
+
+    if( aSource )
+        *aSource = _( "pad" );
+
+    return m_thermalWidth;
 }
 
 
-int D_PAD::GetThermalGap() const
+int D_PAD::GetEffectiveThermalGap( wxString* aSource ) const
 {
     MODULE* module = GetParent();
 
     if( m_thermalGap == 0 && module )
+    {
+        if( aSource )
+            *aSource = _( "parent footprint" );
+
         return module->GetThermalGap();
-    else
-        return m_thermalGap;
+    }
+
+    if( aSource )
+        *aSource = _( "pad" );
+
+    return m_thermalGap;
 }
 
 
@@ -1300,7 +1326,7 @@ void D_PAD::ImportSettingsFrom( const D_PAD& aMasterPad )
     SetLocalSolderPasteMarginRatio( aMasterPad.GetLocalSolderPasteMarginRatio() );
 
     SetZoneConnection( aMasterPad.GetEffectiveZoneConnection() );
-    SetThermalWidth( aMasterPad.GetThermalWidth() );
+    SetThermalSpokeWidth( aMasterPad.GetThermalSpokeWidth() );
     SetThermalGap( aMasterPad.GetThermalGap() );
 
     SetCustomShapeInZoneOpt( aMasterPad.GetCustomShapeInZoneOpt() );
@@ -1367,10 +1393,10 @@ static struct PAD_DESC
                     PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<D_PAD, double>( _( "Local Solderpaste Margin Ratio" ),
                     &D_PAD::SetLocalSolderPasteMarginRatio, &D_PAD::GetLocalSolderPasteMarginRatio ) );
-        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Thermal Width" ),
-                    &D_PAD::SetThermalWidth, &D_PAD::GetThermalWidth,
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Thermal Relief Spoke Width" ),
+                    &D_PAD::SetThermalSpokeWidth, &D_PAD::GetThermalSpokeWidth,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Thermal Gap" ),
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Thermal Relief" ),
                     &D_PAD::SetThermalGap, &D_PAD::GetThermalGap,
                     PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY_ENUM<D_PAD, PAD_PROP_T>( _( "Fabrication Property" ),

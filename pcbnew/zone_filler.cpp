@@ -440,8 +440,8 @@ static void setupDummyPadForHole( const D_PAD* aPad, D_PAD& aDummyPad )
     aDummyPad.SetLocalSolderPasteMarginRatio( aPad->GetLocalSolderPasteMarginRatio() );
 
     aDummyPad.SetZoneConnection( aPad->GetEffectiveZoneConnection() );
-    aDummyPad.SetThermalWidth( aPad->GetThermalWidth() );
-    aDummyPad.SetThermalGap( aPad->GetThermalGap() );
+    aDummyPad.SetThermalSpokeWidth( aPad->GetEffectiveThermalSpokeWidth() );
+    aDummyPad.SetThermalGap( aPad->GetEffectiveThermalGap() );
 
     aDummyPad.SetCustomShapeInZoneOpt( aPad->GetCustomShapeInZoneOpt() );
 

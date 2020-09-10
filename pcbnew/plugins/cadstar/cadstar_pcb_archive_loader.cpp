@@ -669,7 +669,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF& aComponent, MODU
             pad->SetThermalGap( getKiCadLength( csPadcode.ReliefClearance ) );
 
         if( csPadcode.ReliefWidth != UNDEFINED_VALUE )
-            pad->SetThermalWidth( getKiCadLength( csPadcode.ReliefWidth ) );
+            pad->SetThermalSpokeWidth( getKiCadLength( csPadcode.ReliefWidth ) );
 
         pad->SetOrientation( pad->GetOrientation() + getAngleTenthDegree( csPadcode.Shape.OrientAngle ) );
 

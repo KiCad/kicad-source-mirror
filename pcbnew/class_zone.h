@@ -163,7 +163,7 @@ public:
         m_ThermalReliefGap = aThermalReliefGap;
     }
     int GetThermalReliefGap() const { return m_ThermalReliefGap; }
-    int GetThermalReliefGap( D_PAD* aPad ) const;
+    int GetThermalReliefGap( D_PAD* aPad, wxString* aSource = nullptr ) const;
 
     void SetThermalReliefCopperBridge( int aThermalReliefCopperBridge )
     {
@@ -173,7 +173,7 @@ public:
         m_ThermalReliefCopperBridge = aThermalReliefCopperBridge;
     }
     int GetThermalReliefCopperBridge() const { return m_ThermalReliefCopperBridge; }
-    int GetThermalReliefCopperBridge( D_PAD* aPad ) const;
+    int GetThermalReliefCopperBridge( D_PAD* aPad, wxString* aSource = nullptr ) const;
 
     /**
      * Compute the area currently occupied by the zone fill.
@@ -204,7 +204,7 @@ public:
     bool NeedRefill() const { return m_needRefill; }
     void SetNeedRefill( bool aNeedRefill ) { m_needRefill = aNeedRefill; }
 
-    ZONE_CONNECTION GetPadConnection( D_PAD* aPad ) const;
+    ZONE_CONNECTION GetPadConnection( D_PAD* aPad, wxString* aSource = nullptr ) const;
     ZONE_CONNECTION GetPadConnection() const { return m_PadConnection; }
     void SetPadConnection( ZONE_CONNECTION aPadConnection ) { m_PadConnection = aPadConnection; }
 

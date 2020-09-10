@@ -1606,7 +1606,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
         else if( TESTLINE( ".ThermalWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( ".ThermalWidth" ) );
-            pad->SetThermalWidth( tmp );
+            pad->SetThermalSpokeWidth( tmp );
         }
 
         else if( TESTLINE( ".ThermalGap" ) )

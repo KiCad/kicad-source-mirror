@@ -1355,16 +1355,20 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
                    Double2Str( aPad->GetLocalSolderPasteMarginRatio() ).c_str() );
 
     if( aPad->GetLocalClearance() != 0 )
-        StrPrintf( &output, " (clearance %s)", FormatInternalUnits( aPad->GetLocalClearance() ).c_str() );
+        StrPrintf( &output, " (clearance %s)",
+                   FormatInternalUnits( aPad->GetLocalClearance() ).c_str() );
 
     if( aPad->GetEffectiveZoneConnection() != ZONE_CONNECTION::INHERITED )
-        StrPrintf( &output, " (zone_connect %d)", static_cast<int>( aPad->GetEffectiveZoneConnection() ) );
+        StrPrintf( &output, " (zone_connect %d)",
+                   static_cast<int>( aPad->GetEffectiveZoneConnection() ) );
 
-    if( aPad->GetThermalWidth() != 0 )
-        StrPrintf( &output, " (thermal_width %s)", FormatInternalUnits( aPad->GetThermalWidth() ).c_str() );
+    if( aPad->GetThermalSpokeWidth() != 0 )
+        StrPrintf( &output, " (thermal_width %s)",
+                   FormatInternalUnits( aPad->GetThermalSpokeWidth() ).c_str() );
 
     if( aPad->GetThermalGap() != 0 )
-        StrPrintf( &output, " (thermal_gap %s)", FormatInternalUnits( aPad->GetThermalGap() ).c_str() );
+        StrPrintf( &output, " (thermal_gap %s)",
+                   FormatInternalUnits( aPad->GetThermalGap() ).c_str() );
 
     if( output.size() )
     {

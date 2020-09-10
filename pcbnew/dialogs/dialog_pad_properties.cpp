@@ -530,7 +530,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     m_clearance.ChangeValue( m_dummyPad->GetLocalClearance() );
     m_maskClearance.ChangeValue( m_dummyPad->GetLocalSolderMaskMargin() );
-    m_spokeWidth.ChangeValue( m_dummyPad->GetThermalWidth() );
+    m_spokeWidth.ChangeValue( m_dummyPad->GetThermalSpokeWidth() );
     m_thermalGap.ChangeValue( m_dummyPad->GetThermalGap() );
     m_pasteClearance.ChangeValue( m_dummyPad->GetLocalSolderPasteMargin() );
 
@@ -1515,7 +1515,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetLocalSolderMaskMargin( m_padMaster->GetLocalSolderMaskMargin() );
     m_currentPad->SetLocalSolderPasteMargin( m_padMaster->GetLocalSolderPasteMargin() );
     m_currentPad->SetLocalSolderPasteMarginRatio( m_padMaster->GetLocalSolderPasteMarginRatio() );
-    m_currentPad->SetThermalWidth( m_padMaster->GetThermalWidth() );
+    m_currentPad->SetThermalSpokeWidth( m_padMaster->GetThermalSpokeWidth() );
     m_currentPad->SetThermalGap( m_padMaster->GetThermalGap() );
     m_currentPad->SetRoundRectRadiusRatio( m_padMaster->GetRoundRectRadiusRatio() );
     m_currentPad->SetChamferRectRatio( m_padMaster->GetChamferRectRatio() );
@@ -1596,7 +1596,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     aPad->SetLocalClearance( m_clearance.GetValue() );
     aPad->SetLocalSolderMaskMargin( m_maskClearance.GetValue() );
     aPad->SetLocalSolderPasteMargin( m_pasteClearance.GetValue() );
-    aPad->SetThermalWidth( m_spokeWidth.GetValue() );
+    aPad->SetThermalSpokeWidth( m_spokeWidth.GetValue() );
     aPad->SetThermalGap( m_thermalGap.GetValue() );
     double dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
