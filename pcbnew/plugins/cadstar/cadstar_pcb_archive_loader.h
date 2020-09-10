@@ -86,8 +86,8 @@ private:
     std::map<ROUTECODE_ID, NETCLASSPTR>   mNetClassMap;  ///< Map between Cadstar and KiCad classes
     std::map<PHYSICAL_LAYER_ID, LAYER_ID> mCopperLayers; ///< Map of CADSTAR Physical layers to
                                                          ///< CADSTAR Layer IDs
-    std::vector<LAYER_ID> mPowerPlaneLayers;             ///< List of layers that are marked as 
-                                                         ///< power plane in CADSTAR. This is used 
+    std::vector<LAYER_ID> mPowerPlaneLayers;             ///< List of layers that are marked as
+                                                         ///< power plane in CADSTAR. This is used
                                                          ///< by "loadtemplates"
     wxPoint mDesignCenter;                               ///< Used for calculating the required
                                                          ///< offset to apply to the Cadstar design
@@ -100,7 +100,7 @@ private:
                                                          ///< multiple duplicate warnings
     bool mDoneNetClassWarning;                           ///< Used by getKiCadNet() to avoid
                                                          ///< multiple duplicate warnings
-    int mNumNets;                                        ///< Number of nets loaded so far 
+    int mNumNets;                                        ///< Number of nets loaded so far
 
 
     // Functions for loading individual elements:
@@ -122,13 +122,13 @@ private:
     // Helper functions for element loading:
     void logBoardStackupWarning(
             const wxString& aCadstarLayerName, const PCB_LAYER_ID& aKiCadLayer );
-    void loadLibraryFigures( const SYMDEF& aComponent, MODULE* aModule );
-    void loadLibraryCoppers( const SYMDEF& aComponent, MODULE* aModule );
-    void loadLibraryAreas( const SYMDEF& aComponent, MODULE* aModule );
-    void loadLibraryPads( const SYMDEF& aComponent, MODULE* aModule );
+    void loadLibraryFigures( const SYMDEF_PCB& aComponent, MODULE* aModule );
+    void loadLibraryCoppers( const SYMDEF_PCB& aComponent, MODULE* aModule );
+    void loadLibraryAreas( const SYMDEF_PCB& aComponent, MODULE* aModule );
+    void loadLibraryPads( const SYMDEF_PCB& aComponent, MODULE* aModule );
     void loadComponentAttributes( const COMPONENT& aComponent, MODULE* aModule );
-    void loadNetTracks( const NET_ID& aCadstarNetID, const NET::ROUTE& aCadstarRoute );
-    void loadNetVia( const NET_ID& aCadstarNetID, const NET::VIA& aCadstarVia );
+    void loadNetTracks( const NET_ID& aCadstarNetID, const NET_PCB::ROUTE& aCadstarRoute );
+    void loadNetVia( const NET_ID& aCadstarNetID, const NET_PCB::VIA& aCadstarVia );
     void checkAndLogHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
 
     //Helper functions for drawing /loading objects onto screen:
@@ -323,8 +323,8 @@ private:
     TEXTCODE   getTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
     VIACODE    getViaCode( const VIACODE_ID& aCadstarViaCodeID );
     wxString   getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
-    wxString  getAttributeValue( const ATTRIBUTE_ID&        aCadstarAttributeID,
-            const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>& aCadstarAttributeMap );
+    wxString   getAttributeValue( const ATTRIBUTE_ID&        aCadstarAttributeID,
+              const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>& aCadstarAttributeMap );
 
     // Helper Functions for obtaining individual elements as KiCad elements:
     double     getHatchCodeAngleDegrees( const HATCHCODE_ID& aCadstarHatchcodeID );
