@@ -536,7 +536,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
             double   angle   = 3600.0;
             wxPoint  start   = center;
             int      radius  = graphic->GetRadius();
-            int      steps   = std::max<int>( 4, GetArcToSegmentCount( radius, aTolerance, 360.0 ) );
+            int      steps   = GetArcToSegmentCount( radius, aTolerance, 360.0 );
             wxPoint  nextPt;
 
             start.x += radius;

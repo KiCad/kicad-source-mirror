@@ -122,22 +122,6 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                            double aChamferRatio, int aChamferCorners, int aError );
 
 /**
- * Function TransformRoundedEndsSegmentToPolygon
- * convert a segment with rounded ends to a polygon
- * Convert arcs to multiple straight lines
- * @param aCornerBuffer = a buffer to store the polygon
- * @param aStart = the segment start point coordinate
- * @param aEnd = the segment end point coordinate
- * @param aError = the IU allowed for error in approximation
- * @param aWidth = the segment width
- * Note: the polygon is inside the arc ends, so if you want to have the polygon
- * outside the circle, you should give aStart and aEnd calculated with a correction factor
- */
-void TransformSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aEnd,
-                                int aError, int aWidth );
-
-
-/**
  * Function TransformArcToPolygon
  * Creates a polygon from an Arc
  * Convert arcs to multiple straight segments

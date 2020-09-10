@@ -344,7 +344,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 // Shape polygon can have holes so use InflateWithLinkedHoles(), not Inflate()
                 // which can create bad shapes if margin.x is < 0
                 int maxError = aBoard->GetDesignSettings().m_MaxError;
-                int numSegs = std::max( GetArcToSegmentCount( margin.x, maxError, 360.0 ), 6 );
+                int numSegs = GetArcToSegmentCount( margin.x, maxError, 360.0 );
                 shape.InflateWithLinkedHoles( margin.x, numSegs, SHAPE_POLY_SET::PM_FAST );
                 dummy.DeletePrimitivesList();
                 dummy.AddPrimitivePoly( shape, 0 );
@@ -781,9 +781,6 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     // They do not have a solder Mask margin, because they are graphic items
     // on this layer (like logos), not actually areas around pads.
 
-    // Normal mode to generate polygons from shapes with arcs, if any:
-    DisableArcRadiusCorrection( false );
-
     itemplotter.PlotBoardGraphicItems();
 
     for( auto module : aBoard->Modules() )
@@ -812,82 +809,80 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 #if NEW_ALGO
     // Generate polygons with arcs inside the shape or exact shape
     // to minimize shape changes created by arc to segment size correction.
-    DisableArcRadiusCorrection( true );
+    DISABLE_ARC_RADIUS_CORRECTION disabler;
 #endif
-
-    // Plot pads
-    for( auto module : aBoard->Modules() )
     {
-        // add shapes with their exact mask layer size in initialPolys
-        module->TransformPadsShapesWithClearanceToPolygon( layer, initialPolys, 0 );
-        // add shapes inflated by aMinThickness/2 in areas
-        module->TransformPadsShapesWithClearanceToPolygon( layer, areas, inflate );
-    }
-
-    // Plot vias on solder masks, if aPlotOpt.GetPlotViaOnMaskLayer() is true,
-    if( aPlotOpt.GetPlotViaOnMaskLayer() )
-    {
-        // The current layer is a solder mask, use the global mask clearance for vias
-        int via_clearance = aBoard->GetDesignSettings().m_SolderMaskMargin;
-        int via_margin = via_clearance + inflate;
-
-        for( auto track : aBoard->Tracks() )
+        // Plot pads
+        for( auto module : aBoard->Modules() )
         {
-            const VIA* via = dyn_cast<const VIA*>( track );
-
-            if( !via )
-                continue;
-
-            // vias are plotted only if they are on the corresponding external copper layer
-            LSET via_set = via->GetLayerSet();
-
-            if( via_set[B_Cu] )
-                via_set.set( B_Mask );
-
-            if( via_set[F_Cu] )
-                via_set.set( F_Mask );
-
-            if( !( via_set & aLayerMask ).any() )
-                continue;
-
             // add shapes with their exact mask layer size in initialPolys
-            via->TransformShapeWithClearanceToPolygon( initialPolys, layer, via_clearance );
+            module->TransformPadsShapesWithClearanceToPolygon( layer, initialPolys, 0 );
             // add shapes inflated by aMinThickness/2 in areas
-            via->TransformShapeWithClearanceToPolygon( areas, layer, via_margin );
+            module->TransformPadsShapesWithClearanceToPolygon( layer, areas, inflate );
         }
-    }
 
-    // Add filled zone areas.
+        // Plot vias on solder masks, if aPlotOpt.GetPlotViaOnMaskLayer() is true,
+        if( aPlotOpt.GetPlotViaOnMaskLayer() )
+        {
+            // The current layer is a solder mask, use the global mask clearance for vias
+            int via_clearance = aBoard->GetDesignSettings().m_SolderMaskMargin;
+            int via_margin = via_clearance + inflate;
+
+            for( auto track : aBoard->Tracks() )
+            {
+                const VIA* via = dyn_cast<const VIA*>( track );
+
+                if( !via )
+                    continue;
+
+                // vias are plotted only if they are on the corresponding external copper layer
+                LSET via_set = via->GetLayerSet();
+
+                if( via_set[B_Cu] )
+                    via_set.set( B_Mask );
+
+                if( via_set[F_Cu] )
+                    via_set.set( F_Mask );
+
+                if( !( via_set & aLayerMask ).any() )
+                    continue;
+
+                // add shapes with their exact mask layer size in initialPolys
+                via->TransformShapeWithClearanceToPolygon( initialPolys, layer, via_clearance );
+                // add shapes inflated by aMinThickness/2 in areas
+                via->TransformShapeWithClearanceToPolygon( areas, layer, via_margin );
+            }
+        }
+
+        // Add filled zone areas.
 #if 0   // Set to 1 if a solder mask margin must be applied to zones on solder mask
-    int zone_margin = aBoard->GetDesignSettings().m_SolderMaskMargin;
+        int zone_margin = aBoard->GetDesignSettings().m_SolderMaskMargin;
 #else
-    int zone_margin = 0;
+        int zone_margin = 0;
 #endif
 
-    for( ZONE_CONTAINER* zone : aBoard->Zones() )
-    {
-        if( zone->GetLayer() != layer )
-            continue;
+        for( ZONE_CONTAINER* zone : aBoard->Zones() )
+        {
+            if( zone->GetLayer() != layer )
+                continue;
 
-        // add shapes inflated by aMinThickness/2 in areas
-        zone->TransformOutlinesShapeWithClearanceToPolygon( areas, inflate + zone_margin );
-        // add shapes with their exact mask layer size in initialPolys
-        zone->TransformOutlinesShapeWithClearanceToPolygon( initialPolys, zone_margin );
+            // add shapes inflated by aMinThickness/2 in areas
+            zone->TransformOutlinesShapeWithClearanceToPolygon( areas, inflate + zone_margin );
+            // add shapes with their exact mask layer size in initialPolys
+            zone->TransformOutlinesShapeWithClearanceToPolygon( initialPolys, zone_margin );
+        }
+
+        int maxError = aBoard->GetDesignSettings().m_MaxError;
+        int numSegs = GetArcToSegmentCount( inflate, maxError, 360.0 );
+
+        // Merge all polygons: After deflating, not merged (not overlapping) polygons
+        // will have the initial shape (with perhaps small changes due to deflating transform)
+        areas.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        areas.Deflate( inflate, numSegs );
+
+        // Restore initial settings:
+        aBoard->GetDesignSettings().m_MaxError = currMaxError;
     }
-
-    int maxError = aBoard->GetDesignSettings().m_MaxError;
-    int numSegs = std::max( GetArcToSegmentCount( inflate, maxError, 360.0 ), 12 );
-
-    // Merge all polygons: After deflating, not merged (not overlapping) polygons
-    // will have the initial shape (with perhaps small changes due to deflating transform)
-    areas.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-    areas.Deflate( inflate, numSegs );
-
-    // Restore initial settings:
-    aBoard->GetDesignSettings().m_MaxError = currMaxError;
-
-    // Restore normal option to build polygons from item shapes:
-    DisableArcRadiusCorrection( false );
 
 #if !NEW_ALGO
     // To avoid a lot of code, use a ZONE_CONTAINER to handle and plot polygons, because our

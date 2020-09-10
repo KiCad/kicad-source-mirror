@@ -671,8 +671,7 @@ static void export_vrml_polygon( MODEL_VRML& aModel, LAYER_NUM layer,
 
         if( aOutline->GetWidth() )
         {
-            int numSegs = std::max(
-                    GetArcToSegmentCount( aOutline->GetWidth() / 2, ARC_HIGH_DEF, 360.0 ), 6 );
+            int numSegs = GetArcToSegmentCount( aOutline->GetWidth() / 2, ARC_HIGH_DEF, 360.0 );
             shape.Inflate( aOutline->GetWidth() / 2, numSegs );
             shape.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
         }

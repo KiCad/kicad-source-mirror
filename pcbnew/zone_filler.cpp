@@ -78,12 +78,11 @@ static const bool s_DumpZonesWhenFilling = false;
 
 
 ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
-    m_board( aBoard ),
-    m_brdOutlinesValid( false ),
-    m_commit( aCommit ),
-    m_progressReporter( nullptr ),
-    m_high_def( 9 ),
-    m_low_def( 6 )
+        m_board( aBoard ),
+        m_brdOutlinesValid( false ),
+        m_commit( aCommit ),
+        m_progressReporter( nullptr ),
+        m_maxError( ARC_HIGH_DEF )
 {
 }
 
@@ -470,7 +469,7 @@ void ZONE_FILLER::addKnockout( D_PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE
     if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
     {
         SHAPE_POLY_SET poly;
-        aPad->TransformShapeWithClearanceToPolygon( poly, aLayer, aGap, m_high_def );
+        aPad->TransformShapeWithClearanceToPolygon( poly, aLayer, aGap, m_maxError );
 
         // the pad shape in zone can be its convex hull or the shape itself
         if( aPad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
@@ -488,14 +487,7 @@ void ZONE_FILLER::addKnockout( D_PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE
     }
     else
     {
-        // Optimizing polygon vertex count: the high definition is used for round
-        // and oval pads (pads with large arcs) but low def for other shapes (with
-        // small arcs)
-        if( aPad->GetShape() == PAD_SHAPE_CIRCLE || aPad->GetShape() == PAD_SHAPE_OVAL ||
-          ( aPad->GetShape() == PAD_SHAPE_ROUNDRECT && aPad->GetRoundRectRadiusRatio() > 0.4 ) )
-            aPad->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_high_def );
-        else
-            aPad->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_low_def );
+        aPad->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError );
     }
 }
 
@@ -512,7 +504,7 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
     case PCB_LINE_T:
     {
         DRAWSEGMENT* seg = (DRAWSEGMENT*) aItem;
-        seg->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_high_def,
+        seg->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
                                                    aIgnoreLineWidth );
         break;
     }
@@ -525,7 +517,7 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
     case PCB_MODULE_EDGE_T:
     {
         EDGE_MODULE* edge = (EDGE_MODULE*) aItem;
-        edge->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_high_def,
+        edge->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
                                                     aIgnoreLineWidth );
         break;
     }
@@ -674,17 +666,17 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
                 if( !via->IsPadOnLayer( aLayer ) )
                 {
-                    TransformCircleToPolygon( aHoles, via->GetPosition(),
-                            ( via->GetDrillValue() + 1 ) / 2 + gap, m_low_def );
+                    int radius = via->GetDrillValue() / 2 + bds.GetHolePlatingThickness() + gap;
+                    TransformCircleToPolygon( aHoles, via->GetPosition(), radius, m_maxError );
                 }
                 else
                 {
-                    via->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap, m_low_def );
+                    via->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap, m_maxError );
                 }
             }
             else
             {
-                track->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap, m_low_def );
+                track->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap, m_maxError );
             }
         }
     }
@@ -780,15 +772,14 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
                                         SHAPE_POLY_SET& aRawPolys,
                                         SHAPE_POLY_SET& aFinalPolys )
 {
-    m_high_def = m_board->GetDesignSettings().m_MaxError;
-    m_low_def = std::min( ARC_LOW_DEF, int( m_high_def * 1.5 ) );   // Reasonable value
+    m_maxError = m_board->GetDesignSettings().m_MaxError;
 
     // Features which are min_width should survive pruning; features that are *less* than
     // min_width should not.  Therefore we subtract epsilon from the min_width when
     // deflating/inflating.
     int half_min_width = aZone->GetMinThickness() / 2;
     int epsilon = Millimeter2iu( 0.001 );
-    int numSegs = std::max( GetArcToSegmentCount( half_min_width, m_high_def, 360.0 ), 6 );
+    int numSegs = GetArcToSegmentCount( half_min_width, m_maxError, 360.0 );
 
     SHAPE_POLY_SET::CORNER_STRATEGY cornerStrategy;
 
@@ -974,7 +965,7 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
         // deflating/inflating.
         int half_min_width = aZone->GetMinThickness() / 2;
         int epsilon = Millimeter2iu( 0.001 );
-        int numSegs = std::max( GetArcToSegmentCount( half_min_width, m_high_def, 360.0 ), 6 );
+        int numSegs = GetArcToSegmentCount( half_min_width, m_maxError, 360.0 );
 
         if( m_brdOutlinesValid )
             smoothedPoly.BooleanIntersection( m_boardOutline, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );

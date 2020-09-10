@@ -256,16 +256,7 @@ unsigned int BOARD_ADAPTER::GetNrSegmentsCircle( int aDiameterBIU ) const
 {
     wxASSERT( aDiameterBIU > 0 );
 
-    // Require at least 3 segments for a circle
-    return std::max( GetArcToSegmentCount( aDiameterBIU / 2, ARC_HIGH_DEF, 360.0 ), 3 );
-}
-
-
-double BOARD_ADAPTER::GetCircleCorrectionFactor( int aNrSides ) const
-{
-    wxASSERT( aNrSides >= 3 );
-
-    return GetCircletoPolyCorrectionFactor( aNrSides );
+    return GetArcToSegmentCount( aDiameterBIU / 2, ARC_HIGH_DEF, 360.0 );
 }
 
 

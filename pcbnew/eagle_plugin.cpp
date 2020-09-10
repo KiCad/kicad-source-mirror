@@ -1295,11 +1295,8 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
             double radius = sqrt( pow( center.x - kicad_x( v1.x ), 2 )
                                 + pow( center.y - kicad_y( v1.y ), 2 ) );
 
-            // If we are curving, we need at least 2 segments otherwise
-            // delta_angle == angle
-            double delta_angle = angle / std::max(
-                            2, GetArcToSegmentCount( KiROUND( radius ),
-                            ARC_HIGH_DEF, *v1.curve ) - 1 );
+            int segCount = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF, *v1.curve );
+            double delta_angle = angle / segCount;
 
             for( double a = end_angle + angle;
                     fabs( a - end_angle ) > fabs( delta_angle );
@@ -1959,12 +1956,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
             if( KiROUND( radius ) == 0 )
                 radius = 1.0;
 
-            int segCount = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF, *v1.curve ) - 1;
-
-            // If we are curving, we need at least 2 segments otherwise delta == angle
-            if( segCount < 2 )
-                segCount = 2;
-
+            int segCount = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF, *v1.curve );
             double delta = angle / segCount;
 
             for( double a = end_angle + angle; fabs( a - end_angle ) > fabs( delta ); a -= delta )
@@ -2295,12 +2287,8 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                         radius = sqrt( pow( center.x - kicad_x( w.x1 ), 2 ) +
                                        pow( center.y - kicad_y( w.y1 ), 2 ) );
 
-                        // If we are curving, we need at least 2 segments otherwise
-                        // delta_angle == angle
-                        int segments = std::max( 2, GetArcToSegmentCount( KiROUND( radius ),
-                                                                          ARC_HIGH_DEF,
-                                                                          *w.curve ) - 1 );
-                        delta_angle = angle / segments;
+                        int segs = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF, *w.curve );
+                        delta_angle = angle / segs;
                     }
 
                     while( fabs( angle ) > fabs( delta_angle ) )

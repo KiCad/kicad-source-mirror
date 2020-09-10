@@ -47,36 +47,33 @@ class EDA_RECT;
  */
 int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree );
 
-/** When creating polygons to create a clearance polygonal area, the polygon must
+/**
+ * When creating polygons to create a clearance polygonal area, the polygon must
  * be same or bigger than the original shape.
- * Polygons are bigger if the original shape has arcs (round rectangles, ovals, circles...)
- * In some cases (in fact only one: when building layer solder mask) modifying
- * shapes when converting them to polygons is not acceptable (the modification
- * can break calculations)
- * so one can disable the shape expansion by calling DisableArcRadiusCorrection( true )
- * Important: calling DisableArcRadiusCorrection( false ) after calculations is
- * mandatory to break oher calculations
- * @param aDisable = false to create polygons same or outside the original shape
- *  = true to create polygons same or inside the original shape and minimize
- * shape geometric changes
+ * Polygons are bigger if the original shape has arcs (round rectangles, ovals,
+ * circles...).  However, when building the solder mask layer modifying the shapes
+ * when converting them to polygons is not acceptable (the modification can break
+ * calculations).
+ * So one can disable the shape expansion within a particular scope by allocating
+ * a DISABLE_ARC_CORRECTION.
  */
-void DisableArcRadiusCorrection( bool aDisable );
+class DISABLE_ARC_RADIUS_CORRECTION
+{
+public:
+    DISABLE_ARC_RADIUS_CORRECTION();
+    ~DISABLE_ARC_RADIUS_CORRECTION();
+};
 
 /**
- * @return the correction factor to approximate a circle by segments or 1.0
- * depending on the last call to DisableArcRadiusCorrection()
- * @param aSegCountforCircle is the number of segments to approximate the circle
+ * @return the radius correction to approximate a circle.
+ * @param aMaxError is the same error value used to calculate the number of segments.
  *
  * When creating a polygon from a circle, the polygon is inside the circle.
  * Only corners are on the circle.
  * This is incorrect when building clearance areas of circles, that need to build
- * the equivalent polygon outside the circle
- * The correction factor is a scaling factor to apply to the radius to build a
- * polygon outside the circle (only the middle of each segment is on the circle
- *
- *
+ * the equivalent polygon outside the circle.
  */
-double GetCircletoPolyCorrectionFactor( int aSegCountforCircle );
+int GetCircleToPolyCorrection( int aMaxError );
 
 /**
  * Snap a vector onto the nearest 0, 45 or 90 degree line.

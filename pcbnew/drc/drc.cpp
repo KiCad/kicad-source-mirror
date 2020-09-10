@@ -1252,39 +1252,45 @@ void DRC::setTransitions()
 const int UI_EPSILON = Mils2iu( 5 );
 
 
-wxPoint DRC::GetLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone )
+wxPoint DRC::GetLocation( PCB_LAYER_ID aLayer, TRACK* aTrack, ZONE_CONTAINER* aZone )
 {
-    SHAPE_POLY_SET* conflictOutline = nullptr;
+    SHAPE_POLY_SET* zonePoly = nullptr;
 
-    PCB_LAYER_ID l = aTrack->GetLayer();
+    if( aZone->IsFilled() && aZone->HasFilledPolysForLayer( aLayer ) )
+        zonePoly = const_cast<SHAPE_POLY_SET*>( &aZone->GetFilledPolysList( aLayer ) );
 
-    if( aConflictZone->IsFilled() && aConflictZone->HasFilledPolysForLayer( l ) )
-        conflictOutline = const_cast<SHAPE_POLY_SET*>( &aConflictZone->GetFilledPolysList( l ) );
+    if( !zonePoly || zonePoly->IsEmpty() )
+        zonePoly = aZone->Outline();
 
-    if( !conflictOutline || conflictOutline->IsEmpty() )
-        conflictOutline = aConflictZone->Outline();
+    SEG         trackSeg( aTrack->GetStart(), aTrack->GetEnd() );
+    SEG::ecoord closestDist_sq = VECTOR2I::ECOORD_MAX;
+    SEG         closestSeg;
 
-    wxPoint pt1 = aTrack->GetPosition();
-    wxPoint pt2 = aTrack->GetEnd();
-
-    // If the mid-point is in the zone, then that's a fine place for the marker
-    if( conflictOutline->SquaredDistance( ( pt1 + pt2 ) / 2 ) == 0 )
-        return ( pt1 + pt2 ) / 2;
-
-    // Otherwise do a binary search for a "good enough" marker location
-    else
+    for( auto it = zonePoly->CIterateSegments( 0, -1, true ); it; it++ )
     {
-        while( GetLineLength( pt1, pt2 ) > UI_EPSILON )
-        {
-            if( conflictOutline->SquaredDistance( pt1 ) < conflictOutline->SquaredDistance( pt2 ) )
-                pt2 = ( pt1 + pt2 ) / 2;
-            else
-                pt1 = ( pt1 + pt2 ) / 2;
-        }
+        SEG::ecoord dist_sq = trackSeg.SquaredDistance( *it );
 
-        // Once we're within UI_EPSILON pt1 and pt2 are "equivalent"
-        return pt1;
+        if( dist_sq < closestDist_sq )
+        {
+            closestDist_sq = dist_sq;
+            closestSeg = *it;
+        }
     }
+
+    VECTOR2I pt1 = closestSeg.A;
+    VECTOR2I pt2 = closestSeg.B;
+
+    // Do a binary search for a "good enough" marker location
+    while( GetLineLength( (wxPoint) pt1, (wxPoint) pt2 ) > UI_EPSILON )
+    {
+        if( trackSeg.SquaredDistance( pt1 ) < trackSeg.SquaredDistance( pt2 ) )
+            pt2 = ( pt1 + pt2 ) / 2;
+        else
+            pt1 = ( pt1 + pt2 ) / 2;
+    }
+
+    // Once we're within UI_EPSILON pt1 and pt2 are "equivalent"
+    return (wxPoint) pt1;
 }
 
 

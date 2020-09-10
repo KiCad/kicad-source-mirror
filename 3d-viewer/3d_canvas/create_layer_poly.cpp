@@ -54,8 +54,7 @@ void BOARD_ADAPTER::buildPadShapeThickOutlineAsPolygon( const D_PAD* aPad,
         const VECTOR2I& a = path.CPoint( ii );
         const VECTOR2I& b = path.CPoint( ii + 1 );
 
-        TransformSegmentToPolygon( aCornerBuffer, wxPoint( a.x, a.y ), wxPoint( b.x, b.y ),
-                                   ARC_HIGH_DEF, aWidth );
+        TransformOvalToPolygon( aCornerBuffer, (wxPoint) a, (wxPoint) b, aWidth, ARC_HIGH_DEF );
     }
 }
 

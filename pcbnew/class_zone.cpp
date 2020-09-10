@@ -1325,7 +1325,7 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SE
         if( board )
             maxError = board->GetDesignSettings().m_MaxError;
 
-        int segCount = std::max( GetArcToSegmentCount( aClearance, maxError, 360.0 ), 3 );
+        int segCount = GetArcToSegmentCount( aClearance, maxError, 360.0 );
         polybuffer.Inflate( aClearance, segCount );
     }
 

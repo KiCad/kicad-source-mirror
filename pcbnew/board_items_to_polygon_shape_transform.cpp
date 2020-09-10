@@ -59,9 +59,8 @@ TSEGM_2_POLY_PRMS prms;
 static void addTextSegmToPoly( int x0, int y0, int xf, int yf, void* aData )
 {
     TSEGM_2_POLY_PRMS* prm = static_cast<TSEGM_2_POLY_PRMS*>( aData );
-    TransformSegmentToPolygon( *prm->m_cornerBuffer,
-                               wxPoint( x0, y0 ), wxPoint( xf, yf ),
-                               prm->m_error, prm->m_textWidth );
+    TransformOvalToPolygon( *prm->m_cornerBuffer, wxPoint( x0, y0 ), wxPoint( xf, yf ),
+                            prm->m_textWidth, prm->m_error );
 }
 
 
@@ -296,7 +295,7 @@ void ZONE_CONTAINER::TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer,
     if( board )
         maxError = board->GetDesignSettings().m_MaxError;
 
-    int numSegs = std::max( GetArcToSegmentCount( GetMinThickness(), maxError, 360.0 ), 12 );
+    int numSegs = GetArcToSegmentCount( GetMinThickness(), maxError, 360.0 );
 
     polys.InflateWithLinkedHoles( GetMinThickness()/2, numSegs, SHAPE_POLY_SET::PM_FAST );
 
@@ -420,10 +419,10 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
         if( width > 0 )
         {
             // Add in segments
-            TransformSegmentToPolygon( aCornerBuffer, pts[0], pts[1], aError, width );
-            TransformSegmentToPolygon( aCornerBuffer, pts[1], pts[2], aError, width );
-            TransformSegmentToPolygon( aCornerBuffer, pts[2], pts[3], aError, width );
-            TransformSegmentToPolygon( aCornerBuffer, pts[3], pts[0], aError, width );
+            TransformOvalToPolygon( aCornerBuffer, pts[0], pts[1], width, aError );
+            TransformOvalToPolygon( aCornerBuffer, pts[1], pts[2], width, aError );
+            TransformOvalToPolygon( aCornerBuffer, pts[2], pts[3], width, aError );
+            TransformOvalToPolygon( aCornerBuffer, pts[3], pts[0], width, aError );
         }
     }
         break;
@@ -473,7 +472,7 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
                 for( wxPoint pt2 : poly )
                 {
                     if( pt2 != pt1 )
-                        TransformSegmentToPolygon( aCornerBuffer, pt1, pt2, aError, width );
+                        TransformOvalToPolygon( aCornerBuffer, pt1, pt2, width, aError );
 
                     pt1 = pt2;
                 }
@@ -491,7 +490,7 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
             if( width != 0 )
             {
                 for( unsigned ii = 1; ii < poly.size(); ii++ )
-                    TransformSegmentToPolygon( aCornerBuffer, poly[ii-1], poly[ii], aError, width );
+                    TransformOvalToPolygon( aCornerBuffer, poly[ii-1], poly[ii], width, aError );
             }
         }
         break;
@@ -511,29 +510,33 @@ void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 {
     wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for tracks." );
 
-    int width = m_Width + ( 2 * aClearanceValue );
 
     switch( Type() )
     {
     case PCB_VIA_T:
-        {
+    {
         int radius = ( m_Width / 2 ) + aClearanceValue;
         TransformCircleToPolygon( aCornerBuffer, m_Start, radius, aError );
-        }
+    }
         break;
 
     case PCB_ARC_T:
-        {
+    {
         const ARC* arc = static_cast<const ARC*>( this );
-        VECTOR2D center( arc->GetCenter() );
-        double arc_angle = arc->GetAngle();
-        TransformArcToPolygon( aCornerBuffer, wxPoint( center.x, center.y ),
-                               GetStart(), arc_angle, aError, width );
-        }
+        int        width = m_Width + ( 2 * aClearanceValue );
+        VECTOR2D   center( arc->GetCenter() );
+        double     angle = arc->GetAngle();
+
+        TransformArcToPolygon( aCornerBuffer, (wxPoint) center, GetStart(), angle, aError, width );
+    }
         break;
 
     default:
+    {
+        int width = m_Width + ( 2 * aClearanceValue );
+
         TransformOvalToPolygon( aCornerBuffer, m_Start, m_End, width, aError );
+    }
         break;
     }
 }
@@ -602,10 +605,9 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
         if( aClearanceValue )
         {
-            int    numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ),
-                                       pad_min_seg_per_circle_count );
-            double correction = GetCircletoPolyCorrectionFactor( numSegs );
-            int    clearance = KiROUND( aClearanceValue * correction );
+            int numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ),
+                                    pad_min_seg_per_circle_count );
+            int clearance = aClearanceValue + GetCircleToPolyCorrection( aError );
             outline.Inflate( clearance, numSegs );
             // TODO: clamp the inflated polygon, because it is slightly too big:
             // it was inflated by a value slightly too big to keep rounded corners
@@ -620,13 +622,10 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PAD_SHAPE_ROUNDRECT:
     {
         int    radius = GetRoundRectCornerRadius() + aClearanceValue;
-        int    numSegs = std::max( GetArcToSegmentCount( radius, aError, 360.0 ),
-                                   pad_min_seg_per_circle_count );
-        double correction = GetCircletoPolyCorrectionFactor( numSegs );
-        int    clearance = KiROUND( aClearanceValue * correction );
+        int    clearance = aClearanceValue + GetCircleToPolyCorrection( aError );
         wxSize shapesize( m_size );
 
-        radius = KiROUND( radius * correction );
+        radius = radius + GetCircleToPolyCorrection( aError );
         shapesize.x += clearance * 2;
         shapesize.y += clearance * 2;
         bool doChamfer = GetShape() == PAD_SHAPE_CHAMFERED_RECT;
@@ -652,10 +651,9 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
         if( aClearanceValue )
         {
-            int    numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ),
-                                                             pad_min_seg_per_circle_count );
-            double correction = GetCircletoPolyCorrectionFactor( numSegs );
-            int    clearance = KiROUND( aClearanceValue * correction );
+            int numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ),
+                                                          pad_min_seg_per_circle_count );
+            int clearance = aClearanceValue + GetCircleToPolyCorrection( aError );
 
             outline.Inflate( clearance, numSegs );
         }
@@ -684,8 +682,8 @@ bool D_PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, 
 
     const SHAPE_SEGMENT* seg = GetEffectiveHoleShape();
 
-    TransformSegmentToPolygon( aCornerBuffer, (wxPoint) seg->GetSeg().A, (wxPoint) seg->GetSeg().B,
-                               aError, seg->GetWidth() + aInflateValue * 2 );
+    TransformOvalToPolygon( aCornerBuffer, (wxPoint) seg->GetSeg().A, (wxPoint) seg->GetSeg().B,
+                            seg->GetWidth() + aInflateValue * 2, aError );
 
     return true;
 }

@@ -115,14 +115,7 @@ private:
     WX_PROGRESS_REPORTER* m_progressReporter;
     std::unique_ptr<WX_PROGRESS_REPORTER> m_uniqueReporter;
 
-    // m_high_def can be used to define a high definition arc to polygon approximation
-    int m_high_def;
-
-    // m_low_def can be used to define a low definition arc to polygon approximation
-    // Used when converting some pad shapes that can accept lower resolution, vias and track ends.
-    // Rect pads use m_low_def to reduce the number of segments. For these shapes a low def
-    // gives a good shape, because the arc is small (90 degrees) and a small part of the shape.
-    int m_low_def;
+    int m_maxError;
 };
 
 #endif

@@ -443,9 +443,9 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
     /* Phase 3: test DRC with copper zones */
     /***************************************/
     // Can be *very* time consumming.
+
     if( aTestZones )
     {
-
         for( ZONE_CONTAINER* zone : m_pcb->Zones() )
         {
             if( !zone->GetLayerSet().test( aLayer ) || zone->GetIsKeepout() )
@@ -474,7 +474,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( aRefSeg, zone );
 
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, GetLocation( aRefSeg, zone ) );
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, GetLocation( aLayer, aRefSeg, zone ) );
                 addMarkerToPcb( aCommit, marker );
             }
         }

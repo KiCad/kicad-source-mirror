@@ -246,8 +246,8 @@ public:
     /**
      * Fetches a reasonable point for marking a violoation between two non-point objects.
      */
-    static wxPoint GetLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone );
-    static wxPoint GetLocation( TRACK* aTrack, const SEG& aConflictSeg );
+    static wxPoint GetLocation( PCB_LAYER_ID aLayer, TRACK* aTrack, ZONE_CONTAINER* aZone );
+    static wxPoint GetLocation( TRACK* aTrack, const SEG& aSeg );
 
     /**
      * Open a dialog and prompts the user, then if a test run button is

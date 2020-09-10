@@ -530,14 +530,6 @@ class BOARD_ADAPTER
     unsigned int GetNrSegmentsCircle( int aDiameterBIU ) const;
 
     /**
-     * @brief GetCircleCorrectionFactor - computes a angle correction
-     * factor used when creating circles
-     * @param aNrSides: the number of segments sides of the circle
-     * @return a factor to apply to contour creation
-     */
-    double GetCircleCorrectionFactor( int aNrSides ) const;
-
-    /**
      * @brief GetPolyMap - Get maps of polygons's layers
      * @return the map with polygons's layers
      */

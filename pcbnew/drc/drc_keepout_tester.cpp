@@ -88,7 +88,9 @@ bool DRC_KEEPOUT_TESTER::checkTracksAndVias()
         if( segm->Type() == PCB_TRACE_T && ( m_keepoutFlags & DISALLOW_TRACKS ) != 0 )
         {
             // Ignore if the keepout zone is not on the same layer
-            if( !m_zone->IsOnLayer( segm->GetLayer() ) )
+            PCB_LAYER_ID layer = segm->GetLayer();
+
+            if( !m_zone->IsOnLayer( layer ) )
                 continue;
 
             SEG trackSeg( segm->GetStart(), segm->GetEnd() );
@@ -103,7 +105,7 @@ bool DRC_KEEPOUT_TESTER::checkTracksAndVias()
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( segm, m_zone );
 
-                HandleMarker( new MARKER_PCB( drcItem, DRC::GetLocation( segm, m_zone ) ) );
+                HandleMarker( new MARKER_PCB( drcItem, DRC::GetLocation( layer, segm, m_zone ) ) );
                 success = false;
             }
         }
@@ -143,7 +145,7 @@ bool DRC_KEEPOUT_TESTER::checkTracksAndVias()
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( segm, m_zone );
 
-                HandleMarker( new MARKER_PCB( drcItem, DRC::GetLocation( segm, m_zone ) ) );
+                HandleMarker( new MARKER_PCB( drcItem, via->GetPosition() ) );
                 success = false;
             }
         }

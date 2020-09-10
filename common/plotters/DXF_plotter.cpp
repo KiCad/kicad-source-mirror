@@ -533,8 +533,8 @@ void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
     // enter outline as polygon:
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
     {
-        TransformSegmentToPolygon( bufferOutline,
-                                   aCornerList[ ii - 1 ], aCornerList[ ii ], GetPlotterArcHighDef(), aWidth );
+        TransformOvalToPolygon( bufferOutline, aCornerList[ ii - 1 ], aCornerList[ ii ],
+                                aWidth, GetPlotterArcHighDef() );
     }
 
     // enter the initial polygon:

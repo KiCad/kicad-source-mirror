@@ -744,8 +744,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
                 const float  holediameter = via->GetDrillValue() * m_boardAdapter.BiuTo3Dunits();
                 const float  thickness = m_boardAdapter.GetCopperThickness3DU();
                 const int    nrSegments = m_boardAdapter.GetNrSegmentsCircle( via->GetDrillValue() );
-                const double correctionFactor = m_boardAdapter.GetCircleCorrectionFactor( nrSegments );
-                const float  hole_inner_radius = ( holediameter / 2.0f ) * correctionFactor;
+                const float  hole_inner_radius = holediameter / 2.0f;
 
                 const SFVEC2F via_center( via->GetStart().x * m_boardAdapter.BiuTo3Dunits(),
                                           -via->GetStart().y * m_boardAdapter.BiuTo3Dunits() );
@@ -805,14 +804,11 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
                     // for slots, the diameter is the smaller of (drillsize.x, drillsize.y)
                     int    copperThickness = m_boardAdapter.GetCopperThicknessBIU();
                     int    radius = std::min( drillsize.x, drillsize.y ) / 2 + copperThickness;
-                    int    nrSegments = m_boardAdapter.GetNrSegmentsCircle( radius * 2 );
-                    double correctionFactor = m_boardAdapter.GetCircleCorrectionFactor( nrSegments );
-                    int    correction = radius * ( correctionFactor - 1 );
 
                     pad->TransformHoleWithClearanceToPolygon( tht_outer_holes_poly,
-                                                              copperThickness + correction );
+                                                              copperThickness + radius );
 
-                    pad->TransformHoleWithClearanceToPolygon( tht_inner_holes_poly, correction );
+                    pad->TransformHoleWithClearanceToPolygon( tht_inner_holes_poly, radius );
                 }
             }
         }

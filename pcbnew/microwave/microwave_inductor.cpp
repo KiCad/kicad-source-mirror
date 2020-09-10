@@ -55,7 +55,7 @@ static void gen_arc( std::vector <wxPoint>& aBuffer,
 {
     auto first_point = aStartPoint - aCenter;
     auto radius = KiROUND( EuclideanNorm( first_point ) );
-    int  seg_count = std::max( GetArcToSegmentCount( radius, ARC_HIGH_DEF, a_ArcAngle / 10.0 ), 3 );
+    int  seg_count = GetArcToSegmentCount( radius, ARC_HIGH_DEF, a_ArcAngle / 10.0 );
 
     double increment_angle = (double) a_ArcAngle * M_PI / 1800 / seg_count;
 

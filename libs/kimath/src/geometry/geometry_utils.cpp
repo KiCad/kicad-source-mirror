@@ -34,8 +34,11 @@
 #include <geometry/geometry_utils.h>
 #include <math/util.h>      // for KiROUND
 
-// To approximate a circle by segments, a minimal seg count is mandatory
-#define MIN_SEGCOUNT_FOR_CIRCLE 6
+// To approximate a circle by segments, a minimal seg count is mandatory.
+// Note that this is rarely used as the maxError constraint will yield a higher
+// segment count on everything but very small circles.  (Even a 0.125mm track
+// with a 0.01mm maximum deviation yields 11 segments.)
+#define MIN_SEGCOUNT_FOR_CIRCLE 8
 
 int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
 {
@@ -56,39 +59,35 @@ int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
 
     int segCount = KiROUND( fabs( aArcAngleDegree ) / arc_increment );
 
-    // Ensure at least one segment is used (can happen for small arcs)
-    return std::max( segCount, 1 );
+    // Ensure at least two segments are used for algorithmic safety
+    return std::max( segCount, 2 );
 }
 
 // When creating polygons to create a clearance polygonal area, the polygon must
 // be same or bigger than the original shape.
-// Polygons are bigger if the original shape has arcs (round rectangles, ovals, circles...)
-// In some cases (in fact only one: when building layer solder mask) modifying
-// shapes when converting them to polygons is not acceptable (the modification
-// can break calculations)
-// so one can disable the shape expansion by calling KeepPolyInsideShape( true )
-// Important: calling KeepPolyInsideShape( false ) after calculations is
-// mandatory to break oher calculations
+// Polygons are bigger if the original shape has arcs (round rectangles, ovals,
+// circles...).  However, when building the solder mask layer modifying the shapes
+// when converting them to polygons is not acceptable (the modification can break
+// calculations).
+// So one can disable the shape expansion within a particular scope by allocating
+// a DISABLE_ARC_CORRECTION.
+
 static bool s_disable_arc_correction = false;
 
-// Enable (aInside = false) or disable (aInside = true) polygonal shape expansion
-// when converting pads shapes and other items shapes to polygons:
-void DisableArcRadiusCorrection( bool aDisable )
+DISABLE_ARC_RADIUS_CORRECTION::DISABLE_ARC_RADIUS_CORRECTION()
 {
-    s_disable_arc_correction = aDisable;
+    s_disable_arc_correction = true;
 }
 
-double GetCircletoPolyCorrectionFactor( int aSegCountforCircle )
+DISABLE_ARC_RADIUS_CORRECTION::~DISABLE_ARC_RADIUS_CORRECTION()
 {
-    /* calculates the coeff to compensate radius reduction of circle
-     * due to the segment approx.
-     * For a circle the min radius is radius * cos( 2PI / aSegCountforCircle / 2)
-     * this is the distance between the center and the middle of the segment.
-     * therefore, to move the middle of the segment to the circle (distance = radius)
-     * the correctionFactor is 1 /cos( PI/aSegCountforCircle  )
-     */
-    aSegCountforCircle = std::max( MIN_SEGCOUNT_FOR_CIRCLE, aSegCountforCircle );
-    return s_disable_arc_correction ? 1.0 : 1.0 / cos( M_PI / aSegCountforCircle );
+    s_disable_arc_correction = false;
+}
+
+int GetCircleToPolyCorrection( int aMaxError )
+{
+    // Push all the error to the outside by increasing the radius
+    return s_disable_arc_correction ? 0 : aMaxError;
 }
 
 
