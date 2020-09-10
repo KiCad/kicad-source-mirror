@@ -26,6 +26,7 @@
 #define _REPORTER_H_
 
 #include <wx/string.h>
+#include <common.h>
 #include <widgets/ui_common.h>
 
 /**
@@ -37,7 +38,6 @@
 
 class wxStatusBar;
 class wxTextCtrl;
-class wxHtmlListbox;
 class WX_HTML_REPORT_PANEL;
 class WX_INFOBAR;
 
@@ -117,6 +117,11 @@ public:
      * Returns true if the reporter client is non-empty.
      */
     virtual bool HasMessage() const = 0;
+
+    virtual EDA_UNITS GetUnits() const
+    {
+        return EDA_UNITS::MILLIMETRES;
+    }
 
     virtual ~REPORTER()
     {

@@ -28,7 +28,7 @@
 /**
  * WX_HTML_REPORT_BOX
  *
- * A slimmed down version of WX_HTML_REPORT_BOX
+ * A slimmed down version of WX_HTML_REPORT_PANEL
  */
 class WX_HTML_REPORT_BOX : public wxHtmlWindow, public REPORTER
 {
@@ -41,6 +41,9 @@ public:
 
     bool HasMessage() const override { return !m_messages.empty(); }
 
+    void SetUnits( EDA_UNITS aUnits ) { m_units = aUnits; }
+    EDA_UNITS GetUnits() const override { return m_units; }
+
     void Flush();
     void Clear();
 
@@ -48,7 +51,7 @@ private:
     wxString addHeader( const wxString& aBody );
     wxString generateHtml( const wxString& aLine );
 
-    void scrollToBottom();
+    EDA_UNITS             m_units;
 
     ///> copy of the report, stored for filtering
     std::vector<wxString> m_messages;

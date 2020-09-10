@@ -18,12 +18,15 @@
  */
 
 
+#include <math/util.h>
+#include <common.h>
 #include "wx_html_report_box.h"
 
 
 WX_HTML_REPORT_BOX::WX_HTML_REPORT_BOX( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                                         const wxSize& size, long style ) :
-    wxHtmlWindow( parent, id, pos, size, style )
+    wxHtmlWindow( parent, id, pos, size, style ),
+    m_units( EDA_UNITS::MILLIMETRES )
 {
 }
 
@@ -35,6 +38,30 @@ REPORTER& WX_HTML_REPORT_BOX::Report( const wxString& aText, SEVERITY aSeverity 
 }
 
 
+wxString fixLinespacing( wxHtmlCell* aCell, int aMinLinespacing )
+{
+    // wxWidgets default linespacing is about 110% of font-height (which is way too small),
+    // and the default paragraph spacing is about 200% (which is too big).  The heading,
+    // bullet lists, etc. line spacing is fine.
+    //
+    // And of course they provide no way to set it, which leaves us with very few options.
+    // Fortunately we know we're dealing mostly with single lines in the reporter so we apply
+    // an egregious hack and enforce a minimum linespacing for things ending in '.' (which
+    // normally won't include headings or bullet list items).
+
+    wxString             content = aCell->ConvertToText( nullptr );
+    wxHtmlContainerCell* container = dynamic_cast<wxHtmlContainerCell*>( aCell );
+
+    for( wxHtmlCell* child = aCell->GetFirstChild(); child; child = child->GetNext() )
+        content += fixLinespacing( child, aMinLinespacing );
+
+    if( container && content.EndsWith( "." ) && container->GetHeight() < aMinLinespacing )
+        container->SetMinHeight( aMinLinespacing );
+
+    return content;
+}
+
+
 void WX_HTML_REPORT_BOX::Flush()
 {
     wxString html;
@@ -43,6 +70,11 @@ void WX_HTML_REPORT_BOX::Flush()
         html += generateHtml( line );
 
     SetPage( addHeader( html ) );
+
+    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    int    minLineHeight = KiROUND( font.GetPixelSize().y * 1.3 );
+
+    fixLinespacing( GetInternalRepresentation(), minLineHeight );
 }
 
 
@@ -51,7 +83,11 @@ wxString WX_HTML_REPORT_BOX::addHeader( const wxString& aBody )
     wxColour bgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
     wxColour fgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
 
-    return wxString::Format( wxT( "<html><body bgcolor='%s' text='%s'>%s</body></html>" ),
+    return wxString::Format( wxT( "<html>"
+                                  "  <body bgcolor='%s' text='%s'>"
+                                  "    %s"
+                                  "  </body>"
+                                  "</html>" ),
                              bgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
                              fgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
                              aBody );
@@ -60,7 +96,7 @@ wxString WX_HTML_REPORT_BOX::addHeader( const wxString& aBody )
 
 wxString WX_HTML_REPORT_BOX::generateHtml( const wxString& aLine )
 {
-    return "<font size=3>" + aLine + "</font><br>";
+    return aLine + "<br>";
 }
 
 
