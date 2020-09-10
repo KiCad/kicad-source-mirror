@@ -417,6 +417,7 @@ public:
     static TOOL_ACTION boardStatistics;
     static TOOL_ACTION boardReannotate;
     static TOOL_ACTION repairBoard;
+    static TOOL_ACTION inspectClearance;
 
     // Appearance controls
     static TOOL_ACTION clearHighlight;

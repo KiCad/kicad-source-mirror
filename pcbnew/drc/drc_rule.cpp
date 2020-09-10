@@ -31,42 +31,86 @@
 
 
 const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem,
-                                     int aConstraint, PCB_LAYER_ID aLayer, wxString* aRuleName )
+                                     int aConstraint, PCB_LAYER_ID aLayer, wxString* aRuleName,
+                                     REPORTER* aReporter )
 {
-    BOARD* board = aItem->GetBoard();
+    BOARD*    board = aItem->GetBoard();
 
     if( !board )
         return nullptr;
 
     for( DRC_RULE* rule : board->GetDesignSettings().m_DRCRules )
     {
-        if( !rule->m_LayerCondition.test( aLayer ) )
-            continue;
-
-        for( const DRC_CONSTRAINT& constraint : rule->m_Constraints )
+        if( aReporter )
         {
-            if( constraint.m_Type != aConstraint )
-                continue;
+            aReporter->Report( wxString::Format( _( "Checking rule \"%s\"." ),
+                                                 rule->m_Name ) );
+        }
 
-            if( !rule->m_LayerCondition.test( aLayer ) )
-                continue;
+        if( !rule->m_LayerCondition.test( aLayer ) )
+        {
+            if( aReporter )
+            {
+                aReporter->Report( wxString::Format( _( "Rule layer \"%s\" not matched." ),
+                                                     rule->m_LayerSource ) );
+                aReporter->Report( "Rule not applied." );
+            }
+
+            continue;
+        }
+
+        const DRC_CONSTRAINT* constraint = nullptr;
+
+        for( const DRC_CONSTRAINT& candidate : rule->m_Constraints )
+        {
+            if( candidate.m_Type == aConstraint )
+            {
+                constraint = &candidate;
+                break;
+            }
+        }
+
+        if( aReporter && !constraint )
+        {
+            aReporter->Report( _( "Rule contains no applicable constraints." ) );
+            aReporter->Report( _( "Rule not applied." ) );
+        }
+        else
+        {
+            if( aReporter )
+            {
+                aReporter->Report( wxString::Format( _( "Checking rule condition \"%s\"." ),
+                                                     rule->m_Condition.m_Expression ) );
+            }
 
             if( rule->m_Condition.EvaluateFor( aItem, bItem, aLayer ) )
             {
+                if( aReporter )
+                    aReporter->Report( "Rule applied." );
+
                 if( aRuleName )
                     *aRuleName = rule->m_Name;
 
-                return &constraint;
+                return constraint;
             }
 
             if( bItem && rule->m_Condition.EvaluateFor( bItem, aItem, aLayer ) )
             {
+                if( aReporter )
+                    aReporter->Report( "Rule applied." );
+
                 if( aRuleName )
                     *aRuleName = rule->m_Name;
 
-                return &constraint;
+                return constraint;
             }
+
+            if( aReporter )
+                aReporter->Report( "Condition not satisfied; rule not applied." );
         }
+
+        if( aReporter )
+            aReporter->Report( "" );
     }
 
     return nullptr;
@@ -97,21 +141,37 @@ DRC_RULE_CONDITION::~DRC_RULE_CONDITION()
 
 
 bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB,
-                                      PCB_LAYER_ID aLayer )
+                                      PCB_LAYER_ID aLayer, REPORTER* aReporter )
 {
-    // An unconditional rule is always true
     if( m_Expression.IsEmpty() )
-        return true;
+    {
+        if( aReporter )
+            aReporter->Report( _( "Unconditional constraint." ) );
 
-    // A rule which failed to compile is always false
+        return true;
+    }
+
+    if( aReporter )
+        aReporter->Report( _( "Evaluating expression \"" + m_Expression + "\"." ) );
+
     if( !m_ucode )
+    {
+        if( aReporter )
+            aReporter->Report( _( "ERROR in expression." ) );
+
         return false;
+    }
 
     BOARD_ITEM* a = const_cast<BOARD_ITEM*>( aItemA );
     BOARD_ITEM* b = aItemB ? const_cast<BOARD_ITEM*>( aItemB ) : DELETED_BOARD_ITEM::GetInstance();
 
     PCB_EXPR_CONTEXT ctx( aLayer );
     ctx.SetItems( a, b );
+    ctx.SetErrorCallback( [&]( const wxString& aMessage, int aOffset )
+                          {
+                              if( aReporter )
+                                  aReporter->Report( _( "ERROR: " ) + aMessage );
+                          } );
 
     return m_ucode->Run( &ctx )->AsDouble() != 0.0;
 }

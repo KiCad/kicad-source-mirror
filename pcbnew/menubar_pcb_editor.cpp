@@ -372,6 +372,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     inspectMenu->AppendSeparator();
     inspectMenu->Add( PCB_ACTIONS::runDRC );
+    inspectMenu->Add( PCB_ACTIONS::inspectClearance );
 
 
     //-- Tools menu ----------------------------------------------------------

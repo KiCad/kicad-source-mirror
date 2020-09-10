@@ -30,6 +30,7 @@
 #include <pcb_painter.h>
 #include <connectivity/connectivity_data.h>
 #include <profile.h>
+#include <dialogs/wx_html_report_box.h>
 #include "pcb_inspection_tool.h"
 
 
@@ -77,7 +78,9 @@ bool PCB_INSPECTION_TOOL::Init()
     CONDITIONAL_MENU& menu = selectionTool->GetToolMenu().GetMenu();
 
     selectionTool->GetToolMenu().AddSubMenu( netSubMenu );
-    menu.AddMenu( netSubMenu.get(), SELECTION_CONDITIONS::OnlyTypes( connectedTypes ) );
+
+    menu.AddMenu( netSubMenu.get(), SELECTION_CONDITIONS::OnlyTypes( connectedTypes ), 200 );
+    menu.AddItem( PCB_ACTIONS::inspectClearance, SELECTION_CONDITIONS::Count( 2 ), 200 );
 
     return true;
 }
@@ -93,6 +96,195 @@ int PCB_INSPECTION_TOOL::ShowStatisticsDialog( const TOOL_EVENT& aEvent )
 {
     DIALOG_BOARD_STATISTICS dialog( m_frame );
     dialog.ShowModal();
+    return 0;
+}
+
+
+void reportZoneConnection( ZONE_CONTAINER* aZone, D_PAD* aPad, REPORTER* r )
+{
+    ENUM_MAP<ZONE_CONNECTION> connectionEnum = ENUM_MAP<ZONE_CONNECTION>::Instance();
+    wxString                  source;
+    ZONE_CONNECTION           connection = aZone->GetPadConnection( aPad, &source );
+
+    r->Report( "" );
+
+    r->Report( wxString::Format( _( "Zone connection type: %s." ),
+                                 connectionEnum.ToString( aZone->GetPadConnection() ) ) );
+
+    if( source != _( "zone" ) )
+    {
+        r->Report( wxString::Format( _( "Overridden by %s; connection type: %s." ),
+                                     source,
+                                     connectionEnum.ToString( connection ) ) );
+    }
+
+    // Resolve complex connection types into simple types
+    if( connection == ZONE_CONNECTION::THT_THERMAL )
+    {
+        if( aPad->GetAttribute() == PAD_ATTRIB_STANDARD )
+        {
+            connection = ZONE_CONNECTION::THERMAL;
+        }
+        else
+        {
+            connection = ZONE_CONNECTION::FULL;
+            r->Report( wxString::Format( _( "Pad is not a PTH pad; connection will be: %s." ),
+                                         connectionEnum.ToString( ZONE_CONNECTION::FULL ) ) );
+        }
+    }
+
+    r->Report( "" );
+
+    // Process simple connection types
+    if( connection == ZONE_CONNECTION::THERMAL )
+    {
+        int gap = aZone->GetThermalReliefGap();
+
+        r->Report( wxString::Format( _( "Zone thermal relief: %s." ),
+                                     StringFromValue( r->GetUnits(), gap, true ) ) );
+
+        gap = aZone->GetThermalReliefGap( aPad, &source );
+
+        if( source != _( "zone" ) )
+        {
+            r->Report( wxString::Format( _( "Overridden by %s; thermal relief: %s." ),
+                                         source,
+                                         StringFromValue( r->GetUnits(), gap, true ) ) );
+        }
+    }
+    else if( connection == ZONE_CONNECTION::NONE )
+    {
+        int clearance = aZone->GetLocalClearance();
+
+        r->Report( wxString::Format( _( "Zone clearance: %s." ),
+                                     StringFromValue( r->GetUnits(), clearance, true ) ) );
+
+        if( aZone->GetThermalReliefGap( aPad ) > clearance )
+        {
+            clearance = aZone->GetThermalReliefGap( aPad, &source );
+
+            if( source != _( "zone" ) )
+            {
+                r->Report( wxString::Format( _( "Overridden by larger thermal relief from %s;"
+                                                "clearance: %s." ),
+                                             source,
+                                             StringFromValue( r->GetUnits(), clearance, true ) ) );
+            }
+        }
+    }
+    else
+    {
+        r->Report( _( "Clearance is 0." ) );
+    }
+}
+
+
+void reportCopperClearance( PCB_LAYER_ID aLayer, BOARD_CONNECTED_ITEM* aA, BOARD_ITEM* aB,
+                            REPORTER* r )
+{
+    wxString source;
+
+    r->Report( "" );
+
+    // JEY TODO: hook this up to new DRC engine to get "classic" sources as well; right now
+    // we're just reporting on rules....
+    aA->GetClearance( aLayer, aB, &source, r );
+}
+
+
+int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
+{
+    SELECTION_TOOL*         selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const PCBNEW_SELECTION& selection = selTool->GetSelection();
+    PCB_LAYER_ID            layer = m_frame->GetActiveLayer();
+
+    if( selection.Size() != 2 )
+    {
+        m_frame->ShowInfoBarError( _( "Select two items for a clearance resolution report." ) );
+        return 0;
+    }
+
+    if( m_inspectClearanceDialog == nullptr )
+    {
+        m_inspectClearanceDialog = std::make_unique<DIALOG_HTML_REPORTER>( m_frame );
+        m_inspectClearanceDialog->SetTitle( _( "Clearance Report" ) );
+
+        m_inspectClearanceDialog->Connect( wxEVT_CLOSE_WINDOW,
+                    wxCommandEventHandler( PCB_INSPECTION_TOOL::onInspectClearanceDialogClosed ),
+                    nullptr, this );
+    }
+
+    WX_HTML_REPORT_BOX* r = m_inspectClearanceDialog->m_Reporter;
+    r->SetUnits( m_frame->GetUserUnits() );
+    r->Clear();
+
+    BOARD_ITEM* a = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
+    BOARD_ITEM* b = static_cast<BOARD_ITEM*>( selection.GetItem( 1 ) );
+
+    if( a->Type() != PCB_ZONE_AREA_T && b->Type() == PCB_ZONE_AREA_T )
+        std::swap( a, b );
+    else if( !a->IsConnected() && b->IsConnected() )
+        std::swap( a, b );
+
+    if( !IsCopperLayer( layer ) )
+    {
+        r->Report( wxString::Format( _( "Active layer (%s) is not a copper layer.  "
+                                        "No clearance defined." ),
+                                     m_frame->GetBoard()->GetLayerName( layer ) ) );
+    }
+    else if( !a->GetLayerSet().test( layer ) )
+    {
+        r->Report( wxString::Format( _( "%s not present on layer %s.  No clearance defined." ),
+                                     a->GetSelectMenuText( r->GetUnits() ),
+                                     m_frame->GetBoard()->GetLayerName( layer ) ) );
+    }
+    else if( !b->GetLayerSet().test( layer ) )
+    {
+        r->Report( wxString::Format( _( "%s not present on layer %s.  No clearance defined." ),
+                                     b->GetSelectMenuText( r->GetUnits() ),
+                                     m_frame->GetBoard()->GetLayerName( layer ) ) );
+    }
+    else if( !a->IsConnected() )
+    {
+        r->Report( _( "Items have no electrical connections.  No clearance defined." ) );
+    }
+    else
+    {
+        r->Report( _( "<h7>Clearance resolution for:</h7>" ) );
+
+        r->Report( wxString::Format( _( "<ul><li>Layer %s</li><li>%s</li><li>%s</li></ul>" ),
+                                     m_frame->GetBoard()->GetLayerName( layer ),
+                                     a->GetSelectMenuText( r->GetUnits() ),
+                                     b->GetSelectMenuText( r->GetUnits() ) ) );
+
+        BOARD_CONNECTED_ITEM* ac = dynamic_cast<BOARD_CONNECTED_ITEM*>( a );
+        BOARD_CONNECTED_ITEM* bc = dynamic_cast<BOARD_CONNECTED_ITEM*>( b );
+
+        if( ac && bc && ac->GetNetCode() > 0 && ac->GetNetCode() == bc->GetNetCode() )
+        {
+            // Same nets....
+
+            if( ac->Type() == PCB_ZONE_AREA_T && bc->Type() == PCB_PAD_T )
+            {
+                reportZoneConnection( static_cast<ZONE_CONTAINER*>( ac ),
+                                      static_cast<D_PAD*>( bc ), r );
+            }
+            else
+            {
+                r->Report( _( "Items belong to the same net. Clearance is 0." ) );
+            }
+        }
+        else
+        {
+            // Different nets (or second unconnected)....
+
+            reportCopperClearance( layer, ac, b, r );
+        }
+    }
+
+    r->Flush();
+
+    m_inspectClearanceDialog->Show( true );
     return 0;
 }
 
@@ -537,6 +729,16 @@ void PCB_INSPECTION_TOOL::onListNetsDialogClosed( wxCommandEvent& event )
 }
 
 
+void PCB_INSPECTION_TOOL::onInspectClearanceDialogClosed( wxCommandEvent& event )
+{
+    m_inspectClearanceDialog->Disconnect( wxEVT_CLOSE_WINDOW,
+            wxCommandEventHandler( PCB_INSPECTION_TOOL::onListNetsDialogClosed ), nullptr, this );
+
+    m_inspectClearanceDialog->Destroy();
+    m_inspectClearanceDialog.release();
+}
+
+
 int PCB_INSPECTION_TOOL::HideNet( const TOOL_EVENT& aEvent )
 {
     doHideNet( aEvent.Parameter<intptr_t>(), true );
@@ -595,6 +797,7 @@ void PCB_INSPECTION_TOOL::setTransitions()
 
     Go( &PCB_INSPECTION_TOOL::ListNets,               PCB_ACTIONS::listNets.MakeEvent() );
     Go( &PCB_INSPECTION_TOOL::ShowStatisticsDialog,   PCB_ACTIONS::boardStatistics.MakeEvent() );
+    Go( &PCB_INSPECTION_TOOL::InspectClearance,       PCB_ACTIONS::inspectClearance.MakeEvent() );
 
     Go( &PCB_INSPECTION_TOOL::HighlightNet,           PCB_ACTIONS::highlightNet.MakeEvent() );
     Go( &PCB_INSPECTION_TOOL::HighlightNet,           PCB_ACTIONS::highlightNetSelection.MakeEvent() );

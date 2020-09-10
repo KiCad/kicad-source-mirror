@@ -215,6 +215,7 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
             break;
 
         case T_layer:
+            rule->m_LayerSource = FromUTF8();
             rule->m_LayerCondition = parseLayer();
             break;
 
@@ -453,7 +454,7 @@ LSET DRC_RULES_PARSER::parseLayer()
         }
 
         if( !retVal.any() )
-            reportError( wxString::Format( _( "Unrecognized layer '%s' " ), layerName ) );
+            reportError( wxString::Format( _( "Unrecognized layer '%s'." ), layerName ) );
     }
 
     if( (int) NextTok() != DSN_RIGHT )

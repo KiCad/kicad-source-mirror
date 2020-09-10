@@ -81,7 +81,7 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetEffectiveNetclass() const
  * LEVEL 3: Accumulated local settings, netclass settings, & board design settings
  */
 int BOARD_CONNECTED_ITEM::GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem,
-                                        wxString* aSource ) const
+                                        wxString* aSource, REPORTER* aReporter ) const
 {
     BOARD*                board = GetBoard();
     int                   clearance = 0;
@@ -111,7 +111,7 @@ int BOARD_CONNECTED_ITEM::GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem,
 
     // LEVEL 2: Rules
     //
-    if( GetRuleClearance( aItem, aLayer, &clearance, aSource ) )
+    if( GetRuleClearance( aItem, aLayer, &clearance, aSource, aReporter ) )
         return clearance;
 
     // LEVEL 3: Accumulated local settings, netclass settings, & board design settings
@@ -153,10 +153,11 @@ int BOARD_CONNECTED_ITEM::GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem,
 
 
 bool BOARD_CONNECTED_ITEM::GetRuleClearance( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer,
-                                             int* aClearance, wxString* aSource ) const
+                                             int* aClearance, wxString* aSource,
+                                             REPORTER* aReporter ) const
 {
     const DRC_CONSTRAINT* constraint = GetConstraint( this, aItem, DRC_RULE_ID_CLEARANCE, aLayer,
-                                                      aSource );
+                                                      aSource, aReporter );
 
     if( constraint )
     {
@@ -164,6 +165,13 @@ bool BOARD_CONNECTED_ITEM::GetRuleClearance( BOARD_ITEM* aItem, PCB_LAYER_ID aLa
             *aSource = wxString::Format( _( "'%s' rule" ), *aSource );
 
         *aClearance = constraint->m_Value.Min();
+
+        if( aReporter )
+        {
+            wxString clearance = StringFromValue( aReporter->GetUnits(), *aClearance, true );
+            aReporter->Report( wxString::Format( _( "Clearance: %s." ), clearance ) );
+        }
+
         return true;
     }
 

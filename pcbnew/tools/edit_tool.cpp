@@ -204,23 +204,21 @@ bool EDIT_TOOL::Init()
     auto specialToolsSubMenu = std::make_shared<SPECIAL_TOOLS_CONTEXT_MENU>( this );
     menu.AddSeparator();
     m_selectionTool->GetToolMenu().AddSubMenu( specialToolsSubMenu );
-    menu.AddMenu( specialToolsSubMenu.get(), SELECTION_CONDITIONS::NotEmpty );
+    menu.AddMenu( specialToolsSubMenu.get(), SELECTION_CONDITIONS::NotEmpty, 100 );
 
-    menu.AddSeparator();
-    menu.AddItem( ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( ACTIONS::copy, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddSeparator( 150 );
+    menu.AddItem( ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty, 150 );
+    menu.AddItem( ACTIONS::copy, SELECTION_CONDITIONS::NotEmpty, 150 );
     // Selection tool handles the context menu for some other tools, such as the Picker.
     // Don't add things like Paste when another tool is active.
-    menu.AddItem( ACTIONS::paste, noActiveToolCondition );
-
-    menu.AppendSeparator();
-    menu.AddItem( ACTIONS::selectAll, noItemsCondition );
+    menu.AddItem( ACTIONS::paste, noActiveToolCondition, 150 );
+    menu.AddItem( ACTIONS::selectAll, noItemsCondition, 150 );
 
     // Footprint actions
-    menu.AddSeparator();
-    menu.AddItem( PCB_ACTIONS::editFpInFpEditor, singleModuleCondition );
-    menu.AddItem( PCB_ACTIONS::updateFootprint, singleModuleCondition );
-    menu.AddItem( PCB_ACTIONS::changeFootprint, singleModuleCondition );
+    menu.AddSeparator( 150 );
+    menu.AddItem( PCB_ACTIONS::editFpInFpEditor, singleModuleCondition, 150 );
+    menu.AddItem( PCB_ACTIONS::updateFootprint, singleModuleCondition, 150 );
+    menu.AddItem( PCB_ACTIONS::changeFootprint, singleModuleCondition, 150 );
 
     return true;
 }

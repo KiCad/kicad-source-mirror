@@ -243,9 +243,10 @@ bool PCB_EDITOR_CONTROL::Init()
         toolMenu.AddSubMenu( lockMenu );
         toolMenu.AddSubMenu( groupMenu );
 
+        menu.AddMenu( groupMenu.get(), SELECTION_CONDITIONS::NotEmpty, 100 );
+        menu.AddMenu( lockMenu.get(), SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::LockableItems ), 100 );
+
         menu.AddMenu( zoneMenu.get(), SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ), 200 );
-        menu.AddMenu( lockMenu.get(), SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::LockableItems ), 200 );
-        menu.AddMenu( groupMenu.get(), SELECTION_CONDITIONS::NotEmpty, 200 );
     }
 
     DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<DRAWING_TOOL>();

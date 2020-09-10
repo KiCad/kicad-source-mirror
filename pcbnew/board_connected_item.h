@@ -28,6 +28,7 @@
 
 #include <class_board_item.h>
 #include <netinfo.h>
+#include <reporter.h>
 #include <kicad_string.h>
 
 class NETCLASS;
@@ -167,7 +168,7 @@ public:
      * @return int - the clearance in internal units.
      */
     virtual int GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem = nullptr,
-                              wxString* aSource = nullptr ) const;
+                              wxString* aSource = nullptr, REPORTER* aReporter = nullptr ) const;
 
     /**
      * Function GetRuleClearance
@@ -178,7 +179,7 @@ public:
      * @return true if a rule was fired
      */
     virtual bool GetRuleClearance( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int* aClearance,
-                                   wxString* aSource ) const;
+                                   wxString* aSource, REPORTER* aReporter = nullptr ) const;
 
     /**
      * Function GetLocalClearanceOverrides

@@ -88,8 +88,7 @@ class DRC_CONSTRAINT
 public:
     DRC_CONSTRAINT() :
         m_Type( DRC_RULE_ID_UNKNOWN ),
-        m_DisallowFlags( 0 ),
-        m_LayerCondition( LSET::AllLayersMask() )
+        m_DisallowFlags( 0 )
     {}
 
     const MINOPTMAX<int>& GetValue() const { return m_Value; }
@@ -97,9 +96,8 @@ public:
 
 public:
     DRC_CONSTRAINT_TYPE_T  m_Type;
-    MINOPTMAX<int> m_Value;
-    int            m_DisallowFlags;
-    LSET           m_LayerCondition;
+    MINOPTMAX<int>         m_Value;
+    int                    m_DisallowFlags;
 };
 
 
@@ -109,14 +107,15 @@ public:
     DRC_RULE_CONDITION();
     ~DRC_RULE_CONDITION();
 
-    bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB, PCB_LAYER_ID aLayer );
+    bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB, PCB_LAYER_ID aLayer,
+                      REPORTER* aReporter = nullptr );
     bool Compile( REPORTER* aReporter, int aSourceLine, int aSourceOffset );
 
 public:
     wxString  m_Expression;
 
 private:
-    PCB_EXPR_UCODE*       m_ucode;
+    PCB_EXPR_UCODE* m_ucode;
 };
 
 
@@ -128,6 +127,7 @@ public:
 
 public:
     wxString                    m_Name;
+    wxString                    m_LayerSource;
     LSET                        m_LayerCondition;
     wxString                    m_TestProviderName;
     DRC_RULE_CONDITION          m_Condition;
@@ -136,7 +136,9 @@ public:
 
 
 const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem,
-                                     int aConstraint, PCB_LAYER_ID aLayer, wxString* aRuleName );
+                                     int aConstraint, PCB_LAYER_ID aLayer,
+                                     wxString* aRuleName = nullptr,
+                                     REPORTER* aReporter = nullptr );
 
 
 #endif      // DRC_RULE_H

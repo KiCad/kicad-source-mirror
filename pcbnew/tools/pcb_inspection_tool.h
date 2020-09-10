@@ -26,6 +26,7 @@
 
 #include <dialogs/dialog_board_statistics.h>
 #include <dialogs/dialog_select_net_from_list.h>
+#include <dialogs/dialog_HTML_reporter_base.h>
 #include <pcb_edit_frame.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_tool_base.h>
@@ -89,6 +90,9 @@ public:
     ///> Show the ratsnest for a given net
     int ShowNet( const TOOL_EVENT& aEvent );
 
+    ///> Show the clearance resolution for two selected items
+    int InspectClearance( const TOOL_EVENT& aEvent );
+
 private:
     ///> Event handler to recalculate dynamic ratsnest
     void ratsnestTimer( wxTimerEvent& aEvent );
@@ -103,7 +107,8 @@ private:
     ///> Bind handlers to corresponding TOOL_ACTIONs
     void setTransitions() override;
 
-    void onListNetsDialogClosed( wxCommandEvent& event );
+    void onListNetsDialogClosed( wxCommandEvent& aEvent );
+    void onInspectClearanceDialogClosed( wxCommandEvent& aEvent );
 
 private:
     PCB_EDIT_FRAME* m_frame;    // Pointer to the currently used edit frame.
@@ -116,6 +121,7 @@ private:
     std::unique_ptr<DIALOG_SELECT_NET_FROM_LIST> m_listNetsDialog;
     DIALOG_SELECT_NET_FROM_LIST::SETTINGS        m_listNetsDialogSettings;
 
+    std::unique_ptr<DIALOG_HTML_REPORTER>        m_inspectClearanceDialog;
 };
 
 #endif //__BOARD_STATISTICS_TOOL_H
