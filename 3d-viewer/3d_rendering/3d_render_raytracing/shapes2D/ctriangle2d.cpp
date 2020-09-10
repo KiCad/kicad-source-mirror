@@ -132,7 +132,7 @@ void Convert_shape_line_polygon_to_triangles( SHAPE_POLY_SET &aPolyList,
                                               const BOARD_ITEM &aBoardItem )
 {
 
-    aPolyList.CacheTriangulation();
+    aPolyList.CacheTriangulation( false );
     const double conver_d = (double)aBiuTo3DunitsScale;
 
     for( unsigned int j = 0; j < aPolyList.TriangulatedPolyCount(); j++ )

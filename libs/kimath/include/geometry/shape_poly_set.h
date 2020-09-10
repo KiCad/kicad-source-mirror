@@ -99,7 +99,7 @@ class SHAPE_POLY_SET : public SHAPE
                     return bbox;
                 }
 
-                virtual const VECTOR2I GetPoint( int aIndex ) const override 
+                virtual const VECTOR2I GetPoint( int aIndex ) const override
                 {
                     switch(aIndex)
                     {
@@ -165,7 +165,7 @@ class SHAPE_POLY_SET : public SHAPE
                 return m_triangles.size();
             }
 
-            size_t GetVertexCount() const 
+            size_t GetVertexCount() const
             {
                 return m_vertices.size();
             }
@@ -1365,7 +1365,7 @@ class SHAPE_POLY_SET : public SHAPE
 
         SHAPE_POLY_SET& operator=( const SHAPE_POLY_SET& );
 
-        void CacheTriangulation();
+        void CacheTriangulation( bool aPartition = true );
         bool IsTriangulationUpToDate() const;
 
         MD5_HASH GetHash() const;

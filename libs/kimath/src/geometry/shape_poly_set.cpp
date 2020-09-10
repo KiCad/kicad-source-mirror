@@ -1903,7 +1903,7 @@ bool SHAPE_POLY_SET::IsTriangulationUpToDate() const
 
 
 static void partitionPolyIntoRegularCellGrid(
-        const SHAPE_POLY_SET& aPoly, int aCells, SHAPE_POLY_SET& aOut )
+        const SHAPE_POLY_SET& aPoly, int aSize, SHAPE_POLY_SET& aOut )
 {
     BOX2I bb = aPoly.BBox();
 
@@ -1917,13 +1917,13 @@ static void partitionPolyIntoRegularCellGrid(
 
     if( w > h )
     {
-        n_cells_x = aCells;
-        n_cells_y = (int) floor( h / w * (double) aCells ) + 1;
+        n_cells_x = w / aSize;
+        n_cells_y = floor( h / w * n_cells_x ) + 1;
     }
     else
     {
-        n_cells_x = (int) floor( w / h * (double) aCells ) + 1;
-        n_cells_y = aCells;
+        n_cells_y = h / aSize;
+        n_cells_x = floor( w / h * n_cells_y ) + 1;
     }
 
     SHAPE_POLY_SET ps1( aPoly ), ps2( aPoly ), maskSetOdd, maskSetEven;
@@ -1968,7 +1968,7 @@ static void partitionPolyIntoRegularCellGrid(
 }
 
 
-void SHAPE_POLY_SET::CacheTriangulation()
+void SHAPE_POLY_SET::CacheTriangulation( bool aPartition )
 {
     bool recalculate = !m_hash.IsValid();
     MD5_HASH hash;
@@ -1992,7 +1992,11 @@ void SHAPE_POLY_SET::CacheTriangulation()
 
     SHAPE_POLY_SET tmpSet;
 
-    partitionPolyIntoRegularCellGrid( *this, 20, tmpSet );
+    if( aPartition )
+        // This partitions into regularly-sized grids (1cm in pcbnew)
+        partitionPolyIntoRegularCellGrid( *this, 1e7, tmpSet );
+    else
+        tmpSet = *this;
 
     m_triangulatedPolys.clear();
     m_triangulationValid = true;
