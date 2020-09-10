@@ -306,13 +306,14 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 break;
 
             case PAD_SHAPE_RECT:
+                pad->SetSize( padPlotsSize );
+
                 if( margin.x > 0 )
                 {
                     pad->SetShape( PAD_SHAPE_ROUNDRECT );
                     pad->SetRoundRectCornerRadius( margin.x );
                 }
 
-                pad->SetSize( padPlotsSize );
                 itemplotter.PlotPad( pad, color, padPlotMode );
                 break;
 
@@ -320,8 +321,8 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             {
                 wxSize scale( padPlotsSize.x / padSize.x, padPlotsSize.y / padSize.y );
                 pad->SetDelta( wxSize( padDelta.x * scale.x, padDelta.y * scale.y ) );
-
                 pad->SetSize( padPlotsSize );
+
                 itemplotter.PlotPad( pad, color, padPlotMode );
             }
                 break;
