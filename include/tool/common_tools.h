@@ -56,6 +56,7 @@ public:
     int ZoomInOutCenter( const TOOL_EVENT& aEvent );
     int ZoomCenter( const TOOL_EVENT& aEvent );
     int ZoomFitScreen( const TOOL_EVENT& aEvent );
+    int ZoomFitObjects( const TOOL_EVENT& aEvent );
     int ZoomPreset( const TOOL_EVENT& aEvent );
 
     int CenterContents( const TOOL_EVENT& aEvent );
@@ -88,6 +89,16 @@ public:
     int SwitchCanvas( const TOOL_EVENT& aEvent );
 
 private:
+    /**
+     * Enum ZOOM_FIT_TYPE_T
+     * is the set of "Zoom to Fit" types that can be performed
+     */
+    enum ZOOM_FIT_TYPE_T
+    {
+        ZOOM_FIT_ALL,     // Zoom to fall all items in view INCLUDING page and border
+        ZOOM_FIT_OBJECTS, // Zoom to fit all items in view EXCLUDING page and border
+    };
+
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
@@ -98,6 +109,8 @@ private:
 
     ///> Note: idx == 0 is Auto; idx == 1 is first entry in zoomList
     int doZoomToPreset( int idx, bool aCenterOnCursor );
+
+    int doZoomFit( ZOOM_FIT_TYPE_T aFitType );
 
     std::vector<VECTOR2I> m_grids;  // grids from APP_SETTINGS converted to internal units
                                     // and with the user grid appended

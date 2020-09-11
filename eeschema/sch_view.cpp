@@ -80,6 +80,20 @@ void SCH_VIEW::SetScale( double aScale, VECTOR2D aAnchor )
 }
 
 
+const BOX2I SCH_VIEW::GetItemsExtents() const
+{
+    // Calc the bounding box of all items on screen except the page border
+    EDA_RECT bBoxItems;
+
+    for( EDA_ITEM* item : m_frame->GetScreen()->Items() )
+    {
+        if( item != m_worksheet.get() )
+            bBoxItems.Merge( item->GetBoundingBox() );
+    }
+
+    return bBoxItems;
+}
+
 void SCH_VIEW::ResizeSheetWorkingArea( SCH_SCREEN* aScreen )
 {
     const PAGE_INFO& page_info = aScreen->GetPageSettings();

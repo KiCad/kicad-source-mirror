@@ -167,6 +167,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->Add( ACTIONS::zoomInCenter );
     viewMenu->Add( ACTIONS::zoomOutCenter );
     viewMenu->Add( ACTIONS::zoomFitScreen );
+    viewMenu->Add( ACTIONS::zoomFitObjects );
     viewMenu->Add( ACTIONS::zoomTool );
     viewMenu->Add( ACTIONS::zoomRedraw );
 

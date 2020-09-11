@@ -259,6 +259,11 @@ TOOL_ACTION ACTIONS::zoomFitScreen( "common.Control.zoomFitScreen",
         _( "Zoom to Fit" ), _( "Zoom to Fit" ),
         zoom_fit_in_page_xpm );
 
+TOOL_ACTION ACTIONS::zoomFitObjects( "common.Control.zoomFitObjects",
+        AS_GLOBAL, MD_CTRL + WXK_HOME, "",
+        _( "Zoom to Objects" ), _( "Zoom to Objects" ),
+        zoom_fit_to_objects_xpm );
+
 TOOL_ACTION ACTIONS::zoomIn( "common.Control.zoomIn",
         AS_GLOBAL,
 #if defined( __WXMAC__ )

@@ -92,6 +92,7 @@ public:
     static TOOL_ACTION zoomOutCenter;
     static TOOL_ACTION zoomCenter;
     static TOOL_ACTION zoomFitScreen;
+    static TOOL_ACTION zoomFitObjects; // Zooms to bbox of items on screen (except page border)
     static TOOL_ACTION zoomPreset;
     static TOOL_ACTION zoomTool;
     static TOOL_ACTION centerContents;

@@ -58,7 +58,7 @@ option( MAINTAIN_PNGS
 # SMALL - for menus         - 16 x 16
 # MID   - for toolbars      - 26 x 26
 # BIG   - for program icons - 48 x 48
-# which are given on three basename lists: BMAPS_SMALL, BMAPS_MID,a nd BMAPS_BIG
+# which are given on three basename lists: BMAPS_SMALL, BMAPS_MID,and BMAPS_BIG
 # respectively.  The basename is without file extension and without path.
 # A corresponding ${basename}.svg file must exist in 'sources' dir below here.
 
@@ -508,6 +508,7 @@ set( BMAPS_MID
     zoom_area
     zoom_auto_fit_in_page
     zoom_fit_in_page
+    zoom_fit_to_objects
     zoom_center_on_screen
     zoom_in
     zoom_out

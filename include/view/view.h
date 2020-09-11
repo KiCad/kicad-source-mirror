@@ -290,6 +290,11 @@ public:
     }
 
     /**
+     * Return BBox of all items on screen except page and border
+     */
+    virtual const BOX2I GetItemsExtents() const;
+
+    /**
      * Function SetScaleLimits()
      * Sets minimum and maximum values for scale.
      * @param aMaximum is the maximum value for scale.

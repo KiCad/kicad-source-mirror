@@ -250,7 +250,19 @@ int COMMON_TOOLS::ZoomCenter( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
 {
-    KIGFX::VIEW*        view = getView();
+    return doZoomFit( ZOOM_FIT_ALL );
+}
+
+
+int COMMON_TOOLS::ZoomFitObjects( const TOOL_EVENT& aEvent )
+{
+    return doZoomFit( ZOOM_FIT_OBJECTS );
+}
+
+
+int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
+{
+    KIGFX::VIEW*        view   = getView();
     EDA_DRAW_PANEL_GAL* canvas = m_frame->GetCanvas();
     EDA_DRAW_FRAME*     frame = getEditFrame<EDA_DRAW_FRAME>();
 
@@ -258,10 +270,23 @@ int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
     BOX2I    defaultBox = canvas->GetDefaultViewBBox();
     VECTOR2D scrollbarSize = VECTOR2D( canvas->GetSize() - canvas->GetClientSize() );
 
-    view->SetScale( 1.0 );  // the best scale will be fixed later, from this initial value
-                            // but this call ensure all view parameters are up to date
-                            // especially at init time
+    view->SetScale( 1.0 );  // The best scale will be determined later, but this initial
+                            // value ensures all view parameters are up to date (especially
+                            // at init time)
     VECTOR2D screenSize = view->ToWorld( canvas->GetClientSize(), false );
+
+    // Currently "Zoom to Objects" is only supported on Eeschema.  Support for other 
+    // programs in the suite can be added as needed.
+
+    if( aFitType == ZOOM_FIT_OBJECTS )
+    {
+        if( frame->IsType( FRAME_SCH ) )
+            bBox = view->GetItemsExtents(); // Get a BBox of all items except page and border
+        else
+            aFitType = ZOOM_FIT_ALL; // Just do a "Zoom to Fit" for unsupported editors
+    }
+
+    // If the screen is empty then use the default view bbox
 
     if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
         bBox = defaultBox;
@@ -270,26 +295,36 @@ int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
     double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
                                                 fabs( vsize.y / screenSize.y ) );
 
-    // Reserve a 10% margin around component bounding box.
-    double margin_scale_factor = 1.1;
+    // Reserve a 2% margin around bounding boxes.
+    double margin_scale_factor = 1.02;
 
-    // Leave a bigger margin for library editors & viewers
-    if( frame->IsType( FRAME_FOOTPRINT_VIEWER ) || frame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
-         || frame->IsType( FRAME_SCH_VIEWER ) || frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
+    switch( aFitType )
     {
-        margin_scale_factor = 1.4;
-    }
-    else if( frame->IsType( FRAME_SCH_LIB_EDITOR ) || frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
-    {
-        margin_scale_factor = 2;
+    case ZOOM_FIT_ALL:
+        // Leave a bigger margin for library editors & viewers
+
+        if( frame->IsType( FRAME_FOOTPRINT_VIEWER ) || frame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
+                || frame->IsType( FRAME_SCH_VIEWER ) || frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
+        {
+            margin_scale_factor = 1.4;
+        }
+        else if( frame->IsType( FRAME_SCH_LIB_EDITOR ) || frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
+        {
+            margin_scale_factor = 2;
+        }
+        break;
+
+    // Currently the same value as "ZOOM_FIT_ALL" but allows easy expansion/change in the future.
+    case ZOOM_FIT_OBJECTS:
+        margin_scale_factor = 1.02; // Reserve a 2% margin around bounding box.
+        break;
+
+    default:
+        margin_scale_factor = 1.02;
     }
 
     view->SetScale( scale / margin_scale_factor );
     view->SetCenter( bBox.Centre() );
-
-    // Take scrollbars into account
-    VECTOR2D worldScrollbarSize = view->ToWorld( scrollbarSize, false );
-    view->SetCenter( view->GetCenter() + worldScrollbarSize / 2.0 );
 
     return 0;
 }
@@ -565,6 +600,7 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::ZoomInOutCenter,    ACTIONS::zoomOutCenter.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomCenter,         ACTIONS::zoomCenter.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomFitScreen,      ACTIONS::zoomFitScreen.MakeEvent() );
+    Go( &COMMON_TOOLS::ZoomFitObjects,     ACTIONS::zoomFitObjects.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomPreset,         ACTIONS::zoomPreset.MakeEvent() );
     Go( &COMMON_TOOLS::CenterContents,     ACTIONS::centerContents.MakeEvent() );
 
