@@ -36,22 +36,22 @@
 #include <settings/settings_manager.h>
 
 
-DIMENSION::DIMENSION( BOARD_ITEM* aParent )
-        : BOARD_ITEM( aParent, PCB_DIMENSION_T ),
-          m_overrideValue( false ),
-          m_units( EDA_UNITS::INCHES ),
-          m_useMils( false ),
-          m_autoUnits( false ),
-          m_unitsFormat( DIM_UNITS_FORMAT::BARE_SUFFIX ),
-          m_precision( 4 ),
-          m_suppressZeroes( false ),
-          m_lineThickness( Millimeter2iu( 0.2 ) ),
-          m_arrowLength( Mils2iu( 50 ) ),
-          m_extensionOffset( 0 ),
-          m_textPosition( DIM_TEXT_POSITION::OUTSIDE ),
-          m_keepTextAligned( true ),
-          m_text( this ),
-          m_measuredValue( 0 )
+DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
+        BOARD_ITEM( aParent, PCB_DIMENSION_T ),
+        m_overrideTextEnabled( false ),
+        m_units( EDA_UNITS::INCHES ),
+        m_useMils( false ),
+        m_autoUnits( false ),
+        m_unitsFormat( DIM_UNITS_FORMAT::BARE_SUFFIX ),
+        m_precision( 4 ),
+        m_suppressZeroes( false ),
+        m_lineThickness( Millimeter2iu( 0.2 ) ),
+        m_arrowLength( Mils2iu( 50 ) ),
+        m_extensionOffset( 0 ),
+        m_textPosition( DIM_TEXT_POSITION::OUTSIDE ),
+        m_keepTextAligned( true ),
+        m_text( this ),
+        m_measuredValue( 0 )
 {
     m_Layer = Dwgs_User;
 }
@@ -66,6 +66,81 @@ void DIMENSION::SetPosition( const wxPoint& aPos )
 wxPoint DIMENSION::GetPosition() const
 {
     return m_text.GetTextPos();
+}
+
+
+void DIMENSION::updateText()
+{
+    wxString text = m_overrideTextEnabled ? m_valueString : GetValueText();
+
+    switch( m_unitsFormat )
+    {
+    case DIM_UNITS_FORMAT::NO_SUFFIX: // no units
+        break;
+
+    case DIM_UNITS_FORMAT::BARE_SUFFIX: // normal
+        text += " ";
+        text += GetAbbreviatedUnitsLabel( m_units, m_useMils );
+        break;
+
+    case DIM_UNITS_FORMAT::PAREN_SUFFIX: // parenthetical
+        text += " (";
+        text += GetAbbreviatedUnitsLabel( m_units, m_useMils );
+        text += ")";
+        break;
+    }
+
+    text.Prepend( m_prefix );
+    text.Append( m_suffix );
+
+    m_text.SetText( text );
+}
+
+
+wxString DIMENSION::GetValueText() const
+{
+    int val = GetMeasuredValue();
+
+    wxString text;
+    wxString format = wxT( "%." ) + wxString::Format( "%i", m_precision ) + wxT( "f" );
+
+    text.Printf( format, To_User_Unit( m_units, val, m_useMils ) );
+
+    if( m_suppressZeroes )
+    {
+        while( text.Last() == '0' )
+        {
+            text.RemoveLast();
+
+            if( text.Last() == '.' )
+            {
+                text.RemoveLast();
+                break;
+            }
+        }
+
+    }
+
+    return text;
+}
+
+
+void DIMENSION::SetPrefix( const wxString& aPrefix )
+{
+    m_prefix = aPrefix;
+}
+
+
+void DIMENSION::SetSuffix( const wxString& aSuffix )
+{
+    m_suffix = aSuffix;
+}
+
+
+void DIMENSION::SetUnits( EDA_UNITS aUnits, bool aUseMils )
+{
+    m_units = aUnits;
+    m_useMils = aUseMils;
 }
 
 
@@ -84,16 +159,17 @@ DIM_UNITS_MODE DIMENSION::GetUnitsMode() const
 
 void DIMENSION::SetUnitsMode( DIM_UNITS_MODE aMode )
 {
-    m_units     = EDA_UNITS::INCHES;
     m_autoUnits = false;
     m_useMils   = false;
 
     switch( aMode )
     {
     case DIM_UNITS_MODE::INCHES:
+        m_units = EDA_UNITS::INCHES;
         break;
 
     case DIM_UNITS_MODE::MILS:
+        m_units = EDA_UNITS::INCHES;
         m_useMils = true;
         break;
 
@@ -110,7 +186,8 @@ void DIMENSION::SetUnitsMode( DIM_UNITS_MODE aMode )
 
 void DIMENSION::SetText( const wxString& aNewText )
 {
-    m_text.SetText( aNewText );
+    m_valueString = aNewText;
+    updateText();
 }
 
 
@@ -134,7 +211,7 @@ void DIMENSION::Move( const wxPoint& offset )
     m_start += offset;
     m_end   += offset;
 
-    updateGeometry();
+    Update();
 }
 
 
@@ -157,7 +234,7 @@ void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
     RotatePoint( &m_start, aRotCentre, aAngle );
     RotatePoint( &m_end, aRotCentre, aAngle );
 
-    updateGeometry();
+    Update();
 }
 
 
@@ -199,21 +276,21 @@ void DIMENSION::Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight )
         INVERT( m_end.y );
     }
 
-    updateGeometry();
+    Update();
 }
 
 
 void DIMENSION::SetStart( const wxPoint& aOrigin )
 {
     m_start = aOrigin;
-    updateGeometry();
+    Update();
 }
 
 
 void DIMENSION::SetEnd( const wxPoint& aEnd )
 {
     m_end = aEnd;
-    updateGeometry();
+    Update();
 }
 
 
@@ -333,7 +410,7 @@ ALIGNED_DIMENSION::ALIGNED_DIMENSION( BOARD_ITEM* aParent ) :
         m_height( 0 )
 {
     // To preserve look of old dimensions, initialize extension height based on default arrow length
-    m_extensionHeight = m_arrowLength * std::sin( DEG2RAD( s_arrowAngle ) );
+    m_extensionHeight = static_cast<int>( m_arrowLength * std::sin( DEG2RAD( s_arrowAngle ) ) );
 }
 
 
@@ -347,14 +424,15 @@ void ALIGNED_DIMENSION::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_DIMENSION_T );
 
-    std::swap( *static_cast<ALIGNED_DIMENSION*>( this ), *static_cast<ALIGNED_DIMENSION*>( aImage ) );
+    std::swap( *static_cast<ALIGNED_DIMENSION*>( this ),
+               *static_cast<ALIGNED_DIMENSION*>( aImage ) );
 }
 
 
 void ALIGNED_DIMENSION::SetHeight( int aHeight )
 {
     m_height = aHeight;
-    updateGeometry();
+    Update();
 }
 
 
@@ -368,7 +446,7 @@ void ALIGNED_DIMENSION::UpdateHeight( const wxPoint& aCrossbarStart, const wxPoi
     else
         m_height = height.EuclideanNorm();
 
-    updateGeometry();
+    Update();
 }
 
 
@@ -410,13 +488,71 @@ void ALIGNED_DIMENSION::updateGeometry()
     // Update text after calculating crossbar position but before adding crossbar lines
     updateText();
 
-    // Now that we have the text updated, we can determine if the crossbar needs to be broken
-    if( m_textPosition == DIM_TEXT_POSITION::INLINE )
+    // Now that we have the text updated, we can determine how to draw the crossbar.
+    // First we need to create an appropriate bounding polygon to collide with
+    EDA_RECT textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
+                                                    m_text.GetEffectiveTextPenWidth() );
+
+    SHAPE_POLY_SET polyBox;
+    polyBox.NewOutline();
+    polyBox.Append( textBox.GetOrigin() );
+    polyBox.Append( textBox.GetOrigin().x, textBox.GetEnd().y );
+    polyBox.Append( textBox.GetEnd() );
+    polyBox.Append( textBox.GetEnd().x, textBox.GetOrigin().y );
+    polyBox.Rotate( -m_text.GetTextAngleRadians(), textBox.GetCenter() );
+
+    // The ideal crossbar, if the text doesn't collide
+    SEG crossbar( m_crossBarStart, m_crossBarEnd );
+
+    auto findEndpoint =
+            [&]( const VECTOR2I& aStart, const VECTOR2I& aEnd ) -> VECTOR2I
+            {
+                VECTOR2I endpoint( aEnd );
+
+                for( SHAPE_POLY_SET::SEGMENT_ITERATOR seg = polyBox.IterateSegments(); seg; seg++ )
+                {
+                    if( OPT_VECTOR2I intersection = ( *seg ).Intersect( crossbar ) )
+                    {
+                        if( ( *intersection - aStart ).SquaredEuclideanNorm() <
+                            ( endpoint - aStart ).SquaredEuclideanNorm() )
+                            endpoint = *intersection;
+                    }
+                }
+
+                return endpoint;
+            };
+
+    // Now we can draw 0, 1, or 2 crossbar lines depending on how the polygon collides
+
+    bool containsA = polyBox.Contains( crossbar.A );
+    bool containsB = polyBox.Contains( crossbar.B );
+
+    if( containsA && !containsB )
     {
-
+        m_lines.emplace_back( SEG( findEndpoint( crossbar.B, crossbar.A ), crossbar.B ) );
     }
+    else if( containsB && !containsA )
+    {
+        m_lines.emplace_back( SEG( crossbar.A, findEndpoint( crossbar.A, crossbar.B ) ) );
+    }
+    else if( polyBox.Collide( crossbar ) )
+    {
+        // text box collides and we need two segs
+        VECTOR2I endpoint1 = findEndpoint( crossbar.B, crossbar.A );
+        VECTOR2I endpoint2 = findEndpoint( crossbar.A, crossbar.B );
 
-    m_lines.emplace_back( SEG( m_crossBarStart, m_crossBarEnd ) );
+        if( ( crossbar.B - endpoint1 ).SquaredEuclideanNorm() >
+            ( crossbar.B - endpoint2 ).SquaredEuclideanNorm() )
+            std::swap( endpoint1, endpoint2 );
+
+        m_lines.emplace_back( SEG( endpoint1, crossbar.B ) );
+        m_lines.emplace_back( SEG( crossbar.A, endpoint2 ) );
+    }
+    else if( !containsA && !containsB )
+    {
+        // No collision
+        m_lines.emplace_back( crossbar );
+    }
 
     // Add arrows
     VECTOR2I arrowEnd( m_arrowLength, 0 );
@@ -442,7 +578,7 @@ void ALIGNED_DIMENSION::updateText()
 {
     VECTOR2I crossbarCenter( ( m_crossBarEnd - m_crossBarStart ) / 2 );
 
-    if( m_textPosition != DIM_TEXT_POSITION::MANUAL )
+    if( m_textPosition == DIM_TEXT_POSITION::OUTSIDE )
     {
         int textOffsetDistance = m_text.GetEffectiveTextPenWidth() + m_text.GetTextHeight();
 
@@ -451,6 +587,10 @@ void ALIGNED_DIMENSION::updateText()
         textOffset += crossbarCenter;
 
         m_text.SetTextPos( m_crossBarStart + wxPoint( textOffset ) );
+    }
+    else if( m_textPosition == DIM_TEXT_POSITION::INLINE )
+    {
+        m_text.SetTextPos( m_crossBarStart + wxPoint( crossbarCenter ) );
     }
 
     if( m_keepTextAligned )
@@ -464,17 +604,6 @@ void ALIGNED_DIMENSION::updateText()
 
         m_text.SetTextAngle( textAngle );
     }
-    else
-    {
-        m_text.SetTextAngle( 0 );
-    }
 
-    wxString text;
-    wxString format = wxT( "%." ) + wxString::Format( "%i", m_precision ) + wxT( "f" );
-
-    text.Printf( format, To_User_Unit( m_units, m_measuredValue, m_useMils ) );
-    text += " ";
-    text += GetAbbreviatedUnitsLabel( m_units, m_useMils );
-
-    SetText( text );
+    DIMENSION::updateText();
 }

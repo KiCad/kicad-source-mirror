@@ -337,6 +337,45 @@ bool EDA_RECT::Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2 ) cons
 }
 
 
+bool EDA_RECT::Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2,
+                           wxPoint* aIntersection1, wxPoint* aIntersection2 ) const
+{
+    wxPoint point2, point4;
+
+    point2.x = GetEnd().x;
+    point2.y = GetOrigin().y;
+    point4.x = GetOrigin().x;
+    point4.y = GetEnd().y;
+
+    bool intersects = false;
+
+    wxPoint* aPointToFill = aIntersection1;
+
+    if( SegmentIntersectsSegment( aPoint1, aPoint2, GetOrigin(), point2, aPointToFill ) )
+        intersects = true;
+
+    if( intersects )
+        aPointToFill = aIntersection2;
+
+    if( SegmentIntersectsSegment( aPoint1, aPoint2, point2, GetEnd(), aPointToFill ) )
+        intersects = true;
+
+    if( intersects )
+        aPointToFill = aIntersection2;
+
+    if( SegmentIntersectsSegment( aPoint1, aPoint2, GetEnd(), point4, aPointToFill ) )
+        intersects = true;
+
+    if( intersects )
+        aPointToFill = aIntersection2;
+
+    if( SegmentIntersectsSegment( aPoint1, aPoint2, point4, GetOrigin(), aPointToFill ) )
+        intersects = true;
+
+    return intersects;
+}
+
+
 bool EDA_RECT::Intersects( const EDA_RECT& aRect ) const
 {
     if( !m_init )

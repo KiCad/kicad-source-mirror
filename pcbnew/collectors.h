@@ -318,6 +318,11 @@ public:
     static const KICAD_T LockableItems[];
 
     /**
+     * A scan list for dimensions
+     */
+    static const KICAD_T Dimensions[];
+
+    /**
      * Constructor GENERALCOLLECTOR
      */
     GENERAL_COLLECTOR()

@@ -244,6 +244,17 @@ public:
     bool Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2 ) const;
 
     /**
+     * Tests for intersection between a segment and this rectangle, returning the intersections
+     * @param aPoint1 is the first point of the segment to test intersection with
+     * @param aPoint2 is the second point of the segment to test intersection with
+     * @param aIntersection1 will be filled with the first intersection point, if any
+     * @param aIntersection2 will be filled with the second intersection point, if any
+     * @return true if the segment intersects the rect
+     */
+    bool Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2,
+                     wxPoint* aIntersection1, wxPoint* aIntersection2 ) const;
+
+    /**
      * Return the point in this rect that is closest to the provided point
      */
     const wxPoint ClosestPointTo( const wxPoint& aPoint ) const;

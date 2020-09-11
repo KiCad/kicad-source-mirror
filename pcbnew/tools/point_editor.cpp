@@ -80,6 +80,7 @@ enum DIMENSION_POINTS
     DIM_CROSSBAREND,
     DIM_START,
     DIM_END,
+    DIM_TEXT
 };
 
 class EDIT_POINTS_FACTORY
@@ -251,6 +252,7 @@ public:
             points->AddPoint( dimension->GetCrossbarEnd() );
             points->AddPoint( dimension->GetStart() );
             points->AddPoint( dimension->GetEnd() );
+            points->AddPoint( dimension->Text().GetPosition() );
 
             // Dimension height setting - edit points should move only along the feature lines
             points->Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( points->Point( DIM_CROSSBARSTART ),
@@ -1297,6 +1299,14 @@ void POINT_EDITOR::updateItem() const
                                                                              m_editPoints->Point( DIM_END ) ) );
         }
 
+        else if( isModified( m_editPoints->Point(DIM_TEXT ) ) )
+        {
+            // Force manual mode if we weren't already in it
+            dimension->SetTextPositionMode( DIM_TEXT_POSITION::MANUAL );
+            dimension->Text().SetPosition( wxPoint( m_editedPoint->GetPosition() ) );
+            dimension->Update();
+        }
+
         break;
     }
 
@@ -1525,6 +1535,7 @@ void POINT_EDITOR::updatePoints()
         m_editPoints->Point( DIM_CROSSBAREND ).SetPosition( dimension->GetCrossbarEnd() );
         m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
         m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );
+        m_editPoints->Point( DIM_TEXT ).SetPosition( dimension->Text().GetPosition() );
         break;
     }
 

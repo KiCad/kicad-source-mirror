@@ -38,6 +38,7 @@
 #include <widgets/appearance_controls.h>
 #include <dialogs/eda_view_switcher.h>
 #include <layer_widget.h>
+#include <class_dimension.h>
 
 PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                           FRAME_T aFrameType, const wxString& aTitle,
@@ -159,6 +160,29 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
 void PCB_BASE_EDIT_FRAME::unitsChangeRefresh()
 {
     PCB_BASE_FRAME::unitsChangeRefresh();
+
+    if( BOARD* board = GetBoard() )
+    {
+        EDA_UNITS    units = GetUserUnits();
+        KIGFX::VIEW* view  = GetCanvas()->GetView();
+
+        INSPECTOR_FUNC inspector =
+                [units, view]( EDA_ITEM* aItem, void* aTestData )
+                {
+                    DIMENSION* dimension = static_cast<DIMENSION*>( aItem );
+
+                    if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
+                    {
+                        dimension->SetUnits( units, false );
+                        dimension->Update();
+                        view->Update( dimension );
+                    }
+
+                    return SEARCH_RESULT::CONTINUE;
+                };
+
+        board->Visit( inspector, nullptr, GENERAL_COLLECTOR::Dimensions );
+    }
 
     ReCreateAuxiliaryToolbar();
 }

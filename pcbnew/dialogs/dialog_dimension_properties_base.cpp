@@ -222,14 +222,14 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	m_lblTextOrientation->Wrap( -1 );
 	m_lblTextOrientation->SetToolTip( _("Text orientation") );
 
-	gbSizerText->Add( m_lblTextOrientation, wxGBPosition( 2, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizerText->Add( m_lblTextOrientation, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_cbTextOrientation = new wxComboBox( sbSizerText->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_cbTextOrientation->Append( _("0.0") );
 	m_cbTextOrientation->Append( _("90.0") );
 	m_cbTextOrientation->Append( _("-90.0") );
 	m_cbTextOrientation->Append( _("180.0") );
-	gbSizerText->Add( m_cbTextOrientation, wxGBPosition( 2, 5 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+	gbSizerText->Add( m_cbTextOrientation, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
 	m_cbItalic = new wxCheckBox( sbSizerText->GetStaticBox(), wxID_ANY, _("Italic"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizerText->Add( m_cbItalic, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
@@ -237,7 +237,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	m_cbKeepAligned = new wxCheckBox( sbSizerText->GetStaticBox(), wxID_ANY, _("Keep aligned with dimension"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbKeepAligned->SetToolTip( _("Automatically set the text orientation to match the dimension lines") );
 
-	gbSizerText->Add( m_cbKeepAligned, wxGBPosition( 3, 4 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizerText->Add( m_cbKeepAligned, wxGBPosition( 4, 4 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_cbMirrored = new wxCheckBox( sbSizerText->GetStaticBox(), wxID_ANY, _("Mirrored"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbMirrored->SetToolTip( _("Mirror text") );
@@ -246,13 +246,25 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 
 	m_lblJustification = new wxStaticText( sbSizerText->GetStaticBox(), wxID_ANY, _("Justification:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblJustification->Wrap( -1 );
-	gbSizerText->Add( m_lblJustification, wxGBPosition( 4, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizerText->Add( m_lblJustification, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxString m_cbJustificationChoices[] = { _("Left"), _("Center"), _("Right") };
 	int m_cbJustificationNChoices = sizeof( m_cbJustificationChoices ) / sizeof( wxString );
 	m_cbJustification = new wxChoice( sbSizerText->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbJustificationNChoices, m_cbJustificationChoices, 0 );
 	m_cbJustification->SetSelection( 0 );
-	gbSizerText->Add( m_cbJustification, wxGBPosition( 4, 5 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+	gbSizerText->Add( m_cbJustification, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+
+	m_lblTextPositionMode = new wxStaticText( sbSizerText->GetStaticBox(), wxID_ANY, _("Position mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblTextPositionMode->Wrap( -1 );
+	gbSizerText->Add( m_lblTextPositionMode, wxGBPosition( 2, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	wxString m_cbTextPositionModeChoices[] = { _("Outside"), _("Inline"), _("Manual") };
+	int m_cbTextPositionModeNChoices = sizeof( m_cbTextPositionModeChoices ) / sizeof( wxString );
+	m_cbTextPositionMode = new wxChoice( sbSizerText->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbTextPositionModeNChoices, m_cbTextPositionModeChoices, 0 );
+	m_cbTextPositionMode->SetSelection( 0 );
+	m_cbTextPositionMode->SetToolTip( _("Choose how to position the text relative to the dimension line") );
+
+	gbSizerText->Add( m_cbTextPositionMode, wxGBPosition( 2, 5 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
 
 	gbSizerText->AddGrowableCol( 1 );

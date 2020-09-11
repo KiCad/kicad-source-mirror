@@ -49,6 +49,7 @@ private:
     PCB_BASE_EDIT_FRAME* m_frame;
 
     DIMENSION* m_dimension;
+    DIMENSION* m_previewDimension;
 
     UNIT_BINDER m_textWidth;
     UNIT_BINDER m_textHeight;
@@ -62,9 +63,7 @@ private:
     UNIT_BINDER m_lineThickness;
     UNIT_BINDER m_arrowLength;
 
-    void getUnitsSelection( EDA_UNITS& aUnits, bool& aUseMils );
-
-    wxString getValueText();
+    void updateDimensionFromDialog( DIMENSION* aTarget );
 
     void updatePreviewText();
 };

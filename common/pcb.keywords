@@ -146,6 +146,7 @@ italic
 justify
 keepout
 keep_end_layers
+keep_text_aligned
 keep_upright
 kicad_pcb
 last_trace_width

@@ -2486,11 +2486,19 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
                     break;
 
                 case T_override_value:
-                    dimension->SetOverrideValue( true );
+                    NeedSYMBOLorNUMBER();
+                    dimension->SetOverrideTextEnabled( true );
+                    dimension->SetOverrideText( FromUTF8() );
+                    NeedRIGHT();
+                    break;
+
+                case T_suppress_zeroes:
+                    dimension->SetSuppressZeroes( true );
                     break;
 
                 default:
-                    Expecting( "prefix, suffix, units, units_format, precision, override_value" );
+                    Expecting( "prefix, suffix, units, units_format, precision, override_value, "
+                               "suppress_zeroes" );
                 }
             }
             break;
@@ -2498,6 +2506,9 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
 
         case T_style:
         {
+            // new format: default to keep text aligned off unless token is present
+            dimension->SetKeepTextAligned( false );
+
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
                 switch( token )
@@ -2531,6 +2542,10 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
                 case T_extension_offset:
                     dimension->SetExtensionOffset( parseBoardUnits( "extension offset" ) );
                     NeedRIGHT();
+                    break;
+
+                case T_keep_text_aligned:
+                    dimension->SetKeepTextAligned( true );
                     break;
 
                 default:
@@ -2663,6 +2678,8 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
                        "arrow1b, arrow2a, or arrow2b" );
         }
     }
+
+    dimension->Update();
 
     return dimension.release();
 }

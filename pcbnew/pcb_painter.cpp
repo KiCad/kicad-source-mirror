@@ -1296,7 +1296,7 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
     }
 
     m_gal->SetTextAttributes( &text );
-    m_gal->StrokeText( text.GetShownText(), position, text.GetTextAngleRadians() );
+    m_gal->StrokeText( aDimension->GetText(), position, text.GetTextAngleRadians() );
 }
 
 

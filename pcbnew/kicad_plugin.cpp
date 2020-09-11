@@ -683,17 +683,17 @@ void PCB_IO::format( ALIGNED_DIMENSION* aDimension, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(format" );
 
     if( !aDimension->GetPrefix().IsEmpty() )
-        m_out->Print( 0, " (prefix %s)", TO_UTF8( aDimension->GetPrefix() ) );
+        m_out->Print( 0, " (prefix \"%s\")", TO_UTF8( aDimension->GetPrefix() ) );
 
     if( !aDimension->GetSuffix().IsEmpty() )
-        m_out->Print( 0, " (suffix %s)", TO_UTF8( aDimension->GetSuffix() ) );
+        m_out->Print( 0, " (suffix \"%s\")", TO_UTF8( aDimension->GetSuffix() ) );
 
     m_out->Print( 0, " (units %d) (units_format %d) (precision %d)",
                   static_cast<int>( aDimension->GetUnitsMode() ),
                   static_cast<int>( aDimension->GetUnitsFormat() ), aDimension->GetPrecision() );
 
-    if( aDimension->GetOverrideValue() )
-        m_out->Print( 0, " override_value" );
+    if( aDimension->GetOverrideTextEnabled() )
+        m_out->Print( 0, " (override_value \"%s\")", TO_UTF8( aDimension->GetOverrideText() ) );
 
     if( aDimension->GetSuppressZeroes() )
         m_out->Print( 0, " suppress_zeroes" );
@@ -710,7 +710,7 @@ void PCB_IO::format( ALIGNED_DIMENSION* aDimension, int aNestLevel ) const
                   FormatInternalUnits( aDimension->GetExtensionOffset() ).c_str() );
 
     if( !aDimension->GetKeepTextAligned() )
-        m_out->Print( 0, " keep_upright" );
+        m_out->Print( 0, " keep_text_aligned" );
 
     m_out->Print( 0, ")\n" );
 

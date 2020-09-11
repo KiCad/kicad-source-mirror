@@ -163,6 +163,13 @@ const KICAD_T GENERAL_COLLECTOR::Zones[] = {
 };
 
 
+const KICAD_T GENERAL_COLLECTOR::Dimensions[] = {
+    PCB_DIMENSION_T,
+    EOT
+};
+
+
+
 
 SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {

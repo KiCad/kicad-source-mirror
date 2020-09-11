@@ -82,6 +82,8 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbMirrored;
 		wxStaticText* m_lblJustification;
 		wxChoice* m_cbJustification;
+		wxStaticText* m_lblTextPositionMode;
+		wxChoice* m_cbTextPositionMode;
 		wxStaticText* m_lblLineThickness;
 		wxTextCtrl* m_txtLineThickness;
 		wxStaticText* m_lblLineThicknessUnits;

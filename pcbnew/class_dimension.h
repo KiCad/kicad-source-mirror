@@ -106,21 +106,33 @@ public:
     wxPoint GetPosition() const override;
     void SetPosition( const wxPoint& aPos ) override;
 
-    bool GetOverrideValue() const { return m_overrideValue; }
-    void SetOverrideValue( bool aOverride ) { m_overrideValue = aOverride; }
+    bool GetOverrideTextEnabled() const { return m_overrideTextEnabled; }
+    void SetOverrideTextEnabled( bool aOverride ) { m_overrideTextEnabled = aOverride; }
+
+    wxString GetOverrideText() const { return m_valueString; }
+    void SetOverrideText( const wxString& aValue ) { m_valueString = aValue; }
 
     int GetMeasuredValue() const { return m_measuredValue; }
 
     /**
-     * @return the text that should be shown, including any prefix and suffix
+     * @return the dimension value, rendered with precision / zero suppression but no units, etc
      */
-    wxString GetDisplayedText() const;
+    wxString GetValueText() const;
+
+    /**
+     * Updates the dimension's cached text and geometry
+     */
+    void Update()
+    {
+        updateGeometry();
+        updateText();
+    }
 
     wxString GetPrefix() const { return m_prefix; }
-    void SetPrefix( const wxString& aPrefix ) { m_prefix = aPrefix; }
+    void SetPrefix( const wxString& aPrefix );
 
     wxString GetSuffix() const { return m_suffix; }
-    void SetSuffix( const wxString& aSuffix ) { m_suffix = aSuffix; }
+    void SetSuffix( const wxString& aSuffix );
 
     void GetUnits( EDA_UNITS& aUnits, bool& aUseMils ) const
     {
@@ -128,11 +140,7 @@ public:
         aUseMils = m_useMils;
     }
 
-    void SetUnits( EDA_UNITS aUnits, bool aUseMils )
-    {
-        m_units = aUnits;
-        m_useMils = aUseMils;
-    }
+    void SetUnits( EDA_UNITS aUnits, bool aUseMils );
 
     DIM_UNITS_MODE GetUnitsMode() const;
     void SetUnitsMode( DIM_UNITS_MODE aMode );
@@ -170,7 +178,16 @@ public:
         m_text.SetTextSize( aTextSize );
     }
 
+    /**
+     * Sets the override text - has no effect if m_overrideValue == false
+     * @param aNewText is the text to use as the value
+     */
     void           SetText( const wxString& aNewText );
+
+    /**
+     * Retrieves the value text or override text, not including prefix or suffix
+     * @return the value portion of the dimension text (either overridden or not)
+     */
     const wxString GetText() const;
 
     TEXTE_PCB&     Text() { return m_text; }
@@ -222,11 +239,11 @@ protected:
     /**
      * Updates the text field value from the current geometry (called by updateGeometry normally)
      */
-    virtual void updateText() {}
+    virtual void updateText();
 
     // Value format
-    bool              m_overrideValue;   ///< Manually specify the displayed measurement value
-    wxString          m_overrideText;    ///< The shown value if m_overrideValue is true
+    bool              m_overrideTextEnabled;   ///< Manually specify the displayed measurement value
+    wxString          m_valueString;     ///< Displayed value when m_overrideValue = true
     wxString          m_prefix;          ///< String prepended to the value
     wxString          m_suffix;          ///< String appended to the value
     EDA_UNITS         m_units;           ///< 0 = inches, 1 = mm
