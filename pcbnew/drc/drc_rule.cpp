@@ -130,6 +130,7 @@ wxString DRC_CONSTRAINT::GetName() const
 DRC_RULE::DRC_RULE() :
         m_Unary( false ),
         m_LayerCondition( LSET::AllLayersMask() ),
+        m_Condition( nullptr ),
         m_Priority( 0 ),
         m_Severity( SEVERITY::RPT_SEVERITY_ERROR )
 {

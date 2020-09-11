@@ -196,7 +196,7 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
 
             if( IsSymbol( token ) )
             {
-                rule->m_Condition->SetExpression( FromUTF8() );
+                rule->m_Condition = new DRC_RULE_CONDITION( FromUTF8() );
                 rule->m_Condition->Compile( m_reporter, CurLineNumber(), CurOffset() );
             }
             else

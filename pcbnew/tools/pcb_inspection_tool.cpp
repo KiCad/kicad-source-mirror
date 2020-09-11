@@ -31,6 +31,7 @@
 #include <connectivity/connectivity_data.h>
 #include <profile.h>
 #include <dialogs/wx_html_report_box.h>
+#include <drc/drc_engine.h>
 #include "pcb_inspection_tool.h"
 
 
@@ -100,7 +101,7 @@ int PCB_INSPECTION_TOOL::ShowStatisticsDialog( const TOOL_EVENT& aEvent )
 }
 
 
-void reportZoneConnection( ZONE_CONTAINER* aZone, D_PAD* aPad, REPORTER* r )
+void PCB_INSPECTION_TOOL::reportZoneConnection( ZONE_CONTAINER* aZone, D_PAD* aPad, REPORTER* r )
 {
     ENUM_MAP<ZONE_CONNECTION> connectionEnum = ENUM_MAP<ZONE_CONNECTION>::Instance();
     wxString                  source;
@@ -179,16 +180,28 @@ void reportZoneConnection( ZONE_CONTAINER* aZone, D_PAD* aPad, REPORTER* r )
 }
 
 
-void reportCopperClearance( PCB_LAYER_ID aLayer, BOARD_CONNECTED_ITEM* aA, BOARD_ITEM* aB,
-                            REPORTER* r )
+void PCB_INSPECTION_TOOL::reportCopperClearance( PCB_LAYER_ID aLayer, BOARD_CONNECTED_ITEM* aA,
+                                                 BOARD_ITEM* aB, REPORTER* r )
 {
     wxString source;
 
     r->Report( "" );
 
+    DRC_ENGINE drcEngine( m_frame->GetBoard(), &m_frame->GetBoard()->GetDesignSettings() );
+    drcEngine.InitEngine();
+
+    auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aA, aB, aLayer );
+
+    if( r )
+    {
+        wxString clearance = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
+        r->Report( wxString::Format( _( "Clearance: %s." ), clearance ) );
+    }
+
     // JEY TODO: hook this up to new DRC engine to get "classic" sources as well; right now
     // we're just reporting on rules....
-    aA->GetClearance( aLayer, aB, &source, r );
+    // JEY TODO: retire this version
+    // aA->GetClearance( aLayer, aB, &source, r );
 }
 
 

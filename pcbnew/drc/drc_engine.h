@@ -82,7 +82,7 @@ public:
     struct ENTRY
     {
         std::shared_ptr<DRC_ITEM> m_item;
-        ::MARKER_PCB* m_marker;
+        MARKER_PCB* m_marker;
     };
 
     typedef std::vector<ENTRY> ENTRIES;
@@ -149,6 +149,8 @@ public:
         m_reporter = aReporter;
     }
 
+    void InitEngine();
+
     void RunTests();
 
     void SetErrorLimit( int aLimit );
@@ -165,7 +167,8 @@ public:
 
     DRC_CONSTRAINT EvalRulesForItems( DRC_CONSTRAINT_TYPE_T ruleID, BOARD_ITEM* a,
                                       BOARD_ITEM* b = nullptr,
-                                      PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
+                                      PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+                                      REPORTER* aReporter = nullptr );
 
     std::vector<DRC_CONSTRAINT> QueryConstraintsById( DRC_CONSTRAINT_TYPE_T ruleID );
 

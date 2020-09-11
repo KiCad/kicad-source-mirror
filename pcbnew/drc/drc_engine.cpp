@@ -315,14 +315,14 @@ bool DRC_ENGINE::CompileRules()
 
             m_constraintMap[ id ]->provider = provider;
 
-            for( auto rule : m_rules )
+            for( DRC_RULE* rule : m_rules )
             {
                 DRC_RULE_CONDITION* condition = nullptr;
                 bool compileOk = false;
                 std::vector<DRC_CONSTRAINT> matchingConstraints;
                 drc_dbg(7, "Scan provider %s, rule %s",  provider->GetName(), rule->m_Name );
 
-                if( !rule->m_Condition->GetExpression().IsEmpty() )
+                if( rule->m_Condition && !rule->m_Condition->GetExpression().IsEmpty() )
                 {
                     condition = rule->m_Condition;
                     compileOk = condition->Compile( nullptr, 0, 0 ); // fixme
@@ -375,9 +375,8 @@ bool DRC_ENGINE::CompileRules()
 }
 
 
-void DRC_ENGINE::RunTests( )
+void DRC_ENGINE::InitEngine()
 {
-    m_drcReport.reset( new DRC_REPORT );
     m_testProviders = DRC_TEST_PROVIDER_REGISTRY::Instance().GetTestProviders();
 
     for( auto provider : m_testProviders )
@@ -388,8 +387,16 @@ void DRC_ENGINE::RunTests( )
 
     inferLegacyRules();
     CompileRules();
+}
 
-    for( auto provider : m_testProviders )
+
+void DRC_ENGINE::RunTests( )
+{
+    InitEngine();
+
+    m_drcReport = std::make_shared<DRC_REPORT>();
+
+    for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
         bool skipProvider = false;
         auto matchingConstraints = provider->GetMatchingConstraintIds();
@@ -419,8 +426,11 @@ void DRC_ENGINE::RunTests( )
 
 
 DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintId,
-                                              BOARD_ITEM* a, BOARD_ITEM* b, PCB_LAYER_ID aLayer )
+                                              BOARD_ITEM* a, BOARD_ITEM* b, PCB_LAYER_ID aLayer,
+                                              REPORTER* aReporter )
 {
+#define REPORT( s ) { if( aReporter ) { aReporter->Report( s ); } }
+
     // Local overrides take precedence
     if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
     {
@@ -428,48 +438,77 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                                                     : nullptr;
         BOARD_CONNECTED_ITEM* bc = b->IsConnected() ? static_cast<BOARD_CONNECTED_ITEM*>( b )
                                                     : nullptr;
-        int clearance = 0;
+        int overrideA = 0;
+        int overrideB = 0;
 
-        if( ac && ac->GetLocalClearanceOverrides( nullptr ) > clearance )
-            clearance = ac->GetLocalClearanceOverrides( &m_msg );
+        if( ac && ac->GetLocalClearanceOverrides( nullptr ) > 0 )
+        {
+            overrideA = ac->GetLocalClearanceOverrides( &m_msg );
 
-        if( bc && bc->GetLocalClearanceOverrides( nullptr ) > clearance )
-            clearance = bc->GetLocalClearanceOverrides( &m_msg );
+            REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
+                                      a->GetSelectMenuText( aReporter->GetUnits() ),
+                                      StringFromValue( aReporter->GetUnits(), overrideA, true ) ) );
+        }
 
-        if( clearance )
+        if( bc && bc->GetLocalClearanceOverrides( nullptr ) > 0 )
+        {
+            overrideB = bc->GetLocalClearanceOverrides( &m_msg );
+
+            REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
+                                      b->GetSelectMenuText( aReporter->GetUnits() ),
+                                      StringFromValue( aReporter->GetUnits(), overrideB, true ) ) );
+
+            // If both overridden, report on which wins
+            if( overrideA )
+            {
+                REPORT( wxString::Format( _( "Clearance: %s." ),
+                                          std::max( overrideA, overrideB ) ) );
+            }
+        }
+
+        if( overrideA || overrideB )
         {
             DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_CLEARANCE, m_msg );
-            constraint.m_Value.SetMin( clearance );
+            constraint.m_Value.SetMin( std::max( overrideA, overrideB ) );
             return constraint;
         }
     }
 
     auto ruleset = m_constraintMap[ aConstraintId ];
 
-    for( const auto& rcond : ruleset->sortedConstraints )
+    for( const CONSTRAINT_WITH_CONDITIONS* rcond : ruleset->sortedConstraints )
     {
+        DRC_RULE* rule = rcond->parentRule;
+        REPORT( wxString::Format( _( "Checking rule \"%s\"." ), rule->m_Name ) );
+
+        if( aLayer != UNDEFINED_LAYER && !rule->m_LayerCondition.test( aLayer ) )
+        {
+            REPORT( wxString::Format( _( "Rule layer \"%s\" not matched." ),
+                                      rule->m_LayerSource ) );
+            REPORT( "Rule not applied." );
+
+            continue;
+        }
+
         if( rcond->conditions.size() == 0 )  // uconditional
         {
-            drc_dbg( 8, "   -> rule '%s' matches (unconditional)\n",
-                     rcond->constraint.GetParentRule()->m_Name );
+            REPORT( "No condition found; rule applied." );
+
             return rcond->constraint;
         }
 
-        for( const auto& condition : rcond->conditions )
+        for( DRC_RULE_CONDITION* condition : rcond->conditions )
         {
-            drc_dbg( 8, "   -> check condition '%s'\n",
-                     condition->GetExpression() );
+            REPORT( wxString::Format( _( "Checking rule condition \"%s\"." ),
+                                      condition->GetExpression() ) );
 
-            bool result = condition->EvaluateFor( a, b, aLayer );
+            bool result = condition->EvaluateFor( a, b, aLayer, aReporter );
+
+            REPORT( result ? _( "Rule applied." )
+                           : _( "Condition not satisfied; rule not applied." ) );
 
             if( result )
-            {
-                drc_dbg( 8, "   -> rule '%s' matches, triggered by condition '%s'\n",
-                         rcond->constraint.GetParentRule()->m_Name,
-                         condition->GetExpression() );
-
                 return rcond->constraint;
-            }
         }
     }
 
