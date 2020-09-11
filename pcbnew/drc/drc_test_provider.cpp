@@ -1,60 +1,60 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
-#include <drc_proto/drc_test_provider.h>
+#include <pcbnew/drc/drc_test_provider.h>
 
-test::DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
+DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
     m_drcEngine( nullptr ),
     m_enable( false )
 {
 
 }
 
-void test::DRC_TEST_PROVIDER::Enable( bool enable )
+void DRC_TEST_PROVIDER::Enable( bool enable )
 {
     m_enable = enable;
 }
 
-bool test::DRC_TEST_PROVIDER::IsEnabled() const
+bool DRC_TEST_PROVIDER::IsEnabled() const
 {
     return m_enable;
 }
 
-const wxString test::DRC_TEST_PROVIDER::GetName() const { return "<no name test>"; }
-const wxString test::DRC_TEST_PROVIDER::GetDescription() const { return ""; }
+const wxString DRC_TEST_PROVIDER::GetName() const { return "<no name test>"; }
+const wxString DRC_TEST_PROVIDER::GetDescription() const { return ""; }
 
-void test::DRC_TEST_PROVIDER::Report( std::shared_ptr<DRC_ITEM> item )
+void DRC_TEST_PROVIDER::Report( std::shared_ptr<DRC_ITEM> item )
 {
     item->SetViolatingTest( this );
     m_drcEngine->Report( item, nullptr );
 }
 
 
-void test::DRC_TEST_PROVIDER::ReportWithMarker( std::shared_ptr<DRC_ITEM> item, VECTOR2I aMarkerPos )
+void DRC_TEST_PROVIDER::ReportWithMarker( std::shared_ptr<DRC_ITEM> item, VECTOR2I aMarkerPos )
 {
     item->SetViolatingTest( this );
     MARKER_PCB* marker = new MARKER_PCB( item, wxPoint( aMarkerPos.x, aMarkerPos.y) );
     m_drcEngine->Report( item, marker );
 }
 
-void test::DRC_TEST_PROVIDER::ReportWithMarker( std::shared_ptr<DRC_ITEM> item, wxPoint aMarkerPos )
+void DRC_TEST_PROVIDER::ReportWithMarker( std::shared_ptr<DRC_ITEM> item, wxPoint aMarkerPos )
 {
     item->SetViolatingTest( this );
     MARKER_PCB* marker = new MARKER_PCB( item, wxPoint( aMarkerPos.x, aMarkerPos.y) );
     m_drcEngine->Report( item, marker ); // fixme: create marker
 }
 
-void test::DRC_TEST_PROVIDER::ReportProgress( double aProgress )
+void DRC_TEST_PROVIDER::ReportProgress( double aProgress )
 {
     m_drcEngine->ReportProgress( aProgress );
 }
 
-void test::DRC_TEST_PROVIDER::ReportStage ( const wxString& aStageName, int index, int total )
+void DRC_TEST_PROVIDER::ReportStage ( const wxString& aStageName, int index, int total )
 {
     m_drcEngine->ReportStage( aStageName, index, total );
     ReportAux( aStageName );
 }
 
-void test::DRC_TEST_PROVIDER::ReportAux( const wxString fmt, ... )
+void DRC_TEST_PROVIDER::ReportAux( const wxString& fmt, ... )
 {
     va_list vargs;
     va_start( vargs, fmt );
@@ -64,45 +64,50 @@ void test::DRC_TEST_PROVIDER::ReportAux( const wxString fmt, ... )
     m_drcEngine->ReportAux( str );
 }
 
-bool test::DRC_TEST_PROVIDER::isErrorLimitExceeded( int error_code )
+bool DRC_TEST_PROVIDER::isErrorLimitExceeded( int error_code )
 {
     // fixme: implement error limit (or timeout)
     return false;
 }
 
-EDA_UNITS test::DRC_TEST_PROVIDER::userUnits() const
+EDA_UNITS DRC_TEST_PROVIDER::userUnits() const
 {
     return m_drcEngine->UserUnits();
 }
 
-void test::DRC_TEST_PROVIDER::accountCheck( const test::DRC_RULE* ruleToTest )
+void DRC_TEST_PROVIDER::accountCheck( const DRC_RULE* ruleToTest )
 {
     auto it = m_stats.find( ruleToTest );
+
     if( it == m_stats.end() )
         m_stats[ ruleToTest ] = 1;
     else
         it->second++;
 }
 
-void test::DRC_TEST_PROVIDER::accountCheck( const test::DRC_CONSTRAINT& constraintToTest )
+void DRC_TEST_PROVIDER::accountCheck( const DRC_CONSTRAINT& constraintToTest )
 {
     accountCheck( constraintToTest.GetParentRule() );
 }
 
 
-void test::DRC_TEST_PROVIDER::reportRuleStatistics()
+void DRC_TEST_PROVIDER::reportRuleStatistics()
 {
     if( !m_isRuleDriven )
         return;
 
     m_drcEngine->ReportAux("Rule hit statistics: ");
-    for( auto stat : m_stats )
+
+    for( const std::pair<const DRC_RULE*, int>&  stat : m_stats )
     {
-        m_drcEngine->ReportAux( wxString::Format( " - rule '%s': %d hits ", stat.first->GetName().c_str(), stat.second ) );
+        m_drcEngine->ReportAux( wxString::Format( " - rule '%s': %d hits ",
+                                                  stat.first->m_Name,
+                                                  stat.second ) );
     }
 }
 
-int test::DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTypes, const LSET aLayers, std::function<bool(BOARD_ITEM*)> aFunc )
+int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTypes, const LSET aLayers,
+                                            std::function<bool( BOARD_ITEM*)> aFunc )
 {
     BOARD *brd = m_drcEngine->GetBoard();
     std::bitset<MAX_STRUCT_TYPE_ID> typeMask;
@@ -126,7 +131,7 @@ int test::DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTy
     /* case PCB_TRACE_T:
     case PCB_VIA_T:
     case PCB_ARC_T:*/
-    for ( auto item : brd->Tracks() )
+    for( TRACK* item : brd->Tracks() )
     {
         if( (item->GetLayerSet() & aLayers).any() )
         {
@@ -153,7 +158,7 @@ int test::DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTy
     case PCB_TEXT_T:
     case PCB_TARGET_T:
     */
-    for( auto item : brd->Drawings() )
+    for( BOARD_ITEM* item : brd->Drawings() )
     {
         if( (item->GetLayerSet() & aLayers).any() )
         {
@@ -188,7 +193,7 @@ int test::DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTy
         }
     }
 
-    for( auto item : brd->Zones() )
+    for( ZONE_CONTAINER* item : brd->Zones() )
     {
         if( (item->GetLayerSet() & aLayers).any() )
         {
@@ -202,7 +207,7 @@ int test::DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTy
         }
     }
 
-    for( auto mod : brd->Modules() )
+    for( MODULE* mod : brd->Modules() )
     {
         if( typeMask[ PCB_MODULE_TEXT_T ] )
         {
@@ -223,7 +228,7 @@ int test::DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTy
             }
         }
 
-        for( auto pad : mod->Pads() )
+        for( D_PAD* pad : mod->Pads() )
         {
             if( (pad->GetLayerSet() & aLayers).any() )
             {
@@ -237,7 +242,7 @@ int test::DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTy
             }
         }
 
-        for( auto dwg : mod->GraphicalItems() )
+        for( BOARD_ITEM* dwg : mod->GraphicalItems() )
         {
             if( (dwg->GetLayerSet() & aLayers).any() )
             {
@@ -258,7 +263,7 @@ int test::DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTy
             }
         }
 
-        for( auto zone : mod->Zones() )
+        for( ZONE_CONTAINER* zone : mod->Zones() )
         {
             if( (zone->GetLayerSet() & aLayers).any() )
             {

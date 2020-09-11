@@ -22,8 +22,8 @@
  */
 
 
-#ifndef DRC_PROVIDER__H
-#define DRC_PROVIDER__H
+#ifndef DRC_TEST_PROVIDER__H
+#define DRC_TEST_PROVIDER__H
 
 #include <class_board.h>
 #include <class_marker_pcb.h>
@@ -31,38 +31,37 @@
 #include <functional>
 #include <set>
 
-namespace test {
-
 class DRC_ENGINE;
+class DRC_TEST_PROVIDER;
+
 
 class DRC_TEST_PROVIDER_REGISTRY 
 {
-    public:
-        DRC_TEST_PROVIDER_REGISTRY() {};
-        ~DRC_TEST_PROVIDER_REGISTRY() {};
+public:
+    DRC_TEST_PROVIDER_REGISTRY() {};
+    ~DRC_TEST_PROVIDER_REGISTRY() {};
 
-        static DRC_TEST_PROVIDER_REGISTRY& Instance()
-        {
-            static DRC_TEST_PROVIDER_REGISTRY self;
-            return self;
-        }
+    static DRC_TEST_PROVIDER_REGISTRY& Instance()
+    {
+        static DRC_TEST_PROVIDER_REGISTRY self;
+        return self;
+    }
 
-        void RegisterTestProvider(DRC_TEST_PROVIDER* provider) { m_providers.push_back(provider); }
-        std::vector<DRC_TEST_PROVIDER*> GetTestProviders() const { return m_providers; }
+    void RegisterTestProvider( DRC_TEST_PROVIDER* provider ) { m_providers.push_back( provider ); }
+    std::vector<DRC_TEST_PROVIDER*> GetTestProviders() const { return m_providers; }
 
-    private:
-        std::vector<DRC_TEST_PROVIDER*> m_providers;
-
+private:
+    std::vector<DRC_TEST_PROVIDER*> m_providers;
 };
 
 template<class T> class DRC_REGISTER_TEST_PROVIDER
 {
-    public:
-        DRC_REGISTER_TEST_PROVIDER()
-        {
-            T* provider = new T;
-            DRC_TEST_PROVIDER_REGISTRY::Instance().RegisterTestProvider( provider );
-        }
+public:
+    DRC_REGISTER_TEST_PROVIDER()
+    {
+        T* provider = new T;
+        DRC_TEST_PROVIDER_REGISTRY::Instance().RegisterTestProvider( provider );
+    }
 };
 
 /**
@@ -96,7 +95,7 @@ public:
     virtual const wxString GetName() const;
     virtual const wxString GetDescription() const;
 
-    virtual void ReportAux( const wxString fmt, ... );
+    virtual void ReportAux( const wxString& fmt, ... );
     virtual void Report( std::shared_ptr<DRC_ITEM> item );
     virtual void ReportWithMarker( std::shared_ptr<DRC_ITEM> item, wxPoint aMarkerPos );
     virtual void ReportWithMarker( std::shared_ptr<DRC_ITEM> item, VECTOR2I aMarkerPos );
@@ -112,7 +111,6 @@ public:
     }
 
 protected:
-
     int forEachGeometryItem( const std::vector<KICAD_T> aTypes, const LSET aLayers,
                              std::function<bool(BOARD_ITEM*)> aFunc );
 
@@ -128,7 +126,4 @@ protected:
     bool m_isRuleDriven = true;
 };
 
-
-};
-
-#endif // DRC_PROVIDER__H
+#endif // DRC_TEST_PROVIDER__H

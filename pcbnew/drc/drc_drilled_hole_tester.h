@@ -25,14 +25,14 @@
 #ifndef DRC_DRILLED_HOLE_TESTER__H
 #define DRC_DRILLED_HOLE_TESTER__H
 
-#include <drc/drc_provider.h>
+#include <drc/drc_results_provider.h>
 
 
 class BOARD;
 class BOARD_ITEM;
 
 
-class DRC_DRILLED_HOLE_TESTER : public DRC_TEST_PROVIDER
+class DRC_DRILLED_HOLE_TESTER : public LEGACY_DRC_TEST_PROVIDER
 {
 public:
     DRC_DRILLED_HOLE_TESTER( MARKER_HANDLER aMarkerHandler );

@@ -31,7 +31,7 @@
 
 
 DRC_DRILLED_HOLE_TESTER::DRC_DRILLED_HOLE_TESTER( MARKER_HANDLER aMarkerHandler ) :
-        DRC_TEST_PROVIDER( std::move( aMarkerHandler ) ),
+        LEGACY_DRC_TEST_PROVIDER( std::move( aMarkerHandler ) ),
         m_units( EDA_UNITS::MILLIMETRES ),
         m_board( nullptr ),
         m_largestRadius( 0 )
@@ -94,7 +94,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkPad( D_PAD* aPad )
     if( !bds.Ignore( DRCE_TOO_SMALL_DRILL ) )
     {
         int                   minHole;
-        const DRC_CONSTRAINT* constraint = GetConstraint( aPad, nullptr, DRC_RULE_ID_HOLE_SIZE,
+        const DRC_CONSTRAINT* constraint = GetConstraint( aPad, nullptr, DRC_CONSTRAINT_TYPE_HOLE_SIZE,
                                                           layer, &m_source );
 
         if( constraint )
@@ -145,7 +145,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkVia( VIA* via )
     if( !bds.Ignore( DRCE_TOO_SMALL_DRILL ) )
     {
         int                   minHole;
-        const DRC_CONSTRAINT* constraint = GetConstraint( via, nullptr, DRC_RULE_ID_HOLE_SIZE,
+        const DRC_CONSTRAINT* constraint = GetConstraint( via, nullptr, DRC_CONSTRAINT_TYPE_HOLE_SIZE,
                                                           layer, &m_source );
 
         if( constraint )
@@ -197,7 +197,7 @@ bool DRC_DRILLED_HOLE_TESTER::checkMicroVia( VIA* via )
     if( !bds.Ignore( DRCE_TOO_SMALL_MICROVIA_DRILL ) )
     {
         int                   minHole;
-        const DRC_CONSTRAINT* constraint = GetConstraint( via, nullptr, DRC_RULE_ID_HOLE_SIZE,
+        const DRC_CONSTRAINT* constraint = GetConstraint( via, nullptr, DRC_CONSTRAINT_TYPE_HOLE_SIZE,
                                                           layer, &m_source );
 
         if( constraint )

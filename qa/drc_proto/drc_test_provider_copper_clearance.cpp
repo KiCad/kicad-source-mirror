@@ -26,18 +26,17 @@
 #include <class_drawsegment.h>
 #include <class_pad.h>
 
-#include <convert_basic_shapes_to_polygon.h>
 #include <geometry/polygon_test_point_inside.h>
-
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 
-#include <drc_proto/drc_engine.h>
-#include <drc_proto/drc_item.h>
+#include <pcbnew/drc/drc_engine.h>
+#include <drc/drc.h>
+#include <drc/drc_item.h>
 #include <drc_proto/drc_rtree.h>
-#include <drc_proto/drc_rule.h>
+#include <drc/drc_rule.h>
 #include <drc_proto/drc_test_provider_clearance_base.h>
 
 /*
@@ -77,7 +76,7 @@ public:
         return "Tests copper item clearance";
     }
 
-    virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
 
 private:
     void testPadClearances();
@@ -99,7 +98,8 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
     m_board = m_drcEngine->GetBoard();
     DRC_CONSTRAINT worstClearanceConstraint;
 
-    if( m_drcEngine->QueryWorstConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
+    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                           worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
     {
         m_largestClearance = worstClearanceConstraint.GetValue().Min();
     }
@@ -199,7 +199,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
         if( !track->IsOnLayer( aItem->GetLayer() ) )
             continue;
 
-        auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aItem, track, aItem->GetLayer() );
+        auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                          aItem, track, aItem->GetLayer() );
         auto minClearance = constraint.GetValue().Min();
         int     actual = INT_MAX;
         wxPoint pos;
@@ -224,7 +225,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
 
             wxString msg;
             msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                          constraint.GetParentRule()->GetName(),
+                          constraint.GetParentRule()->m_Name,
                           MessageTextFromValue( userUnits(), minClearance, true ),
                           MessageTextFromValue( userUnits(), actual, true ) );
 
@@ -246,7 +247,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
         if( drawItem && pad->GetParent() == drawItem->GetParent() )
             continue;
 
-        auto constraint  = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aItem, pad );
+        auto constraint  = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                           aItem, pad );
         auto minClearance = constraint.GetValue().Min();
 
         accountCheck( constraint );
@@ -270,7 +272,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* a
             wxString msg;
 
             msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                          constraint.GetParentRule()->GetName(),
+                          constraint.GetParentRule()->m_Name,
                           MessageTextFromValue( userUnits(), minClearance, true ),
                           MessageTextFromValue( userUnits(), actual, true ) );
 
@@ -358,7 +360,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
 
             // fixme: hole to hole clearance moved elsewhere
 
-            auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aRefSeg, pad );
+            auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                              aRefSeg, pad );
             auto minClearance = constraint.GetValue().Min();
             int clearanceAllowed = minClearance - bds.GetDRCEpsilon();
             int actual;
@@ -432,7 +435,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
         if( !trackBB.Intersects( refSegBB ) )
             continue;
 
-        auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aRefSeg, track );
+        auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                          aRefSeg, track );
         auto minClearance = constraint.GetValue().Min();
 
         accountCheck( constraint );
@@ -500,7 +504,8 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
 
                 // fixme: per-layer onLayer() property
 
-                auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aRefSeg, zone );
+                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                                  aRefSeg, zone );
                 auto minClearance = constraint.GetValue().Min();
                 int widths       = refSegWidth / 2;
 
@@ -521,7 +526,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, TRACK
                     wxString msg;
 
                     msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                                constraint.GetParentRule()->GetName(),
+                                constraint.GetParentRule()->m_Name,
                                 MessageTextFromValue( userUnits(), minClearance, true ),
                                 MessageTextFromValue( userUnits(), actual, true ) );
 
@@ -637,7 +642,8 @@ bool test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D
             continue;
         }
 
-        auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, aRefPad, pad );
+        auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                          aRefPad, pad );
         auto minClearance = constraint.GetValue().Min();
 
         accountCheck( constraint );
@@ -721,8 +727,9 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
             // Examine a candidate zone: compare zoneToTest to zoneRef
 
             // Get clearance used in zone to zone test.
-            auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE, zoneRef, zoneToTest );
-            auto zone2zoneClearance = constraint.GetValue().Min();
+            auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                              zoneRef, zoneToTest );
+            int  zone2zoneClearance = constraint.GetValue().Min();
 
             accountCheck( constraint );
 
@@ -840,7 +847,7 @@ void test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
 }
 
 
-std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::GetMatchingConstraintIds() const
 {
     return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE };
 }
@@ -848,5 +855,5 @@ std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_COPPER_CLEARANCE::
 
 namespace detail
 {
-    static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_COPPER_CLEARANCE> dummy;
+    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_COPPER_CLEARANCE> dummy;
 }

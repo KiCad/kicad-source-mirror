@@ -836,7 +836,7 @@ int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue()
     {
         for( const DRC_CONSTRAINT& constraint : rule->m_Constraints )
         {
-            if( constraint.m_Type == DRC_RULE_ID_CLEARANCE )
+            if( constraint.m_Type == DRC_CONSTRAINT_TYPE_CLEARANCE )
                 clearance = std::max( clearance, constraint.m_Value.Min() );
         }
     }

@@ -29,7 +29,7 @@
 #include <drc/drc_item.h>
 
 DRC_KEEPOUT_TESTER::DRC_KEEPOUT_TESTER( MARKER_HANDLER aMarkerHandler ) :
-        DRC_TEST_PROVIDER( std::move( aMarkerHandler ) ),
+        LEGACY_DRC_TEST_PROVIDER( std::move( aMarkerHandler ) ),
         m_units( EDA_UNITS::MILLIMETRES ),
         m_board( nullptr ),
         m_zone( nullptr ),
@@ -71,9 +71,9 @@ bool DRC_KEEPOUT_TESTER::RunDRC( EDA_UNITS aUnits, BOARD& aBoard )
 
 bool DRC_KEEPOUT_TESTER::checkTracksAndVias()
 {
-    constexpr int VIA_MASK = DISALLOW_VIAS | DISALLOW_MICRO_VIAS | DISALLOW_BB_VIAS;
-    constexpr int CHECK_VIAS_MASK = VIA_MASK | DISALLOW_HOLES;
-    constexpr int CHECK_TRACKS_AND_VIAS_MASK = CHECK_VIAS_MASK | DISALLOW_TRACKS;
+    constexpr int VIA_MASK = DRC_DISALLOW_VIAS | DRC_DISALLOW_MICRO_VIAS | DRC_DISALLOW_BB_VIAS;
+    constexpr int CHECK_VIAS_MASK = VIA_MASK | DRC_DISALLOW_HOLES;
+    constexpr int CHECK_TRACKS_AND_VIAS_MASK = CHECK_VIAS_MASK | DRC_DISALLOW_TRACKS;
 
     if(( m_keepoutFlags & CHECK_TRACKS_AND_VIAS_MASK ) == 0 )
         return true;
@@ -85,7 +85,7 @@ bool DRC_KEEPOUT_TESTER::checkTracksAndVias()
         if( !m_zoneBBox.Intersects( segm->GetBoundingBox() ) )
             continue;
 
-        if( segm->Type() == PCB_TRACE_T && ( m_keepoutFlags & DISALLOW_TRACKS ) != 0 )
+        if( segm->Type() == PCB_TRACE_T && ( m_keepoutFlags & DRC_DISALLOW_TRACKS ) != 0 )
         {
             // Ignore if the keepout zone is not on the same layer
             PCB_LAYER_ID layer = segm->GetLayer();
@@ -100,7 +100,7 @@ bool DRC_KEEPOUT_TESTER::checkTracksAndVias()
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ),
-                              m_sources.at( DISALLOW_TRACKS ) );
+                              m_sources.at( DRC_DISALLOW_TRACKS ) );
 
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( segm, m_zone );
@@ -116,23 +116,23 @@ bool DRC_KEEPOUT_TESTER::checkTracksAndVias()
             int  test = 0;
             int  clearance = via->GetWidth() / 2;
 
-            if( ( m_keepoutFlags & DISALLOW_VIAS ) > 0 )
+            if( ( m_keepoutFlags & DRC_DISALLOW_VIAS ) > 0 )
             {
-                test = DISALLOW_VIAS;
+                test = DRC_DISALLOW_VIAS;
             }
             else if( via->GetViaType() == VIATYPE::MICROVIA
-                        && ( m_keepoutFlags & DISALLOW_MICRO_VIAS ) > 0 )
+                        && ( m_keepoutFlags & DRC_DISALLOW_MICRO_VIAS ) > 0 )
             {
-                test = DISALLOW_MICRO_VIAS;
+                test = DRC_DISALLOW_MICRO_VIAS;
             }
             else if( via->GetViaType() == VIATYPE::BLIND_BURIED
-                        && ( m_keepoutFlags & DISALLOW_BB_VIAS ) > 0 )
+                        && ( m_keepoutFlags & DRC_DISALLOW_BB_VIAS ) > 0 )
             {
-                test = DISALLOW_BB_VIAS;
+                test = DRC_DISALLOW_BB_VIAS;
             }
-            else if( ( m_keepoutFlags & DISALLOW_HOLES ) > 0 )
+            else if( ( m_keepoutFlags & DRC_DISALLOW_HOLES ) > 0 )
             {
-                test = DISALLOW_HOLES;
+                test = DRC_DISALLOW_HOLES;
                 clearance = via->GetDrillValue() / 2;
             }
             else
@@ -157,8 +157,8 @@ bool DRC_KEEPOUT_TESTER::checkTracksAndVias()
 
 bool DRC_KEEPOUT_TESTER::checkFootprints()
 {
-    constexpr int CHECK_PADS_MASK = DISALLOW_PADS | DISALLOW_HOLES;
-    constexpr int CHECK_FOOTPRINTS_MASK = CHECK_PADS_MASK | DISALLOW_FOOTPRINTS;
+    constexpr int CHECK_PADS_MASK = DRC_DISALLOW_PADS | DRC_DISALLOW_HOLES;
+    constexpr int CHECK_FOOTPRINTS_MASK = CHECK_PADS_MASK | DRC_DISALLOW_FOOTPRINTS;
 
     if(( m_keepoutFlags & CHECK_FOOTPRINTS_MASK ) == 0 )
         return true;
@@ -173,7 +173,7 @@ bool DRC_KEEPOUT_TESTER::checkFootprints()
         if( !m_zoneBBox.Intersects( fp->GetBoundingBox() ) )
             continue;
 
-        if( ( m_keepoutFlags & DISALLOW_FOOTPRINTS ) > 0
+        if( ( m_keepoutFlags & DRC_DISALLOW_FOOTPRINTS ) > 0
                 && ( fp->IsFlipped() ? m_zone->CommonLayerExists( LSET::BackMask() )
                                      : m_zone->CommonLayerExists( LSET::FrontMask() ) ) )
         {
@@ -195,7 +195,7 @@ bool DRC_KEEPOUT_TESTER::checkFootprints()
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ),
-                              m_sources.at( DISALLOW_FOOTPRINTS ) );
+                              m_sources.at( DRC_DISALLOW_FOOTPRINTS ) );
 
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( fp, m_zone );
@@ -231,7 +231,7 @@ bool DRC_KEEPOUT_TESTER::checkPads( MODULE* aModule )
         if( !m_zoneBBox.Intersects( padBBox ) )
             continue;
 
-        if( ( m_keepoutFlags & DISALLOW_PADS ) > 0 )
+        if( ( m_keepoutFlags & DRC_DISALLOW_PADS ) > 0 )
         {
             SHAPE_POLY_SET outline = *pad->GetEffectivePolygon();
 
@@ -245,7 +245,7 @@ bool DRC_KEEPOUT_TESTER::checkPads( MODULE* aModule )
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ),
-                              m_sources.at( DISALLOW_PADS ) );
+                              m_sources.at( DRC_DISALLOW_PADS ) );
 
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( pad, m_zone );
@@ -254,7 +254,7 @@ bool DRC_KEEPOUT_TESTER::checkPads( MODULE* aModule )
                 success = false;
             }
         }
-        else if( ( m_keepoutFlags & DISALLOW_HOLES ) > 0 )
+        else if( ( m_keepoutFlags & DRC_DISALLOW_HOLES ) > 0 )
         {
             const SHAPE_SEGMENT* slot = pad->GetEffectiveHoleShape();
 
@@ -263,7 +263,7 @@ bool DRC_KEEPOUT_TESTER::checkPads( MODULE* aModule )
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_KEEPOUT );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ),
-                              m_sources.at( DISALLOW_HOLES ) );
+                              m_sources.at( DRC_DISALLOW_HOLES ) );
 
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( pad, m_zone );
@@ -280,7 +280,7 @@ bool DRC_KEEPOUT_TESTER::checkPads( MODULE* aModule )
 
 bool DRC_KEEPOUT_TESTER::checkDrawings()
 {
-    constexpr int CHECK_DRAWINGS_MASK = DISALLOW_TEXTS | DISALLOW_GRAPHICS;
+    constexpr int CHECK_DRAWINGS_MASK = DRC_DISALLOW_TEXTS | DRC_DISALLOW_GRAPHICS;
     constexpr KICAD_T graphicTypes[] = { PCB_LINE_T, PCB_DIMENSION_T, PCB_TARGET_T, EOT };
 
     if(( m_keepoutFlags & CHECK_DRAWINGS_MASK ) == 0 )
@@ -295,10 +295,10 @@ bool DRC_KEEPOUT_TESTER::checkDrawings()
 
         int  sourceId = 0;
 
-        if( drawing->IsType( graphicTypes ) && ( m_keepoutFlags & DISALLOW_GRAPHICS ) > 0 )
-            sourceId = DISALLOW_GRAPHICS;
-        else if( drawing->Type() == PCB_TEXT_T && ( m_keepoutFlags & DISALLOW_TEXTS ) > 0 )
-            sourceId = DISALLOW_TEXTS;
+        if( drawing->IsType( graphicTypes ) && ( m_keepoutFlags & DRC_DISALLOW_GRAPHICS ) > 0 )
+            sourceId = DRC_DISALLOW_GRAPHICS;
+        else if( drawing->Type() == PCB_TEXT_T && ( m_keepoutFlags & DRC_DISALLOW_TEXTS ) > 0 )
+            sourceId = DRC_DISALLOW_TEXTS;
         else
             continue;
 

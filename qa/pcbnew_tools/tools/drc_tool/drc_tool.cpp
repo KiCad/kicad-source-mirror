@@ -78,7 +78,7 @@ public:
                                   markers.push_back( std::unique_ptr<MARKER_PCB>( aMarker ) );
                               };
 
-        std::unique_ptr<DRC_TEST_PROVIDER> drc_prov = createDrcProvider( aBoard, marker_handler );
+        std::unique_ptr<LEGACY_DRC_TEST_PROVIDER> drc_prov = createDrcProvider( aBoard, marker_handler );
 
         DRC_DURATION duration;
         {
@@ -106,8 +106,8 @@ private:
      */
     virtual void setDesignSettings( BOARD_DESIGN_SETTINGS& aSettings ) const = 0;
 
-    virtual std::unique_ptr<DRC_TEST_PROVIDER> createDrcProvider(
-            BOARD& aBoard, DRC_TEST_PROVIDER::MARKER_HANDLER aHandler ) = 0;
+    virtual std::unique_ptr<LEGACY_DRC_TEST_PROVIDER> createDrcProvider(
+            BOARD& aBoard, LEGACY_DRC_TEST_PROVIDER::MARKER_HANDLER aHandler ) = 0;
 
     void reportDuration( const DRC_DURATION& aDuration ) const
     {
@@ -164,8 +164,8 @@ private:
         aSettings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_ERROR;
     }
 
-    std::unique_ptr<DRC_TEST_PROVIDER> createDrcProvider(
-            BOARD& aBoard, DRC_TEST_PROVIDER::MARKER_HANDLER aHandler ) override
+    std::unique_ptr<LEGACY_DRC_TEST_PROVIDER> createDrcProvider(
+            BOARD& aBoard, LEGACY_DRC_TEST_PROVIDER::MARKER_HANDLER aHandler ) override
     {
         return std::make_unique<DRC_COURTYARD_TESTER>( aHandler );
     }
@@ -198,8 +198,8 @@ private:
         aSettings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_IGNORE;
     }
 
-    std::unique_ptr<DRC_TEST_PROVIDER> createDrcProvider(
-            BOARD& aBoard, DRC_TEST_PROVIDER::MARKER_HANDLER aHandler ) override
+    std::unique_ptr<LEGACY_DRC_TEST_PROVIDER> createDrcProvider(
+            BOARD& aBoard, LEGACY_DRC_TEST_PROVIDER::MARKER_HANDLER aHandler ) override
     {
         return std::make_unique<DRC_COURTYARD_TESTER>( aHandler );
     }

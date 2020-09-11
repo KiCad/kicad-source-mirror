@@ -29,8 +29,8 @@
 #include <wx/cmdline.h>
 
 #include <pcbnew_utils/board_file_utils.h>
-#include <drc_proto/drc_engine.h>
-
+#include <pcbnew/drc/drc_engine.h>
+#include <pcbnew/drc/drc_rule_parser.h>
 #include <reporter.h>
 #include <widgets/progress_reporter.h>
 
@@ -184,6 +184,51 @@ PROJECT_CONTEXT loadKicadProject( wxString filename )
 }
 
 
+class TEST_DRC_ENGINE : public DRC_ENGINE
+{
+public:
+    TEST_DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS* aSettings ) :
+            DRC_ENGINE( aBoard, aSettings )
+    { }
+
+    bool LoadRules( wxFileName aPath )
+    {
+        if( aPath.FileExists() )
+        {
+            m_ruleConditions.clear();
+            m_rules.clear();
+
+            FILE* fp = wxFopen( aPath.GetFullPath(), wxT( "rt" ) );
+
+            if( fp )
+            {
+                try
+                {
+                    DRC_RULES_PARSER parser( m_board, fp, aPath.GetFullPath() );
+                    parser.Parse( m_rules, nullptr );
+                }
+                catch( PARSE_ERROR& pe )
+                {
+                    // Don't leave possibly malformed stuff around for us to trip over
+                    m_ruleConditions.clear();
+                    m_rules.clear();
+
+                    //wxSafeYield( m_editFrame );
+                    //m_editFrame->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
+                    //                                   pe.lineNumber, pe.byteIndex );
+
+                    throw;
+
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+};
+
+
 int main( int argc, char *argv[] )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -200,7 +245,7 @@ int main( int argc, char *argv[] )
 
 
 
-    test::DRC_ENGINE drcEngine( project.board.get(), &project.board->GetDesignSettings() );
+    TEST_DRC_ENGINE drcEngine( project.board.get(), &project.board->GetDesignSettings() );
 
     CONSOLE_LOG consoleLog;
 

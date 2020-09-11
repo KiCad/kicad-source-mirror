@@ -25,7 +25,7 @@
 #ifndef DRC_TEXTVAR_TESTER__H
 #define DRC_TEXTVAR_TESTER__H
 
-#include <drc/drc_provider.h>
+#include <drc/drc_results_provider.h>
 
 
 class BOARD;

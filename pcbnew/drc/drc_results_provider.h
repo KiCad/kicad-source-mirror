@@ -35,11 +35,14 @@
 
 
 /**
- * DRC_TEST_PROVIDER
+ * LEGACY_DRC_TEST_PROVIDER
  * is a base class that represents a DRC "provider" which runs some DRC functions over a
  * #BOARD and spits out #PCB_MARKERs as needed.
+ *
+ * JEY TODO: to remove
+ *
  */
-class DRC_TEST_PROVIDER
+class LEGACY_DRC_TEST_PROVIDER
 {
 public:
     /**
@@ -55,10 +58,10 @@ public:
      */
     virtual bool RunDRC( EDA_UNITS aUnits, BOARD& aBoard ) = 0;
 
-    virtual ~DRC_TEST_PROVIDER() {}
+    virtual ~LEGACY_DRC_TEST_PROVIDER() {}
 
 protected:
-    DRC_TEST_PROVIDER( MARKER_HANDLER aMarkerHandler ) :
+    LEGACY_DRC_TEST_PROVIDER( MARKER_HANDLER aMarkerHandler ) :
             m_marker_handler( std::move( aMarkerHandler ) )
     {
     }

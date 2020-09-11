@@ -27,10 +27,11 @@
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 
-#include <drc_proto/drc_engine.h>
-#include <drc_proto/drc_item.h>
-#include <drc_proto/drc_rule.h>
-#include <drc_proto/drc_test_provider.h>
+#include <drc/drc_engine.h>
+#include <drc/drc.h>
+#include <drc/drc_item.h>
+#include <drc/drc_rule.h>
+#include <drc/drc_test_provider.h>
 
 
 /*
@@ -67,7 +68,7 @@ public:
         return "Tests board connectivity";
     }
 
-    virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
 };
 
 }; // namespace test
@@ -164,8 +165,7 @@ bool test::DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 }
 
 
-std::set<test::DRC_CONSTRAINT_TYPE_T>
-test::DRC_TEST_PROVIDER_CONNECTIVITY::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_CONNECTIVITY::GetMatchingConstraintIds() const
 {
     return {};
 }
@@ -173,5 +173,5 @@ test::DRC_TEST_PROVIDER_CONNECTIVITY::GetMatchingConstraintIds() const
 
 namespace detail
 {
-static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_CONNECTIVITY> dummy;
+static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_CONNECTIVITY> dummy;
 }

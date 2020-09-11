@@ -26,17 +26,15 @@
 #include <class_drawsegment.h>
 #include <class_pad.h>
 
-#include <convert_basic_shapes_to_polygon.h>
 #include <geometry/polygon_test_point_inside.h>
-
 #include <geometry/seg.h>
-#include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 
-#include <drc_proto/drc_engine.h>
-#include <drc_proto/drc_item.h>
-#include <drc_proto/drc_rule.h>
+#include <drc/drc_engine.h>
+#include <drc/drc_item.h>
+#include <drc/drc_rule.h>
+#include <drc/drc.h>
 #include <drc_proto/drc_test_provider_clearance_base.h>
 
 /*
@@ -75,7 +73,7 @@ public:
         return "Tests clearance of holes (via/pad drills)";
     }
 
-    virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
 
 private:
     void addHole( const VECTOR2I& aLocation, int aRadius, BOARD_ITEM* aOwner );
@@ -112,7 +110,8 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
     DRC_CONSTRAINT worstClearanceConstraint;
 
-    if( m_drcEngine->QueryWorstConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE, worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
+    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
+                                           worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
     {
         m_largestClearance = worstClearanceConstraint.GetValue().Min();
     }
@@ -271,11 +270,13 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
             {
                 // pad under testing has a hole, test this hole against pad reference
 
-                auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE, aRefPad, pad );
+                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
+                                                                  aRefPad, pad );
                 auto minClearance = constraint.GetValue().Min();
                 int actual;
 
-                drc_dbg(10,"check pad %p rule '%s' cl %d\n", pad, constraint.GetParentRule()->GetName(), minClearance );
+                drc_dbg( 10, "check pad %p rule '%s' cl %d\n",
+                         pad, constraint.GetParentRule()->m_Name, minClearance );
 
                 accountCheck( constraint.GetParentRule() );
 
@@ -304,13 +305,15 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
             if( aRefPad->GetDrillSize().x ) // pad reference has a hole
             {
 
-                auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE, aRefPad, pad );
+                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
+                                                                  aRefPad, pad );
                 auto minClearance = constraint.GetValue().Min();
                 int actual;
 
                 accountCheck( constraint.GetParentRule() );
 
-                drc_dbg(10,"check pad %p rule '%s' cl %d\n", aRefPad, constraint.GetParentRule()->GetName(), minClearance );
+                drc_dbg( 10,"check pad %p rule '%s' cl %d\n", aRefPad,
+                         constraint.GetParentRule()->m_Name, minClearance );
 
                 auto padShape = pad->GetEffectiveShape();
                 if( padShape->Collide( aRefPad->GetEffectiveHoleShape(), minClearance, &actual ) )
@@ -389,7 +392,8 @@ void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
             int actual = ( checkHole.m_location - refHole.m_location ).EuclideanNorm();
             actual = std::max( 0, actual - checkHole.m_drillRadius - refHole.m_drillRadius );
 
-            DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE, refHole.m_owner, checkHole.m_owner );
+            DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
+                                                                        refHole.m_owner, checkHole.m_owner );
             int minClearance = constraint.GetValue().Min();
 
             accountCheck( constraint.GetParentRule() );
@@ -417,7 +421,7 @@ void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
 }
 
 
-std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::GetMatchingConstraintIds() const
 {
     return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE };
 }
@@ -425,5 +429,5 @@ std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::Ge
 
 namespace detail
 {
-    static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_HOLE_CLEARANCE> dummy;
+    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_HOLE_CLEARANCE> dummy;
 }

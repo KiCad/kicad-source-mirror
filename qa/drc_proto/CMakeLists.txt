@@ -36,9 +36,9 @@ endif()
 add_executable( drc_proto
     drc_rules_proto_keywords.cpp
     drc_proto_test.cpp
-    drc_rule.cpp
-    drc_rule_parser.cpp
-    drc_test_provider.cpp
+    ../../pcbnew/drc/drc_rule.cpp
+    ../../pcbnew/drc/drc_rule_parser.cpp
+    ../../pcbnew/drc/drc_test_provider.cpp
     drc_test_provider_clearance_base.cpp
     drc_test_provider_copper_clearance.cpp
     drc_test_provider_hole_clearance.cpp
@@ -52,8 +52,8 @@ add_executable( drc_proto
     drc_test_provider_via_diameter.cpp
     drc_test_provider_lvs.cpp
     drc_test_provider_misc.cpp
-    drc_engine.cpp
-    drc_item.cpp
+    ../../pcbnew/drc/drc_engine.cpp
+    ../../pcbnew/drc/drc_item.cpp
     ../qa_utils/mocks.cpp
     ../pcbnew_utils/board_file_utils.cpp
     ../qa_utils/stdstream_line_reader.cpp

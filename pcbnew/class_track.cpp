@@ -139,8 +139,9 @@ void TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
     // Not currently implemented
 
     // LEVEL 2: Rules
-    const DRC_CONSTRAINT* constraint = GetConstraint( this, nullptr, DRC_RULE_ID_TRACK, m_Layer,
-                                                      aSource );
+    const DRC_CONSTRAINT* constraint = GetConstraint( this, nullptr,
+                                                      DRC_CONSTRAINT_TYPE_TRACK_WIDTH,
+                                                      m_Layer, aSource );
 
     if( constraint )
     {
@@ -177,8 +178,9 @@ int VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
         return 0;
     }
 
-    const DRC_CONSTRAINT* constraint = GetConstraint( this, nullptr, DRC_RULE_ID_ANNULUS, aLayer,
-                                                      aSource );
+    const DRC_CONSTRAINT* constraint = GetConstraint( this, nullptr,
+                                                      DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH,
+                                                      aLayer, aSource );
 
     if( constraint )
     {

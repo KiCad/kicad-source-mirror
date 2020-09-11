@@ -92,7 +92,7 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporte
 
     m_reporter = aReporter;
 
-    for( T token = NextTok();  token != T_EOF;  token = NextTok() )
+    for( T token = NextTok(); token != T_EOF; token = NextTok() )
     {
         if( token != T_LEFT )
             reportError( _( "Missing '('." ) );
@@ -172,7 +172,7 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
 
     rule->m_Name = FromUTF8();
 
-    for( token = NextTok();  token != T_RIGHT && token != T_EOF;  token = NextTok() )
+    for( token = NextTok(); token != T_RIGHT && token != T_EOF; token = NextTok() )
     {
         if( token != T_LEFT )
             reportError( _( "Missing '('." ) );
@@ -196,8 +196,8 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
 
             if( IsSymbol( token ) )
             {
-                rule->m_Condition.m_Expression = FromUTF8();
-                rule->m_Condition.Compile( m_reporter, CurLineNumber(), CurOffset() );
+                rule->m_Condition->SetExpression( FromUTF8() );
+                rule->m_Condition->Compile( m_reporter, CurLineNumber(), CurOffset() );
             }
             else
             {
@@ -241,11 +241,10 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
 
 void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 {
-    aRule->m_Constraints.emplace_back( DRC_CONSTRAINT() );
+    DRC_CONSTRAINT constraint;
 
-    DRC_CONSTRAINT& constraint = aRule->m_Constraints.back();
-    int             value;
-    wxString        msg;
+    int       value;
+    wxString  msg;
 
     T token = NextTok();
 
@@ -259,11 +258,16 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
     switch( token )
     {
-    case T_clearance:     constraint.m_Type = DRC_RULE_ID_CLEARANCE; break;
-    case T_track_width:   constraint.m_Type = DRC_RULE_ID_TRACK;     break;
-    case T_annulus_width: constraint.m_Type = DRC_RULE_ID_ANNULUS;   break;
-    case T_hole:          constraint.m_Type = DRC_RULE_ID_HOLE_SIZE; break;
-    case T_disallow:      constraint.m_Type = DRC_RULE_ID_DISALLOW;  break;
+    case T_clearance:           constraint.m_Type = DRC_CONSTRAINT_TYPE_CLEARANCE;           break;
+    case T_hole_clearance:      constraint.m_Type = DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE;      break;
+    case T_edge_clearance:      constraint.m_Type = DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE;      break;
+    case T_hole:                constraint.m_Type = DRC_CONSTRAINT_TYPE_HOLE_SIZE;           break;
+    case T_courtyard_clearance: constraint.m_Type = DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE; break;
+    case T_silk_to_pad:         constraint.m_Type = DRC_CONSTRAINT_TYPE_SILK_TO_PAD;         break;
+    case T_silk_to_silk:        constraint.m_Type = DRC_CONSTRAINT_TYPE_SILK_TO_SILK;        break;
+    case T_track_width:         constraint.m_Type = DRC_CONSTRAINT_TYPE_TRACK_WIDTH;         break;
+    case T_annulus_width:       constraint.m_Type = DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH;       break;
+    case T_disallow:            constraint.m_Type = DRC_CONSTRAINT_TYPE_DISALLOW;            break;
     default:
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
                     FromUTF8(),
@@ -272,7 +276,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
         reportError( msg );
     }
 
-    if( constraint.m_Type == DRC_RULE_ID_DISALLOW )
+    if( constraint.m_Type == DRC_CONSTRAINT_TYPE_DISALLOW )
     {
         for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
         {
@@ -281,16 +285,16 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
             switch( token )
             {
-            case T_track:      constraint.m_DisallowFlags |= DISALLOW_TRACKS;     break;
-            case T_via:        constraint.m_DisallowFlags |= DISALLOW_VIAS;       break;
-            case T_micro_via:  constraint.m_DisallowFlags |= DISALLOW_MICRO_VIAS; break;
-            case T_buried_via: constraint.m_DisallowFlags |= DISALLOW_BB_VIAS;    break;
-            case T_pad:        constraint.m_DisallowFlags |= DISALLOW_PADS;       break;
-            case T_zone:       constraint.m_DisallowFlags |= DISALLOW_ZONES;      break;
-            case T_text:       constraint.m_DisallowFlags |= DISALLOW_TEXTS;      break;
-            case T_graphic:    constraint.m_DisallowFlags |= DISALLOW_GRAPHICS;   break;
-            case T_hole:       constraint.m_DisallowFlags |= DISALLOW_HOLES;      break;
-            case T_footprint:  constraint.m_DisallowFlags |= DISALLOW_FOOTPRINTS; break;
+            case T_track:      constraint.m_DisallowFlags |= DRC_DISALLOW_TRACKS;     break;
+            case T_via:        constraint.m_DisallowFlags |= DRC_DISALLOW_VIAS;       break;
+            case T_micro_via:  constraint.m_DisallowFlags |= DRC_DISALLOW_MICRO_VIAS; break;
+            case T_buried_via: constraint.m_DisallowFlags |= DRC_DISALLOW_BB_VIAS;    break;
+            case T_pad:        constraint.m_DisallowFlags |= DRC_DISALLOW_PADS;       break;
+            case T_zone:       constraint.m_DisallowFlags |= DRC_DISALLOW_ZONES;      break;
+            case T_text:       constraint.m_DisallowFlags |= DRC_DISALLOW_TEXTS;      break;
+            case T_graphic:    constraint.m_DisallowFlags |= DRC_DISALLOW_GRAPHICS;   break;
+            case T_hole:       constraint.m_DisallowFlags |= DRC_DISALLOW_HOLES;      break;
+            case T_footprint:  constraint.m_DisallowFlags |= DRC_DISALLOW_FOOTPRINTS; break;
 
             case T_EOF:
                 reportError( _( "Missing ')'." ) );
@@ -313,7 +317,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
         return;
     }
 
-    for( token = NextTok();  token != T_RIGHT && token != T_EOF;  token = NextTok() )
+    for( token = NextTok(); token != T_RIGHT && token != T_EOF; token = NextTok() )
     {
         if( token != T_LEFT )
             reportError( _( "Missing '('." ) );
@@ -396,6 +400,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
     if( (int) CurTok() != DSN_RIGHT )
         reportError( _( "Missing ')'." ) );
+
+    aRule->AddConstraint( constraint );
 }
 
 
@@ -416,7 +422,7 @@ void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult 
 
     PCB_EXPR_EVALUATOR evaluator;
     evaluator.SetErrorCallback( errorHandler );
-    
+
     evaluator.Evaluate( aExpr );
     aResult = evaluator.Result();
 }

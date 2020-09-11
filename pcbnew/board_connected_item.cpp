@@ -156,8 +156,8 @@ bool BOARD_CONNECTED_ITEM::GetRuleClearance( BOARD_ITEM* aItem, PCB_LAYER_ID aLa
                                              int* aClearance, wxString* aSource,
                                              REPORTER* aReporter ) const
 {
-    const DRC_CONSTRAINT* constraint = GetConstraint( this, aItem, DRC_RULE_ID_CLEARANCE, aLayer,
-                                                      aSource, aReporter );
+    const DRC_CONSTRAINT* constraint = GetConstraint( this, aItem, DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                      aLayer, aSource, aReporter );
 
     if( constraint )
     {

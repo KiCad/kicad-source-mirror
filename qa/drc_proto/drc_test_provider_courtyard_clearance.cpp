@@ -28,15 +28,15 @@
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/polygon_test_point_inside.h>
-
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 
-#include <drc_proto/drc_engine.h>
-#include <drc_proto/drc_item.h>
-#include <drc_proto/drc_rule.h>
+#include <drc/drc_engine.h>
+#include <drc/drc.h>
+#include <drc/drc_item.h>
+#include <drc/drc_rule.h>
 #include <drc_proto/drc_test_provider_clearance_base.h>
 
 /*
@@ -76,7 +76,7 @@ public:
         return "Tests components' courtyard clearance";
     }
 
-    virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
 
 private:
 
@@ -217,7 +217,7 @@ bool test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::Run()
 }
 
 
-std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::GetMatchingConstraintIds() const
 {
     return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE };
 }
@@ -225,5 +225,5 @@ std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_COURTYARD_CLEARANC
 
 namespace detail
 {
-    static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE> dummy;
+    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE> dummy;
 }

@@ -28,15 +28,15 @@
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/polygon_test_point_inside.h>
-
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 
-#include <drc_proto/drc_engine.h>
-#include <drc_proto/drc_item.h>
-#include <drc_proto/drc_rule.h>
+#include <pcbnew/drc/drc_engine.h>
+#include <drc/drc.h>
+#include <drc/drc_item.h>
+#include <drc/drc_rule.h>
 #include <drc_proto/drc_test_provider_clearance_base.h>
 
 /*
@@ -73,7 +73,7 @@ public:
         return "Tests for silkscreen covering components pads";
     }
 
-    virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
 
 private:
 };
@@ -88,7 +88,8 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
     DRC_CONSTRAINT worstClearanceConstraint;
     m_largestClearance = 0;
 
-    if( m_drcEngine->QueryWorstConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_SILK_TO_PAD, worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
+    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_SILK_TO_PAD,
+                                           worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
     {
         m_largestClearance = worstClearanceConstraint.m_Value.Min();
     }
@@ -96,21 +97,20 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
     ReportAux( "Worst clearance : %d nm", m_largestClearance );
     ReportStage( ("Testing pads vs silkscreen clearance"), 0, 2 );
 
-    
     std::vector<DRAWSEGMENT*> boardOutline;
     std::vector<BOARD_ITEM*> boardItems;
 
-    auto queryBoardOutlineItems = [&] ( BOARD_ITEM *item ) -> int
-    {
-        boardOutline.push_back( dyn_cast<DRAWSEGMENT*>( item ) );
-    };
+    auto queryBoardOutlineItems =
+            [&]( BOARD_ITEM *item ) -> int
+            {
+                boardOutline.push_back( dyn_cast<DRAWSEGMENT*>( item ) );
+            };
 
-    auto queryBoardGeometryItems = [&] ( BOARD_ITEM *item ) -> int
-    {
-        boardItems.push_back( item );
-    };
-
-    
+    auto queryBoardGeometryItems =
+            [&]( BOARD_ITEM *item ) -> int
+            {
+                boardItems.push_back( item );
+            };
 
     forEachGeometryItem( { PCB_LINE_T }, LSET( Edge_Cuts ), queryBoardOutlineItems );
     forEachGeometryItem( {}, LSET::AllTechMask() | LSET::AllCuMask(), queryBoardGeometryItems );
@@ -156,7 +156,7 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
 }
 
 
-std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetMatchingConstraintIds() const
 {
     return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE };
 }
@@ -164,5 +164,5 @@ std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::Ge
 
 namespace detail
 {
-    static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_EDGE_CLEARANCE> dummy;
+    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_EDGE_CLEARANCE> dummy;
 }

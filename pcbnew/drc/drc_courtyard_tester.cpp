@@ -35,7 +35,7 @@
 #include <drc/drc_item.h>
 
 DRC_COURTYARD_TESTER::DRC_COURTYARD_TESTER( MARKER_HANDLER aMarkerHandler ) :
-        DRC_TEST_PROVIDER( std::move( aMarkerHandler ) )
+        LEGACY_DRC_TEST_PROVIDER( std::move( aMarkerHandler ) )
 {
 }
 

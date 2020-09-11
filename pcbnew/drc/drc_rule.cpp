@@ -27,6 +27,7 @@
 #include <class_board_item.h>
 #include <reporter.h>
 #include <drc/drc_rule.h>
+#include <drc/drc_engine.h>
 #include <pcb_expr_evaluator.h>
 
 
@@ -34,7 +35,7 @@ const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* 
                                      int aConstraint, PCB_LAYER_ID aLayer, wxString* aRuleName,
                                      REPORTER* aReporter )
 {
-    BOARD*    board = aItem->GetBoard();
+    BOARD* board = aItem->GetBoard();
 
     if( !board )
         return nullptr;
@@ -80,10 +81,10 @@ const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* 
             if( aReporter )
             {
                 aReporter->Report( wxString::Format( _( "Checking rule condition \"%s\"." ),
-                                                     rule->m_Condition.m_Expression ) );
+                                                     rule->m_Condition->GetExpression() ) );
             }
 
-            if( rule->m_Condition.EvaluateFor( aItem, bItem, aLayer ) )
+            if( rule->m_Condition->EvaluateFor( aItem, bItem, aLayer ) )
             {
                 if( aReporter )
                     aReporter->Report( "Rule applied." );
@@ -94,7 +95,7 @@ const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* 
                 return constraint;
             }
 
-            if( bItem && rule->m_Condition.EvaluateFor( bItem, aItem, aLayer ) )
+            if( bItem && rule->m_Condition->EvaluateFor( bItem, aItem, aLayer ) )
             {
                 if( aReporter )
                     aReporter->Report( "Rule applied." );
@@ -118,32 +119,43 @@ const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* 
 
 
 DRC_RULE::DRC_RULE() :
-    m_LayerCondition( LSET::AllLayersMask() )
+        m_Unary( false ),
+        m_LayerCondition( LSET::AllLayersMask() ),
+        m_Priority( 0 ),
+        m_Severity( SEVERITY::RPT_SEVERITY_ERROR )
 {
 }
 
 
 DRC_RULE::~DRC_RULE()
 {
+    delete m_Condition;
 }
 
 
-DRC_RULE_CONDITION::DRC_RULE_CONDITION()
+void DRC_RULE::AddConstraint( DRC_CONSTRAINT& aConstraint )
 {
-    m_ucode = nullptr;
+    aConstraint.SetParentRule( this );
+    m_Constraints.push_back( aConstraint );
+}
+
+
+DRC_RULE_CONDITION::DRC_RULE_CONDITION( const wxString& aExpression ) :
+    m_expression( aExpression ),
+    m_ucode ( nullptr )
+{
 }
 
 
 DRC_RULE_CONDITION::~DRC_RULE_CONDITION()
 {
-    delete m_ucode;
 }
 
 
 bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB,
                                       PCB_LAYER_ID aLayer, REPORTER* aReporter )
 {
-    if( m_Expression.IsEmpty() )
+    if( GetExpression().IsEmpty() )
     {
         if( aReporter )
             aReporter->Report( _( "Unconditional constraint." ) );
@@ -152,7 +164,7 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
     }
 
     if( aReporter )
-        aReporter->Report( _( "Evaluating expression \"" + m_Expression + "\"." ) );
+        aReporter->Report( _( "Evaluating expression \"" + GetExpression() + "\"." ) );
 
     if( !m_ucode )
     {
@@ -195,12 +207,11 @@ bool DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSou
     PCB_EXPR_COMPILER compiler;
     compiler.SetErrorCallback( errorHandler );
 
-    if (!m_ucode)
-        m_ucode = new PCB_EXPR_UCODE;
+    m_ucode = std::make_unique<PCB_EXPR_UCODE>();
 
     PCB_EXPR_CONTEXT preflightContext( F_Cu );
 
-    bool ok = compiler.Compile( m_Expression.ToUTF8().data(), m_ucode, &preflightContext );
+    bool ok = compiler.Compile( GetExpression().ToUTF8().data(), m_ucode.get(), &preflightContext );
     return ok;
 }
 

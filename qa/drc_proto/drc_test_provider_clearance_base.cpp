@@ -29,15 +29,15 @@
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/polygon_test_point_inside.h>
-
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
 
-#include <drc_proto/drc_engine.h>
+#include <drc/drc_engine.h>
 #include <drc_proto/drc_test_provider_clearance_base.h>
-#include <drc_proto/drc_item.h>
-#include <drc_proto/drc_rule.h>
+#include <drc/drc.h>
+#include <drc/drc_item.h>
+#include <drc/drc_rule.h>
 
 const int UI_EPSILON = Mils2iu( 5 );
 

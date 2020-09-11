@@ -28,6 +28,8 @@
 #include <rc_item.h>
 
 class PCB_BASE_FRAME;
+class DRC_RULE;
+class DRC_TEST_PROVIDER;
 
 class DRC_ITEM : public RC_ITEM
 {
@@ -55,7 +57,14 @@ public:
      * Translates this object into a fragment of HTML suitable for the wxHtmlListBox class.
      * @return wxString - the html text.
      */
-    wxString ShowHtml( PCB_BASE_FRAME* aFrame ) const;
+    wxString ShowHtml( PCB_BASE_FRAME* aFrame ) const; // JEY TODO
+    wxString FormatHtml( ) const { return ""; } // fixme
+
+    void SetViolatingRule ( DRC_RULE *aRule ) { m_violatingRule = aRule; }
+    DRC_RULE* GetViolatingRule() const { return m_violatingRule; }
+
+    void SetViolatingTest( DRC_TEST_PROVIDER *aProvider ) { m_violatingTest = aProvider; }
+    DRC_TEST_PROVIDER* GetViolatingTest() const { return m_violatingTest; }
 
 private:
     DRC_ITEM( int aErrorCode = 0, const wxString& aTitle = "", const wxString& aSettingsKey = "" )
@@ -78,10 +87,11 @@ private:
     static DRC_ITEM zoneHasEmptyNet;
     static DRC_ITEM viaDangling;
     static DRC_ITEM trackDangling;
-    static DRC_ITEM holeNearHole;
+    static DRC_ITEM holeNearHole; // JEY TODO
+    static DRC_ITEM holeClearance; // JEY TODO
     static DRC_ITEM trackWidth;
     static DRC_ITEM viaTooSmall;
-    static DRC_ITEM viaAnnulus;
+    static DRC_ITEM annulus;
     static DRC_ITEM drillTooSmall;
     static DRC_ITEM viaHoleLargerThanPad;
     static DRC_ITEM padstack;
@@ -100,7 +110,10 @@ private:
     static DRC_ITEM extraFootprint;
     static DRC_ITEM netConflict;
     static DRC_ITEM unresolvedVariable;
-};
 
+private:
+    DRC_RULE*          m_violatingRule = nullptr;
+    DRC_TEST_PROVIDER* m_violatingTest = nullptr;
+};
 
 #endif      // DRC_ITEM_H

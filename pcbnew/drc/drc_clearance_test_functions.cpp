@@ -43,7 +43,7 @@ void DRC::doSingleViaDRC( BOARD_COMMIT& aCommit, VIA* aRefVia )
     {
         if( aRefVia->GetWidth() < bds.m_MicroViasMinSize )
         {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_VIA_ANNULUS );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ANNULUS );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
                           MessageTextFromValue( userUnits(), bds.m_MicroViasMinSize, true ),
@@ -60,7 +60,7 @@ void DRC::doSingleViaDRC( BOARD_COMMIT& aCommit, VIA* aRefVia )
     {
         if( aRefVia->GetWidth() < bds.m_ViasMinSize )
         {
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_VIA_ANNULUS );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ANNULUS );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
                           MessageTextFromValue( userUnits(), bds.m_ViasMinSize, true ),
@@ -231,7 +231,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
         {
             if( viaAnnulus < minAnnulus )
             {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_VIA_ANNULUS );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ANNULUS );
 
                 m_msg.Printf( _( "Via annulus too small (%s %s; actual %s)" ),
                               m_clearanceSource,
@@ -255,7 +255,7 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
 
             if( viaAnnulus < minAnnulus )
             {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_VIA_ANNULUS );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ANNULUS );
 
                 m_msg.Printf( _( "Via annulus too small (%s %s; actual %s)" ),
                               m_clearanceSource,
@@ -303,8 +303,8 @@ void DRC::doTrackDrc( BOARD_COMMIT& aCommit, TRACK* aRefSeg, TRACKS::iterator aS
             {
                 const SHAPE_SEGMENT*  slot = pad->GetEffectiveHoleShape();
                 const DRC_CONSTRAINT* constraint = GetConstraint( aRefSeg, pad,
-                                                                  DRC_RULE_ID_CLEARANCE, aLayer,
-                                                                  &m_clearanceSource );
+                                                                  DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                                  aLayer, &m_clearanceSource );
                 int minClearance;
                 int actual;
 

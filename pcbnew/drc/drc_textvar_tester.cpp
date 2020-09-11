@@ -31,7 +31,7 @@
 
 DRC_TEXTVAR_TESTER::DRC_TEXTVAR_TESTER( MARKER_HANDLER aMarkerHandler,
                                         KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet ) :
-        DRC_TEST_PROVIDER( std::move( aMarkerHandler ) ),
+        LEGACY_DRC_TEST_PROVIDER( std::move( aMarkerHandler ) ),
         m_units( EDA_UNITS::MILLIMETRES ),
         m_board( nullptr ),
         m_worksheet( aWorksheet )

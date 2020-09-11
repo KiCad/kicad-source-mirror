@@ -22,21 +22,17 @@
  */
 
 #include <common.h>
-#include <class_board.h>
 #include <class_drawsegment.h>
-#include <class_pad.h>
-
-#include <convert_basic_shapes_to_polygon.h>
 #include <geometry/polygon_test_point_inside.h>
 
 #include <geometry/seg.h>
-#include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 
-#include <drc_proto/drc_engine.h>
-#include <drc_proto/drc_item.h>
-#include <drc_proto/drc_rule.h>
+#include <pcbnew/drc/drc_engine.h>
+#include <drc/drc_item.h>
+#include <drc/drc_rule.h>
+#include <drc/drc.h>
 #include <drc_proto/drc_test_provider_clearance_base.h>
 
 /*
@@ -75,7 +71,7 @@ public:
         return "Tests items vs board edge clearance";
     }
 
-    virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
 
 private:
 };
@@ -88,7 +84,9 @@ bool test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     m_board = m_drcEngine->GetBoard();
 
     DRC_CONSTRAINT worstClearanceConstraint;
-    if( m_drcEngine->QueryWorstConstraint( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE, worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
+
+    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
+                                           worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
     {
         m_largestClearance = worstClearanceConstraint.GetValue().Min();
     }
@@ -132,12 +130,15 @@ bool test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
         for( auto boardItem : boardItems )
         {
-            drc_dbg(10, "RefT %d %p %s %d\n", outlineItem->Type(), outlineItem, outlineItem->GetClass(), outlineItem->GetLayer() );
-            drc_dbg(10, "BoardT %d %p %s %d\n", boardItem->Type(), boardItem, boardItem->GetClass(), boardItem->GetLayer() );
+            drc_dbg( 10, "RefT %d %p %s %d\n", outlineItem->Type(), outlineItem,
+                     outlineItem->GetClass(), outlineItem->GetLayer() );
+            drc_dbg( 10, "BoardT %d %p %s %d\n", boardItem->Type(), boardItem,
+                     boardItem->GetClass(), boardItem->GetLayer() );
 
             auto shape = boardItem->GetEffectiveShape();
 
-            test::DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE, outlineItem, boardItem );
+            DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
+                                                                        outlineItem, boardItem );
             int minClearance = constraint.GetValue().Min();
             int actual;
 
@@ -149,7 +150,7 @@ bool test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 wxString msg;
 
                 msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                            constraint.GetParentRule()->GetName(),
+                            constraint.GetParentRule()->m_Name,
                             MessageTextFromValue( userUnits(), minClearance, true ),
                             MessageTextFromValue( userUnits(), actual, true ) );
 
@@ -177,7 +178,7 @@ bool test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 }
 
 
-std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetMatchingConstraintIds() const
 {
     return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE };
 }
@@ -185,5 +186,5 @@ std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::Ge
 
 namespace detail
 {
-    static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_EDGE_CLEARANCE> dummy;
+    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_EDGE_CLEARANCE> dummy;
 }

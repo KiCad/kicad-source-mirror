@@ -25,10 +25,11 @@
 #include <class_track.h>
 #include <common.h>
 
-#include <drc_proto/drc_engine.h>
-#include <drc_proto/drc_item.h>
-#include <drc_proto/drc_rule.h>
-#include <drc_proto/drc_test_provider.h>
+#include <drc/drc_engine.h>
+#include <drc/drc.h>
+#include <drc/drc_item.h>
+#include <drc/drc_rule.h>
+#include <drc/drc_test_provider.h>
 
 
 /*
@@ -63,7 +64,7 @@ public:
         return "Tests track widths";
     }
 
-    virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
 };
 
 }; // namespace test
@@ -71,8 +72,7 @@ public:
 
 bool test::DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 {
-    if( !m_drcEngine->HasCorrectRulesForId(
-                test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH ) )
+    if( !m_drcEngine->HasCorrectRulesForId( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH ) )
     {
         ReportAux( "No track width constraints found. Skipping check." );
         return false;
@@ -95,8 +95,8 @@ bool test::DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
             p0    = ( trk->GetStart() + trk->GetEnd() ) / 2;
         }
 
-        test::DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems(
-                test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH, item );
+        DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH,
+                                                                    item );
 
         bool fail_min = false, fail_max = false;
         int  constraintWidth;
@@ -119,7 +119,7 @@ bool test::DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
             wxString                  msg;
 
             msg.Printf( drcItem->GetErrorText() + _( " (%s; width %s, constraint %s %s)" ),
-                    constraint.GetParentRule()->GetName(),
+                    constraint.GetParentRule()->m_Name,
                     MessageTextFromValue( userUnits(), width, true ),
                     fail_min ? _( "minimum" ) : _( "maximum" ),
                     MessageTextFromValue( userUnits(), constraintWidth, true ) );
@@ -146,8 +146,7 @@ bool test::DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 }
 
 
-std::set<test::DRC_CONSTRAINT_TYPE_T>
-test::DRC_TEST_PROVIDER_TRACK_WIDTH::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_TRACK_WIDTH::GetMatchingConstraintIds() const
 {
     return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH };
 }
@@ -155,5 +154,5 @@ test::DRC_TEST_PROVIDER_TRACK_WIDTH::GetMatchingConstraintIds() const
 
 namespace detail
 {
-static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_TRACK_WIDTH> dummy;
+static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_TRACK_WIDTH> dummy;
 }

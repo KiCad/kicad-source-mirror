@@ -27,10 +27,11 @@
 
 #include <common.h>
 
-#include <drc_proto/drc_engine.h>
-#include <drc_proto/drc_item.h>
-#include <drc_proto/drc_rule.h>
-#include <drc_proto/drc_test_provider.h>
+#include <drc/drc_engine.h>
+#include <drc/drc.h>
+#include <drc/drc_item.h>
+#include <drc/drc_rule.h>
+#include <drc/drc_test_provider.h>
 
 
 /*
@@ -69,7 +70,7 @@ public:
         return "Tests pad/via annular rings";
     }
 
-    virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
 };
 
 }; // namespace test
@@ -77,8 +78,7 @@ public:
 
 bool test::DRC_TEST_PROVIDER_ANNULUS::Run()
 {
-    if( !m_drcEngine->HasCorrectRulesForId(
-                test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH ) )
+    if( !m_drcEngine->HasCorrectRulesForId( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH ) )
     {
         ReportAux( "No annulus constraints found. Skipping check." );
         return false;
@@ -96,8 +96,7 @@ bool test::DRC_TEST_PROVIDER_ANNULUS::Run()
         if( !via )
             return true;
 
-        test::DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems(
-                test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH, via );
+        DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH, via );
 
         accountCheck( constraint );
 
@@ -121,7 +120,7 @@ bool test::DRC_TEST_PROVIDER_ANNULUS::Run()
             wxString                  msg;
 
             msg.Printf( drcItem->GetErrorText() + _( " (%s; actual annulus %s, constraint %s %s)" ),
-                    constraint.GetParentRule()->GetName(),
+                    constraint.GetParentRule()->m_Name,
                     MessageTextFromValue( userUnits(), annulus, true ),
                     fail_min ? _( "minimum" ) : _( "maximum" ),
                     MessageTextFromValue( userUnits(), fail_min ? v_min : v_max, true ) );
@@ -148,8 +147,7 @@ bool test::DRC_TEST_PROVIDER_ANNULUS::Run()
 }
 
 
-std::set<test::DRC_CONSTRAINT_TYPE_T>
-test::DRC_TEST_PROVIDER_ANNULUS::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_ANNULUS::GetMatchingConstraintIds() const
 {
     return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH };
 }
@@ -157,5 +155,5 @@ test::DRC_TEST_PROVIDER_ANNULUS::GetMatchingConstraintIds() const
 
 namespace detail
 {
-static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_ANNULUS> dummy;
+static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_ANNULUS> dummy;
 }

@@ -28,15 +28,15 @@
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/polygon_test_point_inside.h>
-
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 
-#include <drc_proto/drc_engine.h>
-#include <drc_proto/drc_item.h>
-#include <drc_proto/drc_rule.h>
+#include <drc/drc_engine.h>
+#include <drc/drc_item.h>
+#include <drc/drc_rule.h>
+#include <drc/drc.h>
 #include <drc_proto/drc_test_provider_clearance_base.h>
 
 
@@ -76,7 +76,7 @@ public:
         return "Tests sizes of drilled holes (via/pad drills)";
     }
 
-    virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
 
 private:
     bool checkVia( VIA* via );
@@ -135,7 +135,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( D_PAD* aPad )
     if( holeSize == 0 )
         return true;
 
-    auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_SIZE, aPad );
+    auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_SIZE, aPad );
     auto minHole = constraint.GetValue().Min();
 
     accountCheck( constraint );
@@ -164,7 +164,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( D_PAD* aPad )
 
 bool test::DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via )
 {
-    auto constraint = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_SIZE, via );
+    auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_SIZE, via );
     auto minHole = constraint.GetValue().Min();
 
     accountCheck( constraint );
@@ -194,7 +194,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via )
 }
 
 
-std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_HOLE_SIZE::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_HOLE_SIZE::GetMatchingConstraintIds() const
 {
     return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_SIZE };
 }
@@ -202,5 +202,5 @@ std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_HOLE_SIZE::GetMatc
 
 namespace detail
 {
-static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_HOLE_SIZE> dummy;
+static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_HOLE_SIZE> dummy;
 }

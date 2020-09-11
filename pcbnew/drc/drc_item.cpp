@@ -79,6 +79,10 @@ DRC_ITEM DRC_ITEM::trackDangling( DRCE_DANGLING_TRACK,
         _( "Track has unconnected end" ),
         wxT( "track_dangling" ) );
 
+DRC_ITEM DRC_ITEM::holeClearance( DRCE_HOLE_CLEARANCE,
+        _( "Hole clearance" ),
+        wxT( "hole_clearance" ) );
+
 DRC_ITEM DRC_ITEM::holeNearHole( DRCE_DRILLED_HOLES_TOO_CLOSE,
         _( "Drilled holes too close together" ),
         wxT( "hole_near_hole" ) );
@@ -91,9 +95,9 @@ DRC_ITEM DRC_ITEM::viaTooSmall( DRCE_TOO_SMALL_VIA,
         _( "Via size too small" ),
         wxT( "via_too_small" ) );
 
-DRC_ITEM DRC_ITEM::viaAnnulus( DRCE_VIA_ANNULUS,
-        _( "Via annulus" ),
-        wxT( "via_annulus" ) );
+DRC_ITEM DRC_ITEM::annulus( DRCE_ANNULUS,
+        _( "Annulus" ),
+        wxT( "annulus" ) );
 
 DRC_ITEM DRC_ITEM::drillTooSmall( DRCE_TOO_SMALL_DRILL,
         _( "Drill too small" ),
@@ -180,9 +184,10 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::viaDangling,
             DRC_ITEM::trackDangling,
             DRC_ITEM::holeNearHole,
+            DRC_ITEM::holeClearance,
             DRC_ITEM::trackWidth,
             DRC_ITEM::viaTooSmall,
-            DRC_ITEM::viaAnnulus,
+            DRC_ITEM::annulus,
             DRC_ITEM::drillTooSmall,
             DRC_ITEM::viaHoleLargerThanPad,
             DRC_ITEM::padstack,
@@ -199,6 +204,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::duplicateFootprints,
             DRC_ITEM::missingFootprint,
             DRC_ITEM::extraFootprint,
+            DRC_ITEM::netConflict,
             DRC_ITEM::unresolvedVariable
         } );
 
@@ -218,9 +224,10 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_DANGLING_VIA:             return std::make_shared<DRC_ITEM>( viaDangling );
     case DRCE_DANGLING_TRACK:           return std::make_shared<DRC_ITEM>( trackDangling );
     case DRCE_DRILLED_HOLES_TOO_CLOSE:  return std::make_shared<DRC_ITEM>( holeNearHole );
+    case DRCE_HOLE_CLEARANCE:           return std::make_shared<DRC_ITEM>( holeClearance );
     case DRCE_TRACK_WIDTH:              return std::make_shared<DRC_ITEM>( trackWidth );
     case DRCE_TOO_SMALL_VIA:            return std::make_shared<DRC_ITEM>( viaTooSmall );
-    case DRCE_VIA_ANNULUS:              return std::make_shared<DRC_ITEM>( viaAnnulus );
+    case DRCE_ANNULUS:                  return std::make_shared<DRC_ITEM>( annulus );
     case DRCE_TOO_SMALL_DRILL:          return std::make_shared<DRC_ITEM>( drillTooSmall );
     case DRCE_VIA_HOLE_BIGGER:          return std::make_shared<DRC_ITEM>( viaHoleLargerThanPad );
     case DRCE_PADSTACK:                 return std::make_shared<DRC_ITEM>( padstack );

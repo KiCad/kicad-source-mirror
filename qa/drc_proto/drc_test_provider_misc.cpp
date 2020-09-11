@@ -28,10 +28,11 @@
 #include <class_module.h>
 #include <class_pcb_text.h>
 
-#include <drc_proto/drc_engine.h>
-#include <drc_proto/drc_item.h>
-#include <drc_proto/drc_rule.h>
-#include <drc_proto/drc_test_provider.h>
+#include <pcbnew/drc/drc_engine.h>
+#include <drc/drc.h>
+#include <drc/drc_item.h>
+#include <drc/drc_rule.h>
+#include <pcbnew/drc/drc_test_provider.h>
 
 #include <ws_draw_item.h>
 #include <ws_proxy_view_item.h>
@@ -74,7 +75,7 @@ public:
         return "Misc checks (board outline, missing textvars)";
     }
 
-    virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
 
 private:
     void testOutline();
@@ -206,7 +207,7 @@ bool test::DRC_TEST_PROVIDER_MISC::Run()
 }
 
 
-std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_MISC::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_MISC::GetMatchingConstraintIds() const
 {
     return {};
 }
@@ -214,5 +215,5 @@ std::set<test::DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_MISC::GetMatchingC
 
 namespace detail
 {
-static test::DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_MISC> dummy;
+static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_MISC> dummy;
 }

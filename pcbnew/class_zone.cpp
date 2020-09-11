@@ -372,58 +372,58 @@ int ZONE_CONTAINER::GetKeepouts( PCB_LAYER_ID aLayer, std::map<int, wxString>* a
             source = _( "zone properties" );
 
         if( m_doNotAllowTracks )
-            setFlag( DISALLOW_TRACKS );
+            setFlag( DRC_DISALLOW_TRACKS );
 
         if( m_doNotAllowVias )
-            setFlag( DISALLOW_VIAS );
+            setFlag( DRC_DISALLOW_VIAS );
 
         if( m_doNotAllowPads )
-            setFlag( DISALLOW_PADS );
+            setFlag( DRC_DISALLOW_PADS );
 
         if( m_doNotAllowFootprints )
-            setFlag( DISALLOW_FOOTPRINTS );
+            setFlag( DRC_DISALLOW_FOOTPRINTS );
 
         if( m_doNotAllowCopperPour )
-            setFlag( DISALLOW_ZONES );
+            setFlag( DRC_DISALLOW_ZONES );
     }
 
-    const DRC_CONSTRAINT* constraint = GetConstraint( this, nullptr, DRC_RULE_ID_DISALLOW, aLayer,
-                                                      &source );
+    const DRC_CONSTRAINT* constraint = GetConstraint( this, nullptr, DRC_CONSTRAINT_TYPE_DISALLOW,
+                                                      aLayer, &source );
 
     if( constraint )
     {
         if( aSources )
             source = wxString::Format( _( "'%s' rule" ), source );
 
-        if( ( constraint->m_DisallowFlags & DISALLOW_VIAS ) > 0 )
-            setFlag( DISALLOW_VIAS );
+        if( ( constraint->m_DisallowFlags & DRC_DISALLOW_VIAS ) > 0 )
+            setFlag( DRC_DISALLOW_VIAS );
 
-        if( ( constraint->m_DisallowFlags & DISALLOW_MICRO_VIAS ) > 0 )
-            setFlag( DISALLOW_MICRO_VIAS );
+        if( ( constraint->m_DisallowFlags & DRC_DISALLOW_MICRO_VIAS ) > 0 )
+            setFlag( DRC_DISALLOW_MICRO_VIAS );
 
-        if( ( constraint->m_DisallowFlags & DISALLOW_BB_VIAS ) > 0 )
-            setFlag( DISALLOW_BB_VIAS );
+        if( ( constraint->m_DisallowFlags & DRC_DISALLOW_BB_VIAS ) > 0 )
+            setFlag( DRC_DISALLOW_BB_VIAS );
 
-        if( ( constraint->m_DisallowFlags & DISALLOW_TRACKS ) > 0 )
-            setFlag( DISALLOW_TRACKS );
+        if( ( constraint->m_DisallowFlags & DRC_DISALLOW_TRACKS ) > 0 )
+            setFlag( DRC_DISALLOW_TRACKS );
 
-        if( ( constraint->m_DisallowFlags & DISALLOW_PADS ) > 0 )
-            setFlag( DISALLOW_PADS );
+        if( ( constraint->m_DisallowFlags & DRC_DISALLOW_PADS ) > 0 )
+            setFlag( DRC_DISALLOW_PADS );
 
-        if( ( constraint->m_DisallowFlags & DISALLOW_ZONES ) > 0 )
-            setFlag( DISALLOW_ZONES );
+        if( ( constraint->m_DisallowFlags & DRC_DISALLOW_ZONES ) > 0 )
+            setFlag( DRC_DISALLOW_ZONES );
 
-        if( ( constraint->m_DisallowFlags & DISALLOW_TEXTS ) > 0 )
-            setFlag( DISALLOW_TEXTS );
+        if( ( constraint->m_DisallowFlags & DRC_DISALLOW_TEXTS ) > 0 )
+            setFlag( DRC_DISALLOW_TEXTS );
 
-        if( ( constraint->m_DisallowFlags & DISALLOW_GRAPHICS ) > 0 )
-            setFlag( DISALLOW_GRAPHICS );
+        if( ( constraint->m_DisallowFlags & DRC_DISALLOW_GRAPHICS ) > 0 )
+            setFlag( DRC_DISALLOW_GRAPHICS );
 
-        if( ( constraint->m_DisallowFlags & DISALLOW_HOLES ) > 0 )
-            setFlag( DISALLOW_HOLES );
+        if( ( constraint->m_DisallowFlags & DRC_DISALLOW_HOLES ) > 0 )
+            setFlag( DRC_DISALLOW_HOLES );
 
-        if( ( constraint->m_DisallowFlags & DISALLOW_FOOTPRINTS ) > 0 )
-            setFlag( DISALLOW_FOOTPRINTS );
+        if( ( constraint->m_DisallowFlags & DRC_DISALLOW_FOOTPRINTS ) > 0 )
+            setFlag( DRC_DISALLOW_FOOTPRINTS );
     }
 
     return keepouts;

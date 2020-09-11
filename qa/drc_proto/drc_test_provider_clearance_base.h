@@ -29,7 +29,7 @@
 
 #include <class_board.h>
 
-#include <drc_proto/drc_test_provider.h>
+#include <pcbnew/drc/drc_test_provider.h>
 
 namespace test {
 
@@ -37,10 +37,10 @@ class DRC_TEST_PROVIDER_CLEARANCE_BASE : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_CLEARANCE_BASE () :
-        DRC_TEST_PROVIDER(),
-        m_board( nullptr ),
-        m_largestClearance( 0 ),
-        m_boardOutlineValid( false )
+            DRC_TEST_PROVIDER(),
+            m_board( nullptr ),
+            m_largestClearance( 0 ),
+            m_boardOutlineValid( false )
         {
 
         }
