@@ -39,6 +39,11 @@ public:
 
     ~DIALOG_DIMENSION_PROPERTIES();
 
+protected:
+    bool TransferDataToWindow() override;
+
+    bool TransferDataFromWindow() override;
+
 private:
 
     PCB_BASE_EDIT_FRAME* m_frame;
@@ -57,9 +62,11 @@ private:
     UNIT_BINDER m_lineThickness;
     UNIT_BINDER m_arrowLength;
 
-    bool TransferDataToWindow() override;
+    void getUnitsSelection( EDA_UNITS& aUnits, bool& aUseMils );
 
-    bool TransferDataFromWindow() override;
+    wxString getValueText();
+
+    void updatePreviewText();
 };
 
 

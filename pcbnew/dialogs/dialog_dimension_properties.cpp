@@ -75,6 +75,33 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
 
     m_sdbSizerOK->SetDefault();
 
+    m_cbOverrideValue->Bind( wxEVT_CHECKBOX,
+            [&]( wxCommandEvent& evt )
+            {
+                m_txtValue->Enable( m_cbOverrideValue->GetValue() );
+
+                if( !m_cbOverrideValue->GetValue() )
+                    m_txtValue->SetValue( getValueText() );
+            } );
+
+    auto updateEventHandler =
+            [&]( wxCommandEvent& evt )
+            {
+                if( !m_cbOverrideValue->GetValue() )
+                    m_txtValue->ChangeValue( getValueText() );
+
+                updatePreviewText();
+            };
+
+    m_txtValue->Bind( wxEVT_TEXT, updateEventHandler );
+    m_txtPrefix->Bind( wxEVT_TEXT, updateEventHandler );
+    m_txtSuffix->Bind( wxEVT_TEXT, updateEventHandler );
+
+    m_cbUnits->Bind( wxEVT_CHOICE, updateEventHandler );
+    m_cbUnitsFormat->Bind( wxEVT_CHOICE, updateEventHandler );
+    m_cbPrecision->Bind( wxEVT_CHOICE, updateEventHandler );
+    m_cbSuppressZeroes->Bind( wxEVT_CHECKBOX, updateEventHandler );
+
     FinishDialogSettings();
 }
 
@@ -86,13 +113,16 @@ DIALOG_DIMENSION_PROPERTIES::~DIALOG_DIMENSION_PROPERTIES()
 
 bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 {
-    m_txtValue->SetValue( m_dimension->GetText() );
+    m_txtValue->Enable( m_dimension->GetOverrideValue() );
+    m_cbOverrideValue->SetValue( m_dimension->GetOverrideValue() );
 
     EDA_UNITS  units;
     bool       useMils;
     m_dimension->GetUnits( units, useMils );
 
     m_cbUnits->SetSelection( units == EDA_UNITS::MILLIMETRES ? 2 : useMils ? 1 : 0 );
+    m_cbUnitsFormat->SetSelection( static_cast<int>( m_dimension->GetUnitsFormat() ) );
+    m_cbPrecision->SetSelection( static_cast<int>( m_dimension->GetPrecision() ) );
 
     m_txtPrefix->SetValue( m_dimension->GetPrefix() );
     m_txtSuffix->SetValue( m_dimension->GetSuffix() );
@@ -104,6 +134,8 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
         m_cbLayer->SetSelection( 0 );
     }
 
+    m_cbSuppressZeroes->SetValue( m_dimension->GetSuppressZeroes() );
+
     TEXTE_PCB& text = m_dimension->Text();
 
     m_textWidth.SetValue( text.GetTextSize().x );
@@ -111,14 +143,19 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
     m_textThickness.SetValue( text.GetTextThickness() );
     m_textPosX.SetValue( text.GetTextPos().x );
     m_textPosY.SetValue( text.GetTextPos().y );
+    m_orientValue = text.GetTextAngleDegrees();
+    m_cbKeepAligned->SetValue( m_dimension->GetKeepTextAligned() );
 
     m_cbItalic->SetValue( text.IsItalic() );
+    m_cbMirrored->SetValue( text.IsMirrored() );
     EDA_TEXT_HJUSTIFY_T hJustify = text.GetHorizJustify();
     m_cbJustification->SetSelection( (int) hJustify + 1 );
-    m_orientValue = text.GetTextAngleDegrees();
-    m_cbMirrored->SetValue( text.IsMirrored() );
 
     m_lineThickness.SetValue( m_dimension->GetLineThickness() );
+    m_arrowLength.SetValue( m_dimension->GetArrowLength() );
+
+    // Do this last; it depends on the other settings
+    m_txtValue->SetValue( getValueText() );
 
     return DIALOG_DIMENSION_PROPERTIES_BASE::TransferDataToWindow();
 }
@@ -126,64 +163,122 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_DIMENSION_PROPERTIES::TransferDataFromWindow()
 {
-#if 0
-    switch( m_DimensionUnitsOpt->GetSelection() )
-        {
-        case 0:
-            dimension->SetUnits( EDA_UNITS::INCHES, false );
-            break;
-        case 1:
-            dimension->SetUnits( EDA_UNITS::INCHES, true );
-            break;
-        case 2:
-            dimension->SetUnits( EDA_UNITS::MILLIMETRES, false );
-            break;
-        default: break;
-        }
-#endif
+    m_dimension->SetOverrideValue( m_cbOverrideValue->GetValue() );
+
+    if( m_cbOverrideValue->GetValue() )
+        m_dimension->SetText( m_txtValue->GetValue() );
+
+    m_dimension->SetPrefix( m_txtPrefix->GetValue() );
+    m_dimension->SetSuffix( m_txtSuffix->GetValue() );
+    m_dimension->SetLayer( static_cast<PCB_LAYER_ID>( m_cbLayer->GetLayerSelection() ) );
+
+    m_dimension->SetUnitsMode( static_cast<DIM_UNITS_MODE>( m_cbUnits->GetSelection() ) );
+    m_dimension->SetUnitsFormat( static_cast<DIM_UNITS_FORMAT>( m_cbUnitsFormat->GetSelection() ) );
+    m_dimension->SetPrecision( m_cbPrecision->GetSelection() );
+    m_dimension->SetSuppressZeroes( m_cbSuppressZeroes->GetValue() );
+
+    TEXTE_PCB& text = m_dimension->Text();
+
+    // TODO(JE) text positioning modes
+    wxPoint pos( m_textPosX.GetValue(), m_textPosY.GetValue() );
+    text.SetPosition( pos );
+    text.SetTextAngle( KiROUND( m_orientValue * 10.0 ) );
+    text.SetTextWidth( m_textWidth.GetValue() );
+    text.SetTextHeight( m_textHeight.GetValue() );
+    text.SetTextThickness( m_textThickness.GetValue() );
+    text.SetItalic( m_cbItalic->GetValue() );
+    text.SetMirrored( m_cbMirrored->GetValue() );
+    int justification = m_cbJustification->GetSelection() - 1;
+    text.SetHorizJustify( static_cast<EDA_TEXT_HJUSTIFY_T>( justification ) );
+    m_dimension->SetKeepTextAligned( m_cbKeepAligned->GetValue() );
+
+    m_dimension->SetLineThickness( m_lineThickness.GetValue() );
+    m_dimension->SetArrowLength( m_arrowLength.GetValue() );
+
     return true;
 }
 
-#if 0
-void DIALOG_TEXT_PROPERTIES::OnDimensionTextChange( wxCommandEvent& event )
+
+void DIALOG_DIMENSION_PROPERTIES::getUnitsSelection( EDA_UNITS& aUnits, bool& aUseMils )
 {
-    EDA_UNITS units = EDA_UNITS::UNSCALED;
-    bool useMils;
+    aUseMils = false;
 
-    FetchUnitsFromString( m_DimensionText->GetValue(), units, useMils );
+    switch( m_cbUnits->GetSelection() )
+    {
+    case 0: // inches
+        aUnits = EDA_UNITS::INCHES;
+        break;
 
-    if( units != EDA_UNITS::UNSCALED )
-        m_DimensionUnitsOpt->SetSelection( units == EDA_UNITS::MILLIMETRES ? 2 : useMils ? 1 : 0 );
+    case 1: // mils
+        aUnits = EDA_UNITS::INCHES;
+        aUseMils = true;
+        break;
+
+    case 2: // mm
+        aUnits = EDA_UNITS::MILLIMETRES;
+        break;
+
+    case 3: // auto
+        aUnits = m_frame->GetUserUnits();
+        break;
+
+    default:
+        break;
+    }
 }
 
-void DIALOG_TEXT_PROPERTIES::OnDimensionUnitsChange( wxCommandEvent& event )
+
+wxString DIALOG_DIMENSION_PROPERTIES::getValueText()
 {
-    DIMENSION* dimension = (DIMENSION*) m_item;
-    EDA_UNITS  units;
+    int val = m_dimension->GetMeasuredValue();
+    int precision = m_cbPrecision->GetSelection();
+
+    EDA_UNITS units;
     bool useMils;
+    getUnitsSelection( units, useMils );
 
-    // Get default units in case dimension text doesn't contain units.
-    dimension->GetUnits( units, useMils );
+    wxString text;
+    wxString format = wxT( "%." ) + wxString::Format( "%i", precision ) + wxT( "f" );
 
-    double value = ValueFromString( units, m_DimensionText->GetValue(), useMils );
+    text.Printf( format, To_User_Unit( units, val, useMils ) );
 
-    switch( event.GetSelection() )
+    if( m_cbSuppressZeroes->GetValue() )
     {
-    case 0:
-        units = EDA_UNITS::INCHES;
-        useMils = false;
-        break;
-    case 1:
-        units = EDA_UNITS::INCHES;
-        useMils = true;
-        break;
-    case 2:
-        units = EDA_UNITS::MILLIMETRES;
-        useMils = false;
-        break;
-    default: break;
+        while( text[text.Length() - 1] == '0' || text[text.Length() - 1] == '.' )
+            text.Remove( text.Length() - 1 );
     }
 
-    m_DimensionText->SetValue( StringFromValue( units, value, true, useMils ) );
+    return text;
 }
-#endif
+
+
+void DIALOG_DIMENSION_PROPERTIES::updatePreviewText()
+{
+    wxString text = m_cbOverrideValue->GetValue() ? m_txtValue->GetValue() : getValueText();
+
+    EDA_UNITS units;
+    bool useMils;
+    getUnitsSelection( units, useMils );
+
+    switch( m_cbUnitsFormat->GetSelection() )
+    {
+    case 0: // no units
+        break;
+
+    case 1: // normal
+        text += " ";
+        text += GetAbbreviatedUnitsLabel( units, useMils );
+        break;
+
+    case 2: // parenthetical
+        text += " (";
+        text += GetAbbreviatedUnitsLabel( units, useMils );
+        text += ")";
+        break;
+    }
+
+    text.Prepend( m_txtPrefix->GetValue() );
+    text.Append( m_txtSuffix->GetValue() );
+
+    m_staticTextPreview->SetLabel( text );
+}

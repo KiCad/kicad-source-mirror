@@ -38,6 +38,7 @@
 
 DIMENSION::DIMENSION( BOARD_ITEM* aParent )
         : BOARD_ITEM( aParent, PCB_DIMENSION_T ),
+          m_overrideValue( false ),
           m_units( EDA_UNITS::INCHES ),
           m_useMils( false ),
           m_autoUnits( false ),

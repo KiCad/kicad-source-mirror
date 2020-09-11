@@ -341,7 +341,6 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_DIMENSION_PROPERTIES_BASE::OnInitDlg ) );
-	m_txtValue->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DIMENSION_PROPERTIES_BASE::OnDimensionTextChange ), NULL, this );
 	m_cbUnits->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_DIMENSION_PROPERTIES_BASE::OnDimensionUnitsChange ), NULL, this );
 	m_txtTextWidth->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_DIMENSION_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_txtTextPosX->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_DIMENSION_PROPERTIES_BASE::OnOkClick ), NULL, this );
@@ -357,7 +356,6 @@ DIALOG_DIMENSION_PROPERTIES_BASE::~DIALOG_DIMENSION_PROPERTIES_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_DIMENSION_PROPERTIES_BASE::OnInitDlg ) );
-	m_txtValue->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DIMENSION_PROPERTIES_BASE::OnDimensionTextChange ), NULL, this );
 	m_cbUnits->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_DIMENSION_PROPERTIES_BASE::OnDimensionUnitsChange ), NULL, this );
 	m_txtTextWidth->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_DIMENSION_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_txtTextPosX->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_DIMENSION_PROPERTIES_BASE::OnOkClick ), NULL, this );

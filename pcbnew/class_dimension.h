@@ -111,10 +111,10 @@ public:
 
     int GetMeasuredValue() const { return m_measuredValue; }
 
-    wxString GetDisplayedValue() const
-    {
-        return m_text.GetText();
-    }
+    /**
+     * @return the text that should be shown, including any prefix and suffix
+     */
+    wxString GetDisplayedText() const;
 
     wxString GetPrefix() const { return m_prefix; }
     void SetPrefix( const wxString& aPrefix ) { m_prefix = aPrefix; }
@@ -226,6 +226,7 @@ protected:
 
     // Value format
     bool              m_overrideValue;   ///< Manually specify the displayed measurement value
+    wxString          m_overrideText;    ///< The shown value if m_overrideValue is true
     wxString          m_prefix;          ///< String prepended to the value
     wxString          m_suffix;          ///< String appended to the value
     EDA_UNITS         m_units;           ///< 0 = inches, 1 = mm

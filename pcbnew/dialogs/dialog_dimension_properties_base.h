@@ -95,7 +95,6 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
-		virtual void OnDimensionTextChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDimensionUnitsChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 

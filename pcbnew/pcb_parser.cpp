@@ -2361,22 +2361,25 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
 
     token = NextTok();
 
+    bool isLegacyDimension = false;
+
     // Old format
     if( token == T_width )
     {
+        isLegacyDimension = true;
         dimension->SetLineThickness( parseBoardUnits( "dimension width value" ) );
         NeedRIGHT();
     }
     else if( token != T_type )
     {
         Expecting( T_type );
-
-        // This function only parses aligned dimensions for now
-        if( NextTok() != T_aligned )
-            Expecting( T_aligned );
-
-        NeedRIGHT();
     }
+
+    // This function only parses aligned dimensions for now
+    if( NextTok() != T_aligned )
+        Expecting( T_aligned );
+
+    NeedRIGHT();
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2409,10 +2412,13 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
             // Fetch other dimension properties out of the text item
             dimension->SetPosition( text->GetTextPos() );
 
-            EDA_UNITS units = EDA_UNITS::INCHES;
-            bool useMils = false;
-            FetchUnitsFromString( text->GetText(), units, useMils );
-            dimension->SetUnits( units, useMils );
+            if( isLegacyDimension )
+            {
+                EDA_UNITS units   = EDA_UNITS::INCHES;
+                bool      useMils = false;
+                FetchUnitsFromString( text->GetText(), units, useMils );
+                dimension->SetUnits( units, useMils );
+            }
 
             delete text;
             break;
