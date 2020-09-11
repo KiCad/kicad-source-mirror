@@ -418,6 +418,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                                ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER,
                                folder_xpm );
 #endif
+    // Populate the Action Plugin sub-menu: Must be done before Add
+    // Since the object is cloned by Add
+    buildActionPluginMenus( submenuActionPlugins );
     submenuActionPlugins->AppendSeparator();
 
     toolsMenu->AppendSeparator();
@@ -468,8 +471,4 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     SetMenuBar( menuBar );
     delete oldMenuBar;
 
-#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
-    // Populate the Action Plugin sub-menu
-    buildActionPluginMenus( submenuActionPlugins );
-#endif
 }
