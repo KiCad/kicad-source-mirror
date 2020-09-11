@@ -64,8 +64,42 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
             catch( ... )
             {
                 wxLogTrace( traceSettings, "NESTED_SETTINGS %s: Could not load from %s at %s",
-                        m_filename, m_parent->GetFilename(), m_path );
+                            m_filename, m_parent->GetFilename(), m_path );
             }
+        }
+    }
+
+    if( success )
+    {
+        int filever = -1;
+
+        try
+        {
+            filever = at( PointerFromString( "meta.version" ) ).get<int>();
+        }
+        catch( ... )
+        {
+            wxLogTrace( traceSettings, "%s: nested settings version could not be read!",
+                        m_filename );
+            success = false;
+        }
+
+        if( filever >= 0 && filever < m_schemaVersion )
+        {
+            wxLogTrace( traceSettings, "%s: attempting migration from version %d to %d",
+                        m_filename, filever, m_schemaVersion );
+
+            if( !Migrate() )
+            {
+                wxLogTrace( traceSettings, "%s: migration failed!", GetFullFilename() );
+                success = false;
+            }
+        }
+        else if( filever > m_schemaVersion )
+        {
+            wxLogTrace( traceSettings,
+                        "%s: warning: nested settings version %d is newer than latest (%d)",
+                        m_filename, filever, m_schemaVersion );
         }
     }
 

@@ -35,7 +35,7 @@
 #include <project/project_file.h>
 #include <advanced_config.h>
 
-const int bdsSchemaVersion = 0;
+const int bdsSchemaVersion = 1;
 
 
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
@@ -393,7 +393,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                 if( !aObj.is_array() )
                     return;
 
-              m_DiffPairDimensionsList.clear();
+                m_DiffPairDimensionsList.clear();
 
                 for( const nlohmann::json& entry : aObj )
                 {
@@ -514,7 +514,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             &m_DimensionUnits, 0, 0, 2 ) );
 
     m_params.emplace_back( new PARAM<int>( "defaults.dimension_precision",
-            &m_DimensionPrecision, 1, 0, 2 ) );
+            &m_DimensionPrecision, 4, 0, 5 ) );
 
     m_params.emplace_back( new PARAM<bool>( "defaults.zones.45_degree_only",
             &m_defaultZoneSettings.m_Zone_45_Only, false ) );
@@ -662,6 +662,76 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
         m_netClasses = aOther.m_netClasses;
 
     m_defaultZoneSettings    = aOther.m_defaultZoneSettings;
+}
+
+
+bool BOARD_DESIGN_SETTINGS::Migrate()
+{
+    bool ret = true;
+    int  filever = at( PointerFromString( "meta.version" ) ).get<int>();
+
+    if( filever == 0 )
+    {
+        ret &= migrateSchema0to1();
+
+        if( ret )
+        {
+            ( *this )[PointerFromString( "meta.version" )] = 1;
+        }
+    }
+
+    return ret;
+}
+
+
+bool BOARD_DESIGN_SETTINGS::migrateSchema0to1()
+{
+    /**
+     * Schema 0 to 1: default dimension precision changed in meaning.
+     * Previously it was an enum with the following meaning:
+     *
+     * 0: 0.01mm / 1 mil / 0.001 in
+     * 1: 0.001mm / 0.1 mil / 0.0001 in
+     * 2: 0.0001mm / 0.01 mil / 0.00001 in
+     *
+     * Now it is indepenent of display units and is an integer meaning the number of digits
+     * displayed after the decimal point, so we have to migrate based on the default units.
+     *
+     * The units is an integer with the following mapping:
+     *
+     * 0: Inches
+     * 1: Mils
+     * 2: Millimetres
+     */
+    nlohmann::json::json_pointer units_ptr( "/defaults/dimension_units" );
+    nlohmann::json::json_pointer precision_ptr( "/defaults/dimension_precision" );
+
+    if( !( contains( units_ptr ) && contains( precision_ptr ) &&
+           at( units_ptr ).is_number_integer() &&
+           at( precision_ptr ).is_number_integer() ) )
+    {
+        // if either is missing or invalid, migration doesn't make sense
+        return true;
+    }
+
+    int units     = at( units_ptr ).get<int>();
+    int precision = at( precision_ptr ).get<int>();
+
+    // The enum maps directly to precision if the units is mils
+    int extraDigits = 0;
+
+    switch( units )
+    {
+    case 0: extraDigits = 3; break;
+    case 2: extraDigits = 2; break;
+    default: break;
+    }
+
+    precision += extraDigits;
+
+    ( *this )[precision_ptr] = precision;
+
+    return true;
 }
 
 

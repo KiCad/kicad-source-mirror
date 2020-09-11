@@ -327,6 +327,8 @@ private:
 
     void initFromOther( const BOARD_DESIGN_SETTINGS& aOther );
 
+    bool migrateSchema0to1();
+
 public:
     BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
 
@@ -337,6 +339,8 @@ public:
     BOARD_DESIGN_SETTINGS& operator=( const BOARD_DESIGN_SETTINGS& aOther );
 
     bool LoadFromFile( const wxString& aDirectory = "" ) override;
+
+    bool Migrate() override;
 
     BOARD_STACKUP& GetStackupDescriptor() { return m_stackup; }
 

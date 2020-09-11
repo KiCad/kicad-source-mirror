@@ -102,7 +102,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 
 	gbSizerFormat->Add( m_lblPrecision, wxGBPosition( 2, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	wxString m_cbPrecisionChoices[] = { _("0.0000"), _("0.000"), _("0.00"), _("0.0"), _("0") };
+	wxString m_cbPrecisionChoices[] = { _("0"), _("0.0"), _("0.00"), _("0.000"), _("0.0000"), _("0.00000") };
 	int m_cbPrecisionNChoices = sizeof( m_cbPrecisionChoices ) / sizeof( wxString );
 	m_cbPrecision = new wxChoice( sbSizerFormat->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbPrecisionNChoices, m_cbPrecisionChoices, 0 );
 	m_cbPrecision->SetSelection( 0 );
