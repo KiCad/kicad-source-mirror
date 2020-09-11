@@ -53,7 +53,7 @@ class NETLIST;
 class PROGRESS_REPORTER;
 class REPORTER;
 
-namespace KIGFX 
+namespace KIGFX
 {
     class WS_PROXY_VIEW_ITEM;
 };
@@ -62,10 +62,6 @@ void drcPrintDebugMessage( int level, wxString msg, const char *function, int li
 
 #define drc_dbg(level, fmt, ...) \
     drcPrintDebugMessage(level, wxString::Format( fmt, __VA_ARGS__ ), __FUNCTION__, __LINE__ );
-
-
-//#define drc_dbg(level, fmt, ...) \
-  //  wxLogTrace("DUPA", fmt, __VA_ARGS__);
 
 class DRC_RULE_CONDITION;
 class DRC_ITEM;

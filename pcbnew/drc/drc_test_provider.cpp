@@ -1,6 +1,6 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
-#include <pcbnew/drc/drc_test_provider.h>
+#include <drc/drc_test_provider.h>
 
 DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
     m_drcEngine( nullptr ),
