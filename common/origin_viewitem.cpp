@@ -127,7 +127,6 @@ void ORIGIN_VIEWITEM::ViewDraw( int, VIEW* aView ) const
                 start = next;
             }
 
-            gal->DrawLine( m_position, m_end );
             gal->DrawCircle( m_end, scaledSize.x / 4 );
             break;
         }
