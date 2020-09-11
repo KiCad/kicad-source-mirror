@@ -96,7 +96,8 @@ void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius, const wxPoint&
 
 /**
  * convert a rectangle with rounded corners and/or chamfered corners to a polygon
- * Convert rounded corners arcs to multiple straight lines
+ * Convert rounded corners arcs to multiple straight lines.  This will generate at least
+ * 16 segments per circle
  * @param aCornerBuffer = a buffer to store the polygon
  * @param aPosition = the coordinate of the center of the rectangle
  * @param aSize = the size of the rectangle
@@ -111,10 +112,6 @@ void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius, const wxPoint&
  *  8 = BOTTOM_RIGHT
  * One can have more than one chamfered corner by ORing the corner identifers
  * @param aError = the IU allowed for error in approximation
- * @param aSegsPerCircle = the minimal segments per circle count in approximation
- *   (aApproxErrorMax can generate must more seg  count than aMinSegPerCircleCount)
- * To allow a reasonable good shape even for very small shapes, the min count is 16
- * (must be a multiple of 4 becauseusually arcs are 90 deg.
  */
 void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                            const wxPoint& aPosition, const wxSize& aSize,
