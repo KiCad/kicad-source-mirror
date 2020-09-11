@@ -1965,6 +1965,9 @@ static void partitionPolyIntoRegularCellGrid(
     {
         aOut.AddOutline( ps2.COutline( i ) );
     }
+
+    if( !aOut.OutlineCount() )
+        aOut = aPoly;
 }
 
 
