@@ -208,18 +208,16 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     //
                     for( EDA_ITEM* item : selection )
                     {
-                        if( static_cast<SCH_ITEM*>( item )->IsConnectable() )
-                        {
-                            std::vector<wxPoint> connections;
+                        std::vector<wxPoint> connections;
 
-                            if( item->Type() == SCH_LINE_T )
-                                static_cast<SCH_LINE*>( item )->GetSelectedPoints( connections );
-                            else
-                                connections = static_cast<SCH_ITEM*>( item )->GetConnectionPoints();
+                        if( item->Type() == SCH_LINE_T )
+                            static_cast<SCH_LINE*>( item )->GetSelectedPoints( connections );
+                        else
+                            connections = static_cast<SCH_ITEM*>( item )->GetConnectionPoints();
 
-                            for( wxPoint point : connections )
-                                getConnectedDragItems( (SCH_ITEM*) item, point, m_dragAdditions );
-                        }
+                        for( wxPoint point : connections )
+                            getConnectedDragItems( static_cast<SCH_ITEM*>( item ), point,
+                                    m_dragAdditions );
                     }
 
                     m_selectionTool->AddItemsToSel( &m_dragAdditions, QUIET_MODE );
@@ -495,9 +493,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoint,
                                            EDA_ITEMS& aList )
 {
-    for( SCH_ITEM* test : m_frame->GetScreen()->Items() )
+    EE_RTREE& items = m_frame->GetScreen()->Items();
+
+    for( SCH_ITEM *test : items.Overlapping( aOriginalItem->GetBoundingBox() ) )
     {
-        if( test->IsSelected() || !test->IsConnectable() || !test->CanConnect( aOriginalItem ) )
+        if( test->IsSelected() || !test->CanConnect( aOriginalItem ) )
             continue;
 
         KICAD_T testType = test->Type();

@@ -582,22 +582,42 @@ bool SCH_LINE::IsConnectable() const
 
 bool SCH_LINE::CanConnect( const SCH_ITEM* aItem ) const
 {
-    switch( aItem->Type() )
+    if( m_Layer == LAYER_WIRE )
     {
-    case SCH_JUNCTION_T:
-    case SCH_NO_CONNECT_T:
-    case SCH_LABEL_T:
-    case SCH_GLOBAL_LABEL_T:
-    case SCH_HIER_LABEL_T:
-    case SCH_BUS_WIRE_ENTRY_T:
-    case SCH_COMPONENT_T:
-    case SCH_SHEET_T:
-    case SCH_SHEET_PIN_T:
-        return true;
-
-    default:
-        return aItem->GetLayer() == m_Layer;
+        switch( aItem->Type() )
+        {
+        case SCH_JUNCTION_T:
+        case SCH_NO_CONNECT_T:
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
+        case SCH_BUS_WIRE_ENTRY_T:
+        case SCH_COMPONENT_T:
+        case SCH_SHEET_T:
+        case SCH_SHEET_PIN_T:
+            return true;
+        default:
+            break;
+        }
     }
+    else if( m_Layer == LAYER_BUS )
+    {
+        switch( aItem->Type() )
+        {
+        case SCH_JUNCTION_T:
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
+        case SCH_BUS_WIRE_ENTRY_T:
+        case SCH_SHEET_T:
+        case SCH_SHEET_PIN_T:
+            return true;
+        default:
+            break;
+        }
+    }
+
+    return aItem->GetLayer() == m_Layer;
 }
 
 
