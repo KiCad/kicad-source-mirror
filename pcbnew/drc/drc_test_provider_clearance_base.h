@@ -27,11 +27,10 @@
 #ifndef DRC_TEST_PROVIDER_CLEARANCE_BASE__H
 #define DRC_TEST_PROVIDER_CLEARANCE_BASE__H
 
-#include <class_board.h>
+#include <drc/drc_test_provider.h>
 
-#include <pcbnew/drc/drc_test_provider.h>
+class BOARD;
 
-namespace test {
 
 class DRC_TEST_PROVIDER_CLEARANCE_BASE : public DRC_TEST_PROVIDER
 {
@@ -41,37 +40,24 @@ public:
             m_board( nullptr ),
             m_largestClearance( 0 ),
             m_boardOutlineValid( false )
-        {
-
-        }
+    {
+    }
 
     virtual ~DRC_TEST_PROVIDER_CLEARANCE_BASE()
     {
-
     }
 
 protected:
-    void testCopperDrawItem( BOARD_ITEM* aItem );
-
-    bool doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit );
-
-    //bool checkClearanceSegmToPad( const SEG& refSeg, int refSegWidth, const D_PAD* pad,
-      //                             int minClearance, int* aActualDist );
-    //bool checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance, int* aActual );
-    //bool poly2segmentDRC( wxPoint* aTref, int aTrefCount, wxPoint aSegStart, wxPoint aSegEnd,
-      //                int aDist, int* aActual );
-    //bool poly2polyDRC( wxPoint* aTref, int aTrefCount, wxPoint* aTtest, int aTtestCount,
-      //             int aAllowedDist, int* actualDist );
-
     wxPoint getLocation( TRACK* aTrack, const SEG& aConflictSeg );
-    wxPoint getLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone );
+    wxPoint getLocation( PCB_LAYER_ID aLayer, TRACK* aTrack, ZONE_CONTAINER* aZone );
 
+protected:
     BOARD* m_board;
-    int m_largestClearance;
-    SHAPE_POLY_SET             m_boardOutline;   // The board outline including cutouts
-    bool                       m_boardOutlineValid;
+    int    m_largestClearance;
+    bool   m_boardOutlineValid;
+
+    wxString m_msg;  // Allocating strings gets expensive enough to want to avoid it
 };
 
-};
 
 #endif // DRC_TEST_PROVIDER_CLEARANCE_BASE__H

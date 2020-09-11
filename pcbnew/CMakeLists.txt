@@ -234,12 +234,16 @@ set( PCBNEW_DRC_SRCS
     drc/drc_drilled_hole_tester.cpp
     drc/drc_keepout_tester.cpp
     drc/drc_textvar_tester.cpp
+    drc/footprint_tester.cpp
     drc/drc.cpp
     drc/drc_clearance_test_functions.cpp
     drc/drc_engine.cpp
-    drc/drc_test_provider.cpp
     drc/drc_rule_parser.cpp
-    drc/footprint_tester.cpp
+    drc/drc_test_provider.cpp
+    drc/drc_test_provider_clearance_base.cpp
+    drc/drc_test_provider_copper_clearance.cpp
+    drc/drc_test_provider_edge_clearance.cpp
+    drc/drc_test_provider_hole_clearance.cpp
     )
 
 set( PCBNEW_NETLIST_SRCS

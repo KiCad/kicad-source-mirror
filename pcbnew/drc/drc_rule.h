@@ -96,10 +96,12 @@ private:
 class DRC_CONSTRAINT
 {
     public:
-    DRC_CONSTRAINT( DRC_CONSTRAINT_TYPE_T aType = DRC_CONSTRAINT_TYPE_UNKNOWN ) :
+    DRC_CONSTRAINT( DRC_CONSTRAINT_TYPE_T aType = DRC_CONSTRAINT_TYPE_UNKNOWN,
+                    const wxString& aName = wxEmptyString ) :
             m_Type( aType ),
             m_DisallowFlags( 0 ),
-            m_parentRule( nullptr ) // fixme
+            m_name( aName ),
+            m_parentRule( nullptr )
     {
     }
 
@@ -109,13 +111,16 @@ class DRC_CONSTRAINT
     void SetParentRule( DRC_RULE *aParentRule ) { m_parentRule = aParentRule; }
     DRC_RULE* GetParentRule() const { return m_parentRule; }
 
+    wxString GetName() const;
+
 public:
     DRC_CONSTRAINT_TYPE_T  m_Type;
     MINOPTMAX<int>         m_Value;
     int                    m_DisallowFlags;
 
 private:
-    DRC_RULE*      m_parentRule;
+    wxString               m_name;          // For just-in-time constraints
+    DRC_RULE*              m_parentRule;    // For constraints found in rules
 };
 
 

@@ -44,6 +44,7 @@ void drcPrintDebugMessage( int level, wxString msg, const char *function, int li
     if( wxGetEnv( "DRC_DEBUG", &valueStr ) )
     {
         int setLevel = wxAtoi( valueStr );
+
         if( level <= setLevel )
         {
             printf("%-30s:%d | %s\n", function, line, (const char *) msg.c_str() );
@@ -99,79 +100,6 @@ DRC_RULE* DRC_ENGINE::createInferredRule( const wxString& name, std::set<BOARD_I
 
     return rule;
 }
-
-#if 0
-int BOARD_CONNECTED_ITEM::GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem,
-                                        wxString* aSource ) const
-{
-    BOARD*                board = GetBoard();
-    int                   clearance = 0;
-    wxString              source;
-    wxString*             localSource = aSource ? &source : nullptr;
-    BOARD_CONNECTED_ITEM* second = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem );
-
-    // No clearance if "this" is not (yet) linked to a board therefore no available netclass
-    if( !board )
-        return clearance;
-
-    // LEVEL 1: local overrides (pad, footprint, etc.)
-    //
-    if( GetLocalClearanceOverrides() > clearance )
-        clearance = GetLocalClearanceOverrides( localSource );
-
-    if( second && second->GetLocalClearanceOverrides() > clearance )
-        clearance = second->GetLocalClearanceOverrides( localSource );
-
-    if( clearance )
-    {
-        if( aSource )
-            *aSource = *localSource;
-
-        return clearance;
-    }
-
-    // LEVEL 2: Rules
-    //
-    if( GetRuleClearance( aItem, aLayer, &clearance, aSource ) )
-        return clearance;
-
-    // LEVEL 3: Accumulated local settings, netclass settings, & board design settings
-    //
-    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
-    NETCLASS*              netclass = GetEffectiveNetclass();
-    NETCLASS*              secondNetclass = second ? second->GetEffectiveNetclass() : nullptr;
-
-    if( bds.m_MinClearance > clearance )
-    {
-        if( aSource )
-            *aSource = _( "board minimum" );
-
-        clearance = bds.m_MinClearance;
-    }
-
-    if( netclass && netclass->GetClearance() > clearance )
-        clearance = netclass->GetClearance( aSource );
-
-    if( secondNetclass && secondNetclass->GetClearance() > clearance )
-        clearance = secondNetclass->GetClearance( aSource );
-
-    if( aItem && aItem->GetLayer() == Edge_Cuts && bds.m_CopperEdgeClearance > clearance )
-    {
-        if( aSource )
-            *aSource = _( "board edge" );
-
-        clearance = bds.m_CopperEdgeClearance;
-    }
-
-    if( GetLocalClearance() > clearance )
-        clearance = GetLocalClearance( aSource );
-
-    if( second && second->GetLocalClearance() > clearance )
-        clearance = second->GetLocalClearance( aSource );
-
-    return clearance;
-}
-#endif
 
 
 void DRC_ENGINE::inferLegacyRules()
@@ -490,11 +418,32 @@ void DRC_ENGINE::RunTests( )
 }
 
 
-const DRC_CONSTRAINT& DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintId,
-                                                     BOARD_ITEM* a, BOARD_ITEM* b,
-                                                     PCB_LAYER_ID aLayer )
+DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintId,
+                                              BOARD_ITEM* a, BOARD_ITEM* b, PCB_LAYER_ID aLayer )
 {
-    DRC_RULE* rv;
+    // Local overrides take precedence
+    if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
+    {
+        BOARD_CONNECTED_ITEM* ac = a->IsConnected() ? static_cast<BOARD_CONNECTED_ITEM*>( a )
+                                                    : nullptr;
+        BOARD_CONNECTED_ITEM* bc = b->IsConnected() ? static_cast<BOARD_CONNECTED_ITEM*>( b )
+                                                    : nullptr;
+        int clearance = 0;
+
+        if( ac && ac->GetLocalClearanceOverrides( nullptr ) > clearance )
+            clearance = ac->GetLocalClearanceOverrides( &m_msg );
+
+        if( bc && bc->GetLocalClearanceOverrides( nullptr ) > clearance )
+            clearance = bc->GetLocalClearanceOverrides( &m_msg );
+
+        if( clearance )
+        {
+            DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_CLEARANCE, m_msg );
+            constraint.m_Value.SetMin( clearance );
+            return constraint;
+        }
+    }
+
     auto ruleset = m_constraintMap[ aConstraintId ];
 
     for( const auto& rcond : ruleset->sortedConstraints )

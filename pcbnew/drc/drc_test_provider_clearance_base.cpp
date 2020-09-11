@@ -22,61 +22,57 @@
  */
 
 
-#include <common.h>
 #include <class_board.h>
-#include <class_drawsegment.h>
-#include <class_pad.h>
-
-#include <convert_basic_shapes_to_polygon.h>
-#include <geometry/polygon_test_point_inside.h>
+#include <class_track.h>
 #include <geometry/seg.h>
-#include <geometry/shape_poly_set.h>
-#include <geometry/shape_rect.h>
-
-#include <drc/drc_engine.h>
-#include <drc_proto/drc_test_provider_clearance_base.h>
-#include <drc/drc.h>
-#include <drc/drc_item.h>
-#include <drc/drc_rule.h>
+#include <drc/drc_test_provider_clearance_base.h>
 
 const int UI_EPSILON = Mils2iu( 5 );
 
-wxPoint test::DRC_TEST_PROVIDER_CLEARANCE_BASE::getLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone )
+
+wxPoint DRC_TEST_PROVIDER_CLEARANCE_BASE::getLocation( PCB_LAYER_ID aLayer, TRACK* aTrack,
+                                                       ZONE_CONTAINER* aZone )
 {
-    SHAPE_POLY_SET* conflictOutline;
+    SHAPE_POLY_SET* zonePoly = nullptr;
 
-    PCB_LAYER_ID l = aTrack->GetLayer();
+    if( aZone->IsFilled() && aZone->HasFilledPolysForLayer( aLayer ) )
+        zonePoly = const_cast<SHAPE_POLY_SET*>( &aZone->GetFilledPolysList( aLayer ) );
 
-    if( aConflictZone->IsFilled() )
-        conflictOutline = const_cast<SHAPE_POLY_SET*>( &aConflictZone->GetFilledPolysList( l ) );
-    else
-        conflictOutline = aConflictZone->Outline();
+    if( !zonePoly || zonePoly->IsEmpty() )
+        zonePoly = aZone->Outline();
 
+    SEG         trackSeg( aTrack->GetStart(), aTrack->GetEnd() );
+    SEG::ecoord closestDist_sq = VECTOR2I::ECOORD_MAX;
+    SEG         closestSeg;
 
-    wxPoint pt1 = aTrack->GetPosition();
-    wxPoint pt2 = aTrack->GetEnd();
-
-    // If the mid-point is in the zone, then that's a fine place for the marker
-    if( conflictOutline->SquaredDistance( ( pt1 + pt2 ) / 2 ) == 0 )
-        return ( pt1 + pt2 ) / 2;
-
-    // Otherwise do a binary search for a "good enough" marker location
-    else
+    for( auto it = zonePoly->CIterateSegments( 0, -1, true ); it; it++ )
     {
-        while( GetLineLength( pt1, pt2 ) > UI_EPSILON )
-        {
-            if( conflictOutline->SquaredDistance( pt1 ) < conflictOutline->SquaredDistance( pt2 ) )
-                pt2 = ( pt1 + pt2 ) / 2;
-            else
-                pt1 = ( pt1 + pt2 ) / 2;
-        }
+        SEG::ecoord dist_sq = trackSeg.SquaredDistance( *it );
 
-        // Once we're within UI_EPSILON pt1 and pt2 are "equivalent"
-        return pt1;
+        if( dist_sq < closestDist_sq )
+        {
+            closestDist_sq = dist_sq;
+            closestSeg = *it;
+        }
     }
+
+    VECTOR2I pt1 = closestSeg.A;
+    VECTOR2I pt2 = closestSeg.B;
+
+    // Do a binary search for a "good enough" marker location
+    while( GetLineLength( (wxPoint) pt1, (wxPoint) pt2 ) > UI_EPSILON )
+    {
+        if( trackSeg.SquaredDistance( pt1 ) < trackSeg.SquaredDistance( pt2 ) )
+            pt2 = ( pt1 + pt2 ) / 2;
+        else
+            pt1 = ( pt1 + pt2 ) / 2;
+    }
+
+    // Once we're within UI_EPSILON pt1 and pt2 are "equivalent"
+    return (wxPoint) pt1;
 }
 
-wxPoint test::DRC_TEST_PROVIDER_CLEARANCE_BASE::getLocation( TRACK* aTrack, const SEG& aConflictSeg )
+wxPoint DRC_TEST_PROVIDER_CLEARANCE_BASE::getLocation( TRACK* aTrack, const SEG& aConflictSeg )
 {
     wxPoint pt1 = aTrack->GetPosition();
     wxPoint pt2 = aTrack->GetEnd();
@@ -93,4 +89,3 @@ wxPoint test::DRC_TEST_PROVIDER_CLEARANCE_BASE::getLocation( TRACK* aTrack, cons
     // Once we're within UI_EPSILON pt1 and pt2 are "equivalent"
     return pt1;
 }
-

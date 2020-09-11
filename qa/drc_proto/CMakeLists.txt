@@ -39,16 +39,16 @@ add_executable( drc_proto
     ../../pcbnew/drc/drc_rule.cpp
     ../../pcbnew/drc/drc_rule_parser.cpp
     ../../pcbnew/drc/drc_test_provider.cpp
-    drc_test_provider_clearance_base.cpp
-    drc_test_provider_copper_clearance.cpp
-    drc_test_provider_hole_clearance.cpp
-    drc_test_provider_edge_clearance.cpp
+    ../../pcbnew/drc/drc_test_provider_clearance_base.cpp
+    ../../pcbnew/drc/drc_test_provider_copper_clearance.cpp
+    ../../pcbnew/drc/drc_test_provider_hole_clearance.cpp
+    ../../pcbnew/drc/drc_test_provider_edge_clearance.cpp
     drc_test_provider_hole_size.cpp
     drc_test_provider_disallow.cpp
     drc_test_provider_track_width.cpp
     drc_test_provider_annulus.cpp
     drc_test_provider_connectivity.cpp
-    drc_test_provider_courtyard_clearance.cpp
+    ../../pcbnew/drc/drc_test_provider_courtyard_clearance.cpp
     drc_test_provider_via_diameter.cpp
     drc_test_provider_lvs.cpp
     drc_test_provider_misc.cpp

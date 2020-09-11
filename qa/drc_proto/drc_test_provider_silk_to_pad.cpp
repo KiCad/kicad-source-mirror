@@ -37,7 +37,7 @@
 #include <drc/drc.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
-#include <drc_proto/drc_test_provider_clearance_base.h>
+#include <pcbnew/drc/drc_test_provider_clearance_base.h>
 
 /*
     Silk to pads clearance test. Check all pads against silkscreen (mask opening in the pad vs silkscreen)
@@ -88,7 +88,7 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
     DRC_CONSTRAINT worstClearanceConstraint;
     m_largestClearance = 0;
 
-    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_SILK_TO_PAD,
+    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_SILK_TO_PAD,
                                            worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
     {
         m_largestClearance = worstClearanceConstraint.m_Value.Min();

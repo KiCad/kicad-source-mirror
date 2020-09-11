@@ -163,9 +163,9 @@ public:
         return m_board;
     }
 
-    const DRC_CONSTRAINT& EvalRulesForItems( DRC_CONSTRAINT_TYPE_T ruleID,  BOARD_ITEM* a,
-                                             BOARD_ITEM* b = nullptr,
-                                             PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
+    DRC_CONSTRAINT EvalRulesForItems( DRC_CONSTRAINT_TYPE_T ruleID, BOARD_ITEM* a,
+                                      BOARD_ITEM* b = nullptr,
+                                      PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
     std::vector<DRC_CONSTRAINT> QueryConstraintsById( DRC_CONSTRAINT_TYPE_T ruleID );
 
@@ -173,7 +173,14 @@ public:
 
     EDA_UNITS UserUnits() const
     {
+        // JEY TODO
         return EDA_UNITS::MILLIMETRES;
+    }
+
+    bool GetTestTracksAgainstZones() const
+    {
+        // JEY TODO
+        return true;
     }
 
     bool CompileRules();
@@ -232,6 +239,8 @@ protected:
     PROGRESS_REPORTER*               m_progressReporter;
 
     // condition -> rule -> provider
+
+    wxString m_msg;  // Allocating strings gets expensive enough to want to avoid it
 };
 
 #endif // DRC_H

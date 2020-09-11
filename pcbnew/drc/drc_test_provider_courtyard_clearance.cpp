@@ -23,21 +23,21 @@
 
 #include <common.h>
 #include <class_board.h>
-#include <class_drawsegment.h>
-#include <class_pad.h>
+//#include <class_drawsegment.h>
+//#include <class_pad.h>
 
 #include <convert_basic_shapes_to_polygon.h>
-#include <geometry/polygon_test_point_inside.h>
-#include <geometry/seg.h>
+//#include <geometry/polygon_test_point_inside.h>
+//#include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
-#include <geometry/shape_rect.h>
-#include <geometry/shape_segment.h>
+//#include <geometry/shape_rect.h>
+//#include <geometry/shape_segment.h>
 
 #include <drc/drc_engine.h>
 #include <drc/drc.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
-#include <drc_proto/drc_test_provider_clearance_base.h>
+#include <drc/drc_test_provider_clearance_base.h>
 
 /*
     Couartyard clearance. Tests for malformed component courtyards and overlapping footprints.
@@ -49,8 +49,6 @@
     TODO: do an actual clearance check instead of polygon intersection. Treat closed outlines
     as filled and allow open curves in the courtyard.
 */
-
-namespace test {
 
 class DRC_TEST_PROVIDER_COURTYARD_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
 {
@@ -69,7 +67,7 @@ public:
     virtual const wxString GetName() const override 
     {
         return "courtyard_clearance";
-    };
+    }
 
     virtual const wxString GetDescription() const override
     {
@@ -79,18 +77,15 @@ public:
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
 
 private:
-
     void testFootprintCourtyardDefinitions();
+
     void testOverlappingComponentCourtyards();
-
-};
-
 };
 
 
-void test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
+void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 {
-    ReportStage( _("Testing component courtyard definitions"), 0, 2 );
+    ReportStage( _( "Testing component courtyard definitions" ), 0, 2 );
 
     for( MODULE* footprint : m_board->Modules() )
     {
@@ -103,9 +98,6 @@ void test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefiniti
                     continue;
 
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_COURTYARD );
-                wxString msg;
-
-                msg.Printf( drcItem->GetErrorText( ));
 
                 drcItem->SetItems( footprint );
                 ReportWithMarker( drcItem, footprint->GetPosition() );
@@ -120,12 +112,11 @@ void test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefiniti
         {
             if( !isErrorLimitExceeded( DRCE_MALFORMED_COURTYARD) )
             {
-                wxString msg;
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (not a closed shape)" ) );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (not a closed shape)" ) );
 
-                drcItem->SetErrorMessage( msg );
+                drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( footprint );
                 ReportWithMarker( drcItem, footprint->GetPosition() );
             }
@@ -134,9 +125,9 @@ void test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefiniti
 }
 
 
-void test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
+void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
 {
-    ReportStage( _("Testing component courtyard overlap"), 0, 2 );
+    ReportStage( _( "Testing component courtyard overlap" ), 0, 2 );
 
     for( auto it1 = m_board->Modules().begin(); it1 != m_board->Modules().end(); it1++ )
         {
@@ -202,7 +193,7 @@ void test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourty
 }
 
 
-bool test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::Run()
+bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
@@ -211,13 +202,14 @@ bool test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::Run()
     //ReportAux( "Worst courtyard clearance : %d nm", m_largestClearance );
 
     testFootprintCourtyardDefinitions();
+
     testOverlappingComponentCourtyards();
 
     return true;
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::GetMatchingConstraintIds() const
 {
     return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE };
 }
@@ -225,5 +217,5 @@ std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::Get
 
 namespace detail
 {
-    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_COURTYARD_CLEARANCE> dummy;
+    static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_COURTYARD_CLEARANCE> dummy;
 }

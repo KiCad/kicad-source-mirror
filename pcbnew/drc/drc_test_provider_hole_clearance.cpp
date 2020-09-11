@@ -22,20 +22,14 @@
  */
 
 #include <common.h>
-#include <class_board.h>
 #include <class_drawsegment.h>
 #include <class_pad.h>
-
-#include <geometry/polygon_test_point_inside.h>
-#include <geometry/seg.h>
-#include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
-
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc.h>
-#include <drc_proto/drc_test_provider_clearance_base.h>
+#include <drc/drc_test_provider_clearance_base.h>
 
 /*
     Holes clearance test. Checks pad and via holes for their mechanical clearances.
@@ -78,7 +72,7 @@ public:
 private:
     void addHole( const VECTOR2I& aLocation, int aRadius, BOARD_ITEM* aOwner );
 
-    void buildHoleList();
+    void buildDrilledHoleList();
     void testHoles2Holes();
     void testPads2Holes();
 
@@ -92,7 +86,7 @@ private:
     };
 
     BOARD*                    m_board;
-    std::vector<DRILLED_HOLE> m_holes;
+    std::vector<DRILLED_HOLE> m_drilledHoles;
     int                       m_largestRadius;
 
 };
@@ -102,7 +96,6 @@ private:
 
 bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 {
-    auto bds = m_drcEngine->GetDesignSettings();
     m_board = m_drcEngine->GetBoard();
 
     m_largestClearance = 0;
@@ -110,25 +103,25 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
     DRC_CONSTRAINT worstClearanceConstraint;
 
-    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
+    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
                                            worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
     {
         m_largestClearance = worstClearanceConstraint.GetValue().Min();
     }
     else
     {
-        ReportAux("No Clearance constraints found...");
+        ReportAux( "No Clearance constraints found..." );
         return false;
     }
 
-
     ReportAux( "Worst hole clearance : %d nm", m_largestClearance );
 
-    buildHoleList();
+    buildDrilledHoleList();
 
-    ReportStage( ("Testing hole<->pad clearances"), 0, 2 );
+    ReportStage( _( "Testing hole<->pad clearances" ), 0, 2 );
     testPads2Holes();
-    ReportStage( ("Testing hole<->hole clearances"), 0, 2 );
+
+    ReportStage( _( "Testing hole<->hole clearances" ), 0, 2 );
     testHoles2Holes();
 
     reportRuleStatistics();
@@ -137,44 +130,45 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 }
 
 
-void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::buildHoleList()
+void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::buildDrilledHoleList()
 {
     bool                   success = true;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-    m_holes.clear();
+    m_drilledHoles.clear();
 
-    for( auto module : m_board->Modules() )
+    for( MODULE* module : m_board->Modules() )
     {
-        for( auto pad : module->Pads() )
+        for( D_PAD* pad : module->Pads() )
         {
             int holeSize = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
 
             if( holeSize == 0 )
                 continue;
 
-            // fixme: support for non-round (i.e. slotted) holes
+            // Milled holes (slots) aren't required to meet the minimum hole-to-hole
+            // distance, so we only have to collect the drilled holes.
             if( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
                 addHole( pad->GetPosition(), pad->GetDrillSize().x / 2, pad );
         }
     }
 
-    for( auto track : m_board->Tracks() )
+    for( TRACK* track : m_board->Tracks() )
     {
         if ( track->Type() == PCB_VIA_T )
         {
-            auto via = static_cast<VIA*>( track );
+            VIA* via = static_cast<VIA*>( track );
             addHole( via->GetPosition(), via->GetDrillValue() / 2, via );
         }
     }
 
-    ReportAux( "Total drilled holes : %d", m_holes.size() );
+    ReportAux( "Total drilled holes : %d", m_drilledHoles.size() );
 
 }
 
 void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::testPads2Holes()
 {
-    std::vector<D_PAD*>    sortedPads;
+    std::vector<D_PAD*> sortedPads;
 
     m_board->GetSortedPadListByXthenYCoord( sortedPads );
 
@@ -201,22 +195,23 @@ void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::testPads2Holes()
     D_PAD** listEnd = &sortedPads[0] + sortedPads.size();
 
     // Test the pads
-    for( auto& pad : sortedPads )
+    for( D_PAD* pad : sortedPads )
     {
        int x_limit = pad->GetPosition().x + pad->GetBoundingRadius() + max_size;
-        drc_dbg(10,"-> %p\n", pad);
+
+       drc_dbg( 10,"-> %p\n", pad );
+
        doPadToPadHoleDrc( pad, &pad, listEnd, x_limit );
     }
 }
 
 
-bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd,
-                          int x_limit )
+bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad, D_PAD** aStart,
+                                                                 D_PAD** aEnd, int x_limit )
 {
     const static LSET all_cu = LSET::AllCuMask();
 
     LSET layerMask = aRefPad->GetLayerSet() & all_cu;
-
 
     for( D_PAD** pad_list = aStart;  pad_list<aEnd;  ++pad_list )
     {
@@ -225,18 +220,18 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
         if( pad == aRefPad )
             continue;
 
+//      drc_dbg(10," chk against -> %p\n", pad);
 
-
-  //      drc_dbg(10," chk against -> %p\n", pad);
-
-        // We can stop the test when pad->GetPosition().x > x_limit
-        // because the list is sorted by X values
+        // We can stop the test when pad->GetPosition().x > x_limit because the list is
+        // sorted by X values
         if( pad->GetPosition().x > x_limit )
             break;
 
-//        drc_dbg(10," chk2 against -> %p ds %d %d\n", pad, pad->GetDrillSize().x, aRefPad->GetDrillSize().x );
+//        drc_dbg( 10," chk2 against -> %p ds %d %d\n",
+//                 pad, pad->GetDrillSize().x, aRefPad->GetDrillSize().x );
 
-        drc_dbg(10," chk1 against -> %p x0 %d x2 %d\n", pad, pad->GetDrillSize().x, aRefPad->GetDrillSize().x );
+        drc_dbg( 10," chk1 against -> %p x0 %d x2 %d\n",
+                 pad, pad->GetDrillSize().x, aRefPad->GetDrillSize().x );
 
         // No problem if pads which are on copper layers are on different copper layers,
         // (pads can be only on a technical layer, to build complex pads)
@@ -246,7 +241,6 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
             ( pad->GetLayerSet() & all_cu ) != 0 &&
             ( aRefPad->GetLayerSet() & all_cu ) != 0 )
         {
-
             // if holes are in the same location and have the same size and shape,
             // this can be accepted
             if( pad->GetPosition() == aRefPad->GetPosition()
@@ -263,37 +257,31 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
 
             drc_dbg(10," chk3 against -> %p x0 %d x2 %d\n", pad, pad->GetDrillSize().x, aRefPad->GetDrillSize().x );
 
-            /* Here, we must test clearance between holes and pads
-             * pad size and shape is adjusted to pad drill size and shape
-             */
-            if( pad->GetDrillSize().x )
+            if( pad->GetDrillSize().x )     // test pad has a hole
             {
-                // pad under testing has a hole, test this hole against pad reference
-
-                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
+                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
                                                                   aRefPad, pad );
-                auto minClearance = constraint.GetValue().Min();
-                int actual;
+                int  minClearance = constraint.GetValue().Min();
+                int  actual;
 
                 drc_dbg( 10, "check pad %p rule '%s' cl %d\n",
                          pad, constraint.GetParentRule()->m_Name, minClearance );
 
                 accountCheck( constraint.GetParentRule() );
 
-                auto refPadShape = aRefPad->GetEffectiveShape();
+                const std::shared_ptr<SHAPE>&  refPadShape = aRefPad->GetEffectiveShape();
+
                 // fixme: pad stacks...
                 if( refPadShape->Collide( pad->GetEffectiveHoleShape(), minClearance, &actual ) )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
-                    wxString msg;
-
-                    msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                                  "",
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                                  constraint.GetName(),
                                   MessageTextFromValue( userUnits(), minClearance, true ),
                                   MessageTextFromValue( userUnits(), actual, true ) );
 
-                    drcItem->SetErrorMessage( msg );
+                    drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad, aRefPad );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
@@ -302,31 +290,31 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
                 }
             }
 
-            if( aRefPad->GetDrillSize().x ) // pad reference has a hole
+            if( aRefPad->GetDrillSize().x )     // reference pad has a hole
             {
 
-                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
+                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
                                                                   aRefPad, pad );
-                auto minClearance = constraint.GetValue().Min();
-                int actual;
+                int  minClearance = constraint.GetValue().Min();
+                int  actual;
 
                 accountCheck( constraint.GetParentRule() );
 
                 drc_dbg( 10,"check pad %p rule '%s' cl %d\n", aRefPad,
                          constraint.GetParentRule()->m_Name, minClearance );
 
-                auto padShape = pad->GetEffectiveShape();
+                const std::shared_ptr<SHAPE>& padShape = pad->GetEffectiveShape();
+
                 if( padShape->Collide( aRefPad->GetEffectiveHoleShape(), minClearance, &actual ) )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-                    wxString msg;
 
-                    msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                                  "",
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                                  constraint.GetName(),
                                   MessageTextFromValue( userUnits(), minClearance, true ),
                                   MessageTextFromValue( userUnits(), actual, true ) );
 
-                    drcItem->SetErrorMessage( msg );
+                    drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( aRefPad, pad );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
@@ -341,7 +329,8 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
 }
 
 
-void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::addHole( const VECTOR2I& aLocation, int aRadius, BOARD_ITEM* aOwner )
+void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::addHole( const VECTOR2I& aLocation, int aRadius,
+                                                      BOARD_ITEM* aOwner )
 {
     DRILLED_HOLE hole;
 
@@ -351,20 +340,17 @@ void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::addHole( const VECTOR2I& aLocation,
 
     m_largestRadius = std::max( m_largestRadius, aRadius );
 
-    m_holes.push_back( hole );
+    m_drilledHoles.push_back( hole );
 }
 
 
 void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
 {
-    // No need to check if we're ignoring DRCE_DRILLED_HOLES_TOO_CLOSE; if we are then we
-    // won't have collected any holes to test.
-
     // Sort holes by X for performance.  In the nested iteration we then need to look at
     // following holes only while they are within the refHole's neighborhood as defined by
     // the refHole radius + the minimum hole-to-hole clearance + the largest radius any of
     // the following holes can have.
-    std::sort( m_holes.begin(), m_holes.end(),
+    std::sort( m_drilledHoles.begin(), m_drilledHoles.end(),
                []( const DRILLED_HOLE& a, const DRILLED_HOLE& b )
                {
                    if( a.m_location.x == b.m_location.x )
@@ -373,14 +359,14 @@ void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
                        return a.m_location.x < b.m_location.x;
                } );
 
-    for( size_t ii = 0; ii < m_holes.size(); ++ii )
+    for( size_t ii = 0; ii < m_drilledHoles.size(); ++ii )
     {
-        DRILLED_HOLE& refHole = m_holes[ ii ];
+        DRILLED_HOLE& refHole = m_drilledHoles[ ii ];
         int neighborhood = refHole.m_drillRadius + m_largestClearance + m_largestRadius;
 
-        for( size_t jj = ii + 1; jj < m_holes.size(); ++jj )
+        for( size_t jj = ii + 1; jj < m_drilledHoles.size(); ++jj )
         {
-            DRILLED_HOLE& checkHole = m_holes[ jj ];
+            DRILLED_HOLE& checkHole = m_drilledHoles[ jj ];
 
             if( refHole.m_location.x + neighborhood < checkHole.m_location.x )
                 break;
@@ -392,28 +378,28 @@ void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
             int actual = ( checkHole.m_location - refHole.m_location ).EuclideanNorm();
             actual = std::max( 0, actual - checkHole.m_drillRadius - refHole.m_drillRadius );
 
-            DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
-                                                                        refHole.m_owner, checkHole.m_owner );
-            int minClearance = constraint.GetValue().Min();
+            auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
+                                                              refHole.m_owner, checkHole.m_owner );
+            int  minClearance = constraint.GetValue().Min();
 
             accountCheck( constraint.GetParentRule() );
 
             if( actual < minClearance )
             {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-                wxString msg;
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DRILLED_HOLES_TOO_CLOSE );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (clearance %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), minClearance, true ),
-                            MessageTextFromValue( userUnits(), actual, true ) );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                              constraint.GetName(),
+                              MessageTextFromValue( userUnits(), minClearance, true ),
+                              MessageTextFromValue( userUnits(), actual, true ) );
 
-                drcItem->SetViolatingRule( constraint.GetParentRule() );
-                drcItem->SetErrorMessage( msg );
+                drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( refHole.m_owner, checkHole.m_owner );
+                drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                 ReportWithMarker( drcItem, refHole.m_location );
 
-                if( isErrorLimitExceeded( DRCE_HOLE_CLEARANCE ) )
+                if( isErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE ) )
                     return;
             }
         }

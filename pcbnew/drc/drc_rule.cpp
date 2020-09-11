@@ -118,6 +118,15 @@ const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* 
 }
 
 
+wxString DRC_CONSTRAINT::GetName() const
+{
+    if( m_parentRule )
+        return wxString::Format( _( "rule %s" ), m_parentRule->m_Name );
+    else
+        return m_name;
+}
+
+
 DRC_RULE::DRC_RULE() :
         m_Unary( false ),
         m_LayerCondition( LSET::AllLayersMask() ),

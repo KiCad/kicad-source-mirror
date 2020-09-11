@@ -23,17 +23,13 @@
 
 #include <common.h>
 #include <class_drawsegment.h>
-#include <geometry/polygon_test_point_inside.h>
-
 #include <geometry/seg.h>
-#include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
-
-#include <pcbnew/drc/drc_engine.h>
+#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc.h>
-#include <drc_proto/drc_test_provider_clearance_base.h>
+#include <drc/drc_test_provider_clearance_base.h>
 
 /*
     Board edge clearance test. Checks all items for their mechanical clearances against the board edge.
@@ -45,15 +41,13 @@
     - tester only looks for edge crossings. it doesn't check if items are inside/outside the board area.
 */
 
-namespace test {
-
 class DRC_TEST_PROVIDER_EDGE_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
 {
 public:
     DRC_TEST_PROVIDER_EDGE_CLEARANCE () :
-        DRC_TEST_PROVIDER_CLEARANCE_BASE()
-        {
-        }
+            DRC_TEST_PROVIDER_CLEARANCE_BASE()
+    {
+    }
 
     virtual ~DRC_TEST_PROVIDER_EDGE_CLEARANCE()
     {
@@ -64,7 +58,7 @@ public:
     virtual const wxString GetName() const override
     {
         return "edge_clearance";
-    };
+    }
 
     virtual const wxString GetDescription() const override
     {
@@ -72,20 +66,16 @@ public:
     }
 
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
-
-private:
-};
-
 };
 
 
-bool test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
+bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
     DRC_CONSTRAINT worstClearanceConstraint;
 
-    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
+    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
                                            worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
     {
         m_largestClearance = worstClearanceConstraint.GetValue().Min();
@@ -97,7 +87,8 @@ bool test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     }
 
     ReportAux( "Worst clearance : %d nm", m_largestClearance );
-    ReportStage( ("Testing all items <> Board Edge clearance"), 0, 2 );
+
+    ReportStage( _( "Testing all items <> Board Edge clearance" ), 0, 2 );
     
     std::vector<DRAWSEGMENT*> boardOutline;
     std::vector<BOARD_ITEM*> boardItems;
@@ -124,37 +115,36 @@ bool test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
     bool stop = false;
 
-    for( auto outlineItem : boardOutline )
+    for( DRAWSEGMENT* outlineItem : boardOutline )
     {
-        auto refShape = outlineItem->GetEffectiveShape();
+        const std::shared_ptr<SHAPE>& refShape = outlineItem->GetEffectiveShape();
 
-        for( auto boardItem : boardItems )
+        for( BOARD_ITEM* boardItem : boardItems )
         {
             drc_dbg( 10, "RefT %d %p %s %d\n", outlineItem->Type(), outlineItem,
                      outlineItem->GetClass(), outlineItem->GetLayer() );
             drc_dbg( 10, "BoardT %d %p %s %d\n", boardItem->Type(), boardItem,
                      boardItem->GetClass(), boardItem->GetLayer() );
 
-            auto shape = boardItem->GetEffectiveShape();
+            const std::shared_ptr<SHAPE>& shape = boardItem->GetEffectiveShape();
 
-            DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
-                                                                        outlineItem, boardItem );
-            int minClearance = constraint.GetValue().Min();
-            int actual;
+            auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
+                                                              outlineItem, boardItem );
+            int  minClearance = constraint.GetValue().Min();
+            int  actual;
 
             accountCheck( constraint );
 
             if( refShape->Collide( shape.get(), minClearance, &actual ) )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_COPPER_EDGE_CLEARANCE );
-                wxString msg;
 
-                msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                            constraint.GetParentRule()->m_Name,
-                            MessageTextFromValue( userUnits(), minClearance, true ),
-                            MessageTextFromValue( userUnits(), actual, true ) );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                              constraint.GetName(),
+                              MessageTextFromValue( userUnits(), minClearance, true ),
+                              MessageTextFromValue( userUnits(), actual, true ) );
 
-                drcItem->SetErrorMessage( msg );
+                drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( outlineItem, boardItem );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
@@ -178,7 +168,7 @@ bool test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetMatchingConstraintIds() const
 {
     return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE };
 }
@@ -186,5 +176,5 @@ std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetMatch
 
 namespace detail
 {
-    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_EDGE_CLEARANCE> dummy;
+    static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_EDGE_CLEARANCE> dummy;
 }
