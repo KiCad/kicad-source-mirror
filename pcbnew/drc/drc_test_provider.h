@@ -104,7 +104,7 @@ public:
     virtual void ReportProgress( double aProgress );
     virtual void ReportStage ( const wxString& aStageName, int index, int total );
 
-    virtual std::set<test::DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const = 0;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const = 0;
 
     virtual bool IsRuleDriven() const
     {
@@ -113,16 +113,17 @@ public:
 
 protected:
 
-    int forEachGeometryItem( const std::vector<KICAD_T> aTypes, const LSET aLayers, std::function<bool(BOARD_ITEM*)> aFunc );
+    int forEachGeometryItem( const std::vector<KICAD_T> aTypes, const LSET aLayers,
+                             std::function<bool(BOARD_ITEM*)> aFunc );
 
     virtual void reportRuleStatistics();
-    virtual void accountCheck( const test::DRC_RULE* ruleToTest );
-    virtual void accountCheck( const test::DRC_CONSTRAINT& constraintToTest );
+    virtual void accountCheck( const DRC_RULE* ruleToTest );
+    virtual void accountCheck( const DRC_CONSTRAINT& constraintToTest );
     virtual bool isErrorLimitExceeded( int error_code );
 
     EDA_UNITS userUnits() const;
     DRC_ENGINE *m_drcEngine;
-    std::unordered_map<const test::DRC_RULE*, int> m_stats;
+    std::unordered_map<const DRC_RULE*, int> m_stats;
     bool m_enable;
     bool m_isRuleDriven = true;
 };

@@ -124,7 +124,6 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPo
     double delta_angle = atan2( (double)endp.y, (double)endp.x );
     int    seg_len     = KiROUND( EuclideanNorm( endp ) );
 
-
     // Compute the outlines of the segment, and creates a polygon
     // Note: the polygonal shape is built from the equivalent horizontal
     // segment starting at {0,0}, and ending at {seg_len,0}
@@ -235,6 +234,11 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const 
         outline.Append( corner );
 
     int numSegs = GetArcToSegmentCount( aCornerRadius, aError, 360.0 );
+
+    // Choppy corners on rounded-corner rectangles look awful so enforce a minimum of
+    // 4 segments per corner.
+    if( numSegs < 16 )
+        numSegs = 16;
 
     // To build the polygonal shape outside the actual shape, we use a bigger
     // radius to build rounded corners.

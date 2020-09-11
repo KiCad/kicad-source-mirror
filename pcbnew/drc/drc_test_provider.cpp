@@ -1,5 +1,5 @@
-#include <drc_proto/drc_engine.h>
-#include <drc_proto/drc_item.h>
+#include <drc/drc_engine.h>
+#include <drc/drc_item.h>
 #include <drc_proto/drc_test_provider.h>
 
 test::DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
