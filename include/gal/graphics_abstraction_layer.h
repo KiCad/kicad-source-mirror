@@ -861,6 +861,11 @@ public:
 
     bool GetGridVisibility() const { return gridVisibility; }
 
+    bool GetGridSnapping() const
+    {
+        return ( options.m_gridSnapping == KIGFX::GRID_SNAPPING::ALWAYS ||
+                ( gridVisibility && options.m_gridSnapping == KIGFX::GRID_SNAPPING::WITH_GRID ) );
+    }
     /**
      * @brief Set the origin point for the grid.
      *

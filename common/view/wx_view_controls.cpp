@@ -498,9 +498,11 @@ VECTOR2D WX_VIEW_CONTROLS::GetMousePosition( bool aWorldCoordinates ) const
 
 VECTOR2D WX_VIEW_CONTROLS::GetRawCursorPosition( bool aEnableSnapping ) const
 {
-    if( aEnableSnapping )
+    GAL* gal = m_view->GetGAL();
+
+    if( aEnableSnapping && gal->GetGridSnapping() )
     {
-        return m_view->GetGAL()->GetGridPoint( m_cursorPos );
+        return gal->GetGridPoint( m_cursorPos );
     }
     else
     {

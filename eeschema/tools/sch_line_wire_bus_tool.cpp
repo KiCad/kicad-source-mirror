@@ -469,7 +469,6 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     controls->ShowCursor( true );
-    controls->SetGridSnapping( m_frame->IsGridVisible() );
 
 
     Activate();
@@ -489,7 +488,6 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
             m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        controls->SetGridSnapping( m_frame->IsGridVisible() );
         wxPoint cursorPos = wxPoint( grid.BestSnapAnchor(
                 evt->IsPrime() ? evt->Position() : controls->GetMousePosition(), nullptr ) );
         controls->ForceCursorPosition( true, cursorPos );

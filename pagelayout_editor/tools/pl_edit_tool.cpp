@@ -93,7 +93,6 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
-    controls->SetGridSnapping( m_frame->IsGridVisible() );
     VECTOR2I originalCursorPos = controls->GetCursorPosition();
 
     // Be sure that there is at least one item that we can move. If there's no selection try
@@ -123,7 +122,6 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     do
     {
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
-        controls->SetGridSnapping(  m_frame->IsGridVisible()  );
 
         if( evt->IsAction( &PL_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
             || evt->IsAction( &ACTIONS::refreshPreview ) )

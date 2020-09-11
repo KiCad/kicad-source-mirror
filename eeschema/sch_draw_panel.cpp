@@ -91,8 +91,6 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     // on updated viewport data.
     m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
 
-    m_viewControls->SetGridSnapping( m_gal->GetGridVisibility() );
-
     SetEvtHandlerEnabled( true );
     SetFocus();
     Show( true );

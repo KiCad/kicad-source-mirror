@@ -312,6 +312,9 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.style",
             &aWindow->grid.style, 0 ) );
 
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.snap",
+            &aWindow->grid.snap, 0 ) );
+
     m_params.emplace_back( new PARAM<bool>( aJsonPath + ".cursor.always_show_cursor",
             &aWindow->cursor.always_show_cursor, true ) );
 

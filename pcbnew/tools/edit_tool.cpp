@@ -407,7 +407,6 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         editFrame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        controls->SetGridSnapping( frame()->IsGridVisible() );
 
         if( evt->IsAction( &PCB_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::refreshPreview )

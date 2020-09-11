@@ -31,9 +31,8 @@
 #include <core/optional.h>
 #include <origin_viewitem.h>
 #include <layers_id_colors_and_visibility.h>
-#include <geometry/seg.h>
-#include <geometry/shape_arc.h>
 
+class TOOL_MANAGER;
 
 class GRID_HELPER {
 public:

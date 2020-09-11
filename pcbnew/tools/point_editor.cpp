@@ -383,7 +383,6 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( editFrame->IsGridVisible() );
-        controls->SetGridSnapping( editFrame->IsGridVisible() );
 
         if( !m_editPoints || evt->IsSelectionEvent() )
             break;

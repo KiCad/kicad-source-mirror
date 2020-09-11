@@ -108,7 +108,7 @@ void EE_GRID_HELPER::SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin )
 
 VECTOR2I EE_GRID_HELPER::Align( const VECTOR2I& aPoint ) const
 {
-    if( !m_toolMgr->GetView()->GetGAL()->GetGridVisibility() )
+    if( !m_toolMgr->GetView()->GetGAL()->GetGridSnapping() )
         return aPoint;
 
     const VECTOR2D gridOffset( GetOrigin() );

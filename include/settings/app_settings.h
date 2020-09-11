@@ -59,6 +59,7 @@ struct GRID_SETTINGS
     double min_spacing;
     bool show;
     int style;
+    int snap;
 };
 
 /**

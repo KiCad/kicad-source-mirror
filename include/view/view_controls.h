@@ -154,25 +154,6 @@ public:
     }
 
     /**
-     * Function SetGridSnapping()
-     * Enables/disables snapping cursor to grid.
-     *
-     * @param aEnabled says whether the opion should be enabled or disabled.
-     */
-    virtual void SetGridSnapping( bool aEnabled )
-    {
-        m_settings.m_snappingEnabled = aEnabled;
-    }
-
-    /**
-     * @return the current state of the snapping cursor to grid.
-     */
-    virtual bool GetGridSnapping()
-    {
-        return m_settings.m_snappingEnabled;
-    }
-
-    /**
      * Function SetGrabMouse
      * Turns on/off mouse grabbing. When the mouse is grabbed, it cannot go outside the VIEW.
      * @param aEnabled tells if mouse should be grabbed or not.

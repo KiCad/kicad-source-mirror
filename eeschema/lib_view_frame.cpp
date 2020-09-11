@@ -194,7 +194,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     }
 
     SyncView();
-    GetCanvas()->GetViewControls()->SetGridSnapping( IsGridVisible() );
     GetCanvas()->SetCanFocus( false );
 
     // Set the working/draw area size to display a symbol to a reasonable value:

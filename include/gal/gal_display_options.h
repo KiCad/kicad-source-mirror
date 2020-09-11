@@ -62,6 +62,13 @@ namespace KIGFX
         BEST,
     };
 
+    enum class GRID_SNAPPING
+    {
+        ALWAYS,
+        WITH_GRID,
+        NEVER
+    };
+
     class GAL_DISPLAY_OPTIONS;
 
     class GAL_DISPLAY_OPTIONS_OBSERVER
@@ -115,6 +122,9 @@ namespace KIGFX
 
         ///> The grid style to draw the grid in
         KIGFX::GRID_STYLE m_gridStyle;
+
+        ///> Snapping options for the grid
+        GRID_SNAPPING m_gridSnapping;
 
         ///> Thickness to render grid lines/dots
         double m_gridLineWidth;

@@ -110,7 +110,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    controls->SetGridSnapping( m_frame->IsGridVisible() );
     EE_GRID_HELPER   grid( m_toolMgr );
 
     m_anchorPos.reset();
@@ -173,7 +172,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     do
     {
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
-        controls->SetGridSnapping( m_frame->IsGridVisible() );
 
         if( evt->IsAction( &EE_ACTIONS::moveActivate ) || evt->IsAction( &EE_ACTIONS::restartMove )
                 || evt->IsAction( &EE_ACTIONS::move ) || evt->IsAction( &EE_ACTIONS::drag )

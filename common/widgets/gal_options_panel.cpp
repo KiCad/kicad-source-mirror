@@ -24,6 +24,7 @@
 
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
+#include <wx/choice.h>
 #include <wx/radiobox.h>
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
@@ -45,7 +46,7 @@ static const double gridMinSpacingMin = 5;
 static const double gridMinSpacingMax = 200;
 static const double gridMinSpacingStep = 5;
 
-
+///TODO: These are duplicated in gal_display_options - Unify!
 static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleSelectMap =
 {
     { KIGFX::GRID_STYLE::DOTS,        0 },  // Default
@@ -53,6 +54,12 @@ static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleSelectMap =
     { KIGFX::GRID_STYLE::SMALL_CROSS, 2 },
 };
 
+static const UTIL::CFG_MAP<KIGFX::GRID_SNAPPING> gridSnapConfigVals =
+{
+    { KIGFX::GRID_SNAPPING::ALWAYS,     0 },
+    { KIGFX::GRID_SNAPPING::WITH_GRID,  1 },
+    { KIGFX::GRID_SNAPPING::NEVER,      2 }
+};
 
 GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTIONS& aGalOpts ):
     wxPanel( aParent, wxID_ANY ),
@@ -124,6 +131,25 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
         l_gridMinSpacingUnits->Wrap( -1 );
         sGridSettingsGrid->Add( l_gridMinSpacingUnits, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
+        l_gridSnapOptions = new wxStaticText( sGridSettings->GetStaticBox(), wxID_ANY, _( "Snap to Grid:" ) );
+        l_gridSnapOptions->Wrap( -1 );
+        sGridSettingsGrid->Add( l_gridSnapOptions, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
+
+        wxString gridSnapChoices[] = { _( "Always"), _("When grid shown"), _("Never") };
+        int gridSnapNChoices = sizeof( gridSnapChoices ) / sizeof( wxString );
+        m_gridSnapOptions = new wxChoice( sGridSettings->GetStaticBox(), wxID_ANY,
+                wxDefaultPosition, wxDefaultSize, gridSnapNChoices, gridSnapChoices );
+        m_gridSnapOptions->Select( 0 );
+        sGridSettingsGrid->Add( m_gridSnapOptions, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND | wxALL, 5 );
+
+        l_gridSnapSpace = new wxStaticText( sGridSettings->GetStaticBox(),
+                wxID_ANY, _( "px" ) );
+        l_gridSnapSpace->Wrap( -1 );
+        l_gridSnapSpace->Hide();
+        sGridSettingsGrid->Add( l_gridSnapSpace, 0,
+                wxALIGN_CENTER_VERTICAL | wxALL | wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
+
+
         sGridSettings->Add( sGridSettingsGrid, 1, wxALL | wxEXPAND, 5 );
 
         sLeftSizer->Add( sGridSettings, 0, wxTOP | wxBOTTOM | wxRIGHT | wxEXPAND, 5 );
@@ -161,6 +187,9 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
 bool GAL_OPTIONS_PANEL::TransferDataToWindow()
 {
+    m_gridSnapOptions->SetSelection(
+            UTIL::GetConfigForVal( gridSnapConfigVals, m_galOptions.m_gridSnapping ) );
+
     m_gridStyle->SetSelection( UTIL::GetConfigForVal(
             gridStyleSelectMap, m_galOptions.m_gridStyle ) );
 
@@ -178,6 +207,9 @@ bool GAL_OPTIONS_PANEL::TransferDataToWindow()
 
 bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
 {
+    m_galOptions.m_gridSnapping = UTIL::GetValFromConfig( gridSnapConfigVals,
+            m_gridSnapOptions->GetSelection() );
+
     m_galOptions.m_gridStyle = UTIL::GetValFromConfig(
             gridStyleSelectMap, m_gridStyle->GetSelection() );
 

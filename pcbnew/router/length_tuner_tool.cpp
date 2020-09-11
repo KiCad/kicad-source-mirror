@@ -270,7 +270,6 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
     m_router->SetMode( aEvent.Parameter<PNS::ROUTER_MODE>() );
 
-    controls()->SetGridSnapping( true );
     controls()->ShowCursor( true );
     frame()->UndoRedoBlock( true );
 

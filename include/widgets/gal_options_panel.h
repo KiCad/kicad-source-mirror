@@ -63,6 +63,10 @@ private:
     wxSpinCtrlDouble* m_gridMinSpacing;
     wxStaticText* l_gridMinSpacingUnits;
 
+    wxStaticText* l_gridSnapOptions;
+    wxChoice* m_gridSnapOptions;
+    wxStaticText* l_gridSnapSpace;
+
     wxRadioBox* m_cursorShape;
     wxCheckBox* m_forceCursorDisplay;
 

@@ -798,7 +798,6 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     controls->ShowCursor( true );
-    controls->SetGridSnapping( m_frame->IsGridVisible() );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
@@ -1281,7 +1280,6 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     view->Add( &preview );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    controls->SetGridSnapping( frame()->IsGridVisible() );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );

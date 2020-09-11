@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013  CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -24,13 +24,15 @@
 using namespace std::placeholders;
 
 #include <id.h>
+#include <view/view.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>
 #include <pcbnew_settings.h>
 #include <bitmaps.h>
 
-#include <tools/pcb_actions.h>
 #include <tools/grid_helper.h>
+#include <tools/pcb_actions.h>
+#include <tool/tool_manager.h>
 
 #include "pns_arc.h"
 #include "pns_kicad_iface.h"
@@ -265,7 +267,7 @@ void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
     VECTOR2I p;
 
     controls()->ForceCursorPosition( false );
-    m_gridHelper->SetUseGrid( !aEvent.Modifier( MD_ALT ) );
+    m_gridHelper->SetUseGrid( m_toolMgr->GetView()->GetGAL()->GetGridSnapping() );
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
     bool snapEnabled = true;
@@ -298,7 +300,7 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 {
     int layer;
     bool snapEnabled = !aEvent.Modifier( MD_SHIFT );
-    m_gridHelper->SetUseGrid( !aEvent.Modifier( MD_ALT ) );
+    m_gridHelper->SetUseGrid( m_toolMgr->GetView()->GetGAL()->GetGridSnapping() );
     m_gridHelper->SetSnap( snapEnabled );
 
     controls()->ForceCursorPosition( false );
