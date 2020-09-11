@@ -39,8 +39,6 @@
     TODO: vias-in-smd-pads check
 */
 
-namespace test {
-
 class DRC_TEST_PROVIDER_HOLE_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
 {
 public:
@@ -80,7 +78,7 @@ private:
 
     struct DRILLED_HOLE
     {
-        VECTOR2I     m_location;
+        VECTOR2I    m_location;
         int         m_drillRadius = 0;
         BOARD_ITEM* m_owner = nullptr;
     };
@@ -91,10 +89,8 @@ private:
 
 };
 
-};
 
-
-bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
+bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
@@ -130,11 +126,8 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 }
 
 
-void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::buildDrilledHoleList()
+void DRC_TEST_PROVIDER_HOLE_CLEARANCE::buildDrilledHoleList()
 {
-    bool                   success = true;
-    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-
     m_drilledHoles.clear();
 
     for( MODULE* module : m_board->Modules() )
@@ -155,7 +148,7 @@ void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::buildDrilledHoleList()
 
     for( TRACK* track : m_board->Tracks() )
     {
-        if ( track->Type() == PCB_VIA_T )
+        if( track->Type() == PCB_VIA_T )
         {
             VIA* via = static_cast<VIA*>( track );
             addHole( via->GetPosition(), via->GetDrillValue() / 2, via );
@@ -163,10 +156,9 @@ void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::buildDrilledHoleList()
     }
 
     ReportAux( "Total drilled holes : %d", m_drilledHoles.size() );
-
 }
 
-void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::testPads2Holes()
+void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testPads2Holes()
 {
     std::vector<D_PAD*> sortedPads;
 
@@ -206,7 +198,7 @@ void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::testPads2Holes()
 }
 
 
-bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad, D_PAD** aStart,
+bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad, D_PAD** aStart,
                                                                  D_PAD** aEnd, int x_limit )
 {
     const static LSET all_cu = LSET::AllCuMask();
@@ -329,7 +321,7 @@ bool test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad,
 }
 
 
-void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::addHole( const VECTOR2I& aLocation, int aRadius,
+void DRC_TEST_PROVIDER_HOLE_CLEARANCE::addHole( const VECTOR2I& aLocation, int aRadius,
                                                       BOARD_ITEM* aOwner )
 {
     DRILLED_HOLE hole;
@@ -344,7 +336,7 @@ void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::addHole( const VECTOR2I& aLocation,
 }
 
 
-void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
+void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
 {
     // Sort holes by X for performance.  In the nested iteration we then need to look at
     // following holes only while they are within the refHole's neighborhood as defined by
@@ -407,7 +399,7 @@ void test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_HOLE_CLEARANCE::GetMatchingConstraintIds() const
 {
     return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE };
 }
@@ -415,5 +407,5 @@ std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_HOLE_CLEARANCE::GetMatch
 
 namespace detail
 {
-    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_HOLE_CLEARANCE> dummy;
+    static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_HOLE_CLEARANCE> dummy;
 }

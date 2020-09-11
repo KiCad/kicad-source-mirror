@@ -3,20 +3,8 @@
 #include <drc/drc_test_provider.h>
 
 DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
-    m_drcEngine( nullptr ),
-    m_enable( false )
+    m_drcEngine( nullptr )
 {
-
-}
-
-void DRC_TEST_PROVIDER::Enable( bool enable )
-{
-    m_enable = enable;
-}
-
-bool DRC_TEST_PROVIDER::IsEnabled() const
-{
-    return m_enable;
 }
 
 const wxString DRC_TEST_PROVIDER::GetName() const { return "<no name test>"; }
@@ -54,7 +42,7 @@ void DRC_TEST_PROVIDER::ReportStage ( const wxString& aStageName, int index, int
     ReportAux( aStageName );
 }
 
-void DRC_TEST_PROVIDER::ReportAux( const wxString& fmt, ... )
+void DRC_TEST_PROVIDER::ReportAux( wxString fmt, ... )
 {
     va_list vargs;
     va_start( vargs, fmt );

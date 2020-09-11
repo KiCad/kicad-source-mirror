@@ -34,7 +34,6 @@ endif()
 
 
 add_executable( drc_proto
-    drc_rules_proto_keywords.cpp
     drc_proto_test.cpp
     ../../pcbnew/drc/drc_rule.cpp
     ../../pcbnew/drc/drc_rule_parser.cpp
@@ -43,15 +42,15 @@ add_executable( drc_proto
     ../../pcbnew/drc/drc_test_provider_copper_clearance.cpp
     ../../pcbnew/drc/drc_test_provider_hole_clearance.cpp
     ../../pcbnew/drc/drc_test_provider_edge_clearance.cpp
-    drc_test_provider_hole_size.cpp
-    drc_test_provider_disallow.cpp
-    drc_test_provider_track_width.cpp
-    drc_test_provider_annulus.cpp
-    drc_test_provider_connectivity.cpp
+    ../../pcbnew/drc/drc_test_provider_hole_size.cpp
+    ../../pcbnew/drc/drc_test_provider_disallow.cpp
+    ../../pcbnew/drc/drc_test_provider_track_width.cpp
+    ../../pcbnew/drc/drc_test_provider_annulus.cpp
+    ../../pcbnew/drc/drc_test_provider_connectivity.cpp
     ../../pcbnew/drc/drc_test_provider_courtyard_clearance.cpp
-    drc_test_provider_via_diameter.cpp
-    drc_test_provider_lvs.cpp
-    drc_test_provider_misc.cpp
+    ../../pcbnew/drc/drc_test_provider_via_diameter.cpp
+    ../../pcbnew/drc/drc_test_provider_lvs.cpp
+    ../../pcbnew/drc/drc_test_provider_misc.cpp
     ../../pcbnew/drc/drc_engine.cpp
     ../../pcbnew/drc/drc_item.cpp
     ../qa_utils/mocks.cpp
@@ -113,13 +112,4 @@ target_link_libraries( drc_proto
     ${Boost_SYSTEM_LIBRARY}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
     ${wxWidgets_LIBRARIES}
-)
-
-# auto-generate drc_rules_lexer.h and drc_rules_keywords.cpp
-make_lexer(
-    drc_proto
-    drc_rules_proto.keywords
-    drc_rules_proto_lexer.h
-    drc_rules_proto_keywords.cpp
-    DRCRULEPROTO_T
 )

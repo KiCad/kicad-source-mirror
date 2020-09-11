@@ -21,18 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <common.h>
-#include <class_board.h>
-//#include <class_drawsegment.h>
-//#include <class_pad.h>
-
-#include <convert_basic_shapes_to_polygon.h>
-//#include <geometry/polygon_test_point_inside.h>
-//#include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
-//#include <geometry/shape_rect.h>
-//#include <geometry/shape_segment.h>
-
 #include <drc/drc_engine.h>
 #include <drc/drc.h>
 #include <drc/drc_item.h>
@@ -85,6 +74,7 @@ private:
 
 void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 {
+    // Detects missing (or malformed) footprint courtyards
     ReportStage( _( "Testing component courtyard definitions" ), 0, 2 );
 
     for( MODULE* footprint : m_board->Modules() )
@@ -98,7 +88,6 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
                     continue;
 
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_COURTYARD );
-
                 drcItem->SetItems( footprint );
                 ReportWithMarker( drcItem, footprint->GetPosition() );
             }
@@ -130,66 +119,66 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
     ReportStage( _( "Testing component courtyard overlap" ), 0, 2 );
 
     for( auto it1 = m_board->Modules().begin(); it1 != m_board->Modules().end(); it1++ )
+    {
+        MODULE*         footprint = *it1;
+        SHAPE_POLY_SET& footprintFront = footprint->GetPolyCourtyardFront();
+        SHAPE_POLY_SET& footprintBack = footprint->GetPolyCourtyardBack();
+
+        if( footprintFront.OutlineCount() == 0 && footprintBack.OutlineCount() == 0 )
+            continue; // No courtyards defined
+
+        for( auto it2 = it1 + 1; it2 != m_board->Modules().end(); it2++ )
         {
-            MODULE*         footprint = *it1;
-            SHAPE_POLY_SET& footprintFront = footprint->GetPolyCourtyardFront();
-            SHAPE_POLY_SET& footprintBack = footprint->GetPolyCourtyardBack();
+            MODULE*         test = *it2;
+            SHAPE_POLY_SET& testFront = test->GetPolyCourtyardFront();
+            SHAPE_POLY_SET& testBack = test->GetPolyCourtyardBack();
+            SHAPE_POLY_SET  intersection;
+            bool            overlap = false;
+            wxPoint         pos;
 
-            if( footprintFront.OutlineCount() == 0 && footprintBack.OutlineCount() == 0 )
-                continue; // No courtyards defined
-
-            for( auto it2 = it1 + 1; it2 != m_board->Modules().end(); it2++ )
+            if( footprintFront.OutlineCount() > 0 && testFront.OutlineCount() > 0
+                && footprintFront.BBoxFromCaches().Intersects( testFront.BBoxFromCaches() ) )
             {
-                MODULE*         test = *it2;
-                SHAPE_POLY_SET& testFront = test->GetPolyCourtyardFront();
-                SHAPE_POLY_SET& testBack = test->GetPolyCourtyardBack();
-                SHAPE_POLY_SET  intersection;
-                bool            overlap = false;
-                wxPoint         pos;
+                intersection.RemoveAllContours();
+                intersection.Append( footprintFront );
 
-                if( footprintFront.OutlineCount() > 0 && testFront.OutlineCount() > 0
-                    && footprintFront.BBoxFromCaches().Intersects( testFront.BBoxFromCaches() ) )
+                // Build the common area between footprint and the test:
+                intersection.BooleanIntersection( testFront, SHAPE_POLY_SET::PM_FAST );
+
+                // If the intersection exists then they overlap
+                if( intersection.OutlineCount() > 0 )
                 {
-                    intersection.RemoveAllContours();
-                    intersection.Append( footprintFront );
-
-                    // Build the common area between footprint and the test:
-                    intersection.BooleanIntersection( testFront, SHAPE_POLY_SET::PM_FAST );
-
-                    // If the intersection exists then they overlap
-                    if( intersection.OutlineCount() > 0 )
-                    {
-                        overlap = true;
-                        pos = (wxPoint) intersection.CVertex( 0, 0, -1 );
-                    }
-                }
-
-                if( footprintBack.OutlineCount() > 0 && testBack.OutlineCount() > 0
-                    && footprintBack.BBoxFromCaches().Intersects( testBack.BBoxFromCaches() ) )
-                {
-                    intersection.RemoveAllContours();
-                    intersection.Append( footprintBack );
-
-                    intersection.BooleanIntersection( testBack, SHAPE_POLY_SET::PM_FAST );
-
-                    if( intersection.OutlineCount() > 0 )
-                    {
-                        overlap = true;
-                        pos = (wxPoint) intersection.CVertex( 0, 0, -1 );
-                    }
-                }
-
-                if( overlap )
-                {
-                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_OVERLAPPING_FOOTPRINTS );
-                    drcItem->SetItems( footprint, test );
-                    ReportWithMarker ( drcItem, pos );
-
-                    if( isErrorLimitExceeded( DRCE_OVERLAPPING_FOOTPRINTS ) )
-                        return;
+                    overlap = true;
+                    pos = (wxPoint) intersection.CVertex( 0, 0, -1 );
                 }
             }
+
+            if( footprintBack.OutlineCount() > 0 && testBack.OutlineCount() > 0
+                && footprintBack.BBoxFromCaches().Intersects( testBack.BBoxFromCaches() ) )
+            {
+                intersection.RemoveAllContours();
+                intersection.Append( footprintBack );
+
+                intersection.BooleanIntersection( testBack, SHAPE_POLY_SET::PM_FAST );
+
+                if( intersection.OutlineCount() > 0 )
+                {
+                    overlap = true;
+                    pos = (wxPoint) intersection.CVertex( 0, 0, -1 );
+                }
+            }
+
+            if( overlap )
+            {
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_OVERLAPPING_FOOTPRINTS );
+                drcItem->SetItems( footprint, test );
+                ReportWithMarker ( drcItem, pos );
+
+                if( isErrorLimitExceeded( DRCE_OVERLAPPING_FOOTPRINTS ) )
+                    return;
+            }
         }
+    }
 }
 
 

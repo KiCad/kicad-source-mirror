@@ -22,10 +22,7 @@
  */
 
 #include <class_board.h>
-#include <class_track.h>
-#include <common.h>
-
-#include <pcbnew/drc/drc_engine.h>
+#include <drc/drc_engine.h>
 #include <drc/drc.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
@@ -46,9 +43,6 @@
     - cross-check PCB netlist against SCH netlist
     - cross-check PCB fields against SCH fields
 */
-
-namespace test
-{
 
 class DRC_TEST_PROVIDER_LVS : public DRC_TEST_PROVIDER
 {
@@ -82,20 +76,19 @@ private:
     void testFootprints( NETLIST& aNetlist );
 };
 
-}; // namespace test
 
-
-void test::DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
+void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
 {
-    wxString msg;
-    BOARD*   board = m_drcEngine->GetBoard();
+    BOARD* board = m_drcEngine->GetBoard();
 
-    auto comp = []( const MODULE* x, const MODULE* y ) {
-        return x->GetReference().CmpNoCase( y->GetReference() ) < 0;
-    };
+    auto comp = []( const MODULE* x, const MODULE* y )
+                {
+                    return x->GetReference().CmpNoCase( y->GetReference() ) < 0;
+                };
 
     auto mods = std::set<MODULE*, decltype( comp )>( comp );
 
+    // Search for duplicate footprints on the board
     for( MODULE* mod : board->Modules() )
     {
         auto ins = mods.insert( mod );
@@ -120,21 +113,82 @@ void test::DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
 
         if( module == nullptr )
         {
-            msg.Printf( _( "Missing footprint %s (%s)" ), component->GetReference(),
+            m_msg.Printf( _( "Missing footprint %s (%s)" ), component->GetReference(),
                     component->GetValue() );
 
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
 
-            drcItem->SetErrorMessage( msg );
+            drcItem->SetErrorMessage( m_msg );
             Report( drcItem );
 
             if( isErrorLimitExceeded( DRCE_MISSING_FOOTPRINT ) )
                 break;
         }
+        else
+        {
+            for( D_PAD* pad : module->Pads() )
+            {
+                const COMPONENT_NET& sch_net = component->GetNet( pad->GetName() );
+                const wxString&      pcb_netname = pad->GetNetname();
+
+                if( !pcb_netname.IsEmpty() && sch_net.GetPinName().IsEmpty() )
+                {
+                    m_msg.Printf( _( "No corresponding pin found in schematic." ) );
+
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
+                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetItems( pad );
+                    ReportWithMarker( drcItem, module->GetPosition() );
+                }
+                else if( pcb_netname.IsEmpty() && !sch_net.GetNetName().IsEmpty() )
+                {
+                    m_msg.Printf( _( "Pad missing net given by schematic (%s)." ),
+                                  sch_net.GetNetName() );
+
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
+                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetItems( pad );
+                    ReportWithMarker( drcItem, module->GetPosition() );
+                }
+                else if( pcb_netname != sch_net.GetNetName() )
+                {
+                    m_msg.Printf( _( "Pad net (%s) doesn't match net given by schematic (%s)." ),
+                                  pcb_netname,
+                                  sch_net.GetNetName() );
+
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
+                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetItems( pad );
+                    ReportWithMarker( drcItem, module->GetPosition() );
+                }
+
+                if( isErrorLimitExceeded( DRCE_NET_CONFLICT ) )
+                    break;
+            }
+
+            for( unsigned jj = 0; jj < component->GetNetCount(); ++jj )
+            {
+                const COMPONENT_NET& sch_net = component->GetNet( jj );
+
+                if( !module->FindPadByName( sch_net.GetPinName() ) )
+                {
+                    m_msg.Printf( _( "No pad found for pin %s in schematic." ),
+                                  sch_net.GetPinName() );
+
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
+                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetItems( module );
+                    ReportWithMarker( drcItem, module->GetPosition() );
+                }
+
+                if( isErrorLimitExceeded( DRCE_NET_CONFLICT ) )
+                    break;
+            }
+        }
     }
 
-
-    for( auto module : mods )
+    // Search for component footprints found on board but not in netlist.
+    for( MODULE* module : board->Modules() )
     {
         COMPONENT* component = aNetlist.GetComponentByReference( module->GetReference() );
 
@@ -152,7 +206,7 @@ void test::DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
 }
 
 
-bool test::DRC_TEST_PROVIDER_LVS::fetchNetlistFromSchematic( NETLIST& aNetlist )
+bool DRC_TEST_PROVIDER_LVS::fetchNetlistFromSchematic( NETLIST& aNetlist )
 {
     // fixme: make it work without dependency on EDIT_FRAME/kiway
 #if 0
@@ -177,7 +231,7 @@ bool test::DRC_TEST_PROVIDER_LVS::fetchNetlistFromSchematic( NETLIST& aNetlist )
     return false;
 }
 
-bool test::DRC_TEST_PROVIDER_LVS::Run()
+bool DRC_TEST_PROVIDER_LVS::Run()
 {
     ReportStage( _( "Layout-vs-Schematic checks..." ), 0, 2 );
 
@@ -203,7 +257,7 @@ bool test::DRC_TEST_PROVIDER_LVS::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_LVS::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_LVS::GetMatchingConstraintIds() const
 {
     return {};
 }
@@ -211,5 +265,5 @@ std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_LVS::GetMatchingConstrai
 
 namespace detail
 {
-static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_LVS> dummy;
+static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_LVS> dummy;
 }

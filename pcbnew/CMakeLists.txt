@@ -240,10 +240,17 @@ set( PCBNEW_DRC_SRCS
     drc/drc_engine.cpp
     drc/drc_rule_parser.cpp
     drc/drc_test_provider.cpp
+    drc/drc_test_provider_annulus.cpp
     drc/drc_test_provider_clearance_base.cpp
+    drc/drc_test_provider_disallow.cpp
+    drc/drc_test_provider_connectivity.cpp
     drc/drc_test_provider_copper_clearance.cpp
     drc/drc_test_provider_edge_clearance.cpp
     drc/drc_test_provider_hole_clearance.cpp
+    drc/drc_test_provider_hole_size.cpp
+    drc/drc_test_provider_misc.cpp
+    drc/drc_test_provider_track_width.cpp
+    drc/drc_test_provider_via_diameter.cpp
     )
 
 set( PCBNEW_NETLIST_SRCS

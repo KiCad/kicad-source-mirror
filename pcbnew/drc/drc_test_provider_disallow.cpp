@@ -21,10 +21,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <class_board.h>
+//#include <class_board.h>
 #include <common.h>
 
-#include <geometry/shape.h>
+//#include <geometry/shape.h>
 
 #include <drc/drc_engine.h>
 #include <drc/drc.h>
@@ -37,9 +37,6 @@
     Errors generated:
     - DRCE_ALLOWED_ITEMS
 */
-
-namespace test
-{
 
 class DRC_TEST_PROVIDER_DISALLOW : public DRC_TEST_PROVIDER
 {
@@ -65,14 +62,10 @@ public:
     }
 
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
-
-private:
 };
 
-}; // namespace test
 
-
-bool test::DRC_TEST_PROVIDER_DISALLOW::Run()
+bool DRC_TEST_PROVIDER_DISALLOW::Run()
 {
     if( !m_drcEngine->HasCorrectRulesForId( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_DISALLOW ) )
     {
@@ -80,26 +73,28 @@ bool test::DRC_TEST_PROVIDER_DISALLOW::Run()
         return false;
     }
 
-    ReportStage( ("Testing for disallow constraints"), 0, 2 );
+    ReportStage( _( "Testing disallow constraints" ), 0, 2 );
 
-    auto checkItem = [&] ( BOARD_ITEM *item ) -> bool
+    auto checkItem = [&]( BOARD_ITEM *item ) -> bool
     {
-        DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_DISALLOW,
-                                                                    item );
+        auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_DISALLOW, item );
 
-        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
-        wxString                  msg;
+        if( constraint.m_DisallowFlags )
+        {
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
 
-        msg.Printf( drcItem->GetErrorText() + _( " (%s)" ), constraint.GetParentRule()->m_Name );
+            m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ),
+                          constraint.GetName() );
 
-        drcItem->SetErrorMessage( msg );
-        drcItem->SetItems( item );
-        drcItem->SetViolatingRule( constraint.GetParentRule() );
+            drcItem->SetErrorMessage( m_msg );
+            drcItem->SetItems( item );
+            drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-        ReportWithMarker( drcItem, item->GetPosition() );
+            ReportWithMarker( drcItem, item->GetPosition() );
 
-        if( isErrorLimitExceeded( DRCE_ALLOWED_ITEMS ) )
-            return false;
+            if( isErrorLimitExceeded( DRCE_ALLOWED_ITEMS ) )
+                return false;
+        }
 
         return true;
     };
@@ -112,7 +107,7 @@ bool test::DRC_TEST_PROVIDER_DISALLOW::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_DISALLOW::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_DISALLOW::GetMatchingConstraintIds() const
 {
     return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_DISALLOW };
 }
@@ -120,5 +115,5 @@ std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_DISALLOW::GetMatchingCon
 
 namespace detail
 {
-static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_DISALLOW> dummy;
+static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_DISALLOW> dummy;
 }

@@ -89,13 +89,10 @@ public:
 
     virtual bool Run() = 0;
 
-    virtual void Enable( bool enable );
-    virtual bool IsEnabled() const;
-
     virtual const wxString GetName() const;
     virtual const wxString GetDescription() const;
 
-    virtual void ReportAux( const wxString& fmt, ... );
+    virtual void ReportAux( wxString fmt, ... );
     virtual void Report( std::shared_ptr<DRC_ITEM> item );
     virtual void ReportWithMarker( std::shared_ptr<DRC_ITEM> item, wxPoint aMarkerPos );
     virtual void ReportWithMarker( std::shared_ptr<DRC_ITEM> item, VECTOR2I aMarkerPos );
@@ -119,11 +116,12 @@ protected:
     virtual void accountCheck( const DRC_CONSTRAINT& constraintToTest );
     virtual bool isErrorLimitExceeded( int error_code );
 
-    EDA_UNITS userUnits() const;
-    DRC_ENGINE *m_drcEngine;
+    EDA_UNITS   userUnits() const;
+    DRC_ENGINE* m_drcEngine;
     std::unordered_map<const DRC_RULE*, int> m_stats;
-    bool m_enable;
-    bool m_isRuleDriven = true;
+    bool        m_isRuleDriven = true;
+
+    wxString    m_msg;  // Allocating strings gets expensive enough to want to avoid it
 };
 
 #endif // DRC_TEST_PROVIDER__H

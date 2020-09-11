@@ -42,9 +42,6 @@
     - DRCE_ZONE_HAS_EMPTY_NET
 */
 
-namespace test
-{
-
 class DRC_TEST_PROVIDER_CONNECTIVITY : public DRC_TEST_PROVIDER
 {
 public:
@@ -71,12 +68,10 @@ public:
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
 };
 
-}; // namespace test
 
-
-bool test::DRC_TEST_PROVIDER_CONNECTIVITY::Run()
+bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 {
-    ReportStage( ( "Testing dangling pads/vias" ), 0, 2 );
+    ReportStage( _( "Testing dangling pads/vias" ), 0, 2 );
 
     BOARD* board = m_drcEngine->GetBoard();
 
@@ -84,11 +79,11 @@ bool test::DRC_TEST_PROVIDER_CONNECTIVITY::Run()
     connectivity->Clear();
     connectivity->Build( board ); // just in case. This really needs to be reliable.
 
-
-    for( auto track : board->Tracks() )
+    for( TRACK* track : board->Tracks() )
     {
         bool exceedT = isErrorLimitExceeded( DRCE_DANGLING_TRACK );
         bool exceedV = isErrorLimitExceeded( DRCE_DANGLING_VIA );
+
         // Test for dangling items
         int code = track->Type() == PCB_VIA_T ? DRCE_DANGLING_VIA : DRCE_DANGLING_TRACK;
         wxPoint pos;
@@ -101,10 +96,6 @@ bool test::DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         if( connectivity->TestTrackEndpointDangling( track, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( code );
-            wxString                  msg;
-
-            msg.Printf( drcItem->GetErrorText() );
-            drcItem->SetErrorMessage( msg );
             drcItem->SetItems( track );
             ReportWithMarker( drcItem, pos );
         }
@@ -113,36 +104,32 @@ bool test::DRC_TEST_PROVIDER_CONNECTIVITY::Run()
             break;
     }
 
-    ReportStage( ( "Testing starved zones" ), 0, 2 );
+    ReportStage( _( "Testing starved zones" ), 0, 2 );
 
     /* test starved zones */
-    for( auto zone : board->Zones() )
+    for( ZONE_CONTAINER* zone : board->Zones() )
     {
         if( !zone->IsOnCopperLayer() )
             continue;
 
-            int netcode = zone->GetNetCode();
-            // a netcode < 0 or > 0 and no pad in net is a error or strange
-            // perhaps a "dead" net, which happens when all pads in this net were removed
-            // Remark: a netcode < 0 should not happen (this is more a bug somewhere)
-            int pads_in_net = ( netcode > 0 ) ? connectivity->GetPadCount( netcode ) : 1;
+        int netcode = zone->GetNetCode();
+        // a netcode < 0 or > 0 and no pad in net is a error or strange
+        // perhaps a "dead" net, which happens when all pads in this net were removed
+        // Remark: a netcode < 0 should not happen (this is more a bug somewhere)
+        int pads_in_net = ( netcode > 0 ) ? connectivity->GetPadCount( netcode ) : 1;
 
-            if( ( netcode < 0 ) || pads_in_net == 0 )
-            {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ZONE_HAS_EMPTY_NET );
-                wxString                  msg;
+        if( ( netcode < 0 ) || pads_in_net == 0 )
+        {
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ZONE_HAS_EMPTY_NET );
+            drcItem->SetItems( zone );
+            ReportWithMarker( drcItem, zone->GetPosition() );
 
-                msg.Printf( drcItem->GetErrorText() );
-                drcItem->SetErrorMessage( msg );
-                drcItem->SetItems( zone );
-                ReportWithMarker( drcItem, zone->GetPosition() );
-
-                if( isErrorLimitExceeded( DRCE_ZONE_HAS_EMPTY_NET ) )
-                    break;
-            }
+            if( isErrorLimitExceeded( DRCE_ZONE_HAS_EMPTY_NET ) )
+                break;
         }
+    }
 
-    ReportStage( ( "Testing unconnected ratlines" ), 0, 2 );
+    ReportStage( _( "Testing unconnected nets" ), 0, 2 );
 
     connectivity->RecalculateRatsnest();
     std::vector<CN_EDGE> edges;
@@ -151,7 +138,6 @@ bool test::DRC_TEST_PROVIDER_CONNECTIVITY::Run()
     for( const CN_EDGE& edge : edges )
     {
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNCONNECTED_ITEMS );
-
         drcItem->SetItems( edge.GetSourceNode()->Parent(), edge.GetTargetNode()->Parent() );
         ReportWithMarker( drcItem, edge.GetSourceNode()->Pos() );
 
@@ -165,7 +151,7 @@ bool test::DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_CONNECTIVITY::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_CONNECTIVITY::GetMatchingConstraintIds() const
 {
     return {};
 }
@@ -173,5 +159,5 @@ std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_CONNECTIVITY::GetMatchin
 
 namespace detail
 {
-static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_CONNECTIVITY> dummy;
+static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_CONNECTIVITY> dummy;
 }

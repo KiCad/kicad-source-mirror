@@ -55,8 +55,6 @@ protected:
     BOARD* m_board;
     int    m_largestClearance;
     bool   m_boardOutlineValid;
-
-    wxString m_msg;  // Allocating strings gets expensive enough to want to avoid it
 };
 
 

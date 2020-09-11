@@ -21,18 +21,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <class_board.h>
-#include <class_track.h>
-#include <common.h>
-
-#include <class_module.h>
 #include <class_pcb_text.h>
-
-#include <pcbnew/drc/drc_engine.h>
+#include <drc/drc_engine.h>
 #include <drc/drc.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
-#include <pcbnew/drc/drc_test_provider.h>
+#include <drc/drc_test_provider.h>
 
 #include <ws_draw_item.h>
 #include <ws_proxy_view_item.h>
@@ -47,9 +41,6 @@
     TODO:
     - if grows too big, split into separate providers
 */
-
-namespace test
-{
 
 class DRC_TEST_PROVIDER_MISC : public DRC_TEST_PROVIDER
 {
@@ -85,10 +76,8 @@ private:
     BOARD* m_board;
 };
 
-}; // namespace test
 
-
-void test::DRC_TEST_PROVIDER_MISC::testOutline()
+void DRC_TEST_PROVIDER_MISC::testOutline()
 {
     wxPoint error_loc( m_board->GetBoardEdgesBoundingBox().GetPosition() );
 
@@ -98,80 +87,86 @@ void test::DRC_TEST_PROVIDER_MISC::testOutline()
         return;
 
     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
-    wxString                  msg;
 
-    msg.Printf( drcItem->GetErrorText() + _( " (not a closed shape)" ) );
+    m_msg.Printf( drcItem->GetErrorText() + _( " (not a closed shape)" ) );
 
-    drcItem->SetErrorMessage( msg );
+    drcItem->SetErrorMessage( m_msg );
     drcItem->SetItems( m_board );
 
     ReportWithMarker( drcItem, error_loc );
 }
 
 
-void test::DRC_TEST_PROVIDER_MISC::testDisabledLayers()
+void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
 {
     LSET disabledLayers = m_board->GetEnabledLayers().flip();
-
 
     // Perform the test only for copper layers
     disabledLayers &= LSET::AllCuMask();
 
-    auto checkDisabledLayers = [&]( BOARD_ITEM* item ) -> bool {
-        LSET refLayers ( item->GetLayer() );
+    auto checkDisabledLayers =
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                LSET refLayers ( item->GetLayer() );
 
-        if( ( disabledLayers & refLayers ).any() )
-        {
-            wxString                  msg;
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
+                if( ( disabledLayers & refLayers ).any() )
+                {
+                    std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
 
-            msg.Printf( drcItem->GetErrorText() + _( " (layer %s)" ), item->GetLayerName() );
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (layer %s)" ),
+                                  item->GetLayerName() );
 
-            drcItem->SetErrorMessage( msg );
-            drcItem->SetItems( item );
+                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetItems( item );
 
-            ReportWithMarker( drcItem, item->GetPosition() );
-        }
-        return true;
-    };
+                    ReportWithMarker( drcItem, item->GetPosition() );
+                }
+                return true;
+            };
 
     // fixme: what about graphical items?
     forEachGeometryItem( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_ZONE_AREA_T, PCB_PAD_T },
-            LSET::AllLayersMask(), checkDisabledLayers );
+                           LSET::AllLayersMask(), checkDisabledLayers );
 }
 
-void test::DRC_TEST_PROVIDER_MISC::testTextVars()
+void DRC_TEST_PROVIDER_MISC::testTextVars()
 {
-    auto checkUnresolvedTextVar = [&]( EDA_ITEM* item ) -> bool {
-        EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item );
+    auto checkUnresolvedTextVar =
+            [&]( EDA_ITEM* item ) -> bool
+            {
+                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item );
 
-        assert( text );
+                wxASSERT( text );
 
+                if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
+                {
+                    if( isErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
+                        return false;
 
-        if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
-        {
-            if( isErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
-                return false;
+                    std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
+                    drcItem->SetItems( item );
 
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
-            drcItem->SetItems( item );
+                    ReportWithMarker( drcItem, item->GetPosition() );
+                }
+                return true;
+            };
 
-            ReportWithMarker( drcItem, item->GetPosition() );
-        }
-        return true;
-    };
+    forEachGeometryItem( { PCB_MODULE_TEXT_T, PCB_TEXT_T }, LSET::AllLayersMask(),
+                         checkUnresolvedTextVar );
 
-    forEachGeometryItem(
-            { PCB_MODULE_TEXT_T, PCB_TEXT_T }, LSET::AllLayersMask(), checkUnresolvedTextVar );
-
-    WS_DRAW_ITEM_LIST wsItems;
-
-    auto worksheet = m_drcEngine->GetWorksheet();
+    KIGFX::WS_PROXY_VIEW_ITEM* worksheet = m_drcEngine->GetWorksheet();
+    WS_DRAW_ITEM_LIST          wsItems;
 
     if( !worksheet )
         return;
 
     wsItems.SetMilsToIUfactor( IU_PER_MILS );
+    wsItems.SetSheetNumber( 1 );
+    wsItems.SetSheetCount( 1 );
+    wsItems.SetFileName( "dummyFilename" );
+    wsItems.SetSheetName( "dummySheet" );
+    wsItems.SetSheetLayer( "dummyLayer" );
+    wsItems.SetProject( m_board->GetProject() );
     wsItems.BuildWorkSheetGraphicList( worksheet->GetPageInfo(), worksheet->GetTitleBlock() );
 
     for( WS_DRAW_ITEM_BASE* item = wsItems.GetFirst(); item; item = wsItems.GetNext() )
@@ -181,16 +176,19 @@ void test::DRC_TEST_PROVIDER_MISC::testTextVars()
             if( isErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
                 return;
 
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
-            drcItem->SetItems( text );
+            if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
+            {
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
+                drcItem->SetItems( text );
 
-            ReportWithMarker( drcItem, text->GetPosition() );
+                ReportWithMarker( drcItem, text->GetPosition() );
+            }
         }
     }
 }
 
 
-bool test::DRC_TEST_PROVIDER_MISC::Run()
+bool DRC_TEST_PROVIDER_MISC::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
@@ -207,7 +205,7 @@ bool test::DRC_TEST_PROVIDER_MISC::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_MISC::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_MISC::GetMatchingConstraintIds() const
 {
     return {};
 }
@@ -215,5 +213,5 @@ std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_MISC::GetMatchingConstra
 
 namespace detail
 {
-static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_MISC> dummy;
+static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_MISC> dummy;
 }
