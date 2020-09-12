@@ -32,12 +32,15 @@
 #include <class_board.h>
 #include <class_dimension.h>
 #include <class_pcb_text.h>
+#include <geometry/shape_circle.h>
+#include <geometry/shape_rect.h>
+#include <geometry/shape_segment.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 
 
-DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
-        BOARD_ITEM( aParent, PCB_DIMENSION_T ),
+DIMENSION::DIMENSION( BOARD_ITEM* aParent, KICAD_T aType ) :
+        BOARD_ITEM( aParent, aType ),
         m_overrideTextEnabled( false ),
         m_units( EDA_UNITS::INCHES ),
         m_useMils( false ),
@@ -101,6 +104,13 @@ void DIMENSION::updateText()
     text.Append( m_suffix );
 
     m_text.SetText( text );
+}
+
+
+template<typename ShapeType>
+void DIMENSION::addShape( ShapeType* aShape )
+{
+    m_shapes.emplace_back( std::make_shared<ShapeType>( *aShape ) );
 }
 
 
@@ -310,9 +320,9 @@ bool DIMENSION::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
     // Locate SEGMENTS
 
-    for( const SEG& seg : GetLines() )
+    for( const std::shared_ptr<SHAPE>& shape : GetShapes() )
     {
-        if( TestSegmentHit( aPosition, wxPoint( seg.A ), wxPoint( seg.B ), dist_max ) )
+        if( shape->Collide( aPosition, dist_max ) )
             return true;
     }
 
@@ -347,16 +357,13 @@ const EDA_RECT DIMENSION::GetBoundingBox() const
     ymin    = bBox.GetY();
     ymax    = bBox.GetBottom();
 
-    for( const SEG& seg : GetLines() )
+    for( const std::shared_ptr<SHAPE>& shape : GetShapes() )
     {
-        xmin = std::min( xmin, seg.A.x );
-        xmin = std::min( xmin, seg.B.x );
-        xmax = std::max( xmax, seg.A.x );
-        xmax = std::max( xmax, seg.B.x );
-        ymin = std::min( ymin, seg.A.y );
-        ymin = std::min( ymin, seg.B.y );
-        ymax = std::max( ymax, seg.A.y );
-        ymax = std::max( ymax, seg.B.y );
+        BOX2I shapeBox = shape->BBox();
+        xmin = std::min( xmin, shapeBox.GetOrigin().x );
+        xmax = std::max( xmax, shapeBox.GetEnd().x );
+        ymin = std::min( ymin, shapeBox.GetOrigin().y );
+        ymax = std::max( ymax, shapeBox.GetEnd().y );
     }
 
     bBox.SetX( xmin );
@@ -376,11 +383,6 @@ wxString DIMENSION::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF DIMENSION::GetMenuImage() const
-{
-    return add_dimension_xpm;
-}
-
 
 const BOX2I DIMENSION::ViewBBox() const
 {
@@ -389,6 +391,30 @@ const BOX2I DIMENSION::ViewBBox() const
     dimBBox.Merge( m_text.ViewBBox() );
 
     return dimBBox;
+}
+
+
+OPT_VECTOR2I DIMENSION::segPolyIntersection( SHAPE_POLY_SET& aPoly, SEG& aSeg, bool aStart )
+{
+    VECTOR2I start( aStart ? aSeg.A : aSeg.B );
+    VECTOR2I endpoint( aStart ? aSeg.B : aSeg.A );
+
+    if( aPoly.Contains( start ) )
+        return NULLOPT;
+
+    for( SHAPE_POLY_SET::SEGMENT_ITERATOR seg = aPoly.IterateSegments(); seg; seg++ )
+    {
+        if( OPT_VECTOR2I intersection = ( *seg ).Intersect( aSeg ) )
+        {
+            if( ( *intersection - start ).SquaredEuclideanNorm() <
+                ( endpoint - start ).SquaredEuclideanNorm() )
+                endpoint = *intersection;
+        }
+    }
+    if( start == endpoint )
+        return NULLOPT;
+
+    return OPT_VECTOR2I( endpoint );
 }
 
 
@@ -406,7 +432,7 @@ static struct DIMENSION_DESC
 
 
 ALIGNED_DIMENSION::ALIGNED_DIMENSION( BOARD_ITEM* aParent ) :
-        DIMENSION( aParent ),
+        DIMENSION( aParent, PCB_DIM_ALIGNED_T ),
         m_height( 0 )
 {
     // To preserve look of old dimensions, initialize extension height based on default arrow length
@@ -422,10 +448,20 @@ EDA_ITEM* ALIGNED_DIMENSION::Clone() const
 
 void ALIGNED_DIMENSION::SwapData( BOARD_ITEM* aImage )
 {
-    assert( aImage->Type() == PCB_DIMENSION_T );
+    assert( aImage->Type() == PCB_DIM_ALIGNED_T );
+
+    m_shapes.clear();
+    static_cast<ALIGNED_DIMENSION*>( aImage )->m_shapes.clear();
 
     std::swap( *static_cast<ALIGNED_DIMENSION*>( this ),
                *static_cast<ALIGNED_DIMENSION*>( aImage ) );
+
+    Update();
+}
+
+BITMAP_DEF ALIGNED_DIMENSION::GetMenuImage() const
+{
+    return add_aligned_dimension_xpm;
 }
 
 
@@ -452,7 +488,7 @@ void ALIGNED_DIMENSION::UpdateHeight( const wxPoint& aCrossbarStart, const wxPoi
 
 void ALIGNED_DIMENSION::updateGeometry()
 {
-    m_lines.clear();
+    m_shapes.clear();
 
     VECTOR2I dimension( m_end - m_start );
 
@@ -468,17 +504,15 @@ void ALIGNED_DIMENSION::updateGeometry()
     // Add extension lines
     int extensionHeight = std::abs( m_height ) - m_extensionOffset + m_extensionHeight;
 
-    VECTOR2I extensionStart( m_start );
-    extensionStart += extension.Resize( m_extensionOffset );
+    VECTOR2I extStart( m_start );
+    extStart += extension.Resize( m_extensionOffset );
 
-    m_lines.emplace_back( SEG( extensionStart,
-                               extensionStart + extension.Resize( extensionHeight ) ) );
+    addShape( new SHAPE_SEGMENT( extStart, extStart + extension.Resize( extensionHeight ) ) );
 
-    extensionStart = VECTOR2I( m_end );
-    extensionStart += extension.Resize( m_extensionOffset );
+    extStart = VECTOR2I( m_end );
+    extStart += extension.Resize( m_extensionOffset );
 
-    m_lines.emplace_back( SEG( extensionStart,
-                               extensionStart + extension.Resize( extensionHeight ) ) );
+    addShape( new SHAPE_SEGMENT( extStart, extStart + extension.Resize( extensionHeight ) ) );
 
     // Add crossbar
     VECTOR2I crossBarDistance = sign( m_height ) * extension.Resize( m_height );
@@ -504,55 +538,21 @@ void ALIGNED_DIMENSION::updateGeometry()
     // The ideal crossbar, if the text doesn't collide
     SEG crossbar( m_crossBarStart, m_crossBarEnd );
 
-    auto findEndpoint =
-            [&]( const VECTOR2I& aStart, const VECTOR2I& aEnd ) -> VECTOR2I
-            {
-                VECTOR2I endpoint( aEnd );
-
-                for( SHAPE_POLY_SET::SEGMENT_ITERATOR seg = polyBox.IterateSegments(); seg; seg++ )
-                {
-                    if( OPT_VECTOR2I intersection = ( *seg ).Intersect( crossbar ) )
-                    {
-                        if( ( *intersection - aStart ).SquaredEuclideanNorm() <
-                            ( endpoint - aStart ).SquaredEuclideanNorm() )
-                            endpoint = *intersection;
-                    }
-                }
-
-                return endpoint;
-            };
-
     // Now we can draw 0, 1, or 2 crossbar lines depending on how the polygon collides
-
     bool containsA = polyBox.Contains( crossbar.A );
     bool containsB = polyBox.Contains( crossbar.B );
 
-    if( containsA && !containsB )
-    {
-        m_lines.emplace_back( SEG( findEndpoint( crossbar.B, crossbar.A ), crossbar.B ) );
-    }
-    else if( containsB && !containsA )
-    {
-        m_lines.emplace_back( SEG( crossbar.A, findEndpoint( crossbar.A, crossbar.B ) ) );
-    }
-    else if( polyBox.Collide( crossbar ) )
-    {
-        // text box collides and we need two segs
-        VECTOR2I endpoint1 = findEndpoint( crossbar.B, crossbar.A );
-        VECTOR2I endpoint2 = findEndpoint( crossbar.A, crossbar.B );
+    OPT_VECTOR2I endpointA = segPolyIntersection( polyBox, crossbar );
+    OPT_VECTOR2I endpointB = segPolyIntersection( polyBox, crossbar, false );
 
-        if( ( crossbar.B - endpoint1 ).SquaredEuclideanNorm() >
-            ( crossbar.B - endpoint2 ).SquaredEuclideanNorm() )
-            std::swap( endpoint1, endpoint2 );
+    if( endpointA )
+        m_shapes.emplace_back( new SHAPE_SEGMENT( crossbar.A, *endpointA ) );
 
-        m_lines.emplace_back( SEG( endpoint1, crossbar.B ) );
-        m_lines.emplace_back( SEG( crossbar.A, endpoint2 ) );
-    }
-    else if( !containsA && !containsB )
-    {
-        // No collision
-        m_lines.emplace_back( crossbar );
-    }
+    if( endpointB )
+        m_shapes.emplace_back( new SHAPE_SEGMENT( *endpointB, crossbar.B ) );
+
+    if( !containsA && !containsB && !endpointA && !endpointB )
+        m_shapes.emplace_back( new SHAPE_SEGMENT( crossbar ) );
 
     // Add arrows
     VECTOR2I arrowEnd( m_arrowLength, 0 );
@@ -560,17 +560,17 @@ void ALIGNED_DIMENSION::updateGeometry()
     double arrowRotPos = dimension.Angle() + DEG2RAD( s_arrowAngle );
     double arrowRotNeg = dimension.Angle() - DEG2RAD( s_arrowAngle );
 
-    m_lines.emplace_back( SEG( m_crossBarStart,
-                               m_crossBarStart + wxPoint( arrowEnd.Rotate( arrowRotPos ) ) ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart,
+                           m_crossBarStart + wxPoint( arrowEnd.Rotate( arrowRotPos ) ) ) );
 
-    m_lines.emplace_back( SEG( m_crossBarStart,
-                               m_crossBarStart + wxPoint( arrowEnd.Rotate( arrowRotNeg ) ) ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart,
+                           m_crossBarStart + wxPoint( arrowEnd.Rotate( arrowRotNeg ) ) ) );
 
-    m_lines.emplace_back( SEG( m_crossBarEnd,
-                               m_crossBarEnd - wxPoint( arrowEnd.Rotate( arrowRotPos ) ) ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd,
+                           m_crossBarEnd - wxPoint( arrowEnd.Rotate( arrowRotPos ) ) ) );
 
-    m_lines.emplace_back( SEG( m_crossBarEnd,
-                               m_crossBarEnd - wxPoint( arrowEnd.Rotate( arrowRotNeg ) ) ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd,
+                           m_crossBarEnd - wxPoint( arrowEnd.Rotate( arrowRotNeg ) ) ) );
 }
 
 
@@ -606,4 +606,113 @@ void ALIGNED_DIMENSION::updateText()
     }
 
     DIMENSION::updateText();
+}
+
+
+LEADER::LEADER( BOARD_ITEM* aParent ) :
+        DIMENSION( aParent, PCB_DIM_LEADER_T ),
+        m_textFrame( DIM_TEXT_FRAME::NONE )
+{
+    m_unitsFormat         = DIM_UNITS_FORMAT::NO_SUFFIX;
+    m_overrideTextEnabled = true;
+    m_keepTextAligned     = false;
+}
+
+
+EDA_ITEM* LEADER::Clone() const
+{
+    return new LEADER( *this );
+}
+
+
+void LEADER::SwapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_DIM_LEADER_T );
+
+    std::swap( *static_cast<LEADER*>( this ), *static_cast<LEADER*>( aImage ) );
+}
+
+
+BITMAP_DEF LEADER::GetMenuImage() const
+{
+    return add_leader_xpm;
+}
+
+
+void LEADER::updateGeometry()
+{
+    m_shapes.clear();
+
+    VECTOR2I firstLine( m_end - m_start );
+    VECTOR2I start( m_start );
+    start += firstLine.Resize( m_extensionOffset );
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( start, m_end ) );
+
+    // Add arrows
+    VECTOR2I arrowEnd( m_arrowLength, 0 );
+
+    double arrowRotPos = firstLine.Angle() + DEG2RAD( s_arrowAngle );
+    double arrowRotNeg = firstLine.Angle() - DEG2RAD( s_arrowAngle );
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( start,
+                                              start + wxPoint( arrowEnd.Rotate( arrowRotPos ) ) ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( start,
+                                              start + wxPoint( arrowEnd.Rotate( arrowRotNeg ) ) ) );
+
+    updateText();
+
+    // Now that we have the text updated, we can determine how to draw the second line
+    // First we need to create an appropriate bounding polygon to collide with
+    EDA_RECT textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
+                                                    m_text.GetEffectiveTextPenWidth() );
+
+    SHAPE_POLY_SET polyBox;
+    polyBox.NewOutline();
+    polyBox.Append( textBox.GetOrigin() );
+    polyBox.Append( textBox.GetOrigin().x, textBox.GetEnd().y );
+    polyBox.Append( textBox.GetEnd() );
+    polyBox.Append( textBox.GetEnd().x, textBox.GetOrigin().y );
+    polyBox.Rotate( -m_text.GetTextAngleRadians(), textBox.GetCenter() );
+
+    SEG textSeg( m_end, m_text.GetPosition() );
+    OPT_VECTOR2I endpoint = segPolyIntersection( polyBox, textSeg );
+
+    if( !GetText().IsEmpty() )
+    {
+        switch( m_textFrame )
+        {
+        case DIM_TEXT_FRAME::RECT:
+        {
+            for( SHAPE_POLY_SET::SEGMENT_ITERATOR seg = polyBox.IterateSegments(); seg; seg++ )
+                m_shapes.emplace_back( new SHAPE_SEGMENT( *seg ) );
+
+            break;
+        }
+
+        case DIM_TEXT_FRAME::CIRCLE:
+        {
+            double penWidth = m_text.GetEffectiveTextPenWidth() / 2.0;
+            double radius   = ( textBox.GetWidth() / 2.0 ) - penWidth;
+            m_shapes.emplace_back( new SHAPE_CIRCLE( textBox.GetCenter(), radius ) );
+
+            // Calculated bbox endpoint won't be right
+            if( endpoint )
+            {
+                VECTOR2I totalLength( textBox.GetCenter() - m_end );
+                VECTOR2I circleEndpoint( *endpoint - m_end );
+                circleEndpoint = circleEndpoint.Resize( totalLength.EuclideanNorm() - radius );
+                endpoint = OPT_VECTOR2I( VECTOR2I( m_end ) + circleEndpoint );
+            }
+
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
+
+    if( endpoint )
+        m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, *endpoint ) );
 }

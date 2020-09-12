@@ -32,6 +32,8 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
                                                           BOARD_ITEM* aItem ) :
         DIALOG_DIMENSION_PROPERTIES_BASE( aParent ),
         m_frame( aParent ),
+        m_cbLayerActual( m_cbLayer ),
+        m_txtValueActual( m_txtValue ),
         m_textWidth( aParent, m_lblTextWidth, m_txtTextWidth, m_lblTextWidthUnits, true ),
         m_textHeight( aParent, m_lblTextHeight, m_txtTextHeight, m_lblTextHeightUnits, true ),
         m_textThickness( aParent, m_lblTextThickness, m_txtTextThickness,
@@ -45,10 +47,32 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_extensionOffset( aParent, m_lblExtensionOffset, m_txtExtensionOffset,
                            m_lblExtensionOffsetUnits )
 {
-    wxASSERT( aItem->Type() == PCB_DIMENSION_T );
+    wxASSERT( BaseType( aItem->Type() ) == PCB_DIMENSION_T );
     m_dimension = static_cast<DIMENSION*>( aItem );
     m_previewDimension = static_cast<DIMENSION*>( m_dimension->Clone() );
     m_previewDimension->SetParent( m_frame->GetBoard() );
+
+    switch( m_dimension->Type() )
+    {
+    case PCB_DIM_LEADER_T:
+        // Hide the main format controls and keep the leader controls shown
+        m_sizerFormat->GetStaticBox()->Hide();
+
+        m_cbLayerActual = m_cbLeaderLayer;
+        m_txtValueActual = m_txtLeaderValue;
+
+        // Remove a fewings from text format
+        m_lblTextPositionMode->Hide();
+        m_cbTextPositionMode->Hide();
+        break;
+
+    default:
+        m_sizerLeader->GetStaticBox()->Hide();
+        break;
+    }
+
+    // Fix the size after hiding/showing some of the properties
+    Layout();
 
     // Configure display origin transforms
     m_textPosX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
@@ -57,12 +81,12 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     // Configure the layers list selector.  Note that footprints are built outside the current
     // board and so we may need to show all layers if the text is on an unactivated layer.
     if( !m_frame->GetBoard()->IsLayerEnabled( m_dimension->GetLayer() ) )
-        m_cbLayer->ShowNonActivatedLayers( true );
+        m_cbLayerActual->ShowNonActivatedLayers( true );
 
-    m_cbLayer->SetLayersHotkeys( false );
-    m_cbLayer->SetNotAllowedLayerSet( LSET::ForbiddenTextLayers() );
-    m_cbLayer->SetBoardFrame( aParent );
-    m_cbLayer->Resync();
+    m_cbLayerActual->SetLayersHotkeys( false );
+    m_cbLayerActual->SetNotAllowedLayerSet( LSET::ForbiddenTextLayers() );
+    m_cbLayerActual->SetBoardFrame( aParent );
+    m_cbLayerActual->Resync();
 
     m_orientValue = 0.0;
     m_orientValidator.SetRange( -360.0, 360.0 );
@@ -97,6 +121,7 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
                 updatePreviewText();
             };
 
+    // No need to use m_txtValueActual here since we don't have previewing for leaders
     m_txtValue->Bind( wxEVT_TEXT, updateEventHandler );
     m_txtPrefix->Bind( wxEVT_TEXT, updateEventHandler );
     m_txtSuffix->Bind( wxEVT_TEXT, updateEventHandler );
@@ -148,11 +173,11 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
     m_txtPrefix->SetValue( m_dimension->GetPrefix() );
     m_txtSuffix->SetValue( m_dimension->GetSuffix() );
 
-    if( m_cbLayer->SetLayerSelection( m_dimension->GetLayer() ) < 0 )
+    if( m_cbLayerActual->SetLayerSelection( m_dimension->GetLayer() ) < 0 )
     {
         wxMessageBox( _( "This item was on a non-existing or forbidden layer.\n"
                          "It has been moved to the first allowed layer." ) );
-        m_cbLayer->SetSelection( 0 );
+        m_cbLayerActual->SetSelection( 0 );
     }
 
     m_cbSuppressZeroes->SetValue( m_dimension->GetSuppressZeroes() );
@@ -188,11 +213,17 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
     // Do this last; it depends on the other settings
     if( m_dimension->GetOverrideTextEnabled() )
-        m_txtValue->SetValue( m_dimension->GetOverrideText() );
+        m_txtValueActual->SetValue( m_dimension->GetOverrideText() );
     else
-        m_txtValue->SetValue( m_dimension->GetValueText() );
+        m_txtValueActual->SetValue( m_dimension->GetValueText() );
 
     m_orientValidator.TransferToWindow();
+
+    if( m_dimension->Type() == PCB_DIM_LEADER_T )
+    {
+        LEADER* leader = static_cast<LEADER*>( m_dimension );
+        m_cbTextFrame->SetSelection( static_cast<int>( leader->GetTextFrame() ) );
+    }
 
     return DIALOG_DIMENSION_PROPERTIES_BASE::TransferDataToWindow();
 }
@@ -233,11 +264,11 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( DIMENSION* aTarget 
     aTarget->SetOverrideTextEnabled( m_cbOverrideValue->GetValue() );
 
     if( m_cbOverrideValue->GetValue() )
-        aTarget->SetOverrideText( m_txtValue->GetValue() );
+        aTarget->SetOverrideText( m_txtValueActual->GetValue() );
 
     aTarget->SetPrefix( m_txtPrefix->GetValue() );
     aTarget->SetSuffix( m_txtSuffix->GetValue() );
-    aTarget->SetLayer( static_cast<PCB_LAYER_ID>( m_cbLayer->GetLayerSelection() ) );
+    aTarget->SetLayer( static_cast<PCB_LAYER_ID>( m_cbLayerActual->GetLayerSelection() ) );
 
     aTarget->SetUnits( m_frame->GetUserUnits(), false );
     aTarget->SetUnitsMode( static_cast<DIM_UNITS_MODE>( m_cbUnits->GetSelection() ) );
@@ -270,6 +301,12 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( DIMENSION* aTarget 
     aTarget->SetLineThickness( m_lineThickness.GetValue() );
     aTarget->SetArrowLength( m_arrowLength.GetValue() );
     aTarget->SetExtensionOffset( m_extensionOffset.GetValue() );
+
+    if( aTarget->Type() == PCB_DIM_LEADER_T )
+    {
+        LEADER* leader = static_cast<LEADER*>( aTarget );
+        leader->SetTextFrame( static_cast<DIM_TEXT_FRAME>( m_cbTextFrame->GetSelection() ) );
+    }
 
     aTarget->Update();
 }

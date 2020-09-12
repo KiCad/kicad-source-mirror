@@ -139,7 +139,8 @@ public:
     static TOOL_ACTION drawCircle;
     static TOOL_ACTION drawArc;
     static TOOL_ACTION placeText;
-    static TOOL_ACTION drawDimension;
+    static TOOL_ACTION drawAlignedDimension;
+    static TOOL_ACTION drawLeader;
     static TOOL_ACTION drawZone;
     static TOOL_ACTION drawVia;
     static TOOL_ACTION drawZoneKeepout;

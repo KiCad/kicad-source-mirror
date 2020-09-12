@@ -49,7 +49,8 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     PCB_MARKER_T,                // in m_markers
     PCB_TEXT_T,                  // in m_drawings
     PCB_LINE_T,                  // in m_drawings
-    PCB_DIMENSION_T,             // in m_drawings
+    PCB_DIM_ALIGNED_T,           // in m_drawings
+    PCB_DIM_LEADER_T,            // in m_drawings
     PCB_TARGET_T,                // in m_drawings
     PCB_VIA_T,                   // in m_tracks
     PCB_TRACE_T,                 // in m_tracks
@@ -67,7 +68,8 @@ const KICAD_T GENERAL_COLLECTOR::BoardLevelItems[] = {
     PCB_MARKER_T,
     PCB_TEXT_T,
     PCB_LINE_T,
-    PCB_DIMENSION_T,
+    PCB_DIM_ALIGNED_T,
+    PCB_DIM_LEADER_T,
     PCB_TARGET_T,
     PCB_VIA_T,
     PCB_ARC_T,
@@ -83,7 +85,8 @@ const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
     PCB_MARKER_T,
     PCB_TEXT_T,
     PCB_LINE_T,
-    PCB_DIMENSION_T,
+    PCB_DIM_ALIGNED_T,
+    PCB_DIM_LEADER_T,
     PCB_TARGET_T,
     PCB_VIA_T,
     PCB_TRACE_T,
@@ -164,7 +167,8 @@ const KICAD_T GENERAL_COLLECTOR::Zones[] = {
 
 
 const KICAD_T GENERAL_COLLECTOR::Dimensions[] = {
-    PCB_DIMENSION_T,
+    PCB_DIM_ALIGNED_T,
+    PCB_DIM_LEADER_T,
     EOT
 };
 
@@ -216,7 +220,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         breakhere++;
         break;
 
-    case PCB_DIMENSION_T:
+    case PCB_DIM_ALIGNED_T:
         breakhere++;
         break;
 
@@ -306,7 +310,8 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         drawSegment = static_cast<DRAWSEGMENT*>( item );
         break;
 
-    case PCB_DIMENSION_T:
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_LEADER_T:
         break;
 
     case PCB_TARGET_T:

@@ -604,10 +604,11 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     if( m_editModules && !m_frame->GetModel() )
         return 0;
 
-    POINT_EDITOR*     pointEditor = m_toolMgr->GetTool<POINT_EDITOR>();
-    ALIGNED_DIMENSION* dimension   = nullptr;
-    BOARD_COMMIT      commit( m_frame );
-    GRID_HELPER       grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    TOOL_EVENT    originalEvent = aEvent;
+    POINT_EDITOR* pointEditor   = m_toolMgr->GetTool<POINT_EDITOR>();
+    DIMENSION*    dimension     = nullptr;
+    BOARD_COMMIT  commit( m_frame );
+    GRID_HELPER   grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     const BOARD_DESIGN_SETTINGS& boardSettings = m_board->GetDesignSettings();
 
@@ -731,26 +732,39 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     layer = Dwgs_User;
 
                 // Init the new item attributes
-                dimension = new ALIGNED_DIMENSION( m_board );
+                if( originalEvent.IsAction( &PCB_ACTIONS::drawAlignedDimension ) )
+                {
+                    dimension = new ALIGNED_DIMENSION( m_board );
+
+                    dimension->SetUnitsMode( boardSettings.m_DimensionUnitsMode );
+                    dimension->SetUnitsFormat( boardSettings.m_DimensionUnitsFormat );
+                    dimension->SetPrecision( boardSettings.m_DimensionPrecision );
+                    dimension->SetSuppressZeroes( boardSettings.m_DimensionSuppressZeroes );
+                    dimension->SetTextPositionMode( boardSettings.m_DimensionTextPosition );
+                    dimension->SetKeepTextAligned( boardSettings.m_DimensionKeepTextAligned );
+
+                    if( boardSettings.m_DimensionUnitsMode == DIM_UNITS_MODE::AUTOMATIC )
+                        dimension->SetUnits( m_frame->GetUserUnits(), false );
+                }
+                else if( originalEvent.IsAction( &PCB_ACTIONS::drawLeader ) )
+                {
+                    dimension = new LEADER( m_board );
+                    dimension->Text().SetPosition( wxPoint( cursorPos ) );
+                }
+                else
+                {
+                    wxFAIL_MSG( "Unhandled action in DRAWING_TOOL::DrawDimension" );
+                }
+
                 dimension->SetLayer( layer );
-                dimension->SetPrecision( boardSettings.m_DimensionPrecision );
                 dimension->Text().SetTextSize( boardSettings.GetTextSize( layer ) );
                 dimension->Text().SetTextThickness( boardSettings.GetTextThickness( layer ) );
                 dimension->Text().SetItalic( boardSettings.GetTextItalic( layer ) );
                 dimension->SetLineThickness( boardSettings.GetLineThickness( layer ) );
-                dimension->SetUnitsMode( boardSettings.m_DimensionUnitsMode );
-                dimension->SetUnitsFormat( boardSettings.m_DimensionUnitsFormat );
-                dimension->SetPrecision( boardSettings.m_DimensionPrecision );
-                dimension->SetSuppressZeroes( boardSettings.m_DimensionSuppressZeroes );
-                dimension->SetTextPositionMode( boardSettings.m_DimensionTextPosition );
-                dimension->SetKeepTextAligned( boardSettings.m_DimensionKeepTextAligned );
                 dimension->SetArrowLength( boardSettings.m_DimensionArrowLength );
                 dimension->SetExtensionOffset( boardSettings.m_DimensionExtensionOffset );
                 dimension->SetStart( (wxPoint) cursorPos );
                 dimension->SetEnd( (wxPoint) cursorPos );
-
-                if( boardSettings.m_DimensionUnitsMode == DIM_UNITS_MODE::AUTOMATIC )
-                    dimension->SetUnits( m_frame->GetUserUnits(), false );
 
                 preview.Add( dimension );
 
@@ -768,12 +782,27 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 // Dimensions that have origin and end in the same spot are not valid
                 if( dimension->GetStart() == dimension->GetEnd() )
                     --step;
+                else if( dimension->Type() == PCB_DIM_LEADER_T )
+                    dimension->SetText( wxT( "?" ) );
 
                 break;
 
             case SET_HEIGHT:
             {
-                if( (wxPoint) cursorPos != dimension->GetPosition() )
+                if( dimension->Type() == PCB_DIM_LEADER_T )
+                {
+                    assert( dimension->GetStart() != dimension->GetEnd() );
+                    assert( dimension->GetLineThickness() > 0 );
+
+                    preview.Remove( dimension );
+
+                    commit.Add( dimension );
+                    commit.Push( _( "Draw a leader" ) );
+
+                    // Run the edit immediately to set the leader text
+                    m_toolMgr->RunAction( PCB_ACTIONS::properties, true, dimension );
+                }
+                else if( (wxPoint) cursorPos != dimension->GetPosition() )
                 {
                     assert( dimension->GetStart() != dimension->GetEnd() );
                     assert( dimension->GetLineThickness() > 0 );
@@ -810,12 +839,26 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
             case SET_HEIGHT:
             {
-                // Calculating the direction of travel perpendicular to the selected axis
-                double angle = dimension->GetAngle() + ( M_PI / 2 );
+                if( dimension->Type() == PCB_DIM_ALIGNED_T )
+                {
+                    ALIGNED_DIMENSION* aligned = static_cast<ALIGNED_DIMENSION*>( dimension );
 
-                wxPoint delta( (wxPoint) cursorPos - dimension->GetEnd() );
-                double  height = ( delta.x * cos( angle ) ) + ( delta.y * sin( angle ) );
-                dimension->SetHeight( height );
+                    // Calculating the direction of travel perpendicular to the selected axis
+                    double angle = aligned->GetAngle() + ( M_PI / 2 );
+
+                    wxPoint delta( (wxPoint) cursorPos - dimension->GetEnd() );
+                    double  height = ( delta.x * cos( angle ) ) + ( delta.y * sin( angle ) );
+                    aligned->SetHeight( height );
+                }
+                else
+                {
+                    wxASSERT( dimension->Type() == PCB_DIM_LEADER_T );
+
+                    VECTOR2I lineVector( cursorPos - dimension->GetEnd() );
+                    dimension->Text().SetPosition( wxPoint( VECTOR2I( dimension->GetEnd() ) +
+                                                            GetVectorSnapped45( lineVector ) ) );
+                    dimension->Update();
+                }
             }
             break;
             }
@@ -2083,7 +2126,8 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawRectangle,         PCB_ACTIONS::drawRectangle.MakeEvent() );
     Go( &DRAWING_TOOL::DrawCircle,            PCB_ACTIONS::drawCircle.MakeEvent() );
     Go( &DRAWING_TOOL::DrawArc,               PCB_ACTIONS::drawArc.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawDimension.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawAlignedDimension.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawLeader.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZone.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZoneKeepout.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZoneCutout.MakeEvent() );

@@ -156,7 +156,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
     {
         if( (item->GetLayerSet() & aLayers).any() )
         {
-            if( typeMask[ PCB_DIMENSION_T ] && item->Type() == PCB_DIMENSION_T )
+            if( typeMask[PCB_DIMENSION_T] && BaseType( item->Type() ) == PCB_DIMENSION_T )
             {
                 if( !aFunc( item ) )
                     return n;

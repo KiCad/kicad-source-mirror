@@ -31,8 +31,10 @@
 #include <common.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/seg.h>                     // for SEG
+#include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>        // for SHAPE_LINE_CHAIN
 #include <geometry/shape_poly_set.h>          // for SHAPE_POLY_SET, SHAPE_P...
+#include <geometry/shape_segment.h>
 #include <math/util.h>                        // for KiROUND, Clamp
 #include <math/vector2d.h>                    // for VECTOR2I
 #include <plotter.h>
@@ -311,7 +313,12 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
         {
         case PCB_LINE_T:      PlotDrawSegment( (DRAWSEGMENT*) item); break;
         case PCB_TEXT_T:      PlotTextePcb( (TEXTE_PCB*) item );     break;
-        case PCB_DIMENSION_T: PlotDimension( (DIMENSION*) item );    break;
+
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_LEADER_T:
+            PlotDimension( (DIMENSION*) item );
+            break;
+
         case PCB_TARGET_T:    PlotPcbTarget( (PCB_TARGET*) item );   break;
         default:              break;
         }
@@ -371,11 +378,38 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
 
     PlotTextePcb( &aDim->Text() );
 
-    for( const SEG& seg : aDim->GetLines() )
+    for( const std::shared_ptr<SHAPE>& shape : aDim->GetShapes() )
     {
-        draw.SetStart( wxPoint( seg.A ) );
-        draw.SetEnd( wxPoint( seg.B ) );
-        PlotDrawSegment( &draw );
+        switch( shape->Type() )
+        {
+        case SH_SEGMENT:
+        {
+            const SEG& seg = static_cast<const SHAPE_SEGMENT*>( shape.get() )->GetSeg();
+
+            draw.SetShape( S_SEGMENT );
+            draw.SetStart( wxPoint( seg.A ) );
+            draw.SetEnd( wxPoint( seg.B ) );
+
+            PlotDrawSegment( &draw );
+            break;
+        }
+
+        case SH_CIRCLE:
+        {
+            wxPoint start( shape->Centre() );
+            int radius = static_cast<const SHAPE_CIRCLE*>( shape.get() )->GetRadius();
+
+            draw.SetShape( S_CIRCLE );
+            draw.SetStart( start );
+            draw.SetEnd( wxPoint( start.x + radius, start.y ) );
+
+            PlotDrawSegment( &draw );
+            break;
+        }
+
+        default:
+            break;
+        }
     }
 }
 

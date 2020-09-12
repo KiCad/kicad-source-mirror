@@ -398,8 +398,9 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
         format( static_cast<BOARD*>( aItem ), aNestLevel );
         break;
 
-    case PCB_DIMENSION_T:
-        format( static_cast<ALIGNED_DIMENSION*>( aItem ), aNestLevel );
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_LEADER_T:
+        format( static_cast<DIMENSION*>( aItem ), aNestLevel );
         break;
 
     case PCB_LINE_T:
@@ -659,9 +660,19 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( ALIGNED_DIMENSION* aDimension, int aNestLevel ) const
+void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
 {
-    m_out->Print( aNestLevel, "(dimension (type aligned)" );
+    ALIGNED_DIMENSION* aligned = dynamic_cast<ALIGNED_DIMENSION*>( aDimension );
+    LEADER*            leader  = dynamic_cast<LEADER*>( aDimension );
+
+    m_out->Print( aNestLevel, "(dimension" );
+
+    if( aDimension->Type() == PCB_DIM_ALIGNED_T )
+        m_out->Print( 0, " (type aligned)" );
+    else if( aDimension->Type() == PCB_DIM_LEADER_T )
+        m_out->Print( 0, " (type leader)" );
+    else
+        wxFAIL_MSG( wxT( "Cannot format unknown dimension type!" ) );
 
     formatLayer( aDimension );
 
@@ -675,8 +686,9 @@ void PCB_IO::format( ALIGNED_DIMENSION* aDimension, int aNestLevel ) const
                   FormatInternalUnits( aDimension->GetEnd().x ).c_str(),
                   FormatInternalUnits( aDimension->GetEnd().y ).c_str() );
 
-    m_out->Print( aNestLevel+1, "(height %s)\n",
-                  FormatInternalUnits( aDimension->GetHeight() ).c_str() );
+    if( aligned )
+        m_out->Print( aNestLevel+1, "(height %s)\n",
+                      FormatInternalUnits( aligned->GetHeight() ).c_str() );
 
     Format( &aDimension->Text(), aNestLevel+1 );
 
@@ -705,8 +717,16 @@ void PCB_IO::format( ALIGNED_DIMENSION* aDimension, int aNestLevel ) const
                   FormatInternalUnits( aDimension->GetArrowLength() ).c_str(),
                   static_cast<int>( aDimension->GetTextPositionMode() ) );
 
-    m_out->Print( 0, " (extension_height %s) (extension_offset %s)",
-                  FormatInternalUnits( aDimension->GetExtensionHeight() ).c_str(),
+    if( aligned )
+    {
+        m_out->Print( 0, " (extension_height %s)",
+                     FormatInternalUnits( aligned->GetExtensionHeight() ).c_str() );
+    }
+
+    if( leader )
+        m_out->Print( 0, " (text_frame %d)", static_cast<int>( leader->GetTextFrame() ) );
+
+    m_out->Print( 0, " (extension_offset %s)",
                   FormatInternalUnits( aDimension->GetExtensionOffset() ).c_str() );
 
     if( aDimension->GetKeepTextAligned() )

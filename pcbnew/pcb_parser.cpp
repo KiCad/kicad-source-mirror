@@ -2354,7 +2354,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
 
     T token;
 
-    std::unique_ptr<ALIGNED_DIMENSION> dimension( new ALIGNED_DIMENSION( nullptr ) );
+    std::unique_ptr<DIMENSION> dimension;
 
     // skip value that used to be saved
     if( NextTok() != T_LEFT )
@@ -2368,6 +2368,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
     if( token == T_width )
     {
         isLegacyDimension = true;
+        dimension = std::make_unique<ALIGNED_DIMENSION>( nullptr );
         dimension->SetLineThickness( parseBoardUnits( "dimension width value" ) );
         NeedRIGHT();
     }
@@ -2376,9 +2377,20 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
         if( token != T_type )
             Expecting( T_type );
 
-        // This function only parses aligned dimensions for now
-        if( NextTok() != T_aligned )
-            Expecting( T_aligned );
+        switch( NextTok() )
+        {
+        case T_aligned:
+            dimension = std::make_unique<ALIGNED_DIMENSION>( nullptr );
+            break;
+
+        case T_leader:
+            dimension = std::make_unique<LEADER>( nullptr );
+            break;
+
+        default:
+            wxFAIL_MSG( wxT( "Cannot parse unknown dimension type %s" ) +
+                        GetTokenString( CurTok() ) );
+        }
 
         NeedRIGHT();
     }
@@ -2441,9 +2453,14 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
         }
 
         case T_height:
-            dimension->SetHeight( parseBoardUnits( "dimension height value" ) );
+        {
+            wxCHECK_MSG( dimension->Type() == PCB_DIM_ALIGNED_T, nullptr,
+                         wxT( "Invalid height token" ) );
+            ALIGNED_DIMENSION* aligned = static_cast<ALIGNED_DIMENSION*>( dimension.get() );
+            aligned->SetHeight( parseBoardUnits( "dimension height value" ) );
             NeedRIGHT();
             break;
+        }
 
         case T_format:
         {
@@ -2540,9 +2557,14 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
                 }
 
                 case T_extension_height:
-                    dimension->SetExtensionHeight( parseBoardUnits( "extension height" ) );
+                {
+                    wxCHECK_MSG( dimension->Type() == PCB_DIM_ALIGNED_T, nullptr,
+                                 wxT( "Invalid extension_height token" ) );
+                    ALIGNED_DIMENSION* aligned = static_cast<ALIGNED_DIMENSION*>( dimension.get() );
+                    aligned->SetExtensionHeight( parseBoardUnits( "extension height" ) );
                     NeedRIGHT();
                     break;
+                }
 
                 case T_extension_offset:
                     dimension->SetExtensionOffset( parseBoardUnits( "extension offset" ) );
@@ -2552,6 +2574,19 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
                 case T_keep_text_aligned:
                     dimension->SetKeepTextAligned( true );
                     break;
+
+                case T_text_frame:
+                {
+                    wxCHECK_MSG( dimension->Type() == PCB_DIM_LEADER_T, nullptr,
+                                 wxT( "Invalid text_frame token" ) );
+                    LEADER* leader = static_cast<LEADER*>( dimension.get() );
+
+                    int textFrame = parseInt( "dimension text frame mode" );
+                    textFrame = std::max( 0, std::min( 3, textFrame ) );
+                    leader->SetTextFrame( static_cast<DIM_TEXT_FRAME>( textFrame ) );
+                    NeedRIGHT();
+                    break;
+                }
 
                 default:
                     Expecting( "thickness, arrow_length, text_position_mode, extension_height, "
@@ -2610,11 +2645,14 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
 
             if( token == T_pts )
             {
+                // If we have a crossbar, we know we're an old aligned dimension
+                ALIGNED_DIMENSION* aligned = static_cast<ALIGNED_DIMENSION*>( dimension.get() );
+
                 // Old style: calculate height from crossbar
                 wxPoint point1, point2;
                 parseXY( &point1.x, &point1.y );
                 parseXY( &point2.x, &point2.y );
-                dimension->UpdateHeight( point2, point1 ); // Yes, backwards intentionally
+                aligned->UpdateHeight( point2, point1 ); // Yes, backwards intentionally
                 NeedRIGHT();
             }
 

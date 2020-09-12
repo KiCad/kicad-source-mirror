@@ -116,11 +116,16 @@ TOOL_ACTION PCB_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
         _( "Add Text" ), _( "Add a text item" ),
         text_xpm, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::drawDimension( "pcbnew.InteractiveDrawing.dimension",
+TOOL_ACTION PCB_ACTIONS::drawAlignedDimension( "pcbnew.InteractiveDrawing.alignedDimension",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'H', LEGACY_HK_NAME(  "Add Dimension" ),
-        _( "Add Dimension" ), _( "Add a dimension" ),
-        add_dimension_xpm, AF_ACTIVATE );
+        _( "Add Aligned Dimension" ), _( "Add an aligned linear dimension" ),
+        add_aligned_dimension_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::drawLeader( "pcbnew.InteractiveDrawing.leader",
+        AS_GLOBAL, 0, "",
+        _( "Add Leader" ), _( "Add a leader dimension" ),
+        add_leader_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
         AS_GLOBAL,

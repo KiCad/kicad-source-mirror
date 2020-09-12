@@ -138,19 +138,47 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DIMENSION* aDimensio
 
     const int linewidth = aDimension->GetLineThickness() + (2 * aClearanceValue);
 
-    for( const SEG& seg : aDimension->GetLines() )
+    for( const std::shared_ptr<SHAPE>& shape : aDimension->GetShapes() )
     {
-        const SFVEC2F start3DU(  seg.A.x * m_biuTo3Dunits,
-                                -seg.A.y * m_biuTo3Dunits );
+        switch( shape->Type() )
+        {
+        case SH_SEGMENT:
+        {
+            const SEG& seg = static_cast<const SHAPE_SEGMENT*>( shape.get() )->GetSeg();
 
-        const SFVEC2F end3DU  (  seg.B.x * m_biuTo3Dunits,
-                                -seg.B.y * m_biuTo3Dunits );
+            const SFVEC2F start3DU(  seg.A.x * m_biuTo3Dunits,
+                                     -seg.A.y * m_biuTo3Dunits );
 
-        aDstContainer->Add( new CROUNDSEGMENT2D( start3DU,
-                                                 end3DU,
-                                                 linewidth * m_biuTo3Dunits,
-                                                 *aDimension ) );
+            const SFVEC2F end3DU  (  seg.B.x * m_biuTo3Dunits,
+                                     -seg.B.y * m_biuTo3Dunits );
+
+            aDstContainer->Add( new CROUNDSEGMENT2D( start3DU,
+                                                     end3DU,
+                                                     linewidth * m_biuTo3Dunits,
+                                                     *aDimension ) );
+            break;
+        }
+
+        case SH_CIRCLE:
+        {
+            int radius = static_cast<const SHAPE_CIRCLE*>( shape.get() )->GetRadius();
+            int deltar = aDimension->GetLineThickness();
+
+            SFVEC2F center( shape->Centre().x * m_biuTo3Dunits,
+                            shape->Centre().y * m_biuTo3Dunits );
+
+            aDstContainer->Add( new CRING2D( center, ( radius - deltar ) * m_biuTo3Dunits,
+                                             ( radius + deltar ) * m_biuTo3Dunits, *aDimension ) );
+
+            break;
+        }
+
+        default:
+            break;
+        }
+
     }
+
 }
 
 

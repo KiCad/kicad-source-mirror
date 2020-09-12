@@ -214,7 +214,8 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
         PCB_MARKER_T,
         PCB_TEXT_T,
         PCB_LINE_T,
-        PCB_DIMENSION_T,
+        PCB_DIM_ALIGNED_T,
+        PCB_DIM_LEADER_T,
         PCB_TARGET_T,
         PCB_VIA_T,
         PCB_TRACE_T,
@@ -579,7 +580,8 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 
         break;
 
-    case PCB_DIMENSION_T:
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_LEADER_T:
     case PCB_LINE_T:
     case PCB_TEXT_T:
     case PCB_TARGET_T:
@@ -666,7 +668,8 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
                                         } ) );
         break;
 
-    case PCB_DIMENSION_T:
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_LEADER_T:
     case PCB_LINE_T:
     case PCB_TEXT_T:
     case PCB_TARGET_T:
@@ -1003,7 +1006,8 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
 
         case PCB_LINE_T:
         case PCB_TEXT_T:
-        case PCB_DIMENSION_T:
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_LEADER_T:
         case PCB_TARGET_T:
             result = IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, p );
 
@@ -1014,7 +1018,8 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
                 {
                 case PCB_LINE_T:
                 case PCB_TEXT_T:
-                case PCB_DIMENSION_T:
+                case PCB_DIM_ALIGNED_T:
+                case PCB_DIM_LEADER_T:
                 case PCB_TARGET_T:
                     continue;
 

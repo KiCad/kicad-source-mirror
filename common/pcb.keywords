@@ -152,6 +152,7 @@ kicad_pcb
 last_trace_width
 layer
 layers
+leader
 left
 linear
 links
@@ -252,6 +253,7 @@ target
 title
 title_block
 tedit
+text_frame
 text_position_mode
 thermal_width
 thermal_gap

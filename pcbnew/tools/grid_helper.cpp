@@ -546,13 +546,22 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
             break;
         }
 
-        case PCB_DIMENSION_T:
+        case PCB_DIM_ALIGNED_T:
         {
             const ALIGNED_DIMENSION* dim = static_cast<const ALIGNED_DIMENSION*>( aItem );
             addAnchor( dim->GetCrossbarStart(), CORNER | SNAPPABLE, aItem );
             addAnchor( dim->GetCrossbarEnd(), CORNER | SNAPPABLE, aItem );
             addAnchor( dim->GetStart(), CORNER | SNAPPABLE, aItem );
             addAnchor( dim->GetEnd(), CORNER | SNAPPABLE, aItem );
+            break;
+        }
+
+        case PCB_DIM_LEADER_T:
+        {
+            const LEADER* leader = static_cast<const LEADER*>( aItem );
+            addAnchor( leader->GetStart(), CORNER | SNAPPABLE, aItem );
+            addAnchor( leader->GetEnd(), CORNER | SNAPPABLE, aItem );
+            addAnchor( leader->Text().GetPosition(), CORNER | SNAPPABLE, aItem );
             break;
         }
 

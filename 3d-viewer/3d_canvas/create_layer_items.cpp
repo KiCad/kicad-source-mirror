@@ -628,7 +628,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                                   0 );
             break;
 
-            case PCB_DIMENSION_T:
+            case PCB_DIM_ALIGNED_T:
+            case PCB_DIM_LEADER_T:
                 AddShapeWithClearanceToContainer( (DIMENSION*) item,
                                                   layerContainer,
                                                   curr_layer_id,
@@ -911,7 +912,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                                   0 );
                 break;
 
-            case PCB_DIMENSION_T:
+            case PCB_DIM_ALIGNED_T:
+            case PCB_DIM_LEADER_T:
                 AddShapeWithClearanceToContainer( (DIMENSION*) item,
                                                   layerContainer,
                                                   curr_layer_id,

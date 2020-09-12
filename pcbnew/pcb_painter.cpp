@@ -443,7 +443,8 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         draw( static_cast<const ZONE_CONTAINER*>( item ), aLayer );
         break;
 
-    case PCB_DIMENSION_T:
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_LEADER_T:
         draw( static_cast<const DIMENSION*>( item ), aLayer );
         break;
 
@@ -1277,9 +1278,29 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
     }
 
     // Draw dimension shapes
-    for( const SEG& seg : aDimension->GetLines() )
-        m_gal->DrawLine( seg.A, seg.B );
+    // TODO(JE) lift this out
+    for( const std::shared_ptr<SHAPE>& shape : aDimension->GetShapes() )
+    {
+        switch( shape->Type() )
+        {
+        case SH_SEGMENT:
+        {
+            const SEG& seg = static_cast<const SHAPE_SEGMENT*>( shape.get() )->GetSeg();
+            m_gal->DrawLine( seg.A, seg.B );
+            break;
+        }
 
+        case SH_CIRCLE:
+        {
+            int radius = static_cast<const SHAPE_CIRCLE*>( shape.get() )->GetRadius();
+            m_gal->DrawCircle( shape->Centre(), radius );
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
     // Draw text
     TEXTE_PCB& text = aDimension->Text();
     VECTOR2D position( text.GetTextPos().x, text.GetTextPos().y );

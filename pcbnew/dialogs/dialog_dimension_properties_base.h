@@ -20,12 +20,12 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/checkbox.h>
 #include <wx/choice.h>
 #include <wx/bmpcbox.h>
 #include <wx/gbsizer.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <wx/checkbox.h>
 #include <wx/combobox.h>
 #include <wx/statline.h>
 #include <wx/button.h>
@@ -42,6 +42,15 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		wxBoxSizer* m_mainSizer;
+		wxStaticBoxSizer* m_sizerLeader;
+		wxStaticText* m_lblLeaderValue;
+		wxTextCtrl* m_txtLeaderValue;
+		wxStaticText* m_lblTextFrame;
+		wxChoice* m_cbTextFrame;
+		wxStaticText* m_lblLeaderLayer;
+		PCB_LAYER_BOX_SELECTOR* m_cbLeaderLayer;
+		wxStaticBoxSizer* m_sizerFormat;
 		wxStaticText* m_lblValue;
 		wxTextCtrl* m_txtValue;
 		wxCheckBox* m_cbOverrideValue;
@@ -106,7 +115,7 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dimension Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 654,757 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
+		DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dimension Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 654,600 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
 		~DIALOG_DIMENSION_PROPERTIES_BASE();
 
 };

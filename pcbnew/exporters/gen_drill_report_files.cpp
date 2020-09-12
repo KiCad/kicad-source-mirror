@@ -202,7 +202,8 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
             itemplotter.PlotTextePcb( (TEXTE_PCB*) PtStruct );
             break;
 
-        case PCB_DIMENSION_T:
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_LEADER_T:
         case PCB_TARGET_T:
         case PCB_MARKER_T: // do not draw
         default:

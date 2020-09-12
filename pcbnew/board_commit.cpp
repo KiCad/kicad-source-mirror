@@ -217,7 +217,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_TRACE_T:               // a track segment (segment on a copper layer)
                 case PCB_ARC_T:                 // an arced track segment (segment on a copper layer)
                 case PCB_VIA_T:                 // a via (like track segment on a copper layer)
-                case PCB_DIMENSION_T:           // a dimension (graphic item)
+                case PCB_DIM_ALIGNED_T:         // a dimension (graphic item)
+                case PCB_DIM_LEADER_T:          // a leader dimension
                 case PCB_TARGET_T:              // a target (graphic item)
                 case PCB_MARKER_T:              // a marker used to show something
                 case PCB_GROUP_T:               // a group of items

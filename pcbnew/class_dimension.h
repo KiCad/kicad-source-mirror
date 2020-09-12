@@ -33,7 +33,7 @@
 
 #include <class_board_item.h>
 #include <class_pcb_text.h>
-#include <geometry/seg.h>
+#include <geometry/shape.h>
 
 
 class LINE_READER;
@@ -69,6 +69,17 @@ enum class DIM_UNITS_MODE
 };
 
 /**
+ * Frame to show around dimension text
+ */
+enum class DIM_TEXT_FRAME
+{
+    NONE,
+    RECT,
+    CIRCLE,
+    ROUNDRECT
+};
+
+/**
  * Abstract dimension API
  *
  * Some notes about dimension nomenclature:
@@ -90,7 +101,21 @@ enum class DIM_UNITS_MODE
 class DIMENSION : public BOARD_ITEM
 {
 public:
-    DIMENSION( BOARD_ITEM* aParent );
+    DIMENSION( BOARD_ITEM* aParent, KICAD_T aType = PCB_DIMENSION_T );
+
+    bool IsType( const KICAD_T aScanTypes[] ) const override
+    {
+        if( BOARD_ITEM::IsType( aScanTypes ) )
+            return true;
+
+        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        {
+            if( *p == PCB_LOCATE_GRAPHIC_T )
+                return true;
+        }
+
+        return false;
+    }
 
     void SetParent( EDA_ITEM* aParent ) override;
 
@@ -199,7 +224,7 @@ public:
     /**
      * @return a list of line segments that make up this dimension (for drawing, plotting, etc)
      */
-    const std::vector<SEG>& GetLines() const { return m_lines; }
+    const std::vector<std::shared_ptr<SHAPE>>& GetShapes() const { return m_shapes; }
 
     // BOARD_ITEM overrides
 
@@ -224,8 +249,6 @@ public:
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
-    BITMAP_DEF GetMenuImage() const override;
-
     virtual const BOX2I ViewBBox() const override;
 
 #if defined(DEBUG)
@@ -243,6 +266,18 @@ protected:
      * Updates the text field value from the current geometry (called by updateGeometry normally)
      */
     virtual void updateText();
+
+    template<typename ShapeType>
+    void addShape( ShapeType* aShape );
+
+    /**
+     * Finds the intersection between a given segment and polygon outline
+     * @param aPoly is the polygon to collide
+     * @param aSeg is the segment to collide
+     * @param aStart if true will start from aSeg.A, otherwise aSeg.B
+     * @return a point on aSeg that collides with aPoly closest to the start, if one exists
+     */
+    static OPT_VECTOR2I segPolyIntersection( SHAPE_POLY_SET& aPoly, SEG& aSeg, bool aStart = true );
 
     // Value format
     bool              m_overrideTextEnabled;   ///< Manually specify the displayed measurement value
@@ -269,7 +304,10 @@ protected:
     wxPoint           m_start;
     wxPoint           m_end;
 
-    std::vector<SEG>  m_lines;            ///< Internal cache of drawn lines
+    ///< Internal cache of drawn shapes
+    std::vector<std::shared_ptr<SHAPE>> m_shapes;
+
+    static constexpr float s_arrowAngle = 27.5;
 };
 
 /**
@@ -308,8 +346,6 @@ class ALIGNED_DIMENSION : public DIMENSION
     wxPoint      m_crossBarStart;    ///< Crossbar start control point
     wxPoint      m_crossBarEnd;      ///< Crossbar end control point
 
-    static constexpr float s_arrowAngle = 27.5;
-
 public:
     ALIGNED_DIMENSION( BOARD_ITEM* aParent );
 
@@ -320,26 +356,14 @@ public:
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
-        return aItem && PCB_DIMENSION_T == aItem->Type();
-    }
-
-    bool IsType( const KICAD_T aScanTypes[] ) const override
-    {
-        if( BOARD_ITEM::IsType( aScanTypes ) )
-            return true;
-
-        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
-        {
-            if( *p == PCB_LOCATE_GRAPHIC_T )
-                return true;
-        }
-
-        return false;
+        return aItem && PCB_DIM_ALIGNED_T == aItem->Type();
     }
 
     EDA_ITEM* Clone() const override;
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
+
+    BITMAP_DEF GetMenuImage() const override;
 
     const wxPoint& GetCrossbarStart() const { return m_crossBarStart; }
 
@@ -383,6 +407,52 @@ protected:
     void updateGeometry() override;
 
     void updateText() override;
+};
+
+
+/**
+ * A leader is a dimension-like object pointing to a specific point.
+ *
+ * A guide to the geometry of a leader:
+ *
+ *     a
+ *        _
+ *       |\
+ *          \
+ *            b---c TEXT
+ *
+ * Point (a) is m_start, point (b) is m_end, point (c) is the end of the "text line"
+ * The b-c line is drawn from b to the text center, and clipped on the text bounding box.
+ */
+class LEADER : public DIMENSION
+{
+    DIM_TEXT_FRAME m_textFrame;
+
+public:
+    LEADER( BOARD_ITEM* aParent );
+
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && PCB_DIM_LEADER_T == aItem->Type();
+    }
+
+    EDA_ITEM* Clone() const override;
+
+    virtual void SwapData( BOARD_ITEM* aImage ) override;
+
+    BITMAP_DEF GetMenuImage() const override;
+
+    wxString GetClass() const override
+    {
+        return wxT( "LEADER" );
+    }
+
+    void SetTextFrame( DIM_TEXT_FRAME aFrame ) { m_textFrame = aFrame; }
+    DIM_TEXT_FRAME GetTextFrame() const { return m_textFrame; }
+
+protected:
+
+    void updateGeometry() override;
 };
 
 #endif    // DIMENSION_H_

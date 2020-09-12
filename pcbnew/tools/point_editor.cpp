@@ -76,11 +76,11 @@ enum BEZIER_CURVE_POINTS
 
 enum DIMENSION_POINTS
 {
-    DIM_CROSSBARSTART,
-    DIM_CROSSBAREND,
     DIM_START,
     DIM_END,
-    DIM_TEXT
+    DIM_TEXT,
+    DIM_CROSSBARSTART,
+    DIM_CROSSBAREND,
 };
 
 class EDIT_POINTS_FACTORY
@@ -244,7 +244,7 @@ public:
         }
             break;
 
-        case PCB_DIMENSION_T:
+        case PCB_DIM_ALIGNED_T:
         {
             const ALIGNED_DIMENSION* dimension = static_cast<const ALIGNED_DIMENSION*>( aItem );
 
@@ -261,6 +261,17 @@ public:
                                                                        points->Point( DIM_END ) ) );
         }
             break;
+
+        case PCB_DIM_LEADER_T:
+        {
+            const LEADER* dimension = static_cast<const LEADER*>( aItem );
+
+            points->AddPoint( dimension->GetStart() );
+            points->AddPoint( dimension->GetEnd() );
+            points->AddPoint( dimension->Text().GetPosition() );
+
+            break;
+        }
 
         default:
             points.reset();
@@ -377,7 +388,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     BOARD_COMMIT commit( editFrame );
     LSET snapLayers = item->GetLayerSet();
 
-    if( item->Type() == PCB_DIMENSION_T )
+    if( BaseType( item->Type() ) == PCB_DIMENSION_T )
         snapLayers = LSET::AllLayersMask();
 
     // Main loop: keep receiving events
@@ -1252,7 +1263,7 @@ void POINT_EDITOR::updateItem() const
         break;
     }
 
-    case PCB_DIMENSION_T:
+    case PCB_DIM_ALIGNED_T:
     {
         ALIGNED_DIMENSION* dimension = static_cast<ALIGNED_DIMENSION*>( item );
 
@@ -1306,6 +1317,33 @@ void POINT_EDITOR::updateItem() const
             dimension->Text().SetPosition( wxPoint( m_editedPoint->GetPosition() ) );
             dimension->Update();
         }
+
+        break;
+    }
+
+    case PCB_DIM_LEADER_T:
+    {
+        LEADER* dimension = static_cast<LEADER*>( item );
+
+        if( isModified( m_editPoints->Point( DIM_START ) ) )
+        {
+            dimension->SetStart( wxPoint( m_editedPoint->GetPosition().x,
+                                          m_editedPoint->GetPosition().y ) );
+        }
+        else if( isModified( m_editPoints->Point( DIM_END ) ) )
+        {
+            wxPoint newPoint( m_editedPoint->GetPosition().x, m_editedPoint->GetPosition().y );
+            wxPoint delta = newPoint - dimension->GetEnd();
+
+            dimension->SetEnd( newPoint );
+            dimension->Text().SetPosition( dimension->Text().GetPosition() + delta );
+        }
+        else if( isModified( m_editPoints->Point( DIM_TEXT ) ) )
+        {
+            dimension->Text().SetPosition( wxPoint( m_editedPoint->GetPosition() ) );
+        }
+
+        dimension->Update();
 
         break;
     }
@@ -1527,12 +1565,22 @@ void POINT_EDITOR::updatePoints()
         break;
     }
 
-    case PCB_DIMENSION_T:
+    case PCB_DIM_ALIGNED_T:
     {
         const ALIGNED_DIMENSION* dimension = static_cast<const ALIGNED_DIMENSION*>( item );
 
+        m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
+        m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );
+        m_editPoints->Point( DIM_TEXT ).SetPosition( dimension->Text().GetPosition() );
         m_editPoints->Point( DIM_CROSSBARSTART ).SetPosition( dimension->GetCrossbarStart() );
         m_editPoints->Point( DIM_CROSSBAREND ).SetPosition( dimension->GetCrossbarEnd() );
+        break;
+    }
+
+    case PCB_DIM_LEADER_T:
+    {
+        const LEADER* dimension = static_cast<const LEADER*>( item );
+
         m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
         m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );
         m_editPoints->Point( DIM_TEXT ).SetPosition( dimension->Text().GetPosition() );
@@ -1633,7 +1681,7 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
         break;
     }
 
-    case PCB_DIMENSION_T:
+    case PCB_DIM_ALIGNED_T:
     {
         // Constraint for crossbar
         if( isModified( m_editPoints->Point( DIM_START ) ) )

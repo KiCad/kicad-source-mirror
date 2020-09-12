@@ -320,7 +320,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->Add( PCB_ACTIONS::drawPolygon );
 
     placeMenu->AppendSeparator();
-    placeMenu->Add( PCB_ACTIONS::drawDimension );
+    placeMenu->Add( PCB_ACTIONS::drawAlignedDimension );
+    placeMenu->Add( PCB_ACTIONS::drawLeader );
 
     placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::placeTarget );

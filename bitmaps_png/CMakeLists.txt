@@ -111,6 +111,7 @@ set( BMAPS_SMALL
 # image basenames that go into the toolbar sized destinations, i.e. 26x26
 set( BMAPS_MID
     about
+    add_aligned_dimension
     add_arc
     add_board
     add_bus2bus
@@ -119,7 +120,6 @@ set( BMAPS_MID
     add_component
     add_corner
     add_dashed_line
-    add_dimension
     add_document
     add_gerber
     add_glabel
@@ -130,10 +130,12 @@ set( BMAPS_MID
     add_hierarchical_subsheet
     add_junction
     add_keepout_area
+    add_leader
     add_library
     add_line2bus
     add_line_label
     add_line
+    add_orthogonal_dimension
     add_pcb_target
     add_power
     add_rectangle

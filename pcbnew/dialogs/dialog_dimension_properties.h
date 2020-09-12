@@ -51,6 +51,9 @@ private:
     DIMENSION* m_dimension;
     DIMENSION* m_previewDimension;
 
+    PCB_LAYER_BOX_SELECTOR* m_cbLayerActual;    // The active layer box control
+    wxTextCtrl* m_txtValueActual;               // The active value control
+
     UNIT_BINDER m_textWidth;
     UNIT_BINDER m_textHeight;
     UNIT_BINDER m_textThickness;

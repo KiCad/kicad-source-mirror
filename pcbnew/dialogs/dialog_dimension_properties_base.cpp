@@ -15,30 +15,72 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
-	wxBoxSizer* bMainSizer;
-	bMainSizer = new wxBoxSizer( wxVERTICAL );
+	m_mainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbSizerFormat;
-	sbSizerFormat = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Dimension Format") ), wxVERTICAL );
+	m_sizerLeader = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Leader Format") ), wxVERTICAL );
+
+	wxGridBagSizer* gbSizerLeader;
+	gbSizerLeader = new wxGridBagSizer( 0, 0 );
+	gbSizerLeader->SetFlexibleDirection( wxBOTH );
+	gbSizerLeader->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_lblLeaderValue = new wxStaticText( m_sizerLeader->GetStaticBox(), wxID_ANY, _("Value:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblLeaderValue->Wrap( -1 );
+	gbSizerLeader->Add( m_lblLeaderValue, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_txtLeaderValue = new wxTextCtrl( m_sizerLeader->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerLeader->Add( m_txtLeaderValue, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+
+
+	gbSizerLeader->Add( 60, 0, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+
+	m_lblTextFrame = new wxStaticText( m_sizerLeader->GetStaticBox(), wxID_ANY, _("Text frame:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblTextFrame->Wrap( -1 );
+	m_lblTextFrame->SetToolTip( _("Draw a shape around the leader text") );
+
+	gbSizerLeader->Add( m_lblTextFrame, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	wxString m_cbTextFrameChoices[] = { _("None"), _("Rectangle"), _("Circle") };
+	int m_cbTextFrameNChoices = sizeof( m_cbTextFrameChoices ) / sizeof( wxString );
+	m_cbTextFrame = new wxChoice( m_sizerLeader->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbTextFrameNChoices, m_cbTextFrameChoices, 0 );
+	m_cbTextFrame->SetSelection( 0 );
+	m_cbTextFrame->SetToolTip( _("Draw a shape around the leader text") );
+
+	gbSizerLeader->Add( m_cbTextFrame, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+
+	m_lblLeaderLayer = new wxStaticText( m_sizerLeader->GetStaticBox(), wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblLeaderLayer->Wrap( -1 );
+	gbSizerLeader->Add( m_lblLeaderLayer, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_cbLeaderLayer = new PCB_LAYER_BOX_SELECTOR( m_sizerLeader->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	gbSizerLeader->Add( m_cbLeaderLayer, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+
+
+	m_sizerLeader->Add( gbSizerLeader, 1, wxBOTTOM|wxEXPAND, 5 );
+
+
+	m_mainSizer->Add( m_sizerLeader, 0, wxALL|wxEXPAND, 5 );
+
+	m_sizerFormat = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Dimension Format") ), wxVERTICAL );
 
 	wxGridBagSizer* gbSizerFormat;
 	gbSizerFormat = new wxGridBagSizer( 0, 5 );
-	gbSizerFormat->SetFlexibleDirection( wxHORIZONTAL );
+	gbSizerFormat->SetFlexibleDirection( wxBOTH );
 	gbSizerFormat->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_lblValue = new wxStaticText( sbSizerFormat->GetStaticBox(), wxID_ANY, _("Value:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblValue = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, _("Value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblValue->Wrap( -1 );
 	m_lblValue->SetToolTip( _("Measured value of this dimension") );
 
 	gbSizerFormat->Add( m_lblValue, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_txtValue = new wxTextCtrl( sbSizerFormat->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_txtValue = new wxTextCtrl( m_sizerFormat->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_txtValue->Enable( false );
 	m_txtValue->SetToolTip( _("Measured value of this dimension") );
 
 	gbSizerFormat->Add( m_txtValue, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
-	m_cbOverrideValue = new wxCheckBox( sbSizerFormat->GetStaticBox(), wxID_ANY, _("Override value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbOverrideValue = new wxCheckBox( m_sizerFormat->GetStaticBox(), wxID_ANY, _("Override value"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbOverrideValue->SetToolTip( _("When checked, the actual measurement is ignored and any value can be entered") );
 
 	gbSizerFormat->Add( m_cbOverrideValue, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
@@ -46,7 +88,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 
 	gbSizerFormat->Add( 20, 0, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), 0, 5 );
 
-	m_lblUnits = new wxStaticText( sbSizerFormat->GetStaticBox(), wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblUnits = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblUnits->Wrap( -1 );
 	m_lblUnits->SetToolTip( _("Units of this dimension (\"automatic\" to follow the units selected in the editor)") );
 
@@ -54,24 +96,24 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 
 	wxString m_cbUnitsChoices[] = { _("Inches"), _("Mils"), _("Millimeters"), _("Automatic") };
 	int m_cbUnitsNChoices = sizeof( m_cbUnitsChoices ) / sizeof( wxString );
-	m_cbUnits = new wxChoice( sbSizerFormat->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbUnitsNChoices, m_cbUnitsChoices, 0 );
+	m_cbUnits = new wxChoice( m_sizerFormat->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbUnitsNChoices, m_cbUnitsChoices, 0 );
 	m_cbUnits->SetSelection( 0 );
 	m_cbUnits->SetToolTip( _("Units of this dimension (\"automatic\" to follow the units selected in the editor)") );
 
 	gbSizerFormat->Add( m_cbUnits, wxGBPosition( 0, 5 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
-	m_lblPrefix = new wxStaticText( sbSizerFormat->GetStaticBox(), wxID_ANY, _("Prefix:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblPrefix = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, _("Prefix:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblPrefix->Wrap( -1 );
 	m_lblPrefix->SetToolTip( _("Text to print before the dimension value") );
 
 	gbSizerFormat->Add( m_lblPrefix, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_txtPrefix = new wxTextCtrl( sbSizerFormat->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_txtPrefix = new wxTextCtrl( m_sizerFormat->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_txtPrefix->SetToolTip( _("Text to print before the dimension value") );
 
 	gbSizerFormat->Add( m_txtPrefix, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
-	m_txtUnitsFormat = new wxStaticText( sbSizerFormat->GetStaticBox(), wxID_ANY, _("Units format:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_txtUnitsFormat = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, _("Units format:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_txtUnitsFormat->Wrap( -1 );
 	m_txtUnitsFormat->SetToolTip( _("Choose how to display the units") );
 
@@ -79,24 +121,24 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 
 	wxString m_cbUnitsFormatChoices[] = { _("1234"), _("1234 mm"), _("1234 (mm)") };
 	int m_cbUnitsFormatNChoices = sizeof( m_cbUnitsFormatChoices ) / sizeof( wxString );
-	m_cbUnitsFormat = new wxChoice( sbSizerFormat->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbUnitsFormatNChoices, m_cbUnitsFormatChoices, 0 );
+	m_cbUnitsFormat = new wxChoice( m_sizerFormat->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbUnitsFormatNChoices, m_cbUnitsFormatChoices, 0 );
 	m_cbUnitsFormat->SetSelection( 1 );
 	m_cbUnitsFormat->SetToolTip( _("Choose how to display the units") );
 
 	gbSizerFormat->Add( m_cbUnitsFormat, wxGBPosition( 1, 5 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
-	m_lblSuffix = new wxStaticText( sbSizerFormat->GetStaticBox(), wxID_ANY, _("Suffix:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblSuffix = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, _("Suffix:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblSuffix->Wrap( -1 );
 	m_lblSuffix->SetToolTip( _("Text to print after the dimension value") );
 
 	gbSizerFormat->Add( m_lblSuffix, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_txtSuffix = new wxTextCtrl( sbSizerFormat->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_txtSuffix = new wxTextCtrl( m_sizerFormat->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_txtSuffix->SetToolTip( _("Text to print after the dimension value") );
 
 	gbSizerFormat->Add( m_txtSuffix, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
-	m_lblPrecision = new wxStaticText( sbSizerFormat->GetStaticBox(), wxID_ANY, _("Precision:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblPrecision = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, _("Precision:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblPrecision->Wrap( -1 );
 	m_lblPrecision->SetToolTip( _("Choose how many digits of precision to display") );
 
@@ -104,29 +146,29 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 
 	wxString m_cbPrecisionChoices[] = { _("0"), _("0.0"), _("0.00"), _("0.000"), _("0.0000"), _("0.00000") };
 	int m_cbPrecisionNChoices = sizeof( m_cbPrecisionChoices ) / sizeof( wxString );
-	m_cbPrecision = new wxChoice( sbSizerFormat->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbPrecisionNChoices, m_cbPrecisionChoices, 0 );
+	m_cbPrecision = new wxChoice( m_sizerFormat->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbPrecisionNChoices, m_cbPrecisionChoices, 0 );
 	m_cbPrecision->SetSelection( 0 );
 	m_cbPrecision->SetToolTip( _("Choose how many digits of precision to display") );
 
 	gbSizerFormat->Add( m_cbPrecision, wxGBPosition( 2, 5 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
-	m_cbSuppressZeroes = new wxCheckBox( sbSizerFormat->GetStaticBox(), wxID_ANY, _("Suppress trailing zeroes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbSuppressZeroes = new wxCheckBox( m_sizerFormat->GetStaticBox(), wxID_ANY, _("Suppress trailing zeroes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbSuppressZeroes->SetToolTip( _("When checked, \"0.100\" will be shown as \"0.1\" even if the precision setting is higher") );
 
 	gbSizerFormat->Add( m_cbSuppressZeroes, wxGBPosition( 3, 4 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_lblLayer = new wxStaticText( sbSizerFormat->GetStaticBox(), wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblLayer = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblLayer->Wrap( -1 );
 	gbSizerFormat->Add( m_lblLayer, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_cbLayer = new PCB_LAYER_BOX_SELECTOR( sbSizerFormat->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_cbLayer = new PCB_LAYER_BOX_SELECTOR( m_sizerFormat->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	gbSizerFormat->Add( m_cbLayer, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
-	m_lblPreview = new wxStaticText( sbSizerFormat->GetStaticBox(), wxID_ANY, _("Preview:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblPreview = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, _("Preview:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblPreview->Wrap( -1 );
 	gbSizerFormat->Add( m_lblPreview, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_staticTextPreview = new wxStaticText( sbSizerFormat->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPreview = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPreview->Wrap( -1 );
 	m_staticTextPreview->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
@@ -137,10 +179,10 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	gbSizerFormat->AddGrowableCol( 3 );
 	gbSizerFormat->AddGrowableCol( 5 );
 
-	sbSizerFormat->Add( gbSizerFormat, 1, wxBOTTOM|wxEXPAND, 5 );
+	m_sizerFormat->Add( gbSizerFormat, 1, wxBOTTOM|wxEXPAND, 5 );
 
 
-	bMainSizer->Add( sbSizerFormat, 0, wxALL|wxEXPAND, 5 );
+	m_mainSizer->Add( m_sizerFormat, 1, wxALL|wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizerText;
 	sbSizerText = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Dimension Text") ), wxVERTICAL );
@@ -274,7 +316,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	sbSizerText->Add( gbSizerText, 0, wxBOTTOM|wxEXPAND, 5 );
 
 
-	bMainSizer->Add( sbSizerText, 0, wxALL|wxEXPAND, 5 );
+	m_mainSizer->Add( sbSizerText, 0, wxALL|wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizerLine;
 	sbSizerLine = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Dimension Line") ), wxVERTICAL );
@@ -334,13 +376,13 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	sbSizerLine->Add( gbSizerLine, 1, wxBOTTOM|wxEXPAND, 5 );
 
 
-	bMainSizer->Add( sbSizerLine, 0, wxALL|wxEXPAND, 5 );
+	m_mainSizer->Add( sbSizerLine, 0, wxALL|wxEXPAND, 5 );
 
 
-	bMainSizer->Add( 0, 0, 0, wxTOP, 5 );
+	m_mainSizer->Add( 0, 0, 0, wxTOP, 5 );
 
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	m_mainSizer->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* lowerSizer;
 	lowerSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -358,10 +400,10 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	lowerSizer->Add( m_sdbSizer, 0, wxALL, 5 );
 
 
-	bMainSizer->Add( lowerSizer, 0, wxEXPAND, 5 );
+	m_mainSizer->Add( lowerSizer, 0, wxEXPAND, 5 );
 
 
-	this->SetSizer( bMainSizer );
+	this->SetSizer( m_mainSizer );
 	this->Layout();
 
 	this->Centre( wxBOTH );

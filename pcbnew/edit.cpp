@@ -142,7 +142,8 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         ShowTargetOptionsDialog( static_cast<PCB_TARGET*>( aItem ) );
         break;
 
-    case PCB_DIMENSION_T:
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_LEADER_T:
         ShowDimensionPropertyDialog( static_cast<DIMENSION*>( aItem ) );
         break;
 

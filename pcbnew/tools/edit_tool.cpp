@@ -1420,7 +1420,8 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             case PCB_VIA_T:
             case PCB_ZONE_AREA_T:
             case PCB_TARGET_T:
-            case PCB_DIMENSION_T:
+            case PCB_DIM_ALIGNED_T:
+            case PCB_DIM_LEADER_T:
                 dupe_item = orig_item->Duplicate();
                 break;
 

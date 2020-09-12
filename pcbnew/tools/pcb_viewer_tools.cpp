@@ -149,7 +149,7 @@ int PCB_VIEWER_TOOLS::GraphicOutlines( const TOOL_EVENT& aEvent )
     {
         KICAD_T t = item->Type();
 
-        if( t == PCB_LINE_T || t == PCB_DIMENSION_T || t == PCB_TARGET_T )
+        if( t == PCB_LINE_T || BaseType( t ) == PCB_DIMENSION_T || t == PCB_TARGET_T )
             view()->Update( item, KIGFX::GEOMETRY );
     }
 
@@ -182,7 +182,7 @@ int PCB_VIEWER_TOOLS::TextOutlines( const TOOL_EVENT& aEvent )
     {
         KICAD_T t = item->Type();
 
-        if( t == PCB_TEXT_T || t == PCB_DIMENSION_T )
+        if( t == PCB_TEXT_T || BaseType( t ) == PCB_DIMENSION_T )
             view()->Update( item, KIGFX::GEOMETRY );
     }
 
