@@ -131,13 +131,11 @@ public:
 
     void SetLogReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
 
-    bool LoadRules( wxFileName aPath );
+    bool LoadRules( const wxFileName& aPath );
 
-    void InitEngine( wxFileName aRulePath );
+    void InitEngine( const wxFileName& aRulePath );
 
     void RunTests();
-
-    void SetErrorLimit( int aLimit );
 
     BOARD_DESIGN_SETTINGS* GetDesignSettings() const { return m_designSettings; }
 
@@ -193,9 +191,10 @@ private:
 
     struct CONSTRAINT_WITH_CONDITIONS
     {
-        std::vector<DRC_RULE_CONDITION*> conditions;
-        DRC_RULE*                        parentRule;
-        DRC_CONSTRAINT                   constraint;
+        LSET                 layerTest;
+        DRC_RULE_CONDITION*  condition;
+        DRC_RULE*            parentRule;
+        DRC_CONSTRAINT       constraint;
     };
 
     struct CONSTRAINT_SET

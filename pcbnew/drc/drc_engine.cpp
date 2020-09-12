@@ -293,7 +293,7 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
 }
 
 
-bool DRC_ENGINE::LoadRules( wxFileName aPath )
+bool DRC_ENGINE::LoadRules( const wxFileName& aPath )
 {
     NULL_REPORTER nullReporter;
     REPORTER*     reporter = m_reporter ? m_reporter : &nullReporter;
@@ -374,8 +374,8 @@ bool DRC_ENGINE::CompileRules()
 
                     CONSTRAINT_WITH_CONDITIONS* rcons = new CONSTRAINT_WITH_CONDITIONS;
 
-                    if( condition )
-                        rcons->conditions.push_back( condition );
+                    rcons->layerTest = rule->m_LayerCondition;
+                    rcons->condition = condition;
 
                     matchingConstraints.push_back( constraint );
 
@@ -410,7 +410,7 @@ bool DRC_ENGINE::CompileRules()
 }
 
 
-void DRC_ENGINE::InitEngine( wxFileName aRulePath )
+void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
 {
     m_testProviders = DRC_TEST_PROVIDER_REGISTRY::Instance().GetTestProviders();
 
@@ -520,43 +520,34 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         }
     }
 
-    auto ruleset = m_constraintMap[ aConstraintId ];
+    CONSTRAINT_SET* ruleset = m_constraintMap[ aConstraintId ];
 
-    for( const CONSTRAINT_WITH_CONDITIONS* rcond : ruleset->sortedConstraints )
+    for( int ii = ruleset->sortedConstraints.size() - 1; ii >= 0; --ii )
     {
-        DRC_RULE* rule = rcond->parentRule;
-        REPORT( wxString::Format( _( "Checking rule \"%s\"." ), rule->m_Name ) );
+        const CONSTRAINT_WITH_CONDITIONS* rcons = ruleset->sortedConstraints[ ii ];
+        REPORT( wxString::Format( _( "Checking rule \"%s\"." ),
+                                  rcons->parentRule->m_Name ) );
 
-        if( aLayer != UNDEFINED_LAYER && !rule->m_LayerCondition.test( aLayer ) )
+        if( aLayer != UNDEFINED_LAYER && !rcons->layerTest.test( aLayer ) )
         {
             REPORT( wxString::Format( _( "Rule layer \"%s\" not matched." ),
-                                      rule->m_LayerSource ) );
+                                      rcons->parentRule->m_LayerSource ) );
             REPORT( "Rule not applied." );
 
             continue;
         }
 
-        if( rcond->conditions.size() == 0 )  // uconditional
-        {
-            REPORT( _( "Unconditional constraint; rule applied." ) );
+        bool result = rcons->condition->EvaluateFor( a, b, aLayer, aReporter );
 
-            return rcond->constraint;
+        if( result )
+        {
+            REPORT( _( "Rule applied." ) );
+            return rcons->constraint;
         }
-
-        for( DRC_RULE_CONDITION* condition : rcond->conditions )
+        else
         {
-            bool result = condition->EvaluateFor( a, b, aLayer, aReporter );
-
-            if( result )
-            {
-                REPORT( _( "Rule applied." ) );
-                return rcond->constraint;
-            }
-            else
-            {
-                REPORT( _( "Condition not satisfied; rule not applied." ) );
-                REPORT( "" );
-            }
+            REPORT( _( "Condition not satisfied; rule not applied." ) );
+            REPORT( "" );
         }
     }
 
