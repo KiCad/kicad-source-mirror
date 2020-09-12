@@ -52,7 +52,7 @@ GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMagneticSe
     m_enableSnap = true;
     m_enableGrid = true;
     m_enableSnapLine = true;
-    m_snapSize = 100;
+    m_snapSize = 25;
     m_snapItem = nullptr;
     KIGFX::VIEW* view = m_toolMgr->GetView();
 
