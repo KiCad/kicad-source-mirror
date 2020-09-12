@@ -2371,16 +2371,17 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
         dimension->SetLineThickness( parseBoardUnits( "dimension width value" ) );
         NeedRIGHT();
     }
-    else if( token != T_type )
+    else
     {
-        Expecting( T_type );
+        if( token != T_type )
+            Expecting( T_type );
+
+        // This function only parses aligned dimensions for now
+        if( NextTok() != T_aligned )
+            Expecting( T_aligned );
+
+        NeedRIGHT();
     }
-
-    // This function only parses aligned dimensions for now
-    if( NextTok() != T_aligned )
-        Expecting( T_aligned );
-
-    NeedRIGHT();
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2468,6 +2469,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
                 case T_units:
                 {
                     int mode = parseInt( "dimension units mode" );
+                    mode = std::max( 0, std::min( 4, mode ) );
                     dimension->SetUnitsMode( static_cast<DIM_UNITS_MODE>( mode ) );
                     NeedRIGHT();
                     break;
@@ -2476,6 +2478,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
                 case T_units_format:
                 {
                     int format = parseInt( "dimension units format" );
+                    format = std::max( 0, std::min( 3, format ) );
                     dimension->SetUnitsFormat( static_cast<DIM_UNITS_FORMAT>( format ) );
                     NeedRIGHT();
                     break;
@@ -2530,6 +2533,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
                 case T_text_position_mode:
                 {
                     int mode = parseInt( "dimension text position mode" );
+                    mode = std::max( 0, std::min( 3, mode ) );
                     dimension->SetTextPositionMode( static_cast<DIM_TEXT_POSITION>( mode ) );
                     NeedRIGHT();
                     break;
