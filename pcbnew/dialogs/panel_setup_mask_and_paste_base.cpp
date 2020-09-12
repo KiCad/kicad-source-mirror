@@ -30,7 +30,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	m_staticTextInfoMaskMinWidth->Wrap( -1 );
 	m_staticTextInfoMaskMinWidth->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizer4->Add( m_staticTextInfoMaskMinWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	bSizer4->Add( m_staticTextInfoMaskMinWidth, 0, wxALL|wxEXPAND, 5 );
 
 
 	bMessages->Add( bSizer4, 1, wxEXPAND, 5 );
