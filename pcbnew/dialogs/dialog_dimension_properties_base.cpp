@@ -324,7 +324,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 
 	m_lblExtensionOffsetUnits = new wxStaticText( sbSizerLine->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblExtensionOffsetUnits->Wrap( -1 );
-	gbSizerLine->Add( m_lblExtensionOffsetUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizerLine->Add( m_lblExtensionOffsetUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	gbSizerLine->AddGrowableCol( 1 );
