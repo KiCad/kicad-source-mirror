@@ -747,6 +747,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->SetStart( (wxPoint) cursorPos );
                 dimension->SetEnd( (wxPoint) cursorPos );
 
+                if( boardSettings.m_DimensionUnitsMode == DIM_UNITS_MODE::AUTOMATIC )
+                    dimension->SetUnits( m_frame->GetUserUnits(), false );
+
                 preview.Add( dimension );
 
                 m_controls->SetAutoPan( true );
