@@ -50,8 +50,7 @@ TEXTE_PCB::~TEXTE_PCB()
 
 wxString TEXTE_PCB::GetShownText( int aDepth ) const
 {
-    BOARD* board = static_cast<BOARD*>( GetParent() );
-    wxASSERT( board );
+    BOARD* board = dynamic_cast<BOARD*>( GetParent() );
 
     std::function<bool( wxString* )> pcbTextResolver =
             [&]( wxString* token ) -> bool
@@ -91,7 +90,7 @@ wxString TEXTE_PCB::GetShownText( int aDepth ) const
     bool     processTextVars = false;
     wxString text = EDA_TEXT::GetShownText( &processTextVars );
 
-    if( processTextVars && aDepth < 10 )
+    if( board && processTextVars && aDepth < 10 )
         text = ExpandTextVars( text, &pcbTextResolver, board->GetProject(), &boardTextResolver );
 
     return text;

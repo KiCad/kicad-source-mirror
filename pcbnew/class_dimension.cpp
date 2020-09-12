@@ -50,10 +50,17 @@ DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
         m_extensionOffset( 0 ),
         m_textPosition( DIM_TEXT_POSITION::OUTSIDE ),
         m_keepTextAligned( true ),
-        m_text( this ),
+        m_text( aParent ),
         m_measuredValue( 0 )
 {
     m_Layer = Dwgs_User;
+}
+
+
+void DIMENSION::SetParent( EDA_ITEM* aParent )
+{
+    BOARD_ITEM::SetParent( aParent );
+    m_text.SetParent( aParent );
 }
 
 

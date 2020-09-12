@@ -92,6 +92,8 @@ class DIMENSION : public BOARD_ITEM
 public:
     DIMENSION( BOARD_ITEM* aParent );
 
+    void SetParent( EDA_ITEM* aParent ) override;
+
     /**
      * The dimension's origin is the first feature point for the dimension.  Every dimension has
      * one or more feature points, so every dimension has at least an origin.

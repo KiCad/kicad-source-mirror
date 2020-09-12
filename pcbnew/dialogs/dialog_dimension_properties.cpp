@@ -46,6 +46,7 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     wxASSERT( aItem->Type() == PCB_DIMENSION_T );
     m_dimension = static_cast<DIMENSION*>( aItem );
     m_previewDimension = static_cast<DIMENSION*>( m_dimension->Clone() );
+    m_previewDimension->SetParent( m_frame->GetBoard() );
 
     // Configure display origin transforms
     m_textPosX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
