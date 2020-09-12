@@ -179,7 +179,7 @@ public:
      * @return true if a rule was fired
      */
     virtual bool GetRuleClearance( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int* aClearance,
-                                   wxString* aSource, REPORTER* aReporter = nullptr ) const;
+                                   wxString* aSource ) const;
 
     /**
      * Function GetLocalClearanceOverrides

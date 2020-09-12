@@ -24,9 +24,8 @@
 
 #include <fctsys.h>
 #include <class_board.h>
-#include <class_board_item.h>
-
 #include <drc/drc_rule_parser.h>
+#include <drc/drc_rule_condition.h>
 #include <drc_rules_lexer.h>
 #include <pcb_expr_evaluator.h>
 #include <reporter.h>

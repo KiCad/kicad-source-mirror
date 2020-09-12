@@ -173,7 +173,7 @@ public:
 
     bool CompileRules();
 
-    void Report( std::shared_ptr<DRC_ITEM> aItem, MARKER_PCB *Marker );
+    void Report( const std::shared_ptr<DRC_ITEM>& aItem, MARKER_PCB *Marker );
     void ReportProgress( double aProgress );
     void ReportStage ( const wxString& aStageName, int index, int total );
     void ReportAux( const wxString& aStr );

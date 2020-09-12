@@ -36,6 +36,7 @@ endif()
 add_executable( drc_proto
     drc_proto_test.cpp
     ../../pcbnew/drc/drc_rule.cpp
+    ../../pcbnew/drc/drc_rule_condition.cpp
     ../../pcbnew/drc/drc_rule_parser.cpp
     ../../pcbnew/drc/drc_test_provider.cpp
     ../../pcbnew/drc/drc_test_provider_clearance_base.cpp

@@ -23,19 +23,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-// fixme - way too much includes
 #include <fctsys.h>
-#include <pcbnew.h>
-
 #include <reporter.h>
 #include <widgets/progress_reporter.h>
-
 #include <drc/drc_engine.h>
 #include <drc/drc_rule_parser.h>
 #include <drc/drc_rule.h>
-#include <drc/drc_item.h>
+#include <drc/drc_rule_condition.h>
 #include <drc/drc_test_provider.h>
-#include "drc.h"
+#include <drc/drc.h>
 
 void drcPrintDebugMessage( int level, wxString msg, const char *function, int line )
 {
@@ -297,6 +293,45 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
 }
 
 
+bool DRC_ENGINE::LoadRules( wxFileName aPath )
+{
+    NULL_REPORTER nullReporter;
+    REPORTER*     reporter = m_reporter ? m_reporter : &nullReporter;
+
+    if( aPath.FileExists() )
+    {
+        m_ruleConditions.clear();
+        m_rules.clear();
+
+        FILE* fp = wxFopen( aPath.GetFullPath(), wxT( "rt" ) );
+
+        if( fp )
+        {
+            try
+            {
+                DRC_RULES_PARSER parser( m_board, fp, aPath.GetFullPath() );
+                parser.Parse( m_rules, reporter );
+            }
+            catch( PARSE_ERROR& pe )
+            {
+                // Don't leave possibly malformed stuff around for us to trip over
+                m_ruleConditions.clear();
+                m_rules.clear();
+
+                // JEY TODO
+                //wxSafeYield( m_editFrame );
+                //m_editFrame->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
+                //                                   pe.lineNumber, pe.byteIndex );
+
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+
 bool DRC_ENGINE::CompileRules()
 {
     ReportAux( wxString::Format( "Compiling Rules (%d rules, %d conditions): ",
@@ -367,45 +402,6 @@ bool DRC_ENGINE::CompileRules()
                                                      formatConstraint( constraint ) ) );
                     }
                 }
-            }
-        }
-    }
-
-    return true;
-}
-
-
-bool DRC_ENGINE::LoadRules( wxFileName aPath )
-{
-    NULL_REPORTER nullReporter;
-    REPORTER*     reporter = m_reporter ? m_reporter : &nullReporter;
-
-    if( aPath.FileExists() )
-    {
-        m_ruleConditions.clear();
-        m_rules.clear();
-
-        FILE* fp = wxFopen( aPath.GetFullPath(), wxT( "rt" ) );
-
-        if( fp )
-        {
-            try
-            {
-                DRC_RULES_PARSER parser( m_board, fp, aPath.GetFullPath() );
-                parser.Parse( m_rules, reporter );
-            }
-            catch( PARSE_ERROR& pe )
-            {
-                // Don't leave possibly malformed stuff around for us to trip over
-                m_ruleConditions.clear();
-                m_rules.clear();
-
-                // JEY TODO
-                //wxSafeYield( m_editFrame );
-                //m_editFrame->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
-                //                                   pe.lineNumber, pe.byteIndex );
-
-                return false;
             }
         }
     }
@@ -570,10 +566,12 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
     nullConstraint.m_DisallowFlags = 0;
 
     return nullConstraint;
+
+#undef REPORT
 }
 
 
-void DRC_ENGINE::Report( std::shared_ptr<DRC_ITEM> aItem, MARKER_PCB *aMarker )
+void DRC_ENGINE::Report( const std::shared_ptr<DRC_ITEM>& aItem, MARKER_PCB *aMarker )
 {
     m_drcReport->AddItem( aItem, aMarker );
 
@@ -584,7 +582,7 @@ void DRC_ENGINE::Report( std::shared_ptr<DRC_ITEM> aItem, MARKER_PCB *aMarker )
                                          aItem->GetErrorMessage(),
                                          aItem->GetErrorCode() );
 
-        auto rule = aItem->GetViolatingRule();
+        DRC_RULE* rule = aItem->GetViolatingRule();
 
         if( rule )
             msg += wxString::Format( ", violating rule: '%s'", rule->m_Name );
@@ -655,8 +653,10 @@ DRC_CONSTRAINT DRC_ENGINE::GetWorstGlobalConstraint( DRC_CONSTRAINT_TYPE_T ruleI
 std::vector<DRC_CONSTRAINT> DRC_ENGINE::QueryConstraintsById( DRC_CONSTRAINT_TYPE_T constraintID )
 {
     std::vector<DRC_CONSTRAINT> rv;
-    for ( auto c : m_constraintMap[constraintID]->sortedConstraints )
+
+    for ( CONSTRAINT_WITH_CONDITIONS* c : m_constraintMap[constraintID]->sortedConstraints )
         rv.push_back(c->constraint);
+
     return rv;
 }
 
@@ -676,7 +676,7 @@ bool DRC_ENGINE::QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T aConstraintId,
     {
         int worst = 0;
 
-        for( const auto constraint : QueryConstraintsById( aConstraintId ) )
+        for( const DRC_CONSTRAINT& constraint : QueryConstraintsById( aConstraintId ) )
         {
             if( constraint.GetValue().HasMin() )
             {

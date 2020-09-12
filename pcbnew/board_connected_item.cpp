@@ -111,7 +111,7 @@ int BOARD_CONNECTED_ITEM::GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem,
 
     // LEVEL 2: Rules
     //
-    if( GetRuleClearance( aItem, aLayer, &clearance, aSource, aReporter ) )
+    if( GetRuleClearance( aItem, aLayer, &clearance, aSource ) )
         return clearance;
 
     // LEVEL 3: Accumulated local settings, netclass settings, & board design settings
@@ -153,11 +153,10 @@ int BOARD_CONNECTED_ITEM::GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem,
 
 
 bool BOARD_CONNECTED_ITEM::GetRuleClearance( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer,
-                                             int* aClearance, wxString* aSource,
-                                             REPORTER* aReporter ) const
+                                             int* aClearance, wxString* aSource ) const
 {
     const DRC_CONSTRAINT* constraint = GetConstraint( this, aItem, DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                                      aLayer, aSource, aReporter );
+                                                      aLayer, aSource );
 
     if( constraint )
     {
@@ -165,12 +164,6 @@ bool BOARD_CONNECTED_ITEM::GetRuleClearance( BOARD_ITEM* aItem, PCB_LAYER_ID aLa
             *aSource = wxString::Format( _( "'%s' rule" ), *aSource );
 
         *aClearance = constraint->m_Value.Min();
-
-        if( aReporter )
-        {
-            wxString clearance = StringFromValue( aReporter->GetUnits(), *aClearance, true );
-            aReporter->Report( wxString::Format( _( "Clearance: %s." ), clearance ) );
-        }
 
         return true;
     }

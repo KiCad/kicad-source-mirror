@@ -30,11 +30,10 @@
 #include <libeval_compiler/libeval_compiler.h>
 
 class BOARD_ITEM;
-
 class PCB_EXPR_UCODE;
-
-class DRC_RULE;
+class DRC_CONSTRAINT;
 class DRC_RULE_CONDITION;
+
 
 enum DRC_CONSTRAINT_TYPE_T
 {
@@ -49,10 +48,9 @@ enum DRC_CONSTRAINT_TYPE_T
     DRC_CONSTRAINT_TYPE_TRACK_WIDTH,
     DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH,
     DRC_CONSTRAINT_TYPE_DISALLOW,
-    DRC_CONSTRAINT_TYPE_VIA_DIAMETER,
-
-    DRC_CONSTRAINT_TYPE_COUNT
+    DRC_CONSTRAINT_TYPE_VIA_DIAMETER
 };
+
 
 enum DRC_DISALLOW_T
 {
@@ -95,57 +93,6 @@ private:
 };
 
 
-class DRC_CONSTRAINT
-{
-    public:
-    DRC_CONSTRAINT( DRC_CONSTRAINT_TYPE_T aType = DRC_CONSTRAINT_TYPE_UNKNOWN,
-                    const wxString& aName = wxEmptyString ) :
-            m_Type( aType ),
-            m_DisallowFlags( 0 ),
-            m_name( aName ),
-            m_parentRule( nullptr )
-    {
-    }
-
-    const MINOPTMAX<int>& GetValue() const { return m_Value; }
-    MINOPTMAX<int>& Value() { return m_Value; }
-
-    void SetParentRule( DRC_RULE *aParentRule ) { m_parentRule = aParentRule; }
-    DRC_RULE* GetParentRule() const { return m_parentRule; }
-
-    wxString GetName() const;
-
-public:
-    DRC_CONSTRAINT_TYPE_T  m_Type;
-    MINOPTMAX<int>         m_Value;
-    int                    m_DisallowFlags;
-
-private:
-    wxString               m_name;          // For just-in-time constraints
-    DRC_RULE*              m_parentRule;    // For constraints found in rules
-};
-
-
-class DRC_RULE_CONDITION
-{
-public:
-    DRC_RULE_CONDITION( const wxString& aExpression = "" );
-    ~DRC_RULE_CONDITION();
-
-    bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB, PCB_LAYER_ID aLayer,
-                      REPORTER* aReporter = nullptr );
-
-    bool Compile( REPORTER* aReporter, int aSourceLine = 0, int aSourceOffset = 0 );
-
-    void SetExpression( const wxString& aExpression ) { m_expression = aExpression; }
-    wxString GetExpression() const { return m_expression; }
-
-private:
-    wxString                        m_expression;
-    std::unique_ptr<PCB_EXPR_UCODE> m_ucode;
-};
-
-
 class DRC_RULE
 {
 public:
@@ -167,7 +114,7 @@ public:
         return false;
     };
 
-    virtual void FillSpecificItemSet( std::set<BOARD_ITEM*> specificItems )
+    virtual void FillSpecificItemSet( const std::set<BOARD_ITEM*>& specificItems )
     {
     };
 
@@ -185,14 +132,49 @@ public:
     std::vector<DRC_CONSTRAINT> m_Constraints;
 
     int                         m_Priority; // 0 indicates automatic priority generation fixme: use enum
-    SEVERITY                    m_Severity;
+};
+
+
+class DRC_CONSTRAINT
+{
+    public:
+    DRC_CONSTRAINT( DRC_CONSTRAINT_TYPE_T aType = DRC_CONSTRAINT_TYPE_UNKNOWN,
+                    const wxString& aName = wxEmptyString ) :
+            m_Type( aType ),
+            m_DisallowFlags( 0 ),
+            m_name( aName ),
+            m_parentRule( nullptr )
+    {
+    }
+
+    const MINOPTMAX<int>& GetValue() const { return m_Value; }
+    MINOPTMAX<int>& Value() { return m_Value; }
+
+    void SetParentRule( DRC_RULE *aParentRule ) { m_parentRule = aParentRule; }
+    DRC_RULE* GetParentRule() const { return m_parentRule; }
+
+    wxString GetName() const
+    {
+        if( m_parentRule )
+            return wxString::Format( _( "rule %s" ), m_parentRule->m_Name );
+        else
+            return m_name;
+    }
+
+public:
+    DRC_CONSTRAINT_TYPE_T  m_Type;
+    MINOPTMAX<int>         m_Value;
+    int                    m_DisallowFlags;
+
+private:
+    wxString               m_name;          // For just-in-time constraints
+    DRC_RULE*              m_parentRule;    // For constraints found in rules
 };
 
 
 const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem,
                                      int aConstraint, PCB_LAYER_ID aLayer,
-                                     wxString* aRuleName = nullptr,
-                                     REPORTER* aReporter = nullptr );
+                                     wxString* aRuleName = nullptr );
 
 
 #endif // DRC_RULE_H
