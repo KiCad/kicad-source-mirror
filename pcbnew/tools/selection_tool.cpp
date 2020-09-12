@@ -2398,7 +2398,8 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
             if( MODULE* mod = dyn_cast<MODULE*>( aCollector[i] ) )
             {
                 // filter out components larger than the viewport
-                if( mod->ViewBBox().Contains( viewport ) )
+                if( mod->ViewBBox().GetHeight() > viewport.GetHeight() ||
+                    mod->ViewBBox().GetWidth() > viewport.GetWidth() )
                     rejected.insert( mod );
                 // footprints completely covered with other features have no other
                 // means of selection, so must be kept
