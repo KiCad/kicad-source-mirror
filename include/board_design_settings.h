@@ -49,6 +49,8 @@
 #define DEFAULT_COPPER_TEXT_WIDTH     0.30
 #define DEFAULT_TEXT_WIDTH            0.15
 
+#define DEFAULT_DIMENSION_ARROW_LENGTH 50 // mils, for legacy purposes
+
 // Board thickness, mainly for 3D view:
 #define DEFAULT_BOARD_THICKNESS_MM    1.6
 
@@ -203,6 +205,11 @@ struct TEXT_ITEM_INFO
 // forward declaration from class_track.h
 enum class VIATYPE : int;
 
+// forward declarations from class_dimension.h
+enum class DIM_UNITS_FORMAT : int;
+enum class DIM_TEXT_POSITION : int;
+enum class DIM_UNITS_MODE : int;
+
 
 /**
  * BOARD_DESIGN_SETTINGS
@@ -269,8 +276,13 @@ public:
     bool       m_TextItalic[ LAYER_CLASS_COUNT ];
     bool       m_TextUpright[ LAYER_CLASS_COUNT ];
 
-    int        m_DimensionUnits;
-    int        m_DimensionPrecision;    ///< Number of digits after the decimal
+    // Default values for dimension objects
+    DIM_UNITS_MODE    m_DimensionUnitsMode;
+    int               m_DimensionPrecision; ///< Number of digits after the decimal
+    DIM_UNITS_FORMAT  m_DimensionUnitsFormat;
+    DIM_TEXT_POSITION m_DimensionTextPosition;
+    bool              m_DimensionKeepTextAligned;
+    int               m_DimensionArrowLength;
 
     // Miscellaneous
     wxPoint    m_AuxOrigin;                 ///< origin for plot exports

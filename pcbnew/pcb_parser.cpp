@@ -1914,7 +1914,8 @@ void PCB_PARSER::parseDefaults( BOARD_DESIGN_SETTINGS& designSettings )
             break;
 
         case T_dimension_units:
-            designSettings.m_DimensionUnits = parseInt( "dimension units" );
+            designSettings.m_DimensionUnitsMode =
+                    static_cast<DIM_UNITS_MODE>( parseInt( "dimension units" ) );
             NeedRIGHT();
             break;
 

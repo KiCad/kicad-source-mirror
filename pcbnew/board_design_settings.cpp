@@ -23,6 +23,7 @@
 
 #include <fctsys.h>
 #include <common.h>
+#include <class_dimension.h>
 #include <class_track.h>
 #include <layers_id_colors_and_visibility.h>
 #include <kiface_i.h>
@@ -118,8 +119,12 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_TextItalic[ LAYER_CLASS_OTHERS ] = false;
     m_TextUpright[ LAYER_CLASS_OTHERS ] = false;
 
-    m_DimensionUnits = 0;       // Inches
-    m_DimensionPrecision = 4;
+    m_DimensionPrecision       = 4;
+    m_DimensionUnitsMode       = DIM_UNITS_MODE::AUTOMATIC;
+    m_DimensionUnitsFormat     = DIM_UNITS_FORMAT::BARE_SUFFIX;
+    m_DimensionTextPosition    = DIM_TEXT_POSITION::OUTSIDE;
+    m_DimensionKeepTextAligned = true;
+    m_DimensionArrowLength     = Mils2iu( DEFAULT_DIMENSION_ARROW_LENGTH );
 
     m_useCustomTrackVia = false;
     m_customTrackWidth  = Millimeter2iu( DEFAULT_CUSTOMTRACKWIDTH );
@@ -510,11 +515,28 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_params.emplace_back( new PARAM<bool>( "defaults.other_text_upright",
             &m_TextUpright[LAYER_CLASS_OTHERS], true ) );
 
-    m_params.emplace_back( new PARAM<int>( "defaults.dimension_units",
-            &m_DimensionUnits, 0, 0, 2 ) );
+    m_params.emplace_back( new PARAM_ENUM<DIM_UNITS_MODE>( "defaults.dimension_units",
+            &m_DimensionUnitsMode, DIM_UNITS_MODE::AUTOMATIC, DIM_UNITS_MODE::INCHES,
+            DIM_UNITS_MODE::AUTOMATIC ) );
 
     m_params.emplace_back( new PARAM<int>( "defaults.dimension_precision",
             &m_DimensionPrecision, 4, 0, 5 ) );
+
+    m_params.emplace_back( new PARAM_ENUM<DIM_UNITS_FORMAT>( "defaults.dimensions.units_format",
+            &m_DimensionUnitsFormat, DIM_UNITS_FORMAT::BARE_SUFFIX, DIM_UNITS_FORMAT::NO_SUFFIX,
+                                                             DIM_UNITS_FORMAT::PAREN_SUFFIX ) );
+
+    // NOTE: excluding DIM_TEXT_POSITION::MANUAL from the valid range here
+    m_params.emplace_back( new PARAM_ENUM<DIM_TEXT_POSITION>( "defaults.dimensions.text_position",
+            &m_DimensionTextPosition, DIM_TEXT_POSITION::OUTSIDE, DIM_TEXT_POSITION::OUTSIDE,
+            DIM_TEXT_POSITION::INLINE ) );
+
+    m_params.emplace_back( new PARAM<bool>( "defaults.dimensions.keep_text_aligned",
+                                            &m_DimensionKeepTextAligned, true ) );
+
+    m_params.emplace_back( new PARAM<int>( "defaults.dimensions.arrow_length",
+                                           &m_DimensionArrowLength,
+                                           Mils2iu( DEFAULT_DIMENSION_ARROW_LENGTH ) ) );
 
     m_params.emplace_back( new PARAM<bool>( "defaults.zones.45_degree_only",
             &m_defaultZoneSettings.m_Zone_45_Only, false ) );
@@ -635,8 +657,13 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     std::copy( std::begin( aOther.m_TextUpright ), std::end( aOther.m_TextUpright ),
                std::begin( m_TextUpright ) );
 
-    m_DimensionUnits         = aOther.m_DimensionUnits;
-    m_DimensionPrecision     = aOther.m_DimensionPrecision;
+    m_DimensionUnitsMode       = aOther.m_DimensionUnitsMode;
+    m_DimensionPrecision       = aOther.m_DimensionPrecision;
+    m_DimensionUnitsFormat     = aOther.m_DimensionUnitsFormat;
+    m_DimensionTextPosition    = aOther.m_DimensionTextPosition;
+    m_DimensionKeepTextAligned = aOther.m_DimensionKeepTextAligned;
+    m_DimensionArrowLength     = aOther.m_DimensionArrowLength;
+
     m_AuxOrigin              = aOther.m_AuxOrigin;
     m_GridOrigin             = aOther.m_GridOrigin;
     m_HasStackup             = aOther.m_HasStackup;

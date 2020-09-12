@@ -33,6 +33,7 @@
 
 #include <class_board_item.h>
 #include <class_pcb_text.h>
+#include <geometry/seg.h>
 
 
 class LINE_READER;

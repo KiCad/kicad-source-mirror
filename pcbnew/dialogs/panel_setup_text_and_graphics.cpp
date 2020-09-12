@@ -56,7 +56,8 @@ enum
 
 PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( PAGED_DIALOG* aParent,
                                                               PCB_EDIT_FRAME* aFrame ) :
-        PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( aParent->GetTreebook() )
+        PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( aParent->GetTreebook() ),
+        m_arrowLength( aFrame, m_lblArrowLength, m_dimensionArrowLength, m_arrowLengthUnits )
 {
     m_Parent = aParent;
     m_Frame = aFrame;
@@ -134,8 +135,19 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
 
     wxASSERT_MSG( m_BrdSettings->m_DimensionPrecision <= 4, "Unhandled dimension precision!" );
 
-    m_dimensionUnits->SetSelection( m_BrdSettings->m_DimensionUnits );
+    int mode = static_cast<int>( m_BrdSettings->m_DimensionUnitsMode );
+    m_dimensionUnits->SetSelection( mode );
+
+    int format = static_cast<int>( m_BrdSettings->m_DimensionUnitsFormat );
+    m_dimensionUnitsFormat->SetSelection( format );
+
     m_dimensionPrecision->SetSelection( m_BrdSettings->m_DimensionPrecision );
+
+    int position = static_cast<int>( m_BrdSettings->m_DimensionTextPosition );
+    m_dimensionTextPositionMode->SetSelection( position );
+
+    m_dimensionTextKeepAligned->SetValue( m_BrdSettings->m_DimensionKeepTextAligned );
+    m_arrowLength.SetValue( m_BrdSettings->m_DimensionArrowLength );
 
     return true;
 }
@@ -192,8 +204,15 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
                 wxGridCellBoolEditor::IsTrueValue( m_grid->GetCellValue( i, COL_TEXT_UPRIGHT ) );
     }
 
-    m_BrdSettings->m_DimensionUnits = m_dimensionUnits->GetSelection();
-    m_BrdSettings->m_DimensionPrecision = m_dimensionPrecision->GetSelection();
+    int mode = m_dimensionUnits->GetSelection();
+    m_BrdSettings->m_DimensionUnitsMode       = static_cast<DIM_UNITS_MODE>( mode );
+    int format                                = m_dimensionUnitsFormat->GetSelection();
+    m_BrdSettings->m_DimensionUnitsFormat     = static_cast<DIM_UNITS_FORMAT>( format );
+    m_BrdSettings->m_DimensionPrecision       = m_dimensionPrecision->GetSelection();
+    int position                              = m_dimensionTextPositionMode->GetSelection();
+    m_BrdSettings->m_DimensionTextPosition    = static_cast<DIM_TEXT_POSITION>( position );
+    m_BrdSettings->m_DimensionKeepTextAligned = m_dimensionTextKeepAligned->GetValue();
+    m_BrdSettings->m_DimensionArrowLength     = m_arrowLength.GetValue();
 
     return true;
 }

@@ -738,9 +738,12 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->Text().SetTextThickness( boardSettings.GetTextThickness( layer ) );
                 dimension->Text().SetItalic( boardSettings.GetTextItalic( layer ) );
                 dimension->SetLineThickness( boardSettings.GetLineThickness( layer ) );
-                dimension->SetUnits( boardSettings.m_DimensionUnits == 2 ? EDA_UNITS::MILLIMETRES :
-                                                                           EDA_UNITS::INCHES,
-                                     boardSettings.m_DimensionUnits == 1 );
+                dimension->SetUnitsMode( boardSettings.m_DimensionUnitsMode );
+                dimension->SetUnitsFormat( boardSettings.m_DimensionUnitsFormat );
+                dimension->SetPrecision( boardSettings.m_DimensionPrecision );
+                dimension->SetTextPositionMode( boardSettings.m_DimensionTextPosition );
+                dimension->SetKeepTextAligned( boardSettings.m_DimensionKeepTextAligned );
+                dimension->SetArrowLength( boardSettings.m_DimensionArrowLength );
                 dimension->SetStart( (wxPoint) cursorPos );
                 dimension->SetEnd( (wxPoint) cursorPos );
 

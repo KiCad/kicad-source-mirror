@@ -20,6 +20,9 @@ class WX_GRID;
 #include <wx/settings.h>
 #include <wx/grid.h>
 #include <wx/choice.h>
+#include <wx/checkbox.h>
+#include <wx/textctrl.h>
+#include <wx/gbsizer.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
 
@@ -37,10 +40,18 @@ class PANEL_SETUP_TEXT_AND_GRAPHICS_BASE : public wxPanel
 		wxStaticText* m_staticText1;
 		WX_GRID* m_grid;
 		wxStaticText* m_staticText2;
-		wxStaticText* m_dimensionUnitsLabel;
+		wxStaticText* m_lblDimensionUnits;
 		wxChoice* m_dimensionUnits;
-		wxStaticText* m_dimensionPrecisionLabel;
+		wxStaticText* m_lblTextPositionMode;
+		wxChoice* m_dimensionTextPositionMode;
+		wxStaticText* m_lblDimensionUnitsFormat;
+		wxChoice* m_dimensionUnitsFormat;
+		wxCheckBox* m_dimensionTextKeepAligned;
+		wxStaticText* m_lblDimensionPrecision;
 		wxChoice* m_dimensionPrecision;
+		wxStaticText* m_lblArrowLength;
+		wxTextCtrl* m_dimensionArrowLength;
+		wxStaticText* m_arrowLengthUnits;
 
 	public:
 
