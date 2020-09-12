@@ -1033,8 +1033,8 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     if( GetBoard()->GetDesignSettings().IsLayerEnabled( localSettings.m_ActiveLayer ) )
         SetActiveLayer( localSettings.m_ActiveLayer );
 
-    // Update the tracks / vias available sizes list:
-    ReCreateAuxiliaryToolbar();
+    // Updates any auto dimensions and the auxiliary toolbar tracks/via sizes
+    unitsChangeRefresh();
 
     // Display the loaded board:
     Zoom_Automatique( false );
