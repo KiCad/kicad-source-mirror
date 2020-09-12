@@ -217,22 +217,15 @@ void DIMENSION::Move( const wxPoint& offset )
 
 void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
-    wxPoint tmp = m_text.GetTextPos();
-    RotatePoint( &tmp, aRotCentre, aAngle );
-    m_text.SetTextPos( tmp );
+    if( m_keepTextAligned )
+        m_keepTextAligned = false;
 
     double newAngle = m_text.GetTextAngle() + aAngle;
 
     if( newAngle >= 3600 )
         newAngle -= 3600;
 
-    if( newAngle > 900  &&  newAngle < 2700 )
-        newAngle -= 1800;
-
     m_text.SetTextAngle( newAngle );
-
-    RotatePoint( &m_start, aRotCentre, aAngle );
-    RotatePoint( &m_end, aRotCentre, aAngle );
 
     Update();
 }
