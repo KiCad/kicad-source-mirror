@@ -81,17 +81,20 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
     for( TRACK* track : board->Tracks() )
     {
-        bool exceedT = isErrorLimitExceeded( DRCE_DANGLING_TRACK );
-        bool exceedV = isErrorLimitExceeded( DRCE_DANGLING_VIA );
+        bool exceedT = m_drcEngine->IsErrorLimitExceeded( DRCE_DANGLING_TRACK );
+        bool exceedV = m_drcEngine->IsErrorLimitExceeded( DRCE_DANGLING_VIA );
+
+        if( exceedV && exceedT )
+            break;
+        else if( track->Type() == PCB_VIA_T && exceedV )
+            continue;
+        else if( track->Type() == PCB_TRACE_T && exceedT )
+            continue;
+
 
         // Test for dangling items
         int code = track->Type() == PCB_VIA_T ? DRCE_DANGLING_VIA : DRCE_DANGLING_TRACK;
         wxPoint pos;
-
-        if( track->Type() == PCB_VIA_T && exceedV )
-            continue;
-        else if( track->Type() == PCB_TRACE_T && exceedT )
-            continue;
 
         if( connectivity->TestTrackEndpointDangling( track, &pos ) )
         {
@@ -99,9 +102,6 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
             drcItem->SetItems( track );
             ReportWithMarker( drcItem, pos );
         }
-
-        if( exceedV && exceedT )
-            break;
     }
 
     ReportStage( _( "Testing starved zones" ), 0, 2 );
@@ -109,6 +109,9 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
     /* test starved zones */
     for( ZONE_CONTAINER* zone : board->Zones() )
     {
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_ZONE_HAS_EMPTY_NET ) )
+            break;
+
         if( !zone->IsOnCopperLayer() )
             continue;
 
@@ -123,9 +126,6 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ZONE_HAS_EMPTY_NET );
             drcItem->SetItems( zone );
             ReportWithMarker( drcItem, zone->GetPosition() );
-
-            if( isErrorLimitExceeded( DRCE_ZONE_HAS_EMPTY_NET ) )
-                break;
         }
     }
 
@@ -137,12 +137,12 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
     for( const CN_EDGE& edge : edges )
     {
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_UNCONNECTED_ITEMS ) )
+            break;
+
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNCONNECTED_ITEMS );
         drcItem->SetItems( edge.GetSourceNode()->Parent(), edge.GetTargetNode()->Parent() );
         ReportWithMarker( drcItem, edge.GetSourceNode()->Pos() );
-
-        if( isErrorLimitExceeded( DRCE_UNCONNECTED_ITEMS ) )
-            break;
     }
 
     reportRuleStatistics();

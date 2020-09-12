@@ -7,8 +7,10 @@ DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
 {
 }
 
+
 const wxString DRC_TEST_PROVIDER::GetName() const { return "<no name test>"; }
 const wxString DRC_TEST_PROVIDER::GetDescription() const { return ""; }
+
 
 void DRC_TEST_PROVIDER::Report( std::shared_ptr<DRC_ITEM> item )
 {
@@ -24,6 +26,7 @@ void DRC_TEST_PROVIDER::ReportWithMarker( std::shared_ptr<DRC_ITEM> item, VECTOR
     m_drcEngine->Report( item, marker );
 }
 
+
 void DRC_TEST_PROVIDER::ReportWithMarker( std::shared_ptr<DRC_ITEM> item, wxPoint aMarkerPos )
 {
     item->SetViolatingTest( this );
@@ -31,16 +34,19 @@ void DRC_TEST_PROVIDER::ReportWithMarker( std::shared_ptr<DRC_ITEM> item, wxPoin
     m_drcEngine->Report( item, marker ); // fixme: create marker
 }
 
+
 void DRC_TEST_PROVIDER::ReportProgress( double aProgress )
 {
     m_drcEngine->ReportProgress( aProgress );
 }
+
 
 void DRC_TEST_PROVIDER::ReportStage ( const wxString& aStageName, int index, int total )
 {
     m_drcEngine->ReportStage( aStageName, index, total );
     ReportAux( aStageName );
 }
+
 
 void DRC_TEST_PROVIDER::ReportAux( wxString fmt, ... )
 {
@@ -52,16 +58,12 @@ void DRC_TEST_PROVIDER::ReportAux( wxString fmt, ... )
     m_drcEngine->ReportAux( str );
 }
 
-bool DRC_TEST_PROVIDER::isErrorLimitExceeded( int error_code )
-{
-    // fixme: implement error limit (or timeout)
-    return false;
-}
 
 EDA_UNITS DRC_TEST_PROVIDER::userUnits() const
 {
     return m_drcEngine->UserUnits();
 }
+
 
 void DRC_TEST_PROVIDER::accountCheck( const DRC_RULE* ruleToTest )
 {
@@ -72,6 +74,7 @@ void DRC_TEST_PROVIDER::accountCheck( const DRC_RULE* ruleToTest )
     else
         it->second++;
 }
+
 
 void DRC_TEST_PROVIDER::accountCheck( const DRC_CONSTRAINT& constraintToTest )
 {
@@ -86,7 +89,7 @@ void DRC_TEST_PROVIDER::reportRuleStatistics()
 
     m_drcEngine->ReportAux("Rule hit statistics: ");
 
-    for( const std::pair<const DRC_RULE*, int>&  stat : m_stats )
+    for( const std::pair<const DRC_RULE* const, int>& stat : m_stats )
     {
         m_drcEngine->ReportAux( wxString::Format( " - rule '%s': %d hits ",
                                                   stat.first->m_Name,
@@ -94,8 +97,9 @@ void DRC_TEST_PROVIDER::reportRuleStatistics()
     }
 }
 
-int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTypes, const LSET aLayers,
-                                            std::function<bool( BOARD_ITEM*)> aFunc )
+
+int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, LSET aLayers,
+                                            const std::function<bool( BOARD_ITEM*)>& aFunc )
 {
     BOARD *brd = m_drcEngine->GetBoard();
     std::bitset<MAX_STRUCT_TYPE_ID> typeMask;
@@ -104,16 +108,12 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T> aTypes, c
     if( aTypes.size() == 0 )
     {
         for( int i = 0; i < MAX_STRUCT_TYPE_ID; i++ )
-        {
-            typeMask[i] = true;
-        }
+            typeMask[ i ] = true;
     }
     else
     {
-        for( int i = 0; i < aTypes.size(); i++ )
-        {
-            typeMask[ aTypes[i] ] = 1;
-        }
+        for( KICAD_T aType : aTypes )
+            typeMask[ aType ] = true;
     }
 
     /* case PCB_TRACE_T:

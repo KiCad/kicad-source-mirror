@@ -81,16 +81,19 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
 {
     BOARD* board = m_drcEngine->GetBoard();
 
-    auto comp = []( const MODULE* x, const MODULE* y )
-                {
-                    return x->GetReference().CmpNoCase( y->GetReference() ) < 0;
-                };
+    auto compare = []( const MODULE* x, const MODULE* y )
+                   {
+                       return x->GetReference().CmpNoCase( y->GetReference() ) < 0;
+                   };
 
-    auto mods = std::set<MODULE*, decltype( comp )>( comp );
+    auto mods = std::set<MODULE*, decltype( compare )>( compare );
 
     // Search for duplicate footprints on the board
     for( MODULE* mod : board->Modules() )
     {
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_DUPLICATE_FOOTPRINT ) )
+            break;
+
         auto ins = mods.insert( mod );
 
         if( !ins.second )
@@ -99,9 +102,6 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
             drcItem->SetItems( mod, *ins.first );
 
             ReportWithMarker( drcItem, mod->GetPosition() );
-
-            if( isErrorLimitExceeded( DRCE_DUPLICATE_FOOTPRINT ) )
-                break;
         }
     }
 
@@ -113,21 +113,25 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
 
         if( module == nullptr )
         {
-            m_msg.Printf( _( "Missing footprint %s (%s)" ), component->GetReference(),
-                    component->GetValue() );
+            if( m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_FOOTPRINT ) )
+                break;
+
+            m_msg.Printf( _( "Missing footprint %s (%s)" ),
+                          component->GetReference(),
+                          component->GetValue() );
 
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
 
             drcItem->SetErrorMessage( m_msg );
             Report( drcItem );
-
-            if( isErrorLimitExceeded( DRCE_MISSING_FOOTPRINT ) )
-                break;
         }
         else
         {
             for( D_PAD* pad : module->Pads() )
             {
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_NET_CONFLICT ) )
+                    break;
+
                 const COMPONENT_NET& sch_net = component->GetNet( pad->GetName() );
                 const wxString&      pcb_netname = pad->GetNetname();
 
@@ -161,13 +165,13 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     drcItem->SetItems( pad );
                     ReportWithMarker( drcItem, module->GetPosition() );
                 }
-
-                if( isErrorLimitExceeded( DRCE_NET_CONFLICT ) )
-                    break;
             }
 
             for( unsigned jj = 0; jj < component->GetNetCount(); ++jj )
             {
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_NET_CONFLICT ) )
+                    break;
+
                 const COMPONENT_NET& sch_net = component->GetNet( jj );
 
                 if( !module->FindPadByName( sch_net.GetPinName() ) )
@@ -180,9 +184,6 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     drcItem->SetItems( module );
                     ReportWithMarker( drcItem, module->GetPosition() );
                 }
-
-                if( isErrorLimitExceeded( DRCE_NET_CONFLICT ) )
-                    break;
             }
         }
     }
@@ -190,17 +191,15 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
     // Search for component footprints found on board but not in netlist.
     for( MODULE* module : board->Modules() )
     {
-        COMPONENT* component = aNetlist.GetComponentByReference( module->GetReference() );
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_EXTRA_FOOTPRINT ) )
+            break;
 
-        if( component == NULL )
+        if( !aNetlist.GetComponentByReference( module->GetReference() ) )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_EXTRA_FOOTPRINT );
 
             drcItem->SetItems( module );
             ReportWithMarker( drcItem, module->GetPosition() );
-
-            if( isErrorLimitExceeded( DRCE_EXTRA_FOOTPRINT ) )
-                break;
         }
     }
 }

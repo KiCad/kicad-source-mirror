@@ -89,7 +89,7 @@ private:
     void doTrackDrc( TRACK* aRefSeg, PCB_LAYER_ID aLayer, TRACKS::iterator aStartIt,
                      TRACKS::iterator aEndIt, bool aTestZones );
 
-    bool doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit );
+    void doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit );
 };
 
 
@@ -320,12 +320,18 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
     // Compute the min distance to pads
     for( MODULE* mod : m_board->Modules() )
     {
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
+            break;
+
         // Don't preflight at the module level.  Getting a module's bounding box goes
         // through all its pads anyway (so it's no faster), and also all its drawings
         // (so it's in fact slower).
 
         for( D_PAD* pad : mod->Pads() )
         {
+            if( m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
+                break;
+
             // Preflight based on bounding boxes.
             EDA_RECT inflatedBB = refSegBB;
             inflatedBB.Inflate( pad->GetBoundingRadius() + m_largestClearance );
@@ -364,9 +370,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                 ReportWithMarker( drcItem, pad->GetPosition() );
-
-                if( isErrorLimitExceeded( DRCE_CLEARANCE ) )
-                    return;
             }
         }
     }
@@ -378,6 +381,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
     // Test the reference segment with other track segments
     for( auto it = aStartIt; it != aEndIt; it++ )
     {
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
+            break;
+
         TRACK* track = *it;
 
         // No problem if segments have the same net code:
@@ -419,9 +425,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             drcItem->SetViolatingRule( constraint.GetParentRule() );
 
             ReportWithMarker( drcItem, (wxPoint) intersection.get() );
-
-            if( isErrorLimitExceeded( DRCE_TRACKS_CROSSING ) )
-                return;
         }
         else if( refSeg.Collide( &trackSeg, minClearance - bds.GetDRCEpsilon(), &actual ) )
         {
@@ -438,9 +441,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             drcItem->SetViolatingRule( constraint.GetParentRule() );
 
             ReportWithMarker( drcItem, pos );
-
-            if( isErrorLimitExceeded( DRCE_CLEARANCE ) )
-                return;
         }
     }
 
@@ -455,6 +455,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
 
         for( ZONE_CONTAINER* zone : m_board->Zones() )
         {
+            if( m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
+                break;
+
             if( !zone->GetLayerSet().test( aLayer ) || zone->GetIsKeepout() )
                 continue;
 
@@ -472,7 +475,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             int  actual;
 
             accountCheck( constraint );
-
 
             if( zone->GetFilledPolysList( aLayer ).Collide( testSeg, allowedDist, &actual ) )
             {
@@ -540,7 +542,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
     }
 }
 
-bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart,
+void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart,
                                                          D_PAD** aEnd, int x_limit )
 {
     const static LSET all_cu = LSET::AllCuMask();
@@ -550,6 +552,12 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD**
 
     for( D_PAD** pad_list = aStart;  pad_list<aEnd;  ++pad_list )
     {
+        bool exceedClearance = m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
+        bool exceedShorting = m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
+
+        if( exceedClearance && exceedShorting )
+            return;
+
         D_PAD* pad = *pad_list;
 
         if( pad == aRefPad )
@@ -570,7 +578,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD**
         {
             // ...and have nets, then they must be the same net
             if( pad->GetNetCode() && aRefPad->GetNetCode()
-                    && pad->GetNetCode() != aRefPad->GetNetCode() )
+                    && pad->GetNetCode() != aRefPad->GetNetCode()
+                    && !exceedShorting )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
 
@@ -595,6 +604,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD**
 
         for( PCB_LAYER_ID layer : aRefPad->GetLayerSet().Seq() )
         {
+            if( exceedClearance )
+                break;
+
             auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
                                                               aRefPad, pad, layer );
             int  minClearance = constraint.GetValue().Min();
@@ -619,12 +631,10 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD**
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                 ReportWithMarker( drcItem, aRefPad->GetPosition() );
-                return false;
+                break;
             }
         }
     }
-
-    return true;
 }
 
 

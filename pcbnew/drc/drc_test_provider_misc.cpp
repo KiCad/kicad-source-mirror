@@ -134,15 +134,13 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
     auto checkUnresolvedTextVar =
             [&]( EDA_ITEM* item ) -> bool
             {
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
+                    return false;
+
                 EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item );
 
-                wxASSERT( text );
-
-                if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
+                if( text && text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                 {
-                    if( isErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
-                        return false;
-
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                     drcItem->SetItems( item );
 
@@ -157,7 +155,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
     KIGFX::WS_PROXY_VIEW_ITEM* worksheet = m_drcEngine->GetWorksheet();
     WS_DRAW_ITEM_LIST          wsItems;
 
-    if( !worksheet )
+    if( !worksheet || m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
         return;
 
     wsItems.SetMilsToIUfactor( IU_PER_MILS );
@@ -171,18 +169,17 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
 
     for( WS_DRAW_ITEM_BASE* item = wsItems.GetFirst(); item; item = wsItems.GetNext() )
     {
-        if( WS_DRAW_ITEM_TEXT* text = dynamic_cast<WS_DRAW_ITEM_TEXT*>( item ) )
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
+            break;
+
+        WS_DRAW_ITEM_TEXT* text = dynamic_cast<WS_DRAW_ITEM_TEXT*>( item );
+
+        if( text && text->GetShownText().Matches( wxT( "*${*}*" ) ) )
         {
-            if( isErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
-                return;
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
+            drcItem->SetItems( text );
 
-            if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
-            {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
-                drcItem->SetItems( text );
-
-                ReportWithMarker( drcItem, text->GetPosition() );
-            }
+            ReportWithMarker( drcItem, text->GetPosition() );
         }
     }
 }

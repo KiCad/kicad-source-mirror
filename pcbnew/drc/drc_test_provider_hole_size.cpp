@@ -65,8 +65,8 @@ public:
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
 
 private:
-    bool checkVia( VIA* via );
-    bool checkPad( D_PAD* aPad );
+    void checkVia( VIA* via, bool aExceedMicro, bool aExceedStd );
+    void checkPad( D_PAD* aPad );
 
     BOARD* m_board;
 };
@@ -80,10 +80,15 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 
     for( MODULE* module : m_board->Modules() )
     {
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_TOO_SMALL_DRILL ) )
+            break;
+
         for( D_PAD* pad : module->Pads() )
         {
-            if( checkPad( pad ) )
+            if( m_drcEngine->IsErrorLimitExceeded( DRCE_TOO_SMALL_DRILL ) )
                 break;
+
+            checkPad( pad );
         }
     }
 
@@ -100,8 +105,13 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 
     for( VIA* via : vias )
     {
-        if( checkVia( via ) )
+        bool exceedMicro = m_drcEngine->IsErrorLimitExceeded( DRCE_TOO_SMALL_MICROVIA_DRILL );
+        bool exceedStd = m_drcEngine->IsErrorLimitExceeded( DRCE_TOO_SMALL_DRILL );
+
+        if( exceedMicro && exceedStd )
             break;
+
+        checkVia( via, exceedMicro, exceedStd );
     }
 
     reportRuleStatistics();
@@ -110,12 +120,12 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 }
 
 
-bool DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( D_PAD* aPad )
+void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( D_PAD* aPad )
 {
     int holeSize = std::min( aPad->GetDrillSize().x, aPad->GetDrillSize().y );
 
     if( holeSize == 0 )
-        return true;
+        return;
 
     auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_SIZE, aPad );
     int  minHole = constraint.GetValue().Min();
@@ -136,16 +146,29 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( D_PAD* aPad )
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
         ReportWithMarker( drcItem, aPad->GetPosition() );
-
-        return isErrorLimitExceeded( DRCE_TOO_SMALL_DRILL );
     }
-
-    return false;
 }
 
 
-bool DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via )
+void DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via, bool aExceedMicro, bool aExceedStd )
 {
+    int errorCode;
+
+    if( via->GetViaType() == VIATYPE::MICROVIA )
+    {
+        if( aExceedMicro )
+            return;
+
+        errorCode = DRCE_TOO_SMALL_MICROVIA_DRILL;
+    }
+    else
+    {
+        if( aExceedStd )
+            return;
+
+        errorCode = DRCE_TOO_SMALL_DRILL;
+    }
+
     auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_SIZE, via );
     int  minHole = constraint.GetValue().Min();
 
@@ -153,9 +176,6 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via )
 
     if( via->GetDrillValue() < minHole )
     {
-        int errorCode = via->GetViaType() == VIATYPE::MICROVIA ? DRCE_TOO_SMALL_MICROVIA_DRILL :
-                                                                 DRCE_TOO_SMALL_DRILL;
-
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( errorCode );
 
         m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
@@ -168,11 +188,7 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via )
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
         ReportWithMarker( drcItem, via->GetPosition() );
-
-        return isErrorLimitExceeded( errorCode );
     }
-
-    return false;
 }
 
 

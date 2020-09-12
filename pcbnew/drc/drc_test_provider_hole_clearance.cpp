@@ -353,11 +353,17 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
 
     for( size_t ii = 0; ii < m_drilledHoles.size(); ++ii )
     {
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE ) )
+            break;
+
         DRILLED_HOLE& refHole = m_drilledHoles[ ii ];
         int neighborhood = refHole.m_drillRadius + m_largestClearance + m_largestRadius;
 
         for( size_t jj = ii + 1; jj < m_drilledHoles.size(); ++jj )
         {
+            if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE ) )
+                break;
+
             DRILLED_HOLE& checkHole = m_drilledHoles[ jj ];
 
             if( refHole.m_location.x + neighborhood < checkHole.m_location.x )
@@ -390,9 +396,6 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                 ReportWithMarker( drcItem, refHole.m_location );
-
-                if( isErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE ) )
-                    return;
             }
         }
     }

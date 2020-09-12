@@ -35,7 +35,7 @@
 #include <drc/drc_rule.h>
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
-
+#include "drc.h"
 
 void drcPrintDebugMessage( int level, wxString msg, const char *function, int line )
 {
@@ -61,6 +61,7 @@ DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
     m_reporter( nullptr ),
     m_progressReporter( nullptr )
 {
+    m_errorLimits.resize( DRCE_LAST );
 }
 
 
@@ -307,11 +308,12 @@ bool DRC_ENGINE::CompileRules()
         ReportAux( wxString::Format( "- Provider: '%s': ", provider->GetName() ) );
         drc_dbg(7, "do prov %s", provider->GetName() );
 
-        for ( auto id : provider->GetMatchingConstraintIds() )
+        for ( DRC_CONSTRAINT_TYPE_T id : provider->GetMatchingConstraintIds() )
         {
-            drc_dbg(7, "do id %d", id);
-            if( m_constraintMap.find(id) == m_constraintMap.end() )
-                m_constraintMap[id] = new CONSTRAINT_SET;
+            drc_dbg( 7, "do id %d", id );
+
+            if( m_constraintMap.find( id ) == m_constraintMap.end() )
+                m_constraintMap[ id ] = new CONSTRAINT_SET;
 
             m_constraintMap[ id ]->provider = provider;
 
@@ -364,9 +366,7 @@ bool DRC_ENGINE::CompileRules()
                         ReportAux( wxString::Format( "       |- constraint: %s",
                                                      formatConstraint( constraint ) ) );
                     }
-
                 }
-        
             }
         }
     }
@@ -428,12 +428,23 @@ void DRC_ENGINE::InitEngine( wxFileName aRulePath )
     inferLegacyRules();
 
     CompileRules();
+
+    for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
+        m_errorLimits[ ii ] = INT_MAX;
 }
 
 
 void DRC_ENGINE::RunTests( )
 {
     m_drcReport = std::make_shared<DRC_REPORT>();
+
+    for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
+    {
+        if( m_designSettings->Ignore( ii ) )
+            m_errorLimits[ ii ] = 0;
+        else
+            m_errorLimits[ ii ] = INT_MAX;
+    }
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {

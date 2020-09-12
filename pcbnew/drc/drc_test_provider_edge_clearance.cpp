@@ -93,17 +93,19 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     std::vector<DRAWSEGMENT*> boardOutline;
     std::vector<BOARD_ITEM*> boardItems;
 
-    auto queryBoardOutlineItems = [&] ( BOARD_ITEM *item ) -> bool
-    {
-        boardOutline.push_back( dyn_cast<DRAWSEGMENT*>( item ) );
-        return true;
-    };
+    auto queryBoardOutlineItems =
+            [&]( BOARD_ITEM *item ) -> bool
+            {
+                boardOutline.push_back( dyn_cast<DRAWSEGMENT*>( item ) );
+                return true;
+            };
 
-    auto queryBoardGeometryItems = [&] ( BOARD_ITEM *item ) -> bool
-    {
-        boardItems.push_back( item );
-        return true;
-    };
+    auto queryBoardGeometryItems =
+            [&]( BOARD_ITEM *item ) -> bool
+            {
+                boardItems.push_back( item );
+                return true;
+            };
 
     forEachGeometryItem( { PCB_LINE_T }, LSET( Edge_Cuts ), queryBoardOutlineItems );
     forEachGeometryItem( {}, LSET::AllTechMask() | LSET::AllCuMask(), queryBoardGeometryItems );
@@ -111,16 +113,20 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     wxString val;
     wxGetEnv( "WXTRACE", &val);
 
-    drc_dbg(2,"outline: %d items, board: %d items\n", boardOutline.size(), boardItems.size() );
-
-    bool stop = false;
+    drc_dbg( 2,"outline: %d items, board: %d items\n", boardOutline.size(), boardItems.size() );
 
     for( DRAWSEGMENT* outlineItem : boardOutline )
     {
+        if( m_drcEngine->IsErrorLimitExceeded( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE ) )
+            break;
+
         const std::shared_ptr<SHAPE>& refShape = outlineItem->GetEffectiveShape();
 
         for( BOARD_ITEM* boardItem : boardItems )
         {
+            if( m_drcEngine->IsErrorLimitExceeded( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE ) )
+                break;
+
             drc_dbg( 10, "RefT %d %p %s %d\n", outlineItem->Type(), outlineItem,
                      outlineItem->GetClass(), outlineItem->GetLayer() );
             drc_dbg( 10, "BoardT %d %p %s %d\n", boardItem->Type(), boardItem,
@@ -149,17 +155,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                 ReportWithMarker( drcItem, refShape->Centre() );
-
-                if( isErrorLimitExceeded( DRCE_COPPER_EDGE_CLEARANCE ) )
-                {
-                    stop = true;
-                    break;
-                }
             }
         }
-
-        if( stop )
-            break;
     }
 
     reportRuleStatistics();

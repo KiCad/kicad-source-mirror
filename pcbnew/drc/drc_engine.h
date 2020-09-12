@@ -119,35 +119,17 @@ public:
     DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS* aSettings );
     ~DRC_ENGINE();
 
-    void SetSchematicNetlist( NETLIST* aNetlist )
-    {
-        m_schematicNetlist = aNetlist;
-    }
+    void SetSchematicNetlist( NETLIST* aNetlist ) { m_schematicNetlist = aNetlist; }
+    NETLIST* GetSchematicNetlist() const { return m_schematicNetlist; }
 
-    NETLIST* GetSchematicNetlist() const
-    {
-        return m_schematicNetlist;
-    }
+    // JEY TODO: why isn't this called?
+    void SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet ) { m_worksheet = aWorksheet; }
+    KIGFX::WS_PROXY_VIEW_ITEM* GetWorksheet() const { return m_worksheet; }
 
-    void SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
-    {
-        m_worksheet = aWorksheet;
-    }
+    // JEY TODO: rationalize old progress report style with new...
+    void SetProgressReporter( PROGRESS_REPORTER* aProgRep ) { m_progressReporter = aProgRep; }
 
-    KIGFX::WS_PROXY_VIEW_ITEM* GetWorksheet() const
-    {
-        return m_worksheet;
-    }
-
-    void SetProgressReporter( PROGRESS_REPORTER* aProgRep )
-    {
-        m_progressReporter = aProgRep;
-    }
-
-    void SetLogReporter( REPORTER* aReporter )
-    {
-        m_reporter = aReporter;
-    }
+    void SetLogReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
 
     bool LoadRules( wxFileName aPath );
 
@@ -157,14 +139,15 @@ public:
 
     void SetErrorLimit( int aLimit );
 
-    BOARD_DESIGN_SETTINGS* GetDesignSettings() const
-    {
-        return m_designSettings;
-    }
+    BOARD_DESIGN_SETTINGS* GetDesignSettings() const { return m_designSettings; }
 
-    BOARD* GetBoard() const
+    BOARD* GetBoard() const { return m_board; }
+
+    bool IsErrorLimitExceeded( int error_code )
     {
-        return m_board;
+        m_errorLimits[ error_code ] -= 1;
+
+        return m_errorLimits[ error_code ] <= 0;
     }
 
     DRC_CONSTRAINT EvalRulesForItems( DRC_CONSTRAINT_TYPE_T ruleID, BOARD_ITEM* a,
@@ -190,7 +173,7 @@ public:
 
     bool CompileRules();
 
-    void Report( std::shared_ptr<DRC_ITEM> aItem, ::MARKER_PCB *Marker );
+    void Report( std::shared_ptr<DRC_ITEM> aItem, MARKER_PCB *Marker );
     void ReportProgress( double aProgress );
     void ReportStage ( const wxString& aStageName, int index, int total );
     void ReportAux( const wxString& aStr );
@@ -221,8 +204,6 @@ private:
         DRC_TEST_PROVIDER*                       provider;
     };
 
-    typedef std::unordered_map<DRC_CONSTRAINT_TYPE_T, CONSTRAINT_SET*> CONSTRAINT_MAP;
-
     void inferLegacyRules();
     void loadTestProviders();
     DRC_RULE* createInferredRule( const wxString& name, std::set<BOARD_ITEM*> items, int priority );
@@ -238,8 +219,11 @@ protected:
     std::vector<DRC_RULE_CONDITION*> m_ruleConditions;
     std::vector<DRC_RULE*>           m_rules;
     std::vector<DRC_TEST_PROVIDER*>  m_testProviders;
-    std::unordered_map<EDA_ITEM*, CONSTRAINT_SET*> m_implicitRules;
-    CONSTRAINT_MAP                   m_constraintMap;
+    std::vector<int>                 m_errorLimits;
+
+    std::unordered_map<EDA_ITEM*, CONSTRAINT_SET*>             m_implicitRules;
+    std::unordered_map<DRC_CONSTRAINT_TYPE_T, CONSTRAINT_SET*> m_constraintMap;
+
     REPORTER*                        m_reporter;
     PROGRESS_REPORTER*               m_progressReporter;
 

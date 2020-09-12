@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-//#include <common.h>
 #include <class_track.h>
 #include <drc/drc_engine.h>
 #include <drc/drc.h>
@@ -78,7 +77,10 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
     auto checkViaDiameter =
             [&]( BOARD_ITEM* item ) -> bool
             {
-                auto via = dyn_cast<VIA*>( item );
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_VIA_DIAMETER ) )
+                    return false;
+
+                VIA* via = dyn_cast<VIA*>( item );
 
                 // fixme: move to pad stack check?
                 if( !via )
@@ -118,10 +120,6 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                     ReportWithMarker( drcItem, via->GetPosition() );
-
-                    if( isErrorLimitExceeded( DRCE_VIA_DIAMETER ) )
-                        return false;
-
                 }
 
                 return true;

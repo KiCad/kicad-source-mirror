@@ -77,6 +77,9 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
 
     auto checkItem = [&]( BOARD_ITEM *item ) -> bool
     {
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_ALLOWED_ITEMS ) )
+            return false;
+
         auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_DISALLOW, item );
 
         if( constraint.m_DisallowFlags )
@@ -91,9 +94,6 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
             drcItem->SetViolatingRule( constraint.GetParentRule() );
 
             ReportWithMarker( drcItem, item->GetPosition() );
-
-            if( isErrorLimitExceeded( DRCE_ALLOWED_ITEMS ) )
-                return false;
         }
 
         return true;

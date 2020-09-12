@@ -76,6 +76,9 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
     auto checkTrackWidth =
             [&]( BOARD_ITEM* item ) -> bool
             {
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_TRACK_WIDTH ) )
+                    return false;
+
                 int      actual;
                 VECTOR2I p0;
 
@@ -123,10 +126,6 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                     ReportWithMarker( drcItem, p0 );
-
-                    if( isErrorLimitExceeded( DRCE_TRACK_WIDTH ) )
-                        return false;
-
                 }
 
                 return true;

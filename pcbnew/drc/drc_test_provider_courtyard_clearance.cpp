@@ -84,7 +84,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
             if( footprint->GetPolyCourtyardFront().OutlineCount() == 0
                 && footprint->GetPolyCourtyardBack().OutlineCount() == 0 )
             {
-                if( isErrorLimitExceeded( DRCE_MISSING_COURTYARD ) )
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_COURTYARD ) )
                     continue;
 
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_COURTYARD );
@@ -99,16 +99,16 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
         }
         else
         {
-            if( !isErrorLimitExceeded( DRCE_MALFORMED_COURTYARD) )
-            {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
+            if( m_drcEngine->IsErrorLimitExceeded( DRCE_MALFORMED_COURTYARD) )
+                continue;
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (not a closed shape)" ) );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
 
-                drcItem->SetErrorMessage( m_msg );
-                drcItem->SetItems( footprint );
-                ReportWithMarker( drcItem, footprint->GetPosition() );
-            }
+            m_msg.Printf( drcItem->GetErrorText() + _( " (not a closed shape)" ) );
+
+            drcItem->SetErrorMessage( m_msg );
+            drcItem->SetItems( footprint );
+            ReportWithMarker( drcItem, footprint->GetPosition() );
         }
     }
 }
@@ -120,6 +120,9 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
 
     for( auto it1 = m_board->Modules().begin(); it1 != m_board->Modules().end(); it1++ )
     {
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_FOOTPRINTS) )
+            break;
+
         MODULE*         footprint = *it1;
         SHAPE_POLY_SET& footprintFront = footprint->GetPolyCourtyardFront();
         SHAPE_POLY_SET& footprintBack = footprint->GetPolyCourtyardBack();
@@ -173,9 +176,6 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_OVERLAPPING_FOOTPRINTS );
                 drcItem->SetItems( footprint, test );
                 ReportWithMarker ( drcItem, pos );
-
-                if( isErrorLimitExceeded( DRCE_OVERLAPPING_FOOTPRINTS ) )
-                    return;
             }
         }
     }

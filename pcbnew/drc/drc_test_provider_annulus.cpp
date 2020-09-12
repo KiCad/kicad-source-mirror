@@ -79,6 +79,9 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
     auto checkAnnulus =
             [&]( BOARD_ITEM* item ) -> bool
             {
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_ANNULUS ) )
+                    return false;
+
                 int  v_min;
                 int  v_max;
                 VIA* via = dyn_cast<VIA*>( item );
@@ -123,10 +126,6 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                     ReportWithMarker( drcItem, via->GetPosition() );
-
-                    if( isErrorLimitExceeded( DRCE_ANNULUS ) )
-                        return false;
-
                 }
 
                 return true;

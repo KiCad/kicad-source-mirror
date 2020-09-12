@@ -108,13 +108,12 @@ public:
     }
 
 protected:
-    int forEachGeometryItem( const std::vector<KICAD_T> aTypes, const LSET aLayers,
-                             std::function<bool(BOARD_ITEM*)> aFunc );
+    int forEachGeometryItem( const std::vector<KICAD_T>& aTypes, LSET aLayers,
+                             const std::function<bool(BOARD_ITEM*)>& aFunc );
 
     virtual void reportRuleStatistics();
     virtual void accountCheck( const DRC_RULE* ruleToTest );
     virtual void accountCheck( const DRC_CONSTRAINT& constraintToTest );
-    virtual bool isErrorLimitExceeded( int error_code );
 
     EDA_UNITS   userUnits() const;
     DRC_ENGINE* m_drcEngine;
