@@ -42,6 +42,7 @@ private:
     PCB_EDIT_FRAME*         m_Frame;
     BOARD_DESIGN_SETTINGS*  m_BrdSettings;
     UNIT_BINDER             m_arrowLength;
+    UNIT_BINDER             m_extensionOffset;
 
 private:
     bool validateData();

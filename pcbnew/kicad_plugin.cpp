@@ -709,7 +709,7 @@ void PCB_IO::format( ALIGNED_DIMENSION* aDimension, int aNestLevel ) const
                   FormatInternalUnits( aDimension->GetExtensionHeight() ).c_str(),
                   FormatInternalUnits( aDimension->GetExtensionOffset() ).c_str() );
 
-    if( !aDimension->GetKeepTextAligned() )
+    if( aDimension->GetKeepTextAligned() )
         m_out->Print( 0, " keep_text_aligned" );
 
     m_out->Print( 0, ")\n" );

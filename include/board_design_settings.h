@@ -50,6 +50,7 @@
 #define DEFAULT_TEXT_WIDTH            0.15
 
 #define DEFAULT_DIMENSION_ARROW_LENGTH 50 // mils, for legacy purposes
+#define DEFAULT_DIMENSION_EXTENSION_OFFSET 0.5
 
 // Board thickness, mainly for 3D view:
 #define DEFAULT_BOARD_THICKNESS_MM    1.6
@@ -280,9 +281,11 @@ public:
     DIM_UNITS_MODE    m_DimensionUnitsMode;
     int               m_DimensionPrecision; ///< Number of digits after the decimal
     DIM_UNITS_FORMAT  m_DimensionUnitsFormat;
+    bool              m_DimensionSuppressZeroes;
     DIM_TEXT_POSITION m_DimensionTextPosition;
     bool              m_DimensionKeepTextAligned;
     int               m_DimensionArrowLength;
+    int               m_DimensionExtensionOffset;
 
     // Miscellaneous
     wxPoint    m_AuxOrigin;                 ///< origin for plot exports

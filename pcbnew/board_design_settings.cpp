@@ -122,9 +122,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_DimensionPrecision       = 4;
     m_DimensionUnitsMode       = DIM_UNITS_MODE::AUTOMATIC;
     m_DimensionUnitsFormat     = DIM_UNITS_FORMAT::BARE_SUFFIX;
+    m_DimensionSuppressZeroes  = false;
     m_DimensionTextPosition    = DIM_TEXT_POSITION::OUTSIDE;
     m_DimensionKeepTextAligned = true;
     m_DimensionArrowLength     = Mils2iu( DEFAULT_DIMENSION_ARROW_LENGTH );
+    m_DimensionExtensionOffset = Millimeter2iu( DEFAULT_DIMENSION_EXTENSION_OFFSET );
 
     m_useCustomTrackVia = false;
     m_customTrackWidth  = Millimeter2iu( DEFAULT_CUSTOMTRACKWIDTH );
@@ -524,7 +526,10 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     m_params.emplace_back( new PARAM_ENUM<DIM_UNITS_FORMAT>( "defaults.dimensions.units_format",
             &m_DimensionUnitsFormat, DIM_UNITS_FORMAT::BARE_SUFFIX, DIM_UNITS_FORMAT::NO_SUFFIX,
-                                                             DIM_UNITS_FORMAT::PAREN_SUFFIX ) );
+            DIM_UNITS_FORMAT::PAREN_SUFFIX ) );
+
+    m_params.emplace_back( new PARAM<bool>( "defaults.dimensions.suppress_zeroes",
+            &m_DimensionSuppressZeroes, false ) );
 
     // NOTE: excluding DIM_TEXT_POSITION::MANUAL from the valid range here
     m_params.emplace_back( new PARAM_ENUM<DIM_TEXT_POSITION>( "defaults.dimensions.text_position",
@@ -532,11 +537,15 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             DIM_TEXT_POSITION::INLINE ) );
 
     m_params.emplace_back( new PARAM<bool>( "defaults.dimensions.keep_text_aligned",
-                                            &m_DimensionKeepTextAligned, true ) );
+            &m_DimensionKeepTextAligned, true ) );
 
     m_params.emplace_back( new PARAM<int>( "defaults.dimensions.arrow_length",
-                                           &m_DimensionArrowLength,
-                                           Mils2iu( DEFAULT_DIMENSION_ARROW_LENGTH ) ) );
+            &m_DimensionArrowLength,
+            Mils2iu( DEFAULT_DIMENSION_ARROW_LENGTH ) ) );
+
+    m_params.emplace_back( new PARAM<int>( "defaults.dimensions.extension_offset",
+            &m_DimensionExtensionOffset,
+            Millimeter2iu( DEFAULT_DIMENSION_EXTENSION_OFFSET ) ) );
 
     m_params.emplace_back( new PARAM<bool>( "defaults.zones.45_degree_only",
             &m_defaultZoneSettings.m_Zone_45_Only, false ) );
@@ -660,9 +669,11 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_DimensionUnitsMode       = aOther.m_DimensionUnitsMode;
     m_DimensionPrecision       = aOther.m_DimensionPrecision;
     m_DimensionUnitsFormat     = aOther.m_DimensionUnitsFormat;
+    m_DimensionSuppressZeroes  = aOther.m_DimensionSuppressZeroes;
     m_DimensionTextPosition    = aOther.m_DimensionTextPosition;
     m_DimensionKeepTextAligned = aOther.m_DimensionKeepTextAligned;
     m_DimensionArrowLength     = aOther.m_DimensionArrowLength;
+    m_DimensionExtensionOffset = aOther.m_DimensionExtensionOffset;
 
     m_AuxOrigin              = aOther.m_AuxOrigin;
     m_GridOrigin             = aOther.m_GridOrigin;

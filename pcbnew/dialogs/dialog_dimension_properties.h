@@ -62,6 +62,7 @@ private:
 
     UNIT_BINDER m_lineThickness;
     UNIT_BINDER m_arrowLength;
+    UNIT_BINDER m_extensionOffset;
 
     void updateDimensionFromDialog( DIMENSION* aTarget );
 

@@ -41,7 +41,9 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_orientValidator( 1, &m_orientValue ),
         m_lineThickness( aParent, m_lblLineThickness, m_txtLineThickness,
                          m_lblLineThicknessUnits, true ),
-        m_arrowLength( aParent, m_lblArrowLength, m_txtArrowLength, m_lblArrowLengthUnits, true )
+        m_arrowLength( aParent, m_lblArrowLength, m_txtArrowLength, m_lblArrowLengthUnits, true ),
+        m_extensionOffset( aParent, m_lblExtensionOffset, m_txtExtensionOffset,
+                           m_lblExtensionOffsetUnits )
 {
     wxASSERT( aItem->Type() == PCB_DIMENSION_T );
     m_dimension = static_cast<DIMENSION*>( aItem );
@@ -182,6 +184,7 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
     m_lineThickness.SetValue( m_dimension->GetLineThickness() );
     m_arrowLength.SetValue( m_dimension->GetArrowLength() );
+    m_extensionOffset.SetValue( m_dimension->GetExtensionOffset() );
 
     // Do this last; it depends on the other settings
     if( m_dimension->GetOverrideTextEnabled() )
@@ -266,6 +269,7 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( DIMENSION* aTarget 
 
     aTarget->SetLineThickness( m_lineThickness.GetValue() );
     aTarget->SetArrowLength( m_arrowLength.GetValue() );
+    aTarget->SetExtensionOffset( m_extensionOffset.GetValue() );
 
     aTarget->Update();
 }

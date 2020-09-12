@@ -52,6 +52,10 @@ class PANEL_SETUP_TEXT_AND_GRAPHICS_BASE : public wxPanel
 		wxStaticText* m_lblArrowLength;
 		wxTextCtrl* m_dimensionArrowLength;
 		wxStaticText* m_arrowLengthUnits;
+		wxCheckBox* m_dimensionSuppressZeroes;
+		wxStaticText* m_lblExtensionOffset;
+		wxTextCtrl* m_dimensionExtensionOffset;
+		wxStaticText* m_dimensionExtensionOffsetUnits;
 
 	public:
 

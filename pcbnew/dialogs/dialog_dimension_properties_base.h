@@ -90,6 +90,9 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_lblArrowLength;
 		wxTextCtrl* m_txtArrowLength;
 		wxStaticText* m_lblArrowLengthUnits;
+		wxStaticText* m_lblExtensionOffset;
+		wxTextCtrl* m_txtExtensionOffset;
+		wxStaticText* m_lblExtensionOffsetUnits;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -103,7 +106,7 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dimension Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 654,655 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
+		DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dimension Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 654,757 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
 		~DIALOG_DIMENSION_PROPERTIES_BASE();
 
 };

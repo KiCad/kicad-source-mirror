@@ -93,7 +93,7 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 	gbSizer1->Add( m_dimensionUnits, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
 
-	gbSizer1->Add( 40, 0, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	gbSizer1->Add( 100, 0, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 
 	m_lblTextPositionMode = new wxStaticText( this, wxID_ANY, _("Text position:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblTextPositionMode->Wrap( -1 );
@@ -144,6 +144,22 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 	m_arrowLengthUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_arrowLengthUnits->Wrap( -1 );
 	gbSizer1->Add( m_arrowLengthUnits, wxGBPosition( 2, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_dimensionSuppressZeroes = new wxCheckBox( this, wxID_ANY, _("Suppress trailing zeroes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_dimensionSuppressZeroes->SetToolTip( _("When checked, \"1.2300\" will be rendered as \"1.23\" even if precision is set to show more digits") );
+
+	gbSizer1->Add( m_dimensionSuppressZeroes, wxGBPosition( 3, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_lblExtensionOffset = new wxStaticText( this, wxID_ANY, _("Extension line offset:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblExtensionOffset->Wrap( -1 );
+	gbSizer1->Add( m_lblExtensionOffset, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_dimensionExtensionOffset = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_dimensionExtensionOffset, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+
+	m_dimensionExtensionOffsetUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_dimensionExtensionOffsetUnits->Wrap( -1 );
+	gbSizer1->Add( m_dimensionExtensionOffsetUnits, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	m_gridSizer->Add( gbSizer1, 1, wxBOTTOM|wxEXPAND|wxLEFT, 20 );

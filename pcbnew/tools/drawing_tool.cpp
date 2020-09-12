@@ -741,9 +741,11 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->SetUnitsMode( boardSettings.m_DimensionUnitsMode );
                 dimension->SetUnitsFormat( boardSettings.m_DimensionUnitsFormat );
                 dimension->SetPrecision( boardSettings.m_DimensionPrecision );
+                dimension->SetSuppressZeroes( boardSettings.m_DimensionSuppressZeroes );
                 dimension->SetTextPositionMode( boardSettings.m_DimensionTextPosition );
                 dimension->SetKeepTextAligned( boardSettings.m_DimensionKeepTextAligned );
                 dimension->SetArrowLength( boardSettings.m_DimensionArrowLength );
+                dimension->SetExtensionOffset( boardSettings.m_DimensionExtensionOffset );
                 dimension->SetStart( (wxPoint) cursorPos );
                 dimension->SetEnd( (wxPoint) cursorPos );
 
