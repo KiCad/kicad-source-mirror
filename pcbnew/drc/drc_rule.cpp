@@ -78,6 +78,14 @@ const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* 
         }
         else
         {
+            if( !rule->m_Condition )
+            {
+                if( aReporter )
+                    aReporter->Report( _( "No condition found; rule not applied." ) );
+
+                return nullptr;
+            }
+
             if( aReporter )
             {
                 aReporter->Report( wxString::Format( _( "Checking rule condition \"%s\"." ),
