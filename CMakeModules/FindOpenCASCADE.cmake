@@ -91,14 +91,27 @@ if(WIN32)
       /usr/local/lib
       /opt/opencascade/lib
     )
-  else(CYGWIN OR MINGW)
+  elseif(VCPKG_TOOLCHAIN)
+    FIND_PATH(OCC_INCLUDE_DIR 
+      NAMES Standard_Version.hxx
+      PATH_SUFFIXES
+        include/opencascade
+    )
+    FIND_LIBRARY(OCC_LIBRARY 
+      NAMES TKernel
+      HINTS
+      ${OCC_LIBRARY_DIR}
+      PATH_SUFFIXES
+        lib
+    )
+  else()
     FIND_PATH(OCC_INCLUDE_DIR Standard_Version.hxx
       "[HKEY_LOCAL_MACHINE\\SOFTWARE\\SIM\\OCC\\2;Installation Path]/include"
     )
     FIND_LIBRARY(OCC_LIBRARY TKernel
       "[HKEY_LOCAL_MACHINE\\SOFTWARE\\SIM\\OCC\\2;Installation Path]/lib"
     )
-  endif(CYGWIN OR MINGW)
+  endif()
 else(WIN32)
   FIND_PATH(OCC_INCLUDE_DIR Standard_Version.hxx
     /usr/include/opencascade
