@@ -149,7 +149,9 @@ public:
         m_reporter = aReporter;
     }
 
-    void InitEngine();
+    bool LoadRules( wxFileName aPath );
+
+    void InitEngine( wxFileName aRulePath );
 
     void RunTests();
 

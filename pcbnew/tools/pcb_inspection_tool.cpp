@@ -183,14 +183,13 @@ void PCB_INSPECTION_TOOL::reportZoneConnection( ZONE_CONTAINER* aZone, D_PAD* aP
 void PCB_INSPECTION_TOOL::reportCopperClearance( PCB_LAYER_ID aLayer, BOARD_CONNECTED_ITEM* aA,
                                                  BOARD_ITEM* aB, REPORTER* r )
 {
-    wxString source;
-
     r->Report( "" );
 
     DRC_ENGINE drcEngine( m_frame->GetBoard(), &m_frame->GetBoard()->GetDesignSettings() );
-    drcEngine.InitEngine();
+    drcEngine.InitEngine( m_frame->Prj().AbsolutePath( "drc-rules" ) );
 
-    auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aA, aB, aLayer );
+    auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aA, aB,
+                                                   aLayer, r );
 
     if( r )
     {

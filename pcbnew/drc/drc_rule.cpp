@@ -165,21 +165,20 @@ DRC_RULE_CONDITION::~DRC_RULE_CONDITION()
 bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB,
                                       PCB_LAYER_ID aLayer, REPORTER* aReporter )
 {
+#define REPORT( s ) { if( aReporter ) { aReporter->Report( s ); } }
+
     if( GetExpression().IsEmpty() )
     {
-        if( aReporter )
-            aReporter->Report( _( "Unconditional constraint." ) );
+        REPORT( _( "Unconditional constraint." ) );
 
         return true;
     }
 
-    if( aReporter )
-        aReporter->Report( _( "Evaluating expression \"" + GetExpression() + "\"." ) );
+    REPORT( _( "Checking rule condition \"" + GetExpression() + "\"." ) );
 
     if( !m_ucode )
     {
-        if( aReporter )
-            aReporter->Report( _( "ERROR in expression." ) );
+        REPORT( _( "ERROR in expression." ) );
 
         return false;
     }
@@ -191,8 +190,7 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
     ctx.SetItems( a, b );
     ctx.SetErrorCallback( [&]( const wxString& aMessage, int aOffset )
                           {
-                              if( aReporter )
-                                  aReporter->Report( _( "ERROR: " ) + aMessage );
+                              REPORT( _( "ERROR: " ) + aMessage );
                           } );
 
     return m_ucode->Run( &ctx )->AsDouble() != 0.0;

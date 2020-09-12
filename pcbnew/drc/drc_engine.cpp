@@ -375,25 +375,64 @@ bool DRC_ENGINE::CompileRules()
 }
 
 
-void DRC_ENGINE::InitEngine()
+bool DRC_ENGINE::LoadRules( wxFileName aPath )
+{
+    NULL_REPORTER nullReporter;
+    REPORTER*     reporter = m_reporter ? m_reporter : &nullReporter;
+
+    if( aPath.FileExists() )
+    {
+        m_ruleConditions.clear();
+        m_rules.clear();
+
+        FILE* fp = wxFopen( aPath.GetFullPath(), wxT( "rt" ) );
+
+        if( fp )
+        {
+            try
+            {
+                DRC_RULES_PARSER parser( m_board, fp, aPath.GetFullPath() );
+                parser.Parse( m_rules, reporter );
+            }
+            catch( PARSE_ERROR& pe )
+            {
+                // Don't leave possibly malformed stuff around for us to trip over
+                m_ruleConditions.clear();
+                m_rules.clear();
+
+                // JEY TODO
+                //wxSafeYield( m_editFrame );
+                //m_editFrame->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
+                //                                   pe.lineNumber, pe.byteIndex );
+
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+
+void DRC_ENGINE::InitEngine( wxFileName aRulePath )
 {
     m_testProviders = DRC_TEST_PROVIDER_REGISTRY::Instance().GetTestProviders();
 
-    for( auto provider : m_testProviders )
+    for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
         ReportAux( wxString::Format( "Create DRC provider: '%s'", provider->GetName() ) );
         provider->SetDRCEngine( this );
     }
 
+    LoadRules( aRulePath );
     inferLegacyRules();
+
     CompileRules();
 }
 
 
 void DRC_ENGINE::RunTests( )
 {
-    InitEngine();
-
     m_drcReport = std::make_shared<DRC_REPORT>();
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
@@ -492,23 +531,25 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
         if( rcond->conditions.size() == 0 )  // uconditional
         {
-            REPORT( "No condition found; rule applied." );
+            REPORT( _( "Unconditional constraint; rule applied." ) );
 
             return rcond->constraint;
         }
 
         for( DRC_RULE_CONDITION* condition : rcond->conditions )
         {
-            REPORT( wxString::Format( _( "Checking rule condition \"%s\"." ),
-                                      condition->GetExpression() ) );
-
             bool result = condition->EvaluateFor( a, b, aLayer, aReporter );
 
-            REPORT( result ? _( "Rule applied." )
-                           : _( "Condition not satisfied; rule not applied." ) );
-
             if( result )
+            {
+                REPORT( _( "Rule applied." ) );
                 return rcond->constraint;
+            }
+            else
+            {
+                REPORT( _( "Condition not satisfied; rule not applied." ) );
+                REPORT( "" );
+            }
         }
     }
 

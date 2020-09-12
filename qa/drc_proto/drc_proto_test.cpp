@@ -184,57 +184,11 @@ PROJECT_CONTEXT loadKicadProject( wxString filename )
 }
 
 
-class TEST_DRC_ENGINE : public DRC_ENGINE
-{
-public:
-    TEST_DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS* aSettings ) :
-            DRC_ENGINE( aBoard, aSettings )
-    { }
-
-    bool LoadRules( wxFileName aPath )
-    {
-        if( aPath.FileExists() )
-        {
-            m_ruleConditions.clear();
-            m_rules.clear();
-
-            FILE* fp = wxFopen( aPath.GetFullPath(), wxT( "rt" ) );
-
-            if( fp )
-            {
-                try
-                {
-                    DRC_RULES_PARSER parser( m_board, fp, aPath.GetFullPath() );
-                    parser.Parse( m_rules, nullptr );
-                }
-                catch( PARSE_ERROR& pe )
-                {
-                    // Don't leave possibly malformed stuff around for us to trip over
-                    m_ruleConditions.clear();
-                    m_rules.clear();
-
-                    //wxSafeYield( m_editFrame );
-                    //m_editFrame->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
-                    //                                   pe.lineNumber, pe.byteIndex );
-
-                    throw;
-
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-};
-
-
 int main( int argc, char *argv[] )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     propMgr.Rebuild();
 
-    
     if( argc < 2 )
     {
         printf("usage: %s board_file.kicad_pcb [drc-rules-file]\n", argv[0] );
@@ -245,24 +199,21 @@ int main( int argc, char *argv[] )
 
 
 
-    TEST_DRC_ENGINE drcEngine( project.board.get(), &project.board->GetDesignSettings() );
+    DRC_ENGINE drcEngine( project.board.get(), &project.board->GetDesignSettings() );
 
     CONSOLE_LOG consoleLog;
 
     drcEngine.SetLogReporter( new CONSOLE_MSG_REPORTER ( &consoleLog ) );
     drcEngine.SetProgressReporter( new CONSOLE_PROGRESS_REPORTER ( &consoleLog ) );
 
+    wxString rulesFilepath;
+
     if( argc > 2 )
-    {
-        try
-        {
-            drcEngine.LoadRules( wxString( argv[2] ) );
-        }
-        catch( PARSE_ERROR& err )
-        {
-            return -1;
-        }
-    }
+        rulesFilepath = wxString( argv[2] );
+    else
+        rulesFilepath = project.project->AbsolutePath( "drc-rules" );
+
+    drcEngine.InitEngine( rulesFilepath );
 
     drcEngine.RunTests();
     auto report = drcEngine.GetReport();
