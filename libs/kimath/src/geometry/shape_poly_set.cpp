@@ -1999,7 +1999,12 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition )
         // This partitions into regularly-sized grids (1cm in pcbnew)
         partitionPolyIntoRegularCellGrid( *this, 1e7, tmpSet );
     else
+    {
         tmpSet = *this;
+
+        if( tmpSet.HasHoles() )
+            tmpSet.Fracture( PM_FAST );
+    }
 
     m_triangulatedPolys.clear();
     m_triangulationValid = true;
