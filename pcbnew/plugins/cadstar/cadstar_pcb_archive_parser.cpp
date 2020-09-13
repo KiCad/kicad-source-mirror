@@ -52,6 +52,17 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
                 wxASSERT_MSG( true, wxT( "Unknown File Resolution" ) );
                 break;
             }
+            
+            if( Header.Format.Type != wxT( "LAYOUT" ) )
+                if( Header.Format.Type == wxT( "LIBRARY" ) )
+                    THROW_IO_ERROR(
+                            "The selected file is a CADSTAR Library file (as opposed to a Layout "
+                            "file). CADSTAR libraries cannot yet be imported into KiCad." );
+                else
+                    THROW_IO_ERROR(
+                            "The selected file is an unknown CADSTAR format so cannot be "
+                            "imported into KiCad." );
+
         }
         else if( cNode->GetName() == wxT( "ASSIGNMENTS" ) )
         {
@@ -1537,7 +1548,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SYMDEF_PCB::Parse( XNODE* aNode )
         }
     }
 
-    if( !Origin.IsFullySpecified() )
+    if( !Stub && !Origin.IsFullySpecified() )
         THROW_MISSING_PARAMETER_IO_ERROR( wxT( "PT" ), aNode->GetName() );
 }
 
@@ -2188,7 +2199,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::NETREF::TERMINAL::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::NETREF::COPPER_TERM::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "TERM" ) );
 
@@ -2232,7 +2243,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::NETREF::Parse( XNODE* aNode )
 
         if( cNodeName == wxT( "TERM" ) )
         {
-            TERMINAL term;
+            COPPER_TERM term;
             term.Parse( cNode );
             CopperTerminals.insert( std::make_pair( term.ID, term ) );
         }

@@ -86,6 +86,12 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
         mRootSheet->SetScreen( screen );
     }
 
+
+    //TEMP TESTING CODE - REMOVE
+    CADSTAR_SCH_ARCHIVE_PARSER parser( aFileName );
+    parser.Parse();
+    //TEMP TESTING CODE - REMOVE
+
     return mRootSheet;
 }
 

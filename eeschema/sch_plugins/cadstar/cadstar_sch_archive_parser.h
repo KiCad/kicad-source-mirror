@@ -48,7 +48,353 @@ public:
      */
     void Parse();
 
-    wxString Filename;
+    
+    typedef wxString TERMINALCODE_ID;
+    typedef wxString SYMBOL_ID;
+    typedef wxString BUS_ID;
+    typedef wxString BLOCK_ID;
+    typedef wxString SHEET_NAME;
+
+    enum class TERMINAL_SHAPE_TYPE
+    {
+        ANNULUS,
+        BOX,
+        BULLET,
+        CIRCLE, ///< Keyword "ROUND"
+        CROSS,
+        DIAMOND,
+        FINGER,
+        OCTAGON,
+        PLUS,
+        POINTER,
+        RECTANGLE,
+        ROUNDED_RECT, ///< Keyword "ROUNDED"
+        SQUARE,
+        STAR,
+        TRIANGLE,
+        UNDEFINED ///< Only used for error checking (not a real shape)
+    };
+
+    static TERMINAL_SHAPE_TYPE ParseTermShapeType( const wxString& aShapeStr );
+
+
+    struct TERMINAL_SHAPE
+    {
+        TERMINAL_SHAPE_TYPE ShapeType;
+        long                Size            = UNDEFINED_VALUE;
+        long                LeftLength      = UNDEFINED_VALUE;
+        long                RightLength     = UNDEFINED_VALUE;
+        long                InternalFeature = UNDEFINED_VALUE;
+        long                OrientAngle     = 0; ///< 1/1000 of a Degree
+
+        static bool IsTermShape( XNODE* aNode );
+        void        Parse( XNODE* aNode );
+    };
+
+
+    struct TERMINALCODE
+    {
+        TERMINALCODE_ID ID;
+        wxString        Name;
+        TERMINAL_SHAPE  Shape;
+        bool            Filled = false;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct CODEDEFS_SCM : CADSTAR_ARCHIVE_PARSER::CODEDEFS
+    {
+        std::map<TERMINALCODE_ID, TERMINALCODE> TerminalCodes;
+
+        void Parse( XNODE* aNode ) override;
+    };
+
+
+    struct ASSIGNMENTS_SCM
+    {
+        CODEDEFS_SCM       Codedefs;
+        GRIDS              Grids;
+        SETTINGS           Settings;
+        bool               NetclassEditAttributeSettings     = false; //< Unclear what this does
+        bool               SpacingclassEditAttributeSettings = false; //< Unclear what this does
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct TERMINAL
+    {
+        TERMINAL_ID     ID;
+        TERMINALCODE_ID TerminalCodeID;
+        POINT           Position; ///< Pad position within the component's coordinate frame.
+        long            OrientAngle = 0;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct PIN_NUM_LABEL_LOC : CADSTAR_ARCHIVE_PARSER::ATTRIBUTE_LOCATION
+    {
+        TERMINAL_ID TerminalID;
+
+        void Parse( XNODE* aNode ) override;
+    };
+
+    
+    struct SYMDEF_SCM : CADSTAR_ARCHIVE_PARSER::SYMDEF
+    {
+        std::map<TERMINAL_ID, TERMINAL> Terminals;
+        std::map<TERMINAL_ID, PIN_NUM_LABEL_LOC> PinLabelLocations;
+        std::map<TERMINAL_ID, PIN_NUM_LABEL_LOC> PinNumberLocations;
+
+
+        void Parse( XNODE* aNode ) override;
+    };
+
+
+    struct LIBRARY_SCM
+    {
+        std::map<SYMDEF_ID, SYMDEF_SCM> SymbolDefinitions;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct SHEETS
+    {
+        std::map<LAYER_ID, SHEET_NAME> Sheets;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct COMP
+    {
+        wxString           Designator  = wxEmptyString;
+        bool               ReadOnly    = false;
+        bool               HasLocation = false;
+        ATTRIBUTE_LOCATION AttrLoc;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct PARTREF
+    {
+        PART_ID            RefID       = wxEmptyString;
+        bool               ReadOnly    = false;
+        bool               HasLocation = false;
+        ATTRIBUTE_LOCATION AttrLoc;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct SYMPINNAME_LABEL
+    {
+        TERMINAL_ID        TerminalID;
+        wxString           NameOrLabel; 
+        bool               HasLocation = false;
+        ATTRIBUTE_LOCATION AttrLoc;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct SYMBOLVARIANT
+    {
+        enum class TYPE
+        {
+            GLOBALSIGNAL,
+            SIGNALREF
+            //TODO: there might be others
+        };        
+
+        TYPE Type;
+        wxString Reference;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct SIGNALREFERENCELINK : CADSTAR_ARCHIVE_PARSER::ATTRIBUTE_LOCATION
+    {
+        wxString Text; ///< This contains the numbers of the other sheets where the
+                       ///< signal reference is present separated by commas
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct SYMBOL
+    {
+        SYMBOL_ID     ID;
+        SYMDEF_ID     SymdefID;
+        LAYER_ID      LayerID; ///< Sheet on which symbol is located
+        POINT         Origin;
+        GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this symbol is part of a group
+        REUSEBLOCKREF ReuseBlockRef;
+        long          OrientAngle = 0;
+        bool          Mirror      = false;
+        bool          Fixed       = false;
+        READABILITY   Readability = READABILITY::BOTTOM_TO_TOP;
+
+        bool    IsComponent = false;
+        COMP    ComponentRef;
+        bool    HasPartRef = false;
+        PARTREF PartRef;
+        bool    PartNameVisible = true;
+        GATE_ID GateID; ///< The gate this symbol represents within the associated Part
+
+        bool          IsSymbolVariant = false;
+        SYMBOLVARIANT SymbolVariant;
+        SIGNALREFERENCELINK SigRefLink; ///< Signal References (a special form of global signal)
+                                        ///< have annotations showing the location of all the 
+                                        ///< other sheets where the signal is present
+
+        SYMBOL_ID  VariantParentSymbolID = wxEmptyString;
+        VARIANT_ID VariantID             = wxEmptyString;
+
+        std::map<TERMINAL_ID, SYMPINNAME_LABEL> PinLabels;
+        std::map<TERMINAL_ID, SYMPINNAME_LABEL> PinNames;
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
+
+        void Parse( XNODE* aNode );
+    };
+
+    
+    /**
+     * @brief Net name or bus name label
+     */
+    struct SIGLOC : CADSTAR_ARCHIVE_PARSER::ATTRIBUTE_LOCATION
+    {
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct BUS
+    {
+        BUS_ID      ID;
+        LINECODE_ID LineCodeID;
+        LAYER_ID    LayerID; ///< Sheet on which bus is located
+        SHAPE       Shape;
+        wxString    Name        = wxEmptyString;
+        bool        HasBusLabel = false;
+        SIGLOC      BusLabel;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct BLOCK
+    {
+        enum class TYPE
+        {
+            CLONE,
+            PARENT,
+            CHILD
+        };
+
+        BLOCK_ID           ID;
+        TYPE     Type;
+        LAYER_ID           LayerID = wxEmptyString; ///< The sheet block is on (TODO: verify this is true)
+        LAYER_ID           AssocLayerID = wxEmptyString; ///< Parent or Child linked sheet
+        wxString           Name          = wxEmptyString;
+        bool               HasBlockLabel = false;
+        ATTRIBUTE_LOCATION BlockLabel;
+
+        std::map<TERMINAL_ID, TERMINAL> Terminals;
+        std::map<FIGURE_ID, FIGURE>     Figures;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct NET_SCH : CADSTAR_ARCHIVE_PARSER::NET
+    {
+        struct SYM_TERM ///< "TERM" nodename (represents a pin in a SCH symbol)
+        {
+            NETELEMENT_ID ID; ///< First character is "P"
+            SYMBOL_ID     SymbolID;
+            TERMINAL_ID   TerminalID;
+            bool          HasNetLabel = false;
+            SIGLOC        NetLabel;
+
+            void Parse( XNODE* aNode );
+        };
+
+        struct BUS_TERM ///< "BUSTERM" nodename (represents a connetion to a bus)
+        {
+            NETELEMENT_ID ID; ///< First two characters "BT"
+            BUS_ID        BusID;
+            POINT         FirstPoint;  ///< Point on the bus itself
+            POINT         SecondPoint; ///< Start point for any wires
+            bool          HasNetLabel = false;
+            SIGLOC        NetLabel;
+
+            void Parse( XNODE* aNode );
+        };
+
+        struct BLOCK_TERM ///< "BLOCKTERM" nodename (represents a connetion to a block)
+        {
+            NETELEMENT_ID ID; ///< First four characters "BLKT"
+            BLOCK_ID      BlockID;
+            TERMINAL_ID   TerminalID;
+            bool          HasNetLabel = false;
+            SIGLOC        NetLabel;
+
+            void Parse( XNODE* aNode );
+        };
+
+        struct CONNECTION_SCH : CADSTAR_ARCHIVE_PARSER::NET::CONNECTION ///< "CONN" nodename
+        {
+            LAYER_ID           LayerID; ///< Sheet on which the connection is drawn
+            std::vector<POINT> Path;
+            GROUP_ID           GroupID = wxEmptyString;
+            REUSEBLOCKREF      ReuseBlockRef;
+            LINECODE_ID        ConnectionLineCode;
+
+            void Parse( XNODE* aNode ) override;
+        };
+
+
+        std::map<NETELEMENT_ID, SYM_TERM>   Terminals;
+        std::map<NETELEMENT_ID, BUS_TERM>   BusTerminals;
+        std::map<NETELEMENT_ID, BLOCK_TERM> BlockTerminals;
+        std::vector<CONNECTION_SCH>         Connections;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    struct SCHEMATIC
+    {
+        std::map<GROUP_ID, GROUP>                               Groups;
+        std::map<REUSEBLOCK_ID, REUSEBLOCK>                     ReuseBlocks;
+        std::map<FIGURE_ID, FIGURE>                             Figures;
+        std::map<SYMBOL_ID, SYMBOL>                             Symbols;
+        std::map<BUS_ID, BUS>                                   Buses;
+        std::map<BLOCK_ID, BLOCK>                               Blocks;
+        std::map<NET_ID, NET_SCH>                               Nets;
+        std::map<TEXT_ID, TEXT>                                 Texts;
+        std::map<DOCUMENTATION_SYMBOL_ID, DOCUMENTATION_SYMBOL> DocumentationSymbols;
+        VARIANT_HIERARCHY                                       VariantHierarchy;
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>                 AttributeValues;
+
+        void Parse( XNODE* aNode );
+    };
+
+
+    wxString        Filename;
+    HEADER          Header;
+    ASSIGNMENTS_SCM Assignments;
+    LIBRARY_SCM     Library;
+    PARTS           Parts;
+    SHEETS          Sheets;
+    SCHEMATIC       Schematic;
+
+    int KiCadUnitMultiplier; ///<Use this value to convert units in this CSA file to KiCad units
 
 }; //CADSTAR_SCH_ARCHIVE_PARSER
 

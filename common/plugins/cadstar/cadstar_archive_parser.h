@@ -66,6 +66,13 @@
  * placement drawings.
  */
 #define COMPONENT_NAME_2_ATTRID ( ATTRIBUTE_ID ) wxT( "__COMPONENT_NAME_2__" )
+
+/**
+ * Symbol Name attribute ID - used for placement of designators on the schematic
+ */
+#define SYMBOL_NAME_ATTRID ( ATTRIBUTE_ID ) wxT( "__SYMBOL_NAME__" )
+#define LINK_ORIGIN_ATTRID ( ATTRIBUTE_ID ) wxT( "__LINK_ORIGIN__" )
+#define SIGNALNAME_ORIGIN_ATTRID ( ATTRIBUTE_ID ) wxT( "__SIGNALNAME_ORIGIN__" )
 #define PART_NAME_ATTRID ( ATTRIBUTE_ID ) wxT( "__PART_NAME__" )
 
 
@@ -516,6 +523,7 @@ public:
         PART,            ///< Only library Attributes
         PART_DEFINITION, ///< Only library Attributes
         PIN,
+        SYMBOL,
         SYMDEF,
         TEMPLATE,
         TESTPOINT
@@ -537,6 +545,7 @@ public:
                   ///< with the design itself (i.e. not inherited from the library)
     };
 
+
     struct ATTRIBUTE_LOCATION
     {
         TEXTCODE_ID   TextCodeID;
@@ -553,7 +562,9 @@ public:
                               ///< Note that this is different from BOTTOM_LEFT (which is bottom
                               ///< left of the whole text block)
 
-        void Parse( XNODE* aNode );
+        void ParseIdentifiers( XNODE* aNode );
+        bool ParseSubNode( XNODE* aChildNode );
+        virtual void Parse( XNODE* aNode );
     };
 
 
@@ -630,7 +641,7 @@ public:
         }
         ATTRIBUTE_ID AttributeID;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode ) override;
     };
 
 
@@ -721,6 +732,7 @@ public:
         GROUP_ID ID;
         wxString Name;
         bool     Fixed   = false;
+        bool     Transfer = false; ///< If true, the group is transferred to PCB
         GROUP_ID GroupID = wxEmptyString; ///< If not empty, this GROUP
                                           ///< is part of another GROUP
         REUSEBLOCKREF ReuseBlockRef;
@@ -1117,19 +1129,21 @@ public:
      * @brief 
      * @param aNode 
      * @param aID 
+     * @param aIsRequired Prevents exception throwing if false.
      * @return returns the value (wxString) of attribute "attrX" in aNode where 'X' is aID
      * @throws IO_ERROR if attribute does not exist
      */
-    static wxString GetXmlAttributeIDString( XNODE* aNode, unsigned int aID );
+    static wxString GetXmlAttributeIDString( XNODE* aNode, unsigned int aID, bool aIsRequired = true );
 
     /**
      * @brief 
      * @param aNode 
      * @param aID 
+     * @param aIsRequired Prevents exception throwing if false.
      * @return returns the value (long) of attribute "attrX" in aNode where 'X' is aID
      * @throws IO_ERROR if attribute does not exist
      */
-    static long GetXmlAttributeIDLong( XNODE* aNode, unsigned int aID );
+    static long GetXmlAttributeIDLong( XNODE* aNode, unsigned int aID, bool aIsRequired = true );
 
     /**
      * @brief 

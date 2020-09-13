@@ -63,16 +63,6 @@ void CADSTAR_ARCHIVE_PARSER::HEADER::Parse( XNODE* aNode )
         if( nodeName == wxT( "FORMAT" ) )
         {
             Format.Parse( cNode );
-
-            if( Format.Type != wxT( "LAYOUT" ) )
-                if( Format.Type == wxT( "LIBRARY" ) )
-                    THROW_IO_ERROR(
-                            "The selected file is a CADSTAR Library file (as opposed to a Layout "
-                            "file). CADSTAR libraries cannot yet be imported into KiCad." );
-                else
-                    THROW_IO_ERROR(
-                            "The selected file is an unknown CADSTAR format so cannot be "
-                            "imported into KiCad." );
         }
         else if( nodeName == wxT( "JOBFILE" ) )
             JobFile = GetXmlAttributeIDString( cNode, 0 );
@@ -267,10 +257,9 @@ void CADSTAR_ARCHIVE_PARSER::ROUTECODE::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "ROUTECODE" ) );
 
-    ID   = GetXmlAttributeIDString( aNode, 0 );
-    Name = GetXmlAttributeIDString( aNode, 1 );
-
-    OptimalWidth = GetXmlAttributeIDLong( aNode, 2 );
+    ID           = GetXmlAttributeIDString( aNode, 0 );
+    Name         = GetXmlAttributeIDString( aNode, 1 );
+    OptimalWidth = GetXmlAttributeIDLong( aNode, 2, false );
 
     XNODE* cNode = aNode->GetChildren();
 
@@ -280,6 +269,8 @@ void CADSTAR_ARCHIVE_PARSER::ROUTECODE::Parse( XNODE* aNode )
 
         if( cNodeName == wxT( "NECKWIDTH" ) )
             NeckedWidth = GetXmlAttributeIDLong( cNode, 0 );
+        else if( cNodeName == wxT( "SROUTEWIDTH" ) )
+            OptimalWidth = GetXmlAttributeIDLong( cNode, 0 );
         else if( cNodeName == wxT( "MINWIDTH" ) )
             MinWidth = GetXmlAttributeIDLong( cNode, 0 );
         else if( cNodeName == wxT( "MAXWIDTH" ) )
@@ -691,38 +682,55 @@ CADSTAR_ARCHIVE_PARSER::READABILITY CADSTAR_ARCHIVE_PARSER::ParseReadability( XN
 }
 
 
+void CADSTAR_ARCHIVE_PARSER::ATTRIBUTE_LOCATION::ParseIdentifiers( XNODE* aNode )
+{
+    TextCodeID = GetXmlAttributeIDString( aNode, 0 );
+    LayerID    = GetXmlAttributeIDString( aNode, 1 );
+}
+
+
+bool CADSTAR_ARCHIVE_PARSER::ATTRIBUTE_LOCATION::ParseSubNode( XNODE* aChildNode )
+{
+    wxString cNodeName = aChildNode->GetName();
+
+    if( cNodeName == wxT( "PT" ) )
+        Position.Parse( aChildNode );
+    else if( cNodeName == wxT( "ORIENT" ) )
+        OrientAngle = GetXmlAttributeIDLong( aChildNode, 0 );
+    else if( cNodeName == wxT( "MIRROR" ) )
+        Mirror = true;
+    else if( cNodeName == wxT( "FIX" ) )
+        Fixed = true;
+    else if( cNodeName == wxT( "ALIGN" ) )
+        Alignment = ParseAlignment( aChildNode );
+    else if( cNodeName == wxT( "JUSTIFICATION" ) )
+        Justification = ParseJustification( aChildNode );
+    else
+        return false;
+
+    return true;
+}
+
+
 void CADSTAR_ARCHIVE_PARSER::ATTRIBUTE_LOCATION::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "ATTRLOC" ) );
 
-    TextCodeID = GetXmlAttributeIDString( aNode, 0 );
-    LayerID    = GetXmlAttributeIDString( aNode, 1 );
+    ParseIdentifiers( aNode );
 
     //Parse child nodes
     XNODE* cNode = aNode->GetChildren();
 
-    if( !cNode )
-        THROW_MISSING_NODE_IO_ERROR( wxT( "PT" ), wxT( "ATTRLOC" ) );
-
     for( ; cNode; cNode = cNode->GetNext() )
     {
-        wxString cNodeName = cNode->GetName();
-
-        if( cNodeName == wxT( "PT" ) )
-            Position.Parse( cNode );
-        else if( cNodeName == wxT( "ORIENT" ) )
-            OrientAngle = GetXmlAttributeIDLong( cNode, 0 );
-        else if( cNodeName == wxT( "MIRROR" ) )
-            Mirror = true;
-        else if( cNodeName == wxT( "FIX" ) )
-            Fixed = true;
-        else if( cNodeName == wxT( "ALIGN" ) )
-            Alignment = ParseAlignment( cNode );
-        else if( cNodeName == wxT( "JUSTIFICATION" ) )
-            Justification = ParseJustification( cNode );
+        if( ParseSubNode( cNode ) )
+            continue;
         else
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "ATTRLOC" ) );
+            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "ATTRLOC" ) );
     }
+
+    if( !Position.IsFullySpecified() )
+        THROW_MISSING_NODE_IO_ERROR( wxT( "PT" ), wxT( "ATTRLOC" ) );
 }
 
 
@@ -792,6 +800,8 @@ void CADSTAR_ARCHIVE_PARSER::ATTRNAME::Parse( XNODE* aNode )
                 AttributeOwner = ATTROWNER::PART_DEFINITION;
             else if( attOwnerVal == wxT( "PIN" ) )
                 AttributeOwner = ATTROWNER::PIN;
+            else if( attOwnerVal == wxT( "SYMBOL" ) )
+                AttributeOwner = ATTROWNER::SYMBOL;
             else if( attOwnerVal == wxT( "SYMDEF" ) )
                 AttributeOwner = ATTROWNER::SYMDEF;
             else if( attOwnerVal == wxT( "TEMPLATE" ) )
@@ -886,6 +896,21 @@ void CADSTAR_ARCHIVE_PARSER::TEXT_LOCATION::Parse( XNODE* aNode )
         AttributeID      = COMPONENT_NAME_2_ATTRID;
         attributeIDisSet = true;
     }
+    else if( attributeStr == wxT( "SYMBOL_NAME" ) )
+    {
+        AttributeID      = SYMBOL_NAME_ATTRID;
+        attributeIDisSet = true;
+    }
+    else if( attributeStr == wxT( "LINK_ORIGIN" ) )
+    {
+        AttributeID      = LINK_ORIGIN_ATTRID;
+        attributeIDisSet = true;
+    }
+    else if( attributeStr == wxT( "SIGNALNAME_ORIGIN" ) )
+    {
+        AttributeID      = SIGNALNAME_ORIGIN_ATTRID;
+        attributeIDisSet = true;
+    }
     else if( attributeStr == wxT( "ATTRREF" ) )
     {
         //We will initialise when we parse all child nodes
@@ -896,21 +921,17 @@ void CADSTAR_ARCHIVE_PARSER::TEXT_LOCATION::Parse( XNODE* aNode )
         THROW_UNKNOWN_PARAMETER_IO_ERROR( attributeStr, wxT( "TEXTLOC" ) );
     }
 
-    TextCodeID = GetXmlAttributeIDString( aNode, 1 );
-    LayerID    = GetXmlAttributeIDString( aNode, 2 );
+    ParseIdentifiers( aNode );
 
     //Parse child nodes
     XNODE* cNode = aNode->GetChildren();
-
-    if( !cNode )
-        THROW_MISSING_NODE_IO_ERROR( wxT( "PT" ), wxT( "TEXTLOC" ) );
 
     for( ; cNode; cNode = cNode->GetNext() )
     {
         wxString cNodeName = cNode->GetName();
 
-        if( cNodeName == wxT( "PT" ) )
-            Position.Parse( cNode );
+        if( ParseSubNode( cNode ) )
+            continue;
         else if( !attributeIDisSet && cNodeName == wxT( "ATTRREF" ) )
         {
             AttributeID      = GetXmlAttributeIDString( cNode, 0 );
@@ -929,6 +950,9 @@ void CADSTAR_ARCHIVE_PARSER::TEXT_LOCATION::Parse( XNODE* aNode )
         else
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "TEXTLOC" ) );
     }
+
+    if( !Position.IsFullySpecified() )
+        THROW_MISSING_NODE_IO_ERROR( wxT( "PT" ), wxT( "TEXTLOC" ) );
 }
 
 
@@ -1096,6 +1120,8 @@ void CADSTAR_ARCHIVE_PARSER::GROUP::Parse( XNODE* aNode )
 
         if( cNodeName == wxT( "FIX" ) )
             Fixed = true;
+        else if( cNodeName == wxT( "TRANSFER" ) )
+            Transfer = true;
         else if( cNodeName == wxT( "GROUPREF" ) )
             GroupID = GetXmlAttributeIDString( cNode, 0 );
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
@@ -1824,25 +1850,34 @@ bool CADSTAR_ARCHIVE_PARSER::IsValidAttribute( wxXmlAttribute* aAttribute )
 }
 
 
-wxString CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDString( XNODE* aNode, unsigned int aID )
+wxString CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDString(
+        XNODE* aNode, unsigned int aID, bool aIsRequired )
 {
     wxString attrName, retVal;
     attrName = "attr";
     attrName << aID;
 
     if( !aNode->GetAttribute( attrName, &retVal ) )
-        THROW_MISSING_PARAMETER_IO_ERROR( std::to_string( aID ), aNode->GetName() );
+        if( aIsRequired )
+            THROW_MISSING_PARAMETER_IO_ERROR( std::to_string( aID ), aNode->GetName() );
+        else
+            return wxEmptyString;
 
     return retVal;
 }
 
 
-long CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDLong( XNODE* aNode, unsigned int aID )
+long CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDLong(
+        XNODE* aNode, unsigned int aID, bool aIsRequired )
 {
     long retVal;
+    bool success = GetXmlAttributeIDString( aNode, aID, aIsRequired ).ToLong( &retVal );
 
-    if( !GetXmlAttributeIDString( aNode, aID ).ToLong( &retVal ) )
-        THROW_PARSING_IO_ERROR( std::to_string( aID ), aNode->GetName() );
+    if( !success )
+        if( aIsRequired )
+            THROW_PARSING_IO_ERROR( std::to_string( aID ), aNode->GetName() );
+        else
+            return UNDEFINED_VALUE;
 
     return retVal;
 }

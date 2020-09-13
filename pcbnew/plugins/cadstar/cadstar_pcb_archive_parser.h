@@ -898,7 +898,7 @@ public:
         GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this component is part of a group
         REUSEBLOCKREF ReuseBlockRef;
         COMPONENT_ID  VariantParentComponentID = wxEmptyString;
-        VARIANT_ID    VariantID   = wxEmptyString; ///< TODO: find out what this represents
+        VARIANT_ID    VariantID = wxEmptyString;
         long          OrientAngle = 0;
         bool          TestPoint   = false; ///< Indicates whether this component should be treated
                                            ///< as a testpoint. See SYMDEF_TYPE::TESTPOINT
@@ -984,7 +984,7 @@ public:
 
             LAYER_ID UnrouteLayerID = wxEmptyString; ///< See Unrouted member variable.
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode ) override;
         };
 
         std::map<NETELEMENT_ID, PIN>             Pins;
@@ -1089,7 +1089,7 @@ public:
     {
         struct NETREF
         {
-            struct TERMINAL
+            struct COPPER_TERM
             {
                 COPPER_TERM_ID ID;
                 POINT          Location;
@@ -1099,7 +1099,7 @@ public:
             };
 
             NET_ID                             NetID = wxEmptyString;
-            std::map<COPPER_TERM_ID, TERMINAL> CopperTerminals;
+            std::map<COPPER_TERM_ID, COPPER_TERM> CopperTerminals;
             bool                               Fixed = false;
 
             void Parse( XNODE* aNode );
