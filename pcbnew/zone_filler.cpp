@@ -238,6 +238,30 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
+    // Re-add not connected zones to list, connectivity->FindIsolatedCopperIslands()
+    // populates islandsList only with zones having a net
+    for( ZONE_CONTAINER* zone : aZones )
+    {
+        // Keepout zones are not filled
+        if( zone->GetIsKeepout() || !zone->IsOnCopperLayer() || zone->GetNetCode() > 0 )
+            continue;
+
+        islandsList.emplace_back( CN_ZONE_ISOLATED_ISLAND_LIST( zone ) );
+
+        // All filled polygons are "isolated areas". Enter all filled polygons
+        // to CN_ZONE_ISOLATED_ISLAND_LIST index list
+        // Later, only areas outside the board outlines will be removed.
+        CN_ZONE_ISOLATED_ISLAND_LIST& cn_item = islandsList.back();
+
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        {
+            const SHAPE_POLY_SET& polys = zone->GetFilledPolysList( layer );
+
+            for( int ii = 0; ii < polys.OutlineCount(); ii++ )
+                cn_item.m_islands[layer].push_back( ii );
+        }
+    }
+
     // Now remove insulated copper islands and islands outside the board edge
     bool outOfDate = false;
 
@@ -250,7 +274,10 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 
             std::vector<int>& islands = zone.m_islands.at( layer );
 
+            // The list of polygons to delete must be explored from last to first in list,
+            // to allow deleting a polygon from list without breaking the remaining of the list
             std::sort( islands.begin(), islands.end(), std::greater<int>() );
+
             SHAPE_POLY_SET poly = zone.m_zone->GetFilledPolysList( layer );
 
             long long int       minArea = zone.m_zone->GetMinIslandArea();
@@ -275,22 +302,20 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
             }
             // Zones with no net can have areas outside the board cutouts.
             // By definition, Zones with no net have no isolated island
-            // (in fact all filled areas are isolated islands)
+            // (in fact any filled area is an isolated island)
             // but they can have some areas outside the board cutouts.
             // A filled area outside the board cutouts has all points outside cutouts,
             // so we only need to check one point for each filled polygon.
             // Note also non copper zones are already clipped
             else if( m_brdOutlinesValid && zone.m_zone->IsOnCopperLayer() )
             {
-                for( int idx = 0; idx < poly.OutlineCount(); )
+                for( auto idx : islands )
                 {
                     if( poly.Polygon( idx ).empty()
                             || !m_boardOutline.Contains( poly.Polygon( idx ).front().CPoint( 0 ) ) )
                     {
                         poly.DeletePolygon( idx );
                     }
-                    else
-                        idx++;
                 }
             }
 
