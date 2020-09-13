@@ -23,9 +23,10 @@
 
 
 #include <fctsys.h>
+#include <class_board.h>
+#include <class_board_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_rule_condition.h>
-#include <drc/drc_engine.h>
 
 
 const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem,
@@ -78,9 +79,9 @@ const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* 
 
 DRC_RULE::DRC_RULE() :
         m_Unary( false ),
+        m_Implicit( false ),
         m_LayerCondition( LSET::AllLayersMask() ),
-        m_Condition( nullptr ),
-        m_Priority( 0 )
+        m_Condition( nullptr )
 {
 }
 

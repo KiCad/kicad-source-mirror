@@ -99,39 +99,21 @@ public:
     DRC_RULE();
     virtual ~DRC_RULE();
 
-    virtual bool IsImplicit() const
-    {
-        return false;
-    };
-
     virtual bool AppliesTo( const BOARD_ITEM* a, const BOARD_ITEM* b = nullptr ) const
     {
         return true;
     };
 
-    virtual bool HasSpecificItemSet() const
-    {
-        return false;
-    };
-
-    virtual void FillSpecificItemSet( const std::set<BOARD_ITEM*>& specificItems )
-    {
-    };
-
-    void SetPriority( int aPriority ) { m_Priority = aPriority; }
-    int GetPriority() const { return m_Priority; }
-
     void AddConstraint( DRC_CONSTRAINT& aConstraint );
 
 public:
     bool                        m_Unary;
+    bool                        m_Implicit;
     wxString                    m_Name;
     wxString                    m_LayerSource;
     LSET                        m_LayerCondition;
     DRC_RULE_CONDITION*         m_Condition;
     std::vector<DRC_CONSTRAINT> m_Constraints;
-
-    int                         m_Priority; // 0 indicates automatic priority generation fixme: use enum
 };
 
 
@@ -156,9 +138,14 @@ class DRC_CONSTRAINT
     wxString GetName() const
     {
         if( m_parentRule )
-            return wxString::Format( _( "rule %s" ), m_parentRule->m_Name );
-        else
-            return m_name;
+        {
+            if( m_parentRule->m_Implicit )
+                return m_parentRule->m_Name;
+            else
+                return wxString::Format( _( "rule %s" ), m_parentRule->m_Name );
+        }
+
+        return m_name;
     }
 
 public:

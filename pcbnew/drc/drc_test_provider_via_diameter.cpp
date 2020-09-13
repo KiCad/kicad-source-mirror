@@ -60,13 +60,13 @@ public:
         return "Tests via diameters";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 };
 
 
 bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
 {
-    if( !m_drcEngine->HasCorrectRulesForId( DRC_CONSTRAINT_TYPE_VIA_DIAMETER ) )
+    if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_VIA_DIAMETER ) )
     {
         ReportAux( "No diameter constraints found. Skipping check." );
         return false;
@@ -119,7 +119,7 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    ReportWithMarker( drcItem, via->GetPosition() );
+                    ReportViolation( drcItem, via->GetPosition() );
                 }
 
                 return true;
@@ -133,9 +133,9 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_VIA_DIAMETER::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_VIA_DIAMETER::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_VIA_DIAMETER };
+    return { DRC_CONSTRAINT_TYPE_VIA_DIAMETER };
 }
 
 

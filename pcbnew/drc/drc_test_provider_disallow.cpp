@@ -61,13 +61,13 @@ public:
         return "Tests for disallowed items (e.g. keepouts)";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 };
 
 
 bool DRC_TEST_PROVIDER_DISALLOW::Run()
 {
-    if( !m_drcEngine->HasCorrectRulesForId( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_DISALLOW ) )
+    if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_DISALLOW ) )
     {
         ReportAux( "No disallow constraints found. Skipping check." );
         return false;
@@ -93,7 +93,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
             drcItem->SetItems( item );
             drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-            ReportWithMarker( drcItem, item->GetPosition() );
+            ReportViolation( drcItem, item->GetPosition() );
         }
 
         return true;
@@ -107,9 +107,9 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_DISALLOW::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_DISALLOW::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_DISALLOW };
+    return { DRC_CONSTRAINT_TYPE_DISALLOW };
 }
 
 

@@ -65,7 +65,7 @@ public:
         return "Tests clearance of holes (via/pad drills)";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 
 private:
     void addHole( const VECTOR2I& aLocation, int aRadius, BOARD_ITEM* aOwner );
@@ -277,7 +277,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad, D_PAD
                     drcItem->SetItems( pad, aRefPad );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    ReportWithMarker( drcItem, pad->GetPosition() );
+                    ReportViolation( drcItem, pad->GetPosition() );
                     return false;
                 }
             }
@@ -310,7 +310,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad, D_PAD
                     drcItem->SetItems( aRefPad, pad );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    ReportWithMarker( drcItem, pad->GetPosition() );
+                    ReportViolation( drcItem, pad->GetPosition() );
                     return false;
                 }
             }
@@ -395,16 +395,16 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
                 drcItem->SetItems( refHole.m_owner, checkHole.m_owner );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                ReportWithMarker( drcItem, refHole.m_location );
+                ReportViolation( drcItem, (wxPoint) refHole.m_location );
             }
         }
     }
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_HOLE_CLEARANCE::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_HOLE_CLEARANCE::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE };
+    return { DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE };
 }
 
 

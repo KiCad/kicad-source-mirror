@@ -1,6 +1,33 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2020 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
+#include <class_track.h>
+#include <class_module.h>
+#include <class_pad.h>
+#include <class_zone.h>
 
 DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
     m_drcEngine( nullptr )
@@ -12,26 +39,10 @@ const wxString DRC_TEST_PROVIDER::GetName() const { return "<no name test>"; }
 const wxString DRC_TEST_PROVIDER::GetDescription() const { return ""; }
 
 
-void DRC_TEST_PROVIDER::Report( std::shared_ptr<DRC_ITEM> item )
+void DRC_TEST_PROVIDER::ReportViolation( std::shared_ptr<DRC_ITEM> aItem, wxPoint aPos )
 {
-    item->SetViolatingTest( this );
-    m_drcEngine->Report( item, nullptr );
-}
-
-
-void DRC_TEST_PROVIDER::ReportWithMarker( std::shared_ptr<DRC_ITEM> item, VECTOR2I aMarkerPos )
-{
-    item->SetViolatingTest( this );
-    MARKER_PCB* marker = new MARKER_PCB( item, wxPoint( aMarkerPos.x, aMarkerPos.y) );
-    m_drcEngine->Report( item, marker );
-}
-
-
-void DRC_TEST_PROVIDER::ReportWithMarker( std::shared_ptr<DRC_ITEM> item, wxPoint aMarkerPos )
-{
-    item->SetViolatingTest( this );
-    MARKER_PCB* marker = new MARKER_PCB( item, wxPoint( aMarkerPos.x, aMarkerPos.y) );
-    m_drcEngine->Report( item, marker ); // fixme: create marker
+    aItem->SetViolatingTest( this );
+    m_drcEngine->ReportViolation( aItem, aPos );
 }
 
 
@@ -116,9 +127,6 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
             typeMask[ aType ] = true;
     }
 
-    /* case PCB_TRACE_T:
-    case PCB_VIA_T:
-    case PCB_ARC_T:*/
     for( TRACK* item : brd->Tracks() )
     {
         if( (item->GetLayerSet() & aLayers).any() )
@@ -141,11 +149,6 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
         }
     }
 
-    /* case PCB_DIMENSION_T:
-    case PCB_LINE_T:
-    case PCB_TEXT_T:
-    case PCB_TARGET_T:
-    */
     for( BOARD_ITEM* item : brd->Drawings() )
     {
         if( (item->GetLayerSet() & aLayers).any() )

@@ -19,7 +19,7 @@ DIALOG_HTML_REPORTER::DIALOG_HTML_REPORTER( wxWindow* parent, wxWindowID id, con
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_Reporter = new WX_HTML_REPORT_BOX( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO|wxBORDER_SIMPLE );
-	m_Reporter->SetMinSize( wxSize( 480,360 ) );
+	m_Reporter->SetMinSize( wxSize( 640,360 ) );
 
 	bMainSizer->Add( m_Reporter, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 

@@ -73,7 +73,7 @@ public:
         return "Tests copper item clearance";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 
 private:
     void testPadClearances();
@@ -230,7 +230,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
             drcItem->SetItems( track, aItem );
             drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-            ReportWithMarker( drcItem, pos );
+            ReportViolation( drcItem, pos );
         }
     }
 
@@ -273,7 +273,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
         drcItem->SetItems( pad, aItem );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-        ReportWithMarker( drcItem, pad->GetPosition() );
+        ReportViolation( drcItem, pad->GetPosition() );
     }
 }
 
@@ -369,7 +369,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
                 drcItem->SetItems( aRefSeg, pad );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                ReportWithMarker( drcItem, pad->GetPosition() );
+                ReportViolation( drcItem, pad->GetPosition() );
             }
         }
     }
@@ -424,7 +424,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             drcItem->SetItems( aRefSeg, track );
             drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-            ReportWithMarker( drcItem, (wxPoint) intersection.get() );
+            ReportViolation( drcItem, (wxPoint) intersection.get() );
         }
         else if( refSeg.Collide( &trackSeg, minClearance - bds.GetDRCEpsilon(), &actual ) )
         {
@@ -440,7 +440,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             drcItem->SetItems( aRefSeg, track );
             drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-            ReportWithMarker( drcItem, pos );
+            ReportViolation( drcItem, pos );
         }
     }
 
@@ -490,7 +490,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
                 drcItem->SetItems( aRefSeg, zone );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                ReportWithMarker( drcItem, getLocation( aLayer, aRefSeg, zone ) );
+                ReportViolation( drcItem, getLocation( aLayer, aRefSeg, zone ) );
             }
         }
     }
@@ -589,7 +589,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD**
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( pad, aRefPad );
 
-                ReportWithMarker( drcItem, aRefPad->GetPosition() );
+                ReportViolation( drcItem, aRefPad->GetPosition() );
             }
 
             continue;
@@ -630,7 +630,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD**
                 drcItem->SetItems( aRefPad, pad );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                ReportWithMarker( drcItem, aRefPad->GetPosition() );
+                ReportViolation( drcItem, aRefPad->GetPosition() );
                 break;
             }
         }
@@ -711,7 +711,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
                     drcItem->SetItems( zoneRef, zoneToTest );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    ReportWithMarker( drcItem, pt );
+                    ReportViolation( drcItem, pt );
                 }
             }
 
@@ -727,7 +727,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
                     drcItem->SetItems( zoneToTest, zoneRef );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    ReportWithMarker( drcItem, pt );
+                    ReportViolation( drcItem, pt );
                 }
             }
 
@@ -799,16 +799,16 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
                 drcItem->SetItems( zoneRef, zoneToTest );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                ReportWithMarker( drcItem, conflict.first );
+                ReportViolation( drcItem, conflict.first );
             }
         }
     }
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_COPPER_CLEARANCE::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_COPPER_CLEARANCE::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_CLEARANCE };
+    return { DRC_CONSTRAINT_TYPE_CLEARANCE };
 }
 
 

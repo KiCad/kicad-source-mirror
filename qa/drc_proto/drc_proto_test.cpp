@@ -30,6 +30,7 @@
 
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew/drc/drc_engine.h>
+#include <pcbnew/class_board.h>
 #include <pcbnew/drc/drc_rule_parser.h>
 #include <reporter.h>
 #include <widgets/progress_reporter.h>
@@ -159,6 +160,35 @@ private:
 };
 
 
+class DRC_REPORT
+{
+public:
+    struct ENTRY
+    {
+        std::shared_ptr<DRC_ITEM> m_item;
+        MARKER_PCB* m_marker;
+    };
+
+    typedef std::vector<ENTRY> ENTRIES;
+
+    DRC_REPORT() {};
+    ~DRC_REPORT();
+
+    void AddItem( std::shared_ptr<DRC_ITEM> aItem, MARKER_PCB *aMarker = nullptr )
+    {
+        ENTRY ent;
+        ent.m_item = aItem;
+        ent.m_marker = aMarker;
+        m_entries.push_back(ent);
+    }
+
+    const ENTRIES& GetReportEntries() const { return m_entries; };
+
+private:
+    ENTRIES m_entries;
+};
+
+
 struct PROJECT_CONTEXT {
     PROJECT* project;
     std::shared_ptr<BOARD> board;
@@ -215,9 +245,10 @@ int main( int argc, char *argv[] )
 
     drcEngine.InitEngine( rulesFilepath );
 
-    drcEngine.RunTests();
-    auto report = drcEngine.GetReport();
-
+    drcEngine.RunTests(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
+            {
+            } );
 
     return 0;
 }

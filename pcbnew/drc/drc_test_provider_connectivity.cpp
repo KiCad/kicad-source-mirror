@@ -65,7 +65,7 @@ public:
         return "Tests board connectivity";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 };
 
 
@@ -100,7 +100,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( code );
             drcItem->SetItems( track );
-            ReportWithMarker( drcItem, pos );
+            ReportViolation( drcItem, pos );
         }
     }
 
@@ -125,7 +125,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ZONE_HAS_EMPTY_NET );
             drcItem->SetItems( zone );
-            ReportWithMarker( drcItem, zone->GetPosition() );
+            ReportViolation( drcItem, zone->GetPosition() );
         }
     }
 
@@ -142,7 +142,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNCONNECTED_ITEMS );
         drcItem->SetItems( edge.GetSourceNode()->Parent(), edge.GetTargetNode()->Parent() );
-        ReportWithMarker( drcItem, edge.GetSourceNode()->Pos() );
+        ReportViolation( drcItem, (wxPoint) edge.GetSourceNode()->Pos() );
     }
 
     reportRuleStatistics();
@@ -151,7 +151,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_CONNECTIVITY::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_CONNECTIVITY::GetConstraintTypes() const
 {
     return {};
 }

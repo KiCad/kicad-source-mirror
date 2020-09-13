@@ -66,7 +66,7 @@ public:
         return "Misc checks (board outline, missing textvars)";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 
 private:
     void testOutline();
@@ -93,7 +93,7 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
     drcItem->SetErrorMessage( m_msg );
     drcItem->SetItems( m_board );
 
-    ReportWithMarker( drcItem, error_loc );
+    ReportViolation( drcItem, error_loc );
 }
 
 
@@ -119,7 +119,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( item );
 
-                    ReportWithMarker( drcItem, item->GetPosition() );
+                    ReportViolation( drcItem, item->GetPosition() );
                 }
                 return true;
             };
@@ -144,7 +144,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                     drcItem->SetItems( item );
 
-                    ReportWithMarker( drcItem, item->GetPosition() );
+                    ReportViolation( drcItem, item->GetPosition() );
                 }
                 return true;
             };
@@ -179,7 +179,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
             drcItem->SetItems( text );
 
-            ReportWithMarker( drcItem, text->GetPosition() );
+            ReportViolation( drcItem, text->GetPosition() );
         }
     }
 }
@@ -202,7 +202,7 @@ bool DRC_TEST_PROVIDER_MISC::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_MISC::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_MISC::GetConstraintTypes() const
 {
     return {};
 }

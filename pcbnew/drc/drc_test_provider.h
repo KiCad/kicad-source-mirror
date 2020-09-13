@@ -93,14 +93,11 @@ public:
     virtual const wxString GetDescription() const;
 
     virtual void ReportAux( wxString fmt, ... );
-    virtual void Report( std::shared_ptr<DRC_ITEM> item );
-    virtual void ReportWithMarker( std::shared_ptr<DRC_ITEM> item, wxPoint aMarkerPos );
-    virtual void ReportWithMarker( std::shared_ptr<DRC_ITEM> item, VECTOR2I aMarkerPos );
-
+    virtual void ReportViolation( std::shared_ptr<DRC_ITEM> item, wxPoint aMarkerPos );
     virtual void ReportProgress( double aProgress );
     virtual void ReportStage ( const wxString& aStageName, int index, int total );
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const = 0;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const = 0;
 
     virtual bool IsRuleDriven() const
     {

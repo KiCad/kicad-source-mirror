@@ -65,7 +65,7 @@ public:
         return "Tests items vs board edge clearance";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 };
 
 
@@ -154,7 +154,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 drcItem->SetItems( outlineItem, boardItem );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                ReportWithMarker( drcItem, refShape->Centre() );
+                ReportViolation( drcItem, (wxPoint) refShape->Centre() );
             }
         }
     }
@@ -165,7 +165,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetConstraintTypes() const
 {
     return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE };
 }

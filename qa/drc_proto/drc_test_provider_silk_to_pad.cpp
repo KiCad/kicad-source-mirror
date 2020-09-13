@@ -73,7 +73,7 @@ public:
         return "Tests for silkscreen covering components pads";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 
 private:
 };
@@ -147,7 +147,7 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
                 drcItem->SetItems( outlineItem, boardItem );
                 drcItem->SetViolatingRule( rule );
 
-                ReportWithMarker( drcItem, refShape->Centre() );
+                ReportViolation( drcItem, refShape->Centre() );
             }
         }
     }

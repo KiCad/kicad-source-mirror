@@ -59,13 +59,13 @@ public:
         return "Tests track widths";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 };
 
 
 bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 {
-    if( !m_drcEngine->HasCorrectRulesForId( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH ) )
+    if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH ) )
     {
         ReportAux( "No track width constraints found. Skipping check." );
         return false;
@@ -79,8 +79,8 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_TRACK_WIDTH ) )
                     return false;
 
-                int      actual;
-                VECTOR2I p0;
+                int     actual;
+                wxPoint p0;
 
                 if( ARC* arc = dyn_cast<ARC*>( item ) )
                 {
@@ -125,7 +125,7 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    ReportWithMarker( drcItem, p0 );
+                    ReportViolation( drcItem, p0 );
                 }
 
                 return true;
@@ -139,9 +139,9 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_TRACK_WIDTH::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_TRACK_WIDTH::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH };
+    return { DRC_CONSTRAINT_TYPE_TRACK_WIDTH };
 }
 
 

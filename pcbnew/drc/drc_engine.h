@@ -24,31 +24,21 @@
 #ifndef DRC_ENGINE_H
 #define DRC_ENGINE_H
 
-#include <board_commit.h>
-#include <class_board.h>
-#include <class_marker_pcb.h>
-#include <class_track.h>
-#include <geometry/seg.h>
-#include <geometry/shape_poly_set.h>
 #include <memory>
-#include <tools/pcb_tool_base.h>
 #include <vector>
+#include <unordered_map>
 
 #include <drc/drc_rule.h>
 
 
 class BOARD_DESIGN_SETTINGS;
+class DRC_TEST_PROVIDER;
 class PCB_EDIT_FRAME;
-class DIALOG_DRC;
 class BOARD_ITEM;
 class BOARD;
-class D_PAD;
 class ZONE_CONTAINER;
-class TRACK;
 class MARKER_PCB;
 class NETCLASS;
-class EDA_TEXT;
-class DRAWSEGMENT;
 class NETLIST;
 class PROGRESS_REPORTER;
 class REPORTER;
@@ -75,34 +65,9 @@ enum DRC_CONSTRAINT_QUERY_T
     // fixme: more to come I guess...
 };
 
+typedef
+std::function<void( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )> DRC_VIOLATION_HANDLER;
 
-class DRC_REPORT
-{
-public:
-    struct ENTRY
-    {
-        std::shared_ptr<DRC_ITEM> m_item;
-        MARKER_PCB* m_marker;
-    };
-
-    typedef std::vector<ENTRY> ENTRIES;
-
-    DRC_REPORT() {};
-    ~DRC_REPORT();
-
-    void AddItem( std::shared_ptr<DRC_ITEM> aItem, ::MARKER_PCB *aMarker = nullptr)
-    {
-        ENTRY ent;
-        ent.m_item = aItem;
-        ent.m_marker = aMarker;
-        m_entries.push_back(ent);
-    }
-
-    const ENTRIES& GetReportEntries() const { return m_entries; };
-
-private:
-    ENTRIES m_entries;
-};
 
 /**
  * Design Rule Checker object that performs all the DRC tests.  The output of
@@ -135,7 +100,7 @@ public:
 
     void InitEngine( const wxFileName& aRulePath );
 
-    void RunTests();
+    void RunTests( DRC_VIOLATION_HANDLER aDRCItemHandler );
 
     BOARD_DESIGN_SETTINGS* GetDesignSettings() const { return m_designSettings; }
 
@@ -155,7 +120,7 @@ public:
 
     std::vector<DRC_CONSTRAINT> QueryConstraintsById( DRC_CONSTRAINT_TYPE_T ruleID );
 
-    bool HasCorrectRulesForId( DRC_CONSTRAINT_TYPE_T ruleID );
+    bool HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T constraintID );
 
     EDA_UNITS UserUnits() const
     {
@@ -171,12 +136,10 @@ public:
 
     bool CompileRules();
 
-    void Report( const std::shared_ptr<DRC_ITEM>& aItem, MARKER_PCB *Marker );
+    void ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos );
     void ReportProgress( double aProgress );
     void ReportStage ( const wxString& aStageName, int index, int total );
     void ReportAux( const wxString& aStr );
-
-    std::shared_ptr<DRC_REPORT> GetReport() const { return m_drcReport; }
 
     bool QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T aRuleId, DRC_CONSTRAINT& aConstraint,
                                DRC_CONSTRAINT_QUERY_T aQueryType );
@@ -203,9 +166,9 @@ private:
         DRC_TEST_PROVIDER*                       provider;
     };
 
-    void inferLegacyRules();
+    void loadImplicitRules();
     void loadTestProviders();
-    DRC_RULE* createInferredRule( const wxString& name, std::set<BOARD_ITEM*> items, int priority );
+    DRC_RULE* createImplicitRule( const wxString& name );
 
 protected:
     BOARD_DESIGN_SETTINGS*           m_designSettings;
@@ -213,20 +176,17 @@ protected:
     KIGFX::WS_PROXY_VIEW_ITEM*       m_worksheet;
     NETLIST*                         m_schematicNetlist;
 
-    std::shared_ptr<DRC_REPORT>      m_drcReport;
-
     std::vector<DRC_RULE_CONDITION*> m_ruleConditions;
     std::vector<DRC_RULE*>           m_rules;
     std::vector<DRC_TEST_PROVIDER*>  m_testProviders;
     std::vector<int>                 m_errorLimits;
 
-    std::unordered_map<EDA_ITEM*, CONSTRAINT_SET*>             m_implicitRules;
+    // constraint -> rule -> provider
     std::unordered_map<DRC_CONSTRAINT_TYPE_T, CONSTRAINT_SET*> m_constraintMap;
 
+    DRC_VIOLATION_HANDLER            m_violationHandler;
     REPORTER*                        m_reporter;
     PROGRESS_REPORTER*               m_progressReporter;
-
-    // condition -> rule -> provider
 
     wxString m_msg;  // Allocating strings gets expensive enough to want to avoid it
 };

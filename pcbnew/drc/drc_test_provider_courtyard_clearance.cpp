@@ -63,7 +63,7 @@ public:
         return "Tests components' courtyard clearance";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 
 private:
     void testFootprintCourtyardDefinitions();
@@ -89,7 +89,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_COURTYARD );
                 drcItem->SetItems( footprint );
-                ReportWithMarker( drcItem, footprint->GetPosition() );
+                ReportViolation( drcItem, footprint->GetPosition() );
             }
             else
             {
@@ -108,7 +108,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 
             drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( footprint );
-            ReportWithMarker( drcItem, footprint->GetPosition() );
+            ReportViolation( drcItem, footprint->GetPosition() );
         }
     }
 }
@@ -175,7 +175,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_OVERLAPPING_FOOTPRINTS );
                 drcItem->SetItems( footprint, test );
-                ReportWithMarker ( drcItem, pos );
+                ReportViolation( drcItem, pos );
             }
         }
     }
@@ -198,9 +198,9 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE };
+    return { DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE };
 }
 
 

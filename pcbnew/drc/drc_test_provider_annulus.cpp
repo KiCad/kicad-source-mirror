@@ -62,13 +62,13 @@ public:
         return "Tests pad/via annular rings";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 };
 
 
 bool DRC_TEST_PROVIDER_ANNULUS::Run()
 {
-    if( !m_drcEngine->HasCorrectRulesForId( DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH ) )
+    if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH ) )
     {
         ReportAux( "No annulus constraints found. Skipping check." );
         return false;
@@ -125,7 +125,7 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    ReportWithMarker( drcItem, via->GetPosition() );
+                    ReportViolation( drcItem, via->GetPosition() );
                 }
 
                 return true;
@@ -139,9 +139,9 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_ANNULUS::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_ANNULUS::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH };
+    return { DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH };
 }
 
 

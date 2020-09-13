@@ -62,7 +62,7 @@ public:
         return "Tests sizes of drilled holes (via/pad drills)";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 
 private:
     void checkVia( VIA* via, bool aExceedMicro, bool aExceedStd );
@@ -145,7 +145,7 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( D_PAD* aPad )
         drcItem->SetItems( aPad );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-        ReportWithMarker( drcItem, aPad->GetPosition() );
+        ReportViolation( drcItem, aPad->GetPosition() );
     }
 }
 
@@ -187,14 +187,14 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via, bool aExceedMicro, bool aE
         drcItem->SetItems( via );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-        ReportWithMarker( drcItem, via->GetPosition() );
+        ReportViolation( drcItem, via->GetPosition() );
     }
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_HOLE_SIZE::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_HOLE_SIZE::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_HOLE_SIZE };
+    return { DRC_CONSTRAINT_TYPE_HOLE_SIZE };
 }
 
 

@@ -68,7 +68,7 @@ public:
         return "Performs layout-vs-schematics integity check";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetMatchingConstraintIds() const override;
+    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 
 private:
 
@@ -101,7 +101,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DUPLICATE_FOOTPRINT );
             drcItem->SetItems( mod, *ins.first );
 
-            ReportWithMarker( drcItem, mod->GetPosition() );
+            ReportViolation( drcItem, mod->GetPosition() );
         }
     }
 
@@ -123,7 +123,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
 
             drcItem->SetErrorMessage( m_msg );
-            Report( drcItem );
+            ReportViolation( drcItem, wxPoint() );
         }
         else
         {
@@ -142,7 +142,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad );
-                    ReportWithMarker( drcItem, module->GetPosition() );
+                    ReportViolation( drcItem, module->GetPosition() );
                 }
                 else if( pcb_netname.IsEmpty() && !sch_net.GetNetName().IsEmpty() )
                 {
@@ -152,7 +152,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad );
-                    ReportWithMarker( drcItem, module->GetPosition() );
+                    ReportViolation( drcItem, module->GetPosition() );
                 }
                 else if( pcb_netname != sch_net.GetNetName() )
                 {
@@ -163,7 +163,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad );
-                    ReportWithMarker( drcItem, module->GetPosition() );
+                    ReportViolation( drcItem, module->GetPosition() );
                 }
             }
 
@@ -182,7 +182,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( module );
-                    ReportWithMarker( drcItem, module->GetPosition() );
+                    ReportViolation( drcItem, module->GetPosition() );
                 }
             }
         }
@@ -199,7 +199,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_EXTRA_FOOTPRINT );
 
             drcItem->SetItems( module );
-            ReportWithMarker( drcItem, module->GetPosition() );
+            ReportViolation( drcItem, module->GetPosition() );
         }
     }
 }
@@ -256,7 +256,7 @@ bool DRC_TEST_PROVIDER_LVS::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_LVS::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_LVS::GetConstraintTypes() const
 {
     return {};
 }
