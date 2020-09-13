@@ -3447,7 +3447,8 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
 
     wxCHECK_MSG( strCompare( "X", line, &line ), NULL, "Invalid LIB_PIN definition" );
 
-    LIB_PIN* pin = new LIB_PIN( aPart.get() );
+    wxString name;
+    wxString number;
 
     size_t pos = 2;                               // "X" plus ' ' space character.
     wxString tmp;
@@ -3458,11 +3459,11 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
         SCH_PARSE_ERROR( "invalid pin definition", aReader, line );
 
     tmp = tokens.GetNextToken();
-    pin->SetName( tmp );
+    name = tmp;
     pos += tmp.size() + 1;
 
     tmp = tokens.GetNextToken();
-    pin->SetNumber( tmp );
+    number = tmp ;
     pos += tmp.size() + 1;
 
     long num;
@@ -3485,7 +3486,6 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
 
     pos += tmp.size() + 1;
     position.y = Mils2Iu( (int) num );
-    pin->SetPosition( position );
 
     tmp = tokens.GetNextToken();
 
@@ -3494,7 +3494,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    pin->SetLength( Mils2Iu( (int) num ) );
+    int length = Mils2Iu( (int) num );
 
 
     tmp = tokens.GetNextToken();
@@ -3504,7 +3504,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    pin->SetOrientation( tmp[0] );
+    int orientation = tmp[0];
 
     tmp = tokens.GetNextToken();
 
@@ -3513,7 +3513,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    pin->SetNumberTextSize( Mils2Iu( (int) num ) );
+    int numberTextSize = Mils2Iu( (int) num );
 
     tmp = tokens.GetNextToken();
 
@@ -3522,7 +3522,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    pin->SetNameTextSize( Mils2Iu( (int) num ) );
+    int nameTextSize = Mils2Iu( (int) num );
 
     tmp = tokens.GetNextToken();
 
@@ -3531,7 +3531,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    pin->SetUnit( (int) num );
+    int unit = (int) num;
 
     tmp = tokens.GetNextToken();
 
@@ -3540,7 +3540,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    pin->SetConvert( (int) num );
+    int convert = (int) num;
 
     tmp = tokens.GetNextToken();
 
@@ -3550,26 +3550,29 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
 
     pos += tmp.size() + 1;
     char type = tmp[0];
-
-    wxString attributes;
+    ELECTRICAL_PINTYPE pinType;
 
     switch( type )
     {
-    case 'I': pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );         break;
-    case 'O': pin->SetType( ELECTRICAL_PINTYPE::PT_OUTPUT );        break;
-    case 'B': pin->SetType( ELECTRICAL_PINTYPE::PT_BIDI );          break;
-    case 'T': pin->SetType( ELECTRICAL_PINTYPE::PT_TRISTATE );      break;
-    case 'P': pin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );       break;
-    case 'U': pin->SetType( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );   break;
-    case 'W': pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );      break;
-    case 'w': pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_OUT );     break;
-    case 'C': pin->SetType( ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR ); break;
-    case 'E': pin->SetType( ELECTRICAL_PINTYPE::PT_OPENEMITTER );   break;
-    case 'N': pin->SetType( ELECTRICAL_PINTYPE::PT_NC );            break;
+    case 'I': pinType = ELECTRICAL_PINTYPE::PT_INPUT;         break;
+    case 'O': pinType = ELECTRICAL_PINTYPE::PT_OUTPUT;        break;
+    case 'B': pinType = ELECTRICAL_PINTYPE::PT_BIDI;          break;
+    case 'T': pinType = ELECTRICAL_PINTYPE::PT_TRISTATE;      break;
+    case 'P': pinType = ELECTRICAL_PINTYPE::PT_PASSIVE;       break;
+    case 'U': pinType = ELECTRICAL_PINTYPE::PT_UNSPECIFIED;   break;
+    case 'W': pinType = ELECTRICAL_PINTYPE::PT_POWER_IN;      break;
+    case 'w': pinType = ELECTRICAL_PINTYPE::PT_POWER_OUT;     break;
+    case 'C': pinType = ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR; break;
+    case 'E': pinType = ELECTRICAL_PINTYPE::PT_OPENEMITTER;   break;
+    case 'N': pinType = ELECTRICAL_PINTYPE::PT_NC;            break;
     default:
         THROW_PARSE_ERROR( "unknown pin type", aReader.GetSource(), aReader.Line(),
                 aReader.LineNumber(), pos );
     }
+
+
+    LIB_PIN* pin = new LIB_PIN( aPart.get(), name, number, orientation, pinType, length,
+            nameTextSize, numberTextSize, convert, position, unit );
 
     // Optional
     if( tokens.HasMoreTokens() )       /* Special Symbol defined */

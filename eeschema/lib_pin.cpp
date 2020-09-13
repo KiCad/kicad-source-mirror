@@ -94,13 +94,12 @@ static int externalPinDecoSize( RENDER_SETTINGS* aSettings, const LIB_PIN &aPin 
 
 
 LIB_PIN::LIB_PIN( LIB_PART* aParent ) :
-        LIB_ITEM( LIB_PIN_T, aParent )
+        LIB_ITEM( LIB_PIN_T, aParent ),
+          m_orientation( PIN_RIGHT ),
+          m_shape( GRAPHIC_PINSHAPE::LINE ),
+          m_type( ELECTRICAL_PINTYPE::PT_UNSPECIFIED ),
+          m_attributes( 0 )
 {
-    m_orientation = PIN_RIGHT;                           // Pin orient: Up, Down, Left, Right
-    m_type        = ELECTRICAL_PINTYPE::PT_UNSPECIFIED;  // electrical type of pin
-    m_shape       = GRAPHIC_PINSHAPE::LINE;
-    m_attributes  = 0;                                   // bit 0 != 0: pin invisible
-
     // Use the application settings for pin sizes if exists.
     // pgm can be nullptr when running a shared lib from a script, not from a kicad appl
     PGM_BASE* pgm  = PgmOrNull();
@@ -118,6 +117,26 @@ LIB_PIN::LIB_PIN( LIB_PART* aParent ) :
         m_numTextSize  = Mils2iu( DEFAULT_PINNUM_SIZE );
         m_nameTextSize = Mils2iu( DEFAULT_PINNAME_SIZE );
     }
+}
+
+
+LIB_PIN::LIB_PIN( LIB_PART* aParent, const wxString& aName, const wxString& aNumber,
+        int aOrientation, ELECTRICAL_PINTYPE aPinType, int aLength, int aNameTextSize,
+        int aNumTextSize, int aConvert, const wxPoint& aPos, int aUnit ) : 
+        LIB_ITEM( LIB_PIN_T, aParent ),
+        m_position( aPos ),
+        m_length( aLength ),
+        m_orientation( aOrientation ),
+        m_shape( GRAPHIC_PINSHAPE::LINE ),
+        m_type( aPinType ),
+        m_attributes( 0 ),
+        m_numTextSize( aNumTextSize ),
+        m_nameTextSize( aNameTextSize )
+{
+    SetName( aName );
+    SetNumber( aNumber );
+    SetUnit( aUnit );
+    SetConvert( aConvert );
 }
 
 
