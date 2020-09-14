@@ -1232,9 +1232,9 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 }
 
 
-void MODULE::SetPosition( const wxPoint& newpos )
+void MODULE::SetPosition( const wxPoint& aPos )
 {
-    wxPoint delta = newpos - m_Pos;
+    wxPoint delta = aPos - m_Pos;
 
     m_Pos += delta;
 
@@ -1273,7 +1273,7 @@ void MODULE::SetPosition( const wxPoint& newpos )
         }
     }
 
-    CalculateBoundingBox();
+    m_BoundaryBox.Move( delta );
 }
 
 
@@ -1334,13 +1334,13 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
 }
 
 
-void MODULE::SetOrientation( double newangle )
+void MODULE::SetOrientation( double aNewAngle )
 {
-    double  angleChange = newangle - m_Orient;  // change in rotation
+    double angleChange = aNewAngle - m_Orient;  // change in rotation
 
-    NORMALIZE_ANGLE_180( newangle );
+    NORMALIZE_ANGLE_180( aNewAngle );
 
-    m_Orient = newangle;
+    m_Orient = aNewAngle;
 
     for( auto pad : m_pads )
     {
@@ -1370,7 +1370,7 @@ void MODULE::SetOrientation( double newangle )
         }
     }
 
-    CalculateBoundingBox();
+    m_BoundaryBox = m_BoundaryBox.GetBoundingBoxRotated( GetPosition(), angleChange );
 }
 
 

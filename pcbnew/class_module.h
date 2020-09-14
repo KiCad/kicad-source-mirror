@@ -211,7 +211,7 @@ public:
 
     wxPoint GetPosition() const override { return m_Pos; }
 
-    void SetOrientation( double newangle );
+    void SetOrientation( double aNewAngle );
 
     void SetOrientationDegrees( double aOrientation ) { SetOrientation( aOrientation * 10.0 ); }
     double GetOrientation() const { return m_Orient; }
