@@ -236,6 +236,12 @@ int main( int argc, char *argv[] )
     drcEngine.SetLogReporter( new CONSOLE_MSG_REPORTER ( &consoleLog ) );
     drcEngine.SetProgressReporter( new CONSOLE_PROGRESS_REPORTER ( &consoleLog ) );
 
+    drcEngine.SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
+            {
+                // fixme
+            } );
+
     wxString rulesFilepath;
 
     if( argc > 2 )
@@ -245,10 +251,7 @@ int main( int argc, char *argv[] )
 
     drcEngine.InitEngine( rulesFilepath );
 
-    drcEngine.RunTests(
-            [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
-            {
-            } );
+    drcEngine.RunTests();
 
     return 0;
 }

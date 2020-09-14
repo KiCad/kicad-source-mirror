@@ -42,79 +42,86 @@
  */
 class PROGRESS_REPORTER
 {
-    public:
+public:
 
-        PROGRESS_REPORTER( int aNumPhases );
-        PROGRESS_REPORTER( const PROGRESS_REPORTER& ) = delete;
+    PROGRESS_REPORTER( int aNumPhases );
+    PROGRESS_REPORTER( const PROGRESS_REPORTER& ) = delete;
 
-        virtual ~PROGRESS_REPORTER()
-        {
-        }
+    virtual ~PROGRESS_REPORTER()
+    {
+    }
 
-        /**
-         * sets the number of phases
-         */
-        void SetNumPhases( int aNumPhases );
+    /**
+     * sets the number of phases
+     */
+    void SetNumPhases( int aNumPhases );
+    void AddPhases( int aNumPhases );
 
-        /**
-         * initialize the aPhase virtual zone of the dialog progress bar
-         */
-        void BeginPhase( int aPhase );
+    /**
+     * initialize the aPhase virtual zone of the dialog progress bar
+     */
+    virtual void BeginPhase( int aPhase );
 
-        /**
-         * Uses the next vailable virtual zone of the dialog progress bar
-         */
-        void AdvancePhase();
+    /**
+     * Uses the next vailable virtual zone of the dialog progress bar
+     */
+    virtual void AdvancePhase();
 
-        /**
-         * Display aMessage in the progress bar dialog
-         */
-        void Report( const wxString& aMessage );
+    /**
+     * Uses the next vailable virtual zone of the dialog progress bar and updates
+     * the message.
+     */
+    virtual void AdvancePhase( const wxString& aMessage );
 
-        /**
-         * Set the progress value to aProgress (0..1)
-         */
-        virtual void SetCurrentProgress( double aProgress );
+    /**
+     * Display aMessage in the progress bar dialog
+     */
+    virtual void Report( const wxString& aMessage );
 
-        /**
-         * Fix the value thar gives the 100 precent progress bar length
-         * (inside the current virtual zone)
-         */
-        void SetMaxProgress( int aMaxProgress );
+    /**
+     * Set the progress value to aProgress (0..1)
+     */
+    virtual void SetCurrentProgress( double aProgress );
 
-        /**
-         * Increment the progress bar length (inside the current virtual zone)
-         */
-        void AdvanceProgress();
+    /**
+     * Fix the value thar gives the 100 precent progress bar length
+     * (inside the current virtual zone)
+     */
+    void SetMaxProgress( int aMaxProgress );
 
-        /**
-         * Update the UI dialog.  *MUST* only be called from the main thread.
-         * Returns false if the user clicked Cancel.
-         */
-        bool KeepRefreshing( bool aWait = false );
+    /**
+     * Increment the progress bar length (inside the current virtual zone)
+     */
+    void AdvanceProgress();
 
-        /** change the title displayed on the window caption
-         * *MUST* only be called from the main thread.
-         * Has meaning only for some reporters.
-         * Do nothing for others
-         */
-        virtual void SetTitle( const wxString& aTitle ) {}
+    /**
+     * Update the UI dialog.  *MUST* only be called from the main thread.
+     * Returns false if the user clicked Cancel.
+     */
+    bool KeepRefreshing( bool aWait = false );
 
-        bool IsCancelled() const { return m_cancelled.load(); }
+    /** change the title displayed on the window caption
+     * *MUST* only be called from the main thread.
+     * Has meaning only for some reporters.
+     * Do nothing for others
+     */
+    virtual void SetTitle( const wxString& aTitle ) {}
 
-    protected:
+    bool IsCancelled() const { return m_cancelled.load(); }
 
-        int currentProgress() const;
+protected:
 
-        virtual bool updateUI() = 0;
+    int currentProgress() const;
 
-        wxString           m_rptMessage;
-        mutable std::mutex m_mutex;
-        std::atomic_int    m_phase;
-        std::atomic_int    m_numPhases;
-        std::atomic_int    m_progress;
-        std::atomic_int    m_maxProgress;
-        std::atomic_bool   m_cancelled;
+    virtual bool updateUI() = 0;
+
+    wxString           m_rptMessage;
+    mutable std::mutex m_mutex;
+    std::atomic_int    m_phase;
+    std::atomic_int    m_numPhases;
+    std::atomic_int    m_progress;
+    std::atomic_int    m_maxProgress;
+    std::atomic_bool   m_cancelled;
 };
 
 /**

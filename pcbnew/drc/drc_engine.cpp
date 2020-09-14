@@ -87,7 +87,7 @@ void DRC_ENGINE::loadImplicitRules()
 
     // 1) global defaults
 
-    DRC_RULE* rule = createImplicitRule( _( "board setup > design rules > constraints" ));
+    DRC_RULE* rule = createImplicitRule( _( "board setup constraints" ));
 
     DRC_CONSTRAINT clearanceConstraint( DRC_CONSTRAINT_TYPE_CLEARANCE );
     clearanceConstraint.Value().SetMin( bds.m_MinClearance );
@@ -123,7 +123,7 @@ void DRC_ENGINE::loadImplicitRules()
 
     // 2) micro-via specific defaults (new DRC doesn't treat microvias in any special way)
 
-    DRC_RULE* uViaRule = createImplicitRule( _( "board setup > design rules > constraints" ));
+    DRC_RULE* uViaRule = createImplicitRule( _( "board setup constraints" ));
 
     uViaRule->m_Condition = new DRC_RULE_CONDITION ( "A.Via_Type == 'micro_via'" );
 
@@ -144,7 +144,7 @@ void DRC_ENGINE::loadImplicitRules()
 
     if( !bds.m_BlindBuriedViaAllowed )
     {
-        DRC_RULE* bbViaRule = createImplicitRule( _( "board setup > design rules > constraints" ));
+        DRC_RULE* bbViaRule = createImplicitRule( _( "board setup constraints" ));
 
         bbViaRule->m_Condition = new DRC_RULE_CONDITION ( "A.Via_Type == 'buried_via'" );
 
@@ -187,13 +187,6 @@ void DRC_ENGINE::loadImplicitRules()
             DRC_CONSTRAINT ncClearanceConstraint( DRC_CONSTRAINT_TYPE_CLEARANCE );
             ncClearanceConstraint.Value().SetMin( nc->GetClearance() );
             netclassRule->AddConstraint( ncClearanceConstraint );
-        }
-
-        if( nc->GetTrackWidth() > bds.m_TrackMinWidth )
-        {
-            DRC_CONSTRAINT ncWidthConstraint( DRC_CONSTRAINT_TYPE_TRACK_WIDTH );
-            ncWidthConstraint.Value().SetMin( nc->GetTrackWidth() );
-            netclassRule->AddConstraint( ncWidthConstraint );
         }
     }
 }
@@ -302,23 +295,21 @@ bool DRC_ENGINE::CompileRules()
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
         ReportAux( wxString::Format( "- Provider: '%s': ", provider->GetName() ) );
-        drc_dbg(7, "do prov %s", provider->GetName() );
+        drc_dbg( 7, "do prov %s", provider->GetName() );
 
-        for ( DRC_CONSTRAINT_TYPE_T id : provider->GetConstraintTypes() )
+        for( DRC_CONSTRAINT_TYPE_T id : provider->GetConstraintTypes() )
         {
             drc_dbg( 7, "do id %d", id );
 
             if( m_constraintMap.find( id ) == m_constraintMap.end() )
-                m_constraintMap[ id ] = new CONSTRAINT_SET;
-
-            m_constraintMap[ id ]->provider = provider;
+                m_constraintMap[ id ] = new std::vector<CONSTRAINT_WITH_CONDITIONS*>();
 
             for( DRC_RULE* rule : m_rules )
             {
                 DRC_RULE_CONDITION* condition = nullptr;
                 bool compileOk = false;
                 std::vector<DRC_CONSTRAINT> matchingConstraints;
-                drc_dbg(7, "Scan provider %s, rule %s",  provider->GetName(), rule->m_Name );
+                drc_dbg( 7, "Scan provider %s, rule %s",  provider->GetName(), rule->m_Name );
 
                 if( rule->m_Condition && !rule->m_Condition->GetExpression().IsEmpty() )
                 {
@@ -342,7 +333,7 @@ bool DRC_ENGINE::CompileRules()
 
                     rcons->constraint = constraint;
                     rcons->parentRule = rule;
-                    m_constraintMap[ id ]->sortedConstraints.push_back( rcons );
+                    m_constraintMap[ id ]->push_back( rcons );
                 }
 
                 if( !matchingConstraints.empty() )
@@ -391,9 +382,22 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
 }
 
 
-void DRC_ENGINE::RunTests( DRC_VIOLATION_HANDLER aViolationHandler  )
+void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aTestTracksAgainstZones,
+                           bool aReportAllTrackErrors, bool aTestFootprints )
 {
-    m_violationHandler = std::move( aViolationHandler );
+    m_userUnits = aUnits;
+
+    // Note: set these first.  The phase counts may be dependent on some of them.
+    m_testTracksAgainstZones = aTestTracksAgainstZones;
+    m_reportAllTrackErrors = aReportAllTrackErrors;
+    m_testFootprints = aTestFootprints;
+
+    int phases = 0;
+
+    for( DRC_TEST_PROVIDER* provider : m_testProviders )
+        phases += provider->GetNumPhases();
+
+    m_progressReporter->AddPhases( phases );
 
     for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
     {
@@ -405,27 +409,8 @@ void DRC_ENGINE::RunTests( DRC_VIOLATION_HANDLER aViolationHandler  )
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
-        bool skipProvider = false;
-        auto providedConstraints = provider->GetConstraintTypes();
+        drc_dbg( 0, "Running test provider: '%s'\n", provider->GetName() );
 
-        if( providedConstraints.size() )
-        {
-            for( DRC_CONSTRAINT_TYPE_T constraintType : providedConstraints )
-            {
-                if( !HasRulesForConstraintType( constraintType ) )
-                {
-                    ReportAux( wxString::Format( "DRC provider '%s' has no rules provided. Skipping run.",
-                                                 provider->GetName() ) );
-                    skipProvider = true;
-                    break;
-                }
-            }
-        }
-
-        if( skipProvider )
-            continue;
-
-        drc_dbg(0, "Running test provider: '%s'\n", provider->GetName() );
         ReportAux( wxString::Format( "Run DRC provider: '%s'", provider->GetName() ) );
         provider->Run();
     }
@@ -438,39 +423,33 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 {
 #define REPORT( s ) { if( aReporter ) { aReporter->Report( s ); } }
 
+    auto* connectedA = a && a->IsConnected() ? static_cast<BOARD_CONNECTED_ITEM*>( a ) : nullptr;
+    auto* connectedB = b && b->IsConnected() ? static_cast<BOARD_CONNECTED_ITEM*>( b ) : nullptr;
+
     // Local overrides take precedence
     if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
     {
-        BOARD_CONNECTED_ITEM* ac = a->IsConnected() ? static_cast<BOARD_CONNECTED_ITEM*>( a )
-                                                    : nullptr;
-        BOARD_CONNECTED_ITEM* bc = b->IsConnected() ? static_cast<BOARD_CONNECTED_ITEM*>( b )
-                                                    : nullptr;
         int overrideA = 0;
         int overrideB = 0;
 
-        if( ac && ac->GetLocalClearanceOverrides( nullptr ) > 0 )
+        if( connectedA && connectedA->GetLocalClearanceOverrides( nullptr ) > 0 )
         {
-            overrideA = ac->GetLocalClearanceOverrides( &m_msg );
+            overrideA = connectedA->GetLocalClearanceOverrides( &m_msg );
 
+            REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
                                       a->GetSelectMenuText( aReporter->GetUnits() ),
                                       StringFromValue( aReporter->GetUnits(), overrideA, true ) ) )
         }
 
-        if( bc && bc->GetLocalClearanceOverrides( nullptr ) > 0 )
+        if( connectedB && connectedB->GetLocalClearanceOverrides( nullptr ) > 0 )
         {
-            overrideB = bc->GetLocalClearanceOverrides( &m_msg );
+            overrideB = connectedB->GetLocalClearanceOverrides( &m_msg );
 
+            REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
                                       b->GetSelectMenuText( aReporter->GetUnits() ),
                                       StringFromValue( aReporter->GetUnits(), overrideB, true ) ) )
-
-            // If both overridden, report on which wins
-            if( overrideA )
-            {
-                REPORT( wxString::Format( _( "Clearance: %s." ),
-                                          std::max( overrideA, overrideB ) ) )
-            }
         }
 
         if( overrideA || overrideB )
@@ -481,17 +460,34 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         }
     }
 
-    CONSTRAINT_SET* ruleset = m_constraintMap[ aConstraintId ];
+    std::vector<CONSTRAINT_WITH_CONDITIONS*>* ruleset = m_constraintMap[ aConstraintId ];
 
-    for( ssize_t ii = ruleset->sortedConstraints.size() - 1; ii >= 0; --ii )
+    const DRC_CONSTRAINT* constraintRef = nullptr;
+    bool                  implicit = false;
+
+    // Last matching rule wins, so process in reverse order
+    for( int ii = (int) ruleset->size() - 1; ii >= 0; --ii )
     {
-        const CONSTRAINT_WITH_CONDITIONS* rcons = ruleset->sortedConstraints[ ii ];
-        bool implicit = rcons->parentRule && rcons->parentRule->m_Implicit;
+        const CONSTRAINT_WITH_CONDITIONS* rcons = ruleset->at( ii );
+        implicit = rcons->parentRule && rcons->parentRule->m_Implicit;
 
-        if( implicit )
-            REPORT( wxString::Format( _( "Checking %s." ), rcons->parentRule->m_Name ) )
+        REPORT( "" )
+
+        if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
+        {
+            int clearance = rcons->constraint.m_Value.Min();
+            REPORT( wxString::Format( _( "Checking %s %s; clearance: %s." ),
+                                      implicit ? _( "" ) : _( "rule" ),
+                                      rcons->parentRule->m_Name,
+                                      StringFromValue( aReporter->GetUnits(), clearance, true ) ) )
+        }
         else
-            REPORT( wxString::Format( _( "Checking rule %s." ), rcons->parentRule->m_Name ) )
+        {
+            REPORT( wxString::Format( _( "Checking %s %s." ),
+                                      implicit ? _( "" ) : _( "rule" ),
+                                      rcons->parentRule->m_Name ) )
+        }
+
         if( aLayer != UNDEFINED_LAYER && !rcons->layerTest.test( aLayer ) )
         {
             REPORT( wxString::Format( _( "Rule layer \"%s\" not matched." ),
@@ -501,34 +497,76 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
             continue;
         }
 
-        const wxString& expression = rcons->condition->GetExpression();
-
-        if( expression.IsEmpty() )
+        if( !rcons->condition || rcons->condition->GetExpression().IsEmpty() )
         {
             REPORT( implicit ? _( "Unconditional constraint applied." )
                              : _( "Unconditional rule applied." ) )
 
-            return rcons->constraint;
+            constraintRef = &rcons->constraint;
+            break;
         }
         else
         {
-            // Don't report on implicit rule conditions; they're stuff we made up.
+            // Don't report on implicit rule conditions; they're synthetic.
             if( !implicit )
-                REPORT( _( "Checking rule condition \"" + expression + "\"." ) )
+            {
+                REPORT( wxString::Format( _( "Checking rule condition \"%s\"." ),
+                                          rcons->condition->GetExpression() ) )
+            }
 
             if( rcons->condition->EvaluateFor( a, b, aLayer, aReporter ) )
             {
-                REPORT( implicit ? _( "Constraint applied." )
+                REPORT( implicit ? _( "Constraint applicable." )
                                  : _( "Rule applied." ) )
 
-                return rcons->constraint;
+                constraintRef = &rcons->constraint;
+                break;
             }
             else
             {
-                REPORT( implicit ? _( "Membership not satisfied; constraint not applied." )
+                REPORT( implicit ? _( "Membership not satisfied; constraint not applicable." )
                                  : _( "Condition not satisfied; rule not applied." ) )
-                REPORT( "" )
             }
+        }
+    }
+
+    // Unfortunately implicit rules don't work for local clearances (such as zones) because
+    // they have to be max'ed with netclass values (which are already implicit rules), and our
+    // rule selection paradigm is "winner takes all".
+    if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE && implicit )
+    {
+        int global = constraintRef->m_Value.Min();
+        int localA = connectedA ? connectedA->GetLocalClearance( nullptr ) : 0;
+        int localB = connectedB ? connectedB->GetLocalClearance( nullptr ) : 0;
+        int clearance = global;
+
+        if( localA > 0 )
+        {
+            REPORT( "" )
+            REPORT( wxString::Format( _( "Local clearance on %s; clearance: %s." ),
+                                      a->GetSelectMenuText( aReporter->GetUnits() ),
+                                      StringFromValue( aReporter->GetUnits(), localA, true ) ) )
+
+            if( localA > clearance )
+                clearance = connectedA->GetLocalClearance( &m_msg );
+        }
+
+        if( localB > 0 )
+        {
+            REPORT( "" )
+            REPORT( wxString::Format( _( "Local clearance on %s; clearance: %s." ),
+                                      b->GetSelectMenuText( aReporter->GetUnits() ),
+                                      StringFromValue( aReporter->GetUnits(), localB, true ) ) )
+
+            if( localB > clearance )
+                clearance = connectedB->GetLocalClearance( &m_msg );
+        }
+
+        if( localA > global || localB > global )
+        {
+            DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_CLEARANCE, m_msg );
+            constraint.m_Value.SetMin( clearance );
+            return constraint;
         }
     }
 
@@ -537,14 +575,25 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
     static DRC_CONSTRAINT nullConstraint;
     nullConstraint.m_DisallowFlags = 0;
 
-    return nullConstraint;
+    return constraintRef ? *constraintRef : nullConstraint;
 
 #undef REPORT
 }
 
 
+bool DRC_ENGINE::IsErrorLimitExceeded( int error_code )
+{
+    return m_errorLimits[ error_code ] <= 0;
+}
+
+
 void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
 {
+    m_errorLimits[ aItem->GetErrorCode() ] -= 1;
+
+    if( m_violationHandler )
+        m_violationHandler( aItem, aPos );
+
     if( m_reporter )
     {
         wxString msg = wxString::Format( "Test '%s': %s (code %d)",
@@ -561,12 +610,10 @@ void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, wxPoin
 
         wxString violatingItemsStr = "Violating items: ";
 
-       m_reporter->Report( wxString::Format( "  |- violating position (%d, %d)",
-                                             aPos.x,
-                                             aPos.y ) );
+        m_reporter->Report( wxString::Format( "  |- violating position (%d, %d)",
+                                              aPos.x,
+                                              aPos.y ) );
     }
-
-    m_violationHandler( aItem, aPos );
 }
 
 void DRC_ENGINE::ReportAux ( const wxString& aStr )
@@ -587,14 +634,12 @@ void DRC_ENGINE::ReportProgress( double aProgress )
 }
 
 
-void DRC_ENGINE::ReportStage ( const wxString& aStageName, int index, int total )
+void DRC_ENGINE::ReportStage ( const wxString& aStageName )
 {
     if( !m_progressReporter )
         return;
 
-    m_progressReporter->SetNumPhases( total );
-    m_progressReporter->BeginPhase( index ); // fixme: coalesce all stages/test providers
-    m_progressReporter->Report( aStageName );
+    m_progressReporter->AdvancePhase( aStageName );
 }
 
 
@@ -623,8 +668,8 @@ std::vector<DRC_CONSTRAINT> DRC_ENGINE::QueryConstraintsById( DRC_CONSTRAINT_TYP
 {
     std::vector<DRC_CONSTRAINT> rv;
 
-    for ( CONSTRAINT_WITH_CONDITIONS* c : m_constraintMap[constraintID]->sortedConstraints )
-        rv.push_back(c->constraint);
+    for ( CONSTRAINT_WITH_CONDITIONS* c : *m_constraintMap[constraintID] )
+        rv.push_back( c->constraint );
 
     return rv;
 }
@@ -633,7 +678,7 @@ std::vector<DRC_CONSTRAINT> DRC_ENGINE::QueryConstraintsById( DRC_CONSTRAINT_TYP
 bool DRC_ENGINE::HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T constraintID )
 {
     //drc_dbg(10,"hascorrect id %d size %d\n", ruleID,  m_ruleMap[ruleID]->sortedRules.size( ) );
-    return m_constraintMap[constraintID]->sortedConstraints.size() != 0;
+    return m_constraintMap[constraintID]->size() != 0;
 }
 
 

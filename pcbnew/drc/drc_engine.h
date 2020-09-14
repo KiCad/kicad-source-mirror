@@ -79,7 +79,6 @@ std::function<void( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )> DRC_
  */
 class DRC_ENGINE
 {
-
 public:
     DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS* aSettings );
     ~DRC_ENGINE();
@@ -87,31 +86,42 @@ public:
     void SetSchematicNetlist( NETLIST* aNetlist ) { m_schematicNetlist = aNetlist; }
     NETLIST* GetSchematicNetlist() const { return m_schematicNetlist; }
 
-    // JEY TODO: why isn't this called?
     void SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet ) { m_worksheet = aWorksheet; }
     KIGFX::WS_PROXY_VIEW_ITEM* GetWorksheet() const { return m_worksheet; }
 
-    // JEY TODO: rationalize old progress report style with new...
+    /*
+     * Receives DRC violation reports (a DRC_ITEM and a position).
+     */
+    void SetViolationHandler( DRC_VIOLATION_HANDLER aHandler )
+    {
+        m_violationHandler = std::move( aHandler );
+    }
+
+    /*
+     * Receives progress information to show the user.
+     */
     void SetProgressReporter( PROGRESS_REPORTER* aProgRep ) { m_progressReporter = aProgRep; }
 
+    /*
+     * Receives debug information for a developer.
+     */
     void SetLogReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
 
+    /*
+     * Loads and parses a rule set from an sexpr text file.
+     */
     bool LoadRules( const wxFileName& aPath );
 
     void InitEngine( const wxFileName& aRulePath );
 
-    void RunTests( DRC_VIOLATION_HANDLER aDRCItemHandler );
+    void RunTests( EDA_UNITS aUnits = EDA_UNITS::MILLIMETRES, bool aTestTracksAgainstZones = true,
+                   bool aReportAllTrackErrors = true, bool aTestFootprints = true );
 
     BOARD_DESIGN_SETTINGS* GetDesignSettings() const { return m_designSettings; }
 
     BOARD* GetBoard() const { return m_board; }
 
-    bool IsErrorLimitExceeded( int error_code )
-    {
-        m_errorLimits[ error_code ] -= 1;
-
-        return m_errorLimits[ error_code ] <= 0;
-    }
+    bool IsErrorLimitExceeded( int error_code );
 
     DRC_CONSTRAINT EvalRulesForItems( DRC_CONSTRAINT_TYPE_T ruleID, BOARD_ITEM* a,
                                       BOARD_ITEM* b = nullptr,
@@ -122,23 +132,16 @@ public:
 
     bool HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T constraintID );
 
-    EDA_UNITS UserUnits() const
-    {
-        // JEY TODO
-        return EDA_UNITS::MILLIMETRES;
-    }
-
-    bool GetTestTracksAgainstZones() const
-    {
-        // JEY TODO
-        return true;
-    }
+    EDA_UNITS UserUnits() const { return m_userUnits; }
+    bool GetTestTracksAgainstZones() const { return m_testTracksAgainstZones; }
+    bool GetReportAllTrackErrors() const { return m_reportAllTrackErrors; }
+    bool GetTestFootprints() const { return m_testFootprints; }
 
     bool CompileRules();
 
     void ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos );
     void ReportProgress( double aProgress );
-    void ReportStage ( const wxString& aStageName, int index, int total );
+    void ReportStage( const wxString& aStageName );
     void ReportAux( const wxString& aStr );
 
     bool QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T aRuleId, DRC_CONSTRAINT& aConstraint,
@@ -160,12 +163,6 @@ private:
         DRC_CONSTRAINT       constraint;
     };
 
-    struct CONSTRAINT_SET
-    {
-        std::vector<CONSTRAINT_WITH_CONDITIONS*> sortedConstraints;
-        DRC_TEST_PROVIDER*                       provider;
-    };
-
     void loadImplicitRules();
     void loadTestProviders();
     DRC_RULE* createImplicitRule( const wxString& name );
@@ -179,10 +176,16 @@ protected:
     std::vector<DRC_RULE_CONDITION*> m_ruleConditions;
     std::vector<DRC_RULE*>           m_rules;
     std::vector<DRC_TEST_PROVIDER*>  m_testProviders;
+
+    EDA_UNITS                        m_userUnits;
     std::vector<int>                 m_errorLimits;
+    bool                             m_testTracksAgainstZones;
+    bool                             m_reportAllTrackErrors;
+    bool                             m_testFootprints;
 
     // constraint -> rule -> provider
-    std::unordered_map<DRC_CONSTRAINT_TYPE_T, CONSTRAINT_SET*> m_constraintMap;
+    std::unordered_map< DRC_CONSTRAINT_TYPE_T,
+                        std::vector<CONSTRAINT_WITH_CONDITIONS*>* > m_constraintMap;
 
     DRC_VIOLATION_HANDLER            m_violationHandler;
     REPORTER*                        m_reporter;

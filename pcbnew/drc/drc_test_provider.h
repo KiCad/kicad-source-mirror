@@ -67,7 +67,7 @@ public:
 /**
  * DRC_TEST_PROVIDER
  * is a base class that represents a DRC "provider" which runs some DRC functions over a
- * #BOARD and spits out #PCB_MARKERs as needed.
+ * #BOARD and spits out #DRC_ITEMs and positions as needed.
  */
 class DRC_TEST_PROVIDER
 {
@@ -82,22 +82,15 @@ public:
 
     /**
      * Runs this provider against the given PCB with configured options (if any).
-     *
-     * Note: Board is non-const, as some DRC functions modify the board (e.g. zone fill
-     * or polygon coalescing)
      */
-
     virtual bool Run() = 0;
 
     virtual const wxString GetName() const;
     virtual const wxString GetDescription() const;
 
-    virtual void ReportAux( wxString fmt, ... );
-    virtual void ReportViolation( std::shared_ptr<DRC_ITEM> item, wxPoint aMarkerPos );
-    virtual void ReportProgress( double aProgress );
-    virtual void ReportStage ( const wxString& aStageName, int index, int total );
-
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const = 0;
+
+    virtual int GetNumPhases() const = 0;
 
     virtual bool IsRuleDriven() const
     {
@@ -107,6 +100,11 @@ public:
 protected:
     int forEachGeometryItem( const std::vector<KICAD_T>& aTypes, LSET aLayers,
                              const std::function<bool(BOARD_ITEM*)>& aFunc );
+
+    virtual void reportAux( wxString fmt, ... );
+    virtual void reportViolation( std::shared_ptr<DRC_ITEM> item, wxPoint aMarkerPos );
+    virtual void reportProgress( double aProgress );
+    virtual void reportStage( const wxString& aStageName );
 
     virtual void reportRuleStatistics();
     virtual void accountCheck( const DRC_RULE* ruleToTest );

@@ -96,7 +96,13 @@ void ZONE_FILLER::InstallNewProgressReporter( wxWindow* aParent, const wxString&
                                               int aNumPhases )
 {
     m_uniqueReporter = std::make_unique<WX_PROGRESS_REPORTER>( aParent, aTitle, aNumPhases );
-    m_progressReporter = m_uniqueReporter.get();
+    SetProgressReporter( m_uniqueReporter.get() );
+}
+
+
+void ZONE_FILLER::SetProgressReporter( WX_PROGRESS_REPORTER* aReporter )
+{
+    m_progressReporter = aReporter;
 }
 
 
@@ -118,6 +124,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         m_progressReporter->Report( aCheck ? _( "Checking zone fills..." )
                                            : _( "Building zone fills..." ) );
         m_progressReporter->SetMaxProgress( aZones.size() );
+        m_progressReporter->KeepRefreshing();
     }
 
     // The board outlines is used to clip solid areas inside the board (when outlines are valid)
@@ -125,9 +132,9 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     m_brdOutlinesValid = m_board->GetBoardPolygonOutlines( m_boardOutline );
 
     // Update the bounding box shape caches in the pads to prevent multi-threaded rebuilds
-    for( auto module : m_board->Modules() )
+    for( MODULE* module : m_board->Modules() )
     {
-        for( auto pad : module->Pads() )
+        for( D_PAD* pad : module->Pads() )
         {
             if( pad->IsDirty() )
                 pad->BuildEffectiveShapes( UNDEFINED_LAYER );
@@ -263,8 +270,6 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     }
 
     // Now remove insulated copper islands and islands outside the board edge
-    bool outOfDate = false;
-
     for( auto& zone : islandsList )
     {
         for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
@@ -322,25 +327,45 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
             zone.m_zone->SetFilledPolysList( layer, poly );
             zone.m_zone->CalculateFilledArea();
 
-            if( aCheck && zone.m_zone->GetHashValue( layer ) != poly.GetHash() )
-                outOfDate = true;
-
             if( m_progressReporter && m_progressReporter->IsCancelled() )
                 return false;
         }
     }
 
-    if( aCheck && outOfDate )
+    if( aCheck )
     {
-        PROGRESS_REPORTER_HIDER raii( m_progressReporter );
-        KIDIALOG dlg( m_progressReporter->GetParent(),
-                      _( "Zone fills are out-of-date. Refill?" ),
-                      _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-        dlg.SetOKCancelLabels( _( "Refill" ), _( "Continue without Refill" ) );
-        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+        bool outOfDate = false;
 
-        if( dlg.ShowModal() == wxID_CANCEL )
-            return false;
+        for( ZONE_CONTAINER* zone : aZones )
+        {
+            // Keepout zones are not filled
+            if( zone->GetIsKeepout() )
+                continue;
+
+            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+            {
+                MD5_HASH was = zone->GetHashValue( layer );
+                zone->CacheTriangulation( layer );
+                zone->BuildHashValue( layer );
+                MD5_HASH is = zone->GetHashValue( layer );
+
+                if( is != was )
+                    outOfDate = true;
+            }
+        }
+
+        if( outOfDate )
+        {
+            PROGRESS_REPORTER_HIDER raii( m_progressReporter );
+            KIDIALOG dlg( m_progressReporter->GetParent(),
+                          _( "Zone fills are out-of-date. Refill?" ),
+                          _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+            dlg.SetOKCancelLabels( _( "Refill" ), _( "Continue without Refill" ) );
+            dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+            if( dlg.ShowModal() == wxID_CANCEL )
+                return false;
+        }
     }
 
     if( m_progressReporter )
@@ -406,7 +431,6 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
             return false;
 
         m_progressReporter->AdvancePhase();
-        m_progressReporter->Report( _( "Committing changes..." ) );
         m_progressReporter->KeepRefreshing();
     }
 

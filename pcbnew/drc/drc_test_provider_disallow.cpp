@@ -21,11 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-//#include <class_board.h>
 #include <common.h>
-
-//#include <geometry/shape.h>
-
 #include <drc/drc_engine.h>
 #include <drc/drc.h>
 #include <drc/drc_item.h>
@@ -62,18 +58,20 @@ public:
     }
 
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
+
+    int GetNumPhases() const override;
 };
 
 
 bool DRC_TEST_PROVIDER_DISALLOW::Run()
 {
-    if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_DISALLOW ) )
+    if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_DISALLOW ) )
     {
-        ReportAux( "No disallow constraints found. Skipping check." );
+        reportAux( "No disallow constraints found. Skipping check." );
         return false;
     }
 
-    ReportStage( _( "Testing disallow constraints" ), 0, 2 );
+    reportStage( _( "Keepouts & disallow constraints..." ));
 
     auto checkItem = [&]( BOARD_ITEM *item ) -> bool
     {
@@ -93,7 +91,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
             drcItem->SetItems( item );
             drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-            ReportViolation( drcItem, item->GetPosition() );
+            reportViolation( drcItem, item->GetPosition());
         }
 
         return true;
@@ -104,6 +102,12 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     reportRuleStatistics();
 
     return true;
+}
+
+
+int DRC_TEST_PROVIDER_DISALLOW::GetNumPhases() const
+{
+    return 1;
 }
 
 

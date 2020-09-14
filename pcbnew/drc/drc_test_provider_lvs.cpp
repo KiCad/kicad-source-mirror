@@ -70,9 +70,9 @@ public:
 
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 
-private:
+    int GetNumPhases() const override;
 
-    bool fetchNetlistFromSchematic( NETLIST& aNetlist );
+private:
     void testFootprints( NETLIST& aNetlist );
 };
 
@@ -101,7 +101,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DUPLICATE_FOOTPRINT );
             drcItem->SetItems( mod, *ins.first );
 
-            ReportViolation( drcItem, mod->GetPosition() );
+            reportViolation( drcItem, mod->GetPosition());
         }
     }
 
@@ -123,7 +123,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
 
             drcItem->SetErrorMessage( m_msg );
-            ReportViolation( drcItem, wxPoint() );
+            reportViolation( drcItem, wxPoint());
         }
         else
         {
@@ -142,7 +142,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad );
-                    ReportViolation( drcItem, module->GetPosition() );
+                    reportViolation( drcItem, module->GetPosition());
                 }
                 else if( pcb_netname.IsEmpty() && !sch_net.GetNetName().IsEmpty() )
                 {
@@ -152,7 +152,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad );
-                    ReportViolation( drcItem, module->GetPosition() );
+                    reportViolation( drcItem, module->GetPosition());
                 }
                 else if( pcb_netname != sch_net.GetNetName() )
                 {
@@ -163,7 +163,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad );
-                    ReportViolation( drcItem, module->GetPosition() );
+                    reportViolation( drcItem, module->GetPosition());
                 }
             }
 
@@ -182,7 +182,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( module );
-                    ReportViolation( drcItem, module->GetPosition() );
+                    reportViolation( drcItem, module->GetPosition());
                 }
             }
         }
@@ -199,60 +199,30 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_EXTRA_FOOTPRINT );
 
             drcItem->SetItems( module );
-            ReportViolation( drcItem, module->GetPosition() );
+            reportViolation( drcItem, module->GetPosition());
         }
     }
 }
 
-
-bool DRC_TEST_PROVIDER_LVS::fetchNetlistFromSchematic( NETLIST& aNetlist )
-{
-    // fixme: make it work without dependency on EDIT_FRAME/kiway
-#if 0
-    std::string payload;
-
-    Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_GET_NETLIST, payload, nullptr );
-
-    try
-    {
-        auto lineReader = new STRING_LINE_READER( payload, _( "Eeschema netlist" ) );
-        KICAD_NETLIST_READER netlistReader( lineReader, &aNetlist );
-        netlistReader.LoadNetlist();
-    }
-    catch( const IO_ERROR& )
-    {
-        assert( false ); // should never happen
-        return false;
-    }
-
-#endif
-
-    return false;
-}
 
 bool DRC_TEST_PROVIDER_LVS::Run()
 {
-    ReportStage( _( "Layout-vs-Schematic checks..." ), 0, 2 );
-
-#if 0
-       
-    if ( !Kiface().IsSingle() )
+    if( m_drcEngine->GetTestFootprints() )
     {
-        NETLIST netlist; // fixme: fetch from schematic without referring directly to the FRAME
+        reportStage( _( "Layout-vs-Schematic checks..." ));
 
-        if( ! fetchNetlistFromSchematic( netlist ) )
-        {
-            ReportAux( _( "Unable to fetch the schematic netlist. Skipping LVS checks. ") );
-            return true;
-        }
-    
-        testFootprints( netlist );
+        testFootprints( *m_drcEngine->GetSchematicNetlist() );
+
+        reportRuleStatistics();
     }
-#endif
-
-    reportRuleStatistics();
 
     return true;
+}
+
+
+int DRC_TEST_PROVIDER_LVS::GetNumPhases() const
+{
+    return m_drcEngine->GetTestFootprints() ? 1 : 0;
 }
 
 

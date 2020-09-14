@@ -60,6 +60,8 @@ public:
     }
 
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
+
+    int GetNumPhases() const override;
 };
 
 
@@ -67,11 +69,11 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 {
     if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH ) )
     {
-        ReportAux( "No track width constraints found. Skipping check." );
+        reportAux( "No track width constraints found. Skipping check." );
         return false;
     }
 
-    ReportStage( _( "Testing track widths" ), 0, 2 );
+    reportStage( _( "Track widths..." ));
 
     auto checkTrackWidth =
             [&]( BOARD_ITEM* item ) -> bool
@@ -117,15 +119,15 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s width %s; actual %s)" ),
                                   constraint.GetName(),
-                                  fail_min ? _( "minimum" ) : _( "maximum" ),
-                                  MessageTextFromValue( userUnits(), constraintWidth, true ) );
-                                  MessageTextFromValue( userUnits(), actual, true ),
+                                  fail_min ? _( "min" ) : _( "max" ),
+                                  MessageTextFromValue( userUnits(), constraintWidth, true ),
+                                  MessageTextFromValue( userUnits(), actual, true ) );
 
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    ReportViolation( drcItem, p0 );
+                    reportViolation( drcItem, p0 );
                 }
 
                 return true;
@@ -136,6 +138,12 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
     reportRuleStatistics();
 
     return true;
+}
+
+
+int DRC_TEST_PROVIDER_TRACK_WIDTH::GetNumPhases() const
+{
+    return 1;
 }
 
 

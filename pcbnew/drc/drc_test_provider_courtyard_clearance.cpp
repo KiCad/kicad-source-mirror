@@ -65,6 +65,8 @@ public:
 
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 
+    int GetNumPhases() const override;
+
 private:
     void testFootprintCourtyardDefinitions();
 
@@ -75,7 +77,7 @@ private:
 void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 {
     // Detects missing (or malformed) footprint courtyards
-    ReportStage( _( "Testing component courtyard definitions" ), 0, 2 );
+    reportStage( _( "Footprint courtyard definitions..." ));
 
     for( MODULE* footprint : m_board->Modules() )
     {
@@ -89,7 +91,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_COURTYARD );
                 drcItem->SetItems( footprint );
-                ReportViolation( drcItem, footprint->GetPosition() );
+                reportViolation( drcItem, footprint->GetPosition());
             }
             else
             {
@@ -108,7 +110,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 
             drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( footprint );
-            ReportViolation( drcItem, footprint->GetPosition() );
+            reportViolation( drcItem, footprint->GetPosition());
         }
     }
 }
@@ -116,7 +118,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 
 void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
 {
-    ReportStage( _( "Testing component courtyard overlap" ), 0, 2 );
+    reportStage( _( "Footprint courtyard overlap..." ));
 
     for( auto it1 = m_board->Modules().begin(); it1 != m_board->Modules().end(); it1++ )
     {
@@ -175,7 +177,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_OVERLAPPING_FOOTPRINTS );
                 drcItem->SetItems( footprint, test );
-                ReportViolation( drcItem, pos );
+                reportViolation( drcItem, pos );
             }
         }
     }
@@ -195,6 +197,12 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::Run()
     testOverlappingComponentCourtyards();
 
     return true;
+}
+
+
+int DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::GetNumPhases() const
+{
+    return 2;
 }
 
 

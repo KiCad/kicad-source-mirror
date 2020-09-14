@@ -66,6 +66,8 @@ public:
     }
 
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
+
+    int GetNumPhases() const override;
 };
 
 
@@ -82,13 +84,13 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     }
     else
     {
-        ReportAux("No Clearance constraints found...");
+        reportAux( "No Clearance constraints found..." );
         return false;
     }
 
-    ReportAux( "Worst clearance : %d nm", m_largestClearance );
+    reportAux( "Worst clearance : %d nm", m_largestClearance );
 
-    ReportStage( _( "Testing all items <> Board Edge clearance" ), 0, 2 );
+    reportStage( _( "Board edge clearances..." ));
     
     std::vector<DRAWSEGMENT*> boardOutline;
     std::vector<BOARD_ITEM*> boardItems;
@@ -108,12 +110,13 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
             };
 
     forEachGeometryItem( { PCB_LINE_T }, LSET( Edge_Cuts ), queryBoardOutlineItems );
-    forEachGeometryItem( {}, LSET::AllTechMask() | LSET::AllCuMask(), queryBoardGeometryItems );
+    forEachGeometryItem( {}, LSET::AllCuMask(), queryBoardGeometryItems );
 
     wxString val;
     wxGetEnv( "WXTRACE", &val);
 
-    drc_dbg( 2,"outline: %d items, board: %d items\n", boardOutline.size(), boardItems.size() );
+    drc_dbg( 2, "outline: %d items, board: %d items\n",
+            (int) boardOutline.size(), (int) boardItems.size() );
 
     for( DRAWSEGMENT* outlineItem : boardOutline )
     {
@@ -154,7 +157,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 drcItem->SetItems( outlineItem, boardItem );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                ReportViolation( drcItem, (wxPoint) refShape->Centre() );
+                reportViolation( drcItem, (wxPoint) refShape->Centre());
             }
         }
     }
@@ -162,6 +165,12 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     reportRuleStatistics();
 
     return true;
+}
+
+
+int DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetNumPhases() const
+{
+    return 1;
 }
 
 

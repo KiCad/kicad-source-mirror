@@ -50,7 +50,7 @@
 
 namespace test {
 
-class DRC_TEST_PROVIDER_SILK_TO_PAD : public DRC_TEST_PROVIDER
+class DRC_TEST_PROVIDER_SILK_TO_PAD : public ::DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_SILK_TO_PAD ()
@@ -94,8 +94,8 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
         m_largestClearance = worstClearanceConstraint.m_Value.Min();
     }
 
-    ReportAux( "Worst clearance : %d nm", m_largestClearance );
-    ReportStage( ("Testing pads vs silkscreen clearance"), 0, 2 );
+    reportAux( "Worst clearance : %d nm", m_largestClearance );
+    reportStage(( "Pad to silkscreen clearances..." ));
 
     std::vector<DRAWSEGMENT*> boardOutline;
     std::vector<BOARD_ITEM*> boardItems;
@@ -116,7 +116,7 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
     forEachGeometryItem( {}, LSET::AllTechMask() | LSET::AllCuMask(), queryBoardGeometryItems );
 
 
-    drc_dbg(2,"outline: %d items, board: %d items\n", boardOutline.size(), boardItems.size() );
+    drc_dbg( 2, "outline: %d items, board: %d items\n", boardOutline.size(), boardItems.size() );
 
     for( auto outlineItem : boardOutline )
     {
@@ -129,13 +129,14 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
             
             auto shape = boardItem->GetEffectiveShape();
 
-            test::DRC_RULE* rule = m_drcEngine->EvalRulesForItems( test::DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE, outlineItem, boardItem );
-            int minClearance = rule->GetConstraint().GetValue().Min();
-            int actual;
+            auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
+                                                              outlineItem, boardItem );
+            int  minClearance = constraint.GetValue().Min();
+            int  actual;
 
             if( refShape->Collide( shape.get(), minClearance, &actual ) )
             {
-                DRC_ITEM* drcItem = DRC_ITEM::Create( DRCE_COPPER_EDGE_CLEARANCE );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_COPPER_EDGE_CLEARANCE );
                 wxString msg;
 
                 msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
@@ -147,7 +148,7 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
                 drcItem->SetItems( outlineItem, boardItem );
                 drcItem->SetViolatingRule( rule );
 
-                ReportViolation( drcItem, refShape->Centre() );
+                reportViolation( drcItem, refShape->Centre());
             }
         }
     }
@@ -156,13 +157,13 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetMatchingConstraintIds() const
+std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_SILK_TO_PAD::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE };
+    return { DRC_CONSTRAINT_TYPE_CLEARANCE };
 }
 
 
 namespace detail
 {
-    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_EDGE_CLEARANCE> dummy;
+    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_SILK_TO_PAD> dummy;
 }

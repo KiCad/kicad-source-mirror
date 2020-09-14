@@ -194,6 +194,8 @@ void PCB_INSPECTION_TOOL::reportCopperClearance( PCB_LAYER_ID aLayer, BOARD_CONN
     if( r )
     {
         wxString clearance = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
+
+        r->Report( "" );
         r->Report( wxString::Format( _( "Clearance: %s." ), clearance ) );
     }
 

@@ -1165,10 +1165,18 @@ void ZONE_CONTAINER::SwapData( BOARD_ITEM* aImage )
 }
 
 
-void ZONE_CONTAINER::CacheTriangulation()
+void ZONE_CONTAINER::CacheTriangulation( PCB_LAYER_ID aLayer )
 {
-    for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
-        pair.second.CacheTriangulation();
+    if( aLayer == UNDEFINED_LAYER )
+    {
+        for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
+            pair.second.CacheTriangulation();
+    }
+    else
+    {
+        if( m_FilledPolysList.count( aLayer ) )
+            m_FilledPolysList[ aLayer ].CacheTriangulation();
+    }
 }
 
 

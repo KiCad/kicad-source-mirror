@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,56 +28,9 @@
 #include <class_board.h>
 #include <class_marker_pcb.h>
 #include <pcb_base_frame.h>
-#include <drc/drc.h>
 #include <drc/drc_item.h>
 #include <widgets/ui_common.h>
 #include <functional>
-
-
-/**
- * LEGACY_DRC_TEST_PROVIDER
- * is a base class that represents a DRC "provider" which runs some DRC functions over a
- * #BOARD and spits out #PCB_MARKERs as needed.
- *
- * JEY TODO: to remove
- *
- */
-class LEGACY_DRC_TEST_PROVIDER
-{
-public:
-    /**
-     * A callable that can handle a single generated PCB_MARKER
-     */
-    using MARKER_HANDLER = std::function<void( MARKER_PCB* )>;
-
-    /**
-     * Runs this provider against the given PCB with configured options (if any).
-     *
-     * Note: Board is non-const, as some DRC functions modify the board (e.g. zone fill
-     * or polygon coalescing)
-     */
-    virtual bool RunDRC( EDA_UNITS aUnits, BOARD& aBoard ) = 0;
-
-    virtual ~LEGACY_DRC_TEST_PROVIDER() {}
-
-protected:
-    LEGACY_DRC_TEST_PROVIDER( MARKER_HANDLER aMarkerHandler ) :
-            m_marker_handler( std::move( aMarkerHandler ) )
-    {
-    }
-
-    /**
-     * Pass a given marker to the marker handler
-     */
-    void HandleMarker( MARKER_PCB* aMarker ) const
-    {
-        m_marker_handler( aMarker );
-    }
-
-private:
-    /// The handler for any generated markers
-    MARKER_HANDLER m_marker_handler;
-};
 
 
 /**

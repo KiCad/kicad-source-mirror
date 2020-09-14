@@ -23,9 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <base_units.h>
 #include <bitmaps.h>
-#include <collectors.h>
 #include <confirm.h>
 #include <dialog_drc.h>
 #include <fctsys.h>
@@ -40,10 +38,41 @@
 #include <wx/wupdlock.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/ui_common.h>
+#include <widgets/progress_reporter.h>
+#include <drc/drc_engine.h>
+#include <tools/drc_tool.h>
 
 
-DIALOG_DRC::DIALOG_DRC( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
+class DRC_PROGRESS_REPORTER : public WX_PROGRESS_REPORTER
+{
+public:
+    DRC_PROGRESS_REPORTER( wxWindow* aParent, wxTextCtrl* aAuxStageReporter ) :
+        WX_PROGRESS_REPORTER( aParent, _( "Test Progress" ), 1, true ),
+        m_auxStageReporter( aAuxStageReporter )
+    { }
+
+    void AdvancePhase( const wxString& aMessage ) override
+    {
+        WX_PROGRESS_REPORTER::AdvancePhase( aMessage );
+
+        m_auxStageReporter->AppendText( aMessage + "\n" );
+    }
+
+    void SetCurrentProgress( double aProgress ) override
+    {
+        WX_PROGRESS_REPORTER::SetCurrentProgress( aProgress );
+        KeepRefreshing( false );
+    }
+
+private:
+    wxTextCtrl* m_auxStageReporter;
+};
+
+
+DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         DIALOG_DRC_BASE( aParent ),
+        m_drcRun( false ),
+        m_footprintTestsRun( false ),
         m_trackMinWidth( aEditorFrame, m_MinWidthLabel, m_MinWidthCtrl, m_MinWidthUnits, true ),
         m_viaMinSize( aEditorFrame, m_ViaMinLabel, m_ViaMinCtrl, m_ViaMinUnits, true ),
         m_uviaMinSize( aEditorFrame, m_uViaMinLabel, m_uViaMinCtrl, m_uViaMinUnits, true ),
@@ -57,7 +86,6 @@ DIALOG_DRC::DIALOG_DRC( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aP
 {
     SetName( DIALOG_DRC_WINDOW_NAME ); // Set a window name to be able to find it
 
-    m_tester       = aTester;
     m_brdEditor    = aEditorFrame;
     m_currentBoard = m_brdEditor->GetBoard();
 
@@ -105,13 +133,14 @@ void DIALOG_DRC::OnActivateDlg( wxActivateEvent& aEvent )
 {
     if( m_currentBoard != m_brdEditor->GetBoard() )
     {
-        // If m_currentBoard is not the current parent board,
-        // (for instance because a new board was loaded),
-        // close the dialog, because many pointers are now invalid
-        // in lists
+        // If m_currentBoard is not the current board, (for instance because a new board
+        // was loaded), close the dialog, because many pointers are now invalid in lists
         SetReturnCode( wxID_CANCEL );
         Close();
-        m_tester->DestroyDRCDialog( wxID_CANCEL );
+
+        DRC_TOOL* drcTool = m_brdEditor->GetToolManager()->GetTool<DRC_TOOL>();
+        drcTool->DestroyDRCDialog( wxID_CANCEL );
+
         return;
     }
 
@@ -183,22 +212,35 @@ void DIALOG_DRC::syncCheckboxes()
 
 void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 {
+    DRC_TOOL*             drcTool = m_parentFrame->GetToolManager()->GetTool<DRC_TOOL>();
+    DRC_PROGRESS_REPORTER progressReporter( this, m_Messages );
+    bool                  testTracksAgainstZones = m_cbReportTracksToZonesErrors->GetValue();
+    bool                  refillZones            = m_cbRefillZones->GetValue();
+    bool                  reportAllTrackErrors   = m_cbReportAllTrackErrors->GetValue();
+    bool                  testFootprints         = m_cbTestFootprints->GetValue();
+
     setDRCParameters();
-    m_tester->m_testTracksAgainstZones = m_cbReportTracksToZonesErrors->GetValue();
-    m_tester->m_refillZones            = m_cbRefillZones->GetValue();
-    m_tester->m_reportAllTrackErrors   = m_cbReportAllTrackErrors->GetValue();
-    m_tester->m_testFootprints         = m_cbTestFootprints->GetValue();
+
+    m_drcRun = false;
+    m_footprintTestsRun = false;
 
     m_brdEditor->RecordDRCExclusions();
     deleteAllMarkers( true );
 
     wxBeginBusyCursor();
-    wxWindowDisabler disabler;
+    wxWindowDisabler disabler( &progressReporter );
+    Raise();
 
     // run all the tests, with no UI at this time.
     m_Messages->Clear();
-    wxSafeYield(); // Allows time slice to refresh the Messages
-    m_tester->RunTests( m_Messages );
+    wxYield(); // Allows time slice to refresh the Messages
+
+    drcTool->RunTests( &progressReporter, testTracksAgainstZones, refillZones,
+                       reportAllTrackErrors, testFootprints );
+    m_drcRun = true;
+
+    if( testFootprints )
+        m_footprintTestsRun = true;
 
     m_Notebook->ChangeSelection( 0 ); // display the "Problems/Markers" tab
 
@@ -206,7 +248,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 
     refreshBoardEditor();
 
-    wxSafeYield();
+    wxYield();
     Raise();
     m_Notebook->GetPage( m_Notebook->GetSelection() )->SetFocus();
 }
@@ -538,7 +580,8 @@ void DIALOG_DRC::OnCancelClick( wxCommandEvent& aEvent )
 
     // The dialog can be modal or not modal.
     // Leave the DRC caller destroy (or not) the dialog
-    m_tester->DestroyDRCDialog( wxID_CANCEL );
+    DRC_TOOL* drcTool = m_brdEditor->GetToolManager()->GetTool<DRC_TOOL>();
+    drcTool->DestroyDRCDialog( wxID_CANCEL );
 }
 
 
@@ -689,7 +732,7 @@ void DIALOG_DRC::updateDisplayedCounts()
     // First the tab headers:
     //
 
-    if( m_tester->m_drcRun )
+    if( m_drcRun )
     {
         msg.sprintf( m_markersTitleTemplate, m_markerTreeModel->GetDRCItemCount() );
         m_Notebook->SetPageText( 0, msg );
@@ -697,7 +740,7 @@ void DIALOG_DRC::updateDisplayedCounts()
         msg.sprintf( m_unconnectedTitleTemplate, m_unconnectedTreeModel->GetDRCItemCount() );
         m_Notebook->SetPageText( 1, msg );
 
-        if( m_tester->m_footprintsTested )
+        if( m_footprintTestsRun )
             msg.sprintf( m_footprintsTitleTemplate, m_footprintWarningsTreeModel->GetDRCItemCount() );
         else
         {

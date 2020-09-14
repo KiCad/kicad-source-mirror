@@ -37,9 +37,9 @@
 #include <dialog_plot.h>
 #include <dialog_gendrill.h>
 #include <wx_html_report_panel.h>
-#include <drc/drc.h>
 #include <tool/tool_manager.h>
 #include <tools/zone_filler_tool.h>
+#include <tools/drc_tool.h>
 #include <math/util.h>      // for KiROUND
 #include <macros.h>
 
@@ -903,7 +903,7 @@ void DIALOG_PLOT::onRunDRC( wxCommandEvent& event )
 
     if( parent )
     {
-        DRC* drcTool = parent->GetToolManager()->GetTool<DRC>();
+        DRC_TOOL* drcTool = parent->GetToolManager()->GetTool<DRC_TOOL>();
 
         // First close an existing dialog if open
         // (low probability, but can happen)

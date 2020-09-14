@@ -68,6 +68,8 @@ public:
 
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 
+    int GetNumPhases() const override;
+
 private:
     void testOutline();
     void testDisabledLayers();
@@ -93,7 +95,7 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
     drcItem->SetErrorMessage( m_msg );
     drcItem->SetItems( m_board );
 
-    ReportViolation( drcItem, error_loc );
+    reportViolation( drcItem, error_loc );
 }
 
 
@@ -119,7 +121,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( item );
 
-                    ReportViolation( drcItem, item->GetPosition() );
+                    reportViolation( drcItem, item->GetPosition());
                 }
                 return true;
             };
@@ -144,7 +146,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                     drcItem->SetItems( item );
 
-                    ReportViolation( drcItem, item->GetPosition() );
+                    reportViolation( drcItem, item->GetPosition());
                 }
                 return true;
             };
@@ -179,7 +181,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
             drcItem->SetItems( text );
 
-            ReportViolation( drcItem, text->GetPosition() );
+            reportViolation( drcItem, text->GetPosition());
         }
     }
 }
@@ -189,16 +191,22 @@ bool DRC_TEST_PROVIDER_MISC::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
-    ReportStage( _( "Test board outline" ), 0, 3 );
+    reportStage( _( "Board outline..." ));
     testOutline();
 
-    ReportStage( _( "Test disabled layers" ), 1, 3 );
+    reportStage( _( "Disabled layers..." ));
     testDisabledLayers();
 
-    ReportStage( _( "Test text variables" ), 2, 3 );
+    reportStage( _( "Text variables..." ));
     testTextVars();
 
     return true;
+}
+
+
+int DRC_TEST_PROVIDER_MISC::GetNumPhases() const
+{
+    return 3;
 }
 
 

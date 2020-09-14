@@ -67,6 +67,8 @@ public:
 
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 
+    int GetNumPhases() const override;
+
 private:
     void addHole( const VECTOR2I& aLocation, int aRadius, BOARD_ITEM* aOwner );
 
@@ -103,21 +105,20 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
                                            worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
     {
         m_largestClearance = worstClearanceConstraint.GetValue().Min();
+        reportAux( "Worst hole clearance : %d nm", m_largestClearance );
     }
     else
     {
-        ReportAux( "No Clearance constraints found..." );
+        reportAux( "No hole clearance constraints found..." );
         return false;
     }
 
-    ReportAux( "Worst hole clearance : %d nm", m_largestClearance );
-
     buildDrilledHoleList();
 
-    ReportStage( _( "Testing hole<->pad clearances" ), 0, 2 );
+    reportStage( _( "Hole to pad clearances..." ));
     testPads2Holes();
 
-    ReportStage( _( "Testing hole<->hole clearances" ), 0, 2 );
+    reportStage( _( "Hole to hole clearances..." ));
     testHoles2Holes();
 
     reportRuleStatistics();
@@ -155,7 +156,7 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::buildDrilledHoleList()
         }
     }
 
-    ReportAux( "Total drilled holes : %d", m_drilledHoles.size() );
+    reportAux( "Total drilled holes : %d", m_drilledHoles.size());
 }
 
 void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testPads2Holes()
@@ -277,7 +278,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad, D_PAD
                     drcItem->SetItems( pad, aRefPad );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    ReportViolation( drcItem, pad->GetPosition() );
+                    reportViolation( drcItem, pad->GetPosition());
                     return false;
                 }
             }
@@ -310,7 +311,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad, D_PAD
                     drcItem->SetItems( aRefPad, pad );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    ReportViolation( drcItem, pad->GetPosition() );
+                    reportViolation( drcItem, pad->GetPosition());
                     return false;
                 }
             }
@@ -395,10 +396,16 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
                 drcItem->SetItems( refHole.m_owner, checkHole.m_owner );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                ReportViolation( drcItem, (wxPoint) refHole.m_location );
+                reportViolation( drcItem, (wxPoint) refHole.m_location );
             }
         }
     }
+}
+
+
+int DRC_TEST_PROVIDER_HOLE_CLEARANCE::GetNumPhases() const
+{
+    return 2;
 }
 
 

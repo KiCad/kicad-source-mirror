@@ -63,6 +63,8 @@ public:
     }
 
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
+
+    int GetNumPhases() const override;
 };
 
 
@@ -70,11 +72,11 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
 {
     if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH ) )
     {
-        ReportAux( "No annulus constraints found. Skipping check." );
+        reportAux( "No annulus constraints found. Skipping check." );
         return false;
     }
 
-    ReportStage( _( "Testing via annular rings" ), 0, 2 );
+    reportStage( _( "Via annular rings..." ));
 
     auto checkAnnulus =
             [&]( BOARD_ITEM* item ) -> bool
@@ -117,7 +119,7 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
 
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s annulus %s; actual %s)" ),
                                   constraint.GetName(),
-                                  fail_min ? _( "minimum" ) : _( "maximum" ),
+                                  fail_min ? _( "min" ) : _( "max" ),
                                   MessageTextFromValue( userUnits(), annulus, true ),
                                   MessageTextFromValue( userUnits(), fail_min ? v_min : v_max, true ) );
 
@@ -125,7 +127,7 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    ReportViolation( drcItem, via->GetPosition() );
+                    reportViolation( drcItem, via->GetPosition());
                 }
 
                 return true;
@@ -136,6 +138,12 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
     reportRuleStatistics();
 
     return true;
+}
+
+
+int DRC_TEST_PROVIDER_ANNULUS::GetNumPhases() const
+{
+    return 1;
 }
 
 

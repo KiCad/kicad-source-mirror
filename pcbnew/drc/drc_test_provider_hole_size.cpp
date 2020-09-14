@@ -64,6 +64,8 @@ public:
 
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 
+    int GetNumPhases() const override;
+
 private:
     void checkVia( VIA* via, bool aExceedMicro, bool aExceedStd );
     void checkPad( D_PAD* aPad );
@@ -74,7 +76,7 @@ private:
 
 bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 {
-    ReportStage( _( "Testing pad holes" ), 0, 2 );
+    reportStage( _( "Pad holes..." ));
 
     m_board = m_drcEngine->GetBoard();
 
@@ -92,7 +94,7 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
         }
     }
 
-    ReportStage( _( "Testing via/microvia holes" ), 0, 2 );
+    reportStage( _( "Via holes..." ));
 
     std::vector<VIA*> vias;
 
@@ -145,7 +147,7 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( D_PAD* aPad )
         drcItem->SetItems( aPad );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-        ReportViolation( drcItem, aPad->GetPosition() );
+        reportViolation( drcItem, aPad->GetPosition());
     }
 }
 
@@ -187,8 +189,14 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via, bool aExceedMicro, bool aE
         drcItem->SetItems( via );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-        ReportViolation( drcItem, via->GetPosition() );
+        reportViolation( drcItem, via->GetPosition());
     }
+}
+
+
+int DRC_TEST_PROVIDER_HOLE_SIZE::GetNumPhases() const
+{
+    return 2;
 }
 
 

@@ -29,8 +29,6 @@ add_executable( qa_pcbnew_tools
     # The main entry point
     pcbnew_tools.cpp
 
-    tools/drc_tool/drc_tool.cpp
-
     tools/pcb_parser/pcb_parser_tool.cpp
 
     tools/polygon_generator/polygon_generator.cpp

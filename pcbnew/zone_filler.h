@@ -42,6 +42,7 @@ public:
     ZONE_FILLER( BOARD* aBoard, COMMIT* aCommit );
     ~ZONE_FILLER();
 
+    void SetProgressReporter( WX_PROGRESS_REPORTER* aReporter );
     void InstallNewProgressReporter( wxWindow* aParent, const wxString& aTitle, int aNumPhases );
     bool Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck = false );
 
@@ -107,15 +108,15 @@ private:
     void addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
                                  SHAPE_POLY_SET& aRawPolys );
 
-    BOARD* m_board;
-    SHAPE_POLY_SET m_boardOutline;      // The board outlines, if exists
-    bool m_brdOutlinesValid;            // true if m_boardOutline can be calculated
-                                        // false if not (not closed outlines for instance)
-    COMMIT* m_commit;
+    BOARD*                m_board;
+    SHAPE_POLY_SET        m_boardOutline;       // the board outlines, if exists
+    bool                  m_brdOutlinesValid;   // true if m_boardOutline is well-formed
+    COMMIT*               m_commit;
     WX_PROGRESS_REPORTER* m_progressReporter;
+
     std::unique_ptr<WX_PROGRESS_REPORTER> m_uniqueReporter;
 
-    int m_maxError;
+    int                   m_maxError;
 };
 
 #endif

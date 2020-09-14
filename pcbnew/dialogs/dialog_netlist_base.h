@@ -42,11 +42,6 @@ class DIALOG_NETLIST_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		enum
-		{
-			ID_TEST_NETLIST = 1000
-		};
-
 		wxTextCtrl* m_NetlistFilenameCtrl;
 		wxBitmapButton* m_browseButton;
 		wxRadioBox* m_matchByTimestamp;
@@ -57,19 +52,17 @@ class DIALOG_NETLIST_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbWarnNoNetPad;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		wxBoxSizer* m_buttonsSizer;
-		wxButton* m_buttonFPTest;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Apply;
 		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnUpdateUIValidNetlistFile( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnFilenameKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnOpenNetlistClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMatchChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOptionChanged( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnTestFootprintsClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnUpdateUIValidNetlistFile( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnCompileRatsnestClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdatePCB( wxCommandEvent& event ) { event.Skip(); }
 

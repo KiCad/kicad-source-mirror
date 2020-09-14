@@ -29,6 +29,8 @@
 
 
 class PCB_EDIT_FRAME;
+class WX_PROGRESS_REPORTER;
+
 
 /**
  * ZONE_FILLER_TOOL
@@ -44,8 +46,8 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    void CheckAllZones( wxWindow* aCaller );
-    void FillAllZones( wxWindow* aCaller );
+    void CheckAllZones( wxWindow* aCaller, WX_PROGRESS_REPORTER* aReporter = nullptr );
+    void FillAllZones( wxWindow* aCaller, WX_PROGRESS_REPORTER* aReporter = nullptr );
 
     int ZoneFill( const TOOL_EVENT& aEvent );
     int ZoneFillAll( const TOOL_EVENT& aEvent );

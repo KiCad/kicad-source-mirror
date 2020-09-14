@@ -29,7 +29,6 @@
 #include <tools/pcb_actions.h>
 #include <tracks_cleaner.h>
 #include <drc/drc_item.h>
-#include <drc/drc_results_provider.h>
 #include <tools/zone_filler_tool.h>
 
 DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParentFrame ) :

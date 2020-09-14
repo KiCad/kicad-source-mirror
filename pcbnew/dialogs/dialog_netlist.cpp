@@ -31,9 +31,6 @@
 #include <pcbnew_settings.h>
 #include <reporter.h>
 #include <bitmaps.h>
-#include <drc/drc.h>
-#include <drc/drc_item.h>
-#include <drc/footprint_tester.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <class_board.h>
@@ -174,33 +171,6 @@ void DIALOG_NETLIST::OnUpdatePCB( wxCommandEvent& event )
 }
 
 
-void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
-{
-    if( m_parent->GetBoard()->GetFirstModule() == nullptr )
-    {
-        DisplayInfoMessage( this, _( "No footprints." ) );
-        return;
-    }
-
-    wxString        netlistFilename = m_NetlistFilenameCtrl->GetValue();
-    NETLIST         netlist;
-    wxBusyCursor    dummy;         // Shows an hourglass while calculating.
-
-    if( !m_parent->ReadNetlistFromFile( netlistFilename, netlist, NULL_REPORTER::GetInstance() ) )
-        return;
-
-    HTML_MESSAGE_BOX dlg( this, _( "Check footprints" ) );
-    std::vector<std::shared_ptr<DRC_ITEM> > drcItems;
-
-    TestFootprints( netlist, m_parent->GetBoard(), drcItems );
-
-    for( auto item : drcItems )
-        dlg.AddHTML_Text( item->ShowHtml( m_parent ) );
-
-    dlg.ShowModal();
-}
-
-
 void DIALOG_NETLIST::OnFilenameKillFocus( wxFocusEvent& event )
 {
     onFilenameChanged();
@@ -251,12 +221,6 @@ void DIALOG_NETLIST::OnCompileRatsnestClick( wxCommandEvent& event )
     // Rebuild the board connectivity:
     auto board = m_parent->GetBoard();
 	board->GetConnectivity()->RecalculateRatsnest();
-}
-
-
-void DIALOG_NETLIST::OnUpdateUIValidNetlistFile( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( !m_NetlistFilenameCtrl->GetValue().IsEmpty() );
 }
 
 

@@ -25,11 +25,11 @@
 
 #include <pcbnew_utils/board_construction_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
-
+#include <class_board.h>
 #include <class_module.h>
-#include <drc/drc.h>
+#include <class_marker_pcb.h>
 #include <drc/drc_item.h>
-#include <drc/drc_courtyard_tester.h>
+#include <drc/drc_engine.h>
 #include <widgets/ui_common.h>
 
 #include "../board_test_utils.h"
@@ -463,13 +463,21 @@ static void DoCourtyardOverlapTest( const COURTYARD_OVERLAP_TEST_CASE& aCase,
     // list of markers to collect
     std::vector<std::unique_ptr<MARKER_PCB>> markers;
 
-    DRC_COURTYARD_TESTER drc_overlap(
-            [&]( MARKER_PCB* aMarker )
+    DRC_ENGINE drcEngine( board.get(), &board->GetDesignSettings() );
+
+    drcEngine.InitEngine( wxFileName() );
+
+    drcEngine.SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
             {
-                markers.push_back( std::unique_ptr<MARKER_PCB>( aMarker ) );
+                if(    aItem->GetErrorCode() == DRCE_OVERLAPPING_FOOTPRINTS
+                    || aItem->GetErrorCode() == DRCE_MISSING_COURTYARD )
+                {
+                    markers.push_back( std::make_unique<MARKER_PCB>( aItem, aPos ) );
+                }
             } );
 
-    drc_overlap.RunDRC( EDA_UNITS::MILLIMETRES, *board );
+    drcEngine.RunTests();
 
     CheckCollisionsMatchExpected( *board, markers, aCase.m_collisions );
 }

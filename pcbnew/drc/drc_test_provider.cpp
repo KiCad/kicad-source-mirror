@@ -39,27 +39,27 @@ const wxString DRC_TEST_PROVIDER::GetName() const { return "<no name test>"; }
 const wxString DRC_TEST_PROVIDER::GetDescription() const { return ""; }
 
 
-void DRC_TEST_PROVIDER::ReportViolation( std::shared_ptr<DRC_ITEM> aItem, wxPoint aPos )
+void DRC_TEST_PROVIDER::reportViolation( std::shared_ptr<DRC_ITEM> item, wxPoint aMarkerPos )
 {
-    aItem->SetViolatingTest( this );
-    m_drcEngine->ReportViolation( aItem, aPos );
+    item->SetViolatingTest( this );
+    m_drcEngine->ReportViolation( item, aMarkerPos );
 }
 
 
-void DRC_TEST_PROVIDER::ReportProgress( double aProgress )
+void DRC_TEST_PROVIDER::reportProgress( double aProgress )
 {
     m_drcEngine->ReportProgress( aProgress );
 }
 
 
-void DRC_TEST_PROVIDER::ReportStage ( const wxString& aStageName, int index, int total )
+void DRC_TEST_PROVIDER::reportStage( const wxString& aStageName )
 {
-    m_drcEngine->ReportStage( aStageName, index, total );
-    ReportAux( aStageName );
+    m_drcEngine->ReportStage( aStageName );
+    reportAux( aStageName );
 }
 
 
-void DRC_TEST_PROVIDER::ReportAux( wxString fmt, ... )
+void DRC_TEST_PROVIDER::reportAux( wxString fmt, ... )
 {
     va_list vargs;
     va_start( vargs, fmt );
@@ -83,7 +83,7 @@ void DRC_TEST_PROVIDER::accountCheck( const DRC_RULE* ruleToTest )
     if( it == m_stats.end() )
         m_stats[ ruleToTest ] = 1;
     else
-        it->second++;
+        m_stats[ ruleToTest ] += 1;
 }
 
 
@@ -98,13 +98,16 @@ void DRC_TEST_PROVIDER::reportRuleStatistics()
     if( !m_isRuleDriven )
         return;
 
-    m_drcEngine->ReportAux("Rule hit statistics: ");
+    m_drcEngine->ReportAux( "Rule hit statistics: " );
 
     for( const std::pair<const DRC_RULE* const, int>& stat : m_stats )
     {
-        m_drcEngine->ReportAux( wxString::Format( " - rule '%s': %d hits ",
-                                                  stat.first->m_Name,
-                                                  stat.second ) );
+        if( stat.first )
+        {
+            m_drcEngine->ReportAux( wxString::Format( " - rule '%s': %d hits ",
+                                                      stat.first->m_Name,
+                                                      stat.second ) );
+        }
     }
 }
 

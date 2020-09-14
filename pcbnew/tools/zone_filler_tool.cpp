@@ -30,9 +30,7 @@
 #include <widgets/progress_reporter.h>
 #include <wx/event.h>
 #include <tool/tool_manager.h>
-#include <bitmaps.h>
 #include "pcb_actions.h"
-#include "selection_tool.h"
 #include "zone_filler_tool.h"
 #include "zone_filler.h"
 
@@ -53,7 +51,7 @@ void ZONE_FILLER_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller )
+void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, WX_PROGRESS_REPORTER* aReporter )
 {
     if( !getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty )
         return;
@@ -66,7 +64,11 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller )
     BOARD_COMMIT commit( this );
 
     ZONE_FILLER filler( frame()->GetBoard(), &commit );
-    filler.InstallNewProgressReporter( aCaller, _( "Checking Zones" ), 4 );
+
+    if( aReporter )
+        filler.SetProgressReporter( aReporter );
+    else
+        filler.InstallNewProgressReporter( aCaller, _( "Checking Zones" ), 4 );
 
     if( filler.Fill( toFill, true ) )
     {
@@ -89,7 +91,7 @@ void ZONE_FILLER_TOOL::singleShotRefocus( wxIdleEvent& )
 }
 
 
-void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller )
+void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, WX_PROGRESS_REPORTER* aReporter )
 {
     std::vector<ZONE_CONTAINER*> toFill;
 
@@ -99,7 +101,11 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller )
         toFill.push_back(zone);
 
     ZONE_FILLER filler( board(), &commit );
-    filler.InstallNewProgressReporter( aCaller, _( "Fill All Zones" ),  4 );
+
+    if( aReporter )
+        filler.SetProgressReporter( aReporter );
+    else
+        filler.InstallNewProgressReporter( aCaller, _( "Fill All Zones" ), 4 );
 
     if( filler.Fill( toFill ) )
     {

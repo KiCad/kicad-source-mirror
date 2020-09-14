@@ -66,12 +66,14 @@ public:
     }
 
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
+
+    int GetNumPhases() const override;
 };
 
 
 bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 {
-    ReportStage( _( "Testing dangling pads/vias" ), 0, 2 );
+    reportStage( _( "Dangling pads/vias..." ));
 
     BOARD* board = m_drcEngine->GetBoard();
 
@@ -100,11 +102,11 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( code );
             drcItem->SetItems( track );
-            ReportViolation( drcItem, pos );
+            reportViolation( drcItem, pos );
         }
     }
 
-    ReportStage( _( "Testing starved zones" ), 0, 2 );
+    reportStage( _( "Starved zones..." ));
 
     /* test starved zones */
     for( ZONE_CONTAINER* zone : board->Zones() )
@@ -125,11 +127,11 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ZONE_HAS_EMPTY_NET );
             drcItem->SetItems( zone );
-            ReportViolation( drcItem, zone->GetPosition() );
+            reportViolation( drcItem, zone->GetPosition());
         }
     }
 
-    ReportStage( _( "Testing unconnected nets" ), 0, 2 );
+    reportStage( _( "Unconnected nets..." ));
 
     connectivity->RecalculateRatsnest();
     std::vector<CN_EDGE> edges;
@@ -142,12 +144,18 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNCONNECTED_ITEMS );
         drcItem->SetItems( edge.GetSourceNode()->Parent(), edge.GetTargetNode()->Parent() );
-        ReportViolation( drcItem, (wxPoint) edge.GetSourceNode()->Pos() );
+        reportViolation( drcItem, (wxPoint) edge.GetSourceNode()->Pos());
     }
 
     reportRuleStatistics();
 
     return true;
+}
+
+
+int DRC_TEST_PROVIDER_CONNECTIVITY::GetNumPhases() const
+{
+    return 3;
 }
 
 

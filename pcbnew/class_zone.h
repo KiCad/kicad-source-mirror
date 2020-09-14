@@ -620,7 +620,7 @@ public:
     /** (re)create a list of triangles that "fill" the solid areas.
      * used for instance to draw these solid areas on opengl
      */
-    void CacheTriangulation();
+    void CacheTriangulation( PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
    /**
      * Function SetFilledPolysList

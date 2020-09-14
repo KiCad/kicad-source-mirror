@@ -43,10 +43,17 @@ void PROGRESS_REPORTER::BeginPhase( int aPhase )
 }
 
 
-void PROGRESS_REPORTER::AdvancePhase( )
+void PROGRESS_REPORTER::AdvancePhase()
 {
     m_phase.fetch_add( 1 );
     m_progress.store( 0 );
+}
+
+
+void PROGRESS_REPORTER::AdvancePhase( const wxString& aMessage )
+{
+    AdvancePhase();
+    Report( aMessage );
 }
 
 
@@ -78,6 +85,12 @@ void PROGRESS_REPORTER::AdvanceProgress()
 void PROGRESS_REPORTER::SetNumPhases( int aNumPhases )
 {
     m_numPhases = aNumPhases;
+}
+
+
+void PROGRESS_REPORTER::AddPhases( int aNumPhases )
+{
+    m_numPhases += aNumPhases;
 }
 
 

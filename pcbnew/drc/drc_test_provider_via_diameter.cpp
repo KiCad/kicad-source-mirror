@@ -61,6 +61,8 @@ public:
     }
 
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
+
+    int GetNumPhases() const override;
 };
 
 
@@ -68,11 +70,11 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
 {
     if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_VIA_DIAMETER ) )
     {
-        ReportAux( "No diameter constraints found. Skipping check." );
+        reportAux( "No diameter constraints found. Skipping check." );
         return false;
     }
 
-    ReportStage( ( "Testing via diameters" ), 0, 2 );
+    reportStage(( "Via diameters..." ));
 
     auto checkViaDiameter =
             [&]( BOARD_ITEM* item ) -> bool
@@ -111,7 +113,7 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
 
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s diameter %s; actual %s)" ),
                                   constraint.GetName(),
-                                  fail_min ? _( "minimum" ) : _( "maximum" ),
+                                  fail_min ? _( "min" ) : _( "max" ),
                                   MessageTextFromValue( userUnits(), constraintDiameter, true ) );
                                   MessageTextFromValue( userUnits(), actual, true ),
 
@@ -119,7 +121,7 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    ReportViolation( drcItem, via->GetPosition() );
+                    reportViolation( drcItem, via->GetPosition());
                 }
 
                 return true;
@@ -130,6 +132,12 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
     reportRuleStatistics();
 
     return true;
+}
+
+
+int DRC_TEST_PROVIDER_VIA_DIAMETER::GetNumPhases() const
+{
+    return 1;
 }
 
 
