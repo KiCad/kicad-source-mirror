@@ -92,7 +92,8 @@ DIALOG_DRC::~DIALOG_DRC()
 
     PCBNEW_SETTINGS* settings = m_brdEditor->GetPcbNewSettings();
     settings->m_DrcDialog.refill_zones       = m_cbRefillZones->GetValue();
-    settings->m_DrcDialog.test_track_to_zone = m_cbReportAllTrackErrors->GetValue();
+    settings->m_DrcDialog.test_track_to_zone = m_cbReportTracksToZonesErrors->GetValue();
+    settings->m_DrcDialog.test_all_track_errors = m_cbReportAllTrackErrors->GetValue();
     settings->m_DrcDialog.test_footprints    = m_cbTestFootprints->GetValue();
     settings->m_DrcDialog.severities         = m_severities;
 
@@ -144,7 +145,8 @@ void DIALOG_DRC::initValues()
     auto cfg = m_brdEditor->GetPcbNewSettings();
 
     m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );
-    m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_track_to_zone );
+    m_cbReportTracksToZonesErrors->SetValue( cfg->m_DrcDialog.test_track_to_zone );
+    m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_all_track_errors );
     m_cbTestFootprints->SetValue( cfg->m_DrcDialog.test_footprints );
 
     m_severities = cfg->m_DrcDialog.severities;

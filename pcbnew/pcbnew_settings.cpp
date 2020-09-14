@@ -212,6 +212,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "drc_dialog.test_track_to_zone",
             &m_DrcDialog.test_track_to_zone, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "drc_dialog.test_all_track_errors",
+            &m_DrcDialog.test_all_track_errors, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "drc_dialog.test_footprints",
             &m_DrcDialog.test_footprints, false ) );
 

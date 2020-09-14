@@ -87,6 +87,7 @@ public:
     {
         bool refill_zones;
         bool test_track_to_zone;
+        bool test_all_track_errors;
         bool test_footprints;
         int  severities;
     };
