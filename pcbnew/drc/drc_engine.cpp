@@ -483,7 +483,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
     CONSTRAINT_SET* ruleset = m_constraintMap[ aConstraintId ];
 
-    for( size_t ii = ruleset->sortedConstraints.size() - 1; ii >= 0; --ii )
+    for( ssize_t ii = ruleset->sortedConstraints.size() - 1; ii >= 0; --ii )
     {
         const CONSTRAINT_WITH_CONDITIONS* rcons = ruleset->sortedConstraints[ ii ];
         bool implicit = rcons->parentRule && rcons->parentRule->m_Implicit;
