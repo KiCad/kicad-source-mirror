@@ -533,12 +533,25 @@ void PGM_BASE::SaveCommonSettings()
     // process startup: InitPgm(), so test before using:
     if( GetCommonSettings() )
     {
-        GetCommonSettings()->m_System.working_dir = wxGetCwd().ToStdString();
+        GetCommonSettings()->m_System.working_dir = wxGetCwd();
         GetCommonSettings()->m_Env.show_warning_dialog = m_show_env_var_dialog;
 
-        // Save the common environment variables.
-        GetCommonSettings()->m_Env.vars.clear();
+        // remove only the old env vars that do not exist in list.
+        // We do not clear the full list because some are defined externally,
+        // and we cannot modify or delete them
+        std::map<std::string, wxString>& curr_vars = GetCommonSettings()->m_Env.vars;
 
+        for( auto it = curr_vars.begin(); it != curr_vars.end(); )
+        {
+            const std::string& key = it->first;
+
+            if( m_local_env_vars.find( key ) == m_local_env_vars.end() )
+                it = curr_vars.erase( it );     // This entry no longer exists in new list
+            else
+                it++;
+        }
+
+       // Save the local environment variables.
         for( auto& m_local_env_var : m_local_env_vars )
         {
             if( m_local_env_var.second.GetDefinedExternally() )
@@ -546,8 +559,7 @@ void PGM_BASE::SaveCommonSettings()
 
             wxLogTrace( traceEnvVars,
                         "PGM_BASE::SaveCommonSettings: Saving environment variable config entry %s as %s",
-                        GetChars( m_local_env_var.first ),
-                        GetChars( m_local_env_var.second.GetValue() ) );
+                        m_local_env_var.first, m_local_env_var.second.GetValue() );
 
             std::string key( m_local_env_var.first.ToUTF8() );
             GetCommonSettings()->m_Env.vars[ key ] = m_local_env_var.second.GetValue();
@@ -604,7 +616,7 @@ bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
     else if( !first_time )
     {
         wxLogTrace( traceLocale, "Search for dictionary %s.mo in %s",
-                    GetChars( dictionaryName ), GetChars( m_locale->GetName() ) );
+                    dictionaryName, m_locale->GetName() );
     }
 
     if( !first_time )
@@ -652,7 +664,7 @@ bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
     if( !m_locale->IsLoaded( dictionaryName ) )
     {
         wxLogTrace( traceLocale, "Unable to load dictionary %s.mo in %s",
-                    GetChars( dictionaryName ), GetChars( m_locale->GetName() ) );
+                    dictionaryName, m_locale->GetName() );
 
         setLanguageId( wxLANGUAGE_DEFAULT );
         delete m_locale;
@@ -728,13 +740,13 @@ bool PGM_BASE::SetLocalEnvVariable( const wxString& aName, const wxString& aValu
     {
         wxLogTrace( traceEnvVars,
                     "PGM_BASE::SetLocalEnvVariable: Environment variable %s already set to %s",
-                    GetChars( aName ), GetChars( env ) );
+                    aName, env );
         return env == aValue;
     }
 
     wxLogTrace( traceEnvVars,
                 "PGM_BASE::SetLocalEnvVariable: Setting local environment variable %s to %s",
-                GetChars( aName ), GetChars( aValue ) );
+                aName, aValue );
 
     return wxSetEnv( aName, aValue );
 }
@@ -753,8 +765,8 @@ void PGM_BASE::SetLocalEnvVariables( const ENV_VAR_MAP& aEnvVarMap )
     {
         wxLogTrace( traceEnvVars,
                     "PGM_BASE::SetLocalEnvVariables: Setting local environment variable %s to %s",
-                    GetChars( m_local_env_var.first ),
-                    GetChars( m_local_env_var.second.GetValue() ) );
+                    m_local_env_var.first,
+                    m_local_env_var.second.GetValue() );
         wxSetEnv( m_local_env_var.first, m_local_env_var.second.GetValue() );
     }
 }
