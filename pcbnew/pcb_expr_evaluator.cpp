@@ -72,7 +72,7 @@ static void onLayer( LIBEVAL::CONTEXT* aCtx, void *self )
     }
 
     if( !anyMatch )
-        aCtx->ReportError( wxString::Format( _( "Unrecognized layer '%s' " ), layerName ) );
+        aCtx->ReportError( wxString::Format( _( "Unrecognized layer '%s'" ), layerName ) );
 }
 
 

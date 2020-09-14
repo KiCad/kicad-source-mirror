@@ -104,7 +104,7 @@ void DRC_ENGINE::loadImplicitRules()
     DRC_CONSTRAINT annulusConstraint( DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH );
     annulusConstraint.Value().SetMin( bds.m_ViasMinAnnulus );
     rule->AddConstraint( annulusConstraint );
-    
+
     DRC_CONSTRAINT diameterConstraint( DRC_CONSTRAINT_TYPE_VIA_DIAMETER );
     diameterConstraint.Value().SetMin( bds.m_ViasMinSize );
     rule->AddConstraint( diameterConstraint );
@@ -159,7 +159,7 @@ void DRC_ENGINE::loadImplicitRules()
 
     m_board->SynchronizeNetsAndNetClasses();
     netclasses.push_back( bds.GetNetClasses().GetDefault() );
-    
+
     for( const std::pair<const wxString, NETCLASSPTR>& netclass : bds.GetNetClasses() )
         netclasses.push_back( netclass.second );
 
@@ -173,7 +173,7 @@ void DRC_ENGINE::loadImplicitRules()
                                           className );
 
         DRC_RULE_CONDITION* inNetclassCondition = new DRC_RULE_CONDITION ( expr );
-    
+
         DRC_RULE* netclassRule = createImplicitRule( wxString::Format( _( "netclass '%s'" ),
                                                                        className ));
 
@@ -488,10 +488,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         const CONSTRAINT_WITH_CONDITIONS* rcons = ruleset->sortedConstraints[ ii ];
         bool implicit = rcons->parentRule && rcons->parentRule->m_Implicit;
 
-        REPORT( wxString::Format( _( "Checking %s %s." ),
-                                  implicit ? _( "" ) : _( "rule" ),
-                                  rcons->parentRule->m_Name ) )
-
+        if( implicit )
+            REPORT( wxString::Format( _( "Checking %s." ), rcons->parentRule->m_Name ) )
+        else
+            REPORT( wxString::Format( _( "Checking rule %s." ), rcons->parentRule->m_Name ) )
         if( aLayer != UNDEFINED_LAYER && !rcons->layerTest.test( aLayer ) )
         {
             REPORT( wxString::Format( _( "Rule layer \"%s\" not matched." ),
@@ -556,9 +556,9 @@ void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, wxPoin
 
         if( rule )
             msg += wxString::Format( ", violating rule: '%s'", rule->m_Name );
-        
+
         m_reporter->Report( msg );
-        
+
         wxString violatingItemsStr = "Violating items: ";
 
        m_reporter->Report( wxString::Format( "  |- violating position (%d, %d)",

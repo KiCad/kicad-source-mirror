@@ -50,19 +50,20 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
     //Note: can't use getKiCadPoint() due wxPoint being int - need long long to make the check
     long long designSizeXkicad   = (long long) designLimit.x * KiCadUnitMultiplier;
     long long designSizeYkicad   = (long long) designLimit.y * KiCadUnitMultiplier;
-    
+
     // Max size limited by the positive dimention of wxPoint
-    long long maxDesignSizekicad = (long long) std::numeric_limits<int>::max(); 
+    double maxDesignSizekicad = Iu2Millimeter( std::numeric_limits<int>::max() );
 
     if( designSizeXkicad > maxDesignSizekicad || designSizeYkicad > maxDesignSizekicad )
         THROW_IO_ERROR( wxString::Format(
                 _( "The design is too large and cannot be imported into KiCad. \n"
                    "Please reduce the maximum design size in CADSTAR by navigating to: \n"
                    "Design Tab -> Properties -> Design Options -> Maximum Design Size. \n"
-                   "Current Design size: %.2f, %.2f milimetres. \n"
-                   "Maximum permitted design size: %.2f, %.2f milimetres.\n" ),
-                (double) designSizeXkicad / 1E6, (double) designSizeYkicad / 1E6,
-                (double) maxDesignSizekicad / 1E6, (double) maxDesignSizekicad / 1E6 ) );
+                   "Current Design size: %.2f, %.2f millimeters. \n"
+                   "Maximum permitted design size: %.2f, %.2f millimeters.\n" ),
+                (double) designSizeXkicad / PCB_IU_PER_MM,
+                (double) designSizeYkicad / PCB_IU_PER_MM,
+                maxDesignSizekicad, maxDesignSizekicad ) );
 
     mDesignCenter =
             ( Assignments.Technology.DesignArea.first + Assignments.Technology.DesignArea.second )
@@ -416,19 +417,19 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
 
     applyRule( "T_T", &ds.m_MinClearance );
     applyRule( "C_B", &ds.m_CopperEdgeClearance );
-    applyRule( "H_H", &ds.m_HoleToHoleMin );    
+    applyRule( "H_H", &ds.m_HoleToHoleMin );
 
     ds.m_TrackMinWidth = Assignments.Technology.MinRouteWidth;
 
     auto applyNetClassRule =
-        [&]( wxString aID, ::NETCLASS* aNetClassPtr, void (::NETCLASS::*aFunc)(int) ) 
+        [&]( wxString aID, ::NETCLASS* aNetClassPtr, void (::NETCLASS::*aFunc)(int) )
         {
             int value = -1;
             applyRule(aID, &value);
 
             if( value != -1 )
                 (aNetClassPtr->*aFunc)(value);
-            
+
         };
 
     applyNetClassRule( "T_T", ds.GetDefault(), &::NETCLASS::SetClearance );
@@ -585,7 +586,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF& aComponent, MODU
 
         if( csPadcode.Shape.Size == 0 )
             // zero sized pads seems to break KiCad so lets make it very small instead
-            csPadcode.Shape.Size = 1; 
+            csPadcode.Shape.Size = 1;
 
         switch( csPadcode.Shape.ShapeType )
         {
@@ -1104,7 +1105,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
         wxASSERT( Assignments.Layerdefs.Layers.find( layer ) != Assignments.Layerdefs.Layers.end() );
 
         //The net name will equal the layer name
-        wxString powerPlaneLayerName = Assignments.Layerdefs.Layers.at( layer ).Name; 
+        wxString powerPlaneLayerName = Assignments.Layerdefs.Layers.at( layer ).Name;
         NET_ID netid = wxEmptyString;
 
         for( std::pair<NET_ID, NET> netPair : Layout.Nets )
@@ -1149,9 +1150,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
         }
 
 
-        
+
     }
-    
+
 }
 
 
@@ -1247,7 +1248,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
     {
         NET net = netPair.second;
         wxString netnameForErrorReporting = net.Name;
-        
+
         if( netnameForErrorReporting.IsEmpty() )
             netnameForErrorReporting = "$" + net.SignalNum;
 
@@ -1269,7 +1270,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
         {
             NET::PIN pin = pinPair.second;
             MODULE*  m   = getModuleFromCadstarID( pin.ComponentID );
-            
+
             if( m == nullptr )
             {
                 wxLogWarning( wxString::Format(
@@ -1346,7 +1347,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks(
         dsVector.push_back( ds );
         prevEnd = v.Vertex.End;
     }
-    
+
     //Todo add real netcode to the tracks
     std::vector<TRACK*> tracks =
             makeTracksFromDrawsegments( dsVector, mBoard, getKiCadNet( aCadstarNetID ) );
@@ -1540,7 +1541,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
     else
     {
         txt->SetLayer( getKiCadLayer( layersToDrawOn ) );
-        
+
         if( !aCadstarGroupID.IsEmpty() )
             addToGroup( aCadstarGroupID, txt );
     }
@@ -1829,7 +1830,7 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHA
     for( int i = 0; i < polySet.OutlineCount(); ++i )
     {
         wxASSERT( polySet.Outline( i ).PointCount() > 2 );
-        
+
         for( int j = 0; j < polySet.HoleCount( i ); ++j )
         {
             wxASSERT( polySet.Hole( i, j ).PointCount() > 2 );
@@ -2337,7 +2338,7 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
     else
     {
         wxCHECK( Layout.Nets.find( aCadstarNetID ) != Layout.Nets.end(), nullptr );
-        
+
         NET csNet = Layout.Nets.at( aCadstarNetID );
         wxString newName = csNet.Name;
 
@@ -2349,7 +2350,7 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
 
                 NET::PIN firstPin = (*csNet.Pins.begin()).second;
                 //we should have already loaded the component with loadComponents() :
-                MODULE* m = getModuleFromCadstarID( firstPin.ComponentID ); 
+                MODULE* m = getModuleFromCadstarID( firstPin.ComponentID );
                 newName   = wxT( "Net-(" );
                 newName << m->Reference().GetText();
                 newName << "-Pad" << wxString::Format( "%i", firstPin.PadID) << ")";
