@@ -536,7 +536,9 @@ void PGM_BASE::SaveCommonSettings()
         GetCommonSettings()->m_System.working_dir = wxGetCwd().ToStdString();
         GetCommonSettings()->m_Env.show_warning_dialog = m_show_env_var_dialog;
 
-        // Save the local environment variables.
+        // Save the common environment variables.
+        GetCommonSettings()->m_Env.vars.clear();
+
         for( auto& m_local_env_var : m_local_env_vars )
         {
             if( m_local_env_var.second.GetDefinedExternally() )
