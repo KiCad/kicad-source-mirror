@@ -51,8 +51,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
     long long designSizeXkicad   = (long long) designLimit.x * KiCadUnitMultiplier;
     long long designSizeYkicad   = (long long) designLimit.y * KiCadUnitMultiplier;
 
-    // Max size limited by the positive dimention of wxPoint
-    double maxDesignSizekicad = Iu2Millimeter( std::numeric_limits<int>::max() );
+    // Max size limited by the positive dimension of wxPoint (which is an int)
+    long long maxDesignSizekicad = std::numeric_limits<int>::max();
 
     if( designSizeXkicad > maxDesignSizekicad || designSizeYkicad > maxDesignSizekicad )
         THROW_IO_ERROR( wxString::Format(
@@ -63,7 +63,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
                    "Maximum permitted design size: %.2f, %.2f millimeters.\n" ),
                 (double) designSizeXkicad / PCB_IU_PER_MM,
                 (double) designSizeYkicad / PCB_IU_PER_MM,
-                maxDesignSizekicad, maxDesignSizekicad ) );
+                (double) maxDesignSizekicad / PCB_IU_PER_MM,
+                (double) maxDesignSizekicad / PCB_IU_PER_MM ) );
 
     mDesignCenter =
             ( Assignments.Technology.DesignArea.first + Assignments.Technology.DesignArea.second )

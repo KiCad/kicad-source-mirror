@@ -25,6 +25,7 @@
 
 #include <cadstar_pcb_archive_parser.h>
 #include <cmath> // pow()
+#include <convert_to_biu.h> // PCB_IU_PER_MM
 
 
 void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
@@ -45,7 +46,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
             switch( Header.Resolution )
             {
             case RESOLUTION::HUNDREDTH_MICRON:
-                KiCadUnitMultiplier = 10;
+                KiCadUnitMultiplier = PCB_IU_PER_MM / 1e5;
                 break;
 
             default:
