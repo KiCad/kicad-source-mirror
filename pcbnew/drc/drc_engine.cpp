@@ -476,25 +476,33 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
     // Last matching rule wins, so process in reverse order
     for( int ii = (int) ruleset->size() - 1; ii >= 0; --ii )
     {
+        wxString msg;
         const CONSTRAINT_WITH_CONDITIONS* rcons = ruleset->at( ii );
         implicit = rcons->parentRule && rcons->parentRule->m_Implicit;
 
         REPORT( "" )
 
-        if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
+        if( implicit )
         {
-            int clearance = rcons->constraint.m_Value.Min();
-            REPORT( wxString::Format( _( "Checking %s %s; clearance: %s." ),
-                                      implicit ? _( "" ) : _( "rule" ),
-                                      rcons->parentRule->m_Name,
-                                      MessageTextFromValue( UNITS, clearance, true ) ) )
+            msg = wxString::Format( _( "Checking %s;" ),
+                                    rcons->parentRule->m_Name );
         }
         else
         {
-            REPORT( wxString::Format( _( "Checking %s %s." ),
-                                      implicit ? _( "" ) : _( "rule" ),
-                                      rcons->parentRule->m_Name ) )
+            msg = wxString::Format( _( "Checking rule %s;"),
+                                    rcons->parentRule->m_Name );
         }
+
+        if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
+        {
+            int clearance = rcons->constraint.m_Value.Min();
+
+            msg += " ";
+            msg += wxString::Format( _( "clearance: %s." ),
+                                     MessageTextFromValue( UNITS, clearance, true ) );
+        }
+
+        REPORT( msg );
 
         if( aLayer != UNDEFINED_LAYER && !rcons->layerTest.test( aLayer ) )
         {
