@@ -216,9 +216,7 @@ void KICAD_MANAGER_FRAME::setupUIConditions()
     activeProjectCond.Enable( activeProject );
 
     manager->SetConditions( KICAD_MANAGER_ACTIONS::editSchematic,  activeProjectCond );
-    manager->SetConditions( KICAD_MANAGER_ACTIONS::editSymbols,    activeProjectCond );
     manager->SetConditions( KICAD_MANAGER_ACTIONS::editPCB,        activeProjectCond );
-    manager->SetConditions( KICAD_MANAGER_ACTIONS::editFootprints, activeProjectCond );
     manager->SetConditions( ACTIONS::saveAs,                       activeProjectCond );
     manager->SetConditions( KICAD_MANAGER_ACTIONS::closeProject,   activeProjectCond );
 
