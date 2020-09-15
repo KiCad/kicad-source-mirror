@@ -76,7 +76,7 @@ private:
 
 bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 {
-    reportStage( _( "Pad holes..." ));
+    reportPhase( _( "Pad holes..." ));
 
     m_board = m_drcEngine->GetBoard();
 
@@ -94,7 +94,7 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
         }
     }
 
-    reportStage( _( "Via holes..." ));
+    reportPhase( _( "Via holes..." ));
 
     std::vector<VIA*> vias;
 

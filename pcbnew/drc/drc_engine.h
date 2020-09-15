@@ -48,7 +48,7 @@ namespace KIGFX
     class WS_PROXY_VIEW_ITEM;
 };
 
-void drcPrintDebugMessage( int level, wxString msg, const char *function, int line );
+void drcPrintDebugMessage( int level, const wxString& msg, const char *function, int line );
 
 #define drc_dbg(level, fmt, ...) \
     drcPrintDebugMessage(level, wxString::Format( fmt, __VA_ARGS__ ), __FUNCTION__, __LINE__ );
@@ -141,7 +141,7 @@ public:
 
     void ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos );
     void ReportProgress( double aProgress );
-    void ReportStage( const wxString& aStageName );
+    void ReportPhase( const wxString& aMessage );
     void ReportAux( const wxString& aStr );
 
     bool QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T aRuleId, DRC_CONSTRAINT& aConstraint,

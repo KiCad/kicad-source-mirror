@@ -73,7 +73,7 @@ public:
 
 bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 {
-    reportStage( _( "Dangling pads/vias..." ));
+    reportPhase( _( "Dangling pads/vias..." ));
 
     BOARD* board = m_drcEngine->GetBoard();
 
@@ -106,7 +106,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         }
     }
 
-    reportStage( _( "Starved zones..." ));
+    reportPhase( _( "Starved zones..." ));
 
     /* test starved zones */
     for( ZONE_CONTAINER* zone : board->Zones() )
@@ -131,7 +131,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         }
     }
 
-    reportStage( _( "Unconnected nets..." ));
+    reportPhase( _( "Unconnected nets..." ));
 
     connectivity->RecalculateRatsnest();
     std::vector<CN_EDGE> edges;

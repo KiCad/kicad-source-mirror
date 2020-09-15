@@ -33,7 +33,7 @@
 #include <drc/drc_test_provider.h>
 #include <drc/drc.h>
 
-void drcPrintDebugMessage( int level, wxString msg, const char *function, int line )
+void drcPrintDebugMessage( int level, const wxString& msg, const char *function, int line )
 {
     wxString valueStr;
 
@@ -54,10 +54,17 @@ DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
     m_board( aBoard ),
     m_worksheet( nullptr ),
     m_schematicNetlist( nullptr ),
+    m_userUnits( EDA_UNITS::MILLIMETRES ),
+    m_testTracksAgainstZones( false ),
+    m_reportAllTrackErrors( false ),
+    m_testFootprints( false ),
     m_reporter( nullptr ),
     m_progressReporter( nullptr )
 {
     m_errorLimits.resize( DRCE_LAST );
+
+    for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
+        m_errorLimits[ ii ] = INT_MAX;
 }
 
 
@@ -422,6 +429,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                                               REPORTER* aReporter )
 {
 #define REPORT( s ) { if( aReporter ) { aReporter->Report( s ); } }
+#define UNITS aReporter ? aReporter->GetUnits() : EDA_UNITS::MILLIMETRES
 
     auto* connectedA = a && a->IsConnected() ? static_cast<BOARD_CONNECTED_ITEM*>( a ) : nullptr;
     auto* connectedB = b && b->IsConnected() ? static_cast<BOARD_CONNECTED_ITEM*>( b ) : nullptr;
@@ -438,8 +446,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
-                                      a->GetSelectMenuText( aReporter->GetUnits() ),
-                                      StringFromValue( aReporter->GetUnits(), overrideA, true ) ) )
+                                      a->GetSelectMenuText( UNITS ),
+                                      MessageTextFromValue( UNITS, overrideA, true ) ) )
         }
 
         if( connectedB && connectedB->GetLocalClearanceOverrides( nullptr ) > 0 )
@@ -448,8 +456,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
-                                      b->GetSelectMenuText( aReporter->GetUnits() ),
-                                      StringFromValue( aReporter->GetUnits(), overrideB, true ) ) )
+                                      b->GetSelectMenuText( UNITS ),
+                                      MessageTextFromValue( UNITS, overrideB, true ) ) )
         }
 
         if( overrideA || overrideB )
@@ -479,7 +487,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
             REPORT( wxString::Format( _( "Checking %s %s; clearance: %s." ),
                                       implicit ? _( "" ) : _( "rule" ),
                                       rcons->parentRule->m_Name,
-                                      StringFromValue( aReporter->GetUnits(), clearance, true ) ) )
+                                      MessageTextFromValue( UNITS, clearance, true ) ) )
         }
         else
         {
@@ -544,8 +552,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         {
             REPORT( "" )
             REPORT( wxString::Format( _( "Local clearance on %s; clearance: %s." ),
-                                      a->GetSelectMenuText( aReporter->GetUnits() ),
-                                      StringFromValue( aReporter->GetUnits(), localA, true ) ) )
+                                      a->GetSelectMenuText( UNITS ),
+                                      MessageTextFromValue( UNITS, localA, true ) ) )
 
             if( localA > clearance )
                 clearance = connectedA->GetLocalClearance( &m_msg );
@@ -555,8 +563,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         {
             REPORT( "" )
             REPORT( wxString::Format( _( "Local clearance on %s; clearance: %s." ),
-                                      b->GetSelectMenuText( aReporter->GetUnits() ),
-                                      StringFromValue( aReporter->GetUnits(), localB, true ) ) )
+                                      b->GetSelectMenuText( UNITS ),
+                                      MessageTextFromValue( UNITS, localB, true ) ) )
 
             if( localB > clearance )
                 clearance = connectedB->GetLocalClearance( &m_msg );
@@ -578,6 +586,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
     return constraintRef ? *constraintRef : nullConstraint;
 
 #undef REPORT
+#undef UNITS
 }
 
 
@@ -634,12 +643,12 @@ void DRC_ENGINE::ReportProgress( double aProgress )
 }
 
 
-void DRC_ENGINE::ReportStage ( const wxString& aStageName )
+void DRC_ENGINE::ReportPhase( const wxString& aMessage )
 {
     if( !m_progressReporter )
         return;
 
-    m_progressReporter->AdvancePhase( aStageName );
+    m_progressReporter->AdvancePhase( aMessage );
 }
 
 

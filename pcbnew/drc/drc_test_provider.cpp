@@ -39,7 +39,7 @@ const wxString DRC_TEST_PROVIDER::GetName() const { return "<no name test>"; }
 const wxString DRC_TEST_PROVIDER::GetDescription() const { return ""; }
 
 
-void DRC_TEST_PROVIDER::reportViolation( std::shared_ptr<DRC_ITEM> item, wxPoint aMarkerPos )
+void DRC_TEST_PROVIDER::reportViolation( std::shared_ptr<DRC_ITEM>& item, wxPoint aMarkerPos )
 {
     item->SetViolatingTest( this );
     m_drcEngine->ReportViolation( item, aMarkerPos );
@@ -52,10 +52,10 @@ void DRC_TEST_PROVIDER::reportProgress( double aProgress )
 }
 
 
-void DRC_TEST_PROVIDER::reportStage( const wxString& aStageName )
+void DRC_TEST_PROVIDER::reportPhase( const wxString& aMessage )
 {
-    m_drcEngine->ReportStage( aStageName );
-    reportAux( aStageName );
+    m_drcEngine->ReportPhase( aMessage );
+    reportAux( aMessage );
 }
 
 

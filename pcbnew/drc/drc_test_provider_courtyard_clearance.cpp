@@ -77,7 +77,7 @@ private:
 void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 {
     // Detects missing (or malformed) footprint courtyards
-    reportStage( _( "Footprint courtyard definitions..." ));
+    reportPhase( _( "Footprint courtyard definitions..." ));
 
     for( MODULE* footprint : m_board->Modules() )
     {
@@ -118,7 +118,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 
 void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
 {
-    reportStage( _( "Footprint courtyard overlap..." ));
+    reportPhase( _( "Footprint courtyard overlap..." ));
 
     for( auto it1 = m_board->Modules().begin(); it1 != m_board->Modules().end(); it1++ )
     {

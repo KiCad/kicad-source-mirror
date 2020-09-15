@@ -113,16 +113,16 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
     reportAux( "Worst clearance : %d nm", m_largestClearance );
 
-    reportStage( _( "Pad clerances..." ));
+    reportPhase( _( "Pad clerances..." ));
     testPadClearances();
 
-    reportStage( _( "Track/via clerances..." ));
+    reportPhase( _( "Track/via clerances..." ));
     testTrackClearances();
 
-    reportStage( _( "Copper drawing/text clerances..." ));
+    reportPhase( _( "Copper drawing/text clerances..." ));
     testCopperTextAndGraphics();
 
-    reportStage( _( "Zone clearances..." ));
+    reportPhase( _( "Zone clearances..." ));
     testZones();
 
     reportRuleStatistics();

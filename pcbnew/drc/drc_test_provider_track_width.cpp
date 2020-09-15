@@ -73,7 +73,7 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
         return false;
     }
 
-    reportStage( _( "Track widths..." ));
+    reportPhase( _( "Track widths..." ));
 
     auto checkTrackWidth =
             [&]( BOARD_ITEM* item ) -> bool

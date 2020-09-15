@@ -76,7 +76,7 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
         return false;
     }
 
-    reportStage( _( "Via annular rings..." ));
+    reportPhase( _( "Via annular rings..." ));
 
     auto checkAnnulus =
             [&]( BOARD_ITEM* item ) -> bool
@@ -115,7 +115,6 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                 if( fail_min || fail_max )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ANNULUS );
-                    wxString                  msg;
 
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s annulus %s; actual %s)" ),
                                   constraint.GetName(),
@@ -123,7 +122,7 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                                   MessageTextFromValue( userUnits(), annulus, true ),
                                   MessageTextFromValue( userUnits(), fail_min ? v_min : v_max, true ) );
 
-                    drcItem->SetErrorMessage( msg );
+                    drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 

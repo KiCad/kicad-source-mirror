@@ -115,10 +115,10 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
     buildDrilledHoleList();
 
-    reportStage( _( "Hole to pad clearances..." ));
+    reportPhase( _( "Hole to pad clearances..." ));
     testPads2Holes();
 
-    reportStage( _( "Hole to hole clearances..." ));
+    reportPhase( _( "Hole to hole clearances..." ));
     testHoles2Holes();
 
     reportRuleStatistics();

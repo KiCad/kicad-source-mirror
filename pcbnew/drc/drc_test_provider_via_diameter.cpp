@@ -74,7 +74,7 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
         return false;
     }
 
-    reportStage(( "Via diameters..." ));
+    reportPhase(( "Via diameters..." ));
 
     auto checkViaDiameter =
             [&]( BOARD_ITEM* item ) -> bool

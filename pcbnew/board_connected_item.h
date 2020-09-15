@@ -171,17 +171,6 @@ public:
                               wxString* aSource = nullptr, REPORTER* aReporter = nullptr ) const;
 
     /**
-     * Function GetRuleClearance
-     * returns any rule-based clearance.
-     * @param aLayer the current layer under test
-     * @param aClearance [out] the clearance value in internal units
-     * @param aSource [out] reports the source as a user-readable string
-     * @return true if a rule was fired
-     */
-    virtual bool GetRuleClearance( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int* aClearance,
-                                   wxString* aSource ) const;
-
-    /**
      * Function GetLocalClearanceOverrides
      * returns any local clearance overrides set in the "classic" (ie: pre-rule) system.
      * @param aSource [out] optionally reports the source as a user-readable string
