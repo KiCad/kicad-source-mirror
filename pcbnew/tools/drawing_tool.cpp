@@ -1092,10 +1092,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
 
     // drawing assistant overlay
     // TODO: workaround because STROKE_T is not visible from commons.
-    KIGFX::PREVIEW::GEOM_SHAPE geomShape =
-            ( aShape == S_SEGMENT ) ? KIGFX::PREVIEW::GEOM_SHAPE::SEGMENT :
-                                      ( aShape == S_CIRCLE ) ? KIGFX::PREVIEW::GEOM_SHAPE::CIRCLE :
-                                                               KIGFX::PREVIEW::GEOM_SHAPE::RECT;
+    KIGFX::PREVIEW::GEOM_SHAPE geomShape( static_cast<KIGFX::PREVIEW::GEOM_SHAPE>( aShape ) );
     KIGFX::PREVIEW::TWO_POINT_ASSISTANT twoPointAsst(
             twoPointManager, m_frame->GetUserUnits(), geomShape );
 
@@ -1106,7 +1103,6 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
 
     m_controls->ShowCursor( true );
 
-    bool     direction45 = false;    // 45 degrees only mode
     bool     started = false;
     bool     cancelled = false;
     bool     isLocalOriginSet = ( m_frame->GetScreen()->m_LocalOrigin != VECTOR2D( 0, 0 ) );
@@ -1118,11 +1114,14 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
     if( aStartingPoint )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
+    frame()->SetMsgPanel( graphic );
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
         if( !pointEditor->HasPoint() )
             m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+
+        m_frame->SetMsgPanel( graphic );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( m_frame->IsGridVisible() );
@@ -1134,33 +1133,6 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
 
         if( evt->Modifier( MD_CTRL ) )
             limit45 = !limit45;
-
-        if( direction45 != limit45 && started && aShape == S_SEGMENT )
-        {
-            direction45 = limit45;
-
-            if( direction45 )
-            {
-                const VECTOR2I lineVector( cursorPos - VECTOR2I( twoPointManager.GetOrigin() ) );
-
-                // get a restricted 45/H/V line from the last fixed point to the cursor
-                auto newEnd = GetVectorSnapped45( lineVector );
-                m_controls->ForceCursorPosition( true, VECTOR2I( twoPointManager.GetEnd() ) );
-                twoPointManager.SetEnd( twoPointManager.GetOrigin() + (wxPoint) newEnd );
-                twoPointManager.SetAngleSnap( true );
-            }
-            else
-            {
-                twoPointManager.SetEnd( (wxPoint) cursorPos );
-                twoPointManager.SetAngleSnap( false );
-            }
-
-            updateSegmentFromConstructionMgr( twoPointManager, graphic );
-            m_view->Update( &preview );
-            m_view->Update( &twoPointAsst );
-
-            frame()->SetMsgPanel( graphic );
-        }
 
         auto cleanup = [&] () {
             preview.Clear();
@@ -1288,12 +1260,13 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
         else if( evt->IsMotion() )
         {
             // 45 degree lines
-            if( direction45 && aShape == S_SEGMENT )
+            if( ( limit45 && aShape == S_SEGMENT )
+                    || ( evt->Modifier( MD_CTRL ) && aShape == S_RECT ) )
             {
                 const VECTOR2I lineVector( cursorPos - VECTOR2I( twoPointManager.GetOrigin() ) );
 
                 // get a restricted 45/H/V line from the last fixed point to the cursor
-                auto newEnd = GetVectorSnapped45( lineVector );
+                auto newEnd = GetVectorSnapped45( lineVector, ( aShape == S_RECT ) );
                 m_controls->ForceCursorPosition( true, VECTOR2I( twoPointManager.GetEnd() ) );
                 twoPointManager.SetEnd( twoPointManager.GetOrigin() + (wxPoint) newEnd );
                 twoPointManager.SetAngleSnap( true );
