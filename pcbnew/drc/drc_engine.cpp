@@ -410,7 +410,8 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aTestTracksAgainstZones,
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
         phases += provider->GetNumPhases();
 
-    m_progressReporter->AddPhases( phases );
+    if( m_progressReporter )
+        m_progressReporter->AddPhases( phases );
 
     for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
     {
