@@ -67,7 +67,6 @@ private:
     std::vector<ATTENUATOR*> m_attenuator_list;
     wxString                 m_lastSelectedRegulatorName; // last regulator name selected
 
-
 public:
     PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~PCB_CALCULATOR_FRAME();
@@ -102,12 +101,30 @@ private:
     void SetDataFilename( const wxString& aFilename );
 
     // Trace width / maximum current capability calculations.
-
     /**
      * Function TW_Init
      * Read config and init dialog widgets values
      */
     void TW_Init();
+
+    /**
+     * E-Series Resistor calculator Panel
+     * Called on calculator start to display markdown formula explanations
+     */
+    void ES_Init( void );
+
+    /**
+     * Called on calculate button and executes all E-series calculations
+     *
+     */
+
+    void OnCalculateESeries( wxCommandEvent& event ) override;
+
+    /**
+     * Radio Buttons to select the E-serie for the resistor calculator
+     * @param event contains the radio button state
+     */
+    void OnESerieSelection( wxCommandEvent& event ) override;
 
     /**
      * Function TW_WriteConfig

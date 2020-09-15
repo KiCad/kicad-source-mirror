@@ -1,4 +1,3 @@
-
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     bitmaps
@@ -10,6 +9,7 @@ include_directories(
     )
 
 set( PCB_CALCULATOR_SRCS
+    eserie.cpp
     attenuators.cpp
     board_classes_values.cpp
     colorcode.cpp
@@ -162,7 +162,6 @@ make_lexer(
 function( html_doc2h inputFile )
     add_custom_command(
         OUTPUT ${inputFile}.h
-
         COMMAND ${CMAKE_COMMAND} -DinputFile=${inputFile}.html -DoutputFile=${inputFile}.h
             -P ${CMAKE_MODULE_PATH}/Html2C.cmake
         DEPENDS ${inputFile}.html ${CMAKE_MODULE_PATH}/Html2C.cmake
@@ -189,6 +188,7 @@ endfunction()
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/tee_formula )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/tracks_width_versus_current_formula )
+    md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/eserie_help )
 
 set( DOCS_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula.h
@@ -196,6 +196,7 @@ set( DOCS_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/bridget_tee_formula.h
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/splitter_formula.h
         ${CMAKE_CURRENT_SOURCE_DIR}/tracks_width_versus_current_formula.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/eserie_help.h
     )
 
 set_source_files_properties( attenuators/attenuator_classes.cpp
