@@ -52,7 +52,6 @@ GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMagneticSe
     m_enableSnap = true;
     m_enableGrid = true;
     m_enableSnapLine = true;
-    m_snapSize = 25;
     m_snapItem = nullptr;
     KIGFX::VIEW* view = m_toolMgr->GetView();
 
@@ -305,9 +304,8 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDrag
 VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
                                       const std::vector<BOARD_ITEM*>& aSkip )
 {
-    double worldScale = m_toolMgr->GetView()->GetGAL()->GetWorldScale();
-    double snapDist   = m_snapSize / worldScale;
-    int snapRange     = KiROUND( snapDist );
+    int snapDist      = GetGrid().x;
+    int snapRange     = snapDist;
 
     BOX2I bb( VECTOR2I( aOrigin.x - snapRange / 2, aOrigin.y - snapRange / 2 ),
               VECTOR2I( snapRange, snapRange ) );
@@ -346,7 +344,6 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
         if( snapLine && m_skipPoint != VECTOR2I( m_viewSnapLine.GetPosition() ) )
         {
             m_viewSnapLine.SetEndPosition( nearestGrid );
-            m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
 
             if( m_toolMgr->GetView()->IsVisible( &m_viewSnapLine ) )
                 m_toolMgr->GetView()->Update( &m_viewSnapLine, KIGFX::GEOMETRY );

@@ -153,7 +153,6 @@ private:
     bool          m_enableSnap;      // If true, allow snapping to other items on the layers
     bool          m_enableGrid;      // If true, allow snapping to grid
     bool          m_enableSnapLine;  // If true, allow drawing lines from snap points
-    int           m_snapSize;        // Sets the radius in screen units for snapping to items
     ANCHOR*       m_snapItem;        // Pointer to the currently snapped item in m_anchors
                                      //   (NULL if not snapped)
     VECTOR2I      m_skipPoint;       // When drawing a line, we avoid snapping to the source point
