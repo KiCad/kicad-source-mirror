@@ -80,7 +80,9 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
     m_preview->GetGAL()->SetClearColor( backgroundColor );
 
     m_statusPanel = new wxPanel( this );
+    m_statusPanel->SetBackgroundColour( backgroundColor.ToColour() );
     m_status = new wxStaticText( m_statusPanel, wxID_ANY, wxEmptyString );
+    m_status->SetForegroundColour( settings->GetLayerColor( LAYER_REFERENCEPART ).ToColour() );
     m_statusSizer = new wxBoxSizer( wxVERTICAL );
     m_statusSizer->Add( 0, 0, 1 );  // add a spacer
     m_statusSizer->Add( m_status, 0, wxALIGN_CENTER );
