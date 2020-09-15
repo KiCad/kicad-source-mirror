@@ -26,7 +26,11 @@
 #include <array>
 #include <iostream>
 #include <string>
+
+#ifdef BENCHMARK
 #include <sys/time.h>
+#endif
+
 #include <vector>
 
 #include "eserie.h"
