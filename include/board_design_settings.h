@@ -29,7 +29,7 @@
 #include <netclass.h>
 #include <config_params.h>
 #include <board_stackup_manager/class_board_stackup.h>
-#include <drc/drc_rule.h>
+#include <drc/drc_engine.h>
 #include <settings/nested_settings.h>
 #include <widgets/ui_common.h>
 #include <zone_settings.h>
@@ -240,9 +240,9 @@ public:
     int        m_CopperEdgeClearance;
     int        m_HoleToHoleMin;             // Min width of peninsula between two drilled holes
 
-    std::vector<DRC_RULE*> m_DRCRules;
-    std::map< int, int >   m_DRCSeverities;   // Map from DRCErrorCode to SEVERITY
-    std::set<wxString>     m_DrcExclusions;
+    std::shared_ptr<DRC_ENGINE> m_DRCEngine;
+    std::map<int, int>          m_DRCSeverities;   // Map from DRCErrorCode to SEVERITY
+    std::set<wxString>          m_DrcExclusions;
 
     // Option to handle filled polygons in zones:
     // the "legacy" option is using thick outlines around filled polygons: give the best shape

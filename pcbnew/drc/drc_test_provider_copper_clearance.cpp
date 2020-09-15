@@ -25,15 +25,15 @@
 #include <class_board.h>
 #include <class_drawsegment.h>
 #include <class_pad.h>
+#include <class_track.h>
 
-#include <geometry/polygon_test_point_inside.h>
+//#include <geometry/polygon_test_point_inside.h>
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 
 #include <drc/drc_engine.h>
-#include <drc/drc.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>

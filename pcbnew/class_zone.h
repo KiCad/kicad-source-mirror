@@ -714,15 +714,6 @@ public:
     bool GetDoNotAllowPads() const { return m_doNotAllowPads; }
     bool GetDoNotAllowFootprints() const { return m_doNotAllowFootprints; }
 
-    /**
-     * Return a bitset of flags for keepouts.  Includes both those set via the GUI
-     * and those set via DRC rules.
-     * @aSources indicates the source ("zone properties" or rule name) of each
-     *           flag.
-     * @return a bitset of DISALLOW_* flags.
-     */
-    int GetKeepouts( PCB_LAYER_ID aLayer, std::map<int, wxString>* aSources = nullptr ) const;
-
     void SetIsKeepout( bool aEnable ) { m_isKeepout = aEnable; }
     void SetDoNotAllowCopperPour( bool aEnable ) { m_doNotAllowCopperPour = aEnable; }
     void SetDoNotAllowVias( bool aEnable ) { m_doNotAllowVias = aEnable; }

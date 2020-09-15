@@ -24,8 +24,7 @@
 #ifndef CLEANUP_ITEM_H
 #define CLEANUP_ITEM_H
 
-#include <rc_item.h>
-#include <drc/drc.h>
+#include <drc/drc_item.h>
 
 class PCB_BASE_FRAME;
 

@@ -198,11 +198,6 @@ void PCB_INSPECTION_TOOL::reportCopperClearance( PCB_LAYER_ID aLayer, BOARD_CONN
         r->Report( "" );
         r->Report( wxString::Format( _( "Clearance: %s." ), clearance ) );
     }
-
-    // JEY TODO: hook this up to new DRC engine to get "classic" sources as well; right now
-    // we're just reporting on rules....
-    // JEY TODO: retire this version
-    // aA->GetClearance( aLayer, aB, &source, r );
 }
 
 

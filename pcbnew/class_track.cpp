@@ -38,6 +38,7 @@
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_arc.h>
+#include <drc/drc_engine.h>
 
 TRACK::TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_CONNECTED_ITEM( aParent, idtype )
@@ -124,52 +125,41 @@ int TRACK::GetLocalClearance( wxString* aSource ) const
 }
 
 
-/*
- * Width constraints exist in a hiearchy.  If a given level is specified then the remaining
- * levels are NOT consulted.
- *
- * LEVEL 1: (highest priority) local overrides (not currently implemented.)
- * LEVEL 2: Rules
- * LEVEL 3: Accumulated local settings, netclass settings, & board design settings
- */
 void TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
 {
-    // LEVEL 1: local overrides
-    //
-    // Not currently implemented
-
-    // LEVEL 2: Rules
-    const DRC_CONSTRAINT* constraint = GetConstraint( this, nullptr,
-                                                      DRC_CONSTRAINT_TYPE_TRACK_WIDTH,
-                                                      m_Layer, aSource );
-
-    if( constraint )
+    // No constraints if "this" is not (yet) linked to a board
+    if( !GetBoard() )
     {
-        *aMin = constraint->m_Value.Min();
-        *aMax = constraint->m_Value.Max();
-
-        if( aSource )
-            *aSource = wxString::Format( _( "'%s' rule" ), *aSource );
-
+        *aMin = 0;
+        *aMax = INT_MAX;
         return;
     }
 
-    // LEVEL 3: Netclasses & board design settings
-    //
-    // Note that local settings aren't currently implemented, and netclasses don't contain a
-    // minimum width (only a default width), so only the board design settings are relevant
-    // here.
-    //
-    *aMin = GetBoard()->GetDesignSettings().m_TrackMinWidth;
-    *aMax = INT_MAX / 2;
+    std::shared_ptr<DRC_ENGINE> drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
 
-    if( aSource )
-        *aSource = _( "board minimum" );
+    DRC_CONSTRAINT constraint = drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_TRACK_WIDTH,
+                                                              this, nullptr, GetLayer() );
+
+    if( constraint.Value().HasMin() || constraint.Value().HasMax() )
+    {
+        if( constraint.Value().HasMin() )
+            *aMin = constraint.Value().Min();
+
+        if( constraint.Value().HasMax() )
+            *aMax = constraint.Value().Max();
+
+        if( aSource )
+            *aSource = constraint.GetName();
+    }
 }
 
 
 int VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
+    // No constraints if "this" is not (yet) linked to a board
+    if( !GetBoard() )
+        return 0;
+
     if( !IsPadOnLayer( aLayer ) )
     {
         if( aSource )
@@ -178,24 +168,20 @@ int VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
         return 0;
     }
 
-    const DRC_CONSTRAINT* constraint = GetConstraint( this, nullptr,
-                                                      DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH,
-                                                      aLayer, aSource );
+    std::shared_ptr<DRC_ENGINE> drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
 
-    if( constraint )
+    DRC_CONSTRAINT constraint = drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH,
+                                                              this, nullptr, aLayer );
+
+    if( constraint.Value().HasMin() )
     {
         if( aSource )
-            *aSource = wxString::Format( _( "'%s' rule" ), *aSource );
+            *aSource = constraint.GetName();
 
-        return constraint->m_Value.Min();
+        return constraint.Value().Min();
     }
-    else
-    {
-        if( aSource )
-            *aSource = _( "board minimum" );
 
-        return GetBoard()->GetDesignSettings().m_ViasMinAnnulus;
-    }
+    return 0;
 }
 
 

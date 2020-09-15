@@ -27,6 +27,7 @@
 #include <class_board.h>
 #include <class_board_item.h>
 #include <connectivity/connectivity_data.h>
+#include <drc/drc_engine.h>
 
 using namespace std::placeholders;
 
@@ -81,82 +82,26 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetEffectiveNetclass() const
  * LEVEL 3: Accumulated local settings, netclass settings, & board design settings
  */
 int BOARD_CONNECTED_ITEM::GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem,
-                                        wxString* aSource, REPORTER* aReporter ) const
+                                        wxString* aSource ) const
 {
-    BOARD*                board = GetBoard();
-    int                   clearance = 0;
-    wxString              source;
-    wxString*             localSource = aSource ? &source : nullptr;
-    BOARD_CONNECTED_ITEM* second = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem );
-
     // No clearance if "this" is not (yet) linked to a board therefore no available netclass
-    if( !board )
-        return clearance;
+    if( !GetBoard() )
+        return 0;
 
-    // LEVEL 1: local overrides (pad, footprint, etc.)
-    //
-    if( GetLocalClearanceOverrides( nullptr ) > clearance )
-        clearance = GetLocalClearanceOverrides( localSource );
+    std::shared_ptr<DRC_ENGINE> drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
 
-    if( second && second->GetLocalClearanceOverrides( nullptr ) > clearance )
-        clearance = second->GetLocalClearanceOverrides( localSource );
+    DRC_CONSTRAINT constraint = drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                              this, aItem, aLayer );
 
-    if( clearance )
+    if( constraint.Value().HasMin() )
     {
         if( aSource )
-            *aSource = *localSource;
+            *aSource = constraint.GetName();
 
-        return clearance;
+        return constraint.Value().Min();
     }
 
-    // LEVEL 2: Rules
-    //
-    const DRC_CONSTRAINT* constraint = GetConstraint( this, aItem, DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                                      aLayer, aSource );
-
-    if( constraint )
-    {
-        if( aSource )
-            *aSource = wxString::Format( _( "'%s' rule" ), *aSource );
-
-        return constraint->m_Value.Min();
-    }
-
-    // LEVEL 3: Accumulated local settings, netclass settings, & board design settings
-    //
-    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
-    NETCLASS*              netclass = GetEffectiveNetclass();
-    NETCLASS*              secondNetclass = second ? second->GetEffectiveNetclass() : nullptr;
-
-    if( bds.m_MinClearance > clearance )
-    {
-        if( aSource )
-            *aSource = _( "board minimum" );
-
-        clearance = bds.m_MinClearance;
-    }
-
-    if( netclass && netclass->GetClearance() > clearance )
-        clearance = netclass->GetClearance( aSource );
-
-    if( secondNetclass && secondNetclass->GetClearance() > clearance )
-        clearance = secondNetclass->GetClearance( aSource );
-
-    if( aItem && aItem->GetLayer() == Edge_Cuts && bds.m_CopperEdgeClearance > clearance )
-    {
-        if( aSource )
-            *aSource = _( "board edge" );
-
-        clearance = bds.m_CopperEdgeClearance;
-    }
-
-    if( GetLocalClearance( nullptr ) > clearance )
-        clearance = GetLocalClearance( aSource );
-
-    if( second && second->GetLocalClearance( nullptr ) > clearance )
-        clearance = second->GetLocalClearance( aSource );
-
-    return clearance;
+    return 0;
 }
 
 

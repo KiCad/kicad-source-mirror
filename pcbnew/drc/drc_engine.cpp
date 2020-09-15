@@ -31,7 +31,6 @@
 #include <drc/drc_rule.h>
 #include <drc/drc_rule_condition.h>
 #include <drc/drc_test_provider.h>
-#include <drc/drc.h>
 
 void drcPrintDebugMessage( int level, const wxString& msg, const char *function, int line )
 {
@@ -162,40 +161,47 @@ void DRC_ENGINE::loadImplicitRules()
 
     // 3) per-netclass rules
 
-    std::vector<NETCLASSPTR> netclasses;
+    int ruleCount = 0;
 
-    m_board->SynchronizeNetsAndNetClasses();
-    netclasses.push_back( bds.GetNetClasses().GetDefault() );
+    auto makeNetclassRule =
+            [&]( const NETCLASSPTR& nc, bool isDefault )
+            {
+                wxString className = nc->GetName();
+                wxString expr;
 
-    for( const std::pair<const wxString, NETCLASSPTR>& netclass : bds.GetNetClasses() )
-        netclasses.push_back( netclass.second );
+                if( !isDefault )
+                {
+                    expr = wxString::Format( "A.NetClass == '%s' || B.NetClass == '%s'",
+                                             className,
+                                             className );
+                }
 
-    ReportAux( wxString::Format( "Building %d implicit netclass rules", (int) netclasses.size() ) );
-
-    for( const NETCLASSPTR& nc : netclasses )
-    {
-        wxString className = nc->GetName();
-        wxString expr = wxString::Format( "A.NetClass == '%s' || B.NetClass == '%s'",
-                                          className,
-                                          className );
-
-        DRC_RULE_CONDITION* inNetclassCondition = new DRC_RULE_CONDITION ( expr );
-
-        DRC_RULE* netclassRule = createImplicitRule( wxString::Format( _( "netclass '%s'" ),
+                DRC_RULE_CONDITION* inNetclassCondition = new DRC_RULE_CONDITION ( expr );
+                DRC_RULE* rule = createImplicitRule( wxString::Format( _( "netclass '%s'" ),
                                                                        className ));
 
-        netclassRule->m_Condition = inNetclassCondition;
+                rule->m_Condition = inNetclassCondition;
 
-        // Only add netclass clearances if they're larger than board minimums.  That way
-        // board minimums will still enforce a global minimum.
+                // Only add netclass clearances if they're larger than board minimums.  That way
+                // board minimums will still enforce a global minimum.
 
-        if( nc->GetClearance() > bds.m_MinClearance )
-        {
-            DRC_CONSTRAINT ncClearanceConstraint( DRC_CONSTRAINT_TYPE_CLEARANCE );
-            ncClearanceConstraint.Value().SetMin( nc->GetClearance() );
-            netclassRule->AddConstraint( ncClearanceConstraint );
-        }
-    }
+                if( nc->GetClearance() > bds.m_MinClearance )
+                {
+                    DRC_CONSTRAINT ncClearanceConstraint( DRC_CONSTRAINT_TYPE_CLEARANCE );
+                    ncClearanceConstraint.Value().SetMin( nc->GetClearance() );
+                    rule->AddConstraint( ncClearanceConstraint );
+                }
+
+                ruleCount++;
+            };
+
+    m_board->SynchronizeNetsAndNetClasses();
+    makeNetclassRule( bds.GetNetClasses().GetDefault(), true );
+
+    for( const std::pair<const wxString, NETCLASSPTR>& netclass : bds.GetNetClasses() )
+        makeNetclassRule( netclass.second, false );
+
+    ReportAux( wxString::Format( "Building %d implicit netclass rules", ruleCount ) );
 }
 
 static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
@@ -425,14 +431,14 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aTestTracksAgainstZones,
 
 
 DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintId,
-                                              BOARD_ITEM* a, BOARD_ITEM* b, PCB_LAYER_ID aLayer,
-                                              REPORTER* aReporter )
+                                              const BOARD_ITEM* a, const BOARD_ITEM* b,
+                                              PCB_LAYER_ID aLayer, REPORTER* aReporter )
 {
 #define REPORT( s ) { if( aReporter ) { aReporter->Report( s ); } }
 #define UNITS aReporter ? aReporter->GetUnits() : EDA_UNITS::MILLIMETRES
 
-    auto* connectedA = a && a->IsConnected() ? static_cast<BOARD_CONNECTED_ITEM*>( a ) : nullptr;
-    auto* connectedB = b && b->IsConnected() ? static_cast<BOARD_CONNECTED_ITEM*>( b ) : nullptr;
+    const BOARD_CONNECTED_ITEM* connectedA = dynamic_cast<const BOARD_CONNECTED_ITEM*>( a );
+    const BOARD_CONNECTED_ITEM* connectedB = dynamic_cast<const BOARD_CONNECTED_ITEM*>( b );
 
     // Local overrides take precedence
     if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )

@@ -30,7 +30,6 @@
 #include <bitmaps.h>
 #include <trace_helpers.h>
 #include <pcbnew_id.h>
-#include <drc/drc.h>
 #include <pcbnew_settings.h>
 #include <pcb_layer_box_selector.h>
 #include <pcb_layer_widget.h>
@@ -504,7 +503,6 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
     m_toolManager->RegisterTool( new ZONE_FILLER_TOOL );
     m_toolManager->RegisterTool( new AUTOPLACE_TOOL );
-    m_toolManager->RegisterTool( new DRC );
     m_toolManager->RegisterTool( new DRC_TOOL );
     m_toolManager->RegisterTool( new PCB_VIEWER_TOOLS );
     m_toolManager->RegisterTool( new CONVERT_TOOL );
@@ -1045,8 +1043,6 @@ void PCB_EDIT_FRAME::onBoardLoaded()
 
     SetMsgPanel( GetBoard() );
     SetStatusText( wxEmptyString );
-
-    m_toolManager->GetTool<DRC>()->LoadRules();
 
     KIPLATFORM::APP::SetShutdownBlockReason( this, _( "PCB file changes are unsaved" ) );
 }

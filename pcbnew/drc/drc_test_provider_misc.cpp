@@ -23,7 +23,6 @@
 
 #include <class_pcb_text.h>
 #include <drc/drc_engine.h>
-#include <drc/drc.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>

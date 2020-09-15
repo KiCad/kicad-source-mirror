@@ -168,7 +168,7 @@ public:
      * @return int - the clearance in internal units.
      */
     virtual int GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem = nullptr,
-                              wxString* aSource = nullptr, REPORTER* aReporter = nullptr ) const;
+                              wxString* aSource = nullptr ) const;
 
     /**
      * Function GetLocalClearanceOverrides

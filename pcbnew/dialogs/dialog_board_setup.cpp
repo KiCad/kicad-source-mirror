@@ -26,7 +26,6 @@
 #include <../board_stackup_manager/panel_board_stackup.h>
 #include <confirm.h>
 #include <kiface_i.h>
-#include <drc/drc.h>
 #include <drc/drc_item.h>
 #include <dialog_import_settings.h>
 #include <io_mgr.h>

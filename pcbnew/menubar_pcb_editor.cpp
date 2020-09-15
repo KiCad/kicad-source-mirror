@@ -26,7 +26,6 @@
 
 
 #include <advanced_config.h>
-#include <drc/drc.h>
 #include <filehistory.h>
 #include <kiface_i.h>
 #include <menus_helpers.h>

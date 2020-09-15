@@ -24,11 +24,11 @@
 #include <common.h>
 #include <class_drawsegment.h>
 #include <class_pad.h>
+#include <class_track.h>
 #include <geometry/shape_segment.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
-#include <drc/drc.h>
 #include <drc/drc_test_provider_clearance_base.h>
 
 /*

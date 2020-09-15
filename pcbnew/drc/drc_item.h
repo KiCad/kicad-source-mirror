@@ -97,13 +97,6 @@ public:
         return allItemTypes;
     }
 
-    /**
-     * Translates this object into a fragment of HTML suitable for the wxHtmlListBox class.
-     * @return wxString - the html text.
-     */
-    wxString ShowHtml( PCB_BASE_FRAME* aFrame ) const; // JEY TODO
-    wxString FormatHtml( ) const { return ""; } // fixme
-
     void SetViolatingRule ( DRC_RULE *aRule ) { m_violatingRule = aRule; }
     DRC_RULE* GetViolatingRule() const { return m_violatingRule; }
 

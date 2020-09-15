@@ -62,6 +62,7 @@ void DRC_TOOL::Reset( RESET_REASON aReason )
             DestroyDRCDialog( wxID_OK );
 
         m_pcb = m_editFrame->GetBoard();
+        m_drcEngine = m_pcb->GetDesignSettings().m_DRCEngine;
     }
 }
 
@@ -131,10 +132,8 @@ void DRC_TOOL::RunTests( WX_PROGRESS_REPORTER* aProgressReporter, bool aTestTrac
                          bool aRefillZones, bool aReportAllTrackErrors, bool aTestFootprints )
 {
     ZONE_FILLER_TOOL* zoneFiller = m_toolMgr->GetTool<ZONE_FILLER_TOOL>();
-
-    BOARD_COMMIT commit( m_editFrame );
-    DRC_ENGINE   drcEngine( m_pcb, &m_pcb->GetDesignSettings() );
-    NETLIST      netlist;
+    BOARD_COMMIT      commit( m_editFrame );
+    NETLIST           netlist;
 
     if( aRefillZones )
     {
@@ -149,9 +148,10 @@ void DRC_TOOL::RunTests( WX_PROGRESS_REPORTER* aProgressReporter, bool aTestTrac
         zoneFiller->CheckAllZones( aProgressReporter->GetParent(), aProgressReporter );
     }
 
-    drcEngine.InitEngine( m_editFrame->Prj().AbsolutePath( "drc-rules" ) );
-
-    drcEngine.SetWorksheet( m_editFrame->GetCanvas()->GetWorksheet() );
+    // Re-initialize the DRC_ENGINE to make doubly sure everything is up-to-date
+    //
+    m_drcEngine->InitEngine( m_editFrame->Prj().AbsolutePath( "drc-rules" ) );
+    m_drcEngine->SetWorksheet( m_editFrame->GetCanvas()->GetWorksheet() );
 
     if( aTestFootprints && !Kiface().IsSingle() )
     {
@@ -160,12 +160,12 @@ void DRC_TOOL::RunTests( WX_PROGRESS_REPORTER* aProgressReporter, bool aTestTrac
         if( m_drcDialog )
             m_drcDialog->Raise();
 
-        drcEngine.SetSchematicNetlist( &netlist );
+        m_drcEngine->SetSchematicNetlist( &netlist );
     }
 
-    drcEngine.SetProgressReporter( aProgressReporter );
+    m_drcEngine->SetProgressReporter( aProgressReporter );
 
-    drcEngine.SetViolationHandler(
+    m_drcEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
             {
                 if(    aItem->GetErrorCode() == DRCE_MISSING_FOOTPRINT
@@ -186,8 +186,11 @@ void DRC_TOOL::RunTests( WX_PROGRESS_REPORTER* aProgressReporter, bool aTestTrac
                 }
             } );
 
-    drcEngine.RunTests( m_editFrame->GetUserUnits(), aTestTracksAgainstZones,
-                        aReportAllTrackErrors, aTestFootprints );
+    m_drcEngine->RunTests( m_editFrame->GetUserUnits(), aTestTracksAgainstZones,
+                           aReportAllTrackErrors, aTestFootprints );
+
+    m_drcEngine->SetProgressReporter( nullptr );
+    m_drcEngine->ClearViolationHandler();
 
     commit.Push( _( "DRC" ), false );
 

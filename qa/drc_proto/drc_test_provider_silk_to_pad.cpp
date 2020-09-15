@@ -33,11 +33,10 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 
-#include <pcbnew/drc/drc_engine.h>
-#include <drc/drc.h>
+#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
-#include <pcbnew/drc/drc_test_provider_clearance_base.h>
+#include <drc/drc_test_provider_clearance_base.h>
 
 /*
     Silk to pads clearance test. Check all pads against silkscreen (mask opening in the pad vs silkscreen)

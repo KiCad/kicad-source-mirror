@@ -131,6 +131,10 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
 
     if( new_board )
     {
+        BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
+        bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( aBoard, &bds );
+        bds.m_DRCEngine->InitEngine( Prj().AbsolutePath( "drc-rules" ) );
+
         if( m_toolManager )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 

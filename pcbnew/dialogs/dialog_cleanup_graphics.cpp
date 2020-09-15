@@ -26,6 +26,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <graphics_cleaner.h>
+#include <pcb_base_frame.h>
 
 
 DIALOG_CLEANUP_GRAPHICS::DIALOG_CLEANUP_GRAPHICS( PCB_BASE_FRAME* aParent, bool isModEdit ) :

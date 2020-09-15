@@ -27,7 +27,6 @@
 #include <common.h>
 #include "wx/html/m_templ.h"
 #include "wx/html/styleparams.h"
-#include <drc/drc.h>
 #include <drc/drc_item.h>
 #include <class_board.h>
 
@@ -274,49 +273,6 @@ wxString escapeHtml( wxString aString )
     aString.Replace( wxT("<"), wxT("&lt;") );
     aString.Replace( wxT(">"), wxT("&gt;") );
     return aString;
-}
-
-
-wxString DRC_ITEM::ShowHtml( PCB_BASE_FRAME* aFrame ) const
-{
-    BOARD_ITEM* mainItem = nullptr;
-    BOARD_ITEM* auxItem = nullptr;
-    wxString    msg = m_errorMessage.IsEmpty() ? GetErrorText() : m_errorMessage;
-    wxString    mainText;
-    wxString    auxText;
-
-    if( m_mainItemUuid != niluuid )
-        mainItem = aFrame->GetBoard()->GetItem( m_mainItemUuid );
-
-    if( m_auxItemUuid != niluuid )
-        auxItem = aFrame->GetBoard()->GetItem( m_auxItemUuid );
-
-    if( mainItem )
-        mainText = mainItem->GetSelectMenuText( aFrame->GetUserUnits() );
-
-    if( auxItem )
-        auxText = auxItem->GetSelectMenuText( aFrame->GetUserUnits() );
-
-    if( mainItem && auxItem )
-    {
-        // an html fragment for the entire message in the listbox.  feel free
-        // to add color if you want:
-        return wxString::Format( wxT( "<b>%s</b><br>&nbsp;&nbsp; %s<br>&nbsp;&nbsp; %s" ),
-                                 escapeHtml( msg ),
-                                 escapeHtml( mainText ),
-                                 escapeHtml( auxText ) );
-    }
-    else if( mainItem )
-    {
-        return wxString::Format( wxT( "<b>%s</b><br>&nbsp;&nbsp; %s" ),
-                                 escapeHtml( msg ),
-                                 escapeHtml( mainText ) );
-    }
-    else
-    {
-        return wxString::Format( wxT( "<b>%s</b>" ),
-                                 escapeHtml( msg ) );
-    }
 }
 
 

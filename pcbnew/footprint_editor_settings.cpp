@@ -27,7 +27,6 @@
 #include <settings/settings_manager.h>
 #include <wx/config.h>
 #include <base_units.h>
-#include <drc/drc.h>
 #include <widgets/ui_common.h>
 
 extern const char* traceSettings;

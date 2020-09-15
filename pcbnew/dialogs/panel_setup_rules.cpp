@@ -25,15 +25,16 @@
 #include <widgets/paged_dialog.h>
 #include <pcb_edit_frame.h>
 #include <pcb_expr_evaluator.h>
+#include <class_board.h>
+#include <board_design_settings.h>
 #include <project.h>
 #include <tool/tool_manager.h>
-#include <drc/drc.h>
 #include <panel_setup_rules.h>
 #include <wx_html_report_box.h>
 #include <html_messagebox.h>
 #include <scintilla_tricks.h>
 #include <drc/drc_rule_parser.h>
-
+#include <tools/drc_tool.h>
 
 PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_RULES_BASE( aParent->GetTreebook() ),
@@ -372,9 +373,11 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
         return false;
     }
 
-    if( m_textEditor->SaveFile( m_frame->Prj().AbsolutePath( "drc-rules" ) ) )
+    wxString rulesFilepath = m_frame->Prj().AbsolutePath( "drc-rules" );
+
+    if( m_textEditor->SaveFile( rulesFilepath ) )
     {
-        m_frame->GetToolManager()->GetTool<DRC>()->LoadRules();
+        m_frame->GetBoard()->GetDesignSettings().m_DRCEngine->LoadRules( rulesFilepath );
         return true;
     }
 

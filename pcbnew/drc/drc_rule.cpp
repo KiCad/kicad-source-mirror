@@ -29,54 +29,6 @@
 #include <drc/drc_rule_condition.h>
 
 
-const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* bItem,
-                                     int aConstraint, PCB_LAYER_ID aLayer, wxString* aRuleName )
-{
-    BOARD* board = aItem->GetBoard();
-
-    if( !board )
-        return nullptr;
-
-    for( DRC_RULE* rule : board->GetDesignSettings().m_DRCRules )
-    {
-        if( !rule->m_LayerCondition.test( aLayer ) )
-            continue;
-
-        const DRC_CONSTRAINT* constraint = nullptr;
-
-        for( const DRC_CONSTRAINT& candidate : rule->m_Constraints )
-        {
-            if( candidate.m_Type == aConstraint )
-            {
-                constraint = &candidate;
-                break;
-            }
-        }
-
-        if( constraint )
-        {
-            if( rule->m_Condition->EvaluateFor( aItem, bItem, aLayer ) )
-            {
-                if( aRuleName )
-                    *aRuleName = rule->m_Name;
-
-                return constraint;
-            }
-
-            if( bItem && rule->m_Condition->EvaluateFor( bItem, aItem, aLayer ) )
-            {
-                if( aRuleName )
-                    *aRuleName = rule->m_Name;
-
-                return constraint;
-            }
-        }
-    }
-
-    return nullptr;
-}
-
-
 DRC_RULE::DRC_RULE() :
         m_Unary( false ),
         m_Implicit( false ),

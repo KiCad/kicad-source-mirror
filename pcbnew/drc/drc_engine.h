@@ -97,6 +97,11 @@ public:
         m_violationHandler = std::move( aHandler );
     }
 
+    void ClearViolationHandler()
+    {
+        m_violationHandler = DRC_VIOLATION_HANDLER();
+    }
+
     /*
      * Receives progress information to show the user.
      */
@@ -123,8 +128,8 @@ public:
 
     bool IsErrorLimitExceeded( int error_code );
 
-    DRC_CONSTRAINT EvalRulesForItems( DRC_CONSTRAINT_TYPE_T ruleID, BOARD_ITEM* a,
-                                      BOARD_ITEM* b = nullptr,
+    DRC_CONSTRAINT EvalRulesForItems( DRC_CONSTRAINT_TYPE_T ruleID, const BOARD_ITEM* a,
+                                      const BOARD_ITEM* b = nullptr,
                                       PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                                       REPORTER* aReporter = nullptr );
 

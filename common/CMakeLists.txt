@@ -509,9 +509,11 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/connectivity/connectivity_items.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/connectivity/connectivity_data.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/convert_drawsegment_list_to_polygon.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_engine.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_item.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_rule.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_rule_condition.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_rule_parser.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/eagle_plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/footprint_editor_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/gpcb_plugin.cpp

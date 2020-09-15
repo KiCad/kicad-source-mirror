@@ -39,12 +39,11 @@ class PCB_EDIT_FRAME;
 class DIALOG_DRC;
 class DRC_ITEM;
 class WX_PROGRESS_REPORTER;
+class DRC_ENGINE;
 
 
 class DRC_TOOL : public PCB_TOOL_BASE
 {
-    friend class DIALOG_DRC;
-
 public:
     DRC_TOOL();
     ~DRC_TOOL();
@@ -56,6 +55,8 @@ private:
     PCB_EDIT_FRAME*  m_editFrame;        // The pcb frame editor which owns the board
     BOARD*           m_pcb;
     DIALOG_DRC*      m_drcDialog;
+
+    std::shared_ptr<DRC_ENGINE>            m_drcEngine;
 
     std::vector<std::shared_ptr<DRC_ITEM>> m_unconnected;      // list of unconnected pads
     std::vector<std::shared_ptr<DRC_ITEM>> m_footprints;       // list of footprint warnings

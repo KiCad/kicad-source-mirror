@@ -27,11 +27,9 @@
 #include <class_track.h>
 #include <layers_id_colors_and_visibility.h>
 #include <kiface_i.h>
-//#include <pcbnew.h>
 #include <board_design_settings.h>
-#include <drc/drc.h>
-//#include <widgets/ui_common.h>
-#include <drc/drc_rule.h>
+#include <drc/drc_item.h>
+#include <drc/drc_engine.h>
 #include <settings/parameters.h>
 #include <project/project_file.h>
 #include <advanced_config.h>
@@ -626,7 +624,6 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_TrackWidthList         = aOther.m_TrackWidthList;
     m_ViasDimensionsList     = aOther.m_ViasDimensionsList;
     m_DiffPairDimensionsList = aOther.m_DiffPairDimensionsList;
-    m_DRCRules               = aOther.m_DRCRules;
     m_MicroViasAllowed       = aOther.m_MicroViasAllowed;
     m_BlindBuriedViaAllowed  = aOther.m_BlindBuriedViaAllowed;
     m_CurrentViaType         = aOther.m_CurrentViaType;
@@ -935,21 +932,12 @@ bool BOARD_DESIGN_SETTINGS::SetCurrentNetClass( const wxString& aNetClassName )
 
 int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue()
 {
-    int clearance = GetDefault()->GetClearance();
+    DRC_CONSTRAINT constraint;
 
-    for( const std::pair<const wxString, NETCLASSPTR>& netclass : GetNetClasses().NetClasses() )
-        clearance = std::max( clearance, netclass.second->GetClearance() );
+    m_DRCEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_CLEARANCE, constraint,
+                                       DRCCQ_LARGEST_MINIMUM );
 
-    for( const DRC_RULE* rule : m_DRCRules )
-    {
-        for( const DRC_CONSTRAINT& constraint : rule->m_Constraints )
-        {
-            if( constraint.m_Type == DRC_CONSTRAINT_TYPE_CLEARANCE )
-                clearance = std::max( clearance, constraint.m_Value.Min() );
-        }
-    }
-
-    return clearance;
+    return constraint.Value().HasMin() ? constraint.Value().Min() : 0;
 }
 
 

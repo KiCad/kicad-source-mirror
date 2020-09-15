@@ -30,7 +30,6 @@
 #include <wx/htmllbox.h>
 #include <fctsys.h>
 #include <pcbnew.h>
-#include <drc/drc.h>
 #include <rc_item.h>
 #include <class_marker_pcb.h>
 #include <class_board.h>
