@@ -98,6 +98,9 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
     m_footprintWarningsTreeModel = new RC_TREE_MODEL( m_brdEditor, m_footprintsDataView );
     m_footprintsDataView->AssociateModel( m_footprintWarningsTreeModel );
 
+    if( Kiface().IsSingle() )
+        m_cbTestFootprints->Hide();
+
     m_Notebook->SetSelection( 0 );
 
     // We use a sdbSizer here to get the order right, which is platform-dependent
@@ -119,11 +122,14 @@ DIALOG_DRC::~DIALOG_DRC()
     m_brdEditor->FocusOnItem( nullptr );
 
     PCBNEW_SETTINGS* settings = m_brdEditor->GetPcbNewSettings();
-    settings->m_DrcDialog.refill_zones       = m_cbRefillZones->GetValue();
-    settings->m_DrcDialog.test_track_to_zone = m_cbReportTracksToZonesErrors->GetValue();
+    settings->m_DrcDialog.refill_zones          = m_cbRefillZones->GetValue();
+    settings->m_DrcDialog.test_track_to_zone    = m_cbReportTracksToZonesErrors->GetValue();
     settings->m_DrcDialog.test_all_track_errors = m_cbReportAllTrackErrors->GetValue();
-    settings->m_DrcDialog.test_footprints    = m_cbTestFootprints->GetValue();
-    settings->m_DrcDialog.severities         = m_severities;
+
+    if( !Kiface().IsSingle() )
+        settings->m_DrcDialog.test_footprints   = m_cbTestFootprints->GetValue();
+
+    settings->m_DrcDialog.severities            = m_severities;
 
     m_markerTreeModel->DecRef();
 }
@@ -176,7 +182,9 @@ void DIALOG_DRC::initValues()
     m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );
     m_cbReportTracksToZonesErrors->SetValue( cfg->m_DrcDialog.test_track_to_zone );
     m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_all_track_errors );
-    m_cbTestFootprints->SetValue( cfg->m_DrcDialog.test_footprints );
+
+    if( Kiface().IsSingle() )
+        m_cbTestFootprints->SetValue( cfg->m_DrcDialog.test_footprints );
 
     m_severities = cfg->m_DrcDialog.severities;
     m_markerTreeModel->SetSeverities( m_severities );

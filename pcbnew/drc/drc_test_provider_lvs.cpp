@@ -210,7 +210,8 @@ bool DRC_TEST_PROVIDER_LVS::Run()
     {
         reportPhase( _( "Layout-vs-Schematic checks..." ));
 
-        testFootprints( *m_drcEngine->GetSchematicNetlist() );
+        if( m_drcEngine->GetSchematicNetlist() )
+            testFootprints( *m_drcEngine->GetSchematicNetlist() );
 
         reportRuleStatistics();
     }
