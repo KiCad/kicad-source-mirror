@@ -66,11 +66,17 @@ void DRC_MARKER_FACTORY::SetUnits( EDA_UNITS_T aUnits )
 MARKER_PCB* DRC_MARKER_FACTORY::NewMarker(
         TRACK* aTrack, ZONE_CONTAINER* aConflictZone, int aErrorCode ) const
 {
-    SHAPE_POLY_SET* conflictOutline;
+    SHAPE_POLY_SET* conflictOutline = nullptr;
 
-    if( aConflictZone->IsFilled() )
+    if( !aConflictZone->GetIsKeepout() && aConflictZone->IsFilled() )
+    {
         conflictOutline = const_cast<SHAPE_POLY_SET*>( &aConflictZone->GetFilledPolysList() );
-    else
+
+        if( !conflictOutline ->OutlineCount() )
+            conflictOutline = nullptr;
+    }
+
+    if( !conflictOutline )
         conflictOutline = aConflictZone->Outline();
 
     wxPoint markerPos;
