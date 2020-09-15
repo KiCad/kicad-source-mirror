@@ -84,7 +84,7 @@ wxString GetKicadLockFilePath()
         lockpath.AppendDir( ".cache" );
     }
 
-    lockpath.AppendDir( wxString::Format( "kicad_v%d", GetMajorMinorVersion() ) );
+    lockpath.AppendDir( wxString::Format( "kicad_v%s", GetMajorMinorVersion() ) );
 #endif
 
 #if defined( __WXMAC__ ) || defined( __UNIX__ )
