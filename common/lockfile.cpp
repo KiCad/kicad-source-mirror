@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <build_version.h>
 #include <lockfile.h>
 
 #include <wx/filename.h>
@@ -83,7 +84,7 @@ wxString GetKicadLockFilePath()
         lockpath.AppendDir( ".cache" );
     }
 
-    lockpath.AppendDir( "kicad" );
+    lockpath.AppendDir( wxString::Format( "kicad_v%d", GetMajorMinorVersion() ) );
 #endif
 
 #if defined( __WXMAC__ ) || defined( __UNIX__ )
