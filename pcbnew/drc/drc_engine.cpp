@@ -405,13 +405,15 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aTestTracksAgainstZones,
     m_reportAllTrackErrors = aReportAllTrackErrors;
     m_testFootprints = aTestFootprints;
 
-    int phases = 0;
-
-    for( DRC_TEST_PROVIDER* provider : m_testProviders )
-        phases += provider->GetNumPhases();
-
     if( m_progressReporter )
+    {
+        int phases = 0;
+
+        for( DRC_TEST_PROVIDER* provider : m_testProviders )
+            phases += provider->GetNumPhases();
+
         m_progressReporter->AddPhases( phases );
+    }
 
     for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
     {

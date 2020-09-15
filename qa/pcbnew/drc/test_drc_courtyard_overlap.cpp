@@ -471,6 +471,7 @@ static void DoCourtyardOverlapTest( const COURTYARD_OVERLAP_TEST_CASE& aCase,
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
             {
                 if(    aItem->GetErrorCode() == DRCE_OVERLAPPING_FOOTPRINTS
+                    || aItem->GetErrorCode() == DRCE_MALFORMED_COURTYARD
                     || aItem->GetErrorCode() == DRCE_MISSING_COURTYARD )
                 {
                     markers.push_back( std::make_unique<MARKER_PCB>( aItem, aPos ) );
