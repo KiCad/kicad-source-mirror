@@ -799,16 +799,12 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
                     if( !hasHole )
                         continue;
 
-                    // we use the hole diameter to calculate the seg count.
-                    // for round holes, drillsize.x == drillsize.y
-                    // for slots, the diameter is the smaller of (drillsize.x, drillsize.y)
-                    int    copperThickness = m_boardAdapter.GetCopperThicknessBIU();
-                    int    radius = std::min( drillsize.x, drillsize.y ) / 2 + copperThickness;
+                    const int copperThickness = m_boardAdapter.GetCopperThicknessBIU();
 
                     pad->TransformHoleWithClearanceToPolygon( tht_outer_holes_poly,
-                                                              copperThickness + radius );
-
-                    pad->TransformHoleWithClearanceToPolygon( tht_inner_holes_poly, radius );
+                                                              copperThickness, ARC_LOW_DEF );
+                    pad->TransformHoleWithClearanceToPolygon( tht_inner_holes_poly,
+                                                              0, ARC_LOW_DEF );
                 }
             }
         }
