@@ -51,11 +51,11 @@ int g_matchModeForUpdateSelected   = ID_MATCH_FP_SELECTED;
 int g_matchModeForExchange         = ID_MATCH_FP_REF;
 int g_matchModeForExchangeSelected = ID_MATCH_FP_SELECTED;
 
-bool g_removeExtraTextItems  = false;
-bool g_resetTextItemLayers   = false;
-bool g_resetTextItemEffects  = false;
-bool g_resetFabricationAttrs = false;
-bool g_reset3DModels         = false;
+bool g_removeExtraTextItems[2]  = { false, false };
+bool g_resetTextItemLayers[2]   = { false, true };
+bool g_resetTextItemEffects[2]  = { false, true };
+bool g_resetFabricationAttrs[2] = { false, true };
+bool g_reset3DModels[2]         = { false, true };
 
 
 DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, MODULE* aModule,
@@ -68,6 +68,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
 {
     wxString title = updateMode ? _( "Update Footprints from Library" ) : _( "Change Footprints" );
     wxString verb  = updateMode ? _( "Update" )                         : _( "Change" );
+    wxString reset = updateMode ? _( "Reset" )                          : _( "Update" );
     wxString label;
 
     SetTitle( title );
@@ -137,11 +138,23 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     default:                                                    break;
     }
 
-    m_removeExtraBox->SetValue( g_removeExtraTextItems );
-    m_resetTextItemLayers->SetValue( g_resetTextItemLayers );
-    m_resetTextItemEffects->SetValue( g_resetTextItemEffects );
-    m_resetFabricationAttrs->SetValue( g_resetFabricationAttrs );
-    m_reset3DModels->SetValue( g_reset3DModels );
+    label.Printf( m_resetTextItemLayers->GetLabel(), reset );
+    m_resetTextItemLayers->SetLabel( label );
+
+    label.Printf( m_resetTextItemEffects->GetLabel(), reset );
+    m_resetTextItemEffects->SetLabel( label );
+
+    label.Printf( m_resetFabricationAttrs->GetLabel(), reset );
+    m_resetFabricationAttrs->SetLabel( label );
+
+    label.Printf( m_reset3DModels->GetLabel(), reset );
+    m_reset3DModels->SetLabel( label );
+
+    m_removeExtraBox->SetValue( g_removeExtraTextItems[ m_updateMode ? 0 : 1 ] );
+    m_resetTextItemLayers->SetValue( g_resetTextItemLayers[ m_updateMode ? 0 : 1 ] );
+    m_resetTextItemEffects->SetValue( g_resetTextItemEffects[ m_updateMode ? 0 : 1 ] );
+    m_resetFabricationAttrs->SetValue( g_resetFabricationAttrs[ m_updateMode ? 0 : 1 ] );
+    m_reset3DModels->SetValue( g_reset3DModels[ m_updateMode ? 0 : 1 ] );
 
     m_MessageWindow->SetLazyUpdate( true );
 
@@ -162,11 +175,11 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
 
 DIALOG_EXCHANGE_FOOTPRINTS::~DIALOG_EXCHANGE_FOOTPRINTS()
 {
-    g_removeExtraTextItems = m_removeExtraBox->GetValue();
-    g_resetTextItemLayers = m_resetTextItemLayers->GetValue();
-    g_resetTextItemEffects = m_resetTextItemEffects->GetValue();
-    g_resetFabricationAttrs = m_resetFabricationAttrs->GetValue();
-    g_reset3DModels = m_reset3DModels->GetValue();
+    g_removeExtraTextItems[ m_updateMode ? 0 : 1 ]  = m_removeExtraBox->GetValue();
+    g_resetTextItemLayers[ m_updateMode ? 0 : 1 ]   = m_resetTextItemLayers->GetValue();
+    g_resetTextItemEffects[ m_updateMode ? 0 : 1 ]  = m_resetTextItemEffects->GetValue();
+    g_resetFabricationAttrs[ m_updateMode ? 0 : 1 ] = m_resetFabricationAttrs->GetValue();
+    g_reset3DModels[ m_updateMode ? 0 : 1 ]         = m_reset3DModels->GetValue();
 }
 
 

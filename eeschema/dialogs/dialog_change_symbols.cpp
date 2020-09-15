@@ -52,7 +52,9 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
 {
     wxASSERT( aParent );
     wxString label;
-    wxString verb  = ( m_mode == MODE::UPDATE ) ? _( "Update" ) : _( "Change" );
+    wxString verb  =   ( m_mode == MODE::UPDATE ) ? _( "Update" ) :  _( "Change" );
+    wxString reset =   ( m_mode == MODE::UPDATE ) ? _( "Reset" ) :   _( "Update" );
+    wxString library = ( m_mode == MODE::UPDATE ) ? _( "library" ) : _( "new" );
 
     label.Printf( m_matchAll->GetLabel(), verb );
 
@@ -110,6 +112,21 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
         else
             m_matchByReference->SetValue( true );
     }
+
+    label.Printf( m_removeExtraBox->GetLabel(), library );
+    m_removeExtraBox->SetLabel( label );
+
+    label.Printf( m_resetEmptyFields->GetLabel(), library );
+    m_resetEmptyFields->SetLabel( label );
+
+    label.Printf( m_resetFieldVisibilities->GetLabel(), reset );
+    m_resetFieldVisibilities->SetLabel( label );
+
+    label.Printf( m_resetFieldEffects->GetLabel(), reset );
+    m_resetFieldEffects->SetLabel( label );
+
+    label.Printf( m_resetFieldPositions->GetLabel(), reset );
+    m_resetFieldPositions->SetLabel( label );
 
     m_removeExtraBox->SetValue( g_removeExtraFields );
     m_resetEmptyFields->SetValue( g_resetEmptyFields );
