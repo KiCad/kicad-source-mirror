@@ -82,7 +82,8 @@ bool DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSou
                                          first,
                                          rest );
 
-        aReporter->Report( msg, RPT_SEVERITY_ERROR );
+        if( aReporter )
+            aReporter->Report( msg, RPT_SEVERITY_ERROR );
     };
 
     PCB_EXPR_COMPILER compiler;
