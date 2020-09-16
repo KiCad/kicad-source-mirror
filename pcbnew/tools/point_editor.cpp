@@ -248,11 +248,11 @@ public:
         {
             const ALIGNED_DIMENSION* dimension = static_cast<const ALIGNED_DIMENSION*>( aItem );
 
-            points->AddPoint( dimension->GetCrossbarStart() );
-            points->AddPoint( dimension->GetCrossbarEnd() );
             points->AddPoint( dimension->GetStart() );
             points->AddPoint( dimension->GetEnd() );
             points->AddPoint( dimension->Text().GetPosition() );
+            points->AddPoint( dimension->GetCrossbarStart() );
+            points->AddPoint( dimension->GetCrossbarEnd() );
 
             // Dimension height setting - edit points should move only along the feature lines
             points->Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( points->Point( DIM_CROSSBARSTART ),
