@@ -44,7 +44,8 @@
 class DRC_TEST_PROVIDER_MISC : public DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_MISC()
+    DRC_TEST_PROVIDER_MISC() :
+        m_board( nullptr )
     {
         m_isRuleDriven = false;
     }

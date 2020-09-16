@@ -65,7 +65,9 @@ LIB_TABLE_ROW* new_clone( const LIB_TABLE_ROW& aRow );
 class LIB_TABLE_ROW : boost::noncopyable
 {
 public:
-    LIB_TABLE_ROW()
+    LIB_TABLE_ROW() :
+        enabled( true ),
+        m_loaded( false )
     {
     }
 
@@ -220,8 +222,8 @@ private:
     wxString          options;
     wxString          description;
 
-    bool              enabled = true;     ///< Whether the LIB_TABLE_ROW is enabled
-    bool              m_loaded;           ///< Whether the LIB_TABLE_ROW is loaded
+    bool              enabled  = true;    ///< Whether the LIB_TABLE_ROW is enabled
+    bool              m_loaded = false;   ///< Whether the LIB_TABLE_ROW is loaded
 
     std::unique_ptr< PROPERTIES > properties;
 };

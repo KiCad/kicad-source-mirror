@@ -41,11 +41,13 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aUse
         DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize,
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
         m_title( aTitle ),
+        m_dirty( false ),
         m_errorCtrl( nullptr ),
         m_errorRow( 0 ),
         m_errorCol( 0 ),
         m_auxiliaryButton( nullptr ),
-        m_resetButton( nullptr )
+        m_resetButton( nullptr ),
+        m_cancelButton( nullptr )
 {
     auto mainSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer( mainSizer );

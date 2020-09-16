@@ -41,6 +41,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
         m_Env(),
         m_Input(),
         m_Graphics(),
+        m_Session(),
         m_System()
 {
     // This only effect the first time KiCad is run.  The user's setting will be used for all

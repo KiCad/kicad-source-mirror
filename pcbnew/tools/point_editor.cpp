@@ -306,7 +306,8 @@ POINT_EDITOR::POINT_EDITOR() :
     m_editedPoint( NULL ),
     m_original( VECTOR2I( 0, 0 ) ),
     m_altConstrainer( VECTOR2I( 0, 0 ) ),
-    m_refill( false )
+    m_refill( false ),
+    m_altEditMethod( false )
 {
 }
 
