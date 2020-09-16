@@ -122,9 +122,7 @@ std::unique_ptr<BOARD> createBoard( const std::vector<std::vector<ItemType>>& sp
             for( ItemType item : groupSpec )
             {
                 used.set( static_cast<size_t>( item ) );
-
-                if( item != REMOVED_TEXT || item != REMOVED_GROUP )
-                    group->AddItem( items[item] );
+                group->AddItem( items[item] );
             }
 
             BOOST_CHECK_EQUAL( group->GetItems().size(), groupSpec.size() );
