@@ -84,14 +84,15 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetEffectiveNetclass() const
 int BOARD_CONNECTED_ITEM::GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem,
                                         wxString* aSource ) const
 {
-    // No clearance if "this" is not (yet) linked to a board therefore no available netclass
-    if( !GetBoard() )
-        return 0;
+    DRC_CONSTRAINT constraint;
 
-    std::shared_ptr<DRC_ENGINE> drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
+    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
+    {
+        BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
 
-    DRC_CONSTRAINT constraint = drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                                              this, aItem, aLayer );
+        constraint = bds.m_DRCEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, this,
+                                                         aItem, aLayer );
+    }
 
     if( constraint.Value().HasMin() )
     {

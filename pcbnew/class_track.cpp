@@ -78,37 +78,28 @@ EDA_ITEM* VIA::Clone() const
 
 wxString VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    wxString format;
-    BOARD*   board = GetBoard();
+    wxString viaType;
 
     switch( GetViaType() )
     {
-    case VIATYPE::BLIND_BURIED:
-        format = _( "Blind/Buried Via %s %s on %s - %s" );
-        break;
-    case VIATYPE::MICROVIA:
-        format = _( "Micro Via %s %s on %s - %s" );
-        break;
-    // else say nothing about normal (through) vias
-    default:
-        format = _( "Via %s %s on %s - %s" );
-        break;
+    case VIATYPE::BLIND_BURIED: viaType = _( "Blind/Buried" ) + " "; break;
+    case VIATYPE::MICROVIA:     viaType = _( "Micro" ) + " ";        break;
+    default:                    viaType = _( "" );                   break;
     }
 
-    if( board )
-    {
-        // say which layers, only two for now
-        PCB_LAYER_ID topLayer;
-        PCB_LAYER_ID botLayer;
-        LayerPair( &topLayer, &botLayer );
-        return wxString::Format( format.GetData(), MessageTextFromValue( aUnits, m_Width ),
-                GetNetnameMsg(), board->GetLayerName( topLayer ), board->GetLayerName( botLayer ) );
-    }
-    else
-    {
-        return wxString::Format( format.GetData(), MessageTextFromValue( aUnits, m_Width ),
-                GetNetnameMsg(), wxT( "??" ), wxT( "??" ) );
-    }
+    // say which layers, only two for now
+    PCB_LAYER_ID topLayer;
+    PCB_LAYER_ID botLayer;
+    BOARD*       board = GetBoard();
+
+    LayerPair( &topLayer, &botLayer );
+
+    return wxString::Format( _( "%s Via %s %s on %s - %s" ),
+                             viaType,
+                             MessageTextFromValue( aUnits, m_Width ),
+                             GetNetnameMsg(),
+                             board ? board->GetLayerName( topLayer ) : wxT( "??" ),
+                             board ? board->GetLayerName( botLayer ) : wxT( "??" ) );
 }
 
 
@@ -127,18 +118,18 @@ int TRACK::GetLocalClearance( wxString* aSource ) const
 
 void TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
 {
-    // No constraints if "this" is not (yet) linked to a board
-    if( !GetBoard() )
+    *aMin = 0;
+    *aMax = INT_MAX;
+
+    DRC_CONSTRAINT constraint;
+
+    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
     {
-        *aMin = 0;
-        *aMax = INT_MAX;
-        return;
+        BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
+
+        constraint = bds.m_DRCEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_TRACK_WIDTH, this,
+                                                         nullptr, GetLayer() );
     }
-
-    std::shared_ptr<DRC_ENGINE> drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
-
-    DRC_CONSTRAINT constraint = drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_TRACK_WIDTH,
-                                                              this, nullptr, GetLayer() );
 
     if( constraint.Value().HasMin() || constraint.Value().HasMax() )
     {
@@ -156,10 +147,6 @@ void TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
 
 int VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
-    // No constraints if "this" is not (yet) linked to a board
-    if( !GetBoard() )
-        return 0;
-
     if( !IsPadOnLayer( aLayer ) )
     {
         if( aSource )
@@ -168,10 +155,15 @@ int VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
         return 0;
     }
 
-    std::shared_ptr<DRC_ENGINE> drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
+    DRC_CONSTRAINT constraint;
 
-    DRC_CONSTRAINT constraint = drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH,
-                                                              this, nullptr, aLayer );
+    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
+    {
+        BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
+
+        constraint = bds.m_DRCEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH, this,
+                                                         nullptr, aLayer );
+    }
 
     if( constraint.Value().HasMin() )
     {
