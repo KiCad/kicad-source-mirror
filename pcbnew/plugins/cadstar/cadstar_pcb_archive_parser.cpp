@@ -677,15 +677,20 @@ void CADSTAR_PCB_ARCHIVE_PARSER::HEADER::Parse( XNODE* aNode )
             Format.Parse( cNode );
 
             if( Format.Type != wxT( "LAYOUT" ) )
+            {
                 if( Format.Type == wxT( "LIBRARY" ) )
-                    THROW_IO_ERROR(
-                            "The selected file is a CADSTAR Library file (as opposed to a Layout "
-                            "file). CADSTAR libraries cannot yet be imported into KiCad." );
+                {
+                    THROW_IO_ERROR( "The selected file is a CADSTAR Library file (as opposed to"
+                                    " a Layout file). CADSTAR libraries cannot yet be imported"
+                                    " into KiCad." );
+                }
                 else
-                    THROW_IO_ERROR(
-                            "The selected file is an unknown CADSTAR format so cannot be "
-                            "imported into KiCad." );
-            
+                {
+                    THROW_IO_ERROR( "The selected file is an unknown CADSTAR format so cannot be "
+                                    "imported into KiCad." );
+                }
+            }
+
         }
         else if( nodeName == wxT( "JOBFILE" ) )
             JobFile = GetXmlAttributeIDString( cNode, 0 );
@@ -1741,7 +1746,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PAD::Parse( XNODE* aNode )
 
     ID        = GetXmlAttributeIDLong( aNode, 0 );
     PadCodeID = GetXmlAttributeIDString( aNode, 2 );
-    Side      = GetPadSide( GetXmlAttributeIDString( aNode, 3 ) );    
+    Side      = GetPadSide( GetXmlAttributeIDString( aNode, 3 ) );
 
     XNODE*   cNode    = aNode->GetChildren();
     wxString location = wxString::Format( "PAD %d", ID );

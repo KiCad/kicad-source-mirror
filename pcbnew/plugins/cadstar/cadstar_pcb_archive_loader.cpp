@@ -115,18 +115,18 @@ void CADSTAR_PCB_ARCHIVE_LOADER::logBoardStackupWarning(
 
 void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 {
-    std::map<LAYER_ID, LAYER>&       cpaLayers              = Assignments.Layerdefs.Layers;
-    std::map<MATERIAL_ID, MATERIAL>& cpaMaterials           = Assignments.Layerdefs.Materials;
-    std::vector<LAYER_ID>&           cpaLayerStack          = Assignments.Layerdefs.LayerStack;
-    unsigned                         numElecAndPowerLayers  = 0;
-    BOARD_DESIGN_SETTINGS&           designSettings         = mBoard->GetDesignSettings();
-    BOARD_STACKUP&                   stackup                = designSettings.GetStackupDescriptor();
-    int                              noOfKiCadStackupLayers = 0;
+    std::map<LAYER_ID, LAYER>&       cpaLayers                = Assignments.Layerdefs.Layers;
+    std::map<MATERIAL_ID, MATERIAL>& cpaMaterials             = Assignments.Layerdefs.Materials;
+    std::vector<LAYER_ID>&           cpaLayerStack            = Assignments.Layerdefs.LayerStack;
+    unsigned                         numElecAndPowerLayers    = 0;
+    BOARD_DESIGN_SETTINGS&           designSettings           = mBoard->GetDesignSettings();
+    BOARD_STACKUP&                   stackup                  = designSettings.GetStackupDescriptor();
+    int                              noOfKiCadStackupLayers   = 0;
     int                              lastElectricalLayerIndex = 0;
     int                              dielectricSublayer       = 0;
     int                              numDielectricLayers      = 0;
     bool                             prevWasDielectric        = false;
-    BOARD_STACKUP_ITEM*              tempKiCadLayer;
+    BOARD_STACKUP_ITEM*              tempKiCadLayer           = nullptr;
     std::vector<PCB_LAYER_ID>        layerIDs;
 
     //Remove all layers except required ones
@@ -164,9 +164,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         case LAYER_TYPE::ASSCOMPCOPP:
         case LAYER_TYPE::NOLAYER:
             //Shouldn't be here if CPA file is correctly parsed and not corrupt
-            THROW_IO_ERROR( wxString::Format(
-                    _( "Unexpected layer '%s' in layer stack." ), curLayer.Name ) );
-            continue;
+            THROW_IO_ERROR( wxString::Format( _( "Unexpected layer '%s' in layer stack." ),
+                                              curLayer.Name ) );
+
         case LAYER_TYPE::JUMPERLAYER:
             copperType     = LAYER_T::LT_JUMPER;
             kicadLayerID   = getKiCadCopperLayerID( ++numElecAndPowerLayers );
@@ -678,12 +678,16 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF& aComponent, MODU
         if( csPadcode.DrillDiameter != UNDEFINED_VALUE )
         {
             if( csPadcode.SlotLength != UNDEFINED_VALUE )
+            {
                 pad->SetDrillSize( { getKiCadLength( csPadcode.DrillDiameter ),
-                        getKiCadLength( (long long) csPadcode.DrillOversize
-                                        + (long long) csPadcode.DrillDiameter ) } );
+                                     getKiCadLength( (long long) csPadcode.DrillOversize
+                                      + (long long) csPadcode.DrillDiameter ) } );
+            }
             else
+            {
                 pad->SetDrillSize( { getKiCadLength( csPadcode.DrillDiameter ),
-                        getKiCadLength( csPadcode.DrillDiameter ) } );
+                                     getKiCadLength( csPadcode.DrillDiameter ) } );
+            }
         }
         //TODO handle csPadcode.Reassigns when KiCad supports full padstacks
     }
@@ -713,17 +717,19 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadGroups()
         if( !csGroup.GroupID.IsEmpty() )
         {
             if( mGroupMap.find( csGroup.ID ) == mGroupMap.end() )
+            {
                 THROW_IO_ERROR( wxString::Format(
                         _( "The file appears to be corrupt. Unable to find group ID %s "
                            "in the group definitions." ),
                         csGroup.ID ) );
-
+            }
             else if( mGroupMap.find( csGroup.ID ) == mGroupMap.end() )
+            {
                 THROW_IO_ERROR( wxString::Format(
                         _( "The file appears to be corrupt. Unable to find sub group %s "
                            "in the group map (parent group ID=%s, Name=%s)." ),
                         csGroup.GroupID, csGroup.ID, csGroup.Name ) );
-
+            }
             else
             {
                 PCB_GROUP* kiCadGroup = mGroupMap.at( csGroup.ID );
@@ -1251,7 +1257,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
         wxString netnameForErrorReporting = net.Name;
 
         if( netnameForErrorReporting.IsEmpty() )
-            netnameForErrorReporting = "$" + net.SignalNum;
+            netnameForErrorReporting = wxString::Format( "$%ld", net.SignalNum );
 
         for( NET::CONNECTION connection : net.Connections )
         {
@@ -1689,7 +1695,9 @@ DRAWSEGMENT* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& 
     case VERTEX_TYPE::POINT:
 
         if( isModule( aContainer ) )
-            ds = new EDGE_MODULE( (MODULE*) aContainer, STROKE_T::S_SEGMENT );
+        {
+            ds = new EDGE_MODULE( static_cast<MODULE*>( aContainer ), STROKE_T::S_SEGMENT );
+        }
         else
         {
             ds = new DRAWSEGMENT( aContainer );
@@ -1703,11 +1711,15 @@ DRAWSEGMENT* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& 
     case VERTEX_TYPE::CLOCKWISE_SEMICIRCLE:
     case VERTEX_TYPE::CLOCKWISE_ARC:
         cw = true;
+        KI_FALLTHROUGH;
+
     case VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE:
     case VERTEX_TYPE::ANTICLOCKWISE_ARC:
 
         if( isModule( aContainer ) )
+        {
             ds = new EDGE_MODULE( (MODULE*) aContainer, STROKE_T::S_ARC );
+        }
         else
         {
             ds = new DRAWSEGMENT( aContainer );
@@ -1727,6 +1739,7 @@ DRAWSEGMENT* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& 
             ds->SetAngle( NormalizeAnglePos( arcAngle ) );
         else
             ds->SetAngle( NormalizeAngleNeg( arcAngle ) );
+
         break;
     }
 
@@ -1748,7 +1761,7 @@ DRAWSEGMENT* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& 
         ds->Move( aMoveVector );
 
     if( isModule( aContainer ) && ds != nullptr )
-        ( (EDGE_MODULE*) ds )->SetLocalCoord();
+        static_cast<EDGE_MODULE*>( ds )->SetLocalCoord();
 
     if( !aCadstarGroupID.IsEmpty() )
         addToGroup( aCadstarGroupID, ds );
@@ -1768,16 +1781,16 @@ ZONE_CONTAINER* CADSTAR_PCB_ARCHIVE_LOADER::getZoneFromCadstarShape(
         zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL );
     }
     else
+    {
         zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
+    }
 
     SHAPE_POLY_SET polygon = getPolySetFromCadstarShape( aCadstarShape, aLineThickness );
 
     zone->AddPolygon( polygon.COutline( 0 ) );
 
     for( int i = 0; i < polygon.HoleCount( 0 ); i++ )
-    {
         zone->AddPolygon( polygon.CHole( 0, i ) );
-    }
 
     return zone;
 }
