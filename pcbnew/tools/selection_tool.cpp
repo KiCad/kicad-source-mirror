@@ -73,7 +73,8 @@ public:
 
         Add( PCB_ACTIONS::selectConnection );
         Add( PCB_ACTIONS::selectNet );
-        Add( PCB_ACTIONS::deselectNet );
+        // This could be enabled if we have better logic for picking the target net with the mouse
+        // Add( PCB_ACTIONS::deselectNet );
         Add( PCB_ACTIONS::selectSameSheet );
     }
 
