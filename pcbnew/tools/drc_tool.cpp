@@ -36,7 +36,7 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_results_provider.h>
 #include <netlist_reader/pcb_netlist.h>
-
+#include <dialogs/panel_setup_rules_base.h>
 
 DRC_TOOL::DRC_TOOL() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
@@ -59,7 +59,7 @@ void DRC_TOOL::Reset( RESET_REASON aReason )
     if( m_pcb != m_editFrame->GetBoard() )
     {
         if( m_drcDialog )
-            DestroyDRCDialog( wxID_OK );
+            DestroyDRCDialog();
 
         m_pcb = m_editFrame->GetBoard();
         m_drcEngine = m_pcb->GetDesignSettings().m_DRCEngine;
@@ -118,7 +118,7 @@ bool DRC_TOOL::IsDRCDialogShown()
 }
 
 
-void DRC_TOOL::DestroyDRCDialog( int aReason )
+void DRC_TOOL::DestroyDRCDialog()
 {
     if( m_drcDialog )
     {
@@ -134,6 +134,25 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksA
     ZONE_FILLER_TOOL* zoneFiller = m_toolMgr->GetTool<ZONE_FILLER_TOOL>();
     BOARD_COMMIT      commit( m_editFrame );
     NETLIST           netlist;
+    wxWindowDisabler  disabler( /* disable everything except: */ m_drcDialog );
+
+    // This is not the time to have stale or buggy rules.  Ensure they're up-to-date
+    // and that they at least parse.
+    try
+    {
+        m_drcEngine->InitEngine( m_editFrame->Prj().AbsolutePath( "drc-rules" ) );
+    }
+    catch( PARSE_ERROR& pe )
+    {
+        // Shouldn't be necessary, but we get into all kinds of wxWidgets window ordering
+        // issues (on at least OSX) if we don't.
+        DestroyDRCDialog();
+
+        m_editFrame->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
+                                           pe.lineNumber, pe.byteIndex );
+
+        return;
+    }
 
     if( aRefillZones )
     {
@@ -148,9 +167,6 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksA
         zoneFiller->CheckAllZones( m_drcDialog, aProgressReporter );
     }
 
-    // Re-initialize the DRC_ENGINE to make doubly sure everything is up-to-date
-    //
-    m_drcEngine->InitEngine( m_editFrame->Prj().AbsolutePath( "drc-rules" ) );
     m_drcEngine->SetWorksheet( m_editFrame->GetCanvas()->GetWorksheet() );
 
     if( aTestFootprints && !Kiface().IsSingle() )
@@ -191,6 +207,11 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksA
 
     m_drcEngine->SetProgressReporter( nullptr );
     m_drcEngine->ClearViolationHandler();
+
+    m_drcDialog->SetDrcRun();
+
+    if( !netlist.IsEmpty() )
+        m_drcDialog->SetFootprintTestsRun();
 
     commit.Push( _( "DRC" ), false );
 

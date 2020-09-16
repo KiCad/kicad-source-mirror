@@ -260,11 +260,11 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
 }
 
 
-bool DRC_ENGINE::LoadRules( const wxFileName& aPath )
+/**
+ * @throws PARSE_ERROR
+ */
+void DRC_ENGINE::LoadRules( const wxFileName& aPath )
 {
-    NULL_REPORTER nullReporter;
-    REPORTER*     reporter = m_reporter ? m_reporter : &nullReporter;
-
     if( aPath.FileExists() )
     {
         m_ruleConditions.clear();
@@ -276,8 +276,8 @@ bool DRC_ENGINE::LoadRules( const wxFileName& aPath )
         {
             try
             {
-                DRC_RULES_PARSER parser( m_board, fp, aPath.GetFullPath() );
-                parser.Parse( m_rules, reporter );
+                DRC_RULES_PARSER parser( fp, aPath.GetFullPath() );
+                parser.Parse( m_rules, m_reporter );
             }
             catch( PARSE_ERROR& pe )
             {
@@ -285,17 +285,10 @@ bool DRC_ENGINE::LoadRules( const wxFileName& aPath )
                 m_ruleConditions.clear();
                 m_rules.clear();
 
-                // JEY TODO
-                //wxSafeYield( m_editFrame );
-                //m_editFrame->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
-                //                                   pe.lineNumber, pe.byteIndex );
-
-                return false;
+                throw pe;
             }
         }
     }
-
-    return true;
 }
 
 
@@ -375,6 +368,9 @@ bool DRC_ENGINE::CompileRules()
 }
 
 
+/**
+ * @throws PARSE_ERROR
+ */
 void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
 {
     m_testProviders = DRC_TEST_PROVIDER_REGISTRY::Instance().GetTestProviders();
@@ -442,6 +438,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
     const BOARD_CONNECTED_ITEM* connectedA = dynamic_cast<const BOARD_CONNECTED_ITEM*>( a );
     const BOARD_CONNECTED_ITEM* connectedB = dynamic_cast<const BOARD_CONNECTED_ITEM*>( b );
+    const DRC_CONSTRAINT*       constraintRef = nullptr;
+    bool                        implicit = false;
 
     // Local overrides take precedence
     if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
@@ -477,80 +475,83 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         }
     }
 
-    std::vector<CONSTRAINT_WITH_CONDITIONS*>* ruleset = m_constraintMap[ aConstraintId ];
-
-    const DRC_CONSTRAINT* constraintRef = nullptr;
-    bool                  implicit = false;
-
-    // Last matching rule wins, so process in reverse order
-    for( int ii = (int) ruleset->size() - 1; ii >= 0; --ii )
+    if( m_constraintMap.count( aConstraintId ) )
     {
-        wxString msg;
-        const CONSTRAINT_WITH_CONDITIONS* rcons = ruleset->at( ii );
-        implicit = rcons->parentRule && rcons->parentRule->m_Implicit;
+        std::vector<CONSTRAINT_WITH_CONDITIONS*>* ruleset = m_constraintMap[ aConstraintId ];
 
-        REPORT( "" )
-
-        if( implicit )
+        // Last matching rule wins, so process in reverse order
+        for( int ii = (int) ruleset->size() - 1; ii >= 0; --ii )
         {
-            msg = wxString::Format( _( "Checking %s;" ),
-                                    rcons->parentRule->m_Name );
-        }
-        else
-        {
-            msg = wxString::Format( _( "Checking rule %s;"),
-                                    rcons->parentRule->m_Name );
-        }
+            wxString msg;
+            const CONSTRAINT_WITH_CONDITIONS* rcons = ruleset->at( ii );
+            implicit = rcons->parentRule && rcons->parentRule->m_Implicit;
 
-        if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
-        {
-            int clearance = rcons->constraint.m_Value.Min();
+            REPORT( "" )
 
-            msg += " ";
-            msg += wxString::Format( _( "clearance: %s." ),
-                                     MessageTextFromValue( UNITS, clearance, true ) );
-        }
-
-        REPORT( msg );
-
-        if( aLayer != UNDEFINED_LAYER && !rcons->layerTest.test( aLayer ) )
-        {
-            REPORT( wxString::Format( _( "Rule layer \"%s\" not matched." ),
-                                      rcons->parentRule->m_LayerSource ) )
-            REPORT( "Rule not applied." )
-
-            continue;
-        }
-
-        if( !rcons->condition || rcons->condition->GetExpression().IsEmpty() )
-        {
-            REPORT( implicit ? _( "Unconditional constraint applied." )
-                             : _( "Unconditional rule applied." ) )
-
-            constraintRef = &rcons->constraint;
-            break;
-        }
-        else
-        {
-            // Don't report on implicit rule conditions; they're synthetic.
-            if( !implicit )
+            if( implicit )
             {
-                REPORT( wxString::Format( _( "Checking rule condition \"%s\"." ),
-                                          rcons->condition->GetExpression() ) )
+                msg = wxString::Format( _( "Checking %s;" ),
+                                        rcons->constraint.GetName() );
+            }
+            else
+            {
+                msg = wxString::Format( _( "Checking rule %s;"),
+                                        rcons->constraint.GetName() );
             }
 
-            if( rcons->condition->EvaluateFor( a, b, aLayer, aReporter ) )
+            if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
             {
-                REPORT( implicit ? _( "Constraint applicable." )
-                                 : _( "Rule applied." ) )
+                int clearance = rcons->constraint.m_Value.Min();
+
+                msg += " ";
+                msg += wxString::Format( _( "clearance: %s." ),
+                                         MessageTextFromValue( UNITS, clearance, true ) );
+            }
+
+            REPORT( msg );
+
+            if( aLayer != UNDEFINED_LAYER && !rcons->layerTest.test( aLayer ) )
+            {
+                if( rcons->parentRule )
+                {
+                    REPORT( wxString::Format( _( "Rule layer \"%s\" not matched." ),
+                                              rcons->parentRule->m_LayerSource ) )
+                    REPORT( "Rule not applied." )
+                }
+
+                continue;
+            }
+
+            if( !rcons->condition || rcons->condition->GetExpression().IsEmpty() )
+            {
+                REPORT( implicit ? _( "Unconditional constraint applied." )
+                                 : _( "Unconditional rule applied." ) )
 
                 constraintRef = &rcons->constraint;
                 break;
             }
             else
             {
-                REPORT( implicit ? _( "Membership not satisfied; constraint not applicable." )
-                                 : _( "Condition not satisfied; rule not applied." ) )
+                // Don't report on implicit rule conditions; they're synthetic.
+                if( !implicit )
+                {
+                    REPORT( wxString::Format( _( "Checking rule condition \"%s\"." ),
+                                              rcons->condition->GetExpression() ) )
+                }
+
+                if( rcons->condition->EvaluateFor( a, b, aLayer, aReporter ) )
+                {
+                    REPORT( implicit ? _( "Constraint applicable." )
+                                     : _( "Rule applied." ) )
+
+                    constraintRef = &rcons->constraint;
+                    break;
+                }
+                else
+                {
+                    REPORT( implicit ? _( "Membership not satisfied; constraint not applicable." )
+                                     : _( "Condition not satisfied; rule not applied." ) )
+                }
             }
         }
     }
@@ -695,8 +696,11 @@ std::vector<DRC_CONSTRAINT> DRC_ENGINE::QueryConstraintsById( DRC_CONSTRAINT_TYP
 {
     std::vector<DRC_CONSTRAINT> rv;
 
-    for ( CONSTRAINT_WITH_CONDITIONS* c : *m_constraintMap[constraintID] )
-        rv.push_back( c->constraint );
+    if( m_constraintMap.count( constraintID ) )
+    {
+        for ( CONSTRAINT_WITH_CONDITIONS* c : *m_constraintMap[ constraintID ] )
+            rv.push_back( c->constraint );
+    }
 
     return rv;
 }
@@ -705,7 +709,10 @@ std::vector<DRC_CONSTRAINT> DRC_ENGINE::QueryConstraintsById( DRC_CONSTRAINT_TYP
 bool DRC_ENGINE::HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T constraintID )
 {
     //drc_dbg(10,"hascorrect id %d size %d\n", ruleID,  m_ruleMap[ruleID]->sortedRules.size( ) );
-    return m_constraintMap[constraintID]->size() != 0;
+    if( m_constraintMap.count( constraintID ) )
+        return m_constraintMap[ constraintID ]->size() > 0;
+
+    return false;
 }
 
 

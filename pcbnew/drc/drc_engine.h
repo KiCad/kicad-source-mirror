@@ -69,12 +69,14 @@ std::function<void( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )> DRC_
 
 
 /**
- * Design Rule Checker object that performs all the DRC tests.  The output of
- * the checking goes to the BOARD file in the form of two MARKER lists.  Those
- * two lists are displayable in the drc dialog box.  And they can optionally
- * be sent to a text file on disk.
- * This class is given access to the windows and the BOARD
- * that it needs via its constructor or public access functions.
+ * Design Rule Checker object that performs all the DRC tests.
+ *
+ * Optionally reports violations via a DRC_VIOLATION_HANDLER, user-level progress via a
+ * PROGRESS_REPORTER and rule parse errors via a REPORTER, all set through various setter
+ * calls.
+ *
+ * Note that EvalRulesForItems() has yet another optional REPORTER for reporting resolution
+ * info to the user.
  */
 class DRC_ENGINE
 {
@@ -88,8 +90,8 @@ public:
     void SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet ) { m_worksheet = aWorksheet; }
     KIGFX::WS_PROXY_VIEW_ITEM* GetWorksheet() const { return m_worksheet; }
 
-    /*
-     * Receives DRC violation reports (a DRC_ITEM and a position).
+    /**
+     * Set an optional DRC violation handler (receives DRC_ITEMs and positions).
      */
     void SetViolationHandler( DRC_VIOLATION_HANDLER aHandler )
     {
@@ -101,23 +103,41 @@ public:
         m_violationHandler = DRC_VIOLATION_HANDLER();
     }
 
-    /*
-     * Receives progress information to show the user.
+    /**
+     * Set an optional reporter for user-level progress info.
      */
     void SetProgressReporter( PROGRESS_REPORTER* aProgRep ) { m_progressReporter = aProgRep; }
 
     /*
-     * Receives debug information for a developer.
+     * Set an optional reporter for rule parse/compile/run-time errors and log-level progress
+     * information.
+     *
+     * Note: if no log reporter is installed rule parse/compile/run-time errors are returned
+     * via a thrown PARSE_ERROR exception.
      */
     void SetLogReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
 
-    /*
+    /**
      * Loads and parses a rule set from an sexpr text file.
+     *
+     * @throws PARSE_ERROR
      */
-    bool LoadRules( const wxFileName& aPath );
+    void LoadRules( const wxFileName& aPath );
 
+    /**
+     * Initializes the DRC engine.
+     *
+     * @throws PARSE_ERROR if the rules file contains errors
+     */
     void InitEngine( const wxFileName& aRulePath );
 
+    /**
+     * Runs the DRC tests.
+     * @param aUnits
+     * @param aTestTracksAgainstZones
+     * @param aReportAllTrackErrors
+     * @param aTestFootprints
+     */
     void RunTests( EDA_UNITS aUnits = EDA_UNITS::MILLIMETRES, bool aTestTracksAgainstZones = true,
                    bool aReportAllTrackErrors = true, bool aTestFootprints = true );
 

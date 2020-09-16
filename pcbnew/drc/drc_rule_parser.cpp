@@ -33,8 +33,7 @@
 using namespace DRCRULE_T;
 
 
-DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, const wxString& aSource,
-                                    const wxString& aSourceDescr ) :
+DRC_RULES_PARSER::DRC_RULES_PARSER( const wxString& aSource, const wxString& aSourceDescr ) :
         DRC_RULES_LEXER( aSource.ToStdString(), aSourceDescr ),
         m_requiredVersion( 0 ),
         m_tooRecent( false ),
@@ -43,7 +42,7 @@ DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, const wxString& aSource,
 }
 
 
-DRC_RULES_PARSER::DRC_RULES_PARSER( BOARD* aBoard, FILE* aFile, const wxString& aFilename ) :
+DRC_RULES_PARSER::DRC_RULES_PARSER( FILE* aFile, const wxString& aFilename ) :
         DRC_RULES_LEXER( aFile, aFilename ),
         m_requiredVersion( 0 ),
         m_tooRecent( false ),
@@ -56,13 +55,25 @@ void DRC_RULES_PARSER::reportError( const wxString& aMessage )
 {
     wxString rest;
     wxString first = aMessage.BeforeFirst( '|', &rest );
-    wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
-                                     CurLineNumber(),
-                                     CurOffset(),
-                                     first,
-                                     rest );
 
-    m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+    if( m_reporter )
+    {
+        wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
+                                         CurLineNumber(),
+                                         CurOffset(),
+                                         first,
+                                         rest );
+
+        m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+    }
+    else
+    {
+        wxString msg = wxString::Format( _( "ERROR: %s%s" ),
+                                         first,
+                                         rest );
+
+        THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+    }
 }
 
 
@@ -124,13 +135,15 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporte
             }
             else
             {
-                msg.Printf( _( "Unrecognized item '%s'.| Expected version number" ), FromUTF8() );
+                msg.Printf( _( "Unrecognized item '%s'.| Expected version number" ),
+                            FromUTF8() );
                 reportError( msg );
             }
 
             if( (int) token != DSN_RIGHT )
             {
-                msg.Printf( _( "Unrecognized item '%s'." ), FromUTF8() );
+                msg.Printf( _( "Unrecognized item '%s'." ),
+                            FromUTF8() );
                 reportError( msg );
                 parseUnknown();
             }
@@ -147,13 +160,14 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporte
 
         default:
             msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
-                        FromUTF8(), "'rule', 'version'" );
+                        FromUTF8(),
+                        "'rule', 'version'" );
             reportError( msg );
             parseUnknown();
         }
     }
 
-    if( !m_reporter->HasMessage() )
+    if( m_reporter && !m_reporter->HasMessage() )
         m_reporter->Report( _( "No errors found." ), RPT_SEVERITY_INFO );
 
     m_reporter = nullptr;
@@ -207,7 +221,8 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
 
             if( (int) NextTok() != DSN_RIGHT )
             {
-                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
+                reportError( wxString::Format( _( "Unrecognized item '%s'." ),
+                                               FromUTF8() ) );
                 parseUnknown();
             }
 
@@ -302,8 +317,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             default:
                 msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
                             FromUTF8(),
-                            "'track', 'via', 'micro_via', "
-                            "'blind_via', 'pad', 'zone', 'text', 'graphic', 'hole'."
+                            "'track', 'via', 'micro_via', 'blind_via', 'pad', 'zone', 'text', "
+                            "'graphic', 'hole'."
                             );
                 reportError( msg );
                 break;
@@ -339,7 +354,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
             if( (int) NextTok() != DSN_RIGHT )
             {
-                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
+                reportError( wxString::Format( _( "Unrecognized item '%s'." ),
+                                               FromUTF8() ) );
                 parseUnknown();
             }
 
@@ -359,7 +375,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
             if( (int) NextTok() != DSN_RIGHT )
             {
-                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
+                reportError( wxString::Format( _( "Unrecognized item '%s'." ),
+                                               FromUTF8() ) );
                 parseUnknown();
             }
 
@@ -379,7 +396,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
             if( (int) NextTok() != DSN_RIGHT )
             {
-                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
+                reportError( wxString::Format( _( "Unrecognized item '%s'." ),
+                                               FromUTF8() ) );
                 parseUnknown();
             }
 
@@ -391,7 +409,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
         default:
             msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
-                        FromUTF8(), "'min', 'max', 'opt'" );
+                        FromUTF8(),
+                        "'min', 'max', 'opt'" );
             reportError( msg );
             parseUnknown();
         }
@@ -410,13 +429,25 @@ void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult 
     {
         wxString rest;
         wxString first = aMessage.BeforeFirst( '|', &rest );
-        wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
-                                         CurLineNumber(),
-                                         CurOffset() + aOffset,
-                                         first,
-                                         rest );
 
-        m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+        if( m_reporter )
+        {
+            wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
+                                             CurLineNumber(),
+                                             CurOffset(),
+                                             first,
+                                             rest );
+
+            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+        }
+        else
+        {
+            wxString msg = wxString::Format( _( "ERROR: %s%s" ),
+                                             first,
+                                             rest );
+
+            THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+        }
     };
 
     PCB_EXPR_EVALUATOR evaluator;
@@ -459,12 +490,16 @@ LSET DRC_RULES_PARSER::parseLayer()
         }
 
         if( !retVal.any() )
-            reportError( wxString::Format( _( "Unrecognized layer '%s'." ), layerName ) );
+        {
+            reportError( wxString::Format( _( "Unrecognized layer '%s'." ),
+                                           layerName ) );
+        }
     }
 
     if( (int) NextTok() != DSN_RIGHT )
     {
-        reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
+        reportError( wxString::Format( _( "Unrecognized item '%s'." ),
+                                       FromUTF8() ) );
         parseUnknown();
     }
 

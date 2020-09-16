@@ -40,8 +40,8 @@ class BOARD_ITEM;
 class DRC_RULES_PARSER : public DRC_RULES_LEXER
 {
 public:
-    DRC_RULES_PARSER( BOARD* aBoard, const wxString& aSource, const wxString& aSourceDescr );
-    DRC_RULES_PARSER( BOARD* aBoard, FILE* aFile, const wxString& aFilename );
+    DRC_RULES_PARSER( const wxString& aSource, const wxString& aSourceDescr );
+    DRC_RULES_PARSER( FILE* aFile, const wxString& aFilename );
 
     void Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporter );
 

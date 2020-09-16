@@ -133,7 +133,16 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
     {
         BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
         bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( aBoard, &bds );
-        bds.m_DRCEngine->InitEngine( Prj().AbsolutePath( "drc-rules" ) );
+
+        try
+        {
+            bds.m_DRCEngine->InitEngine( Prj().AbsolutePath( "drc-rules" ) );
+        }
+        catch( PARSE_ERROR& pe )
+        {
+            // TODO: We could redirect to Board Setup here and report the error.  Or we could
+            // wait till they run DRC or do an Inspect Clearance.  Not sure which is better....
+        }
 
         if( m_toolManager )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );

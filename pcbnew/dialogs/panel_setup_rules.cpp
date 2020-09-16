@@ -294,7 +294,7 @@ void PANEL_SETUP_RULES::OnCompile( wxCommandEvent& event )
     {
         std::vector<DRC_RULE*> dummyRules;
 
-        DRC_RULES_PARSER parser( m_frame->GetBoard(), m_textEditor->GetText(), _( "DRC rules" ) );
+        DRC_RULES_PARSER parser( m_textEditor->GetText(), _( "DRC rules" ) );
 
         parser.Parse( dummyRules, m_errorsReport );
     }
@@ -363,7 +363,7 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
     {
         std::vector<DRC_RULE*> dummyRules;
 
-        DRC_RULES_PARSER parser( m_frame->GetBoard(), m_textEditor->GetText(), _( "DRC rules" ) );
+        DRC_RULES_PARSER parser( m_textEditor->GetText(), _( "DRC rules" ) );
 
         parser.Parse( dummyRules, m_errorsReport );
     }
@@ -375,9 +375,18 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
 
     wxString rulesFilepath = m_frame->Prj().AbsolutePath( "drc-rules" );
 
-    if( m_textEditor->SaveFile( rulesFilepath ) )
+    try
     {
-        m_frame->GetBoard()->GetDesignSettings().m_DRCEngine->LoadRules( rulesFilepath );
+        if( m_textEditor->SaveFile( rulesFilepath ) )
+        {
+            m_frame->GetBoard()->GetDesignSettings().m_DRCEngine->LoadRules( rulesFilepath );
+            return true;
+        }
+    }
+    catch( PARSE_ERROR& pe )
+    {
+        // Don't lock them in to the Setup dialog if they have bad rules.  They've already
+        // saved them so we can allow an exit.
         return true;
     }
 

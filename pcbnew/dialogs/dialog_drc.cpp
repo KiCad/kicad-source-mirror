@@ -115,7 +115,7 @@ void DIALOG_DRC::OnActivateDlg( wxActivateEvent& aEvent )
         Close();
 
         DRC_TOOL* drcTool = m_brdEditor->GetToolManager()->GetTool<DRC_TOOL>();
-        drcTool->DestroyDRCDialog( wxID_CANCEL );
+        drcTool->DestroyDRCDialog();
 
         return;
     }
@@ -185,8 +185,6 @@ void DIALOG_DRC::SetCurrentProgress( double aProgress )
 }
 
 
-
-
 // Don't globally define this; different facilities use different definitions of "ALL"
 static int RPT_SEVERITY_ALL = RPT_SEVERITY_WARNING | RPT_SEVERITY_ERROR | RPT_SEVERITY_EXCLUSION;
 
@@ -213,9 +211,9 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 
     m_brdEditor->RecordDRCExclusions();
     deleteAllMarkers( true );
+    m_unconnectedTreeModel->DeleteItems( false, true, true );
+    m_footprintWarningsTreeModel->DeleteItems( false, true, true );
 
-    wxBeginBusyCursor();
-    wxWindowDisabler disabler( this );
     Raise();
 
     m_Notebook->ChangeSelection( 0 ); // Display the "Messages" tab
@@ -224,12 +222,6 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 
     drcTool->RunTests( this, testTracksAgainstZones, refillZones, reportAllTrackErrors,
                        testFootprints );
-    m_drcRun = true;
-
-    if( testFootprints )
-        m_footprintTestsRun = true;
-
-    wxEndBusyCursor();
 
     refreshBoardEditor();
 
@@ -569,7 +561,7 @@ void DIALOG_DRC::OnCancelClick( wxCommandEvent& aEvent )
     // The dialog can be modal or not modal.
     // Leave the DRC caller destroy (or not) the dialog
     DRC_TOOL* drcTool = m_brdEditor->GetToolManager()->GetTool<DRC_TOOL>();
-    drcTool->DestroyDRCDialog( wxID_CANCEL );
+    drcTool->DestroyDRCDialog();
 }
 
 

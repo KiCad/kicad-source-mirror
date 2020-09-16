@@ -98,19 +98,12 @@ public:
     bool IsDRCDialogShown();
 
     /**
-     * Deletes this ui dialog box and zeros out its pointer to remember
-     * the state of the dialog's existence.
-     *
-     * @param aReason Indication of which button was clicked to cause the destruction.
-     * if aReason == wxID_OK, design parameters values which can be entered from the dialog
-     * will bbe saved in design parameters list
+     * Closes and frees the DRC dialog.
      */
-    void DestroyDRCDialog( int aReason );
+    void DestroyDRCDialog();
 
     /**
-     * Run all the tests specified with a previous call to
-     * SetSettings()
-     * @param aMessages = a wxTextControl where to display some activity messages. Can be NULL
+     * Run the DRC tests.
      */
     void RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksAgainstZones,
                    bool aRefillZones, bool aReportAllTrackErrors, bool aTestFootprints );

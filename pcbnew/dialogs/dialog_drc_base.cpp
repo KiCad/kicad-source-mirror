@@ -72,7 +72,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_panelMessages->SetSizer( bSizer10 );
 	m_panelMessages->Layout();
 	bSizer10->Fit( m_panelMessages );
-	m_Notebook->AddPage( m_panelMessages, _("Messages"), false );
+	m_Notebook->AddPage( m_panelMessages, _("Messages"), true );
 	m_panelViolations = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerViolationsBox;
 	bSizerViolationsBox = new wxBoxSizer( wxVERTICAL );
@@ -87,7 +87,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_panelViolations->SetSizer( bSizerViolationsBox );
 	m_panelViolations->Layout();
 	bSizerViolationsBox->Fit( m_panelViolations );
-	m_Notebook->AddPage( m_panelViolations, _("Violations (%d)"), true );
+	m_Notebook->AddPage( m_panelViolations, _("Violations (%d)"), false );
 	m_panelUnconnectedItems = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerUnconnectedBox;
 	bSizerUnconnectedBox = new wxBoxSizer( wxVERTICAL );

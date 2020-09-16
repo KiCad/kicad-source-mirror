@@ -50,6 +50,9 @@ public:
     DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent );
     ~DIALOG_DRC();
 
+    void SetDrcRun() { m_drcRun = true; }
+    void SetFootprintTestsRun() { m_footprintTestsRun = true; }
+
     void SetMarkersProvider( RC_ITEMS_PROVIDER* aProvider );
     void SetUnconnectedProvider( RC_ITEMS_PROVIDER* aProvider );
     void SetFootprintsProvider( RC_ITEMS_PROVIDER* aProvider );

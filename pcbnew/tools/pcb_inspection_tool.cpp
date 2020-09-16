@@ -32,6 +32,7 @@
 #include <profile.h>
 #include <dialogs/wx_html_report_box.h>
 #include <drc/drc_engine.h>
+#include <dialogs/panel_setup_rules_base.h>
 #include "pcb_inspection_tool.h"
 
 
@@ -186,7 +187,17 @@ void PCB_INSPECTION_TOOL::reportCopperClearance( PCB_LAYER_ID aLayer, BOARD_CONN
     r->Report( "" );
 
     DRC_ENGINE drcEngine( m_frame->GetBoard(), &m_frame->GetBoard()->GetDesignSettings() );
-    drcEngine.InitEngine( m_frame->Prj().AbsolutePath( "drc-rules" ) );
+
+    try
+    {
+        drcEngine.InitEngine( m_frame->Prj().AbsolutePath( "drc-rules" ) );
+    }
+    catch( PARSE_ERROR& pe )
+    {
+        m_frame->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
+                                       pe.lineNumber, pe.byteIndex );
+        return;
+    }
 
     auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aA, aB,
                                                    aLayer, r );
