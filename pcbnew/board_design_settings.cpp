@@ -934,8 +934,11 @@ int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue()
 {
     DRC_CONSTRAINT constraint;
 
-    m_DRCEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_CLEARANCE, constraint,
-                                       DRCCQ_LARGEST_MINIMUM );
+    if( m_DRCEngine )
+    {
+        m_DRCEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_CLEARANCE, constraint,
+                                           DRCCQ_LARGEST_MINIMUM );
+    }
 
     return constraint.Value().HasMin() ? constraint.Value().Min() : 0;
 }
