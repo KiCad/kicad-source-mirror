@@ -76,7 +76,16 @@ private:
     void testHoles2Holes();
     void testPads2Holes();
 
-    bool doPadToPadHoleDrc(  D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit );
+    /**
+     * Test clearance of a pad hole with the pad hole of other pads.
+     * @param aSortedPadsList is the sorted by X pos of all pads
+     * @param aRefPadIdx is the index of pad to test inside aSortedPadsList
+     * @param aX_limit is the max X pos of others pads that need to be tested
+     * To speed up the test, aSortedPadsList is a pad list sorted by X position,
+     * and only pads after the pad to test are tested, so this function must be called
+     * for each pad for the first in list to the last in list
+     */
+    bool doPadToPadHoleDrc( int aRefPadIdx, std::vector<D_PAD*>& aSortedPadsList, int aX_limit );
 
     struct DRILLED_HOLE
     {
@@ -184,47 +193,47 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testPads2Holes()
     // actual clearances
     max_size += m_largestClearance;
 
-    // Upper limit of pad list (limit not included)
-    D_PAD** listEnd = &sortedPads[0] + sortedPads.size();
-
     // Test the pads
-    for( D_PAD* pad : sortedPads )
+    for( int idx = 0; idx < (int)sortedPads.size(); idx++ )
     {
-       int x_limit = pad->GetPosition().x + pad->GetBoundingRadius() + max_size;
+        D_PAD* pad = sortedPads[idx];
+        int x_limit = pad->GetPosition().x + pad->GetBoundingRadius() + max_size;
 
-       drc_dbg( 10,"-> %p\n", pad );
+        drc_dbg( 10,"-> %p\n", pad );
 
-       doPadToPadHoleDrc( pad, &pad, listEnd, x_limit );
+        doPadToPadHoleDrc( idx, sortedPads, x_limit );
     }
 }
 
 
-bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad, D_PAD** aStart,
-                                                                 D_PAD** aEnd, int x_limit )
+bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc( int aRefPadIdx,
+                                                          std::vector<D_PAD*>& aSortedPadsList,
+                                                          int aX_limit )
 {
     const static LSET all_cu = LSET::AllCuMask();
 
-    LSET layerMask = aRefPad->GetLayerSet() & all_cu;
+    D_PAD* refPad = aSortedPadsList[aRefPadIdx];
+    LSET layerMask = refPad->GetLayerSet() & all_cu;
 
-    for( D_PAD** pad_list = aStart;  pad_list<aEnd;  ++pad_list )
+    for( int idx = aRefPadIdx; idx < (int)aSortedPadsList.size();  ++idx )
     {
-        D_PAD* pad = *pad_list;
+        D_PAD* pad = aSortedPadsList[idx];
 
-        if( pad == aRefPad )
+        if( pad == refPad )
             continue;
 
 //      drc_dbg(10," chk against -> %p\n", pad);
 
-        // We can stop the test when pad->GetPosition().x > x_limit because the list is
-        // sorted by X values
-        if( pad->GetPosition().x > x_limit )
+        // We can stop the test when pad->GetPosition().x > aX_limit because the list is
+        // sorted by X positions, and other pads are too far.
+        if( pad->GetPosition().x > aX_limit )
             break;
 
 //        drc_dbg( 10," chk2 against -> %p ds %d %d\n",
-//                 pad, pad->GetDrillSize().x, aRefPad->GetDrillSize().x );
+//                 pad, pad->GetDrillSize().x, refPad->GetDrillSize().x );
 
         drc_dbg( 10," chk1 against -> %p x0 %d x2 %d\n",
-                 pad, pad->GetDrillSize().x, aRefPad->GetDrillSize().x );
+                 pad, pad->GetDrillSize().x, refPad->GetDrillSize().x );
 
         // No problem if pads which are on copper layers are on different copper layers,
         // (pads can be only on a technical layer, to build complex pads)
@@ -232,28 +241,28 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad, D_PAD
         // copper layers, so we test them
         if( ( pad->GetLayerSet() & layerMask ) != 0 &&
             ( pad->GetLayerSet() & all_cu ) != 0 &&
-            ( aRefPad->GetLayerSet() & all_cu ) != 0 )
+            ( refPad->GetLayerSet() & all_cu ) != 0 )
         {
             // if holes are in the same location and have the same size and shape,
             // this can be accepted
-            if( pad->GetPosition() == aRefPad->GetPosition()
-                && pad->GetDrillSize() == aRefPad->GetDrillSize()
-                && pad->GetDrillShape() == aRefPad->GetDrillShape() )
+            if( pad->GetPosition() == refPad->GetPosition()
+                && pad->GetDrillSize() == refPad->GetDrillSize()
+                && pad->GetDrillShape() == refPad->GetDrillShape() )
             {
-                if( aRefPad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
+                if( refPad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
                     continue;
 
                 // for oval holes: must also have the same orientation
-                if( pad->GetOrientation() == aRefPad->GetOrientation() )
+                if( pad->GetOrientation() == refPad->GetOrientation() )
                     continue;
             }
 
-            drc_dbg(10," chk3 against -> %p x0 %d x2 %d\n", pad, pad->GetDrillSize().x, aRefPad->GetDrillSize().x );
+            drc_dbg(10," chk3 against -> %p x0 %d x2 %d\n", pad, pad->GetDrillSize().x, refPad->GetDrillSize().x );
 
             if( pad->GetDrillSize().x )     // test pad has a hole
             {
                 auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
-                                                                  aRefPad, pad );
+                                                                  refPad, pad );
                 int  minClearance = constraint.GetValue().Min();
                 int  actual;
 
@@ -262,7 +271,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad, D_PAD
 
                 accountCheck( constraint.GetParentRule() );
 
-                const std::shared_ptr<SHAPE>&  refPadShape = aRefPad->GetEffectiveShape();
+                const std::shared_ptr<SHAPE>&  refPadShape = refPad->GetEffectiveShape();
 
                 // fixme: pad stacks...
                 if( refPadShape->Collide( pad->GetEffectiveHoleShape(), minClearance, &actual ) )
@@ -275,7 +284,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad, D_PAD
                                   MessageTextFromValue( userUnits(), actual, true ) );
 
                     drcItem->SetErrorMessage( m_msg );
-                    drcItem->SetItems( pad, aRefPad );
+                    drcItem->SetItems( pad, refPad );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                     reportViolation( drcItem, pad->GetPosition());
@@ -283,22 +292,22 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad, D_PAD
                 }
             }
 
-            if( aRefPad->GetDrillSize().x )     // reference pad has a hole
+            if( refPad->GetDrillSize().x )     // reference pad has a hole
             {
 
                 auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
-                                                                  aRefPad, pad );
+                                                                  refPad, pad );
                 int  minClearance = constraint.GetValue().Min();
                 int  actual;
 
                 accountCheck( constraint.GetParentRule() );
 
-                drc_dbg( 10,"check pad %p rule '%s' cl %d\n", aRefPad,
+                drc_dbg( 10,"check pad %p rule '%s' cl %d\n", refPad,
                          constraint.GetParentRule()->m_Name, minClearance );
 
                 const std::shared_ptr<SHAPE>& padShape = pad->GetEffectiveShape();
 
-                if( padShape->Collide( aRefPad->GetEffectiveHoleShape(), minClearance, &actual ) )
+                if( padShape->Collide( refPad->GetEffectiveHoleShape(), minClearance, &actual ) )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
@@ -308,7 +317,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc(  D_PAD* aRefPad, D_PAD
                                   MessageTextFromValue( userUnits(), actual, true ) );
 
                     drcItem->SetErrorMessage( m_msg );
-                    drcItem->SetItems( aRefPad, pad );
+                    drcItem->SetItems( refPad, pad );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                     reportViolation( drcItem, pad->GetPosition());

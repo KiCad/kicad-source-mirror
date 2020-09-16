@@ -91,7 +91,16 @@ private:
     void doTrackDrc( TRACK* aRefSeg, PCB_LAYER_ID aLayer, TRACKS::iterator aStartIt,
                      TRACKS::iterator aEndIt );
 
-    void doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit );
+    /**
+     * Test clearance of a pad hole with the pad hole of other pads.
+     * @param aSortedPadsList is the sorted by X pos of all pads
+     * @param aRefPadIdx is the index of pad to test inside aSortedPadsList
+     * @param aX_limit is the max X pos of others pads that need to be tested
+     * To speed up the test, aSortedPadsList is a pad list sorted by X position,
+     * and only pads after the pad to test are tested, so this function must be called
+     * for each pad for the first in list to the last in list
+     */
+    void doPadToPadsDrc( int aRefPadIdx, std::vector<D_PAD*>& aSortedPadsList, int aX_limit );
 };
 
 
@@ -529,33 +538,31 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
     // actual clearances
     max_size += m_largestClearance;
 
-    // Upper limit of pad list (limit not included)
-    D_PAD** listEnd = &sortedPads[0] + sortedPads.size();
-
-    int ii = 0;
-
     // Test the pads
-    for( D_PAD* pad : sortedPads )
+    for( int idx = 0; idx < (int)sortedPads.size(); idx++ )
     {
-        if( ii % 100 == 0 )
-            reportProgress((double) ii / (double) sortedPads.size());
+        D_PAD* pad = sortedPads[idx];
 
-        ii++;
+        if( idx % 100 == 0 )
+            reportProgress((double) idx / (double) sortedPads.size());
+
         int x_limit = pad->GetPosition().x + pad->GetBoundingRadius() + max_size;
 
-        doPadToPadsDrc( pad, &pad, listEnd, x_limit );
+        doPadToPadsDrc( idx, sortedPads, x_limit );
     }
 }
 
-void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart,
-                                                         D_PAD** aEnd, int x_limit )
+void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( int aRefPadIdx,
+                                                         std::vector<D_PAD*>& aSortedPadsList,
+                                                         int aX_limit )
 {
     const static LSET all_cu = LSET::AllCuMask();
     const BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-    LSET layerMask = aRefPad->GetLayerSet() & all_cu;
+    D_PAD* refPad = aSortedPadsList[aRefPadIdx];
+    LSET layerMask = refPad->GetLayerSet() & all_cu;
 
-    for( D_PAD** pad_list = aStart;  pad_list<aEnd;  ++pad_list )
+    for( int idx = aRefPadIdx; idx < (int)aSortedPadsList.size();  ++idx )
     {
         bool exceedClearance = m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
         bool exceedShorting = m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
@@ -563,38 +570,38 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD**
         if( exceedClearance && exceedShorting )
             return;
 
-        D_PAD* pad = *pad_list;
+        D_PAD* pad = aSortedPadsList[idx];
 
-        if( pad == aRefPad )
+        if( pad == refPad )
             continue;
 
-        // We can stop the test when pad->GetPosition().x > x_limit
-        // because the list is sorted by X values
-        if( pad->GetPosition().x > x_limit )
+        // We can stop the test when pad->GetPosition().x > aX_limit
+        // because the list is sorted by X poditions, and other pads are too far.
+        if( pad->GetPosition().x > aX_limit )
             break;
 
         // The pad must be in a net (i.e pt_pad->GetNet() != 0 ),
         // But no problem if pads have the same netcode (same net)
-        if( pad->GetNetCode() && ( aRefPad->GetNetCode() == pad->GetNetCode() ) )
+        if( pad->GetNetCode() && ( refPad->GetNetCode() == pad->GetNetCode() ) )
             continue;
 
         // If pads are equivalent (ie: from the same footprint with the same pad number)...
-        if( pad->GetParent() == aRefPad->GetParent() && pad->PadNameEqual( aRefPad ) )
+        if( pad->GetParent() == refPad->GetParent() && pad->PadNameEqual( refPad ) )
         {
             // ...and have nets, then they must be the same net
-            if( pad->GetNetCode() && aRefPad->GetNetCode()
-                    && pad->GetNetCode() != aRefPad->GetNetCode()
+            if( pad->GetNetCode() && refPad->GetNetCode()
+                    && pad->GetNetCode() != refPad->GetNetCode()
                     && !exceedShorting )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (nets %s and %s)" ),
-                              pad->GetNetname(), aRefPad->GetNetname() );
+                              pad->GetNetname(), refPad->GetNetname() );
 
                 drcItem->SetErrorMessage( m_msg );
-                drcItem->SetItems( pad, aRefPad );
+                drcItem->SetItems( pad, refPad );
 
-                reportViolation( drcItem, aRefPad->GetPosition());
+                reportViolation( drcItem, refPad->GetPosition());
             }
 
             continue;
@@ -602,25 +609,25 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD**
 
         // if either pad has no drill and is only on technical layers, not a clearance violation
         if( ( ( pad->GetLayerSet() & layerMask ) == 0 && !pad->GetDrillSize().x ) ||
-            ( ( aRefPad->GetLayerSet() & layerMask ) == 0 && !aRefPad->GetDrillSize().x ) )
+            ( ( refPad->GetLayerSet() & layerMask ) == 0 && !refPad->GetDrillSize().x ) )
         {
             continue;
         }
 
-        for( PCB_LAYER_ID layer : aRefPad->GetLayerSet().Seq() )
+        for( PCB_LAYER_ID layer : refPad->GetLayerSet().Seq() )
         {
             if( exceedClearance )
                 break;
 
             auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                                              aRefPad, pad, layer );
+                                                              refPad, pad, layer );
             int  minClearance = constraint.GetValue().Min();
             int  clearanceAllowed = minClearance - bds.GetDRCEpsilon();
             int  actual;
 
             accountCheck( constraint );
 
-            std::shared_ptr<SHAPE> refPadShape = aRefPad->GetEffectiveShape();
+            std::shared_ptr<SHAPE> refPadShape = refPad->GetEffectiveShape();
 
             if( refPadShape->Collide( pad->GetEffectiveShape().get(), clearanceAllowed, &actual ) )
             {
@@ -632,10 +639,10 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( D_PAD* aRefPad, D_PAD**
                               MessageTextFromValue( userUnits(), actual, true ) );
 
                 drcItem->SetErrorMessage( m_msg );
-                drcItem->SetItems( aRefPad, pad );
+                drcItem->SetItems( refPad, pad );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drcItem, aRefPad->GetPosition());
+                reportViolation( drcItem, refPad->GetPosition());
                 break;
             }
         }
