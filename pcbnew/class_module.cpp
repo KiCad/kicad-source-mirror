@@ -562,19 +562,7 @@ EDA_RECT MODULE::GetFpPadsLocalBbox() const
 
 const EDA_RECT MODULE::GetBoundingBox() const
 {
-    EDA_RECT area = GetFootprintRect();
-
-    // Add in items not collected by GetFootprintRect():
-    for( BOARD_ITEM* item : m_drawings )
-    {
-        if( item->Type() != PCB_MODULE_EDGE_T )
-            area.Merge( item->GetBoundingBox() );
-    }
-
-    area.Merge( m_Value->GetBoundingBox() );
-    area.Merge( m_Reference->GetBoundingBox() );
-
-    return area;
+    return GetBoundingBox( true );
 }
 
 
@@ -589,10 +577,32 @@ const EDA_RECT MODULE::GetBoundingBox( bool aIncludeInvisibleText ) const
             area.Merge( item->GetBoundingBox() );
     }
 
-    if( m_Value->IsVisible() || aIncludeInvisibleText )
+    // This can be further optimized when aIncludeInvisibleText is true, but currently
+    // leaving this as is until it's determined there is a noticeable speed hit.
+    bool   valueLayerIsVisible = true;
+    bool   refLayerIsVisible   = true;
+    BOARD* board               = GetBoard();
+
+    if( board )
+    {
+        // The first "&&" conditional handles the user turning layers off as well as layers
+        // not being present in the current PCB stackup.  Values, references, and all
+        // footprint text can also be turned off via the GAL meta-layers, so the 2nd and
+        // 3rd "&&" conditionals handle that.
+        valueLayerIsVisible = board->IsLayerVisible( m_Value->GetLayer() )
+                              && board->IsElementVisible( LAYER_MOD_VALUES )
+                              && board->IsElementVisible( LAYER_MOD_TEXT_FR );
+
+        refLayerIsVisible = board->IsLayerVisible( m_Reference->GetLayer() )
+                            && board->IsElementVisible( LAYER_MOD_REFERENCES )
+                            && board->IsElementVisible( LAYER_MOD_TEXT_FR );
+    }
+
+
+    if( ( m_Value->IsVisible() && valueLayerIsVisible ) || aIncludeInvisibleText )
         area.Merge( m_Value->GetBoundingBox() );
 
-    if( m_Reference->IsVisible() || aIncludeInvisibleText  )
+    if( ( m_Reference->IsVisible() && refLayerIsVisible ) || aIncludeInvisibleText )
         area.Merge( m_Reference->GetBoundingBox() );
 
     return area;
