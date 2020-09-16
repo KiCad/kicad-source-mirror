@@ -73,6 +73,7 @@ public:
 
         Add( PCB_ACTIONS::selectConnection );
         Add( PCB_ACTIONS::selectNet );
+        Add( PCB_ACTIONS::deselectNet );
         Add( PCB_ACTIONS::selectSameSheet );
     }
 
@@ -1066,25 +1067,27 @@ void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
 }
 
 
-void SELECTION_TOOL::selectAllItemsOnNet( int aNetCode )
+void SELECTION_TOOL::selectAllItemsOnNet( int aNetCode, bool aSelect )
 {
     constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
     auto connectivity = board()->GetConnectivity();
 
     for( BOARD_CONNECTED_ITEM* item : connectivity->GetNetItems( aNetCode, types ) )
         if( itemPassesFilter( item ) )
-            select( item );
+            aSelect ? select( item ) : unselect( item );
 }
 
 
 int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 {
-    // If we've been passed an argument, just select that netcode
+    bool select = aEvent.IsAction( &PCB_ACTIONS::selectNet );
+
+    // If we've been passed an argument, just select that netcode1
     int netcode = aEvent.Parameter<intptr_t>();
 
     if( netcode > 0 )
     {
-        selectAllItemsOnNet( netcode );
+        selectAllItemsOnNet( netcode, select );
         return 0;
     }
 
@@ -1099,7 +1102,7 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
         BOARD_CONNECTED_ITEM* connItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( i );
 
         if( connItem )
-            selectAllItemsOnNet( connItem->GetNetCode() );
+            selectAllItemsOnNet( connItem->GetNetCode(), select );
     }
 
     // Inform other potentially interested tools
@@ -2600,6 +2603,7 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::filterSelection,     PCB_ACTIONS::filterSelection.MakeEvent() );
     Go( &SELECTION_TOOL::expandConnection,    PCB_ACTIONS::selectConnection.MakeEvent() );
     Go( &SELECTION_TOOL::selectNet,           PCB_ACTIONS::selectNet.MakeEvent() );
+    Go( &SELECTION_TOOL::selectNet,           PCB_ACTIONS::deselectNet.MakeEvent() );
     Go( &SELECTION_TOOL::selectSameSheet,     PCB_ACTIONS::selectSameSheet.MakeEvent() );
     Go( &SELECTION_TOOL::selectSheetContents, PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
     Go( &SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsModified );

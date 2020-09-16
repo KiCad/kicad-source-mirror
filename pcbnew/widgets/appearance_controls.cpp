@@ -812,6 +812,9 @@ void APPEARANCE_CONTROLS::OnNetGridRightClick( wxGridEvent& event )
     menu.Append( new wxMenuItem( &menu, ID_SELECT_NET,
                                  wxString::Format( _( "Select tracks and vias in %s" ), netName ),
                                  wxEmptyString, wxITEM_NORMAL ) );
+    menu.Append( new wxMenuItem( &menu, ID_DESELECT_NET,
+                                 wxString::Format( _( "Deselect tracks and vias in %s" ), netName ),
+                                 wxEmptyString, wxITEM_NORMAL ) );
 
     menu.AppendSeparator();
 
@@ -1947,6 +1950,10 @@ void APPEARANCE_CONTROLS::rebuildNets()
                                          wxString::Format( _( "Select tracks and vias in %s" ),
                                                            name ),
                                          wxEmptyString, wxITEM_NORMAL ) );
+                            menu.Append( new wxMenuItem( &menu, ID_DESELECT_NET,
+                                         wxString::Format( _( "Deselect tracks and vias in %s" ),
+                                                           name ),
+                                         wxEmptyString, wxITEM_NORMAL ) );
 
                             menu.AppendSeparator();
 
@@ -2277,6 +2284,13 @@ void APPEARANCE_CONTROLS::onNetContextMenu( wxCommandEvent& aEvent )
         break;
     }
 
+    case ID_DESELECT_NET:
+    {
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::deselectNet, true, net.code );
+        m_frame->GetCanvas()->Refresh();
+        break;
+    }
+
     case ID_SHOW_ALL_NETS:
         m_netsTable->ShowAllNets();
         break;
@@ -2504,9 +2518,12 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
         }
 
         case ID_SELECT_NET:
+        case ID_DESELECT_NET:
         {
             if( netclass )
             {
+                TOOL_ACTION& action = aEvent.GetId() == ID_SELECT_NET ? PCB_ACTIONS::selectNet :
+                                                                        PCB_ACTIONS::deselectNet;
                 runOnNetsOfClass( netclass,
                         [&]( NETINFO_ITEM* aItem )
                         {
@@ -2514,8 +2531,7 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
                                 return;
 
                             int code = aItem->GetNet();
-                            m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectNet, true,
-                                                                  code );
+                            m_frame->GetToolManager()->RunAction( action, true, code );
                         } );
             }
             break;

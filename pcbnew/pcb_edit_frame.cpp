@@ -670,6 +670,8 @@ void PCB_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( PCB_ACTIONS::selectNet,
                         ENABLE( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) ) );
+    mgr->SetConditions( PCB_ACTIONS::deselectNet,
+                        ENABLE( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) ) );
     mgr->SetConditions( PCB_ACTIONS::selectConnection,
                         ENABLE( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) ) );
     mgr->SetConditions( PCB_ACTIONS::selectSameSheet,

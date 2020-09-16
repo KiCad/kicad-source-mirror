@@ -278,8 +278,10 @@ private:
 
     /**
      * Selects all items with the given net code
+     * @param aNetCode is the target net to select
+     * @param aSelect is true to add the items to the selection, false to remove them (deselect)
      */
-    void selectAllItemsOnNet( int aNetCode );
+    void selectAllItemsOnNet( int aNetCode, bool aSelect = true );
 
     /**
      * Selects all items with the given sheet timestamp/UUID name

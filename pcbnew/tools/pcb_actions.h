@@ -79,6 +79,9 @@ public:
     /// Selects all connections belonging to a single net.
     static TOOL_ACTION selectNet;
 
+    /// Removes all connections belonging to a single net from the active selection
+    static TOOL_ACTION deselectNet;
+
     /// Selects all components on sheet from Eeschema crossprobing.
     static TOOL_ACTION selectOnSheetFromEeschema;
 
