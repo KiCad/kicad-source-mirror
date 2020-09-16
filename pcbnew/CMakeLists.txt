@@ -437,8 +437,15 @@ if( KICAD_SCRIPTING )   # Generate pcbnew.py and pcbnew_wrap.cxx using swig
 
     # We deliberately do not use the CMake support for swig here,
     # i.e. swig_add_footprint()) because we want full control.
-
-    set( SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
+    
+    # Avoid threading in SWIG (breaks threads in pcbnew)
+    set( SWIG_OPTS -python -c++ -nothreads  )
+    
+    if( KICAD_SCRIPTING_PYTHON3 )
+        set( SWIG_OPTS ${SWIG_OPTS} -py3 )
+    endif()
+    
+    set( SWIG_OPTS ${SWIG_OPTS} -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
 
     if( EXISTS ${CMAKE_CURRENT_BINARY_DIR}/doxygen-xml )
         set( SWIG_OPTS ${SWIG_OPTS} -DENABLE_DOCSTRINGS_FROM_DOXYGEN )
