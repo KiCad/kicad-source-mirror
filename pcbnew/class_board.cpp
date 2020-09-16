@@ -2185,10 +2185,10 @@ BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCBNEW_SELECTION& selectio
 void BOARD::GroupRemoveItems( const PCBNEW_SELECTION& selection, BOARD_COMMIT* commit )
 {
     std::unordered_set<BOARD_ITEM*> emptyGroups;
-    std::unordered_set<PCB_GROUP*> emptyGroupParents;
+    std::unordered_set<PCB_GROUP*>  emptyGroupParents;
 
     // groups who have had children removed, either items or empty groups.
-    std::unordered_set<PCB_GROUP*> itemParents;
+    std::unordered_set<PCB_GROUP*>  itemParents;
     std::unordered_set<BOARD_ITEM*> itemsToRemove;
 
     for( EDA_ITEM* item : selection )
@@ -2211,7 +2211,9 @@ void BOARD::GroupRemoveItems( const PCBNEW_SELECTION& selection, BOARD_COMMIT* c
             {
                 if( ( itemsToRemove.find( grpItem ) == itemsToRemove.end() )
                     && ( emptyGroups.find( grpItem ) == emptyGroups.end() ) )
+                {
                     allRemoved = false;
+                }
             }
 
             if( allRemoved )
@@ -2236,7 +2238,7 @@ void BOARD::GroupRemoveItems( const PCBNEW_SELECTION& selection, BOARD_COMMIT* c
         if( emptyGroups.find( grp ) == emptyGroups.end() )
         {
             commit->Modify( grp );
-            ITEM_SET members = grp->GetItems();
+            BOARD_ITEM_SET members = grp->GetItems();
             bool removedSomething = false;
 
             for( BOARD_ITEM* member : members )
@@ -2248,13 +2250,11 @@ void BOARD::GroupRemoveItems( const PCBNEW_SELECTION& selection, BOARD_COMMIT* c
                     removedSomething = true;
                 }
             }
+
             wxCHECK_RET( removedSomething, "Item to be removed not found in it's parent group" );
         }
     }
 
     for( BOARD_ITEM* grp : emptyGroups )
-    {
         commit->Remove( grp );
-    }
 }
-

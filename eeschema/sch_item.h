@@ -144,7 +144,7 @@ public:
 };
 
 
-typedef std::unordered_set<SCH_ITEM*> ITEM_SET;
+typedef std::unordered_set<SCH_ITEM*> SCH_ITEM_SET;
 
 
 /**
@@ -203,7 +203,7 @@ protected:
                                           // to store a initial pos of the item or mouse cursor
 
     /// Stores pointers to other items that are connected to this one, per sheet
-    std::unordered_map<SCH_SHEET_PATH, ITEM_SET> m_connected_items;
+    std::unordered_map<SCH_SHEET_PATH, SCH_ITEM_SET> m_connected_items;
 
     /// Stores connectivity information, per sheet
     std::unordered_map<SCH_SHEET_PATH, SCH_CONNECTION*> m_connection_map;
@@ -411,7 +411,7 @@ public:
     /**
      * Retrieves the set of items connected to this item on the given sheet
      */
-    ITEM_SET& ConnectedItems( const SCH_SHEET_PATH& aPath );
+    SCH_ITEM_SET& ConnectedItems( const SCH_SHEET_PATH& aPath );
 
     /**
      * Adds a connection link between this item and another

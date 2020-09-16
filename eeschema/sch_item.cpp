@@ -175,7 +175,7 @@ NETCLASSPTR SCH_ITEM::NetClass() const
 }
 
 
-ITEM_SET& SCH_ITEM::ConnectedItems( const SCH_SHEET_PATH& aSheet )
+SCH_ITEM_SET& SCH_ITEM::ConnectedItems( const SCH_SHEET_PATH& aSheet )
 {
     return m_connected_items[ aSheet ];
 }
