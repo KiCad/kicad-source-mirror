@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <bitset>
+#include <string>
 
 #include <boost/filesystem.hpp>
 #include <class_board.h>
@@ -30,7 +32,6 @@
 #include <common.h>
 #include <pcbnew_utils/board_construction_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
-#include <string>
 #include <unit_test_utils/unit_test_utils.h>
 
 BOOST_AUTO_TEST_SUITE( GroupSaveLoad )
@@ -48,111 +49,162 @@ enum ItemType
     TEXT6,
     TEXT7,
     TEXT8,
-    REMOVED_TEXT, // not known to board
+    REMOVED_TEXT,   // Text not added to board
     GROUP0,
     GROUP1,
     GROUP2,
     NAME_GROUP3,
     NAME_GROUP4,
     NAME_GROUP3_DUP, // Group with name identical to NAME_GROUP3
+    REMOVED_GROUP,   // Group not added to board
     NUM_ITEMS
 };
+
+// The objects associated with item REMOVED_TEXT and REMOVED_GROUP are not added to the board,
+// so they are not cleaned up when the board is deleted. These pointers stores the objects
+// so they can be deleted once they are done being used.
+static TEXTE_PCB* s_removedText  = nullptr;
+static PCB_GROUP* s_removedGroup = nullptr;
+
 
 /*
  * Takes a vector of group specifications for groups to create.
  * Each group is a vector of which ItemTypes to put in the group.
  * The first group corresponds to GROUP0, the second to GROUP1, and os on.
  */
-BOARD* createBoard( const std::vector<std::vector<ItemType>>& spec )
+std::unique_ptr<BOARD> createBoard( const std::vector<std::vector<ItemType>>& spec )
 {
-    BOARD*                  aBoard = new BOARD();
-    std::vector<PCB_GROUP*>     groups;
-    std::vector<TEXTE_PCB*> textItems;
+    std::unique_ptr<BOARD>   board = std::make_unique<BOARD>();
+    std::vector<BOARD_ITEM*> items;
+
+    // Create text items and add to board.
+    for( int idx = 0; idx <= REMOVED_TEXT; idx++ )
+    {
+        TEXTE_PCB* textItem = new TEXTE_PCB( board.get() );
+        textItem->SetText( wxString::Format( _( "some text-%d" ), idx ) );
+
+        // Don't add REMOVED_TEXT to the board
+        if( idx < REMOVED_TEXT )
+            board->Add( textItem );
+
+        items.push_back( textItem );
+    }
 
     // Create groups
-    for( int idx = 0; idx < 6; idx++ )
+    for( int idx = 0; idx < ( NUM_ITEMS - GROUP0 ); idx++ )
     {
-        PCB_GROUP* gr = new PCB_GROUP( aBoard );
+        PCB_GROUP* gr = new PCB_GROUP( board.get() );
+
         if( idx >= ( NAME_GROUP3 - GROUP0 ) )
         {
-            wxString name = wxString::Format(
-                    _( "group-%d" ), ( idx == ( NAME_GROUP3_DUP - GROUP0 ) ) ? 3 : idx );
+            wxString name = wxString::Format( _( "group-%d" ),
+                                               ( idx == ( NAME_GROUP3_DUP - GROUP0 ) ) ? 3 : idx );
             gr->SetName( name );
             BOOST_CHECK_EQUAL( gr->GetName(), name );
         }
-        groups.push_back( gr );
+
+        items.push_back( gr );
     }
 
-    // Create text items and add to board.
-    for( int idx = 0; idx < 10; idx++ )
-    {
-        auto textItem = new TEXTE_PCB( aBoard );
-        textItem->SetText( wxString::Format( _( "some text-%d" ), idx ) );
-        if( idx < 9 ) // don't add REMOVED_TEXT
-        {
-            aBoard->Add( textItem );
-        }
-        textItems.push_back( textItem );
-    }
+    std::bitset<NUM_ITEMS> used;
 
     // Populate groups based on spec
-    for( int groupIdx = 0; groupIdx < spec.size(); groupIdx++ )
+    for( int offset = 0; offset < ( NUM_ITEMS - GROUP0 ); offset++ )
     {
-        auto&  groupSpec = spec[groupIdx];
-        PCB_GROUP* group     = groups[groupIdx];
-        int    count     = 0;
-        for( ItemType item : groupSpec )
+        int groupIdx = GROUP0 + offset;
+
+        PCB_GROUP* group = static_cast<PCB_GROUP*>( items[groupIdx] );
+
+        if( offset < spec.size() )
         {
-            if( item <= REMOVED_TEXT )
+            const std::vector<ItemType>& groupSpec = spec[offset];
+
+            for( ItemType item : groupSpec )
             {
-                group->AddItem( textItems[item] );
-                count++;
+                used.set( static_cast<size_t>( item ) );
+
+                if( item != REMOVED_TEXT || item != REMOVED_GROUP )
+                    group->AddItem( items[item] );
             }
-            else // it's a group
-            {
-                group->AddItem( groups[item - GROUP0] );
-                count++;
-            }
+
+            BOOST_CHECK_EQUAL( group->GetItems().size(), groupSpec.size() );
+            board->Add( group );
         }
-        BOOST_CHECK_EQUAL( group->GetItems().size(), count );
-        aBoard->Add( group );
+        else if( groupIdx != REMOVED_GROUP && used.test( groupIdx ) )
+        {
+            // This group is used in another group, so it must be on the board
+            board->Add( group );
+        }
+        else if( groupIdx != REMOVED_GROUP )
+        {
+            // If the group isn't used, delete it
+            delete group;
+        }
     }
 
+    // Delete the removed text item if it isn't used
+    if( used.test( REMOVED_TEXT ) )
+        s_removedText = static_cast<TEXTE_PCB*>( items[REMOVED_TEXT] );
+    else
+        delete items[REMOVED_TEXT];
+
+    // Delete the removed group item if it isn't used
+    if( used.test( REMOVED_GROUP ) )
+        s_removedGroup = static_cast<PCB_GROUP*>( items[REMOVED_GROUP] );
+    else
+        delete items[REMOVED_GROUP];
+
     BOOST_TEST_CHECKPOINT( "Returning fresh board" );
-    return aBoard;
+    return board;
 }
+
 
 // Check if two groups are identical by comparing the fields (by Uuid).
 void testGroupEqual( const PCB_GROUP& group1, const PCB_GROUP& group2 )
 {
     BOOST_CHECK_EQUAL( group1.m_Uuid.AsString(), group2.m_Uuid.AsString() );
     BOOST_CHECK_EQUAL( group1.GetName(), group2.GetName() );
-    auto items1 = group1.GetItems();
-    auto items2 = group2.GetItems();
+
+    const BOARD_ITEM_SET& items1 = group1.GetItems();
+    const BOARD_ITEM_SET& items2 = group2.GetItems();
+
+    BOOST_CHECK_EQUAL( items1.size(), items2.size() );
 
     // Test that the sets items1 and items2 are identical, by checking m_Uuid
-    BOOST_CHECK_EQUAL( items1.size(), items2.size() );
-    for( auto item1 : items1 )
+    for( BOARD_ITEM* item1 : items1 )
     {
-        auto item2 = std::find_if( items2.begin(), items2.end(),
-                [&]( auto elem ) { return elem->m_Uuid.AsString() == item1->m_Uuid.AsString(); } );
+        auto cmp = [&]( BOARD_ITEM* elem )
+                   {
+                       return elem->m_Uuid.AsString() == item1->m_Uuid.AsString();
+                   };
+
+        auto item2 = std::find_if( items2.begin(), items2.end(), cmp );
+
         BOOST_CHECK( item2 != items2.end() );
-        // Could check other properties here...
     }
 }
+
 
 // Check if two GROUPS are identical by comparing the groups in each of them.
 void testGroupsEqual( const GROUPS& groups1, const GROUPS& groups2 )
 {
     BOOST_CHECK_EQUAL( groups1.size(), groups2.size() );
-    for( auto group1 : groups1 )
+
+    for( PCB_GROUP* group1 : groups1 )
     {
-        auto group2 = std::find_if( groups2.begin(), groups2.end(),
-                [&]( auto elem ) { return elem->m_Uuid.AsString() == group1->m_Uuid.AsString(); } );
+        auto cmp = [&]( BOARD_ITEM* elem )
+                   {
+                       return elem->m_Uuid.AsString() == group1->m_Uuid.AsString();
+                   };
+
+        auto group2 = std::find_if( groups2.begin(), groups2.end(), cmp );
+
         BOOST_CHECK( group2 != groups2.end() );
+
         testGroupEqual( *group1, **group2 );
     }
 }
+
 
 /*
  * Create board based on spec, save it to a file, load it, and make sure the
@@ -160,18 +212,18 @@ void testGroupsEqual( const GROUPS& groups1, const GROUPS& groups2 )
  */
 void testSaveLoad( const std::vector<std::vector<ItemType>>& spec )
 {
-    BOARD* aBoard1 = createBoard( spec );
+    std::unique_ptr<BOARD> board1 = createBoard( spec );
     auto path = boost::filesystem::temp_directory_path() / "group_saveload_tst.kicad_pcb";
-    ::KI_TEST::DumpBoardToFile( *aBoard1, path.string() );
-    auto aBoard2 = ::KI_TEST::ReadBoardFromFileOrStream( path.string() );
-    testGroupsEqual( aBoard1->Groups(), aBoard2->Groups() );
+    ::KI_TEST::DumpBoardToFile( *board1, path.string() );
+
+    std::unique_ptr<BOARD> board2 = ::KI_TEST::ReadBoardFromFileOrStream( path.string() );
+    testGroupsEqual( board1->Groups(), board2->Groups() );
 }
 
-// Test saving & loading of a few configurations
-BOOST_AUTO_TEST_CASE( HealthyCases )
-{
-    //BOOST_TEST_CONTEXT( "happy" );
 
+// Test saving & loading of a few configurations
+BOOST_AUTO_TEST_CASE( HealthyGroups )
+{
     // Test board with no groups
     testSaveLoad( {} );
 
@@ -191,37 +243,50 @@ BOOST_AUTO_TEST_CASE( HealthyCases )
     testSaveLoad( { { TEXT0 }, { TEXT1 }, { TEXT2 }, { TEXT3 }, { NAME_GROUP3, GROUP0 } } );
 }
 
-BOOST_AUTO_TEST_CASE( ErrorCases )
+
+BOOST_AUTO_TEST_CASE( InvalidGroups )
 {
     // A cycle
-    BOARD* aBoard1 = createBoard( { { TEXT0, GROUP1 }, { TEXT2, GROUP0 } } );
-    BOOST_CHECK_EQUAL( aBoard1->GroupsSanityCheck(), "Cycle detected in group membership" );
+    std::unique_ptr<BOARD> board1 = createBoard( { { TEXT0, GROUP1 }, { TEXT2, GROUP0 } } );
+    BOOST_CHECK_EQUAL( board1->GroupsSanityCheck(), "Cycle detected in group membership" );
 
     // More complex cycle
-    aBoard1 = createBoard( { { TEXT0, GROUP1 }, { TEXT1 }, { TEXT2, NAME_GROUP4 },
-                             { TEXT3, GROUP2 }, { TEXT4, NAME_GROUP3 } } );
-    BOOST_CHECK_EQUAL( aBoard1->GroupsSanityCheck(), "Cycle detected in group membership" );
+    board1 = createBoard( { { TEXT0, GROUP1 }, { TEXT1 }, { TEXT2, NAME_GROUP4 },
+                            { TEXT3, GROUP2 }, { TEXT4, NAME_GROUP3 } } );
+    BOOST_CHECK_EQUAL( board1->GroupsSanityCheck(), "Cycle detected in group membership" );
 
     // Reference group not on board
-    aBoard1      = createBoard( { { TEXT0, GROUP1 } } );
-    wxString res = aBoard1->GroupsSanityCheck();
-    BOOST_CHECK_MESSAGE( res.find( "contains deleted item" ) != std::string::npos, res );
+    board1       = createBoard( { { TEXT0, REMOVED_GROUP } } );
+    wxString res = board1->GroupsSanityCheck();
+    BOOST_CHECK_MESSAGE( res.find( "contains deleted item" ) != wxString::npos, res );
+
+    // Delete the removed group since the test is over
+    board1.reset( nullptr );
+    delete s_removedGroup;
+    s_removedGroup = nullptr;
 
     // Single empty group
-    aBoard1      = createBoard( { {} } );
-    res          = aBoard1->GroupsSanityCheck();
-    BOOST_CHECK_MESSAGE(
-            res.find( "Group must have at least one member" ) != std::string::npos, res );
+    board1      = createBoard( { {} } );
+    res         = board1->GroupsSanityCheck();
+    BOOST_CHECK_MESSAGE( res.find( "Group must have at least one member" ) != wxString::npos,
+                         res );
 
     // Duplicate group name
-    aBoard1 = createBoard( { { TEXT0 }, { TEXT1 }, { TEXT2 }, { TEXT3 }, { TEXT4 }, { TEXT5 } } );
-    res     = aBoard1->GroupsSanityCheck();
-    BOOST_CHECK_MESSAGE( res.find( "Two groups of identical name" ) != std::string::npos, res );
+    board1 = createBoard( { { TEXT0 }, { TEXT1 }, { TEXT2 }, { TEXT3 }, { TEXT4 }, { TEXT5 } } );
+    res    = board1->GroupsSanityCheck();
+    BOOST_CHECK_MESSAGE( res.find( "Two groups of identical name" ) != wxString::npos, res );
 
     // Group references item that is not on board
-    aBoard1 = createBoard( { { REMOVED_TEXT } } );
-    res     = aBoard1->GroupsSanityCheck();
-    BOOST_CHECK_MESSAGE( res.find( "contains deleted item" ) != std::string::npos, res );
+    board1 = createBoard( { { REMOVED_TEXT } } );
+    res    = board1->GroupsSanityCheck();
+    BOOST_CHECK_MESSAGE( res.find( "contains deleted item" ) != wxString::npos, res );
+
+    // Delete the removed text since the test is over
+    board1.reset( nullptr );
+    delete s_removedText;
+    s_removedText = nullptr;
+
 }
+
 
 BOOST_AUTO_TEST_SUITE_END()
