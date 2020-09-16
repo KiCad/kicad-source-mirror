@@ -737,7 +737,7 @@ EDA_RECT EDA_RECT::Common( const EDA_RECT& aRect ) const
 }
 
 
-const EDA_RECT EDA_RECT::GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle )
+const EDA_RECT EDA_RECT::GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle ) const
 {
     wxPoint corners[4];
 

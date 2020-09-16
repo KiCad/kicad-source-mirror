@@ -719,7 +719,7 @@ void MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
 
 bool MODULE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    EDA_RECT rect = m_BoundaryBox;
+    EDA_RECT rect = m_BoundaryBox.GetBoundingBoxRotated( GetPosition(), m_Orient );
     return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
 
@@ -736,7 +736,7 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
     arect.Inflate( aAccuracy );
 
     if( aContained )
-        return arect.Contains( m_BoundaryBox );
+        return arect.Contains( m_BoundaryBox.GetBoundingBoxRotated( GetPosition(), m_Orient ) );
     else
     {
         // If the rect does not intersect the bounding box, skip any tests
@@ -1369,8 +1369,6 @@ void MODULE::SetOrientation( double aNewAngle )
             static_cast<TEXTE_MODULE*>( item )->SetDrawCoord();
         }
     }
-
-    m_BoundaryBox = m_BoundaryBox.GetBoundingBoxRotated( GetPosition(), angleChange );
 }
 
 

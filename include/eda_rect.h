@@ -360,7 +360,7 @@ public:
      * useful to calculate bounding box of rotated items, when
      * rotation if not k*90 degrees
      */
-    const EDA_RECT GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle );
+    const EDA_RECT GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle ) const;
 };
 
 
