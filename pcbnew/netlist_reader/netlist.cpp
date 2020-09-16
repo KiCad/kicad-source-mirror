@@ -185,7 +185,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
 
         if( component->GetFPID() != lastFPID )
         {
-            module = NULL;
+            module = nullptr;
 
             // The LIB_ID is ok as long as there is a footprint portion coming the library if
             // it's needed.  Nickname can be blank.
@@ -219,7 +219,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
         else
         {
             // Footprint already loaded from a library, duplicate it (faster)
-            if( module == NULL )
+            if( !module )
                 continue;            // Module does not exist in any library.
 
             module = new MODULE( *module );
