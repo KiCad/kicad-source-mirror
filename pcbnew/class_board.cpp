@@ -120,10 +120,13 @@ BOARD::~BOARD()
 
     m_tracks.clear();
 
-    for ( BOARD_ITEM* d : m_drawings )
+    for( BOARD_ITEM* d : m_drawings )
         delete d;
 
     m_drawings.clear();
+
+    for( PCB_GROUP* g : m_groups )
+        delete g;
 
     m_groups.clear();
 }
