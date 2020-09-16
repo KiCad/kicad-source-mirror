@@ -60,9 +60,9 @@ DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
     m_reporter( nullptr ),
     m_progressReporter( nullptr )
 {
-    m_errorLimits.resize( DRCE_LAST );
+    m_errorLimits.resize( DRCE_LAST + 1 );
 
-    for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
+    for( int ii = DRCE_FIRST; ii <= DRCE_LAST; ++ii )
         m_errorLimits[ ii ] = INT_MAX;
 }
 
@@ -609,6 +609,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
 bool DRC_ENGINE::IsErrorLimitExceeded( int error_code )
 {
+    assert( error_code >= 0 && error_code <= DRCE_LAST );
     return m_errorLimits[ error_code ] <= 0;
 }
 
