@@ -69,6 +69,8 @@ public:
 
 bool DRC_TEST_PROVIDER_ANNULUS::Run()
 {
+    const int delta = 250;  // This is the number of tests between 2 calls to the progress bar
+
     if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH ) )
     {
         reportAux( "No annulus constraints found. Skipping check." );
@@ -131,7 +133,19 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                 return true;
             };
 
-    forEachGeometryItem( { PCB_VIA_T }, LSET::AllCuMask(), checkAnnulus );
+    BOARD* board = m_drcEngine->GetBoard();
+    int    ii = 0;
+
+    for( TRACK* item : board->Tracks() )
+    {
+        if( (ii % delta) == 0 || ii >= (int) board->Tracks().size() - 1 )
+            reportProgress( (double) ii / (double) board->Tracks().size() );
+
+        ii++;
+
+        if( !checkAnnulus( item ) )
+            break;
+    }
 
     reportRuleStatistics();
 

@@ -42,9 +42,10 @@ public:
     ZONE_FILLER( BOARD* aBoard, COMMIT* aCommit );
     ~ZONE_FILLER();
 
-    void SetProgressReporter( WX_PROGRESS_REPORTER* aReporter );
+    void SetProgressReporter( PROGRESS_REPORTER* aReporter );
     void InstallNewProgressReporter( wxWindow* aParent, const wxString& aTitle, int aNumPhases );
-    bool Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck = false );
+    bool Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck = false,
+                            wxWindow* aParent = nullptr );
 
 private:
 
@@ -112,7 +113,7 @@ private:
     SHAPE_POLY_SET        m_boardOutline;       // the board outlines, if exists
     bool                  m_brdOutlinesValid;   // true if m_boardOutline is well-formed
     COMMIT*               m_commit;
-    WX_PROGRESS_REPORTER* m_progressReporter;
+    PROGRESS_REPORTER*    m_progressReporter;
 
     std::unique_ptr<WX_PROGRESS_REPORTER> m_uniqueReporter;
 

@@ -112,7 +112,7 @@ public:
      * SetSettings()
      * @param aMessages = a wxTextControl where to display some activity messages. Can be NULL
      */
-    void RunTests( WX_PROGRESS_REPORTER* aProgressReporter, bool aTestTracksAgainstZones,
+    void RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksAgainstZones,
                    bool aRefillZones, bool aReportAllTrackErrors, bool aTestFootprints );
 };
 

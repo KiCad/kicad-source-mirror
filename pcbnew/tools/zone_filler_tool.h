@@ -46,8 +46,8 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    void CheckAllZones( wxWindow* aCaller, WX_PROGRESS_REPORTER* aReporter = nullptr );
-    void FillAllZones( wxWindow* aCaller, WX_PROGRESS_REPORTER* aReporter = nullptr );
+    void CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter = nullptr );
+    void FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter = nullptr );
 
     int ZoneFill( const TOOL_EVENT& aEvent );
     int ZoneFillAll( const TOOL_EVENT& aEvent );

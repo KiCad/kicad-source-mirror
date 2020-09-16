@@ -51,7 +51,7 @@ void ZONE_FILLER_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, WX_PROGRESS_REPORTER* aReporter )
+void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter )
 {
     if( !getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty )
         return;
@@ -70,7 +70,7 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, WX_PROGRESS_REPORTER* a
     else
         filler.InstallNewProgressReporter( aCaller, _( "Checking Zones" ), 4 );
 
-    if( filler.Fill( toFill, true ) )
+    if( filler.Fill( toFill, true, aCaller ) )
     {
         commit.Push( _( "Fill Zone(s)" ), false );
         getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty = false;
@@ -91,7 +91,7 @@ void ZONE_FILLER_TOOL::singleShotRefocus( wxIdleEvent& )
 }
 
 
-void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, WX_PROGRESS_REPORTER* aReporter )
+void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter )
 {
     std::vector<ZONE_CONTAINER*> toFill;
 

@@ -34,7 +34,7 @@
 #include <class_marker_pcb.h>
 #include <class_board.h>
 #include <dialog_drc_base.h>
-#include <widgets/unit_binder.h>
+#include <widgets/progress_reporter.h>
 
 
 class BOARD_DESIGN_SETTINGS;
@@ -43,7 +43,7 @@ class BOARD_DESIGN_SETTINGS;
 #define DIALOG_DRC_WINDOW_NAME "DialogDrcWindowName"
 
 class
-DIALOG_DRC: public DIALOG_DRC_BASE
+DIALOG_DRC: public DIALOG_DRC_BASE, PROGRESS_REPORTER
 {
 public:
     /// Constructors
@@ -65,8 +65,6 @@ private:
     bool writeReport( const wxString& aFullFileName );
 
     void initValues();
-    void displayDRCValues();
-    void setDRCParameters();
     void syncCheckboxes();
     void updateDisplayedCounts();
 
@@ -91,6 +89,11 @@ private:
     void deleteAllMarkers( bool aIncludeExclusions );
     void refreshBoardEditor();
 
+    // PROGRESS_REPORTER calls
+    bool updateUI() override;
+    void AdvancePhase( const wxString& aMessage ) override;
+    void SetCurrentProgress( double aProgress ) override;
+
     BOARD_DESIGN_SETTINGS& bds() { return m_currentBoard->GetDesignSettings(); }
 
     BOARD*             m_currentBoard;     // the board currently on test
@@ -101,10 +104,6 @@ private:
     wxString           m_markersTitleTemplate;
     wxString           m_unconnectedTitleTemplate;
     wxString           m_footprintsTitleTemplate;
-
-    UNIT_BINDER        m_trackMinWidth;
-    UNIT_BINDER        m_viaMinSize;
-    UNIT_BINDER        m_uviaMinSize;
 
     RC_ITEMS_PROVIDER* m_markersProvider;
     RC_TREE_MODEL*     m_markerTreeModel;

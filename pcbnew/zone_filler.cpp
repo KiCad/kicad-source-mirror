@@ -51,28 +51,6 @@
 
 #include "zone_filler.h"
 
-class PROGRESS_REPORTER_HIDER
-{
-public:
-    PROGRESS_REPORTER_HIDER( WX_PROGRESS_REPORTER* aReporter )
-    {
-        m_reporter = aReporter;
-
-        if( aReporter )
-            aReporter->Hide();
-    }
-
-    ~PROGRESS_REPORTER_HIDER()
-    {
-        if( m_reporter )
-            m_reporter->Show();
-    }
-
-private:
-    WX_PROGRESS_REPORTER* m_reporter;
-};
-
-
 static const double s_RoundPadThermalSpokeAngle = 450;
 static const bool s_DumpZonesWhenFilling = false;
 
@@ -100,13 +78,14 @@ void ZONE_FILLER::InstallNewProgressReporter( wxWindow* aParent, const wxString&
 }
 
 
-void ZONE_FILLER::SetProgressReporter( WX_PROGRESS_REPORTER* aReporter )
+void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 {
     m_progressReporter = aReporter;
 }
 
 
-bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck )
+bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck,
+                        wxWindow* aParent )
 {
     std::vector<std::pair<ZONE_CONTAINER*, PCB_LAYER_ID>> toFill;
     std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> islandsList;
@@ -356,9 +335,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 
         if( outOfDate )
         {
-            PROGRESS_REPORTER_HIDER raii( m_progressReporter );
-            KIDIALOG dlg( m_progressReporter->GetParent(),
-                          _( "Zone fills are out-of-date. Refill?" ),
+            KIDIALOG dlg( aParent, _( "Zone fills are out-of-date. Refill?" ),
                           _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
             dlg.SetOKCancelLabels( _( "Refill" ), _( "Continue without Refill" ) );
             dlg.DoNotShowCheckbox( __FILE__, __LINE__ );

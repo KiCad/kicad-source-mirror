@@ -107,7 +107,7 @@ bool PROGRESS_REPORTER::KeepRefreshing( bool aWait )
 {
     if( aWait )
     {
-        while( m_progress < m_maxProgress && m_maxProgress > 0 )
+        while( m_progress.load() < m_maxProgress && m_maxProgress > 0 )
         {
             if( !updateUI() )
             {

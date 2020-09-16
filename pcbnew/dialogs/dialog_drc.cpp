@@ -43,39 +43,11 @@
 #include <tools/drc_tool.h>
 
 
-class DRC_PROGRESS_REPORTER : public WX_PROGRESS_REPORTER
-{
-public:
-    DRC_PROGRESS_REPORTER( wxWindow* aParent, wxTextCtrl* aAuxStageReporter ) :
-        WX_PROGRESS_REPORTER( aParent, _( "Test Progress" ), 1, true ),
-        m_auxStageReporter( aAuxStageReporter )
-    { }
-
-    void AdvancePhase( const wxString& aMessage ) override
-    {
-        WX_PROGRESS_REPORTER::AdvancePhase( aMessage );
-
-        m_auxStageReporter->AppendText( aMessage + "\n" );
-    }
-
-    void SetCurrentProgress( double aProgress ) override
-    {
-        WX_PROGRESS_REPORTER::SetCurrentProgress( aProgress );
-        KeepRefreshing( false );
-    }
-
-private:
-    wxTextCtrl* m_auxStageReporter;
-};
-
-
 DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         DIALOG_DRC_BASE( aParent ),
+        PROGRESS_REPORTER( 1 ),
         m_drcRun( false ),
         m_footprintTestsRun( false ),
-        m_trackMinWidth( aEditorFrame, m_MinWidthLabel, m_MinWidthCtrl, m_MinWidthUnits, true ),
-        m_viaMinSize( aEditorFrame, m_ViaMinLabel, m_ViaMinCtrl, m_ViaMinUnits, true ),
-        m_uviaMinSize( aEditorFrame, m_uViaMinLabel, m_uViaMinCtrl, m_uViaMinUnits, true ),
         m_markersProvider( nullptr ),
         m_markerTreeModel( nullptr ),
         m_unconnectedItemsProvider( nullptr ),
@@ -100,8 +72,6 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
 
     if( Kiface().IsSingle() )
         m_cbTestFootprints->Hide();
-
-    m_Notebook->SetSelection( 0 );
 
     // We use a sdbSizer here to get the order right, which is platform-dependent
     m_sdbSizer1OK->SetLabel( _( "Run DRC" ) );
@@ -150,10 +120,6 @@ void DIALOG_DRC::OnActivateDlg( wxActivateEvent& aEvent )
         return;
     }
 
-    // updating data which can be modified outside the dialog (DRC parameters, units ...)
-    // because the dialog is not modal
-    displayDRCValues();
-
     m_markerTreeModel->SetProvider( m_markersProvider );
     m_unconnectedTreeModel->SetProvider( m_unconnectedItemsProvider );
     m_footprintWarningsTreeModel->SetProvider( m_footprintWarningsProvider );
@@ -161,21 +127,11 @@ void DIALOG_DRC::OnActivateDlg( wxActivateEvent& aEvent )
 }
 
 
-void DIALOG_DRC::displayDRCValues()
-{
-    m_trackMinWidth.SetValue( bds().m_TrackMinWidth );
-    m_viaMinSize.SetValue( bds().m_ViasMinSize );
-    m_uviaMinSize.SetValue( bds().m_MicroViasMinSize );
-}
-
-
 void DIALOG_DRC::initValues()
 {
-    m_markersTitleTemplate     = m_Notebook->GetPageText( 0 );
-    m_unconnectedTitleTemplate = m_Notebook->GetPageText( 1 );
-    m_footprintsTitleTemplate  = m_Notebook->GetPageText( 2 );
-
-    displayDRCValues();
+    m_markersTitleTemplate     = m_Notebook->GetPageText( 1 );
+    m_unconnectedTitleTemplate = m_Notebook->GetPageText( 2 );
+    m_footprintsTitleTemplate  = m_Notebook->GetPageText( 3 );
 
     auto cfg = m_brdEditor->GetPcbNewSettings();
 
@@ -197,12 +153,38 @@ void DIALOG_DRC::initValues()
 }
 
 
-void DIALOG_DRC::setDRCParameters()
+// PROGRESS_REPORTER calls
+
+bool DIALOG_DRC::updateUI()
 {
-    bds().m_TrackMinWidth    = (int) m_trackMinWidth.GetValue();
-    bds().m_ViasMinSize      = (int) m_viaMinSize.GetValue();
-    bds().m_MicroViasMinSize = (int) m_uviaMinSize.GetValue();
+    int cur = std::max( 0, std::min( m_progress.load(), 10000 ) );
+
+    m_gauge->SetValue( cur );
+
+    return true;  // No cancel button on a wxGauge
 }
+
+
+void DIALOG_DRC::AdvancePhase( const wxString& aMessage )
+{
+    PROGRESS_REPORTER::AdvancePhase( aMessage );
+
+    m_Messages->AppendText( aMessage + "\n" );
+
+    KeepRefreshing( false );
+    wxSafeYield( this );
+}
+
+
+void DIALOG_DRC::SetCurrentProgress( double aProgress )
+{
+    PROGRESS_REPORTER::SetCurrentProgress( aProgress );
+
+    KeepRefreshing( false );
+    wxSafeYield( this );
+}
+
+
 
 
 // Don't globally define this; different facilities use different definitions of "ALL"
@@ -221,13 +203,10 @@ void DIALOG_DRC::syncCheckboxes()
 void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 {
     DRC_TOOL*             drcTool = m_parentFrame->GetToolManager()->GetTool<DRC_TOOL>();
-    DRC_PROGRESS_REPORTER progressReporter( this, m_Messages );
     bool                  testTracksAgainstZones = m_cbReportTracksToZonesErrors->GetValue();
     bool                  refillZones            = m_cbRefillZones->GetValue();
     bool                  reportAllTrackErrors   = m_cbReportAllTrackErrors->GetValue();
     bool                  testFootprints         = m_cbTestFootprints->GetValue();
-
-    setDRCParameters();
 
     m_drcRun = false;
     m_footprintTestsRun = false;
@@ -236,21 +215,19 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     deleteAllMarkers( true );
 
     wxBeginBusyCursor();
-    wxWindowDisabler disabler( &progressReporter );
+    wxWindowDisabler disabler( this );
     Raise();
 
-    // run all the tests, with no UI at this time.
+    m_Notebook->ChangeSelection( 0 ); // Display the "Messages" tab
     m_Messages->Clear();
-    wxYield(); // Allows time slice to refresh the Messages
+    wxYield();                        // Allows time slice to refresh Messages
 
-    drcTool->RunTests( &progressReporter, testTracksAgainstZones, refillZones,
-                       reportAllTrackErrors, testFootprints );
+    drcTool->RunTests( this, testTracksAgainstZones, refillZones, reportAllTrackErrors,
+                       testFootprints );
     m_drcRun = true;
 
     if( testFootprints )
         m_footprintTestsRun = true;
-
-    m_Notebook->ChangeSelection( 0 ); // display the "Problems/Markers" tab
 
     wxEndBusyCursor();
 
@@ -258,6 +235,10 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 
     wxYield();
     Raise();
+
+    if( m_markerTreeModel->GetDRCItemCount() > 0 )
+        m_Notebook->ChangeSelection( 1 ); // display the "Problems/Markers" tab
+
     m_Notebook->GetPage( m_Notebook->GetSelection() )->SetFocus();
 }
 
@@ -584,7 +565,6 @@ void DIALOG_DRC::OnCancelClick( wxCommandEvent& aEvent )
     m_brdEditor->FocusOnItem( nullptr );
 
     SetReturnCode( wxID_CANCEL );
-    setDRCParameters();
 
     // The dialog can be modal or not modal.
     // Leave the DRC caller destroy (or not) the dialog
@@ -673,7 +653,7 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
 
 void DIALOG_DRC::OnDeleteOneClick( wxCommandEvent& aEvent )
 {
-    if( m_Notebook->GetSelection() == 0 )
+    if( m_Notebook->GetSelection() == 1 )
     {
         // Clear the selection.  It may be the selected DRC marker.
         m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -683,11 +663,11 @@ void DIALOG_DRC::OnDeleteOneClick( wxCommandEvent& aEvent )
         // redraw the pcb
         refreshBoardEditor();
     }
-    else if( m_Notebook->GetSelection() == 1 )
+    else if( m_Notebook->GetSelection() == 2 )
     {
         m_unconnectedTreeModel->DeleteCurrentItem( true );
     }
-    else if( m_Notebook->GetSelection() == 2 )
+    else if( m_Notebook->GetSelection() == 3 )
     {
         m_footprintWarningsTreeModel->DeleteCurrentItem( true );
     }
@@ -743,10 +723,10 @@ void DIALOG_DRC::updateDisplayedCounts()
     if( m_drcRun )
     {
         msg.sprintf( m_markersTitleTemplate, m_markerTreeModel->GetDRCItemCount() );
-        m_Notebook->SetPageText( 0, msg );
+        m_Notebook->SetPageText( 1, msg );
 
         msg.sprintf( m_unconnectedTitleTemplate, m_unconnectedTreeModel->GetDRCItemCount() );
-        m_Notebook->SetPageText( 1, msg );
+        m_Notebook->SetPageText( 2, msg );
 
         if( m_footprintTestsRun )
             msg.sprintf( m_footprintsTitleTemplate, m_footprintWarningsTreeModel->GetDRCItemCount() );
@@ -755,21 +735,21 @@ void DIALOG_DRC::updateDisplayedCounts()
             msg = m_footprintsTitleTemplate;
             msg.Replace( wxT( "%d" ), _( "not run" ) );
         }
-        m_Notebook->SetPageText( 2, msg );
+        m_Notebook->SetPageText( 3, msg );
     }
     else
     {
         msg = m_markersTitleTemplate;
         msg.Replace( wxT( "(%d)" ), wxEmptyString );
-        m_Notebook->SetPageText( 0, msg );
+        m_Notebook->SetPageText( 1, msg );
 
         msg = m_unconnectedTitleTemplate;
         msg.Replace( wxT( "(%d)" ), wxEmptyString );
-        m_Notebook->SetPageText( 1, msg );
+        m_Notebook->SetPageText( 2, msg );
 
         msg = m_footprintsTitleTemplate;
         msg.Replace( wxT( "(%d)" ), wxEmptyString );
-        m_Notebook->SetPageText( 2, msg );
+        m_Notebook->SetPageText( 3, msg );
     }
 
     // And now the badges:

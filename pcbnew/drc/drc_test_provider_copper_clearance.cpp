@@ -291,7 +291,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
 
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 {
-    const int delta = 500;  // This is the number of tests between 2 calls to the progress bar
+    // This is the number of tests between 2 calls to the progress bar
+    const int delta = m_drcEngine->GetTestTracksAgainstZones() ? 50 : 250;
     int       count = m_board->Tracks().size();
 
     reportProgress( 0.0 );
@@ -301,8 +302,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 
     for( auto seg_it = m_board->Tracks().begin(); seg_it != m_board->Tracks().end(); seg_it++ )
     {
-        if( (ii % delta) == 0)
-            reportProgress((double) ii / (double) m_board->Tracks().size());
+        if( (ii % delta) == 0 || ii >= (int) m_board->Tracks().size() - 1 )
+            reportProgress( (double) ii / (double) m_board->Tracks().size() );
 
         ii++;
 
@@ -513,6 +514,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
 
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 {
+    const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
     std::vector<D_PAD*> sortedPads;
 
     m_board->GetSortedPadListByXthenYCoord( sortedPads );
@@ -543,7 +545,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
     {
         D_PAD* pad = sortedPads[idx];
 
-        if( idx % 100 == 0 )
+        if( idx % delta == 0 )
             reportProgress((double) idx / (double) sortedPads.size());
 
         int x_limit = pad->GetPosition().x + pad->GetBoundingRadius() + max_size;

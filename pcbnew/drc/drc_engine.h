@@ -56,7 +56,6 @@ void drcPrintDebugMessage( int level, const wxString& msg, const char *function,
 class DRC_RULE_CONDITION;
 class DRC_ITEM;
 class DRC_RULE;
-class LEGACY_DRC_TEST_PROVIDER;
 class DRC_CONSTRAINT;
 
 enum DRC_CONSTRAINT_QUERY_T

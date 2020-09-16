@@ -128,7 +128,7 @@ void DRC_TOOL::DestroyDRCDialog( int aReason )
 }
 
 
-void DRC_TOOL::RunTests( WX_PROGRESS_REPORTER* aProgressReporter, bool aTestTracksAgainstZones,
+void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksAgainstZones,
                          bool aRefillZones, bool aReportAllTrackErrors, bool aTestFootprints )
 {
     ZONE_FILLER_TOOL* zoneFiller = m_toolMgr->GetTool<ZONE_FILLER_TOOL>();
@@ -139,13 +139,13 @@ void DRC_TOOL::RunTests( WX_PROGRESS_REPORTER* aProgressReporter, bool aTestTrac
     {
         aProgressReporter->AdvancePhase( _( "Refilling all zones..." ) );
 
-        zoneFiller->FillAllZones( aProgressReporter->GetParent(), aProgressReporter );
+        zoneFiller->FillAllZones( m_drcDialog, aProgressReporter );
     }
     else
     {
         aProgressReporter->AdvancePhase( _( "Checking zone fills..." ) );
 
-        zoneFiller->CheckAllZones( aProgressReporter->GetParent(), aProgressReporter );
+        zoneFiller->CheckAllZones( m_drcDialog, aProgressReporter );
     }
 
     // Re-initialize the DRC_ENGINE to make doubly sure everything is up-to-date
