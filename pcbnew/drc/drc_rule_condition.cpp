@@ -60,11 +60,12 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
 
     PCB_EXPR_CONTEXT ctx( aLayer );
     ctx.SetItems( a, b );
-    ctx.SetErrorCallback( [&]( const wxString& aMessage, int aOffset )
-                          {
-                              if( aReporter )
-                                aReporter->Report( _( "ERROR: " ) + aMessage );
-                          } );
+    ctx.SetErrorCallback(
+            [&]( const wxString& aMessage, int aOffset )
+            {
+                if( aReporter )
+                    aReporter->Report( _( "ERROR: " ) + aMessage );
+            } );
 
     return m_ucode->Run( &ctx )->AsDouble() != 0.0;
 }
@@ -72,22 +73,24 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
 
 bool DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSourceOffset )
 {
-    auto errorHandler = [&]( const wxString& aMessage, int aOffset )
-    {
-        wxString rest;
-        wxString first = aMessage.BeforeFirst( '|', &rest );
-        wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
-                                         aSourceLine,
-                                         aSourceOffset + aOffset,
-                                         first,
-                                         rest );
-
-        if( aReporter )
-            aReporter->Report( msg, RPT_SEVERITY_ERROR );
-    };
-
     PCB_EXPR_COMPILER compiler;
-    compiler.SetErrorCallback( errorHandler );
+
+    compiler.SetErrorCallback(
+            [&]( const wxString& aMessage, int aOffset )
+            {
+                if( aReporter )
+                {
+                    wxString rest;
+                    wxString first = aMessage.BeforeFirst( '|', &rest );
+                    wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
+                                                     aSourceLine,
+                                                     aSourceOffset + aOffset,
+                                                     first,
+                                                     rest );
+
+                    aReporter->Report( msg, RPT_SEVERITY_ERROR );
+                }
+            } );
 
     m_ucode = std::make_unique<PCB_EXPR_UCODE>();
 
