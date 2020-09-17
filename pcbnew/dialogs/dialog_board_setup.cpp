@@ -185,7 +185,8 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
             DisplayErrorMessage( this, msg, ioe.What() );
         }
 
-        m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
+        if( otherPrj != &m_frame->Prj() )
+            m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
 
         return;
     }
@@ -228,11 +229,13 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
         if( importDlg.m_SeveritiesOpt->GetValue() )
             m_severities->ImportSettingsFrom( otherBoard->GetDesignSettings().m_DRCSeverities );
 
-        otherBoard->ClearProject();
+        if( otherPrj != &m_frame->Prj() )
+            otherBoard->ClearProject();
     }
 
     // Clean up and free memory before leaving
-    m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
+    if( otherPrj != &m_frame->Prj() )
+        m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
 
     delete otherBoard;
 }
