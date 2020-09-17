@@ -30,7 +30,7 @@ int KIUI::GetStdMargin()
 }
 
 
-#define BADGE_SIZE       20
+#define BADGE_SIZE       24
 #define BADGE_FONT_SIZE  10
 
 wxBitmap MakeBadge( SEVERITY aStyle, int aCount, wxWindow* aWindow, int aDepth )
@@ -53,9 +53,9 @@ wxBitmap MakeBadge( SEVERITY aStyle, int aCount, wxWindow* aWindow, int aDepth )
 
     backColour = aWindow->GetParent()->GetBackgroundColour();
 
-    // Each level inside staticBoxes is darkened by 210
+    // Each level inside staticBoxes is darkened by 215
     for( int i = 1; i < aDepth; ++i )
-        backColour = backColour.MakeDisabled( 210 );
+        backColour = backColour.MakeDisabled( 215 );
 
     brush.SetColour( backColour );
     badgeDC.SetBackground( brush );
