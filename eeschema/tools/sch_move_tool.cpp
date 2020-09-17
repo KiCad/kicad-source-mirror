@@ -74,9 +74,31 @@ bool SCH_MOVE_TOOL::Init()
 
     selToolMenu.AddItem( EE_ACTIONS::move, moveCondition, 150 );
     selToolMenu.AddItem( EE_ACTIONS::drag, moveCondition, 150 );
+    selToolMenu.AddItem( EE_ACTIONS::alignToGrid, moveCondition, 150 );
 
     return true;
 }
+
+
+static const KICAD_T movableItems[] =
+{
+    SCH_MARKER_T,
+    SCH_JUNCTION_T,
+    SCH_NO_CONNECT_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_BUS_WIRE_ENTRY_T,
+    SCH_LINE_T,
+    SCH_BITMAP_T,
+    SCH_TEXT_T,
+    SCH_LABEL_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_HIER_LABEL_T,
+    SCH_FIELD_T,
+    SCH_COMPONENT_T,
+    SCH_SHEET_PIN_T,
+    SCH_SHEET_T,
+    EOT
+};
 
 
 /* TODO - Tom/Jeff
@@ -88,26 +110,6 @@ bool SCH_MOVE_TOOL::Init()
 
 int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    const KICAD_T movableItems[] =
-    {
-        SCH_MARKER_T,
-        SCH_JUNCTION_T,
-        SCH_NO_CONNECT_T,
-        SCH_BUS_BUS_ENTRY_T,
-        SCH_BUS_WIRE_ENTRY_T,
-        SCH_LINE_T,
-        SCH_BITMAP_T,
-        SCH_TEXT_T,
-        SCH_LABEL_T,
-        SCH_GLOBAL_LABEL_T,
-        SCH_HIER_LABEL_T,
-        SCH_FIELD_T,
-        SCH_COMPONENT_T,
-        SCH_SHEET_PIN_T,
-        SCH_SHEET_T,
-        EOT
-    };
-
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER   grid( m_toolMgr );
@@ -497,7 +499,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
 
     for( SCH_ITEM *test : items.Overlapping( aOriginalItem->GetBoundingBox() ) )
     {
-        if( test->IsSelected() || !test->CanConnect( aOriginalItem ) )
+        if( test == aOriginalItem || test->IsSelected() || !test->CanConnect( aOriginalItem ) )
             continue;
 
         KICAD_T testType = test->Type();
@@ -618,7 +620,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
                             else
                                 otherEnd = ends[0];
 
-                            getConnectedDragItems( (SCH_ITEM*) test, otherEnd, m_dragAdditions );
+                            getConnectedDragItems( test, otherEnd, aList );
                         }
                         break;
                     }
@@ -705,9 +707,106 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 }
 
 
+int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
+{
+    EE_GRID_HELPER grid( m_toolMgr);
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( movableItems );
+    bool append_undo = false;
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() == SCH_LINE_T )
+        {
+            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+            std::vector<int> flags{ STARTPOINT, ENDPOINT };
+            std::vector<wxPoint> pts{ line->GetStartPoint(), line->GetEndPoint() };
+
+            for( int ii = 0; ii < 2; ++ii )
+            {
+                EDA_ITEMS drag_items{ item };
+                line->ClearFlags();
+                line->SetFlags( flags[ii] );
+                getConnectedDragItems( line, pts[ii], drag_items );
+                std::set<EDA_ITEM*> unique_items( drag_items.begin(), drag_items.end() );
+
+                VECTOR2I gridpt = grid.AlignGrid( pts[ii] ) - pts[ii];
+
+                if( gridpt != VECTOR2I( 0, 0 ) )
+                {
+                    for( auto dritem : unique_items )
+                    {
+                        if( dritem->GetParent() && dritem->GetParent()->IsSelected() )
+                            continue;
+
+                        saveCopyInUndoList( dritem, UNDO_REDO::CHANGED, append_undo );
+                        append_undo = true;
+
+                        moveItem( dritem, gridpt );
+                        updateView( dritem );
+                    }
+                }
+
+            }
+        }
+        else
+        {
+            std::vector<wxPoint> connections;
+            EDA_ITEMS drag_items{ item };
+            connections = static_cast<SCH_ITEM*>( item )->GetConnectionPoints();
+
+            for( wxPoint point : connections )
+                getConnectedDragItems( static_cast<SCH_ITEM*>( item ), point, drag_items );
+
+            std::map<VECTOR2I, int> shifts;
+            VECTOR2I most_common( 0, 0 );
+            int max_count = 0;
+
+            for( auto& conn : connections )
+            {
+                VECTOR2I gridpt = grid.AlignGrid( conn ) - conn;
+
+                shifts[gridpt]++;
+
+                if( shifts[gridpt] > max_count )
+                {
+                    most_common = gridpt;
+                    max_count = shifts[most_common];
+                }
+            }
+
+            if( most_common != VECTOR2I( 0, 0 ) )
+            {
+                for( auto dritem : drag_items )
+                {
+                    if( dritem->GetParent() && dritem->GetParent()->IsSelected() )
+                        continue;
+
+                    saveCopyInUndoList( dritem, UNDO_REDO::CHANGED, append_undo );
+                    append_undo = true;
+
+                    moveItem( dritem, most_common );
+                    updateView( dritem );
+                }
+            }
+        }
+    }
+
+
+    m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
+    m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selection );
+
+    m_frame->SchematicCleanUp();
+    m_frame->TestDanglingEnds();
+
+    m_frame->OnModify();
+    return 0;
+}
+
+
 void SCH_MOVE_TOOL::setTransitions()
 {
     Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::moveActivate.MakeEvent() );
     Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::move.MakeEvent() );
     Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::drag.MakeEvent() );
+    Go( &SCH_MOVE_TOOL::AlignElements,      EE_ACTIONS::alignToGrid.MakeEvent() );
 }

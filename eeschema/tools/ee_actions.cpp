@@ -715,3 +715,7 @@ TOOL_ACTION EE_ACTIONS::moveActivate( "eeschema.InteractiveMove",
 TOOL_ACTION EE_ACTIONS::symbolMoveActivate( "eeschema.SymbolMoveTool",
         AS_GLOBAL, 0, "",
         _( "Symbol Move Activate" ), "", move_xpm, AF_ACTIVATE );
+
+TOOL_ACTION EE_ACTIONS::alignToGrid( "eeschema.AlignToGrid",
+        AS_GLOBAL, 0, "",
+        _( "Align Elements to Grid" ), "", move_xpm, AF_ACTIVATE );

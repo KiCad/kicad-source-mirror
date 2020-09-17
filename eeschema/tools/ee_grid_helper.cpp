@@ -105,16 +105,24 @@ void EE_GRID_HELPER::SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin )
 }
 
 
-VECTOR2I EE_GRID_HELPER::Align( const VECTOR2I& aPoint ) const
+VECTOR2I EE_GRID_HELPER::AlignGrid( const VECTOR2I& aPoint ) const
 {
-    if( !m_toolMgr->GetView()->GetGAL()->GetGridSnapping() )
-        return aPoint;
-
     const VECTOR2D gridOffset( GetOrigin() );
     const VECTOR2D grid( GetGrid() );
 
     VECTOR2I nearest( KiROUND( ( aPoint.x - gridOffset.x ) / grid.x ) * grid.x + gridOffset.x,
                       KiROUND( ( aPoint.y - gridOffset.y ) / grid.y ) * grid.y + gridOffset.y );
+
+    return nearest;
+}
+
+
+VECTOR2I EE_GRID_HELPER::Align( const VECTOR2I& aPoint ) const
+{
+    if( !m_toolMgr->GetView()->GetGAL()->GetGridSnapping() )
+        return aPoint;
+
+    VECTOR2I nearest = AlignGrid( aPoint );
 
     if( !m_auxAxis )
         return nearest;

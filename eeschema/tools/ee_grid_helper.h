@@ -56,6 +56,8 @@ public:
 
     VECTOR2I Align( const VECTOR2I& aPoint ) const;
 
+    VECTOR2I AlignGrid( const VECTOR2I& aPoint ) const;
+
     VECTOR2I AlignToWire( const VECTOR2I& aPoint, const SEG& aSeg );
 
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, std::vector<SCH_ITEM*>& aItem );

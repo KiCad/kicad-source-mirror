@@ -108,6 +108,7 @@ public:
     static TOOL_ACTION finishDrawing;
 
     // Interactive Editing
+    static TOOL_ACTION alignToGrid;
     static TOOL_ACTION symbolMoveActivate;  // Symbol editor move tool activate
     static TOOL_ACTION moveActivate;        // Schematic editor move tool activate
     static TOOL_ACTION move;

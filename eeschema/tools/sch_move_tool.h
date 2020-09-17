@@ -50,11 +50,16 @@ public:
     bool Init() override;
 
     /**
-     * Function Main()
-     *
      * Runs an interactive move of the selected items, or the item under the cursor.
      */
     int Main( const TOOL_EVENT& aEvent );
+
+    /**
+     * Aligns selected elements to the grid
+     * @param aEvent current event that activated the tool
+     * @return 0
+     */
+    int AlignElements( const TOOL_EVENT& aEvent );
 
 private:
     void moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta );
