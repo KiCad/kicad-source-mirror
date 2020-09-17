@@ -284,12 +284,9 @@ static bool scriptingSetup()
     wxFileName path( PyPluginsPath( true ) + wxT("/") );
 
     // Ensure the user plugin path exists, and create it if not.
-    if( !path.DirExists() && !path.Mkdir() )
-    {
-        wxLogDebug( "Warning: could not create user scripting path %s",
-                    path.GetPath() );
-        return false;
-    }
+    // However, if it cannot be created, this is not a fatal error.
+    if( !path.DirExists() && !path.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        wxLogError( "Warning: could not create user scripting path %s", path.GetPath() );
 
     if( !pcbnewInitPythonScripting( TO_UTF8( PyScriptingPath() ) ) )
     {
