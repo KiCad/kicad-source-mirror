@@ -252,15 +252,6 @@ void D_PAD::SetChamferRectRatio( double aChamferScale )
 }
 
 
-const std::vector<std::shared_ptr<SHAPE>>& D_PAD::GetEffectiveShapes( PCB_LAYER_ID aLayer ) const
-{
-    if( m_shapesDirty )
-        BuildEffectiveShapes( aLayer );
-
-    return m_effectiveShapes;
-}
-
-
 const std::shared_ptr<SHAPE_POLY_SET>& D_PAD::GetEffectivePolygon( PCB_LAYER_ID aLayer ) const
 {
     if( m_shapesDirty )
@@ -272,15 +263,10 @@ const std::shared_ptr<SHAPE_POLY_SET>& D_PAD::GetEffectivePolygon( PCB_LAYER_ID 
 
 std::shared_ptr<SHAPE> D_PAD::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
-    std::shared_ptr<SHAPE_COMPOUND> shape( new SHAPE_COMPOUND );
-
     if( m_shapesDirty )
         BuildEffectiveShapes( aLayer );
 
-    for( std::shared_ptr<SHAPE>& s : m_effectiveShapes )
-        shape->AddShape( s->Clone() ); // fixme: use COMPOUND everywhere
-
-    return shape;
+    return m_effectiveShape;
 }
 
 
@@ -304,12 +290,12 @@ int D_PAD::GetBoundingRadius() const
 
 void D_PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
 {
-    m_effectiveShapes.clear();
+    m_effectiveShape = std::make_shared<SHAPE_COMPOUND>();
     m_effectiveHoleShape = nullptr;
 
     auto add = [this]( SHAPE* aShape )
                {
-                   m_effectiveShapes.emplace_back( aShape );
+                   m_effectiveShape->AddShape( aShape );
                };
 
     wxPoint shapePos = ShapePos();  // Fetch only once; rotation involves trig
@@ -448,15 +434,10 @@ void D_PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
 
     m_effectiveBoundingRadius += 1;
 
-    // reset the bbox to uninitialized state to prepare for merging
-    m_effectiveBoundingBox = EDA_RECT();
+    BOX2I bbox = m_effectiveShape->BBox();
+    m_effectiveBoundingBox = EDA_RECT( (wxPoint) bbox.GetPosition(),
+                                       wxSize( bbox.GetWidth(), bbox.GetHeight() ) );
 
-    for( const std::shared_ptr<SHAPE>& shape : m_effectiveShapes )
-    {
-        BOX2I r = shape->BBox();
-        m_effectiveBoundingBox.Merge( EDA_RECT( (wxPoint) r.GetOrigin(),
-                                      wxSize( r.GetWidth(), r.GetHeight() ) ) );
-    }
     // Hole shape
     //
     wxSize  half_size = m_drill / 2;

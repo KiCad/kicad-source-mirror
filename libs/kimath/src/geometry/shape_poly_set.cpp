@@ -1582,14 +1582,11 @@ SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( VECTOR2I aPoint, int aPoly
 
     CONST_SEGMENT_ITERATOR iterator = CIterateSegmentsWithHoles( aPolygonIndex );
 
-    SEG polygonEdge = *iterator;
-    SEG::ecoord minDistance = polygonEdge.SquaredDistance( aPoint );
+    SEG::ecoord minDistance = (*iterator).SquaredDistance( aPoint );
 
     for( iterator++; iterator && minDistance > 0; iterator++ )
     {
-        polygonEdge = *iterator;
-
-        SEG::ecoord currentDistance = polygonEdge.SquaredDistance( aPoint );
+        SEG::ecoord currentDistance = (*iterator).SquaredDistance( aPoint );
 
         if( currentDistance < minDistance )
             minDistance = currentDistance;
@@ -1609,14 +1606,11 @@ SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( const SEG& aSegment, int a
         return 0;
 
     CONST_SEGMENT_ITERATOR iterator = CIterateSegmentsWithHoles( aPolygonIndex );
-    SEG                    polygonEdge = *iterator;
-    SEG::ecoord            minDistance = polygonEdge.SquaredDistance( aSegment );
+    SEG::ecoord            minDistance = (*iterator).SquaredDistance( aSegment );
 
     for( iterator++; iterator && minDistance > 0; iterator++ )
     {
-        polygonEdge = *iterator;
-
-        SEG::ecoord currentDistance = polygonEdge.SquaredDistance( aSegment );
+        SEG::ecoord currentDistance = (*iterator).SquaredDistance( aSegment );
 
         if( currentDistance < minDistance )
             minDistance = currentDistance;

@@ -382,13 +382,11 @@ public:
     // @copydoc BOARD_ITEM::GetEffectiveShape
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 
-    const std::vector<std::shared_ptr<SHAPE>>& GetEffectiveShapes( PCB_LAYER_ID = UNDEFINED_LAYER ) const;
-
     const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon( PCB_LAYER_ID = UNDEFINED_LAYER ) const;
 
     /**
      * Function GetEffectiveHoleShape
-     * Returns a list of SHAPE objects representing the pad's hole.
+     * Returns a SHAPE object representing the pad's hole.
      */
     const SHAPE_SEGMENT* GetEffectiveHoleShape() const;
 
@@ -644,14 +642,14 @@ private:
      * Editing definitions of primitives for custom pad shapes.  In local coordinates relative
      * to m_Pos (NOT shapePos) at orient 0.
      */
-    std::vector<std::shared_ptr<DRAWSEGMENT>>   m_editPrimitives;
+    std::vector<std::shared_ptr<DRAWSEGMENT>> m_editPrimitives;
 
-    mutable bool                                m_shapesDirty;
-    mutable int                                 m_effectiveBoundingRadius;
-    mutable EDA_RECT                            m_effectiveBoundingBox;
-    mutable std::vector<std::shared_ptr<SHAPE>> m_effectiveShapes;
-    mutable std::shared_ptr<SHAPE_SEGMENT>      m_effectiveHoleShape;
-    mutable std::shared_ptr<SHAPE_POLY_SET>     m_effectivePolygon;
+    mutable bool                              m_shapesDirty;
+    mutable int                               m_effectiveBoundingRadius;
+    mutable EDA_RECT                          m_effectiveBoundingBox;
+    mutable std::shared_ptr<SHAPE_COMPOUND>   m_effectiveShape;
+    mutable std::shared_ptr<SHAPE_SEGMENT>    m_effectiveHoleShape;
+    mutable std::shared_ptr<SHAPE_POLY_SET>   m_effectivePolygon;
 
     /*
      * How to build the custom shape in zone, to create the clearance area:

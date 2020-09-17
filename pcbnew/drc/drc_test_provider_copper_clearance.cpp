@@ -292,7 +292,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 {
     // This is the number of tests between 2 calls to the progress bar
-    const int delta = m_drcEngine->GetTestTracksAgainstZones() ? 50 : 250;
+    const int delta = m_drcEngine->GetTestTracksAgainstZones() ? 25 : 100;
     int       count = m_board->Tracks().size();
 
     reportProgress( 0.0 );
@@ -322,8 +322,10 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
     BOARD_DESIGN_SETTINGS&  bds = m_board->GetDesignSettings();
 
     SHAPE_SEGMENT refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd(), aRefSeg->GetWidth() );
-    EDA_RECT      refSegBB = aRefSeg->GetBoundingBox();
+    EDA_RECT      refSegInflatedBB = aRefSeg->GetBoundingBox();
     int           refSegWidth = aRefSeg->GetWidth();
+
+    refSegInflatedBB.Inflate( m_largestClearance );
 
     /******************************************/
     /* Phase 1 : test DRC track to pads :     */
@@ -345,10 +347,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
                 break;
 
             // Preflight based on bounding boxes.
-            EDA_RECT inflatedBB = refSegBB;
-            inflatedBB.Inflate( pad->GetBoundingRadius() + m_largestClearance );
-
-            if( !inflatedBB.Contains( pad->GetPosition() ) )
+            if( !refSegInflatedBB.Intersects( pad->GetBoundingBox() ) )
                 continue;
 
             /// Skip checking pad copper when it has been removed
@@ -398,18 +397,23 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
 
         TRACK* track = *it;
 
+        if( track->Type() == PCB_VIA_T )
+        {
+            if( !track->GetLayerSet().test( aLayer ) )
+                continue;
+        }
+        else
+        {
+            if( track->GetLayer() != aLayer )
+                continue;
+        }
+
         // No problem if segments have the same net code:
         if( aRefSeg->GetNetCode() == track->GetNetCode() )
             continue;
 
-        if( !track->GetLayerSet().test( aLayer ) )
-            continue;
-
         // Preflight based on worst-case inflated bounding boxes:
-        EDA_RECT trackBB = track->GetBoundingBox();
-        trackBB.Inflate( m_largestClearance );
-
-        if( !trackBB.Intersects( refSegBB ) )
+        if( !refSegInflatedBB.Intersects( track->GetBoundingBox() ) )
             continue;
 
         auto          constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
@@ -480,6 +484,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
                 continue;
 
             if( zone->GetFilledPolysList( aLayer ).IsEmpty() )
+                continue;
+
+            if( !refSegInflatedBB.Intersects( zone->GetBoundingBox() ) )
                 continue;
 
             auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
@@ -561,8 +568,11 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( int aRefPadIdx,
     const static LSET all_cu = LSET::AllCuMask();
     const BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-    D_PAD* refPad = aSortedPadsList[aRefPadIdx];
-    LSET layerMask = refPad->GetLayerSet() & all_cu;
+    D_PAD*   refPad = aSortedPadsList[aRefPadIdx];
+    LSET     layerMask = refPad->GetLayerSet() & all_cu;
+    EDA_RECT refPadInflatedBB = refPad->GetBoundingBox();
+
+    refPadInflatedBB.Inflate( m_largestClearance );
 
     for( int idx = aRefPadIdx; idx < (int)aSortedPadsList.size();  ++idx )
     {
@@ -615,6 +625,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( int aRefPadIdx,
         {
             continue;
         }
+
+        if( !refPadInflatedBB.Intersects( pad->GetBoundingBox() ) )
+            continue;
 
         for( PCB_LAYER_ID layer : refPad->GetLayerSet().Seq() )
         {

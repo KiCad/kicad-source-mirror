@@ -200,7 +200,7 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testPads2Holes()
         D_PAD* pad = sortedPads[idx];
         int x_limit = pad->GetPosition().x + pad->GetBoundingRadius() + max_size;
 
-        drc_dbg( 10,"-> %p\n", pad );
+        drc_dbg( 10, "-> %p\n", pad );
 
         if( idx % delta == 0 || idx == (int) sortedPads.size() - 1 )
             reportProgress( (double) idx / (double) sortedPads.size() );
@@ -236,7 +236,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc( int aRefPadIdx,
 //        drc_dbg( 10," chk2 against -> %p ds %d %d\n",
 //                 pad, pad->GetDrillSize().x, refPad->GetDrillSize().x );
 
-        drc_dbg( 10," chk1 against -> %p x0 %d x2 %d\n",
+        drc_dbg( 10, " chk1 against -> %p x0 %d x2 %d\n",
                  pad, pad->GetDrillSize().x, refPad->GetDrillSize().x );
 
         // No problem if pads which are on copper layers are on different copper layers,
@@ -261,7 +261,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc( int aRefPadIdx,
                     continue;
             }
 
-            drc_dbg(10," chk3 against -> %p x0 %d x2 %d\n", pad, pad->GetDrillSize().x, refPad->GetDrillSize().x );
+            drc_dbg(10, " chk3 against -> %p x0 %d x2 %d\n", pad, pad->GetDrillSize().x, refPad->GetDrillSize().x );
 
             if( pad->GetDrillSize().x )     // test pad has a hole
             {
