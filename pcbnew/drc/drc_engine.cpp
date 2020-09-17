@@ -263,31 +263,25 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
 /**
  * @throws PARSE_ERROR
  */
-void DRC_ENGINE::LoadRules( const wxFileName& aPath )
+void DRC_ENGINE::loadRules( const wxFileName& aPath )
 {
     if( aPath.FileExists() )
     {
-        m_ruleConditions.clear();
-        m_rules.clear();
+        std::vector<DRC_RULE*> rules;
 
         FILE* fp = wxFopen( aPath.GetFullPath(), wxT( "rt" ) );
 
         if( fp )
         {
-            try
-            {
-                DRC_RULES_PARSER parser( fp, aPath.GetFullPath() );
-                parser.Parse( m_rules, m_reporter );
-            }
-            catch( PARSE_ERROR& pe )
-            {
-                // Don't leave possibly malformed stuff around for us to trip over
-                m_ruleConditions.clear();
-                m_rules.clear();
-
-                throw pe;
-            }
+            DRC_RULES_PARSER parser( fp, aPath.GetFullPath() );
+            parser.Parse( rules, m_reporter );
         }
+
+        // Copy the rules into the member variable afterwards so that if Parse() throws then
+        // the possibly malformed rules won't contaminate the current ruleset.
+
+        for( DRC_RULE* rule : rules )
+            m_rules.push_back( rule );
     }
 }
 
@@ -381,8 +375,11 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
         provider->SetDRCEngine( this );
     }
 
-    LoadRules( aRulePath );
+    m_ruleConditions.clear();
+    m_rules.clear();
+
     loadImplicitRules();
+    loadRules( aRulePath );
 
     CompileRules();
 

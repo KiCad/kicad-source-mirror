@@ -118,13 +118,6 @@ public:
     void SetLogReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
 
     /**
-     * Loads and parses a rule set from an sexpr text file.
-     *
-     * @throws PARSE_ERROR
-     */
-    void LoadRules( const wxFileName& aPath );
-
-    /**
      * Initializes the DRC engine.
      *
      * @throws PARSE_ERROR if the rules file contains errors
@@ -176,6 +169,13 @@ private:
     {
         m_rules.push_back(rule);
     }
+
+    /**
+     * Loads and parses a rule set from an sexpr text file.
+     *
+     * @throws PARSE_ERROR
+     */
+    void loadRules( const wxFileName& aPath );
 
     void freeCompiledRules();
 

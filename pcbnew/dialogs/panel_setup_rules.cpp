@@ -379,7 +379,7 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
     {
         if( m_textEditor->SaveFile( rulesFilepath ) )
         {
-            m_frame->GetBoard()->GetDesignSettings().m_DRCEngine->LoadRules( rulesFilepath );
+            m_frame->GetBoard()->GetDesignSettings().m_DRCEngine->InitEngine( rulesFilepath );
             return true;
         }
     }
