@@ -544,6 +544,10 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                     }
                     else
                     {
+                        // Check if user wants to warp the mouse to origin of moved object
+                        if( !editFrame->GetMoveWarpsCursor() )
+                            m_cursor = originalCursorPos; // No, so use original mouse pos instead
+
                         selection.SetReferencePoint( m_cursor );
                         grid.SetAuxAxes( true, m_cursor );
                     }
