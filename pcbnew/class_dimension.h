@@ -249,7 +249,7 @@ public:
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
-    virtual const BOX2I ViewBBox() const override;
+    const BOX2I ViewBBox() const override;
 
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
@@ -449,6 +449,43 @@ public:
 
     void SetTextFrame( DIM_TEXT_FRAME aFrame ) { m_textFrame = aFrame; }
     DIM_TEXT_FRAME GetTextFrame() const { return m_textFrame; }
+
+protected:
+
+    void updateGeometry() override;
+};
+
+
+/**
+ * Marks the center of a circle or arc with a cross shape
+ * The size and orientation of the cross is adjustable.
+ * m_start always marks the center being measured; m_end marks the end of one leg of the cross.
+ */
+class CENTER_DIMENSION : public DIMENSION
+{
+
+public:
+    CENTER_DIMENSION( BOARD_ITEM* aParent );
+
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && PCB_DIM_CENTER_T == aItem->Type();
+    }
+
+    EDA_ITEM* Clone() const override;
+
+    virtual void SwapData( BOARD_ITEM* aImage ) override;
+
+    BITMAP_DEF GetMenuImage() const override;
+
+    wxString GetClass() const override
+    {
+        return wxT( "CENTER_DIMENSION" );
+    }
+
+    const EDA_RECT GetBoundingBox() const override;
+
+    const BOX2I ViewBBox() const override;
 
 protected:
 

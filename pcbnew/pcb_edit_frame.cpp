@@ -723,6 +723,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_TOOL( PCB_ACTIONS::drawPolygon );
     CURRENT_TOOL( PCB_ACTIONS::placeText );
     CURRENT_TOOL( PCB_ACTIONS::drawAlignedDimension );
+    CURRENT_TOOL( PCB_ACTIONS::drawCenterDimension );
     CURRENT_TOOL( PCB_ACTIONS::drawLeader );
     CURRENT_TOOL( PCB_ACTIONS::placeTarget );
     CURRENT_TOOL( PCB_ACTIONS::drillOrigin );

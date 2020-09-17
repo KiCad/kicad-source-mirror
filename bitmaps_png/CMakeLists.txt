@@ -116,6 +116,7 @@ set( BMAPS_MID
     add_board
     add_bus2bus
     add_bus
+    add_center_dimension
     add_circle
     add_component
     add_corner

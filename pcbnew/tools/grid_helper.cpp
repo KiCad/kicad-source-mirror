@@ -556,6 +556,24 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
             break;
         }
 
+        case PCB_DIM_CENTER_T:
+        {
+            const CENTER_DIMENSION* dim = static_cast<const CENTER_DIMENSION*>( aItem );
+            addAnchor( dim->GetStart(), CORNER | SNAPPABLE, aItem );
+            addAnchor( dim->GetEnd(), CORNER | SNAPPABLE, aItem );
+
+            VECTOR2I start( dim->GetStart() );
+            VECTOR2I radial( dim->GetEnd() - dim->GetStart() );
+
+            for( int i = 0; i < 2; i++ )
+            {
+                radial = radial.Rotate( DEG2RAD( 90 ) );
+                addAnchor( start + radial, CORNER | SNAPPABLE, aItem );
+            }
+
+            break;
+        }
+
         case PCB_DIM_LEADER_T:
         {
             const LEADER* leader = static_cast<const LEADER*>( aItem );

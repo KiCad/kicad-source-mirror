@@ -259,8 +259,22 @@ public:
                                                                        points->Point( DIM_START ) ) );
             points->Point( DIM_CROSSBAREND ).SetConstraint( new EC_LINE( points->Point( DIM_CROSSBAREND ),
                                                                        points->Point( DIM_END ) ) );
-        }
+
             break;
+        }
+
+        case PCB_DIM_CENTER_T:
+        {
+            const CENTER_DIMENSION* dimension = static_cast<const CENTER_DIMENSION*>( aItem );
+
+            points->AddPoint( dimension->GetStart() );
+            points->AddPoint( dimension->GetEnd() );
+
+            points->Point( DIM_END ).SetConstraint( new EC_45DEGREE( points->Point( DIM_END ),
+                                                                     points->Point( DIM_START ) ) );
+
+            break;
+        }
 
         case PCB_DIM_LEADER_T:
         {
@@ -1321,6 +1335,26 @@ void POINT_EDITOR::updateItem() const
         break;
     }
 
+    case PCB_DIM_CENTER_T:
+    {
+        CENTER_DIMENSION* dimension = static_cast<CENTER_DIMENSION*>( item );
+
+        if( isModified( m_editPoints->Point( DIM_START ) ) )
+        {
+            dimension->SetStart( wxPoint( m_editedPoint->GetPosition().x,
+                                          m_editedPoint->GetPosition().y ) );
+        }
+        else if( isModified( m_editPoints->Point( DIM_END ) ) )
+        {
+            dimension->SetEnd( wxPoint( m_editedPoint->GetPosition().x,
+                                        m_editedPoint->GetPosition().y ) );
+        }
+
+        dimension->Update();
+
+        break;
+    }
+
     case PCB_DIM_LEADER_T:
     {
         LEADER* dimension = static_cast<LEADER*>( item );
@@ -1577,6 +1611,15 @@ void POINT_EDITOR::updatePoints()
         break;
     }
 
+    case PCB_DIM_CENTER_T:
+    {
+        const CENTER_DIMENSION* dimension = static_cast<const CENTER_DIMENSION*>( item );
+
+        m_editPoints->Point( DIM_START ).SetPosition( dimension->GetStart() );
+        m_editPoints->Point( DIM_END ).SetPosition( dimension->GetEnd() );
+        break;
+    }
+
     case PCB_DIM_LEADER_T:
     {
         const LEADER* dimension = static_cast<const LEADER*>( item );
@@ -1692,6 +1735,14 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
 
         else
             return EDIT_POINT( m_editedPoint->GetPosition() );      // no constraint
+
+        break;
+    }
+
+    case PCB_DIM_CENTER_T:
+    {
+        if( isModified( m_editPoints->Point( DIM_END ) ) )
+            return m_editPoints->Point( DIM_START );
 
         break;
     }

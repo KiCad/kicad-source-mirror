@@ -336,6 +336,7 @@ bool DIMENSION::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     arect.Inflate( aAccuracy );
 
     EDA_RECT rect = GetBoundingBox();
+
     if( aAccuracy )
         rect.Inflate( aAccuracy );
 
@@ -360,6 +361,8 @@ const EDA_RECT DIMENSION::GetBoundingBox() const
     for( const std::shared_ptr<SHAPE>& shape : GetShapes() )
     {
         BOX2I shapeBox = shape->BBox();
+        shapeBox.Inflate( m_lineThickness / 2 );
+
         xmin = std::min( xmin, shapeBox.GetOrigin().x );
         xmax = std::max( xmax, shapeBox.GetEnd().x );
         ymin = std::min( ymin, shapeBox.GetOrigin().y );
@@ -715,4 +718,71 @@ void LEADER::updateGeometry()
 
     if( endpoint )
         m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, *endpoint ) );
+}
+
+
+CENTER_DIMENSION::CENTER_DIMENSION( BOARD_ITEM* aParent ) :
+        DIMENSION( aParent, PCB_DIM_CENTER_T )
+{
+    m_unitsFormat         = DIM_UNITS_FORMAT::NO_SUFFIX;
+    m_overrideTextEnabled = true;
+}
+
+
+EDA_ITEM* CENTER_DIMENSION::Clone() const
+{
+    return new CENTER_DIMENSION( *this );
+}
+
+
+void CENTER_DIMENSION::SwapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_DIM_CENTER_T );
+
+    std::swap( *static_cast<CENTER_DIMENSION*>( this ), *static_cast<CENTER_DIMENSION*>( aImage ) );
+}
+
+
+BITMAP_DEF CENTER_DIMENSION::GetMenuImage() const
+{
+    return add_center_dimension_xpm;
+}
+
+
+const EDA_RECT CENTER_DIMENSION::GetBoundingBox() const
+{
+    int halfWidth = VECTOR2I( m_end - m_start ).x + ( m_lineThickness / 2.0 );
+
+    EDA_RECT bBox;
+
+    bBox.SetX( m_start.x - halfWidth );
+    bBox.SetY( m_start.y - halfWidth );
+    bBox.SetWidth( halfWidth * 2 );
+    bBox.SetHeight( halfWidth * 2 );
+
+    bBox.Normalize();
+
+    return bBox;
+}
+
+
+const BOX2I CENTER_DIMENSION::ViewBBox() const
+{
+    return BOX2I( VECTOR2I( GetBoundingBox().GetPosition() ),
+                  VECTOR2I( GetBoundingBox().GetSize() ) );
+}
+
+
+void CENTER_DIMENSION::updateGeometry()
+{
+    m_shapes.clear();
+
+    VECTOR2I center( m_start );
+    VECTOR2I arm( m_end - m_start );
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( center - arm, center + arm ) );
+
+    arm = arm.Rotate( DEG2RAD( 90 ) );
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( center - arm, center + arm ) );
 }

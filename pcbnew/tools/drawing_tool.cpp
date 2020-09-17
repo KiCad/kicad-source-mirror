@@ -746,6 +746,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     if( boardSettings.m_DimensionUnitsMode == DIM_UNITS_MODE::AUTOMATIC )
                         dimension->SetUnits( m_frame->GetUserUnits(), false );
                 }
+                else if( originalEvent.IsAction( &PCB_ACTIONS::drawCenterDimension ) )
+                {
+                    dimension = new CENTER_DIMENSION( m_board );
+                }
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawLeader ) )
                 {
                     dimension = new LEADER( m_board );
@@ -774,9 +778,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             break;
 
             case SET_END:
+            {
                 dimension->SetEnd( (wxPoint) cursorPos );
 
-                if( !!evt->Modifier( MD_CTRL ) )
+                if( !!evt->Modifier( MD_CTRL ) || dimension->Type() == PCB_DIM_CENTER_T )
                     constrainDimension( dimension );
 
                 // Dimensions that have origin and end in the same spot are not valid
@@ -785,7 +790,15 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 else if( dimension->Type() == PCB_DIM_LEADER_T )
                     dimension->SetText( wxT( "?" ) );
 
-                break;
+                if( dimension->Type() == PCB_DIM_CENTER_T )
+                {
+                    // No separate height/text step
+                    ++step;
+                    KI_FALLTHROUGH;
+                }
+                else
+                    break;
+            }
 
             case SET_HEIGHT:
             {
@@ -814,8 +827,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                     m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, dimension );
                 }
+
+                break;
             }
-            break;
             }
 
             if( ++step == FINISHED )
@@ -832,7 +846,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             case SET_END:
                 dimension->SetEnd( (wxPoint) cursorPos );
 
-                if( !!evt->Modifier( MD_CTRL ) )
+                if( !!evt->Modifier( MD_CTRL ) || dimension->Type() == PCB_DIM_CENTER_T )
                     constrainDimension( dimension );
 
                 break;
@@ -850,7 +864,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     double  height = ( delta.x * cos( angle ) ) + ( delta.y * sin( angle ) );
                     aligned->SetHeight( height );
                 }
-                else
+                else if( dimension->Type() != PCB_DIM_CENTER_T )
                 {
                     wxASSERT( dimension->Type() == PCB_DIM_LEADER_T );
 
@@ -2127,6 +2141,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawCircle,            PCB_ACTIONS::drawCircle.MakeEvent() );
     Go( &DRAWING_TOOL::DrawArc,               PCB_ACTIONS::drawArc.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawAlignedDimension.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawCenterDimension.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawLeader.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZone.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZoneKeepout.MakeEvent() );

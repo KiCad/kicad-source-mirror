@@ -114,6 +114,8 @@ void ARRAY_CREATOR::Invoke()
                     case PCB_ZONE_AREA_T:
                     case PCB_TARGET_T:
                     case PCB_DIM_ALIGNED_T:
+                    case PCB_DIM_CENTER_T:
+                    case PCB_DIM_ORTHOGONAL_T:
                     case PCB_DIM_LEADER_T:
                         new_item = item->Duplicate();
                         break;

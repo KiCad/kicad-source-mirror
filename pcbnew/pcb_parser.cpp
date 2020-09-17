@@ -2387,6 +2387,10 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
             dimension = std::make_unique<LEADER>( nullptr );
             break;
 
+        case T_center:
+            dimension = std::make_unique<CENTER_DIMENSION>( nullptr );
+            break;
+
         default:
             wxFAIL_MSG( wxT( "Cannot parse unknown dimension type %s" ) +
                         GetTokenString( CurTok() ) );

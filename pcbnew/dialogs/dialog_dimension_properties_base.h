@@ -50,6 +50,9 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		wxChoice* m_cbTextFrame;
 		wxStaticText* m_lblLeaderLayer;
 		PCB_LAYER_BOX_SELECTOR* m_cbLeaderLayer;
+		wxStaticBoxSizer* m_sizerCenter;
+		wxStaticText* m_lblCenterLayer;
+		PCB_LAYER_BOX_SELECTOR* m_cbCenterLayer;
 		wxStaticBoxSizer* m_sizerFormat;
 		wxStaticText* m_lblValue;
 		wxTextCtrl* m_txtValue;
@@ -69,6 +72,7 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		PCB_LAYER_BOX_SELECTOR* m_cbLayer;
 		wxStaticText* m_lblPreview;
 		wxStaticText* m_staticTextPreview;
+		wxStaticBoxSizer* m_sizerText;
 		wxStaticText* m_lblTextWidth;
 		wxTextCtrl* m_txtTextWidth;
 		wxStaticText* m_lblTextWidthUnits;
@@ -115,7 +119,7 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dimension Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 654,600 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
+		DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dimension Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 654,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
 		~DIALOG_DIMENSION_PROPERTIES_BASE();
 
 };

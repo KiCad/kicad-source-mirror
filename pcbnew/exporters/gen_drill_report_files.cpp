@@ -203,6 +203,8 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
             break;
 
         case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_ORTHOGONAL_T:
         case PCB_DIM_LEADER_T:
         case PCB_TARGET_T:
         case PCB_MARKER_T: // do not draw

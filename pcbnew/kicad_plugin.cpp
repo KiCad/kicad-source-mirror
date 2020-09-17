@@ -399,6 +399,8 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
         break;
 
     case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
         format( static_cast<DIMENSION*>( aItem ), aNestLevel );
         break;
@@ -663,6 +665,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
 {
     ALIGNED_DIMENSION* aligned = dynamic_cast<ALIGNED_DIMENSION*>( aDimension );
+    CENTER_DIMENSION*  center  = dynamic_cast<CENTER_DIMENSION*>( aDimension );
     LEADER*            leader  = dynamic_cast<LEADER*>( aDimension );
 
     m_out->Print( aNestLevel, "(dimension" );
@@ -671,6 +674,8 @@ void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
         m_out->Print( 0, " (type aligned)" );
     else if( aDimension->Type() == PCB_DIM_LEADER_T )
         m_out->Print( 0, " (type leader)" );
+    else if( aDimension->Type() == PCB_DIM_CENTER_T )
+        m_out->Print( 0, " (type center)" );
     else
         wxFAIL_MSG( wxT( "Cannot format unknown dimension type!" ) );
 
@@ -690,27 +695,30 @@ void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(height %s)\n",
                       FormatInternalUnits( aligned->GetHeight() ).c_str() );
 
-    Format( &aDimension->Text(), aNestLevel+1 );
+    if( !center )
+    {
+        Format( &aDimension->Text(), aNestLevel + 1 );
 
-    m_out->Print( aNestLevel+1, "(format" );
+        m_out->Print( aNestLevel + 1, "(format" );
 
-    if( !aDimension->GetPrefix().IsEmpty() )
-        m_out->Print( 0, " (prefix \"%s\")", TO_UTF8( aDimension->GetPrefix() ) );
+        if( !aDimension->GetPrefix().IsEmpty() )
+            m_out->Print( 0, " (prefix \"%s\")", TO_UTF8( aDimension->GetPrefix() ) );
 
-    if( !aDimension->GetSuffix().IsEmpty() )
-        m_out->Print( 0, " (suffix \"%s\")", TO_UTF8( aDimension->GetSuffix() ) );
+        if( !aDimension->GetSuffix().IsEmpty() )
+            m_out->Print( 0, " (suffix \"%s\")", TO_UTF8( aDimension->GetSuffix() ) );
 
-    m_out->Print( 0, " (units %d) (units_format %d) (precision %d)",
-                  static_cast<int>( aDimension->GetUnitsMode() ),
-                  static_cast<int>( aDimension->GetUnitsFormat() ), aDimension->GetPrecision() );
+        m_out->Print( 0, " (units %d) (units_format %d) (precision %d)",
+                static_cast<int>( aDimension->GetUnitsMode() ),
+                static_cast<int>( aDimension->GetUnitsFormat() ), aDimension->GetPrecision() );
 
-    if( aDimension->GetOverrideTextEnabled() )
-        m_out->Print( 0, " (override_value \"%s\")", TO_UTF8( aDimension->GetOverrideText() ) );
+        if( aDimension->GetOverrideTextEnabled() )
+            m_out->Print( 0, " (override_value \"%s\")", TO_UTF8( aDimension->GetOverrideText() ) );
 
-    if( aDimension->GetSuppressZeroes() )
-        m_out->Print( 0, " suppress_zeroes" );
+        if( aDimension->GetSuppressZeroes() )
+            m_out->Print( 0, " suppress_zeroes" );
 
-    m_out->Print( 0, ")\n" );
+        m_out->Print( 0, ")\n" );
+    }
 
     m_out->Print( aNestLevel+1, "(style (thickness %s) (arrow_length %s) (text_position_mode %d)",
                   FormatInternalUnits( aDimension->GetLineThickness() ).c_str(),

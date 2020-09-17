@@ -581,6 +581,8 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
         break;
 
     case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
     case PCB_LINE_T:
     case PCB_TEXT_T:
@@ -669,6 +671,8 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
         break;
 
     case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
     case PCB_LINE_T:
     case PCB_TEXT_T:
@@ -1007,6 +1011,8 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
         case PCB_LINE_T:
         case PCB_TEXT_T:
         case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_ORTHOGONAL_T:
         case PCB_DIM_LEADER_T:
         case PCB_TARGET_T:
             result = IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, p );
@@ -1019,6 +1025,8 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
                 case PCB_LINE_T:
                 case PCB_TEXT_T:
                 case PCB_DIM_ALIGNED_T:
+                case PCB_DIM_CENTER_T:
+                case PCB_DIM_ORTHOGONAL_T:
                 case PCB_DIM_LEADER_T:
                 case PCB_TARGET_T:
                     continue;

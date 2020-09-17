@@ -84,7 +84,8 @@ class TEXTE_PCB;
 //#define SEXPR_BOARD_FILE_VERSION    20200828  // Add new fabrication attributes
 //#define SEXPR_BOARD_FILE_VERSION    20200829  // Remove library name from exported footprints
 //#define SEXPR_BOARD_FILE_VERSION    20200909  // Change DIMENSION format
-#define SEXPR_BOARD_FILE_VERSION      20200913  // Add leader dimension
+//#define SEXPR_BOARD_FILE_VERSION    20200913  // Add leader dimension
+#define SEXPR_BOARD_FILE_VERSION      20200916  // Add center dimension
 
 #define BOARD_FILE_HOST_VERSION     20200825    ///< Earlier files than this include the host tag
 

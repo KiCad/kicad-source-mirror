@@ -444,6 +444,8 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
         draw( static_cast<const DIMENSION*>( item ), aLayer );
         break;

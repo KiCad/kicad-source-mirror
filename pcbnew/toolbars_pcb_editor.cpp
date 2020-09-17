@@ -380,6 +380,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( PCB_ACTIONS::placeText,            ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawAlignedDimension, ACTION_TOOLBAR::TOGGLE );
     // TODO: re-insert when we have a multi-select tool button
+    // m_drawToolBar->Add( PCB_ACTIONS::drawCenterDimension,  ACTION_TOOLBAR::TOGGLE );
     // m_drawToolBar->Add( PCB_ACTIONS::drawLeader,           ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::placeTarget,          ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( ACTIONS::deleteTool,               ACTION_TOOLBAR::TOGGLE );

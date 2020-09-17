@@ -57,6 +57,7 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     case PCB_DIM_LEADER_T:
         // Hide the main format controls and keep the leader controls shown
         m_sizerFormat->GetStaticBox()->Hide();
+        m_sizerCenter->GetStaticBox()->Hide();
 
         m_cbLayerActual = m_cbLeaderLayer;
         m_txtValueActual = m_txtLeaderValue;
@@ -66,8 +67,25 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_cbTextPositionMode->Hide();
         break;
 
+    case PCB_DIM_CENTER_T:
+        m_sizerLeader->GetStaticBox()->Hide();
+        m_sizerFormat->GetStaticBox()->Hide();
+        m_sizerText->GetStaticBox()->Hide();
+
+        m_lblArrowLength->Hide();
+        m_txtArrowLength->Hide();
+        m_lblArrowLengthUnits->Hide();
+
+        m_lblExtensionOffset->Hide();
+        m_txtExtensionOffset->Hide();
+        m_lblExtensionOffsetUnits->Hide();
+
+        m_cbLayerActual = m_cbCenterLayer;
+        break;
+
     default:
         m_sizerLeader->GetStaticBox()->Hide();
+        m_sizerCenter->GetStaticBox()->Hide();
         break;
     }
 

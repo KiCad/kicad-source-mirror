@@ -122,6 +122,11 @@ TOOL_ACTION PCB_ACTIONS::drawAlignedDimension( "pcbnew.InteractiveDrawing.aligne
         _( "Add Aligned Dimension" ), _( "Add an aligned linear dimension" ),
         add_aligned_dimension_xpm, AF_ACTIVATE );
 
+TOOL_ACTION PCB_ACTIONS::drawCenterDimension( "pcbnew.InteractiveDrawing.centerDimension",
+       AS_GLOBAL, 0, "",
+       _( "Add Center Dimension" ), _( "Add a center dimension" ),
+       add_center_dimension_xpm, AF_ACTIVATE );
+
 TOOL_ACTION PCB_ACTIONS::drawLeader( "pcbnew.InteractiveDrawing.leader",
         AS_GLOBAL, 0, "",
         _( "Add Leader" ), _( "Add a leader dimension" ),

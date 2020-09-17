@@ -50,6 +50,8 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     PCB_TEXT_T,                  // in m_drawings
     PCB_LINE_T,                  // in m_drawings
     PCB_DIM_ALIGNED_T,           // in m_drawings
+    PCB_DIM_CENTER_T,            // in m_drawings
+    PCB_DIM_ORTHOGONAL_T,        // in m_drawings
     PCB_DIM_LEADER_T,            // in m_drawings
     PCB_TARGET_T,                // in m_drawings
     PCB_VIA_T,                   // in m_tracks
@@ -311,6 +313,8 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
         break;
 
