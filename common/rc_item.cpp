@@ -55,11 +55,15 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, const std::map<KIID, EDA_ITEM*>&
     EDA_ITEM* mainItem = nullptr;
     EDA_ITEM* auxItem = nullptr;
 
-    if( m_mainItemUuid != niluuid )
-        mainItem = aItemMap.at( m_mainItemUuid );
+    auto ii = aItemMap.find( m_mainItemUuid );
 
-    if( m_auxItemUuid != niluuid )
-        auxItem = aItemMap.at( m_auxItemUuid );
+    if( ii != aItemMap.end() )
+        mainItem = ii->second;
+
+    ii = aItemMap.find( m_auxItemUuid );
+
+    if( ii != aItemMap.end() )
+        auxItem = ii->second;
 
     if( mainItem && auxItem )
     {

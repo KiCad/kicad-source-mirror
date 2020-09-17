@@ -392,6 +392,12 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
+    // Close modeless dialogs
+    wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME );
+
+    if( open_dlg )
+        open_dlg->Close( true );
+
     // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
@@ -807,14 +813,6 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         return false;
     }
 
-    // First close the DRC dialog.  For some reason, if the board editor frame is destroyed
-    // when the DRC dialog currently open, Pcbnew crashes, at least on Windows.
-    DIALOG_DRC* open_dlg = static_cast<DIALOG_DRC*>(
-        wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME ) );
-
-    if( open_dlg )
-        open_dlg->Close( true );
-
     if( IsContentModified() )
     {
         wxFileName fileName = GetBoard()->GetFileName();
@@ -829,6 +827,13 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
             return false;
         }
     }
+
+    // Close modeless dialogs.  They're trouble when they get destroyed after the frame and/or
+    // board.
+    wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME );
+
+    if( open_dlg )
+        open_dlg->Close( true );
 
     return true;
 }
