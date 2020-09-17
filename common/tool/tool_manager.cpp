@@ -701,8 +701,7 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                             "TOOL_MANAGER::dispatchInternal - %s stopped passing event: %s",
                             st->theTool->GetName(), aEvent.Format() );
 
-                    handled = true;
-                    break;
+                    return true;
                 }
             }
         }

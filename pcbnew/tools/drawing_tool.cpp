@@ -416,8 +416,6 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    bool reselect = false;
-
     // Prime the pump
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
@@ -428,18 +426,16 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->SetCurrentCursor( text ? wxCURSOR_ARROW : wxCURSOR_PENCIL );
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
-        if( reselect && text )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, text );
-
-        auto cleanup = [&] () {
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-            m_controls->ForceCursorPosition( false );
-            m_controls->ShowCursor( true );
-            m_controls->SetAutoPan( false );
-            m_controls->CaptureCursor( false );
-            delete text;
-            text = NULL;
-        };
+        auto cleanup = [&]()
+                       {
+                           m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+                           m_controls->ForceCursorPosition( false );
+                           m_controls->ShowCursor( true );
+                           m_controls->SetAutoPan( false );
+                           m_controls->CaptureCursor( false );
+                           delete text;
+                           text = NULL;
+                       };
 
         if( evt->IsCancelInteractive() )
         {
@@ -575,13 +571,15 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             selection().SetReferencePoint( cursorPos );
             m_view->Update( &selection() );
         }
-
-        else if( text && evt->IsAction( &PCB_ACTIONS::properties ) )
+        else if( evt->IsAction( &PCB_ACTIONS::properties ) )
         {
-            // Calling 'Properties' action clears the selection, so we need to restore it
-            reselect = true;
+            if( text )
+            {
+                frame()->OnEditItemRequest( text );
+                m_view->Update( &selection() );
+                frame()->SetMsgPanel( text );
+            }
         }
-
         else
             evt->SetPassEvent();
     }
@@ -653,17 +651,18 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 evt->IsPrime() ? evt->Position() : m_controls->GetMousePosition(), nullptr );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        auto cleanup = [&] () {
-            m_controls->SetAutoPan( false );
-            m_controls->CaptureCursor( false );
+        auto cleanup = [&]()
+                       {
+                           m_controls->SetAutoPan( false );
+                           m_controls->CaptureCursor( false );
 
-            preview.Clear();
-            m_view->Update( &preview );
+                           preview.Clear();
+                           m_view->Update( &preview );
 
-            delete dimension;
-            dimension = nullptr;
-            step = SET_ORIGIN;
-        };
+                           delete dimension;
+                           dimension = nullptr;
+                           step = SET_ORIGIN;
+                       };
 
         if( evt->IsCancelInteractive() )
         {
@@ -879,6 +878,15 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
             // Show a preview of the item
             m_view->Update( &preview );
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::properties ) )
+        {
+            if( step != SET_ORIGIN )
+            {
+                frame()->OnEditItemRequest( dimension );
+                dimension->Update();
+                frame()->SetMsgPanel( dimension );
+            }
         }
         else
             evt->SetPassEvent();
@@ -1242,6 +1250,15 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
             m_view->Update( &preview );
             frame()->SetMsgPanel( graphic );
         }
+        else if( evt->IsAction( &PCB_ACTIONS::properties ) )
+        {
+            if( started )
+            {
+                frame()->OnEditItemRequest( graphic );
+                m_view->Update( &preview );
+                frame()->SetMsgPanel( graphic );
+            }
+        }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu( selection() );
@@ -1516,6 +1533,15 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT** aGraphic, bo
             m_view->Update( &preview );
             frame()->SetMsgPanel( graphic );
         }
+        else if( evt->IsAction( &PCB_ACTIONS::properties ) )
+        {
+            if( firstPoint )
+            {
+                frame()->OnEditItemRequest( graphic );
+                m_view->Update( &preview );
+                frame()->SetMsgPanel( graphic );
+            }
+        }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu( selection() );
@@ -1789,6 +1815,15 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
             else
             {
                 status.Hide();
+            }
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::properties ) )
+        {
+            if( started )
+            {
+                frame()->OnEditItemRequest( zoneTool.GetZone() );
+                zoneTool.OnGeometryChange( polyGeomMgr );
+                frame()->SetMsgPanel( zoneTool.GetZone() );
             }
         }
         else

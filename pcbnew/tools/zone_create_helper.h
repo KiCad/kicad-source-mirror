@@ -73,6 +73,8 @@ public:
 
     virtual ~ZONE_CREATE_HELPER();
 
+    ZONE_CONTAINER* GetZone() const { return m_zone.get(); }
+
     /*
      * Interface for receiving POLYGON_GEOM_MANAGER update
      */
