@@ -121,7 +121,7 @@ wxString        PyStringToWx( PyObject* str );
 wxArrayString   PyArrayStringToWx( PyObject* arr );
 wxString        PyErrStringWithTraceback();
 
-wxString        PyScriptingPath();
-wxString        PyPluginsPath();
+wxString        PyScriptingPath( bool aUserPath = false );
+wxString        PyPluginsPath( bool aUserPath = false );
 
 #endif    // __PYTHON_SCRIPTING_H

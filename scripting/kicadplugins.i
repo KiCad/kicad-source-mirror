@@ -159,18 +159,10 @@ def LoadPlugins(bundlepath=None):
             <bundlepath>/
             <bundlepath>/plugins/
 
-        The Scripts relative to the KiCad search path environment variable:
-            [KICAD_PATH]/scripting/
-            [KICAD_PATH]/scripting/plugins/
-
         The Scripts relative to the KiCad Users configuration:
-            <kicad_config_path>/scripting/
-            <kicad_config_path>/scripting/plugins/
+            <userpath>/
+            <userpath>/plugins/
 
-        And on Linux ONLY, extra paths relative to the users home directory:
-            ~/.kicad_plugins/
-            ~/.kicad/scripting/
-            ~/.kicad/scripting/plugins/
     """
     import os
     import sys
@@ -181,7 +173,6 @@ def LoadPlugins(bundlepath=None):
         import importlib
         importlib.invalidate_caches()
 
-    kicad_path = os.environ.get('KICAD_PATH')
     config_path = pcbnew.SETTINGS_MANAGER.GetUserSettingsPath()
     plugin_directories=[]
 
@@ -196,18 +187,10 @@ def LoadPlugins(bundlepath=None):
         plugin_directories.append(bundlepath)
         plugin_directories.append(os.path.join(bundlepath, 'plugins'))
 
-    if kicad_path:
-        plugin_directories.append(os.path.join(kicad_path, 'scripting'))
-        plugin_directories.append(os.path.join(kicad_path, 'scripting', 'plugins'))
-
     if config_path:
         plugin_directories.append(os.path.join(config_path, 'scripting'))
         plugin_directories.append(os.path.join(config_path, 'scripting', 'plugins'))
 
-    if sys.platform.startswith('linux'):
-        plugin_directories.append(os.path.join(os.environ['HOME'],'.kicad_plugins'))
-        plugin_directories.append(os.path.join(os.environ['HOME'],'.kicad','scripting'))
-        plugin_directories.append(os.path.join(os.environ['HOME'],'.kicad','scripting','plugins'))
 
     global PLUGIN_DIRECTORIES_SEARCH
     PLUGIN_DIRECTORIES_SEARCH=""

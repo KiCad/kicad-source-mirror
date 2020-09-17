@@ -41,6 +41,7 @@
 #include <pcb_edit_frame.h>
 #include <eda_dde.h>
 #include <wx/file.h>
+#include <wx/log.h>
 #include <wx/snglinst.h>
 #include <gestfich.h>
 #include <pcbnew.h>
@@ -279,6 +280,16 @@ static bool scriptingSetup()
     wxSetEnv( wxT( "PYTHONPATH" ), pypath );
 
 #endif
+
+    wxFileName path( PyPluginsPath( true ) + wxT("/") );
+
+    // Ensure the user plugin path exists, and create it if not.
+    if( !path.DirExists() && !path.Mkdir() )
+    {
+        wxLogDebug( "Warning: could not create user scripting path %s",
+                    path.GetPath() );
+        return false;
+    }
 
     if( !pcbnewInitPythonScripting( TO_UTF8( PyScriptingPath() ) ) )
     {

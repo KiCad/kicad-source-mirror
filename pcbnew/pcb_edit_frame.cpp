@@ -1475,11 +1475,11 @@ void PCB_EDIT_FRAME::PythonPluginsShowFolder()
     wxString msg;
 
     // Quote in case there are spaces in the path.
-    msg.Printf( "open \"%s\"", PyPluginsPath() );
+    msg.Printf( "open \"%s\"", PyPluginsPath( true ) );
 
     system( msg.c_str() );
 #else
-    wxString pypath( PyPluginsPath() );
+    wxString pypath( PyPluginsPath( true ) );
 
     // Quote in case there are spaces in the path.
     AddDelimiterString( pypath );

@@ -40,6 +40,7 @@
 #include <trace_helpers.h>
 
 #include <pgm_base.h>
+#include <settings/settings_manager.h>
 
 /* init functions defined by swig */
 
@@ -207,7 +208,7 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
 
 #endif  // ifdef KICAD_SCRIPTING_WXPYTHON
 
-    // Load pcbnew inside Python and load all the user plugins, TODO: add system wide plugins
+    // Load pcbnew inside Python and load all the user plugins and package-based plugins
     {
         PyLOCK lock;
 
@@ -616,16 +617,23 @@ wxString PyErrStringWithTraceback()
 /**
  * Find the Python scripting path.
  */
-wxString PyScriptingPath()
+wxString PyScriptingPath( bool aUserPath )
 {
     wxString path;
 
     //@todo This should this be a user configurable variable eg KISCRIPT?
+    if( aUserPath)
+    {
+        path = SETTINGS_MANAGER::GetUserSettingsPath() + wxT( "/scripting" );
+    }
+    else
+    {
 #if defined( __WXMAC__ )
-    path = GetOSXKicadDataDir() + wxT( "/scripting" );
+        path = GetOSXKicadDataDir() + wxT( "/scripting" );
 #else
-    path = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting" );
+        path = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting" );
 #endif
+    }
 
     wxFileName scriptPath( path );
     scriptPath.MakeAbsolute();
@@ -640,9 +648,9 @@ wxString PyScriptingPath()
 }
 
 
-wxString PyPluginsPath()
+wxString PyPluginsPath( bool aUserPath )
 {
     // Note we are using unix path separator, because window separator sometimes
     // creates issues when passing a command string to a python method by PyRun_SimpleString
-    return PyScriptingPath() + '/' + "plugins";
+    return PyScriptingPath( aUserPath ) + '/' + "plugins";
 }
