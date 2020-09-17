@@ -98,7 +98,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-17 01:08+0200\n"
-"PO-Revision-Date: 2020-09-17 01:18+0200\n"
+"PO-Revision-Date: 2020-09-17 11:46+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -3389,27 +3389,27 @@ msgstr "No"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:107
 msgid "Right button drag:"
-msgstr ""
+msgstr "Trascinamento pulsante destro:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:124
 msgid "Mouse Wheel and Touchpad Scrolling"
-msgstr ""
+msgstr "Rotella mouse e scorrimento touchpad"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Behavior of vertical touchpad or scroll wheel:"
-msgstr ""
+msgstr "Comportamento touchpad verticale o rotella mouse:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:135
 msgid "While pressing:"
-msgstr ""
+msgstr "Mentre si preme:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:143
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:147
 msgid "Shift"
-msgstr ""
+msgstr "Maiusc"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:151
 msgid "Alt"
@@ -3429,12 +3429,12 @@ msgstr "Pan sinistra/destra:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:206
 msgid "Pan left/right with horizontal touchpad or scroll wheel movement"
-msgstr ""
+msgstr "Pan sinistra/destra con touchpad orizzontale o movimento rotella mouse"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:207
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
-msgstr ""
+msgstr "Sposta l'area di lavoro a sinistra e destra quando si fa lo scorrimento a sinistra e destra sul touchpad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:82
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
@@ -5007,11 +5007,11 @@ msgstr "%s è già in esecuzione. Continuare?"
 
 #: common/pgm_base.cpp:613
 msgid "This language is not supported by the operating system."
-msgstr ""
+msgstr "Questa lingua non è supportata dal sistema operativo."
 
 #: common/pgm_base.cpp:675
 msgid "The KiCad language file for this language is not installed."
-msgstr ""
+msgstr "Il file KiCad di supporto per questa lingua non è installato."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:160
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:227
@@ -5026,12 +5026,12 @@ msgstr "Impossibile aprire il file \"%s\""
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:219
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:229
 msgid "The selected file is not valid or might be corrupt!"
-msgstr ""
+msgstr "Il file selezionato non è valido o potrebbe essere corrotto!"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:319
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr ""
+msgstr "Numero di punti non previsto in \"%s\". Trovato %d ma era previsto %d."
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:39
 #, c-format
@@ -8457,7 +8457,7 @@ msgstr "Esegui"
 #: eeschema/dialogs/dialog_erc.cpp:84 eeschema/dialogs/dialog_erc.cpp:215
 #: eeschema/dialogs/dialog_erc.cpp:230
 msgid "Some components are not annotated.  ERC cannot be run."
-msgstr ""
+msgstr "Alcuni componenti non sono annotati. l'ERC non può essere eseguito."
 
 #: eeschema/dialogs/dialog_erc.cpp:134
 msgid "Delete exclusions too?"
@@ -8567,7 +8567,7 @@ msgstr "Le violazioni non saranno controllate o riportate"
 
 #: eeschema/dialogs/dialog_erc.cpp:412
 msgid "Edit pin-to-pin conflict map..."
-msgstr ""
+msgstr "Modifica la mappa conflitti da-pin-a-pin..."
 
 #: eeschema/dialogs/dialog_erc.cpp:416 pcbnew/dialogs/dialog_drc.cpp:384
 msgid "Edit violation severities..."
@@ -8580,7 +8580,7 @@ msgstr "Apri la finestra impostazioni schema..."
 #: eeschema/dialogs/dialog_erc.cpp:475
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
 msgid "Pin Conflicts Map"
-msgstr ""
+msgstr "Mappa conflitti pin"
 
 #: eeschema/dialogs/dialog_erc.cpp:479
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
@@ -9194,7 +9194,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_netlist.cpp:391
 msgid "Create Netlist and Run Simulator Command"
-msgstr ""
+msgstr "Crea netlist ed esegui comando di simulazione"
 
 #: eeschema/dialogs/dialog_netlist.cpp:442
 msgid "Netlist command:"
@@ -9745,7 +9745,7 @@ msgstr "Un foglio deve avere un nome file valido."
 
 #: eeschema/dialogs/dialog_sch_sheet_props.cpp:255
 msgid "Sheet file must have a '.kicad_sch' extension."
-msgstr ""
+msgstr "Il file foglio deve avere estensione \".kicad_sch\"."
 
 #: eeschema/dialogs/dialog_sch_sheet_props.cpp:278
 msgid "Untitled Sheet"
@@ -9941,7 +9941,7 @@ msgstr "Variabili testo"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:86
 #: pcbnew/dialogs/dialog_board_setup.cpp:98
 msgid "Project is missing or read-only. Changes will not be saved."
-msgstr ""
+msgstr "Il progetto manca o è in sola lettura. I cambiamenti non verranno salvati."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:148
 #, c-format
@@ -12070,7 +12070,7 @@ msgstr "Unità %s"
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
-msgstr ""
+msgstr "Modifica simbolo %s dallo schema.  Salvando verrà aggiornato solo lo schema."
 
 #: eeschema/libedit/lib_edit_frame.cpp:702
 #, c-format
@@ -12682,7 +12682,7 @@ msgstr "Simbolo di potenza"
 
 #: eeschema/sch_component.cpp:1339
 msgid "flags"
-msgstr ""
+msgstr "flag"
 
 #: eeschema/sch_component.cpp:1348
 msgid "Missing parent"
@@ -21549,9 +21549,8 @@ msgstr ""
 "Se non selezionata, verrà riportata solo la prima violazione DRC per ogni connessione di pista."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
-#, fuzzy
 msgid "Test tracks against zone fills (slow)"
-msgstr "Controllo tracce rispetto alle aree rame riempite (molto lento)"
+msgstr "Controlla piste rispetto alle aree riempite (lento)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -21571,14 +21570,13 @@ msgid "Refill all zones before performing DRC"
 msgstr "Aggiorna tutte le zone prima di eseguire il DRC"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:44
-#, fuzzy
 msgid "Test for parity between PCB and schematic"
-msgstr "Controlla le impronte rispetto allo schema"
+msgstr "Controlla la parità tra C.S. e schema elettrico"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%d)"
-msgstr "Violazioni:"
+msgstr "Violazioni (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:102
 #, c-format
@@ -21586,9 +21584,9 @@ msgid "Unconnected Items (%d)"
 msgstr "Elementi non connessi (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic Parity (%d)"
-msgstr "Campo schema"
+msgstr "Parità schema (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:173
 msgid "Delete Marker"
@@ -26734,9 +26732,9 @@ msgid "ERROR: <a href='%d:%d'>%s</a>%s"
 msgstr "ERRORE: <a href='%d:%d'>%s</a>%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:71 pcbnew/drc/drc_rule_parser.cpp:445
-#, fuzzy, c-format
+#, c-format
 msgid "ERROR: %s%s"
-msgstr "ERRORE:"
+msgstr "ERRORE: %s%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:108 pcbnew/drc/drc_rule_parser.cpp:191
 #: pcbnew/drc/drc_rule_parser.cpp:337
@@ -26859,17 +26857,14 @@ msgid "Unconnected nets..."
 msgstr "Collegamenti non connessi..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:125
-#, fuzzy
 msgid "Pad clearances..."
 msgstr "Distanze piazzole..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:128
-#, fuzzy
 msgid "Track/via clearances..."
 msgstr "Distanze piste/via..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:131
-#, fuzzy
 msgid "Copper drawing/text clearances..."
 msgstr "Distanza grafiche/test rame..."
 
@@ -26913,7 +26908,7 @@ msgstr "Sovrapposizione ingombro impronte..."
 #: pcbnew/drc/drc_test_provider_disallow.cpp:73
 #, fuzzy
 msgid "Keepouts & disallow constraints..."
-msgstr "Cambia limitazioni metodo modifica"
+msgstr "....zone proibite e non abilitate..."
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:86
 #, c-format
@@ -26953,17 +26948,17 @@ msgstr "Impronta mancante %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:139
 msgid "No corresponding pin found in schematic."
-msgstr ""
+msgstr "Nessun pin corrispondente trovato nello schema."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:148
 #, c-format
 msgid "Pad missing net given by schematic (%s)."
-msgstr ""
+msgstr "Alla piazzola manca il collegamento dato dallo schema (%s)."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:158
 #, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)."
-msgstr ""
+msgstr "Il collegamento piazzola (%s) non corrisponde il collegamento dato dallo schema (%s)."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:178
 #, c-format
@@ -26972,7 +26967,7 @@ msgstr "Nessuna piazzola trovata per il pin %s nello schema."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:211
 msgid "Layout-vs-Schematic checks..."
-msgstr ""
+msgstr "Controlli disposizione-schema..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:117
 #, c-format
@@ -27874,10 +27869,13 @@ msgid ""
 "\n"
 "Save anyway?"
 msgstr ""
+"Per favore, segnalare questo problema.  Errore nella validazione la struttura del gruppo: %s\n"
+"\n"
+"Salvare comunque?"
 
 #: pcbnew/kicad_plugin.cpp:342
 msgid "Internal group data structure corrupt"
-msgstr ""
+msgstr "Struttura interna dati gruppo rovinata"
 
 #: pcbnew/kicad_plugin.cpp:344
 msgid "Save Anyway"
@@ -29008,6 +29006,9 @@ msgid ""
 "\n"
 "Attempt repair?"
 msgstr ""
+"Errore nella struttura del gruppo nel file: %s\n"
+"\n"
+"Tentare una riparazione?"
 
 #: pcbnew/pcb_parser.cpp:799
 msgid "File data error"
@@ -29139,7 +29140,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:1182
 #, c-format
 msgid "Cannot create directory \"%s\" -> no 3D-models will be imported."
-msgstr ""
+msgstr "Impossibile creare cartella \"%s\" -> nessun modello 3D verrà importato."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1261
 #, c-format
@@ -29225,7 +29226,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Ignore Barcode on Altium layer %d because it is not supported right now."
-msgstr ""
+msgstr "Ignora codice a barre sullo strato Altium %d perché non è ancora supportato."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2312
 #, c-format
@@ -29252,6 +29253,11 @@ msgid ""
 "Current Design size: %.2f, %.2f millimeters. \n"
 "Maximum permitted design size: %.2f, %.2f millimeters.\n"
 msgstr ""
+"Il progetto è troppo grande e non può essere importato in KiCad. \n"
+"Ridurre la dimensione massima del progetto in CADSTAR andando in: \n"
+"Design Tab -> Properties -> Design Options -> Maximum Design Size. \n"
+"Dimensione progetto corrente: %.2f, %.2f millimetri. \n"
+"Dimensione massima permessa progetto: %.2f, %.2f millimetri.\n"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:75
 msgid ""
@@ -29259,31 +29265,33 @@ msgid ""
 "the schematic. It is recommended that you carry out an 'Align Nets' "
 "procedure in CADSTAR and re-import, to avoid inconsistencies between the PCB "
 "and the schematic. "
-msgstr ""
+msgstr "Il file selezionato indica che i collegamenti potrebbero essere non sincronizzati con lo schema elettrico. Si raccomanda di eseguire una procedura di 'Align Nets' in CADSTAR e re-importare, per evitare incongruenze tra C.S. e schema elettrico. "
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:97
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. All "
 "components have been loaded on top of each other. "
-msgstr ""
+msgstr "Il progetto CADSTAR contiene particolari che non hanno un equivalente KiCad. Tutti i componenti sono stati caricati uno sopra l'altro. "
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:101
 msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
 msgstr ""
+"Il progetto CADSTAR è stato importato con successo.\n"
+"Verificare gli errori e gli avvertimeni di importazione (se presenti)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:110
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
 "have been mapped to KiCad layer '%s' instead."
-msgstr ""
+msgstr "Lo strato CADSTAR \"%s\" non ha equivalente KiCad. Tutti gli elementi su questo strato sono stati rimappati allo strato KiCad \"%s\"."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:168
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
-msgstr ""
+msgstr "Strato inatteso \"%s\" nella pila degli strati."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:246
 #, c-format
@@ -29295,7 +29303,7 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:412
 #, c-format
 msgid "Design rule %s was not found. This was ignored."
-msgstr ""
+msgstr "Regola di progettazione %s non trovata. Ignorata."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:438
 msgid ""
@@ -29317,7 +29325,7 @@ msgstr ""
 msgid ""
 "The file appears to be corrupt. Unable to find group ID %s in the group "
 "definitions."
-msgstr ""
+msgstr "Il file sembra rovinato. Impossibile trovare l'ID gruppo %s nelle definizioni di gruppo."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:723
 #, c-format
@@ -30172,9 +30180,8 @@ msgid "Special Tools..."
 msgstr "Strumenti speciali..."
 
 #: pcbnew/tools/edit_tool.cpp:366
-#, fuzzy
 msgid "Select reference point for move..."
-msgstr "Selezionare il punto di riferimento per la copia..."
+msgstr "Selezionare il punto di riferimento per lo spostamento..."
 
 #: pcbnew/tools/edit_tool.cpp:698
 msgid "Edit track width/via size"
@@ -30254,75 +30261,63 @@ msgstr ""
 #: pcbnew/tools/pad_tool.cpp:534
 #, c-format
 msgid "Pad Edit Mode.  Press %s to exit."
-msgstr ""
+msgstr "Modalità modifica piazzola. Premere %s per uscire."
 
 #: pcbnew/tools/pad_tool.cpp:599
-#, fuzzy
 msgid "Edit pad shapes"
-msgstr "Esplodi forme piazzola"
+msgstr "Modifica forme piazzola"
 
 #: pcbnew/tools/pad_tool.cpp:699
-#, fuzzy
 msgid "Recombine pads"
-msgstr "Rinumera piazzole"
+msgstr "Ricombina piazzole"
 
 #: pcbnew/tools/pcb_actions.cpp:58
-#, fuzzy
 msgid "Convert to Polygon"
-msgstr "Schizza poligoni"
+msgstr "Converti in poligono"
 
 #: pcbnew/tools/pcb_actions.cpp:59
-#, fuzzy
 msgid "Creates a graphic polygon from the selection"
-msgstr "Disegna un poligono grafico"
+msgstr "Crea un poligono grafico dalla selezione"
 
 #: pcbnew/tools/pcb_actions.cpp:62
-#, fuzzy
 msgid "Convert to Zone"
-msgstr "Zona non in rame"
+msgstr "Converti in zona"
 
 #: pcbnew/tools/pcb_actions.cpp:62
-#, fuzzy
 msgid "Creates a copper zone from the selection"
-msgstr "Crea una copia del simbolo corrente"
+msgstr "Crea una zona rame dalla selezione corrente"
 
 #: pcbnew/tools/pcb_actions.cpp:66
 msgid "Convert to Keepout"
-msgstr ""
+msgstr "Converte in zona proibita"
 
 #: pcbnew/tools/pcb_actions.cpp:67
-#, fuzzy
 msgid "Creates a keepout zone from the selection"
-msgstr "Crea una nuova cartella per il progetto"
+msgstr "Crea una zona proibita dalla selezione"
 
 #: pcbnew/tools/pcb_actions.cpp:70
-#, fuzzy
 msgid "Convert to Lines"
-msgstr "Convertito"
+msgstr "Converti in linee"
 
 #: pcbnew/tools/pcb_actions.cpp:70
-#, fuzzy
 msgid "Creates graphic lines from the selection"
-msgstr "Mostra ratsnest degli elementi selezionati"
+msgstr "Crea linee grafiche dalla selezione"
 
 #: pcbnew/tools/pcb_actions.cpp:74
-#, fuzzy
 msgid "Convert to Arc"
-msgstr "Convertito"
+msgstr "Converti in arco"
 
 #: pcbnew/tools/pcb_actions.cpp:74
 msgid "Converts selected line segment to an arc"
-msgstr ""
+msgstr "Converte i segmenti di linea selezionati in un arco"
 
 #: pcbnew/tools/pcb_actions.cpp:78
-#, fuzzy
 msgid "Convert to Tracks"
-msgstr "Piste magnetiche:"
+msgstr "Converti in piste"
 
 #: pcbnew/tools/pcb_actions.cpp:79
-#, fuzzy
 msgid "Converts selected graphic lines to tracks"
-msgstr "Cancella lo strato grafico selezionato"
+msgstr "Converte le linee grafiche selezionate in piste"
 
 #: pcbnew/tools/pcb_actions.cpp:87
 msgid "Draw Line"
@@ -30341,9 +30336,8 @@ msgid "Draw a graphic polygon"
 msgstr "Disegna un poligono grafico"
 
 #: pcbnew/tools/pcb_actions.cpp:98
-#, fuzzy
 msgid "Draw Rectangle"
-msgstr "Rettangolo"
+msgstr "Disegna rettangolo"
 
 #: pcbnew/tools/pcb_actions.cpp:104
 msgid "Draw Circle"
@@ -30790,11 +30784,8 @@ msgid "Edit Pad as Graphic Shapes"
 msgstr "Modifica piazzola come forme grafiche"
 
 #: pcbnew/tools/pcb_actions.cpp:496
-#, fuzzy
 msgid "Ungroups a custom-shaped pad for editing as individual graphic shapes"
-msgstr ""
-"Coverti una piazzola di forma personalizzata in un inseme di forme "
-"geometriche"
+msgstr "De-raggruppa una piazzola di forma personalizzata per la modifica come insieme di forme individuali"
 
 #: pcbnew/tools/pcb_actions.cpp:502
 msgid "Finish Pad Edit"
@@ -31632,13 +31623,12 @@ msgid "Locking"
 msgstr "Blocco"
 
 #: pcbnew/tools/pcb_editor_control.cpp:128
-#, fuzzy
 msgid "Grouping"
-msgstr "Raggruppati per"
+msgstr "Raggruppamento"
 
 #: pcbnew/tools/pcb_editor_control.cpp:152
 msgid "Group is in inconsistent state: "
-msgstr ""
+msgstr "Il gruppo è in uno stato difforme:"
 
 #: pcbnew/tools/pcb_editor_control.cpp:364
 msgid "Merge Specctra Session file:"
@@ -31649,19 +31639,18 @@ msgid "Specctra DSN File"
 msgstr "File Specctra DSN"
 
 #: pcbnew/tools/pcb_editor_control.cpp:487
-#, fuzzy, c-format
+#, c-format
 msgid "%d duplicate IDs replaced.\n"
-msgstr "%d marcature temporali duplicate trovate e sostituite."
+msgstr "%d ID duplicati sostituiti.\n"
 
 #: pcbnew/tools/pcb_editor_control.cpp:502
 #, c-format
 msgid "%d potential problems repaired."
-msgstr ""
+msgstr "%d potenziali problemi riparati."
 
 #: pcbnew/tools/pcb_editor_control.cpp:507
-#, fuzzy
 msgid "No board problems found."
-msgstr "Nessuna scheda attualmente aperta."
+msgstr "Nessuna problema trovato."
 
 #: pcbnew/tools/pcb_editor_control.cpp:532
 msgid ""
@@ -31690,49 +31679,47 @@ msgid "Duplicate zone"
 msgstr "Duplica zona"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:55
-#, fuzzy
 msgid "Net Tools"
-msgstr "Imposta a"
+msgstr "Strumenti collegamenti"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Zone connection type: %s."
-msgstr "Tipo di connessione:"
+msgstr "Tipo connessione zona: %s"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:118
 #, c-format
 msgid "Overridden by %s; connection type: %s."
-msgstr ""
+msgstr "Superato da %s; tipo connessione: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:133
 #, c-format
 msgid "Pad is not a PTH pad; connection will be: %s."
-msgstr ""
+msgstr "La piazzola non è passante; la connessione sarà: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:145
-#, fuzzy, c-format
+#, c-format
 msgid "Zone thermal relief: %s."
-msgstr "Supporti termici"
+msgstr "Supporto termico zona: %s"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:152
 #, c-format
 msgid "Overridden by %s; thermal relief: %s."
-msgstr ""
+msgstr "Superato da %s; supporto termico: %s"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:161
-#, fuzzy, c-format
+#, c-format
 msgid "Zone clearance: %s."
-msgstr "Distanza min: %s"
+msgstr "Distanza zona: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:170
 #, c-format
 msgid "Overridden by larger thermal relief from %s;clearance: %s."
-msgstr ""
+msgstr "Superato da supporto termico più largo da %s; distanza: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:179
-#, fuzzy
 msgid "Clearance is 0."
-msgstr "Distanze"
+msgstr "La distanza è 0."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:210
 #, c-format
@@ -31744,38 +31731,36 @@ msgid "Select two items for a clearance resolution report."
 msgstr ""
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:230
-#, fuzzy
 msgid "Clearance Report"
-msgstr "Distanza"
+msgstr "Rapporto distanza"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:251
 #, c-format
 msgid "Active layer (%s) is not a copper layer.  No clearance defined."
-msgstr ""
+msgstr "Lo strato attivo (%s) non è uno strato rame. Nessuna distanza definita."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:257
 #: pcbnew/tools/pcb_inspection_tool.cpp:263
 #, c-format
 msgid "%s not present on layer %s.  No clearance defined."
-msgstr ""
+msgstr "%s non presente sullo strato %s.  Nessuna distanza definita."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:269
 msgid "Items have no electrical connections.  No clearance defined."
-msgstr ""
+msgstr "Gli elementi non hanno connessione elettrica.  Nessuna distanza definita."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:273
-#, fuzzy
 msgid "<h7>Clearance resolution for:</h7>"
-msgstr "Distanze contorni"
+msgstr "<h7>Risoluzione distanza per:</h7>"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:275
 #, c-format
 msgid "<ul><li>Layer %s</li><li>%s</li><li>%s</li></ul>"
-msgstr ""
+msgstr "<ul><li>Strato %s</li><li>%s</li><li>%s</li></ul>"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:294
 msgid "Items belong to the same net. Clearance is 0."
-msgstr ""
+msgstr "Gli elementi appartengono allo stesso collegamento.  La distanza è 0."
 
 #: pcbnew/tools/pcbnew_control.cpp:721
 msgid "Invalid clipboard contents"
@@ -31917,29 +31902,24 @@ msgid "Incomplete undo/redo operation: some items not found"
 msgstr "Operazione annulla/ripeti incompleta: alcuni elementi non trovati"
 
 #: pcbnew/widgets/appearance_controls.cpp:330
-#, fuzzy
 msgid "Show all vias"
-msgstr "Mostra tutti i collegamenti"
+msgstr "Mostra tutti i via"
 
 #: pcbnew/widgets/appearance_controls.cpp:331
-#, fuzzy
 msgid "Show all pads"
-msgstr "Mostra sul tutte le pagine"
+msgstr "Mostra tutte le piazzole"
 
 #: pcbnew/widgets/appearance_controls.cpp:332
-#, fuzzy
 msgid "Show copper zones"
-msgstr "Mostra spessore rame "
+msgstr "Mostra le zone rame"
 
 #: pcbnew/widgets/appearance_controls.cpp:336
-#, fuzzy
 msgid "Through-hole Pads"
 msgstr "Piazzole a fori passanti"
 
 #: pcbnew/widgets/appearance_controls.cpp:336
-#, fuzzy
 msgid "Show through-hole pads"
-msgstr "Mostra i modelli 3D a via passanti"
+msgstr "Mostra le piazzole a fori passanti"
 
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "References"
@@ -32038,139 +32018,121 @@ msgid "Net and netclass colors are shown on all copper items"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:635
-#, fuzzy
 msgid "Net and netclass colors are shown on the ratsnest only"
-msgstr "Crea un nuovo tema colore basato sul quello corrente"
+msgstr "Colori collegamenti e netclass mostrati solo sulla ratsnest"
 
 #: pcbnew/widgets/appearance_controls.cpp:641
-#, fuzzy
 msgid "Net and netclass colors are not shown"
-msgstr "Assegna ai valori della netclass:"
+msgstr "Colori collegamenti e netclass non mostrati"
 
 #: pcbnew/widgets/appearance_controls.cpp:649
-#, fuzzy
 msgid "Ratsnest display:"
-msgstr "Visualizzazione contorni:"
+msgstr "Visualizzazione ratsnest:"
 
 #: pcbnew/widgets/appearance_controls.cpp:652
 msgid "Choose what ratsnest lines to display"
-msgstr ""
+msgstr "Scegli tipo linee ratsnest da mostrare"
 
 #: pcbnew/widgets/appearance_controls.cpp:660
 msgid "Ratsnest lines are shown to items on all layers"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:665
-#, fuzzy
 msgid "Visible layers"
-msgstr "Visibili"
+msgstr "Strati visibili"
 
 #: pcbnew/widgets/appearance_controls.cpp:667
 msgid "Ratsnest lines are shown to items on visible layers"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:808
-#, fuzzy
 msgid "Set net color"
-msgstr "Incolla colore"
+msgstr "Imposta colore collegamento"
 
 #: pcbnew/widgets/appearance_controls.cpp:810
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight %s"
-msgstr "Evidenzia"
+msgstr "Evidenzia %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:813
 #: pcbnew/widgets/appearance_controls.cpp:1947
-#, fuzzy, c-format
+#, c-format
 msgid "Select tracks and vias in %s"
-msgstr "Crea piste e via"
+msgstr "Seleziona piste e via in %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:821
-#, fuzzy
 msgid "Hide all other nets"
-msgstr "Nascondi tutti gli strati in rame"
+msgstr "Nascondi tutti gli altri collegamenti"
 
 #: pcbnew/widgets/appearance_controls.cpp:854
 #, c-format
 msgid "Click to hide ratsnest for %s"
-msgstr ""
+msgstr "Clic per nascondere ratsnest per %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:855
 #, c-format
 msgid "Click to show ratsnest for %s"
-msgstr ""
+msgstr "Clic per mostrare ratsnest per %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:1211
-#, fuzzy
 msgid "Double click or middle click for color change, right click for menu"
-msgstr ""
-"Doppio clic del pulsante sinistro o clic del centrale per cambiare colore, "
-"pulsante destro per il menù"
+msgstr "Doppio clic o centrale per cambiare colore, clic destro per il menù"
 
 #: pcbnew/widgets/appearance_controls.cpp:1218
-#, fuzzy
 msgid "Show or hide this layer"
-msgstr "Mostra o nascondi gestione strati"
+msgstr "Mostra o nascondi questo strato"
 
 #: pcbnew/widgets/appearance_controls.cpp:1714
-#, fuzzy, c-format
+#, c-format
 msgid "Show or hide %s"
-msgstr "Mostrare o nascondere il nome del piedino"
+msgstr "Mostra o nascondi %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:1755
 #, c-format
 msgid "Set opacity of %s"
-msgstr ""
+msgstr "Imposta opacità a %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:1908
-#, fuzzy, c-format
+#, c-format
 msgid "Show or hide ratsnest for nets in %s"
-msgstr "Mostrare o nascondere il nome del piedino"
+msgstr "Mostra o nascondi ratsnest per i collegamenti in %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:1939
-#, fuzzy
 msgid "Set netclass color"
-msgstr "Assegna ai valori della netclass:"
+msgstr "Imposta colore netclass"
 
 #: pcbnew/widgets/appearance_controls.cpp:1944
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight nets in %s"
-msgstr "Collegamento evidenziato: %s"
+msgstr "Evidenzia collegamenti in %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:1954
-#, fuzzy
 msgid "Show all netclasses"
-msgstr "Mostra tutti i collegamenti"
+msgstr "Mostra tutte le netclass"
 
 #: pcbnew/widgets/appearance_controls.cpp:1957
-#, fuzzy
 msgid "Hide all other netclasses"
-msgstr "Nascondi tutti i campi impronta"
+msgstr "Nascondi tutte le altre netclass"
 
 #: pcbnew/widgets/appearance_controls.cpp:2011
-#, fuzzy
 msgid "Save preset..."
-msgstr "Salva con nome..."
+msgstr "Salva preimpostazione..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2012
-#, fuzzy
 msgid "Delete preset..."
-msgstr "Cancella marcatori"
+msgstr "Cancella preimpostazione..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2093
-#, fuzzy
 msgid "Layer preset name:"
-msgstr "Selezione strato:"
+msgstr "Nome preimpostazione strato:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2093
-#, fuzzy
 msgid "Save Layer Preset"
-msgstr "Imposta coppia di strati..."
+msgstr "Salva preimpostazione strato"
 
 #: pcbnew/widgets/appearance_controls.cpp:2128
-#, fuzzy
 msgid "Presets"
-msgstr "Reimposta"
+msgstr "Reimpostazioni"
 
 #: pcbnew/widgets/appearance_controls.cpp:2140
 msgid "Delete Preset"
@@ -32321,58 +32283,6 @@ msgstr "Ri-riempi %d zone"
 #~ msgid "rule"
 #~ msgstr "regola"
 
-#, fuzzy
-#~ msgid "minimum"
-#~ msgstr "Scheda minima"
-
-#, fuzzy
-#~ msgid "Testing unconnected nets"
-#~ msgstr "Elementi non collegati"
-
-#, fuzzy
-#~ msgid "Testing pad copper clerances"
-#~ msgstr "Distanze testo e grafiche...\n"
-
-#, fuzzy
-#~ msgid "Testing track/via copper clerances"
-#~ msgstr "Modifica le proprietà pista/via"
-
-#, fuzzy
-#~ msgid "Testing copper zone clearances"
-#~ msgstr "Distanze da zona a zona...\n"
-
-#, fuzzy
-#~ msgid "Testing component courtyard overlap"
-#~ msgstr "Gli ingombri si sovrappongono"
-
-#, fuzzy
-#~ msgid "Testing hole<->pad clearances"
-#~ msgstr "Distanza da foro a foro:"
-
-#, fuzzy
-#~ msgid "Testing hole<->hole clearances"
-#~ msgstr "Distanza da foro a foro:"
-
-#, fuzzy
-#~ msgid "Test board outline"
-#~ msgstr "Contorni scheda"
-
-#, fuzzy
-#~ msgid "Test disabled layers"
-#~ msgstr "Elementi su strati disabilitati...\n"
-
-#, fuzzy
-#~ msgid "Test text variables"
-#~ msgstr "Variabili testo"
-
-#, fuzzy
-#~ msgid "Testing track widths"
-#~ msgstr "Larghezza pista minima:"
-
-#, fuzzy
-#~ msgid "Unrecognized layer '%s' "
-#~ msgstr "Strati non definiti:"
-
 #~ msgid "Committing changes..."
 #~ msgstr "Inserimeno cambiamenti..."
 
@@ -32422,14 +32332,6 @@ msgstr "Ri-riempi %d zone"
 
 #~ msgid "Show pad in outline mode"
 #~ msgstr "Mostra piazzole in modalità contorno"
-
-#, fuzzy
-#~ msgid "Rule Clauses"
-#~ msgstr "Netclass"
-
-#, fuzzy
-#~ msgid "Item Types"
-#~ msgstr "Elementi"
 
 #~ msgid "0.01 mm / 1 mil"
 #~ msgstr "0.01 mm / 1 mil"
@@ -32493,14 +32395,6 @@ msgstr "Ri-riempi %d zone"
 
 #~ msgid "Remap Symbols..."
 #~ msgstr "Rimappa i simboli..."
-
-#, fuzzy
-#~ msgid "Enter"
-#~ msgstr "Centra"
-
-#, fuzzy
-#~ msgid "Item %s is already in group for merge"
-#~ msgstr "Il nome strato \"%s\" è già in uso."
 
 #~ msgid "Some items failed DRC and were not modified."
 #~ msgstr "Alcuni elementi hanno fallito il DRC e non sono stati modificati."
