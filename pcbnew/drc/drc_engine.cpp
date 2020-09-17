@@ -435,6 +435,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 {
 #define REPORT( s ) { if( aReporter ) { aReporter->Report( s ); } }
 #define UNITS aReporter ? aReporter->GetUnits() : EDA_UNITS::MILLIMETRES
+    /*
+     * NOTE: all string manipulation MUST be kept inside the REPORT macro.  It absolutely
+     * kills performance when running bulk DRC tests (where aReporter is nullptr).
+     */
 
     const BOARD_CONNECTED_ITEM* connectedA = dynamic_cast<const BOARD_CONNECTED_ITEM*>( a );
     const BOARD_CONNECTED_ITEM* connectedB = dynamic_cast<const BOARD_CONNECTED_ITEM*>( b );
@@ -482,33 +486,25 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         // Last matching rule wins, so process in reverse order
         for( int ii = (int) ruleset->size() - 1; ii >= 0; --ii )
         {
-            wxString msg;
             const CONSTRAINT_WITH_CONDITIONS* rcons = ruleset->at( ii );
             implicit = rcons->parentRule && rcons->parentRule->m_Implicit;
 
             REPORT( "" )
 
-            if( implicit )
-            {
-                msg = wxString::Format( _( "Checking %s;" ),
-                                        rcons->constraint.GetName() );
-            }
-            else
-            {
-                msg = wxString::Format( _( "Checking rule %s;"),
-                                        rcons->constraint.GetName() );
-            }
-
             if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
             {
                 int clearance = rcons->constraint.m_Value.Min();
-
-                msg += " ";
-                msg += wxString::Format( _( "clearance: %s." ),
-                                         MessageTextFromValue( UNITS, clearance, true ) );
+                REPORT( wxString::Format( implicit ? _( "Checking %s; clearance: %s." )
+                                                   : _( "Checking rule %s; clearance: %s."),
+                                          rcons->constraint.GetName(),
+                                          MessageTextFromValue( UNITS, clearance, true ) ) )
             }
-
-            REPORT( msg );
+            else
+            {
+                REPORT( wxString::Format( implicit ? _( "Checking %s." )
+                                                   : _( "Checking rule %s."),
+                                          rcons->constraint.GetName() ) )
+            }
 
             if( aLayer != UNDEFINED_LAYER && !rcons->layerTest.test( aLayer ) )
             {
