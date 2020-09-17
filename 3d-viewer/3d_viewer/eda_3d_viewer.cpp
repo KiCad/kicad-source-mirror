@@ -291,9 +291,6 @@ void EDA_3D_VIEWER::OnCloseWindow( wxCloseEvent &event )
     //delete m_canvas;
     //m_canvas = nullptr;
 
-    COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
-    Pgm().GetSettingsManager().SaveColorSettings( colors, "3d_viewer" );
-
     Destroy();
     event.Skip( true );
 }
@@ -581,7 +578,21 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
     auto save_color =
             [colors] ( SFVEC4F& aSource, LAYER_3D_ID aTarget )
             {
-                colors->SetColor( aTarget, COLOR4D( aSource.r, aSource.g, aSource.b, aSource.a ) );
+                // You could think just copy the new color in config is enough.
+                // unfortunately, SFVEC4F uses floats, and COLOR4D uses doubles,
+                // and the conversion SFVEC4F from/to COLOR4D creates small diffs.
+                //
+                // This has no matter to draw colors, but creates slight differences
+                // in config file, that appears always modified.
+                // So we must compare the SFVEC4F old and new values and update only
+                // actual changes.
+                SFVEC4F newSFVEC4Fcolor( float(colors->GetColor( aTarget ).r),
+                                         float(colors->GetColor( aTarget ).g),
+                                         float(colors->GetColor( aTarget ).b),
+                                         float(colors->GetColor( aTarget ).a) );
+
+                if( aSource != newSFVEC4Fcolor )
+                    colors->SetColor( aTarget, COLOR4D( aSource.r, aSource.g, aSource.b, aSource.a ) );
             };
 
     save_color( m_boardAdapter.m_BgColorBot,         LAYER_3D_BACKGROUND_BOTTOM );
@@ -592,6 +603,8 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
     save_color( m_boardAdapter.m_SilkScreenColorTop, LAYER_3D_SILKSCREEN_TOP );
     save_color( m_boardAdapter.m_SolderMaskColorTop, LAYER_3D_SOLDERMASK );
     save_color( m_boardAdapter.m_SolderPasteColor,   LAYER_3D_SOLDERPASTE );
+
+    Pgm().GetSettingsManager().SaveColorSettings( colors, "3d_viewer" );
 
     wxLogTrace( m_logTrace, m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::RAYTRACING ?
                             "EDA_3D_VIEWER::SaveSettings render setting Ray Trace" :
