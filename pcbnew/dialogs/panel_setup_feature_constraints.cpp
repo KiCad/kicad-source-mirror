@@ -64,8 +64,8 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataToWindow()
 
     m_maxError.SetValue( m_BrdSettings->m_MaxError );
 
-    m_rbOutlinePolygonFastest->SetValue( m_BrdSettings->m_ZoneUseNoOutlineInFill );
-    m_rbOutlinePolygonBestQ->SetValue( !m_BrdSettings->m_ZoneUseNoOutlineInFill );
+    m_rbOutlinePolygonFastest->SetValue( m_BrdSettings->m_ZoneFillVersion == 6 );
+    m_rbOutlinePolygonBestQ->SetValue( m_BrdSettings->m_ZoneFillVersion == 5 );
     m_allowExternalFilletsOpt->SetValue( m_BrdSettings->m_ZoneKeepExternalFillets );
 
     m_minClearance.SetValue( m_BrdSettings->m_MinClearance );
@@ -113,7 +113,7 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
     m_BrdSettings->m_MaxError = Clamp<int>( IU_PER_MM * MINIMUM_ERROR_SIZE_MM,
             m_maxError.GetValue(), IU_PER_MM * MAXIMUM_ERROR_SIZE_MM );
 
-    m_BrdSettings->m_ZoneUseNoOutlineInFill = m_rbOutlinePolygonFastest->GetValue();
+    m_BrdSettings->m_ZoneFillVersion = m_rbOutlinePolygonFastest->GetValue() ? 6 : 5;
     m_BrdSettings->m_ZoneKeepExternalFillets = m_allowExternalFilletsOpt->GetValue();
 
     m_BrdSettings->m_MinClearance = m_minClearance.GetValue();

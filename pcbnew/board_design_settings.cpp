@@ -162,7 +162,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_DRCSeverities[ DRCE_NET_CONFLICT ] = RPT_SEVERITY_WARNING;
 
     m_MaxError = ARC_HIGH_DEF;
-    m_ZoneUseNoOutlineInFill = true;            // Use new algo by default to fill zones
+    m_ZoneFillVersion = 6;                      // Use new algo by default to fill zones
     m_ZoneKeepExternalFillets = false;          // Use new algo by default.  Legacy boards might
                                                 // want to set it to true for old algo....
 
@@ -584,8 +584,17 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.max_error", &m_MaxError, ARC_HIGH_DEF,
             Millimeter2iu( 0.0001 ), Millimeter2iu( 1.0 ), MM_PER_IU ) );
 
-    m_params.emplace_back( new PARAM<bool>( "zones_use_no_outline",
-            &m_ZoneUseNoOutlineInFill, true ) );
+    // TODO: replace with zones_fill_version parameter and migrate zones_use_no_outline?
+    m_params.emplace_back( new PARAM_LAMBDA<bool>( "zones_use_no_outline",
+            [this]() -> bool
+            {
+                return m_ZoneFillVersion >= 6;
+            },
+            [this]( bool aVal )
+            {
+                m_ZoneFillVersion = aVal ? 6 : 5;
+            },
+            6 ) );
 
     m_params.emplace_back( new PARAM<bool>( "zones_allow_external_fillets",
             &m_ZoneKeepExternalFillets, false ) );
@@ -639,7 +648,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_HoleToHoleMin          = aOther.m_HoleToHoleMin;
     m_DRCSeverities          = aOther.m_DRCSeverities;
     m_DrcExclusions          = aOther.m_DrcExclusions;
-    m_ZoneUseNoOutlineInFill = aOther.m_ZoneUseNoOutlineInFill;
+    m_ZoneFillVersion        = aOther.m_ZoneFillVersion;
     m_ZoneKeepExternalFillets= aOther.m_ZoneKeepExternalFillets;
     m_MaxError               = aOther.m_MaxError;
     m_SolderMaskMargin       = aOther.m_SolderMaskMargin;

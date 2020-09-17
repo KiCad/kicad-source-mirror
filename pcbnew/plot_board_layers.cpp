@@ -492,6 +492,8 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
     for( ZONE_CONTAINER* zone : aBoard->Zones() )
     {
+        int outlineThickness = zone->GetFilledPolysUseThickness() ? zone->GetMinThickness() : 0;
+
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
             auto pair = std::make_pair( layer, zone );
@@ -529,17 +531,12 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 if( candidate->GetNetCode() != zone->GetNetCode() )
                     continue;
 
-                // Merging zones of the same net can be done only for areas
-                // having compatible settings for drawings:
-                // use or not outline thickness, and if using outline thickness,
-                // having the same thickness
-                // because after merging only one outline thickness is used
-                if( candidate->GetFilledPolysUseThickness() != zone->GetFilledPolysUseThickness() )
-                    // Should not happens, because usually the same option is used for filling
-                    continue;
+                // Merging zones of the same net can be done only for areas having compatible
+                // settings for filling as the merged zone can only have a single setting.
+                int candidateOutlineThickness = candidate->GetFilledPolysUseThickness() ?
+                                                    candidate->GetMinThickness() : 0;
 
-                if( zone->GetFilledPolysUseThickness()
-                        && ( candidate->GetMinThickness() != zone->GetMinThickness() ) )
+                if( candidateOutlineThickness != outlineThickness )
                     continue;
 
                 plotted.insert( candidate_pair );
@@ -867,9 +864,9 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 continue;
 
             // add shapes inflated by aMinThickness/2 in areas
-            zone->TransformOutlinesShapeWithClearanceToPolygon( areas, inflate + zone_margin );
+            zone->TransformSmoothedOutlineWithClearanceToPolygon( areas, inflate + zone_margin );
             // add shapes with their exact mask layer size in initialPolys
-            zone->TransformOutlinesShapeWithClearanceToPolygon( initialPolys, zone_margin );
+            zone->TransformSmoothedOutlineWithClearanceToPolygon( initialPolys, zone_margin );
         }
 
         int maxError = aBoard->GetDesignSettings().m_MaxError;

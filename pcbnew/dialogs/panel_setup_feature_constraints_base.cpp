@@ -87,7 +87,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	m_bitmapInfo = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_INFORMATION, wxART_OTHER ), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer8->Add( m_bitmapInfo, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_stCircleToPolyWarning = new wxStaticText( this, wxID_ANY, _("Value < %s  can be time consumming\nwhen filling zones."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stCircleToPolyWarning = new wxStaticText( this, wxID_ANY, _("Value < %s  can be time consuming when \nfilling zones."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stCircleToPolyWarning->Wrap( -1 );
 	m_stCircleToPolyWarning->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
@@ -119,11 +119,15 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	wxBoxSizer* bSizerOutlinesOpts;
 	bSizerOutlinesOpts = new wxBoxSizer( wxVERTICAL );
 
-	m_rbOutlinePolygonBestQ = new wxRadioButton( this, wxID_ANY, _("Stroked outlines (legacy)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbOutlinePolygonBestQ = new wxRadioButton( this, wxID_ANY, _("Mimic legacy behavior"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbOutlinePolygonBestQ->SetToolTip( _("Produces a slightly smoother outline at the expense of performance, some export fidelity issues, and overly agressive higher-priority zone knockouts.") );
+
 	bSizerOutlinesOpts->Add( m_rbOutlinePolygonBestQ, 0, wxALL, 4 );
 
 	m_rbOutlinePolygonFastest = new wxRadioButton( this, wxID_ANY, _("Smoothed polygons (best performance)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbOutlinePolygonFastest->SetValue( true );
+	m_rbOutlinePolygonFastest->SetToolTip( _("Better performance, exact export fidelity, and more complete filling near higher-priority zones.") );
+
 	bSizerOutlinesOpts->Add( m_rbOutlinePolygonFastest, 0, wxALL, 4 );
 
 

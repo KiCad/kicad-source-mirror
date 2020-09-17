@@ -76,52 +76,50 @@ public:
         SMOOTHING_LAST              // sentinel
     };
 
-    int  m_ZonePriority;                ///< Priority (0 ... N) of the zone
+    int             m_ZonePriority;          // Priority (0 ... N) of the zone
 
-    ZONE_FILL_MODE m_FillMode;
-    int            m_ZoneClearance;         // Minimal clearance value
-    int            m_ZoneMinThickness;      // Min thickness value in filled areas
-    int            m_HatchThickness;        // HatchBorder thickness of lines (if 0 -> solid shape)
-    int            m_HatchGap;              // HatchBorder clearance between lines (0 -> solid shape)
-    double         m_HatchOrientation;      // HatchBorder orientation of grid lines in degrees
-    int            m_HatchSmoothingLevel;   // HatchBorder smoothing type, similar to corner smoothing type
-                                            // 0 = no smoothing, 1 = fillet, >= 2 = arc
-    double         m_HatchSmoothingValue;   // HatchBorder chamfer/fillet size as a ratio of hole size
-    double         m_HatchHoleMinArea;      // min size before holes are dropped (ratio)
-    int            m_HatchBorderAlgorithm;  // 0 = use min zone thickness
+    ZONE_FILL_MODE  m_FillMode;
+    int             m_ZoneClearance;         // Minimal clearance value
+    int             m_ZoneMinThickness;      // Min thickness value in filled areas
+    int             m_HatchThickness;        // HatchBorder thickness of lines (if 0 -> solid shape)
+    int             m_HatchGap;              // HatchBorder clearance between lines (0 -> solid shape)
+    double          m_HatchOrientation;      // HatchBorder orientation of grid lines in degrees
+    int             m_HatchSmoothingLevel;   // HatchBorder smoothing type, similar to corner smoothing type
+                                             // 0 = no smoothing, 1 = fillet, >= 2 = arc
+    double          m_HatchSmoothingValue;   // HatchBorder chamfer/fillet size as a ratio of hole size
+    double          m_HatchHoleMinArea;      // min size before holes are dropped (ratio)
+    int             m_HatchBorderAlgorithm;  // 0 = use min zone thickness
 
-    int  m_NetcodeSelection;            ///< Net code selection for the current zone
+    int             m_NetcodeSelection;      // Net code selection for the current zone
 
-    wxString m_Name;                    ///< Unique name for the current zone (can be blank)
+    wxString        m_Name;                  // Unique name for the current zone (can be blank)
 
-    LSET m_Layers;                      ///< Layers that this zone exists on
+    LSET            m_Layers;                // Layers that this zone exists on
 
     /// Option to show the zone area (outlines only, short hatches or full hatches
     ZONE_BORDER_DISPLAY_STYLE m_ZoneBorderDisplayStyle;
 
-    long m_ThermalReliefGap;            ///< thickness of the gap in thermal reliefs
-    long m_ThermalReliefCopperBridge;   ///< thickness of the copper bridge in thermal reliefs
+    long            m_ThermalReliefGap;      // thickness of the gap in thermal reliefs
+    long            m_ThermalReliefSpokeWidth;     // thickness of the copper bridge in thermal reliefs
 
-    bool m_Zone_45_Only;
+    bool            m_Zone_45_Only;
 
 private:
-    int  m_cornerSmoothingType;           ///< Corner smoothing type
-    unsigned int  m_cornerRadius;         ///< Corner chamfer distance / fillet radius
-    ZONE_CONNECTION m_PadConnection;
+    int             m_cornerSmoothingType;   // Corner smoothing type
+    unsigned int    m_cornerRadius;          // Corner chamfer distance / fillet radius
+    ZONE_CONNECTION m_padConnection;
 
-    /* A zone outline can be a keepout zone.
-     * It will be never filled, and DRC should test for pads, tracks and vias
+    /*
+     * Keepout zones and keepout flags.
+     * Note that DRC rules can set keepouts on zones whether they're a keepout or not.
      */
-    bool                  m_isKeepout;
+    bool            m_isKeepout;
 
-    /* For keepout zones only:
-     * what is not allowed inside the keepout ( pads, tracks and vias )
-     */
-    bool m_keepoutDoNotAllowCopperPour;
-    bool m_keepoutDoNotAllowVias;
-    bool m_keepoutDoNotAllowTracks;
-    bool m_keepoutDoNotAllowPads;
-    bool m_keepoutDoNotAllowFootprints;
+    bool            m_keepoutDoNotAllowCopperPour;
+    bool            m_keepoutDoNotAllowVias;
+    bool            m_keepoutDoNotAllowTracks;
+    bool            m_keepoutDoNotAllowPads;
+    bool            m_keepoutDoNotAllowFootprints;
 
     ISLAND_REMOVAL_MODE m_removeIslands;
     long long int       m_minIslandArea;
@@ -168,12 +166,12 @@ public:
 
     ZONE_CONNECTION GetPadConnection() const
     {
-        return m_PadConnection;
+        return m_padConnection;
     }
 
     void SetPadConnection( ZONE_CONNECTION aPadConnection )
     {
-        m_PadConnection = aPadConnection;
+        m_padConnection = aPadConnection;
     }
 
     /**

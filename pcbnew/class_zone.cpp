@@ -43,8 +43,8 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
           m_area( 0.0 )
 {
     m_CornerSelection = nullptr;                // no corner is selected
-    m_IsFilled = false;                         // fill status : true when the zone is filled
-    m_FillMode = ZONE_FILL_MODE::POLYGONS;
+    m_isFilled = false;                         // fill status : true when the zone is filled
+    m_fillMode = ZONE_FILL_MODE::POLYGONS;
     m_borderStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
     m_borderHatchPitch = GetDefaultHatchPitch();
     m_hv45 = false;
@@ -67,7 +67,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
     m_cornerRadius = 0;
     SetLocalFlags( 0 );                         // flags tempoarry used in zone calculations
     m_Poly = new SHAPE_POLY_SET();              // Outlines
-    m_FilledPolysUseThickness = true;           // set the "old" way to build filled polygon areas (before 6.0.x)
+    m_fillVersion = 6;                          // set the "old" way to build filled polygon areas (before 6.0.x)
     m_islandRemovalMode       = ISLAND_REMOVAL_MODE::ALWAYS;
     aParent->GetZoneSettings().ExportSetting( *this );
 
@@ -131,17 +131,17 @@ void ZONE_CONTAINER::InitDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
     m_PadConnection           = aZone.m_PadConnection;
     m_ZoneClearance           = aZone.m_ZoneClearance;     // clearance value
     m_ZoneMinThickness        = aZone.m_ZoneMinThickness;
-    m_FilledPolysUseThickness = aZone.m_FilledPolysUseThickness;
+    m_fillVersion             = aZone.m_fillVersion;
     m_islandRemovalMode       = aZone.m_islandRemovalMode;
     m_minIslandArea           = aZone.m_minIslandArea;
 
-    m_IsFilled = aZone.m_IsFilled;
-    m_needRefill = aZone.m_needRefill;
+    m_isFilled                = aZone.m_isFilled;
+    m_needRefill              = aZone.m_needRefill;
 
-    m_ThermalReliefGap        = aZone.m_ThermalReliefGap;
-    m_ThermalReliefCopperBridge = aZone.m_ThermalReliefCopperBridge;
+    m_thermalReliefGap        = aZone.m_thermalReliefGap;
+    m_thermalReliefSpokeWidth = aZone.m_thermalReliefSpokeWidth;
 
-    m_FillMode                = aZone.m_FillMode;         // solid vs. hatched
+    m_fillMode                = aZone.m_fillMode;         // solid vs. hatched
     m_hatchThickness          = aZone.m_hatchThickness;
     m_hatchGap                = aZone.m_hatchGap;
     m_hatchOrientation        = aZone.m_hatchOrientation;
@@ -198,7 +198,8 @@ bool ZONE_CONTAINER::UnFill()
         pair.second.clear();
     }
 
-    m_IsFilled = false;
+    m_isFilled = false;
+    m_fillFlags.clear();
 
     return change;
 }
@@ -331,7 +332,7 @@ int ZONE_CONTAINER::GetThermalReliefGap( D_PAD* aPad, wxString* aSource ) const
         if( aSource )
             *aSource = _( "zone" );
 
-        return m_ThermalReliefGap;
+        return m_thermalReliefGap;
     }
 
     return aPad->GetEffectiveThermalGap( aSource );
@@ -339,14 +340,14 @@ int ZONE_CONTAINER::GetThermalReliefGap( D_PAD* aPad, wxString* aSource ) const
 }
 
 
-int ZONE_CONTAINER::GetThermalReliefCopperBridge( D_PAD* aPad, wxString* aSource ) const
+int ZONE_CONTAINER::GetThermalReliefSpokeWidth( D_PAD* aPad, wxString* aSource ) const
 {
     if( aPad->GetEffectiveThermalSpokeWidth() == 0 )
     {
         if( aSource )
             *aSource = _( "zone" );
 
-        return m_ThermalReliefCopperBridge;
+        return m_thermalReliefSpokeWidth;
     }
 
     return aPad->GetEffectiveThermalSpokeWidth( aSource );
@@ -600,7 +601,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     if( !m_zoneName.empty() )
         aList.emplace_back( _( "Name" ), m_zoneName, DARKMAGENTA );
 
-    switch( m_FillMode )
+    switch( m_fillMode )
     {
     case ZONE_FILL_MODE::POLYGONS:      msg = _( "Solid" ); break;
     case ZONE_FILL_MODE::HATCH_PATTERN: msg = _( "Hatched" ); break;
@@ -1235,12 +1236,12 @@ double ZONE_CONTAINER::CalculateFilledArea()
 
 
 /**
- * Function TransformOutlinesShapeWithClearanceToPolygon
- * Convert the filled areas to polygons (optionally inflated by \a aClearance) and copy them
+ * Function TransformSmoothedOutlineWithClearanceToPolygon
+ * Convert the smoothed outline to polygons (optionally inflated by \a aClearance) and copy them
  * into \a aCornerBuffer.
  */
-void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                                   int aClearance ) const
+void ZONE_CONTAINER::TransformSmoothedOutlineWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                                     int aClearance ) const
 {
     // Creates the zone outline polygon (with holes if any)
     SHAPE_POLY_SET polybuffer;
@@ -1367,8 +1368,8 @@ static struct ZONE_CONTAINER_DESC
                     &ZONE_CONTAINER::SetThermalReliefGap, &ZONE_CONTAINER::GetThermalReliefGap,
                     PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _( "Thermal Spoke Width" ),
-                    &ZONE_CONTAINER::SetThermalReliefCopperBridge, &ZONE_CONTAINER::GetThermalReliefCopperBridge,
-                    PROPERTY_DISPLAY::DISTANCE ) );
+                                                                &ZONE_CONTAINER::SetThermalReliefSpokeWidth, &ZONE_CONTAINER::GetThermalReliefSpokeWidth,
+                                                                PROPERTY_DISPLAY::DISTANCE ) );
     }
 } _ZONE_CONTAINER_DESC;
 

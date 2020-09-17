@@ -68,9 +68,9 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     // thickness of the gap in thermal reliefs:
     m_ThermalReliefGap = Mils2iu( ZONE_THERMAL_RELIEF_GAP_MIL );
     // thickness of the copper bridge in thermal reliefs:
-    m_ThermalReliefCopperBridge = Mils2iu( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL );
+    m_ThermalReliefSpokeWidth = Mils2iu( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL );
 
-    m_PadConnection = ZONE_CONNECTION::THERMAL; // How pads are covered by copper in zone
+    m_padConnection = ZONE_CONNECTION::THERMAL; // How pads are covered by copper in zone
 
     m_Zone_45_Only = false;
 
@@ -104,10 +104,10 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
     m_HatchHoleMinArea            = aSource.GetHatchHoleMinArea();
     m_NetcodeSelection            = aSource.GetNetCode();
     m_Name                        = aSource.GetZoneName();
-    m_ZoneBorderDisplayStyle          = aSource.GetHatchStyle();
+    m_ZoneBorderDisplayStyle      = aSource.GetHatchStyle();
     m_ThermalReliefGap            = aSource.GetThermalReliefGap();
-    m_ThermalReliefCopperBridge   = aSource.GetThermalReliefCopperBridge();
-    m_PadConnection               = aSource.GetPadConnection();
+    m_ThermalReliefSpokeWidth   = aSource.GetThermalReliefSpokeWidth();
+    m_padConnection               = aSource.GetPadConnection();
     m_cornerSmoothingType         = aSource.GetCornerSmoothingType();
     m_cornerRadius                = aSource.GetCornerRadius();
     m_isKeepout                   = aSource.GetIsKeepout();
@@ -139,8 +139,8 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     aTarget.SetHatchBorderAlgorithm( m_HatchBorderAlgorithm );
     aTarget.SetHatchHoleMinArea( m_HatchHoleMinArea );
     aTarget.SetThermalReliefGap( m_ThermalReliefGap );
-    aTarget.SetThermalReliefCopperBridge( m_ThermalReliefCopperBridge );
-    aTarget.SetPadConnection( m_PadConnection );
+    aTarget.SetThermalReliefSpokeWidth( m_ThermalReliefSpokeWidth );
+    aTarget.SetPadConnection( m_padConnection );
     aTarget.SetCornerSmoothingType( m_cornerSmoothingType );
     aTarget.SetCornerRadius( m_cornerRadius );
     aTarget.SetIsKeepout( GetIsKeepout() );

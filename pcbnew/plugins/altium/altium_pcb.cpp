@@ -1311,7 +1311,7 @@ void ALTIUM_PCB::ParsePolygons6Data(
             }
 
             // TODO: correct variables?
-            zone->SetThermalReliefCopperBridge(
+            zone->SetThermalReliefSpokeWidth(
                     polygonConnectRule->polygonconnectReliefconductorwidth );
             zone->SetThermalReliefGap( polygonConnectRule->polygonconnectAirgapwidth );
 

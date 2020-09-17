@@ -177,7 +177,7 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     // Do not enable/disable antipad clearance and spoke width.  They might be needed if
     // a module or pad overrides the zone to specify a thermal connection.
     m_antipadClearance.SetValue( m_settings.m_ThermalReliefGap );
-    m_spokeWidth.SetValue( m_settings.m_ThermalReliefCopperBridge );
+    m_spokeWidth.SetValue( m_settings.m_ThermalReliefSpokeWidth );
 
     m_islandThreshold.SetDataType( EDA_DATA_TYPE::AREA );
     m_islandThreshold.SetDoubleValue( static_cast<double>( m_settings.GetMinIslandArea() ) );
@@ -395,9 +395,9 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
     m_settings.m_Zone_45_Only = m_constrainOutline->GetValue();
 
     m_settings.m_ThermalReliefGap = m_antipadClearance.GetValue();
-    m_settings.m_ThermalReliefCopperBridge = m_spokeWidth.GetValue();
+    m_settings.m_ThermalReliefSpokeWidth = m_spokeWidth.GetValue();
 
-    if( m_settings.m_ThermalReliefCopperBridge < m_settings.m_ZoneMinThickness )
+    if( m_settings.m_ThermalReliefSpokeWidth < m_settings.m_ZoneMinThickness )
     {
         DisplayError( this, _( "Thermal spoke width cannot be smaller than the minimum width." ) );
         return false;
@@ -406,7 +406,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
     cfg->m_Zones.clearance                   = Iu2Mils( m_settings.m_ZoneClearance );
     cfg->m_Zones.min_thickness               = Iu2Mils( m_settings.m_ZoneMinThickness );
     cfg->m_Zones.thermal_relief_gap          = Iu2Mils( m_settings.m_ThermalReliefGap );
-    cfg->m_Zones.thermal_relief_copper_width = Iu2Mils( m_settings.m_ThermalReliefCopperBridge );
+    cfg->m_Zones.thermal_relief_copper_width = Iu2Mils( m_settings.m_ThermalReliefSpokeWidth );
 
     m_settings.SetIslandRemovalMode(
             static_cast<ISLAND_REMOVAL_MODE>( m_cbRemoveIslands->GetSelection() ) );

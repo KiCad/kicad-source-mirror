@@ -88,10 +88,11 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck,
     std::vector<std::pair<ZONE_CONTAINER*, PCB_LAYER_ID>> toFill;
     std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> islandsList;
 
-    auto connectivity = m_board->GetConnectivity();
-    bool filledPolyWithOutline = not m_board->GetDesignSettings().m_ZoneUseNoOutlineInFill;
-
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
     std::unique_lock<std::mutex> lock( connectivity->GetLock(), std::try_to_lock );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    int                    worstClearance = bds.GetBiggestClearanceValue();
 
     if( !lock )
         return false;
@@ -141,25 +142,90 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck,
         // Remove existing fill first to prevent drawing invalid polygons
         // on some platforms
         zone->UnFill();
+
+        zone->SetFillVersion( bds.m_ZoneFillVersion );
     }
 
     std::atomic<size_t> nextItem( 0 );
     size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
-                                                   aZones.size() );
+                                                   toFill.size() );
     std::vector<std::future<size_t>> returns( parallelThreadCount );
 
     auto fill_lambda =
             [&]( PROGRESS_REPORTER* aReporter ) -> size_t
             {
-                size_t num = 0;
+                std::deque<std::pair<ZONE_CONTAINER*, PCB_LAYER_ID>> deferred;
 
-                for( size_t i = nextItem++; i < toFill.size(); i = nextItem++ )
+                size_t          num = 0;
+                PCB_LAYER_ID    layer = UNDEFINED_LAYER;
+                ZONE_CONTAINER* zone = nullptr;
+
+                while( true )
                 {
-                    PCB_LAYER_ID    layer = toFill[i].second;
-                    ZONE_CONTAINER* zone  = toFill[i].first;
+                    size_t i = nextItem++;
 
-                    zone->SetFilledPolysUseThickness( filledPolyWithOutline );
+                    if( i < toFill.size() )
+                    {
+                        layer = toFill[i].second;
+                        zone  = toFill[i].first;
+                    }
+                    else if( !deferred.empty() )
+                    {
+                        layer = deferred.front().second;
+                        zone  = deferred.front().first;
+                        deferred.pop_front();
+                    }
+                    else
+                    {
+                        // all done
+                        break;
+                    }
 
+                    EDA_RECT zone_boundingbox = zone->GetBoundingBox();
+                    bool     canFill  = true;
+
+                    zone_boundingbox.Inflate( worstClearance );
+
+                    // Check for any fill dependencies.  If our zone needs to be clipped by
+                    // another zone then we can't fill until that zone is filled.
+                    for( ZONE_CONTAINER* candidate : m_board->GetZoneList( true ) )
+                    {
+                        // We don't care about keepouts; even if they exlclude copper pours
+                        // the exclusion is by outline, not by filled area.
+                        if( candidate->GetIsKeepout() )
+                            continue;
+
+                        // If the zones share no common layers
+                        if( !candidate->GetLayerSet().test( layer ) )
+                            continue;
+
+                        if( candidate->GetPriority() <= zone->GetPriority() )
+                            continue;
+
+                        // Same-net zones always use outline to produce predictable results
+                        if( candidate->GetNetCode() == zone->GetNetCode() )
+                            continue;
+
+                        // A higher priority zone is found: if we intersect and it's not
+                        // filled yet then we have to wait.
+                        if( zone_boundingbox.Intersects( candidate->GetBoundingBox() )
+                                && !candidate->GetFillFlag( layer ) )
+                        {
+                            canFill = false;
+                            break;
+                        }
+                    }
+
+                    if( !canFill )
+                    {
+                        // This isn't ideal from a load-balancing standpoint as another thread
+                        // cannot pick up this thread's deferred zones.  However a better
+                        // solution would require a significantly more complex thread-safe queue.
+                        deferred.push_back( { zone, layer } );
+                        continue;
+                    }
+
+                    // Now we're ready to fill.
                     SHAPE_POLY_SET rawPolys, finalPolys;
                     fillSingleZone( zone, layer, rawPolys, finalPolys );
 
@@ -167,7 +233,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck,
 
                     zone->SetRawPolysList( layer, rawPolys );
                     zone->SetFilledPolysList( layer, finalPolys );
-                    zone->SetIsFilled( true );
+                    zone->SetFillFlag( layer, true );
 
                     if( m_progressReporter )
                     {
@@ -221,6 +287,15 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck,
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
+
+    for( ZONE_CONTAINER* zone : aZones )
+    {
+        // Keepout zones are not filled
+        if( zone->GetIsKeepout() )
+            continue;
+
+        zone->SetIsFilled( true );
+    }
 
     // Re-add not connected zones to list, connectivity->FindIsolatedCopperIslands()
     // populates islandsList only with zones having a net
@@ -748,7 +823,6 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
     //
     for( ZONE_CONTAINER* zone : m_board->GetZoneList( true ) )
     {
-
         // If the zones share no common layers
         if( !zone->GetLayerSet().test( aLayer ) )
             continue;
@@ -764,15 +838,28 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
         if( item_boundingbox.Intersects( zone_boundingbox ) )
         {
-            // Add the zone outline area.  Don't use any clearance for keepouts, or for zones
-            // with the same net (they will be connected but will honor their own clearance,
-            // thermal connections, etc.).
-            int  gap = 0;
+            if( zone->GetIsKeepout() || aZone->GetNetCode() == zone->GetNetCode() )
+            {
+                // Keepouts and same-net zones use outline with no clearance
+                zone->TransformSmoothedOutlineWithClearanceToPolygon( aHoles, 0 );
+            }
+            else
+            {
+                int gap = aZone->GetClearance( aLayer, zone );
 
-            if( !zone->GetIsKeepout() && aZone->GetNetCode() != zone->GetNetCode() )
-                gap = aZone->GetClearance( aLayer, zone );
-
-            zone->TransformOutlinesShapeWithClearanceToPolygon( aHoles, gap );
+                if( bds.m_ZoneFillVersion == 5 )
+                {
+                    // 5.x used outline with clearance
+                    zone->TransformSmoothedOutlineWithClearanceToPolygon( aHoles, gap );
+                }
+                else
+                {
+                    // 6.0 uses filled areas with clearance
+                    SHAPE_POLY_SET knockout;
+                    zone->TransformShapeWithClearanceToPolygon( knockout, aLayer, gap );
+                    aHoles.Append( knockout );
+                }
+            }
         }
     }
 
@@ -1050,7 +1137,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone, PCB_LAYER_ID 
             int thermalReliefGap = aZone->GetThermalReliefGap( pad );
 
             // Calculate thermal bridge half width
-            int spoke_w = aZone->GetThermalReliefCopperBridge( pad );
+            int spoke_w = aZone->GetThermalReliefSpokeWidth( pad );
             // Avoid spoke_w bigger than the smaller pad size, because
             // it is not possible to create stubs bigger than the pad.
             // Possible refinement: have a separate size for vertical and horizontal stubs

@@ -152,28 +152,28 @@ public:
 
     unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
-    void SetFillMode( ZONE_FILL_MODE aFillMode ) { m_FillMode = aFillMode; }
-    ZONE_FILL_MODE GetFillMode() const { return m_FillMode; }
+    void SetFillMode( ZONE_FILL_MODE aFillMode ) { m_fillMode = aFillMode; }
+    ZONE_FILL_MODE GetFillMode() const { return m_fillMode; }
 
     void SetThermalReliefGap( int aThermalReliefGap )
     {
-        if( m_ThermalReliefGap != aThermalReliefGap )
+        if( m_thermalReliefGap != aThermalReliefGap )
             SetNeedRefill( true );
 
-        m_ThermalReliefGap = aThermalReliefGap;
+        m_thermalReliefGap = aThermalReliefGap;
     }
-    int GetThermalReliefGap() const { return m_ThermalReliefGap; }
+    int GetThermalReliefGap() const { return m_thermalReliefGap; }
     int GetThermalReliefGap( D_PAD* aPad, wxString* aSource = nullptr ) const;
 
-    void SetThermalReliefCopperBridge( int aThermalReliefCopperBridge )
+    void SetThermalReliefSpokeWidth( int aThermalReliefSpokeWidth )
     {
-        if( m_ThermalReliefCopperBridge != aThermalReliefCopperBridge )
+        if( m_thermalReliefSpokeWidth != aThermalReliefSpokeWidth )
             SetNeedRefill( true );
 
-        m_ThermalReliefCopperBridge = aThermalReliefCopperBridge;
+        m_thermalReliefSpokeWidth = aThermalReliefSpokeWidth;
     }
-    int GetThermalReliefCopperBridge() const { return m_ThermalReliefCopperBridge; }
-    int GetThermalReliefCopperBridge( D_PAD* aPad, wxString* aSource = nullptr ) const;
+    int GetThermalReliefSpokeWidth() const { return m_thermalReliefSpokeWidth; }
+    int GetThermalReliefSpokeWidth( D_PAD* aPad, wxString* aSource = nullptr ) const;
 
     /**
      * Compute the area currently occupied by the zone fill.
@@ -198,8 +198,14 @@ public:
         return m_lock;
     }
 
-    bool IsFilled() const { return m_IsFilled; }
-    void SetIsFilled( bool isFilled ) { m_IsFilled = isFilled; }
+    int GetFillFlag( PCB_LAYER_ID aLayer )
+    {
+        return m_fillFlags.count( aLayer ) ? m_fillFlags[ aLayer ] : false;
+    }
+    void SetFillFlag( PCB_LAYER_ID aLayer, bool aFlag ) { m_fillFlags[ aLayer ] = aFlag; }
+
+    bool IsFilled() const { return m_isFilled; }
+    void SetIsFilled( bool isFilled ) { m_isFilled = isFilled; }
 
     bool NeedRefill() const { return m_needRefill; }
     void SetNeedRefill( bool aNeedRefill ) { m_needRefill = aNeedRefill; }
@@ -348,17 +354,17 @@ public:
                                              int aError = ARC_HIGH_DEF ) const;
 
     /**
-     * Function TransformOutlinesShapeWithClearanceToPolygon
+     * Function TransformSmoothedOutlineWithClearanceToPolygon
      * Convert the outlines shape to a polygon with no holes
      * inflated (optional) by max( aClearanceValue, the zone clearance)
      * (holes are linked to external outline by overlapping segments)
      * Used in filling zones calculations
      * Circles (vias) and arcs (ends of tracks) are approximated by segments
      * @param aCornerBuffer = a buffer to store the polygon
-     * @param aMinClearanceValue = the min clearance around outlines
+     * @param aClearance = the min clearance around outlines
      */
-    void TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                       int aMinClearanceValue ) const;
+    void TransformSmoothedOutlineWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                         int aClearance ) const;
 
     /**
      * Function TransformShapeWithClearanceToPolygon
@@ -666,9 +672,10 @@ public:
 
     unsigned int GetCornerRadius() const { return m_cornerRadius; }
 
-    bool GetFilledPolysUseThickness() const { return m_FilledPolysUseThickness; }
-    void SetFilledPolysUseThickness( bool aOption ) { m_FilledPolysUseThickness = aOption; }
+    bool GetFilledPolysUseThickness() const { return m_fillVersion == 5; }
 
+    int GetFillVersion() const { return m_fillVersion; }
+    void SetFillVersion( int aVersion ) { m_fillVersion = aVersion; }
 
     /**
      * Remove a cutout from the zone.
@@ -842,39 +849,36 @@ protected:
     bool                  m_doNotAllowFootprints;
 
     ZONE_CONNECTION       m_PadConnection;
-    int                   m_ZoneClearance;           ///< Clearance value in internal units.
-    int                   m_ZoneMinThickness;        ///< Minimum thickness value in filled areas.
-    bool                  m_FilledPolysUseThickness;    ///< outline of filled polygons have thickness.
-
+    int                   m_ZoneClearance;           // Clearance value in internal units.
+    int                   m_ZoneMinThickness;        // Minimum thickness value in filled areas.
+    int                   m_fillVersion;             // See BOARD_DESIGN_SETTINGS for version
+                                                     // differences.
     ISLAND_REMOVAL_MODE   m_islandRemovalMode;
 
     /**
      * When island removal mode is set to AREA, islands below this area will be removed.
      * If this value is negative, all islands will be removed.
      */
-    long long int         m_minIslandArea;
+    long long int    m_minIslandArea;
 
     /** True when a zone was filled, false after deleting the filled areas. */
-    bool                  m_IsFilled;
+    bool             m_isFilled;
 
     /** False when a zone was refilled, true after changes in zone params.
      * m_needRefill = false does not imply filled areas are up to date, just
      * the zone was refilled after edition, and does not need refilling
      */
-    bool                  m_needRefill;
+    bool             m_needRefill;
 
-    ///< Width of the gap in thermal reliefs.
-    int                   m_ThermalReliefGap;
-
-    ///< Width of the copper bridge in thermal reliefs.
-    int                   m_ThermalReliefCopperBridge;
+    int              m_thermalReliefGap;        // Width of the gap in thermal reliefs.
+    int              m_thermalReliefSpokeWidth; // Width of the copper bridge in thermal reliefs.
 
 
     /** How to fill areas:
      * ZONE_FILL_MODE::POLYGONS => use solid polygons
      * ZONE_FILL_MODE::HATCH_PATTERN => use a grid pattern as shape
      */
-    ZONE_FILL_MODE   m_FillMode;
+    ZONE_FILL_MODE   m_fillMode;
     int              m_hatchThickness;          // thickness of lines (if 0 -> solid shape)
     int              m_hatchGap;                // gap between lines (0 -> solid shape
     double           m_hatchOrientation;        // orientation in degrees of grid lines
@@ -890,8 +894,7 @@ protected:
     /// The index of the corner being moved or nullptr if no corner is selected.
     SHAPE_POLY_SET::VERTEX_INDEX* m_CornerSelection;
 
-    /// Variable used in polygon calculations.
-    int                   m_localFlgs;
+    int              m_localFlgs;               // Variable used in polygon calculations.
 
     /** Segments used to fill the zone (#m_FillMode ==1 ), when fill zone by segment is used.
      *  In this case the segments have #m_ZoneMinThickness width.
@@ -908,6 +911,9 @@ protected:
      */
     std::map<PCB_LAYER_ID, SHAPE_POLY_SET> m_FilledPolysList;
     std::map<PCB_LAYER_ID, SHAPE_POLY_SET> m_RawPolysList;
+
+    /// A temp variable used while filling
+    std::map<PCB_LAYER_ID, bool>           m_fillFlags;
 
     /// A hash value used in zone filling calculations to see if the filled areas are up to date
     std::map<PCB_LAYER_ID, MD5_HASH>       m_filledPolysHash;

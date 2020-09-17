@@ -1821,8 +1821,8 @@ void PCB_PARSER::parseSetup()
             NeedRIGHT();
             break;
 
-        case T_filled_areas_thickness:
-            designSettings.m_ZoneUseNoOutlineInFill = not parseBool();
+        case T_filled_areas_thickness:  // Note: legacy (early 5.99) token
+            designSettings.m_ZoneFillVersion = parseBool() ? 5 : 6;
             m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
@@ -4353,7 +4353,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
             break;
 
         case T_filled_areas_thickness:
-            zone->SetFilledPolysUseThickness( parseBool() );
+            zone->SetFillVersion( parseBool() ? 5 : 6 );
             NeedRIGHT();
             break;
 
@@ -4454,8 +4454,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                     NeedRIGHT();
                     break;
 
-                case T_thermal_bridge_width:
-                    zone->SetThermalReliefCopperBridge( parseBoardUnits( T_thermal_bridge_width ) );
+                case T_thermal_bridge_width:zone->SetThermalReliefSpokeWidth( parseBoardUnits( T_thermal_bridge_width ));
                     NeedRIGHT();
                     break;
 

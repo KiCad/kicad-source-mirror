@@ -1098,8 +1098,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
         if( csTemplate.Pouring.ThermalReliefOnPads )
         {
             zone->SetThermalReliefGap( getKiCadLength( csTemplate.Pouring.ClearanceWidth ) );
-            zone->SetThermalReliefCopperBridge( getKiCadLength(
-                    getCopperCode( csTemplate.Pouring.ReliefCopperCodeID ).CopperWidth ) );
+            zone->SetThermalReliefSpokeWidth( getKiCadLength(
+                    getCopperCode( csTemplate.Pouring.ReliefCopperCodeID ).CopperWidth ));
             zone->SetPadConnection( ZONE_CONNECTION::THERMAL );
         }
         else

@@ -1357,7 +1357,7 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
         //        (i.e. width of spoke is half of the smaller side of an smd pad)
         //        This is a basic workaround
         zone->SetThermalReliefGap( p.width.ToPcbUnits() + 50000 ); // 50000nm == 0.05mm
-        zone->SetThermalReliefCopperBridge( p.width.ToPcbUnits() + 50000 );
+        zone->SetThermalReliefSpokeWidth( p.width.ToPcbUnits() + 50000 );
     }
 
     int rank = p.rank ? (p.max_priority - *p.rank) : p.max_priority;

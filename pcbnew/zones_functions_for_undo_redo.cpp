@@ -99,16 +99,16 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
     if( m_ZoneMinThickness != aZoneToCompare.GetMinThickness() )
         return false;
 
-    if( m_FillMode != aZoneToCompare.GetFillMode() )
+    if( m_fillMode != aZoneToCompare.GetFillMode() )
         return false;
 
     if( m_PadConnection != aZoneToCompare.m_PadConnection )
         return false;
 
-    if( m_ThermalReliefGap != aZoneToCompare.m_ThermalReliefGap )
+    if( m_thermalReliefGap != aZoneToCompare.m_thermalReliefGap )
         return false;
 
-    if( m_ThermalReliefCopperBridge != aZoneToCompare.m_ThermalReliefCopperBridge )
+    if( m_thermalReliefSpokeWidth != aZoneToCompare.m_thermalReliefSpokeWidth )
         return false;
 
     if( m_zoneName != aZoneToCompare.m_zoneName )

@@ -2610,7 +2610,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             zc->SetIsFilled( fillstate == 'S' );
             zc->SetThermalReliefGap( thermalReliefGap );
-            zc->SetThermalReliefCopperBridge( thermalReliefCopperBridge );
+            zc->SetThermalReliefSpokeWidth( thermalReliefCopperBridge );
         }
 
         else if( TESTLINE( "ZClearance" ) )     // Clearance and pad options info found

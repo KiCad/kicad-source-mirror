@@ -1776,8 +1776,8 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(min_thickness %s)",
                   FormatInternalUnits( aZone->GetMinThickness() ).c_str() );
 
-    // write it only if V 6.O version option is not used (i.e. do not write if the
-    // "legacy" algorithm is used)
+    // write it only if V 6.O version option is used (i.e. do not write if the "legacy"
+    // algorithm is used)
     if( !aZone->GetFilledPolysUseThickness() )
         m_out->Print( 0, " (filled_areas_thickness no)" );
 
@@ -1805,7 +1805,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
     m_out->Print( 0, " (thermal_gap %s) (thermal_bridge_width %s)",
                   FormatInternalUnits( aZone->GetThermalReliefGap() ).c_str(),
-                  FormatInternalUnits( aZone->GetThermalReliefCopperBridge() ).c_str() );
+                  FormatInternalUnits( aZone->GetThermalReliefSpokeWidth() ).c_str() );
 
     if( aZone->GetCornerSmoothingType() != ZONE_SETTINGS::SMOOTHING_NONE )
     {
