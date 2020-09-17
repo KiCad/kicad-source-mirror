@@ -360,6 +360,15 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( EE_ACTIONS::properties );
         }
 
+        // Middle double click?  Do zoom to fit or zoom to objects
+        else if( evt->IsDblClick( BUT_MIDDLE ) )
+        {
+            if( m_exclusive_or ) // Is CTRL key down?
+                m_toolMgr->RunAction( ACTIONS::zoomFitObjects, true );
+            else
+                m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
+        }
+
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {

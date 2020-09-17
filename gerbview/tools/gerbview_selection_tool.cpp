@@ -214,6 +214,12 @@ int GERBVIEW_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_menu.ShowContextMenu( m_selection );
         }
 
+        // Middle double click?  Do zoom to fit
+        else if( evt->IsDblClick( BUT_MIDDLE ) )
+        {
+            m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
+        }
+
         else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE )
         {
             clearSelection();

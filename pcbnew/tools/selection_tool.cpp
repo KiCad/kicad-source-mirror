@@ -274,6 +274,12 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
 
+        // Middle double click?  Do zoom to fit
+        else if( evt->IsDblClick( BUT_MIDDLE ) )
+        {
+            m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
+        }
+
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
