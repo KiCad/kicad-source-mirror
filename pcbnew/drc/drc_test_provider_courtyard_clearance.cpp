@@ -78,7 +78,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
     const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
 
     // Detects missing (or malformed) footprint courtyards
-    reportPhase( _( "Footprint courtyard definitions..." ));
+    reportPhase( _( "Checking footprint courtyard definitions..." ));
 
     int ii = 0;
 
@@ -128,7 +128,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
 {
     const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
 
-    reportPhase( _( "Footprint courtyard overlap..." ));
+    reportPhase( _( "Checking footprint courtyard overlap..." ));
 
     int ii = 0;
 

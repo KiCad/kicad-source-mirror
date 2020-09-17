@@ -66,13 +66,15 @@ public:
 
 bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 {
+    const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
+
     if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH ) )
     {
         reportAux( "No track width constraints found. Skipping check." );
         return false;
     }
 
-    reportPhase( _( "Track widths..." ));
+    reportPhase( _( "Checking track widths..." ));
 
     auto checkTrackWidth =
             [&]( BOARD_ITEM* item ) -> bool
@@ -92,6 +94,10 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                 {
                     actual = trk->GetWidth();
                     p0 = ( trk->GetStart() + trk->GetEnd() ) / 2;
+                }
+                else
+                {
+                    return true;
                 }
 
                 auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_TRACK_WIDTH,
@@ -132,7 +138,18 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                 return true;
             };
 
-    forEachGeometryItem( { PCB_TRACE_T, PCB_ARC_T }, LSET::AllCuMask(), checkTrackWidth );
+    int ii = 0;
+
+    for( TRACK* item : m_drcEngine->GetBoard()->Tracks() )
+    {
+        if( (ii % delta) == 0 || ii >= (int) m_drcEngine->GetBoard()->Tracks().size() - 1 )
+            reportProgress( (double) ii / (double) m_drcEngine->GetBoard()->Tracks().size() );
+
+        ii++;
+
+        if( !checkTrackWidth( item ) )
+            break;
+    }
 
     reportRuleStatistics();
 

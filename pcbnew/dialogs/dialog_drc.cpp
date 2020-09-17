@@ -129,9 +129,9 @@ void DIALOG_DRC::OnActivateDlg( wxActivateEvent& aEvent )
 
 void DIALOG_DRC::initValues()
 {
-    m_markersTitleTemplate     = m_Notebook->GetPageText( 1 );
-    m_unconnectedTitleTemplate = m_Notebook->GetPageText( 2 );
-    m_footprintsTitleTemplate  = m_Notebook->GetPageText( 3 );
+    m_markersTitleTemplate     = m_Notebook->GetPageText( 0 );
+    m_unconnectedTitleTemplate = m_Notebook->GetPageText( 1 );
+    m_footprintsTitleTemplate  = m_Notebook->GetPageText( 2 );
 
     auto cfg = m_brdEditor->GetPcbNewSettings();
 
@@ -216,9 +216,9 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 
     Raise();
 
-    m_Notebook->ChangeSelection( 0 ); // Display the "Messages" tab
+    m_runningResultsBook->ChangeSelection( 0 );   // Display the "Tests Running..." tab
     m_Messages->Clear();
-    wxYield();                        // Allows time slice to refresh Messages
+    wxYield();                                    // Allows time slice to refresh Messages
 
     drcTool->RunTests( this, testTracksAgainstZones, refillZones, reportAllTrackErrors,
                        testFootprints );
@@ -228,8 +228,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     wxYield();
     Raise();
 
-    if( m_markerTreeModel->GetDRCItemCount() > 0 )
-        m_Notebook->ChangeSelection( 1 ); // display the "Problems/Markers" tab
+    m_runningResultsBook->ChangeSelection( 1 );   // display the results tabs
 
     m_Notebook->GetPage( m_Notebook->GetSelection() )->SetFocus();
 }
@@ -645,7 +644,7 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
 
 void DIALOG_DRC::OnDeleteOneClick( wxCommandEvent& aEvent )
 {
-    if( m_Notebook->GetSelection() == 1 )
+    if( m_Notebook->GetSelection() == 0 )
     {
         // Clear the selection.  It may be the selected DRC marker.
         m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -655,11 +654,11 @@ void DIALOG_DRC::OnDeleteOneClick( wxCommandEvent& aEvent )
         // redraw the pcb
         refreshBoardEditor();
     }
-    else if( m_Notebook->GetSelection() == 2 )
+    else if( m_Notebook->GetSelection() == 1 )
     {
         m_unconnectedTreeModel->DeleteCurrentItem( true );
     }
-    else if( m_Notebook->GetSelection() == 3 )
+    else if( m_Notebook->GetSelection() == 2 )
     {
         m_footprintWarningsTreeModel->DeleteCurrentItem( true );
     }
@@ -715,10 +714,10 @@ void DIALOG_DRC::updateDisplayedCounts()
     if( m_drcRun )
     {
         msg.sprintf( m_markersTitleTemplate, m_markerTreeModel->GetDRCItemCount() );
-        m_Notebook->SetPageText( 1, msg );
+        m_Notebook->SetPageText( 0, msg );
 
         msg.sprintf( m_unconnectedTitleTemplate, m_unconnectedTreeModel->GetDRCItemCount() );
-        m_Notebook->SetPageText( 2, msg );
+        m_Notebook->SetPageText( 1, msg );
 
         if( m_footprintTestsRun )
             msg.sprintf( m_footprintsTitleTemplate, m_footprintWarningsTreeModel->GetDRCItemCount() );
@@ -727,21 +726,21 @@ void DIALOG_DRC::updateDisplayedCounts()
             msg = m_footprintsTitleTemplate;
             msg.Replace( wxT( "%d" ), _( "not run" ) );
         }
-        m_Notebook->SetPageText( 3, msg );
+        m_Notebook->SetPageText( 2, msg );
     }
     else
     {
         msg = m_markersTitleTemplate;
         msg.Replace( wxT( "(%d)" ), wxEmptyString );
-        m_Notebook->SetPageText( 1, msg );
+        m_Notebook->SetPageText( 0, msg );
 
         msg = m_unconnectedTitleTemplate;
         msg.Replace( wxT( "(%d)" ), wxEmptyString );
-        m_Notebook->SetPageText( 2, msg );
+        m_Notebook->SetPageText( 1, msg );
 
         msg = m_footprintsTitleTemplate;
         msg.Replace( wxT( "(%d)" ), wxEmptyString );
-        m_Notebook->SetPageText( 3, msg );
+        m_Notebook->SetPageText( 2, msg );
     }
 
     // And now the badges:

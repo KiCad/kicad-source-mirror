@@ -50,8 +50,13 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 
 	m_MainSizer->Add( bSizerOptions, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 3 );
 
-	m_Notebook = new wxNotebook( this, ID_NOTEBOOK1, wxDefaultPosition, wxDefaultSize, 0 );
-	m_panelMessages = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_runningResultsBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	running = new wxPanel( m_runningResultsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer14;
+	bSizer14 = new wxBoxSizer( wxVERTICAL );
+
+	m_runningNotebook = new wxNotebook( running, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_panelMessages = new wxPanel( m_runningNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
 
@@ -72,12 +77,25 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_panelMessages->SetSizer( bSizer10 );
 	m_panelMessages->Layout();
 	bSizer10->Fit( m_panelMessages );
-	m_Notebook->AddPage( m_panelMessages, _("Messages"), true );
+	m_runningNotebook->AddPage( m_panelMessages, _("Tests Running..."), true );
+
+	bSizer14->Add( m_runningNotebook, 1, wxEXPAND | wxALL, 5 );
+
+
+	running->SetSizer( bSizer14 );
+	running->Layout();
+	bSizer14->Fit( running );
+	m_runningResultsBook->AddPage( running, _("a page"), false );
+	results = new wxPanel( m_runningResultsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer13;
+	bSizer13 = new wxBoxSizer( wxVERTICAL );
+
+	m_Notebook = new wxNotebook( results, ID_NOTEBOOK1, wxDefaultPosition, wxDefaultSize, 0 );
 	m_panelViolations = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerViolationsBox;
 	bSizerViolationsBox = new wxBoxSizer( wxVERTICAL );
 
-	bSizerViolationsBox->SetMinSize( wxSize( 580,320 ) );
+	bSizerViolationsBox->SetMinSize( wxSize( -1,320 ) );
 	m_markerDataView = new wxDataViewCtrl( m_panelViolations, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_NO_HEADER );
 	m_markerDataView->SetToolTip( _("Click on items to highlight them on the board.") );
 
@@ -113,7 +131,15 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizerFootprintsBox->Fit( m_panelFootprintWarnings );
 	m_Notebook->AddPage( m_panelFootprintWarnings, _("Schematic Parity (%d)"), false );
 
-	m_MainSizer->Add( m_Notebook, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer13->Add( m_Notebook, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	results->SetSizer( bSizer13 );
+	results->Layout();
+	bSizer13->Fit( results );
+	m_runningResultsBook->AddPage( results, _("a page"), true );
+
+	m_MainSizer->Add( m_runningResultsBook, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
@@ -129,7 +155,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSeveritySizer->Add( m_showAll, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bSeveritySizer->Add( 25, 0, 0, wxEXPAND, 5 );
+	bSeveritySizer->Add( 35, 0, 0, wxEXPAND, 5 );
 
 	m_showErrors = new wxCheckBox( this, wxID_ANY, _("Errors"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSeveritySizer->Add( m_showErrors, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -137,7 +163,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_errorsBadge = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_errorsBadge->SetMinSize( wxSize( 20,20 ) );
 
-	bSeveritySizer->Add( m_errorsBadge, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 20 );
+	bSeveritySizer->Add( m_errorsBadge, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 25 );
 
 	m_showWarnings = new wxCheckBox( this, wxID_ANY, _("Warnings"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSeveritySizer->Add( m_showWarnings, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -145,13 +171,13 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_warningsBadge = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_warningsBadge->SetMinSize( wxSize( 20,20 ) );
 
-	bSeveritySizer->Add( m_warningsBadge, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 20 );
+	bSeveritySizer->Add( m_warningsBadge, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 25 );
 
 	m_showExclusions = new wxCheckBox( this, wxID_ANY, _("Exclusions"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSeveritySizer->Add( m_showExclusions, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_exclusionsBadge = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSeveritySizer->Add( m_exclusionsBadge, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 20 );
+	bSeveritySizer->Add( m_exclusionsBadge, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 25 );
 
 
 	bSeveritySizer->Add( 5, 0, 1, wxEXPAND, 5 );

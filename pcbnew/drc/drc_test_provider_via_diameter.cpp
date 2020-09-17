@@ -22,11 +22,9 @@
  */
 
 #include <class_track.h>
-#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
-
 
 /*
     Via diameter test.
@@ -67,13 +65,15 @@ public:
 
 bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
 {
+    const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
+
     if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_VIA_DIAMETER ) )
     {
         reportAux( "No diameter constraints found. Skipping check." );
         return false;
     }
 
-    reportPhase(( "Via diameters..." ));
+    reportPhase( _( "Checking via diameters..." ) );
 
     auto checkViaDiameter =
             [&]( BOARD_ITEM* item ) -> bool
@@ -91,7 +91,7 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                                                                   item );
                 bool fail_min = false;
                 bool fail_max = false;
-                int  constraintDiameter;
+                int  constraintDiameter = 0;
                 int  actual = via->GetWidth();
 
                 if( constraint.Value().HasMin() && actual < constraint.Value().Min() )
@@ -126,7 +126,18 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                 return true;
             };
 
-    forEachGeometryItem( { PCB_VIA_T }, LSET::AllCuMask(), checkViaDiameter );
+    int ii = 0;
+
+    for( TRACK* item : m_drcEngine->GetBoard()->Tracks() )
+    {
+        if( (ii % delta) == 0 || ii >= (int) m_drcEngine->GetBoard()->Tracks().size() - 1 )
+            reportProgress( (double) ii / (double) m_drcEngine->GetBoard()->Tracks().size() );
+
+        ii++;
+
+        if( !checkViaDiameter( item ) )
+            break;
+    }
 
     reportRuleStatistics();
 

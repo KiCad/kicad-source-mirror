@@ -94,7 +94,7 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
     }
 
     reportAux( "Worst clearance : %d nm", m_largestClearance );
-    reportPhase(( "Pad to silkscreen clearances..." ));
+    reportPhase( _( "Checking pad to silkscreen clearances..." ) );
 
     std::vector<DRAWSEGMENT*> boardOutline;
     std::vector<BOARD_ITEM*> boardItems;

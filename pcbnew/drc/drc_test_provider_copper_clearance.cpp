@@ -122,16 +122,16 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
     reportAux( "Worst clearance : %d nm", m_largestClearance );
 
-    reportPhase( _( "Pad clearances..." ));
+    reportPhase( _( "Checking pad clearances..." ));
     testPadClearances();
 
-    reportPhase( _( "Track/via clearances..." ));
+    reportPhase( _( "Checking track & via clearances..." ));
     testTrackClearances();
 
-    reportPhase( _( "Copper drawing/text clearances..." ));
+    reportPhase( _( "Checking copper graphic & text clearances..." ));
     testCopperTextAndGraphics();
 
-    reportPhase( _( "Zone clearances..." ));
+    reportPhase( _( "Checking copper zone clearances..." ));
     testZones();
 
     reportRuleStatistics();
@@ -514,7 +514,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
 
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 {
-    const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
+    const int delta = 25;  // This is the number of tests between 2 calls to the progress bar
     std::vector<D_PAD*> sortedPads;
 
     m_board->GetSortedPadListByXthenYCoord( sortedPads );
@@ -541,12 +541,12 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
     max_size += m_largestClearance;
 
     // Test the pads
-    for( int idx = 0; idx < (int)sortedPads.size(); idx++ )
+    for( int idx = 0; idx < (int) sortedPads.size(); idx++ )
     {
         D_PAD* pad = sortedPads[idx];
 
-        if( idx % delta == 0 )
-            reportProgress((double) idx / (double) sortedPads.size());
+        if( idx % delta == 0 || idx == (int) sortedPads.size() - 1 )
+            reportProgress( (double) idx / (double) sortedPads.size() );
 
         int x_limit = pad->GetPosition().x + pad->GetBoundingRadius() + max_size;
 

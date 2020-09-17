@@ -24,8 +24,9 @@
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/dataview.h>
 #include <wx/notebook.h>
+#include <wx/dataview.h>
+#include <wx/simplebook.h>
 #include <wx/stattext.h>
 #include <wx/statbmp.h>
 #include <wx/button.h>
@@ -49,10 +50,14 @@ class DIALOG_DRC_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbReportTracksToZonesErrors;
 		wxCheckBox* m_cbRefillZones;
 		wxCheckBox* m_cbTestFootprints;
-		wxNotebook* m_Notebook;
+		wxSimplebook* m_runningResultsBook;
+		wxPanel* running;
+		wxNotebook* m_runningNotebook;
 		wxPanel* m_panelMessages;
 		wxTextCtrl* m_Messages;
 		wxGauge* m_gauge;
+		wxPanel* results;
+		wxNotebook* m_Notebook;
 		wxPanel* m_panelViolations;
 		wxDataViewCtrl* m_markerDataView;
 		wxDataViewCtrl* m_unconnectedDataView;

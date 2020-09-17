@@ -70,7 +70,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
         return false;
     }
 
-    reportPhase( _( "Keepouts & disallow constraints..." ));
+    reportPhase( _( "Checking keepouts & disallow constraints..." ));
 
     auto checkItem = [&]( BOARD_ITEM *item ) -> bool
     {

@@ -124,10 +124,10 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
     buildDrilledHoleList();
 
-    reportPhase( _( "Hole to pad clearances..." ));
+    reportPhase( _( "Checking hole to pad clearances..." ));
     testPads2Holes();
 
-    reportPhase( _( "Hole to hole clearances..." ));
+    reportPhase( _( "Checking hole to hole clearances..." ));
     testHoles2Holes();
 
     reportRuleStatistics();
@@ -170,6 +170,7 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::buildDrilledHoleList()
 
 void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testPads2Holes()
 {
+    const int delta = 25;  // This is the number of tests between 2 calls to the progress bar
     std::vector<D_PAD*> sortedPads;
 
     m_board->GetSortedPadListByXthenYCoord( sortedPads );
@@ -194,12 +195,15 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testPads2Holes()
     max_size += m_largestClearance;
 
     // Test the pads
-    for( int idx = 0; idx < (int)sortedPads.size(); idx++ )
+    for( int idx = 0; idx < (int) sortedPads.size(); idx++ )
     {
         D_PAD* pad = sortedPads[idx];
         int x_limit = pad->GetPosition().x + pad->GetBoundingRadius() + max_size;
 
         drc_dbg( 10,"-> %p\n", pad );
+
+        if( idx % delta == 0 || idx == (int) sortedPads.size() - 1 )
+            reportProgress( (double) idx / (double) sortedPads.size() );
 
         doPadToPadHoleDrc( idx, sortedPads, x_limit );
     }
@@ -348,6 +352,8 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::addHole( const VECTOR2I& aLocation, int a
 
 void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
 {
+    const int delta = 50;  // This is the number of tests between 2 calls to the progress bar
+
     // Sort holes by X for performance.  In the nested iteration we then need to look at
     // following holes only while they are within the refHole's neighborhood as defined by
     // the refHole radius + the minimum hole-to-hole clearance + the largest radius any of
@@ -363,6 +369,9 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
 
     for( size_t ii = 0; ii < m_drilledHoles.size(); ++ii )
     {
+        if( ii % delta == 0 || ii == m_drilledHoles.size() -  1 )
+            reportProgress( (double) ii / (double) m_drilledHoles.size() );
+
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE ) )
             break;
 

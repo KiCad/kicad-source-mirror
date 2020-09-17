@@ -23,7 +23,6 @@
 
 #include <common.h>
 #include <class_track.h>
-#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
@@ -77,7 +76,7 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
         return false;
     }
 
-    reportPhase( _( "Via annular rings..." ));
+    reportPhase( _( "Checking via annular rings..." ));
 
     auto checkAnnulus =
             [&]( BOARD_ITEM* item ) -> bool
