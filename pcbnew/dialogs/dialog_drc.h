@@ -81,10 +81,12 @@ private:
     void OnDeleteOneClick( wxCommandEvent& aEvent ) override;
     void OnDeleteAllClick( wxCommandEvent& aEvent ) override;
     void OnRunDRCClick( wxCommandEvent& aEvent ) override;
-    void OnCancelClick( wxCommandEvent& aEvent ) override;
 
-    /// handler for activate event, updating data which can be modified outside the dialog
-    /// (DRC parameters)
+    // These require special handling while the DRC tests are running.
+    void OnCancelClick( wxCommandEvent& aEvent ) override;
+    void OnClose( wxCloseEvent& event ) override;
+
+    // Updates data which can be modified outside the dialog
     void OnActivateDlg( wxActivateEvent& aEvent ) override;
 
     void OnChangingNotebookPage( wxNotebookEvent& aEvent ) override;
@@ -101,6 +103,8 @@ private:
 
     BOARD*             m_currentBoard;     // the board currently on test
     PCB_EDIT_FRAME*    m_brdEditor;
+    bool               m_running;
+    std::atomic<bool>  m_cancelled;
     bool               m_drcRun;
     bool               m_footprintTestsRun;
 

@@ -221,6 +221,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 
 	// Connect Events
 	this->Connect( wxEVT_ACTIVATE, wxActivateEventHandler( DIALOG_DRC_BASE::OnActivateDlg ) );
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_DRC_BASE::OnClose ) );
 	m_Notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_DRC_BASE::OnChangingNotebookPage ), NULL, this );
 	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_BASE::OnDRCItemDClick ), NULL, this );
 	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_DRC_BASE::OnDRCItemRClick ), NULL, this );
@@ -244,6 +245,7 @@ DIALOG_DRC_BASE::~DIALOG_DRC_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_ACTIVATE, wxActivateEventHandler( DIALOG_DRC_BASE::OnActivateDlg ) );
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_DRC_BASE::OnClose ) );
 	m_Notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_DRC_BASE::OnChangingNotebookPage ), NULL, this );
 	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_BASE::OnDRCItemDClick ), NULL, this );
 	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_DRC_BASE::OnDRCItemRClick ), NULL, this );

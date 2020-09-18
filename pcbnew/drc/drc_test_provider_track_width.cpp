@@ -74,7 +74,8 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
         return false;
     }
 
-    reportPhase( _( "Checking track widths..." ));
+    if( !reportPhase( _( "Checking track widths..." ) ) )
+        return false;
 
     auto checkTrackWidth =
             [&]( BOARD_ITEM* item ) -> bool
@@ -142,10 +143,8 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 
     for( TRACK* item : m_drcEngine->GetBoard()->Tracks() )
     {
-        if( (ii % delta) == 0 || ii >= (int) m_drcEngine->GetBoard()->Tracks().size() - 1 )
-            reportProgress( (double) ii / (double) m_drcEngine->GetBoard()->Tracks().size() );
-
-        ii++;
+        if( !reportProgress( ii++, m_drcEngine->GetBoard()->Tracks().size(), delta ) )
+            break;
 
         if( !checkTrackWidth( item ) )
             break;

@@ -46,16 +46,22 @@ void DRC_TEST_PROVIDER::reportViolation( std::shared_ptr<DRC_ITEM>& item, wxPoin
 }
 
 
-void DRC_TEST_PROVIDER::reportProgress( double aProgress )
+bool DRC_TEST_PROVIDER::reportProgress( int aCount, int aSize, int aDelta )
 {
-    m_drcEngine->ReportProgress( aProgress );
+    if( ( aCount % aDelta ) == 0 || aCount == aSize -  1 )
+    {
+        if( !m_drcEngine->ReportProgress( (double) aCount / (double) aSize ) )
+            return false;
+    }
+
+    return true;
 }
 
 
-void DRC_TEST_PROVIDER::reportPhase( const wxString& aMessage )
+bool DRC_TEST_PROVIDER::reportPhase( const wxString& aMessage )
 {
-    m_drcEngine->ReportPhase( aMessage );
     reportAux( aMessage );
+    return m_drcEngine->ReportPhase( aMessage );
 }
 
 

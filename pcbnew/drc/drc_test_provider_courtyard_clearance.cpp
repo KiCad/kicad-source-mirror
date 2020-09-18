@@ -78,16 +78,15 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
     const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
 
     // Detects missing (or malformed) footprint courtyards
-    reportPhase( _( "Checking footprint courtyard definitions..." ));
+    if( !reportPhase( _( "Checking footprint courtyard definitions..." ) ) )
+        return;
 
     int ii = 0;
 
     for( MODULE* footprint : m_board->Modules() )
     {
-        if( (ii % delta) == 0 || ii >= (int) m_board->Modules().size() - 1 )
-            reportProgress( (double) ii / (double) m_board->Modules().size() );
-
-        ii++;
+        if( !reportProgress( ii++, m_board->Modules().size(), delta ) )
+            return;
 
         if( footprint->BuildPolyCourtyard() )
         {
@@ -128,16 +127,15 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
 {
     const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
 
-    reportPhase( _( "Checking footprint courtyard overlap..." ));
+    if( !reportPhase( _( "Checking footprint courtyard overlap..." ) ) )
+        return;
 
     int ii = 0;
 
     for( auto it1 = m_board->Modules().begin(); it1 != m_board->Modules().end(); it1++ )
     {
-        if( (ii % delta) == 0 || ii >= (int) m_board->Modules().size() - 1 )
-            reportProgress( (double) ii / (double) m_board->Modules().size() );
-
-        ii++;
+        if( !reportProgress( ii++, m_board->Modules().size(), delta ) )
+            break;
 
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_FOOTPRINTS) )
             break;

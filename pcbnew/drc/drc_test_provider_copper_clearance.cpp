@@ -122,16 +122,24 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
     reportAux( "Worst clearance : %d nm", m_largestClearance );
 
-    reportPhase( _( "Checking pad clearances..." ));
+    if( !reportPhase( _( "Checking pad clearances..." ) ) )
+        return false;
+
     testPadClearances();
 
-    reportPhase( _( "Checking track & via clearances..." ));
+    if( !reportPhase( _( "Checking track & via clearances..." ) ) )
+        return false;
+
     testTrackClearances();
 
-    reportPhase( _( "Checking copper graphic & text clearances..." ));
+    if( !reportPhase( _( "Checking copper graphic & text clearances..." ) ) )
+        return false;
+
     testCopperTextAndGraphics();
 
-    reportPhase( _( "Checking copper zone clearances..." ));
+    if( !reportPhase( _( "Checking copper zone clearances..." ) ) )
+        return false;
+
     testZones();
 
     reportRuleStatistics();
@@ -295,17 +303,14 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
     const int delta = m_drcEngine->GetTestTracksAgainstZones() ? 25 : 100;
     int       count = m_board->Tracks().size();
 
-    reportProgress( 0.0 );
     reportAux( "Testing %d tracks...", count );
 
     int ii = 0;
 
     for( auto seg_it = m_board->Tracks().begin(); seg_it != m_board->Tracks().end(); seg_it++ )
     {
-        if( (ii % delta) == 0 || ii >= (int) m_board->Tracks().size() - 1 )
-            reportProgress( (double) ii / (double) m_board->Tracks().size() );
-
-        ii++;
+        if( !reportProgress( ii++, m_board->Tracks().size(), delta ) )
+            break;
 
         // Test segment against tracks and pads, optionally against copper zones
         for( PCB_LAYER_ID layer : (*seg_it)->GetLayerSet().Seq() )
@@ -552,8 +557,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
     {
         D_PAD* pad = sortedPads[idx];
 
-        if( idx % delta == 0 || idx == (int) sortedPads.size() - 1 )
-            reportProgress( (double) idx / (double) sortedPads.size() );
+        if( !reportProgress( idx, sortedPads.size(), delta ) )
+            break;
 
         int x_limit = pad->GetPosition().x + pad->GetBoundingRadius() + max_size;
 
@@ -667,6 +672,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( int aRefPadIdx,
 
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
 {
+    const int delta = 50;  // This is the number of tests between 2 calls to the progress bar
+
     // Test copper areas for valid netcodes -> fixme, goes to connectivity checks
 
     std::vector<SHAPE_POLY_SET> smoothed_polys;
@@ -682,6 +689,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
     // iterate through all areas
     for( int ia = 0; ia < m_board->GetAreaCount(); ia++ )
     {
+        if( !reportProgress( ia, m_board->GetAreaCount(), delta ) )
+            break;
+
         ZONE_CONTAINER* zoneRef = m_board->GetArea( ia );
 
         if( !zoneRef->IsOnCopperLayer() )

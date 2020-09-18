@@ -76,7 +76,8 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
         return false;
     }
 
-    reportPhase( _( "Checking via annular rings..." ));
+    if( !reportPhase( _( "Checking via annular rings..." ) ) )
+        return false;
 
     auto checkAnnulus =
             [&]( BOARD_ITEM* item ) -> bool
@@ -137,10 +138,8 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
 
     for( TRACK* item : board->Tracks() )
     {
-        if( (ii % delta) == 0 || ii >= (int) board->Tracks().size() - 1 )
-            reportProgress( (double) ii / (double) board->Tracks().size() );
-
-        ii++;
+        if( !reportProgress( ii++, board->Tracks().size(), delta ) )
+            break;
 
         if( !checkAnnulus( item ) )
             break;

@@ -41,11 +41,13 @@
 #include <widgets/progress_reporter.h>
 #include <drc/drc_engine.h>
 #include <tools/drc_tool.h>
-
+#include <kiplatform/ui.h>
 
 DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         DIALOG_DRC_BASE( aParent ),
         PROGRESS_REPORTER( 1 ),
+        m_running( false ),
+        m_cancelled( false ),
         m_drcRun( false ),
         m_footprintTestsRun( false ),
         m_markersProvider( nullptr ),
@@ -160,8 +162,9 @@ bool DIALOG_DRC::updateUI()
     int cur = std::max( 0, std::min( m_progress.load(), 10000 ) );
 
     m_gauge->SetValue( cur );
+    wxSafeYield( this );
 
-    return true;  // No cancel button on a wxGauge
+    return !m_cancelled;
 }
 
 
@@ -170,18 +173,12 @@ void DIALOG_DRC::AdvancePhase( const wxString& aMessage )
     PROGRESS_REPORTER::AdvancePhase( aMessage );
 
     m_Messages->AppendText( aMessage + "\n" );
-
-    KeepRefreshing( false );
-    wxSafeYield( this );
 }
 
 
 void DIALOG_DRC::SetCurrentProgress( double aProgress )
 {
     PROGRESS_REPORTER::SetCurrentProgress( aProgress );
-
-    KeepRefreshing( false );
-    wxSafeYield( this );
 }
 
 
@@ -208,6 +205,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 
     m_drcRun = false;
     m_footprintTestsRun = false;
+    m_cancelled = false;
 
     m_brdEditor->RecordDRCExclusions();
     deleteAllMarkers( true );
@@ -218,19 +216,33 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 
     m_runningResultsBook->ChangeSelection( 0 );   // Display the "Tests Running..." tab
     m_Messages->Clear();
-    wxYield();                                    // Allows time slice to refresh Messages
+    wxYield();                                    // Allow time slice to refresh Messages
+
+    m_running = true;
+    m_sdbSizer1Cancel->SetLabel( _( "Cancel" ) );
 
     drcTool->RunTests( this, testTracksAgainstZones, refillZones, reportAllTrackErrors,
                        testFootprints );
 
-    refreshBoardEditor();
+    if( m_cancelled )
+        m_Messages->AppendText( _( "-------- DRC cancelled by user.\n\n" ) );
+    else
+        m_Messages->AppendText( _( "Done.\n\n" ) );
 
-    wxYield();
     Raise();
+    wxYield();                                    // Allow time slice to refresh Messages
 
-    m_runningResultsBook->ChangeSelection( 1 );   // display the results tabs
+    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
+    m_running = false;
 
-    m_Notebook->GetPage( m_Notebook->GetSelection() )->SetFocus();
+    if( !m_cancelled )
+    {
+        wxMilliSleep( 500 );
+        m_runningResultsBook->ChangeSelection( 1 );
+        KIPLATFORM::UI::ForceFocus( m_markerDataView );
+    }
+
+    refreshBoardEditor();
 }
 
 
@@ -551,8 +563,25 @@ void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
 }
 
 
+void DIALOG_DRC::OnClose( wxCloseEvent& aEvent )
+{
+    if( m_running )
+        aEvent.Veto();
+
+    wxCommandEvent dummy;
+
+    OnCancelClick( dummy );
+}
+
+
 void DIALOG_DRC::OnCancelClick( wxCommandEvent& aEvent )
 {
+    if( m_running )
+    {
+        m_cancelled = true;
+        return;
+    }
+
     m_brdEditor->FocusOnItem( nullptr );
 
     SetReturnCode( wxID_CANCEL );

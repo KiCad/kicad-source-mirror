@@ -82,6 +82,7 @@ class DIALOG_DRC_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnActivateDlg( wxActivateEvent& event ) { event.Skip(); }
+		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnChangingNotebookPage( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnDRCItemDClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnDRCItemRClick( wxDataViewEvent& event ) { event.Skip(); }

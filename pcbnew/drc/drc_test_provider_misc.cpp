@@ -191,13 +191,19 @@ bool DRC_TEST_PROVIDER_MISC::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
-    reportPhase( _( "Checking board outline..." ));
+    if( !reportPhase( _( "Checking board outline..." ) ) )
+        return false;
+
     testOutline();
 
-    reportPhase( _( "Checking disabled layers..." ));
+    if( !reportPhase( _( "Checking disabled layers..." ) ) )
+        return false;
+
     testDisabledLayers();
 
-    reportPhase( _( "Checking text variables..." ));
+    if( !reportPhase( _( "Checking text variables..." ) ) )
+        return false;
+
     testTextVars();
 
     return true;

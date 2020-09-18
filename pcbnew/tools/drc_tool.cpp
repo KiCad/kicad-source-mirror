@@ -217,8 +217,6 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksA
 
     // update the m_drcDialog listboxes
     updatePointers();
-
-    aProgressReporter->AdvancePhase( _( "Done." ) );
 }
 
 

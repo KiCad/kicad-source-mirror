@@ -54,6 +54,7 @@
             <property name="window_name"></property>
             <property name="window_style"></property>
             <event name="OnActivate">OnActivateDlg</event>
+            <event name="OnClose">OnClose</event>
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">m_MainSizer</property>

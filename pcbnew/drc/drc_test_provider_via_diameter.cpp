@@ -72,7 +72,8 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
         return false;
     }
 
-    reportPhase( _( "Checking via diameters..." ) );
+    if( !reportPhase( _( "Checking via diameters..." ) ) )
+        return false;
 
     auto checkViaDiameter =
             [&]( BOARD_ITEM* item ) -> bool
@@ -129,10 +130,8 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
 
     for( TRACK* item : m_drcEngine->GetBoard()->Tracks() )
     {
-        if( (ii % delta) == 0 || ii >= (int) m_drcEngine->GetBoard()->Tracks().size() - 1 )
-            reportProgress( (double) ii / (double) m_drcEngine->GetBoard()->Tracks().size() );
-
-        ii++;
+        if( !reportProgress( ii++, m_drcEngine->GetBoard()->Tracks().size(), delta ) )
+            break;
 
         if( !checkViaDiameter( item ) )
             break;

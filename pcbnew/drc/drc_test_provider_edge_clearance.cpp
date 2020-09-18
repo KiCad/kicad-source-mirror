@@ -89,7 +89,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
     reportAux( "Worst clearance : %d nm", m_largestClearance );
 
-    reportPhase( _( "Checking board edge clearances..." ));
+    if( !reportPhase( _( "Checking board edge clearances..." ) ) )
+        return false;
     
     std::vector<DRAWSEGMENT*> boardOutline;
     std::vector<BOARD_ITEM*> boardItems;

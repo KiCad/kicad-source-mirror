@@ -124,10 +124,14 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
     buildDrilledHoleList();
 
-    reportPhase( _( "Checking hole to pad clearances..." ));
+    if( !reportPhase( _( "Checking hole to pad clearances..." ) ) )
+        return false;
+
     testPads2Holes();
 
-    reportPhase( _( "Checking hole to hole clearances..." ));
+    if( !reportPhase( _( "Checking hole to hole clearances..." ) ) )
+        return false;
+
     testHoles2Holes();
 
     reportRuleStatistics();
@@ -202,8 +206,8 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testPads2Holes()
 
         drc_dbg( 10, "-> %p\n", pad );
 
-        if( idx % delta == 0 || idx == (int) sortedPads.size() - 1 )
-            reportProgress( (double) idx / (double) sortedPads.size() );
+        if( !reportProgress( idx, sortedPads.size(), delta ) )
+            break;
 
         doPadToPadHoleDrc( idx, sortedPads, x_limit );
     }
@@ -369,8 +373,8 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
 
     for( size_t ii = 0; ii < m_drilledHoles.size(); ++ii )
     {
-        if( ii % delta == 0 || ii == m_drilledHoles.size() -  1 )
-            reportProgress( (double) ii / (double) m_drilledHoles.size() );
+        if( !reportProgress( ii, m_drilledHoles.size(), delta ) )
+            break;
 
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE ) )
             break;

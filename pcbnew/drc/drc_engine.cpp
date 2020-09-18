@@ -421,7 +421,9 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aTestTracksAgainstZones,
         drc_dbg( 0, "Running test provider: '%s'\n", provider->GetName() );
 
         ReportAux( wxString::Format( "Run DRC provider: '%s'", provider->GetName() ) );
-        provider->Run();
+
+        if( !provider->Run() )
+            break;
     }
 }
 
@@ -646,21 +648,23 @@ void DRC_ENGINE::ReportAux ( const wxString& aStr )
 }
 
 
-void DRC_ENGINE::ReportProgress( double aProgress )
+bool DRC_ENGINE::ReportProgress( double aProgress )
 {
     if( !m_progressReporter )
-        return;
+        return true;
 
     m_progressReporter->SetCurrentProgress( aProgress );
+    return m_progressReporter->KeepRefreshing( false );
 }
 
 
-void DRC_ENGINE::ReportPhase( const wxString& aMessage )
+bool DRC_ENGINE::ReportPhase( const wxString& aMessage )
 {
     if( !m_progressReporter )
-        return;
+        return true;
 
     m_progressReporter->AdvancePhase( aMessage );
+    return m_progressReporter->KeepRefreshing( false );
 }
 
 

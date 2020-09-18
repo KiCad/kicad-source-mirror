@@ -208,7 +208,8 @@ bool DRC_TEST_PROVIDER_LVS::Run()
 {
     if( m_drcEngine->GetTestFootprints() )
     {
-        reportPhase( _( "Checking PCB to schematic parity..." ));
+        if( !reportPhase( _( "Checking PCB to schematic parity..." ) ) )
+            return false;
 
         if( m_drcEngine->GetSchematicNetlist() )
             testFootprints( *m_drcEngine->GetSchematicNetlist() );

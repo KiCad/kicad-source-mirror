@@ -157,8 +157,8 @@ public:
     bool CompileRules();
 
     void ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos );
-    void ReportProgress( double aProgress );
-    void ReportPhase( const wxString& aMessage );
+    bool ReportProgress( double aProgress );
+    bool ReportPhase( const wxString& aMessage );
     void ReportAux( const wxString& aStr );
 
     bool QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T aRuleId, DRC_CONSTRAINT& aConstraint,

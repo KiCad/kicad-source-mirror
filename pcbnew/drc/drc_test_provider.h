@@ -103,8 +103,8 @@ protected:
 
     virtual void reportAux( wxString fmt, ... );
     virtual void reportViolation( std::shared_ptr<DRC_ITEM>& item, wxPoint aMarkerPos );
-    virtual void reportProgress( double aProgress );
-    virtual void reportPhase( const wxString& aStageName );
+    virtual bool reportProgress( int aCount, int aSize, int aDelta );
+    virtual bool reportPhase( const wxString& aStageName );
 
     virtual void reportRuleStatistics();
     virtual void accountCheck( const DRC_RULE* ruleToTest );
