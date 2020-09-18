@@ -62,6 +62,8 @@ static bool       g_filterByNet;
 static wxString   g_netFilter;
 
 
+#define DEFAULT_STYLE _( "Default" )
+
 class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS : public DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE
 {
     SCH_EDIT_FRAME*        m_parent;
@@ -106,6 +108,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_
     if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
         m_parent->RecalculateConnections( NO_CLEANUP );
 
+    m_lineStyle->Append( DEFAULT_STYLE );
     m_lineStyle->Append( INDETERMINATE_ACTION );
 
     m_sdbSizerButtonsOK->SetDefault();
@@ -279,7 +282,11 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
 
         if( m_lineStyle->GetStringSelection() != INDETERMINATE_ACTION )
         {
-            lineItem->SetLineStyle( m_lineStyle->GetSelection() );
+            if( m_lineStyle->GetStringSelection() == DEFAULT_STYLE )
+                lineItem->SetLineStyle( PLOT_DASH_TYPE::DEFAULT );
+            else
+                lineItem->SetLineStyle( m_lineStyle->GetSelection() );
+
             m_hasChange = true;
         }
 
