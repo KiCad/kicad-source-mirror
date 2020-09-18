@@ -32,9 +32,11 @@ void CADSTAR_ARCHIVE_PARSER::EVALUE::Parse( XNODE* aNode )
 
     if( ( !GetXmlAttributeIDString( aNode, 0 ).ToLong( &Base ) )
             || ( !GetXmlAttributeIDString( aNode, 1 ).ToLong( &Exponent ) ) )
+    {
         THROW_PARSING_IO_ERROR( wxT( "Base and Exponent" ),
-                wxString::Format(
-                        "%s->%s", aNode->GetParent()->GetName(), aNode->GetParent()->GetName() ) );
+                                wxString::Format( "%s->%s", aNode->GetParent()->GetName(),
+                                                  aNode->GetParent()->GetName() ) );
+    }
 }
 
 
@@ -64,9 +66,13 @@ bool CADSTAR_ARCHIVE_PARSER::VERTEX::IsVertex( XNODE* aNode )
 
     if( aNodeName == wxT( "PT" ) || aNodeName == wxT( "ACWARC" ) || aNodeName == wxT( "CWARC" )
             || aNodeName == wxT( "CWSEMI" ) || aNodeName == wxT( "ACWSEMI" ) )
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 
@@ -126,7 +132,7 @@ void CADSTAR_ARCHIVE_PARSER::InsertAttributeAtEnd( XNODE* aNode, wxString aValue
 {
     wxString result;
     int      numAttributes = 0;
-    
+
     if( aNode->GetAttribute( wxT( "numAttributes" ), &result ) )
     {
         numAttributes = wxAtoi( result );
@@ -192,9 +198,8 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile(
             {
 
                 if( cNode->GetName() != aFileTypeIdentifier )
-                {
                     THROW_IO_ERROR( _( "The selected file is not valid or might be corrupt!" ) );
-                }
+
                 cadstarFileCheckDone = true;
             }
 
@@ -213,21 +218,15 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile(
         }
     }
 
+    // Not enough closing brackets
     if( iNode != NULL )
-    {
-        //not enough closing brackets
         THROW_IO_ERROR( _( "The selected file is not valid or might be corrupt!" ) );
-    }
 
+    // Throw if no data was parsed
     if( cNode )
-    {
         return cNode;
-    }
     else
-    {
-        //no data?
         THROW_IO_ERROR( _( "The selected file is not valid or might be corrupt!" ) );
-    }
 
     return NULL;
 }
@@ -266,31 +265,23 @@ long CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDLong( XNODE* aNode, unsigned int a
 void CADSTAR_ARCHIVE_PARSER::CheckNoChildNodes( XNODE* aNode )
 {
     if( aNode && aNode->GetChildren() )
-    {
         THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aNode->GetName() );
-    }
 }
 
 
 void CADSTAR_ARCHIVE_PARSER::CheckNoNextNodes( XNODE* aNode )
 {
     if( aNode && aNode->GetNext() )
-    {
         THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetNext()->GetName(), aNode->GetParent()->GetName() );
-    }
 }
 
 
 void CADSTAR_ARCHIVE_PARSER::ParseChildEValue( XNODE* aNode, EVALUE& aValueToParse )
 {
     if( aNode->GetChildren()->GetName() == wxT( "E" ) )
-    {
         aValueToParse.Parse( aNode->GetChildren() );
-    }
     else
-    {
         THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aNode->GetName() );
-    }
 }
 
 
@@ -311,13 +302,18 @@ std::vector<CADSTAR_ARCHIVE_PARSER::POINT> CADSTAR_ARCHIVE_PARSER::ParseAllChild
             retVal.push_back( pt );
         }
         else if( aTestAllChildNodes )
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
+        }
     }
 
-    if( aExpectedNumPoints != UNDEFINED_VALUE && retVal.size() != aExpectedNumPoints )
+    if( aExpectedNumPoints != UNDEFINED_VALUE &&
+        retVal.size() != static_cast<size_t>( aExpectedNumPoints ) )
+    {
         THROW_IO_ERROR( wxString::Format(
-                _( "Unexpected number of points in '%s'. Found %d but expected %d." ),
-                aNode->GetName(), retVal.size(), aExpectedNumPoints ) );
+                        _( "Unexpected number of points in '%s'. Found %d but expected %d." ),
+                        aNode->GetName(), retVal.size(), aExpectedNumPoints ) );
+    }
 
     return retVal;
 }
@@ -340,7 +336,9 @@ std::vector<CADSTAR_ARCHIVE_PARSER::VERTEX> CADSTAR_ARCHIVE_PARSER::ParseAllChil
             retVal.push_back( vertex );
         }
         else if( aTestAllChildNodes )
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
+        }
     }
 
     return retVal;
@@ -364,7 +362,9 @@ std::vector<CADSTAR_ARCHIVE_PARSER::CUTOUT> CADSTAR_ARCHIVE_PARSER::ParseAllChil
             retVal.push_back( cutout );
         }
         else if( aTestAllChildNodes )
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
+        }
     }
 
     return retVal;
@@ -385,9 +385,13 @@ bool CADSTAR_ARCHIVE_PARSER::SHAPE::IsShape( XNODE* aNode )
 
     if( aNodeName == wxT( "OPENSHAPE" ) || aNodeName == wxT( "OUTLINE" )
             || aNodeName == wxT( "SOLID" ) || aNodeName == wxT( "HATCHED" ) )
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 
@@ -426,5 +430,7 @@ void CADSTAR_ARCHIVE_PARSER::SHAPE::Parse( XNODE* aNode )
         HatchCodeID = GetXmlAttributeIDString( aNode, 0 );
     }
     else
+    {
         wxASSERT_MSG( true, wxT( "Unknown SHAPE type" ) );
+    }
 }
