@@ -46,13 +46,11 @@ enum PCB_DRC_CODE {
     DRCE_DRILLED_HOLES_TOO_CLOSE,        // overlapping drilled holes break drill bits
     DRCE_HOLE_CLEARANCE,                 //
     DRCE_TRACK_WIDTH,                    // Track width is too small or too large
-    DRCE_TOO_SMALL_VIA,                  // Too small via size
     DRCE_ANNULUS,                        // Via size and drill leave annulus too small or too large
     DRCE_TOO_SMALL_DRILL,                // Too small via or pad drill
     DRCE_VIA_HOLE_BIGGER,                // via's hole is bigger than its diameter
     DRCE_VIA_DIAMETER,                   // Via diameter checks (min/max)
     DRCE_PADSTACK,                       // something is wrong with a pad or via stackup
-    DRCE_TOO_SMALL_MICROVIA,             // Too small micro via size
     DRCE_TOO_SMALL_MICROVIA_DRILL,       // Too small micro via drill
     DRCE_KEEPOUT,                        // A disallowed object is inside a keepout
     DRCE_OVERLAPPING_FOOTPRINTS,         // footprint courtyards overlap
@@ -127,13 +125,11 @@ private:
     static DRC_ITEM holeNearHole;
     static DRC_ITEM holeClearance;
     static DRC_ITEM trackWidth;
-    static DRC_ITEM viaTooSmall;
     static DRC_ITEM annulus;
     static DRC_ITEM drillTooSmall;
     static DRC_ITEM viaHoleLargerThanPad;
     static DRC_ITEM viaDiameter;
     static DRC_ITEM padstack;
-    static DRC_ITEM microviaTooSmall;
     static DRC_ITEM microviaDrillTooSmall;
     static DRC_ITEM keepout;
     static DRC_ITEM courtyardsOverlap;

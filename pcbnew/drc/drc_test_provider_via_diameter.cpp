@@ -30,8 +30,7 @@
     Via diameter test.
 
     Errors generated:
-    - DRCE_TOO_SMALL_VIA
-    - DRCE_TOO_SMALL_MICROVIA
+    - DRCE_VIA_DIAMETER
 */
 
 class DRC_TEST_PROVIDER_VIA_DIAMETER : public DRC_TEST_PROVIDER

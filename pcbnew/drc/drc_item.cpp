@@ -90,10 +90,6 @@ DRC_ITEM DRC_ITEM::trackWidth( DRCE_TRACK_WIDTH,
         _( "Track width outside allowed limits" ),
         wxT( "track_width" ) );
 
-DRC_ITEM DRC_ITEM::viaTooSmall( DRCE_TOO_SMALL_VIA,
-        _( "Via size too small" ),
-        wxT( "via_too_small" ) );
-
 DRC_ITEM DRC_ITEM::annulus( DRCE_ANNULUS,
         _( "Annulus" ),
         wxT( "annulus" ) );
@@ -113,10 +109,6 @@ DRC_ITEM DRC_ITEM::viaDiameter( DRCE_VIA_DIAMETER,
 DRC_ITEM DRC_ITEM::padstack( DRCE_PADSTACK,
         _( "Padstack is not valid" ),
         wxT( "padstack" ) );
-
-DRC_ITEM DRC_ITEM::microviaTooSmall( DRCE_TOO_SMALL_MICROVIA,
-        _( "Micro via size too small" ),
-        wxT( "microvia_too_small" ) );
 
 DRC_ITEM DRC_ITEM::microviaDrillTooSmall( DRCE_TOO_SMALL_MICROVIA_DRILL,
         _( "Micro via drill too small" ),
@@ -189,12 +181,10 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::holeNearHole,
             DRC_ITEM::holeClearance,
             DRC_ITEM::trackWidth,
-            DRC_ITEM::viaTooSmall,
             DRC_ITEM::annulus,
             DRC_ITEM::drillTooSmall,
             DRC_ITEM::viaHoleLargerThanPad,
             DRC_ITEM::padstack,
-            DRC_ITEM::microviaTooSmall,
             DRC_ITEM::microviaDrillTooSmall,
             DRC_ITEM::keepout,
             DRC_ITEM::courtyardsOverlap,
@@ -229,13 +219,11 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_DRILLED_HOLES_TOO_CLOSE:  return std::make_shared<DRC_ITEM>( holeNearHole );
     case DRCE_HOLE_CLEARANCE:           return std::make_shared<DRC_ITEM>( holeClearance );
     case DRCE_TRACK_WIDTH:              return std::make_shared<DRC_ITEM>( trackWidth );
-    case DRCE_TOO_SMALL_VIA:            return std::make_shared<DRC_ITEM>( viaTooSmall );
     case DRCE_ANNULUS:                  return std::make_shared<DRC_ITEM>( annulus );
     case DRCE_TOO_SMALL_DRILL:          return std::make_shared<DRC_ITEM>( drillTooSmall );
     case DRCE_VIA_HOLE_BIGGER:          return std::make_shared<DRC_ITEM>( viaHoleLargerThanPad );
     case DRCE_VIA_DIAMETER:             return std::make_shared<DRC_ITEM>( viaDiameter );
     case DRCE_PADSTACK:                 return std::make_shared<DRC_ITEM>( padstack );
-    case DRCE_TOO_SMALL_MICROVIA:       return std::make_shared<DRC_ITEM>( microviaTooSmall );
     case DRCE_TOO_SMALL_MICROVIA_DRILL: return std::make_shared<DRC_ITEM>( microviaDrillTooSmall );
     case DRCE_KEEPOUT:                  return std::make_shared<DRC_ITEM>( keepout );
     case DRCE_OVERLAPPING_FOOTPRINTS:   return std::make_shared<DRC_ITEM>( courtyardsOverlap );
