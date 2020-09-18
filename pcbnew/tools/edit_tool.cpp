@@ -579,27 +579,24 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         }
 
         // Dispatch TOOL_ACTIONs
-        else if( evt->Category() == TC_COMMAND )
+        else if( evt->IsAction( &ACTIONS::doDelete ) )
         {
-            if( evt->IsAction( &ACTIONS::doDelete ) )
+            break; // finish -- there is no further processing for removed items
+        }
+        else if( evt->IsAction( &ACTIONS::duplicate ) )
+        {
+            break; // finish -- Duplicate tool will start a new Move with the dup'ed items
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::moveExact ) )
+        {
+            // Reset positions so the Move Exactly is from the start.
+            for( EDA_ITEM* item : selection )
             {
-                break; // finish -- there is no further processing for removed items
+                BOARD_ITEM* i = static_cast<BOARD_ITEM*>( item );
+                i->Move( -totalMovement );
             }
-            else if( evt->IsAction( &ACTIONS::duplicate ) )
-            {
-                break; // finish -- Duplicate tool will start a new Move with the dup'ed items
-            }
-            else if( evt->IsAction( &PCB_ACTIONS::moveExact ) )
-            {
-                // Reset positions so the Move Exactly is from the start.
-                for( EDA_ITEM* item : selection )
-                {
-                    BOARD_ITEM* i = static_cast<BOARD_ITEM*>( item );
-                    i->Move( -totalMovement );
-                }
 
-                break; // finish -- we moved exactly, so we are finished
-            }
+            break; // finish -- we moved exactly, so we are finished
         }
 
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
