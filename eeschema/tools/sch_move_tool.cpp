@@ -373,41 +373,38 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             unselect = true;
             break;
         }
-        else if( evt->Category() == TC_COMMAND )
+        else if( evt->IsAction( &ACTIONS::doDelete ) )
         {
-            if( evt->IsAction( &ACTIONS::doDelete ) )
+            // Exit on a remove operation; there is no further processing for removed items.
+            break;
+        }
+        else if( evt->IsAction( &ACTIONS::duplicate ) )
+        {
+            if( selection.Front()->IsNew() )
             {
-                // Exit on a remove operation; there is no further processing for removed items.
-                break;
+                // This doesn't really make sense; we'll just end up dragging a stack of
+                // objects so Duplicate() is going to ignore this and we'll just carry on.
+                continue;
             }
-            else if( evt->IsAction( &ACTIONS::duplicate ) )
-            {
-                if( selection.Front()->IsNew() )
-                {
-                    // This doesn't really make sense; we'll just end up dragging a stack of
-                    // objects so Duplicate() is going to ignore this and we'll just carry on.
-                    continue;
-                }
 
-                // Move original back and exit.  The duplicate will run in its own loop.
-                restore_state = true;
-                unselect = false;
-                chain_commands = true;
-                break;
-            }
-            else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
+            // Move original back and exit.  The duplicate will run in its own loop.
+            restore_state = true;
+            unselect = false;
+            chain_commands = true;
+            break;
+        }
+        else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
+        {
+            if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
+                && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_CMP_MAX )
             {
-                if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
-                    && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_CMP_MAX )
-                {
-                    SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
-                    int unit = evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP;
+                SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
+                int unit = evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP;
 
-                    if( component )
-                    {
-                        m_frame->SelectUnit( component, unit );
-                        m_toolMgr->RunAction( ACTIONS::refreshPreview );
-                    }
+                if( component )
+                {
+                    m_frame->SelectUnit( component, unit );
+                    m_toolMgr->RunAction( ACTIONS::refreshPreview );
                 }
             }
         }
