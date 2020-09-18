@@ -106,6 +106,10 @@ DRC_ITEM DRC_ITEM::viaHoleLargerThanPad( DRCE_VIA_HOLE_BIGGER,
         _( "Via hole larger than diameter" ),
         wxT( "via_hole_larger_than_pad" ) );
 
+DRC_ITEM DRC_ITEM::viaDiameter( DRCE_VIA_DIAMETER,
+        _( "Via diameter outside allowed limits" ),
+        wxT( "via_diameter" ) );
+
 DRC_ITEM DRC_ITEM::padstack( DRCE_PADSTACK,
         _( "Padstack is not valid" ),
         wxT( "padstack" ) );
@@ -229,6 +233,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_ANNULUS:                  return std::make_shared<DRC_ITEM>( annulus );
     case DRCE_TOO_SMALL_DRILL:          return std::make_shared<DRC_ITEM>( drillTooSmall );
     case DRCE_VIA_HOLE_BIGGER:          return std::make_shared<DRC_ITEM>( viaHoleLargerThanPad );
+    case DRCE_VIA_DIAMETER:             return std::make_shared<DRC_ITEM>( viaDiameter );
     case DRCE_PADSTACK:                 return std::make_shared<DRC_ITEM>( padstack );
     case DRCE_TOO_SMALL_MICROVIA:       return std::make_shared<DRC_ITEM>( microviaTooSmall );
     case DRCE_TOO_SMALL_MICROVIA_DRILL: return std::make_shared<DRC_ITEM>( microviaDrillTooSmall );

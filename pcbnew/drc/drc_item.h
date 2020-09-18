@@ -124,13 +124,14 @@ private:
     static DRC_ITEM zoneHasEmptyNet;
     static DRC_ITEM viaDangling;
     static DRC_ITEM trackDangling;
-    static DRC_ITEM holeNearHole; // JEY TODO
-    static DRC_ITEM holeClearance; // JEY TODO
+    static DRC_ITEM holeNearHole;
+    static DRC_ITEM holeClearance;
     static DRC_ITEM trackWidth;
     static DRC_ITEM viaTooSmall;
     static DRC_ITEM annulus;
     static DRC_ITEM drillTooSmall;
     static DRC_ITEM viaHoleLargerThanPad;
+    static DRC_ITEM viaDiameter;
     static DRC_ITEM padstack;
     static DRC_ITEM microviaTooSmall;
     static DRC_ITEM microviaDrillTooSmall;
