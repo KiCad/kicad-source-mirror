@@ -621,15 +621,25 @@ public:
                 if( !destField )
                 {
                     comp.RemoveField( srcName );
-                    continue;
                 }
-
-                // Reference and value fields cannot be empty.  All other fields can.
-                if( srcValue.IsEmpty()
-                  && (destField->GetId() == REFERENCE || destField->GetId() == VALUE))
-                    continue;
-
-                destField->SetText( srcValue );
+                else if( destField->GetId() == REFERENCE )
+                {
+                    // Reference is not editable
+                }
+                else if( destField->GetId() == VALUE )
+                {
+                    // Value field cannot be empty
+                    if( !srcValue.IsEmpty() )
+                        comp.SetValue( srcValue );
+                }
+                else if( destField->GetId() == FOOTPRINT )
+                {
+                    comp.SetFootprint( srcValue );
+                }
+                else
+                {
+                    destField->SetText( srcValue );
+                }
             }
         }
 
