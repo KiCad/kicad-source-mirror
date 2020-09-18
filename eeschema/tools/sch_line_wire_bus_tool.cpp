@@ -279,7 +279,7 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
     SCH_LAYER_ID layer = aEvent.Parameter<SCH_LAYER_ID>();
 
     if( aEvent.HasPosition() )
-        getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
+        getViewControls()->WarpCursor( aEvent.Position(), true );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
@@ -705,6 +705,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
         controls->CaptureCursor( segment != nullptr );
     }
 
+    controls->ForceCursorPosition( false );
     return 0;
 }
 
