@@ -665,44 +665,41 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
             }
         }
 
+        // If we're pendingWait then we had better have a cofunc to process the wait.
+        wxASSERT( !st || !st->pendingWait || st->cofunc );
+
         // the tool state handler is waiting for events (i.e. called Wait() method)
-        if( st && st->pendingWait )
+        if( st && st->cofunc && st->pendingWait && st->waitEvents.Matches( aEvent ) )
         {
-            if( st->waitEvents.Matches( aEvent ) )
+            if( !aEvent.FirstResponder() )
+                const_cast<TOOL_EVENT*>( &aEvent )->SetFirstResponder( st->theTool );
+
+            // got matching event? clear wait list and wake up the coroutine
+            st->wakeupEvent = aEvent;
+            st->pendingWait = false;
+            st->waitEvents.clear();
+
+            wxLogTrace( kicadTraceToolStack,
+                    "TOOL_MANAGER::dispatchInternal - Waking tool %s for event: %s",
+                    st->theTool->GetName(), aEvent.Format() );
+
+            setActiveState( st );
+            bool end = !st->cofunc->Resume();
+
+            if( end )
             {
-                if( !aEvent.FirstResponder() )
-                    const_cast<TOOL_EVENT*>( &aEvent )->SetFirstResponder( st->theTool );
+                it = finishTool( st );
+                increment = false;
+            }
 
-                // got matching event? clear wait list and wake up the coroutine
-                st->wakeupEvent = aEvent;
-                st->pendingWait = false;
-                st->waitEvents.clear();
+            // If the tool did not request the event be passed to other tools, we're done
+            if( !st->wakeupEvent.PassEvent() )
+            {
+                wxLogTrace( kicadTraceToolStack,
+                        "TOOL_MANAGER::dispatchInternal - %s stopped passing event: %s",
+                        st->theTool->GetName(), aEvent.Format() );
 
-                if( st->cofunc )
-                {
-                    wxLogTrace( kicadTraceToolStack,
-                            "TOOL_MANAGER::dispatchInternal - Waking tool %s for event: %s",
-                            st->theTool->GetName(), aEvent.Format() );
-
-                    setActiveState( st );
-                    bool end = !st->cofunc->Resume();
-
-                    if( end )
-                    {
-                        it = finishTool( st );
-                        increment = false;
-                    }
-                }
-
-                // If the tool did not request the event be passed to other tools, we're done
-                if( !st->wakeupEvent.PassEvent() )
-                {
-                    wxLogTrace( kicadTraceToolStack,
-                            "TOOL_MANAGER::dispatchInternal - %s stopped passing event: %s",
-                            st->theTool->GetName(), aEvent.Format() );
-
-                    return true;
-                }
+                return true;
             }
         }
 
@@ -821,8 +818,11 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
         if( st->contextMenuTrigger == CMENU_BUTTON && !aEvent.IsClick( BUT_RIGHT ) )
             break;
 
-        st->pendingWait = true;
-        st->waitEvents = TOOL_EVENT( TC_ANY, TA_ANY );
+        if( st->cofunc )
+        {
+            st->pendingWait = true;
+            st->waitEvents = TOOL_EVENT( TC_ANY, TA_ANY );
+        }
 
         // Store the menu pointer in case it is changed by the TOOL when handling menu events
         ACTION_MENU* m = st->contextMenu;
