@@ -2090,3 +2090,31 @@ bool SHAPE_POLY_SET::hasTouchingHoles( const POLYGON& aPoly ) const
 
     return false;
 }
+
+bool SHAPE_POLY_SET::HasIndexableSubshapes() const
+{
+    return IsTriangulationUpToDate();
+}
+
+size_t SHAPE_POLY_SET::GetIndexableSubshapeCount() const
+{
+    size_t n = 0;
+    for( auto& t : m_triangulatedPolys )
+        n += t->GetTriangleCount();
+    return n;
+}
+
+void SHAPE_POLY_SET:: GetIndexableSubshapes( std::vector<SHAPE*>& aSubshapes )
+{
+    aSubshapes.reserve( GetIndexableSubshapeCount() );
+
+    for( auto& tpoly : m_triangulatedPolys )
+    {
+        for ( auto& tri : tpoly->Triangles() )
+        {
+            SHAPE *s = static_cast<SHAPE*> ( &tri );
+            aSubshapes.push_back( &tri );
+        }
+    }
+}
+

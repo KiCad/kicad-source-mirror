@@ -96,6 +96,21 @@ class SHAPE_COMPOUND : public SHAPE
        return m_shapes.size() != 1 ? nullptr : m_shapes[0];
     }
 
+   virtual bool HasIndexableSubshapes() const override
+   {
+      return true;
+   }
+
+   virtual size_t GetIndexableSubshapeCount() const override
+   {
+      return m_shapes.size();
+   }
+
+   virtual void GetIndexableSubshapes( std::vector<SHAPE*>& aSubshapes ) override
+   {
+      aSubshapes = m_shapes;
+   }
+
    private:
 
       BOX2I m_cachedBBox;

@@ -26,6 +26,7 @@
 #define __SHAPE_H
 
 #include <sstream>
+#include <vector>
 #include <geometry/seg.h>
 #include <math/vector2d.h>
 #include <math/box2.h>
@@ -70,6 +71,7 @@ static inline wxString SHAPE_TYPE_asString( SHAPE_TYPE a )
     return wxEmptyString;  // Just to quiet GCC.
 }
 
+class SHAPE;
 
 class SHAPE_BASE
 {
@@ -103,9 +105,9 @@ public:
         return false;
     }
 
-    virtual size_t GetIndexableSubshapeCount() { return 0; }
+    virtual size_t GetIndexableSubshapeCount() const { return 0; }
 
-    virtual void GetIndexableSubshape( SHAPE_BASE& aSubshape ) const {};
+    virtual void GetIndexableSubshapes( std::vector<SHAPE*>& aSubshapes ) { }
 
 protected:
     ///> type of our shape

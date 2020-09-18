@@ -28,6 +28,7 @@
 
 #include <cstdio>
 #include <deque>                        // for deque
+#include <vector>                       // for vector
 #include <iosfwd>                       // for string, stringstream
 #include <memory>
 #include <set>                          // for set
@@ -163,6 +164,11 @@ class SHAPE_POLY_SET : public SHAPE
             size_t GetTriangleCount() const
             {
                 return m_triangles.size();
+            }
+
+            std::deque<TRI>& Triangles()
+            {
+                return m_triangles;
             }
 
             size_t GetVertexCount() const
@@ -1369,6 +1375,12 @@ class SHAPE_POLY_SET : public SHAPE
         bool IsTriangulationUpToDate() const;
 
         MD5_HASH GetHash() const;
+
+        virtual bool HasIndexableSubshapes() const override;
+
+        virtual size_t GetIndexableSubshapeCount() const override;
+
+        virtual void GetIndexableSubshapes( std::vector<SHAPE*>& aSubshapes ) override;
 
     private:
 
