@@ -44,7 +44,7 @@ pad          hole        graphic         text             zone
 
 (rule HV_unshielded
    (constraint clearance (min 2mm))
-   (condition "A.NetClass == 'HV' && not A.insideArea('Shield*')))
+   (condition "A.NetClass == 'HV' && !A.insideArea('Shield*')))
 
 
 # ---- Notes

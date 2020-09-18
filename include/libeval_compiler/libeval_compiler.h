@@ -276,6 +276,12 @@ public:
 
     VALUE* Pop()
     {
+        if( m_stack.size() == 0 )
+        {
+            ReportError( _( "Malformed expression" ) );
+            return AllocValue();
+        }
+
         VALUE* value = m_stack.top();
         m_stack.pop();
         return value;

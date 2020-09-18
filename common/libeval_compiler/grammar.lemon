@@ -128,6 +128,12 @@ nt(A) ::= nt(B) G_BOOL_OR nt(C).
     A->leaf[1] = C;
 }
 
+nt(A) ::= G_BOOL_NOT nt(B).
+{
+    A = newNode( pEval, TR_OP_BOOL_NOT );
+    A->leaf[0] = B;
+}
+
 nt(A) ::= nt(B) G_PLUS nt(C).
 {
     A = newNode( pEval, TR_OP_ADD );

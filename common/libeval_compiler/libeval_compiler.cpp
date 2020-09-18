@@ -1031,7 +1031,24 @@ void UOP::Exec( CONTEXT* ctx )
     }
     else if( m_op & TR_OP_UNARY_MASK )
     {
-        // fixme : not operator
+        LIBEVAL::VALUE* arg1 = ctx->Pop();
+        double          arg1Value = arg1 ? arg1->AsDouble() : 0.0;
+        double          result;
+
+        switch( m_op )
+        {
+        case TR_OP_BOOL_NOT:
+            result = arg1Value != 0.0 ? 0 : 1;
+            break;
+        default:
+            result = 0.0;
+            break;
+        }
+
+        auto rp = ctx->AllocValue();
+        rp->Set( result );
+        ctx->Push( rp );
+        return;
     }
 }
 
@@ -1040,8 +1057,16 @@ VALUE* UCODE::Run( CONTEXT* ctx )
 {
     static VALUE g_false( 0 );
 
-    for( UOP* op : m_ucode )
-        op->Exec( ctx );
+    try
+    {
+        for( UOP* op : m_ucode )
+            op->Exec( ctx );
+    }
+    catch(...)
+    {
+        // rules which fail outright should not be fired
+        return &g_false;
+    }
 
     // non-well-formed rules should not be fired
     if( ctx->SP() != 1 )
