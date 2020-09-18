@@ -127,6 +127,10 @@ void DRC_ENGINE::loadImplicitRules()
     holeClearanceConstraint.Value().SetMin( 0 );
     rule->AddConstraint( courtyardClearanceConstraint );
 
+    DRC_CONSTRAINT silkToPadClearanceConstraint( DRC_CONSTRAINT_TYPE_SILK_TO_PAD );
+    silkToPadClearanceConstraint.Value().SetMin( 0 );
+    rule->AddConstraint( silkToPadClearanceConstraint );
+
     // 2) micro-via specific defaults (new DRC doesn't treat microvias in any special way)
 
     DRC_RULE* uViaRule = createImplicitRule( _( "board setup micro-via constraints" ));
@@ -274,14 +278,14 @@ void DRC_ENGINE::loadRules( const wxFileName& aPath )
         {
             DRC_RULES_PARSER parser( fp, aPath.GetFullPath() );
             parser.Parse( rules, m_reporter );
-        }
+            }
 
         // Copy the rules into the member variable afterwards so that if Parse() throws then
         // the possibly malformed rules won't contaminate the current ruleset.
 
         for( DRC_RULE* rule : rules )
             m_rules.push_back( rule );
-    }
+            }
 }
 
 
@@ -402,7 +406,12 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aTestTracksAgainstZones,
         int phases = 0;
 
         for( DRC_TEST_PROVIDER* provider : m_testProviders )
+        {
+            if( provider->IsEnabled() )
+            {
             phases += provider->GetNumPhases();
+            }
+        }
 
         m_progressReporter->AddPhases( phases );
     }
@@ -417,6 +426,9 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aTestTracksAgainstZones,
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
+        if( !provider->IsEnabled() )
+            continue;
+
         drc_dbg( 0, "Running test provider: '%s'\n", provider->GetName() );
 
         ReportAux( wxString::Format( "Run DRC provider: '%s'", provider->GetName() ) );
@@ -479,30 +491,30 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
     if( m_constraintMap.count( aConstraintId ) )
     {
-        std::vector<CONSTRAINT_WITH_CONDITIONS*>* ruleset = m_constraintMap[ aConstraintId ];
+    std::vector<CONSTRAINT_WITH_CONDITIONS*>* ruleset = m_constraintMap[ aConstraintId ];
 
-        // Last matching rule wins, so process in reverse order
-        for( int ii = (int) ruleset->size() - 1; ii >= 0; --ii )
-        {
-            const CONSTRAINT_WITH_CONDITIONS* rcons = ruleset->at( ii );
-            implicit = rcons->parentRule && rcons->parentRule->m_Implicit;
+    // Last matching rule wins, so process in reverse order
+    for( int ii = (int) ruleset->size() - 1; ii >= 0; --ii )
+    {
+        const CONSTRAINT_WITH_CONDITIONS* rcons = ruleset->at( ii );
+        implicit = rcons->parentRule && rcons->parentRule->m_Implicit;
 
-            REPORT( "" )
+        REPORT( "" )
 
             if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
-            {
+        {
                 int clearance = rcons->constraint.m_Value.Min();
                 REPORT( wxString::Format( implicit ? _( "Checking %s; clearance: %s." )
                                                    : _( "Checking rule %s; clearance: %s."),
                                           rcons->constraint.GetName(),
                                           MessageTextFromValue( UNITS, clearance, true ) ) )
-            }
-            else
-            {
+        }
+        else
+        {
                 REPORT( wxString::Format( implicit ? _( "Checking %s." )
                                                    : _( "Checking rule %s."),
                                           rcons->constraint.GetName() ) )
-            }
+        }
 
             if( aLayer != UNDEFINED_LAYER && !rcons->layerTest.test( aLayer ) )
             {
@@ -694,8 +706,8 @@ std::vector<DRC_CONSTRAINT> DRC_ENGINE::QueryConstraintsById( DRC_CONSTRAINT_TYP
 
     if( m_constraintMap.count( constraintID ) )
     {
-        for ( CONSTRAINT_WITH_CONDITIONS* c : *m_constraintMap[ constraintID ] )
-            rv.push_back( c->constraint );
+    for ( CONSTRAINT_WITH_CONDITIONS* c : *m_constraintMap[constraintID] )
+        rv.push_back( c->constraint );
     }
 
     return rv;

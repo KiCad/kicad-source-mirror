@@ -249,6 +249,7 @@ set( PCBNEW_DRC_SRCS
     drc/drc_test_provider_misc.cpp
     drc/drc_test_provider_track_width.cpp
     drc/drc_test_provider_via_diameter.cpp
+    drc/drc_test_provider_silk_to_pad.cpp
     )
 
 set( PCBNEW_NETLIST_SRCS

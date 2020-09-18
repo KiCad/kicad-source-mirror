@@ -166,6 +166,14 @@ DRC_ITEM DRC_ITEM::unresolvedVariable( DRCE_UNRESOLVED_VARIABLE,
         _( "Unresolved text variable" ),
         wxT( "unresolved_variable" ) );
 
+DRC_ITEM DRC_ITEM::silkOverPad( DRCE_SILK_OVER_PAD,
+        _( "Silkscreen overlapping component pad(s)" ),
+        wxT( "silk_over_pad" ) );
+
+DRC_ITEM DRC_ITEM::silkClearance( DRCE_SILK_CLEARANCE,
+        _( "Silkscreen clearance" ),
+        wxT( "silk_clearance" ) );
+
 
 std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::unconnectedItems,
@@ -238,6 +246,8 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_NET_CONFLICT:             return std::make_shared<DRC_ITEM>( netConflict );
     case DRCE_EXTRA_FOOTPRINT:          return std::make_shared<DRC_ITEM>( extraFootprint );
     case DRCE_UNRESOLVED_VARIABLE:      return std::make_shared<DRC_ITEM>( unresolvedVariable );
+    case DRCE_SILK_OVER_PAD:            return std::make_shared<DRC_ITEM>( silkOverPad );
+    case DRCE_SILK_CLEARANCE:           return std::make_shared<DRC_ITEM>( silkClearance );
 
     default:
         wxFAIL_MSG( "Unknown DRC error code" );

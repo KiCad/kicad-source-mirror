@@ -81,8 +81,14 @@ std::function<void( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )> DRC_
 class DRC_ENGINE
 {
 public:
-    DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS* aSettings );
+    DRC_ENGINE( BOARD* aBoard = nullptr, BOARD_DESIGN_SETTINGS* aSettings = nullptr );
     ~DRC_ENGINE();
+
+    void SetBoard( BOARD* aBoard ) { m_board = aBoard; }
+    BOARD* GetBoard() const { return m_board; }
+
+    void SetDesignSettings( BOARD_DESIGN_SETTINGS* aSettings ) { m_designSettings = aSettings; }
+    BOARD_DESIGN_SETTINGS* GetDesignSettings() const { return m_designSettings; }
 
     void SetSchematicNetlist( NETLIST* aNetlist ) { m_schematicNetlist = aNetlist; }
     NETLIST* GetSchematicNetlist() const { return m_schematicNetlist; }
@@ -135,9 +141,6 @@ public:
     void RunTests( EDA_UNITS aUnits = EDA_UNITS::MILLIMETRES, bool aTestTracksAgainstZones = true,
                    bool aReportAllTrackErrors = true, bool aTestFootprints = true );
 
-    BOARD_DESIGN_SETTINGS* GetDesignSettings() const { return m_designSettings; }
-
-    BOARD* GetBoard() const { return m_board; }
 
     bool IsErrorLimitExceeded( int error_code );
 
@@ -164,6 +167,8 @@ public:
 
     bool QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T aRuleId, DRC_CONSTRAINT& aConstraint,
                                DRC_CONSTRAINT_QUERY_T aQueryType );
+
+    std::vector<DRC_TEST_PROVIDER* > GetTestProviders() const { return m_testProviders; };
 
 private:
     void addRule( DRC_RULE* rule )
