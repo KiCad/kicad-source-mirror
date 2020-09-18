@@ -733,7 +733,11 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
         {
         case TR_OP_FUNC_CALL:
             // Function call's uop was generated inside TR_STRUCT_REF
-            assert( node->uop );
+            if( !node->uop )
+            {
+                reportError( CST_CODEGEN,  _( "Unknown parent of function parameters" ),
+                             node->srcPos );
+            }
 
             node->isTerminal = true;
             break;
@@ -743,8 +747,11 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             // leaf[0]: object
             // leaf[1]: field (TR_IDENTIFIER) or TR_OP_FUNC_CALL
 
-            assert( node->leaf[0]->op == TR_IDENTIFIER );
-            //assert( node->leaf[1]->op == TR_IDENTIFIER );
+            if( node->leaf[0]->op != TR_IDENTIFIER )
+            {
+                reportError( CST_CODEGEN,  _( "Unknown parent of property" ),
+                             node->leaf[0]->srcPos - (int) node->leaf[0]->value.str->length() );
+            }
 
             switch( node->leaf[1]->op )
             {
