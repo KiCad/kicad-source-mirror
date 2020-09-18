@@ -211,8 +211,15 @@ bool DRC_TEST_PROVIDER_LVS::Run()
         if( !reportPhase( _( "Checking PCB to schematic parity..." ) ) )
             return false;
 
-        if( m_drcEngine->GetSchematicNetlist() )
-            testFootprints( *m_drcEngine->GetSchematicNetlist() );
+        auto netlist = m_drcEngine->GetSchematicNetlist();
+
+        if( !netlist )
+        {
+            reportAux( _("No netlist provided, skipping LVS.") );
+            return false;
+        }
+
+        testFootprints( *netlist );
 
         reportRuleStatistics();
     }
