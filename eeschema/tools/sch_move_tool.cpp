@@ -304,12 +304,21 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    std::vector<SCH_ITEM*> items;
+                    if( m_frame->GetMoveWarpsCursor() )
+                    {
+                        // User wants to warp the mouse
+                        std::vector<SCH_ITEM*> items;
 
-                    for( EDA_ITEM* item : selection )
-                        items.push_back( static_cast<SCH_ITEM*>( item ) );
+                        for( EDA_ITEM* item : selection )
+                            items.push_back( static_cast<SCH_ITEM*>( item ) );
 
-                    m_cursor = grid.BestDragOrigin( m_cursor, items );
+                        m_cursor = grid.BestDragOrigin( m_cursor, items );
+                    }
+                    else
+                    {
+                        // User does not want to warp the mouse
+                        m_cursor = getViewControls()->GetCursorPosition( true );
+                    }
                 }
 
 
