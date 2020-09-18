@@ -47,11 +47,9 @@
 #include <confirm.h>
 #include <convert_to_biu.h>
 #include <math/util.h>      // for KiROUND
-#include <convert_basic_shapes_to_polygon.h>
-
 #include "zone_filler.h"
 
-static const double s_RoundPadThermalSpokeAngle = 450;
+static const double s_RoundPadThermalSpokeAngle = 450;      // in deci-degrees
 static const bool s_DumpZonesWhenFilling = false;
 
 
