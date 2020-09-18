@@ -35,12 +35,16 @@ pad          hole        graphic         text             zone
 
 (rule HV
    (constraint clearance (min 1.5mm))
-   (condition "A.netclass == 'HV'"))
+   (condition "A.NetClass == 'HV'"))
 
 (rule HV_HV
    # wider clearance between HV tracks
    (constraint clearance (min "1.5mm + 2.0mm"))
-   (condition "A.netclass == 'HV' && B.netclass == 'HV'"))
+   (condition "A.NetClass == 'HV' && B.NetClass == 'HV'"))
+
+(rule HV_unshielded
+   (constraint clearance (min 2mm))
+   (condition "A.NetClass == 'HV' && not A.insideArea('Shield*')))
 
 
 # ---- Notes
