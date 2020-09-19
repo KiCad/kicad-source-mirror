@@ -82,9 +82,9 @@ wxString VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
 
     switch( GetViaType() )
     {
-    case VIATYPE::BLIND_BURIED: viaType = _( "Blind/Buried" ) + " "; break;
-    case VIATYPE::MICROVIA:     viaType = _( "Micro" ) + " ";        break;
-    default:                    viaType = "";                        break;
+    case VIATYPE::BLIND_BURIED: viaType = _( "Blind/Buried Via" );  break;
+    case VIATYPE::MICROVIA:     viaType = _( "Micro Via" );         break;
+    default:                    viaType = _( "Via" );               break;
     }
 
     // say which layers, only two for now
@@ -94,7 +94,7 @@ wxString VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
 
     LayerPair( &topLayer, &botLayer );
 
-    return wxString::Format( _( "%s Via %s %s on %s - %s" ),
+    return wxString::Format( _( "%s %s %s on %s - %s" ),
                              viaType,
                              MessageTextFromValue( aUnits, m_Width ),
                              GetNetnameMsg(),
