@@ -55,11 +55,7 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
         return false;
     }
 
-    BOARD_ITEM* a = const_cast<BOARD_ITEM*>( aItemA );
-    BOARD_ITEM* b = aItemB ? const_cast<BOARD_ITEM*>( aItemB ) : DELETED_BOARD_ITEM::GetInstance();
-
     PCB_EXPR_CONTEXT ctx( aLayer );
-    ctx.SetItems( a, b );
     ctx.SetErrorCallback(
             [&]( const wxString& aMessage, int aOffset )
             {
@@ -67,7 +63,24 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
                     aReporter->Report( _( "ERROR: " ) + aMessage );
             } );
 
-    return m_ucode->Run( &ctx )->AsDouble() != 0.0;
+    BOARD_ITEM* a = const_cast<BOARD_ITEM*>( aItemA );
+    BOARD_ITEM* b = aItemB ? const_cast<BOARD_ITEM*>( aItemB ) : DELETED_BOARD_ITEM::GetInstance();
+
+    ctx.SetItems( a, b );
+
+    if( m_ucode->Run( &ctx )->AsDouble() != 0.0 )
+    {
+        return true;
+    }
+    else if( aItemB )   // Conditions are commutative
+    {
+        ctx.SetItems( b, a );
+
+        if( m_ucode->Run( &ctx )->AsDouble() != 0.0 )
+            return true;
+    }
+
+    return false;
 }
 
 
