@@ -97,8 +97,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-19 19:13+0200\n"
-"PO-Revision-Date: 2020-09-19 20:06+0200\n"
+"POT-Creation-Date: 2020-09-19 20:07+0200\n"
+"PO-Revision-Date: 2020-09-19 23:30+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1513,7 +1513,8 @@ msgstr "Grafiche impronte"
 msgid "Track"
 msgstr "Pista"
 
-#: common/base_struct.cpp:792 pcbnew/dialogs/dialog_board_statistics.cpp:484
+#: common/base_struct.cpp:792 pcbnew/class_track.cpp:87
+#: pcbnew/dialogs/dialog_board_statistics.cpp:484
 msgid "Via"
 msgstr "Via"
 
@@ -4826,7 +4827,7 @@ msgstr "Via passanti"
 msgid "Bl/Buried Via"
 msgstr "Via coperti/interni"
 
-#: common/layer_id.cpp:142 pcbnew/class_track.cpp:694
+#: common/layer_id.cpp:142 pcbnew/class_track.cpp:86 pcbnew/class_track.cpp:694
 #: pcbnew/pcb_layer_widget.cpp:67
 msgid "Micro Via"
 msgstr "Microvia"
@@ -10236,8 +10237,10 @@ msgid ""
 "Check the symbol and use \"Alternate node sequence\" to reorder the pins, if "
 "necessary"
 msgstr ""
-"La numerazione pin del simbolo non sempre corrisponde all'ordine pin richiesto da SPICE\n"
-"Controllare il simbolo e usare \"Sequenza nodo alternativa\" per riordinare i pin, se necessario"
+"La numerazione pin del simbolo non sempre corrisponde all'ordine pin "
+"richiesto da SPICE\n"
+"Controllare il simbolo e usare \"Sequenza nodo alternativa\" per riordinare "
+"i pin, se necessario"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:418
 msgid "For a Diode, pin order is anode, cathode"
@@ -13496,7 +13499,55 @@ msgid ""
 "&nbsp;               <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br>         <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
 "samp>      </td>   </tr></table>"
-msgstr "<table><tr><th>Marcatore</th><th></th><th>Risultato</th></tr><tr><td>&nbsp;<br><samp>^{superscript}</samp></td><td></td><td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>      <td></td>      <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>   </tr>   <tr><td><br></td></tr>   <tr>      <td>&nbsp;<br><samp>_{subscript}</samp></td>      <td></td>      <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>      <td></td>      <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>   </tr>   <tr><td></td></tr>   <tr>      <td>         &nbsp;<br><samp>~overbar</samp><br>         &nbsp;<br><samp>~CLK</samp><br>         &nbsp;<br><samp>~~</samp>      </td>      <td></td>      <td>         <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br>         <samp>overbar</samp><br>         <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br>         <samp>CLK</samp><br>         <samp>&nbsp;</samp><br>         <samp>~</samp>      </td>   </tr>   <tr><td><br></td></tr>   <tr>      <td>&nbsp;<br><samp>${variable}</samp></td>      <td></td>      <td>&nbsp;<br><samp><i>variable_value</i></samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>${REVISION}</samp></td>      <td></td>      <td>&nbsp;<br><samp>2020.1</samp></td>   </tr>   <tr><td><br></td></tr>   <tr>      <td>&nbsp;<br><samp>${refdes:field}</samp></td>      <td></td>      <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>      <td></td>      <td>&nbsp;<br><samp>150K</samp></td>   </tr>   <tr><td><br></td></tr>   <tr><td><br></td></tr>   <tr>      <th>Bus Definition</th>      <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>      <th>Resultant Nets</th>   </tr>   <tr>      <td>&nbsp;<br><samp>prefix[m..n]</samp></td>      <td></td>      <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>D[0..7]</samp></td>      <td></td>      <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>   </tr>   <tr><td><br></td></tr>   <tr><samp>      <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>      <td></td>      <td>&nbsp;<br><samp>net1, net2, ...</samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>{SCL SDA}</samp></td>      <td></td>      <td>&nbsp;<br><samp>SCL, SDA</samp></td>   </tr></samp>   <tr><td><br></td></tr>   <tr>      <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>      <td></td>      <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>USB1{DP DM}</samp></td>      <td></td>      <td>&nbsp;<br><samp>USB1.DP, USB1.DM</samp></td>   </tr>   <tr><td><br></td></tr>   <tr>      <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>      <td></td>      <td>&nbsp;<br>         <samp>MEM.D1, MEM.D2, MEM.LATCH</samp>      </td>   </tr>   <tr>      <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>      <td></td>      <td>         <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;               <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br>         <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp>      </td>   </tr></table>"
+msgstr ""
+"<table><tr><th>Marcatore</th><th></th><th>Risultato</th></tr><tr><td>&nbsp;"
+"<br><samp>^{superscript}</samp></td><td></td><td>&nbsp;"
+"<br><samp><sup>superscript</sup>&nbsp;</samp></td>   </tr>   <tr>      "
+"<td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>      <td></td>      "
+"<td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>   </tr>   "
+"<tr><td><br></td></tr>   <tr>      <td>&nbsp;<br><samp>_{subscript}</samp></"
+"td>      <td></td>      <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</"
+"samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></"
+"td>      <td></td>      <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></"
+"samp></td>   </tr>   <tr><td></td></tr>   <tr>      <td>         &nbsp;"
+"<br><samp>~overbar</samp><br>         &nbsp;<br><samp>~CLK</"
+"samp><br>         &nbsp;<br><samp>~~</samp>      </td>      <td></td>      "
+"<td>         <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br>         <samp>overbar</samp><br>         <samp><u>&nbsp;&nbsp;"
+"&nbsp;</u></samp><br>         <samp>CLK</samp><br>         <samp>&nbsp;</"
+"samp><br>         <samp>~</samp>      </td>   </tr>   <tr><td><br></td></"
+"tr>   <tr>      <td>&nbsp;<br><samp>${variable}</samp></td>      <td></"
+"td>      <td>&nbsp;<br><samp><i>variable_value</i></samp></td>   </tr>   "
+"<tr>      <td>&nbsp;<br><samp>${REVISION}</samp></td>      <td></td>      "
+"<td>&nbsp;<br><samp>2020.1</samp></td>   </tr>   <tr><td><br></td></tr>   "
+"<tr>      <td>&nbsp;<br><samp>${refdes:field}</samp></td>      <td></"
+"td>      <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
+"samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>${R3:VALUE}</samp></"
+"td>      <td></td>      <td>&nbsp;<br><samp>150K</samp></td>   </tr>   "
+"<tr><td><br></td></tr>   <tr><td><br></td></tr>   <tr>      <th>Bus "
+"Definition</th>      <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>      <th>Resultant Nets</th>   </tr>   "
+"<tr>      <td>&nbsp;<br><samp>prefix[m..n]</samp></td>      <td></td>      "
+"<td>&nbsp;<br><samp>prefixm to prefixn</samp></td>   </tr>   <tr>      "
+"<td>&nbsp;<br><samp>D[0..7]</samp></td>      <td></td>      <td>&nbsp;"
+"<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>   </tr>   <tr><td><br></"
+"td></tr>   <tr><samp>      <td>&nbsp;<br><samp>{net1 net2 ...}</samp></"
+"td>      <td></td>      <td>&nbsp;<br><samp>net1, net2, ...</samp></td>   </"
+"tr>   <tr>      <td>&nbsp;<br><samp>{SCL SDA}</samp></td>      <td></"
+"td>      <td>&nbsp;<br><samp>SCL, SDA</samp></td>   </tr></samp>   "
+"<tr><td><br></td></tr>   <tr>      <td>&nbsp;<br><samp>prefix{net1 net2 ...}"
+"</samp></td>      <td></td>      <td>&nbsp;<br><samp>prefix.net1, prefix."
+"net2, ...</samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>USB1{DP DM}</"
+"samp></td>      <td></td>      <td>&nbsp;<br><samp>USB1.DP, USB1.DM</samp></"
+"td>   </tr>   <tr><td><br></td></tr>   <tr>      <td>&nbsp;"
+"<br><samp>MEM{D[1..2] LATCH}</samp></td>      <td></td>      <td>&nbsp;"
+"<br>         <samp>MEM.D1, MEM.D2, MEM.LATCH</samp>      </td>   </tr>   "
+"<tr>      <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>      <td></"
+"td>      <td>         <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;               <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br>         <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
+"samp>      </td>   </tr></table>"
 
 #: eeschema/sch_text.cpp:1364 pcbnew/dialogs/panel_setup_rules.cpp:407
 msgid "Syntax Help"
@@ -18273,7 +18324,7 @@ msgid "PCB Calculator"
 msgstr "Calcolatrice C. S."
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -18338,8 +18389,8 @@ msgstr ""
 "\tR1 + (R2|R3)...\t\tqualunque combinazione di cui sopra\n"
 "__Esempio:__ I divisori di tensione, usati spesso per la riduzione 1:10\n"
 "richiedono rapporti di valori resistivi 1:9.  Sfortunatamente, il \"9\" è\n"
-"un valore che non è neanche disponibile nella serie E192.  Una deviazione\n"
-"del 1% o più è inaccettabile già per un'accuratezza a 8 bit.  Per un valore\n"
+"un valore che non è neanche disponibile nella serie E192. Una deviazione di\n"
+"1% e più è già inaccettabile già per un'accuratezza a 8 bit.  Per un valore\n"
 "di resistenza richiesto di 9 KOhm, la calcolatrice suggerisce i valori E6\n"
 "2k2 + 6k8 in serie, come possibile soluzione esatta.\n"
 
@@ -19423,7 +19474,7 @@ msgstr "Larghezza termica"
 msgid "Thermal Gap"
 msgstr "Spaziatura termica"
 
-#: pcbnew/class_module.h:242
+#: pcbnew/class_module.h:249
 #, c-format
 msgid "footprint %s"
 msgstr "impronta: %s"
@@ -19671,19 +19722,14 @@ msgstr "Valore %s di %s"
 msgid "Text \"%s\" of %s on %s"
 msgstr "Testo \"%s\" di %s su %s"
 
-#: pcbnew/class_track.cpp:85 pcbnew/class_track.cpp:1079
-msgid "Blind/Buried"
-msgstr "Cieco/sepolto"
-
-#: pcbnew/class_track.cpp:86
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:244
-msgid "Micro"
-msgstr "Micro"
+#: pcbnew/class_track.cpp:85 pcbnew/class_track.cpp:699
+msgid "Blind/Buried Via"
+msgstr "Via cieco/sepolto"
 
 #: pcbnew/class_track.cpp:97
 #, c-format
-msgid "%s Via %s %s on %s - %s"
-msgstr "%s via %s %s su %s - %s"
+msgid "%s %s %s on %s - %s"
+msgstr "%s %s %s su %s - %s"
 
 #: pcbnew/class_track.cpp:153
 msgid "removed annulus"
@@ -19697,10 +19743,6 @@ msgstr "Lung. intera"
 #, c-format
 msgid "Min Width: %s"
 msgstr "Larghezza min: %s"
-
-#: pcbnew/class_track.cpp:699
-msgid "Blind/Buried Via"
-msgstr "Via cieco/sepolto"
 
 #: pcbnew/class_track.cpp:747
 #, c-format
@@ -19720,6 +19762,10 @@ msgstr "Pista %s %s su %s, lunghezza: %s"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:244
 msgid "Through"
 msgstr "Passante"
+
+#: pcbnew/class_track.cpp:1079
+msgid "Blind/Buried"
+msgstr "Cieco/sepolto"
 
 #: pcbnew/class_track.cpp:1080
 msgid "Microvia"
@@ -20199,7 +20245,7 @@ msgstr ""
 "%d %s Uuid: [%s], X, Y: %s, Arrotondato X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:605
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
@@ -21631,7 +21677,9 @@ msgstr "Avvia DRC"
 msgid ""
 "-------- DRC cancelled by user.\n"
 "\n"
-msgstr "-------- DRC annullato dall'utente.\n\n"
+msgstr ""
+"-------- DRC annullato dall'utente.\n"
+"\n"
 
 #: pcbnew/dialogs/dialog_drc.cpp:230
 msgid ""
@@ -24408,9 +24456,12 @@ msgid ""
 "Please ensure the  solder mask min width (and margin value) are valid\n"
 "Use non 0 values only when required."
 msgstr ""
-"La larghezza minima e/o il margine maschera di saldatura globali non sono imposti a 0\n"
-"Molti dei fabbricanti di C.S. si aspettano un valore di 0 e usano i loro limiti, specialmente per la larghezza minima della maschera di saldatura.\n"
-"Assicurarsi che la larghezza minima della maschera di saldatura (e il valore di margine) siano validi\n"
+"La larghezza minima e/o il margine maschera di saldatura globali non sono "
+"imposti a 0\n"
+"Molti dei fabbricanti di C.S. si aspettano un valore di 0 e usano i loro "
+"limiti, specialmente per la larghezza minima della maschera di saldatura.\n"
+"Assicurarsi che la larghezza minima della maschera di saldatura (e il valore "
+"di margine) siano validi\n"
 "Usare valori non 0 solo se richiesto."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:175
@@ -25250,6 +25301,10 @@ msgid "Via type:"
 msgstr "Tipo via:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:244
+msgid "Micro"
+msgstr "Micro"
+
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:244
 msgid "Blind/buried"
 msgstr "Cieco/sepolto"
 
@@ -25720,11 +25775,10 @@ msgid "Mimic legacy behavior"
 msgstr "Comportamento di imitazione tradizionale"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:123
-#, fuzzy
 msgid ""
 "Produces a slightly smoother outline at the expense of performance, some "
 "export fidelity issues, and overly agressive higher-priority zone knockouts."
-msgstr "Produce un profilo leggermente più morbido  at the expense of performance, some export fidelity issues, and overly agressive higher-priority zone knockouts."
+msgstr "Produce un profilo leggermente più morbido a scapito delle prestazioni, alcuni problemi di fedeltà dell'esportazione, e un esclusione di zona molto aggressiva."
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:127
 msgid "Smoothed polygons (best performance)"
@@ -25734,7 +25788,7 @@ msgstr "Poligoni stondati (migliore prestazione)"
 msgid ""
 "Better performance, exact export fidelity, and more complete filling near "
 "higher-priority zones."
-msgstr "Migliore performance, fedeltà di esportazione esatta, e riempimenti più completi vicino alle zone a più alta priorità."
+msgstr "Migliore prestazione, fedeltà di esportazione esatta, e riempimenti più completi vicino alle zone a più alta priorità."
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:145
 msgid "Allow fillets outside zone outline"
@@ -26425,7 +26479,8 @@ msgid ""
 "bridge width.\n"
 "If none is provided, setting the values to zero is suggested."
 msgstr ""
-"Usa i valori del produttore di C.S. per la distanza della maschera di saldatura e larghezza ponte minima.\n"
+"Usa i valori del produttore di C.S. per la distanza della maschera di "
+"saldatura e larghezza ponte minima.\n"
 "Se assenti, si suggerisce di impostare i valori a zero."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:49
@@ -29612,7 +29667,11 @@ msgid ""
 "Disjoint' and 'Retain Poured Copper - Isolated'. KiCad does not distinguish "
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
-msgstr "Il modello CADSTAR \"%s\" ha impostazioni diverse per \"Retain Poured Copper - Disjoint\" e \"Retain Poured Copper - Isolated\". KiCad non distingue tra queste due impostazioni. Le impostazioni per \"disjoint copper\" sono state applicate come area isola minima della zona KiCad."
+msgstr ""
+"Il modello CADSTAR \"%s\" ha impostazioni diverse per \"Retain Poured Copper "
+"- Disjoint\" e \"Retain Poured Copper - Isolated\". KiCad non distingue tra "
+"queste due impostazioni. Le impostazioni per \"disjoint copper\" sono state "
+"applicate come area isola minima della zona KiCad."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1093
 #, c-format
@@ -29620,7 +29679,10 @@ msgid ""
 "The CADSTAR template '%s' has different settings for thermal relief in pads "
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
-msgstr "Il modello CADSTAR \"%s\" ha impostazioni diverse per i supporti termici nelle piazzole e nei via. KiCad supporta solo una impostazione per entrambe. Viene usata l'impostazione per le piazzole."
+msgstr ""
+"Il modello CADSTAR \"%s\" ha impostazioni diverse per i supporti termici "
+"nelle piazzole e nei via. KiCad supporta solo una impostazione per entrambe. "
+"Viene usata l'impostazione per le piazzole."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1132
 #, c-format
@@ -29628,7 +29690,10 @@ msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
-msgstr "Lo strato CADSTAR \"%s\" viene definito come strato di potenza. Ma non esiste collegamento con tal nome. Lo strato è stato caricato ma non è stata creata una zona rame."
+msgstr ""
+"Lo strato CADSTAR \"%s\" viene definito come strato di potenza. Ma non "
+"esiste collegamento con tal nome. Lo strato è stato caricato ma non è stata "
+"creata una zona rame."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1181
 msgid ""
@@ -29636,21 +29701,21 @@ msgid ""
 "equivalent. These have been imported as a KiCad Zone if solid or hatch "
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
-msgstr ""
+msgstr "Il progetto CADSTAR contiene elementi COPPER (rame), che non hanno diretto equivalente KiCad. Questi sono stati importati come una zona KiCad se riempiti in maniera continua o a tratteggio, o come pista KiCad se la forma era un contorno non riempito (aperto o chiuso)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1284
 #, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored,"
-msgstr ""
+msgstr "Il collegamento \"%s\" fa riferimento all'ID componente \"%s\" che non esiste. Ignorato."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1291
 #, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
-msgstr ""
+msgstr "Il collegamento \"%s\" si riferisce ad un indice piazzola non esistente \"%d\" nel componente \"%s\". Ignorato."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1386
 #, c-format
@@ -29658,14 +29723,14 @@ msgid ""
 "The CADSTAR via code '%s' has different shape from a circle defined. KiCad "
 "only supports circular vias so this via type has been changed to be a via "
 "with circular shape of %.2f mm diameter."
-msgstr ""
+msgstr "Il codice via CADSTAR \"%s\" ha una forma diversa dal cerchio definito. KiCad supporta solo via circolari perciò questo tipo di via è stato cambiato ad un via di forma circolare di %.2f mm di diametro."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1581
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
-msgstr ""
+msgstr "La forma per \"%s\" è un tratteggio riempito in CADSTAR, che non ha un equivalente KiCad. Uso riempimento continuo."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2266
 #, c-format
@@ -29673,7 +29738,7 @@ msgid ""
 "The CADSTAR Hatching code '%s' has %d hatches defined. KiCad only supports 2 "
 "hatches (crosshatching) 90 degrees apart. The imported hatching is "
 "crosshatched."
-msgstr ""
+msgstr "Il codice tratteggio CADSTAR \"%s\" ha %d tratteggi definiti. KiCad supporta solo 2 tratteggi (tratteggio incrociato) a 90 gradi tra loro. Il tratteggio importato viene reso incrociato."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2276
 #, c-format
@@ -29681,7 +29746,7 @@ msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
 "KiCad only supports one width for the haching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
-msgstr ""
+msgstr "Il codice di tratteggio CADSTAR \"%s\" ha larghezza linee diversa per ogni tratteggio. KiCad supporta solo una larghezza per il tratteggio. Il tratteggio importato usa la larghezza definita nella prima definizione di tratteggio, cioè %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2287
 #, c-format
@@ -29689,7 +29754,7 @@ msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
 "KiCad only supports one step size for the haching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
-msgstr ""
+msgstr "Il codice di tratteggio CADSTAR \"%s\" a dimensione passi diverse per ogni tratteggio. KiCad supporta solo una dimensione passo per il tratteggio. Il tratteggio importato usa la dimensione passo definita nella prima definizione di tratteggio, cioè %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2300
 #, c-format
@@ -29698,7 +29763,7 @@ msgid ""
 "degrees. KiCad only supports hatching 90 degrees apart.  The imported "
 "hatching has two hatches 90 degrees apart, oriented %.1f degrees from "
 "horizontal."
-msgstr ""
+msgstr "I tratteggi nel codice di tratteggio CADSTAR \"%s\" hanno una differenza di angolo di %.1f gradi. KiCad supporta solo tratteggi a 90 gradi tra loro.  Il tratteggio importato ha sono tratteggi a 90 gradi tra loro, orientati a %.1f gradi dall'orizzontale."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2384
 msgid ""
@@ -29706,7 +29771,7 @@ msgid ""
 "have an equivalent to CADSTAR's Net Class so these elements were not "
 "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's 'Net "
 "Route Code' (which has been imported for all nets)."
-msgstr ""
+msgstr "Il progetto CADSTAR contiene collegamenti con una \"Net Class\" assegnata. KiCad non ha un equivalente alla Net Class CADSTAR perciò questi elementi non sono stati importati. Nota: il concetto di KiCad di \"Net Class\" è vicino al codice \"Net Route\" di CADSTAR (che è stato importato per tutti i collegamenti)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2395
 msgid ""
@@ -29714,7 +29779,7 @@ msgid ""
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
 "imported. Please review the design rules as copper pours will affected by "
 "this."
-msgstr ""
+msgstr "Il progetto CADSTAR contiene collegamenti con una \"Spacing Class\" assegnata. KiCad non ha un equivalente alle \"Spacing Class\" di CADSTAR perciò questi elementi non sono stati importati. Vedere le regole di progettazione per controllare come i riempimenti rame vengono influenzati da ciò."
 
 #: pcbnew/router/length_tuner_tool.cpp:57
 msgid "New Track"
@@ -30404,7 +30469,7 @@ msgstr "Riempi zona"
 
 #: pcbnew/tools/edit_tool.cpp:1226
 msgid "Remove of items in entered group resulted in inconsistent state: "
-msgstr ""
+msgstr "La rimozione di elementi nel gruppo inserito ha prodotto uno stato incoerente: "
 
 #: pcbnew/tools/edit_tool.cpp:1236
 msgid "Delete again to remove locked items"
@@ -30463,7 +30528,7 @@ msgstr "Piazza piazzola"
 #: pcbnew/tools/pad_tool.cpp:531
 #, c-format
 msgid "Pad Edit Mode.  Press %s again to exit."
-msgstr ""
+msgstr "Modalità modifica piazzola.  Premere %s nuovamente per uscire."
 
 #: pcbnew/tools/pad_tool.cpp:534
 #, c-format
@@ -30901,7 +30966,7 @@ msgstr "Pulizia piste e via..."
 
 #: pcbnew/tools/pcb_actions.cpp:430
 msgid "Cleanup redundant items, shorting items, etc."
-msgstr ""
+msgstr "Pulizia di elementi inutili, che provocano corti, ecc."
 
 #: pcbnew/tools/pcb_actions.cpp:435
 msgid "Cleanup Graphics..."
@@ -31010,7 +31075,7 @@ msgstr "Termina modifica piazzola"
 
 #: pcbnew/tools/pcb_actions.cpp:508
 msgid "Regroups all touching graphic shapes into the edited pad"
-msgstr ""
+msgstr "Ri-raggruppamento di tutte le forme grafiche che si toccano nella piazzola modificata"
 
 #: pcbnew/tools/pcb_actions.cpp:513
 msgid "Default Pad Properties..."
@@ -31898,7 +31963,7 @@ msgstr "Commuta blocco"
 
 #: pcbnew/tools/pcb_editor_control.cpp:1027
 msgid "GroupCreate"
-msgstr ""
+msgstr "Crea gruppo"
 
 #: pcbnew/tools/pcb_editor_control.cpp:1509
 msgid "Duplicate zone"
@@ -31954,7 +32019,7 @@ msgstr "Distanza: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:223
 msgid "Select two items for a clearance resolution report."
-msgstr ""
+msgstr "Seleziona due elementi per un rapporto di risoluzione distanza."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:230
 msgid "Clearance Report"
@@ -32239,11 +32304,11 @@ msgstr "Colori collegamenti:"
 
 #: pcbnew/widgets/appearance_controls.cpp:620
 msgid "Choose when to show net and netclass colors"
-msgstr ""
+msgstr "Scegli quando mostrare i colori collegamento e netclass"
 
 #: pcbnew/widgets/appearance_controls.cpp:628
 msgid "Net and netclass colors are shown on all copper items"
-msgstr ""
+msgstr "I colori collegamento e netclass sono mostrati su tutti gli elementi rame"
 
 #: pcbnew/widgets/appearance_controls.cpp:635
 msgid "Net and netclass colors are shown on the ratsnest only"
@@ -32263,7 +32328,7 @@ msgstr "Scegli tipo linee ratsnest da mostrare"
 
 #: pcbnew/widgets/appearance_controls.cpp:660
 msgid "Ratsnest lines are shown to items on all layers"
-msgstr ""
+msgstr "Le ratsnest vengono mostrate per gli elementi su tutti gli strati"
 
 #: pcbnew/widgets/appearance_controls.cpp:665
 msgid "Visible layers"
@@ -32271,7 +32336,7 @@ msgstr "Strati visibili"
 
 #: pcbnew/widgets/appearance_controls.cpp:667
 msgid "Ratsnest lines are shown to items on visible layers"
-msgstr ""
+msgstr "Le ratsnest vengono mostrate per gli elementi sugli strati visibili"
 
 #: pcbnew/widgets/appearance_controls.cpp:808
 msgid "Set net color"
