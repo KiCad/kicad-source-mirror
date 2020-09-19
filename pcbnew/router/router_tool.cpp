@@ -1007,11 +1007,8 @@ void ROUTER_TOOL::performRouting()
 
             break;
         }
-        else if( evt->IsKeyPressed() )
+        else
         {
-            // wxWidgets fails to correctly translate shifted keycodes on the wxEVT_CHAR_HOOK
-            // event so we need to process the wxEVT_CHAR event that will follow as long as we
-            // pass the event.
             evt->SetPassEvent();
         }
     }
