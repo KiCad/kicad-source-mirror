@@ -31,6 +31,7 @@
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <widgets/bitmap_button.h>
 #include <widgets/bitmap_toggle.h>
 #include <widgets/collapsible_pane.h>
 #include <widgets/color_swatch.h>
@@ -404,8 +405,11 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
 
     createControls();
 
-    m_btnNetInspector->SetBitmapLabel( KiBitmap( list_nets_xpm ) );
-    m_btnConfigureNetClasses->SetBitmapLabel( KiBitmap( options_generic_xpm ) );
+    m_btnNetInspector->SetBitmap( KiBitmap( list_nets_xpm ) );
+    m_btnNetInspector->SetPadding( 2 );
+
+    m_btnConfigureNetClasses->SetBitmap( KiBitmap( options_generic_xpm ) );
+    m_btnConfigureNetClasses->SetPadding( 2 );
 
     m_txtNetFilter->SetHint( _( "Filter nets" ) );
 

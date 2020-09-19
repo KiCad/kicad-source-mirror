@@ -202,6 +202,7 @@ set( COMMON_DLG_SRCS
 
 set( COMMON_WIDGET_SRCS
     widgets/app_progress_dialog.cpp
+    widgets/bitmap_button.cpp
     widgets/bitmap_toggle.cpp
     widgets/button_row_panel.cpp
     widgets/collapsible_pane.cpp
@@ -400,7 +401,7 @@ set( COMMON_SRCS
     ${COMMON_SRCS}
 
     origin_viewitem.cpp
-    
+
     view/view.cpp
     view/view_item.cpp
     view/view_group.cpp

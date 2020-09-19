@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/bitmap_button.h"
 #include "widgets/wx_grid.h"
 
 #include "appearance_controls_base.h"
@@ -69,7 +70,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	bSizer17->Add( m_txtNetFilter, 1, wxLEFT|wxTOP, 5 );
 
-	m_btnNetInspector = new wxBitmapButton( m_panelNets, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_btnNetInspector = new BITMAP_BUTTON( m_panelNets, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnNetInspector->SetToolTip( wxT("Show the Net Inspector") );
 
 	bSizer17->Add( m_btnNetInspector, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
@@ -123,10 +124,10 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	bSizer20->Add( m_staticText14, 1, wxALL, 5 );
 
-	m_btnConfigureNetClasses = new wxBitmapButton( m_panelNetclasses, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_btnConfigureNetClasses = new BITMAP_BUTTON( m_panelNetclasses, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnConfigureNetClasses->SetToolTip( wxT("Configure net classes") );
 
-	bSizer20->Add( m_btnConfigureNetClasses, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	bSizer20->Add( m_btnConfigureNetClasses, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
 
 
 	bSizerNetClasses->Add( bSizer20, 0, wxEXPAND, 5 );

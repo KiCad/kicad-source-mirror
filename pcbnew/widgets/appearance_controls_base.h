@@ -9,6 +9,7 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+class BITMAP_BUTTON;
 class WX_GRID;
 
 #include <wx/scrolwin.h>
@@ -24,8 +25,6 @@ class WX_GRID;
 #include <wx/icon.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/bmpbuttn.h>
-#include <wx/button.h>
 #include <wx/grid.h>
 #include <wx/splitter.h>
 #include <wx/notebook.h>
@@ -56,11 +55,11 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		wxPanel* m_panelNets;
 		wxStaticText* m_staticTextNets;
 		wxTextCtrl* m_txtNetFilter;
-		wxBitmapButton* m_btnNetInspector;
+		BITMAP_BUTTON* m_btnNetInspector;
 		WX_GRID* m_netsGrid;
 		wxPanel* m_panelNetclasses;
 		wxStaticText* m_staticText14;
-		wxBitmapButton* m_btnConfigureNetClasses;
+		BITMAP_BUTTON* m_btnConfigureNetClasses;
 		wxScrolledWindow* m_netclassScrolledWindow;
 		wxBoxSizer* m_netclassOuterSizer;
 		wxStaticText* presetsLabel;
