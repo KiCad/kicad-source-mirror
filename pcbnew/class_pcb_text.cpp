@@ -216,7 +216,7 @@ void TEXTE_PCB::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 
 wxString TEXTE_PCB::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Pcb Text \"%s\" on %s"), ShortenedShownText(), GetLayerName() );
+    return wxString::Format( _( "PCB Text \"%s\" on %s"), ShortenedShownText(), GetLayerName() );
 }
 
 

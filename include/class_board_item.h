@@ -395,7 +395,7 @@ protected:
      * Return a string (to be shown to the user) describing a layer mask.
      * The BOARD is needed because layer names are (somewhat) customizable
      */
-    static wxString LayerMaskDescribe( const BOARD* aBoard, LSET aMask );
+    virtual wxString LayerMaskDescribe() const;
 };
 
 #ifndef SWIG

@@ -272,11 +272,13 @@ wxString PCB_GROUP::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     if( m_name.empty() )
     {
-        return wxString::Format( _( "Anonymous group %s with %zu members" ),
-                                 m_Uuid.AsString(), m_items.size() );
+        return wxString::Format( _( "Anonymous Group, %zu members" ),
+                                 m_items.size() );
     }
 
-    return wxString::Format( _( "Group \"%s\" with %zu members" ), m_name, m_items.size() );
+    return wxString::Format( _( "Group \"%s\", %zu members" ),
+                             m_name,
+                             m_items.size() );
 }
 
 

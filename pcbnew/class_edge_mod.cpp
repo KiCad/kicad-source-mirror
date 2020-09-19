@@ -131,9 +131,8 @@ void EDGE_MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
 
 wxString EDGE_MODULE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Graphic %s of %s on %s" ),
+    return wxString::Format( _( "%s on %s" ),
                              ShowShape( m_Shape  ),
-                             ((MODULE*) GetParent())->GetReference(),
                              GetLayerName() );
 }
 

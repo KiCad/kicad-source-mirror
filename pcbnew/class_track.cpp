@@ -82,9 +82,9 @@ wxString VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
 
     switch( GetViaType() )
     {
-    case VIATYPE::BLIND_BURIED: viaType = _( "Blind/Buried Via" );  break;
-    case VIATYPE::MICROVIA:     viaType = _( "Micro Via" );         break;
-    default:                    viaType = _( "Via" );               break;
+    case VIATYPE::BLIND_BURIED: viaType = _( "Blind/Buried Via" ); break;
+    case VIATYPE::MICROVIA:     viaType = _( "Micro Via" );        break;
+    default:                    viaType = _( "Via" );              break;
     }
 
     // say which layers, only two for now
@@ -94,12 +94,10 @@ wxString VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
 
     LayerPair( &topLayer, &botLayer );
 
-    return wxString::Format( _( "%s %s %s on %s - %s" ),
+    return wxString::Format( _( "%s %s on %s" ),
                              viaType,
-                             MessageTextFromValue( aUnits, m_Width ),
                              GetNetnameMsg(),
-                             board ? board->GetLayerName( topLayer ) : wxT( "??" ),
-                             board ? board->GetLayerName( botLayer ) : wxT( "??" ) );
+                             LayerMaskDescribe( board, GetLayerSet() ) );
 }
 
 
@@ -631,10 +629,7 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
     GetMsgPanelInfoBase_Common( aFrame, aList );
 
     // Display layer
-    if( board )
-        msg = board->GetLayerName( m_Layer );
-    else
-        msg.Printf(wxT("%d"), m_Layer );
+    aList.emplace_back( _( "Layer" ), LayerMaskDescribe( board, GetLayerSet() ), DARKGREEN );
 
     // Display width
     msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
@@ -689,24 +684,10 @@ void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     // Display basic infos
     switch( GetViaType() )
     {
-    default:
-    case VIATYPE::MICROVIA:
-        msg = _( "Micro Via" ); // from external layer (TOP or BOTTOM) from
-                                // the near neighbor inner layer only
-        break;
-
-    case VIATYPE::BLIND_BURIED:
-        msg = _( "Blind/Buried Via" ); // from inner or external to inner
-                                       // or external layer (no restriction)
-        break;
-
-    case VIATYPE::THROUGH:
-        msg = _( "Through Via" ); // Usual via (from TOP to BOTTOM layer only )
-        break;
-
-    case VIATYPE::NOT_DEFINED:
-        msg = wxT( "???" ); // Not used yet, does not exist currently
-        break;
+    case VIATYPE::MICROVIA:     msg = _( "Micro Via" );        break;
+    case VIATYPE::BLIND_BURIED: msg = _( "Blind/Buried Via" ); break;
+    case VIATYPE::THROUGH:      msg = _( "Through Via" );      break;
+    default:                    msg = _( "Via" );              break;
     }
 
     aList.emplace_back( _( "Type" ), msg, DARKCYAN );
@@ -714,16 +695,7 @@ void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     GetMsgPanelInfoBase_Common( aFrame, aList );
 
     // Display layer pair
-    PCB_LAYER_ID top_layer, bottom_layer;
-
-    LayerPair( &top_layer, &bottom_layer );
-
-    if( board )
-        msg = board->GetLayerName( top_layer ) + wxT( "/" ) + board->GetLayerName( bottom_layer );
-    else
-        msg.Printf( wxT( "%d/%d" ), top_layer, bottom_layer );
-
-    aList.emplace_back( _( "Layers" ), msg, BROWN );
+    aList.emplace_back( _( "Layer" ), LayerMaskDescribe( board, GetLayerSet() ), DARKGREEN );
 
     // Display width
     msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
@@ -809,6 +781,18 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
         msg[2] = 'A';
 
     aList.emplace_back( _( "Status" ), msg, MAGENTA );
+}
+
+
+wxString VIA::LayerMaskDescribe()
+{
+    BOARD*       board = GetBoard();
+    PCB_LAYER_ID top_layer;
+    PCB_LAYER_ID bottom_layer;
+
+    LayerPair( &top_layer, &bottom_layer );
+
+    return board->GetLayerName( top_layer ) + wxT( " - " ) + board->GetLayerName( bottom_layer );
 }
 
 
@@ -898,20 +882,15 @@ bool VIA::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
     box.Inflate( GetWidth() / 2 );
 
     if( aContained )
-    {
         return arect.Contains( box );
-    }
     else
-    {
         return arect.IntersectsCircle( GetStart(), GetWidth() / 2 );
-    }
 }
 
 
 wxString TRACK::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _("Track %s %s on %s, length: %s" ),
-                             MessageTextFromValue( aUnits, m_Width ),
+    return wxString::Format( _("Track %s on %s, length %s" ),
                              GetNetnameMsg(),
                              GetLayerName(),
                              MessageTextFromValue( aUnits, GetLength() ) );

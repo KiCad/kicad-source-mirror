@@ -339,10 +339,9 @@ wxString TEXTE_MODULE::GetSelectMenuText( EDA_UNITS aUnits ) const
                                  static_cast<MODULE*>( GetParent() )->GetReference() );
 
     default:    // wrap this one in quotes:
-        return wxString::Format( _( "Text \"%s\" of %s on %s" ),
+        return wxString::Format( _( "Footprint Text \"%s\" of %s" ),
                                  ShortenedShownText(),
-                                 static_cast<MODULE*>( GetParent() )->GetReference(),
-                                 GetLayerName() );
+                                 static_cast<MODULE*>( GetParent() )->GetReference() );
     }
 }
 

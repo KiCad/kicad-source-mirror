@@ -977,7 +977,7 @@ wxString MODULE::GetSelectMenuText( EDA_UNITS aUnits ) const
     if( reference.IsEmpty() )
         reference = _( "<no reference designator>" );
 
-    return wxString::Format( _( "Footprint %s on %s" ), reference, GetLayerName() );
+    return wxString::Format( _( "Footprint %s" ), reference );
 }
 
 

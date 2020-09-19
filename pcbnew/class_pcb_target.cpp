@@ -119,7 +119,7 @@ const EDA_RECT PCB_TARGET::GetBoundingBox() const
 wxString PCB_TARGET::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     // Targets are on *every* layer by definition
-    return wxString::Format( _( "Target size %s" ), MessageTextFromValue( aUnits, m_Size ) );
+    return _( "Target" );
 }
 
 

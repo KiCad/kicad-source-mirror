@@ -412,9 +412,7 @@ void LIB_ARC::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
 wxString LIB_ARC::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Arc center (%s, %s), radius %s" ),
-                             MessageTextFromValue( aUnits, m_Pos.x ),
-                             MessageTextFromValue( aUnits, m_Pos.y ),
+    return wxString::Format( _( "Arc, radius %s" ),
                              MessageTextFromValue( aUnits, m_Radius ) );
 }
 

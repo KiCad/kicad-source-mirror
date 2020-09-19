@@ -915,7 +915,7 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 
 wxString DRAWSEGMENT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Pcb Graphic %s on %s" ),
+    return wxString::Format( _( "%s on %s" ),
                              ShowShape( m_Shape ),
                              GetLayerName() );
 }

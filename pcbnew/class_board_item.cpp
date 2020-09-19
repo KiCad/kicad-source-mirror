@@ -71,35 +71,32 @@ wxString BOARD_ITEM::GetLayerName() const
 }
 
 
-wxString BOARD_ITEM::LayerMaskDescribe( const BOARD* aBoard, LSET aMask )
+wxString BOARD_ITEM::LayerMaskDescribe() const
 {
+    BOARD* board = GetBoard();
+    LSET   layers = GetLayerSet();
+
     // Try to be smart and useful.  Check all copper first.
-    if( aMask[F_Cu] && aMask[B_Cu] )
-        return _( "All copper layers" );
+    if( layers[F_Cu] && layers[B_Cu] )
+        return _( "all copper layers" );
 
-    // Check for copper.
-    auto layer = aBoard->GetEnabledLayers().AllCuMask() & aMask;
+    LSET copperLayers = layers & board->GetEnabledLayers().AllCuMask();
+    LSET techLayers = layers & board->GetEnabledLayers().AllTechMask();
 
-    for( int i = 0; i < 3; i++ )
+    for( LSET testLayers : { copperLayers, techLayers, layers } )
     {
         for( int bit = PCBNEW_LAYER_ID_START; bit < PCB_LAYER_ID_COUNT; ++bit )
         {
-            if( layer[ bit ] )
+            if( testLayers[ bit ] )
             {
-                wxString layerInfo = aBoard->GetLayerName( static_cast<PCB_LAYER_ID>( bit ) );
+                wxString layerInfo = board->GetLayerName( static_cast<PCB_LAYER_ID>( bit ) );
 
-                if( aMask.count() > 1 )
+                if( testLayers.count() > 1 )
                     layerInfo << _( " and others" );
 
                 return layerInfo;
             }
         }
-
-        // No copper; first, check for technicals and then for all layers.
-        if( i < 1 )     // first, check for technicals
-            layer = aBoard->GetEnabledLayers().AllTechMask() & aMask;
-        else            // then check for all other layers
-            layer = aMask;
     }
 
     // No copper, no technicals: no layer

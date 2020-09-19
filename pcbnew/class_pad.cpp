@@ -815,7 +815,7 @@ void D_PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 
     aList.emplace_back( _( "NetClass" ), msg, CYAN );
 
-    aList.emplace_back( _( "Layer" ), LayerMaskDescribe( board, m_layerMask ), DARKGREEN );
+    aList.emplace_back( _( "Layer" ), LayerMaskDescribe(), DARKGREEN );
 
     // Show the pad shape, attribute and property
     wxString props = ShowPadAttr();
@@ -1064,14 +1064,14 @@ wxString D_PAD::GetSelectMenuText( EDA_UNITS aUnits ) const
     {
         return wxString::Format( _( "Pad of %s on %s" ),
                                  GetParent()->GetReference(),
-                                 LayerMaskDescribe( GetBoard(), m_layerMask ) );
+                                 LayerMaskDescribe() );
     }
     else
     {
         return wxString::Format( _( "Pad %s of %s on %s" ),
                                  GetName(),
                                  GetParent()->GetReference(),
-                                 LayerMaskDescribe( GetBoard(), m_layerMask ) );
+                                 LayerMaskDescribe() );
     }
 }
 

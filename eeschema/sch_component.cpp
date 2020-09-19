@@ -1585,9 +1585,9 @@ LIB_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
 
 wxString SCH_COMPONENT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Symbol %s, %s" ),
-                             GetLibId().GetLibItemName().wx_str(),
-                             GetField( REFERENCE )->GetShownText() );
+    return wxString::Format( _( "Symbol %s [%s]" ),
+                             GetField( REFERENCE )->GetShownText(),
+                             GetLibId().GetLibItemName().wx_str() );
 }
 
 

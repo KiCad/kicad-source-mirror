@@ -906,7 +906,8 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KICA
 
 wxString SCH_SHEET::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Hierarchical Sheet %s" ), m_fields[ SHEETNAME ].GetText() );
+    return wxString::Format( _( "Hierarchical Sheet %s" ),
+                             m_fields[ SHEETNAME ].GetText() );
 }
 
 

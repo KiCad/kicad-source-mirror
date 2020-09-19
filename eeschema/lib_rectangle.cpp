@@ -260,11 +260,9 @@ bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 wxString LIB_RECTANGLE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Rectangle from (%s, %s) to (%s, %s)" ),
-                             MessageTextFromValue( aUnits, m_Pos.x ),
-                             MessageTextFromValue( aUnits, m_Pos.y ),
-                             MessageTextFromValue( aUnits, m_End.x ),
-                             MessageTextFromValue( aUnits, m_End.y ) );
+    return wxString::Format( _( "Rectangle, width %s height %s" ),
+                             MessageTextFromValue( aUnits, std::abs( m_Pos.x - m_End.x ) ),
+                             MessageTextFromValue( aUnits, std::abs( m_Pos.y - m_End.y ) ) );
 }
 
 

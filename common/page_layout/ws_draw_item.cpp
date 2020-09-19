@@ -182,10 +182,8 @@ bool WS_DRAW_ITEM_TEXT::HitTest( const EDA_RECT& aRect, bool aContains, int aAcc
 
 wxString WS_DRAW_ITEM_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Text %s at (%s, %s)" ),
-                             GetShownText(),
-                             MessageTextFromValue( aUnits, GetTextPos().x ),
-                             MessageTextFromValue( aUnits, GetTextPos().y ) );
+    return wxString::Format( _( "Text \"%s\"" ),
+                             GetShownText() );
 }
 
 
@@ -288,9 +286,7 @@ bool WS_DRAW_ITEM_POLYPOLYGONS::HitTest( const EDA_RECT& aRect, bool aContained,
 
 wxString WS_DRAW_ITEM_POLYPOLYGONS::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Imported shape at (%s, %s)" ),
-                             MessageTextFromValue( aUnits, GetPosition().x ),
-                             MessageTextFromValue( aUnits, GetPosition().y ) );
+    return wxString::Format( _( "Imported Shape" ) );
 }
 
 
@@ -349,11 +345,9 @@ bool WS_DRAW_ITEM_RECT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 wxString WS_DRAW_ITEM_RECT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Rectangle from (%s, %s) to (%s, %s)" ),
-                             MessageTextFromValue( aUnits, GetStart().x ),
-                             MessageTextFromValue( aUnits, GetStart().y ),
-                             MessageTextFromValue( aUnits, GetEnd().x ),
-                             MessageTextFromValue( aUnits, GetEnd().y ) );
+    return wxString::Format( _( "Rectangle, width %s height %s" ),
+                             MessageTextFromValue( aUnits, std::abs( GetStart().x - GetEnd().x ) ),
+                             MessageTextFromValue( aUnits, std::abs( GetStart().y - GetEnd().y ) ) );
 }
 
 
@@ -384,11 +378,8 @@ bool WS_DRAW_ITEM_LINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 wxString WS_DRAW_ITEM_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Line from (%s, %s) to (%s, %s)" ),
-                             MessageTextFromValue( aUnits, GetStart().x ),
-                             MessageTextFromValue( aUnits, GetStart().y ),
-                             MessageTextFromValue( aUnits, GetEnd().x ),
-                             MessageTextFromValue( aUnits, GetEnd().y ) );
+    return wxString::Format( _( "Line, length %s" ),
+                             MessageTextFromValue( aUnits, EuclideanNorm( GetStart() - GetEnd() ) ) );
 }
 
 
@@ -437,15 +428,13 @@ bool WS_DRAW_ITEM_BITMAP::HitTest( const EDA_RECT& aRect, bool aContains, int aA
 
 wxString WS_DRAW_ITEM_BITMAP::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Image at (%s, %s)" ),
-                             MessageTextFromValue( aUnits, GetPosition().x ),
-                             MessageTextFromValue( aUnits, GetPosition().y ) );
+    return wxString::Format( _( "Image" ) );
 }
 
 
 wxString WS_DRAW_ITEM_PAGE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    wxString txt( "Page limits" );
+    wxString txt( "Page Limits" );
     return txt;
 }
 

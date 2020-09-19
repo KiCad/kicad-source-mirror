@@ -405,9 +405,7 @@ void LIB_FIELD::SetName( const wxString& aName )
 
 wxString LIB_FIELD::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Field %s (%s)" ),
-                             GetName(),
-                             ShortenedShownText() );
+    return GetName() + " " + ShortenedShownText();
 }
 
 

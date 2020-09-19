@@ -1137,10 +1137,21 @@ BITMAP_DEF LIB_PIN::GetMenuImage() const
 
 wxString LIB_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Pin %s, %s, %s" ),
-                             m_number,
-                             GetElectricalTypeName(),
-                             PinShapeGetText( m_shape ));
+    if( !m_name.IsEmpty() )
+    {
+        return wxString::Format( _( "Pin %s [%s, %s, %s]" ),
+                                 m_number,
+                                 m_name,
+                                 GetElectricalTypeName(),
+                                 PinShapeGetText( m_shape ));
+    }
+    else
+    {
+        return wxString::Format( _( "Pin %s [%s, %s]" ),
+                                 m_number,
+                                 GetElectricalTypeName(),
+                                 PinShapeGetText( m_shape ));
+    }
 }
 
 

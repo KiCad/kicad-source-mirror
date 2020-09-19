@@ -351,9 +351,7 @@ void LIB_POLYLINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aLi
 
 wxString LIB_POLYLINE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Polyline at (%s, %s) with %d points" ),
-                             MessageTextFromValue( aUnits, m_PolyPoints[0].x ),
-                             MessageTextFromValue( aUnits, m_PolyPoints[0].y ),
+    return wxString::Format( _( "Polyline, %d points" ),
                              int( m_PolyPoints.size() ) );
 }
 

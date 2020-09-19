@@ -642,24 +642,35 @@ wxString SCH_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
     wxString txtfmt, orient;
 
     if( m_start.x == m_end.x )
-        orient = _( "Vertical" );
-    else if( m_start.y == m_end.y )
-        orient = _( "Horizontal" );
-
-    switch( m_Layer )
     {
-    case LAYER_NOTES: txtfmt = _( "%s Graphic Line from (%s, %s) to (%s, %s)" );          break;
-    case LAYER_WIRE:  txtfmt = _( "%s Wire from (%s, %s) to (%s, %s)" );                  break;
-    case LAYER_BUS:   txtfmt = _( "%s Bus from (%s, %s) to (%s, %s)" );                   break;
-    default:          txtfmt = _( "%s Line on Unknown Layer from (%s, %s) to (%s, %s)" ); break;
+        switch( m_Layer )
+        {
+        case LAYER_WIRE:  txtfmt = _( "Vertical Wire, length %s" );         break;
+        case LAYER_BUS:   txtfmt = _( "Vertical Bus, length %s" );          break;
+        default:          txtfmt = _( "Vertical Graphic Line, length %s" ); break;
+        }
+    }
+    else if( m_start.y == m_end.y )
+    {
+        switch( m_Layer )
+        {
+        case LAYER_WIRE:  txtfmt = _( "Horizontal Wire, length %s" );         break;
+        case LAYER_BUS:   txtfmt = _( "Horizontal Bus, length %s" );          break;
+        default:          txtfmt = _( "Horizontal Graphic Line, length %s" ); break;
+        }
+    }
+    else
+    {
+        switch( m_Layer )
+        {
+        case LAYER_WIRE:  txtfmt = _( "Wire, length %s" );         break;
+        case LAYER_BUS:   txtfmt = _( "Bus, length %s" );          break;
+        default:          txtfmt = _( "Graphic Line, length %s" ); break;
+        }
     }
 
     return wxString::Format( txtfmt,
-                             orient,
-                             MessageTextFromValue( aUnits, m_start.x ),
-                             MessageTextFromValue( aUnits, m_start.y ),
-                             MessageTextFromValue( aUnits, m_end.x ),
-                             MessageTextFromValue( aUnits, m_end.y ) );
+                             MessageTextFromValue( aUnits, EuclideanNorm( m_start - m_end ) ) );
 }
 
 

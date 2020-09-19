@@ -266,9 +266,7 @@ void LIB_CIRCLE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList
 
 wxString LIB_CIRCLE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Circle center (%s, %s), radius %s" ),
-                             MessageTextFromValue( aUnits, m_Pos.x ),
-                             MessageTextFromValue( aUnits, m_Pos.y ),
+    return wxString::Format( _( "Circle, radius %s" ),
                              MessageTextFromValue( aUnits, GetRadius() ) );
 }
 
