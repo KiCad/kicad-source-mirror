@@ -93,13 +93,12 @@
 # mc: - leader = bollatura (thanks t.me/kicadit)
 # mc: - HatchBorder = tratteggio (thanks t.me/kicadit)
 # mc: - constraints = vincoli
-#: pcbnew/class_track.cpp:87
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-19 17:32+0200\n"
-"PO-Revision-Date: 2020-09-19 17:51+0200\n"
+"POT-Creation-Date: 2020-09-19 19:13+0200\n"
+"PO-Revision-Date: 2020-09-19 20:06+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -4906,11 +4905,11 @@ msgstr "Carattere non riconosciuto \"%c\""
 
 #: common/libeval_compiler/libeval_compiler.cpp:738
 msgid "Unknown parent of function parameters"
-msgstr ""
+msgstr "Genitore di parametri di funzione sconosciuto"
 
 #: common/libeval_compiler/libeval_compiler.cpp:752
 msgid "Unknown parent of property"
-msgstr ""
+msgstr "Genitore di proprietà sconosciuto"
 
 #: common/libeval_compiler/libeval_compiler.cpp:769
 #: common/libeval_compiler/libeval_compiler.cpp:797
@@ -10237,6 +10236,8 @@ msgid ""
 "Check the symbol and use \"Alternate node sequence\" to reorder the pins, if "
 "necessary"
 msgstr ""
+"La numerazione pin del simbolo non sempre corrisponde all'ordine pin richiesto da SPICE\n"
+"Controllare il simbolo e usare \"Sequenza nodo alternativa\" per riordinare i pin, se necessario"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:418
 msgid "For a Diode, pin order is anode, cathode"
@@ -13495,7 +13496,7 @@ msgid ""
 "&nbsp;               <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br>         <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
 "samp>      </td>   </tr></table>"
-msgstr ""
+msgstr "<table><tr><th>Marcatore</th><th></th><th>Risultato</th></tr><tr><td>&nbsp;<br><samp>^{superscript}</samp></td><td></td><td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>      <td></td>      <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>   </tr>   <tr><td><br></td></tr>   <tr>      <td>&nbsp;<br><samp>_{subscript}</samp></td>      <td></td>      <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>      <td></td>      <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>   </tr>   <tr><td></td></tr>   <tr>      <td>         &nbsp;<br><samp>~overbar</samp><br>         &nbsp;<br><samp>~CLK</samp><br>         &nbsp;<br><samp>~~</samp>      </td>      <td></td>      <td>         <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br>         <samp>overbar</samp><br>         <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br>         <samp>CLK</samp><br>         <samp>&nbsp;</samp><br>         <samp>~</samp>      </td>   </tr>   <tr><td><br></td></tr>   <tr>      <td>&nbsp;<br><samp>${variable}</samp></td>      <td></td>      <td>&nbsp;<br><samp><i>variable_value</i></samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>${REVISION}</samp></td>      <td></td>      <td>&nbsp;<br><samp>2020.1</samp></td>   </tr>   <tr><td><br></td></tr>   <tr>      <td>&nbsp;<br><samp>${refdes:field}</samp></td>      <td></td>      <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>      <td></td>      <td>&nbsp;<br><samp>150K</samp></td>   </tr>   <tr><td><br></td></tr>   <tr><td><br></td></tr>   <tr>      <th>Bus Definition</th>      <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>      <th>Resultant Nets</th>   </tr>   <tr>      <td>&nbsp;<br><samp>prefix[m..n]</samp></td>      <td></td>      <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>D[0..7]</samp></td>      <td></td>      <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>   </tr>   <tr><td><br></td></tr>   <tr><samp>      <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>      <td></td>      <td>&nbsp;<br><samp>net1, net2, ...</samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>{SCL SDA}</samp></td>      <td></td>      <td>&nbsp;<br><samp>SCL, SDA</samp></td>   </tr></samp>   <tr><td><br></td></tr>   <tr>      <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>      <td></td>      <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>USB1{DP DM}</samp></td>      <td></td>      <td>&nbsp;<br><samp>USB1.DP, USB1.DM</samp></td>   </tr>   <tr><td><br></td></tr>   <tr>      <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>      <td></td>      <td>&nbsp;<br>         <samp>MEM.D1, MEM.D2, MEM.LATCH</samp>      </td>   </tr>   <tr>      <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>      <td></td>      <td>         <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;               <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br>         <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp>      </td>   </tr></table>"
 
 #: eeschema/sch_text.cpp:1364 pcbnew/dialogs/panel_setup_rules.cpp:407
 msgid "Syntax Help"
@@ -16238,7 +16239,7 @@ msgstr "Attiva"
 
 #: include/libeval_compiler/libeval_compiler.h:281
 msgid "Malformed expression"
-msgstr ""
+msgstr "Espressione malformata"
 
 #: include/netclass.h:161
 #, c-format
@@ -20198,12 +20199,15 @@ msgstr ""
 "%d %s Uuid: [%s], X, Y: %s, Arrotondato X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:605
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
 "Recommend you run DRC with 'Test footprints against schematic' checked.\n"
 msgstr ""
+"\n"
+"Il C.S. ha %d designatori di riferimento vuoti o non validi.\n"
+"Si raccomanda di eseguire il DRC con l'opzione \"Controlla impronte rispetto allo schema\" selezionata.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:611
 #, c-format
@@ -20831,7 +20835,7 @@ msgstr "Distanza smusso:"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:284
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:108
 msgid "Fillet radius:"
-msgstr "Raggio filetto:"
+msgstr "Raggio stondamento:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:402
 msgid "Thermal spoke width cannot be smaller than the minimum width."
@@ -21627,13 +21631,15 @@ msgstr "Avvia DRC"
 msgid ""
 "-------- DRC cancelled by user.\n"
 "\n"
-msgstr ""
+msgstr "-------- DRC annullato dall'utente.\n\n"
 
 #: pcbnew/dialogs/dialog_drc.cpp:230
 msgid ""
 "Done.\n"
 "\n"
-msgstr "Fatto.\n\n"
+msgstr ""
+"Fatto.\n"
+"\n"
 
 #: pcbnew/dialogs/dialog_drc.cpp:395
 msgid "Open the Board Setup... dialog"
@@ -23862,7 +23868,7 @@ msgstr "Trapezoidale"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:104
 msgid "Chamfered with other corners rounded"
-msgstr ""
+msgstr "Smussato con altri spigoli arrotondati"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:104
 msgid "Custom (circular base)"
@@ -24402,6 +24408,10 @@ msgid ""
 "Please ensure the  solder mask min width (and margin value) are valid\n"
 "Use non 0 values only when required."
 msgstr ""
+"La larghezza minima e/o il margine maschera di saldatura globali non sono imposti a 0\n"
+"Molti dei fabbricanti di C.S. si aspettano un valore di 0 e usano i loro limiti, specialmente per la larghezza minima della maschera di saldatura.\n"
+"Assicurarsi che la larghezza minima della maschera di saldatura (e il valore di margine) siano validi\n"
+"Usare valori non 0 solo se richiesto."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:175
 msgid "Gerber Options"
@@ -24579,6 +24589,10 @@ msgid ""
 "User unit is 10^-<N> mm or 10^-<N> inch.\n"
 "Choose 6 if you are not sure."
 msgstr ""
+"La grandezza di una unità utente SVG.\n"
+"Il numero definisce quante cifre vengano esportate sotto 1 mm o 1 pollice.\n"
+"L'unità utente è 10^-<N> mm o 10^-<N> pollici.\n"
+"Scegliere 6 nel dubbio."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:393
 msgid "Run DRC..."
@@ -25703,13 +25717,14 @@ msgstr "Strategia riempimento zona"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:122
 msgid "Mimic legacy behavior"
-msgstr ""
+msgstr "Comportamento di imitazione tradizionale"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:123
+#, fuzzy
 msgid ""
 "Produces a slightly smoother outline at the expense of performance, some "
 "export fidelity issues, and overly agressive higher-priority zone knockouts."
-msgstr ""
+msgstr "Produce un profilo leggermente più morbido  at the expense of performance, some export fidelity issues, and overly agressive higher-priority zone knockouts."
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:127
 msgid "Smoothed polygons (best performance)"
@@ -25719,11 +25734,11 @@ msgstr "Poligoni stondati (migliore prestazione)"
 msgid ""
 "Better performance, exact export fidelity, and more complete filling near "
 "higher-priority zones."
-msgstr ""
+msgstr "Migliore performance, fedeltà di esportazione esatta, e riempimenti più completi vicino alle zone a più alta priorità."
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:145
 msgid "Allow fillets outside zone outline"
-msgstr ""
+msgstr "Permetti stondamento fuori dal contorno zona"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:184
 msgid "Minimum clearance:"
@@ -25827,7 +25842,8 @@ msgid ""
 "\n"
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
-"Le impostazioni importate hanno meno coppie di strati rame della scheda corrente (%i invece di %i).\n"
+"Le impostazioni importate hanno meno coppie di strati rame della scheda "
+"corrente (%i invece di %i).\n"
 "\n"
 "Continuare e cancellare le coppie di strati rame extra dalla scheda corrente?"
 
@@ -26409,6 +26425,8 @@ msgid ""
 "bridge width.\n"
 "If none is provided, setting the values to zero is suggested."
 msgstr ""
+"Usa i valori del produttore di C.S. per la distanza della maschera di saldatura e larghezza ponte minima.\n"
+"Se assenti, si suggerisce di impostare i valori a zero."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:49
 msgid ""
@@ -29553,21 +29571,28 @@ msgstr ""
 msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
-msgstr "Il modello CADSTAR \"%s\" ha l'impostazione \"Allow in No Routing Areas\" abilitata. Questa impostazione non ha equivalente KiCad, perciò è stata ignorata."
+msgstr ""
+"Il modello CADSTAR \"%s\" ha l'impostazione \"Allow in No Routing Areas\" "
+"abilitata. Questa impostazione non ha equivalente KiCad, perciò è stata "
+"ignorata."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1039
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins'enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
-msgstr "Il modello CADSTAR \"%s\" ha l'impostazione \"Box Isolated Pins\" abilitata. Questa impostazione non ha equivalente KiCad, perciò è stata ignorata."
+msgstr ""
+"Il modello CADSTAR \"%s\" ha l'impostazione \"Box Isolated Pins\" abilitata. "
+"Questa impostazione non ha equivalente KiCad, perciò è stata ignorata."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1045
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour'enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
-msgstr "Il modello CADSTAR \"%s\" ha l'impostazione \"Automatic Repour\" abilitata. Questa impostazione non ha equivalente KiCad, perciò è stata ignorata."
+msgstr ""
+"Il modello CADSTAR \"%s\" ha l'impostazione \"Automatic Repour\" abilitata. "
+"Questa impostazione non ha equivalente KiCad, perciò è stata ignorata."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1054
 #, c-format
@@ -29575,7 +29600,10 @@ msgid ""
 "The CADSTAR template '%s' has a non-zero value defined for the 'Sliver "
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
-msgstr "Il modello CADSTAR \\\"%s\\\" ha un valore non zero definito per l'impostazione \"Sliver Width\". Questo non ha equivalente in KiCad, perciò quest'impostazione è stata ignorata."
+msgstr ""
+"Il modello CADSTAR \\\"%s\\\" ha un valore non zero definito per "
+"l'impostazione \"Sliver Width\". Questo non ha equivalente in KiCad, perciò "
+"quest'impostazione è stata ignorata."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1062
 #, c-format
@@ -29584,7 +29612,7 @@ msgid ""
 "Disjoint' and 'Retain Poured Copper - Isolated'. KiCad does not distinguish "
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
-msgstr ""
+msgstr "Il modello CADSTAR \"%s\" ha impostazioni diverse per \"Retain Poured Copper - Disjoint\" e \"Retain Poured Copper - Isolated\". KiCad non distingue tra queste due impostazioni. Le impostazioni per \"disjoint copper\" sono state applicate come area isola minima della zona KiCad."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1093
 #, c-format
@@ -29592,7 +29620,7 @@ msgid ""
 "The CADSTAR template '%s' has different settings for thermal relief in pads "
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
-msgstr ""
+msgstr "Il modello CADSTAR \"%s\" ha impostazioni diverse per i supporti termici nelle piazzole e nei via. KiCad supporta solo una impostazione per entrambe. Viene usata l'impostazione per le piazzole."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1132
 #, c-format
@@ -29600,7 +29628,7 @@ msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
-msgstr ""
+msgstr "Lo strato CADSTAR \"%s\" viene definito come strato di potenza. Ma non esiste collegamento con tal nome. Lo strato è stato caricato ma non è stata creata una zona rame."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1181
 msgid ""
