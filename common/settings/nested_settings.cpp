@@ -73,14 +73,21 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
     {
         int filever = -1;
 
-        try
+        if( count( PointerFromString( "meta.version" ) ) )
         {
-            filever = at( PointerFromString( "meta.version" ) ).get<int>();
-        }
-        catch( ... )
-        {
-            wxLogTrace( traceSettings, "%s: nested settings version could not be read!",
+            try
+            {
+                filever = at( PointerFromString( "meta.version" ) ).get<int>();
+            }
+            catch( ... )
+            {
+                wxLogTrace( traceSettings, "%s: nested settings version could not be read!",
                         m_filename );
+                success = false;
+            }
+        }
+        else
+        {
             success = false;
         }
 
