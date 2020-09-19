@@ -98,8 +98,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-18 08:07+0200\n"
-"PO-Revision-Date: 2020-09-18 13:13+0200\n"
+"POT-Creation-Date: 2020-09-19 17:32+0200\n"
+"PO-Revision-Date: 2020-09-19 17:51+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1232,15 +1232,15 @@ msgstr "Commuta la visualizzazione degli strati ECO"
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:74
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:91
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:77
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:187
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:203
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:217
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:231
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:245
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:284
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:298
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:337
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:351
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:191
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:207
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:221
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:235
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:249
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:288
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:302
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:341
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:355
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:58
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:73
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
@@ -1839,7 +1839,8 @@ msgstr "Ripristina"
 
 #: common/confirm.cpp:195 common/tool/actions.cpp:120
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:187
-#: pcbnew/microwave/microwave_polygon.cpp:125 pcbnew/pcb_parser.cpp:659
+#: pcbnew/dialogs/dialog_drc.cpp:222 pcbnew/microwave/microwave_polygon.cpp:125
+#: pcbnew/pcb_parser.cpp:659
 msgid "Cancel"
 msgstr "Annulla"
 
@@ -1854,9 +1855,9 @@ msgstr "Info"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:353
 #: pcbnew/footprint_libraries_utils.cpp:445
-#: pcbnew/footprint_libraries_utils.cpp:948 pcbnew/router/router_tool.cpp:1216
-#: pcbnew/router/router_tool.cpp:1397 pcbnew/router/router_tool.cpp:1553
-#: pcbnew/zone_filler.cpp:339
+#: pcbnew/footprint_libraries_utils.cpp:948 pcbnew/router/router_tool.cpp:1213
+#: pcbnew/router/router_tool.cpp:1394 pcbnew/router/router_tool.cpp:1550
+#: pcbnew/zone_filler.cpp:412
 msgid "Confirmation"
 msgstr "Conferma"
 
@@ -2196,8 +2197,8 @@ msgstr "Variabili ambiente"
 #: eeschema/lib_view_frame.cpp:358 eeschema/libedit/symbedit.cpp:213
 #: eeschema/sch_component.cpp:1344 eeschema/sch_component.cpp:1386
 #: eeschema/sch_pin.cpp:163 eeschema/widgets/tuner_slider_base.cpp:20
-#: pcbnew/class_pad.cpp:1361 pcbnew/class_zone.cpp:601
-#: pcbnew/class_zone.cpp:1356
+#: pcbnew/class_pad.cpp:1361 pcbnew/class_zone.cpp:602
+#: pcbnew/class_zone.cpp:1357
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:55
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:456
@@ -2796,7 +2797,7 @@ msgstr "Anteprima di stampa"
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:66
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:119
 #: pcbnew/dialogs/dialog_board_statistics.cpp:126
-#: pcbnew/dialogs/dialog_drc.cpp:78
+#: pcbnew/dialogs/dialog_drc.cpp:80 pcbnew/dialogs/dialog_drc.cpp:235
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:167
 #: pcbnew/dialogs/dialog_export_step.cpp:129
 #: pcbnew/dialogs/dialog_export_svg.cpp:93
@@ -3348,7 +3349,9 @@ msgstr "Velocità autopan:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:72
 msgid "How fast to pan when moving an object off the edge of the screen"
-msgstr "Quanto velocemente fare pan quando si sposta un oggetto fuori dal bordo dello schermo"
+msgstr ""
+"Quanto velocemente fare pan quando si sposta un oggetto fuori dal bordo "
+"dello schermo"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:89
 msgid "Mouse Buttons"
@@ -3374,7 +3377,7 @@ msgstr "Zoom"
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:164
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:56
-#: pcbnew/class_pad.cpp:1345 pcbnew/class_zone.cpp:1344
+#: pcbnew/class_pad.cpp:1345 pcbnew/class_zone.cpp:1345
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:157
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:233
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43
@@ -3444,7 +3447,7 @@ msgstr ""
 #: common/dialogs/panel_setup_netclasses.cpp:82
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:309
-#: pcbnew/class_zone.cpp:605 pcbnew/class_zone.cpp:1346
+#: pcbnew/class_zone.cpp:606 pcbnew/class_zone.cpp:1347
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:233
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:420
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:324
@@ -3489,7 +3492,7 @@ msgstr "Le netclass predefinita è necessaria."
 msgid "Net Classes"
 msgstr "Netclass"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:41 pcbnew/class_zone.cpp:1358
+#: common/dialogs/panel_setup_netclasses_base.cpp:41 pcbnew/class_zone.cpp:1359
 msgid "Clearance"
 msgstr "Distanza"
 
@@ -3545,6 +3548,7 @@ msgstr "Stile linea"
 #: common/widgets/footprint_select_widget.cpp:229
 #: eeschema/dialogs/dialog_edit_line_style.cpp:53
 #: eeschema/dialogs/dialog_edit_line_style.cpp:64
+#: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:65
 #: eeschema/dialogs/dialog_junction_props.cpp:38
 #: eeschema/tools/sch_editor_control.cpp:937
 msgid "Default"
@@ -3600,7 +3604,7 @@ msgstr "Assegna ai collegamenti selezionati"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:207
 #: pcbnew/board_connected_item.cpp:150 pcbnew/class_pad.cpp:807
-#: pcbnew/class_track.cpp:777 pcbnew/class_zone.cpp:573
+#: pcbnew/class_track.cpp:777 pcbnew/class_zone.cpp:574
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:33
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:54
 msgid "Net"
@@ -3648,7 +3652,7 @@ msgid "Info: "
 msgstr "Info: "
 
 #: common/dialogs/wx_html_report_panel.cpp:322
-#: eeschema/dialogs/dialog_erc.cpp:532 pcbnew/dialogs/dialog_drc.cpp:524
+#: eeschema/dialogs/dialog_erc.cpp:532 pcbnew/dialogs/dialog_drc.cpp:536
 msgid "Save Report to File"
 msgstr "Salva il file rapporto"
 
@@ -4900,19 +4904,27 @@ msgstr "Elemento"
 msgid "Unrecognized character '%c'"
 msgstr "Carattere non riconosciuto \"%c\""
 
-#: common/libeval_compiler/libeval_compiler.cpp:762
-#: common/libeval_compiler/libeval_compiler.cpp:790
-#: common/libeval_compiler/libeval_compiler.cpp:895
+#: common/libeval_compiler/libeval_compiler.cpp:738
+msgid "Unknown parent of function parameters"
+msgstr ""
+
+#: common/libeval_compiler/libeval_compiler.cpp:752
+msgid "Unknown parent of property"
+msgstr ""
+
+#: common/libeval_compiler/libeval_compiler.cpp:769
+#: common/libeval_compiler/libeval_compiler.cpp:797
+#: common/libeval_compiler/libeval_compiler.cpp:902
 #, c-format
 msgid "Unrecognized item '%s'"
 msgstr "Elemento non riconosciuto \"%s\""
 
-#: common/libeval_compiler/libeval_compiler.cpp:767
+#: common/libeval_compiler/libeval_compiler.cpp:774
 #, c-format
 msgid "Unrecognized property '%s'"
 msgstr "Proprietà non riconosciuta \"%s\""
 
-#: common/libeval_compiler/libeval_compiler.cpp:801
+#: common/libeval_compiler/libeval_compiler.cpp:808
 #, c-format
 msgid "Unrecognized function '%s'"
 msgstr "Funzione non riconosciuta \"%s\""
@@ -5290,7 +5302,7 @@ msgid "Redo last edit"
 msgstr "Rifà l'ultima modifica"
 
 #: common/tool/actions.cpp:152 eeschema/tools/ee_actions.cpp:131
-#: pcbnew/tools/edit_tool.cpp:1221
+#: pcbnew/tools/edit_tool.cpp:1218
 msgid "Cut"
 msgstr "Taglia"
 
@@ -5345,7 +5357,7 @@ msgstr "Duplica gli elementi selezionati"
 
 #: common/tool/actions.cpp:186 eeschema/tools/ee_actions.cpp:126
 #: kicad/tree_project_frame.cpp:785 pcbnew/pcb_parser.cpp:659
-#: pcbnew/tools/edit_tool.cpp:1223
+#: pcbnew/tools/edit_tool.cpp:1220
 msgid "Delete"
 msgstr "Cancella"
 
@@ -6004,7 +6016,7 @@ msgstr "<crea connessione>"
 msgid "Filter:"
 msgstr "Filtro:"
 
-#: common/widgets/paged_dialog.cpp:66
+#: common/widgets/paged_dialog.cpp:68
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:191
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1098
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1430
@@ -7693,7 +7705,7 @@ msgstr "Campi"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:58
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:55
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:687
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:697
 #: eeschema/dialogs/dialog_sch_sheet_props_base.cpp:52
 #: eeschema/fields_grid_table.cpp:197
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:54
@@ -8470,7 +8482,7 @@ msgstr "Alcuni componenti non sono annotati. l'ERC non può essere eseguito."
 msgid "Delete exclusions too?"
 msgstr "Cancellare anche le esclusioni?"
 
-#: eeschema/dialogs/dialog_erc.cpp:134 pcbnew/dialogs/dialog_drc.cpp:688
+#: eeschema/dialogs/dialog_erc.cpp:134 pcbnew/dialogs/dialog_drc.cpp:717
 #: pcbnew/dialogs/dialog_drc_base.cpp:202
 msgid "Delete All Markers"
 msgstr "Cancella tutti i marcatori"
@@ -8516,59 +8528,59 @@ msgstr "Controllo etichette...\n"
 msgid "Finished"
 msgstr "Terminato"
 
-#: eeschema/dialogs/dialog_erc.cpp:368 pcbnew/dialogs/dialog_drc.cpp:343
+#: eeschema/dialogs/dialog_erc.cpp:368 pcbnew/dialogs/dialog_drc.cpp:355
 msgid "errors"
 msgstr "errori"
 
-#: eeschema/dialogs/dialog_erc.cpp:369 pcbnew/dialogs/dialog_drc.cpp:344
+#: eeschema/dialogs/dialog_erc.cpp:369 pcbnew/dialogs/dialog_drc.cpp:356
 msgid "warnings"
 msgstr "avvisi"
 
-#: eeschema/dialogs/dialog_erc.cpp:370 pcbnew/dialogs/dialog_drc.cpp:345
+#: eeschema/dialogs/dialog_erc.cpp:370 pcbnew/dialogs/dialog_drc.cpp:357
 msgid "appropriate"
 msgstr "appropriato"
 
-#: eeschema/dialogs/dialog_erc.cpp:375 pcbnew/dialogs/dialog_drc.cpp:350
+#: eeschema/dialogs/dialog_erc.cpp:375 pcbnew/dialogs/dialog_drc.cpp:362
 msgid "Remove exclusion for this violation"
 msgstr "Rimuovi l'esclusione per questa violazione"
 
-#: eeschema/dialogs/dialog_erc.cpp:376 pcbnew/dialogs/dialog_drc.cpp:351
+#: eeschema/dialogs/dialog_erc.cpp:376 pcbnew/dialogs/dialog_drc.cpp:363
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "Verrà rimesso nuovamente nell'elenco %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:380 pcbnew/dialogs/dialog_drc.cpp:355
+#: eeschema/dialogs/dialog_erc.cpp:380 pcbnew/dialogs/dialog_drc.cpp:367
 msgid "Exclude this violation"
 msgstr "Escludi questa violazione"
 
-#: eeschema/dialogs/dialog_erc.cpp:381 pcbnew/dialogs/dialog_drc.cpp:356
+#: eeschema/dialogs/dialog_erc.cpp:381 pcbnew/dialogs/dialog_drc.cpp:368
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "Verrà escluso dall'elenco %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:393 pcbnew/dialogs/dialog_drc.cpp:363
+#: eeschema/dialogs/dialog_erc.cpp:393 pcbnew/dialogs/dialog_drc.cpp:375
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "Cambia l'importanza a Errore per tutte le violazioni \"%s\""
 
 #: eeschema/dialogs/dialog_erc.cpp:395 eeschema/dialogs/dialog_erc.cpp:401
-#: pcbnew/dialogs/dialog_drc.cpp:365 pcbnew/dialogs/dialog_drc.cpp:372
+#: pcbnew/dialogs/dialog_drc.cpp:377 pcbnew/dialogs/dialog_drc.cpp:384
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
 "L'importanza delle violazioni può essere modificata anche nella finestra di "
 "dialogo di impostazioni della scheda..."
 
-#: eeschema/dialogs/dialog_erc.cpp:399 pcbnew/dialogs/dialog_drc.cpp:370
+#: eeschema/dialogs/dialog_erc.cpp:399 pcbnew/dialogs/dialog_drc.cpp:382
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "Cambia l'importanza ad Avvertimento per tutte le violazioni \"%s\""
 
-#: eeschema/dialogs/dialog_erc.cpp:404 pcbnew/dialogs/dialog_drc.cpp:376
+#: eeschema/dialogs/dialog_erc.cpp:404 pcbnew/dialogs/dialog_drc.cpp:388
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "Ignora tutte le violazioni \"%s\""
 
-#: eeschema/dialogs/dialog_erc.cpp:405 pcbnew/dialogs/dialog_drc.cpp:378
+#: eeschema/dialogs/dialog_erc.cpp:405 pcbnew/dialogs/dialog_drc.cpp:390
 msgid "Violations will not be checked or reported"
 msgstr "Le violazioni non saranno controllate o riportate"
 
@@ -8576,7 +8588,7 @@ msgstr "Le violazioni non saranno controllate o riportate"
 msgid "Edit pin-to-pin conflict map..."
 msgstr "Modifica la mappa conflitti da-pin-a-pin..."
 
-#: eeschema/dialogs/dialog_erc.cpp:416 pcbnew/dialogs/dialog_drc.cpp:383
+#: eeschema/dialogs/dialog_erc.cpp:416 pcbnew/dialogs/dialog_drc.cpp:395
 msgid "Edit violation severities..."
 msgstr "Modifica l'importanza delle violazioni..."
 
@@ -8591,16 +8603,16 @@ msgstr "Mappa conflitti pin"
 
 #: eeschema/dialogs/dialog_erc.cpp:479
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
-#: pcbnew/dialogs/dialog_board_setup.cpp:84 pcbnew/dialogs/dialog_drc.cpp:471
+#: pcbnew/dialogs/dialog_board_setup.cpp:84 pcbnew/dialogs/dialog_drc.cpp:483
 msgid "Violation Severity"
 msgstr "Importanza violazione"
 
-#: eeschema/dialogs/dialog_erc.cpp:551 pcbnew/dialogs/dialog_drc.cpp:543
+#: eeschema/dialogs/dialog_erc.cpp:551 pcbnew/dialogs/dialog_drc.cpp:555
 #, c-format
 msgid "Report file '%s' created\n"
 msgstr "File rapporto \"%s\" creato\n"
 
-#: eeschema/dialogs/dialog_erc.cpp:556 pcbnew/dialogs/dialog_drc.cpp:548
+#: eeschema/dialogs/dialog_erc.cpp:556 pcbnew/dialogs/dialog_drc.cpp:560
 #, c-format
 msgid "Unable to create report file '%s'"
 msgstr "Impossibile creare il file rapporto \"%s\""
@@ -8676,7 +8688,7 @@ msgid "Show datasheet in browser"
 msgstr "Mostra datasheet nel browser"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:112
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:1038
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:1048
 msgid "The Reference column cannot be hidden."
 msgstr "La colonna dei riferimenti non può essere nascosta."
 
@@ -8684,33 +8696,33 @@ msgstr "La colonna dei riferimenti non può essere nascosta."
 msgid "Qty"
 msgstr "Qtà"
 
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:686
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:696
 #: eeschema/lib_field.cpp:443 eeschema/lib_field.h:102
 msgid "Field"
 msgstr "Campo"
 
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:689
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:699
 msgid "Group By"
 msgstr "Raggruppati per"
 
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:976
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:986
 msgid "New field name:"
 msgstr "Nuovo nome campo:"
 
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:976
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:986
 msgid "Add Field"
 msgstr "Aggiungi campo"
 
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:985
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:995
 msgid "Field must have a name."
 msgstr "Il campo deve avere un nome."
 
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:993
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:1003
 #, c-format
 msgid "Field name \"%s\" already in use."
 msgstr "Nome campo \"%s\" già in uso."
 
-#: eeschema/dialogs/dialog_fields_editor_global.cpp:1191
+#: eeschema/dialogs/dialog_fields_editor_global.cpp:1201
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:699
 msgid "Save changes?"
 msgstr "Salva i cambiamenti?"
@@ -10232,7 +10244,9 @@ msgstr "Per un diodo, l'ordine dei pin è anodo, catodo"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:422
 msgid "For a BJT, pin order is collector, base, emitter, substrate (optional)"
-msgstr "Per un BJT, l'ordine dei pin è collettore, base, emettitore, substrato (opzionale)"
+msgstr ""
+"Per un BJT, l'ordine dei pin è collettore, base, emettitore, substrato "
+"(opzionale)"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:426
 msgid "For a MOSFET, pin order is drain, grid, source"
@@ -11638,7 +11652,7 @@ msgstr "I bus sono graficamente connessi ma non condividono nessun membro bus"
 msgid "Invalid connection between bus and net items"
 msgstr "Connessione non valida tra gli elementi bus e connessione"
 
-#: eeschema/erc_item.cpp:117 pcbnew/drc/drc_item.cpp:170
+#: eeschema/erc_item.cpp:117 pcbnew/drc/drc_item.cpp:166
 msgid "Unresolved text variable"
 msgstr "Variabile testo non risolta"
 
@@ -11850,7 +11864,7 @@ msgid "Key words:"
 msgstr "Parole chiave:"
 
 #: eeschema/generate_alias_info.cpp:122 eeschema/sim/spice_simulator.cpp:81
-#: pcbnew/class_module.cpp:677 pcbnew/class_zone.cpp:607
+#: pcbnew/class_module.cpp:677 pcbnew/class_zone.cpp:608
 #: pcbnew/tools/pcbnew_control.cpp:1084
 msgid "Unknown"
 msgstr "Sconosciuto"
@@ -11930,7 +11944,7 @@ msgstr "Campo %s (%s)"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:74
 #: pcbnew/class_drawsegment.cpp:461 pcbnew/class_marker_pcb.cpp:93
 #: pcbnew/class_text_mod.cpp:295 pcbnew/class_track.cpp:629
-#: pcbnew/class_track.cpp:712 pcbnew/class_zone.cpp:529
+#: pcbnew/class_track.cpp:712 pcbnew/class_zone.cpp:530
 msgid "Type"
 msgstr "Tipo"
 
@@ -14501,7 +14515,7 @@ msgstr "Ruota in senso orario"
 msgid "Rotates selected item(s) clockwise"
 msgstr "Ruota gli elementi selezionati in senso orario"
 
-#: eeschema/tools/ee_actions.cpp:353 pcbnew/tools/edit_tool.cpp:811
+#: eeschema/tools/ee_actions.cpp:353 pcbnew/tools/edit_tool.cpp:808
 msgid "Rotate"
 msgstr "Ruota"
 
@@ -14980,7 +14994,7 @@ msgstr "Sposta"
 msgid "Moves the selected item(s)"
 msgstr "Sposta gli elementi selezionati"
 
-#: eeschema/tools/ee_actions.cpp:709 pcbnew/tools/edit_tool.cpp:647
+#: eeschema/tools/ee_actions.cpp:709 pcbnew/tools/edit_tool.cpp:644
 msgid "Drag"
 msgstr "Trascina"
 
@@ -15053,13 +15067,13 @@ msgstr " di normali"
 msgid "No off grid or duplicate pins were found."
 msgstr "Non è stato trovato nessun piedino duplicato o fuori griglia "
 
-#: eeschema/tools/ee_selection_tool.cpp:1159
+#: eeschema/tools/ee_selection_tool.cpp:1190
 #: pagelayout_editor/tools/pl_selection_tool.cpp:558
 #: pcbnew/tools/selection_tool.cpp:1636
 msgid "Select &All\tA"
 msgstr "Selezion&a tutto\tA"
 
-#: eeschema/tools/ee_selection_tool.cpp:1162
+#: eeschema/tools/ee_selection_tool.cpp:1193
 #: pcbnew/tools/selection_tool.cpp:1639
 msgid "&Expand Selection\tE"
 msgstr "&Espandi selezione\tE"
@@ -15329,7 +15343,7 @@ msgstr "Non esportare"
 #: pcbnew/class_module.cpp:1727 pcbnew/class_module.cpp:1730
 #: pcbnew/class_pad.cpp:818 pcbnew/class_pcb_text.cpp:117
 #: pcbnew/class_text_mod.cpp:305 pcbnew/class_track.cpp:1122
-#: pcbnew/class_zone.cpp:598 pcbnew/dialogs/dialog_copper_zones_base.cpp:22
+#: pcbnew/class_zone.cpp:599 pcbnew/dialogs/dialog_copper_zones_base.cpp:22
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:59
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:59
 #: pcbnew/dialogs/panel_modedit_defaults.cpp:52
@@ -15662,7 +15676,7 @@ msgstr "Polarità"
 
 #: gerbview/gerber_draw_item.cpp:711 pcbnew/class_pcb_text.cpp:120
 #: pcbnew/class_pcb_text.cpp:122 pcbnew/class_text_mod.cpp:312
-#: pcbnew/tools/edit_tool.cpp:949 pcbnew/tools/pcb_actions.cpp:283
+#: pcbnew/tools/edit_tool.cpp:946 pcbnew/tools/pcb_actions.cpp:283
 msgid "Mirror"
 msgstr "Speculare"
 
@@ -16221,6 +16235,10 @@ msgstr "Tipo plugin"
 #: include/lib_table_grid.h:190
 msgid "Active"
 msgstr "Attiva"
+
+#: include/libeval_compiler/libeval_compiler.h:281
+msgid "Malformed expression"
+msgstr ""
 
 #: include/netclass.h:161
 #, c-format
@@ -18254,7 +18272,7 @@ msgid "PCB Calculator"
 msgstr "Calcolatrice C. S."
 
 #: pcb_calculator/eserie_help.h:2
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -18766,7 +18784,7 @@ msgid "NetName"
 msgstr "Nome collegamento"
 
 #: pcbnew/board_connected_item.cpp:154 pcbnew/class_pad.cpp:816
-#: pcbnew/class_track.cpp:780 pcbnew/class_zone.cpp:576
+#: pcbnew/class_track.cpp:780 pcbnew/class_zone.cpp:577
 msgid "NetClass"
 msgstr "Netclass"
 
@@ -18867,7 +18885,7 @@ msgid "Dielectric Layers List"
 msgstr "Elenco strati dielettrici"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:617
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:164
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:168
 msgid "Copper"
 msgstr "Rame"
 
@@ -19199,7 +19217,9 @@ msgstr "L'uuid %s mappa a 2 differenti BOARD_ITEMS: %s %p %s e %p %s"
 msgid ""
 "BOARD_ITEM %s appears multiple times in groups (either in the same group or "
 "in multiple groups) "
-msgstr "BOARD_ITEM %s appare più volte nei gruppi (nello stesso gruppo o in più gruppi) "
+msgstr ""
+"BOARD_ITEM %s appare più volte nei gruppi (nello stesso gruppo o in più "
+"gruppi) "
 
 #: pcbnew/class_board.cpp:2036
 #, c-format
@@ -19244,7 +19264,7 @@ msgstr "Posizione Y"
 msgid "Locked"
 msgstr "Bloccato"
 
-#: pcbnew/class_dimension.cpp:385
+#: pcbnew/class_dimension.cpp:405
 #, c-format
 msgid "Dimension \"%s\" on %s"
 msgstr "Dimensioni \"%s\" su %s"
@@ -19468,14 +19488,14 @@ msgid "Drill X / Y"
 msgstr "Foratura X / Y"
 
 #: pcbnew/class_pad.cpp:888 pcbnew/class_track.cpp:668
-#: pcbnew/class_track.cpp:741 pcbnew/class_zone.cpp:618
+#: pcbnew/class_track.cpp:741 pcbnew/class_zone.cpp:619
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Distanza min: %s"
 
 #: pcbnew/class_pad.cpp:889 pcbnew/class_track.cpp:669
 #: pcbnew/class_track.cpp:676 pcbnew/class_track.cpp:742
-#: pcbnew/class_track.cpp:748 pcbnew/class_zone.cpp:619
+#: pcbnew/class_track.cpp:748 pcbnew/class_zone.cpp:620
 #, c-format
 msgid "(from %s)"
 msgstr "(da %s)"
@@ -19724,128 +19744,128 @@ msgstr "Strato inferiore"
 msgid "Via Type"
 msgstr "Tipo via"
 
-#: pcbnew/class_zone.cpp:332 pcbnew/class_zone.cpp:347
-#: pcbnew/class_zone.cpp:465 pcbnew/class_zone.cpp:759
+#: pcbnew/class_zone.cpp:333 pcbnew/class_zone.cpp:348
+#: pcbnew/class_zone.cpp:466 pcbnew/class_zone.cpp:760
 #: pcbnew/tools/pcb_inspection_tool.cpp:116
 #: pcbnew/tools/pcb_inspection_tool.cpp:150
 #: pcbnew/tools/pcb_inspection_tool.cpp:168
 msgid "zone"
 msgstr "zona"
 
-#: pcbnew/class_zone.cpp:518
+#: pcbnew/class_zone.cpp:519
 msgid "Keepout Area"
 msgstr "Zona proibita"
 
-#: pcbnew/class_zone.cpp:520
+#: pcbnew/class_zone.cpp:521
 msgid "Copper Zone"
 msgstr "Zona rame"
 
-#: pcbnew/class_zone.cpp:522
+#: pcbnew/class_zone.cpp:523
 msgid "Non-copper Zone"
 msgstr "Zona non rame"
 
-#: pcbnew/class_zone.cpp:527
+#: pcbnew/class_zone.cpp:528
 msgid "Cutout"
 msgstr "Ritaglio"
 
-#: pcbnew/class_zone.cpp:536
+#: pcbnew/class_zone.cpp:537
 msgid "No vias"
 msgstr "No via"
 
-#: pcbnew/class_zone.cpp:539
+#: pcbnew/class_zone.cpp:540
 msgid "No tracks"
 msgstr "No piste"
 
-#: pcbnew/class_zone.cpp:542
+#: pcbnew/class_zone.cpp:543
 msgid "No pads"
 msgstr "No piazzole"
 
-#: pcbnew/class_zone.cpp:545
+#: pcbnew/class_zone.cpp:546
 msgid "No copper zones"
 msgstr "No zone rame"
 
-#: pcbnew/class_zone.cpp:548
+#: pcbnew/class_zone.cpp:549
 msgid "No footprints"
 msgstr "No impronte"
 
-#: pcbnew/class_zone.cpp:550
+#: pcbnew/class_zone.cpp:551
 msgid "Keepout"
 msgstr "Proibita"
 
-#: pcbnew/class_zone.cpp:581 pcbnew/class_zone.cpp:1352
+#: pcbnew/class_zone.cpp:582 pcbnew/class_zone.cpp:1353
 msgid "Priority"
 msgstr "Priorità"
 
-#: pcbnew/class_zone.cpp:596 pcbnew/class_zone.cpp:861
+#: pcbnew/class_zone.cpp:597 pcbnew/class_zone.cpp:862
 #, c-format
 msgid "%s and %d more"
 msgstr "%s e %d di più"
 
-#: pcbnew/class_zone.cpp:606 pcbnew/dialogs/dialog_copper_zones_base.cpp:144
+#: pcbnew/class_zone.cpp:607 pcbnew/dialogs/dialog_copper_zones_base.cpp:144
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:72
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:58
 msgid "Hatched"
 msgstr "Tratteggiato"
 
-#: pcbnew/class_zone.cpp:610
+#: pcbnew/class_zone.cpp:611
 msgid "Fill Mode"
 msgstr "Modalità piena"
 
-#: pcbnew/class_zone.cpp:613
+#: pcbnew/class_zone.cpp:614
 msgid "Filled Area"
 msgstr "Area piena"
 
-#: pcbnew/class_zone.cpp:625
+#: pcbnew/class_zone.cpp:626
 msgid "HatchBorder Lines"
 msgstr "Linee tratteggio"
 
-#: pcbnew/class_zone.cpp:644
+#: pcbnew/class_zone.cpp:645
 msgid "Corner Count"
 msgstr "Conteggio fori"
 
-#: pcbnew/class_zone.cpp:842
+#: pcbnew/class_zone.cpp:843
 msgid "(Cutout)"
 msgstr "(Ritaglio)"
 
-#: pcbnew/class_zone.cpp:845
+#: pcbnew/class_zone.cpp:846
 msgid "(Keepout)"
 msgstr "(Proibita)"
 
-#: pcbnew/class_zone.cpp:863
+#: pcbnew/class_zone.cpp:864
 #, c-format
 msgid "Zone Outline %s on %s"
 msgstr "Contorno zona %s su %s"
 
-#: pcbnew/class_zone.cpp:1343
+#: pcbnew/class_zone.cpp:1344
 msgid "Inherited"
 msgstr "Ereditato"
 
-#: pcbnew/class_zone.cpp:1345 pcbnew/dialogs/dialog_copper_zones_base.cpp:233
+#: pcbnew/class_zone.cpp:1346 pcbnew/dialogs/dialog_copper_zones_base.cpp:233
 msgid "Thermal reliefs"
 msgstr "Supporti termici"
 
-#: pcbnew/class_zone.cpp:1347 pcbnew/dialogs/dialog_copper_zones_base.cpp:233
+#: pcbnew/class_zone.cpp:1348 pcbnew/dialogs/dialog_copper_zones_base.cpp:233
 msgid "Reliefs for PTH"
 msgstr "Supporti per passanti"
 
-#: pcbnew/class_zone.cpp:1361
+#: pcbnew/class_zone.cpp:1362
 msgid "Min Width"
 msgstr "Larghezza min"
 
-#: pcbnew/class_zone.cpp:1364
+#: pcbnew/class_zone.cpp:1365
 msgid "Pad Connections"
 msgstr "Connessioni piazzole"
 
-#: pcbnew/class_zone.cpp:1366
+#: pcbnew/class_zone.cpp:1367
 msgid "Thermal Clearance"
 msgstr "Distanza termica"
 
-#: pcbnew/class_zone.cpp:1369
+#: pcbnew/class_zone.cpp:1370
 msgid "Thermal Spoke Width"
 msgstr "Larghezza supporti termici"
 
 #: pcbnew/cleanup_item.cpp:47 pcbnew/tools/drc_tool.cpp:165
-#: pcbnew/zone_filler.cpp:103
+#: pcbnew/zone_filler.cpp:102
 msgid "Checking zone fills..."
 msgstr "Controllo riempimenti zone..."
 
@@ -20034,21 +20054,27 @@ msgstr ""
 msgid ""
 "\n"
 "Front footprints will have '%s' inserted as a prefix."
-msgstr "\nLe impronte lato fronte avranno '%s' inserito come prefisso."
+msgstr ""
+"\n"
+"Le impronte lato fronte avranno '%s' inserito come prefisso."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:348
 #, c-format
 msgid ""
 "\n"
 "Back footprints starting with '%s' will have the prefix removed."
-msgstr "\nLe impronte lato retro che cominciano con \"%s\" avranno il prefisso rimosso."
+msgstr ""
+"\n"
+"Le impronte lato retro che cominciano con \"%s\" avranno il prefisso rimosso."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:354
 #, c-format
 msgid ""
 "\n"
 "Back footprints will have '%s' inserted as a prefix."
-msgstr "\nLe impronte lato retro avranno \"%s\" inserito come prefisso."
+msgstr ""
+"\n"
+"Le impronte lato retro avranno \"%s\" inserito come prefisso."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:362
 #, c-format
@@ -20056,7 +20082,10 @@ msgid ""
 "\n"
 "Prior to sorting by %s, the coordinates of which will be rounded to a %s, %s "
 "grid. "
-msgstr "\nPrima di ordinare per %s, le coordinate verranno normalizzate alla griglia %s, %s. "
+msgstr ""
+"\n"
+"Prima di ordinare per %s, le coordinate verranno normalizzate alla griglia "
+"%s, %s. "
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:364
 msgid "footprint location"
@@ -20138,7 +20167,9 @@ msgstr ""
 msgid ""
 "\n"
 "*********** Sort on %s ***********"
-msgstr "\n******** ordinato per %s *********"
+msgstr ""
+"\n"
+"******** ordinato per %s *********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:564
 msgid "Footprint Coordinates"
@@ -20162,7 +20193,9 @@ msgstr ""
 msgid ""
 "\n"
 "%d %s Uuid: [%s], X, Y: %s, Rounded X, Y, %s"
-msgstr "\n%d %s Uuid: [%s], X, Y: %s, Arrotondato X, Y, %s"
+msgstr ""
+"\n"
+"%d %s Uuid: [%s], X, Y: %s, Arrotondato X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:605
 #, c-format
@@ -20177,7 +20210,9 @@ msgstr ""
 msgid ""
 "\n"
 "RefDes: %s Module: %s:%s at %s on PCB."
-msgstr "\nRefDes: %s Modulo: %s:%s a %s sul C.S."
+msgstr ""
+"\n"
+"RefDes: %s Modulo: %s:%s a %s sul C.S."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:619
 msgid "Reannotate anyway?"
@@ -21584,23 +21619,35 @@ msgstr "Spazio tra i punti misurati e l'inizio delle righe di estensione"
 msgid "Dimension Properties"
 msgstr "Proprietà dimensioni"
 
-#: pcbnew/dialogs/dialog_drc.cpp:77
+#: pcbnew/dialogs/dialog_drc.cpp:79
 msgid "Run DRC"
 msgstr "Avvia DRC"
 
-#: pcbnew/dialogs/dialog_drc.cpp:383
+#: pcbnew/dialogs/dialog_drc.cpp:228
+msgid ""
+"-------- DRC cancelled by user.\n"
+"\n"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_drc.cpp:230
+msgid ""
+"Done.\n"
+"\n"
+msgstr "Fatto.\n\n"
+
+#: pcbnew/dialogs/dialog_drc.cpp:395
 msgid "Open the Board Setup... dialog"
 msgstr "Apri la finestra impostazioni scheda..."
 
-#: pcbnew/dialogs/dialog_drc.cpp:687
+#: pcbnew/dialogs/dialog_drc.cpp:716
 msgid "Do you wish to delete excluded markers as well?"
 msgstr "Eliminare anche i marcatori esclusi?"
 
-#: pcbnew/dialogs/dialog_drc.cpp:690
+#: pcbnew/dialogs/dialog_drc.cpp:719
 msgid "Delete exclusions"
 msgstr "Cancella esclusioni"
 
-#: pcbnew/dialogs/dialog_drc.cpp:727
+#: pcbnew/dialogs/dialog_drc.cpp:756
 msgid "not run"
 msgstr "non eseguito"
 
@@ -21670,7 +21717,7 @@ msgstr "Parità schema (%d)"
 msgid "Delete Marker"
 msgstr "Cancella marcatore"
 
-#: pcbnew/dialogs/dialog_drc_base.h:99
+#: pcbnew/dialogs/dialog_drc_base.h:100
 msgid "DRC Control"
 msgstr "Controllo regole di progettazione (DRC)"
 
@@ -23680,7 +23727,9 @@ msgstr "Errore: la piazzola non ha strati"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1225
 msgid ""
 "Error: plated through holes must have a copper pad on at least one layer"
-msgstr "Errore: i fori metallizzati devono avere una piazzola in rame almeno su uno strato"
+msgstr ""
+"Errore: i fori metallizzati devono avere una piazzola in rame almeno su uno "
+"strato"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1241
 msgid "Incorrect value for pad offset"
@@ -25356,7 +25405,8 @@ msgstr "Mostra distanza piazzole"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
-msgstr "Evidenzia collegamenti quando sono evidenziati nell'editor dello schema"
+msgstr ""
+"Evidenzia collegamenti quando sono evidenziati nell'editor dello schema"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:27
 msgid ""
@@ -25641,8 +25691,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:90
 #, c-format
 msgid ""
-"Value < %s  can be time consumming\n"
-"when filling zones."
+"Value < %s  can be time consuming when \n"
+"filling zones."
 msgstr ""
 "Un valore < %s può impiegare del tempo\n"
 "durante lo riempimento delle zone."
@@ -25652,58 +25702,70 @@ msgid "Zone fill strategy"
 msgstr "Strategia riempimento zona"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:122
-msgid "Stroked outlines (legacy)"
-msgstr "Bordi tratteggiati (tradizionale)"
+msgid "Mimic legacy behavior"
+msgstr ""
 
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:125
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:123
+msgid ""
+"Produces a slightly smoother outline at the expense of performance, some "
+"export fidelity issues, and overly agressive higher-priority zone knockouts."
+msgstr ""
+
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:127
 msgid "Smoothed polygons (best performance)"
 msgstr "Poligoni stondati (migliore prestazione)"
 
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:141
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:129
+msgid ""
+"Better performance, exact export fidelity, and more complete filling near "
+"higher-priority zones."
+msgstr ""
+
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:145
 msgid "Allow fillets outside zone outline"
 msgstr ""
 
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:180
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:184
 msgid "Minimum clearance:"
 msgstr "Distanza minima:"
 
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:194
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:198
 msgid "Minimum track width:"
 msgstr "Larghezza pista minima:"
 
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:210
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:214
 msgid "Minimum via annulus:"
 msgstr "Anello via minimo:"
 
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:224
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:228
 msgid "Minimum via diameter:"
 msgstr "Diametro via minimo:"
 
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:238
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:242
 msgid "Copper edge clearance:"
 msgstr "Distanza bordo rame:"
 
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:261
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:265
 msgid "Holes"
 msgstr "Fori"
 
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:277
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:281
 msgid "Minimum through hole:"
 msgstr "Foro minimo:"
 
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:291
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:295
 msgid "Hole to hole clearance:"
 msgstr "Distanza da foro a foro:"
 
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:314
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:318
 msgid "uVias"
 msgstr "microvia"
 
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:330
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:334
 msgid "Minimum uVia diameter:"
 msgstr "Diametro uVia minimo:"
 
-#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:344
+#: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:348
 msgid "Minimum uVia drill:"
 msgstr "Diametro foro uVia minimo:"
 
@@ -25758,16 +25820,16 @@ msgid "Layer name \"%s\" is already in use."
 msgstr "Il nome strato \"%s\" è già in uso."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:766
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Imported settings have fewer copper layers than the current board (%i "
 "instead of %i).\n"
 "\n"
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
-"Le impostazioni importate have fewer copper layers than the current board (%i instead of %i).\n"
+"Le impostazioni importate hanno meno coppie di strati rame della scheda corrente (%i invece di %i).\n"
 "\n"
-"Continue and delete the extra inner copper layers from the current board?"
+"Continuare e cancellare le coppie di strati rame extra dalla scheda corrente?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:773
 msgid "Inner Layers To Be Deleted"
@@ -26610,66 +26672,66 @@ msgstr "vincoli impostazioni scheda"
 msgid "netclass '%s'"
 msgstr "netclass \"%s\""
 
-#: pcbnew/drc/drc_engine.cpp:456 pcbnew/drc/drc_engine.cpp:466
+#: pcbnew/drc/drc_engine.cpp:458 pcbnew/drc/drc_engine.cpp:468
 #, c-format
 msgid "Local override on %s; clearance: %s."
 msgstr "Superamento locale su %s; distanza: %s"
 
-#: pcbnew/drc/drc_engine.cpp:494
+#: pcbnew/drc/drc_engine.cpp:496
 #, c-format
 msgid "Checking %s; clearance: %s."
 msgstr "Controllo %s; cistanza: %s."
 
-#: pcbnew/drc/drc_engine.cpp:495
+#: pcbnew/drc/drc_engine.cpp:497
 #, c-format
 msgid "Checking rule %s; clearance: %s."
 msgstr "Controllo regola %s; distanza: %s."
 
-#: pcbnew/drc/drc_engine.cpp:501
+#: pcbnew/drc/drc_engine.cpp:503
 #, c-format
 msgid "Checking %s."
 msgstr "Controllo %s."
 
-#: pcbnew/drc/drc_engine.cpp:502
+#: pcbnew/drc/drc_engine.cpp:504
 #, c-format
 msgid "Checking rule %s."
 msgstr "Controllo regola %s."
 
-#: pcbnew/drc/drc_engine.cpp:510
+#: pcbnew/drc/drc_engine.cpp:512
 #, c-format
 msgid "Rule layer \"%s\" not matched."
 msgstr "Livello regola \"%s\" non corrispondente."
 
-#: pcbnew/drc/drc_engine.cpp:520
+#: pcbnew/drc/drc_engine.cpp:522
 msgid "Unconditional constraint applied."
 msgstr "Vincolo incondizionale applicato."
 
-#: pcbnew/drc/drc_engine.cpp:521
+#: pcbnew/drc/drc_engine.cpp:523
 msgid "Unconditional rule applied."
 msgstr "Regola incondizionale applicata."
 
-#: pcbnew/drc/drc_engine.cpp:531
+#: pcbnew/drc/drc_engine.cpp:533
 #, c-format
 msgid "Checking rule condition \"%s\"."
 msgstr "Controllo condizioni regola \"%s\"."
 
-#: pcbnew/drc/drc_engine.cpp:537
+#: pcbnew/drc/drc_engine.cpp:539
 msgid "Constraint applicable."
 msgstr "Vincolo applicabile."
 
-#: pcbnew/drc/drc_engine.cpp:538
+#: pcbnew/drc/drc_engine.cpp:540
 msgid "Rule applied."
 msgstr "Regola applicata."
 
-#: pcbnew/drc/drc_engine.cpp:545
+#: pcbnew/drc/drc_engine.cpp:547
 msgid "Membership not satisfied; constraint not applicable."
 msgstr "Appartenenza non soddisfatta; vincolo non applicabile."
 
-#: pcbnew/drc/drc_engine.cpp:546
+#: pcbnew/drc/drc_engine.cpp:548
 msgid "Condition not satisfied; rule not applied."
 msgstr "Condizione non soddisfatta; regola non applicata."
 
-#: pcbnew/drc/drc_engine.cpp:565 pcbnew/drc/drc_engine.cpp:576
+#: pcbnew/drc/drc_engine.cpp:567 pcbnew/drc/drc_engine.cpp:578
 #, c-format
 msgid "Local clearance on %s; clearance: %s."
 msgstr "Distanza locale su %s; distanza: %s."
@@ -26727,78 +26789,74 @@ msgid "Track width outside allowed limits"
 msgstr "Larghezza pista fuori dai limiti consentiti"
 
 #: pcbnew/drc/drc_item.cpp:94
-msgid "Via size too small"
-msgstr "Dimensione via troppo piccola"
-
-#: pcbnew/drc/drc_item.cpp:98
 msgid "Annulus"
 msgstr "Anello"
 
-#: pcbnew/drc/drc_item.cpp:102
+#: pcbnew/drc/drc_item.cpp:98
 msgid "Drill too small"
 msgstr "Foro troppo piccolo"
 
-#: pcbnew/drc/drc_item.cpp:106
+#: pcbnew/drc/drc_item.cpp:102
 msgid "Via hole larger than diameter"
 msgstr "Dimensione foro via maggiore del diametro"
+
+#: pcbnew/drc/drc_item.cpp:106
+msgid "Via diameter outside allowed limits"
+msgstr "Larghezza via fuori dai limiti consentiti"
 
 #: pcbnew/drc/drc_item.cpp:110
 msgid "Padstack is not valid"
 msgstr "Padstack non valido "
 
 #: pcbnew/drc/drc_item.cpp:114
-msgid "Micro via size too small"
-msgstr "Dimensione microvia troppo piccola"
-
-#: pcbnew/drc/drc_item.cpp:118
 msgid "Micro via drill too small"
 msgstr "Foro microvia troppo piccolo"
 
-#: pcbnew/drc/drc_item.cpp:122
+#: pcbnew/drc/drc_item.cpp:118
 msgid "Keepout violation"
 msgstr "Violazione zona proibita"
 
-#: pcbnew/drc/drc_item.cpp:126
+#: pcbnew/drc/drc_item.cpp:122
 msgid "Courtyards overlap"
 msgstr "Gli ingombri si sovrappongono"
 
-#: pcbnew/drc/drc_item.cpp:130
+#: pcbnew/drc/drc_item.cpp:126
 msgid "Footprint has no courtyard defined"
 msgstr "L'impronta non ha un ingombro definito"
 
-#: pcbnew/drc/drc_item.cpp:134
+#: pcbnew/drc/drc_item.cpp:130
 msgid "Footprint has malformed courtyard"
 msgstr "L'impronta ha un ingombro maldefinito"
 
-#: pcbnew/drc/drc_item.cpp:138
+#: pcbnew/drc/drc_item.cpp:134
 msgid "PTH inside courtyard"
 msgstr "Foro metallizzato dentro un ingombro"
 
-#: pcbnew/drc/drc_item.cpp:142
+#: pcbnew/drc/drc_item.cpp:138
 msgid "NPTH inside courtyard"
 msgstr "Foro non metallizzato dentro un ingombro"
 
-#: pcbnew/drc/drc_item.cpp:146
+#: pcbnew/drc/drc_item.cpp:142
 msgid "Item on a disabled layer"
 msgstr "Elemento su strato disabilitato"
 
-#: pcbnew/drc/drc_item.cpp:150
+#: pcbnew/drc/drc_item.cpp:146
 msgid "Board has malformed outline"
 msgstr "La scheda ha il bordo malformato"
 
-#: pcbnew/drc/drc_item.cpp:154
+#: pcbnew/drc/drc_item.cpp:150
 msgid "Duplicate footprints"
 msgstr "Impronte duplicate"
 
-#: pcbnew/drc/drc_item.cpp:158
+#: pcbnew/drc/drc_item.cpp:154
 msgid "Missing footprint"
 msgstr "Impronta mancante"
 
-#: pcbnew/drc/drc_item.cpp:162
+#: pcbnew/drc/drc_item.cpp:158
 msgid "Extra footprint"
 msgstr "Impronta extra"
 
-#: pcbnew/drc/drc_item.cpp:166
+#: pcbnew/drc/drc_item.cpp:162
 msgid "Pad net doesn't match schematic"
 msgstr "La piazzola non corrisponde allo schema"
 
@@ -26916,19 +26974,19 @@ msgstr "Strati non riconosciuto \"%s\"."
 msgid "Checking via annular rings..."
 msgstr "Controllo anelli via circolari..."
 
-#: pcbnew/drc/drc_test_provider_annulus.cpp:119
+#: pcbnew/drc/drc_test_provider_annulus.cpp:120
 #, c-format
 msgid " (%s %s annulus %s; actual %s)"
 msgstr " (%s %s anello %s; corrente %s)"
 
-#: pcbnew/drc/drc_test_provider_annulus.cpp:121
-#: pcbnew/drc/drc_test_provider_track_width.cpp:127
+#: pcbnew/drc/drc_test_provider_annulus.cpp:122
+#: pcbnew/drc/drc_test_provider_track_width.cpp:128
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:115
 msgid "min"
 msgstr "min"
 
-#: pcbnew/drc/drc_test_provider_annulus.cpp:121
-#: pcbnew/drc/drc_test_provider_track_width.cpp:127
+#: pcbnew/drc/drc_test_provider_annulus.cpp:122
+#: pcbnew/drc/drc_test_provider_track_width.cpp:128
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:115
 msgid "max"
 msgstr "max"
@@ -26937,41 +26995,41 @@ msgstr "max"
 msgid "Checking dangling pads & vias..."
 msgstr "Controllo via/piazzole inutili..."
 
-#: pcbnew/drc/drc_test_provider_connectivity.cpp:108
+#: pcbnew/drc/drc_test_provider_connectivity.cpp:109
 msgid "Checking starved zones..."
 msgstr "Controllo zone morte..."
 
-#: pcbnew/drc/drc_test_provider_connectivity.cpp:133
+#: pcbnew/drc/drc_test_provider_connectivity.cpp:135
 msgid "Checking net connections..."
 msgstr "Controllo connessioni..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:125
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:126
 msgid "Checking pad clearances..."
 msgstr "Controllo distanze piazzole..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:128
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:131
 msgid "Checking track & via clearances..."
 msgstr "Controllo distanze piste e via..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:131
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:136
 msgid "Checking copper graphic & text clearances..."
 msgstr "Controllo distanze grafiche e testo in rame..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:134
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:141
 msgid "Checking copper zone clearances..."
 msgstr "Controllo distanze zone in rame..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:235
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:278
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:238
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:281
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:374
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:450
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:506
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:651
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:818
-#: pcbnew/drc/drc_test_provider_edge_clearance.cpp:150
-#: pcbnew/drc/drc_test_provider_hole_clearance.cpp:285
-#: pcbnew/drc/drc_test_provider_hole_clearance.cpp:318
-#: pcbnew/drc/drc_test_provider_hole_clearance.cpp:408
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:823
+#: pcbnew/drc/drc_test_provider_edge_clearance.cpp:151
+#: pcbnew/drc/drc_test_provider_hole_clearance.cpp:289
+#: pcbnew/drc/drc_test_provider_hole_clearance.cpp:322
+#: pcbnew/drc/drc_test_provider_hole_clearance.cpp:412
 #, c-format
 msgid " (%s clearance %s; actual %s)"
 msgstr " (%s distanza %s; effettiva %s)"
@@ -26985,12 +27043,12 @@ msgstr " (coll %s e %s)"
 msgid "Checking footprint courtyard definitions..."
 msgstr "Controllo definizioni ingombri impronte..."
 
-#: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:117
-#: pcbnew/drc/drc_test_provider_misc.cpp:92
+#: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:116
+#: pcbnew/drc/drc_test_provider_misc.cpp:93
 msgid " (not a closed shape)"
 msgstr " (non una forma chiusa)"
 
-#: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:131
+#: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:130
 msgid "Checking footprint courtyard overlap..."
 msgstr "Controllo sovrapposizione ingombro impronte..."
 
@@ -26998,7 +27056,7 @@ msgstr "Controllo sovrapposizione ingombro impronte..."
 msgid "Checking keepouts & disallow constraints..."
 msgstr "Controllo vincoli zone proibite e disabilitazioni..."
 
-#: pcbnew/drc/drc_test_provider_disallow.cpp:86
+#: pcbnew/drc/drc_test_provider_disallow.cpp:87
 #, c-format
 msgid " (%s)"
 msgstr " (%s)"
@@ -27011,7 +27069,7 @@ msgstr "Controllo distanze bordi scheda..."
 msgid "Checking hole to pad clearances..."
 msgstr "Controllo distanze da foro a piazzola..."
 
-#: pcbnew/drc/drc_test_provider_hole_clearance.cpp:130
+#: pcbnew/drc/drc_test_provider_hole_clearance.cpp:132
 msgid "Checking hole to hole clearances..."
 msgstr "Controllo distanze da foro a foro..."
 
@@ -27019,12 +27077,12 @@ msgstr "Controllo distanze da foro a foro..."
 msgid "Checking pad holes..."
 msgstr "Controllo fori piazzole..."
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:97
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:98
 msgid "Checking via holes..."
 msgstr "Controllo fori via..."
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:141
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:183
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:143
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:185
 #, c-format
 msgid " (%s %s; actual %s)"
 msgstr " (%s %s; attuale %s)"
@@ -27059,20 +27117,20 @@ msgstr "Nessuna piazzola trovata per il pin %s nello schema."
 msgid "Checking PCB to schematic parity..."
 msgstr "Controllo parità C.S. rispetto allo schema..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:117
+#: pcbnew/drc/drc_test_provider_misc.cpp:118
 #, c-format
 msgid " (layer %s)"
 msgstr " (strato %s)"
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:193
+#: pcbnew/drc/drc_test_provider_misc.cpp:194
 msgid "Checking board outline..."
 msgstr "Controllo contorni scheda..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:196
+#: pcbnew/drc/drc_test_provider_misc.cpp:199
 msgid "Checking disabled layers..."
 msgstr "Controllo strati disabilitati..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:199
+#: pcbnew/drc/drc_test_provider_misc.cpp:204
 msgid "Checking text variables..."
 msgstr "Controllo variabili testo..."
 
@@ -27080,12 +27138,12 @@ msgstr "Controllo variabili testo..."
 msgid "Checking track widths..."
 msgstr "Controllo larghezza piste..."
 
-#: pcbnew/drc/drc_test_provider_track_width.cpp:125
+#: pcbnew/drc/drc_test_provider_track_width.cpp:126
 #, c-format
 msgid " (%s %s width %s; actual %s)"
 msgstr " (%s %s larghezza %s; corrente %s)"
 
-#: pcbnew/drc/drc_test_provider_via_diameter.cpp:76
+#: pcbnew/drc/drc_test_provider_via_diameter.cpp:75
 msgid "Checking via diameters..."
 msgstr "Controllo diametro via..."
 
@@ -29393,7 +29451,7 @@ msgstr ""
 "Lo strato CADSTAR \"%s\" non ha equivalente KiCad. Tutti gli elementi su "
 "questo strato sono stati rimappati allo strato KiCad \"%s\"."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:168
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:167
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
 msgstr "Strato inatteso \"%s\" nella pila degli strati."
@@ -29433,7 +29491,7 @@ msgstr ""
 "equivalente KiCad. L'area non è né un via né un'area proibita. L'area non è "
 "stata importata. "
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:717
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:722
 #, c-format
 msgid ""
 "The file appears to be corrupt. Unable to find group ID %s in the group "
@@ -29442,7 +29500,7 @@ msgstr ""
 "Il file sembra rovinato. Impossibile trovare l'ID gruppo %s nelle "
 "definizioni di gruppo."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:723
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:729
 #, c-format
 msgid ""
 "The file appears to be corrupt. Unable to find sub group %s in the group map "
@@ -29451,13 +29509,13 @@ msgstr ""
 "Il file sembra essere rovinato. Impossibile trovare il sottogruppo %s nella "
 "mappa dei gruppi (ID gruppo genitore=%s, Nome=%s)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:832
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:842
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:838
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:848
 #, c-format
 msgid "Dimension ID %s has no KiCad equivalent. This was not imported"
 msgstr "L'ID dimensione %s non ha equivalente KiCad. Non è stato importato"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:881
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:887
 #, c-format
 msgid ""
 "The CADSTAR area '%s' is defined as a placement and/or routing area in "
@@ -29468,7 +29526,7 @@ msgstr ""
 "CADSTAR, oltre che proibita. Le aree di piazzamento o di sbroglio non sono "
 "supportate in KiCad. Solo gli elementi supportati sono stati importati."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:889
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:895
 #, c-format
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement or "
@@ -29477,49 +29535,49 @@ msgstr ""
 "L'area CADSTAR \"%s\" non ha un equivalente KiCad. Le aree di piazzamento o "
 "di sbroglio pure non sono supportate."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:913
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:919
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
 msgstr ""
 "Impossibile trovare il componente \"%s\" nella libreria (Symdef ID: \"%s\")"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:961
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:967
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
 msgstr ""
 "Impossibile trovare il simbolo di documentazione nella libreria (Symdef ID: "
 "\"%s\")"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1027
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1033
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
-msgstr "Il modello CADSTAR \"%s\" ha l'impostazione \"Permetti nelle aree di no sbroglio\" abilitata. Questa impostazione non ha equivalente KiCad, perciò è stata ignorata."
-
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1033
-#, c-format
-msgid ""
-"The CADSTAR template '%s' has the setting 'Box Isolated Pins'enabled. This "
-"setting has no KiCad equivalent, so it has been ignored."
-msgstr ""
+msgstr "Il modello CADSTAR \"%s\" ha l'impostazione \"Allow in No Routing Areas\" abilitata. Questa impostazione non ha equivalente KiCad, perciò è stata ignorata."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1039
 #, c-format
 msgid ""
+"The CADSTAR template '%s' has the setting 'Box Isolated Pins'enabled. This "
+"setting has no KiCad equivalent, so it has been ignored."
+msgstr "Il modello CADSTAR \"%s\" ha l'impostazione \"Box Isolated Pins\" abilitata. Questa impostazione non ha equivalente KiCad, perciò è stata ignorata."
+
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1045
+#, c-format
+msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour'enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
-msgstr ""
+msgstr "Il modello CADSTAR \"%s\" ha l'impostazione \"Automatic Repour\" abilitata. Questa impostazione non ha equivalente KiCad, perciò è stata ignorata."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1048
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1054
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has a non-zero value defined for the 'Sliver "
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
-msgstr ""
+msgstr "Il modello CADSTAR \\\"%s\\\" ha un valore non zero definito per l'impostazione \"Sliver Width\". Questo non ha equivalente in KiCad, perciò quest'impostazione è stata ignorata."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1056
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1062
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for 'Retain Poured Copper - "
@@ -29528,7 +29586,7 @@ msgid ""
 "as the minimum island area of the KiCad Zone."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1087
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1093
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for thermal relief in pads "
@@ -29536,7 +29594,7 @@ msgid ""
 "pads has been applied."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1126
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1132
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
@@ -29544,7 +29602,7 @@ msgid ""
 "created."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1175
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1181
 msgid ""
 "The CADSTAR design contains COPPER elements, which have no direct KiCad "
 "equivalent. These have been imported as a KiCad Zone if solid or hatch "
@@ -29552,21 +29610,21 @@ msgid ""
 "closed)."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1278
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1284
 #, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored,"
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1285
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1291
 #, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1380
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1386
 #, c-format
 msgid ""
 "The CADSTAR via code '%s' has different shape from a circle defined. KiCad "
@@ -29574,14 +29632,14 @@ msgid ""
 "with circular shape of %.2f mm diameter."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1575
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1581
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2253
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2266
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has %d hatches defined. KiCad only supports 2 "
@@ -29589,7 +29647,7 @@ msgid ""
 "crosshatched."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2263
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2276
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
@@ -29597,7 +29655,7 @@ msgid ""
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2274
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2287
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
@@ -29605,7 +29663,7 @@ msgid ""
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2287
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2300
 #, c-format
 msgid ""
 "The hatches in CADSTAR Hatching code '%s' have an angle  difference of %.1f "
@@ -29614,7 +29672,7 @@ msgid ""
 "horizontal."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2371
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2384
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
 "have an equivalent to CADSTAR's Net Class so these elements were not "
@@ -29622,7 +29680,7 @@ msgid ""
 "Route Code' (which has been imported for all nets)."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2382
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2395
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
@@ -30023,16 +30081,16 @@ msgstr ""
 msgid "Tracks on Copper layers only"
 msgstr "Piste solo sugli strati in rame"
 
-#: pcbnew/router/router_tool.cpp:1216 pcbnew/router/router_tool.cpp:1397
-#: pcbnew/router/router_tool.cpp:1553
+#: pcbnew/router/router_tool.cpp:1213 pcbnew/router/router_tool.cpp:1394
+#: pcbnew/router/router_tool.cpp:1550
 msgid "The selected item is locked."
 msgstr "L'elemento selezionato è bloccato."
 
-#: pcbnew/router/router_tool.cpp:1218 pcbnew/router/router_tool.cpp:1399
+#: pcbnew/router/router_tool.cpp:1215 pcbnew/router/router_tool.cpp:1396
 msgid "Drag Anyway"
 msgstr "Trascina comunque"
 
-#: pcbnew/router/router_tool.cpp:1555 pcbnew/tools/pcb_actions.cpp:1300
+#: pcbnew/router/router_tool.cpp:1552 pcbnew/tools/pcb_actions.cpp:1300
 #: pcbnew/tools/pcb_actions.cpp:1306
 msgid "Break Track"
 msgstr "Interrompi pista"
@@ -30296,10 +30354,6 @@ msgstr "Ri-riempimento di tutte le zone..."
 msgid "DRC"
 msgstr "DRC"
 
-#: pcbnew/tools/drc_tool.cpp:221
-msgid "Done."
-msgstr "Fatto."
-
 #: pcbnew/tools/edit_tool.cpp:141
 msgid "Special Tools..."
 msgstr "Strumenti speciali..."
@@ -30308,44 +30362,44 @@ msgstr "Strumenti speciali..."
 msgid "Select reference point for move..."
 msgstr "Selezionare il punto di riferimento per lo spostamento..."
 
-#: pcbnew/tools/edit_tool.cpp:702
+#: pcbnew/tools/edit_tool.cpp:699
 msgid "Edit track width/via size"
 msgstr "Larghezza piste/dimensioni via"
 
-#: pcbnew/tools/edit_tool.cpp:1014 pcbnew/tools/pcb_actions.cpp:278
+#: pcbnew/tools/edit_tool.cpp:1011 pcbnew/tools/pcb_actions.cpp:278
 msgid "Flip"
 msgstr "Capovolgi"
 
-#: pcbnew/tools/edit_tool.cpp:1161 pcbnew/tools/zone_filler_tool.cpp:149
+#: pcbnew/tools/edit_tool.cpp:1158 pcbnew/tools/zone_filler_tool.cpp:149
 msgid "Fill Zone"
 msgstr "Riempi zona"
 
-#: pcbnew/tools/edit_tool.cpp:1229
+#: pcbnew/tools/edit_tool.cpp:1226
 msgid "Remove of items in entered group resulted in inconsistent state: "
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:1239
+#: pcbnew/tools/edit_tool.cpp:1236
 msgid "Delete again to remove locked items"
 msgstr "Cancella nuovamente per eliminare gli elementi bloccati"
 
-#: pcbnew/tools/edit_tool.cpp:1342
+#: pcbnew/tools/edit_tool.cpp:1339
 msgid "Move exact"
 msgstr "Sposta esattamente"
 
-#: pcbnew/tools/edit_tool.cpp:1472
+#: pcbnew/tools/edit_tool.cpp:1469
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "%d elementi duplicati"
 
-#: pcbnew/tools/edit_tool.cpp:1653
+#: pcbnew/tools/edit_tool.cpp:1650
 msgid "Select reference point for the copy..."
 msgstr "Selezionare il punto di riferimento per la copia..."
 
-#: pcbnew/tools/edit_tool.cpp:1654
+#: pcbnew/tools/edit_tool.cpp:1651
 msgid "Selection copied."
 msgstr "Selezione copiata."
 
-#: pcbnew/tools/edit_tool.cpp:1655
+#: pcbnew/tools/edit_tool.cpp:1652
 msgid "Copy cancelled."
 msgstr "Copia annullata."
 
@@ -31610,7 +31664,8 @@ msgstr "De-seleziona tutte le piste nel collegamento"
 
 #: pcbnew/tools/pcb_actions.cpp:1167
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr "De-seleziona tutte le piste e via appartenenti allo stesso collegamento."
+msgstr ""
+"De-seleziona tutte le piste e via appartenenti allo stesso collegamento."
 
 #: pcbnew/tools/pcb_actions.cpp:1173
 msgid "Selects all modules and tracks in the schematic sheet"
@@ -31969,27 +32024,27 @@ msgstr "Distribuisci orizzontalmente"
 msgid "Distribute vertically"
 msgstr "Distribuisci verticalmente"
 
-#: pcbnew/tools/point_editor.cpp:323
+#: pcbnew/tools/point_editor.cpp:324
 msgid "Self-intersecting polygons are not allowed."
 msgstr "I poligoni autointersecanti non permessi."
 
-#: pcbnew/tools/point_editor.cpp:332
+#: pcbnew/tools/point_editor.cpp:333
 msgid "pcbnew.InteractiveSelection tool is not available"
 msgstr "strumento pcbnew.InteractiveSelection non disponibile"
 
-#: pcbnew/tools/point_editor.cpp:467
+#: pcbnew/tools/point_editor.cpp:468
 msgid "Drag a corner"
 msgstr "Sposta un angolo"
 
-#: pcbnew/tools/point_editor.cpp:1924
+#: pcbnew/tools/point_editor.cpp:1925
 msgid "Add a zone corner"
 msgstr "Aggiungi un vertice alla zona"
 
-#: pcbnew/tools/point_editor.cpp:1962
+#: pcbnew/tools/point_editor.cpp:1963
 msgid "Split segment"
 msgstr "Dividi segmento"
 
-#: pcbnew/tools/point_editor.cpp:2033
+#: pcbnew/tools/point_editor.cpp:2034
 msgid "Remove a zone/polygon corner"
 msgstr "Elimina zona/vertice poligono"
 
@@ -32298,27 +32353,27 @@ msgstr "Seleziona preimpostazione:"
 msgid "Only %s"
 msgstr "Solo %s"
 
-#: pcbnew/zone_filler.cpp:104
+#: pcbnew/zone_filler.cpp:103
 msgid "Building zone fills..."
 msgstr "Creazione riempimenti zone..."
 
-#: pcbnew/zone_filler.cpp:216
+#: pcbnew/zone_filler.cpp:280
 msgid "Removing insulated copper islands..."
 msgstr "Rimozione isole di rame isolate..."
 
-#: pcbnew/zone_filler.cpp:338
+#: pcbnew/zone_filler.cpp:411
 msgid "Zone fills are out-of-date. Refill?"
 msgstr "Riempimenti zone scaduti. Ri-riempire?"
 
-#: pcbnew/zone_filler.cpp:340
+#: pcbnew/zone_filler.cpp:413
 msgid "Refill"
 msgstr "Ri-riempi"
 
-#: pcbnew/zone_filler.cpp:340
+#: pcbnew/zone_filler.cpp:413
 msgid "Continue without Refill"
 msgstr "Continua senza il ri-riempimento"
 
-#: pcbnew/zone_filler.cpp:351
+#: pcbnew/zone_filler.cpp:424
 msgid "Performing polygon fills..."
 msgstr "Esecuzione riempimento poligoni..."
 
@@ -32330,6 +32385,15 @@ msgstr "Modifica proprietà della zona"
 #, c-format
 msgid "Refill %d Zones"
 msgstr "Ri-riempi %d zone"
+
+#~ msgid "Stroked outlines (legacy)"
+#~ msgstr "Bordi tratteggiati (tradizionale)"
+
+#~ msgid "Via size too small"
+#~ msgstr "Dimensione via troppo piccola"
+
+#~ msgid "Micro via size too small"
+#~ msgstr "Dimensione microvia troppo piccola"
 
 #~ msgid "clearance: %s."
 #~ msgstr "distanza: %s."
