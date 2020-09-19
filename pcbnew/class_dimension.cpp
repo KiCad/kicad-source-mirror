@@ -311,6 +311,26 @@ void DIMENSION::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
+std::vector<SHAPE*> DIMENSION::MakeEffectiveShapes() const
+{
+    std::vector<SHAPE*> effectiveShapes;
+
+    for( SHAPE* shape : Text().GetEffectiveTextShape()->Shapes() )
+        effectiveShapes.emplace_back( shape->Clone() );
+
+    for( const std::shared_ptr<SHAPE>& shape : GetShapes() )
+        effectiveShapes.emplace_back( shape->Clone() );
+
+    return effectiveShapes;
+}
+
+
+std::shared_ptr<SHAPE> DIMENSION::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+{
+    return std::shared_ptr<SHAPE>( new SHAPE_COMPOUND( MakeEffectiveShapes() ) );
+}
+
+
 bool DIMENSION::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     if( m_text.TextHitTest( aPosition ) )

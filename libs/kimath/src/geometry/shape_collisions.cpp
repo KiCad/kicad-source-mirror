@@ -617,7 +617,7 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
     bool unsupported_collision = true;
     (void) unsupported_collision;   // make gcc quiet
 
-    assert( unsupported_collision == false );
+    wxASSERT( unsupported_collision == false );
 
     return false;
 }
@@ -635,10 +635,9 @@ static bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int
                 int actual;
                 VECTOR2I mtv;
 
-                bool c = collideSingleShapes( elemA, elemB,
-                                                        clearance,
-                                                        aActual ? &actual : nullptr,
-                                                        aMTV ? &mtv : nullptr );
+                bool c = collideSingleShapes( elemA, elemB, clearance,
+                                              aActual ? &actual : nullptr,
+                                              aMTV ? &mtv : nullptr );
                 if(c)
                 {
                     if (aActual)
@@ -655,7 +654,7 @@ static bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int
                 return c;
     };
 
-    if (aA->Type() == SH_COMPOUND && aB->Type() == SH_COMPOUND )
+    if( aA->Type() == SH_COMPOUND && aB->Type() == SH_COMPOUND )
     {
         auto cmpA = static_cast<const SHAPE_COMPOUND*>( aA );
         auto cmpB = static_cast<const SHAPE_COMPOUND*>( aB );
@@ -675,7 +674,7 @@ static bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int
                 break;
         }
     }
-    else if ( aA->Type() == SH_COMPOUND )
+    else if( aA->Type() == SH_COMPOUND )
     {
         auto cmpA = static_cast<const SHAPE_COMPOUND*>( aA );
         for( auto elemA : cmpA->Shapes() )

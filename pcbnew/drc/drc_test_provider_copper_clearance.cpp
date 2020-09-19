@@ -37,6 +37,7 @@
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>
+#include <class_dimension.h>
 
 /*
     Copper clearance test. Checks all copper items (pads, vias, tracks, drawings, zones) for their electrical clearance.
@@ -189,24 +190,18 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
 {
     EDA_RECT               bbox;
     std::shared_ptr<SHAPE> itemShape;
-    DRAWSEGMENT*           drawItem = dynamic_cast<DRAWSEGMENT*>( aItem );
     EDA_TEXT*              textItem = dynamic_cast<EDA_TEXT*>( aItem );
     PCB_LAYER_ID           layer = aItem->GetLayer();
 
-    if( drawItem )
-    {
-        bbox = drawItem->GetBoundingBox();
-        itemShape = drawItem->GetEffectiveShape();
-    }
-    else if( textItem )
+    if( textItem )
     {
         bbox = textItem->GetTextBox();
         itemShape = textItem->GetEffectiveTextShape();
     }
     else
     {
-        wxFAIL_MSG( "unknown item type in testCopperDrawItem()" );
-        return;
+        bbox = aItem->GetBoundingBox();
+        itemShape = aItem->GetEffectiveShape( layer );
     }
 
     SHAPE_RECT bboxShape( bbox.GetX(), bbox.GetY(), bbox.GetWidth(), bbox.GetHeight() );
@@ -260,7 +255,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
             continue;
 
         // Graphic items are allowed to act as net-ties within their own footprint
-        if( drawItem && pad->GetParent() == drawItem->GetParent() )
+        if( aItem->Type() == PCB_MODULE_EDGE_T && pad->GetParent() == aItem->GetParent() )
             continue;
 
         auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,

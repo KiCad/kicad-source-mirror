@@ -226,6 +226,12 @@ public:
      */
     const std::vector<std::shared_ptr<SHAPE>>& GetShapes() const { return m_shapes; }
 
+    /**
+     * @return create a caller-owned list of *all* shapes (including any text).
+     * Used for collision calculations (DRC, PNS, etc.).
+     */
+    std::vector<SHAPE*> MakeEffectiveShapes() const;
+
     // BOARD_ITEM overrides
 
     void Move( const wxPoint& offset ) override;
@@ -246,6 +252,8 @@ public:
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     const EDA_RECT GetBoundingBox() const override;
+
+    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
