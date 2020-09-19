@@ -699,6 +699,37 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
                 collector.Transfer( j );
         }
     }
+
+    // Construct a tight box (1/2 height and width) around the center of the closest item.
+    // All items which exist at least partly outside this box have sufficient other areas
+    // for selection and can be dropped.
+    EDA_ITEM* closest = nullptr;
+    int       closestDist = INT_MAX;
+
+    for( EDA_ITEM* item : collector )
+    {
+        int dist = EuclideanNorm( item->GetBoundingBox().GetCenter() - (wxPoint) aPos );
+
+        if( dist < closestDist )
+        {
+            closestDist = dist;
+            closest = item;
+        }
+    }
+
+    EDA_RECT tightBox = closest->GetBoundingBox();
+    tightBox.Inflate( -tightBox.GetWidth() / 4, -tightBox.GetHeight() / 4 );
+
+    for( int i = collector.GetCount() - 1; i >= 0; --i )
+    {
+        EDA_ITEM* item = collector[ i ];
+
+        if( item == closest )
+            continue;
+
+        if( !item->HitTest( tightBox, true ) )
+            collector.Transfer( item );
+    }
 }
 
 
