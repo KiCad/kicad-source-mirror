@@ -146,10 +146,17 @@ public:
 
     /**
      * Function GetFootprintRect()
-     * Returns the area of the module footprint excluding any text.
+     * Build and returns the boundary box of the module footprint excluding any text.
      * @return EDA_RECT - The rectangle containing the footprint.
      */
     EDA_RECT GetFootprintRect() const;
+
+    /**
+     * Returns the last calculated bounding box of the footprint (does not recalculate it).
+     * (call CalculateBoundingBox() to recalculate it)
+     * @return EDA_RECT - The rectangle containing the footprint
+     */
+    EDA_RECT GetBoundingBoxBase() const { return m_BoundaryBox; }
 
     /**
      * Returns the bounding box containing pads when the footprint
