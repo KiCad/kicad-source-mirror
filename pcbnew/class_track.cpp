@@ -84,7 +84,7 @@ wxString VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
     {
     case VIATYPE::BLIND_BURIED: viaType = _( "Blind/Buried" ) + " "; break;
     case VIATYPE::MICROVIA:     viaType = _( "Micro" ) + " ";        break;
-    default:                    viaType = _( "" );                   break;
+    default:                    viaType = "";                        break;
     }
 
     // say which layers, only two for now
