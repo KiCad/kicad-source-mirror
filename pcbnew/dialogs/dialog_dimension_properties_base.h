@@ -27,7 +27,6 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
 #include <wx/combobox.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -106,7 +105,6 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_lblExtensionOffset;
 		wxTextCtrl* m_txtExtensionOffset;
 		wxStaticText* m_lblExtensionOffsetUnits;
-		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -119,7 +117,7 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dimension Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 654,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
+		DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dimension Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
 		~DIALOG_DIMENSION_PROPERTIES_BASE();
 
 };

@@ -60,9 +60,6 @@ private:
     wxFloatingPointValidator<double>    m_OrientValidator;
     double               m_OrientValue;
 
-    wxString convertReferencesToKIIDs( const wxString& aSource );
-    wxString convertKIIDsToReferences( const wxString& aSource );
-
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 

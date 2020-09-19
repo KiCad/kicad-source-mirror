@@ -228,105 +228,6 @@ void DIALOG_TEXT_PROPERTIES::OnCharHook( wxKeyEvent& aEvent )
 }
 
 
-wxString DIALOG_TEXT_PROPERTIES::convertKIIDsToReferences( const wxString& aSource )
-{
-    wxString newbuf;
-    size_t   sourceLen = aSource.length();
-
-    for( size_t i = 0; i < sourceLen; ++i )
-    {
-        if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i+1] == '{' )
-        {
-            wxString token;
-            bool     isCrossRef = false;
-
-            for( i = i + 2; i < sourceLen; ++i )
-            {
-                if( aSource[i] == '}' )
-                    break;
-
-                if( aSource[i] == ':' )
-                    isCrossRef = true;
-
-                token.append( aSource[i] );
-            }
-
-            if( isCrossRef )
-            {
-                wxString      remainder;
-                wxString      ref = token.BeforeFirst( ':', &remainder );
-                BOARD_ITEM*   refItem = m_Parent->GetBoard()->GetItem( KIID( ref ) );
-
-                if( refItem && refItem->Type() == PCB_MODULE_T )
-                    token = static_cast<MODULE*>( refItem )->GetReference() + ":" + remainder;
-            }
-
-            newbuf.append( "${" + token + "}" );
-        }
-        else
-        {
-            newbuf.append( aSource[i] );
-        }
-    }
-
-    return newbuf;
-}
-
-
-wxString DIALOG_TEXT_PROPERTIES::convertReferencesToKIIDs( const wxString& aSource )
-{
-    wxString newbuf;
-    size_t   sourceLen = aSource.length();
-
-    for( size_t i = 0; i < sourceLen; ++i )
-    {
-        if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i+1] == '{' )
-        {
-            wxString token;
-            bool     isCrossRef = false;
-
-            for( i = i + 2; i < sourceLen; ++i )
-            {
-                if( aSource[i] == '}' )
-                    break;
-
-                if( aSource[i] == ':' )
-                    isCrossRef = true;
-
-                token.append( aSource[i] );
-            }
-
-            if( isCrossRef )
-            {
-                wxString remainder;
-                wxString ref = token.BeforeFirst( ':', &remainder );
-
-                for( MODULE* mod : m_Parent->GetBoard()->Modules() )
-                {
-                    if( mod->GetReference().CmpNoCase( ref ) == 0 )
-                    {
-                        wxString test( remainder );
-
-                        if( mod->ResolveTextVar( &test ) )
-                            token = mod->m_Uuid.AsString() + ":" + remainder;
-
-                        break;
-                    }
-                }
-            }
-
-            newbuf.append( "${" + token + "}" );
-        }
-        else
-        {
-            newbuf.append( aSource[i] );
-        }
-    }
-
-    return newbuf;
-}
-
-
 bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 {
     if( m_SingleLineText->IsShown() )
@@ -340,7 +241,10 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     }
     else if( m_MultiLineText->IsShown() )
     {
-        m_MultiLineText->SetValue( convertKIIDsToReferences( m_edaText->GetText() ) );
+        BOARD*   board = m_Parent->GetBoard();
+        wxString converted = board->ConvertKIIDsToCrossReferences( m_edaText->GetText() );
+
+        m_MultiLineText->SetValue( converted );
         m_MultiLineText->SetSelection( -1, -1 );
     }
 
@@ -425,7 +329,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     {
         if( !m_MultiLineText->GetValue().IsEmpty() )
         {
-            wxString txt = convertReferencesToKIIDs( m_MultiLineText->GetValue() );
+            BOARD*   board = m_Parent->GetBoard();
+            wxString txt = board->ConvertCrossReferencesToKIIDs( m_MultiLineText->GetValue() );
 
             // On Windows, a new line is coded as \r\n.
             // We use only \n in kicad files and in drawing routines.

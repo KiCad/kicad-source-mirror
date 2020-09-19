@@ -231,9 +231,16 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
     // Do this last; it depends on the other settings
     if( m_dimension->GetOverrideTextEnabled() )
-        m_txtValueActual->SetValue( m_dimension->GetOverrideText() );
+    {
+        BOARD*   board = m_frame->GetBoard();
+        wxString txt = board->ConvertKIIDsToCrossReferences( m_dimension->GetOverrideText() );
+
+        m_txtValueActual->SetValue( txt );
+    }
     else
+    {
         m_txtValueActual->SetValue( m_dimension->GetValueText() );
+    }
 
     m_orientValidator.TransferToWindow();
 
@@ -282,7 +289,12 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( DIMENSION* aTarget 
     aTarget->SetOverrideTextEnabled( m_cbOverrideValue->GetValue() );
 
     if( m_cbOverrideValue->GetValue() )
-        aTarget->SetOverrideText( m_txtValueActual->GetValue() );
+    {
+        BOARD*   board = m_frame->GetBoard();
+        wxString txt = board->ConvertCrossReferencesToKIIDs( m_txtValueActual->GetValue() );
+
+        aTarget->SetOverrideText( txt );
+    }
 
     aTarget->SetPrefix( m_txtPrefix->GetValue() );
     aTarget->SetSuffix( m_txtSuffix->GetValue() );

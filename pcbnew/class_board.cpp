@@ -836,6 +836,105 @@ void BOARD::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
 }
 
 
+wxString BOARD::ConvertCrossReferencesToKIIDs( const wxString& aSource )
+{
+    wxString newbuf;
+    size_t   sourceLen = aSource.length();
+
+    for( size_t i = 0; i < sourceLen; ++i )
+    {
+        if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i+1] == '{' )
+        {
+            wxString token;
+            bool     isCrossRef = false;
+
+            for( i = i + 2; i < sourceLen; ++i )
+            {
+                if( aSource[i] == '}' )
+                    break;
+
+                if( aSource[i] == ':' )
+                    isCrossRef = true;
+
+                token.append( aSource[i] );
+            }
+
+            if( isCrossRef )
+            {
+                wxString remainder;
+                wxString ref = token.BeforeFirst( ':', &remainder );
+
+                for( MODULE* mod : Modules() )
+                {
+                    if( mod->GetReference().CmpNoCase( ref ) == 0 )
+                    {
+                        wxString test( remainder );
+
+                        if( mod->ResolveTextVar( &test ) )
+                            token = mod->m_Uuid.AsString() + ":" + remainder;
+
+                        break;
+                    }
+                }
+            }
+
+            newbuf.append( "${" + token + "}" );
+        }
+        else
+        {
+            newbuf.append( aSource[i] );
+        }
+    }
+
+    return newbuf;
+}
+
+
+wxString BOARD::ConvertKIIDsToCrossReferences( const wxString& aSource )
+{
+    wxString newbuf;
+    size_t   sourceLen = aSource.length();
+
+    for( size_t i = 0; i < sourceLen; ++i )
+    {
+        if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i+1] == '{' )
+        {
+            wxString token;
+            bool     isCrossRef = false;
+
+            for( i = i + 2; i < sourceLen; ++i )
+            {
+                if( aSource[i] == '}' )
+                    break;
+
+                if( aSource[i] == ':' )
+                    isCrossRef = true;
+
+                token.append( aSource[i] );
+            }
+
+            if( isCrossRef )
+            {
+                wxString      remainder;
+                wxString      ref = token.BeforeFirst( ':', &remainder );
+                BOARD_ITEM*   refItem = GetItem( KIID( ref ) );
+
+                if( refItem && refItem->Type() == PCB_MODULE_T )
+                    token = static_cast<MODULE*>( refItem )->GetReference() + ":" + remainder;
+            }
+
+            newbuf.append( "${" + token + "}" );
+        }
+        else
+        {
+            newbuf.append( aSource[i] );
+        }
+    }
+
+    return newbuf;
+}
+
+
 unsigned BOARD::GetNodesCount( int aNet )
 {
     unsigned retval = 0;
