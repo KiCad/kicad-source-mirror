@@ -182,7 +182,7 @@ bool WS_DRAW_ITEM_TEXT::HitTest( const EDA_RECT& aRect, bool aContains, int aAcc
 
 wxString WS_DRAW_ITEM_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Text \"%s\"" ),
+    return wxString::Format( _( "Text '%s'" ),
                              GetShownText() );
 }
 
@@ -428,14 +428,13 @@ bool WS_DRAW_ITEM_BITMAP::HitTest( const EDA_RECT& aRect, bool aContains, int aA
 
 wxString WS_DRAW_ITEM_BITMAP::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Image" ) );
+    return _( "Image" );
 }
 
 
 wxString WS_DRAW_ITEM_PAGE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    wxString txt( "Page Limits" );
-    return txt;
+    return _( "Page Limits" );
 }
 
 

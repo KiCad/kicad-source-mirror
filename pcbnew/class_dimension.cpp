@@ -402,7 +402,7 @@ const EDA_RECT DIMENSION::GetBoundingBox() const
 
 wxString DIMENSION::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Dimension \"%s\" on %s" ),
+    return wxString::Format( _( "Dimension '%s' on %s" ),
                              GetText(),
                              GetLayerName() );
 }

@@ -330,16 +330,16 @@ wxString TEXTE_MODULE::GetSelectMenuText( EDA_UNITS aUnits ) const
     switch( m_Type )
     {
     case TEXT_is_REFERENCE:
-        return wxString::Format( _( "Reference %s" ),
+        return wxString::Format( _( "Reference '%s'" ),
                                  static_cast<MODULE*>( GetParent() )->GetReference() );
 
     case TEXT_is_VALUE:
-        return wxString::Format( _( "Value %s of %s" ),
+        return wxString::Format( _( "Value '%s' of %s" ),
                                  GetShownText(),
                                  static_cast<MODULE*>( GetParent() )->GetReference() );
 
-    default:    // wrap this one in quotes:
-        return wxString::Format( _( "Footprint Text \"%s\" of %s" ),
+    default:
+        return wxString::Format( _( "Footprint Text '%s' of %s" ),
                                  ShortenedShownText(),
                                  static_cast<MODULE*>( GetParent() )->GetReference() );
     }

@@ -78,26 +78,18 @@ EDA_ITEM* VIA::Clone() const
 
 wxString VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    wxString viaType;
+    wxString formatStr;
 
     switch( GetViaType() )
     {
-    case VIATYPE::BLIND_BURIED: viaType = _( "Blind/Buried Via" ); break;
-    case VIATYPE::MICROVIA:     viaType = _( "Micro Via" );        break;
-    default:                    viaType = _( "Via" );              break;
+    case VIATYPE::BLIND_BURIED: formatStr = _( "Blind/Buried Via %s on %s" ); break;
+    case VIATYPE::MICROVIA:     formatStr = _( "Micro Via %s on %s" );        break;
+    default:                    formatStr = _( "Via %s on %s" );              break;
     }
 
-    // say which layers, only two for now
-    PCB_LAYER_ID topLayer;
-    PCB_LAYER_ID botLayer;
-    BOARD*       board = GetBoard();
-
-    LayerPair( &topLayer, &botLayer );
-
-    return wxString::Format( _( "%s %s on %s" ),
-                             viaType,
+    return wxString::Format( formatStr,
                              GetNetnameMsg(),
-                             LayerMaskDescribe( board, GetLayerSet() ) );
+                             LayerMaskDescribe() );
 }
 
 
@@ -629,7 +621,7 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
     GetMsgPanelInfoBase_Common( aFrame, aList );
 
     // Display layer
-    aList.emplace_back( _( "Layer" ), LayerMaskDescribe( board, GetLayerSet() ), DARKGREEN );
+    aList.emplace_back( _( "Layer" ), LayerMaskDescribe(), DARKGREEN );
 
     // Display width
     msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
@@ -695,7 +687,7 @@ void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     GetMsgPanelInfoBase_Common( aFrame, aList );
 
     // Display layer pair
-    aList.emplace_back( _( "Layer" ), LayerMaskDescribe( board, GetLayerSet() ), DARKGREEN );
+    aList.emplace_back( _( "Layer" ), LayerMaskDescribe(), DARKGREEN );
 
     // Display width
     msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
@@ -784,7 +776,7 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
 }
 
 
-wxString VIA::LayerMaskDescribe()
+wxString VIA::LayerMaskDescribe() const
 {
     BOARD*       board = GetBoard();
     PCB_LAYER_ID top_layer;

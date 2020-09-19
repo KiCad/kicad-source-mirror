@@ -429,7 +429,7 @@ void SCH_FIELD::Rotate( wxPoint aPosition )
 
 wxString SCH_FIELD::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( "%s \"%s\"",
+    return wxString::Format( "%s '%s'",
                              GetName(),
                              ShortenedShownText() );
 }

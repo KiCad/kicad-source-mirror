@@ -545,7 +545,7 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
 
 wxString SCH_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Graphic Text \"%s\"" ), GetChars( ShortenedShownText() ) );
+    return wxString::Format( _( "Graphic Text '%s'" ), GetChars( ShortenedShownText() ) );
 }
 
 
@@ -792,7 +792,7 @@ const EDA_RECT SCH_LABEL::GetBoundingBox() const
 
 wxString SCH_LABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Label \"%s\"" ), ShortenedShownText() );
+    return wxString::Format( _( "Label '%s'" ), ShortenedShownText() );
 }
 
 
@@ -1034,7 +1034,7 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
 
 wxString SCH_GLOBALLABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Global Label \"%s\"" ), ShortenedShownText() );
+    return wxString::Format( _( "Global Label '%s'" ), ShortenedShownText() );
 }
 
 
@@ -1223,7 +1223,7 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) cons
 
 wxString SCH_HIERLABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Hierarchical Label \"%s\"" ), ShortenedShownText() );
+    return wxString::Format( _( "Hierarchical Label '%s'" ), ShortenedShownText() );
 }
 
 
