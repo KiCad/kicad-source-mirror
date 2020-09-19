@@ -29,6 +29,13 @@ namespace KIPLATFORM
     namespace UI
     {
         /**
+         * Determine if the desktop interface is currently using a dark theme or a light theme.
+         *
+         * @return true if a dark theme is being used.
+         */
+        bool IsDarkTheme();
+
+        /**
          * Pass the current focus to the window. On OSX this will forcefully give the focus to
          * the desired window, while on MSW and GTK it will simply call the wxWidgets SetFocus()
          * function.

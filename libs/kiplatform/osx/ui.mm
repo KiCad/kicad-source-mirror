@@ -26,6 +26,14 @@
 #include <wx/toplevel.h>
 #include <wx/button.h>
 
+
+bool KIPLATFORM::UI::IsDarkTheme()
+{
+    // TODO(ISM): Write this function
+    return false;
+}
+
+
 void KIPLATFORM::UI::ForceFocus( wxWindow* aWindow )
 {
     // On OSX we need to forcefully give the focus to the window

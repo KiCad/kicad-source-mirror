@@ -23,6 +23,14 @@
 #include <wx/nonownedwnd.h>
 #include <wx/window.h>
 
+
+bool KIPLATFORM::UI::IsDarkTheme()
+{
+    // TODO(ISM): Write this function
+    return false;
+}
+
+
 void KIPLATFORM::UI::ForceFocus( wxWindow* aWindow )
 {
     aWindow->SetFocus();
