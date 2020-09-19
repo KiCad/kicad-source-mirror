@@ -295,8 +295,8 @@ void CADSTAR_ARCHIVE_PARSER::EVALUE::Parse( XNODE* aNode )
             || ( !GetXmlAttributeIDString( aNode, 1 ).ToLong( &Exponent ) ) )
     {
         THROW_PARSING_IO_ERROR( wxT( "Base and Exponent" ),
-                                wxString::Format( "%s->%s", aNode->GetParent()->GetName(),
-                                                  aNode->GetParent()->GetName() ) );
+                wxString::Format(
+                        "%s->%s", aNode->GetParent()->GetName(), aNode->GetParent()->GetName() ) );
     }
 }
 
@@ -1928,12 +1928,12 @@ std::vector<CADSTAR_ARCHIVE_PARSER::POINT> CADSTAR_ARCHIVE_PARSER::ParseAllChild
         }
     }
 
-    if( aExpectedNumPoints != UNDEFINED_VALUE &&
-        retVal.size() != static_cast<size_t>( aExpectedNumPoints ) )
+    if( aExpectedNumPoints != UNDEFINED_VALUE
+            && retVal.size() != static_cast<size_t>( aExpectedNumPoints ) )
     {
         THROW_IO_ERROR( wxString::Format(
-                        _( "Unexpected number of points in '%s'. Found %d but expected %d." ),
-                        aNode->GetName(), retVal.size(), aExpectedNumPoints ) );
+                _( "Unexpected number of points in '%s'. Found %d but expected %d." ),
+                aNode->GetName(), retVal.size(), aExpectedNumPoints ) );
     }
 
     return retVal;

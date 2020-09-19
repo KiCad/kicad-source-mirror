@@ -115,13 +115,13 @@ void CADSTAR_PCB_ARCHIVE_LOADER::logBoardStackupWarning(
 
 void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 {
-    std::map<LAYER_ID, LAYER>&       cpaLayers                = Assignments.Layerdefs.Layers;
-    std::map<MATERIAL_ID, MATERIAL>& cpaMaterials             = Assignments.Layerdefs.Materials;
-    std::vector<LAYER_ID>&           cpaLayerStack            = Assignments.Layerdefs.LayerStack;
-    unsigned                         numElecAndPowerLayers    = 0;
-    BOARD_DESIGN_SETTINGS&           designSettings           = mBoard->GetDesignSettings();
-    BOARD_STACKUP&                   stackup                  = designSettings.GetStackupDescriptor();
-    int                              noOfKiCadStackupLayers   = 0;
+    std::map<LAYER_ID, LAYER>&       cpaLayers              = Assignments.Layerdefs.Layers;
+    std::map<MATERIAL_ID, MATERIAL>& cpaMaterials           = Assignments.Layerdefs.Materials;
+    std::vector<LAYER_ID>&           cpaLayerStack          = Assignments.Layerdefs.LayerStack;
+    unsigned                         numElecAndPowerLayers  = 0;
+    BOARD_DESIGN_SETTINGS&           designSettings         = mBoard->GetDesignSettings();
+    BOARD_STACKUP&                   stackup                = designSettings.GetStackupDescriptor();
+    int                              noOfKiCadStackupLayers = 0;
     int                              lastElectricalLayerIndex = 0;
     int                              dielectricSublayer       = 0;
     int                              numDielectricLayers      = 0;
@@ -164,8 +164,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         case LAYER_TYPE::ASSCOMPCOPP:
         case LAYER_TYPE::NOLAYER:
             //Shouldn't be here if CPA file is correctly parsed and not corrupt
-            THROW_IO_ERROR( wxString::Format( _( "Unexpected layer '%s' in layer stack." ),
-                                              curLayer.Name ) );
+            THROW_IO_ERROR( wxString::Format(
+                    _( "Unexpected layer '%s' in layer stack." ), curLayer.Name ) );
 
         case LAYER_TYPE::JUMPERLAYER:
             copperType     = LAYER_T::LT_JUMPER;
@@ -435,9 +435,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
 
     applyNetClassRule( "T_T", ds.GetDefault(), &::NETCLASS::SetClearance );
 
-    wxLogWarning( _( "KiCad design rules are different from CADSTAR ones. Only the compatible "
-                     "design rules were imported. It is recommended that you review the design "
-                     "rules that have been applied." ) );
+    wxLogWarning(
+            _( "KiCad design rules are different from CADSTAR ones. Only the compatible "
+               "design rules were imported. It is recommended that you review the design "
+               "rules that have been applied." ) );
     wxLogWarning(
             _( "KiCad design rules are different from CADSTAR ones. Only the compatible "
                "design rules were imported. It is recommended that you review the design "
@@ -686,13 +687,13 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent, 
             if( csPadcode.SlotLength != UNDEFINED_VALUE )
             {
                 pad->SetDrillSize( { getKiCadLength( csPadcode.DrillDiameter ),
-                                     getKiCadLength( (long long) csPadcode.DrillOversize
-                                      + (long long) csPadcode.DrillDiameter ) } );
+                        getKiCadLength( (long long) csPadcode.DrillOversize
+                                        + (long long) csPadcode.DrillDiameter ) } );
             }
             else
             {
                 pad->SetDrillSize( { getKiCadLength( csPadcode.DrillDiameter ),
-                                     getKiCadLength( csPadcode.DrillDiameter ) } );
+                        getKiCadLength( csPadcode.DrillDiameter ) } );
             }
         }
         //TODO handle csPadcode.Reassigns when KiCad supports full padstacks
@@ -1105,7 +1106,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
         {
             zone->SetThermalReliefGap( getKiCadLength( csTemplate.Pouring.ClearanceWidth ) );
             zone->SetThermalReliefSpokeWidth( getKiCadLength(
-                    getCopperCode( csTemplate.Pouring.ReliefCopperCodeID ).CopperWidth ));
+                    getCopperCode( csTemplate.Pouring.ReliefCopperCodeID ).CopperWidth ) );
             zone->SetPadConnection( ZONE_CONNECTION::THERMAL );
         }
         else

@@ -898,10 +898,10 @@ public:
         GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this component is part of a group
         REUSEBLOCKREF ReuseBlockRef;
         COMPONENT_ID  VariantParentComponentID = wxEmptyString;
-        VARIANT_ID    VariantID = wxEmptyString;
-        long          OrientAngle = 0;
-        bool          TestPoint   = false; ///< Indicates whether this component should be treated
-                                           ///< as a testpoint. See SYMDEF_TYPE::TESTPOINT
+        VARIANT_ID    VariantID                = wxEmptyString;
+        long          OrientAngle              = 0;
+        bool          TestPoint = false; ///< Indicates whether this component should be treated
+                                         ///< as a testpoint. See SYMDEF_TYPE::TESTPOINT
         bool        Mirror      = false;
         bool        Fixed       = false;
         READABILITY Readability = READABILITY::BOTTOM_TO_TOP;
@@ -1098,9 +1098,9 @@ public:
                 void Parse( XNODE* aNode );
             };
 
-            NET_ID                             NetID = wxEmptyString;
+            NET_ID                                NetID = wxEmptyString;
             std::map<COPPER_TERM_ID, COPPER_TERM> CopperTerminals;
-            bool                               Fixed = false;
+            bool                                  Fixed = false;
 
             void Parse( XNODE* aNode );
         };

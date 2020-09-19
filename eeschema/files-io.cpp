@@ -611,7 +611,7 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     if( ADVANCED_CFG::GetCfg().m_PluginAltiumSch )
         loaders.emplace_back( AltiumSchematicFileWildcard(), SCH_IO_MGR::SCH_ALTIUM ); // Import Altium schematic files
 
-    loaders.emplace_back( CadstarSchematicArchiveFileWildcard(), SCH_IO_MGR::CADSTAR_SCH_ARCHIVE ); //Import CADSTAR Schematic Archive files
+    loaders.emplace_back( CadstarSchematicArchiveFileWildcard(), SCH_IO_MGR::SCH_CADSTAR_ARCHIVE ); //Import CADSTAR Schematic Archive files
     loaders.emplace_back( EagleSchematicFileWildcard(),  SCH_IO_MGR::SCH_EAGLE ); // Import Eagle schematic files
     // clang-format on
 
@@ -868,7 +868,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
     switch( (SCH_IO_MGR::SCH_FILE_T) aFileType )
     {
     case SCH_IO_MGR::SCH_ALTIUM:
-    case SCH_IO_MGR::CADSTAR_SCH_ARCHIVE:
+    case SCH_IO_MGR::SCH_CADSTAR_ARCHIVE:
     case SCH_IO_MGR::SCH_EAGLE:
         // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
         wxASSERT_MSG( wxFileName( aFileName ).IsAbsolute(),

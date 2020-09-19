@@ -65,9 +65,6 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
     mProperties = aProperties;
     mSchematic  = aSchematic;
 
-    // Delete on exception, if I own m_rootSheet, according to aAppendToMe
-    std::unique_ptr<SCH_SHEET> deleter( aAppendToMe ? nullptr : mRootSheet );
-
     if( aAppendToMe )
     {
         wxCHECK_MSG( aSchematic->IsValid(), nullptr, "Can't append to a schematic with no root!" );
@@ -87,10 +84,8 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
     }
 
 
-    //TEMP TESTING CODE - REMOVE
-    CADSTAR_SCH_ARCHIVE_PARSER parser( aFileName );
-    parser.Parse();
-    //TEMP TESTING CODE - REMOVE
+    CADSTAR_SCH_ARCHIVE_LOADER csaFile( aFileName );
+    csaFile.Load( mSchematic, mRootSheet );
 
     return mRootSheet;
 }
@@ -98,6 +93,7 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
 
 bool CADSTAR_SCH_ARCHIVE_PLUGIN::CheckHeader( const wxString& aFileName )
 {
-    //TODO
+    // TODO: write a parser for the cpa header. For now assume it is valid
+    // and throw exceptions when parsing
     return true;
 }

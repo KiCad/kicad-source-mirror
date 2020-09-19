@@ -36,9 +36,8 @@ class SCH_SCREEN;
 class CADSTAR_SCH_ARCHIVE_PLUGIN : public SCH_PLUGIN
 {
 public:
-
     //-----<PUBLIC SCH_PLUGIN API>-------------------------------------------------
-  
+
     const wxString GetName() const override;
 
     const wxString GetFileExtension() const override;

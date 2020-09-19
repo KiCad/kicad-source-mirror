@@ -23,6 +23,7 @@
  * @brief Reads in a CADSTAR Schematic Archive (*.csa) file
  */
 
+#include <convert_to_biu.h> // SCH_IU_PER_MM
 #include <sch_plugins/cadstar/cadstar_sch_archive_parser.h>
 
 
@@ -44,7 +45,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::Parse()
             switch( Header.Resolution )
             {
             case RESOLUTION::HUNDREDTH_MICRON:
-                KiCadUnitMultiplier = 100;
+                KiCadUnitMultiplier = SCH_IU_PER_MM / 1e5;
                 break;
 
             default:
@@ -147,14 +148,26 @@ void CADSTAR_SCH_ARCHIVE_PARSER::TERMINAL_SHAPE::Parse( XNODE* aNode )
 
     case TERMINAL_SHAPE_TYPE::ROUNDED_RECT:
         InternalFeature = GetXmlAttributeIDLong( aNode, 3 );
-        //Fall through
+        KI_FALLTHROUGH;
+
     case TERMINAL_SHAPE_TYPE::BULLET:
     case TERMINAL_SHAPE_TYPE::FINGER:
     case TERMINAL_SHAPE_TYPE::POINTER:
     case TERMINAL_SHAPE_TYPE::RECTANGLE:
     case TERMINAL_SHAPE_TYPE::TRIANGLE:
         RightLength = GetXmlAttributeIDLong( aNode, 2 );
-        LeftLength  = GetXmlAttributeIDLong( aNode, 1 );        
+        LeftLength  = GetXmlAttributeIDLong( aNode, 1 );
+        break;
+
+    case TERMINAL_SHAPE_TYPE::CIRCLE:
+    case TERMINAL_SHAPE_TYPE::DIAMOND:
+    case TERMINAL_SHAPE_TYPE::OCTAGON:
+    case TERMINAL_SHAPE_TYPE::SQUARE:
+        KI_FALLTHROUGH; //don't do anything
+        break;
+
+    case TERMINAL_SHAPE_TYPE::UNDEFINED:
+        wxASSERT_MSG( false, "Unknown terminal shape type" );
         break;
     }
 
@@ -285,7 +298,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::TERMINAL::Parse( XNODE* aNode )
 void CADSTAR_SCH_ARCHIVE_PARSER::PIN_NUM_LABEL_LOC::Parse( XNODE* aNode )
 {
     wxCHECK( aNode->GetName() == wxT( "PINLABELLOC" )
-             || aNode->GetName() == wxT( "PINNUMNAMELOC" ), );
+                     || aNode->GetName() == wxT( "PINNUMNAMELOC" ), );
 
     TerminalID = GetXmlAttributeIDLong( aNode, 0 );
     TextCodeID = GetXmlAttributeIDString( aNode, 1 );
@@ -385,7 +398,8 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SHEETS::Parse( XNODE* aNode )
         {
             LAYER_ID   id   = GetXmlAttributeIDString( cNode, 0 );
             SHEET_NAME name = GetXmlAttributeIDString( cNode, 1 );
-            Sheets.insert( std::make_pair( id, name ) );
+            SheetNames.insert( std::make_pair( id, name ) );
+            SheetOrder.push_back( id );
         }
         else
         {
@@ -480,7 +494,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOLVARIANT::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "GLOBALSIGNAL" ) )
         {
-            Type = TYPE::GLOBALSIGNAL;
+            Type      = TYPE::GLOBALSIGNAL;
             Reference = GetXmlAttributeIDString( cNode, 0 );
         }
         else
@@ -517,7 +531,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SIGNALREFERENCELINK::Parse( XNODE* aNode )
 void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::Parse( XNODE* aNode )
 {
     wxCHECK( aNode->GetName() == wxT( "SYMBOL" ), );
-    
+
     ID       = GetXmlAttributeIDString( aNode, 0 );
     SymdefID = GetXmlAttributeIDString( aNode, 1 );
     LayerID  = GetXmlAttributeIDString( aNode, 2 );
@@ -550,7 +564,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::Parse( XNODE* aNode )
         else if( cNodeName == wxT( "VSYMMASTER" ) )
         {
             VariantParentSymbolID = GetXmlAttributeIDString( aNode, 0 );
-            VariantID                = GetXmlAttributeIDString( aNode, 1 );
+            VariantID             = GetXmlAttributeIDString( aNode, 1 );
         }
         else if( cNodeName == wxT( "GROUPREF" ) )
             GroupID = GetXmlAttributeIDString( cNode, 0 );
@@ -654,7 +668,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::BUS::Parse( XNODE* aNode )
 
             if( subNode )
             {
-                if(subNode->GetName() == wxT("SIGLOC"))
+                if( subNode->GetName() == wxT( "SIGLOC" ) )
                 {
                     BusLabel.Parse( subNode );
                     HasBusLabel = true;
@@ -673,8 +687,8 @@ void CADSTAR_SCH_ARCHIVE_PARSER::BLOCK::Parse( XNODE* aNode )
 {
     wxCHECK( aNode->GetName() == wxT( "BLOCK" ), );
 
-    ID         = GetXmlAttributeIDString( aNode, 0 );
-    LayerID    = GetXmlAttributeIDString( aNode, 2 );
+    ID      = GetXmlAttributeIDString( aNode, 0 );
+    LayerID = GetXmlAttributeIDString( aNode, 2 );
 
     XNODE* cNode = aNode->GetChildren();
 
@@ -682,7 +696,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::BLOCK::Parse( XNODE* aNode )
     {
         wxString cNodeName = cNode->GetName();
 
-       
+
         if( cNodeName == wxT( "CLONE" ) )
             Type = TYPE::CLONE;
         else if( cNodeName == wxT( "PARENT" ) )
@@ -736,7 +750,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::SYM_TERM::Parse( XNODE* aNode )
     ID         = GetXmlAttributeIDString( aNode, 0 );
     SymbolID   = GetXmlAttributeIDString( aNode, 1 );
     TerminalID = GetXmlAttributeIDLong( aNode, 2 );
-    
+
 
     XNODE* cNode = aNode->GetChildren();
 
@@ -759,12 +773,12 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::BUS_TERM::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "BUSTERM" ) );
 
-    ID         = GetXmlAttributeIDString( aNode, 0 );
-    BusID      = GetXmlAttributeIDString( aNode, 1 );
-    
+    ID    = GetXmlAttributeIDString( aNode, 0 );
+    BusID = GetXmlAttributeIDString( aNode, 1 );
 
-    XNODE* cNode = aNode->GetChildren();
-    bool   firstPointParsed = false;
+
+    XNODE* cNode             = aNode->GetChildren();
+    bool   firstPointParsed  = false;
     bool   secondPointParsed = false;
 
     for( ; cNode; cNode = cNode->GetNext() )
@@ -789,8 +803,9 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::BUS_TERM::Parse( XNODE* aNode )
                 secondPointParsed = true;
             }
             else
+            {
                 THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
-
+            }
         }
         else
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
@@ -831,7 +846,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::CONNECTION_SCH::Parse( XNODE* aNode )
     ParseIdentifiers( aNode );
     LayerID = GetXmlAttributeIDString( aNode, 3 );
 
-    XNODE* cNode       = aNode->GetChildren();
+    XNODE* cNode = aNode->GetChildren();
 
     for( ; cNode; cNode = cNode->GetNext() )
     {
@@ -895,7 +910,9 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::Parse( XNODE* aNode )
             Connections.push_back( conn );
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "NET" ) );
+        }
     }
 }
 
@@ -904,9 +921,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SCHEMATIC::Parse( XNODE* aNode )
 {
     wxCHECK( aNode->GetName() == wxT( "SCHEMATIC" ), );
 
-    XNODE* cNode            = aNode->GetChildren();
-    bool   netSynchParsed   = false;
-    bool   dimensionsParsed = false;
+    XNODE* cNode = aNode->GetChildren();
 
     for( ; cNode; cNode = cNode->GetNext() )
     {

@@ -562,8 +562,8 @@ public:
                               ///< Note that this is different from BOTTOM_LEFT (which is bottom
                               ///< left of the whole text block)
 
-        void ParseIdentifiers( XNODE* aNode );
-        bool ParseSubNode( XNODE* aChildNode );
+        void         ParseIdentifiers( XNODE* aNode );
+        bool         ParseSubNode( XNODE* aChildNode );
         virtual void Parse( XNODE* aNode );
     };
 
@@ -731,10 +731,10 @@ public:
     {
         GROUP_ID ID;
         wxString Name;
-        bool     Fixed   = false;
-        bool     Transfer = false; ///< If true, the group is transferred to PCB
-        GROUP_ID GroupID = wxEmptyString; ///< If not empty, this GROUP
-                                          ///< is part of another GROUP
+        bool     Fixed    = false;
+        bool     Transfer = false;         ///< If true, the group is transferred to PCB
+        GROUP_ID GroupID  = wxEmptyString; ///< If not empty, this GROUP
+                                           ///< is part of another GROUP
         REUSEBLOCKREF ReuseBlockRef;
 
         void Parse( XNODE* aNode );
@@ -1133,7 +1133,8 @@ public:
      * @return returns the value (wxString) of attribute "attrX" in aNode where 'X' is aID
      * @throws IO_ERROR if attribute does not exist
      */
-    static wxString GetXmlAttributeIDString( XNODE* aNode, unsigned int aID, bool aIsRequired = true );
+    static wxString GetXmlAttributeIDString(
+            XNODE* aNode, unsigned int aID, bool aIsRequired = true );
 
     /**
      * @brief 

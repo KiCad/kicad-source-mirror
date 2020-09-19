@@ -62,7 +62,7 @@ SCH_PLUGIN* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
         return new SCH_SEXPR_PLUGIN();
     case SCH_ALTIUM:
         return new SCH_ALTIUM_PLUGIN();
-    case CADSTAR_SCH_ARCHIVE:
+    case SCH_CADSTAR_ARCHIVE:
         return new CADSTAR_SCH_ARCHIVE_PLUGIN();
     case SCH_EAGLE:
         return new SCH_EAGLE_PLUGIN();
@@ -104,7 +104,7 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
     case SCH_ALTIUM:
         return wxString( wxT( "Altium" ) );
 
-    case CADSTAR_SCH_ARCHIVE:
+    case SCH_CADSTAR_ARCHIVE:
         return wxString( wxT( "CADSTAR Schematic Archive" ) );
 
     case SCH_EAGLE:
@@ -126,7 +126,7 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::EnumFromStr( const wxString& aType )
     else if( aType == wxT( "Altium" ) )
         return SCH_ALTIUM;
     else if( aType == wxT( "CADSTAR Schematic Archive" ) )
-        return CADSTAR_SCH_ARCHIVE;
+        return SCH_CADSTAR_ARCHIVE;
     else if( aType == wxT( "EAGLE" ) )
         return SCH_EAGLE;
 

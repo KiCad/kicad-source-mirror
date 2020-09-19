@@ -52,7 +52,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
                 wxASSERT_MSG( true, wxT( "Unknown File Resolution" ) );
                 break;
             }
-            
+
             if( Header.Format.Type != wxT( "LAYOUT" ) )
                 if( Header.Format.Type == wxT( "LIBRARY" ) )
                     THROW_IO_ERROR(
@@ -62,7 +62,6 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
                     THROW_IO_ERROR(
                             "The selected file is an unknown CADSTAR format so cannot be "
                             "imported into KiCad." );
-
         }
         else if( cNode->GetName() == wxT( "ASSIGNMENTS" ) )
         {
@@ -911,7 +910,6 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TECHNOLOGY_SECTION::Parse( XNODE* aNode )
         if( ParseSubNode( cNode ) ) //CADSTAR_ARCHIVE_PARSER::SETTINGS
         {
         }
-        }
         else if( cNodeName == wxT( "MINROUTEWIDTH" ) )
         {
             MinRouteWidth = GetXmlAttributeIDLong( cNode, 0 );
@@ -943,6 +941,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TECHNOLOGY_SECTION::Parse( XNODE* aNode )
         else if( cNodeName == wxT( "VIAGRID" ) )
         {
             ViaGrid = GetXmlAttributeIDLong( cNode, 0 );
+        }
         else if( cNodeName == wxT( "BACKOFFJCTS" ) )
         {
             BackOffJunctions = true;

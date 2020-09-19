@@ -36,9 +36,8 @@ class CADSTAR_SCH_ARCHIVE_PARSER : public CADSTAR_ARCHIVE_PARSER
 {
 public:
     explicit CADSTAR_SCH_ARCHIVE_PARSER( wxString aFilename )
-            : Filename( aFilename ), CADSTAR_ARCHIVE_PARSER()
+            : CADSTAR_ARCHIVE_PARSER(), Filename( aFilename ), KiCadUnitMultiplier( 0.1 )
     {
-       // KiCadUnitMultiplier = 10; // assume hundredth micron
     }
 
     /**
@@ -48,7 +47,7 @@ public:
      */
     void Parse();
 
-    
+
     typedef wxString TERMINALCODE_ID;
     typedef wxString SYMBOL_ID;
     typedef wxString BUS_ID;
@@ -113,11 +112,11 @@ public:
 
     struct ASSIGNMENTS_SCM
     {
-        CODEDEFS_SCM       Codedefs;
-        GRIDS              Grids;
-        SETTINGS           Settings;
-        bool               NetclassEditAttributeSettings     = false; //< Unclear what this does
-        bool               SpacingclassEditAttributeSettings = false; //< Unclear what this does
+        CODEDEFS_SCM Codedefs;
+        GRIDS        Grids;
+        SETTINGS     Settings;
+        bool         NetclassEditAttributeSettings     = false; //< Unclear what this does
+        bool         SpacingclassEditAttributeSettings = false; //< Unclear what this does
 
         void Parse( XNODE* aNode );
     };
@@ -141,10 +140,10 @@ public:
         void Parse( XNODE* aNode ) override;
     };
 
-    
+
     struct SYMDEF_SCM : CADSTAR_ARCHIVE_PARSER::SYMDEF
     {
-        std::map<TERMINAL_ID, TERMINAL> Terminals;
+        std::map<TERMINAL_ID, TERMINAL>          Terminals;
         std::map<TERMINAL_ID, PIN_NUM_LABEL_LOC> PinLabelLocations;
         std::map<TERMINAL_ID, PIN_NUM_LABEL_LOC> PinNumberLocations;
 
@@ -163,7 +162,9 @@ public:
 
     struct SHEETS
     {
-        std::map<LAYER_ID, SHEET_NAME> Sheets;
+        std::map<LAYER_ID, SHEET_NAME> SheetNames;
+        std::vector<LAYER_ID>          SheetOrder; ///< A vector to also store the order in which
+                                                   ///< sheets are to be displayed
 
         void Parse( XNODE* aNode );
     };
@@ -194,7 +195,7 @@ public:
     struct SYMPINNAME_LABEL
     {
         TERMINAL_ID        TerminalID;
-        wxString           NameOrLabel; 
+        wxString           NameOrLabel;
         bool               HasLocation = false;
         ATTRIBUTE_LOCATION AttrLoc;
 
@@ -209,9 +210,9 @@ public:
             GLOBALSIGNAL,
             SIGNALREF
             //TODO: there might be others
-        };        
+        };
 
-        TYPE Type;
+        TYPE     Type;
         wxString Reference;
 
         void Parse( XNODE* aNode );
@@ -223,7 +224,7 @@ public:
         wxString Text; ///< This contains the numbers of the other sheets where the
                        ///< signal reference is present separated by commas
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode ) override;
     };
 
 
@@ -247,10 +248,10 @@ public:
         bool    PartNameVisible = true;
         GATE_ID GateID; ///< The gate this symbol represents within the associated Part
 
-        bool          IsSymbolVariant = false;
-        SYMBOLVARIANT SymbolVariant;
+        bool                IsSymbolVariant = false;
+        SYMBOLVARIANT       SymbolVariant;
         SIGNALREFERENCELINK SigRefLink; ///< Signal References (a special form of global signal)
-                                        ///< have annotations showing the location of all the 
+                                        ///< have annotations showing the location of all the
                                         ///< other sheets where the signal is present
 
         SYMBOL_ID  VariantParentSymbolID = wxEmptyString;
@@ -263,13 +264,13 @@ public:
         void Parse( XNODE* aNode );
     };
 
-    
+
     /**
      * @brief Net name or bus name label
      */
     struct SIGLOC : CADSTAR_ARCHIVE_PARSER::ATTRIBUTE_LOCATION
     {
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode ) override;
     };
 
 
@@ -291,17 +292,17 @@ public:
     {
         enum class TYPE
         {
-            CLONE,
+            CLONE, ///< the block is referring to the sheet it is on.
             PARENT,
             CHILD
         };
 
-        BLOCK_ID           ID;
-        TYPE     Type;
-        LAYER_ID           LayerID = wxEmptyString; ///< The sheet block is on (TODO: verify this is true)
-        LAYER_ID           AssocLayerID = wxEmptyString; ///< Parent or Child linked sheet
-        wxString           Name          = wxEmptyString;
-        bool               HasBlockLabel = false;
+        BLOCK_ID ID;
+        TYPE     Type; ///< Determines what the associated layer is, whether parent, child or clone
+        LAYER_ID LayerID = wxEmptyString; ///< The sheet block is on (TODO: verify this is true)
+        LAYER_ID AssocLayerID  = wxEmptyString; ///< Parent or Child linked sheet
+        wxString Name          = wxEmptyString;
+        bool     HasBlockLabel = false;
         ATTRIBUTE_LOCATION BlockLabel;
 
         std::map<TERMINAL_ID, TERMINAL> Terminals;
@@ -364,7 +365,7 @@ public:
         std::map<NETELEMENT_ID, BLOCK_TERM> BlockTerminals;
         std::vector<CONNECTION_SCH>         Connections;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode ) override;
     };
 
 
@@ -394,7 +395,7 @@ public:
     SHEETS          Sheets;
     SCHEMATIC       Schematic;
 
-    int KiCadUnitMultiplier; ///<Use this value to convert units in this CSA file to KiCad units
+    double KiCadUnitMultiplier; ///<Use this value to convert units in this CSA file to KiCad units
 
 }; //CADSTAR_SCH_ARCHIVE_PARSER
 
