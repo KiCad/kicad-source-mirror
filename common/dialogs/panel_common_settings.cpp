@@ -66,6 +66,12 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aP
 
     m_iconScaleSlider->SetStep( 25 );
 
+#ifdef __WXMAC__
+    // Cairo canvas doesn't work on Mac, so no need for anti-aliasing options
+    m_antialiasingFallback->Show( false );
+    m_antialiasingFallbackLabel->Show( false );
+#endif
+
     m_textEditorBtn->SetBitmap( KiBitmap( folder_xpm ) );
     m_pdfViewerBtn->SetBitmap( KiBitmap( folder_xpm ) );
 
