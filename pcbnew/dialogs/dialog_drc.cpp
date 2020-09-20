@@ -220,6 +220,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 
     m_running = true;
     m_sdbSizer1Cancel->SetLabel( _( "Cancel" ) );
+    m_saveReport->Enable( false );
 
     drcTool->RunTests( this, testTracksAgainstZones, refillZones, reportAllTrackErrors,
                        testFootprints );
@@ -232,8 +233,9 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     Raise();
     wxYield();                                    // Allow time slice to refresh Messages
 
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
     m_running = false;
+    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
+    m_saveReport->Enable( true );
 
     if( !m_cancelled )
     {
