@@ -88,18 +88,11 @@ public:
 
     CADSTAR_SCH_ARCHIVE_PLUGIN()
     {
-        mSchematic = nullptr;
-        mRootSheet = nullptr;
     }
 
     ~CADSTAR_SCH_ARCHIVE_PLUGIN()
     {
     }
-
-private:
-    const PROPERTIES* mProperties;
-    SCHEMATIC*        mSchematic;
-    SCH_SHEET*        mRootSheet;
 };
 
 #endif // CADSTAR_SCH_ARCHIVE_PLUGIN_H_

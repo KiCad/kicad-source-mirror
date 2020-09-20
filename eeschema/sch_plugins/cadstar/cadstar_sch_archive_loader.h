@@ -28,8 +28,16 @@
 
 #include <sch_plugins/cadstar/cadstar_sch_archive_parser.h>
 
-#include <eda_text.h>
-#include <schematic.h>
+#include <sch_io_mgr.h>
+
+class EDA_TEXT;
+class LABEL_SPIN_STYLE;
+class LIB_FIELD;
+class LIB_PART;
+class SCH_COMPONENT;
+class SCH_SHEET;
+class SCH_FIELD;
+class SCHEMATIC;
 
 class CADSTAR_SCH_ARCHIVE_LOADER : public CADSTAR_SCH_ARCHIVE_PARSER
 {
@@ -39,6 +47,7 @@ public:
     {
         mSchematic      = nullptr;
         mRootSheet      = nullptr;
+        mPlugin         = nullptr;
         mDesignCenter.x = 0;
         mDesignCenter.y = 0;
     }
@@ -53,31 +62,52 @@ public:
      * @param aSchematic Schematic to add the design onto 
      * @param aRootSheet Root sheet to add the design onto 
      */
-    void Load( ::SCHEMATIC* aSchematic, ::SCH_SHEET* aRootSheet );
+    void Load( ::SCHEMATIC* aSchematic, ::SCH_SHEET* aRootSheet,
+            SCH_PLUGIN::SCH_PLUGIN_RELEASER* aSchPlugin, wxFileName aLibraryFileName );
 
 
 private:
-    ::SCHEMATIC* mSchematic;
-    ::SCH_SHEET* mRootSheet;
-    wxPoint      mDesignCenter;               ///< Used for calculating the required
-                                              ///< offset to apply to the Cadstar design
-                                              ///< so that it fits in KiCad canvas
-    std::set<HATCHCODE_ID> mHatchcodesTested; ///< Used by checkAndLogHatchCode() to
-                                              ///< avoid multiple duplicate warnings
-    std::map<LAYER_ID, SCH_SHEET*> mSheetMap; ///< Map between Cadstar and KiCad
+    ::SCHEMATIC*                     mSchematic;
+    ::SCH_SHEET*                     mRootSheet;
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER* mPlugin;
+    wxFileName                       mLibraryFileName;
+    wxPoint                          mDesignCenter; ///< Used for calculating the required
+                                                    ///< offset to apply to the Cadstar design
+                                                    ///< so that it fits in KiCad canvas
+    std::set<HATCHCODE_ID> mHatchcodesTested;       ///< Used by checkAndLogHatchCode() to
+                                                    ///< avoid multiple duplicate warnings
+    std::map<LAYER_ID, SCH_SHEET*> mSheetMap;       ///< Map between Cadstar and KiCad Sheets
+    std::map<PART_ID, LIB_PART*>   mPartMap;        ///< Map between Cadstar and KiCad Parts
+    std::map<SYMDEF_ID, LIB_PART*> mPowerSymMap;    ///< Map between Cadstar and KiCad Power Symbols
 
     void loadSheets();
+    void loadPartsLibrary();
+    void loadSchematicSymbolInstances();
 
-    //Helper Functions for loading
+    //Helper Functions for loading sheets
     void loadSheetAndChildSheets( LAYER_ID aCadstarSheetID, wxPoint aPosition, wxSize aSheetSize,
             SCH_SHEET* aParentSheet );
     void loadChildSheets( LAYER_ID aCadstarSheetID );
     std::vector<LAYER_ID> findOrphanSheets();
     int                   getSheetNumber( LAYER_ID aCadstarSheetID );
 
+    //Helper Functions for loading symbols
+    void           loadSymDefIntoLibrary( const SYMDEF_ID& aSymdefID, const PART* aCadstarPart,
+                      const GATE_ID& aGateID, LIB_PART* aPart );
+    void           loadLibrarySymbolShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
+                      wxPoint aSymbolOrigin, LIB_PART* aPart, int aGateNumber );
+    void           loadLibraryFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
+                      wxPoint aSymbolOrigin, LIB_FIELD* aKiCadField );
+    SCH_COMPONENT* loadSchematicSymbol( const SYMBOL& aCadstarSymbol, LIB_PART* aKiCadPart,
+            double& aComponentOrientationDeciDeg );
+    void           loadSymbolFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
+                      const double& aComponentOrientationDeciDeg, SCH_FIELD* aKiCadField );
+
     void checkAndLogHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
 
     //Helper Functions for obtaining CADSTAR elements in the parsed structures
+    SYMDEF_ID getSymDefFromName( const wxString& aSymdefName, const wxString& aSymDefAlternate );
+    wxString  generateSymDefName( const SYMDEF_ID& aSymdefID );
     int       getLineThickness( const LINECODE_ID& aCadstarLineCodeID );
     HATCHCODE getHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
     PART      getPart( const PART_ID& aCadstarPartID );
@@ -86,12 +116,15 @@ private:
     wxString  getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
     wxString  getAttributeValue( const ATTRIBUTE_ID&        aCadstarAttributeID,
              const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>& aCadstarAttributeMap );
+    PART::DEFINITION::PIN getPartDefinitionPin(
+            const PART& aCadstarPart, const GATE_ID& aGateID, const TERMINAL_ID& aTerminalID );
 
     // Helper Functions for obtaining individual elements as KiCad elements:
-    double getHatchCodeAngleDegrees( const HATCHCODE_ID& aCadstarHatchcodeID );
-    int    getKiCadHatchCodeThickness( const HATCHCODE_ID& aCadstarHatchcodeID );
-    int    getKiCadHatchCodeGap( const HATCHCODE_ID& aCadstarHatchcodeID );
-
+    double           getHatchCodeAngleDegrees( const HATCHCODE_ID& aCadstarHatchcodeID );
+    int              getKiCadHatchCodeThickness( const HATCHCODE_ID& aCadstarHatchcodeID );
+    int              getKiCadHatchCodeGap( const HATCHCODE_ID& aCadstarHatchcodeID );
+    int              getKiCadUnitNumberFromGate( const GATE_ID& aCadstarGateID );
+    LABEL_SPIN_STYLE getSpinStyle( const long long& aCadstarOrientation, bool aMirror );
 
     void applyTextSettings( const TEXTCODE_ID& aCadstarTextCodeID,
             const ALIGNMENT& aCadstarAlignment, const JUSTIFICATION& aCadstarJustification,
@@ -100,6 +133,8 @@ private:
     std::pair<wxPoint, wxSize> getFigureExtentsKiCad( const FIGURE& aCadstarFigure );
 
     wxPoint getKiCadPoint( wxPoint aCadstarPoint );
+
+    wxPoint getKiCadLibraryPoint( wxPoint aCadstarPoint, wxPoint aCadstarCentre );
 
 
     int getKiCadLength( long long aCadstarLength )
@@ -133,6 +168,13 @@ private:
      * @return Angle in decidegrees of the polar representation of the point, scaled 0..360
      */
     double getPolarAngle( wxPoint aPoint );
+
+    /**
+     * @brief 
+     * @param aPoint 
+     * @return Radius of polar representation of the point
+     */
+    double getPolarRadius( wxPoint aPoint );
 
 }; // CADSTAR_SCH_ARCHIVE_LOADER
 

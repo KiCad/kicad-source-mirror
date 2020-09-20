@@ -921,7 +921,8 @@ void CADSTAR_ARCHIVE_PARSER::TEXT_LOCATION::Parse( XNODE* aNode )
         THROW_UNKNOWN_PARAMETER_IO_ERROR( attributeStr, wxT( "TEXTLOC" ) );
     }
 
-    ParseIdentifiers( aNode );
+    TextCodeID = GetXmlAttributeIDString( aNode, 1 );
+    LayerID    = GetXmlAttributeIDString( aNode, 2, false );
 
     //Parse child nodes
     XNODE* cNode = aNode->GetChildren();
