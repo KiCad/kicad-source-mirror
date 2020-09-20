@@ -25,6 +25,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <core/typeinfo.h>
 #include <memory>
 #include <view/view.h>
 #include <view/view_group.h>
@@ -87,8 +88,17 @@ const BOX2I SCH_VIEW::GetItemsExtents() const
 
     for( EDA_ITEM* item : m_frame->GetScreen()->Items() )
     {
-        if( item != m_worksheet.get() )
-            bBoxItems.Merge( item->GetBoundingBox() );
+        if( item != m_worksheet.get() ) // Ignore the worksheet itself
+        {
+            if( item->Type() == SCH_COMPONENT_T )
+            {
+                // For components we need to get the bounding box without invisible text
+                SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( item );
+                bBoxItems.Merge( comp->GetBoundingBox( false ) );
+            }
+            else
+                bBoxItems.Merge( item->GetBoundingBox() );
+        }
     }
 
     return bBoxItems;
