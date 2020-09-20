@@ -20,9 +20,8 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_staticText9->Wrap( -1 );
 	bControlSizer->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	wxString m_cbThemeChoices[] = { _("User") };
-	int m_cbThemeNChoices = sizeof( m_cbThemeChoices ) / sizeof( wxString );
-	m_cbTheme = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbThemeNChoices, m_cbThemeChoices, 0 );
+	wxArrayString m_cbThemeChoices;
+	m_cbTheme = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbThemeChoices, 0 );
 	m_cbTheme->SetSelection( 0 );
 	m_cbTheme->SetMinSize( wxSize( 150,-1 ) );
 

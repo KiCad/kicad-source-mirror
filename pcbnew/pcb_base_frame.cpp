@@ -767,6 +767,8 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 {
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
+    GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( GetColorSettings() );
+
     RecreateToolbars();
 
     // The 3D viewer isn't in the Kiway, so send its update manually

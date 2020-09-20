@@ -50,6 +50,8 @@ public:
         return _( "Reset all colors in this theme to the KiCad defaults" );
     }
 
+    bool Show( bool show ) override;
+
 protected:
     void OnBtnOpenThemeFolderClicked( wxCommandEvent& event ) override;
 
@@ -59,6 +61,8 @@ protected:
     void ShowColorContextMenu( wxMouseEvent& aEvent, int aLayer );
 
     void OnColorChanged( wxCommandEvent& aEvent );
+
+    void updateSwatches();
 
     void createThemeList( const wxString& aCurrent );
 

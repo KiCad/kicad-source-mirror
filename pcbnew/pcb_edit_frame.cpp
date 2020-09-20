@@ -1584,6 +1584,7 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 {
     PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
+    GetAppearancePanel()->OnColorThemeChanged();
     ReCreateMicrowaveVToolbar();
 
     if( aTextVarsChanged )

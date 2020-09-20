@@ -79,6 +79,25 @@ void PANEL_COLOR_SETTINGS::ResetPanel()
 }
 
 
+bool PANEL_COLOR_SETTINGS::Show( bool show )
+{
+    if( show )
+    {
+        // In case changes have been made to the current theme in another panel:
+        wxString        currentTheme = m_cbTheme->GetStringSelection();
+        COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings( currentTheme );
+
+        if( settings )
+            *m_currentSettings = *settings;
+
+        onNewThemeSelected();
+        updateSwatches();
+    }
+
+    return PANEL_COLOR_SETTINGS_BASE::Show( show );
+}
+
+
 void PANEL_COLOR_SETTINGS::OnLeftDownTheme( wxMouseEvent& event )
 {
     // Lazy rebuild of theme menu to catch any colour theme changes made in other panels
@@ -153,15 +172,20 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
 
             *m_currentSettings = *selected;
             onNewThemeSelected();
-
-            COLOR4D background = m_currentSettings->GetColor( m_backgroundLayer );
-
-            for( std::pair<int, COLOR_SWATCH*> pair : m_swatches )
-            {
-                pair.second->SetSwatchBackground( background );
-                pair.second->SetSwatchColor( m_currentSettings->GetColor( pair.first ), false );
-            }
+            updateSwatches();
         }
+    }
+}
+
+
+void PANEL_COLOR_SETTINGS::updateSwatches()
+{
+    COLOR4D background = m_currentSettings->GetColor( m_backgroundLayer );
+
+    for( std::pair<int, COLOR_SWATCH*> pair : m_swatches )
+    {
+        pair.second->SetSwatchBackground( background );
+        pair.second->SetSwatchColor( m_currentSettings->GetColor( pair.first ), false );
     }
 }
 
@@ -291,6 +315,10 @@ void PANEL_COLOR_SETTINGS::updateColor( int aLayer, const KIGFX::COLOR4D& aColor
 {
     if( m_currentSettings )
         m_currentSettings->SetColor( aLayer, aColor );
+
+    // Colors must be persisted when edited because multiple PANEL_COLOR_SETTINGS could be
+    // referring to the same theme.
+    saveCurrentTheme( false );
 
     m_swatches[aLayer]->SetSwatchColor( aColor, false );
 

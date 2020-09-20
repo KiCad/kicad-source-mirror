@@ -432,16 +432,9 @@ PANEL_PCBNEW_COLOR_SETTINGS::~PANEL_PCBNEW_COLOR_SETTINGS()
 
 bool PANEL_PCBNEW_COLOR_SETTINGS::TransferDataFromWindow()
 {
-    if( !saveCurrentTheme( true ) )
-        return false;
-
-    m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( m_currentSettings );
-
     SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
     PCBNEW_SETTINGS* app_settings = settingsMgr.GetAppSettings<PCBNEW_SETTINGS>();
     app_settings->m_ColorTheme = m_currentSettings->GetFilename();
-
-    m_frame->GetAppearancePanel()->OnColorThemeChanged();
 
     return true;
 }

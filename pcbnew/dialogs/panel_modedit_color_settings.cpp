@@ -93,18 +93,9 @@ PANEL_MODEDIT_COLOR_SETTINGS::~PANEL_MODEDIT_COLOR_SETTINGS()
 
 bool PANEL_MODEDIT_COLOR_SETTINGS::TransferDataFromWindow()
 {
-    m_currentSettings->SetOverrideSchItemColors( m_optOverrideColors->GetValue() );
-
-    if( !saveCurrentTheme( true ) )
-        return false;
-
-    m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( m_currentSettings );
-
     SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
     FOOTPRINT_EDITOR_SETTINGS* settings = settingsMgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
     settings->m_ColorTheme = m_currentSettings->GetFilename();
-
-    m_frame->UpdateUserInterface();
 
     return true;
 }

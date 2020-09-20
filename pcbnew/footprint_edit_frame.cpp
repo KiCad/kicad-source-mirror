@@ -1039,6 +1039,11 @@ void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTe
 {
     PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
+    GetCanvas()->GetView()->UpdateAllLayersColor();
+    GetCanvas()->ForceRefresh();
+
+    UpdateUserInterface();
+
     if( aEnvVarsChanged )
         SyncLibraryTree( true );
 

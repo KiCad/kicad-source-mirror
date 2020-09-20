@@ -231,8 +231,6 @@ void PCB_DRAW_PANEL_GAL::UpdateColors()
 
     wxCHECK_RET( cs, "null COLOR_SETTINGS" );
 
-    Pgm().GetSettingsManager().SaveColorSettings( cs, "board" );
-
     auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() );
     rs->LoadColors( cs );
 
