@@ -51,7 +51,16 @@ JSON_SETTINGS::JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation,
         m_schemaVersion( aSchemaVersion ),
         m_manager( nullptr )
 {
-    ( *this )[PointerFromString( "meta.filename" )] = GetFullFilename();
+    try
+    {
+        ( *this )[PointerFromString( "meta.filename" )] = GetFullFilename();
+    }
+    catch( ... )
+    {
+        wxLogTrace( traceSettings, "Error: Could not create filename field for %s",
+                    GetFullFilename() );
+    }
+
 
     m_params.emplace_back(
             new PARAM<int>( "meta.version", &m_schemaVersion, m_schemaVersion, true ) );
@@ -83,10 +92,8 @@ void JSON_SETTINGS::Load()
         }
         catch( ... )
         {
-            // Skip unreadable parameters in file:
-#ifdef DEBUG
-            wxLogMessage( wxString::Format( "param '%s' load err", param->GetJsonPath().c_str() ) );
-#endif
+            // Skip unreadable parameters in file
+            wxLogTrace( traceSettings, "param '%s' load err", param->GetJsonPath().c_str() );
         }
     }
 }
