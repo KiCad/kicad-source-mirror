@@ -484,9 +484,9 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
                                   bool* aSelectionCancelledFlag,
                                   CLIENT_SELECTION_FILTER aClientFilter )
 {
-    GENERAL_COLLECTORS_GUIDE guide = getCollectorsGuide();
-    GENERAL_COLLECTOR        collector;
-    auto&                    displayOpts = m_frame->GetDisplayOptions();
+    GENERAL_COLLECTORS_GUIDE   guide = getCollectorsGuide();
+    GENERAL_COLLECTOR          collector;
+    const PCB_DISPLAY_OPTIONS& displayOpts = m_frame->GetDisplayOptions();
 
     guide.SetIgnoreZoneFills( displayOpts.m_ZoneDisplayMode != ZONE_DISPLAY_MODE::SHOW_FILLED );
 
@@ -496,9 +496,9 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
             ExitGroup();
     }
 
-    collector.Collect( board(),
-        m_editModules ? GENERAL_COLLECTOR::ModuleItems : GENERAL_COLLECTOR::AllBoardItems,
-        wxPoint( aWhere.x, aWhere.y ), guide );
+    collector.Collect( board(), m_editModules ? GENERAL_COLLECTOR::ModuleItems
+                                              : GENERAL_COLLECTOR::AllBoardItems,
+                       (wxPoint) aWhere, guide );
 
     // Remove unselectable items
     for( int i = collector.GetCount() - 1; i >= 0; --i )
@@ -725,7 +725,7 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
     bool containsLocked = false;
 
     // Check if the selection contains locked items
-    for( const auto& item : m_selection )
+    for( EDA_ITEM* item : m_selection )
     {
         switch( item->Type() )
         {
@@ -786,7 +786,7 @@ int SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
     if( items )
     {
         // Perform individual selection of each item before processing the event.
-        for( auto item : *items )
+        for( BOARD_ITEM* item : *items )
             select( item );
 
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
@@ -816,7 +816,7 @@ int SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
     selectionBox.SetMaximum();
     view->Query( selectionBox, selectedItems );         // Get the list of selected items
 
-    for( auto& item_pair : selectedItems )
+    for( const KIGFX::VIEW::LAYER_ITEM_PAIR& item_pair : selectedItems )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( item_pair.first );
 
@@ -1943,7 +1943,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
         // Similar to logic for module, a group is selectable if any of its
         // members are. (This recurses)
-        for( auto item : group->GetItems() )
+        for( BOARD_ITEM* item : group->GetItems() )
         {
             if( Selectable( item, true ) )
                 return true;
@@ -1956,6 +1956,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         return true;
 
     // These are not selectable
+    case PCB_NETINFO_T:
     case NOT_USED:
     case TYPE_NOT_INIT:
         return false;

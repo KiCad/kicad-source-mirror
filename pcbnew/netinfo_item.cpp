@@ -28,17 +28,11 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
 #include <pcb_base_frame.h>
-#include <common.h>
 #include <kicad_string.h>
-#include <pcbnew.h>
-#include <richio.h>
-#include <macros.h>
 #include <msgpanel.h>
 #include <base_units.h>
 #include <class_board.h>
-#include <class_module.h>
 #include <class_track.h>
 
 
@@ -94,9 +88,10 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
         return;
 
     int count = 0;
-    for( auto mod : board->Modules() )
+
+    for( MODULE* mod : board->Modules() )
     {
-        for( auto pad : mod->Pads() )
+        for( D_PAD* pad : mod->Pads() )
         {
             if( pad->GetNetCode() == GetNet() )
             {
@@ -111,7 +106,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
 
     count  = 0;
 
-    for( auto track : board->Tracks() )
+    for( TRACK* track : board->Tracks() )
     {
         if( track->Type() == PCB_VIA_T )
         {
