@@ -111,7 +111,6 @@ bool DIALOG_IMPORT_SETTINGS::TransferDataToWindow()
 void DIALOG_IMPORT_SETTINGS::OnBrowseClicked( wxCommandEvent& event )
 {
     wxFileName fn = m_frame->GetBoard()->GetFileName();
-    fn.SetExt( ProjectFileExtension );
 
     wxFileDialog dlg( this, _( "Import Settings From" ), fn.GetPath(), fn.GetFullName(),
                       PcbFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
