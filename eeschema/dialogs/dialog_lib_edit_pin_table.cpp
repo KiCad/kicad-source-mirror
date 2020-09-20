@@ -553,9 +553,9 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
         LIBEDIT_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
 
         if( last->GetOrientation() == PIN_LEFT || last->GetOrientation() == PIN_RIGHT )
-            pos.y -= cfg->m_Repeat.pin_step;
+            pos.y -= Mils2iu(cfg->m_Repeat.pin_step);
         else
-            pos.x += cfg->m_Repeat.pin_step;
+            pos.x += Mils2iu(cfg->m_Repeat.pin_step);
 
         newPin->SetPosition( pos );
     }
