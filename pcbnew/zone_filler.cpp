@@ -297,32 +297,8 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck,
         zone->SetIsFilled( true );
     }
 
-    // Re-add not connected zones to list, connectivity->FindIsolatedCopperIslands()
-    // populates islandsList only with zones having a net
-    for( ZONE_CONTAINER* zone : aZones )
-    {
-        // Keepout zones are not filled
-        if( zone->GetIsKeepout() || !zone->IsOnCopperLayer() || zone->GetNetCode() > 0 )
-            continue;
-
-        islandsList.emplace_back( CN_ZONE_ISOLATED_ISLAND_LIST( zone ) );
-
-        // All filled polygons are "isolated areas". Enter all filled polygons
-        // to CN_ZONE_ISOLATED_ISLAND_LIST index list
-        // Later, only areas outside the board outlines will be removed.
-        CN_ZONE_ISOLATED_ISLAND_LIST& cn_item = islandsList.back();
-
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
-        {
-            const SHAPE_POLY_SET& polys = zone->GetFilledPolysList( layer );
-
-            for( int ii = 0; ii < polys.OutlineCount(); ii++ )
-                cn_item.m_islands[layer].push_back( ii );
-        }
-    }
-
-    // Now remove insulated copper islands and islands outside the board edge
-    for( auto& zone : islandsList )
+    // Now remove insulated copper islands
+    for( CN_ZONE_ISOLATED_ISLAND_LIST& zone : islandsList )
     {
         for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
         {
@@ -335,49 +311,47 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck,
             // to allow deleting a polygon from list without breaking the remaining of the list
             std::sort( islands.begin(), islands.end(), std::greater<int>() );
 
-            SHAPE_POLY_SET poly = zone.m_zone->GetFilledPolysList( layer );
-
+            SHAPE_POLY_SET      poly = zone.m_zone->GetFilledPolysList( layer );
             long long int       minArea = zone.m_zone->GetMinIslandArea();
             ISLAND_REMOVAL_MODE mode    = zone.m_zone->GetIslandRemovalMode();
 
-            // Remove solid areas outside the board cutouts and the insulated islands
-            // only zones with net code > 0 can have insulated islands by definition
-            if( zone.m_zone->GetNetCode() > 0 )
+            for( int idx : islands )
             {
-                // solid areas outside the board cutouts are also removed, because they are usually
-                // insulated islands
-                for( auto idx : islands )
-                {
-                    if( mode == ISLAND_REMOVAL_MODE::ALWAYS
-                            || ( mode == ISLAND_REMOVAL_MODE::AREA
-                                    && poly.Outline( idx ).Area() < minArea )
-                            || !m_boardOutline.Contains( poly.Polygon( idx ).front().CPoint( 0 ) ) )
-                        poly.DeletePolygon( idx );
-                    else
-                        zone.m_zone->SetIsIsland( layer, idx );
-                }
-            }
-            // Zones with no net can have areas outside the board cutouts.
-            // By definition, Zones with no net have no isolated island
-            // (in fact any filled area is an isolated island)
-            // but they can have some areas outside the board cutouts.
-            // A filled area outside the board cutouts has all points outside cutouts,
-            // so we only need to check one point for each filled polygon.
-            // Note also non copper zones are already clipped
-            else if( m_brdOutlinesValid && zone.m_zone->IsOnCopperLayer() )
-            {
-                for( auto idx : islands )
-                {
-                    if( poly.Polygon( idx ).empty()
-                            || !m_boardOutline.Contains( poly.Polygon( idx ).front().CPoint( 0 ) ) )
-                    {
-                        poly.DeletePolygon( idx );
-                    }
-                }
+                SHAPE_LINE_CHAIN& outline = poly.Outline( idx );
+
+                if( mode == ISLAND_REMOVAL_MODE::ALWAYS )
+                    poly.DeletePolygon( idx );
+                else if ( mode == ISLAND_REMOVAL_MODE::AREA && outline.Area() < minArea )
+                    poly.DeletePolygon( idx );
+                else
+                    zone.m_zone->SetIsIsland( layer, idx );
             }
 
             zone.m_zone->SetFilledPolysList( layer, poly );
             zone.m_zone->CalculateFilledArea();
+
+            if( m_progressReporter && m_progressReporter->IsCancelled() )
+                return false;
+        }
+    }
+
+    // Now remove islands outside the board edge
+    for( ZONE_CONTAINER* zone : aZones )
+    {
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        {
+            SHAPE_POLY_SET poly = zone->GetFilledPolysList( layer );
+
+            for( int ii = 0; ii < poly.OutlineCount(); ii++ )
+            {
+                std::vector<SHAPE_LINE_CHAIN>& island = poly.Polygon( ii );
+
+                if( island.empty() || !m_boardOutline.Contains( island.front().CPoint( 0 ) ) )
+                    poly.DeletePolygon( ii );
+            }
+
+            zone->SetFilledPolysList( layer, poly );
+            zone->CalculateFilledArea();
 
             if( m_progressReporter && m_progressReporter->IsCancelled() )
                 return false;
