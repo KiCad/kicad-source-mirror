@@ -125,6 +125,18 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 
     m_F_Cu_PlatedPads_poly = nullptr;
     m_B_Cu_PlatedPads_poly = nullptr;
+
+    // Avoid raytracing options not initialized:
+    m_raytrace_nrsamples_shadows = 0;
+    m_raytrace_nrsamples_reflections = 0;
+    m_raytrace_nrsamples_refractions = 0;
+
+    m_raytrace_spread_shadows = 0.0;
+    m_raytrace_spread_reflections = 0.0;
+    m_raytrace_spread_refractions = 0.0;
+
+    m_raytrace_recursivelevel_reflections = 0;
+    m_raytrace_recursivelevel_refractions = 0;
 }
 
 

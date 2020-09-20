@@ -137,9 +137,11 @@ public:
     {
         switch( aSeverity )
         {
-            case RPT_SEVERITY_ERROR: 
+            case RPT_SEVERITY_ERROR:
                 m_log->SetColor( CONSOLE_LOG::RED );
                 m_log->Print("ERROR | ");
+                break;
+
             default:
                 m_log->SetColor( CONSOLE_LOG::DEFAULT );
                 m_log->Print("      | ");
