@@ -1147,18 +1147,29 @@ void PCB_PAINTER::draw( const MODULE* aModule, int aLayer )
 {
     if( aLayer == LAYER_ANCHOR )
     {
-        const COLOR4D color = m_pcbSettings.GetColor( aModule, LAYER_ANCHOR );
+        const COLOR4D color = m_pcbSettings.GetColor( aModule, aLayer );
+
+        // Keep the size and width constant, not related to the scale because the anchor
+        // is just a marker on screen
+        double anchorSize = 5.0 / m_gal->GetWorldScale();           // 5 pixels size
+        double anchorThickness = 2.0 / m_gal->GetWorldScale();      // 2 pixels width
 
         // Draw anchor
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color );
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-
-        // Keep the size constant, not related to the scale
-        double anchorSize = 5.0 / m_gal->GetWorldScale();
+        m_gal->SetLineWidth( anchorThickness );
 
         VECTOR2D center = aModule->GetPosition();
         m_gal->DrawLine( center - VECTOR2D( anchorSize, 0 ), center + VECTOR2D( anchorSize, 0 ) );
         m_gal->DrawLine( center - VECTOR2D( 0, anchorSize ), center + VECTOR2D( 0, anchorSize ) );
+
+#if 0   // For debug purpose only: draw the bounding box
+        double bboxThickness = 1.0 / m_gal->GetWorldScale();
+        m_gal->SetLineWidth( bboxThickness );
+        EDA_RECT rect = aModule->GetBoundingBoxBase();
+        m_gal->DrawRectangle( VECTOR2D( rect.GetOrigin() ), VECTOR2D( rect.GetEnd() ) );
+#endif
     }
 }
 
