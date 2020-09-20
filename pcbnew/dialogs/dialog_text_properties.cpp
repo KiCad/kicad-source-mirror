@@ -26,7 +26,6 @@
 #include <confirm.h>
 #include <gr_text.h>
 #include <fctsys.h>
-#include <widgets/tab_traversal.h>
 #include <widgets/unit_binder.h>
 #include <board_commit.h>
 #include <class_board.h>
@@ -216,6 +215,10 @@ void DIALOG_TEXT_PROPERTIES::OnCharHook( wxKeyEvent& aEvent )
         {
             m_MultiLineText->Paste();
         }
+        else if( IsCtrl( 'A', aEvent ) )
+        {
+            m_MultiLineText->SelectAll();
+        }
         else
         {
             aEvent.Skip();
@@ -271,8 +274,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
     if( m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() ) < 0 )
     {
-        wxMessageBox( _( "This item was on a non-existing or forbidden layer.\n"
-                         "It has been moved to the first allowed layer." ) );
+        wxMessageBox( _( "This item was on a non-existing layer.\n"
+                         "It has been moved to the first layer." ) );
         m_LayerSelectionCtrl->SetSelection( 0 );
     }
 
