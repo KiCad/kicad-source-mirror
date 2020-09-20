@@ -172,21 +172,31 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
         {
             BOARD* loadedBoard = m_frame->GetBoard();
 
-            // Check if "Import Settings" board  has more layers than the current board.
-            okToProceed = m_layers->compareCopperLayerCount( loadedBoard, otherBoard );
+            // Check if "Import Settings" board has more layers than the current board.
+            okToProceed = m_layers->CheckCopperLayerCount( loadedBoard, otherBoard );
         }
     }
     catch( const IO_ERROR& ioe )
     {
-        if( ioe.Problem() != wxT( "CANCEL" ) )
+        // You wouldn't think boardFn.GetFullPath() would throw, but we get a stack buffer
+        // underflow from ASAN.  While it's probably an ASAN error, a second try/catch doesn't
+        // cost us much.
+        try
         {
-            wxString msg =
-                    wxString::Format( _( "Error loading board file:\n%s" ), boardFn.GetFullPath() );
-            DisplayErrorMessage( this, msg, ioe.What() );
-        }
+            if( ioe.Problem() != wxT( "CANCEL" ) )
+            {
+                wxString msg = wxString::Format( _( "Error loading board file:\n%s" ),
+                                                 boardFn.GetFullPath() );
+                DisplayErrorMessage( this, msg, ioe.What() );
+            }
 
-        if( otherPrj != &m_frame->Prj() )
-            m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
+            if( otherPrj != &m_frame->Prj() )
+                m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
+        }
+        catch(...)
+        {
+            // That was already our best-efforts
+        }
 
         return;
     }

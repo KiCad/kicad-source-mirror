@@ -25,6 +25,7 @@
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,8 +41,9 @@ class DIALOG_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_MainSizer;
 		wxTextCtrl* m_filePathCtrl;
 		wxBitmapButton* m_browseButton;
-		wxBoxSizer* m_buttonsSizer;
 		wxButton* m_selectAllButton;
+		wxStaticLine* m_staticline1;
+		wxBoxSizer* m_buttonsSizer;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

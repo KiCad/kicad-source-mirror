@@ -749,12 +749,14 @@ void PANEL_SETUP_LAYERS::ImportSettingsFrom( BOARD* aBoard )
 }
 
 
-bool PANEL_SETUP_LAYERS::compareCopperLayerCount( BOARD* aWorkingBoard, BOARD* aImportedBoard )
+bool PANEL_SETUP_LAYERS::CheckCopperLayerCount( BOARD* aWorkingBoard, BOARD* aImportedBoard )
 {
-    /*  This function warns users if they are going to delete inner copper layers because
-        they're importing settings from a board with less copper layers than the board
-        already loaded. We want to return "true" as default on the assumption no layer will
-        actually be deleted. */
+    /*
+     * This function warns users if they are going to delete inner copper layers because
+     * they're importing settings from a board with less copper layers than the board
+     * already loaded. We want to return "true" as default on the assumption no layer will
+     * actually be deleted.
+     */
     bool okToDeleteCopperLayers = true;
 
     // Get the number of copper layers in the loaded board and the "import settings" board

@@ -15,64 +15,79 @@ DIALOG_IMPORT_SETTINGS_BASE::DIALOG_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWi
 
 	m_MainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bupperSizer;
-	bupperSizer = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bUpperSizer;
+	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	wxStaticText* importFromLabel;
 	importFromLabel = new wxStaticText( this, wxID_ANY, _("Import from:"), wxDefaultPosition, wxDefaultSize, 0 );
 	importFromLabel->Wrap( -1 );
-	bupperSizer->Add( importFromLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bUpperSizer->Add( importFromLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_filePathCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_filePathCtrl->SetToolTip( _("Target directory for plot files. Can be absolute or relative to the board file location.") );
 	m_filePathCtrl->SetMinSize( wxSize( 300,-1 ) );
 
-	bupperSizer->Add( m_filePathCtrl, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bUpperSizer->Add( m_filePathCtrl, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_browseButton->SetMinSize( wxSize( 29,29 ) );
 
-	bupperSizer->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bUpperSizer->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	m_MainSizer->Add( bupperSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_MainSizer->Add( bUpperSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	wxBoxSizer* bmiddleSizer;
-	bmiddleSizer = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bMiddleSizer;
+	bMiddleSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	wxBoxSizer* bLeftCol;
+	bLeftCol = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticText* importLabel;
 	importLabel = new wxStaticText( this, wxID_ANY, _("Import:"), wxDefaultPosition, wxDefaultSize, 0 );
 	importLabel->Wrap( -1 );
-	bmiddleSizer->Add( importLabel, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bLeftCol->Add( importLabel, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_LayersOpt = new wxCheckBox( this, wxID_ANY, _("Layers setup"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_LayersOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLeftCol->Add( m_LayersOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_TextAndGraphicsOpt = new wxCheckBox( this, wxID_ANY, _("Text and graphics default properties"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_TextAndGraphicsOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLeftCol->Add( m_TextAndGraphicsOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_ConstraintsOpt = new wxCheckBox( this, wxID_ANY, _("Design rules"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_ConstraintsOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLeftCol->Add( m_ConstraintsOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_TracksAndViasOpt = new wxCheckBox( this, wxID_ANY, _("Predefined track and via dimensions"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_TracksAndViasOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLeftCol->Add( m_TracksAndViasOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_MaskAndPasteOpt = new wxCheckBox( this, wxID_ANY, _("Solder mask/paste defaults"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_MaskAndPasteOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLeftCol->Add( m_MaskAndPasteOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_SeveritiesOpt = new wxCheckBox( this, wxID_ANY, _("Violation severities"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_SeveritiesOpt, 0, wxRIGHT|wxLEFT, 5 );
+	bLeftCol->Add( m_SeveritiesOpt, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_NetclassesOpt = new wxCheckBox( this, wxID_ANY, _("Net classes"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_NetclassesOpt, 0, wxALL, 5 );
+	bLeftCol->Add( m_NetclassesOpt, 0, wxALL, 5 );
 
 
-	m_MainSizer->Add( bmiddleSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bMiddleSizer->Add( bLeftCol, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
-	m_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bRightCol;
+	bRightCol = new wxBoxSizer( wxVERTICAL );
 
 	m_selectAllButton = new wxButton( this, wxID_ANY, _("Select All"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonsSizer->Add( m_selectAllButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
+	bRightCol->Add( m_selectAllButton, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxALIGN_RIGHT, 10 );
+
+
+	bMiddleSizer->Add( bRightCol, 1, wxEXPAND|wxALL, 20 );
+
+
+	m_MainSizer->Add( bMiddleSizer, 1, wxEXPAND|wxBOTTOM, 5 );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_MainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
