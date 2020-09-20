@@ -241,7 +241,22 @@ void DIALOG_PLOT::reInitDialog()
         m_DRCExclusionsWarning->Show();
     }
     else
+    {
         m_DRCExclusionsWarning->Hide();
+    }
+
+    BOARD* board = m_parent->GetBoard();
+    const BOARD_DESIGN_SETTINGS& brd_settings = board->GetDesignSettings();
+
+    if( getPlotFormat() == PLOT_FORMAT::GERBER &&
+        ( brd_settings.m_SolderMaskMargin || brd_settings.m_SolderMaskMinWidth ) )
+    {
+        m_PlotOptionsSizer->Show( m_SizerSolderMaskAlert );
+    }
+    else
+    {
+        m_PlotOptionsSizer->Hide( m_SizerSolderMaskAlert );
+    }
 }
 
 
@@ -407,9 +422,13 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 
     if( getPlotFormat() == PLOT_FORMAT::GERBER &&
         ( brd_settings.m_SolderMaskMargin || brd_settings.m_SolderMaskMinWidth ) )
+    {
         m_PlotOptionsSizer->Show( m_SizerSolderMaskAlert );
+    }
     else
+    {
         m_PlotOptionsSizer->Hide( m_SizerSolderMaskAlert );
+    }
 
 
     switch( getPlotFormat() )
@@ -917,3 +936,16 @@ void DIALOG_PLOT::onRunDRC( wxCommandEvent& event )
     }
 }
 
+
+void DIALOG_PLOT::onBoardSetup( wxHyperlinkEvent& aEvent )
+{
+    PCB_EDIT_FRAME* parent = dynamic_cast<PCB_EDIT_FRAME*>( GetParent() );
+
+    if( parent )
+    {
+        parent->ShowBoardSetupDialog( _( "Solder Mask/Paste" ) );
+
+        // Update warnings on return to this dialog
+        reInitDialog();
+    }
+}

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -163,14 +163,36 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_SizerSolderMaskAlert = new wxBoxSizer( wxHORIZONTAL );
 
 	m_bitmapAlert = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_WARNING, wxART_CMN_DIALOG ), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SizerSolderMaskAlert->Add( m_bitmapAlert, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_SizerSolderMaskAlert->Add( m_bitmapAlert, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_staticTextAlert = new wxStaticText( this, wxID_ANY, _("Global solder mask min width and/or margin are not set to 0\nMost of board houses expect a 0 value and use their constraints, especially for solder mask min width.\nPlease ensure the  solder mask min width (and margin value) are valid\nUse non 0 values only when required."), wxDefaultPosition, wxDefaultSize, 0 );
+	wxBoxSizer* bSizerWarningText;
+	bSizerWarningText = new wxBoxSizer( wxVERTICAL );
+
+	m_staticTextAlert = new wxStaticText( this, wxID_ANY, _("Global solder mask min width and/or margin are not set to 0.  Most board houses"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextAlert->Wrap( -1 );
-	m_SizerSolderMaskAlert->Add( m_staticTextAlert, 0, wxALL, 5 );
+	bSizerWarningText->Add( m_staticTextAlert, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizerSecondLine;
+	bSizerSecondLine = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticTextAlert1 = new wxStaticText( this, wxID_ANY, _("expect 0 and use their constraints, especially for solder mask min width."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextAlert1->Wrap( 580 );
+	bSizerSecondLine->Add( m_staticTextAlert1, 0, wxTOP, 2 );
 
 
-	m_PlotOptionsSizer->Add( m_SizerSolderMaskAlert, 1, wxEXPAND, 5 );
+	bSizerSecondLine->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_boardSetup = new wxHyperlinkCtrl( this, wxID_ANY, _("Board setup"), wxT("http://www.wxformbuilder.org"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	bSizerSecondLine->Add( m_boardSetup, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
+
+
+	bSizerWarningText->Add( bSizerSecondLine, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	m_SizerSolderMaskAlert->Add( bSizerWarningText, 1, wxEXPAND, 5 );
+
+
+	m_PlotOptionsSizer->Add( m_SizerSolderMaskAlert, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	m_GerberOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Gerber Options") ), wxHORIZONTAL );
 
@@ -447,6 +469,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_layerCheckListBox->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DIALOG_PLOT_BASE::OnRightClick ), NULL, this );
 	m_scaleOpt->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnSetScaleOpt ), NULL, this );
+	m_boardSetup->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_PLOT_BASE::onBoardSetup ), NULL, this );
 	m_useGerberX2Format->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnGerberX2Checked ), NULL, this );
 	m_DXF_plotModeOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnChangeDXFPlotMode ), NULL, this );
 	m_buttonDRC->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onRunDRC ), NULL, this );
@@ -468,6 +491,7 @@ DIALOG_PLOT_BASE::~DIALOG_PLOT_BASE()
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_layerCheckListBox->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DIALOG_PLOT_BASE::OnRightClick ), NULL, this );
 	m_scaleOpt->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnSetScaleOpt ), NULL, this );
+	m_boardSetup->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_PLOT_BASE::onBoardSetup ), NULL, this );
 	m_useGerberX2Format->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnGerberX2Checked ), NULL, this );
 	m_DXF_plotModeOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnChangeDXFPlotMode ), NULL, this );
 	m_buttonDRC->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onRunDRC ), NULL, this );

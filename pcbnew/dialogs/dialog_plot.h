@@ -74,6 +74,7 @@ private:
     void        CreateDrillFile( wxCommandEvent& event ) override;
     void        OnGerberX2Checked( wxCommandEvent& event ) override;
     void        onRunDRC( wxCommandEvent& event ) override;
+    void        onBoardSetup( wxHyperlinkEvent& aEvent ) override;
 
     // other functions
     void        init_Dialog();      // main initialization

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,6 +32,7 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
 #include <wx/statbmp.h>
+#include <wx/hyperlink.h>
 #include <wx/spinctrl.h>
 #include <wx/panel.h>
 #include <wx/menu.h>
@@ -88,6 +89,8 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_SizerSolderMaskAlert;
 		wxStaticBitmap* m_bitmapAlert;
 		wxStaticText* m_staticTextAlert;
+		wxStaticText* m_staticTextAlert1;
+		wxHyperlinkCtrl* m_boardSetup;
 		wxStaticBoxSizer* m_GerberOptionsSizer;
 		wxCheckBox* m_useGerberExtensions;
 		wxCheckBox* m_generateGerberJobFile;
@@ -135,6 +138,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		virtual void SetPlotFormat( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetScaleOpt( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onBoardSetup( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void OnGerberX2Checked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnChangeDXFPlotMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRunDRC( wxCommandEvent& event ) { event.Skip(); }
