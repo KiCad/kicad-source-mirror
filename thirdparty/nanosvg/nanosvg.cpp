@@ -3669,7 +3669,7 @@ NSVGimage* nsvgParse( char* input, const char* units, float dpi )
 
 NSVGimage* nsvgParseFromFile( FILE *fp, const char* units, float dpi )
 {
-    size_t  size;
+    long    size;
     char*   data = NULL;
     NSVGimage* image = NULL;
 
@@ -3678,6 +3678,10 @@ NSVGimage* nsvgParseFromFile( FILE *fp, const char* units, float dpi )
 
     fseek( fp, 0, SEEK_END );
     size = ftell( fp );
+
+    if( size < 0 )
+        goto error;
+
     fseek( fp, 0, SEEK_SET );
     data = (char*) malloc( size + 1 );
 
