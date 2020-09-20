@@ -328,18 +328,22 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
     if( !IsVisible() && !searchHiddenFields )
         return false;
 
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T && m_id == REFERENCE )
     {
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
-
-        if( searchAndReplace && m_id == REFERENCE && !replaceReferences )
+        if( searchAndReplace && !replaceReferences )
             return false;
+
+        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
+        wxASSERT( aAuxData );
 
         // Take sheet path into account which effects the reference field and the unit for
         // components with multiple parts.
-        if( m_id == REFERENCE && aAuxData != NULL )
+        if( aAuxData )
         {
             text = parentComponent->GetRef( (SCH_SHEET_PATH*) aAuxData );
+
+            if( SCH_ITEM::Matches( text, aSearchData ) )
+                return true;
 
             if( parentComponent->GetUnitCount() > 1 )
                 text << LIB_PART::SubReference( parentComponent->GetUnit() );

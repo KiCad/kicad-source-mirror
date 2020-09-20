@@ -200,7 +200,8 @@ private:
      * @param aData Search data to compare against or NULL to match the first item found
      * @return pointer to the next search item found or NULL if nothing found
      */
-    SCH_ITEM* nextMatch( SCH_SCREEN* aScreen, SCH_ITEM* aAfter, wxFindReplaceData* aData );
+    SCH_ITEM* nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet, SCH_ITEM* aAfter,
+                         wxFindReplaceData* aData );
 
 private:
     bool      m_probingPcbToSch; // Recursion guard when cross-probing to PCBNew
