@@ -208,7 +208,8 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksA
     m_drcEngine->SetProgressReporter( nullptr );
     m_drcEngine->ClearViolationHandler();
 
-    m_drcDialog->SetDrcRun();
+    if( m_drcDialog )
+        m_drcDialog->SetDrcRun();
 
     if( !netlist.IsEmpty() )
         m_drcDialog->SetFootprintTestsRun();

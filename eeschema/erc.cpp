@@ -343,7 +343,7 @@ int ERC_TESTER::TestMultiunitFootprints()
             const wxString secondFp = secondRef.GetFootprint();
             wxString       msg;
 
-            if( !secondFp.IsEmpty() && unitFP != secondFp )
+            if( unit && !secondFp.IsEmpty() && unitFP != secondFp )
             {
                 msg.Printf( _( "Different footprints assigned to %s and %s" ),
                             unitName, secondName );

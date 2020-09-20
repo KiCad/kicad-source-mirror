@@ -402,12 +402,15 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     {
         MARKER_PCB* marker = dynamic_cast<MARKER_PCB*>( node->m_RcItem->GetParent() );
 
-        marker->SetExcluded( false );
-        m_brdEditor->GetCanvas()->GetView()->Update( marker );
+        if( marker )
+        {
+            marker->SetExcluded( false );
+            m_brdEditor->GetCanvas()->GetView()->Update( marker );
 
-        // Update view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
-        modified = true;
+            // Update view
+            static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
+            modified = true;
+        }
     }
         break;
 
@@ -415,16 +418,19 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     {
         MARKER_PCB* marker = dynamic_cast<MARKER_PCB*>( node->m_RcItem->GetParent() );
 
-        marker->SetExcluded( true );
-        m_brdEditor->GetCanvas()->GetView()->Update( marker );
+        if( marker )
+        {
+            marker->SetExcluded( true );
+            m_brdEditor->GetCanvas()->GetView()->Update( marker );
 
-        // Update view
-        if( m_severities & RPT_SEVERITY_EXCLUSION )
-            static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
-        else
-            static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->DeleteCurrentItem( false );
+            // Update view
+            if( m_severities & RPT_SEVERITY_EXCLUSION )
+                static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
+            else
+                static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->DeleteCurrentItem( false );
 
-        modified = true;
+            modified = true;
+        }
     }
         break;
 

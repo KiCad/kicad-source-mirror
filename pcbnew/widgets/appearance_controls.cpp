@@ -2173,7 +2173,7 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
 
     m_lastSelectedUserPreset = ( !preset || preset->readOnly ) ? nullptr : preset;
 
-    if( !preset )
+    if( preset )
         doApplyLayerPreset( *preset );
 
     if( !m_currentPreset->name.IsEmpty() )

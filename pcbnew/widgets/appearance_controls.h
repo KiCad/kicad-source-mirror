@@ -161,27 +161,35 @@ public:
 
         APPEARANCE_SETTING( const wxString& aLabel, int aId,
                             const wxString& aTooltip = wxEmptyString,
-                            bool aCanControlOpacity = false )
+                            bool aCanControlOpacity = false ) :
+                id( aId ),
+                label( aLabel ),
+                tooltip( aTooltip ),
+                visible( true ),
+                can_control_opacity( aCanControlOpacity ),
+                spacer( false ),
+                ctl_panel( nullptr ),
+                ctl_indicator( nullptr ),
+                ctl_visibility( nullptr ),
+                ctl_color( nullptr ),
+                ctl_text( nullptr ),
+                ctl_opacity( nullptr )
         {
-            label   = aLabel;
-            id      = aId;
-            tooltip = aTooltip;
-            spacer  = false;
-            visible = true;
-
-            can_control_opacity = aCanControlOpacity;
-
-            ctl_panel      = nullptr;
-            ctl_indicator  = nullptr;
-            ctl_visibility = nullptr;
-            ctl_color      = nullptr;
-            ctl_text       = nullptr;
-            ctl_opacity    = nullptr;
         }
 
         APPEARANCE_SETTING() :
-                id( -1 ), label( "" ), tooltip( "" ), visible( false ),
-                can_control_opacity( false ), spacer( true )
+                id( -1 ),
+                label( "" ),
+                tooltip( "" ),
+                visible( false ),
+                can_control_opacity( false ),
+                spacer( true ),
+                ctl_panel( nullptr ),
+                ctl_indicator( nullptr ),
+                ctl_visibility( nullptr ),
+                ctl_color( nullptr ),
+                ctl_text( nullptr ),
+                ctl_opacity( nullptr )
         {
         }
     };

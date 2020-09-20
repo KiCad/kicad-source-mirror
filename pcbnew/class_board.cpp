@@ -2117,7 +2117,7 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
                 // This check of childIdx should never fail, because if a group
                 // is not found in the groups list, then the board.GetItem()
                 // check above should have failed.
-                wxCHECK( childIdx >= 0 && childIdx < groups.size(),
+                wxCHECK( childIdx < groups.size(),
                          wxString::Format( "Group %s not found in groups list",
                                            item->m_Uuid.AsString() ) );
                 wxCHECK( parentGroupIdx[childIdx] == -1,

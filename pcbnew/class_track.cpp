@@ -671,7 +671,6 @@ void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     wxString  msg;
     wxString  msg2;
     wxString  source;
-    BOARD*    board = GetBoard();
 
     // Display basic infos
     switch( GetViaType() )

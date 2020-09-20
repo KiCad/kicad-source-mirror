@@ -532,7 +532,10 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
     BOARD_ITEM_CONTAINER* parent = frame->GetModel();
 
     BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( source );
-    wxASSERT( boardItem );
+
+    // Don't continue processing if we don't actually have a board item
+    if( !boardItem )
+        return 0;
 
     PCB_LAYER_ID layer = boardItem->GetLayer();
 

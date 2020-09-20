@@ -294,10 +294,9 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 r->Report( _( "Items belong to the same net. Clearance is 0." ) );
             }
         }
-        else
+        else if( ac )
         {
             // Different nets (or second unconnected)....
-
             reportCopperClearance( layer, ac, b, r );
         }
     }

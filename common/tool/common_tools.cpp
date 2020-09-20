@@ -264,20 +264,18 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
 {
     KIGFX::VIEW*        view   = getView();
     EDA_DRAW_PANEL_GAL* canvas = m_frame->GetCanvas();
-    EDA_DRAW_FRAME*     frame = getEditFrame<EDA_DRAW_FRAME>();
+    EDA_DRAW_FRAME*     frame  = getEditFrame<EDA_DRAW_FRAME>();
 
     BOX2I    bBox = frame->GetDocumentExtents();
     BOX2I    defaultBox = canvas->GetDefaultViewBBox();
-    VECTOR2D scrollbarSize = VECTOR2D( canvas->GetSize() - canvas->GetClientSize() );
 
     view->SetScale( 1.0 );  // The best scale will be determined later, but this initial
                             // value ensures all view parameters are up to date (especially
                             // at init time)
     VECTOR2D screenSize = view->ToWorld( canvas->GetClientSize(), false );
 
-    // Currently "Zoom to Objects" is only supported on Eeschema.  Support for other 
+    // Currently "Zoom to Objects" is only supported on Eeschema.  Support for other
     // programs in the suite can be added as needed.
-
     if( aFitType == ZOOM_FIT_OBJECTS )
     {
         if( frame->IsType( FRAME_SCH ) )
@@ -287,7 +285,6 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
     }
 
     // If the screen is empty then use the default view bbox
-
     if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
         bBox = defaultBox;
 
@@ -302,7 +299,6 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
     {
     case ZOOM_FIT_ALL:
         // Leave a bigger margin for library editors & viewers
-
         if( frame->IsType( FRAME_FOOTPRINT_VIEWER ) || frame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
                 || frame->IsType( FRAME_SCH_VIEWER ) || frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
         {
