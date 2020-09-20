@@ -170,7 +170,6 @@ wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry
     wxMenuItem* item = new wxMenuItem( this, aAction.GetUIId(), aAction.GetMenuItem(),
                                        aAction.GetDescription(),
                                        aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
-
     if( icon )
         AddBitmapToMenuItem( item, KiBitmap( icon ) );
 
@@ -612,9 +611,18 @@ wxMenuItem* ACTION_MENU::appendCopy( const wxMenuItem* aSource )
                                           aSource->GetHelp(), aSource->GetKind() );
 
     // Add the source bitmap if it is not the wxNullBitmap
-    // On Windows, for Checkable Menu items, adding a null bitmap adds also
+    // On Windows, for Checkable Menu items, adding a bitmap adds also
     // our predefined checked alternate bitmap
+    // On other OS, wxITEM_CHECK and wxITEM_RADIO Menu items do not use custom bitmaps.
+#if defined(_WIN32)
+    // On Windows, AddBitmapToMenuItem() uses the unchecked bitmap for wxITEM_CHECK and wxITEM_RADIO menuitems
+    // and autoamtically adds a checked bitmap.
+    // For other menuitrms, use the "checked" bitmap.
+    bool use_checked_bm = ( aSource->GetKind() == wxITEM_CHECK || aSource->GetKind() == wxITEM_RADIO ) ? false : true;
+    const wxBitmap& src_bitmap = aSource->GetBitmap( use_checked_bm );
+#else
     const wxBitmap& src_bitmap = aSource->GetBitmap();
+#endif
 
     if( src_bitmap.IsOk() && src_bitmap.GetHeight() > 1 )    // a null bitmap has a 0 size
         AddBitmapToMenuItem( newItem, src_bitmap );
