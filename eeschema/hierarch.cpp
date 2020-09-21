@@ -34,18 +34,17 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <schematic.h>
-#include <wx/imaglist.h>
-#include <wx/treectrl.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/sch_editor_control.h>
-//#include <netlist_object.h>
 #include <sch_sheet_path.h>
 
 #include <hierarch.h>
 #include <view/view.h>
 #include <kiface_i.h>
 #include "eeschema_settings.h"
+
+#include <wx/wx.h>
 
 class HIERARCHY_NAVIG_DLG;
 
@@ -157,6 +156,12 @@ void HIERARCHY_TREE::onChar( wxKeyEvent& event )
 }
 
 
+int HIERARCHY_TREE::OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 )
+{
+    return GetItemText( item1 ).CmpNoCase( GetItemText( item2 ) );
+}
+
+
 void HIERARCHY_NAVIG_DLG::buildHierarchyTree( SCH_SHEET_PATH* aList, wxTreeItemId* aPreviousmenu )
 {
     wxCHECK_RET( m_nbsheets < NB_MAX_SHEET, "Maximum number of sheets exceeded." );
@@ -186,6 +191,8 @@ void HIERARCHY_NAVIG_DLG::buildHierarchyTree( SCH_SHEET_PATH* aList, wxTreeItemI
         if( m_nbsheets >= NB_MAX_SHEET )
             break;
     }
+
+    m_Tree->SortChildren( *aPreviousmenu );
 }
 
 void HIERARCHY_NAVIG_DLG::UpdateHierarchyTree()

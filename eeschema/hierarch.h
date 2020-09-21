@@ -53,6 +53,8 @@ public:
 
     // Closes the dialog on escape key
     void onChar( wxKeyEvent& event );
+
+    int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 ) override;
 };
 
 class HIERARCHY_NAVIG_DLG : public DIALOG_SHIM
