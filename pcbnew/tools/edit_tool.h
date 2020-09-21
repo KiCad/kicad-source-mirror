@@ -205,6 +205,8 @@ private:
     VECTOR2I        m_cursor;          // Last cursor position (needed for getModificationPoint()
                                        // to avoid changes of edit reference point).
     std::unique_ptr<BOARD_COMMIT> m_commit;
+
+    std::unique_ptr<STATUS_TEXT_POPUP>    m_statusPopup;
 };
 
 #endif

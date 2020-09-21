@@ -129,6 +129,8 @@ void EDIT_TOOL::Reset( RESET_REASON aReason )
 {
     m_dragging = false;
 
+    m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( getEditFrame<PCB_BASE_EDIT_FRAME>() );
+
     if( aReason != RUN )
         m_commit.reset( new BOARD_COMMIT( this ) );
 }
@@ -1229,24 +1231,22 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     if( !m_lockedSelected && !lockedItems.empty() )
     {
         ///> Popup nag for deleting locked items
-        STATUS_TEXT_POPUP statusPopup( frame() );
-
         m_lockedSelected = true;
         m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &lockedItems );
-        statusPopup.SetText( _( "Delete again to remove locked items" ) );
-        statusPopup.PopupFor( 2000 );
-        statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+        m_statusPopup->SetText( _( "Delete again to remove locked items" ) );
+        m_statusPopup->PopupFor( 2000 );
+        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
 
         Activate();
 
-        while( m_lockedSelected && statusPopup.IsShown() )
+        while( m_lockedSelected && m_statusPopup->IsShown() )
         {
-            statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+            m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
             Wait();
         }
 
-        // Ensure statusPopup is hidden after use and before deleting it:
-        statusPopup.Hide();
+        // Ensure statusPopup is hidden after use
+        m_statusPopup->Hide();
     }
 
     m_lockedSelected = false;
@@ -1561,12 +1561,11 @@ bool EDIT_TOOL::updateModificationPoint( PCBNEW_SELECTION& aSelection )
 bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aSuccessMessage,
                                     const wxString& aCanceledMessage, VECTOR2I& aReferencePoint )
 {
-    STATUS_TEXT_POPUP   statusPopup( frame() );
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
     OPT<VECTOR2I>       pickedPoint;
     bool                done = false;
 
-    statusPopup.SetText( aTooltip );
+    m_statusPopup->SetText( aTooltip );
 
     picker->SetClickHandler(
             [&]( const VECTOR2D& aPoint ) -> bool
@@ -1575,12 +1574,12 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
 
                 if( !aSuccessMessage.empty() )
                 {
-                    statusPopup.SetText( aSuccessMessage );
-                    statusPopup.Expire( 800 );
+                    m_statusPopup->SetText( aSuccessMessage );
+                    m_statusPopup->Expire( 800 );
                 }
                 else
                 {
-                    statusPopup.Hide();
+                    m_statusPopup->Hide();
                 }
 
                 return false; // we don't need any more points
@@ -1589,7 +1588,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
     picker->SetMotionHandler(
             [&]( const VECTOR2D& aPos )
             {
-                statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
+                m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
             } );
 
     picker->SetCancelHandler(
@@ -1597,12 +1596,12 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
             {
                 if( !aCanceledMessage.empty() )
                 {
-                    statusPopup.SetText( aCanceledMessage );
-                    statusPopup.Expire( 800 );
+                    m_statusPopup->SetText( aCanceledMessage );
+                    m_statusPopup->Expire( 800 );
                 }
                 else
                 {
-                    statusPopup.Hide();
+                    m_statusPopup->Hide();
                 }
             } );
 
@@ -1612,8 +1611,8 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
                 done = true;
             } );
 
-    statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
-    statusPopup.Popup();
+    m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
+    m_statusPopup->Popup();
 
     std::string tool = "";
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
@@ -1622,7 +1621,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
         Wait();
 
     // Ensure statusPopup is hidden after use and before deleting it:
-    statusPopup.Hide();
+    m_statusPopup->Hide();
 
     if( pickedPoint.is_initialized() )
         aReferencePoint = pickedPoint.get();
@@ -1635,6 +1634,7 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 {
     std::string  tool = "pcbnew.InteractiveEdit.selectReferencePoint";
     CLIPBOARD_IO io;
+    GRID_HELPER grid( m_toolMgr, getEditFrame<PCB_BASE_EDIT_FRAME>()->GetMagneticItemsSettings() );
 
     frame()->PushTool( tool );
     Activate();
@@ -1646,20 +1646,21 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 
     if( !selection.Empty() )
     {
-        VECTOR2I refPoint;
-        bool     rv = pickReferencePoint( _( "Select reference point for the copy..." ),
-                                          _( "Selection copied." ),
-                                          _( "Copy cancelled." ),
-                                          refPoint );
-        frame()->SetMsgPanel( board() );
+        m_statusPopup->SetText( _( "Selection copied" ) );
+        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
 
-        if( rv )
-        {
-            selection.SetReferencePoint( refPoint );
+        std::vector<BOARD_ITEM*> items;
 
-            io.SetBoard( board() );
-            io.SaveSelection( selection, m_editModules );
-        }
+        for( EDA_ITEM* item : selection )
+            items.push_back( static_cast<BOARD_ITEM*>( item ) );
+
+        VECTOR2I refPoint = grid.BestDragOrigin( getViewControls()->GetCursorPosition( false ), items );
+        selection.SetReferencePoint( refPoint );
+
+        io.SetBoard( board() );
+        io.SaveSelection( selection, m_editModules );
+        m_statusPopup->Expire( 800 );
+        m_statusPopup->Show();
     }
 
     frame()->PopTool( tool );
