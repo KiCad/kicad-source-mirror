@@ -1095,8 +1095,10 @@ unsigned int MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
     // Currently this is only pertinent for the anchor layer; everything else is drawn from the
     // children.
+    #define MINIMAL_ZOOM_LEVEL_FOR_VISIBILITY 0.6
+
     if( aView->IsLayerVisible( layer ) )
-        return 3;
+        return MINIMAL_ZOOM_LEVEL_FOR_VISIBILITY;
 
     return std::numeric_limits<unsigned int>::max();
 }
