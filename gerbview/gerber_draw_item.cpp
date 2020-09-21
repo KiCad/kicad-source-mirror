@@ -951,7 +951,7 @@ const BOX2I GERBER_DRAW_ITEM::ViewBBox() const
 }
 
 
-unsigned int GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     // DCodes will be shown only if zoom is appropriate:
     // Returns the level of detail of the item.
@@ -977,12 +977,12 @@ unsigned int GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) cons
 
         // the level of details is chosen experimentally, to show
         // only a readable text:
-        const int level = Millimeter2iu( 4 );
-        return ( level / ( size + 1 ) );
+        double level = (double)Millimeter2iu( 3 );
+        return level / ( size + 1 );
     }
 
     // Other layers are shown without any conditions
-    return 0;
+    return 0.0;
 }
 
 

@@ -226,7 +226,7 @@ public:
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
     const BOX2I ViewBBox() const override;
 
@@ -438,7 +438,7 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
     void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 

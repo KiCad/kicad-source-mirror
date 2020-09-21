@@ -148,7 +148,7 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }

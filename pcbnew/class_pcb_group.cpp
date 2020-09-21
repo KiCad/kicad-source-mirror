@@ -238,12 +238,12 @@ void PCB_GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-unsigned int PCB_GROUP::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double PCB_GROUP::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     if( aView->IsLayerVisible( LAYER_ANCHOR ) )
-        return 0;
+        return 0.0;
 
-    return std::numeric_limits<unsigned int>::max();
+    return std::numeric_limits<double>::max();
 }
 
 

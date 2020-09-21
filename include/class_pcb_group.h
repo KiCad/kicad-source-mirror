@@ -151,7 +151,7 @@ public:
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     ///> @copydoc VIEW_ITEM::ViewGetLOD
-    unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
     ///> @copydoc BOARD_ITEM::Move
     void Move( const wxPoint& aMoveVector ) override;

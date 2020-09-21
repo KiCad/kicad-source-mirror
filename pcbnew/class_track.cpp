@@ -508,9 +508,9 @@ void TRACK::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-unsigned int TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    const int HIDE = std::numeric_limits<unsigned int>::max();
+    constexpr double HIDE = std::numeric_limits<double>::max();
 
     if( !aView->IsLayerVisible( LAYER_TRACKS ) )
         return HIDE;
@@ -518,11 +518,11 @@ unsigned int TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     // Netnames will be shown only if zoom is appropriate
     if( IsNetnameLayer( aLayer ) )
     {
-        return ( Millimeter2iu( 4 ) / ( m_Width + 1 ) );
+        return ( double ) Millimeter2iu( 4 ) / ( m_Width + 1 );
     }
 
     // Other layers are shown without any conditions
-    return 0;
+    return 0.0;
 }
 
 
@@ -569,13 +569,13 @@ void VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-unsigned int VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    constexpr unsigned int HIDE = std::numeric_limits<unsigned int>::max();
+    constexpr double HIDE = (double)std::numeric_limits<double>::max();
 
     // Netnames will be shown only if zoom is appropriate
     if( IsNetnameLayer( aLayer ) )
-        return m_Width == 0 ? HIDE : ( Millimeter2iu( 10 ) / m_Width );
+        return m_Width == 0 ? HIDE : ( (double)Millimeter2iu( 10 ) / m_Width );
 
     bool onVisibleLayer = false;
 
@@ -599,7 +599,7 @@ unsigned int VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         if( !onVisibleLayer && m_ViaType != VIATYPE::THROUGH )
             return HIDE;
 
-        return aView->IsLayerVisible( LAYER_VIAS ) ? 0 : HIDE;
+        return aView->IsLayerVisible( LAYER_VIAS ) ? 0.0 : HIDE;
     }
 
     return HIDE;

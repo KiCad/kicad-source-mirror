@@ -138,10 +138,10 @@ public:
      * @return the level of detail. 0 always show the item, because the
      * actual zoom level (or VIEW scale) is always > 0
      */
-    virtual unsigned int ViewGetLOD( int aLayer, VIEW* aView ) const
+    virtual double ViewGetLOD( int aLayer, VIEW* aView ) const
     {
         // By default always show the item
-        return 0;
+        return 0.0;
     }
 
 public:

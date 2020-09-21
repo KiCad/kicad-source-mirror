@@ -292,7 +292,7 @@ public:
     virtual const BOX2I ViewBBox() const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLOD()
-    virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
     ///> @copydoc EDA_ITEM::Visit()
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;

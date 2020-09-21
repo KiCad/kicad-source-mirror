@@ -381,12 +381,12 @@ void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    const int HIDE = std::numeric_limits<unsigned int>::max();
+    constexpr double HIDE = (double)std::numeric_limits<double>::max();
 
     if( !aView )
-        return 0;
+        return 0.0;
 
     // Hidden text gets put on the LAYER_MOD_TEXT_INVISIBLE for rendering, but
     // should only render if its native layer is visible.
@@ -415,7 +415,7 @@ unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return HIDE;
 
     // Other layers are shown without any conditions
-    return 0;
+    return 0.0;
 }
 
 

@@ -1152,7 +1152,7 @@ void PCB_PAINTER::draw( const MODULE* aModule, int aLayer )
         // Keep the size and width constant, not related to the scale because the anchor
         // is just a marker on screen
         double anchorSize = 5.0 / m_gal->GetWorldScale();           // 5 pixels size
-        double anchorThickness = 2.0 / m_gal->GetWorldScale();      // 2 pixels width
+        double anchorThickness = 1.0 / m_gal->GetWorldScale();      // 1 pixels width
 
         // Draw anchor
         m_gal->SetIsFill( false );
@@ -1164,7 +1164,7 @@ void PCB_PAINTER::draw( const MODULE* aModule, int aLayer )
         m_gal->DrawLine( center - VECTOR2D( anchorSize, 0 ), center + VECTOR2D( anchorSize, 0 ) );
         m_gal->DrawLine( center - VECTOR2D( 0, anchorSize ), center + VECTOR2D( 0, anchorSize ) );
 
-#if 0   // For debug purpose only: draw the bounding box
+#if 0   // For debug purpose only: draw the footing bounding box
         double bboxThickness = 1.0 / m_gal->GetWorldScale();
         m_gal->SetLineWidth( bboxThickness );
         EDA_RECT rect = aModule->GetBoundingBoxBase();

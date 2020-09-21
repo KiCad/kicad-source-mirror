@@ -301,11 +301,11 @@ void ZONE_CONTAINER::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-unsigned int ZONE_CONTAINER::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double ZONE_CONTAINER::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    constexpr unsigned int HIDE = std::numeric_limits<unsigned int>::max();
+    constexpr double HIDE = std::numeric_limits<double>::max();
 
-    return aView->IsLayerVisible( LAYER_ZONES ) ? 0 : HIDE;
+    return aView->IsLayerVisible( LAYER_ZONES ) ? 0.0 : HIDE;
 }
 
 
@@ -1298,9 +1298,9 @@ EDA_ITEM* MODULE_ZONE_CONTAINER::Clone() const
 }
 
 
-unsigned int MODULE_ZONE_CONTAINER::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double MODULE_ZONE_CONTAINER::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    const int HIDE = std::numeric_limits<unsigned int>::max();
+    constexpr double HIDE = (double)std::numeric_limits<double>::max();
 
     if( !aView )
         return 0;
@@ -1315,7 +1315,7 @@ unsigned int MODULE_ZONE_CONTAINER::ViewGetLOD( int aLayer, KIGFX::VIEW* aView )
         return HIDE;
 
     // Other layers are shown without any conditions
-    return 0;
+    return 0.0;
 }
 
 

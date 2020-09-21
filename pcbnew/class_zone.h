@@ -150,7 +150,7 @@ public:
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
     void SetFillMode( ZONE_FILL_MODE aFillMode ) { m_fillMode = aFillMode; }
     ZONE_FILL_MODE GetFillMode() const { return m_fillMode; }
@@ -951,7 +951,7 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 };
 
 #endif  // CLASS_ZONE_H_

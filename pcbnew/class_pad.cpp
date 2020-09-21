@@ -1171,12 +1171,12 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-unsigned int D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     if( aView->GetPrintMode() > 0 )  // In printing mode the pad is always drawable
-        return 0;
+        return 0.0;
 
-    const int HIDE = std::numeric_limits<unsigned int>::max();
+    constexpr double HIDE = std::numeric_limits<double>::max();
     BOARD* board = GetBoard();
 
     // Meta control for hiding all pads
@@ -1214,7 +1214,7 @@ unsigned int D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         if( divisor == 0 )
             return HIDE;
 
-        return ( Millimeter2iu( 5 ) / divisor );
+        return ( double ) Millimeter2iu( 5 ) / divisor;
     }
 
     // Other layers are shown without any conditions

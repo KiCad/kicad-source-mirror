@@ -313,9 +313,9 @@ void EDGE_MODULE::Move( const wxPoint& aMoveVector )
 }
 
 
-unsigned int EDGE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double EDGE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    const int HIDE = std::numeric_limits<unsigned int>::max();
+    constexpr double HIDE = std::numeric_limits<double>::max();
 
     if( !aView )
         return 0;
@@ -328,7 +328,7 @@ unsigned int EDGE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return HIDE;
 
     // Other layers are shown without any conditions
-    return 0;
+    return 0.0;
 }
 
 
