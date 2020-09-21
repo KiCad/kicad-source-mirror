@@ -42,7 +42,8 @@ DRC_TOOL::DRC_TOOL() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
         m_editFrame( nullptr ),
         m_pcb( nullptr ),
-        m_drcDialog( nullptr )
+        m_drcDialog( nullptr ),
+        m_drcRunning( false )
 {
 }
 
@@ -154,6 +155,8 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksA
         return;
     }
 
+    m_drcRunning = true;
+
     if( aRefillZones )
     {
         aProgressReporter->AdvancePhase( _( "Refilling all zones..." ) );
@@ -217,6 +220,8 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksA
     }
 
     commit.Push( _( "DRC" ), false );
+
+    m_drcRunning = false;
 
     // update the m_drcDialog listboxes
     updatePointers();

@@ -711,37 +711,51 @@ void PCB_EDIT_FRAME::setupUIConditions()
 
 #define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )
 
+    // These tools can be used at any time to inspect the board
     CURRENT_TOOL( ACTIONS::zoomTool );
-    CURRENT_TOOL( ACTIONS::deleteTool );
     CURRENT_TOOL( ACTIONS::measureTool );
     CURRENT_TOOL( ACTIONS::selectionTool );
     CURRENT_TOOL( PCB_ACTIONS::highlightNetTool );
     CURRENT_TOOL( PCB_ACTIONS::localRatsnestTool );
-    CURRENT_TOOL( PCB_ACTIONS::placeModule );
-    CURRENT_TOOL( PCB_ACTIONS::routeSingleTrack);
-    CURRENT_TOOL( PCB_ACTIONS::drawVia );
-    CURRENT_TOOL( PCB_ACTIONS::drawZone );
-    CURRENT_TOOL( PCB_ACTIONS::drawZoneKeepout );
-    CURRENT_TOOL( PCB_ACTIONS::drawLine );
-    CURRENT_TOOL( PCB_ACTIONS::drawRectangle );
-    CURRENT_TOOL( PCB_ACTIONS::drawCircle );
-    CURRENT_TOOL( PCB_ACTIONS::drawArc );
-    CURRENT_TOOL( PCB_ACTIONS::drawPolygon );
-    CURRENT_TOOL( PCB_ACTIONS::placeText );
-    CURRENT_TOOL( PCB_ACTIONS::drawAlignedDimension );
-    CURRENT_TOOL( PCB_ACTIONS::drawCenterDimension );
-    CURRENT_TOOL( PCB_ACTIONS::drawLeader );
-    CURRENT_TOOL( PCB_ACTIONS::placeTarget );
-    CURRENT_TOOL( PCB_ACTIONS::drillOrigin );
-    CURRENT_TOOL( PCB_ACTIONS::gridSetOrigin );
 
-    CURRENT_TOOL( PCB_ACTIONS::microwaveCreateLine );
-    CURRENT_TOOL( PCB_ACTIONS::microwaveCreateGap );
-    CURRENT_TOOL( PCB_ACTIONS::microwaveCreateStub );
-    CURRENT_TOOL( PCB_ACTIONS::microwaveCreateStubArc );
-    CURRENT_TOOL( PCB_ACTIONS::microwaveCreateFunctionShape );
+
+    auto isDrcRunning =
+        [this] ( const SELECTION& )
+        {
+            DRC_TOOL* tool = m_toolManager->GetTool<DRC_TOOL>();
+            return !tool->IsDRCRunning();
+        };
+
+#define CURRENT_EDIT_TOOL( action ) mgr->SetConditions( action, ACTION_CONDITIONS().Check( cond.CurrentTool( action ) ).Enable( isDrcRunning ) )
+
+    // These tools edit the board, so they must be disabled during some operations
+    CURRENT_EDIT_TOOL( ACTIONS::deleteTool );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::placeModule );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::routeSingleTrack);
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawVia );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawZone );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawZoneKeepout );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawLine );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawRectangle );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawCircle );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawArc );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawPolygon );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::placeText );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawAlignedDimension );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawCenterDimension );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawLeader );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::placeTarget );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drillOrigin );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::gridSetOrigin );
+
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::microwaveCreateLine );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::microwaveCreateGap );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::microwaveCreateStub );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::microwaveCreateStubArc );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::microwaveCreateFunctionShape );
 
 #undef CURRENT_TOOL
+#undef CURRENT_EDIT_TOOL
 #undef ENABLE
 #undef CHECK
 }

@@ -55,6 +55,7 @@ private:
     PCB_EDIT_FRAME*  m_editFrame;        // The pcb frame editor which owns the board
     BOARD*           m_pcb;
     DIALOG_DRC*      m_drcDialog;
+    bool             m_drcRunning;
 
     std::shared_ptr<DRC_ENGINE>            m_drcEngine;
 
@@ -96,6 +97,13 @@ public:
      * @return true if the dialog is shown
      */
     bool IsDRCDialogShown();
+
+    /**
+     * Check to see if the DRC engine is running the tests
+     *
+     * @return true if the DRC engine is running the tests
+     */
+    bool IsDRCRunning() const { return m_drcRunning; }
 
     /**
      * Closes and frees the DRC dialog.
