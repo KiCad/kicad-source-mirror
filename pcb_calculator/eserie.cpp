@@ -80,7 +80,7 @@ void eserie::simple_solution( uint32_t aSize )
     uint32_t i;
 
     results[S2R].e_value = std::numeric_limits<double>::max(); // assume no 2R solution or max deviation
-    
+
     for( i = 0; i < aSize; i++ )
     {
         if( abs( cmb_lut[i].e_value - reqR ) < abs( results[S2R].e_value ) )
@@ -104,7 +104,7 @@ void eserie::combine4( uint32_t aSize )
     #ifdef BENCHMARK
         PROF_COUNTER combine4_timer;                     // start timer to count execution time
     #endif
-    
+
     for( i = 0; i < aSize; i++ )                         // 4R search outer loop
     {                                                    // scan valid intermediate 2R solutions
         for( j = 0; j < aSize; j++ )                     // inner loop combines all with itself
@@ -154,14 +154,14 @@ void eserie::new_calc( void )
 {
     for( r_data& i : cmb_lut )
     {
-        i.e_use = false; // before any calculation is done, assume that 
+        i.e_use = false; // before any calculation is done, assume that
     }
 
     for( r_data& i : results )
     {
         i.e_use = false; // no combinations and no results are available
     }
-    
+
     for( r_data& i : luts[rb_state])
     {
         i.e_use = true; // all selecte E-values available
@@ -174,7 +174,7 @@ uint32_t eserie::combine2( void )
     std::string s;
 
     for( const r_data& i : luts[rb_state] ) // outer loop to sweep selected source lookup table
-    {   
+    {
         if( i.e_use )
         {
             for( const r_data& j : luts[rb_state] ) // inner loop to combine values with itself
@@ -189,12 +189,12 @@ uint32_t eserie::combine2( void )
                     combi2R++;                                         // next destination
                     cmb_lut[combi2R].e_use    = true;                  // calculate 2R parallel
                     cmb_lut[combi2R].e_value = i.e_value * j.e_value /
-                                             ( i.e_value + j.e_value );                    	
+                                             ( i.e_value + j.e_value );
                     s = i.e_name;
                     s.append( " | " );
                     cmb_lut[combi2R].e_name = s.append( j.e_name );
                     combi2R++;                                         // next destination
-                }  
+                }
             }
         }
     }
@@ -231,7 +231,7 @@ void eserie::combine3( uint32_t aSize )
                 }
 
                 tmp =   i.e_value * cmb_lut[j].e_value /
-                      ( i.e_value + cmb_lut[j].e_value );      // calculate R + 2R parallel  
+                      ( i.e_value + cmb_lut[j].e_value );      // calculate R + 2R parallel
                 tmp -= reqR;                                   // calculate deviation
 
                 if( abs( tmp ) < abs( results[S3R].e_value ) ) // compare if better
@@ -262,7 +262,7 @@ void eserie::calculate( void )
     simple_solution( no_of_2Rcombi ); // search for simple 2 component solution
 
     if( results[S2R].e_value )        // if simple 2R result is not exact
-    {    
+    {
         combine3( no_of_2Rcombi );    // continiue searching for a possibly better solution
     }
     strip3();
@@ -316,7 +316,7 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
     reqr = ( 1000 * DoubleFromString( m_ResRequired->GetValue() ) );
     r.set_reqR(reqr); // keep a local copy of requred resistor value
     r.new_calc();     // assume all values available
-    /* 
+    /*
      * Exclude itself. For the case, a value from the available series is found as required value,
      * the calculator assumes this value needs a replacement for the reason of being not available.
      * Two further exclude values can be entered to exclude and are skipped as not being availabe.
@@ -334,23 +334,37 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
 
     if( error )
     {
-        es.Printf( "%+.2f",error);               // if 2R solution with error 
+        if( std::abs( error ) < 0.01 )
+        {
+            es.Printf( "<0.01" );
+        }
+        else
+        {
+            es.Printf( "%+.2f",error);
+        }
     }
     else
     {
-        es = "Exact";                            // 2R solution is already exact
+        es = "Exact";
     }
 
     m_ESeriesError2R->SetValue( es );            // anyway show 2R error string
 
     if( r.get_rslt()[S3R].e_use )                // if 3R solution available
     {
-        err3 = reqr + r.get_rslt()[S3R].e_value; // calculate the 3R   
+        err3 = reqr + r.get_rslt()[S3R].e_value; // calculate the 3R
         err3 = ( reqr / err3 - 1 ) * 100;        // error in percent
 
-        if( err3 )                               // build 3R error string
+        if( err3 )
         {
-            es.Printf( "%+.2f",err3);
+            if( std::abs( err3 ) < 0.01 )
+            {
+                es.Printf( "<0.01" );
+            }
+            else
+            {
+                es.Printf( "%+.2f",err3);
+            }
         }
         else
         {
@@ -389,7 +403,7 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
         m_ESeriesError4R->SetValue( es );
     }
     else                                          // no 4R solution
-    { 
+    {
         fs = "Not worth using";
         es = wxEmptyString;
         m_ESeriesError4R->SetValue( es );
