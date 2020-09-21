@@ -61,29 +61,45 @@ wxBitmap MakeBadge( SEVERITY aStyle, int aCount, wxWindow* aWindow, int aDepth )
     badgeDC.SetBackground( brush );
     badgeDC.Clear();
 
-    if( aCount == 0 )
-        return bitmap;
-
-    switch( aStyle )
+    if( aCount < 0 )
     {
-    case RPT_SEVERITY_ERROR:
-        badgeColour = *wxRED;
-        textColour = *wxWHITE;
-        break;
-    case RPT_SEVERITY_WARNING:
-        badgeColour = *wxYELLOW;
-        textColour = *wxBLACK;
-        break;
-    case RPT_SEVERITY_ACTION:
-        badgeColour = *wxGREEN;
-        textColour = *wxWHITE;
-        break;
-    case RPT_SEVERITY_EXCLUSION:
-    case RPT_SEVERITY_INFO:
-    default:
-        badgeColour = *wxLIGHT_GREY;
-        textColour = *wxBLACK;
-        break;
+        return bitmap;
+    }
+    else if( aCount == 0 )
+    {
+        if( aStyle == RPT_SEVERITY_ERROR || aStyle == RPT_SEVERITY_WARNING )
+        {
+            badgeColour = *wxGREEN;
+            textColour = *wxWHITE;
+        }
+        else
+        {
+            return bitmap;
+        }
+    }
+    else
+    {
+        switch( aStyle )
+        {
+        case RPT_SEVERITY_ERROR:
+            badgeColour = *wxRED;
+            textColour = *wxWHITE;
+            break;
+        case RPT_SEVERITY_WARNING:
+            badgeColour = *wxYELLOW;
+            textColour = *wxBLACK;
+            break;
+        case RPT_SEVERITY_ACTION:
+            badgeColour = *wxGREEN;
+            textColour = *wxWHITE;
+            break;
+        case RPT_SEVERITY_EXCLUSION:
+        case RPT_SEVERITY_INFO:
+        default:
+            badgeColour = *wxLIGHT_GREY;
+            textColour = *wxBLACK;
+            break;
+        }
     }
 
     brush.SetStyle( wxBRUSHSTYLE_SOLID );

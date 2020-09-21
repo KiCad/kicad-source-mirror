@@ -752,6 +752,7 @@ void DIALOG_DRC::OnDeleteAllClick( wxCommandEvent& aEvent )
 
     deleteAllMarkers( s_includeExclusions );
 
+    m_drcRun = false;
     refreshBoardEditor();
     updateDisplayedCounts();
 }
@@ -817,11 +818,17 @@ void DIALOG_DRC::updateDisplayedCounts()
         numExcluded += m_unconnectedItemsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
     }
 
-    if( m_footprintWarningsProvider )
+    if( m_footprintTestsRun && m_footprintWarningsProvider )
     {
         numErrors += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_ERROR );
         numWarnings += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_WARNING );
         numExcluded += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
+    }
+
+    if( !m_drcRun )
+    {
+        numErrors = -1;
+        numWarnings = -1;
     }
 
     m_errorsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_ERROR, numErrors, m_errorsBadge ) );

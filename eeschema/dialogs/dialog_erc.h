@@ -42,6 +42,8 @@ private:
     RC_ITEMS_PROVIDER* m_markerProvider;
     RC_TREE_MODEL*     m_markerTreeModel;
 
+    bool               m_ercRun;
+
     int                m_severities;
 
 public:
@@ -61,9 +63,9 @@ private:
     void OnSaveReport( wxCommandEvent& aEvent ) override;
     void OnButtonCloseClick( wxCommandEvent& event ) override;
 
-    void RedrawDrawPanel();
+    void redrawDrawPanel();
 
-    void TestErc( REPORTER& aReporter );
+    void testErc( REPORTER& aReporter );
 
     bool writeReport( const wxString& aFullFileName );
 

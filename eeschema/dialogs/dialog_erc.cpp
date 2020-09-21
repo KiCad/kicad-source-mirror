@@ -53,6 +53,7 @@
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
         DIALOG_ERC_BASE( parent, ID_DIALOG_ERC ),  // parent looks for this ID explicitly
         m_parent( parent ),
+        m_ercRun( false ),
         m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
 {
     EESCHEMA_SETTINGS* settings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
@@ -113,6 +114,12 @@ void DIALOG_ERC::updateDisplayedCounts()
         numExcluded += m_markerProvider->GetCount( RPT_SEVERITY_EXCLUSION );
     }
 
+    if( !m_ercRun )
+    {
+        numErrors = -1;
+        numWarnings = -1;
+    }
+
     m_errorsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_ERROR, numErrors, m_errorsBadge ) );
     m_warningsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_WARNING, numWarnings, m_warningsBadge ) );
     m_exclusionsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_EXCLUSION, numExcluded, m_exclusionsBadge ) );
@@ -145,6 +152,7 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 
     deleteAllMarkers( includeExclusions );
 
+    m_ercRun = false;
     updateDisplayedCounts();
     m_parent->GetCanvas()->Refresh();
 }
@@ -188,11 +196,14 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
     wxSafeYield();      // m_MarkersList must be redraw
 
     WX_TEXT_CTRL_REPORTER reporter( m_MessagesList );
-    TestErc( reporter );
+    testErc( reporter );
+
+    m_ercRun = true;
+    updateDisplayedCounts();
 }
 
 
-void DIALOG_ERC::RedrawDrawPanel()
+void DIALOG_ERC::redrawDrawPanel()
 {
     WINDOW_THAWER thawer( m_parent );
 
@@ -200,7 +211,7 @@ void DIALOG_ERC::RedrawDrawPanel()
 }
 
 
-void DIALOG_ERC::TestErc( REPORTER& aReporter )
+void DIALOG_ERC::testErc( REPORTER& aReporter )
 {
     wxFileName fn;
 
@@ -291,9 +302,6 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     // Display diags:
     m_markerTreeModel->SetProvider( m_markerProvider );
 
-    // Displays global results:
-    updateDisplayedCounts();
-
     // Display new markers from the current screen:
     KIGFX::VIEW* view = m_parent->GetCanvas()->GetView();
 
@@ -328,7 +336,7 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
         }
 
         m_parent->FocusOnItem( item );
-        RedrawDrawPanel();
+        redrawDrawPanel();
     }
 
     aEvent.Skip();
