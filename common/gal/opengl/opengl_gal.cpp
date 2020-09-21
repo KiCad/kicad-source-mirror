@@ -654,9 +654,15 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
     VECTOR2D startEndVector = aEndPoint - aStartPoint;
     double lineLength = startEndVector.EuclideanNorm();
 
-    // segments having a length <= 1 are just a circle.
-    // Moreover trying to draw them as a segment does not work fine.
-    if( lineLength <= 1 )
+    float startx = aStartPoint.x;
+    float starty = aStartPoint.y;
+    float endx = aStartPoint.x + lineLength;
+    float endy = aStartPoint.y + lineLength;
+
+    // Be careful about floating point rounding.  As we draw segments in larger and larger coordinates,
+    // the shader (which uses floats) will lose precision and stop drawing small segments.
+    // In this case, we need to draw a circle for the minimal segment
+    if( startx == endx || starty == endy )
     {
         DrawCircle( aStartPoint, aWidth/2 );
         return;
