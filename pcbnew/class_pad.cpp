@@ -477,6 +477,8 @@ void D_PAD::SetDrawCoord()
 
     RotatePoint( &m_pos.x, &m_pos.y, angle );
     m_pos += module->GetPosition();
+
+    m_shapesDirty = true;
 }
 
 

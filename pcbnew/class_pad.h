@@ -326,6 +326,7 @@ public:
     PAD_DRILL_SHAPE_T GetDrillShape() const     { return m_drillShape; }
 
     bool IsDirty() const { return m_shapesDirty; }
+    void SetDirty() { m_shapesDirty = true; }
 
     void SetLayerSet( LSET aLayers ) override   { m_layerMask = aLayers; }
     LSET GetLayerSet() const override           { return m_layerMask; }
@@ -644,6 +645,7 @@ private:
      */
     std::vector<std::shared_ptr<DRAWSEGMENT>> m_editPrimitives;
 
+    // Must be set to true to force rebuild shapes to draw (after geometry change for instance)
     mutable bool                              m_shapesDirty;
     mutable int                               m_effectiveBoundingRadius;
     mutable EDA_RECT                          m_effectiveBoundingBox;

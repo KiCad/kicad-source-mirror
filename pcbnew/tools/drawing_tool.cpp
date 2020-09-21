@@ -1065,7 +1065,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 {
-    assert( m_editModules );
+    wxASSERT( m_editModules );
 
     if( !m_frame->GetModel() )
         return 0;
