@@ -537,7 +537,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                 if( rcons->condition->EvaluateFor( a, b, aLayer, aReporter ) )
                 {
                     REPORT( implicit ? _( "Constraint applicable." )
-                                     : _( "Rule applied." ) )
+                                     : _( "Rule applied.  (No further rules will be checked.)" ) )
 
                     constraintRef = &rcons->constraint;
                     break;

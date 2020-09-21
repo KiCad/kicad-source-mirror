@@ -49,7 +49,11 @@ pad          hole        graphic         text             zone
 
 # ---- Notes
 #
-# Version clause must be first clause in file.
+# Version clause must be the first clause.
+#
+# Rules should be ordered by specificity.  Later rules take
+# precedence over earlier rules; once a matching rule is found
+# no further rules will be checked.
 #
 # Use Ctrl+/ to comment or uncomment line(s).
 #
