@@ -271,9 +271,10 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
             case 'M':       // Sequence code (followed by one digit: the sequence len)
                             // (sometimes found after the X,Y sequence)
                             // Obscure option
-                code = *aText++;
+                aText++;
+                code = *aText;
 
-                if( ( *aText >= '0' ) && ( *aText<= '9' ) )
+                if( ( code >= '0' ) && ( code <= '9' ) )
                     aText++;     // skip the digit
 
                 break;
@@ -343,7 +344,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         break;
 
     case MIRROR_IMAGE:      // command %MIA0B0*%, %MIA0B1*%, %MIA1B0*%, %MIA1B1*%
-        m_MirrorA = m_MirrorB = 0;
+        m_MirrorA = m_MirrorB = false;
 
         while( *aText && *aText != '*' )
         {
