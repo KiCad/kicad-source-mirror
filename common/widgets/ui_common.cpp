@@ -21,7 +21,7 @@
 #include <widgets/ui_common.h>
 
 #include <algorithm>
-
+#include <gal/color4d.h>
 
 int KIUI::GetStdMargin()
 {
@@ -69,7 +69,7 @@ wxBitmap MakeBadge( SEVERITY aStyle, int aCount, wxWindow* aWindow, int aDepth )
     {
         if( aStyle == RPT_SEVERITY_ERROR || aStyle == RPT_SEVERITY_WARNING )
         {
-            badgeColour = *wxGREEN;
+            badgeColour = KIGFX::COLOR4D( GREEN ).ToColour();
             textColour = *wxWHITE;
         }
         else
@@ -90,7 +90,7 @@ wxBitmap MakeBadge( SEVERITY aStyle, int aCount, wxWindow* aWindow, int aDepth )
             textColour = *wxBLACK;
             break;
         case RPT_SEVERITY_ACTION:
-            badgeColour = *wxGREEN;
+            badgeColour = KIGFX::COLOR4D( GREEN ).ToColour();
             textColour = *wxWHITE;
             break;
         case RPT_SEVERITY_EXCLUSION:
