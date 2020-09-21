@@ -1017,7 +1017,10 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb, COMMIT* aCommit 
             {
                 ZONE_FILLER filler( aPcb, aCommit );
                 zone->SetFillMode( ZONE_FILL_MODE::POLYGONS ); // use filled polygons
-                filler.Fill( { zone } );
+
+                // If the zone fill failed, don't try adding it to the export
+                if( !filler.Fill( { zone } ) )
+                    continue;
             }
 
             const SHAPE_POLY_SET& poly = zone->GetFilledPolysList( layer );
@@ -1032,7 +1035,9 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb, COMMIT* aCommit 
                 {
                     if( !vl->AddVertex( seg, (double) outline.CPoint( j ).x * BOARD_SCALE,
                                 -( (double) outline.CPoint( j ).y * BOARD_SCALE ) ) )
+                    {
                         throw( std::runtime_error( vl->GetError() ) );
+                    }
                 }
 
                 vl->EnsureWinding( seg, false );

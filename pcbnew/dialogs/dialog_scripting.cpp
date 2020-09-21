@@ -48,7 +48,8 @@ DIALOG_SCRIPTING::DIALOG_SCRIPTING( wxWindow* parent )
 void DIALOG_SCRIPTING::OnRunButtonClick( wxCommandEvent& event )
 {
 	wxCharBuffer buffer = m_txScript->GetValue().ToUTF8();
-        PyRun_SimpleString(buffer.data());
+    int          retv   = PyRun_SimpleString( buffer.data()) ;
+
+    if( retv != 0 )
+        wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, buffer );
 }
-
-
