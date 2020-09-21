@@ -57,10 +57,10 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
 
     switch( aSeverity )
     {
-    case RPT_SEVERITY_ERROR:   severity = wxT( "Severity: error" );
-    case RPT_SEVERITY_WARNING: severity = wxT( "Severity: warning" );
-    case RPT_SEVERITY_ACTION:  severity = wxT( "Severity: action" );
-    case RPT_SEVERITY_INFO:    severity = wxT( "Severity: info" );
+    case RPT_SEVERITY_ERROR:   severity = wxT( "Severity: error" );   break;
+    case RPT_SEVERITY_WARNING: severity = wxT( "Severity: warning" ); break;
+    case RPT_SEVERITY_ACTION:  severity = wxT( "Severity: action" );  break;
+    case RPT_SEVERITY_INFO:    severity = wxT( "Severity: info" );    break;
     default:                   ;
     };
 
