@@ -760,9 +760,9 @@ void FOOTPRINT_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     PCB_BASE_FRAME::LoadSettings( aCfg );
 
-    // Fetch grid settings from Footprint Editor
+    // Fetch display and grid settings from Footprint Editor
     auto fpedit = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
-
+    m_DisplayOptions = fpedit->m_Display;
     GetGalDisplayOptions().ReadWindowSettings( fpedit->m_Window );
 }
 
