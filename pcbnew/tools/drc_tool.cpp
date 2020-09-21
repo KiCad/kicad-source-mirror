@@ -209,10 +209,12 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksA
     m_drcEngine->ClearViolationHandler();
 
     if( m_drcDialog )
+    {
         m_drcDialog->SetDrcRun();
 
-    if( !netlist.IsEmpty() )
-        m_drcDialog->SetFootprintTestsRun();
+        if( !netlist.IsEmpty() )
+            m_drcDialog->SetFootprintTestsRun();
+    }
 
     commit.Push( _( "DRC" ), false );
 
