@@ -507,7 +507,7 @@ void DIALOG_COPPER_ZONE::ExportSetupToOtherCopperZones( wxCommandEvent& event )
     {
         // Cannot export settings from a copper zone
         // to a zone keepout:
-        if( zone->GetIsKeepout() )
+        if( zone->GetIsRuleArea() )
             continue;
 
         m_settings.ExportSetting( *zone, false );  // false = partial export

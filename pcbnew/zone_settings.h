@@ -113,7 +113,7 @@ private:
      * Keepout zones and keepout flags.
      * Note that DRC rules can set keepouts on zones whether they're a keepout or not.
      */
-    bool            m_isKeepout;
+    bool m_isRuleArea;
 
     bool            m_keepoutDoNotAllowCopperPour;
     bool            m_keepoutDoNotAllowVias;
@@ -175,16 +175,16 @@ public:
     }
 
     /**
-     * Accessors to parameters used in Keepout zones:
+     * Accessors to parameters used in Rule Area zones:
      */
-    const bool GetIsKeepout() const { return m_isKeepout; }
+    const bool GetIsRuleArea() const { return m_isRuleArea; }
     const bool GetDoNotAllowCopperPour() const { return m_keepoutDoNotAllowCopperPour; }
     const bool GetDoNotAllowVias() const { return m_keepoutDoNotAllowVias; }
     const bool GetDoNotAllowTracks() const { return m_keepoutDoNotAllowTracks; }
     const bool GetDoNotAllowPads() const { return m_keepoutDoNotAllowPads; }
     const bool GetDoNotAllowFootprints() const { return m_keepoutDoNotAllowFootprints; }
 
-    void SetIsKeepout( bool aEnable ) { m_isKeepout = aEnable; }
+    void SetIsRuleArea( bool aEnable ) { m_isRuleArea = aEnable; }
     void SetDoNotAllowCopperPour( bool aEnable ) { m_keepoutDoNotAllowCopperPour = aEnable; }
     void SetDoNotAllowVias( bool aEnable ) { m_keepoutDoNotAllowVias = aEnable; }
     void SetDoNotAllowTracks( bool aEnable ) { m_keepoutDoNotAllowTracks = aEnable; }

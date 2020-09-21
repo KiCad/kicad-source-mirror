@@ -56,7 +56,7 @@ PANEL_SELECTION_FILTER_BASE::PANEL_SELECTION_FILTER_BASE( wxWindow* parent, wxWi
 	m_cbZones->SetValue(true);
 	gbSizer1->Add( m_cbZones, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT, 5 );
 
-	m_cbKeepouts = new wxCheckBox( this, wxID_ANY, wxT("Keepouts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbKeepouts = new wxCheckBox( this, wxID_ANY, wxT("Rule Areas"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbKeepouts->SetValue(true);
 	gbSizer1->Add( m_cbKeepouts, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxLEFT|wxRIGHT, 5 );
 

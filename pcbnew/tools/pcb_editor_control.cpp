@@ -1435,7 +1435,7 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
         if( curr_area->GetPriority() != firstZone->GetPriority() )
             continue;
 
-        if( curr_area->GetIsKeepout() != firstZone->GetIsKeepout() )
+        if( curr_area->GetIsRuleArea() != firstZone->GetIsRuleArea() )
             continue;
 
         if( curr_area->GetLayer() != firstZone->GetLayer() )
@@ -1480,8 +1480,8 @@ int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
     zoneSettings << *oldZone;
     int dialogResult;
 
-    if( oldZone->GetIsKeepout() )
-        dialogResult = InvokeKeepoutAreaEditor( m_frame, &zoneSettings );
+    if( oldZone->GetIsRuleArea() )
+        dialogResult = InvokeRuleAreaEditor( m_frame, &zoneSettings );
     else if( oldZone->IsOnCopperLayer() )
         dialogResult = InvokeCopperZonesEditor( m_frame, &zoneSettings );
     else
@@ -1500,9 +1500,9 @@ int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
 
     // If the new zone is on the same layer(s) as the the initial zone,
     // offset it a bit so it can more easily be picked.
-    if( oldZone->GetIsKeepout() && ( oldZone->GetLayerSet() == zoneSettings.m_Layers ) )
+    if( oldZone->GetIsRuleArea() && ( oldZone->GetLayerSet() == zoneSettings.m_Layers ) )
         newZone->Move( wxPoint( IU_PER_MM, IU_PER_MM ) );
-    else if( !oldZone->GetIsKeepout() && zoneSettings.m_Layers.test( oldZone->GetLayer() ) )
+    else if( !oldZone->GetIsRuleArea() && zoneSettings.m_Layers.test( oldZone->GetLayer() ) )
         newZone->Move( wxPoint( IU_PER_MM, IU_PER_MM ) );
 
     commit.Add( newZone.release() );

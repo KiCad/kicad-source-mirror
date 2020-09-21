@@ -1425,7 +1425,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
             ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
             m_board->Add( zone, ADD_MODE::APPEND );
 
-            zone->SetIsKeepout( true );
+            zone->SetIsRuleArea( true );
             zone->SetDoNotAllowTracks( false );
             zone->SetDoNotAllowVias( false );
             zone->SetDoNotAllowPads( false );
@@ -1613,7 +1613,7 @@ void ALTIUM_PCB::ParseArcs6Data(
             m_board->Add( zone, ADD_MODE::APPEND );
 
             zone->SetLayer( klayer );
-            zone->SetIsKeepout( true );
+            zone->SetIsRuleArea( true );
             zone->SetDoNotAllowTracks( false );
             zone->SetDoNotAllowVias( false );
             zone->SetDoNotAllowPads( false );
@@ -2168,7 +2168,7 @@ void ALTIUM_PCB::ParseTracks6Data(
             ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
             m_board->Add( zone, ADD_MODE::APPEND );
             zone->SetLayer( klayer );
-            zone->SetIsKeepout( true );
+            zone->SetIsRuleArea( true );
             zone->SetDoNotAllowTracks( false );
             zone->SetDoNotAllowVias( false );
             zone->SetDoNotAllowPads( false );
@@ -2434,7 +2434,7 @@ void ALTIUM_PCB::ParseFills6Data(
 
             if( elem.is_keepout )
             {
-                zone->SetIsKeepout( true );
+                zone->SetIsRuleArea( true );
                 zone->SetDoNotAllowTracks( false );
                 zone->SetDoNotAllowVias( false );
                 zone->SetDoNotAllowPads( false );

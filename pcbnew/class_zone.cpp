@@ -58,12 +58,12 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
     m_hatchBorderAlgorithm = 1;         // 0 = use zone min thickness; 1 = use hatch width
     m_priority = 0;
     m_cornerSmoothingType = ZONE_SETTINGS::SMOOTHING_NONE;
-    SetIsKeepout( aInModule ? true : false );   // Zones living in modules have the keepout option.
-    SetDoNotAllowCopperPour( false );           // has meaning only if m_isKeepout == true
-    SetDoNotAllowVias( true );                  // has meaning only if m_isKeepout == true
-    SetDoNotAllowTracks( true );                // has meaning only if m_isKeepout == true
-    SetDoNotAllowPads( true );                  // has meaning only if m_isKeepout == true
-    SetDoNotAllowFootprints( false );           // has meaning only if m_isKeepout == true
+    SetIsRuleArea( aInModule ? true : false );  // Zones living in modules have the rule area option
+    SetDoNotAllowCopperPour( false );           // has meaning only if m_isRuleArea == true
+    SetDoNotAllowVias( true );                  // has meaning only if m_isRuleArea == true
+    SetDoNotAllowTracks( true );                // has meaning only if m_isRuleArea == true
+    SetDoNotAllowPads( true );                  // has meaning only if m_isRuleArea == true
+    SetDoNotAllowFootprints( false );           // has meaning only if m_isRuleArea == true
     m_cornerRadius = 0;
     SetLocalFlags( 0 );                         // flags tempoarry used in zone calculations
     m_Poly = new SHAPE_POLY_SET();              // Outlines
@@ -120,7 +120,7 @@ void ZONE_CONTAINER::InitDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
     m_zoneName                = aZone.m_zoneName;
     SetLayerSet( aZone.GetLayerSet() );
     m_priority                = aZone.m_priority;
-    m_isKeepout               = aZone.m_isKeepout;
+    m_isRuleArea              = aZone.m_isRuleArea;
 
     m_doNotAllowCopperPour    = aZone.m_doNotAllowCopperPour;
     m_doNotAllowVias          = aZone.m_doNotAllowVias;
@@ -241,9 +241,9 @@ void ZONE_CONTAINER::SetLayer( PCB_LAYER_ID aLayer )
 
 void ZONE_CONTAINER::SetLayerSet( LSET aLayerSet )
 {
-    if( GetIsKeepout() )
+    if( GetIsRuleArea() )
     {
-        // Keepouts can only exist on copper layers
+        // Rule areas can only exist on copper layers
         aLayerSet &= LSET::AllCuMask();
     }
 
@@ -459,7 +459,7 @@ bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 
 int ZONE_CONTAINER::GetLocalClearance( wxString* aSource ) const
 {
-    if( m_isKeepout )
+    if( m_isRuleArea )
         return 0;
 
     if( aSource )
@@ -472,9 +472,9 @@ int ZONE_CONTAINER::GetLocalClearance( wxString* aSource ) const
 bool ZONE_CONTAINER::HitTestFilledArea( PCB_LAYER_ID aLayer, const wxPoint &aRefPos,
                                         int aAccuracy ) const
 {
-    // Keepouts have no filled area, but it's generally nice to treat their interior as if it were
-    // filled so that people don't have to select keepouts by their outline (which is min-width)
-    if( GetIsKeepout() )
+    // Rule areas have no filled area, but it's generally nice to treat their interior as if it were
+    // filled so that people don't have to select them by their outline (which is min-width)
+    if( GetIsRuleArea() )
         return m_Poly->Contains( VECTOR2I( aRefPos.x, aRefPos.y ), -1, aAccuracy );
 
     if( !m_FilledPolysList.count( aLayer ) )
@@ -515,8 +515,8 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     EDA_UNITS units = aFrame->GetUserUnits();
     wxString  msg, msg2;
 
-    if( GetIsKeepout() )
-        msg = _( "Keepout Area" );
+    if( GetIsRuleArea() )
+        msg = _( "Rule Area" );
     else if( IsOnCopperLayer() )
         msg = _( "Copper Zone" );
     else
@@ -529,7 +529,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 
     aList.emplace_back( _( "Type" ), msg, DARKCYAN );
 
-    if( GetIsKeepout() )
+    if( GetIsRuleArea() )
     {
         msg.Empty();
 
@@ -548,7 +548,8 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         if( GetDoNotAllowFootprints() )
             AccumulateDescription( msg, _( "No footprints" ) );
 
-        aList.emplace_back( MSG_PANEL_ITEM( _( "Keepout" ), msg, RED ) );
+        if( !msg.IsEmpty() )
+            aList.emplace_back( MSG_PANEL_ITEM( _( "Restrictions" ), msg, RED ) );
     }
     else if( IsOnCopperLayer() )
     {
@@ -716,7 +717,7 @@ void ZONE_CONTAINER::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     Mirror( aCentre, aFlipLeftRight );
     int copperLayerCount = GetBoard()->GetCopperLayerCount();
 
-    if( GetIsKeepout() )
+    if( GetIsRuleArea() )
         SetLayerSet( FlipLayerMask( GetLayerSet(), copperLayerCount ) );
     else
         SetLayer( FlipLayer( GetLayer(), copperLayerCount ) );
@@ -842,8 +843,8 @@ wxString ZONE_CONTAINER::GetSelectMenuText( EDA_UNITS aUnits ) const
     if( m_CornerSelection != nullptr &&  m_CornerSelection->m_contour > 0 )
         text << wxT( " " ) << _( "(Cutout)" );
 
-    if( GetIsKeepout() )
-        text << wxT( " " ) << _( "(Keepout)" );
+    if( GetIsRuleArea() )
+        text << wxT( " " ) << _( "(Rule Area)" );
     else
         text << GetNetnameMsg();
 
@@ -1129,7 +1130,7 @@ void ZONE_CONTAINER::GetInteractingZones( PCB_LAYER_ID aLayer,
         if( !candidate->GetLayerSet().test( aLayer ) )
             continue;
 
-        if( candidate->GetIsKeepout() )
+        if( candidate->GetIsRuleArea() )
             continue;
 
         if( candidate->GetNetCode() != GetNetCode() )

@@ -109,8 +109,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_graphic_item_properties_base.cpp
     dialogs/dialog_import_settings.cpp
     dialogs/dialog_import_settings_base.cpp
-    dialogs/dialog_keepout_area_properties.cpp
-    dialogs/dialog_keepout_area_properties_base.cpp
+    dialogs/dialog_rule_area_properties.cpp
+    dialogs/dialog_rule_area_properties_base.cpp
     dialogs/dialog_layer_selection_base.cpp
     dialogs/dialog_move_exact.cpp
     dialogs/dialog_move_exact_base.cpp

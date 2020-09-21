@@ -57,11 +57,11 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE_CONTAINER* aZone )
     s_PickedList.ClearListAndDeleteItems();
     SaveCopyOfZones( s_PickedList, GetBoard(), -1, UNDEFINED_LAYER );
 
-    if( aZone->GetIsKeepout() )
+    if( aZone->GetIsRuleArea() )
     {
-        // edit a keepout area on a copper layer
+        // edit a rule area on a copper layer
         zoneInfo << *aZone;
-        dialogResult = InvokeKeepoutAreaEditor( this, &zoneInfo );
+        dialogResult = InvokeRuleAreaEditor( this, &zoneInfo );
     }
     else if( IsCopperLayer( aZone->GetLayer() ) )
     {

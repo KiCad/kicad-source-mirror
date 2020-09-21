@@ -1497,8 +1497,8 @@ bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
     {
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( aItem );
 
-        if( ( !m_filter.zones && !zone->GetIsKeepout() )
-            || ( !m_filter.keepouts && zone->GetIsKeepout() ) )
+        if( ( !m_filter.zones && !zone->GetIsRuleArea() )
+            || ( !m_filter.keepouts && zone->GetIsRuleArea() ) )
         {
             return false;
         }

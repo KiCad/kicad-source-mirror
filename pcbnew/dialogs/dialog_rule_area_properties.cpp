@@ -32,17 +32,17 @@
 #include <class_zone.h>
 #include <zones.h>
 #include <zone_settings.h>
-#include <dialog_keepout_area_properties_base.h>
+#include <dialog_rule_area_properties_base.h>
 
 #define LAYER_LIST_COLUMN_CHECK 0
 #define LAYER_LIST_COLUMN_ICON 1
 #define LAYER_LIST_COLUMN_NAME 2
 #define LAYER_LIST_ROW_ALL_INNER_LAYERS 1
 
-class DIALOG_KEEPOUT_AREA_PROPERTIES : public DIALOG_KEEPOUT_AREA_PROPERTIES_BASE
+class DIALOG_RULE_AREA_PROPERTIES : public DIALOG_RULE_AREA_PROPERTIES_BASE
 {
 public:
-    DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings );
+    DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings );
 
 private:
     PCB_BASE_FRAME* m_parent;
@@ -58,17 +58,17 @@ private:
 };
 
 
-int InvokeKeepoutAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings )
+int InvokeRuleAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings )
 {
-    DIALOG_KEEPOUT_AREA_PROPERTIES dlg( aCaller, aSettings );
+    DIALOG_RULE_AREA_PROPERTIES dlg( aCaller, aSettings );
 
     return dlg.ShowModal();
 }
 
 
-DIALOG_KEEPOUT_AREA_PROPERTIES::DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* aParent,
-                                                                ZONE_SETTINGS* aSettings ) :
-    DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( aParent )
+DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParent,
+                                                          ZONE_SETTINGS* aSettings ) :
+        DIALOG_RULE_AREA_PROPERTIES_BASE( aParent )
 {
     m_parent = aParent;
 
@@ -86,7 +86,7 @@ DIALOG_KEEPOUT_AREA_PROPERTIES::DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* 
 }
 
 
-bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataToWindow()
+bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
 {
     // Init keepout parameters:
     m_cbTracksCtrl->SetValue( m_zonesettings.GetDoNotAllowTracks() );
@@ -112,7 +112,7 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataToWindow()
 }
 
 
-void DIALOG_KEEPOUT_AREA_PROPERTIES::OnLayerSelection( wxDataViewEvent& event )
+void DIALOG_RULE_AREA_PROPERTIES::OnLayerSelection( wxDataViewEvent& event )
 {
     if( event.GetColumn() != 0 )
         return;
@@ -137,26 +137,15 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::OnLayerSelection( wxDataViewEvent& event )
 }
 
 
-bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataFromWindow()
+bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
 {
     // Init keepout parameters:
-    m_zonesettings.SetIsKeepout( true );
+    m_zonesettings.SetIsRuleArea( true );
     m_zonesettings.SetDoNotAllowTracks( m_cbTracksCtrl->GetValue() );
     m_zonesettings.SetDoNotAllowVias( m_cbViasCtrl->GetValue() );
     m_zonesettings.SetDoNotAllowCopperPour( m_cbCopperPourCtrl->GetValue() );
     m_zonesettings.SetDoNotAllowPads( m_cbPadsCtrl->GetValue() );
     m_zonesettings.SetDoNotAllowFootprints( m_cbFootprintsCtrl->GetValue() );
-
-    // Test for not allowed items: should have at least one item not allowed:
-    if( ! m_zonesettings.GetDoNotAllowTracks() &&
-        ! m_zonesettings.GetDoNotAllowVias() &&
-        ! m_zonesettings.GetDoNotAllowPads() &&
-        ! m_zonesettings.GetDoNotAllowFootprints() &&
-        ! m_zonesettings.GetDoNotAllowCopperPour() )
-    {
-        DisplayError( NULL, _("No items are disallowed. The keepout will have no effect." ) );
-        return false;
-    }
 
     if( m_zonesettings.m_Layers.count() == 0 )
     {

@@ -72,10 +72,10 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
         return false;
 
     // Compare zone specific parameters
-    if( GetIsKeepout() != aZoneToCompare.GetIsKeepout() )
+    if( GetIsRuleArea() != aZoneToCompare.GetIsRuleArea() )
         return false;
 
-    if( GetIsKeepout() )
+    if( GetIsRuleArea() )
     {
         if(  GetDoNotAllowCopperPour() != aZoneToCompare.GetDoNotAllowCopperPour() )
             return false;

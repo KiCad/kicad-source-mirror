@@ -80,7 +80,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_removeIslands = ISLAND_REMOVAL_MODE::ALWAYS;
     m_minIslandArea = 0;
 
-    SetIsKeepout( false );
+    SetIsRuleArea( false );
     SetDoNotAllowCopperPour( false );
     SetDoNotAllowVias( true );
     SetDoNotAllowTracks( true );
@@ -110,7 +110,7 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
     m_padConnection               = aSource.GetPadConnection();
     m_cornerSmoothingType         = aSource.GetCornerSmoothingType();
     m_cornerRadius                = aSource.GetCornerRadius();
-    m_isKeepout                   = aSource.GetIsKeepout();
+    m_isRuleArea                  = aSource.GetIsRuleArea();
     m_keepoutDoNotAllowCopperPour = aSource.GetDoNotAllowCopperPour();
     m_keepoutDoNotAllowVias       = aSource.GetDoNotAllowVias();
     m_keepoutDoNotAllowTracks     = aSource.GetDoNotAllowTracks();
@@ -143,7 +143,7 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     aTarget.SetPadConnection( m_padConnection );
     aTarget.SetCornerSmoothingType( m_cornerSmoothingType );
     aTarget.SetCornerRadius( m_cornerRadius );
-    aTarget.SetIsKeepout( GetIsKeepout() );
+    aTarget.SetIsRuleArea( GetIsRuleArea() );
     aTarget.SetDoNotAllowCopperPour( GetDoNotAllowCopperPour() );
     aTarget.SetDoNotAllowVias( GetDoNotAllowVias() );
     aTarget.SetDoNotAllowTracks( GetDoNotAllowTracks() );
@@ -159,7 +159,7 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
         aTarget.SetLayerSet( m_Layers );
         aTarget.SetZoneName( m_Name );
 
-        if( !m_isKeepout )
+        if( !m_isRuleArea )
             aTarget.SetNetCode( m_NetcodeSelection );
     }
 

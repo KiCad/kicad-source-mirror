@@ -4466,12 +4466,12 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                         break;
 
                     case T_chamfer:
-                        if( !zone->GetIsKeepout() ) // smoothing has meaning only for filled zones
+                        if( !zone->GetIsRuleArea() ) // smoothing has meaning only for filled zones
                             zone->SetCornerSmoothingType( ZONE_SETTINGS::SMOOTHING_CHAMFER );
                         break;
 
                     case T_fillet:
-                        if( !zone->GetIsKeepout() ) // smoothing has meaning only for filled zones
+                        if( !zone->GetIsRuleArea() ) // smoothing has meaning only for filled zones
                             zone->SetCornerSmoothingType( ZONE_SETTINGS::SMOOTHING_FILLET );
                         break;
 
@@ -4483,7 +4483,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
 
                 case T_radius:
                     tmp = parseBoardUnits( "corner radius" );
-                    if( !zone->GetIsKeepout() ) // smoothing has meaning only for filled zones
+                    if( !zone->GetIsRuleArea() ) // smoothing has meaning only for filled zones
                        zone->SetCornerRadius( tmp );
                     NeedRIGHT();
                     break;
@@ -4517,7 +4517,8 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
             break;
 
         case T_keepout:
-            zone->SetIsKeepout( true );
+            // "keepout" now means rule area, but the file token stays the same
+            zone->SetIsRuleArea( true );
 
             // Initialize these two because their tokens won't appear in older files:
             zone->SetDoNotAllowPads( false );
@@ -4734,7 +4735,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
     // Ensure keepout and non copper zones do not have a net
     // (which have no sense for these zones)
     // the netcode 0 is used for these zones
-    bool zone_has_net = zone->IsOnCopperLayer() && !zone->GetIsKeepout();
+    bool zone_has_net = zone->IsOnCopperLayer() && !zone->GetIsRuleArea();
 
     if( !zone_has_net )
         zone->SetNetCode( NETINFO_LIST::UNCONNECTED );

@@ -311,7 +311,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->Add( PCB_ACTIONS::placeModule );
     placeMenu->Add( PCB_ACTIONS::drawVia );
     placeMenu->Add( PCB_ACTIONS::drawZone );
-    placeMenu->Add( PCB_ACTIONS::drawZoneKeepout );
+    placeMenu->Add( PCB_ACTIONS::drawRuleArea );
     placeMenu->Add( PCB_ACTIONS::placeText );
     placeMenu->Add( PCB_ACTIONS::drawArc );
     placeMenu->Add( PCB_ACTIONS::drawRectangle );

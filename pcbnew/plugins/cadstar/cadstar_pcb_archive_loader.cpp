@@ -514,7 +514,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryAreas( const SYMDEF& aComponent, MOD
             else
                 zone->SetLayer( getKiCadLayer( area.LayerID ) );
 
-            zone->SetIsKeepout( true );       //import all CADSTAR areas as Keepout zones
+            zone->SetIsRuleArea( true );       //import all CADSTAR areas as Keepout zones
             zone->SetDoNotAllowPads( false ); //no CADSTAR equivalent
             zone->SetZoneName( area.ID );
 
@@ -871,7 +871,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadAreas()
             else
                 zone->SetLayer( getKiCadLayer( area.LayerID ) );
 
-            zone->SetIsKeepout( true );       //import all CADSTAR areas as Keepout zones
+            zone->SetIsRuleArea( true );       //import all CADSTAR areas as Keepout zones
             zone->SetDoNotAllowPads( false ); //no CADSTAR equivalent
             zone->SetZoneName( area.Name );
 

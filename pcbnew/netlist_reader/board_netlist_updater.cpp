@@ -484,7 +484,7 @@ void BOARD_NETLIST_UPDATER::cacheCopperZoneConnections()
 {
     for( ZONE_CONTAINER* zone : m_board->Zones() )
     {
-        if( !zone->IsOnCopperLayer() || zone->GetIsKeepout() )
+        if( !zone->IsOnCopperLayer() || zone->GetIsRuleArea() )
             continue;
 
         m_zoneConnectionsCache[ zone ] = m_board->GetConnectivity()->GetConnectedPads( zone );
@@ -557,7 +557,7 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
     // Test copper zones to detect "dead" nets (nets without any pad):
     for( ZONE_CONTAINER* zone : m_board->Zones() )
     {
-        if( !zone->IsOnCopperLayer() || zone->GetIsKeepout() )
+        if( !zone->IsOnCopperLayer() || zone->GetIsRuleArea() )
             continue;
 
         if( netlistNetnames.count( zone->GetNetname() ) == 0 )
@@ -690,7 +690,7 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
                     if( !zone->IsOnCopperLayer() )
                         continue;
 
-                    if( zone->GetIsKeepout() )
+                    if( zone->GetIsRuleArea() )
                         continue;
 
                     if( zone->GetNetname() == getNetname( previouspad ) )

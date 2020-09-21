@@ -2544,7 +2544,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         else if( TESTLINE( "ZKeepout" ) )
         {
             char* token;
-            zc->SetIsKeepout( true );
+            zc->SetIsRuleArea( true );
             zc->SetDoNotAllowPads( false );        // Not supported in legacy
             zc->SetDoNotAllowFootprints( false );  // Not supported in legacy
 
@@ -2700,7 +2700,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         {
             // Ensure keepout does not have a net
             // (which have no sense for a keepout zone)
-            if( zc->GetIsKeepout() )
+            if( zc->GetIsRuleArea() )
                 zc->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
             // should always occur, but who knows, a zone without two corners

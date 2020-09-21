@@ -192,7 +192,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->Add( PCB_ACTIONS::drawCircle );
     placeMenu->Add( PCB_ACTIONS::drawLine );
     placeMenu->Add( PCB_ACTIONS::drawPolygon );
-    placeMenu->Add( PCB_ACTIONS::drawZoneKeepout );
+    placeMenu->Add( PCB_ACTIONS::drawRuleArea );
 
     placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::setAnchor );

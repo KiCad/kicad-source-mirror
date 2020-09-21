@@ -518,7 +518,7 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
 
     for( ZONE_CONTAINER* zone : m_pcb->Zones() )
     {
-        if( zone->GetIsKeepout() || !zone->IsOnCopperLayer() )
+        if( zone->GetIsRuleArea() || !zone->IsOnCopperLayer() )
             continue;
 
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )

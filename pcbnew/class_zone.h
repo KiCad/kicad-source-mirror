@@ -719,16 +719,16 @@ public:
     EDA_ITEM* Clone() const override;
 
     /**
-     * Accessors to parameters used in Keepout zones:
+     * Accessors to parameters used in Rule Area zones:
      */
-    bool GetIsKeepout() const { return m_isKeepout; }
+    bool GetIsRuleArea() const { return m_isRuleArea; }
     bool GetDoNotAllowCopperPour() const { return m_doNotAllowCopperPour; }
     bool GetDoNotAllowVias() const { return m_doNotAllowVias; }
     bool GetDoNotAllowTracks() const { return m_doNotAllowTracks; }
     bool GetDoNotAllowPads() const { return m_doNotAllowPads; }
     bool GetDoNotAllowFootprints() const { return m_doNotAllowFootprints; }
 
-    void SetIsKeepout( bool aEnable ) { m_isKeepout = aEnable; }
+    void SetIsRuleArea( bool aEnable ) {m_isRuleArea = aEnable; }
     void SetDoNotAllowCopperPour( bool aEnable ) { m_doNotAllowCopperPour = aEnable; }
     void SetDoNotAllowVias( bool aEnable ) { m_doNotAllowVias = aEnable; }
     void SetDoNotAllowTracks( bool aEnable ) { m_doNotAllowTracks = aEnable; }
@@ -844,7 +844,7 @@ protected:
     /* A zone outline can be a keepout zone.
      * It will be never filled, and DRC should test for pads, tracks and vias
      */
-    bool                  m_isKeepout;
+    bool m_isRuleArea;
 
     /* For keepout zones only:
      * what is not allowed inside the keepout ( pads, tracks and vias )

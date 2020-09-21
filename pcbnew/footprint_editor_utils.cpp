@@ -387,9 +387,9 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 
         zoneSettings << *static_cast<ZONE_CONTAINER*>( aItem );
 
-        if( zone->GetIsKeepout() )
+        if( zone->GetIsRuleArea() )
         {
-            success = InvokeKeepoutAreaEditor( this, &zoneSettings );
+            success = InvokeRuleAreaEditor( this, &zoneSettings );
         }
         else if( zone->IsOnCopperLayer() )
         {

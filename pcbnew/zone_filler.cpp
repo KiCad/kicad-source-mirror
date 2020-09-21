@@ -129,8 +129,8 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
     {
         zone->CacheBoundingBox();
 
-        // Keepout zones are not filled
-        if( zone->GetIsKeepout() )
+        // Rule areas are not filled
+        if( zone->GetIsRuleArea() )
             continue;
 
         m_commit->Modify( zone );
@@ -169,7 +169,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
 
                 // Even if keepouts exclude copper pours the exclusion is by outline, not by
                 // filled area, so we're good-to-go here too.
-                if( aOtherZone->GetIsKeepout() )
+                if( aOtherZone->GetIsRuleArea() )
                     return false;
 
                 // If the zones share no common layers
@@ -313,7 +313,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
     for( ZONE_CONTAINER* zone : aZones )
     {
         // Keepout zones are not filled
-        if( zone->GetIsKeepout() )
+        if( zone->GetIsRuleArea() )
             continue;
 
         zone->SetIsFilled( true );
@@ -387,7 +387,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
         for( ZONE_CONTAINER* zone : aZones )
         {
             // Keepout zones are not filled
-            if( zone->GetIsKeepout() )
+            if( zone->GetIsRuleArea() )
                 continue;
 
             for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
@@ -829,7 +829,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
                 if( aKnockout->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
-                    if( aKnockout->GetIsKeepout()
+                    if( aKnockout->GetIsRuleArea()
                         || aZone->GetNetCode() == aKnockout->GetNetCode() )
                     {
                         // Keepouts and same-net zones use outline with no clearance
@@ -860,7 +860,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
         if( otherZone == aZone )
             continue;
 
-        if( otherZone->GetIsKeepout() )
+        if( otherZone->GetIsRuleArea() )
         {
             if( otherZone->GetDoNotAllowCopperPour() )
                 knockoutZone( otherZone );
@@ -876,7 +876,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
     {
         for( ZONE_CONTAINER* otherZone : module->Zones() )
         {
-            if( otherZone->GetIsKeepout() )
+            if( otherZone->GetIsRuleArea() )
             {
                 if( otherZone->GetDoNotAllowCopperPour() )
                     knockoutZone( otherZone );

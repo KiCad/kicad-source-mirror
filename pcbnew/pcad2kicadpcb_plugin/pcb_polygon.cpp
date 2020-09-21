@@ -207,7 +207,7 @@ void PCB_POLYGON::AddToBoard()
 
         if ( m_objType == wxT( 'K' ) )
         {
-            zone->SetIsKeepout( true );
+            zone->SetIsRuleArea( true );
             zone->SetDoNotAllowTracks( true );
             zone->SetDoNotAllowVias( true );
             zone->SetDoNotAllowPads( true );
@@ -217,7 +217,7 @@ void PCB_POLYGON::AddToBoard()
         else if( m_objType == wxT( 'C' ) )
         {
             // convert cutouts to keepouts because standalone cutouts are not supported in KiCad
-            zone->SetIsKeepout( true );
+            zone->SetIsRuleArea( true );
             zone->SetDoNotAllowCopperPour( true );
             zone->SetDoNotAllowTracks( false );
             zone->SetDoNotAllowVias( false );

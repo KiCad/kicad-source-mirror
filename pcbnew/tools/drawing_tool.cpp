@@ -1638,7 +1638,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     ZONE_MODE zoneMode = aEvent.Parameter<ZONE_MODE>();
     MODE      drawMode = MODE::ZONE;
 
-    if( aEvent.IsAction( &PCB_ACTIONS::drawZoneKeepout ) )
+    if( aEvent.IsAction( &PCB_ACTIONS::drawRuleArea ) )
         drawMode = MODE::KEEPOUT;
 
     if( aEvent.IsAction( &PCB_ACTIONS::drawPolygon ) )
@@ -2179,7 +2179,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawCenterDimension.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawLeader.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZone.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZoneKeepout.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawRuleArea.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZoneCutout.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawSimilarZone.MakeEvent() );
     Go( &DRAWING_TOOL::DrawVia,               PCB_ACTIONS::drawVia.MakeEvent() );

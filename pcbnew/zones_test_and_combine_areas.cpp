@@ -90,7 +90,7 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
             if( curr_area->GetPriority() != area2->GetPriority() )
                 continue;
 
-            if( curr_area->GetIsKeepout() != area2->GetIsKeepout() )
+            if( curr_area->GetIsRuleArea() != area2->GetIsRuleArea() )
                 continue;
 
             if( curr_area->GetLayerSet() != area2->GetLayerSet() )
@@ -145,11 +145,11 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
             continue;
 
         // test for different types
-        if( area_to_test->GetIsKeepout() != area2->GetIsKeepout() )
+        if( area_to_test->GetIsRuleArea() != area2->GetIsRuleArea() )
             continue;
 
         // Keepout area-specific tests
-        if( area_to_test->GetIsKeepout() )
+        if( area_to_test->GetIsRuleArea() )
         {
             if( area_to_test->GetDoNotAllowCopperPour() != area2->GetDoNotAllowCopperPour() )
                 continue;

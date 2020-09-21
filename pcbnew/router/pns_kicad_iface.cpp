@@ -736,7 +736,7 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
     SHAPE_POLY_SET poly;
 
     // TODO handle no-via restriction
-    if( !aZone->GetIsKeepout() || !aZone->GetDoNotAllowTracks() )
+    if( !aZone->GetIsRuleArea() || !aZone->GetDoNotAllowTracks() )
         return false;
 
     LSET layers = aZone->GetLayerSet();

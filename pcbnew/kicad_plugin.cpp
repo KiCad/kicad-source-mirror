@@ -1714,8 +1714,8 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     // so be sure a dummy value is stored, just for ZONE_CONTAINER compatibility
     // (perhaps netcode and netname should be not stored)
     m_out->Print( aNestLevel, "(zone (net %d) (net_name %s)",
-                  aZone->GetIsKeepout() ? 0 : m_mapping->Translate( aZone->GetNetCode() ),
-                  m_out->Quotew( aZone->GetIsKeepout() ? wxT("") : aZone->GetNetname() ).c_str() );
+                  aZone->GetIsRuleArea() ? 0 : m_mapping->Translate( aZone->GetNetCode() ),
+                  m_out->Quotew( aZone->GetIsRuleArea() ? wxT("") : aZone->GetNetname() ).c_str() );
 
     // If a zone exists on multiple layers, format accordingly
     if( aZone->GetLayerSet().count() > 1 )
@@ -1783,7 +1783,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
     m_out->Print( 0, "\n" );
 
-    if( aZone->GetIsKeepout() )
+    if( aZone->GetIsRuleArea() )
     {
         m_out->Print( aNestLevel+1, "(keepout (tracks %s) (vias %s) (pads %s ) (copperpour %s) (footprints %s))\n",
                       aZone->GetDoNotAllowTracks() ? "not_allowed" : "allowed",

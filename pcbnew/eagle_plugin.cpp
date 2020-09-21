@@ -180,7 +180,7 @@ static void setKeepoutSettingsToZone( ZONE_CONTAINER* aZone, LAYER_NUM aLayer )
 {
     if( aLayer == EAGLE_LAYER::TRESTRICT || aLayer == EAGLE_LAYER::BRESTRICT )
     {
-        aZone->SetIsKeepout( true );
+        aZone->SetIsRuleArea( true );
         aZone->SetDoNotAllowVias( true );
         aZone->SetDoNotAllowTracks( true );
         aZone->SetDoNotAllowCopperPour( true );
@@ -194,7 +194,7 @@ static void setKeepoutSettingsToZone( ZONE_CONTAINER* aZone, LAYER_NUM aLayer )
     }
     else if( aLayer == EAGLE_LAYER::VRESTRICT )
     {
-        aZone->SetIsKeepout( true );
+        aZone->SetIsRuleArea( true );
         aZone->SetDoNotAllowVias( true );
         aZone->SetDoNotAllowTracks( false );
         aZone->SetDoNotAllowCopperPour( false );
@@ -1318,7 +1318,7 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     // If the pour is a cutout it needs to be set to a keepout
     if( p.pour == EPOLYGON::CUTOUT )
     {
-        zone->SetIsKeepout( true );
+        zone->SetIsRuleArea( true );
         zone->SetDoNotAllowVias( false );
         zone->SetDoNotAllowTracks( false );
         zone->SetDoNotAllowPads( false );
@@ -2422,7 +2422,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                 {
                     zones.push_back( zone );
 
-                    if( !zone->GetIsKeepout() )
+                    if( !zone->GetIsRuleArea() )
                         zone->SetNetCode( netCode );
                 }
 

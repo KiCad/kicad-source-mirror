@@ -1077,7 +1077,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         {
             ZONE_CONTAINER* item = (ZONE_CONTAINER*) items[i];
 
-            if( item->GetIsKeepout() )
+            if( item->GetIsRuleArea() )
                 continue;
 
             // Currently, we export only copper layers
@@ -1195,7 +1195,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         {
             ZONE_CONTAINER* item = (ZONE_CONTAINER*) items[i];
 
-            if( ! item->GetIsKeepout() )
+            if( !item->GetIsRuleArea() )
                 continue;
 
             // keepout areas have a type. types are

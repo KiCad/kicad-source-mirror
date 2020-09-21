@@ -477,7 +477,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
                 break;
 
-            if( !zone->GetLayerSet().test( aLayer ) || zone->GetIsKeepout() )
+            if( !zone->GetLayerSet().test( aLayer ) || zone->GetIsRuleArea() )
                 continue;
 
             if( zone->GetNetCode() && zone->GetNetCode() == aRefSeg->GetNetCode() )
@@ -722,7 +722,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
                     continue;
 
                 // test for different types
-                if( zoneRef->GetIsKeepout() != zoneToTest->GetIsKeepout() )
+                if( zoneRef->GetIsRuleArea() != zoneToTest->GetIsRuleArea() )
                     continue;
 
                 // Examine a candidate zone: compare zoneToTest to zoneRef
@@ -736,7 +736,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
 
                 // Keepout areas have no clearance, so set zone2zoneClearance to 1
                 // ( zone2zoneClearance = 0  can create problems in test functions)
-                if( zoneRef->GetIsKeepout() ) // fixme: really?
+                if( zoneRef->GetIsRuleArea() ) // fixme: really?
                     zone2zoneClearance = 1;
 
                 // test for some corners of zoneRef inside zoneToTest

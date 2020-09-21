@@ -734,7 +734,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( PCB_ACTIONS::routeSingleTrack);
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawVia );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawZone );
-    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawZoneKeepout );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawRuleArea );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawLine );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawRectangle );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawCircle );

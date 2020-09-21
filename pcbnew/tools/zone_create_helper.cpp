@@ -61,7 +61,7 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
     ZONE_SETTINGS         zoneInfo = frame->GetZoneSettings();
     zoneInfo.m_Layers.reset().set( m_params.m_layer );  // TODO(JE) multilayer defaults?
     zoneInfo.m_NetcodeSelection = highlightedNets.empty() ? -1 : *highlightedNets.begin();
-    zoneInfo.SetIsKeepout( m_params.m_keepout );
+    zoneInfo.SetIsRuleArea( m_params.m_keepout );
     zoneInfo.m_Zone_45_Only = ( m_params.m_leaderMode == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
 
     // If we don't have a net from highlighing, maybe we can get one from the selection
@@ -84,7 +84,7 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
         int dialogResult;
 
         if( m_params.m_keepout )
-            dialogResult = InvokeKeepoutAreaEditor( frame, &zoneInfo );
+            dialogResult = InvokeRuleAreaEditor( frame, &zoneInfo );
         else
         {
             // TODO(JE) combine these dialogs?

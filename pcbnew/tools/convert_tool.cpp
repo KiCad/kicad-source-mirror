@@ -187,7 +187,7 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
         int ret;
 
         if( aEvent.IsAction( &PCB_ACTIONS::convertToKeepout ) )
-            ret = InvokeKeepoutAreaEditor( frame, &zoneInfo );
+            ret = InvokeRuleAreaEditor( frame, &zoneInfo );
         else
             ret = InvokeCopperZonesEditor( frame, &zoneInfo );
 

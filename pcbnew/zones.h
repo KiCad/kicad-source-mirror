@@ -74,7 +74,7 @@ int InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSetting
 int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings );
 
 /**
- * Function InvokeKeepoutAreaEditor
+ * Function InvokeRuleAreaEditor
  * invokes up a modal dialog window for copper zone editing.
  *
  * @param aCaller is the PCB_BASE_FRAME calling parent window for the modal dialog,
@@ -82,6 +82,6 @@ int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings )
  * @param aSettings points to the ZONE_SETTINGS to edit.
  * @return int - tells if user aborted, changed only one zone, or all of them.
  */
-int InvokeKeepoutAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings );
+int InvokeRuleAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings );
 
 #endif  // ZONES_H_

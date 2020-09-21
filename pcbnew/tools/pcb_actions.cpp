@@ -63,8 +63,8 @@ TOOL_ACTION PCB_ACTIONS::convertToZone( "pcbnew.Convert.convertToZone",
         add_zone_xpm );
 
 TOOL_ACTION PCB_ACTIONS::convertToKeepout( "pcbnew.Convert.convertToKeepout",
-        AS_GLOBAL, 0, "", _( "Convert to Keepout" ),
-        _( "Creates a keepout zone from the selection" ), add_keepout_area_xpm );
+        AS_GLOBAL, 0, "", _( "Convert to Rule Area" ),
+        _( "Creates a rule area from the selection" ), add_keepout_area_xpm );
 
 TOOL_ACTION PCB_ACTIONS::convertToLines( "pcbnew.Convert.convertToLines",
         AS_GLOBAL, 0, "", _( "Convert to Lines" ), _( "Creates graphic lines from the selection" ),
@@ -149,10 +149,10 @@ TOOL_ACTION PCB_ACTIONS::drawVia( "pcbnew.InteractiveDrawing.via",
         _( "Add Vias" ), _( "Add free-standing vias" ),
         add_via_xpm, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::drawZoneKeepout( "pcbnew.InteractiveDrawing.keepout",
+TOOL_ACTION PCB_ACTIONS::drawRuleArea( "pcbnew.InteractiveDrawing.ruleArea",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'K', LEGACY_HK_NAME( "Add Keepout Area" ),
-        _( "Add Keepout Area" ), _( "Add a keepout area" ),
+        _( "Add Rule Area" ), _( "Add a rule area (keepout)" ),
         add_keepout_area_xpm, AF_ACTIVATE, (void*) ZONE_MODE::ADD );
 
 TOOL_ACTION PCB_ACTIONS::drawZoneCutout( "pcbnew.InteractiveDrawing.zoneCutout",
