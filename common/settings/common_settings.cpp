@@ -28,9 +28,6 @@
 using KIGFX::MOUSE_DRAG_ACTION;
 
 
-extern const char* traceSettings;
-
-
 ///! Update the schema version whenever a migration is required
 const int commonSchemaVersion = 1;
 

@@ -41,12 +41,6 @@
 #include <wildcards_and_files_ext.h>
 
 
-/**
- * Flag to enable settings tracing
- * @ingroup trace_env_vars
- */
-const char* traceSettings = "SETTINGS";
-
 
 /// Project settings path will be <projectname> + this
 #define PROJECT_BACKUPS_DIR_SUFFIX wxT( "-backups" )

@@ -29,8 +29,6 @@
 #include <base_units.h>
 #include <widgets/ui_common.h>
 
-extern const char* traceSettings;
-
 
 ///! Update the schema version whenever a migration is required
 const int fpEditSchemaVersion = 1;

@@ -22,8 +22,6 @@
 
 #include <settings/nested_settings.h>
 
-extern const char* traceSettings;
-
 
 NESTED_SETTINGS::NESTED_SETTINGS( const std::string& aName, int aVersion, JSON_SETTINGS* aParent,
                                   const std::string& aPath ) :

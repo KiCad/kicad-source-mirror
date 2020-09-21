@@ -94,9 +94,21 @@ public:
                                 } );
 
         if( it != m_settings.end() )
+        {
             ret = dynamic_cast<AppSettings*>( it->get() );
+        }
         else
-            ret = static_cast<AppSettings*>( RegisterSettings( new AppSettings, aLoadNow ) );
+        {
+            try
+            {
+                ret = static_cast<AppSettings*>( RegisterSettings( new AppSettings, aLoadNow ) );
+            }
+            catch( ... )
+            {
+                wxLogTrace( traceSettings, "Unable to create application settings object" );
+            }
+
+        }
 
         return ret;
     }

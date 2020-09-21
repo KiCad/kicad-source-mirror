@@ -32,6 +32,14 @@ class NESTED_SETTINGS;
 class PARAM_BASE;
 class SETTINGS_MANAGER;
 
+/**
+ * Flag to enable debug output of settings operations and management.
+ *
+ * Use "KICAD_SETTINGS" to enable.
+ *
+ * @ingroup trace_env_vars
+ */
+extern const wxChar* const traceSettings;
 
 enum class SETTINGS_LOC {
     USER,       ///< The main config directory (e.g. ~/.config/kicad/)

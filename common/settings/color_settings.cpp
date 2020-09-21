@@ -25,8 +25,6 @@
 #include <settings/settings_manager.h>
 
 
-extern const char* traceSettings;
-
 ///! Update the schema version whenever a migration is required
 const int colorsSchemaVersion = 1;
 

@@ -33,8 +33,7 @@
 #include <wx/debug.h>
 #include <wx/filename.h>
 
-extern const char* traceSettings;
-
+const wxChar* const traceSettings = wxT( "KICAD_SETTINGS" );
 
 JSON_SETTINGS::JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation,
                               int aSchemaVersion, bool aCreateIfMissing, bool aCreateIfDefault,

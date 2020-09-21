@@ -28,7 +28,6 @@
 #include <wx/config.h>
 #include <wx/log.h>
 
-extern const char* traceSettings;
 
 ///! Update the schema version whenever a migration is required
 const int projectFileSchemaVersion = 1;
