@@ -640,8 +640,9 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
     std::map<KIID, EDA_ITEM*> itemMap;
     m_brdEditor->GetBoard()->FillItemMap( itemMap );
 
-    int       count;
-    EDA_UNITS units = GetUserUnits();
+    EDA_UNITS              units = GetUserUnits();
+    BOARD_DESIGN_SETTINGS& bds = m_brdEditor->GetBoard()->GetDesignSettings();
+    int                    count;
 
     fprintf( fp, "** Drc report for %s **\n", TO_UTF8( m_brdEditor->GetBoard()->GetFileName() ) );
 
@@ -654,21 +655,36 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
     fprintf( fp, "\n** Found %d DRC violations **\n", count );
 
     for( int i = 0; i < count; ++i )
-        fprintf( fp, "%s", TO_UTF8( m_markersProvider->GetItem( i )->ShowReport( units, itemMap ) ) );
+    {
+        const std::shared_ptr<RC_ITEM>& item = m_markersProvider->GetItem( i );
+        SEVERITY severity = (SEVERITY) bds.GetSeverity( item->GetErrorCode() );
+
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( units, severity, itemMap ) ) );
+    }
 
     count = m_unconnectedItemsProvider->GetCount();
 
     fprintf( fp, "\n** Found %d unconnected pads **\n", count );
 
     for( int i = 0; i < count; ++i )
-        fprintf( fp, "%s", TO_UTF8( m_unconnectedItemsProvider->GetItem( i )->ShowReport( units, itemMap ) ) );
+    {
+        const std::shared_ptr<RC_ITEM>& item = m_unconnectedItemsProvider->GetItem( i );
+        SEVERITY severity = (SEVERITY) bds.GetSeverity( item->GetErrorCode() );
+
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( units, severity, itemMap ) ) );
+    }
 
     count = m_footprintWarningsProvider->GetCount();
 
     fprintf( fp, "\n** Found %d Footprint errors **\n", count );
 
     for( int i = 0; i < count; ++i )
-        fprintf( fp, "%s", TO_UTF8( m_footprintWarningsProvider->GetItem( i )->ShowReport( units, itemMap ) ) );
+    {
+        const std::shared_ptr<RC_ITEM>& item = m_footprintWarningsProvider->GetItem( i );
+        SEVERITY severity = (SEVERITY) bds.GetSeverity( item->GetErrorCode() );
+
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( units, severity, itemMap ) ) );
+    }
 
 
     fprintf( fp, "\n** End of Report **\n" );

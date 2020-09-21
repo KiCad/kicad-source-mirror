@@ -586,20 +586,22 @@ bool DIALOG_ERC::writeReport( const wxString& aFullFileName )
         for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
         {
             const SCH_MARKER* marker = static_cast<const SCH_MARKER*>( aItem );
+            RC_ITEM*          item = marker->GetRCItem().get();
+            SEVERITY          severity = (SEVERITY)settings.GetSeverity( item->GetErrorCode() );
 
             if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
                 continue;
 
             total_count++;
 
-            switch( settings.GetSeverity( marker->GetRCItem()->GetErrorCode() ) )
+            switch( severity )
             {
             case RPT_SEVERITY_ERROR:   err_count++;  break;
             case RPT_SEVERITY_WARNING: warn_count++; break;
             default:                                 break;
             }
 
-            msg << marker->GetRCItem()->ShowReport( GetUserUnits(), itemMap );
+            msg << marker->GetRCItem()->ShowReport( GetUserUnits(), severity, itemMap );
         }
     }
 

@@ -50,8 +50,23 @@ wxString RC_ITEM::ShowCoord( EDA_UNITS aUnits, const wxPoint& aPos )
 }
 
 
-wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, const std::map<KIID, EDA_ITEM*>& aItemMap ) const
+wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
+                              const std::map<KIID, EDA_ITEM*>& aItemMap ) const
 {
+    wxString severity;
+
+    switch( aSeverity )
+    {
+    case RPT_SEVERITY_ERROR:   severity = wxT( "Severity: error" );
+    case RPT_SEVERITY_WARNING: severity = wxT( "Severity: warning" );
+    case RPT_SEVERITY_ACTION:  severity = wxT( "Severity: action" );
+    case RPT_SEVERITY_INFO:    severity = wxT( "Severity: info" );
+    default:                   ;
+    };
+
+    if( m_parent && m_parent->IsExcluded() )
+        severity += wxT( " (excluded)" );
+
     EDA_ITEM* mainItem = nullptr;
     EDA_ITEM* auxItem = nullptr;
 
@@ -65,11 +80,17 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, const std::map<KIID, EDA_ITEM*>&
     if( ii != aItemMap.end() )
         auxItem = ii->second;
 
+    // Note: some customers machine-process these.  So:
+    // 1) don't translate
+    // 2) try not to re-order or change syntax
+    // 3) report numeric error code (which should be more stable) in addition to message
+
     if( mainItem && auxItem )
     {
-        return wxString::Format( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
+        return wxString::Format( wxT( "ErrType(%d): %s %s\n    %s: %s\n    %s: %s\n" ),
                                  GetErrorCode(),
                                  GetErrorMessage(),
+                                 severity,
                                  ShowCoord( aUnits, mainItem->GetPosition() ),
                                  mainItem->GetSelectMenuText( aUnits ),
                                  ShowCoord( aUnits, auxItem->GetPosition() ),
@@ -77,17 +98,19 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, const std::map<KIID, EDA_ITEM*>&
     }
     else if( mainItem )
     {
-        return wxString::Format( wxT( "ErrType(%d): %s\n    %s: %s\n" ),
+        return wxString::Format( wxT( "ErrType(%d): %s %s\n    %s: %s\n" ),
                                  GetErrorCode(),
                                  GetErrorMessage(),
+                                 severity,
                                  ShowCoord( aUnits, mainItem->GetPosition() ),
                                  mainItem->GetSelectMenuText( aUnits ) );
     }
     else
     {
-        return wxString::Format( wxT( "ErrType(%d): %s\n" ),
+        return wxString::Format( wxT( "ErrType(%d): %s %s\n" ),
                                  GetErrorCode(),
-                                 GetErrorMessage() );
+                                 GetErrorMessage(),
+                                 severity );
     }
 }
 

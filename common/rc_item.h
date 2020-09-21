@@ -27,6 +27,7 @@
 #include <wx/dataview.h>
 #include <macros.h>
 #include <base_struct.h>
+#include <reporter.h>
 
 class MARKER_BASE;
 class EDA_BASE_FRAME;
@@ -150,7 +151,7 @@ public:
      * translates this object into a text string suitable for saving to disk in a report.
      * @return wxString - the simple multi-line report text.
      */
-    virtual wxString ShowReport( EDA_UNITS aUnits,
+    virtual wxString ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
                                  const std::map<KIID, EDA_ITEM*>& aItemMap ) const;
 
     int GetErrorCode() const { return m_errorCode; }
