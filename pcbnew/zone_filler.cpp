@@ -82,8 +82,7 @@ void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 }
 
 
-bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck,
-                        wxWindow* aParent )
+bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWindow* aParent )
 {
     std::vector<std::pair<ZONE_CONTAINER*, PCB_LAYER_ID>> toFill;
     std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> islandsList;
@@ -109,7 +108,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck,
     m_boardOutline.RemoveAllContours();
     m_brdOutlinesValid = m_board->GetBoardPolygonOutlines( m_boardOutline );
 
-    // Update the bounding box shape caches in the pads to prevent multi-threaded rebuilds
+    // Update the bounding box and shape caches in the pads to prevent multi-threaded rebuilds.
     for( MODULE* module : m_board->Modules() )
     {
         for( D_PAD* pad : module->Pads() )
@@ -119,8 +118,17 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck,
         }
     }
 
+    // Sort by priority to reduce deferrals waiting on higher priority zones.
+    std::sort( aZones.begin(), aZones.end(),
+               []( const ZONE_CONTAINER* lhs, const ZONE_CONTAINER* rhs )
+               {
+                   return lhs->GetPriority() > rhs->GetPriority();
+               } );
+
     for( ZONE_CONTAINER* zone : aZones )
     {
+        zone->CacheBoundingBox();
+
         // Keepout zones are not filled
         if( zone->GetIsKeepout() )
             continue;
@@ -146,84 +154,85 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck,
         zone->SetFillVersion( bds.m_ZoneFillVersion );
     }
 
-    std::atomic<size_t> nextItem( 0 );
-    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
-                                                   toFill.size() );
-    std::vector<std::future<size_t>> returns( parallelThreadCount );
+    size_t cores = std::thread::hardware_concurrency();
+    std::atomic<size_t> nextItem;
+
+    auto check_fill_dependency =
+            [&]( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer, ZONE_CONTAINER* aOtherZone ) -> bool
+            {
+                // Check to see if we have to knock-out the filled areas of a higher-priority
+                // zone.  If so we have to wait until said zone is filled before we can fill.
+
+                // If the other zone is already filled then we're good-to-go
+                if( aOtherZone->GetFillFlag( aLayer ) )
+                    return false;
+
+                // Even if keepouts exclude copper pours the exclusion is by outline, not by
+                // filled area, so we're good-to-go here too.
+                if( aOtherZone->GetIsKeepout() )
+                    return false;
+
+                // If the zones share no common layers
+                if( !aOtherZone->GetLayerSet().test( aLayer ) )
+                    return false;
+
+                if( aOtherZone->GetPriority() <= aZone->GetPriority() )
+                    return false;
+
+                // Same-net zones always use outline to produce predictable results
+                if( aOtherZone->GetNetCode() == aZone->GetNetCode() )
+                    return false;
+
+                // A higher priority zone is found: if we intersect and it's not filled yet
+                // then we have to wait.
+                EDA_RECT inflatedBBox = aZone->GetCachedBoundingBox();
+                inflatedBBox.Inflate( worstClearance );
+
+                return inflatedBBox.Intersects( aOtherZone->GetCachedBoundingBox() );
+            };
 
     auto fill_lambda =
-            [&]( PROGRESS_REPORTER* aReporter ) -> size_t
+            [&]( PROGRESS_REPORTER* aReporter )
             {
-                std::deque<std::pair<ZONE_CONTAINER*, PCB_LAYER_ID>> deferred;
+                size_t num = 0;
 
-                size_t          num = 0;
-                PCB_LAYER_ID    layer = UNDEFINED_LAYER;
-                ZONE_CONTAINER* zone = nullptr;
-
-                while( true )
+                for( size_t i = nextItem++; i < toFill.size(); i = nextItem++ )
                 {
-                    size_t i = nextItem++;
-
-                    if( i < toFill.size() )
-                    {
-                        layer = toFill[i].second;
-                        zone  = toFill[i].first;
-                    }
-                    else if( !deferred.empty() )
-                    {
-                        layer = deferred.front().second;
-                        zone  = deferred.front().first;
-                        deferred.pop_front();
-                    }
-                    else
-                    {
-                        // all done
-                        break;
-                    }
-
-                    EDA_RECT zone_boundingbox = zone->GetBoundingBox();
-                    bool     canFill  = true;
-
-                    zone_boundingbox.Inflate( worstClearance );
+                    PCB_LAYER_ID    layer = toFill[i].second;
+                    ZONE_CONTAINER* zone = toFill[i].first;
+                    bool            canFill = true;
 
                     // Check for any fill dependencies.  If our zone needs to be clipped by
                     // another zone then we can't fill until that zone is filled.
-                    for( ZONE_CONTAINER* candidate : m_board->GetZoneList( true ) )
+                    for( ZONE_CONTAINER* otherZone : m_board->Zones() )
                     {
-                        // We don't care about keepouts; even if they exlclude copper pours
-                        // the exclusion is by outline, not by filled area.
-                        if( candidate->GetIsKeepout() )
+                        if( otherZone == zone )
                             continue;
 
-                        // If the zones share no common layers
-                        if( !candidate->GetLayerSet().test( layer ) )
-                            continue;
-
-                        if( candidate->GetPriority() <= zone->GetPriority() )
-                            continue;
-
-                        // Same-net zones always use outline to produce predictable results
-                        if( candidate->GetNetCode() == zone->GetNetCode() )
-                            continue;
-
-                        // A higher priority zone is found: if we intersect and it's not
-                        // filled yet then we have to wait.
-                        if( zone_boundingbox.Intersects( candidate->GetBoundingBox() )
-                                && !candidate->GetFillFlag( layer ) )
+                        if( check_fill_dependency( zone, layer, otherZone ) )
                         {
                             canFill = false;
                             break;
                         }
                     }
 
-                    if( !canFill )
+                    for( MODULE* module : m_board->Modules() )
                     {
-                        // This isn't ideal from a load-balancing standpoint as another thread
-                        // cannot pick up this thread's deferred zones.  However a better
-                        // solution would require a significantly more complex thread-safe queue.
-                        deferred.push_back( { zone, layer } );
-                        continue;
+                        for( ZONE_CONTAINER* otherZone : module->Zones() )
+                        {
+                            if( check_fill_dependency( zone, layer, otherZone ) )
+                            {
+                                canFill = false;
+                                break;
+                            }
+                        }
                     }
+
+                    if( m_progressReporter && m_progressReporter->IsCancelled() )
+                        break;
+
+                    if( !canFill )
+                        continue;
 
                     // Now we're ready to fill.
                     SHAPE_POLY_SET rawPolys, finalPolys;
@@ -236,12 +245,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck,
                     zone->SetFillFlag( layer, true );
 
                     if( m_progressReporter )
-                    {
                         m_progressReporter->AdvanceProgress();
-
-                        if( m_progressReporter->IsCancelled() )
-                            break;
-                    }
 
                     num++;
                 }
@@ -249,25 +253,43 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck,
                 return num;
             };
 
-    if( parallelThreadCount <= 1 )
-        fill_lambda( m_progressReporter );
-    else
+    while( !toFill.empty() )
     {
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-            returns[ii] = std::async( std::launch::async, fill_lambda, m_progressReporter );
+        size_t parallelThreadCount = std::min( cores, toFill.size() );
+        std::vector<std::future<size_t>> returns( parallelThreadCount );
 
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+        nextItem = 0;
+
+        if( parallelThreadCount <= 1 )
+            fill_lambda( m_progressReporter );
+        else
         {
-            // Here we balance returns with a 100ms timeout to allow UI updating
-            std::future_status status;
-            do
-            {
-                if( m_progressReporter )
-                    m_progressReporter->KeepRefreshing();
+            for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+                returns[ii] = std::async( std::launch::async, fill_lambda, m_progressReporter );
 
-                status = returns[ii].wait_for( std::chrono::milliseconds( 100 ) );
-            } while( status != std::future_status::ready );
+            for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+            {
+                // Here we balance returns with a 100ms timeout to allow UI updating
+                std::future_status status;
+                do
+                {
+                    if( m_progressReporter )
+                        m_progressReporter->KeepRefreshing();
+
+                    status = returns[ii].wait_for( std::chrono::milliseconds( 100 ) );
+                } while( status != std::future_status::ready );
+            }
         }
+
+        toFill.erase( std::remove_if( toFill.begin(), toFill.end(),
+                      [&] ( const std::pair<ZONE_CONTAINER*, PCB_LAYER_ID> pair ) -> bool
+                      {
+                          return pair.first->GetFillFlag( pair.second );
+                      } ),
+                      toFill.end() );
+
+        if( m_progressReporter && m_progressReporter->IsCancelled() )
+            break;
     }
 
     // Now update the connectivity to check for copper islands
@@ -396,7 +418,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck,
     {
         m_progressReporter->AdvancePhase();
         m_progressReporter->Report( _( "Performing polygon fills..." ) );
-        m_progressReporter->SetMaxProgress( toFill.size() );
+        m_progressReporter->SetMaxProgress( islandsList.size() );
     }
 
     nextItem = 0;
@@ -422,6 +444,9 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck,
 
                 return num;
             };
+
+    size_t parallelThreadCount = std::min( cores, islandsList.size() );
+    std::vector<std::future<size_t>> returns( parallelThreadCount );
 
     if( parallelThreadCount <= 1 )
         tri_lambda( m_progressReporter );
@@ -488,7 +513,7 @@ bool hasThermalConnection( D_PAD* pad, const ZONE_CONTAINER* aZone )
     int thermalGap = aZone->GetThermalReliefGap( pad );
     item_boundingbox.Inflate( thermalGap, thermalGap );
 
-    return item_boundingbox.Intersects( aZone->GetBoundingBox() );
+    return item_boundingbox.Intersects( aZone->GetCachedBoundingBox() );
 }
 
 
@@ -670,7 +695,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     int                    zone_clearance = aZone->GetLocalClearance();
-    EDA_RECT               zone_boundingbox = aZone->GetBoundingBox();
+    EDA_RECT               zone_boundingbox = aZone->GetCachedBoundingBox();
 
     // Items outside the zone bounding box are skipped, so it needs to be inflated by the
     // largest clearance value found in the netclasses and rules
@@ -793,46 +818,73 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
     for( BOARD_ITEM* item : m_board->Drawings() )
         doGraphicItem( item );
 
-    // Add zones outlines having an higher priority and keepout
+    // Add keepout zones and higher-priority zones
     //
-    for( ZONE_CONTAINER* zone : m_board->GetZoneList( true ) )
-    {
-        // If the zones share no common layers
-        if( !zone->GetLayerSet().test( aLayer ) )
-            continue;
-
-        if( !zone->GetIsKeepout() && zone->GetPriority() <= aZone->GetPriority() )
-            continue;
-
-        if( zone->GetIsKeepout() && !zone->GetDoNotAllowCopperPour() )
-            continue;
-
-        // A higher priority zone or keepout area is found: remove this area
-        EDA_RECT item_boundingbox = zone->GetBoundingBox();
-
-        if( item_boundingbox.Intersects( zone_boundingbox ) )
-        {
-            if( zone->GetIsKeepout() || aZone->GetNetCode() == zone->GetNetCode() )
+    auto knockoutZone =
+            [&]( ZONE_CONTAINER* aKnockout )
             {
-                // Keepouts and same-net zones use outline with no clearance
-                zone->TransformSmoothedOutlineWithClearanceToPolygon( aHoles, 0 );
+                // If the zones share no common layers
+                if( !aKnockout->GetLayerSet().test( aLayer ) )
+                    return;
+
+                if( aKnockout->GetBoundingBox().Intersects( zone_boundingbox ) )
+                {
+                    if( aKnockout->GetIsKeepout()
+                        || aZone->GetNetCode() == aKnockout->GetNetCode() )
+                    {
+                        // Keepouts and same-net zones use outline with no clearance
+                        aKnockout->TransformSmoothedOutlineWithClearanceToPolygon( aHoles, 0 );
+                    }
+                    else
+                    {
+                        int gap = aZone->GetClearance( aLayer, aKnockout );
+
+                        if( bds.m_ZoneFillVersion == 5 )
+                        {
+                            // 5.x used outline with clearance
+                            aKnockout->TransformSmoothedOutlineWithClearanceToPolygon( aHoles, gap );
+                        }
+                        else
+                        {
+                            // 6.0 uses filled areas with clearance
+                            SHAPE_POLY_SET poly;
+                            aKnockout->TransformShapeWithClearanceToPolygon( poly, aLayer, gap );
+                            aHoles.Append( poly );
+                        }
+                    }
+                }
+            };
+
+    for( ZONE_CONTAINER* otherZone : m_board->Zones() )
+    {
+        if( otherZone == aZone )
+            continue;
+
+        if( otherZone->GetIsKeepout() )
+        {
+            if( otherZone->GetDoNotAllowCopperPour() )
+                knockoutZone( otherZone );
+        }
+        else
+        {
+            if( otherZone->GetPriority() > aZone->GetPriority() )
+                knockoutZone( otherZone );
+        }
+    }
+
+    for( MODULE* module : m_board->Modules() )
+    {
+        for( ZONE_CONTAINER* otherZone : module->Zones() )
+        {
+            if( otherZone->GetIsKeepout() )
+            {
+                if( otherZone->GetDoNotAllowCopperPour() )
+                    knockoutZone( otherZone );
             }
             else
             {
-                int gap = aZone->GetClearance( aLayer, zone );
-
-                if( bds.m_ZoneFillVersion == 5 )
-                {
-                    // 5.x used outline with clearance
-                    zone->TransformSmoothedOutlineWithClearanceToPolygon( aHoles, gap );
-                }
-                else
-                {
-                    // 6.0 uses filled areas with clearance
-                    SHAPE_POLY_SET knockout;
-                    zone->TransformShapeWithClearanceToPolygon( knockout, aLayer, gap );
-                    aHoles.Append( knockout );
-                }
+                if( otherZone->GetPriority() > aZone->GetPriority() )
+                    knockoutZone( otherZone );
             }
         }
     }
@@ -1087,7 +1139,7 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
 void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
                                       std::deque<SHAPE_LINE_CHAIN>& aSpokesList )
 {
-    auto zoneBB = aZone->GetBoundingBox();
+    auto zoneBB = aZone->GetCachedBoundingBox();
     int  zone_clearance = aZone->GetLocalClearance();
     int  biggest_clearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
     biggest_clearance = std::max( biggest_clearance, zone_clearance );
@@ -1349,7 +1401,7 @@ void ZONE_FILLER::addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, PCB_LAYER
         // one of the holes.  Effectively this means their copper outline needs to be expanded
         // to be at least as wide as the gap so that it is guaranteed to touch at least one
         // edge.
-        EDA_RECT       zone_boundingbox = aZone->GetBoundingBox();
+        EDA_RECT       zone_boundingbox = aZone->GetCachedBoundingBox();
         SHAPE_POLY_SET aprons;
         int            min_apron_radius = ( aZone->GetHatchGap() * 10 ) / 19;
 

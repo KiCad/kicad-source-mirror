@@ -1019,7 +1019,9 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb, COMMIT* aCommit 
                 zone->SetFillMode( ZONE_FILL_MODE::POLYGONS ); // use filled polygons
 
                 // If the zone fill failed, don't try adding it to the export
-                if( !filler.Fill( { zone } ) )
+                std::vector<ZONE_CONTAINER*> toFill = { zone };
+
+                if( !filler.Fill( toFill ) )
                     continue;
             }
 

@@ -699,6 +699,8 @@ void ZONE_CONTAINER::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCorn
         return;
 
     aCornerBuffer = m_FilledPolysList.at( aLayer );
-    aCornerBuffer.Inflate( aClearance, aError );
+
+    int numSegs = GetArcToSegmentCount( aClearance, aError, 360.0 );
+    aCornerBuffer.Inflate( aClearance, numSegs );
     aCornerBuffer.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 }

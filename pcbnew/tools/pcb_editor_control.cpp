@@ -475,7 +475,7 @@ int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
     for( BOARD_ITEM* drawing : board()->Drawings() )
         processItem( drawing );
 
-    for( ZONE_CONTAINER* zone : board()->GetZoneList() )
+    for( ZONE_CONTAINER* zone : board()->Zones() )
         processItem( zone );
 
     for( MARKER_PCB* marker : board()->Markers() )

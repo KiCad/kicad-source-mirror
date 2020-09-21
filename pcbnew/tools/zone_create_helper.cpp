@@ -203,8 +203,9 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
             if( !m_params.m_keepout )
             {
                 ZONE_FILLER filler( m_tool.getModel<BOARD>(), &bCommit );
+                std::vector<ZONE_CONTAINER*> toFill = { aZone.get() };
 
-                if( !filler.Fill( { aZone.get() } ) )
+                if( !filler.Fill( toFill ) )
                 {
                     bCommit.Revert();
                     break;

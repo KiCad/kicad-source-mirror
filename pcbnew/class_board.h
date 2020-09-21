@@ -880,12 +880,6 @@ public:
     }
 
     /**
-     * Function GetZoneList
-     * @return a std::list of pointers to all board zones (possibly including zones in footprints)
-     */
-    std::list<ZONE_CONTAINER*> GetZoneList( bool aIncludeZonesInFootprints = false );
-
-    /**
      * Function GetAreaCount
      * @return The number of Areas or ZONE_CONTAINER.
      */

@@ -44,8 +44,8 @@ public:
 
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
     void InstallNewProgressReporter( wxWindow* aParent, const wxString& aTitle, int aNumPhases );
-    bool Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck = false,
-                            wxWindow* aParent = nullptr );
+    bool Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck = false,
+               wxWindow* aParent = nullptr );
 
 private:
 

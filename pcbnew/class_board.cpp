@@ -1701,25 +1701,6 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer
     return NULL;
 }
 
-std::list<ZONE_CONTAINER*> BOARD::GetZoneList( bool aIncludeZonesInFootprints )
-{
-    std::list<ZONE_CONTAINER*> zones;
-
-    for( ZONE_CONTAINER* zone : Zones() )
-        zones.push_back( zone );
-
-    if( aIncludeZonesInFootprints )
-    {
-        for( MODULE* mod : m_modules )
-        {
-            for( MODULE_ZONE_CONTAINER* zone : mod->Zones() )
-                zones.push_back( zone );
-        }
-    }
-
-    return zones;
-}
-
 
 ZONE_CONTAINER* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_ID aLayer,
                                 wxPoint aStartPointPosition, ZONE_BORDER_DISPLAY_STYLE aHatch )

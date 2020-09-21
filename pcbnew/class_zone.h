@@ -113,10 +113,17 @@ public:
     wxString GetZoneName() const { return m_zoneName; }
     void SetZoneName( const wxString& aName ) { m_zoneName = aName; }
 
-    /** Function GetBoundingBox (virtual)
+    /**
+     * Function GetBoundingBox (virtual)
      * @return an EDA_RECT that is the bounding box of the zone outline
      */
     const EDA_RECT GetBoundingBox() const override;
+
+    /**
+     * ONLY TO BE USED BY CLIENTS WHICH SET UP THE CACHE!
+     */
+    const EDA_RECT GetCachedBoundingBox() const { return m_bboxCache; }
+    void CacheBoundingBox() { m_bboxCache = GetBoundingBox(); }
 
     /**
      * Function GetLocalClearance
@@ -912,7 +919,8 @@ protected:
     std::map<PCB_LAYER_ID, SHAPE_POLY_SET> m_FilledPolysList;
     std::map<PCB_LAYER_ID, SHAPE_POLY_SET> m_RawPolysList;
 
-    /// A temp variable used while filling
+    /// Temp variables used while filling
+    EDA_RECT                               m_bboxCache;
     std::map<PCB_LAYER_ID, bool>           m_fillFlags;
 
     /// A hash value used in zone filling calculations to see if the filled areas are up to date

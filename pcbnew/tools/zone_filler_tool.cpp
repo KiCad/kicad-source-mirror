@@ -97,15 +97,15 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
 
     BOARD_COMMIT commit( this );
 
-    for( auto zone : board()->Zones() )
-        toFill.push_back(zone);
+    for( ZONE_CONTAINER* zone : board()->Zones() )
+        toFill.push_back( zone );
 
     ZONE_FILLER filler( board(), &commit );
 
     if( aReporter )
         filler.SetProgressReporter( aReporter );
     else
-        filler.InstallNewProgressReporter( aCaller, _( "Fill All Zones" ), 4 );
+        filler.InstallNewProgressReporter( aCaller, _( "Fill All Zones" ), 3 );
 
     if( filler.Fill( toFill ) )
     {
