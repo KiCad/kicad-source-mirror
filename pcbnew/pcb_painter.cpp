@@ -889,10 +889,16 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         {
             const_cast<D_PAD*>( aPad )->SetSize( pad_size + margin + margin );
             margin.x = margin.y = 0;
+        }
 
-            // Once we change the size of the pad, check that there is still a pad remaining
-            if( !aPad->GetSize().x || !aPad->GetSize().y )
-                return;
+        // Once we change the size of the pad, check that there is still a pad remaining
+        if( !aPad->GetSize().x || !aPad->GetSize().y )
+        {
+            // Reset the stored pad size
+            if( aPad->GetSize() != pad_size )
+                const_cast<D_PAD*>( aPad )->SetSize( pad_size );
+
+            return;
         }
 
         const std::shared_ptr<SHAPE_COMPOUND> shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
