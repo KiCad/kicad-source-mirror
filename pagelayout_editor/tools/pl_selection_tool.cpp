@@ -179,6 +179,12 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
 
+        // Middle double click?  Do zoom to fit or zoom to objects
+        else if( evt->IsDblClick( BUT_MIDDLE ) )
+        {
+            m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
+        }
+
         else if( evt->IsCancelInteractive() )
         {
             ClearSelection();

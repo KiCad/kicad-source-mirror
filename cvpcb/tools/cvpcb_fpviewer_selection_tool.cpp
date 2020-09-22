@@ -23,6 +23,7 @@ using namespace std::placeholders;
 #include <bitmaps.h>
 #include <preview_items/ruler_item.h>
 #include <tool/tool_event.h>
+#include <tool/tool_manager.h>
 #include <tools/cvpcb_actions.h>
 #include <tools/cvpcb_fpviewer_selection_tool.h>
 #include <view/view.h>
@@ -68,6 +69,11 @@ int CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_menu.ShowContextMenu( m_selection );
         }
 
+        // Middle double click?  Do zoom to fit or zoom to objects
+        else if( evt->IsDblClick( BUT_MIDDLE ) )
+        {
+            m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
+        }
         else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE )
         {
             clearSelection();
