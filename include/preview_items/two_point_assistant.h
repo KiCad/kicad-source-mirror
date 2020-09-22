@@ -37,7 +37,10 @@ namespace PREVIEW
     {
         SEGMENT = 0,
         RECT,
+        ARC,
         CIRCLE,
+        POLYGON,
+        CURVE
     };
 
     /**
