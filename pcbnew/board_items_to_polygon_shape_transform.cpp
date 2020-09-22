@@ -646,9 +646,6 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         outline.Rotate( -DECIDEG2RAD( m_orient ) );
         outline.Move( VECTOR2I( m_pos ) );
 
-        // TODO: do we need the Simplify() & Fracture() if we're not inflating?
-        outline.Simplify( SHAPE_POLY_SET::PM_FAST );
-
         if( aClearanceValue )
         {
             int numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ),
@@ -656,9 +653,10 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
             int clearance = aClearanceValue + GetCircleToPolyCorrection( aError );
 
             outline.Inflate( clearance, numSegs );
+            outline.Simplify( SHAPE_POLY_SET::PM_FAST );
+            outline.Fracture( SHAPE_POLY_SET::PM_FAST );
         }
 
-        outline.Fracture( SHAPE_POLY_SET::PM_FAST );
         aCornerBuffer.Append( outline );
     }
         break;
