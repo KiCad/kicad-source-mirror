@@ -671,167 +671,176 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
 
     // Test copper areas for valid netcodes -> fixme, goes to connectivity checks
 
-    std::vector<SHAPE_POLY_SET> smoothed_polys;
-    smoothed_polys.resize( m_board->GetAreaCount() );
-
-    for( int ii = 0; ii < m_board->GetAreaCount(); ii++ )
+    for( int layer_id = F_Cu; layer_id <= B_Cu; ++layer_id )
     {
-        ZONE_CONTAINER* zoneRef = m_board->GetArea( ii );
+        PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( layer_id );
+        std::vector<SHAPE_POLY_SET> smoothed_polys;
+        smoothed_polys.resize( m_board->GetAreaCount() );
 
-        zoneRef->BuildSmoothedPoly( smoothed_polys[ii], zoneRef->GetLayer() );
-    }
-
-    // iterate through all areas
-    for( int ia = 0; ia < m_board->GetAreaCount(); ia++ )
-    {
-        if( !reportProgress( ia, m_board->GetAreaCount(), delta ) )
-            break;
-
-        ZONE_CONTAINER* zoneRef = m_board->GetArea( ia );
-
-        if( !zoneRef->IsOnCopperLayer() )
+        // Skip over layers not used on the current board
+        if( !m_board->IsLayerEnabled( layer ) )
             continue;
 
-        // If we are testing a single zone, then iterate through all other zones
-        // Otherwise, we have already tested the zone combination
-        for( int ia2 = ia + 1; ia2 < m_board->GetAreaCount(); ia2++ )
+        for( int ii = 0; ii < m_board->GetAreaCount(); ii++ )
         {
-            ZONE_CONTAINER* zoneToTest = m_board->GetArea( ia2 );
+            ZONE_CONTAINER* zoneRef = m_board->GetArea( ii );
 
-            if( zoneRef == zoneToTest )
+            if( zoneRef->IsOnLayer( layer ) )
+                zoneRef->BuildSmoothedPoly( smoothed_polys[ii], layer );
+        }
+
+        // iterate through all areas
+        for( int ia = 0; ia < m_board->GetAreaCount(); ia++ )
+        {
+            if( !reportProgress( ia, m_board->GetAreaCount(), delta ) )
+                break;
+
+            ZONE_CONTAINER* zoneRef = m_board->GetArea( ia );
+
+            if( !zoneRef->IsOnLayer( layer ) )
                 continue;
 
-            // test for same layer
-            if( zoneRef->GetLayer() != zoneToTest->GetLayer() )
-                continue;
-
-            // Test for same net
-            if( zoneRef->GetNetCode() == zoneToTest->GetNetCode() && zoneRef->GetNetCode() >= 0 )
-                continue;
-
-            // test for different priorities
-            if( zoneRef->GetPriority() != zoneToTest->GetPriority() )
-                continue;
-
-            // test for different types
-            if( zoneRef->GetIsKeepout() != zoneToTest->GetIsKeepout() )
-                continue;
-
-            // Examine a candidate zone: compare zoneToTest to zoneRef
-
-            // Get clearance used in zone to zone test.
-            auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                                              zoneRef, zoneToTest );
-            int  zone2zoneClearance = constraint.GetValue().Min();
-
-            accountCheck( constraint );
-
-            // Keepout areas have no clearance, so set zone2zoneClearance to 1
-            // ( zone2zoneClearance = 0  can create problems in test functions)
-            if( zoneRef->GetIsKeepout() ) // fixme: really?
-                zone2zoneClearance = 1;
-
-            // test for some corners of zoneRef inside zoneToTest
-            for( auto iterator = smoothed_polys[ia].IterateWithHoles(); iterator; iterator++ )
+            // If we are testing a single zone, then iterate through all other zones
+            // Otherwise, we have already tested the zone combination
+            for( int ia2 = ia + 1; ia2 < m_board->GetAreaCount(); ia2++ )
             {
-                VECTOR2I currentVertex = *iterator;
-                wxPoint pt( currentVertex.x, currentVertex.y );
+                ZONE_CONTAINER* zoneToTest = m_board->GetArea( ia2 );
 
-                if( smoothed_polys[ia2].Contains( currentVertex ) )
+                if( zoneRef == zoneToTest )
+                    continue;
+
+                // test for same layer
+                if( !zoneToTest->IsOnLayer( layer ) )
+                    continue;
+
+                // Test for same net
+                if( zoneRef->GetNetCode() == zoneToTest->GetNetCode() && zoneRef->GetNetCode() >= 0 )
+                    continue;
+
+                // test for different priorities
+                if( zoneRef->GetPriority() != zoneToTest->GetPriority() )
+                    continue;
+
+                // test for different types
+                if( zoneRef->GetIsKeepout() != zoneToTest->GetIsKeepout() )
+                    continue;
+
+                // Examine a candidate zone: compare zoneToTest to zoneRef
+
+                // Get clearance used in zone to zone test.
+                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                                  zoneRef, zoneToTest );
+                int  zone2zoneClearance = constraint.GetValue().Min();
+
+                accountCheck( constraint );
+
+                // Keepout areas have no clearance, so set zone2zoneClearance to 1
+                // ( zone2zoneClearance = 0  can create problems in test functions)
+                if( zoneRef->GetIsKeepout() ) // fixme: really?
+                    zone2zoneClearance = 1;
+
+                // test for some corners of zoneRef inside zoneToTest
+                for( auto iterator = smoothed_polys[ia].IterateWithHoles(); iterator; iterator++ )
                 {
-                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
+                    VECTOR2I currentVertex = *iterator;
+                    wxPoint pt( currentVertex.x, currentVertex.y );
+
+                    if( smoothed_polys[ia2].Contains( currentVertex ) )
+                    {
+                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
+                        drcItem->SetItems( zoneRef, zoneToTest );
+                        drcItem->SetViolatingRule( constraint.GetParentRule() );
+
+                        reportViolation( drcItem, pt );
+                    }
+                }
+
+                // test for some corners of zoneToTest inside zoneRef
+                for( auto iterator = smoothed_polys[ia2].IterateWithHoles(); iterator; iterator++ )
+                {
+                    VECTOR2I currentVertex = *iterator;
+                    wxPoint pt( currentVertex.x, currentVertex.y );
+
+                    if( smoothed_polys[ia].Contains( currentVertex ) )
+                    {
+                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
+                        drcItem->SetItems( zoneToTest, zoneRef );
+                        drcItem->SetViolatingRule( constraint.GetParentRule() );
+
+                        reportViolation( drcItem, pt );
+                    }
+                }
+
+                // Iterate through all the segments of refSmoothedPoly
+                std::map<wxPoint, int> conflictPoints;
+
+                for( auto refIt = smoothed_polys[ia].IterateSegmentsWithHoles(); refIt; refIt++ )
+                {
+                    // Build ref segment
+                    SEG refSegment = *refIt;
+
+                    // Iterate through all the segments in smoothed_polys[ia2]
+                    for( auto testIt = smoothed_polys[ia2].IterateSegmentsWithHoles(); testIt; testIt++ )
+                    {
+                        // Build test segment
+                        SEG testSegment = *testIt;
+                        wxPoint pt;
+
+                        int ax1, ay1, ax2, ay2;
+                        ax1 = refSegment.A.x;
+                        ay1 = refSegment.A.y;
+                        ax2 = refSegment.B.x;
+                        ay2 = refSegment.B.y;
+
+                        int bx1, by1, bx2, by2;
+                        bx1 = testSegment.A.x;
+                        by1 = testSegment.A.y;
+                        bx2 = testSegment.B.x;
+                        by2 = testSegment.B.y;
+
+                        int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2,
+                                                             0,
+                                                             ax1, ay1, ax2, ay2,
+                                                             0,
+                                                             zone2zoneClearance,
+                                                             &pt.x, &pt.y );
+
+                        if( d < zone2zoneClearance )
+                        {
+                            if( conflictPoints.count( pt ) )
+                                conflictPoints[ pt ] = std::min( conflictPoints[ pt ], d );
+                            else
+                                conflictPoints[ pt ] = d;
+                        }
+                    }
+                }
+
+                for( const std::pair<const wxPoint, int>& conflict : conflictPoints )
+                {
+                    int       actual = conflict.second;
+                    std::shared_ptr<DRC_ITEM> drcItem;
+
+                    if( actual <= 0 )
+                    {
+                        drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
+                    }
+                    else
+                    {
+                        drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+
+                        m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                                      constraint.GetName(),
+                                      MessageTextFromValue( userUnits(), zone2zoneClearance, true ),
+                                      MessageTextFromValue( userUnits(), conflict.second, true ) );
+
+                        drcItem->SetErrorMessage( m_msg );
+                    }
+
                     drcItem->SetItems( zoneRef, zoneToTest );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drcItem, pt );
+                    reportViolation( drcItem, conflict.first );
                 }
-            }
-
-            // test for some corners of zoneToTest inside zoneRef
-            for( auto iterator = smoothed_polys[ia2].IterateWithHoles(); iterator; iterator++ )
-            {
-                VECTOR2I currentVertex = *iterator;
-                wxPoint pt( currentVertex.x, currentVertex.y );
-
-                if( smoothed_polys[ia].Contains( currentVertex ) )
-                {
-                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
-                    drcItem->SetItems( zoneToTest, zoneRef );
-                    drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-                    reportViolation( drcItem, pt );
-                }
-            }
-
-            // Iterate through all the segments of refSmoothedPoly
-            std::map<wxPoint, int> conflictPoints;
-
-            for( auto refIt = smoothed_polys[ia].IterateSegmentsWithHoles(); refIt; refIt++ )
-            {
-                // Build ref segment
-                SEG refSegment = *refIt;
-
-                // Iterate through all the segments in smoothed_polys[ia2]
-                for( auto testIt = smoothed_polys[ia2].IterateSegmentsWithHoles(); testIt; testIt++ )
-                {
-                    // Build test segment
-                    SEG testSegment = *testIt;
-                    wxPoint pt;
-
-                    int ax1, ay1, ax2, ay2;
-                    ax1 = refSegment.A.x;
-                    ay1 = refSegment.A.y;
-                    ax2 = refSegment.B.x;
-                    ay2 = refSegment.B.y;
-
-                    int bx1, by1, bx2, by2;
-                    bx1 = testSegment.A.x;
-                    by1 = testSegment.A.y;
-                    bx2 = testSegment.B.x;
-                    by2 = testSegment.B.y;
-
-                    int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2,
-                                                         0,
-                                                         ax1, ay1, ax2, ay2,
-                                                         0,
-                                                         zone2zoneClearance,
-                                                         &pt.x, &pt.y );
-
-                    if( d < zone2zoneClearance )
-                    {
-                        if( conflictPoints.count( pt ) )
-                            conflictPoints[ pt ] = std::min( conflictPoints[ pt ], d );
-                        else
-                            conflictPoints[ pt ] = d;
-                    }
-                }
-            }
-
-            for( const std::pair<const wxPoint, int>& conflict : conflictPoints )
-            {
-                int       actual = conflict.second;
-                std::shared_ptr<DRC_ITEM> drcItem;
-
-                if( actual <= 0 )
-                {
-                    drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
-                }
-                else
-                {
-                    drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
-
-                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                                  constraint.GetName(),
-                                  MessageTextFromValue( userUnits(), zone2zoneClearance, true ),
-                                  MessageTextFromValue( userUnits(), conflict.second, true ) );
-
-                    drcItem->SetErrorMessage( m_msg );
-                }
-
-                drcItem->SetItems( zoneRef, zoneToTest );
-                drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-                reportViolation( drcItem, conflict.first );
             }
         }
     }
