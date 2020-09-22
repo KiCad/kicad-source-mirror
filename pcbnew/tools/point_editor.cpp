@@ -245,6 +245,7 @@ public:
             break;
 
         case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_ORTHOGONAL_T:
         {
             const ALIGNED_DIMENSION* dimension = static_cast<const ALIGNED_DIMENSION*>( aItem );
 
@@ -254,11 +255,16 @@ public:
             points->AddPoint( dimension->GetCrossbarStart() );
             points->AddPoint( dimension->GetCrossbarEnd() );
 
-            // Dimension height setting - edit points should move only along the feature lines
-            points->Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( points->Point( DIM_CROSSBARSTART ),
-                                                                       points->Point( DIM_START ) ) );
-            points->Point( DIM_CROSSBAREND ).SetConstraint( new EC_LINE( points->Point( DIM_CROSSBAREND ),
-                                                                       points->Point( DIM_END ) ) );
+            if( aItem->Type() == PCB_DIM_ALIGNED_T )
+            {
+                // Dimension height setting - edit points should move only along the feature lines
+                points->Point( DIM_CROSSBARSTART )
+                        .SetConstraint( new EC_LINE( points->Point( DIM_CROSSBARSTART ),
+                                                     points->Point( DIM_START ) ) );
+                points->Point( DIM_CROSSBAREND )
+                        .SetConstraint( new EC_LINE( points->Point( DIM_CROSSBAREND ),
+                                                     points->Point( DIM_END ) ) );
+            }
 
             break;
         }
@@ -1336,6 +1342,52 @@ void POINT_EDITOR::updateItem() const
         break;
     }
 
+    case PCB_DIM_ORTHOGONAL_T:
+    {
+        ORTHOGONAL_DIMENSION* dimension = static_cast<ORTHOGONAL_DIMENSION*>( item );
+
+        BOX2I bounds( dimension->GetStart(),
+                      dimension->GetEnd() - dimension->GetStart() );
+
+        VECTOR2I direction( m_editedPoint->GetPosition() - bounds.Centre() );
+        bool vert = std::abs( direction.y ) < std::abs( direction.x );
+        VECTOR2D featureLine( m_editedPoint->GetPosition() - dimension->GetStart() );
+
+        if( isModified( m_editPoints->Point( DIM_CROSSBARSTART ) ) ||
+            isModified( m_editPoints->Point( DIM_CROSSBAREND ) ) )
+        {
+            // Only change the orientation when we move outside the bounds
+            if( !bounds.Contains( m_editedPoint->GetPosition() ) )
+            {
+                dimension->SetOrientation( vert ? ORTHOGONAL_DIMENSION::DIR::VERTICAL :
+                                                  ORTHOGONAL_DIMENSION::DIR::HORIZONTAL );
+            }
+
+            vert = dimension->GetOrientation() == ORTHOGONAL_DIMENSION::DIR::VERTICAL;
+
+            dimension->SetHeight( vert ? featureLine.x : featureLine.y );
+        }
+        else if( isModified( m_editPoints->Point( DIM_START ) ) )
+        {
+            dimension->SetStart( wxPoint( m_editedPoint->GetPosition().x,
+                                          m_editedPoint->GetPosition().y ) );
+        }
+        else if( isModified( m_editPoints->Point( DIM_END ) ) )
+        {
+            dimension->SetEnd( wxPoint( m_editedPoint->GetPosition().x,
+                                        m_editedPoint->GetPosition().y ) );
+        }
+        else if( isModified( m_editPoints->Point(DIM_TEXT ) ) )
+        {
+            // Force manual mode if we weren't already in it
+            dimension->SetTextPositionMode( DIM_TEXT_POSITION::MANUAL );
+            dimension->Text().SetPosition( wxPoint( m_editedPoint->GetPosition() ) );
+            dimension->Update();
+        }
+
+        break;
+    }
+
     case PCB_DIM_CENTER_T:
     {
         CENTER_DIMENSION* dimension = static_cast<CENTER_DIMENSION*>( item );
@@ -1601,6 +1653,7 @@ void POINT_EDITOR::updatePoints()
     }
 
     case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_ORTHOGONAL_T:
     {
         const ALIGNED_DIMENSION* dimension = static_cast<const ALIGNED_DIMENSION*>( item );
 

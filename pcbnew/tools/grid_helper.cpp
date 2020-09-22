@@ -547,6 +547,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
         }
 
         case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_ORTHOGONAL_T:
         {
             const ALIGNED_DIMENSION* dim = static_cast<const ALIGNED_DIMENSION*>( aItem );
             addAnchor( dim->GetCrossbarStart(), CORNER | SNAPPABLE, aItem );

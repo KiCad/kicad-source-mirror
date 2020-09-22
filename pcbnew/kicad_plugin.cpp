@@ -664,9 +664,10 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
 void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
 {
-    ALIGNED_DIMENSION* aligned = dynamic_cast<ALIGNED_DIMENSION*>( aDimension );
-    CENTER_DIMENSION*  center  = dynamic_cast<CENTER_DIMENSION*>( aDimension );
-    LEADER*            leader  = dynamic_cast<LEADER*>( aDimension );
+    ALIGNED_DIMENSION*    aligned = dynamic_cast<ALIGNED_DIMENSION*>( aDimension );
+    ORTHOGONAL_DIMENSION* ortho   = dynamic_cast<ORTHOGONAL_DIMENSION*>( aDimension );
+    CENTER_DIMENSION*     center  = dynamic_cast<CENTER_DIMENSION*>( aDimension );
+    LEADER*               leader  = dynamic_cast<LEADER*>( aDimension );
 
     m_out->Print( aNestLevel, "(dimension" );
 
@@ -676,6 +677,8 @@ void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
         m_out->Print( 0, " (type leader)" );
     else if( aDimension->Type() == PCB_DIM_CENTER_T )
         m_out->Print( 0, " (type center)" );
+    else if( aDimension->Type() == PCB_DIM_ORTHOGONAL_T )
+        m_out->Print( 0, " (type orthogonal)" );
     else
         wxFAIL_MSG( wxT( "Cannot format unknown dimension type!" ) );
 
@@ -694,6 +697,10 @@ void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
     if( aligned )
         m_out->Print( aNestLevel+1, "(height %s)\n",
                       FormatInternalUnits( aligned->GetHeight() ).c_str() );
+
+    if( ortho )
+        m_out->Print( aNestLevel+1, "(orientation %d)\n",
+                      static_cast<int>( ortho->GetOrientation() ) );
 
     if( !center )
     {

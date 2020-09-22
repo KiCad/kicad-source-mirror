@@ -184,6 +184,8 @@ np_thru_hole
 offset
 opacity
 options
+orientation
+orthogonal
 other_layers_line_width
 other_layers_text_dims
 oval

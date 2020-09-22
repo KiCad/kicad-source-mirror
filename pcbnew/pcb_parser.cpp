@@ -2383,6 +2383,10 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
             dimension = std::make_unique<ALIGNED_DIMENSION>( nullptr );
             break;
 
+        case T_orthogonal:
+            dimension = std::make_unique<ORTHOGONAL_DIMENSION>( nullptr );
+            break;
+
         case T_leader:
             dimension = std::make_unique<LEADER>( nullptr );
             break;
@@ -2458,10 +2462,24 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
 
         case T_height:
         {
-            wxCHECK_MSG( dimension->Type() == PCB_DIM_ALIGNED_T, nullptr,
+            wxCHECK_MSG( dimension->Type() == PCB_DIM_ALIGNED_T ||
+                         dimension->Type() == PCB_DIM_ORTHOGONAL_T, nullptr,
                          wxT( "Invalid height token" ) );
             ALIGNED_DIMENSION* aligned = static_cast<ALIGNED_DIMENSION*>( dimension.get() );
             aligned->SetHeight( parseBoardUnits( "dimension height value" ) );
+            NeedRIGHT();
+            break;
+        }
+
+        case T_orientation:
+        {
+            wxCHECK_MSG( dimension->Type() == PCB_DIM_ORTHOGONAL_T, nullptr,
+                         wxT( "Invalid orientation token" ) );
+            ORTHOGONAL_DIMENSION* ortho = static_cast<ORTHOGONAL_DIMENSION*>( dimension.get() );
+
+            int orientation = parseInt( "orthogonal dimension orientation" );
+            orientation     = std::max( 0, std::min( 1, orientation ) );
+            ortho->SetOrientation( static_cast<ORTHOGONAL_DIMENSION::DIR>( orientation ) );
             NeedRIGHT();
             break;
         }
@@ -2562,9 +2580,8 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
 
                 case T_extension_height:
                 {
-                    wxCHECK_MSG( dimension->Type() == PCB_DIM_ALIGNED_T, nullptr,
-                                 wxT( "Invalid extension_height token" ) );
-                    ALIGNED_DIMENSION* aligned = static_cast<ALIGNED_DIMENSION*>( dimension.get() );
+                    ALIGNED_DIMENSION* aligned = dynamic_cast<ALIGNED_DIMENSION*>( dimension.get() );
+                    wxCHECK_MSG( aligned, nullptr, wxT( "Invalid extension_height token" ) );
                     aligned->SetExtensionHeight( parseBoardUnits( "extension height" ) );
                     NeedRIGHT();
                     break;

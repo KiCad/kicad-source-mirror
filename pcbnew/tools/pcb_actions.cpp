@@ -127,6 +127,11 @@ TOOL_ACTION PCB_ACTIONS::drawCenterDimension( "pcbnew.InteractiveDrawing.centerD
        _( "Add Center Dimension" ), _( "Add a center dimension" ),
        add_center_dimension_xpm, AF_ACTIVATE );
 
+TOOL_ACTION PCB_ACTIONS::drawOrthogonalDimension( "pcbnew.InteractiveDrawing.orthogonalDimension",
+      AS_GLOBAL, 0, "",
+      _( "Add Orthogonal Dimension" ), _( "Add an orthogonal dimension" ),
+      add_orthogonal_dimension_xpm, AF_ACTIVATE );
+
 TOOL_ACTION PCB_ACTIONS::drawLeader( "pcbnew.InteractiveDrawing.leader",
         AS_GLOBAL, 0, "",
         _( "Add Leader" ), _( "Add a leader dimension" ),

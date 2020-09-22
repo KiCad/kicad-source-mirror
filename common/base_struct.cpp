@@ -792,6 +792,8 @@ static struct EDA_ITEM_DESC
             .Map( PCB_VIA_T,            _( "Via" ) )
             .Map( PCB_MARKER_T,         _( "Board Marker" ) )
             .Map( PCB_DIM_ALIGNED_T,    _( "Aligned Dimension" ) )
+            .Map( PCB_DIM_ORTHOGONAL_T, _( "Orthogonal Dimension" ) )
+            .Map( PCB_DIM_CENTER_T,     _( "Center Dimension" ) )
             .Map( PCB_DIM_LEADER_T,     _( "Leader" ) )
             .Map( PCB_TARGET_T,         _( "Target" ) )
             .Map( PCB_ZONE_AREA_T,      _( "Zone" ) )

@@ -731,19 +731,29 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     layer = Dwgs_User;
 
                 // Init the new item attributes
+                auto setMeasurementAttributes =
+                        [&]( DIMENSION* aDim )
+                        {
+                            aDim->SetUnitsMode( boardSettings.m_DimensionUnitsMode );
+                            aDim->SetUnitsFormat( boardSettings.m_DimensionUnitsFormat );
+                            aDim->SetPrecision( boardSettings.m_DimensionPrecision );
+                            aDim->SetSuppressZeroes( boardSettings.m_DimensionSuppressZeroes );
+                            aDim->SetTextPositionMode( boardSettings.m_DimensionTextPosition );
+                            aDim->SetKeepTextAligned( boardSettings.m_DimensionKeepTextAligned );
+
+                            if( boardSettings.m_DimensionUnitsMode == DIM_UNITS_MODE::AUTOMATIC )
+                                aDim->SetUnits( m_frame->GetUserUnits(), false );
+                        };
+
                 if( originalEvent.IsAction( &PCB_ACTIONS::drawAlignedDimension ) )
                 {
                     dimension = new ALIGNED_DIMENSION( m_board );
-
-                    dimension->SetUnitsMode( boardSettings.m_DimensionUnitsMode );
-                    dimension->SetUnitsFormat( boardSettings.m_DimensionUnitsFormat );
-                    dimension->SetPrecision( boardSettings.m_DimensionPrecision );
-                    dimension->SetSuppressZeroes( boardSettings.m_DimensionSuppressZeroes );
-                    dimension->SetTextPositionMode( boardSettings.m_DimensionTextPosition );
-                    dimension->SetKeepTextAligned( boardSettings.m_DimensionKeepTextAligned );
-
-                    if( boardSettings.m_DimensionUnitsMode == DIM_UNITS_MODE::AUTOMATIC )
-                        dimension->SetUnits( m_frame->GetUserUnits(), false );
+                    setMeasurementAttributes( dimension );
+                }
+                else if( originalEvent.IsAction( &PCB_ACTIONS::drawOrthogonalDimension ) )
+                {
+                    dimension = new ORTHOGONAL_DIMENSION( m_board );
+                    setMeasurementAttributes( dimension );
                 }
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawCenterDimension ) )
                 {
@@ -863,10 +873,32 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     double  height = ( delta.x * cos( angle ) ) + ( delta.y * sin( angle ) );
                     aligned->SetHeight( height );
                 }
-                else if( dimension->Type() != PCB_DIM_CENTER_T )
+                else if( dimension->Type() == PCB_DIM_ORTHOGONAL_T )
                 {
-                    wxASSERT( dimension->Type() == PCB_DIM_LEADER_T );
+                    ORTHOGONAL_DIMENSION* ortho = static_cast<ORTHOGONAL_DIMENSION*>( dimension );
 
+                    BOX2I bounds( dimension->GetStart(),
+                                  dimension->GetEnd() - dimension->GetStart() );
+                    VECTOR2I direction( cursorPos - bounds.Centre() );
+                    bool vert = std::abs( direction.y ) < std::abs( direction.x );
+
+                    // Only change the orientation when we move outside the bounds
+                    if( !bounds.Contains( cursorPos ) )
+                    {
+                        ortho->SetOrientation( vert ? ORTHOGONAL_DIMENSION::DIR::VERTICAL :
+                                                      ORTHOGONAL_DIMENSION::DIR::HORIZONTAL );
+                    }
+                    else
+                    {
+                        vert = ortho->GetOrientation() == ORTHOGONAL_DIMENSION::DIR::VERTICAL;
+                    }
+
+                    VECTOR2I heightVector( cursorPos - dimension->GetStart() );
+                    ortho->SetHeight( vert ? heightVector.x : heightVector.y );
+                }
+                else if( dimension->Type() == PCB_DIM_LEADER_T )
+                {
+                    // Leader: SET_HEIGHT actually sets the text position directly
                     VECTOR2I lineVector( cursorPos - dimension->GetEnd() );
                     dimension->Text().SetPosition( wxPoint( VECTOR2I( dimension->GetEnd() ) +
                                                             GetVectorSnapped45( lineVector ) ) );
@@ -2176,6 +2208,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawCircle,            PCB_ACTIONS::drawCircle.MakeEvent() );
     Go( &DRAWING_TOOL::DrawArc,               PCB_ACTIONS::drawArc.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawAlignedDimension.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawOrthogonalDimension.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawCenterDimension.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawLeader.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZone.MakeEvent() );

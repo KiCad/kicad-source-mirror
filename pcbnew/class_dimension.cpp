@@ -456,8 +456,8 @@ static struct DIMENSION_DESC
 } _DIMENSION_DESC;
 
 
-ALIGNED_DIMENSION::ALIGNED_DIMENSION( BOARD_ITEM* aParent ) :
-        DIMENSION( aParent, PCB_DIM_ALIGNED_T ),
+ALIGNED_DIMENSION::ALIGNED_DIMENSION( BOARD_ITEM* aParent, KICAD_T aType ) :
+        DIMENSION( aParent, aType ),
         m_height( 0 )
 {
     // To preserve look of old dimensions, initialize extension height based on default arrow length
@@ -608,6 +608,176 @@ void ALIGNED_DIMENSION::updateText()
         int textOffsetDistance = m_text.GetEffectiveTextPenWidth() + m_text.GetTextHeight();
 
         double rotation = std::copysign( DEG2RAD( 90 ), m_height );
+        VECTOR2I textOffset = crossbarCenter.Rotate( rotation ).Resize( textOffsetDistance );
+        textOffset += crossbarCenter;
+
+        m_text.SetTextPos( m_crossBarStart + wxPoint( textOffset ) );
+    }
+    else if( m_textPosition == DIM_TEXT_POSITION::INLINE )
+    {
+        m_text.SetTextPos( m_crossBarStart + wxPoint( crossbarCenter ) );
+    }
+
+    if( m_keepTextAligned )
+    {
+        double textAngle = 3600 - RAD2DECIDEG( crossbarCenter.Angle() );
+
+        NORMALIZE_ANGLE_POS( textAngle );
+
+        if( textAngle > 900 && textAngle < 2700 )
+            textAngle -= 1800;
+
+        m_text.SetTextAngle( textAngle );
+    }
+
+    DIMENSION::updateText();
+}
+
+
+ORTHOGONAL_DIMENSION::ORTHOGONAL_DIMENSION( BOARD_ITEM* aParent ) :
+        ALIGNED_DIMENSION( aParent, PCB_DIM_ORTHOGONAL_T )
+{
+    // To preserve look of old dimensions, initialize extension height based on default arrow length
+    m_extensionHeight = static_cast<int>( m_arrowLength * std::sin( DEG2RAD( s_arrowAngle ) ) );
+}
+
+
+EDA_ITEM* ORTHOGONAL_DIMENSION::Clone() const
+{
+    return new ORTHOGONAL_DIMENSION( *this );
+}
+
+
+void ORTHOGONAL_DIMENSION::SwapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_DIM_ORTHOGONAL_T );
+
+    m_shapes.clear();
+    static_cast<ORTHOGONAL_DIMENSION*>( aImage )->m_shapes.clear();
+
+    std::swap( *static_cast<ORTHOGONAL_DIMENSION*>( this ),
+               *static_cast<ORTHOGONAL_DIMENSION*>( aImage ) );
+
+    Update();
+}
+
+
+BITMAP_DEF ORTHOGONAL_DIMENSION::GetMenuImage() const
+{
+    return add_orthogonal_dimension_xpm;
+}
+
+
+void ORTHOGONAL_DIMENSION::updateGeometry()
+{
+    m_shapes.clear();
+
+    int measurement = ( m_orientation == DIR::HORIZONTAL ? m_end.x - m_start.x :
+                                                           m_end.y - m_start.y );
+    m_measuredValue = KiROUND( std::abs( measurement ) );
+
+    VECTOR2I extension;
+
+    if( m_orientation == DIR::HORIZONTAL )
+        extension = VECTOR2I( 0, m_height );
+    else
+        extension = VECTOR2I( m_height, 0 );
+
+    // Add first extension line
+    int extensionHeight = std::abs( m_height ) - m_extensionOffset + m_extensionHeight;
+
+    VECTOR2I extStart( m_start );
+    extStart += extension.Resize( m_extensionOffset );
+
+    addShape( new SHAPE_SEGMENT( extStart, extStart + extension.Resize( extensionHeight ) ) );
+
+    // Add crossbar
+    VECTOR2I crossBarDistance = sign( m_height ) * extension.Resize( m_height );
+    m_crossBarStart = m_start + wxPoint( crossBarDistance );
+
+    if( m_orientation == DIR::HORIZONTAL )
+        m_crossBarEnd = wxPoint( m_end.x, m_crossBarStart.y );
+    else
+        m_crossBarEnd = wxPoint( m_crossBarStart.x, m_end.y );
+
+    // Add second extension line (m_end to crossbar end)
+    if( m_orientation == DIR::HORIZONTAL )
+        extension = VECTOR2I( 0, m_end.y - m_crossBarEnd.y );
+    else
+        extension = VECTOR2I( m_end.x - m_crossBarEnd.x, 0 );
+
+    extensionHeight = extension.EuclideanNorm() - m_extensionOffset + m_extensionHeight;
+
+    extStart = VECTOR2I( m_crossBarEnd );
+    extStart -= extension.Resize( m_extensionHeight );
+
+    addShape( new SHAPE_SEGMENT( extStart, extStart + extension.Resize( extensionHeight ) ) );
+
+    // Update text after calculating crossbar position but before adding crossbar lines
+    updateText();
+
+    // Now that we have the text updated, we can determine how to draw the crossbar.
+    // First we need to create an appropriate bounding polygon to collide with
+    EDA_RECT textBox = m_text.GetTextBox().Inflate( m_text.GetTextWidth() / 2,
+                                                    m_text.GetEffectiveTextPenWidth() );
+
+    SHAPE_POLY_SET polyBox;
+    polyBox.NewOutline();
+    polyBox.Append( textBox.GetOrigin() );
+    polyBox.Append( textBox.GetOrigin().x, textBox.GetEnd().y );
+    polyBox.Append( textBox.GetEnd() );
+    polyBox.Append( textBox.GetEnd().x, textBox.GetOrigin().y );
+    polyBox.Rotate( -m_text.GetTextAngleRadians(), textBox.GetCenter() );
+
+    // The ideal crossbar, if the text doesn't collide
+    SEG crossbar( m_crossBarStart, m_crossBarEnd );
+
+    // Now we can draw 0, 1, or 2 crossbar lines depending on how the polygon collides
+    bool containsA = polyBox.Contains( crossbar.A );
+    bool containsB = polyBox.Contains( crossbar.B );
+
+    OPT_VECTOR2I endpointA = segPolyIntersection( polyBox, crossbar );
+    OPT_VECTOR2I endpointB = segPolyIntersection( polyBox, crossbar, false );
+
+    if( endpointA )
+        m_shapes.emplace_back( new SHAPE_SEGMENT( crossbar.A, *endpointA ) );
+
+    if( endpointB )
+        m_shapes.emplace_back( new SHAPE_SEGMENT( *endpointB, crossbar.B ) );
+
+    if( !containsA && !containsB && !endpointA && !endpointB )
+        m_shapes.emplace_back( new SHAPE_SEGMENT( crossbar ) );
+
+    // Add arrows
+    VECTOR2I crossBarAngle( m_crossBarEnd - m_crossBarStart );
+    VECTOR2I arrowEnd( m_arrowLength, 0 );
+
+    double arrowRotPos = crossBarAngle.Angle() + DEG2RAD( s_arrowAngle );
+    double arrowRotNeg = crossBarAngle.Angle() - DEG2RAD( s_arrowAngle );
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart,
+                                              m_crossBarStart + wxPoint( arrowEnd.Rotate( arrowRotPos ) ) ) );
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart,
+                                              m_crossBarStart + wxPoint( arrowEnd.Rotate( arrowRotNeg ) ) ) );
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd,
+                                              m_crossBarEnd - wxPoint( arrowEnd.Rotate( arrowRotPos ) ) ) );
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd,
+                                              m_crossBarEnd - wxPoint( arrowEnd.Rotate( arrowRotNeg ) ) ) );
+}
+
+
+void ORTHOGONAL_DIMENSION::updateText()
+{
+    VECTOR2I crossbarCenter( ( m_crossBarEnd - m_crossBarStart ) / 2 );
+
+    if( m_textPosition == DIM_TEXT_POSITION::OUTSIDE )
+    {
+        int textOffsetDistance = m_text.GetEffectiveTextPenWidth() + m_text.GetTextHeight();
+
+        double rotation = sign( m_height ) * DEG2RAD( -90 );
         VECTOR2I textOffset = crossbarCenter.Rotate( rotation ).Resize( textOffsetDistance );
         textOffset += crossbarCenter;
 
