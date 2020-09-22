@@ -24,6 +24,7 @@
 %type nt {LIBEVAL::TREE_NODE*}
 
 %nonassoc G_IDENTIFIER G_ASSIGN G_SEMCOL.
+%left G_COMMA.
 %left G_BOOL_AND.
 %left G_BOOL_OR.
 %left G_BOOL_XOR.
@@ -76,6 +77,13 @@ nt(A) ::= G_STRING(B).
 nt(A) ::= G_IDENTIFIER(B).
 {
     A = newNode( pEval, TR_IDENTIFIER, B.value );
+}
+
+nt(A) ::= nt(B) G_COMMA nt(C).
+{
+    A = newNode( pEval, TR_ARG_LIST );
+    A->leaf[0] = B;
+    A->leaf[1] = C;
 }
 
 nt(A) ::= nt(B) G_LESS_THAN nt(C).

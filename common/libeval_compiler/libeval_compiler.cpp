@@ -21,6 +21,7 @@
 #include <memory>
 #include <set>
 #include <vector>
+#include <algorithm>
 
 #ifdef DEBUG
 #include <cstdarg>
@@ -518,6 +519,8 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
         case ')': retval.token = G_PARENR;       break;
         case ';': retval.token = G_SEMCOL;       break;
         case '.': retval.token = G_STRUCT_REF;   break;
+        case ',': retval.token = G_COMMA;        break;
+
 
         default:
             reportError( CST_PARSE, wxString::Format( _( "Unrecognized character '%c'" ), (char) ch ) );
@@ -566,6 +569,17 @@ void dumpNode( wxString& buf, TREE_NODE* tok, int depth = 0 )
 
         if( tok->leaf[0] )
             dumpNode( buf, tok->leaf[0], depth + 1 );
+
+        break;
+
+    case TR_ARG_LIST:
+        buf += "ARG_LIST: ";
+        buf += formatNode( tok );
+
+        if( tok->leaf[0] )
+            dumpNode( buf, tok->leaf[0], depth + 1 );
+        if( tok->leaf[1] )
+            dumpNode( buf, tok->leaf[1], depth + 1 );
 
         break;
 
@@ -698,6 +712,44 @@ static void prepareTree( LIBEVAL::TREE_NODE *node )
         prepareTree( node->leaf[1] );
 }
 
+static std::vector<TREE_NODE*> squashParamList( TREE_NODE* root )
+{
+    std::vector<TREE_NODE*> args;
+
+    if( !root )
+    {
+        return args;
+    }
+
+    if( root->op != TR_ARG_LIST && root->op != TR_NULL )
+    {
+        args.push_back( root );
+    }
+    else
+    {
+        TREE_NODE *n = root;
+        do
+        {
+            if( n->leaf[1] )
+                args.push_back(n->leaf[1]);
+
+            n = n->leaf[0];
+        } while ( n && n->op == TR_ARG_LIST );
+
+        if( n )
+        {
+            args.push_back(n);
+        }
+    }
+
+    std::reverse( args.begin(), args.end() );
+
+    for(int i = 0; i < args.size(); i++ )
+        libeval_dbg(10, "squash arg%d: %s\n", i, (const char*) *args[i]->value.str );
+
+    return args;
+}
+
 
 bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 {
@@ -800,6 +852,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
                     wxString functionName = *node->leaf[1]->leaf[0]->value.str;
                     auto  func = aCode->CreateFuncCall( functionName );
+                    std::vector<TREE_NODE*> params = squashParamList( node->leaf[1]->leaf[1] );
 
                     libeval_dbg( 10, "emit func call: %s\n", functionName );
 
@@ -812,22 +865,18 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     if( func )
                     {
                         // Preflight the function call
-                        auto argsLeaf = node->leaf[1]->leaf[1];
-                        wxString paramStr;
 
-                        if( argsLeaf->op != TR_NULL ) // function has an argument
+                        for( auto pnode : params )
                         {
-                            paramStr = *node->leaf[1]->leaf[1]->value.str;
                             VALUE*   param = aPreflightContext->AllocValue();
-
-                            param->Set( paramStr );
+                            param->Set( *pnode->value.str );
                             aPreflightContext->Push( param );
                         }
 
                         aPreflightContext->SetErrorCallback(
                                 [&]( const wxString& aMessage, int aOffset )
                                 {
-                                    size_t loc = node->leaf[1]->leaf[1]->srcPos- paramStr.Length();
+                                    size_t loc = node->leaf[1]->leaf[1]->srcPos;
                                     reportError( CST_CODEGEN, aMessage, (int) loc - 1 );
                                 } );
 
@@ -851,7 +900,10 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     // a TR_OP_FUNC_CALL and its function parameter
                     stack.pop_back();
                     stack.push_back( node->leaf[1] );
-                    stack.push_back( node->leaf[1]->leaf[1] );
+                    for( auto pnode : params )
+                    {
+                        stack.push_back( pnode );
+                    }
 
                     node->leaf[1]->SetUop( TR_OP_METHOD_CALL, func, std::move( vref ) );
                     node->isTerminal = false;

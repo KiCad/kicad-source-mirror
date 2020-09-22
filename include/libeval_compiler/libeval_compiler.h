@@ -95,7 +95,8 @@ enum TOKEN_TYPE_T
     TR_STRUCT_REF = 4,
     TR_STRING     = 5,
     TR_UNIT       = 6,
-    TR_NULL       = 7
+    TR_ARG_LIST   = 7,
+    TR_NULL       = 8
 };
 
 class UOP;
