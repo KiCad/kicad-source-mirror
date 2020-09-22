@@ -625,53 +625,38 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB )
     const auto parentA = static_cast<const ZONE_CONTAINER*>( aZoneA->Parent() );
     const auto parentB = static_cast<const ZONE_CONTAINER*>( aZoneB->Parent() );
 
-    if( aZoneB == aZoneA  || parentA == parentB )
-        return;
-
-    if( aZoneA->Layer() != aZoneB->Layer() )
-        return;
-
     if( aZoneB->Net() != aZoneA->Net() )
         return; // we only test zones belonging to the same net
 
-    const BOX2I& boxA = aZoneA->BBox();
-    const BOX2I& boxB = aZoneB->BBox();
-
-    int radiusA = 0;
-    int radiusB = 0;
-
-    if( parentA->GetFilledPolysUseThickness() )
-        radiusA = ( parentA->GetMinThickness() + 1 ) / 2;
-
-    if( parentB->GetFilledPolysUseThickness() )
-        radiusB = ( parentB->GetMinThickness() + 1 ) / 2;
-
-    PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( aZoneA->Layer() );
-
-    const auto& outline = parentA->GetFilledPolysList( layer ).COutline( aZoneA->SubpolyIndex() );
-
-    for( int i = 0; i < outline.PointCount(); i++ )
+    for( PCB_LAYER_ID layer : LSET( parentA->GetLayerSet() & parentB->GetLayerSet() ).Seq() )
     {
-        if( !boxB.Contains( outline.CPoint( i ) ) )
-            continue;
+        SHAPE_POLY_SET        testA = parentA->GetFilledPolysList( layer );
+        const SHAPE_POLY_SET* testB = &parentB->GetFilledPolysList( layer );
 
-        if( aZoneB->ContainsPoint( outline.CPoint( i ), radiusA ) )
+        if( parentA->GetFilledPolysUseThickness() && parentA->GetMinThickness() > 0 )
         {
-            aZoneA->Connect( aZoneB );
-            aZoneB->Connect( aZoneA );
-            return;
+            int halfThickness = parentA->GetMinThickness() / 2;
+            int numSegs = GetArcToSegmentCount( halfThickness, ARC_HIGH_DEF, 360.0 );
+
+            testA.Inflate( halfThickness, numSegs );
         }
-    }
 
-    const auto& outline2 =
-            parentB->GetFilledPolysList( layer ).COutline( aZoneB->SubpolyIndex() );
+        if( parentB->GetFilledPolysUseThickness() && parentB->GetMinThickness() > 0 )
+        {
+            static SHAPE_POLY_SET temp;
+            temp = parentB->GetFilledPolysList( layer );
 
-    for( int i = 0; i < outline2.PointCount(); i++ )
-    {
-        if( !boxA.Contains( outline2.CPoint( i ) ) )
-            continue;
+            int halfThickness = parentB->GetMinThickness() / 2;
+            int numSegs = GetArcToSegmentCount( halfThickness, ARC_HIGH_DEF, 360.0 );
 
-        if( aZoneA->ContainsPoint( outline2.CPoint( i ), radiusB ) )
+            temp.Inflate( halfThickness, numSegs );
+
+            testB = &temp;
+        }
+
+        testA.BooleanIntersection( *testB, SHAPE_POLY_SET::PM_FAST );
+
+        if( !testA.IsEmpty() )
         {
             aZoneA->Connect( aZoneB );
             aZoneB->Connect( aZoneA );
@@ -705,7 +690,7 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
     if ( parentA->Type() == PCB_ZONE_AREA_T && parentB->Type() == PCB_ZONE_AREA_T )
     {
         checkZoneZoneConnection( static_cast<CN_ZONE*>( m_item ),
-                static_cast<CN_ZONE*>( aCandidate ) );
+                                 static_cast<CN_ZONE*>( aCandidate ) );
         return true;
     }
 
