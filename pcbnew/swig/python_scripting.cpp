@@ -640,17 +640,25 @@ wxString PyScriptingPath( bool aUserPath )
     wxString path;
 
     //@todo This should this be a user configurable variable eg KISCRIPT?
-    if( aUserPath)
+    if( aUserPath )
     {
         path = SETTINGS_MANAGER::GetUserSettingsPath() + wxT( "/scripting" );
     }
     else
     {
+        if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+        {
+            // Allow debugging from build dir by placing a "scripting" folder in the build root
+            path = Pgm().GetExecutablePath() + wxT( "../scripting" );
+        }
+        else
+        {
 #if defined( __WXMAC__ )
-        path = GetOSXKicadDataDir() + wxT( "/scripting" );
+            path = GetOSXKicadDataDir() + wxT( "/scripting" );
 #else
-        path = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting" );
+            path = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting" );
 #endif
+        }
     }
 
     wxFileName scriptPath( path );
