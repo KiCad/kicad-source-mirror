@@ -150,9 +150,42 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
 }
 
 
+///> Helper widget to select whether a new project should be created for a file when saving
+class CREATE_PROJECT_CHECKBOX : public wxPanel
+{
+public:
+    CREATE_PROJECT_CHECKBOX( wxWindow* aParent )
+            : wxPanel( aParent )
+    {
+        m_cbCreateProject = new wxCheckBox( this, wxID_ANY,
+                                            _( "Create a new project for this board" ) );
+        m_cbCreateProject->SetValue( false );
+        m_cbCreateProject->SetToolTip( _( "Creating a project will enable features such as "
+                                          "design rules, net classes, and layer presets" ) );
+
+        wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
+        sizer->Add( m_cbCreateProject, 0, wxALL, 8 );
+
+        SetSizerAndFit( sizer );
+    }
+
+    bool GetValue() const
+    {
+        return m_cbCreateProject->GetValue();
+    }
+
+    static wxWindow* Create( wxWindow* aParent )
+    {
+        return new CREATE_PROJECT_CHECKBOX( aParent );
+    }
+
+protected:
+    wxCheckBox* m_cbCreateProject;
+};
+
+
 /**
- * Function AskSaveBoardFileName
- * puts up a wxFileDialog asking for a BOARD filename to save.
+ * Puts up a wxFileDialog asking for a BOARD filename to save.
  *
  * @param aParent is a wxFrame passed to wxFileDialog.
  * @param aFileName on entry is a probable choice, on return is the
@@ -160,7 +193,7 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
  *
  * @return bool - true if chosen, else false if user aborted.
  */
-bool AskSaveBoardFileName( wxWindow* aParent, wxString* aFileName )
+bool AskSaveBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, bool* aCreateProject )
 {
     wxString    wildcard =  PcbFileWildcard();
     wxFileName  fn = *aFileName;
@@ -175,6 +208,10 @@ bool AskSaveBoardFileName( wxWindow* aParent, wxString* aFileName )
             wxFD_SAVE | wxFD_OVERWRITE_PROMPT
             );
 
+    // Add a "Create a project" checkbox in standalone mode and one isn't loaded
+    if( Kiface().IsSingle() && aParent->Prj().IsNullProject() )
+        dlg.SetExtraControlCreator( &CREATE_PROJECT_CHECKBOX::Create );
+
     if( dlg.ShowModal() != wxID_OK )
         return false;
 
@@ -183,7 +220,8 @@ bool AskSaveBoardFileName( wxWindow* aParent, wxString* aFileName )
     // always enforce filename extension, user may not have entered it.
     fn.SetExt( KiCadPcbFileExtension );
 
-    *aFileName = fn.GetFullPath();
+    *aFileName      = fn.GetFullPath();
+    *aCreateProject = static_cast<CREATE_PROJECT_CHECKBOX*>( dlg.GetExtraControl() )->GetValue();
 
     return true;
 }
@@ -339,12 +377,14 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
             wxFileName  fn( pro_dir, orig_name, KiCadPcbFileExtension );
             wxString    filename = fn.GetFullPath();
 
-            if( AskSaveBoardFileName( this, &filename ) )
+            bool createProject = false;
+
+            if( AskSaveBoardFileName( this, &filename, &createProject ) )
             {
                 if( id == ID_COPY_BOARD_AS )
-                    return SavePcbCopy( filename );
+                    return SavePcbCopy( filename, createProject );
                 else
-                    return SavePcbFile( filename, addToHistory, false );
+                    return SavePcbFile( filename, addToHistory, createProject );
             }
             return false;
         }
@@ -830,7 +870,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 }
 
 
-bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName )
+bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject )
 {
     wxFileName  pcbFileName = aFileName;
 
@@ -870,6 +910,36 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName )
         DisplayError( this, msg );
 
         return false;
+    }
+
+    if( aCreateProject )
+    {
+        wxFileName projectFile( pcbFileName );
+        projectFile.SetExt( ProjectFileExtension );
+
+        if( !projectFile.FileExists() )
+        {
+            wxString currentProject = Prj().GetProjectFullName();
+
+            SETTINGS_MANAGER* mgr = GetSettingsManager();
+
+            GetBoard()->ClearProject();
+
+            mgr->SaveProject( currentProject );
+            mgr->UnloadProject( &Prj() );
+
+            mgr->LoadProject( projectFile.GetFullPath() );
+            mgr->SaveProject();
+
+            mgr->UnloadProject( &Prj() );
+            mgr->LoadProject( currentProject );
+
+            // If no project to load then initialize project text vars with board properties
+            if( !mgr->LoadProject( currentProject ) )
+                Prj().GetTextVars() = GetBoard()->GetProperties();
+
+            GetBoard()->SetProject( &Prj() );
+        }
     }
 
     DisplayInfoMessage( this, wxString::Format( _( "Board copied to:\n\"%s\"" ),

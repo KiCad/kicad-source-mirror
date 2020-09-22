@@ -609,9 +609,10 @@ public:
      *
      * When not under a project mgr, the full SavePcbFile is used.
      * @param aFileName The file name to write.
+     * @param aCreateProject will create an empty project alongside the board file
      * @return True if file was saved successfully.
      */
-    bool SavePcbCopy( const wxString& aFileName );
+    bool SavePcbCopy( const wxString& aFileName, bool aCreateProject = false );
 
     // BOARD handling
 
