@@ -190,6 +190,7 @@ protected:
  * @param aParent is a wxFrame passed to wxFileDialog.
  * @param aFileName on entry is a probable choice, on return is the
  *  chosen full filename (includes path).
+ * @param aCreateProject will be filled with the state of the Create Project? checkbox if relevant
  *
  * @return bool - true if chosen, else false if user aborted.
  */
@@ -220,8 +221,10 @@ bool AskSaveBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, bool* a
     // always enforce filename extension, user may not have entered it.
     fn.SetExt( KiCadPcbFileExtension );
 
-    *aFileName      = fn.GetFullPath();
-    *aCreateProject = static_cast<CREATE_PROJECT_CHECKBOX*>( dlg.GetExtraControl() )->GetValue();
+    *aFileName = fn.GetFullPath();
+
+    if( wxWindow* extraControl = dlg.GetExtraControl() )
+        *aCreateProject = static_cast<CREATE_PROJECT_CHECKBOX*>( extraControl )->GetValue();
 
     return true;
 }
