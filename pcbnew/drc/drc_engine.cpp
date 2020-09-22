@@ -172,15 +172,14 @@ void DRC_ENGINE::loadImplicitRules()
                 if( !isDefault )
                 {
                     expr = wxString::Format( "A.NetClass == '%s' || B.NetClass == '%s'",
-                                             className,
-                                             className );
+                                             className, className );
                 }
 
                 DRC_RULE_CONDITION* inNetclassCondition = new DRC_RULE_CONDITION ( expr );
-                DRC_RULE* rule = createImplicitRule( wxString::Format( _( "netclass '%s'" ),
+                DRC_RULE* nc_rule = createImplicitRule( wxString::Format( _( "netclass '%s'" ),
                                                                        className ));
 
-                rule->m_Condition = inNetclassCondition;
+                nc_rule->m_Condition = inNetclassCondition;
 
                 // Only add netclass clearances if they're larger than board minimums.  That way
                 // board minimums will still enforce a global minimum.
@@ -189,7 +188,7 @@ void DRC_ENGINE::loadImplicitRules()
                 {
                     DRC_CONSTRAINT ncClearanceConstraint( DRC_CONSTRAINT_TYPE_CLEARANCE );
                     ncClearanceConstraint.Value().SetMin( nc->GetClearance() );
-                    rule->AddConstraint( ncClearanceConstraint );
+                    nc_rule->AddConstraint( ncClearanceConstraint );
                 }
 
                 ruleCount++;

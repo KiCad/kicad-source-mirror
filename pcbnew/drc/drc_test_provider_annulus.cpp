@@ -85,8 +85,8 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_ANNULUS ) )
                     return false;
 
-                int  v_min;
-                int  v_max;
+                int  v_min = 0;
+                int  v_max = 0;
                 VIA* via = dyn_cast<VIA*>( item );
 
                 // fixme: check minimum IAR/OAR ring for THT pads too
@@ -117,11 +117,17 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ANNULUS );
 
-                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s annulus %s; actual %s)" ),
-                                  constraint.GetName(),
-                                  fail_min ? _( "min" ) : _( "max" ),
-                                  MessageTextFromValue( userUnits(), annulus, true ),
-                                  MessageTextFromValue( userUnits(), fail_min ? v_min : v_max, true ) );
+                    if( fail_min )
+                        m_msg.Printf( drcItem->GetErrorText() + _( " (%s min annulus %s; actual %s)" ),
+                                      constraint.GetName(),
+                                      MessageTextFromValue( userUnits(), annulus, true ),
+                                      MessageTextFromValue( userUnits(), v_min, true ) );
+
+                    if( fail_max )
+                        m_msg.Printf( drcItem->GetErrorText() + _( " (%s max annulus %s; actual %s)" ),
+                                      constraint.GetName(),
+                                      MessageTextFromValue( userUnits(), annulus, true ),
+                                      MessageTextFromValue( userUnits(), v_max, true ) );
 
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( item );
