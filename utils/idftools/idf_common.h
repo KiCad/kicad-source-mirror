@@ -48,14 +48,12 @@ struct IDF_ERROR : std::exception
 {
     std::string message;
 
-    IDF_ERROR( const char* aSourceFile,
-               const char* aSourceMethod,
-               int         aSourceLine,
-               const std::string& aMessage ) throw();
+    IDF_ERROR( const char* aSourceFile, const char* aSourceMethod, int aSourceLine,
+               const std::string& aMessage ) noexcept;
 
-    virtual ~IDF_ERROR() throw();
+    virtual ~IDF_ERROR() noexcept;
 
-    virtual const char* what() const throw() override;
+    virtual const char* what() const noexcept override;
 };
 
 
@@ -319,7 +317,7 @@ public:
      * Function GetText
      * returns the string stored in the note entry
      */
-    const std::string& GetText( void );
+    const std::string& GetText();
 
     /**
      * Function GetText
@@ -457,7 +455,7 @@ public:
      */
     const std::string& GetDrillHoleType();
 
-    IDF3::KEY_OWNER GetDrillOwner( void )
+    IDF3::KEY_OWNER GetDrillOwner()
     {
         return owner;
     }
@@ -525,15 +523,15 @@ private:
      *
      * @var startPoint, @var endPoint, and @var angle must be set prior as per IDFv3
      */
-    void CalcCenterAndRadius( void );
+    void CalcCenterAndRadius();
 
 public:
     IDF_POINT startPoint;   ///< starting point coordinates in mm
     IDF_POINT endPoint;     ///< end point coordinates in mm
-    IDF_POINT   center;     ///< center of an arc or circle; internally calculated and not to be set by the user
-    double  angle;          ///< included angle (degrees) according to IDFv3 specification
-    double  offsetAngle;    ///< angle between center and start of arc; internally calculated
-    double  radius;         ///< radius of the arc or circle; internally calculated
+    IDF_POINT center  ;     ///< center of an arc or circle; internally calculated and not to be set by the user
+    double    angle;        ///< included angle (degrees) according to IDFv3 specification
+    double    offsetAngle;  ///< angle between center and start of arc; internally calculated
+    double    radius;       ///< radius of the arc or circle; internally calculated
 
     /**
      * Constructor IDF_SEGMENT
@@ -589,20 +587,20 @@ public:
      * Function IsCircle
      * returns true if this segment is a circle
      */
-    bool IsCircle( void );
+    bool IsCircle();
 
     /**
      * Function GetMinX()
      * returns the minimum X coordinate of this segment
      */
-    double GetMinX( void );
+    double GetMinX();
 
     /**
      * Function SwapEnds()
      * Swaps the start and end points and alters internal
      * variables as necessary for arcs
      */
-    void SwapEnds( void );
+    void SwapEnds();
 };
 
 
@@ -624,19 +622,19 @@ public:
      * Function IsCCW
      * returns true if the current list of points represents a counterclockwise winding
      */
-    bool IsCCW( void );
+    bool IsCCW();
 
     /**
      * Function IsCircle
      * returns true if this outline is a circle
      */
-    bool IsCircle( void );
+    bool IsCircle();
 
     /**
      * Function Clear
      * clears the internal list of outline segments
      */
-    void Clear( void )
+    void Clear()
     {
         dir = 0.0;
 
@@ -651,7 +649,7 @@ public:
      * Function size
      * returns the size of the internal segment list
      */
-    size_t size( void )
+    size_t size()
     {
         return outline.size();
     }
@@ -660,7 +658,7 @@ public:
      * Function empty
      * returns true if the internal segment list is empty
      */
-    bool empty( void )
+    bool empty()
     {
         return outline.empty();
     }
@@ -669,7 +667,7 @@ public:
      * Function front
      * returns the front() iterator of the internal segment list
      */
-    IDF_SEGMENT*& front( void )
+    IDF_SEGMENT*& front()
     {
         return outline.front();
     }
@@ -678,7 +676,7 @@ public:
      * Function back
      * returns the back() iterator of the internal segment list
      */
-    IDF_SEGMENT*& back( void )
+    IDF_SEGMENT*& back()
     {
         return outline.back();
     }
@@ -687,7 +685,7 @@ public:
      * Function begin
      * returns the begin() iterator of the internal segment list
      */
-    std::list<IDF_SEGMENT*>::iterator begin( void )
+    std::list<IDF_SEGMENT*>::iterator begin()
     {
         return outline.begin();
     }
@@ -696,7 +694,7 @@ public:
      * Function end
      * returns the end() iterator of the internal segment list
      */
-    std::list<IDF_SEGMENT*>::iterator end( void )
+    std::list<IDF_SEGMENT*>::iterator end()
     {
         return outline.end();
     }

@@ -72,8 +72,7 @@ C_MICROSTRIP::C_MICROSTRIP() : TRANSLINE(),
 
 C_MICROSTRIP::~C_MICROSTRIP()
 {
-    if( aux_ms )
-        delete aux_ms;
+    delete aux_ms;
 }
 
 
