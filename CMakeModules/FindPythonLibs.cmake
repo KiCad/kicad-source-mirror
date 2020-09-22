@@ -91,11 +91,18 @@ foreach(_CURRENT_VERSION ${_Python_VERSIONS})
   if(WIN32)
     if(MINGW)
       find_library(PYTHON_DEBUG_LIBRARY
-        NAMES python{$_CURRENT_VERSION}_d
+        NAMES python${_CURRENT_VERSION}_d
         PATHS
           "${PYTHON_ROOT_DIR}"
           "c:/python${_CURRENT_VERSION}"
           "c:/python${_CURRENT_VERSION_NO_DOTS}"
+        NO_SYSTEM_ENVIRONMENT_PATH
+      )
+    elseif(VCPKG_TOOLCHAIN)
+      find_library(PYTHON_DEBUG_LIBRARY
+        NAMES python${_CURRENT_VERSION_NO_DOTS}_d
+        PATHS
+          "${PYTHON_ROOT_DIR}"
         NO_SYSTEM_ENVIRONMENT_PATH
       )
     else()
@@ -116,6 +123,16 @@ foreach(_CURRENT_VERSION ${_Python_VERSIONS})
       PATHS
         "${PYTHON_ROOT_DIR}"
         "C:/python"
+      PATH_SUFFIXES
+        ${_CURRENT_VERSION}
+        ${_CURRENT_VERSION_NO_DOTS}
+      NO_SYSTEM_ENVIRONMENT_PATH
+    )
+  elseif(VCPKG_TOOLCHAIN)
+    find_library(PYTHON_LIBRARY
+      NAMES python${_CURRENT_VERSION_NO_DOTS}
+      PATHS
+        "${PYTHON_ROOT_DIR}"
       PATH_SUFFIXES
         ${_CURRENT_VERSION}
         ${_CURRENT_VERSION_NO_DOTS}
@@ -173,6 +190,17 @@ foreach(_CURRENT_VERSION ${_Python_VERSIONS})
         include
         python${_CURRENT_VERSION}
         python${_CURRENT_VERSION_NOT_DOTS}
+    )
+  elseif(VCPKG_TOOLCHAIN)
+    find_path(PYTHON_INCLUDE_DIR
+      NAMES Python.h
+      PATHS
+        "${PYTHON_ROOT_DIR}"
+      PATH_SUFFIXES
+        include
+        python${_CURRENT_VERSION}
+        python${_CURRENT_VERSION_NOT_DOTS}
+      NO_SYSTEM_ENVIRONMENT_PATH
     )
   else()
     find_path(PYTHON_INCLUDE_DIR

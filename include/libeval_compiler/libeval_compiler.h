@@ -29,6 +29,11 @@
 
 #include <base_units.h>
 
+#if defined(WIN32)
+// This gets leaked by python headers on MSVC only and will cause chaos
+#undef COMPILER
+#endif
+
 #define TR_OP_BINARY_MASK 0x200
 #define TR_OP_UNARY_MASK 0x100
 

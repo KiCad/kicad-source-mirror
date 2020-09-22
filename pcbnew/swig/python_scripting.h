@@ -33,6 +33,10 @@
     #undef _XOPEN_SOURCE
 #endif
 
+#if defined(WIN32)
+    #undef pid_t    // wxWidgets defines this, python typedefs, result is a conflict
+#endif
+
 #undef HAVE_CLOCK_GETTIME  // macro is defined in Python.h and causes redefine warning
 #include <Python.h>
 #undef HAVE_CLOCK_GETTIME
