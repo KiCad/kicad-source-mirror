@@ -47,6 +47,8 @@ public:
     bool Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck = false,
                wxWindow* aParent = nullptr );
 
+    static const bool s_DumpZonesWhenFilling = true;
+
 private:
 
     void addKnockout( D_PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_POLY_SET& aHoles );

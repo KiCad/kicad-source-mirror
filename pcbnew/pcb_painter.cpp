@@ -1260,7 +1260,11 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
             return;
 
         // Set up drawing options
-        int outline_thickness = aZone->GetFilledPolysUseThickness() ? aZone->GetMinThickness() : 0;
+        int outline_thickness = 0;
+
+        if( aZone->GetFilledPolysUseThickness( layer ) )
+            outline_thickness = aZone->GetMinThickness();
+
         m_gal->SetStrokeColor( color );
         m_gal->SetFillColor( color );
         m_gal->SetLineWidth( outline_thickness );

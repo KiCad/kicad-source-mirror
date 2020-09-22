@@ -36,7 +36,7 @@
 #include <math_for_graphics.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
-
+#include "zone_filler.h"
 
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
         : BOARD_CONNECTED_ITEM( aParent, aInModule ? PCB_MODULE_ZONE_AREA_T : PCB_ZONE_AREA_T ),
@@ -67,7 +67,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
     m_cornerRadius = 0;
     SetLocalFlags( 0 );                         // flags tempoarry used in zone calculations
     m_Poly = new SHAPE_POLY_SET();              // Outlines
-    m_fillVersion = 6;                          // set the "old" way to build filled polygon areas (before 6.0.x)
+    m_fillVersion = 5;                          // set the "old" way to build filled polygon areas (before 6.0.x)
     m_islandRemovalMode       = ISLAND_REMOVAL_MODE::ALWAYS;
     aParent->GetZoneSettings().ExportSetting( *this );
 
@@ -360,6 +360,15 @@ void ZONE_CONTAINER::SetCornerRadius( unsigned int aRadius )
         SetNeedRefill( true );
 
     m_cornerRadius = aRadius;
+}
+
+
+bool ZONE_CONTAINER::GetFilledPolysUseThickness( PCB_LAYER_ID aLayer ) const
+{
+    if( ZONE_FILLER::s_DumpZonesWhenFilling && LSET::InternalCuMask().Contains( aLayer ) )
+        return false;
+
+    return GetFilledPolysUseThickness();
 }
 
 
