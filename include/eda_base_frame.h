@@ -161,8 +161,6 @@ protected:
     int             m_autoSaveInterval;     // The auto save interval time in seconds.
     wxTimer*        m_autoSaveTimer;
 
-    bool            m_FlagModified;         // Indicates current drawing has been modified.
-    bool            m_FlagSave;             // Indicates automatic file save.
     int             m_UndoRedoCountMax;     // undo/Redo command Max depth
 
     UNDO_REDO_CONTAINER m_undoList;         // Objects list for the undo command (old data)
