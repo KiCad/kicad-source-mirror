@@ -409,6 +409,12 @@ public:
 
 bool SETTINGS_MANAGER::MigrateIfNeeded()
 {
+    if( m_headless )
+    {
+        wxLogTrace( traceSettings, "Settings migration not checked; running headless" );
+        return false;
+    }
+
     wxFileName path( GetUserSettingsPath(), "" );
     wxLogTrace( traceSettings, "Using settings path %s", path.GetFullPath() );
 
@@ -423,12 +429,6 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
             wxLogTrace( traceSettings, "Path exists and has a kicad_common, continuing!" );
             return true;
         }
-    }
-
-    if( m_headless )
-    {
-        wxLogTrace( traceSettings, "Manual settings migration required but running headless!" );
-        return false;
     }
 
     // Now we have an empty path, let's figure out what to put in it
