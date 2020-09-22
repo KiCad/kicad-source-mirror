@@ -1047,7 +1047,7 @@ typedef std::deque<mpLayer*> wxLayerList;
 class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
 {
 public:
-    mpWindow() {}
+    mpWindow();
     mpWindow( wxWindow* parent, wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,

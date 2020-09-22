@@ -1695,6 +1695,41 @@ EVT_MENU( mpID_ZOOM_OUT, mpWindow::OnZoomOut )
 EVT_MENU( mpID_LOCKASPECT, mpWindow::OnLockAspect )
 END_EVENT_TABLE()
 
+mpWindow::mpWindow() : wxWindow(),
+        m_lockaspect( false ),
+        m_minX( 0.0 ),
+        m_maxX( 0.0 ),
+        m_minY( 0.0 ),
+        m_maxY( 0.0 ),
+        m_scaleX( 1.0 ),
+        m_scaleY( 1.0 ),
+        m_posX( 0.0 ),
+        m_posY( 0.0 ),
+        m_scrX( 64 ),
+        m_scrY( 64 ),
+        m_clickedX( 0 ),
+        m_clickedY( 0 ),
+        m_desiredXmin( 0.0 ),
+        m_desiredXmax( 1.0 ),
+        m_desiredYmin( 0.0 ),
+        m_desiredYmax( 1.0 ),
+        m_marginTop( 0 ),
+        m_marginRight( 0 ),
+        m_marginBottom( 0 ),
+        m_marginLeft( 0 ),
+        m_last_lx( 0 ),
+        m_last_ly( 0 ),
+        m_buff_bmp( nullptr ),
+        m_enableDoubleBuffer( false ),
+        m_enableMouseNavigation( true ),
+        m_enableMouseWheelPan( false ),
+        m_enableLimitedView( false ),
+        m_enableScrollBars( false ),
+        m_movingInfoLayer( nullptr ),
+        m_zooming( false )
+{
+}
+
 mpWindow::mpWindow( wxWindow* parent,
         wxWindowID id,
         const wxPoint& pos,

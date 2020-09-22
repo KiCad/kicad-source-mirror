@@ -28,11 +28,21 @@
 #include <rectwaveguide.h>
 #include <units.h>
 
-RECTWAVEGUIDE::RECTWAVEGUIDE() : TRANSLINE()
+RECTWAVEGUIDE::RECTWAVEGUIDE() : TRANSLINE(),
+    mur( 0.0 ),                 // magnetic permeability of substrate
+    a( 0.0 ),                   // width of waveguide
+    b( 0.0 ),                   // height of waveguide
+    l( 0.0 ),                   // length of waveguide
+    Z0( 0.0 ),                  // characteristic impedance
+    Z0EH( 0.0 ),                // characteristic impedance of field quantities*/
+    ang_l( 0.0 ),               // Electrical length in angle
+    er_eff( 0.0 ),              // Effective dielectric constant
+    mur_eff( 0.0 ),             // Effective mag. permeability
+    atten_dielectric( 0.0 ),    // Loss in dielectric (dB)
+    atten_cond( 0.0 ),          // Loss in conductors (dB)
+    fc10( 1.0 )                 // Cutoff frequency for TE10 mode
 {
     m_Name = "RectWaveGuide";
-    fc10 = 1.0;                 // Cutoff frequency for TE10 mode
-
     Init();
 }
 

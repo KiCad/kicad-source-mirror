@@ -39,7 +39,24 @@
 
 #include <units.h>
 
-MICROSTRIP::MICROSTRIP() : TRANSLINE()
+MICROSTRIP::MICROSTRIP() : TRANSLINE(),
+    h( 0.0 ),                // height of substrate
+    ht( 0.0 ),               // height to the top of box
+    t( 0.0 ),                // thickness of top metal
+    rough( 0.0 ),            // Roughness of top metal
+    mur( 0.0 ),              // magnetic permeability of substrate
+    w( 0.0 ),                // width of line
+    l( 0.0 ),                // length of line
+    Z0_0( 0.0 ),             // static characteristic impedance
+    Z0( 0.0 ),               // characteristic impedance
+    ang_l( 0.0 ),            // Electrical length in angle
+    er_eff_0( 0.0 ),         // Static effective dielectric constant
+    er_eff( 0.0 ),           // Effective dielectric constant
+    mur_eff( 0.0 ),          // Effective mag. permeability
+    w_eff( 0.0 ),            // Effective width of line
+    atten_dielectric( 0.0 ), // Loss in dielectric (dB)
+    atten_cond( 0.0 ),       // Loss in conductors (dB)
+    Z0_h_1( 0.0 )            // homogeneous stripline impedance
 {
     m_Name = "MicroStrip";
     Init();

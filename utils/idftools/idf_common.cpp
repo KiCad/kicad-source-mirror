@@ -1029,28 +1029,29 @@ void IDF3::GetOutline( std::list<IDF_SEGMENT*>& aLines,
 }
 
 
-IDF_SEGMENT::IDF_SEGMENT()
+IDF_SEGMENT::IDF_SEGMENT() :
+        angle( 0.0 ),
+        offsetAngle( 0.0 ),
+        radius( 0.0 )
 {
-    angle = 0.0;
-    offsetAngle = 0.0;
-    radius = 0.0;
 }
 
 
-IDF_SEGMENT::IDF_SEGMENT( const IDF_POINT& aStartPoint, const IDF_POINT& aEndPoint )
+IDF_SEGMENT::IDF_SEGMENT( const IDF_POINT& aStartPoint, const IDF_POINT& aEndPoint ) :
+        startPoint( aStartPoint ),
+        endPoint( aEndPoint ),
+        angle( 0.0 ),
+        offsetAngle( 0.0),
+        radius( 0.0 )
 {
-    angle = 0.0;
-    offsetAngle = 0.0;
-    radius = 0.0;
-    startPoint = aStartPoint;
-    endPoint = aEndPoint;
 }
 
 
-IDF_SEGMENT::IDF_SEGMENT( const IDF_POINT& aStartPoint,
-                          const IDF_POINT& aEndPoint,
-                          double aAngle,
-                          bool aFromKicad )
+IDF_SEGMENT::IDF_SEGMENT( const IDF_POINT& aStartPoint, const IDF_POINT& aEndPoint, double aAngle,
+                          bool aFromKicad ) :
+        angle( 0.0 ),
+        offsetAngle( 0.0 ),
+        radius( 0.0 )
 {
     double diff = abs( aAngle ) - 360.0;
 
