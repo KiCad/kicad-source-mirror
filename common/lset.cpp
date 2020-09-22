@@ -142,6 +142,17 @@ const wxChar* LSET::Name( PCB_LAYER_ID aLayerId )
     case F_Fab:             txt = wxT( "F.Fab" );           break;
     case B_Fab:             txt = wxT( "B.Fab" );           break;
 
+    // User definable layers.
+    case User_1:            txt = wxT( "User.1" );          break;
+    case User_2:            txt = wxT( "User.2" );          break;
+    case User_3:            txt = wxT( "User.3" );          break;
+    case User_4:            txt = wxT( "User.4" );          break;
+    case User_5:            txt = wxT( "User.5" );          break;
+    case User_6:            txt = wxT( "User.6" );          break;
+    case User_7:            txt = wxT( "User.7" );          break;
+    case User_8:            txt = wxT( "User.8" );          break;
+    case User_9:            txt = wxT( "User.9" );          break;
+
     // Rescue
     case Rescue:            txt = wxT( "Rescue" );          break;
 
@@ -304,7 +315,8 @@ std::string LSET::FmtHex() const
         for( size_t nibble_bit = 0; nibble_bit < 4; ++nibble_bit )
         {
             size_t nibble_pos = nibble_bit + ( nibble * 4 );
-            // make sure it's not extra bits that dont exist in the bitset but need to in the hex format
+            // make sure it's not extra bits that don't exist in the bitset but need to in the
+            // hex format
             if( nibble_pos >= size() )
                 break;
 
@@ -517,7 +529,7 @@ PCB_LAYER_ID FlipLayer( PCB_LAYER_ID aLayerId, int aCopperLayersCount )
         {
             // internal copper layers count is aCopperLayersCount-2
             PCB_LAYER_ID fliplayer = PCB_LAYER_ID(aCopperLayersCount - 2 - ( aLayerId - In1_Cu ) );
-            // Ensure fliplayer has a value which does not crash pcbnew:
+            // Ensure fliplayer has a value which does not crash Pcbnew:
             if( fliplayer < F_Cu )
                 fliplayer = F_Cu;
 
@@ -809,6 +821,24 @@ LSET LSET::UserMask()
         Eco2_User,
         Edge_Cuts,
         Margin
+        );
+
+    return saved;
+}
+
+
+LSET LSET::UserDefinedLayers()
+{
+    static const LSET saved( 9,
+        User_1,
+        User_2,
+        User_3,
+        User_4,
+        User_5,
+        User_6,
+        User_7,
+        User_8,
+        User_9
         );
 
     return saved;

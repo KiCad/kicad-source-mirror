@@ -158,7 +158,7 @@ void BOARD::SetProject( PROJECT* aProject )
         if( m_LegacyNetclassesLoaded )
             project.NetSettings().m_NetClasses = GetDesignSettings().GetNetClasses();
 
-        // Now update the DesignSettings' netclass pointer ot point into the project.
+        // Now update the DesignSettings' netclass pointer to point into the project.
         GetDesignSettings().SetNetClasses( &project.NetSettings().m_NetClasses );
     }
 }
@@ -278,14 +278,15 @@ bool BOARD::SetLayerDescr( PCB_LAYER_ID aIndex, const LAYER& aLayer )
 const PCB_LAYER_ID BOARD::GetLayerID( const wxString& aLayerName ) const
 {
 
-    // Look for the BOARD specific copper layer names
+    // Check the BOARD physical layer names.
     for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
-        if ( IsCopperLayer( layer ) && ( m_Layer[ layer ].m_name == aLayerName ) )
+        if ( ( m_Layer[ layer ].m_name == aLayerName )
+                || ( m_Layer[ layer ].m_userName == aLayerName ) )
             return ToLAYER_ID( layer );
     }
 
-    // Otherwise fall back to the system standard layer names
+    // Otherwise fall back to the system standard layer names for virtual layers.
     for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
         if( GetStandardLayerName( ToLAYER_ID( layer ) ) == aLayerName )
@@ -295,42 +296,34 @@ const PCB_LAYER_ID BOARD::GetLayerID( const wxString& aLayerName ) const
     return UNDEFINED_LAYER;
 }
 
+
 const wxString BOARD::GetLayerName( PCB_LAYER_ID aLayer ) const
 {
     // All layer names are stored in the BOARD.
     if( IsLayerEnabled( aLayer ) )
     {
-        // Standard names were set in BOARD::BOARD() but they may be
-        // over-ridden by BOARD::SetLayerName().
-        // For copper layers, return the actual copper layer name,
-        // otherwise return the Standard English layer name.
-        if( IsCopperLayer( aLayer ) )
-            return m_Layer[aLayer].m_name;
+        // Standard names were set in BOARD::BOARD() but they may be over-ridden by
+        // BOARD::SetLayerName().  For copper layers, return the user defined layer name,
+        // if it was set.  Otherwise return the Standard English layer name.
+        if( !m_Layer[aLayer].m_userName.IsEmpty() )
+            return m_Layer[aLayer].m_userName;
     }
 
     return GetStandardLayerName( aLayer );
 }
 
+
 bool BOARD::SetLayerName( PCB_LAYER_ID aLayer, const wxString& aLayerName )
 {
-    if( !IsCopperLayer( aLayer ) )
-        return false;
-
-    if( aLayerName == wxEmptyString )
-        return false;
+    wxCHECK( !aLayerName.IsEmpty(), false );
 
     // no quote chars in the name allowed
     if( aLayerName.Find( wxChar( '"' ) ) != wxNOT_FOUND )
         return false;
 
-    wxString nameTemp = aLayerName;
-
-    // replace any spaces with underscores before we do any comparing
-    nameTemp.Replace( wxT( " " ), wxT( "_" ) );
-
     if( IsLayerEnabled( aLayer ) )
     {
-        m_Layer[aLayer].m_name = nameTemp;
+        m_Layer[aLayer].m_userName = aLayerName;
         return true;
     }
 
@@ -1244,6 +1237,7 @@ MODULE* BOARD::FindModuleByPath( const KIID_PATH& aPath ) const
 // This is needed by the sort function sortNetsByNodes()
 static std::vector<int> padCountListByNet;
 
+
 // Sort nets by decreasing pad count.
 // For same pad count, sort by alphabetic names
 static bool sortNetsByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
@@ -1257,11 +1251,13 @@ static bool sortNetsByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
         return countB < countA;
 }
 
+
 // Sort nets by alphabetic names
 static bool sortNetsByNames( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
 {
     return a->GetNetname() < b->GetNetname();
 }
+
 
 int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 {
@@ -1362,7 +1358,8 @@ void BOARD::SynchronizeNetsAndNetClasses()
 
         BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
 
-        // Set initial values for custom track width & via size to match the default netclass settings
+        // Set initial values for custom track width & via size to match the default
+        // netclass settings
         bds.UseCustomTrackViaSize( false );
         bds.SetCustomTrackWidth( defaultNetClass->GetTrackWidth() );
         bds.SetCustomViaSize( defaultNetClass->GetViaDiameter() );
@@ -1554,8 +1551,8 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, L
 
 
 /**
- * Function SortPadsByXCoord
- * is used by GetSortedPadListByXCoord to Sort a pad list by x coordinate value.
+ * Used by #GetSortedPadListByXCoord to sort a pad list by X coordinate value.
+ *
  * This function is used to build ordered pads lists
  */
 bool sortPadsByXthenYCoord( D_PAD* const & ref, D_PAD* const & comp )
@@ -1699,6 +1696,26 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer
     }
 
     return NULL;
+}
+
+
+std::list<ZONE_CONTAINER*> BOARD::GetZoneList( bool aIncludeZonesInFootprints )
+{
+    std::list<ZONE_CONTAINER*> zones;
+
+    for( ZONE_CONTAINER* zone : Zones() )
+        zones.push_back( zone );
+
+    if( aIncludeZonesInFootprints )
+    {
+        for( MODULE* mod : m_modules )
+        {
+            for( MODULE_ZONE_CONTAINER* zone : mod->Zones() )
+                zones.push_back( zone );
+        }
+    }
+
+    return zones;
 }
 
 
@@ -1949,6 +1966,7 @@ void BOARD::HighLightON( bool aValue )
     }
 }
 
+
 PCB_GROUP* BOARD::TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope  )
 {
     PCB_GROUP* candidate = NULL;
@@ -2113,7 +2131,8 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
             if( repair )
                 board.Groups().erase( board.Groups().begin() + idx );
 
-            return wxString::Format( _( "Group must have at least one member: %s" ), group.m_Uuid.AsString() );
+            return wxString::Format( _( "Group must have at least one member: %s" ),
+                    group.m_Uuid.AsString() );
         }
     }
 
@@ -2174,7 +2193,8 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
             }
         }
 
-        // No cycles found in chain, so add it to set of groups we know don't participate in a cycle.
+        // No cycles found in chain, so add it to set of groups we know don't participate
+        // in a cycle.
         knownCycleFreeGroups.insert( currentChainGroups.begin(), currentChainGroups.end() );
     }
 
@@ -2280,6 +2300,7 @@ BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCBNEW_SELECTION& selectio
     legalOps.enter       = onlyGroups && selection.Size() == 1;
     return legalOps;
 }
+
 
 void BOARD::GroupRemoveItems( const PCBNEW_SELECTION& selection, BOARD_COMMIT* commit )
 {

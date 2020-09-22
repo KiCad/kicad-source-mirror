@@ -83,9 +83,20 @@ wxString LayerName( int aLayer )
     case F_Fab:             return _( "F.Fab" );
     case B_Fab:             return _( "B.Fab" );
 
+    // User definable layers.
+    case User_1:            return _( "User.1" );
+    case User_2:            return _( "User.2" );
+    case User_3:            return _( "User.3" );
+    case User_4:            return _( "User.4" );
+    case User_5:            return _( "User.5" );
+    case User_6:            return _( "User.6" );
+    case User_7:            return _( "User.7" );
+    case User_8:            return _( "User.8" );
+    case User_9:            return _( "User.9" );
+
     // Rescue
     case Rescue:            return _( "Rescue" );
-        
+
     // SCH_LAYER_ID
 
     case LAYER_WIRE:                    return _( "Wire" );
@@ -156,12 +167,6 @@ wxString LayerName( int aLayer )
     case LAYER_SELECT_OVERLAY:          return _( "Selection highlight" );
 
     default:
-#if DEBUG
-        wxString str;
-        str.Printf( "Unknown: ID %d", aLayer );
-        return str;
-#else
-        return wxEmptyString;
-#endif
+        wxCHECK_MSG( false, wxEmptyString, wxString::Format( "Unknown layer ID %d", aLayer ) );
     }
 }

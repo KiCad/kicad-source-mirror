@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,7 +27,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	bSizerLayerCnt->Add( m_PresetsChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerLayerCnt->Add( 15, 0, 0, 0, 5 );
+	bSizerLayerCnt->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_staticTextCopperLayers = new wxStaticText( this, wxID_ANY, _("Copper layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCopperLayers->Wrap( -1 );
@@ -40,13 +40,16 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	bSizerLayerCnt->Add( m_CopperLayersChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
 
 
-	bSizerLayerCnt->Add( 15, 0, 0, 0, 5 );
+	bSizerLayerCnt->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_addUserDefinedLayerButton = new wxButton( this, wxID_ANY, _("Add User Defined Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerLayerCnt->Add( m_addUserDefinedLayerButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizerMargins->Add( bSizerLayerCnt, 0, wxEXPAND, 5 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMargins->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bSizerMargins->Add( m_staticline2, 0, wxEXPAND|wxTOP, 5 );
 
 	m_LayersListPanel = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTAB_TRAVERSAL|wxVSCROLL );
 	m_LayersListPanel->SetScrollRate( 0, 5 );
@@ -61,11 +64,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	m_LayerListFlexGridSizer->Add( m_CrtYdFrontCheckBox, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxLEFT, 5 );
 
-	m_CrtYdFrontName = new wxStaticText( m_LayersListPanel, ID_CRTYDFRONTNAME, _("CrtYd_Front_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_CrtYdFrontName->Wrap( -1 );
-	m_CrtYdFrontName->SetMinSize( wxSize( 110,-1 ) );
-
-	m_LayerListFlexGridSizer->Add( m_CrtYdFrontName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_CrtYdFrontName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("CrtYd_Front"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_CrtYdFrontName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_CrtYdFrontStaticText = new wxStaticText( m_LayersListPanel, ID_CRTYDFRONTCHOICE, _("Off-board, testing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CrtYdFrontStaticText->Wrap( -1 );
@@ -78,9 +78,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	m_LayerListFlexGridSizer->Add( m_FabFrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_FabFrontName = new wxStaticText( m_LayersListPanel, ID_FABFRONTNAME, _("Fab_Front_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_FabFrontName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_FabFrontName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_FabFrontName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("Fab_Front"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_FabFrontName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_FabFrontStaticText = new wxStaticText( m_LayersListPanel, ID_FABFRONTCHOICE, _("Off-board, manufacturing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_FabFrontStaticText->Wrap( -1 );
@@ -91,9 +90,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	m_LayerListFlexGridSizer->Add( m_AdhesFrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_AdhesFrontName = new wxStaticText( m_LayersListPanel, ID_ADHESFRONTNAME, _("Adhes_Front_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_AdhesFrontName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_AdhesFrontName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_AdhesFrontName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("Adhes_Front"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_AdhesFrontName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_AdhesFrontStaticText = new wxStaticText( m_LayersListPanel, ID_ADHESFRONTCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AdhesFrontStaticText->Wrap( -1 );
@@ -104,9 +102,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	m_LayerListFlexGridSizer->Add( m_SoldPFrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_SoldPFrontName = new wxStaticText( m_LayersListPanel, ID_SOLDPFRONTNAME, _("SoldP_Front_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SoldPFrontName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_SoldPFrontName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_SoldPFrontName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("SoldP_Front"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_SoldPFrontName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_SoldPFrontStaticText = new wxStaticText( m_LayersListPanel, ID_SOLDPFRONTCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SoldPFrontStaticText->Wrap( -1 );
@@ -117,9 +114,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	m_LayerListFlexGridSizer->Add( m_SilkSFrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_SilkSFrontName = new wxStaticText( m_LayersListPanel, ID_SILKSFRONTNAME, _("SilkS_Front_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SilkSFrontName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_SilkSFrontName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_SilkSFrontName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("SilkS_Front"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_SilkSFrontName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_SilkSFrontStaticText = new wxStaticText( m_LayersListPanel, ID_SILKSFRONTCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SilkSFrontStaticText->Wrap( -1 );
@@ -130,9 +126,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	m_LayerListFlexGridSizer->Add( m_MaskFrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_MaskFrontName = new wxStaticText( m_LayersListPanel, ID_MASKFRONTNAME, _("Mask_Front_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_MaskFrontName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_MaskFrontName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_MaskFrontName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("Mask_Front"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_MaskFrontName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_MaskFrontStaticText = new wxStaticText( m_LayersListPanel, ID_MASKFRONTCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MaskFrontStaticText->Wrap( -1 );
@@ -557,7 +552,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	wxString m_In29ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In29ChoiceNChoices = sizeof( m_In29ChoiceChoices ) / sizeof( wxString );
 	m_In29Choice = new wxChoice( m_LayersListPanel, ID_IN29CHOICE, wxDefaultPosition, wxDefaultSize, m_In29ChoiceNChoices, m_In29ChoiceChoices, 0 );
-	m_In29Choice->SetSelection( 0 );
+	m_In29Choice->SetSelection( 1 );
 	m_In29Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
 	m_LayerListFlexGridSizer->Add( m_In29Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -571,7 +566,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	wxString m_In30ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In30ChoiceNChoices = sizeof( m_In30ChoiceChoices ) / sizeof( wxString );
 	m_In30Choice = new wxChoice( m_LayersListPanel, ID_IN30CHOICE, wxDefaultPosition, wxDefaultSize, m_In30ChoiceNChoices, m_In30ChoiceChoices, 0 );
-	m_In30Choice->SetSelection( 0 );
+	m_In30Choice->SetSelection( 3 );
 	m_In30Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
 	m_LayerListFlexGridSizer->Add( m_In30Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -589,7 +584,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	wxString m_BackChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_BackChoiceNChoices = sizeof( m_BackChoiceChoices ) / sizeof( wxString );
 	m_BackChoice = new wxChoice( m_LayersListPanel, ID_BACKCHOICE, wxDefaultPosition, wxDefaultSize, m_BackChoiceNChoices, m_BackChoiceChoices, 0 );
-	m_BackChoice->SetSelection( 0 );
+	m_BackChoice->SetSelection( 3 );
 	m_BackChoice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 
 	m_LayerListFlexGridSizer->Add( m_BackChoice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -599,9 +594,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	m_LayerListFlexGridSizer->Add( m_MaskBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_MaskBackName = new wxStaticText( m_LayersListPanel, ID_MASKBACKNAME, _("Mask_Back_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_MaskBackName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_MaskBackName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_MaskBackName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("SoldM_Back"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_MaskBackName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_MaskBackStaticText = new wxStaticText( m_LayersListPanel, ID_MASKBACKCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MaskBackStaticText->Wrap( -1 );
@@ -612,9 +606,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	m_LayerListFlexGridSizer->Add( m_SilkSBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_SilkSBackName = new wxStaticText( m_LayersListPanel, ID_SILKSBACKNAME, _("SilkS_Back_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SilkSBackName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_SilkSBackName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_SilkSBackName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("SilkS_Back"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_SilkSBackName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_SilkSBackStaticText = new wxStaticText( m_LayersListPanel, ID_SILKSBACKCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SilkSBackStaticText->Wrap( -1 );
@@ -625,9 +618,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	m_LayerListFlexGridSizer->Add( m_SoldPBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_SoldPBackName = new wxStaticText( m_LayersListPanel, ID_SOLDPBACKNAME, _("SoldP_Back_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SoldPBackName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_SoldPBackName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_SoldPBackName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("SoldP_Back"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_SoldPBackName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_SoldPBackStaticText = new wxStaticText( m_LayersListPanel, ID_SOLDPBACKCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SoldPBackStaticText->Wrap( -1 );
@@ -638,9 +630,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	m_LayerListFlexGridSizer->Add( m_AdhesBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_AdhesBackName = new wxStaticText( m_LayersListPanel, ID_ADHESBACKNAME, _("Adhes_Back_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_AdhesBackName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_AdhesBackName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_AdhesBackName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("Adhes_Back"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_AdhesBackName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_AdhesBackStaticText = new wxStaticText( m_LayersListPanel, ID_ADHESBACKCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AdhesBackStaticText->Wrap( -1 );
@@ -651,9 +642,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	m_LayerListFlexGridSizer->Add( m_FabBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_FabBackName = new wxStaticText( m_LayersListPanel, ID_FABBACKNAME, _("Fab_Back_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_FabBackName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_FabBackName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_FabBackName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("Fab_Back"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_FabBackName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_FabBackStaticText = new wxStaticText( m_LayersListPanel, ID_FABBACKCHOICE, _("Off-board, manufacturing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_FabBackStaticText->Wrap( -1 );
@@ -664,9 +654,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	m_LayerListFlexGridSizer->Add( m_CrtYdBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_CrtYdBackName = new wxStaticText( m_LayersListPanel, ID_CRTYDBACKNAME, _("CrtYd_Back_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_CrtYdBackName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_CrtYdBackName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_CrtYdBackName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("CrtYd_Back"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_CrtYdBackName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_CrtYdBackStaticText = new wxStaticText( m_LayersListPanel, ID_CRTYDBACKCHOICE, _("Off-board, testing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CrtYdBackStaticText->Wrap( -1 );
@@ -677,9 +666,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	m_LayerListFlexGridSizer->Add( m_PCBEdgesCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_PCBEdgesName = new wxStaticText( m_LayersListPanel, ID_PCBEDGESNAME, _("PCB_Edges_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PCBEdgesName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_PCBEdgesName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_PCBEdgesName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("Pcb_Edges"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_PCBEdgesName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_PCBEdgesStaticText = new wxStaticText( m_LayersListPanel, ID_PCBEDGESCHOICE, _("Board contour"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PCBEdgesStaticText->Wrap( -1 );
@@ -688,9 +676,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_MarginCheckBox = new wxCheckBox( m_LayersListPanel, ID_MARGINCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_MarginCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_MarginName = new wxStaticText( m_LayersListPanel, ID_MARGINNAME, _("Margin_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_MarginName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_MarginName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_MarginName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("Margin"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_MarginName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_MarginStaticText = new wxStaticText( m_LayersListPanel, ID_ECO2CHOICE, _("Edge_Cuts setback"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MarginStaticText->Wrap( -1 );
@@ -699,9 +686,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_Eco1CheckBox = new wxCheckBox( m_LayersListPanel, ID_ECO2CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_Eco1CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_Eco1Name = new wxStaticText( m_LayersListPanel, ID_ECO2NAME, _("Eco1_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Eco1Name->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_Eco1Name, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_Eco1Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("Eco1"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_Eco1Name, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_Eco1StaticText = new wxStaticText( m_LayersListPanel, ID_ECO2CHOICE, _("Auxiliary"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Eco1StaticText->Wrap( -1 );
@@ -710,9 +696,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_Eco2CheckBox = new wxCheckBox( m_LayersListPanel, ID_ECO1CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_Eco2CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_Eco2Name = new wxStaticText( m_LayersListPanel, ID_ECO1NAME, _("Eco2_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Eco2Name->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_Eco2Name, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_Eco2Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("Eco2"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_Eco2Name, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_Eco2StaticText = new wxStaticText( m_LayersListPanel, ID_ECO1CHOICE, _("Auxiliary"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Eco2StaticText->Wrap( -1 );
@@ -723,9 +708,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	m_LayerListFlexGridSizer->Add( m_CommentsCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_CommentsName = new wxStaticText( m_LayersListPanel, ID_COMMENTSNAME, _("Comments_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_CommentsName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_CommentsName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_CommentsName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("Comments"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_CommentsName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_CommentsStaticText = new wxStaticText( m_LayersListPanel, ID_COMMENTSCHOICE, _("Auxiliary"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CommentsStaticText->Wrap( -1 );
@@ -736,22 +720,111 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	m_LayerListFlexGridSizer->Add( m_DrawingsCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_DrawingsName = new wxStaticText( m_LayersListPanel, ID_DRAWINGSNAME, _("Drawings_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_DrawingsName->Wrap( -1 );
-	m_LayerListFlexGridSizer->Add( m_DrawingsName, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_DrawingsName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("Drawings"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_DrawingsName, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_DrawingsStaticText = new wxStaticText( m_LayersListPanel, ID_DRAWINGSCHOICE, _("Auxiliary"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DrawingsStaticText->Wrap( -1 );
 	m_LayerListFlexGridSizer->Add( m_DrawingsStaticText, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
+	m_User1CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User1CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_User1Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User1"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User1Name, 0, wxEXPAND|wxRIGHT, 5 );
+
+	m_User1StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_User1StaticText->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_User1StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_User2CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User2CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_User2Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User2"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User2Name, 0, wxEXPAND|wxRIGHT, 5 );
+
+	m_User2StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_User2StaticText->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_User2StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_User3CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User3CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_User3Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User3"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User3Name, 0, wxEXPAND|wxRIGHT, 5 );
+
+	m_User3StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_User3StaticText->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_User3StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_User4CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User4CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_User4Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User4"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User4Name, 0, wxEXPAND|wxRIGHT, 5 );
+
+	m_User4StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_User4StaticText->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_User4StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_User5CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User5CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_User5Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User5"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User5Name, 0, wxEXPAND|wxRIGHT, 5 );
+
+	m_User5StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_User5StaticText->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_User5StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_User6CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User6CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_User6Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User6"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User6Name, 0, wxEXPAND|wxRIGHT, 5 );
+
+	m_User6StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_User6StaticText->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_User6StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_User7CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User7CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_User7Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User7"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User7Name, 0, wxEXPAND|wxRIGHT, 5 );
+
+	m_User7StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_User7StaticText->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_User7StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_User8CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User8CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_User8Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User8"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User8Name, 0, wxEXPAND|wxRIGHT, 5 );
+
+	m_User8StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_User8StaticText->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_User8StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_User9CheckBox = new wxCheckBox( m_LayersListPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User9CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_User9Name = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("User9"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerListFlexGridSizer->Add( m_User9Name, 0, wxEXPAND|wxRIGHT, 5 );
+
+	m_User9StaticText = new wxStaticText( m_LayersListPanel, wxID_ANY, _("User defined layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_User9StaticText->Wrap( -1 );
+	m_LayerListFlexGridSizer->Add( m_User9StaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
 
 	m_LayersListPanel->SetSizer( m_LayerListFlexGridSizer );
 	m_LayersListPanel->Layout();
 	m_LayerListFlexGridSizer->Fit( m_LayersListPanel );
-	bSizerMargins->Add( m_LayersListPanel, 1, wxEXPAND|wxALL, 5 );
+	bSizerMargins->Add( m_LayersListPanel, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
-	bMainSizer->Add( bSizerMargins, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( bSizerMargins, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bMainSizer );
@@ -761,6 +834,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	// Connect Events
 	m_PresetsChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnPresetsChoice ), NULL, this );
 	m_CopperLayersChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCopperLayersChoice ), NULL, this );
+	m_addUserDefinedLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::addUserDefinedLayer ), NULL, this );
+	m_addUserDefinedLayerButton->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_LAYERS_BASE::onUpdateAddUserDefinedLayer ), NULL, this );
 	m_CrtYdFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
 	m_FabFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_AdhesFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
@@ -818,6 +893,8 @@ PANEL_SETUP_LAYERS_BASE::~PANEL_SETUP_LAYERS_BASE()
 	// Disconnect Events
 	m_PresetsChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnPresetsChoice ), NULL, this );
 	m_CopperLayersChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCopperLayersChoice ), NULL, this );
+	m_addUserDefinedLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::addUserDefinedLayer ), NULL, this );
+	m_addUserDefinedLayerButton->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_LAYERS_BASE::onUpdateAddUserDefinedLayer ), NULL, this );
 	m_CrtYdFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
 	m_FabFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_AdhesFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );

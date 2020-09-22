@@ -50,8 +50,7 @@ using namespace PCB_KEYS_T;
 
 
 /**
- * FP_CACHE_ITEM
- * is helper class for creating a footprint library cache.
+ * Helper class for creating a footprint library cache.
  *
  * The new footprint library design is a file path of individual module files
  * that contain a single module per file.  This class is a helper only for the
@@ -107,7 +106,6 @@ public:
     // Catch these exceptions higher up please.
 
     /**
-     * Function Save
      * Save the footprint cache or a single module from it to disk
      *
      * @param aModule if set, save only this module, otherwise, save the full library
@@ -119,7 +117,6 @@ public:
     void Remove( const wxString& aFootprintName );
 
     /**
-     * Function GetTimestamp
      * Generate a timestamp representing all source files in the cache (including the
      * parent directory).
      * Timestamps should not be considered ordered.  They either match or they don't.
@@ -127,14 +124,12 @@ public:
     static long long GetTimestamp( const wxString& aLibPath );
 
     /**
-     * Function IsModified
      * Return true if the cache is not up-to-date.
      */
     bool IsModified();
 
     /**
-     * Function IsPath
-     * checks if \a aPath is the same as the current cache path.
+     * Check if \a aPath is the same as the current cache path.
      *
      * This tests paths by converting \a aPath using the native separators.  Internally
      * #FP_CACHE stores the current path using native separators.  This prevents path
@@ -202,7 +197,7 @@ void FP_CACHE::Save( MODULE* aModule )
 #ifdef USE_TMP_FILE
         wxRemove( fn.GetFullPath() );     // it is not an error if this does not exist
 
-        // Even on linux you can see an _intermittent_ error when calling wxRename(),
+        // Even on Linux you can see an _intermittent_ error when calling wxRename(),
         // and it is fully inexplicable.  See if this dodges the error.
         wxMilliSleep( 250L );
 
@@ -456,15 +451,12 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
 
 void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 {
-    if( m_ctl & CTL_STD_LAYER_NAMES )
-    {
-        PCB_LAYER_ID layer = aItem->GetLayer();
+    PCB_LAYER_ID layer = aItem->GetLayer();
 
-        // English layer names should never need quoting.
+    if( m_ctl & CTL_STD_LAYER_NAMES )    // English layer names should never need quoting.
         m_out->Print( 0, " (layer %s)", TO_UTF8( BOARD::GetStandardLayerName( layer ) ) );
-    }
     else
-        m_out->Print( 0, " (layer %s)", m_out->Quotew( aItem->GetLayerName() ).c_str() );
+        m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( layer ) ).c_str() );
 }
 
 
@@ -524,8 +516,11 @@ void PCB_IO::formatBoardLayers( BOARD* aBoard, int aNestLevel ) const
         PCB_LAYER_ID layer = *cu;
 
         m_out->Print( aNestLevel+1, "(%d %s %s", layer,
-                      m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str(),
+                      m_out->Quotew( LSET::Name( layer ) ).c_str(),
                       LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
+
+        if( LSET::Name( layer ) != m_board->GetLayerName( layer ) )
+            m_out->Print( 0, " %s", m_out->Quotew( m_board->GetLayerName( layer ) ).c_str() );
 
         m_out->Print( 0, ")\n" );
     }
@@ -551,7 +546,16 @@ void PCB_IO::formatBoardLayers( BOARD* aBoard, int aNestLevel ) const
         B_CrtYd,
         F_CrtYd,
         B_Fab,
-        F_Fab
+        F_Fab,
+        User_1,
+        User_2,
+        User_3,
+        User_4,
+        User_5,
+        User_6,
+        User_7,
+        User_8,
+        User_9
     };
 
     for( LSEQ seq = aBoard->GetEnabledLayers().Seq( non_cu, arrayDim( non_cu ) );  seq;  ++seq )
@@ -559,7 +563,10 @@ void PCB_IO::formatBoardLayers( BOARD* aBoard, int aNestLevel ) const
         PCB_LAYER_ID layer = *seq;
 
         m_out->Print( aNestLevel+1, "(%d %s user", layer,
-                      m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str() );
+                      m_out->Quotew( LSET::Name( layer ) ).c_str() );
+
+        if( m_board->GetLayerName( layer ) != LSET::Name( layer ) )
+            m_out->Print( 0, " %s", m_out->Quotew( m_board->GetLayerName( layer ) ).c_str() );
 
         m_out->Print( 0, ")\n" );
     }
@@ -1210,12 +1217,7 @@ void PCB_IO::formatLayers( LSET aLayerMask, int aNestLevel ) const
     {
         if( aLayerMask[layer] )
         {
-            if( m_board && !( m_ctl & CTL_STD_LAYER_NAMES ) )
-                layerName = m_board->GetLayerName( PCB_LAYER_ID( layer ) );
-
-            else    // I am being called from FootprintSave()
-                layerName = BOARD::GetStandardLayerName( PCB_LAYER_ID( layer ) );
-
+            layerName = LSET::Name( PCB_LAYER_ID( layer ) );
             output += ' ';
             output += m_out->Quotew( layerName );
         }
@@ -1672,8 +1674,8 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
             m_out->Print( 0, " (drill %s)", FormatInternalUnits( via->GetDrill() ).c_str() );
 
         m_out->Print( 0, " (layers %s %s)",
-                      m_out->Quotew( m_board->GetLayerName( layer1 ) ).c_str(),
-                      m_out->Quotew( m_board->GetLayerName( layer2 ) ).c_str() );
+                      m_out->Quotew( LSET::Name( layer1 ) ).c_str(),
+                      m_out->Quotew( LSET::Name( layer2 ) ).c_str() );
 
         if( via->GetRemoveUnconnected() )
         {
@@ -1693,15 +1695,16 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
                 FormatInternalUnits( arc->GetEnd() ).c_str(),
                 FormatInternalUnits( arc->GetWidth() ).c_str() );
 
-        m_out->Print( 0, " (layer %s)", m_out->Quotew( aTrack->GetLayerName() ).c_str() );
+        m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( arc->GetLayer() ) ).c_str() );
     }
     else
     {
         m_out->Print( aNestLevel, "(segment (start %s) (end %s) (width %s)",
-                      FormatInternalUnits( aTrack->GetStart() ).c_str(), FormatInternalUnits( aTrack->GetEnd() ).c_str(),
+                      FormatInternalUnits( aTrack->GetStart() ).c_str(),
+                      FormatInternalUnits( aTrack->GetEnd() ).c_str(),
                       FormatInternalUnits( aTrack->GetWidth() ).c_str() );
 
-        m_out->Print( 0, " (layer %s)", m_out->Quotew( aTrack->GetLayerName() ).c_str() );
+        m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( aTrack->GetLayer() ) ).c_str() );
     }
 
     if( aTrack->IsLocked() )

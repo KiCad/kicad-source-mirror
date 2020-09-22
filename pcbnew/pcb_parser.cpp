@@ -722,7 +722,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
     }
 
     // Now that we've parsed the other Uuids in the file we can resolve
-    // the uuids referrred to in the group declarations we saw.
+    // the uuids referred to in the group declarations we saw.
     //
     // First add all group objects so subsequent GetItem() calls for nested
     // groups work.
@@ -800,7 +800,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         dlg.SetOKLabel( _( "Attempt repair" ) );
 
         if( dlg.ShowModal() == wxID_CANCEL )
-            THROW_IO_ERROR( _( "File read cancelled" ) );
+            THROW_IO_ERROR( _( "File read canceled" ) );
 
         m_board->GroupsSanityCheck( true );
     }
@@ -1050,6 +1050,7 @@ void PCB_PARSER::parseLayer( LAYER* aLayer )
     T           token;
 
     std::string name;
+    std::string userName;
     std::string type;
     bool        isVisible = true;
 
@@ -1069,20 +1070,35 @@ void PCB_PARSER::parseLayer( LAYER* aLayer )
 
     token = NextTok();
 
+    // @todo Figure out why we are looking for a hide token in the layer definition.
     if( token == T_hide )
     {
         isVisible = false;
         NeedRIGHT();
     }
+    else if( token == T_STRING )
+    {
+        userName = CurText();
+        NeedRIGHT();
+    }
     else if( token != T_RIGHT )
     {
-        Expecting( "hide or )" );
+        Expecting( "hide, user defined name, or )" );
     }
 
     aLayer->m_name    = FROM_UTF8( name.c_str() );
     aLayer->m_type    = LAYER::ParseType( type.c_str() );
     aLayer->m_number  = layer_num;
     aLayer->m_visible = isVisible;
+
+    if( !userName.empty() )
+        aLayer->m_userName = FROM_UTF8( userName.c_str() );
+
+    // The canonical name will get reset back to the default for copper layer on the next
+    // save.  The user defined name is now a separate optional layer token from the canonical
+    // name.
+    if( aLayer->m_name != LSET::Name( static_cast<PCB_LAYER_ID>( aLayer->m_number ) ) )
+        aLayer->m_userName = aLayer->m_name;
 }
 
 
@@ -1223,7 +1239,7 @@ void PCB_PARSER::parseBoardStackup()
 
                         if( token == T_locked )
                         {
-                            // Dielectric thickness can be locked (for impedance controled layers)
+                            // Dielectric thickness can be locked (for impedance controlled layers)
                             if( type == BS_ITEM_TYPE_DIELECTRIC )
                                 item->SetThicknessLocked( true, sublayer_idx );
 
@@ -3065,7 +3081,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
     // In legacy files the lack of attributes indicated a through-hole component which was by
     // default excluded from pos files.  However there was a hack to look for SMD pads and
-    // consider those "mislabelled through-hole components" and therefore include them in place
+    // consider those "mislabeled through-hole components" and therefore include them in place
     // files.  We probably don't want to get into that game so we'll just include them by
     // default and let the user change it if required.
     if( m_requiredVersion < 20200826 && attributes == 0 )
@@ -3457,7 +3473,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
 
     case T_roundrect:
         // Note: the shape can be PAD_SHAPE_ROUNDRECT or PAD_SHAPE_CHAMFERED_RECT
-        // (if champfer parameters are found later in pad descr.)
+        // (if chamfer parameters are found later in pad descr.)
         pad->SetShape( PAD_SHAPE_ROUNDRECT );
         break;
 
@@ -3893,7 +3909,7 @@ bool PCB_PARSER::parseD_PAD_option( D_PAD* aPad )
         case T_clearance:
             token = NextTok();
             // Custom shaped pads have a clearance area that is the pad shape
-            // (like usual pads) or the convew hull of the pad shape.
+            // (like usual pads) or the convex hull of the pad shape.
             switch( token )
             {
             case T_outline:

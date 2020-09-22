@@ -86,9 +86,11 @@ class TEXTE_PCB;
 //#define SEXPR_BOARD_FILE_VERSION    20200909  // Change DIMENSION format
 //#define SEXPR_BOARD_FILE_VERSION    20200913  // Add leader dimension
 //#define SEXPR_BOARD_FILE_VERSION    20200916  // Add center dimension
-#define SEXPR_BOARD_FILE_VERSION      20200921  // Add orthogonal dimension
+//#define SEXPR_BOARD_FILE_VERSION      20200921  // Add orthogonal dimension
+#define SEXPR_BOARD_FILE_VERSION      20200922  // Add user name to layer definition.
 
-#define BOARD_FILE_HOST_VERSION     20200825    ///< Earlier files than this include the host tag
+
+#define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 
 #define CTL_STD_LAYER_NAMES         (1 << 0)    ///< Use English Standard layer names
 #define CTL_OMIT_NETS               (1 << 1)    ///< Omit pads net names (useless in library)
@@ -137,7 +139,7 @@ public:
     {
         // Would have used wildcards_and_files_ext.cpp's KiCadPcbFileExtension,
         // but to be pure, a plugin should not assume that it will always be linked
-        // with the core of the pcbnew code. (Might someday be a DLL/DSO.)  Besides,
+        // with the core of the Pcbnew code. (Might someday be a DLL/DSO.)  Besides,
         // file extension policy should be controlled by the plugin.
         return wxT( "kicad_pcb" );
     }
@@ -171,9 +173,11 @@ public:
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
-    void FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL) override;
+    void FootprintLibCreate( const wxString& aLibraryPath,
+            const PROPERTIES* aProperties = NULL) override;
 
-    bool FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL ) override;
+    bool FootprintLibDelete( const wxString& aLibraryPath,
+            const PROPERTIES* aProperties = NULL ) override;
 
     bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
 
@@ -184,8 +188,7 @@ public:
     ~PCB_IO();
 
     /**
-     * Function Format
-     * outputs \a aItem to \a aFormatter in s-expression format.
+     * Output \a aItem to \a aFormatter in s-expression format.
      *
      * @param aItem A pointer the an #BOARD_ITEM object to format.
      * @param aNestLevel The indentation nest level.

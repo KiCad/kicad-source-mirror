@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2009-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,7 +105,8 @@ void BOARD_STACKUP_ITEM::RemoveDielectricPrms( int aDielectricPrmsIdx )
 {
     // Remove a DIELECTRIC_PRMS item from m_DielectricPrmsList if possible
 
-    if( GetSublayersCount() < 2 || aDielectricPrmsIdx < 0 || aDielectricPrmsIdx >= GetSublayersCount() )
+    if( GetSublayersCount() < 2 || aDielectricPrmsIdx < 0
+            || aDielectricPrmsIdx >= GetSublayersCount() )
         return;
 
     m_DielectricPrmsList.erase( m_DielectricPrmsList.begin() + aDielectricPrmsIdx );
@@ -125,6 +126,7 @@ int BOARD_STACKUP_ITEM::GetMaskDefaultThickness()
     // A reasonable thickness for solder mask:
     return Millimeter2iu( 0.01 );
 }
+
 
 // Getters:
 int BOARD_STACKUP_ITEM::GetThickness( int aDielectricSubLayer ) const
@@ -298,7 +300,7 @@ wxString BOARD_STACKUP_ITEM::FormatLossTangent( int aDielectricSubLayer ) const
 
 wxString BOARD_STACKUP_ITEM::FormatDielectricLayerName() const
 {
-    // return a wxString to print/display a dielectriv name
+    // return a wxString to print/display a dielectric name
     wxString lname;
     lname.Printf( _( "Dielectric %d" ), GetDielectricLayerId() );
 
@@ -613,9 +615,8 @@ void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings,
 }
 
 
-
 void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
-                                         BOARD* aBoard, int aNestLevel ) const
+                                        BOARD* aBoard, int aNestLevel ) const
 {
     // Board stackup is the ordered list from top to bottom of
     // physical layers and substrate used to build the board.
@@ -632,11 +633,9 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
         wxString layer_name;
 
         if( item->GetBrdLayerId() == UNDEFINED_LAYER )
-        {
             layer_name.Printf( "dielectric %d", item->GetDielectricLayerId() );
-        }
         else
-            layer_name = aBoard->GetLayerName( item->GetBrdLayerId() );
+            layer_name = LSET::Name( item->GetBrdLayerId() );
 
         aFormatter->Print( nest_level, "(layer %s (type %s)",
                            aFormatter->Quotew( layer_name ).c_str(),

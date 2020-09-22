@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,6 +88,7 @@ private:
     void setLayerCheckBox( LAYER_NUM layer, bool isChecked );
     void setCopperLayerCheckBoxes( int copperCount );
     void setMandatoryLayerCheckBoxes();
+    void setUserDefinedLayerCheckBoxes();
 
     void showCopperChoice( int copperCount );
     void showBoardLayerNames();
@@ -103,6 +104,9 @@ private:
     void OnCopperLayersChoice( wxCommandEvent& event ) override;
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+    virtual void addUserDefinedLayer( wxCommandEvent& aEvent ) override;
+
+    virtual void onUpdateAddUserDefinedLayer( wxUpdateUIEvent& event ) override;
 
     bool testLayerNames();
 

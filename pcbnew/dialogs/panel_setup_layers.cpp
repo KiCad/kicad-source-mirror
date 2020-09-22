@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Isaac Marino Bavaresco, isaacbavaresco@yahoo.com.br
  * Copyright (C) 2009 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2009-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,6 +100,16 @@ static LSEQ dlg_layers()
         Eco1_User,
         Cmts_User,
         Dwgs_User,
+
+        User_1,
+        User_2,
+        User_3,
+        User_4,
+        User_5,
+        User_6,
+        User_7,
+        User_8,
+        User_9,
     };
 
     return LSEQ( layers, layers + arrayDim( layers ) );
@@ -142,8 +152,8 @@ PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* a
 
 PANEL_SETUP_LAYERS_CTLs PANEL_SETUP_LAYERS::getCTLs( LAYER_NUM aLayerNumber )
 {
-#define RETURN_COPPER(x) return PANEL_SETUP_LAYERS_CTLs( x##Name, x##CheckBox, x##Choice )
-#define RETURN_AUX(x)    return PANEL_SETUP_LAYERS_CTLs( x##Name, x##CheckBox, x##StaticText )
+#define RETURN_COPPER( x )   return PANEL_SETUP_LAYERS_CTLs( x##Name, x##CheckBox, x##Choice )
+#define RETURN_AUX( x )      return PANEL_SETUP_LAYERS_CTLs( x##Name, x##CheckBox, x##StaticText )
 
     switch( aLayerNumber )
     {
@@ -201,6 +211,17 @@ PANEL_SETUP_LAYERS_CTLs PANEL_SETUP_LAYERS::getCTLs( LAYER_NUM aLayerNumber )
     case Eco1_User:             RETURN_AUX( m_Eco1 );
     case Cmts_User:             RETURN_AUX( m_Comments );
     case Dwgs_User:             RETURN_AUX( m_Drawings );
+
+    case User_1:                RETURN_AUX( m_User1 );
+    case User_2:                RETURN_AUX( m_User2 );
+    case User_3:                RETURN_AUX( m_User3 );
+    case User_4:                RETURN_AUX( m_User4 );
+    case User_5:                RETURN_AUX( m_User5 );
+    case User_6:                RETURN_AUX( m_User6 );
+    case User_7:                RETURN_AUX( m_User7 );
+    case User_8:                RETURN_AUX( m_User8 );
+    case User_9:                RETURN_AUX( m_User9 );
+
     default:
         wxASSERT_MSG( 0, wxT( "bad layer id" ) );
         return PANEL_SETUP_LAYERS_CTLs( nullptr,  nullptr, nullptr );
@@ -238,6 +259,7 @@ bool PANEL_SETUP_LAYERS::TransferDataToWindow()
     showPresets( m_enabledLayers );
     showLayerTypes();
     setMandatoryLayerCheckBoxes();
+    setUserDefinedLayerCheckBoxes();
 
     return true;
 }
@@ -247,6 +269,35 @@ void PANEL_SETUP_LAYERS::setMandatoryLayerCheckBoxes()
 {
     for( int layer : { F_CrtYd, B_CrtYd, Edge_Cuts, Margin } )
         setLayerCheckBox( layer, true );
+}
+
+
+void PANEL_SETUP_LAYERS::setUserDefinedLayerCheckBoxes()
+{
+    for( LSEQ seq = LSET::UserDefinedLayers().Seq();  seq;  ++seq )
+    {
+        PCB_LAYER_ID layer = *seq;
+        bool     state = m_pcb->IsLayerEnabled( layer );
+
+#ifdef HIDE_INACTIVE_LAYERS
+        // This code hides non-active copper layers, or redisplays hidden
+        // layers which are now needed.
+        PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( layer );
+
+        ctl.name->Show( state );
+        ctl.checkbox->Show( state );
+        ctl.choice->Show( state );
+#endif
+
+        setLayerCheckBox( layer, state );
+    }
+
+#ifdef HIDE_INACTIVE_LAYERS
+    // Send an size event to force sizers to be updated,
+    // because the number of copper layers can have changed.
+    wxSizeEvent evt_size( m_LayersListPanel->GetSize() );
+    m_LayersListPanel->GetEventHandler()->ProcessEvent( evt_size );
+#endif
 }
 
 
@@ -557,16 +608,27 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
         m_pcb->SetVisibleLayers( m_enabledLayers );
     }
 
-    for( LSEQ seq = LSET::AllCuMask().Seq();  seq;  ++seq )
+    for( LSEQ seq = LSET::AllLayersMask().Seq();  seq;  ++seq )
     {
         PCB_LAYER_ID  layer = *seq;
 
         if( m_enabledLayers[layer] )
         {
             m_pcb->SetLayerName( layer, GetLayerName( layer ) );
-            LAYER_T t = (LAYER_T) getLayerTypeIndex( layer );
-            m_pcb->SetLayerType( layer, t );
+
+            // Only copper layers have a definable type.
+            if( LSET::AllCuMask().Contains( layer ) )
+            {
+                LAYER_T t = (LAYER_T) getLayerTypeIndex( layer );
+                m_pcb->SetLayerType( layer, t );
+            }
         }
+    }
+
+    for( LSEQ seq = LSET::UserDefinedLayers().Seq();  seq;  ++seq )
+    {
+        if( m_enabledLayers[*seq] )
+            m_pcb->SetLayerName( *seq, GetLayerName( *seq ) );
     }
 
     // If some board items are deleted: Rebuild the connectivity,
@@ -618,7 +680,7 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
     std::vector<wxString>    names;
     wxTextCtrl*  ctl;
 
-    for( LSEQ seq = LSET::AllCuMask().Seq();  seq;  ++seq )
+    for( LSEQ seq = LSET::AllLayersMask().Seq();  seq;  ++seq )
     {
         PCB_LAYER_ID layer = *seq;
 
@@ -781,3 +843,62 @@ bool PANEL_SETUP_LAYERS::CheckCopperLayerCount( BOARD* aWorkingBoard, BOARD* aIm
 
     return okToDeleteCopperLayers;
 }
+
+
+void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
+{
+    LSEQ seq;
+    wxArrayString availableUserDefinedLayers;
+
+    for( seq = LSET::UserDefinedLayers().Seq();  seq;  ++seq )
+    {
+        wxCheckBox* checkBox = getCheckBox( *seq );
+
+        if( checkBox && checkBox->IsChecked() )
+            continue;
+
+        availableUserDefinedLayers.Add( LayerName( *seq ) );
+    }
+
+    wxCHECK( !availableUserDefinedLayers.IsEmpty(), /* void */ );
+
+    wxSingleChoiceDialog dlg( this, _( "Select user defined layer to add to board layer set" ),
+            _( "Select Layer" ), availableUserDefinedLayers );
+
+    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetStringSelection().IsEmpty() )
+        return;
+
+    for( seq = LSET::UserDefinedLayers().Seq();  seq;  ++seq )
+    {
+        if( LayerName( *seq ) == dlg.GetStringSelection() )
+            break;
+    }
+
+    wxCHECK( *seq >= User_1 && *seq <= User_9, /* void */ );
+
+    LSET newLayer( *seq );
+
+    m_enabledLayers |= newLayer;
+
+    PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( *seq );
+
+    wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ctl.name );
+
+    wxCHECK( textCtrl, /* void */ );
+    textCtrl->ChangeValue( LSET::Name( *seq ) );
+    ctl.name->Show( true );
+    ctl.checkbox->Show( true );
+    ctl.choice->Show( true );
+
+    wxSizeEvent evt_size( m_LayersListPanel->GetSize() );
+    m_LayersListPanel->GetEventHandler()->ProcessEvent( evt_size );
+
+    setLayerCheckBox( *seq, true );
+}
+
+
+void PANEL_SETUP_LAYERS::onUpdateAddUserDefinedLayer( wxUpdateUIEvent& event )
+{
+    event.Enable( m_PresetsChoice->GetSelection() == 0 );
+}
+

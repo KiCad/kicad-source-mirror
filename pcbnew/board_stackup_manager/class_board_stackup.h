@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2009-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,12 +30,13 @@
 #include <wx/string.h>
 #include <layers_id_colors_and_visibility.h>
 
+class BOARD;
 class BOARD_DESIGN_SETTINGS;
 class OUTPUTFORMATTER;
 
 // A enum to manage the different layers inside the stackup layers.
 // Note the stackup layers include both dielectric and some layers handled by the board editor
-// Therefore a stackup layer item is not exactely like a board layer
+// Therefore a stackup layer item is not exactly like a board layer
 enum BOARD_STACKUP_ITEM_TYPE
 {
     BS_ITEM_TYPE_UNDEFINED,     // For not yet initialized BOARD_STACKUP_ITEM item
@@ -53,7 +54,7 @@ enum BS_EDGE_CONNECTOR_CONSTRAINTS
 {
     BS_EDGE_CONNECTOR_NONE,     // No edge connector in board
     BS_EDGE_CONNECTOR_IN_USE,   // some edge connector in board
-    BS_EDGE_CONNECTOR_BEVELLED  // Some connector in board, and the connector must be bevelled
+    BS_EDGE_CONNECTOR_BEVELLED  // Some connector in board, and the connector must be beveled
 };
 
 
@@ -68,7 +69,7 @@ private:
     wxString m_Material;    /// type of material (for dielectric and solder mask)
     int m_Thickness;        /// the physical layer thickness in internal units
     bool m_ThicknessLocked; /// true for dielectric layers with a fixed thickness
-                            /// (for impendace controled purposes), unused for other layers
+                            /// (for impedance controlled purposes), unused for other layers
     double m_EpsilonR;      /// For dielectric (and solder mask) the dielectric constant
     double m_LossTangent;   /// For dielectric (and solder mask) the dielectric loss
 
@@ -93,18 +94,18 @@ public:
 
 private:
     BOARD_STACKUP_ITEM_TYPE m_Type;
-    wxString m_LayerName;   /// name of layer as shown in layer manager. Usefull to create reports
+    wxString m_LayerName;   /// name of layer as shown in layer manager. Useful to create reports
     wxString m_TypeName;    /// type name of layer (copper, silk screen, core, prepreg ...)
     wxString m_Color;       /// mainly for silkscreen and solder mask
     PCB_LAYER_ID m_LayerId; /// the layer id (F.Cu to B.Cu, F.Silk, B.silk, F.Mask, B.Mask)
-                            /// and UNDEFINED_LAYER (-1) for dielectic layers that are not
+                            /// and UNDEFINED_LAYER (-1) for dielectric layers that are not
                             /// really layers for the board editor
     int m_DielectricLayerId;/// the "layer" id for dielectric layers,
                             /// from 1 (top) to 31 (bottom)
                             /// (only 31 dielectric layers for 32 copper layers)
     /// List of dielectric parameters
     /// usually only one item, but in complex (microwave) boards, one can have
-    /// more than one dielectic layer between 2 copper layers, and therfore
+    /// more than one dielectric layer between 2 copper layers, and therefore
     /// more than one item in list
     std::vector<DIELECTRIC_PRMS> m_DielectricPrmsList;
 
@@ -127,11 +128,11 @@ public:
      */
     void RemoveDielectricPrms( int aDielectricPrmsIdx );
 
-    /// @return true if the layer has a meaningfull Epsilon R parameter
+    /// @return true if the layer has a meaningful Epsilon R parameter
     /// namely dielectric layers: dielectric and solder mask
     bool HasEpsilonRValue() const;
 
-    /// @return true if the layer has a meaningfull Dielectric Loss parameter
+    /// @return true if the layer has a meaningfully Dielectric Loss parameter
     /// namely dielectric layers: dielectric and solder mask
     bool HasLossTangentValue() const;
 
@@ -203,7 +204,7 @@ public:
  * they are solder mask, silk screen, copper and dielectric
  * Some other layers, used in fabrication, are not managed here because they
  * are not used to make a physical board itself
- * Note also there are a few other parameters realed to the physical stackup,
+ * Note also there are a few other parameters related to the physical stackup,
  * like finish type, impedance control and a few others
  */
 class BOARD_STACKUP
@@ -229,11 +230,11 @@ public:
      */
     bool m_HasThicknessConstrains;
 
-    /** If the board has edge connector cards, some constrains can be specifed
+    /** If the board has edge connector cards, some constrains can be specified
      * in job file:
      *  BS_EDGE_CONNECTOR_NONE = no edge connector
      *  BS_EDGE_CONNECTOR_IN_USE = board has edge connectors
-     *  BS_EDGE_CONNECTOR_BEVELLED = edge connectors are bevelled
+     *  BS_EDGE_CONNECTOR_BEVELLED = edge connectors are beveled
      */
     BS_EDGE_CONNECTOR_CONSTRAINTS m_EdgeConnectorConstraints;
 
@@ -291,7 +292,8 @@ public:
      * of copper layers to use to calculate a default dielectric thickness.
      * ((<= 0 to use all copper layers)
      */
-    void BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings, int aActiveCopperLayersCount = 0 );
+    void BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings,
+            int aActiveCopperLayersCount = 0 );
 
     /**
      * Writes the stackup info on board file

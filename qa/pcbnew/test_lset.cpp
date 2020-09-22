@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,12 +35,14 @@ struct LSETS_TO_TEST
     std::string expectedFmtBin;
 };
 
+
 const static std::vector<LSETS_TO_TEST> type_to_ext_cases = {
-    { LSET( 2, F_Cu, F_Fab ), "20000_00000001",
-            "010|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0001" },
-    { LSET( 3, In14_Cu, B_Adhes, Rescue ), "40001_00004000",
-            "100|0000_0000|0000_0001|0000_0000|0000_0000|0100_0000|0000_0000" }
+    { LSET( 2, F_Cu, F_Fab ), "0020000_00000001",
+            "0000|0000_0010|0000_0000|0000_0000|0000_0000|0000_0000|0000_0000|0000_0001" },
+    { LSET( 3, In14_Cu, B_Adhes, Rescue ), "8000001_00004000",
+      "1000|0000_0000|0000_0000|0000_0001|0000_0000|0000_0000|0100_0000|0000_0000" }
 };
+
 
 BOOST_AUTO_TEST_CASE( FmtHex )
 {
@@ -50,6 +52,7 @@ BOOST_AUTO_TEST_CASE( FmtHex )
     }
 }
 
+
 BOOST_AUTO_TEST_CASE( FmtBin )
 {
     for( const auto& c : type_to_ext_cases )
@@ -57,5 +60,6 @@ BOOST_AUTO_TEST_CASE( FmtBin )
         BOOST_CHECK_EQUAL( c.expectedFmtBin, c.lset.FmtBin() );
     }
 }
+
 
 BOOST_AUTO_TEST_SUITE_END()

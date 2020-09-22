@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,6 +17,10 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/stattext.h>
+#include <wx/button.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/checkbox.h>
@@ -27,153 +31,135 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #define ID_CRTYDFRONTCHECKBOX 1000
-#define ID_CRTYDFRONTNAME 1001
-#define ID_CRTYDFRONTCHOICE 1002
-#define ID_FABFRONTCHECKBOX 1003
-#define ID_FABFRONTNAME 1004
-#define ID_FABFRONTCHOICE 1005
-#define ID_ADHESFRONTCHECKBOX 1006
-#define ID_ADHESFRONTNAME 1007
-#define ID_ADHESFRONTCHOICE 1008
-#define ID_SOLDPFRONTCHECKBOX 1009
-#define ID_SOLDPFRONTNAME 1010
-#define ID_SOLDPFRONTCHOICE 1011
-#define ID_SILKSFRONTCHECKBOX 1012
-#define ID_SILKSFRONTNAME 1013
-#define ID_SILKSFRONTCHOICE 1014
-#define ID_MASKFRONTCHECKBOX 1015
-#define ID_MASKFRONTNAME 1016
-#define ID_MASKFRONTCHOICE 1017
-#define ID_FRONTCHECKBOX 1018
-#define ID_FRONTNAME 1019
-#define ID_FRONTCHOICE 1020
-#define ID_IN1CHECKBOX 1021
-#define ID_IN1NAME 1022
-#define ID_IN1CHOICE 1023
-#define ID_IN2CHECKBOX 1024
-#define ID_IN2NAME 1025
-#define ID_IN2CHOICE 1026
-#define ID_IN3CHECKBOX 1027
-#define ID_IN3NAME 1028
-#define ID_IN3CHOICE 1029
-#define ID_IN4CHECKBOX 1030
-#define ID_IN4NAME 1031
-#define ID_IN4CHOICE 1032
-#define ID_IN5CHECKBOX 1033
-#define ID_IN5NAME 1034
-#define ID_IN5CHOICE 1035
-#define ID_IN6CHECKBOX 1036
-#define ID_IN6NAME 1037
-#define ID_IN6CHOICE 1038
-#define ID_IN7CHECKBOX 1039
-#define ID_IN7NAME 1040
-#define ID_IN7CHOICE 1041
-#define ID_IN8CHECKBOX 1042
-#define ID_IN8NAME 1043
-#define ID_IN8CHOICE 1044
-#define ID_IN9CHECKBOX 1045
-#define ID_IN9NAME 1046
-#define ID_IN9CHOICE 1047
-#define ID_IN10CHECKBOX 1048
-#define ID_IN10NAME 1049
-#define ID_IN10CHOICE 1050
-#define ID_IN11CHECKBOX 1051
-#define ID_IN11NAME 1052
-#define ID_IN11CHOICE 1053
-#define ID_IN12CHECKBOX 1054
-#define ID_IN12NAME 1055
-#define ID_IN12CHOICE 1056
-#define ID_IN13CHECKBOX 1057
-#define ID_IN13NAME 1058
-#define ID_IN13CHOICE 1059
-#define ID_IN14CHECKBOX 1060
-#define ID_IN14NAME 1061
-#define ID_IN14CHOICE 1062
-#define ID_IN15CHECKBOX 1063
-#define ID_IN15NAME 1064
-#define ID_IN15CHOICE 1065
-#define ID_IN16CHECKBOX 1066
-#define ID_IN16NAME 1067
-#define ID_IN16CHOICE 1068
-#define ID_IN17CHECKBOX 1069
-#define ID_IN17NAME 1070
-#define ID_IN17CHOICE 1071
-#define ID_IN18CHECKBOX 1072
-#define ID_IN18NAME 1073
-#define ID_IN18CHOICE 1074
-#define ID_IN19CHECKBOX 1075
-#define ID_IN19NAME 1076
-#define ID_IN19CHOICE 1077
-#define ID_IN20CHECKBOX 1078
-#define ID_IN20NAME 1079
-#define ID_IN20CHOICE 1080
-#define ID_IN21CHECKBOX 1081
-#define ID_IN21NAME 1082
-#define ID_IN21CHOICE 1083
-#define ID_IN22CHECKBOX 1084
-#define ID_IN22NAME 1085
-#define ID_IN22CHOICE 1086
-#define ID_IN23CHECKBOX 1087
-#define ID_IN23NAME 1088
-#define ID_IN24CHECKBOX 1089
-#define ID_IN24NAME 1090
-#define ID_IN24CHOICE 1091
-#define ID_IN25CHECKBOX 1092
-#define ID_IN25NAME 1093
-#define ID_IN25CHOICE 1094
-#define ID_IN26CHECKBOX 1095
-#define ID_IN26NAME 1096
-#define ID_IN26CHOICE 1097
-#define ID_IN27CHECKBOX 1098
-#define ID_IN27NAME 1099
-#define ID_IN27CHOICE 1100
-#define ID_IN28CHECKBOX 1101
-#define ID_IN28NAME 1102
-#define ID_IN28CHOICE 1103
-#define ID_IN29CHECKBOX 1104
-#define ID_IN29NAME 1105
-#define ID_IN29CHOICE 1106
-#define ID_IN30CHECKBOX 1107
-#define ID_IN30NAME 1108
-#define ID_IN30CHOICE 1109
-#define ID_BACKCHECKBOX 1110
-#define ID_BACKNAME 1111
-#define ID_BACKCHOICE 1112
-#define ID_MASKBACKCHECKBOX 1113
-#define ID_MASKBACKNAME 1114
-#define ID_MASKBACKCHOICE 1115
-#define ID_SILKSBACKCHECKBOX 1116
-#define ID_SILKSBACKNAME 1117
-#define ID_SILKSBACKCHOICE 1118
-#define ID_SOLDPBACKCHECKBOX 1119
-#define ID_SOLDPBACKNAME 1120
-#define ID_SOLDPBACKCHOICE 1121
-#define ID_ADHESBACKCHECKBOX 1122
-#define ID_ADHESBACKNAME 1123
-#define ID_ADHESBACKCHOICE 1124
-#define ID_FABBACKCHECKBOX 1125
-#define ID_FABBACKNAME 1126
-#define ID_FABBACKCHOICE 1127
-#define ID_CRTYDBACKCHECKBOX 1128
-#define ID_CRTYDBACKNAME 1129
-#define ID_CRTYDBACKCHOICE 1130
-#define ID_PCBEDGESCHECKBOX 1131
-#define ID_PCBEDGESNAME 1132
-#define ID_PCBEDGESCHOICE 1133
-#define ID_MARGINCHECKBOX 1134
-#define ID_MARGINNAME 1135
-#define ID_ECO2CHOICE 1136
-#define ID_ECO2CHECKBOX 1137
-#define ID_ECO2NAME 1138
-#define ID_ECO1CHECKBOX 1139
-#define ID_ECO1NAME 1140
-#define ID_ECO1CHOICE 1141
-#define ID_COMMENTSCHECKBOX 1142
-#define ID_COMMENTSNAME 1143
-#define ID_COMMENTSCHOICE 1144
-#define ID_DRAWINGSCHECKBOX 1145
-#define ID_DRAWINGSNAME 1146
-#define ID_DRAWINGSCHOICE 1147
+#define ID_CRTYDFRONTCHOICE 1001
+#define ID_FABFRONTCHECKBOX 1002
+#define ID_FABFRONTCHOICE 1003
+#define ID_ADHESFRONTCHECKBOX 1004
+#define ID_ADHESFRONTCHOICE 1005
+#define ID_SOLDPFRONTCHECKBOX 1006
+#define ID_SOLDPFRONTCHOICE 1007
+#define ID_SILKSFRONTCHECKBOX 1008
+#define ID_SILKSFRONTCHOICE 1009
+#define ID_MASKFRONTCHECKBOX 1010
+#define ID_MASKFRONTCHOICE 1011
+#define ID_FRONTCHECKBOX 1012
+#define ID_FRONTNAME 1013
+#define ID_FRONTCHOICE 1014
+#define ID_IN1CHECKBOX 1015
+#define ID_IN1NAME 1016
+#define ID_IN1CHOICE 1017
+#define ID_IN2CHECKBOX 1018
+#define ID_IN2NAME 1019
+#define ID_IN2CHOICE 1020
+#define ID_IN3CHECKBOX 1021
+#define ID_IN3NAME 1022
+#define ID_IN3CHOICE 1023
+#define ID_IN4CHECKBOX 1024
+#define ID_IN4NAME 1025
+#define ID_IN4CHOICE 1026
+#define ID_IN5CHECKBOX 1027
+#define ID_IN5NAME 1028
+#define ID_IN5CHOICE 1029
+#define ID_IN6CHECKBOX 1030
+#define ID_IN6NAME 1031
+#define ID_IN6CHOICE 1032
+#define ID_IN7CHECKBOX 1033
+#define ID_IN7NAME 1034
+#define ID_IN7CHOICE 1035
+#define ID_IN8CHECKBOX 1036
+#define ID_IN8NAME 1037
+#define ID_IN8CHOICE 1038
+#define ID_IN9CHECKBOX 1039
+#define ID_IN9NAME 1040
+#define ID_IN9CHOICE 1041
+#define ID_IN10CHECKBOX 1042
+#define ID_IN10NAME 1043
+#define ID_IN10CHOICE 1044
+#define ID_IN11CHECKBOX 1045
+#define ID_IN11NAME 1046
+#define ID_IN11CHOICE 1047
+#define ID_IN12CHECKBOX 1048
+#define ID_IN12NAME 1049
+#define ID_IN12CHOICE 1050
+#define ID_IN13CHECKBOX 1051
+#define ID_IN13NAME 1052
+#define ID_IN13CHOICE 1053
+#define ID_IN14CHECKBOX 1054
+#define ID_IN14NAME 1055
+#define ID_IN14CHOICE 1056
+#define ID_IN15CHECKBOX 1057
+#define ID_IN15NAME 1058
+#define ID_IN15CHOICE 1059
+#define ID_IN16CHECKBOX 1060
+#define ID_IN16NAME 1061
+#define ID_IN16CHOICE 1062
+#define ID_IN17CHECKBOX 1063
+#define ID_IN17NAME 1064
+#define ID_IN17CHOICE 1065
+#define ID_IN18CHECKBOX 1066
+#define ID_IN18NAME 1067
+#define ID_IN18CHOICE 1068
+#define ID_IN19CHECKBOX 1069
+#define ID_IN19NAME 1070
+#define ID_IN19CHOICE 1071
+#define ID_IN20CHECKBOX 1072
+#define ID_IN20NAME 1073
+#define ID_IN20CHOICE 1074
+#define ID_IN21CHECKBOX 1075
+#define ID_IN21NAME 1076
+#define ID_IN21CHOICE 1077
+#define ID_IN22CHECKBOX 1078
+#define ID_IN22NAME 1079
+#define ID_IN22CHOICE 1080
+#define ID_IN23CHECKBOX 1081
+#define ID_IN23NAME 1082
+#define ID_IN24CHECKBOX 1083
+#define ID_IN24NAME 1084
+#define ID_IN24CHOICE 1085
+#define ID_IN25CHECKBOX 1086
+#define ID_IN25NAME 1087
+#define ID_IN25CHOICE 1088
+#define ID_IN26CHECKBOX 1089
+#define ID_IN26NAME 1090
+#define ID_IN26CHOICE 1091
+#define ID_IN27CHECKBOX 1092
+#define ID_IN27NAME 1093
+#define ID_IN27CHOICE 1094
+#define ID_IN28CHECKBOX 1095
+#define ID_IN28NAME 1096
+#define ID_IN28CHOICE 1097
+#define ID_IN29CHECKBOX 1098
+#define ID_IN29NAME 1099
+#define ID_IN29CHOICE 1100
+#define ID_IN30CHECKBOX 1101
+#define ID_IN30NAME 1102
+#define ID_IN30CHOICE 1103
+#define ID_BACKCHECKBOX 1104
+#define ID_BACKNAME 1105
+#define ID_BACKCHOICE 1106
+#define ID_MASKBACKCHECKBOX 1107
+#define ID_MASKBACKCHOICE 1108
+#define ID_SILKSBACKCHECKBOX 1109
+#define ID_SILKSBACKCHOICE 1110
+#define ID_SOLDPBACKCHECKBOX 1111
+#define ID_SOLDPBACKCHOICE 1112
+#define ID_ADHESBACKCHECKBOX 1113
+#define ID_ADHESBACKCHOICE 1114
+#define ID_FABBACKCHECKBOX 1115
+#define ID_FABBACKCHOICE 1116
+#define ID_CRTYDBACKCHECKBOX 1117
+#define ID_CRTYDBACKCHOICE 1118
+#define ID_PCBEDGESCHECKBOX 1119
+#define ID_PCBEDGESCHOICE 1120
+#define ID_MARGINCHECKBOX 1121
+#define ID_ECO2CHOICE 1122
+#define ID_ECO2CHECKBOX 1123
+#define ID_ECO1CHECKBOX 1124
+#define ID_ECO1CHOICE 1125
+#define ID_COMMENTSCHECKBOX 1126
+#define ID_COMMENTSCHOICE 1127
+#define ID_DRAWINGSCHECKBOX 1128
+#define ID_DRAWINGSCHOICE 1129
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_SETUP_LAYERS_BASE
@@ -186,26 +172,27 @@ class PANEL_SETUP_LAYERS_BASE : public wxPanel
 		wxChoice* m_PresetsChoice;
 		wxStaticText* m_staticTextCopperLayers;
 		wxChoice* m_CopperLayersChoice;
+		wxButton* m_addUserDefinedLayerButton;
 		wxStaticLine* m_staticline2;
 		wxScrolledWindow* m_LayersListPanel;
 		wxFlexGridSizer* m_LayerListFlexGridSizer;
 		wxCheckBox* m_CrtYdFrontCheckBox;
-		wxStaticText* m_CrtYdFrontName;
+		wxTextCtrl* m_CrtYdFrontName;
 		wxStaticText* m_CrtYdFrontStaticText;
 		wxCheckBox* m_FabFrontCheckBox;
-		wxStaticText* m_FabFrontName;
+		wxTextCtrl* m_FabFrontName;
 		wxStaticText* m_FabFrontStaticText;
 		wxCheckBox* m_AdhesFrontCheckBox;
-		wxStaticText* m_AdhesFrontName;
+		wxTextCtrl* m_AdhesFrontName;
 		wxStaticText* m_AdhesFrontStaticText;
 		wxCheckBox* m_SoldPFrontCheckBox;
-		wxStaticText* m_SoldPFrontName;
+		wxTextCtrl* m_SoldPFrontName;
 		wxStaticText* m_SoldPFrontStaticText;
 		wxCheckBox* m_SilkSFrontCheckBox;
-		wxStaticText* m_SilkSFrontName;
+		wxTextCtrl* m_SilkSFrontName;
 		wxStaticText* m_SilkSFrontStaticText;
 		wxCheckBox* m_MaskFrontCheckBox;
-		wxStaticText* m_MaskFrontName;
+		wxTextCtrl* m_MaskFrontName;
 		wxStaticText* m_MaskFrontStaticText;
 		wxCheckBox* m_FrontCheckBox;
 		wxTextCtrl* m_FrontName;
@@ -304,45 +291,74 @@ class PANEL_SETUP_LAYERS_BASE : public wxPanel
 		wxTextCtrl* m_BackName;
 		wxChoice* m_BackChoice;
 		wxCheckBox* m_MaskBackCheckBox;
-		wxStaticText* m_MaskBackName;
+		wxTextCtrl* m_MaskBackName;
 		wxStaticText* m_MaskBackStaticText;
 		wxCheckBox* m_SilkSBackCheckBox;
-		wxStaticText* m_SilkSBackName;
+		wxTextCtrl* m_SilkSBackName;
 		wxStaticText* m_SilkSBackStaticText;
 		wxCheckBox* m_SoldPBackCheckBox;
-		wxStaticText* m_SoldPBackName;
+		wxTextCtrl* m_SoldPBackName;
 		wxStaticText* m_SoldPBackStaticText;
 		wxCheckBox* m_AdhesBackCheckBox;
-		wxStaticText* m_AdhesBackName;
+		wxTextCtrl* m_AdhesBackName;
 		wxStaticText* m_AdhesBackStaticText;
 		wxCheckBox* m_FabBackCheckBox;
-		wxStaticText* m_FabBackName;
+		wxTextCtrl* m_FabBackName;
 		wxStaticText* m_FabBackStaticText;
 		wxCheckBox* m_CrtYdBackCheckBox;
-		wxStaticText* m_CrtYdBackName;
+		wxTextCtrl* m_CrtYdBackName;
 		wxStaticText* m_CrtYdBackStaticText;
 		wxCheckBox* m_PCBEdgesCheckBox;
-		wxStaticText* m_PCBEdgesName;
+		wxTextCtrl* m_PCBEdgesName;
 		wxStaticText* m_PCBEdgesStaticText;
 		wxCheckBox* m_MarginCheckBox;
-		wxStaticText* m_MarginName;
+		wxTextCtrl* m_MarginName;
 		wxStaticText* m_MarginStaticText;
 		wxCheckBox* m_Eco1CheckBox;
-		wxStaticText* m_Eco1Name;
+		wxTextCtrl* m_Eco1Name;
 		wxStaticText* m_Eco1StaticText;
 		wxCheckBox* m_Eco2CheckBox;
-		wxStaticText* m_Eco2Name;
+		wxTextCtrl* m_Eco2Name;
 		wxStaticText* m_Eco2StaticText;
 		wxCheckBox* m_CommentsCheckBox;
-		wxStaticText* m_CommentsName;
+		wxTextCtrl* m_CommentsName;
 		wxStaticText* m_CommentsStaticText;
 		wxCheckBox* m_DrawingsCheckBox;
-		wxStaticText* m_DrawingsName;
+		wxTextCtrl* m_DrawingsName;
 		wxStaticText* m_DrawingsStaticText;
+		wxCheckBox* m_User1CheckBox;
+		wxTextCtrl* m_User1Name;
+		wxStaticText* m_User1StaticText;
+		wxCheckBox* m_User2CheckBox;
+		wxTextCtrl* m_User2Name;
+		wxStaticText* m_User2StaticText;
+		wxCheckBox* m_User3CheckBox;
+		wxTextCtrl* m_User3Name;
+		wxStaticText* m_User3StaticText;
+		wxCheckBox* m_User4CheckBox;
+		wxTextCtrl* m_User4Name;
+		wxStaticText* m_User4StaticText;
+		wxCheckBox* m_User5CheckBox;
+		wxTextCtrl* m_User5Name;
+		wxStaticText* m_User5StaticText;
+		wxCheckBox* m_User6CheckBox;
+		wxTextCtrl* m_User6Name;
+		wxStaticText* m_User6StaticText;
+		wxCheckBox* m_User7CheckBox;
+		wxTextCtrl* m_User7Name;
+		wxStaticText* m_User7StaticText;
+		wxCheckBox* m_User8CheckBox;
+		wxTextCtrl* m_User8Name;
+		wxStaticText* m_User8StaticText;
+		wxCheckBox* m_User9CheckBox;
+		wxTextCtrl* m_User9Name;
+		wxStaticText* m_User9StaticText;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPresetsChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCopperLayersChoice( wxCommandEvent& event ) { event.Skip(); }
+		virtual void addUserDefinedLayer( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUpdateAddUserDefinedLayer( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void DenyChangeCheckBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
 

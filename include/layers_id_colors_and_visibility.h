@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2007-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,12 +36,9 @@
 #include <wx/string.h>
 #include <macros.h>
 
-class BOARD;
-
 
 /**
- * Type LAYER_NUM
- * can be replaced with int and removed.  Until then, it is something you can increment,
+ * This can be replaced with int and removed.  Until then, it is something you can increment,
  * and its meaning is only advisory but can extend beyond PCB layers into view layers
  * and gerber layers.
  */
@@ -51,7 +48,7 @@ typedef int     LAYER_NUM;
  * A quick note on layer IDs:
  *
  * The layers are stored in separate enums so that certain functions can
- * take in the enums as datatypes and don't have to know about layers from
+ * take in the enums as data types and don't have to know about layers from
  * other applications.
  *
  * Layers that are shared between applications should be in the GAL_LAYER_ID enum.
@@ -64,11 +61,10 @@ typedef int     LAYER_NUM;
 
 
 /**
- * Enum PCB_LAYER_ID
- * This is the definition of all layers used in Pcbnew
- * The PCB layer types are fixed at value 0 through LAYER_ID_COUNT,
- * to ensure compatibility with legacy board files.
+ * This is the definition of all layers used in Pcbnew.
  *
+ * The PCB layer types are fixed at value 0 through LAYER_ID_COUNT to ensure compatibility
+ * with legacy board files.
  */
 enum PCB_LAYER_ID: int
 {
@@ -119,22 +115,35 @@ enum PCB_LAYER_ID: int
     F_SilkS,
 
     B_Mask,
-    F_Mask,
+    F_Mask,         // 39
 
     Dwgs_User,
     Cmts_User,
     Eco1_User,
     Eco2_User,
     Edge_Cuts,
-    Margin,
+    Margin,         // 45
 
     B_CrtYd,
     F_CrtYd,
 
     B_Fab,
-    F_Fab,
+    F_Fab,          // 49
 
-    Rescue,
+    // User definable layers.
+    User_1,
+    User_2,
+    User_3,
+    User_4,
+    User_5,
+    User_6,
+    User_7,
+    User_8,
+    User_9,
+
+    Rescue,         // 59
+
+    // Four reserved layers (60 - 63) for future expansion within the 64 bit integer limit.
 
     PCB_LAYER_ID_COUNT
 };
@@ -204,7 +213,7 @@ enum GAL_LAYER_ID: int
     LAYER_AUX_ITEMS,            ///< Auxiliary items (guides, rule, etc)
     LAYER_DRAW_BITMAPS,         ///< to handle and draw images bitmaps
 
-    /// This is the end of the layers used for visibility bitmasks in Pcbnew
+    /// This is the end of the layers used for visibility bit masks in Pcbnew
     /// There can be at most 32 layers above here.
     GAL_LAYER_ID_BITMASK_END,
 
@@ -424,8 +433,7 @@ typedef std::vector<PCB_LAYER_ID>   BASE_SEQ;
 
 
 /**
- * LSEQ
- * is a sequence (and therefore also a set) of PCB_LAYER_IDs.  A sequence provides
+ * LSEQ is a sequence (and therefore also a set) of PCB_LAYER_IDs.  A sequence provides
  * a certain order.
  * <p>
  * It can also be used as an iterator:
@@ -474,8 +482,7 @@ typedef std::bitset<PCB_LAYER_ID_COUNT>     BASE_SET;
 
 
 /**
- * LSET
- * is a set of PCB_LAYER_IDs.  It can be converted to numerous purpose LSEQs using
+ * LSET is a set of PCB_LAYER_IDs.  It can be converted to numerous purpose LSEQs using
  * the various member functions, most of which are based on Seq(). The advantage
  * of converting to LSEQ using purposeful code, is it removes any dependency
  * on order/sequence inherent in this set.
@@ -488,15 +495,14 @@ public:
     // That excludes  "LSET s = 0;" and excludes "LSET s = -1;", etc.
     // LSET s = 0;  needs to be removed from the code, this accomplishes that.
     // Remember LSET( PCB_LAYER_ID(0) ) sets bit 0, so "LSET s = 0;" is illegal
-    // to prevent that surprize.  Therefore LSET's constructor suite is significantly
+    // to prevent that surprise.  Therefore LSET's constructor suite is significantly
     // different than the base class from which it is derived.
 
     // Other member functions (non-constructor functions) are identical to the base
     // class's and therefore are re-used from the base class.
 
     /**
-     * Constructor LSET()
-     * creates an empty (cleared) set.
+     * Create an empty (cleared) set.
      */
     LSET() :
         BASE_SET()  // all bits are set to zero in BASE_SET()
@@ -509,8 +515,7 @@ public:
     }
 
     /**
-     * Constructor LSET( PCB_LAYER_ID )
-     * takes a PCB_LAYER_ID and sets that bit.  This makes the following code into
+     * Take a PCB_LAYER_ID and sets that bit.  This makes the following code into
      * a bug:
      *
      * <code>   LSET s = 0;  </code>
@@ -523,22 +528,20 @@ public:
      *
      * for an empty set.
      */
-    LSET( PCB_LAYER_ID aLayer ) :    // PCB_LAYER_ID deliberately exludes int and relatives
+    LSET( PCB_LAYER_ID aLayer ) :    // PCB_LAYER_ID deliberately excludes int and relatives
         BASE_SET()
     {
         set( aLayer );
     }
 
     /**
-     * Constructor LSET( const PCB_LAYER_ID* aArray, unsigned aCount )
-     * works well with an array or LSEQ.
+     * Create an array or LSEQ.
      */
     LSET( const PCB_LAYER_ID* aArray, unsigned aCount );
 
     /**
-     * Constructor LSET( unsigned, PCB_LAYER_ID, ...)
-     * takes one or more PCB_LAYER_IDs in the argument list to construct
-     * the set.  Typically only used in static construction.
+     * Take one or more PCB_LAYER_IDs in the argument list to construct the set.  Typically
+     * only used in static construction.
      *
      * @param aIdCount is the number of PCB_LAYER_IDs which follow.
      * @param aFirst is the first included in @a aIdCount and must always be present, and can
@@ -547,7 +550,7 @@ public:
      *
      *  Parameter is 'int' to avoid va_start undefined behavior.
      */
-    LSET( unsigned aIdCount, int aFirst, ... );  // args chosen to prevent LSET( int ) from compiling
+    LSET( unsigned aIdCount, int aFirst, ... ); // args chosen to prevent LSET( int ) from compiling
 
     /**
      * See if the layer set contains a PCB layer.
@@ -561,106 +564,93 @@ public:
     }
 
     /**
-     * Function Name
-     * returns the fixed name association with aLayerId.
+     * Return the fixed name association with aLayerId.
      */
     static const wxChar* Name( PCB_LAYER_ID aLayerId );
 
     /**
-     * Function InternalCuMask()
-     * returns a complete set of internal copper layers, which is all Cu layers
+     * Return a complete set of internal copper layers which is all Cu layers
      * except F_Cu and B_Cu.
      */
     static LSET InternalCuMask();
 
     /**
-     * Function FrontAssembly()
-     * returns a complete set of all top assembly layers, which is all F_SilkS
-     * and F_Mask
+     * Return a complete set of all top assembly layers which is all F_SilkS and F_Mask
      */
     static LSET FrontAssembly();
 
     /**
-     * Function BackAssembly()
-     * returns a complete set of all bottom assembly layers, which is all B_SilkS
-     * and B_Mask
+     * Return a complete set of all bottom assembly layers which is all B_SilkS and B_Mask
      */
     static LSET BackAssembly();
 
     /**
-     * Function AllCuMask
-     * returns a mask holding the requested number of Cu PCB_LAYER_IDs.
+     * Return a mask holding the requested number of Cu PCB_LAYER_IDs.
      */
     static LSET AllCuMask( int aCuLayerCount = MAX_CU_LAYERS );
 
     /**
-     * Function ExternalCuMask
-     * returns a mask holding the Front and Bottom layers.
+     * Return a mask holding the Front and Bottom layers.
      */
     static LSET ExternalCuMask();
 
     /**
-     * Function AllNonCuMask
-     * returns a mask holding all layer minus CU layers.
+     * Return a mask holding all layer minus CU layers.
      */
     static LSET AllNonCuMask();
 
     static LSET AllLayersMask();
 
     /**
-     * Function FrontTechMask
-     * returns a mask holding all technical layers (no CU layer) on front side.
+     * Return a mask holding all technical layers (no CU layer) on front side.
      */
     static LSET FrontTechMask();
 
     /**
-     * Function FrontBoardTechMask
-     * returns a mask holding technical layers used in a board fabrication
+     * Return a mask holding technical layers used in a board fabrication
      * (no CU layer) on front side.
      */
     static LSET FrontBoardTechMask();
 
     /**
-     * Function BackTechMask
-     * returns a mask holding all technical layers (no CU layer) on back side.
+     * Return a mask holding all technical layers (no CU layer) on back side.
      */
     static LSET BackTechMask();
 
     /**
-     * Function BackBoardTechMask
-     * returns a mask holding technical layers used in a board fabrication
+     * Return a mask holding technical layers used in a board fabrication
      * (no CU layer) on Back side.
      */
     static LSET BackBoardTechMask();
 
     /**
-     * Function AllTechMask
-     * returns a mask holding all technical layers (no CU layer) on both side.
+     * Return a mask holding all technical layers (no CU layer) on both side.
      */
     static LSET AllTechMask();
 
     /**
-     * Function AllTechMask
-     * returns a mask holding board technical layers (no CU layer) on both side.
+     * Return a mask holding board technical layers (no CU layer) on both side.
      */
     static LSET AllBoardTechMask();
 
     /**
-     * Function FrontMask
-     * returns a mask holding all technical layers and the external CU layer on front side.
+     * Return a mask holding all technical layers and the external CU layer on front side.
      */
     static LSET FrontMask();
 
     /**
-     * Function BackMask
-     * returns a mask holding all technical layers and the external CU layer on back side.
+     * Return a mask holding all technical layers and the external CU layer on back side.
      */
     static LSET BackMask();
 
     static LSET UserMask();
 
     /**
-     * Function ForbiddenFootprintLayers
+     * Return a mask with all of the allowable user defined layers.
+     */
+    static LSET UserDefinedLayers();
+
+    /**
      * Layers which are not allowed within footprint definitions.  Currently internal
      * copper layers, Edge.Cuts and Margin.
      */
@@ -668,24 +658,21 @@ public:
     static LSET ForbiddenFootprintLayers();
 
     /**
-     * Function ForbiddenTextLayers
-     * Layers which are now allowed to have text on them.  Currently Edge.Cuts and Margin.
+     * Layers which are allowed to have text on them.  Currently Edge.Cuts and Margin.
      */
     static LSET ForbiddenTextLayers();
 
     /**
-     * Function CuStack
-     * returns a sequence of copper layers in starting from the front/top
+     * Return a sequence of copper layers in starting from the front/top
      * and extending to the back/bottom.  This specific sequence is depended upon
      * in numerous places.
      */
     LSEQ CuStack() const;
 
     /**
-     * Function Technicals
-     * returns a sequence of technical layers.  A sequence provides a certain
-     * order.
-     * @param aSubToOmit is the subset of the techical layers to omit, defaults to none.
+     * Return a sequence of technical layers.  A sequence provides a certain order.
+     *
+     * @param aSubToOmit is the subset of the technical layers to omit, defaults to none.
      */
     LSEQ Technicals( LSET aSubToOmit = LSET() ) const;
 
@@ -698,8 +685,7 @@ public:
     LSEQ UIOrder() const;
 
     /**
-     * Function Seq
-     * returns an LSEQ from the union of this LSET and a desired sequence.  The LSEQ
+     * Return an LSEQ from the union of this LSET and a desired sequence.  The LSEQ
      * element will be in the same sequence as aWishListSequence if they are present.
      * @param aWishListSequence establishes the order of the returned LSEQ, and the LSEQ will only
      * contain PCB_LAYER_IDs which are present in this set.
@@ -708,8 +694,7 @@ public:
     LSEQ Seq( const PCB_LAYER_ID* aWishListSequence, unsigned aCount ) const;
 
     /**
-     * Function Seq
-     * returns a LSEQ from this LSET in ascending PCB_LAYER_ID order.  Each LSEQ
+     * Return a LSEQ from this LSET in ascending PCB_LAYER_ID order.  Each LSEQ
      * element will be in the same sequence as in PCB_LAYER_ID and only present
      * in the resultant LSEQ if present in this set.  Therefore the sequence is
      * subject to change, use it only when enumeration and not order is important.
@@ -717,21 +702,18 @@ public:
     LSEQ Seq() const;
 
     /**
-     * Function SeqStackBottom2Top
-     * returns the sequence that is typical for a bottom-to-top stack-up.
+     * Return the sequence that is typical for a bottom-to-top stack-up.
      * For instance, to plot multiple layers in a single image, the top layers output last.
      */
     LSEQ SeqStackupBottom2Top() const;
 
     /**
-     * Function FmtHex
-     * returns a hex string showing contents of this LSEQ.
+     * Return a hex string showing contents of this LSEQ.
      */
     std::string FmtHex() const;
 
     /**
-     * Function ParseHex
-     * understands the output of FmtHex() and replaces this set's values
+     * Convert the output of FmtHex() and replaces this set's values
      * with those given in the input string.  Parsing stops at the first
      * non hex ASCII byte, except that marker bytes output from FmtHex are
      * not terminators.
@@ -740,8 +722,7 @@ public:
     int ParseHex( const char* aStart, int aCount );
 
     /**
-     * Function FmtBin
-     * returns a binary string showing contents of this LSEQ.
+     * Return a binary string showing contents of this LSEQ.
      */
     std::string FmtBin() const;
 
@@ -762,11 +743,10 @@ private:
 
 
 /**
- * Function IsValidLayer
- * tests whether a given integer is a valid layer index, i.e. can
+ * Test whether a given integer is a valid layer index, i.e. can
  * be safely put in a PCB_LAYER_ID
- * @param aLayerId = Layer index to test. It can be an int, so its
- * useful during I/O
+ *
+ * @param aLayerId = Layer index to test. It can be an int, so its useful during I/O
  * @return true if aLayerIndex is a valid layer index
  */
 inline bool IsValidLayer( LAYER_NUM aLayerId )
@@ -775,10 +755,10 @@ inline bool IsValidLayer( LAYER_NUM aLayerId )
 }
 
 /**
- * Function IsPcbLayer
- * tests whether a layer is a valid layer for pcbnew
+ * Test whether a layer is a valid layer for Pcbnew
+ *
  * @param aLayer = Layer to test
- * @return true if aLayer is a layer valid in pcbnew
+ * @return true if aLayer is a layer valid in Pcbnew
  */
 inline bool IsPcbLayer( LAYER_NUM aLayer )
 {
@@ -786,8 +766,8 @@ inline bool IsPcbLayer( LAYER_NUM aLayer )
 }
 
 /**
- * Function IsCopperLayer
- * tests whether a layer is a copper layer
+ * Tests whether a layer is a copper layer.
+ *
  * @param aLayerId = Layer  to test
  * @return true if aLayer is a valid copper layer
  */
@@ -797,8 +777,8 @@ inline bool IsCopperLayer( LAYER_NUM aLayerId )
 }
 
 /**
- * Function IsNonCopperLayer
- * tests whether a layer is a non copper layer
+ * Test whether a layer is a non copper layer.
+ *
  * @param aLayerId = Layer to test
  * @return true if aLayer is a non copper layer
  */
@@ -808,8 +788,8 @@ inline bool IsNonCopperLayer( LAYER_NUM aLayerId )
 }
 
 /**
- * Function IsUserLayer
- * tests whether a layer is a non copper and a non tech layer
+ * Test whether a layer is a non copper and a non tech layer.
+ *
  * @param aLayerId = Layer to test
  * @return true if aLayer is a user layer
  */
@@ -818,14 +798,18 @@ inline bool IsUserLayer( PCB_LAYER_ID aLayerId )
     return aLayerId >= Dwgs_User && aLayerId <= Eco2_User;
 }
 
-/* IMPORTANT: If a layer is not a front layer not necessarily is true
+/*
+   @todo Where does this comment actually belong?
+
+   IMPORTANT: If a layer is not a front layer not necessarily is true
    the converse. The same hold for a back layer.
    So a layer can be:
    - Front
    - Back
    - Neither (internal or auxiliary)
 
-   The check most frequent is for back layers, since it involves flips */
+   The check most frequent is for back layers, since it involves flips
+*/
 
 
 /**
@@ -875,7 +859,6 @@ inline bool IsBackLayer( PCB_LAYER_ID aLayerId )
 
 
 /**
- * Function FlippedLayerNumber
  * @return the layer number after flipping an item
  * some (not all) layers: external copper, and paired layers( Mask, Paste, solder ... )
  * are swapped between front and back sides
@@ -887,7 +870,8 @@ inline bool IsBackLayer( PCB_LAYER_ID aLayerId )
 PCB_LAYER_ID FlipLayer( PCB_LAYER_ID aLayerId, int aCopperLayersCount = 0 );
 
 /**
- * Calculate the mask layer when flipping a footprint
+ * Calculate the mask layer when flipping a footprint.
+ *
  * BACK and FRONT copper layers, mask, paste, solder layers are swapped
  * internal layers are flipped only if the copper layers count is known
  * @param aMask = the LSET to flip
@@ -918,8 +902,8 @@ inline int GetNetnameLayer( int aLayer )
 }
 
 /**
- * Function IsNetnameLayer
- * tests whether a layer is a netname layer
+ * Test whether a layer is a netname layer.
+ *
  * @param aLayer = Layer to test
  * @return true if aLayer is a valid netname layer
  */
@@ -944,7 +928,8 @@ inline bool IsDCodeLayer( int aLayer )
 
 
 /**
- * Checks if the given layer is "net copper", meaning it is eligible for net coloring
+ * Checks if the given layer is "net copper", meaning it is eligible for net coloring.
+ *
  * @param aLayer is the layer to test
  * @return true if the layer is one that participates in net coloring
  */
