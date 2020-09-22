@@ -33,6 +33,7 @@
 #include <dialogs/wx_html_report_box.h>
 #include <drc/drc_engine.h>
 #include <dialogs/panel_setup_rules_base.h>
+#include <dialogs/dialog_constraints_reporter.h>
 #include "pcb_inspection_tool.h"
 
 
@@ -304,6 +305,154 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     r->Flush();
 
     m_inspectClearanceDialog->Show( true );
+    return 0;
+}
+
+
+int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
+{
+    SELECTION_TOOL*         selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const PCBNEW_SELECTION& selection = selTool->GetSelection();
+
+    if( selection.Size() != 1 )
+    {
+        m_frame->ShowInfoBarError( _( "Select an item for a constraints resolution report." ) );
+        return 0;
+    }
+
+    if( m_inspectConstraintsDialog == nullptr )
+    {
+        m_inspectConstraintsDialog = std::make_unique<DIALOG_CONSTRAINTS_REPORTER>( m_frame );
+        m_inspectConstraintsDialog->SetTitle( _( "Constraints Report" ) );
+
+        m_inspectConstraintsDialog->Connect( wxEVT_CLOSE_WINDOW,
+                    wxCommandEventHandler( PCB_INSPECTION_TOOL::onInspectConstraintsDialogClosed ),
+                    nullptr, this );
+    }
+
+    m_inspectConstraintsDialog->DeleteAllPages();
+
+    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
+    DRC_ENGINE  drcEngine( m_frame->GetBoard(), &m_frame->GetBoard()->GetDesignSettings() );
+
+    try
+    {
+        drcEngine.InitEngine( m_frame->Prj().AbsolutePath( "drc-rules" ) );
+    }
+    catch( PARSE_ERROR& pe )
+    {
+        m_frame->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
+                                       pe.lineNumber, pe.byteIndex );
+        return 1;
+    }
+
+    if( item->Type() == PCB_TRACE_T )
+    {
+        WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( "Track Width" );
+
+        r->Report( _( "<h7>Track width resolution for:</h7>" ) );
+        r->Report( wxString::Format( _( "<ul><li>%s</li></ul>" ),
+                                     item->GetSelectMenuText( r->GetUnits() ) ) );
+        r->Report( "" );
+
+        auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_TRACK_WIDTH, item,
+                                                       nullptr, UNDEFINED_LAYER, r );
+
+        wxString min = _( "undefined" );
+        wxString max = _( "undefined" );
+
+        if( constraint.m_Value.HasMin() )
+            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
+
+        if( constraint.m_Value.HasMax() )
+            max = StringFromValue( r->GetUnits(), constraint.m_Value.Max(), true );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Width constraints: min %s max %s." ),
+                                     min,
+                                     max ) );
+        r->Flush();
+    }
+
+    if( item->Type() == PCB_VIA_T )
+    {
+        WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( "Via Diameter" );
+
+        r->Report( _( "<h7>Via diameter resolution for:</h7>" ) );
+        r->Report( wxString::Format( _( "<ul><li>%s</li></ul>" ),
+                                     item->GetSelectMenuText( r->GetUnits() ) ) );
+        r->Report( "" );
+
+        auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_VIA_DIAMETER, item,
+                                                       nullptr, UNDEFINED_LAYER, r );
+
+        wxString min = _( "undefined" );
+        wxString max = _( "undefined" );
+
+        if( constraint.m_Value.HasMin() )
+            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
+
+        if( constraint.m_Value.HasMax() )
+            max = StringFromValue( r->GetUnits(), constraint.m_Value.Max(), true );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Diameter constraints: min %s max %s." ),
+                                     min,
+                                     max ) );
+        r->Flush();
+
+
+        r = m_inspectConstraintsDialog->AddPage( "Via Annular Width" );
+
+        r->Report( _( "<h7>Via annular width resolution for:</h7>" ) );
+        r->Report( wxString::Format( _( "<ul><li>%s</li></ul>" ),
+                                     item->GetSelectMenuText( r->GetUnits() ) ) );
+        r->Report( "" );
+
+        constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH, item,
+                                                  nullptr, UNDEFINED_LAYER, r );
+
+        min = _( "undefined" );
+        max = _( "undefined" );
+
+        if( constraint.m_Value.HasMin() )
+            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
+
+        if( constraint.m_Value.HasMax() )
+            max = StringFromValue( r->GetUnits(), constraint.m_Value.Max(), true );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Annular width constraints: min %s max %s." ),
+                                     min,
+                                     max ) );
+        r->Flush();
+    }
+
+    if( ( item->Type() == PCB_PAD_T && static_cast<D_PAD*>( item )->GetDrillSize().x > 0 )
+            || item->Type() == PCB_VIA_T )
+    {
+        WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( "Hole Size" );
+
+        r->Report( _( "<h7>Hole diameter resolution for:</h7>" ) );
+        r->Report( wxString::Format( _( "<ul><li>%s</li></ul>" ),
+                                     item->GetSelectMenuText( r->GetUnits() ) ) );
+        r->Report( "" );
+
+        auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_SIZE, item,
+                                                       nullptr, UNDEFINED_LAYER, r );
+
+        wxString min = _( "undefined" );
+
+        if( constraint.m_Value.HasMin() )
+            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Hole constraint: min %s." ), min ) );
+        r->Flush();
+    }
+
+    m_inspectConstraintsDialog->FinishInitialization();
+    m_inspectConstraintsDialog->Show( true );
     return 0;
 }
 
@@ -751,10 +900,20 @@ void PCB_INSPECTION_TOOL::onListNetsDialogClosed( wxCommandEvent& event )
 void PCB_INSPECTION_TOOL::onInspectClearanceDialogClosed( wxCommandEvent& event )
 {
     m_inspectClearanceDialog->Disconnect( wxEVT_CLOSE_WINDOW,
-            wxCommandEventHandler( PCB_INSPECTION_TOOL::onListNetsDialogClosed ), nullptr, this );
+            wxCommandEventHandler( PCB_INSPECTION_TOOL::onInspectClearanceDialogClosed ), nullptr, this );
 
     m_inspectClearanceDialog->Destroy();
     m_inspectClearanceDialog.release();
+}
+
+
+void PCB_INSPECTION_TOOL::onInspectConstraintsDialogClosed( wxCommandEvent& event )
+{
+    m_inspectConstraintsDialog->Disconnect( wxEVT_CLOSE_WINDOW,
+            wxCommandEventHandler( PCB_INSPECTION_TOOL::onInspectConstraintsDialogClosed ), nullptr, this );
+
+    m_inspectConstraintsDialog->Destroy();
+    m_inspectConstraintsDialog.release();
 }
 
 
@@ -817,6 +976,7 @@ void PCB_INSPECTION_TOOL::setTransitions()
     Go( &PCB_INSPECTION_TOOL::ListNets,               PCB_ACTIONS::listNets.MakeEvent() );
     Go( &PCB_INSPECTION_TOOL::ShowStatisticsDialog,   PCB_ACTIONS::boardStatistics.MakeEvent() );
     Go( &PCB_INSPECTION_TOOL::InspectClearance,       PCB_ACTIONS::inspectClearance.MakeEvent() );
+    Go( &PCB_INSPECTION_TOOL::InspectConstraints,     PCB_ACTIONS::inspectConstraints.MakeEvent() );
 
     Go( &PCB_INSPECTION_TOOL::HighlightNet,           PCB_ACTIONS::highlightNet.MakeEvent() );
     Go( &PCB_INSPECTION_TOOL::HighlightNet,           PCB_ACTIONS::highlightNetSelection.MakeEvent() );

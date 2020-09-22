@@ -61,6 +61,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_cleanup_graphics_base.cpp
     dialogs/dialog_cleanup_tracks_and_vias.cpp
     dialogs/dialog_cleanup_tracks_and_vias_base.cpp
+    dialogs/dialog_constraints_reporter.cpp
+    dialogs/dialog_constraints_reporter_base.cpp
     dialogs/dialog_copper_zones.cpp
     dialogs/dialog_copper_zones_base.cpp
     dialogs/dialog_create_array.cpp

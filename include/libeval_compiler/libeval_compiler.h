@@ -208,7 +208,7 @@ public:
         if( m_type == VT_NUMERIC && b.m_type == VT_NUMERIC )
             return m_valueDbl == b.m_valueDbl;
         else if( m_type == VT_STRING && b.m_type == VT_STRING )
-            return m_valueStr == b.m_valueStr;
+            return m_valueStr.CmpNoCase( b.m_valueStr ) == 0;
 
         return false;
     }

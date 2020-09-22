@@ -1046,6 +1046,12 @@ TOOL_ACTION PCB_ACTIONS::inspectClearance( "pcbnew.InspectionTool.InspectClearan
         _( "Show clearance resolution for the active layer between two selected objects" ),
         mw_add_gap_xpm );
 
+TOOL_ACTION PCB_ACTIONS::inspectConstraints( "pcbnew.InspectionTool.InspectConstraints",
+        AS_GLOBAL, 0, "",
+        _( "Constraints Resolution..." ),
+        _( "Show constraints resolution for the selected object" ),
+        mw_add_gap_xpm );
+
 //Geographic re-annotation tool
 TOOL_ACTION PCB_ACTIONS::boardReannotate( "pcbnew.ReannotateTool.ShowReannotateDialog",
         AS_GLOBAL, 0, "",

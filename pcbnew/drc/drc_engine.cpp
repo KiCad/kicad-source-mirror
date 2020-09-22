@@ -129,7 +129,7 @@ void DRC_ENGINE::loadImplicitRules()
 
     // 2) micro-via specific defaults (new DRC doesn't treat microvias in any special way)
 
-    DRC_RULE* uViaRule = createImplicitRule( _( "board setup constraints" ));
+    DRC_RULE* uViaRule = createImplicitRule( _( "board setup micro-via constraints" ));
 
     uViaRule->m_Condition = new DRC_RULE_CONDITION ( "A.Via_Type == 'micro_via'" );
 

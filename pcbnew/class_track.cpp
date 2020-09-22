@@ -1046,8 +1046,8 @@ static struct TRACK_VIA_DESC
         ENUM_MAP<VIATYPE>::Instance()
             .Undefined( VIATYPE::NOT_DEFINED )
             .Map( VIATYPE::THROUGH, _( "Through" ) )
-            .Map( VIATYPE::BLIND_BURIED, _( "Blind/Buried" ) )
-            .Map( VIATYPE::MICROVIA, _( "Microvia" ) );
+            .Map( VIATYPE::BLIND_BURIED, _( "Buried_via" ) )
+            .Map( VIATYPE::MICROVIA, _( "Micro_via" ) );
 
         ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
