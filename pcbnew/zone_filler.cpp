@@ -58,6 +58,8 @@ ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
         m_progressReporter( nullptr ),
         m_maxError( ARC_HIGH_DEF )
 {
+    // To enable add "DebugZoneFiller=true" to kicad_advanced settings file.
+    m_debugZoneFiller = ADVANCED_CFG::GetCfg().m_DebugZoneFiller;
 }
 
 
@@ -322,7 +324,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
     {
         for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
         {
-            if( s_DumpZonesWhenFilling && LSET::InternalCuMask().Contains( layer ) )
+            if( m_debugZoneFiller && LSET::InternalCuMask().Contains( layer ) )
                 continue;
 
             if( !zone.m_islands.count( layer ) )
@@ -363,7 +365,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
     {
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
-            if( s_DumpZonesWhenFilling && LSET::InternalCuMask().Contains( layer ) )
+            if( m_debugZoneFiller && LSET::InternalCuMask().Contains( layer ) )
                 continue;
 
             SHAPE_POLY_SET poly = zone->GetFilledPolysList( layer );
@@ -898,7 +900,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
 
 #define DUMP_POLYS_TO_COPPER_LAYER( a, b, c ) \
-    { if( s_DumpZonesWhenFilling && dumpLayer == b ) \
+    { if( m_debugZoneFiller && dumpLayer == b ) \
         { \
             m_board->SetLayerName( b, c ); \
             a.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); \
@@ -927,7 +929,7 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
 {
     PCB_LAYER_ID dumpLayer = aLayer;
 
-    if( s_DumpZonesWhenFilling && LSET::InternalCuMask().Contains( aLayer ) )
+    if( m_debugZoneFiller && LSET::InternalCuMask().Contains( aLayer ) )
         aLayer = F_Cu;
 
     m_maxError = m_board->GetDesignSettings().m_MaxError;

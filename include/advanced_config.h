@@ -62,16 +62,15 @@ public:
      * Get the singleton instance's config, which is shared by all
      * consumers of advanced config.
      *
-     * This configuration is read-only - to set options, users should
-     * add the parameters to their config files at ~/.config/kicad/advanced, or the
-     * platform equivalent.
+     * This configuration is read-only - to set options, users should add the parameters to
+     * their config files at ~/.config/kicad/advanced, or the platform equivalent.
      */
     static const ADVANCED_CFG& GetCfg();
 
     /**
      * For drawsegments - arcs.
-     * Distance from an arc end point and the estimated end point,
-     * when rotating from the start point to the end point.
+     * Distance from an arc end point and the estimated end point, when rotating from the
+     * start point to the end point.
      */
     double m_drawArcAccuracy;
 
@@ -137,6 +136,11 @@ public:
      * like ultra-thin lines.  Units are mm.
      */
     double m_MinPlotPenWidth;
+
+    /**
+     * A mode that dumps the various stages of a F_Cu fill into In1_Cu through In9_Cu.
+     */
+    bool m_DebugZoneFiller;
 
 private:
     ADVANCED_CFG();

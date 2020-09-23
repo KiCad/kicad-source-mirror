@@ -47,8 +47,6 @@ public:
     bool Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck = false,
                wxWindow* aParent = nullptr );
 
-    static const bool s_DumpZonesWhenFilling = false;
-
 private:
 
     void addKnockout( D_PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_POLY_SET& aHoles );
@@ -120,6 +118,8 @@ private:
     std::unique_ptr<WX_PROGRESS_REPORTER> m_uniqueReporter;
 
     int                   m_maxError;
+
+    bool                  m_debugZoneFiller;
 };
 
 #endif

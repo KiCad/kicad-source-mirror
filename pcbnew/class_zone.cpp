@@ -27,7 +27,7 @@
 #include <fctsys.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_null.h>
-
+#include <advanced_config.h>
 #include <pcb_base_frame.h>
 #include <pcb_screen.h>
 #include <class_board.h>
@@ -36,7 +36,6 @@
 #include <math_for_graphics.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
-#include "zone_filler.h"
 
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
         : BOARD_CONNECTED_ITEM( aParent, aInModule ? PCB_MODULE_ZONE_AREA_T : PCB_ZONE_AREA_T ),
@@ -365,7 +364,7 @@ void ZONE_CONTAINER::SetCornerRadius( unsigned int aRadius )
 
 bool ZONE_CONTAINER::GetFilledPolysUseThickness( PCB_LAYER_ID aLayer ) const
 {
-    if( ZONE_FILLER::s_DumpZonesWhenFilling && LSET::InternalCuMask().Contains( aLayer ) )
+    if( ADVANCED_CFG::GetCfg().m_DebugZoneFiller && LSET::InternalCuMask().Contains( aLayer ) )
         return false;
 
     return GetFilledPolysUseThickness();

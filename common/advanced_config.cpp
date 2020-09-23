@@ -138,6 +138,8 @@ static const wxChar PluginAltiumSch[] = wxT( "PluginAltiumSch" );
  */
 static const wxChar MinPlotPenWidth[] = wxT( "MinPlotPenWidth" );
 
+static const wxChar DebugZoneFiller[] = wxT( "DebugZoneFiller" );
+
 } // namespace KEYS
 
 
@@ -233,6 +235,8 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_MinPlotPenWidth           = 0.0212;   // 1 pixel at 1200dpi.
 
+    m_DebugZoneFiller           = false;
+
     loadFromConfigFile();
 }
 
@@ -306,6 +310,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MinPlotPenWidth,
                                                   &m_MinPlotPenWidth, 0.0212, 0.0, 1.0 ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::DebugZoneFiller,
+                                                &m_DebugZoneFiller, false ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 
