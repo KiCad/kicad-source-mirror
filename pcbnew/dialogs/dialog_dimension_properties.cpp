@@ -177,6 +177,8 @@ DIALOG_DIMENSION_PROPERTIES::~DIALOG_DIMENSION_PROPERTIES()
 
 bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 {
+    BOARD*  board = m_frame->GetBoard();
+
     m_txtValue->Enable( m_dimension->GetOverrideTextEnabled() );
     m_cbOverrideValue->SetValue( m_dimension->GetOverrideTextEnabled() );
 
@@ -188,8 +190,8 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
     m_cbUnitsFormat->SetSelection( static_cast<int>( m_dimension->GetUnitsFormat() ) );
     m_cbPrecision->SetSelection( static_cast<int>( m_dimension->GetPrecision() ) );
 
-    m_txtPrefix->SetValue( m_dimension->GetPrefix() );
-    m_txtSuffix->SetValue( m_dimension->GetSuffix() );
+    m_txtPrefix->SetValue( board->ConvertKIIDsToCrossReferences( m_dimension->GetPrefix() ) );
+    m_txtSuffix->SetValue( board->ConvertKIIDsToCrossReferences( m_dimension->GetSuffix() ) );
 
     if( m_cbLayerActual->SetLayerSelection( m_dimension->GetLayer() ) < 0 )
     {
@@ -232,9 +234,7 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
     // Do this last; it depends on the other settings
     if( m_dimension->GetOverrideTextEnabled() )
     {
-        BOARD*   board = m_frame->GetBoard();
         wxString txt = board->ConvertKIIDsToCrossReferences( m_dimension->GetOverrideText() );
-
         m_txtValueActual->SetValue( txt );
     }
     else
@@ -284,20 +284,20 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataFromWindow()
 
 void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( DIMENSION* aTarget )
 {
+    BOARD* board = m_frame->GetBoard();
+
     m_orientValidator.TransferFromWindow();
 
     aTarget->SetOverrideTextEnabled( m_cbOverrideValue->GetValue() );
 
     if( m_cbOverrideValue->GetValue() )
     {
-        BOARD*   board = m_frame->GetBoard();
         wxString txt = board->ConvertCrossReferencesToKIIDs( m_txtValueActual->GetValue() );
-
         aTarget->SetOverrideText( txt );
     }
 
-    aTarget->SetPrefix( m_txtPrefix->GetValue() );
-    aTarget->SetSuffix( m_txtSuffix->GetValue() );
+    aTarget->SetPrefix( board->ConvertCrossReferencesToKIIDs( m_txtPrefix->GetValue() ) );
+    aTarget->SetSuffix( board->ConvertCrossReferencesToKIIDs( m_txtSuffix->GetValue() ) );
     aTarget->SetLayer( static_cast<PCB_LAYER_ID>( m_cbLayerActual->GetLayerSelection() ) );
 
     aTarget->SetUnits( m_frame->GetUserUnits(), false );
