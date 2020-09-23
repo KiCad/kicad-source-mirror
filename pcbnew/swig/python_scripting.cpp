@@ -162,6 +162,24 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
     swigAddModules();           // add our own modules
     swigSwitchPythonBuiltin();  // switch the python builtin modules to our new list
 
+#ifdef _MSC_VER
+    // Under vcpkg/msvc, we need to explicitly set the python home
+    // or else it'll start consuming system python registry keys and the like instead
+    // We are going to follow the "unix" layout for the msvc/vcpkg distributions so exes in /root/bin
+    // And the python lib in /root/share/python3(/Lib,/DLLs)
+    wxFileName pyHome;
+
+    pyHome.Assign( Pgm().GetExecutablePath() );
+    pyHome.AppendDir( wxT("..") );
+    pyHome.AppendDir( wxT("share") );
+    pyHome.AppendDir( wxT("python3") );
+
+    pyHome.Normalize();
+
+    // MUST be called before Py_Initialize so it will to create valid default lib paths
+    Py_SetPythonHome( pyHome.GetFullPath().c_str() );
+#endif
+
     Py_Initialize();
     PySys_SetArgv( Pgm().App().argc, Pgm().App().argv );
 
