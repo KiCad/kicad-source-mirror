@@ -30,6 +30,7 @@
 #include <class_track.h>
 #include <class_zone.h>
 #include <unordered_set>
+#include <set>
 #include <vector>
 
 #include <geometry/rtree.h>
@@ -42,7 +43,9 @@
  */
 class DRC_RTREE
 {
-private:
+
+public:
+
     struct ITEM_WITH_SHAPE
     {
         ITEM_WITH_SHAPE( BOARD_ITEM *aParent, SHAPE* aShape, std::shared_ptr<SHAPE> aParentShape = nullptr ) :
@@ -54,11 +57,11 @@ private:
         std::shared_ptr<SHAPE> parentShape;
     };
 
+private:
+    
     using drc_rtree = RTree<ITEM_WITH_SHAPE*, int, 2, double>;
 
 public:
-
-
 
     DRC_RTREE()
     {
@@ -276,6 +279,63 @@ public:
         };
 
         this->m_tree[aTargetLayer]->Search( min, max, visit );
+        return 0;
+    }
+
+    typedef std::pair<PCB_LAYER_ID, PCB_LAYER_ID> LAYER_PAIR;
+
+    int QueryCollidingPairs( DRC_RTREE* aRefTree,
+                                std::vector<LAYER_PAIR> aLayers,
+                                std::function<bool( const LAYER_PAIR&, ITEM_WITH_SHAPE*, ITEM_WITH_SHAPE* )> aVisitor,
+    
+    //                         std::function<bool( const LAYER_PAIR&, BOARD_ITEM*, BOARD_ITEM*, int&, DRC_CONSTRAINT& )> aResolver,
+      //                       std::function<bool( BOARD_ITEM*, BOARD_ITEM*, int, int&, DRC_CONSTRAINT&)> aVisitor,
+                             int aMaxClearance
+                        )
+    {
+        // keep track of BOARD_ITEMs pairs that have been already found to collide (some items
+        // might be build of COMPOUND/triangulated shapes and a single subshape collision
+        // means we have a hit)
+        std::set< std::pair<BOARD_ITEM*, BOARD_ITEM*>> collidingCompounds;
+
+        for( auto refLayerIter : aLayers )
+        {
+            const PCB_LAYER_ID refLayer = refLayerIter.first;
+            const PCB_LAYER_ID targetLayer = refLayerIter.second;
+
+            for( auto refItem : aRefTree->OnLayer( refLayer ) )
+            {
+                BOX2I box = refItem->shape->BBox();
+                box.Inflate( aMaxClearance );
+
+                int min[2] = { box.GetX(),         box.GetY() };
+                int max[2] = { box.GetRight(),     box.GetBottom() };
+
+                auto visit = [&] ( ITEM_WITH_SHAPE* aItemToTest ) -> bool
+                {
+                    const std::pair<BOARD_ITEM*, BOARD_ITEM*> chkCompoundPair( refItem->parent, aItemToTest->parent );
+
+                    // don't report multiple collisions for compound or triangulated shapes
+                    if( collidingCompounds.find( chkCompoundPair ) != collidingCompounds.end() )
+                        return true;
+
+                    // don't collide items against themselves
+                    if( refLayer == targetLayer && aItemToTest->parent == refItem->parent )
+                        return true;
+
+                    bool colliding = aVisitor( refLayerIter, refItem, aItemToTest );
+
+                    if( colliding )
+                    {
+                        collidingCompounds.insert( chkCompoundPair );
+                    }
+
+                    return true;
+                };
+
+                this->m_tree[targetLayer]->Search( min, max, visit );
+            };
+        }
         return 0;
     }
 
