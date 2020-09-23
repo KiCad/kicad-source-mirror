@@ -23,6 +23,8 @@
 #include <vector>
 #include <algorithm>
 
+#include <kicad_string.h>
+
 #ifdef DEBUG
 #include <cstdarg>
 #endif
@@ -103,6 +105,23 @@ static const wxString formatOpName( int op )
     }
 
     return "???";
+}
+
+bool VALUE::EqualTo( const VALUE* b ) const
+{
+    if( m_type == VT_NUMERIC && b->m_type == VT_NUMERIC )
+        return m_valueDbl == b->m_valueDbl;
+    else if( m_type == VT_STRING && b->m_type == VT_STRING )
+    {
+        if( b->m_stringIsWildcard )
+        {
+            return WildCompareString( b->m_valueStr, m_valueStr, false );
+        }
+        else
+            return m_valueStr.CmpNoCase( b->m_valueStr );
+    }
+
+    return false;
 }
 
 
@@ -668,11 +687,11 @@ void TREE_NODE::SetUop( int aOp, double aValue )
 }
 
 
-void TREE_NODE::SetUop( int aOp, const wxString& aValue )
+void TREE_NODE::SetUop( int aOp, const wxString& aValue, bool aStringIsWildcard )
 {
     delete uop;
 
-    std::unique_ptr<VALUE> val( new VALUE( aValue ) );
+    std::unique_ptr<VALUE> val( new VALUE( aValue, aStringIsWildcard ) );
     uop = new UOP( aOp, std::move( val ) );
 }
 
@@ -900,6 +919,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     // a TR_OP_FUNC_CALL and its function parameter
                     stack.pop_back();
                     stack.push_back( node->leaf[1] );
+                    //stack.push_back( node->leaf[1]->leaf[1] );
                     for( auto pnode : params )
                     {
                         stack.push_back( pnode );
@@ -940,7 +960,9 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
         case TR_STRING:
         {
-            node->SetUop( TR_UOP_PUSH_VALUE, *node->value.str );
+            wxString str = *node->value.str;
+            bool isWildcard = str.Contains("?") || str.Contains("*");
+            node->SetUop( TR_UOP_PUSH_VALUE, str, isWildcard );
             node->isTerminal = true;
             break;
         }
@@ -1120,7 +1142,11 @@ VALUE* UCODE::Run( CONTEXT* ctx )
         return &g_false;
     }
 
+    assert( ctx->SP() == 1 );
+
     // non-well-formed rules should not be fired
+    // fixme: not sure it's a good idea, if stack is corrupted after execution it means
+    // a problem with the compiler, not the rule...
     if( ctx->SP() != 1 )
         return &g_false;
 

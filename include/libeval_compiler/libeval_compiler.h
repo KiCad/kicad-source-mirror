@@ -141,7 +141,7 @@ public:
     int        srcPos;
 
     void SetUop( int aOp, double aValue );
-    void SetUop( int aOp, const wxString& aValue );
+    void SetUop( int aOp, const wxString& aValue, bool aStringIsWildcard );
     void SetUop( int aOp, std::unique_ptr<VAR_REF> aRef = nullptr );
     void SetUop( int aOp, FUNC_CALL_REF aFunc, std::unique_ptr<VAR_REF> aRef = nullptr );
 };
@@ -180,18 +180,21 @@ class VALUE
 public:
     VALUE():
         m_type(VT_UNDEFINED),
-        m_valueDbl( 0 )
+        m_valueDbl( 0 ),
+        m_stringIsWildcard( false )
     {};
 
-    VALUE( const wxString& aStr ) :
+    VALUE( const wxString& aStr, bool aIsWildcard = false ) :
         m_type( VT_STRING ),
         m_valueDbl( 0 ),
-        m_valueStr( aStr )
+        m_valueStr( aStr ),
+        m_stringIsWildcard( aIsWildcard )
     {};
 
     VALUE( const double aVal ) :
         m_type( VT_NUMERIC ),
-        m_valueDbl( aVal )
+        m_valueDbl( aVal ),
+        m_stringIsWildcard( false )
     {};
 
     double AsDouble() const
@@ -204,15 +207,7 @@ public:
         return m_valueStr;
     }
 
-    bool operator==( const VALUE& b ) const
-    {
-        if( m_type == VT_NUMERIC && b.m_type == VT_NUMERIC )
-            return m_valueDbl == b.m_valueDbl;
-        else if( m_type == VT_STRING && b.m_type == VT_STRING )
-            return m_valueStr.CmpNoCase( b.m_valueStr ) == 0;
-
-        return false;
-    }
+    bool EqualTo( const VALUE* b ) const;
 
     VAR_TYPE_T GetType() const { return m_type; };
 
@@ -237,15 +232,11 @@ public:
             m_valueStr = val.m_valueStr;
     }
 
-    bool EqualTo( const VALUE* v2 ) const
-    {
-        return operator==( *v2 );
-    }
-
 private:
     VAR_TYPE_T  m_type;
     double      m_valueDbl;
     wxString    m_valueStr;
+    bool        m_stringIsWildcard;
 };
 
 class VAR_REF
