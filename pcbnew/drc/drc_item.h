@@ -70,6 +70,10 @@ enum PCB_DRC_CODE {
     DRCE_UNRESOLVED_VARIABLE,
     DRCE_SILK_OVER_PAD,                  // silkscreen over component pad(s)
     DRCE_SILK_CLEARANCE,                 // silk to silk clearance error
+    DRCE_LENGTH_OUT_OF_RANGE,
+    DRCE_SKEW_OUT_OF_RANGE,
+    DRCE_TOO_MANY_VIAS,
+
 
     DRCE_LAST = DRCE_SILK_CLEARANCE
 };
@@ -148,6 +152,9 @@ private:
     static DRC_ITEM unresolvedVariable;
     static DRC_ITEM silkOverPad;
     static DRC_ITEM silkClearance;
+    static DRC_ITEM lengthOutOfRange;
+    static DRC_ITEM skewOutOfRange;
+    static DRC_ITEM tooManyVias;
 
 private:
     DRC_RULE*          m_violatingRule = nullptr;
