@@ -20,7 +20,10 @@
 #include <layers_id_colors_and_visibility.h>
 #include <wx/wx.h>
 
-
+/**
+ * Returns the default display name for a given layer.  These are not the same as the canonical
+ * name in LSET::Name(), which is used in board files and cannot be translated or changed.
+ */
 wxString LayerName( int aLayer )
 {
     switch( aLayer )
@@ -60,26 +63,26 @@ wxString LayerName( int aLayer )
     case B_Cu:              return _( "B.Cu" );
 
     // Technicals
-    case B_Adhes:           return _( "B.Adhes" );
-    case F_Adhes:           return _( "F.Adhes" );
+    case B_Adhes:           return _( "B.Adhesive" );
+    case F_Adhes:           return _( "F.Adhesive" );
     case B_Paste:           return _( "B.Paste" );
     case F_Paste:           return _( "F.Paste" );
-    case B_SilkS:           return _( "B.SilkS" );
-    case F_SilkS:           return _( "F.SilkS" );
+    case B_SilkS:           return _( "B.Silkscreen" );
+    case F_SilkS:           return _( "F.Silkscreen" );
     case B_Mask:            return _( "B.Mask" );
     case F_Mask:            return _( "F.Mask" );
 
     // Users
-    case Dwgs_User:         return _( "Dwgs.User" );
-    case Cmts_User:         return _( "Cmts.User" );
-    case Eco1_User:         return _( "Eco1.User" );
-    case Eco2_User:         return _( "Eco2.User" );
+    case Dwgs_User:         return _( "User.Drawings" );
+    case Cmts_User:         return _( "User.Comments" );
+    case Eco1_User:         return _( "User.Eco1" );
+    case Eco2_User:         return _( "User.Eco2" );
     case Edge_Cuts:         return _( "Edge.Cuts" );
     case Margin:            return _( "Margin" );
 
     // Footprint
-    case F_CrtYd:           return _( "F.CrtYd" );
-    case B_CrtYd:           return _( "B.CrtYd" );
+    case F_CrtYd:           return _( "F.Courtyard" );
+    case B_CrtYd:           return _( "B.Courtyard" );
     case F_Fab:             return _( "F.Fab" );
     case B_Fab:             return _( "B.Fab" );
 
