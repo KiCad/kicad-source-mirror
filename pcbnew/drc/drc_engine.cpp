@@ -107,7 +107,7 @@ void DRC_ENGINE::loadImplicitRules()
     drillConstraint.Value().SetMin( bds.m_MinThroughDrill );
     rule->AddConstraint( drillConstraint );
 
-    DRC_CONSTRAINT annulusConstraint( DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH );
+    DRC_CONSTRAINT annulusConstraint( DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH );
     annulusConstraint.Value().SetMin( bds.m_ViasMinAnnulus );
     rule->AddConstraint( annulusConstraint );
 
@@ -230,18 +230,18 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
 
     std::vector<Formatter> formats =
     {
-        { DRC_CONSTRAINT_TYPE_UNKNOWN, "unknown", nullptr },
-        { DRC_CONSTRAINT_TYPE_CLEARANCE, "clearance", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE, "hole_clearance", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE, "edge_clearance", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_HOLE_SIZE, "hole_size", formatMinMax },
+        { DRC_CONSTRAINT_TYPE_UNKNOWN,             "unknown",             nullptr },
+        { DRC_CONSTRAINT_TYPE_CLEARANCE,           "clearance",           formatMinMax },
+        { DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,      "hole_clearance",      formatMinMax },
+        { DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,      "edge_clearance",      formatMinMax },
+        { DRC_CONSTRAINT_TYPE_HOLE_SIZE,           "hole_size",           formatMinMax },
         { DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE, "courtyard_clearance", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_SILK_TO_PAD, "silk_to_pad", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_SILK_TO_SILK, "silk_to_silk", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_TRACK_WIDTH, "track_width", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH, "annulus_width", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_DISALLOW, "disallow", nullptr }, // fixme
-        { DRC_CONSTRAINT_TYPE_VIA_DIAMETER, "via_diameter", formatMinMax }
+        { DRC_CONSTRAINT_TYPE_SILK_TO_PAD,         "silk_to_pad",         formatMinMax },
+        { DRC_CONSTRAINT_TYPE_SILK_TO_SILK,        "silk_to_silk",        formatMinMax },
+        { DRC_CONSTRAINT_TYPE_TRACK_WIDTH,         "track_width",         formatMinMax },
+        { DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH,       "annular_width",       formatMinMax },
+        { DRC_CONSTRAINT_TYPE_DISALLOW,            "disallow",            nullptr }, // fixme
+        { DRC_CONSTRAINT_TYPE_VIA_DIAMETER,        "via_diameter",        formatMinMax }
     };
 
     for( auto& fmt : formats )

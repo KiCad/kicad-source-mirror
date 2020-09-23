@@ -66,7 +66,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bGaugeMargins;
 	bGaugeMargins = new wxBoxSizer( wxVERTICAL );
 
-	m_gauge = new wxGauge( m_panelMessages, wxID_ANY, 10000, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL );
+	m_gauge = new wxGauge( m_panelMessages, wxID_ANY, 1000, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL );
 	m_gauge->SetValue( 0 );
 	bGaugeMargins->Add( m_gauge, 0, wxALL|wxEXPAND, 5 );
 

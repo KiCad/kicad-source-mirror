@@ -392,18 +392,49 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
 }
 
 
-void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard )
+void reportProgress( PROGRESS_REPORTER* aReporter, int aCount, int aSize, int aDelta )
 {
+    if( aReporter && ( ( aCount % aDelta ) == 0 || aCount == aSize -  1 ) )
+    {
+        aReporter->SetCurrentProgress( (double) aCount / (double) aSize );
+        aReporter->KeepRefreshing( false );
+    }
+}
+
+
+void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
+{
+    const int delta = 100;  // Number of additions between 2 calls to the progress bar
+    int ii = 0;
+    int size = 0;
+
+    size += aBoard->Zones().size();
+    size += aBoard->Tracks().size();
+
+    for( MODULE* mod : aBoard->Modules() )
+        size += mod->Pads().size();
+
+    size *= 2;      // Our caller us gets the other half of the progress bar
+
     for( ZONE_CONTAINER* zone : aBoard->Zones() )
+    {
         Add( zone );
+        reportProgress( aReporter, ii++, size, delta );
+    }
 
     for( TRACK* tv : aBoard->Tracks() )
+    {
         Add( tv );
+        reportProgress( aReporter, ii++, size, delta );
+    }
 
     for( MODULE* mod : aBoard->Modules() )
     {
         for( D_PAD* pad : mod->Pads() )
+        {
             Add( pad );
+            reportProgress( aReporter, ii++, size, delta );
+        }
     }
 }
 

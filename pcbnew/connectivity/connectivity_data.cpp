@@ -78,10 +78,10 @@ bool CONNECTIVITY_DATA::Update( BOARD_ITEM* aItem )
 }
 
 
-void CONNECTIVITY_DATA::Build( BOARD* aBoard )
+void CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 {
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
-    m_connAlgo->Build( aBoard );
+    m_connAlgo->Build( aBoard, aReporter );
 
     m_netclassMap.clear();
 
@@ -525,7 +525,7 @@ unsigned int CONNECTIVITY_DATA::GetNodeCount( int aNet ) const
 
     if( aNet < 0 )      // Node count for all nets
     {
-        for( const auto& net : m_nets )
+        for( const RN_NET* net : m_nets )
             sum += net->GetNodeCount();
     }
     else if( aNet < (int) m_nets.size() )
@@ -541,17 +541,15 @@ unsigned int CONNECTIVITY_DATA::GetPadCount( int aNet ) const
 {
     int n = 0;
 
-    for( auto&& pad : m_connAlgo->ItemList() )
+    for( CN_ITEM* pad : m_connAlgo->ItemList() )
     {
         if( !pad->Valid() || pad->Parent()->Type() != PCB_PAD_T)
             continue;
 
-        auto dpad = static_cast<D_PAD*>( pad->Parent() );
+        D_PAD* dpad = static_cast<D_PAD*>( pad->Parent() );
 
         if( aNet < 0 || aNet == dpad->GetNetCode() )
-        {
             n++;
-        }
     }
 
     return n;
@@ -560,14 +558,12 @@ unsigned int CONNECTIVITY_DATA::GetPadCount( int aNet ) const
 
 void CONNECTIVITY_DATA::GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges) const
 {
-    for( auto rnNet : m_nets )
+    for( const RN_NET* rnNet : m_nets )
     {
         if( rnNet )
         {
-            for( const auto& edge : rnNet->GetEdges() )
-            {
+            for( const CN_EDGE& edge : rnNet->GetEdges() )
                 aEdges.push_back( edge );
-            }
         }
     }
 }

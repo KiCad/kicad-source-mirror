@@ -699,7 +699,7 @@
                                                                         <property name="permission">protected</property>
                                                                         <property name="pin_button">1</property>
                                                                         <property name="pos"></property>
-                                                                        <property name="range">10000</property>
+                                                                        <property name="range">1000</property>
                                                                         <property name="resize">Resizable</property>
                                                                         <property name="show">1</property>
                                                                         <property name="size"></property>

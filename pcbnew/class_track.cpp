@@ -140,7 +140,7 @@ int VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
     if( !IsPadOnLayer( aLayer ) )
     {
         if( aSource )
-            *aSource = _( "removed annulus" );
+            *aSource = _( "removed annular ring" );
 
         return 0;
     }
@@ -151,7 +151,7 @@ int VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
     {
         BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
 
-        constraint = bds.m_DRCEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH, this,
+        constraint = bds.m_DRCEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH, this,
                                                          nullptr, aLayer );
     }
 
@@ -707,7 +707,7 @@ void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 
     int minAnnulus = GetMinAnnulus( GetLayer(), &source );
 
-    msg.Printf( _( "Min Annulus: %s" ), MessageTextFromValue( units, minAnnulus, true ) );
+    msg.Printf( _( "Min Annular Width: %s" ), MessageTextFromValue( units, minAnnulus, true ) );
     msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
 }

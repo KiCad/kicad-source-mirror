@@ -409,7 +409,7 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
                                      item->GetSelectMenuText( r->GetUnits() ) ) );
         r->Report( "" );
 
-        constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_ANNULUS_WIDTH, item,
+        constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH, item,
                                                   nullptr, UNDEFINED_LAYER, r );
 
         min = _( "undefined" );

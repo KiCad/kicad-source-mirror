@@ -27,7 +27,6 @@
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 
-#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
@@ -72,14 +71,23 @@ public:
 
 bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 {
-    if( !reportPhase( _( "Checking dangling pads & vias..." ) ) )
+    if( !reportPhase( _( "Checking pad, via and zone connections..." ) ) )
         return false;
 
     BOARD* board = m_drcEngine->GetBoard();
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
+
+    // Rebuild just in case. This really needs to be reliable.
     connectivity->Clear();
-    connectivity->Build( board ); // just in case. This really needs to be reliable.
+    connectivity->Build( board, m_drcEngine->GetProgressReporter() );
+
+    int delta = 100;  // This is the number of tests between 2 calls to the progress bar
+    int ii = 0;
+    int count = board->Tracks().size() + board->Zones().size();
+
+    ii += count;      // We gave half of this phase to CONNECTIVITY_DATA::Build()
+    count += count;
 
     for( TRACK* track : board->Tracks() )
     {
@@ -93,6 +101,8 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         else if( track->Type() == PCB_TRACE_T && exceedT )
             continue;
 
+        if( !reportProgress( ii++, count, delta ) )
+            break;
 
         // Test for dangling items
         int code = track->Type() == PCB_VIA_T ? DRCE_DANGLING_VIA : DRCE_DANGLING_TRACK;
@@ -106,9 +116,6 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         }
     }
 
-    if( !reportPhase( _( "Checking starved zones..." ) ) )
-        return false;
-
     /* test starved zones */
     for( ZONE_CONTAINER* zone : board->Zones() )
     {
@@ -117,6 +124,9 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
         if( !zone->IsOnCopperLayer() )
             continue;
+
+        if( !reportProgress( ii++, count, delta ) )
+            break;
 
         int netcode = zone->GetNetCode();
         // a netcode < 0 or > 0 and no pad in net is a error or strange
@@ -139,9 +149,16 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
     std::vector<CN_EDGE> edges;
     connectivity->GetUnconnectedEdges( edges );
 
+    delta = 250;
+    ii = 0;
+    count = edges.size();
+
     for( const CN_EDGE& edge : edges )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_UNCONNECTED_ITEMS ) )
+            break;
+
+        if( !reportProgress( ii++, count, delta ) )
             break;
 
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNCONNECTED_ITEMS );

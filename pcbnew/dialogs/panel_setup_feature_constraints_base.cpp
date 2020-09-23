@@ -211,7 +211,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	m_bitmapMinViaAnnulus = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapMinViaAnnulus, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
-	m_ViaMinAnnulusTitle = new wxStaticText( this, wxID_ANY, _("Minimum via annulus:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ViaMinAnnulusTitle = new wxStaticText( this, wxID_ANY, _("Minimum annular width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaMinAnnulusTitle->Wrap( -1 );
 	fgFeatureConstraints->Add( m_ViaMinAnnulusTitle, 0, wxALIGN_CENTER_VERTICAL, 5 );
 

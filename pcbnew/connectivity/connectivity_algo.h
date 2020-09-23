@@ -224,7 +224,7 @@ public:
         return m_dirtyNets.size();
     }
 
-    void    Build( BOARD* aBoard );
+    void    Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr );
     void    Build( const std::vector<BOARD_ITEM*>& aItems );
 
     void Clear();

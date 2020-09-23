@@ -107,6 +107,7 @@ public:
      * Set an optional reporter for user-level progress info.
      */
     void SetProgressReporter( PROGRESS_REPORTER* aProgRep ) { m_progressReporter = aProgRep; }
+    PROGRESS_REPORTER* GetProgressReporter() const { return m_progressReporter; }
 
     /*
      * Set an optional reporter for rule parse/compile/run-time errors and log-level progress

@@ -87,12 +87,12 @@ DRC_ITEM DRC_ITEM::holeNearHole( DRCE_DRILLED_HOLES_TOO_CLOSE,
         wxT( "hole_near_hole" ) );
 
 DRC_ITEM DRC_ITEM::trackWidth( DRCE_TRACK_WIDTH,
-        _( "Track width outside allowed limits" ),
+        _( "Track width" ),
         wxT( "track_width" ) );
 
-DRC_ITEM DRC_ITEM::annulus( DRCE_ANNULUS,
-        _( "Annulus" ),
-        wxT( "annulus" ) );
+DRC_ITEM DRC_ITEM::annularWidth( DRCE_ANNULAR_WIDTH,
+        _( "Annular width" ),
+        wxT( "annular_width" ) );
 
 DRC_ITEM DRC_ITEM::drillTooSmall( DRCE_TOO_SMALL_DRILL,
         _( "Drill too small" ),
@@ -103,7 +103,7 @@ DRC_ITEM DRC_ITEM::viaHoleLargerThanPad( DRCE_VIA_HOLE_BIGGER,
         wxT( "via_hole_larger_than_pad" ) );
 
 DRC_ITEM DRC_ITEM::viaDiameter( DRCE_VIA_DIAMETER,
-        _( "Via diameter outside allowed limits" ),
+        _( "Via diameter" ),
         wxT( "via_diameter" ) );
 
 DRC_ITEM DRC_ITEM::padstack( DRCE_PADSTACK,
@@ -181,7 +181,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::holeNearHole,
             DRC_ITEM::holeClearance,
             DRC_ITEM::trackWidth,
-            DRC_ITEM::annulus,
+            DRC_ITEM::annularWidth,
             DRC_ITEM::drillTooSmall,
             DRC_ITEM::viaHoleLargerThanPad,
             DRC_ITEM::padstack,
@@ -219,7 +219,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_DRILLED_HOLES_TOO_CLOSE:  return std::make_shared<DRC_ITEM>( holeNearHole );
     case DRCE_HOLE_CLEARANCE:           return std::make_shared<DRC_ITEM>( holeClearance );
     case DRCE_TRACK_WIDTH:              return std::make_shared<DRC_ITEM>( trackWidth );
-    case DRCE_ANNULUS:                  return std::make_shared<DRC_ITEM>( annulus );
+    case DRCE_ANNULAR_WIDTH:                  return std::make_shared<DRC_ITEM>( annularWidth );
     case DRCE_TOO_SMALL_DRILL:          return std::make_shared<DRC_ITEM>( drillTooSmall );
     case DRCE_VIA_HOLE_BIGGER:          return std::make_shared<DRC_ITEM>( viaHoleLargerThanPad );
     case DRCE_VIA_DIAMETER:             return std::make_shared<DRC_ITEM>( viaDiameter );

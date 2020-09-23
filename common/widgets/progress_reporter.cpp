@@ -30,7 +30,7 @@ PROGRESS_REPORTER::PROGRESS_REPORTER( int aNumPhases ) :
     m_phase( 0 ),
     m_numPhases( aNumPhases ),
     m_progress( 0 ),
-    m_maxProgress( 1 ),
+    m_maxProgress( 1000 ),
     m_cancelled( false )
 {
 }
@@ -71,8 +71,8 @@ void PROGRESS_REPORTER::SetMaxProgress( int aMaxProgress )
 
 void PROGRESS_REPORTER::SetCurrentProgress( double aProgress )
 {
-    m_maxProgress.store( 10000 );
-    m_progress.store( (int) (aProgress * 10000.0) );
+    m_maxProgress.store( 1000 );
+    m_progress.store( (int) (aProgress * 1000.0) );
 }
 
 

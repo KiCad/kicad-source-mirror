@@ -159,9 +159,10 @@ void DIALOG_DRC::initValues()
 
 bool DIALOG_DRC::updateUI()
 {
-    int cur = std::max( 0, std::min( m_progress.load(), 10000 ) );
+    double cur = (double) m_progress.load() / m_maxProgress;
+    cur = std::max( 0.0, std::min( cur, 1.0 ) );
 
-    m_gauge->SetValue( cur );
+    m_gauge->SetValue( KiROUND( cur * 1000.0 ) );
     wxSafeYield( this );
 
     return !m_cancelled;
@@ -171,6 +172,7 @@ bool DIALOG_DRC::updateUI()
 void DIALOG_DRC::AdvancePhase( const wxString& aMessage )
 {
     PROGRESS_REPORTER::AdvancePhase( aMessage );
+    SetCurrentProgress( 0.0 );
 
     m_Messages->AppendText( aMessage + "\n" );
 }

@@ -201,7 +201,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             Millimeter2iu( DEFAULT_TRACKMINWIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
             MM_PER_IU ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_via_annulus", &m_ViasMinAnnulus,
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_via_annular_width", &m_ViasMinAnnulus,
             Millimeter2iu( DEFAULT_VIASMINSIZE ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
             MM_PER_IU ) );
 
