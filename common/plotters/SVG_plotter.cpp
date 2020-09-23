@@ -91,19 +91,19 @@
  * The center of ellipse is automatically calculated.
  */
 
+#include <config.h>
 #include <base64.h>
-#include <fctsys.h>
-#include <trigo.h>
 #include <eda_base_frame.h>
 #include <eda_rect.h>
 #include <base_struct.h>
 #include <common.h>
-#include <plotter.h>
-#include <macros.h>
 #include <kicad_string.h>
 
 #include <cstdint>
 #include <wx/mstream.h>
+
+#include "plotters_pslike.h"
+
 
 /**
  * Function XmlEsc

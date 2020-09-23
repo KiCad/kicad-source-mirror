@@ -27,15 +27,14 @@
  * @brief Kicad: specialized plotter for PS files format
  */
 
-#include <fctsys.h>
-#include <trigo.h>
+#include <config.h>
 #include <eda_base_frame.h>
 #include <base_struct.h>
-#include <common.h>
-#include <plotter.h>
-#include <macros.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <math/util.h>      // for KiROUND
+
+#include "plotters_pslike.h"
+
 
 /* Forward declaration of the font width metrics
    (yes extern! this is the way to forward declare variables */

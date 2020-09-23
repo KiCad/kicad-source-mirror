@@ -42,6 +42,7 @@
 #include <dialog_plot_schematic.h>
 #include <wx_html_report_panel.h>
 #include "sch_painter.h"
+#include <plotters_specific.h>
 
 void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef,
                                            RENDER_SETTINGS* aRenderSettings )

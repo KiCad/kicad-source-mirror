@@ -27,7 +27,7 @@
 #include <lib_edit_frame.h>
 #include <class_libentry.h>
 #include <class_library.h>
-#include <plotter.h>
+#include <plotters_specific.h>
 
 void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
 {

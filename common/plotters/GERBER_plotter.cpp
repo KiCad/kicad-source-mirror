@@ -4,22 +4,18 @@
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -27,19 +23,16 @@
  * @brief specialized plotter for GERBER files format
  */
 
-#include <fctsys.h>
-#include <gr_basic.h>
-#include <trigo.h>
+#include <config.h>
 #include <eda_base_frame.h>
 #include <base_struct.h>
-#include <common.h>
-#include <plotter.h>
-#include <macros.h>
 #include <kicad_string.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <math/util.h>      // for KiROUND
 
 #include <build_version.h>
+
+#include "plotter_gerber.h"
 
 #include <gbr_metadata.h>
 
@@ -345,6 +338,7 @@ void GERBER_PLOTTER::selectAperture( const wxSize&           aSize,
         fprintf( outputFile, "D%d*\n", m_apertures[m_currentApertureIdx].m_DCode );
     }
 }
+
 
 void GERBER_PLOTTER::selectAperture( int aDiameter, double aPolygonRotation,
                      APERTURE::APERTURE_TYPE aType, int aApertureAttribute )

@@ -25,7 +25,7 @@
 
 #include <wx/wx.h>
 #include <eda_text.h>                // EDA_DRAW_MODE_T
-#include <plotter.h>
+#include <plotters_specific.h>
 #include <layers_id_colors_and_visibility.h>
 
 class COLOR_SETTINGS;

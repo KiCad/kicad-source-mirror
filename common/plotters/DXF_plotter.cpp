@@ -26,11 +26,10 @@
  */
 
 
-#include <fctsys.h>
-#include <trigo.h>
+#include <config.h>
 #include <eda_base_frame.h>
 #include <base_struct.h>
-#include <plotter.h>
+#include <plotters_specific.h>
 #include <macros.h>
 #include <kicad_string.h>
 #include <convert_basic_shapes_to_polygon.h>

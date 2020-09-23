@@ -31,7 +31,6 @@
 #define _SCH_BUS_ENTRY_H_
 
 #include <gal/color4d.h>
-#include <plotter.h>
 #include <sch_item.h>
 
 #define TARGET_BUSENTRY_RADIUS Mils2iu( 12 )   // Circle diameter drawn at the ends

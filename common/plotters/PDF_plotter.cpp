@@ -32,13 +32,15 @@
 #include <eda_base_frame.h>
 #include <base_struct.h>
 #include <common.h>
-#include <plotter.h>
 #include <macros.h>
 #include <wx/zstream.h>
 #include <wx/mstream.h>
 #include <math/util.h>      // for KiROUND
 
 #include <algorithm>
+
+#include "plotters_pslike.h"
+
 
 
 std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )

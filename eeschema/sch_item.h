@@ -30,7 +30,7 @@
 #include <vector>
 
 #include <base_struct.h>
-#include <plotter.h>
+#include <plotter.h>      // for PLOT_DASH_TYPE definition
 
 #include <gal/color4d.h>
 

@@ -24,7 +24,7 @@
 
 #include <fctsys.h>
 #include <base_struct.h>
-#include <plotter.h>
+#include <plotters_specific.h>
 #include <ws_painter.h>
 #include <base_screen.h>
 #include <gr_text.h>

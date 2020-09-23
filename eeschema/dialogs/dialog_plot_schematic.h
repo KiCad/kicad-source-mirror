@@ -41,6 +41,7 @@ enum PageFormatReq {
     PAGE_SIZE_A
 };
 
+class PDF_PLOTTER;
 
 class DIALOG_PLOT_SCHEMATIC : public DIALOG_PLOT_SCHEMATIC_BASE
 {
