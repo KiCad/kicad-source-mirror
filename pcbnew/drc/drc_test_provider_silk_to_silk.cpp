@@ -41,21 +41,22 @@
 #include <drc/drc_rtree.h>
 
 /*
-    Silk to pads clearance test. Check all pads against silkscreen (mask opening in the pad vs silkscreen)
+    Silk to silk clearance test. Check all silkscreen features against each other.
     Errors generated:
-    - DRCE_SILK_ON_PADS
+    - DRCE_SILK_CLEARANCE
+
 */
 
 namespace test {
 
-class DRC_TEST_PROVIDER_SILK_TO_PAD : public ::DRC_TEST_PROVIDER
+class DRC_TEST_PROVIDER_SILK_TO_SILK : public ::DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_SILK_TO_PAD ()
+    DRC_TEST_PROVIDER_SILK_TO_SILK ()
     {
     }
 
-    virtual ~DRC_TEST_PROVIDER_SILK_TO_PAD() 
+    virtual ~DRC_TEST_PROVIDER_SILK_TO_SILK() 
     {
     }
 
@@ -63,12 +64,12 @@ public:
 
     virtual const wxString GetName() const override 
     {
-        return "silk_to_pad"; 
+        return "silk_to_silk"; 
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests for silkscreen covering components pads";
+        return "Tests for overlapping silkscreen features.";
     }
 
     virtual int GetNumPhases() const override
@@ -87,43 +88,36 @@ private:
 };
 
 
-bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
+bool test::DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
     DRC_CONSTRAINT worstClearanceConstraint;
     m_largestClearance = 0;
 
-    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_SILK_TO_PAD,
+    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_SILK_TO_SILK,
                                            worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
     {
         m_largestClearance = worstClearanceConstraint.m_Value.Min();
     }
 
     reportAux( "Worst clearance : %d nm", m_largestClearance );
-    reportPhase(( "Pad to silkscreen clearances..." ));
+    reportPhase(( "Silkscreen clearances..." ));
 
-    DRC_RTREE padTree, silkTree;
+    DRC_RTREE silkTree;
 
-    auto addPadToTree =
-            [&padTree]( BOARD_ITEM *item ) -> bool
-            {
-                padTree.insert( item );
-                return true;
-            };
-
-    auto addSilkToTree =
+    auto addToTree =
             [&silkTree]( BOARD_ITEM *item ) -> bool
             {
                 silkTree.insert( item );
                 return true;
             };
 
-    auto checkClearance = [&]( const DRC_RTREE::LAYER_PAIR& aLayers, 
+    auto checkClearance = [&]( const DRC_RTREE::LAYER_PAIR& aLayers,
                                     DRC_RTREE::ITEM_WITH_SHAPE* aRefItem,
                                     DRC_RTREE::ITEM_WITH_SHAPE* aTestItem ) -> bool {
         auto constraint = m_drcEngine->EvalRulesForItems(
-                DRC_CONSTRAINT_TYPE_SILK_TO_PAD, aRefItem->parent, aTestItem->parent );
+                DRC_CONSTRAINT_TYPE_SILK_TO_SILK, aRefItem->parent, aTestItem->parent );
 
         int minClearance = constraint.GetValue().Min();
 
@@ -131,10 +125,45 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
 
         int actual;
 
+        // only check for silkscreen collisions belonging to different modules or overlapping texts
+        
+
+        KICAD_T typeRef = aRefItem->parent->Type();
+        KICAD_T typeTest = aTestItem->parent->Type();
+        
+        MODULE *parentModRef = nullptr;
+        MODULE *parentModTest = nullptr;
+
+        if( typeRef == PCB_MODULE_EDGE_T || typeRef == PCB_MODULE_TEXT_T )
+        {
+            parentModRef = static_cast<MODULE*> ( aRefItem->parent->GetParent() );
+        }
+
+        if( typeTest == PCB_MODULE_EDGE_T || typeTest == PCB_MODULE_TEXT_T )
+        {
+            parentModTest = static_cast<MODULE*> ( aTestItem->parent->GetParent() );
+        }
+
+
+        // silkscreen drawings within the same module (or globally on the board)
+        // don't report clearance errors. Everything else does.
+
+        if( parentModRef && parentModRef == parentModTest )
+        {
+            if( typeRef == PCB_MODULE_EDGE_T && typeTest == PCB_MODULE_EDGE_T )
+                return true;
+        }
+
+        if( !parentModRef && !parentModTest )
+        {
+            if( typeRef == PCB_LINE_T && typeTest == PCB_LINE_T )
+                return true;
+        }
+
         if( ! aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual ) )
             return true;
 
-        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_OVER_PAD );
+        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_CLEARANCE );
         wxString                  msg;
 
         msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
@@ -149,25 +178,22 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
         reportViolation( drcItem, aRefItem->parent->GetPosition() );
 
 
-        return !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_OVER_PAD );
+        return !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE );
     };
-
-    int numPads = forEachGeometryItem(
-            { PCB_PAD_T }, LSET::AllTechMask() | LSET::AllCuMask(), addPadToTree );
 
     int numSilk =
             forEachGeometryItem( { PCB_LINE_T, PCB_MODULE_EDGE_T, PCB_TEXT_T, PCB_MODULE_TEXT_T },
-                    LSET( 2, F_SilkS, B_SilkS ), addSilkToTree );
+                    LSET( 2, F_SilkS, B_SilkS ), addToTree );
 
-    reportAux( _("Testing %d pads against %d silkscreen features."), numPads, numSilk );
+    reportAux( _("Testing %d silkscreen features."),  numSilk );
 
     const std::vector<DRC_RTREE::LAYER_PAIR> layerPairs =
     {
-        DRC_RTREE::LAYER_PAIR( F_SilkS, F_Cu ),
-        DRC_RTREE::LAYER_PAIR( B_SilkS, B_Cu )
+        DRC_RTREE::LAYER_PAIR( F_SilkS, F_SilkS ),
+        DRC_RTREE::LAYER_PAIR( B_SilkS, B_SilkS )
     };
 
-    padTree.QueryCollidingPairs( &silkTree, layerPairs, checkClearance, m_largestClearance );
+    silkTree.QueryCollidingPairs( &silkTree, layerPairs, checkClearance, m_largestClearance );
 
     reportRuleStatistics();
 
@@ -175,13 +201,13 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_SILK_TO_PAD::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_SILK_TO_SILK::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_SILK_TO_PAD };
+    return { DRC_CONSTRAINT_TYPE_SILK_TO_SILK };
 }
 
 
 namespace detail
 {
-    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_SILK_TO_PAD> dummy;
+    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_SILK_TO_SILK> dummy;
 }
