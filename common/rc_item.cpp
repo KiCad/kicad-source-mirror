@@ -432,17 +432,31 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
         return;
     }
 
+    int  lastGood = -1;
+    bool found = false;
+
+    if( m_view )
+        m_view->UnselectAll();
+
     for( int i = m_rcItemsProvider->GetCount() - 1; i >= 0; --i )
     {
-        std::shared_ptr<RC_ITEM>     rcItem = m_rcItemsProvider->GetItem( i );
-        MARKER_BASE* marker = rcItem->GetParent();
-        bool         excluded = marker ? marker->IsExcluded() : false;
+        std::shared_ptr<RC_ITEM> rcItem = m_rcItemsProvider->GetItem( i );
+        MARKER_BASE*             marker = rcItem->GetParent();
+        bool                     excluded = marker ? marker->IsExcluded() : false;
 
         if( aCurrentOnly && rcItem != current_item )
+        {
+            if( found && lastGood >= 0 )
+                break;
+
+            lastGood = i;
             continue;
+        }
 
         if( excluded && !aIncludeExclusions )
             continue;
+
+        found = true;
 
         wxDataViewItem      markerItem = ToItem( m_tree[i] );
         wxDataViewItemArray childItems;
@@ -465,6 +479,9 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
         // DeleteAllItems() call below, which is more efficient.
         m_rcItemsProvider->DeleteItem( i, aDeep && aCurrentOnly );
     }
+
+    if( m_view && aCurrentOnly && lastGood >= 0 )
+        m_view->Select( ToItem( m_tree[ lastGood ] ) );
 
     if( !aCurrentOnly )
     {
