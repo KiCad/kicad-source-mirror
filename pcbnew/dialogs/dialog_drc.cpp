@@ -76,11 +76,11 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         m_cbTestFootprints->Hide();
 
     // We use a sdbSizer here to get the order right, which is platform-dependent
-    m_sdbSizer1OK->SetLabel( _( "Run DRC" ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
+    m_sdbSizerOK->SetLabel( _( "Run DRC" ) );
+    m_sdbSizerCancel->SetLabel( _( "Close" ) );
     m_sizerButtons->Layout();
 
-    m_sdbSizer1OK->SetDefault();
+    m_sdbSizerOK->SetDefault();
 
     initValues();
     syncCheckboxes();
@@ -219,7 +219,10 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     wxYield();                                    // Allow time slice to refresh Messages
 
     m_running = true;
-    m_sdbSizer1Cancel->SetLabel( _( "Cancel" ) );
+    m_sdbSizerCancel->SetLabel( _( "Cancel" ) );
+    m_sdbSizerOK->Enable( false );
+    m_DeleteCurrentMarkerButton->Enable( false );
+    m_DeleteAllMarkersButton->Enable( false );
     m_saveReport->Enable( false );
 
     drcTool->RunTests( this, testTracksAgainstZones, refillZones, reportAllTrackErrors,
@@ -234,7 +237,10 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     wxYield();                                    // Allow time slice to refresh Messages
 
     m_running = false;
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
+    m_sdbSizerCancel->SetLabel( _( "Close" ) );
+    m_sdbSizerOK->Enable( true );
+    m_DeleteCurrentMarkerButton->Enable( true );
+    m_DeleteAllMarkersButton->Enable( true );
     m_saveReport->Enable( true );
 
     if( !m_cancelled )

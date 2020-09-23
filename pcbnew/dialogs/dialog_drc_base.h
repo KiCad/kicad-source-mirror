@@ -76,9 +76,9 @@ class DIALOG_DRC_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_sizerButtons;
 		wxButton* m_DeleteCurrentMarkerButton;
 		wxButton* m_DeleteAllMarkersButton;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnActivateDlg( wxActivateEvent& event ) { event.Skip(); }

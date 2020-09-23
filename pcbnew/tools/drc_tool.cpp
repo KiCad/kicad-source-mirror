@@ -132,6 +132,12 @@ void DRC_TOOL::DestroyDRCDialog()
 void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksAgainstZones,
                          bool aRefillZones, bool aReportAllTrackErrors, bool aTestFootprints )
 {
+    // One at a time, please.
+    // Note that the main GUI entry points to get here are blocked, so this is really an
+    // insurance policy and as such we make no attempts to queue up the DRC run or anything.
+    if( m_drcRunning )
+        return;
+
     ZONE_FILLER_TOOL* zoneFiller = m_toolMgr->GetTool<ZONE_FILLER_TOOL>();
     BOARD_COMMIT      commit( m_editFrame );
     NETLIST           netlist;
