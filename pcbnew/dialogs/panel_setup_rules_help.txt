@@ -13,7 +13,7 @@
 
 # ---- Constraint Types
 
-clearance    annulus_width   track_width     hole     dissallow
+clearance    annular_width   track_width     hole     dissallow
 
 
 # ---- Item Types
