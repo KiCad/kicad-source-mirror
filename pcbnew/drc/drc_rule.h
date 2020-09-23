@@ -25,6 +25,7 @@
 #define DRC_RULE_PROTO_H
 
 #include <core/typeinfo.h>
+#include <core/optional.h>
 #include <layers_id_colors_and_visibility.h>
 #include <netclass.h>
 #include <libeval_compiler/libeval_compiler.h>
@@ -38,7 +39,8 @@ class DRC_RULE_CONDITION;
 enum DRC_CONSTRAINT_TYPE_T
 {
     DRC_CONSTRAINT_TYPE_UNKNOWN = -1,
-    DRC_CONSTRAINT_TYPE_CLEARANCE = 0,
+    DRC_CONSTRAINT_TYPE_NULL = 0,
+    DRC_CONSTRAINT_TYPE_CLEARANCE,
     DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
     DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
     DRC_CONSTRAINT_TYPE_HOLE_SIZE,
@@ -48,7 +50,12 @@ enum DRC_CONSTRAINT_TYPE_T
     DRC_CONSTRAINT_TYPE_TRACK_WIDTH,
     DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH,
     DRC_CONSTRAINT_TYPE_DISALLOW,
-    DRC_CONSTRAINT_TYPE_VIA_DIAMETER
+    DRC_CONSTRAINT_TYPE_VIA_DIAMETER,
+    DRC_CONSTRAINT_TYPE_LENGTH,
+    DRC_CONSTRAINT_TYPE_SKEW,
+    DRC_CONSTRAINT_TYPE_DIFF_PAIR_LENGTH,
+    DRC_CONSTRAINT_TYPE_DIFF_PAIR_SKEW,
+    DRC_CONSTRAINT_TYPE_DIFF_PAIR_INTRA_SKEW
 };
 
 
@@ -105,6 +112,7 @@ public:
     };
 
     void AddConstraint( DRC_CONSTRAINT& aConstraint );
+    OPT<DRC_CONSTRAINT> FindConstraint( DRC_CONSTRAINT_TYPE_T aType );
 
 public:
     bool                        m_Unary;
@@ -127,6 +135,11 @@ class DRC_CONSTRAINT
             m_name( aName ),
             m_parentRule( nullptr )
     {
+    }
+
+    bool IsNull() const
+    {
+        return m_Type == DRC_CONSTRAINT_TYPE_NULL;
     }
 
     const MINOPTMAX<int>& GetValue() const { return m_Value; }
