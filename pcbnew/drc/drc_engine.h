@@ -170,6 +170,8 @@ public:
 
     std::vector<DRC_TEST_PROVIDER* > GetTestProviders() const { return m_testProviders; };
 
+    DRC_TEST_PROVIDER* GetTestProvider( const wxString& name ) const;
+
 private:
     void addRule( DRC_RULE* rule )
     {

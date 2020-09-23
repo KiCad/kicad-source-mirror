@@ -131,6 +131,10 @@ void DRC_ENGINE::loadImplicitRules()
     silkToPadClearanceConstraint.Value().SetMin( 0 );
     rule->AddConstraint( silkToPadClearanceConstraint );
 
+    DRC_CONSTRAINT silkToSilkClearanceConstraint( DRC_CONSTRAINT_TYPE_SILK_TO_SILK );
+    silkToSilkClearanceConstraint.Value().SetMin( 0 );
+    rule->AddConstraint( silkToSilkClearanceConstraint );
+
     // 2) micro-via specific defaults (new DRC doesn't treat microvias in any special way)
 
     DRC_RULE* uViaRule = createImplicitRule( _( "board setup micro-via constraints" ));
@@ -234,18 +238,20 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
 
     std::vector<Formatter> formats =
     {
-        { DRC_CONSTRAINT_TYPE_UNKNOWN,             "unknown",             nullptr },
-        { DRC_CONSTRAINT_TYPE_CLEARANCE,           "clearance",           formatMinMax },
-        { DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,      "hole_clearance",      formatMinMax },
-        { DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,      "edge_clearance",      formatMinMax },
-        { DRC_CONSTRAINT_TYPE_HOLE_SIZE,           "hole_size",           formatMinMax },
+        { DRC_CONSTRAINT_TYPE_UNKNOWN, "unknown", nullptr },
+        { DRC_CONSTRAINT_TYPE_CLEARANCE, "clearance", formatMinMax },
+        { DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE, "hole_clearance", formatMinMax },
+        { DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE, "edge_clearance", formatMinMax },
+        { DRC_CONSTRAINT_TYPE_HOLE_SIZE, "hole_size", formatMinMax },
         { DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE, "courtyard_clearance", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_SILK_TO_PAD,         "silk_to_pad",         formatMinMax },
-        { DRC_CONSTRAINT_TYPE_SILK_TO_SILK,        "silk_to_silk",        formatMinMax },
-        { DRC_CONSTRAINT_TYPE_TRACK_WIDTH,         "track_width",         formatMinMax },
+        { DRC_CONSTRAINT_TYPE_SILK_TO_PAD, "silk_to_pad", formatMinMax },
+        { DRC_CONSTRAINT_TYPE_SILK_TO_SILK, "silk_to_silk", formatMinMax },
+        { DRC_CONSTRAINT_TYPE_TRACK_WIDTH, "track_width", formatMinMax },
         { DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH,       "annular_width",       formatMinMax },
-        { DRC_CONSTRAINT_TYPE_DISALLOW,            "disallow",            nullptr }, // fixme
-        { DRC_CONSTRAINT_TYPE_VIA_DIAMETER,        "via_diameter",        formatMinMax }
+        { DRC_CONSTRAINT_TYPE_DISALLOW, "disallow", nullptr },
+        { DRC_CONSTRAINT_TYPE_VIA_DIAMETER, "via_diameter", formatMinMax },
+        { DRC_CONSTRAINT_TYPE_LENGTH, "length", formatMinMax },
+        { DRC_CONSTRAINT_TYPE_SKEW, "skew", formatMinMax }
     };
 
     for( auto& fmt : formats )
@@ -604,7 +610,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
     // fixme: return optional<drc_constraint>, let the particular test decide what to do if no matching constraint
     // is found
-    static DRC_CONSTRAINT nullConstraint;
+    static DRC_CONSTRAINT nullConstraint( DRC_CONSTRAINT_TYPE_NULL );
     nullConstraint.m_DisallowFlags = 0;
 
     return constraintRef ? *constraintRef : nullConstraint;
@@ -750,4 +756,14 @@ bool DRC_ENGINE::QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T aConstraintId,
     }
 
     return false;
+}
+
+
+DRC_TEST_PROVIDER* DRC_ENGINE::GetTestProvider( const wxString& name ) const
+{
+    for( auto prov : m_testProviders )
+        if( name == prov->GetName() )
+            return prov;
+
+    return nullptr;
 }
