@@ -10,6 +10,7 @@ graphic
 hole
 inner
 layer
+length
 max
 micro_via
 min
@@ -19,7 +20,6 @@ outer
 pad
 pth
 rule
-selector
 text
 track
 track_width
@@ -31,6 +31,5 @@ hole_clearance
 courtyard_clearance
 silk_to_pad
 silk_to_silk
-match_lengths
-match_skew
+skew
 diff_pair
