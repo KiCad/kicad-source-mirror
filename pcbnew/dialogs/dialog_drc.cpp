@@ -284,7 +284,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 {
     BOARD*        board = m_brdEditor->GetBoard();
     RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
-    const KIID&   itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
+    const KIID&   itemID = node ? RC_TREE_MODEL::ToUUID( aEvent.GetItem() ) : niluuid;
     BOARD_ITEM*   item = board->GetItem( itemID );
 
     if( item )
