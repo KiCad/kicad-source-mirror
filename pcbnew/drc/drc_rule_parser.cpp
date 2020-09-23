@@ -280,7 +280,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_silk_to_pad:         constraint.m_Type = DRC_CONSTRAINT_TYPE_SILK_TO_PAD;         break;
     case T_silk_to_silk:        constraint.m_Type = DRC_CONSTRAINT_TYPE_SILK_TO_SILK;        break;
     case T_track_width:         constraint.m_Type = DRC_CONSTRAINT_TYPE_TRACK_WIDTH;         break;
-    case T_annulus_width:       constraint.m_Type = DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH;       break;
+    case T_annular_width:       constraint.m_Type = DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH;       break;
     case T_disallow:            constraint.m_Type = DRC_CONSTRAINT_TYPE_DISALLOW;            break;
     default:
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
