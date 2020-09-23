@@ -47,7 +47,7 @@ public:
     bool Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck = false,
                wxWindow* aParent = nullptr );
 
-    static const bool s_DumpZonesWhenFilling = true;
+    static const bool s_DumpZonesWhenFilling = false;
 
 private:
 
