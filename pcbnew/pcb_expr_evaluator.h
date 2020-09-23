@@ -137,6 +137,16 @@ public:
         return m_funcSigs;
     }
 
+    void RegisterFunc( const wxString& funcSignature, LIBEVAL::FUNC_CALL_REF funcPtr )
+    {
+        wxString funcName = funcSignature.BeforeFirst( '(' );
+        m_funcs[std::string( funcName.Lower() )] = std::move( funcPtr );
+        m_funcSigs.Add( funcSignature );
+        printf("Register '%s'\n", (const char *) funcName.Lower() );
+    }
+
+    void RegisterAllFunctions();
+
 private:
     std::map<wxString, LIBEVAL::FUNC_CALL_REF> m_funcs;
 

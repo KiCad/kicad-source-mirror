@@ -286,23 +286,25 @@ static void isBlindBuriedVia( LIBEVAL::CONTEXT* aCtx, void* self )
 
 }
 
+extern void exprFromTo( LIBEVAL::CONTEXT* aCtx, void* self );
 
 PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 {
-    auto registerFunc = [&]( const wxString& funcSignature,  LIBEVAL::FUNC_CALL_REF funcPtr )
-                        {
-                            wxString funcName = funcSignature.BeforeFirst( '(' );
-                            m_funcs[ std::string( funcName.Lower() ) ] = std::move( funcPtr );
-                            m_funcSigs.Add( funcSignature );
-                        };
+    RegisterAllFunctions();
+}
 
-    registerFunc( "onLayer('x')", onLayer );
-    registerFunc( "isPlated()", isPlated );
-    registerFunc( "insideCourtyard('x')", insideCourtyard );
-    registerFunc( "insideArea('x')", insideArea );
-    registerFunc( "memberOf('x')", memberOf );
-    registerFunc( "isMicroVia()", isMicroVia );
-    registerFunc( "isBlindBuriedVia()", isBlindBuriedVia );
+
+void PCB_EXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
+                        {
+    m_funcs.clear();
+    RegisterFunc( "onLayer('x')", onLayer );
+    RegisterFunc( "isPlated()", isPlated );
+    RegisterFunc( "insideCourtyard('x')", insideCourtyard );
+    RegisterFunc( "insideArea('x')", insideArea );
+    RegisterFunc( "isMicroVia()", isMicroVia );
+    RegisterFunc( "isBlindBuriedVia()", isBlindBuriedVia );
+    RegisterFunc( "memberOf('x')", memberOf );
+    RegisterFunc( "fromTo('x','y')", exprFromTo );
 }
 
 
@@ -409,7 +411,7 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
                 else if ( prop->HasChoices() )
                 {   // it's an enum, we treat it as string
                     vref->SetType( LIBEVAL::VT_STRING );
-                    vref->SetIsEnum( true );
+                    vref->SetIsEnum ( true );
                 }
                 else
                 {
