@@ -31,15 +31,13 @@
 #undef HAVE_CLOCK_GETTIME  // macro is defined in Python.h and causes redefine warning
 
 #include <action_plugin.h>
-#include <build_version.h>
 #include <class_board.h>
 #include <cstdlib>
+#include <drc/drc_engine.h>
+#include <drc/drc_item.h>
 #include <fp_lib_table.h>
 #include <io_mgr.h>
 #include <kicad_string.h>
-#include <macros.h>
-#include <pcb_draw_panel_gal.h>
-#include <pcbnew.h>
 #include <pcbnew_scripting_helpers.h>
 #include <project.h>
 #include <settings/settings_manager.h>
@@ -112,7 +110,7 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
     if( !project )
     {
         GetSettingsManager()->LoadProject( projectPath );
-        GetSettingsManager()->GetProject( projectPath );
+        project = GetSettingsManager()->GetProject( projectPath );
     }
 
     // Board cannot be loaded without a project, so create the default project
@@ -306,4 +304,105 @@ int GetUserUnits()
 bool IsActionRunning()
 {
     return ACTION_PLUGINS::IsActionRunning();
+}
+
+
+bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
+                     bool aTestTracksAgainstZones, bool aReportAllTrackErrors )
+{
+    wxCHECK( aBoard, false );
+
+    BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
+    std::shared_ptr<DRC_ENGINE> engine = bds.m_DRCEngine;
+
+    if( !engine )
+    {
+        bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( aBoard, &bds );
+        engine = bds.m_DRCEngine;
+    }
+
+    wxCHECK( engine, false );
+
+    try
+    {
+        engine->InitEngine( s_SettingsManager->Prj().AbsolutePath( "drc-rules" ) );
+    }
+    catch( PARSE_ERROR& pe )
+    {
+        return false;
+    }
+
+    std::vector<std::shared_ptr<DRC_ITEM>> footprints;
+    std::vector<std::shared_ptr<DRC_ITEM>> unconnected;
+    std::vector<std::shared_ptr<DRC_ITEM>> violations;
+
+    engine->SetProgressReporter( nullptr );
+
+    engine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
+            {
+                if(    aItem->GetErrorCode() == DRCE_MISSING_FOOTPRINT
+                    || aItem->GetErrorCode() == DRCE_DUPLICATE_FOOTPRINT
+                    || aItem->GetErrorCode() == DRCE_EXTRA_FOOTPRINT
+                    || aItem->GetErrorCode() == DRCE_NET_CONFLICT )
+                {
+                    footprints.push_back( aItem );
+                }
+                else if( aItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
+                {
+                    unconnected.push_back( aItem );
+                }
+                else
+                {
+                    violations.push_back( aItem );
+                }
+            } );
+
+    engine->RunTests( aUnits, aTestTracksAgainstZones, aReportAllTrackErrors, false );
+    engine->ClearViolationHandler();
+
+    // TODO: Unify this with DIALOG_DRC::writeReport
+
+    FILE* fp = wxFopen( aFileName, wxT( "w" ) );
+
+    if( fp == nullptr )
+        return false;
+
+    std::map<KIID, EDA_ITEM*> itemMap;
+    aBoard->FillItemMap( itemMap );
+
+    fprintf( fp, "** Drc report for %s **\n", TO_UTF8( aBoard->GetFileName() ) );
+
+    wxDateTime now = wxDateTime::Now();
+
+    fprintf( fp, "** Created on %s **\n", TO_UTF8( now.Format( wxT( "%F %T" ) ) ) );
+
+    fprintf( fp, "\n** Found %d DRC violations **\n", static_cast<int>( violations.size() ) );
+
+    for( const std::shared_ptr<DRC_ITEM>& item : violations )
+    {
+        SEVERITY severity = static_cast<SEVERITY>( bds.GetSeverity( item->GetErrorCode() ) );
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( aUnits, severity, itemMap ) ) );
+    }
+
+    fprintf( fp, "\n** Found %d unconnected pads **\n", static_cast<int>( unconnected.size() ) );
+
+    for( const std::shared_ptr<DRC_ITEM>& item : unconnected )
+    {
+        SEVERITY severity = static_cast<SEVERITY>( bds.GetSeverity( item->GetErrorCode() ) );
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( aUnits, severity, itemMap ) ) );
+    }
+
+    fprintf( fp, "\n** Found %d Footprint errors **\n", static_cast<int>( footprints.size() ) );
+
+    for( const std::shared_ptr<DRC_ITEM>& item : footprints )
+    {
+        SEVERITY severity = static_cast<SEVERITY>( bds.GetSeverity( item->GetErrorCode() ) );
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( aUnits, severity, itemMap ) ) );
+    }
+
+    fprintf( fp, "\n** End of Report **\n" );
+    fclose( fp );
+
+    return true;
 }

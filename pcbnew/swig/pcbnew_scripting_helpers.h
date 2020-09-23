@@ -142,4 +142,20 @@ int GetUserUnits();
  */
 bool IsActionRunning();
 
+/**
+ * Runs the DRC check on the given board and writes the results to a report file.
+ * Requires that the project for the board be loaded, and note that unlike the DRC dialog
+ * this does not attempt to fill zones, so zones must be valid before calling.
+ *
+ * @param aBoard is a valid loaded board
+ * @param aFileName is the full path and name of the report file to write
+ * @param aUnits is the units to use in the report
+ * @param aTestTracksAgainstZones controls whether full track/zone checking is done (slow)
+ * @param aReportAllTrackErrors controls whether all errors or just the first error is reported
+ *                              for each track
+ * @return true if successful, false if not
+ */
+bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
+                     bool aTestTracksAgainstZones, bool aReportAllTrackErrors );
+
 #endif      // __PCBNEW_SCRIPTING_HELPERS_H

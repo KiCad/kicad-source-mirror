@@ -124,6 +124,7 @@ HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
 %include <id.h>
 
 HANDLE_EXCEPTIONS(LoadBoard)
+HANDLE_EXCEPTIONS(WriteDRCReport)
 %include <pcbnew_scripting_helpers.h>
 
 
