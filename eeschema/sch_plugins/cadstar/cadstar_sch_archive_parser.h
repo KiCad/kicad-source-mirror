@@ -314,6 +314,13 @@ public:
 
     struct NET_SCH : CADSTAR_ARCHIVE_PARSER::NET
     {
+        struct JUNCTION_SCH : CADSTAR_ARCHIVE_PARSER::NET::JUNCTION ///< "JPT" nodename.
+        {
+            TERMINALCODE_ID TerminalCodeID; ///< Usually a circle, but size can be varied
+
+            void Parse( XNODE* aNode ) override;
+        };
+
         struct SYM_TERM ///< "TERM" nodename (represents a pin in a SCH symbol)
         {
             NETELEMENT_ID ID; ///< First character is "P"
@@ -359,11 +366,11 @@ public:
             void Parse( XNODE* aNode ) override;
         };
 
-
-        std::map<NETELEMENT_ID, SYM_TERM>   Terminals;
-        std::map<NETELEMENT_ID, BUS_TERM>   BusTerminals;
-        std::map<NETELEMENT_ID, BLOCK_TERM> BlockTerminals;
-        std::vector<CONNECTION_SCH>         Connections;
+        std::map<NETELEMENT_ID, JUNCTION_SCH> Junctions;
+        std::map<NETELEMENT_ID, SYM_TERM>     Terminals;
+        std::map<NETELEMENT_ID, BUS_TERM>     BusTerminals;
+        std::map<NETELEMENT_ID, BLOCK_TERM>   BlockTerminals;
+        std::vector<CONNECTION_SCH>           Connections;
 
         void Parse( XNODE* aNode ) override;
     };

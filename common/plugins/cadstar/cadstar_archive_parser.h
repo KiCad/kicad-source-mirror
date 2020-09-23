@@ -1022,7 +1022,7 @@ public:
             REUSEBLOCKREF ReuseBlockRef;
             bool          Fixed = false;
 
-            void Parse( XNODE* aNode );
+            virtual void Parse( XNODE* aNode );
         };
 
 

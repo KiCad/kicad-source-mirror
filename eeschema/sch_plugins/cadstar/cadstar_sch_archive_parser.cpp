@@ -881,7 +881,13 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::Parse( XNODE* aNode )
     {
         wxString cNodeName = cNode->GetName();
 
-        if( ParseSubNode( cNode ) )
+        if( cNodeName == wxT( "JPT" ) )
+        {
+            JUNCTION_SCH jpt;
+            jpt.Parse( cNode );
+            Junctions.insert( std::make_pair( jpt.ID, jpt ) );
+        }
+        else if( ParseSubNode( cNode ) )
         {
             continue;
         }
@@ -990,4 +996,12 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SCHEMATIC::Parse( XNODE* aNode )
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
     }
+}
+
+void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::JUNCTION_SCH::Parse( XNODE* aNode )
+{
+    CADSTAR_ARCHIVE_PARSER::NET::JUNCTION::Parse( aNode );
+
+    TerminalCodeID = GetXmlAttributeIDString( aNode, 1 );
+    LayerID        = GetXmlAttributeIDString( aNode, 2 );
 }

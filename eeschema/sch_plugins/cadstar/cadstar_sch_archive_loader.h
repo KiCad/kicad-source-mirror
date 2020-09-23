@@ -35,8 +35,10 @@ class LABEL_SPIN_STYLE;
 class LIB_FIELD;
 class LIB_PART;
 class SCH_COMPONENT;
-class SCH_SHEET;
 class SCH_FIELD;
+class SCH_GLOBALLABEL;
+class SCH_HIERLABEL;
+class SCH_SHEET;
 class SCHEMATIC;
 
 class CADSTAR_SCH_ARCHIVE_LOADER : public CADSTAR_SCH_ARCHIVE_PARSER
@@ -67,6 +69,8 @@ public:
 
 
 private:
+    typedef std::pair<BLOCK_ID, TERMINAL_ID> BLOCK_PIN_ID;
+
     ::SCHEMATIC*                     mSchematic;
     ::SCH_SHEET*                     mRootSheet;
     SCH_PLUGIN::SCH_PLUGIN_RELEASER* mPlugin;
@@ -77,12 +81,21 @@ private:
     std::set<HATCHCODE_ID> mHatchcodesTested;       ///< Used by checkAndLogHatchCode() to
                                                     ///< avoid multiple duplicate warnings
     std::map<LAYER_ID, SCH_SHEET*> mSheetMap;       ///< Map between Cadstar and KiCad Sheets
-    std::map<PART_ID, LIB_PART*>   mPartMap;        ///< Map between Cadstar and KiCad Parts
-    std::map<SYMDEF_ID, LIB_PART*> mPowerSymMap;    ///< Map between Cadstar and KiCad Power Symbols
+    std::map<BLOCK_PIN_ID, SCH_HIERLABEL*>
+                                 mSheetPinMap; ///< Map between Cadstar and KiCad Sheets Pins
+    std::map<PART_ID, LIB_PART*> mPartMap;     ///< Map between Cadstar and KiCad Parts
+    std::map<SYMDEF_ID, LIB_PART*>
+            mPowerSymLibMap; ///< Map between Cadstar and KiCad Power Symbol Library items
+    std::map<SYMBOL_ID, SCH_COMPONENT*>
+            mPowerSymMap; ///< Map between Cadstar and KiCad Power Symbols
+    std::map<SYMBOL_ID, SCH_GLOBALLABEL*>
+            mGlobLabelMap; ///< Map between Cadstar and KiCad Global Labels
 
     void loadSheets();
+    void loadHierarchicalSheetPins();
     void loadPartsLibrary();
     void loadSchematicSymbolInstances();
+    void loadNets();
 
     //Helper Functions for loading sheets
     void loadSheetAndChildSheets( LAYER_ID aCadstarSheetID, wxPoint aPosition, wxSize aSheetSize,
@@ -91,25 +104,30 @@ private:
     std::vector<LAYER_ID> findOrphanSheets();
     int                   getSheetNumber( LAYER_ID aCadstarSheetID );
 
-    //Helper Functions for loading symbols
-    void           loadSymDefIntoLibrary( const SYMDEF_ID& aSymdefID, const PART* aCadstarPart,
-                      const GATE_ID& aGateID, LIB_PART* aPart );
-    void           loadLibrarySymbolShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
-                      wxPoint aSymbolOrigin, LIB_PART* aPart, int aGateNumber );
-    void           loadLibraryFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
-                      wxPoint aSymbolOrigin, LIB_FIELD* aKiCadField );
+    //Helper Functions for loading library items
+    void loadSymDefIntoLibrary( const SYMDEF_ID& aSymdefID, const PART* aCadstarPart,
+            const GATE_ID& aGateID, LIB_PART* aPart );
+    void loadLibrarySymbolShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
+            wxPoint aSymbolOrigin, LIB_PART* aPart, int aGateNumber );
+    void loadLibraryFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
+            wxPoint aSymbolOrigin, LIB_FIELD* aKiCadField );
+
+    //Helper Functions for loading symbols in schematic
     SCH_COMPONENT* loadSchematicSymbol( const SYMBOL& aCadstarSymbol, LIB_PART* aKiCadPart,
             double& aComponentOrientationDeciDeg );
     void           loadSymbolFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
                       const double& aComponentOrientationDeciDeg, SCH_FIELD* aKiCadField );
+    int            getComponentOrientation(
+                       long long aCadstarOrientAngle, double& aReturnedOrientationDeciDeg );
 
-    void checkAndLogHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
+    //Helper functions for loading nets
+    POINT    getLocationOfNetElement( const NET_SCH& aNet, const NETELEMENT_ID& aNetElementID );
+    wxString getNetName( const NET_SCH& aNet );
 
-    //Helper Functions for obtaining CADSTAR elements in the parsed structures
+    //Helper Functions for obtaining CADSTAR elements from the parsed structures
     SYMDEF_ID getSymDefFromName( const wxString& aSymdefName, const wxString& aSymDefAlternate );
     wxString  generateSymDefName( const SYMDEF_ID& aSymdefID );
     int       getLineThickness( const LINECODE_ID& aCadstarLineCodeID );
-    HATCHCODE getHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
     PART      getPart( const PART_ID& aCadstarPartID );
     ROUTECODE getRouteCode( const ROUTECODE_ID& aCadstarRouteCodeID );
     TEXTCODE  getTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
@@ -120,9 +138,6 @@ private:
             const PART& aCadstarPart, const GATE_ID& aGateID, const TERMINAL_ID& aTerminalID );
 
     // Helper Functions for obtaining individual elements as KiCad elements:
-    double           getHatchCodeAngleDegrees( const HATCHCODE_ID& aCadstarHatchcodeID );
-    int              getKiCadHatchCodeThickness( const HATCHCODE_ID& aCadstarHatchcodeID );
-    int              getKiCadHatchCodeGap( const HATCHCODE_ID& aCadstarHatchcodeID );
     int              getKiCadUnitNumberFromGate( const GATE_ID& aCadstarGateID );
     LABEL_SPIN_STYLE getSpinStyle( const long long& aCadstarOrientation, bool aMirror );
 

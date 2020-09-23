@@ -31,8 +31,11 @@
 #include <lib_text.h>
 #include <sch_edit_frame.h> //COMPONENT_ORIENTATION_T
 #include <sch_io_mgr.h>
+#include <sch_junction.h>
+#include <sch_line.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
+#include <sch_text.h>
 #include <schematic.h>
 #include <trigo.h>
 #include <wildcards_and_files_ext.h>
@@ -75,8 +78,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( ::SCHEMATIC* aSchematic, ::SCH_SHEET* aRo
     mLibraryFileName = aLibraryFileName;
 
     loadSheets();
+    loadHierarchicalSheetPins();
     loadPartsLibrary();
     loadSchematicSymbolInstances();
+    loadNets();
     // TODO Load other elements!
 
     // For all sheets, centre all elements and re calculate the page size:
@@ -186,6 +191,54 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheets()
 }
 
 
+void CADSTAR_SCH_ARCHIVE_LOADER::loadHierarchicalSheetPins()
+{
+    for( std::pair<BLOCK_ID, BLOCK> blockPair : Schematic.Blocks )
+    {
+        BLOCK&   block   = blockPair.second;
+        LAYER_ID sheetID = "";
+
+        if( block.Type == BLOCK::TYPE::PARENT )
+            sheetID = block.LayerID;
+        else if( block.Type == BLOCK::TYPE::CHILD )
+            sheetID = block.AssocLayerID;
+        else
+            continue;
+
+        if( mSheetMap.find( sheetID ) != mSheetMap.end() )
+        {
+            SCH_SHEET* sheet = mSheetMap.at( sheetID );
+
+            for( std::pair<TERMINAL_ID, TERMINAL> termPair : block.Terminals )
+            {
+                TERMINAL term = termPair.second;
+                wxString name = "YOU SHOULDN'T SEE THIS TEXT. THIS IS A BUG.";
+
+                SCH_HIERLABEL* sheetPin = nullptr;
+
+                if( block.Type == BLOCK::TYPE::PARENT )
+                    sheetPin = new SCH_HIERLABEL();
+                else if( block.Type == BLOCK::TYPE::CHILD )
+                    sheetPin = new SCH_SHEET_PIN( sheet );
+
+                sheetPin->SetText( name );
+                sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );
+                sheetPin->SetLabelSpinStyle( getSpinStyle( term.OrientAngle, false ) );
+                sheetPin->SetPosition( getKiCadPoint( term.Position ) );
+
+                if( sheetPin->Type() == SCH_SHEET_PIN_T )
+                    sheet->AddPin( (SCH_SHEET_PIN*) sheetPin );
+                else
+                    sheet->GetScreen()->Append( sheetPin );
+
+                BLOCK_PIN_ID blockPinID = std::make_pair( block.ID, term.ID );
+                mSheetPinMap.insert( { blockPinID, sheetPin } );
+            }
+        }
+    }
+}
+
+
 void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
 {
     for( std::pair<PART_ID, PART> partPair : Parts.PartDefinitions )
@@ -281,32 +334,47 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
 
             if( sym.SymbolVariant.Type == SYMBOLVARIANT::TYPE::GLOBALSIGNAL )
             {
-                SYMDEF_ID symID    = sym.SymdefID;
-                LIB_PART* kiPart   = nullptr;
-                wxString  partName = sym.SymbolVariant.Reference;
+                SYMDEF_ID symID  = sym.SymdefID;
+                LIB_PART* kiPart = nullptr;
+                //KiCad requires parts to be named the same as the net:
+                wxString partName = sym.SymbolVariant.Reference;
 
                 partName = LIB_ID::FixIllegalChars( partName, LIB_ID::ID_SCH );
 
-                if( mPowerSymMap.find( symID ) == mPowerSymMap.end()
-                        || mPowerSymMap.at( symID )->GetName() != partName )
+                if( mPowerSymLibMap.find( symID ) == mPowerSymLibMap.end()
+                        || mPowerSymLibMap.at( symID )->GetName() != partName )
                 {
                     kiPart = new LIB_PART( partName );
                     kiPart->SetPower();
                     loadSymDefIntoLibrary( symID, nullptr, "A", kiPart );
+
                     kiPart->GetValueField().SetText( partName );
+                    SYMDEF_SCM symbolDef = Library.SymbolDefinitions.at( symID );
+
+                    if( symbolDef.TextLocations.find( SIGNALNAME_ORIGIN_ATTRID )
+                            != symbolDef.TextLocations.end() )
+                    {
+                        TEXT_LOCATION signameOrigin =
+                                symbolDef.TextLocations.at( SIGNALNAME_ORIGIN_ATTRID );
+                        kiPart->GetValueField().SetPosition(
+                                getKiCadLibraryPoint( signameOrigin.Position, symbolDef.Origin ) );
+                    }
+
                     kiPart->GetReferenceField().SetText( "#PWR" );
                     ( *mPlugin )->SaveSymbol( mLibraryFileName.GetFullPath(), kiPart );
-                    mPowerSymMap.insert( { symID, kiPart } );
+                    mPowerSymLibMap.insert( { symID, kiPart } );
                 }
                 else
                 {
-                    kiPart = mPowerSymMap.at( symID );
+                    kiPart = mPowerSymLibMap.at( symID );
                 }
 
                 double compOrientationTenthDegree = 0.0;
 
                 SCH_COMPONENT* component =
                         loadSchematicSymbol( sym, kiPart, compOrientationTenthDegree );
+
+                mPowerSymMap.insert( { sym.ID, component } );
             }
             else if( sym.SymbolVariant.Type == SYMBOLVARIANT::TYPE::SIGNALREF )
             {
@@ -316,7 +384,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
 
                 SCH_GLOBALLABEL* netLabel = new SCH_GLOBALLABEL;
                 netLabel->SetPosition( getKiCadPoint( sym.Origin + terminalPosOffset ) );
-                netLabel->SetText( "SOMEGLOBALNET" );
+                netLabel->SetText( "YOU SHOULDN'T SEE THIS TEXT - PLEASE REPORT THIS BUG" );
                 netLabel->SetTextSize( wxSize( Mils2iu( 50 ), Mils2iu( 50 ) ) );
                 netLabel->SetLabelSpinStyle( getSpinStyle( sym.OrientAngle, sym.Mirror ) );
 
@@ -330,6 +398,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                     netLabel->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );
 
                 mSheetMap.at( sym.LayerID )->GetScreen()->Append( netLabel );
+                mGlobLabelMap.insert( { sym.ID, netLabel } );
             }
             else
             {
@@ -340,8 +409,112 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
         {
             wxLogError( wxString::Format(
                     _( "Symbol ID '%s' is of an unknown type. It is neither a component or a "
-                       "net (power /symbol. The symbol was not loaded." ),
+                       "net power / symbol. The symbol was not loaded." ),
                     sym.ID ) );
+        }
+    }
+}
+
+
+void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
+{
+    for( std::pair<NET_ID, NET_SCH> netPair : Schematic.Nets )
+    {
+        NET_SCH  net     = netPair.second;
+        wxString netName = net.Name;
+
+        if( netName.IsEmpty() )
+            netName = wxString::Format( "$%d", net.SignalNum );
+
+
+        for( std::pair<NETELEMENT_ID, NET_SCH::SYM_TERM> terminalPair : net.Terminals )
+        {
+            NET_SCH::SYM_TERM netTerm = terminalPair.second;
+
+            if( netTerm.HasNetLabel )
+            {
+                if( mPowerSymMap.find( netTerm.SymbolID ) != mPowerSymMap.end() )
+                {
+                    SCH_FIELD* val = mPowerSymMap.at( netTerm.SymbolID )->GetField( VALUE );
+                    val->SetText( netName );
+                    val->SetPosition( getKiCadPoint( netTerm.NetLabel.Position ) );
+                    val->SetTextAngle( getAngleTenthDegree( netTerm.NetLabel.OrientAngle ) );
+                    val->SetBold( false );
+                    val->SetVisible( true );
+
+                    applyTextSettings( netTerm.NetLabel.TextCodeID, netTerm.NetLabel.Alignment,
+                            netTerm.NetLabel.Justification, val );
+                }
+                else if( mGlobLabelMap.find( netTerm.SymbolID ) != mGlobLabelMap.end() )
+                {
+                    mGlobLabelMap.at( netTerm.SymbolID )->SetText( netName );
+                }
+            }
+        }
+
+
+        for( std::pair<NETELEMENT_ID, NET_SCH::BLOCK_TERM> blockPair : net.BlockTerminals )
+        {
+            NET_SCH::BLOCK_TERM blockTerm = blockPair.second;
+            BLOCK_PIN_ID blockPinID = std::make_pair( blockTerm.BlockID, blockTerm.TerminalID );
+
+            if( mSheetPinMap.find( blockPinID ) != mSheetPinMap.end() )
+                mSheetPinMap.at( blockPinID )->SetText( netName );
+        }
+
+
+        for( NET_SCH::CONNECTION_SCH conn : net.Connections )
+        {
+            if( conn.Path.size() < 2 )
+            {
+                //Implied straight line connection between the two elements
+                POINT start = getLocationOfNetElement( net, conn.StartNode );
+                POINT end   = getLocationOfNetElement( net, conn.EndNode );
+
+                if( start.x == UNDEFINED_VALUE || end.x == UNDEFINED_VALUE )
+                    continue;
+
+                conn.Path.clear();
+                conn.Path.push_back( start );
+                conn.Path.push_back( end );
+            }
+
+            bool  firstPt = true;
+            POINT last;
+
+            for( POINT pt : conn.Path )
+            {
+                if( firstPt )
+                {
+                    last    = pt;
+                    firstPt = false;
+                    continue;
+                }
+
+                if( conn.LayerID != wxT( "NO_SHEET" ) )
+                {
+                    SCH_LINE* wire = new SCH_LINE();
+
+                    wire->SetStartPoint( getKiCadPoint( last ) );
+                    wire->SetEndPoint( getKiCadPoint( pt ) );
+                    wire->SetLayer( LAYER_WIRE );
+
+                    last = pt;
+
+                    mSheetMap.at( conn.LayerID )->GetScreen()->Append( wire );
+                }
+            }
+        }
+
+
+        for( std::pair<NETELEMENT_ID, NET::JUNCTION> juncPair : net.Junctions )
+        {
+            NET::JUNCTION junc = juncPair.second;
+
+            SCH_JUNCTION* kiJunc = new SCH_JUNCTION();
+
+            kiJunc->SetPosition( getKiCadPoint( junc.Location ) );
+            mSheetMap.at( junc.LayerID )->GetScreen()->Append( kiJunc );
         }
     }
 }
@@ -561,30 +734,8 @@ SCH_COMPONENT* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol(
 
     component->SetPosition( getKiCadPoint( aCadstarSymbol.Origin ) );
 
-    int compOrientation = COMPONENT_ORIENTATION_T::CMP_ORIENT_0;
-
-    int oDeg = (int) NormalizeAngle180( getAngleTenthDegree( aCadstarSymbol.OrientAngle ) );
-
-    if( oDeg >= -450 && oDeg <= 450 )
-    {
-        compOrientation              = COMPONENT_ORIENTATION_T::CMP_ORIENT_0;
-        aComponentOrientationDeciDeg = 0.0;
-    }
-    else if( oDeg >= 450 && oDeg <= 1350 )
-    {
-        compOrientation              = COMPONENT_ORIENTATION_T::CMP_ORIENT_90;
-        aComponentOrientationDeciDeg = 900.0;
-    }
-    else if( oDeg >= 1350 || oDeg <= -1350 )
-    {
-        compOrientation              = COMPONENT_ORIENTATION_T::CMP_ORIENT_180;
-        aComponentOrientationDeciDeg = 1800.0;
-    }
-    else
-    {
-        compOrientation              = COMPONENT_ORIENTATION_T::CMP_ORIENT_270;
-        aComponentOrientationDeciDeg = 2700.0;
-    }
+    int compOrientation =
+            getComponentOrientation( aCadstarSymbol.OrientAngle, aComponentOrientationDeciDeg );
 
     if( aCadstarSymbol.Mirror )
         compOrientation += COMPONENT_ORIENTATION_T::CMP_MIRROR_Y;
@@ -625,6 +776,7 @@ SCH_COMPONENT* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol(
     return component;
 }
 
+
 void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolFieldAttribute(
         const ATTRIBUTE_LOCATION& aCadstarAttrLoc, const double& aComponentOrientationDeciDeg,
         SCH_FIELD* aKiCadField )
@@ -637,6 +789,139 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolFieldAttribute(
 
     applyTextSettings( aCadstarAttrLoc.TextCodeID, aCadstarAttrLoc.Alignment,
             aCadstarAttrLoc.Justification, aKiCadField );
+}
+
+
+int CADSTAR_SCH_ARCHIVE_LOADER::getComponentOrientation(
+        long long aCadstarOrientAngle, double& aReturnedOrientationDeciDeg )
+{
+    int compOrientation = COMPONENT_ORIENTATION_T::CMP_ORIENT_0;
+
+    int oDeg = (int) NormalizeAngle180( getAngleTenthDegree( aCadstarOrientAngle ) );
+
+    if( oDeg >= -450 && oDeg <= 450 )
+    {
+        compOrientation             = COMPONENT_ORIENTATION_T::CMP_ORIENT_0;
+        aReturnedOrientationDeciDeg = 0.0;
+    }
+    else if( oDeg >= 450 && oDeg <= 1350 )
+    {
+        compOrientation             = COMPONENT_ORIENTATION_T::CMP_ORIENT_90;
+        aReturnedOrientationDeciDeg = 900.0;
+    }
+    else if( oDeg >= 1350 || oDeg <= -1350 )
+    {
+        compOrientation             = COMPONENT_ORIENTATION_T::CMP_ORIENT_180;
+        aReturnedOrientationDeciDeg = 1800.0;
+    }
+    else
+    {
+        compOrientation             = COMPONENT_ORIENTATION_T::CMP_ORIENT_270;
+        aReturnedOrientationDeciDeg = 2700.0;
+    }
+
+    return compOrientation;
+}
+
+
+CADSTAR_SCH_ARCHIVE_LOADER::POINT CADSTAR_SCH_ARCHIVE_LOADER::getLocationOfNetElement(
+        const NET_SCH& aNet, const NETELEMENT_ID& aNetElementID )
+{
+    // clang-format off
+    auto logUnknownNetElementError = 
+        [&]()
+        {
+            wxLogError( wxString::Format( _( 
+                "Net %s references unknown net element %s. The net was "                                         
+                "not properly loaded and may require manual fixing." ),
+                    getNetName( aNet ), aNetElementID ) );
+
+            return POINT();
+        };
+    // clang-format on
+
+    if( aNetElementID.Contains( "J" ) ) // Junction
+    {
+        if( aNet.Junctions.find( aNetElementID ) == aNet.Junctions.end() )
+            return logUnknownNetElementError();
+
+        return aNet.Junctions.at( aNetElementID ).Location;
+    }
+    else if( aNetElementID.Contains( "P" ) ) // Terminal/Pin of a symbol
+    {
+        if( aNet.Terminals.find( aNetElementID ) == aNet.Terminals.end() )
+            return logUnknownNetElementError();
+
+        SYMBOL_ID   symid  = aNet.Terminals.at( aNetElementID ).SymbolID;
+        TERMINAL_ID termid = aNet.Terminals.at( aNetElementID ).TerminalID;
+
+        if( Schematic.Symbols.find( symid ) == Schematic.Symbols.end() )
+            return logUnknownNetElementError();
+
+        SYMBOL    sym          = Schematic.Symbols.at( symid );
+        SYMDEF_ID symdefid     = sym.SymdefID;
+        wxPoint   symbolOrigin = sym.Origin;
+
+        if( Library.SymbolDefinitions.find( symdefid ) == Library.SymbolDefinitions.end() )
+            return logUnknownNetElementError();
+
+        wxPoint libpinPosition =
+                Library.SymbolDefinitions.at( symdefid ).Terminals.at( termid ).Position;
+        wxPoint libOrigin   = Library.SymbolDefinitions.at( symdefid ).Origin;
+        wxPoint pinOffset   = libpinPosition - libOrigin;
+        wxPoint pinPosition = symbolOrigin + pinOffset;
+
+        if( sym.Mirror )
+            pinPosition.x = ( 2 * symbolOrigin.x ) - pinPosition.x;
+
+        double adjustedOrientationDecideg;
+        getComponentOrientation( sym.OrientAngle, adjustedOrientationDecideg );
+
+        RotatePoint( &pinPosition, symbolOrigin, -adjustedOrientationDecideg );
+
+        POINT retval;
+        retval.x = pinPosition.x;
+        retval.y = pinPosition.y;
+
+        return retval;
+    }
+    else if( aNetElementID.Contains( "BT" ) ) // Bus Terminal
+    {
+        if( aNet.BusTerminals.find( aNetElementID ) == aNet.BusTerminals.end() )
+            return logUnknownNetElementError();
+
+        return aNet.BusTerminals.at( aNetElementID ).SecondPoint;
+    }
+    else if( aNetElementID.Contains( "BLKT" ) ) // Block Terminal (sheet hierarchy connection)
+    {
+        if( aNet.BlockTerminals.find( aNetElementID ) == aNet.BlockTerminals.end() )
+            return logUnknownNetElementError();
+
+        BLOCK_ID    blockid = aNet.BlockTerminals.at( aNetElementID ).BlockID;
+        TERMINAL_ID termid  = aNet.BlockTerminals.at( aNetElementID ).TerminalID;
+
+        if( Schematic.Blocks.find( blockid ) == Schematic.Blocks.end() )
+            return logUnknownNetElementError();
+
+        return Schematic.Blocks.at( blockid ).Terminals.at( termid ).Position;
+    }
+    else
+    {
+        return logUnknownNetElementError();
+    }
+
+    return POINT();
+}
+
+
+wxString CADSTAR_SCH_ARCHIVE_LOADER::getNetName( const NET_SCH& aNet )
+{
+    wxString netname = aNet.Name;
+
+    if( netname.IsEmpty() )
+        netname = wxString::Format( "$%d", aNet.SignalNum );
+
+    return netname;
 }
 
 
@@ -775,70 +1060,6 @@ int CADSTAR_SCH_ARCHIVE_LOADER::getSheetNumber( LAYER_ID aCadstarSheetID )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::checkAndLogHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID )
-{
-    if( mHatchcodesTested.find( aCadstarHatchcodeID ) != mHatchcodesTested.end() )
-    {
-        return; //already checked
-    }
-    else
-    {
-        HATCHCODE hcode = getHatchCode( aCadstarHatchcodeID );
-
-        if( hcode.Hatches.size() != 2 )
-        {
-            wxLogWarning( wxString::Format(
-                    _( "The CADSTAR Hatching code '%s' has %d hatches defined. "
-                       "KiCad only supports 2 hatches (crosshatching) 90 degrees apart. "
-                       "The imported hatching is crosshatched." ),
-                    hcode.Name, (int) hcode.Hatches.size() ) );
-        }
-        else
-        {
-            if( hcode.Hatches.at( 0 ).LineWidth != hcode.Hatches.at( 1 ).LineWidth )
-            {
-                wxLogWarning( wxString::Format(
-                        _( "The CADSTAR Hatching code '%s' has different line widths for each "
-                           "hatch. KiCad only supports one width for the haching. The imported "
-                           "hatching uses the width defined in the first hatch definition, i.e. "
-                           "%.2f mm." ),
-                        hcode.Name,
-                        (double) ( (double) getKiCadLength( hcode.Hatches.at( 0 ).LineWidth ) )
-                                / 1E6 ) );
-            }
-
-            if( hcode.Hatches.at( 0 ).Step != hcode.Hatches.at( 1 ).Step )
-            {
-                wxLogWarning( wxString::Format(
-                        _( "The CADSTAR Hatching code '%s' has different step sizes for each "
-                           "hatch. KiCad only supports one step size for the haching. The imported "
-                           "hatching uses the step size defined in the first hatching definition, "
-                           "i.e. %.2f mm." ),
-                        hcode.Name,
-                        (double) ( (double) getKiCadLength( hcode.Hatches.at( 0 ).Step ) )
-                                / 1E6 ) );
-            }
-
-            if( abs( hcode.Hatches.at( 0 ).OrientAngle - hcode.Hatches.at( 1 ).OrientAngle )
-                    != 90000 )
-            {
-                wxLogWarning( wxString::Format(
-                        _( "The hatches in CADSTAR Hatching code '%s' have an angle  "
-                           "difference of %.1f degrees. KiCad only supports hatching 90 "
-                           "degrees apart.  The imported hatching has two hatches 90 "
-                           "degrees apart, oriented %.1f degrees from horizontal." ),
-                        hcode.Name,
-                        getAngleDegrees( abs( hcode.Hatches.at( 0 ).OrientAngle
-                                              - hcode.Hatches.at( 1 ).OrientAngle ) ),
-                        getAngleDegrees( hcode.Hatches.at( 0 ).OrientAngle ) ) );
-            }
-        }
-
-        mHatchcodesTested.insert( aCadstarHatchcodeID );
-    }
-}
-
-
 CADSTAR_SCH_ARCHIVE_LOADER::SYMDEF_ID CADSTAR_SCH_ARCHIVE_LOADER::getSymDefFromName(
         const wxString& aSymdefName, const wxString& aSymDefAlternate )
 {
@@ -878,17 +1099,6 @@ int CADSTAR_SCH_ARCHIVE_LOADER::getLineThickness( const LINECODE_ID& aCadstarLin
             mSchematic->Settings().m_DefaultWireThickness );
 
     return getKiCadLength( Assignments.Codedefs.LineCodes.at( aCadstarLineCodeID ).Width );
-}
-
-
-CADSTAR_SCH_ARCHIVE_LOADER::HATCHCODE CADSTAR_SCH_ARCHIVE_LOADER::getHatchCode(
-        const HATCHCODE_ID& aCadstarHatchcodeID )
-{
-    wxCHECK( Assignments.Codedefs.HatchCodes.find( aCadstarHatchcodeID )
-                     != Assignments.Codedefs.HatchCodes.end(),
-            HATCHCODE() );
-
-    return Assignments.Codedefs.HatchCodes.at( aCadstarHatchcodeID );
 }
 
 
@@ -958,43 +1168,6 @@ CADSTAR_SCH_ARCHIVE_LOADER::PART::DEFINITION::PIN CADSTAR_SCH_ARCHIVE_LOADER::ge
     return PART::DEFINITION::PIN();
 }
 
-
-double CADSTAR_SCH_ARCHIVE_LOADER::getHatchCodeAngleDegrees(
-        const HATCHCODE_ID& aCadstarHatchcodeID )
-{
-    checkAndLogHatchCode( aCadstarHatchcodeID );
-    HATCHCODE hcode = getHatchCode( aCadstarHatchcodeID );
-
-    if( hcode.Hatches.size() < 1 )
-        return mSchematic->Settings().m_DefaultWireThickness;
-    else
-        return getAngleDegrees( hcode.Hatches.at( 0 ).OrientAngle );
-}
-
-
-int CADSTAR_SCH_ARCHIVE_LOADER::getKiCadHatchCodeThickness(
-        const HATCHCODE_ID& aCadstarHatchcodeID )
-{
-    checkAndLogHatchCode( aCadstarHatchcodeID );
-    HATCHCODE hcode = getHatchCode( aCadstarHatchcodeID );
-
-    if( hcode.Hatches.size() < 1 )
-        return mSchematic->Settings().m_DefaultWireThickness;
-    else
-        return getKiCadLength( hcode.Hatches.at( 0 ).LineWidth );
-}
-
-
-int CADSTAR_SCH_ARCHIVE_LOADER::getKiCadHatchCodeGap( const HATCHCODE_ID& aCadstarHatchcodeID )
-{
-    checkAndLogHatchCode( aCadstarHatchcodeID );
-    HATCHCODE hcode = getHatchCode( aCadstarHatchcodeID );
-
-    if( hcode.Hatches.size() < 1 )
-        return mSchematic->Settings().m_DefaultWireThickness;
-    else
-        return getKiCadLength( hcode.Hatches.at( 0 ).Step );
-}
 
 int CADSTAR_SCH_ARCHIVE_LOADER::getKiCadUnitNumberFromGate( const GATE_ID& aCadstarGateID )
 {
