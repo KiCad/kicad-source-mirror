@@ -196,7 +196,7 @@ void CONNECTIVITY_DATA::RecalculateRatsnest( BOARD_COMMIT* aCommit  )
         // Don't add intentionally-kept zone islands to the ratsnest
         if( c->IsOrphaned() && c->Size() == 1 )
         {
-            if( dynamic_cast<CN_ZONE*>( *c->begin() ) )
+            if( dynamic_cast<CN_ZONE_LAYER*>( *c->begin() ) )
                 continue;
         }
 

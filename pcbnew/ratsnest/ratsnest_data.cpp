@@ -364,7 +364,7 @@ void RN_NET::AddCluster( CN_CLUSTER_PTR aCluster )
 
     for( auto item : *aCluster )
     {
-        bool isZone = dynamic_cast<CN_ZONE*>(item) != nullptr;
+        bool isZone = dynamic_cast<CN_ZONE_LAYER*>(item) != nullptr;
         auto& anchors = item->Anchors();
         unsigned int nAnchors = isZone ? 1 : anchors.size();
 

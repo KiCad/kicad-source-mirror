@@ -296,9 +296,9 @@ public:
 
 protected:
 
-    void checkZoneItemConnection( CN_ZONE* aZone, CN_ITEM* aItem );
+    void checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aItem );
 
-    void checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB );
+    void checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LAYER* aZoneLayerB );
 
     ///> the item we are looking for connections to
     CN_ITEM* m_item;

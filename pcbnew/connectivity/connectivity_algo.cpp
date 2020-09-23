@@ -550,7 +550,7 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE_CONTAINER* aZone,
             {
                 if( z->Parent() == aZone && z->Layer() == aLayer )
                 {
-                    aIslands.push_back( static_cast<CN_ZONE*>(z)->SubpolyIndex() );
+                    aIslands.push_back( static_cast<CN_ZONE_LAYER*>(z)->SubpolyIndex() );
                 }
             }
         }
@@ -585,7 +585,7 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLAT
                         if( z->Parent() == zone.m_zone && z->Layer() == layer )
                         {
                             zone.m_islands[layer].push_back(
-                                    static_cast<CN_ZONE*>( z )->SubpolyIndex() );
+                                    static_cast<CN_ZONE_LAYER*>( z )->SubpolyIndex() );
                         }
                     }
                 }
@@ -624,85 +624,85 @@ void CN_CONNECTIVITY_ALGO::MarkNetAsDirty( int aNet )
 }
 
 
-void CN_VISITOR::checkZoneItemConnection( CN_ZONE* aZone, CN_ITEM* aItem )
+void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aItem )
 {
-    if( aZone->Net() != aItem->Net() && !aItem->CanChangeNet() )
+    if( aZoneLayer->Net() != aItem->Net() && !aItem->CanChangeNet() )
         return;
 
-    if( !aZone->BBox().Intersects( aItem->BBox() ) )
+    if( !aZoneLayer->BBox().Intersects( aItem->BBox() ) )
         return;
 
-    CN_ZONE* zoneItem = static_cast<CN_ZONE*> ( aZone );
-    int      accuracy = 0;
+    int accuracy = 0;
 
     if( aItem->Parent()->Type() == PCB_VIA_T
             || aItem->Parent()->Type() == PCB_TRACE_T
             || aItem->Parent()->Type() == PCB_ARC_T )
+    {
         accuracy = ( static_cast<TRACK*>( aItem->Parent() )->GetWidth() + 1 ) / 2;
+    }
 
     for( int i = 0; i < aItem->AnchorCount(); ++i )
     {
-        if( zoneItem->ContainsPoint( aItem->GetAnchor( i ), accuracy ) )
+        if( aZoneLayer->ContainsPoint( aItem->GetAnchor( i ), accuracy ) )
         {
-            zoneItem->Connect( aItem );
-            aItem->Connect( zoneItem );
+            aZoneLayer->Connect( aItem );
+            aItem->Connect( aZoneLayer );
             return;
         }
     }
 }
 
-void CN_VISITOR::checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB )
+void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LAYER* aZoneLayerB )
 {
-    const auto parentA = static_cast<const ZONE_CONTAINER*>( aZoneA->Parent() );
-    const auto parentB = static_cast<const ZONE_CONTAINER*>( aZoneB->Parent() );
+    const auto zoneA = static_cast<const ZONE_CONTAINER*>( aZoneLayerA->Parent() );
+    const auto zoneB = static_cast<const ZONE_CONTAINER*>( aZoneLayerB->Parent() );
 
-    if( aZoneB->Net() != aZoneA->Net() )
+    if( aZoneLayerB->Net() != aZoneLayerA->Net() )
         return; // we only test zones belonging to the same net
 
-    const BOX2I& boxA = aZoneA->BBox();
-    const BOX2I& boxB = aZoneB->BBox();
+    const BOX2I& boxA = aZoneLayerA->BBox();
+    const BOX2I& boxB = aZoneLayerB->BBox();
 
     int radiusA = 0;
     int radiusB = 0;
 
-    if( parentA->GetFilledPolysUseThickness() )
-        radiusA = ( parentA->GetMinThickness() + 1 ) / 2;
+    if( zoneA->GetFilledPolysUseThickness() )
+        radiusA = ( zoneA->GetMinThickness() + 1 ) / 2;
 
-    if( parentB->GetFilledPolysUseThickness() )
-        radiusB = ( parentB->GetMinThickness() + 1 ) / 2;
+    if( zoneB->GetFilledPolysUseThickness() )
+        radiusB = ( zoneB->GetMinThickness() + 1 ) / 2;
 
-    for( PCB_LAYER_ID layer : LSET( parentA->GetLayerSet() & parentB->GetLayerSet() ).Seq() )
+    PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( aZoneLayerA->Layer() );
+
+    const SHAPE_LINE_CHAIN& outline = 
+            zoneA->GetFilledPolysList( layer ).COutline( aZoneLayerA->SubpolyIndex() );
+
+    for( int i = 0; i < outline.PointCount(); i++ )
     {
-        const SHAPE_LINE_CHAIN& outline =
-                parentA->GetFilledPolysList( layer ).COutline( aZoneA->SubpolyIndex() );
+        if( !boxB.Contains( outline.CPoint( i ) ) )
+            continue;
 
-        for( int i = 0; i < outline.PointCount(); i++ )
+        if( aZoneLayerB->ContainsPoint( outline.CPoint( i ), radiusA ) )
         {
-            if( !boxB.Contains( outline.CPoint( i ) ) )
-                continue;
-
-            if( aZoneB->ContainsPoint( outline.CPoint( i ), radiusA ) )
-            {
-                aZoneA->Connect( aZoneB );
-                aZoneB->Connect( aZoneA );
-                return;
-            }
+            aZoneLayerA->Connect( aZoneLayerB );
+            aZoneLayerB->Connect( aZoneLayerA );
+            return;
         }
+    }
 
-        const SHAPE_LINE_CHAIN& outline2 =
-                parentB->GetFilledPolysList( layer ).COutline( aZoneB->SubpolyIndex() );
+    const SHAPE_LINE_CHAIN& outline2 =
+            zoneB->GetFilledPolysList( layer ).COutline( aZoneLayerB->SubpolyIndex() );
 
-        for( int i = 0; i < outline2.PointCount(); i++ )
+    for( int i = 0; i < outline2.PointCount(); i++ )
+    {
+        if( !boxA.Contains( outline2.CPoint( i ) ) )
+            continue;
+
+        if( aZoneLayerA->ContainsPoint( outline2.CPoint( i ), radiusB ) )
         {
-            if( !boxA.Contains( outline2.CPoint( i ) ) )
-                continue;
-
-            if( aZoneA->ContainsPoint( outline2.CPoint( i ), radiusB ) )
-            {
-                aZoneA->Connect( aZoneB );
-                aZoneB->Connect( aZoneA );
-                return;
-            }
+            aZoneLayerA->Connect( aZoneLayerB );
+            aZoneLayerB->Connect( aZoneLayerA );
+            return;
         }
     }
 }
@@ -731,20 +731,20 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
     // We should handle zone-zone connection separately
     if ( parentA->Type() == PCB_ZONE_AREA_T && parentB->Type() == PCB_ZONE_AREA_T )
     {
-        checkZoneZoneConnection( static_cast<CN_ZONE*>( m_item ),
-                                 static_cast<CN_ZONE*>( aCandidate ) );
+        checkZoneZoneConnection( static_cast<CN_ZONE_LAYER*>( m_item ),
+                                 static_cast<CN_ZONE_LAYER*>( aCandidate ) );
         return true;
     }
 
     if( parentA->Type() == PCB_ZONE_AREA_T )
     {
-        checkZoneItemConnection( static_cast<CN_ZONE*>( aCandidate ), m_item );
+        checkZoneItemConnection( static_cast<CN_ZONE_LAYER*>( aCandidate ), m_item );
         return true;
     }
 
     if( parentB->Type() == PCB_ZONE_AREA_T )
     {
-        checkZoneItemConnection( static_cast<CN_ZONE*>( m_item ), aCandidate );
+        checkZoneItemConnection( static_cast<CN_ZONE_LAYER*>( m_item ), aCandidate );
         return true;
     }
 

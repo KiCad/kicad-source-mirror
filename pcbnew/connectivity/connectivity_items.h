@@ -354,10 +354,11 @@ public:
 
 typedef std::shared_ptr<CN_ITEM> CN_ITEM_PTR;
 
-class CN_ZONE : public CN_ITEM
+class CN_ZONE_LAYER : public CN_ITEM
 {
 public:
-    CN_ZONE( ZONE_CONTAINER* aParent, PCB_LAYER_ID aLayer, bool aCanChangeNet, int aSubpolyIndex ) :
+    CN_ZONE_LAYER( ZONE_CONTAINER* aParent, PCB_LAYER_ID aLayer, bool aCanChangeNet,
+                   int aSubpolyIndex ) :
         CN_ITEM( aParent, aCanChangeNet ),
         m_subpolyIndex( aSubpolyIndex ),
         m_layer( aLayer )

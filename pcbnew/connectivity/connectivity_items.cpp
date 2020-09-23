@@ -160,7 +160,7 @@ void CN_ITEM::Dump()
 }
 
 
-int CN_ZONE::AnchorCount() const
+int CN_ZONE_LAYER::AnchorCount() const
 {
     if( !Valid() )
         return 0;
@@ -172,7 +172,7 @@ int CN_ZONE::AnchorCount() const
 }
 
 
-const VECTOR2I CN_ZONE::GetAnchor( int n ) const
+const VECTOR2I CN_ZONE_LAYER::GetAnchor( int n ) const
 {
     if( !Valid() )
         return VECTOR2I();
@@ -278,7 +278,7 @@ CN_ITEM* CN_LIST::Add( ARC* aArc )
 
      for( int j = 0; j < polys.OutlineCount(); j++ )
      {
-         CN_ZONE* zitem = new CN_ZONE( zone, aLayer, false, j );
+         CN_ZONE_LAYER* zitem = new CN_ZONE_LAYER( zone, aLayer, false, j );
          const auto& outline = zone->GetFilledPolysList( aLayer ).COutline( j );
 
          for( int k = 0; k < outline.PointCount(); k++ )
