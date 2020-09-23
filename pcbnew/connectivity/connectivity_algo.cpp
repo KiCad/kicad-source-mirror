@@ -657,6 +657,9 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
     const auto zoneA = static_cast<const ZONE_CONTAINER*>( aZoneLayerA->Parent() );
     const auto zoneB = static_cast<const ZONE_CONTAINER*>( aZoneLayerB->Parent() );
 
+    if( aZoneA->Layer() != aZoneB->Layer() )
+        return;
+
     if( aZoneLayerB->Net() != aZoneLayerA->Net() )
         return; // we only test zones belonging to the same net
 
@@ -674,7 +677,7 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
 
     PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( aZoneLayerA->Layer() );
 
-    const SHAPE_LINE_CHAIN& outline = 
+    const SHAPE_LINE_CHAIN& outline =
             zoneA->GetFilledPolysList( layer ).COutline( aZoneLayerA->SubpolyIndex() );
 
     for( int i = 0; i < outline.PointCount(); i++ )
