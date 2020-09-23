@@ -657,7 +657,7 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
     const auto zoneA = static_cast<const ZONE_CONTAINER*>( aZoneLayerA->Parent() );
     const auto zoneB = static_cast<const ZONE_CONTAINER*>( aZoneLayerB->Parent() );
 
-    if( aZoneA->Layer() != aZoneB->Layer() )
+    if( aZoneLayerA->Layer() != aZoneLayerB->Layer() )
         return;
 
     if( aZoneLayerB->Net() != aZoneLayerA->Net() )
