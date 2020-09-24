@@ -1189,14 +1189,14 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
         EDA_RECT bbox = aGroup->GetBoundingBox();
         m_gal->SetStrokeColor( color );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth * 2.0f );
-        wxPoint pos = bbox.GetPosition();
+        wxPoint topLeft = bbox.GetPosition();
+        wxPoint width = wxPoint( bbox.GetWidth(), 0 );
+        wxPoint height = wxPoint( 0, bbox.GetHeight() );
 
-        m_gal->DrawLine( pos, pos + wxPoint( bbox.GetWidth(), 0 ) );
-        m_gal->DrawLine( pos + wxPoint( bbox.GetWidth(), 0 ),
-                         pos + wxPoint( bbox.GetWidth(), bbox.GetHeight() ) );
-        m_gal->DrawLine( pos + wxPoint( bbox.GetWidth(), bbox.GetHeight() ),
-                         pos + wxPoint( 0, bbox.GetHeight() ) );
-        m_gal->DrawLine( pos + wxPoint( 0, bbox.GetHeight() ), pos );
+        m_gal->DrawLine( topLeft, topLeft + width );
+        m_gal->DrawLine( topLeft + width, topLeft + width + height );
+        m_gal->DrawLine( topLeft + width + height, topLeft + height );
+        m_gal->DrawLine( topLeft + height, topLeft );
 
         wxString name = aGroup->GetName();
 
@@ -1205,19 +1205,23 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
         int unscaledSize = Mils2iu( ptSize );
 
         // Scale by zoom a bit, but not too much
-        int textSize = ( scaledSize + unscaledSize ) / 2;
-
-        int penWidth = textSize / 12;
-        int textOffset = textSize / 2;
+        int     textSize = ( scaledSize + unscaledSize ) / 2;
+        int     penWidth = textSize / 12;
+        wxPoint textOffset = wxPoint( width.x / 2, - KiROUND( textSize * 0.6 ) );
+        wxPoint titleHeight = wxPoint( 0, KiROUND( textSize * 2.0 ) );
 
         if( !name.IsEmpty() && (int) aGroup->GetName().Length() * textSize < bbox.GetWidth() )
         {
-            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+            m_gal->DrawLine( topLeft, topLeft - titleHeight );
+            m_gal->DrawLine( topLeft - titleHeight, topLeft + width - titleHeight );
+            m_gal->DrawLine( topLeft + width - titleHeight, topLeft + width );
+
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
             m_gal->SetIsFill( false );
             m_gal->SetGlyphSize( VECTOR2D( textSize, textSize ) );
             m_gal->SetLineWidth( penWidth );
-            m_gal->StrokeText( aGroup->GetName(), wxPoint( pos.x, pos.y - textOffset ), 0 );
+            m_gal->StrokeText( aGroup->GetName(), topLeft + textOffset, 0.0 );
         }
     }
 }
