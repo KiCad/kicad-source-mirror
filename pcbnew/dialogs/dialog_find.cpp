@@ -284,7 +284,7 @@ void DIALOG_FIND::search( bool aDirection )
     {
         m_frame->SetStatusText( wxEmptyString );
     }
-    else
+    else if( m_it != m_hitList.end() )
     {
         if( aDirection )
         {
@@ -297,7 +297,7 @@ void DIALOG_FIND::search( bool aDirection )
                 else
                 {
                     m_frame->SetStatusText( wxEmptyString );
-                    m_frame->ShowInfoBarMsg( _( "No more item to show" ) );
+                    m_frame->ShowInfoBarMsg( _( "No more items to show" ) );
                     return;
                 }
             }
@@ -313,7 +313,7 @@ void DIALOG_FIND::search( bool aDirection )
                 else
                 {
                     m_frame->SetStatusText( wxEmptyString );
-                    m_frame->ShowInfoBarMsg( _( "No more item to show" ) );
+                    m_frame->ShowInfoBarMsg( _( "No more items to show" ) );
                     return;
                 }
             }
