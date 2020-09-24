@@ -109,10 +109,7 @@ void TEXTE_PCB::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     wxCHECK_RET( m_Parent != NULL, wxT( "TEXTE_PCB::GetMsgPanelInfo() m_Parent is NULL." ) );
 
-    if( BaseType( m_Parent->Type() ) == PCB_DIMENSION_T )
-        aList.emplace_back( _( "Dimension" ), GetShownText(), DARKGREEN );
-    else
-        aList.emplace_back( _( "PCB Text" ), GetShownText(), DARKGREEN );
+    aList.emplace_back( _( "PCB Text" ), GetShownText(), DARKGREEN );
 
     aList.emplace_back( _( "Layer" ), GetLayerName(), BLUE );
 

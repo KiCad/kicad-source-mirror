@@ -307,7 +307,35 @@ void DIMENSION::SetEnd( const wxPoint& aEnd )
 void DIMENSION::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     // for now, display only the text within the DIMENSION using class TEXTE_PCB.
-    m_text.GetMsgPanelInfo( aFrame, aList );
+    wxString    msg;
+
+    wxCHECK_RET( m_Parent != NULL, wxT( "TEXTE_PCB::GetMsgPanelInfo() m_Parent is NULL." ) );
+
+    aList.emplace_back( _( "Dimension" ), m_text.GetShownText(), DARKGREEN );
+
+    aList.emplace_back( _( "Layer" ), GetLayerName(), BLUE );
+
+    aList.emplace_back( _( "Prefix" ), GetPrefix(), BLUE );
+
+    if( GetOverrideTextEnabled() )
+    {
+        aList.emplace_back( _( "Override Text" ), GetOverrideText(), BLUE );
+    }
+    else
+    {
+        aList.emplace_back( _( "Value" ), GetValueText(), BLUE );
+
+        msg = "%" + wxString::Format( "1.%df", GetPrecision() );
+        aList.emplace_back( _( "Precision" ), wxString::Format( msg, 0.0 ), BLUE );
+    }
+
+    aList.emplace_back( _( "Suffix" ), GetSuffix(), BLUE );
+
+    EDA_UNITS units;
+    bool      useMils;
+
+    GetUnits( units, useMils );
+    aList.emplace_back( _( "Units" ), GetAbbreviatedUnitsLabel( units, useMils ), BLUE );
 }
 
 
@@ -910,6 +938,16 @@ void LEADER::updateGeometry()
 
     if( endpoint )
         m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, *endpoint ) );
+}
+
+
+void LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+{
+    wxString    msg;
+
+    aList.emplace_back( _( "Leader" ), m_text.GetShownText(), DARKGREEN );
+
+    aList.emplace_back( _( "Layer" ), GetLayerName(), BLUE );
 }
 
 

@@ -512,6 +512,8 @@ public:
     void SetTextFrame( DIM_TEXT_FRAME aFrame ) { m_textFrame = aFrame; }
     DIM_TEXT_FRAME GetTextFrame() const { return m_textFrame; }
 
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
+
 protected:
 
     void updateGeometry() override;
