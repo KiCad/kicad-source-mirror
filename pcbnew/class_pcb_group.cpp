@@ -41,24 +41,30 @@ bool PCB_GROUP::AddItem( BOARD_ITEM* aItem )
         return false;
 
     m_items.insert( aItem );
-    aItem->SetGroup( m_Uuid );
+    aItem->SetGroup( this );
     return true;
 }
 
 
 bool PCB_GROUP::RemoveItem( BOARD_ITEM* aItem )
 {
-    if( !aItem->IsInGroup() )
-        return false;
-
     // Only clear the item's group field if it was inside this group
     if( m_items.erase( aItem ) == 1 )
     {
-        aItem->SetGroup( niluuid );
+        aItem->SetGroup( nullptr );
         return true;
     }
 
     return false;
+}
+
+
+void PCB_GROUP::RemoveAll()
+{
+    for( BOARD_ITEM* item : m_items )
+        item->SetGroup( nullptr );
+
+    m_items.clear();
 }
 
 

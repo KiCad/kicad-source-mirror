@@ -851,11 +851,12 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
             }
             else if( item->Type() == PCB_GROUP_T )
             {
+                PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
                 // If pasting a group, its immediate children must be updated to have its new KIID
-                static_cast<PCB_GROUP*>( item )->RunOnChildren( [item] ( BOARD_ITEM* aBrdItem )
-                                                                {
-                                                                    aBrdItem->SetGroup( item->m_Uuid );
-                                                                } );
+                group->RunOnChildren( [group]( BOARD_ITEM* aBrdItem )
+                                      {
+                                          aBrdItem->SetGroup( group );
+                                      } );
             }
         }
 

@@ -161,6 +161,10 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         Edit_Zone_Params( static_cast<ZONE_CONTAINER*>( aItem ) );
         break;
 
+    case PCB_GROUP_T:
+        m_toolManager->RunAction( PCB_ACTIONS::groupProperties, true, aItem );
+        break;
+
     default:
         break;
     }

@@ -351,7 +351,10 @@ void SELECTION_TOOL::EnterGroup()
 
     ClearSelection();
     m_enteredGroup = aGroup;
-    m_enteredGroup->RunOnChildren( [&]( BOARD_ITEM* titem ) { select( titem ); } );
+    m_enteredGroup->RunOnChildren( [&]( BOARD_ITEM* titem )
+                                   {
+                                       select( titem );
+                                   } );
 }
 
 
@@ -2004,6 +2007,7 @@ void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
         m_locked = true;
 }
 
+
 void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup )
 {
     highlightInternal( aItem, aMode, aGroup, false );
@@ -2016,35 +2020,44 @@ void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* 
         getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
 }
 
-void SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup, bool isChild )
+
+void SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode,
+                                        PCBNEW_SELECTION* aSelectionViewGroup, bool isChild )
 {
-    wxLogTrace( "GRP", wxString::Format( "highlight() of %s %p",
-                         aItem->GetSelectMenuText( m_frame->GetUserUnits() ) ), aItem );
+    wxLogTrace( "GRP", wxString::Format( "highlight() %s",
+                                         aItem->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) ) );
+
     if( aMode == SELECTED )
         aItem->SetSelected();
     else if( aMode == BRIGHTENED )
         aItem->SetBrightened();
 
-    if( aGroup )
+    if( aSelectionViewGroup )
     {
         // Hide the original item, so it is shown only on overlay
         view()->Hide( aItem, true );
 
         if( !isChild || aMode == BRIGHTENED )
-            aGroup->Add( aItem );
+            aSelectionViewGroup->Add( aItem );
     }
 
-    // Modules are treated in a special way - when they are highlighted, we have to
-    // highlight all the parts that make the module, not the module itself
+    // Modules are treated in a special way - when they are highlighted, we have to highlight
+    // all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
     {
-        static_cast<MODULE*>( aItem )->RunOnChildren( [&]( BOARD_ITEM* titem ) {
-                                                          highlightInternal( titem, aMode, aGroup, true ); } );
+        static_cast<MODULE*>( aItem )->RunOnChildren(
+                [&]( BOARD_ITEM* aChild )
+                {
+                    highlightInternal( aChild, aMode, aSelectionViewGroup, true );
+                } );
     }
     else if( aItem->Type() == PCB_GROUP_T )
     {
-        static_cast<PCB_GROUP*>( aItem )->RunOnChildren( [&]( BOARD_ITEM* titem ) {
-                                                         highlightInternal( titem, aMode, aGroup, true ); } );
+        static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
+                [&]( BOARD_ITEM* aChild )
+                {
+                    highlightInternal( aChild, aMode, aSelectionViewGroup, true );
+                } );
     }
 }
 
@@ -2062,18 +2075,20 @@ void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION
 }
 
 
-void SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup, bool isChild )
+void SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode,
+                                          PCBNEW_SELECTION* aSelectionViewGroup, bool isChild )
 {
-    wxLogTrace( "GRP", wxString::Format( "unhighlight() of %s %p",
-                                  aItem->GetSelectMenuText( m_frame->GetUserUnits() ) ), aItem );
+    wxLogTrace( "GRP", wxString::Format( "unhighlight() %s",
+                                         aItem->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) ) );
+
     if( aMode == SELECTED )
         aItem->ClearSelected();
     else if( aMode == BRIGHTENED )
         aItem->ClearBrightened();
 
-    if( aGroup )
+    if( aSelectionViewGroup )
     {
-        aGroup->Remove( aItem );
+        aSelectionViewGroup->Remove( aItem );
 
         // Restore original item visibility
         view()->Hide( aItem, false );
@@ -2088,13 +2103,19 @@ void SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode, PCBNEW_S
     // highlight all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
     {
-        static_cast<MODULE*>( aItem )->RunOnChildren( [&]( BOARD_ITEM* titem ) {
-                                                          unhighlightInternal( titem, aMode, aGroup, true ); } );
+        static_cast<MODULE*>( aItem )->RunOnChildren(
+                [&]( BOARD_ITEM* aChild )
+                {
+                    unhighlightInternal( aChild, aMode, aSelectionViewGroup, true );
+                } );
     }
     else if( aItem->Type() == PCB_GROUP_T )
     {
-        static_cast<PCB_GROUP*>( aItem )->RunOnChildren( [&]( BOARD_ITEM* titem ) {
-                                                         unhighlightInternal( titem, aMode, aGroup, true ); } );
+        static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
+                [&]( BOARD_ITEM* aChild )
+                {
+                    unhighlightInternal( aChild, aMode, aSelectionViewGroup, true );
+                } );
     }
 }
 

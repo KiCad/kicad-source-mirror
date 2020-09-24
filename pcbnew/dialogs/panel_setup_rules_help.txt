@@ -79,6 +79,12 @@ A.insideArea('<zone_name>')
 A.isPlated()
 
 
+# True if A is a member of the given group. Includes nested
+# membership.
+
+A.memberOf('<group_name>')
+
+
 # True if A exists on the given layer.  The layer name can be
 # either the name assigned in Board Setup > Board Editor Layers or
 # the canonical name (ie: F.Cu).

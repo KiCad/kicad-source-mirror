@@ -211,6 +211,46 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
+static void memberOf( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    LIBEVAL::VALUE* arg = aCtx->Pop();
+    LIBEVAL::VALUE* result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( !arg )
+    {
+        aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+                                             wxT( "memberOf()" ) ) );
+        return;
+    }
+
+    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
+
+    if( !item )
+        return;
+
+    BOARD*     board = item->GetBoard();
+    PCB_GROUP* group = board->ParentGroup( item );
+
+    if( !group && item->GetParent() && item->GetParent()->Type() == PCB_MODULE_T )
+        group = board->ParentGroup( item->GetParent() );
+
+    while( group )
+    {
+        if( group->GetName().Matches( arg->AsString() ) )
+        {
+            result->Set( 1.0 );
+            return;
+        }
+
+        group = board->ParentGroup( group );
+    }
+}
+
+
 static void isMicroVia( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
@@ -261,6 +301,7 @@ PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
     registerFunc( "isPlated()", isPlated );
     registerFunc( "insideCourtyard('x')", insideCourtyard );
     registerFunc( "insideArea('x')", insideArea );
+    registerFunc( "memberOf('x')", memberOf );
     registerFunc( "isMicroVia()", isMicroVia );
     registerFunc( "isBlindBuriedVia()", isBlindBuriedVia );
 }

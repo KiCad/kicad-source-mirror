@@ -205,7 +205,13 @@ public:
     /// Removes a corner
     static TOOL_ACTION pointEditorRemoveCorner;
 
-    // Placement tool
+
+    // Group Tool
+    static TOOL_ACTION groupProperties;
+    static TOOL_ACTION pickNewGroupMember;
+
+
+    // Placement Tool
     static TOOL_ACTION alignTop;
     static TOOL_ACTION alignBottom;
     static TOOL_ACTION alignLeft;

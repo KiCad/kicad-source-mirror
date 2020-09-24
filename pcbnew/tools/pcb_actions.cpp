@@ -1120,6 +1120,16 @@ TOOL_ACTION PCB_ACTIONS::pointEditorRemoveCorner( "pcbnew.PointEditor.removeCorn
         _( "Remove Corner" ), _( "Remove corner" ), delete_xpm );
 
 
+// GROUP_TOOL
+//
+TOOL_ACTION PCB_ACTIONS::groupProperties( "pcbnew.Groups.groupProperties",
+        AS_GLOBAL );
+
+TOOL_ACTION PCB_ACTIONS::pickNewGroupMember( "pcbnew.Groups.selectNewGroupMember",
+        AS_GLOBAL );
+
+
+
 // POSITION_RELATIVE_TOOL
 //
 TOOL_ACTION PCB_ACTIONS::positionRelative( "pcbnew.PositionRelative.positionRelative",

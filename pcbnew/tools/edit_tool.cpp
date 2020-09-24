@@ -1618,7 +1618,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
     while( !done )
-        Wait();
+        Wait()->SetPassEvent();
 
     // Ensure statusPopup is hidden after use and before deleting it:
     m_statusPopup->Hide();

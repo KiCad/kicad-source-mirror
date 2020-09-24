@@ -60,19 +60,17 @@ public:
         return aItem && PCB_GROUP_T == aItem->Type();
     }
 
-    wxString GetName() const
+    wxString GetClass() const override
     {
-        return m_name;
+        return wxT( "PCB_GROUP" );
     }
+
+    wxString GetName() const { return m_name; }
+    void SetName( wxString aName ) { m_name = aName; }
 
     const BOARD_ITEM_SET& GetItems() const
     {
         return m_items;
-    }
-
-    void SetName( wxString aName )
-    {
-        m_name = aName;
     }
 
     /**
@@ -89,10 +87,7 @@ public:
      */
     bool RemoveItem( BOARD_ITEM* aItem );
 
-    wxString GetClass() const override
-    {
-        return wxT( "PCB_GROUP" );
-    }
+    void RemoveAll();
 
 #if defined( DEBUG )
     void Show( int nestLevel, std::ostream& os ) const override
@@ -201,11 +196,8 @@ public:
     void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction );
 
 private:
-    // Members of the group
-    BOARD_ITEM_SET m_items;
-
-    // Optional group name
-    wxString m_name;
+    BOARD_ITEM_SET m_items;     // Members of the group
+    wxString       m_name;      // Optional group name
 };
 
 #endif // CLASS_PCB_GROUP_H_

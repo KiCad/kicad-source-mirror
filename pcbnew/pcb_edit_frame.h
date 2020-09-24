@@ -43,6 +43,7 @@ class VIA;
 class D_PAD;
 class TEXTE_MODULE;
 class PCB_TARGET;
+class PCB_GROUP;
 class DIMENSION;
 class EDGE_MODULE;
 class DRC;
@@ -816,6 +817,7 @@ public:
     // Properties dialogs
     void ShowTargetOptionsDialog( PCB_TARGET* aTarget );
     void ShowDimensionPropertyDialog( DIMENSION* aDimension );
+    void ShowGroupPropertiesDialog( PCB_GROUP* aGroup );
     void InstallNetlistFrame();
 
     /**

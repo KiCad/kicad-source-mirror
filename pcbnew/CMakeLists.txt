@@ -105,6 +105,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_global_edit_text_and_graphics.cpp
     dialogs/dialog_global_edit_text_and_graphics_base.cpp
     dialogs/dialog_global_fp_lib_table_config.cpp
+    dialogs/dialog_group_properties_base.cpp
     dialogs/dialog_push_pad_properties.cpp
     dialogs/dialog_push_pad_properties_base.cpp
     dialogs/dialog_graphic_item_properties.cpp
@@ -331,6 +332,7 @@ set( PCBNEW_CLASS_SRCS
     tools/drc_tool.cpp
     tools/edit_tool.cpp
     tools/global_edit_tool.cpp
+    tools/group_tool.cpp
     tools/footprint_editor_tools.cpp
     tools/pad_tool.cpp
     tools/pcb_bright_box.cpp

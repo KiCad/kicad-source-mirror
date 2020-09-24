@@ -366,10 +366,10 @@ private:
     const GENERAL_COLLECTORS_GUIDE getCollectorsGuide() const;
 
 private:
-    void highlightInternal( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION* aGroup,
+    void highlightInternal( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION* aSelectionViewGroup,
         bool isChild);
 
-    void unhighlightInternal( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION* aGroup,
+    void unhighlightInternal( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION* aSelectionViewGroup,
         bool isChild);
 
     PCB_BASE_FRAME*  m_frame;     // Pointer to the parent frame

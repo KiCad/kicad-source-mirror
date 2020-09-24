@@ -1197,6 +1197,28 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
         m_gal->DrawLine( pos + wxPoint( bbox.GetWidth(), bbox.GetHeight() ),
                          pos + wxPoint( 0, bbox.GetHeight() ) );
         m_gal->DrawLine( pos + wxPoint( 0, bbox.GetHeight() ), pos );
+
+        wxString name = aGroup->GetName();
+
+        int ptSize = 12;
+        int scaledSize = abs( KiROUND( m_gal->GetScreenWorldMatrix().GetScale().x * ptSize ) );
+        int unscaledSize = Mils2iu( ptSize );
+
+        // Scale by zoom a bit, but not too much
+        int textSize = ( scaledSize + unscaledSize ) / 2;
+
+        int penWidth = textSize / 12;
+        int textOffset = textSize / 2;
+
+        if( !name.IsEmpty() && (int) aGroup->GetName().Length() * textSize < bbox.GetWidth() )
+        {
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            m_gal->SetIsFill( false );
+            m_gal->SetGlyphSize( VECTOR2D( textSize, textSize ) );
+            m_gal->SetLineWidth( penWidth );
+            m_gal->StrokeText( aGroup->GetName(), wxPoint( pos.x, pos.y - textOffset ), 0 );
+        }
     }
 }
 

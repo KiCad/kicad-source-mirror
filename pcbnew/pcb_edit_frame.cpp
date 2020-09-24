@@ -63,6 +63,7 @@
 #include <tools/pcbnew_picker_tool.h>
 #include <tools/point_editor.h>
 #include <tools/edit_tool.h>
+#include <tools/group_tool.h>
 #include <tools/drc_tool.h>
 #include <tools/global_edit_tool.h>
 #include <tools/convert_tool.h>
@@ -512,6 +513,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new DRC_TOOL );
     m_toolManager->RegisterTool( new PCB_VIEWER_TOOLS );
     m_toolManager->RegisterTool( new CONVERT_TOOL );
+    m_toolManager->RegisterTool( new GROUP_TOOL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
