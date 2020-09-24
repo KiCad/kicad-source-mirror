@@ -456,7 +456,7 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createSwatches()
                } );
 
     // Don't sort board layers by name
-    for( int i = PCBNEW_LAYER_ID_START; i <= F_Fab; ++i )
+    for( int i = PCBNEW_LAYER_ID_START; i <= User_9; ++i )
         m_validLayers.insert( m_validLayers.begin() + i, i );
 
     BOARD* board = m_frame->GetBoard();
