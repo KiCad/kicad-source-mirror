@@ -102,39 +102,31 @@ LENGTH_TUNER_TOOL::LENGTH_TUNER_TOOL() :
 }
 
 
-class TUNER_TOOL_MENU : public ACTION_MENU
-{
-public:
-    TUNER_TOOL_MENU() :
-        ACTION_MENU( true )
-    {
-        SetTitle( _( "Length Tuner" ) );
-        SetIcon( router_len_tuner_xpm );
-        DisplayTitle( true );
-
-        Add( ACTIONS::cancelInteractive );
-
-        AppendSeparator();
-
-        Add( ACT_SpacingIncrease );
-        Add( ACT_SpacingDecrease );
-        Add( ACT_AmplIncrease );
-        Add( ACT_AmplDecrease );
-        Add( ACT_Settings );
-    }
-
-private:
-    ACTION_MENU* create() const override
-    {
-        return new TUNER_TOOL_MENU();
-    }
-};
-
-
 LENGTH_TUNER_TOOL::~LENGTH_TUNER_TOOL()
 {
 }
 
+
+bool LENGTH_TUNER_TOOL::Init()
+{
+    auto& menu = m_menu.GetMenu();
+
+    menu.SetTitle( _( "Length Tuner" ) );
+    menu.SetIcon( router_len_tuner_xpm );
+    menu.DisplayTitle( true );
+
+    menu.AddItem( ACTIONS::cancelInteractive, SELECTION_CONDITIONS::ShowAlways );
+
+    menu.AddSeparator();
+
+    menu.AddItem( ACT_SpacingIncrease,        SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_SpacingDecrease,        SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_AmplIncrease,           SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_AmplDecrease,           SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_Settings,               SELECTION_CONDITIONS::ShowAlways );
+
+    return true;
+}
 
 void LENGTH_TUNER_TOOL::Reset( RESET_REASON aReason )
 {
@@ -194,7 +186,9 @@ void LENGTH_TUNER_TOOL::performTuning()
         frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
             break;
+        }
         else if( evt->IsMotion() )
         {
             end = evt->Position();
@@ -205,6 +199,10 @@ void LENGTH_TUNER_TOOL::performTuning()
         {
             if( m_router->FixRoute( evt->Position(), NULL ) )
                 break;
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            m_menu.ShowContextMenu( selection() );
         }
         else if( evt->IsAction( &ACT_EndTuning ) )
         {
@@ -273,9 +271,6 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     controls()->ShowCursor( true );
     frame()->UndoRedoBlock( true );
 
-    std::unique_ptr<TUNER_TOOL_MENU> ctxMenu( new TUNER_TOOL_MENU );
-    SetContextMenu( ctxMenu.get() );
-
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
@@ -298,6 +293,10 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         {
             TOOL_EVENT dummy;
             meanderSettingsDialog( dummy );
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            m_menu.ShowContextMenu( selection() );
         }
     }
 

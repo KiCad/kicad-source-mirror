@@ -34,6 +34,9 @@ public:
     LENGTH_TUNER_TOOL();
     ~LENGTH_TUNER_TOOL();
 
+    /// @copydoc TOOL_BASE::Init()
+    bool Init() override;
+
     void Reset( RESET_REASON aReason ) override;
 
     int MainLoop( const TOOL_EVENT& aEvent );

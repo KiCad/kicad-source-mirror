@@ -37,8 +37,7 @@ using namespace std::placeholders;
 #include <bitmaps.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
-#include <tool/grid_menu.h>
-#include <tool/zoom_menu.h>
+#include <tool/tool_menu.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
 #include <tools/grid_helper.h>
@@ -384,68 +383,6 @@ private:
 };
 
 
-class ROUTER_TOOL_MENU : public ACTION_MENU
-{
-public:
-    ROUTER_TOOL_MENU( PCB_EDIT_FRAME& aFrame, PNS::ROUTER_MODE aMode ) :
-        ACTION_MENU( true ),
-        m_frame( aFrame ), m_mode( aMode ), m_trackViaMenu( aFrame ), m_diffPairMenu( aFrame ),
-        m_zoomMenu( &aFrame ), m_gridMenu( &aFrame )
-    {
-        SetTitle( _( "Interactive Router" ) );
-
-        Add( ACTIONS::cancelInteractive );
-
-        AppendSeparator();
-
-        Add( PCB_ACTIONS::routeSingleTrack );
-        Add( PCB_ACTIONS::routeDiffPair );
-        Add( ACT_EndTrack );
-        Add( ACT_UndoLastSegment );
-        Add( PCB_ACTIONS::breakTrack );
-
-        Add( PCB_ACTIONS::drag45Degree );
-        Add( PCB_ACTIONS::dragFreeAngle );
-
-//        Add( ACT_AutoEndRoute );  // fixme: not implemented yet. Sorry.
-        Add( ACT_PlaceThroughVia );
-        Add( ACT_PlaceBlindVia );
-        Add( ACT_PlaceMicroVia );
-        Add( ACT_SelLayerAndPlaceThroughVia );
-        Add( ACT_SelLayerAndPlaceBlindVia );
-        Add( ACT_SwitchPosture );
-        Add( ACT_SwitchRounding );
-
-        AppendSeparator();
-
-        Add( &m_trackViaMenu );
-
-        if( m_mode == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
-            Add( &m_diffPairMenu );
-
-        Add( PCB_ACTIONS::routerSettingsDialog );
-
-        AppendSeparator();
-
-        Add( &m_zoomMenu );
-        Add( &m_gridMenu );
-    }
-
-private:
-    ACTION_MENU* create() const override
-    {
-        return new ROUTER_TOOL_MENU( m_frame, m_mode );
-    }
-
-    PCB_EDIT_FRAME&  m_frame;
-    PNS::ROUTER_MODE m_mode;
-    TRACK_WIDTH_MENU m_trackViaMenu;
-    DIFF_PAIR_MENU   m_diffPairMenu;
-    ZOOM_MENU        m_zoomMenu;
-    GRID_MENU        m_gridMenu;
-};
-
-
 ROUTER_TOOL::~ROUTER_TOOL()
 {
 }
@@ -453,6 +390,60 @@ ROUTER_TOOL::~ROUTER_TOOL()
 
 bool ROUTER_TOOL::Init()
 {
+    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
+
+    wxASSERT( frame );
+
+    auto& menu = m_menu.GetMenu();
+    menu.SetTitle( _( "Interactive Router" ) );
+
+    auto trackViaMenu = std::make_shared<TRACK_WIDTH_MENU>( *frame );
+    trackViaMenu->SetTool( this );
+    m_menu.AddSubMenu( trackViaMenu );
+
+    auto diffPairMenu = std::make_shared<DIFF_PAIR_MENU>( *frame );
+    diffPairMenu->SetTool( this );
+    m_menu.AddSubMenu( diffPairMenu );
+
+    menu.AddItem( ACTIONS::cancelInteractive,        SELECTION_CONDITIONS::ShowAlways );
+
+    menu.AddSeparator();
+
+    menu.AddItem( PCB_ACTIONS::routeSingleTrack,     SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( PCB_ACTIONS::routeDiffPair,        SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_EndTrack,                      SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_UndoLastSegment,               SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( PCB_ACTIONS::breakTrack,           SELECTION_CONDITIONS::ShowAlways );
+
+    menu.AddItem( PCB_ACTIONS::drag45Degree,         SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( PCB_ACTIONS::dragFreeAngle,        SELECTION_CONDITIONS::ShowAlways );
+
+//        Add( ACT_AutoEndRoute );  // fixme: not implemented yet. Sorry.
+    menu.AddItem( ACT_PlaceThroughVia,               SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_PlaceBlindVia,                 SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_PlaceMicroVia,                 SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_SelLayerAndPlaceThroughVia,    SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_SelLayerAndPlaceBlindVia,      SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_SwitchPosture,                 SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_SwitchRounding,                SELECTION_CONDITIONS::ShowAlways );
+
+    menu.AddSeparator();
+
+    auto diffPairCond =
+        [this]( const SELECTION& )
+        {
+            return m_router->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR;
+        };
+
+    menu.AddMenu( trackViaMenu.get(), SELECTION_CONDITIONS::NotEmpty );
+    menu.AddMenu( diffPairMenu.get(), diffPairCond );
+
+    menu.AddItem( PCB_ACTIONS::routerSettingsDialog, SELECTION_CONDITIONS::ShowAlways );
+
+    menu.AddSeparator( 1 );
+
+    frame->AddStandardSubMenus( m_menu );
+
     return true;
 }
 
@@ -476,7 +467,7 @@ void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
             auto logger = m_router->Logger();
             if( ! logger )
                 return;
-            
+
             FILE *f = fopen("/tmp/pns.log", "wb");
             wxLogTrace( "PNS", "saving drag/route log...\n" );
 
@@ -1007,6 +998,10 @@ void ROUTER_TOOL::performRouting()
 
             break;
         }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            m_menu.ShowContextMenu( selection() );
+        }
         else
         {
             evt->SetPassEvent();
@@ -1093,9 +1088,6 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     ctls->ForceCursorPosition( false );
     m_cancelled = false;
     m_startSnapPoint = ctls->GetCursorPosition();
-
-    std::unique_ptr<ROUTER_TOOL_MENU> ctxMenu( new ROUTER_TOOL_MENU( *frame, mode ) );
-    SetContextMenu( ctxMenu.get() );
 
     // Prime the pump
     if( aEvent.HasPosition() )
@@ -1187,6 +1179,10 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
             // pass the event.
             evt->SetPassEvent();
         }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            m_menu.ShowContextMenu( selection() );
+        }
 
         if( m_cancelled )
         {
@@ -1194,8 +1190,6 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
             break;
         }
     }
-
-    SetContextMenu( nullptr );
 
     // Store routing settings till the next invocation
     m_savedSizes = m_router->Sizes();
@@ -1244,6 +1238,10 @@ void ROUTER_TOOL::performDragging( int aMode )
         {
             if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
                 break;
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            m_menu.ShowContextMenu( selection() );
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() || evt->IsUndoRedo() )
         {
