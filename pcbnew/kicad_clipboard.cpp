@@ -38,7 +38,7 @@
 #include <kicad_clipboard.h>
 
 CLIPBOARD_IO::CLIPBOARD_IO():
-    PCB_IO( CTL_STD_LAYER_NAMES ),
+    PCB_IO( CTL_FOR_CLIPBOARD ),
     m_formatter(),
     m_parser( new CLIPBOARD_PARSER() )
 {

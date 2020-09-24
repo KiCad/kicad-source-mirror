@@ -1230,14 +1230,15 @@ double D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     }
 
     // Other layers are shown without any conditions
-    return 0;
+    return 0.0;
 }
 
 
 const BOX2I D_PAD::ViewBBox() const
 {
-    // Bounding box includes soldermask too
-    int solderMaskMargin       = GetSolderMaskMargin();
+    // Bounding box includes soldermask too. Remember mask and/or paste
+    // margins can be < 0
+    int solderMaskMargin       = std::max( GetSolderMaskMargin(), 0 );
     VECTOR2I solderPasteMargin = VECTOR2D( GetSolderPasteMargin() );
     EDA_RECT bbox              = GetBoundingBox();
 

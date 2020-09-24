@@ -453,10 +453,7 @@ void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 {
     PCB_LAYER_ID layer = aItem->GetLayer();
 
-    if( m_ctl & CTL_STD_LAYER_NAMES )    // English layer names should never need quoting.
-        m_out->Print( 0, " (layer %s)", TO_UTF8( BOARD::GetStandardLayerName( layer ) ) );
-    else
-        m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( layer ) ).c_str() );
+    m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( layer ) ).c_str() );
 }
 
 

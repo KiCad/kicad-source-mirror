@@ -92,7 +92,6 @@ class TEXTE_PCB;
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 
-#define CTL_STD_LAYER_NAMES         (1 << 0)    ///< Use English Standard layer names
 #define CTL_OMIT_NETS               (1 << 1)    ///< Omit pads net names (useless in library)
 #define CTL_OMIT_TSTAMPS            (1 << 2)    ///< Omit component time stamp (useless in library)
 #define CTL_OMIT_INITIAL_COMMENTS   (1 << 3)    ///< omit MODULE initial comments
@@ -106,10 +105,10 @@ class TEXTE_PCB;
 // common combinations of the above:
 
 /// Format output for the clipboard instead of footprint library or BOARD
-#define CTL_FOR_CLIPBOARD           (CTL_STD_LAYER_NAMES|CTL_OMIT_NETS)
+#define CTL_FOR_CLIPBOARD           // (CTL_OMIT_NETS)
 
 /// Format output for a footprint library instead of clipboard or BOARD
-#define CTL_FOR_LIBRARY             (CTL_STD_LAYER_NAMES|CTL_OMIT_NETS|CTL_OMIT_TSTAMPS|CTL_OMIT_PATH|CTL_OMIT_AT|CTL_OMIT_LIBNAME)
+#define CTL_FOR_LIBRARY             (CTL_OMIT_NETS|CTL_OMIT_TSTAMPS|CTL_OMIT_PATH|CTL_OMIT_AT|CTL_OMIT_LIBNAME)
 
 /// The zero arg constructor when PCB_IO is used for PLUGIN::Load() and PLUGIN::Save()ing
 /// a BOARD file underneath IO_MGR.
