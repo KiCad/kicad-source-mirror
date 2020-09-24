@@ -824,6 +824,8 @@ void SCH_EDIT_FRAME::OnFindDialogClose()
 
     m_findReplaceDialog->Destroy();
     m_findReplaceDialog = nullptr;
+
+    m_toolManager->RunAction( ACTIONS::updateFind, true );
 }
 
 

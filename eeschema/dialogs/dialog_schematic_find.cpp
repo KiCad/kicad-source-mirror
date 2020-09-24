@@ -96,9 +96,6 @@ void DIALOG_SCH_FIND::OnClose( wxCloseEvent& aEvent )
 {
     // Notify the SCH_EDIT_FRAME
     m_frame->OnFindDialogClose();
-
-    // Notify the controller
-    m_findDirty = true;
 }
 
 
@@ -249,7 +246,7 @@ void DIALOG_SCH_FIND::OnFind( wxCommandEvent& aEvent )
         m_comboFind->SetSelection( 0 );
     }
 
-    m_editorControl->FindNext( ACTIONS::findNext.MakeEvent());
+    m_editorControl->FindNext( ACTIONS::findNext.MakeEvent() );
 }
 
 
@@ -271,14 +268,28 @@ void DIALOG_SCH_FIND::OnReplace( wxCommandEvent& aEvent )
     }
 
     if( aEvent.GetId() == wxID_REPLACE )
-        m_editorControl->ReplaceAndFindNext( ACTIONS::replaceAndFindNext.MakeEvent());
+        m_editorControl->ReplaceAndFindNext( ACTIONS::replaceAndFindNext.MakeEvent() );
     else if( aEvent.GetId() == wxID_REPLACE_ALL )
-        m_editorControl->ReplaceAll( ACTIONS::replaceAll.MakeEvent());
+        m_editorControl->ReplaceAll( ACTIONS::replaceAll.MakeEvent() );
 }
 
 
 wxArrayString DIALOG_SCH_FIND::GetFindEntries() const
 {
+    int index = m_comboFind->FindString( m_comboFind->GetValue(), true );
+
+    if( index == wxNOT_FOUND )
+    {
+        m_comboFind->Insert( m_comboFind->GetValue(), 0 );
+    }
+    else if( index != 0 )
+    {
+        /* Move the search string to the top of the list if it isn't already there. */
+        wxString tmp = m_comboFind->GetValue();
+        m_comboFind->Delete( index );
+        m_comboFind->Insert( tmp, 0 );
+    }
+
     return m_comboFind->GetStrings();
 }
 
