@@ -39,8 +39,8 @@ static const double midTickLengthFactor = 1.5;
 static const double majorTickLengthFactor = 2.5;
 
 
-static void drawCursorStrings(
-        KIGFX::VIEW* aView, const VECTOR2D& aCursor, const VECTOR2D& aRulerVec, EDA_UNITS aUnits )
+static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
+                               const VECTOR2D& aRulerVec, EDA_UNITS aUnits )
 {
     // draw the cursor labels
     std::vector<wxString> cursorStrings;
@@ -51,8 +51,8 @@ static void drawCursorStrings(
     cursorStrings.push_back( DimensionLabel( "r", aRulerVec.EuclideanNorm(), aUnits ) );
 
     double degs = RAD2DECIDEG( -aRulerVec.Angle() );
-    cursorStrings.push_back(
-            DimensionLabel( wxString::FromUTF8( "θ" ), degs, EDA_UNITS::DEGREES ) );
+    cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), degs,
+                                             EDA_UNITS::DEGREES ) );
 
     auto temp = aRulerVec;
     DrawTextNextToCursor( aView, aCursor, -temp, cursorStrings );
@@ -117,7 +117,7 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA
  * @param aMinorTickLen length of minor ticks in IU
  */
 void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTOR2D& aLine,
-        double aMinorTickLen, EDA_UNITS aUnits )
+                         double aMinorTickLen, EDA_UNITS aUnits )
 {
     VECTOR2D tickLine = aLine.Rotate( -M_PI_2 );
     auto gal = aView->GetGAL();
@@ -141,8 +141,7 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
         labelAngle += M_PI;
     }
 
-    // text and ticks are dimmed
-    gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ).WithAlpha( PreviewOverlayDeemphAlpha( true ) ) );
+    gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
 
     const auto labelOffset = tickLine.Resize( aMinorTickLen * ( majorTickLengthFactor + 1 ) );
 
@@ -153,7 +152,7 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
         double length = aMinorTickLen;
         bool drawLabel = false;
 
-        if( i % tickF.majorStep == 0)
+        if( i % tickF.majorStep == 0 )
         {
             drawLabel = true;
             length *= majorTickLengthFactor;
@@ -185,8 +184,8 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
  * @param aTickLen length of ticks in IU
  * @param aNumDivisions number of parts to divide the line into
  */
-void drawBacksideTicks( KIGFX::GAL& aGal, const VECTOR2D& aOrigin,
-        const VECTOR2D& aLine, double aTickLen, int aNumDivisions )
+void drawBacksideTicks( KIGFX::GAL& aGal, const VECTOR2D& aOrigin, const VECTOR2D& aLine,
+                        double aTickLen, int aNumDivisions )
 {
     const double backTickSpace = aLine.EuclideanNorm() / aNumDivisions;
     const auto backTickVec = aLine.Rotate( M_PI_2 ).Resize( aTickLen );
@@ -230,6 +229,9 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     auto& gal = *aView->GetGAL();
     auto rs = aView->GetPainter()->GetSettings();
 
+    gal.PushDepth();
+    gal.SetLayerDepth( gal.GetMinDepth() );
+
     VECTOR2D origin = m_geomMgr.GetOrigin();
     VECTOR2D end = m_geomMgr.GetEnd();
 
@@ -260,9 +262,36 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     drawTicksAlongLine( aView, origin, rulerVec, minorTickLen, m_userUnits );
 
-    gal.SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ).WithAlpha( PreviewOverlayDeemphAlpha( true ) ) );
+    gal.SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
     drawBacksideTicks( gal, origin, rulerVec, minorTickLen * majorTickLengthFactor, 2 );
 
     // draw the back of the origin "crosshair"
     gal.DrawLine( origin, origin + rulerVec.Resize( -minorTickLen * midTickLengthFactor ) );
+
+    // Draw a shadow behind everything to help visibility on busy boards
+    if( rulerVec.SquaredEuclideanNorm() > 0 )
+    {
+        VECTOR2D shadowOrigin = origin + rulerVec.Resize( -minorTickLen * midTickLengthFactor );
+
+        wxString dummyText = DimensionLabel( "", 0, m_userUnits );
+        double   textSize  = gal.GetTextLineSize( dummyText ).x;
+        textSize += minorTickLen * ( majorTickLengthFactor + 1 );
+
+        VECTOR2D textVec = rulerVec.Rotate( -M_PI_2 ).Resize( textSize );
+
+        SHAPE_POLY_SET shadow;
+        shadow.NewOutline();
+        shadow.Append( shadowOrigin );
+        shadow.Append( end );
+        shadow.Append( end + textVec );
+        shadow.Append( shadowOrigin + textVec );
+
+        gal.SetLayerDepth( gal.GetMinDepth() + 1 );
+        gal.SetIsStroke( false );
+        gal.SetIsFill( true );
+        gal.SetFillColor( rs->GetLayerColor( LAYER_PCB_BACKGROUND ).WithAlpha( 0.5 ) );
+        gal.DrawPolygon( shadow );
+    }
+
+    gal.PopDepth();
 }

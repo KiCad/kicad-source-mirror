@@ -92,9 +92,9 @@ void KIGFX::PREVIEW::SetConstantGlyphHeight( KIGFX::GAL& aGal, double aHeight )
 }
 
 
-void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView,
-        const VECTOR2D& aCursorPos, const VECTOR2D& aTextQuadrant,
-        const std::vector<wxString>& aStrings )
+void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& aCursorPos,
+                                           const VECTOR2D& aTextQuadrant,
+                                           const std::vector<wxString>& aStrings )
 {
     auto gal = aView->GetGAL();
     auto glyphSize = gal->GetGlyphSize();
@@ -126,8 +126,7 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView,
     }
 
     gal->SetLineWidth( 1.0f );  // TODO(ISM): Set to the minimum GAL linewidth for HiDPI compatibility
-    gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ).WithAlpha(
-                            PreviewOverlayDeemphAlpha( true ) ) );
+    gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
     gal->SetIsFill( false );
 
     // write strings top-to-bottom
