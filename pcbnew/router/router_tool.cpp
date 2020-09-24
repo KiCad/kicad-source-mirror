@@ -435,12 +435,12 @@ bool ROUTER_TOOL::Init()
             return m_router->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR;
         };
 
-    menu.AddMenu( trackViaMenu.get(), SELECTION_CONDITIONS::NotEmpty );
-    menu.AddMenu( diffPairMenu.get(), diffPairCond );
+    menu.AddMenu( trackViaMenu.get(),                SELECTION_CONDITIONS::ShowAlways );
+    menu.AddMenu( diffPairMenu.get(),                diffPairCond );
 
     menu.AddItem( PCB_ACTIONS::routerSettingsDialog, SELECTION_CONDITIONS::ShowAlways );
 
-    menu.AddSeparator( 1 );
+    menu.AddSeparator();
 
     frame->AddStandardSubMenus( m_menu );
 
