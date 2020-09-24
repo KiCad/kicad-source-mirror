@@ -79,6 +79,7 @@ void ZONE_FILLER::InstallNewProgressReporter( wxWindow* aParent, const wxString&
 void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 {
     m_progressReporter = aReporter;
+    wxASSERT_MSG( m_commit, "ZONE_FILLER must have a valid commit to call SetProgressReporter" );
 }
 
 
@@ -133,7 +134,8 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
         if( zone->GetIsRuleArea() )
             continue;
 
-        m_commit->Modify( zone );
+        if( m_commit )
+            m_commit->Modify( zone );
 
         // calculate the hash value for filled areas. it will be used later
         // to know if the current filled areas are up to date
