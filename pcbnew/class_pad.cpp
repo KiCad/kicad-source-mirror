@@ -347,7 +347,19 @@ void D_PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
         wxSize  trap_delta( 0, 0 );
 
         if( effectiveShape == PAD_SHAPE_ROUNDRECT )
+        {
             half_size -= wxPoint( r, r );
+
+            // Avoid degenerated shapes (0 length segments) that always create issues
+            // For roundrect pad very near a circle, use only a circle
+            const int min_len = Millimeter2iu( 0.0001);
+
+            if( half_size.x < min_len && half_size.y < min_len )
+            {
+                add( new SHAPE_CIRCLE( shapePos, r ) );
+                break;
+            }
+        }
         else if( effectiveShape == PAD_SHAPE_TRAPEZOID )
             trap_delta = m_deltaSize / 2;
 
