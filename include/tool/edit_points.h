@@ -54,7 +54,8 @@ public:
     EDIT_POINT( const VECTOR2I& aPoint, EDA_ITEM* aConnection = nullptr ) :
         m_position( aPoint ),
         m_connection( aConnection ),
-        m_isActive( false )
+        m_isActive( false ),
+        m_isHover( false )
     {
     }
 
@@ -177,15 +178,11 @@ public:
             m_constraint->Apply();
     }
 
-    inline bool IsActive() const
-    {
-        return m_isActive;
-    }
+    bool IsActive() const { return m_isActive; }
+    void SetActive( bool aActive = true ) { m_isActive = aActive; }
 
-    inline void SetActive( bool aActive = true )
-    {
-        m_isActive = aActive;
-    }
+    bool IsHover() const { return m_isHover; }
+    void SetHover( bool aHover = true ) { m_isHover = aHover; }
 
     bool operator==( const EDIT_POINT& aOther ) const
     {
@@ -194,6 +191,12 @@ public:
 
     ///> Single point size in pixels
     static const int POINT_SIZE = 10;
+
+    ///> Border size when not hovering
+    static const int BORDER_SIZE = 2;
+
+    ///> Border size when hovering
+    static const int HOVER_SIZE = 5;
 
 private:
     ///> Position of EDIT_POINT
@@ -208,6 +211,9 @@ private:
 
     ///> True if this point is being manipulated
     bool m_isActive;
+
+    ///> True if this point is being hovered over
+    bool m_isHover;
 };
 
 

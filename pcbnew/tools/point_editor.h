@@ -74,6 +74,8 @@ private:
     ///> Currently edited point, NULL if there is none.
     EDIT_POINT* m_editedPoint;
 
+    EDIT_POINT* m_hoveredPoint;
+
     ///> Original position for the current drag point.
     EDIT_POINT m_original;
 

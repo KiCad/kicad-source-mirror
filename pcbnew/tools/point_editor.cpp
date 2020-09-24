@@ -308,8 +308,9 @@ private:
 
 POINT_EDITOR::POINT_EDITOR() :
     PCB_TOOL_BASE( "pcbnew.PointEditor" ),
-    m_selectionTool( NULL ),
-    m_editedPoint( NULL ),
+    m_selectionTool( nullptr ),
+    m_editedPoint( nullptr ),
+    m_hoveredPoint( nullptr ),
     m_original( VECTOR2I( 0, 0 ) ),
     m_altConstrainer( VECTOR2I( 0, 0 ) ),
     m_refill( false ),
@@ -350,10 +351,12 @@ bool POINT_EDITOR::Init()
 void POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 {
     EDIT_POINT* point;
+    EDIT_POINT* hovered = nullptr;
 
     if( aEvent.IsMotion() )
     {
         point = m_editPoints->FindPoint( aEvent.Position(), getView() );
+        hovered = point;
     }
     else if( aEvent.IsDrag( BUT_LEFT ) )
     {
@@ -362,6 +365,23 @@ void POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
     else
     {
         point = m_editPoints->FindPoint( getViewControls()->GetCursorPosition(), getView() );
+    }
+
+    if( hovered )
+    {
+        if( m_hoveredPoint != hovered )
+        {
+            if( m_hoveredPoint )
+                m_hoveredPoint->SetHover( false );
+
+            m_hoveredPoint = hovered;
+            m_hoveredPoint->SetHover();
+        }
+    }
+    else if( m_hoveredPoint )
+    {
+        m_hoveredPoint->SetHover( false );
+        m_hoveredPoint = nullptr;
     }
 
     if( m_editedPoint != point )
@@ -421,8 +441,13 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         if( !m_editPoints || evt->IsSelectionEvent() )
             break;
 
-        if ( !inDrag )
+        EDIT_POINT* prevHover = m_hoveredPoint;
+
+        if( !inDrag )
             updateEditedPoint( *evt );
+
+        if( prevHover != m_hoveredPoint )
+            getView()->Update( m_editPoints.get() );
 
         if( evt->IsDrag( BUT_LEFT ) && m_editedPoint )
         {
@@ -459,7 +484,11 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             updateItem();
             updatePoints();
         }
-
+        else if( m_editedPoint && evt->Action() == TA_MOUSE_DOWN && evt->Buttons() == BUT_LEFT )
+        {
+            m_editedPoint->SetActive();
+            getView()->Update( m_editPoints.get() );
+        }
         else if( inDrag && evt->IsMouseUp( BUT_LEFT ) )
         {
             if( m_editedPoint )

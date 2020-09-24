@@ -243,36 +243,43 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     auto gal = aView->GetGAL();
 
-    KIGFX::COLOR4D drawColor = aView->GetPainter()->GetSettings()->GetLayerColor( LAYER_AUX_ITEMS );
+    KIGFX::RENDER_SETTINGS* settings = aView->GetPainter()->GetSettings();
 
-    KIGFX::COLOR4D highlightColor =
-            aView->GetPainter()->GetSettings()->GetLayerColor( LAYER_SELECT_OVERLAY );
+    KIGFX::COLOR4D drawColor      = settings->GetLayerColor( LAYER_AUX_ITEMS );
+    KIGFX::COLOR4D bgColor        = drawColor.Darkened( 0.3 ).WithAlpha( 0.8 );
+    KIGFX::COLOR4D highlightColor = settings->GetLayerColor( LAYER_SELECT_OVERLAY );
 
     gal->SetFillColor( drawColor );
+    gal->SetStrokeColor( bgColor );
     gal->SetIsFill( true );
-    gal->SetIsStroke( false );
+    gal->SetIsStroke( true );
     gal->PushDepth();
     gal->SetLayerDepth( gal->GetMinDepth() );
 
-    float size       = aView->ToWorld( EDIT_POINT::POINT_SIZE );
-    float shadowSize = aView->ToWorld( EDIT_POINT::POINT_SIZE * 1.5 );
+    double size       = aView->ToWorld( EDIT_POINT::POINT_SIZE ) / 2.0;
+    double borderSize = aView->ToWorld( EDIT_POINT::BORDER_SIZE );
+    double hoverSize  = aView->ToWorld( EDIT_POINT::HOVER_SIZE );
 
     for( const EDIT_POINT& point : m_points )
     {
-        if( point.IsActive() )
+        if( point.IsHover() || point.IsActive() )
         {
-            gal->SetFillColor( highlightColor );
-            gal->DrawRectangle( point.GetPosition() - shadowSize / 2,
-                                point.GetPosition() + shadowSize / 2 );
-            gal->SetFillColor( drawColor );
+            gal->SetStrokeColor( highlightColor );
+            gal->SetLineWidth( hoverSize );
+        }
+        else
+        {
+            gal->SetStrokeColor( bgColor );
+            gal->SetLineWidth( borderSize );
         }
 
-        gal->DrawRectangle( point.GetPosition() - size / 2, point.GetPosition() + size / 2 );
+        gal->SetFillColor( point.IsActive() ? highlightColor : drawColor );
+        gal->DrawRectangle( point.GetPosition() - size, point.GetPosition() + size );
     }
 
     for( const EDIT_LINE& line : m_lines )
     {
-        gal->DrawCircle( line.GetPosition(), size / 2 );
+        gal->DrawCircle( line.GetPosition(), size );
     }
 
     gal->PopDepth();
