@@ -313,8 +313,6 @@ void DIMENSION::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     aList.emplace_back( _( "Dimension" ), m_text.GetShownText(), DARKGREEN );
 
-    aList.emplace_back( _( "Layer" ), GetLayerName(), BLUE );
-
     aList.emplace_back( _( "Prefix" ), GetPrefix(), BLUE );
 
     if( GetOverrideTextEnabled() )
@@ -336,6 +334,34 @@ void DIMENSION::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     GetUnits( units, useMils );
     aList.emplace_back( _( "Units" ), GetAbbreviatedUnitsLabel( units, useMils ), BLUE );
+
+    ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
+    units = aFrame->GetUserUnits();
+
+    if( Type() == PCB_DIM_CENTER_T )
+    {
+        wxPoint startCoord = originTransforms.ToDisplayAbs( GetStart() );
+        wxString start = wxString::Format( "@(%s, %s)",
+                                           MessageTextFromValue( units, startCoord.x ),
+                                           MessageTextFromValue( units, startCoord.y ) );
+
+        aList.emplace_back( start, wxEmptyString, DARKGREEN );
+    }
+    else
+    {
+        wxPoint startCoord = originTransforms.ToDisplayAbs( GetStart() );
+        wxString start = wxString::Format( "@(%s, %s)",
+                                           MessageTextFromValue( units, startCoord.x ),
+                                           MessageTextFromValue( units, startCoord.y ) );
+        wxPoint endCoord = originTransforms.ToDisplayAbs( GetEnd() );
+        wxString end   = wxString::Format( "@(%s, %s)",
+                                           MessageTextFromValue( units, endCoord.x ),
+                                           MessageTextFromValue( units, endCoord.y ) );
+
+        aList.emplace_back( start, end, DARKGREEN );
+    }
+
+    aList.emplace_back( _( "Layer" ), GetLayerName(), DARKBROWN );
 }
 
 
@@ -946,6 +972,16 @@ void LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
     wxString    msg;
 
     aList.emplace_back( _( "Leader" ), m_text.GetShownText(), DARKGREEN );
+
+    ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
+    EDA_UNITS         units = aFrame->GetUserUnits();
+
+    wxPoint startCoord = originTransforms.ToDisplayAbs( GetStart() );
+    wxString start = wxString::Format( "@(%s, %s)",
+                                       MessageTextFromValue( units, startCoord.x ),
+                                       MessageTextFromValue( units, startCoord.y ) );
+
+    aList.emplace_back( start, wxEmptyString, DARKGREEN );
 
     aList.emplace_back( _( "Layer" ), GetLayerName(), BLUE );
 }
