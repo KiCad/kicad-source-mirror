@@ -473,7 +473,7 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     // aCfg will be the PCBNEW_SETTINGS
-    auto cfg = GetSettings();
+    FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
 
     PCB_BASE_FRAME::SaveSettings( cfg );
 
@@ -481,6 +481,8 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     cfg->m_Display         = m_DisplayOptions;
     cfg->m_LibWidth        = m_treePane->GetSize().x;
     cfg->m_SelectionFilter = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();
+
+    GetSettingsManager()->SaveColorSettings( GetColorSettings(), "board" );
 }
 
 
