@@ -42,6 +42,8 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 
+#include <widgets/infobar.h>
+
 #ifdef PROFILE
 #include <profile.h>
 #endif /* PROFILE */
@@ -262,12 +264,26 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 {
     KIGFX::GAL_CONTEXT_LOCKER locker( m_gal );
     wxSize clientSize = GetClientSize();
+    WX_INFOBAR* infobar = GetParentEDAFrame()->GetInfoBar();
+
+    if( VECTOR2I( clientSize ) == m_gal->GetScreenPixelSize() )
+        return;
+
     clientSize.x = std::max( 10, clientSize.x );
     clientSize.y = std::max( 10, clientSize.y );
+
+    VECTOR2D bottom( 0, 0 );
+
+    if( m_view )
+        bottom = m_view->ToWorld( m_gal->GetScreenPixelSize(), true );
+
     m_gal->ResizeScreen( clientSize.GetX(), clientSize.GetY() );
 
     if( m_view )
     {
+        if( infobar && infobar->IsLocked() )
+            m_view->SetCenter( bottom - m_view->ToWorld( clientSize, false ) / 2.0 );
+
         m_view->MarkTargetDirty( KIGFX::TARGET_CACHED );
         m_view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }

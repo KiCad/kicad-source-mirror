@@ -156,6 +156,14 @@ public:
      */
     void QueueDismiss();
 
+    /**
+     * Returns true if the infobar is being updated.
+     */
+    bool IsLocked()
+    {
+        return m_updateLock;
+    }
+
 protected:
     /**
      * Event handler for showing the infobar using a wxCommandEvent of the type
