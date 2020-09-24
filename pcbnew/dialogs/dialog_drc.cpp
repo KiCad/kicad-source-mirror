@@ -40,6 +40,7 @@
 #include <widgets/ui_common.h>
 #include <widgets/progress_reporter.h>
 #include <drc/drc_engine.h>
+#include <dialogs/panel_setup_rules_base.h>
 #include <tools/drc_tool.h>
 #include <kiplatform/ui.h>
 
@@ -199,11 +200,29 @@ void DIALOG_DRC::syncCheckboxes()
 
 void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 {
-    DRC_TOOL*             drcTool = m_parentFrame->GetToolManager()->GetTool<DRC_TOOL>();
-    bool                  testTracksAgainstZones = m_cbReportTracksToZonesErrors->GetValue();
-    bool                  refillZones            = m_cbRefillZones->GetValue();
-    bool                  reportAllTrackErrors   = m_cbReportAllTrackErrors->GetValue();
-    bool                  testFootprints         = m_cbTestFootprints->GetValue();
+    DRC_TOOL* drcTool = m_brdEditor->GetToolManager()->GetTool<DRC_TOOL>();
+    bool      testTracksAgainstZones = m_cbReportTracksToZonesErrors->GetValue();
+    bool      refillZones            = m_cbRefillZones->GetValue();
+    bool      reportAllTrackErrors   = m_cbReportAllTrackErrors->GetValue();
+    bool      testFootprints         = m_cbTestFootprints->GetValue();
+
+    // This is not the time to have stale or buggy rules.  Ensure they're up-to-date
+    // and that they at least parse.
+    try
+    {
+        drcTool->GetDRCEngine()->InitEngine( m_parentFrame->Prj().AbsolutePath( "drc-rules" ) );
+    }
+    catch( PARSE_ERROR& pe )
+    {
+        // Shouldn't be necessary, but we get into all kinds of wxWidgets window ordering
+        // issues (on at least OSX) if we don't.
+        drcTool->DestroyDRCDialog();
+
+        m_brdEditor->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
+                                           pe.lineNumber, pe.byteIndex );
+
+        return;
+    }
 
     m_drcRun = false;
     m_footprintTestsRun = false;

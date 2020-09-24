@@ -110,6 +110,8 @@ public:
      */
     void DestroyDRCDialog();
 
+    std::shared_ptr<DRC_ENGINE> GetDRCEngine() { return m_drcEngine; }
+
     /**
      * Run the DRC tests.
      */

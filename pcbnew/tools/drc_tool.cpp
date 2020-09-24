@@ -33,10 +33,8 @@
 #include <dialog_drc.h>
 #include <board_commit.h>
 #include <widgets/progress_reporter.h>
-#include <drc/drc_engine.h>
 #include <drc/drc_results_provider.h>
 #include <netlist_reader/pcb_netlist.h>
-#include <dialogs/panel_setup_rules_base.h>
 
 DRC_TOOL::DRC_TOOL() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
@@ -142,24 +140,6 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksA
     BOARD_COMMIT      commit( m_editFrame );
     NETLIST           netlist;
     wxWindowDisabler  disabler( /* disable everything except: */ m_drcDialog );
-
-    // This is not the time to have stale or buggy rules.  Ensure they're up-to-date
-    // and that they at least parse.
-    try
-    {
-        m_drcEngine->InitEngine( m_editFrame->Prj().AbsolutePath( "drc-rules" ) );
-    }
-    catch( PARSE_ERROR& pe )
-    {
-        // Shouldn't be necessary, but we get into all kinds of wxWidgets window ordering
-        // issues (on at least OSX) if we don't.
-        DestroyDRCDialog();
-
-        m_editFrame->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
-                                           pe.lineNumber, pe.byteIndex );
-
-        return;
-    }
 
     m_drcRunning = true;
 
