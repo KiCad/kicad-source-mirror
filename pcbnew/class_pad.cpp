@@ -1346,27 +1346,37 @@ static struct PAD_DESC
 {
     PAD_DESC()
     {
+        ENUM_MAP<PAD_ATTR_T>::Instance()
+                .Map( PAD_ATTRIB_STANDARD,        _( "Through-hole" ) )
+                .Map( PAD_ATTRIB_SMD,             _( "SMD" ) )
+                .Map( PAD_ATTRIB_CONN,            _( "Edge connector" ) )
+                .Map( PAD_ATTRIB_HOLE_NOT_PLATED, _( "NPTH, mechanical" ) );
+
         ENUM_MAP<PAD_SHAPE_T>::Instance()
-                .Map( PAD_SHAPE_CIRCLE,         _( "Circle" ) )
-                .Map( PAD_SHAPE_RECT,           _( "Rectangle" ) )
-                .Map( PAD_SHAPE_OVAL,           _( "Oval" ) )
-                .Map( PAD_SHAPE_TRAPEZOID,      _( "Trapezoid" ) )
-                .Map( PAD_SHAPE_ROUNDRECT,      _( "Rounded rectangle" ) )
-                .Map( PAD_SHAPE_CHAMFERED_RECT, _( "Chamfered rectangle" ) )
-                .Map( PAD_SHAPE_CUSTOM,         _( "Custom" ) );
+                .Map( PAD_SHAPE_CIRCLE,           _( "Circle" ) )
+                .Map( PAD_SHAPE_RECT,             _( "Rectangle" ) )
+                .Map( PAD_SHAPE_OVAL,             _( "Oval" ) )
+                .Map( PAD_SHAPE_TRAPEZOID,        _( "Trapezoid" ) )
+                .Map( PAD_SHAPE_ROUNDRECT,        _( "Rounded rectangle" ) )
+                .Map( PAD_SHAPE_CHAMFERED_RECT,   _( "Chamfered rectangle" ) )
+                .Map( PAD_SHAPE_CUSTOM,           _( "Custom" ) );
 
         ENUM_MAP<PAD_PROP_T>::Instance()
-                .Map( PAD_PROP_NONE,            _( "None" ) )
-                .Map( PAD_PROP_BGA,             _( "BGA pad" ) )
-                .Map( PAD_PROP_FIDUCIAL_GLBL,   _( "Fiducial, global to board" ) )
-                .Map( PAD_PROP_FIDUCIAL_LOCAL,  _( "Fiducial, local to footprint" ) )
-                .Map( PAD_PROP_TESTPOINT,       _( "Test point pad" ) )
-                .Map( PAD_PROP_HEATSINK,        _( "Heatsink pad" ) )
-                .Map( PAD_PROP_CASTELLATED,     _( "Castellated pad" ) );
+                .Map( PAD_PROP_NONE,              _( "None" ) )
+                .Map( PAD_PROP_BGA,               _( "BGA pad" ) )
+                .Map( PAD_PROP_FIDUCIAL_GLBL,     _( "Fiducial, global to board" ) )
+                .Map( PAD_PROP_FIDUCIAL_LOCAL,    _( "Fiducial, local to footprint" ) )
+                .Map( PAD_PROP_TESTPOINT,         _( "Test point pad" ) )
+                .Map( PAD_PROP_HEATSINK,          _( "Heatsink pad" ) )
+                .Map( PAD_PROP_CASTELLATED,       _( "Castellated pad" ) );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( D_PAD );
         propMgr.InheritsAfter( TYPE_HASH( D_PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
+
+        auto padType = new PROPERTY_ENUM<D_PAD, PAD_ATTR_T>( _( "Pad Type" ),
+                    &D_PAD::SetAttribute, &D_PAD::GetAttribute );
+        propMgr.AddProperty( padType );
 
         auto shape = new PROPERTY_ENUM<D_PAD, PAD_SHAPE_T>( _( "Shape" ),
                     &D_PAD::SetShape, &D_PAD::GetShape );

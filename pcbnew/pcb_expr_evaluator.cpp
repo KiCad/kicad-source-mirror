@@ -362,7 +362,8 @@ LIBEVAL::FUNC_CALL_REF PCB_EXPR_UCODE::CreateFuncCall( const wxString& aName )
 }
 
 
-std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& aVar, const wxString& aField )
+std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& aVar,
+                                                                const wxString& aField )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     std::unique_ptr<PCB_EXPR_VAR_REF> vref;;
@@ -409,7 +410,7 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
                 else if ( prop->HasChoices() )
                 {   // it's an enum, we treat it as string
                     vref->SetType( LIBEVAL::VT_STRING );
-                    vref->SetIsEnum ( true );
+                    vref->SetIsEnum( true );
                 }
                 else
                 {

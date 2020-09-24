@@ -1046,8 +1046,8 @@ static struct TRACK_VIA_DESC
         ENUM_MAP<VIATYPE>::Instance()
             .Undefined( VIATYPE::NOT_DEFINED )
             .Map( VIATYPE::THROUGH, _( "Through" ) )
-            .Map( VIATYPE::BLIND_BURIED, _( "Buried_via" ) )
-            .Map( VIATYPE::MICROVIA, _( "Micro_via" ) );
+            .Map( VIATYPE::BLIND_BURIED, _( "Blind/buried" ) )
+            .Map( VIATYPE::MICROVIA, _( "Micro" ) );
 
         ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
@@ -1085,13 +1085,13 @@ static struct TRACK_VIA_DESC
         // TODO layerset for vias?
         // TODO test drill, use getdrillvalue?
         propMgr.ReplaceProperty( TYPE_HASH( TRACK ), _( "Width" ),
-            new PROPERTY<VIA, int, TRACK>( _( "Diameter" ), &VIA::SetWidth, &VIA::GetWidth,
-            PROPERTY_DISPLAY::DISTANCE ) );
+            new PROPERTY<VIA, int, TRACK>( _( "Diameter" ),
+            &VIA::SetWidth, &VIA::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<VIA, int>( _( "Drill" ),
             &VIA::SetDrill, &VIA::GetDrillValue, PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _( "Layer" ),
-                new PROPERTY_ENUM<VIA, PCB_LAYER_ID, BOARD_ITEM>( _( "Layer Top" ),
-                    &VIA::SetLayer, &VIA::GetLayer ) );
+            new PROPERTY_ENUM<VIA, PCB_LAYER_ID, BOARD_ITEM>( _( "Layer Top" ),
+            &VIA::SetLayer, &VIA::GetLayer ) );
         propMgr.AddProperty( new PROPERTY_ENUM<VIA, PCB_LAYER_ID>( _( "Layer Bottom" ),
             &VIA::SetBottomLayer, &VIA::BottomLayer ) );
         propMgr.AddProperty( new PROPERTY_ENUM<VIA, VIATYPE>( _( "Via Type" ),
