@@ -120,6 +120,8 @@ private:
      */
     LSEQ getNonRemovableLayers();
 
+    wxArrayString getAvailableUserDefinedLayers();
+
     PANEL_SETUP_LAYERS_CTLs getCTLs( LAYER_NUM aLayerNumber );
     wxControl*  getName( LAYER_NUM aLayer );
     wxCheckBox* getCheckBox( LAYER_NUM aLayer );

@@ -195,6 +195,15 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
     CLR( "board.f_crtyd",       F_CrtYd,    COLOR4D( LIGHTGRAY ) );
     CLR( "board.b_fab",         B_Fab,      COLOR4D( BLUE ) );
     CLR( "board.f_fab",         F_Fab,      COLOR4D( DARKGRAY ) );
+    CLR( "board.user_1",        User_1,     COLOR4D( BLUE ) );
+    CLR( "board.user_2",        User_2,     COLOR4D( BLUE ) );
+    CLR( "board.user_3",        User_3,     COLOR4D( BLUE ) );
+    CLR( "board.user_4",        User_4,     COLOR4D( BLUE ) );
+    CLR( "board.user_5",        User_5,     COLOR4D( BLUE ) );
+    CLR( "board.user_6",        User_6,     COLOR4D( BLUE ) );
+    CLR( "board.user_7",        User_7,     COLOR4D( BLUE ) );
+    CLR( "board.user_8",        User_8,     COLOR4D( BLUE ) );
+    CLR( "board.user_9",        User_9,     COLOR4D( BLUE ) );
 
     // Colors for 3D viewer, which are used as defaults unless overridden by the board
     CLR( "3d_viewer.background_bottom", LAYER_3D_BACKGROUND_BOTTOM, COLOR4D( 0.4, 0.4, 0.5, 1.0 ) );

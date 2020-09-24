@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2017 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2010-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -509,9 +509,6 @@ void PCB_LAYER_WIDGET::ReFill()
         }
     }
 
-    UpdateLayouts();
-
-
     // technical layers are shown in this order:
     // Because they are static, wxGetTranslation must be explicitly
     // called for tooltips.
@@ -536,7 +533,7 @@ void PCB_LAYER_WIDGET::ReFill()
         { F_CrtYd,          _( "Footprint courtyards on board's front" ) },
         { B_CrtYd,          _( "Footprint courtyards on board's back" ) },
         { F_Fab,            _( "Footprint assembly on board's front" ) },
-        { B_Fab,            _( "Footprint assembly on board's back" ) }
+        { B_Fab,            _( "Footprint assembly on board's back" ) },
     };
 
     for( unsigned i=0;  i<arrayDim( non_cu_seq );  ++i )
@@ -544,7 +541,10 @@ void PCB_LAYER_WIDGET::ReFill()
         PCB_LAYER_ID layer = non_cu_seq[i].layerId;
 
         if( !enabled[layer] )
+        {
+            wxLogDebug( "Layer widget: layer %s not enabled.", LSET::Name( layer ) );
             continue;
+        }
 
         AppendLayerRow( LAYER_WIDGET::ROW( brd->GetLayerName( layer ), layer,
                 myframe->GetColorSettings()->GetColor( layer ),
@@ -557,6 +557,8 @@ void PCB_LAYER_WIDGET::ReFill()
             getLayerComp( GetLayerRowCount()-1, COLUMN_COLORBM )->SetToolTip( wxEmptyString );
         }
     }
+
+    UpdateLayouts();
 }
 
 
@@ -640,8 +642,10 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
         }
     }
     else
+    {
         if( myframe->GetCanvas() )
             myframe->GetCanvas()->GetView()->SetLayerVisible( aLayer, isVisible );
+    }
 
     if( isFinal )
         myframe->GetCanvas()->Refresh();
@@ -671,7 +675,6 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 
     myframe->ReCreateHToolbar();
     myframe->GetCanvas()->ForceRefresh();
-    myframe->GetCanvas()->Refresh();
 }
 
 
@@ -702,7 +705,6 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
     else if( aId != LAYER_GRID )
         myframe->GetCanvas()->GetView()->SetLayerVisible( aId, isEnabled );
 
-    myframe->GetCanvas()->Refresh();
     myframe->GetCanvas()->Refresh();
 }
 

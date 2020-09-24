@@ -848,17 +848,7 @@ bool PANEL_SETUP_LAYERS::CheckCopperLayerCount( BOARD* aWorkingBoard, BOARD* aIm
 void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
 {
     LSEQ seq;
-    wxArrayString availableUserDefinedLayers;
-
-    for( seq = LSET::UserDefinedLayers().Seq();  seq;  ++seq )
-    {
-        wxCheckBox* checkBox = getCheckBox( *seq );
-
-        if( checkBox && checkBox->IsChecked() )
-            continue;
-
-        availableUserDefinedLayers.Add( LayerName( *seq ) );
-    }
+    wxArrayString availableUserDefinedLayers = getAvailableUserDefinedLayers();
 
     wxCHECK( !availableUserDefinedLayers.IsEmpty(), /* void */ );
 
@@ -899,6 +889,25 @@ void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
 
 void PANEL_SETUP_LAYERS::onUpdateAddUserDefinedLayer( wxUpdateUIEvent& event )
 {
-    event.Enable( m_PresetsChoice->GetSelection() == 0 );
+    wxArrayString availableUserDefinedLayers = getAvailableUserDefinedLayers();
+
+    event.Enable( m_PresetsChoice->GetSelection() == 0 && !availableUserDefinedLayers.IsEmpty() );
 }
 
+
+wxArrayString PANEL_SETUP_LAYERS::getAvailableUserDefinedLayers()
+{
+    wxArrayString availableUserDefinedLayers;
+
+    for( LSEQ seq = LSET::UserDefinedLayers().Seq();  seq;  ++seq )
+    {
+        wxCheckBox* checkBox = getCheckBox( *seq );
+
+        if( checkBox && checkBox->IsShown() )
+            continue;
+
+        availableUserDefinedLayers.Add( LayerName( *seq ) );
+    }
+
+    return availableUserDefinedLayers;
+}

@@ -242,6 +242,15 @@ LSEQ LSET::Users() const
         Eco2_User,
         Edge_Cuts,
         Margin,
+        User_1,
+        User_2,
+        User_3,
+        User_4,
+        User_5,
+        User_6,
+        User_7,
+        User_8,
+        User_9
    };
 
    return Seq( sequence, arrayDim( sequence ) );
@@ -269,6 +278,15 @@ LSEQ LSET::TechAndUserUIOrder() const
         B_CrtYd,
         F_Fab,
         B_Fab,
+        User_1,
+        User_2,
+        User_3,
+        User_4,
+        User_5,
+        User_6,
+        User_7,
+        User_8,
+        User_9
    };
 
    return Seq( sequence, arrayDim( sequence ) );

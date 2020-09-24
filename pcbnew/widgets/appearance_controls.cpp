@@ -1340,7 +1340,16 @@ void APPEARANCE_CONTROLS::rebuildLayers()
         { F_CrtYd,          _( "Footprint courtyards on board's front" ) },
         { B_CrtYd,          _( "Footprint courtyards on board's back" ) },
         { F_Fab,            _( "Footprint assembly on board's front" ) },
-        { B_Fab,            _( "Footprint assembly on board's back" ) }
+        { B_Fab,            _( "Footprint assembly on board's back" ) },
+        { User_1,           _( "User defined layer 1" ) },
+        { User_2,           _( "User defined layer 2" ) },
+        { User_3,           _( "User defined layer 3" ) },
+        { User_4,           _( "User defined layer 4" ) },
+        { User_5,           _( "User defined layer 5" ) },
+        { User_6,           _( "User defined layer 6" ) },
+        { User_7,           _( "User defined layer 7" ) },
+        { User_8,           _( "User defined layer 8" ) },
+        { User_9,           _( "User defined layer 9" ) },
     };
 
     for( const auto& entry : non_cu_seq )
