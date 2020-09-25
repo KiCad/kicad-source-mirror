@@ -73,26 +73,22 @@ public:
  */
 class RC_ITEM
 {
+public:
+    typedef std::vector<KIID> KIIDS;
 protected:
     int           m_errorCode;         // the error code's numeric value
     wxString      m_errorMessage;      ///< A message describing the details of this specific error
     wxString      m_errorTitle;        ///< The string describing the type of error
     wxString      m_settingsKey;       ///< The key used to describe this type of error in settings
     MARKER_BASE*  m_parent;            // The marker this item belongs to, if any
-    KIID          m_mainItemUuid;
-    KIID          m_auxItemUuid;
-    KIID          m_auxItem2Uuid;
-    KIID          m_auxItem3Uuid;
+
+    KIIDS m_ids;
 
 public:
 
     RC_ITEM() :
         m_errorCode( 0 ),
-        m_parent( nullptr ),
-        m_mainItemUuid( NilUuid() ),
-        m_auxItemUuid( NilUuid() ),
-        m_auxItem2Uuid( NilUuid() ),
-        m_auxItem3Uuid( NilUuid() )
+        m_parent( nullptr )
     {
     }
 
@@ -103,44 +99,55 @@ public:
         m_errorTitle   = aItem->m_errorTitle;
         m_settingsKey  = aItem->m_settingsKey;
         m_parent       = aItem->m_parent;
-        m_mainItemUuid = aItem->m_mainItemUuid;
-        m_auxItemUuid  = aItem->m_auxItemUuid;
-        m_auxItem2Uuid = aItem->m_auxItem2Uuid;
-        m_auxItem3Uuid = aItem->m_auxItem3Uuid;
+        m_ids = aItem->m_ids;
     }
 
     virtual ~RC_ITEM() { }
 
     void SetErrorMessage( const wxString& aMessage ) { m_errorMessage = aMessage; }
 
+    void SetItems( const KIIDS& aIds )
+    {
+        m_ids = aIds;
+    }
+
+    void AddItem( EDA_ITEM* aItem )
+    {
+        m_ids.push_back( aItem->m_Uuid );
+    }
+
     void SetItems( EDA_ITEM* aItem, EDA_ITEM* bItem = nullptr, EDA_ITEM* cItem = nullptr,
                    EDA_ITEM* dItem = nullptr )
     {
-        m_mainItemUuid = aItem->m_Uuid;
+        m_ids.clear();
+        
+        m_ids.push_back( aItem->m_Uuid );
 
         if( bItem )
-            m_auxItemUuid = bItem->m_Uuid;
+            m_ids.push_back( bItem->m_Uuid );
 
         if( cItem )
-            m_auxItem2Uuid = cItem->m_Uuid;
+            m_ids.push_back( cItem->m_Uuid );
 
         if( dItem )
-            m_auxItem3Uuid = dItem->m_Uuid;
+            m_ids.push_back( dItem->m_Uuid );
     }
 
     void SetItems( const KIID& aItem, const KIID& bItem = niluuid, const KIID& cItem = niluuid,
                    const KIID& dItem = niluuid )
     {
-        m_mainItemUuid = aItem;
-        m_auxItemUuid = bItem;
-        m_auxItem2Uuid = cItem;
-        m_auxItem3Uuid = dItem;
+        m_ids.clear();
+        
+        m_ids.push_back( aItem );
+        m_ids.push_back( bItem );
+        m_ids.push_back( cItem );
+        m_ids.push_back( dItem );
     }
 
-    KIID GetMainItemID() const { return m_mainItemUuid; }
-    KIID GetAuxItemID() const { return m_auxItemUuid; }
-    KIID GetAuxItem2ID() const { return m_auxItem2Uuid; }
-    KIID GetAuxItem3ID() const { return m_auxItem3Uuid; }
+    KIID GetMainItemID() const { return m_ids.size() > 0 ? m_ids[0] : niluuid; }
+    KIID GetAuxItemID() const { return m_ids.size() > 1 ? m_ids[1] : niluuid;; }
+    KIID GetAuxItem2ID() const { return m_ids.size() > 2 ? m_ids[2] : niluuid;; }
+    KIID GetAuxItem3ID() const { return m_ids.size() > 3 ? m_ids[3] : niluuid;; }
 
     void SetParent( MARKER_BASE* aMarker ) { m_parent = aMarker; }
     MARKER_BASE* GetParent() const { return m_parent; }

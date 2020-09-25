@@ -70,12 +70,12 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
     EDA_ITEM* mainItem = nullptr;
     EDA_ITEM* auxItem = nullptr;
 
-    auto ii = aItemMap.find( m_mainItemUuid );
+    auto ii = aItemMap.find( GetMainItemID() );
 
     if( ii != aItemMap.end() )
         mainItem = ii->second;
 
-    ii = aItemMap.find( m_auxItemUuid );
+    ii = aItemMap.find( GetAuxItemID() );
 
     if( ii != aItemMap.end() )
         auxItem = ii->second;
