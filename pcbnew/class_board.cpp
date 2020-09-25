@@ -1974,7 +1974,7 @@ PCB_GROUP* BOARD::TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope )
     while( candidate && candidate->GetParentGroup() && candidate->GetParentGroup() != scope )
         candidate = candidate->GetParentGroup();
 
-    return candidate;
+    return candidate == scope ? nullptr : candidate;
 }
 
 
