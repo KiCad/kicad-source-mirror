@@ -253,11 +253,6 @@ BOOST_AUTO_TEST_CASE( InvalidGroups )
                             { TEXT3, GROUP2 }, { TEXT4, NAME_GROUP3 } } );
     BOOST_CHECK_EQUAL( board1->GroupsSanityCheck(), "Cycle detected in group membership" );
 
-    // Reference group not on board
-    board1       = createBoard( { { TEXT0, REMOVED_GROUP } } );
-    wxString res = board1->GroupsSanityCheck();
-    BOOST_CHECK_MESSAGE( res.find( "contains deleted item" ) != wxString::npos, res );
-
     // Delete the removed group since the test is over
     board1.reset( nullptr );
     delete s_removedGroup;
@@ -267,7 +262,6 @@ BOOST_AUTO_TEST_CASE( InvalidGroups )
     board1.reset( nullptr );
     delete s_removedText;
     s_removedText = nullptr;
-
 }
 
 
