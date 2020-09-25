@@ -232,11 +232,10 @@ static void memberOf( LIBEVAL::CONTEXT* aCtx, void* self )
     if( !item )
         return;
 
-    BOARD*     board = item->GetBoard();
-    PCB_GROUP* group = board->ParentGroup( item );
+    PCB_GROUP* group = item->GetParentGroup();
 
     if( !group && item->GetParent() && item->GetParent()->Type() == PCB_MODULE_T )
-        group = board->ParentGroup( item->GetParent() );
+        group = item->GetParent()->GetParentGroup();
 
     while( group )
     {
@@ -246,7 +245,7 @@ static void memberOf( LIBEVAL::CONTEXT* aCtx, void* self )
             return;
         }
 
-        group = board->ParentGroup( group );
+        group = group->GetParentGroup();
     }
 }
 

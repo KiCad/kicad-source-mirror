@@ -410,10 +410,8 @@ public:
 
     // Grouping
     static TOOL_ACTION groupCreate;
-    static TOOL_ACTION groupMerge;
     static TOOL_ACTION groupUngroup;
     static TOOL_ACTION groupRemoveItems;
-    static TOOL_ACTION groupFlatten;
     static TOOL_ACTION groupEnter;
     static TOOL_ACTION groupLeave;
 

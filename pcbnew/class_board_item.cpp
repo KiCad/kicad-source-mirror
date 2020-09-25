@@ -59,21 +59,6 @@ BOARD* BOARD_ITEM::GetBoard() const
 }
 
 
-PCB_GROUP* BOARD_ITEM::GetGroup() const
-{
-    if( IsInGroup() && GetBoard() )
-        return dynamic_cast<PCB_GROUP*>( GetBoard()->GetItem( m_groupUuid ) );
-
-    return nullptr;
-}
-
-
-void BOARD_ITEM::SetGroup( PCB_GROUP* aGroup )
-{
-    m_groupUuid = aGroup ? aGroup->m_Uuid : niluuid;
-}
-
-
 wxString BOARD_ITEM::GetLayerName() const
 {
     BOARD*  board = GetBoard();

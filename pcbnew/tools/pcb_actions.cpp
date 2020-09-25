@@ -647,11 +647,6 @@ TOOL_ACTION PCB_ACTIONS::groupCreate( "pcbnew.EditorControl.groupCreate",
         _( "Group" ), _( "Add the selected items to a new group" ),
         locked_xpm );
 
-TOOL_ACTION PCB_ACTIONS::groupMerge( "pcbnew.EditorControl.groupMerge",
-        AS_GLOBAL, 0, "",
-        _( "Merge" ), "",
-        unlocked_xpm );
-
 TOOL_ACTION PCB_ACTIONS::groupUngroup( "pcbnew.EditorControl.groupUngroup",
         AS_GLOBAL, 0, "",
         _( "Ungroup" ), "",
@@ -660,11 +655,6 @@ TOOL_ACTION PCB_ACTIONS::groupUngroup( "pcbnew.EditorControl.groupUngroup",
 TOOL_ACTION PCB_ACTIONS::groupRemoveItems( "pcbnew.EditorControl.groupRemoveItems",
         AS_GLOBAL, 0, "",
         _( "Remove Items" ), _( "Remove items from group" ),
-        unlocked_xpm );
-
-TOOL_ACTION PCB_ACTIONS::groupFlatten( "pcbnew.EditorControl.groupFlatten",
-        AS_GLOBAL, 0, "",
-        _( "Flatten Group" ), "",
         unlocked_xpm );
 
 TOOL_ACTION PCB_ACTIONS::groupEnter( "pcbnew.EditorControl.groupEnter",

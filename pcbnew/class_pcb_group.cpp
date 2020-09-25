@@ -37,11 +37,11 @@ PCB_GROUP::PCB_GROUP( BOARD*aParent ) : BOARD_ITEM( aParent, PCB_GROUP_T )
 bool PCB_GROUP::AddItem( BOARD_ITEM* aItem )
 {
     // Items can only be in one group at a time
-    if( aItem->IsInGroup() )
-        return false;
+    if( aItem->GetParentGroup() )
+        aItem->GetParentGroup()->RemoveItem( aItem );
 
     m_items.insert( aItem );
-    aItem->SetGroup( this );
+    aItem->SetParentGroup( this );
     return true;
 }
 
@@ -51,7 +51,7 @@ bool PCB_GROUP::RemoveItem( BOARD_ITEM* aItem )
     // Only clear the item's group field if it was inside this group
     if( m_items.erase( aItem ) == 1 )
     {
-        aItem->SetGroup( nullptr );
+        aItem->SetParentGroup( nullptr );
         return true;
     }
 
@@ -62,7 +62,7 @@ bool PCB_GROUP::RemoveItem( BOARD_ITEM* aItem )
 void PCB_GROUP::RemoveAll()
 {
     for( BOARD_ITEM* item : m_items )
-        item->SetGroup( nullptr );
+        item->SetParentGroup( nullptr );
 
     m_items.clear();
 }

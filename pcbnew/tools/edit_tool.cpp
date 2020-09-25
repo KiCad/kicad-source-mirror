@@ -1089,6 +1089,11 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selectionCopy )
     {
+        PCB_GROUP* group = static_cast<BOARD_ITEM*>( item )->GetParentGroup();
+
+        if( group )
+            group->RemoveItem( static_cast<BOARD_ITEM*>( item ) );
+
         if( m_editModules )
         {
             m_commit->Remove( item );
@@ -1201,32 +1206,16 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         }
     }
 
-    // Figure out status of a group containing items to be removed.  if entered
-    // group is not set in the selection tool, then any groups to be removed are
-    // removed in their entirety and so no empty group could remain.  If entered
-    // group is set, then we could be removing all items of the entered group,
-    // in which case we need to remove the group itself.
+    // If the entered group has been emptied then leave it.
     PCB_GROUP* enteredGroup = m_selectionTool->GetEnteredGroup();
 
-    if( enteredGroup != nullptr )
-    {
-        board()->GroupRemoveItems( removed, m_commit.get() );
-
-        if( m_commit->HasRemoveEntry( enteredGroup ) )
-            m_selectionTool->ExitGroup();
-    }
+    if( enteredGroup && enteredGroup->GetItems().empty() )
+        m_selectionTool->ExitGroup();
 
     if( isCut )
         m_commit->Push( _( "Cut" ) );
     else
         m_commit->Push( _( "Delete" ) );
-
-    if( enteredGroup != nullptr )
-    {
-        wxString check = board()->GroupsSanityCheck();
-        wxCHECK_MSG( check == wxEmptyString, 0,
-                     _( "Remove of items in entered group resulted in inconsistent state: " )+ check );
-    }
 
     if( !m_lockedSelected && !lockedItems.empty() )
     {

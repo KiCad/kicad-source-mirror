@@ -100,7 +100,7 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
     for( size_t ii = 0; ii < m_membersList->GetCount(); ++ii )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_membersList->GetClientData( ii ) );
-        PCB_GROUP*  existingGroup = item->GetGroup();
+        PCB_GROUP*  existingGroup = item->GetParentGroup();
 
         if( existingGroup )
         {

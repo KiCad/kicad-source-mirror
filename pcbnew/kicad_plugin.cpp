@@ -1552,16 +1552,25 @@ void PCB_IO::format( TEXTE_PCB* aText, int aNestLevel ) const
 
 void PCB_IO::format( PCB_GROUP* aGroup, int aNestLevel ) const
 {
-    m_out->Print( aNestLevel, "(group %s (id %s)\n", m_out->Quotew( aGroup->GetName() ).c_str(),
-            TO_UTF8( aGroup->m_Uuid.AsString() ) );
-    m_out->Print( aNestLevel + 2, "(members\n" );
-    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_items( aGroup->GetItems().begin(),
-            aGroup->GetItems().end() );
+    // Don't write empty groups
+    if( aGroup->GetItems().empty() )
+        return;
 
-    for( const auto& item : sorted_items )
-    {
-        m_out->Print( aNestLevel + 4, "%s\n", TO_UTF8( item->m_Uuid.AsString() ) );
-    }
+    m_out->Print( aNestLevel, "(group %s (id %s)\n",
+                              m_out->Quotew( aGroup->GetName() ).c_str(),
+                              TO_UTF8( aGroup->m_Uuid.AsString() ) );
+
+    m_out->Print( aNestLevel + 1, "(members\n" );
+
+    wxArrayString memberIds;
+
+    for( BOARD_ITEM* member : aGroup->GetItems() )
+        memberIds.Add( member->m_Uuid.AsString() );
+
+    memberIds.Sort();
+
+    for( const wxString& memberId : memberIds )
+        m_out->Print( aNestLevel + 2, "%s\n", TO_UTF8( memberId ) );
 
     m_out->Print( 0, " )\n" );
     m_out->Print( aNestLevel, ")\n" );

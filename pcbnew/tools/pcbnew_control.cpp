@@ -849,15 +849,6 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
             {
                 static_cast<MODULE*>( item )->SetPath( KIID_PATH() );
             }
-            else if( item->Type() == PCB_GROUP_T )
-            {
-                PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
-                // If pasting a group, its immediate children must be updated to have its new KIID
-                group->RunOnChildren( [group]( BOARD_ITEM* aBrdItem )
-                                      {
-                                          aBrdItem->SetGroup( group );
-                                      } );
-            }
         }
 
         // Add or just select items for the move/place command
@@ -875,33 +866,10 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
         // selection, so descendents of groups should not be in the selection
         // object.
         item->SetSelected();
-    }
 
-    // Filter out from selection any items that are in groups that are also in the selection
-    // For PCB_GROUP_T, a selection including the group should not include its descendants.
-    std::unordered_set<PCB_GROUP*> groups;
-    for( BOARD_ITEM* item : aItems )
-    {
-        if( item->Type() == PCB_GROUP_T )
-            groups.insert( static_cast<PCB_GROUP*>( item ) );
-    }
-    for( BOARD_ITEM* item : aItems )
-    {
-        bool inGroup = false;
-        for( PCB_GROUP* grp : groups )
-        {
-            if( grp->GetItems().find( item ) != grp->GetItems().end() )
-            {
-                inGroup = true;
-                break;
-            }
-        }
-        if( !inGroup )
-        {
+        if( !item->GetParentGroup() || !item->GetParentGroup()->IsSelected() )
             selection.Add( item );
-        }
     }
-
 
     if( selection.Size() > 0 )
     {

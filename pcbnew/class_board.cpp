@@ -726,7 +726,7 @@ void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
 }
 
 
-BOARD_ITEM* BOARD::GetItem( const KIID& aID )
+BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
 {
     if( aID == niluuid )
         return nullptr;
@@ -786,7 +786,7 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID )
     }
 
     if( m_Uuid == aID )
-        return this;
+        return const_cast<BOARD*>( this );
 
     // Not found; weak reference has been deleted.
     return DELETED_BOARD_ITEM::GetInstance();
@@ -1967,49 +1967,14 @@ void BOARD::HighLightON( bool aValue )
 }
 
 
-PCB_GROUP* BOARD::TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope  )
+PCB_GROUP* BOARD::TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope )
 {
-    PCB_GROUP* candidate = NULL;
-    bool foundParent;
+    PCB_GROUP* candidate = item->GetParentGroup();
 
-    do
-    {
-        foundParent = false;
-        for( PCB_GROUP* group : m_groups )
-        {
-            BOARD_ITEM* toFind = ( candidate == NULL ) ? item : candidate;
-
-            if( group->GetItems().find( toFind ) != group->GetItems().end() )
-            {
-                if( scope == group && candidate != NULL )
-                {
-                    wxCHECK( candidate->Type() == PCB_GROUP_T, NULL );
-                    return candidate;
-                }
-
-                candidate   = group;
-                foundParent = true;
-            }
-        }
-    } while( foundParent );
-
-    if( scope != NULL )
-    {
-        return NULL;
-    }
+    while( candidate && candidate->GetParentGroup() && candidate->GetParentGroup() != scope )
+        candidate = candidate->GetParentGroup();
 
     return candidate;
-}
-
-
-PCB_GROUP* BOARD::ParentGroup( BOARD_ITEM* item )
-{
-    for( PCB_GROUP* group : m_groups )
-    {
-        if( group->GetItems().find( item ) != group->GetItems().end() )
-            return group;
-    }
-    return NULL;
 }
 
 
@@ -2026,116 +1991,6 @@ wxString BOARD::GroupsSanityCheck( bool repair )
 
 wxString BOARD::GroupsSanityCheckInternal( bool repair )
 {
-    BOARD&                       board  = *this;
-    GROUPS&                      groups = board.Groups();
-    std::unordered_set<wxString> groupNames;
-    std::unordered_set<wxString> allMembers;
-
-    // To help with cycle detection, construct a mapping from
-    // each group to the at most single parent group it could belong to.
-    std::vector<int> parentGroupIdx( groups.size(), -1 );
-
-    for( size_t idx = 0; idx < groups.size(); idx++ )
-    {
-        PCB_GROUP& group    = *( groups[idx] );
-        BOARD_ITEM*  testItem = board.GetItem( group.m_Uuid );
-
-        if( testItem != groups[idx] )
-        {
-            if( repair )
-                board.Groups().erase( board.Groups().begin() + idx );
-
-            return  wxString::Format( _( "Group Uuid %s maps to 2 different BOARD_ITEMS: %p and %p" ),
-                                      group.m_Uuid.AsString(),
-                                      testItem, groups[idx] );
-        }
-
-        // Non-blank group names must be unique
-        if( !group.GetName().empty() )
-        {
-            if( groupNames.find( group.GetName() ) != groupNames.end() )
-            {
-                if( repair )
-                    group.SetName( group.GetName() + "-" + group.m_Uuid.AsString() );
-
-                return wxString::Format( _( "Two groups of identical name: %s" ), group.GetName() );
-            }
-
-            wxCHECK( groupNames.insert( group.GetName() ).second == true,
-                     "Insert failed of new group" );
-        }
-
-        for( BOARD_ITEM* member : group.GetItems() )
-        {
-            BOARD_ITEM* item = board.GetItem( member->m_Uuid );
-
-            if( ( item == nullptr ) || ( item->Type() == NOT_USED ) )
-            {
-                if( repair )
-                    group.RemoveItem( member );
-
-                return wxString::Format( _( "Group %s contains deleted item %s" ),
-                                            group.m_Uuid.AsString(),
-                                            member->m_Uuid.AsString() );
-            }
-
-            if( item != member )
-            {
-                if( repair )
-                    group.RemoveItem( member );
-
-                return wxString::Format( _( "Uuid %s maps to 2 different BOARD_ITEMS: %s %p %s and %p %s" ),
-                                          member->m_Uuid.AsString(),
-                                          item->m_Uuid.AsString(),
-                                          item,
-                                          item->GetSelectMenuText( EDA_UNITS::MILLIMETRES ),
-                                          member,
-                                          member->GetSelectMenuText( EDA_UNITS::MILLIMETRES )
-                    );
-            }
-
-            if( allMembers.find( member->m_Uuid.AsString() ) != allMembers.end() )
-            {
-                if( repair )
-                    group.RemoveItem( member );
-
-                return wxString::Format(
-                        _( "BOARD_ITEM %s appears multiple times in groups (either in the "
-                           "same group or in multiple groups) " ),
-                        item->m_Uuid.AsString() );
-            }
-
-            wxCHECK( allMembers.insert( member->m_Uuid.AsString() ).second == true,
-                     "Insert failed of new member" );
-
-            if( item->Type() == PCB_GROUP_T )
-            {
-                // Could speed up with a map structure if needed
-                size_t childIdx = std::distance(
-                        groups.begin(), std::find( groups.begin(), groups.end(), item ) );
-                // This check of childIdx should never fail, because if a group
-                // is not found in the groups list, then the board.GetItem()
-                // check above should have failed.
-                wxCHECK( childIdx < groups.size(),
-                         wxString::Format( "Group %s not found in groups list",
-                                           item->m_Uuid.AsString() ) );
-                wxCHECK( parentGroupIdx[childIdx] == -1,
-                         wxString::Format( "Duplicate group despite allMembers check previously: %s",
-                                           item->m_Uuid.AsString() ) );
-                parentGroupIdx[childIdx] = idx;
-            }
-        }
-
-        if( group.GetItems().size() == 0 )
-        {
-            if( repair )
-                board.Groups().erase( board.Groups().begin() + idx );
-
-            return wxString::Format( _( "Group must have at least one member: %s" ),
-                    group.m_Uuid.AsString() );
-        }
-    }
-
     // Cycle detection
     //
     // Each group has at most one parent group.
@@ -2147,46 +2002,43 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
     // There may be extra time taken due to the container access calls and iterators.
     //
     // Groups we know are cycle free
-    std::unordered_set<int> knownCycleFreeGroups;
+    std::unordered_set<PCB_GROUP*> knownCycleFreeGroups;
     // Groups in the current chain we're exploring.
-    std::unordered_set<int> currentChainGroups;
+    std::unordered_set<PCB_GROUP*> currentChainGroups;
     // Groups we haven't checked yet.
-    std::unordered_set<int> toCheckGroups;
+    std::unordered_set<PCB_GROUP*> toCheckGroups;
 
     // Initialize set of groups to check that could participate in a cycle.
-    for( size_t idx = 0; idx < groups.size(); idx++ )
-    {
-        wxCHECK( toCheckGroups.insert( idx ).second == true, "Insert of ints failed" );
-    }
+    for( PCB_GROUP* group : Groups() )
+        toCheckGroups.insert( group);
 
     while( !toCheckGroups.empty() )
     {
         currentChainGroups.clear();
-        int currIdx = *toCheckGroups.begin();
+        PCB_GROUP* group = *toCheckGroups.begin();
 
         while( true )
         {
-            if( currentChainGroups.find( currIdx ) != currentChainGroups.end() )
+            if( currentChainGroups.find( group ) != currentChainGroups.end() )
             {
                 if( repair )
-                    board.Groups().erase( board.Groups().begin() + currIdx );
+                    Remove( group );
 
                 return "Cycle detected in group membership";
             }
-            else if( knownCycleFreeGroups.find( currIdx ) != knownCycleFreeGroups.end() )
+            else if( knownCycleFreeGroups.find( group ) != knownCycleFreeGroups.end() )
             {
                 // Parent is a group we know does not lead to a cycle
                 break;
             }
 
-            wxCHECK( currentChainGroups.insert( currIdx ).second == true,
-                     "Insert of new group to check failed" );
+            currentChainGroups.insert( group );
             // We haven't visited currIdx yet, so it must be in toCheckGroups
-            wxCHECK( toCheckGroups.erase( currIdx ) == 1,
-                     "Erase of idx for group just checked failed" );
-            currIdx = parentGroupIdx[currIdx];
+            toCheckGroups.erase( group );
 
-            if( currIdx == -1 )
+            group = group->GetParentGroup();
+
+            if( !group )
             {
                 // end of chain and no cycles found in this chain
                 break;
@@ -2208,15 +2060,12 @@ BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCBNEW_SELECTION& selectio
     GroupLegalOpsField legalOps = { false, false, false, false, false, false };
 
     std::unordered_set<const BOARD_ITEM*> allMembers;
+
     for( const PCB_GROUP* grp : m_groups )
     {
         for( const BOARD_ITEM* member : grp->GetItems() )
-        {
-            // Item can be member of at most one group.
-            wxCHECK( allMembers.insert( member ).second == true, legalOps );
-        }
+            allMembers.insert( member );
     }
-
 
     bool hasGroup              = ( SELECTION_CONDITIONS::HasType( PCB_GROUP_T ) )( selection );
     // All elements of selection are groups, and no element is a descendant group of any other.
@@ -2286,9 +2135,7 @@ BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCBNEW_SELECTION& selectio
             anyGrouped = true;
 
             if( !isFirstGroup )
-            {
                 anyGroupedExceptFirst = true;
-            }
         }
     }
 
@@ -2299,82 +2146,4 @@ BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCBNEW_SELECTION& selectio
     legalOps.flatten     = onlyGroups;
     legalOps.enter       = onlyGroups && selection.Size() == 1;
     return legalOps;
-}
-
-
-void BOARD::GroupRemoveItems( const PCBNEW_SELECTION& selection, BOARD_COMMIT* commit )
-{
-    std::unordered_set<BOARD_ITEM*> emptyGroups;
-    std::unordered_set<PCB_GROUP*>  emptyGroupParents;
-
-    // groups who have had children removed, either items or empty groups.
-    std::unordered_set<PCB_GROUP*>  itemParents;
-    std::unordered_set<BOARD_ITEM*> itemsToRemove;
-
-    for( EDA_ITEM* item : selection )
-    {
-        BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
-        itemsToRemove.insert( board_item );
-    }
-
-    for( BOARD_ITEM* item : itemsToRemove )
-    {
-        PCB_GROUP* parentGroup = ParentGroup( item );
-        itemParents.insert( parentGroup );
-
-        while( parentGroup != nullptr )
-        {
-            // Test if removing this item would make parent empty
-            bool allRemoved = true;
-
-            for( BOARD_ITEM* grpItem : parentGroup->GetItems() )
-            {
-                if( ( itemsToRemove.find( grpItem ) == itemsToRemove.end() )
-                    && ( emptyGroups.find( grpItem ) == emptyGroups.end() ) )
-                {
-                    allRemoved = false;
-                }
-            }
-
-            if( allRemoved )
-            {
-                emptyGroups.insert( parentGroup );
-                parentGroup = ParentGroup( parentGroup );
-
-                if( parentGroup != nullptr )
-                    itemParents.insert( parentGroup );
-            }
-            else
-            {
-                break;
-            }
-        }
-    }
-
-    // Items themselves are removed outside the context of this function
-    // First let's check the parents of items that are no empty
-    for( PCB_GROUP* grp : itemParents )
-    {
-        if( emptyGroups.find( grp ) == emptyGroups.end() )
-        {
-            commit->Modify( grp );
-            BOARD_ITEM_SET members = grp->GetItems();
-            bool removedSomething = false;
-
-            for( BOARD_ITEM* member : members )
-            {
-                if( ( itemsToRemove.find( member ) != itemsToRemove.end() )
-                    || ( emptyGroups.find( member ) != emptyGroups.end() ) )
-                {
-                    grp->RemoveItem( member );
-                    removedSomething = true;
-                }
-            }
-
-            wxCHECK_RET( removedSomething, "Item to be removed not found in it's parent group" );
-        }
-    }
-
-    for( BOARD_ITEM* grp : emptyGroups )
-        commit->Remove( grp );
 }

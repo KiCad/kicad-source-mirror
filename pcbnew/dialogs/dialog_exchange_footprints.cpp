@@ -473,30 +473,38 @@ TEXTE_MODULE* getMatchingTextItem( TEXTE_MODULE* aRefItem, MODULE* aModule )
 }
 
 
-void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT& aCommit,
+void PCB_EDIT_FRAME::Exchange_Module( MODULE* aExisting, MODULE* aNew, BOARD_COMMIT& aCommit,
                                       bool deleteExtraTexts, bool resetTextLayers,
                                       bool resetTextEffects, bool resetFabricationAttrs,
                                       bool reset3DModels )
 {
-    aDest->SetParent( GetBoard() );
+    PCB_GROUP* parentGroup = aExisting->GetParentGroup();
 
-    PlaceModule( aDest, false );
+    if( parentGroup )
+    {
+        parentGroup->RemoveItem( aExisting );
+        parentGroup->AddItem( aNew );
+    }
+
+    aNew->SetParent( GetBoard() );
+
+    PlaceModule( aNew, false );
 
     // PlaceModule will move the module to the cursor position, which we don't want.  Copy
     // the original position across.
-    aDest->SetPosition( aSrc->GetPosition() );
+    aNew->SetPosition( aExisting->GetPosition() );
 
-    if( aDest->GetLayer() != aSrc->GetLayer() )
-        aDest->Flip( aDest->GetPosition(), m_Settings->m_FlipLeftRight );
+    if( aNew->GetLayer() != aExisting->GetLayer() )
+        aNew->Flip( aNew->GetPosition(), m_Settings->m_FlipLeftRight );
 
-    if( aDest->GetOrientation() != aSrc->GetOrientation() )
-        aDest->SetOrientation( aSrc->GetOrientation() );
+    if( aNew->GetOrientation() != aExisting->GetOrientation() )
+        aNew->SetOrientation( aExisting->GetOrientation() );
 
-    aDest->SetLocked( aSrc->IsLocked() );
+    aNew->SetLocked( aExisting->IsLocked() );
 
-    for( D_PAD* pad : aDest->Pads() )
+    for( D_PAD* pad : aNew->Pads() )
     {
-        D_PAD* oldPad = aSrc->FindPadByName( pad->GetName() );
+        D_PAD* oldPad = aExisting->FindPadByName( pad->GetName() );
 
         if( oldPad )
         {
@@ -507,51 +515,51 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
     }
 
     // Copy reference
-    processTextItem( aSrc->Reference(), aDest->Reference(),
+    processTextItem( aExisting->Reference(), aNew->Reference(),
                      // never reset reference text
                      false,
                      resetTextLayers, resetTextEffects );
 
     // Copy value
-    processTextItem( aSrc->Value(), aDest->Value(),
+    processTextItem( aExisting->Value(), aNew->Value(),
                      // reset value text only when it is a proxy for the footprint ID
                      // (cf replacing value "MountingHole-2.5mm" with "MountingHole-4.0mm")
-                     aSrc->GetValue() == aSrc->GetFPID().GetLibItemName(),
+                     aExisting->GetValue() == aExisting->GetFPID().GetLibItemName(),
                      resetTextLayers, resetTextEffects );
 
     // Copy fields in accordance with the reset* flags
-    for( BOARD_ITEM* item : aSrc->GraphicalItems() )
+    for( BOARD_ITEM* item : aExisting->GraphicalItems() )
     {
         TEXTE_MODULE* srcItem = dyn_cast<TEXTE_MODULE*>( item );
 
         if( srcItem )
         {
-            TEXTE_MODULE* destItem = getMatchingTextItem( srcItem, aDest );
+            TEXTE_MODULE* destItem = getMatchingTextItem( srcItem, aNew );
 
             if( destItem )
                 processTextItem( *srcItem, *destItem, false, resetTextLayers, resetTextEffects );
             else if( !deleteExtraTexts )
-                aDest->Add( new TEXTE_MODULE( *srcItem ) );
+                aNew->Add( new TEXTE_MODULE( *srcItem ) );
         }
     }
 
     if( !resetFabricationAttrs )
-        aDest->SetAttributes( aSrc->GetAttributes() );
+        aNew->SetAttributes( aExisting->GetAttributes() );
 
     // Copy 3D model settings in accordance with the reset* flag
     if( !reset3DModels )
-        aDest->Models() = aSrc->Models();  // Linked list of 3D models.
+        aNew->Models() = aExisting->Models();  // Linked list of 3D models.
 
     // Updating other parameters
-    const_cast<KIID&>( aDest->m_Uuid ) = aSrc->m_Uuid;
-    aDest->SetProperties( aSrc->GetProperties() );
-    aDest->SetPath( aSrc->GetPath() );
-    aDest->CalculateBoundingBox();
+    const_cast<KIID&>( aNew->m_Uuid ) = aExisting->m_Uuid;
+    aNew->SetProperties( aExisting->GetProperties() );
+    aNew->SetPath( aExisting->GetPath() );
+    aNew->CalculateBoundingBox();
 
-    aCommit.Remove( aSrc );
-    aCommit.Add( aDest );
+    aCommit.Remove( aExisting );
+    aCommit.Add( aNew );
 
-    aDest->ClearFlags();
+    aNew->ClearFlags();
 }
 
 

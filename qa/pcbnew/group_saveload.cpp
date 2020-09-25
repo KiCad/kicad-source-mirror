@@ -163,8 +163,8 @@ void testGroupEqual( const PCB_GROUP& group1, const PCB_GROUP& group2 )
     BOOST_CHECK_EQUAL( group1.m_Uuid.AsString(), group2.m_Uuid.AsString() );
     BOOST_CHECK_EQUAL( group1.GetName(), group2.GetName() );
 
-    const BOARD_ITEM_SET& items1 = group1.GetItems();
-    const BOARD_ITEM_SET& items2 = group2.GetItems();
+    const std::unordered_set<BOARD_ITEM*>& items1 = group1.GetItems();
+    const std::unordered_set<BOARD_ITEM*>& items2 = group2.GetItems();
 
     BOOST_CHECK_EQUAL( items1.size(), items2.size() );
 

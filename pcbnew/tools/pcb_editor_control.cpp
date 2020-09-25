@@ -129,9 +129,7 @@ public:
 
         Add( PCB_ACTIONS::groupCreate );
         Add( PCB_ACTIONS::groupUngroup );
-        Add( PCB_ACTIONS::groupMerge );
         Add( PCB_ACTIONS::groupRemoveItems );
-        Add( PCB_ACTIONS::groupFlatten );
         Add( PCB_ACTIONS::groupEnter );
     }
 
@@ -154,10 +152,8 @@ private:
         BOARD::GroupLegalOpsField legalOps = board->GroupLegalOps( selection );
 
         Enable( PCB_ACTIONS::groupCreate.GetUIId(),      legalOps.create );
-        Enable( PCB_ACTIONS::groupMerge.GetUIId(),       legalOps.merge );
         Enable( PCB_ACTIONS::groupUngroup.GetUIId(),     legalOps.ungroup );
         Enable( PCB_ACTIONS::groupRemoveItems.GetUIId(), legalOps.removeItems );
-        Enable( PCB_ACTIONS::groupFlatten.GetUIId(),     legalOps.flatten );
         Enable( PCB_ACTIONS::groupEnter.GetUIId(),       legalOps.enter );
     }
 };
@@ -1006,7 +1002,7 @@ int PCB_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 }
 
 
-int PCB_EDITOR_CONTROL::GroupSelected( const TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::Group( const TOOL_EVENT& aEvent )
 {
     SELECTION_TOOL*         selTool   = m_toolMgr->GetTool<SELECTION_TOOL>();
     const PCBNEW_SELECTION& selection = selTool->GetSelection();
@@ -1015,23 +1011,18 @@ int PCB_EDITOR_CONTROL::GroupSelected( const TOOL_EVENT& aEvent )
 
     if( selection.Empty() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
-    // why don't we have to update the selection after selectionCursor action?
 
     PCB_GROUP* group = new PCB_GROUP( board );
 
     for( EDA_ITEM* item : selection )
         group->AddItem( static_cast<BOARD_ITEM*>( item ) );
 
-
     commit.Add( group );
-    commit.Push( _( "GroupCreate" ) );
-    wxString check = board->GroupsSanityCheck();
-    wxCHECK_MSG( check == wxEmptyString, 0,wxT( "Group create resulted in inconsistent state: " ) + check );
+    commit.Push( _( "Group Items" ) );
 
     selTool->ClearSelection();
     selTool->select( group );
 
-    // Should I call PostEvent and onModify() ?
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
     m_frame->OnModify();
 
@@ -1039,51 +1030,35 @@ int PCB_EDITOR_CONTROL::GroupSelected( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::GroupMergeSelected( const TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::Ungroup( const TOOL_EVENT& aEvent )
 {
     SELECTION_TOOL*         selTool   = m_toolMgr->GetTool<SELECTION_TOOL>();
     const PCBNEW_SELECTION& selection = selTool->GetSelection();
-    BOARD*                  board     = getModel<BOARD>();
     BOARD_COMMIT            commit( m_frame );
 
     if( selection.Empty() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
-    // why don't we have to update the selection after selectionCursor action?
 
-    PCB_GROUP* firstGroup = NULL;
-
-    for( EDA_ITEM* item : selection )
-    {
-        BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
-
-        if( firstGroup == NULL && board_item->Type() == PCB_GROUP_T )
-        {
-            firstGroup = static_cast<PCB_GROUP*>( board_item );
-            break;
-        }
-    }
-    // The group submenu update() call only enabled merge if there was a group
-    // in the selection.
-    wxCHECK_MSG( firstGroup != NULL, 0, "Group not found in selection though selection was checked" );
-
-    commit.Modify( firstGroup );
-
-    for( EDA_ITEM* item : selection )
-    {
-        BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
-
-        if( board_item != firstGroup )
-            firstGroup->AddItem( board_item );
-    }
-
-    commit.Push( "GroupMerge" );
-    wxString check = board->GroupsSanityCheck();
-    wxCHECK_MSG( check == wxEmptyString, 0, wxT( "Group merge resulted in inconsistent state: " ) + check );
+    PCBNEW_SELECTION selCopy = selection;
 
     selTool->ClearSelection();
-    selTool->select( firstGroup );
 
-    // Should I call PostEvent and onModify() ?
+    for( EDA_ITEM* item : selCopy )
+    {
+        PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( item );
+
+        if( group )
+        {
+            for( BOARD_ITEM* member : group->GetItems() )
+                selTool->select( member );
+
+            group->RemoveAll();
+            commit.Remove( group );
+        }
+    }
+
+    commit.Push( "Ungroup Items" );
+
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
     m_frame->OnModify();
 
@@ -1091,49 +1066,36 @@ int PCB_EDITOR_CONTROL::GroupMergeSelected( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::UngroupSelected( const TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::RemoveFromGroup( const TOOL_EVENT& aEvent )
 {
     SELECTION_TOOL*         selTool   = m_toolMgr->GetTool<SELECTION_TOOL>();
     const PCBNEW_SELECTION& selection = selTool->GetSelection();
-    BOARD*                  board     = getModel<BOARD>();
     BOARD_COMMIT            commit( m_frame );
-    std::unordered_set<BOARD_ITEM*> ungroupedItems;
 
     if( selection.Empty() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
-    // why don't we have to update the selection after selectionCursor action?
 
+    std::map<PCB_GROUP*, std::vector<BOARD_ITEM*>> groupMap;
 
     for( EDA_ITEM* item : selection )
     {
-        BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+        PCB_GROUP*  group = boardItem->GetParentGroup();
 
-        wxCHECK_MSG( board_item->Type() == PCB_GROUP_T, 0,
-                     "Selection for ungroup should only have groups in it - was checked." );
-
-        commit.Remove( board_item );
-
-        for( BOARD_ITEM* bItem : static_cast<PCB_GROUP*>( board_item )->GetItems() )
-        {
-            ungroupedItems.insert( bItem );
-        }
+        if( group )
+            groupMap[ group ].push_back( boardItem );
     }
 
-    commit.Push( "GroupUngroup" );
-    wxString check = board->GroupsSanityCheck();
-    wxCHECK_MSG( check == wxEmptyString, 0, wxT( "Group merge resulted in inconsistent state: " ) + check );
-
-    selTool->ClearSelection();
-    for( BOARD_ITEM* item : ungroupedItems )
+    for( std::pair<PCB_GROUP*, std::vector<BOARD_ITEM*>> pair : groupMap )
     {
-        // commit.Remove() on the group recursively removed children from the view.
-        // Add them back to the view
-        //getView()->Add( item );
+        commit.Modify( pair.first );
 
-        selTool->select( item );
+        for( BOARD_ITEM* item : pair.second )
+            pair.first->RemoveItem( item );
     }
 
-    // Should I call PostEvent and onModify() ?
+    commit.Push( "Remove Group Items" );
+
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
     m_frame->OnModify();
 
@@ -1141,107 +1103,7 @@ int PCB_EDITOR_CONTROL::UngroupSelected( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::GroupRemoveItemsSelected( const TOOL_EVENT& aEvent )
-{
-    SELECTION_TOOL*         selTool   = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const PCBNEW_SELECTION& selection = selTool->GetSelection();
-    BOARD*                  board     = getModel<BOARD>();
-    BOARD_COMMIT            commit( m_frame );
-
-    if( selection.Empty() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
-    // why don't we have to update the selection after selectionCursor action?
-
-    board->GroupRemoveItems( selection, &commit );
-
-    commit.Push( "GroupRemoveItems" );
-    wxString check = board->GroupsSanityCheck();
-    wxCHECK_MSG( check == wxEmptyString, 0, wxT( "Group removeItems resulted in inconsistent state: " ) + check );
-
-    // Should I call PostEvent and onModify() ?
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-    m_frame->OnModify();
-
-    return 0;
-}
-
-
-int PCB_EDITOR_CONTROL::GroupFlattenSelected( const TOOL_EVENT& aEvent )
-{
-    SELECTION_TOOL*         selTool   = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const PCBNEW_SELECTION& selection = selTool->GetSelection();
-    BOARD*                  board     = getModel<BOARD>();
-    BOARD_COMMIT            commit( m_frame );
-    const PCBNEW_SELECTION  origGroups = selTool->GetSelection();
-    // These items were moved up to the top-level group that need to be readded to
-    // the view.  That's becuase commit.Remove(group) recursively removed them from
-    // the view.
-    //std::unordered_set<BOARD_ITEM*> movedItems;
-
-    if( selection.Empty() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
-    // why don't we have to update the selection after selectionCursor action?
-
-    for( EDA_ITEM* item : selection )
-    {
-        BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
-        wxCHECK_MSG( board_item->Type() == PCB_GROUP_T, 0,
-                     "Selection for ungroup should only have groups in it - was checked." );
-        std::queue<PCB_GROUP*> groupsToFlatten;
-        groupsToFlatten.push( static_cast<PCB_GROUP*>( board_item ) );
-        PCB_GROUP* topGroup = groupsToFlatten.front();
-        commit.Modify( topGroup );
-        std::unordered_set<BOARD_ITEM*> topSubgroupsToRemove;
-
-        while( !groupsToFlatten.empty() )
-        {
-            PCB_GROUP* grp = groupsToFlatten.front();
-            groupsToFlatten.pop();
-
-            for( BOARD_ITEM* grpItem : grp->GetItems() )
-            {
-                if( grpItem->Type() == PCB_GROUP_T )
-                {
-                    groupsToFlatten.push( static_cast<PCB_GROUP*>( grpItem ) );
-                    commit.Remove( grpItem );
-                    if( grp == topGroup )
-                        topSubgroupsToRemove.insert( grpItem );
-                }
-                else
-                {
-                    if( grp != topGroup )
-                    {
-                        wxCHECK( topGroup->AddItem( grpItem ), 0 );
-                        //movedItems.insert( grpItem );
-                    }
-                }
-            }
-        }
-
-        for( BOARD_ITEM* group : topSubgroupsToRemove )
-        {
-            topGroup->RemoveItem( group );
-        }
-    }
-
-    commit.Push( "GroupFlatten" );
-    wxString check = board->GroupsSanityCheck();
-    wxCHECK_MSG( check == wxEmptyString, 0, wxT( "Group flatten resulted in inconsistent state: " ) + check );
-
-    // Removing subgroups deselects the items in them. So reselect everything no that it's flattened.
-    selTool->ClearSelection();
-    for( EDA_ITEM* item : origGroups )
-        selTool->select( static_cast<BOARD_ITEM*>( item ) );
-
-    // Should I call PostEvent and onModify() ?
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-    m_frame->OnModify();
-
-    return 0;
-}
-
-
-int PCB_EDITOR_CONTROL::GroupEnterSelected( const TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::EnterGroup( const TOOL_EVENT& aEvent )
 {
     SELECTION_TOOL*         selTool   = m_toolMgr->GetTool<SELECTION_TOOL>();
     const PCBNEW_SELECTION& selection = selTool->GetSelection();
@@ -1253,7 +1115,7 @@ int PCB_EDITOR_CONTROL::GroupEnterSelected( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::GroupLeave( const TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::LeaveGroup( const TOOL_EVENT& aEvent )
 {
     m_toolMgr->GetTool<SELECTION_TOOL>()->ExitGroup( true /* Select the group */ );
     return 0;
@@ -1625,13 +1487,11 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::ToggleLockSelected,       PCB_ACTIONS::toggleLock.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::LockSelected,             PCB_ACTIONS::lock.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UnlockSelected,           PCB_ACTIONS::unlock.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::GroupSelected,            PCB_ACTIONS::groupCreate.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::GroupMergeSelected,       PCB_ACTIONS::groupMerge.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::UngroupSelected,          PCB_ACTIONS::groupUngroup.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::GroupRemoveItemsSelected, PCB_ACTIONS::groupRemoveItems.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::GroupFlattenSelected,     PCB_ACTIONS::groupFlatten.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::GroupEnterSelected,       PCB_ACTIONS::groupEnter.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::GroupLeave,               PCB_ACTIONS::groupLeave.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::Group,                    PCB_ACTIONS::groupCreate.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::Ungroup,                  PCB_ACTIONS::groupUngroup.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::RemoveFromGroup,          PCB_ACTIONS::groupRemoveItems.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::EnterGroup,               PCB_ACTIONS::groupEnter.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::LeaveGroup,               PCB_ACTIONS::groupLeave.MakeEvent() );
 
     Go( &PCB_EDITOR_CONTROL::UpdatePCBFromSchematic,   ACTIONS::updatePcbFromSchematic.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UpdateSchematicFromPCB,   ACTIONS::updateSchematicFromPcb.MakeEvent() );

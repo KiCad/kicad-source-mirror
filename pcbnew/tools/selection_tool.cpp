@@ -1545,10 +1545,8 @@ bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
             return false;
     }
 
-    if( m_enteredGroup != NULL )
-    {
-        return m_enteredGroup->GetItems().find( aItem ) != m_enteredGroup->GetItems().end();
-    }
+    if( m_enteredGroup && aItem->GetParentGroup() != m_enteredGroup )
+        return false;
 
     return true;
 }
@@ -1954,7 +1952,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         PCB_GROUP* group = const_cast<PCB_GROUP*>( static_cast<const PCB_GROUP*>( aItem ) );
 
         // Similar to logic for module, a group is selectable if any of its
-        // members are. (This recurses)
+        // members are. (This recurses.)
         for( BOARD_ITEM* item : group->GetItems() )
         {
             if( Selectable( item, true ) )
@@ -2579,8 +2577,7 @@ void SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) c
                 aCollector.Remove( aCollector[j] );
             }
         }
-        else if( m_enteredGroup != NULL &&
-                 m_enteredGroup->GetItems().find( aCollector[j] ) == m_enteredGroup->GetItems().end() )
+        else if( m_enteredGroup && aCollector[j]->GetParentGroup() != m_enteredGroup )
         {
             // If a group is entered, no selections of objects not in the group.
             aCollector.Remove( aCollector[j] );

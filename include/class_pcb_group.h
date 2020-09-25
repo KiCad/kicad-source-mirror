@@ -45,8 +45,6 @@ namespace KIGFX
 class VIEW;
 }
 
-typedef std::unordered_set<BOARD_ITEM*> BOARD_ITEM_SET;
-
 /**
  * PCB_GROUP is a set of BOARD_ITEMs (i.e., without duplicates)
  */
@@ -68,7 +66,7 @@ public:
     wxString GetName() const { return m_name; }
     void SetName( wxString aName ) { m_name = aName; }
 
-    const BOARD_ITEM_SET& GetItems() const
+    const std::unordered_set<BOARD_ITEM*>& GetItems() const
     {
         return m_items;
     }
@@ -196,8 +194,8 @@ public:
     void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction );
 
 private:
-    BOARD_ITEM_SET m_items;     // Members of the group
-    wxString       m_name;      // Optional group name
+    std::unordered_set<BOARD_ITEM*> m_items;     // Members of the group
+    wxString                        m_name;      // Optional group name
 };
 
 #endif // CLASS_PCB_GROUP_H_

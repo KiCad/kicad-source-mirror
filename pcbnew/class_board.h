@@ -248,6 +248,7 @@ public:
     const MODULES& Modules() const { return m_modules; }
 
     DRAWINGS& Drawings() { return m_drawings; }
+    const DRAWINGS& Drawings() const { return m_drawings; }
 
     ZONE_CONTAINERS& Zones() { return m_zones; }
     const ZONE_CONTAINERS& Zones() const { return m_zones; }
@@ -325,7 +326,7 @@ public:
      * @return null if aID is null. Returns an object of Type() == NOT_USED if
      * the aID is not found.
      */
-    BOARD_ITEM* GetItem( const KIID& aID );
+    BOARD_ITEM* GetItem( const KIID& aID ) const;
 
     void FillItemMap( std::map<KIID, EDA_ITEM*>& aMap );
 
@@ -1104,20 +1105,6 @@ public:
      * @return group containing item, if it exists, otherwise, NULL
      */
     PCB_GROUP* TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope );
-
-
-    /*
-     * @return The group containing item as a child, or NULL if there is no
-     * such group.
-     */
-    PCB_GROUP* ParentGroup( BOARD_ITEM* item );
-
-    /*
-     * Given a selection of items, remove them from their groups and also
-     * recursively remove empty groups that result.
-     */
-    void GroupRemoveItems( const PCBNEW_SELECTION& selection, BOARD_COMMIT* commit );
-
 
     struct GroupLegalOpsField
     {
