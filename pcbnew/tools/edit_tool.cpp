@@ -60,7 +60,8 @@ using namespace std::placeholders;
 #include <zone_filler.h>
 
 
-void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags, SELECTION_TOOL* selectionTool )
+void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags,
+                              SELECTION_TOOL* selectionTool )
 {
     // Iterate from the back so we don't have to worry about removals.
     for( int i = aCollector.GetCount() - 1; i >= 0; --i )
@@ -112,6 +113,7 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags, SELECTI
             aCollector.Remove( item );
         }
     }
+
     selectionTool->FilterCollectorForGroups( aCollector );
 }
 

@@ -849,6 +849,11 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
             {
                 static_cast<MODULE*>( item )->SetPath( KIID_PATH() );
             }
+
+            if( selectionTool->GetEnteredGroup() && !item->GetParentGroup() )
+            {
+                selectionTool->GetEnteredGroup()->AddItem( item );
+            }
         }
 
         // Add or just select items for the move/place command
