@@ -32,4 +32,6 @@ courtyard_clearance
 silk_to_pad
 silk_to_silk
 skew
-diff_pair
+diff_pair_gap
+diff_pair_uncoupled
+via_count
