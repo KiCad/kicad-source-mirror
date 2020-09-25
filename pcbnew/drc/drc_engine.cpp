@@ -251,7 +251,8 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
         { DRC_CONSTRAINT_TYPE_DISALLOW, "disallow", nullptr },
         { DRC_CONSTRAINT_TYPE_VIA_DIAMETER, "via_diameter", formatMinMax },
         { DRC_CONSTRAINT_TYPE_LENGTH, "length", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_SKEW, "skew", formatMinMax }
+        { DRC_CONSTRAINT_TYPE_SKEW, "skew", formatMinMax },
+        { DRC_CONSTRAINT_TYPE_VIA_COUNT, "via_count", formatMinMax }
     };
 
     for( auto& fmt : formats )

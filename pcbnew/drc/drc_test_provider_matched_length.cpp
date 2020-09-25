@@ -25,22 +25,25 @@
 #include <class_board.h>
 #include <class_drawsegment.h>
 #include <class_pad.h>
+#include <class_track.h>
 
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
+#include <drc/drc_length_report.h>
 
 #include <connectivity/connectivity_data.h>
-#include <connectivity/connectivity_algo.h>
+#include <connectivity/from_to_cache.h>
 
 #include <pcb_expr_evaluator.h>
 
 /*
-    Single-ended matched length test.
+    Single-ended matched length + skew + via count test.
     Errors generated:
-    - DRCE_SIGNAL_LENGTH
-
+    - DRCE_LENGTH_OUT_OF_RANGE
+    - DRCE_SKEW_OUT_OF_RANGE
+    - DRCE_TOO_MANY_VIAS
 */
 
 namespace test {
@@ -75,338 +78,199 @@ public:
 
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
 
-    bool checkFromToPath( BOARD_CONNECTED_ITEM* aItem, const wxString& aFrom, const wxString& aTo );
+    DRC_LENGTH_REPORT BuildLengthReport() const;
 
 private:
 
-    struct FROM_TO_ENDPOINT
-    {
-        wxString name;
-        D_PAD* parent;
-    };
+    bool runInternal( bool aDelayReportMode = false );
 
-    struct FROM_TO_PATH
-    {
-        int net;
-        D_PAD *from;
-        D_PAD *to;
-        wxString fromName, toName;
-        wxString fromWildcard, toWildcard;
-        bool isUnique;
-        std::set<BOARD_CONNECTED_ITEM*> pathItems;
-    };
+    using LENGTH_ENTRY = DRC_LENGTH_REPORT::ENTRY;
+    typedef std::set<BOARD_CONNECTED_ITEM*> CITEMS;
+    typedef std::vector<LENGTH_ENTRY> LENGTH_ENTRIES;
 
-    int cacheFromToPaths( const wxString& aFrom, const wxString& aTo );
-    void buildEndpointList();
-
-    std::vector<FROM_TO_ENDPOINT> m_ftEndpoints;
-    std::vector<FROM_TO_PATH> m_ftPaths;
+    void checkLengthViolations( DRC_CONSTRAINT& aConstraint, LENGTH_ENTRIES& aMatchedConnections );
+    void checkSkewViolations( DRC_CONSTRAINT& aConstraint, LENGTH_ENTRIES& aMatchedConnections );
+    void checkViaCountViolations( DRC_CONSTRAINT& aConstraint, LENGTH_ENTRIES& aMatchedConnections );
 
     BOARD* m_board;
-    int m_largestClearance;
+    DRC_LENGTH_REPORT m_report;
 };
 
 };
 
 
-bool exprFromTo( LIBEVAL::CONTEXT* aCtx, void* self )
+static int computeViaThruLength( VIA *aVia, const std::set<BOARD_CONNECTED_ITEM*> &conns )
 {
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
-    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
-    LIBEVAL::VALUE*   result = aCtx->AllocValue();
-
-    LIBEVAL::VALUE*   argTo = aCtx->Pop();
-    LIBEVAL::VALUE*   argFrom = aCtx->Pop();
-
-    result->Set(0.0);
-    aCtx->Push( result );
-
-    if(!item)
-        return false;
-
-    auto drcEngine = item->GetBoard()->GetDesignSettings().m_DRCEngine;
-
-    assert ( drcEngine );
-
-    auto lengthTestProvider = static_cast<test::DRC_TEST_PROVIDER_MATCHED_LENGTH*>( drcEngine->GetTestProvider("length") );
-
-    if( lengthTestProvider->checkFromToPath( static_cast<BOARD_CONNECTED_ITEM*>( item ),
-    argFrom->AsString(),
-    argTo->AsString() ) )
-    {
-        result->Set(1.0);
-    }
-
-    return true;
-}
-
-void test::DRC_TEST_PROVIDER_MATCHED_LENGTH::buildEndpointList( )
-{
-    m_ftEndpoints.clear();
-
-    for( auto mod : m_board->Modules() )
-    {
-        for( auto pad : mod->Pads() )
-        {
-            FROM_TO_ENDPOINT ent;
-            ent.name = mod->GetReference() + "-" + pad->GetName();
-            ent.parent = pad;
-            m_ftEndpoints.push_back( ent );
-            ent.name = mod->GetReference();
-            ent.parent = pad;
-            m_ftEndpoints.push_back( ent );
-        }
-    }
+    return 0; // fixme: not yet there...
 }
 
 
-enum PATH_STATUS {
-    PS_OK = 0,
-    PS_MULTIPLE_PATHS = -1,
-    PS_NO_PATH = -2
-};
-
-static bool isVertexVisited( CN_ITEM* v, const std::vector<CN_ITEM*>& path )
+void test::DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengthViolations(
+        DRC_CONSTRAINT& aConstraint, LENGTH_ENTRIES& matchedConnections )
 {
-    for( auto u : path )
+    for( const auto& ent : matchedConnections )
     {
-        if ( u == v )
-            return true;
-    }
+        bool minViolation = false;
+        bool maxViolation = false;
+        int  minLen, maxLen;
 
-    return false;
-}
-
-static PATH_STATUS uniquePathBetweenNodes( CN_ITEM* u, CN_ITEM* v, std::vector<CN_ITEM*>& outPath )
-{
-    using Path = std::vector<CN_ITEM*>;
-    std::deque<Path> Q;
-
-    Path p;
-    int pathFound = false;
-    p.push_back( u );
-    Q.push_back( p );
-
-    while( Q.size() )
-    {
-        Path path = Q.front();
-        Q.pop_front();
-        CN_ITEM *last = path.back();
-
-        if( last == v )
+        if( aConstraint.GetValue().HasMin() && ent.total < aConstraint.GetValue().Min() )
         {
-            outPath = path;
-            if( pathFound )
-                return PS_MULTIPLE_PATHS;
-            pathFound = true;
+            minViolation = true;
+            minLen       = aConstraint.GetValue().Min();
+        }
+        else if( aConstraint.GetValue().HasMax() && ent.total > aConstraint.GetValue().Max() )
+        {
+            maxViolation = true;
+            maxLen       = aConstraint.GetValue().Max();
         }
 
-        for( auto ci : last->ConnectedItems() )
+        if( ( minViolation || maxViolation ) )
         {
-            bool vertexVisited = isVertexVisited(ci, path);
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LENGTH_OUT_OF_RANGE );
+            wxString                  msg =
+                    drcItem->GetErrorText() + " (" + aConstraint.GetParentRule()->m_Name + " ";
 
-            for( auto &p : Q )
-                if (isVertexVisited(ci, p))
-                {
-                    vertexVisited = true;
-                    break;
-                }
-
-         if (!vertexVisited) {
-            Path newpath(path);
-            newpath.push_back(ci);
-            Q.push_back(newpath);
-         }
-      }
-    }
-
-    return pathFound ? PS_OK : PS_NO_PATH;
-};
-
-
-int test::DRC_TEST_PROVIDER_MATCHED_LENGTH::cacheFromToPaths( const wxString& aFrom, const wxString& aTo )
-{
-    std::vector<FROM_TO_PATH> paths;
-    auto connectivity = m_board->GetConnectivity();
-    auto cnAlgo = connectivity->GetConnectivityAlgo();
-
-    for( auto& endpoint : m_ftEndpoints )
-    {
-        if( WildCompareString( aFrom, endpoint.name, false ) )
-        {
-            FROM_TO_PATH p;
-            p.net = endpoint.parent->GetNetCode();
-            p.from = endpoint.parent;
-            p.to = nullptr;
-            paths.push_back(p);
-        }
-    }
-
-    for( auto &path : paths )
-    {
-        int count = 0;
-        auto netName = path.from->GetNetname();
-
-        wxString fromName = path.from->GetParent()->GetReference() + "-" + path.from->GetName();
-
-        const KICAD_T onlyRouting[] = { PCB_PAD_T, PCB_ARC_T, PCB_VIA_T, PCB_TRACE_T, EOT };
-
-        auto padCandidates = connectivity->GetConnectedItems( path.from, onlyRouting );
-        D_PAD* toPad = nullptr;
-
-        for( auto pitem : padCandidates )
-        {
-            if( pitem == path.from )
-                continue;
-
-            if( pitem->Type() != PCB_PAD_T )
-                continue;
-
-            D_PAD *pad = static_cast<D_PAD*>( pitem );
-
-            wxString toName = pad->GetParent()->GetReference() + "-" + pad->GetName();
-
-
-            for ( auto& endpoint : m_ftEndpoints )
+            if( minViolation )
             {
-                if( pad == endpoint.parent )
-                {
-                        if( WildCompareString( aTo, endpoint.name, false ) )
-                        {
-                            //printf("match from-to: %s -> %s [net %s] p %p\n", (const char *)fromName, (const char *) toName, (const char *) netName, endpoint.parent );
-                            count++;
-                            toPad = endpoint.parent;
+                msg += wxString::Format( _( "minimum length: %s; actual: %s)" ),
+                        MessageTextFromValue( userUnits(), minLen, true ),
+                        MessageTextFromValue( userUnits(), ent.total, true ) );
+            }
+            else if( maxViolation )
+            {
+                msg += wxString::Format( _( "maximum length: %s; actual: %s)" ),
+                        MessageTextFromValue( userUnits(), maxLen, true ),
+                        MessageTextFromValue( userUnits(), ent.total, true ) );
+            }
 
-                            path.to = toPad;
-                            path.fromName = fromName;
-                            path.toName = toName;
-                            path.fromWildcard = aFrom;
-                            path.toWildcard = aTo;
+            drcItem->SetErrorMessage( msg );
 
-                            if( count >= 2 )
-                            {
-                                //printf("Multiple targets found, aborting...\n");
-                                path.to = nullptr;
-                            }
-                        }
-                    }
-                }
+            for( auto offendingTrack : ent.items )
+                drcItem->SetItems( offendingTrack );
+
+            drcItem->SetViolatingRule( aConstraint.GetParentRule() );
+
+            reportViolation( drcItem, (*ent.items.begin() )->GetPosition() );
         }
     }
-
-    int newPaths = 0;
-
-    for( auto &path : paths )
-    {
-        if( !path.from || !path.to )
-            continue;
-
-        
-        CN_ITEM *cnFrom = cnAlgo->ItemEntry( path.from ).GetItems().front();
-        CN_ITEM *cnTo = cnAlgo->ItemEntry( path.to ).GetItems().front();
-        CN_ITEM::CONNECTED_ITEMS upath;
-
-        auto result = uniquePathBetweenNodes( cnFrom, cnTo, upath );
-
-        if( result == PS_OK )
-            path.isUnique = true;
-        else
-            path.isUnique = false;
-
-
-        reportAux( wxString::Format( _("Check path: %s -> %s (net %s)"), path.fromName, path.toName, cnFrom->Parent()->GetNetname() ) );
-
-        if( result == PS_NO_PATH )
-            continue;
-
-        for( auto item : upath )
-        {
-            path.pathItems.insert( item->Parent() );
-        }
-
-        m_ftPaths.push_back(path);
-        newPaths++;
-    }
-
-    reportAux( _("Cached %d paths\n"), newPaths );
-
-    return newPaths;
 }
 
-bool test::DRC_TEST_PROVIDER_MATCHED_LENGTH::checkFromToPath( BOARD_CONNECTED_ITEM* aItem, const wxString& aFrom, const wxString& aTo )
+void test::DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkewViolations(
+        DRC_CONSTRAINT& aConstraint, LENGTH_ENTRIES& matchedConnections )
 {
-    int nFromTosFound = 0;
-    //printf("Check %d cached paths [%p]\n", m_ftPaths.size(), aItem );
-    for( int attempt = 0; attempt < 2; attempt++ )
+    int avgLength = 0;
+
+    for( const auto& ent : matchedConnections )
     {
-        // item already belongs to path
-        for( auto& ftPath : m_ftPaths )
-        {
-            if( aFrom == ftPath.fromWildcard &&
-                    aTo == ftPath.toWildcard )
-                {
-                    nFromTosFound++;
-
-                    if( ftPath.pathItems.count( aItem ) )
-                    {
-            //            printf("Found cached path for %p [%s->%s]\n", aItem, (const char *)ftPath.fromName, (const char *) ftPath.toName );
-                        return true;
-                    }
-                }
-        }
-
-        if( !nFromTosFound )
-            cacheFromToPaths( aFrom, aTo );
-        else
-            return false;
+        avgLength += ent.total;
     }
 
-    return false;
+    avgLength /= matchedConnections.size();
+
+    for( const auto& ent : matchedConnections )
+    {
+        int skew = ent.total - avgLength;
+        if( aConstraint.GetValue().HasMax() && abs( skew ) > aConstraint.GetValue().Max() )
+        {
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SKEW_OUT_OF_RANGE );
+            wxString                  msg =
+                    drcItem->GetErrorText() + " (" + aConstraint.GetParentRule()->m_Name + " ";
+
+            msg += wxString::Format( _( "maximum skew: %s; actual skew: %s; average net length: %s; actual net length: %s)" ),
+                        MessageTextFromValue( userUnits(), aConstraint.GetValue().Max(), true ),
+                        MessageTextFromValue( userUnits(), skew, true ),
+                        MessageTextFromValue( userUnits(), avgLength, true ),
+                        MessageTextFromValue( userUnits(), ent.total, true )
+                         );
+
+            drcItem->SetErrorMessage( msg );
+
+            for( auto offendingTrack : ent.items )
+                drcItem->SetItems( offendingTrack );
+
+            drcItem->SetViolatingRule( aConstraint.GetParentRule() );
+
+            reportViolation( drcItem, (*ent.items.begin() )->GetPosition() );
+        }
+    }
+}
+
+
+void test::DRC_TEST_PROVIDER_MATCHED_LENGTH::checkViaCountViolations(
+        DRC_CONSTRAINT& aConstraint, LENGTH_ENTRIES& matchedConnections )
+{
+    for( const auto& ent : matchedConnections )
+    {
+        if( aConstraint.GetValue().HasMax() && ent.viaCount > aConstraint.GetValue().Max() )
+        {
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TOO_MANY_VIAS );
+            wxString                  msg =
+                    drcItem->GetErrorText() + " (" + aConstraint.GetParentRule()->m_Name + " ";
+
+            msg += wxString::Format( _( "max vias: %d; actual: %d" ),
+                        aConstraint.GetValue().Max(), ent.viaCount );
+
+            drcItem->SetErrorMessage( msg );
+
+            for( auto offendingTrack : ent.items )
+                drcItem->SetItems( offendingTrack );
+
+            drcItem->SetViolatingRule( aConstraint.GetParentRule() );
+
+            reportViolation( drcItem, (*ent.items.begin() )->GetPosition() );
+        }
+    }
 }
 
 
 bool test::DRC_TEST_PROVIDER_MATCHED_LENGTH::Run()
 {
+    return runInternal( false );
+}
+
+
+bool test::DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
+{
     m_board = m_drcEngine->GetBoard();
+    m_report.Clear();
 
-    reportPhase(( "Gathering length-constrained connections..." ));
+    if( !aDelayReportMode )
+    {
+        reportPhase(( "Gathering length-constrained connections..." ));
+    }
 
-    typedef std::vector<BOARD_CONNECTED_ITEM*> CITEMS;
     std::map<DRC_RULE*, CITEMS> itemSets;
 
      auto evaluateLengthConstraints =
             [&]( BOARD_ITEM *item ) -> bool
             {
-                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_LENGTH, item );
+                const DRC_CONSTRAINT_TYPE_T constraintsToCheck[] = {
+                    DRC_CONSTRAINT_TYPE_LENGTH,
+                    DRC_CONSTRAINT_TYPE_SKEW,
+                    DRC_CONSTRAINT_TYPE_VIA_COUNT,
+                };
 
-                if( constraint.IsNull() )
-                    return true;
+                for( int i = 0; i < 3; i++ )
+                {
+                    auto constraint = m_drcEngine->EvalRulesForItems( constraintsToCheck[i], item );
 
-                auto citem = static_cast<BOARD_CONNECTED_ITEM*>( item );
+                    if( constraint.IsNull() )
+                        continue;
 
-                itemSets[ constraint.GetParentRule() ].push_back( citem );
+                    auto citem = static_cast<BOARD_CONNECTED_ITEM*>( item );
+
+                    itemSets[ constraint.GetParentRule() ].insert( citem );
+                }
 
                 return true;
             };
 
-    buildEndpointList( );
+    m_board->GetConnectivity()->GetFromToCache()->Rebuild( m_board );
 
     forEachGeometryItem( { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T },
                     LSET::AllCuMask(), evaluateLengthConstraints );
 
-
-    struct LENGTH_ENTRY {
-        int netcode;
-        wxString netname;
-        CITEMS items;
-        int viaCount;
-        int totalRoute;
-        int totalVia;
-        int totalPadToDie;
-        int total;
-    };
-
-    typedef std::vector<LENGTH_ENTRY> LENGTH_ENTRIES;
     std::map<DRC_RULE*, LENGTH_ENTRIES> matches;
 
     for( auto it : itemSets )
@@ -414,7 +278,7 @@ bool test::DRC_TEST_PROVIDER_MATCHED_LENGTH::Run()
         std::map<int, CITEMS> netMap;
 
         for( auto citem : it.second )
-            netMap[ citem->GetNetCode() ].push_back( citem );
+            netMap[ citem->GetNetCode() ].insert( citem );
 
 
         for( auto nitem : netMap )
@@ -428,103 +292,86 @@ bool test::DRC_TEST_PROVIDER_MATCHED_LENGTH::Run()
             ent.totalRoute = 0;
             ent.totalVia = 0;
             ent.totalPadToDie = 0;
-        
+            ent.fromItem = nullptr;
+            ent.toItem = nullptr;
+
             for( auto citem : nitem.second )
             {
                 if ( auto bi = dyn_cast<VIA*>( citem ) )
                 {
                     ent.viaCount++;
-                    ent.totalVia += 0; // fixme: via thru distance
+                    ent.totalVia += computeViaThruLength( bi, nitem.second ); // fixme: via thru distance
                 }
                 else if ( auto bi = dyn_cast<TRACK*>(citem ))
                 {
                     ent.totalRoute += bi->GetLength();
                 }
+                else if ( auto bi = dyn_cast<D_PAD*>( citem ))
+                {
+                    ent.totalPadToDie += bi->GetPadToDieLength();
+                }
             }
 
             ent.total = ent.totalRoute + ent.totalVia + ent.totalPadToDie;
+            ent.matchingRule = it.first;
 
+            m_report.Add( ent );
             matches[ it.first ].push_back(ent);
         }
     }
 
-    for( auto it : matches )
+    if( !aDelayReportMode )
     {
-        DRC_RULE *rule = it.first;
-        auto& matchedConnections = it.second;
-
-        std::sort( matchedConnections.begin(), matchedConnections.end(), 
-            [] ( const LENGTH_ENTRY&a, const LENGTH_ENTRY&b ) -> int
-            {
-                return a.netname < b.netname;
-            }
-        );
-
-        reportAux( wxString::Format( _("Length-constrained traces for rule '%s':"), it.first->m_Name ) );
-
-        for( const auto& ent : matchedConnections )
+        for( auto it : matches )
         {
-            reportAux(wxString::Format(
-                " - net %s: %d matching items, total: %s (tracks: %s, vias: %s, pad-to-die: %s), vias: %d",
-                 ent.netname,
-                 (int) ent.items.size(),
-                 MessageTextFromValue( userUnits(), ent.total, true ),
-                 MessageTextFromValue( userUnits(), ent.totalRoute, true ),
-                 MessageTextFromValue( userUnits(), ent.totalVia, true ),
-                 MessageTextFromValue( userUnits(), ent.totalPadToDie, true ),
-                 ent.viaCount
-                ) );
-        }
+            DRC_RULE *rule = it.first;
+            auto& matchedConnections = it.second;
 
+            std::sort( matchedConnections.begin(), matchedConnections.end(),
+                [] ( const LENGTH_ENTRY&a, const LENGTH_ENTRY&b ) -> int
+                {
+                    return a.netname < b.netname;
+                }
+            );
 
-        OPT<DRC_CONSTRAINT> lengthConstraint = rule->FindConstraint( DRC_CONSTRAINT_TYPE_LENGTH );
+            reportAux( wxString::Format( _("Length-constrained traces for rule '%s':"), it.first->m_Name ) );
 
-        if( lengthConstraint )
-        {
             for( const auto& ent : matchedConnections )
             {
-                bool minViolation = false;
-                bool maxViolation = false;
-                int minLen, maxLen;
-                
-                if( lengthConstraint->GetValue().HasMin() && ent.total < lengthConstraint->GetValue().Min() )
-                {
-                    //printf("Min violation %d %d\n", ent.total, lengthConstraint->GetValue().Min() );
-                    minViolation = true;
-                    minLen = lengthConstraint->GetValue().Min();
-                }
-                else if( lengthConstraint->GetValue().HasMax() && ent.total > lengthConstraint->GetValue().Max() )
-                {
-                    //printf("Max violation %d %d\n", ent.total, lengthConstraint->GetValue().Min() );
-                    maxViolation = true;
-                    maxLen = lengthConstraint->GetValue().Max();
-                }
+                reportAux(wxString::Format(
+                    " - net %s: %d matching items, total: %s (tracks: %s, vias: %s, pad-to-die: %s), vias: %d",
+                    ent.netname,
+                    (int) ent.items.size(),
+                    MessageTextFromValue( userUnits(), ent.total, true ),
+                    MessageTextFromValue( userUnits(), ent.totalRoute, true ),
+                    MessageTextFromValue( userUnits(), ent.totalVia, true ),
+                    MessageTextFromValue( userUnits(), ent.totalPadToDie, true ),
+                    ent.viaCount
+                    ) );
+            }
 
-                if( (minViolation || maxViolation) )
-                {
-                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LENGTH_OUT_OF_RANGE );
-                    wxString msg = drcItem->GetErrorText() + " (" + lengthConstraint->GetParentRule()->m_Name + " ";
 
-                    if( minViolation )
-                        msg += wxString::Format( _("minimum length: %s; actual: %s)" ),
-                        MessageTextFromValue( userUnits(), minLen, true ),
-                        MessageTextFromValue( userUnits(), ent.total, true ) );
-                    else if( maxViolation )
-                        msg += wxString::Format( _("maximum length: %s; actual: %s)" ),
-                        MessageTextFromValue( userUnits(), maxLen, true ),
-                        MessageTextFromValue( userUnits(), ent.total, true ) );
+            OPT<DRC_CONSTRAINT> lengthConstraint = rule->FindConstraint( DRC_CONSTRAINT_TYPE_LENGTH );
+            if( lengthConstraint )
+            {
+                checkLengthViolations( *lengthConstraint, matchedConnections );
+            }
 
-                        drcItem->SetErrorMessage( msg );
-                        // drcItem->SetItems( aRefItem->parent, aTestItem->parent );
-                        drcItem->SetViolatingRule( lengthConstraint->GetParentRule() );
+            OPT<DRC_CONSTRAINT> skewConstraint = rule->FindConstraint( DRC_CONSTRAINT_TYPE_SKEW );
+            if( skewConstraint )
+            {
+                checkSkewViolations( *skewConstraint, matchedConnections );
+            }
 
-                    reportViolation( drcItem, wxPoint(0, 0) ); //aRefItem->parent->GetPosition() );
-                }
+            OPT<DRC_CONSTRAINT> viaCountConstraint = rule->FindConstraint( DRC_CONSTRAINT_TYPE_VIA_COUNT );
+            if( viaCountConstraint )
+            {
+                checkViaCountViolations( *viaCountConstraint, matchedConnections );
             }
         }
-    }
 
-    reportRuleStatistics();
+        reportRuleStatistics();
+    }
 
     return true;
 }
@@ -532,7 +379,7 @@ bool test::DRC_TEST_PROVIDER_MATCHED_LENGTH::Run()
 
 std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_MATCHED_LENGTH::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_LENGTH, DRC_CONSTRAINT_TYPE_SKEW };
+    return { DRC_CONSTRAINT_TYPE_LENGTH, DRC_CONSTRAINT_TYPE_SKEW, DRC_CONSTRAINT_TYPE_VIA_COUNT };
 }
 
 
