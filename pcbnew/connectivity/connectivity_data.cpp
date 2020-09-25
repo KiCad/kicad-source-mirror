@@ -33,12 +33,15 @@
 
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
+#include <connectivity/from_to_cache.h>
+
 #include <ratsnest/ratsnest_data.h>
 
 CONNECTIVITY_DATA::CONNECTIVITY_DATA()
 {
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
     m_progressReporter = nullptr;
+    m_fromToCache.reset( new FROM_TO_CACHE );
 }
 
 
@@ -47,6 +50,7 @@ CONNECTIVITY_DATA::CONNECTIVITY_DATA( const std::vector<BOARD_ITEM*>& aItems, bo
 {
     Build( aItems );
     m_progressReporter = nullptr;
+    m_fromToCache.reset( new FROM_TO_CACHE );
 }
 
 

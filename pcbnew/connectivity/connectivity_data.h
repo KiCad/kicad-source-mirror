@@ -38,6 +38,7 @@
 #include <geometry/shape_poly_set.h>
 #include <class_zone.h>
 
+class FROM_TO_CACHE;
 class CN_CLUSTER;
 class CN_CONNECTIVITY_ALGO;
 class CN_EDGE;
@@ -269,6 +270,11 @@ public:
     const std::vector<CN_EDGE> GetRatsnestForComponent( MODULE* aComponent, bool aSkipInternalConnections = false );
 #endif
 
+    std::shared_ptr<FROM_TO_CACHE> GetFromToCache()
+    {
+        return m_fromToCache;
+    }
+
 private:
 
     void    updateRatsnest();
@@ -282,7 +288,7 @@ private:
     void    addRatsnestCluster( const std::shared_ptr<CN_CLUSTER>& aCluster );
 
     std::shared_ptr<CN_CONNECTIVITY_ALGO> m_connAlgo;
-
+    std::shared_ptr<FROM_TO_CACHE> m_fromToCache;
     std::vector<RN_DYNAMIC_LINE> m_dynamicRatsnest;
     std::vector<RN_NET*> m_nets;
 

@@ -27,7 +27,54 @@
 #include <reporter.h>
 #include <class_board.h>
 #include <class_track.h>
+
 #include <pcb_expr_evaluator.h>
+
+#include <connectivity/connectivity_data.h>
+#include <connectivity/connectivity_algo.h>
+#include <connectivity/from_to_cache.h>
+
+
+
+bool exprFromTo( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
+    LIBEVAL::VALUE*   result = aCtx->AllocValue();
+
+    LIBEVAL::VALUE*   argTo = aCtx->Pop();
+    LIBEVAL::VALUE*   argFrom = aCtx->Pop();
+
+    result->Set(0.0);
+    aCtx->Push( result );
+
+    if(!item)
+        return false;
+
+    auto ftCache = item->GetBoard()->GetConnectivity()->GetFromToCache();
+
+    if( !ftCache )
+    {
+        wxLogWarning( "Attempting to call fromTo() with non-existent from-to cache, aborting...");
+        return true;
+    }
+
+    int r =0 ;
+    
+    if( ftCache->IsOnFromToPath( static_cast<BOARD_CONNECTED_ITEM*>( item ),
+        argFrom->AsString(), argTo->AsString() ) )
+    {
+        result->Set(1.0);
+        r = 1;
+    
+    }
+
+    /*printf("isonfromto %p %s %s -> %d\n", static_cast<BOARD_CONNECTED_ITEM*>( item ),
+        (const char *)argFrom->AsString(),
+        (const char *)argTo->AsString(), r );*/
+
+    return true;
+}
 
 
 static void onLayer( LIBEVAL::CONTEXT* aCtx, void *self )
@@ -286,8 +333,6 @@ static void isBlindBuriedVia( LIBEVAL::CONTEXT* aCtx, void* self )
 
 }
 
-extern void exprFromTo( LIBEVAL::CONTEXT* aCtx, void* self );
-
 PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 {
     RegisterAllFunctions();
@@ -305,6 +350,7 @@ void PCB_EXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( "isBlindBuriedVia()", isBlindBuriedVia );
     RegisterFunc( "memberOf('x')", memberOf );
     RegisterFunc( "fromTo('x','y')", exprFromTo );
+    //RegisterFunc( "isDiffPair()", exprFromTo );
 }
 
 
