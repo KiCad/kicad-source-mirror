@@ -189,6 +189,8 @@ public:
      */
     void SetMigrationSource( const wxString& aSource ) { m_migration_source = aSource; }
 
+    void SetMigrateLibraryTables( bool aMigrate = true ) { m_migrateLibraryTables = aMigrate; }
+
     /**
      * Retreives the name of the most recent previous KiCad version that can be found in the
      * user settings directory.  For legacy versions (5.x, and 5.99 builds before this code was
@@ -381,6 +383,9 @@ private:
     COMMON_SETTINGS* m_common_settings;
 
     wxString m_migration_source;
+
+    /// If true, the symbol and footprint library tables will be migrated from the previous version
+    bool m_migrateLibraryTables;
 
     /// True if settings loaded successfully at construction
     bool m_ok;

@@ -50,7 +50,8 @@ SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
         m_headless( aHeadless ),
         m_kiway( nullptr ),
         m_common_settings( nullptr ),
-        m_migration_source()
+        m_migration_source(),
+        m_migrateLibraryTables( true )
 {
     // Check if the settings directory already exists, and if not, perform a migration if possible
     if( !MigrateIfNeeded() )
@@ -356,18 +357,28 @@ private:
     wxString m_src;
     wxString m_dest;
     wxString m_errors;
+    bool     m_migrateTables;
 
 public:
-    MIGRATION_TRAVERSER( const wxString& aSrcDir, const wxString& aDestDir ) :
-            m_src( aSrcDir ), m_dest( aDestDir )
+    MIGRATION_TRAVERSER( const wxString& aSrcDir, const wxString& aDestDir, bool aMigrateTables ) :
+            m_src( aSrcDir ),
+            m_dest( aDestDir ),
+            m_migrateTables( aMigrateTables )
     {
     }
 
     wxString GetErrors() { return m_errors; }
 
-    virtual wxDirTraverseResult OnFile( const wxString& aSrcFilePath ) override
+    wxDirTraverseResult OnFile( const wxString& aSrcFilePath ) override
     {
         wxFileName file( aSrcFilePath );
+
+        if( !m_migrateTables && ( file.GetName() == wxT( "sym-lib-table" ) ||
+                                  file.GetName() == wxT( "fp-lib-table" ) ) )
+        {
+            return wxDIR_CONTINUE;
+        }
+
         wxString path = file.GetPath();
 
         path.Replace( m_src, m_dest, false );
@@ -381,7 +392,7 @@ public:
         return wxDIR_CONTINUE;
     }
 
-    virtual wxDirTraverseResult OnDir( const wxString& dirPath ) override
+    wxDirTraverseResult OnDir( const wxString& dirPath ) override
     {
         wxFileName dir( dirPath );
 
@@ -452,7 +463,7 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
         return true;
     }
 
-    MIGRATION_TRAVERSER traverser( m_migration_source, path.GetFullPath() );
+    MIGRATION_TRAVERSER traverser( m_migration_source, path.GetFullPath(), m_migrateLibraryTables );
     wxDir source_dir( m_migration_source );
 
     source_dir.Traverse( traverser );

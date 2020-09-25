@@ -61,6 +61,12 @@ DIALOG_MIGRATE_SETTINGS_BASE::DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wx
 
 	bSizer6->Add( m_lblPathError, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 
+	m_cbCopyLibraryTables = new wxCheckBox( this, wxID_ANY, wxT("Import library configuration from previous version"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbCopyLibraryTables->SetValue(true);
+	m_cbCopyLibraryTables->SetToolTip( wxT("When checked, the symbol and footprint library tables from the previous version will be imported into this version") );
+
+	bSizer6->Add( m_cbCopyLibraryTables, 0, wxALL, 5 );
+
 	m_btnUseDefaults = new wxRadioButton( this, wxID_ANY, wxT("Start with default settings"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer6->Add( m_btnUseDefaults, 0, wxALL|wxEXPAND, 5 );
 

@@ -83,6 +83,8 @@ bool DIALOG_MIGRATE_SETTINGS::TransferDataFromWindow()
     else
         m_manager->SetMigrationSource( wxEmptyString );
 
+    m_manager->SetMigrateLibraryTables( m_cbCopyLibraryTables->GetValue() );
+
     return true;
 }
 
@@ -92,6 +94,7 @@ void DIALOG_MIGRATE_SETTINGS::OnPrevVerSelected( wxCommandEvent& event )
     m_standardButtons->GetAffirmativeButton()->Enable();
     m_cbPath->Enable();
     m_btnCustomPath->Enable();
+    m_cbCopyLibraryTables->Enable();
     validatePath();
 }
 
@@ -126,6 +129,7 @@ void DIALOG_MIGRATE_SETTINGS::OnDefaultSelected( wxCommandEvent& event )
     m_standardButtons->GetAffirmativeButton()->Enable();
     m_cbPath->Disable();
     m_btnCustomPath->Disable();
+    m_cbCopyLibraryTables->Disable();
     showPathError( false );
 }
 
