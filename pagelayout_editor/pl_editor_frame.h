@@ -163,7 +163,7 @@ public:
     const PL_EDITOR_LAYOUT& GetPageLayout() const { return m_pageLayout; }
     PL_EDITOR_LAYOUT& GetPageLayout() { return m_pageLayout; }
 
-    const BOX2I GetDocumentExtents() const override;
+    const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override;
 
     /**
      * Page layout editor can show the title block using a page number 1 or another number.

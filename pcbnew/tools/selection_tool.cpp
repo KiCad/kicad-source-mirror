@@ -239,7 +239,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             selectPoint( evt->Position() );
         }
 
-        // right click? if there is any object - show the context menu
+        // Right click? if there is any object - show the context menu
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             bool selectionCancelled = false;
@@ -256,7 +256,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 m_menu.ShowContextMenu( m_selection );
         }
 
-        // double click? Display the properties window
+        // Double click? Display the properties window
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
             m_frame->FocusOnItem( nullptr );
@@ -274,13 +274,16 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
 
-        // Middle double click?  Do zoom to fit
+        // Middle double click?  Do zoom to fit or zoom to objects
         else if( evt->IsDblClick( BUT_MIDDLE ) )
         {
-            m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
+            if( m_exclusive_or ) // Is CTRL key down?
+                m_toolMgr->RunAction( ACTIONS::zoomFitObjects, true );
+            else
+                m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
         }
 
-        // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
+        // Drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
             m_frame->FocusOnItem( nullptr );
@@ -291,7 +294,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else
             {
-                // selection is empty? try to start dragging the item under the point where drag
+                // Selection is empty? try to start dragging the item under the point where drag
                 // started
                 if( m_selection.Empty() && selectCursor() )
                     m_selection.SetIsHover( true );

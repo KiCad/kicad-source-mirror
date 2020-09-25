@@ -87,7 +87,7 @@ public:
 
     COLOR_SETTINGS* GetColorSettings() override;
 
-    const BOX2I GetDocumentExtents() const override;
+    const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override;
 
     bool canCloseWindow( wxCloseEvent& Event ) override;
     void doCloseWindow() override;

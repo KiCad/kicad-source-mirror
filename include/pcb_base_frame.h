@@ -32,17 +32,18 @@
 #define  PCB_BASE_FRAME_H
 
 
-#include <vector>
-
-#include <eda_draw_frame.h>
 #include <base_struct.h>
-#include <eda_text.h>                // EDA_DRAW_MODE_T
-#include <richio.h>
-#include <pcb_screen.h>
+#include <class_board.h>
+#include <eda_draw_frame.h>
+#include <eda_text.h> // EDA_DRAW_MODE_T
+#include <lib_id.h>
 #include <pcb_display_options.h>
 #include <pcb_draw_panel_gal.h>
-#include <lib_id.h>
 #include <pcb_origin_transforms.h>
+#include <pcb_screen.h>
+#include <richio.h>
+#include <vector>
+
 
 /* Forward declarations of classes. */
 class APP_SETTINGS_BASE;
@@ -135,9 +136,24 @@ public:
      */
     EDA_RECT    GetBoardBoundingBox( bool aBoardEdgesOnly = false ) const;
 
-    const BOX2I GetDocumentExtents() const override
+    const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override
     {
-        return GetBoardBoundingBox( false );
+        /* "Zoom to Fit" calls this with "aIncludeAllVisible" as true.  Since that
+        * feature always ignored the page and border, this function returns a bbox 
+        * without them as well when passed true.  This technically is not all things 
+        * visible, but it keeps behavior consistent.
+        * 
+        * When passed false, this function returns a bbox of just the board edge.  
+        * This allows things like fabrication text or anything else outside the board
+        * edge to be ignored, and just zooms up to the board itself.
+        * 
+        * Calling "GetBoardBoundingBox(true)" when edge cuts are turned off will return bbox of
+        * entire page and border, so we make sure to do "GetBoardBoundingBox(false)" instead.
+        */
+        if( aIncludeAllVisible || ( !aIncludeAllVisible && !m_Pcb->IsLayerVisible( Edge_Cuts ) ) )
+            return GetBoardBoundingBox( false );
+        else
+            return GetBoardBoundingBox( true );
     }
 
     virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) override;

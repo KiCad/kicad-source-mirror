@@ -920,7 +920,7 @@ public:
 
     void SetScreen( BASE_SCREEN* aScreen ) override;
 
-    const BOX2I GetDocumentExtents() const override;
+    const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override;
 
     void FixupJunctions();
 

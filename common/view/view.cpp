@@ -1591,10 +1591,4 @@ void VIEW::ShowPreview( bool aShow )
 
 const int VIEW::TOP_LAYER_MODIFIER = -VIEW_MAX_LAYERS;
 
-const BOX2I VIEW::GetItemsExtents() const
-{
-    // To be implemented by subclasses.
-    return BOX2I();
-}
-
 } // namespace KIGFX

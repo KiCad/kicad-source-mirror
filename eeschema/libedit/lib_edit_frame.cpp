@@ -1012,7 +1012,7 @@ void LIB_EDIT_FRAME::HardRedraw()
 }
 
 
-const BOX2I LIB_EDIT_FRAME::GetDocumentExtents() const
+const BOX2I LIB_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
     if( !m_my_part )
     {

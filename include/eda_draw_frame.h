@@ -474,10 +474,23 @@ public:
         GetCanvas()->Refresh();
     }
 
-    virtual const BOX2I GetDocumentExtents() const;
+    /**
+     * Returns bbox of document with option to not include some items.
+     * 
+     * Used most commonly by "Zoom to Fit" and "Zoom to Objects".  In Eeschema
+     * for "Zoom to Fit", it's passed "true" to include worksheet border.  It's 
+     * passed false by "Zoom To Objects" to ignore worksheet border.  In Pcbnew, 
+     * false makes it ignore any items outside the PCB edge such as fabrication 
+     * notes.
+     *
+     * @param aIncludeAllVisible - True = Include everything visible in bbox calculations
+     *  False = Ignore some visible items (program dependent)
+     * @return BOX2I - Bounding box of document (ignoring some items as requested)
+     */
+    virtual const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const;
 
     /**
-     * Rebuild all toolbars, and update the checked state of ckeck tools
+     * Rebuild all toolbars, and update the checked state of check tools
      */
     void RecreateToolbars();
 

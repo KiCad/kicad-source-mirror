@@ -502,7 +502,7 @@ MAGNETIC_SETTINGS* FOOTPRINT_EDIT_FRAME::GetMagneticItemsSettings()
 }
 
 
-const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents() const
+const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
     MODULE* module = GetBoard()->GetFirstModule();
 

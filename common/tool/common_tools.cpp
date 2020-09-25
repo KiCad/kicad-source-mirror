@@ -23,22 +23,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <base_screen.h>
+#include <base_units.h>
 #include <bitmaps.h>
-#include <tool/actions.h>
-#include <tool/tool_manager.h>
-#include <eda_draw_frame.h>
 #include <class_draw_panel_gal.h>
+#include <dialog_configure_paths.h>
+#include <eda_draw_frame.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <id.h>
+#include <kiface_i.h>
+#include <project.h>
+#include <settings/app_settings.h>
+#include <tool/actions.h>
+#include <tool/common_tools.h>
+#include <tool/tool_manager.h>
 #include <view/view.h>
 #include <view/view_controls.h>
-#include <gal/graphics_abstraction_layer.h>
-#include <settings/app_settings.h>
-#include <base_screen.h>
-#include <tool/common_tools.h>
-#include <id.h>
-#include <project.h>
-#include <kiface_i.h>
-#include <dialog_configure_paths.h>
-#include <base_units.h>
 
 
 void COMMON_TOOLS::Reset( RESET_REASON aReason )
@@ -274,17 +274,21 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
                             // at init time)
     VECTOR2D screenSize = view->ToWorld( canvas->GetClientSize(), false );
 
-    // Currently "Zoom to Objects" is only supported on Eeschema.  Support for other
+    // Currently "Zoom to Objects" is only supported in Eeschema & Pcbnew.  Support for other
     // programs in the suite can be added as needed.
+
     if( aFitType == ZOOM_FIT_OBJECTS )
     {
-        if( frame->IsType( FRAME_SCH ) )
-            bBox = view->GetItemsExtents(); // Get a BBox of all items except page and border
+        if( frame->IsType( FRAME_SCH ) || frame->IsType( FRAME_PCB_EDITOR ) )
+        {
+            bBox = m_frame->GetDocumentExtents( false );
+        }
         else
             aFitType = ZOOM_FIT_ALL; // Just do a "Zoom to Fit" for unsupported editors
     }
 
     // If the screen is empty then use the default view bbox
+
     if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
         bBox = defaultBox;
 
@@ -299,6 +303,7 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
     {
     case ZOOM_FIT_ALL:
         // Leave a bigger margin for library editors & viewers
+
         if( frame->IsType( FRAME_FOOTPRINT_VIEWER ) || frame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
                 || frame->IsType( FRAME_SCH_VIEWER ) || frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
         {

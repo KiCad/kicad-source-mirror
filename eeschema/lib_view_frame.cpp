@@ -767,7 +767,7 @@ void LIB_VIEW_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
 }
 
 
-const BOX2I LIB_VIEW_FRAME::GetDocumentExtents() const
+const BOX2I LIB_VIEW_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
     LIB_PART* part = GetSelectedSymbol();
 

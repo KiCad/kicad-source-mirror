@@ -437,6 +437,8 @@ void EDA_DRAW_FRAME::AddStandardSubMenus( TOOL_MENU& aToolMenu )
     aMenu.AddItem( ACTIONS::zoomIn,        SELECTION_CONDITIONS::ShowAlways, 1000 );
     aMenu.AddItem( ACTIONS::zoomOut,       SELECTION_CONDITIONS::ShowAlways, 1000 );
     aMenu.AddItem( ACTIONS::zoomFitScreen, SELECTION_CONDITIONS::ShowAlways, 1000 );
+    if( IsType( FRAME_SCH ) || IsType( FRAME_PCB_EDITOR ) )
+        aMenu.AddItem( ACTIONS::zoomFitObjects, SELECTION_CONDITIONS::ShowAlways, 1000 );
 
     aMenu.AddSeparator( 1000 );
 
@@ -734,7 +736,7 @@ wxPoint EDA_DRAW_FRAME::GetNearestGridPosition( const wxPoint& aPosition ) const
 }
 
 
-const BOX2I EDA_DRAW_FRAME::GetDocumentExtents() const
+const BOX2I EDA_DRAW_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
     return BOX2I();
 }

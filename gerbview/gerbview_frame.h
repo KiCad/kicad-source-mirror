@@ -139,7 +139,7 @@ public:
     ///> @copydoc EDA_DRAW_FRAME::SetGridColor()
     virtual void SetGridColor( COLOR4D aColor ) override;
 
-    const BOX2I GetDocumentExtents() const override
+    const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override
     {
         wxASSERT( m_gerberLayout );
         return m_gerberLayout->ViewBBox();

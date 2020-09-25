@@ -89,12 +89,6 @@ public:
     void SetScale( double aScale, VECTOR2D aAnchor = { 0, 0 } ) override;
 
     /**
-     * Return BBox of all items on screen except page and border
-     */
-    const BOX2I GetItemsExtents() const override;
-
-
-    /**
      * Clear the hide flag of all items in the view
      */
     void ClearHiddenFlags();

@@ -71,11 +71,14 @@
 #include <tools/sch_editor_control.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
+#include <view/view.h>
+#include <view/view_controls.h>
 #include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/cmdline.h>
 
 #include <gal/graphics_abstraction_layer.h>
+#include <ws_proxy_view_item.h>
 
 // non-member so it can be moved easily, and kept REALLY private.
 // Do NOT Clear() in here.
@@ -1212,12 +1215,44 @@ void SCH_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 }
 
 
-const BOX2I SCH_EDIT_FRAME::GetDocumentExtents() const
+const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
-    int sizeX = GetScreen()->GetPageSettings().GetWidthIU();
-    int sizeY = GetScreen()->GetPageSettings().GetHeightIU();
+    BOX2I bBoxDoc;
 
-    return BOX2I( VECTOR2I(0, 0), VECTOR2I( sizeX, sizeY ) );
+    if( aIncludeAllVisible )
+    {
+        // Get the whole page size and return that
+        int sizeX = GetScreen()->GetPageSettings().GetWidthIU();
+        int sizeY = GetScreen()->GetPageSettings().GetHeightIU();
+        bBoxDoc   = BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( sizeX, sizeY ) );
+    }
+    else
+    {
+        // Get current worksheet in a form we can compare to an EDA_ITEM
+        KIGFX::WS_PROXY_VIEW_ITEM* currWs = SCH_BASE_FRAME::GetCanvas()->GetView()->GetWorksheet();
+        EDA_ITEM*                  currWsAsItem = static_cast<EDA_ITEM*>( currWs );
+
+        // Need an EDA_RECT so the first ".Merge" sees it's uninitialized
+        EDA_RECT bBoxItems;
+
+        // Calc the bounding box of all items on screen except the page border
+        for( EDA_ITEM* item : GetScreen()->Items() )
+        {
+            if( item != currWsAsItem ) // Ignore the worksheet itself
+            {
+                if( item->Type() == SCH_COMPONENT_T )
+                {
+                    // For components we need to get the bounding box without invisible text
+                    SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( item );
+                    bBoxItems.Merge( comp->GetBoundingBox( false ) );
+                }
+                else
+                    bBoxItems.Merge( item->GetBoundingBox() );
+            }
+            bBoxDoc = bBoxItems;
+        }
+    }
+    return bBoxDoc;
 }
 
 

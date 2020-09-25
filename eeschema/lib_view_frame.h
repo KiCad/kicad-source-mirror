@@ -143,7 +143,7 @@ public:
 
     LIB_PART* GetSelectedSymbol() const;
 
-    const BOX2I GetDocumentExtents() const override;
+    const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override;
 
     SELECTION& GetCurrentSelection() override;
 

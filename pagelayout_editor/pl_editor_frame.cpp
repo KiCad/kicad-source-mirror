@@ -432,7 +432,7 @@ void PL_EDITOR_FRAME::ToPrinter( bool doPreview )
 }
 
 
-const BOX2I PL_EDITOR_FRAME::GetDocumentExtents() const
+const BOX2I PL_EDITOR_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
     BOX2I rv( VECTOR2I( 0, 0 ), GetPageLayout().GetPageSettings().GetSizeIU() );
     return rv;
