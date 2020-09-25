@@ -70,6 +70,7 @@ static const wxChar* s_allowedExtensionsToList[] = {
     wxT( "^.*\\.kicad_sch$" ),     // S-expr Eeschema files
     wxT( "^[^$].*\\.brd$" ),       // Legacy Pcbnew files
     wxT( "^[^$].*\\.kicad_pcb$" ), // S format Pcbnew board files
+    wxT( "^[^$].*\\.kicad_dru$" ), // Design rule files
     wxT( "^[^$].*\\.kicad_wks$" ), // S format kicad page layout help_textr files
     wxT( "^[^$].*\\.kicad_mod$" ), // S format kicad footprint files, currently not listed
     wxT( "^.*\\.net$" ),           // pcbnew netlist file

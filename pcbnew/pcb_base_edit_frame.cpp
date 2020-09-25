@@ -39,6 +39,8 @@
 #include <dialogs/eda_view_switcher.h>
 #include <layer_widget.h>
 #include <class_dimension.h>
+#include <wildcards_and_files_ext.h>
+
 
 PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                           FRAME_T aFrameType, const wxString& aTitle,
@@ -131,19 +133,6 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
 
     if( new_board )
     {
-        BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
-        bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( aBoard, &bds );
-
-        try
-        {
-            bds.m_DRCEngine->InitEngine( Prj().AbsolutePath( "drc-rules" ) );
-        }
-        catch( PARSE_ERROR& pe )
-        {
-            // TODO: We could redirect to Board Setup here and report the error.  Or we could
-            // wait till they run DRC or do an Inspect Clearance.  Not sure which is better....
-        }
-
         if( m_toolManager )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
@@ -152,6 +141,22 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
     }
 
     PCB_BASE_FRAME::SetBoard( aBoard );
+
+    if( new_board )
+    {
+        BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
+        bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( aBoard, &bds );
+
+        try
+        {
+            bds.m_DRCEngine->InitEngine( GetDesignRulesPath() );
+        }
+        catch( PARSE_ERROR& pe )
+        {
+            // TODO: We could redirect to Board Setup here and report the error.  Or we could
+            // wait till they run DRC or do an Inspect Clearance.  Not sure which is better....
+        }
+    }
 
     GetCanvas()->GetGAL()->SetGridOrigin( VECTOR2D( aBoard->GetDesignSettings().m_GridOrigin ) );
 
@@ -217,3 +222,12 @@ COLOR_SETTINGS* PCB_BASE_EDIT_FRAME::GetColorSettings()
 }
 
 
+wxString PCB_BASE_EDIT_FRAME::GetDesignRulesPath()
+{
+    if( !GetBoard() )
+        return wxEmptyString;
+
+    wxFileName fn = GetBoard()->GetFileName();
+    fn.SetExt( DesignRulesFileExtension );
+    return Prj().AbsolutePath( fn.GetFullName() );
+}

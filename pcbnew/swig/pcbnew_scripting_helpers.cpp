@@ -323,9 +323,13 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
 
     wxCHECK( engine, false );
 
+    wxFileName fn = GetBoard()->GetFileName();
+    fn.SetExt( DesignRulesFileExtension );
+    wxString drcRulesPath = s_SettingsManager->Prj().AbsolutePath( fn.GetFullName() );
+
     try
     {
-        engine->InitEngine( s_SettingsManager->Prj().AbsolutePath( "drc-rules" ) );
+        engine->InitEngine( drcRulesPath );
     }
     catch( PARSE_ERROR& pe )
     {

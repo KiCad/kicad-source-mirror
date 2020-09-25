@@ -140,6 +140,7 @@ const std::string ArchiveFileExtension( "zip" );
 const std::string LegacyPcbFileExtension( "brd" );
 const std::string KiCadPcbFileExtension( "kicad_pcb" );
 const std::string PageLayoutDescrFileExtension( "kicad_wks" );
+const std::string DesignRulesFileExtension( "kicad_dru" );
 
 const std::string PdfFileExtension( "pdf" );
 const std::string MacrosFileExtension( "mcr" );

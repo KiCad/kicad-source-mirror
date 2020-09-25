@@ -191,7 +191,7 @@ void PCB_INSPECTION_TOOL::reportCopperClearance( PCB_LAYER_ID aLayer, BOARD_CONN
 
     try
     {
-        drcEngine.InitEngine( m_frame->Prj().AbsolutePath( "drc-rules" ) );
+        drcEngine.InitEngine( m_frame->GetDesignRulesPath() );
     }
     catch( PARSE_ERROR& pe )
     {
@@ -337,7 +337,7 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
     try
     {
-        drcEngine.InitEngine( m_frame->Prj().AbsolutePath( "drc-rules" ) );
+        drcEngine.InitEngine( m_frame->GetDesignRulesPath() );
     }
     catch( PARSE_ERROR& pe )
     {

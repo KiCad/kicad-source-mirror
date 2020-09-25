@@ -212,6 +212,13 @@ public:
      */
     void ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCount = -1 ) override;
 
+    /**
+     * Returns the absolute path to the design rules file for the currently-loaded board.
+     * Note that there is no guarantee that this file actually exists and can be opened!
+     * NOTE: only really makes sense from PcbNew, but is needed in PCB_BASE_EDIT_FRAME::SetBoard
+     */
+    wxString GetDesignRulesPath();
+
 protected:
     /// User defined rotation angle (in tenths of a degree).
     int m_rotationAngle;

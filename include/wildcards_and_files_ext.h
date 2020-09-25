@@ -132,6 +132,7 @@ extern const std::string KiCadPcbFileExtension;
 #define PcbFileExtension    KiCadPcbFileExtension       // symlink choice
 extern const std::string KiCadSymbolLibFileExtension;
 extern const std::string PageLayoutDescrFileExtension;
+extern const std::string DesignRulesFileExtension;
 
 extern const std::string LegacyFootprintLibPathExtension;
 extern const std::string PdfFileExtension;

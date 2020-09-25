@@ -331,8 +331,7 @@ void PANEL_SETUP_RULES::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 
 bool PANEL_SETUP_RULES::TransferDataToWindow()
 {
-    wxString   rulesFilepath = m_frame->Prj().AbsolutePath( "drc-rules" );
-    wxFileName rulesFile( rulesFilepath );
+    wxFileName rulesFile( m_frame->GetDesignRulesPath() );
 
     if( rulesFile.FileExists() )
     {
@@ -373,7 +372,7 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
         return false;
     }
 
-    wxString rulesFilepath = m_frame->Prj().AbsolutePath( "drc-rules" );
+    wxString rulesFilepath = m_frame->GetDesignRulesPath();
 
     try
     {

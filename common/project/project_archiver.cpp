@@ -165,6 +165,7 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
             wxT( "*.cmp" ),
             wxT( "*.brd" ), wxT( "*.kicad_pcb" ),   // Brd files
             wxT( "*.mod" ), wxT( "*.kicad_mod" ),   // fp files
+            wxT( "*.kicad_dru" ),
             wxT( "*.gb?" ), wxT( "*.gbrjob" ),      // Gerber files
             wxT( "*.gko" ), wxT( "*.gm1" ),
             wxT( "*.gm2" ), wxT( "*.g?" ),
