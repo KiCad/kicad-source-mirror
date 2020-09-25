@@ -164,7 +164,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                         board->Add( boardItem );        // handles connectivity
                 }
 
-                if( boardItem->Type() != PCB_NETINFO_T )
+                if( boardItem->Type() != PCB_NETINFO_T && boardItem->Type() != PCB_GROUP_T )
                     view->Add( boardItem );
 
                 break;

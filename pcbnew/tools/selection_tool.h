@@ -383,7 +383,11 @@ private:
     bool m_multiple;              // Multiple selection mode is active
     bool m_skip_heuristics;       // Heuristics are not allowed when choosing item under cursor
     bool m_locked;                // Other tools are not allowed to modify locked items
-    PCB_GROUP* m_enteredGroup;        // If non-null, selections are limited to members of this group
+
+    PCB_GROUP*        m_enteredGroup;          // If non-null, selections are limited to
+                                               // members of this group
+    KIGFX::VIEW_GROUP m_enteredGroupOverlay;   // Overlay for the entered group's frame.
+
 
     /// Private state (opaque pointer/compilation firewall)
     class PRIV;

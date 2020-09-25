@@ -29,7 +29,8 @@
 #include <msgpanel.h>
 #include <view/view.h>
 
-PCB_GROUP::PCB_GROUP( BOARD*aParent ) : BOARD_ITEM( aParent, PCB_GROUP_T )
+PCB_GROUP::PCB_GROUP( BOARD*aParent ) :
+        BOARD_ITEM( aParent, PCB_GROUP_T )
 {
 }
 

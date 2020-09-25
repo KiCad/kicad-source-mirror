@@ -31,7 +31,6 @@ using namespace std::placeholders;
 #include <class_board_item.h>
 #include <class_track.h>
 #include <class_module.h>
-#include <class_edge_mod.h>
 #include <class_drawsegment.h>
 #include <class_zone.h>
 #include <collectors.h>
@@ -54,8 +53,6 @@ using namespace std::placeholders;
 #include "selection_tool.h"
 #include "pcb_bright_box.h"
 #include "pcb_actions.h"
-
-#include "kicad_plugin.h"
 
 
 class SELECT_MENU : public ACTION_MENU
@@ -105,7 +102,7 @@ SELECTION_TOOL::SELECTION_TOOL() :
         m_multiple( false ),
         m_skip_heuristics( false ),
         m_locked( true ),
-        m_enteredGroup( NULL ),
+        m_enteredGroup( nullptr ),
         m_priv( std::make_unique<PRIV>() )
 {
     m_filter.lockedItems = true;
@@ -125,6 +122,7 @@ SELECTION_TOOL::SELECTION_TOOL() :
 SELECTION_TOOL::~SELECTION_TOOL()
 {
     getView()->Remove( &m_selection );
+    getView()->Remove( &m_enteredGroupOverlay );
 }
 
 
@@ -177,7 +175,7 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
     m_frame = getEditFrame<PCB_BASE_FRAME>();
     m_locked = true;
 
-    if( m_enteredGroup != NULL )
+    if( m_enteredGroup )
         ExitGroup();
 
     if( aReason == TOOL_BASE::MODEL_RELOAD )
@@ -199,6 +197,9 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     view()->Remove( &m_selection );
     view()->Add( &m_selection );
+
+    view()->Remove( &m_enteredGroupOverlay );
+    view()->Add( &m_enteredGroupOverlay );
 }
 
 
@@ -326,7 +327,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             m_frame->FocusOnItem( nullptr );
 
-            if( m_enteredGroup != NULL )
+            if( m_enteredGroup )
                 ExitGroup();
 
             ClearSelection();
@@ -358,6 +359,8 @@ void SELECTION_TOOL::EnterGroup()
                                    {
                                        select( titem );
                                    } );
+
+    m_enteredGroupOverlay.Add( m_enteredGroup );
 }
 
 
@@ -372,7 +375,8 @@ void SELECTION_TOOL::ExitGroup( bool aSelectGroup )
     if( aSelectGroup )
         select( m_enteredGroup );
 
-    m_enteredGroup = NULL;
+    m_enteredGroupOverlay.Clear();
+    m_enteredGroup = nullptr;
 }
 
 
@@ -2597,6 +2601,7 @@ void SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) c
 int SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
 {
     getView()->Update( &m_selection );
+    getView()->Update( &m_enteredGroupOverlay );
 
     return 0;
 }
