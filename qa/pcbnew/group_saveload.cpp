@@ -263,22 +263,6 @@ BOOST_AUTO_TEST_CASE( InvalidGroups )
     delete s_removedGroup;
     s_removedGroup = nullptr;
 
-    // Single empty group
-    board1      = createBoard( { {} } );
-    res         = board1->GroupsSanityCheck();
-    BOOST_CHECK_MESSAGE( res.find( "Group must have at least one member" ) != wxString::npos,
-                         res );
-
-    // Duplicate group name
-    board1 = createBoard( { { TEXT0 }, { TEXT1 }, { TEXT2 }, { TEXT3 }, { TEXT4 }, { TEXT5 } } );
-    res    = board1->GroupsSanityCheck();
-    BOOST_CHECK_MESSAGE( res.find( "Two groups of identical name" ) != wxString::npos, res );
-
-    // Group references item that is not on board
-    board1 = createBoard( { { REMOVED_TEXT } } );
-    res    = board1->GroupsSanityCheck();
-    BOOST_CHECK_MESSAGE( res.find( "contains deleted item" ) != wxString::npos, res );
-
     // Delete the removed text since the test is over
     board1.reset( nullptr );
     delete s_removedText;
