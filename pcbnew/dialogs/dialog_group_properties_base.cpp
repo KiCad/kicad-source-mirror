@@ -33,7 +33,7 @@ DIALOG_GROUP_PROPERTIES_BASE::DIALOG_GROUP_PROPERTIES_BASE( wxWindow* parent, wx
 	fgSizer1->Add( m_nameCtrl, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerUpper->Add( fgSizer1, 1, wxEXPAND|wxBOTTOM, 5 );
+	bSizerUpper->Add( fgSizer1, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	m_membersLabel = new wxStaticText( this, wxID_ANY, _("Group members:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_membersLabel->Wrap( -1 );
@@ -42,7 +42,7 @@ DIALOG_GROUP_PROPERTIES_BASE::DIALOG_GROUP_PROPERTIES_BASE( wxWindow* parent, wx
 	m_membersList = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_membersList->SetMinSize( wxSize( 360,200 ) );
 
-	bSizerUpper->Add( m_membersList, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerUpper->Add( m_membersList, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bMembershipButtons;
 	bMembershipButtons = new wxBoxSizer( wxHORIZONTAL );
@@ -54,7 +54,7 @@ DIALOG_GROUP_PROPERTIES_BASE::DIALOG_GROUP_PROPERTIES_BASE( wxWindow* parent, wx
 	bMembershipButtons->Add( m_bpRemoveMember, 0, wxALL, 5 );
 
 
-	bSizerUpper->Add( bMembershipButtons, 1, wxEXPAND, 5 );
+	bSizerUpper->Add( bMembershipButtons, 0, wxEXPAND, 5 );
 
 
 	bSizerMain->Add( bSizerUpper, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
