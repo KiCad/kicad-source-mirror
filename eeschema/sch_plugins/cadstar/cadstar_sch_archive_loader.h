@@ -28,6 +28,8 @@
 
 #include <sch_plugins/cadstar/cadstar_sch_archive_parser.h>
 
+#include <layers_id_colors_and_visibility.h> // SCH_LAYER_ID
+#include <plotter.h>                         // PLOT_DASH_TYPE
 #include <sch_io_mgr.h>
 
 class EDA_TEXT;
@@ -97,6 +99,7 @@ private:
     void loadSchematicSymbolInstances();
     void loadBusses();
     void loadNets();
+    void loadFigures();
 
     //Helper Functions for loading sheets
     void loadSheetAndChildSheets( LAYER_ID aCadstarSheetID, wxPoint aPosition, wxSize aSheetSize,
@@ -125,16 +128,22 @@ private:
     POINT    getLocationOfNetElement( const NET_SCH& aNet, const NETELEMENT_ID& aNetElementID );
     wxString getNetName( const NET_SCH& aNet );
 
+    //Helper functions for loading figures / graphical items
+    void loadShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
+            LINECODE_ID aCadstarLineCodeID, LAYER_ID aCadstarSheetID,
+            SCH_LAYER_ID aKiCadSchLayerID );
+
     //Helper Functions for obtaining CADSTAR elements from the parsed structures
     SYMDEF_ID getSymDefFromName( const wxString& aSymdefName, const wxString& aSymDefAlternate );
     wxString  generateSymDefName( const SYMDEF_ID& aSymdefID );
     int       getLineThickness( const LINECODE_ID& aCadstarLineCodeID );
-    PART      getPart( const PART_ID& aCadstarPartID );
-    ROUTECODE getRouteCode( const ROUTECODE_ID& aCadstarRouteCodeID );
-    TEXTCODE  getTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
-    wxString  getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
-    wxString  getAttributeValue( const ATTRIBUTE_ID&        aCadstarAttributeID,
-             const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>& aCadstarAttributeMap );
+    PLOT_DASH_TYPE        getLineStyle( const LINECODE_ID& aCadstarLineCodeID );
+    PART                  getPart( const PART_ID& aCadstarPartID );
+    ROUTECODE             getRouteCode( const ROUTECODE_ID& aCadstarRouteCodeID );
+    TEXTCODE              getTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
+    wxString              getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
+    wxString              getAttributeValue( const ATTRIBUTE_ID&        aCadstarAttributeID,
+                         const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>& aCadstarAttributeMap );
     PART::DEFINITION::PIN getPartDefinitionPin(
             const PART& aCadstarPart, const GATE_ID& aGateID, const TERMINAL_ID& aTerminalID );
 

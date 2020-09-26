@@ -84,6 +84,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( ::SCHEMATIC* aSchematic, ::SCH_SHEET* aRo
     loadSchematicSymbolInstances();
     loadBusses();
     loadNets();
+    loadFigures();
     // TODO Load other elements!
 
     // For all sheets, centre all elements and re calculate the page size:
@@ -632,6 +633,33 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
 }
 
 
+void CADSTAR_SCH_ARCHIVE_LOADER::loadFigures()
+{
+    for( std::pair<FIGURE_ID, FIGURE> figPair : Schematic.Figures )
+    {
+        FIGURE fig = figPair.second;
+
+        if( fig.LayerID == "ALL_SHEETS" )
+        {
+            for( std::pair<LAYER_ID, SHEET_NAME> sheetPair : Sheets.SheetNames )
+            {
+                LAYER_ID sheetID = sheetPair.first;
+
+                loadShapeVertices( fig.Shape.Vertices, fig.LineCodeID, sheetID, LAYER_NOTES );
+            }
+        }
+        else if( fig.LayerID == "NO_SHEET" )
+        {
+            continue;
+        }
+        else
+        {
+            loadShapeVertices( fig.Shape.Vertices, fig.LineCodeID, fig.LayerID, LAYER_NOTES );
+        }
+    }
+}
+
+
 void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdefID,
         const PART* aCadstarPart, const GATE_ID& aGateID, LIB_PART* aPart )
 {
@@ -1047,6 +1075,44 @@ wxString CADSTAR_SCH_ARCHIVE_LOADER::getNetName( const NET_SCH& aNet )
 }
 
 
+void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
+        LINECODE_ID aCadstarLineCodeID, LAYER_ID aCadstarSheetID, SCH_LAYER_ID aKiCadSchLayerID )
+{
+    const VERTEX* prev = &aCadstarVertices.at( 0 );
+    const VERTEX* cur;
+
+    wxASSERT_MSG(
+            prev->Type == VERTEX_TYPE::POINT, "First vertex should always be a point vertex" );
+
+    for( size_t i = 1; i < aCadstarVertices.size(); i++ )
+    {
+        cur = &aCadstarVertices.at( i );
+
+        SCH_LINE* segment    = new SCH_LINE();
+        wxPoint   startPoint = getKiCadPoint( prev->End );
+        wxPoint   endPoint   = getKiCadPoint( cur->End );
+
+        segment->SetStartPoint( startPoint );
+        segment->SetEndPoint( endPoint );
+        segment->SetLayer( aKiCadSchLayerID );
+        segment->SetLineWidth( getLineThickness( aCadstarLineCodeID ) );
+        segment->SetLineStyle( getLineStyle( aCadstarLineCodeID ) );
+
+        prev = cur;
+
+        if( mSheetMap.find( aCadstarSheetID ) != mSheetMap.end() )
+        {
+            mSheetMap.at( aCadstarSheetID )->GetScreen()->Append( segment );
+        }
+        else
+        {
+            delete segment;
+            wxASSERT_MSG( false, "Unknown Sheet ID." );
+        }
+    }
+}
+
+
 void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets(
         LAYER_ID aCadstarSheetID, wxPoint aPosition, wxSize aSheetSize, SCH_SHEET* aParentSheet )
 {
@@ -1221,6 +1287,28 @@ int CADSTAR_SCH_ARCHIVE_LOADER::getLineThickness( const LINECODE_ID& aCadstarLin
             mSchematic->Settings().m_DefaultWireThickness );
 
     return getKiCadLength( Assignments.Codedefs.LineCodes.at( aCadstarLineCodeID ).Width );
+}
+
+
+PLOT_DASH_TYPE CADSTAR_SCH_ARCHIVE_LOADER::getLineStyle( const LINECODE_ID& aCadstarLineCodeID )
+{
+    wxCHECK( Assignments.Codedefs.LineCodes.find( aCadstarLineCodeID )
+                     != Assignments.Codedefs.LineCodes.end(),
+            PLOT_DASH_TYPE::SOLID );
+
+    // clang-format off
+    switch( Assignments.Codedefs.LineCodes.at( aCadstarLineCodeID ).Style )
+    {
+    case LINESTYLE::DASH:       return PLOT_DASH_TYPE::DASH;
+    case LINESTYLE::DASHDOT:    return PLOT_DASH_TYPE::DASHDOT;
+    case LINESTYLE::DASHDOTDOT: return PLOT_DASH_TYPE::DASHDOT; //TODO: update in future
+    case LINESTYLE::DOT:        return PLOT_DASH_TYPE::DOT;
+    case LINESTYLE::SOLID:      return PLOT_DASH_TYPE::SOLID;
+    default:                    return PLOT_DASH_TYPE::DEFAULT;
+    }
+    // clang-format on
+
+    return PLOT_DASH_TYPE();
 }
 
 

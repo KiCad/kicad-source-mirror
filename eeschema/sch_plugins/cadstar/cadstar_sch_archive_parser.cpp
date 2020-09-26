@@ -163,7 +163,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::TERMINAL_SHAPE::Parse( XNODE* aNode )
     case TERMINAL_SHAPE_TYPE::DIAMOND:
     case TERMINAL_SHAPE_TYPE::OCTAGON:
     case TERMINAL_SHAPE_TYPE::SQUARE:
-        KI_FALLTHROUGH; //don't do anything
+        //don't do anything
         break;
 
     case TERMINAL_SHAPE_TYPE::UNDEFINED:
