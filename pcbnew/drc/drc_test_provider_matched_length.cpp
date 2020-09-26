@@ -3,22 +3,18 @@
  *
  * Copyright (C) 2004-2020 KiCad Developers.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <common.h>
@@ -44,6 +40,7 @@
     - DRCE_LENGTH_OUT_OF_RANGE
     - DRCE_SKEW_OUT_OF_RANGE
     - DRCE_TOO_MANY_VIAS
+    Todo: arc support
 */
 
 namespace test {
@@ -266,7 +263,9 @@ bool test::DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode 
                 return true;
             };
 
-    m_board->GetConnectivity()->GetFromToCache()->Rebuild( m_board );
+    auto ftCache = m_board->GetConnectivity()->GetFromToCache();
+
+    ftCache->Rebuild( m_board );
 
     forEachGeometryItem( { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T },
                     LSET::AllCuMask(), evaluateLengthConstraints );
@@ -315,6 +314,19 @@ bool test::DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode 
             ent.total = ent.totalRoute + ent.totalVia + ent.totalPadToDie;
             ent.matchingRule = it.first;
 
+            // fixme: doesn't seem to work ;-)
+            auto ftPath = ftCache->QueryFromToPath( ent.items );
+
+            if( ftPath )
+            {
+                ent.from = ftPath->fromName;
+                ent.to = ftPath->toName;
+            }
+            else
+            {
+                ent.from = ent.to = _("<unconstrained>");
+            }
+
             m_report.Add( ent );
             matches[ it.first ].push_back(ent);
         }
@@ -336,11 +348,13 @@ bool test::DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode 
 
             reportAux( wxString::Format( _("Length-constrained traces for rule '%s':"), it.first->m_Name ) );
 
-            for( const auto& ent : matchedConnections )
+            for( auto& ent : matchedConnections )
             {
                 reportAux(wxString::Format(
-                    " - net %s: %d matching items, total: %s (tracks: %s, vias: %s, pad-to-die: %s), vias: %d",
+                    " - net: %s, from: %s, to: %s, %d matching items, total: %s (tracks: %s, vias: %s, pad-to-die: %s), vias: %d",
                     ent.netname,
+                    ent.from,
+                    ent.to,
                     (int) ent.items.size(),
                     MessageTextFromValue( userUnits(), ent.total, true ),
                     MessageTextFromValue( userUnits(), ent.totalRoute, true ),
