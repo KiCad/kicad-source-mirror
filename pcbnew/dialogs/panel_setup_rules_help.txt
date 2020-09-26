@@ -37,6 +37,11 @@ pad          hole        graphic         text             zone
    (constraint clearance (min 1.5mm))
    (condition "A.NetClass == 'HV'"))
 
+(rule HV
+   (layer outer)
+   (constraint clearance (min 1.5mm))
+   (condition "A.NetClass == 'HV'"))
+
 (rule HV_HV
    # wider clearance between HV tracks
    (constraint clearance (min "1.5mm + 2.0mm"))
@@ -88,5 +93,9 @@ A.memberOf('<group_name>')
 # True if A exists on the given layer.  The layer name can be
 # either the name assigned in Board Setup > Board Editor Layers or
 # the canonical name (ie: F.Cu).
+#
+# NB: this returns true if A is on the given layer, independently
+# of whether or not the rule is being evaluated for that layer.
+# For the latter use a (layer "layer_name") clause in the rule.
 
 A.onLayer('<layer_name>')
