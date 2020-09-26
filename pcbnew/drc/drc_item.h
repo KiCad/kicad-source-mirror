@@ -74,6 +74,8 @@ enum PCB_DRC_CODE {
     DRCE_SKEW_OUT_OF_RANGE,
     DRCE_TOO_MANY_VIAS,
 
+    DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE,
+    DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG,
 
     DRCE_LAST = DRCE_TOO_MANY_VIAS
 };
@@ -155,6 +157,8 @@ private:
     static DRC_ITEM lengthOutOfRange;
     static DRC_ITEM skewOutOfRange;
     static DRC_ITEM tooManyVias;
+    static DRC_ITEM diffPairGapOutOfRange;
+    static DRC_ITEM diffPairUncoupledLengthTooLong;
 
 private:
     DRC_RULE*          m_violatingRule = nullptr;

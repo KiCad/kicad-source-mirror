@@ -186,6 +186,14 @@ DRC_ITEM DRC_ITEM::tooManyVias( DRCE_TOO_MANY_VIAS,
         _( "Too many vias on a connection" ),
         wxT( "too_many_vias" ) );
 
+DRC_ITEM DRC_ITEM::diffPairGapOutOfRange( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE,
+        _( "Differential pair gap out of range" ),
+        wxT( "diff_pair_gap_out_of_range" ) );
+
+DRC_ITEM DRC_ITEM::diffPairUncoupledLengthTooLong( DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG,
+        _( "Differential uncoupled length too long" ),
+        wxT( "diff_pair_uncoupled_length_too_long" ) );
+
 std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::unconnectedItems,
             DRC_ITEM::shortingItems,
@@ -222,7 +230,9 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::silkOverPad,
             DRC_ITEM::lengthOutOfRange,
             DRC_ITEM::skewOutOfRange,
-            DRC_ITEM::tooManyVias
+            DRC_ITEM::tooManyVias,
+            DRC_ITEM::diffPairGapOutOfRange,
+            DRC_ITEM::diffPairUncoupledLengthTooLong
         } );
 
 
@@ -267,7 +277,8 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_LENGTH_OUT_OF_RANGE:      return std::make_shared<DRC_ITEM>( lengthOutOfRange );
     case DRCE_SKEW_OUT_OF_RANGE:        return std::make_shared<DRC_ITEM>( skewOutOfRange );
     case DRCE_TOO_MANY_VIAS:            return std::make_shared<DRC_ITEM>( tooManyVias );
-
+    case DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE:          return std::make_shared<DRC_ITEM>( diffPairGapOutOfRange );
+    case DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG: return std::make_shared<DRC_ITEM>( diffPairUncoupledLengthTooLong );
     default:
         wxFAIL_MSG( "Unknown DRC error code" );
         return nullptr;
