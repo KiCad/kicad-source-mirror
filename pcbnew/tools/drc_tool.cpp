@@ -63,6 +63,19 @@ void DRC_TOOL::Reset( RESET_REASON aReason )
         m_pcb = m_editFrame->GetBoard();
         m_drcEngine = m_pcb->GetDesignSettings().m_DRCEngine;
     }
+
+    if( aReason == MODEL_RELOAD )
+    {
+        try
+        {
+            m_drcEngine->InitEngine( m_editFrame->GetDesignRulesPath() );
+        }
+        catch( PARSE_ERROR& pe )
+        {
+            // Not sure this is the best place to tell the user their rules are buggy, so
+            // we'll stay quiet for now.  Feel free to revisit this decision....
+        }
+    }
 }
 
 
