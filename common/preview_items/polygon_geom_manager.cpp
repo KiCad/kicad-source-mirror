@@ -187,8 +187,15 @@ void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER
 
         if( pt )
         {
-            // This checks for backtracking from the point to intersection
-            if( SEG( last_pt, new_end ).Collinear( SEG( new_end, *pt ) ) )
+            SEG drawn( last_pt, new_end );
+            SEG completed( new_end, *pt );
+
+            /*
+             * Check for backtracking from the point to intersection.  If the snapped path to
+             * completion is shorter than what the user actually drew, we want to discard the
+             * drawn point and just use the snapped completion point.
+             */
+            if( drawn.Collinear( completed ) && drawn.SquaredLength() > completed.SquaredLength() )
                 m_leaderPts = SHAPE_LINE_CHAIN( { last_pt, *pt } );
             else
                 m_leaderPts.Append( *pt );
