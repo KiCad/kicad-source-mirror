@@ -192,9 +192,9 @@ bool BITMAP_BUTTON::Enable( bool aEnable )
 void BITMAP_BUTTON::Check( bool aCheck )
 {
     if( aCheck )
-        clearFlag( wxCONTROL_CHECKED );
-    else
         setFlag( wxCONTROL_CHECKED );
+    else
+        clearFlag( wxCONTROL_CHECKED );
 
     Refresh();
 }
