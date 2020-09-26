@@ -57,6 +57,12 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
     LAYER_PADS_NETNAMES, LAYER_VIAS_NETNAMES,
     Dwgs_User, Cmts_User, Eco1_User, Eco2_User, Edge_Cuts,
 
+    User_1, ZONE_LAYER_FOR( User_1 ), User_2, ZONE_LAYER_FOR( User_2 ),
+    User_3, ZONE_LAYER_FOR( User_3 ), User_4, ZONE_LAYER_FOR( User_4 ),
+    User_5, ZONE_LAYER_FOR( User_5 ), User_6, ZONE_LAYER_FOR( User_6 ),
+    User_7, ZONE_LAYER_FOR( User_7 ), User_8, ZONE_LAYER_FOR( User_8 ),
+    User_9, ZONE_LAYER_FOR( User_9 ),
+
     LAYER_MOD_TEXT_FR,
     LAYER_MOD_REFERENCES, LAYER_MOD_VALUES,
 
@@ -67,7 +73,12 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
 
     LAYER_PAD_FR_NETNAMES, LAYER_PAD_FR,
     NETNAMES_LAYER_INDEX( F_Cu ), F_Cu, ZONE_LAYER_FOR( F_Cu ),
-    F_Mask, F_SilkS, F_Paste, F_Adhes, F_CrtYd, F_Fab,
+    F_Mask, ZONE_LAYER_FOR( F_Mask ),
+    F_SilkS, ZONE_LAYER_FOR( F_SilkS ),
+    F_Paste, ZONE_LAYER_FOR( F_Paste ),
+    F_Adhes, ZONE_LAYER_FOR( F_Adhes ),
+    F_CrtYd, ZONE_LAYER_FOR( F_CrtYd ),
+    F_Fab, ZONE_LAYER_FOR( F_Fab ),
 
     NETNAMES_LAYER_INDEX( In1_Cu ),   In1_Cu,   ZONE_LAYER_FOR( In1_Cu ),
     NETNAMES_LAYER_INDEX( In2_Cu ),   In2_Cu,   ZONE_LAYER_FOR( In2_Cu ),
@@ -102,7 +113,12 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
 
     LAYER_PAD_BK_NETNAMES, LAYER_PAD_BK,
     NETNAMES_LAYER_INDEX( B_Cu ), B_Cu, ZONE_LAYER_FOR( B_Cu ),
-    B_Mask, B_Adhes, B_Paste, B_SilkS, B_CrtYd, B_Fab,
+    B_Mask, ZONE_LAYER_FOR( B_Mask ),
+    B_SilkS, ZONE_LAYER_FOR( B_SilkS ),
+    B_Paste, ZONE_LAYER_FOR( B_Paste ),
+    B_Adhes, ZONE_LAYER_FOR( B_Adhes ),
+    B_CrtYd, ZONE_LAYER_FOR( B_CrtYd ),
+    B_Fab, ZONE_LAYER_FOR( B_Fab ),
 
     LAYER_MOD_TEXT_BK,
     LAYER_WORKSHEET
@@ -306,12 +322,12 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
     // Extra layers that are brought to the top if a F.* or B.* is selected
     const std::vector<LAYER_NUM> frontLayers = {
         F_Cu, F_Adhes, F_Paste, F_SilkS, F_Mask, F_Fab, F_CrtYd, LAYER_PAD_FR,
-        LAYER_PAD_FR_NETNAMES, NETNAMES_LAYER_INDEX( F_Cu ), ZONE_LAYER_FOR( F_Cu )
+        LAYER_PAD_FR_NETNAMES, NETNAMES_LAYER_INDEX( F_Cu )
     };
 
     const std::vector<LAYER_NUM> backLayers = {
         B_Cu, B_Adhes, B_Paste, B_SilkS, B_Mask, B_Fab, B_CrtYd, LAYER_PAD_BK,
-        LAYER_PAD_BK_NETNAMES, NETNAMES_LAYER_INDEX( B_Cu ), ZONE_LAYER_FOR( B_Cu )
+        LAYER_PAD_BK_NETNAMES, NETNAMES_LAYER_INDEX( B_Cu )
     };
 
     const std::vector<LAYER_NUM>* extraLayers = NULL;
@@ -325,16 +341,29 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
     if( extraLayers )
     {
         for( auto layer : *extraLayers )
+        {
             m_view->SetTopLayer( layer );
+
+            if( layer < PCB_LAYER_ID_COUNT )
+                m_view->SetTopLayer( ZONE_LAYER_FOR( layer ) );
+        }
 
         // Move the active layer to the top
         if( !IsCopperLayer( aLayer ) )
+        {
             m_view->SetLayerOrder( aLayer, m_view->GetLayerOrder( GAL_LAYER_ORDER[0] ) );
+            m_view->SetLayerOrder( ZONE_LAYER_FOR( aLayer ),
+                                   m_view->GetLayerOrder( GAL_LAYER_ORDER[1] ) );
+        }
     }
     else if( IsCopperLayer( aLayer ) )
     {
         // Display labels for copper layers on the top
         m_view->SetTopLayer( GetNetnameLayer( aLayer ) );
+        m_view->SetTopLayer( ZONE_LAYER_FOR( aLayer ) );
+    }
+    else
+    {
         m_view->SetTopLayer( ZONE_LAYER_FOR( aLayer ) );
     }
 
@@ -506,6 +535,8 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
             m_view->SetRequired( ZONE_LAYER_FOR( layer ), layer );
             m_view->SetRequired( GetNetnameLayer( layer ), layer );
         }
+        else if( IsNonCopperLayer( layer ) )
+            m_view->SetRequired( ZONE_LAYER_FOR( layer ), layer );
         else if( IsNetnameLayer( layer ) )
             m_view->SetLayerDisplayOnly( layer );
     }
