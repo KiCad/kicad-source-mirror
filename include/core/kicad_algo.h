@@ -25,6 +25,8 @@
 #ifndef INCLUDE_CORE_KICAD_ALGO_H_
 #define INCLUDE_CORE_KICAD_ALGO_H_
 
+#include <algorithm>
+
 namespace alg
 {
 /**
@@ -70,6 +72,15 @@ void for_all_pairs( _InputIterator __first, _InputIterator __last, _Function __f
             for( _InputIterator __it = __first; __it != __last; ++__it )
                 __f( *__follow, *__it );
     }
+}
+
+/**
+ * @brief Returns true if the container contains the given value.
+ */
+template <class _Container, typename _Value>
+bool contains( _Container __container, _Value __value )
+{
+    return std::find( __container.begin(), __container.end(), __value ) != __container.end();
 }
 } // namespace alg
 

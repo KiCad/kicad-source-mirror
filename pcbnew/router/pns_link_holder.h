@@ -56,7 +56,7 @@ public:
     ///> Checks if the segment aLink is a part of the line.
     bool ContainsLink( const LINKED_ITEM* aItem ) const
     {
-        return std::contains( m_links, aItem );
+        return alg::contains( m_links, aItem );
     }
 
     LINKED_ITEM* GetLink( int aIndex ) const

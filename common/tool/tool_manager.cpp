@@ -1037,7 +1037,7 @@ bool TOOL_MANAGER::isActive( TOOL_BASE* aTool )
         return false;
 
     // Just check if the tool is on the active tools stack
-    return std::contains( m_activeTools, aTool->GetId() );
+    return alg::contains( m_activeTools, aTool->GetId() );
 }
 
 

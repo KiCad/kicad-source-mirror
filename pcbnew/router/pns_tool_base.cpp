@@ -138,7 +138,7 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
         if( !m_iface->IsAnyLayerVisible( item->Layers() ) )
             continue;
 
-        if( std::contains( aAvoidItems, item ) )
+        if( alg::contains( aAvoidItems, item ) )
             continue;
 
         // fixme: this causes flicker with live loop removal...

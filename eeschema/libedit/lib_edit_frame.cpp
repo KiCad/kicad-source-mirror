@@ -1001,7 +1001,7 @@ void LIB_EDIT_FRAME::HardRedraw()
 
         for( LIB_ITEM& item : m_my_part->GetDrawItems() )
         {
-            if( !std::contains( selection, &item ) )
+            if( !alg::contains( selection, &item ) )
                 item.ClearSelected();
             else
                 item.SetSelected();

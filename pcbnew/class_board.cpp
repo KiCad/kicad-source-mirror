@@ -1912,7 +1912,7 @@ void BOARD::SanitizeNetcodes()
 
 void BOARD::AddListener( BOARD_LISTENER* aListener )
 {
-    if( !std::contains( m_listeners, aListener ) )
+    if( !alg::contains( m_listeners, aListener ) )
         m_listeners.push_back( aListener );
 }
 

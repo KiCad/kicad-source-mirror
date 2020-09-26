@@ -36,5 +36,5 @@ BUS_ALIAS::~BUS_ALIAS()
 
 bool BUS_ALIAS::Contains( const wxString& aName )
 {
-    return std::contains( m_members, aName );
+    return alg::contains( m_members, aName );
 }

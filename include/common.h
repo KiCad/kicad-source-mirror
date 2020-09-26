@@ -49,6 +49,7 @@
 #include <type_traits>
 #include <typeinfo>
 #include <boost/uuid/uuid.hpp>
+#include <core/kicad_algo.h>
 #include <macros.h>
 
 class PROJECT;
@@ -407,19 +408,6 @@ std::ostream& operator<<( std::ostream& out, const wxSize& size );
  * testing fixtures.
  */
 std::ostream& operator<<( std::ostream& out, const wxPoint& pt );
-
-
-#ifndef __cpp_concepts // a proxy for C++20 as there's no __cpp_contains macro
-// TODO: remove this once we move to C++20.
-namespace std
-{
-    template<class Container, class Value>
-    bool contains( Container aContainer, Value aValue )
-    {
-        return std::find( aContainer.begin(), aContainer.end(), aValue ) != aContainer.end();
-    }
-}
-#endif
 
 
 /**

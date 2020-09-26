@@ -193,7 +193,7 @@ public:
     bool Contains( ITEM* aItem ) const
     {
         const ENTRY ent( aItem );
-        return std::contains( m_items, ent );
+        return alg::contains( m_items, ent );
     }
 
     void Erase( ITEM* aItem )

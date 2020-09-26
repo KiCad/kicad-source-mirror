@@ -1183,7 +1183,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
     {
         for( BOARD_CONNECTED_ITEM* mitem : board()->GetConnectivity()->GetNetItems( netCode, padType ) )
         {
-            if( mitem->Type() == PCB_PAD_T && !std::contains( modList, mitem->GetParent() ) )
+            if( mitem->Type() == PCB_PAD_T && !alg::contains( modList, mitem->GetParent() ) )
             {
                 // if we cannot find the module of the pad in the modList
                 // then we can assume that that module is not located in the same
