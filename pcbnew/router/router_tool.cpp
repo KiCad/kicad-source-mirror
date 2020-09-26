@@ -1540,8 +1540,23 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_router->SyncWorld();
     m_startItem = m_router->GetWorld()->FindItemByParent( item );
-    m_startSnapPoint = snapToItem( true, m_startItem, controls()->GetCursorPosition() );
 
+    TOOL_MANAGER* toolManager = frame()->GetToolManager();
+
+    if( toolManager->IsContextMenuActive() )
+    {
+        // If we're here from a context menu then we need to get the position of the
+        // cursor when the context menu was invoked.  This is used to figure out the
+        // break point on the track.
+        VECTOR2I CurrPos = toolManager->GetMenuCursorPos();
+        m_startSnapPoint = snapToItem( true, m_startItem, toolManager->GetMenuCursorPos() );
+    }
+    else
+    {
+        // If we're here from a hotkey, then get the current mouse position so we know
+        // where to break the track.
+        m_startSnapPoint = snapToItem( true, m_startItem, controls()->GetCursorPosition() );
+    }
 
     if( m_startItem && m_startItem->IsLocked() )
     {

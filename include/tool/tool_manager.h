@@ -429,6 +429,11 @@ public:
      */
     bool DispatchHotKey( const TOOL_EVENT& aEvent );
 
+    VECTOR2D GetMenuCursorPos()
+    {
+        return m_menuCursor;
+    }
+
 private:
     typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> TRANSITION;
 
