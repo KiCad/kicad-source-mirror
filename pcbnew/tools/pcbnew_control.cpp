@@ -872,7 +872,7 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
         // object.
         item->SetSelected();
 
-        if( !item->GetParentGroup() || !item->GetParentGroup()->IsSelected() )
+        if( !item->GetParentGroup() || !std::contains( aItems, item->GetParentGroup() ) )
             selection.Add( item );
     }
 
