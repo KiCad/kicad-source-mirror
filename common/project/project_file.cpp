@@ -73,7 +73,7 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
             new PARAM_PATH( "pcbnew.last_paths.idf", &m_PcbLastPath[LAST_PATH_IDF], "" ) );
 
     m_params.emplace_back(
-            new PARAM_PATH( "pcbnew.last_paths.vmrl", &m_PcbLastPath[LAST_PATH_VRML], "" ) );
+            new PARAM_PATH( "pcbnew.last_paths.vrml", &m_PcbLastPath[LAST_PATH_VRML], "" ) );
 
     m_params.emplace_back( new PARAM_PATH(
             "pcbnew.last_paths.specctra_dsn", &m_PcbLastPath[LAST_PATH_SPECCTRADSN], "" ) );
