@@ -1958,7 +1958,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
                     newLine = 0;
                     m_out->Print( aNestLevel + 1, "(filled_polygon\n" );
                     m_out->Print( aNestLevel + 2, "(layer %s)\n",
-                            TO_UTF8( BOARD::GetStandardLayerName( layer ) ) );
+                                  m_out->Quotew( LSET::Name( layer ) ).c_str() );
 
                     if( aZone->IsIsland( layer, poly_index ) )
                         m_out->Print( aNestLevel + 2, "(island)\n" );
