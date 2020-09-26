@@ -285,6 +285,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_length:              constraint.m_Type = DRC_CONSTRAINT_TYPE_LENGTH;              break;
     case T_skew:                constraint.m_Type = DRC_CONSTRAINT_TYPE_SKEW;                break;
     case T_via_count:           constraint.m_Type = DRC_CONSTRAINT_TYPE_VIA_COUNT;           break;
+    case T_diff_pair_gap:       constraint.m_Type = DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP;       break;
+    case T_diff_pair_uncoupled: constraint.m_Type = DRC_CONSTRAINT_TYPE_DIFF_PAIR_MAX_UNCOUPLED;  break;
     default:
     // fixme: message
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
