@@ -260,9 +260,22 @@ bool  FROM_TO_CACHE::IsOnFromToPath( BOARD_CONNECTED_ITEM* aItem, const wxString
     return false;
 }
 
+
 void FROM_TO_CACHE::Rebuild( BOARD* aBoard )
 {
     m_board = aBoard;
     buildEndpointList();
     m_ftPaths.clear();
+}
+
+
+FROM_TO_CACHE::FT_PATH* FROM_TO_CACHE::QueryFromToPath( const std::set<BOARD_CONNECTED_ITEM*>& aItems )
+{
+    for( auto& ftPath : m_ftPaths )
+    {
+        if ( ftPath.pathItems == aItems )
+            return &ftPath;
+    }
+
+    return nullptr;
 }

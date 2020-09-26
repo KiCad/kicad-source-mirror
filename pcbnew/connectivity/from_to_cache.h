@@ -60,6 +60,8 @@ public:
     void Rebuild( BOARD* aBoard );
     bool IsOnFromToPath( BOARD_CONNECTED_ITEM* aItem, const wxString& aFrom, const wxString& aTo );
 
+    FT_PATH* QueryFromToPath( const std::set<BOARD_CONNECTED_ITEM*>& aItems );
+
 private:
 
     int cacheFromToPaths( const wxString& aFrom, const wxString& aTo );
