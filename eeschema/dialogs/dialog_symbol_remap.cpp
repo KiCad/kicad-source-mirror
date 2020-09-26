@@ -180,7 +180,7 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
             libName.Replace( " ", "-" );
 
             // Don't create duplicate table entries.
-            while( std::find( libNames.begin(), libNames.end(), libName ) != libNames.end() )
+            while( std::contains( libNames, libName ) )
             {
                 libName = libName.Left( libNameLen );
                 libName << libNameInc;

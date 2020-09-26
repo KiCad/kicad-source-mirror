@@ -163,8 +163,7 @@ void DIALOG_EXPORT_SVG::initDialog()
             m_boxSelectLayer[layer] = std::make_pair( m_TechnicalLayersList, checkIndex );
         }
 
-        if( std::find( cfg->m_ExportSvg.layers.begin(), cfg->m_ExportSvg.layers.end(), layer ) !=
-            cfg->m_ExportSvg.layers.end() )
+        if( std::contains( cfg->m_ExportSvg.layers, layer ) )
             m_boxSelectLayer[layer].first->Check( checkIndex, true );
     }
 }

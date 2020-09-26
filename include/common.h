@@ -409,6 +409,16 @@ std::ostream& operator<<( std::ostream& out, const wxSize& size );
 std::ostream& operator<<( std::ostream& out, const wxPoint& pt );
 
 
+namespace std
+{
+    template<class Container, class Value>
+    bool contains( Container aContainer, Value aValue )
+    {
+        return std::find( aContainer.begin(), aContainer.end(), aValue ) != aContainer.end();
+    }
+}
+
+
 /**
  * A wrapper around a wxFileName which is much more performant with a subset of the API.
  */

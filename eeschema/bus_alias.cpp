@@ -19,7 +19,7 @@
  */
 
 #include <algorithm>
-
+#include <common.h>
 #include "bus_alias.h"
 
 
@@ -36,6 +36,5 @@ BUS_ALIAS::~BUS_ALIAS()
 
 bool BUS_ALIAS::Contains( const wxString& aName )
 {
-    return ( std::find( m_members.begin(), m_members.end(), aName )
-             != m_members.end() );
+    return std::contains( m_members, aName );
 }

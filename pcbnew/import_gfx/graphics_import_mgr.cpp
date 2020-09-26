@@ -38,10 +38,10 @@ GRAPHICS_IMPORT_MGR::GRAPHICS_IMPORT_MGR( const TYPE_LIST& aBlacklist )
     };
 
     std::copy_if( all_types.begin(), all_types.end(), std::back_inserter( m_importableTypes ),
-            [&aBlacklist]( const GFX_FILE_T& arg ) {
-                return ( std::find( aBlacklist.begin(), aBlacklist.end(), arg )
-                         == aBlacklist.end() );
-            } );
+                  [&aBlacklist]( const GFX_FILE_T& arg )
+                  {
+                      return !std::contains( aBlacklist, arg );
+                  } );
 }
 
 

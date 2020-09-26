@@ -1183,18 +1183,13 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
     {
         for( BOARD_CONNECTED_ITEM* mitem : board()->GetConnectivity()->GetNetItems( netCode, padType ) )
         {
-            if( mitem->Type() == PCB_PAD_T)
+            if( mitem->Type() == PCB_PAD_T && !std::contains( modList, mitem->GetParent() ) )
             {
-                bool found = std::find( modList.begin(), modList.end(), mitem->GetParent() ) != modList.end();
-
-                if( !found )
-                {
-                    // if we cannot find the module of the pad in the modList
-                    // then we can assume that that module is not located in the same
-                    // schematic, therefore invalidate this netcode.
-                    removeCodeList.push_back( netCode );
-                    break;
-                }
+                // if we cannot find the module of the pad in the modList
+                // then we can assume that that module is not located in the same
+                // schematic, therefore invalidate this netcode.
+                removeCodeList.push_back( netCode );
+                break;
             }
         }
     }

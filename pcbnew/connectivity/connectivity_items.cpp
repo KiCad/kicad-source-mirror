@@ -432,7 +432,7 @@ wxString CN_CLUSTER::OriginNetName() const
 
 bool CN_CLUSTER::Contains( const CN_ITEM* aItem )
 {
-    return std::find( m_items.begin(), m_items.end(), aItem ) != m_items.end();
+    return std::contains( m_items, aItem );
 }
 
 

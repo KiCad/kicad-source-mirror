@@ -23,7 +23,7 @@
 #define __PNS_ITEMSET_H
 
 #include <vector>
-
+#include <common.h>
 #include "pns_item.h"
 
 namespace PNS {
@@ -193,7 +193,7 @@ public:
     bool Contains( ITEM* aItem ) const
     {
         const ENTRY ent( aItem );
-        return std::find( m_items.begin(), m_items.end(), ent ) != m_items.end();
+        return std::contains( m_items, ent );
     }
 
     void Erase( ITEM* aItem )

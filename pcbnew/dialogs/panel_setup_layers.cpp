@@ -752,9 +752,9 @@ LSEQ PANEL_SETUP_LAYERS::getRemovedLayersWithItems()
     PCB_LAYER_COLLECTOR collector;
     LSEQ newLayerSeq = newLayers.Seq();
 
-    for( auto layer_id : curLayers.Seq() )
+    for( PCB_LAYER_ID layer_id : curLayers.Seq() )
     {
-        if( std::find( newLayerSeq.begin(), newLayerSeq.end(), layer_id ) == newLayerSeq.end() )
+        if( !std::contains( newLayerSeq, layer_id ) )
         {
             collector.SetLayerId( layer_id );
             collector.Collect( m_pcb, GENERAL_COLLECTOR::BoardLevelItems );
@@ -786,7 +786,7 @@ LSEQ PANEL_SETUP_LAYERS::getNonRemovableLayers()
         if( IsCopperLayer( layer_id ) ) // Copper layers are not taken into account here
             continue;
 
-        if( std::find( newLayerSeq.begin(), newLayerSeq.end(), layer_id ) == newLayerSeq.end() )
+        if( !std::contains( newLayerSeq, layer_id ) )
         {
             collector.SetLayerId( layer_id );
             collector.Collect( m_pcb, GENERAL_COLLECTOR::ModuleItems );
