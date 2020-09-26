@@ -223,7 +223,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_DIM_LEADER_T:          // a leader dimension
                 case PCB_TARGET_T:              // a target (graphic item)
                 case PCB_MARKER_T:              // a marker used to show something
-                case PCB_GROUP_T:               // a group of items
                 case PCB_ZONE_AREA_T:
                     view->Remove( boardItem );
 
@@ -248,6 +247,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                 // Metadata items
                 case PCB_NETINFO_T:
+                case PCB_GROUP_T:
                     if( !( changeFlags & CHT_DONE ) )
                         board->Remove( boardItem );
                     break;

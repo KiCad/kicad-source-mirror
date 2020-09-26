@@ -1007,18 +1007,23 @@ int PCB_EDITOR_CONTROL::Group( const TOOL_EVENT& aEvent )
     SELECTION_TOOL*         selTool   = m_toolMgr->GetTool<SELECTION_TOOL>();
     const PCBNEW_SELECTION& selection = selTool->GetSelection();
     BOARD*                  board     = getModel<BOARD>();
-    BOARD_COMMIT            commit( m_frame );
+    PICKED_ITEMS_LIST       undoList;
 
     if( selection.Empty() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
 
     PCB_GROUP* group = new PCB_GROUP( board );
+    board->Add( group );
+
+    undoList.PushItem( ITEM_PICKER( nullptr, group, UNDO_REDO::NEWITEM ) );
 
     for( EDA_ITEM* item : selection )
+    {
         group->AddItem( static_cast<BOARD_ITEM*>( item ) );
+        undoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::GROUP ) );
+    }
 
-    commit.Add( group );
-    commit.Push( _( "Group Items" ) );
+    m_frame->SaveCopyInUndoList( undoList, UNDO_REDO::GROUP );
 
     selTool->ClearSelection();
     selTool->select( group );
@@ -1032,16 +1037,15 @@ int PCB_EDITOR_CONTROL::Group( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::Ungroup( const TOOL_EVENT& aEvent )
 {
-    SELECTION_TOOL*         selTool   = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const PCBNEW_SELECTION& selection = selTool->GetSelection();
-    BOARD_COMMIT            commit( m_frame );
+    const PCBNEW_SELECTION&  selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    PICKED_ITEMS_LIST        undoList;
+    std::vector<BOARD_ITEM*> members;
 
     if( selection.Empty() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
 
     PCBNEW_SELECTION selCopy = selection;
-
-    selTool->ClearSelection();
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     for( EDA_ITEM* item : selCopy )
     {
@@ -1050,14 +1054,22 @@ int PCB_EDITOR_CONTROL::Ungroup( const TOOL_EVENT& aEvent )
         if( group )
         {
             for( BOARD_ITEM* member : group->GetItems() )
-                selTool->select( member );
+            {
+                undoList.PushItem( ITEM_PICKER( nullptr, member, UNDO_REDO::UNGROUP ) );
+                members.push_back( member );
+            }
 
             group->RemoveAll();
-            commit.Remove( group );
+            m_frame->GetBoard()->Remove( group );
+
+            group->SetSelected();
+            undoList.PushItem( ITEM_PICKER( nullptr, group, UNDO_REDO::DELETED ) );
         }
     }
 
-    commit.Push( "Ungroup Items" );
+    m_frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNGROUP );
+
+    m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &members );
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
     m_frame->OnModify();

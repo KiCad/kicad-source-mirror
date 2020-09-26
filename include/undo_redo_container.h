@@ -69,7 +69,9 @@ enum class UNDO_REDO {
                          // data structure is insufficient to restore the change.
     DRILLORIGIN,         // origin changed (like CHANGED, contains the origin and a copy)
     GRIDORIGIN,          // origin changed (like CHANGED, contains the origin and a copy)
-    PAGESETTINGS         // page settings or title block changes
+    PAGESETTINGS,        // page settings or title block changes
+    GROUP,
+    UNGROUP
 };
 
 

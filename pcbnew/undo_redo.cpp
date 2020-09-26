@@ -160,6 +160,7 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
     return false;
 }
 
+
 static void SwapItemData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 {
     if( aImage == NULL )
@@ -180,6 +181,7 @@ static void SwapItemData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     // Restore pointers to be sure they are not broken
     aItem->SetParent( parent );
 }
+
 
 void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aCommandType,
                                               const wxPoint& aTransformPoint )
@@ -303,6 +305,8 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
         case UNDO_REDO::NEWITEM:
         case UNDO_REDO::DELETED:
         case UNDO_REDO::PAGESETTINGS:
+        case UNDO_REDO::GROUP:
+        case UNDO_REDO::UNGROUP:
             break;
 
         default:
@@ -400,6 +404,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
     auto view = GetCanvas()->GetView();
     auto connectivity = GetBoard()->GetConnectivity();
 
+    PCB_GROUP* group = nullptr;
+
     // Undo in the reverse order of list creation: (this can allow stacked changes
     // like the same item can be changes and deleted in the same complex command
 
@@ -488,7 +494,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             aList->SetPickedItemStatus( UNDO_REDO::DELETED, ii );
             GetModel()->Remove( (BOARD_ITEM*) eda_item );
 
-            if( eda_item->Type() != PCB_NETINFO_T )
+            if( eda_item->Type() != PCB_NETINFO_T && eda_item->Type() != PCB_GROUP_T )
                 view->Remove( eda_item );
 
             break;
@@ -497,9 +503,20 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             aList->SetPickedItemStatus( UNDO_REDO::NEWITEM, ii );
             GetModel()->Add( (BOARD_ITEM*) eda_item );
 
-            if( eda_item->Type() != PCB_NETINFO_T )
+            if( eda_item->Type() != PCB_NETINFO_T && eda_item->Type() != PCB_GROUP_T )
                 view->Add( eda_item );
 
+            if( eda_item->Type() == PCB_GROUP_T )
+                group = static_cast<PCB_GROUP*>( eda_item );
+
+            break;
+
+        case UNDO_REDO::GROUP:
+            static_cast<BOARD_ITEM*>( eda_item )->SetParentGroup( nullptr );
+            break;
+
+        case UNDO_REDO::UNGROUP:
+            group->AddItem( static_cast<BOARD_ITEM*>( eda_item ) );
             break;
 
         case UNDO_REDO::MOVED:
