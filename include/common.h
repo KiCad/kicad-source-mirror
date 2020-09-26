@@ -409,6 +409,8 @@ std::ostream& operator<<( std::ostream& out, const wxSize& size );
 std::ostream& operator<<( std::ostream& out, const wxPoint& pt );
 
 
+#ifndef __cpp_concepts // a proxy for C++20 as there's no __cpp_contains macro
+// TODO: remove this once we move to C++20.
 namespace std
 {
     template<class Container, class Value>
@@ -417,6 +419,7 @@ namespace std
         return std::find( aContainer.begin(), aContainer.end(), aValue ) != aContainer.end();
     }
 }
+#endif
 
 
 /**
