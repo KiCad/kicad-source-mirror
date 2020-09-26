@@ -177,10 +177,15 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
 {
     if( m_mainToolBar )
+    {
         m_mainToolBar->ClearToolbar();
+    }
     else
+    {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_mainToolBar->SetAuiManager( &m_auimgr );
+    }
 
     // New
     m_mainToolBar->Add( KICAD_MANAGER_ACTIONS::newProject );
@@ -216,10 +221,15 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
 void KICAD_MANAGER_FRAME::RecreateLauncher()
 {
     if( m_launcher )
+    {
         m_launcher->Clear();
+    }
     else
+    {
         m_launcher = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_launcher->SetAuiManager( &m_auimgr );
+    }
 
     // Add tools. Note these KICAD_MANAGER_ACTIONS are defined with a bitmap
     // suitable for menus. The icans will be changed later.

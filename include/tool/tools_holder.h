@@ -86,6 +86,17 @@ public:
      */
     virtual void RegisterUIUpdateHandler( const TOOL_ACTION& aAction,
                                           const ACTION_CONDITIONS& aConditions )
+    {
+        RegisterUIUpdateHandler( aAction.GetUIId(), aConditions );
+    }
+
+    /**
+     * Register a UI update handler for the control with ID @c aID
+     *
+     * @param aID is the control ID to register the handler for
+     * @param aConditions are the UI conditions to use for the control states
+     */
+    virtual void RegisterUIUpdateHandler( int aID, const ACTION_CONDITIONS& aConditions )
     {}
 
     /**
@@ -94,6 +105,16 @@ public:
      * @param aAction is the action to unregister the handler for
      */
     virtual void UnregisterUIUpdateHandler( const TOOL_ACTION& aAction )
+    {
+        UnregisterUIUpdateHandler( aAction.GetUIId() );
+    }
+
+    /**
+     * Unregister a UI handler for a given ID that was registered using @c RegisterUIUpdateHandler
+     *
+     * @param aID is the control ID to unregister the handler for
+     */
+    virtual void UnregisterUIUpdateHandler( int aID )
     {}
 
     /**

@@ -22,9 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
 #include <bitmaps.h>
 #include <eda_draw_frame.h>
 #include <functional>
+#include <math/util.h>
 #include <memory>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
@@ -33,22 +35,157 @@
 #include <tool/tool_event.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
+#include <widgets/bitmap_button.h>
+#include <wx/popupwin.h>
+#include <wx/renderer.h>
+
+
+ACTION_GROUP::ACTION_GROUP( std::string aName, const std::vector<const TOOL_ACTION*>& aActions )
+{
+    wxASSERT_MSG( aActions.size() > 0, "Action groups must have at least one action" );
+
+    // The default action is just the first action in the vector
+    m_actions       = aActions;
+    m_defaultAction = m_actions[0];
+
+    m_name = aName;
+    m_id   = ACTION_MANAGER::MakeActionId( m_name );
+}
+
+
+void ACTION_GROUP::SetDefaultAction( const TOOL_ACTION& aDefault )
+{
+    bool valid = std::any_of( m_actions.begin(), m_actions.end(),
+                              [&]( const TOOL_ACTION* aAction ) -> bool
+                              {
+                                  // For some reason, we can't compare the actions directly
+                                  return aAction->GetId() == aDefault.GetId();
+                              } );
+
+    wxASSERT_MSG( valid, "Action must be present in a group to be the default" );
+
+    m_defaultAction = &aDefault;
+}
+
+
+#define PALETTE_BORDER 4    // The border around the palette buttons on all sides
+#define BUTTON_BORDER  1    // The border on the sides of the buttons that touch other buttons
+
+
+ACTION_TOOLBAR_PALETTE::ACTION_TOOLBAR_PALETTE( wxWindow* aParent, bool aVertical ) :
+        wxPopupTransientWindow( aParent, wxBORDER_NONE ),
+        m_group( nullptr ),
+        m_isVertical( aVertical ),
+        m_panel( nullptr ),
+        m_mainSizer( nullptr ),
+        m_buttonSizer( nullptr )
+{
+    m_panel = new wxPanel( this, wxID_ANY );
+    m_panel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+
+    // This sizer holds the buttons for the actions
+    m_buttonSizer = new wxBoxSizer( aVertical ? wxVERTICAL : wxHORIZONTAL );
+
+    // This sizer holds the other sizer, so that a consistent border is present on all sides
+    m_mainSizer = new wxBoxSizer( aVertical ? wxVERTICAL : wxHORIZONTAL );
+    m_mainSizer->Add( m_buttonSizer, wxSizerFlags().Border( wxALL, PALETTE_BORDER ) );
+
+    m_panel->SetSizer( m_mainSizer );
+
+    Connect( wxEVT_CHAR_HOOK, wxCharEventHandler( ACTION_TOOLBAR_PALETTE::onCharHook ),
+             NULL, this );
+}
+
+
+void ACTION_TOOLBAR_PALETTE::AddAction( const TOOL_ACTION& aAction )
+{
+    wxBitmap normalBmp   = KiScaledBitmap( aAction.GetIcon(), this );
+    wxBitmap disabledBmp = normalBmp.ConvertToDisabled();
+
+    int padding = ( m_buttonSize.GetWidth() - normalBmp.GetWidth() ) / 2;
+
+    BITMAP_BUTTON* button = new BITMAP_BUTTON( m_panel, aAction.GetUIId() );
+
+    button->SetBitmap( normalBmp );
+    button->SetDisabledBitmap( disabledBmp );
+    button->SetPadding( padding );
+    button->SetToolTip( aAction.GetDescription() );
+
+    m_buttons[aAction.GetUIId()] = button;
+
+    if( m_isVertical )
+        m_buttonSizer->Add( button, wxSizerFlags().Border( wxTOP | wxBOTTOM, BUTTON_BORDER ) );
+    else
+        m_buttonSizer->Add( button, wxSizerFlags().Border( wxLEFT | wxRIGHT, BUTTON_BORDER ) );
+
+    m_buttonSizer->Layout();
+}
+
+
+void ACTION_TOOLBAR_PALETTE::EnableAction( const TOOL_ACTION& aAction, bool aEnable )
+{
+    auto it = m_buttons.find( aAction.GetUIId() );
+
+    if( it != m_buttons.end() )
+        it->second->Enable( aEnable );
+}
+
+
+void ACTION_TOOLBAR_PALETTE::CheckAction( const TOOL_ACTION& aAction, bool aCheck )
+{
+    auto it = m_buttons.find( aAction.GetUIId() );
+
+    if( it != m_buttons.end() )
+        it->second->Check( aCheck );
+}
+
+
+void ACTION_TOOLBAR_PALETTE::Popup( wxWindow* aFocus )
+{
+    m_mainSizer->Fit( m_panel );
+    SetClientSize( m_panel->GetSize() );
+
+    wxPopupTransientWindow::Popup( aFocus );
+}
+
+
+void ACTION_TOOLBAR_PALETTE::onCharHook( wxKeyEvent& aEvent )
+{
+    // Allow the escape key to dismiss this popup
+    if( aEvent.GetKeyCode() == WXK_ESCAPE )
+        Dismiss();
+    else
+        aEvent.Skip();
+}
 
 
 ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxPoint& pos,
                                 const wxSize& size, long style ) :
     wxAuiToolBar( parent, id, pos, size, style ),
-    m_toolManager( parent->GetToolManager() )
+    m_toolManager( parent->GetToolManager() ),
+    m_palette( nullptr ),
+    m_paletteTimer( nullptr ),
+    m_auiManager( nullptr )
 {
+    m_paletteTimer = new wxTimer( this );
+
     Connect( wxEVT_COMMAND_TOOL_CLICKED, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onToolEvent ),
              NULL, this );
     Connect( wxEVT_AUITOOLBAR_RIGHT_CLICK, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onToolRightClick ),
+             NULL, this );
+    Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ACTION_TOOLBAR::onMouseEvent ),
+             NULL, this );
+    Connect( wxEVT_LEFT_UP, wxMouseEventHandler( ACTION_TOOLBAR::onMouseEvent ),
+             NULL, this );
+    Connect( m_paletteTimer->GetId(), wxEVT_TIMER, wxTimerEventHandler( ACTION_TOOLBAR::onTimerDone ),
              NULL, this );
 }
 
 
 ACTION_TOOLBAR::~ACTION_TOOLBAR()
 {
+    delete m_paletteTimer;
+
     // Delete all the menus
     for( auto it = m_toolMenus.begin(); it != m_toolMenus.end(); it++ )
         delete it->second;
@@ -120,6 +257,75 @@ void ACTION_TOOLBAR::AddToolContextMenu( const TOOL_ACTION& aAction, ACTION_MENU
     }
 
     m_toolMenus[toolId] = aMenu;
+}
+
+
+void ACTION_TOOLBAR::AddGroup( ACTION_GROUP* aGroup, bool aIsToggleEntry )
+{
+    int                groupId       = aGroup->GetUIId();
+    const TOOL_ACTION* defaultAction = aGroup->GetDefaultAction();
+    wxWindow*          parent        = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
+
+    wxASSERT( defaultAction );
+
+    m_toolKinds[ groupId ]    = aIsToggleEntry;
+    m_toolActions[ groupId ]  = defaultAction;
+    m_actionGroups[ groupId ] = aGroup;
+
+    // Add the main toolbar item representing the group
+    AddTool( groupId, wxEmptyString, KiScaledBitmap( defaultAction->GetIcon(), parent ),
+             wxEmptyString, aIsToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL );
+
+    // Select the default action
+    doSelectAction( aGroup, *defaultAction );
+}
+
+
+void ACTION_TOOLBAR::SelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aAction )
+{
+    bool valid = std::any_of( aGroup->m_actions.begin(), aGroup->m_actions.end(),
+                              [&]( const TOOL_ACTION* action2 ) -> bool
+                              {
+                                  // For some reason, we can't compare the actions directly
+                                  return aAction.GetId() == action2->GetId();
+                              } );
+
+    if( valid )
+        doSelectAction( aGroup, aAction );
+}
+
+
+void ACTION_TOOLBAR::doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aAction )
+{
+    int groupId = aGroup->GetUIId();
+
+    wxAuiToolBarItem* item   = FindTool( groupId );
+    wxWindow*         parent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
+
+    if( !item )
+        return;
+
+    // Update the item information
+    item->SetShortHelp( aAction.GetDescription() );
+    item->SetBitmap( KiScaledBitmap( aAction.GetIcon(), parent ) );
+    item->SetDisabledBitmap( item->GetBitmap().ConvertToDisabled() );
+
+    // Register a new handler with the new UI conditions
+    if( m_toolManager )
+    {
+        const ACTION_CONDITIONS* cond = m_toolManager->GetActionManager()->GetCondition( aAction );
+
+        wxASSERT_MSG( cond, wxString::Format( "Missing UI condition for action %s",
+                                              aAction.GetName() ) );
+
+        m_toolManager->GetToolHolder()->UnregisterUIUpdateHandler( groupId );
+        m_toolManager->GetToolHolder()->RegisterUIUpdateHandler( groupId, *cond );
+    }
+
+    // Update the currently selected action
+    m_toolActions[ groupId ] = &aAction;
+
+    Refresh();
 }
 
 
@@ -213,13 +419,22 @@ void ACTION_TOOLBAR::onToolRightClick( wxAuiToolBarEvent& aEvent )
     if( toolId == -1 )
         return;
 
-    const auto it = m_toolMenus.find( aEvent.GetId() );
+    // Ensure that the ID used maps to a proper tool ID.
+    // If right-clicked on a group item, this is needed to get the ID of the currently selected
+    // action, since the event's ID is that of the group.
+    const auto actionIt = m_toolActions.find( toolId );
 
-    if( it == m_toolMenus.end() )
+    if( actionIt != m_toolActions.end() )
+        toolId = actionIt->second->GetUIId();
+
+    // Find the menu for the action
+    const auto menuIt = m_toolMenus.find( toolId );
+
+    if( menuIt == m_toolMenus.end() )
         return;
 
     // Update and show the menu
-    ACTION_MENU* menu = it->second;
+    ACTION_MENU* menu = menuIt->second;
     SELECTION    dummySel;
 
     if( CONDITIONAL_MENU* condMenu = dynamic_cast<CONDITIONAL_MENU*>( menu ) )
@@ -231,4 +446,195 @@ void ACTION_TOOLBAR::onToolRightClick( wxAuiToolBarEvent& aEvent )
     // Remove hovered item when the menu closes, otherwise it remains hovered even if the
     // mouse is not on the toolbar
     SetHoverItem( nullptr );
+}
+
+// The time (in milliseconds) between pressing the left mouse button and opening the palette
+#define PALETTE_OPEN_DELAY 500
+
+
+void ACTION_TOOLBAR::onMouseEvent( wxMouseEvent& aEvent )
+{
+    wxAuiToolBarItem* item = FindToolByPosition( aEvent.GetX(), aEvent.GetY() );
+
+    if( item )
+    {
+        // Ensure there is no active palette
+        if( m_palette )
+        {
+            m_palette->Hide();
+            m_palette->Destroy();
+            m_palette = nullptr;
+        }
+
+        // Start the timer if it is a left mouse click and the tool clicked is a group
+        if( aEvent.LeftDown() && ( m_actionGroups.find( item->GetId() ) != m_actionGroups.end() ) )
+            m_paletteTimer->StartOnce( PALETTE_OPEN_DELAY );
+
+        // Stop the timer if there is a left up, because that implies a click happened
+        if( aEvent.LeftUp() )
+            m_paletteTimer->Stop();
+    }
+
+    // Skip the event so wx can continue processing the mouse event
+    aEvent.Skip();
+}
+
+
+void ACTION_TOOLBAR::onPaletteEvent( wxCommandEvent& aEvent )
+{
+    if( !m_palette )
+        return;
+
+    OPT_TOOL_EVENT evt;
+    ACTION_GROUP*  group = m_palette->GetGroup();
+
+    // Find the action corresponding to the button press
+    auto actionIt = std::find_if( group->GetActions().begin(), group->GetActions().end(),
+                                  [=]( const TOOL_ACTION* aAction )
+                                  {
+                                      return aAction->GetUIId() == aEvent.GetId();
+                                  } );
+
+    if( actionIt != group->GetActions().end() )
+    {
+        const TOOL_ACTION* action = *actionIt;
+
+        // Dispatch a tool event
+        evt = action->MakeEvent();
+        evt->SetHasPosition( false );
+        m_toolManager->ProcessEvent( *evt );
+
+        // Update the main toolbar item with the selected action
+        doSelectAction( group, *action );
+    }
+
+    // Hide the palette
+    m_palette->Hide();
+    m_palette->Destroy();
+    m_palette = nullptr;
+}
+
+void ACTION_TOOLBAR::onTimerDone( wxTimerEvent& aEvent )
+{
+    // We need to search for the tool using the client coordinates
+    wxPoint mousePos = ScreenToClient( wxGetMousePosition() );
+
+    wxWindow*         parent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
+    wxAuiToolBarItem* item   = FindToolByPosition( mousePos.x, mousePos.y );
+
+    wxASSERT( m_auiManager );
+    wxASSERT( parent );
+
+    if( !item )
+        return;
+
+    // The mouse could have been moved off of the button with the group, so we test
+    // for it again to see if we are still on an item with a group.
+    const auto it = m_actionGroups.find( item->GetId() );
+
+    if( it == m_actionGroups.end() )
+        return;
+
+    ACTION_GROUP* group = it->second;
+
+    m_palette = new ACTION_TOOLBAR_PALETTE( parent, true );
+
+    // We handle the button events in the toolbar class, so connect the right handler
+    m_palette->SetGroup( group );
+    m_palette->Connect( wxEVT_BUTTON, wxCommandEventHandler( ACTION_TOOLBAR::onPaletteEvent ),
+                        NULL, this );
+
+    // This button size is used for all buttons on the toolbar
+    wxRect toolRect = GetToolRect( item->GetId() );
+    m_palette->SetButtonSize( toolRect );
+
+    // Add the actions in the group to the palette and update their state
+    for( const TOOL_ACTION* action : group->m_actions )
+    {
+        wxUpdateUIEvent evt( action->GetUIId() );
+
+        parent->ProcessWindowEvent( evt );
+
+        m_palette->AddAction( *action );
+
+        if( evt.GetSetChecked() )
+            m_palette->CheckAction( *action, evt.GetChecked() );
+
+        if( evt.GetSetEnabled() )
+            m_palette->EnableAction( *action, evt.GetEnabled() );
+    }
+
+    wxAuiPaneInfo& pane = m_auiManager->GetPane( this );
+
+    // The position for the palette window must be in screen coordinates
+    wxPoint pos( ClientToScreen( toolRect.GetPosition() ) );
+
+    // Determine the position of the top left corner of the palette window
+    switch( pane.dock_direction )
+    {
+        case wxAUI_DOCK_TOP:
+            // Top toolbars need to shift the palette window down by the toolbar padding
+            pos = ClientToScreen( toolRect.GetBottomLeft() );
+            pos += wxPoint( 0, GetToolBorderPadding() );
+            break;
+
+        case wxAUI_DOCK_BOTTOM:
+            // Bottom toolbars need to shift the palette window up by its height (1 button + border + toolbar padding)
+            pos = ClientToScreen( toolRect.GetTopLeft() );
+            pos -= wxPoint( GetToolBorderPadding(), 2*PALETTE_BORDER + toolRect.GetHeight() + GetToolBorderPadding() );
+            break;
+
+        case wxAUI_DOCK_LEFT:
+            // Left toolbars need to shift the palette window up by the toolbar padding
+            pos = ClientToScreen( toolRect.GetTopRight() );
+            pos += wxPoint( GetToolBorderPadding(), 0 );
+            break;
+
+        case wxAUI_DOCK_RIGHT:
+            // Right toolbars need to shift the palette window left by its width (1 button + border + toolbar padding)
+            pos = ClientToScreen( toolRect.GetTopLeft() );
+            pos -= wxPoint( 2*PALETTE_BORDER + toolRect.GetHeight() + GetToolBorderPadding(), 0 );
+            break;
+    }
+
+    m_palette->SetPosition( pos );
+    m_palette->Popup();
+}
+
+
+void ACTION_TOOLBAR::OnCustomRender(wxDC& aDc, const wxAuiToolBarItem& aItem,
+                                    const wxRect& aRect )
+{
+    auto it = m_actionGroups.find( aItem.GetId() );
+
+    if( it == m_actionGroups.end() )
+        return;
+
+    // Choose the color to draw the triangle
+    wxColour clr;
+
+    if( aItem.GetState() & wxAUI_BUTTON_STATE_DISABLED )
+        clr = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
+    else
+        clr = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT );
+
+    // Must set both the pen (for the outline) and the brush (for the polygon fill)
+    aDc.SetPen( wxPen( clr ) );
+    aDc.SetBrush( wxBrush( clr ) );
+
+    // Make the side length of the triangle approximately 1/5th of the bitmap
+    int sideLength = KiROUND( aRect.height / 5.0 );
+
+    // This will create a triangle with its point at the bottom right corner,
+    // and its other two corners along the right and bottom sides
+    wxPoint btmRight = aRect.GetBottomRight();
+    wxPoint topCorner( btmRight.x,              btmRight.y - sideLength );
+    wxPoint btmCorner( btmRight.x - sideLength, btmRight.y  );
+
+    wxPointList points;
+    points.Append( &btmRight );
+    points.Append( &topCorner );
+    points.Append( &btmCorner );
+
+    aDc.DrawPolygon( &points );
 }

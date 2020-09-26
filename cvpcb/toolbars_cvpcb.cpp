@@ -35,10 +35,15 @@
 void CVPCB_MAINFRAME::ReCreateHToolbar()
 {
     if( m_mainToolBar )
+    {
         m_mainToolBar->ClearToolbar();
+    }
     else
+    {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                 KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_mainToolBar->SetAuiManager( &m_auimgr );
+    }
 
     m_mainToolBar->Add( CVPCB_ACTIONS::saveAssociations );
 

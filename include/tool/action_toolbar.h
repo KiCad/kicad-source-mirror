@@ -25,14 +25,156 @@
 #define ACTION_TOOLBAR_H
 
 #include <map>
+#include <vector>
 #include <wx/bitmap.h>          // Needed for the auibar include
 #include <wx/aui/auibar.h>
+#include <wx/aui/framemanager.h>
+#include <wx/popupwin.h>
+#include <tool/action_manager.h>
+#include <tool/tool_action.h>
 #include <tool/tool_event.h>
 
 class ACTION_MENU;
+class BITMAP_BUTTON;
 class EDA_BASE_FRAME;
 class TOOL_MANAGER;
-class TOOL_ACTION;
+
+/**
+ * A group of actions that will be displayed together on a toolbar palette.
+ */
+class ACTION_GROUP
+{
+public:
+    // Make the toolbar a friend so it can easily access everything inside here
+    friend class ACTION_TOOLBAR;
+
+    ACTION_GROUP( std::string aName, const std::vector<const TOOL_ACTION*>& aActions );
+
+    /**
+     * Set the default action to use when first creating the toolbar palette icon.
+     * If no default action is provided, the default will be the first action in the
+     * vector.
+     *
+     * @param aDefault is the default action.
+     */
+    void SetDefaultAction( const TOOL_ACTION& aDefault );
+
+    /**
+     * Get the default action to use when first creating this group's toolbar palette icon.
+     */
+    const TOOL_ACTION* GetDefaultAction() const { return m_defaultAction; }
+
+    /**
+     * Get the name of the group.
+     */
+    std::string GetName() const { return m_name; }
+
+    /**
+     * Get the ID used in the UI to reference this group
+     */
+    int GetUIId() const { return m_id + TOOL_ACTION::GetBaseUIId(); }
+
+    /**
+     * Get a vector of all the actions contained inside this group.
+     */
+    const std::vector< const TOOL_ACTION*>& GetActions() const { return m_actions; }
+
+protected:
+    ///> The action ID for this action group
+    int m_id;
+
+    ///> The name of this action group
+    std::string m_name;
+
+    ///> The default action to display on the toolbar item
+    const TOOL_ACTION* m_defaultAction;
+
+    ///> The actions that compose the group
+    std::vector<const TOOL_ACTION*> m_actions;
+};
+
+
+/**
+ * A popup window that contains a row of toolbar-like buttons for the user to choose from.
+ */
+class ACTION_TOOLBAR_PALETTE : public wxPopupTransientWindow
+{
+public:
+    /**
+     * Create the palette.
+     *
+     * @param aParent is the parent window
+     * @param aVertical is true if the palette should make the buttons a vertical line,
+     *                  false for a horizonatl line.
+     */
+    ACTION_TOOLBAR_PALETTE( wxWindow* aParent, bool aVertical );
+
+    /**
+     * Add an action to the palette.
+     *
+     * @param aAction is the action to add
+     */
+    void AddAction( const TOOL_ACTION& aAction );
+
+    /**
+     * Enable the button for an action on the palette.
+     *
+     * @param aAction is the action who's button should be enabled
+     * @param aEnable is true to enable the button, false to disable
+     */
+    void EnableAction( const TOOL_ACTION& aAction, bool aEnable = true );
+
+    /**
+     * Check/Toggle the button for an action on the palette.
+     *
+     * @param aAction is the action who's button should be checked
+     * @param aCheck is true to check the button, false to uncheck
+     */
+    void CheckAction( const TOOL_ACTION& aAction, bool aCheck = true );
+
+    /**
+     * Set the size all the buttons on this palette should be.
+     * This function will automatically pad all button bitmaps to ensure this
+     * size is met.
+     *
+     * @param aSize is the requested size of the buttons
+     */
+    void SetButtonSize( wxRect& aSize ) { m_buttonSize = aSize; }
+
+    /**
+     * Popup this window
+     *
+     * @param aFocus is the window to keep focus on (if supported)
+     */
+    void Popup( wxWindow* aFocus = nullptr );
+
+    /**
+     * Set the action group that this palette contains the actions for
+     */
+    void SetGroup( ACTION_GROUP* aGroup ) { m_group = aGroup; }
+    ACTION_GROUP* GetGroup() { return m_group; }
+
+protected:
+    void onCharHook( wxKeyEvent& aEvent );
+
+protected:
+    // The group that the buttons in the palette are part of
+     ACTION_GROUP* m_group;
+
+    ///> The size each button on the toolbar should be
+    wxRect         m_buttonSize;
+
+    ///> True if the palette uses vertical buttons, false for horizontal buttons
+    bool           m_isVertical;
+
+    wxPanel*       m_panel;
+    wxBoxSizer*    m_mainSizer;
+    wxBoxSizer*    m_buttonSizer;
+
+    ///> The buttons that act as the toolbar on the palette
+    std::map<int, BITMAP_BUTTON*> m_buttons;
+};
+
 
 /**
  * ACTION_TOOLBAR
@@ -47,6 +189,13 @@ public:
                     long style = wxAUI_TB_DEFAULT_STYLE );
 
     virtual ~ACTION_TOOLBAR();
+
+    /**
+     * Set the AUI manager that this toolbar belongs to.
+     *
+     * @param aManager is the AUI manager
+     */
+    void SetAuiManager( wxAuiManager* aManager ) { m_auiManager = aManager; }
 
     /**
      * Adds a TOOL_ACTION-based button to the toolbar. After selecting the entry,
@@ -85,6 +234,23 @@ public:
     void AddToolContextMenu( const TOOL_ACTION& aAction, ACTION_MENU* aMenu );
 
     /**
+     * Add a set of actions to a toolbar as a group. One action from the group will be displayed
+     * at a time.
+     *
+     * @param aGroup is the group to add. The first action in the group will be the first shown on the toolbar.
+     * @param aIsToggleEntry makes the toolbar item a toggle entry when true
+     */
+    void AddGroup( ACTION_GROUP* aGroup, bool aIsToggleEntry = false );
+
+    /**
+     * Select an action inside a group
+     *
+     * @param aGroup is the group that contains the action
+     * @param aAction is the action inside the group
+     */
+    void SelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aAction );
+
+    /**
      * Clear the toolbar and remove all associated menus.
      */
     void ClearToolbar();
@@ -107,18 +273,46 @@ public:
     static constexpr bool CANCEL = true;
 
 protected:
+    /**
+     * Update a group toolbar item to look like a specific action.
+     *
+     * Note: This function does not verify that the action is inside the group.
+     */
+    void doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aAction );
+
+    ///> Handler for a mouse up/down event
+    void onMouseEvent( wxMouseEvent& aEvent );
+
     ///> The default tool event handler.
     void onToolEvent( wxAuiToolBarEvent& aEvent );
 
     ///> Handle a right-click on a menu item
     void onToolRightClick( wxAuiToolBarEvent& aEvent );
 
+    ///> Handle the button select inside the palette
+    void onPaletteEvent( wxCommandEvent& aEvent );
+
+    ///> Handle the palette timer triggering
+    void onTimerDone( wxTimerEvent& aEvent );
+
+    ///> Render the triangle in the lower-right corner that represents that an action pallette
+    ///> is available for an item
+    void OnCustomRender( wxDC& aDc, const wxAuiToolBarItem& aItem,
+                         const wxRect& aRect ) override;
+
 protected:
-    TOOL_MANAGER* m_toolManager;
-    std::map<int, bool>               m_toolKinds;
-    std::map<int, bool>               m_toolCancellable;
-    std::map<int, const TOOL_ACTION*> m_toolActions;
-    std::map<int, ACTION_MENU*>       m_toolMenus;
+    TOOL_MANAGER*           m_toolManager;
+    ACTION_TOOLBAR_PALETTE* m_palette;
+
+    wxTimer*      m_paletteTimer;
+    wxAuiManager* m_auiManager;
+
+    std::map<int, bool>                m_toolKinds;
+    std::map<int, bool>                m_toolCancellable;
+    std::map<int, const TOOL_ACTION*>  m_toolActions;
+    std::map<int, ACTION_MENU*>        m_toolMenus;
+
+    std::map<int, ACTION_GROUP*>       m_actionGroups;
 };
 
 #endif

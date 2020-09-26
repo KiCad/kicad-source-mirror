@@ -222,10 +222,25 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     wxWindowUpdateLocker dummy( this );
 
     if( m_mainToolBar )
+    {
         m_mainToolBar->ClearToolbar();
+    }
     else
+    {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_mainToolBar->SetAuiManager( &m_auimgr );
+
+        // The layer indicator is special, so we register a callback directly that will regenerate the
+        // bitmap instead of using the conditions system
+        auto layerIndicatorUpdate =
+            [this] ( wxUpdateUIEvent& )
+            {
+                PrepareLayerIndicator();
+            };
+
+        Bind( wxEVT_UPDATE_UI, layerIndicatorUpdate, PCB_ACTIONS::selectLayerPair.GetUIId() );
+    }
 
     // Set up toolbar
     if( Kiface().IsSingle() )
@@ -314,11 +329,16 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
     wxWindowUpdateLocker dummy( this );
 
     if( m_optionsToolBar )
+    {
         m_optionsToolBar->ClearToolbar();
+    }
     else
+    {
         m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR,
                                                wxDefaultPosition, wxDefaultSize,
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_optionsToolBar->SetAuiManager( &m_auimgr );
+    }
 
     m_optionsToolBar->Add( ACTIONS::toggleGrid,               ACTION_TOOLBAR::TOGGLE );
 
@@ -356,10 +376,43 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     wxWindowUpdateLocker dummy( this );
 
     if( m_drawToolBar )
+    {
         m_drawToolBar->ClearToolbar();
+    }
     else
+    {
         m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_drawToolBar->SetAuiManager( &m_auimgr );
+    }
+
+    // Groups contained on this toolbar
+    static ACTION_GROUP* dimensionGroup = nullptr;
+    static ACTION_GROUP* originGroup    = nullptr;
+    static ACTION_GROUP* routingGroup   = nullptr;
+
+    if( !dimensionGroup )
+    {
+        dimensionGroup = new ACTION_GROUP( "group.pcbDimensions",
+                                           { &PCB_ACTIONS::drawAlignedDimension,
+                                             &PCB_ACTIONS::drawOrthogonalDimension,
+                                             &PCB_ACTIONS::drawCenterDimension,
+                                             &PCB_ACTIONS::drawLeader } );
+    }
+
+    if( !originGroup )
+    {
+        originGroup = new ACTION_GROUP( "group.pcbOrigins",
+                                        { &PCB_ACTIONS::drillOrigin,
+                                          &PCB_ACTIONS::gridSetOrigin } );
+    }
+
+    if( !routingGroup )
+    {
+        routingGroup = new ACTION_GROUP( "group.pcbRouting",
+                                        { &PCB_ACTIONS::routeSingleTrack,
+                                          &PCB_ACTIONS::routeDiffPair } );
+    }
 
     m_drawToolBar->Add( ACTIONS::selectionTool,            ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::highlightNetTool,     ACTION_TOOLBAR::TOGGLE );
@@ -367,7 +420,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
 
     m_drawToolBar->AddScaledSeparator( this );
     m_drawToolBar->Add( PCB_ACTIONS::placeModule,          ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::routeSingleTrack,     ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->AddGroup( routingGroup,                 ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawVia,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawZone,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawRuleArea,         ACTION_TOOLBAR::TOGGLE );
@@ -379,18 +432,12 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( PCB_ACTIONS::drawArc,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawPolygon,          ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::placeText,            ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::drawAlignedDimension, ACTION_TOOLBAR::TOGGLE );
-    // TODO: re-insert when we have a multi-select tool button
-    // m_drawToolBar->Add( PCB_ACTIONS::drawOrthogonalDimension, ACTION_TOOLBAR::TOGGLE );
-    // m_drawToolBar->Add( PCB_ACTIONS::drawCenterDimension,  ACTION_TOOLBAR::TOGGLE );
-    // m_drawToolBar->Add( PCB_ACTIONS::drawLeader,           ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->AddGroup( dimensionGroup,               ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::placeTarget,          ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( ACTIONS::deleteTool,               ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->AddScaledSeparator( this );
-    // TODO: re-insert when we have a multi-select tool button
-    // m_drawToolBar->Add( PCB_ACTIONS::drillOrigin,          ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::gridSetOrigin,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->AddGroup( originGroup,                  ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( ACTIONS::measureTool,              ACTION_TOOLBAR::TOGGLE );
 
     SELECTION_TOOL* selTool   = m_toolManager->GetTool<SELECTION_TOOL>();
@@ -419,11 +466,16 @@ void PCB_EDIT_FRAME::ReCreateMicrowaveVToolbar()
     wxWindowUpdateLocker dummy(this);
 
     if( m_microWaveToolBar )
+    {
         m_microWaveToolBar->ClearToolbar();
+    }
     else
+    {
         m_microWaveToolBar = new ACTION_TOOLBAR( this, ID_MICROWAVE_V_TOOLBAR, wxDefaultPosition,
                                                  wxDefaultSize,
                                                  KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_microWaveToolBar->SetAuiManager( &m_auimgr );
+    }
 
     // Set up toolbar
     m_microWaveToolBar->Add( PCB_ACTIONS::microwaveCreateLine,          ACTION_TOOLBAR::TOGGLE );

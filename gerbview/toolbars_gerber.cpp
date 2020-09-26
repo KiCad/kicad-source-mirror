@@ -47,10 +47,15 @@ void GERBVIEW_FRAME::ReCreateHToolbar()
     // So we do not recreate them after clearing the tools.
 
     if( m_mainToolBar )
+    {
         m_mainToolBar->ClearToolbar();
+    }
     else
+    {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_mainToolBar->SetAuiManager( &m_auimgr );
+    }
 
     // Set up toolbar
     m_mainToolBar->AddTool( ID_GERBVIEW_ERASE_ALL, wxEmptyString,
@@ -101,11 +106,16 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     wxWindowUpdateLocker dummy( this );
 
     if( m_auxiliaryToolBar )
+    {
         m_auxiliaryToolBar->ClearToolbar();
+    }
     else
+    {
         m_auxiliaryToolBar = new ACTION_TOOLBAR( this, ID_AUX_TOOLBAR,
                                                  wxDefaultPosition, wxDefaultSize,
                                                  KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_auxiliaryToolBar->SetAuiManager( &m_auimgr );
+    }
 
     // Creates box to display and choose components:
     // (note, when the m_auxiliaryToolBar is recreated, tools are deleted, but controls
@@ -223,10 +233,15 @@ void GERBVIEW_FRAME::ReCreateVToolbar()
 void GERBVIEW_FRAME::ReCreateOptToolbar()
 {
     if( m_optionsToolBar )
+    {
         m_optionsToolBar->ClearToolbar();
+    }
     else
+    {
         m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_optionsToolBar->SetAuiManager( &m_auimgr );
+    }
 
     // TODO: these can be moved to the 'proper' vertical toolbar if and when there are
     // actual tools to put there. That, or I'll get around to implementing configurable

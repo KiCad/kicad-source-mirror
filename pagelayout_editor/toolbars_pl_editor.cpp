@@ -31,10 +31,15 @@
 void PL_EDITOR_FRAME::ReCreateHToolbar()
 {
     if( m_mainToolBar )
+    {
         m_mainToolBar->ClearToolbar();
+    }
     else
+    {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_mainToolBar->SetAuiManager( &m_auimgr );
+    }
 
     wxString      msg;
 
@@ -111,10 +116,15 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
 void PL_EDITOR_FRAME::ReCreateVToolbar()
 {
     if( m_drawToolBar )
+    {
         m_drawToolBar->ClearToolbar();
+    }
     else
+    {
         m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_drawToolBar->SetAuiManager( &m_auimgr );
+    }
 
     m_drawToolBar->Add( ACTIONS::selectionTool,              ACTION_TOOLBAR::TOGGLE );
 

@@ -283,31 +283,20 @@ public:
      */
     void OnMenuEvent( wxMenuEvent& event );
 
-    virtual void RegisterUIUpdateHandler( const TOOL_ACTION& aAction,
-                                          const ACTION_CONDITIONS& aConditions ) override
-    {
-        RegisterUIUpdateHandler( aAction.GetUIId(), aConditions );
-    }
-
     /**
      * Register a UI update handler for the control with ID @c aID
      *
      * @param aID is the control ID to register the handler for
      * @param aConditions are the UI conditions to use for the control states
      */
-    virtual void RegisterUIUpdateHandler( int aID, const ACTION_CONDITIONS& aConditions );
-
-    virtual void UnregisterUIUpdateHandler( const TOOL_ACTION& aAction ) override
-    {
-        UnregisterUIUpdateHandler( aAction.GetUIId() );
-    }
+    virtual void RegisterUIUpdateHandler( int aID, const ACTION_CONDITIONS& aConditions ) override;
 
     /**
      * Unregister a UI handler for a given ID that was registered using @c RegisterUIUpdateHandler
      *
      * @param aID is the control ID to unregister the handler for
      */
-    virtual void UnregisterUIUpdateHandler( int aID );
+    virtual void UnregisterUIUpdateHandler( int aID ) override;
 
     /**
      * Handles events generated when the UI is trying to figure out the current state of the UI controls

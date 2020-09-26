@@ -217,16 +217,14 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetScreen()->m_Center = false;
 
     setupTools();
+    setupUIConditions();
+
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateAuxiliaryToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
     ReCreateMicrowaveVToolbar();
-
-    // We call this after the toolbars have been created to ensure the layer widget button handler
-    // doesn't cause problems
-    setupUIConditions();
 
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
 
@@ -700,16 +698,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::zoneFill,        ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
     mgr->SetConditions( PCB_ACTIONS::zoneUnfill,      ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
 
-    // The layer indicator is special, so we register a callback directly that will regenerate the
-    // bitmap instead of using the conditions system
-    auto layerIndicatorUpdate =
-        [this] ( wxUpdateUIEvent& )
-        {
-            PrepareLayerIndicator();
-        };
-
-    Bind( wxEVT_UPDATE_UI, layerIndicatorUpdate, PCB_ACTIONS::selectLayerPair.GetUIId() );
-
 
 #define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )
 
@@ -734,6 +722,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( ACTIONS::deleteTool );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::placeModule );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::routeSingleTrack);
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::routeDiffPair);
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawVia );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawZone );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawRuleArea );
