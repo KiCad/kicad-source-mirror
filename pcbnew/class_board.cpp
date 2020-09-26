@@ -1967,17 +1967,6 @@ void BOARD::HighLightON( bool aValue )
 }
 
 
-PCB_GROUP* BOARD::TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope )
-{
-    PCB_GROUP* candidate = item->GetParentGroup();
-
-    while( candidate && candidate->GetParentGroup() && candidate->GetParentGroup() != scope )
-        candidate = candidate->GetParentGroup();
-
-    return candidate == scope ? nullptr : candidate;
-}
-
-
 wxString BOARD::GroupsSanityCheck( bool repair )
 {
     if( repair )

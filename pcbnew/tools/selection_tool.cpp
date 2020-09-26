@@ -1552,7 +1552,7 @@ bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
             return false;
     }
 
-    if( m_enteredGroup && aItem->GetParentGroup() != m_enteredGroup )
+    if( m_enteredGroup && !PCB_GROUP::WithinScope( aItem, m_enteredGroup ) )
         return false;
 
     return true;
@@ -2566,7 +2566,7 @@ void SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) c
     // If any element is a member of a group, replace those elements with the top containing group.
     for( int j = 0; j < aCollector.GetCount(); ++j )
     {
-        PCB_GROUP* aTop = board()->TopLevelGroup( aCollector[j], m_enteredGroup );
+        PCB_GROUP* aTop = PCB_GROUP::TopLevelGroup( aCollector[j], m_enteredGroup );
 
         if( aTop != NULL )
         {
@@ -2576,9 +2576,9 @@ void SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) c
                 aCollector.Remove( aCollector[j] );
             }
         }
-        else if( m_enteredGroup && aCollector[j]->GetParentGroup() != m_enteredGroup )
+        else if( m_enteredGroup && !PCB_GROUP::WithinScope( aCollector[j], m_enteredGroup ) )
         {
-            // If a group is entered, no selections of objects not in the group.
+            // If a group is entered, disallow selections of objects outside the group.
             aCollector.Remove( aCollector[j] );
         }
     }

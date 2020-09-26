@@ -69,6 +69,35 @@ void PCB_GROUP::RemoveAll()
 }
 
 
+PCB_GROUP* PCB_GROUP::TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope )
+{
+    if( item->GetParent() && item->GetParent()->Type() == PCB_MODULE_T )
+        item = item->GetParent();
+
+    PCB_GROUP* candidate = item->GetParentGroup();
+
+    while( candidate && candidate->GetParentGroup() && candidate->GetParentGroup() != scope )
+        candidate = candidate->GetParentGroup();
+
+    return candidate == scope ? nullptr : candidate;
+}
+
+
+bool PCB_GROUP::WithinScope( BOARD_ITEM* item, PCB_GROUP* scope )
+{
+    if( item->GetParent() && item->GetParent()->Type() == PCB_MODULE_T )
+        item = item->GetParent();
+
+    for( PCB_GROUP* parent = item->GetParentGroup(); parent; parent = parent->GetParentGroup() )
+    {
+        if( parent == scope )
+            return true;
+    }
+
+    return false;
+}
+
+
 wxPoint PCB_GROUP::GetPosition() const
 {
     return GetBoundingBox().Centre();

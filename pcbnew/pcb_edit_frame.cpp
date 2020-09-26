@@ -1031,6 +1031,9 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 
 void PCB_EDIT_FRAME::onBoardLoaded()
 {
+    DRC_TOOL* drcTool = m_toolManager->GetTool<DRC_TOOL>();
+    drcTool->Reset( TOOL_BASE::MODEL_RELOAD );
+
     UpdateTitle();
 
     wxFileName fn = GetBoard()->GetFileName();

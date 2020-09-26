@@ -87,6 +87,15 @@ public:
 
     void RemoveAll();
 
+    /*
+     * Searches for highest level group containing item.
+     * @param scope restricts the search to groups within the group scope.
+     * @return group containing item, if it exists, otherwise, NULL
+     */
+    static PCB_GROUP* TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope );
+
+    static bool WithinScope( BOARD_ITEM* item, PCB_GROUP* scope );
+
 #if defined( DEBUG )
     void Show( int nestLevel, std::ostream& os ) const override
     {
