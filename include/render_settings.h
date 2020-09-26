@@ -82,6 +82,17 @@ public:
         return m_activeLayers;
     }
 
+    PCB_LAYER_ID GetActiveLayer() const
+    {
+        for( int layer : m_activeLayers )
+        {
+            if( layer >= PCBNEW_LAYER_ID_START && layer < PCB_LAYER_ID_COUNT )
+                return (PCB_LAYER_ID) layer;
+        }
+
+        return UNDEFINED_LAYER;
+    }
+
     /**
      * Function ClearActiveLayers
      * Clears the list of active layers.

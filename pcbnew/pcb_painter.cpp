@@ -235,8 +235,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         return COLOR4D::CLEAR;
 
     // Hide net names in "dimmed" contrast mode
-    if( m_contrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL && IsNetnameLayer( aLayer )
-        && m_activeLayers.count( aLayer ) == 0 )
+    if( m_hiContrastEnabled && IsNetnameLayer( aLayer ) && m_activeLayers.count( aLayer ) == 0 )
         return COLOR4D::CLEAR;
 
     // Normal path: get the layer base color
@@ -530,12 +529,18 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
 
         if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags )
         {
+            int clearance;
+
+            if( m_pcbSettings.m_hiContrastEnabled )
+                clearance = aTrack->GetClearance( m_pcbSettings.GetActiveLayer() );
+            else
+                clearance = aTrack->GetClearance( ToLAYER_ID( aLayer ) );
+
             m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );
             m_gal->SetStrokeColor( color );
-            m_gal->DrawSegment( start, end,
-                                width + aTrack->GetClearance( ToLAYER_ID( aLayer ) ) * 2 );
+            m_gal->DrawSegment( start, end, width + clearance * 2 );
         }
     }
 }
