@@ -29,6 +29,7 @@
 #include <lib_arc.h>
 #include <lib_polyline.h>
 #include <lib_text.h>
+#include <sch_bus_entry.h>
 #include <sch_edit_frame.h> //COMPONENT_ORIENTATION_T
 #include <sch_io_mgr.h>
 #include <sch_junction.h>
@@ -81,6 +82,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( ::SCHEMATIC* aSchematic, ::SCH_SHEET* aRo
     loadHierarchicalSheetPins();
     loadPartsLibrary();
     loadSchematicSymbolInstances();
+    loadBusses();
     loadNets();
     // TODO Load other elements!
 
@@ -416,12 +418,48 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
 }
 
 
+void CADSTAR_SCH_ARCHIVE_LOADER::loadBusses()
+{
+    for( std::pair<BUS_ID, BUS> busPair : Schematic.Buses )
+    {
+        BUS    bus     = busPair.second;
+        bool   firstPt = true;
+        VERTEX last;
+
+        for( const VERTEX& cur : bus.Shape.Vertices )
+        {
+            if( firstPt )
+            {
+                last    = cur;
+                firstPt = false;
+                continue;
+            }
+
+            if( bus.LayerID != wxT( "NO_SHEET" ) )
+            {
+                SCH_LINE* kiBus = new SCH_LINE();
+
+                kiBus->SetStartPoint( getKiCadPoint( last.End ) );
+                kiBus->SetEndPoint( getKiCadPoint( cur.End ) );
+                kiBus->SetLayer( LAYER_BUS );
+                kiBus->SetLineWidth( getLineThickness( bus.LineCodeID ) );
+
+                last = cur;
+
+                mSheetMap.at( bus.LayerID )->GetScreen()->Append( kiBus );
+            }
+        }
+    }
+}
+
+
 void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
 {
     for( std::pair<NET_ID, NET_SCH> netPair : Schematic.Nets )
     {
-        NET_SCH  net     = netPair.second;
-        wxString netName = net.Name;
+        NET_SCH                             net     = netPair.second;
+        wxString                            netName = net.Name;
+        std::map<NETELEMENT_ID, SCH_LABEL*> netlabels;
 
         if( netName.IsEmpty() )
             netName = wxString::Format( "$%d", net.SignalNum );
@@ -452,7 +490,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             }
         }
 
-
+        //Add net name to all hierarchical pins (block terminals in CADSTAR)
         for( std::pair<NETELEMENT_ID, NET_SCH::BLOCK_TERM> blockPair : net.BlockTerminals )
         {
             NET_SCH::BLOCK_TERM blockTerm = blockPair.second;
@@ -460,6 +498,50 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
 
             if( mSheetPinMap.find( blockPinID ) != mSheetPinMap.end() )
                 mSheetPinMap.at( blockPinID )->SetText( netName );
+        }
+
+        // Load all bus entries and add net label if required
+        for( std::pair<NETELEMENT_ID, NET_SCH::BUS_TERM> busPair : net.BusTerminals )
+        {
+            NET_SCH::BUS_TERM busTerm = busPair.second;
+            BUS               bus     = Schematic.Buses.at( busTerm.BusID );
+
+            SCH_BUS_WIRE_ENTRY* busEntry =
+                    new SCH_BUS_WIRE_ENTRY( getKiCadPoint( busTerm.FirstPoint ), false );
+
+            wxPoint size =
+                    getKiCadPoint( busTerm.SecondPoint ) - getKiCadPoint( busTerm.FirstPoint );
+            busEntry->SetSize( wxSize( size.x, size.y ) );
+
+            mSheetMap.at( bus.LayerID )->GetScreen()->Append( busEntry );
+
+            if( busTerm.HasNetLabel )
+            {
+                SCH_LABEL* label = new SCH_LABEL();
+                applyTextSettings( busTerm.NetLabel.TextCodeID, busTerm.NetLabel.Alignment,
+                        busTerm.NetLabel.Justification, label );
+
+                label->SetText( netName );
+                label->SetPosition( getKiCadPoint( busTerm.SecondPoint ) );
+                label->SetVisible( true );
+                netlabels.insert( { busTerm.ID, label } );
+
+                mSheetMap.at( bus.LayerID )->GetScreen()->Append( label );
+            }
+        }
+
+
+        for( std::pair<NETELEMENT_ID, NET_SCH::DANGLER> danglerPair : net.Danglers )
+        {
+            NET_SCH::DANGLER dangler = danglerPair.second;
+
+            SCH_LABEL* label = new SCH_LABEL();
+            label->SetText( netName );
+            label->SetPosition( getKiCadPoint( dangler.Position ) );
+            label->SetVisible( true );
+            netlabels.insert( { dangler.ID, label } );
+
+            mSheetMap.at( dangler.LayerID )->GetScreen()->Append( label );
         }
 
 
@@ -479,30 +561,60 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                 conn.Path.push_back( end );
             }
 
-            bool  firstPt = true;
-            POINT last;
+            bool      firstPt  = true;
+            bool      secondPt = false;
+            POINT     last;
+            SCH_LINE* wire = nullptr;
 
             for( POINT pt : conn.Path )
             {
                 if( firstPt )
                 {
-                    last    = pt;
-                    firstPt = false;
+                    last     = pt;
+                    firstPt  = false;
+                    secondPt = true;
                     continue;
                 }
 
+                if( secondPt )
+                {
+                    secondPt = false;
+
+                    if( netlabels.find( conn.StartNode ) != netlabels.end() )
+                    {
+                        wxPoint          kiLast           = getKiCadPoint( last );
+                        wxPoint          kiCurrent        = getKiCadPoint( pt );
+                        double           wireangleDeciDeg = getPolarAngle( kiCurrent - kiLast );
+                        LABEL_SPIN_STYLE spin             = getSpinStyleDeciDeg( wireangleDeciDeg );
+                        netlabels.at( conn.StartNode )->SetLabelSpinStyle( spin );
+                    }
+                }
+
+
                 if( conn.LayerID != wxT( "NO_SHEET" ) )
                 {
-                    SCH_LINE* wire = new SCH_LINE();
+                    wire = new SCH_LINE();
 
                     wire->SetStartPoint( getKiCadPoint( last ) );
                     wire->SetEndPoint( getKiCadPoint( pt ) );
                     wire->SetLayer( LAYER_WIRE );
 
+                    if( !conn.ConnectionLineCode.IsEmpty() )
+                        wire->SetLineWidth( getLineThickness( conn.ConnectionLineCode ) );
+
                     last = pt;
 
                     mSheetMap.at( conn.LayerID )->GetScreen()->Append( wire );
                 }
+            }
+
+            if( wire && netlabels.find( conn.EndNode ) != netlabels.end() )
+            {
+                wxPoint          kiLast           = wire->GetEndPoint();
+                wxPoint          kiCurrent        = wire->GetStartPoint();
+                double           wireangleDeciDeg = getPolarAngle( kiCurrent - kiLast );
+                LABEL_SPIN_STYLE spin             = getSpinStyleDeciDeg( wireangleDeciDeg );
+                netlabels.at( conn.EndNode )->SetLabelSpinStyle( spin );
             }
         }
 
@@ -571,10 +683,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
         pin->SetUnit( gateNumber );
         pin->SetNumber( pinNum );
 
-        if( !aCadstarPart )
-            pin->SetName( pinName );
-        else if( !aCadstarPart->Definition.HidePinNames )
-            pin->SetName( pinName );
+        pin->SetName( pinName );
 
         int oDeg = (int) NormalizeAngle180( getAngleTenthDegree( term.OrientAngle ) );
 
@@ -637,6 +746,12 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
             field->SetText( aCadstarPart->Definition.Name );
 
         field->SetUnit( gateNumber );
+    }
+
+    if( aCadstarPart && aCadstarPart->Definition.HidePinNames )
+    {
+        aPart->SetShowPinNames( false );
+        aPart->SetShowPinNumbers( false );
     }
 }
 
@@ -904,6 +1019,13 @@ CADSTAR_SCH_ARCHIVE_LOADER::POINT CADSTAR_SCH_ARCHIVE_LOADER::getLocationOfNetEl
             return logUnknownNetElementError();
 
         return Schematic.Blocks.at( blockid ).Terminals.at( termid ).Position;
+    }
+    else if( aNetElementID.Contains( "D" ) ) // Dangler
+    {
+        if( aNet.Danglers.find( aNetElementID ) == aNet.Danglers.end() )
+            return logUnknownNetElementError();
+
+        return aNet.Danglers.at( aNetElementID ).Position;
     }
     else
     {
@@ -1181,8 +1303,25 @@ int CADSTAR_SCH_ARCHIVE_LOADER::getKiCadUnitNumberFromGate( const GATE_ID& aCads
 LABEL_SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyle(
         const long long& aCadstarOrientation, bool aMirror )
 {
+    double           orientationDeciDegree = getAngleTenthDegree( aCadstarOrientation );
+    LABEL_SPIN_STYLE spinStyle             = getSpinStyleDeciDeg( orientationDeciDegree );
+
+    if( aMirror )
+    {
+        spinStyle = spinStyle.RotateCCW();
+        spinStyle = spinStyle.RotateCCW();
+    }
+
+    return spinStyle;
+}
+
+
+LABEL_SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyleDeciDeg(
+        const double& aOrientationDeciDeg )
+{
     LABEL_SPIN_STYLE spinStyle = LABEL_SPIN_STYLE::LEFT;
-    int              oDeg = (int) NormalizeAngle180( getAngleTenthDegree( aCadstarOrientation ) );
+
+    int oDeg = (int) NormalizeAngle180( aOrientationDeciDeg );
 
     if( oDeg >= -450 && oDeg <= 450 )
         spinStyle = LABEL_SPIN_STYLE::RIGHT; // 0deg
@@ -1192,13 +1331,6 @@ LABEL_SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyle(
         spinStyle = LABEL_SPIN_STYLE::LEFT; // 180deg
     else
         spinStyle = LABEL_SPIN_STYLE::UP; // 270deg
-
-
-    if( aMirror )
-    {
-        spinStyle = spinStyle.RotateCCW();
-        spinStyle = spinStyle.RotateCCW();
-    }
 
     return spinStyle;
 }

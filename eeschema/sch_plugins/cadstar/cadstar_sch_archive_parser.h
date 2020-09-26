@@ -230,6 +230,16 @@ public:
 
     struct SYMBOL
     {
+        struct PIN_NUM
+        {
+            TERMINAL_ID        TerminalID;
+            long               PinNum;
+            bool               HasLocation = false;
+            ATTRIBUTE_LOCATION AttrLoc;
+
+            void Parse( XNODE* aNode );
+        };
+
         SYMBOL_ID     ID;
         SYMDEF_ID     SymdefID;
         LAYER_ID      LayerID; ///< Sheet on which symbol is located
@@ -259,6 +269,7 @@ public:
 
         std::map<TERMINAL_ID, SYMPINNAME_LABEL> PinLabels;
         std::map<TERMINAL_ID, SYMPINNAME_LABEL> PinNames;
+        std::map<TERMINAL_ID, PIN_NUM>          PinNumbers;
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
 
         void Parse( XNODE* aNode );
@@ -355,6 +366,19 @@ public:
             void Parse( XNODE* aNode );
         };
 
+
+        struct DANGLER ///< "DANGLER" nodename (represents a dangling wire)
+        {
+            NETELEMENT_ID   ID; ///< First character "D"
+            TERMINALCODE_ID TerminalCodeID;
+            LAYER_ID        LayerID;
+            POINT           Position;
+            bool            HasNetLabel = false;
+            SIGLOC          NetLabel;
+
+            void Parse( XNODE* aNode );
+        };
+
         struct CONNECTION_SCH : CADSTAR_ARCHIVE_PARSER::NET::CONNECTION ///< "CONN" nodename
         {
             LAYER_ID           LayerID; ///< Sheet on which the connection is drawn
@@ -370,6 +394,7 @@ public:
         std::map<NETELEMENT_ID, SYM_TERM>     Terminals;
         std::map<NETELEMENT_ID, BUS_TERM>     BusTerminals;
         std::map<NETELEMENT_ID, BLOCK_TERM>   BlockTerminals;
+        std::map<NETELEMENT_ID, DANGLER>      Danglers;
         std::vector<CONNECTION_SCH>           Connections;
 
         void Parse( XNODE* aNode ) override;

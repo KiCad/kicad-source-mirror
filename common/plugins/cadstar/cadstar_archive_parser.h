@@ -944,11 +944,12 @@ public:
                 void Parse( XNODE* aNode );
             };
 
-            wxString Name;         ///< This name can be different to the PART name
-            bool     HidePinNames; ///< Specifies whether to display the pin names/indentifier in
-                                   ///< the schematic symbol or not. E.g. it is useful to display
-                                   ///< pin name information for integrated circuits but less so
-                                   ///< for resistors and capacitors. (subnode HIDEPINNAMES)
+            wxString Name; ///< This name can be different to the PART name
+            bool     HidePinNames =
+                    false; ///< Specifies whether to display the pin names/indentifier in
+                           ///< the schematic symbol or not. E.g. it is useful to display
+                           ///< pin name information for integrated circuits but less so
+                           ///< for resistors and capacitors. (subnode HIDEPINNAMES)
 
             long MaxPinCount =
                     UNDEFINED_VALUE; ///< Optional parameter which is used for specifying the number
@@ -992,6 +993,8 @@ public:
                                                   ///< Therefore, PART_PIN is only included for
                                                   ///< completeness of the parser, but won't be used
 
+        bool HidePinNames = false; ///< This seems to be a dupplicate of DEFINITION::HidePinNames
+                                   ///< Possibly only used in older file formats?
 
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues; ///< Some attributes are defined
                                                                  ///< within the part definition,

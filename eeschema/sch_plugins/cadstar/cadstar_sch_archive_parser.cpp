@@ -477,6 +477,28 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMPINNAME_LABEL::Parse( XNODE* aNode )
 }
 
 
+void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::PIN_NUM::Parse( XNODE* aNode )
+{
+    wxCHECK( aNode->GetName() == wxT( "PINNUM" ), );
+
+    TerminalID = GetXmlAttributeIDLong( aNode, 0 );
+    PinNum     = GetXmlAttributeIDLong( aNode, 1 );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        if( cNode->GetName() == wxT( "ATTRLOC" ) )
+        {
+            AttrLoc.Parse( cNode );
+            HasLocation = true;
+        }
+        else
+            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "ATTR" ) );
+    }
+}
+
+
 void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOLVARIANT::Parse( XNODE* aNode )
 {
     wxCHECK( aNode->GetName() == wxT( "SYMBOLVARIANT" ), );
@@ -602,6 +624,12 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::Parse( XNODE* aNode )
             SYMPINNAME_LABEL sympinname;
             sympinname.Parse( cNode );
             PinNames.insert( std::make_pair( sympinname.TerminalID, sympinname ) );
+        }
+        else if( cNodeName == wxT( "PINNUM" ) )
+        {
+            PIN_NUM pinNum;
+            pinNum.Parse( cNode );
+            PinNumbers.insert( std::make_pair( pinNum.TerminalID, pinNum ) );
         }
         else if( cNodeName == wxT( "ATTR" ) )
         {
@@ -799,7 +827,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::BUS_TERM::Parse( XNODE* aNode )
             }
             else if( !secondPointParsed )
             {
-                FirstPoint.Parse( cNode );
+                SecondPoint.Parse( cNode );
                 secondPointParsed = true;
             }
             else
@@ -909,6 +937,12 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::Parse( XNODE* aNode )
             bt.Parse( cNode );
             BlockTerminals.insert( std::make_pair( bt.ID, bt ) );
         }
+        else if( cNodeName == wxT( "DANGLER" ) )
+        {
+            DANGLER dang;
+            dang.Parse( cNode );
+            Danglers.insert( std::make_pair( dang.ID, dang ) );
+        }
         else if( cNodeName == wxT( "CONN" ) )
         {
             CONNECTION_SCH conn;
@@ -998,10 +1032,44 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SCHEMATIC::Parse( XNODE* aNode )
     }
 }
 
+
 void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::JUNCTION_SCH::Parse( XNODE* aNode )
 {
     CADSTAR_ARCHIVE_PARSER::NET::JUNCTION::Parse( aNode );
 
     TerminalCodeID = GetXmlAttributeIDString( aNode, 1 );
     LayerID        = GetXmlAttributeIDString( aNode, 2 );
+}
+
+
+void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::DANGLER::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "DANGLER" ) );
+
+    ID             = GetXmlAttributeIDString( aNode, 0 );
+    TerminalCodeID = GetXmlAttributeIDString( aNode, 1 );
+    LayerID        = GetXmlAttributeIDString( aNode, 2 );
+
+    XNODE* cNode          = aNode->GetChildren();
+    bool   positionParsed = false;
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        wxString cNodeName = cNode->GetName();
+
+        if( cNodeName == wxT( "SIGLOC" ) )
+        {
+            NetLabel.Parse( cNode );
+            HasNetLabel = true;
+        }
+        else if( !positionParsed && cNodeName == wxT( "PT" ) )
+        {
+            Position.Parse( cNode );
+            positionParsed = true;
+        }
+        else
+        {
+            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
+    }
 }

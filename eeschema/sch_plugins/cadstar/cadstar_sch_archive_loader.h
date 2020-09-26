@@ -95,6 +95,7 @@ private:
     void loadHierarchicalSheetPins();
     void loadPartsLibrary();
     void loadSchematicSymbolInstances();
+    void loadBusses();
     void loadNets();
 
     //Helper Functions for loading sheets
@@ -140,6 +141,7 @@ private:
     // Helper Functions for obtaining individual elements as KiCad elements:
     int              getKiCadUnitNumberFromGate( const GATE_ID& aCadstarGateID );
     LABEL_SPIN_STYLE getSpinStyle( const long long& aCadstarOrientation, bool aMirror );
+    LABEL_SPIN_STYLE getSpinStyleDeciDeg( const double& aOrientationDeciDeg );
 
     void applyTextSettings( const TEXTCODE_ID& aCadstarTextCodeID,
             const ALIGNMENT& aCadstarAlignment, const JUSTIFICATION& aCadstarJustification,

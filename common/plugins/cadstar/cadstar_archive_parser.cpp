@@ -1516,7 +1516,13 @@ void CADSTAR_ARCHIVE_PARSER::PART::Parse( XNODE* aNode )
         wxString cNodeName = cNode->GetName();
 
         if( cNodeName == wxT( "VERSION" ) )
+        {
             Version = GetXmlAttributeIDLong( cNode, 0 );
+        }
+        else if( cNodeName == wxT( "HIDEPINNAMES" ) )
+        {
+            HidePinNames = true;
+        }
         else if( cNodeName == wxT( "PARTDEFINITION" ) )
         {
             Definition.Parse( cNode );
