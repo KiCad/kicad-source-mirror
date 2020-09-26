@@ -1491,10 +1491,18 @@ bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
         break;
 
     case PCB_PAD_T:
+    {
         if( !m_filter.pads )
             return false;
 
+        // Parent footprint locking should apply to pads also
+        D_PAD* pad = static_cast<D_PAD*>( aItem );
+
+        if( !m_filter.lockedItems && pad->GetParent() && pad->GetParent()->IsLocked() )
+            return false;
+
         break;
+    }
 
     case PCB_TRACE_T:
     case PCB_ARC_T:
@@ -1917,14 +1925,6 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         if( aItem->Type() == PCB_PAD_T )
         {
             auto pad = static_cast<const D_PAD*>( aItem );
-
-            // In pcbnew, locked modules prevent individual pad selection.
-            // In modedit, we don't enforce this as the module is assumed to be edited by design.
-            if( !m_editModules && !checkVisibilityOnly )
-            {
-                if( pad->GetParent() && pad->GetParent()->IsLocked() )
-                    return false;
-            }
 
             // Check render mode (from the Items tab) first
             switch( pad->GetAttribute() )
