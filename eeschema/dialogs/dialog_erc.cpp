@@ -311,7 +311,7 @@ void DIALOG_ERC::testErc( REPORTER& aReporter )
     m_parent->GetCanvas()->Refresh();
 
     // Display message
-    aReporter.ReportTail( _( "Finished" ), RPT_SEVERITY_INFO );
+    aReporter.ReportTail( _( "Finished.\n" ), RPT_SEVERITY_INFO );
 }
 
 
