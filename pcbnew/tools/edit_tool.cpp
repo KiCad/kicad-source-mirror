@@ -1637,9 +1637,6 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 
     if( !selection.Empty() )
     {
-        m_statusPopup->SetText( _( "Selection copied" ) );
-        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-
         std::vector<BOARD_ITEM*> items;
 
         for( EDA_ITEM* item : selection )
@@ -1650,8 +1647,7 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 
         io.SetBoard( board() );
         io.SaveSelection( selection, m_editModules );
-        m_statusPopup->Expire( 800 );
-        m_statusPopup->Show();
+        frame()->SetStatusText( _( "Selection copied" ) );
     }
 
     frame()->PopTool( tool );
