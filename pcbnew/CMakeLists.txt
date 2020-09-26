@@ -252,6 +252,7 @@ set( PCBNEW_DRC_SRCS
     drc/drc_test_provider_silk_to_pad.cpp
     drc/drc_test_provider_silk_to_silk.cpp
     drc/drc_test_provider_matched_length.cpp
+    drc/drc_test_provider_diff_pair_coupling.cpp
     )
 
 set( PCBNEW_NETLIST_SRCS
