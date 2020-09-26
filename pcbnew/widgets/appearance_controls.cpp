@@ -1882,6 +1882,10 @@ void APPEARANCE_CONTROLS::rebuildNets()
     COLOR_SETTINGS* theme   = m_frame->GetColorSettings();
     COLOR4D         bgColor = theme->GetColor( LAYER_PCB_BACKGROUND );
 
+    // If the board isn't fully loaded, we can't yet rebuild
+    if( !board->GetProject() )
+        return;
+
     KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
             m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings() );
 

@@ -64,7 +64,7 @@ void DRC_TOOL::Reset( RESET_REASON aReason )
         m_drcEngine = m_pcb->GetDesignSettings().m_DRCEngine;
     }
 
-    if( aReason == MODEL_RELOAD )
+    if( aReason == MODEL_RELOAD && m_pcb->GetProject() )
     {
         try
         {

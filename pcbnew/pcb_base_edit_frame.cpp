@@ -142,22 +142,6 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
 
     PCB_BASE_FRAME::SetBoard( aBoard );
 
-    if( new_board )
-    {
-        BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
-        bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( aBoard, &bds );
-
-        try
-        {
-            bds.m_DRCEngine->InitEngine( GetDesignRulesPath() );
-        }
-        catch( PARSE_ERROR& pe )
-        {
-            // TODO: We could redirect to Board Setup here and report the error.  Or we could
-            // wait till they run DRC or do an Inspect Clearance.  Not sure which is better....
-        }
-    }
-
     GetCanvas()->GetGAL()->SetGridOrigin( VECTOR2D( aBoard->GetDesignSettings().m_GridOrigin ) );
 
     // update the tool manager with the new board and its view.
@@ -170,7 +154,22 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
                                        GetCanvas()->GetViewControls(), config(), this );
 
         if( new_board )
+        {
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
+            BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
+            bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( aBoard, &bds );
+
+            try
+            {
+                bds.m_DRCEngine->InitEngine( GetDesignRulesPath() );
+            }
+            catch( PARSE_ERROR& pe )
+            {
+                // TODO: We could redirect to Board Setup here and report the error.  Or we could
+                // wait till they run DRC or do an Inspect Clearance.  Not sure which is better....
+            }
+        }
     }
 }
 
