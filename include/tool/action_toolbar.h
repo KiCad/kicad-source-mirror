@@ -280,8 +280,17 @@ protected:
      */
     void doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aAction );
 
+    /**
+     * Popup the ACTION_TOOLBAR_PALETTE associated with the ACTION_GROUP of the
+     * given toolbar item.
+     */
+    void popupPalette( wxAuiToolBarItem* aItem );
+
     ///> Handler for a mouse up/down event
-    void onMouseEvent( wxMouseEvent& aEvent );
+    void onMouseClick( wxMouseEvent& aEvent );
+
+    ///> Handler for a mouse motion event
+    void onMouseMotion( wxMouseEvent& aEvent );
 
     ///> The default tool event handler.
     void onToolEvent( wxAuiToolBarEvent& aEvent );
@@ -301,11 +310,13 @@ protected:
                          const wxRect& aRect ) override;
 
 protected:
+    // Items used to determine when the palette should be opened after a group item is pressed
+    bool     m_paletteMoving;
+    wxTimer* m_paletteTimer;
+
+    wxAuiManager*           m_auiManager;
     TOOL_MANAGER*           m_toolManager;
     ACTION_TOOLBAR_PALETTE* m_palette;
-
-    wxTimer*      m_paletteTimer;
-    wxAuiManager* m_auiManager;
 
     std::map<int, bool>                m_toolKinds;
     std::map<int, bool>                m_toolCancellable;

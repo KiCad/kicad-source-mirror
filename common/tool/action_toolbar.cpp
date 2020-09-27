@@ -162,10 +162,11 @@ void ACTION_TOOLBAR_PALETTE::onCharHook( wxKeyEvent& aEvent )
 ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxPoint& pos,
                                 const wxSize& size, long style ) :
     wxAuiToolBar( parent, id, pos, size, style ),
-    m_toolManager( parent->GetToolManager() ),
-    m_palette( nullptr ),
+    m_paletteMoving( false ),
     m_paletteTimer( nullptr ),
-    m_auiManager( nullptr )
+    m_auiManager( nullptr ),
+    m_toolManager( parent->GetToolManager() ),
+    m_palette( nullptr )
 {
     m_paletteTimer = new wxTimer( this );
 
@@ -173,9 +174,11 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
              NULL, this );
     Connect( wxEVT_AUITOOLBAR_RIGHT_CLICK, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onToolRightClick ),
              NULL, this );
-    Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ACTION_TOOLBAR::onMouseEvent ),
+    Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ),
              NULL, this );
-    Connect( wxEVT_LEFT_UP, wxMouseEventHandler( ACTION_TOOLBAR::onMouseEvent ),
+    Connect( wxEVT_LEFT_UP, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ),
+             NULL, this );
+    Connect( wxEVT_MOTION, wxMouseEventHandler( ACTION_TOOLBAR::onMouseMotion ),
              NULL, this );
     Connect( m_paletteTimer->GetId(), wxEVT_TIMER, wxTimerEventHandler( ACTION_TOOLBAR::onTimerDone ),
              NULL, this );
@@ -452,7 +455,7 @@ void ACTION_TOOLBAR::onToolRightClick( wxAuiToolBarEvent& aEvent )
 #define PALETTE_OPEN_DELAY 500
 
 
-void ACTION_TOOLBAR::onMouseEvent( wxMouseEvent& aEvent )
+void ACTION_TOOLBAR::onMouseClick( wxMouseEvent& aEvent )
 {
     wxAuiToolBarItem* item = FindToolByPosition( aEvent.GetX(), aEvent.GetY() );
 
@@ -466,17 +469,50 @@ void ACTION_TOOLBAR::onMouseEvent( wxMouseEvent& aEvent )
             m_palette = nullptr;
         }
 
-        // Start the timer if it is a left mouse click and the tool clicked is a group
+        // Start the popup conditions if it is a left mouse click and the tool clicked is a group
         if( aEvent.LeftDown() && ( m_actionGroups.find( item->GetId() ) != m_actionGroups.end() ) )
+        {
+            m_paletteMoving = true;
             m_paletteTimer->StartOnce( PALETTE_OPEN_DELAY );
+        }
 
-        // Stop the timer if there is a left up, because that implies a click happened
+        // Clear the popup conditions if it is a left up, because that implies a click happened
         if( aEvent.LeftUp() )
+        {
+            m_paletteMoving = false;
             m_paletteTimer->Stop();
+        }
     }
 
     // Skip the event so wx can continue processing the mouse event
     aEvent.Skip();
+}
+
+
+void ACTION_TOOLBAR::onMouseMotion( wxMouseEvent& aEvent )
+{
+    if( m_paletteMoving )
+    {
+        wxAuiToolBarItem* item = FindToolByPosition( aEvent.GetX(), aEvent.GetY() );
+
+        if( item )
+            popupPalette( item );
+    }
+
+    // Skip the event so wx can continue processing the mouse event
+    aEvent.Skip();
+}
+
+
+void ACTION_TOOLBAR::onTimerDone( wxTimerEvent& aEvent )
+{
+    // We need to search for the tool using the client coordinates
+    wxPoint mousePos = ScreenToClient( wxGetMousePosition() );
+
+    wxAuiToolBarItem* item = FindToolByPosition( mousePos.x, mousePos.y );
+
+    if( item )
+        popupPalette( item );
 }
 
 
@@ -514,23 +550,20 @@ void ACTION_TOOLBAR::onPaletteEvent( wxCommandEvent& aEvent )
     m_palette = nullptr;
 }
 
-void ACTION_TOOLBAR::onTimerDone( wxTimerEvent& aEvent )
-{
-    // We need to search for the tool using the client coordinates
-    wxPoint mousePos = ScreenToClient( wxGetMousePosition() );
 
-    wxWindow*         parent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
-    wxAuiToolBarItem* item   = FindToolByPosition( mousePos.x, mousePos.y );
+void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
+{
+    // Clear all popup conditions
+    m_paletteMoving = false;
+    m_paletteTimer->Stop();
+
+    wxWindow* parent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
 
     wxASSERT( m_auiManager );
     wxASSERT( parent );
 
-    if( !item )
-        return;
-
-    // The mouse could have been moved off of the button with the group, so we test
-    // for it again to see if we are still on an item with a group.
-    const auto it = m_actionGroups.find( item->GetId() );
+    // Ensure the item we are using for the palette has a group associated with it.
+    const auto it = m_actionGroups.find( aItem->GetId() );
 
     if( it == m_actionGroups.end() )
         return;
@@ -544,8 +577,8 @@ void ACTION_TOOLBAR::onTimerDone( wxTimerEvent& aEvent )
     m_palette->Connect( wxEVT_BUTTON, wxCommandEventHandler( ACTION_TOOLBAR::onPaletteEvent ),
                         NULL, this );
 
-    // This button size is used for all buttons on the toolbar
-    wxRect toolRect = GetToolRect( item->GetId() );
+    // This button size is used for all buttons on the palette
+    wxRect toolRect = GetToolRect( aItem->GetId() );
     m_palette->SetButtonSize( toolRect );
 
     // Add the actions in the group to the palette and update their state
