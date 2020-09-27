@@ -32,6 +32,7 @@
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
 #include <tools/ee_actions.h>
+#include <tools/ee_selection_tool.h>
 
 /* Create  the main Horizontal Toolbar for the schematic editor
  */
@@ -175,6 +176,11 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,   ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( EE_ACTIONS::toggleHiddenPins, ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( EE_ACTIONS::toggleForceHV,    ACTION_TOOLBAR::TOGGLE );
+
+    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+    std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
+    gridMenu->Add( ACTIONS::gridProperties );
+    m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
 
     m_optionsToolBar->Realize();
 }
