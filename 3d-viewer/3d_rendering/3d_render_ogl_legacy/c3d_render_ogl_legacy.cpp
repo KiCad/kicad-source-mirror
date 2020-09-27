@@ -1246,7 +1246,8 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot, boo
     {
         const bool isIntersected = ( module == m_currentIntersectedBoardItem );
 
-        if( !isIntersected &&
+        if( m_boardAdapter.GetFlag( FL_USE_SELECTION ) &&
+            !isIntersected &&
             ( ( aRenderSelectedOnly && !module->IsSelected() ) ||
               ( !aRenderSelectedOnly && module->IsSelected() ) ) )
             continue;
@@ -1280,7 +1281,9 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot, boo
 void C3D_RENDER_OGL_LEGACY::render_3D_models( bool aRenderTopOrBot,
                                               bool aRenderTransparentOnly )
 {
-    render_3D_models_selected( aRenderTopOrBot, aRenderTransparentOnly, true );
+    if( m_boardAdapter.GetFlag( FL_USE_SELECTION ) )
+        render_3D_models_selected( aRenderTopOrBot, aRenderTransparentOnly, true );
+
     render_3D_models_selected( aRenderTopOrBot, aRenderTransparentOnly, false );
 }
 

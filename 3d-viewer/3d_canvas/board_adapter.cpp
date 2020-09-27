@@ -110,6 +110,8 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     SetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE, false );
     SetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE, false );
 
+    SetFlag( FL_USE_SELECTION, true );
+
     m_BgColorBot         = SFVEC4F( 0.4, 0.4, 0.5, 1.0 );
     m_BgColorTop         = SFVEC4F( 0.8, 0.8, 0.9, 1.0 );
     m_BoardBodyColor     = SFVEC4F( 0.4, 0.4, 0.5, 0.9 );

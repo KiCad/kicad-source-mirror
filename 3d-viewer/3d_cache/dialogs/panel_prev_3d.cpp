@@ -90,6 +90,8 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
 
     loadCommonSettings();
 
+    m_boardAdapter.SetFlag( FL_USE_SELECTION, false );
+
     // Create the manager
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( m_dummyBoard, nullptr, nullptr, nullptr, this );
