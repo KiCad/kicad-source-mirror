@@ -60,13 +60,13 @@ bool exprFromTo( LIBEVAL::CONTEXT* aCtx, void* self )
     }
 
     int r =0 ;
-    
+
     if( ftCache->IsOnFromToPath( static_cast<BOARD_CONNECTED_ITEM*>( item ),
         argFrom->AsString(), argTo->AsString() ) )
     {
         result->Set(1.0);
         r = 1;
-    
+
     }
 
     /*printf("isonfromto %p %s %s -> %d\n", static_cast<BOARD_CONNECTED_ITEM*>( item ),
@@ -77,7 +77,7 @@ bool exprFromTo( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
-static void onLayer( LIBEVAL::CONTEXT* aCtx, void *self )
+static void existsOnLayer( LIBEVAL::CONTEXT* aCtx, void *self )
 {
     PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
@@ -94,7 +94,7 @@ static void onLayer( LIBEVAL::CONTEXT* aCtx, void *self )
     if( !arg )
     {
         aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
-                                             wxT( "onLayer()" ) ) );
+                                             wxT( "existsOnLayer()" ) ) );
         return;
     }
 
@@ -342,7 +342,7 @@ PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 void PCB_EXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
                         {
     m_funcs.clear();
-    RegisterFunc( "onLayer('x')", onLayer );
+                            registerFunc( "existsOnLayer('x')", existsOnLayer );
     RegisterFunc( "isPlated()", isPlated );
     RegisterFunc( "insideCourtyard('x')", insideCourtyard );
     RegisterFunc( "insideArea('x')", insideArea );

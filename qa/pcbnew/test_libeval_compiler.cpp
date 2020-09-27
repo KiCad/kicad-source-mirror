@@ -71,7 +71,7 @@ const static std::vector<EXPR_TO_TEST> simpleExpressions = {
 
 
 const static std::vector<EXPR_TO_TEST> introspectionExpressions = {
-    { "A.type == 'Pad' && B.type == 'Pad' && (A.onLayer('F.Cu'))", false, VAL( 0.0 ) },
+    { "A.type == 'Pad' && B.type == 'Pad' && (A.existsOnLayer('F.Cu'))", false, VAL( 0.0 ) },
     { "A.Width > B.Width", false, VAL( 0.0 ) },
     { "A.Width + B.Width", false, VAL( Mils2iu(10) + Mils2iu(20) ) },
     { "A.Netclass", false, VAL( "HV" ) },

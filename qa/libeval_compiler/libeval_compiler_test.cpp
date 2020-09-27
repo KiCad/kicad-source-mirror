@@ -98,7 +98,7 @@ int main( int argc, char *argv[] )
     trackB.SetWidth( Mils2iu( 20 ));
 
 //    testEvalExpr( "A.onlayer('F.Cu') || A.onlayer('B.Cu')", VAL( 1.0 ), false, &trackA, &trackB );
-    testEvalExpr( "A.type == 'Pad' && B.type == 'Pad' && (A.onLayer('F.Cu'))", VAL( 0.0 ), false, &trackA, &trackB );
+    testEvalExpr( "A.type == 'Pad' && B.type == 'Pad' && (A.existsOnLayer('F.Cu'))", VAL( 0.0 ), false, &trackA, &trackB );
         return 0;
     testEvalExpr( "A.Width > B.Width", VAL( 0.0 ), false, &trackA, &trackB );
     testEvalExpr( "A.Width + B.Width", VAL( Mils2iu(10) + Mils2iu(20) ), false, &trackA, &trackB );
