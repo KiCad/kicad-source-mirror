@@ -39,8 +39,10 @@
  * @brief OGL_SetMaterial - Set OpenGL materials
  * @param aMaterial: a material structure with parameters to set
  * @param aOpacity: main model opacity 0.0 full transparente, 1.0 full opaque
+ * @param aUseSelectedMaterial: if material should be set for selection mode
+ * @param aSelectionColor: material to use for selection in case it is enabled
  */
-void OGL_SetMaterial( const SMATERIAL & aMaterial, float aOpacity );
+void OGL_SetMaterial( const SMATERIAL & aMaterial, float aOpacity, bool aUseSelectedMaterial = false, SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) );
 
 
 /**

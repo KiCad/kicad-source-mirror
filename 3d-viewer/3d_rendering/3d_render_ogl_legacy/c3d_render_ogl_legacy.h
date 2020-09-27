@@ -228,6 +228,8 @@ private:
 
     void set_layer_material( PCB_LAYER_ID aLayerID );
     SFVEC4F get_layer_color( PCB_LAYER_ID aLayerID );
+
+    SFVEC3F m_selectionColor;
 };
 
 #endif // C3D_RENDER_OGL_LEGACY_H_

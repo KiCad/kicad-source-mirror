@@ -142,14 +142,14 @@ GLuint OGL_LoadTexture( const CIMAGE &aImage )
 }
 
 
-void OGL_SetMaterial( const SMATERIAL & aMaterial, float aOpacity )
+void OGL_SetMaterial( const SMATERIAL & aMaterial, float aOpacity, bool aUseSelectedMaterial, SFVEC3F aSelectionColor )
 {
-    const SFVEC4F ambient  = SFVEC4F( aMaterial.m_Ambient,  1.0f );
+    const SFVEC4F ambient  = SFVEC4F( aMaterial.m_Ambient, 1.0f );
 
     // !TODO: at this moment, diffuse color is added via
     // glEnableClientState( GL_COLOR_ARRAY ) so this line may has no effect
     // but can be used for optimization
-    const SFVEC4F diffuse  = SFVEC4F( aMaterial.m_Diffuse,
+    const SFVEC4F diffuse  = SFVEC4F( aUseSelectedMaterial?aSelectionColor:aMaterial.m_Diffuse,
                                       ( 1.0f - aMaterial.m_Transparency ) * aOpacity );
     const SFVEC4F specular = SFVEC4F( aMaterial.m_Specular, 1.0f );
     const SFVEC4F emissive = SFVEC4F( aMaterial.m_Emissive, 1.0f );

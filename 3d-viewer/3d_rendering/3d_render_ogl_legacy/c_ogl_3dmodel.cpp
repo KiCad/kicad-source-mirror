@@ -395,7 +395,7 @@ void C_OGL_3DMODEL::EndDrawMulti()
 }
 
 
-void C_OGL_3DMODEL::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMaterial ) const
+void C_OGL_3DMODEL::Draw(bool aTransparent, float aOpacity, bool aUseSelectedMaterial , SFVEC3F aSelectionColor ) const
 {
     if( aOpacity <= FLT_EPSILON )
         return;
@@ -418,17 +418,11 @@ void C_OGL_3DMODEL::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMa
     glTexCoordPointer( 2, GL_FLOAT, sizeof( VERTEX ),
                        reinterpret_cast<const void*>( offsetof( VERTEX, m_tex_uv ) ) );
 
-    if( aUseSelectedMaterial )
-        aOpacity = aOpacity * 0.75f;
-
     const SFVEC4F param = SFVEC4F( 1.0f, 1.0f, 1.0f, aOpacity );
 
     glTexEnvfv( GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, (const float*)&param.x );
 
     // BeginDrawMulti();
-
-    if( aUseSelectedMaterial )
-        OGL_SetDiffuseOnlyMaterial( SFVEC3F( 0.0f, 1.0f, 0.0f ), aOpacity );
 
     for( auto& mat : m_materials )
     {
@@ -436,29 +430,26 @@ void C_OGL_3DMODEL::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMa
             ( aOpacity >= 1.0f ) )
             continue;
 
-        if( !aUseSelectedMaterial )
+        switch( m_material_mode )
         {
-            switch( m_material_mode )
-            {
-                case MATERIAL_MODE::NORMAL:
-                    OGL_SetMaterial( mat, aOpacity );
-                break;
+            case MATERIAL_MODE::NORMAL:
+                OGL_SetMaterial( mat, aOpacity, aUseSelectedMaterial, aSelectionColor );
+            break;
 
-                case MATERIAL_MODE::DIFFUSE_ONLY:
-                    OGL_SetDiffuseOnlyMaterial( mat.m_Diffuse, aOpacity );
-                break;
+            case MATERIAL_MODE::DIFFUSE_ONLY:
+                OGL_SetDiffuseOnlyMaterial( mat.m_Diffuse, aOpacity );
+            break;
 
-                case MATERIAL_MODE::CAD_MODE:
-                    OGL_SetDiffuseOnlyMaterial( MaterialDiffuseToColorCAD( mat.m_Diffuse ), aOpacity );
-                break;
+            case MATERIAL_MODE::CAD_MODE:
+                OGL_SetDiffuseOnlyMaterial( MaterialDiffuseToColorCAD( mat.m_Diffuse ), aOpacity );
+            break;
 
-                default:
-                break;
-            }
+            default:
+            break;
         }
 
-      glDrawElements( GL_TRIANGLES, mat.m_render_idx_count, m_index_buffer_type,
-                      reinterpret_cast<const void*>( mat.m_render_idx_buffer_offset ) );
+        glDrawElements( GL_TRIANGLES, mat.m_render_idx_count, m_index_buffer_type,
+                        reinterpret_cast<const void*>( mat.m_render_idx_buffer_offset ) );
     }
 
     // EndDrawMulti();

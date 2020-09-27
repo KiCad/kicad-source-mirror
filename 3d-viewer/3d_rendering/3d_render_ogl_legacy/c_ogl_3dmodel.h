@@ -53,12 +53,12 @@ public:
     /**
      * @brief Draw_opaque - render the model into the current context
      */
-    void Draw_opaque( bool aUseSelectedMaterial ) const { Draw( false, 1.0f, aUseSelectedMaterial ); }
+    void Draw_opaque( bool aUseSelectedMaterial, SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) ) const { Draw( false, 1.0f, aUseSelectedMaterial, aSelectionColor ); }
 
     /**
      * @brief Draw_transparent - render the model into the current context
      */
-    void Draw_transparent( float aOpacity, bool aUseSelectedMaterial ) const { Draw( true, aOpacity, aUseSelectedMaterial ); }
+    void Draw_transparent( float aOpacity, bool aUseSelectedMaterial, SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) ) const { Draw( true, aOpacity, aUseSelectedMaterial, aSelectionColor ); }
 
     /**
      * @brief Have_opaque - return true if have opaque meshs to render
@@ -155,7 +155,7 @@ private:
                           VERTEX *aVtxOut, GLuint *aIdxOut,
                           const glm::vec4 &aColor );
 
-    void Draw( bool aTransparent, float aOpacity, bool aUseSelectedMaterial ) const;
+    void Draw( bool aTransparent, float aOpacity, bool aUseSelectedMaterial, SFVEC3F aSelectionColor ) const;
 };
 
 #endif // _C_OGL_3DMODEL_H_
