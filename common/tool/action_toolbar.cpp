@@ -490,7 +490,9 @@ void ACTION_TOOLBAR::onItemDrag( wxAuiToolBarEvent& aEvent )
     {
         wxAuiToolBarItem* item = FindTool( toolId );
 
-        popupPalette( item );
+        // Use call after because opening the palette from a mouse handler
+        // creates a weird mouse state that causes problems on OSX.
+        CallAfter( &ACTION_TOOLBAR::popupPalette, item );
 
         // Don't skip this event since we are handling it
         return;
@@ -645,8 +647,23 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
             m_palette->EnableAction( *action, evt.GetEnabled() );
     }
 
+    // Release the mouse to ensure the first click will be recognized in the palette
+    ReleaseMouse();
+
     m_palette->SetPosition( pos );
     m_palette->Popup();
+
+    // Clear the mouse state on the toolbar because otherwise wxWidgets gets confused
+    // and won't properly display any highlighted items after the palette is closed.
+    // (This is the equivalent of calling the DoResetMouseState() private function)
+    RefreshOverflowState();
+    SetHoverItem( nullptr );
+    SetPressedItem( nullptr );
+
+    m_dragging   = false;
+    m_tipItem    = nullptr;
+    m_actionPos  = wxPoint( -1, -1 );
+    m_actionItem = nullptr;
 }
 
 
