@@ -84,10 +84,23 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     fileMenu->Add( ACTIONS::saveAs );
 
     fileMenu->AppendSeparator();
-    fileMenu->Add( _( "Import EAGLE Project..." ),
-                   _( "Import EAGLE CAD XML schematic and board" ),
-                   ID_IMPORT_EAGLE_PROJECT,
-                   import_project_xpm );
+
+    //Import Sub-menu
+    ACTION_MENU* importMenu = new ACTION_MENU( false, controlTool );
+    importMenu->SetTitle( _( "Import Non-KiCad Project..." ) );
+    importMenu->SetIcon( import_project_xpm );
+
+    importMenu->Add( _( "Import CADSTAR Project..." ),
+                     _( "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)" ),
+                     ID_IMPORT_CADSTAR_ARCHIVE_PROJECT,
+                     import_project_xpm );
+
+    importMenu->Add( _( "Import EAGLE Project..." ),
+                     _( "Import EAGLE CAD XML schematic and board" ),
+                     ID_IMPORT_EAGLE_PROJECT,
+                     import_project_xpm );
+
+    fileMenu->Add( importMenu );
 
     fileMenu->AppendSeparator();
     fileMenu->Add( _( "&Archive Project..." ),

@@ -1013,6 +1013,7 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 {
     switch( (IO_MGR::PCB_FILE_T) aFileType )
     {
+    case IO_MGR::CADSTAR_PCB_ARCHIVE:
     case IO_MGR::EAGLE:
         if( OpenProjectFiles( std::vector<wxString>( 1, aFileName ), KICTL_EAGLE_BRD ) )
         {

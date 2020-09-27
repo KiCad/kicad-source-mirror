@@ -25,7 +25,7 @@
 
 /**
  * @file import_project.cpp
- * @brief routines for importing an eagle project
+ * @brief routines for importing a non-KiCad project
  */
 
 
@@ -46,16 +46,16 @@
 
 #include "kicad_manager_frame.h"
 
-void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
+
+void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString aFilesWildcard,
+        wxString aSchFileExtension, wxString aPcbFileExtension, int aSchFileType, int aPcbFileType )
 {
-    wxString title = _( "Import Eagle Project Files" );
-    int style = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
+    int      style       = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
     wxString default_dir = GetMruPath();
 
     ClearMsg();
 
-    wxFileDialog schdlg( this, title, default_dir, wxEmptyString,
-                         EagleFilesWildcard(), style );
+    wxFileDialog schdlg( this, aWindowTitle, default_dir, wxEmptyString, aFilesWildcard, style );
 
     if( schdlg.ShowModal() == wxID_CANCEL )
         return;
@@ -63,7 +63,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     wxFileName sch( schdlg.GetPath() );
 
-    sch.SetExt( LegacySchematicFileExtension );
+    sch.SetExt( aSchFileExtension );
 
     wxFileName pro = sch;
 
@@ -85,9 +85,10 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     if( directory.HasFiles() )
     {
-        wxString msg = _( "The selected directory is not empty.  We recommend you "
-                          "create projects in their own clean directory.\n\nDo you "
-                          "want to create a new empty directory for the project?" );
+        wxString msg =
+                _( "The selected directory is not empty.  We recommend you "
+                   "create projects in their own clean directory.\n\nDo you "
+                   "want to create a new empty directory for the project?" );
 
         KIDIALOG dlg( this, msg, _( "Confirmation" ), wxYES_NO | wxICON_WARNING );
         dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
@@ -106,8 +107,9 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     wxFileName  pcb( sch );
     std::string packet;
+
     pro.SetExt( ProjectFileExtension );
-    pcb.SetExt( LegacyPcbFileExtension );       // enforce extension
+    pcb.SetExt( aPcbFileExtension ); // enforce extension
 
     if( !pro.IsAbsolute() )
         pro.MakeAbsolute();
@@ -121,7 +123,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
     {
         KIWAY_PLAYER* schframe = Kiway().Player( FRAME_SCH, true );
 
-        packet = StrPrintf( "%d\n%s", SCH_IO_MGR::SCH_EAGLE,  TO_UTF8( sch.GetFullPath() ) );
+        packet = StrPrintf( "%d\n%s", aSchFileType, TO_UTF8( sch.GetFullPath() ) );
         schframe->Kiway().ExpressMail( FRAME_SCH, MAIL_IMPORT_FILE, packet, this );
 
         if( !schframe->IsShown() )
@@ -141,7 +143,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
         if( !pcbframe->IsVisible() )
             pcbframe->Show( true );
 
-        packet = StrPrintf( "%d\n%s", IO_MGR::EAGLE, TO_UTF8( pcb.GetFullPath() ) );
+        packet = StrPrintf( "%d\n%s", aPcbFileType, TO_UTF8( pcb.GetFullPath() ) );
         pcbframe->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_IMPORT_FILE, packet, this );
 
         // On Windows, Raise() does not bring the window on screen, when iconized
@@ -153,4 +155,20 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     ReCreateTreePrj();
     m_active_project = true;
+}
+
+
+void KICAD_MANAGER_FRAME::OnImportCadstarArchiveFiles( wxCommandEvent& event )
+{
+    ImportNonKiCadProject( _( "Import CADSTAR Archive Project Files" ),
+            CadstarArchiveFilesWildcard(), "csa", "cpa", SCH_IO_MGR::SCH_CADSTAR_ARCHIVE,
+            IO_MGR::CADSTAR_PCB_ARCHIVE );
+}
+
+
+void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
+{
+    ImportNonKiCadProject( _( "Import Eagle Project Files" ), EagleFilesWildcard(),
+            LegacySchematicFileExtension, LegacyPcbFileExtension,
+            SCH_IO_MGR::SCH_EAGLE, IO_MGR::EAGLE );
 }

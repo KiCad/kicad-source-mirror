@@ -108,6 +108,25 @@ public:
         return GetProjectFileName();
     }
 
+
+    /**
+     * @brief Creates a project and imports a non-KiCad Schematic and PCB
+     * @param aWindowTitle to display to the user when opening the files
+     * @param aFilesWildcard that includes both PCB and Schematic files (from wildcards_and_files_ext.h)
+     * @param aSchFileExtension e.g. "sch" or "csa"
+     * @param aPcbFileExtension e.g. "brd" or "cpa"
+     * @param aSchFileType Type of Schematic File to import (from SCH_IO_MGR::SCH_FILE_T)
+     * @param aPcbFileType Type of PCB File to import (from IO_MGR::PCB_FILE_T)
+    */
+    void ImportNonKiCadProject( wxString aWindowTitle, wxString aFilesWildcard,
+            wxString aSchFileExtension, wxString aPcbFileExtension, int aSchFileType,
+            int aPcbFileType );
+
+    /**
+     *  Open dialog to import CADSTAR Schematic and PCB Archive files.
+     */
+    void OnImportCadstarArchiveFiles( wxCommandEvent& event );
+
     /**
      *  Open dialog to import Eagle schematic and board files.
      */
