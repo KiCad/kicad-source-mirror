@@ -539,6 +539,8 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
         m_boardAdapter.GridSet( static_cast<GRID3D_TYPE>( cfg->m_Render.grid_type ) );
         m_boardAdapter.AntiAliasingSet( static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode ) );
 
+        m_boardAdapter.m_opengl_selectionColor = m_boardAdapter.GetColor( cfg->m_Render.opengl_selection_color );
+
         m_boardAdapter.m_raytrace_nrsamples_shadows = cfg->m_Render.raytrace_nrsamples_shadows;
         m_boardAdapter.m_raytrace_nrsamples_reflections = cfg->m_Render.raytrace_nrsamples_reflections;
         m_boardAdapter.m_raytrace_nrsamples_refractions = cfg->m_Render.raytrace_nrsamples_refractions;
@@ -656,6 +658,8 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
         cfg->m_Render.grid_type      = static_cast<int>( m_boardAdapter.GridGet() );
         cfg->m_Render.material_mode  = static_cast<int>( m_boardAdapter.MaterialModeGet() );
         cfg->m_Render.opengl_AA_mode = static_cast<int>( m_boardAdapter.AntiAliasingGet() );
+
+        save_color( m_boardAdapter.m_opengl_selectionColor, cfg->m_Render.opengl_selection_color );
 
         cfg->m_Camera.animation_enabled       = m_canvas->AnimationEnabledGet();
         cfg->m_Camera.moving_speed_multiplier = m_canvas->MovingSpeedMultiplierGet();

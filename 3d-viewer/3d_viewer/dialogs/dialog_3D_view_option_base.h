@@ -89,7 +89,10 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkBoxBoundingBoxes;
 		wxStaticBitmap* m_bitmapCuThickness;
 		wxCheckBox* m_checkBoxCuThickness;
+		wxStaticText* m_staticText221;
 		wxChoice* m_choiceAntiAliasing;
+		wxStaticText* m_staticText231;
+		wxColourPickerCtrl* m_colourPickerSelection;
 		wxCheckBox* m_checkBoxDisableAAMove;
 		wxCheckBox* m_checkBoxDisableMoveThickness;
 		wxCheckBox* m_checkBoxDisableMoveVias;

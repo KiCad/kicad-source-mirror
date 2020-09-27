@@ -54,7 +54,7 @@ private:
     /// Automatically called after creating the dialog
     bool TransferDataToWindow() override;
 
-    void TransferLightDataToWindow();
+    void TransferColorDataToWindow();
 };
 
 
@@ -134,10 +134,10 @@ void DIALOG_3D_VIEW_OPTIONS::OnLightsResetToDefaults( wxCommandEvent& event )
         m_settings.m_raytrace_lightSphericalCoords[i].y = (float)default_azimuth[i] / 180.0f;
     }
 
-    TransferLightDataToWindow();
+    TransferColorDataToWindow();
 }
 
-void DIALOG_3D_VIEW_OPTIONS::TransferLightDataToWindow()
+void DIALOG_3D_VIEW_OPTIONS::TransferColorDataToWindow()
 {
     auto Transfer_color = [] ( const SFVEC3F& aSource, wxColourPickerCtrl *aTarget )
     {
@@ -159,6 +159,8 @@ void DIALOG_3D_VIEW_OPTIONS::TransferLightDataToWindow()
     Transfer_color( m_settings.m_raytrace_lightColor[5], m_colourPickerLight6 );
     Transfer_color( m_settings.m_raytrace_lightColor[6], m_colourPickerLight7 );
     Transfer_color( m_settings.m_raytrace_lightColor[7], m_colourPickerLight8 );
+
+    Transfer_color( m_settings.m_opengl_selectionColor, m_colourPickerSelection );
 
     m_spinCtrlLightElevation1->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[0].x * 180.0f - 90.0f ) );
     m_spinCtrlLightElevation2->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[1].x * 180.0f - 90.0f ) );
@@ -229,7 +231,7 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
     m_spinCtrlRecursiveLevel_Reflections->SetValue( m_settings.m_raytrace_recursivelevel_reflections );
     m_spinCtrlRecursiveLevel_Refractions->SetValue( m_settings.m_raytrace_recursivelevel_refractions );
 
-    TransferLightDataToWindow();
+    TransferColorDataToWindow();
 
     // Camera Options
     m_checkBoxEnableAnimation->SetValue( m_canvas->AnimationEnabledGet() );
@@ -319,6 +321,8 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
     Transfer_color( m_settings.m_raytrace_lightColor[5], m_colourPickerLight6 );
     Transfer_color( m_settings.m_raytrace_lightColor[6], m_colourPickerLight7 );
     Transfer_color( m_settings.m_raytrace_lightColor[7], m_colourPickerLight8 );
+
+    Transfer_color( m_settings.m_opengl_selectionColor, m_colourPickerSelection );
 
     m_settings.m_raytrace_lightSphericalCoords[0].x = ( m_spinCtrlLightElevation1->GetValue() + 90.0f ) / 180.0f;
     m_settings.m_raytrace_lightSphericalCoords[1].x = ( m_spinCtrlLightElevation2->GetValue() + 90.0f ) / 180.0f;

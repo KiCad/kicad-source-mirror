@@ -319,30 +319,44 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 
 	bSizer7->Add( sbSizerOpenGLRenderoptions, 1, wxALL|wxEXPAND, 5 );
 
-	wxStaticBoxSizer* sbSizerAntialiasing;
-	sbSizerAntialiasing = new wxStaticBoxSizer( new wxStaticBox( m_panelOpenGL, wxID_ANY, _("Anti-aliasing") ), wxVERTICAL );
+	wxStaticBoxSizer* sbSizerOtherOptions;
+	sbSizerOtherOptions = new wxStaticBoxSizer( new wxStaticBox( m_panelOpenGL, wxID_ANY, _("Other Options") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer7;
-	fgSizer7 = new wxFlexGridSizer( 1, 2, 0, 0 );
+	fgSizer7 = new wxFlexGridSizer( 2, 3, 0, 0 );
 	fgSizer7->SetFlexibleDirection( wxBOTH );
 	fgSizer7->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 
 	fgSizer7->Add( 0, 0, 1, wxLEFT|wxRIGHT, 5 );
 
+	m_staticText221 = new wxStaticText( sbSizerOtherOptions->GetStaticBox(), wxID_ANY, _("Anti-aliasing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText221->Wrap( -1 );
+	fgSizer7->Add( m_staticText221, 0, wxALL, 5 );
+
 	wxString m_choiceAntiAliasingChoices[] = { _("Disabled"), _("2x"), _("4x"), _("8x"), wxEmptyString };
 	int m_choiceAntiAliasingNChoices = sizeof( m_choiceAntiAliasingChoices ) / sizeof( wxString );
-	m_choiceAntiAliasing = new wxChoice( sbSizerAntialiasing->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceAntiAliasingNChoices, m_choiceAntiAliasingChoices, 0 );
+	m_choiceAntiAliasing = new wxChoice( sbSizerOtherOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceAntiAliasingNChoices, m_choiceAntiAliasingChoices, 0 );
 	m_choiceAntiAliasing->SetSelection( 0 );
 	m_choiceAntiAliasing->SetToolTip( _("3D-Viewer must be closed and re-opened to apply this setting") );
 
-	fgSizer7->Add( m_choiceAntiAliasing, 0, 0, 5 );
+	fgSizer7->Add( m_choiceAntiAliasing, 0, wxALL|wxEXPAND, 5 );
 
 
-	sbSizerAntialiasing->Add( fgSizer7, 1, wxALL|wxEXPAND, 5 );
+	fgSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_staticText231 = new wxStaticText( sbSizerOtherOptions->GetStaticBox(), wxID_ANY, _("Selection color"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText231->Wrap( -1 );
+	fgSizer7->Add( m_staticText231, 0, wxALL, 5 );
+
+	m_colourPickerSelection = new wxColourPickerCtrl( sbSizerOtherOptions->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxDefaultSize, wxCLRP_DEFAULT_STYLE );
+	fgSizer7->Add( m_colourPickerSelection, 0, wxALL|wxEXPAND, 5 );
 
 
-	bSizer7->Add( sbSizerAntialiasing, 1, wxALL|wxEXPAND, 5 );
+	sbSizerOtherOptions->Add( fgSizer7, 1, wxALL|wxEXPAND, 5 );
+
+
+	bSizer7->Add( sbSizerOtherOptions, 1, wxALL|wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizerWhileMoving;
 	sbSizerWhileMoving = new wxStaticBoxSizer( new wxStaticBox( m_panelOpenGL, wxID_ANY, _("While Moving") ), wxVERTICAL );

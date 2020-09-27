@@ -56,6 +56,10 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
            static_cast<int>( ANTIALIASING_MODE::AA_NONE ),
            static_cast<int>( ANTIALIASING_MODE::AA_8X ) ) );
 
+    m_params.emplace_back( new PARAM<COLOR4D>( "render.opengl_selection_color",
+                                               &m_Render.opengl_selection_color,
+                                               COLOR4D( 0.0, 1.0, 0.0, 1.0 ) ) );
+
     // OpenGL options
     m_params.emplace_back( new PARAM<bool>(
             "render.opengl_copper_thickness", &m_Render.opengl_copper_thickness, true ) );

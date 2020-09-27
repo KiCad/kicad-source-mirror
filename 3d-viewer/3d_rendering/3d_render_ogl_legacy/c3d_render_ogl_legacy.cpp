@@ -890,8 +890,6 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
         glPopMatrix();
     }
 
-    m_selectionColor = m_boardAdapter.GetItemColor( LAYER_SELECT_OVERLAY );
-
     // Render 3D Models (Non-transparent)
     // /////////////////////////////////////////////////////////////////////////
     render_3D_models( false, false );
@@ -1356,10 +1354,10 @@ void C3D_RENDER_OGL_LEGACY::render_3D_module( const MODULE* module,
                     if( aRenderTransparentOnly )
                         modelPtr->Draw_transparent( sM.m_Opacity,
                                                     module->IsSelected() || aIsSelected,
-                                                    m_selectionColor );
+                                                    m_boardAdapter.m_opengl_selectionColor );
                     else
                         modelPtr->Draw_opaque( module->IsSelected() || aIsSelected,
-                                               m_selectionColor );
+                                               m_boardAdapter.m_opengl_selectionColor );
 
                     if( m_boardAdapter.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) )
                     {

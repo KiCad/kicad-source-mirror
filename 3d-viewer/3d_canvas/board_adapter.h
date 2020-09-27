@@ -643,6 +643,8 @@ public:
     SFVEC4F m_SilkScreenColorTop; ///< in realistic mode: SilkScreen color ( top )
     SFVEC4F m_CopperColor;        ///< in realistic mode: copper color
 
+    SFVEC3F m_opengl_selectionColor;
+
     // Raytracing light colors
 
     SFVEC3F m_raytrace_lightColorCamera;
