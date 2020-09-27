@@ -85,6 +85,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( ::SCHEMATIC* aSchematic, ::SCH_SHEET* aRo
     loadBusses();
     loadNets();
     loadFigures();
+    loadTexts();
     // TODO Load other elements!
 
     // For all sheets, centre all elements and re calculate the page size:
@@ -639,23 +640,19 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadFigures()
     {
         FIGURE fig = figPair.second;
 
-        if( fig.LayerID == "ALL_SHEETS" )
-        {
-            for( std::pair<LAYER_ID, SHEET_NAME> sheetPair : Sheets.SheetNames )
-            {
-                LAYER_ID sheetID = sheetPair.first;
+        loadFigure( fig, fig.LayerID, LAYER_NOTES );
+    }
+}
 
-                loadShapeVertices( fig.Shape.Vertices, fig.LineCodeID, sheetID, LAYER_NOTES );
-            }
-        }
-        else if( fig.LayerID == "NO_SHEET" )
-        {
-            continue;
-        }
-        else
-        {
-            loadShapeVertices( fig.Shape.Vertices, fig.LineCodeID, fig.LayerID, LAYER_NOTES );
-        }
+
+void CADSTAR_SCH_ARCHIVE_LOADER::loadTexts()
+{
+    for( std::pair<TEXT_ID, TEXT> textPair : Schematic.Texts )
+    {
+        TEXT txt = textPair.second;
+
+        SCH_TEXT* kiTxt = getKiCadSchText( txt );
+        loadItemOntoKiCadSheet( txt.LayerID, kiTxt );
     }
 }
 
@@ -1100,15 +1097,21 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
 
         prev = cur;
 
-        if( mSheetMap.find( aCadstarSheetID ) != mSheetMap.end() )
-        {
-            mSheetMap.at( aCadstarSheetID )->GetScreen()->Append( segment );
-        }
-        else
-        {
-            delete segment;
-            wxASSERT_MSG( false, "Unknown Sheet ID." );
-        }
+        loadItemOntoKiCadSheet( aCadstarSheetID, segment );
+    }
+}
+
+
+void CADSTAR_SCH_ARCHIVE_LOADER::loadFigure( const FIGURE& aCadstarFigure,
+        const LAYER_ID& aCadstarSheetIDOverride, SCH_LAYER_ID aKiCadSchLayerID )
+{
+    loadShapeVertices( aCadstarFigure.Shape.Vertices, aCadstarFigure.LineCodeID,
+            aCadstarFigure.LayerID, aKiCadSchLayerID );
+
+    for( CUTOUT cutout : aCadstarFigure.Shape.Cutouts )
+    {
+        loadShapeVertices( cutout.Vertices, aCadstarFigure.LineCodeID, aCadstarFigure.LayerID,
+                aKiCadSchLayerID );
     }
 }
 
@@ -1245,6 +1248,45 @@ int CADSTAR_SCH_ARCHIVE_LOADER::getSheetNumber( LAYER_ID aCadstarSheetID )
     }
 
     return -1;
+}
+
+
+void CADSTAR_SCH_ARCHIVE_LOADER::loadItemOntoKiCadSheet( LAYER_ID aCadstarSheetID, SCH_ITEM* aItem )
+{
+    wxCHECK_MSG( aItem, /*void*/, "aItem is null" );
+
+    if( aCadstarSheetID == "ALL_SHEETS" )
+    {
+        SCH_ITEM* duplicateItem;
+
+        for( std::pair<LAYER_ID, SHEET_NAME> sheetPair : Sheets.SheetNames )
+        {
+            LAYER_ID sheetID = sheetPair.first;
+            duplicateItem    = aItem->Duplicate();
+            mSheetMap.at( sheetID )->GetScreen()->Append( aItem->Duplicate() );
+        }
+
+        //Get rid of the extra copy:
+        delete aItem;
+        aItem = duplicateItem;
+    }
+    else if( aCadstarSheetID == "NO_SHEET" )
+    {
+        wxASSERT_MSG(
+                false, "Trying to add an item to NO_SHEET? This might be a documentation symbol." );
+    }
+    else
+    {
+        if( mSheetMap.find( aCadstarSheetID ) != mSheetMap.end() )
+        {
+            mSheetMap.at( aCadstarSheetID )->GetScreen()->Append( aItem );
+        }
+        else
+        {
+            delete aItem;
+            wxASSERT_MSG( false, "Unknown Sheet ID." );
+        }
+    }
 }
 
 
@@ -1482,6 +1524,20 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( const TEXTCODE_ID& aCadstarT
         aKiCadTextItem->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         break;
     }
+}
+
+SCH_TEXT* CADSTAR_SCH_ARCHIVE_LOADER::getKiCadSchText( const TEXT& aCadstarTextElement )
+{
+    SCH_TEXT* kiTxt = new SCH_TEXT();
+
+    kiTxt->SetPosition( getKiCadPoint( aCadstarTextElement.Position ) );
+    kiTxt->SetText( aCadstarTextElement.Text );
+    applyTextSettings( aCadstarTextElement.TextCodeID, aCadstarTextElement.Alignment,
+            aCadstarTextElement.Justification, kiTxt );
+    kiTxt->SetTextAngle( getAngleTenthDegree( aCadstarTextElement.OrientAngle ) );
+    kiTxt->SetMirrored( aCadstarTextElement.Mirror );
+
+    return kiTxt;
 }
 
 

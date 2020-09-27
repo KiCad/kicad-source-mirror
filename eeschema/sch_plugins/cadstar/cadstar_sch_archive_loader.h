@@ -37,10 +37,12 @@ class LABEL_SPIN_STYLE;
 class LIB_FIELD;
 class LIB_PART;
 class SCH_COMPONENT;
+class SCH_ITEM;
 class SCH_FIELD;
 class SCH_GLOBALLABEL;
 class SCH_HIERLABEL;
 class SCH_SHEET;
+class SCH_TEXT;
 class SCHEMATIC;
 
 class CADSTAR_SCH_ARCHIVE_LOADER : public CADSTAR_SCH_ARCHIVE_PARSER
@@ -100,6 +102,7 @@ private:
     void loadBusses();
     void loadNets();
     void loadFigures();
+    void loadTexts();
 
     //Helper Functions for loading sheets
     void loadSheetAndChildSheets( LAYER_ID aCadstarSheetID, wxPoint aPosition, wxSize aSheetSize,
@@ -107,6 +110,7 @@ private:
     void loadChildSheets( LAYER_ID aCadstarSheetID );
     std::vector<LAYER_ID> findOrphanSheets();
     int                   getSheetNumber( LAYER_ID aCadstarSheetID );
+    void                  loadItemOntoKiCadSheet( LAYER_ID aCadstarSheetID, SCH_ITEM* aItem );
 
     //Helper Functions for loading library items
     void loadSymDefIntoLibrary( const SYMDEF_ID& aSymdefID, const PART* aCadstarPart,
@@ -132,6 +136,8 @@ private:
     void loadShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
             LINECODE_ID aCadstarLineCodeID, LAYER_ID aCadstarSheetID,
             SCH_LAYER_ID aKiCadSchLayerID );
+    void loadFigure( const FIGURE& aCadstarFigure, const LAYER_ID& aCadstarSheetIDOverride,
+            SCH_LAYER_ID aKiCadSchLayerID );
 
     //Helper Functions for obtaining CADSTAR elements from the parsed structures
     SYMDEF_ID getSymDefFromName( const wxString& aSymdefName, const wxString& aSymDefAlternate );
@@ -155,6 +161,8 @@ private:
     void applyTextSettings( const TEXTCODE_ID& aCadstarTextCodeID,
             const ALIGNMENT& aCadstarAlignment, const JUSTIFICATION& aCadstarJustification,
             EDA_TEXT* aKiCadTextItem );
+    SCH_TEXT* getKiCadSchText( const TEXT& aCadstarTextElement );
+
 
     std::pair<wxPoint, wxSize> getFigureExtentsKiCad( const FIGURE& aCadstarFigure );
 
