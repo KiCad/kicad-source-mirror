@@ -499,6 +499,7 @@ LSET DRC_RULES_PARSER::parseLayer()
         {
             reportError( wxString::Format( _( "Unrecognized layer '%s'." ),
                                            layerName ) );
+            retVal.set( UNDEFINED_LAYER );
         }
     }
 

@@ -1203,7 +1203,12 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
     layerEnum.Undefined( UNDEFINED_LAYER );
 
     for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
+    {
+        // Canonical name
+        layerEnum.Map( *seq, LSET::Name( *seq ) );
+        // User name
         layerEnum.Map( *seq, GetBoard()->GetLayerName( *seq ) );
+    }
 
     // Sync visibility with canvas
     KIGFX::VIEW* view = GetCanvas()->GetView();

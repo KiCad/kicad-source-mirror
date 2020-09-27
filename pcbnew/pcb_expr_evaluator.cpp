@@ -340,9 +340,9 @@ PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 
 
 void PCB_EXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
-                        {
+{
     m_funcs.clear();
-                            registerFunc( "existsOnLayer('x')", existsOnLayer );
+    RegisterFunc( "existsOnLayer('x')", existsOnLayer );
     RegisterFunc( "isPlated()", isPlated );
     RegisterFunc( "insideCourtyard('x')", insideCourtyard );
     RegisterFunc( "insideArea('x')", insideArea );
@@ -364,8 +364,43 @@ BOARD_ITEM* PCB_EXPR_VAR_REF::GetObject( LIBEVAL::CONTEXT* aCtx ) const
 }
 
 
+class PCB_LAYER_VALUE : public LIBEVAL::VALUE
+{
+public:
+    PCB_LAYER_VALUE( PCB_LAYER_ID aLayer ) :
+        LIBEVAL::VALUE( double( aLayer ) )
+    {};
+
+    virtual bool EqualTo( const VALUE* b ) const override
+    {
+        // For boards with user-defined layer names there will be 2 entries for each layer
+        // in the ENUM_MAP: one for the canonical layer name and one for the user layer name.
+        // We need to check against both.
+
+        wxPGChoices& layerMap = ENUM_MAP<PCB_LAYER_ID>::Instance().Choices();
+        PCB_LAYER_ID layerId = ToLAYER_ID( (int) AsDouble() );
+
+        for( unsigned ii = 0; ii < layerMap.GetCount(); ++ii )
+        {
+            wxPGChoiceEntry& entry = layerMap[ii];
+
+            if( entry.GetValue() == layerId && entry.GetText().Matches( b->AsString() ) )
+                return true;
+        }
+
+        return false;
+    }
+};
+
+
 LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 {
+    if( m_itemIndex == 2 )
+    {
+        PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
+        return PCB_LAYER_VALUE( context->GetLayer() );
+    }
+
     BOARD_ITEM* item  = const_cast<BOARD_ITEM*>( GetObject( aCtx ) );
     auto        it = m_matchingTypes.find( TYPE_HASH( *item ) );
 
@@ -413,7 +448,7 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
                                                                 const wxString& aField )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-    std::unique_ptr<PCB_EXPR_VAR_REF> vref;;
+    std::unique_ptr<PCB_EXPR_VAR_REF> vref;
 
     if( aVar == "A" )
     {
@@ -422,6 +457,10 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
     else if( aVar == "B" )
     {
         vref.reset( new PCB_EXPR_VAR_REF( 1 ) );
+    }
+    else if( aVar == "L" )
+    {
+        vref.reset( new PCB_EXPR_VAR_REF( 2 ) );
     }
     else
     {

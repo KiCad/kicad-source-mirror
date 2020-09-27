@@ -178,8 +178,8 @@ public:
 class VALUE
 {
 public:
-    VALUE():
-        m_type(VT_UNDEFINED),
+    VALUE() :
+        m_type( VT_UNDEFINED ),
         m_valueDbl( 0 ),
         m_stringIsWildcard( false )
     {};
@@ -197,17 +197,20 @@ public:
         m_stringIsWildcard( false )
     {};
 
-    double AsDouble() const
+    virtual ~VALUE()
+    {};
+
+    virtual double AsDouble() const
     {
         return m_valueDbl;
     }
 
-    const wxString& AsString() const
+    virtual const wxString& AsString() const
     {
         return m_valueStr;
     }
 
-    bool EqualTo( const VALUE* b ) const;
+    virtual bool EqualTo( const VALUE* b ) const;
 
     VAR_TYPE_T GetType() const { return m_type; };
 

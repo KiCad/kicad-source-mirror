@@ -522,7 +522,6 @@ public:
 
     ENUM_MAP& Map( T aValue, const wxString& aName )
     {
-        wxASSERT_MSG( m_choices.Index( aName ) == wxNOT_FOUND, "Redefined string for a value in ENUM_MAP" );
         m_choices.Add( aName, static_cast<int>( aValue ) );
         m_reverseMap[ aName ] = aValue;
         return *this;
