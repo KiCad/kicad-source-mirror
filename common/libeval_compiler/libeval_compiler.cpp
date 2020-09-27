@@ -232,6 +232,11 @@ COMPILER::~COMPILER()
 {
     LIBEVAL::ParseFree( m_parser, free );
 
+    if( m_tree )
+    {
+        freeTree( m_tree );
+    }
+
     // Allow explicit call to destructor
     m_parser = nullptr;
 
@@ -247,6 +252,7 @@ void COMPILER::Clear()
     if( m_tree )
     {
         freeTree( m_tree );
+        m_tree = nullptr;
     }
 
     m_tree = nullptr;
@@ -283,6 +289,7 @@ bool COMPILER::Compile( const wxString& aString, UCODE* aCode, CONTEXT* aPreflig
     if( m_tree )
     {
         freeTree( m_tree );
+        m_tree = nullptr;
     }
 
     m_tree = nullptr;
@@ -763,7 +770,7 @@ static std::vector<TREE_NODE*> squashParamList( TREE_NODE* root )
 
     std::reverse( args.begin(), args.end() );
 
-    for(int i = 0; i < args.size(); i++ )
+    for(size_t i = 0; i < args.size(); i++ )
         libeval_dbg(10, "squash arg%d: %s\n", i, (const char*) *args[i]->value.str );
 
     return args;
