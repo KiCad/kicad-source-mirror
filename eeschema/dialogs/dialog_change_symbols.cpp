@@ -45,7 +45,7 @@ bool g_resetFieldPositions    = false;
 
 
 DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aSymbol,
-        MODE aMode ) :
+                                              MODE aMode ) :
     DIALOG_CHANGE_SYMBOLS_BASE( aParent ),
     m_symbol( aSymbol),
     m_mode( aMode )
@@ -99,6 +99,16 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
     m_matchSizer->SetEmptyCellSize( wxSize( 0, 0 ) );
     m_matchSizer->Layout();
 
+    for( int i = 0; i < MANDATORY_FIELDS; ++i )
+    {
+        m_fieldsBox->Append( TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) );
+
+        if( i != REFERENCE && i != VALUE )
+            m_fieldsBox->Check( i, true );
+    }
+
+    updateFieldsList();
+
     m_messagePanel->SetLazyUpdate( true );
 
     if( aSymbol && aSymbol->IsSelected() )
@@ -112,6 +122,9 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
         else
             m_matchByReference->SetValue( true );
     }
+
+    label.Printf( m_updateFieldsSizer->GetStaticBox()->GetLabel(), reset );
+    m_updateFieldsSizer->GetStaticBox()->SetLabel( label );
 
     label.Printf( m_removeExtraBox->GetLabel(), library );
     m_removeExtraBox->SetLabel( label );
@@ -149,21 +162,42 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
 }
 
 
+void DIALOG_CHANGE_SYMBOLS::onMatchByAll( wxCommandEvent& aEvent )
+{
+    updateFieldsList();
+}
+
+
+void DIALOG_CHANGE_SYMBOLS::onMatchBySelected( wxCommandEvent& aEvent )
+{
+    updateFieldsList();
+}
+
+
 void DIALOG_CHANGE_SYMBOLS::onMatchByReference( wxCommandEvent& aEvent )
 {
+    updateFieldsList();
     m_specifiedReference->SetFocus();
 }
 
 
 void DIALOG_CHANGE_SYMBOLS::onMatchByValue( wxCommandEvent& aEvent )
 {
+    updateFieldsList();
     m_specifiedValue->SetFocus();
 }
 
 
 void DIALOG_CHANGE_SYMBOLS::onMatchById( wxCommandEvent& aEvent )
 {
+    updateFieldsList();
     m_specifiedId->SetFocus();
+}
+
+
+void DIALOG_CHANGE_SYMBOLS::onMatchTextKillFocus( wxFocusEvent& event )
+{
+    updateFieldsList();
 }
 
 
@@ -184,7 +218,10 @@ void DIALOG_CHANGE_SYMBOLS::launchMatchIdSymbolBrowser( wxCommandEvent& aEvent )
     KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH_VIEWER_MODAL, true );
 
     if( frame->ShowModal( &newName, this ) )
+    {
         m_specifiedId->SetValue( newName );
+        updateFieldsList();
+    }
 
     frame->Destroy();
 }
@@ -197,9 +234,78 @@ void DIALOG_CHANGE_SYMBOLS::launchNewIdSymbolBrowser( wxCommandEvent& aEvent )
     KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH_VIEWER_MODAL, true );
 
     if( frame->ShowModal( &newName, this ) )
+    {
         m_newId->SetValue( newName );
+        updateFieldsList();
+    }
 
     frame->Destroy();
+}
+
+
+void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
+{
+    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
+    LIB_ID          newId;
+    SCH_SHEET_LIST  hierarchy = frame->Schematic().GetSheets();
+
+    if( m_mode == MODE::CHANGE )
+    {
+        newId.Parse( m_newId->GetValue(), LIB_ID::ID_SCH );
+
+        if( !newId.IsValid() )
+            return;
+    }
+
+    // Load new non-mandatory fields from the library parts of all matching symbols
+    std::set<wxString> fieldNames;
+
+    for( SCH_SHEET_PATH& instance : hierarchy )
+    {
+        SCH_SCREEN* screen = instance.LastScreen();
+
+        wxCHECK2( screen, continue );
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_COMPONENT_T ) )
+        {
+            SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( item );
+
+            wxCHECK2( symbol, continue );
+
+            if( !isMatch( symbol, &instance ) )
+                continue;
+
+            LIB_PART* libSymbol = frame->GetLibPart( symbol->GetLibId() );
+
+            if( !libSymbol )
+                continue;
+
+            std::unique_ptr<LIB_PART> flattenedSymbol = libSymbol->Flatten();
+
+            LIB_FIELDS libFields;
+            flattenedSymbol->GetFields( libFields );
+
+            for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
+                fieldNames.insert( libFields[i].GetName() );
+        }
+    }
+
+    // Update the listbox widget
+    for( unsigned i = m_fieldsBox->GetCount() - 1; i >= MANDATORY_FIELDS; --i )
+        m_fieldsBox->Delete( i );
+
+    for( const wxString& fieldName : fieldNames )
+        m_fieldsBox->Append( fieldName );
+
+    for( unsigned i = MANDATORY_FIELDS; i < m_fieldsBox->GetCount(); ++i )
+        m_fieldsBox->Check( i, true );
+}
+
+
+void DIALOG_CHANGE_SYMBOLS::checkAll( bool aCheck )
+{
+    for( unsigned i = 0; i < m_fieldsBox->GetCount(); ++i )
+        m_fieldsBox->Check( i, aCheck );
 }
 
 
@@ -212,6 +318,15 @@ void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
 
     m_messagePanel->Clear();
     m_messagePanel->Flush( false );
+
+    // Create the set of fields to be updated
+    m_updateFields.clear();
+
+    for( unsigned i = 0; i < m_fieldsBox->GetCount(); ++i )
+    {
+        if( m_fieldsBox->IsChecked( i ) )
+            m_updateFields.insert( m_fieldsBox->GetString( i ) );
+    }
 
     if( processMatchingSymbols() )
     {
@@ -396,6 +511,9 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* a
         SCH_FIELD* field = aSymbol->GetField( (int) i ) ;
         LIB_FIELD* libField = nullptr;
 
+        if( alg::contains( m_updateFields, field->GetName() ) )
+            continue;
+
         if( i < MANDATORY_FIELDS )
             libField = libSymbol->GetField( (int) i );
         else
@@ -435,6 +553,9 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* a
     for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
     {
         LIB_FIELD& libField = libFields[i];
+
+        if( !alg::contains( m_updateFields, libField.GetName() ) )
+            continue;
 
         if( !aSymbol->FindField( libField.GetName(), false ) )
         {

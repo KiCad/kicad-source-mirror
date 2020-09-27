@@ -395,11 +395,6 @@ TOOL_ACTION EE_ACTIONS::autoplaceFields( "eeschema.InteractiveEdit.autoplaceFiel
         _( "Autoplace Fields" ), _( "Runs the automatic placement algorithm on the symbol's fields" ),
         autoplace_fields_xpm );
 
-TOOL_ACTION EE_ACTIONS::updateFieldsFromLibrary( "eeschema.InteractiveEdit.updateFieldsFromLibrary",
-        AS_GLOBAL, 0, "",
-        _( "Update Fields from Library..." ), _( "Sets symbol fields to original library values" ),
-        update_fields_xpm );
-
 TOOL_ACTION EE_ACTIONS::changeSymbols( "eeschema.InteractiveEdit.changeSymbols",
         AS_GLOBAL, 0, "",
         _( "Change Symbols..." ),

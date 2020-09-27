@@ -39,25 +39,46 @@ public:
     enum class MODE { CHANGE, UPDATE };
 
     DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aSymbol,
-            MODE aMode = MODE::UPDATE );
+                           MODE aMode = MODE::UPDATE );
     ~DIALOG_CHANGE_SYMBOLS() override;
 
 protected:
     void launchMatchIdSymbolBrowser( wxCommandEvent& aEvent ) override;
     void launchNewIdSymbolBrowser( wxCommandEvent& aEvent ) override;
+    void onMatchTextKillFocus( wxFocusEvent& event ) override;
     void onOkButtonClicked( wxCommandEvent& aEvent ) override;
+    void onMatchByAll( wxCommandEvent& aEvent ) override;
+    void onMatchBySelected( wxCommandEvent& aEvent ) override;
     void onMatchByReference( wxCommandEvent& aEvent ) override;
     void onMatchByValue( wxCommandEvent& aEvent ) override;
     void onMatchById( wxCommandEvent& aEvent ) override;
 
+    void onSelectAll( wxCommandEvent& event ) override
+    {
+        checkAll( true );
+    }
+
+    void onSelectNone( wxCommandEvent& event ) override
+    {
+        checkAll( false );
+    }
+
+    ///> Selects or deselects all fields in the listbox widget
+    void checkAll( bool aCheck );
+
 private:
+    void updateFieldsList();
+
     bool isMatch( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aInstance );
     bool processMatchingSymbols();
     bool processSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* aScreen, const LIB_ID& aNewId,
-            bool aAppendToUndo );
+                        bool aAppendToUndo );
 
     SCH_COMPONENT* m_symbol;
     MODE           m_mode;
+
+    ///> Set of field names that should have values updated
+    std::set<wxString> m_updateFields;
 };
 
 #endif // _DIALOG_CHANGE_SYMBOLS_H_

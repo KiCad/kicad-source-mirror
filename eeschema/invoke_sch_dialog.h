@@ -85,10 +85,6 @@ int InvokeDialogCreateBOM( SCH_EDIT_FRAME* aCaller );
 /// Create and show DIALOG_BUS_MANAGER
 void InvokeDialogBusManager( SCH_EDIT_FRAME* aCaller );
 
-/// Update symbol fields
-int InvokeDialogUpdateFields( SCH_EDIT_FRAME* aCaller, SCH_COMPONENT* aSpecificComponent = nullptr,
-                              bool aCreateUndoEntry = true );
-
 /**
  * Create and shows NETLIST_DIALOG and returns whatever
  * NETLIST_DIALOG::ShowModal() returns.

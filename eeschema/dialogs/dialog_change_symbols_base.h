@@ -29,8 +29,9 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
-#include <wx/checkbox.h>
+#include <wx/checklst.h>
 #include <wx/statbox.h>
+#include <wx/checkbox.h>
 #include <wx/panel.h>
 #include <wx/dialog.h>
 
@@ -60,6 +61,10 @@ class DIALOG_CHANGE_SYMBOLS_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_newIdSizer;
 		wxTextCtrl* m_newId;
 		wxBitmapButton* m_newIdBrowserButton;
+		wxStaticBoxSizer* m_updateFieldsSizer;
+		wxCheckListBox* m_fieldsBox;
+		wxButton* m_selAllBtn;
+		wxButton* m_selNoneBtn;
 		wxStaticBoxSizer* m_updateOptionsSizer;
 		wxCheckBox* m_removeExtraBox;
 		wxCheckBox* m_resetEmptyFields;
@@ -72,11 +77,17 @@ class DIALOG_CHANGE_SYMBOLS_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, overide them in your derived class
+		virtual void onMatchByAll( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onMatchBySelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onMatchByReference( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onMatchTextKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void onMatchByValue( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMatchText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onMatchById( wxCommandEvent& event ) { event.Skip(); }
 		virtual void launchMatchIdSymbolBrowser( wxCommandEvent& event ) { event.Skip(); }
 		virtual void launchNewIdSymbolBrowser( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSelectAll( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSelectNone( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOkButtonClicked( wxCommandEvent& event ) { event.Skip(); }
 
 

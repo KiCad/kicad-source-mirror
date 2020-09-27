@@ -1235,15 +1235,6 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDIT_TOOL::UpdateFields( const TOOL_EVENT& aEvent )
-{
-    if( InvokeDialogUpdateFields( m_frame ) == wxID_OK )
-        m_frame->GetCanvas()->Refresh();
-
-    return 0;
-}
-
-
 int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
 {
     SCH_COMPONENT* selectedSymbol = nullptr;
@@ -1788,7 +1779,6 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editValue.MakeEvent() );
     Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editFootprint.MakeEvent() );
     Go( &SCH_EDIT_TOOL::AutoplaceFields,    EE_ACTIONS::autoplaceFields.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::UpdateFields,       EE_ACTIONS::updateFieldsFromLibrary.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeSymbols,      EE_ACTIONS::changeSymbols.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeSymbols,      EE_ACTIONS::updateSymbols.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeSymbols,      EE_ACTIONS::changeSymbol.MakeEvent() );
