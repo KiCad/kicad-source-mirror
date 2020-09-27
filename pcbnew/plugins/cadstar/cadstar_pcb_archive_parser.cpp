@@ -1134,7 +1134,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PAD::Parse( XNODE* aNode )
     Side      = GetPadSide( GetXmlAttributeIDString( aNode, 3 ) );
 
     XNODE*   cNode    = aNode->GetChildren();
-    wxString location = wxString::Format( "PAD %d", int{ ID } );
+    wxString location = wxString::Format( "PAD %ld", ID );
 
     if( !cNode )
         THROW_MISSING_NODE_IO_ERROR( wxT( "PT" ), location );

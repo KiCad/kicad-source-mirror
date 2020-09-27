@@ -1046,6 +1046,8 @@ public:
             void         ParseIdentifiers( XNODE* aNode );
             bool         ParseSubNode( XNODE* aChildNode );
             virtual void Parse( XNODE* aNode ) = 0;
+
+            virtual ~CONNECTION() {}
         };
 
         NET_ID       ID;

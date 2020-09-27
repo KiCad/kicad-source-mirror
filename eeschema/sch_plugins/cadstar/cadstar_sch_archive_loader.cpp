@@ -486,7 +486,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
         std::map<NETELEMENT_ID, SCH_LABEL*> netlabels;
 
         if( netName.IsEmpty() )
-            netName = wxString::Format( "$%d", int{ net.SignalNum } );
+            netName = wxString::Format( "$%ld", net.SignalNum );
 
 
         for( std::pair<NETELEMENT_ID, NET_SCH::SYM_TERM> terminalPair : net.Terminals )
@@ -765,7 +765,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
     for( std::pair<TERMINAL_ID, TERMINAL> termPair : symbol.Terminals )
     {
         TERMINAL term    = termPair.second;
-        wxString pinNum  = wxString::Format( "%d", int{ term.ID } );
+        wxString pinNum  = wxString::Format( "%ld", term.ID );
         wxString pinName = wxEmptyString;
 
         if( aCadstarPart )
@@ -773,7 +773,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
             PART::DEFINITION::PIN csPin = getPartDefinitionPin( *aCadstarPart, aGateID, term.ID );
 
             pinName = csPin.Name;
-            pinNum  = wxString::Format( "%d", int{ csPin.ID } );
+            pinNum  = wxString::Format( "%ld", csPin.ID );
 
             if( pinName.IsEmpty() )
             {
@@ -1148,7 +1148,7 @@ wxString CADSTAR_SCH_ARCHIVE_LOADER::getNetName( const NET_SCH& aNet )
     wxString netname = aNet.Name;
 
     if( netname.IsEmpty() )
-        netname = wxString::Format( "$%d", int{ aNet.SignalNum } );
+        netname = wxString::Format( "$%ld", aNet.SignalNum );
 
     return netname;
 }
