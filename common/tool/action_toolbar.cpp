@@ -575,25 +575,29 @@ void ACTION_TOOLBAR::onTimerDone( wxTimerEvent& aEvent )
         case wxAUI_DOCK_TOP:
             // Top toolbars need to shift the palette window down by the toolbar padding
             pos = ClientToScreen( toolRect.GetBottomLeft() );
-            pos += wxPoint( 0, GetToolBorderPadding() );
+            pos += wxPoint( -( PALETTE_BORDER + BUTTON_BORDER ),    // Shift left to align the button
+                            GetToolBorderPadding() );               // Shift down to move away from the toolbar
             break;
 
         case wxAUI_DOCK_BOTTOM:
             // Bottom toolbars need to shift the palette window up by its height (1 button + border + toolbar padding)
             pos = ClientToScreen( toolRect.GetTopLeft() );
-            pos -= wxPoint( GetToolBorderPadding(), 2*PALETTE_BORDER + toolRect.GetHeight() + GetToolBorderPadding() );
+            pos -= wxPoint( ( PALETTE_BORDER + BUTTON_BORDER ),    // Shift left to align the button
+                            2*PALETTE_BORDER + toolRect.GetHeight() + GetToolBorderPadding() );
             break;
 
         case wxAUI_DOCK_LEFT:
             // Left toolbars need to shift the palette window up by the toolbar padding
             pos = ClientToScreen( toolRect.GetTopRight() );
-            pos += wxPoint( GetToolBorderPadding(), 0 );
+            pos += wxPoint( GetToolBorderPadding(),                 // Shift right to move away from the toolbar
+                            -( PALETTE_BORDER + BUTTON_BORDER ) );  // Shift up to align the button
             break;
 
         case wxAUI_DOCK_RIGHT:
             // Right toolbars need to shift the palette window left by its width (1 button + border + toolbar padding)
             pos = ClientToScreen( toolRect.GetTopLeft() );
-            pos -= wxPoint( 2*PALETTE_BORDER + toolRect.GetHeight() + GetToolBorderPadding(), 0 );
+            pos -= wxPoint( 2*PALETTE_BORDER + toolRect.GetHeight() + GetToolBorderPadding(),
+                            ( PALETTE_BORDER + BUTTON_BORDER ) );  // Shift up to align the button
             break;
     }
 
