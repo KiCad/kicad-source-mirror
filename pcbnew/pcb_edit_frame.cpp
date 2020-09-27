@@ -1012,8 +1012,29 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
     m_appearancePanel->OnLayerChanged();
 
     m_toolManager->RunAction( PCB_ACTIONS::layerChanged );  // notify other tools
-    GetCanvas()->SetFocus();                             // allow capture of hotkeys
+    GetCanvas()->SetFocus();                                // allow capture of hotkeys
     GetCanvas()->SetHighContrastLayer( aLayer );
+
+    // Clearances could be layer-dependent so redraw them when the active layer is changed
+    if( GetDisplayOptions().m_DisplayPadIsol )
+    {
+        GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                []( KIGFX::VIEW_ITEM* aItem ) -> bool
+                {
+                    return dynamic_cast<D_PAD*>( aItem ) != nullptr;
+                });
+    }
+
+    // Clearances could be layer-dependent so redraw them when the active layer is changed
+    if( GetDisplayOptions().m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS )
+    {
+        GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                []( KIGFX::VIEW_ITEM* aItem ) -> bool
+                {
+                    return dynamic_cast<TRACK*>( aItem ) != nullptr;
+                });
+    }
+
     GetCanvas()->Refresh();
 }
 
