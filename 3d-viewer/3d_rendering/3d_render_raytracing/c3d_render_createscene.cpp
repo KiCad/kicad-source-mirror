@@ -1427,12 +1427,12 @@ MODEL_MATERIALS *C3D_RENDER_RAYTRACING::get_3D_model_material( const S3DMODEL *a
                 {
                     // Guess material type and apply a normal perturbator
 
-                    if( ( RGBtoGray(material.m_Diffuse) < 0.3f ) &&
+                    if( ( RGBtoGray( material.m_Diffuse ) < 0.3f ) &&
                         ( material.m_Shininess < 0.36f ) &&
                         ( material.m_Transparency == 0.0f ) &&
-                        ( (glm::abs( material.m_Diffuse.r - material.m_Diffuse.g ) < 0.15f) &&
-                          (glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) < 0.15f) &&
-                          (glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) < 0.15f) ) )
+                        ( ( glm::abs( material.m_Diffuse.r - material.m_Diffuse.g ) < 0.15f ) &&
+                          ( glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) < 0.15f ) &&
+                          ( glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) < 0.15f ) ) )
                     {
                         // This may be a black plastic..
 
@@ -1443,24 +1443,24 @@ MODEL_MATERIALS *C3D_RENDER_RAYTRACING::get_3D_model_material( const S3DMODEL *a
                     }
                     else
                     {
-                        if( ( RGBtoGray(material.m_Diffuse) > 0.3f ) &&
+                        if( ( RGBtoGray( material.m_Diffuse ) > 0.3f ) &&
                             ( material.m_Shininess < 0.30f ) &&
                             ( material.m_Transparency == 0.0f ) &&
-                            ( (glm::abs( material.m_Diffuse.r - material.m_Diffuse.g ) > 0.25f) ||
-                              (glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) > 0.25f) ||
-                              (glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) > 0.25f) ) )
+                            ( ( glm::abs( material.m_Diffuse.r - material.m_Diffuse.g ) > 0.25f ) ||
+                              ( glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) > 0.25f ) ||
+                              ( glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) > 0.25f ) ) )
                         {
                             // This may be a color plastic ...
                             blinnMaterial.SetNormalPerturbator( &m_plastic_shine_normal_perturbator );
                         }
                         else
                         {
-                            if( ( RGBtoGray(material.m_Diffuse) > 0.6f ) &&
+                            if( ( RGBtoGray( material.m_Diffuse ) > 0.6f ) &&
                                 ( material.m_Shininess > 0.35f ) &&
                                 ( material.m_Transparency == 0.0f ) &&
-                                ( (glm::abs( material.m_Diffuse.r - material.m_Diffuse.g ) < 0.40f) &&
-                                  (glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) < 0.40f) &&
-                                  (glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) < 0.40f) ) )
+                                ( ( glm::abs( material.m_Diffuse.r - material.m_Diffuse.g ) < 0.40f ) &&
+                                  ( glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) < 0.40f ) &&
+                                  ( glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) < 0.40f ) ) )
                             {
                                 // This may be a brushed metal
                                 blinnMaterial.SetNormalPerturbator( &m_brushed_metal_normal_perturbator );
