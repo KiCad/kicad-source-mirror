@@ -289,10 +289,10 @@ protected:
     ///> Handler for a mouse up/down event
     void onMouseClick( wxMouseEvent& aEvent );
 
-    ///> Handler for a mouse motion event
-    void onMouseMotion( wxMouseEvent& aEvent );
+    ///> Handler for when a drag event occurs on an item
+    void onItemDrag( wxAuiToolBarEvent& aEvent );
 
-    ///> The default tool event handler.
+    ///> The default tool event handler
     void onToolEvent( wxAuiToolBarEvent& aEvent );
 
     ///> Handle a right-click on a menu item
@@ -310,8 +310,7 @@ protected:
                          const wxRect& aRect ) override;
 
 protected:
-    // Items used to determine when the palette should be opened after a group item is pressed
-    bool     m_paletteMoving;
+    // Timer used to determine when the palette should be opened after a group item is pressed
     wxTimer* m_paletteTimer;
 
     wxAuiManager*           m_auiManager;

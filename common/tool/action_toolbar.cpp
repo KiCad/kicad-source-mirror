@@ -162,7 +162,6 @@ void ACTION_TOOLBAR_PALETTE::onCharHook( wxKeyEvent& aEvent )
 ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxPoint& pos,
                                 const wxSize& size, long style ) :
     wxAuiToolBar( parent, id, pos, size, style ),
-    m_paletteMoving( false ),
     m_paletteTimer( nullptr ),
     m_auiManager( nullptr ),
     m_toolManager( parent->GetToolManager() ),
@@ -174,11 +173,11 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
              NULL, this );
     Connect( wxEVT_AUITOOLBAR_RIGHT_CLICK, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onToolRightClick ),
              NULL, this );
+    Connect( wxEVT_AUITOOLBAR_BEGIN_DRAG, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onItemDrag ),
+             NULL, this );
     Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ),
              NULL, this );
     Connect( wxEVT_LEFT_UP, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ),
-             NULL, this );
-    Connect( wxEVT_MOTION, wxMouseEventHandler( ACTION_TOOLBAR::onMouseMotion ),
              NULL, this );
     Connect( m_paletteTimer->GetId(), wxEVT_TIMER, wxTimerEventHandler( ACTION_TOOLBAR::onTimerDone ),
              NULL, this );
@@ -471,17 +470,11 @@ void ACTION_TOOLBAR::onMouseClick( wxMouseEvent& aEvent )
 
         // Start the popup conditions if it is a left mouse click and the tool clicked is a group
         if( aEvent.LeftDown() && ( m_actionGroups.find( item->GetId() ) != m_actionGroups.end() ) )
-        {
-            m_paletteMoving = true;
             m_paletteTimer->StartOnce( PALETTE_OPEN_DELAY );
-        }
 
         // Clear the popup conditions if it is a left up, because that implies a click happened
         if( aEvent.LeftUp() )
-        {
-            m_paletteMoving = false;
             m_paletteTimer->Stop();
-        }
     }
 
     // Skip the event so wx can continue processing the mouse event
@@ -489,17 +482,21 @@ void ACTION_TOOLBAR::onMouseClick( wxMouseEvent& aEvent )
 }
 
 
-void ACTION_TOOLBAR::onMouseMotion( wxMouseEvent& aEvent )
+void ACTION_TOOLBAR::onItemDrag( wxAuiToolBarEvent& aEvent )
 {
-    if( m_paletteMoving )
-    {
-        wxAuiToolBarItem* item = FindToolByPosition( aEvent.GetX(), aEvent.GetY() );
+    int toolId = aEvent.GetToolId();
 
-        if( item )
-            popupPalette( item );
+    if( m_actionGroups.find( toolId ) != m_actionGroups.end() )
+    {
+        wxAuiToolBarItem* item = FindTool( toolId );
+
+        popupPalette( item );
+
+        // Don't skip this event since we are handling it
+        return;
     }
 
-    // Skip the event so wx can continue processing the mouse event
+    // Skip since we don't care about it
     aEvent.Skip();
 }
 
@@ -554,7 +551,6 @@ void ACTION_TOOLBAR::onPaletteEvent( wxCommandEvent& aEvent )
 void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
 {
     // Clear all popup conditions
-    m_paletteMoving = false;
     m_paletteTimer->Stop();
 
     wxWindow* parent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
