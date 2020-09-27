@@ -144,7 +144,7 @@ void test::DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengthViolations(
             drcItem->SetErrorMessage( msg );
 
             for( auto offendingTrack : ent.items )
-                drcItem->SetItems( offendingTrack );
+                drcItem->AddItem( offendingTrack );
 
             drcItem->SetViolatingRule( aConstraint.GetParentRule() );
 
@@ -250,7 +250,7 @@ bool test::DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode 
 
                 for( int i = 0; i < 3; i++ )
                 {
-                    auto constraint = m_drcEngine->EvalRulesForItems( constraintsToCheck[i], item );
+                    auto constraint = m_drcEngine->EvalRulesForItems( constraintsToCheck[i], item, nullptr, item->GetLayer() );
 
                     if( constraint.IsNull() )
                         continue;
@@ -296,18 +296,18 @@ bool test::DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode 
 
             for( auto citem : nitem.second )
             {
-                if ( auto bi = dyn_cast<VIA*>( citem ) )
+                if ( auto via = dyn_cast<VIA*>( citem ) )
                 {
                     ent.viaCount++;
-                    ent.totalVia += computeViaThruLength( bi, nitem.second ); // fixme: via thru distance
+                    ent.totalVia += computeViaThruLength( via, nitem.second ); // fixme: via thru distance
                 }
-                else if ( auto bi = dyn_cast<TRACK*>(citem ))
+                else if ( auto trk = dyn_cast<TRACK*>(citem ))
                 {
-                    ent.totalRoute += bi->GetLength();
+                    ent.totalRoute += trk->GetLength();
                 }
-                else if ( auto bi = dyn_cast<D_PAD*>( citem ))
+                else if ( auto pad = dyn_cast<D_PAD*>( citem ))
                 {
-                    ent.totalPadToDie += bi->GetPadToDieLength();
+                    ent.totalPadToDie += pad->GetPadToDieLength();
                 }
             }
 
