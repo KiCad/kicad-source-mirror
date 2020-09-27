@@ -118,7 +118,7 @@ bool VALUE::EqualTo( const VALUE* b ) const
             return WildCompareString( b->m_valueStr, m_valueStr, false );
         }
         else
-            return m_valueStr.CmpNoCase( b->m_valueStr );
+            return !m_valueStr.CmpNoCase( b->m_valueStr );
     }
 
     return false;

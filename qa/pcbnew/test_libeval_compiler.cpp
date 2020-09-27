@@ -116,7 +116,7 @@ static bool testEvalExpr( const wxString& expr, LIBEVAL::VALUE expectedResult,
     if( ok )
     {
         result = *ucode.Run( &context );
-        ok     = ( result == expectedResult );
+        ok     = ( result.EqualTo( &expectedResult ) );
     }
 
 
