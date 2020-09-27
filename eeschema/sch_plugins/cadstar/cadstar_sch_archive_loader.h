@@ -103,53 +103,77 @@ private:
     void loadNets();
     void loadFigures();
     void loadTexts();
+    void loadDocumentationSymbols();
 
     //Helper Functions for loading sheets
     void loadSheetAndChildSheets( LAYER_ID aCadstarSheetID, wxPoint aPosition, wxSize aSheetSize,
             SCH_SHEET* aParentSheet );
+
     void loadChildSheets( LAYER_ID aCadstarSheetID );
+
     std::vector<LAYER_ID> findOrphanSheets();
-    int                   getSheetNumber( LAYER_ID aCadstarSheetID );
-    void                  loadItemOntoKiCadSheet( LAYER_ID aCadstarSheetID, SCH_ITEM* aItem );
+
+    int getSheetNumber( LAYER_ID aCadstarSheetID );
+
+    void loadItemOntoKiCadSheet( LAYER_ID aCadstarSheetID, SCH_ITEM* aItem );
 
     //Helper Functions for loading library items
     void loadSymDefIntoLibrary( const SYMDEF_ID& aSymdefID, const PART* aCadstarPart,
             const GATE_ID& aGateID, LIB_PART* aPart );
+
     void loadLibrarySymbolShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
             wxPoint aSymbolOrigin, LIB_PART* aPart, int aGateNumber );
+
     void loadLibraryFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
             wxPoint aSymbolOrigin, LIB_FIELD* aKiCadField );
 
     //Helper Functions for loading symbols in schematic
     SCH_COMPONENT* loadSchematicSymbol( const SYMBOL& aCadstarSymbol, LIB_PART* aKiCadPart,
             double& aComponentOrientationDeciDeg );
-    void           loadSymbolFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
-                      const double& aComponentOrientationDeciDeg, SCH_FIELD* aKiCadField );
-    int            getComponentOrientation(
-                       long long aCadstarOrientAngle, double& aReturnedOrientationDeciDeg );
+
+    void loadSymbolFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
+            const double& aComponentOrientationDeciDeg, SCH_FIELD* aKiCadField );
+
+    int getComponentOrientation(
+            long long aCadstarOrientAngle, double& aReturnedOrientationDeciDeg );
 
     //Helper functions for loading nets
-    POINT    getLocationOfNetElement( const NET_SCH& aNet, const NETELEMENT_ID& aNetElementID );
+    POINT getLocationOfNetElement( const NET_SCH& aNet, const NETELEMENT_ID& aNetElementID );
+
     wxString getNetName( const NET_SCH& aNet );
 
     //Helper functions for loading figures / graphical items
     void loadShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
-            LINECODE_ID aCadstarLineCodeID, LAYER_ID aCadstarSheetID,
-            SCH_LAYER_ID aKiCadSchLayerID );
+            LINECODE_ID aCadstarLineCodeID, LAYER_ID aCadstarSheetID, SCH_LAYER_ID aKiCadSchLayerID,
+            const wxPoint& aMoveVector = { 0, 0 }, const double& aRotationAngleDeciDeg = 0.0,
+            const double& aScalingFactor = 1.0, const wxPoint& aTransformCentre = { 0, 0 },
+            const bool& aMirrorInvert = false );
+
     void loadFigure( const FIGURE& aCadstarFigure, const LAYER_ID& aCadstarSheetIDOverride,
-            SCH_LAYER_ID aKiCadSchLayerID );
+            SCH_LAYER_ID aKiCadSchLayerID, const wxPoint& aMoveVector = { 0, 0 },
+            const double& aRotationAngleDeciDeg = 0.0, const double& aScalingFactor = 1.0,
+            const wxPoint& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
+
+    //Helper functions for loading text elements
+    void      applyTextSettings( const TEXTCODE_ID& aCadstarTextCodeID,
+                 const ALIGNMENT& aCadstarAlignment, const JUSTIFICATION& aCadstarJustification,
+                 EDA_TEXT* aKiCadTextItem );
+    SCH_TEXT* getKiCadSchText( const TEXT& aCadstarTextElement );
+
 
     //Helper Functions for obtaining CADSTAR elements from the parsed structures
     SYMDEF_ID getSymDefFromName( const wxString& aSymdefName, const wxString& aSymDefAlternate );
-    wxString  generateSymDefName( const SYMDEF_ID& aSymdefID );
-    int       getLineThickness( const LINECODE_ID& aCadstarLineCodeID );
-    PLOT_DASH_TYPE        getLineStyle( const LINECODE_ID& aCadstarLineCodeID );
-    PART                  getPart( const PART_ID& aCadstarPartID );
-    ROUTECODE             getRouteCode( const ROUTECODE_ID& aCadstarRouteCodeID );
-    TEXTCODE              getTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
-    wxString              getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
-    wxString              getAttributeValue( const ATTRIBUTE_ID&        aCadstarAttributeID,
-                         const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>& aCadstarAttributeMap );
+
+    wxString       generateSymDefName( const SYMDEF_ID& aSymdefID );
+    int            getLineThickness( const LINECODE_ID& aCadstarLineCodeID );
+    PLOT_DASH_TYPE getLineStyle( const LINECODE_ID& aCadstarLineCodeID );
+    PART           getPart( const PART_ID& aCadstarPartID );
+    ROUTECODE      getRouteCode( const ROUTECODE_ID& aCadstarRouteCodeID );
+    TEXTCODE       getTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
+    wxString       getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
+    wxString       getAttributeValue( const ATTRIBUTE_ID&        aCadstarAttributeID,
+                  const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>& aCadstarAttributeMap );
+
     PART::DEFINITION::PIN getPartDefinitionPin(
             const PART& aCadstarPart, const GATE_ID& aGateID, const TERMINAL_ID& aTerminalID );
 
@@ -158,11 +182,8 @@ private:
     LABEL_SPIN_STYLE getSpinStyle( const long long& aCadstarOrientation, bool aMirror );
     LABEL_SPIN_STYLE getSpinStyleDeciDeg( const double& aOrientationDeciDeg );
 
-    void applyTextSettings( const TEXTCODE_ID& aCadstarTextCodeID,
-            const ALIGNMENT& aCadstarAlignment, const JUSTIFICATION& aCadstarJustification,
-            EDA_TEXT* aKiCadTextItem );
-    SCH_TEXT* getKiCadSchText( const TEXT& aCadstarTextElement );
 
+    // General Graphical manipulation functions
 
     std::pair<wxPoint, wxSize> getFigureExtentsKiCad( const FIGURE& aCadstarFigure );
 
@@ -170,6 +191,9 @@ private:
 
     wxPoint getKiCadLibraryPoint( wxPoint aCadstarPoint, wxPoint aCadstarCentre );
 
+    wxPoint applyTransform( const wxPoint& aPoint, const wxPoint& aMoveVector = { 0, 0 },
+            const double& aRotationAngleDeciDeg = 0.0, const double& aScalingFactor = 1.0,
+            const wxPoint& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
 
     int getKiCadLength( long long aCadstarLength )
     {

@@ -86,6 +86,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( ::SCHEMATIC* aSchematic, ::SCH_SHEET* aRo
     loadNets();
     loadFigures();
     loadTexts();
+    loadDocumentationSymbols();
     // TODO Load other elements!
 
     // For all sheets, centre all elements and re calculate the page size:
@@ -657,6 +658,66 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadTexts()
 }
 
 
+void CADSTAR_SCH_ARCHIVE_LOADER::loadDocumentationSymbols()
+{
+    for( std::pair<DOCUMENTATION_SYMBOL_ID, DOCUMENTATION_SYMBOL> docSymPair :
+            Schematic.DocumentationSymbols )
+    {
+        DOCUMENTATION_SYMBOL docSym = docSymPair.second;
+
+        if( Library.SymbolDefinitions.find( docSym.SymdefID ) == Library.SymbolDefinitions.end() )
+        {
+            wxLogError(
+                    wxString::Format( _( "Documentation Symbol '%s' refers to symbol definition "
+                                         "ID '%s' which does not exist in the library. The symbol "
+                                         "was not loaded." ),
+                            docSym.ID, docSym.SymdefID ) );
+            continue;
+        }
+
+        SYMDEF_SCM docSymDef  = Library.SymbolDefinitions.at( docSym.SymdefID );
+        wxPoint    moveVector = getKiCadPoint( docSym.Origin ) - getKiCadPoint( docSymDef.Origin );
+        double     rotationAngle = getAngleTenthDegree( docSym.OrientAngle );
+        double     scalingFactor =
+                (double) docSym.ScaleRatioNumerator / (double) docSym.ScaleRatioDenominator;
+        wxPoint centreOfTransform = getKiCadPoint( docSymDef.Origin );
+        bool    mirrorInvert      = docSym.Mirror;
+
+        for( std::pair<FIGURE_ID, FIGURE> figPair : docSymDef.Figures )
+        {
+            FIGURE fig = figPair.second;
+
+            loadFigure( fig, docSym.LayerID, LAYER_NOTES, moveVector, rotationAngle, scalingFactor,
+                    centreOfTransform, mirrorInvert );
+        }
+
+        for( std::pair<TEXT_ID, TEXT> textPair : docSymDef.Texts )
+        {
+            TEXT txt = textPair.second;
+
+            SCH_TEXT* kiTxt = getKiCadSchText( txt );
+
+            wxPoint newPosition = applyTransform( kiTxt->GetPosition(), moveVector, rotationAngle,
+                    scalingFactor, centreOfTransform, mirrorInvert );
+            double  newTxtAngle = NormalizeAnglePos( kiTxt->GetTextAngle() + rotationAngle );
+            bool    newMirrorStatus = kiTxt->IsMirrored() ? !mirrorInvert : mirrorInvert;
+            int     newTxtWidth     = KiROUND( kiTxt->GetTextWidth() * scalingFactor );
+            int     newTxtHeight    = KiROUND( kiTxt->GetTextHeight() * scalingFactor );
+            int     newTxtThickness = KiROUND( kiTxt->GetTextThickness() * scalingFactor );
+
+            kiTxt->SetPosition( newPosition );
+            kiTxt->SetTextAngle( newTxtAngle );
+            kiTxt->SetMirrored( newMirrorStatus );
+            kiTxt->SetTextWidth( newTxtWidth );
+            kiTxt->SetTextHeight( newTxtHeight );
+            kiTxt->SetTextThickness( newTxtThickness );
+
+            loadItemOntoKiCadSheet( docSym.LayerID, kiTxt );
+        }
+    }
+}
+
+
 void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdefID,
         const PART* aCadstarPart, const GATE_ID& aGateID, LIB_PART* aPart )
 {
@@ -1073,7 +1134,9 @@ wxString CADSTAR_SCH_ARCHIVE_LOADER::getNetName( const NET_SCH& aNet )
 
 
 void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
-        LINECODE_ID aCadstarLineCodeID, LAYER_ID aCadstarSheetID, SCH_LAYER_ID aKiCadSchLayerID )
+        LINECODE_ID aCadstarLineCodeID, LAYER_ID aCadstarSheetID, SCH_LAYER_ID aKiCadSchLayerID,
+        const wxPoint& aMoveVector, const double& aRotationAngleDeciDeg,
+        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
 {
     const VERTEX* prev = &aCadstarVertices.at( 0 );
     const VERTEX* cur;
@@ -1089,11 +1152,18 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
         wxPoint   startPoint = getKiCadPoint( prev->End );
         wxPoint   endPoint   = getKiCadPoint( cur->End );
 
+        segment->SetLayer( aKiCadSchLayerID );
+        segment->SetLineWidth( KiROUND( getLineThickness( aCadstarLineCodeID ) * aScalingFactor ) );
+        segment->SetLineStyle( getLineStyle( aCadstarLineCodeID ) );
+
+        //Apply transforms
+        startPoint = applyTransform( startPoint, aMoveVector, aRotationAngleDeciDeg, aScalingFactor,
+                aTransformCentre, aMirrorInvert );
+        endPoint   = applyTransform( endPoint, aMoveVector, aRotationAngleDeciDeg, aScalingFactor,
+                aTransformCentre, aMirrorInvert );
+
         segment->SetStartPoint( startPoint );
         segment->SetEndPoint( endPoint );
-        segment->SetLayer( aKiCadSchLayerID );
-        segment->SetLineWidth( getLineThickness( aCadstarLineCodeID ) );
-        segment->SetLineStyle( getLineStyle( aCadstarLineCodeID ) );
 
         prev = cur;
 
@@ -1103,15 +1173,19 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
 
 
 void CADSTAR_SCH_ARCHIVE_LOADER::loadFigure( const FIGURE& aCadstarFigure,
-        const LAYER_ID& aCadstarSheetIDOverride, SCH_LAYER_ID aKiCadSchLayerID )
+        const LAYER_ID& aCadstarSheetIDOverride, SCH_LAYER_ID aKiCadSchLayerID,
+        const wxPoint& aMoveVector, const double& aRotationAngleDeciDeg,
+        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
 {
     loadShapeVertices( aCadstarFigure.Shape.Vertices, aCadstarFigure.LineCodeID,
-            aCadstarFigure.LayerID, aKiCadSchLayerID );
+            aCadstarSheetIDOverride, aKiCadSchLayerID, aMoveVector, aRotationAngleDeciDeg,
+            aScalingFactor, aTransformCentre, aMirrorInvert );
 
     for( CUTOUT cutout : aCadstarFigure.Shape.Cutouts )
     {
-        loadShapeVertices( cutout.Vertices, aCadstarFigure.LineCodeID, aCadstarFigure.LayerID,
-                aKiCadSchLayerID );
+        loadShapeVertices( cutout.Vertices, aCadstarFigure.LineCodeID, aCadstarSheetIDOverride,
+                aKiCadSchLayerID, aMoveVector, aRotationAngleDeciDeg, aScalingFactor,
+                aTransformCentre, aMirrorInvert );
     }
 }
 
@@ -1609,6 +1683,41 @@ wxPoint CADSTAR_SCH_ARCHIVE_LOADER::getKiCadLibraryPoint(
     retval.y = ( aCadstarPoint.y - aCadstarCentre.y ) * KiCadUnitMultiplier;
 
     return retval;
+}
+
+
+wxPoint CADSTAR_SCH_ARCHIVE_LOADER::applyTransform( const wxPoint& aPoint,
+        const wxPoint& aMoveVector, const double& aRotationAngleDeciDeg,
+        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
+{
+    wxPoint retVal = aPoint;
+
+    if( aScalingFactor != 1.0 )
+    {
+        //scale point
+        retVal -= aTransformCentre;
+        retVal.x = KiROUND( retVal.x * aScalingFactor );
+        retVal.y = KiROUND( retVal.y * aScalingFactor );
+        retVal += aTransformCentre;
+    }
+
+    if( aMirrorInvert )
+    {
+        MIRROR( retVal.x, aTransformCentre.x );
+        MIRROR( retVal.x, aTransformCentre.x );
+    }
+
+    if( aRotationAngleDeciDeg != 0.0 )
+    {
+        RotatePoint( &retVal, aTransformCentre, aRotationAngleDeciDeg );
+    }
+
+    if( aMoveVector != wxPoint{ 0, 0 } )
+    {
+        retVal += aMoveVector;
+    }
+
+    return retVal;
 }
 
 
