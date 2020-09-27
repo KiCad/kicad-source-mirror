@@ -298,7 +298,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::TERMINAL::Parse( XNODE* aNode )
     TerminalCodeID = GetXmlAttributeIDString( aNode, 1 );
 
     XNODE*   cNode    = aNode->GetChildren();
-    wxString location = wxString::Format( "TERMINAL %d", ID );
+    wxString location = wxString::Format( "TERMINAL %d", int{ ID } );
 
     if( !cNode )
         THROW_MISSING_NODE_IO_ERROR( wxT( "PT" ), location );
