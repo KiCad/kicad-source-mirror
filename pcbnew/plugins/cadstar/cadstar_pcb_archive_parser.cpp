@@ -54,14 +54,20 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
             }
 
             if( Header.Format.Type != wxT( "LAYOUT" ) )
+            {
                 if( Header.Format.Type == wxT( "LIBRARY" ) )
+                {
                     THROW_IO_ERROR(
                             "The selected file is a CADSTAR Library file (as opposed to a Layout "
                             "file). CADSTAR libraries cannot yet be imported into KiCad." );
+                }
                 else
+                {
                     THROW_IO_ERROR(
                             "The selected file is an unknown CADSTAR format so cannot be "
                             "imported into KiCad." );
+                }
+            }
         }
         else if( cNode->GetName() == wxT( "ASSIGNMENTS" ) )
         {
@@ -313,8 +319,10 @@ void CADSTAR_PCB_ARCHIVE_PARSER::MATERIAL::Parse( XNODE* aNode )
     XNODE* iNode = aNode->GetChildren();
 
     if( !iNode )
+    {
         THROW_MISSING_PARAMETER_IO_ERROR(
                 wxT( "RESISTIVITY" ), wxString::Format( "MATERIAL %s", Name ) );
+    }
 
     for( ; iNode; iNode = iNode->GetNext() )
     {
@@ -1388,13 +1396,13 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::Parse( XNODE* aNode )
     LayerID             = GetXmlAttributeIDString( aNode, 1 );
     wxString subTypeStr = GetXmlAttributeIDString( aNode, 2 );
 
-    std::map<wxString, SUBTYPE> subTypeMap = { { wxT( "DIMENSION_ORTHOGONAL" ),
-                                                       SUBTYPE::ORTHOGONAL },
-        { wxT( "DIMENSION_DIRECT" ), SUBTYPE::DIRECT },
-        { wxT( "DIMENSION_ANGLED" ), SUBTYPE::ANGLED },
-        { wxT( "DIMENSION_DIAMETER" ), SUBTYPE::DIAMETER },
-        { wxT( "DIMENSION_RADIUS" ), SUBTYPE::RADIUS },
-        { wxT( "DIMENSION_ANGULAR" ), SUBTYPE::ANGULAR } };
+    std::map<wxString, SUBTYPE> subTypeMap = { 
+        { wxT( "DIMENSION_ORTHOGONAL" ), SUBTYPE::ORTHOGONAL },
+        { wxT( "DIMENSION_DIRECT" ),     SUBTYPE::DIRECT },
+        { wxT( "DIMENSION_ANGLED" ),     SUBTYPE::ANGLED },
+        { wxT( "DIMENSION_DIAMETER" ),   SUBTYPE::DIAMETER },
+        { wxT( "DIMENSION_RADIUS" ),     SUBTYPE::RADIUS },
+        { wxT( "DIMENSION_ANGULAR" ),    SUBTYPE::ANGULAR } };
 
     if( subTypeMap.find( subTypeStr ) == subTypeMap.end() )
         THROW_UNKNOWN_PARAMETER_IO_ERROR( subTypeStr, aNode->GetName() );
@@ -1500,7 +1508,9 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SYMDEF_PCB::Parse( XNODE* aNode )
         wxString cNodeName = cNode->GetName();
 
         if( ParseSubNode( cNode ) )
+        {
             continue;
+        }
         else if( cNodeName == wxT( "SYMHEIGHT" ) )
         {
             SymHeight = GetXmlAttributeIDLong( cNode, 0 );
@@ -1724,7 +1734,9 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PIN_ATTRIBUTE::Parse( XNODE* aNode )
             AttributeValues.insert( std::make_pair( attrVal.AttributeID, attrVal ) );
         }
         else if( cNodeName == wxT( "TESTLAND" ) )
+        {
             TestlandSide = ParseTestlandSide( cNode );
+        }
         else
         {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
@@ -2001,7 +2013,9 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::CONNECTION_PCB::Parse( XNODE* aNode )
         wxString cNodeName = cNode->GetName();
 
         if( ParseSubNode( cNode ) )
+        {
             continue;
+        }
         else if( !Unrouted && !routeParsed && cNodeName == wxT( "ROUTE" ) )
         {
             Route.Parse( cNode );

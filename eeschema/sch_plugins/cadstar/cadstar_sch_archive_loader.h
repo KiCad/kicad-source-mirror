@@ -177,14 +177,13 @@ private:
     PART::DEFINITION::PIN getPartDefinitionPin(
             const PART& aCadstarPart, const GATE_ID& aGateID, const TERMINAL_ID& aTerminalID );
 
-    // Helper Functions for obtaining individual elements as KiCad elements:
+    //Helper Functions for obtaining individual elements as KiCad elements:
     int              getKiCadUnitNumberFromGate( const GATE_ID& aCadstarGateID );
     LABEL_SPIN_STYLE getSpinStyle( const long long& aCadstarOrientation, bool aMirror );
     LABEL_SPIN_STYLE getSpinStyleDeciDeg( const double& aOrientationDeciDeg );
 
 
-    // General Graphical manipulation functions
-
+    //General Graphical manipulation functions
     std::pair<wxPoint, wxSize> getFigureExtentsKiCad( const FIGURE& aCadstarFigure );
 
     wxPoint getKiCadPoint( wxPoint aCadstarPoint );

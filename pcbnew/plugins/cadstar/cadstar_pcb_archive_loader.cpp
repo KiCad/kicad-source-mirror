@@ -55,6 +55,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
     long long maxDesignSizekicad = std::numeric_limits<int>::max();
 
     if( designSizeXkicad > maxDesignSizekicad || designSizeYkicad > maxDesignSizekicad )
+    {
         THROW_IO_ERROR( wxString::Format(
                 _( "The design is too large and cannot be imported into KiCad. \n"
                    "Please reduce the maximum design size in CADSTAR by navigating to: \n"
@@ -65,17 +66,20 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
                 (double) designSizeYkicad / PCB_IU_PER_MM,
                 (double) maxDesignSizekicad / PCB_IU_PER_MM,
                 (double) maxDesignSizekicad / PCB_IU_PER_MM ) );
+    }
 
     mDesignCenter =
             ( Assignments.Technology.DesignArea.first + Assignments.Technology.DesignArea.second )
             / 2;
 
     if( Layout.NetSynch == NETSYNCH::WARNING )
+    {
         wxLogWarning(
                 _( "The selected file indicates that nets might be out of synchronisation "
                    "with the schematic. It is recommended that you carry out an 'Align Nets' "
                    "procedure in CADSTAR and re-import, to avoid inconsistencies between the "
                    "PCB and the schematic. " ) );
+    }
 
     loadBoardStackup();
     loadDesignRules();
@@ -93,9 +97,18 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
     loadNets();
 
     if( Layout.VariantHierarchy.Variants.size() > 0 )
+    {
         wxLogWarning(
                 _( "The CADSTAR design contains variants which has no KiCad equivalent. All "
                    "components have been loaded on top of each other. " ) );
+    }
+
+    if( Layout.ReuseBlocks.size() > 0 )
+    {
+        wxLogWarning(
+                _( "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
+                   "re-use block information has been discarded during the import." ) );
+    }
 
     wxLogMessage(
             _( "The CADSTAR design has been imported successfully.\n"
@@ -405,14 +418,12 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
     BOARD_DESIGN_SETTINGS&                 ds           = mBoard->GetDesignSettings();
     std::map<SPACINGCODE_ID, SPACINGCODE>& spacingCodes = Assignments.Codedefs.SpacingCodes;
 
-    auto applyRule =
-        [&]( wxString aID, int* aVal )
-        {
-            if( spacingCodes.find( aID ) == spacingCodes.end() )
-                wxLogWarning( _( "Design rule %s was not found. This was ignored." ) );
-            else
-                *aVal = getKiCadLength( spacingCodes.at( aID ).Spacing );
-        };
+    auto applyRule = [&]( wxString aID, int* aVal ) {
+        if( spacingCodes.find( aID ) == spacingCodes.end() )
+            wxLogWarning( _( "Design rule %s was not found. This was ignored." ) );
+        else
+            *aVal = getKiCadLength( spacingCodes.at( aID ).Spacing );
+    };
 
     //Note: for details on the different spacing codes see SPACINGCODE::ID
 
@@ -422,16 +433,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
 
     ds.m_TrackMinWidth = Assignments.Technology.MinRouteWidth;
 
-    auto applyNetClassRule =
-        [&]( wxString aID, ::NETCLASS* aNetClassPtr, void (::NETCLASS::*aFunc)(int) )
-        {
-            int value = -1;
-            applyRule(aID, &value);
+    auto applyNetClassRule = [&]( wxString aID, ::NETCLASS* aNetClassPtr,
+                                     void ( ::NETCLASS::*aFunc )( int ) ) {
+        int value = -1;
+        applyRule( aID, &value );
 
-            if( value != -1 )
-                (aNetClassPtr->*aFunc)(value);
-
-        };
+        if( value != -1 )
+            ( aNetClassPtr->*aFunc )( value );
+    };
 
     applyNetClassRule( "T_T", ds.GetDefault(), &::NETCLASS::SetClearance );
 
@@ -519,7 +528,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryAreas( const SYMDEF_PCB& aComponent,
             else
                 zone->SetLayer( getKiCadLayer( area.LayerID ) );
 
-            zone->SetIsRuleArea( true );       //import all CADSTAR areas as Keepout zones
+            zone->SetIsRuleArea( true );      //import all CADSTAR areas as Keepout zones
             zone->SetDoNotAllowPads( false ); //no CADSTAR equivalent
             zone->SetZoneName( area.ID );
 
@@ -878,7 +887,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadAreas()
             else
                 zone->SetLayer( getKiCadLayer( area.LayerID ) );
 
-            zone->SetIsRuleArea( true );       //import all CADSTAR areas as Keepout zones
+            zone->SetIsRuleArea( true );      //import all CADSTAR areas as Keepout zones
             zone->SetDoNotAllowPads( false ); //no CADSTAR equivalent
             zone->SetZoneName( area.Name );
 

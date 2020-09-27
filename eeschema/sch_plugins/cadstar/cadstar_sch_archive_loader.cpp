@@ -87,7 +87,28 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( ::SCHEMATIC* aSchematic, ::SCH_SHEET* aRo
     loadFigures();
     loadTexts();
     loadDocumentationSymbols();
-    // TODO Load other elements!
+    
+    if( Schematic.VariantHierarchy.Variants.size() > 0 )
+    {
+        wxLogWarning(
+                _( "The CADSTAR design contains variants which has no KiCad equivalent. All "
+                   "components have been loaded on top of each other. " ) );
+    }
+        
+    if( Schematic.Groups.size() > 0 )
+    {
+        wxLogWarning(
+                _( "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
+                   "grouped items have been ungrouped." ) );
+    }
+
+    if( Schematic.ReuseBlocks.size() > 0 )
+    {
+        wxLogWarning(
+                _( "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
+                   "re-use block information has been discarded during the import." ) );
+    }
+
 
     // For all sheets, centre all elements and re calculate the page size:
     for( std::pair<LAYER_ID, SCH_SHEET*> sheetPair : mSheetMap )

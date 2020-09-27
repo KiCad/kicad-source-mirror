@@ -65,30 +65,44 @@ void CADSTAR_ARCHIVE_PARSER::HEADER::Parse( XNODE* aNode )
             Format.Parse( cNode );
         }
         else if( nodeName == wxT( "JOBFILE" ) )
+        {
             JobFile = GetXmlAttributeIDString( cNode, 0 );
+        }
         else if( nodeName == wxT( "JOBTITLE" ) )
+        {
             JobTitle = GetXmlAttributeIDString( cNode, 0 );
+        }
         else if( nodeName == wxT( "GENERATOR" ) )
+        {
             Generator = GetXmlAttributeIDString( cNode, 0 );
+        }
         else if( nodeName == wxT( "RESOLUTION" ) )
         {
             XNODE* subNode = cNode->GetChildren();
+
             if( ( subNode->GetName() == wxT( "METRIC" ) )
                     && ( GetXmlAttributeIDString( subNode, 0 ) == wxT( "HUNDREDTH" ) )
                     && ( GetXmlAttributeIDString( subNode, 1 ) == wxT( "MICRON" ) ) )
             {
                 Resolution = RESOLUTION::HUNDREDTH_MICRON;
             }
-            else // TODO Need to find out if there are other possible resolutions. Logically
-                    // there must be other base units that could be used, such as "IMPERIAL INCH"
-                    // or "METRIC MM" but so far none of settings in CADSTAR generated a different
-                    // output resolution to "HUNDREDTH MICRON"
+            else
+            {
+                // TODO Need to find out if there are other possible resolutions. Logically
+                // there must be other base units that could be used, such as "IMPERIAL INCH"
+                // or "METRIC MM" but so far none of settings in CADSTAR generated a different
+                // output resolution to "HUNDREDTH MICRON"
                 THROW_UNKNOWN_NODE_IO_ERROR( subNode->GetName(), wxT( "HEADER->RESOLUTION" ) );
+            }
         }
         else if( nodeName == wxT( "TIMESTAMP" ) )
+        {
             Timestamp.Parse( cNode );
+        }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "HEADER" ) );
+        }
     }
 }
 
@@ -153,18 +167,30 @@ void CADSTAR_ARCHIVE_PARSER::LINECODE::Parse( XNODE* aNode )
     wxString styleStr = GetXmlAttributeIDString( cNode, 0 );
 
     if( styleStr == wxT( "SOLID" ) )
+    {
         Style = LINESTYLE::SOLID;
+    }
     else if( styleStr == wxT( "DASH" ) )
+    {
         Style = LINESTYLE::DASH;
+    }
     else if( styleStr == wxT( "DASHDOT" ) )
+    {
         Style = LINESTYLE::DASHDOT;
+    }
     else if( styleStr == wxT( "DASHDOTDOT" ) )
+    {
         Style = LINESTYLE::DASHDOTDOT;
+    }
     else if( styleStr == wxT( "DOT" ) )
+    {
         Style = LINESTYLE::DOT;
+    }
     else
+    {
         THROW_UNKNOWN_PARAMETER_IO_ERROR( wxString::Format( "STYLE %s", styleStr ),
                 wxString::Format( "LINECODE -> %s", Name ) );
+    }
 }
 
 
@@ -395,9 +421,13 @@ bool CADSTAR_ARCHIVE_PARSER::SHAPE::IsShape( XNODE* aNode )
 
     if( aNodeName == wxT( "OPENSHAPE" ) || aNodeName == wxT( "OUTLINE" )
             || aNodeName == wxT( "SOLID" ) || aNodeName == wxT( "HATCHED" ) )
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 
@@ -436,8 +466,11 @@ void CADSTAR_ARCHIVE_PARSER::SHAPE::Parse( XNODE* aNode )
         HatchCodeID = GetXmlAttributeIDString( aNode, 0 );
     }
     else
+    {
         wxASSERT_MSG( true, wxT( "Unknown SHAPE type" ) );
+    }
 }
+
 
 CADSTAR_ARCHIVE_PARSER::UNITS CADSTAR_ARCHIVE_PARSER::ParseUnits( XNODE* aNode )
 {
@@ -528,20 +561,28 @@ void CADSTAR_ARCHIVE_PARSER::GRIDS::Parse( XNODE* aNode )
             XNODE* workingGridNode = cNode->GetChildren();
 
             if( !GRID::IsGrid( workingGridNode ) )
+            {
                 THROW_UNKNOWN_NODE_IO_ERROR(
                         workingGridNode->GetName(), wxT( "GRIDS -> WORKINGGRID" ) );
+            }
             else
+            {
                 WorkingGrid.Parse( workingGridNode );
+            }
         }
         else if( cNodeName == wxT( "SCREENGRID" ) )
         {
             XNODE* screenGridNode = cNode->GetChildren();
 
             if( !GRID::IsGrid( screenGridNode ) )
+            {
                 THROW_UNKNOWN_NODE_IO_ERROR(
                         screenGridNode->GetName(), wxT( "GRIDS -> SCREENGRID" ) );
+            }
             else
+            {
                 ScreenGrid.Parse( screenGridNode );
+            }
         }
         else if( GRID::IsGrid( cNode ) )
         {
@@ -558,17 +599,29 @@ bool CADSTAR_ARCHIVE_PARSER::SETTINGS::ParseSubNode( XNODE* aChildNode )
     wxString cNodeName = aChildNode->GetName();
 
     if( cNodeName == wxT( "UNITS" ) )
+    {
         Units = ParseUnits( aChildNode );
+    }
     else if( cNodeName == wxT( "UNITSPRECISION" ) )
+    {
         UnitDisplPrecision = GetXmlAttributeIDLong( aChildNode, 0 );
+    }
     else if( cNodeName == wxT( "INTERLINEGAP" ) )
+    {
         InterlineGap = GetXmlAttributeIDLong( aChildNode, 0 );
+    }
     else if( cNodeName == wxT( "BARLINEGAP" ) )
+    {
         BarlineGap = GetXmlAttributeIDLong( aChildNode, 0 );
+    }
     else if( cNodeName == wxT( "ALLOWBARTEXT" ) )
+    {
         AllowBarredText = true;
+    }
     else if( cNodeName == wxT( "ANGULARPRECISION" ) )
+    {
         AngularPrecision = GetXmlAttributeIDLong( aChildNode, 0 );
+    }
     else if( cNodeName == wxT( "DESIGNORIGIN" ) )
     {
         DesignOrigin.Parse( aChildNode->GetChildren() );
@@ -606,8 +659,7 @@ void CADSTAR_ARCHIVE_PARSER::SETTINGS::Parse( XNODE* aNode )
         wxString cNodeName = cNode->GetName();
 
         if( ParseSubNode( cNode ) )
-        {
-        }
+            continue;
         else
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "SETTINGS" ) );
     }
@@ -829,7 +881,9 @@ void CADSTAR_ARCHIVE_PARSER::ATTRNAME::Parse( XNODE* aNode )
                 THROW_UNKNOWN_PARAMETER_IO_ERROR( attUsageVal, location );
         }
         else if( cNodeName == wxT( "NOTRANSFER" ) )
+        {
             NoTransfer = true;
+        }
         else if( cNodeName == wxT( "COLUMNORDER" ) )
         {
             COLUMNORDER cOrder;
@@ -843,9 +897,13 @@ void CADSTAR_ARCHIVE_PARSER::ATTRNAME::Parse( XNODE* aNode )
             ColumnWidths.push_back( cWidth );
         }
         else if( cNodeName == wxT( "COLUMNINVISIBLE" ) )
+        {
             ColumnInvisible = true;
+        }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
+        }
     }
 }
 
@@ -862,14 +920,18 @@ void CADSTAR_ARCHIVE_PARSER::ATTRIBUTE_VALUE::Parse( XNODE* aNode )
     for( ; cNode; cNode = cNode->GetNext() )
     {
         if( cNode->GetName() == wxT( "READONLY" ) )
+        {
             ReadOnly = true;
+        }
         else if( cNode->GetName() == wxT( "ATTRLOC" ) )
         {
             AttributeLocation.Parse( cNode );
             HasLocation = true;
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "ATTR" ) );
+        }
     }
 }
 
@@ -932,24 +994,38 @@ void CADSTAR_ARCHIVE_PARSER::TEXT_LOCATION::Parse( XNODE* aNode )
         wxString cNodeName = cNode->GetName();
 
         if( ParseSubNode( cNode ) )
+        {
             continue;
+        }
         else if( !attributeIDisSet && cNodeName == wxT( "ATTRREF" ) )
         {
             AttributeID      = GetXmlAttributeIDString( cNode, 0 );
             attributeIDisSet = true;
         }
         else if( cNodeName == wxT( "ORIENT" ) )
+        {
             OrientAngle = GetXmlAttributeIDLong( cNode, 0 );
+        }
         else if( cNodeName == wxT( "MIRROR" ) )
+        {
             Mirror = true;
+        }
         else if( cNodeName == wxT( "FIX" ) )
+        {
             Fixed = true;
+        }
         else if( cNodeName == wxT( "ALIGN" ) )
+        {
             Alignment = ParseAlignment( cNode );
+        }
         else if( cNodeName == wxT( "JUSTIFICATION" ) )
+        {
             Justification = ParseJustification( cNode );
+        }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "TEXTLOC" ) );
+        }
     }
 
     if( !Position.IsFullySpecified() )
@@ -978,7 +1054,9 @@ void CADSTAR_ARCHIVE_PARSER::NETCLASS::Parse( XNODE* aNode )
             Attributes.push_back( attribute_val );
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
+        }
     }
 }
 
@@ -1162,11 +1240,18 @@ void CADSTAR_ARCHIVE_PARSER::FIGURE::Parse( XNODE* aNode )
             SwapRule = ParseSwapRule( cNode );
         }
         else if( cNodeName == wxT( "FIX" ) )
+        {
             Fixed = true;
+        }
         else if( cNodeName == wxT( "GROUPREF" ) )
+        {
+
             GroupID = GetXmlAttributeIDString( cNode, 0 );
+        }
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
+        {
             ReuseBlockRef.Parse( cNode );
+        }
         else if( cNodeName == wxT( "ATTR" ) )
         {
             ATTRIBUTE_VALUE attr;
@@ -1174,7 +1259,9 @@ void CADSTAR_ARCHIVE_PARSER::FIGURE::Parse( XNODE* aNode )
             AttributeValues.insert( std::make_pair( attr.AttributeID, attr ) );
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
+        }
     }
 }
 
@@ -1330,26 +1417,42 @@ void CADSTAR_ARCHIVE_PARSER::PART::DEFINITION::PIN::Parse( XNODE* aNode )
         wxString cNodeName = cNode->GetName();
 
         if( cNodeName == wxT( "PINNAME" ) )
+        {
             Name = GetXmlAttributeIDString( cNode, 0 );
+        }
         else if( cNodeName == wxT( "PINLABEL" ) )
+        {
             Label = GetXmlAttributeIDString( cNode, 0 );
+        }
         else if( cNodeName == wxT( "PINSIGNAL" ) )
+        {
             Signal = GetXmlAttributeIDString( cNode, 0 );
+        }
         else if( cNodeName == wxT( "PINTERM" ) )
         {
             TerminalGate = GetXmlAttributeIDString( cNode, 0 );
             TerminalPin  = GetXmlAttributeIDLong( cNode, 1 );
         }
         else if( cNodeName == wxT( "PINTYPE" ) )
+        {
             Type = GetPinType( cNode );
+        }
         else if( cNodeName == wxT( "PINLOAD" ) )
+        {
             Load = GetXmlAttributeIDLong( cNode, 0 );
+        }
         else if( cNodeName == wxT( "PINPOSITION" ) )
+        {
             Position = (POSITION) GetXmlAttributeIDLong( cNode, 0 );
+        }
         else if( cNodeName == wxT( "PINIDENTIFIER" ) )
+        {
             Identifier = GetXmlAttributeIDString( cNode, 0 );
+        }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
     }
 }
 
@@ -1437,7 +1540,9 @@ void CADSTAR_ARCHIVE_PARSER::PART::DEFINITION::SWAP_GROUP::Parse( XNODE* aNode )
         wxString cNodeName = cNode->GetName();
 
         if( cNodeName == wxT( "EXTERNAL" ) )
+        {
             External = true;
+        }
         else if( cNodeName == wxT( "SWAPGATE" ) )
         {
             SWAP_GATE swapGate;
@@ -1445,7 +1550,9 @@ void CADSTAR_ARCHIVE_PARSER::PART::DEFINITION::SWAP_GROUP::Parse( XNODE* aNode )
             SwapGates.push_back( swapGate );
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
     }
 }
 
@@ -1463,9 +1570,13 @@ void CADSTAR_ARCHIVE_PARSER::PART::DEFINITION::Parse( XNODE* aNode )
         wxString cNodeName = cNode->GetName();
 
         if( cNodeName == wxT( "HIDEPINNAMES" ) )
+        {
             HidePinNames = true;
+        }
         else if( cNodeName == wxT( "MAXPIN" ) )
+        {
             MaxPinCount = GetXmlAttributeIDLong( cNode, 0 );
+        }
         else if( cNodeName == wxT( "GATEDEFINITION" ) )
         {
             GATE gate;
@@ -1497,7 +1608,9 @@ void CADSTAR_ARCHIVE_PARSER::PART::DEFINITION::Parse( XNODE* aNode )
             SwapGroups.push_back( swapGroup );
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
     }
 }
 
@@ -1540,7 +1653,9 @@ void CADSTAR_ARCHIVE_PARSER::PART::Parse( XNODE* aNode )
             AttributeValues.insert( std::make_pair( attr.AttributeID, attr ) );
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
     }
 }
 
@@ -1610,13 +1725,21 @@ bool CADSTAR_ARCHIVE_PARSER::NET::CONNECTION::ParseSubNode( XNODE* aChildNode )
     wxString cNodeName = aChildNode->GetName();
 
     if( cNodeName == wxT( "FIX" ) )
+    {
         Fixed = true;
+    }
     else if( cNodeName == wxT( "HIDDEN" ) )
+    {
         Hidden = true;
+    }
     else if( cNodeName == wxT( "GROUPREF" ) )
+    {
         GroupID = GetXmlAttributeIDString( aChildNode, 0 );
+    }
     else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
+    {
         ReuseBlockRef.Parse( aChildNode );
+    }
     else if( cNodeName == wxT( "ATTR" ) )
     {
         ATTRIBUTE_VALUE attrVal;
@@ -1710,13 +1833,21 @@ void CADSTAR_ARCHIVE_PARSER::DOCUMENTATION_SYMBOL::Parse( XNODE* aNode )
             originParsed = true;
         }
         else if( cNodeName == wxT( "GROUPREF" ) )
+        {
             GroupID = GetXmlAttributeIDString( cNode, 0 );
+        }
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
+        {
             ReuseBlockRef.Parse( cNode );
+        }
         else if( cNodeName == wxT( "FIX" ) )
+        {
             Fixed = true;
+        }
         else if( cNodeName == wxT( "MIRROR" ) )
+        {
             Mirror = true;
+        }
         else if( cNodeName == wxT( "READABILITY" ) )
         {
             Readability = ParseReadability( cNode );
@@ -1815,7 +1946,6 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile(
             }
             else if( !cadstarFileCheckDone )
             {
-
                 if( cNode->GetName() != aFileTypeIdentifier )
                     THROW_IO_ERROR( _( "The selected file is not valid or might be corrupt!" ) );
 
@@ -1865,10 +1995,12 @@ wxString CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDString(
     attrName << aID;
 
     if( !aNode->GetAttribute( attrName, &retVal ) )
+    {
         if( aIsRequired )
             THROW_MISSING_PARAMETER_IO_ERROR( std::to_string( aID ), aNode->GetName() );
         else
             return wxEmptyString;
+    }
 
     return retVal;
 }
@@ -1881,10 +2013,12 @@ long CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDLong(
     bool success = GetXmlAttributeIDString( aNode, aID, aIsRequired ).ToLong( &retVal );
 
     if( !success )
+    {
         if( aIsRequired )
             THROW_PARSING_IO_ERROR( std::to_string( aID ), aNode->GetName() );
         else
             return UNDEFINED_VALUE;
+    }
 
     return retVal;
 }

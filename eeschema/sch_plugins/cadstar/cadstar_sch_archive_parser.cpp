@@ -54,9 +54,13 @@ void CADSTAR_SCH_ARCHIVE_PARSER::Parse()
             }
         }
         else if( cNode->GetName() == wxT( "ASSIGNMENTS" ) )
+        {
             Assignments.Parse( cNode );
+        }
         else if( cNode->GetName() == wxT( "LIBRARY" ) )
+        {
             Library.Parse( cNode );
+        }
         else if( cNode->GetName() == wxT( "DEFAULTS" ) )
         {
             // No design information here (no need to parse)
@@ -64,11 +68,17 @@ void CADSTAR_SCH_ARCHIVE_PARSER::Parse()
             // In future some of this could be converted to KiCad but limited value
         }
         else if( cNode->GetName() == wxT( "PARTS" ) )
+        {
             Parts.Parse( cNode );
+        }
         else if( cNode->GetName() == wxT( "SHEETS" ) )
+        {
             Sheets.Parse( cNode );
+        }
         else if( cNode->GetName() == wxT( "SCHEMATIC" ) )
+        {
             Schematic.Parse( cNode );
+        }
         else if( cNode->GetName() == wxT( "DISPLAY" ) )
         {
             // No design information here (no need to parse)
@@ -178,7 +188,9 @@ void CADSTAR_SCH_ARCHIVE_PARSER::TERMINAL_SHAPE::Parse( XNODE* aNode )
             OrientAngle = GetXmlAttributeIDLong( aNode->GetChildren(), 0 );
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aNode->GetName() );
+        }
 
         CheckNoNextNodes( aNode->GetChildren() );
     }
@@ -247,20 +259,30 @@ void CADSTAR_SCH_ARCHIVE_PARSER::ASSIGNMENTS_SCM::Parse( XNODE* aNode )
     for( ; cNode; cNode = cNode->GetNext() )
     {
         if( cNode->GetName() == wxT( "CODEDEFS" ) )
+        {
             Codedefs.Parse( cNode );
+        }
         else if( cNode->GetName() == wxT( "SETTINGS" ) )
         {
             settingsParsed = true;
             Settings.Parse( cNode );
         }
         else if( cNode->GetName() == wxT( "GRIDS" ) )
+        {
             Grids.Parse( cNode );
+        }
         else if( cNode->GetName() == wxT( "NETCLASSEDITATTRIBSETTINGS" ) )
+        {
             NetclassEditAttributeSettings = true;
+        }
         else if( cNode->GetName() == wxT( "SPCCLASSEDITATTRIBSETTINGS" ) )
+        {
             SpacingclassEditAttributeSettings = true;
+        }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
+        }
     }
 
     if( !settingsParsed )
@@ -332,7 +354,9 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMDEF_SCM::Parse( XNODE* aNode )
         wxString cNodeName = cNode->GetName();
 
         if( ParseSubNode( cNode ) )
+        {
             continue;
+        }
         else if( cNodeName == wxT( "TERMINAL" ) )
         {
             TERMINAL term;
@@ -420,14 +444,18 @@ void CADSTAR_SCH_ARCHIVE_PARSER::COMP::Parse( XNODE* aNode )
     for( ; cNode; cNode = cNode->GetNext() )
     {
         if( cNode->GetName() == wxT( "READONLY" ) )
+        {
             ReadOnly = true;
+        }
         else if( cNode->GetName() == wxT( "ATTRLOC" ) )
         {
             AttrLoc.Parse( cNode );
             HasLocation = true;
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "ATTR" ) );
+        }
     }
 }
 
@@ -443,14 +471,18 @@ void CADSTAR_SCH_ARCHIVE_PARSER::PARTREF::Parse( XNODE* aNode )
     for( ; cNode; cNode = cNode->GetNext() )
     {
         if( cNode->GetName() == wxT( "READONLY" ) )
+        {
             ReadOnly = true;
+        }
         else if( cNode->GetName() == wxT( "ATTRLOC" ) )
         {
             AttrLoc.Parse( cNode );
             HasLocation = true;
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "ATTR" ) );
+        }
     }
 }
 
@@ -472,7 +504,9 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMPINNAME_LABEL::Parse( XNODE* aNode )
             HasLocation = true;
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "ATTR" ) );
+        }
     }
 }
 
@@ -494,7 +528,9 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::PIN_NUM::Parse( XNODE* aNode )
             HasLocation = true;
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "ATTR" ) );
+        }
     }
 }
 
@@ -520,7 +556,9 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOLVARIANT::Parse( XNODE* aNode )
             Reference = GetXmlAttributeIDString( cNode, 0 );
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
     }
 }
 
@@ -582,32 +620,46 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::Parse( XNODE* aNode )
             HasPartRef = true;
         }
         else if( cNodeName == wxT( "PARTNAMENOTVISIBLE" ) )
+        {
             PartNameVisible = false;
+        }
         else if( cNodeName == wxT( "VSYMMASTER" ) )
         {
             VariantParentSymbolID = GetXmlAttributeIDString( aNode, 0 );
             VariantID             = GetXmlAttributeIDString( aNode, 1 );
         }
         else if( cNodeName == wxT( "GROUPREF" ) )
+        {
             GroupID = GetXmlAttributeIDString( cNode, 0 );
+        }
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
+        {
             ReuseBlockRef.Parse( cNode );
+        }
         else if( cNodeName == wxT( "SIGNALREFERENCELINK" ) )
+        {
             SigRefLink.Parse( cNode );
+        }
         else if( cNodeName == wxT( "ORIENT" ) )
         {
             OrientAngle = GetXmlAttributeIDLong( cNode, 0 );
         }
         else if( cNodeName == wxT( "MIRROR" ) )
+        {
             Mirror = true;
+        }
         else if( cNodeName == wxT( "FIX" ) )
+        {
             Fixed = true;
+        }
         else if( cNodeName == wxT( "READABILITY" ) )
         {
             Readability = ParseReadability( cNode );
         }
         else if( cNodeName == wxT( "GATE" ) )
+        {
             GateID = GetXmlAttributeIDString( cNode, 0 );
+        }
         else if( cNodeName == wxT( "SYMBOLVARIANT" ) )
         {
             IsSymbolVariant = true;
@@ -702,11 +754,15 @@ void CADSTAR_SCH_ARCHIVE_PARSER::BUS::Parse( XNODE* aNode )
                     HasBusLabel = true;
                 }
                 else
+                {
                     THROW_UNKNOWN_NODE_IO_ERROR( subNode->GetName(), cNode->GetName() );
+                }
             }
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
     }
 }
 
@@ -724,9 +780,10 @@ void CADSTAR_SCH_ARCHIVE_PARSER::BLOCK::Parse( XNODE* aNode )
     {
         wxString cNodeName = cNode->GetName();
 
-
         if( cNodeName == wxT( "CLONE" ) )
+        {
             Type = TYPE::CLONE;
+        }
         else if( cNodeName == wxT( "PARENT" ) )
         {
             Type         = TYPE::PARENT;
@@ -750,7 +807,9 @@ void CADSTAR_SCH_ARCHIVE_PARSER::BLOCK::Parse( XNODE* aNode )
                     HasBlockLabel = true;
                 }
                 else
+                {
                     THROW_UNKNOWN_NODE_IO_ERROR( subNode->GetName(), cNode->GetName() );
+                }
             }
         }
         else if( cNodeName == wxT( "TERMINAL" ) )
@@ -766,7 +825,9 @@ void CADSTAR_SCH_ARCHIVE_PARSER::BLOCK::Parse( XNODE* aNode )
             Figures.insert( std::make_pair( figure.ID, figure ) );
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
     }
 }
 
@@ -792,7 +853,9 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::SYM_TERM::Parse( XNODE* aNode )
             HasNetLabel = true;
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
     }
 }
 
@@ -836,7 +899,9 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::BUS_TERM::Parse( XNODE* aNode )
             }
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
     }
 
     if( !firstPointParsed || !secondPointParsed )
@@ -864,7 +929,9 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::BLOCK_TERM::Parse( XNODE* aNode )
             HasNetLabel = true;
         }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
     }
 }
 
@@ -881,19 +948,29 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::CONNECTION_SCH::Parse( XNODE* aNode )
         wxString cNodeName = cNode->GetName();
 
         if( ParseSubNode( cNode ) )
+        {
             continue;
+        }
         else if( cNodeName == wxT( "PATH" ) )
         {
             Path = ParseAllChildPoints( cNode, true );
         }
         else if( cNodeName == wxT( "GROUPREF" ) )
+        {
             GroupID = GetXmlAttributeIDString( cNode, 0 );
+        }
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
+        {
             ReuseBlockRef.Parse( cNode );
+        }
         else if( cNodeName == wxT( "CONLINECODE" ) )
+        {
             ConnectionLineCode = GetXmlAttributeIDString( cNode, 0 );
+        }
         else
+        {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "CONN" ) );
+        }
     }
 }
 

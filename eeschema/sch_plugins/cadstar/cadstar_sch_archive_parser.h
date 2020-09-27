@@ -54,6 +54,7 @@ public:
     typedef wxString BLOCK_ID;
     typedef wxString SHEET_NAME;
 
+
     enum class TERMINAL_SHAPE_TYPE
     {
         ANNULUS,
@@ -73,6 +74,7 @@ public:
         TRIANGLE,
         UNDEFINED ///< Only used for error checking (not a real shape)
     };
+
 
     static TERMINAL_SHAPE_TYPE ParseTermShapeType( const wxString& aShapeStr );
 
