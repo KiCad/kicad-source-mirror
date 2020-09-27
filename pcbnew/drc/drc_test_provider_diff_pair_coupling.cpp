@@ -41,7 +41,10 @@
     - DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE
     - DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG
     - DRCE_TOO_MANY_VIAS
-    Todo: arc support.
+    Todo: 
+    - arc support.
+    - improve recognition of coupled segments (now anything that's parallel is considered coupled, causing
+      DRC errors on meanders)
 */
 
 namespace test {
@@ -249,6 +252,8 @@ struct DIFF_PAIR_KEY
     {
         SEG coupledN, coupledP;
         TRACK* parentN, *parentP;
+        int computedGap;
+        bool couplingOK;
     };
 
     struct DIFF_PAIR_ITEMS
@@ -326,14 +331,12 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                 for( int i = 0; i < 2; i++ )
                 {
-                    auto constraint = m_drcEngine->EvalRulesForItems( constraintsToCheck[i], item );
+                    auto constraint = m_drcEngine->EvalRulesForItems( constraintsToCheck[i], item, nullptr, item->GetLayer() );
 
                     if( constraint.IsNull() )
                         continue;
 
                     key.parentRule = constraint.GetParentRule();
-
-                    printf("insert %d %d\n", key.netN, key.netP );
 
                     if( refNet == key.netN )
                         dpRuleMatches[key].itemsN.insert( citem );
@@ -371,7 +374,24 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         it.second.totalLengthN = 0;
         it.second.totalLengthP = 0;
 
-        printf("       coupled prims : %d\n", it.second.coupled.size() );
+        drc_dbg(10, "       coupled prims : %d\n", (int) it.second.coupled.size() );
+
+        OPT<DRC_CONSTRAINT> gapConstraint = it.first.parentRule->FindConstraint( DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP );
+        OPT<DRC_CONSTRAINT> maxUncoupledConstraint = it.first.parentRule->FindConstraint( DRC_CONSTRAINT_TYPE_DIFF_PAIR_MAX_UNCOUPLED );
+
+        for( auto& item : it.second.itemsN )
+        {
+            // fixme: include vias
+            if( auto track = dyn_cast<TRACK*>( item ) )
+                it.second.totalLengthN += track->GetLength();
+        }
+
+        for( auto& item : it.second.itemsP )
+        {
+            // fixme: include vias
+            if( auto track = dyn_cast<TRACK*>( item ) )
+                it.second.totalLengthP += track->GetLength();
+        }
 
         for( auto& cpair : it.second.coupled )
         {
@@ -381,7 +401,103 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
             gap -= cpair.parentN->GetWidth() / 2;
             gap -= cpair.parentP->GetWidth() / 2;
 
-            printf("               len %d gap %d\n", length, gap);
+            cpair.computedGap = gap;
+
+            drc_dbg(10, "               len %d gap %d l %d\n", length, gap, cpair.parentP->GetLayer() );
+
+            if( gapConstraint )
+            {
+                auto val = gapConstraint->GetValue();
+                bool insideRange = true;
+                if ( val.HasMin() && gap < val.Min() )
+                    insideRange = false;
+                if ( val.HasMax() && gap > val.Max() )
+                    insideRange = false;
+
+
+//                if(val.HasMin() && val.HasMax() )
+  //                  drc_dbg(10, "Vmin %d vmax %d\n", val.Min(), val.Max() );
+
+                cpair.couplingOK = insideRange;
+
+                if( insideRange )
+                    it.second.totalCoupled += length;
+            }
+        }
+
+        int totalLen = std::max( it.second.totalLengthN, it.second.totalLengthP );
+            reportAux( wxString::Format( "   - coupled length: %s, total length: %s",
+
+            MessageTextFromValue( userUnits(), it.second.totalCoupled, false),
+            MessageTextFromValue( userUnits(), totalLen, false ) ) );
+
+        int totalUncoupled = totalLen - it.second.totalCoupled;
+
+        bool uncoupledViolation = false;
+
+        if( maxUncoupledConstraint )
+        {
+            auto val = maxUncoupledConstraint->GetValue();
+
+            if ( val.HasMax() && totalUncoupled > val.Max() )
+            {
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG );
+                wxString                  msg =
+                    drcItem->GetErrorText() + " (" + maxUncoupledConstraint->GetParentRule()->m_Name + " ";
+
+                msg += wxString::Format( _( "maximum uncoupled length: %s; actual: %s)" ),
+                        MessageTextFromValue( userUnits(), val.Max(), true ),
+                        MessageTextFromValue( userUnits(), totalUncoupled, true ) );
+
+                drcItem->SetErrorMessage( msg );
+
+                for( auto offendingTrack : it.second.itemsP )
+                    drcItem->AddItem( offendingTrack );
+                for( auto offendingTrack : it.second.itemsN )
+                    drcItem->AddItem( offendingTrack );
+
+                uncoupledViolation = true;
+
+                drcItem->SetViolatingRule( maxUncoupledConstraint->GetParentRule() );
+
+                reportViolation( drcItem, (*it.second.itemsP.begin())->GetPosition() );
+            }
+        }
+
+        if ( gapConstraint && (uncoupledViolation || !maxUncoupledConstraint ) )
+        {
+            for( auto& cpair : it.second.coupled )
+            {
+                if( !cpair.couplingOK )
+                {
+                    auto val = gapConstraint->GetValue();
+
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE );
+                    wxString                  msg =
+                    drcItem->GetErrorText() + " (" + maxUncoupledConstraint->GetParentRule()->m_Name + " ";
+
+                    if( val.HasMin() )
+                        msg += wxString::Format( _( "minimum gap: %s; " ),
+                        MessageTextFromValue( userUnits(), val.Min(), true ) );
+
+                    if( val.HasMax() )
+                        msg += wxString::Format( _( "maximum gap: %s; " ),
+                        MessageTextFromValue( userUnits(), val.Max(), true ) );
+
+
+                    msg += wxString::Format( _( "actual: %s)" ),
+                        MessageTextFromValue( userUnits(), cpair.computedGap, true ) );
+
+                    drcItem->SetErrorMessage( msg );
+
+                    drcItem->AddItem( cpair.parentP );
+                    drcItem->AddItem( cpair.parentN );
+
+                    drcItem->SetViolatingRule( gapConstraint->GetParentRule() );
+
+                    reportViolation( drcItem, cpair.parentP->GetPosition() );
+                }
+            }
         }
     }
 
