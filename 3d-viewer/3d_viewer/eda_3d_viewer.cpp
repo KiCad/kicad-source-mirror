@@ -528,6 +528,7 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
         TRANSFER_SETTING( FL_ECO,                             show_eco );
         TRANSFER_SETTING( FL_SHOW_BOARD_BODY,                 show_board_body );
         TRANSFER_SETTING( FL_CLIP_SILK_ON_VIA_ANNULUS,        clip_silk_on_via_annulus );
+        TRANSFER_SETTING( FL_RENDER_PLATED_PADS_AS_PLATED,    renderPlatedPadsAsPlated );
 
         m_boardAdapter.GridSet( static_cast<GRID3D_TYPE>( cfg->m_Render.grid_type ) );
         m_boardAdapter.AntiAliasingSet( static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode ) );
@@ -676,6 +677,7 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
         TRANSFER_SETTING( show_axis,                FL_AXIS );
         TRANSFER_SETTING( show_board_body,          FL_SHOW_BOARD_BODY );
         TRANSFER_SETTING( clip_silk_on_via_annulus, FL_CLIP_SILK_ON_VIA_ANNULUS );
+        TRANSFER_SETTING( renderPlatedPadsAsPlated, FL_RENDER_PLATED_PADS_AS_PLATED );
         TRANSFER_SETTING( show_comments,            FL_COMMENTS );
         TRANSFER_SETTING( show_eco,                 FL_ECO );
         TRANSFER_SETTING( show_footprints_insert,   FL_MODULE_ATTRIBUTES_NORMAL_INSERT );

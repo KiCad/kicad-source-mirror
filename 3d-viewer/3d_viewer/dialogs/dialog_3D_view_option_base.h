@@ -57,6 +57,7 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkBoxSubtractMaskFromSilk;
 		wxStaticBitmap* m_bitmapClipSilkOnViaAnnulus;
 		wxCheckBox* m_checkBoxClipSilkOnViaAnnulus;
+		wxCheckBox* m_checkBoxRenderPlatedPadsAsPlated;
 		wxStaticBitmap* m_bitmap3DshapesTH;
 		wxCheckBox* m_checkBox3DshapesTH;
 		wxStaticBitmap* m_bitmap3DshapesSMD;

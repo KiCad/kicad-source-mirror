@@ -198,6 +198,7 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
     m_checkBoxECO->SetValue( m_settings.GetFlag( FL_ECO ) );
     m_checkBoxSubtractMaskFromSilk->SetValue( m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) );
     m_checkBoxClipSilkOnViaAnnulus->SetValue( m_settings.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) );
+    m_checkBoxRenderPlatedPadsAsPlated->SetValue( m_settings.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) );
 
     // OpenGL options
     m_checkBoxCuThickness->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
@@ -253,6 +254,7 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
     m_settings.SetFlag( FL_ZONE, m_checkBoxAreas->GetValue() );
     m_settings.SetFlag( FL_SUBTRACT_MASK_FROM_SILK, m_checkBoxSubtractMaskFromSilk->GetValue() );
     m_settings.SetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS, m_checkBoxClipSilkOnViaAnnulus->GetValue() );
+    m_settings.SetFlag( FL_RENDER_PLATED_PADS_AS_PLATED, m_checkBoxRenderPlatedPadsAsPlated->GetValue() );
 
     // Set 3D shapes visibility
     m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, m_checkBox3DshapesTH->GetValue() );

@@ -733,7 +733,11 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
 
         if( (layer_id >= F_Cu) && (layer_id <= B_Cu) )
         {
-            setCopperMaterial();
+            if( !m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) ||
+                !m_boardAdapter.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) )
+                set_layer_material( layer_id );
+            else
+                setCopperMaterial();
 
             if( skipRenderHoles )
             {
@@ -1082,7 +1086,11 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
     m_ogl_disp_lists_layers.clear();
 
     delete m_ogl_disp_lists_platedPads_F_Cu;
+    m_ogl_disp_lists_platedPads_F_Cu = nullptr;
+
     delete m_ogl_disp_lists_platedPads_B_Cu;
+    m_ogl_disp_lists_platedPads_B_Cu = nullptr;
+
 
     for( MAP_OGL_DISP_LISTS::const_iterator ii = m_ogl_disp_lists_layers_holes_outer.begin();
          ii != m_ogl_disp_lists_layers_holes_outer.end();

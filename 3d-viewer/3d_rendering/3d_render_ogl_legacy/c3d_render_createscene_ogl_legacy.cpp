@@ -622,10 +622,13 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
 
     }// for each layer on
 
-    m_ogl_disp_lists_platedPads_F_Cu = generateLayerListFromContainer( m_boardAdapter.GetPlatedPads_Front(),
-                                                                       m_boardAdapter.GetPolyPlatedPads_Front(), F_Cu );
-    m_ogl_disp_lists_platedPads_B_Cu = generateLayerListFromContainer( m_boardAdapter.GetPlatedPads_Back(),
-                                                                       m_boardAdapter.GetPolyPlatedPads_Back(), B_Cu );
+    if( m_boardAdapter.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) )
+    {
+        m_ogl_disp_lists_platedPads_F_Cu = generateLayerListFromContainer( m_boardAdapter.GetPlatedPads_Front(),
+                                                                           m_boardAdapter.GetPolyPlatedPads_Front(), F_Cu );
+        m_ogl_disp_lists_platedPads_B_Cu = generateLayerListFromContainer( m_boardAdapter.GetPlatedPads_Back(),
+                                                                           m_boardAdapter.GetPolyPlatedPads_Back(), B_Cu );
+    }
 
     // Load 3D models
     // /////////////////////////////////////////////////////////////////////////

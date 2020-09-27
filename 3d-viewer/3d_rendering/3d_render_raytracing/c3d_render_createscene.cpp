@@ -703,18 +703,20 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
     }// for each layer on map
 
     // Create plated copper
-
-    SFVEC3F layerColor_F_Cu = m_boardAdapter.GetLayerColor( F_Cu );
-    SFVEC3F layerColor_B_Cu = m_boardAdapter.GetLayerColor( B_Cu );
-
-    if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+    if( m_boardAdapter.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) )
     {
-        layerColor_F_Cu = m_boardAdapter.m_CopperColor;;
-        layerColor_B_Cu = layerColor_F_Cu;
-    }
+        SFVEC3F layerColor_F_Cu = m_boardAdapter.GetLayerColor( F_Cu );
+        SFVEC3F layerColor_B_Cu = m_boardAdapter.GetLayerColor( B_Cu );
 
-    createItemsFromContainer( m_boardAdapter.GetPlatedPads_Front(), F_Cu, &m_materials.m_Copper, layerColor_F_Cu, +m_boardAdapter.GetCopperThickness3DU() * 0.1f );
-    createItemsFromContainer( m_boardAdapter.GetPlatedPads_Back(), B_Cu, &m_materials.m_Copper, layerColor_B_Cu, -m_boardAdapter.GetCopperThickness3DU() * 0.1f );
+        if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+        {
+            layerColor_F_Cu = m_boardAdapter.m_CopperColor;
+            layerColor_B_Cu = layerColor_F_Cu;
+        }
+
+        createItemsFromContainer( m_boardAdapter.GetPlatedPads_Front(), F_Cu, &m_materials.m_Copper, layerColor_F_Cu, +m_boardAdapter.GetCopperThickness3DU() * 0.1f );
+        createItemsFromContainer( m_boardAdapter.GetPlatedPads_Back(), B_Cu, &m_materials.m_Copper, layerColor_B_Cu, -m_boardAdapter.GetCopperThickness3DU() * 0.1f );
+    }
 
     // Add Mask layer
     // Solder mask layers are "negative" layers so the elements that we have

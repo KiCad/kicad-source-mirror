@@ -64,7 +64,10 @@ void BOARD_ADAPTER::destroyLayers()
     }
 
     delete m_F_Cu_PlatedPads_poly;
+    m_F_Cu_PlatedPads_poly = nullptr;
+
     delete m_B_Cu_PlatedPads_poly;
+    m_B_Cu_PlatedPads_poly = nullptr;
 
     if( !m_layers_inner_holes_poly.empty() )
     {
@@ -91,7 +94,10 @@ void BOARD_ADAPTER::destroyLayers()
     }
 
     delete m_platedpads_container2D_F_Cu;
+    m_platedpads_container2D_F_Cu = nullptr;
+
     delete m_platedpads_container2D_B_Cu;
+    m_platedpads_container2D_B_Cu = nullptr;
 
     if( !m_layers_holes2D.empty() )
     {
@@ -203,11 +209,15 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-    m_F_Cu_PlatedPads_poly = new SHAPE_POLY_SET;
-    m_B_Cu_PlatedPads_poly = new SHAPE_POLY_SET;
+    if( GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) )
+    {
+        m_F_Cu_PlatedPads_poly = new SHAPE_POLY_SET;
+        m_B_Cu_PlatedPads_poly = new SHAPE_POLY_SET;
 
-    m_platedpads_container2D_F_Cu = new CBVHCONTAINER2D;
-    m_platedpads_container2D_B_Cu = new CBVHCONTAINER2D;
+        m_platedpads_container2D_F_Cu = new CBVHCONTAINER2D;
+        m_platedpads_container2D_B_Cu = new CBVHCONTAINER2D;
+
+    }
 
     if( aStatusReporter )
         aStatusReporter->Report( _( "Create tracks and vias" ) );
@@ -508,6 +518,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
+    const bool renderPlatedPadsAsPlated = GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED );
+
     // Add modules PADs objects to containers
     for( PCB_LAYER_ID curr_layer_id : layer_id )
     {
@@ -525,7 +537,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                                    curr_layer_id,
                                                    0,
                                                    true,
-                                                   true,
+                                                   renderPlatedPadsAsPlated,
                                                    false );
 
             // Micro-wave modules may have items on copper layers
@@ -536,24 +548,27 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-    // ADD PLATED PADS
-    for( MODULE* module : m_board->Modules() )
+    if( renderPlatedPadsAsPlated )
     {
-        AddPadsShapesWithClearanceToContainer( module,
-                                               m_platedpads_container2D_F_Cu,
-                                               F_Cu,
-                                               0,
-                                               true,
-                                               false,
-                                               true );
+        // ADD PLATED PADS
+        for( MODULE* module : m_board->Modules() )
+        {
+            AddPadsShapesWithClearanceToContainer( module,
+                                                   m_platedpads_container2D_F_Cu,
+                                                   F_Cu,
+                                                   0,
+                                                   true,
+                                                   false,
+                                                   true );
 
-        AddPadsShapesWithClearanceToContainer( module,
-                                               m_platedpads_container2D_B_Cu,
-                                               B_Cu,
-                                               0,
-                                               true,
-                                               false,
-                                               true );
+            AddPadsShapesWithClearanceToContainer( module,
+                                                   m_platedpads_container2D_B_Cu,
+                                                   B_Cu,
+                                                   0,
+                                                   true,
+                                                   false,
+                                                   true );
+        }
     }
 
     // Add modules PADs poly contourns (vertical outlines)
@@ -573,26 +588,30 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 // has same shape as its hole
                 module->TransformPadsShapesWithClearanceToPolygon( curr_layer_id, *layerPoly,
                                                                    0, ARC_HIGH_DEF, true,
-                                                                   true, false );
+                                                                   renderPlatedPadsAsPlated,
+                                                                   false );
 
                 transformGraphicModuleEdgeToPolygonSet( module, curr_layer_id, *layerPoly );
             }
         }
 
-        // ADD PLATED PADS contourns
-        for( auto module : m_board->Modules() )
+        if( renderPlatedPadsAsPlated )
         {
-            module->TransformPadsShapesWithClearanceToPolygon( F_Cu, *m_F_Cu_PlatedPads_poly,
-                                                               0, ARC_HIGH_DEF, true,
-                                                               false, true );
+            // ADD PLATED PADS contourns
+            for( auto module : m_board->Modules() )
+            {
+                module->TransformPadsShapesWithClearanceToPolygon( F_Cu, *m_F_Cu_PlatedPads_poly,
+                                                                   0, ARC_HIGH_DEF, true,
+                                                                   false, true );
 
-            //transformGraphicModuleEdgeToPolygonSet( module, F_Cu, *m_F_Cu_PlatedPads_poly );
+                //transformGraphicModuleEdgeToPolygonSet( module, F_Cu, *m_F_Cu_PlatedPads_poly );
 
-            module->TransformPadsShapesWithClearanceToPolygon( B_Cu, *m_B_Cu_PlatedPads_poly,
-                                                               0, ARC_HIGH_DEF, true,
-                                                               false, true );
+                module->TransformPadsShapesWithClearanceToPolygon( B_Cu, *m_B_Cu_PlatedPads_poly,
+                                                                   0, ARC_HIGH_DEF, true,
+                                                                   false, true );
 
-            //transformGraphicModuleEdgeToPolygonSet( module, B_Cu, *m_B_Cu_PlatedPads_poly );
+                //transformGraphicModuleEdgeToPolygonSet( module, B_Cu, *m_B_Cu_PlatedPads_poly );
+            }
         }
     }
 
@@ -761,50 +780,60 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
-        if( m_F_Cu_PlatedPads_poly && ( m_layers_poly.find( F_Cu ) != m_layers_poly.end() ) )
+        if( GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) )
         {
-            SHAPE_POLY_SET *layerPoly_F_Cu = m_layers_poly[F_Cu];
-            layerPoly_F_Cu->BooleanSubtract( *m_F_Cu_PlatedPads_poly, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+            if( m_F_Cu_PlatedPads_poly && ( m_layers_poly.find( F_Cu ) != m_layers_poly.end() ) )
+            {
+                SHAPE_POLY_SET *layerPoly_F_Cu = m_layers_poly[F_Cu];
+                layerPoly_F_Cu->BooleanSubtract( *m_F_Cu_PlatedPads_poly, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
-            m_F_Cu_PlatedPads_poly->Simplify( SHAPE_POLY_SET::PM_FAST );
+                m_F_Cu_PlatedPads_poly->Simplify( SHAPE_POLY_SET::PM_FAST );
+            }
+
+            if( m_B_Cu_PlatedPads_poly && ( m_layers_poly.find( B_Cu ) != m_layers_poly.end() ) )
+            {
+                SHAPE_POLY_SET *layerPoly_B_Cu = m_layers_poly[B_Cu];
+                layerPoly_B_Cu->BooleanSubtract( *m_B_Cu_PlatedPads_poly, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+
+                m_B_Cu_PlatedPads_poly->Simplify( SHAPE_POLY_SET::PM_FAST );
+            }
         }
 
-        if( m_B_Cu_PlatedPads_poly && ( m_layers_poly.find( B_Cu ) != m_layers_poly.end() ) )
-        {
-            SHAPE_POLY_SET *layerPoly_B_Cu = m_layers_poly[B_Cu];
-            layerPoly_B_Cu->BooleanSubtract( *m_B_Cu_PlatedPads_poly, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
-
-            m_B_Cu_PlatedPads_poly->Simplify( SHAPE_POLY_SET::PM_FAST );
-        }
-
+        std::vector< PCB_LAYER_ID > &selected_layer_id = layer_id;
         std::vector< PCB_LAYER_ID > layer_id_without_F_and_B;
-        layer_id_without_F_and_B.clear();
-        layer_id_without_F_and_B.reserve( layer_id.size() );
 
-        for( size_t i = 0; i < layer_id.size(); ++i )
+        if( GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) )
         {
-            if( ( layer_id[i] != F_Cu ) &&
-                ( layer_id[i] != B_Cu ) )
-                layer_id_without_F_and_B.push_back( layer_id[i] );
+            layer_id_without_F_and_B.clear();
+            layer_id_without_F_and_B.reserve( layer_id.size() );
+
+            for( size_t i = 0; i < layer_id.size(); ++i )
+            {
+                if( ( layer_id[i] != F_Cu ) &&
+                    ( layer_id[i] != B_Cu ) )
+                    layer_id_without_F_and_B.push_back( layer_id[i] );
+            }
+
+            selected_layer_id = layer_id_without_F_and_B;
         }
 
-        if( layer_id_without_F_and_B.size() > 0 )
+        if( selected_layer_id.size() > 0 )
         {
             std::atomic<size_t> nextItem( 0 );
             std::atomic<size_t> threadsFinished( 0 );
 
             size_t parallelThreadCount = std::min<size_t>(
                     std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
-                    layer_id_without_F_and_B.size() );
+                    selected_layer_id.size() );
             for( size_t ii = 0; ii < parallelThreadCount; ++ii )
             {
-                std::thread t = std::thread( [&nextItem, &threadsFinished, &layer_id_without_F_and_B, this]()
+                std::thread t = std::thread( [&nextItem, &threadsFinished, &selected_layer_id, this]()
                 {
                     for( size_t i = nextItem.fetch_add( 1 );
-                                i < layer_id_without_F_and_B.size();
+                                i < selected_layer_id.size();
                                 i = nextItem.fetch_add( 1 ) )
                     {
-                        auto layerPoly = m_layers_poly.find( layer_id_without_F_and_B[i] );
+                        auto layerPoly = m_layers_poly.find( selected_layer_id[i] );
 
                         if( layerPoly != m_layers_poly.end() )
                             // This will make a union of all added contours

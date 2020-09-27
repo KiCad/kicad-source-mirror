@@ -77,13 +77,16 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_checkBoxClipSilkOnViaAnnulus = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Clip silkscreen at via annulus"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerRenderOptions->Add( m_checkBoxClipSilkOnViaAnnulus, 0, wxALL, 5 );
 
-	wxFlexGridSizer* fgSizer3;
-	fgSizer3 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer3->SetFlexibleDirection( wxBOTH );
-	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	fgSizerRenderOptions->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	fgSizerRenderOptions->Add( fgSizer3, 1, wxEXPAND, 5 );
+	fgSizerRenderOptions->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_checkBoxRenderPlatedPadsAsPlated = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Non plated pads copper as bare copper"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxRenderPlatedPadsAsPlated->SetToolTip( _("Display plated pads as plated but other copper as raw copper material. (Slow)") );
+
+	fgSizerRenderOptions->Add( m_checkBoxRenderPlatedPadsAsPlated, 0, wxALL, 5 );
 
 
 	sbSizer1->Add( fgSizerRenderOptions, 0, wxEXPAND|wxBOTTOM, 5 );
