@@ -74,16 +74,16 @@ static PATH_STATUS uniquePathBetweenNodes( CN_ITEM* u, CN_ITEM* v, std::vector<C
     using Path = std::vector<CN_ITEM*>;
     std::deque<Path> Q;
 
-    Path p;
-    int pathFound = false;
-    p.push_back( u );
-    Q.push_back( p );
+    Path pInit;
+    int  pathFound = false;
+    pInit.push_back( u );
+    Q.push_back( pInit );
 
     while( Q.size() )
     {
         Path path = Q.front();
         Q.pop_front();
-        CN_ITEM *last = path.back();
+        CN_ITEM* last = path.back();
 
         if( last == v )
         {
@@ -95,21 +95,22 @@ static PATH_STATUS uniquePathBetweenNodes( CN_ITEM* u, CN_ITEM* v, std::vector<C
 
         for( auto ci : last->ConnectedItems() )
         {
-            bool vertexVisited = isVertexVisited(ci, path);
+            bool vertexVisited = isVertexVisited( ci, path );
 
-            for( auto &p : Q )
-                if (isVertexVisited(ci, p))
+            for( auto& p : Q )
+                if( isVertexVisited( ci, p ) )
                 {
                     vertexVisited = true;
                     break;
                 }
 
-         if (!vertexVisited) {
-            Path newpath(path);
-            newpath.push_back(ci);
-            Q.push_back(newpath);
-         }
-      }
+            if( !vertexVisited )
+            {
+                Path newpath( path );
+                newpath.push_back( ci );
+                Q.push_back( newpath );
+            }
+        }
     }
 
     return pathFound ? PS_OK : PS_NO_PATH;
