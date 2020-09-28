@@ -146,7 +146,7 @@ public:
      *
      * @param aFocus is the window to keep focus on (if supported)
      */
-    void Popup( wxWindow* aFocus = nullptr );
+    void Popup( wxWindow* aFocus = nullptr ) override;
 
     /**
      * Set the action group that this palette contains the actions for
