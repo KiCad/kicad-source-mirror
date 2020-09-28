@@ -36,6 +36,8 @@
  * regular polygon
  *
  * We need round apertures to plot lines, so we also defined a aperture type for plotting
+ *
+ * Other aperture types are aperture macros
  */
 #define FIRST_DCODE_VALUE 10    // D_CODE < 10 is a command, D_CODE >= 10 is a tool
 
@@ -43,21 +45,26 @@ class APERTURE
 {
 public:
     enum APERTURE_TYPE {
-        AT_CIRCLE   = 1,    // round aperture, to flash pads
-        AT_RECT     = 2,    // rect aperture, to flash pads
-        AT_PLOTTING = 3,    // round aperture, to plot lines
-        AT_OVAL     = 4,    // oval aperture, to flash pads
-        AT_REGULAR_POLY = 5,// Regular polygon (n vertices, n = 3 .. 12, with rotation)
-        AT_REGULAR_POLY3,   // Regular polygon 3 vertices, with rotation
-        AT_REGULAR_POLY4,   // Regular polygon 4 vertices, with rotation
-        AT_REGULAR_POLY5,   // Regular polygon 5 vertices, with rotation
-        AT_REGULAR_POLY6,   // Regular polygon 6 vertices, with rotation
-        AT_REGULAR_POLY7,   // Regular polygon 7 vertices, with rotation
-        AT_REGULAR_POLY8,   // Regular polygon 8 vertices, with rotation
-        AT_REGULAR_POLY9,   // Regular polygon 9 vertices, with rotation
-        AT_REGULAR_POLY10,  // Regular polygon 10 vertices, with rotation
-        AT_REGULAR_POLY11,  // Regular polygon 11 vertices, with rotation
-        AT_REGULAR_POLY12,  // Regular polygon 12 vertices, with rotation
+        AT_CIRCLE   = 1,        // round aperture, to flash pads
+        AT_RECT     = 2,        // rect aperture, to flash pads
+        AT_PLOTTING = 3,        // round aperture, to plot lines
+        AT_OVAL     = 4,        // oval aperture, to flash pads
+        AT_REGULAR_POLY = 5,    // Regular polygon (n vertices, n = 3 .. 12, with rotation)
+        AT_REGULAR_POLY3,       // Regular polygon 3 vertices, with rotation
+        AT_REGULAR_POLY4,       // Regular polygon 4 vertices, with rotation
+        AT_REGULAR_POLY5,       // Regular polygon 5 vertices, with rotation
+        AT_REGULAR_POLY6,       // Regular polygon 6 vertices, with rotation
+        AT_REGULAR_POLY7,       // Regular polygon 7 vertices, with rotation
+        AT_REGULAR_POLY8,       // Regular polygon 8 vertices, with rotation
+        AT_REGULAR_POLY9,       // Regular polygon 9 vertices, with rotation
+        AT_REGULAR_POLY10,      // Regular polygon 10 vertices, with rotation
+        AT_REGULAR_POLY11,      // Regular polygon 11 vertices, with rotation
+        AT_REGULAR_POLY12,      // Regular polygon 12 vertices, with rotation
+        AM_ROUND_RECT,          // Aperture macro for round rect pads
+        AM_ROT_RECT,            // Aperture macro for rotated rect pads
+        APER_MACRO_OUTLINE4P,   // Aperture macro for trapezoid pads (outline with 4 corners)
+        AM_ROTATED_OVAL         // Aperture macro for rotated oval pads
+                                // (not rotated uses a primitive)
     };
 
     void SetSize( const wxSize& aSize )
@@ -72,15 +79,21 @@ public:
 
     void SetDiameter( int aDiameter )
     {
-        m_Size.x = aDiameter;
+        m_Radius = aDiameter/2;
     }
 
     int GetDiameter()
     {
-        return m_Size.x;
+        // For round primitive, the diameter is the m_Size.x ot m_Size.y
+        if( m_Type == AT_CIRCLE || m_Type == AT_PLOTTING )
+            return m_Size.x;
+
+        // For rounded shapes (macro apertures), return m_Radius * 2
+        // but usually they use the radius (m_Radius)
+        return m_Radius*2;
     }
 
-    void SetVerticeCount( int aCount )
+    void SetRegPolyVerticeCount( int aCount )
     {
         if( aCount < 3 )
             aCount = 3;
@@ -90,30 +103,37 @@ public:
         m_Type = (APERTURE_TYPE)(AT_REGULAR_POLY3 - 3 + aCount);
     }
 
-    int GetVerticeCount()
+    int GetRegPolyVerticeCount()
     {
         return m_Type - AT_REGULAR_POLY3 + 3;
     }
 
     void SetRotation( double aRotDegree )
     {
-        // The rotation is stored in 1/1000 degree
-        m_Size.y = int( aRotDegree * 1000.0 );
+        // The rotation is stored in  degree
+       m_Rotation = aRotDegree;
     }
 
     double GetRotation()
     {
-        // The rotation is stored in 1/1000 degree
-        return m_Size.y / 1000.0;
+        // The rotation is stored in degree
+        return m_Rotation;
     }
 
-    // Type ( Line, rect , circulaire , ovale poly 3 to 12 vertices )
+    // Type ( Line, rect , circulaire , ovale poly 3 to 12 vertices, aperture macro )
     APERTURE_TYPE m_Type;
 
-    // horiz and Vert size, or diameter and rotation for regular polygon
-    // The diameter (for  circle and polygons) is stored in m_Size.x
-    // the rotation is stored in m_Size.y in 1/1000 degree
+    // horiz and Vert size
     wxSize        m_Size;
+
+    // list of corners for polygon shape
+    std::vector<wxPoint>  m_Corners;
+
+    // Radius for polygon and round rect shape
+    int           m_Radius;
+
+    // Rotation in degrees
+    double        m_Rotation;
 
     // code number ( >= 10 )
     int           m_DCode;

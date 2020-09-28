@@ -200,11 +200,25 @@ public:
      * @return a index to the aperture in aperture list which meets the size and type of tool
      * if the aperture does not exist, it is created and entered in aperture list
      * @param aSize = the size of tool
+     * @param aRadius = the radius used for some shapes tool (oval, roundrect macros)
+     * @param aRotDegree = the rotation of tool (primitives round, oval rect accept only 0.0)
      * @param aType = the type ( shape ) of tool
      * @param aApertureAttribute = an aperture attribute of the tool (a tool can have onlu one attribute)
      * 0 = no specific attribute
      */
-    int GetOrCreateAperture( const wxSize& aSize,
+    int GetOrCreateAperture( const wxSize& aSize, int aRadius, double aRotDegree,
+                    APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
+
+    /**
+     * @return a index to the aperture in aperture list which meets the data and type of tool
+     * if the aperture does not exist, it is created and entered in aperture list
+     * @param aCorners = the corner list
+     * @param aRotDegree = the rotation of tool
+     * @param aType = the type ( shape ) of tool that can manage a list of corners (polygon)
+     * @param aApertureAttribute = an aperture attribute of the tool (a tool can have onlu one attribute)
+     * 0 = no specific attribute
+     */
+    int GetOrCreateAperture( const std::vector<wxPoint>& aCorners, double aRotDegree,
                     APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
 protected:
@@ -237,7 +251,8 @@ protected:
      * size, type and attributes.
      * write the DCode selection on gerber file
      */
-    void selectAperture( const wxSize& aSize, APERTURE::APERTURE_TYPE aType,
+    void selectAperture( const wxSize& aSize, int aRadius, double aRotDegree,
+                         APERTURE::APERTURE_TYPE aType,
                          int aApertureAttribute );
     /**
      * Pick an existing aperture or create a new one, matching the
@@ -245,7 +260,17 @@ protected:
      * It apply only to apertures with type = AT_REGULAR_POLY3 to AT_REGULAR_POLY12
      * write the DCode selection on gerber file
      */
-    void selectAperture( int aDiameter, double aPolygonRotation,
+    void selectAperture( const std::vector<wxPoint>& aCorners, double aPolygonRotation,
+                         APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
+
+    /**
+     * Pick an existing aperture or create a new one, matching the
+     * corner list, aRotDegree, type and attributes.
+     * It apply only to apertures managing a polygon that differs from AT_REGULAR_POLY3
+     * to AT_REGULAR_POLY12 (for instance APER_MACRO_TRAPEZOID )
+     * write the DCode selection on gerber file
+     */
+    void selectAperture( int aDiameter, double aRotDegree,
                          APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
     /**
@@ -294,6 +319,10 @@ protected:
 
     std::vector<APERTURE> m_apertures; // The list of available apertures
     int     m_currentApertureIdx;      // The index of the current aperture in m_apertures
+    bool    m_hasApertureRoundRect;    // true is at least one round rect aperture is in use
+    bool    m_hasApertureRotOval;      // true is at least one oval rotated aperture is in use
+    bool    m_hasApertureRotRect;      // true is at least one rect. rotated aperture is in use
+    bool    m_hasApertureOutline;      // true is at least one outline (free polygon) aperture is in use
 
     bool    m_gerberUnitInch;          // true if the gerber units are inches, false for mm
     int     m_gerberUnitFmt;           // number of digits in mantissa.

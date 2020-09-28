@@ -236,8 +236,27 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
                                       aPad->GetOrientation(), aPlotMode, &gbr_metadata );
         break;
 
-    default:
     case PAD_SHAPE_TRAPEZOID:
+    {
+        // Build the pad polygon in coordinates relative to the pad
+        // (i.e. for a pad at pos 0,0, rot 0.0). Needed to use aperture macros,
+        // to be able to create a pattern common to all trapezoid pads having the same shape
+        wxPoint coord[4];
+        // Order is lower left, lower right, upper right, upper left
+        wxSize half_size = aPad->GetSize()/2;
+        wxSize trap_delta = aPad->GetDelta()/2;
+
+        coord[0] = wxPoint( -half_size.x - trap_delta.y,  half_size.y + trap_delta.x );
+        coord[1] = wxPoint( half_size.x + trap_delta.y,  half_size.y - trap_delta.x );
+        coord[2] = wxPoint( half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
+        coord[3] = wxPoint( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
+
+        m_plotter->FlashPadTrapez( shape_pos, coord, aPad->GetOrientation(), aPlotMode,
+                                 &gbr_metadata );
+    }
+        break;
+
+    default:
     case PAD_SHAPE_CHAMFERED_RECT:
     case PAD_SHAPE_CUSTOM:
     {

@@ -33,9 +33,14 @@
 #include <build_version.h>
 
 #include "plotter_gerber.h"
+#include "gbr_plotter_aperture_macros.h"
 
 #include <gbr_metadata.h>
 
+// if GBR_USE_MACROS is defined, pads having a shape that is not a Gerber primitive
+// will use a macro when possible
+// Old code will be removed after more tests
+#define GBR_USE_MACROS
 
 GERBER_PLOTTER::GERBER_PLOTTER()
 {
@@ -64,8 +69,12 @@ void GERBER_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     wxASSERT( aMirror == false );
     m_plotMirror = false;
     plotOffset = aOffset;
-    wxASSERT( aScale == 1 );    // aScale parameter is not used in Gerber
-    plotScale = 1;              // Plot scale is *always* 1.0
+    wxASSERT( aScale == 1 );            // aScale parameter is not used in Gerber
+    plotScale = 1;                      // Plot scale is *always* 1.0
+    m_hasApertureRoundRect = false;     // true is at least one round rect aperture is in use
+    m_hasApertureRotOval = false;       // true is at least one oval rotated aperture is in use
+    m_hasApertureRotRect = false;       // true is at least one rect. rotated aperture is in use
+    m_hasApertureOutline = false;     // true is at least one rotated rect/trapezoid aperture is in use
 
     m_IUsPerDecimil = aIusPerDecimil;
     // gives now a default value to iuPerDeviceUnit (because the units of the caller is now known)
@@ -228,8 +237,16 @@ bool GERBER_PLOTTER::StartPlot()
     // Set initial interpolation mode: always G01 (linear):
     fputs( "G01*\n", outputFile );
 
-    // Set aperture list starting point:
+    // Add aperture list start point
     fputs( "G04 APERTURE LIST*\n", outputFile );
+
+    // Give a minimal value to the default pen size, used to plot items in sketch mode
+    if( m_renderSettings )
+    {
+        const int pen_min = 0.1 * m_IUsPerDecimil * 10000 / 25.4;   // for min width = 0.1 mm
+        m_renderSettings->SetDefaultPenWidth( std::max( m_renderSettings->GetDefaultPenWidth(),
+                                                        pen_min ) );
+    }
 
     return true;
 }
@@ -260,6 +277,27 @@ bool GERBER_PLOTTER::EndPlot()
 
         if( substr && strcmp( substr, "G04 APERTURE LIST*" ) == 0 )
         {
+            // Add aperture list macro:
+            if( m_hasApertureRoundRect | m_hasApertureRotOval ||
+                m_hasApertureOutline || m_hasApertureRotRect )
+            {
+                fputs( "G04 Aperture macros list*\n", outputFile );
+
+                if( m_hasApertureRoundRect )
+                    fputs( APER_MACRO_ROUNDRECT_HEADER, outputFile );
+
+                if( m_hasApertureRotOval )
+                    fputs( APER_MACRO_HORIZ_OVAL_HEADER, outputFile );
+
+                if( m_hasApertureRotRect )
+                    fputs( APER_MACRO_ROT_RECT_HEADER, outputFile );
+
+                if( m_hasApertureOutline )
+                    fputs( APER_MACRO_OUTLINE4P_HEADER, outputFile );
+
+                fputs( "G04 Aperture macros list end*\n", outputFile );
+            }
+
             writeApertureList();
             fputs( "G04 APERTURE END LIST*\n", outputFile );
         }
@@ -279,19 +317,19 @@ void GERBER_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
     if( aWidth == DO_NOT_SET_LINE_WIDTH )
         return;
     else if( aWidth == USE_DEFAULT_LINE_WIDTH )
-        aWidth = m_renderSettings->GetDefaultPenWidth();
+        aWidth =  m_renderSettings->GetDefaultPenWidth();
 
     wxASSERT_MSG( aWidth >= 0, "Plotter called to set negative pen width" );
 
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
     int aperture_attribute = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
 
-    selectAperture( wxSize( aWidth, aWidth ), APERTURE::AT_PLOTTING, aperture_attribute );
+    selectAperture( wxSize( aWidth, aWidth ), 0, 0.0, APERTURE::AT_PLOTTING, aperture_attribute );
     currentPenWidth = aWidth;
 }
 
 
-int GERBER_PLOTTER::GetOrCreateAperture( const wxSize& aSize,
+int GERBER_PLOTTER::GetOrCreateAperture( const wxSize& aSize, int aRadius, double aRotDegree,
                         APERTURE::APERTURE_TYPE aType, int aApertureAttribute )
 {
     int last_D_code = 9;
@@ -303,6 +341,7 @@ int GERBER_PLOTTER::GetOrCreateAperture( const wxSize& aSize,
         last_D_code = tool->m_DCode;
 
         if( (tool->m_Type == aType) && (tool->m_Size == aSize) &&
+            (tool->m_Radius == aRadius) && (tool->m_Rotation == aRotDegree) &&
             (tool->m_ApertureAttribute == aApertureAttribute) )
             return idx;
     }
@@ -311,6 +350,8 @@ int GERBER_PLOTTER::GetOrCreateAperture( const wxSize& aSize,
     APERTURE new_tool;
     new_tool.m_Size  = aSize;
     new_tool.m_Type  = aType;
+    new_tool.m_Radius  = aRadius;
+    new_tool.m_Rotation  = aRotDegree;
     new_tool.m_DCode = last_D_code + 1;
     new_tool.m_ApertureAttribute = aApertureAttribute;
 
@@ -320,13 +361,63 @@ int GERBER_PLOTTER::GetOrCreateAperture( const wxSize& aSize,
 }
 
 
-void GERBER_PLOTTER::selectAperture( const wxSize&           aSize,
+int GERBER_PLOTTER::GetOrCreateAperture( const std::vector<wxPoint>& aCorners, double aRotDegree,
+                         APERTURE::APERTURE_TYPE aType, int aApertureAttribute )
+{
+    int last_D_code = 9;
+
+    // Search an existing aperture
+    for( int idx = 0; idx < (int)m_apertures.size(); ++idx )
+    {
+        APERTURE* tool = &m_apertures[idx];
+        last_D_code = tool->m_DCode;
+
+        if( (tool->m_Type == aType) && (tool->m_Corners.size() == aCorners.size() ) &&
+            (tool->m_ApertureAttribute == aApertureAttribute) )
+        {
+            // A candidate is found. the corner lists must be the same
+            bool is_same = true;
+
+            for( size_t ii = 0; ii < aCorners.size(); ii++ )
+            {
+                if( aCorners[ii] != m_apertures[m_currentApertureIdx].m_Corners[ii] )
+                {
+                    is_same = false;
+                    break;
+                }
+            }
+
+            if( is_same )
+                return idx;
+        }
+    }
+
+    // Allocate a new aperture
+    APERTURE new_tool;
+
+    new_tool.m_Corners  = aCorners;
+    new_tool.m_Size     = wxSize( 0, 0 );   // Not used
+    new_tool.m_Type     = aType;
+    new_tool.m_Radius   = 0;             // Not used
+    new_tool.m_Rotation = aRotDegree;
+    new_tool.m_DCode    = last_D_code + 1;
+    new_tool.m_ApertureAttribute = aApertureAttribute;
+
+    m_apertures.push_back( new_tool );
+
+    return m_apertures.size() - 1;
+}
+
+
+void GERBER_PLOTTER::selectAperture( const wxSize& aSize, int aRadius, double aRotDegree,
                                      APERTURE::APERTURE_TYPE aType,
                                      int aApertureAttribute )
 {
     bool change = ( m_currentApertureIdx < 0 ) ||
                   ( m_apertures[m_currentApertureIdx].m_Type != aType ) ||
-                  ( m_apertures[m_currentApertureIdx].m_Size != aSize );
+                  ( m_apertures[m_currentApertureIdx].m_Size != aSize ) ||
+                  ( m_apertures[m_currentApertureIdx].m_Radius != aRadius ) ||
+                  ( m_apertures[m_currentApertureIdx].m_Rotation != aRotDegree );
 
     if( !change )
         change = m_apertures[m_currentApertureIdx].m_ApertureAttribute != aApertureAttribute;
@@ -334,7 +425,41 @@ void GERBER_PLOTTER::selectAperture( const wxSize&           aSize,
     if( change )
     {
         // Pick an existing aperture or create a new one
-        m_currentApertureIdx = GetOrCreateAperture( aSize, aType, aApertureAttribute );
+        m_currentApertureIdx = GetOrCreateAperture( aSize, aRadius, aRotDegree,
+                                                    aType, aApertureAttribute );
+        fprintf( outputFile, "D%d*\n", m_apertures[m_currentApertureIdx].m_DCode );
+    }
+}
+
+
+void GERBER_PLOTTER::selectAperture( const std::vector<wxPoint>& aCorners, double aRotDegree,
+                         APERTURE::APERTURE_TYPE aType, int aApertureAttribute )
+{
+    bool change = ( m_currentApertureIdx < 0 ) ||
+                  ( m_apertures[m_currentApertureIdx].m_Type != aType ) ||
+                  ( m_apertures[m_currentApertureIdx].m_Corners.size() != aCorners.size() ) ||
+                  ( m_apertures[m_currentApertureIdx].m_Rotation != aRotDegree );
+
+    if( !change )   // Compare corner lists
+    {
+        for( size_t ii = 0; ii < aCorners.size(); ii++ )
+        {
+            if( aCorners[ii] != m_apertures[m_currentApertureIdx].m_Corners[ii] )
+            {
+                change = true;
+                break;
+            }
+        }
+    }
+
+    if( !change )
+        change = m_apertures[m_currentApertureIdx].m_ApertureAttribute != aApertureAttribute;
+
+    if( change )
+    {
+        // Pick an existing aperture or create a new one
+        m_currentApertureIdx = GetOrCreateAperture( aCorners, aRotDegree,
+                                                    aType, aApertureAttribute );
         fprintf( outputFile, "D%d*\n", m_apertures[m_currentApertureIdx].m_DCode );
     }
 }
@@ -350,17 +475,15 @@ void GERBER_PLOTTER::selectAperture( int aDiameter, double aPolygonRotation,
     wxASSERT( aType>= APERTURE::APERTURE_TYPE::AT_REGULAR_POLY3 &&
                       aType <= APERTURE::APERTURE_TYPE::AT_REGULAR_POLY12 );
 
-    // To use selectAperture( size, ... ) calculate a equivalent aperture size:
-    // for AT_REGULAR_POLYxx the parameter APERTURE::m_Size contains
-    // aDiameter (in m_Size.x) and aPolygonRotation in 1/1000 degree (in m_Size.y)
     wxSize size( aDiameter, (int)( aPolygonRotation * 1000.0 ) );
-    selectAperture( size, aType, aApertureAttribute );
+    selectAperture( wxSize( 0, 0), aDiameter/2, aPolygonRotation, aType, aApertureAttribute );
 }
 
 void GERBER_PLOTTER::writeApertureList()
 {
     wxASSERT( outputFile );
     char cbuf[1024];
+    std::string buffer;
 
     bool useX1StructuredComment = false;
 
@@ -386,7 +509,8 @@ void GERBER_PLOTTER::writeApertureList()
                             useX1StructuredComment ).c_str(), outputFile );
         }
 
-        char* text = cbuf + sprintf( cbuf, "%%ADD%d", tool.m_DCode );
+        sprintf( cbuf, "%%ADD%d", tool.m_DCode );
+        buffer = cbuf;
 
         /* Please note: the Gerber specs for mass parameters say that
            exponential syntax is *not* allowed and the decimal point should
@@ -398,20 +522,20 @@ void GERBER_PLOTTER::writeApertureList()
         switch( tool.m_Type )
         {
         case APERTURE::AT_CIRCLE:
-            sprintf( text, "C,%#f*%%\n", tool.GetDiameter() * fscale );
+            sprintf( cbuf, "C,%#f*%%\n", tool.GetDiameter() * fscale );
             break;
 
         case APERTURE::AT_RECT:
-            sprintf( text, "R,%#fX%#f*%%\n", tool.m_Size.x * fscale,
+            sprintf( cbuf, "R,%#fX%#f*%%\n", tool.m_Size.x * fscale,
                                              tool.m_Size.y * fscale );
             break;
 
         case APERTURE::AT_PLOTTING:
-            sprintf( text, "C,%#f*%%\n", tool.m_Size.x * fscale );
+            sprintf( cbuf, "C,%#f*%%\n", tool.m_Size.x * fscale );
             break;
 
         case APERTURE::AT_OVAL:
-            sprintf( text, "O,%#fX%#f*%%\n", tool.m_Size.x * fscale,
+            sprintf( cbuf, "O,%#fX%#f*%%\n", tool.m_Size.x * fscale,
                                              tool.m_Size.y * fscale );
             break;
 
@@ -426,12 +550,53 @@ void GERBER_PLOTTER::writeApertureList()
         case APERTURE::AT_REGULAR_POLY10:
         case APERTURE::AT_REGULAR_POLY11:
         case APERTURE::AT_REGULAR_POLY12:
-            sprintf( text, "P,%#fX%dX%#f*%%\n", tool.GetDiameter() * fscale,
-                     tool.GetVerticeCount(), tool.GetRotation() );
+            sprintf( cbuf, "P,%#fX%dX%#f*%%\n", tool.GetDiameter() * fscale,
+                     tool.GetRegPolyVerticeCount(), tool.GetRotation() );
+            break;
+
+        case APERTURE::AM_ROUND_RECT:       // Aperture macro for round rect pads
+            sprintf( cbuf, "%s,%#fX%#fX%#fX%#f*%%\n", APER_MACRO_ROUNDRECT_NAME,
+                     tool.m_Size.x * fscale, tool.m_Size.y * fscale,
+                     tool.m_Radius * fscale, tool.m_Rotation );
+            break;
+
+        case APERTURE::AM_ROT_RECT:         // Aperture macro for rotated rect pads
+            sprintf( cbuf, "%s,%#fX%#fX%#f*%%\n", APER_MACRO_ROT_RECT_NAME,
+                     tool.m_Size.x * fscale, tool.m_Size.y * fscale,
+                     tool.m_Rotation );
+            break;
+
+        case APERTURE::APER_MACRO_OUTLINE4P:    // Aperture macro for trapezoid pads
+            wxASSERT( tool.m_Corners.size() == 4 );
+
+            sprintf( cbuf, "%s,", APER_MACRO_OUTLINE4P_NAME );
+            buffer += cbuf;
+
+            // Output all corners (should be 4 corners)
+            // Remember: the Y coordinate must be negated, due to the fact in Pcbnew
+            // the Y axis is from top to bottom
+            for( size_t ii = 0; ii < tool.m_Corners.size(); ii++ )
+            {
+                sprintf( cbuf, "%#fX%#fX",
+                         tool.m_Corners[ii].x * fscale, -tool.m_Corners[ii].y * fscale );
+                buffer += cbuf;
+            }
+
+            // close outline and output rotation
+            sprintf( cbuf, "%#f*%%\n", tool.m_Rotation );
+            break;
+
+        case APERTURE::AM_ROTATED_OVAL:         // Aperture macro for rotated oval pads
+                                                // (not rotated is a primitive)
+                                                // m_Size.x = lenght; m_Size.y = width
+            sprintf( cbuf, "%s,%#fX%#fX%#f*%%\n", APER_MACRO_HORIZ_OVAL_NAME,
+                     tool.m_Size.x * fscale, tool.m_Size.y * fscale,
+                     tool.m_Rotation );
             break;
         }
 
-        fputs( cbuf, outputFile );
+        buffer += cbuf;
+        fputs( buffer.c_str(), outputFile );
 
         m_apertureAttribute = attribute;
 
@@ -731,6 +896,8 @@ void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, EDA_DRAW_
         if( gbr_metadata )
             formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
+        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
+
         Circle( pos, diametre - currentPenWidth, NO_FILL, DO_NOT_SET_LINE_WIDTH );
     }
     else
@@ -738,7 +905,7 @@ void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, EDA_DRAW_
         DPOINT pos_dev = userToDeviceCoordinates( pos );
 
         int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
-        selectAperture( size, APERTURE::AT_CIRCLE, aperture_attrib );
+        selectAperture( size, 0, 0.0, APERTURE::AT_CIRCLE, aperture_attrib );
 
         if( gbr_metadata )
             formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
@@ -764,7 +931,7 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
 
         DPOINT pos_dev = userToDeviceCoordinates( pos );
         int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
-        selectAperture( size, APERTURE::AT_OVAL, aperture_attrib );
+        selectAperture( size, 0, 0.0, APERTURE::AT_OVAL, aperture_attrib );
 
         if( gbr_metadata )
             formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
@@ -776,11 +943,35 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
     {
         if( trace_mode == FILLED )
         {
+        #ifdef GBR_USE_MACROS
+            m_hasApertureRotOval = true;
+            // We are using a aperture macro that expect size.y < size.x
+            // i.e draw a horizontal line for rotation = 0.0
+            // size.x = length, size.y = width
+            if( size.x < size.y )
+            {
+                std::swap( size.x, size.y );
+                orient += 900;
+
+                if( orient > 1800 )
+                    orient -= 1800;
+            }
+
+            DPOINT pos_dev = userToDeviceCoordinates( pos );
+            int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
+            selectAperture( size, 0, orient/10.0, APERTURE::AM_ROTATED_OVAL, aperture_attrib );
+
+            if( gbr_metadata )
+                formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
+
+            emitDcode( pos_dev, 3 );
+        #else
             // Draw the oval as round rect pad with a radius = 50% min size)
             // In gerber file, it will be drawn as a region with arcs, and can be
             // detected as pads (similar to a flashed pad)
             FlashPadRoundRect( pos, aSize, std::min( aSize.x, aSize.y ) /2,
                                orient, FILLED, aData );
+        #endif
         }
         else    // Non filled shape: plot outlines:
         {
@@ -823,17 +1014,18 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
             if( gbr_metadata )
                 formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
-            Rect( wxPoint( pos.x - (size.x - currentPenWidth) / 2,
-                           pos.y - (size.y - currentPenWidth) / 2 ),
-                  wxPoint( pos.x + (size.x - currentPenWidth) / 2,
-                           pos.y + (size.y - currentPenWidth) / 2 ),
+            SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
+            Rect( wxPoint( pos.x - (size.x - GetCurrentLineWidth()) / 2,
+                           pos.y - (size.y - GetCurrentLineWidth()) / 2 ),
+                  wxPoint( pos.x + (size.x - GetCurrentLineWidth()) / 2,
+                           pos.y + (size.y - GetCurrentLineWidth()) / 2 ),
                   NO_FILL, GetCurrentLineWidth() );
         }
         else
         {
             DPOINT pos_dev = userToDeviceCoordinates( pos );
             int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
-            selectAperture( size, APERTURE::AT_RECT, aperture_attrib );
+            selectAperture( size, 0, 0.0, APERTURE::AT_RECT, aperture_attrib );
 
             if( gbr_metadata )
                 formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
@@ -842,8 +1034,25 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
         }
         break;
 
-    default: // plot pad shape as Gerber region
+    default:
+    #ifdef GBR_USE_MACROS
+        if( trace_mode != SKETCH )
         {
+            m_hasApertureRotRect = true;
+            DPOINT pos_dev = userToDeviceCoordinates( pos );
+            int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
+            selectAperture( size, 0, orient/10.0, APERTURE::AM_ROT_RECT, aperture_attrib );
+
+            if( gbr_metadata )
+                formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
+
+            emitDcode( pos_dev, 3 );
+
+            break;
+        }
+    #endif
+        {
+        // plot pad shape as Gerber region
         wxPoint coord[4];
         // coord[0] is assumed the lower left
         // coord[1] is assumed the upper left
@@ -897,6 +1106,19 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
     }
     else
     {
+    #ifdef GBR_USE_MACROS
+        m_hasApertureRoundRect = true;
+
+        DPOINT pos_dev = userToDeviceCoordinates( aPadPos );
+        int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
+        selectAperture( aSize, aCornerRadius, aOrient/10.0,
+                        APERTURE::AM_ROUND_RECT, aperture_attrib );
+
+        if( gbr_metadata )
+            formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
+
+        emitDcode( pos_dev, 3 );
+    #else
         // A Pad RoundRect is plotted as a Gerber region.
         // Initialize region metadata:
         bool clearTA_AperFunction = false;     // true if a TA.AperFunction is used
@@ -920,14 +1142,11 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
         if( clearTA_AperFunction )
         {
             if( m_useX2format )
-            {
                 fputs( "%TD.AperFunction*%\n", outputFile );
-            }
             else
-            {
                 fputs( "G04 #@! TD.AperFunction*\n", outputFile );
-            }
         }
+    #endif
     }
 }
 
@@ -1106,8 +1325,6 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
                                      double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode, void* aData )
 
 {
-    // TODO: use Aperture macro and flash it
-
     // polygon corners list
     std::vector<wxPoint> cornerList = { aCorners[0], aCorners[1], aCorners[2], aCorners[3] };
 
@@ -1128,9 +1345,25 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
         metadata = *gbr_metadata;
 
     if( aTrace_Mode == SKETCH )
-        PlotPoly( cornerList, NO_FILL, DO_NOT_SET_LINE_WIDTH, &metadata );
+        PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), &metadata );
     else
+    #ifdef GBR_USE_MACROS
+    {
+        m_hasApertureOutline = true;
+        DPOINT pos_dev = userToDeviceCoordinates( aPadPos );
+        // polygon corners list
+        std::vector<wxPoint> corners = { aCorners[0], aCorners[1], aCorners[2], aCorners[3] };
+        int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
+        selectAperture( corners, aPadOrient/10.0, APERTURE::APER_MACRO_OUTLINE4P, aperture_attrib );
+
+        if( gbr_metadata )
+            formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
+
+        emitDcode( pos_dev, 3 );
+    }
+    #else
         PlotGerberRegion( cornerList, &metadata );
+    #endif
 }
 
 
