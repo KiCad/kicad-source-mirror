@@ -237,7 +237,6 @@ set( PCBNEW_MICROWAVE_SRCS
 set( PCBNEW_DRC_SRCS
     drc/drc_test_provider.cpp
     drc/drc_test_provider_annulus.cpp
-    drc/drc_test_provider_clearance_base.cpp
     drc/drc_test_provider_disallow.cpp
     drc/drc_test_provider_connectivity.cpp
     drc/drc_test_provider_copper_clearance.cpp

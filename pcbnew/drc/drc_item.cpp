@@ -167,7 +167,7 @@ DRC_ITEM DRC_ITEM::unresolvedVariable( DRCE_UNRESOLVED_VARIABLE,
         wxT( "unresolved_variable" ) );
 
 DRC_ITEM DRC_ITEM::silkOverPad( DRCE_SILK_OVER_PAD,
-        _( "Silkscreen overlapping component pad(s)" ),
+        _( "Silkscreen overlapping pad" ),
         wxT( "silk_over_pad" ) );
 
 DRC_ITEM DRC_ITEM::silkClearance( DRCE_SILK_CLEARANCE,

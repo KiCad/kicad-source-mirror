@@ -41,37 +41,41 @@
 typedef VECTOR2I::extended_type ecoord;
 
 static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_CIRCLE& aB, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+                            int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     ecoord min_dist = aClearance + aA.GetRadius() + aB.GetRadius();
     ecoord min_dist_sq = min_dist * min_dist;
 
     const VECTOR2I delta = aB.GetCenter() - aA.GetCenter();
-
     ecoord dist_sq = delta.SquaredEuclideanNorm();
 
-    if( dist_sq >= min_dist_sq )
-        return false;
+    if( dist_sq < min_dist_sq )
+    {
+        if( aActual )
+            *aActual = std::max( 0, (int) sqrt( dist_sq ) - aA.GetRadius() - aB.GetRadius() );
 
-    if( aActual )
-        *aActual = std::max( 0, (int) sqrt( dist_sq ) - aA.GetRadius() - aB.GetRadius() );
+        if( aLocation )
+            *aLocation = ( aA.GetCenter() + aB.GetCenter() ) / 2;
 
-    if( aMTV )
-        *aMTV = delta.Resize( min_dist - sqrt( dist_sq ) + 3 );  // fixme: apparent rounding error
+        if( aMTV )
+            *aMTV = delta.Resize( min_dist - sqrt( dist_sq ) + 3 );  // fixme: apparent rounding error
 
-    return true;
+        return true;
+    }
+
+    return false;
 }
 
 
 static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_CIRCLE& aB, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+                            int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     const VECTOR2I c = aB.GetCenter();
     const VECTOR2I p0 = aA.GetPosition();
     const VECTOR2I size = aA.GetSize();
     const int r = aB.GetRadius();
     const int min_dist = aClearance + r;
-    const ecoord min_dist_sq = (ecoord) min_dist * min_dist;
+    const ecoord min_dist_sq = SEG::Square( min_dist );
 
     const VECTOR2I vts[] =
     {
@@ -88,14 +92,9 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_CIRCLE& aB, int aC
     bool inside = c.x >= p0.x && c.x <= ( p0.x + size.x )
                   && c.y >= p0.y && c.y <= ( p0.y + size.y );
 
-    // If we're not looking for MTV, short-circuit once we find a hard collision
-    if( !aMTV && inside )
-    {
-        if( aActual )
-            *aActual = 0;
-
+    // If we're not looking for MTV or actual, short-circuit once we find a hard collision
+    if( inside && !aActual && !aLocation && !aMTV )
         return true;
-    }
 
     for( int i = 0; i < 4; i++ )
     {
@@ -104,35 +103,39 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_CIRCLE& aB, int aC
         VECTOR2I pn = side.NearestPoint( c );
         ecoord side_dist_sq = ( pn - c ).SquaredEuclideanNorm();
 
-        // If we're not looking for MTV or actual, short-circuit once we find any collision
-        if( !aMTV && !aActual && ( side_dist_sq == 0 || side_dist_sq < min_dist_sq ) )
-            return true;
-
         if( side_dist_sq < nearest_side_dist_sq )
         {
             nearest = pn;
             nearest_side_dist_sq = side_dist_sq;
+
+            // If we're not looking for actual or MTV, short-circuit once we find any collision
+            if( ( nearest_side_dist_sq == 0 || !aActual ) && !aMTV )
+                break;
         }
     }
 
-    if( !inside && nearest_side_dist_sq >= min_dist_sq )
-        return false;
-
-    VECTOR2I delta = c - nearest;
-
-    if( aActual )
-        *aActual = std::max( 0, (int) sqrt( nearest_side_dist_sq ) - r );
-
-    if( aMTV )
+    if( inside || nearest_side_dist_sq < min_dist_sq )
     {
-        if( inside )
-            *aMTV = -delta.Resize( abs( min_dist + 1 + sqrt( nearest_side_dist_sq ) ) + 1 );
-        else
-            *aMTV = delta.Resize( abs( min_dist + 1 - sqrt( nearest_side_dist_sq ) ) + 1 );
+        if( aLocation )
+            *aLocation = nearest;
+
+        if( aActual )
+            *aActual = std::max( 0, (int) sqrt( nearest_side_dist_sq ) - r );
+
+        if( aMTV )
+        {
+            VECTOR2I delta = c - nearest;
+
+            if( inside )
+                *aMTV = -delta.Resize( abs( min_dist + 1 + sqrt( nearest_side_dist_sq ) ) + 1 );
+            else
+                *aMTV = delta.Resize( abs( min_dist + 1 - sqrt( nearest_side_dist_sq ) ) + 1 );
+        }
+
+        return true;
     }
 
-
-    return true;
+    return false;
 }
 
 
@@ -162,96 +165,116 @@ static VECTOR2I pushoutForce( const SHAPE_CIRCLE& aA, const SEG& aB, int aCleara
     return f;
 }
 
-#if 0
-static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN_BASE& aB, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+
+static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN_BASE& aB,
+                            int aClearance, int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    bool collided = false;
+    int closest_dist = INT_MAX;
+    VECTOR2I nearest;
 
     for( int s = 0; s < aB.GetSegmentCount(); s++ )
     {
-        if( aA.Collide( aB.GetSegment( s ), aClearance, aActual ) )
+        int collision_dist = 0;
+        VECTOR2I pn;
+
+        if( aA.Collide( aB.GetSegment( s ), aClearance,
+                        aActual || aLocation ? &collision_dist : nullptr,
+                        aLocation ? &pn : nullptr ) )
         {
-            collided = true;
-            break;
+            if( collision_dist < closest_dist )
+            {
+                nearest = pn;
+                closest_dist = collision_dist;
+
+                if( closest_dist == 0 || !aActual )
+                    break;
+            }
         }
     }
 
-    if( !collided )
-        return false;
-
-    if( aMTV )
+    if( closest_dist < aClearance )
     {
-        SHAPE_CIRCLE cmoved( aA );
-        VECTOR2I f_total( 0, 0 );
+        if( aLocation )
+            *aLocation = nearest;
 
-        for( int s = 0; s < aB.GetSegmentCount(); s++ )
+        if( aActual )
+            *aActual = closest_dist;
+
+        if( aMTV )
         {
-            VECTOR2I f = pushoutForce( cmoved, aB.GetSegment( s ), aClearance );
-            cmoved.SetCenter( cmoved.GetCenter() + f );
-            f_total += f;
+            SHAPE_CIRCLE cmoved( aA );
+            VECTOR2I f_total( 0, 0 );
+
+            for( int s = 0; s < aB.GetSegmentCount(); s++ )
+            {
+                VECTOR2I f = pushoutForce( cmoved, aB.GetSegment( s ), aClearance );
+                cmoved.SetCenter( cmoved.GetCenter() + f );
+                f_total += f;
+            }
+
+            *aMTV = f_total;
         }
 
-        *aMTV = f_total;
+        return true;
     }
 
-    return true;
-}
-#endif
-
-static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN_BASE& aB, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
-{
-    int min_dist = aClearance + aA.GetRadius();
-    ecoord dist_sq = aB.SquaredDistance( aA.GetCenter() );
-
-    if( dist_sq > (ecoord) min_dist * min_dist )
-        return false;
-
-    if( aActual )
-        *aActual = std::max( 0, (int) sqrt( dist_sq ) - aA.GetRadius() );
-
-    if( aMTV )
-    {
-        SHAPE_CIRCLE cmoved( aA );
-        VECTOR2I f_total( 0, 0 );
-
-        for( int s = 0; s < aB.GetSegmentCount(); s++ )
-        {
-            VECTOR2I f = pushoutForce( cmoved, aB.GetSegment( s ), aClearance );
-            cmoved.SetCenter( cmoved.GetCenter() + f );
-            f_total += f;
-        }
-
-        *aMTV = f_total;
-    }
-    return true;
+    return false;
 }
 
 
 static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_SEGMENT& aSeg, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+                            int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    if( !aA.Collide( aSeg.GetSeg(), aClearance + aSeg.GetWidth() / 2, aActual ) )
-        return false;
+    if( aA.Collide( aSeg.GetSeg(), aClearance + aSeg.GetWidth() / 2, aActual, aLocation ) )
+    {
+        if( aMTV )
+            *aMTV = -pushoutForce( aA, aSeg.GetSeg(), aClearance + aSeg.GetWidth() / 2);
 
-    if( aMTV )
-        *aMTV = -pushoutForce( aA, aSeg.GetSeg(), aClearance + aSeg.GetWidth() / 2);
+        return true;
+    }
 
-    return true;
+    return false;
 }
 
 
-static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CHAIN_BASE& aB, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CHAIN_BASE& aB,
+                            int aClearance, int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     // TODO: why doesn't this handle MTV?
     // TODO: worse, why this doesn't handle closed shapes?
 
+    int closest_dist = INT_MAX;
+    VECTOR2I nearest;
+
     for( int i = 0; i < aB.GetSegmentCount(); i++ )
     {
-        if( aA.Collide( aB.GetSegment( i ), aClearance, aActual ) )
-            return true;
+        int collision_dist = 0;
+        VECTOR2I pn;
+
+        if( aA.Collide( aB.GetSegment( i ), aClearance,
+                        aActual || aLocation ? &collision_dist : nullptr,
+                        aLocation ? &pn : nullptr ) )
+        {
+            if( collision_dist < closest_dist )
+            {
+                nearest = pn;
+                closest_dist = collision_dist;
+
+                if( closest_dist == 0 || !aActual )
+                    break;
+            }
+        }
+    }
+
+    if( closest_dist < aClearance )
+    {
+        if( aLocation )
+            *aLocation = nearest;
+
+        if( aActual )
+            *aActual = closest_dist;
+
+        return true;
     }
 
     return false;
@@ -259,41 +282,66 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CH
 
 
 static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_LINE_CHAIN_BASE& aB, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+                            int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    int minActual = INT_MAX;
-    int actual;
+    // TODO: why doesn't this handle MTV?
+
+    if( aB.IsClosed() && aB.PointInside( aA.Centre() ) )
+    {
+        if( aLocation )
+            *aLocation = aA.Centre();
+
+        if( aActual )
+            *aActual = 0;
+
+        return true;
+    }
+
+    int closest_dist = INT_MAX;
+    VECTOR2I nearest;
 
     for( int s = 0; s < aB.GetSegmentCount(); s++ )
     {
-        if( aA.Collide( aB.GetSegment( s ), aClearance, &actual ) )
-        {
-            minActual = std::min( minActual, actual );
+        int collision_dist = 0;
+        VECTOR2I pn;
 
-            // If we're not looking for MTV or Actual, short-circuit after any collision
-            if( !aActual && !aMTV )
-                return true;
+        if( aA.Collide( aB.GetSegment( s ), aClearance,
+                        aActual || aLocation ? &collision_dist : nullptr,
+                        aLocation ? &pn : nullptr ) )
+        {
+            if( collision_dist < closest_dist )
+            {
+                nearest = pn;
+                closest_dist = collision_dist;
+
+                if( closest_dist == 0 || !aActual )
+                    break;
+            }
         }
     }
 
-    if( aActual )
-        *aActual = std::max( 0, minActual );
+    if( closest_dist < aClearance )
+    {
+        if( aLocation )
+            *aLocation = nearest;
 
-    // TODO: why doesn't this handle MTV?
+        if( aActual )
+            *aActual = closest_dist;
 
-    return minActual < INT_MAX;
+        return true;
+    }
+
+    return false;
 }
 
 
 static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_SEGMENT& aSeg, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+                            int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    int actual;
-
-    if( aA.Collide( aSeg.GetSeg(), aClearance + aSeg.GetWidth() / 2, &actual ) )
+    if( aA.Collide( aSeg.GetSeg(), aClearance + aSeg.GetWidth() / 2, aActual, aLocation ) )
     {
         if( aActual )
-            *aActual = std::max( 0, actual - aSeg.GetWidth() / 2 );
+            *aActual = std::max( 0, *aActual - aSeg.GetWidth() / 2 );
 
         // TODO: why doesn't this handle MTV?
 
@@ -305,14 +353,12 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_SEGMENT& aSeg, int
 
 
 static inline bool Collide( const SHAPE_SEGMENT& aA, const SHAPE_SEGMENT& aB, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+                            int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    int actual;
-
-    if( aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, &actual ) )
+    if( aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation ) )
     {
         if( aActual )
-            *aActual = std::max( 0, actual - aB.GetWidth() / 2 );
+            *aActual = std::max( 0, *aActual - aB.GetWidth() / 2 );
 
         // TODO: why doesn't this handle MTV?
 
@@ -323,15 +369,13 @@ static inline bool Collide( const SHAPE_SEGMENT& aA, const SHAPE_SEGMENT& aB, in
 }
 
 
-static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_SEGMENT& aB, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_SEGMENT& aB,
+                            int aClearance, int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    int actual;
-
-    if( aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, &actual ) )
+    if( aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation ) )
     {
         if( aActual )
-            *aActual = std::max( 0, actual - aB.GetWidth() / 2 );
+            *aActual = std::max( 0, *aActual - aB.GetWidth() / 2 );
 
         // TODO: why doesn't this handle MTV?
 
@@ -343,23 +387,23 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_SEGMENT
 
 
 static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_RECT& aB, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+                            int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    return Collide( aA.Outline(), aB.Outline(), aClearance, aActual, aMTV );
+    return Collide( aA.Outline(), aB.Outline(), aClearance, aActual, aLocation, aMTV );
 }
 
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_RECT& aB, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+                            int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     const auto lc = aA.ConvertToPolyline();
-    return Collide( lc, aB.Outline(), aClearance, aActual, aMTV );
+    return Collide( lc, aB.Outline(), aClearance, aActual, aLocation, aMTV );
 }
 
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_CIRCLE& aB, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+                            int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     const auto lc = aA.ConvertToPolyline();
-    bool rv = Collide( aB, lc, aClearance, aActual, aMTV );
+    bool rv = Collide( aB, lc, aClearance, aActual, aLocation, aMTV );
 
     if( rv && aMTV )
         *aMTV = - *aMTV ;
@@ -368,50 +412,50 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_CIRCLE& aB, int aCl
 }
 
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN& aB, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+                            int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     const auto lc = aA.ConvertToPolyline();
-    return Collide( lc, aB, aClearance, aActual, aMTV );
+    return Collide( lc, aB, aClearance, aActual, aLocation, aMTV );
 }
 
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_SEGMENT& aB, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+                            int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     const auto lc = aA.ConvertToPolyline();
-    return Collide( lc, aB, aClearance, aActual, aMTV );
+    return Collide( lc, aB, aClearance, aActual, aLocation, aMTV );
 }
 
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN_BASE& aB, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+                            int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     const auto lc = aA.ConvertToPolyline();
 
-    return Collide( lc, aB, aClearance, aActual, aMTV );
+    return Collide( lc, aB, aClearance, aActual, aLocation, aMTV );
 }
 
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_ARC& aB, int aClearance,
-                            int* aActual, VECTOR2I* aMTV )
+                            int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     const auto lcA = aA.ConvertToPolyline();
     const auto lcB = aB.ConvertToPolyline();
-    return Collide( lcA, lcB, aClearance, aActual, aMTV );
+    return Collide( lcA, lcB, aClearance, aActual, aLocation, aMTV );
 }
 
 template<class T_a, class T_b>
 inline bool CollCase( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual,
-                      VECTOR2I* aMTV )
+                      VECTOR2I* aLocation, VECTOR2I* aMTV )
 
 {
     return Collide( *static_cast<const T_a*>( aA ), *static_cast<const T_b*>( aB ),
-                    aClearance, aActual, aMTV);
+                    aClearance, aActual, aLocation, aMTV);
 }
 
 template<class T_a, class T_b>
 inline bool CollCaseReversed ( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual,
-                               VECTOR2I* aMTV )
+                               VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     bool rv = Collide( *static_cast<const T_b*>( aB ), *static_cast<const T_a*>( aA ),
-                       aClearance, aActual, aMTV);
+                       aClearance, aActual, aLocation, aMTV);
 
     if( rv && aMTV)
         *aMTV = -  *aMTV;
@@ -420,10 +464,9 @@ inline bool CollCaseReversed ( const SHAPE* aA, const SHAPE* aB, int aClearance,
 }
 
 
-static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual, VECTOR2I* aMTV )
+static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual,
+                                 VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-
-
     switch( aA->Type() )
     {
     case SH_NULL: 
@@ -433,23 +476,23 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
         switch( aB->Type() )
         {
         case SH_RECT:
-            return CollCase<SHAPE_RECT, SHAPE_RECT>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_RECT, SHAPE_RECT>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_CIRCLE:
-            return CollCase<SHAPE_RECT, SHAPE_CIRCLE>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_RECT, SHAPE_CIRCLE>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_LINE_CHAIN:
-            return CollCase<SHAPE_RECT, SHAPE_LINE_CHAIN>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_RECT, SHAPE_LINE_CHAIN>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_SEGMENT:
-            return CollCase<SHAPE_RECT, SHAPE_SEGMENT>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_RECT, SHAPE_SEGMENT>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_SIMPLE:
         case SH_POLY_SET_TRIANGLE:
-            return CollCase<SHAPE_RECT, SHAPE_LINE_CHAIN_BASE>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_RECT, SHAPE_LINE_CHAIN_BASE>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_ARC:
-            return CollCaseReversed<SHAPE_RECT, SHAPE_ARC>( aA, aB, aClearance, aActual, aMTV );
+            return CollCaseReversed<SHAPE_RECT, SHAPE_ARC>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_NULL:
             return false;
@@ -463,23 +506,23 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
         switch( aB->Type() )
         {
         case SH_RECT:
-            return CollCaseReversed<SHAPE_CIRCLE, SHAPE_RECT>( aA, aB, aClearance, aActual, aMTV );
+            return CollCaseReversed<SHAPE_CIRCLE, SHAPE_RECT>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_CIRCLE:
-            return CollCase<SHAPE_CIRCLE, SHAPE_CIRCLE>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_CIRCLE, SHAPE_CIRCLE>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_LINE_CHAIN:
-            return CollCase<SHAPE_CIRCLE, SHAPE_LINE_CHAIN>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_CIRCLE, SHAPE_LINE_CHAIN>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_SEGMENT:
-            return CollCase<SHAPE_CIRCLE, SHAPE_SEGMENT>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_CIRCLE, SHAPE_SEGMENT>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_SIMPLE:
         case SH_POLY_SET_TRIANGLE:
-            return CollCase<SHAPE_CIRCLE, SHAPE_LINE_CHAIN_BASE>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_CIRCLE, SHAPE_LINE_CHAIN_BASE>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_ARC:
-            return CollCaseReversed<SHAPE_CIRCLE, SHAPE_ARC>( aA, aB, aClearance, aActual, aMTV );
+            return CollCaseReversed<SHAPE_CIRCLE, SHAPE_ARC>( aA, aB, aClearance, aActual, aLocation, aMTV );
     
         case SH_NULL:
             return false;
@@ -493,23 +536,23 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
         switch( aB->Type() )
         {
         case SH_RECT:
-            return CollCase<SHAPE_RECT, SHAPE_LINE_CHAIN>( aB, aA, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_RECT, SHAPE_LINE_CHAIN>( aB, aA, aClearance, aActual, aLocation, aMTV );
 
         case SH_CIRCLE:
-            return CollCase<SHAPE_CIRCLE, SHAPE_LINE_CHAIN>( aB, aA, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_CIRCLE, SHAPE_LINE_CHAIN>( aB, aA, aClearance, aActual, aLocation, aMTV );
 
         case SH_LINE_CHAIN:
-            return CollCase<SHAPE_LINE_CHAIN, SHAPE_LINE_CHAIN>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_LINE_CHAIN, SHAPE_LINE_CHAIN>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_SEGMENT:
-            return CollCase<SHAPE_LINE_CHAIN, SHAPE_SEGMENT>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_LINE_CHAIN, SHAPE_SEGMENT>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_SIMPLE:
         case SH_POLY_SET_TRIANGLE:
-            return CollCase<SHAPE_LINE_CHAIN, SHAPE_LINE_CHAIN_BASE>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_LINE_CHAIN, SHAPE_LINE_CHAIN_BASE>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_ARC:
-            return CollCaseReversed<SHAPE_LINE_CHAIN, SHAPE_ARC>( aA, aB, aClearance, aActual, aMTV );
+            return CollCaseReversed<SHAPE_LINE_CHAIN, SHAPE_ARC>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_NULL:
             return false;
@@ -523,23 +566,23 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
         switch( aB->Type() )
         {
         case SH_RECT:
-            return CollCase<SHAPE_RECT, SHAPE_SEGMENT>( aB, aA, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_RECT, SHAPE_SEGMENT>( aB, aA, aClearance, aActual, aLocation, aMTV );
 
         case SH_CIRCLE:
-            return CollCaseReversed<SHAPE_SEGMENT, SHAPE_CIRCLE>( aA, aB, aClearance, aActual, aMTV );
+            return CollCaseReversed<SHAPE_SEGMENT, SHAPE_CIRCLE>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_LINE_CHAIN:
-            return CollCase<SHAPE_LINE_CHAIN, SHAPE_SEGMENT>( aB, aA, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_LINE_CHAIN, SHAPE_SEGMENT>( aB, aA, aClearance, aActual, aLocation, aMTV );
 
         case SH_SEGMENT:
-            return CollCase<SHAPE_SEGMENT, SHAPE_SEGMENT>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_SEGMENT, SHAPE_SEGMENT>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_SIMPLE:
         case SH_POLY_SET_TRIANGLE:
-            return CollCase<SHAPE_LINE_CHAIN_BASE, SHAPE_SEGMENT>( aB, aA, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_LINE_CHAIN_BASE, SHAPE_SEGMENT>( aB, aA, aClearance, aActual, aLocation, aMTV );
 
         case SH_ARC:
-            return CollCaseReversed<SHAPE_SEGMENT, SHAPE_ARC>( aA, aB, aClearance, aActual, aMTV );
+            return CollCaseReversed<SHAPE_SEGMENT, SHAPE_ARC>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_NULL:
             return false;
@@ -554,23 +597,23 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
         switch( aB->Type() )
         {
         case SH_RECT:
-            return CollCase<SHAPE_RECT, SHAPE_LINE_CHAIN_BASE>( aB, aA, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_RECT, SHAPE_LINE_CHAIN_BASE>( aB, aA, aClearance, aActual, aLocation, aMTV );
 
         case SH_CIRCLE:
-            return CollCase<SHAPE_CIRCLE, SHAPE_LINE_CHAIN_BASE>( aB, aA, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_CIRCLE, SHAPE_LINE_CHAIN_BASE>( aB, aA, aClearance, aActual, aLocation, aMTV );
 
         case SH_LINE_CHAIN:
-            return CollCase<SHAPE_LINE_CHAIN, SHAPE_LINE_CHAIN_BASE>( aB, aA, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_LINE_CHAIN, SHAPE_LINE_CHAIN_BASE>( aB, aA, aClearance, aActual, aLocation, aMTV );
 
         case SH_SEGMENT:
-            return CollCase<SHAPE_LINE_CHAIN_BASE, SHAPE_SEGMENT>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_LINE_CHAIN_BASE, SHAPE_SEGMENT>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_SIMPLE:
         case SH_POLY_SET_TRIANGLE:
-            return CollCase<SHAPE_LINE_CHAIN_BASE, SHAPE_LINE_CHAIN_BASE>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_LINE_CHAIN_BASE, SHAPE_LINE_CHAIN_BASE>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_ARC:
-            return CollCaseReversed<SHAPE_LINE_CHAIN_BASE, SHAPE_ARC>( aA, aB, aClearance, aActual, aMTV );
+            return CollCaseReversed<SHAPE_LINE_CHAIN_BASE, SHAPE_ARC>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_NULL:
             return false;
@@ -584,23 +627,23 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
         switch( aB->Type() )
         {
         case SH_RECT:
-            return CollCase<SHAPE_ARC, SHAPE_RECT>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_ARC, SHAPE_RECT>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_CIRCLE:
-            return CollCase<SHAPE_ARC, SHAPE_CIRCLE>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_ARC, SHAPE_CIRCLE>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_LINE_CHAIN:
-            return CollCase<SHAPE_ARC, SHAPE_LINE_CHAIN>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_ARC, SHAPE_LINE_CHAIN>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_SEGMENT:
-            return CollCase<SHAPE_ARC, SHAPE_SEGMENT>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_ARC, SHAPE_SEGMENT>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_SIMPLE:
         case SH_POLY_SET_TRIANGLE:
-            return CollCase<SHAPE_ARC, SHAPE_LINE_CHAIN_BASE>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_ARC, SHAPE_LINE_CHAIN_BASE>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_ARC:
-            return CollCase<SHAPE_ARC, SHAPE_ARC>( aA, aB, aClearance, aActual, aMTV );
+            return CollCase<SHAPE_ARC, SHAPE_ARC>( aA, aB, aClearance, aActual, aLocation, aMTV );
 
         case SH_NULL:
             return false;
@@ -622,93 +665,123 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
     return false;
 }
 
-static bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual, VECTOR2I* aMTV )
+static bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual,
+                           VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     int currentActual = std::numeric_limits<int>::max();
+    VECTOR2I currentLocation;
     VECTOR2I currentMTV(0, 0);
     bool colliding = false;
 
-    bool exitOnFirstCollision = aActual == nullptr && aMTV == nullptr;
+    auto canExit =
+            [&]()
+            {
+                if( !colliding )
+                    return false;
 
-    auto collideCompoundSubshapes = [&] ( const SHAPE* elemA, const SHAPE* elemB, int clearance ) -> bool
-    {
-                int actual;
+                if( aActual && currentActual > 0 )
+                    return false;
+
+                if( aMTV )
+                    return false;
+
+                return true;
+            };
+
+    auto collideCompoundSubshapes =
+            [&]( const SHAPE* elemA, const SHAPE* elemB, int clearance ) -> bool
+            {
+                int actual = 0;
+                VECTOR2I location;
                 VECTOR2I mtv;
 
-                bool c = collideSingleShapes( elemA, elemB, clearance,
-                                              aActual ? &actual : nullptr,
-                                              aMTV ? &mtv : nullptr );
-                if(c)
+                if( collideSingleShapes( elemA, elemB, clearance,
+                                         aActual || aLocation ? &actual : nullptr,
+                                         aLocation ? &location : nullptr,
+                                         aMTV ? &mtv : nullptr ) )
                 {
-                    if (aActual)
+                    if( actual < currentActual )
                     {
-                        currentActual = std::min( actual, currentActual );
+                        currentActual = actual;
+                        currentLocation = location;
                     }
-                    if( aMTV )
+
+                    if( aMTV && mtv.SquaredEuclideanNorm() > currentMTV.SquaredEuclideanNorm() )
                     {
-                        if( mtv.SquaredEuclideanNorm() > currentMTV.SquaredEuclideanNorm() )
-                            currentMTV = mtv;
+                        currentMTV = mtv;
                     }
+
+                    return true;
                 }
 
-                return c;
-    };
+                return false;
+            };
 
     if( aA->Type() == SH_COMPOUND && aB->Type() == SH_COMPOUND )
     {
-        auto cmpA = static_cast<const SHAPE_COMPOUND*>( aA );
-        auto cmpB = static_cast<const SHAPE_COMPOUND*>( aB );
+        const SHAPE_COMPOUND* cmpA = static_cast<const SHAPE_COMPOUND*>( aA );
+        const SHAPE_COMPOUND* cmpB = static_cast<const SHAPE_COMPOUND*>( aB );
 
-        for( auto elemA : cmpA->Shapes() )
+        for( const SHAPE* elemA : cmpA->Shapes() )
         {
-            for( auto elemB : cmpB->Shapes() )
+            for( const SHAPE* elemB : cmpB->Shapes() )
             {
                 if( collideCompoundSubshapes( elemA, elemB, aClearance ) )
                 {
                     colliding = true;
-                    if ( exitOnFirstCollision )
+
+                    if( canExit() )
                         break;
                 }
             }
-            if( colliding && exitOnFirstCollision )
+
+            if( canExit() )
                 break;
         }
     }
     else if( aA->Type() == SH_COMPOUND )
     {
-        auto cmpA = static_cast<const SHAPE_COMPOUND*>( aA );
-        for( auto elemA : cmpA->Shapes() )
+        const SHAPE_COMPOUND* cmpA = static_cast<const SHAPE_COMPOUND*>( aA );
+
+        for( const SHAPE* elemA : cmpA->Shapes() )
         {
             if( collideCompoundSubshapes( elemA, aB, aClearance ) )
             {
                 colliding = true;
-                if ( exitOnFirstCollision )
+
+                if( canExit() )
                     break;
             }
         }
     }
-    else if ( aB->Type() == SH_COMPOUND )
+    else if( aB->Type() == SH_COMPOUND )
     {
-        auto cmpB = static_cast<const SHAPE_COMPOUND*>( aB );
-        for( auto elemB : cmpB->Shapes() )
+        const SHAPE_COMPOUND* cmpB = static_cast<const SHAPE_COMPOUND*>( aB );
+
+        for( const SHAPE* elemB : cmpB->Shapes() )
         {
             if( collideCompoundSubshapes( aA, elemB, aClearance ) )
             {
                 colliding = true;
-                if ( exitOnFirstCollision )
+
+                if( canExit() )
                     break;
             }
         }
     }
     else
     {
-        return collideSingleShapes( aA, aB, aClearance, aActual, aMTV );
+        return collideSingleShapes( aA, aB, aClearance, aActual, aLocation, aMTV );
     }
     
     if( colliding )
     {
+        if( aLocation )
+            *aLocation = currentLocation;
+
         if( aActual )
             *aActual = currentActual;
+
         if( aMTV )
             *aMTV = currentMTV;
     }
@@ -718,13 +791,13 @@ static bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int
 
 bool SHAPE::Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aMTV ) const
 {
-    return collideShapes( this, aShape, aClearance, nullptr, aMTV );
+    return collideShapes( this, aShape, aClearance, nullptr, nullptr, aMTV );
 }
 
 
-bool SHAPE::Collide( const SHAPE* aShape, int aClearance, int* aActual ) const
+bool SHAPE::Collide( const SHAPE* aShape, int aClearance, int* aActual, VECTOR2I* aLocation ) const
 {
-    return collideShapes( this, aShape, aClearance, aActual, nullptr );
+    return collideShapes( this, aShape, aClearance, aActual, aLocation, nullptr );
 }
 
 

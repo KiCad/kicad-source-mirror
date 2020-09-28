@@ -1070,7 +1070,8 @@ class SHAPE_POLY_SET : public SHAPE
          *                of a collision.
          * @return bool - true if the point aP collides with the polygon; false in any other case.
          */
-        bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr ) const override;
+        bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr,
+                      VECTOR2I* aLocation = nullptr ) const override;
 
         /**
          * Function Collide
@@ -1092,7 +1093,8 @@ class SHAPE_POLY_SET : public SHAPE
          * @return bool - true if the segment aSeg collides with the polygon;
          *                    false in any other case.
          */
-        bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override;
+        bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
+                      VECTOR2I* aLocation = nullptr ) const override;
 
         /**
          * Function CollideVertex
@@ -1244,10 +1246,13 @@ class SHAPE_POLY_SET : public SHAPE
          * computes the minimum distance between the aIndex-th polygon and aPoint.
          * @param  aPoint is the point whose distance to the aIndex-th polygon has to be measured.
          * @param  aIndex is the index of the polygon whose distace to aPoint has to be measured.
+         * @param  aNearest [out] an optional pointer to be filled in with the point on the
+         *                  polyset which is closest to aPoint.
          * @return int -  The minimum distance between aPoint and all the segments of the aIndex-th
          *                polygon. If the point is contained in the polygon, the distance is zero.
          */
-        SEG::ecoord SquaredDistanceToPolygon( VECTOR2I aPoint, int aIndex ) const;
+        SEG::ecoord SquaredDistanceToPolygon( VECTOR2I aPoint, int aIndex,
+                                              VECTOR2I* aNearest ) const;
 
         /**
          * Function DistanceToPolygon
@@ -1256,22 +1261,26 @@ class SHAPE_POLY_SET : public SHAPE
          * @param  aSegment is the segment whose distance to the aIndex-th polygon has to be
          *                  measured.
          * @param  aIndex   is the index of the polygon whose distace to aPoint has to be measured.
-         * @param  aSegmentWidth is the width of the segment; defaults to zero.
+         * @param  aNearest [out] an optional pointer to be filled in with the point on the
+         *                  polyset which is closest to aSegment.
          * @return int -    The minimum distance between aSegment and all the segments of the
          *                  aIndex-th polygon. If the point is contained in the polygon, the
          *                  distance is zero.
          */
-        SEG::ecoord SquaredDistanceToPolygon( const SEG& aSegment, int aIndex ) const;
+        SEG::ecoord SquaredDistanceToPolygon( const SEG& aSegment, int aIndex,
+                                              VECTOR2I* aNearest) const;
 
         /**
          * Function SquaredDistance
          * computes the minimum distance squared between aPoint and all the polygons in the set.
          * Squared distances are used because they avoid the cost of doing square-roots.
          * @param  aPoint is the point whose distance to the set has to be measured.
+         * @param  aNearest [out] an optional pointer to be filled in with the point on the
+         *                  polyset which is closest to aPoint.
          * @return The minimum distance squared between aPoint and all the polygons in the set.
          *         If the point is contained in any of the polygons, the distance is zero.
          */
-        SEG::ecoord SquaredDistance( VECTOR2I aPoint ) const;
+        SEG::ecoord SquaredDistance( VECTOR2I aPoint, VECTOR2I* aNearest = nullptr ) const;
 
         /**
          * Function SquaredDistance
@@ -1279,10 +1288,12 @@ class SHAPE_POLY_SET : public SHAPE
          * Squared distances are used because they avoid the cost of doing square-roots.
          * @param  aSegment is the segment whose distance to the polygon set has to be measured.
          * @param  aSegmentWidth is the width of the segment; defaults to zero.
+         * @param  aNearest [out] an optional pointer to be filled in with the point on the
+         *                  polyset which is closest to aSegment.
          * @return  The minimum distance squared between aSegment and all the polygons in the set.
          *          If the point is contained in the polygon, the distance is zero.
          */
-        SEG::ecoord SquaredDistance( const SEG& aSegment ) const;
+        SEG::ecoord SquaredDistance( const SEG& aSegment, VECTOR2I* aNearest = nullptr ) const;
 
         /**
          * Function IsVertexInHole.

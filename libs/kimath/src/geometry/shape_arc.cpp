@@ -65,11 +65,13 @@ SHAPE_ARC::SHAPE_ARC( const SHAPE_ARC& aOther )
 }
 
 
-bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
+bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I* aLocation ) const
 {
     int minDist = aClearance + m_width / 2;
     VECTOR2I center = GetCenter();
-    ecoord dist_sq = VECTOR2I::ECOORD_MAX;
+    ecoord dist_sq;
+    ecoord closest_dist_sq = VECTOR2I::ECOORD_MAX;
+    VECTOR2I nearest;
 
     VECTOR2I ab = ( aSeg.B - aSeg.A );
     VECTOR2I ac = ( center - aSeg.A );
@@ -84,17 +86,46 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
         p.x = (double) aSeg.A.x * lambda + (double) aSeg.B.x * (1.0 - lambda);
         p.y = (double) aSeg.A.y * lambda + (double) aSeg.B.y * (1.0 - lambda);
 
-        dist_sq = std::min( dist_sq, ( m_start - p ).SquaredEuclideanNorm() );
-        dist_sq = std::min( dist_sq, ( m_end - p ).SquaredEuclideanNorm() );
+        dist_sq = ( m_start - p ).SquaredEuclideanNorm();
+
+        if( dist_sq < closest_dist_sq )
+        {
+            closest_dist_sq = dist_sq;
+            nearest = p;
+        }
+
+        dist_sq = ( m_end - p ).SquaredEuclideanNorm();
+
+        if( dist_sq < closest_dist_sq )
+        {
+            closest_dist_sq = dist_sq;
+            nearest = p;
+        }
     }
 
-    dist_sq = std::min( dist_sq, aSeg.SquaredDistance( m_start ) );
-    dist_sq = std::min( dist_sq, aSeg.SquaredDistance( m_end ) );
+    dist_sq = aSeg.SquaredDistance( m_start );
 
-    if( dist_sq == 0 || dist_sq < (ecoord) minDist * minDist )
+    if( dist_sq < closest_dist_sq )
     {
+        closest_dist_sq = dist_sq;
+        nearest = m_start;
+    }
+
+    dist_sq = aSeg.SquaredDistance( m_end );
+
+    if( dist_sq < closest_dist_sq )
+    {
+        closest_dist_sq = dist_sq;
+        nearest = m_end;
+    }
+
+    if( closest_dist_sq == 0 || closest_dist_sq < SEG::Square( minDist ) )
+    {
+        if( aLocation )
+            *aLocation = nearest;
+
         if( aActual )
-            *aActual = std::max( 0, (int) sqrt( dist_sq ) - m_width / 2 );
+            *aActual = std::max( 0, (int) sqrt( closest_dist_sq ) - m_width / 2 );
 
         return true;
     }
@@ -156,7 +187,8 @@ const BOX2I SHAPE_ARC::BBox( int aClearance ) const
 }
 
 
-bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual ) const
+bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
+                         VECTOR2I* aLocation ) const
 {
     int minDist = aClearance + m_width / 2;
     auto bbox = BBox( minDist );
@@ -164,15 +196,17 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual ) cons
     if( !bbox.Contains( aP ) )
         return false;
 
-    ecoord min_dist_sq = (ecoord) minDist * minDist;
-    ecoord r = GetRadius();
-    ecoord r_sq = r * r;
+    ecoord min_dist_sq = SEG::Square( minDist );
+    ecoord r_sq = SEG::Square( GetRadius() );
 
     ecoord dist_sq = ( aP - GetCenter() ).SquaredEuclideanNorm();
     ecoord dist_to_edge_sq = abs( dist_sq - r_sq );
 
     if( dist_to_edge_sq < min_dist_sq )
     {
+        if( aLocation )
+            *aLocation = ( aP + GetCenter() ) / 2;
+
         if( aActual )
             *aActual = std::max( 0, (int) sqrt( dist_to_edge_sq ) - m_width / 2 );
 

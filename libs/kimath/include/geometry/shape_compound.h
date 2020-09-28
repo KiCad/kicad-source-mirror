@@ -47,18 +47,19 @@ class SHAPE_COMPOUND : public SHAPE
       SHAPE_COMPOUND* Clone() const override;
       const std::string Format() const override;
 
-      bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override;
+      bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
+                    VECTOR2I* aLocation = nullptr ) const override;
 
       bool Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aMTV ) const override
       {
          return SHAPE::Collide( aShape, aClearance, aMTV );
       }
 
-      bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr ) const override
+      bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr,
+                    VECTOR2I* aLocation = nullptr ) const override
       {
-         return SHAPE::Collide( aShape, aClearance, aActual );
+         return SHAPE::Collide( aShape, aClearance, aActual, aLocation );
       }
-
 
       const std::vector<SHAPE*>& Shapes() const
       {

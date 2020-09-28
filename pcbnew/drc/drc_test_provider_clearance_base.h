@@ -48,10 +48,6 @@ public:
     }
 
 protected:
-    wxPoint getLocation( TRACK* aTrack, const SEG& aConflictSeg );
-    wxPoint getLocation( PCB_LAYER_ID aLayer, TRACK* aTrack, ZONE_CONTAINER* aZone );
-
-protected:
     BOARD* m_board;
     int    m_largestClearance;
     bool   m_boardOutlineValid;

@@ -36,57 +36,27 @@ int sgn( T aVal )
 
 SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
 {
-    // fixme: rather inefficient....
-    if( Intersect( aSeg ) )
-        return 0;
+    VECTOR2I closestOnRef = NearestPoint( aSeg );
+    VECTOR2I closestOnASeg = aSeg.NearestPoint( *this );
 
-    const VECTOR2I pts[4] =
-    {
-        aSeg.NearestPoint( A ) - A,
-        aSeg.NearestPoint( B ) - B,
-        NearestPoint( aSeg.A ) - aSeg.A,
-        NearestPoint( aSeg.B ) - aSeg.B
-    };
-
-    ecoord m = VECTOR2I::ECOORD_MAX;
-
-    for( int i = 0; i < 4; i++ )
-        m = std::min( m, pts[i].SquaredEuclideanNorm() );
-
-    return m;
+    return ( closestOnRef - closestOnASeg ).SquaredEuclideanNorm();
 }
 
 
 const VECTOR2I SEG::NearestPoint( const SEG& aSeg ) const
 {
-    if( auto p = Intersect( aSeg ) )
+    if( OPT_VECTOR2I p = Intersect( aSeg ) )
         return *p;
 
-    const VECTOR2I pts_origin[4] =
-    {
-            aSeg.NearestPoint( A ),
-            aSeg.NearestPoint( B ),
-            NearestPoint( aSeg.A ),
-            NearestPoint( aSeg.B )
-    };
+    VECTOR2I nearestA = NearestPoint( aSeg.A );
+    VECTOR2I deltaA = nearestA - aSeg.A;
+    VECTOR2I nearestB = NearestPoint( aSeg.B );
+    VECTOR2I deltaB = nearestB - aSeg.B;
 
-    const ecoord pts_dist[4] =
-    {
-            ( pts_origin[0] - A ).SquaredEuclideanNorm(),
-            ( pts_origin[1] - B ).SquaredEuclideanNorm(),
-            ( pts_origin[2] - aSeg.A ).SquaredEuclideanNorm(),
-            ( pts_origin[3] - aSeg.B ).SquaredEuclideanNorm()
-    };
-
-    int min_i = 0;
-
-    for( int i = 0; i < 4; i++ )
-    {
-        if( pts_dist[i] < pts_dist[min_i] )
-            min_i = i;
-    }
-
-    return pts_origin[min_i];
+    if( deltaA.SquaredEuclideanNorm() < deltaB.SquaredEuclideanNorm() )
+        return nearestA;
+    else
+        return nearestB;
 }
 
 

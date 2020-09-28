@@ -536,9 +536,6 @@ public:
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    bool Collide( const SHAPE_SEGMENT* aSeg, int aMinClearance, int* aActual = nullptr );
-    bool Collide( const D_PAD* aPad, int aMinClearance, int* aActual = nullptr );
-
     wxString GetClass() const override
     {
         return wxT( "PAD" );

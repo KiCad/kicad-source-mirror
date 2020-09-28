@@ -24,12 +24,9 @@
 #include <common.h>
 #include <class_board.h>
 #include <class_drawsegment.h>
-#include <class_pad.h>
 
-#include <convert_basic_shapes_to_polygon.h>
 #include <geometry/polygon_test_point_inside.h>
 #include <geometry/seg.h>
-#include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 
@@ -47,9 +44,7 @@
 
 */
 
-namespace test {
-
-class DRC_TEST_PROVIDER_SILK_TO_SILK : public ::DRC_TEST_PROVIDER
+class DRC_TEST_PROVIDER_SILK_TO_SILK : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_SILK_TO_SILK ()
@@ -85,10 +80,8 @@ private:
     int m_largestClearance;
 };
 
-};
 
-
-bool test::DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
+bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
@@ -113,77 +106,76 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
                 return true;
             };
 
-    auto checkClearance = [&]( const DRC_RTREE::LAYER_PAIR& aLayers,
-                                    DRC_RTREE::ITEM_WITH_SHAPE* aRefItem,
-                                    DRC_RTREE::ITEM_WITH_SHAPE* aTestItem ) -> bool {
-        auto constraint = m_drcEngine->EvalRulesForItems(
-                DRC_CONSTRAINT_TYPE_SILK_TO_SILK, aRefItem->parent, aTestItem->parent );
+    auto checkClearance =
+            [&]( const DRC_RTREE::LAYER_PAIR& aLayers,
+                 DRC_RTREE::ITEM_WITH_SHAPE* aRefItem,
+                 DRC_RTREE::ITEM_WITH_SHAPE* aTestItem ) -> bool
+            {
+                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_TO_SILK,
+                                                                  aRefItem->parent,
+                                                                  aTestItem->parent );
+                int      minClearance = constraint.GetValue().Min();
+                int      actual;
+                VECTOR2I pos;
 
-        int minClearance = constraint.GetValue().Min();
+                accountCheck( constraint );
 
-        accountCheck( constraint );
+                // only check for silkscreen collisions belonging to different modules or
+                // overlapping texts
 
-        int actual;
+                KICAD_T typeRef = aRefItem->parent->Type();
+                KICAD_T typeTest = aTestItem->parent->Type();
 
-        // only check for silkscreen collisions belonging to different modules or overlapping texts
-        
+                MODULE *parentModRef = nullptr;
+                MODULE *parentModTest = nullptr;
 
-        KICAD_T typeRef = aRefItem->parent->Type();
-        KICAD_T typeTest = aTestItem->parent->Type();
-        
-        MODULE *parentModRef = nullptr;
-        MODULE *parentModTest = nullptr;
+                if( typeRef == PCB_MODULE_EDGE_T || typeRef == PCB_MODULE_TEXT_T )
+                {
+                    parentModRef = static_cast<MODULE*> ( aRefItem->parent->GetParent() );
+                }
 
-        if( typeRef == PCB_MODULE_EDGE_T || typeRef == PCB_MODULE_TEXT_T )
-        {
-            parentModRef = static_cast<MODULE*> ( aRefItem->parent->GetParent() );
-        }
+                if( typeTest == PCB_MODULE_EDGE_T || typeTest == PCB_MODULE_TEXT_T )
+                {
+                    parentModTest = static_cast<MODULE*> ( aTestItem->parent->GetParent() );
+                }
 
-        if( typeTest == PCB_MODULE_EDGE_T || typeTest == PCB_MODULE_TEXT_T )
-        {
-            parentModTest = static_cast<MODULE*> ( aTestItem->parent->GetParent() );
-        }
+                // silkscreen drawings within the same module (or globally on the board)
+                // don't report clearance errors. Everything else does.
 
+                if( parentModRef && parentModRef == parentModTest )
+                {
+                    if( typeRef == PCB_MODULE_EDGE_T && typeTest == PCB_MODULE_EDGE_T )
+                        return true;
+                }
 
-        // silkscreen drawings within the same module (or globally on the board)
-        // don't report clearance errors. Everything else does.
+                if( !parentModRef && !parentModTest )
+                {
+                    if( typeRef == PCB_LINE_T && typeTest == PCB_LINE_T )
+                        return true;
+                }
 
-        if( parentModRef && parentModRef == parentModTest )
-        {
-            if( typeRef == PCB_MODULE_EDGE_T && typeTest == PCB_MODULE_EDGE_T )
-                return true;
-        }
+                if( ! aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual, &pos ) )
+                    return true;
 
-        if( !parentModRef && !parentModTest )
-        {
-            if( typeRef == PCB_LINE_T && typeTest == PCB_LINE_T )
-                return true;
-        }
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_CLEARANCE );
+                wxString                  msg;
 
-        if( ! aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual ) )
-            return true;
+                msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                            constraint.GetParentRule()->m_Name,
+                            MessageTextFromValue( userUnits(), minClearance, true ),
+                            MessageTextFromValue( userUnits(), actual, true ) );
 
-        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_CLEARANCE );
-        wxString                  msg;
+                drcItem->SetErrorMessage( msg );
+                drcItem->SetItems( aRefItem->parent, aTestItem->parent );
+                drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-        msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                constraint.GetParentRule()->m_Name,
-                MessageTextFromValue( userUnits(), minClearance, true ),
-                MessageTextFromValue( userUnits(), actual, true ) );
+                reportViolation( drcItem, (wxPoint) pos );
 
-        drcItem->SetErrorMessage( msg );
-        drcItem->SetItems( aRefItem->parent, aTestItem->parent );
-        drcItem->SetViolatingRule( constraint.GetParentRule() );
+                return !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE );
+            };
 
-        reportViolation( drcItem, aRefItem->parent->GetPosition() );
-
-
-        return !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE );
-    };
-
-    int numSilk =
-            forEachGeometryItem( { PCB_LINE_T, PCB_MODULE_EDGE_T, PCB_TEXT_T, PCB_MODULE_TEXT_T },
-                    LSET( 2, F_SilkS, B_SilkS ), addToTree );
+    int numSilk = forEachGeometryItem( { PCB_LINE_T, PCB_MODULE_EDGE_T, PCB_TEXT_T, PCB_MODULE_TEXT_T },
+                                       LSET( 2, F_SilkS, B_SilkS ), addToTree );
 
     reportAux( _("Testing %d silkscreen features."),  numSilk );
 
@@ -201,7 +193,7 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_SILK_TO_SILK::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_SILK_TO_SILK::GetConstraintTypes() const
 {
     return { DRC_CONSTRAINT_TYPE_SILK_TO_SILK };
 }
@@ -209,5 +201,5 @@ std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_SILK_TO_SILK::GetConstra
 
 namespace detail
 {
-    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_SILK_TO_SILK> dummy;
+    static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_SILK_TO_SILK> dummy;
 }

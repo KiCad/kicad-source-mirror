@@ -26,10 +26,25 @@
 #include <geometry/shape_rect.h>
 
 
-bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
+bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual,
+                          VECTOR2I* aLocation ) const
 {
-    if( BBox( 0 ).Contains( aSeg.A ) || BBox( 0 ).Contains( aSeg.B ) )
+    if( BBox( 0 ).Contains( aSeg.A ) )
     {
+        if( aLocation )
+            *aLocation = aSeg.A;
+
+        if( aActual )
+            *aActual = 0;
+
+        return true;
+    }
+
+    if( BBox( 0 ).Contains( aSeg.B ) )
+    {
+        if( aLocation )
+            *aLocation = aSeg.B;
+
         if( aActual )
             *aActual = 0;
 
@@ -42,19 +57,33 @@ bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
                            VECTOR2I( m_p0.x + m_w, m_p0.y ),
                            VECTOR2I( m_p0.x, m_p0.y ) };
 
-    SEG s( corners[0], corners[1] );
-    SEG::ecoord dist_squared = s.SquaredDistance( aSeg );
+    SEG::ecoord closest_dist_sq = VECTOR2I::ECOORD_MAX;
+    VECTOR2I nearest;
 
-    for( int i = 1; i < 4; i++ )
+    for( int i = 0; i < 4; i++ )
     {
-        s = SEG( corners[i], corners[ i + 1] );
-        dist_squared = std::min( dist_squared, s.SquaredDistance( aSeg ) );
+        SEG side = SEG( corners[i], corners[ i + 1] );
+        VECTOR2I pnA = side.NearestPoint( aSeg );
+        VECTOR2I pnB = aSeg.NearestPoint( side );
+        SEG::ecoord dist_sq = ( pnA - pnB ).SquaredEuclideanNorm();
+
+        if( dist_sq < closest_dist_sq )
+        {
+            nearest = pnA;
+            closest_dist_sq = dist_sq;
+
+            if( closest_dist_sq == 0 || !aActual )
+                break;
+        }
     }
 
-    if( dist_squared < (ecoord) aClearance * aClearance )
+    if( closest_dist_sq < SEG::Square( aClearance ) )
     {
+        if( aLocation )
+            *aLocation = nearest;
+
         if( aActual )
-            *aActual = sqrt( dist_squared );
+            *aActual = sqrt( closest_dist_sq );
 
         return true;
     }

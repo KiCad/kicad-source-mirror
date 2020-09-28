@@ -65,13 +65,18 @@ public:
         return BOX2I( m_center - rc, rc * 2 );
     }
 
-    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override
+    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
+                  VECTOR2I* aLocation = nullptr ) const override
     {
         int minDist = aClearance + m_radius;
-        ecoord dist_sq = aSeg.SquaredDistance( m_center );
+        VECTOR2I pn = aSeg.NearestPoint( m_center );
+        ecoord dist_sq = ( pn - m_center ).SquaredEuclideanNorm();
 
-        if( dist_sq == 0 || dist_sq < (ecoord) minDist * minDist )
+        if( dist_sq == 0 || dist_sq < SEG::Square( minDist ) )
         {
+            if( aLocation )
+                *aLocation = pn;
+
             if( aActual )
                 *aActual = std::max( 0, (int) sqrt( dist_sq ) - m_radius );
 

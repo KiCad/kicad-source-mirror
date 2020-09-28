@@ -295,7 +295,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc( int aRefPadIdx,
                     drcItem->SetItems( pad, refPad );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drcItem, pad->GetPosition());
+                    reportViolation( drcItem, pad->GetPosition() );
                     return false;
                 }
             }
@@ -328,7 +328,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc( int aRefPadIdx,
                     drcItem->SetItems( refPad, pad );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drcItem, pad->GetPosition());
+                    reportViolation( drcItem, pad->GetPosition() );
                     return false;
                 }
             }

@@ -140,12 +140,14 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
             auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
                                                               outlineItem, boardItem );
-            int  minClearance = constraint.GetValue().Min();
-            int  actual;
+
+            int      minClearance = constraint.GetValue().Min();
+            int      actual;
+            VECTOR2I pos;
 
             accountCheck( constraint );
 
-            if( refShape->Collide( shape.get(), minClearance, &actual ) )
+            if( refShape->Collide( shape.get(), minClearance, &actual, &pos ) )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_COPPER_EDGE_CLEARANCE );
 
@@ -158,7 +160,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 drcItem->SetItems( outlineItem, boardItem );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drcItem, (wxPoint) refShape->Centre());
+                reportViolation( drcItem, (wxPoint) pos );
             }
         }
     }

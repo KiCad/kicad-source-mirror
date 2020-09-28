@@ -113,23 +113,42 @@ bool SHAPE_COMPOUND::IsSolid() const
 }
 
 
-bool SHAPE_COMPOUND::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
+bool SHAPE_COMPOUND::Collide( const SEG& aSeg, int aClearance, int* aActual,
+                              VECTOR2I* aLocation ) const
 {
-    int dist = std::numeric_limits<int>::max();
+    int closest_dist = std::numeric_limits<int>::max();
+    VECTOR2I nearest;
 
-    for( auto& item : m_shapes )
+    for( SHAPE* item : m_shapes )
     {
-        if( item->Collide( aSeg, aClearance, aActual ) )
-        {
-            if( !aActual || *aActual == 0 )
-                return true;
+        int actual = 0;
+        VECTOR2I pn;
 
-            dist = std::min( dist, *aActual );
+        if( item->Collide( aSeg, aClearance,
+                           aActual || aLocation ? &actual : nullptr,
+                           aLocation ? &pn : nullptr ) )
+        {
+            if( actual < closest_dist )
+            {
+                nearest = pn;
+                closest_dist = actual;
+
+                if( closest_dist == 0 || !aActual )
+                    break;
+            }
         }
     }
 
-    if( aActual )
-        *aActual = dist;
+    if( closest_dist < aClearance )
+    {
+        if( aLocation )
+            *aLocation = nearest;
 
-    return dist != std::numeric_limits<int>::max();
+        if( aActual )
+            *aActual = closest_dist;
+
+        return true;
+    }
+
+    return false;
 }

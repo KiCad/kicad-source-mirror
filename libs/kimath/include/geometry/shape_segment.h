@@ -61,18 +61,23 @@ public:
         return SHAPE::Collide( aShape, aClearance, aMTV );
     }
 
-    bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr ) const override
+    bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr,
+                  VECTOR2I* aLocation = nullptr ) const override
     {
-        return SHAPE::Collide( aShape, aClearance, aActual );
+        return SHAPE::Collide( aShape, aClearance, aActual, aLocation );
     }
 
-    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override
+    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
+                  VECTOR2I* aLocation = nullptr ) const override
     {
         int min_dist = ( m_width + 1 ) / 2 + aClearance;
         ecoord dist_sq = m_seg.SquaredDistance( aSeg );
 
-        if( dist_sq == 0 || dist_sq < (ecoord) min_dist * min_dist )
+        if( dist_sq == 0 || dist_sq < SEG::Square( min_dist ) )
         {
+            if( aLocation )
+                *aLocation = m_seg.NearestPoint( aSeg );
+
             if( aActual )
                 *aActual = std::max( 0, (int) sqrt( dist_sq ) - ( m_width + 1 ) / 2 );
 
@@ -82,13 +87,17 @@ public:
         return false;
     }
 
-    bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr ) const override
+    bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr,
+                  VECTOR2I* aLocation = nullptr ) const override
     {
         int min_dist = ( m_width + 1 ) / 2 + aClearance;
         ecoord dist_sq = m_seg.SquaredDistance( aP );
 
-        if( dist_sq == 0 || dist_sq < (ecoord) min_dist * min_dist )
+        if( dist_sq == 0 || dist_sq < SEG::Square( min_dist ) )
         {
+            if( aLocation )
+                *aLocation = m_seg.NearestPoint( aP );
+
             if( aActual )
                 *aActual = std::max( 0, (int) sqrt( dist_sq ) - ( m_width + 1 ) / 2 );
 

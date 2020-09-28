@@ -167,13 +167,16 @@ public:
      *
      * Checks if the boundary of shape (this) lies closer to the point aP than aClearance,
      * indicating a collision.
-     * @param aActual an optional pointer to an int to store the actual distance in the event
-     *                of a collision.
+     * @param aActual [out] an optional pointer to an int to store the actual distance in the
+     *                event of a collision.
+     * @param aLocation [out] an option pointer to a point to store a nearby location in the
+     *                  event of a collision.
      * @return true, if there is a collision.
      */
-    virtual bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr ) const
+    virtual bool Collide( const VECTOR2I& aP, int aClearance = 0,
+                          int* aActual = nullptr, VECTOR2I* aLocation = nullptr ) const
     {
-        return Collide( SEG( aP, aP ), aClearance, aActual );
+        return Collide( SEG( aP, aP ), aClearance, aActual, aLocation );
     }
 
     /**
@@ -184,23 +187,30 @@ public:
      * @param aShape shape to check collision against
      * @param aClearance minimum clearance
      * @param aMTV minimum translation vector
-     * @param aActual an optional pointer to an int to store the actual distance in the event
-     *                of a collision.
+     * @param aActual [out] an optional pointer to an int to store the actual distance in the
+     *                event of a collision.
+     * @param aLocation [out] an option pointer to a point to store a nearby location in the
+     *                  event of a collision.
      * @return true, if there is a collision.
      */
     virtual bool Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aMTV ) const;
-    virtual bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr ) const;
+
+    virtual bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr,
+                          VECTOR2I* aLocation = nullptr ) const;
 
     /**
      * Function Collide()
      *
      * Checks if the boundary of shape (this) lies closer to the segment aSeg than aClearance,
      * indicating a collision.
-     * @aActual an optional pointer to an int to be updated with the actual distance in the
-     *          case of collision.
+     * @param aActual [out] an optional pointer to an int to be updated with the actual distance
+     *                int the event of a collision.
+     * @param aLocation [out] an option pointer to a point to store a nearby location in the
+     *                  event of a collision.
      * @return true, if there is a collision.
      */
-    virtual bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const = 0;
+    virtual bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
+                          VECTOR2I* aLocation = nullptr ) const = 0;
 
     /**
      * Function BBox()
@@ -263,7 +273,8 @@ public:
      *                of a collision.
      * @return true, when a collision has been found
      */
-    virtual bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr ) const override;
+    virtual bool Collide( const VECTOR2I& aP, int aClearance = 0,
+                          int* aActual = nullptr, VECTOR2I* aLocation = nullptr ) const override;
 
     /**
      * Function Collide()
@@ -276,7 +287,9 @@ public:
      * @return true, when a collision has been found
      */
 
-    virtual bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override;
+    virtual bool Collide( const SEG& aSeg, int aClearance = 0,
+                          int* aActual = nullptr, VECTOR2I* aLocation = nullptr ) const override;
+
     SEG::ecoord SquaredDistance( const VECTOR2I& aP, bool aOutlineOnly = false ) const;
 
     /**

@@ -95,13 +95,15 @@ public:
         return SHAPE::Collide( aShape, aClearance, aMTV );
     }
 
-    bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr ) const override
+    bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr,
+                  VECTOR2I* aLocation = nullptr ) const override
     {
-        return SHAPE::Collide( aShape, aClearance, aActual );
+        return SHAPE::Collide( aShape, aClearance, aActual, aLocation );
     }
 
     /// @copydoc SHAPE::Collide()
-    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override;
+    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
+                  VECTOR2I* aLocation = nullptr ) const override;
 
     /**
      * Function GetPosition()

@@ -212,11 +212,11 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
         if( !track->IsOnLayer( aItem->GetLayer() ) )
             continue;
 
-        auto    constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                                             aItem, track, layer );
-        int     minClearance = constraint.GetValue().Min();
-        int     actual = INT_MAX;
-        wxPoint pos;
+        auto      constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                               aItem, track, layer );
+        int      minClearance = constraint.GetValue().Min();
+        int      actual = INT_MAX;
+        VECTOR2I pos;
 
         accountCheck( constraint );
 
@@ -226,10 +226,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
         if( !bboxShape.Collide( &trackSeg, 0 ) )
             continue;
 
-        if( !itemShape->Collide( &trackSeg, minClearance, &actual ) )
+        if( !itemShape->Collide( &trackSeg, minClearance, &actual, &pos ) )
             continue;
-
-        pos = (wxPoint) itemShape->Centre();
 
         if( actual < INT_MAX )
         {
@@ -244,7 +242,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
             drcItem->SetItems( track, aItem );
             drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drcItem, pos );
+            reportViolation( drcItem, (wxPoint) pos );
         }
     }
 
@@ -258,13 +256,13 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
         if( aItem->Type() == PCB_MODULE_EDGE_T && pad->GetParent() == aItem->GetParent() )
             continue;
 
-        auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                                          aItem, pad, layer );
-        int  minClearance = constraint.GetValue().Min();
-        int  actual;
+        auto     constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                              aItem, pad, layer );
+        int      minClearance = constraint.GetValue().Min();
+        int      actual;
+        VECTOR2I pos;
 
         accountCheck( constraint );
-
 
         // Fast test to detect a pad candidate inside the text bounding box
         // Finer test (time consuming) is made only for pads near the text.
@@ -273,7 +271,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
         if( !bboxShape.Collide( SEG( pad->GetPosition(), pad->GetPosition() ), bb_radius ) )
             continue;
 
-        if( !pad->GetEffectiveShape()->Collide( itemShape.get(), minClearance, &actual ) )
+        if( !itemShape->Collide( pad->GetEffectiveShape().get(), minClearance, &actual, &pos ) )
             continue;
 
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
@@ -287,7 +285,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
         drcItem->SetItems( pad, aItem );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-        reportViolation( drcItem, pad->GetPosition());
+        reportViolation( drcItem, (wxPoint) pos );
     }
 }
 
@@ -314,6 +312,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
         }
     }
 }
+
 
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_ID aLayer,
                                                      TRACKS::iterator aStartIt,
@@ -358,16 +357,17 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             if( pad->GetNetCode() && aRefSeg->GetNetCode() == pad->GetNetCode() )
                 continue;
 
-            auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                                              aRefSeg, pad, aLayer );
-            int  minClearance = constraint.GetValue().Min();
-            int  actual;
+            auto     constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                                  aRefSeg, pad, aLayer );
+            int      minClearance = constraint.GetValue().Min();
+            int      actual;
+            VECTOR2I pos;
 
             accountCheck( constraint );
 
             const std::shared_ptr<SHAPE>& padShape = pad->GetEffectiveShape();
 
-            if( padShape->Collide( &refSeg, minClearance - bds.GetDRCEpsilon(), &actual ) )
+            if( padShape->Collide( &refSeg, minClearance - bds.GetDRCEpsilon(), &actual, &pos ) )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
@@ -380,7 +380,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
                 drcItem->SetItems( aRefSeg, pad );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drcItem, pad->GetPosition());
+                reportViolation( drcItem, (wxPoint) pos );
             }
         }
     }
@@ -421,6 +421,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
         int           minClearance = constraint.GetValue().Min();
         int           actual;
         SHAPE_SEGMENT trackSeg( track->GetStart(), track->GetEnd(), track->GetWidth() );
+        VECTOR2I      pos;
 
         accountCheck( constraint );
 
@@ -440,11 +441,10 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             drcItem->SetItems( aRefSeg, track );
             drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drcItem, (wxPoint) intersection.get());
+            reportViolation( drcItem, (wxPoint) intersection.get() );
         }
-        else if( refSeg.Collide( &trackSeg, minClearance - bds.GetDRCEpsilon(), &actual ) )
+        else if( refSeg.Collide( &trackSeg, minClearance - bds.GetDRCEpsilon(), &actual, &pos ) )
         {
-            wxPoint   pos = getLocation( aRefSeg, trackSeg.GetSeg() );
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
             m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
@@ -456,7 +456,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             drcItem->SetItems( aRefSeg, track );
             drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drcItem, pos );
+            reportViolation( drcItem, (wxPoint) pos );
 
             if( !m_drcEngine->GetReportAllTrackErrors() )
                 break;
@@ -491,14 +491,17 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
 
             auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
                                                               aRefSeg, zone, aLayer );
-            int  minClearance = constraint.GetValue().Min();
-            int  halfWidth = refSegWidth / 2;
-            int  allowedDist  = minClearance + halfWidth - bds.GetDRCEpsilon();
-            int  actual;
+            int minClearance = constraint.GetValue().Min();
+            int halfWidth = refSegWidth / 2;
+            int allowedDist  = minClearance + halfWidth - bds.GetDRCEpsilon();
+
+            const SHAPE_POLY_SET& zonePoly = zone->GetFilledPolysList( aLayer );
+            int                   actual;
+            VECTOR2I              location;
 
             accountCheck( constraint );
 
-            if( zone->GetFilledPolysList( aLayer ).Collide( testSeg, allowedDist, &actual ) )
+            if( zonePoly.Collide( testSeg, allowedDist, &actual, &location ) )
             {
                 actual = std::max( 0, actual - halfWidth );
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
@@ -512,7 +515,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
                 drcItem->SetItems( aRefSeg, zone );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drcItem, getLocation( aLayer, aRefSeg, zone ));
+                reportViolation( drcItem, (wxPoint) location );
             }
         }
     }
@@ -634,17 +637,19 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( int aRefPadIdx,
             if( exceedClearance )
                 break;
 
-            auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                                              refPad, pad, layer );
-            int  minClearance = constraint.GetValue().Min();
-            int  clearanceAllowed = minClearance - bds.GetDRCEpsilon();
-            int  actual;
+            auto     constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                                  refPad, pad, layer );
+            int      minClearance = constraint.GetValue().Min();
+            int      clearanceAllowed = minClearance - bds.GetDRCEpsilon();
+            int      actual;
+            VECTOR2I pos;
 
             accountCheck( constraint );
 
             std::shared_ptr<SHAPE> refPadShape = refPad->GetEffectiveShape();
+            std::shared_ptr<SHAPE> padShape = pad->GetEffectiveShape();
 
-            if( refPadShape->Collide( pad->GetEffectiveShape().get(), clearanceAllowed, &actual ) )
+            if( refPadShape->Collide( padShape.get(), clearanceAllowed, &actual, &pos ) )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
@@ -657,7 +662,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( int aRefPadIdx,
                 drcItem->SetItems( refPad, pad );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drcItem, refPad->GetPosition());
+                reportViolation( drcItem, (wxPoint) pos );
                 break;
             }
         }

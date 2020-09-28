@@ -39,7 +39,6 @@ add_executable( drc_proto
     ../../pcbnew/drc/drc_rule_condition.cpp
     ../../pcbnew/drc/drc_rule_parser.cpp
     ../../pcbnew/drc/drc_test_provider.cpp
-    ../../pcbnew/drc/drc_test_provider_clearance_base.cpp
     ../../pcbnew/drc/drc_test_provider_copper_clearance.cpp
     ../../pcbnew/drc/drc_test_provider_hole_clearance.cpp
     ../../pcbnew/drc/drc_test_provider_edge_clearance.cpp

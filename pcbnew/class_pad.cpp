@@ -956,25 +956,6 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
 }
 
 
-bool D_PAD::Collide( const D_PAD* aPad, int aMinClearance, int* aActual )
-{
-    int center2center = KiROUND( EuclideanNorm( aPad->ShapePos() - ShapePos() ) );
-
-    // Quick test: Clearance is OK if the bounding circles are further away than aMinClearance
-    if( center2center - GetBoundingRadius() - aPad->GetBoundingRadius() >= aMinClearance )
-        return false;
-
-
-    return GetEffectiveShape()->Collide( aPad->GetEffectiveShape().get(), aMinClearance, aActual );
-}
-
-
-bool D_PAD::Collide( const SHAPE_SEGMENT* aSeg, int aMinClearance, int* aActual )
-{
-    return aSeg->Collide( GetEffectiveShape().get(), aMinClearance, aActual );
-}
-
-
 int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 {
     int diff;

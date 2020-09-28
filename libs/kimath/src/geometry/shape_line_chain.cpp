@@ -85,26 +85,38 @@ void SHAPE_LINE_CHAIN::convertArc( ssize_t aArcIndex )
 }
 
 
-bool SHAPE_LINE_CHAIN_BASE::Collide( const VECTOR2I& aP, int aClearance, int* aActual ) const
+bool SHAPE_LINE_CHAIN_BASE::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
+                                     VECTOR2I* aLocation ) const
 {
-    SEG::ecoord dist_sq = VECTOR2I::ECOORD_MAX;
+    SEG::ecoord closest_dist_sq = VECTOR2I::ECOORD_MAX;
     SEG::ecoord clearance_sq = SEG::Square( aClearance );
+    VECTOR2I nearest;
 
     // fixme: why this only checks open curves?
 
     for( int i = 0; i < GetSegmentCount(); i++ )
     {
         const SEG& s = GetSegment( i );
-        dist_sq = std::min( dist_sq, s.SquaredDistance( aP ) );
+        VECTOR2I pn = s.NearestPoint( aP );
+        SEG::ecoord dist_sq = ( pn - aP ).SquaredEuclideanNorm();
 
-        if( ( dist_sq == 0 || dist_sq < clearance_sq ) && !aActual )
-            return true;
+        if( dist_sq < closest_dist_sq )
+        {
+            nearest = pn;
+            closest_dist_sq = dist_sq;
+
+            if( closest_dist_sq == 0 || !aActual )
+                break;
+        }
     }
 
-    if( dist_sq == 0 || dist_sq < clearance_sq )
+    if( closest_dist_sq == 0 || closest_dist_sq < clearance_sq )
     {
+        if( aLocation )
+            *aLocation = nearest;
+
         if( aActual )
-            *aActual = sqrt( dist_sq );
+            *aActual = sqrt( closest_dist_sq );
 
         return true;
     }
@@ -127,24 +139,37 @@ void SHAPE_LINE_CHAIN::Rotate( double aAngle, const VECTOR2I& aCenter )
 }
 
 
-bool SHAPE_LINE_CHAIN_BASE::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
+bool SHAPE_LINE_CHAIN_BASE::Collide( const SEG& aSeg, int aClearance, int* aActual,
+                                     VECTOR2I* aLocation ) const
 {
-    SEG::ecoord dist_sq = VECTOR2I::ECOORD_MAX;
+    SEG::ecoord closest_dist_sq = VECTOR2I::ECOORD_MAX;
     SEG::ecoord clearance_sq = SEG::Square( aClearance );
+    VECTOR2I nearest;
 
     for( int i = 0; i < GetSegmentCount(); i++ )
     {
         const SEG& s = GetSegment( i );
-        dist_sq = std::min( dist_sq, s.SquaredDistance( aSeg ) );
+        SEG::ecoord dist_sq =s.SquaredDistance( aSeg );
 
-        if( ( dist_sq == 0 || dist_sq < clearance_sq ) && !aActual )
-            return true;
+        if( dist_sq < closest_dist_sq )
+        {
+            if( aLocation )
+                nearest = s.NearestPoint( aSeg );
+
+            closest_dist_sq = dist_sq;
+
+            if( closest_dist_sq == 0 || !aActual )
+                break;
+        }
     }
 
-    if( dist_sq == 0 || dist_sq < clearance_sq )
+    if( closest_dist_sq == 0 || closest_dist_sq < clearance_sq )
     {
+        if( aLocation )
+            *aLocation = nearest;
+
         if( aActual )
-            *aActual = sqrt( dist_sq );
+            *aActual = sqrt( closest_dist_sq );
 
         return true;
     }

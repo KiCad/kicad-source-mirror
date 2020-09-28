@@ -57,7 +57,8 @@ public:
         return BOX2I();
     }
 
-    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override
+    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
+                  VECTOR2I* aLocation = nullptr ) const override
     {
         return false;
     }

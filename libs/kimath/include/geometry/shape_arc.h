@@ -73,8 +73,10 @@ public:
 
     const BOX2I BBox( int aClearance = 0 ) const override;
 
-    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr ) const override;
-    bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr ) const override;
+    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
+                  VECTOR2I* aLocation = nullptr ) const override;
+    bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr,
+                  VECTOR2I* aLocation = nullptr ) const override;
 
     void SetWidth( int aWidth )
     {

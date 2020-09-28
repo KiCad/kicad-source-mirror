@@ -1224,12 +1224,17 @@ bool SHAPE_POLY_SET::PointOnEdge( const VECTOR2I& aP ) const
 }
 
 
-bool SHAPE_POLY_SET::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
+bool SHAPE_POLY_SET::Collide( const SEG& aSeg, int aClearance, int* aActual,
+                              VECTOR2I* aLocation ) const
 {
-    ecoord dist_sq = SquaredDistance( aSeg );
+    VECTOR2I nearest;
+    ecoord dist_sq = SquaredDistance( aSeg, aLocation ? &nearest : nullptr );
 
-    if( dist_sq == 0 || dist_sq < (ecoord) aClearance * aClearance )
+    if( dist_sq == 0 || dist_sq < SEG::Square( aClearance ) )
     {
+        if( aLocation )
+            *aLocation = nearest;
+
         if( aActual )
             *aActual = sqrt( dist_sq );
 
@@ -1240,12 +1245,17 @@ bool SHAPE_POLY_SET::Collide( const SEG& aSeg, int aClearance, int* aActual ) co
 }
 
 
-bool SHAPE_POLY_SET::Collide( const VECTOR2I& aP, int aClearance, int* aActual ) const
+bool SHAPE_POLY_SET::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
+                              VECTOR2I* aLocation ) const
 {
-    ecoord dist_sq = SquaredDistance( aP );
+    VECTOR2I nearest;
+    ecoord dist_sq = SquaredDistance( aP, aLocation ? &nearest : nullptr );
 
-    if( dist_sq == 0 || dist_sq < (ecoord) aClearance * aClearance )
+    if( dist_sq == 0 || dist_sq < SEG::Square( aClearance ) )
     {
+        if( aLocation )
+            *aLocation = nearest;
+
         if( aActual )
             *aActual = sqrt( dist_sq );
 
@@ -1571,14 +1581,20 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::FilletPolygon( unsigned int aRadius, int
 }
 
 
-SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( VECTOR2I aPoint, int aPolygonIndex ) const
+SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( VECTOR2I aPoint, int aPolygonIndex,
+                                                      VECTOR2I* aNearest ) const
 {
     // We calculate the min dist between the segment and each outline segment.  However, if the
     // segment to test is inside the outline, and does not cross any edge, it can be seen outside
     // the polygon.  Therefore test if a segment end is inside (testing only one end is enough).
     // Use an accuracy of "1" to say that we don't care if it's exactly on the edge or not.
     if( containsSingle( aPoint, aPolygonIndex, 1 ) )
+    {
+        if( aNearest )
+            *aNearest = aPoint;
+
         return 0;
+    }
 
     CONST_SEGMENT_ITERATOR iterator = CIterateSegmentsWithHoles( aPolygonIndex );
 
@@ -1589,21 +1605,32 @@ SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( VECTOR2I aPoint, int aPoly
         SEG::ecoord currentDistance = (*iterator).SquaredDistance( aPoint );
 
         if( currentDistance < minDistance )
+        {
+            if( aNearest )
+                *aNearest = (*iterator).NearestPoint( aPoint );
+
             minDistance = currentDistance;
+        }
     }
 
     return minDistance;
 }
 
 
-SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( const SEG& aSegment, int aPolygonIndex ) const
+SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( const SEG& aSegment, int aPolygonIndex,
+                                                      VECTOR2I* aNearest ) const
 {
     // We calculate the min dist between the segment and each outline segment.  However, if the
     // segment to test is inside the outline, and does not cross any edge, it can be seen outside
     // the polygon.  Therefore test if a segment end is inside (testing only one end is enough).
     // Use an accuracy of "1" to say that we don't care if it's exactly on the edge or not.
     if( containsSingle( aSegment.A, aPolygonIndex, 1 ) )
+    {
+        if( aNearest )
+            *aNearest = ( aSegment.A + aSegment.B ) / 2;
+
         return 0;
+    }
 
     CONST_SEGMENT_ITERATOR iterator = CIterateSegmentsWithHoles( aPolygonIndex );
     SEG::ecoord            minDistance = (*iterator).SquaredDistance( aSegment );
@@ -1613,7 +1640,12 @@ SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( const SEG& aSegment, int a
         SEG::ecoord currentDistance = (*iterator).SquaredDistance( aSegment );
 
         if( currentDistance < minDistance )
+        {
+            if( aNearest )
+                *aNearest = (*iterator).NearestPoint( aSegment );
+
             minDistance = currentDistance;
+        }
     }
 
     // Return the maximum of minDistance and zero
@@ -1621,39 +1653,53 @@ SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( const SEG& aSegment, int a
 }
 
 
-SEG::ecoord SHAPE_POLY_SET::SquaredDistance( VECTOR2I aPoint ) const
+SEG::ecoord SHAPE_POLY_SET::SquaredDistance( VECTOR2I aPoint, VECTOR2I* aNearest ) const
 {
-    SEG::ecoord currentDistance;
-    SEG::ecoord minDistance = SquaredDistanceToPolygon( aPoint, 0 );
+    SEG::ecoord currentDistance_sq;
+    SEG::ecoord minDistance_sq = VECTOR2I::ECOORD_MAX;
+    VECTOR2I nearest;
 
     // Iterate through all the polygons and get the minimum distance.
-    for( unsigned int polygonIdx = 1; polygonIdx < m_polys.size(); polygonIdx++ )
+    for( unsigned int polygonIdx = 0; polygonIdx < m_polys.size(); polygonIdx++ )
     {
-        currentDistance = SquaredDistanceToPolygon( aPoint, polygonIdx );
+        currentDistance_sq = SquaredDistanceToPolygon( aPoint, polygonIdx,
+                                                       aNearest ? &nearest : nullptr );
 
-        if( currentDistance < minDistance )
-            minDistance = currentDistance;
+        if( currentDistance_sq < minDistance_sq )
+        {
+            if( aNearest )
+                *aNearest = nearest;
+
+            minDistance_sq = currentDistance_sq;
+        }
     }
 
-    return minDistance;
+    return minDistance_sq;
 }
 
 
-SEG::ecoord SHAPE_POLY_SET::SquaredDistance( const SEG& aSegment ) const
+SEG::ecoord SHAPE_POLY_SET::SquaredDistance( const SEG& aSegment, VECTOR2I* aNearest ) const
 {
-    SEG::ecoord currentDistance;
-    SEG::ecoord minDistance = SquaredDistanceToPolygon( aSegment, 0 );
+    SEG::ecoord currentDistance_sq;
+    SEG::ecoord minDistance_sq = VECTOR2I::ECOORD_MAX;
+    VECTOR2I nearest;
 
     // Iterate through all the polygons and get the minimum distance.
-    for( unsigned int polygonIdx = 1; polygonIdx < m_polys.size(); polygonIdx++ )
+    for( unsigned int polygonIdx = 0; polygonIdx < m_polys.size(); polygonIdx++ )
     {
-        currentDistance = SquaredDistanceToPolygon( aSegment, polygonIdx );
+        currentDistance_sq = SquaredDistanceToPolygon( aSegment, polygonIdx,
+                                                    aNearest ? &nearest : nullptr );
 
-        if( currentDistance < minDistance )
-            minDistance = currentDistance;
+        if( currentDistance_sq < minDistance_sq )
+        {
+            if( aNearest )
+                *aNearest = nearest;
+
+            minDistance_sq = currentDistance_sq;
+        }
     }
 
-    return minDistance;
+    return minDistance_sq;
 }
 
 

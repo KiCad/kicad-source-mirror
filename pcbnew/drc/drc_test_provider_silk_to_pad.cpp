@@ -119,45 +119,41 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
                 return true;
             };
 
-    auto checkClearance = [&]( const DRC_RTREE::LAYER_PAIR& aLayers, 
-                                    DRC_RTREE::ITEM_WITH_SHAPE* aRefItem,
-                                    DRC_RTREE::ITEM_WITH_SHAPE* aTestItem ) -> bool {
-        auto constraint = m_drcEngine->EvalRulesForItems(
-                DRC_CONSTRAINT_TYPE_SILK_TO_PAD, aRefItem->parent, aTestItem->parent );
+    auto checkClearance =
+            [&]( const DRC_RTREE::LAYER_PAIR& aLayers,
+                 DRC_RTREE::ITEM_WITH_SHAPE* aRefItem,
+                 DRC_RTREE::ITEM_WITH_SHAPE* aTestItem ) -> bool
+            {
+                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_TO_PAD,
+                                                                  aRefItem->parent,
+                                                                  aTestItem->parent );
 
-        int minClearance = constraint.GetValue().Min();
+                int      minClearance = constraint.GetValue().Min();
+                int      actual;
+                VECTOR2I pos;
 
-        accountCheck( constraint );
+                accountCheck( constraint );
 
-        int actual;
+                if( !aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual, &pos ) )
+                    return true;
 
-        if( ! aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual ) )
-            return true;
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_OVER_PAD );
+                wxString                  msg;
 
-        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_OVER_PAD );
-        wxString                  msg;
+                drcItem->SetItems( aRefItem->parent, aTestItem->parent );
+                drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-        msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                constraint.GetParentRule()->m_Name,
-                MessageTextFromValue( userUnits(), minClearance, true ),
-                MessageTextFromValue( userUnits(), actual, true ) );
-
-        drcItem->SetErrorMessage( msg );
-        drcItem->SetItems( aRefItem->parent, aTestItem->parent );
-        drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-        reportViolation( drcItem, aRefItem->parent->GetPosition() );
+                reportViolation( drcItem, (wxPoint) pos );
 
 
-        return !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_OVER_PAD );
-    };
+                return !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_OVER_PAD );
+            };
 
-    int numPads = forEachGeometryItem(
-            { PCB_PAD_T }, LSET::AllTechMask() | LSET::AllCuMask(), addPadToTree );
+    int numPads = forEachGeometryItem( { PCB_PAD_T }, LSET::AllTechMask() | LSET::AllCuMask(),
+                                       addPadToTree );
 
-    int numSilk =
-            forEachGeometryItem( { PCB_LINE_T, PCB_MODULE_EDGE_T, PCB_TEXT_T, PCB_MODULE_TEXT_T },
-                    LSET( 2, F_SilkS, B_SilkS ), addSilkToTree );
+    int numSilk = forEachGeometryItem( { PCB_LINE_T, PCB_MODULE_EDGE_T, PCB_TEXT_T, PCB_MODULE_TEXT_T },
+                                       LSET( 2, F_SilkS, B_SilkS ), addSilkToTree );
 
     reportAux( _("Testing %d pads against %d silkscreen features."), numPads, numSilk );
 
