@@ -77,7 +77,6 @@ void PANEL_SELECTION_FILTER::OnFilterChanged( wxCommandEvent& aEvent )
     {
         bool newState = m_cbAllItems->GetValue();
 
-        m_cbLockedItems->SetValue( newState );
         m_cbFootprints->SetValue( newState );
         m_cbText->SetValue( newState );
         m_cbTracks->SetValue( newState );

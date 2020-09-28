@@ -105,7 +105,7 @@ SELECTION_TOOL::SELECTION_TOOL() :
         m_enteredGroup( nullptr ),
         m_priv( std::make_unique<PRIV>() )
 {
-    m_filter.lockedItems = true;
+    m_filter.lockedItems = false;
     m_filter.footprints  = true;
     m_filter.text        = true;
     m_filter.tracks      = true;

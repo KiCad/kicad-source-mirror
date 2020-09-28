@@ -62,15 +62,21 @@ struct SELECTION_FILTER_OPTIONS
         otherItems  = true;
     }
 
+    /**
+     * @return true if any of the item types are enabled (excluding "locked items" which is special)
+     */
     bool Any()
     {
-        return ( lockedItems || footprints || text || tracks || vias || pads || graphics || zones
+        return ( footprints || text || tracks || vias || pads || graphics || zones
                  || keepouts || dimensions || otherItems );
     }
 
+    /**
+     * @return true if all the item types are enabled (excluding "locked items" which is special)
+     */
     bool All()
     {
-        return ( lockedItems && footprints && text && tracks && vias && pads && graphics && zones
+        return ( footprints && text && tracks && vias && pads && graphics && zones
                  && keepouts && dimensions && otherItems );
     }
 };
