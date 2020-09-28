@@ -90,7 +90,6 @@ set( BMAPS_SMALL
     pintype_opencoll
     pintype_openemit
     pintype_noconnect
-    question_mark
     refresh
     small_down
     small_edit
@@ -122,7 +121,6 @@ set( BMAPS_MID
     add_corner
     add_dashed_line
     add_document
-    add_gerber
     add_glabel
     add_graphical_segments
     add_graphical_polygon
@@ -158,7 +156,6 @@ set( BMAPS_MID
     apply_pad_settings
     array
     auto_associe
-    auto_delete_track
     auto_track_width
     autoplace_fields
     axis3d_back
@@ -170,7 +167,6 @@ set( BMAPS_MID
     axis3d
     bitmap2component
     bom
-    break_bus
     break_line
     browse_files
     bus_definition_tool
@@ -184,11 +180,9 @@ set( BMAPS_MID
     checked_ok
     color_materials
     component_select_unit
-    component_select_alternate_shape
     config
     copy
     copy_pad_settings
-    copper_layers_setup
     cursor_shape
     cursor
     custom_pad_to_primitives
@@ -201,13 +195,11 @@ set( BMAPS_MID
     delete
     directory
     directory_browser
-    display_options
     distribute_horizontal
     distribute_vertical
     down
     drag
     drag_segment_withslope
-    drc_off
     drc
     duplicate
     edit_comp_footprint
@@ -243,20 +235,13 @@ set( BMAPS_MID
     flag
     flag_remove
     flip_board
-    fonts
     footprint_text
-    gbr_select_mode0
-    gbr_select_mode1
     gbr_select_mode2
-    gerber_file
     gerber_job_file
     gerbview_show_negative_objects
     gerbview_drill_file
-    gerbview_clear_layers
     general_deletions
     general_ratsnest
-    go_down
-    go_up
     green
     grid_select
     grid_select_axis
@@ -285,8 +270,6 @@ set( BMAPS_MID
     import
     info
     insert_module_board
-    invisible_text
-    kicad_icon_small
     label
     language
     layers_manager
@@ -304,11 +287,9 @@ set( BMAPS_MID
     list_nets
     load_gerber
     load_module_board
-    local_ratsnest
     lock_unlock
     locked
     measurement
-    minus
     pcb_target
     mirror_h
     mirror_v
@@ -318,11 +299,9 @@ set( BMAPS_MID
     module_editor
     module_wizard
     module_filtered_list
-    module_full_list
     module_options
     module_pin_filtered_list
     module_library_list
-    module_name_filtered_list
     module
     modview_icon
     morgan1
@@ -332,23 +311,15 @@ set( BMAPS_MID
     move_relative
     mw_add_gap
     mw_add_line
-    mw_add_shape
     mw_add_stub_arc
     mw_add_stub
     mw_toolbar
     net_highlight
     net_highlight_schematic
     netlist
-    net_locked
-    net_unlocked
-    new_board
     new_component
-    new_cvpcb
-    new_document
     new_footprint
-    new_library
     new_generic
-    new_page_layout
     new_project
     new_project_with_template
     noconn
@@ -389,16 +360,12 @@ set( BMAPS_MID
     polar_coord
     post_compo
     post_drill
-    post_module
     preference
-    primitives_to_custom_pad
     print_button
-    ps_router
     ps_diff_pair
     ps_diff_pair_gap
     ps_diff_pair_tune_length
     ps_diff_pair_tune_phase
-    ps_diff_pair_via_gap
     ps_tune_length
     push_pad_settings
     py_script
@@ -406,12 +373,10 @@ set( BMAPS_MID
     read_setup
     recent
     redo
-    red
     reload2
     reload
     render_mode
     reset_text
-    resize_sheet
     rescue
     right
     router_len_tuner
@@ -432,7 +397,6 @@ set( BMAPS_MID
     save_symbol_to_schematic
     save_fp_to_board
     save
-    select_grid
     select_layer_pair
     select_w_layer
     select_same_sheet
@@ -456,7 +420,6 @@ set( BMAPS_MID
     show_dcodenumber
     show_footprint
     show_mod_edge
-    show_graphics_mode
     showtrack
     show_zone
     show_zone_disable
@@ -476,10 +439,6 @@ set( BMAPS_MID
     three_d
     tool_ratsnest
     tools
-    track_locked
-    track_sketch
-    track_unlocked
-    undelete
     undo
     unit_inch
     unit_mm
@@ -487,7 +446,6 @@ set( BMAPS_MID
     unlocked
     unzip
     up
-    update_fields
     update_pcb_from_sch
     update_sch_from_pcb
     update_lib_symbols_in_schematic
@@ -502,12 +460,10 @@ set( BMAPS_MID
     warning
     width_track_via
     width_track
-    wizard_add_fplib_small
     zip
     zone_duplicate
     zone_fillet
     zone_unfill
-    zoom
     zoom_area
     zoom_auto_fit_in_page
     zoom_fit_in_page
@@ -541,7 +497,6 @@ set( BMAPS_BIG
     reannotate_right_up
     reannotate_up_left
     reannotate_up_right
-    viewlibs_icon
     icon_pagelayout_editor
     wizard_add_fplib_icon
     )
@@ -586,10 +541,10 @@ function( svg2png inputFile outFile pngWidth pngHeight )
     add_custom_command(
         OUTPUT ${outFile}
         # this Inkscape command line is for old Inkscape version < 1.0
-        COMMAND ${Inkscape_EXECUTABLE} --without-gui --export-area-snap -f ${inputFile} --export-png ${outFile}
+        # COMMAND ${Inkscape_EXECUTABLE} --without-gui --export-area-snap -f ${inputFile} --export-png ${outFile}
 
         # this Inkscape command line is for Inkscape >= 1.0
-        #COMMAND ${Inkscape_EXECUTABLE} --export-area-snap --export-type="png" ${inputFile} --export-filename ${outFile}
+        COMMAND ${Inkscape_EXECUTABLE} --export-area-snap --export-type="png" ${inputFile} --export-filename ${outFile}
             -w ${pngWidth} -h ${pngHeight} > ${logfile}
 
         DEPENDS ${inputFile}
