@@ -363,7 +363,8 @@ void DIALOG_DRC::OnDRCItemDClick( wxDataViewEvent& aEvent )
             Show( false );
     }
 
-    aEvent.Skip();
+    // Do not skip aVent here: tihs is not useful, and Pcbnew crashes
+    // if skipped (at least on Windows)
 }
 
 
