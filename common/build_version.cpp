@@ -109,9 +109,14 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << "Platform: " << wxGetOsDescription() << ", "
          << platform.GetArchName() << ", "
          << platform.GetEndiannessName() << ", "
-         << platform.GetPortIdName() << eol;
+         << platform.GetPortIdName();
 
-    aMsg << eol;
+#ifdef __WXGTK__
+    aMsg << ", " << wxGetenv( "XDG_SESSION_DESKTOP" )
+         << ", " << wxGetenv( "XDG_SESSION_TYPE" );
+#endif
+
+    aMsg << eol << eol;
 
     if( !aBrief )
         aMsg << "Build Info:" << eol;
