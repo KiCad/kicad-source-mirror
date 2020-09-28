@@ -943,12 +943,18 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
     int epsilon = Millimeter2iu( 0.001 );
     int numSegs = GetArcToSegmentCount( half_min_width, m_maxError, 360.0 );
 
-    SHAPE_POLY_SET::CORNER_STRATEGY cornerStrategy;
-
-    if( aZone->GetCornerSmoothingType() == ZONE_SETTINGS::SMOOTHING_FILLET )
-        cornerStrategy = SHAPE_POLY_SET::ROUND_ACUTE_CORNERS;
-    else
-        cornerStrategy = SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS;
+    // Solid polygons are deflated and inflated during calculations.  Deflating doesn't cause
+    // issues, but inflate is tricky as it can create excessively long and narrow spikes for
+    // acute angles.
+    // ALLOW_ACUTE_CORNERS cannot be used due to the spike problem.
+    // CHAMFER_ACUTE_CORNERS is tempting, but can still produce spikes in some unusual
+    // circumstances (https://gitlab.com/kicad/code/kicad/-/issues/5581).
+    // It's unclear if ROUND_ACUTE_CORNERS would have the same issues, but is currently avoided
+    // as a "less-safe" option.
+    // ROUND_ALL_CORNERS produces the uniformly nicest shapes, but also a lot of segments.
+    // CHAMFER_ALL_CORNERS improves the segement count.
+    SHAPE_POLY_SET::CORNER_STRATEGY fastCornerStrategy = SHAPE_POLY_SET::CHAMFER_ALL_CORNERS;
+    SHAPE_POLY_SET::CORNER_STRATEGY cornerStrategy = SHAPE_POLY_SET::ROUND_ALL_CORNERS;
 
     std::deque<SHAPE_LINE_CHAIN> thermalSpokes;
     SHAPE_POLY_SET clearanceHoles;
@@ -985,10 +991,10 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
     // Prune features that don't meet minimum-width criteria
     if( half_min_width - epsilon > epsilon )
     {
-        testAreas.Deflate( half_min_width - epsilon, numSegs, cornerStrategy );
+        testAreas.Deflate( half_min_width - epsilon, numSegs, fastCornerStrategy );
         DUMP_POLYS_TO_COPPER_LAYER( testAreas, In4_Cu, "spoke-test-deflated" );
 
-        testAreas.Inflate( half_min_width - epsilon, numSegs, cornerStrategy );
+        testAreas.Inflate( half_min_width - epsilon, numSegs, fastCornerStrategy );
         DUMP_POLYS_TO_COPPER_LAYER( testAreas, In5_Cu, "spoke-test-reinflated" );
     }
 
