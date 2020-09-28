@@ -36,6 +36,7 @@
 #include <math/util.h>      // for KiROUND
 #include <bitmap_base.h>
 
+#include <algorithm>
 #include <limits>
 
 #include <pixman.h>
@@ -1017,7 +1018,7 @@ void CAIRO_GAL_BASE::drawGridCross( const VECTOR2D& aPoint )
 void CAIRO_GAL_BASE::drawGridPoint( const VECTOR2D& aPoint, double aSize )
 {
     auto p = roundp( xform( aPoint ) );
-    auto s = xform( aSize / 2.0 );
+    auto s = std::max( 1.0, xform( aSize / 2.0 ) );
 
     cairo_set_source_rgba( currentContext, gridColor.r, gridColor.g, gridColor.b, gridColor.a );
     cairo_move_to( currentContext, p.x, p.y );
