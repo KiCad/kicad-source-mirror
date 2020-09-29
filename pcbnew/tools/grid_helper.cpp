@@ -329,13 +329,13 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
         int y_dist = std::abs( m_viewSnapLine.GetPosition().y - aOrigin.y );
 
         /// Allows de-snapping from the line if you are closer to another snap point
-        if( x_dist < snapRange && x_dist < snapDist )
+        if( x_dist < snapRange && ( !nearest || snapDist > snapRange ) )
         {
             nearestGrid.x = m_viewSnapLine.GetPosition().x;
             snapLine      = true;
         }
 
-        if( y_dist < snapRange && y_dist < snapDist )
+        if( y_dist < snapRange && ( !nearest || snapDist > snapRange ) )
         {
             nearestGrid.y = m_viewSnapLine.GetPosition().y;
             snapLine      = true;
@@ -514,6 +514,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
                     origin.y = start.y + ( start.y - end.y ) / 2;
                     addAnchor( start, CORNER | SNAPPABLE, dseg );
                     addAnchor( end, CORNER | SNAPPABLE, dseg );
+                    addAnchor( SEG( start, end ).Center(), CORNER | SNAPPABLE, dseg );
                     addAnchor( origin, ORIGIN, dseg );
                     break;
 
