@@ -28,7 +28,6 @@
 #define _DIALOG_DRC_H_
 
 #include <wx/htmllbox.h>
-#include <fctsys.h>
 #include <pcbnew.h>
 #include <rc_item.h>
 #include <class_marker_pcb.h>

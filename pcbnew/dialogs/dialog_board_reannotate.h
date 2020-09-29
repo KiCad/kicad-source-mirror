@@ -36,10 +36,9 @@
 #include <pcb_edit_frame.h>
 #include <project.h>
 #include <stdint.h>
-#include <wx/wx.h>
+//#include <wx/wx.h>
 #include <wx_html_report_panel.h>
 
-#include <fctsys.h>
 #include <frame_type.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>

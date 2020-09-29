@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/wx.h>
+
 #include <unit_test_utils/unit_test_utils.h>
 
 #include <layers_id_colors_and_visibility.h>
@@ -40,11 +42,11 @@ struct EXPR_TO_TEST
 
 using VAL = LIBEVAL::VALUE;
 
-const static std::vector<EXPR_TO_TEST> simpleExpressions = { 
+const static std::vector<EXPR_TO_TEST> simpleExpressions = {
     { "10mm + 20 mm", false, VAL( 30e6 ) },
-    { "3*(7+8)", false, VAL( 3 * ( 7 + 8 ) ) }, 
+    { "3*(7+8)", false, VAL( 3 * ( 7 + 8 ) ) },
     { "3*7+8", false, VAL( 3 * 7 + 8 ) },
-    { "(3*7)+8", false, VAL( 3 * 7 + 8 ) }, 
+    { "(3*7)+8", false, VAL( 3 * 7 + 8 ) },
     { "10mm + 20)", true, VAL( 0 ) },
 
     { "1", false, VAL(1) },

@@ -26,9 +26,12 @@
 #define __STATUS_POPUP_H_
 
 
-#include <common.h>
 #include <math/vector2d.h>
 #include <wx/popupwin.h>
+#include <wx/timer.h>
+#include <wx/panel.h>
+#include <wx/stattext.h>
+#include <wx/sizer.h>
 
 class EDA_DRAW_FRAME;
 

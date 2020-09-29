@@ -35,7 +35,8 @@
 // I really did not want to be dependent on wxWidgets in richio
 // but the errorText needs to be wide char so wxString rules.
 #include <cstdio>
-#include <wx/wx.h>
+#include <wx/string.h>
+#include <wx/stream.h>
 
 #include <ki_exception.h>
 

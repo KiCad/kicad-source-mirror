@@ -31,7 +31,6 @@
 #define _CBBOX_H_
 
 #include "../ray.h"
-#include <fctsys.h>     // For the DBG(
 
 /**
  * CBBOX

@@ -24,9 +24,10 @@
 
 #include <io_mgr.h>
 #include <properties.h>
+#include <wx/translation.h>
 
 
-#define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
+#define FMT_UNIMPLEMENTED  "Plugin \"%s\" does not implement the \"%s\" function."
 
 /**
  * Function not_implemented
@@ -38,8 +39,8 @@
 static void not_implemented( PLUGIN* aPlugin, const char* aCaller )
 {
     THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED,
-                                      aPlugin->PluginName().GetData(),
-                                      wxString::FromUTF8( aCaller ).GetData() ) );
+                                      aPlugin->PluginName(),
+                                      wxString::FromUTF8( aCaller ) ) );
 }
 
 

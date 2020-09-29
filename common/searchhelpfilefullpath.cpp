@@ -27,6 +27,7 @@
 #include <common.h>
 #include <config.h>     // to define DEFAULT_INSTALL_PATH
 #include <macros.h>
+#include <wx/log.h>
 #include <trace_helpers.h>
 
 
