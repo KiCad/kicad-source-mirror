@@ -396,6 +396,31 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
     const std::set<unsigned int>& activeLayers = settings->GetActiveLayers();
     bool                          isHighContrast = settings->GetHighContrast();
 
+    auto handlePadShape =
+            [&]( D_PAD* aPad )
+            {
+                addAnchor( aPad->GetPosition(), CORNER | SNAPPABLE, aPad );
+
+                const std::shared_ptr<SHAPE_POLY_SET>& poly =
+                        aPad->GetEffectivePolygon( aPad->GetLayer() );
+
+                if( poly->OutlineCount() )
+                {
+                    const SHAPE_LINE_CHAIN& outline = poly->COutline( 0 );
+
+                    for( int i = 0; i < outline.SegmentCount(); i++ )
+                    {
+                        const SEG& seg = outline.CSegment( i );
+
+                        addAnchor( seg.A, CORNER | SNAPPABLE, aPad );
+                        addAnchor( seg.Center(), CORNER | SNAPPABLE, aPad );
+
+                        if( i == outline.SegmentCount() - 1 )
+                            addAnchor( seg.B, CORNER | SNAPPABLE, aPad );
+                    }
+                }
+            };
+
     switch( aItem->Type() )
     {
         case PCB_MODULE_T:
@@ -411,7 +436,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
                         && ( !isHighContrast || activeLayers.count( pad->GetLayer() ) )
                         && pad->ViewGetLOD( pad->GetLayer(), view ) < view->GetScale() )
                 {
-                    addAnchor( pad->GetPosition(), CORNER | SNAPPABLE, pad );
+                    handlePadShape( pad );
                     break;
                 }
             }
@@ -426,7 +451,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
             if( aFrom || m_magneticSettings->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
             {
                 D_PAD* pad = static_cast<D_PAD*>( aItem );
-                addAnchor( pad->GetPosition(), CORNER | SNAPPABLE, pad );
+                handlePadShape( pad );
             }
 
             break;
@@ -460,15 +485,29 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
                     origin = dseg->GetCenter();
                     addAnchor( dseg->GetArcStart(), CORNER | SNAPPABLE, dseg );
                     addAnchor( dseg->GetArcEnd(), CORNER | SNAPPABLE, dseg );
+                    addAnchor( dseg->GetArcMid(), CORNER | SNAPPABLE, dseg );
                     addAnchor( origin, ORIGIN | SNAPPABLE, dseg );
                     break;
 
                 case S_RECT:
-                    addAnchor( start, CORNER | SNAPPABLE, dseg );
-                    addAnchor( VECTOR2I( end.x, start.y ), CORNER | SNAPPABLE, dseg );
-                    addAnchor( VECTOR2I( start.x, end.y ), CORNER | SNAPPABLE, dseg );
-                    addAnchor( end, CORNER | SNAPPABLE, dseg );
+                {
+                    VECTOR2I point2( end.x, start.y );
+                    VECTOR2I point3( start.x, end.y );
+                    SEG first( start, point2 );
+                    SEG second( point2, end );
+                    SEG third( end, point3 );
+                    SEG fourth( point3, start );
+
+                    addAnchor( first.A,         CORNER | SNAPPABLE, dseg );
+                    addAnchor( first.Center(),  CORNER | SNAPPABLE, dseg );
+                    addAnchor( second.A,        CORNER | SNAPPABLE, dseg );
+                    addAnchor( second.Center(), CORNER | SNAPPABLE, dseg );
+                    addAnchor( third.A,         CORNER | SNAPPABLE, dseg );
+                    addAnchor( third.Center(),  CORNER | SNAPPABLE, dseg );
+                    addAnchor( fourth.A,        CORNER | SNAPPABLE, dseg );
+                    addAnchor( fourth.Center(), CORNER | SNAPPABLE, dseg );
                     break;
+                }
 
                 case S_SEGMENT:
                     origin.x = start.x + ( start.x - end.x ) / 2;
