@@ -432,7 +432,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                                 wxOK | wxCENTER | wxICON_EXCLAMATION );
                         invalidLibDlg.ShowDetailedText(
                                 _( "Symbol libraries defined in the project file symbol library "
-                                   "list are no longer supported and will be\nremoved.  This may "
+                                   "list are no longer supported and will be removed.\n\nThis may "
                                    "cause broken symbol library links under certain conditions." ) );
                         invalidLibDlg.ShowCheckBox( _( "Do not show this dialog again." ) );
                         invalidLibDlg.ShowModal();
@@ -464,7 +464,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                         wxOK | wxCENTER | wxICON_EXCLAMATION );
                 newFileFormatDlg.ShowDetailedText(
                         _( "This schematic was saved in the legacy file format which is no "
-                           "longer supported and will be saved\nusing the new file format.  The "
+                           "longer supported and will be saved using the new file format.\n\nThe "
                            "new file format cannot be opened with previous versions of KiCad." ) );
                 newFileFormatDlg.ShowCheckBox( _( "Do not show this dialog again." ) );
                 newFileFormatDlg.ShowModal();
