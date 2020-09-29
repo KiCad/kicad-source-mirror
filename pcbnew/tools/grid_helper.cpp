@@ -32,13 +32,17 @@ using namespace std::placeholders;
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
-#include <tool/tool_manager.h>
+#include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>
+#include <geometry/shape_rect.h>
+#include <geometry/shape_segment.h>
+#include <geometry/shape_simple.h>
 #include <macros.h>
-#include <math/util.h>      // for KiROUND
+#include <math/util.h> // for KiROUND
 #include <math/vector2d.h>
 #include <painter.h>
 #include <pcbnew_settings.h>
+#include <tool/tool_manager.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 
@@ -401,22 +405,108 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
             {
                 addAnchor( aPad->GetPosition(), CORNER | SNAPPABLE, aPad );
 
-                const std::shared_ptr<SHAPE_POLY_SET>& poly =
-                        aPad->GetEffectivePolygon( aPad->GetLayer() );
+                const std::shared_ptr<SHAPE> eshape = aPad->GetEffectiveShape( aPad->GetLayer() );
 
-                if( poly->OutlineCount() )
+                wxASSERT( eshape->Type() == SH_COMPOUND );
+                const std::vector<SHAPE*> shapes =
+                        static_cast<const SHAPE_COMPOUND*>( eshape.get() )->Shapes();
+
+                for( const SHAPE* shape : shapes )
                 {
-                    const SHAPE_LINE_CHAIN& outline = poly->COutline( 0 );
-
-                    for( int i = 0; i < outline.SegmentCount(); i++ )
+                    switch( shape->Type() )
                     {
-                        const SEG& seg = outline.CSegment( i );
+                    case SH_RECT:
+                    {
+                        const SHAPE_RECT* rect    = static_cast<const SHAPE_RECT*>( shape );
+                        SHAPE_LINE_CHAIN  outline = rect->Outline();
 
-                        addAnchor( seg.A, CORNER | SNAPPABLE, aPad );
-                        addAnchor( seg.Center(), CORNER | SNAPPABLE, aPad );
+                        for( int i = 0; i < outline.SegmentCount(); i++ )
+                        {
+                            const SEG& seg = outline.CSegment( i );
+                            addAnchor( seg.A,         OUTLINE | SNAPPABLE, aPad );
+                            addAnchor( seg.Center(),  OUTLINE | SNAPPABLE, aPad );
+                        }
 
-                        if( i == outline.SegmentCount() - 1 )
-                            addAnchor( seg.B, CORNER | SNAPPABLE, aPad );
+                        break;
+                    }
+
+                    case SH_SEGMENT:
+                    {
+                        const SHAPE_SEGMENT* segment = static_cast<const SHAPE_SEGMENT*>( shape );
+
+                        int offset = segment->GetWidth() / 2;
+                        SEG seg    = segment->GetSeg();
+                        VECTOR2I normal = ( seg.B - seg.A ).Resize( offset ).Rotate( -M_PI_2 );
+
+                        /*
+                         * TODO: This creates more snap points than necessary for rounded rect pads
+                         * because they are built up of overlapping segments.  We could fix this if
+                         * desired by testing these to see if they are "inside" the pad.
+                         */
+
+                        addAnchor( seg.A + normal, OUTLINE | SNAPPABLE, aPad );
+                        addAnchor( seg.A - normal, OUTLINE | SNAPPABLE, aPad );
+                        addAnchor( seg.B + normal, OUTLINE | SNAPPABLE, aPad );
+                        addAnchor( seg.B - normal, OUTLINE | SNAPPABLE, aPad );
+                        addAnchor( seg.Center() + normal, OUTLINE | SNAPPABLE, aPad );
+                        addAnchor( seg.Center() - normal, OUTLINE | SNAPPABLE, aPad );
+
+                        normal = normal.Rotate( M_PI_2 );
+
+                        addAnchor( seg.A - normal, OUTLINE | SNAPPABLE, aPad );
+                        addAnchor( seg.B + normal, OUTLINE | SNAPPABLE, aPad );
+                        break;
+                    }
+
+                    case SH_CIRCLE:
+                    {
+                        const SHAPE_CIRCLE* circle = static_cast<const SHAPE_CIRCLE*>( shape );
+
+                        int      r     = circle->GetRadius();
+                        VECTOR2I start = circle->GetCenter();
+
+                        addAnchor( start + VECTOR2I( -r, 0 ), OUTLINE | SNAPPABLE, aPad );
+                        addAnchor( start + VECTOR2I( r, 0 ), OUTLINE | SNAPPABLE, aPad );
+                        addAnchor( start + VECTOR2I( 0, -r ), OUTLINE | SNAPPABLE, aPad );
+                        addAnchor( start + VECTOR2I( 0, r ), OUTLINE | SNAPPABLE, aPad );
+                        break;
+                    }
+
+                    case SH_ARC:
+                    {
+                        const SHAPE_ARC* arc = static_cast<const SHAPE_ARC*>( shape );
+
+                        addAnchor( arc->GetP0(), OUTLINE | SNAPPABLE, aPad );
+                        addAnchor( arc->GetP1(), OUTLINE | SNAPPABLE, aPad );
+                        addAnchor( arc->GetArcMid(), OUTLINE | SNAPPABLE, aPad );
+                        break;
+                    }
+
+                    case SH_SIMPLE:
+                    {
+                        const SHAPE_SIMPLE* poly = static_cast<const SHAPE_SIMPLE*>( shape );
+
+                        for( size_t i = 0; i < poly->GetSegmentCount(); i++ )
+                        {
+                            const SEG& seg = poly->GetSegment( i );
+
+                            addAnchor( seg.A, OUTLINE | SNAPPABLE, aPad );
+                            addAnchor( seg.Center(), OUTLINE | SNAPPABLE, aPad );
+
+                            if( i == poly->GetSegmentCount() - 1 )
+                                addAnchor( seg.B, OUTLINE | SNAPPABLE, aPad );
+                        }
+
+                        break;
+                    }
+
+                    case SH_POLY_SET:
+                    case SH_LINE_CHAIN:
+                    case SH_COMPOUND:
+                    case SH_POLY_SET_TRIANGLE:
+                    case SH_NULL:
+                    default:
+                        break;
                     }
                 }
             };
