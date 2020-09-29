@@ -576,7 +576,6 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
             aStatusReporter->Report( _( "Loading..." ) );
 
         reload( aStatusReporter, aWarningReporter );
-        setupMaterials();
 
         // generate a new 3D grid as the size of the board may had changed
         m_last_grid_type = m_boardAdapter.GridGet();
@@ -592,6 +591,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
             generate_new_3DGrid( m_last_grid_type );
         }
     }
+
+    setupMaterials();
 
     // Initial setup
     // /////////////////////////////////////////////////////////////////////////

@@ -278,6 +278,14 @@ void EDA_3D_VIEWER::Redraw()
         m_canvas->Request_refresh( true );
 }
 
+void EDA_3D_VIEWER::refreshRender()
+{
+    if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+        m_canvas->Request_refresh();
+    else
+        NewDisplay( true );
+}
+
 void EDA_3D_VIEWER::Exit3DFrame( wxCommandEvent &event )
 {
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::Exit3DFrame" );
@@ -328,22 +336,12 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
     case ID_MENU3D_BGCOLOR_BOTTOM:
         if( Set3DColorFromUser( m_boardAdapter.m_BgColorBot, _( "Background Color, Bottom" ),
                                 nullptr ) )
-        {
-            if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
-                m_canvas->Request_refresh();
-            else
-                NewDisplay( true );
-        }
+            refreshRender();
         return;
 
     case ID_MENU3D_BGCOLOR_TOP:
         if( Set3DColorFromUser( m_boardAdapter.m_BgColorTop, _( "Background Color, Top" ), nullptr ) )
-        {
-            if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
-                m_canvas->Request_refresh();
-            else
-                NewDisplay( true );
-        }
+            refreshRender();
         return;
 
     case ID_MENU3D_SILKSCREEN_COLOR:
@@ -368,7 +366,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 
     case ID_MENU3D_STACKUP_COLORS:
         SynchroniseColoursWithBoard();
-        NewDisplay( true );
+        refreshRender();
         break;
 
     case ID_MENU3D_RESET_DEFAULTS:
@@ -751,13 +749,15 @@ void EDA_3D_VIEWER::SynchroniseColoursWithBoard()
                     m_boardAdapter.m_SolderMaskColorTop.r = color.Red() / 255.0;
                     m_boardAdapter.m_SolderMaskColorTop.g = color.Green() / 255.0;
                     m_boardAdapter.m_SolderMaskColorTop.b = color.Blue() / 255.0;
-                    m_boardAdapter.m_SolderMaskColorTop.a = color.Alpha() / 255.0;
+                    // Keep the previous alpha value
+                    //m_boardAdapter.m_SolderMaskColorTop.a = color.Alpha() / 255.0;
                     break;
                 case B_Mask:
                     m_boardAdapter.m_SolderMaskColorBot.r = color.Red() / 255.0;
                     m_boardAdapter.m_SolderMaskColorBot.g = color.Green() / 255.0;
                     m_boardAdapter.m_SolderMaskColorBot.b = color.Blue() / 255.0;
-                    m_boardAdapter.m_SolderMaskColorBot.a = color.Alpha() / 255.0;
+                    // Keep the previous alpha value
+                    //m_boardAdapter.m_SolderMaskColorBot.a = color.Alpha() / 255.0;
                     break;
                 default:
                     break;
@@ -922,7 +922,9 @@ bool EDA_3D_VIEWER::Set3DSilkScreenColorFromUser()
     if( Set3DColorFromUser( m_boardAdapter.m_SilkScreenColorTop, _( "Silkscreen Color" ), &colors, false, colors[0].m_Color ) )
     {
         m_boardAdapter.m_SilkScreenColorBot = m_boardAdapter.m_SilkScreenColorTop;
-        NewDisplay( true );
+
+        refreshRender();
+
         return true;
     }
 
@@ -953,10 +955,7 @@ bool EDA_3D_VIEWER::Set3DSolderMaskColorFromUser()
     {
         m_boardAdapter.m_SolderMaskColorBot = m_boardAdapter.m_SolderMaskColorTop;
 
-        if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
-            m_canvas->Request_refresh();
-        else
-            NewDisplay( true );
+        refreshRender();
 
         return true;
     }
@@ -976,7 +975,8 @@ bool EDA_3D_VIEWER::Set3DCopperColorFromUser()
 
     if( Set3DColorFromUser( m_boardAdapter.m_CopperColor, _( "Copper Color" ), &colors, false, colors[0].m_Color ) )
     {
-        NewDisplay( true );
+        refreshRender();
+
         return true;
     }
 
@@ -999,10 +999,7 @@ bool EDA_3D_VIEWER::Set3DBoardBodyColorFromUser()
 
     if( Set3DColorFromUser( m_boardAdapter.m_BoardBodyColor, _( "Board Body Color" ), &colors, true, colors[0].m_Color ) )
     {
-        if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
-            m_canvas->Request_refresh();
-        else
-            NewDisplay( true );
+        refreshRender();
 
         return true;
     }
@@ -1021,7 +1018,8 @@ bool EDA_3D_VIEWER::Set3DSolderPasteColorFromUser()
 
     if( Set3DColorFromUser( m_boardAdapter.m_SolderPasteColor, _( "Solder Paste Color" ), &colors, false, colors[0].m_Color ) )
     {
-        NewDisplay( true );
+        refreshRender();
+
         return true;
     }
 

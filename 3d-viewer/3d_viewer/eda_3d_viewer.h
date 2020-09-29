@@ -199,6 +199,8 @@ private:
      */
     void RenderEngineChanged();
 
+    void refreshRender();
+
     DECLARE_EVENT_TABLE()
 
  private:

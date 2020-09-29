@@ -231,9 +231,9 @@ bool EDA_3D_VIEWER_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     auto migrate_color =
             [&] ( const std::string& k_r, const std::string& k_g,
-                  const std::string &k_b, std::string dest )
+                  const std::string &k_b, std::string dest, double alpha = 1.0 )
             {
-                COLOR4D color( 1, 1, 1, 1 );
+                COLOR4D color( 1, 1, 1, alpha );
 
                 if( aCfg->Read( k_r, &color.r ) &&
                     aCfg->Read( k_g, &color.g ) && aCfg->Read( k_b, &color.b ) )
@@ -251,7 +251,7 @@ bool EDA_3D_VIEWER_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrate_color(
             "SilkColor_Red", "SilkColor_Green", "SilkColor_Blue", "colors.silkscreen_bottom" );
     migrate_color( "SilkColor_Red", "SilkColor_Green", "SilkColor_Blue", "colors.silkscreen_top" );
-    migrate_color( "SMaskColor_Red", "SMaskColor_Green", "SMaskColor_Blue", "colors.soldermask" );
+    migrate_color( "SMaskColor_Red", "SMaskColor_Green", "SMaskColor_Blue", "colors.soldermask", 0.83 );
     migrate_color(
             "SPasteColor_Red", "SPasteColor_Green", "SPasteColor_Blue", "colors.solderpaste" );
 
