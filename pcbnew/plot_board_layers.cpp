@@ -200,11 +200,12 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
 }
 
 
-/* Plot a copper layer or mask.
+/*
+ * Plot a copper layer or mask.
  * Silk screen layers are not plotted here.
  */
-void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
-                        LSET aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt )
+void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
+                        const PCB_PLOT_PARAMS& aPlotOpt )
 {
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
 
@@ -249,7 +250,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             }
 
             /// pads not connected to copper are optionally not drawn
-            if( onCopperLayer && !pad->IsPadOnLayer( aLayerMask ) )
+            if( onCopperLayer && !pad->FlashLayer( aLayerMask ) )
                 continue;
 
             COLOR4D color = COLOR4D::BLACK;
@@ -422,7 +423,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         int diameter = Via->GetWidth() + 2 * via_margin + width_adj;
 
         /// Vias not connected to copper are optionally not drawn
-        if( onCopperLayer && !Via->IsPadOnLayer( aLayerMask ) )
+        if( onCopperLayer && !Via->FlashLayer( aLayerMask ) )
             continue;
 
         // Don't draw a null size item :

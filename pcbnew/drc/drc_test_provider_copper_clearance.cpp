@@ -275,7 +275,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
         SHAPE_SEGMENT padCylinder;
         const SHAPE* padShape;
 
-        if( pad->IsPadOnLayer( layer ) )
+        if( pad->FlashLayer( layer ) )
         {
             padShape = pad->GetEffectiveShape().get();
         }
@@ -377,7 +377,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             SHAPE_SEGMENT padCylinder;
             const SHAPE* padShape;
 
-            if( pad->IsPadOnLayer( aLayer ) )
+            if( pad->FlashLayer( aLayer ) )
             {
                 padShape = pad->GetEffectiveShape().get();
             }
@@ -465,7 +465,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
         {
             VIA* via = static_cast<VIA*>( track );
 
-            if( !via->IsPadOnLayer( aLayer ) )
+            if( !via->FlashLayer( aLayer ) )
                 trackSeg.SetWidth( via->GetDrillValue() );
         }
 
@@ -684,7 +684,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( int aRefPadIdx,
             SHAPE_SEGMENT refPadCylinder;
             const SHAPE*  refPadShape;
 
-            if( refPad->IsPadOnLayer( layer ) )
+            if( refPad->FlashLayer( layer ) )
             {
                 refPadShape = refPad->GetEffectiveShape().get();
             }
@@ -704,7 +704,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( int aRefPadIdx,
             SHAPE_SEGMENT padCylinder;
             const SHAPE*  padShape;
 
-            if( pad->IsPadOnLayer( layer ) )
+            if( pad->FlashLayer( layer ) )
             {
                 padShape = pad->GetEffectiveShape().get();
             }

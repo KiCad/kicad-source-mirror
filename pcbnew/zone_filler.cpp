@@ -723,7 +723,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
     {
         for( D_PAD* pad : module->Pads() )
         {
-            if( !pad->IsPadOnLayer( aLayer ) )
+            if( !pad->FlashLayer( aLayer ) )
             {
                 if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
                     continue;
@@ -770,7 +770,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
             {
                 VIA* via = static_cast<VIA*>( track );
 
-                if( !via->IsPadOnLayer( aLayer ) )
+                if( !via->FlashLayer( aLayer ) )
                 {
                     int radius = via->GetDrillValue() / 2 + bds.GetHolePlatingThickness() + gap;
                     TransformCircleToPolygon( aHoles, via->GetPosition(), radius, m_maxError );

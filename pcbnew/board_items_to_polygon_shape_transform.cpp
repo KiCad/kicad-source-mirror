@@ -126,7 +126,7 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
         if( aLayer != UNDEFINED_LAYER && !pad->IsOnLayer(aLayer) )
             continue;
 
-        if( !pad->IsPadOnLayer( aLayer ) && IsCopperLayer( aLayer ) )
+        if( !pad->FlashLayer( aLayer ) && IsCopperLayer( aLayer ) )
             continue;
 
         // NPTH pads are not drawn on layers if the shape size and pos is the same
@@ -153,8 +153,8 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
             }
         }
 
-        const bool isPlated = ( ( aLayer == F_Cu ) && pad->IsPadOnLayer( F_Mask ) ) ||
-                              ( ( aLayer == B_Cu ) && pad->IsPadOnLayer( B_Mask ) );
+        const bool isPlated = ( ( aLayer == F_Cu ) && pad->FlashLayer( F_Mask ) ) ||
+                              ( ( aLayer == B_Cu ) && pad->FlashLayer( B_Mask ) );
 
         if( aSkipPlatedPads && isPlated )
             continue;

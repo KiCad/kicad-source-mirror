@@ -137,7 +137,7 @@ void TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
 
 int VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
-    if( !IsPadOnLayer( aLayer ) )
+    if( !FlashLayer( aLayer ) )
     {
         if( aSource )
             *aSource = _( "removed annular ring" );
@@ -466,11 +466,11 @@ void VIA::SanitizeLayers()
 }
 
 
-bool VIA::IsPadOnLayer( LSET aLayers ) const
+bool VIA::FlashLayer( LSET aLayers ) const
 {
     for( auto layer : aLayers.Seq() )
     {
-        if( IsPadOnLayer( layer ) )
+        if( FlashLayer( layer ) )
             return true;
     }
 
@@ -478,7 +478,7 @@ bool VIA::IsPadOnLayer( LSET aLayers ) const
 }
 
 
-bool VIA::IsPadOnLayer( int aLayer ) const
+bool VIA::FlashLayer( int aLayer ) const
 {
     BOARD* board = GetBoard();
 

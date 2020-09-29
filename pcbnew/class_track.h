@@ -466,14 +466,14 @@ public:
      * @param aLayer Layer to check for connectivity
      * @return true if connected by pad or track
      */
-    bool IsPadOnLayer( int aLayer ) const;
+    bool FlashLayer( int aLayer ) const;
 
     /**
      * Checks to see if the via is present on any of the layers in the set
      * @param aLayers set of layers to check the via against
      * @return true if connected by pad or track on any of the associated layers
      */
-    bool IsPadOnLayer( LSET aLayers ) const;
+    bool FlashLayer( LSET aLayers ) const;
 
     /**
      * Function SetDrill

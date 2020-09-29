@@ -244,7 +244,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             // Skip vias annulus when not connected on this layer (if removing is enabled)
             const VIA *via = dyn_cast< const VIA*>( track );
 
-            if( via && !via->IsPadOnLayer( curr_layer_id ) && IsCopperLayer( curr_layer_id ) )
+            if( via && !via->FlashLayer( curr_layer_id ) && IsCopperLayer( curr_layer_id ) )
                 continue;
 
             // Add object item to layer container
@@ -449,7 +449,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 // Skip vias annulus when not connected on this layer (if removing is enabled)
                 const VIA *via = dyn_cast< const VIA*>( track );
 
-                if( via && !via->IsPadOnLayer( curr_layer_id ) && IsCopperLayer( curr_layer_id ) )
+                if( via && !via->FlashLayer( curr_layer_id ) && IsCopperLayer( curr_layer_id ) )
                     continue;
 
                 // Add the track/via contour

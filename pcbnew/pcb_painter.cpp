@@ -640,7 +640,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
     /// Vias not connected to copper are optionally not drawn
     /// We draw instead the hole size to ensure we show the proper clearance
-    if( IsCopperLayer( aLayer ) && !aVia->IsPadOnLayer( aLayer ) )
+    if( IsCopperLayer( aLayer ) && !aVia->FlashLayer( aLayer ) )
         radius = getDrillSize(aVia) / 2.0 ;
 
     bool sketchMode = false;

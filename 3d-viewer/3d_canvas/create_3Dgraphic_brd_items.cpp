@@ -488,7 +488,7 @@ void BOARD_ADAPTER::AddPadsShapesWithClearanceToContainer( const MODULE* aModule
             continue;
 
         // Skip pad annulus when not connected on this layer (if removing is enabled)
-        if( !pad->IsPadOnLayer( aLayerId ) && IsCopperLayer( aLayerId ) )
+        if( !pad->FlashLayer( aLayerId ) && IsCopperLayer( aLayerId ) )
             continue;
 
         // NPTH pads are not drawn on layers if the
@@ -516,8 +516,8 @@ void BOARD_ADAPTER::AddPadsShapesWithClearanceToContainer( const MODULE* aModule
             }
         }
 
-        const bool isPlated = ( ( aLayerId == F_Cu ) && pad->IsPadOnLayer( F_Mask ) ) ||
-                              ( ( aLayerId == B_Cu ) && pad->IsPadOnLayer( B_Mask ) );
+        const bool isPlated = ( ( aLayerId == F_Cu ) && pad->FlashLayer( F_Mask ) ) ||
+                              ( ( aLayerId == B_Cu ) && pad->FlashLayer( B_Mask ) );
 
         if( aSkipPlatedPads && isPlated )
             continue;

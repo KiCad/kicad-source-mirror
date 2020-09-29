@@ -537,8 +537,8 @@ public:
         return m_layerMask[aLayer];
     }
 
-    bool IsPadOnLayer( int aLayer ) const;
-    bool IsPadOnLayer( LSET aLayers ) const;
+    bool FlashLayer( int aLayer ) const;
+    bool FlashLayer( LSET aLayers ) const;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;

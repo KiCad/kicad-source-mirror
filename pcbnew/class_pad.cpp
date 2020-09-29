@@ -181,11 +181,11 @@ bool D_PAD::IsFlipped() const
 }
 
 
-bool D_PAD::IsPadOnLayer( LSET aLayers ) const
+bool D_PAD::FlashLayer( LSET aLayers ) const
 {
     for( auto layer : aLayers.Seq() )
     {
-        if( IsPadOnLayer( layer ) )
+        if( FlashLayer( layer ) )
             return true;
     }
 
@@ -193,7 +193,7 @@ bool D_PAD::IsPadOnLayer( LSET aLayers ) const
 }
 
 
-bool D_PAD::IsPadOnLayer( int aLayer ) const
+bool D_PAD::FlashLayer( int aLayer ) const
 {
     BOARD* board = GetBoard();
 
@@ -1194,7 +1194,7 @@ double D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return HIDE;
 
     // Only draw the pad if at least one of the layers it crosses is being displayed
-    if( board && !IsPadOnLayer( board->GetVisibleLayers() ) )
+    if( board && !FlashLayer( board->GetVisibleLayers()) )
         return HIDE;
 
     // Netnames will be shown only if zoom is appropriate
