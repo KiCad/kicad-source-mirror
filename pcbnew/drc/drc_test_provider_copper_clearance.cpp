@@ -601,7 +601,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( int aRefPadIdx,
             continue;
 
         // If pads are equivalent (ie: from the same footprint with the same pad number)...
-        if( pad->GetParent() == refPad->GetParent() && pad->PadNameEqual( refPad ) )
+        if( pad->SameLogicalPadAs( refPad ) )
         {
             // ...and have nets, then they must be the same net
             if( pad->GetNetCode() && refPad->GetNetCode()

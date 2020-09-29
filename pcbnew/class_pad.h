@@ -137,9 +137,16 @@ public:
     void SetPinFunction( const wxString& aName ) { m_pinFunction = aName; }
     const wxString& GetPinFunction() const { return m_pinFunction; }
 
-    bool PadNameEqual( const D_PAD* other ) const
+    /**
+     * Before we had custom pad shapes it was common to have multiple overlapping pads to
+     * represent a more complex shape.
+     * @param other
+     * @return
+     */
+    bool SameLogicalPadAs( const D_PAD* other ) const
     {
-        return m_name == other->m_name; // hide tricks behind sensible API
+        // hide tricks behind sensible API
+        return GetParent() == other->GetParent() && m_name == other->m_name;
     }
 
     /**

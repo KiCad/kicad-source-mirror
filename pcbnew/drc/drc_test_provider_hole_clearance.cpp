@@ -227,7 +227,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc( int aRefPadIdx,
     {
         D_PAD* pad = aSortedPadsList[idx];
 
-        if( pad == refPad )
+        if( pad == refPad || pad->SameLogicalPadAs( refPad ) )
             continue;
 
 //      drc_dbg(10," chk against -> %p\n", pad);
@@ -237,35 +237,15 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc( int aRefPadIdx,
         if( pad->GetPosition().x > aX_limit )
             break;
 
-//        drc_dbg( 10," chk2 against -> %p ds %d %d\n",
-//                 pad, pad->GetDrillSize().x, refPad->GetDrillSize().x );
-
         drc_dbg( 10, " chk1 against -> %p x0 %d x2 %d\n",
                  pad, pad->GetDrillSize().x, refPad->GetDrillSize().x );
 
-        // No problem if pads which are on copper layers are on different copper layers,
-        // (pads can be only on a technical layer, to build complex pads)
-        // but their hole (if any ) can create DRC error because they are on all
-        // copper layers, so we test them
-        if( ( pad->GetLayerSet() & layerMask ) != 0 &&
-            ( pad->GetLayerSet() & all_cu ) != 0 &&
-            ( refPad->GetLayerSet() & all_cu ) != 0 )
+        // Since a hole pierces all layers we have to test pads which are on any copper layer.
+        // Pads just on technical layers are not an issue.
+        if( ( pad->GetLayerSet() & all_cu ) != 0 || ( refPad->GetLayerSet() & all_cu ) != 0 )
         {
-            // if holes are in the same location and have the same size and shape,
-            // this can be accepted
-            if( pad->GetPosition() == refPad->GetPosition()
-                && pad->GetDrillSize() == refPad->GetDrillSize()
-                && pad->GetDrillShape() == refPad->GetDrillShape() )
-            {
-                if( refPad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
-                    continue;
-
-                // for oval holes: must also have the same orientation
-                if( pad->GetOrientation() == refPad->GetOrientation() )
-                    continue;
-            }
-
-            drc_dbg(10, " chk3 against -> %p x0 %d x2 %d\n", pad, pad->GetDrillSize().x, refPad->GetDrillSize().x );
+            drc_dbg( 10, " chk3 against -> %p x0 %d x2 %d\n", pad, pad->GetDrillSize().x,
+                     refPad->GetDrillSize().x );
 
             if( pad->GetDrillSize().x )     // test pad has a hole
             {
@@ -302,7 +282,6 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc( int aRefPadIdx,
 
             if( refPad->GetDrillSize().x )     // reference pad has a hole
             {
-
                 auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
                                                                   refPad, pad );
                 int  minClearance = constraint.GetValue().Min();
