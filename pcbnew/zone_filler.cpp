@@ -372,7 +372,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
 
             SHAPE_POLY_SET poly = zone->GetFilledPolysList( layer );
 
-            for( int ii = 0; ii < poly.OutlineCount(); ii++ )
+            for( int ii = poly.OutlineCount() - 1; ii >= 0; ii-- )
             {
                 std::vector<SHAPE_LINE_CHAIN>& island = poly.Polygon( ii );
 
