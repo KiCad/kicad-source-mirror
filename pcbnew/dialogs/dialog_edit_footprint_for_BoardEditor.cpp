@@ -308,9 +308,11 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     m_AutoPlaceCtrl->SetItemToolTip( 0, _( "Component can be freely moved and auto placed. User "
                                            "can arbitrarily select and edit component's pads." ) );
     m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Component can be freely moved and auto placed, but "
-                                           "its pads cannot be selected or edited." ) );
+                                           "its pads cannot be edited." ) );
     m_AutoPlaceCtrl->SetItemToolTip( 2, _( "Component is locked: it cannot be freely moved or "
-                                           "auto placed." ) );
+                                           "auto placed, and can only be selected when the "
+                                           "\"Locked items\" checkbox is enabled in the "
+                                           "selection filter." ) );
 
     m_CostRot90Ctrl->SetValue( m_footprint->GetPlacementCost90() );
     m_CostRot180Ctrl->SetValue( m_footprint->GetPlacementCost180() );

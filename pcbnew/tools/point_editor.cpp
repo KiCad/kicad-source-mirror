@@ -201,7 +201,8 @@ public:
             wxPoint      shapePos = pad->ShapePos();
             wxPoint      halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
 
-            if( pad->GetParent() && pad->GetParent()->PadsLocked() )
+            if( pad->GetParent() &&
+                    ( pad->GetParent()->IsLocked() || pad->GetParent()->PadsLocked() ) )
                 break;
 
             switch( pad->GetShape() )

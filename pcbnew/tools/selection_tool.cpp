@@ -1490,12 +1490,6 @@ bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
         if( !m_filter.pads )
             return false;
 
-        // Parent footprint locking should apply to pads also
-        D_PAD* pad = static_cast<D_PAD*>( aItem );
-
-        if( !m_filter.lockedItems && pad->GetParent() && pad->GetParent()->IsLocked() )
-            return false;
-
         break;
     }
 

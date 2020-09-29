@@ -742,11 +742,23 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // Display properties dialog
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
 
-        // Do not handle undo buffer, it is done by the properties dialogs
-        editFrame->OnEditItemRequest( item );
+        // Pads on a locked footprint can be selected but not edited
+        if( item->Type() == PCB_PAD_T && item->GetParent() &&
+                ( static_cast<D_PAD*>( item )->GetParent()->IsLocked() ||
+                  static_cast<D_PAD*>( item )->GetParent()->PadsLocked() ) )
+        {
+            m_statusPopup->SetText( _( "Locked items cannot be edited" ) );
+            m_statusPopup->PopupFor( 2000 );
+            m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+        }
+        else
+        {
+            // Do not handle undo buffer, it is done by the properties dialogs
+            editFrame->OnEditItemRequest( item );
 
-        // Notify other tools of the changes
-        m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+            // Notify other tools of the changes
+            m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+        }
     }
     else if( selection.Size() == 0 && getView()->IsLayerVisible( LAYER_WORKSHEET ) )
     {
