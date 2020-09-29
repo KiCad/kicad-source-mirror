@@ -139,6 +139,20 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
     if( brd )
     {
         brd->SetProject( project );
+
+        // Move legacy view settings to local project settings
+        if( !brd->m_LegacyVisibleLayers.test( Rescue ) )
+            project->GetLocalSettings().m_VisibleLayers = loadedBoard->m_LegacyVisibleLayers;
+
+        if( !brd->m_LegacyVisibleItems.test( GAL_LAYER_INDEX( GAL_LAYER_ID_BITMASK_END ) ) )
+            project->GetLocalSettings().m_VisibleItems = loadedBoard->m_LegacyVisibleItems;
+
+        BOARD_DESIGN_SETTINGS& bds = brd->GetDesignSettings();
+        bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( brd, &bds );
+
+        for( MARKER_PCB* marker : brd->ResolveDRCExclusions() )
+            brd->Add( marker );
+
         brd->BuildConnectivity();
         brd->BuildListOfNets();
         brd->SynchronizeNetsAndNetClasses();

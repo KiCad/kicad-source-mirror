@@ -183,6 +183,38 @@ void BOARD::ClearProject()
 }
 
 
+std::vector<MARKER_PCB*> BOARD::ResolveDRCExclusions()
+{
+    for( MARKER_PCB* marker : GetBoard()->Markers() )
+    {
+        auto i = m_designSettings->m_DrcExclusions.find( marker->Serialize() );
+
+        if( i != m_designSettings->m_DrcExclusions.end() )
+        {
+            marker->SetExcluded( true );
+            m_designSettings->m_DrcExclusions.erase( i );
+        }
+    }
+
+    std::vector<MARKER_PCB*> markers;
+
+    for( const wxString& exclusionData : m_designSettings->m_DrcExclusions )
+    {
+        MARKER_PCB* marker = MARKER_PCB::Deserialize( exclusionData );
+
+        if( marker )
+        {
+            marker->SetExcluded( true );
+            markers.push_back( marker );
+        }
+    }
+
+    m_designSettings->m_DrcExclusions.clear();
+
+    return markers;
+}
+
+
 bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
 {
     if( m_properties.count( *token ) )

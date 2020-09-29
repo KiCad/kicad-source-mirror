@@ -368,6 +368,11 @@ public:
     void ClearProject();
 
     /**
+     * Rebuild DRC markers from the serialized data in BOARD_DESIGN_SETTINGS.
+     */
+    std::vector<MARKER_PCB*> ResolveDRCExclusions();
+
+    /**
      * Reset all high light data to the init state
      */
     void ResetNetHighLight();

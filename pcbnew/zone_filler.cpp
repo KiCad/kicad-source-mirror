@@ -58,7 +58,7 @@ ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
         m_progressReporter( nullptr ),
         m_maxError( ARC_HIGH_DEF )
 {
-    // To enable add "DebugZoneFiller=true" to kicad_advanced settings file.
+    // To enable add "DebugZoneFiller=1" to kicad_advanced settings file.
     m_debugZoneFiller = ADVANCED_CFG::GetCfg().m_DebugZoneFiller;
 }
 
