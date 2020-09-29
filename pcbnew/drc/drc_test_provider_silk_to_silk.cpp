@@ -111,6 +111,9 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
                  DRC_RTREE::ITEM_WITH_SHAPE* aRefItem,
                  DRC_RTREE::ITEM_WITH_SHAPE* aTestItem ) -> bool
             {
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE ) )
+                    return false;
+
                 auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_TO_SILK,
                                                                   aRefItem->parent,
                                                                   aTestItem->parent );
@@ -171,7 +174,7 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
 
                 reportViolation( drcItem, (wxPoint) pos );
 
-                return !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE );
+                return true;
             };
 
     int numSilk = forEachGeometryItem( { PCB_LINE_T, PCB_MODULE_EDGE_T, PCB_TEXT_T, PCB_MODULE_TEXT_T },

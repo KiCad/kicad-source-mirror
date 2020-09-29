@@ -124,6 +124,9 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
                  DRC_RTREE::ITEM_WITH_SHAPE* aRefItem,
                  DRC_RTREE::ITEM_WITH_SHAPE* aTestItem ) -> bool
             {
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_OVER_PAD ) )
+                    return false;
+
                 auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_TO_PAD,
                                                                   aRefItem->parent,
                                                                   aTestItem->parent );
@@ -145,8 +148,7 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
 
                 reportViolation( drcItem, (wxPoint) pos );
 
-
-                return !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_OVER_PAD );
+                return true;
             };
 
     int numPads = forEachGeometryItem( { PCB_PAD_T }, LSET::AllTechMask() | LSET::AllCuMask(),
