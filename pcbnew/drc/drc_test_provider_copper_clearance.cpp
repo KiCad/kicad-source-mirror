@@ -192,6 +192,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
     std::shared_ptr<SHAPE> itemShape;
     EDA_TEXT*              textItem = dynamic_cast<EDA_TEXT*>( aItem );
     PCB_LAYER_ID           layer = aItem->GetLayer();
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
     if( textItem )
     {
@@ -212,19 +213,19 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
         if( !track->IsOnLayer( aItem->GetLayer() ) )
             continue;
 
-        auto      constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                                               aItem, track, layer );
+        SHAPE_SEGMENT trackSeg( track->GetStart(), track->GetEnd(), track->GetWidth() );
+
+        // Fast test to detect a track segment candidate inside the text bounding box
+        if( !bboxShape.Collide( &trackSeg, m_largestClearance ) )
+            continue;
+
+        auto     constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
+                                                              aItem, track, layer );
         int      minClearance = constraint.GetValue().Min();
         int      actual = INT_MAX;
         VECTOR2I pos;
 
         accountCheck( constraint );
-
-        SHAPE_SEGMENT trackSeg( track->GetStart(), track->GetEnd(), track->GetWidth() );
-
-        // Fast test to detect a track segment candidate inside the text bounding box
-        if( !bboxShape.Collide( &trackSeg, 0 ) )
-            continue;
 
         if( !itemShape->Collide( &trackSeg, minClearance, &actual, &pos ) )
             continue;
@@ -256,6 +257,13 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
         if( aItem->Type() == PCB_MODULE_EDGE_T && pad->GetParent() == aItem->GetParent() )
             continue;
 
+        // Fast test to detect a pad candidate inside the text bounding box
+        // Finer test (time consuming) is made only for pads near the text.
+        int bb_radius = pad->GetBoundingRadius() + m_largestClearance;
+
+        if( !bboxShape.Collide( SEG( pad->GetPosition(), pad->GetPosition() ), bb_radius ) )
+            continue;
+
         auto     constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
                                                               aItem, pad, layer );
         int      minClearance = constraint.GetValue().Min();
@@ -264,14 +272,27 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
 
         accountCheck( constraint );
 
-        // Fast test to detect a pad candidate inside the text bounding box
-        // Finer test (time consuming) is made only for pads near the text.
-        int bb_radius = pad->GetBoundingRadius() + minClearance;
+        SHAPE_SEGMENT padCylinder;
+        const SHAPE* padShape;
 
-        if( !bboxShape.Collide( SEG( pad->GetPosition(), pad->GetPosition() ), bb_radius ) )
+        if( pad->IsPadOnLayer( layer ) )
+        {
+            padShape = pad->GetEffectiveShape().get();
+        }
+        else if( pad->GetAttribute() == PAD_ATTRIB_STANDARD )
+        {
+            // Note: drill size represents finish size, which means the actual holes size is the
+            // plating thickness larger.
+            padCylinder = *pad->GetEffectiveHoleShape();
+            padCylinder.SetWidth( padCylinder.GetWidth() + bds.GetHolePlatingThickness() );
+            padShape = &padCylinder;
+        }
+        else
+        {
             continue;
+        }
 
-        if( !itemShape->Collide( pad->GetEffectiveShape().get(), minClearance, &actual, &pos ) )
+        if( !itemShape->Collide( padShape, minClearance, &actual, &pos ) )
             continue;
 
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
@@ -349,13 +370,29 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             if( !refSegInflatedBB.Intersects( pad->GetBoundingBox() ) )
                 continue;
 
-            /// Skip checking pad copper when it has been removed
-            if( !pad->IsOnLayer( aLayer ) )
-                continue;
-
             // No need to check pads with the same net as the refSeg.
             if( pad->GetNetCode() && aRefSeg->GetNetCode() == pad->GetNetCode() )
                 continue;
+
+            SHAPE_SEGMENT padCylinder;
+            const SHAPE* padShape;
+
+            if( pad->IsPadOnLayer( aLayer ) )
+            {
+                padShape = pad->GetEffectiveShape().get();
+            }
+            else if( pad->GetAttribute() == PAD_ATTRIB_STANDARD )
+            {
+                // Note: drill size represents finish size, which means the actual holes size is the
+                // plating thickness larger.
+                padCylinder = *pad->GetEffectiveHoleShape();
+                padCylinder.SetWidth( padCylinder.GetWidth() + bds.GetHolePlatingThickness() );
+                padShape = &padCylinder;
+            }
+            else
+            {
+                continue;
+            }
 
             auto     constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
                                                                   aRefSeg, pad, aLayer );
@@ -364,8 +401,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             VECTOR2I pos;
 
             accountCheck( constraint );
-
-            const std::shared_ptr<SHAPE>& padShape = pad->GetEffectiveShape();
 
             if( padShape->Collide( &refSeg, minClearance - bds.GetDRCEpsilon(), &actual, &pos ) )
             {
@@ -646,10 +681,47 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( int aRefPadIdx,
 
             accountCheck( constraint );
 
-            std::shared_ptr<SHAPE> refPadShape = refPad->GetEffectiveShape();
-            std::shared_ptr<SHAPE> padShape = pad->GetEffectiveShape();
+            SHAPE_SEGMENT refPadCylinder;
+            const SHAPE*  refPadShape;
 
-            if( refPadShape->Collide( padShape.get(), clearanceAllowed, &actual, &pos ) )
+            if( refPad->IsPadOnLayer( layer ) )
+            {
+                refPadShape = refPad->GetEffectiveShape().get();
+            }
+            else if( refPad->GetAttribute() == PAD_ATTRIB_STANDARD )
+            {
+                // Note: drill size represents finish size, which means the actual holes size is the
+                // plating thickness larger.
+                refPadCylinder = *pad->GetEffectiveHoleShape();
+                refPadCylinder.SetWidth( refPadCylinder.GetWidth() + bds.GetHolePlatingThickness() );
+                refPadShape = &refPadCylinder;
+            }
+            else
+            {
+                continue;
+            }
+
+            SHAPE_SEGMENT padCylinder;
+            const SHAPE*  padShape;
+
+            if( pad->IsPadOnLayer( layer ) )
+            {
+                padShape = pad->GetEffectiveShape().get();
+            }
+            else if( pad->GetAttribute() == PAD_ATTRIB_STANDARD )
+            {
+                // Note: drill size represents finish size, which means the actual holes size is the
+                // plating thickness larger.
+                padCylinder = *pad->GetEffectiveHoleShape();
+                padCylinder.SetWidth( padCylinder.GetWidth() + bds.GetHolePlatingThickness() );
+                padShape = &padCylinder;
+            }
+            else
+            {
+                continue;
+            }
+
+            if( refPadShape->Collide( padShape, clearanceAllowed, &actual, &pos ) )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
