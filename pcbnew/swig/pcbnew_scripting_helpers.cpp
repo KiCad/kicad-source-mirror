@@ -32,6 +32,7 @@
 
 #include <action_plugin.h>
 #include <class_board.h>
+#include <class_marker_pcb.h>
 #include <cstdlib>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
@@ -41,6 +42,7 @@
 #include <pcbnew_scripting_helpers.h>
 #include <project.h>
 #include <settings/settings_manager.h>
+#include <project/project_local_settings.h>
 #include <wildcards_and_files_ext.h>
 
 static PCB_EDIT_FRAME* s_PcbEditFrame = NULL;
@@ -142,10 +144,10 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
 
         // Move legacy view settings to local project settings
         if( !brd->m_LegacyVisibleLayers.test( Rescue ) )
-            project->GetLocalSettings().m_VisibleLayers = loadedBoard->m_LegacyVisibleLayers;
+            project->GetLocalSettings().m_VisibleLayers = brd->m_LegacyVisibleLayers;
 
         if( !brd->m_LegacyVisibleItems.test( GAL_LAYER_INDEX( GAL_LAYER_ID_BITMASK_END ) ) )
-            project->GetLocalSettings().m_VisibleItems = loadedBoard->m_LegacyVisibleItems;
+            project->GetLocalSettings().m_VisibleItems = brd->m_LegacyVisibleItems;
 
         BOARD_DESIGN_SETTINGS& bds = brd->GetDesignSettings();
         bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( brd, &bds );
