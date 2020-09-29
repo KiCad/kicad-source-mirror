@@ -770,8 +770,8 @@ static std::vector<TREE_NODE*> squashParamList( TREE_NODE* root )
 
     std::reverse( args.begin(), args.end() );
 
-    for(size_t i = 0; i < args.size(); i++ )
-        libeval_dbg(10, "squash arg%d: %s\n", i, *args[i]->value.str );
+    for( size_t i = 0; i < args.size(); i++ )
+        libeval_dbg(10, "squash arg%d: %s\n", int( i ), *args[i]->value.str );
 
     return args;
 }
