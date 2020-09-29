@@ -1080,7 +1080,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     // N.B. Setting the CUT flag prevents lock filtering as we only want to delete the items that
     // were copied to the clipboard, no more, no fewer.  Filtering for locked item, if any will be done
     // in the copyToClipboard() routine
-    if( !m_lockedSelected && !isCut )
+    if( !isCut )
     {
         // Second RequestSelection removes locked items but keeps a copy of their pointers
         selectionCopy = m_selectionTool->RequestSelection(
@@ -1232,7 +1232,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         ///> Popup nag for deleting locked items
         m_lockedSelected = true;
         m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &lockedItems );
-        m_statusPopup->SetText( _( "Delete again to remove locked items" ) );
+        m_statusPopup->SetText( _( "Locked items cannot be deleted" ) );
         m_statusPopup->PopupFor( 2000 );
         m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
 
@@ -1639,8 +1639,10 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
     Activate();
 
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool ) {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
+                                         sTool );
             } );
 
     if( !selection.Empty() )
@@ -1650,7 +1652,8 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
         for( EDA_ITEM* item : selection )
             items.push_back( static_cast<BOARD_ITEM*>( item ) );
 
-        VECTOR2I refPoint = grid.BestDragOrigin( getViewControls()->GetCursorPosition( false ), items );
+        VECTOR2I refPoint = grid.BestDragOrigin( getViewControls()->GetCursorPosition( false ),
+                                                 items );
         selection.SetReferencePoint( refPoint );
 
         io.SetBoard( board() );
