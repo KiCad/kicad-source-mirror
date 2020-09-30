@@ -26,6 +26,7 @@
 
 #include <base_struct.h>
 #include <preview_items/two_point_geom_manager.h>
+#include <layers_id_colors_and_visibility.h>
 
 namespace KIGFX
 {
@@ -44,10 +45,7 @@ namespace PREVIEW
     };
 
     /**
-     * SELECTION_AREA
-     *
-     * Represents an assistant draw when interactively drawing an
-     * line or circle on a canvas.
+     * Represents an assistant draw when interactively drawing a line or circle on a canvas.
      */
     class TWO_POINT_ASSISTANT : public EDA_ITEM
     {
@@ -56,6 +54,13 @@ namespace PREVIEW
                 const TWO_POINT_GEOMETRY_MANAGER& aManager, EDA_UNITS aUnits, GEOM_SHAPE aShape );
 
         const BOX2I ViewBBox() const override;
+
+        void ViewGetLayers( int aLayers[], int& aCount ) const override
+        {
+            aLayers[0] = LAYER_GP_OVERLAY;      // Drop shadows
+            aLayers[1] = LAYER_SELECT_OVERLAY;  // Assitant graphics
+            aCount = 2;
+        }
 
         /**
          * Draw the assistance (with reference to the contstruction manager

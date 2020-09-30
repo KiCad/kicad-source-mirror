@@ -26,16 +26,14 @@
 
 #include <base_struct.h>
 #include <preview_items/arc_geom_manager.h>
+#include <layers_id_colors_and_visibility.h>
 
 namespace KIGFX
 {
 namespace PREVIEW
 {
     /**
-     * SELECTION_AREA
-     *
-     * Represents an assistant draw when interactively drawing an
-     * arc on a canvas.
+     * Represents an assistant draw when interactively drawing an arc on a canvas.
      */
     class ARC_ASSISTANT : public EDA_ITEM
     {
@@ -43,6 +41,13 @@ namespace PREVIEW
         ARC_ASSISTANT( const ARC_GEOM_MANAGER& aManager, EDA_UNITS aUnits );
 
         const BOX2I ViewBBox() const override;
+
+        void ViewGetLayers( int aLayers[], int& aCount ) const override
+        {
+            aLayers[0] = LAYER_GP_OVERLAY;      // Drop shadows
+            aLayers[1] = LAYER_SELECT_OVERLAY;  // Assitant graphics
+            aCount = 2;
+        }
 
         /**
          * Draw the assistance (with reference to the contstruction manager
@@ -55,10 +60,6 @@ namespace PREVIEW
         }
 #endif
 
-        /**
-         * Get class name
-         * @return  string "ARC_ASSISTANT"
-         */
         wxString GetClass() const override
         {
             return "ARC_ASSISTANT";

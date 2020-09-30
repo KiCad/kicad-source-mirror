@@ -94,19 +94,19 @@ void KIGFX::PREVIEW::SetConstantGlyphHeight( KIGFX::GAL& aGal, double aHeight )
 
 void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& aCursorPos,
                                            const VECTOR2D& aTextQuadrant,
-                                           const std::vector<wxString>& aStrings )
+                                           const std::vector<wxString>& aStrings,
+                                           bool aDrawingDropShadows )
 {
-    auto gal = aView->GetGAL();
-    auto glyphSize = gal->GetGlyphSize();
-    auto rs = aView->GetPainter()->GetSettings();
-
-    const auto lineSpace = glyphSize.y * 0.2;
-    auto linePitch = glyphSize.y + lineSpace;
+    KIGFX::GAL* gal = aView->GetGAL();
+    VECTOR2D glyphSize = gal->GetGlyphSize();
+    RENDER_SETTINGS* rs = aView->GetPainter()->GetSettings();
+    double linePitch = glyphSize.y * 1.6;
+    double textThickness = glyphSize.x / 8;
 
     // radius string goes on the right of the cursor centre line
     // with a small horizontal offset (enough to keep clear of a
     // system cursor if present)
-    auto textPos = aCursorPos;
+    VECTOR2D textPos = aCursorPos;
 
     // if the text goes above the cursor, shift it up
     if( aTextQuadrant.y > 0 )
@@ -118,21 +118,38 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& a
     {
         gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
         textPos.x += 15.0 / gal->GetWorldScale();
+
+        if( aDrawingDropShadows )
+            textPos.x -= textThickness;
     }
     else
     {
         gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
         textPos.x -= 15.0 / gal->GetWorldScale();
+
+        if( aDrawingDropShadows )
+            textPos.x += textThickness;
     }
 
-    gal->SetLineWidth( 1.0f );  // TODO(ISM): Set to the minimum GAL linewidth for HiDPI compatibility
-    gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
     gal->SetIsFill( false );
+    gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
+
+    if( aDrawingDropShadows )
+    {
+        if( gal->GetStrokeColor().GetBrightness() > 0.5 )
+            gal->SetStrokeColor( COLOR4D::BLACK.WithAlpha( 0.7 ) );
+        else
+            gal->SetStrokeColor( COLOR4D::WHITE.WithAlpha( 0.7 ) );
+
+        textThickness *= 3;
+    }
+
+    gal->SetLineWidth( textThickness );
 
     // write strings top-to-bottom
-    for( const auto& str : aStrings )
+    for( const wxString& str : aStrings )
     {
         textPos.y += linePitch;
-        gal->BitmapText( str, textPos, 0.0 );
+        gal->StrokeText( str, textPos, 0.0 );
     }
 }

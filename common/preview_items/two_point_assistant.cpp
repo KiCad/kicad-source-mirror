@@ -110,5 +110,5 @@ void TWO_POINT_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     }
 
     // place the text next to cursor, on opposite side from drawing
-    DrawTextNextToCursor( aView, end, origin - end, cursorStrings );
+    DrawTextNextToCursor( aView, end, origin - end, cursorStrings, aLayer == LAYER_GP_OVERLAY );
 }

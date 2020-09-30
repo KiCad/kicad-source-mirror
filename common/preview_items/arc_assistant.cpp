@@ -155,6 +155,6 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     // place the text next to cursor, on opposite side from radius
     DrawTextNextToCursor( aView, m_constructMan.GetLastPoint(),
-            origin - m_constructMan.GetLastPoint(),
-            cursorStrings );
+                          origin - m_constructMan.GetLastPoint(),
+                          cursorStrings, aLayer == LAYER_GP_OVERLAY );
 }

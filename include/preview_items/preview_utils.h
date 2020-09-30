@@ -67,9 +67,9 @@ void SetConstantGlyphHeight( KIGFX::GAL& aGal, double aHeight );
  * text in
  * @param aStrings list of strings to draw, top to bottom
  */
-void DrawTextNextToCursor( KIGFX::VIEW* aView,
-        const VECTOR2D& aCursorPos, const VECTOR2D& aTextQuadrant,
-        const std::vector<wxString>& aStrings );
+void DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& aCursorPos,
+                           const VECTOR2D& aTextQuadrant, const std::vector<wxString>& aStrings,
+                           bool aDrawingDropShadows );
 
 } // PREVIEW
 } // KIGFX
