@@ -62,7 +62,7 @@ In order for the discovery process to work, the following requirements must be m
   On macOS, there is a security feature that makes it easier to add scripting plugins
   to the ~/Library... path than to kicad.app, but the search path is
 
-    * /Applications/kicad/Kicad/Contents/SharedSupport/scripting/plugins
+    * /Applications/KiCad/Kicad/Contents/SharedSupport/scripting/plugins
     * ~/Library/Application Support/kicad/scripting/plugins
 
 * Alternatively a symbolic link can be created in the KiCad plugin path link to
