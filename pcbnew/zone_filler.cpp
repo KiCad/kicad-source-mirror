@@ -365,7 +365,9 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
     // Now remove islands outside the board edge
     for( ZONE_CONTAINER* zone : aZones )
     {
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        LSET zoneCopperLayers = zone->GetLayerSet() & LSET::AllCuMask( MAX_CU_LAYERS );
+
+        for( PCB_LAYER_ID layer : zoneCopperLayers.Seq() )
         {
             if( m_debugZoneFiller && LSET::InternalCuMask().Contains( layer ) )
                 continue;
