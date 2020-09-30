@@ -40,6 +40,17 @@
 #include <geometry/shape_poly_set.h>
 #include <geometry/geometry_utils.h>
 
+#include <wx/log.h>
+
+
+/**
+ * Flag to enable debug tracing for the board outline creation
+ *
+ * Use "KICAD_BOARD_OUTLINE" to enable.
+ *
+ * @ingroup trace_env_vars
+ */
+const wxChar* traceBoardOutline = wxT( "KICAD_BOARD_OUTLINE" );
 
 /**
  * Function close_ness
@@ -832,11 +843,21 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, wxStri
 
 
 /**
- * Get the complete bounding box of the board (including all items)
+ * Get the complete bounding box of the board (including all items).
+ *
+ * The vertex numbers and segment numbers of the rectangle returned.
+ *              1
+ *      *---------------*
+ *      |1             2|
+ *     0|               |2
+ *      |0             3|
+ *      *---------------*
+ *              3
  */
 void buildBoardBoundingBoxPoly( const BOARD* aBoard, SHAPE_POLY_SET& aOutline )
 {
-    EDA_RECT bbbox = aBoard->GetBoundingBox();
+    EDA_RECT         bbbox = aBoard->GetBoundingBox();
+    SHAPE_LINE_CHAIN chain;
 
     // If null area, uses the global bounding box.
     if( ( bbbox.GetWidth() ) == 0 || ( bbbox.GetHeight() == 0 ) )
@@ -846,21 +867,17 @@ void buildBoardBoundingBoxPoly( const BOARD* aBoard, SHAPE_POLY_SET& aOutline )
     if( ( bbbox.GetWidth() ) == 0 || ( bbbox.GetHeight() == 0 ) )
         bbbox.Inflate( Millimeter2iu( 1.0 ) );
 
+    // Inflate slightly (by 1/10th the size of the box)
+    bbbox.Inflate( bbbox.GetWidth() / 10, bbbox.GetHeight() / 10 );
+
+    chain.Append( bbbox.GetOrigin() );
+    chain.Append( bbbox.GetOrigin().x, bbbox.GetEnd().y );
+    chain.Append( bbbox.GetEnd() );
+    chain.Append( bbbox.GetEnd().x, bbbox.GetOrigin().y );
+    chain.SetClosed( true );
+
     aOutline.RemoveAllContours();
-    aOutline.NewOutline();
-
-    wxPoint corner;
-    aOutline.Append( bbbox.GetOrigin() );
-
-    corner.x = bbbox.GetOrigin().x;
-    corner.y = bbbox.GetEnd().y;
-    aOutline.Append( corner );
-
-    aOutline.Append( bbbox.GetEnd() );
-
-    corner.x = bbbox.GetEnd().x;
-    corner.y = bbbox.GetOrigin().y;
-    aOutline.Append( corner );
+    aOutline.AddOutline( chain );
 }
 
 
@@ -868,22 +885,22 @@ bool isCopperOutside( const MODULE* aMod, SHAPE_POLY_SET& aShape )
 {
     bool padOutside = false;
 
-    for( auto pad : aMod->Pads() )
+    for( D_PAD* pad : aMod->Pads() )
     {
-        SHAPE_POLY_SET padPoly;
-        pad->BuildPadShapePolygon( padPoly, wxSize( 0, 0 ) );
+        SHAPE_POLY_SET poly = aShape;
 
-        bool padOutsidePad = false;
-        for( auto it = padPoly.CIterateSegments( 0 ); it; it++ )
+        poly.BooleanIntersection( *pad->GetEffectivePolygon(), SHAPE_POLY_SET::PM_FAST );
+
+        if( poly.OutlineCount() == 0 )
         {
-            auto seg = it.Get();
-            padOutsidePad |= !aShape.Collide( seg );
+            wxPoint padPos = pad->GetPosition();
+            wxLogTrace( traceBoardOutline, "Tested pad (%d, %d): outside", padPos.x, padPos.y );
+            padOutside = true;
+            break;
         }
 
         wxPoint padPos = pad->GetPosition();
-        wxLogDebug( "Tested pad (%d, %d): %s", padPos.x, padPos.y, padOutsidePad ? "true" : "false" );
-
-        padOutside |= padOutsidePad;
+        wxLogTrace( traceBoardOutline, "Tested pad (%d, %d): not outside", padPos.x, padPos.y );
     }
 
     return padOutside;
@@ -912,6 +929,59 @@ VECTOR2I projectPointOnSegment( const VECTOR2I& aEndPoint, const SHAPE_POLY_SET&
 }
 
 
+int findEndSegments( SHAPE_LINE_CHAIN& aChain, SEG& aStartSeg, SEG& aEndSeg )
+{
+    int foundSegs = 0;
+
+    for( int i = 0; i < aChain.SegmentCount(); i++ )
+    {
+        SEG seg = aChain.Segment( i );
+
+        bool foundA = false;
+        bool foundB = false;
+
+        for( int j = 0; j < aChain.SegmentCount(); j++ )
+        {
+            // Don't test the segment against itself
+            if( i == j )
+                continue;
+
+            SEG testSeg = aChain.Segment( j );
+
+            if( testSeg.Contains( seg.A ) )
+                foundA = true;
+
+            if( testSeg.Contains( seg.B ) )
+                foundB = true;
+        }
+
+        // This segment isn't a start or end
+        if( foundA && foundB )
+            continue;
+
+        if( foundSegs == 0 )
+        {
+            // The first segment we encounter is the "start" segment
+            wxLogTrace( traceBoardOutline, "Found start segment: (%d, %d)-(%d, %d)",
+                        seg.A.x, seg.A.y, seg.B.x, seg.B.y );
+            aStartSeg = seg;
+            foundSegs++;
+        }
+        else
+        {
+            // Once we find both start and end, we can stop
+            wxLogTrace( traceBoardOutline, "Found end segment: (%d, %d)-(%d, %d)",
+                        seg.A.x, seg.A.y, seg.B.x, seg.B.y );
+            aEndSeg = seg;
+            foundSegs++;
+            break;
+        }
+    }
+
+    return foundSegs;
+}
+
+
 /**
  * This function is used to extract a board outline for a footprint view.
  *
@@ -925,7 +995,8 @@ VECTOR2I projectPointOnSegment( const VECTOR2I& aEndPoint, const SHAPE_POLY_SET&
  *   as a hole, and the outer edge will be formed using the bounding box.
  */
 bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
-        wxString* aErrorText, unsigned int aTolerance, wxPoint* aErrorLocation )
+                                    wxString* aErrorText, unsigned int aTolerance,
+                                    wxPoint* aErrorLocation )
 {
     PCB_TYPE_COLLECTOR  items;
 
@@ -947,97 +1018,301 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
 
     bool success = ConvertOutlineToPolygon( segList, outlines, aErrorText, aTolerance, aErrorLocation );
 
+    MODULE* boardMod = aBoard->GetFirstModule();
+
+    // No module loaded
+    if( !boardMod )
+    {
+        wxLogTrace( traceBoardOutline, "No module found on board" );
+
+        if( aErrorText )
+            *aErrorText = _( "No footprint loaded" );
+
+        return false;
+    }
+
     // A closed outline was found
     if( success )
     {
+        wxLogTrace( traceBoardOutline, "Closed outline found" );
+
         // If copper is outside a closed polygon, treat it as a hole
-        if( isCopperOutside( aBoard->GetFirstModule(), outlines ) )
+        if( isCopperOutside( boardMod, outlines ) )
         {
+            wxLogTrace( traceBoardOutline, "Treating outline as a hole" );
+
             buildBoardBoundingBoxPoly( aBoard, aOutlines );
 
             // Copy all outlines from the conversion as holes into the new outline
             for( int i = 0; i < outlines.OutlineCount(); i++ )
             {
-                aOutlines.AddHole( outlines.Outline( i ), -1 );
+                SHAPE_LINE_CHAIN& out = outlines.Outline( i );
+
+                if( out.IsClosed() )
+                    aOutlines.AddHole( out, -1 );
 
                 for( int j = 0; j < outlines.HoleCount( i ); j++ )
                 {
-                    aOutlines.AddHole( outlines.Hole( i, j ), -1 );
+                    SHAPE_LINE_CHAIN& hole = outlines.Hole( i, j );
+
+                    if( hole.IsClosed() )
+                        aOutlines.AddHole( hole, -1 );
                 }
             }
         }
         // If all copper is inside, then the computed outline is the board outline
         else
         {
+            wxLogTrace( traceBoardOutline, "Treating outline as board edge" );
             aOutlines = outlines;
         }
+
+        return true;
     }
     // No board outlines were found, so use the bounding box
-    else if( !outlines.OutlineCount() )
+    else if( outlines.OutlineCount() == 0 )
     {
+        wxLogTrace( traceBoardOutline, "Using footprint bounding box" );
         buildBoardBoundingBoxPoly( aBoard, aOutlines );
+
+        return true;
     }
     // There is an outline present, but it is not closed
     else
     {
-        SHAPE_POLY_SET closedPolys;
-        SHAPE_POLY_SET openPolys;
+        wxLogTrace( traceBoardOutline, "Trying to build outline" );
 
-        // Extract all polygons to top-level entities
-        for( int i = 0; i < outlines.OutlineCount(); i++ )
+        std::vector<SHAPE_LINE_CHAIN> closedChains;
+        std::vector<SHAPE_LINE_CHAIN> openChains;
+
+        // The ConvertOutlineToPolygon function returns only one main
+        // outline and the rest as holes, so we promote the holes and process them
+        openChains.push_back( outlines.Outline( 0 ) );
+
+        for( int j = 0; j < outlines.HoleCount( 0 ); j++ )
         {
-            SHAPE_LINE_CHAIN chain = outlines.Outline( i );
+            SHAPE_LINE_CHAIN hole = outlines.Hole( 0, j );
 
-            // Separate the open and closed polygons
-            if( chain.IsClosed() )
+            if( hole.IsClosed() )
             {
-                wxLogDebug( "Outline closed" );
-                closedPolys.AddOutline( chain );
+                wxLogTrace( traceBoardOutline, "Found closed hole" );
+                closedChains.push_back( hole );
             }
             else
             {
-                wxLogDebug( "Outline open" );
-                chain.SetClosed( true );
-                openPolys.AddOutline( chain );
+                wxLogTrace( traceBoardOutline, "Found open hole" );
+                openChains.push_back( hole );
             }
+        }
 
-            // The ConvertOutlineToPolygon function returns only one main
-            // outline and the rest as holes, so we promote the holes
-            for( int j = 0; j < outlines.HoleCount( i ); j++ )
+        SHAPE_POLY_SET bbox;
+        buildBoardBoundingBoxPoly( aBoard, bbox );
+
+        // Treat the open polys as the board edge
+        SHAPE_LINE_CHAIN chain = openChains[0];
+        SHAPE_LINE_CHAIN rect  = bbox.Outline( 0 );
+
+        // We know the outline chain is open, so set to non-closed to get better segment count
+        chain.SetClosed( false );
+
+        SEG startSeg;
+        SEG endSeg;
+
+        // The two possible board outlines
+        SHAPE_LINE_CHAIN upper;
+        SHAPE_LINE_CHAIN lower;
+
+        findEndSegments( chain, startSeg, endSeg );
+
+        if( chain.SegmentCount() == 0 )
+        {
+            // Something is wrong, bail out with the overall module bounding box
+            wxLogTrace( traceBoardOutline, "No line segments in provided outline" );
+            aOutlines = bbox;
+            return true;
+        }
+        else if( chain.SegmentCount() == 1 )
+        {
+            // This case means there is only 1 line segment making up the edge cuts of the footprint,
+            // so we just need to use it to cut the bounding box in half.
+            wxLogTrace( traceBoardOutline, "Only 1 line segment in provided outline" );
+
+            startSeg = chain.Segment( 0 );
+
+            // Intersect with all the sides of the rectangle
+            OPT_VECTOR2I inter0 = startSeg.IntersectLines( rect.Segment( 0 ) );
+            OPT_VECTOR2I inter1 = startSeg.IntersectLines( rect.Segment( 1 ) );
+            OPT_VECTOR2I inter2 = startSeg.IntersectLines( rect.Segment( 2 ) );
+            OPT_VECTOR2I inter3 = startSeg.IntersectLines( rect.Segment( 3 ) );
+
+            if( inter0 && inter2 && !inter1 && !inter3 )
             {
-                SHAPE_LINE_CHAIN hole = outlines.Hole( i, j );
+                // Intersects the vertical rectangle sides only
+                wxLogTrace( traceBoardOutline, "Segment intersects only vertical bbox sides" );
 
-                if( hole.IsClosed() )
+                // The upper half
+                upper.Append( *inter0 );
+                upper.Append( rect.GetPoint( 1 ) );
+                upper.Append( rect.GetPoint( 2 ) );
+                upper.Append( *inter2 );
+                upper.SetClosed( true );
+
+                // The lower half
+                lower.Append( *inter0 );
+                lower.Append( rect.GetPoint( 0 ) );
+                lower.Append( rect.GetPoint( 3 ) );
+                lower.Append( *inter2 );
+                lower.SetClosed( true );
+            }
+            else if( inter1 && inter3 && !inter0 && !inter2 )
+            {
+                // Intersects the horizontal rectangle sides only
+                wxLogTrace( traceBoardOutline, "Segment intersects only horizontal bbox sides" );
+
+                // The left half
+                upper.Append( *inter1 );
+                upper.Append( rect.GetPoint( 1 ) );
+                upper.Append( rect.GetPoint( 0 ) );
+                upper.Append( *inter3 );
+                upper.SetClosed( true );
+
+                // The right half
+                lower.Append( *inter1 );
+                lower.Append( rect.GetPoint( 2 ) );
+                lower.Append( rect.GetPoint( 3 ) );
+                lower.Append( *inter3 );
+                lower.SetClosed( true );
+            }
+            else
+            {
+                // Angled line segment that cuts across a corner
+                wxLogTrace( traceBoardOutline, "Segment intersects two perpendicular bbox sides" );
+
+                // Figure out which actual lines are intersected, since IntersectLines assumes an infinite line
+                bool hit0 = rect.Segment( 0 ).Contains( *inter0 );
+                bool hit1 = rect.Segment( 1 ).Contains( *inter1 );
+                bool hit2 = rect.Segment( 2 ).Contains( *inter2 );
+                bool hit3 = rect.Segment( 3 ).Contains( *inter3 );
+
+                if( hit0 && hit1 )
                 {
-                    wxLogDebug( "Hole closed" );
-                    closedPolys.AddOutline( hole );
+                    // Cut across the upper left corner
+                    wxLogTrace( traceBoardOutline, "Segment cuts upper left corner" );
+
+                    // The upper half
+                    upper.Append( *inter0 );
+                    upper.Append( rect.GetPoint( 1 ) );
+                    upper.Append( *inter1 );
+                    upper.SetClosed( true );
+
+                    // The lower half
+                    lower.Append( *inter0 );
+                    lower.Append( rect.GetPoint( 0 ) );
+                    lower.Append( rect.GetPoint( 3 ) );
+                    lower.Append( rect.GetPoint( 2 ) );
+                    lower.Append( *inter1 );
+                    lower.SetClosed( true );
+                }
+                else if( hit1 && hit2 )
+                {
+                    // Cut across the upper right corner
+                    wxLogTrace( traceBoardOutline, "Segment cuts upper right corner" );
+
+                    // The upper half
+                    upper.Append( *inter1 );
+                    upper.Append( rect.GetPoint( 2 ) );
+                    upper.Append( *inter2 );
+                    upper.SetClosed( true );
+
+                    // The lower half
+                    lower.Append( *inter1 );
+                    lower.Append( rect.GetPoint( 1 ) );
+                    lower.Append( rect.GetPoint( 0 ) );
+                    lower.Append( rect.GetPoint( 3 ) );
+                    lower.Append( *inter2 );
+                    lower.SetClosed( true );
+                }
+                else if( hit2 && hit3 )
+                {
+                    // Cut across the lower right corner
+                    wxLogTrace( traceBoardOutline, "Segment cuts lower right corner" );
+
+                    // The upper half
+                    upper.Append( *inter2 );
+                    upper.Append( rect.GetPoint( 2 ) );
+                    upper.Append( rect.GetPoint( 1 ) );
+                    upper.Append( rect.GetPoint( 0 ) );
+                    upper.Append( *inter3 );
+                    upper.SetClosed( true );
+
+                    // The bottom half
+                    lower.Append( *inter2 );
+                    lower.Append( rect.GetPoint( 3 ) );
+                    lower.Append( *inter3 );
+                    lower.SetClosed( true );
                 }
                 else
                 {
-                    wxLogDebug( "Hole open" );
-                    hole.SetClosed( true );
-                    openPolys.AddOutline( hole );
+                    // Cut across the lower left corner
+                    wxLogTrace( traceBoardOutline, "Segment cuts upper left corner" );
+
+                    // The upper half
+                    upper.Append( *inter0 );
+                    upper.Append( rect.GetPoint( 1 ) );
+                    upper.Append( rect.GetPoint( 2 ) );
+                    upper.Append( rect.GetPoint( 3 ) );
+                    upper.Append( *inter3 );
+                    upper.SetClosed( true );
+
+                    // The bottom half
+                    lower.Append( *inter0 );
+                    lower.Append( rect.GetPoint( 0 ) );
+                    lower.Append( *inter3 );
+                    lower.SetClosed( true );
                 }
             }
         }
-
-        SHAPE_POLY_SET boardBoundingBox;
-        buildBoardBoundingBoxPoly( aBoard, boardBoundingBox );
-
-        for( int i = 0; i < openPolys.OutlineCount(); i++ )
+        else
         {
-            SHAPE_LINE_CHAIN chain = openPolys.Outline( i );
+            // More than 1 segment
+            wxLogTrace( traceBoardOutline, "Multiple segments in outline" );
 
-
-            VECTOR2I startProj = projectPointOnSegment( chain.CPoint( 0 ), openPolys, i );
-            VECTOR2I endProj   = projectPointOnSegment( chain.CLastPoint(), openPolys, i );
-
-            wxLogDebug( "Start project: (%d, %d)", startProj.x, startProj.y );
-            wxLogDebug( "end project: (%d, %d)", endProj.x, endProj.y );
+            // Just a temporary thing
+            aOutlines = bbox;
+            return true;
         }
 
+        // Figure out which is the correct outline
+        SHAPE_POLY_SET poly1;
+        SHAPE_POLY_SET poly2;
 
+        poly1.NewOutline();
+        poly1.Append( upper );
+
+        poly2.NewOutline();
+        poly2.Append( lower );
+
+        if( isCopperOutside( boardMod, poly1 ) )
+        {
+            wxLogTrace( traceBoardOutline, "Using lower shape" );
+            aOutlines = poly2;
+        }
+        else
+        {
+            wxLogTrace( traceBoardOutline, "Using upper shape" );
+            aOutlines = poly1;
+        }
+
+        // Add all closed polys as holes to the main outline
+        for( SHAPE_LINE_CHAIN& closedChain : closedChains )
+        {
+            wxLogTrace( traceBoardOutline, "Adding hole to main outline" );
+            aOutlines.AddHole( closedChain, -1 );
+        }
+
+        return true;
     }
 
-    return success;
+    // We really shouldn't reach this point
+    return false;
 }

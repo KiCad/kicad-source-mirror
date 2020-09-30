@@ -430,7 +430,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     if( aWarningReporter )
     {
         if( !createBoardPolygon( &msg ) )
-            aWarningReporter->Report( _( "Board outline is not closed: " ) + msg, RPT_SEVERITY_WARNING );
+            aWarningReporter->Report( msg, RPT_SEVERITY_WARNING );
         else
             aWarningReporter->Report( wxEmptyString );
     }
@@ -442,13 +442,40 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 }
 
 
+extern bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
+                                           wxString* aErrorText, unsigned int aTolerance,
+                                           wxPoint* aErrorLocation );
+
+
 bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
 {
     m_board_poly.RemoveAllContours();
 
-    wxString errmsg;
+    bool     success = false;
+    wxString msg;
 
-    return m_board->GetBoardPolygonOutlines( m_board_poly, aErrorMsg );
+    if( m_board->IsFootprintHolder() )
+    {
+        success = BuildFootprintPolygonOutlines( m_board, m_board_poly, &msg,
+                                                 m_board->GetDesignSettings().m_MaxError,
+                                                 nullptr );
+
+        // Make polygon strictly simple to avoid issues (especially in 3D viewer)
+        m_board_poly.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+        if( aErrorMsg )
+            *aErrorMsg = msg;
+    }
+    else
+    {
+
+        success = m_board->GetBoardPolygonOutlines( m_board_poly, &msg );
+
+        if( aErrorMsg )
+            *aErrorMsg = _( "Board outline is not closed: " ) + msg;
+    }
+
+    return success;
 }
 
 
