@@ -426,10 +426,6 @@ if( KICAD_USE_OCC )
     unset( KICAD_USE_OCE CACHE )
 endif()
 
-if( KICAD_USE_CUSTOM_PADS )
-    add_definitions( -DKICAD_USE_CUSTOM_PADS )
-endif()
-
 
 # KIFACE_SUFFIX is the file extension used for top level program modules which
 # implement the KIFACE interface.  A valid suffix starts with a period '.'.
