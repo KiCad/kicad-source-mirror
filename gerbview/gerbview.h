@@ -29,13 +29,6 @@
 #include <set>
 
 
-#define CURSEUR_ON_GRILLE  0
-#define CURSEUR_OFF_GRILLE 1
-
-/// List of page sizes
-extern const wxChar* g_GerberPageSizeList[7];
-
-
 // Interpolation type
 enum Gerb_Interpolation
 {

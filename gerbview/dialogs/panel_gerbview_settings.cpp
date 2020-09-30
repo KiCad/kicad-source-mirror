@@ -19,12 +19,23 @@
  */
 
 
-#include <fctsys.h>
-#include <common.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
 
 #include "panel_gerbview_settings.h"
+
+
+/// List of page sizes
+static const wxChar* gerberPageSizeList[] =
+{
+    wxT( "GERBER" ),    // index 0: full size page selection
+    wxT( "A4" ),
+    wxT( "A3" ),
+    wxT( "A2" ),
+    wxT( "A" ),
+    wxT( "B" ),
+    wxT( "C" ),
+};
 
 
 PANEL_GERBVIEW_SETTINGS::PANEL_GERBVIEW_SETTINGS( GERBVIEW_FRAME *aFrame, wxWindow* aWindow ) :
@@ -40,9 +51,9 @@ bool PANEL_GERBVIEW_SETTINGS::TransferDataToWindow( )
     m_BoxUnits->SetSelection( ( m_Parent->GetUserUnits() == EDA_UNITS::MILLIMETRES ) ? 1 : 0 );
     m_ShowPageLimitsOpt->SetValue( m_Parent->GetDisplayOptions().m_DisplayPageLimits );
 
-    for( unsigned i = 0;  i < arrayDim( g_GerberPageSizeList );  ++i )
+    for( unsigned i = 0;  i < arrayDim( gerberPageSizeList );  ++i )
     {
-        if( g_GerberPageSizeList[i] == m_Parent->GetPageSettings().GetType() )
+        if( gerberPageSizeList[i] == m_Parent->GetPageSettings().GetType() )
         {
             m_PageSize->SetSelection( i );
             break;
@@ -62,7 +73,7 @@ bool PANEL_GERBVIEW_SETTINGS::TransferDataFromWindow()
     auto opts = m_Parent->GetDisplayOptions();
     opts.m_DisplayPageLimits = m_ShowPageLimitsOpt->GetValue();
 
-    PAGE_INFO pageInfo( g_GerberPageSizeList[ m_PageSize->GetSelection() ] );
+    PAGE_INFO pageInfo( gerberPageSizeList[ m_PageSize->GetSelection() ] );
     m_Parent->SetPageSettings( pageInfo );
 
     m_Parent->UpdateDisplayOptions( opts );

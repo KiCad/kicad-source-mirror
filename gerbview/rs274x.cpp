@@ -26,9 +26,6 @@
  * @file rs274x.cpp
  */
 
-#include <fctsys.h>
-#include <common.h>
-#include <macros.h>
 #include <base_units.h>
 #include <math/util.h>      // for KiROUND
 

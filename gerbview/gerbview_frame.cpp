@@ -18,11 +18,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <fctsys.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
 #include <eda_base_frame.h>
-#include <trigo.h>
 #include <base_units.h>
 #include <gbr_layer_box_selector.h>
 #include <msgpanel.h>

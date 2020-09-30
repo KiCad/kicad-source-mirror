@@ -28,8 +28,6 @@
  * @brief D_CODE class implementation
  */
 
-#include <fctsys.h>
-#include <common.h>
 #include <trigo.h>
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>

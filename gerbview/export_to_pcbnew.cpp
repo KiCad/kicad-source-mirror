@@ -29,8 +29,6 @@
 
 #include <vector>
 
-#include <fctsys.h>
-#include <common.h>
 #include <confirm.h>
 #include <macros.h>
 #include <trigo.h>

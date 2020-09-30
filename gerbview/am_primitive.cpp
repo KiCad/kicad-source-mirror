@@ -7,7 +7,7 @@
  *
  * Copyright (C) 1992-2017 Jean-Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,18 +27,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <common.h>
-#include <macros.h>
 #include <trigo.h>
 #include <convert_to_biu.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <gr_basic.h>
 #include <math/util.h>      // for KiROUND
 
 #include <gerbview.h>
 #include <gerber_file_image.h>
 
+#include <gr_basic.h>
 
 
 /**

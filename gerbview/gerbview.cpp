@@ -26,7 +26,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerbview_settings.h>
@@ -38,17 +37,6 @@
 #include <wildcards_and_files_ext.h>
 
 using json = nlohmann::json;
-
-const wxChar* g_GerberPageSizeList[] =
-{
-    wxT( "GERBER" ),    // index 0: full size page selection
-    wxT( "A4" ),
-    wxT( "A3" ),
-    wxT( "A2" ),
-    wxT( "A" ),
-    wxT( "B" ),
-    wxT( "C" ),
-};
 
 
 namespace GERBV {
