@@ -185,7 +185,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_show_layer_manager_tools = true;
     m_hasAutoSave = true;
     m_microWaveToolBar = NULL;
-    m_Layers = nullptr;
 
     // We don't know what state board was in when it was lasat saved, so we have to
     // assume dirty

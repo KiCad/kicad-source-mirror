@@ -69,6 +69,10 @@ public:
 
     SELECTION_FILTER_OPTIONS m_SelectionFilter;
 
+    std::vector<LAYER_PRESET> m_LayerPresets;
+
+    wxString m_ActiveLayerPreset;
+
 protected:
 
     virtual std::string getLegacyFrameName() const override { return "ModEditFrame"; }

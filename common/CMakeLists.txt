@@ -437,6 +437,7 @@ set( COMMON_SRCS
     settings/nested_settings.cpp
     settings/settings_manager.cpp
 
+    project/board_project_settings.cpp
     project/net_settings.cpp
     project/project_archiver.cpp
     project/project_file.cpp

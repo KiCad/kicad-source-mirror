@@ -48,7 +48,6 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                           const wxString& aFrameName ) :
         PCB_BASE_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
                         m_rotationAngle( 900 ), m_undoRedoBlocked( false ),
-        m_Layers( nullptr ),
         m_selectionFilterPanel( nullptr ),
         m_appearancePanel( nullptr )
 {

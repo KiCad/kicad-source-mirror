@@ -77,6 +77,11 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_fill",
             &m_Display.m_DisplayPadFill, true ) );
 
+    m_params.emplace_back( new PARAM_LAYER_PRESET( "pcb_display.layer_presets", &m_LayerPresets ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "pcb_display.active_layer_preset",
+            &m_ActiveLayerPreset, "" ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
             "design_settings.default_footprint_text_items",
             [&] () -> nlohmann::json

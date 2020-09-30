@@ -261,24 +261,6 @@ public:
     bool DeleteModuleFromLibrary( const LIB_ID& aFPID, bool aConfirm );
 
     /**
-     * Test whether a given element category is visible.
-     *
-     * @param aElement is from the enum by the same name
-     * @return bool - true if the element is visible.
-     * @see enum PCB_LAYER_ID
-     */
-    bool IsElementVisible( GAL_LAYER_ID aElement ) const;
-
-    /**
-     * Function SetElementVisibility
-     * changes the visibility of an element category
-     * @param aElement is from the enum by the same name
-     * @param aNewState = The new visibility state of the element category
-     * @see enum PCB_LAYER_ID
-     */
-    void SetElementVisibility( GAL_LAYER_ID aElement, bool aNewState );
-
-    /**
      * @return the color of the grid
      */
     COLOR4D GetGridColor() override;
@@ -313,8 +295,6 @@ public:
      * Allows Modedit to install its preferences panel into the preferences dialog.
      */
     void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
-
-    void ReFillLayerWidget();
 
     /**
      * Update visible items after a language change.

@@ -53,7 +53,6 @@
 #include <panel_hotkeys_editor.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_edit_frame.h>
-#include <pcb_layer_widget.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <pgm_base.h>
@@ -69,6 +68,7 @@
 #include <tools/pcb_editor_conditions.h>
 #include <tools/pcb_viewer_tools.h>
 #include <tools/position_relative_tool.h>
+#include <widgets/appearance_controls.h>
 #include <widgets/infobar.h>
 #include <widgets/lib_tree.h>
 #include <widgets/paged_dialog.h>
@@ -135,7 +135,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     SetCanvas( drawPanel );
     SetBoard( new BOARD() );
 
-    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), true );
 
     // In modedit, the default net clearance is not known (it depends on the actual board).
     // So we do not show the default clearance, by setting it to 0.
@@ -177,6 +176,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     ReCreateOptToolbar();
 
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
+    m_appearancePanel = new APPEARANCE_CONTROLS( this, GetCanvas(), true );
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings() initialize
     // parameters in m_LayersManager
@@ -192,12 +192,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     GetBoard()->SetVisibleLayers( GetBoard()->GetEnabledLayers() );
     GetBoard()->SetLayerName( In1_Cu, _( "Inner layers" ) );
 
-    m_Layers->ReFill();
-    m_Layers->ReFillRender();
-
-    GetScreen()->m_Active_Layer = F_SilkS;
-    m_Layers->SelectLayer( F_SilkS );
-    m_Layers->OnLayerSelected();
+    SetActiveLayer( F_SilkS );
 
     // Create the infobar
     m_infoBar = new WX_INFOBAR( this, &m_auimgr );
@@ -218,10 +213,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                       .BestSize( m_defaultLibWidth, -1 ) );
 
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(2) );
-    m_auimgr.AddPane( m_Layers, EDA_PANE().Palette().Name( "LayersManager" ).Right().Layer(3)
-                      .Caption( _( "Layers Manager" ) ).PaneBorder( false )
-                      .MinSize( 80, -1 ).BestSize( m_Layers->GetBestSize() ) );
 
+    m_auimgr.AddPane( m_appearancePanel,
+                      EDA_PANE().Name( "LayersManager" ).Right().Layer( 3 )
+                              .Caption( _( "Appearance" ) ).PaneBorder( false )
+                              .MinSize( 180, -1 ).BestSize( 180, -1 ) );
     m_auimgr.AddPane( m_selectionFilterPanel,
                       EDA_PANE().Palette().Name( "SelectionFilter" ).Right().Layer( 3 )
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false ).Position( 2 )
@@ -241,6 +237,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     // We don't want the infobar displayed right away
     m_auimgr.GetPane( "InfoBar" ).Hide();
     m_auimgr.Update();
+
+    // Apply saved visibility stuff at the end
+    FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
+    m_appearancePanel->SetUserLayerPresets( cfg->m_LayerPresets );
+    m_appearancePanel->ApplyLayerPreset( cfg->m_ActiveLayerPreset );
 
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
     updateTitle();
@@ -265,7 +266,7 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
     retainLastFootprint();
 
     delete m_selectionFilterPanel;
-    delete m_Layers;
+    delete m_appearancePanel;
 }
 
 
@@ -477,10 +478,12 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     PCB_BASE_FRAME::SaveSettings( cfg );
 
-    cfg->m_DesignSettings  = GetDesignSettings();
-    cfg->m_Display         = m_DisplayOptions;
-    cfg->m_LibWidth        = m_treePane->GetSize().x;
-    cfg->m_SelectionFilter = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();
+    cfg->m_DesignSettings    = GetDesignSettings();
+    cfg->m_Display           = m_DisplayOptions;
+    cfg->m_LibWidth          = m_treePane->GetSize().x;
+    cfg->m_SelectionFilter   = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();
+    cfg->m_LayerPresets      = m_appearancePanel->GetUserLayerPresets();
+    cfg->m_ActiveLayerPreset = m_appearancePanel->GetActiveLayerPreset();
 
     GetSettingsManager()->SaveColorSettings( GetColorSettings(), "board" );
 }
@@ -639,28 +642,6 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent 
 }
 
 
-void FOOTPRINT_EDIT_FRAME::ReFillLayerWidget()
-{
-
-    m_Layers->Freeze();
-    m_Layers->ReFill();
-    m_Layers->Thaw();
-
-    wxAuiPaneInfo& lyrs = m_auimgr.GetPane( m_Layers );
-
-    wxSize bestz = m_Layers->GetBestSize();
-
-    lyrs.MinSize( bestz );
-    lyrs.BestSize( bestz );
-    lyrs.FloatingSize( bestz );
-
-    if( lyrs.IsDocked() )
-        m_auimgr.Update();
-    else
-        m_Layers->SetSize( bestz );
-}
-
-
 void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
 {
     // call my base class
@@ -673,12 +654,12 @@ void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
     bool tree_shown = tree_pane_info.IsShown();
     tree_pane_info.Caption( _( "Libraries" ) );
 
-    wxAuiPaneInfo& lm_pane_info = m_auimgr.GetPane( m_Layers );
+    wxAuiPaneInfo& lm_pane_info = m_auimgr.GetPane( m_appearancePanel );
     bool lm_shown = lm_pane_info.IsShown();
-    lm_pane_info.Caption( _( "Layers Manager" ) );
+    lm_pane_info.Caption( _( "Appearance" ) );
 
     // update the layer manager
-    m_Layers->SetLayersManagerTabsText();
+    m_appearancePanel->OnBoardChanged();
     UpdateUserInterface();
 
     // Now restore the visibility:
@@ -740,21 +721,7 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
 
 void FOOTPRINT_EDIT_FRAME::UpdateUserInterface()
 {
-    // Update the layer manager and other widgets from the board setup
-    // (layer and items visibility, colors ...)
-
-    // Update the layer manager
-    m_Layers->Freeze();
-    ReFillLayerWidget();
-    m_Layers->ReFillRender();
-
-    // update the layer widget to match board visibility states.
-    m_Layers->SyncLayerVisibilities();
-    GetCanvas()->SyncLayersVisibility( m_Pcb );
-    m_Layers->SelectLayer( GetActiveLayer() );
-    m_Layers->OnLayerSelected();
-
-    m_Layers->Thaw();
+    m_appearancePanel->OnBoardChanged();
 }
 
 
@@ -847,23 +814,9 @@ void FOOTPRINT_EDIT_FRAME::FocusOnLibID( const LIB_ID& aLibID )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::IsElementVisible( GAL_LAYER_ID aElement ) const
-{
-    return GetBoard()->IsElementVisible( aElement );
-}
-
-
-void FOOTPRINT_EDIT_FRAME::SetElementVisibility( GAL_LAYER_ID aElement, bool aNewState )
-{
-    GetCanvas()->GetView()->SetLayerVisible( aElement , aNewState );
-    GetBoard()->SetElementVisibility( aElement, aNewState );
-    m_Layers->SetRenderState( aElement, aNewState );
-}
-
-
 void FOOTPRINT_EDIT_FRAME::OnUpdateLayerAlpha( wxUpdateUIEvent & )
 {
-    m_Layers->SyncLayerAlphaIndicators();
+    m_appearancePanel->OnLayerAlphaChanged();
 }
 
 

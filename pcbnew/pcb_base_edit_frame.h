@@ -228,9 +228,6 @@ protected:
 
     void unitsChangeRefresh() override;
 
-    /// Layer manager. It is the responsibility of the child frames to instantiate this
-    PCB_LAYER_WIDGET* m_Layers;
-
     /// AUI panel for changing the selection tool filter controls
     PANEL_SELECTION_FILTER* m_selectionFilterPanel;
 

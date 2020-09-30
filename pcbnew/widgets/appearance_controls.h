@@ -286,6 +286,8 @@ private:
 
     BOARD* m_board;
 
+    bool m_isFpEditor;
+
     // Nets grid view
     NET_GRID_TABLE* m_netsTable;
 
@@ -415,6 +417,14 @@ private:
     void onLayerVisibilityChanged( PCB_LAYER_ID aLayer, bool isVisible, bool isFinal );
 
     void onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool isVisible, bool isFinal );
+
+    void setVisibleLayers( LSET aLayers );
+
+    void setVisibleObjects( GAL_SET aObjects );
+
+    LSET getVisibleLayers();
+
+    GAL_SET getVisibleObjects();
 
     void onObjectOpacitySlider( int aLayer, float aOpacity );
 

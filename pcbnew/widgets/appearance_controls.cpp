@@ -23,6 +23,7 @@
 #include <bitmaps.h>
 #include <class_board.h>
 #include <dialog_helpers.h>
+#include <footprint_edit_frame.h>
 #include <menus_helpers.h>
 #include <pcb_display_options.h>
 #include <pcb_edit_frame.h>
@@ -35,11 +36,11 @@
 #include <widgets/bitmap_toggle.h>
 #include <widgets/collapsible_pane.h>
 #include <widgets/color_swatch.h>
-#include <widgets/wx_grid.h>
 #include <widgets/grid_bitmap_toggle.h>
 #include <widgets/grid_color_swatch_helpers.h>
 #include <widgets/grid_text_helpers.h>
 #include <widgets/indicator_icon.h>
+#include <widgets/wx_grid.h>
 #include <wx/statline.h>
 
 
@@ -351,6 +352,20 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
     RR( _( "Grid" ),             LAYER_GRID,               _( "Show the (x,y) grid dots" ) )
 };
 
+/// These GAL layers are shown in the Objects tab in the footprint editor
+static std::set<int> s_allowedInFpEditor =
+        {
+            LAYER_TRACKS,
+            LAYER_VIAS,
+            LAYER_PADS,
+            LAYER_ZONES,
+            LAYER_PADS_TH,
+            LAYER_MOD_VALUES,
+            LAYER_MOD_REFERENCES,
+            LAYER_MOD_TEXT_INVISIBLE,
+            LAYER_GRID
+        };
+
 // These are the built-in layer presets that cannot be deleted
 
 LAYER_PRESET APPEARANCE_CONTROLS::presetNoLayers( _( "No Layers" ), LSET() );
@@ -382,6 +397,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
         m_frame( aParent ),
         m_focusOwner( aFocusOwner ),
         m_board( nullptr ),
+        m_isFpEditor( aFpEditorMode ),
         m_currentPreset( nullptr ),
         m_lastSelectedUserPreset( nullptr ),
         m_layerContextMenu( nullptr )
@@ -523,6 +539,9 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
 
     m_netsGrid->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT );
     m_netclassScrolledWindow->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT );
+
+    if( m_isFpEditor )
+        m_notebook->RemovePage( 2 );
 
     loadDefaultLayerPresets();
     rebuildObjects();
@@ -1005,15 +1024,14 @@ void APPEARANCE_CONTROLS::OnLayerChanged()
 
 void APPEARANCE_CONTROLS::SetLayerVisible( LAYER_NUM aLayer, bool isVisible )
 {
-    BOARD*       board   = m_frame->GetBoard();
-    LSET         visible = board->GetVisibleLayers();
+    LSET         visible = getVisibleLayers();
     PCB_LAYER_ID layer   = ToLAYER_ID( aLayer );
 
     if( visible.test( layer ) == isVisible )
         return;
 
     visible.set( layer, isVisible );
-    board->SetVisibleLayers( visible );
+    setVisibleLayers( visible );
 
     m_frame->GetCanvas()->GetView()->SetLayerVisible( layer, isVisible );
 
@@ -1028,6 +1046,77 @@ void APPEARANCE_CONTROLS::SetObjectVisible( GAL_LAYER_ID aLayer, bool isVisible 
     {
         APPEARANCE_SETTING* setting = m_objectSettingsMap.at( aLayer );
         setting->ctl_visibility->SetValue( isVisible );
+    }
+}
+
+
+void APPEARANCE_CONTROLS::setVisibleLayers( LSET aLayers )
+{
+    if( m_isFpEditor )
+    {
+        KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
+
+        for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+            view->SetLayerVisible( layer, aLayers.Contains( layer ) );
+    }
+    else
+    {
+        m_frame->GetBoard()->SetVisibleLayers( aLayers );
+    }
+}
+
+
+void APPEARANCE_CONTROLS::setVisibleObjects( GAL_SET aLayers )
+{
+    if( m_isFpEditor )
+    {
+        KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
+
+        for( size_t i = 0; i < aLayers.size(); i++ )
+            view->SetLayerVisible( GAL_LAYER_ID_START + GAL_LAYER_ID( i ), aLayers.test( i ) );
+    }
+    else
+    {
+        m_frame->GetBoard()->SetVisibleElements( aLayers );
+    }
+}
+
+
+LSET APPEARANCE_CONTROLS::getVisibleLayers()
+{
+    if( m_isFpEditor )
+    {
+        KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
+        LSET set;
+
+        for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+            set.set( layer, view->IsLayerVisible( layer ) );
+
+        return set;
+    }
+    else
+    {
+        return m_frame->GetBoard()->GetVisibleLayers();
+    }
+}
+
+
+GAL_SET APPEARANCE_CONTROLS::getVisibleObjects()
+{
+    if( m_isFpEditor )
+    {
+        KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
+        GAL_SET set;
+        set.reset();
+
+        for( size_t i = 0; i < set.size(); i++ )
+            set.set( i, view->IsLayerVisible( GAL_LAYER_ID_START + GAL_LAYER_ID( i ) ) );
+
+        return set;
+    }
+    else
+    {
+        return m_frame->GetBoard()->GetVisibleElements();
     }
 }
 
@@ -1090,16 +1179,19 @@ void APPEARANCE_CONTROLS::UpdateDisplayOptions()
     case NET_COLOR_MODE::OFF:      m_rbNetColorOff->SetValue( true );      break;
     }
 
-    if( options.m_RatsnestMode == RATSNEST_MODE::ALL )
-        m_rbRatsnestAllLayers->SetValue( true );
-    else
-        m_rbRatsnestVisibleLayers->SetValue( true );
-
-    wxASSERT( m_objectSettingsMap.count( LAYER_RATSNEST ) );
-    APPEARANCE_SETTING* ratsnest = m_objectSettingsMap.at( LAYER_RATSNEST );
-    ratsnest->ctl_visibility->SetValue( options.m_ShowGlobalRatsnest );
-
     m_cbFlipBoard->SetValue( m_frame->GetCanvas()->GetView()->IsMirroredX() );
+
+    if( !m_isFpEditor )
+    {
+        if( options.m_RatsnestMode == RATSNEST_MODE::ALL )
+            m_rbRatsnestAllLayers->SetValue( true );
+        else
+            m_rbRatsnestVisibleLayers->SetValue( true );
+
+        wxASSERT( m_objectSettingsMap.count( LAYER_RATSNEST ) );
+        APPEARANCE_SETTING* ratsnest = m_objectSettingsMap.at( LAYER_RATSNEST );
+        ratsnest->ctl_visibility->SetValue( options.m_ShowGlobalRatsnest );
+    }
 }
 
 
@@ -1180,7 +1272,7 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 {
     BOARD* board = m_frame->GetBoard();
     LSET enabled = board->GetEnabledLayers();
-    LSET visible = board->GetVisibleLayers();
+    LSET visible = getVisibleLayers();
 
     COLOR_SETTINGS* theme      = m_frame->GetColorSettings();
     COLOR4D         bgColor    = theme->GetColor( LAYER_PCB_BACKGROUND );
@@ -1256,10 +1348,17 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                 btn_visible->Bind( TOGGLE_CHANGED,
                         [&]( wxCommandEvent& aEvent )
                         {
-                            int layId = static_cast<wxWindow*>( aEvent.GetEventObject() )->GetId();
+                            wxObject* btn = aEvent.GetEventObject();
+                            int layId = static_cast<wxWindow*>( btn )->GetId();
                             bool isVisible = aEvent.GetInt();
 
                             wxASSERT( layId >= 0 && layId < PCB_LAYER_ID_COUNT );
+
+                            if( LSET::ForbiddenFootprintLayers().test( layId ) )
+                            {
+                                static_cast<BITMAP_TOGGLE*>( btn )->SetValue( !isVisible );
+                                return;
+                            }
 
                             onLayerVisibilityChanged( static_cast<PCB_LAYER_ID>( layId ),
                                                       isVisible, true );
@@ -1306,14 +1405,11 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 
         appendLayer( setting );
 
-        // TODO(JE)
-#ifdef NOTYET
-        if( m_fp_editor_mode && LSET::ForbiddenFootprintLayers().test( layer ) )
+        if( m_isFpEditor && LSET::ForbiddenFootprintLayers().test( layer ) )
         {
-            getLayerComp( GetLayerRowCount()-1, COLUMN_COLOR_LYRNAME )->Enable( false );
-            getLayerComp( GetLayerRowCount()-1, COLUMN_COLORBM )->SetToolTip( wxEmptyString );
+            setting->ctl_text->Disable();
+            setting->ctl_color->SetToolTip( wxEmptyString );
         }
-#endif
     }
 
     // technical layers are shown in this order:
@@ -1368,14 +1464,11 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 
         appendLayer( setting );
 
-        // TODO(JE)
-#ifdef NOTYET
-        if( m_fp_editor_mode && LSET::ForbiddenFootprintLayers().test( layer ) )
+        if( m_isFpEditor && LSET::ForbiddenFootprintLayers().test( layer ) )
         {
-            getLayerComp( GetLayerRowCount()-1, COLUMN_COLOR_LYRNAME )->Enable( false );
-            getLayerComp( GetLayerRowCount()-1, COLUMN_COLORBM )->SetToolTip( wxEmptyString );
+            setting->ctl_text->Disable();
+            setting->ctl_color->SetToolTip( wxEmptyString );
         }
-#endif
     }
 
     m_layersOuterSizer->AddSpacer( 10 );
@@ -1444,7 +1537,7 @@ void APPEARANCE_CONTROLS::rebuildLayerContextMenu()
 void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
 {
     BOARD* board   = m_frame->GetBoard();
-    LSET   visible = board->GetVisibleLayers();
+    LSET   visible = getVisibleLayers();
 
     PCB_LAYER_ID current = m_frame->GetActiveLayer();
 
@@ -1461,7 +1554,7 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
     case ID_SHOW_ALL_COPPER_LAYERS:
     {
         visible |= presetAllCopper.layers;
-        board->SetVisibleLayers( visible );
+        setVisibleLayers( visible );
         break;
     }
 
@@ -1477,7 +1570,7 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
         if( !visible.test( current ) )
             m_frame->SetActiveLayer( *visible.Seq().begin() );
 
-        board->SetVisibleLayers( visible );
+        setVisibleLayers( visible );
         break;
     }
 
@@ -1488,7 +1581,7 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
         if( !visible.test( current ) )
             m_frame->SetActiveLayer( *visible.Seq().begin() );
 
-        board->SetVisibleLayers( visible );
+        setVisibleLayers( visible );
         break;
     }
 
@@ -1496,7 +1589,7 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
     {
         visible |= ~presetAllCopper.layers;
 
-        board->SetVisibleLayers( visible );
+        setVisibleLayers( visible );
         break;
     }
 
@@ -1523,7 +1616,10 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
 
     syncLayerPresetSelection();
     syncColorsAndVisibility();
-    m_frame->GetCanvas()->SyncLayersVisibility( board );
+
+    if( !m_isFpEditor )
+        m_frame->GetCanvas()->SyncLayersVisibility( board );
+
     m_frame->GetCanvas()->Refresh();
 }
 
@@ -1545,9 +1641,8 @@ void APPEARANCE_CONTROLS::SetTabIndex( int aTab )
 
 void APPEARANCE_CONTROLS::syncColorsAndVisibility()
 {
-    BOARD*  board   = m_frame->GetBoard();
-    LSET    visible = board->GetVisibleLayers();
-    GAL_SET objects = board->GetVisibleElements();
+    LSET    visible = getVisibleLayers();
+    GAL_SET objects = getVisibleObjects();
 
     Freeze();
 
@@ -1594,11 +1689,8 @@ void APPEARANCE_CONTROLS::onLayerClick( wxMouseEvent& aEvent )
 
     PCB_LAYER_ID layer = ToLAYER_ID( eventSource->GetId() );
 
-    // TODO(JE)
-#ifdef NOTYET
-    if( m_fp_editor_mode && LSET::ForbiddenFootprintLayers().test( layer ) )
-        return false;
-#endif
+    if( m_isFpEditor && LSET::ForbiddenFootprintLayers().test( layer ) )
+        return;
 
     m_frame->SetActiveLayer( layer );
     passOnFocus();
@@ -1608,15 +1700,13 @@ void APPEARANCE_CONTROLS::onLayerClick( wxMouseEvent& aEvent )
 void APPEARANCE_CONTROLS::onLayerVisibilityChanged( PCB_LAYER_ID aLayer, bool isVisible,
                                                     bool isFinal )
 {
-    BOARD* board = m_frame->GetBoard();
-
-    LSET visibleLayers = board->GetVisibleLayers();
+    LSET visibleLayers = getVisibleLayers();
 
     if( visibleLayers.test( aLayer ) != isVisible )
     {
         visibleLayers.set( aLayer, isVisible );
 
-        board->SetVisibleLayers( visibleLayers );
+        setVisibleLayers( visibleLayers );
 
         m_frame->GetCanvas()->GetView()->SetLayerVisible( aLayer, isVisible );
     }
@@ -1631,8 +1721,7 @@ void APPEARANCE_CONTROLS::onLayerVisibilityChanged( PCB_LAYER_ID aLayer, bool is
 void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool isVisible,
                                                      bool isFinal )
 {
-    BOARD*  board   = m_frame->GetBoard();
-    GAL_SET visible = board->GetVisibleElements();
+    GAL_SET visible = getVisibleObjects();
 
     // Special-case controls
     switch( aLayer )
@@ -1667,7 +1756,7 @@ void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool i
     if( visible.Contains( aLayer ) != isVisible )
     {
         visible.set( aLayer, isVisible );
-        board->SetVisibleElements( visible );
+        setVisibleObjects( visible );
         m_frame->GetCanvas()->GetView()->SetLayerVisible( aLayer, isVisible );
         syncLayerPresetSelection();
     }
@@ -1682,10 +1771,9 @@ void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool i
 
 void APPEARANCE_CONTROLS::rebuildObjects()
 {
-    BOARD*          board   = m_frame->GetBoard();
     COLOR_SETTINGS* theme   = m_frame->GetColorSettings();
     COLOR4D         bgColor = theme->GetColor( LAYER_PCB_BACKGROUND );
-    GAL_SET         visible = board->GetVisibleElements();
+    GAL_SET         visible = getVisibleObjects();
     int             swatchWidth = m_windowObjects->ConvertDialogToPixels( wxSize( 8, 0 ) ).x;
     int             labelWidth = 0;
 
@@ -1800,11 +1888,8 @@ void APPEARANCE_CONTROLS::rebuildObjects()
 
     for( const APPEARANCE_SETTING& s_setting : s_objectSettings )
     {
-        // TODO(JE)
-#ifdef NOTYET
-        if( m_fp_editor_mode && !isAllowedInFpMode( setting.id ) )
+        if( m_isFpEditor && !s_allowedInFpEditor.count( s_setting.id ) )
             continue;
-#endif
 
         if( !s_setting.spacer )
         {
@@ -1842,8 +1927,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
 
 void APPEARANCE_CONTROLS::syncObjectSettings()
 {
-    BOARD*  board   = m_frame->GetBoard();
-    GAL_SET visible = board->GetVisibleElements();
+    GAL_SET visible = getVisibleObjects();
 
     const PCB_DISPLAY_OPTIONS& opts = m_frame->GetDisplayOptions();
 
@@ -2047,9 +2131,8 @@ void APPEARANCE_CONTROLS::rebuildLayerPresetsWidget()
 
 void APPEARANCE_CONTROLS::syncLayerPresetSelection()
 {
-    BOARD*  board          = m_frame->GetBoard();
-    LSET    visibleLayers  = board->GetVisibleLayers();
-    GAL_SET visibleObjects = board->GetVisibleElements();
+    LSET    visibleLayers  = getVisibleLayers();
+    GAL_SET visibleObjects = getVisibleObjects();
 
     auto it = std::find_if( m_layerPresets.begin(), m_layerPresets.end(),
                             [&]( const std::pair<const wxString, LAYER_PRESET>& aPair )
@@ -2086,8 +2169,6 @@ void APPEARANCE_CONTROLS::updateLayerPresetSelection( const wxString& aName )
 
 void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
 {
-    BOARD* board = m_frame->GetBoard();
-
     int count = m_cbLayerPresets->GetCount();
     int index = m_cbLayerPresets->GetSelection();
 
@@ -2126,8 +2207,8 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
         bool exists = m_layerPresets.count( name );
 
         if( !exists )
-            m_layerPresets[name] = LAYER_PRESET( name, board->GetVisibleLayers(),
-                                                 board->GetVisibleElements(), UNSELECTED_LAYER );
+            m_layerPresets[name] = LAYER_PRESET( name, getVisibleLayers(),
+                                                 getVisibleObjects(), UNSELECTED_LAYER );
 
         LAYER_PRESET* preset = &m_layerPresets[name];
         m_currentPreset      = preset;
@@ -2203,8 +2284,8 @@ void APPEARANCE_CONTROLS::doApplyLayerPreset( const LAYER_PRESET& aPreset )
 {
     BOARD* board = m_frame->GetBoard();
 
-    board->SetVisibleLayers( aPreset.layers );
-    board->SetVisibleElements( aPreset.renderLayers );
+    setVisibleLayers( aPreset.layers );
+    setVisibleObjects( aPreset.renderLayers );
 
     // If the preset doesn't have an explicit active layer to restore, we can at least
     // force the active layer to be something in the preset's layer set
@@ -2220,7 +2301,9 @@ void APPEARANCE_CONTROLS::doApplyLayerPreset( const LAYER_PRESET& aPreset )
     if( activeLayer != UNSELECTED_LAYER && boardLayers.Contains( activeLayer ) )
         m_frame->SetActiveLayer( activeLayer );
 
-    m_frame->GetCanvas()->SyncLayersVisibility( board );
+    if( !m_isFpEditor )
+        m_frame->GetCanvas()->SyncLayersVisibility( board );
+
     m_frame->GetCanvas()->Refresh();
 
     syncColorsAndVisibility();

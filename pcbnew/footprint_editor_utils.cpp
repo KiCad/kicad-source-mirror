@@ -39,7 +39,6 @@
 #include <kiway.h>
 #include <kiway_express.h>
 #include <pcb_layer_box_selector.h>
-#include <pcb_layer_widget.h>
 #include <pcbnew_id.h>
 #include <ratsnest/ratsnest_data.h>
 #include <pgm_base.h>
@@ -47,6 +46,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <trigo.h>
+#include <widgets/appearance_controls.h>
 #include <widgets/lib_tree.h>
 
 using namespace std::placeholders;
@@ -427,8 +427,7 @@ void FOOTPRINT_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 {
     PCB_BASE_FRAME::SetActiveLayer( aLayer );
 
-    m_Layers->SelectLayer( aLayer );
-    m_Layers->OnLayerSelected();
+    m_appearancePanel->OnLayerChanged();
 
     m_toolManager->RunAction( PCB_ACTIONS::layerChanged );  // notify other tools
     GetCanvas()->SetFocus();                             // allow capture of hotkeys

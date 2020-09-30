@@ -22,6 +22,7 @@
 #define KICAD_BOARD_PROJECT_SETTINGS_H
 
 #include <layers_id_colors_and_visibility.h>
+#include <settings/parameters.h>
 
 /**
  * This file contains data structures that are saved in the project file or project local settings
@@ -157,6 +158,20 @@ struct LAYER_PRESET
     {
         return aOther.layers == layers && aOther.renderLayers == renderLayers;
     }
+};
+
+
+class PARAM_LAYER_PRESET : public PARAM_LAMBDA<nlohmann::json>
+{
+public:
+    PARAM_LAYER_PRESET( const std::string& aPath, std::vector<LAYER_PRESET>* aPresetList );
+
+private:
+    nlohmann::json presetsToJson();
+
+    void jsonToPresets( const nlohmann::json& aJson );
+
+    std::vector<LAYER_PRESET>* m_presets;
 };
 
 #endif // KICAD_BOARD_PROJECT_SETTINGS_H
