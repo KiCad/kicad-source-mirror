@@ -726,18 +726,21 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         }
     }
 
-    EDA_RECT tightBox = closest->GetBoundingBox();
-    tightBox.Inflate( -tightBox.GetWidth() / 4, -tightBox.GetHeight() / 4 );
-
-    for( int i = collector.GetCount() - 1; i >= 0; --i )
+    if( closest ) // Don't try and get a tight bbox if nothing is near the mouse pointer
     {
-        EDA_ITEM* item = collector[ i ];
+        EDA_RECT tightBox = closest->GetBoundingBox();
+        tightBox.Inflate( -tightBox.GetWidth() / 4, -tightBox.GetHeight() / 4 );
 
-        if( item == closest )
-            continue;
+        for( int i = collector.GetCount() - 1; i >= 0; --i )
+        {
+            EDA_ITEM* item = collector[i];
 
-        if( !item->HitTest( tightBox, true ) )
-            collector.Transfer( item );
+            if( item == closest )
+                continue;
+
+            if( !item->HitTest( tightBox, true ) )
+                collector.Transfer( item );
+        }
     }
 }
 
