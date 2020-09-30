@@ -349,6 +349,13 @@ bool PANEL_SETUP_RULES::TransferDataToWindow()
 
     m_originalText = m_textEditor->GetText();
 
+    if( m_frame->Prj().IsNullProject() )
+    {
+        m_textEditor->ClearAll();
+        m_textEditor->AddText( _( "Design rules cannot be added without a project" ) );
+        m_textEditor->Disable();
+    }
+
     return true;
 }
 
@@ -356,6 +363,9 @@ bool PANEL_SETUP_RULES::TransferDataToWindow()
 bool PANEL_SETUP_RULES::TransferDataFromWindow()
 {
     if( m_originalText == m_textEditor->GetText() )
+        return true;
+
+    if( m_frame->Prj().IsNullProject() )
         return true;
 
     try

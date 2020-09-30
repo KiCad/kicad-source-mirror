@@ -251,6 +251,9 @@ bool PANEL_SETUP_LAYERS::TransferDataToWindow()
 {
     m_enabledLayers = m_pcb->GetEnabledLayers();
 
+    // Rescue may be enabled, but should not be shown in this dialog
+    m_enabledLayers.reset( Rescue );
+
     showCopperChoice( m_pcb->GetCopperLayerCount() );
     setCopperLayerCheckBoxes( m_pcb->GetCopperLayerCount() );
 

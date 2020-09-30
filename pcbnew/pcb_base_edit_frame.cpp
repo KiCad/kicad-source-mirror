@@ -143,6 +143,12 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
 
     GetCanvas()->GetGAL()->SetGridOrigin( VECTOR2D( aBoard->GetDesignSettings().m_GridOrigin ) );
 
+    if( new_board )
+    {
+        BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
+        bds.m_DRCEngine            = std::make_shared<DRC_ENGINE>( aBoard, &bds );
+    }
+
     // update the tool manager with the new board and its view.
     if( m_toolManager )
     {
@@ -153,12 +159,7 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
                                        GetCanvas()->GetViewControls(), config(), this );
 
         if( new_board )
-        {
-            BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
-            bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( aBoard, &bds );
-
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-        }
     }
 }
 
