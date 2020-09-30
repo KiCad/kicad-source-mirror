@@ -45,7 +45,6 @@ class DIALOG_UPDATE_FROM_PCB : public DIALOG_UPDATE_FROM_PCB_BASE
         bool UpdateFootprints;
         bool UpdateValues;
         bool UpdateNetNames;
-        bool IgnoreOtherProjectsErrors;
     };
 
     static DIALOG_UPDATE_FROM_PCB_SAVED_STATE s_savedDialogState;

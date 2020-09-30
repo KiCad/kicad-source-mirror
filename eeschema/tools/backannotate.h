@@ -81,7 +81,7 @@ public:
 
     BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
                    bool aProcessFootprints, bool aProcessValues, bool aProcessReferences,
-                   bool aProcessNetNames, bool aIgnoreOtherProjects, bool aDryRun );
+                   bool aProcessNetNames, bool aDryRun );
     ~BACK_ANNOTATE();
 
     /**
@@ -109,7 +109,6 @@ private:
     bool                         m_processValues;
     bool                         m_processReferences;
     bool                         m_processNetNames;
-    bool                         m_ignoreOtherProjects;
     bool                         m_dryRun;
 
     PCB_MODULES_MAP              m_pcbModules;

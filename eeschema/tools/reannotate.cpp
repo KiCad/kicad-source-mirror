@@ -67,7 +67,6 @@ void ReannotateFromPCBNew( SCH_EDIT_FRAME* aFrame, std::string& aNetlist )
                             false,       //aProcessValues
                             true,        //aProcessReferences
                             false,       //aProcessNetNames
-                            false,       //aIgnoreOtherProjects
                             false );     //aDryRun
 
     if( !backAnno.BackAnnotateSymbols( aNetlist ) )

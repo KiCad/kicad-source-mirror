@@ -30,7 +30,7 @@
 
 // Saved dialog settings
 DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB_SAVED_STATE
-        DIALOG_UPDATE_FROM_PCB::s_savedDialogState{ true, true, true, true, false, false };
+        DIALOG_UPDATE_FROM_PCB::s_savedDialogState{ true, true, true, true, false };
 
 DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
         : DIALOG_UPDATE_FROM_PCB_BASE( aParent ),
@@ -58,7 +58,6 @@ DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
     m_cbUpdateFootprints->SetValue( s_savedDialogState.UpdateFootprints );
     m_cbUpdateValues->SetValue( s_savedDialogState.UpdateValues );
     m_cbUpdateNetNames->SetValue( s_savedDialogState.UpdateNetNames );
-    m_cbIgnoreOtherProjects->SetValue( s_savedDialogState.IgnoreOtherProjectsErrors );
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.
@@ -81,7 +80,6 @@ void DIALOG_UPDATE_FROM_PCB::updateData()
                             m_cbUpdateValues->GetValue(),
                             m_cbUpdateReferences->GetValue(),
                             m_cbUpdateNetNames->GetValue(),
-                            m_cbIgnoreOtherProjects->GetValue(),
                             true );
     std::string   netlist;
 
@@ -130,8 +128,6 @@ void DIALOG_UPDATE_FROM_PCB::OnOptionChanged( wxCommandEvent& event )
         s_savedDialogState.UpdateValues = m_cbUpdateValues->GetValue();
     else if( event.GetEventObject() == m_cbUpdateNetNames )
         s_savedDialogState.UpdateNetNames = m_cbUpdateNetNames->GetValue();
-    else if( event.GetEventObject() == m_cbIgnoreOtherProjects )
-        s_savedDialogState.IgnoreOtherProjectsErrors = m_cbIgnoreOtherProjects->GetValue();
 }
 
 void DIALOG_UPDATE_FROM_PCB::OnUpdateClick( wxCommandEvent& event )
@@ -145,7 +141,6 @@ void DIALOG_UPDATE_FROM_PCB::OnUpdateClick( wxCommandEvent& event )
                             m_cbUpdateValues->GetValue(),
                             m_cbUpdateReferences->GetValue(),
                             m_cbUpdateNetNames->GetValue(),
-                            m_cbIgnoreOtherProjects->GetValue(),
                             false );
 
     if( backAnno.FetchNetlistFromPCB( netlist ) && backAnno.BackAnnotateSymbols( netlist ) )

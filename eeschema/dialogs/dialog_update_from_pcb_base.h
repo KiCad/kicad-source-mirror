@@ -36,7 +36,6 @@ class DIALOG_UPDATE_FROM_PCB_BASE : public DIALOG_SHIM
 
 	protected:
 		wxCheckBox* m_cbRelinkFootprints;
-		wxCheckBox* m_cbIgnoreOtherProjects;
 		wxCheckBox* m_cbUpdateReferences;
 		wxCheckBox* m_cbUpdateFootprints;
 		wxCheckBox* m_cbUpdateValues;

@@ -38,14 +38,13 @@
 BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
                               bool aProcessFootprints, bool aProcessValues,
                               bool aProcessReferences, bool aProcessNetNames,
-                              bool aIgnoreOtherProjects, bool aDryRun ) :
+                              bool aDryRun ) :
         m_reporter( aReporter ),
         m_matchByReference( aRelinkFootprints ),
         m_processFootprints( aProcessFootprints ),
         m_processValues( aProcessValues ),
         m_processReferences( aProcessReferences ),
         m_processNetNames( aProcessNetNames ),
-        m_ignoreOtherProjects( aIgnoreOtherProjects ),
         m_dryRun( aDryRun ),
         m_frame( aFrame ),
         m_changesCount( 0 ),
