@@ -420,7 +420,7 @@ std::vector<ACTION_PLUGIN*> PCB_EDIT_FRAME::GetOrderedActionPlugins()
         plugins.push_back( ACTION_PLUGINS::GetAction( i ) );
 
     // First add plugins that have entries in settings
-    for( const auto& pair : m_Settings->m_VisibleActionPlugins )
+    for( const auto& pair : m_settings->m_VisibleActionPlugins )
     {
         auto loc = std::find_if( plugins.begin(), plugins.end(),
                 [pair] ( ACTION_PLUGIN* plugin )
@@ -445,7 +445,7 @@ std::vector<ACTION_PLUGIN*> PCB_EDIT_FRAME::GetOrderedActionPlugins()
 
 bool PCB_EDIT_FRAME::GetActionPluginButtonVisible( const wxString& aPluginPath, bool aPluginDefault )
 {
-    auto& settings = m_Settings->m_VisibleActionPlugins;
+    auto& settings = m_settings->m_VisibleActionPlugins;
 
     for( const auto& entry : settings )
     {
