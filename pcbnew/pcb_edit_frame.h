@@ -52,7 +52,6 @@ class ZONE_CONTAINER;
 class DRAWSEGMENT;
 class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
-class PCB_LAYER_WIDGET;
 class SELECTION;
 class MARKER_PCB;
 class BOARD_ITEM;
@@ -79,7 +78,6 @@ namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
 class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 {
     friend struct PCB::IFACE;
-    friend class PCB_LAYER_WIDGET;
     friend class APPEARANCE_CONTROLS;
 
     /// The auxiliary right vertical tool bar used to access the microwave tools.
@@ -330,7 +328,6 @@ public:
     bool MicrowaveToolbarShown();
     void OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
-    void OnLayerColorChange( wxCommandEvent& aEvent );
 
     void RunEeschema();
 

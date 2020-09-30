@@ -297,14 +297,12 @@ set( PCBNEW_CLASS_SRCS
     grid_layer_box_helpers.cpp
     grid_layer_box_helpers.h
     initpcb.cpp
-    layer_widget.cpp
     load_select_footprint.cpp
     menubar_footprint_editor.cpp
     menubar_pcb_editor.cpp
     pad_naming.cpp
     pcb_base_edit_frame.cpp
     pcb_layer_box_selector.cpp
-    pcb_layer_widget.cpp
 #    pcb_draw_panel_gal.cpp
 #    pcb_view.cpp
     pcb_edit_frame.cpp

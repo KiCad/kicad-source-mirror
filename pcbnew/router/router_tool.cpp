@@ -29,7 +29,6 @@ using namespace std::placeholders;
 #include <class_pad.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
-#include <pcb_layer_widget.h>
 #include <dialogs/dialog_pns_settings.h>
 #include <dialogs/dialog_pns_diff_pair_dimensions.h>
 #include <dialogs/dialog_track_via_size.h>

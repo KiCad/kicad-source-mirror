@@ -2325,7 +2325,10 @@ void APPEARANCE_CONTROLS::OnColorSwatchChanged( wxCommandEvent& aEvent )
     view->UpdateLayerColor( layer );
     view->UpdateLayerColor( GetNetnameLayer( layer ) );
 
-    m_frame->ReCreateHToolbar();
+    // Update the bitmap of the layer box
+    if( m_frame->IsType( FRAME_PCB_EDITOR ) )
+        static_cast<PCB_EDIT_FRAME*>( m_frame )->ReCreateLayerBox( false );
+
     m_frame->GetCanvas()->Refresh();
 
     if( layer == LAYER_PCB_BACKGROUND )

@@ -32,7 +32,6 @@
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>
 #include <pcb_layer_box_selector.h>
-#include <pcb_layer_widget.h>
 #include <footprint_edit_frame.h>
 #include <dialog_plot.h>
 #include <dialog_edit_footprint_for_BoardEditor.h>
@@ -168,8 +167,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
                          PCB_EDIT_FRAME::OnUpdateSelectTrackWidth )
     EVT_UPDATE_UI_RANGE( ID_POPUP_PCB_SELECT_VIASIZE1, ID_POPUP_PCB_SELECT_VIASIZE8,
                          PCB_EDIT_FRAME::OnUpdateSelectViaSize )
-
-    EVT_COMMAND( wxID_ANY, LAYER_WIDGET::EVT_LAYER_COLOR_CHANGE, PCB_EDIT_FRAME::OnLayerColorChange )
 END_EVENT_TABLE()
 
 
@@ -1236,12 +1233,6 @@ void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable()
         wxMessageBox( wxT( "Error: unable to create the Python Console" ) );
 }
 #endif
-
-
-void PCB_EDIT_FRAME::OnLayerColorChange( wxCommandEvent& aEvent )
-{
-    ReCreateLayerBox();
-}
 
 
 void PCB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
