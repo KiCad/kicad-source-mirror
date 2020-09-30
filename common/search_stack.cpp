@@ -26,7 +26,6 @@
 #include <search_stack.h>
 #include <trace_helpers.h>
 #include <wx/tokenzr.h>
-#include <wx/log.h>
 
 #if defined(__MINGW32__)
  #define PATH_SEPS          wxT( ";\r\n" )

@@ -25,6 +25,7 @@
 #ifndef PCBNEW_H
 #define PCBNEW_H
 
+#include <fctsys.h>         // wxWidgets include.
 #include <convert_to_biu.h> // to define Mils2iu() conversion function
 
 // These are only here for algorithmic safety, not to tell the user what to do

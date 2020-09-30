@@ -631,7 +631,7 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
         if( !m_continuous )
         {
             bool first = true;
-            wxCoord ix = 0;
+            wxCoord ix;
             std::set<wxCoord> ys;
 
             while( GetNextXY( x, y ) )

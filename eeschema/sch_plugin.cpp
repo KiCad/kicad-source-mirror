@@ -23,7 +23,6 @@
 #include <properties.h>
 
 #include <sch_io_mgr.h>
-#include <wx/translation.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
 

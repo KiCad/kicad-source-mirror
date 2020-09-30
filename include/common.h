@@ -35,14 +35,13 @@
 #include <vector>
 #include <functional>
 
+#include <wx/wx.h>
 #include <wx/confbase.h>
 #include <wx/fileconf.h>
 #include <wx/dir.h>
-#include <wx/string.h>
-#include <wx/textctrl.h>
-#include <wx/gdicmn.h>
 
 #include <richio.h>
+#include <gal/color4d.h>
 
 #include <atomic>
 #include <limits>

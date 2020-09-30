@@ -31,13 +31,12 @@
 #ifndef MACROS_H
 #define MACROS_H
 
+#include <wx/wx.h>
 #include <deque>
 #include <vector>
 #include <map>
 #include <set>
 #include <memory>       // std::shared_ptr
-
-#include <wx/string.h>
 
 #if defined( __has_attribute )
     #define KI_HAS_ATTRIBUTE( x ) __has_attribute( x )

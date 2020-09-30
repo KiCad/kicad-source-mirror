@@ -32,6 +32,7 @@
 //  see http://www.boost.org/libs/ptr_container/doc/ptr_set.html
 #include <boost/ptr_container/ptr_set.hpp>
 
+#include <fctsys.h>
 #include <specctra_import_export/specctra_lexer.h>
 #include <pcbnew.h>
 
@@ -3934,7 +3935,7 @@ public:
 
     /**
      * Function FromBOARD
-     * adds the entire BOARD to the PCB but does not write it out.  Note that the BOARD given
+     * adds the entire BOARD to the PCB but does not write it out.  Note that the BOARD given 
      * to this function must have all the MODULEs on the component side of the BOARD.
      *
      * See PCB_EDIT_FRAME::ExportToSpecctra() for an example before calling this function.
@@ -3945,8 +3946,8 @@ public:
 
     /**
      * Function FromSESSION
-     * adds the entire SESSION info to a BOARD but does not write it out.  The BOARD given to
-     * this function will have all its tracks and via's replaced, and all its components are
+     * adds the entire SESSION info to a BOARD but does not write it out.  The BOARD given to 
+     * this function will have all its tracks and via's replaced, and all its components are 
      * subject to being moved.
      *
      * @param aBoard The BOARD to merge the SESSION information into.

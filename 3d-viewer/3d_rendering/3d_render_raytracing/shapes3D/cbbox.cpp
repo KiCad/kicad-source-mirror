@@ -30,7 +30,6 @@
 
 #include "cbbox.h"
 #include <cstdio>
-#include <wx/log.h>
 #include <wx/debug.h>   // For the wxASSERT
 
 

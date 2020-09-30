@@ -52,13 +52,13 @@ public:
     {
     }
 
-    virtual ~DRC_TEST_PROVIDER_MATCHED_LENGTH()
+    virtual ~DRC_TEST_PROVIDER_MATCHED_LENGTH() 
     {
     }
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override
+    virtual const wxString GetName() const override 
     {
         return "length";
     };
@@ -109,8 +109,7 @@ void test::DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengthViolations(
     {
         bool minViolation = false;
         bool maxViolation = false;
-        int  minLen = 0;
-        int  maxLen = 0;
+        int  minLen, maxLen;
 
         if( aConstraint.GetValue().HasMin() && ent.total < aConstraint.GetValue().Min() )
         {

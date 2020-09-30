@@ -22,9 +22,9 @@
 #ifndef PROPERTY_H
 #define PROPERTY_H
 
+#include <wx/wx.h>
 #include <wx/any.h>
 #include <wx/string.h>
-#include <wx/bitmap.h>
 #include <wx/propgrid/property.h>
 
 #include <functional>

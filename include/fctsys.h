@@ -26,6 +26,14 @@
 #define FCTSYS_H_
 
 #include <wx/wx.h>
+
+#ifdef DEBUG
+#define DBG(x)        x
+#else
+#define DBG(x)        // nothing
+#endif
+
+
 #include <config.h>
 
 #endif // FCTSYS_H__

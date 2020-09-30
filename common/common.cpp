@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <fctsys.h>
 #include <eda_base_frame.h>
 #include <project.h>
 #include <common.h>
@@ -37,6 +38,8 @@
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/functional/hash.hpp>
+
+using KIGFX::COLOR4D;
 
 
 // Create only once, as seeding is *very* expensive

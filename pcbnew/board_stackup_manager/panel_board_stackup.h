@@ -26,6 +26,7 @@
 #define PANEL_SETUP_BOARD_STACKUP_H
 
 
+#include <fctsys.h>
 #include <pcbnew.h>
 #include <class_board.h>
 #include <widgets/unit_binder.h>

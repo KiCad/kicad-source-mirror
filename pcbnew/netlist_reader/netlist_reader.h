@@ -32,6 +32,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
+#include <fctsys.h>
 #include <macros.h>
 #include <lib_id.h>
 
