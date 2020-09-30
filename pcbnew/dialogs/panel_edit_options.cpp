@@ -63,7 +63,6 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
     {
         /* Set display options */
         m_OptDisplayCurvedRatsnestLines->SetValue( displ_opts.m_DisplayRatsnestLinesCurved );
-        m_showGlobalRatsnest->SetValue( displ_opts.m_ShowGlobalRatsnest );
         m_showSelectedRatsnest->SetValue( displ_opts.m_ShowModuleRatsnest );
 
         m_magneticPadChoice->SetSelection( static_cast<int>( general_opts.m_MagneticItems.pads ) );
@@ -107,7 +106,6 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         PCBNEW_SETTINGS& pcbnewSettings = m_Frame->Settings();
 
         displ_opts.m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
-        displ_opts.m_ShowGlobalRatsnest = m_showGlobalRatsnest->GetValue();
         displ_opts.m_ShowModuleRatsnest = m_showSelectedRatsnest->GetValue();
 
         m_Frame->Settings().m_MagneticItems.pads =

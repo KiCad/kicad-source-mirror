@@ -57,7 +57,6 @@ class PANEL_EDIT_OPTIONS_BASE : public wxPanel
 		wxChoice* m_magneticTrackChoice;
 		wxStaticText* m_staticText211;
 		wxChoice* m_magneticGraphicsChoice;
-		wxCheckBox* m_showGlobalRatsnest;
 		wxCheckBox* m_showSelectedRatsnest;
 		wxCheckBox* m_OptDisplayCurvedRatsnestLines;
 		wxCheckBox* m_Show_Page_Limits;

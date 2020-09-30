@@ -142,9 +142,6 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Ratsnest") ), wxVERTICAL );
 
-	m_showGlobalRatsnest = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Show ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer3->Add( m_showGlobalRatsnest, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
 	m_showSelectedRatsnest = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Always show selected ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer3->Add( m_showSelectedRatsnest, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
