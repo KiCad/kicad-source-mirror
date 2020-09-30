@@ -37,8 +37,6 @@ PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAM
         m_frame( aFrame ),
         m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
         m_lineWidth( aFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
-        m_busWidth( aFrame, m_busWidthLabel, m_busWidthCtrl, m_busWidthUnits, true ),
-        m_wireWidth( aFrame, m_wireWidthLabel, m_wireWidthCtrl, m_wireWidthUnits, true ),
         m_pinSymbolSize( aFrame, m_pinSymbolSizeLabel, m_pinSymbolSizeCtrl, m_pinSymbolSizeUnits, true ),
         m_junctionSize( aFrame, m_jctSizeLabel, m_jctSizeCtrl, m_jctSizeUnits, true )
 {
@@ -65,15 +63,11 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
 
     m_textSize.SetUnits( EDA_UNITS::INCHES, true );
     m_lineWidth.SetUnits( EDA_UNITS::INCHES, true );
-    m_busWidth.SetUnits( EDA_UNITS::INCHES, true );
-    m_wireWidth.SetUnits( EDA_UNITS::INCHES, true );
     m_pinSymbolSize.SetUnits( EDA_UNITS::INCHES, true );
     m_junctionSize.SetUnits( EDA_UNITS::INCHES, true );
 
     m_textSize.SetValue( settings.m_DefaultTextSize );
     m_lineWidth.SetValue( settings.m_DefaultLineWidth );
-    m_busWidth.SetValue( settings.m_DefaultBusThickness );
-    m_wireWidth.SetValue( settings.m_DefaultWireThickness );
     m_pinSymbolSize.SetValue( settings.m_PinSymbolSize );
     m_junctionSize.SetValue( settings.m_JunctionSize );
 
@@ -111,8 +105,6 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
 
     settings.m_DefaultTextSize = (int) m_textSize.GetValue();
     settings.m_DefaultLineWidth = (int) m_lineWidth.GetValue();
-    settings.m_DefaultWireThickness = (int) m_wireWidth.GetValue();
-    settings.m_DefaultBusThickness = (int) m_busWidth.GetValue();
     settings.m_PinSymbolSize = (int) m_pinSymbolSize.GetValue();
     settings.m_JunctionSize = (int) m_junctionSize.GetValue();
 
@@ -122,8 +114,6 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     settings.m_TextOffsetRatio = dtmp / 100.0;
 
     m_frame->GetRenderSettings()->SetDefaultPenWidth( settings.m_DefaultLineWidth );
-    m_frame->GetRenderSettings()->m_DefaultWireThickness = settings.m_DefaultWireThickness;
-    m_frame->GetRenderSettings()->m_DefaultBusThickness  = settings.m_DefaultBusThickness;
     m_frame->GetRenderSettings()->m_TextOffsetRatio      = settings.m_TextOffsetRatio;
     m_frame->GetRenderSettings()->m_PinSymbolSize        = settings.m_PinSymbolSize;
     m_frame->GetRenderSettings()->m_JunctionSize         = settings.m_JunctionSize;
@@ -140,8 +130,6 @@ void PANEL_SETUP_FORMATTING::ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings )
 {
     m_textSize.SetValue( aSettings.m_DefaultTextSize );
     m_lineWidth.SetValue( aSettings.m_DefaultLineWidth );
-    m_busWidth.SetValue( aSettings.m_DefaultBusThickness );
-    m_wireWidth.SetValue( aSettings.m_DefaultWireThickness );
     m_pinSymbolSize.SetValue( aSettings.m_PinSymbolSize );
     m_junctionSize.SetValue( aSettings.m_JunctionSize );
 

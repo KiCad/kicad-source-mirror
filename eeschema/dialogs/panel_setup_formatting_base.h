@@ -46,12 +46,6 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* m_pinSymbolSizeLabel;
 		wxTextCtrl* m_pinSymbolSizeCtrl;
 		wxStaticText* m_pinSymbolSizeUnits;
-		wxStaticText* m_busWidthLabel;
-		wxTextCtrl* m_busWidthCtrl;
-		wxStaticText* m_busWidthUnits;
-		wxStaticText* m_wireWidthLabel;
-		wxTextCtrl* m_wireWidthCtrl;
-		wxStaticText* m_wireWidthUnits;
 		wxStaticText* m_jctSizeLabel;
 		wxTextCtrl* m_jctSizeCtrl;
 		wxStaticText* m_jctSizeUnits;
