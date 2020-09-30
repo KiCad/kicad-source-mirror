@@ -59,13 +59,6 @@ public:
     int PlacePad( const TOOL_EVENT& aEvent );
 
     /**
-     * Function CreatePadFromShapes()
-     *
-     * Creates a custom-shaped pad from a set of selected graphical shapes
-     */
-    int CreatePadFromShapes( const TOOL_EVENT& aEvent );
-
-    /**
      * Enters/exits WYSIWYG pad shape editing
      */
     int EditPad( const TOOL_EVENT& aEvent );
@@ -76,9 +69,6 @@ public:
 private:
     ///> Bind handlers to corresponding TOOL_ACTIONs
     void setTransitions() override;
-
-    ///> Determine if there are any footprints on the board
-    bool haveFootprints();
 
     ///> Apply pad settings from board design settings to a pad
     int pastePadProperties( const TOOL_EVENT& aEvent );

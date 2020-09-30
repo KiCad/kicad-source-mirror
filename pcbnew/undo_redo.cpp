@@ -554,7 +554,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         case UNDO_REDO::FLIPPED:
         {
             BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
-            item->Flip( aList->m_TransformPoint, m_Settings->m_FlipLeftRight );
+            item->Flip( aList->m_TransformPoint, m_settings->m_FlipLeftRight );
             view->Update( item, KIGFX::LAYERS );
             connectivity->Update( item );
             item->GetBoard()->OnItemChanged( item );

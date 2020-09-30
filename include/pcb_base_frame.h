@@ -75,13 +75,10 @@ wxDECLARE_EVENT( BOARD_CHANGED, wxCommandEvent );
 class PCB_BASE_FRAME : public EDA_DRAW_FRAME
 {
 protected:
-    BOARD*                  m_Pcb;
-
-    PCB_DISPLAY_OPTIONS     m_DisplayOptions;
-
-    PCB_ORIGIN_TRANSFORMS   m_OriginTransforms;
-
-    PCBNEW_SETTINGS*        m_Settings; // No ownership, just a shortcut
+    BOARD*                  m_pcb;
+    PCB_DISPLAY_OPTIONS     m_displayOptions;
+    PCB_ORIGIN_TRANSFORMS   m_originTransforms;
+    PCBNEW_SETTINGS*        m_settings; // No ownership, just a shortcut
 
     virtual void unitsChangeRefresh() override;
 
@@ -155,7 +152,7 @@ public:
         * Calling "GetBoardBoundingBox(true)" when edge cuts are turned off will return bbox of
         * entire page and border, so we make sure to do "GetBoardBoundingBox(false)" instead.
         */
-        if( aIncludeAllVisible || ( !aIncludeAllVisible && !m_Pcb->IsLayerVisible( Edge_Cuts ) ) )
+        if( aIncludeAllVisible || ( !aIncludeAllVisible && !m_pcb->IsLayerVisible( Edge_Cuts ) ) )
             return GetBoardBoundingBox( false );
         else
             return GetBoardBoundingBox( true );
@@ -196,7 +193,7 @@ public:
         return nullptr;
     }
 
-    PCBNEW_SETTINGS& Settings() { return *m_Settings; }
+    PCBNEW_SETTINGS& Settings() { return *m_settings; }
 
     void SetDrawBgColor( COLOR4D aColor ) override;
 
@@ -205,7 +202,7 @@ public:
      * Display options control the way tracks, vias, outlines and other things are shown
      * (for instance solid or sketch mode)
      */
-    const PCB_DISPLAY_OPTIONS& GetDisplayOptions() const { return m_DisplayOptions; }
+    const PCB_DISPLAY_OPTIONS& GetDisplayOptions() const { return m_displayOptions; }
     void SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions );
 
     const ZONE_SETTINGS& GetZoneSettings() const;
@@ -229,8 +226,8 @@ public:
 
     BOARD* GetBoard() const
     {
-        wxASSERT( m_Pcb );
-        return m_Pcb;
+        wxASSERT( m_pcb );
+        return m_pcb;
     }
 
     /**

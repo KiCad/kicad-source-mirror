@@ -137,14 +137,6 @@ bool PCB_LAYER_WIDGET::isAllowedInFpMode( int aId )
 }
 
 
-bool PCB_LAYER_WIDGET::isLayerAllowedInFpMode( PCB_LAYER_ID aLayer )
-{
-    static LSET allowed = LSET::AllTechMask();
-    allowed.set( F_Cu ).set( B_Cu );
-    return allowed.test( aLayer );
-}
-
-
 void PCB_LAYER_WIDGET::AddRightClickMenuItems( wxMenu& menu )
 {
     AddMenuItem( &menu, ID_SHOW_ALL_COPPER_LAYERS,

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2020 Reece R. Pollack <reece@his.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,23 +36,18 @@ public:
 
     virtual ~PCB_ORIGIN_TRANSFORMS() override;
 
-
     using ORIGIN_TRANSFORMS::ToDisplay;
 
-    virtual long long int ToDisplay( long long int aValue,
-                                     COORD_TYPES_T aCoordType ) override;
+    virtual long long int ToDisplay( long long int aValue, COORD_TYPES_T aCoordType ) override;
 
-    virtual double ToDisplay( double        aValue,
-                              COORD_TYPES_T aCoordType ) override;
+    virtual double ToDisplay( double aValue, COORD_TYPES_T aCoordType ) override;
 
 
     using ORIGIN_TRANSFORMS::FromDisplay;
 
-    virtual long long int FromDisplay( long long int aValue,
-                                       COORD_TYPES_T aCoordType ) override;
+    virtual long long int FromDisplay( long long int aValue, COORD_TYPES_T aCoordType ) override;
 
-    virtual double FromDisplay( double        aValue,
-                                COORD_TYPES_T aCoordType ) override;
+    virtual double FromDisplay( double aValue, COORD_TYPES_T aCoordType ) override;
 
 
     /**
@@ -161,7 +156,6 @@ public:
         return displayValue;
     }
 
-
     template<typename T>
     T FromDisplayAbs( T aDisplayValue ) const
     {
@@ -172,7 +166,6 @@ public:
 
         return internalValue;
     }
-
 
     template<typename T>
     T ToDisplayRel( T aInternalValue ) const
@@ -185,7 +178,6 @@ public:
         return displayValue;
     }
 
-
     template<typename T>
     T FromDisplayRel( T aDisplayValue ) const
     {
@@ -197,15 +189,14 @@ public:
         return internalValue;
     }
 
+protected:
+    int GetUserXOrigin() const;
+    int GetUserYOrigin() const;
 
 protected:
     const PCB_BASE_FRAME& m_pcbBaseFrame;
     const bool&           m_invertXAxis;
     const bool&           m_invertYAxis;
-
-    int GetUserXOrigin() const;
-    int GetUserYOrigin() const;
-
 };
 
 #endif // PCB_ORIGIN_TRANSFORMS_H_

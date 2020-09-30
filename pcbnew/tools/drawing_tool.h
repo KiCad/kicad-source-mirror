@@ -224,17 +224,17 @@ private:
     ///> Returns the appropriate width for a segment depending on the settings.
     int getSegmentWidth( PCB_LAYER_ID aLayer ) const;
 
-    KIGFX::VIEW* m_view;
-    KIGFX::VIEW_CONTROLS* m_controls;
-    BOARD* m_board;
-    PCB_BASE_EDIT_FRAME* m_frame;
-    MODE m_mode;
+    KIGFX::VIEW*              m_view;
+    KIGFX::VIEW_CONTROLS*     m_controls;
+    BOARD*                    m_board;
+    PCB_BASE_EDIT_FRAME*      m_frame;
+    MODE                      m_mode;
 
-    unsigned int m_lineWidth;               // Current line width for multi-segment drawing
-    static const unsigned int WIDTH_STEP;   // Amount of width change with one -/+ key press
+    unsigned int              m_lineWidth;         // Current line width for multi-segment drawing
+    static const unsigned int WIDTH_STEP;          // Amount of width change for one -/+ key press
 
-    // give internal access to drawing helper classes
-    friend class ZONE_CREATE_HELPER;
+
+    friend class              ZONE_CREATE_HELPER;  // give internal access to helper classes
 };
 
 #endif /* __DRAWING_TOOL_H */

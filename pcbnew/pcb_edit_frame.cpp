@@ -410,8 +410,8 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 
 void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 {
-    if( m_Pcb )
-        m_Pcb->ClearProject();
+    if( m_pcb )
+        m_pcb->ClearProject();
 
     PCB_BASE_EDIT_FRAME::SetBoard( aBoard );
 
@@ -425,7 +425,7 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 
 BOARD_ITEM_CONTAINER* PCB_EDIT_FRAME::GetModel() const
 {
-    return m_Pcb;
+    return m_pcb;
 }
 
 
@@ -435,8 +435,8 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 
     // Prepare worksheet template
     KIGFX::WS_PROXY_VIEW_ITEM* worksheet;
-    worksheet = new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS ,&m_Pcb->GetPageSettings(),
-                                               m_Pcb->GetProject(), &m_Pcb->GetTitleBlock() );
+    worksheet = new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS, &m_pcb->GetPageSettings(),
+                                               m_pcb->GetProject(), &m_pcb->GetTitleBlock() );
     worksheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
 
     BASE_SCREEN* screen = GetScreen();
@@ -480,7 +480,7 @@ void PCB_EDIT_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( m_Pcb, GetCanvas()->GetView(),
+    m_toolManager->SetEnvironment( m_pcb, GetCanvas()->GetView(),
                                    GetCanvas()->GetViewControls(), config(), this );
     m_actions = new PCB_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
@@ -1036,7 +1036,7 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     ReCreateLayerBox();
 
     // Sync layer and item visibility
-    GetCanvas()->SyncLayersVisibility( m_Pcb );
+    GetCanvas()->SyncLayersVisibility( m_pcb );
 
     SetElementVisibility( LAYER_RATSNEST, GetDisplayOptions().m_ShowGlobalRatsnest );
 

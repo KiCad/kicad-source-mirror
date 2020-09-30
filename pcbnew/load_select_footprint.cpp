@@ -497,7 +497,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, bool aRecreateRatsnest )
     s_ModuleInitialCopy = NULL;
 
     if( aRecreateRatsnest )
-        m_Pcb->GetConnectivity()->Update( aModule );
+        m_pcb->GetConnectivity()->Update( aModule );
 
     if( aRecreateRatsnest )
         Compile_Ratsnest( true );

@@ -57,11 +57,8 @@ public:
     void setTransitions() override;
 
 private:
-    DIALOG_GROUP_PROPERTIES* m_propertiesDialog;
-
-    ///> Selection tool used for obtaining selected items
-    SELECTION_TOOL*  m_selectionTool;
-
+    DIALOG_GROUP_PROPERTIES*      m_propertiesDialog;
+    SELECTION_TOOL*               m_selectionTool;
     std::unique_ptr<BOARD_COMMIT> m_commit;
 };
 

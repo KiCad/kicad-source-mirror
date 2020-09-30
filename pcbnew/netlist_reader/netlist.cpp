@@ -160,9 +160,9 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
         // Check if component footprint is already on BOARD and only load the footprint from
         // the library if it's needed.  Nickname can be blank.
         if( aNetlist.IsFindByTimeStamp() )
-            fpOnBoard = m_Pcb->FindModuleByPath( aNetlist.GetComponent( ii )->GetPath() );
+            fpOnBoard = m_pcb->FindModuleByPath( aNetlist.GetComponent( ii )->GetPath() );
         else
-            fpOnBoard = m_Pcb->FindModuleByReference( aNetlist.GetComponent( ii )->GetReference() );
+            fpOnBoard = m_pcb->FindModuleByReference( aNetlist.GetComponent( ii )->GetReference() );
 
         bool footprintMisMatch = fpOnBoard && fpOnBoard->GetFPID() != component->GetFPID();
 

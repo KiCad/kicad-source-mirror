@@ -88,11 +88,9 @@ private:
      */
     static SHAPE_POLY_SET makePolysFromRects( const std::deque<EDA_ITEM*>& aItems );
 
-    SELECTION_TOOL* m_selectionTool;
-
+    SELECTION_TOOL*   m_selectionTool;
     CONDITIONAL_MENU* m_menu;
-
-    PCB_BASE_FRAME* m_frame;
+    PCB_BASE_FRAME*   m_frame;
 };
 
 #endif

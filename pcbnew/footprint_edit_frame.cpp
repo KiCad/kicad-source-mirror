@@ -135,7 +135,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     SetCanvas( drawPanel );
     SetBoard( new BOARD() );
 
-
     // In modedit, the default net clearance is not known (it depends on the actual board).
     // So we do not show the default clearance, by setting it to 0.
     // The footprint or pad specific clearance will be shown.
@@ -201,23 +200,22 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_auimgr.SetFlags( wxAUI_MGR_DEFAULT | wxAUI_MGR_LIVE_RESIZE );
 
     // Horizontal items; layers 4 - 6
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
-    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer( 6 ) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer( 6 ) );
     m_auimgr.AddPane( m_infoBar,
                       EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
 
     // Vertical items; layers 1 - 3
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer( 3 ) );
     m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "Footprints" ).Left().Layer(2)
                       .Caption( _( "Libraries" ) ).MinSize( 250, 400 )
                       .BestSize( m_defaultLibWidth, -1 ) );
 
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(2) );
 
-    m_auimgr.AddPane( m_appearancePanel,
-                      EDA_PANE().Name( "LayersManager" ).Right().Layer( 3 )
-                              .Caption( _( "Appearance" ) ).PaneBorder( false )
-                              .MinSize( 180, -1 ).BestSize( 180, -1 ) );
+    m_auimgr.AddPane( m_appearancePanel, EDA_PANE().Name( "LayersManager" ).Right().Layer( 3 )
+                      .Caption( _( "Appearance" ) ).PaneBorder( false )
+                      .MinSize( 180, -1 ).BestSize( 180, -1 ) );
     m_auimgr.AddPane( m_selectionFilterPanel,
                       EDA_PANE().Palette().Name( "SelectionFilter" ).Right().Layer( 3 )
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false ).Position( 2 )
@@ -465,7 +463,7 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     GetDesignSettings() = cfg->m_DesignSettings;
 
-    m_DisplayOptions  = cfg->m_Display;
+    m_displayOptions  = cfg->m_Display;
     m_defaultLibWidth = cfg->m_LibWidth;
     m_selectionFilterPanel->SetCheckboxesFromFilter( cfg->m_SelectionFilter );
 }
@@ -479,7 +477,7 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     PCB_BASE_FRAME::SaveSettings( cfg );
 
     cfg->m_DesignSettings    = GetDesignSettings();
-    cfg->m_Display           = m_DisplayOptions;
+    cfg->m_Display           = m_displayOptions;
     cfg->m_LibWidth          = m_treePane->GetSize().x;
     cfg->m_SelectionFilter   = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();
     cfg->m_LayerPresets      = m_appearancePanel->GetUserLayerPresets();

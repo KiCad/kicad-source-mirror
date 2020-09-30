@@ -122,13 +122,13 @@ void PCB_BASE_EDIT_FRAME::ActivateGalCanvas()
 {
     PCB_BASE_FRAME::ActivateGalCanvas();
 
-    GetCanvas()->SyncLayersVisibility( m_Pcb );
+    GetCanvas()->SyncLayersVisibility( m_pcb );
 }
 
 
 void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
 {
-    bool new_board = ( aBoard != m_Pcb );
+    bool new_board = ( aBoard != m_pcb );
 
     if( new_board )
     {

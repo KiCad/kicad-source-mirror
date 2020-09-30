@@ -155,28 +155,12 @@ protected:
     bool isAllowedInFpMode( int aId );
 
     /**
-     * Function isLayerAllowedInFpMode
-     *
-     * User layers, which are not paired, are not shown in layers manager.  However a not
-     * listed layer can be reachable in the graphic item properties dialog.
-     *
-     * @param aLayer is the layer id to test
-     * @return true if PCB_LAYER_ID aLayer has meaning in footprint editor mode.
-     * and therefore is shown in render panel
-     */
-    bool isLayerAllowedInFpMode( PCB_LAYER_ID aLayer );
-
-    /**
      * Function OnRightDownLayers
      * puts up a popup menu for the layer panel.
      */
     void onRightDownLayers( wxMouseEvent& event );
 
     void onPopupSelection( wxCommandEvent& event );
-
-    /// this is for the popup menu, the right click handler has to be installed
-    /// on every child control within the layer panel.
-    void installRightLayerClickHandler();
 };
 
 #endif  // PCB_LAYER_WIDGET_H

@@ -495,7 +495,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aExisting, MODULE* aNew, BOARD_COM
     aNew->SetPosition( aExisting->GetPosition() );
 
     if( aNew->GetLayer() != aExisting->GetLayer() )
-        aNew->Flip( aNew->GetPosition(), m_Settings->m_FlipLeftRight );
+        aNew->Flip( aNew->GetPosition(), m_settings->m_FlipLeftRight );
 
     if( aNew->GetOrientation() != aExisting->GetOrientation() )
         aNew->SetOrientation( aExisting->GetOrientation() );

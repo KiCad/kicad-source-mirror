@@ -232,7 +232,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
         GetBoard()->Add( loadFootprint( id ) );
     }
 
-    drawPanel->DisplayBoard( m_Pcb );
+    drawPanel->DisplayBoard( m_pcb );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -762,7 +762,7 @@ void FOOTPRINT_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     // Fetch display and grid settings from Footprint Editor
     auto fpedit = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
-    m_DisplayOptions = fpedit->m_Display;
+    m_displayOptions = fpedit->m_Display;
     GetGalDisplayOptions().ReadWindowSettings( fpedit->m_Window );
 }
 

@@ -56,13 +56,13 @@
 wxDEFINE_EVENT( BOARD_CHANGED, wxCommandEvent );
 
 PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
-        const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
-        long aStyle, const wxString & aFrameName ) :
-    EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
-    m_Pcb( nullptr ),
-    m_OriginTransforms( *this )
+                                const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
+                                long aStyle, const wxString & aFrameName ) :
+        EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
+        m_pcb( nullptr ),
+        m_originTransforms( *this )
 {
-    m_Settings = static_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
+    m_settings = static_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 }
 
 
@@ -71,7 +71,7 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
     // Ensure m_canvasType is up to date, to save it in config
     m_canvasType = GetCanvas()->GetBackend();
 
-    delete m_Pcb;
+    delete m_pcb;
 }
 
 
@@ -144,10 +144,10 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs()
 
 void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 {
-    if( m_Pcb != aBoard )
+    if( m_pcb != aBoard )
     {
-        delete m_Pcb;
-        m_Pcb = aBoard;
+        delete m_pcb;
+        m_pcb = aBoard;
 
         wxCommandEvent e( BOARD_CHANGED );
         ProcessEventLocally( e );
@@ -167,7 +167,7 @@ void PCB_BASE_FRAME::AddModuleToBoard( MODULE* module )
         // Put it on FRONT layer (note that it might be stored flipped if the lib is an archive
         // built from a board)
         if( module->IsFlipped() )
-            module->Flip( module->GetPosition(), m_Settings->m_FlipLeftRight );
+            module->Flip( module->GetPosition(), m_settings->m_FlipLeftRight );
 
         // Place it in orientation 0 even if it is not saved with orientation 0 in lib (note that
         // it might be stored in another orientation if the lib is an archive built from a board)
@@ -241,8 +241,7 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
 
 void PCB_BASE_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
-    wxASSERT( m_Pcb );
-    m_Pcb->SetPageSettings( aPageSettings );
+    m_pcb->SetPageSettings( aPageSettings );
 
     if( GetScreen() )
         GetScreen()->InitDataPoints( aPageSettings.GetSizeIU() );
@@ -251,40 +250,34 @@ void PCB_BASE_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 
 const PAGE_INFO& PCB_BASE_FRAME::GetPageSettings() const
 {
-    wxASSERT( m_Pcb );
-    return m_Pcb->GetPageSettings();
+    return m_pcb->GetPageSettings();
 }
 
 
 const wxSize PCB_BASE_FRAME::GetPageSizeIU() const
 {
-    wxASSERT( m_Pcb );
-
     // this function is only needed because EDA_DRAW_FRAME is not compiled
     // with either -DPCBNEW or -DEESCHEMA, so the virtual is used to route
     // into an application specific source file.
-    return m_Pcb->GetPageSettings().GetSizeIU();
+    return m_pcb->GetPageSettings().GetSizeIU();
 }
 
 
 const wxPoint& PCB_BASE_FRAME::GetGridOrigin() const
 {
-    wxASSERT( m_Pcb );
-    return m_Pcb->GetDesignSettings().m_GridOrigin;
+    return m_pcb->GetDesignSettings().m_GridOrigin;
 }
 
 
 void PCB_BASE_FRAME::SetGridOrigin( const wxPoint& aPoint )
 {
-    wxASSERT( m_Pcb );
-    m_Pcb->GetDesignSettings().m_GridOrigin = aPoint;
+    m_pcb->GetDesignSettings().m_GridOrigin = aPoint;
 }
 
 
 const wxPoint& PCB_BASE_FRAME::GetAuxOrigin() const
 {
-    wxASSERT( m_Pcb );
-    return m_Pcb->GetDesignSettings().m_AuxOrigin;
+    return m_pcb->GetDesignSettings().m_AuxOrigin;
 }
 
 
@@ -295,18 +288,10 @@ const wxPoint PCB_BASE_FRAME::GetUserOrigin() const
 
     switch( displ_opts.m_DisplayOrigin )
     {
-    case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_PAGE:
-        // No-op
-        break;
-    case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_AUX:
-        origin = GetAuxOrigin();
-        break;
-    case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_GRID:
-        origin = GetGridOrigin();
-        break;
-    default:
-        wxASSERT( false );
-        break;
+    case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_PAGE:                           break;
+    case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_AUX:  origin = GetAuxOrigin();  break;
+    case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_GRID: origin = GetGridOrigin(); break;
+    default:                                   wxASSERT( false );        break;
     }
 
     return origin;
@@ -314,28 +299,25 @@ const wxPoint PCB_BASE_FRAME::GetUserOrigin() const
 
 ORIGIN_TRANSFORMS& PCB_BASE_FRAME::GetOriginTransforms()
 {
-    return m_OriginTransforms;
+    return m_originTransforms;
 }
 
 
 const TITLE_BLOCK& PCB_BASE_FRAME::GetTitleBlock() const
 {
-    wxASSERT( m_Pcb );
-    return m_Pcb->GetTitleBlock();
+    return m_pcb->GetTitleBlock();
 }
 
 
 void PCB_BASE_FRAME::SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
 {
-    wxASSERT( m_Pcb );
-    m_Pcb->SetTitleBlock( aTitleBlock );
+    m_pcb->SetTitleBlock( aTitleBlock );
 }
 
 
 BOARD_DESIGN_SETTINGS& PCB_BASE_FRAME::GetDesignSettings() const
 {
-    wxASSERT( m_Pcb );
-    return m_Pcb->GetDesignSettings();
+    return m_pcb->GetDesignSettings();
 }
 
 
@@ -348,37 +330,31 @@ void PCB_BASE_FRAME::SetDrawBgColor( COLOR4D aColor )
 
 const ZONE_SETTINGS& PCB_BASE_FRAME::GetZoneSettings() const
 {
-    wxASSERT( m_Pcb );
-    return m_Pcb->GetDesignSettings().GetDefaultZoneSettings();
+    return m_pcb->GetDesignSettings().GetDefaultZoneSettings();
 }
 
 
 void PCB_BASE_FRAME::SetZoneSettings( const ZONE_SETTINGS& aSettings )
 {
-    wxASSERT( m_Pcb );
-    m_Pcb->GetDesignSettings().SetDefaultZoneSettings( aSettings );
+    m_pcb->GetDesignSettings().SetDefaultZoneSettings( aSettings );
 }
 
 
 const PCB_PLOT_PARAMS& PCB_BASE_FRAME::GetPlotSettings() const
 {
-    wxASSERT( m_Pcb );
-    return m_Pcb->GetPlotOptions();
+    return m_pcb->GetPlotOptions();
 }
 
 
 void PCB_BASE_FRAME::SetPlotSettings( const PCB_PLOT_PARAMS& aSettings )
 {
-    wxASSERT( m_Pcb );
-    m_Pcb->SetPlotOptions( aSettings );
+    m_pcb->SetPlotOptions( aSettings );
 }
 
 
 EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 {
-    wxASSERT( m_Pcb );
-
-    EDA_RECT area = aBoardEdgesOnly ? m_Pcb->GetBoardEdgesBoundingBox() : m_Pcb->GetBoundingBox();
+    EDA_RECT area = aBoardEdgesOnly ? m_pcb->GetBoardEdgesBoundingBox() : m_pcb->GetBoundingBox();
 
     if( area.GetWidth() == 0 && area.GetHeight() == 0 )
     {
@@ -458,7 +434,7 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
     {
         // If only one copper layer is enabled, the only such layer that can be selected to
         // is the "Copper" layer (so the selection of any other copper layer is disregarded).
-        if( m_Pcb->GetCopperLayerCount() < 2 )
+        if( m_pcb->GetCopperLayerCount() < 2 )
         {
             if( layer != B_Cu )
                 return;
@@ -469,7 +445,7 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
         // layers are also capable of being selected.
         else
         {
-            if( layer != B_Cu && layer != F_Cu && layer >= ( m_Pcb->GetCopperLayerCount() - 1 ) )
+            if( layer != B_Cu && layer != F_Cu && layer >= ( m_pcb->GetCopperLayerCount() - 1 ) )
                 return;
         }
     }
@@ -487,24 +463,24 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 
 GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
 {
-    GENERAL_COLLECTORS_GUIDE guide( m_Pcb->GetVisibleLayers(), GetActiveLayer(),
+    GENERAL_COLLECTORS_GUIDE guide( m_pcb->GetVisibleLayers(), GetActiveLayer(),
                                     GetCanvas()->GetView() );
 
     // account for the globals
-    guide.SetIgnoreMTextsMarkedNoShow( ! m_Pcb->IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) );
-    guide.SetIgnoreMTextsOnBack( ! m_Pcb->IsElementVisible( LAYER_MOD_TEXT_BK ) );
-    guide.SetIgnoreMTextsOnFront( ! m_Pcb->IsElementVisible( LAYER_MOD_TEXT_FR ) );
-    guide.SetIgnoreModulesOnBack( ! m_Pcb->IsElementVisible( LAYER_MOD_BK ) );
-    guide.SetIgnoreModulesOnFront( ! m_Pcb->IsElementVisible( LAYER_MOD_FR ) );
-    guide.SetIgnorePadsOnBack( ! m_Pcb->IsElementVisible( LAYER_PAD_BK ) );
-    guide.SetIgnorePadsOnFront( ! m_Pcb->IsElementVisible( LAYER_PAD_FR ) );
-    guide.SetIgnoreThroughHolePads( ! m_Pcb->IsElementVisible( LAYER_PADS_TH ) );
-    guide.SetIgnoreModulesVals( ! m_Pcb->IsElementVisible( LAYER_MOD_VALUES ) );
-    guide.SetIgnoreModulesRefs( ! m_Pcb->IsElementVisible( LAYER_MOD_REFERENCES ) );
-    guide.SetIgnoreThroughVias( ! m_Pcb->IsElementVisible( LAYER_VIAS ) );
-    guide.SetIgnoreBlindBuriedVias( ! m_Pcb->IsElementVisible( LAYER_VIAS ) );
-    guide.SetIgnoreMicroVias( ! m_Pcb->IsElementVisible( LAYER_VIAS ) );
-    guide.SetIgnoreTracks( ! m_Pcb->IsElementVisible( LAYER_TRACKS ) );
+    guide.SetIgnoreMTextsMarkedNoShow( ! m_pcb->IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) );
+    guide.SetIgnoreMTextsOnBack( ! m_pcb->IsElementVisible( LAYER_MOD_TEXT_BK ) );
+    guide.SetIgnoreMTextsOnFront( ! m_pcb->IsElementVisible( LAYER_MOD_TEXT_FR ) );
+    guide.SetIgnoreModulesOnBack( ! m_pcb->IsElementVisible( LAYER_MOD_BK ) );
+    guide.SetIgnoreModulesOnFront( ! m_pcb->IsElementVisible( LAYER_MOD_FR ) );
+    guide.SetIgnorePadsOnBack( ! m_pcb->IsElementVisible( LAYER_PAD_BK ) );
+    guide.SetIgnorePadsOnFront( ! m_pcb->IsElementVisible( LAYER_PAD_FR ) );
+    guide.SetIgnoreThroughHolePads( ! m_pcb->IsElementVisible( LAYER_PADS_TH ) );
+    guide.SetIgnoreModulesVals( ! m_pcb->IsElementVisible( LAYER_MOD_VALUES ) );
+    guide.SetIgnoreModulesRefs( ! m_pcb->IsElementVisible( LAYER_MOD_REFERENCES ) );
+    guide.SetIgnoreThroughVias( ! m_pcb->IsElementVisible( LAYER_VIAS ) );
+    guide.SetIgnoreBlindBuriedVias( ! m_pcb->IsElementVisible( LAYER_VIAS ) );
+    guide.SetIgnoreMicroVias( ! m_pcb->IsElementVisible( LAYER_VIAS ) );
+    guide.SetIgnoreTracks( ! m_pcb->IsElementVisible( LAYER_TRACKS ) );
 
     return guide;
 }
@@ -576,8 +552,8 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     }
 
     // Transform absolute coordinates for user origin preferences
-    double userXpos = m_OriginTransforms.ToDisplayAbsX( static_cast<double>( cursorPos.x ) );
-    double userYpos = m_OriginTransforms.ToDisplayAbsY( static_cast<double>( cursorPos.y ) );
+    double userXpos = m_originTransforms.ToDisplayAbsX( static_cast<double>( cursorPos.x ) );
+    double userYpos = m_originTransforms.ToDisplayAbsY( static_cast<double>( cursorPos.y ) );
 
     // Display absolute coordinates:
     double dXpos = To_User_Unit( GetUserUnits(), userXpos );
@@ -619,8 +595,8 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         double relYpos = cursorPos.y - screen->m_LocalOrigin.y;
 
         // Transform relative coordinates for user origin preferences
-        userXpos = m_OriginTransforms.ToDisplayRelX( relXpos );
-        userYpos = m_OriginTransforms.ToDisplayRelY( relYpos );
+        userXpos = m_originTransforms.ToDisplayRelX( relXpos );
+        userYpos = m_originTransforms.ToDisplayRelY( relYpos );
 
         // Display relative coordinates:
         dXpos = To_User_Unit( GetUserUnits(), userXpos );
@@ -710,7 +686,7 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     if( cfg )
     {
-        m_DisplayOptions = cfg->m_Display;
+        m_displayOptions = cfg->m_Display;
         m_PolarCoords = cfg->m_PolarCoords;
     }
 
@@ -750,7 +726,7 @@ void PCB_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     if( cfg )
     {
-        cfg->m_Display = m_DisplayOptions;
+        cfg->m_Display = m_displayOptions;
         cfg->m_PolarCoords = m_PolarCoords;
     }
 }
@@ -769,8 +745,8 @@ FOOTPRINT_EDITOR_SETTINGS* PCB_BASE_FRAME::GetFootprintEditorSettings()
 
 MAGNETIC_SETTINGS* PCB_BASE_FRAME::GetMagneticItemsSettings()
 {
-    wxCHECK( m_Settings, nullptr );
-    return &m_Settings->m_MagneticItems;
+    wxCHECK( m_settings, nullptr );
+    return &m_settings->m_MagneticItems;
 }
 
 
@@ -814,7 +790,7 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
 
     if( m_toolManager )
     {
-        m_toolManager->SetEnvironment( m_Pcb, GetCanvas()->GetView(),
+        m_toolManager->SetEnvironment( m_pcb, GetCanvas()->GetView(),
                                        GetCanvas()->GetViewControls(), config(), this );
     }
 
@@ -836,7 +812,7 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
 
 void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions )
 {
-    m_DisplayOptions = aOptions;
+    m_displayOptions = aOptions;
 
     EDA_DRAW_PANEL_GAL* canvas = GetCanvas();
     KIGFX::PCB_VIEW*    view   = static_cast<KIGFX::PCB_VIEW*>( canvas->GetView() );
