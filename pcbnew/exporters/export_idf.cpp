@@ -321,7 +321,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
         if( drill > 0.0 )
         {
             // plating
-            if( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+            if( pad->GetAttribute() == PAD_ATTRIB_NPTH )
                 kplate = IDF3::NPTH;
             else
                 kplate = IDF3::PTH;

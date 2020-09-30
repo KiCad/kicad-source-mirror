@@ -77,10 +77,10 @@ enum CODE_CHOICE
 
 static PAD_ATTR_T code_type[] =
 {
-    PAD_ATTRIB_STANDARD,
+    PAD_ATTRIB_PTH,
     PAD_ATTRIB_SMD,
     PAD_ATTRIB_CONN,
-    PAD_ATTRIB_HOLE_NOT_PLATED,
+    PAD_ATTRIB_NPTH,
     PAD_ATTRIB_SMD                  // Aperture pad :type SMD with no copper layers,
                                     // only on tech layers (usually only on paste layer
 };
@@ -88,10 +88,10 @@ static PAD_ATTR_T code_type[] =
 // Default mask layers setup for pads according to the pad type
 static const LSET std_pad_layers[] =
 {
-    D_PAD::StandardMask(),        // PAD_ATTRIB_STANDARD:
+    D_PAD::StandardMask(),        // PAD_ATTRIB_PTH:
     D_PAD::SMDMask(),             // PAD_ATTRIB_SMD:
     D_PAD::ConnSMDMask(),         // PAD_ATTRIB_CONN:
-    D_PAD::UnplatedHoleMask(),    // PAD_ATTRIB_HOLE_NOT_PLATED:
+    D_PAD::UnplatedHoleMask(),    // PAD_ATTRIB_NPTH:
     D_PAD::ApertureMask()
 };
 
@@ -630,10 +630,10 @@ void DIALOG_PAD_PROPERTIES::initValues()
     {
         switch( m_dummyPad->GetAttribute() )
         {
-        case PAD_ATTRIB_STANDARD:        m_PadType->SetSelection( 0 ); break;
-        case PAD_ATTRIB_SMD:             m_PadType->SetSelection( 1 ); break;
-        case PAD_ATTRIB_CONN:            m_PadType->SetSelection( 2 ); break;
-        case PAD_ATTRIB_HOLE_NOT_PLATED: m_PadType->SetSelection( 3 ); break;
+        case PAD_ATTRIB_PTH:    m_PadType->SetSelection( 0 ); break;
+        case PAD_ATTRIB_SMD:    m_PadType->SetSelection( 1 ); break;
+        case PAD_ATTRIB_CONN:   m_PadType->SetSelection( 2 ); break;
+        case PAD_ATTRIB_NPTH:   m_PadType->SetSelection( 3 ); break;
         }
     }
 
@@ -649,7 +649,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     }
 
     // Ensure the pad property is compatible with the pad type
-    if( m_dummyPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+    if( m_dummyPad->GetAttribute() == PAD_ATTRIB_NPTH )
     {
         m_choiceFabProperty->SetSelection( 0 );
         m_choiceFabProperty->Enable( false );
@@ -1219,7 +1219,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     if( !padlayers_mask[F_Cu] && !padlayers_mask[B_Cu] )
     {
         if( ( m_dummyPad->GetDrillSize().x || m_dummyPad->GetDrillSize().y )
-                && m_dummyPad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
+                && m_dummyPad->GetAttribute() != PAD_ATTRIB_NPTH )
         {
             // Note: he message is shown in an HTML window
             msg = _( "Error: plated through holes must have a copper pad on at least one layer" );
@@ -1247,8 +1247,8 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     switch( m_dummyPad->GetAttribute() )
     {
-    case PAD_ATTRIB_HOLE_NOT_PLATED:   // Not plated, but through hole, a hole is expected
-    case PAD_ATTRIB_STANDARD :         // Pad through hole, a hole is also expected
+    case PAD_ATTRIB_NPTH:   // Not plated, but through hole, a hole is expected
+    case PAD_ATTRIB_PTH:    // Pad through hole, a hole is also expected
         if( m_dummyPad->GetDrillSize().x <= 0 ||
             ( m_dummyPad->GetDrillSize().y <= 0 && m_dummyPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ) )
             error_msgs.Add( _( "Error: Through hole pad: drill diameter set to 0" ) );
@@ -1272,11 +1272,11 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     }
 
     if( m_dummyPad->GetProperty() != PAD_PROP_NONE &&
-        m_dummyPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+        m_dummyPad->GetAttribute() == PAD_ATTRIB_NPTH )
         error_msgs.Add(  _( "Property cannot be set for NPTH" ) );
 
     if( m_dummyPad->GetProperty() == PAD_PROP_CASTELLATED &&
-        m_dummyPad->GetAttribute() != PAD_ATTRIB_STANDARD )
+        m_dummyPad->GetAttribute() != PAD_ATTRIB_PTH )
         error_msgs.Add(  _( "Castellated property can be set only for PTH" ) );
 
     if( m_dummyPad->GetProperty() == PAD_PROP_BGA &&
@@ -1506,8 +1506,8 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     int padNetcode = NETINFO_LIST::UNCONNECTED;
 
-    // For PAD_ATTRIB_HOLE_NOT_PLATED, ensure there is no net name selected
-    if( m_padMaster->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED  )
+    // For PAD_ATTRIB_NPTH, ensure there is no net name selected
+    if( m_padMaster->GetAttribute() != PAD_ATTRIB_NPTH  )
         padNetcode = m_PadNetSelector->GetSelectedNetcode();
 
     m_currentPad->SetNetCode( padNetcode );
@@ -1744,7 +1744,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 
     switch( aPad->GetAttribute() )
     {
-    case PAD_ATTRIB_STANDARD:
+    case PAD_ATTRIB_PTH:
         break;
 
     case PAD_ATTRIB_CONN:
@@ -1758,7 +1758,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
         aPad->SetDrillSize( wxSize( 0, 0 ) );
         break;
 
-    case PAD_ATTRIB_HOLE_NOT_PLATED:
+    case PAD_ATTRIB_NPTH:
         // Mechanical purpose only:
         // no net name, no pad name allowed
         aPad->SetName( wxEmptyString );

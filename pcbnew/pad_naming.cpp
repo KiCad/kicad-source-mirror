@@ -30,7 +30,7 @@ bool PAD_NAMING::PadCanHaveName( const D_PAD& aPad )
         return false;
 
     // NPTH pads don't get numbers
-    if( aPad.GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+    if( aPad.GetAttribute() == PAD_ATTRIB_NPTH )
         return false;
 
     return true;

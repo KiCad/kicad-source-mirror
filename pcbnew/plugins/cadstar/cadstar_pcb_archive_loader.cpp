@@ -582,11 +582,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent, 
         case PAD_SIDE::THROUGH_HOLE:
 
             if( csPadcode.Plated )
-                pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_STANDARD );
+                pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_PTH );
             else
-                pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_HOLE_NOT_PLATED );
+                pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_NPTH );
 
-            pad->SetLayerSet( pad->StandardMask() ); // for now we will assume no paste layers
+            pad->SetLayerSet( pad->PTHMask() ); // for now we will assume no paste layers
             //TODO: We need to read the csPad->Reassigns vector to make sure no paste
             break;
 

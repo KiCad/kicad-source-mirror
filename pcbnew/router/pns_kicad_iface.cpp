@@ -583,15 +583,15 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
 
     // ignore non-copper pads except for those with holes
     if( ( aPad->GetLayerSet() & LSET::AllCuMask()).none() &&
-            aPad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
+            aPad->GetAttribute() != PAD_ATTRIB_NPTH )
         return NULL;
 
     switch( aPad->GetAttribute() )
     {
-    case PAD_ATTRIB_STANDARD:
+    case PAD_ATTRIB_PTH:
         break;
 
-    case PAD_ATTRIB_HOLE_NOT_PLATED:
+    case PAD_ATTRIB_NPTH:
     case PAD_ATTRIB_CONN:
     case PAD_ATTRIB_SMD:
         {
@@ -604,7 +604,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
                 {
                     is_copper = true;
 
-                    if( aPad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
+                    if( aPad->GetAttribute() != PAD_ATTRIB_NPTH )
                         layers = LAYER_RANGE( i );
 
                     break;
@@ -612,7 +612,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
             }
 
             /// Keep the NPTH pads because we will use the drill as alternate shape
-            if( !is_copper && aPad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
+            if( !is_copper && aPad->GetAttribute() != PAD_ATTRIB_NPTH )
                 return NULL;
         }
         break;
@@ -624,11 +624,11 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
 
     std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
 
-    if( aPad->GetAttribute() == PAD_ATTRIB_STANDARD ||
-            aPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+    if( aPad->GetAttribute() == PAD_ATTRIB_PTH ||
+            aPad->GetAttribute() == PAD_ATTRIB_NPTH )
         solid->SetAlternateShape( aPad->GetEffectiveHoleShape()->Clone() );
 
-    if( aPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+    if( aPad->GetAttribute() == PAD_ATTRIB_NPTH )
         solid->SetRoutable( false );
 
     solid->SetLayers( layers );

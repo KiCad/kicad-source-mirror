@@ -279,7 +279,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
         {
             padShape = pad->GetEffectiveShape().get();
         }
-        else if( pad->GetAttribute() == PAD_ATTRIB_STANDARD )
+        else if( pad->GetAttribute() == PAD_ATTRIB_PTH )
         {
             // Note: drill size represents finish size, which means the actual holes size is the
             // plating thickness larger.
@@ -381,7 +381,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             {
                 padShape = pad->GetEffectiveShape().get();
             }
-            else if( pad->GetAttribute() == PAD_ATTRIB_STANDARD )
+            else if( pad->GetAttribute() == PAD_ATTRIB_PTH )
             {
                 // Note: drill size represents finish size, which means the actual holes size is the
                 // plating thickness larger.
@@ -688,7 +688,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( int aRefPadIdx,
             {
                 refPadShape = refPad->GetEffectiveShape().get();
             }
-            else if( refPad->GetAttribute() == PAD_ATTRIB_STANDARD )
+            else if( refPad->GetAttribute() == PAD_ATTRIB_PTH )
             {
                 // Note: drill size represents finish size, which means the actual holes size is the
                 // plating thickness larger.
@@ -708,7 +708,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( int aRefPadIdx,
             {
                 padShape = pad->GetEffectiveShape().get();
             }
-            else if( pad->GetAttribute() == PAD_ATTRIB_STANDARD )
+            else if( pad->GetAttribute() == PAD_ATTRIB_PTH )
             {
                 // Note: drill size represents finish size, which means the actual holes size is the
                 // plating thickness larger.

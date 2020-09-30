@@ -199,7 +199,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
     {
         // mechanical hole
         pad->SetShape( PAD_SHAPE_CIRCLE );
-        pad->SetAttribute( PAD_ATTRIB_HOLE_NOT_PLATED );
+        pad->SetAttribute( PAD_ATTRIB_NPTH );
 
         pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
         pad->SetDrillSize( wxSize( m_hole, m_hole ) );
@@ -218,7 +218,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
     }
     else
     {
-        ( m_hole ) ? padType = PAD_ATTRIB_STANDARD : padType = PAD_ATTRIB_SMD;
+        ( m_hole ) ? padType = PAD_ATTRIB_PTH : padType = PAD_ATTRIB_SMD;
 
         // form layer mask
         for( i = 0; i < (int) m_shapes.GetCount(); i++ )
@@ -250,7 +250,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
             return;
         }
 
-        if( padType == PAD_ATTRIB_STANDARD )
+        if( padType == PAD_ATTRIB_PTH )
             // actually this is a thru-hole pad
             pad->SetLayerSet( LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask ) );
 

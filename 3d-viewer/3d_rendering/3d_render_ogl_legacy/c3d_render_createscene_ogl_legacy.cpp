@@ -794,7 +794,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
         {
             for( auto pad : module->Pads() )
             {
-                if( pad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
+                if( pad->GetAttribute() != PAD_ATTRIB_NPTH )
                 {
                     const wxSize drillsize = pad->GetDrillSize();
                     const bool   hasHole   = drillsize.x && drillsize.y;

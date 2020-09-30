@@ -505,7 +505,7 @@ bool hasThermalConnection( D_PAD* pad, const ZONE_CONTAINER* aZone )
 {
     // Rejects non-standard pads with tht-only thermal reliefs
     if( aZone->GetPadConnection( pad ) == ZONE_CONNECTION::THT_THERMAL
-            && pad->GetAttribute() != PAD_ATTRIB_STANDARD )
+            && pad->GetAttribute() != PAD_ATTRIB_PTH )
     {
         return false;
     }
@@ -556,7 +556,7 @@ static void setupDummyPadForHole( const D_PAD* aPad, D_PAD& aDummyPad )
     // plating thickness larger.
     int platingThickness = 0;
 
-    if( aPad->GetAttribute() == PAD_ATTRIB_STANDARD )
+    if( aPad->GetAttribute() == PAD_ATTRIB_PTH )
         platingThickness = aPad->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
 
     aDummyPad.SetOffset( wxPoint( 0, 0 ) );

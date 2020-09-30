@@ -829,7 +829,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
         {
             m_xpath->push( "hole" );
 
-            // Fabricate a MODULE with a single PAD_ATTRIB_HOLE_NOT_PLATED pad.
+            // Fabricate a MODULE with a single PAD_ATTRIB_NPTH pad.
             // Use m_hole_count to gen up a unique name.
 
             MODULE* module = new MODULE( m_board );
@@ -2076,12 +2076,12 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, wxXmlNode* aTree, bool aCenter 
 {
     EHOLE   e( aTree );
 
-    // we add a PAD_ATTRIB_HOLE_NOT_PLATED pad to this module.
+    // we add a PAD_ATTRIB_NPTH pad to this module.
     D_PAD* pad = new D_PAD( aModule );
     aModule->Add( pad );
 
     pad->SetShape( PAD_SHAPE_CIRCLE );
-    pad->SetAttribute( PAD_ATTRIB_HOLE_NOT_PLATED );
+    pad->SetAttribute( PAD_ATTRIB_NPTH );
 
     // Mechanical purpose only:
     // no offset, no net name, no pad name allowed

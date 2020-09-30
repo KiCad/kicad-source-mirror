@@ -75,7 +75,7 @@ public:
      * Default layers used for pads, according to the pad type.
      * this is default values only, they can be changed for a given pad
      */
-    static LSET StandardMask();     ///< layer set for a through hole pad
+    static LSET PTHMask();     ///< layer set for a through hole pad
     static LSET SMDMask();          ///< layer set for a SMD pad on Front layer
     static LSET ConnSMDMask();      ///< layer set for a SMD pad on Front layer
                                     ///< used for edge board connectors
@@ -98,9 +98,9 @@ public:
             {
                 if( *p == PCB_LOCATE_HOLE_T )
                     return true;
-                else if( *p == PCB_LOCATE_PTH_T && m_attribute != PAD_ATTRIB_HOLE_NOT_PLATED )
+                else if( *p == PCB_LOCATE_PTH_T && m_attribute != PAD_ATTRIB_NPTH )
                     return true;
-                else if( *p == PCB_LOCATE_NPTH_T && m_attribute == PAD_ATTRIB_HOLE_NOT_PLATED )
+                else if( *p == PCB_LOCATE_NPTH_T && m_attribute == PAD_ATTRIB_NPTH )
                     return true;
             }
         }
@@ -701,7 +701,7 @@ private:
                                     //   module anchor, orientation 0)
 
     PAD_ATTR_T  m_attribute;        // PAD_ATTRIB_NORMAL, PAD_ATTRIB_SMD, PAD_ATTRIB_CONN,
-                                    //   PAD_ATTRIB_HOLE_NOT_PLATED
+                                    //   PAD_ATTRIB_NPTH
     PAD_PROP_T  m_property;         // Property in fab files (BGA, FIDUCIAL, TESTPOINT, etc.)
 
     double      m_orient;           // in 1/10 degrees

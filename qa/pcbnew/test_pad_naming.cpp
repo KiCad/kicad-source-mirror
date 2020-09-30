@@ -37,7 +37,7 @@ struct PAD_FIXTURE
     {
         D_PAD pad( &m_module );
 
-        pad.SetAttribute( PAD_ATTRIB_HOLE_NOT_PLATED );
+        pad.SetAttribute( PAD_ATTRIB_NPTH );
         pad.SetLayerSet( D_PAD::UnplatedHoleMask() );
 
         return pad;
@@ -47,7 +47,7 @@ struct PAD_FIXTURE
     {
         D_PAD pad( &m_module );
 
-        pad.SetAttribute( PAD_ATTRIB_STANDARD );
+        pad.SetAttribute( PAD_ATTRIB_PTH );
         pad.SetLayerSet( D_PAD::ApertureMask() );
 
         return pad;

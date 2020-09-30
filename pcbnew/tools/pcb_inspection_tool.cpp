@@ -124,7 +124,7 @@ void PCB_INSPECTION_TOOL::reportZoneConnection( ZONE_CONTAINER* aZone, D_PAD* aP
     // Resolve complex connection types into simple types
     if( connection == ZONE_CONNECTION::THT_THERMAL )
     {
-        if( aPad->GetAttribute() == PAD_ATTRIB_STANDARD )
+        if( aPad->GetAttribute() == PAD_ATTRIB_PTH )
         {
             connection = ZONE_CONNECTION::THERMAL;
         }

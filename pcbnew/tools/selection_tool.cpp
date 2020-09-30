@@ -1918,8 +1918,8 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
             // Check render mode (from the Items tab) first
             switch( pad->GetAttribute() )
             {
-            case PAD_ATTRIB_STANDARD:
-            case PAD_ATTRIB_HOLE_NOT_PLATED:
+            case PAD_ATTRIB_PTH:
+            case PAD_ATTRIB_NPTH:
                 if( !board()->IsElementVisible( LAYER_PADS_TH ) )
                     return false;
                 break;

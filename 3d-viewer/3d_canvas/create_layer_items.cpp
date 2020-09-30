@@ -471,7 +471,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             // The hole in the body is inflated by copper thickness,
             // if not plated, no copper
-            const int inflate = (pad->GetAttribute () != PAD_ATTRIB_HOLE_NOT_PLATED) ?
+            const int inflate = ( pad->GetAttribute () != PAD_ATTRIB_NPTH ) ?
                                 GetCopperThicknessBIU() : 0;
 
             m_stats_nr_holes++;
@@ -506,7 +506,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             // The hole in the body is inflated by copper thickness.
             const int inflate = GetCopperThicknessBIU();
 
-            if( pad->GetAttribute () != PAD_ATTRIB_HOLE_NOT_PLATED )
+            if( pad->GetAttribute () != PAD_ATTRIB_NPTH )
             {
                 pad->TransformHoleWithClearanceToPolygon( m_through_outer_holes_poly, inflate );
             }

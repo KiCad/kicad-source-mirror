@@ -134,7 +134,7 @@ static void isPlated( LIBEVAL::CONTEXT* aCtx, void* self )
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
     D_PAD*            pad = dynamic_cast<D_PAD*>( item );
 
-    if( pad && pad->GetAttribute() == PAD_ATTRIB_STANDARD )
+    if( pad && pad->GetAttribute() == PAD_ATTRIB_PTH )
         result->Set( 1.0 );
 }
 

@@ -300,7 +300,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 if( aPlotOpt.GetSkipPlotNPTH_Pads() &&
                     ( aPlotOpt.GetDrillMarksType() == PCB_PLOT_PARAMS::NO_DRILL_SHAPE ) &&
                     ( pad->GetSize() == pad->GetDrillSize() ) &&
-                    ( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED ) )
+                    ( pad->GetAttribute() == PAD_ATTRIB_NPTH ) )
                     break;
 
                 itemplotter.PlotPad( pad, color, padPlotMode );

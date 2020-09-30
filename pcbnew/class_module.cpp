@@ -834,7 +834,7 @@ unsigned MODULE::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 
     for( D_PAD* pad : m_pads )
     {
-        if( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+        if( pad->GetAttribute() == PAD_ATTRIB_NPTH )
             continue;
 
         cnt++;
@@ -864,7 +864,7 @@ unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
         if( !aIncludeNPTH )
         {
             // skip NPTH
-            if( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+            if( pad->GetAttribute() == PAD_ATTRIB_NPTH )
             {
                 continue;
             }

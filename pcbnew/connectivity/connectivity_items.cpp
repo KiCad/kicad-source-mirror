@@ -208,7 +208,7 @@ CN_ITEM* CN_LIST::Add( D_PAD* pad )
      switch( pad->GetAttribute() )
      {
      case PAD_ATTRIB_SMD:
-     case PAD_ATTRIB_HOLE_NOT_PLATED:
+     case PAD_ATTRIB_NPTH:
      case PAD_ATTRIB_CONN:
      {
          LSET lmsk = pad->GetLayerSet();

@@ -131,7 +131,7 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
 
         // NPTH pads are not drawn on layers if the shape size and pos is the same
         // as their hole:
-        if( aSkipNPTHPadsWihNoCopper && pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+        if( aSkipNPTHPadsWihNoCopper && pad->GetAttribute() == PAD_ATTRIB_NPTH )
         {
             if( pad->GetDrillSize() == pad->GetSize() && pad->GetOffset() == wxPoint( 0, 0 ) )
             {

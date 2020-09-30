@@ -1739,8 +1739,8 @@ void ALTIUM_PCB::ParsePads6Data(
                         "Pad '%s' of Footprint %s is not marked as multilayer, but it is an THT pad",
                         elem.name, module->GetReference() ) );
             }
-            pad->SetAttribute( elem.plated ? PAD_ATTR_T::PAD_ATTRIB_STANDARD :
-                                             PAD_ATTR_T::PAD_ATTRIB_HOLE_NOT_PLATED );
+            pad->SetAttribute( elem.plated ? PAD_ATTR_T::PAD_ATTRIB_PTH :
+                                             PAD_ATTR_T::PAD_ATTRIB_NPTH );
             if( !elem.sizeAndShape || elem.sizeAndShape->holeshape == ALTIUM_PAD_HOLE_SHAPE::ROUND )
             {
                 pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
@@ -1855,7 +1855,7 @@ void ALTIUM_PCB::ParsePads6Data(
             pad->SetLayerSet( FlipLayerMask( D_PAD::SMDMask() ) );
             break;
         case ALTIUM_LAYER::MULTI_LAYER:
-            pad->SetLayerSet( elem.plated ? D_PAD::StandardMask() : D_PAD::UnplatedHoleMask() );
+            pad->SetLayerSet( elem.plated ? D_PAD::PTHMask() : D_PAD::UnplatedHoleMask() );
             break;
         default:
             PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );

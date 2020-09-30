@@ -126,10 +126,10 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair,
             {
                 if( !m_merge_PTH_NPTH )
                 {
-                    if( !aGenerateNPTH_list && pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+                    if( !aGenerateNPTH_list && pad->GetAttribute() == PAD_ATTRIB_NPTH )
                         continue;
 
-                    if( aGenerateNPTH_list && pad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
+                    if( aGenerateNPTH_list && pad->GetAttribute() != PAD_ATTRIB_NPTH )
                         continue;
                 }
 
@@ -137,7 +137,7 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair,
                     continue;
 
                 new_hole.m_ItemParent     = pad;
-                new_hole.m_Hole_NotPlated = (pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED);
+                new_hole.m_Hole_NotPlated = (pad->GetAttribute() == PAD_ATTRIB_NPTH);
                 new_hole.m_Tool_Reference = -1;         // Flag is: Not initialized
                 new_hole.m_Hole_Orient    = pad->GetOrientation();
                 new_hole.m_Hole_Shape     = 0;           // hole shape: round

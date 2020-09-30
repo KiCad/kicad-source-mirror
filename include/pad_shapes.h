@@ -77,13 +77,13 @@ enum PAD_DRILL_SHAPE_T
  */
 enum PAD_ATTR_T
 {
-    PAD_ATTRIB_STANDARD,            ///< Usual pad
-    PAD_ATTRIB_SMD,                 ///< Smd pad, appears on the solder paste layer (default)
-    PAD_ATTRIB_CONN,                ///< Like smd, does not appear on the solder paste layer (default)
-                                    ///< note also has a special attribute in Gerber X files
-                                    ///< Used for edgecard connectors for instance
-    PAD_ATTRIB_HOLE_NOT_PLATED,     ///< like PAD_STANDARD, but not plated
-                                    ///< mechanical use only, no connection allowed
+    PAD_ATTRIB_PTH,     ///< Plated through hole pad
+    PAD_ATTRIB_SMD,     ///< Smd pad, appears on the solder paste layer (default)
+    PAD_ATTRIB_CONN,    ///< Like smd, does not appear on the solder paste layer (default)
+                        ///< note also has a special attribute in Gerber X files
+                        ///< Used for edgecard connectors for instance
+    PAD_ATTRIB_NPTH,    ///< like PAD_PTH, but not plated
+                        ///< mechanical use only, no connection allowed
 };
 
 

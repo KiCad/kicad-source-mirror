@@ -3424,7 +3424,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
     switch( token )
     {
     case T_thru_hole:
-        pad->SetAttribute( PAD_ATTRIB_STANDARD );
+        pad->SetAttribute( PAD_ATTRIB_PTH );
         break;
 
     case T_smd:
@@ -3444,7 +3444,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
         break;
 
     case T_np_thru_hole:
-        pad->SetAttribute( PAD_ATTRIB_HOLE_NOT_PLATED );
+        pad->SetAttribute( PAD_ATTRIB_NPTH );
         break;
 
     default:

@@ -1524,9 +1524,9 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             else if( !strcmp( data, "CONN" ) )
                 attribute = PAD_ATTRIB_CONN;
             else if( !strcmp( data, "HOLE" ) )
-                attribute = PAD_ATTRIB_HOLE_NOT_PLATED;
+                attribute = PAD_ATTRIB_NPTH;
             else
-                attribute = PAD_ATTRIB_STANDARD;
+                attribute = PAD_ATTRIB_PTH;
 
             strtok_r( NULL, delims, &saveptr );  // skip unused prm
             data = strtok_r( NULL, delims, &saveptr );

@@ -1258,7 +1258,7 @@ void C3D_RENDER_RAYTRACING::add_3D_vias_and_pads_to_container()
     for( auto module : m_boardAdapter.GetBoard()->Modules() )
     {
         for( auto pad : module->Pads() )
-            if( pad->GetAttribute () != PAD_ATTRIB_HOLE_NOT_PLATED )
+            if( pad->GetAttribute () != PAD_ATTRIB_NPTH )
             {
                 insert3DPadHole( pad );
             }

@@ -148,7 +148,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
             {
                 if( pad->GetDrillSize().x != 0 )
                 {
-                    if( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+                    if( pad->GetAttribute() == PAD_ATTRIB_NPTH )
                         m_notplatedPadsHoleCount++;
                     else
                         m_platedPadsHoleCount++;
@@ -158,7 +158,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
             {
                 if( pad->GetDrillSize().x != 0 && pad->GetDrillSize().y != 0 )
                 {
-                    if( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+                    if( pad->GetAttribute() == PAD_ATTRIB_NPTH )
                         m_notplatedPadsHoleCount++;
                     else
                         m_platedPadsHoleCount++;

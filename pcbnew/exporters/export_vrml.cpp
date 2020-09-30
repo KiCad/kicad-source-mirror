@@ -1259,7 +1259,7 @@ static void export_vrml_pad( MODEL_VRML& aModel, BOARD* aPcb, D_PAD* aPad )
     {
         bool pth = false;
 
-        if( ( aPad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
+        if( ( aPad->GetAttribute() != PAD_ATTRIB_NPTH )
             && !aModel.m_plainPCB )
             pth = true;
 

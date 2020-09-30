@@ -70,16 +70,16 @@ D_PAD::D_PAD( MODULE* parent ) :
     SetAnchorPadShape( PAD_SHAPE_CIRCLE );          // Default shape for custom shaped pads
                                                     // is PAD_CIRCLE.
     SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );        // Default pad drill shape is a circle.
-    m_attribute           = PAD_ATTRIB_STANDARD;    // Default pad type is NORMAL (thru hole)
+    m_attribute           = PAD_ATTRIB_PTH;         // Default pad type is plated through hole
     SetProperty( PAD_PROP_NONE );                   // no special fabrication property
     m_localClearance      = 0;
     m_localSolderMaskMargin  = 0;
     m_localSolderPasteMargin = 0;
     m_localSolderPasteMarginRatio = 0.0;
     // Parameters for round rect only:
-    m_roundedCornerScale = 0.25;               // from  IPC-7351C standard
+    m_roundedCornerScale = 0.25;                    // from  IPC-7351C standard
     // Parameters for chamfered rect only:
-    m_chamferScale = 0.2;                   // Size of chamfer: ratio of smallest of X,Y size
+    m_chamferScale = 0.2;                           // Size of chamfer: ratio of smallest of X,Y size
     m_chamferPositions  = RECT_NO_CHAMFER;          // No chamfered corner
 
     m_zoneConnection    = ZONE_CONNECTION::INHERITED; // Use parent setting by default
@@ -89,7 +89,7 @@ D_PAD::D_PAD( MODULE* parent ) :
     m_customShapeClearanceArea = CUST_PAD_SHAPE_IN_ZONE_OUTLINE;
 
     // Set layers mask to default for a standard thru hole pad.
-    m_layerMask           = StandardMask();
+    m_layerMask           = PTHMask();
 
     SetSubRatsnest( 0 );                       // used in ratsnest calculations
 
@@ -138,7 +138,7 @@ D_PAD& D_PAD::operator=( const D_PAD &aOther )
 }
 
 
-LSET D_PAD::StandardMask()
+LSET D_PAD::PTHMask()
 {
     static LSET saved = LSET::AllCuMask() | LSET( 2, F_Mask, B_Mask );
     return saved;
@@ -201,7 +201,7 @@ bool D_PAD::FlashLayer( int aLayer ) const
         return false;
 
     /// We don't remove the copper from non-PTH pads
-    if( GetAttribute() != PAD_ATTRIB_STANDARD )
+    if( GetAttribute() != PAD_ATTRIB_PTH )
         return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
 
     /// Heatsink pads always get copper
@@ -1044,11 +1044,11 @@ wxString D_PAD::ShowPadAttr() const
 {
     switch( GetAttribute() )
     {
-    case PAD_ATTRIB_STANDARD:        return _( "Std" );
-    case PAD_ATTRIB_SMD:             return _( "SMD" );
-    case PAD_ATTRIB_CONN:            return _( "Conn" );
-    case PAD_ATTRIB_HOLE_NOT_PLATED: return _( "Not Plated" );
-    default:                         return wxT( "???" );
+    case PAD_ATTRIB_PTH:    return _( "PTH" );
+    case PAD_ATTRIB_SMD:    return _( "SMD" );
+    case PAD_ATTRIB_CONN:   return _( "Conn" );
+    case PAD_ATTRIB_NPTH:   return _( "NPTH" );
+    default:                return wxT( "???" );
     }
 }
 
@@ -1085,7 +1085,7 @@ EDA_ITEM* D_PAD::Clone() const
 
 bool D_PAD::PadShouldBeNPTH() const
 {
-    return( m_attribute == PAD_ATTRIB_STANDARD
+    return( m_attribute == PAD_ATTRIB_PTH
             && m_drill.x >= m_size.x && m_drill.y >= m_size.y );
 }
 
@@ -1095,10 +1095,10 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     aCount = 0;
 
     // These 2 types of pads contain a hole
-    if( m_attribute == PAD_ATTRIB_STANDARD )
+    if( m_attribute == PAD_ATTRIB_PTH )
         aLayers[aCount++] = LAYER_PADS_PLATEDHOLES;
 
-    if( m_attribute == PAD_ATTRIB_HOLE_NOT_PLATED )
+    if( m_attribute == PAD_ATTRIB_NPTH )
         aLayers[aCount++] = LAYER_NON_PLATEDHOLES;
 
     if( IsOnLayer( F_Cu ) && IsOnLayer( B_Cu ) )
@@ -1113,7 +1113,7 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 
         // Is this a PTH pad that has only front copper?  If so, we need to also display the
         // net name on the PTH netname layer so that it isn't blocked by the drill hole.
-        if( m_attribute == PAD_ATTRIB_STANDARD )
+        if( m_attribute == PAD_ATTRIB_PTH )
             aLayers[aCount++] = LAYER_PADS_NETNAMES;
         else
             aLayers[aCount++] = LAYER_PAD_FR_NETNAMES;
@@ -1124,7 +1124,7 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 
         // Is this a PTH pad that has only back copper?  If so, we need to also display the
         // net name on the PTH netname layer so that it isn't blocked by the drill hole.
-        if( m_attribute == PAD_ATTRIB_STANDARD )
+        if( m_attribute == PAD_ATTRIB_PTH )
             aLayers[aCount++] = LAYER_PADS_NETNAMES;
         else
             aLayers[aCount++] = LAYER_PAD_BK_NETNAMES;
@@ -1177,7 +1177,7 @@ double D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return HIDE;
 
     // Handle Render tab switches
-    if( ( GetAttribute() == PAD_ATTRIB_STANDARD || GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+    if( ( GetAttribute() == PAD_ATTRIB_PTH || GetAttribute() == PAD_ATTRIB_NPTH )
          && !aView->IsLayerVisible( LAYER_PADS_TH ) )
         return HIDE;
 
@@ -1329,10 +1329,10 @@ static struct PAD_DESC
     PAD_DESC()
     {
         ENUM_MAP<PAD_ATTR_T>::Instance()
-                .Map( PAD_ATTRIB_STANDARD,        _( "Through-hole" ) )
+                .Map( PAD_ATTRIB_PTH,             _( "Through-hole" ) )
                 .Map( PAD_ATTRIB_SMD,             _( "SMD" ) )
                 .Map( PAD_ATTRIB_CONN,            _( "Edge connector" ) )
-                .Map( PAD_ATTRIB_HOLE_NOT_PLATED, _( "NPTH, mechanical" ) );
+                .Map( PAD_ATTRIB_NPTH,            _( "NPTH, mechanical" ) );
 
         ENUM_MAP<PAD_SHAPE_T>::Instance()
                 .Map( PAD_SHAPE_CIRCLE,           _( "Circle" ) )

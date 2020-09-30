@@ -55,7 +55,7 @@ public:
 
     bool isThrough() const
     {
-        return m_type == PAD_ATTRIB_HOLE_NOT_PLATED || m_type == PAD_ATTRIB_STANDARD;
+        return m_type == PAD_ATTRIB_NPTH || m_type == PAD_ATTRIB_PTH;
     }
 
     bool operator==( const HYPERLYNX_PAD_STACK& other ) const
@@ -237,7 +237,7 @@ HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const D_PAD* aPad )
     m_layers = aPad->GetLayerSet();
     m_drill  = aPad->GetDrillSize().x;
     m_shape  = aPad->GetShape();
-    m_type   = PAD_ATTRIB_STANDARD;
+    m_type   = PAD_ATTRIB_PTH;
     m_id     = 0;
 }
 
@@ -251,7 +251,7 @@ HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const VIA* aVia )
     m_layers = LSET::AllCuMask();
     m_drill  = aVia->GetDrillValue();
     m_shape  = PAD_SHAPE_CIRCLE;
-    m_type   = PAD_ATTRIB_STANDARD;
+    m_type   = PAD_ATTRIB_PTH;
     m_id     = 0;
 }
 
