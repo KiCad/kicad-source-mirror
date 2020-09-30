@@ -88,10 +88,10 @@ static PAD_ATTR_T code_type[] =
 // Default mask layers setup for pads according to the pad type
 static const LSET std_pad_layers[] =
 {
-    D_PAD::StandardMask(),        // PAD_ATTRIB_PTH:
-    D_PAD::SMDMask(),             // PAD_ATTRIB_SMD:
-    D_PAD::ConnSMDMask(),         // PAD_ATTRIB_CONN:
-    D_PAD::UnplatedHoleMask(),    // PAD_ATTRIB_NPTH:
+    D_PAD::PTHMask(),           // PAD_ATTRIB_PTH:
+    D_PAD::SMDMask(),           // PAD_ATTRIB_SMD:
+    D_PAD::ConnSMDMask(),       // PAD_ATTRIB_CONN:
+    D_PAD::UnplatedHoleMask(),  // PAD_ATTRIB_NPTH:
     D_PAD::ApertureMask()
 };
 
