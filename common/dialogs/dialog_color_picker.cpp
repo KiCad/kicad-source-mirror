@@ -60,9 +60,18 @@ DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, const COLOR4D& aCur
     if( !m_allowOpacityCtrl )
     {
         m_SizerTransparency->Show( false );
-        m_previousColor4D.a = 1.0;
-        m_newColor4D.a = 1.0;
+
+        if( aCurrentColor != COLOR4D::UNSPECIFIED )
+        {
+            m_previousColor4D.a = 1.0;
+            m_newColor4D.a      = 1.0;
+        }
     }
+
+    // UNSPECIFIED is ( 0, 0, 0, 0 ) but that is unfriendly for editing because you have to notice
+    // first that the value slider is all the way down before you get any color
+    if( aCurrentColor == COLOR4D::UNSPECIFIED )
+        m_val = 1.0;
 
     APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
     wxASSERT( cfg );
