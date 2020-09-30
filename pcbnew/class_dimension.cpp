@@ -116,8 +116,10 @@ void DIMENSION::addShape( ShapeType* aShape )
 
 wxString DIMENSION::GetValueText() const
 {
-    int val = GetMeasuredValue();
+    struct lconv* lc = localeconv();
+    wxChar sep = lc->decimal_point[0];
 
+    int      val = GetMeasuredValue();
     wxString text;
     wxString format = wxT( "%." ) + wxString::Format( "%i", m_precision ) + wxT( "f" );
 
@@ -129,13 +131,12 @@ wxString DIMENSION::GetValueText() const
         {
             text.RemoveLast();
 
-            if( text.Last() == '.' )
+            if( text.Last() == '.' || text.Last() == sep )
             {
                 text.RemoveLast();
                 break;
             }
         }
-
     }
 
     return text;
