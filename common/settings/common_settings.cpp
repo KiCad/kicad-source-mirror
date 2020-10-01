@@ -96,7 +96,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
             &m_Input.immediate_actions, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "input.prefer_select_to_drag",
-            &m_Input.prefer_select_to_drag, true ) );
+            &m_Input.prefer_select_to_drag, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "input.warp_mouse_on_move",
             &m_Input.warp_mouse_on_move, true ) );
