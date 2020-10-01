@@ -87,9 +87,6 @@ void TWO_POINT_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     gal.ResetTextAttributes();
 
-    // constant text size on screen
-    SetConstantGlyphHeight( gal, 12.0 );
-
     std::vector<wxString> cursorStrings;
 
     if( m_shape == GEOM_SHAPE::SEGMENT )

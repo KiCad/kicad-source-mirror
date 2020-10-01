@@ -27,6 +27,7 @@
 #include <config.h> // HAVE_FGETC_NOLOCK
 
 #include <richio.h>
+#include <errno.h>
 
 #include <wx/file.h>
 #include <wx/translation.h>

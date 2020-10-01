@@ -36,6 +36,13 @@ class VIEW;
 namespace PREVIEW
 {
 
+struct TEXT_DIMS
+{
+    double StrokeWidth;
+    double ShadowWidth;
+    double LinePitch;
+};
+
 /**
  * Default alpha of "de-emphasised" features (like previously locked-in
  * lines
@@ -47,16 +54,21 @@ double PreviewOverlayDeemphAlpha( bool aDeemph = true );
  * Get a formatted string showing a dimension to a sane precision
  * with an optional prefix and unit suffix.
  */
-wxString DimensionLabel( const wxString& prefix, double aVal, EDA_UNITS aUnits );
+wxString DimensionLabel( const wxString& prefix, double aVal, EDA_UNITS aUnits,
+                         bool aIncludeUnits = true );
 
 /**
  * Set the GAL glyph height to a constant scaled value, so that it
  * always looks the same on screen
  *
  * @param aGal the GAL to draw on
- * @param aHeight the height of the glyph, in pixels
+ * @param aRelativeSize similar to HTML font sizes; 0 will give a standard size while +1 etc.
+ *                      will give larger and -1 etc. will give smaller.
+ * @returns the text widths for the resulting glyph size.
  */
-void SetConstantGlyphHeight( KIGFX::GAL& aGal, double aHeight );
+TEXT_DIMS SetConstantGlyphHeight( KIGFX::GAL* aGal, int aRelativeSize = 0 );
+
+COLOR4D GetShadowColor( COLOR4D aColor );
 
 /**
  * Draw strings next to the cursor

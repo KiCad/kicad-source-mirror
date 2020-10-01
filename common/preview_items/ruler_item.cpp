@@ -29,7 +29,6 @@
 #include <painter.h>
 #include <view/view.h>
 
-#include <base_units.h>
 #include <common.h>
 
 using namespace KIGFX::PREVIEW;
@@ -37,8 +36,6 @@ using namespace KIGFX::PREVIEW;
 static const double maxTickDensity = 10.0;       // min pixels between tick marks
 static const double midTickLengthFactor = 1.5;
 static const double majorTickLengthFactor = 2.5;
-
-static const double tickLineWidth = 1.0;
 
 // We need a pair of layers for the graphics and drop-shadows, but it's probably not
 // worth adding more layers to the enum.
@@ -66,13 +63,14 @@ static void drawCursorStrings( int aLayer, KIGFX::VIEW* aView, const VECTOR2D& a
 }
 
 
-static double getTickLineWidth( KIGFX::GAL* aGal, int aLayer )
+static double getTickLineWidth( const TEXT_DIMS& textDims, int aLayer )
 {
-    if( aLayer == LAYER_RULER_SHADOWS )
-        return ( tickLineWidth * 3.0 ) / aGal->GetWorldScale();
-    else
-        return tickLineWidth / aGal->GetWorldScale();
+    double width = textDims.StrokeWidth * 0.8;
 
+    if( aLayer == LAYER_RULER_SHADOWS )
+        width += textDims.ShadowWidth;
+
+    return width;
 }
 
 
@@ -124,40 +122,6 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA
 }
 
 
-static wxString FormatRulerNumber( double aVal, EDA_UNITS aUnits )
-{
-    int precision = 3;
-
-    // show a sane precision for the ruler tick marks, which don't need to be accurate down to
-    // the nanometre
-    switch( aUnits )
-    {
-    case EDA_UNITS::MILLIMETRES:
-        precision = 2;  // 10um
-        break;
-
-    case EDA_UNITS::INCHES:
-        precision = 3;  // 1mil
-        break;
-
-    case EDA_UNITS::DEGREES:
-        precision = 1;  // 0.1deg
-        break;
-
-    case EDA_UNITS::PERCENT:
-        precision = 1;  // 0.1%
-        break;
-
-    case EDA_UNITS::UNSCALED:
-        break;
-    }
-
-    const wxString fmtStr = wxString::Format( "%%.%df", precision );
-
-    return wxString::Format( fmtStr, To_User_Unit( aUnits, aVal ) );
-}
-
-
 /**
  * Draw labelled ticks on a line. Ticks are spaced according to a
  * maximum density. Miror ticks are not labelled.
@@ -170,23 +134,24 @@ static wxString FormatRulerNumber( double aVal, EDA_UNITS aUnits )
 void drawTicksAlongLine( int aLayer, KIGFX::GAL* aGal, const VECTOR2D& aOrigin,
                          const VECTOR2D& aLine, double aMinorTickLen, EDA_UNITS aUnits )
 {
-    VECTOR2D tickLine = aLine.Rotate( -M_PI_2 );
-    double tickSpace;
+    VECTOR2D    tickLine = aLine.Rotate( -M_PI_2 );
+    double      tickSpace;
     TICK_FORMAT tickF = getTickFormatForScale( aGal->GetWorldScale(), tickSpace, aUnits );
 
     // number of ticks in whole ruler
-    int numTicks = (int) std::ceil( aLine.EuclideanNorm() / tickSpace );
+    int         numTicks = (int) std::ceil( aLine.EuclideanNorm() / tickSpace );
 
     // work out which way up the tick labels go
-    double labelAngle = -tickLine.Angle();
-    float textThickness = aGal->GetGlyphSize().x / 8;
-    float textOffset = 0;
+    TEXT_DIMS   textDims = SetConstantGlyphHeight( aGal, -1 );
+    double      textThickness = textDims.StrokeWidth;
+    double      labelAngle = -tickLine.Angle();
+    double      textOffset = 0;
 
     if( aLayer == LAYER_RULER_SHADOWS )
     {
         // Drawing drop shadows
-        textOffset = textThickness;
-        textThickness *= 3.0;
+        textOffset = textDims.ShadowWidth;
+        textThickness += 2 * textDims.ShadowWidth;
     }
 
     double majorTickLen = aMinorTickLen * ( majorTickLengthFactor + 1 );
@@ -220,12 +185,12 @@ void drawTicksAlongLine( int aLayer, KIGFX::GAL* aGal, const VECTOR2D& aOrigin,
             length *= midTickLengthFactor;
         }
 
-        aGal->SetLineWidth( getTickLineWidth( aGal, aLayer ) );
+        aGal->SetLineWidth( textThickness / 2 );
         aGal->DrawLine( tickPos, tickPos + tickLine.Resize( length ) );
 
         if( drawLabel )
         {
-            wxString label = FormatRulerNumber( tickSpace * i, aUnits );
+            wxString label = DimensionLabel( "", tickSpace * i, aUnits, false );
             aGal->SetLineWidth( textThickness );
             aGal->StrokeText( label, tickPos + labelOffset, labelAngle );
         }
@@ -246,13 +211,14 @@ void drawTicksAlongLine( int aLayer, KIGFX::GAL* aGal, const VECTOR2D& aOrigin,
 void drawBacksideTicks( int aLayer, KIGFX::GAL* aGal, const VECTOR2D& aOrigin,
                         const VECTOR2D& aLine, double aTickLen, int aNumDivisions )
 {
-    const double backTickSpace = aLine.EuclideanNorm() / aNumDivisions;
+    const double   backTickSpace = aLine.EuclideanNorm() / aNumDivisions;
     const VECTOR2D backTickVec = aLine.Rotate( M_PI_2 ).Resize( aTickLen );
+    TEXT_DIMS      textDims = SetConstantGlyphHeight( aGal, -1 );
 
     for( int i = 0; i < aNumDivisions + 1; ++i )
     {
         const VECTOR2D backTickPos = aOrigin + aLine.Resize( backTickSpace * i );
-        aGal->SetLineWidth( getTickLineWidth( aGal, aLayer ) );
+        aGal->SetLineWidth( getTickLineWidth( textDims, aLayer ) );
         aGal->DrawLine( backTickPos, backTickPos + backTickVec );
     }
 }
@@ -287,7 +253,7 @@ void RULER_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 
 void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
-    KIGFX::GAL* gal = aView->GetGAL();
+    KIGFX::GAL*      gal = aView->GetGAL();
     RENDER_SETTINGS* rs = aView->GetPainter()->GetSettings();
 
     gal->PushDepth();
@@ -303,29 +269,18 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
 
     if( aLayer == LAYER_RULER_SHADOWS )
-    {
-        // Drawing drop-shadows
-        if( gal->GetStrokeColor().GetBrightness() > 0.5 )
-            gal->SetStrokeColor( COLOR4D::BLACK.WithAlpha( 0.7 ) );
-        else
-            gal->SetStrokeColor( COLOR4D::WHITE.WithAlpha( 0.7 ) );
-    }
+        gal->SetStrokeColor( GetShadowColor( gal->GetStrokeColor() ) );
 
     gal->ResetTextAttributes();
+    TEXT_DIMS textDims = SetConstantGlyphHeight( gal );
 
     // draw the main line from the origin to cursor
-    gal->SetLineWidth( getTickLineWidth( gal, aLayer ) );
+    gal->SetLineWidth( getTickLineWidth( textDims, aLayer ) );
     gal->DrawLine( origin, end );
 
     VECTOR2D rulerVec( end - origin );
 
-    // constant text size on screen
-    SetConstantGlyphHeight( *gal, 10.0 );
-
     drawCursorStrings( aLayer, aView, end, rulerVec, m_userUnits );
-
-    // tick label size
-    SetConstantGlyphHeight( *gal, 9.0 );
 
     // basic tick size
     const double minorTickLen = 5.0 / gal->GetWorldScale();

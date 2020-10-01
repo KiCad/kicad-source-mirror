@@ -91,9 +91,6 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     gal.ResetTextAttributes();
 
-    // constant text size on screen
-    SetConstantGlyphHeight( gal, 12.0 );
-
     // angle reference arc size
     const double innerRad = 12.0 / gal.GetWorldScale();
 
