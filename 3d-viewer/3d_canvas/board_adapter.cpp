@@ -253,9 +253,9 @@ bool BOARD_ADAPTER::ShouldModuleBeDisplayed( MODULE_ATTR_T aModuleAttributs ) co
 #define COPPER_THICKNESS KiROUND( 0.035 * IU_PER_MM )   // for 35 um
 #define TECH_LAYER_THICKNESS KiROUND( 0.04 * IU_PER_MM )
 
-int BOARD_ADAPTER::GetCopperThicknessBIU() const noexcept
+int BOARD_ADAPTER::GetHolePlatingThicknessBIU() const noexcept
 {
-    return COPPER_THICKNESS;
+    return m_board->GetDesignSettings().GetHolePlatingThickness();
 }
 
 unsigned int BOARD_ADAPTER::GetNrSegmentsCircle( float aDiameter3DU ) const

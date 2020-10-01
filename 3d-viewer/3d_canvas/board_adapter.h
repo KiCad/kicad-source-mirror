@@ -199,7 +199,7 @@ class BOARD_ADAPTER
      * @brief GetCopperThicknessBIU - Get the current copper layer thickness
      * @return thickness in board unities
      */
-    int GetCopperThicknessBIU() const noexcept;
+    int GetHolePlatingThicknessBIU() const noexcept;
 
     /**
      * @brief GetBoardSizeBIU - Get the board size
@@ -400,19 +400,16 @@ class BOARD_ADAPTER
         return m_through_holes_outer_ring;
     }
 
-    /**
-     * @brief GetThroughHole_Outer_poly -
-     * @return
-     */
     const SHAPE_POLY_SET &GetThroughHole_Outer_poly() const noexcept
     {
         return m_through_outer_holes_poly;
     }
 
-    /**
-     * @brief GetThroughHole_Outer_poly_NPTH -
-     * @return
-     */
+    const SHAPE_POLY_SET &GetThroughHole_Outer_Ring_poly() const noexcept
+    {
+        return m_through_outer_ring_holes_poly;
+    }
+
     const SHAPE_POLY_SET &GetThroughHole_Outer_poly_NPTH() const noexcept
     {
         return m_through_outer_holes_poly_NPTH;
@@ -427,38 +424,9 @@ class BOARD_ADAPTER
         return m_through_holes_vias_outer;
     }
 
-    /**
-     * @brief GetThroughHole_Vias_Outer_Ring -
-     * @return a container with via THT holes only, including annular ring size
-     */
-    const CBVHCONTAINER2D& GetThroughHole_Vias_Outer_Ring() const noexcept
-    {
-        return m_through_holes_vias_outer_ring;
-    }
-
-    /**
-     * @brief GetThroughHole_Vias_Inner -
-     * @return a container with via THT holes only
-     */
-    const CBVHCONTAINER2D &GetThroughHole_Vias_Inner() const noexcept
-    {
-        return m_through_holes_vias_inner;
-    }
-
-    /**
-     * @brief GetThroughHole_Vias_Outer_poly -
-     */
     const SHAPE_POLY_SET &GetThroughHole_Vias_Outer_poly() const noexcept
     {
         return m_through_outer_holes_vias_poly;
-    }
-
-    /**
-     * @brief GetThroughHole_Vias_Outer_Ring_poly -
-     */
-    const SHAPE_POLY_SET& GetThroughHole_Vias_Outer_Ring_poly() const noexcept
-    {
-        return m_through_outer_ring_holes_vias_poly;
     }
 
     /**
@@ -720,7 +688,7 @@ private:
     SHAPE_POLY_SET    m_through_outer_holes_vias_poly;
 
     /// It contains polygon contours for through holes vias (outer annular ring)
-    SHAPE_POLY_SET    m_through_outer_ring_holes_vias_poly;
+    SHAPE_POLY_SET    m_through_outer_ring_holes_poly;
 
     /// PCB board outline polygon
     SHAPE_POLY_SET    m_board_poly;
@@ -752,10 +720,6 @@ private:
     /// It contains the list of throughHoles vias of the board,
     /// the radius of the hole is inflated with the copper tickness
     CBVHCONTAINER2D   m_through_holes_vias_outer;
-
-    /// It contains the list of throughHoles vias of the board,
-    /// the radius of the hole is inflated with the annular ring size
-    CBVHCONTAINER2D   m_through_holes_vias_outer_ring;
 
     /// It contains the list of throughHoles vias of the board,
     /// the radius of the hole

@@ -111,13 +111,12 @@ void BOARD_ADAPTER::destroyLayers()
     m_through_holes_outer.Clear();
     m_through_holes_outer_ring.Clear();
     m_through_holes_vias_outer.Clear();
-    m_through_holes_vias_outer_ring.Clear();
     m_through_holes_vias_inner.Clear();
     m_through_outer_holes_poly_NPTH.RemoveAllContours();
     m_through_outer_holes_poly.RemoveAllContours();
 
     m_through_outer_holes_vias_poly.RemoveAllContours();
-    m_through_outer_ring_holes_vias_poly.RemoveAllContours();
+    m_through_outer_ring_holes_poly.RemoveAllContours();
 }
 
 
@@ -319,10 +318,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                     if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
                     {
-                        m_through_holes_outer_ring.Add(
-                                new CFILLEDCIRCLE2D( via_center, ring_radius, *track ) );
-                        m_through_holes_vias_outer_ring.Add(
-                                new CFILLEDCIRCLE2D( via_center, ring_radius, *track ) );
+                        m_through_holes_outer_ring.Add( new CFILLEDCIRCLE2D( via_center,
+                                                                             ring_radius,
+                                                                             *track ) );
                     }
 
                     m_through_holes_inner.Add( new CFILLEDCIRCLE2D( via_center,
@@ -391,7 +389,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     }
 
                     const int holediameter = via->GetDrillValue();
-                    const int hole_outer_radius = (holediameter / 2) + GetCopperThicknessBIU();
+                    const int hole_outer_radius = (holediameter / 2) + GetHolePlatingThicknessBIU();
 
                     TransformCircleToPolygon( *layerOuterHolesPoly, via->GetStart(),
                             hole_outer_radius, ARC_HIGH_DEF );
@@ -402,7 +400,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 else if( curr_layer_id == layer_id[0] ) // it only adds once the THT holes
                 {
                     const int holediameter = via->GetDrillValue();
-                    const int hole_outer_radius = (holediameter / 2)+ GetCopperThicknessBIU();
+                    const int hole_outer_radius = (holediameter / 2) + GetHolePlatingThicknessBIU();
                     const int hole_outer_ring_radius = via->GetWidth() / 2.0f;
 
                     // Add through hole contourns
@@ -417,8 +415,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                     if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
                     {
-                        TransformCircleToPolygon( m_through_outer_ring_holes_vias_poly,
-                                via->GetStart(), hole_outer_ring_radius, ARC_HIGH_DEF );
+                        TransformCircleToPolygon( m_through_outer_ring_holes_poly,
+                                                  via->GetStart(), hole_outer_ring_radius, ARC_HIGH_DEF );
                     }
                 }
             }
@@ -469,10 +467,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             if( !padHole.x )    // Not drilled pad like SMD pad
                 continue;
 
-            // The hole in the body is inflated by copper thickness,
-            // if not plated, no copper
+            // The hole in the body is inflated by copper thickness, if not plated, no copper
             const int inflate = ( pad->GetAttribute () != PAD_ATTRIB_NPTH ) ?
-                                GetCopperThicknessBIU() : 0;
+                                GetHolePlatingThicknessBIU() : 0;
 
             m_stats_nr_holes++;
             m_stats_hole_med_diameter += ( ( pad->GetDrillSize().x +
@@ -504,16 +501,22 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 continue;
 
             // The hole in the body is inflated by copper thickness.
-            const int inflate = GetCopperThicknessBIU();
+            const int inflate = GetHolePlatingThicknessBIU();
 
             if( pad->GetAttribute () != PAD_ATTRIB_NPTH )
             {
+                if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
+                    pad->TransformHoleWithClearanceToPolygon( m_through_outer_ring_holes_poly, inflate );
+
                 pad->TransformHoleWithClearanceToPolygon( m_through_outer_holes_poly, inflate );
             }
             else
             {
                 // If not plated, no copper.
-                pad->TransformHoleWithClearanceToPolygon( m_through_outer_holes_poly_NPTH, inflate );
+                if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
+                    pad->TransformHoleWithClearanceToPolygon( m_through_outer_ring_holes_poly, 0 );
+
+                pad->TransformHoleWithClearanceToPolygon( m_through_outer_holes_poly_NPTH, 0 );
             }
         }
     }
@@ -877,7 +880,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     m_through_outer_holes_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
     m_through_outer_holes_poly_NPTH.Simplify( SHAPE_POLY_SET::PM_FAST );
     m_through_outer_holes_vias_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
-    m_through_outer_ring_holes_vias_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
+    m_through_outer_ring_holes_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     // Build Tech layers
     // Based on: https://github.com/KiCad/kicad-source-mirror/blob/master/3d-viewer/3d_draw.cpp#L1059
@@ -1070,7 +1073,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     if( !m_layers_holes2D.empty() )
     {
-        for( auto& hole : m_layers_holes2D)
+        for( auto& hole : m_layers_holes2D )
             hole.second->BuildBVH();
     }
 

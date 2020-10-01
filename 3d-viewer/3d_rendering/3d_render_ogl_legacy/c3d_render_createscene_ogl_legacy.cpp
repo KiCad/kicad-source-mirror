@@ -530,9 +530,9 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
 
     if( m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
     {
-        m_ogl_disp_list_through_holes_vias_outer_ring = generate_holes_display_list(
-                m_boardAdapter.GetThroughHole_Vias_Outer_Ring().GetList(),
-                m_boardAdapter.GetThroughHole_Vias_Outer_Ring_poly(),
+        m_ogl_disp_list_through_holes_outer_ring = generate_holes_display_list(
+                m_boardAdapter.GetThroughHole_Outer_Ring().GetList(),
+                m_boardAdapter.GetThroughHole_Outer_Ring_poly(),
                 1.0f,
                 0.0f,
                 false );
@@ -802,7 +802,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
                     if( !hasHole )
                         continue;
 
-                    const int copperThickness = m_boardAdapter.GetCopperThicknessBIU();
+                    const int copperThickness = m_boardAdapter.GetHolePlatingThicknessBIU();
 
                     pad->TransformHoleWithClearanceToPolygon( tht_outer_holes_poly,
                                                               copperThickness, ARC_LOW_DEF );

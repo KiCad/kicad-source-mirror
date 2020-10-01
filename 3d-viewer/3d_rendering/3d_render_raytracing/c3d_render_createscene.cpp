@@ -1059,7 +1059,7 @@ void C3D_RENDER_RAYTRACING::insert3DViaHole( const VIA* aVia )
 
     CRING2D *ring = new CRING2D( center,
                                  radiusBUI * m_boardAdapter.BiuTo3Dunits(),
-                                 ( radiusBUI + m_boardAdapter.GetCopperThicknessBIU() ) *
+                                 ( radiusBUI + m_boardAdapter.GetHolePlatingThicknessBIU() ) *
                                  m_boardAdapter.BiuTo3Dunits(),
                                  *aVia );
 
@@ -1110,11 +1110,11 @@ void C3D_RENDER_RAYTRACING::insert3DPadHole( const D_PAD* aPad )
         SFVEC2F center = SFVEC2F( aPad->GetPosition().x * m_boardAdapter.BiuTo3Dunits(),
                                   -aPad->GetPosition().y * m_boardAdapter.BiuTo3Dunits() );
 
+        int innerRadius = drillsize.x / 2;
+        int outerRadius = innerRadius + m_boardAdapter.GetHolePlatingThicknessBIU();
         CRING2D *ring = new CRING2D( center,
-                                     ( drillsize.x / 2 ) * m_boardAdapter.BiuTo3Dunits(),
-                                     (( drillsize.x / 2 ) +
-                                      m_boardAdapter.GetCopperThicknessBIU() ) *
-                                     m_boardAdapter.BiuTo3Dunits(),
+                                     innerRadius * m_boardAdapter.BiuTo3Dunits(),
+                                     outerRadius * m_boardAdapter.BiuTo3Dunits(),
                                      *aPad );
 
         m_containerWithObjectsToDelete.Add( ring );
@@ -1155,8 +1155,7 @@ void C3D_RENDER_RAYTRACING::insert3DPadHole( const D_PAD* aPad )
                                              -start.y * m_boardAdapter.BiuTo3Dunits() ),
                                     SFVEC2F( end.x * m_boardAdapter.BiuTo3Dunits(),
                                              -end.y * m_boardAdapter.BiuTo3Dunits() ),
-                                    ( width + m_boardAdapter.GetCopperThicknessBIU() * 2 ) *
-                                    m_boardAdapter.BiuTo3Dunits(),
+                                    ( width + m_boardAdapter.GetHolePlatingThicknessBIU() * 2 ) * m_boardAdapter.BiuTo3Dunits(),
                                     *aPad );
 
         // NOTE: the round segment width is the "diameter", so we double the thickness
