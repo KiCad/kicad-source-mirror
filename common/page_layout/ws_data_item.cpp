@@ -49,7 +49,6 @@
  * describes the page layout (can be the default page layout or a custom file).
  */
 
-#include <fctsys.h>
 #include <gr_text.h>
 #include <eda_rect.h>
 #include <math/util.h>      // for KiROUND

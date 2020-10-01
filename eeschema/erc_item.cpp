@@ -22,7 +22,6 @@
  */
 
 
-#include <fctsys.h>
 #include "wx/html/m_templ.h"
 #include "wx/html/styleparams.h"
 #include <erc.h>

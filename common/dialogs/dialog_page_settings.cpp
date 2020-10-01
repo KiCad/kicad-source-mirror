@@ -23,12 +23,9 @@
 
 #include <base_screen.h>
 #include <base_struct.h>
-#include <common.h>
 #include <confirm.h>
 #include <dialog_page_settings.h>
 #include <eda_draw_frame.h>
-#include <fctsys.h>
-#include <gr_basic.h>
 #include <kiface_i.h>
 #include <math/util.h>      // for KiROUND, Clamp
 #include <project.h>

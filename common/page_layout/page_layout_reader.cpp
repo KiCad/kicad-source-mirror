@@ -29,7 +29,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <base_struct.h>
 #include <ws_painter.h>
 #include <ws_draw_item.h>

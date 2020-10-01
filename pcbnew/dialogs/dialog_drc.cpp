@@ -26,7 +26,6 @@
 #include <bitmaps.h>
 #include <confirm.h>
 #include <dialog_drc.h>
-#include <fctsys.h>
 #include <kiface_i.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>

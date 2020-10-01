@@ -27,8 +27,6 @@
  * @brief build the standard menu to show the list of available translations
  */
 
-#include <fctsys.h>
-
 #include <pgm_base.h>
 #include <id.h>
 #include <menus_helpers.h>

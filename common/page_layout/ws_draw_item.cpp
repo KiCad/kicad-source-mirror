@@ -48,10 +48,8 @@
  * describes the page layout (can be the default page layout or a custom file).
  */
 
-#include <fctsys.h>
 #include <eda_rect.h>
 #include <eda_draw_frame.h>
-#include <gr_text.h>
 #include <ws_draw_item.h>
 #include <ws_data_model.h>
 #include <base_units.h>

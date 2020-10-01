@@ -44,9 +44,7 @@
  * for undo/redo storage (wrapped in a WS_PROXY_UNDO_ITEM).
  */
 
-#include <fctsys.h>
 #include <kiface_i.h>
-#include <gr_text.h>
 #include <ws_painter.h>
 #include <title_block.h>
 #include <ws_draw_item.h>

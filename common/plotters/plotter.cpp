@@ -37,12 +37,10 @@
  * is not handled here.
  */
 
-#include <fctsys.h>
 #include <vector>
 #include <trigo.h>
 #include <base_struct.h>
 #include <plotter.h>
-#include <gr_text.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/geometry_utils.h>
 #include <bezier_curves.h>

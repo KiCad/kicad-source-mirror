@@ -27,7 +27,6 @@
 
 #include <functional>
 using namespace std::placeholders;
-#include <fctsys.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <class_board.h>
