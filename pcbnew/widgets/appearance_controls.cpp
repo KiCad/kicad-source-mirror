@@ -1354,7 +1354,7 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 
                             wxASSERT( layId >= 0 && layId < PCB_LAYER_ID_COUNT );
 
-                            if( LSET::ForbiddenFootprintLayers().test( layId ) )
+                            if( m_isFpEditor && LSET::ForbiddenFootprintLayers().test( layId ) )
                             {
                                 static_cast<BITMAP_TOGGLE*>( btn )->SetValue( !isVisible );
                                 return;
