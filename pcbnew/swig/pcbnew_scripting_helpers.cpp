@@ -152,6 +152,17 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
         BOARD_DESIGN_SETTINGS& bds = brd->GetDesignSettings();
         bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( brd, &bds );
 
+        try
+        {
+            wxFileName rules = pro;
+            rules.SetExt( DesignRulesFileExtension );
+            bds.m_DRCEngine->InitEngine( rules );
+        }
+        catch( ... )
+        {
+            // Best efforts...
+        }
+
         for( MARKER_PCB* marker : brd->ResolveDRCExclusions() )
             brd->Add( marker );
 
