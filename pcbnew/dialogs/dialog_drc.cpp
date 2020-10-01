@@ -119,14 +119,7 @@ void DIALOG_DRC::OnActivateDlg( wxActivateEvent& aEvent )
 
         DRC_TOOL* drcTool = m_brdEditor->GetToolManager()->GetTool<DRC_TOOL>();
         drcTool->DestroyDRCDialog();
-
-        return;
     }
-
-    m_markerTreeModel->SetProvider( m_markersProvider );
-    m_unconnectedTreeModel->SetProvider( m_unconnectedItemsProvider );
-    m_footprintWarningsTreeModel->SetProvider( m_footprintWarningsProvider );
-    updateDisplayedCounts();
 }
 
 
