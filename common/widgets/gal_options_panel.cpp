@@ -28,6 +28,7 @@
 #include <wx/radiobox.h>
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
+#include <wx/statbox.h>
 
 #include <widgets/gal_options_panel.h>
 

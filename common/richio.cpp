@@ -28,6 +28,9 @@
 
 #include <richio.h>
 
+#include <wx/file.h>
+#include <wx/translation.h>
+
 
 // Fall back to getc() when getc_unlocked() is not available on the target platform.
 #if !defined( HAVE_FGETC_NOLOCK )
