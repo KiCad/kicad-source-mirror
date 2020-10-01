@@ -13,14 +13,12 @@ jobs:
           github-token: ${{ github.token }}
           pr-comment: >
             Thank you for offering to help improve KiCad. 
-
             This repository is a one-way mirror that can not accept pull requests.
-
             Please submit your merge request to the official KiCad repository 
             at https://gitlab.com/kicad/code/kicad/-/merge_requests
-
             While we know that _your_ PR is not spam, we mark it as such to dissuade
-            the Hacktoberfest PRs.
+            the Hacktoberfest PRs.  Please join us over at GitLab.  You can even use
+            your GitHub credentials to log in there without creating a new account.
           skip-closed-pr-comment: true
           pr-labels: 'spam'
           close-pr: true
