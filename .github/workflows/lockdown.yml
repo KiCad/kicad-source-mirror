@@ -1,0 +1,28 @@
+name: 'Redirect PRs'
+
+on:
+  pull_request:
+    types: opened
+
+jobs:
+  lockdown:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dessant/repo-lockdown@v2
+        with:
+          github-token: ${{ github.token }}
+          pr-comment: >
+            Thank you for offering to help improve KiCad. 
+
+            This repository is a one-way mirror that can not accept pull requests.
+
+            Please submit your merge request to the official KiCad repository 
+            at https://gitlab.com/kicad/code/kicad/-/merge_requests
+
+            While we know that _your_ PR is not spam, we mark it as such to dissuade
+            the Hacktoberfest PRs.
+          skip-closed-pr-comment: true
+          pr-labels: 'spam'
+          close-pr: true
+          lock-pr: true
+          pr-lock-reason: 'spam'
