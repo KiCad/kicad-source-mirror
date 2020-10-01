@@ -30,6 +30,7 @@
 #include <wx/aui/auibar.h>
 #include <wx/aui/framemanager.h>
 #include <wx/popupwin.h>
+#include <wx/panel.h>
 #include <tool/action_manager.h>
 #include <tool/tool_action.h>
 #include <tool/tool_event.h>
