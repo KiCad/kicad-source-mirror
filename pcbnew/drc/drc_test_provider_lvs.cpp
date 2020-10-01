@@ -216,7 +216,7 @@ bool DRC_TEST_PROVIDER_LVS::Run()
         if( !netlist )
         {
             reportAux( _("No netlist provided, skipping LVS.") );
-            return false;
+            return true;
         }
 
         testFootprints( *netlist );
