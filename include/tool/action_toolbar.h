@@ -25,6 +25,7 @@
 #define ACTION_TOOLBAR_H
 
 #include <map>
+#include <memory>
 #include <vector>
 #include <wx/bitmap.h>          // Needed for the auibar include
 #include <wx/aui/auibar.h>
@@ -232,7 +233,7 @@ public:
      * @param aAction is the action to get the menu
      * @param aMenu is the context menu
      */
-    void AddToolContextMenu( const TOOL_ACTION& aAction, ACTION_MENU* aMenu );
+    void AddToolContextMenu( const TOOL_ACTION& aAction, std::unique_ptr<ACTION_MENU> aMenu );
 
     /**
      * Add a set of actions to a toolbar as a group. One action from the group will be displayed
@@ -321,9 +322,9 @@ protected:
     std::map<int, bool>                m_toolKinds;
     std::map<int, bool>                m_toolCancellable;
     std::map<int, const TOOL_ACTION*>  m_toolActions;
-    std::map<int, ACTION_MENU*>        m_toolMenus;
-
     std::map<int, ACTION_GROUP*>       m_actionGroups;
+
+    std::map<int, std::unique_ptr<ACTION_MENU>> m_toolMenus;
 };
 
 #endif

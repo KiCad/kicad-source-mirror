@@ -188,11 +188,12 @@ ACTION_TOOLBAR::~ACTION_TOOLBAR()
 {
     delete m_paletteTimer;
 
-    // Delete all the menus
-    for( auto it = m_toolMenus.begin(); it != m_toolMenus.end(); it++ )
-        delete it->second;
-
+    // Clear all the maps keeping track of our items on the toolbar
     m_toolMenus.clear();
+    m_actionGroups.clear();
+    m_toolCancellable.clear();
+    m_toolKinds.clear();
+    m_toolActions.clear();
 }
 
 
@@ -242,23 +243,12 @@ void ACTION_TOOLBAR::AddScaledSeparator( wxWindow* aWindow )
 }
 
 
-void ACTION_TOOLBAR::AddToolContextMenu( const TOOL_ACTION& aAction, ACTION_MENU* aMenu )
+void ACTION_TOOLBAR::AddToolContextMenu( const TOOL_ACTION& aAction,
+                                         std::unique_ptr<ACTION_MENU> aMenu )
 {
     int toolId = aAction.GetUIId();
 
-    // If this is replacing an existing menu, delete the existing menu before adding the new one
-    const auto it = m_toolMenus.find( toolId );
-
-    if( it != m_toolMenus.end() )
-    {
-        // Don't delete it if it is the same menu, just ignore this call
-        if( it->second == aMenu )
-            return;
-
-        delete it->second;
-    }
-
-    m_toolMenus[toolId] = aMenu;
+    m_toolMenus[toolId] = std::move( aMenu );
 }
 
 
@@ -333,12 +323,14 @@ void ACTION_TOOLBAR::doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aA
 
 void ACTION_TOOLBAR::ClearToolbar()
 {
-    // Delete all the menus
-    for( auto it = m_toolMenus.begin(); it != m_toolMenus.end(); it++ )
-        delete it->second;
-
-    // Clear the menu items and the actual toolbar
+    // Clear all the maps keeping track of our items on the toolbar
     m_toolMenus.clear();
+    m_actionGroups.clear();
+    m_toolCancellable.clear();
+    m_toolKinds.clear();
+    m_toolActions.clear();
+
+    // Remove the actual tools from the toolbar
     Clear();
 }
 
@@ -436,7 +428,10 @@ void ACTION_TOOLBAR::onToolRightClick( wxAuiToolBarEvent& aEvent )
         return;
 
     // Update and show the menu
-    ACTION_MENU* menu = menuIt->second;
+    std::unique_ptr<ACTION_MENU>& owningMenu = menuIt->second;
+
+    // Get the actual menu pointer to show it
+    ACTION_MENU* menu = owningMenu.get();
     SELECTION    dummySel;
 
     if( CONDITIONAL_MENU* condMenu = dynamic_cast<CONDITIONAL_MENU*>( menu ) )
