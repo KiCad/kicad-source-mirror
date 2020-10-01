@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,8 +31,8 @@
 
 
 #include <macros.h>
+#include <sch_text.h>
 
-class SCH_TEXT;
 class SCH_GLOBALLABEL;
 
 class SCH_IREF : public SCH_TEXT
@@ -76,6 +76,10 @@ public:
 
 private:
     void SetIrefOrientation( LABEL_SPIN_STYLE aSpinStyle );
+
+    // We create a different set parent function for this class, so we hide
+    // the inherited one.
+    using EDA_ITEM::SetParent;
 
     std::vector<int> m_refTable;
     SCH_GLOBALLABEL* m_parent;
