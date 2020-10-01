@@ -375,7 +375,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
 
-            if( m_additive || m_subtractive || m_exclusive_or || m_frame->GetDragSelects() )
+            if( m_additive || m_subtractive || m_exclusive_or ||
+                ( m_selection.Empty() && m_frame->GetDragSelects() ) )
             {
                 selectMultiple();
             }
