@@ -412,30 +412,11 @@ CLAYERS_OGL_DISP_LISTS* C3D_RENDER_OGL_LEGACY::generateLayerListFromContainer( c
 }
 
 
-void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter )
+CLAYERS_OGL_DISP_LISTS* C3D_RENDER_OGL_LEGACY::createBoard( SHAPE_POLY_SET aBoardPoly )
 {
-    m_reloadRequested = false;
-
-    ogl_free_all_display_lists();
-
-    COBJECT2D_STATS::Instance().ResetStats();
-
-    unsigned stats_startReloadTime = GetRunningMicroSecs();
-
-    m_boardAdapter.InitSettings( aStatusReporter, aWarningReporter );
-
-    SFVEC3F camera_pos = m_boardAdapter.GetBoardCenter3DU();
-    m_camera.SetBoardLookAtPos( camera_pos );
-
-    if( aStatusReporter )
-        aStatusReporter->Report( _( "Load OpenGL: board" ) );
-
-    // Create Board
-    // /////////////////////////////////////////////////////////////////////////
-
+    CLAYERS_OGL_DISP_LISTS* dispLists = nullptr;
     CCONTAINER2D boardContainer;
-    SHAPE_POLY_SET tmpBoard = m_boardAdapter.GetBoardPoly();
-    Convert_shape_line_polygon_to_triangles( tmpBoard,
+    Convert_shape_line_polygon_to_triangles( aBoardPoly,
                                              boardContainer,
                                              m_boardAdapter.BiuTo3Dunits(),
                                              (const BOARD_ITEM &)*m_boardAdapter.GetBoard() );
@@ -487,14 +468,53 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
                                                   m_boardAdapter.BiuTo3Dunits(),
                                                   false );
 
-            m_ogl_disp_list_board = new CLAYERS_OGL_DISP_LISTS( *layerTriangles,
-                                                                m_ogl_circle_texture,
-                                                                layer_z_top,
-                                                                layer_z_top );
+            dispLists = new CLAYERS_OGL_DISP_LISTS( *layerTriangles,
+                                                    m_ogl_circle_texture,
+                                                    layer_z_top,
+                                                    layer_z_top );
         }
 
         delete layerTriangles;
     }
+
+    return dispLists;
+}
+
+
+void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter )
+{
+    m_reloadRequested = false;
+
+    ogl_free_all_display_lists();
+
+    COBJECT2D_STATS::Instance().ResetStats();
+
+    unsigned stats_startReloadTime = GetRunningMicroSecs();
+
+    m_boardAdapter.InitSettings( aStatusReporter, aWarningReporter );
+
+    SFVEC3F camera_pos = m_boardAdapter.GetBoardCenter3DU();
+    m_camera.SetBoardLookAtPos( camera_pos );
+
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Load OpenGL: board" ) );
+
+    // Create Board
+    // /////////////////////////////////////////////////////////////////////////
+
+    m_ogl_disp_list_board = createBoard( m_boardAdapter.GetBoardPoly() );
+
+    SHAPE_POLY_SET anti_board;
+    anti_board.NewOutline();
+    anti_board.Append( VECTOR2I( -INT_MAX/2, -INT_MAX/2 ) );
+    anti_board.Append( VECTOR2I(  INT_MAX/2, -INT_MAX/2 ) );
+    anti_board.Append( VECTOR2I(  INT_MAX/2,  INT_MAX/2 ) );
+    anti_board.Append( VECTOR2I( -INT_MAX/2,  INT_MAX/2 ) );
+    anti_board.Outline( 0 ).SetClosed( true );
+
+    anti_board.BooleanSubtract( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_FAST );
+    m_ogl_disp_list_anti_board = createBoard( anti_board );
+    m_ogl_disp_list_anti_board->SetItIsTransparent( true );
 
     // Create Through Holes and vias
     // /////////////////////////////////////////////////////////////////////////

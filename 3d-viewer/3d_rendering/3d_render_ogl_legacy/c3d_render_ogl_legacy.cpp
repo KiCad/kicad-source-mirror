@@ -59,6 +59,7 @@ C3D_RENDER_OGL_LEGACY::C3D_RENDER_OGL_LEGACY( BOARD_ADAPTER& aAdapter, CCAMERA& 
     m_ogl_disp_lists_layers_holes_inner.clear();
     m_triangles.clear();
     m_ogl_disp_list_board = NULL;
+    m_ogl_disp_list_anti_board = NULL;
 
     m_ogl_disp_lists_platedPads_F_Cu = nullptr;
     m_ogl_disp_lists_platedPads_B_Cu = nullptr;
@@ -543,12 +544,12 @@ void C3D_RENDER_OGL_LEGACY::render_board_body( bool aSkipRenderHoles )
         if( (m_ogl_disp_list_through_holes_outer_with_npth) && (!aSkipRenderHoles) )
         {
             m_ogl_disp_list_through_holes_outer_with_npth->ApplyScalePosition(
-                    -m_boardAdapter.GetEpoxyThickness3DU() / 2.0f,
-                    m_boardAdapter.GetEpoxyThickness3DU() );
+                        -m_boardAdapter.GetEpoxyThickness3DU() / 2.0f,
+                        m_boardAdapter.GetEpoxyThickness3DU() );
 
             m_ogl_disp_list_board->DrawAllCameraCulledSubtractLayer(
-                        m_ogl_disp_list_through_holes_outer_with_npth,
-                        NULL );
+                        true,
+                        m_ogl_disp_list_through_holes_outer_with_npth );
         }
         else
         {
@@ -776,9 +777,9 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                     if( viasHolesLayer != NULL )
                     {
                         pLayerDispList->DrawAllCameraCulledSubtractLayer(
+                                    drawMiddleSegments,
                                     m_ogl_disp_list_through_holes_outer,
-                                    viasHolesLayer,
-                                    drawMiddleSegments );
+                                    viasHolesLayer );
 
                         // Draw copper plated pads
 
@@ -787,16 +788,19 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                             setPlatedCopperAndDepthOffset( layer_id );
 
                         if( ( layer_id == F_Cu ) && m_ogl_disp_lists_platedPads_F_Cu )
+                        {
                             m_ogl_disp_lists_platedPads_F_Cu->DrawAllCameraCulledSubtractLayer(
+                                                                drawMiddleSegments,
                                                                 m_ogl_disp_list_through_holes_outer,
-                                                                viasHolesLayer,
-                                                                drawMiddleSegments );
-                        else
-                            if( ( layer_id == B_Cu ) && m_ogl_disp_lists_platedPads_B_Cu )
-                                m_ogl_disp_lists_platedPads_B_Cu->DrawAllCameraCulledSubtractLayer(
-                                                                    m_ogl_disp_list_through_holes_outer,
-                                                                    viasHolesLayer,
-                                                                    drawMiddleSegments );
+                                                                viasHolesLayer );
+                        }
+                        else if( ( layer_id == B_Cu ) && m_ogl_disp_lists_platedPads_B_Cu )
+                        {
+                            m_ogl_disp_lists_platedPads_B_Cu->DrawAllCameraCulledSubtractLayer(
+                                                                drawMiddleSegments,
+                                                                m_ogl_disp_list_through_holes_outer,
+                                                                viasHolesLayer );
+                        }
 
                         unsetDepthOffset();
                     }
@@ -804,27 +808,29 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                 else
                 {
                     pLayerDispList->DrawAllCameraCulledSubtractLayer(
-                                m_ogl_disp_list_through_holes_outer,
-                                NULL,
-                                drawMiddleSegments );
+                                drawMiddleSegments,
+                                m_ogl_disp_list_through_holes_outer );
 
                     // Draw copper plated pads
 
                     if( ( ( layer_id == F_Cu ) || ( layer_id == B_Cu ) ) &&
                         ( m_ogl_disp_lists_platedPads_F_Cu || m_ogl_disp_lists_platedPads_B_Cu ) )
+                    {
                         setPlatedCopperAndDepthOffset( layer_id );
+                    }
 
                     if( ( layer_id == F_Cu ) && m_ogl_disp_lists_platedPads_F_Cu )
+                    {
                         m_ogl_disp_lists_platedPads_F_Cu->DrawAllCameraCulledSubtractLayer(
-                                                            m_ogl_disp_list_through_holes_outer,
-                                                            NULL,
-                                                            drawMiddleSegments );
-                    else
-                        if( ( layer_id == B_Cu ) && m_ogl_disp_lists_platedPads_B_Cu )
-                            m_ogl_disp_lists_platedPads_B_Cu->DrawAllCameraCulledSubtractLayer(
-                                                                m_ogl_disp_list_through_holes_outer,
-                                                                NULL,
-                                                                drawMiddleSegments );
+                                                            drawMiddleSegments,
+                                                            m_ogl_disp_list_through_holes_outer );
+                    }
+                    else if( ( layer_id == B_Cu ) && m_ogl_disp_lists_platedPads_B_Cu )
+                    {
+                        m_ogl_disp_lists_platedPads_B_Cu->DrawAllCameraCulledSubtractLayer(
+                                                            drawMiddleSegments,
+                                                            m_ogl_disp_list_through_holes_outer );
+                    }
 
                     unsetDepthOffset();
                 }
@@ -841,8 +847,13 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                             m_ogl_disp_list_through_holes_outer;
 
             if( dispListThroughHolesOuter )
+            {
                 dispListThroughHolesOuter->ApplyScalePosition( pLayerDispList->GetZBot(),
                         pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
+            }
+
+            m_ogl_disp_list_anti_board->ApplyScalePosition( pLayerDispList->GetZBot(),
+                    pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
 
             if( (!skipRenderHoles) &&
                 m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) &&
@@ -851,37 +862,36 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                   ( ( layer_id == F_SilkS ) &&
                     ( m_ogl_disp_lists_layers.find( F_Mask ) != m_ogl_disp_lists_layers.end() ) ) ) )
             {
-                const PCB_LAYER_ID layerMask_id = (layer_id == B_SilkS)?B_Mask:F_Mask;
+                const PCB_LAYER_ID layerMask_id = (layer_id == B_SilkS) ? B_Mask : F_Mask;
 
                 const CLAYERS_OGL_DISP_LISTS *pLayerDispListMask = m_ogl_disp_lists_layers.at( layerMask_id );
 
                 pLayerDispList->DrawAllCameraCulledSubtractLayer(
+                        drawMiddleSegments,
                         pLayerDispListMask,
                         dispListThroughHolesOuter,
-                        drawMiddleSegments );
+                        m_ogl_disp_list_anti_board );
             }
             else
             {
-                if((!skipRenderHoles) &&
-                   dispListThroughHolesOuter &&
-                   ( ( layer_id == B_SilkS ) || ( layer_id == F_SilkS )
-                      // Remove vias on SolderPaste can be added as an option in future
-                      // ( layer_id == B_Paste ) || ( layer_id == F_Paste ) )
-                    ) )
+                if( !skipRenderHoles &&
+                   dispListThroughHolesOuter && ( layer_id == B_SilkS || layer_id == F_SilkS ) )
                 {
                     pLayerDispList->DrawAllCameraCulledSubtractLayer(
-                            NULL,
+                            drawMiddleSegments,
+                            nullptr,
                             dispListThroughHolesOuter,
-                            drawMiddleSegments );
+                            m_ogl_disp_list_anti_board );
                 }
                 else
                 {
                     // Do not render Paste layers when skipRenderHoles is enabled
                     // otherwise it will cause z-fight issues
-                    if( !( skipRenderHoles &&
-                           ( ( layer_id == B_Paste ) || ( layer_id == F_Paste ) ) ) )
+                    if( !( skipRenderHoles && ( layer_id == B_Paste || layer_id == F_Paste ) ) )
                     {
-                        pLayerDispList->DrawAllCameraCulled( m_camera.GetPos().z, drawMiddleSegments );
+                        pLayerDispList->DrawAllCameraCulledSubtractLayer(
+                                drawMiddleSegments,
+                                m_ogl_disp_list_anti_board );
                     }
                 }
             }
@@ -1136,28 +1146,31 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
 
 
     delete m_ogl_disp_list_board;
-    m_ogl_disp_list_board = 0;
+    m_ogl_disp_list_board = nullptr;
+
+    delete m_ogl_disp_list_anti_board;
+    m_ogl_disp_list_anti_board = nullptr;
 
     delete m_ogl_disp_list_through_holes_outer_with_npth;
-    m_ogl_disp_list_through_holes_outer_with_npth = 0;
+    m_ogl_disp_list_through_holes_outer_with_npth = nullptr;
 
     delete m_ogl_disp_list_through_holes_outer;
-    m_ogl_disp_list_through_holes_outer = 0;
+    m_ogl_disp_list_through_holes_outer = nullptr;
 
     delete m_ogl_disp_list_through_holes_vias_outer;
-    m_ogl_disp_list_through_holes_vias_outer = 0;
+    m_ogl_disp_list_through_holes_vias_outer = nullptr;
 
     delete m_ogl_disp_list_through_holes_outer_ring;
-    m_ogl_disp_list_through_holes_outer_ring = 0;
+    m_ogl_disp_list_through_holes_outer_ring = nullptr;
 
     delete m_ogl_disp_list_via;
-    m_ogl_disp_list_via = 0;
+    m_ogl_disp_list_via = nullptr;
 
     delete m_ogl_disp_list_pads_holes;
-    m_ogl_disp_list_pads_holes = 0;
+    m_ogl_disp_list_pads_holes = nullptr;
 
     delete m_ogl_disp_list_vias_and_pad_holes_outer_contourn_and_caps;
-    m_ogl_disp_list_vias_and_pad_holes_outer_contourn_and_caps = 0;
+    m_ogl_disp_list_vias_and_pad_holes_outer_contourn_and_caps = nullptr;
 }
 
 
@@ -1196,9 +1209,9 @@ void C3D_RENDER_OGL_LEGACY::render_solder_mask_layer(PCB_LAYER_ID aLayerID,
             else
             {
                 m_ogl_disp_list_board->DrawAllCameraCulledSubtractLayer(
+                            aDrawMiddleSegments,
                             pLayerDispListMask,
-                            m_ogl_disp_list_through_holes_vias_outer,
-                            aDrawMiddleSegments );
+                            m_ogl_disp_list_through_holes_vias_outer );
             }
         }
         else
@@ -1226,9 +1239,8 @@ void C3D_RENDER_OGL_LEGACY::render_solder_mask_layer(PCB_LAYER_ID aLayerID,
             else
             {
                 m_ogl_disp_list_board->DrawAllCameraCulledSubtractLayer(
-                            NULL,
-                            m_ogl_disp_list_through_holes_vias_outer,
-                            aDrawMiddleSegments );
+                            aDrawMiddleSegments,
+                            m_ogl_disp_list_through_holes_vias_outer );
             }
         }
     }

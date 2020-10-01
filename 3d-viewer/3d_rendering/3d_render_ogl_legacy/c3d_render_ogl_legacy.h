@@ -73,6 +73,7 @@ public:
 
 private:
     bool initializeOpenGL();
+    CLAYERS_OGL_DISP_LISTS* createBoard( SHAPE_POLY_SET aBoardPoly );
     void reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
 
     void ogl_set_arrow_material();
@@ -84,6 +85,7 @@ private:
     MAP_OGL_DISP_LISTS      m_ogl_disp_lists_layers_holes_outer;
     MAP_OGL_DISP_LISTS      m_ogl_disp_lists_layers_holes_inner;
     CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_board;
+    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_anti_board;
     CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_outer;
 
     // User for body render

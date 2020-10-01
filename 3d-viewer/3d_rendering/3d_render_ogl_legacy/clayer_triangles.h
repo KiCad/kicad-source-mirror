@@ -253,9 +253,10 @@ public:
      */
     void DrawAllCameraCulled( float zCameraPos, bool aDrawMiddle = true ) const;
 
-    void DrawAllCameraCulledSubtractLayer( const CLAYERS_OGL_DISP_LISTS *aLayerToSubtractA,
-                                           const CLAYERS_OGL_DISP_LISTS *aLayerToSubtractB,
-                                           bool aDrawMiddle = true ) const;
+    void DrawAllCameraCulledSubtractLayer( bool aDrawMiddle,
+                               const CLAYERS_OGL_DISP_LISTS* aLayerToSubtractA = nullptr,
+                               const CLAYERS_OGL_DISP_LISTS* aLayerToSubtractB = nullptr,
+                               const CLAYERS_OGL_DISP_LISTS* aLayerToSubtractC = nullptr ) const;
 
     void ApplyScalePosition( float aZposition, float aZscale );
 
