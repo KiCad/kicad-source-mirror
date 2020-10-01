@@ -31,6 +31,9 @@
 
 
 #include <wx/string.h>
+#include <wx/arrstr.h>
+#include <wx/colour.h>
+
 #include <layers_id_colors_and_visibility.h>
 #include <i18n_utility.h>       // For _HKI definition
 

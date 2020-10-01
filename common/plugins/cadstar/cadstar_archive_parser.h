@@ -29,7 +29,7 @@
 #include <dsnlexer.h>
 #include <macros.h>
 #include <vector>
-#include <wx/wx.h>
+#include <wx/log.h>
 #include <wx/xml/xml.h>
 #include <xnode.h>
 
@@ -443,7 +443,7 @@ public:
      * boundary and defines how the text is displayed.
      *
      * For example, with an alignment of bottom-right the origin will be positioned at the bottom
-     * right of the text boundary. This makes it easier to right-align several text items 
+     * right of the text boundary. This makes it easier to right-align several text items
      * regardless of the length of text displayed.
      *
      * Text Alignment applies to all CADSTAR text. [...]
@@ -451,7 +451,7 @@ public:
      * Note: Unaligned text operates in the way CADSTAR text always has. In most cases this behaves
      * as Bottom Left alignment, but there are a few exceptions, e.g. pin names. Also unaligned
      * multiline text has an origin Bottom Left of the first line."
-     * 
+     *
      * See also JUSTIFICATION
      */
     enum class ALIGNMENT
@@ -472,8 +472,8 @@ public:
     static ALIGNMENT ParseAlignment( XNODE* aNode );
 
     /**
-     * @brief From CADSTAR Help: "Multi Line Text can also be justified as Left, Centre or Right. 
-     * This does not affect the text alignment. Note: Justification of single line text has no 
+     * @brief From CADSTAR Help: "Multi Line Text can also be justified as Left, Centre or Right.
+     * This does not affect the text alignment. Note: Justification of single line text has no
      * effect."
      *
      * This only affects multiline text
@@ -684,7 +684,7 @@ public:
      *        a component outline/area (or an area of component copper, or
      *        a string of component text) dependent on the current mirror
      *        status of the component.
-     *        
+     *
      *        For example, you may require a string of component text to
      *        be displayed only when the component is mirrored."
      */
@@ -1113,27 +1113,27 @@ public:
 
     /**
      * @brief Reads a CADSTAR Archive file (S-parameter format)
-     * @param aFileName 
+     * @param aFileName
      * @param aFileTypeIdentifier Identifier of the first node in the file to check against.
               E.g. "CADSTARPCB"
-     * @return XNODE pointing to the top of the tree for further parsing. Each node has the first 
-     *         element as the node's name and subsequent elements as node attributes ("attr0", 
+     * @return XNODE pointing to the top of the tree for further parsing. Each node has the first
+     *         element as the node's name and subsequent elements as node attributes ("attr0",
      *         "attr1", "attr2", etc.). Caller is responsible for deleting to avoid memory leaks.
      * @throws IO_ERROR
      */
     static XNODE* LoadArchiveFile( const wxString& aFileName, const wxString& aFileTypeIdentifier );
 
     /**
-     * @brief 
-     * @param aAttribute 
-     * @return 
+     * @brief
+     * @param aAttribute
+     * @return
      */
     static bool IsValidAttribute( wxXmlAttribute* aAttribute );
 
     /**
-     * @brief 
-     * @param aNode 
-     * @param aID 
+     * @brief
+     * @param aNode
+     * @param aID
      * @param aIsRequired Prevents exception throwing if false.
      * @return returns the value (wxString) of attribute "attrX" in aNode where 'X' is aID
      * @throws IO_ERROR if attribute does not exist
@@ -1142,9 +1142,9 @@ public:
             XNODE* aNode, unsigned int aID, bool aIsRequired = true );
 
     /**
-     * @brief 
-     * @param aNode 
-     * @param aID 
+     * @brief
+     * @param aNode
+     * @param aID
      * @param aIsRequired Prevents exception throwing if false.
      * @return returns the value (long) of attribute "attrX" in aNode where 'X' is aID
      * @throws IO_ERROR if attribute does not exist
@@ -1152,15 +1152,15 @@ public:
     static long GetXmlAttributeIDLong( XNODE* aNode, unsigned int aID, bool aIsRequired = true );
 
     /**
-     * @brief 
-     * @param aNode 
+     * @brief
+     * @param aNode
      * @throw IO_ERROR if a child node was found
      */
     static void CheckNoChildNodes( XNODE* aNode );
 
     /**
-     * @brief 
-     * @param aNode 
+     * @brief
+     * @param aNode
      * @throw IO_ERROR if a node adjacent to aNode was found
      */
     static void CheckNoNextNodes( XNODE* aNode );
@@ -1168,7 +1168,7 @@ public:
     /**
      * @brief
      * @param aNode with a child node containing an EVALUE
-     * @param aValueToParse 
+     * @param aValueToParse
      * @throw IO_ERROR if unable to parse or node is not an EVALUE
      */
     static void ParseChildEValue( XNODE* aNode, EVALUE& aValueToParse );

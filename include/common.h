@@ -41,7 +41,6 @@
 #include <wx/dir.h>
 
 #include <richio.h>
-#include <gal/color4d.h>
 
 #include <atomic>
 #include <limits>

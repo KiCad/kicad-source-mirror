@@ -25,8 +25,6 @@
 #define  TOOL_HOLDER_H
 
 #include <vector>
-#include <fctsys.h>
-#include <common.h>
 #include <tool/action_manager.h>
 #include <tool/selection.h>
 #include <tool/tool_action.h>
