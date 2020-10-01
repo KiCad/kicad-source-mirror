@@ -181,7 +181,7 @@ public:
      * @return the text rotation for drawings and plotting
      * the footprint rotation is taken in account
      */
-    double GetDrawRotation() const;
+    virtual double GetDrawRotation() const override;
     double GetDrawRotationRadians() const { return GetDrawRotation() * M_PI/1800; }
 
     // Virtual function

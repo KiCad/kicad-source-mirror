@@ -603,14 +603,14 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
             wxString txt = strings_list.Item( ii );
-            GRText( NULL, positions[ii], color, txt, GetTextAngle(), size, GetHorizJustify(),
+            GRText( NULL, positions[ii], color, txt, GetDrawRotation(), size, GetHorizJustify(),
                     GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToBuffer,
                     &aCornerBuffer );
         }
     }
     else
     {
-        GRText( NULL, GetTextPos(), color, GetText(), GetTextAngle(), size, GetHorizJustify(),
+        GRText( NULL, GetTextPos(), color, GetText(), GetDrawRotation(), size, GetHorizJustify(),
                 GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToBuffer,
                 &aCornerBuffer );
     }
@@ -628,6 +628,12 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( ) const
         shape->AddShape( new SHAPE_SEGMENT( pts[jj], pts[jj+1], penWidth ) );
 
     return shape;
+}
+
+
+double EDA_TEXT::GetDrawRotation() const
+{
+    return GetTextAngle();
 }
 
 

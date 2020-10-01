@@ -367,6 +367,8 @@ public:
      */
     virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
+    virtual double GetDrawRotation() const;
+
 private:
     wxString      m_text;
     wxString      m_shown_text;           // Cache of unescaped text for efficient access
