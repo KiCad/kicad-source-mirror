@@ -289,8 +289,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             m_frame->FocusOnItem( nullptr );
 
-            if( m_additive || m_subtractive || m_exclusive_or ||
-                ( m_selection.Empty() && dragAlwaysSelects ) )
+            if( m_additive || m_subtractive || m_exclusive_or || dragAlwaysSelects )
             {
                 selectMultiple();
             }
