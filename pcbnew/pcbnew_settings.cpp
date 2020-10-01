@@ -82,9 +82,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "aui.show_layer_manager",
             &m_AuiPanels.show_layer_manager, true ) );
 
-    m_params.emplace_back( new PARAM<bool>( "aui.show_microwave_tools",
-            &m_AuiPanels.show_microwave_tools, false ) );
-
     m_params.emplace_back(
             new PARAM<int>( "aui.right_panel_width", &m_AuiPanels.right_panel_width, -1 ) );
 
@@ -496,7 +493,6 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     // NOTE: there's no value in line-wrapping these; it just makes the table unreadable.
     //
     ret &= fromLegacy<bool>( aCfg, "ShowLayerManagerTools",    "aui.show_layer_manager" );
-    ret &= fromLegacy<bool>( aCfg, "ShowMicrowaveTools",       "aui.show_microwave_tools" );
 
     ret &= fromLegacy<int>(  aCfg, "FootprintChooserHSashPosition", "footprint_chooser.sash_h" );
     ret &= fromLegacy<int>(  aCfg, "FootprintChooserVSashPosition", "footprint_chooser.sash_v" );

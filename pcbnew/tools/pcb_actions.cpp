@@ -740,11 +740,6 @@ TOOL_ACTION PCB_ACTIONS::showLayersManager( "pcbnew.Control.showLayersManager",
         _( "Show Appearance Manager" ), _( "Show/hide the appearance manager" ),
         layers_manager_xpm );
 
-TOOL_ACTION PCB_ACTIONS::showMicrowaveToolbar( "pcbnew.Control.showMicrowaveToolbar",
-        AS_GLOBAL, 0, "",
-        _( "Show Microwave Toolbar" ), _( "Show/hide microwave toolbar\n(Experimental feature)" ),
-        mw_toolbar_xpm );
-
 TOOL_ACTION PCB_ACTIONS::flipBoard( "pcbnew.Control.flipBoard",
         AS_GLOBAL, 0, "",
         _( "Flip Board View" ), _( "Flip (mirror) the board view" ),

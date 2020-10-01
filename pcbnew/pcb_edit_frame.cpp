@@ -178,10 +178,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_SelTrackWidthBox = NULL;
     m_SelViaSizeBox = NULL;
     m_SelLayerBox = NULL;
-    m_show_microwave_tools = false;
     m_show_layer_manager_tools = true;
     m_hasAutoSave = true;
-    m_microWaveToolBar = NULL;
 
     // We don't know what state board was in when it was lasat saved, so we have to
     // assume dirty
@@ -220,7 +218,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateAuxiliaryToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
-    ReCreateMicrowaveVToolbar();
 
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
 
@@ -246,8 +243,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_optionsToolBar,
                       EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
 
-    m_auimgr.AddPane( m_microWaveToolBar,
-                      EDA_PANE().VToolbar().Name( "MicrowaveToolbar" ).Right().Layer(2) );
     m_auimgr.AddPane( m_drawToolBar,
                       EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(3) );
 
@@ -265,7 +260,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
-    m_auimgr.GetPane( "MicrowaveToolbar" ).Show( m_show_microwave_tools );
 
     // The selection filter doesn't need to grow in the vertical direction when docked
     m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
@@ -593,12 +587,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
             return LayerManagerShown();
         };
 
-    auto microwaveToolbarCond =
-        [this] ( const SELECTION& )
-        {
-            return MicrowaveToolbarShown();
-        };
-
     auto highContrastCond =
         [this] ( const SELECTION& )
         {
@@ -620,7 +608,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::highContrastMode,         CHECK( highContrastCond ) );
     mgr->SetConditions( PCB_ACTIONS::flipBoard,            CHECK( boardFlippedCond ) );
     mgr->SetConditions( PCB_ACTIONS::showLayersManager,    CHECK( layerManagerCond ) );
-    mgr->SetConditions( PCB_ACTIONS::showMicrowaveToolbar, CHECK( microwaveToolbarCond ) );
     mgr->SetConditions( PCB_ACTIONS::showRatsnest,         CHECK( globalRatsnestCond ) );
     mgr->SetConditions( PCB_ACTIONS::ratsnestLineMode,     CHECK( curvedRatsnestCond ) );
     mgr->SetConditions( PCB_ACTIONS::boardSetup ,          ENABLE( enableBoardSetupCondition ) );
@@ -935,7 +922,6 @@ void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     {
         m_rotationAngle            = cfg->m_RotationAngle;
         g_DrawDefaultLineThickness = Millimeter2iu( cfg->m_PlotLineWidth );
-        m_show_microwave_tools     = cfg->m_AuiPanels.show_microwave_tools;
         m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
         m_showPageLimits           = cfg->m_ShowPageLimits;
     }
@@ -953,7 +939,6 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     {
         cfg->m_RotationAngle                  = m_rotationAngle;
         cfg->m_PlotLineWidth                  = Iu2Millimeter( g_DrawDefaultLineThickness );
-        cfg->m_AuiPanels.show_microwave_tools = m_show_microwave_tools;
         cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
         cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
         cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
@@ -1102,9 +1087,6 @@ void PCB_EDIT_FRAME::ShowChangedLanguage()
     m_auimgr.Update();
 
     m_appearancePanel->OnBoardChanged();
-
-    // pcbnew-specific toolbars
-    ReCreateMicrowaveVToolbar();
 }
 
 
@@ -1589,7 +1571,6 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     GetAppearancePanel()->OnColorThemeChanged();
-    ReCreateMicrowaveVToolbar();
 
     if( aTextVarsChanged )
         GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
@@ -1666,12 +1647,6 @@ wxString PCB_EDIT_FRAME::GetCurrentFileName() const
 bool PCB_EDIT_FRAME::LayerManagerShown()
 {
     return m_auimgr.GetPane( "LayersManager" ).IsShown();
-}
-
-
-bool PCB_EDIT_FRAME::MicrowaveToolbarShown()
-{
-    return m_auimgr.GetPane( "MicrowaveToolbar" ).IsShown();
 }
 
 

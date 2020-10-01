@@ -333,7 +333,6 @@ public:
 
     static TOOL_ACTION editFpInFpEditor;
     static TOOL_ACTION showLayersManager;
-    static TOOL_ACTION showMicrowaveToolbar;
     static TOOL_ACTION showPythonConsole;
 
     // Module editor tools

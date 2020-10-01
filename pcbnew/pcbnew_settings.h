@@ -69,7 +69,6 @@ public:
     {
         int  appearance_panel_tab;
         int  right_panel_width;
-        bool show_microwave_tools;
         bool show_layer_manager;
     };
 

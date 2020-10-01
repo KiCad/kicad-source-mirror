@@ -80,9 +80,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
     friend struct PCB::IFACE;
     friend class APPEARANCE_CONTROLS;
 
-    /// The auxiliary right vertical tool bar used to access the microwave tools.
-    ACTION_TOOLBAR*         m_microWaveToolBar;
-
 protected:
 
     /**
@@ -242,7 +239,6 @@ public:
     wxChoice* m_SelTrackWidthBox;           // a choice box to display and select current track width
     wxChoice* m_SelViaSizeBox;              // a choice box to display and select current via diameter
 
-    bool m_show_microwave_tools;
     bool m_show_layer_manager_tools;
 
     bool m_ZoneFillsDirty;                  // Board has been modified since last zone fill.
@@ -325,7 +321,6 @@ public:
     // User interface update command event handlers.
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
     bool LayerManagerShown();
-    bool MicrowaveToolbarShown();
     void OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
 
@@ -419,7 +414,6 @@ public:
     void ReCreateHToolbar() override;
     void ReCreateAuxiliaryToolbar() override;
     void ReCreateVToolbar() override;
-    void ReCreateMicrowaveVToolbar();
     void ReCreateOptToolbar() override;
     void ReCreateMenuBar() override;
 
@@ -505,7 +499,6 @@ public:
     void PrepareLayerIndicator( bool aForceRebuild = false );
 
     void ToggleLayersManager();
-    void ToggleMicrowaveToolbar();
 
     /**
      * Function DoGenFootprintsPositionFile

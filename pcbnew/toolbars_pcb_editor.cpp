@@ -365,7 +365,6 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
     // Tools to show/hide toolbars:
     m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( PCB_ACTIONS::showLayersManager,    ACTION_TOOLBAR::TOGGLE  );
-    m_optionsToolBar->Add( PCB_ACTIONS::showMicrowaveToolbar, ACTION_TOOLBAR::TOGGLE  );
 
     m_optionsToolBar->Realize();
 }
@@ -390,6 +389,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     static ACTION_GROUP* dimensionGroup = nullptr;
     static ACTION_GROUP* originGroup    = nullptr;
     static ACTION_GROUP* routingGroup   = nullptr;
+    static ACTION_GROUP* microwaveGroup = nullptr;
 
     if( !dimensionGroup )
     {
@@ -414,6 +414,16 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
                                           &PCB_ACTIONS::routeDiffPair } );
     }
 
+    if( !microwaveGroup )
+    {
+        microwaveGroup = new ACTION_GROUP( "group.pcbMicrowave",
+                                           { &PCB_ACTIONS::microwaveCreateLine,
+                                             &PCB_ACTIONS::microwaveCreateGap,
+                                             &PCB_ACTIONS::microwaveCreateStub,
+                                             &PCB_ACTIONS::microwaveCreateStubArc,
+                                             &PCB_ACTIONS::microwaveCreateFunctionShape } );
+    }
+
     m_drawToolBar->Add( ACTIONS::selectionTool,            ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::highlightNetTool,     ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::localRatsnestTool,    ACTION_TOOLBAR::TOGGLE );
@@ -422,6 +432,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( PCB_ACTIONS::placeModule,          ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->AddGroup( routingGroup,                 ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawVia,              ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->AddGroup( microwaveGroup,               ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawZone,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawRuleArea,         ACTION_TOOLBAR::TOGGLE );
 
@@ -456,37 +467,6 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::drawZone, zoneMenu );
 
     m_drawToolBar->Realize();
-}
-
-
-/* Create the auxiliary vertical right toolbar, showing tools for microwave applications
- */
-void PCB_EDIT_FRAME::ReCreateMicrowaveVToolbar()
-{
-    wxWindowUpdateLocker dummy(this);
-
-    if( m_microWaveToolBar )
-    {
-        m_microWaveToolBar->ClearToolbar();
-    }
-    else
-    {
-        m_microWaveToolBar = new ACTION_TOOLBAR( this, ID_MICROWAVE_V_TOOLBAR, wxDefaultPosition,
-                                                 wxDefaultSize,
-                                                 KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
-        m_microWaveToolBar->SetAuiManager( &m_auimgr );
-    }
-
-    // Set up toolbar
-    m_microWaveToolBar->Add( PCB_ACTIONS::microwaveCreateLine,          ACTION_TOOLBAR::TOGGLE );
-    m_microWaveToolBar->Add( PCB_ACTIONS::microwaveCreateGap,           ACTION_TOOLBAR::TOGGLE );
-
-    m_microWaveToolBar->AddScaledSeparator( this );
-    m_microWaveToolBar->Add( PCB_ACTIONS::microwaveCreateStub,          ACTION_TOOLBAR::TOGGLE );
-    m_microWaveToolBar->Add( PCB_ACTIONS::microwaveCreateStubArc,       ACTION_TOOLBAR::TOGGLE );
-    m_microWaveToolBar->Add( PCB_ACTIONS::microwaveCreateFunctionShape, ACTION_TOOLBAR::TOGGLE );
-
-    m_microWaveToolBar->Realize();
 }
 
 
@@ -685,14 +665,6 @@ void PCB_EDIT_FRAME::ToggleLayersManager()
     m_show_layer_manager_tools = !m_show_layer_manager_tools;
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
-    m_auimgr.Update();
-}
-
-
-void PCB_EDIT_FRAME::ToggleMicrowaveToolbar()
-{
-    m_show_microwave_tools = !m_show_microwave_tools;
-    m_auimgr.GetPane( "MicrowaveToolbar" ).Show( m_show_microwave_tools );
     m_auimgr.Update();
 }
 

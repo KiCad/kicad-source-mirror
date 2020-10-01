@@ -557,13 +557,6 @@ int PCB_EDITOR_CONTROL::ToggleLayersManager( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::ToggleMicrowaveToolbar( const TOOL_EVENT& aEvent )
-{
-    getEditFrame<PCB_EDIT_FRAME>()->ToggleMicrowaveToolbar();
-    return 0;
-}
-
-
 int PCB_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
 {
 #if defined( KICAD_SCRIPTING_WXPYTHON )
@@ -1509,7 +1502,6 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::UpdateSchematicFromPCB,   ACTIONS::updateSchematicFromPcb.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ShowEeschema,             PCB_ACTIONS::showEeschema.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ToggleLayersManager,      PCB_ACTIONS::showLayersManager.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ToggleMicrowaveToolbar,   PCB_ACTIONS::showMicrowaveToolbar.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::TogglePythonConsole,      PCB_ACTIONS::showPythonConsole.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::FlipPcbView,              PCB_ACTIONS::flipBoard.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::RepairBoard,              PCB_ACTIONS::repairBoard.MakeEvent() );
