@@ -30,10 +30,35 @@
 #include <properties.h>
 
 
+LAYER_MAP CADSTAR_PCB_ARCHIVE_PLUGIN::DefaultLayerMappingCallback(
+        const std::vector<INPUT_LAYER_DESC>& aInputLayerDescriptionVector )
+{
+    LAYER_MAP retval;
+
+    // Just return a the auto-mapped layers
+    for( INPUT_LAYER_DESC layerDesc : aInputLayerDescriptionVector )
+    {
+        retval.insert( { layerDesc.Name, layerDesc.AutoMapLayer } );
+    }
+
+    return retval;
+}
+
+
+void CADSTAR_PCB_ARCHIVE_PLUGIN::RegisterLayerMappingCallback(
+        LAYER_MAPPING_HANDLER aLayerMappingHandler )
+{
+    m_layer_mapping_handler       = aLayerMappingHandler;
+    m_show_layer_mapping_warnings = false; // only show warnings with default callback
+}
+
+
 CADSTAR_PCB_ARCHIVE_PLUGIN::CADSTAR_PCB_ARCHIVE_PLUGIN()
 {
-    m_board = nullptr;
-    m_props = nullptr;
+    m_board                       = nullptr;
+    m_props                       = nullptr;
+    m_layer_mapping_handler       = CADSTAR_PCB_ARCHIVE_PLUGIN::DefaultLayerMappingCallback;
+    m_show_layer_mapping_warnings = true;
 }
 
 
@@ -60,7 +85,8 @@ BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::Load(
     m_props = aProperties;
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
 
-    CADSTAR_PCB_ARCHIVE_LOADER tempPCB( aFileName );
+    CADSTAR_PCB_ARCHIVE_LOADER tempPCB(
+            aFileName, m_layer_mapping_handler, m_show_layer_mapping_warnings );
     tempPCB.Load( m_board );
 
     //center the board:

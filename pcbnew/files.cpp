@@ -49,6 +49,8 @@
 #include <settings/settings_manager.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
+#include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
+#include <dialogs/dialog_imported_layers.h>
 
 
 //#define     USE_INSTRUMENTATION     1
@@ -586,6 +588,20 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         BOARD* loadedBoard = 0;   // it will be set to non-NULL if loaded OK
 
         PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
+
+
+        if( pluginType == IO_MGR::CADSTAR_PCB_ARCHIVE )
+        {
+            // TODO: Generalise this so that it is applicable to all non-kicad plugins
+            CADSTAR_PCB_ARCHIVE_PLUGIN* cadstarPlugin = nullptr;
+
+            cadstarPlugin = dynamic_cast<CADSTAR_PCB_ARCHIVE_PLUGIN*>( (PLUGIN*) pi );
+
+            wxCHECK( cadstarPlugin, false );
+
+            cadstarPlugin->RegisterLayerMappingCallback(
+                    std::bind( DIALOG_IMPORTED_LAYERS::GetMapModal, this, std::placeholders::_1 ) );
+        }
 
         // This will rename the file if there is an autosave and the user want to recover
 		CheckForAutoSaveFile( fullFileName );

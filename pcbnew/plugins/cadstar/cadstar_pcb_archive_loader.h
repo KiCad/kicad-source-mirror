@@ -27,6 +27,7 @@
 #define CADSTAR_PCB_ARCHIVE_LOADER_H_
 
 #include <cadstar_pcb_archive_parser.h>
+#include <cadstar_pcb_archive_plugin.h> // LAYER_MAPPING_HANDLER definition
 #include <class_board.h>
 #include <set>
 
@@ -35,9 +36,12 @@ class BOARD;
 class CADSTAR_PCB_ARCHIVE_LOADER : public CADSTAR_PCB_ARCHIVE_PARSER
 {
 public:
-    explicit CADSTAR_PCB_ARCHIVE_LOADER( wxString aFilename )
+    explicit CADSTAR_PCB_ARCHIVE_LOADER(
+            wxString aFilename, LAYER_MAPPING_HANDLER aLayerMappingHandler, bool aLogLayerWarnings )
             : CADSTAR_PCB_ARCHIVE_PARSER( aFilename )
     {
+        mLayerMappingHandler     = aLayerMappingHandler;
+        mLogLayerWarnings        = aLogLayerWarnings;
         mBoard                   = nullptr;
         mDesignCenter.x          = 0;
         mDesignCenter.y          = 0;
@@ -67,6 +71,8 @@ public:
 
 
 private:
+    LAYER_MAPPING_HANDLER            mLayerMappingHandler; ///< Callback to get layer mapping
+    bool                             mLogLayerWarnings;    ///< Used in loadBoardStackup()
     ::BOARD*                         mBoard;
     std::map<LAYER_ID, PCB_LAYER_ID> mLayermap;          ///< Map between Cadstar and KiCad Layers.
                                                          ///< Populated by loadBoardStackup().
@@ -105,6 +111,7 @@ private:
 
     // Functions for loading individual elements:
     void loadBoardStackup();
+    void remapUnsureLayers(); ///< Callback mLayerMappingHandler for layers we aren't sure of
     void loadDesignRules();
     void loadComponentLibrary();
     void loadGroups();
@@ -120,8 +127,10 @@ private:
     void loadNets();
 
     // Helper functions for element loading:
-    void logBoardStackupWarning(
-            const wxString& aCadstarLayerName, const PCB_LAYER_ID& aKiCadLayer );
+    void logBoardStackupWarning( const wxString& aCadstarLayerName,
+                                 const PCB_LAYER_ID& aKiCadLayer );
+    void logBoardStackupMessage( const wxString& aCadstarLayerName,
+                                 const PCB_LAYER_ID& aKiCadLayer );
     void loadLibraryFigures( const SYMDEF_PCB& aComponent, MODULE* aModule );
     void loadLibraryCoppers( const SYMDEF_PCB& aComponent, MODULE* aModule );
     void loadLibraryAreas( const SYMDEF_PCB& aComponent, MODULE* aModule );

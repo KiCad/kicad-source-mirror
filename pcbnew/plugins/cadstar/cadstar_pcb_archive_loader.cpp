@@ -82,6 +82,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
     }
 
     loadBoardStackup();
+    remapUnsureLayers();
     loadDesignRules();
     loadComponentLibrary();
     loadGroups();
@@ -116,13 +117,29 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_LOADER::logBoardStackupWarning(
-        const wxString& aCadstarLayerName, const PCB_LAYER_ID& aKiCadLayer )
+void CADSTAR_PCB_ARCHIVE_LOADER::logBoardStackupWarning( const wxString& aCadstarLayerName,
+                                                         const PCB_LAYER_ID& aKiCadLayer )
 {
-    wxLogWarning( wxString::Format(
-            _( "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this "
-               "layer have been mapped to KiCad layer '%s' instead." ),
-            aCadstarLayerName, LSET::Name( aKiCadLayer ) ) );
+    if( mLogLayerWarnings )
+    {
+        wxLogWarning( wxString::Format(
+                _( "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this "
+                   "layer have been mapped to KiCad layer '%s' instead." ),
+                aCadstarLayerName, LSET::Name( aKiCadLayer ) ) );
+    }
+}
+
+
+void CADSTAR_PCB_ARCHIVE_LOADER::logBoardStackupMessage( const wxString& aCadstarLayerName,
+                                                         const PCB_LAYER_ID& aKiCadLayer )
+{
+    if( mLogLayerWarnings )
+    {
+        wxLogMessage( wxString::Format(
+                _( "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
+                   "elements on this layer have been mapped to KiCad layer '%s'." ),
+                aCadstarLayerName, LSET::Name( aKiCadLayer ) ) );
+    }
 }
 
 
@@ -255,11 +272,46 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
                     else
                         kicadLayerID = PCB_LAYER_ID::F_Adhes;
 
-                    wxLogMessage( wxString::Format(
-                            _( "The CADSTAR layer '%s' has been assumed to be an adhesive layer. "
-                               "All elements on this layer have been mapped to KiCad layer '%s'." ),
-                            curLayer.Name, LSET::Name( kicadLayerID ) ) );
-                    //TODO: allow user to decide if this is actually an adhesive layer or not.
+                    logBoardStackupMessage( curLayer.Name, kicadLayerID );
+                }
+                else if( curLayer.Name.Lower().Contains( "silk" )
+                         || curLayer.Name.Lower().Contains( "legend" ) )
+                {
+                    if( numElecAndPowerLayers > 0 )
+                        kicadLayerID = PCB_LAYER_ID::B_SilkS;
+                    else
+                        kicadLayerID = PCB_LAYER_ID::F_SilkS;
+
+                    logBoardStackupMessage( curLayer.Name, kicadLayerID );
+                }
+                else if( curLayer.Name.Lower().Contains( "assembly" )
+                         || curLayer.Name.Lower().Contains( "fabrication" ) )
+                {
+                    if( numElecAndPowerLayers > 0 )
+                        kicadLayerID = PCB_LAYER_ID::B_Fab;
+                    else
+                        kicadLayerID = PCB_LAYER_ID::F_Fab;
+
+                    logBoardStackupMessage( curLayer.Name, kicadLayerID );
+                }
+                else if( curLayer.Name.Lower().Contains( "resist" )
+                         || curLayer.Name.Lower().Contains( "mask" ) )
+                {
+                    if( numElecAndPowerLayers > 0 )
+                        kicadLayerID = PCB_LAYER_ID::B_Mask;
+                    else
+                        kicadLayerID = PCB_LAYER_ID::F_Mask;
+
+                    logBoardStackupMessage( curLayer.Name, kicadLayerID );
+                }
+                else if( curLayer.Name.Lower().Contains( "paste" ) )
+                {
+                    if( numElecAndPowerLayers > 0 )
+                        kicadLayerID = PCB_LAYER_ID::B_Paste;
+                    else
+                        kicadLayerID = PCB_LAYER_ID::F_Paste;
+
+                    logBoardStackupMessage( curLayer.Name, kicadLayerID );
                 }
                 else
                 {
@@ -269,7 +321,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
                         kicadLayerID = PCB_LAYER_ID::Eco1_User;
 
                     logBoardStackupWarning( curLayer.Name, kicadLayerID );
-                    //TODO: allow user to decide which layer this should be mapped onto.
                 }
 
                 break;
@@ -410,6 +461,58 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
     mBoard->SetVisibleLayers( LSET( &layerIDs[0], layerIDs.size() ) );
 
     mBoard->SetCopperLayerCount( numElecAndPowerLayers );
+}
+
+
+void CADSTAR_PCB_ARCHIVE_LOADER::remapUnsureLayers()
+{
+    LSET enabledLayers        = mBoard->GetEnabledLayers();
+    LSET validRemappingLayers = enabledLayers    | LSET::AllBoardTechMask() |
+                                LSET::UserMask() | LSET::UserDefinedLayers();
+
+    std::vector<INPUT_LAYER_DESC> inputLayers;
+    std::map<wxString, LAYER_ID>  cadstarLayerNameMap;
+
+    for( std::pair<LAYER_ID, PCB_LAYER_ID> layerPair : mLayermap )
+    {
+        LAYER* curLayer = &Assignments.Layerdefs.Layers.at( layerPair.first );
+
+        //Only remap layers that we aren't sure about
+        if( curLayer->Type == LAYER_TYPE::DOC
+                || ( curLayer->Type == LAYER_TYPE::NONELEC
+                        && curLayer->SubType == LAYER_SUBTYPE::LAYERSUBTYPE_NONE ) )
+        {
+            INPUT_LAYER_DESC iLdesc;
+            iLdesc.Name            = curLayer->Name;
+            iLdesc.PermittedLayers = validRemappingLayers;
+            iLdesc.AutoMapLayer    = layerPair.second;
+
+            inputLayers.push_back( iLdesc );
+            cadstarLayerNameMap.insert( { curLayer->Name, curLayer->ID } );
+        }
+    }
+
+    if( inputLayers.size() == 0 )
+        return;
+
+    // Callback:
+    LAYER_MAP reMappedLayers = mLayerMappingHandler( inputLayers );
+
+    for( std::pair<wxString, PCB_LAYER_ID> layerPair : reMappedLayers )
+    {
+        if( layerPair.second == PCB_LAYER_ID::UNDEFINED_LAYER )
+        {
+            wxASSERT_MSG( false, "Unexpected Layer ID" );
+            continue;
+        }
+
+        LAYER_ID cadstarLayerID        = cadstarLayerNameMap.at( layerPair.first );
+        mLayermap.at( cadstarLayerID ) = layerPair.second;
+        enabledLayers |= LSET( layerPair.second );
+    }
+
+    mBoard->SetEnabledLayers( enabledLayers );
+    mBoard->SetVisibleLayers( enabledLayers );
 }
 
 
