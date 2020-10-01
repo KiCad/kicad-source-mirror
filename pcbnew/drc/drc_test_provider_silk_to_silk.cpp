@@ -132,6 +132,22 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
                 MODULE *parentModRef = nullptr;
                 MODULE *parentModTest = nullptr;
 
+                if( typeRef == PCB_MODULE_TEXT_T )
+                {
+                    auto textRef = static_cast<TEXTE_MODULE*>( aRefItem->parent );
+
+                    if( !textRef->IsVisible( ) )
+                        return true;
+                }
+
+                if( typeTest == PCB_MODULE_TEXT_T )
+                {
+                    auto textTest = static_cast<TEXTE_MODULE*>( aTestItem->parent );
+
+                    if( !textTest->IsVisible( ) )
+                        return true;
+                }
+
                 if( typeRef == PCB_MODULE_EDGE_T || typeRef == PCB_MODULE_TEXT_T )
                 {
                     parentModRef = static_cast<MODULE*> ( aRefItem->parent->GetParent() );
@@ -160,7 +176,7 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
                 if( ! aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual, &pos ) )
                     return true;
 
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_CLEARANCE );
+               std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_CLEARANCE );
                 wxString                  msg;
 
                 msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
