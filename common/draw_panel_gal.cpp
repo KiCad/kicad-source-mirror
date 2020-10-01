@@ -264,7 +264,7 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 {
     KIGFX::GAL_CONTEXT_LOCKER locker( m_gal );
     wxSize clientSize = GetClientSize();
-    WX_INFOBAR* infobar = GetParentEDAFrame()->GetInfoBar();
+    WX_INFOBAR* infobar = GetParentEDAFrame() ? GetParentEDAFrame()->GetInfoBar() : nullptr;
 
     if( VECTOR2I( clientSize ) == m_gal->GetScreenPixelSize() )
         return;
