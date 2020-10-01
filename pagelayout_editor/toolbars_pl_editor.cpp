@@ -80,17 +80,24 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
         _("Left Top page corner")
     };
 
-    m_originSelectBox = new wxChoice( m_mainToolBar, ID_SELECT_COORDINATE_ORIGIN,
-                                      wxDefaultPosition, wxDefaultSize, 5, choiceList );
+    if( !m_originSelectBox )
+    {
+        m_originSelectBox = new wxChoice( m_mainToolBar, ID_SELECT_COORDINATE_ORIGIN,
+                                          wxDefaultPosition, wxDefaultSize, 5, choiceList );
+    }
+
+
     m_mainToolBar->AddControl( m_originSelectBox );
     m_originSelectBox->SetToolTip( _("Origin of coordinates displayed to the status bar") );
 
     int minwidth = 0;
+
     for( int ii = 0; ii < 5; ii++ )
     {
         int width = GetTextSize( choiceList[ii], m_originSelectBox ).x;
         minwidth = std::max( minwidth, width );
     }
+
     m_originSelectBox->SetMinSize( wxSize( minwidth, -1 ) );
     m_originSelectBox->SetSelection( m_originSelectChoice );
 
@@ -100,8 +107,12 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
         _("Other pages")
     };
 
-    m_pageSelectBox = new wxChoice( m_mainToolBar, ID_SELECT_PAGE_NUMBER,
-                                    wxDefaultPosition, wxDefaultSize, 2, pageList );
+    if( !m_pageSelectBox )
+    {
+        m_pageSelectBox = new wxChoice( m_mainToolBar, ID_SELECT_PAGE_NUMBER,
+                                        wxDefaultPosition, wxDefaultSize, 2, pageList );
+    }
+
     m_mainToolBar->AddControl( m_pageSelectBox );
     m_pageSelectBox->SetToolTip( _("Simulate page 1 or other pages to show how items\n"\
                                  "which are not on all page are displayed") );

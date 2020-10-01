@@ -79,17 +79,19 @@ END_EVENT_TABLE()
 PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         EDA_DRAW_FRAME( aKiway, aParent, FRAME_PL_EDITOR, wxT( "PlEditorFrame" ),
                         wxDefaultPosition, wxDefaultSize,
-                        KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME )
+                        KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME ),
+        m_propertiesFrameWidth( 200 ),
+        m_originSelectBox( nullptr ),
+        m_originSelectChoice( 0 ),
+        m_pageSelectBox( nullptr ),
+        m_propertiesPagelayout( nullptr )
 {
     m_userUnits = EDA_UNITS::MILLIMETRES;
 
     m_showBorderAndTitleBlock   = true; // true for reference drawings.
-    m_originSelectChoice = 0;
     WS_DATA_MODEL::GetTheInstance().m_EditMode = true;
     SetShowPageLimits( true );
     m_AboutTitle = "PlEditor";
-
-    m_propertiesFrameWidth = 200;
 
     // Give an icon
     wxIcon icon;
@@ -597,6 +599,10 @@ void PL_EDITOR_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVar
 
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
     GetCanvas()->Refresh();
+
+    RecreateToolbars();
+    Layout();
+    SendSizeEvent();
 }
 
 
