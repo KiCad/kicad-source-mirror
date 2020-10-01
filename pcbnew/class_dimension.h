@@ -276,7 +276,7 @@ protected:
     virtual void updateText();
 
     template<typename ShapeType>
-    void addShape( ShapeType* aShape );
+    void addShape( const ShapeType& aShape );
 
     /**
      * Finds the intersection between a given segment and polygon outline

@@ -108,9 +108,9 @@ void DIMENSION::updateText()
 
 
 template<typename ShapeType>
-void DIMENSION::addShape( ShapeType* aShape )
+void DIMENSION::addShape( const ShapeType& aShape )
 {
-    m_shapes.emplace_back( std::make_shared<ShapeType>( *aShape ) );
+    m_shapes.push_back( std::make_shared<ShapeType>( aShape ) );
 }
 
 
@@ -587,12 +587,12 @@ void ALIGNED_DIMENSION::updateGeometry()
     VECTOR2I extStart( m_start );
     extStart += extension.Resize( m_extensionOffset );
 
-    addShape( new SHAPE_SEGMENT( extStart, extStart + extension.Resize( extensionHeight ) ) );
+    addShape( SHAPE_SEGMENT( extStart, extStart + extension.Resize( extensionHeight ) ) );
 
     extStart = VECTOR2I( m_end );
     extStart += extension.Resize( m_extensionOffset );
 
-    addShape( new SHAPE_SEGMENT( extStart, extStart + extension.Resize( extensionHeight ) ) );
+    addShape( SHAPE_SEGMENT( extStart, extStart + extension.Resize( extensionHeight ) ) );
 
     // Add crossbar
     VECTOR2I crossBarDistance = sign( m_height ) * extension.Resize( m_height );
@@ -744,7 +744,7 @@ void ORTHOGONAL_DIMENSION::updateGeometry()
     VECTOR2I extStart( m_start );
     extStart += extension.Resize( m_extensionOffset );
 
-    addShape( new SHAPE_SEGMENT( extStart, extStart + extension.Resize( extensionHeight ) ) );
+    addShape( SHAPE_SEGMENT( extStart, extStart + extension.Resize( extensionHeight ) ) );
 
     // Add crossbar
     VECTOR2I crossBarDistance = sign( m_height ) * extension.Resize( m_height );
@@ -766,7 +766,7 @@ void ORTHOGONAL_DIMENSION::updateGeometry()
     extStart = VECTOR2I( m_crossBarEnd );
     extStart -= extension.Resize( m_extensionHeight );
 
-    addShape( new SHAPE_SEGMENT( extStart, extStart + extension.Resize( extensionHeight ) ) );
+    addShape( SHAPE_SEGMENT( extStart, extStart + extension.Resize( extensionHeight ) ) );
 
     // Update text after calculating crossbar position but before adding crossbar lines
     updateText();
