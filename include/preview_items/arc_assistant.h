@@ -44,8 +44,8 @@ namespace PREVIEW
 
         void ViewGetLayers( int aLayers[], int& aCount ) const override
         {
-            aLayers[0] = LAYER_GP_OVERLAY;      // Drop shadows
-            aLayers[1] = LAYER_SELECT_OVERLAY;  // Assitant graphics
+            aLayers[0] = LAYER_SELECT_OVERLAY;  // Assitant graphics
+            aLayers[1] = LAYER_GP_OVERLAY;      // Drop shadows
             aCount = 2;
         }
 

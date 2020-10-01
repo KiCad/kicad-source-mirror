@@ -48,14 +48,9 @@ const BOX2I ARC_ASSISTANT::ViewBBox() const
     if( m_constructMan.IsReset() )
         return tmp;
 
-    // just enclose the whle circular area
-    auto     origin  = m_constructMan.GetOrigin();
-    auto     radius  = m_constructMan.GetRadius();
-    VECTOR2D rVec( radius, radius );
-
-    tmp.SetOrigin( origin + rVec );
-    tmp.SetEnd( origin - rVec );
-    tmp.Normalize();
+    // this is an edit-time artefact; no reason to try and be smart with the bounding box
+    // (besides, we can't tell the text extents without a view to know what the scale is)
+    tmp.SetMaximum();
     return tmp;
 }
 
@@ -153,5 +148,5 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     // place the text next to cursor, on opposite side from radius
     DrawTextNextToCursor( aView, m_constructMan.GetLastPoint(),
                           origin - m_constructMan.GetLastPoint(),
-                          cursorStrings, aLayer == LAYER_GP_OVERLAY );
+                          cursorStrings, aLayer == LAYER_SELECT_OVERLAY );
 }

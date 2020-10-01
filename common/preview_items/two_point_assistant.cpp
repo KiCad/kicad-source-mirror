@@ -48,22 +48,9 @@ const BOX2I TWO_POINT_ASSISTANT::ViewBBox() const
     if( m_constructMan.IsReset() )
         return tmp;
 
-    // just enclose the whle circular area
-    auto origin = m_constructMan.GetOrigin();
-    auto end    = m_constructMan.GetEnd();
-
-    if( m_shape == GEOM_SHAPE::SEGMENT || m_shape == GEOM_SHAPE::RECT )
-    {
-        tmp.SetOrigin( origin );
-        tmp.SetEnd( end );
-    }
-    else
-    {
-        tmp.SetOrigin( origin + end );
-        tmp.SetEnd( origin - end );
-    }
-
-    tmp.Normalize();
+    // this is an edit-time artefact; no reason to try and be smart with the bounding box
+    // (besides, we can't tell the text extents without a view to know what the scale is)
+    tmp.SetMaximum();
     return tmp;
 }
 

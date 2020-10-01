@@ -236,9 +236,12 @@ const BOX2I RULER_ITEM::ViewBBox() const
 {
     BOX2I tmp;
 
-    tmp.SetOrigin( m_geomMgr.GetOrigin() );
-    tmp.SetEnd( m_geomMgr.GetEnd() );
-    tmp.Normalize();
+    if( m_geomMgr.GetOrigin() == m_geomMgr.GetEnd() )
+        return tmp;
+
+    // this is an edit-time artefact; no reason to try and be smart with the bounding box
+    // (besides, we can't tell the text extents without a view to know what the scale is)
+    tmp.SetMaximum();
     return tmp;
 }
 
