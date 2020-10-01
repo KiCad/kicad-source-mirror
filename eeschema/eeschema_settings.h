@@ -77,6 +77,7 @@ public:
         bool     intersheets_ref_short;
         wxString intersheets_ref_prefix;
         wxString intersheets_ref_suffix;
+        bool     auto_start_wires;
     };
 
     struct INPUT

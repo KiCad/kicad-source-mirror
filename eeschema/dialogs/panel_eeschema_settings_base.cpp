@@ -47,7 +47,10 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 	m_mouseDragIsDrag = new wxCheckBox( sbSizerEditOpt->GetStaticBox(), wxID_ANY, _("Mouse drag performs drag (G) operation"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_mouseDragIsDrag->SetToolTip( _("If unchecked, mouse drag will perform move (M) operation") );
 
-	sbSizerEditOpt->Add( m_mouseDragIsDrag, 0, wxALL, 5 );
+	sbSizerEditOpt->Add( m_mouseDragIsDrag, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	m_cbAutoStartWires = new wxCheckBox( sbSizerEditOpt->GetStaticBox(), wxID_ANY, _("Automatically start wires on junctions and unused anchors"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerEditOpt->Add( m_cbAutoStartWires, 0, wxALL, 5 );
 
 
 	bLeftColumn->Add( sbSizerEditOpt, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );

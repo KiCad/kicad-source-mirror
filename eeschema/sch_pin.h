@@ -94,6 +94,8 @@ public:
     bool IsDangling() const override { return m_isDangling; }
     void SetIsDangling( bool isDangling ) { m_isDangling = isDangling; }
 
+    bool IsPointClickableAnchor( const wxPoint& aPos ) const override { return m_isDangling && GetPosition() == aPos; }
+
     /// Returns the pin's position in global coordinates
     wxPoint GetTransformedPosition() const;
 

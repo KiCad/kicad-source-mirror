@@ -60,6 +60,12 @@ struct BUS_UNFOLDING_T
 };
 
 
+struct DRAW_SEGMENT_EVENT_PARAMS
+{
+    SCH_LAYER_ID layer;
+    bool         quitOnDraw;
+};
+
 /**
  * SCH_LINE_DRAWING_TOOL
  *
@@ -90,7 +96,7 @@ public:
     int AddJunctionsIfNeeded( const TOOL_EVENT& aEvent );
 
 private:
-    int doDrawSegments( const std::string& aTool, int aType );
+    int       doDrawSegments( const std::string& aTool, int aType, bool aQuitOnDraw );
     SCH_LINE* startSegments( int aType, const VECTOR2D& aPos );
     SCH_LINE* doUnfoldBus( const wxString& aNet );
     void finishSegments();

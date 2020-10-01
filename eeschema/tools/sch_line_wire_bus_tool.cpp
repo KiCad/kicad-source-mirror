@@ -276,7 +276,7 @@ bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( const SELECTION& aSelection
 
 int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
 {
-    SCH_LAYER_ID layer = aEvent.Parameter<SCH_LAYER_ID>();
+    DRAW_SEGMENT_EVENT_PARAMS* params = aEvent.Parameter<DRAW_SEGMENT_EVENT_PARAMS*>();
 
     if( aEvent.HasPosition() )
         getViewControls()->WarpCursor( aEvent.Position(), true );
@@ -287,10 +287,10 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
     {
         VECTOR2D cursorPos = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
-        startSegments( layer, cursorPos );
+        startSegments( params->layer, cursorPos );
     }
 
-    return doDrawSegments( tool, layer );
+    return doDrawSegments( tool, params->layer, params->quitOnDraw );
 }
 
 
@@ -345,7 +345,7 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 
     // If we have an unfolded wire to draw, then draw it
     if( segment )
-        return doDrawSegments( tool, LAYER_WIRE );
+        return doDrawSegments( tool, LAYER_WIRE, false );
     else
     {
         m_frame->PopTool( tool );
@@ -458,7 +458,7 @@ void SCH_LINE_WIRE_BUS_TOOL::computeBreakPoint( const std::pair<SCH_LINE*, SCH_L
 }
 
 
-int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType )
+int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType, bool aQuitOnDraw )
 {
     SCH_SCREEN*      screen = m_frame->GetScreen();
     EE_POINT_EDITOR* pointEditor = m_toolMgr->GetTool<EE_POINT_EDITOR>();
@@ -561,6 +561,12 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
             {
                 finishSegments();
                 segment = nullptr;
+
+                if( aQuitOnDraw )
+                {
+                    m_frame->PopTool( aTool );
+                    break;
+                }
             }
         }
         //------------------------------------------------------------------------
@@ -592,6 +598,12 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
                 {
                     finishSegments();
                     segment = nullptr;
+
+                    if( aQuitOnDraw )
+                    {
+                        m_frame->PopTool( aTool );
+                        break;
+                    }
                 }
                 else
                 {
@@ -614,6 +626,12 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
 
                 finishSegments();
                 segment = nullptr;
+
+                if( aQuitOnDraw )
+                {
+                    m_frame->PopTool( aTool );
+                    break;
+                }
             }
         }
         //------------------------------------------------------------------------
@@ -950,8 +968,6 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( const TOOL_EVENT& aEvent )
 
     return 0;
 }
-
-
 void SCH_LINE_WIRE_BUS_TOOL::setTransitions()
 {
     Go( &SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded, EE_ACTIONS::addNeededJunctions.MakeEvent() );

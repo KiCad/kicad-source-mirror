@@ -132,6 +132,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "drawing.hv_lines_only",
             &m_Drawing.hv_lines_only, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "drawing.auto_start_wires",
+            &m_Drawing.auto_start_wires, true ) );
+
     m_params.emplace_back( new PARAM<int>( "drawing.repeat_label_increment",
             &m_Drawing.repeat_label_increment, 1, -10, 10 ) );
 

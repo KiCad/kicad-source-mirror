@@ -46,6 +46,7 @@ public:
     static const KICAD_T EditableItems[];
     static const KICAD_T ComponentsOnly[];
     static const KICAD_T SheetsOnly[];
+    static const KICAD_T AnchorableItems[];
 
     EE_COLLECTOR( const KICAD_T* aScanTypes = EE_COLLECTOR::AllItems ) :
         m_Unit( 0 ),

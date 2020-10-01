@@ -369,6 +369,8 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    bool IsPointClickableAnchor( const wxPoint& aPos ) const override { return m_isDangling && GetPosition() == aPos; }
+
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override { return EDA_TEXT::GetTextPos() == aPosition; }
 };
@@ -424,6 +426,8 @@ public:
     wxPoint GetIrefSavedPosition() { return m_savedIrefPos; }
     void SetIrefSavedPosition( wxPoint pos ) { m_savedIrefPos = pos; }
 
+    bool IsPointClickableAnchor( const wxPoint& aPos ) const override { return m_isDangling && GetPosition() == aPos; }
+
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override { return EDA_TEXT::GetTextPos() == aPosition; }
     SCH_IREF* m_iref;
@@ -475,6 +479,8 @@ public:
     BITMAP_DEF GetMenuImage() const override;
 
     EDA_ITEM* Clone() const override;
+
+    bool IsPointClickableAnchor( const wxPoint& aPos ) const override { return m_isDangling && GetPosition() == aPos; }
 
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override { return EDA_TEXT::GetTextPos() == aPosition; }

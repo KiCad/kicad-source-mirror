@@ -212,6 +212,12 @@ public:
     wxPoint GetPosition() const override { return m_start; }
     void SetPosition( const wxPoint& aPosition ) override;
 
+    bool IsPointClickableAnchor( const wxPoint& aPos ) const override
+    {
+        return ( GetStartPoint() == aPos && IsStartDangling() )
+               || ( GetEndPoint() == aPos && IsEndDangling() );
+    }
+
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 

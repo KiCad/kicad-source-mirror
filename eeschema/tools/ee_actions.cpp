@@ -22,11 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <tool/tool_action.h>
 #include <bitmaps.h>
-#include <tools/ee_actions.h>
 #include <core/typeinfo.h>
 #include <layers_id_colors_and_visibility.h>
+#include <sch_line_wire_bus_tool.h>
+#include <tools/ee_actions.h>
+#include <tool/tool_action.h>
 
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
@@ -645,17 +646,20 @@ TOOL_ACTION EE_ACTIONS::addNeededJunctions(
         "eeschema.InteractiveDrawingLineWireBus.addNeededJunctions", AS_ACTIVE, 0, "",
         _( "Add Junctions to Selection where needed" ), "", nullptr, AF_ACTIVATE );
 
+
+const DRAW_SEGMENT_EVENT_PARAMS drawWireActionParam = { LAYER_WIRE, false };
 TOOL_ACTION EE_ACTIONS::drawWire( "eeschema.InteractiveDrawingLineWireBus.drawWires",
         AS_GLOBAL,
         'W', LEGACY_HK_NAME( "Begin Wire" ),
         _( "Add Wire" ), _( "Add a wire" ),
-        add_line_xpm, AF_ACTIVATE, (void*) LAYER_WIRE );
+        add_line_xpm, AF_ACTIVATE, (void*) &drawWireActionParam );
 
+const DRAW_SEGMENT_EVENT_PARAMS drawBusActionParam = { LAYER_BUS, false };
 TOOL_ACTION EE_ACTIONS::drawBus( "eeschema.InteractiveDrawingLineWireBus.drawBuses",
         AS_GLOBAL,
         'B', LEGACY_HK_NAME( "Begin Bus" ),
         _( "Add Bus" ), _( "Add a bus" ),
-        add_bus_xpm, AF_ACTIVATE, (void*) LAYER_BUS );
+        add_bus_xpm, AF_ACTIVATE, (void*) &drawBusActionParam );
 
 TOOL_ACTION EE_ACTIONS::unfoldBus( "eeschema.InteractiveDrawingLineWireBus.unfoldBus",
         AS_GLOBAL,
@@ -663,11 +667,12 @@ TOOL_ACTION EE_ACTIONS::unfoldBus( "eeschema.InteractiveDrawingLineWireBus.unfol
         _( "Unfold from Bus" ), _( "Break a wire out of a bus" ),
         nullptr, AF_ACTIVATE );
 
+const DRAW_SEGMENT_EVENT_PARAMS drawLinesActionParam = { LAYER_NOTES, false };
 TOOL_ACTION EE_ACTIONS::drawLines( "eeschema.InteractiveDrawingLineWireBus.drawLines",
         AS_GLOBAL,
         'I', LEGACY_HK_NAME( "Add Graphic PolyLine" ),
         _( "Add Lines" ), _( "Add connected graphic lines" ),
-        add_dashed_line_xpm, AF_ACTIVATE, (void*) LAYER_NOTES );
+        add_dashed_line_xpm, AF_ACTIVATE, (void*) &drawLinesActionParam );
 
 TOOL_ACTION EE_ACTIONS::finishLineWireOrBus( "eeschema.InteractiveDrawingLineWireBus.finish",
         AS_GLOBAL,

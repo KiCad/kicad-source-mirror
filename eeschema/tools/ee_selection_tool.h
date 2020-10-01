@@ -88,20 +88,54 @@ public:
 
     /**
      * Function SelectPoint()
-     * Selects one or all items pointed by the parameter aWhere.
-     * If there is more than one item at that place,
-     * there is a menu displayed that allows one to choose the item or all of them.
+     * This overload of SelectPoint will create an EE_COLLECTOR and collect hits at location aWhere 
+     * before calling the primary SelectPoint method.
      *
-     * @param aWhere is the place where the item should be selected.
+     * @param aWhere is the location where the item(s) should be collected
      * @param aItem is set to the newly selected item if only one was selected, otherwise is unchanged.
      * @param aSelectionCancelledFlag allows the function to inform its caller that a selection
      * was cancelled (for instance, by clicking outside of the disambiguation menu).
      * @param aCheckLocked indicates if locked items should be excluded.
+     * @param aAdd indicates if found item(s) should be added to the selection
+     * @param aSubtract indicates if found item(s) should be subtracted from the selection
+     * @param aExclusiveOr indicates if found item(s) should be toggle in the selection
      */
     bool SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFilterList = EE_COLLECTOR::AllItems,
                       EDA_ITEM** aItem = nullptr, bool* aSelectionCancelledFlag = nullptr,
                       bool aCheckLocked = false, bool aAdd = false, bool aSubtract = false,
                       bool aExclusiveOr = false );
+
+    /**
+     * Function SelectPoint()
+     * This is the primary SelectPoint method that will prompt the user with a menu to disambiguate multiple selections
+     * and then finish by adding, subtracting or toggling the item(s) to the actual selection group.
+     *
+     * @param aCollector is an EE_COLLECTOR that already has collected items
+     * @param aItem is set to the newly selected item if only one was selected, otherwise is unchanged.
+     * @param aSelectionCancelledFlag allows the function to inform its caller that a selection
+     * was cancelled (for instance, by clicking outside of the disambiguation menu).
+     * @param aAdd indicates if found item(s) should be added to the selection
+     * @param aSubtract indicates if found item(s) should be subtracted from the selection
+     * @param aExclusiveOr indicates if found item(s) should be toggle in the selection
+     */
+    bool SelectPoint( EE_COLLECTOR& aCollector, EDA_ITEM** aItem = nullptr,
+                      bool* aSelectionCancelledFlag = nullptr, bool aAdd = false,
+                      bool aSubtract = false, bool aExclusiveOr = false );
+
+    /**
+     * Function CollectHits()
+     * Selects one or more items at the location given by parameter aWhere.
+     *
+     * This method does not attempt to disambiguate multiple items and is simply "collecting"
+     *
+     * @param aWhere is the place where the item should be selected.
+     * @param aCollector is the collector object that will store found item(s)
+     * @param aFilterList is a list of items that are acceptable for collection
+     * @param aCheckLocked indicates if locked items should be excluded.
+     */
+    bool CollectHits( const VECTOR2I& aWhere, EE_COLLECTOR& aCollector,
+                      const KICAD_T* aFilterList = EE_COLLECTOR::AllItems,
+                      bool aCheckLocked = false );
 
     int AddItemToSel( const TOOL_EVENT& aEvent );
     void AddItemToSel( EDA_ITEM* aItem, bool aQuietMode = false );

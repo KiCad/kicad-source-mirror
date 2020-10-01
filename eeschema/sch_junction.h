@@ -95,6 +95,8 @@ public:
     wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( const wxPoint& aPosition ) override { m_pos = aPosition; }
 
+    bool IsPointClickableAnchor( const wxPoint& aPos ) const override { return GetPosition() == aPos; }
+
     int GetDiameter() const;
     void SetDiameter( int aDiameter ) { m_diameter = aDiameter; }
 

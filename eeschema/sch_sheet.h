@@ -204,6 +204,8 @@ public:
 
     void SetPosition( const wxPoint& aPosition ) override { ConstrainOnEdge( aPosition ); }
 
+    bool IsPointClickableAnchor( const wxPoint& aPos ) const override { return m_isDangling && GetPosition() == aPos; }
+
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
     EDA_ITEM* Clone() const override;

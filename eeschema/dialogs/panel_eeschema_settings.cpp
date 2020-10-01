@@ -70,6 +70,8 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
     m_mouseDragIsDrag->SetValue( !cfg->m_Input.drag_is_move );
     m_cbPinSelectionOpt->SetValue( cfg->m_Selection.select_pin_selects_symbol );
 
+    m_cbAutoStartWires->SetValue( cfg->m_Drawing.auto_start_wires );
+
     return true;
 }
 
@@ -98,6 +100,8 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
 
     cfg->m_Input.drag_is_move = !m_mouseDragIsDrag->GetValue();
     cfg->m_Selection.select_pin_selects_symbol = m_cbPinSelectionOpt->GetValue();
+
+    cfg->m_Drawing.auto_start_wires = m_cbAutoStartWires->GetValue();
 
     m_frame->SaveProjectSettings();
 

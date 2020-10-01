@@ -59,6 +59,18 @@ const KICAD_T EE_COLLECTOR::EditableItems[] = {
 };
 
 
+const KICAD_T EE_COLLECTOR::AnchorableItems[] = {
+    SCH_PIN_T,
+    SCH_LABEL_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_HIER_LABEL_T,
+    SCH_SHEET_PIN_T,
+    SCH_JUNCTION_T,
+    SCH_LINE_T,
+    EOT
+};
+
+
 const KICAD_T EE_COLLECTOR::ComponentsOnly[] = {
     SCH_COMPONENT_T,
     EOT

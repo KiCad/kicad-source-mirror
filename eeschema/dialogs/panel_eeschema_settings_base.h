@@ -44,6 +44,7 @@ class PANEL_EESCHEMA_SETTINGS_BASE : public wxPanel
 		wxChoice* m_choiceUnits;
 		wxCheckBox* m_checkHVOrientation;
 		wxCheckBox* m_mouseDragIsDrag;
+		wxCheckBox* m_cbAutoStartWires;
 		wxStaticText* m_borderColorLabel;
 		COLOR_SWATCH* m_borderColorSwatch;
 		wxStaticText* m_backgroundColorLabel;

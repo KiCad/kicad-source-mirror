@@ -377,6 +377,11 @@ public:
     virtual bool IsConnectable() const { return false; }
 
     /**
+     * @return true if the given point can start drawing (usually means the anchor is unused/free/dangling)
+     */
+    virtual bool IsPointClickableAnchor( const wxPoint& aPos ) const { return false; }
+
+    /**
      * Add all the connection points for this item to \a aPoints.
      *
      * Not all schematic items have connection points so the default method does nothing.

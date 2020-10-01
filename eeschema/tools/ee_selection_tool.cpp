@@ -46,6 +46,7 @@
 #include <schematic.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
+#include <tools/ee_grid_helper.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <view/view.h>
 #include <view/view_controls.h>
@@ -295,13 +296,12 @@ const KICAD_T movableSymbolItems[] =
 
 int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
+    m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( m_frame->ToolStackIsEmpty() )
-            m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
-
+        bool displayPencil = false;
         m_additive = m_subtractive = m_exclusive_or = false;
 
         if( evt->Modifier( MD_SHIFT ) && evt->Modifier( MD_CTRL ) )
@@ -321,8 +321,46 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
 
-            SelectPoint( evt->Position(), EE_COLLECTOR::AllItems, nullptr, nullptr, false,
-                         m_additive, m_subtractive, m_exclusive_or );
+            EE_COLLECTOR collector;
+
+            // Collect items at the clicked location (doesn't select them yet)
+            if( !CollectHits( evt->Position(), collector, EE_COLLECTOR::AllItems, false ) )
+            {
+                return false;
+            }
+
+            // Check if we want to auto start wires if we clicked on anchors of items
+            bool continueSelect = true;
+            if( collector.GetCount() == 1 && m_frame->eeconfig()->m_Drawing.auto_start_wires )
+            {
+                EE_GRID_HELPER grid( m_toolMgr );
+
+                wxPoint cursorPos = wxPoint( grid.BestSnapAnchor(
+                        evt->IsPrime() ? evt->Position() : getViewControls()->GetMousePosition(),
+                        nullptr ) );
+                if( collector[0]->IsPointClickableAnchor( cursorPos ) )
+                {
+                    OPT_TOOL_EVENT newEvt = EE_ACTIONS::drawWire.MakeEvent();
+
+                    DRAW_SEGMENT_EVENT_PARAMS* params =
+                            newEvt->Parameter<DRAW_SEGMENT_EVENT_PARAMS*>();
+                    DRAW_SEGMENT_EVENT_PARAMS* newParams = new DRAW_SEGMENT_EVENT_PARAMS();
+                    *newParams                           = *params;
+                    newParams->quitOnDraw                = true;
+                    newEvt->SetParameter( newParams );
+
+                    newEvt->SetMousePosition( newEvt->Position() );
+                    m_toolMgr->ProcessEvent( *newEvt );
+                    continueSelect = false;
+                }
+            }
+
+            if( continueSelect )
+            {
+                // If we didn't click on an anchor, we perform a normal select, pass in the items we previously collected
+                SelectPoint(
+                        collector, nullptr, nullptr, m_additive, m_subtractive, m_exclusive_or );
+            }
         }
 
         // right click? if there is any object - show the context menu
@@ -375,7 +413,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
 
-            if( m_additive || m_subtractive || m_exclusive_or || m_frame->GetDragSelects() )
+            if( m_additive || m_subtractive || m_exclusive_or
+                    || ( m_selection.Empty() && m_frame->GetDragSelects() ) )
             {
                 selectMultiple();
             }
@@ -442,8 +481,45 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             ClearSelection();
         }
 
+        else if( evt->IsMotion() )
+        {
+            if( m_frame->eeconfig()->m_Drawing.auto_start_wires )
+            {
+                EE_COLLECTOR collector;
+
+                // We are checking if we should display a pencil when hovering over anchors for "auto starting" wires when clicked
+                if( CollectHits(
+                            evt->Position(), collector, EE_COLLECTOR::AnchorableItems, false ) )
+                {
+                    if( collector.GetCount() == 1 )
+                    {
+                        SCH_ITEM* item = collector[0];
+
+                        if( item
+                                && item->IsPointClickableAnchor( static_cast<wxPoint>(
+                                        getViewControls()->GetCursorPosition( true ) ) ) )
+                        {
+                            displayPencil = true;
+                        }
+                    }
+                }
+            }
+        }
+
         else
             evt->SetPassEvent();
+
+        if( m_frame->ToolStackIsEmpty() )
+        {
+            if( displayPencil )
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+            }
+            else
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+            }
+        }
     }
 
     return 0;
@@ -456,13 +532,10 @@ EE_SELECTION& EE_SELECTION_TOOL::GetSelection()
 }
 
 
-bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFilterList,
-        EDA_ITEM** aItem, bool* aSelectionCancelledFlag, bool aCheckLocked, bool aAdd,
-        bool aSubtract, bool aExclusiveOr )
+bool EE_SELECTION_TOOL::CollectHits( const VECTOR2I& aWhere, EE_COLLECTOR& aCollector,
+        const KICAD_T* aFilterList, bool aCheckLocked )
 {
-    EE_COLLECTOR collector;
-
-    collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+    aCollector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
 
     if( m_isLibEdit )
     {
@@ -471,57 +544,68 @@ bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFil
         if( !part )
             return false;
 
-        collector.Collect( part->GetDrawItems(), aFilterList, (wxPoint) aWhere, m_unit, m_convert );
+        aCollector.Collect(
+                part->GetDrawItems(), aFilterList, (wxPoint) aWhere, m_unit, m_convert );
     }
     else
-        collector.Collect( m_frame->GetScreen(), aFilterList, (wxPoint) aWhere, m_unit, m_convert );
+    {
+        aCollector.Collect(
+                m_frame->GetScreen(), aFilterList, (wxPoint) aWhere, m_unit, m_convert );
+    }
 
     // Post-process collected items
-    for( int i = collector.GetCount() - 1; i >= 0; --i )
+    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
     {
-        if( !Selectable( collector[ i ] ) )
+        if( !Selectable( aCollector[i] ) )
         {
-            collector.Remove( i );
+            aCollector.Remove( i );
             continue;
         }
 
-        if( aCheckLocked && collector[ i ]->IsLocked() )
+        if( aCheckLocked && aCollector[i]->IsLocked() )
         {
-            collector.Remove( i );
+            aCollector.Remove( i );
             continue;
         }
 
         // SelectPoint, unlike other selection routines, can select line ends
-        if( collector[ i ]->Type() == SCH_LINE_T )
+        if( aCollector[i]->Type() == SCH_LINE_T )
         {
-            SCH_LINE* line = (SCH_LINE*) collector[ i ];
+            SCH_LINE* line = (SCH_LINE*) aCollector[i];
             line->ClearFlags( STARTPOINT | ENDPOINT );
 
-            if( HitTestPoints( line->GetStartPoint(), (wxPoint) aWhere, collector.m_Threshold ) )
+            if( HitTestPoints( line->GetStartPoint(), (wxPoint) aWhere, aCollector.m_Threshold ) )
                 line->SetFlags( STARTPOINT );
-            else if (HitTestPoints( line->GetEndPoint(), (wxPoint) aWhere, collector.m_Threshold ) )
+            else if( HitTestPoints( line->GetEndPoint(), (wxPoint) aWhere, aCollector.m_Threshold ) )
                 line->SetFlags( ENDPOINT );
             else
                 line->SetFlags( STARTPOINT | ENDPOINT );
         }
     }
 
-    m_selection.ClearReferencePoint();
-
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
-    if( collector.GetCount() > 1 && !m_skip_heuristics )
+    if( aCollector.GetCount() > 1 && !m_skip_heuristics )
     {
-        GuessSelectionCandidates( collector, aWhere );
+        GuessSelectionCandidates( aCollector, aWhere );
     }
 
-    // If still more than one item we're going to have to ask the user.
-    if( collector.GetCount() > 1 )
-    {
-        collector.m_MenuTitle = wxEmptyString;
-        // Must call selectionMenu via RunAction() to avoid event-loop contention
-        m_toolMgr->RunAction( EE_ACTIONS::selectionMenu, true, &collector );
+    return true;
+}
 
-        if( collector.m_MenuCancelled )
+
+bool EE_SELECTION_TOOL::SelectPoint( EE_COLLECTOR& aCollector, EDA_ITEM** aItem,
+        bool* aSelectionCancelledFlag, bool aAdd, bool aSubtract, bool aExclusiveOr )
+{
+    m_selection.ClearReferencePoint();
+
+    // If still more than one item we're going to have to ask the user.
+    if( aCollector.GetCount() > 1 )
+    {
+        aCollector.m_MenuTitle = wxEmptyString;
+        // Must call selectionMenu via RunAction() to avoid event-loop contention
+        m_toolMgr->RunAction( EE_ACTIONS::selectionMenu, true, &aCollector );
+
+        if( aCollector.m_MenuCancelled )
         {
             if( aSelectionCancelledFlag )
                 *aSelectionCancelledFlag = true;
@@ -536,18 +620,18 @@ bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFil
     bool anyAdded      = false;
     bool anySubtracted = false;
 
-    if( collector.GetCount() > 0 )
+    if( aCollector.GetCount() > 0 )
     {
-        for( int i = 0; i < collector.GetCount(); ++i )
+        for( int i = 0; i < aCollector.GetCount(); ++i )
         {
-            if( aSubtract || ( aExclusiveOr && collector[i]->IsSelected() ) )
+            if( aSubtract || ( aExclusiveOr && aCollector[i]->IsSelected() ) )
             {
-                unselect( collector[i] );
+                unselect( aCollector[i] );
                 anySubtracted = true;
             }
             else
             {
-                select( collector[i] );
+                select( aCollector[i] );
                 anyAdded = true;
             }
         }
@@ -557,8 +641,8 @@ bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFil
     {
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
-        if( aItem && collector.GetCount() == 1 )
-            *aItem = collector[0];
+        if( aItem && aCollector.GetCount() == 1 )
+            *aItem = aCollector[0];
 
         return true;
     }
@@ -569,6 +653,21 @@ bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFil
     }
 
     return false;
+}
+
+
+bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFilterList,
+        EDA_ITEM** aItem, bool* aSelectionCancelledFlag, bool aCheckLocked, bool aAdd,
+        bool aSubtract, bool aExclusiveOr )
+{
+    EE_COLLECTOR collector;
+
+    if( !CollectHits( aWhere, collector, aFilterList, aCheckLocked ) )
+    {
+        return false;
+    }
+
+    return SelectPoint( collector, aItem, aSelectionCancelledFlag, aAdd, aSubtract, aExclusiveOr );
 }
 
 
@@ -663,12 +762,18 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
     // itself is never selected
     for( int i = 0; collector.GetCount() == 2 && i < 2; ++i )
     {
-        EDA_ITEM* item = collector[ i ];
-        EDA_ITEM* other = collector[ ( i + 1 ) % 2 ];
+        SCH_ITEM* item  = collector[i];
+        SCH_ITEM* other = collector[( i + 1 ) % 2];
 
         if( item->Type() == SCH_COMPONENT_T && other->Type() == SCH_PIN_T )
         {
-            if( !m_isLibEdit && m_frame->eeconfig()->m_Selection.select_pin_selects_symbol )
+            // Make sure we aren't clicking on the pin anchor itself, only the rest of the pin should select the symbol with this setting
+            // To avoid conflict with the auto-start wires option
+            EE_GRID_HELPER grid( m_toolMgr );
+            wxPoint        cursorPos = wxPoint( grid.BestSnapAnchor( aPos, nullptr ) );
+
+            if( !m_isLibEdit && m_frame->eeconfig()->m_Selection.select_pin_selects_symbol
+                    && !other->IsPointClickableAnchor( cursorPos ) )
                 collector.Transfer( other );
             else
                 collector.Transfer( item );
