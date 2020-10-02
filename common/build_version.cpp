@@ -23,7 +23,8 @@
  */
 
 // Date for KiCad build version
-#include <fctsys.h>
+#include <wx/wx.h>
+#include <config.h>
 #include <boost/version.hpp>
 
 // kicad_curl.h must be included before wx headers, to avoid

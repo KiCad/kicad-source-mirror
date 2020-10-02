@@ -28,7 +28,6 @@
 #include <confirm.h>
 #include <dialog_shim.h>
 #include <eda_draw_frame.h>
-#include <fctsys.h>
 #include <filehistory.h>
 #include <id.h>
 #include <kiface_i.h>

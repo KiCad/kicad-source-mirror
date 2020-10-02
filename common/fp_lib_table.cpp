@@ -24,7 +24,6 @@
  */
 
 
-#include <fctsys.h>
 #include <kiface_i.h>
 #include <footprint_info.h>
 #include <lib_id.h>

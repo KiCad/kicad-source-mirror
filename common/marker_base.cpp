@@ -30,9 +30,7 @@
  */
 
 
-#include "fctsys.h"
 #include "base_screen.h"
-#include "macros.h"
 #include "marker_base.h"
 #include <geometry/shape_line_chain.h>
 #include <render_settings.h>

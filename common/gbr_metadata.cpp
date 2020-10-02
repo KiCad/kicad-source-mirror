@@ -27,8 +27,9 @@
  * @brief helper functions to handle the gerber metadata in files,
  * related to the netlist info and aperture attribute.
  */
+#include <wx/string.h>
+#include <wx/datetime.h>
 
-#include <fctsys.h>
 #include <gbr_metadata.h>
 #include <utf8.h>
 

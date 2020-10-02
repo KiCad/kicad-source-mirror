@@ -30,7 +30,6 @@
  *        (locale handling)
  */
 
-#include <fctsys.h>
 #include <wx/html/htmlwin.h>
 #include <wx/fs_zip.h>
 #include <wx/dir.h>

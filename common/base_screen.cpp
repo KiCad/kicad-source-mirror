@@ -26,7 +26,6 @@
 
 #include <base_screen.h>
 #include <base_struct.h>
-#include <fctsys.h>
 #include <trace_helpers.h>
 
 

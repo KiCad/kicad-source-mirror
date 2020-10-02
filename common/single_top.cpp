@@ -35,8 +35,6 @@
 
 
 #include <typeinfo>
-#include <macros.h>
-#include <fctsys.h>
 #include <wx/cmdline.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>

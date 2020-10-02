@@ -22,7 +22,7 @@
  */
 
 
-#include <fctsys.h>
+#include <wx/wx.h>
 #include <textentry_tricks.h>
 #include <dialog_shim.h>
 

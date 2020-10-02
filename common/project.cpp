@@ -23,15 +23,12 @@
 
 #include <wx/stdpaths.h>
 
-#include <common.h> // NAMELESS_PROJECT
 #include <config_params.h>
 #include <confirm.h>
-#include <fctsys.h>
 #include <fp_lib_table.h>
 #include <kicad_string.h>
 #include <kiface_ids.h>
 #include <kiway.h>
-#include <macros.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <project/project_file.h>

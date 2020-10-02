@@ -28,6 +28,7 @@
 
 #include <wx/grid.h>
 #include <wx/event.h>
+#include <wx/menu.h>
 #include <widgets/wx_grid.h>
 
 enum

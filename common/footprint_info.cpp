@@ -28,8 +28,6 @@
  * and their documentation (comments and keywords)
  */
 
-#include <common.h>
-#include <fctsys.h>
 #include <footprint_info.h>
 #include <fp_lib_table.h>
 #include <html_messagebox.h>
@@ -37,7 +35,6 @@
 #include <kiface_ids.h>
 #include <kiway.h>
 #include <lib_id.h>
-#include <macros.h>
 #include <pgm_base.h>
 #include <thread>
 #include <utility>

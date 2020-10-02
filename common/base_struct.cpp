@@ -28,10 +28,7 @@
 
 #include <deque>
 
-#include <fctsys.h>
 #include <trigo.h>
-#include <common.h>
-#include <macros.h>
 #include <base_screen.h>
 #include <bitmaps.h>
 #include <trace_helpers.h>

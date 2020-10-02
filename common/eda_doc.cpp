@@ -26,9 +26,7 @@
  * @file eda_doc.cpp
  */
 
-#include <fctsys.h>
 #include <pgm_base.h>
-#include <common.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <settings/common_settings.h>
@@ -37,7 +35,7 @@
 #include <wx/tokenzr.h>
 #include <wx/filename.h>
 #include <wx/uri.h>
-#include <macros.h>
+#include <wx/filedlg.h>
 
 
 void PGM_BASE::ReadPdfBrowserInfos()

@@ -23,16 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <kiface_i.h>
 #include <hotkeys_basic.h>
 #include <id.h>
-#include <confirm.h>
 #include <kicad_string.h>
-#include <gestfich.h>
 #include <eda_base_frame.h>
-#include <macros.h>
-#include <menus_helpers.h>
 #include <eda_draw_frame.h>
 #include <settings/settings_manager.h>
 
@@ -298,7 +293,7 @@ int KeyCodeFromKeyName( const wxString& keyname )
 }
 
 
-/* 
+/*
  * DisplayHotkeyList
  * Displays the hotkeys registered with the given tool manager.
  */
@@ -318,7 +313,7 @@ void ReadHotKeyConfig( wxString fileName, std::map<std::string, int>& aHotKeys )
         fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
         fileName = fn.GetFullPath();
     }
-    
+
     if( !wxFile::Exists( fileName ) )
         return;
 
@@ -356,7 +351,7 @@ int WriteHotKeyConfig( const std::map<std::string, TOOL_ACTION*>& aActionMap )
     // Read the existing config (all hotkeys)
     //
     ReadHotKeyConfig( fn.GetFullPath(), hotkeys );
-   
+
     // Overlay the current app's hotkey definitions onto the map
     //
     for( const auto& ii : aActionMap )
@@ -365,7 +360,7 @@ int WriteHotKeyConfig( const std::map<std::string, TOOL_ACTION*>& aActionMap )
     // Write entire hotkey set
     //
     wxFile file( fn.GetFullPath(), wxFile::OpenMode::write );
-    
+
     for( const auto& ii : hotkeys )
         file.Write( wxString::Format( "%s\t%s\n", ii.first, KeyNameFromKeyCode( ii.second ) ) );
 
@@ -401,7 +396,7 @@ int ReadLegacyHotkeyConfigFile( const wxString& aFilename, std::map<std::string,
         return 0;
 
     wxFile cfgfile( fn.GetFullPath() );
-    
+
     if( !cfgfile.IsOpened() )       // There is a problem to open file
         return 0;
 
