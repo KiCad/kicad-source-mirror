@@ -39,7 +39,7 @@ const KICAD_T GERBER_COLLECTOR::AllItems[] = {
  */
 SEARCH_RESULT GERBER_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
-    if( testItem->HitTest( m_RefPos ) )
+    if( testItem->HitTest( m_refPos ) )
         Append( testItem );
 
     return SEARCH_RESULT::CONTINUE;
@@ -60,8 +60,8 @@ void GERBER_COLLECTOR::Collect( EDA_ITEM* aItem, const KICAD_T aScanList[],
     // the Inspect() function.
     SetRefPos( aRefPos );
 
-    aItem->Visit( m_inspector, NULL, m_ScanTypes );
+    aItem->Visit( m_inspector, NULL, m_scanTypes );
 
     // record the length of the primary list before concatenating on to it.
-    m_PrimaryLength = m_List.size();
+    m_PrimaryLength = m_list.size();
 }

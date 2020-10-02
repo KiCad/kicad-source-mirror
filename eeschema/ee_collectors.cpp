@@ -90,7 +90,7 @@ SEARCH_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
             return SEARCH_RESULT::CONTINUE;
     }
 
-    if( aItem->HitTest( m_RefPos, m_Threshold ) )
+    if( aItem->HitTest( m_refPos, m_Threshold ) )
         Append( aItem );
 
     return SEARCH_RESULT::CONTINUE;
@@ -126,20 +126,20 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], co
                 if( *filter == SCH_SHEET_T || *filter == SCH_LOCATE_ANY_T )
                     sheetsVisited = true;
 
-                item->Visit( m_inspector, nullptr, m_ScanTypes );
+                item->Visit( m_inspector, nullptr, m_scanTypes );
             }
         }
 
         if( !componentsVisited )
         {
             for( SCH_ITEM* item : aScreen->Items().OfType( SCH_COMPONENT_T ) )
-                item->Visit( m_inspector, nullptr, m_ScanTypes );
+                item->Visit( m_inspector, nullptr, m_scanTypes );
         }
 
         if( !sheetsVisited )
         {
             for( SCH_ITEM* item : aScreen->Items().OfType( SCH_SHEET_T ) )
-                item->Visit( m_inspector, nullptr, m_ScanTypes );
+                item->Visit( m_inspector, nullptr, m_scanTypes );
         }
     }
 }
@@ -159,7 +159,7 @@ void EE_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems, const KICAD_T aFilterLi
 
     for( auto& item : aItems )
     {
-        if( item.Visit( m_inspector, nullptr, m_ScanTypes ) == SEARCH_RESULT::QUIT )
+        if( item.Visit( m_inspector, nullptr, m_scanTypes ) == SEARCH_RESULT::QUIT )
             break;
     }
 }
@@ -170,16 +170,16 @@ bool EE_COLLECTOR::IsCorner() const
     if( GetCount() != 2 )
         return false;
 
-    bool is_busentry0 = (dynamic_cast<SCH_BUS_ENTRY_BASE*>( m_List[0] ) != NULL);
-    bool is_busentry1 = (dynamic_cast<SCH_BUS_ENTRY_BASE*>( m_List[1] ) != NULL);
+    bool is_busentry0 = ( dynamic_cast<SCH_BUS_ENTRY_BASE*>( m_list[0] ) != NULL);
+    bool is_busentry1 = ( dynamic_cast<SCH_BUS_ENTRY_BASE*>( m_list[1] ) != NULL);
 
-    if( (m_List[0]->Type() == SCH_LINE_T) && (m_List[1]->Type() == SCH_LINE_T) )
-        return ( ( SCH_LINE* ) m_List[0])->GetLayer() == ( ( SCH_LINE* ) m_List[1])->GetLayer();
+    if(( m_list[0]->Type() == SCH_LINE_T) && ( m_list[1]->Type() == SCH_LINE_T) )
+        return ( ( SCH_LINE* ) m_list[0])->GetLayer() == ( ( SCH_LINE* ) m_list[1])->GetLayer();
 
-    if( (m_List[0]->Type() == SCH_LINE_T) && is_busentry1 )
+    if(( m_list[0]->Type() == SCH_LINE_T) && is_busentry1 )
         return true;
 
-    if( is_busentry0 && (m_List[1]->Type() == SCH_LINE_T) )
+    if( is_busentry0 && ( m_list[1]->Type() == SCH_LINE_T) )
         return true;
 
     return false;

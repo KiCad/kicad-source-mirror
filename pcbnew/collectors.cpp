@@ -421,7 +421,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     if( marker )
     {
         // Markers are not sensitive to the layer
-        if( marker->HitTest( m_RefPos ) )
+        if( marker->HitTest( m_refPos ) )
             Append( item );
 
         goto exit;
@@ -430,7 +430,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     if( group )
     {
         // Groups are not sensitive to the layer ... ?
-        if( group->HitTest( m_RefPos ) )
+        if( group->HitTest( m_refPos ) )
             Append( item );
 
         goto exit;
@@ -470,9 +470,9 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     {
                         bool testFill = !m_Guide->IgnoreZoneFills();
 
-                        if( zone->HitTestForCorner( m_RefPos, accuracy * 2 )
-                            || zone->HitTestForEdge( m_RefPos, accuracy )
-                            || ( testFill && zone->HitTestFilledArea( layer, m_RefPos ) ) )
+                        if( zone->HitTestForCorner( m_refPos, accuracy * 2 )
+                            || zone->HitTestForEdge( m_refPos, accuracy )
+                            || ( testFill && zone->HitTestFilledArea( layer, m_refPos ) ) )
                         {
                             Append( item );
                             goto exit;
@@ -480,8 +480,8 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     }
                     else if( item->Type() == PCB_MODULE_T )
                     {
-                        if( module->HitTest( m_RefPos, accuracy )
-                                && module->HitTestAccurate( m_RefPos, accuracy ) )
+                        if( module->HitTest( m_refPos, accuracy )
+                                && module->HitTestAccurate( m_refPos, accuracy ) )
                         {
                             Append( item );
                             goto exit;
@@ -489,7 +489,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     }
                     else if( drawSegment )
                     {
-                        if( drawSegment->HitTest( m_RefPos, accuracy ) )
+                        if( drawSegment->HitTest( m_refPos, accuracy ) )
                         {
                             Append( item );
                             goto exit;
@@ -497,7 +497,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     }
                     else
                     {
-                        if( item->HitTest( m_RefPos, 0 ) )
+                        if( item->HitTest( m_refPos, 0 ) )
                         {
                             Append( item );
                             goto exit;
@@ -534,9 +534,9 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     {
                         bool testFill = !m_Guide->IgnoreZoneFills();
 
-                        if( zone->HitTestForCorner( m_RefPos, accuracy * 2 )
-                            || zone->HitTestForEdge( m_RefPos, accuracy )
-                            || ( testFill && zone->HitTestFilledArea( layer, m_RefPos ) ) )
+                        if( zone->HitTestForCorner( m_refPos, accuracy * 2 )
+                            || zone->HitTestForEdge( m_refPos, accuracy )
+                            || ( testFill && zone->HitTestFilledArea( layer, m_refPos ) ) )
                         {
                             Append2nd( item );
                             goto exit;
@@ -544,8 +544,8 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     }
                     else if( item->Type() == PCB_MODULE_T )
                     {
-                        if( module->HitTest( m_RefPos, accuracy )
-                                && module->HitTestAccurate( m_RefPos, accuracy ) )
+                        if( module->HitTest( m_refPos, accuracy )
+                                && module->HitTestAccurate( m_refPos, accuracy ) )
                         {
                             Append( item );
                             goto exit;
@@ -553,7 +553,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     }
                     else if( drawSegment )
                     {
-                        if( drawSegment->HitTest( m_RefPos, accuracy ) )
+                        if( drawSegment->HitTest( m_refPos, accuracy ) )
                         {
                             Append( item );
                             goto exit;
@@ -561,7 +561,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     }
                     else
                     {
-                        if( item->HitTest( m_RefPos, 0 ) )
+                        if( item->HitTest( m_refPos, 0 ) )
                         {
                             Append( item );
                             goto exit;
@@ -592,10 +592,10 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
     // the Inspect() function.
     SetRefPos( aRefPos );
 
-    aItem->Visit( m_inspector, NULL, m_ScanTypes );
+    aItem->Visit( m_inspector, NULL, m_scanTypes );
 
     // record the length of the primary list before concatenating on to it.
-    m_PrimaryLength = m_List.size();
+    m_PrimaryLength = m_list.size();
 
     // append 2nd list onto end of the first list
     for( unsigned i = 0;  i<m_List2nd.size();  ++i )

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,13 +55,13 @@ class EDA_ITEM;
 class COLLECTOR
 {
 protected:
-    std::vector<EDA_ITEM*> m_List;       // Primary list of most likely items
-    std::vector<EDA_ITEM*> m_BackupList; // Secondary list with items removed by heuristics
+    std::vector<EDA_ITEM*> m_list;       // Primary list of most likely items
+    std::vector<EDA_ITEM*> m_backupList; // Secondary list with items removed by heuristics
 
-    const KICAD_T* m_ScanTypes;
+    const KICAD_T* m_scanTypes;
     INSPECTOR_FUNC m_inspector;
-    wxPoint        m_RefPos;            // Reference position used to generate the collection.
-    EDA_RECT       m_RefBox;            // Selection rectangle used to generate the collection.
+    wxPoint        m_refPos;            // Reference position used to generate the collection.
+    EDA_RECT       m_refBox;            // Selection rectangle used to generate the collection.
 
 public:
     int            m_Threshold;         // Hit-test threshold in internal units.
@@ -71,11 +71,15 @@ public:
 
 public:
     COLLECTOR() :
-        m_ScanTypes( 0 ),
-        // Inspect() is virtual so calling it from a class common inspector preserves polymorphism.
-        m_inspector( [=] ( EDA_ITEM* aItem, void* aTestData ) { return this->Inspect( aItem, aTestData ); } ),
-        m_Threshold( 0 ),
-        m_MenuCancelled( false )
+            m_scanTypes( 0 ),
+            // Inspect() is virtual so calling it from a class common inspector preserves
+            // polymorphism.
+            m_inspector( [=]( EDA_ITEM* aItem, void* aTestData )
+                         {
+                             return this->Inspect( aItem, aTestData );
+                         } ),
+            m_Threshold( 0 ),
+            m_MenuCancelled( false )
     {
     }
 
@@ -89,10 +93,10 @@ public:
     using ITER = std::vector<EDA_ITEM*>::iterator;
     using CITER = std::vector<EDA_ITEM*>::const_iterator;
 
-    ITER begin() { return m_List.begin(); }
-    ITER end() { return m_List.end(); }
-    CITER begin() const { return m_List.cbegin(); }
-    CITER end() const { return m_List.cend(); }
+    ITER begin() { return m_list.begin(); }
+    ITER end() { return m_list.end(); }
+    CITER begin() const { return m_list.cbegin(); }
+    CITER end() const { return m_list.cend(); }
 
     /**
      * Function GetCount
@@ -100,7 +104,7 @@ public:
      */
     int GetCount() const
     {
-        return (int) m_List.size();
+        return (int) m_list.size();
     }
 
     /**
@@ -109,7 +113,7 @@ public:
      */
     void Empty()
     {
-        m_List.clear();
+        m_list.clear();
     }
 
     /**
@@ -119,7 +123,7 @@ public:
      */
     void Append( EDA_ITEM* item )
     {
-        m_List.push_back( item );
+        m_list.push_back( item );
     }
 
     /**
@@ -129,7 +133,7 @@ public:
      */
     void Remove( int aIndex )
     {
-        m_List.erase( m_List.begin() + aIndex );
+        m_list.erase( m_list.begin() + aIndex );
     }
 
     /**
@@ -139,11 +143,11 @@ public:
      */
     void Remove( const EDA_ITEM* aItem )
     {
-        for( size_t i = 0;  i < m_List.size();  i++ )
+        for( size_t i = 0; i < m_list.size(); i++ )
         {
-            if( m_List[i] == aItem )
+            if( m_list[i] == aItem )
             {
-                m_List.erase( m_List.begin() + i);
+                m_list.erase( m_list.begin() + i);
                 return;
             }
         }
@@ -155,7 +159,7 @@ public:
      */
     bool HasAdditionalItems()
     {
-        return !m_BackupList.empty();
+        return !m_backupList.empty();
     }
 
     /**
@@ -163,8 +167,8 @@ public:
      */
     void Combine()
     {
-        std::copy( m_BackupList.begin(), m_BackupList.end(), std::back_inserter( m_List ) );
-        m_BackupList.clear();
+        std::copy( m_backupList.begin(), m_backupList.end(), std::back_inserter( m_list ) );
+        m_backupList.clear();
     }
 
     /**
@@ -173,8 +177,8 @@ public:
      */
     void Transfer( int aIndex )
     {
-        m_BackupList.push_back( m_List[aIndex] );
-        m_List.erase( m_List.begin() + aIndex );
+        m_backupList.push_back( m_list[aIndex] );
+        m_list.erase( m_list.begin() + aIndex );
     }
 
     /**
@@ -183,12 +187,12 @@ public:
      */
     void Transfer( EDA_ITEM* aItem )
     {
-        for( size_t i = 0; i < m_List.size(); i++ )
+        for( size_t i = 0; i < m_list.size(); i++ )
         {
-            if( m_List[i] == aItem )
+            if( m_list[i] == aItem )
             {
-                m_List.erase( m_List.begin() + i );
-                m_BackupList.push_back( aItem );
+                m_list.erase( m_list.begin() + i );
+                m_backupList.push_back( aItem );
                 return;
             }
         }
@@ -203,20 +207,9 @@ public:
     virtual EDA_ITEM* operator[]( int aIndex ) const
     {
         if( (unsigned)aIndex < (unsigned)GetCount() )  // (unsigned) excludes aIndex<0 also
-            return m_List[ aIndex ];
+            return m_list[ aIndex ];
 
         return NULL;
-    }
-
-    /**
-     * Function BasePtr
-     * returns the address of the first element in the array.  Only call this
-     * if there is at least one element in the vector m_List, otherwise a
-     * C++ exception should get thrown.
-     */
-    EDA_ITEM* const* BasePtr() const
-    {
-        return &m_List[0];
     }
 
     /**
@@ -228,9 +221,9 @@ public:
      */
     bool HasItem( const EDA_ITEM* aItem ) const
     {
-        for( size_t i = 0;  i < m_List.size();  i++ )
+        for( size_t i = 0; i < m_list.size(); i++ )
         {
-            if( m_List[i] == aItem )
+            if( m_list[i] == aItem )
                 return true;
         }
 
@@ -246,12 +239,12 @@ public:
      */
     void SetScanTypes( const KICAD_T* scanTypes )
     {
-        m_ScanTypes = scanTypes;
+        m_scanTypes = scanTypes;
     }
 
-    void SetRefPos( const wxPoint& aRefPos )  {  m_RefPos = aRefPos; }
+    void SetRefPos( const wxPoint& aRefPos )  { m_refPos = aRefPos; }
 
-    const EDA_RECT& GetBoundingBox() const {  return m_RefBox; }
+    const EDA_RECT& GetBoundingBox() const {  return m_refBox; }
 
     /**
      * Function CountType
@@ -262,37 +255,13 @@ public:
     int CountType( KICAD_T aType )
     {
         int cnt = 0;
-        for( size_t i = 0;  i < m_List.size();  i++ )
+        for( size_t i = 0; i < m_list.size(); i++ )
         {
-            if( m_List[i]->Type() == aType )
+            if( m_list[i]->Type() == aType )
                 cnt++;
         }
         return cnt;
     }
-
-    /**
-     * Function Collect
-     * scans an EDA_ITEM using this class's Inspector method, which does
-     * the collection.
-     * @param container An EDA_ITEM to scan, including those items it contains.
-     * @param aRefPos A wxPoint to use in hit-testing.
-     *
-     * example implementation, in derived class:
-     *
-    void Collect( EDA_ITEM* container, const wxPoint& aRefPos )
-    {
-        example implementation:
-
-        SetRefPos( aRefPos );    // remember where the snapshot was taken from
-
-        Empty();        // empty the collection
-
-        // visit the board with the INSPECTOR (me).
-        container->Visit(   inspector, &aRefPos,
-                            m_ScanTypes);
-        SetTimeNow();                   // when it was taken
-    }
-    */
 };
 
 #endif  // COLLECTOR_H

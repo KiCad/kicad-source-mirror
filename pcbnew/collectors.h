@@ -221,7 +221,7 @@ public:
     BOARD_ITEM* operator[]( int ndx ) const override
     {
         if( (unsigned)ndx < (unsigned)GetCount() )
-            return (BOARD_ITEM*) m_List[ ndx ];
+            return (BOARD_ITEM*) m_list[ ndx ];
 
         return NULL;
     }
@@ -374,7 +374,7 @@ public:
      * @param aItem A BOARD_ITEM to scan, may be a BOARD or MODULE, or whatever.
      * @param aScanList A list of KICAD_Ts with a terminating EOT, that specs
      *  what is to be collected and the priority order of the resultant
-     *  collection in "m_List".
+     *  collection in "m_list".
      * @param aRefPos A wxPoint to use in hit-testing.
      * @param aGuide The COLLECTORS_GUIDE to use in collecting items.
      */

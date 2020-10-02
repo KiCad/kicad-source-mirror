@@ -63,7 +63,7 @@ public:
     SCH_ITEM* operator[]( int aIndex ) const override
     {
         if( (unsigned)aIndex < (unsigned)GetCount() )
-            return (SCH_ITEM*) m_List[ aIndex ];
+            return (SCH_ITEM*) m_list[ aIndex ];
 
         return NULL;
     }
