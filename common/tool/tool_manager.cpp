@@ -236,6 +236,8 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
     wxASSERT_MSG( m_toolTypes.find( typeid( *aTool ).name() ) == m_toolTypes.end(),
             wxT( "Adding two tools of the same type may result in unexpected behaviour.") );
 
+    m_toolOrder.push_back( aTool );
+
     TOOL_STATE* st = new TOOL_STATE( aTool );
 
     m_toolState[aTool] = st;
@@ -550,10 +552,11 @@ void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
 
 void TOOL_MANAGER::InitTools()
 {
-    for( auto it = m_toolState.begin(); it != m_toolState.end(); /* iteration in the loop */ )
+    for( TOOL_VEC::iterator it = m_toolOrder.begin(); it != m_toolOrder.end(); /* iter inside */ )
     {
-        TOOL_BASE* tool = it->first;
-        TOOL_STATE* state = it->second;
+        TOOL_BASE* tool = *it;
+        wxASSERT( m_toolState.count( tool ) );
+        TOOL_STATE* state = m_toolState[tool];
         setActiveState( state );
         ++it;   // keep the iterator valid if the element is going to be erased
 
