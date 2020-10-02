@@ -946,7 +946,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
                     break;
 
                 case UNITS::THOU:
-                    dimension->SetUnits( EDA_UNITS::INCHES );
+                    dimension->SetUnits( EDA_UNITS::MILS );
                     break;
                 }
             }

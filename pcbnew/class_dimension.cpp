@@ -193,7 +193,7 @@ void DIMENSION::SetUnitsMode( DIM_UNITS_MODE aMode )
         break;
 
     case DIM_UNITS_MODE::MILS:
-        m_units = EDA_UNITS::INCHES;
+        m_units = EDA_UNITS::MILS;
         break;
 
     case DIM_UNITS_MODE::MILLIMETRES:

@@ -40,8 +40,6 @@
 #include <macros.h>
 #include <title_block.h>
 
-// We need this function even in routines that do not define internal units
-
 #if defined( PCBNEW ) || defined( CVPCB ) || defined( EESCHEMA ) || defined( GERBVIEW ) || defined( PL_EDITOR )
 #define IU_TO_MM( x )       ( x / IU_PER_MM )
 #define IU_TO_IN( x )       ( x / IU_PER_MILS / 1000 )

@@ -59,10 +59,10 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
 
     m_choiceSeparatorRefId->SetSelection( refStyleSelection );
 
-    m_textSize.SetUnits( EDA_UNITS::INCHES );
-    m_lineWidth.SetUnits( EDA_UNITS::INCHES );
-    m_pinSymbolSize.SetUnits( EDA_UNITS::INCHES );
-    m_junctionSize.SetUnits( EDA_UNITS::INCHES );
+    m_textSize.SetUnits( EDA_UNITS::MILS );
+    m_lineWidth.SetUnits( EDA_UNITS::MILS );
+    m_pinSymbolSize.SetUnits( EDA_UNITS::MILS );
+    m_junctionSize.SetUnits( EDA_UNITS::MILS );
 
     m_textSize.SetValue( settings.m_DefaultTextSize );
     m_lineWidth.SetValue( settings.m_DefaultLineWidth );

@@ -398,14 +398,14 @@ void DIALOG_BOARD_REANNOTATE::GetParameters()
 
     if( m_GridIndex >= ( int ) m_Settings->m_Window.grid.sizes.size() )
     {
-        m_SortGridx = DoubleValueFromString( EDA_UNITS::INCHES,
+        m_SortGridx = DoubleValueFromString( EDA_UNITS::MILS,
                                              m_Settings->m_Window.grid.user_grid_x );
-        m_SortGridy = DoubleValueFromString( EDA_UNITS::INCHES,
+        m_SortGridy = DoubleValueFromString( EDA_UNITS::MILS,
                                              m_Settings->m_Window.grid.user_grid_y );
     }
     else
     {
-        m_SortGridx = DoubleValueFromString( EDA_UNITS::INCHES,
+        m_SortGridx = DoubleValueFromString( EDA_UNITS::MILS,
                                              m_Settings->m_Window.grid.sizes[ m_GridIndex ] );
         m_SortGridy = m_SortGridx;
     }

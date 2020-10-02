@@ -965,7 +965,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
         dimension->SetUnits( EDA_UNITS::INCHES );
         break;
     case ALTIUM_UNIT::MILS:
-        dimension->SetUnits( EDA_UNITS::INCHES );
+        dimension->SetUnits( EDA_UNITS::MILS );
         break;
     case ALTIUM_UNIT::MILLIMETERS:
     case ALTIUM_UNIT::CENTIMETER:

@@ -101,7 +101,7 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
     if( !m_edgeClearance.Validate( 0, 10, EDA_UNITS::INCHES ) )
         return false;
 
-    if( !m_throughHoleMin.Validate( 2, 1000, EDA_UNITS::INCHES ) )   // #107 to 1 inch
+    if( !m_throughHoleMin.Validate( 2, 1000, EDA_UNITS::MILS ) )   // #107 to 1 inch
         return false;
 
     if( !m_holeToHoleMin.Validate( 0, 10, EDA_UNITS::INCHES ) )
