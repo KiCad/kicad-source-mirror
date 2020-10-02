@@ -85,12 +85,12 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
     {
         { PcbFileWildcard(),                    IO_MGR::KICAD_SEXP },            // Current Kicad board files
         { LegacyPcbFileWildcard(),              IO_MGR::LEGACY },                // Old Kicad board files
-        { EaglePcbFileWildcard(),               IO_MGR::EAGLE },                 // Import Eagle board files
-        { PCadPcbFileWildcard(),                IO_MGR::PCAD },                  // Import PCAD board files
-        { AltiumDesignerPcbFileWildcard(),      IO_MGR::ALTIUM_DESIGNER },       // Import Altium Designer board files
-        { AltiumCircuitStudioPcbFileWildcard(), IO_MGR::ALTIUM_CIRCUIT_STUDIO }, // Import Altium Circuit Studio board files
         { AltiumCircuitMakerPcbFileWildcard(),  IO_MGR::ALTIUM_CIRCUIT_MAKER },  // Import Altium Circuit Maker board files
+        { AltiumCircuitStudioPcbFileWildcard(), IO_MGR::ALTIUM_CIRCUIT_STUDIO }, // Import Altium Circuit Studio board files
+        { AltiumDesignerPcbFileWildcard(),      IO_MGR::ALTIUM_DESIGNER },       // Import Altium Designer board files
         { CadstarPcbArchiveFileWildcard(),      IO_MGR::CADSTAR_PCB_ARCHIVE },   // Import Cadstar PCB Archive board files
+        { EaglePcbFileWildcard(),               IO_MGR::EAGLE },                 // Import Eagle board files
+        { PCadPcbFileWildcard(),                IO_MGR::PCAD }                   // Import PCAD board files
     };
     // clang-format on
 
@@ -99,24 +99,42 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
 
     if( aKicadFilesOnly )
     {
+        std::vector<std::string> fileExtensions;
+
         for( unsigned ii = 0; ii < 2; ++ii )
         {
             if( !fileFilters.IsEmpty() )
                 fileFilters += wxChar( '|' );
 
             fileFilters += wxGetTranslation( loaders[ii].filter );
+
+            PLUGIN::RELEASER plugin( IO_MGR::PluginFind( loaders[ii].pluginType ) );
+            wxCHECK( plugin, false );
+            fileExtensions.push_back( plugin->GetFileExtension().ToStdString() );
         }
+
+        fileFilters = _( "All KiCad Board Files" ) + AddFileExtListToFilter( fileExtensions ) + "|"
+                      + fileFilters;
     }
     else
     {
+        wxString allWildcards;
+
         for( unsigned ii = 2; ii < arrayDim( loaders ); ++ii )
         {
             if( !fileFilters.IsEmpty() )
                 fileFilters += wxChar( '|' );
 
             fileFilters += wxGetTranslation( loaders[ii].filter );
+
+            PLUGIN::RELEASER plugin( IO_MGR::PluginFind( loaders[ii].pluginType ) );
+            wxCHECK( plugin, false );
+            allWildcards += "*." + formatWildcardExt( plugin->GetFileExtension() ) + ";";
         }
+
+        fileFilters = _( "All supported formats|" ) + allWildcards + "|" + fileFilters;
     }
+
 
     wxString    path;
     wxString    name;
