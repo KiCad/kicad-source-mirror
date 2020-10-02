@@ -29,14 +29,10 @@
  */
 
 
-#include <fctsys.h>
 #include <base_struct.h>
-#include <gr_text.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
-#include <trigo.h>
 #include <pcb_base_frame.h>
-#include <macros.h>
 #include <math/util.h>      // for KiROUND
 
 #include <class_board.h>
@@ -49,7 +45,6 @@
 #include <class_pcb_target.h>
 #include <class_dimension.h>
 
-#include <pcbnew.h>
 #include <pcbplot.h>
 #include <pcb_painter.h>
 #include <gbr_metadata.h>

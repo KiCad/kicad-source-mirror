@@ -29,8 +29,6 @@
 
 #include <zone_settings.h>
 
-#include <fctsys.h>
-
 #include <convert_to_biu.h>
 #include <pcbnew.h>
 #include <pcb_base_frame.h>

@@ -54,16 +54,13 @@ Load() TODO's
 
 #include <wx/string.h>
 #include <wx/xml/xml.h>
+#include <wx/filename.h>
 
-#include <common.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <fctsys.h>
 #include <geometry/geometry_utils.h>
 #include <kicad_string.h>
-#include <macros.h>
 #include <properties.h>
 #include <trigo.h>
-#include <wx/filename.h>
 #include <math/util.h>      // for KiROUND
 
 #include <class_board.h>
@@ -2505,7 +2502,7 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 
         case EAGLE_LAYER::TKEEPOUT:      kiLayer = F_CrtYd;      break;
         case EAGLE_LAYER::BKEEPOUT:      kiLayer = B_CrtYd;      break;
-        
+
         case EAGLE_LAYER::MILLING:
         case EAGLE_LAYER::TTEST:
         case EAGLE_LAYER::BTEST:

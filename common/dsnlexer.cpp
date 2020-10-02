@@ -3,7 +3,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,12 +29,7 @@
 #include <cstdlib>         // bsearch()
 #include <cctype>
 
-#include <macros.h>
-#include <fctsys.h>
 #include <dsnlexer.h>
-
-
-//#define STANDALONE  1       // enable this for stand alone testing.
 
 #define FMT_CLIPBOARD       _( "clipboard" )
 

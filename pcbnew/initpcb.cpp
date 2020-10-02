@@ -26,7 +26,6 @@
  * @file pcbnew/initpcb.cpp
  */
 
-#include <fctsys.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <project.h>

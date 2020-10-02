@@ -27,7 +27,6 @@
  */
 
 #include <X2_gerber_attributes.h>
-#include <fctsys.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <gerbview.h>

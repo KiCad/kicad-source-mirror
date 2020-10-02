@@ -27,9 +27,6 @@
  * D_PAD functions specific to custom shaped pads.
  */
 
-#include <fctsys.h>
-#include <trigo.h>
-#include <pcbnew.h>
 #include <class_board.h>
 #include <class_board_item.h>
 #include <class_drawsegment.h>

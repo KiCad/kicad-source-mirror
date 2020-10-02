@@ -32,12 +32,10 @@
  #include <python_scripting.h>
  #include <pcbnew_scripting_helpers.h>
 #endif
-#include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <kiface_ids.h>
 #include <confirm.h>
-#include <macros.h>
 #include <pcb_edit_frame.h>
 #include <eda_dde.h>
 #include <wx/file.h>

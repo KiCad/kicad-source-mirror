@@ -27,20 +27,16 @@
  * @file pcbnew/pcbplot.cpp
  */
 
-#include <fctsys.h>
 #include <plotter.h>
-#include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <pcbplot.h>
 #include <base_units.h>
 #include <reporter.h>
 #include <class_board.h>
-#include <pcbnew.h>
 #include <plotcontroller.h>
 #include <pcb_plot_params.h>
 #include <wx/ffile.h>
 #include <dialog_plot.h>
-#include <macros.h>
 #include <build_version.h>
 #include <gbr_metadata.h>
 

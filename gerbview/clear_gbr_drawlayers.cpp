@@ -27,7 +27,6 @@
  * @brief erase a given or all draw layers, an free memory relative to the cleared layer(s)
  */
 
-//#include <fctsys.h>
 #include <confirm.h>
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>

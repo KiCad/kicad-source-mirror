@@ -22,7 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <build_version.h>      // LEGACY_BOARD_FILE_VERSION
 #include <wildcards_and_files_ext.h>
 #include <advanced_config.h>

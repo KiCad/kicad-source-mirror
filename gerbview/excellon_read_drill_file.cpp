@@ -62,9 +62,6 @@
  */
 
 
-#include <fctsys.h>
-#include <common.h>
-#include <confirm.h>
 #include <math/util.h>      // for KiROUND
 
 #include <gerbview.h>

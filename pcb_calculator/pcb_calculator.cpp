@@ -17,21 +17,14 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <fctsys.h>
+
 #include <pgm_base.h>
 #include <kiface_i.h>
-#include <confirm.h>
-#include <gestfich.h>
 #include <settings/settings_manager.h>
-
-#include <wx/wx.h>
 
 #include <pcb_calculator_frame_base.h>
 #include <pcb_calculator_settings.h>
 #include <pcb_calculator.h>
-
-#include <bitmaps.h>
-#include <build_version.h>
 
 // Pcb_calculator data file extension:
 const wxString PcbCalcDataFileExt( wxT("pcbcalc") );

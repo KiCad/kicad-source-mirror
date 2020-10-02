@@ -24,7 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <kiface_i.h>
 #include <confirm.h>
 #include <dialog_helpers.h>
@@ -33,7 +32,6 @@
 #include <msgpanel.h>
 #include <pgm_base.h>
 #include <3d_viewer/eda_3d_viewer.h>          // To include VIEWER3D_FRAMENAME
-#include <pcbnew.h>
 #include <footprint_editor_settings.h>
 #include <fp_lib_table.h>
 #include <pcbnew_id.h>
@@ -43,7 +41,7 @@
 #include <collectors.h>
 #include <pcb_draw_panel_gal.h>
 #include <math/vector2d.h>
-#include <trigo.h>
+
 #include <pcb_painter.h>
 #include <settings/settings_manager.h>
 #include <pcbnew_settings.h>

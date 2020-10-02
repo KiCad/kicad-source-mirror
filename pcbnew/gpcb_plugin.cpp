@@ -27,10 +27,6 @@
  * @brief Geda PCB file plugin implementation file.
  */
 
-#include <fctsys.h>
-#include <common.h>
-#include <macros.h>
-#include <trigo.h>
 #include <wildcards_and_files_ext.h>
 #include <filter_reader.h>
 #include <trace_helpers.h>
