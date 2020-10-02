@@ -97,6 +97,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
 
     CROSS_PROBING_SETTINGS& crossProbingSettings = m_frame->eeconfig()->m_CrossProbing;
 
+
     if( component )
     {
         if( *sheetWithComponentFound != m_frame->GetCurrentSheet() )
@@ -106,7 +107,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
         }
 
         wxPoint delta;
-        pos  -= component->GetPosition();
+        pos -= component->GetPosition();
         delta = component->GetTransform().TransformCoordinate( pos );
         pos   = delta + component->GetPosition();
 
@@ -117,20 +118,129 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
 
             if( crossProbingSettings.zoom_to_fit )
             {
+//#define COMP_1_TO_1_RATIO // Un-comment for normal KiCad full screen zoom cross-probe
+#ifdef COMP_1_TO_1_RATIO
                 // Pass "false" to only include visible fields of component in bbox calculations
-                EDA_RECT bbox = component->GetBoundingBox( false );
-
+                EDA_RECT bbox       = component->GetBoundingBox( false );
                 wxSize   bbSize     = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
                 VECTOR2D screenSize = getView()->GetViewport().GetSize();
 
+                // NOTE: The 1:1 here is using the default KiCad sizing, which adds a margin of 20%
+
                 screenSize.x = std::max( 10.0, screenSize.x );
                 screenSize.y = std::max( 10.0, screenSize.y );
-                double ratio = std::max( fabs( bbSize.x / screenSize.x ),
-                                         fabs( bbSize.y / screenSize.y ) );
+                double ratio = std::max(
+                        fabs( bbSize.x / screenSize.x ), fabs( bbSize.y / screenSize.y ) );
 
                 // Try not to zoom on every cross-probe; it gets very noisy
                 if( ratio < 0.5 || ratio > 1.0 )
                     getView()->SetScale( getView()->GetScale() / ratio );
+#endif // COMP_1_TO_1_RATIO
+
+#ifndef COMP_1_TO_1_RATIO // Do the scaled zoom
+                // Pass "false" to only include visible fields of component in bbox calculations
+                EDA_RECT bbox       = component->GetBoundingBox( false );
+                wxSize   bbSize     = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
+                VECTOR2D screenSize = getView()->GetViewport().GetSize();
+
+                // This code tries to come up with a zoom factor that doesn't simply zoom in
+                // to the cross probed component, but instead shows a reasonable amount of the
+                // circuit around it to provide context.  This reduces or eliminates the need
+                // to manually change the zoom because it's too close.
+
+                // Using the default text height as a constant to compare against, use the
+                // height of the bounding box of visible items for a footprint to figure out
+                // if this is a big symbol (like a processor) or a small symbol (like a resistor).
+                // This ratio is not useful by itself as a scaling factor.  It must be "bent" to
+                // provide good scaling at varying component sizes.  Bigger components need less
+                // scaling than small ones.
+                double currTextHeight = Mils2iu( DEFAULT_TEXT_SIZE );
+
+                double compRatio = bbSize.y / currTextHeight; // Ratio of component to text height
+                double compRatioBent = 1.0;
+
+                // LUT to scale zoom ratio to provide reasonable schematic context.  Must work
+                // with symbols of varying sizes (e.g. 0402 package and 200 pin BGA).
+                // "first" is used as the input and "second" as the output
+                //
+                // "first" = compRatio (symbol height / default text height)
+                // "second" = Amount to scale ratio by
+                std::vector<std::pair<double, double>> lut
+                {
+                    {1.25, 16}, // 32
+                    {2.5, 12}, //24
+                    {5, 8}, // 16
+                    {6, 6}, //
+                    {10, 4}, //8
+                    {20, 2}, //4
+                    {40, 1.5}, // 2
+                    {100, 1}
+                };
+
+                std::vector<std::pair<double, double>>::iterator it;
+
+                compRatioBent =
+                        lut.back().second; // Large component default is last LUT entry (1:1)
+
+                // Use LUT to do linear interpolation of "compRatio" within "first", then
+                // use that result to linearly interpolate "second" which gives the scaling
+                // factor needed.
+
+                if( compRatio >= lut.front().first )
+                {
+                    for( it = lut.begin(); it < lut.end() - 1; it++ )
+                    {
+                        if( it->first <= compRatio && next( it )->first >= compRatio )
+                        {
+
+                            double diffx = compRatio - it->first;
+                            double diffn = next( it )->first - it->first;
+
+                            compRatioBent = it->second
+                                            + ( next( it )->second - it->second ) * diffx / diffn;
+                            break; // We have our interpolated value
+                        }
+                    }
+                }
+                else
+                    compRatioBent = lut.front().second; // Small component default is first entry
+
+                // This is similar to the original KiCad code that scaled the zoom to make sure
+                // components were visible on screen.  It's simply a ratio of screen size to component
+                // size, and its job is to zoom in to make the component fullscreen.  Earlier in the
+                // code the component BBox is given a 20% margin to add some breathing room. We compare
+                // the height of this enlarged component bbox to the default text height.  If a
+                // component will end up with the sides clipped, we adjust later to make sure it fits
+                // on screen.
+                screenSize.x      = std::max( 10.0, screenSize.x );
+                screenSize.y      = std::max( 10.0, screenSize.y );
+                double ratio      = std::max( -1.0, fabs( bbSize.y / screenSize.y ) );
+                // Original KiCad code for how much to scale the zoom
+                double kicadRatio = std::max( fabs( bbSize.x / screenSize.x ),
+                                              fabs( bbSize.y / screenSize.y ) ); 
+
+                // If the width of the part we're probing is bigger than what the screen width will be
+                // after the zoom, then punt and use the KiCad zoom algorithm since it guarantees the
+                // part's width will be encompassed within the screen.
+
+                if( bbSize.x > screenSize.x * ratio * compRatioBent )
+                {
+                    ratio = kicadRatio; // Use standard KiCad zoom for parts too wide to fit on screen
+                    compRatioBent = 1.0; // Reset so we don't modify the "KiCad" ratio
+                    wxLogTrace( "CROSS_PROBE_SCALE",
+                                "Part TOO WIDE for screen.  Using normal KiCad zoom ratio: %1.5f",
+                                ratio );
+                }
+
+                // Now that "compRatioBent" holds our final scaling factor we apply it to the original
+                // fullscreen zoom ratio to arrive at the final ratio itself.
+                ratio *= compRatioBent;
+
+                bool alwaysZoom = false; // DEBUG - allows us to minimize zooming or not
+                // Try not to zoom on every cross-probe; it gets very noisy
+                if( ( ratio < 0.5 || ratio > 1.0 ) || alwaysZoom )
+                    getView()->SetScale( getView()->GetScale() / ratio );
+#endif // ifndef COMP_1_TO_1_RATIO
             }
         }
     }
