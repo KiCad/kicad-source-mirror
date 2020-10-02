@@ -533,6 +533,8 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     // Apply the stateful filter
     filterCollectedItems( collector );
 
+    FilterCollectorForGroups( collector );
+
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
     if( collector.GetCount() > 1 && !m_skip_heuristics )
     {
@@ -660,14 +662,9 @@ bool SELECTION_TOOL::selectMultiple()
             // End drawing the selection box
             view->SetVisible( &area, false );
 
-            // Mark items within the selection box as selected
-            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
-
-            // Filter the view items based on the selection box
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> candidates;
             BOX2I selectionBox = area.ViewBBox();
-            view->Query( selectionBox, selectedItems );         // Get the list of selected items
-
-            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR>::iterator it, it_end;
+            view->Query( selectionBox, candidates );    // Get the list of nearby items
 
             int width = area.GetEnd().x - area.GetOrigin().x;
             int height = area.GetEnd().y - area.GetOrigin().y;
@@ -686,25 +683,34 @@ bool SELECTION_TOOL::selectMultiple()
 
             selectionRect.Normalize();
 
-            for( it = selectedItems.begin(), it_end = selectedItems.end(); it != it_end; ++it )
+            GENERAL_COLLECTOR collector;
+
+            for( auto it = candidates.begin(), it_end = candidates.end(); it != it_end; ++it )
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
 
-                if( !item || !Selectable( item ) || !itemPassesFilter( item ) )
-                    continue;
+                if( item && Selectable( item ) && item->HitTest( selectionRect, windowSelection ) )
+                    collector.Append( item );
+            }
 
-                if( item->HitTest( selectionRect, windowSelection ) )
+            // Apply the stateful filter
+            filterCollectedItems( collector );
+
+            FilterCollectorForGroups( collector );
+
+            for( EDA_ITEM* i : collector )
+            {
+                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
+
+                if( m_subtractive || ( m_exclusive_or && item->IsSelected() ) )
                 {
-                    if( m_subtractive || ( m_exclusive_or && item->IsSelected() ) )
-                    {
-                        unselect( item );
-                        anySubtracted = true;
-                    }
-                    else
-                    {
-                        select( item );
-                        anyAdded = true;
-                    }
+                    unselect( item );
+                    anySubtracted = true;
+                }
+                else
+                {
+                    select( item );
+                    anyAdded = true;
                 }
             }
 
@@ -1545,9 +1551,6 @@ bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
         if( !m_filter.otherItems )
             return false;
     }
-
-    if( m_enteredGroup && !PCB_GROUP::WithinScope( aItem, m_enteredGroup ) )
-        return false;
 
     return true;
 }
@@ -2548,8 +2551,6 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
             aCollector.Transfer( item );
         }
     }
-
-    FilterCollectorForGroups( aCollector );
 }
 
 

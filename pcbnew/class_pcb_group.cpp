@@ -165,36 +165,14 @@ void PCB_GROUP::SwapData( BOARD_ITEM* aImage )
 
 bool PCB_GROUP::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    EDA_RECT rect = GetBoundingBox();
-    return rect.Inflate( aAccuracy ).Contains( aPosition );
+    // Groups are selected by promoting a selection of one of their children
+    return false;
 }
 
 
 bool PCB_GROUP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT arect = aRect;
-    arect.Inflate( aAccuracy );
-
-    EDA_RECT bbox = GetBoundingBox();
-
-    if( aContained )
-    {
-        return arect.Contains( bbox );
-    }
-    else
-    {
-        // If the rect does not intersect the bounding box, skip any tests
-        if( !aRect.Intersects( bbox ) )
-            return false;
-
-        for( BOARD_ITEM* member : m_items )
-        {
-            if( member->HitTest( arect, false, 0 ) )
-                return true;
-        }
-    }
-
-    // No items were hit
+    // Groups are selected by promoting a selection of one of their children
     return false;
 }
 
