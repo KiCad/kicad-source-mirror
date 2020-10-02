@@ -39,7 +39,7 @@ class SCH_IREF : public SCH_TEXT
 {
 public:
     SCH_IREF( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString,
-            SCH_GLOBALLABEL* aParent = nullptr, KICAD_T aType = SCH_IREF_T );
+              SCH_GLOBALLABEL* aParent = nullptr, KICAD_T aType = SCH_IREF_T );
 
     ~SCH_IREF() { }
 
@@ -59,11 +59,6 @@ public:
 
     bool IsDangling() const override { return false; }
 
-    wxPoint GetSchematicTextOffset() const
-    {
-        return wxPoint(0, 0);
-    }
-
     void CopyParentStyle();
     void PlaceAtDefaultPosition();
 
@@ -72,10 +67,6 @@ public:
     SCH_GLOBALLABEL* GetParent() { return m_parent; }
 
     void SetParent( SCH_GLOBALLABEL* parent ) { m_parent = parent; }
-
-    int GetOwnPageNumber() { return m_ownPageNumber; }
-
-    void SetOwnPageNumber( int page ) { m_ownPageNumber = page; }
 
     SCH_SCREEN* GetScreen() { return m_screen; }
 

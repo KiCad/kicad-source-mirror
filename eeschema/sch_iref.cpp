@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2020 Franck Jullien, franck.jullien at gmail.com
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,8 +29,9 @@
 #include <tools/sch_editor_control.h>
 #include <tool/tool_manager.h>
 
-SCH_IREF::SCH_IREF( const wxPoint& pos, const wxString& text, SCH_GLOBALLABEL* aParent, KICAD_T aType )
-        : SCH_TEXT( pos, text, SCH_IREF_T )
+SCH_IREF::SCH_IREF( const wxPoint& pos, const wxString& text, SCH_GLOBALLABEL* aParent,
+                    KICAD_T aType ) :
+        SCH_TEXT( pos, text, SCH_IREF_T )
 
 {
     m_Layer  = LAYER_GLOBLABEL;

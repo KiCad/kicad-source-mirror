@@ -1160,9 +1160,9 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
 {
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
-    std::vector<int>   pagesNumbers;
-    SCH_GLOBALLABEL*   gLabel;
-    SCH_IREF*          iref;
+    std::vector<int>    pagesNumbers;
+    SCH_GLOBALLABEL*    gLabel;
+    SCH_IREF*           iref;
 
     m_labelTable.clear();
 
@@ -1171,21 +1171,17 @@ int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
     /* Iterate over screens */
     for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
     {
-
         pagesNumbers.clear();
 
         /* Find in which sheets this screen is used */
         for( const SCH_SHEET_PATH& sheet : Schematic().GetSheets() )
         {
-
             if( sheet.LastScreen() == screen )
                 pagesNumbers.push_back( sheet.GetPageNumber() );
-
         }
 
         for( SCH_ITEM* item : screen->Items() )
         {
-
             if( item->Type() == SCH_GLOBAL_LABEL_T )
             {
                 gLabel = static_cast<SCH_GLOBALLABEL*>( item );
@@ -1216,7 +1212,6 @@ int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
                 iref->GetRefTable()->insert( iref->GetRefTable()->end(),
                                              pagesNumbers.begin(),
                                              pagesNumbers.end() );
-
             }
         }
     }
@@ -1227,9 +1222,11 @@ int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
         for( SCH_GLOBALLABEL* iter : m_labelTable )
         {
             if( iter->GetText().IsSameAs( item->GetText() ) && ( iter != item ) )
+            {
                 iter->GetIref()->GetRefTable()->insert( iter->GetIref()->GetRefTable()->end(),
                                                         item->GetIref()->GetRefTable()->begin(),
                                                         item->GetIref()->GetRefTable()->end() );
+            }
         }
     }
 
@@ -1241,7 +1238,8 @@ int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
         iref = item->GetIref();
 
         sort( iref->GetRefTable()->begin(), iref->GetRefTable()->end() );
-        iref->GetRefTable()->erase( unique( iref->GetRefTable()->begin(), iref->GetRefTable()->end() ),
+        iref->GetRefTable()->erase( unique( iref->GetRefTable()->begin(),
+                                            iref->GetRefTable()->end() ),
                                     iref->GetRefTable()->end() );
 
         text.Printf( "%s", settings.m_IntersheetsRefPrefix );
@@ -1253,7 +1251,6 @@ int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
         }
         else
         {
-
             for( int ref : *( iref->GetRefTable() ) )
             {
                 tmp.Printf( "%d,", ref );

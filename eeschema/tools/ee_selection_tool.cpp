@@ -1462,6 +1462,9 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityO
     case SCH_MARKER_T:  // Always selectable
         return true;
 
+    case SCH_IREF_T:    // Never selectable
+        return false;
+
     default:            // Suppress warnings
         break;
     }
