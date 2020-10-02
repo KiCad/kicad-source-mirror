@@ -603,22 +603,6 @@ TOOL_ACTION EE_ACTIONS::generateBOM( "eeschema.EditorControl.generateBOM",
         _( "Generate BOM..." ), _( "Generate a bill of materials for the current schematic" ),
         bom_xpm );
 
-TOOL_ACTION EE_ACTIONS::enterSheet( "eeschema.EditorControl.enterSheet",
-        AS_GLOBAL, 0, "",
-        _( "Enter Sheet" ), _( "Display the selected sheet's contents in the Eeschema window" ),
-        enter_sheet_xpm );
-
-TOOL_ACTION EE_ACTIONS::leaveSheet( "eeschema.EditorControl.leaveSheet",
-        AS_GLOBAL,
-        MD_ALT + WXK_BACK, LEGACY_HK_NAME( "Leave Sheet" ),
-        _( "Leave Sheet" ), _( "Display the parent sheet in the Eeschema window" ),
-        leave_sheet_xpm );
-
-TOOL_ACTION EE_ACTIONS::navigateHierarchy( "eeschema.EditorControl.navigateHierarchy",
-        AS_GLOBAL, 0, "",
-        _( "Show Hierarchy Navigator" ), "",
-        hierarchy_nav_xpm );
-
 TOOL_ACTION EE_ACTIONS::explicitCrossProbe( "eeschema.EditorControl.explicitCrossProbe",
         AS_GLOBAL, 0, "",
         _( "Highlight on PCB" ), _( "Highlight corresponding items in PCBNew" ),
@@ -638,6 +622,30 @@ TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
         AS_GLOBAL, 0, "",
         _( "Force H/V Wires and Buses" ), "",
         lines90_xpm );
+
+
+// SCH_NAVIGATE_TOOL
+//
+TOOL_ACTION EE_ACTIONS::enterSheet( "eeschema.NavigateTool.enterSheet",
+        AS_GLOBAL, 0, "",
+        _( "Enter Sheet" ), _( "Display the selected sheet's contents in the Eeschema window" ),
+        enter_sheet_xpm );
+
+TOOL_ACTION EE_ACTIONS::leaveSheet( "eeschema.NavigateTool.leaveSheet",
+        AS_GLOBAL,
+        MD_ALT + WXK_BACK, LEGACY_HK_NAME( "Leave Sheet" ),
+        _( "Leave Sheet" ), _( "Display the parent sheet in the Eeschema window" ),
+        leave_sheet_xpm );
+
+TOOL_ACTION EE_ACTIONS::navigateHierarchy( "eeschema.NavigateTool.navigateHierarchy",
+        AS_GLOBAL, 0, "",
+        _( "Show Hierarchy Navigator" ), "",
+        hierarchy_nav_xpm );
+
+TOOL_ACTION EE_ACTIONS::hypertextCommand( "eeschema.NavigateTool.hypertextCommand",
+        AS_GLOBAL, 0, "",
+        _( "Navigate to page" ), "",
+        nullptr );
 
 
 // SCH_LINE_WIRE_BUS_TOOL

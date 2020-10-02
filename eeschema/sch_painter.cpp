@@ -706,6 +706,7 @@ void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
     m_gal->SetGlyphSize( VECTOR2D( aText->GetTextSize() ) );
     m_gal->SetFontBold( aText->IsBold() );
     m_gal->SetFontItalic( aText->IsItalic() );
+    m_gal->SetFontUnderlined( false );
     strokeText( aText->GetText(), pos, orient );
 }
 
@@ -806,6 +807,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     m_gal->SetLineWidth( getLineWidth( aPin, drawingShadows ) );
     m_gal->SetStrokeColor( color );
     m_gal->SetFontBold( false );
+    m_gal->SetFontUnderlined( false );
     m_gal->SetFontItalic( false );
 
     const int radius = externalPinDecoSize( *aPin );
@@ -1295,6 +1297,13 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     }
 
     COLOR4D color = getRenderColor( aText, aLayer, drawingShadows );
+    m_gal->SetFontUnderlined( false );
+
+    if( aText->Type() == SCH_IREF_T && ( aText->GetFlags() & IS_ROLLOVER ) > 0 )
+    {
+        color = BLUE;
+        m_gal->SetFontUnderlined( true );
+    }
 
     if( m_schematic )
     {
@@ -1536,6 +1545,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
         m_gal->SetGlyphSize( VECTOR2D( aField->GetTextSize() ) );
         m_gal->SetFontBold( aField->IsBold() );
         m_gal->SetFontItalic( aField->IsItalic() );
+        m_gal->SetFontUnderlined( false );
         m_gal->SetTextMirrored( aField->IsMirrored() );
         m_gal->SetLineWidth( getTextThickness( aField, drawingShadows ) );
 

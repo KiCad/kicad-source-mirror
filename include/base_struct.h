@@ -135,7 +135,7 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 #define BEGIN_ONPAD    (1 << 22)   ///< Pcbnew: flag set for track segment starting on a pad
 #define END_ONPAD      (1 << 23)   ///< Pcbnew: flag set for track segment ending on a pad
 #define OBSOLETE_3     (1 << 24)   ///< Not presently used
-#define OBSOLETE_4     (1 << 25)   ///< Not presently used
+#define IS_ROLLOVER    (1 << 25)   ///< Rollover active.  Used for hyperlink highlighting.
 #define BRIGHTENED     (1 << 26)   ///< item is drawn with a bright contour
 
 #define DP_COUPLED     (1 << 27)   ///< item is coupled with another item making a differential pair

@@ -266,6 +266,7 @@ set( EESCHEMA_SRCS
     tools/sch_editor_control.cpp
     tools/sch_line_wire_bus_tool.cpp
     tools/sch_move_tool.cpp
+    tools/sch_navigate_tool.cpp
     )
 
 

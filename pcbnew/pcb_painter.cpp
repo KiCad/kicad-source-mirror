@@ -504,6 +504,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             m_gal->SetLineWidth( width / 10.0 );
             m_gal->SetFontBold( false );
             m_gal->SetFontItalic( false );
+            m_gal->SetFontUnderlined( false );
             m_gal->SetTextMirrored( false );
             m_gal->SetGlyphSize( VECTOR2D( textSize * 0.7, textSize * 0.7 ) );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
@@ -773,6 +774,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
             m_gal->SetFontBold( false );
             m_gal->SetFontItalic( false );
+            m_gal->SetFontUnderlined( false );
             m_gal->SetTextMirrored( false );
             m_gal->SetStrokeColor( m_pcbSettings.GetColor( NULL, aLayer ) );
             m_gal->SetIsStroke( true );

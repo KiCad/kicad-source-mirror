@@ -98,10 +98,9 @@ public:
      * Compute the vertical position of an overbar, sometimes used in texts.
      * This is the distance between the text base line and the overbar.
      * @param aGlyphHeight is the height (vertical size) of the text.
-     * @param aGlyphThickness is the thickness of the lines used to draw the text.
      * @return the relative position of the overbar axis.
      */
-    double ComputeOverbarVerticalPosition( double aGlyphHeight, double aGlyphThickness ) const;
+    double ComputeOverbarVerticalPosition( double aGlyphHeight ) const;
 
     /**
      * @brief Compute the distance (interline) between 2 lines of text (for multiline texts).
@@ -133,6 +132,7 @@ private:
      * @return the relative position of the overbar axis.
      */
     double computeOverbarVerticalPosition() const;
+    double computeUnderlineVerticalPosition() const;
 
     /**
      * @brief Compute the bounding box of a given glyph.
@@ -168,6 +168,7 @@ private:
 
     ///> Factor that determines relative vertical position of the overbar.
     static const double OVERBAR_POSITION_FACTOR;
+    static const double UNDERLINE_POSITION_FACTOR;
 
     ///> Factor that determines relative line width for bold text.
     static const double BOLD_FACTOR;

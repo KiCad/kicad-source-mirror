@@ -26,18 +26,19 @@
 #include <sch_iref.h>
 #include <sch_sheet.h>
 #include <schematic.h>
-#include <tools/sch_editor_control.h>
 #include <tool/tool_manager.h>
+#include <tools/sch_editor_control.h>
+#include <tools/sch_navigate_tool.h>
 
 SCH_IREF::SCH_IREF( const wxPoint& pos, const wxString& text, SCH_GLOBALLABEL* aParent,
                     KICAD_T aType ) :
         SCH_TEXT( pos, text, SCH_IREF_T )
-
 {
     m_Layer  = LAYER_GLOBLABEL;
     m_parent = aParent;
     SetMultilineAllowed( false );
 }
+
 
 void SCH_IREF::PlaceAtDefaultPosition()
 {
@@ -62,10 +63,12 @@ wxPoint SCH_IREF::GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const
     return m_parent->GetSchematicTextOffset( aSettings );
 }
 
+
 EDA_ITEM* SCH_IREF::Clone() const
 {
     return new SCH_IREF( *this );
 }
+
 
 void SCH_IREF::SetIrefOrientation( LABEL_SPIN_STYLE aSpinStyle )
 {
@@ -107,6 +110,7 @@ void SCH_IREF::SetIrefOrientation( LABEL_SPIN_STYLE aSpinStyle )
     SetPosition( GetParent()->GetPosition() + pt );
 }
 
+
 void SCH_IREF::CopyParentStyle()
 {
     SetTextSize( m_parent->GetTextSize() );
@@ -114,4 +118,23 @@ void SCH_IREF::CopyParentStyle()
     SetBold( m_parent->IsBold() );
     SetTextThickness( m_parent->GetTextThickness() );
     SetIrefOrientation( m_parent->GetLabelSpinStyle() );
+}
+
+
+void SCH_IREF::BuildHypertextMenu( wxMenu* aMenu )
+{
+    std::map<int, wxString> sheetNames;
+
+    for( const SCH_SHEET_PATH& sheet : Schematic()->GetSheets() )
+        sheetNames[ sheet.GetPageNumber() ] = sheet.Last()->GetName();
+
+    for( int i : m_refTable )
+    {
+        aMenu->Append( i, wxString::Format( _( "Go to Page %d (%s)" ),
+                                            i,
+                                            i == 1 ? _( "Root" ) : sheetNames[ i ] ) );
+    }
+
+    aMenu->AppendSeparator();
+    aMenu->Append( ID_HYPERTEXT_BACK, _( "Back" ) );
 }

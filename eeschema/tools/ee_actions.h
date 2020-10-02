@@ -183,6 +183,7 @@ public:
     static TOOL_ACTION enterSheet;
     static TOOL_ACTION leaveSheet;
     static TOOL_ACTION navigateHierarchy;
+    static TOOL_ACTION hypertextCommand;
 
     // Global edit tools
     static TOOL_ACTION cleanupSheetPins;

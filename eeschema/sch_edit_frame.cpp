@@ -72,6 +72,7 @@
 #include <tools/sch_editor_control.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
+#include <tools/sch_navigate_tool.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <widgets/infobar.h>
@@ -343,6 +344,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );
     m_toolManager->RegisterTool( new SCH_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new EE_POINT_EDITOR );
+    m_toolManager->RegisterTool( new SCH_NAVIGATE_TOOL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active

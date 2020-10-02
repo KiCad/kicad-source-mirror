@@ -37,6 +37,7 @@ using namespace KIGFX;
 
 const double STROKE_FONT::INTERLINE_PITCH_RATIO = 1.61;
 const double STROKE_FONT::OVERBAR_POSITION_FACTOR = 1.33;
+const double STROKE_FONT::UNDERLINE_POSITION_FACTOR = 0.41;
 const double STROKE_FONT::BOLD_FACTOR = 1.3;
 const double STROKE_FONT::STROKE_FONT_SCALE = 1.0 / 21.0;
 const double STROKE_FONT::ITALIC_TILT = 1.0 / 8;
@@ -444,6 +445,15 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
             last_had_overbar = false;
         }
 
+        if( m_gal->IsFontUnderlined() )
+        {
+            double   vOffset = computeUnderlineVerticalPosition();
+            VECTOR2D startUnderline( xOffset, - vOffset );
+            VECTOR2D endUnderline( xOffset + glyphSize.x * bbox.GetEnd().x, - vOffset );
+
+            m_gal->DrawLine( startUnderline, endUnderline );
+        }
+
         for( const std::vector<VECTOR2D>* ptList : *glyph )
         {
             std::deque<VECTOR2D> ptListScaled;
@@ -475,13 +485,9 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 }
 
 
-double STROKE_FONT::ComputeOverbarVerticalPosition( double aGlyphHeight, double aGlyphThickness ) const
+double STROKE_FONT::ComputeOverbarVerticalPosition( double aGlyphHeight ) const
 {
     // Static method.
-    // Compute the Y position of the overbar. This is the distance between the text base line
-    // and the overbar axis.
-    // Don't use the glyph thickness anymore.  We don't know how much of it is "real" and how
-    // much it has been plumped for drop shadows, etc.
     return aGlyphHeight * OVERBAR_POSITION_FACTOR;
 }
 
@@ -490,7 +496,15 @@ double STROKE_FONT::computeOverbarVerticalPosition() const
 {
     // Compute the Y position of the overbar. This is the distance between
     // the text base line and the overbar axis.
-    return ComputeOverbarVerticalPosition( m_gal->GetGlyphSize().y, m_gal->GetLineWidth() );
+    return ComputeOverbarVerticalPosition( m_gal->GetGlyphSize().y );
+}
+
+
+double STROKE_FONT::computeUnderlineVerticalPosition() const
+{
+    // Compute the Y position of the underline. This is the distance between
+    // the text base line and the underline axis.
+    return - m_gal->GetGlyphSize().y * UNDERLINE_POSITION_FACTOR;
 }
 
 

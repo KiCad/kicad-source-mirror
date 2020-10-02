@@ -189,6 +189,7 @@ int EDA_TEXT::LenSize( const wxString& aLine, int aThickness ) const
 {
     basic_gal.SetFontItalic( IsItalic() );
     basic_gal.SetFontBold( IsBold() );
+    basic_gal.SetFontUnderlined( false );
     basic_gal.SetLineWidth( (float) aThickness );
     basic_gal.SetGlyphSize( VECTOR2D( GetTextSize() ) );
 
@@ -282,7 +283,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     {   // A overbar adds an extra size to the text
         // Height from the base line text of chars like [ or {
         double curr_height = GetTextHeight() * 1.15;
-        double overbarPosition = font.ComputeOverbarVerticalPosition( fontSize.y, penWidth );
+        double overbarPosition = font.ComputeOverbarVerticalPosition( fontSize.y );
         int    extra_height = KiROUND( overbarPosition - curr_height );
 
         extra_height += thickness / 2;

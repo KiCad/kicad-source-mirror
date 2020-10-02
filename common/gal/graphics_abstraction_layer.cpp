@@ -150,6 +150,7 @@ void GAL::SetTextAttributes( const EDA_TEXT* aText )
     SetVerticalJustify( aText->GetVertJustify() );
     SetFontBold( aText->IsBold() );
     SetFontItalic( aText->IsItalic() );
+    SetFontUnderlined( false );
     SetTextMirrored( aText->IsMirrored() );
 }
 
@@ -165,6 +166,7 @@ void GAL::ResetTextAttributes()
 
     SetFontBold( false );
     SetFontItalic( false );
+    SetFontUnderlined( false );
     SetTextMirrored( false );
 }
 

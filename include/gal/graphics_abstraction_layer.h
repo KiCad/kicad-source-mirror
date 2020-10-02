@@ -379,16 +379,6 @@ public:
     VECTOR2D GetTextLineSize( const UTF8& aText ) const;
 
     /**
-     * Compute the vertical position of an overbar, sometimes used in texts.
-     * This is the distance between the text base line and the overbar.
-     * @return the relative position of the overbar axis.
-     */
-    double GetOverbarVerticalPosition() const
-    {
-        return strokeFont.computeOverbarVerticalPosition();
-    }
-
-    /**
      * @brief Loads attributes of the given text (bold/italic/underline/mirrored and so on).
      *
      * @param aText is the text item.
@@ -408,72 +398,35 @@ public:
      *
      * @param aGlyphSize is the new font glyph size.
      */
-    inline void SetGlyphSize( const VECTOR2D aGlyphSize )
-    {
-        textProperties.m_glyphSize = aGlyphSize;
-    }
-
-    /**
-     * @return the current font glyph size.
-     */
-    const VECTOR2D& GetGlyphSize() const
-    {
-        return textProperties.m_glyphSize;
-    }
+    inline void SetGlyphSize( const VECTOR2D aSize ) { textProperties.m_glyphSize = aSize; }
+    const VECTOR2D& GetGlyphSize() const { return textProperties.m_glyphSize; }
 
     /**
      * @brief Set bold property of current font.
      *
      * @param aBold tells if the font should be bold or not.
      */
-    inline void SetFontBold( const bool aBold )
-    {
-        textProperties.m_bold = aBold;
-    }
-
-    /**
-     * @brief Returns true if current font has 'bold' attribute enabled.
-     */
-    inline bool IsFontBold() const
-    {
-        return textProperties.m_bold;
-    }
+    inline void SetFontBold( const bool aBold ) { textProperties.m_bold = aBold;  }
+    inline bool IsFontBold() const { return textProperties.m_bold; }
 
     /**
      * @brief Set italic property of current font.
      *
      * @param aItalic tells if the font should be italic or not.
      */
-    inline void SetFontItalic( const bool aItalic )
-    {
-        textProperties.m_italic = aItalic;
-    }
+    inline void SetFontItalic( bool aItalic ) { textProperties.m_italic = aItalic; }
+    inline bool IsFontItalic() const { return textProperties.m_italic; }
 
-    /**
-     * @brief Returns true if current font has 'italic' attribute enabled.
-     */
-    inline bool IsFontItalic() const
-    {
-        return textProperties.m_italic;
-    }
+    inline void SetFontUnderlined( bool aUnderlined ) { textProperties.m_underlined = aUnderlined; }
+    inline bool IsFontUnderlined() const { return textProperties.m_underlined; }
 
     /**
      * @brief Set a mirrored property of text.
      *
      * @param aMirrored tells if the text should be mirrored or not.
      */
-    inline void SetTextMirrored( const bool aMirrored )
-    {
-        textProperties.m_mirrored = aMirrored;
-    }
-
-    /**
-     * @brief Returns true if text should displayed mirrored.
-     */
-    inline bool IsTextMirrored() const
-    {
-        return textProperties.m_mirrored;
-    }
+    inline void SetTextMirrored( const bool aMirrored ) { textProperties.m_mirrored = aMirrored; }
+    inline bool IsTextMirrored() const { return textProperties.m_mirrored; }
 
     /**
      * @brief Set the horizontal justify for text drawing.
@@ -1189,6 +1142,7 @@ private:
         EDA_TEXT_VJUSTIFY_T m_verticalJustify;      ///< Vertical justification
         bool                m_bold;
         bool                m_italic;
+        bool                m_underlined;
         bool                m_mirrored;
     } textProperties;
 };

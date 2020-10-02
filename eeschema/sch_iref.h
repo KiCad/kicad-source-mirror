@@ -72,6 +72,8 @@ public:
 
     void SetScreen( SCH_SCREEN* screen ) { m_screen = screen; }
 
+    void BuildHypertextMenu( wxMenu* aMenu );
+
 private:
     void SetIrefOrientation( LABEL_SPIN_STYLE aSpinStyle );
 

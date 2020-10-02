@@ -122,21 +122,6 @@ public:
                       bool* aSelectionCancelledFlag = nullptr, bool aAdd = false,
                       bool aSubtract = false, bool aExclusiveOr = false );
 
-    /**
-     * Function CollectHits()
-     * Selects one or more items at the location given by parameter aWhere.
-     *
-     * This method does not attempt to disambiguate multiple items and is simply "collecting"
-     *
-     * @param aWhere is the place where the item should be selected.
-     * @param aCollector is the collector object that will store found item(s)
-     * @param aFilterList is a list of items that are acceptable for collection
-     * @param aCheckLocked indicates if locked items should be excluded.
-     */
-    bool CollectHits( const VECTOR2I& aWhere, EE_COLLECTOR& aCollector,
-                      const KICAD_T* aFilterList = EE_COLLECTOR::AllItems,
-                      bool aCheckLocked = false );
-
     int AddItemToSel( const TOOL_EVENT& aEvent );
     void AddItemToSel( EDA_ITEM* aItem, bool aQuietMode = false );
     int AddItemsToSel( const TOOL_EVENT& aEvent );
@@ -198,6 +183,29 @@ public:
     void RebuildSelection();
 
 private:
+    /**
+     * Function CollectHits()
+     * Selects one or more items at the location given by parameter aWhere.
+     *
+     * This method does not attempt to disambiguate multiple items and is simply "collecting"
+     *
+     * @param aCollector is the collector object that will store found item(s)
+     * @param aWhere is the place where the item should be selected.
+     * @param aFilterList is a list of items that are acceptable for collection
+     * @param aCheckLocked indicates if locked items should be excluded.
+     */
+    bool collectHits( EE_COLLECTOR& aCollector, const VECTOR2I& aWhere,
+                      const KICAD_T* aFilterList = EE_COLLECTOR::AllItems );
+
+    /**
+     * Applies rules to narrow the collection down to selectable objects, and then heuristics
+     * to try and narrow it to a single object.
+     * @param collector
+     * @param aWhere
+     * @param aCheckLocked
+     */
+    void narrowSelection( EE_COLLECTOR& collector, const VECTOR2I& aWhere, bool aCheckLocked );
+
     /**
      * Function selectMultiple()
      * Handles drawing a selection box that allows one to select many items at
