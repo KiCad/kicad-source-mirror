@@ -20,9 +20,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <fctsys.h>
 #include <tool/actions.h>
-#include <pcbnew.h>
 #include <class_board.h>
 #include <footprint_edit_frame.h>
 #include <dialog_helpers.h>

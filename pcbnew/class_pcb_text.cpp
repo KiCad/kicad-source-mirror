@@ -23,7 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <base_struct.h>
 #include <pcb_edit_frame.h>
 #include <base_units.h>

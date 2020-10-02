@@ -22,7 +22,6 @@
  */
 
 
-#include <fctsys.h>
 #include <cleanup_item.h>
 #include <pcb_base_frame.h>
 

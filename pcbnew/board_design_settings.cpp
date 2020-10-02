@@ -21,8 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <common.h>
 #include <class_dimension.h>
 #include <class_track.h>
 #include <layers_id_colors_and_visibility.h>

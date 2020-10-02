@@ -27,7 +27,6 @@
 
 #include <algorithm>
 #include <iterator>
-#include <fctsys.h>
 #include <pcb_base_frame.h>
 #include <reporter.h>
 #include <ws_proxy_view_item.h>

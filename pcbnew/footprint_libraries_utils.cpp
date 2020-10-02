@@ -22,7 +22,6 @@
  */
 
 #include <wx/ffile.h>
-#include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <confirm.h>
@@ -30,7 +29,6 @@
 #include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
 #include <filter_reader.h>
-#include <macros.h>
 #include <fp_lib_table.h>
 #include <validators.h>
 #include <dialog_text_entry.h>

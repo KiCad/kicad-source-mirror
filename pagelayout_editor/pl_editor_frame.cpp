@@ -23,10 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
-//#include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
 #include <dialogs/panel_pl_editor_color_settings.h>

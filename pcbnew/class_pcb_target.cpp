@@ -29,8 +29,6 @@
  * PCB_TARGET class definition - targets for photo plots, formerly called MIRE (from French 'mire optique')
  */
 
-#include <fctsys.h>
-#include <gr_basic.h>
 #include <bitmaps.h>
 #include <pcb_edit_frame.h>
 #include <class_board.h>

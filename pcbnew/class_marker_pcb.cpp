@@ -23,8 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <gr_basic.h>
 #include <bitmaps.h>
 #include <base_units.h>
 #include <pcb_base_frame.h>
@@ -78,7 +76,7 @@ MARKER_PCB* MARKER_PCB::Deserialize( const wxString& data )
                              (int) strtol( props[2].c_str(), nullptr, 10 ) );
 
     std::shared_ptr<DRC_ITEM> drcItem =  DRC_ITEM::Create( props[0] );
-    
+
     if( !drcItem )
         return nullptr;
 

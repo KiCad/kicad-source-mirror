@@ -31,7 +31,6 @@
 #include <confirm.h>
 #include <dialog_helpers.h>
 #include <eda_pattern_match.h>
-#include <fctsys.h>
 #include <footprint_info.h>
 #include <footprint_viewer_frame.h>
 #include <fp_lib_table.h>

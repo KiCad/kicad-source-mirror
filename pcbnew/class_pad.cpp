@@ -28,9 +28,6 @@
  * D_PAD class implementation.
  */
 
-#include <fctsys.h>
-#include <trigo.h>
-#include <macros.h>
 #include <msgpanel.h>
 #include <base_units.h>
 #include <bitmaps.h>

@@ -24,7 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <pcb_base_frame.h>
 #include <connectivity/connectivity_data.h>
 #include <class_board.h>

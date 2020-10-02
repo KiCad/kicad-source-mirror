@@ -24,7 +24,7 @@
 
 #include <wx/imaglist.h>
 #include <wx/wupdlock.h>
-#include <fctsys.h>
+
 #include <ws_draw_item.h>
 #include <ws_data_model.h>
 #include <pl_editor_id.h>

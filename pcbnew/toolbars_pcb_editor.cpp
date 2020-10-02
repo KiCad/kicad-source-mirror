@@ -24,16 +24,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <memory>
+
 #include <bitmaps.h>
 #include <class_board.h>
 #include <confirm.h>
 #include <dialog_helpers.h>
-#include <fctsys.h>
 #include <kiface_i.h>
-#include <memory>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
-#include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>

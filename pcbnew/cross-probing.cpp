@@ -36,10 +36,8 @@
 #include <class_track.h>
 #include <collectors.h>
 #include <eda_dde.h>
-#include <fctsys.h>
 #include <kiface_i.h>
 #include <kiway_express.h>
-#include <macros.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/board_netlist_updater.h>
 #include <pcb_edit_frame.h>
@@ -236,8 +234,8 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
         pcb->HighLightON();
 
-        auto merge_area = 
-            [netcode, &bbox]( BOARD_CONNECTED_ITEM* aItem ) 
+        auto merge_area =
+            [netcode, &bbox]( BOARD_CONNECTED_ITEM* aItem )
             {
             if( aItem->GetNetCode() == netcode )
             {
@@ -316,7 +314,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         screenSize.y = std::max( 10.0, screenSize.y );
         double ratio = std::max( -1.0, fabs( bbSize.y / screenSize.y ) );
         // Original KiCad code for how much to scale the zoom
-        double kicadRatio = std::max( fabs( bbSize.x / screenSize.x ), 
+        double kicadRatio = std::max( fabs( bbSize.x / screenSize.x ),
                                       fabs( bbSize.y / screenSize.y ) );
 
         // LUT to scale zoom ratio to provide reasonable schematic context.  Must work

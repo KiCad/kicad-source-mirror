@@ -23,8 +23,6 @@
 #include <footprint_info_impl.h>
 
 #include <class_module.h>
-#include <common.h>
-#include <fctsys.h>
 #include <footprint_info.h>
 #include <fp_lib_table.h>
 #include <html_messagebox.h>
@@ -32,7 +30,6 @@
 #include <kiface_ids.h>
 #include <kiway.h>
 #include <lib_id.h>
-#include <macros.h>
 #include <pgm_base.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/progress_reporter.h>

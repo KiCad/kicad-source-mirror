@@ -39,7 +39,6 @@
 #include <dialogs/panel_modedit_defaults.h>
 #include <dialogs/panel_display_options.h>
 #include <dialogs/panel_edit_options.h>
-#include <fctsys.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <footprint_info_impl.h>

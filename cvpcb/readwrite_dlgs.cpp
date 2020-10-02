@@ -24,12 +24,10 @@
  */
 
 #include <confirm.h>
-#include <fctsys.h>
 #include <fp_lib_table.h>
 #include <html_messagebox.h>
 #include <kiway.h>
 #include <lib_id.h>
-#include <macros.h>
 
 #include <cvpcb_mainframe.h>
 #include <listboxes.h>

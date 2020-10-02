@@ -23,7 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <pcb_edit_frame.h>
 #include <base_units.h>
 #include <bitmaps.h>
@@ -457,10 +456,7 @@ wxString TEXTE_MODULE::GetShownText( int aDepth ) const
 
 std::shared_ptr<SHAPE> TEXTE_MODULE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
-    const MODULE* module = static_cast<MODULE*>( GetParent() );
-    auto shape = GetEffectiveTextShape();
-
-    return shape;
+    return GetEffectiveTextShape();
 }
 
 

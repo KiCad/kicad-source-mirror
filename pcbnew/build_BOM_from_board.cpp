@@ -25,7 +25,6 @@
 /* build_BOM_from_board.cpp */
 
 
-#include <fctsys.h>
 #include <confirm.h>
 #include <kicad_string.h>
 #include <pcb_edit_frame.h>

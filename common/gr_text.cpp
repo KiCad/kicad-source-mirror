@@ -29,16 +29,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <gr_basic.h>
-#include <common.h>
 #include <plotter.h>
-#include <eda_text.h>               // EDA_TEXT_HJUSTIFY_T and EDA_TEXT_VJUSTIFY_T
+#include <eda_text.h>           // EDA_TEXT_HJUSTIFY_T and EDA_TEXT_VJUSTIFY_T
 #include <trigo.h>
-#include <macros.h>
 #include <base_screen.h>
 #include <gr_text.h>
-#include <math/util.h>      // for KiROUND
+#include <math/util.h>          // for KiROUND
 
 #include <basic_gal.h>
 

@@ -22,11 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <vector>
 #include <bezier_curves.h>
 #include <base_units.h>     // for IU_PER_MM
-#include <gr_text.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <trigo.h>

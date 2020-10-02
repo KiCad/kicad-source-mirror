@@ -24,7 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <bitmaps.h>
 #include <math/util.h>      // for KiROUND
 #include <settings/color_settings.h>

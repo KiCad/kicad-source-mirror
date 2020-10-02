@@ -19,9 +19,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <fctsys.h>
-#include <common.h>
-#include <macros.h>
 #include <bitmaps.h>
 #include <tool/action_toolbar.h>
 #include <tools/pl_actions.h>

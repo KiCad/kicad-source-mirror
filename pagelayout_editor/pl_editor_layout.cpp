@@ -29,8 +29,6 @@
 #include <algorithm>
 #include <climits>
 
-#include <fctsys.h>
-#include <common.h>
 #include <eda_rect.h>
 #include <pl_editor_layout.h>
 

@@ -20,7 +20,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <fctsys.h>
 #include <kiface_i.h>
 #include <kiway.h>
 #include <pgm_base.h>

@@ -24,7 +24,6 @@
  */
 
 #include <bitmaps.h>
-#include <fctsys.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_null.h>
 #include <advanced_config.h>
