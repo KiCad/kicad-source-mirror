@@ -96,7 +96,7 @@ class NUMERIC_EVALUATOR
     enum class Unit { Invalid, MM, CM, Inch, Mil };
 
 public:
-    NUMERIC_EVALUATOR( EDA_UNITS aUnits, bool aUseMils = false );
+    NUMERIC_EVALUATOR( EDA_UNITS aUnits );
     ~NUMERIC_EVALUATOR();
 
     /* clear() should be invoked by the client if a new input string is to be processed. It

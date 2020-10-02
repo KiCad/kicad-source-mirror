@@ -43,7 +43,7 @@ namespace numEval
 } /* namespace numEval */
 
 
-NUMERIC_EVALUATOR::NUMERIC_EVALUATOR( EDA_UNITS aUnits, bool aUseMils )
+NUMERIC_EVALUATOR::NUMERIC_EVALUATOR( EDA_UNITS aUnits )
 {
     struct lconv* lc = localeconv();
     m_localeDecimalSeparator = *lc->decimal_point;
@@ -55,17 +55,10 @@ NUMERIC_EVALUATOR::NUMERIC_EVALUATOR( EDA_UNITS aUnits, bool aUseMils )
 
     switch( aUnits )
     {
-    case EDA_UNITS::INCHES:
-        if( aUseMils )
-            m_defaultUnits = Unit::Mil;
-        else
-            m_defaultUnits = Unit::Inch;
-        break;
-    case EDA_UNITS::MILLIMETRES:
-        m_defaultUnits = Unit::MM;
-        break;
-    default:m_defaultUnits = Unit::MM;
-        break;
+    case EDA_UNITS::MILLIMETRES: m_defaultUnits = Unit::MM; break;
+    case EDA_UNITS::MILS: m_defaultUnits = Unit::Mil; break;
+    case EDA_UNITS::INCHES: m_defaultUnits = Unit::Inch; break;
+    default: m_defaultUnits = Unit::MM; break;
     }
 }
 

@@ -32,7 +32,7 @@
 
 struct NUM_EVAL_FIXTURE
 {
-    NUM_EVAL_FIXTURE() : m_eval( EDA_UNITS::MILLIMETRES, false )
+    NUM_EVAL_FIXTURE() : m_eval( EDA_UNITS::MILLIMETRES )
     {
     }
 
