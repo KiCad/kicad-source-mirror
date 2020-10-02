@@ -37,14 +37,26 @@ static const double maxTickDensity = 10.0;       // min pixels between tick mark
 static const double midTickLengthFactor = 1.5;
 static const double majorTickLengthFactor = 2.5;
 
-// We need a pair of layers for the graphics and drop-shadows, but it's probably not
-// worth adding more layers to the enum.
-#define LAYER_RULER LAYER_SELECT_OVERLAY
-#define LAYER_RULER_SHADOWS LAYER_GP_OVERLAY
+
+/*
+ * It would be nice to know why Cairo seems to have an opposite layer order from GAL, but
+ * only when drawing RULER_ITEMs (the TWO_POINT_ASSISTANT and ARC_ASSISTANT are immune from
+ * this issue).
+ *
+ * Until then, this egregious hack...
+ */
+static int getShadowLayer( KIGFX::GAL* aGal )
+{
+    if( aGal->IsCairoEngine() )
+        return LAYER_SELECT_OVERLAY;
+    else
+        return LAYER_GP_OVERLAY;
+}
 
 
-static void drawCursorStrings( int aLayer, KIGFX::VIEW* aView, const VECTOR2D& aCursor,
-                               const VECTOR2D& aRulerVec, EDA_UNITS aUnits )
+static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
+                               const VECTOR2D& aRulerVec, EDA_UNITS aUnits,
+                               bool aDrawingDropShadows )
 {
     // draw the cursor labels
     std::vector<wxString> cursorStrings;
@@ -59,15 +71,15 @@ static void drawCursorStrings( int aLayer, KIGFX::VIEW* aView, const VECTOR2D& a
                                              EDA_UNITS::DEGREES ) );
 
     auto temp = aRulerVec;
-    DrawTextNextToCursor( aView, aCursor, -temp, cursorStrings, aLayer == LAYER_RULER_SHADOWS );
+    DrawTextNextToCursor( aView, aCursor, -temp, cursorStrings, aDrawingDropShadows );
 }
 
 
-static double getTickLineWidth( const TEXT_DIMS& textDims, int aLayer )
+static double getTickLineWidth( const TEXT_DIMS& textDims, bool aDrawingDropShadows )
 {
     double width = textDims.StrokeWidth * 0.8;
 
-    if( aLayer == LAYER_RULER_SHADOWS )
+    if( aDrawingDropShadows )
         width += textDims.ShadowWidth;
 
     return width;
@@ -131,8 +143,8 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA
  * @param aLine line vector
  * @param aMinorTickLen length of minor ticks in IU
  */
-void drawTicksAlongLine( int aLayer, KIGFX::GAL* aGal, const VECTOR2D& aOrigin,
-                         const VECTOR2D& aLine, double aMinorTickLen, EDA_UNITS aUnits )
+void drawTicksAlongLine( KIGFX::GAL* aGal, const VECTOR2D& aOrigin, const VECTOR2D& aLine,
+                         double aMinorTickLen, EDA_UNITS aUnits, bool aDrawingDropShadows )
 {
     VECTOR2D    tickLine = aLine.Rotate( -M_PI_2 );
     double      tickSpace;
@@ -147,9 +159,8 @@ void drawTicksAlongLine( int aLayer, KIGFX::GAL* aGal, const VECTOR2D& aOrigin,
     double      labelAngle = -tickLine.Angle();
     double      textOffset = 0;
 
-    if( aLayer == LAYER_RULER_SHADOWS )
+    if( aDrawingDropShadows )
     {
-        // Drawing drop shadows
         textOffset = textDims.ShadowWidth;
         textThickness += 2 * textDims.ShadowWidth;
     }
@@ -208,8 +219,8 @@ void drawTicksAlongLine( int aLayer, KIGFX::GAL* aGal, const VECTOR2D& aOrigin,
  * @param aTickLen length of ticks in IU
  * @param aNumDivisions number of parts to divide the line into
  */
-void drawBacksideTicks( int aLayer, KIGFX::GAL* aGal, const VECTOR2D& aOrigin,
-                        const VECTOR2D& aLine, double aTickLen, int aNumDivisions )
+void drawBacksideTicks( KIGFX::GAL* aGal, const VECTOR2D& aOrigin, const VECTOR2D& aLine,
+                        double aTickLen, int aNumDivisions, bool aDrawingDropShadows )
 {
     const double   backTickSpace = aLine.EuclideanNorm() / aNumDivisions;
     const VECTOR2D backTickVec = aLine.Rotate( M_PI_2 ).Resize( aTickLen );
@@ -218,7 +229,7 @@ void drawBacksideTicks( int aLayer, KIGFX::GAL* aGal, const VECTOR2D& aOrigin,
     for( int i = 0; i < aNumDivisions + 1; ++i )
     {
         const VECTOR2D backTickPos = aOrigin + aLine.Resize( backTickSpace * i );
-        aGal->SetLineWidth( getTickLineWidth( textDims, aLayer ) );
+        aGal->SetLineWidth( getTickLineWidth( textDims, aDrawingDropShadows ) );
         aGal->DrawLine( backTickPos, backTickPos + backTickVec );
     }
 }
@@ -248,8 +259,8 @@ const BOX2I RULER_ITEM::ViewBBox() const
 
 void RULER_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aLayers[0] = LAYER_RULER;
-    aLayers[1] = LAYER_RULER_SHADOWS;
+    aLayers[0] = LAYER_SELECT_OVERLAY;
+    aLayers[1] = LAYER_GP_OVERLAY;
     aCount = 2;
 }
 
@@ -258,6 +269,7 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     KIGFX::GAL*      gal = aView->GetGAL();
     RENDER_SETTINGS* rs = aView->GetPainter()->GetSettings();
+    bool             drawingDropShadows = ( aLayer == getShadowLayer( gal ) );
 
     gal->PushDepth();
     gal->SetLayerDepth( gal->GetMinDepth() );
@@ -271,26 +283,27 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     gal->SetTextMirrored( false );
     gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
 
-    if( aLayer == LAYER_RULER_SHADOWS )
+    if( drawingDropShadows )
         gal->SetStrokeColor( GetShadowColor( gal->GetStrokeColor() ) );
 
     gal->ResetTextAttributes();
     TEXT_DIMS textDims = SetConstantGlyphHeight( gal );
 
     // draw the main line from the origin to cursor
-    gal->SetLineWidth( getTickLineWidth( textDims, aLayer ) );
+    gal->SetLineWidth( getTickLineWidth( textDims, drawingDropShadows ) );
     gal->DrawLine( origin, end );
 
     VECTOR2D rulerVec( end - origin );
 
-    drawCursorStrings( aLayer, aView, end, rulerVec, m_userUnits );
+    drawCursorStrings( aView, end, rulerVec, m_userUnits, drawingDropShadows );
 
     // basic tick size
     const double minorTickLen = 5.0 / gal->GetWorldScale();
+    const double majorTickLen = minorTickLen * majorTickLengthFactor;
 
-    drawTicksAlongLine( aLayer, gal, origin, rulerVec, minorTickLen, m_userUnits );
+    drawTicksAlongLine( gal, origin, rulerVec, minorTickLen, m_userUnits, drawingDropShadows );
 
-    drawBacksideTicks( aLayer, gal, origin, rulerVec, minorTickLen * majorTickLengthFactor, 2 );
+    drawBacksideTicks( gal, origin, rulerVec, majorTickLen, 2, drawingDropShadows );
 
     // draw the back of the origin "crosshair"
     gal->DrawLine( origin, origin + rulerVec.Resize( -minorTickLen * midTickLengthFactor ) );
