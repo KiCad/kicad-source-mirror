@@ -20,6 +20,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "tools/convert_tool.h"
 #include "tools/drawing_tool.h"
 #include "tools/edit_tool.h"
 #include "tools/footprint_editor_tools.h"
@@ -861,6 +862,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new PCBNEW_PICKER_TOOL );
     m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
     m_toolManager->RegisterTool( new PCB_VIEWER_TOOLS );
+    m_toolManager->RegisterTool( new CONVERT_TOOL );
 
     m_toolManager->GetTool<SELECTION_TOOL>()->SetEditModules( true );
     m_toolManager->GetTool<EDIT_TOOL>()->SetEditModules( true );

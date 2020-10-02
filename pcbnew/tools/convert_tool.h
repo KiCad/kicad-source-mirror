@@ -25,6 +25,7 @@
 #ifndef CONVERT_TOOL_H_
 #define CONVERT_TOOL_H_
 
+#include <geometry/shape_poly_set.h>
 #include <tool/tool_interactive.h>
 
 class CONDITIONAL_MENU;

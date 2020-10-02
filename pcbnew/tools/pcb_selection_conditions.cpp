@@ -144,7 +144,7 @@ bool PCB_SELECTION_CONDITIONS::onlyGraphicShapeTypesFunc( const SELECTION& aSele
 
     for( const EDA_ITEM* item : aSelection )
     {
-        if( item->Type() != PCB_LINE_T )
+        if( item->Type() != PCB_LINE_T && item->Type() != PCB_MODULE_EDGE_T )
             return false;
 
         STROKE_T shape = static_cast<const DRAWSEGMENT*>( item )->GetShape();

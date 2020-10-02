@@ -26,6 +26,7 @@
 #include <board_commit.h>
 #include <class_board.h>
 #include <class_drawsegment.h>
+#include <class_edge_mod.h>
 #include <class_track.h>
 #include <class_zone.h>
 #include <collectors.h>
@@ -68,6 +69,7 @@ bool CONVERT_TOOL::Init()
     m_menu->SetTitle( _( "Convert..." ) );
 
     static KICAD_T convertableTracks[] = { PCB_TRACE_T, PCB_ARC_T, EOT };
+    static KICAD_T convertableZones[]  = { PCB_ZONE_AREA_T, PCB_MODULE_ZONE_AREA_T, EOT };
 
     auto graphicLines = P_S_C::OnlyGraphicShapeTypes( { S_SEGMENT, S_RECT } ) && P_S_C::SameLayer();
 
@@ -76,16 +78,19 @@ bool CONVERT_TOOL::Init()
 
     auto anyLines     = graphicLines || trackLines;
 
-    auto anyPolys     = ( S_C::OnlyType( PCB_ZONE_AREA_T ) ||
+    auto anyPolys     = ( S_C::OnlyTypes( convertableZones ) ||
                           P_S_C::OnlyGraphicShapeTypes( { S_POLYGON, S_RECT } ) );
 
-    auto lineToArc    = P_S_C::OnlyGraphicShapeTypes( { S_SEGMENT } ) ||
-                        S_C::OnlyType( PCB_TRACE_T );
+    auto lineToArc    = S_C::Count( 1 ) && ( P_S_C::OnlyGraphicShapeTypes( { S_SEGMENT } ) ||
+                                             S_C::OnlyType( PCB_TRACE_T ) );
 
     auto showConvert = anyPolys || anyLines || lineToArc;
 
     m_menu->AddItem( PCB_ACTIONS::convertToPoly, anyLines );
-    m_menu->AddItem( PCB_ACTIONS::convertToZone, anyLines );
+
+    if( m_frame->IsType( FRAME_PCB_EDITOR ) )
+        m_menu->AddItem( PCB_ACTIONS::convertToZone, anyLines );
+
     m_menu->AddItem( PCB_ACTIONS::convertToKeepout, anyLines );
     m_menu->AddItem( PCB_ACTIONS::convertToLines, anyPolys );
     m_menu->AddItem( PCB_ACTIONS::convertToTracks, anyPolys );
@@ -94,7 +99,7 @@ bool CONVERT_TOOL::Init()
     for( std::shared_ptr<ACTION_MENU>& subMenu : m_selectionTool->GetToolMenu().GetSubMenus() )
     {
         if( dynamic_cast<SPECIAL_TOOLS_CONTEXT_MENU*>( subMenu.get() ) )
-            static_cast<CONDITIONAL_MENU*>( subMenu.get() )->AddMenu( m_menu, showConvert );
+            static_cast<CONDITIONAL_MENU*>( subMenu.get() )->AddMenu( m_menu, SELECTION_CONDITIONS::ShowAlways );
     }
 
     return true;
@@ -103,6 +108,8 @@ bool CONVERT_TOOL::Init()
 
 int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
 {
+    MODULE* mod = nullptr;
+
     auto& selection = m_selectionTool->RequestSelection(
         []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
         {
@@ -116,11 +123,12 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
                 switch( item->Type() )
                 {
                 case PCB_LINE_T:
+                case PCB_MODULE_EDGE_T:
                     switch( static_cast<DRAWSEGMENT*>( item )->GetShape() )
                     {
                     case S_SEGMENT:
                     case S_RECT:
-                    //case S_ARC: // Not yet
+                        // case S_ARC: // Not yet
                         break;
 
                     default:
@@ -154,6 +162,11 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
     if( polySet.IsEmpty() )
         return 0;
 
+    bool isFootprint = m_frame->IsType( FRAME_FOOTPRINT_EDITOR );
+
+    if( EDGE_MODULE* edge_mod = dynamic_cast<EDGE_MODULE*>( selection.Front() ) )
+        mod = edge_mod->GetParentModule();
+
     BOARD_COMMIT commit( m_frame );
 
     // For now, we convert each outline in the returned shape to its own polygon
@@ -166,7 +179,7 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
     {
         for( const SHAPE_POLY_SET& poly : polys )
         {
-            DRAWSEGMENT* graphic = new DRAWSEGMENT;
+            DRAWSEGMENT* graphic = isFootprint ? new EDGE_MODULE( mod ) : new DRAWSEGMENT;
 
             graphic->SetShape( S_POLYGON );
             graphic->SetLayer( destLayer );
@@ -196,7 +209,8 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
 
         for( const SHAPE_POLY_SET& poly : polys )
         {
-            ZONE_CONTAINER* zone = new ZONE_CONTAINER( parent );
+            ZONE_CONTAINER* zone = isFootprint ? new MODULE_ZONE_CONTAINER( parent )
+                                               : new ZONE_CONTAINER( parent );
 
             *zone->Outline() = poly;
             zone->HatchBorder();
@@ -313,7 +327,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromRects( const std::deque<EDA_ITEM*>& aI
 
     for( EDA_ITEM* item : aItems )
     {
-        if( item->Type() != PCB_LINE_T )
+        if( item->Type() != PCB_LINE_T && item->Type() != PCB_MODULE_EDGE_T )
             continue;
 
         DRAWSEGMENT* graphic = static_cast<DRAWSEGMENT*>( item );
@@ -353,6 +367,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                 switch( item->Type() )
                 {
                 case PCB_LINE_T:
+                case PCB_MODULE_EDGE_T:
                     switch( static_cast<DRAWSEGMENT*>( item )->GetShape() )
                     {
                     case S_POLYGON:
@@ -368,6 +383,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                     break;
 
                 case PCB_ZONE_AREA_T:
+                case PCB_MODULE_ZONE_AREA_T:
                     break;
 
                 default:
@@ -387,10 +403,12 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                 switch( aItem->Type() )
                 {
                 case PCB_ZONE_AREA_T:
+                case PCB_MODULE_ZONE_AREA_T:
                     set = *static_cast<ZONE_CONTAINER*>( aItem )->Outline();
                     break;
 
                 case PCB_LINE_T:
+                case PCB_MODULE_EDGE_T:
                 {
                     DRAWSEGMENT* graphic = static_cast<DRAWSEGMENT*>( aItem );
 
@@ -506,7 +524,9 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
                 {
                     BOARD_ITEM* item = aCollector[i];
 
-                    if( !( item->Type() == PCB_LINE_T || item->Type() == PCB_TRACE_T ) )
+                    if( !( item->Type() == PCB_LINE_T ||
+                           item->Type() == PCB_TRACE_T ||
+                           item->Type() == PCB_MODULE_EDGE_T ) )
                         aCollector.Remove( item );
                 }
             } );
@@ -541,7 +561,7 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
 
     BOARD_COMMIT commit( m_frame );
 
-    if( source->Type() == PCB_LINE_T )
+    if( source->Type() == PCB_LINE_T || source->Type() == PCB_MODULE_EDGE_T )
     {
         DRAWSEGMENT* line = static_cast<DRAWSEGMENT*>( source );
         DRAWSEGMENT* arc  = new DRAWSEGMENT( parent );
@@ -585,6 +605,7 @@ OPT<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem )
     switch( aItem->Type() )
     {
     case PCB_LINE_T:
+    case PCB_MODULE_EDGE_T:
     {
         DRAWSEGMENT* line = static_cast<DRAWSEGMENT*>( aItem );
         return boost::make_optional<SEG>( { VECTOR2I( line->GetStart() ),

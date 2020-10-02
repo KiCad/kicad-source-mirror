@@ -642,15 +642,19 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         if( m_FilledPolysList.count( pcbframe->GetActiveLayer() ) )
             layer = pcbframe->GetActiveLayer();
 #endif
-    auto layer_it = m_FilledPolysList.find( layer );
 
-    if( layer_it == m_FilledPolysList.end() )
-        layer_it = m_FilledPolysList.begin();
-
-    if( layer_it != m_FilledPolysList.end() )
+    if( !GetIsRuleArea() )
     {
-        msg.Printf( wxT( "%d" ), layer_it->second.TotalVertices() );
-        aList.emplace_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg, BLUE ) );
+        auto layer_it = m_FilledPolysList.find( layer );
+
+        if( layer_it == m_FilledPolysList.end() )
+            layer_it = m_FilledPolysList.begin();
+
+        if( layer_it != m_FilledPolysList.end() )
+        {
+            msg.Printf( wxT( "%d" ), layer_it->second.TotalVertices() );
+            aList.emplace_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg, BLUE ) );
+        }
     }
 }
 
@@ -1312,6 +1316,9 @@ double MODULE_ZONE_CONTAINER::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
     if( !aView )
         return 0;
+
+    if( !aView->IsLayerVisible( LAYER_ZONES ) )
+        return HIDE;
 
     bool flipped = GetParent() && GetParent()->GetLayer() == B_Cu;
 
