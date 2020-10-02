@@ -471,7 +471,6 @@ set( BMAPS_MID
     zoom_center_on_screen
     zoom_in
     zoom_out
-    zoom_redraw
     zoom_selection
     )
 
