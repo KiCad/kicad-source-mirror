@@ -615,6 +615,7 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     // clang-format on
 
     wxString fileFilters;
+    wxString allWildcards;
 
     for( auto& loader : loaders )
     {
@@ -622,7 +623,13 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
             fileFilters += wxChar( '|' );
 
         fileFilters += wxGetTranslation( loader.first );
+
+        SCH_PLUGIN::SCH_PLUGIN_RELEASER plugin( SCH_IO_MGR::FindPlugin( loader.second ) );
+        wxCHECK( plugin, /*void*/ );
+        allWildcards += "*." + formatWildcardExt( plugin->GetFileExtension() ) + ";";
     }
+
+    fileFilters = _( "All supported formats|" ) + allWildcards + "|" + fileFilters;
 
     wxFileDialog dlg( this, _( "Import Schematic" ), path, wxEmptyString, fileFilters,
             wxFD_OPEN | wxFD_FILE_MUST_EXIST ); // TODO
