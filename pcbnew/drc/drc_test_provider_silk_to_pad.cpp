@@ -135,6 +135,12 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
                 int      actual;
                 VECTOR2I pos;
 
+                if( isInvisibleText( aRefItem->parent ) )
+                    return true;
+
+                if( isInvisibleText( aTestItem->parent ) )
+                    return true;
+
                 accountCheck( constraint );
 
                 if( !aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual, &pos ) )

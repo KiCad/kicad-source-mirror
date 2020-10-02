@@ -120,6 +120,8 @@ protected:
     virtual void accountCheck( const DRC_RULE* ruleToTest );
     virtual void accountCheck( const DRC_CONSTRAINT& constraintToTest );
 
+    bool isInvisibleText( const BOARD_ITEM* aItem ) const;
+
     EDA_UNITS   userUnits() const;
     DRC_ENGINE* m_drcEngine;
     std::unordered_map<const DRC_RULE*, int> m_stats;

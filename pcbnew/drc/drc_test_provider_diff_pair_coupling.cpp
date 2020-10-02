@@ -29,6 +29,10 @@
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
 #include <drc/drc_length_report.h>
+#include <drc/drc_rtree.h>
+
+#include <geometry/shape.h>
+#include <geometry/shape_segment.h>
 
 #include <connectivity/connectivity_data.h>
 #include <connectivity/from_to_cache.h>
@@ -265,7 +269,7 @@ struct DIFF_PAIR_KEY
         int totalLengthP;
     };
 
-static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
+static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp, DRC_RTREE& aTree )
 {
 
     for( BOARD_CONNECTED_ITEM* itemP : aDp.itemsP )
@@ -295,10 +299,21 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
 
                 if( coupled )
                 {
-                    cpair.parentP = sp;
-                    cpair.parentN = sn;
+                    SHAPE_SEGMENT checkSegStart( cpair.coupledP.A, cpair.coupledN.A );
+                    SHAPE_SEGMENT checkSegEnd( cpair.coupledP.B, cpair.coupledN.B );
 
-                    aDp.coupled.push_back( cpair );
+                    // check if there's anyting in between the segments suspected to be coupled. If
+                    // there's nothing, assume they are really coupled.
+
+                    if( !aTree.CheckColliding( &checkSegStart, sp->GetLayer() )
+                            && !aTree.CheckColliding( &checkSegEnd, sp->GetLayer() ) )
+                    {
+
+                        cpair.parentP = sp;
+                        cpair.parentN = sn;
+
+                        aDp.coupled.push_back( cpair );
+                    }
                 }
             }
         }
@@ -353,6 +368,20 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                     LSET::AllCuMask(), evaluateDpConstraints );
 
 
+    DRC_RTREE copperTree;
+
+    auto addToTree =
+            [&copperTree]( BOARD_ITEM *item ) -> bool
+            {
+                copperTree.insert( item );
+                return true;
+            };
+
+    int numItems =
+            forEachGeometryItem( { PCB_TRACE_T, PCB_VIA_T, PCB_PAD_T, PCB_ZONE_AREA_T, PCB_ARC_T },
+                    LSET::AllCuMask(), addToTree );
+
+
     reportAux( wxString::Format( _("DPs evaluated:") ) );
 
     for( auto& it : dpRuleMatches )
@@ -368,7 +397,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
         reportAux( wxString::Format( "Rule '%s', DP: (+) %s - (-) %s", it.first.parentRule->m_Name, nameP, nameN ) );
 
-        extractDiffPairCoupledItems( it.second );
+        extractDiffPairCoupledItems( it.second, copperTree );
 
         it.second.totalCoupled = 0;
         it.second.totalLengthN = 0;
