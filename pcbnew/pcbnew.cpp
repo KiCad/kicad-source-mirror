@@ -417,19 +417,19 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
         if( destFile.GetName() == aSrcProjectName )
             destFile.SetName( aNewProjectName );
 
-        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+        KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
     else if( ext == "brd" )
     {
         if( destFile.GetName() == aSrcProjectName )
             destFile.SetName( aNewProjectName );
 
-        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+        KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
     else if( ext == "mod" || ext == "kicad_mod" )
     {
         // Footprints are not project-specific.  Keep their source names.
-        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+        KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
     else if( ext == "cmp" )
     {
@@ -441,7 +441,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
         // any non-deterministic cases in the save-as algorithm, we don't want to certify
         // the result with the source's DRC report.  Therefore copy it under the old
         // name.
-        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+        KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
     else if( destFile.GetName() == "fp-lib-table" )
     {

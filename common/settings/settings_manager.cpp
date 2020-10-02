@@ -387,7 +387,7 @@ public:
         wxLogTrace( traceSettings, "Copying %s to %s", aSrcFilePath, file.GetFullPath() );
 
         // For now, just copy everything
-        CopyFile( aSrcFilePath, file.GetFullPath(), m_errors );
+        KiCopyFile( aSrcFilePath, file.GetFullPath(), m_errors );
 
         return wxDIR_CONTINUE;
     }

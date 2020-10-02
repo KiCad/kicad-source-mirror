@@ -161,7 +161,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             destFile.SetName( destFileName );
         }
 
-        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+        KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
     else if( ext == "gbrjob" )
     {
@@ -179,7 +179,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
         // detect the file format: old (deprecated) gerber format or official JSON format
         if( !data.Contains( "{" ) )
         {
-            CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+            KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
             return;
         }
 
@@ -235,7 +235,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
 
         destFile.SetName( destFileName );
 
-        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+        KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
     else
     {

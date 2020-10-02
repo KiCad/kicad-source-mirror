@@ -61,11 +61,11 @@ bool CanPrintFile( const wxString& file );
 
 /**
  * Function CopyFile
- * @param aSrcPath
- * @param aDestPath
+ * @param aSrcPath is the full filename of the source
+ * @param aDestPath is the full filename of the target
  * @param aErrors a wxString to *append* any errors to
  */
-void CopyFile( const wxString& aSrcPath, const wxString& aDestPath, wxString& aErrors );
+void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPath, wxString& aErrors );
 
 /**
  * Function EDA_FILE_SELECTOR

@@ -159,7 +159,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
         if( destFile.GetName() == aSrcProjectName )
             destFile.SetName( aNewProjectName );
 
-        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+        KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
     else
     {

@@ -27,7 +27,6 @@
  * @file gestfich.cpp
  * @brief Functions for file management
  */
-#include <fctsys.h>
 
 #include <wx/mimetype.h>
 #include <wx/filename.h>
@@ -349,7 +348,7 @@ bool CanPrintFile( const wxString& file )
 }
 
 
-void CopyFile( const wxString& aSrcPath, const wxString& aDestPath, wxString& aErrors )
+void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPath, wxString& aErrors )
 {
     if( !wxCopyFile( aSrcPath, aDestPath ) )
     {

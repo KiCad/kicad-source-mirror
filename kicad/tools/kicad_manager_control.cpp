@@ -373,7 +373,7 @@ public:
 
             // Currently all paths in the settings file are relative, so we can just do a
             // straight copy
-            CopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
+            KiCopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
         }
         else if( ext == "kicad_sch"
                  || ext == "kicad_sch-bak"
@@ -432,7 +432,7 @@ public:
             if( destName == m_projectName )
                 destFile.SetName( m_newProjectName );
 
-            CopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
+            KiCopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
         }
 
         return wxDIR_CONTINUE;

@@ -326,19 +326,19 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
         // entire tree with several projects within it), so we leave this as an exercise
         // to the author.
 
-        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+        KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
     else if( ext == "sym" )
     {
         // Symbols are not project-specific.  Keep their source names.
-        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+        KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
     else if( ext == "lib" || ext == "dcm" || ext == "kicad_sym" )
     {
         if( destFile.GetName() == aProjectName + "-cache" )
             destFile.SetName( aNewProjectName + "-cache"  );
 
-        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+        KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
     else if( ext == "net" )
     {
