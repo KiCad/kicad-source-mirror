@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Sep 17 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -148,37 +148,46 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	bRightColumn = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerIREf;
-	sbSizerIREf = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Intersheets References") ), wxVERTICAL );
+	sbSizerIREf = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Inter-sheet References") ), wxVERTICAL );
 
-	m_showIntersheetsReferences = new wxCheckBox( sbSizerIREf->GetStaticBox(), wxID_ANY, _("Show intersheets references"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerIREf->Add( m_showIntersheetsReferences, 0, wxALL, 5 );
+	m_showIntersheetsReferences = new wxCheckBox( sbSizerIREf->GetStaticBox(), wxID_ANY, _("Show inter-sheet references"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerIREf->Add( m_showIntersheetsReferences, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizerMargins;
+	bSizerMargins = new wxBoxSizer( wxVERTICAL );
 
 	m_radioFormatStandard = new wxRadioButton( sbSizerIREf->GetStaticBox(), wxID_ANY, _("Standard (1,2,3)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_radioFormatStandard->SetValue( true );
-	sbSizerIREf->Add( m_radioFormatStandard, 0, wxALL, 5 );
+	bSizerMargins->Add( m_radioFormatStandard, 0, wxALL, 5 );
 
 	m_radioFormatAbbreviated = new wxRadioButton( sbSizerIREf->GetStaticBox(), wxID_ANY, _("Abbreviated (1..3)"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerIREf->Add( m_radioFormatAbbreviated, 0, wxALL, 5 );
+	bSizerMargins->Add( m_radioFormatAbbreviated, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	wxGridSizer* gSizer1;
-	gSizer1 = new wxGridSizer( 0, 2, 0, 0 );
+	wxFlexGridSizer* fgSizer4;
+	fgSizer4 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer4->AddGrowableCol( 1 );
+	fgSizer4->SetFlexibleDirection( wxBOTH );
+	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_prefixLabel = new wxStaticText( sbSizerIREf->GetStaticBox(), wxID_ANY, _("Prefix"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_prefixLabel = new wxStaticText( sbSizerIREf->GetStaticBox(), wxID_ANY, _("Prefix:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_prefixLabel->Wrap( -1 );
-	gSizer1->Add( m_prefixLabel, 0, wxALL, 5 );
+	fgSizer4->Add( m_prefixLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_prefixCtrl = new wxTextCtrl( sbSizerIREf->GetStaticBox(), wxID_ANY, _("["), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_prefixCtrl, 0, wxALL, 5 );
+	fgSizer4->Add( m_prefixCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_suffixLabel = new wxStaticText( sbSizerIREf->GetStaticBox(), wxID_ANY, _("Suffix"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_suffixLabel = new wxStaticText( sbSizerIREf->GetStaticBox(), wxID_ANY, _("Suffix:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_suffixLabel->Wrap( -1 );
-	gSizer1->Add( m_suffixLabel, 0, wxALL, 5 );
+	fgSizer4->Add( m_suffixLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_suffixCtrl = new wxTextCtrl( sbSizerIREf->GetStaticBox(), wxID_ANY, _("]"), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_suffixCtrl, 0, wxALL, 5 );
+	fgSizer4->Add( m_suffixCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizerIREf->Add( gSizer1, 1, wxEXPAND, 5 );
+	bSizerMargins->Add( fgSizer4, 1, wxEXPAND, 5 );
+
+
+	sbSizerIREf->Add( bSizerMargins, 1, wxEXPAND|wxLEFT, 15 );
 
 
 	bRightColumn->Add( sbSizerIREf, 0, wxALL|wxEXPAND, 5 );
