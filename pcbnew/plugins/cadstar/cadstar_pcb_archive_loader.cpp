@@ -938,15 +938,15 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
                 case UNITS::CENTIMETER:
                 case UNITS::MM:
                 case UNITS::MICROMETRE:
-                    dimension->SetUnits( EDA_UNITS::MILLIMETRES, false );
+                    dimension->SetUnits( EDA_UNITS::MILLIMETRES );
                     break;
 
                 case UNITS::INCH:
-                    dimension->SetUnits( EDA_UNITS::INCHES, false );
+                    dimension->SetUnits( EDA_UNITS::INCHES );
                     break;
 
                 case UNITS::THOU:
-                    dimension->SetUnits( EDA_UNITS::INCHES, true );
+                    dimension->SetUnits( EDA_UNITS::INCHES );
                     break;
                 }
             }

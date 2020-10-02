@@ -962,14 +962,14 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
     switch( aElem.textunit )
     {
     case ALTIUM_UNIT::INCHES:
-        dimension->SetUnits( EDA_UNITS::INCHES, false );
+        dimension->SetUnits( EDA_UNITS::INCHES );
         break;
     case ALTIUM_UNIT::MILS:
-        dimension->SetUnits( EDA_UNITS::INCHES, true );
+        dimension->SetUnits( EDA_UNITS::INCHES );
         break;
     case ALTIUM_UNIT::MILLIMETERS:
     case ALTIUM_UNIT::CENTIMETER:
-        dimension->SetUnits( EDA_UNITS::MILLIMETRES, false );
+        dimension->SetUnits( EDA_UNITS::MILLIMETRES );
         break;
     default:
         break;

@@ -180,7 +180,7 @@ void PCB_BASE_EDIT_FRAME::unitsChangeRefresh()
 
                     if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
                     {
-                        dimension->SetUnits( units, false );
+                        dimension->SetUnits( units );
                         dimension->Update();
                         view->Update( dimension );
                     }

@@ -183,10 +183,9 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
     m_cbOverrideValue->SetValue( m_dimension->GetOverrideTextEnabled() );
 
     EDA_UNITS  units;
-    bool       useMils;
-    m_dimension->GetUnits( units, useMils );
+    m_dimension->GetUnits( units );
 
-    m_cbUnits->SetSelection( units == EDA_UNITS::MILLIMETRES ? 2 : useMils ? 1 : 0 );
+    m_cbUnits->SetSelection( units == EDA_UNITS::MILLIMETRES ? 2 : units == EDA_UNITS::MILS ? 1 : 0 );
     m_cbUnitsFormat->SetSelection( static_cast<int>( m_dimension->GetUnitsFormat() ) );
     m_cbPrecision->SetSelection( static_cast<int>( m_dimension->GetPrecision() ) );
 
@@ -300,7 +299,7 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( DIMENSION* aTarget 
     aTarget->SetSuffix( board->ConvertCrossReferencesToKIIDs( m_txtSuffix->GetValue() ) );
     aTarget->SetLayer( static_cast<PCB_LAYER_ID>( m_cbLayerActual->GetLayerSelection() ) );
 
-    aTarget->SetUnits( m_frame->GetUserUnits(), false );
+    aTarget->SetUnits( m_frame->GetUserUnits() );
     aTarget->SetUnitsMode( static_cast<DIM_UNITS_MODE>( m_cbUnits->GetSelection() ) );
     aTarget->SetUnitsFormat( static_cast<DIM_UNITS_FORMAT>( m_cbUnitsFormat->GetSelection() ) );
     aTarget->SetPrecision( m_cbPrecision->GetSelection() );

@@ -483,7 +483,7 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
 
     //Bounds checking cannot include number of elements as an index!
     int gridIdx = std::max( 0, std::min( gridCfg.last_size_idx, (int) gridCfg.sizes.size() - 1 ) );
-    int gridSize = (int) ValueFromString( EDA_UNITS::INCHES, gridCfg.sizes[ gridIdx ], true );
+    int gridSize = (int) ValueFromString( EDA_UNITS::INCHES, gridCfg.sizes[ gridIdx ] );
     panel->GetGAL()->SetGridSize( VECTOR2D( gridSize, gridSize ) );
 
     return panel;

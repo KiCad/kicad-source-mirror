@@ -474,7 +474,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
                                       a->GetSelectMenuText( UNITS ),
-                                      MessageTextFromValue( UNITS, overrideA, true ) ) )
+                                      MessageTextFromValue( UNITS, overrideA ) ) )
         }
 
         if( connectedB && connectedB->GetLocalClearanceOverrides( nullptr ) > 0 )
@@ -484,7 +484,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
                                       b->GetSelectMenuText( UNITS ),
-                                      MessageTextFromValue( UNITS, overrideB, true ) ) )
+                                      MessageTextFromValue( UNITS, overrideB ) ) )
         }
 
         if( overrideA || overrideB )
@@ -513,7 +513,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                 REPORT( wxString::Format( implicit ? _( "Checking %s; clearance: %s." )
                                                    : _( "Checking rule %s; clearance: %s."),
                                           rcons->constraint.GetName(),
-                                          MessageTextFromValue( UNITS, clearance, true ) ) )
+                                          MessageTextFromValue( UNITS, clearance ) ) )
         }
         else
         {
@@ -583,7 +583,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
             REPORT( "" )
             REPORT( wxString::Format( _( "Local clearance on %s; clearance: %s." ),
                                       a->GetSelectMenuText( UNITS ),
-                                      MessageTextFromValue( UNITS, localA, true ) ) )
+                                      MessageTextFromValue( UNITS, localA ) ) )
 
             if( localA > clearance )
                 clearance = connectedA->GetLocalClearance( &m_msg );
@@ -594,7 +594,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
             REPORT( "" )
             REPORT( wxString::Format( _( "Local clearance on %s; clearance: %s." ),
                                       b->GetSelectMenuText( UNITS ),
-                                      MessageTextFromValue( UNITS, localB, true ) ) )
+                                      MessageTextFromValue( UNITS, localB ) ) )
 
             if( localB > clearance )
                 clearance = connectedB->GetLocalClearance( &m_msg );

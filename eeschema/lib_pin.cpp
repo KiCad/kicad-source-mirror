@@ -1010,7 +1010,7 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), text, DARKGREEN ) );
 
     // Display pin length
-    text = StringFromValue( aFrame->GetUserUnits(), m_length, true );
+    text = StringFromValue( aFrame->GetUserUnits(), m_length );
     aList.push_back( MSG_PANEL_ITEM( _( "Length" ), text, MAGENTA ) );
 
     text = PinOrientationName( (unsigned) PinOrientationIndex( m_orientation ) );
@@ -1020,10 +1020,10 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     pinpos.y = -pinpos.y;   // Display coord are top to bottom
                             // lib items coord are bottom to top
 
-    text = MessageTextFromValue( aFrame->GetUserUnits(), pinpos.x, true );
+    text = MessageTextFromValue( aFrame->GetUserUnits(), pinpos.x );
     aList.push_back( MSG_PANEL_ITEM( _( "Pos X" ), text, DARKMAGENTA ) );
 
-    text = MessageTextFromValue( aFrame->GetUserUnits(), pinpos.y, true );
+    text = MessageTextFromValue( aFrame->GetUserUnits(), pinpos.y );
     aList.push_back( MSG_PANEL_ITEM( _( "Pos Y" ), text, DARKMAGENTA ) );
 }
 

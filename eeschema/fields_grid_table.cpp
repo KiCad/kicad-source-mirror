@@ -410,7 +410,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         return StringFromBool( field.IsBold() );
 
     case FDC_TEXT_SIZE:
-        return StringFromValue( m_userUnits, field.GetTextSize().GetHeight(), true, true );
+        return StringFromValue( m_userUnits, field.GetTextSize().GetHeight() );
 
     case FDC_ORIENTATION:
         switch ( (int) field.GetTextAngle() )
@@ -422,10 +422,10 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         break;
 
     case FDC_POSX:
-        return StringFromValue( m_userUnits, field.GetTextPos().x, true );
+        return StringFromValue( m_userUnits, field.GetTextPos().x );
 
     case FDC_POSY:
-        return StringFromValue( m_userUnits, field.GetTextPos().y, true );
+        return StringFromValue( m_userUnits, field.GetTextPos().y );
 
     default:
         // we can't assert here because wxWidgets sometimes calls this without checking
@@ -507,8 +507,8 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         break;
 
     case FDC_TEXT_SIZE:
-        field.SetTextSize( wxSize( ValueFromString( m_userUnits, aValue, true ),
-                                   ValueFromString( m_userUnits, aValue, true ) ) );
+        field.SetTextSize( wxSize( ValueFromString( m_userUnits, aValue ),
+                                   ValueFromString( m_userUnits, aValue ) ) );
         break;
 
     case FDC_ORIENTATION:

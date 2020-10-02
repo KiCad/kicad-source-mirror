@@ -370,7 +370,7 @@ MODULE* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aIn
     aInductorPattern.m_length = min_len;
 
     // Enter the desired length.
-    msg = StringFromValue( editFrame.GetUserUnits(), aInductorPattern.m_length, true );
+    msg = StringFromValue( editFrame.GetUserUnits(), aInductorPattern.m_length );
     WX_TEXT_ENTRY_DIALOG dlg( &editFrame, _( "Length of Trace:" ), wxEmptyString, msg );
 
     if( dlg.ShowModal() != wxID_OK )

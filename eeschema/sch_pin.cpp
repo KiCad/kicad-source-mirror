@@ -171,16 +171,16 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), msg, DARKGREEN ) );
 
     // Display pin length
-    msg = StringFromValue( aFrame->GetUserUnits(), GetLength(), true );
+    msg = StringFromValue( aFrame->GetUserUnits(), GetLength() );
     aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, MAGENTA ) );
 
     msg = PinOrientationName( (unsigned) PinOrientationIndex( GetOrientation() ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), msg, DARKMAGENTA ) );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_position.x, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_position.x );
     aList.emplace_back( _( "Pos X" ), msg, DARKMAGENTA );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_position.y, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_position.y );
     aList.emplace_back( _( "Pos Y" ), msg, DARKMAGENTA );
 
     SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );

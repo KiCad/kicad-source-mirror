@@ -663,7 +663,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     }
 
     // Display text size (X or Y value, with are the same value in Eeschema)
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth(), true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
     aList.push_back( MSG_PANEL_ITEM( _( "Size" ), msg, RED ) );
 
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );

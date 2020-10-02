@@ -120,14 +120,14 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                     if( fail_min )
                         m_msg.Printf( drcItem->GetErrorText() + _( " (%s min annular width %s; actual %s)" ),
                                       constraint.GetName(),
-                                      MessageTextFromValue( userUnits(), v_min, true ),
-                                      MessageTextFromValue( userUnits(), annulus, true ) );
+                                      MessageTextFromValue( userUnits(), v_min ),
+                                      MessageTextFromValue( userUnits(), annulus ) );
 
                     if( fail_max )
                         m_msg.Printf( drcItem->GetErrorText() + _( " (%s max annular width %s; actual %s)" ),
                                       constraint.GetName(),
-                                      MessageTextFromValue( userUnits(), v_max, true ),
-                                      MessageTextFromValue( userUnits(), annulus, true ) );
+                                      MessageTextFromValue( userUnits(), v_max ),
+                                      MessageTextFromValue( userUnits(), annulus ) );
 
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( item );

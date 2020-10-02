@@ -199,7 +199,7 @@ static void netclassToGridRow( EDA_UNITS aUnits, wxGrid* aGrid, int aRow, const 
     aGrid->SetCellValue( aRow, GRID_NAME, nc->GetName() );
 
 #define SET_MILS_CELL( col, val ) \
-    aGrid->SetCellValue( aRow, col, StringFromValue( aUnits, val, true, true ) )
+    aGrid->SetCellValue( aRow, col, StringFromValue( aUnits, val, true ) )
 
     SET_MILS_CELL( GRID_CLEARANCE, nc->GetClearance() );
     SET_MILS_CELL( GRID_TRACKSIZE, nc->GetTrackWidth() );
@@ -327,7 +327,7 @@ static void gridRowToNetclass( EDA_UNITS aUnits, wxGrid* grid, int row, const NE
     nc->SetName( grid->GetCellValue( row, GRID_NAME ) );
 
 #define MYCELL( col )   \
-    ValueFromString( aUnits, grid->GetCellValue( row, col ), true )
+    ValueFromString( aUnits, grid->GetCellValue( row, col ) )
 
     nc->SetClearance( MYCELL( GRID_CLEARANCE ) );
     nc->SetTrackWidth( MYCELL( GRID_TRACKSIZE ) );

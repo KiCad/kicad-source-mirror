@@ -189,13 +189,13 @@ wxString TEXT_MOD_GRID_TABLE::GetValue( int aRow, int aCol )
         return text.GetText();
 
     case TMC_WIDTH:
-        return StringFromValue( m_userUnits, text.GetTextWidth(), true, true );
+        return StringFromValue( m_userUnits, text.GetTextWidth() );
 
     case TMC_HEIGHT:
-        return StringFromValue( m_userUnits, text.GetTextHeight(), true, true );
+        return StringFromValue( m_userUnits, text.GetTextHeight() );
 
     case TMC_THICKNESS:
-        return StringFromValue( m_userUnits, text.GetTextThickness(), true, true );
+        return StringFromValue( m_userUnits, text.GetTextThickness() );
 
     case TMC_LAYER:
         return text.GetLayerName();
@@ -205,10 +205,10 @@ wxString TEXT_MOD_GRID_TABLE::GetValue( int aRow, int aCol )
                                 true );
 
     case TMC_XOFFSET:
-        return StringFromValue( m_userUnits, text.GetPos0().x, true );
+        return StringFromValue( m_userUnits, text.GetPos0().x );
 
     case TMC_YOFFSET:
-        return StringFromValue( m_userUnits, text.GetPos0().y, true );
+        return StringFromValue( m_userUnits, text.GetPos0().y );
 
     default:
         // we can't assert here because wxWidgets sometimes calls this without checking
@@ -260,14 +260,14 @@ void TEXT_MOD_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         break;
 
     case TMC_WIDTH:
-        text.SetTextWidth( ValueFromString( m_userUnits, aValue, true ) );
+        text.SetTextWidth( ValueFromString( m_userUnits, aValue ) );
         break;
 
     case TMC_HEIGHT:
-        text.SetTextHeight( ValueFromString( m_userUnits, aValue, true ) );
+        text.SetTextHeight( ValueFromString( m_userUnits, aValue ) );
         break;
 
-    case TMC_THICKNESS:text.SetTextThickness( ValueFromString( m_userUnits, aValue, true ));
+    case TMC_THICKNESS:text.SetTextThickness( ValueFromString( m_userUnits, aValue ));
         break;
 
     case TMC_ORIENTATION:

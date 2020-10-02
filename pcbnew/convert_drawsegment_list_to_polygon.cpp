@@ -502,8 +502,8 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                     if( aErrorText )
                     {
                         msg.Printf( _( "Unable to find edge with an endpoint of (%s, %s)." ),
-                                    StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.x, true ),
-                                    StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.y, true ) );
+                                    StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.x ),
+                                    StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.y ) );
 
                         *aErrorText << msg << "\n";
                     }
@@ -711,8 +711,8 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                         if( aErrorText )
                         {
                             msg.Printf( _( "Unable to find edge with an endpoint of (%s, %s)." ),
-                                        StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.x, true ),
-                                        StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.y, true ) );
+                                        StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.x ),
+                                        StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.y ) );
 
                             *aErrorText << msg << "\n";
                         }

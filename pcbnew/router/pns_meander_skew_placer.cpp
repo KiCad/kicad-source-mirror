@@ -173,9 +173,9 @@ const wxString MEANDER_SKEW_PLACER::TuningInfo( EDA_UNITS aUnits ) const
         return _( "?" );
     }
 
-    status += ::MessageTextFromValue( aUnits, m_lastLength - m_coupledLength, false );
+    status += ::MessageTextFromValue( aUnits, m_lastLength - m_coupledLength );
     status += "/";
-    status += ::MessageTextFromValue( aUnits, m_settings.m_targetSkew, false );
+    status += ::MessageTextFromValue( aUnits, m_settings.m_targetSkew );
 
     return status;
 }

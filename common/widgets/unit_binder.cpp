@@ -37,17 +37,16 @@ wxDEFINE_EVENT( DELAY_FOCUS, wxCommandEvent );
 
 UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
                           wxStaticText* aLabel, wxWindow* aValue, wxStaticText* aUnitLabel,
-                          bool aUseMils, bool allowEval ) :
+                          bool allowEval ) :
         m_frame( aParent ),
         m_label( aLabel ),
         m_value( aValue ),
         m_unitLabel( aUnitLabel ),
-        m_eval( aParent->GetUserUnits(), aUseMils ),
+        m_eval( aParent->GetUserUnits() ),
         m_originTransforms( aParent->GetOriginTransforms() ),
         m_coordType( ORIGIN_TRANSFORMS::NOT_A_COORD )
 {
     m_units     = aParent->GetUserUnits();
-    m_useMils   = aUseMils;
     m_dataType  = EDA_DATA_TYPE::DISTANCE;
     m_allowEval = allowEval && dynamic_cast<wxTextEntry*>( m_value );
     m_needsEval = false;
@@ -62,7 +61,7 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
         textEntry->ChangeValue( wxT( "0" ) );
     }
 
-    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils, m_dataType ) );
+    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
 
     m_value->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), NULL, this );
     m_value->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
@@ -78,18 +77,17 @@ UNIT_BINDER::~UNIT_BINDER()
 }
 
 
-void UNIT_BINDER::SetUnits( EDA_UNITS aUnits, bool aUseMils )
+void UNIT_BINDER::SetUnits( EDA_UNITS aUnits )
 {
     m_units = aUnits;
-    m_useMils = aUseMils;
-    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils, m_dataType ) );
+    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
 }
 
 
 void UNIT_BINDER::SetDataType( EDA_DATA_TYPE aDataType )
 {
     m_dataType = aDataType;
-    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils, m_dataType ) );
+    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
 }
 
 
@@ -97,7 +95,7 @@ void UNIT_BINDER::onUnitsChanged( wxCommandEvent& aEvent )
 {
     int temp = (int) GetValue();
 
-    SetUnits( m_frame->GetUserUnits(), m_useMils );
+    SetUnits( m_frame->GetUserUnits() );
 
     SetValue( temp );
 
@@ -178,7 +176,7 @@ void UNIT_BINDER::delayedFocusHandler( wxCommandEvent& )
 }
 
 
-bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits, bool aUseMils )
+bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits )
 {
     wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_value );
 
@@ -191,12 +189,12 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits, bool aUs
 
     // TODO: Validate() does not currently support m_dataType being anything other than DISTANCE
     // Note: aMin and aMax are not always given in internal units
-    if( GetValue() < From_User_Unit( aUnits, aMin, aUseMils ) )
+    if( GetValue() < From_User_Unit( aUnits, aMin ) )
     {
-        double val_min_iu = From_User_Unit( aUnits, aMin, aUseMils );
+        double val_min_iu = From_User_Unit( aUnits, aMin );
         m_errorMessage = wxString::Format( _( "%s must be at least %s." ),
                                            valueDescriptionFromLabel( m_label ),
-                                           StringFromValue( m_units, val_min_iu, true, m_useMils ) );
+                                           StringFromValue( m_units, val_min_iu, true ) );
 
         textEntry->SelectAll();
         // Don't focus directly; we might be inside a KillFocus event handler
@@ -205,12 +203,12 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits, bool aUs
         return false;
     }
 
-    if( GetValue() > From_User_Unit( aUnits, aMax, aUseMils ) )
+    if( GetValue() > From_User_Unit( aUnits, aMax ) )
     {
-        double val_max_iu = From_User_Unit( aUnits, aMax, aUseMils );
+        double val_max_iu = From_User_Unit( aUnits, aMax );
         m_errorMessage = wxString::Format( _( "%s must be less than %s." ),
                                            valueDescriptionFromLabel( m_label ),
-                                           StringFromValue( m_units, val_max_iu, true, m_useMils ) );
+                                           StringFromValue( m_units, val_max_iu, true ) );
 
         textEntry->SelectAll();
         // Don't focus directly; we might be inside a KillFocus event handler
@@ -227,14 +225,14 @@ void UNIT_BINDER::SetValue( int aValue )
 {
     double value = aValue;
     double displayValue = m_originTransforms.ToDisplay( value, m_coordType );
-    SetValue( StringFromValue( m_units, displayValue, false, m_useMils, m_dataType ) );
+    SetValue( StringFromValue( m_units, displayValue, false, m_dataType ) );
 }
 
 
 void UNIT_BINDER::SetDoubleValue( double aValue )
 {
     double displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
-    SetValue( StringFromValue( m_units, displayValue, false, m_useMils, m_dataType ) );
+    SetValue( StringFromValue( m_units, displayValue, false, m_dataType ) );
 }
 
 
@@ -251,7 +249,7 @@ void UNIT_BINDER::SetValue( wxString aValue )
     if( m_allowEval )
         m_eval.Clear();
 
-    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils, m_dataType ) );
+    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
 }
 
 
@@ -259,7 +257,7 @@ void UNIT_BINDER::ChangeValue( int aValue )
 {
     double value = aValue;
     double displayValue = m_originTransforms.ToDisplay( value, m_coordType );
-    ChangeValue( StringFromValue( m_units, displayValue, false, m_useMils ) );
+    ChangeValue( StringFromValue( m_units, displayValue, false ) );
 }
 
 
@@ -276,7 +274,7 @@ void UNIT_BINDER::ChangeValue( const wxString& aValue )
     if( m_allowEval )
         m_eval.Clear();
 
-    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils, m_dataType ) );
+    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
 }
 
 
@@ -298,7 +296,7 @@ long long int UNIT_BINDER::GetValue()
     else
         return 0;
 
-    long long int displayValue = ValueFromString( m_units, value, m_useMils, m_dataType );
+    long long int displayValue = ValueFromString( m_units, value, m_dataType );
     return m_originTransforms.FromDisplay( displayValue, m_coordType );
 }
 
@@ -321,7 +319,7 @@ double UNIT_BINDER::GetDoubleValue()
     else
         return 0.0;
 
-    double displayValue = DoubleValueFromString( m_units, value, m_useMils, m_dataType );
+    double displayValue = DoubleValueFromString( m_units, value, m_dataType );
     return m_originTransforms.FromDisplay( displayValue, m_coordType );
 }
 

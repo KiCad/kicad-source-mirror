@@ -363,8 +363,8 @@ void DIALOG_BOARD_REANNOTATE::MakeSampleText( wxString& aMessage )
                                      "rounded to a %s, %s grid. " ),
                                   moduleLocation ? _( "footprint location" )
                                                  : _( "reference designator location" ),
-                                  MessageTextFromValue( m_Units, m_SortGridx, false ),
-                                  MessageTextFromValue( m_Units, m_SortGridy, false ) );
+                                  MessageTextFromValue( m_Units, m_SortGridx ),
+                                  MessageTextFromValue( m_Units, m_SortGridy ) );
 
     if( m_UpdateSchematic->GetValue() )
         aMessage += _( "\nThe schematic will be updated." );
@@ -399,14 +399,14 @@ void DIALOG_BOARD_REANNOTATE::GetParameters()
     if( m_GridIndex >= ( int ) m_Settings->m_Window.grid.sizes.size() )
     {
         m_SortGridx = DoubleValueFromString( EDA_UNITS::INCHES,
-                                             m_Settings->m_Window.grid.user_grid_x, true );
+                                             m_Settings->m_Window.grid.user_grid_x );
         m_SortGridy = DoubleValueFromString( EDA_UNITS::INCHES,
-                                             m_Settings->m_Window.grid.user_grid_y, true );
+                                             m_Settings->m_Window.grid.user_grid_y );
     }
     else
     {
         m_SortGridx = DoubleValueFromString( EDA_UNITS::INCHES,
-                                             m_Settings->m_Window.grid.sizes[ m_GridIndex ], true );
+                                             m_Settings->m_Window.grid.sizes[ m_GridIndex ] );
         m_SortGridy = m_SortGridx;
     }
 
@@ -491,8 +491,8 @@ static bool ModuleCompare( const RefDesInfo& aA, const RefDesInfo& aB )
 /// @return the string
 wxString DIALOG_BOARD_REANNOTATE::CoordTowxString( int aX, int aY )
 {
-    return wxString::Format( "%s, %s", MessageTextFromValue( m_Units, aX, false ),
-                             MessageTextFromValue( m_Units, aY, false ) );
+    return wxString::Format( "%s, %s", MessageTextFromValue( m_Units, aX ),
+                             MessageTextFromValue( m_Units, aY ) );
 }
 
 

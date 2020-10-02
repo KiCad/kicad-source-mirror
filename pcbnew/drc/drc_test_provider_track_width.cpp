@@ -126,8 +126,8 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s width %s; actual %s)" ),
                                   constraint.GetName(),
                                   fail_min ? _( "min" ) : _( "max" ),
-                                  MessageTextFromValue( userUnits(), constraintWidth, true ),
-                                  MessageTextFromValue( userUnits(), actual, true ) );
+                                  MessageTextFromValue( userUnits(), constraintWidth ),
+                                  MessageTextFromValue( userUnits(), actual ) );
 
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( item );

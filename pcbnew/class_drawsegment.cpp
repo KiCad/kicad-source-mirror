@@ -548,7 +548,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
 
     aList.emplace_back( _( "Layer" ), GetLayerName(), DARKBROWN );
 
-    msg = MessageTextFromValue( units, m_Width, true );
+    msg = MessageTextFromValue( units, m_Width );
     aList.emplace_back( _( "Width" ), msg, DARKCYAN );
 }
 

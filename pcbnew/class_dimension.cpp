@@ -41,7 +41,6 @@ DIMENSION::DIMENSION( BOARD_ITEM* aParent, KICAD_T aType ) :
         BOARD_ITEM( aParent, aType ),
         m_overrideTextEnabled( false ),
         m_units( EDA_UNITS::INCHES ),
-        m_useMils( false ),
         m_autoUnits( false ),
         m_unitsFormat( DIM_UNITS_FORMAT::BARE_SUFFIX ),
         m_precision( 4 ),
@@ -88,12 +87,12 @@ void DIMENSION::updateText()
 
     case DIM_UNITS_FORMAT::BARE_SUFFIX: // normal
         text += " ";
-        text += GetAbbreviatedUnitsLabel( m_units, m_useMils );
+        text += GetAbbreviatedUnitsLabel( m_units );
         break;
 
     case DIM_UNITS_FORMAT::PAREN_SUFFIX: // parenthetical
         text += " (";
-        text += GetAbbreviatedUnitsLabel( m_units, m_useMils );
+        text += GetAbbreviatedUnitsLabel( m_units );
         text += ")";
         break;
     }
@@ -121,7 +120,7 @@ wxString DIMENSION::GetValueText() const
     wxString text;
     wxString format = wxT( "%." ) + wxString::Format( "%i", m_precision ) + wxT( "f" );
 
-    text.Printf( format, To_User_Unit( m_units, val, m_useMils ) );
+    text.Printf( format, To_User_Unit( m_units, val ) );
 
     if( m_suppressZeroes )
     {
@@ -153,30 +152,39 @@ void DIMENSION::SetSuffix( const wxString& aSuffix )
 }
 
 
-void DIMENSION::SetUnits( EDA_UNITS aUnits, bool aUseMils )
+void DIMENSION::SetUnits( EDA_UNITS aUnits )
 {
     m_units = aUnits;
-    m_useMils = aUseMils;
 }
 
 
 DIM_UNITS_MODE DIMENSION::GetUnitsMode() const
 {
     if( m_autoUnits )
+    {
         return DIM_UNITS_MODE::AUTOMATIC;
-    else if( m_units == EDA_UNITS::MILLIMETRES )
-        return DIM_UNITS_MODE::MILLIMETRES;
-    else if( m_useMils )
-        return DIM_UNITS_MODE::MILS;
+    }
     else
-        return DIM_UNITS_MODE::INCHES;
+    {
+        switch( m_units )
+        {
+        case EDA_UNITS::MILLIMETRES:
+            return DIM_UNITS_MODE::MILLIMETRES;
+
+        case EDA_UNITS::MILS:
+            return DIM_UNITS_MODE::MILS;
+
+        default:
+        case EDA_UNITS::INCHES:
+            return DIM_UNITS_MODE::INCHES;
+        }
+    }
 }
 
 
 void DIMENSION::SetUnitsMode( DIM_UNITS_MODE aMode )
 {
     m_autoUnits = false;
-    m_useMils   = false;
 
     switch( aMode )
     {
@@ -186,7 +194,6 @@ void DIMENSION::SetUnitsMode( DIM_UNITS_MODE aMode )
 
     case DIM_UNITS_MODE::MILS:
         m_units = EDA_UNITS::INCHES;
-        m_useMils = true;
         break;
 
     case DIM_UNITS_MODE::MILLIMETRES:
@@ -329,10 +336,9 @@ void DIMENSION::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     aList.emplace_back( _( "Suffix" ), GetSuffix(), BLUE );
 
     EDA_UNITS units;
-    bool      useMils;
 
-    GetUnits( units, useMils );
-    aList.emplace_back( _( "Units" ), GetAbbreviatedUnitsLabel( units, useMils ), BLUE );
+    GetUnits( units );
+    aList.emplace_back( _( "Units" ), GetAbbreviatedUnitsLabel( units ), BLUE );
 
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
     units = aFrame->GetUserUnits();

@@ -132,14 +132,14 @@ void test::DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengthViolations(
             if( minViolation )
             {
                 msg += wxString::Format( _( "minimum length: %s; actual: %s)" ),
-                        MessageTextFromValue( userUnits(), minLen, true ),
-                        MessageTextFromValue( userUnits(), ent.total, true ) );
+                        MessageTextFromValue( userUnits(), minLen ),
+                        MessageTextFromValue( userUnits(), ent.total ) );
             }
             else if( maxViolation )
             {
                 msg += wxString::Format( _( "maximum length: %s; actual: %s)" ),
-                        MessageTextFromValue( userUnits(), maxLen, true ),
-                        MessageTextFromValue( userUnits(), ent.total, true ) );
+                        MessageTextFromValue( userUnits(), maxLen ),
+                        MessageTextFromValue( userUnits(), ent.total ) );
             }
 
             drcItem->SetErrorMessage( msg );
@@ -176,10 +176,10 @@ void test::DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkewViolations(
                     drcItem->GetErrorText() + " (" + aConstraint.GetParentRule()->m_Name + " ";
 
             msg += wxString::Format( _( "maximum skew: %s; actual skew: %s; average net length: %s; actual net length: %s)" ),
-                        MessageTextFromValue( userUnits(), aConstraint.GetValue().Max(), true ),
-                        MessageTextFromValue( userUnits(), skew, true ),
-                        MessageTextFromValue( userUnits(), avgLength, true ),
-                        MessageTextFromValue( userUnits(), ent.total, true )
+                        MessageTextFromValue( userUnits(), aConstraint.GetValue().Max() ),
+                        MessageTextFromValue( userUnits(), skew ),
+                        MessageTextFromValue( userUnits(), avgLength ),
+                        MessageTextFromValue( userUnits(), ent.total )
                          );
 
             drcItem->SetErrorMessage( msg );
@@ -357,10 +357,10 @@ bool test::DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode 
                     ent.from,
                     ent.to,
                     (int) ent.items.size(),
-                    MessageTextFromValue( userUnits(), ent.total, true ),
-                    MessageTextFromValue( userUnits(), ent.totalRoute, true ),
-                    MessageTextFromValue( userUnits(), ent.totalVia, true ),
-                    MessageTextFromValue( userUnits(), ent.totalPadToDie, true ),
+                    MessageTextFromValue( userUnits(), ent.total ),
+                    MessageTextFromValue( userUnits(), ent.totalRoute ),
+                    MessageTextFromValue( userUnits(), ent.totalVia ),
+                    MessageTextFromValue( userUnits(), ent.totalPadToDie ),
                     ent.viaCount
                     ) );
             }

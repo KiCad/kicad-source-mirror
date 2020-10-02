@@ -244,11 +244,11 @@ void LIB_CIRCLE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList
 
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width );
 
     aList.push_back( MSG_PANEL_ITEM(  _( "Line Width" ), msg, BLUE ) );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetRadius(), true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetRadius() );
     aList.push_back( MSG_PANEL_ITEM( _( "Radius" ), msg, RED ) );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ),

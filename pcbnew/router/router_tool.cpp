@@ -213,7 +213,7 @@ protected:
             if( i == 0 )
                 msg = _( "Track netclass width" );
             else
-                msg.Printf( _( "Track %s" ), MessageTextFromValue( units, width, true ) );
+                msg.Printf( _( "Track %s" ), MessageTextFromValue( units, width ) );
 
             int menuIdx = ID_POPUP_PCB_SELECT_WIDTH1 + i;
             Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );
@@ -232,10 +232,10 @@ protected:
             {
                 if( via.m_Drill > 0 )
                     msg.Printf( _("Via %s, drill %s" ),
-                                MessageTextFromValue( units, via.m_Diameter, true ),
-                                MessageTextFromValue( units, via.m_Drill, true ) );
+                                MessageTextFromValue( units, via.m_Diameter ),
+                                MessageTextFromValue( units, via.m_Drill ) );
                 else
-                    msg.Printf( _( "Via %s" ), MessageTextFromValue( units, via.m_Diameter, true ) );
+                    msg.Printf( _( "Via %s" ), MessageTextFromValue( units, via.m_Diameter ) );
             }
 
             int menuIdx = ID_POPUP_PCB_SELECT_VIASIZE1 + i;
@@ -334,13 +334,13 @@ protected:
             DIFF_PAIR_DIMENSION diffPair = bds.m_DiffPairDimensionsList[i];
             wxString            msg;
 
-            msg << _( "Width " ) << MessageTextFromValue( units, diffPair.m_Width, true );
+            msg << _( "Width " ) << MessageTextFromValue( units, diffPair.m_Width );
 
             if( diffPair.m_Gap > 0 )
-                msg << _( ", gap " ) << MessageTextFromValue( units, diffPair.m_Gap, true );
+                msg << _( ", gap " ) << MessageTextFromValue( units, diffPair.m_Gap );
 
             if( diffPair.m_ViaGap > 0 )
-                msg << _( ", via gap " ) << MessageTextFromValue( units, diffPair.m_ViaGap, true );
+                msg << _( ", via gap " ) << MessageTextFromValue( units, diffPair.m_ViaGap );
 
             int menuIdx = ID_POPUP_PCB_SELECT_DIFFPAIR1 + i - 1;
             Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );

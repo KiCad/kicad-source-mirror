@@ -457,8 +457,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         int totalLen = std::max( it.second.totalLengthN, it.second.totalLengthP );
             reportAux( wxString::Format( "   - coupled length: %s, total length: %s",
 
-            MessageTextFromValue( userUnits(), it.second.totalCoupled, false),
-            MessageTextFromValue( userUnits(), totalLen, false ) ) );
+            MessageTextFromValue( userUnits(), it.second.totalCoupled ), 
+            MessageTextFromValue( userUnits(), totalLen ) ) );
 
         int totalUncoupled = totalLen - it.second.totalCoupled;
 
@@ -475,8 +475,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                     drcItem->GetErrorText() + " (" + maxUncoupledConstraint->GetParentRule()->m_Name + " ";
 
                 msg += wxString::Format( _( "maximum uncoupled length: %s; actual: %s)" ),
-                        MessageTextFromValue( userUnits(), val.Max(), true ),
-                        MessageTextFromValue( userUnits(), totalUncoupled, true ) );
+                        MessageTextFromValue( userUnits(), val.Max() ),
+                        MessageTextFromValue( userUnits(), totalUncoupled ) );
 
                 drcItem->SetErrorMessage( msg );
 
@@ -507,15 +507,15 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                     if( val.HasMin() )
                         msg += wxString::Format( _( "minimum gap: %s; " ),
-                        MessageTextFromValue( userUnits(), val.Min(), true ) );
+                        MessageTextFromValue( userUnits(), val.Min() ) );
 
                     if( val.HasMax() )
                         msg += wxString::Format( _( "maximum gap: %s; " ),
-                        MessageTextFromValue( userUnits(), val.Max(), true ) );
+                        MessageTextFromValue( userUnits(), val.Max() ) );
 
 
                     msg += wxString::Format( _( "actual: %s)" ),
-                        MessageTextFromValue( userUnits(), cpair.computedGap, true ) );
+                        MessageTextFromValue( userUnits(), cpair.computedGap ) );
 
                     drcItem->SetErrorMessage( msg );
 

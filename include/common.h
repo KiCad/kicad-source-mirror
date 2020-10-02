@@ -204,6 +204,7 @@ enum class EDA_UNITS
     UNSCALED = 2,
     DEGREES = 3,
     PERCENT = 4,
+    MILS = 5,
 };
 
 

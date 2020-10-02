@@ -171,8 +171,8 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
 
                 msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                             constraint.GetParentRule()->m_Name,
-                            MessageTextFromValue( userUnits(), minClearance, true ),
-                            MessageTextFromValue( userUnits(), actual, true ) );
+                            MessageTextFromValue( userUnits(), minClearance ),
+                            MessageTextFromValue( userUnits(), actual ) );
 
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( aRefItem->parent, aTestItem->parent );

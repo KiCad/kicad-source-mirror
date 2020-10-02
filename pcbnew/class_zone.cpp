@@ -618,13 +618,13 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 
     aList.emplace_back( _( "Fill Mode" ), msg, BROWN );
 
-    msg = MessageTextFromValue( units, m_area, false, EDA_DATA_TYPE::AREA );
+    msg = MessageTextFromValue( units, m_area, EDA_DATA_TYPE::AREA );
     aList.emplace_back( _( "Filled Area" ), msg, BLUE );
 
     wxString source;
     int      clearance = GetClearance( GetLayer(), nullptr, &source );
 
-    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
+    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance ) );
     msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
 

@@ -748,8 +748,8 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
         x = From_User_Unit( u, x );
         y = From_User_Unit( u, y );
 
-        ( *this )[PointerFromString( "window.grid.user_grid_x" )] = StringFromValue( u, x, true, true );
-        ( *this )[PointerFromString( "window.grid.user_grid_y" )] = StringFromValue( u, y, true, true );
+        ( *this )[PointerFromString( "window.grid.user_grid_x" )] = StringFromValue( u, x );
+        ( *this )[PointerFromString( "window.grid.user_grid_y" )] = StringFromValue( u, y );
     }
 
     // Footprint editor settings were stored in pcbnew config file.  Migrate them here.

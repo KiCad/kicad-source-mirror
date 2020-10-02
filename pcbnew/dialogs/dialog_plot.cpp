@@ -709,9 +709,9 @@ void DIALOG_PLOT::applyPlotSettings()
         msg.Printf( _( "Width correction constrained. "
                        "The reasonable width correction value must be in a range of "
                        " [%s; %s] (%s) for current design rules." ),
-                    StringFromValue( GetUserUnits(), m_widthAdjustMinValue, false, true ),
-                    StringFromValue( GetUserUnits(), m_widthAdjustMaxValue, false, true ),
-                    GetAbbreviatedUnitsLabel( GetUserUnits(), true ) );
+                    StringFromValue( GetUserUnits(), m_widthAdjustMinValue, false ),
+                    StringFromValue( GetUserUnits(), m_widthAdjustMaxValue, false ),
+                    GetAbbreviatedUnitsLabel( GetUserUnits() ) );
         reporter.Report( msg, RPT_SEVERITY_WARNING );
     }
 

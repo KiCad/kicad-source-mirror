@@ -142,8 +142,8 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
 
                 msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                             rule->GetName(),
-                            MessageTextFromValue( userUnits(), minClearance, true ),
-                            MessageTextFromValue( userUnits(), actual, true ) );
+                            MessageTextFromValue( userUnits(), minClearance ),
+                            MessageTextFromValue( userUnits(), actual ) );
 
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( outlineItem, boardItem );

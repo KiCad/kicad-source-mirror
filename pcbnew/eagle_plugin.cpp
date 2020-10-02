@@ -885,7 +885,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 dimension->Text().SetTextSize( designSettings.GetTextSize( layer ) );
                 dimension->Text().SetTextThickness( designSettings.GetTextThickness( layer ) );
                 dimension->SetLineThickness( designSettings.GetLineThickness( layer ) );
-                dimension->SetUnits( EDA_UNITS::MILLIMETRES, false );
+                dimension->SetUnits( EDA_UNITS::MILLIMETRES );
 
                 // check which axis the dimension runs in
                 // because the "height" of the dimension is perpendicular to that axis

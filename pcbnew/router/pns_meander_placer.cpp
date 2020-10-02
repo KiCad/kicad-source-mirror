@@ -278,9 +278,9 @@ const wxString MEANDER_PLACER::TuningInfo( EDA_UNITS aUnits ) const
         return _( "?" );
     }
 
-    status += ::MessageTextFromValue( aUnits, m_lastLength, false );
+    status += ::MessageTextFromValue( aUnits, m_lastLength );
     status += "/";
-    status += ::MessageTextFromValue( aUnits, m_settings.m_targetLength, false );
+    status += ::MessageTextFromValue( aUnits, m_settings.m_targetLength );
 
     return status;
 }

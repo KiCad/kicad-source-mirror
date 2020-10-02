@@ -84,7 +84,7 @@ wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS aUnits )
             if( item->IsThicknessEditable() )
             {
                 txt.Printf( " Thickness %s",
-                            StringFromValue( aUnits, item->GetThickness( idx ), true, true ) );
+                            StringFromValue( aUnits, item->GetThickness( idx ), true ) );
                 report << txt;
 
                 if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC && item->IsThicknessLocked( idx ) )

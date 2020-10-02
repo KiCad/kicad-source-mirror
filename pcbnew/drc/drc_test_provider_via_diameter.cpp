@@ -113,8 +113,8 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s diameter %s; actual %s)" ),
                                   constraint.GetName(),
                                   fail_min ? _( "min" ) : _( "max" ),
-                                  MessageTextFromValue( userUnits(), constraintDiameter, true ) );
-                                  MessageTextFromValue( userUnits(), actual, true ),
+                                  MessageTextFromValue( userUnits(), constraintDiameter ) );
+                                  MessageTextFromValue( userUnits(), actual ),
 
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( item );

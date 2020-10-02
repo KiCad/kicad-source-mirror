@@ -37,7 +37,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS::DIALOG_PNS_LENGTH_TUNING_SETTINGS( EDA_DRAW_F
     m_maxAmpl( aParent, m_maxAmplLabel, m_maxAmplText, m_maxAmplUnit, true ),
     m_spacing( aParent, m_spacingLabel, m_spacingText, m_spacingUnit, true ),
     m_targetLength( aParent, m_targetLengthLabel, m_targetLengthText, m_targetLengthUnit ),
-    m_radius( aParent, m_radiusLabel, m_radiusText, m_radiusUnit, false, false ),
+    m_radius( aParent, m_radiusLabel, m_radiusText, m_radiusUnit ),
     m_settings( aSettings ),
     m_mode( aMode )
 {

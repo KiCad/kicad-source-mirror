@@ -142,8 +142,8 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( D_PAD* aPad )
 
         m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                       constraint.GetName(),
-                      MessageTextFromValue( userUnits(), minHole, true ),
-                      MessageTextFromValue( userUnits(), holeSize, true ) );
+                      MessageTextFromValue( userUnits(), minHole ),
+                      MessageTextFromValue( userUnits(), holeSize ) );
 
         drcItem->SetErrorMessage( m_msg );
         drcItem->SetItems( aPad );
@@ -184,8 +184,8 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via, bool aExceedMicro, bool aE
 
         m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                       constraint.GetName(),
-                      MessageTextFromValue( userUnits(), minHole, true ),
-                      MessageTextFromValue( userUnits(), via->GetDrillValue(), true ) );
+                      MessageTextFromValue( userUnits(), minHole ),
+                      MessageTextFromValue( userUnits(), via->GetDrillValue() ) );
 
         drcItem->SetErrorMessage( m_msg );
         drcItem->SetItems( via );

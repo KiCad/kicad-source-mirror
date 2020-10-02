@@ -86,8 +86,8 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
 
     gridCfg.last_size_idx = m_currentGridCtrl->GetSelection();
     m_parent->SetGridOrigin( wxPoint( m_gridOriginX.GetValue(), m_gridOriginY.GetValue() ) );
-    gridCfg.user_grid_x = StringFromValue( GetUserUnits(), m_userGridX.GetValue(), true, true );
-    gridCfg.user_grid_y = StringFromValue( GetUserUnits(), m_userGridY.GetValue(), true, true );
+    gridCfg.user_grid_x = StringFromValue( GetUserUnits(), m_userGridX.GetValue(), true );
+    gridCfg.user_grid_y = StringFromValue( GetUserUnits(), m_userGridY.GetValue(), true );
     gridCfg.fast_grid_1 = m_grid1Ctrl->GetSelection();
     gridCfg.fast_grid_2 = m_grid2Ctrl->GetSelection();
 
@@ -111,8 +111,8 @@ bool DIALOG_GRID_SETTINGS::TransferDataToWindow()
 
     m_currentGridCtrl->SetSelection( m_parent->config()->m_Window.grid.last_size_idx );
 
-    m_userGridX.SetValue( ValueFromString( GetUserUnits(), gridCfg.user_grid_x, true ) );
-    m_userGridY.SetValue( ValueFromString( GetUserUnits(), gridCfg.user_grid_y, true ) );
+    m_userGridX.SetValue( ValueFromString( GetUserUnits(), gridCfg.user_grid_x ) );
+    m_userGridY.SetValue( ValueFromString( GetUserUnits(), gridCfg.user_grid_y ) );
 
     m_gridOriginX.SetValue( m_parent->GetGridOrigin().x );
     m_gridOriginY.SetValue( m_parent->GetGridOrigin().y );

@@ -51,12 +51,12 @@ void COMMON_TOOLS::Reset( RESET_REASON aReason )
 
     for( const wxString& gridDef : settings.sizes )
     {
-        int gridSize = (int) ValueFromString( EDA_UNITS::MILLIMETRES, gridDef, true );
+        int gridSize = (int) ValueFromString( EDA_UNITS::MILLIMETRES, gridDef );
         m_grids.emplace_back( gridSize, gridSize );
     }
 
-    m_grids.emplace_back( ValueFromString( EDA_UNITS::MILLIMETRES, settings.user_grid_x, true ),
-                          ValueFromString( EDA_UNITS::MILLIMETRES, settings.user_grid_y, true ) );
+    m_grids.emplace_back( ValueFromString( EDA_UNITS::MILLIMETRES, settings.user_grid_x ),
+                          ValueFromString( EDA_UNITS::MILLIMETRES, settings.user_grid_y ) );
 
     OnGridChanged();
 }

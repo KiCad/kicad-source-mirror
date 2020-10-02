@@ -268,8 +268,8 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc( int aRefPadIdx,
 
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                                   constraint.GetName(),
-                                  MessageTextFromValue( userUnits(), minClearance, true ),
-                                  MessageTextFromValue( userUnits(), actual, true ) );
+                                  MessageTextFromValue( userUnits(), minClearance ),
+                                  MessageTextFromValue( userUnits(), actual ) );
 
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad, refPad );
@@ -300,8 +300,8 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc( int aRefPadIdx,
 
                     m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                                   constraint.GetName(),
-                                  MessageTextFromValue( userUnits(), minClearance, true ),
-                                  MessageTextFromValue( userUnits(), actual, true ) );
+                                  MessageTextFromValue( userUnits(), minClearance ),
+                                  MessageTextFromValue( userUnits(), actual ) );
 
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( refPad, pad );
@@ -390,8 +390,8 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                               constraint.GetName(),
-                              MessageTextFromValue( userUnits(), minClearance, true ),
-                              MessageTextFromValue( userUnits(), actual, true ) );
+                              MessageTextFromValue( userUnits(), minClearance ),
+                              MessageTextFromValue( userUnits(), actual ) );
 
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( refHole.m_owner, checkHole.m_owner );

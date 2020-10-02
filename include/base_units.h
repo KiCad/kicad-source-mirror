@@ -90,9 +90,8 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed =
  * @return The converted value, in double
  * @param aUnit The units to convert \a aValue to.
  * @param aValue The value in internal units to convert.
- * @param aUseMils Indicates mils should be used for imperial units (inches).
  */
-double To_User_Unit( EDA_UNITS aUnit, double aValue, bool aUseMils = false );
+double To_User_Unit( EDA_UNITS aUnit, double aValue );
 
 /**
  * Function AngleToStringDegrees
@@ -116,18 +115,14 @@ wxString AngleToStringDegrees( double aAngle );
  * @param aUnits The units to show the value in.  The unit string is added to the
  *               message text.
  * @param aValue The double value to convert.
- * @param aUseMils Convert inch values to mils if true.
  * @param aType Type of the unit being used (e.g. distance, area, etc.)
  * @return The converted string for display in user interface elements.
  */
-wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aUseMils = false,
-                               EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
-wxString MessageTextFromValue( EDA_UNITS aUnits, int aValue, bool aUseMils = false,
-                               EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+wxString MessageTextFromValue( EDA_UNITS aUnits, int aValue, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
-wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue, bool aUseMils = false,
-                               EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
 /**
  * Function StringFromValue
@@ -146,17 +141,16 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue, bool aUse
  * @param aUnit = display units (INCHES, MILLIMETRE ..)
  * @param aValue = value in Internal_Unit
  * @param aAddUnitSymbol = true to add symbol unit to the string value
- * @param aUseMils Indicates mils should be used for imperial units (inches).
  * @return A wxString object containing value and optionally the symbol unit (like 2.000 mm)
  */
 wxString StringFromValue( EDA_UNITS aUnit, double aValue, bool aAddUnitSymbol = false,
-                          bool aUseMils = false, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+                          EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
 /**
  * Return in internal units the value "val" given in a real unit
  * such as "in", "mm" or "deg"
  */
-double From_User_Unit( EDA_UNITS aUnit, double aValue, bool aUseMils = false );
+double From_User_Unit( EDA_UNITS aUnit, double aValue );
 
 
 /**
@@ -166,10 +160,9 @@ double From_User_Unit( EDA_UNITS aUnit, double aValue, bool aUseMils = false );
  *
  * @param aUnits The units of \a aTextValue.
  * @param aTextValue A reference to a wxString object containing the string to convert.
- * @param aUseMils Indicates mils should be used for imperial units (inches).
  * @return A double representing that value in internal units
  */
-double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool aUseMils = false,
+double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, 
                               EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
 /**
@@ -179,28 +172,25 @@ double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool
  *
  * @param aUnits The units of \a aTextValue.
  * @param aTextValue A reference to a wxString object containing the string to convert.
- * @param aUseMils Indicates mils should be used for imperial units (inches).
  * @return The string from Value, according to units (inch, mm ...) for display,
  */
-long long int ValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool aUseMils = false,
+long long int ValueFromString( EDA_UNITS aUnits, const wxString& aTextValue,
                                EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
 /**
  * Function FetchUnitsFromString
- * writes any unit info found in the string to aUnits and aUseMils.
+ * writes any unit info found in the string to aUnits.
  */
-void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits, bool& aUseMils );
+void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits );
 
 /**
  * Get the units string for a given units type.
  *
  * @param aUnits - The units requested.
- * @param aUseMils - Use mils for the unit
  * @param aType - The data type of the unit (e.g. distance, area, etc.)
  * @return The human readable units string.
  */
-wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils = false,
-                                   EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
 /**
  * Function FormatInternalUnits

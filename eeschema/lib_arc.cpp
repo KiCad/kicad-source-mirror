@@ -396,7 +396,7 @@ void LIB_ARC::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width );
 
     aList.emplace_back( _( "Line Width" ), msg, BLUE );
 

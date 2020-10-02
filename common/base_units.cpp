@@ -40,6 +40,7 @@
 #include <macros.h>
 #include <title_block.h>
 
+// We need this function even in routines that do not define internal units
 
 #if defined( PCBNEW ) || defined( CVPCB ) || defined( EESCHEMA ) || defined( GERBVIEW ) || defined( PL_EDITOR )
 #define IU_TO_MM( x )       ( x / IU_PER_MM )
@@ -51,7 +52,6 @@
 #else
 #error "Cannot resolve internal units due to no definition of EESCHEMA, CVPCB or PCBNEW."
 #endif
-
 
 // Helper function to print a float number without using scientific notation
 // and no trailing 0
@@ -89,18 +89,18 @@ std::string Double2Str( double aValue )
 }
 
 
-double To_User_Unit( EDA_UNITS aUnit, double aValue, bool aUseMils )
+double To_User_Unit( EDA_UNITS aUnit, double aValue )
 {
     switch( aUnit )
     {
     case EDA_UNITS::MILLIMETRES:
         return IU_TO_MM( aValue );
 
+    case EDA_UNITS::MILS:
+        return IU_TO_MILS( aValue );
+
     case EDA_UNITS::INCHES:
-        if( aUseMils )
-            return IU_TO_MILS( aValue );
-        else
-            return IU_TO_IN( aValue );
+        return IU_TO_IN( aValue );
 
     case EDA_UNITS::DEGREES:
         return aValue / 10.0f;
@@ -121,22 +121,21 @@ double To_User_Unit( EDA_UNITS aUnit, double aValue, bool aUseMils )
  */
 
 // A lower-precision (for readability) version of StringFromValue()
-wxString MessageTextFromValue( EDA_UNITS aUnits, int aValue, bool aUseMils, EDA_DATA_TYPE aType )
+wxString MessageTextFromValue( EDA_UNITS aUnits, int aValue, EDA_DATA_TYPE aType )
 {
-    return MessageTextFromValue( aUnits, double( aValue ), aUseMils );
+    return MessageTextFromValue( aUnits, double( aValue ), aType );
 }
 
 
 // A lower-precision (for readability) version of StringFromValue()
-wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue,
-                               bool aUseMils, EDA_DATA_TYPE aType )
+wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue, EDA_DATA_TYPE aType )
 {
-    return MessageTextFromValue( aUnits, double( aValue ), aUseMils );
+    return MessageTextFromValue( aUnits, double( aValue ), aType );
 }
 
 
 // A lower-precision (for readability) version of StringFromValue()
-wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aUseMils, EDA_DATA_TYPE aType )
+wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, EDA_DATA_TYPE aType )
 {
     wxString      text;
     const wxChar* format;
@@ -145,51 +144,51 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aUseMils, E
     switch( aType )
     {
     case EDA_DATA_TYPE::VOLUME:
-        value = To_User_Unit( aUnits, value, aUseMils );
+        value = To_User_Unit( aUnits, value );
         // Fall through to continue computation
         KI_FALLTHROUGH;
 
     case EDA_DATA_TYPE::AREA:
-        value = To_User_Unit( aUnits, value, aUseMils );
+        value = To_User_Unit( aUnits, value );
         // Fall through to continue computation
         KI_FALLTHROUGH;
 
     case EDA_DATA_TYPE::DISTANCE:
-        value = To_User_Unit( aUnits, value, aUseMils );
+        value = To_User_Unit( aUnits, value );
     }
 
-    if( aUnits == EDA_UNITS::INCHES )
+    switch( aUnits )
     {
-        if( aUseMils )
-        {
-#if defined( EESCHEMA )
-            format = wxT( "%.0f" );
-#else
-            format = wxT( "%.1f" );
-#endif
-        }
-        else
-        {
-#if defined( EESCHEMA )
-            format = wxT( "%.3f" );
-#else
-            format = wxT( "%.4f" );
-#endif
-        }
-    }
-    else
-    {
+    default:
+    case EDA_UNITS::MILLIMETRES:
 #if defined( EESCHEMA )
         format = wxT( "%.4f" );
 #else
         format = wxT( "%.3f" );
 #endif
+        break;
+    
+    case EDA_UNITS::MILS:
+#if defined( EESCHEMA )
+        format = wxT( "%.0f" );
+#else
+        format = wxT( "%.1f" );
+#endif
+        break;
+
+    case EDA_UNITS::INCHES:
+#if defined( EESCHEMA )
+        format = wxT( "%.4f" );
+#else
+        format = wxT( "%.3f" );
+#endif
+        break;
     }
 
     text.Printf( format, value );
     text += " ";
 
-    text += GetAbbreviatedUnitsLabel( aUnits, aUseMils, aType );
+    text += GetAbbreviatedUnitsLabel( aUnits, aType );
 
     return text;
 }
@@ -230,23 +229,22 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed )
  * otherwise the actual value is rounded when read from dialog and converted
  * in internal units, and therefore modified.
  */
-wxString StringFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitSymbol, bool aUseMils,
-                          EDA_DATA_TYPE aType )
+wxString StringFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitSymbol, EDA_DATA_TYPE aType )
 {
     double  value_to_print = aValue;
 
     switch( aType )
     {
     case EDA_DATA_TYPE::VOLUME:
-        value_to_print = To_User_Unit( aUnits, value_to_print, aUseMils );
+        value_to_print = To_User_Unit( aUnits, value_to_print );
         KI_FALLTHROUGH;
 
     case EDA_DATA_TYPE::AREA:
-        value_to_print = To_User_Unit( aUnits, value_to_print, aUseMils );
+        value_to_print = To_User_Unit( aUnits, value_to_print );
         KI_FALLTHROUGH;
 
     case EDA_DATA_TYPE::DISTANCE:
-        value_to_print = To_User_Unit( aUnits, value_to_print, aUseMils );
+        value_to_print = To_User_Unit( aUnits, value_to_print );
     }
 
 
@@ -276,7 +274,7 @@ wxString StringFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitSymbol, 
     }
     else
     {
-        if( aUnits == EDA_UNITS::INCHES && aUseMils )
+        if( aUnits == EDA_UNITS::MILS )
             len = sprintf( buf, "%.7g", value_to_print );
         else
             len = sprintf( buf, "%.10g", value_to_print );
@@ -290,19 +288,20 @@ wxString StringFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitSymbol, 
     {
         switch( aUnits )
         {
-        case EDA_UNITS::INCHES:
-            if( aUseMils )
-                stringValue += wxT( " mils" );
-            else
-                stringValue += wxT( " in" );
-            break;
-
         case EDA_UNITS::MILLIMETRES:
             stringValue += wxT( " mm" );
             break;
 
         case EDA_UNITS::DEGREES:
             stringValue += wxT( " deg" );
+            break;
+
+        case EDA_UNITS::MILS:
+            stringValue += wxT( " mils" );
+            break;
+
+        case EDA_UNITS::INCHES:
+            stringValue += wxT( " in" );
             break;
 
         case EDA_UNITS::PERCENT:
@@ -318,18 +317,18 @@ wxString StringFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitSymbol, 
 }
 
 
-double From_User_Unit( EDA_UNITS aUnits, double aValue, bool aUseMils )
+double From_User_Unit( EDA_UNITS aUnits, double aValue )
 {
     switch( aUnits )
     {
     case EDA_UNITS::MILLIMETRES:
         return MM_TO_IU( aValue );
 
+    case EDA_UNITS::MILS:
+        return MILS_TO_IU( aValue );
+
     case EDA_UNITS::INCHES:
-        if( aUseMils )
-            return MILS_TO_IU( aValue );
-        else
-            return IN_TO_IU( aValue );
+        return IN_TO_IU( aValue );
 
     case EDA_UNITS::DEGREES:
         // Convert to "decidegrees"
@@ -343,8 +342,7 @@ double From_User_Unit( EDA_UNITS aUnits, double aValue, bool aUseMils )
 }
 
 
-double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool aUseMils,
-                              EDA_DATA_TYPE aType )
+double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, EDA_DATA_TYPE aType )
 {
     double dtmp = 0;
 
@@ -380,26 +378,23 @@ double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool
     // Check the optional unit designator (2 ch significant)
     wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
 
-    if( aUnits == EDA_UNITS::INCHES || aUnits == EDA_UNITS::MILLIMETRES )
+    if( aUnits == EDA_UNITS::MILLIMETRES || aUnits == EDA_UNITS::MILS || aUnits == EDA_UNITS::INCHES )
     {
-        if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
-        {
-            aUnits = EDA_UNITS::INCHES;
-            aUseMils = false;
-        }
-        else if( unit == wxT( "mm" ) )
+        if( unit == wxT( "mm" ) )
         {
             aUnits = EDA_UNITS::MILLIMETRES;
         }
-        else if( unit == wxT( "mi" ) || unit == wxT( "th" ) )  // "mils" or "thou"
+        else if( unit == wxT( "mi" ) || unit == wxT( "th" ) )
         {
-            aUnits = EDA_UNITS::INCHES;
-            aUseMils = true;
+            aUnits = EDA_UNITS::MILS;
         }
-        else if( unit == "oz" )  // 1 oz = 1.37 mils
+        else if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
         {
             aUnits = EDA_UNITS::INCHES;
-            aUseMils = true;
+        }
+        else if( unit == "oz" ) // 1 oz = 1.37 mils
+        {
+            aUnits = EDA_UNITS::MILS;
             dtmp *= 1.37;
         }
     }
@@ -414,22 +409,22 @@ double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool
     switch( aType )
     {
     case EDA_DATA_TYPE::VOLUME:
-        dtmp = From_User_Unit( aUnits, dtmp, aUseMils );
+        dtmp = From_User_Unit( aUnits, dtmp );
         KI_FALLTHROUGH;
 
     case EDA_DATA_TYPE::AREA:
-        dtmp = From_User_Unit( aUnits, dtmp, aUseMils );
+        dtmp = From_User_Unit( aUnits, dtmp );
         KI_FALLTHROUGH;
 
     case EDA_DATA_TYPE::DISTANCE:
-        dtmp = From_User_Unit( aUnits, dtmp, aUseMils );
+        dtmp = From_User_Unit( aUnits, dtmp );
     }
 
     return dtmp;
 }
 
 
-void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits, bool& aUseMils )
+void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits )
 {
     wxString buf( aTextValue.Strip( wxString::both ) );
     unsigned brk_point = 0;
@@ -447,31 +442,20 @@ void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits, bool& 
     // Check the unit designator (2 ch significant)
     wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
 
-    if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
-    {
-        aUnits = EDA_UNITS::INCHES;
-        aUseMils = false;
-    }
-    else if( unit == wxT( "mm" ) )
-    {
+    if( unit == wxT( "mm" ) )
         aUnits = EDA_UNITS::MILLIMETRES;
-    }
-    else if( unit == wxT( "mi" ) || unit == wxT( "th" ) )  // "mils" or "thou"
-    {
+    else if( unit == wxT( "mi" ) || unit == wxT( "th" ) ) // "mils" or "thou"
+        aUnits = EDA_UNITS::MILS;
+    else if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
         aUnits = EDA_UNITS::INCHES;
-        aUseMils = true;
-    }
-    else if( unit == wxT( "de" ) || unit == wxT( "ra" ) )  // "deg" or "rad"
-    {
+    else if( unit == wxT( "de" ) || unit == wxT( "ra" ) ) // "deg" or "rad"
         aUnits = EDA_UNITS::DEGREES;
-    }
 }
 
 
-long long int ValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool aUseMils,
-                               EDA_DATA_TYPE aType )
+long long int ValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, EDA_DATA_TYPE aType )
 {
-    double value = DoubleValueFromString( aUnits, aTextValue, aUseMils, aType );
+    double value = DoubleValueFromString( aUnits, aTextValue, aType );
     return KiROUND<double, long long int>( value );
 }
 
@@ -492,42 +476,10 @@ wxString AngleToStringDegrees( double aAngle )
 }
 
 
-wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils, EDA_DATA_TYPE aType )
+wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, EDA_DATA_TYPE aType )
 {
     switch( aUnit )
     {
-    case EDA_UNITS::INCHES:
-        if( aUseMils )
-        {
-            switch( aType )
-            {
-            default:
-                wxASSERT( 0 );
-                KI_FALLTHROUGH;
-            case EDA_DATA_TYPE::DISTANCE:
-                return _( "mils" );
-            case EDA_DATA_TYPE::AREA:
-                return _( "sq. mils" );
-            case EDA_DATA_TYPE::VOLUME:
-                return _( "cu. mils" );
-            }
-        }
-        else
-        {
-            switch( aType )
-            {
-            default:
-                wxASSERT( 0 );
-                KI_FALLTHROUGH;
-            case EDA_DATA_TYPE::DISTANCE:
-                return _( "in" );
-            case EDA_DATA_TYPE::AREA:
-                return _( "sq. in" );
-            case EDA_DATA_TYPE::VOLUME:
-                return _( "cu. in" );
-            }
-        }
-
     case EDA_UNITS::MILLIMETRES:
         switch( aType )
         {
@@ -540,6 +492,34 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils, EDA_DATA_TYPE
             return _( "sq. mm" );
         case EDA_DATA_TYPE::VOLUME:
             return _( "cu. mm" );
+        }
+
+    case EDA_UNITS::MILS:
+        switch( aType )
+        {
+        default:
+            wxASSERT( 0 );
+            KI_FALLTHROUGH;
+        case EDA_DATA_TYPE::DISTANCE:
+            return _( "mils" );
+        case EDA_DATA_TYPE::AREA:
+            return _( "sq. mils" );
+        case EDA_DATA_TYPE::VOLUME:
+            return _( "cu. mils" );
+        }
+    
+    case EDA_UNITS::INCHES:
+        switch( aType )
+        {
+        default:
+            wxASSERT( 0 );
+            KI_FALLTHROUGH;
+        case EDA_DATA_TYPE::DISTANCE:
+            return _( "in" );
+        case EDA_DATA_TYPE::AREA:
+            return _( "sq. in" );
+        case EDA_DATA_TYPE::VOLUME:
+            return _( "cu. in" );
         }
 
     case EDA_UNITS::PERCENT:
@@ -613,4 +593,3 @@ std::string FormatInternalUnits( const wxSize& aSize )
 {
     return FormatInternalUnits( aSize.GetWidth() ) + " " + FormatInternalUnits( aSize.GetHeight() );
 }
-

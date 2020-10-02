@@ -112,19 +112,19 @@ public:
                     val = PinOrientationNames()[ PinOrientationIndex( pin->GetOrientation() ) ];
                 break;
             case COL_NUMBER_SIZE:
-                val = StringFromValue( aUserUnits, pin->GetNumberTextSize(), true, true );
+                val = StringFromValue( aUserUnits, pin->GetNumberTextSize(), true );
                 break;
             case COL_NAME_SIZE:
-                val = StringFromValue( aUserUnits, pin->GetNameTextSize(), true, true );
+                val = StringFromValue( aUserUnits, pin->GetNameTextSize(), true );
                 break;
             case COL_LENGTH:
-                val = StringFromValue( aUserUnits, pin->GetLength(), true );
+                val = StringFromValue( aUserUnits, pin->GetLength() );
                 break;
             case COL_POSX:
-                val = StringFromValue( aUserUnits, pin->GetPosition().x, true );
+                val = StringFromValue( aUserUnits, pin->GetPosition().x );
                 break;
             case COL_POSY:
-                val = StringFromValue( aUserUnits, pin->GetPosition().y, true );
+                val = StringFromValue( aUserUnits, pin->GetPosition().y );
                 break;
             default:
                 wxFAIL;
@@ -186,11 +186,11 @@ public:
                 break;
 
             case COL_NUMBER_SIZE:
-                pin->SetNumberTextSize( ValueFromString( m_userUnits, aValue, true ) );
+                pin->SetNumberTextSize( ValueFromString( m_userUnits, aValue ) );
                 break;
 
             case COL_NAME_SIZE:
-                pin->SetNameTextSize( ValueFromString( m_userUnits, aValue, true ) );
+                pin->SetNameTextSize( ValueFromString( m_userUnits, aValue ) );
                 break;
 
             case COL_LENGTH:
@@ -261,8 +261,8 @@ public:
             break;
         case COL_NUMBER_SIZE:
         case COL_NAME_SIZE:
-            res = cmp( ValueFromString( units, lhStr, true ),
-                    ValueFromString( units, rhStr, true ) );
+            res = cmp( ValueFromString( units, lhStr ),
+                    ValueFromString( units, rhStr ) );
             break;
         case COL_LENGTH:
         case COL_POSX:

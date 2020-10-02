@@ -213,7 +213,7 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataToWindow()
     wxColour disabledColour = wxSystemSettings::GetColour( wxSYS_COLOUR_BACKGROUND );
 
 #define SET_MILS_CELL( row, col, val ) \
-    m_layerClassesGrid->SetCellValue( row, col, StringFromValue( m_frame->GetUserUnits(), val, true, true ) )
+    m_layerClassesGrid->SetCellValue( row, col, StringFromValue( m_frame->GetUserUnits(), val, true ) )
 
 #define DISABLE_CELL( row, col ) \
     m_layerClassesGrid->SetReadOnly( row, col ); m_layerClassesGrid->SetCellBackgroundColour( row, col, disabledColour );
@@ -300,7 +300,7 @@ bool PANEL_MODEDIT_DEFAULTS::Show( bool aShow )
 int PANEL_MODEDIT_DEFAULTS::getGridValue( int aRow, int aCol )
 {
     return ValueFromString( m_frame->GetUserUnits(),
-                            m_layerClassesGrid->GetCellValue( aRow, aCol ), true );
+                            m_layerClassesGrid->GetCellValue( aRow, aCol ) );
 }
 
 

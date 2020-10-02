@@ -100,10 +100,10 @@ protected:
 
             if( via.m_Drill > 0 )
                 msg.Printf( _("Via %s, drill %s" ),
-                            MessageTextFromValue( units, via.m_Diameter, true ),
-                            MessageTextFromValue( units, via.m_Drill, true ) );
+                            MessageTextFromValue( units, via.m_Diameter ),
+                            MessageTextFromValue( units, via.m_Drill ) );
             else
-                msg.Printf( _( "Via %s" ), MessageTextFromValue( units, via.m_Diameter, true ) );
+                msg.Printf( _( "Via %s" ), MessageTextFromValue( units, via.m_Diameter ) );
 
             int menuIdx = ID_POPUP_PCB_SELECT_VIASIZE1 + i;
             Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );
@@ -742,7 +742,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                             aDim->SetKeepTextAligned( boardSettings.m_DimensionKeepTextAligned );
 
                             if( boardSettings.m_DimensionUnitsMode == DIM_UNITS_MODE::AUTOMATIC )
-                                aDim->SetUnits( m_frame->GetUserUnits(), false );
+                                aDim->SetUnits( m_frame->GetUserUnits() );
                         };
 
                 if( originalEvent.IsAction( &PCB_ACTIONS::drawAlignedDimension ) )

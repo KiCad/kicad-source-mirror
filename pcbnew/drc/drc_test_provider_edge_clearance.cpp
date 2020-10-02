@@ -153,8 +153,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
                 m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                               constraint.GetName(),
-                              MessageTextFromValue( userUnits(), minClearance, true ),
-                              MessageTextFromValue( userUnits(), actual, true ) );
+                              MessageTextFromValue( userUnits(), minClearance ),
+                              MessageTextFromValue( userUnits(), actual ) );
 
                 drcItem->SetErrorMessage( m_msg );
                 drcItem->SetItems( outlineItem, boardItem );

@@ -57,7 +57,7 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataToWindow()
     wxString fmt = m_stCircleToPolyWarning->GetLabel();
     m_stCircleToPolyWarning->SetLabel( wxString::Format( fmt,
                                        StringFromValue( m_Frame->GetUserUnits(),
-                                       ARC_HIGH_DEF, true, true ) ) );
+                                       ARC_HIGH_DEF, true ) ) );
 
     m_OptAllowBlindBuriedVias->SetValue( m_BrdSettings->m_BlindBuriedViaAllowed );
     m_OptAllowMicroVias->SetValue( m_BrdSettings->m_MicroViasAllowed );
@@ -101,7 +101,7 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
     if( !m_edgeClearance.Validate( 0, 10, EDA_UNITS::INCHES ) )
         return false;
 
-    if( !m_throughHoleMin.Validate( 2, 1000, EDA_UNITS::INCHES, true ) )   // #107 to 1 inch
+    if( !m_throughHoleMin.Validate( 2, 1000, EDA_UNITS::INCHES ) )   // #107 to 1 inch
         return false;
 
     if( !m_holeToHoleMin.Validate( 0, 10, EDA_UNITS::INCHES ) )

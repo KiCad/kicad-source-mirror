@@ -313,13 +313,13 @@ void TEXTE_MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
     msg.Printf( wxT( "%.1f" ), GetTextAngleDegrees() );
     aList.emplace_back( _( "Angle" ), msg, DARKGREEN );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextThickness(), true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextThickness() );
     aList.emplace_back( _( "Thickness" ), msg, DARKGREEN );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth(), true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
     aList.emplace_back( _( "Width" ), msg, RED );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextHeight(), true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextHeight() );
     aList.emplace_back( _( "Height" ), msg, RED );
 }
 

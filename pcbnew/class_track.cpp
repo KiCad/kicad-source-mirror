@@ -623,7 +623,7 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
     aList.emplace_back( _( "Layer" ), LayerMaskDescribe(), DARKGREEN );
 
     // Display width
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width );
 
     aList.emplace_back( _( "Width" ), msg, DARKCYAN );
 
@@ -641,7 +641,7 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 
         if( lenPadToDie != 0 )
         {
-            msg = MessageTextFromValue( aFrame->GetUserUnits(), lenPadToDie, true );
+            msg = MessageTextFromValue( aFrame->GetUserUnits(), lenPadToDie );
             aList.emplace_back( _( "Pad To Die Length" ), msg, DARKCYAN );
 
             msg = MessageTextFromValue( aFrame->GetUserUnits(), trackLen + lenPadToDie );
@@ -651,14 +651,14 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 
     int clearance = GetClearance( GetLayer(), nullptr, &source );
 
-    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
+    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance ) );
     msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
 
     int minWidth, maxWidth;
     GetWidthConstraints( &minWidth, &maxWidth, &source );
 
-    msg.Printf( _( "Min Width: %s" ), MessageTextFromValue( units, minWidth, true ) );
+    msg.Printf( _( "Min Width: %s" ), MessageTextFromValue( units, minWidth ) );
     msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
 }
@@ -688,7 +688,7 @@ void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     aList.emplace_back( _( "Layer" ), LayerMaskDescribe(), DARKGREEN );
 
     // Display width
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width );
 
     // Display diameter value:
     aList.emplace_back( _( "Diameter" ), msg, DARKCYAN );
@@ -700,13 +700,13 @@ void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 
     int clearance = GetClearance( GetLayer(), nullptr, &source );
 
-    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
+    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance ) );
     msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
 
     int minAnnulus = GetMinAnnulus( GetLayer(), &source );
 
-    msg.Printf( _( "Min Annular Width: %s" ), MessageTextFromValue( units, minAnnulus, true ) );
+    msg.Printf( _( "Min Annular Width: %s" ), MessageTextFromValue( units, minAnnulus ) );
     msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
 }

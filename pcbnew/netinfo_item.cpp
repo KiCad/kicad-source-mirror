@@ -132,6 +132,6 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
     aList.emplace_back( _( "On Board" ), txt, RED );
 
     // Displays the net length of internal ICs connections (wires inside ICs):
-    txt = MessageTextFromValue( aFrame->GetUserUnits(), lengthPadToDie, true );
+    txt = MessageTextFromValue( aFrame->GetUserUnits(), lengthPadToDie );
     aList.emplace_back( _( "In Package" ), txt, RED );
 }

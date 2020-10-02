@@ -431,10 +431,10 @@ void LIB_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList 
     msg = GetTextStyleName();
     aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg, MAGENTA ) );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth(), true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
     aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, BLUE ) );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextHeight(), true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextHeight() );
     aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg, BLUE ) );
 
     // Display field name (ref, value ...)

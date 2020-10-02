@@ -150,7 +150,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
         msg = m_trackWidthsGrid->GetCellValue( row, TR_WIDTH_COL );
 
         if( !msg.IsEmpty() )
-            trackWidths.push_back( ValueFromString( m_Frame->GetUserUnits(), msg, true ) );
+            trackWidths.push_back( ValueFromString( m_Frame->GetUserUnits(), msg ) );
     }
 
     for( int row = 0; row < m_viaSizesGrid->GetNumberRows();  ++row )
@@ -160,12 +160,12 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
         if( !msg.IsEmpty() )
         {
             VIA_DIMENSION via_dim;
-            via_dim.m_Diameter = ValueFromString( m_Frame->GetUserUnits(), msg, true );
+            via_dim.m_Diameter = ValueFromString( m_Frame->GetUserUnits(), msg );
 
             msg = m_viaSizesGrid->GetCellValue( row, VIA_DRILL_COL );
 
             if( !msg.IsEmpty() )
-                via_dim.m_Drill = ValueFromString( m_Frame->GetUserUnits(), msg, true );
+                via_dim.m_Drill = ValueFromString( m_Frame->GetUserUnits(), msg );
 
             vias.push_back( via_dim );
         }
@@ -178,15 +178,15 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
         if( !msg.IsEmpty() )
         {
             DIFF_PAIR_DIMENSION diffPair_dim;
-            diffPair_dim.m_Width = ValueFromString( m_Frame->GetUserUnits(), msg, true );
+            diffPair_dim.m_Width = ValueFromString( m_Frame->GetUserUnits(), msg );
 
             msg = m_diffPairsGrid->GetCellValue( row, DP_GAP_COL );
-            diffPair_dim.m_Gap = ValueFromString( m_Frame->GetUserUnits(), msg, true );
+            diffPair_dim.m_Gap = ValueFromString( m_Frame->GetUserUnits(), msg );
 
             msg = m_diffPairsGrid->GetCellValue( row, DP_VIA_GAP_COL );
 
             if( !msg.IsEmpty() )
-                diffPair_dim.m_ViaGap = ValueFromString( m_Frame->GetUserUnits(), msg, true );
+                diffPair_dim.m_ViaGap = ValueFromString( m_Frame->GetUserUnits(), msg );
 
             diffPairs.push_back( diffPair_dim );
         }
@@ -237,7 +237,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         if( ValueFromString( m_Frame->GetUserUnits(), tvalue ) < minTrackWidth )
         {
             msg.Printf( _( "Track width less than minimum track width (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minTrackWidth, true, true ) );
+                        StringFromValue( m_Frame->GetUserUnits(), minTrackWidth ) );
             m_Parent->SetError( msg, this, m_trackWidthsGrid, row, TR_WIDTH_COL );
             return false;
         }
@@ -254,7 +254,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         if( ValueFromString( m_Frame->GetUserUnits(), viaDia ) < minViaDia )
         {
             msg.Printf( _( "Via diameter less than minimum via diameter (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minViaDia, true, true ) );
+                        StringFromValue( m_Frame->GetUserUnits(), minViaDia ) );
             m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_SIZE_COL );
             return false;
         }
@@ -271,7 +271,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         if( ValueFromString( m_Frame->GetUserUnits(), viaDrill ) < minThroughHole )
         {
             msg.Printf( _( "Via drill less than minimum through hole (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minThroughHole, true, true ) );
+                        StringFromValue( m_Frame->GetUserUnits(), minThroughHole ) );
             m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
             return false;
         }
@@ -288,7 +288,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
                 - ValueFromString( m_Frame->GetUserUnits(), viaDrill ) ) / 2 < minViaAnnulus )
         {
             msg.Printf( _( "Diameter and drill leave via annulus less than minimum (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minViaAnnulus, true, true ) );
+                        StringFromValue( m_Frame->GetUserUnits(), minViaAnnulus ) );
             m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_SIZE_COL );
             return false;
         }
@@ -305,7 +305,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         if( ValueFromString( m_Frame->GetUserUnits(), tvalue ) < minTrackWidth )
         {
             msg.Printf( _( "Differential pair track width less than minimum track width (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minTrackWidth, true, true ) );
+                        StringFromValue( m_Frame->GetUserUnits(), minTrackWidth ) );
             m_Parent->SetError( msg, this, m_diffPairsGrid, row, 0 );
             return false;
         }
@@ -322,7 +322,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         if( ValueFromString( m_Frame->GetUserUnits(), gap ) < minClearance )
         {
             msg.Printf( _( "Differential pair gap less than minimum clearance (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minClearance, true, true ) );
+                        StringFromValue( m_Frame->GetUserUnits(), minClearance ) );
             m_Parent->SetError( msg, this, m_diffPairsGrid, row, 1 );
             return false;
         }
@@ -335,7 +335,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         if( ValueFromString( m_Frame->GetUserUnits(), viaGap ) < minClearance )
         {
             msg.Printf( _( "Differential pair via gap less than minimum clearance (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minClearance, true, true ) );
+                        StringFromValue( m_Frame->GetUserUnits(), minClearance ) );
             m_Parent->SetError( msg, this, m_diffPairsGrid, row, 2 );
             return false;
         }
@@ -351,7 +351,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::AppendTrackWidth( const int aWidth )
 
     m_trackWidthsGrid->AppendRows( 1 );
 
-    wxString val = StringFromValue( m_Frame->GetUserUnits(), aWidth, true, true );
+    wxString val = StringFromValue( m_Frame->GetUserUnits(), aWidth );
     m_trackWidthsGrid->SetCellValue( i, TR_WIDTH_COL, val );
 }
 
@@ -362,12 +362,12 @@ void PANEL_SETUP_TRACKS_AND_VIAS::AppendViaSize( const int aSize, const int aDri
 
     m_viaSizesGrid->AppendRows( 1 );
 
-    wxString val = StringFromValue( m_Frame->GetUserUnits(), aSize, true, true );
+    wxString val = StringFromValue( m_Frame->GetUserUnits(), aSize );
     m_viaSizesGrid->SetCellValue( i, VIA_SIZE_COL, val );
 
     if( aDrill > 0 )
     {
-        val = StringFromValue( m_Frame->GetUserUnits(), aDrill, true, true );
+        val = StringFromValue( m_Frame->GetUserUnits(), aDrill );
         m_viaSizesGrid->SetCellValue( i, VIA_DRILL_COL, val );
     }
 }
@@ -380,18 +380,18 @@ void PANEL_SETUP_TRACKS_AND_VIAS::AppendDiffPairs( const int aWidth, const int a
 
     m_diffPairsGrid->AppendRows( 1 );
 
-    wxString val = StringFromValue( m_Frame->GetUserUnits(), aWidth, true, true );
+    wxString val = StringFromValue( m_Frame->GetUserUnits(), aWidth );
     m_diffPairsGrid->SetCellValue( i, DP_WIDTH_COL, val );
 
     if( aGap > 0 )
     {
-        val = StringFromValue( m_Frame->GetUserUnits(), aGap, true, true );
+        val = StringFromValue( m_Frame->GetUserUnits(), aGap );
         m_diffPairsGrid->SetCellValue( i, DP_GAP_COL, val );
     }
 
     if( aViaGap > 0 )
     {
-        val = StringFromValue( m_Frame->GetUserUnits(), aViaGap, true, true );
+        val = StringFromValue( m_Frame->GetUserUnits(), aViaGap );
         m_diffPairsGrid->SetCellValue( i, DP_VIA_GAP_COL, val );
     }
 }

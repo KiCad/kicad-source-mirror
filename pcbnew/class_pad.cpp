@@ -850,15 +850,15 @@ void D_PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
     if( (GetShape() == PAD_SHAPE_CIRCLE || GetShape() == PAD_SHAPE_OVAL )
         && m_size.x == m_size.y )
     {
-        msg = MessageTextFromValue( units, m_size.x, true );
+        msg = MessageTextFromValue( units, m_size.x );
         aList.emplace_back( _( "Diameter" ), msg, RED );
     }
     else
     {
-        msg = MessageTextFromValue( units, m_size.x, true );
+        msg = MessageTextFromValue( units, m_size.x );
         aList.emplace_back( _( "Width" ), msg, RED );
 
-        msg = MessageTextFromValue( units, m_size.y, true );
+        msg = MessageTextFromValue( units, m_size.y );
         aList.emplace_back( _( "Height" ), msg, RED );
     }
 
@@ -875,11 +875,11 @@ void D_PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 
     if( GetPadToDieLength() )
     {
-        msg = MessageTextFromValue(units, GetPadToDieLength(), true );
+        msg = MessageTextFromValue(units, GetPadToDieLength() );
         aList.emplace_back( _( "Length in Package" ), msg, CYAN );
     }
 
-    msg = MessageTextFromValue( units, m_drill.x, true );
+    msg = MessageTextFromValue( units, m_drill.x );
 
     if( GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
     {
@@ -887,16 +887,16 @@ void D_PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
     }
     else
     {
-        msg = MessageTextFromValue( units, m_drill.x, true )
+        msg = MessageTextFromValue( units, m_drill.x )
                + wxT( "/" )
-               + MessageTextFromValue( units, m_drill.y, true );
+               + MessageTextFromValue( units, m_drill.y );
         aList.emplace_back( _( "Drill X / Y" ), msg, RED );
     }
 
     wxString source;
     int      clearance = GetClearance( GetLayer(), nullptr, &source );
 
-    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance, true ) );
+    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance ) );
     msg2.Printf( _( "(from %s)" ), source );
     aList.emplace_back( msg, msg2, BLACK );
 }

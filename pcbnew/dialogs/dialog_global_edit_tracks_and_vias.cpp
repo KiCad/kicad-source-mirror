@@ -185,7 +185,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildFilterLists()
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
 {
 #define SET_NETCLASS_VALUE( row, col, val ) \
-        m_netclassGrid->SetCellValue( row, col, StringFromValue( GetUserUnits(), val, true, true ) )
+        m_netclassGrid->SetCellValue( row, col, StringFromValue( GetUserUnits(), val, true ) )
 
     m_netclassGrid->SetCellValue( 0, GRID_TRACKSIZE, _( "Track Width" ) );
     m_netclassGrid->SetCellValue( 0, GRID_VIASIZE, _( "Via Size" ) );

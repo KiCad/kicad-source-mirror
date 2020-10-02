@@ -78,8 +78,8 @@ void EDA_POSITION_CTRL::Enable( bool x_win_on, bool y_win_on )
 
 void EDA_POSITION_CTRL::SetValue( int x_value, int y_value )
 {
-    m_FramePosX->SetValue( StringFromValue( m_UserUnit, x_value, true ) );
-    m_FramePosY->SetValue( StringFromValue( m_UserUnit, y_value, true ) );
+    m_FramePosX->SetValue( StringFromValue( m_UserUnit, x_value ) );
+    m_FramePosY->SetValue( StringFromValue( m_UserUnit, y_value ) );
 }
 
 

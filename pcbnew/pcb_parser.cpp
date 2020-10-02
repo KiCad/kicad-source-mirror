@@ -2445,9 +2445,8 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
             if( isLegacyDimension )
             {
                 EDA_UNITS units   = EDA_UNITS::INCHES;
-                bool      useMils = false;
-                FetchUnitsFromString( text->GetText(), units, useMils );
-                dimension->SetUnits( units, useMils );
+                FetchUnitsFromString( text->GetText(), units );
+                dimension->SetUnits( units );
             }
 
             delete text;

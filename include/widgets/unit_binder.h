@@ -50,12 +50,11 @@ public:
      * @param aValue is the control used to edit or display the given value (wxTextCtrl,
      *               wxComboBox, wxStaticText, etc.).
      * @param aUnitLabel is the units label displayed after the text input widget
-     * @param aUseMils specifies the use of mils for imperial units (instead of inches)
      * @param aAllowEval indicates \a aTextInput's content should be eval'ed before storing
      */
     UNIT_BINDER( EDA_DRAW_FRAME* aParent,
                  wxStaticText* aLabel, wxWindow* aValue, wxStaticText* aUnitLabel,
-                 bool aUseMils = false, bool aAllowEval = true );
+                 bool aAllowEval = true );
 
     ~UNIT_BINDER() override;
 
@@ -64,7 +63,7 @@ public:
      * Normally not needed (as the UNIT_BINDER inherits from the parent frame), but can be
      * used to set to DEGREES for angular controls.
      */
-    virtual void SetUnits( EDA_UNITS aUnits, bool aUseMils = false );
+    virtual void SetUnits( EDA_UNITS aUnits );
 
     /**
      * Used to override the datatype of the displayed property (default is DISTANCE)
@@ -131,11 +130,9 @@ public:
      * @param aMin a minimum value for validation
      * @param aMax a maximum value for validation
      * @param aUnits the units of the min/max parameters (use UNSCALED for internal units)
-     * @param aUseMils if \a aUnits is EDA_UNITS::INCHES, interpret as mils
      * @return false on error.
      */
-    virtual bool Validate( double aMin, double aMax, EDA_UNITS aUnits = EDA_UNITS::UNSCALED,
-                           bool aUseMils = false );
+    virtual bool Validate( double aMin, double aMax, EDA_UNITS aUnits = EDA_UNITS::UNSCALED );
 
     void SetLabel( const wxString& aLabel );
 
@@ -190,7 +187,6 @@ protected:
 
     ///> Currently used units.
     EDA_UNITS         m_units;
-    bool              m_useMils;
     EDA_DATA_TYPE     m_dataType;
 
     ///> Validation support.

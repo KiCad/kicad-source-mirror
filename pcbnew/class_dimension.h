@@ -162,13 +162,12 @@ public:
     wxString GetSuffix() const { return m_suffix; }
     void SetSuffix( const wxString& aSuffix );
 
-    void GetUnits( EDA_UNITS& aUnits, bool& aUseMils ) const
+    void GetUnits( EDA_UNITS& aUnits ) const
     {
         aUnits = m_units;
-        aUseMils = m_useMils;
     }
 
-    void SetUnits( EDA_UNITS aUnits, bool aUseMils );
+    void SetUnits( EDA_UNITS aUnits );
 
     DIM_UNITS_MODE GetUnitsMode() const;
     void SetUnitsMode( DIM_UNITS_MODE aMode );

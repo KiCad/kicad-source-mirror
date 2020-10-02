@@ -533,9 +533,9 @@ public:
 
         switch( unitId )
         {
-        case 0:  return DoubleValueFromString( EDA_UNITS::INCHES, aString, true );
+        case 0:  return DoubleValueFromString( EDA_UNITS::INCHES, aString );
         case 1:  return DoubleValueFromString( EDA_UNITS::MILLIMETRES, aString );
-        case 2:  return DoubleValueFromString( EDA_UNITS::INCHES, aString, false );
+        case 2:  return DoubleValueFromString( EDA_UNITS::INCHES, aString );
         default: return v;
         }
     };

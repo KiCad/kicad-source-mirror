@@ -335,7 +335,7 @@ void LIB_POLYLINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aLi
 
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 

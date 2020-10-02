@@ -676,8 +676,8 @@ void DIALOG_PAD_PROPERTIES::initValues()
 static wxString formatCoord( EDA_UNITS aUnits, wxPoint aCoord )
 {
     return wxString::Format( "(X:%s Y:%s)",
-                             MessageTextFromValue( aUnits, aCoord.x, true ),
-                             MessageTextFromValue( aUnits, aCoord.y, true ) );
+                             MessageTextFromValue( aUnits, aCoord.x ),
+                             MessageTextFromValue( aUnits, aCoord.y ) );
 }
 
 void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
@@ -699,7 +699,7 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
         for( wxString& s : bs_info )
             s.Empty();
 
-        bs_info[4] = _( "width " ) + MessageTextFromValue( m_units, primitive->GetWidth(), true );
+        bs_info[4] = _( "width " ) + MessageTextFromValue( m_units, primitive->GetWidth() );
 
         switch( primitive->GetShape() )
         {
@@ -729,7 +729,7 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
                 bs_info[0] = _( "circle" );
 
             bs_info[1] = formatCoord( m_units, primitive->GetStart() );
-            bs_info[2] = _( "radius " ) + MessageTextFromValue( m_units, primitive->GetRadius(), true );
+            bs_info[2] = _( "radius " ) + MessageTextFromValue( m_units, primitive->GetRadius() );
             break;
 
         case S_POLYGON:         // polygon
@@ -1200,7 +1200,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
             {
                 error_msgs.Add( wxString::Format(
                                 _( "Pad local solder mask clearance must be greater than %s" ),
-                                StringFromValue( GetUserUnits(), min_smClearance, true, true ) ) );
+                                StringFromValue( GetUserUnits(), min_smClearance ) ) );
             }
         }
     }

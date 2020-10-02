@@ -83,7 +83,7 @@ void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* a
 
     for( const wxString& gridSize : aCfg->m_Window.grid.sizes )
     {
-        int val = (int) ValueFromString( EDA_UNITS::MILLIMETRES, gridSize, true );
+        int val = (int) ValueFromString( EDA_UNITS::MILLIMETRES, gridSize );
         double gridValueMils = To_User_Unit( EDA_UNITS::INCHES, val ) * 1000;
         double gridValue_mm = To_User_Unit( EDA_UNITS::MILLIMETRES, val );
 
@@ -98,7 +98,7 @@ void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* a
 
     if( !aCfg->m_Window.grid.user_grid_x.empty() )
     {
-        int val = (int) ValueFromString( EDA_UNITS::INCHES, aCfg->m_Window.grid.user_grid_x, true );
+        int val = (int) ValueFromString( EDA_UNITS::INCHES, aCfg->m_Window.grid.user_grid_x );
         double gridValueMils = To_User_Unit( EDA_UNITS::INCHES, val ) * 1000;
         double gridValue_mm = To_User_Unit( EDA_UNITS::MILLIMETRES, val );
 
