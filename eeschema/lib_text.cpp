@@ -25,9 +25,6 @@
  * @file lib_text.cpp
  */
 
-#include <fctsys.h>
-#include <gr_basic.h>
-#include <macros.h>
 #include <sch_draw_panel.h>
 #include <plotter.h>
 #include <gr_text.h>

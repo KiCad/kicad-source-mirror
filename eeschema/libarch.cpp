@@ -28,7 +28,6 @@
  * @brief Module for generation of component archive files.
  */
 
-#include <fctsys.h>
 #include <confirm.h>
 #include <wildcards_and_files_ext.h>
 

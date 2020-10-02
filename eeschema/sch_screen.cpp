@@ -29,10 +29,8 @@
  * @brief Implementation of SCH_SCREEN and SCH_SCREENS classes.
  */
 
-#include <common.h>
 #include <eda_rect.h>
-#include <fctsys.h>
-#include <gr_text.h>
+//#include <gr_text.h>
 #include <id.h>
 #include <kicad_string.h>
 #include <kiway.h>

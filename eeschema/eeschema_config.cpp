@@ -31,7 +31,6 @@
 #include <dialogs/panel_libedit_settings.h>
 #include <dialogs/dialog_schematic_setup.h>
 #include <eeschema_config.h>
-#include <fctsys.h>
 #include <kiway.h>
 #include <lib_edit_frame.h>
 #include <panel_gal_display_options.h>

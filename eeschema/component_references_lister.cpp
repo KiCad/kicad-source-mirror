@@ -35,7 +35,6 @@
 #include <vector>
 #include <unordered_set>
 
-#include <fctsys.h>
 #include <refdes_utils.h>
 #include <reporter.h>
 

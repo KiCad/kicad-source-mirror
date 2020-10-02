@@ -23,7 +23,6 @@
 
 #include <algorithm>
 
-#include <fctsys.h>
 #include <sch_draw_panel.h>
 #include <confirm.h>
 #include <reporter.h>

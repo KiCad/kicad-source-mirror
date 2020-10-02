@@ -30,11 +30,8 @@
  * They can be renamed and can appear in reports
  */
 
-#include <fctsys.h>
 #include <base_struct.h>
-#include <gr_basic.h>
 #include <gr_text.h>
-#include <macros.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>
 #include <bitmaps.h>

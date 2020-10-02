@@ -27,7 +27,6 @@
  * @file plot_schematic_SVG.cpp
  */
 
-#include <fctsys.h>
 #include <pgm_base.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>

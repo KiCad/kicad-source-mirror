@@ -23,7 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <pgm_base.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
@@ -122,7 +121,7 @@ LIB_PIN::LIB_PIN( LIB_PART* aParent ) :
 
 LIB_PIN::LIB_PIN( LIB_PART* aParent, const wxString& aName, const wxString& aNumber,
         int aOrientation, ELECTRICAL_PINTYPE aPinType, int aLength, int aNameTextSize,
-        int aNumTextSize, int aConvert, const wxPoint& aPos, int aUnit ) : 
+        int aNumTextSize, int aConvert, const wxPoint& aPos, int aUnit ) :
         LIB_ITEM( LIB_PIN_T, aParent ),
         m_position( aPos ),
         m_length( aLength ),

@@ -26,12 +26,9 @@
  * @file sch_bitmap.cpp
  */
 
-#include <fctsys.h>
 #include <sch_draw_panel.h>
 #include <plotter.h>
 #include <settings/color_settings.h>
-#include <trigo.h>
-#include <macros.h>
 #include <bitmaps.h>
 #include <base_units.h>
 #include <eda_draw_frame.h>

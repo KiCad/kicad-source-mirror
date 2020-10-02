@@ -23,7 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <kiface_i.h>
 #include <kiway_express.h>
 #include <eda_dde.h>
@@ -217,7 +216,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
                 double ratio      = std::max( -1.0, fabs( bbSize.y / screenSize.y ) );
                 // Original KiCad code for how much to scale the zoom
                 double kicadRatio = std::max( fabs( bbSize.x / screenSize.x ),
-                                              fabs( bbSize.y / screenSize.y ) ); 
+                                              fabs( bbSize.y / screenSize.y ) );
 
                 // If the width of the part we're probing is bigger than what the screen width will be
                 // after the zoom, then punt and use the KiCad zoom algorithm since it guarantees the

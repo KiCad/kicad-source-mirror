@@ -28,10 +28,7 @@
  */
 
 #include <algorithm>
-#include <fctsys.h>
 #include <kiface_i.h>
-#include <gr_basic.h>
-#include <macros.h>
 #include <eda_base_frame.h>
 #include <kicad_string.h>
 #include <gestfich.h>

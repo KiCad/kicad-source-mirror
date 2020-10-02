@@ -28,7 +28,6 @@
  * @brief Code for handling schematic texts (texts, labels, hlabels and global labels).
  */
 
-#include <fctsys.h>
 #include <sch_component.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>

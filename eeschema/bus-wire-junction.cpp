@@ -22,8 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-
 #include <core/kicad_algo.h>
 #include <eeschema_id.h>
 #include <general.h>

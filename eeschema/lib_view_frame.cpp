@@ -31,7 +31,6 @@
 #include <dialog_choose_component.h>
 #include <eeschema_id.h>
 #include <eeschema_settings.h>
-#include <fctsys.h>
 #include <kiface_i.h>
 #include <kiway.h>
 #include <lib_view_frame.h>

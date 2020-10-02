@@ -25,10 +25,8 @@
 #include <algorithm>
 
 #include <bitmaps.h>
-#include <fctsys.h>
 #include <general.h>
 #include <geometry/shape_line_chain.h>
-#include <gr_basic.h>
 #include <gr_text.h>
 #include <kicad_string.h>
 #include <plotter.h>

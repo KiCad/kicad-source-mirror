@@ -30,7 +30,6 @@
 
 #include "connection_graph.h"
 #include <erc.h>
-#include <fctsys.h>
 #include <kicad_string.h>
 #include <lib_pin.h>
 #include <sch_edit_frame.h>

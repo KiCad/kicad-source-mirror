@@ -27,11 +27,7 @@
  * @brief Class SCH_NO_CONNECT implementation.
  */
 
-#include <fctsys.h>
-#include <gr_basic.h>
-#include <macros.h>
 #include <sch_draw_panel.h>
-#include <common.h>
 #include <plotter.h>
 #include <bitmaps.h>
 #include <schematic.h>

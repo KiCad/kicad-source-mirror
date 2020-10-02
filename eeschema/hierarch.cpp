@@ -23,14 +23,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <sch_draw_panel.h>
 #include <confirm.h>
 #include <id.h>
 #include <bitmaps.h>
 #include <dialog_shim.h>
 #include <sch_edit_frame.h>
-#include <general.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <schematic.h>

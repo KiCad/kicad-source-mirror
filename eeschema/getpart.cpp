@@ -27,7 +27,6 @@
 #include <class_library.h>
 #include <confirm.h>
 #include <eeschema_id.h>
-#include <fctsys.h>
 #include <general.h>
 #include <kiway.h>
 #include <lib_edit_frame.h>
