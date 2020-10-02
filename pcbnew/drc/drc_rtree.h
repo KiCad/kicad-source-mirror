@@ -236,12 +236,44 @@ public:
 
 #endif
 
+    bool CheckColliding( SHAPE* aRefShape,
+                         PCB_LAYER_ID aTargetLayer,
+                         int aClearance = 0
+                        )
+    {
+        BOX2I box = aRefShape->BBox();
+        box.Inflate( aClearance );
+
+        int min[2] = { box.GetX(),         box.GetY() };
+        int max[2] = { box.GetRight(),     box.GetBottom() };
+
+        int count = 0;
+
+        auto visit = [&] ( ITEM_WITH_SHAPE* aItem ) -> bool
+        {
+            int actual;
+
+            bool colliding = aRefShape->Collide( aItem->shape, aClearance, &actual );
+
+            if( colliding )
+            {
+                count++;
+                return false;
+            }
+
+            return true;
+        };
+
+        this->m_tree[aTargetLayer]->Search( min, max, visit );
+        return count > 0;
+    }
+
     int QueryColliding( BOARD_ITEM* aRefItem,
                         PCB_LAYER_ID aRefLayer,
                         PCB_LAYER_ID aTargetLayer,
-                        std::function<bool( BOARD_ITEM*)> aFilter,
-                        std::function<bool( BOARD_ITEM*, int)> aVisitor,
-                        int aClearance
+                        std::function<bool( BOARD_ITEM*)> aFilter = nullptr,
+                        std::function<bool( BOARD_ITEM*, int)> aVisitor = nullptr,
+                        int aClearance = 0
                         )
     {
         // keep track of BOARD_ITEMs that have been already found to collide (some items
@@ -257,12 +289,14 @@ public:
 
         std::shared_ptr<SHAPE> refShape = aRefItem->GetEffectiveShape( aRefLayer );
 
+        int count = 0;
+
         auto visit = [&] ( ITEM_WITH_SHAPE* aItem ) -> bool
         {
             if( collidingCompounds.find( aItem->parent ) != collidingCompounds.end() )
                 return true;
 
-            if( !aFilter( aItem->parent ) )
+            if( aFilter && !aFilter( aItem->parent ) )
                 return true;
 
             int actual;
@@ -272,14 +306,23 @@ public:
             if( colliding )
             {
                 collidingCompounds.insert( aItem->parent );
-                return aVisitor( aItem->parent, actual );
+                count++;
+                if( aVisitor )
+                {
+                    return aVisitor( aItem->parent, actual );
+                }
+                else
+                {
+                    return true;
+                }
             }
+
 
             return true;
         };
 
         this->m_tree[aTargetLayer]->Search( min, max, visit );
-        return 0;
+        return count;
     }
 
     typedef std::pair<PCB_LAYER_ID, PCB_LAYER_ID> LAYER_PAIR;
