@@ -194,11 +194,11 @@ set( EESCHEMA_SRCS
     netlist_generator.cpp
     pin_number.cpp
     pin_type.cpp
-    plot_schematic_DXF.cpp
-    plot_schematic_HPGL.cpp
-    plot_schematic_PDF.cpp
-    plot_schematic_PS.cpp
-    plot_schematic_SVG.cpp
+    plotters/plot_schematic_DXF.cpp
+    plotters/plot_schematic_HPGL.cpp
+    plotters/plot_schematic_PDF.cpp
+    plotters/plot_schematic_PS.cpp
+    plotters/plot_schematic_SVG.cpp
     sch_draw_panel.cpp
     project_rescue.cpp
     sch_base_frame.cpp
