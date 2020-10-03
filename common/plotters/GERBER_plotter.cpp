@@ -60,6 +60,11 @@ GERBER_PLOTTER::GERBER_PLOTTER()
     m_gerberUnitFmt = 6;
     m_useX2format = true;
     m_useNetAttributes = true;
+
+    m_hasApertureRoundRect = false;     // true is at least one round rect aperture is in use
+    m_hasApertureRotOval = false;       // true is at least one oval rotated aperture is in use
+    m_hasApertureRotRect = false;       // true is at least one rect. rotated aperture is in use
+    m_hasApertureOutline = false;       // true is at least one rotated rect/trapezoid aperture is in use
 }
 
 
@@ -71,10 +76,6 @@ void GERBER_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     plotOffset = aOffset;
     wxASSERT( aScale == 1 );            // aScale parameter is not used in Gerber
     plotScale = 1;                      // Plot scale is *always* 1.0
-    m_hasApertureRoundRect = false;     // true is at least one round rect aperture is in use
-    m_hasApertureRotOval = false;       // true is at least one oval rotated aperture is in use
-    m_hasApertureRotRect = false;       // true is at least one rect. rotated aperture is in use
-    m_hasApertureOutline = false;     // true is at least one rotated rect/trapezoid aperture is in use
 
     m_IUsPerDecimil = aIusPerDecimil;
     // gives now a default value to iuPerDeviceUnit (because the units of the caller is now known)
@@ -184,6 +185,11 @@ void GERBER_PLOTTER::formatNetAttribute( GBR_NETLIST_METADATA* aData )
 
 bool GERBER_PLOTTER::StartPlot()
 {
+    m_hasApertureRoundRect = false;     // true is at least one round rect aperture is in use
+    m_hasApertureRotOval = false;       // true is at least one oval rotated aperture is in use
+    m_hasApertureRotRect = false;       // true is at least one rect. rotated aperture is in use
+    m_hasApertureOutline = false;       // true is at least one rotated rect/trapezoid aperture is in use
+
     wxASSERT( outputFile );
 
     finalFile = outputFile;     // the actual gerber file will be created later

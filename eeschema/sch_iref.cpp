@@ -37,6 +37,8 @@ SCH_IREF::SCH_IREF( const wxPoint& pos, const wxString& text, SCH_GLOBALLABEL* a
     m_Layer  = LAYER_GLOBLABEL;
     m_parent = aParent;
     SetMultilineAllowed( false );
+    m_ownPageNumber = 0;
+    m_screen = nullptr;
 }
 
 

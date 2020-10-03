@@ -51,19 +51,21 @@ namespace test {
 class DRC_TEST_PROVIDER_SILK_TO_PAD : public ::DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_SILK_TO_PAD ()
+    DRC_TEST_PROVIDER_SILK_TO_PAD ():
+            m_board( nullptr ),
+            m_largestClearance( 0 )
     {
     }
 
-    virtual ~DRC_TEST_PROVIDER_SILK_TO_PAD() 
+    virtual ~DRC_TEST_PROVIDER_SILK_TO_PAD()
     {
     }
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override 
+    virtual const wxString GetName() const override
     {
-        return "silk_to_pad"; 
+        return "silk_to_pad";
     };
 
     virtual const wxString GetDescription() const override

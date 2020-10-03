@@ -692,6 +692,7 @@ ORTHOGONAL_DIMENSION::ORTHOGONAL_DIMENSION( BOARD_ITEM* aParent ) :
 {
     // To preserve look of old dimensions, initialize extension height based on default arrow length
     m_extensionHeight = static_cast<int>( m_arrowLength * std::sin( DEG2RAD( s_arrowAngle ) ) );
+    m_orientation = DIR::HORIZONTAL;
 }
 
 
