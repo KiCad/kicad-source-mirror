@@ -90,6 +90,7 @@ public:
 
 private:
     bool migrateSchema0to1();
+    bool migrateSchema1to2();
 
     void initFromOther( const COLOR_SETTINGS& aOther );
 

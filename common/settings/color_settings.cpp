@@ -26,7 +26,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int colorsSchemaVersion = 1;
+const int colorsSchemaVersion = 2;
 
 
 COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
@@ -139,7 +139,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
     CLR( "board.select_overlay",           LAYER_SELECT_OVERLAY,     COLOR4D( PUREGREEN ) );
     CLR( "board.through_via",              LAYER_VIA_THROUGH,        COLOR4D( LIGHTGRAY ) );
     CLR( "board.via_blind_buried",         LAYER_VIA_BBLIND,         COLOR4D( BROWN ) );
-    CLR( "board.via_hole",                 LAYER_VIAS_HOLES,         COLOR4D( WHITE ) );
+    CLR( "board.via_hole",                 LAYER_VIAS_HOLES,         COLOR4D( 0.5, 0.4, 0, 0.8 ) );
     CLR( "board.via_micro",                LAYER_VIA_MICROVIA,       COLOR4D( CYAN ) );
     CLR( "board.via_through",              LAYER_VIA_THROUGH,        COLOR4D( LIGHTGRAY ) );
     CLR( "board.worksheet",                LAYER_WORKSHEET,          COLOR4D( DARKRED ) );
@@ -266,10 +266,18 @@ bool COLOR_SETTINGS::Migrate()
         ret &= migrateSchema0to1();
 
         if( ret )
-        {
-            ( *this )[PointerFromString( "meta.version" )] = 1;
-        }
+            filever = 1;
     }
+
+    if( filever == 1 )
+    {
+        ret &= migrateSchema1to2();
+
+        if( ret )
+            filever = 2;
+    }
+
+    ( *this )[PointerFromString( "meta.version" )] = filever;
 
     return ret;
 }
@@ -318,6 +326,17 @@ bool COLOR_SETTINGS::migrateSchema0to1()
 
     // Now we can get rid of our own copy
     erase( "fpedit" );
+
+    return true;
+}
+
+
+bool COLOR_SETTINGS::migrateSchema1to2()
+{
+    // Fix LAYER_VIAS_HOLES color - before version 2, this setting had no effect
+    nlohmann::json::json_pointer ptr( "/board/via_hole");
+
+    ( *this )[ptr] = COLOR4D( 0.5, 0.4, 0, 0.8 ).ToWxString( wxC2S_CSS_SYNTAX );
 
     return true;
 }

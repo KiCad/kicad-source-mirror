@@ -274,7 +274,7 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
         }
 
         // And write-out immediately so that we don't lose data if the program later crashes.
-        SaveToFile( aDirectory );
+        SaveToFile( aDirectory, true );
     }
 
     return success;

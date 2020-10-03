@@ -101,7 +101,6 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
         m_layerColors[i] = aSettings->GetColor( i );
 
     // Default colors for specific layers (not really board layers).
-    m_layerColors[LAYER_VIAS_HOLES]         = COLOR4D( 0.5, 0.4, 0.0, 0.8 );
     m_layerColors[LAYER_PADS_PLATEDHOLES]   = aSettings->GetColor( LAYER_PCB_BACKGROUND );
     m_layerColors[LAYER_VIAS_NETNAMES]      = COLOR4D( 0.2, 0.2, 0.2, 0.9 );
     m_layerColors[LAYER_PADS_NETNAMES]      = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
