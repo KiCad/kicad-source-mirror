@@ -37,9 +37,9 @@ class DIALOG_IMPORTED_LAYERS_BASE : public DIALOG_SHIM
 
 	protected:
 		wxBoxSizer* bSizerMain;
-		wxStaticText* m_staticText1;
+		wxStaticText* m_lblImportedLayers;
+		wxStaticText* m_lblKicadLayers;
 		wxListCtrl* m_unmatched_layers_list;
-		wxStaticText* m_staticText2;
 		wxListCtrl* m_kicad_layers_list;
 		wxButton* m_button_add;
 		wxButton* m_button_remove;
@@ -62,7 +62,7 @@ class DIALOG_IMPORTED_LAYERS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_IMPORTED_LAYERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Edit Mapping of Imported Layers"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 795,476 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_IMPORTED_LAYERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Edit Mapping of Imported Layers"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_IMPORTED_LAYERS_BASE();
 
 };

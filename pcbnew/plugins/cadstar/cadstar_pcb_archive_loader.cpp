@@ -697,7 +697,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent, 
             wxASSERT_MSG( true, "Unknown Pad type" );
         }
 
-        pad->SetName( csPad.Identifier.IsEmpty() ? wxString::Format( wxT( "%i" ), csPad.ID ) :
+        pad->SetName( csPad.Identifier.IsEmpty() ? wxString::Format( wxT( "%ld" ), csPad.ID ) :
                                                    csPad.Identifier );
 
         pad->SetPos0( getKiCadPoint( csPad.Position ) - aModule->GetPosition() );
@@ -2486,7 +2486,7 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
                 MODULE* m = getModuleFromCadstarID( firstPin.ComponentID );
                 newName   = wxT( "Net-(" );
                 newName << m->Reference().GetText();
-                newName << "-Pad" << wxString::Format( "%i", firstPin.PadID ) << ")";
+                newName << "-Pad" << wxString::Format( "%ld", firstPin.PadID ) << ")";
             }
             else
             {

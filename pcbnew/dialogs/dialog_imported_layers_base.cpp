@@ -11,7 +11,7 @@
 
 DIALOG_IMPORTED_LAYERS_BASE::DIALOG_IMPORTED_LAYERS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 600,350 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
@@ -21,69 +21,67 @@ DIALOG_IMPORTED_LAYERS_BASE::DIALOG_IMPORTED_LAYERS_BASE( wxWindow* parent, wxWi
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Unmatched Layers") ), wxHORIZONTAL );
 
-	wxBoxSizer* bSizerUnmatched;
-	bSizerUnmatched = new wxBoxSizer( wxVERTICAL );
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer1->AddGrowableCol( 0 );
+	fgSizer1->AddGrowableCol( 1 );
+	fgSizer1->AddGrowableRow( 1 );
+	fgSizer1->SetFlexibleDirection( wxVERTICAL );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticText1 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Imported Layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	bSizerUnmatched->Add( m_staticText1, 0, wxALL, 5 );
+	m_lblImportedLayers = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Imported Layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblImportedLayers->Wrap( -1 );
+	fgSizer1->Add( m_lblImportedLayers, 0, wxALL, 5 );
 
-	m_unmatched_layers_list = new wxListCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( 200,-1 ), wxLC_NO_HEADER|wxLC_REPORT );
-	m_unmatched_layers_list->SetMaxSize( wxSize( 300,-1 ) );
+	m_lblKicadLayers = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("KiCad Layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblKicadLayers->Wrap( -1 );
+	fgSizer1->Add( m_lblKicadLayers, 0, wxALL, 5 );
 
-	bSizerUnmatched->Add( m_unmatched_layers_list, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_unmatched_layers_list = new wxListCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxLC_NO_HEADER|wxLC_REPORT );
+	m_unmatched_layers_list->SetMinSize( wxSize( 120,-1 ) );
 
+	fgSizer1->Add( m_unmatched_layers_list, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
-	sbSizer1->Add( bSizerUnmatched, 1, wxEXPAND, 5 );
-
-	wxBoxSizer* bSizerKiCad;
-	bSizerKiCad = new wxBoxSizer( wxVERTICAL );
-
-	m_staticText2 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("KiCad Layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	bSizerKiCad->Add( m_staticText2, 0, wxALL, 5 );
-
-	m_kicad_layers_list = new wxListCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( 120,-1 ), wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL );
+	m_kicad_layers_list = new wxListCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL );
 	m_kicad_layers_list->SetMinSize( wxSize( 120,-1 ) );
-	m_kicad_layers_list->SetMaxSize( wxSize( 150,-1 ) );
 
-	bSizerKiCad->Add( m_kicad_layers_list, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_kicad_layers_list, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	sbSizer1->Add( bSizerKiCad, 0, wxEXPAND, 5 );
+	sbSizer1->Add( fgSizer1, 1, wxEXPAND, 5 );
 
 
 	bSizerTop->Add( sbSizer1, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxEmptyString ), wxVERTICAL );
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxVERTICAL );
 
-	m_button_add = new wxButton( sbSizer2->GetStaticBox(), wxID_ANY, _(">"), wxDefaultPosition, wxSize( 30,100 ), 0 );
+	m_button_add = new wxButton( this, wxID_ANY, _(">"), wxDefaultPosition, wxSize( 36,100 ), 0 );
 	m_button_add->SetFont( wxFont( 9, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	m_button_add->SetToolTip( _("Add selected layers to matched layers list.") );
 
-	sbSizer2->Add( m_button_add, 0, wxALL, 5 );
+	bSizer6->Add( m_button_add, 0, wxALL, 5 );
 
-	m_button_remove = new wxButton( sbSizer2->GetStaticBox(), wxID_ANY, _("<"), wxDefaultPosition, wxSize( 30,100 ), 0 );
+	m_button_remove = new wxButton( this, wxID_ANY, _("<"), wxDefaultPosition, wxSize( 36,100 ), 0 );
 	m_button_remove->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	m_button_remove->SetToolTip( _("Remove selected layers from matched layers list.") );
 
-	sbSizer2->Add( m_button_remove, 0, wxALL, 5 );
+	bSizer6->Add( m_button_remove, 0, wxALL, 5 );
 
-	m_button_removeall = new wxButton( sbSizer2->GetStaticBox(), wxID_ANY, _("<<"), wxDefaultPosition, wxSize( 30,50 ), 0 );
+	m_button_removeall = new wxButton( this, wxID_ANY, _("<<"), wxDefaultPosition, wxSize( 36,50 ), 0 );
 	m_button_removeall->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	m_button_removeall->SetToolTip( _("Remove all matched layers.") );
 
-	sbSizer2->Add( m_button_removeall, 0, wxALL, 5 );
+	bSizer6->Add( m_button_removeall, 0, wxALL, 5 );
 
 
-	bSizerTop->Add( sbSizer2, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizerTop->Add( bSizer6, 0, wxEXPAND|wxTOP, 10 );
 
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Matched Layers") ), wxHORIZONTAL );
 
-	m_matched_layers_list = new wxListCtrl( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( 300,-1 ), wxLC_REPORT );
-	m_matched_layers_list->SetMaxSize( wxSize( 500,-1 ) );
+	m_matched_layers_list = new wxListCtrl( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxLC_REPORT );
+	m_matched_layers_list->SetMinSize( wxSize( 120,-1 ) );
 
 	sbSizer3->Add( m_matched_layers_list, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
@@ -106,14 +104,15 @@ DIALOG_IMPORTED_LAYERS_BASE::DIALOG_IMPORTED_LAYERS_BASE( wxWindow* parent, wxWi
 	m_sdbSizer->AddButton( m_sdbSizerOK );
 	m_sdbSizer->Realize();
 
-	bSizerBottom->Add( m_sdbSizer, 1, wxALL|wxEXPAND, 5 );
+	bSizerBottom->Add( m_sdbSizer, 1, wxEXPAND, 5 );
 
 
-	bSizerMain->Add( bSizerBottom, 0, wxEXPAND|wxLEFT, 5 );
+	bSizerMain->Add( bSizerBottom, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
 
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_IMPORTED_LAYERS_BASE::OnClose ) );

@@ -29,9 +29,8 @@ PCB_LAYER_ID DIALOG_IMPORTED_LAYERS::GetSelectedLayerID()
     wxString selectedKiCadLayerName;
     long     itemIndex = -1;
 
-    if( ( itemIndex = m_kicad_layers_list->GetNextItem(
-                  itemIndex, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED ) )
-            != wxNOT_FOUND )
+    if( ( itemIndex = m_kicad_layers_list->GetNextItem( itemIndex, wxLIST_NEXT_ALL,
+                                                        wxLIST_STATE_SELECTED ) ) != wxNOT_FOUND )
     {
         selectedKiCadLayerName = m_kicad_layers_list->GetItemText( itemIndex );
     }
@@ -41,10 +40,9 @@ PCB_LAYER_ID DIALOG_IMPORTED_LAYERS::GetSelectedLayerID()
     }
 
     // There should only be one selected (or none) as the list is set with wxLC_SINGLE_SEL style
-    wxASSERT_MSG( ( m_kicad_layers_list->GetNextItem(
-                          itemIndex, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED ) )
-                          == wxNOT_FOUND,
-            "There are more than one KiCad layer selected (unexpected)" );
+    wxASSERT_MSG( ( m_kicad_layers_list->GetNextItem( itemIndex, wxLIST_NEXT_ALL,
+                                                      wxLIST_STATE_SELECTED ) ) == wxNOT_FOUND,
+                  "There are more than one KiCad layer selected (unexpected)" );
 
     for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
@@ -79,8 +77,8 @@ void DIALOG_IMPORTED_LAYERS::AddMappings()
     int        itemIndex = -1;
     wxArrayInt rowsToDelete;
 
-    while( ( itemIndex = m_unmatched_layers_list->GetNextItem(
-                     itemIndex, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED ) )
+    while( ( itemIndex = m_unmatched_layers_list->GetNextItem( itemIndex, wxLIST_NEXT_ALL,
+                                                               wxLIST_STATE_SELECTED ) )
             != wxNOT_FOUND )
     {
         wxString selectedLayerName = m_unmatched_layers_list->GetItemText( itemIndex );
@@ -150,8 +148,8 @@ void DIALOG_IMPORTED_LAYERS::OnAutoMatchLayersClicked( wxCommandEvent& event )
     int        itemIndex = -1;
     wxArrayInt rowsToDelete;
 
-    while( ( itemIndex = m_unmatched_layers_list->GetNextItem(
-                     itemIndex, wxLIST_NEXT_ALL, wxLIST_STATE_DONTCARE ) )
+    while( ( itemIndex = m_unmatched_layers_list->GetNextItem( itemIndex, wxLIST_NEXT_ALL,
+                                                               wxLIST_STATE_DONTCARE ) )
             != wxNOT_FOUND )
     {
         wxString     layerName      = m_unmatched_layers_list->GetItemText( itemIndex );
@@ -187,8 +185,8 @@ void DIALOG_IMPORTED_LAYERS::OnAutoMatchLayersClicked( wxCommandEvent& event )
 
 
 DIALOG_IMPORTED_LAYERS::DIALOG_IMPORTED_LAYERS( wxWindow* aParent,
-                                                const std::vector<INPUT_LAYER_DESC>& aLayerDesc )
-                                                : DIALOG_IMPORTED_LAYERS_BASE( aParent )
+                                                const std::vector<INPUT_LAYER_DESC>& aLayerDesc ) :
+        DIALOG_IMPORTED_LAYERS_BASE( aParent )
 {
     LSET kiCadLayers;
 
@@ -200,24 +198,31 @@ DIALOG_IMPORTED_LAYERS::DIALOG_IMPORTED_LAYERS( wxWindow* aParent,
         kiCadLayers |= inLayer.PermittedLayers;
     }
 
+    int maxTextWidth = 0;
+
+    for( const INPUT_LAYER_DESC& layer : m_input_layers )
+        maxTextWidth = std::max( maxTextWidth, GetTextExtent( layer.Name ).x );
 
     // Initialize columns in the wxListCtrl elements:
     wxListItem importedLayersHeader;
     importedLayersHeader.SetId( 0 );
     importedLayersHeader.SetText( _( "Imported Layer" ) );
-    importedLayersHeader.SetWidth( 200 );
+    importedLayersHeader.SetWidth( maxTextWidth + 15 );
     m_unmatched_layers_list->InsertColumn( 0, importedLayersHeader );
+
+    int kicadMaxTextWidth = GetTextExtent( wxT( "User.Drawings" ) ).x;
 
     wxListItem kicadLayersHeader;
     kicadLayersHeader.SetId( 0 );
     kicadLayersHeader.SetText( _( "KiCad Layer" ) );
-    kicadLayersHeader.SetWidth( 100 );
+    kicadLayersHeader.SetWidth( kicadMaxTextWidth + 5 );
     m_kicad_layers_list->InsertColumn( 0, kicadLayersHeader );
 
     kicadLayersHeader.SetId( 1 );
+    importedLayersHeader.SetWidth( maxTextWidth + 15 );
+    kicadLayersHeader.SetWidth( kicadMaxTextWidth + 5 );
     m_matched_layers_list->InsertColumn( 0, importedLayersHeader );
     m_matched_layers_list->InsertColumn( 1, kicadLayersHeader );
-
 
     // Load the input layer list to unmatched layers
     int row = 0;
@@ -248,6 +253,7 @@ DIALOG_IMPORTED_LAYERS::DIALOG_IMPORTED_LAYERS( wxWindow* aParent,
 
     m_sdbSizerOK->SetDefault();
 
+    Fit();
     FinishDialogSettings();
 }
 
@@ -266,7 +272,7 @@ LAYER_MAP DIALOG_IMPORTED_LAYERS::GetMapModal( wxWindow* aParent,
         {
             wxMessageBox( _( "All layers must be matched. Please click on 'Auto-Matched Layers' "
                              "to automatically match the remaining layers." ),
-                    _( "Unmatched Layers" ), wxICON_ERROR | wxOK );
+                          _( "Unmatched Layers" ), wxICON_ERROR | wxOK );
         }
         else
         {
