@@ -1194,7 +1194,7 @@ int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
                     iref = new SCH_IREF();
                     gLabel->SetIref( iref );
 
-                    iref->SetParent( gLabel );
+                    iref->SetParentLabel( gLabel );
                     iref->SetFlags( IS_NEW );
                     iref->SetScreen( screen );
 

@@ -721,7 +721,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
         SCH_IREF* iref = static_cast<SCH_IREF*>( aItem );
         wxPoint   pt   = (wxPoint) aDelta;
 
-        int style = iref->GetParent()->GetLabelSpinStyle();
+        int style = iref->GetParentLabel()->GetLabelSpinStyle();
 
         if( iref->GetParent()->IsSelected() )
             break;

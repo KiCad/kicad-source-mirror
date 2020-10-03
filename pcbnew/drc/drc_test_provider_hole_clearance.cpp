@@ -221,7 +221,6 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc( int aRefPadIdx,
     const static LSET all_cu = LSET::AllCuMask();
 
     D_PAD* refPad = aSortedPadsList[aRefPadIdx];
-    LSET layerMask = refPad->GetLayerSet() & all_cu;
 
     for( int idx = aRefPadIdx; idx < (int)aSortedPadsList.size();  ++idx )
     {

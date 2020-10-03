@@ -77,10 +77,10 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             &m_IntersheetsRefFormatShort, defaultIntersheetsRefFormatShort ) );
 
     m_params.emplace_back( new PARAM<wxString>( "drawing.intersheets_ref_prefix",
-            &m_IntersheetsRefPrefix, "[" ) );
+            &m_IntersheetsRefPrefix, defaultIntersheetsRefPrefix ) );
 
     m_params.emplace_back( new PARAM<wxString>( "drawing.intersheets_ref_suffix",
-            &m_IntersheetsRefSuffix, "]" ) );
+            &m_IntersheetsRefSuffix, defaultIntersheetsRefSuffix ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_line_thickness",
             &m_DefaultLineWidth, Mils2iu( defaultLineThickness ),

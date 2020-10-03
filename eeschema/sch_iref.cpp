@@ -35,9 +35,8 @@ SCH_IREF::SCH_IREF( const wxPoint& pos, const wxString& text, SCH_GLOBALLABEL* a
         SCH_TEXT( pos, text, SCH_IREF_T )
 {
     m_Layer  = LAYER_GLOBLABEL;
-    m_parent = aParent;
+    m_parentLabel = aParent;
     SetMultilineAllowed( false );
-    m_ownPageNumber = 0;
     m_screen = nullptr;
 }
 
@@ -46,9 +45,9 @@ void SCH_IREF::PlaceAtDefaultPosition()
 {
     wxPoint offset;
 
-    int labelLen = m_parent->GetBoundingBox().GetSizeMax();
+    int labelLen = m_parentLabel->GetBoundingBox().GetSizeMax();
 
-    switch( m_parent->GetLabelSpinStyle() )
+    switch( m_parentLabel->GetLabelSpinStyle() )
     {
     default:
     case LABEL_SPIN_STYLE::LEFT:   offset.x -= labelLen; break;
@@ -57,12 +56,12 @@ void SCH_IREF::PlaceAtDefaultPosition()
     case LABEL_SPIN_STYLE::BOTTOM: offset.y += labelLen; break;
     }
 
-    SetTextPos( m_parent->GetPosition() + offset );
+    SetTextPos( m_parentLabel->GetPosition() + offset );
 }
 
 wxPoint SCH_IREF::GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const
 {
-    return m_parent->GetSchematicTextOffset( aSettings );
+    return m_parentLabel->GetSchematicTextOffset( aSettings );
 }
 
 
@@ -115,11 +114,11 @@ void SCH_IREF::SetIrefOrientation( LABEL_SPIN_STYLE aSpinStyle )
 
 void SCH_IREF::CopyParentStyle()
 {
-    SetTextSize( m_parent->GetTextSize() );
-    SetItalic( m_parent->IsItalic() );
-    SetBold( m_parent->IsBold() );
-    SetTextThickness( m_parent->GetTextThickness() );
-    SetIrefOrientation( m_parent->GetLabelSpinStyle() );
+    SetTextSize( m_parentLabel->GetTextSize() );
+    SetItalic( m_parentLabel->IsItalic() );
+    SetBold( m_parentLabel->IsBold() );
+    SetTextThickness( m_parentLabel->GetTextThickness() );
+    SetIrefOrientation( m_parentLabel->GetLabelSpinStyle() );
 }
 
 

@@ -64,9 +64,9 @@ public:
 
     wxPoint GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const override;
 
-    SCH_GLOBALLABEL* GetParent() { return m_parent; }
+    SCH_GLOBALLABEL* GetParentLabel() { return m_parentLabel; }
 
-    void SetParent( SCH_GLOBALLABEL* parent ) { m_parent = parent; }
+    void SetParentLabel( SCH_GLOBALLABEL* parent ) { m_parentLabel = parent; }
 
     SCH_SCREEN* GetScreen() { return m_screen; }
 
@@ -82,8 +82,7 @@ private:
     using EDA_ITEM::SetParent;
 
     std::vector<int> m_refTable;
-    SCH_GLOBALLABEL* m_parent;
-    int              m_ownPageNumber;
+    SCH_GLOBALLABEL* m_parentLabel;
     SCH_SCREEN*      m_screen;
 };
 
