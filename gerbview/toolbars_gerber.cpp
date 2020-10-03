@@ -299,8 +299,30 @@ void GERBVIEW_FRAME::updateDCodeSelectBox()
     // Build the aperture list of the current layer, and add it to the combo box:
     wxArrayString dcode_list;
     wxString msg;
-    const char*   units = GetUserUnits() == EDA_UNITS::INCHES ? "mils" : "mm";
-    double        scale = GetUserUnits() == EDA_UNITS::INCHES ? IU_PER_MILS : IU_PER_MM;
+
+    double   scale = 1.0;
+    wxString units;
+
+    switch( GetUserUnits() )
+    {
+        case EDA_UNITS::MILLIMETRES:
+            scale = IU_PER_MM;
+            units = "mm";
+            break;
+
+        case EDA_UNITS::INCHES:
+            scale = IU_PER_MILS * 1000;
+            units = "in";
+            break;
+
+        case EDA_UNITS::MILS:
+            scale = IU_PER_MILS;
+            units = "mil";
+            break;
+
+        default:
+            wxASSERT_MSG( false, "Invalid units" );
+    }
 
     for( int ii = 0; ii < TOOLS_MAX_COUNT; ii++ )
     {

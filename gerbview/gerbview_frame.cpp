@@ -540,8 +540,31 @@ void GERBVIEW_FRAME::Liste_D_Codes()
     int             ii, jj;
     wxString        Line;
     wxArrayString   list;
-    double          scale = GetUserUnits() == EDA_UNITS::INCHES ? IU_PER_MILS * 1000 : IU_PER_MM;
-    int       curr_layer = GetActiveLayer();
+    int             curr_layer = GetActiveLayer();
+
+    double   scale = 1.0;
+    wxString units;
+
+    switch( GetUserUnits() )
+    {
+        case EDA_UNITS::MILLIMETRES:
+            scale = IU_PER_MM;
+            units = "mm";
+            break;
+
+        case EDA_UNITS::INCHES:
+            scale = IU_PER_MILS * 1000;
+            units = "in";
+            break;
+
+        case EDA_UNITS::MILS:
+            scale = IU_PER_MILS;
+            units = "mil";
+            break;
+
+        default:
+            wxASSERT_MSG( false, "Invalid units" );
+    }
 
     for( int layer = 0; layer < (int)ImagesMaxCount(); ++layer )
     {
@@ -559,8 +582,6 @@ void GERBVIEW_FRAME::Liste_D_Codes()
             Line.Printf( wxT( "*** layer %2.2d  ***" ), layer + 1 );
 
         list.Add( Line );
-
-        const char* units = GetUserUnits() == EDA_UNITS::INCHES ? "\"" : "mm";
 
         for( ii = 0, jj = 1; ii < TOOLS_MAX_COUNT; ii++ )
         {

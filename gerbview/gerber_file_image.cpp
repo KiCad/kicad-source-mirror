@@ -357,12 +357,27 @@ void GERBER_FILE_IMAGE::DisplayImageInfo(  GERBVIEW_FRAME* aMainFrame  )
     msg = m_ImageJustifyYCenter ? _("Center") : _("Normal");
     aMainFrame->AppendMsgPanel( _( "Y Justify" ), msg, DARKRED );
 
-    if( aMainFrame->GetUserUnits() == EDA_UNITS::INCHES )
+    switch( aMainFrame->GetUserUnits() )
+    {
+    case EDA_UNITS::MILS:
+        msg.Printf( wxT( "X=%f Y=%f" ), Iu2Mils( m_ImageJustifyOffset.x ),
+                                        Iu2Mils( m_ImageJustifyOffset.y ) );
+        break;
+
+    case EDA_UNITS::INCHES:
         msg.Printf( wxT( "X=%f Y=%f" ), Iu2Mils( m_ImageJustifyOffset.x ) / 1000.0,
                                         Iu2Mils( m_ImageJustifyOffset.y ) / 1000.0 );
-    else
+        break;
+
+    case EDA_UNITS::MILLIMETRES:
         msg.Printf( wxT( "X=%f Y=%f" ), Iu2Millimeter( m_ImageJustifyOffset.x ),
                                         Iu2Millimeter( m_ImageJustifyOffset.y ) );
+        break;
+
+    default:
+        wxASSERT_MSG( false, "Invalid unit" );
+    }
+
 
     aMainFrame->AppendMsgPanel( _( "Image Justify Offset" ), msg, DARKRED );
 }

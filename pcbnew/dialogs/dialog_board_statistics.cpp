@@ -337,10 +337,23 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
             }
         }
 
-        if( GetUserUnits() == EDA_UNITS::INCHES )
+        switch( GetUserUnits() )
+        {
+        case EDA_UNITS::INCHES:
             m_boardArea /= ( IU_PER_MILS * IU_PER_MILS * 1000000 );
-        else
+            break;
+
+        case EDA_UNITS::MILS:
+            m_boardArea /= ( IU_PER_MILS * IU_PER_MILS );
+            break;
+
+        case EDA_UNITS::MILLIMETRES:
             m_boardArea /= ( IU_PER_MM * IU_PER_MM );
+            break;
+
+        default:
+            wxASSERT_MSG( false, "Invalid unit" );
+        }
 
         m_boardWidth = bbox.GetWidth();
         m_boardHeight = bbox.GetHeight();

@@ -513,7 +513,7 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
     fn.SetPath( dirDialog.GetPath() );
     fn.SetExt( wxT( "rpt" ) );
 
-    bool unitMM = GetUserUnits() != EDA_UNITS::INCHES;
+    bool unitMM = GetUserUnits() == EDA_UNITS::MILLIMETRES;
     bool success = DoGenFootprintsReport( fn.GetFullPath(), unitMM );
 
     wxString msg;
