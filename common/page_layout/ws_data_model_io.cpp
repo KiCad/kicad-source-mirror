@@ -30,14 +30,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <base_struct.h>
 #include <ws_painter.h>
 #include <ws_draw_item.h>
 #include <ws_data_model.h>
 #include <math/vector2d.h>
 #include <page_layout/page_layout_reader_lexer.h>
-#include <macros.h>
 #include <convert_to_biu.h>
 
 

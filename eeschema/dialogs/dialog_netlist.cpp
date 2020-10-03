@@ -33,7 +33,6 @@
  * referred to as plugins, but they are really just external binaries.
  */
 
-#include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <gestfich.h>

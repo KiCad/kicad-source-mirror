@@ -24,7 +24,6 @@
  */
 
 #include "netlist_exporter_pspice.h"
-#include <fctsys.h>
 #include <build_version.h>
 #include <confirm.h>
 

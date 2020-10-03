@@ -33,7 +33,6 @@
 #include <dialogs/dialog_symbol_remap.h>
 #include <project_rescue.h>
 #include <erc.h>
-#include <fctsys.h>
 #include <invoke_sch_dialog.h>
 #include <kiway.h>
 #include <netlist_exporters/netlist_exporter_pspice.h>

@@ -23,7 +23,6 @@
 
 #include <connection_graph.h>
 #include <dialog_global_edit_text_and_graphics_base.h>
-#include <fctsys.h>
 #include <kicad_string.h>
 #include <sch_component.h>
 #include <sch_connection.h>

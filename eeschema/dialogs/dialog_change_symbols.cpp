@@ -21,7 +21,6 @@
 
 #include <algorithm>
 
-#include <fctsys.h>
 #include <bitmaps.h>
 #include <kicad_string.h>   // WildCompareString
 #include <kiway.h>

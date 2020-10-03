@@ -25,7 +25,6 @@
 
 
 #include <algorithm>
-#include <fctsys.h>
 #include <build_version.h>
 #include <confirm.h>
 

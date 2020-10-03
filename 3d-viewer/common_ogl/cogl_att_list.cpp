@@ -30,7 +30,6 @@
 #include "cogl_att_list.h"
 #include <macros.h>
 #include <wx/glcanvas.h>
-#include <fctsys.h>
 #include <wx/debug.h>
 
 /**

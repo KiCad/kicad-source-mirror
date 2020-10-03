@@ -21,7 +21,6 @@
 #include <set>
 #include <wx/regex.h>
 
-#include <fctsys.h>
 #include <project.h>
 #include <panel_sym_lib_table.h>
 #include <lib_id.h>

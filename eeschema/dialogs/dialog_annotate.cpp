@@ -23,7 +23,6 @@
  */
 
 
-#include <fctsys.h>
 #include <sch_edit_frame.h>
 #include <bitmaps.h>
 #include <confirm.h>

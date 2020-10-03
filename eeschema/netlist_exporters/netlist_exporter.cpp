@@ -26,8 +26,6 @@
 #include <netlist_exporter.h>
 
 #include <confirm.h>
-#include <fctsys.h>
-#include <gestfich.h>
 #include <pgm_base.h>
 #include <refdes_utils.h>
 

@@ -28,7 +28,6 @@
  * @file 3d_toolbar.cpp
  */
 
-#include <fctsys.h>
 #include <wx/wupdlock.h>
 #include <eda_3d_viewer.h>
 #include <menus_helpers.h>

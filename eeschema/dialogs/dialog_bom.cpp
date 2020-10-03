@@ -33,7 +33,6 @@
 #include <dialog_bom_base.h>
 #include <dialog_helpers.h>
 #include <eeschema_settings.h>
-#include <fctsys.h>
 #include <gestfich.h>
 #include <html_messagebox.h>
 #include <i18n_utility.h> // for _HKI definition used in dialog_bom_help_md.h

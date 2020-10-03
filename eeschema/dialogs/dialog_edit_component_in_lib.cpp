@@ -25,7 +25,6 @@
 #include <class_libentry.h>
 #include <confirm.h>
 #include <dialog_text_entry.h>
-#include <fctsys.h>
 #include <kiway.h>
 #include <lib_edit_frame.h>
 #include <lib_manager.h>

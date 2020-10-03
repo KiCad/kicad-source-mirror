@@ -28,7 +28,6 @@
  */
 
 
-#include <fctsys.h>
 #include <confirm.h>
 #include <sch_edit_frame.h>
 #include <sch_draw_panel.h>

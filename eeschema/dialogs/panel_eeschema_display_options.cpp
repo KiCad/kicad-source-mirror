@@ -22,14 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
 #include <class_libentry.h>
 #include <panel_eeschema_display_options.h>
 #include <widgets/gal_options_panel.h>
 #include <sch_junction.h>
-#include <gr_text.h>
 
 PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* aFrame,
                                                                 wxWindow* aWindow ) :

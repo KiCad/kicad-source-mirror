@@ -28,8 +28,7 @@
 #include <confirm.h>
 #include <eeschema_id.h>
 #include <eeschema_settings.h>
-#include <fctsys.h>
-#include <general.h>
+//#include <general.h>
 #include <kiface_i.h>
 #include <kiplatform/app.h>
 #include <kiway_express.h>

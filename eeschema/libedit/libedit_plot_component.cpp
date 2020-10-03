@@ -22,7 +22,6 @@
  */
 
 
-#include <fctsys.h>
 #include <sch_painter.h>
 #include <lib_edit_frame.h>
 #include <class_libentry.h>
