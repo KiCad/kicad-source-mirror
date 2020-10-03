@@ -195,14 +195,14 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
             static_cast<MODULE*>( lastItem )->RunOnChildren( [&]( BOARD_ITEM* child )
                                                              {
                                                                  child->ClearBrightened();
-                                                             });
+                                                             } );
         }
         else if( lastItem->Type() == PCB_GROUP_T )
         {
-            static_cast<PCB_GROUP*>( lastItem )->RunOnChildren( [&] ( BOARD_ITEM* child )
-            {
-                child->ClearBrightened();
-            });
+            static_cast<PCB_GROUP*>( lastItem )->RunOnChildren( [&]( BOARD_ITEM* child )
+                                                                {
+                                                                    child->ClearBrightened();
+                                                                } );
         }
 
         GetCanvas()->GetView()->Update( lastItem );

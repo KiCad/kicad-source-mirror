@@ -633,14 +633,14 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     formatHeader( aBoard, aNestLevel );
 
     // Save the modules.
-    for( auto module : sorted_modules )
+    for( BOARD_ITEM* module : sorted_modules )
     {
         Format( module, aNestLevel );
         m_out->Print( 0, "\n" );
     }
 
     // Save the graphical items on the board (not owned by a module)
-    for( auto item : sorted_drawings )
+    for( BOARD_ITEM* item : sorted_drawings )
         Format( item, aNestLevel );
 
     if( sorted_drawings.size() )
@@ -649,7 +649,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     // Do not save MARKER_PCBs, they can be regenerated easily.
 
     // Save the tracks and vias.
-    for( auto track : sorted_tracks )
+    for( TRACK* track : sorted_tracks )
         Format( track, aNestLevel );
 
     if( sorted_tracks.size() )
@@ -660,7 +660,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
         Format( zone, aNestLevel );
 
     // Save the groups
-    for( const auto group : sorted_groups )
+    for( BOARD_ITEM* group : sorted_groups )
         Format( group, aNestLevel );
 }
 
@@ -1083,19 +1083,25 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
             aModule->GraphicalItems().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_zones( aModule->Zones().begin(),
             aModule->Zones().end() );
+    std::set<BOARD_ITEM*, PCB_GROUP::ptr_cmp> sorted_groups( aModule->Groups().begin(),
+            aModule->Groups().end() );
 
     // Save drawing elements.
 
-    for( auto gr : sorted_drawings )
+    for( BOARD_ITEM* gr : sorted_drawings )
         Format( gr, aNestLevel+1 );
 
     // Save pads.
-    for( auto pad : sorted_pads )
+    for( D_PAD* pad : sorted_pads )
         Format( pad, aNestLevel+1 );
 
     // Save zones.
-    for( auto zone : sorted_zones )
+    for( BOARD_ITEM* zone : sorted_zones )
         Format( zone, aNestLevel + 1 );
+
+    // Save groups.
+    for( BOARD_ITEM* group : sorted_groups )
+        Format( group, aNestLevel + 1 );
 
     // Save 3D info.
     auto bs3D = aModule->Models().begin();
@@ -2291,7 +2297,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     }
 
     // I need my own copy for the cache
-    MODULE* module = static_cast<MODULE*>( aFootprint->Duplicate() );
+    MODULE* module = static_cast<MODULE*>( aFootprint->Clone() );
 
     // It should have no parent, orientation should be zero, and it should be on the front layer.
     module->SetParent( nullptr );

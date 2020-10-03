@@ -114,28 +114,25 @@ using namespace std::placeholders;
 
 static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 {
-    for( auto item : aPcb->Tracks() )
+    for( TRACK* item : aPcb->Tracks() )
     {
         if( aItem == static_cast<BOARD_ITEM*>( item ) )
             return true;
     }
 
-    // Append modules:
-    for( auto item : aPcb->Modules() )
+    for( MODULE* item : aPcb->Modules() )
     {
         if( aItem == static_cast<BOARD_ITEM*>( item ) )
             return true;
     }
 
-    // Append drawings
-    for( auto item : aPcb->Drawings() )
+    for( BOARD_ITEM* item : aPcb->Drawings() )
     {
         if( aItem == static_cast<BOARD_ITEM*>( item ) )
             return true;
     }
 
-    // Append zones outlines
-    for( auto item : aPcb->Zones() )
+    for( ZONE_CONTAINER* item : aPcb->Zones() )
     {
         if( aItem == static_cast<BOARD_ITEM*>( item ) )
             return true;
@@ -149,8 +146,7 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
             return true;
     }
 
-    // Append groups:
-    for( auto item : aPcb->Groups() )
+    for( PCB_GROUP* item : aPcb->Groups() )
     {
         if( aItem == static_cast<BOARD_ITEM*>( item ) )
             return true;
@@ -195,8 +191,6 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
                                               UNDO_REDO aTypeCommand,
                                               const wxPoint& aTransformPoint )
 {
-    static KICAD_T moduleChildren[] = { PCB_MODULE_TEXT_T, PCB_MODULE_EDGE_T, PCB_PAD_T, EOT };
-
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
     commandToUndo->m_TransformPoint = aTransformPoint;
@@ -210,14 +204,9 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
         BOARD_ITEM* item        = dynamic_cast<BOARD_ITEM*>( aItemsList.GetPickedItem( ii ) );
 
         // For items belonging to modules, we need to save state of the parent module
-        if( item && item->IsType( moduleChildren ) )
+        if( item && item->GetParent() && item->GetParent()->Type() == PCB_MODULE_T )
         {
-            // Item to be stored in the undo buffer is the parent module
             item = item->GetParent();
-            wxASSERT( item && item->Type() == PCB_MODULE_T );
-
-            if( item == NULL )
-                continue;
 
             // Check if the parent module has already been saved in another entry
             bool found = false;

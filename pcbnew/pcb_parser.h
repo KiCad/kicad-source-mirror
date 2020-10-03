@@ -91,12 +91,13 @@ class PCB_PARSER : public PCB_LEXER
     // them into BOARD_ITEM* after we've parsed the rest of the file.
     typedef struct
     {
+        BOARD_ITEM*       parent;
         wxString          name;
         KIID              uuid;
         std::vector<KIID> memberUuids;
-    } GroupInfo;
+    } GROUP_INFO;
 
-    std::vector<GroupInfo> m_groupInfos;
+    std::vector<GROUP_INFO> m_groupInfos;
 
     ///> Converts net code using the mapping table if available,
     ///> otherwise returns unchanged net code if < 0 or if is is out of range
@@ -181,14 +182,13 @@ class PCB_PARSER : public PCB_LEXER
     PCB_TARGET*     parsePCB_TARGET();
     MARKER_PCB*     parseMARKER( BOARD_ITEM_CONTAINER* aParent );
     BOARD*          parseBOARD();
-    void            parseGROUP();
+    void            parseGROUP( BOARD_ITEM* aParent );
 
     /**
      * Function parseBOARD_unchecked
      * Parse a module, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
      */
     BOARD*          parseBOARD_unchecked();
-
 
     /**
      * Function lookUpLayer
@@ -339,6 +339,12 @@ class PCB_PARSER : public PCB_LEXER
      * @return if m_resetKIIDs, returns new KIID(), otehrwise returns CurStr() as KIID.
      */
     KIID CurStrToKIID();
+
+    /**
+     * Called after parsing a footprint definition or board to build the group membership
+     * lists.
+     */
+    void resolveGroups( BOARD_ITEM* aParent );
 
 public:
 

@@ -51,7 +51,7 @@ class VIEW;
 class PCB_GROUP : public BOARD_ITEM
 {
 public:
-    PCB_GROUP( BOARD* aParent );
+    PCB_GROUP( BOARD_ITEM* aParent );
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {

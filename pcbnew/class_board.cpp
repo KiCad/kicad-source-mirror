@@ -791,6 +791,18 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
             if( drawing->m_Uuid == aID )
                 return drawing;
         }
+
+        for( BOARD_ITEM* zone : module->Zones() )
+        {
+            if( zone->m_Uuid == aID )
+                return zone;
+        }
+
+        for( PCB_GROUP* group : module->Groups() )
+        {
+            if( group->m_Uuid == aID )
+                return group;
+        }
     }
 
     for( ZONE_CONTAINER* zone : Zones() )

@@ -148,9 +148,9 @@ static IO_MGR::PCB_FILE_T detect_file_type( FILE* aFile, const wxFileName& aFile
  * @param aFileType - type of the file
  * @param aName - name of the footprint
  */
-static MODULE* parse_module_with_plugin(
-        const wxFileName& aFileName, IO_MGR::PCB_FILE_T aFileType,
-        const wxString& aName )
+static MODULE* parse_module_with_plugin( const wxFileName& aFileName,
+                                         IO_MGR::PCB_FILE_T aFileType,
+                                         const wxString& aName )
 {
     wxString path;
 

@@ -86,8 +86,9 @@ class TEXTE_PCB;
 //#define SEXPR_BOARD_FILE_VERSION    20200909  // Change DIMENSION format
 //#define SEXPR_BOARD_FILE_VERSION    20200913  // Add leader dimension
 //#define SEXPR_BOARD_FILE_VERSION    20200916  // Add center dimension
-//#define SEXPR_BOARD_FILE_VERSION      20200921  // Add orthogonal dimension
-#define SEXPR_BOARD_FILE_VERSION      20200922  // Add user name to layer definition.
+//#define SEXPR_BOARD_FILE_VERSION    20200921  // Add orthogonal dimension
+//#define SEXPR_BOARD_FILE_VERSION    20200922  // Add user name to layer definition.
+#define SEXPR_BOARD_FILE_VERSION      20201002  // Add groups in footprints (for footprint editor).
 
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag

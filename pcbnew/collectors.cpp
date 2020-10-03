@@ -134,6 +134,7 @@ const KICAD_T GENERAL_COLLECTOR::ModulesAndTheirItems[] = {
     PCB_MODULE_EDGE_T,
     PCB_PAD_T,
     PCB_MODULE_ZONE_AREA_T,
+    PCB_GROUP_T,
     EOT
     };
 
@@ -143,6 +144,7 @@ const KICAD_T GENERAL_COLLECTOR::ModuleItems[] = {
     PCB_MODULE_EDGE_T,
     PCB_PAD_T,
     PCB_MODULE_ZONE_AREA_T,
+    PCB_GROUP_T,
     EOT
     };
 

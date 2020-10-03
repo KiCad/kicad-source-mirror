@@ -118,24 +118,6 @@ private:
     }
 
     /**
-     * Function getAllGroups()
-     * Returns all group ids for the item (collected from all layers the item occupies).
-     *
-     * @return vector of group ids.
-     */
-    std::vector<int> getAllGroups() const
-    {
-        std::vector<int> groups( m_groupsSize );
-
-        for( int i = 0; i < m_groupsSize; ++i )
-        {
-            groups[i] = m_groups[i].second;
-        }
-
-        return groups;
-    }
-
-    /**
      * Function setGroup()
      * Sets a group id for the item and the layer combination.
      *

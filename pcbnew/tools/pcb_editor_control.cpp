@@ -119,46 +119,6 @@ public:
 };
 
 
-class GROUP_CONTEXT_MENU : public ACTION_MENU
-{
-public:
-    GROUP_CONTEXT_MENU( ) : ACTION_MENU( true )
-    {
-        SetIcon( locked_xpm ); // fixme
-        SetTitle( _( "Grouping" ) );
-
-        Add( PCB_ACTIONS::groupCreate );
-        Add( PCB_ACTIONS::groupUngroup );
-        Add( PCB_ACTIONS::groupRemoveItems );
-        Add( PCB_ACTIONS::groupEnter );
-    }
-
-    ACTION_MENU* create() const override
-    {
-        return new GROUP_CONTEXT_MENU();
-    }
-
-private:
-    void update() override
-    {
-        SELECTION_TOOL* selTool = getToolManager()->GetTool<SELECTION_TOOL>();
-        BOARD* board = selTool->GetBoard();
-
-        const auto& selection = selTool->GetSelection();
-
-        wxString check = board->GroupsSanityCheck();
-        wxCHECK_RET( check == wxEmptyString, _( "Group is in inconsistent state: " ) + check );
-
-        BOARD::GroupLegalOpsField legalOps = board->GroupLegalOps( selection );
-
-        Enable( PCB_ACTIONS::groupCreate.GetUIId(),      legalOps.create );
-        Enable( PCB_ACTIONS::groupUngroup.GetUIId(),     legalOps.ungroup );
-        Enable( PCB_ACTIONS::groupRemoveItems.GetUIId(), legalOps.removeItems );
-        Enable( PCB_ACTIONS::groupEnter.GetUIId(),       legalOps.enter );
-    }
-};
-
-
 PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
     PCB_TOOL_BASE( "pcbnew.EditorControl" ),
     m_frame( nullptr )
@@ -219,9 +179,6 @@ bool PCB_EDITOR_CONTROL::Init()
     auto lockMenu = std::make_shared<LOCK_CONTEXT_MENU>();
     lockMenu->SetTool( this );
 
-    auto groupMenu = std::make_shared<GROUP_CONTEXT_MENU>();
-    groupMenu->SetTool( this );
-
     // Add the PCB control menus to relevant other tools
 
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
@@ -237,9 +194,7 @@ bool PCB_EDITOR_CONTROL::Init()
 
         toolMenu.AddSubMenu( zoneMenu );
         toolMenu.AddSubMenu( lockMenu );
-        toolMenu.AddSubMenu( groupMenu );
 
-        menu.AddMenu( groupMenu.get(), SELECTION_CONDITIONS::NotEmpty, 100 );
         menu.AddMenu( lockMenu.get(), SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::LockableItems ), 100 );
 
         menu.AddMenu( zoneMenu.get(), SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ), 200 );
@@ -995,138 +950,6 @@ int PCB_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 }
 
 
-int PCB_EDITOR_CONTROL::Group( const TOOL_EVENT& aEvent )
-{
-    SELECTION_TOOL*         selTool   = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const PCBNEW_SELECTION& selection = selTool->GetSelection();
-    BOARD*                  board     = getModel<BOARD>();
-    PICKED_ITEMS_LIST       undoList;
-
-    if( selection.Empty() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
-
-    PCB_GROUP* group = new PCB_GROUP( board );
-    board->Add( group );
-
-    undoList.PushItem( ITEM_PICKER( nullptr, group, UNDO_REDO::NEWITEM ) );
-
-    for( EDA_ITEM* item : selection )
-    {
-        group->AddItem( static_cast<BOARD_ITEM*>( item ) );
-        undoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::GROUP ) );
-    }
-
-    m_frame->SaveCopyInUndoList( undoList, UNDO_REDO::GROUP );
-
-    selTool->ClearSelection();
-    selTool->select( group );
-
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-    m_frame->OnModify();
-
-    return 0;
-}
-
-
-int PCB_EDITOR_CONTROL::Ungroup( const TOOL_EVENT& aEvent )
-{
-    const PCBNEW_SELECTION&  selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
-    PICKED_ITEMS_LIST        undoList;
-    std::vector<BOARD_ITEM*> members;
-
-    if( selection.Empty() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
-
-    PCBNEW_SELECTION selCopy = selection;
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-    for( EDA_ITEM* item : selCopy )
-    {
-        PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( item );
-
-        if( group )
-        {
-            for( BOARD_ITEM* member : group->GetItems() )
-            {
-                undoList.PushItem( ITEM_PICKER( nullptr, member, UNDO_REDO::UNGROUP ) );
-                members.push_back( member );
-            }
-
-            group->RemoveAll();
-            m_frame->GetBoard()->Remove( group );
-
-            group->SetSelected();
-            undoList.PushItem( ITEM_PICKER( nullptr, group, UNDO_REDO::DELETED ) );
-        }
-    }
-
-    m_frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNGROUP );
-
-    m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &members );
-
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-    m_frame->OnModify();
-
-    return 0;
-}
-
-
-int PCB_EDITOR_CONTROL::RemoveFromGroup( const TOOL_EVENT& aEvent )
-{
-    SELECTION_TOOL*         selTool   = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const PCBNEW_SELECTION& selection = selTool->GetSelection();
-    BOARD_COMMIT            commit( m_frame );
-
-    if( selection.Empty() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
-
-    std::map<PCB_GROUP*, std::vector<BOARD_ITEM*>> groupMap;
-
-    for( EDA_ITEM* item : selection )
-    {
-        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
-        PCB_GROUP*  group = boardItem->GetParentGroup();
-
-        if( group )
-            groupMap[ group ].push_back( boardItem );
-    }
-
-    for( std::pair<PCB_GROUP*, std::vector<BOARD_ITEM*>> pair : groupMap )
-    {
-        commit.Modify( pair.first );
-
-        for( BOARD_ITEM* item : pair.second )
-            pair.first->RemoveItem( item );
-    }
-
-    commit.Push( "Remove Group Items" );
-
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-    m_frame->OnModify();
-
-    return 0;
-}
-
-
-int PCB_EDITOR_CONTROL::EnterGroup( const TOOL_EVENT& aEvent )
-{
-    SELECTION_TOOL*         selTool   = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const PCBNEW_SELECTION& selection = selTool->GetSelection();
-
-    if( selection.GetSize() == 1 && selection[0]->Type() == PCB_GROUP_T )
-        selTool->EnterGroup();
-
-    return 0;
-}
-
-
-int PCB_EDITOR_CONTROL::LeaveGroup( const TOOL_EVENT& aEvent )
-{
-    m_toolMgr->GetTool<SELECTION_TOOL>()->ExitGroup( true /* Select the group */ );
-    return 0;
-}
-
-
 int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = getView();
@@ -1492,11 +1315,6 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::ToggleLockSelected,       PCB_ACTIONS::toggleLock.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::LockSelected,             PCB_ACTIONS::lock.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UnlockSelected,           PCB_ACTIONS::unlock.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::Group,                    PCB_ACTIONS::groupCreate.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::Ungroup,                  PCB_ACTIONS::groupUngroup.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::RemoveFromGroup,          PCB_ACTIONS::groupRemoveItems.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::EnterGroup,               PCB_ACTIONS::groupEnter.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::LeaveGroup,               PCB_ACTIONS::groupLeave.MakeEvent() );
 
     Go( &PCB_EDITOR_CONTROL::UpdatePCBFromSchematic,   ACTIONS::updatePcbFromSchematic.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UpdateSchematicFromPCB,   ACTIONS::updateSchematicFromPcb.MakeEvent() );

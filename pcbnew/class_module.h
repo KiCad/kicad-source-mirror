@@ -101,6 +101,7 @@ public:
 DECL_DEQ_FOR_SWIG( PADS, D_PAD* )
 DECL_DEQ_FOR_SWIG( DRAWINGS, BOARD_ITEM* )
 DECL_VEC_FOR_SWIG( MODULE_ZONE_CONTAINERS, MODULE_ZONE_CONTAINER* )
+DECL_VEC_FOR_SWIG( MODULE_GROUPS, PCB_GROUP* )
 DECL_DEQ_FOR_SWIG( MODULES, MODULE* )
 
 class MODULE : public BOARD_ITEM_CONTAINER
@@ -178,36 +179,17 @@ public:
 
     const EDA_RECT GetBoundingBox( bool aIncludeInvisibleText ) const;
 
-    PADS& Pads()
-    {
-         return m_pads;
-    }
+    PADS& Pads() { return m_pads; }
+    const PADS& Pads() const { return m_pads; }
 
-    const PADS& Pads() const
-    {
-         return m_pads;
-    }
+    DRAWINGS& GraphicalItems() { return m_drawings; }
+    const DRAWINGS& GraphicalItems() const { return m_drawings; }
 
-    DRAWINGS& GraphicalItems()
-    {
-        return m_drawings;
-    }
+    MODULE_ZONE_CONTAINERS& Zones()  { return m_fp_zones; }
+    const MODULE_ZONE_CONTAINERS& Zones() const { return m_fp_zones; }
 
-    const DRAWINGS& GraphicalItems() const
-    {
-        return m_drawings;
-    }
-
-    MODULE_ZONE_CONTAINERS& Zones()
-    {
-        return m_fp_zones;
-    }
-
-
-    const MODULE_ZONE_CONTAINERS& Zones() const
-    {
-        return m_fp_zones;
-    }
+    MODULE_GROUPS& Groups() { return m_fp_groups; }
+    const MODULE_GROUPS& Groups() const { return m_fp_groups; }
 
     bool HasThroughHolePads() const;
 
@@ -713,6 +695,7 @@ private:
     DRAWINGS               m_drawings;  // BOARD_ITEMs for drawings on the board, owned by pointer.
     PADS                   m_pads;      // D_PAD items, owned by pointer
     MODULE_ZONE_CONTAINERS m_fp_zones;  // MODULE_ZONE_CONTAINER items, owned by pointer
+    MODULE_GROUPS          m_fp_groups; // PCB_GROUP items, owned by pointer
 
     double         m_Orient;            // Orientation in tenths of a degree, 900=90.0 degrees.
     wxPoint        m_Pos;               // Position of module on the board in internal units.

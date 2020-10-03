@@ -29,7 +29,7 @@
 #include <msgpanel.h>
 #include <view/view.h>
 
-PCB_GROUP::PCB_GROUP( BOARD*aParent ) :
+PCB_GROUP::PCB_GROUP( BOARD_ITEM* aParent ) :
         BOARD_ITEM( aParent, PCB_GROUP_T )
 {
 }
@@ -71,10 +71,10 @@ void PCB_GROUP::RemoveAll()
 
 PCB_GROUP* PCB_GROUP::TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope )
 {
-    if( item->GetParent() && item->GetParent()->Type() == PCB_MODULE_T )
-        item = item->GetParent();
-
     PCB_GROUP* candidate = item->GetParentGroup();
+
+    if( !candidate && item->GetParent() && item->GetParent()->Type() == PCB_MODULE_T )
+        candidate = item->GetParent()->GetParentGroup();
 
     while( candidate && candidate->GetParentGroup() && candidate->GetParentGroup() != scope )
         candidate = candidate->GetParentGroup();

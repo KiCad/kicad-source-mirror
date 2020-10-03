@@ -67,6 +67,7 @@
 #include <tool/zoom_tool.h>
 #include <tools/pcb_editor_conditions.h>
 #include <tools/pcb_viewer_tools.h>
+#include <tools/group_tool.h>
 #include <tools/position_relative_tool.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/infobar.h>
@@ -862,6 +863,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new PCBNEW_PICKER_TOOL );
     m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
     m_toolManager->RegisterTool( new PCB_VIEWER_TOOLS );
+    m_toolManager->RegisterTool( new GROUP_TOOL );
     m_toolManager->RegisterTool( new CONVERT_TOOL );
 
     m_toolManager->GetTool<SELECTION_TOOL>()->SetEditModules( true );
@@ -872,6 +874,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->GetTool<PCBNEW_CONTROL>()->SetEditModules( true );
     m_toolManager->GetTool<PCBNEW_PICKER_TOOL>()->SetEditModules( true );
     m_toolManager->GetTool<POSITION_RELATIVE_TOOL>()->SetEditModules( true );
+    m_toolManager->GetTool<GROUP_TOOL>()->SetEditModules( true );
 
     m_toolManager->GetTool<PCB_VIEWER_TOOLS>()->SetFootprintFrame( true );
     m_toolManager->InitTools();

@@ -92,36 +92,48 @@ MODULE::MODULE( const MODULE& aModule ) :
     m_Value = new TEXTE_MODULE( *aModule.m_Value );
     m_Value->SetParent( this );
 
-    // Copy auxiliary data: Pads
-    for( D_PAD* pad : aModule.Pads() )
-        Add( static_cast<D_PAD*>( pad->Clone() ) );
+    std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
-    // Copy auxiliary data: Zones
-    for( MODULE_ZONE_CONTAINER* item : aModule.Zones() )
+    // Copy pads
+    for( D_PAD* pad : aModule.Pads() )
     {
-        Add( static_cast<MODULE_ZONE_CONTAINER*>( item->Clone() ) );
+        D_PAD* newPad = static_cast<D_PAD*>( pad->Clone() );
+        ptrMap[ pad ] = newPad;
+        Add( newPad );
+    }
+
+    // Copy zones
+    for( MODULE_ZONE_CONTAINER* zone : aModule.Zones() )
+    {
+        MODULE_ZONE_CONTAINER* newZone = static_cast<MODULE_ZONE_CONTAINER*>( zone->Clone() );
+        ptrMap[ zone ] = newZone;
+        Add( newZone );
 
         // Ensure the net info is OK and especially uses the net info list
         // living in the current board
         // Needed when copying a fp from fp editor that has its own board
         // Must be NETINFO_LIST::ORPHANED_ITEM for a keepout that has no net.
-        item->SetNetCode( -1 );
+        newZone->SetNetCode( -1 );
     }
 
-    // Copy auxiliary data: Drawings
+    // Copy drawings
     for( BOARD_ITEM* item : aModule.GraphicalItems() )
     {
-        switch( item->Type() )
-        {
-        case PCB_MODULE_TEXT_T:
-        case PCB_MODULE_EDGE_T:
-            Add( static_cast<BOARD_ITEM*>( item->Clone() ) );
-            break;
+        BOARD_ITEM* newItem = static_cast<BOARD_ITEM*>( item->Clone() );
+        ptrMap[ item ] = newItem;
+        Add( newItem );
+    }
 
-        default:
-            wxLogMessage( wxT( "Class MODULE copy constructor internal error: unknown type" ) );
-            break;
-        }
+    // Copy groups
+    for( PCB_GROUP* group : aModule.Groups() )
+    {
+        PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( group->Clone() );
+        const_cast<std::unordered_set<BOARD_ITEM*>*>( &newGroup->GetItems() )->clear();
+
+        for( BOARD_ITEM* member : group->GetItems() )
+            newGroup->AddItem( ptrMap[ member ] );
+
+        Add( newGroup );
     }
 
     // Copy auxiliary data: 3D_Drawings info
@@ -160,10 +172,15 @@ MODULE::~MODULE()
 
     m_pads.clear();
 
-    for( MODULE_ZONE_CONTAINER* p : m_fp_zones )
-        delete p;
+    for( MODULE_ZONE_CONTAINER* zone : m_fp_zones )
+        delete zone;
 
     m_fp_zones.clear();
+
+    for( PCB_GROUP* group : m_fp_groups )
+        delete group;
+
+    m_fp_groups.clear();
 
     for( BOARD_ITEM* d : m_drawings )
         delete d;
@@ -209,12 +226,14 @@ MODULE& MODULE::operator=( MODULE&& aOther )
     for( D_PAD* pad : aOther.Pads() )
         Add( pad );
 
+    aOther.Pads().clear();
+
     // Move the zones
     m_fp_zones.clear();
 
     for( MODULE_ZONE_CONTAINER* item : aOther.Zones() )
     {
-        Add( static_cast<MODULE_ZONE_CONTAINER*>( item ) );
+        Add( item );
 
         // Ensure the net info is OK and especially uses the net info list
         // living in the current board
@@ -223,23 +242,23 @@ MODULE& MODULE::operator=( MODULE&& aOther )
         item->SetNetCode( -1 );
     }
 
+    aOther.Zones().clear();
+
     // Move the drawings
     m_drawings.clear();
 
     for( BOARD_ITEM* item : aOther.GraphicalItems() )
-    {
-        switch( item->Type() )
-        {
-        case PCB_MODULE_TEXT_T:
-        case PCB_MODULE_EDGE_T:
-            Add( static_cast<BOARD_ITEM*>( item ) );
-            break;
+        Add( item );
 
-        default:
-            wxLogMessage( wxT( "MODULE::operator=() internal error: unknown type" ) );
-            break;
-        }
-    }
+    aOther.GraphicalItems().clear();
+
+    // Move the groups
+    m_fp_groups.clear();
+
+    for( PCB_GROUP* group : aOther.Groups() )
+        Add( group );
+
+    aOther.Groups().clear();
 
     // Copy auxiliary data: 3D_Drawings info
     m_3D_Drawings.clear();
@@ -295,42 +314,56 @@ MODULE& MODULE::operator=( const MODULE& aOther )
     *m_Value = *aOther.m_Value;
     m_Value->SetParent( this );
 
-    // Copy auxiliary data: Pads
+    std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
+
+    // Copy pads
     m_pads.clear();
 
     for( D_PAD* pad : aOther.Pads() )
-        Add( new D_PAD( *pad ) );
+    {
+        D_PAD* newPad = new D_PAD( *pad );
+        ptrMap[ pad ] = newPad;
+        Add( newPad );
+    }
 
-    // Copy auxiliary data: Zones
+    // Copy zones
     m_fp_zones.clear();
 
-    for( MODULE_ZONE_CONTAINER* item : aOther.Zones() )
+    for( MODULE_ZONE_CONTAINER* zone : aOther.Zones() )
     {
-        Add( static_cast<MODULE_ZONE_CONTAINER*>( item->Clone() ) );
+        MODULE_ZONE_CONTAINER* newZone = static_cast<MODULE_ZONE_CONTAINER*>( zone->Clone() );
+        ptrMap[ zone ] = newZone;
+        Add( newZone );
 
         // Ensure the net info is OK and especially uses the net info list
         // living in the current board
         // Needed when copying a fp from fp editor that has its own board
         // Must be NETINFO_LIST::ORPHANED_ITEM for a keepout that has no net.
-        item->SetNetCode( -1 );
+        newZone->SetNetCode( -1 );
     }
 
-    // Copy auxiliary data: Drawings
+    // Copy drawings
     m_drawings.clear();
 
     for( BOARD_ITEM* item : aOther.GraphicalItems() )
     {
-        switch( item->Type() )
-        {
-        case PCB_MODULE_TEXT_T:
-        case PCB_MODULE_EDGE_T:
-            Add( static_cast<BOARD_ITEM*>( item->Clone() ) );
-            break;
+        BOARD_ITEM* newItem = static_cast<BOARD_ITEM*>( item->Clone() );
+        ptrMap[ item ] = newItem;
+        Add( newItem );
+    }
 
-        default:
-            wxLogMessage( wxT( "MODULE::operator=() internal error: unknown type" ) );
-            break;
-        }
+    // Copy groups
+    m_fp_groups.clear();
+
+    for( PCB_GROUP* group : aOther.Groups() )
+    {
+        PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( group->Clone() );
+        const_cast<std::unordered_set<BOARD_ITEM*>*>( &newGroup->GetItems() )->clear();
+
+        for( BOARD_ITEM* member : group->GetItems() )
+            newGroup->AddItem( ptrMap[ member ] );
+
+        Add( newGroup );
     }
 
     // Copy auxiliary data: 3D_Drawings info
@@ -424,6 +457,13 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
             m_fp_zones.insert( m_fp_zones.begin(), static_cast<MODULE_ZONE_CONTAINER*>( aBoardItem ) );
         break;
 
+    case PCB_GROUP_T:
+        if( aMode == ADD_MODE::APPEND )
+            m_fp_groups.push_back( static_cast<PCB_GROUP*>( aBoardItem ) );
+        else
+            m_fp_groups.insert( m_fp_groups.begin(), static_cast<PCB_GROUP*>( aBoardItem ) );
+        break;
+
     default:
     {
         wxString msg;
@@ -487,6 +527,18 @@ void MODULE::Remove( BOARD_ITEM* aBoardItem )
 
         break;
 
+    case PCB_GROUP_T:
+        for( auto it = m_fp_groups.begin(); it != m_fp_groups.end(); ++it )
+        {
+            if( *it == static_cast<PCB_GROUP*>( aBoardItem ) )
+            {
+                m_fp_groups.erase( it );
+                break;
+            }
+        }
+
+        break;
+
     default:
     {
         wxString msg;
@@ -531,6 +583,8 @@ EDA_RECT MODULE::GetFootprintRect() const
 
     for( MODULE_ZONE_CONTAINER* zone : m_fp_zones )
         area.Merge( zone->GetBoundingBox() );
+
+    // Groups do not contribute to the rect, only their members
 
     return area;
 }
@@ -770,6 +824,8 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
                 return true;
         }
 
+        // Groups are not hit-tested; only their members
+
         // No items were hit
         return false;
     }
@@ -955,6 +1011,11 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
 
             break;
 
+        case PCB_GROUP_T:
+            result = IterateForward<PCB_GROUP*>( m_fp_groups, inspector, testData, p );
+            ++p;
+            break;
+
         default:
             done = true;
             break;
@@ -1000,6 +1061,9 @@ void MODULE::RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction )
 
         for( MODULE_ZONE_CONTAINER* zone : m_fp_zones )
             aFunction( static_cast<MODULE_ZONE_CONTAINER*>( zone ) );
+
+        for( PCB_GROUP* group : m_fp_groups )
+            aFunction( static_cast<PCB_GROUP*>( group ) );
 
         for( BOARD_ITEM* drawing : m_drawings )
             aFunction( static_cast<BOARD_ITEM*>( drawing ) );
@@ -1310,14 +1374,14 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
     m_Value->SetDrawCoord();
 
     // Update the pad local coordinates.
-    for( auto pad : m_pads )
+    for( D_PAD* pad : m_pads )
     {
         pad->SetPos0( pad->GetPos0() + moveVector );
         pad->SetDrawCoord();
     }
 
     // Update the draw element coordinates.
-    for( auto item : GraphicalItems() )
+    for( BOARD_ITEM* item : GraphicalItems() )
     {
         switch( item->Type() )
         {
@@ -1353,13 +1417,13 @@ void MODULE::SetOrientation( double aNewAngle )
 
     m_Orient = aNewAngle;
 
-    for( auto pad : m_pads )
+    for( D_PAD* pad : m_pads )
     {
         pad->SetOrientation( pad->GetOrientation() + angleChange );
         pad->SetDrawCoord();
     }
 
-    for( auto zone : m_fp_zones )
+    for( ZONE_CONTAINER* zone : m_fp_zones )
     {
         zone->Rotate( GetPosition(), angleChange );
     }
@@ -1369,7 +1433,7 @@ void MODULE::SetOrientation( double aNewAngle )
     m_Value->SetDrawCoord();
 
     // Displace contours and text of the footprint.
-    for( auto item : m_drawings )
+    for( BOARD_ITEM* item : m_drawings )
     {
         if( item->Type() == PCB_MODULE_EDGE_T )
         {
@@ -1454,7 +1518,7 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
 
     case PCB_MODULE_EDGE_T:
     {
-        EDGE_MODULE* new_edge = new EDGE_MODULE( *static_cast<const EDGE_MODULE*>(aItem) );
+        EDGE_MODULE* new_edge = new EDGE_MODULE( *static_cast<const EDGE_MODULE*>( aItem ) );
         const_cast<KIID&>( new_edge->m_Uuid ) = KIID();
 
         if( aAddToModule )
@@ -1463,6 +1527,10 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
         new_item = new_edge;
         break;
     }
+
+    case PCB_GROUP_T:
+        new_item = static_cast<const PCB_GROUP*>( aItem )->DeepDuplicate();
+        break;
 
     case PCB_MODULE_T:
         // Ignore the module itself

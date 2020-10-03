@@ -414,7 +414,7 @@ public:
      *          is thrown in the case where aFootprintName cannot be found.
      */
     virtual MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-            const PROPERTIES* aProperties = NULL );
+                                   const PROPERTIES* aProperties = NULL );
 
     /**
      * Function GetEnumeratedFootprint

@@ -516,6 +516,8 @@ BOARD_ITEM* PCB_PARSER::Parse()
         THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
 
+    resolveGroups( item );
+
     return item;
 }
 
@@ -618,7 +620,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             break;
 
         case T_group:
-            parseGROUP();
+            parseGROUP( m_board );
             break;
 
         case T_via:
@@ -721,91 +723,81 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         m_undefinedLayers.clear();
     }
 
-    // Now that we've parsed the other Uuids in the file we can resolve
-    // the uuids referred to in the group declarations we saw.
+    return m_board;
+}
+
+
+void PCB_PARSER::resolveGroups( BOARD_ITEM* aParent )
+{
+    auto getItem = [&]( const KIID& aId )
+    {
+        BOARD_ITEM* aItem = nullptr;
+
+        if( dynamic_cast<BOARD*>( aParent ) )
+        {
+            aItem = static_cast<BOARD*>( aParent )->GetItem( aId );
+        }
+        else if( aParent->Type() == PCB_MODULE_T )
+        {
+            static_cast<MODULE*>( aParent )->RunOnChildren(
+                    [&]( BOARD_ITEM* child )
+                    {
+                        if( child->m_Uuid == aId )
+                            aItem = child;
+                    } );
+        }
+
+        return aItem;
+    };
+
+    // Now that we've parsed the other Uuids in the file we can resolve the uuids referred
+    // to in the group declarations we saw.
     //
-    // First add all group objects so subsequent GetItem() calls for nested
-    // groups work.
+    // First add all group objects so subsequent GetItem() calls for nested groups work.
 
     for( size_t idx = 0; idx < m_groupInfos.size(); idx++ )
     {
-        auto&  aGrp  = m_groupInfos[idx];
-        PCB_GROUP* group = new PCB_GROUP( m_board );
+        GROUP_INFO& aGrp  = m_groupInfos[idx];
+        PCB_GROUP*  group = new PCB_GROUP( aGrp.parent );
+
         group->SetName( aGrp.name );
         const_cast<KIID&>( group->m_Uuid ) = aGrp.uuid;
-        m_board->Add( group );
+
+        if( aGrp.parent->Type() == PCB_MODULE_T )
+            static_cast<MODULE*>( aGrp.parent )->Add( group );
+        else
+            static_cast<BOARD*>( aGrp.parent )->Add( group );
     }
 
     wxString error;
 
     for( size_t idx = 0; idx < m_groupInfos.size(); idx++ )
     {
-        auto&  aGrp  = m_groupInfos[idx];
-        BOARD_ITEM* bItem = m_board->GetItem( aGrp.uuid );
+        GROUP_INFO& aGrp  = m_groupInfos[idx];
+        BOARD_ITEM* bItem = getItem( aGrp.uuid );
 
         if( bItem == nullptr || bItem->Type() != PCB_GROUP_T )
-        {
-            error = wxString::Format( _( "Group %s not found in board" ),
-                                      aGrp.uuid.AsString() );
             continue;
-        }
 
         PCB_GROUP* group = static_cast<PCB_GROUP*>( bItem );
 
-        for( const auto& aUuid : aGrp.memberUuids )
+        for( const KIID& aUuid : aGrp.memberUuids )
         {
-            KIID tUuid = aUuid;
+            BOARD_ITEM* item;
 
             if( m_resetKIIDs )
-            {
-                if( m_resetKIIDMap.find( aUuid.AsString() ) == m_resetKIIDMap.end() )
-                {
-                    if( error == wxEmptyString )
-                    {
-                        error = wxString::Format( _( "Group %s references missing item %s" ),
-                                                  aGrp.uuid.AsString(), aUuid.AsString() );
-                    }
-                }
-                else
-                {
-                    tUuid = m_resetKIIDMap[ aUuid.AsString() ];
-                }
-            }
-
-            BOARD_ITEM* item = m_board->GetItem( tUuid );
-
-            if( ( item == nullptr ) || ( item->Type() == NOT_USED ) )
-            {
-                if( error == wxEmptyString )
-                {
-                    error = wxString::Format( _( "Group %s references missing item %s" ),
-                                              aGrp.uuid.AsString(), tUuid.AsString() );
-                }
-            }
+                item = getItem( m_resetKIIDMap[ aUuid.AsString() ] );
             else
-            {
+                item = getItem( aUuid );
+
+            if( item && item->Type() != NOT_USED )
                 group->AddItem( item );
-            }
         }
     }
 
-    wxString sanityResult = m_board->GroupsSanityCheck();
-
-    if( error != wxEmptyString || sanityResult != wxEmptyString )
-    {
-        wxString errMsg = ( error != wxEmptyString ) ? error : sanityResult;
-        KIDIALOG dlg( nullptr, wxString::Format(
-                      _( "Error in group structure in file: %s\n\nAttempt repair?" ), errMsg ),
-                      _( "File data error" ), wxOK | wxCANCEL | wxICON_ERROR );
-        dlg.SetOKLabel( _( "Attempt repair" ) );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            THROW_IO_ERROR( _( "File read canceled" ) );
-
+    // Don't allow group cycles
+    if( m_board )
         m_board->GroupsSanityCheck( true );
-    }
-
-    return m_board;
 }
 
 
@@ -3012,7 +3004,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
                 module->Add( text, ADD_MODE::APPEND );
             }
         }
-        break;
+            break;
 
         case T_fp_arc:
         {
@@ -3028,8 +3020,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             else
                 delete em;
         }
-
-        break;
+            break;
 
         case T_fp_circle:
         case T_fp_curve:
@@ -3042,8 +3033,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             em->SetDrawCoord();
             module->Add( em, ADD_MODE::APPEND );
         }
-
-        break;
+            break;
 
         case T_pad:
         {
@@ -3054,8 +3044,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             pad->SetPosition( pt + module->GetPosition() );
             module->Add( pad, ADD_MODE::APPEND );
         }
-
-        break;
+            break;
 
         case T_model:
             module->Add3DModel( parse3DModel() );
@@ -3066,7 +3055,11 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             ZONE_CONTAINER* zone = parseZONE_CONTAINER( module.get() );
             module->Add( zone, ADD_MODE::APPEND );
         }
-        break;
+            break;
+
+        case T_group:
+            parseGROUP( module.get() );
+            break;
 
         default:
             Expecting(
@@ -3075,7 +3068,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
                     "solder_paste_margin, solder_paste_ratio, clearance, "
                     "zone_connect, thermal_width, thermal_gap, attr, fp_text, "
                     "fp_arc, fp_circle, fp_curve, fp_line, fp_poly, fp_rect, pad, "
-                    "zone, or model" );
+                    "zone, group, or model" );
         }
     }
 
@@ -3945,7 +3938,7 @@ bool PCB_PARSER::parseD_PAD_option( D_PAD* aPad )
 //     (group <(name “groupName”)> (id 12345679)
 //         (members id_1 id_2 … id_last )
 //     )
-void PCB_PARSER::parseGROUP()
+void PCB_PARSER::parseGROUP( BOARD_ITEM* aParent )
 {
     wxCHECK_RET( CurTok() == T_group,
             wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_GROUP." ) );
@@ -3953,8 +3946,9 @@ void PCB_PARSER::parseGROUP()
     wxPoint pt;
     T       token;
 
-    m_groupInfos.push_back( GroupInfo() );
-    GroupInfo& groupInfo = m_groupInfos.back();
+    m_groupInfos.push_back( GROUP_INFO() );
+    GROUP_INFO& groupInfo = m_groupInfos.back();
+    groupInfo.parent = aParent;
 
     token = NextTok();
 
@@ -3991,9 +3985,9 @@ void PCB_PARSER::parseGROUP()
     while( ( token = NextTok() ) != T_RIGHT )
     {
         // This token is the Uuid of the item in the group.
-        // Since groups are serialized at the end of the file, the
-        // Uuid should already have been seen and exist in the board.
-        KIID        uuid( CurStr() );
+        // Since groups are serialized at the end of the file/module, the Uuid should already
+        // have been seen and exist in the board.
+        KIID uuid( CurStr() );
         groupInfo.memberUuids.push_back( uuid );
     }
 
@@ -4865,16 +4859,19 @@ PCB_TARGET* PCB_PARSER::parsePCB_TARGET()
 }
 
 
-KIID PCB_PARSER::CurStrToKIID() {
-    KIID aid;
+KIID PCB_PARSER::CurStrToKIID()
+{
+    KIID aId;
+
     if( m_resetKIIDs )
     {
-        aid = KIID();
-        m_resetKIIDMap.insert( std::make_pair( CurStr(), aid ) );
+        aId = KIID();
+        m_resetKIIDMap.insert( std::make_pair( CurStr(), aId ) );
     }
     else
     {
-        aid = KIID( CurStr() );
+        aId = KIID( CurStr() );
     }
-    return aid;
+
+    return aId;
 }
