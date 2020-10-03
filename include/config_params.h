@@ -37,6 +37,10 @@
 using KIGFX::COLOR4D;
 
 
+/*
+ * NOTE: Everything in this file is deprecated, it only remains because advanced_config depends on
+ * it for the moment.
+ */
 
 /**
  * Function ConfigBaseWriteDouble

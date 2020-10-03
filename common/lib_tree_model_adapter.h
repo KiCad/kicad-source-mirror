@@ -91,7 +91,6 @@
 
 class APP_SETTINGS_BASE;
 class TOOL_INTERACTIVE;
-class PARAM_CFG;
 class EDA_BASE_FRAME;
 
 
@@ -366,8 +365,6 @@ private:
     wxDataViewColumn*       m_col_part;
     wxDataViewColumn*       m_col_desc;
     wxDataViewCtrl*         m_widget;
-
-    std::vector<PARAM_CFG*> m_projectFileParams;
 
     int                     m_colWidths[NUM_COLS];
     wxArrayString           m_pinnedLibs;
