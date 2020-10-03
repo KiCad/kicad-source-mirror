@@ -31,6 +31,7 @@ RENDER_SETTINGS::RENDER_SETTINGS() :
         m_printDC( nullptr )
 {
     // Set the default initial values
+    m_activeLayer        = F_Cu;
     m_highlightFactor    = 0.5f;
     m_selectFactor       = 0.5f;
     m_highlightEnabled   = false;

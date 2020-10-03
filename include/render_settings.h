@@ -58,33 +58,46 @@ public:
     virtual void LoadColors( const COLOR_SETTINGS* aSettings ) { }
 
     /**
-     * Function SetActiveLayer
-     * Sets the specified layer as active - it means that it can be drawn in a specific mode
-     * (eg. highlighted, so it differs from other layers).
+     * Function SetLayerIsHighContrast
+     * Sets the specified layer as high-contrast.
      * @param aLayerId is a layer number that should be displayed in a specific mode.
      * @param aEnabled is the new layer state ( true = active or false = not active).
      */
-    inline void SetActiveLayer( int aLayerId, bool aEnabled = true )
+    inline void SetLayerIsHighContrast( int aLayerId, bool aEnabled = true )
     {
         if( aEnabled )
-            m_activeLayers.insert( aLayerId );
+            m_highContrastLayers.insert( aLayerId );
         else
-            m_activeLayers.erase( aLayerId );
+            m_highContrastLayers.erase( aLayerId );
     }
 
     /**
-     * Function GetActiveLayers()
-     * Returns the set of currently active layers.
-     * @return The set of currently active layers.
+     * Function GetLayerIsHighContrast
+     * Returns information whether the queried layer is marked as high-contrast.
+     * @return True if the queried layer is marked as active.
      */
-    const std::set<unsigned int> GetActiveLayers() const
+    inline bool GetLayerIsHighContrast( int aLayerId ) const
     {
-        return m_activeLayers;
+        return ( m_highContrastLayers.count( aLayerId ) > 0 );
     }
 
-    PCB_LAYER_ID GetActiveLayer() const
+    /**
+     * Function GetHighContrastLayers()
+     * Returns the set of currently high-contrast layers.
+     */
+    const std::set<unsigned int> GetHighContrastLayers() const
     {
-        for( int layer : m_activeLayers )
+        return m_highContrastLayers;
+    }
+
+    /**
+     * Returns the board layer which is in high-contrast.  There should only be one
+     * board layer which is high-contrast at any given time, although there might be
+     * many high-contrast synthetic (GAL) layers.
+     */
+    PCB_LAYER_ID GetPrimaryHighContrastLayer() const
+    {
+        for( int layer : m_highContrastLayers )
         {
             if( layer >= PCBNEW_LAYER_ID_START && layer < PCB_LAYER_ID_COUNT )
                 return (PCB_LAYER_ID) layer;
@@ -93,23 +106,16 @@ public:
         return UNDEFINED_LAYER;
     }
 
-    /**
-     * Function ClearActiveLayers
-     * Clears the list of active layers.
-     */
-    inline void ClearActiveLayers()
-    {
-        m_activeLayers.clear();
-    }
+    PCB_LAYER_ID GetActiveLayer() const { return m_activeLayer; }
+    void SetActiveLayer( PCB_LAYER_ID aLayer ) { m_activeLayer = aLayer; }
 
     /**
-     * Function IsActiveLayer
-     * Returns information whether the queried layer is marked as active.
-     * @return True if the queried layer is marked as active.
+     * Function ClearHighContrastLayers
+     * Clears the list of active layers.
      */
-    inline bool IsActiveLayer( int aLayerId ) const
+    inline void ClearHighContrastLayers()
     {
-        return ( m_activeLayers.count( aLayerId ) > 0 );
+        m_highContrastLayers.clear();
     }
 
     /**
@@ -258,16 +264,17 @@ protected:
      */
     virtual void update();
 
-    std::set<unsigned int> m_activeLayers; ///< Stores active layers number
+    PCB_LAYER_ID           m_activeLayer;        // The active layer (as shown by appearance mgr)
+    std::set<unsigned int> m_highContrastLayers; // High-contrast layers (both board layers and
+                                                 //   synthetic GAL layers)
+    COLOR4D m_layerColors[LAYER_ID_COUNT];       // Layer colors
+    COLOR4D m_layerColorsHi[LAYER_ID_COUNT];     // Layer colors for highlighted objects
+    COLOR4D m_layerColorsSel[LAYER_ID_COUNT];    // Layer colors for selected objects
 
-    COLOR4D m_layerColors[LAYER_ID_COUNT];      // Layer colors
-    COLOR4D m_layerColorsHi[LAYER_ID_COUNT];    // Layer colors for highlighted objects
-    COLOR4D m_layerColorsSel[LAYER_ID_COUNT];   // Layer colors for selected objects
+    COLOR4D m_hiContrastColor[LAYER_ID_COUNT];   // High-contrast mode layer colors
+    COLOR4D m_layerColorsDark[LAYER_ID_COUNT];   // Darkened layer colors (for high-contrast mode)
 
-    COLOR4D m_hiContrastColor[LAYER_ID_COUNT];  // High-contrast mode layer colors
-    COLOR4D m_layerColorsDark[LAYER_ID_COUNT];  // Darkened layer colors (for high-contrast mode)
-
-    COLOR4D m_backgroundColor;                  // The background color
+    COLOR4D m_backgroundColor;                   // The background color
 
     /// Parameters for display modes
     bool          m_hiContrastEnabled;    // High contrast display mode on/off

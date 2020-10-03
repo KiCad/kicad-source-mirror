@@ -943,7 +943,7 @@ bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem )
     {
         int  layers[KIGFX::VIEW::VIEW_MAX_LAYERS];
         int  layers_count;
-        auto activeLayers = m_view->GetPainter()->GetSettings()->GetActiveLayers();
+        auto activeLayers = m_view->GetPainter()->GetSettings()->GetHighContrastLayers();
 
         isOnVisibleLayer = false;
         item->ViewGetLayers( layers, layers_count );

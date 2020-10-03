@@ -139,7 +139,7 @@ COLOR4D GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer )
         return m_layerColorsHi[aLayer];
 
     // Return grayish color for non-highlighted layers in the high contrast mode
-    if( m_hiContrastEnabled && m_activeLayers.count( aLayer ) == 0)
+    if( m_hiContrastEnabled && m_highContrastLayers.count( aLayer ) == 0)
         return m_hiContrastColor[aLayer];
 
     // Catch the case when highlight and high-contraste modes are enabled

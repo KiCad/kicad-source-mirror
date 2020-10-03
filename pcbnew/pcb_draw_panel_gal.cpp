@@ -261,9 +261,10 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
     KIGFX::RENDER_SETTINGS* rSettings = m_view->GetPainter()->GetSettings();
 
     SetTopLayer( aLayer );
-
-    rSettings->ClearActiveLayers();
     rSettings->SetActiveLayer( aLayer );
+
+    rSettings->ClearHighContrastLayers();
+    rSettings->SetLayerIsHighContrast( aLayer );
 
     if( IsCopperLayer( aLayer ) )
     {
@@ -281,20 +282,20 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
         };
 
         for( unsigned int i : layers )
-            rSettings->SetActiveLayer( i );
+            rSettings->SetLayerIsHighContrast( i );
 
         // Pads should be shown too
         if( aLayer == B_Cu )
         {
-            rSettings->SetActiveLayer( LAYER_PAD_BK );
-            rSettings->SetActiveLayer( LAYER_MOD_BK );
-            rSettings->SetActiveLayer( LAYER_PAD_BK_NETNAMES );
+            rSettings->SetLayerIsHighContrast( LAYER_PAD_BK );
+            rSettings->SetLayerIsHighContrast( LAYER_MOD_BK );
+            rSettings->SetLayerIsHighContrast( LAYER_PAD_BK_NETNAMES );
         }
         else if( aLayer == F_Cu )
         {
-            rSettings->SetActiveLayer( LAYER_PAD_FR );
-            rSettings->SetActiveLayer( LAYER_MOD_FR );
-            rSettings->SetActiveLayer( LAYER_PAD_FR_NETNAMES );
+            rSettings->SetLayerIsHighContrast( LAYER_PAD_FR );
+            rSettings->SetLayerIsHighContrast( LAYER_MOD_FR );
+            rSettings->SetLayerIsHighContrast( LAYER_PAD_FR_NETNAMES );
         }
     }
 

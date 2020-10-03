@@ -1795,7 +1795,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
     if( settings->GetHighContrast() )
     {
-        std::set<unsigned int> activeLayers = settings->GetActiveLayers();
+        std::set<unsigned int> activeLayers = settings->GetHighContrastLayers();
         bool                   onActiveLayer = false;
 
         for( unsigned int layer : activeLayers )

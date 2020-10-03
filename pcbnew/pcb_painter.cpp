@@ -230,11 +230,11 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         aLayer = aLayer - LAYER_ZONE_START;
 
     // Make items invisible in "other layers hidden" contrast mode
-    if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN && m_activeLayers.count( aLayer ) == 0 )
+    if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN && m_highContrastLayers.count( aLayer ) == 0 )
         return COLOR4D::CLEAR;
 
     // Hide net names in "dimmed" contrast mode
-    if( m_hiContrastEnabled && IsNetnameLayer( aLayer ) && m_activeLayers.count( aLayer ) == 0 )
+    if( m_hiContrastEnabled && IsNetnameLayer( aLayer ) && m_highContrastLayers.count( aLayer ) == 0 )
         return COLOR4D::CLEAR;
 
     // Normal path: get the layer base color
@@ -264,7 +264,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 
     bool dimmedMode  = m_contrastModeDisplay == HIGH_CONTRAST_MODE::DIMMED;
     bool highlighted = m_highlightEnabled && m_highlightNetcodes.count( netCode );
-    bool activeLayer = m_activeLayers.count( aLayer );
+    bool activeLayer = m_highContrastLayers.count( aLayer );
 
     // Apply net color overrides
     if( conItem && m_netColorMode == NET_COLOR_MODE::ALL && IsNetCopperLayer( aLayer ) )
@@ -325,7 +325,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         const BOARD* pcb = static_cast<const BOARD*>( item->GetParent() );
         bool         viaActiveLayer = false;
 
-        for( int layer : m_activeLayers )
+        for( int layer : m_highContrastLayers )
         {
             auto lay_id = static_cast<PCB_LAYER_ID>( layer );
             viaActiveLayer |= via->IsOnLayer( lay_id ) && pcb->IsLayerVisible( lay_id );

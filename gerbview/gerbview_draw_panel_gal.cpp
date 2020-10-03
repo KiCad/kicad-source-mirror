@@ -79,9 +79,9 @@ void GERBVIEW_DRAW_PANEL_GAL::SetHighContrastLayer( int aLayer )
 
     SetTopLayer( aLayer );
 
-    rSettings->ClearActiveLayers();
-    rSettings->SetActiveLayer( aLayer );
-    rSettings->SetActiveLayer( GERBER_DCODE_LAYER( aLayer ) );
+    rSettings->ClearHighContrastLayers();
+    rSettings->SetLayerIsHighContrast( aLayer );
+    rSettings->SetLayerIsHighContrast( GERBER_DCODE_LAYER( aLayer ) );
 
     m_view->UpdateAllLayersColor();
 }

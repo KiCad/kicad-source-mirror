@@ -262,7 +262,7 @@ std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea,
 
     KIGFX::VIEW*                  view = m_toolMgr->GetView();
     RENDER_SETTINGS*              settings = view->GetPainter()->GetSettings();
-    const std::set<unsigned int>& activeLayers = settings->GetActiveLayers();
+    const std::set<unsigned int>& activeLayers = settings->GetHighContrastLayers();
     bool                          isHighContrast = settings->GetHighContrast();
 
     view->Query( aArea, selectedItems );
@@ -397,7 +397,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
     VECTOR2I                      origin;
     KIGFX::VIEW*                  view = m_toolMgr->GetView();
     RENDER_SETTINGS*              settings = view->GetPainter()->GetSettings();
-    const std::set<unsigned int>& activeLayers = settings->GetActiveLayers();
+    const std::set<unsigned int>& activeLayers = settings->GetHighContrastLayers();
     bool                          isHighContrast = settings->GetHighContrast();
 
     auto handlePadShape =

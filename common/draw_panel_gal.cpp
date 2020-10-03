@@ -376,8 +376,8 @@ void EDA_DRAW_PANEL_GAL::SetHighContrastLayer( int aLayer )
 
     SetTopLayer( aLayer );
 
-    rSettings->ClearActiveLayers();
-    rSettings->SetActiveLayer( aLayer );
+    rSettings->ClearHighContrastLayers();
+    rSettings->SetLayerIsHighContrast( aLayer );
 
     m_view->UpdateAllLayersColor();
 }
