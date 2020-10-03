@@ -24,7 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <eagle_parser.h>
+#include <plugins/eagle/eagle_parser.h>
 
 #include <functional>
 #include <sstream>

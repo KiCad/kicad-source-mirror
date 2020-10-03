@@ -26,7 +26,7 @@
 #include <wx/uri.h>
 
 #include <config.h>
-#include <eagle_plugin.h>
+#include <plugins/eagle/eagle_plugin.h>
 #include <gpcb_plugin.h>
 #include <io_mgr.h>
 #include <kicad_plugin.h>

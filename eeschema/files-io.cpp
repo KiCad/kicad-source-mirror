@@ -42,7 +42,6 @@
 #include <reporter.h>
 #include <richio.h>
 #include <sch_component.h>
-#include <sch_eagle_plugin.h>
 #include <sch_edit_frame.h>
 #include <sch_legacy_plugin.h>
 #include <sch_sheet.h>

@@ -207,7 +207,7 @@ set( EESCHEMA_SRCS
     ee_collectors.cpp
     sch_component.cpp
     sch_connection.cpp
-    sch_eagle_plugin.cpp
+    sch_plugins/eagle/sch_eagle_plugin.cpp
     sch_field.cpp
     sch_io_mgr.cpp
     sch_item.cpp

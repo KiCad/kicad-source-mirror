@@ -25,7 +25,7 @@
 
 #include <sch_io_mgr.h>
 #include <sch_legacy_plugin.h>
-#include <sch_eagle_plugin.h>
+#include <sch_plugins/eagle/sch_eagle_plugin.h>
 #include <sch_sexpr_plugin.h>
 
 #include <sch_plugins/altium/sch_altium_plugin.h>

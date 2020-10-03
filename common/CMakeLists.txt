@@ -281,6 +281,10 @@ set( PLUGINS_CADSTAR_SRCS
     plugins/cadstar/cadstar_archive_parser.cpp
     )
 
+set( PLUGINS_EAGLE_SRCS
+    plugins/eagle/eagle_parser.cpp
+    )
+
 set( COMMON_SRCS
     ${LIB_KICAD_SRCS}
     ${COMMON_ABOUT_DLG_SRCS}
@@ -291,6 +295,7 @@ set( COMMON_SRCS
     ${PLOTTERS_CONTROL_SRCS}
     ${PLUGINS_ALTIUM_SRCS}
     ${PLUGINS_CADSTAR_SRCS}
+    ${PLUGINS_EAGLE_SRCS}
     advanced_config.cpp
     array_axis.cpp
     array_options.cpp
@@ -309,7 +314,6 @@ set( COMMON_SRCS
     dialog_shim.cpp
     gr_text.cpp
     dsnlexer.cpp
-    eagle_parser.cpp
     eda_base_frame.cpp
     eda_dde.cpp
     eda_doc.cpp
@@ -517,7 +521,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_rule.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_rule_condition.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_rule_parser.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/eagle_plugin.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/plugins/eagle/eagle_plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/footprint_editor_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/gpcb_plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/io_mgr.cpp

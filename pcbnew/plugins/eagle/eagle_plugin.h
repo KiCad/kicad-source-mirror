@@ -27,7 +27,7 @@
 
 #include <io_mgr.h>
 #include <layers_id_colors_and_visibility.h>
-#include <eagle_parser.h>
+#include <plugins/eagle/eagle_parser.h>
 
 #include <map>
 #include <wx/xml/xml.h>

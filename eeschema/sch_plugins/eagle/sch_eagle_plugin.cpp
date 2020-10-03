@@ -22,7 +22,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <sch_eagle_plugin.h>
+#include <sch_plugins/eagle/sch_eagle_plugin.h>
 
 #include <kiway.h>
 #include <properties.h>
@@ -34,7 +34,7 @@
 
 #include <class_libentry.h>
 #include <class_library.h>
-#include <eagle_parser.h>
+#include <plugins/eagle/eagle_parser.h>
 #include <gr_text.h>
 #include <lib_arc.h>
 #include <lib_circle.h>

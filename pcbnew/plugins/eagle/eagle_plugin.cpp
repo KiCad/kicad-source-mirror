@@ -71,7 +71,7 @@ Load() TODO's
 #include <pcb_text.h>
 #include <class_dimension.h>
 
-#include <eagle_plugin.h>
+#include <plugins/eagle/eagle_plugin.h>
 
 using namespace std;
 
