@@ -503,7 +503,10 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
     /***************************************/
     // Can be *very* time consuming.
 
-    if( m_drcEngine->GetTestTracksAgainstZones() )
+    if( m_drcEngine->GetTestTracksAgainstZones()
+            && ( aRefSeg->Type() != PCB_VIA_T
+                    || static_cast<VIA*>( aRefSeg )->FlashLayer( aLayer )
+                    || static_cast<VIA*>( aRefSeg )->GetDrill() > 0 ) )
     {
         SEG testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
 
@@ -524,10 +527,19 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             if( !refSegInflatedBB.Intersects( zone->GetBoundingBox() ) )
                 continue;
 
+            int halfWidth = refSegWidth / 2;
+
+            if( aRefSeg->Type() == PCB_VIA_T )
+            {
+                VIA* refVia = static_cast<VIA*>( aRefSeg );
+
+                if( !refVia->FlashLayer( aLayer ) )
+                    halfWidth = refVia->GetDrill() / 2 + bds.GetHolePlatingThickness();
+            }
+
             auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
                                                               aRefSeg, zone, aLayer );
             int minClearance = constraint.GetValue().Min();
-            int halfWidth = refSegWidth / 2;
             int allowedDist  = minClearance + halfWidth - bds.GetDRCEpsilon();
 
             const SHAPE_POLY_SET& zonePoly = zone->GetFilledPolysList( aLayer );
