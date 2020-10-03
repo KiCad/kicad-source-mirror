@@ -207,6 +207,9 @@ enum class EDA_UNITS
     MILS = 5,
 };
 
+bool IsImperialUnit( EDA_UNITS aUnit );
+bool IsMetricUnit( EDA_UNITS aUnit );
+
 
 /**
  * Instantiate the current locale within a scope in which you are expecting

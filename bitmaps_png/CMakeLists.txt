@@ -441,6 +441,7 @@ set( BMAPS_MID
     tools
     undo
     unit_inch
+    unit_mil
     unit_mm
     unknown
     unlocked

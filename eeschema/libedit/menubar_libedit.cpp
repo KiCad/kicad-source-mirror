@@ -121,8 +121,9 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     ACTION_MENU* unitsSubMenu = new ACTION_MENU( false, selTool );
     unitsSubMenu->SetTitle( _( "&Units" ) );
     unitsSubMenu->SetIcon( unit_mm_xpm );
-    unitsSubMenu->Add( ACTIONS::imperialUnits,    ACTION_MENU::CHECK );
-    unitsSubMenu->Add( ACTIONS::metricUnits,      ACTION_MENU::CHECK );
+    unitsSubMenu->Add( ACTIONS::inchesUnits,      ACTION_MENU::CHECK );
+    unitsSubMenu->Add( ACTIONS::milsUnits,        ACTION_MENU::CHECK );
+    unitsSubMenu->Add( ACTIONS::millimetersUnits, ACTION_MENU::CHECK );
     viewMenu->Add( unitsSubMenu );
 
     viewMenu->Add( ACTIONS::toggleCursorStyle,    ACTION_MENU::CHECK );

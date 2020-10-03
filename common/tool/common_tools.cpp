@@ -43,7 +43,9 @@
 
 void COMMON_TOOLS::Reset( RESET_REASON aReason )
 {
-    m_frame = getEditFrame<EDA_DRAW_FRAME>();
+    m_frame        = getEditFrame<EDA_DRAW_FRAME>();
+    m_metricUnit   = EDA_UNITS::MILLIMETRES;
+    m_imperialUnit = EDA_UNITS::INCHES;
 
     GRID_SETTINGS& settings = m_toolMgr->GetSettings()->m_Window.grid;
 
@@ -483,25 +485,27 @@ int COMMON_TOOLS::GridProperties( const TOOL_EVENT& aEvent )
 }
 
 
-int COMMON_TOOLS::MetricUnits( const TOOL_EVENT& aEvent )
+int COMMON_TOOLS::SwitchUnits( const TOOL_EVENT& aEvent )
 {
-    m_frame->ChangeUserUnits( EDA_UNITS::MILLIMETRES );
-    return 0;
-}
+    EDA_UNITS newUnit = aEvent.Parameter<EDA_UNITS>();
 
+    if( IsMetricUnit( newUnit ) )
+        m_metricUnit = newUnit;
+    else if( IsImperialUnit( newUnit ) )
+        m_imperialUnit = newUnit;
+    else
+        wxASSERT_MSG( false, "Invalid unit for the frame" );
 
-int COMMON_TOOLS::ImperialUnits( const TOOL_EVENT& aEvent )
-{
-    m_frame->ChangeUserUnits( EDA_UNITS::INCHES );
+    m_frame->ChangeUserUnits( newUnit );
     return 0;
 }
 
 
 int COMMON_TOOLS::ToggleUnits( const TOOL_EVENT& aEvent )
 {
-    m_frame->ChangeUserUnits( m_frame->GetUserUnits() == EDA_UNITS::INCHES ?
-                                      EDA_UNITS::MILLIMETRES :
-                                      EDA_UNITS::INCHES );
+    m_frame->ChangeUserUnits( IsImperialUnit( m_frame->GetUserUnits() ) ?
+                                      m_metricUnit :
+                                      m_imperialUnit );
     return 0;
 }
 
@@ -615,8 +619,9 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::GridProperties,     ACTIONS::gridProperties.MakeEvent() );
 
     // Units and coordinates
-    Go( &COMMON_TOOLS::ImperialUnits,      ACTIONS::imperialUnits.MakeEvent() );
-    Go( &COMMON_TOOLS::MetricUnits,        ACTIONS::metricUnits.MakeEvent() );
+    Go( &COMMON_TOOLS::SwitchUnits,        ACTIONS::inchesUnits.MakeEvent() );
+    Go( &COMMON_TOOLS::SwitchUnits,        ACTIONS::milsUnits.MakeEvent() );
+    Go( &COMMON_TOOLS::SwitchUnits,        ACTIONS::millimetersUnits.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleUnits,        ACTIONS::toggleUnits.MakeEvent() );
     Go( &COMMON_TOOLS::TogglePolarCoords,  ACTIONS::togglePolarCoords.MakeEvent() );
     Go( &COMMON_TOOLS::ResetLocalCoords,   ACTIONS::resetLocalCoords.MakeEvent() );

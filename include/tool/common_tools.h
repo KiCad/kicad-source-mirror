@@ -69,8 +69,7 @@ public:
     int ToggleCursorStyle( const TOOL_EVENT& aEvent );
 
     // Units control
-    int ImperialUnits( const TOOL_EVENT& aEvent );
-    int MetricUnits( const TOOL_EVENT& aEvent );
+    int SwitchUnits( const TOOL_EVENT& aEvent );
     int ToggleUnits( const TOOL_EVENT& aEvent );
     int TogglePolarCoords( const TOOL_EVENT& aEvent );
     int ResetLocalCoords( const TOOL_EVENT& aEvent );
@@ -114,6 +113,10 @@ private:
 
     std::vector<VECTOR2I> m_grids;  // grids from APP_SETTINGS converted to internal units
                                     // and with the user grid appended
+
+    // The last used units in each system (used for toggling between metric and imperial)
+    EDA_UNITS m_imperialUnit;
+    EDA_UNITS m_metricUnit;
 };
 
 #endif

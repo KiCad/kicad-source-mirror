@@ -44,7 +44,7 @@ GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) :
     wxArrayString      gridsList;
     int                i = ID_POPUP_GRID_START;
 
-    BuildChoiceList( &gridsList, settings, m_parent->GetUserUnits() != EDA_UNITS::INCHES );
+    BuildChoiceList( &gridsList, settings, IsMetricUnit( m_parent->GetUserUnits() ) );
 
     for( const wxString& grid : gridsList )
         Append( i++, grid, wxEmptyString, wxITEM_CHECK );

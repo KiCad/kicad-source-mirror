@@ -190,8 +190,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
 
     m_optionsToolBar->Add( ACTIONS::toggleGrid,              ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::togglePolarCoords,   ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::imperialUnits,           ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::metricUnits,             ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::inchesUnits,             ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::milsUnits,               ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::millimetersUnits,        ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,       ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddScaledSeparator( this );

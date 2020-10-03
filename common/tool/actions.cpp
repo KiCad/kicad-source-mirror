@@ -22,10 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <tool/actions.h>
 #include <bitmaps.h>
+#include <common.h>
 #include <frame_type.h>
-
+#include <tool/actions.h>
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
 // use the _() macro so that string harvesting by the I18N framework doesn't have to be
@@ -458,20 +458,25 @@ TOOL_ACTION ACTIONS::gridProperties( "common.Control.gridProperties",
         _( "Grid Properties..." ), _( "Set grid dimensions" ),
         grid_select_xpm );
 
-TOOL_ACTION ACTIONS::imperialUnits( "common.Control.imperialUnits",
+TOOL_ACTION ACTIONS::inchesUnits( "common.Control.imperialUnits",
         AS_GLOBAL, 0, "",
-        _( "Imperial" ), _( "Use inches and mils" ),
-        unit_inch_xpm );
+        _( "Inches" ), _( "Use inches" ),
+        unit_inch_xpm, AF_NONE, (void*) EDA_UNITS::INCHES );
 
-TOOL_ACTION ACTIONS::metricUnits( "common.Control.metricUnits",
+TOOL_ACTION ACTIONS::milsUnits( "common.Control.mils",
         AS_GLOBAL, 0, "",
-        _( "Metric" ), _( "Use millimeters" ),
-        unit_mm_xpm );
+        _( "Mils" ), _( "Use mils" ),
+        unit_mil_xpm, AF_NONE, (void*) EDA_UNITS::MILS );
+
+TOOL_ACTION ACTIONS::millimetersUnits( "common.Control.metricUnits",
+        AS_GLOBAL, 0, "",
+        _( "Millimeters" ), _( "Use millimeters" ),
+        unit_mm_xpm, AF_NONE, (void*) EDA_UNITS::MILLIMETRES );
 
 TOOL_ACTION ACTIONS::toggleUnits( "common.Control.toggleUnits",
         AS_GLOBAL,
         MD_CTRL + 'U', LEGACY_HK_NAME( "Switch Units" ),
-        _( "Switch units" ), _( "Switch between inches and millimeters" ),
+        _( "Switch units" ), _( "Switch between imperial and metric units" ),
         unit_mm_xpm );
 
 TOOL_ACTION ACTIONS::togglePolarCoords( "common.Control.togglePolarCoords",

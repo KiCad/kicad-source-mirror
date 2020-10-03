@@ -189,8 +189,9 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     unitsSubMenu->SetTitle( _( "&Units" ) );
     unitsSubMenu->SetIcon( unit_mm_xpm );
-    unitsSubMenu->Add( ACTIONS::imperialUnits,                ACTION_MENU::CHECK );
-    unitsSubMenu->Add( ACTIONS::metricUnits,                  ACTION_MENU::CHECK );
+    unitsSubMenu->Add( ACTIONS::inchesUnits,                  ACTION_MENU::CHECK );
+    unitsSubMenu->Add( ACTIONS::milsUnits,                    ACTION_MENU::CHECK );
+    unitsSubMenu->Add( ACTIONS::millimetersUnits,             ACTION_MENU::CHECK );
 
     viewMenu->Add( unitsSubMenu );
 

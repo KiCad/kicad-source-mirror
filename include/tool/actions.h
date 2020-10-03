@@ -139,8 +139,9 @@ public:
     static TOOL_ACTION gridProperties;
 
     // Units
-    static TOOL_ACTION imperialUnits;
-    static TOOL_ACTION metricUnits;
+    static TOOL_ACTION inchesUnits;
+    static TOOL_ACTION milsUnits;
+    static TOOL_ACTION millimetersUnits;
     static TOOL_ACTION toggleUnits;
     static TOOL_ACTION togglePolarCoords;
     static TOOL_ACTION resetLocalCoords;
