@@ -35,7 +35,6 @@
 #include <wx/regex.h>
 #include <wx/grid.h>
 
-#include <fctsys.h>
 #include <project.h>
 #include <3d_viewer/eda_3d_viewer.h>      // for KISYS3DMOD
 #include <panel_fp_lib_table.h>

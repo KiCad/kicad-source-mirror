@@ -24,11 +24,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <confirm.h>
 #include <dialog_text_entry.h>
-#include <pcbnew.h>
-#include <kiface_i.h>
 #include <3d_viewer/eda_3d_viewer.h>
 #include <pcb_edit_frame.h>
 #include <validators.h>

@@ -22,7 +22,6 @@
 
 #include <confirm.h>
 #include <kiface_i.h>
-#include <macros.h>
 
 #include "fp_lib_table.h"
 

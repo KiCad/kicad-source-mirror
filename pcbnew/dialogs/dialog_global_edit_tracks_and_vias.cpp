@@ -22,7 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_track.h>
@@ -382,7 +381,7 @@ int GLOBAL_EDIT_TOOL::EditTracksAndVias( const TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
     DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( editFrame );
-    
+
     dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
     return 0;
 }

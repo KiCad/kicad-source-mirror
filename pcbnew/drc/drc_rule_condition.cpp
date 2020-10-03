@@ -22,7 +22,6 @@
  */
 
 
-#include <fctsys.h>
 #include <class_board_item.h>
 #include <reporter.h>
 #include <drc/drc_rule_condition.h>

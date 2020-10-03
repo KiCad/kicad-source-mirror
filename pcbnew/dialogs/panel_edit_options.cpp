@@ -24,12 +24,10 @@
 
 #include <board_design_settings.h>
 #include <class_board.h>
-#include <fctsys.h>
 #include <panel_edit_options.h>
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
 #include <pcb_view.h>
-#include <pcbnew.h>
 #include <pcbnew_settings.h>
 #include <widgets/paged_dialog.h>
 #include <footprint_edit_frame.h>

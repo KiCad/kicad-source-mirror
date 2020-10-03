@@ -18,8 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <fctsys.h>
-#include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <pcb_display_options.h>
 #include <pcbnew_settings.h>

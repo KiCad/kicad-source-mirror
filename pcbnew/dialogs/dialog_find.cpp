@@ -29,7 +29,6 @@
 #include <class_pcb_text.h>
 #include <class_text_mod.h>
 #include <dialog_find.h>
-#include <fctsys.h>
 #include <kicad_string.h>
 #include <pcb_edit_frame.h>
 #include <string>

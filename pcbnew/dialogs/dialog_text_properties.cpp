@@ -24,8 +24,6 @@
 
 #include <dialog_text_properties.h>
 #include <confirm.h>
-#include <gr_text.h>
-#include <fctsys.h>
 #include <widgets/unit_binder.h>
 #include <board_commit.h>
 #include <class_board.h>
@@ -34,7 +32,6 @@
 #include <class_text_mod.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
-#include <pcbnew.h>
 #include <wx/valnum.h>
 #include <math/util.h>      // for KiROUND
 

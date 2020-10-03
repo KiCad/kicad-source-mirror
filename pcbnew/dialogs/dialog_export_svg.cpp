@@ -23,15 +23,11 @@
  */
 
 
-#include <fctsys.h>
-//#include <kiface_i.h>
-//#include <common.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
 #include <confirm.h>
-#include <pcbnew.h>
 #include <pcbplot.h>
 #include <class_board.h>
 #include <dialog_export_svg_base.h>

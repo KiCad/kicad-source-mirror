@@ -23,7 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <tools/pcb_inspection_tool.h>
 #include <class_board.h>
 #include <class_track.h>

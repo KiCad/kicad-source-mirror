@@ -30,11 +30,9 @@
 
 #include <class_board.h>
 #include <confirm.h>
-#include <fctsys.h>
 #include <kiface_i.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
-#include <pcbnew.h>
 #include <project/project_file.h>  // LAST_PATH_TYPE
 
 

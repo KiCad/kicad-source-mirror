@@ -24,8 +24,6 @@
  */
 
 
-#include <fctsys.h>
-#include <macros.h>
 #include <confirm.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>

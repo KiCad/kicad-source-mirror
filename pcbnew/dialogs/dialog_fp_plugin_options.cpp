@@ -24,7 +24,6 @@
  */
 
 
-#include <fctsys.h>
 #include <invoke_pcb_dialog.h>
 #include <dialog_fp_plugin_options_base.h>
 #include <fp_lib_table.h>

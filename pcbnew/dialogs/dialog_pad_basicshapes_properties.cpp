@@ -29,8 +29,6 @@
 
 #include <algorithm>
 
-#include <fctsys.h>
-#include <common.h>
 #include <confirm.h>
 #include <trigo.h>
 #include <pcb_base_frame.h>

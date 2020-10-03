@@ -24,7 +24,6 @@
 #include <functional>
 using namespace std::placeholders;
 
-#include <fctsys.h>
 #include <confirm.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
@@ -62,7 +61,7 @@ int GLOBAL_EDIT_TOOL::GlobalDeletions( const TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
     DIALOG_GLOBAL_DELETION dlg( editFrame );
-    
+
     dlg.SetCurrentLayer( frame()->GetActiveLayer() );
     dlg.ShowModal();
     return 0;

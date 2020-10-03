@@ -22,7 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
@@ -54,7 +53,7 @@ int PCB_EDITOR_CONTROL::GenerateDrillFiles( const TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
     DIALOG_GENDRILL dlg( editFrame, editFrame );
-    
+
     dlg.ShowModal();
     return 0;
 }

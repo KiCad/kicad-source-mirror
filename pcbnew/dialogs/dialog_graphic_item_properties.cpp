@@ -26,8 +26,6 @@
  * Edit properties of Lines, Circles, Arcs and Polygons for PCBNew and ModEdit
  */
 
-#include <fctsys.h>
-#include <macros.h>
 #include <confirm.h>
 #include <pcb_base_edit_frame.h>
 #include <wx/valnum.h>

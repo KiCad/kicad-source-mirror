@@ -22,7 +22,6 @@
  */
 
 
-#include <fctsys.h>
 #include <base_units.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>

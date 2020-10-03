@@ -30,8 +30,6 @@
 #include <Python.h>
 #undef HAVE_CLOCK_GETTIME  // macro is defined in Python.h and causes redefine warning
 
-#include <fctsys.h>
-#include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <dialog_scripting.h>
 

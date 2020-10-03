@@ -31,7 +31,6 @@
 #include <class_module.h>
 #include <confirm.h>
 #include <dialog_text_entry.h>
-#include <fctsys.h>
 #include <filename_resolver.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
