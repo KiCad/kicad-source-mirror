@@ -34,6 +34,7 @@
 #include <title_block.h>
 #include <trigo.h>
 
+#include <advanced_config.h>
 #include <class_board.h>
 #include <class_dimension.h>
 #include <class_drawsegment.h>
@@ -3083,7 +3084,16 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
     module->SetFPID( fpid );
     module->SetProperties( properties );
-    module->CalculateBoundingBox();
+
+    // We want to calculate the bounding box in most cases except
+    // if the advanced config is set and its a general footprint load
+    // This improves debugging greatly under MSVC where full std iterator debugging
+    // is present and loading a massive amount of footprints can lead to 2 minute load times
+    if( !ADVANCED_CFG::GetCfg().m_SkipBoundingBoxOnFpLoad || m_board != nullptr
+            || reader->GetSource().Contains( "clipboard" ) )
+    {
+        module->CalculateBoundingBox();
+    }
 
     return module.release();
 }

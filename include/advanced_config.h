@@ -142,6 +142,11 @@ public:
      */
     bool m_DebugZoneFiller;
 
+    /**
+     * Skip bounding box calculation when loading footprints
+     */
+    bool m_SkipBoundingBoxOnFpLoad;
+
 private:
     ADVANCED_CFG();
 

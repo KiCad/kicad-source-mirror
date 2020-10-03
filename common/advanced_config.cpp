@@ -140,6 +140,8 @@ static const wxChar MinPlotPenWidth[] = wxT( "MinPlotPenWidth" );
 
 static const wxChar DebugZoneFiller[] = wxT( "DebugZoneFiller" );
 
+static const wxChar SkipBoundingBoxFpLoad[] = wxT( "SkipBoundingBoxFpLoad" );
+
 } // namespace KEYS
 
 
@@ -237,6 +239,8 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_DebugZoneFiller           = false;
 
+    m_SkipBoundingBoxOnFpLoad   = false;
+
     loadFromConfigFile();
 }
 
@@ -313,6 +317,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::DebugZoneFiller,
                                                 &m_DebugZoneFiller, false ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::SkipBoundingBoxFpLoad, 
+                                                &m_SkipBoundingBoxOnFpLoad, false ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 
