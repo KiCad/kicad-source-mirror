@@ -321,9 +321,6 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         EE_GRID_HELPER grid( m_toolMgr );
 
-        VECTOR2I rawPos = evt->IsPrime() ? evt->Position() : getViewControls()->GetMousePosition();
-        VECTOR2I cursorPos = grid.BestSnapAnchor( rawPos, nullptr );
-
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
@@ -341,8 +338,10 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( collector.GetCount() == 1 )
                 {
                     // Check if we want to auto start wires
+                    VECTOR2I snappedCursorPos = grid.BestSnapAnchor( evt->Position(), nullptr );
+
                     if( m_frame->eeconfig()->m_Drawing.auto_start_wires
-                            && collector[0]->IsPointClickableAnchor( (wxPoint) cursorPos ) )
+                            && collector[0]->IsPointClickableAnchor( (wxPoint) snappedCursorPos ) )
                     {
                         OPT_TOOL_EVENT newEvt = EE_ACTIONS::drawWire.MakeEvent();
                         auto*          params = newEvt->Parameter<DRAW_SEGMENT_EVENT_PARAMS*>();
@@ -507,8 +506,10 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 if( collector.GetCount() == 1 )
                 {
+                    VECTOR2I snappedCursorPos = grid.BestSnapAnchor( evt->Position(), nullptr );
+
                     if( m_frame->eeconfig()->m_Drawing.auto_start_wires
-                            && collector[0]->IsPointClickableAnchor( (wxPoint) cursorPos ) )
+                            && collector[0]->IsPointClickableAnchor( (wxPoint) snappedCursorPos ) )
                     {
                         displayPencil = true;
                     }
