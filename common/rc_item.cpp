@@ -436,7 +436,11 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
     bool found = false;
 
     if( m_view )
+    {
         m_view->UnselectAll();
+        wxYield();
+        m_view->Freeze();
+    }
 
     for( int i = m_rcItemsProvider->GetCount() - 1; i >= 0; --i )
     {
@@ -484,9 +488,10 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
         m_view->Select( ToItem( m_tree[ lastGood ] ) );
 
     if( !aCurrentOnly )
-    {
         m_rcItemsProvider->DeleteAllItems( aIncludeExclusions, aDeep );
-    }
+
+    if( m_view )
+        m_view->Thaw();
 }
 
 
