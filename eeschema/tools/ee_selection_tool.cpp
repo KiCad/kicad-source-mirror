@@ -335,7 +335,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 narrowSelection( collector, evt->Position(), false );
 
-                if( collector.GetCount() == 1 )
+                if( collector.GetCount() == 1 && !m_isLibEdit )
                 {
                     // Check if we want to auto start wires
                     VECTOR2I snappedCursorPos = grid.BestSnapAnchor( evt->Position(), nullptr );
@@ -494,7 +494,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             ClearSelection();
         }
 
-        else if( evt->IsMotion() )
+        else if( evt->IsMotion() && !m_isLibEdit )
         {
             EE_COLLECTOR collector;
 
