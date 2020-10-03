@@ -716,11 +716,17 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
     if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags
             && aLayer != LAYER_VIAS_HOLES )
     {
+        if( !aVia->FlashLayer( m_pcbSettings.GetActiveLayer() ) )
+        {
+            radius = getDrillSize(aVia) / 2.0 +
+                            aVia->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
+        }
+
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color );
-        m_gal->DrawCircle( center, radius + aVia->GetClearance( aVia->GetLayer() ) );
+        m_gal->DrawCircle( center, radius + aVia->GetClearance( m_pcbSettings.GetActiveLayer() ) );
     }
 }
 
@@ -902,7 +908,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             return;
         }
 
-        const std::shared_ptr<SHAPE_COMPOUND> shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
+        auto shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
 
         if( shapes && shapes->Size() == 1 && shapes->Shapes()[0]->Type() == SH_SEGMENT )
         {
@@ -929,35 +935,51 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_PADS;
 
     if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags
-            && ( aLayer == LAYER_PAD_FR
-                || aLayer == LAYER_PAD_BK
-                || aLayer == LAYER_PADS_TH ) )
+            && ( aLayer == LAYER_PAD_FR || aLayer == LAYER_PAD_BK || aLayer == LAYER_PADS_TH ) )
     {
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->SetIsStroke( true );
-        m_gal->SetIsFill( false );
-        m_gal->SetStrokeColor( color );
+        bool flashLayer = aPad->FlashLayer( m_pcbSettings.GetActiveLayer() );
 
-        int clearance = aPad->GetClearance( m_pcbSettings.GetActiveLayer() );
+        if( flashLayer || aPad->GetDrillSize().x )
+        {
+            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+            m_gal->SetIsStroke( true );
+            m_gal->SetIsFill( false );
+            m_gal->SetStrokeColor( color );
 
-        const std::shared_ptr<SHAPE_COMPOUND> shapes =
-                    std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
+            int clearance = aPad->GetClearance( m_pcbSettings.GetActiveLayer() );
 
-        if( shapes && shapes->Size() == 1 && shapes->Shapes()[0]->Type() == SH_SEGMENT )
-        {
-            const SHAPE_SEGMENT* seg = (SHAPE_SEGMENT*) shapes->Shapes()[0];
-            m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B, seg->GetWidth() + 2 * clearance );
-        }
-        else if( shapes && shapes->Size() == 1 && shapes->Shapes()[0]->Type() == SH_CIRCLE )
-        {
-            const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shapes->Shapes()[0];
-            m_gal->DrawCircle( circle->GetCenter(), circle->GetRadius() + clearance );
-        }
-        else
-        {
-            SHAPE_POLY_SET polySet;
-            aPad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ), clearance );
-            m_gal->DrawPolygon( polySet );
+            if( flashLayer )
+            {
+                auto shape = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
+
+                if( shape && shape->Size() == 1 && shape->Shapes()[0]->Type() == SH_SEGMENT )
+                {
+                    const SHAPE_SEGMENT* seg = (SHAPE_SEGMENT*) shape->Shapes()[0];
+                    m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B,
+                                        seg->GetWidth() + 2 * clearance );
+                }
+                else if( shape && shape->Size() == 1 && shape->Shapes()[0]->Type() == SH_CIRCLE )
+                {
+                    const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shape->Shapes()[0];
+                    m_gal->DrawCircle( circle->GetCenter(), circle->GetRadius() + clearance );
+                }
+                else
+                {
+                    SHAPE_POLY_SET polySet;
+                    aPad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ),
+                                                                clearance );
+                    m_gal->DrawPolygon( polySet );
+                }
+            }
+            else if( aPad->GetEffectiveHoleShape() )
+            {
+                clearance += aPad->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
+
+                const SHAPE_SEGMENT* seg = aPad->GetEffectiveHoleShape();
+                m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B,
+                                    seg->GetWidth() + 2 * clearance );
+            }
+
         }
     }
 }
