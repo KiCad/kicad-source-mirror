@@ -824,37 +824,37 @@ TOOL_ACTION PCB_ACTIONS::layerTop( "pcbnew.Control.layerTop",
 
 TOOL_ACTION PCB_ACTIONS::layerInner1( "pcbnew.Control.layerInner1",
         AS_GLOBAL,
-        WXK_F5, LEGACY_HK_NAME( "Switch to Inner layer 1" ),
+        0, LEGACY_HK_NAME( "Switch to Inner layer 1" ),
         _( "Switch to Inner layer 1" ), "",
         nullptr, AF_NOTIFY, (void*) In1_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner2( "pcbnew.Control.layerInner2",
         AS_GLOBAL,
-        WXK_F6, LEGACY_HK_NAME( "Switch to Inner layer 2" ),
+        0, LEGACY_HK_NAME( "Switch to Inner layer 2" ),
         _( "Switch to Inner layer 2" ), "",
         nullptr, AF_NOTIFY, (void*) In2_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner3( "pcbnew.Control.layerInner3",
         AS_GLOBAL,
-        WXK_F7, LEGACY_HK_NAME( "Switch to Inner layer 3" ),
+        0, LEGACY_HK_NAME( "Switch to Inner layer 3" ),
         _( "Switch to Inner layer 3" ), "",
         nullptr, AF_NOTIFY, (void*) In3_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner4( "pcbnew.Control.layerInner4",
         AS_GLOBAL,
-        WXK_F8, LEGACY_HK_NAME( "Switch to Inner layer 4" ),
+        0, LEGACY_HK_NAME( "Switch to Inner layer 4" ),
         _( "Switch to Inner layer 4" ), "",
         nullptr, AF_NOTIFY, (void*) In4_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner5( "pcbnew.Control.layerInner5",
         AS_GLOBAL,
-        MD_SHIFT + WXK_F5, LEGACY_HK_NAME( "Switch to Inner layer 5" ),
+        0, LEGACY_HK_NAME( "Switch to Inner layer 5" ),
         _( "Switch to Inner layer 5" ), "",
         nullptr, AF_NOTIFY, (void*) In5_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner6( "pcbnew.Control.layerInner6",
         AS_GLOBAL,
-        MD_SHIFT + WXK_F6, LEGACY_HK_NAME( "Switch to Inner layer 6" ),
+        0, LEGACY_HK_NAME( "Switch to Inner layer 6" ),
         _( "Switch to Inner layer 6" ), "",
         nullptr, AF_NOTIFY, (void*) In6_Cu );
 

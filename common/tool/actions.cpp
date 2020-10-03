@@ -210,13 +210,13 @@ TOOL_ACTION ACTIONS::findAndReplace( "common.Interactive.findAndReplace",
 
 TOOL_ACTION ACTIONS::findNext( "common.Interactive.findNext",
         AS_GLOBAL,
-        WXK_F5, LEGACY_HK_NAME( "Find Next" ),
+        WXK_F3, LEGACY_HK_NAME( "Find Next" ),
         _( "Find Next" ), _( "Find next match" ),
         find_xpm );
 
 TOOL_ACTION ACTIONS::findNextMarker( "common.Interactive.findNextMarker",
         AS_GLOBAL,
-        MD_SHIFT + WXK_F5, LEGACY_HK_NAME( "Find Next Marker" ),
+        MD_SHIFT + WXK_F3, LEGACY_HK_NAME( "Find Next Marker" ),
         _( "Find Next Marker" ), "",
         find_xpm );
 
@@ -241,7 +241,7 @@ TOOL_ACTION ACTIONS::zoomRedraw( "common.Control.zoomRedraw",
 #if defined( __WXMAC__ )
         MD_CTRL + 'R',
 #else
-        WXK_F3,
+        WXK_F5,
 #endif
         LEGACY_HK_NAME( "Zoom Redraw" ),
         _( "Refresh" ), _( "Refresh" ),
