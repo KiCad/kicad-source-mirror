@@ -27,14 +27,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <common.h>
 #include <plotter.h>
 #include <base_struct.h>
 #include <gr_text.h>
 #include <confirm.h>
 #include <kicad_string.h>
-#include <macros.h>
 #include <math/util.h>      // for KiROUND
 
 #include <class_board.h>

@@ -36,7 +36,6 @@
 #include <class_track.h>
 #include <confirm.h>
 #include <dialogs/dialog_gencad_export_options.h>
-#include <fctsys.h>
 #include <hash_eda.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>

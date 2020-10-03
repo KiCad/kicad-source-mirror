@@ -79,15 +79,12 @@ Vary: Accept-Encoding
 #include <wx/mstream.h>
 #include <wx/uri.h>
 
-#include <fctsys.h>
-
 #include <io_mgr.h>
 #include <richio.h>
 #include <pcb_parser.h>
 #include <class_board.h>
 #include <github_plugin.h>
 #include <class_module.h>
-#include <macros.h>
 #include <fp_lib_table.h>       // ExpandSubstitutions()
 
 

@@ -35,7 +35,6 @@
  */
 
 #include <algorithm>
-#include <fctsys.h>
 #include <convert_to_biu.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>

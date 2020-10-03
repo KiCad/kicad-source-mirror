@@ -35,8 +35,6 @@
  * and the CNC-7 manual.
  */
 
-#include <fctsys.h>
-
 #include <plotter.h>
 #include <kicad_string.h>
 #include <pcb_edit_frame.h>
@@ -45,7 +43,6 @@
 #include <math/util.h>      // for KiROUND
 
 #include <pcbplot.h>
-#include <pcbnew.h>
 #include <class_board.h>
 #include <gendrill_Excellon_writer.h>
 #include <wildcards_and_files_ext.h>

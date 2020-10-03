@@ -23,7 +23,6 @@
  * @brief Functions to create place files in gerber X2 format.
  */
 
-#include <fctsys.h>
 #include "gerber_placefile_writer.h"
 
 #include <vector>
@@ -36,7 +35,6 @@
 #include <class_board.h>
 
 #include <pcbplot.h>
-#include <pcbnew.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
 #include <gbr_metadata.h>

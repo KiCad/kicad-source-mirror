@@ -18,8 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <fctsys.h>
-#include <common.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <class_draw_panel_gal.h>

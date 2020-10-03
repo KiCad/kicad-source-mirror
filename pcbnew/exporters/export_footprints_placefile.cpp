@@ -26,10 +26,8 @@
  *  2 - create a module report (pos and module descr) (ascii file)
  */
 
-#include <fctsys.h>
 #include <kicad_string.h>
 #include <build_version.h>
-#include <macros.h>
 #include <export_footprints_placefile.h>
 
 

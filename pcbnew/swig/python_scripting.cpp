@@ -32,11 +32,8 @@
 #include <python_scripting.h>
 #include <sstream>
 
-#include <fctsys.h>
 #include <eda_base_frame.h>
-#include <common.h>
 #include <gal/color4d.h>
-#include <macros.h>
 #include <trace_helpers.h>
 
 #include <pgm_base.h>

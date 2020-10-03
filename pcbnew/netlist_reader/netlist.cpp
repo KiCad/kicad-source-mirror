@@ -30,7 +30,6 @@
 #include <functional>
 using namespace std::placeholders;
 
-#include <fctsys.h>
 #include <kiway.h>
 #include <pcb_edit_frame.h>
 #include <netlist_reader/pcb_netlist.h>
@@ -47,7 +46,7 @@ using namespace std::placeholders;
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
 #include <project/project_file.h>  // LAST_PATH_TYPE
-//#include <view/view.h>
+
 
 extern void SpreadFootprints( std::vector<MODULE*>* aFootprints, wxPoint aSpreadAreaPosition );
 

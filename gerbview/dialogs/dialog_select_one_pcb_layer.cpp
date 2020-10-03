@@ -27,7 +27,6 @@
  * @brief Set up a dialog to choose a PCB Layer.
  */
 
-#include <fctsys.h>
 #include <gerbview_frame.h>
 #include <select_layers_to_pcb.h>
 

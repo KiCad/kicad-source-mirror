@@ -23,7 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <reporter.h>
 #include <widgets/progress_reporter.h>
 #include <drc/drc_engine.h>

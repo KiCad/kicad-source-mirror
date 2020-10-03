@@ -37,10 +37,6 @@
 #include <s_expr_loader.h>
 #include <pcb.h>
 
-#include <common.h>
-#include <macros.h>
-#include <fctsys.h>
-
 using namespace PCAD2KICAD;
 
 PCAD_PLUGIN::PCAD_PLUGIN()

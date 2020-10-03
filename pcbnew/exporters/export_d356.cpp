@@ -27,7 +27,6 @@
  * @brief Export IPC-D-356 test format
  */
 
-#include <fctsys.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <kiface_i.h>

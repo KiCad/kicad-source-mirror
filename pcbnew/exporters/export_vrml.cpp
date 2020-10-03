@@ -24,7 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-//#include <cmath>
 #include <exception>
 #include <fstream>
 #include <iomanip>
@@ -41,7 +40,6 @@
 #include "class_zone.h"
 #include "convert_to_biu.h"
 #include <filename_resolver.h>
-#include "gr_text.h"
 #include "plugins/3dapi/ifsg_all.h"
 #include "streamwrapper.h"
 #include "vrml_layer.h"

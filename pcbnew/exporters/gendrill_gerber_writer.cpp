@@ -27,8 +27,6 @@
  * @brief Functions to create drill files in gerber X2 format.
  */
 
-#include <fctsys.h>
-
 #include <vector>
 
 #include <plotter.h>
@@ -41,7 +39,6 @@
 #include <class_track.h>
 
 #include <pcbplot.h>
-#include <pcbnew.h>
 #include <gendrill_gerber_writer.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>

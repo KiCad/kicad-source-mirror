@@ -27,8 +27,6 @@
  * @brief Functions to create the Gerber job file in JSON format.
  */
 
-#include <fctsys.h>
-
 #include <fstream>
 #include <iomanip>
 #include <vector>
@@ -45,7 +43,6 @@
 #include <board_stackup_manager/stackup_predefined_prms.h>
 #include <gbr_metadata.h>
 #include <gerber_jobfile_writer.h>
-#include <pcbnew.h>
 #include <pcbplot.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>

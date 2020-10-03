@@ -23,8 +23,6 @@
  */
 
 
-#include <fctsys.h>
-#include <common.h>
 #include "wx/html/m_templ.h"
 #include "wx/html/styleparams.h"
 #include <drc/drc_item.h>

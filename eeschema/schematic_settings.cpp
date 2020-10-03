@@ -41,11 +41,11 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_TextOffsetRatio( 0.08 ),
         m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 ),
         m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS ),
-        m_SpiceAdjustPassiveValues( false ),
         m_IntersheetsRefShow ( false ),
         m_IntersheetsRefFormatShort (false ),
         m_IntersheetsRefPrefix ( DEFAULT_IREF_PREFIX ),
-        m_IntersheetsRefSuffix ( DEFAULT_IREF_SUFFIX )
+        m_IntersheetsRefSuffix ( DEFAULT_IREF_SUFFIX ),
+        m_SpiceAdjustPassiveValues( false )
 {
     EESCHEMA_SETTINGS* appSettings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 

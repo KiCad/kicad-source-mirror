@@ -17,7 +17,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <fctsys.h>
 #include <pl_editor_settings.h>
 #include <pl_editor_frame.h>
 #include <pgm_base.h>

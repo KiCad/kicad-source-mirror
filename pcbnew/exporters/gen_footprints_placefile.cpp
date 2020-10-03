@@ -26,7 +26,6 @@
  *  2 - create a module report (pos and module descr) (ascii file)
  */
 
-#include <fctsys.h>
 #include <confirm.h>
 #include <kicad_string.h>
 #include <gestfich.h>
@@ -34,7 +33,6 @@
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <bitmaps.h>
-#include <macros.h>
 #include <reporter.h>
 #include <tools/pcb_editor_control.h>
 #include <class_board.h>
