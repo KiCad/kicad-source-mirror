@@ -255,10 +255,10 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
 void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
 {
-    if( !m_customSizeX.Validate( MIN_PAGE_SIZE_MILS, m_maxPageSizeMils.x, EDA_UNITS::INCHES ) )
+    if( !m_customSizeX.Validate( MIN_PAGE_SIZE_MILS, m_maxPageSizeMils.x, EDA_UNITS::MILS ) )
         return;
 
-    if( !m_customSizeY.Validate( MIN_PAGE_SIZE_MILS, m_maxPageSizeMils.y, EDA_UNITS::INCHES ) )
+    if( !m_customSizeY.Validate( MIN_PAGE_SIZE_MILS, m_maxPageSizeMils.y, EDA_UNITS::MILS ) )
         return;
 
     if( SavePageSettings() )
