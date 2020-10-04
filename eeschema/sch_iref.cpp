@@ -73,7 +73,7 @@ EDA_ITEM* SCH_IREF::Clone() const
 
 void SCH_IREF::SetIrefOrientation( LABEL_SPIN_STYLE aSpinStyle )
 {
-    wxPoint pt     = GetTextPos() - GetParent()->GetPosition();
+    wxPoint pt     = GetTextPos() - m_parentLabel->GetPosition();
     int     offset = std::max( abs( pt.x ), abs( pt.y ) );
 
     switch( aSpinStyle )
@@ -108,7 +108,7 @@ void SCH_IREF::SetIrefOrientation( LABEL_SPIN_STYLE aSpinStyle )
         break;
     }
 
-    SetPosition( GetParent()->GetPosition() + pt );
+    SetPosition( m_parentLabel->GetPosition() + pt );
 }
 
 
