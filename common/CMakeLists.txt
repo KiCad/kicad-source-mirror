@@ -523,7 +523,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_rule_parser.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/plugins/eagle/eagle_plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/footprint_editor_settings.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/gpcb_plugin.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/plugins/geda/gpcb_plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/io_mgr.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/kicad_clipboard.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/kicad_netlist_reader.cpp

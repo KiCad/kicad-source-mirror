@@ -37,7 +37,7 @@
 #include <pcb_text.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
-#include <gpcb_plugin.h>
+#include <plugins/geda/gpcb_plugin.h>
 
 #include <wx/dir.h>
 #include <wx/filename.h>

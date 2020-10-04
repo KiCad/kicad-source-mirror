@@ -27,7 +27,7 @@
 
 #include <config.h>
 #include <plugins/eagle/eagle_plugin.h>
-#include <gpcb_plugin.h>
+#include <plugins/geda/gpcb_plugin.h>
 #include <io_mgr.h>
 #include <kicad_plugin.h>
 #include <legacy_plugin.h>
