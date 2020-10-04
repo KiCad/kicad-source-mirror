@@ -903,7 +903,7 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
 {
     wxFileName kicad_board = Prj().AbsolutePath( Schematic().GetFileName() );
 
-    if( kicad_board.IsOk() )
+    if( kicad_board.IsOk() && !Schematic().GetFileName().IsEmpty() )
     {
         kicad_board.SetExt( PcbFileExtension );
         wxFileName legacy_board( kicad_board );
@@ -940,6 +940,8 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
     }
     else
     {
+        // If we are running inside a project, it should be impossible for this case to happen
+        wxASSERT( Kiface().IsSingle() );
         ExecuteFile( this, PCBNEW_EXE );
     }
 }

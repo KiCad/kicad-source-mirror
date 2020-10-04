@@ -161,13 +161,7 @@ struct APP_SINGLE_TOP : public wxApp
 
         try
         {
-            if( !program.OnPgmInit() )
-            {
-                program.OnPgmExit();
-                return false;
-            }
-
-            return true;
+            return program.OnPgmInit();
         }
         catch( const std::exception& e )
         {
@@ -294,7 +288,11 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 #endif
 
     if( !InitPgm() )
+    {
+        // Clean up
+        OnPgmExit();
         return false;
+    }
 
 #if !defined(BUILD_KIWAY_DLL)
 
@@ -353,6 +351,8 @@ bool PGM_SINGLE_TOP::OnPgmInit()
         if( appType == FRAME_T_COUNT )
         {
             wxLogError( wxT( "Unknown frame: %s" ), frameName );
+            // Clean up
+            OnPgmExit();
             return false;
         }
     }

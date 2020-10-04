@@ -611,7 +611,7 @@ public:
 
     wxPoint GetPinPhysicalPosition( const LIB_PIN* Pin ) const;
 
-    bool IsConnectable() const override { return m_onBoard; }
+    bool IsConnectable() const override { return true; }
 
     bool CanConnect( const SCH_ITEM* aItem ) const override
     {
