@@ -328,13 +328,11 @@ public:
     typedef std::pair<PCB_LAYER_ID, PCB_LAYER_ID> LAYER_PAIR;
 
     int QueryCollidingPairs( DRC_RTREE* aRefTree,
-                                std::vector<LAYER_PAIR> aLayers,
-                                std::function<bool( const LAYER_PAIR&, ITEM_WITH_SHAPE*, ITEM_WITH_SHAPE* )> aVisitor,
-    
-    //                         std::function<bool( const LAYER_PAIR&, BOARD_ITEM*, BOARD_ITEM*, int&, DRC_CONSTRAINT& )> aResolver,
-      //                       std::function<bool( BOARD_ITEM*, BOARD_ITEM*, int, int&, DRC_CONSTRAINT&)> aVisitor,
-                             int aMaxClearance
-                        )
+                             std::vector<LAYER_PAIR> aLayers,
+                             std::function<bool( const LAYER_PAIR&,
+                                                 ITEM_WITH_SHAPE*, ITEM_WITH_SHAPE*,
+                                                 bool* aCollision )> aVisitor,
+                             int aMaxClearance )
     {
         // keep track of BOARD_ITEMs pairs that have been already found to collide (some items
         // might be build of COMPOUND/triangulated shapes and a single subshape collision
@@ -354,27 +352,29 @@ public:
                 int min[2] = { box.GetX(),         box.GetY() };
                 int max[2] = { box.GetRight(),     box.GetBottom() };
 
-                auto visit = [&] ( ITEM_WITH_SHAPE* aItemToTest ) -> bool
-                {
-                    const std::pair<BOARD_ITEM*, BOARD_ITEM*> chkCompoundPair( refItem->parent, aItemToTest->parent );
+                auto visit =
+                        [&]( ITEM_WITH_SHAPE* aItemToTest ) -> bool
+                        {
+                            const std::pair<BOARD_ITEM*, BOARD_ITEM*>
+                                    chkCompoundPair( refItem->parent, aItemToTest->parent );
 
-                    // don't report multiple collisions for compound or triangulated shapes
-                    if( collidingCompounds.find( chkCompoundPair ) != collidingCompounds.end() )
-                        return true;
+                            // don't report multiple collisions for compound or triangulated shapes
+                            if( alg::contains( collidingCompounds, chkCompoundPair ) )
+                                return true;
 
-                    // don't collide items against themselves
-                    if( refLayer == targetLayer && aItemToTest->parent == refItem->parent )
-                        return true;
+                            // don't collide items against themselves
+                            if( refLayer == targetLayer && aItemToTest->parent == refItem->parent )
+                                return true;
 
-                    bool colliding = aVisitor( refLayerIter, refItem, aItemToTest );
+                            bool collisionDetected = false;
+                            bool continueSearch = aVisitor( refLayerIter, refItem, aItemToTest,
+                                                            &collisionDetected );
 
-                    if( colliding )
-                    {
-                        collidingCompounds.insert( chkCompoundPair );
-                    }
+                            if( collisionDetected )
+                                collidingCompounds.insert( chkCompoundPair );
 
-                    return true;
-                };
+                            return continueSearch;
+                        };
 
                 this->m_tree[targetLayer]->Search( min, max, visit );
             };

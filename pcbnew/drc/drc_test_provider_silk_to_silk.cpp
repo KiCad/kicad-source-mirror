@@ -107,9 +107,8 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
             };
 
     auto checkClearance =
-            [&]( const DRC_RTREE::LAYER_PAIR& aLayers,
-                 DRC_RTREE::ITEM_WITH_SHAPE* aRefItem,
-                 DRC_RTREE::ITEM_WITH_SHAPE* aTestItem ) -> bool
+            [&]( const DRC_RTREE::LAYER_PAIR& aLayers, DRC_RTREE::ITEM_WITH_SHAPE* aRefItem,
+                 DRC_RTREE::ITEM_WITH_SHAPE* aTestItem, bool* aCollisionDetected ) -> bool
             {
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE ) )
                     return false;
@@ -123,7 +122,7 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
 
                 accountCheck( constraint );
 
-                // only check for silkscreen collisions belonging to different modules or
+                // only check for silkscreen collisions belonging to different footprints or
                 // overlapping texts
 
                 KICAD_T typeRef = aRefItem->parent->Type();
@@ -180,6 +179,7 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
 
                 reportViolation( drcItem, (wxPoint) pos );
 
+                *aCollisionDetected = true;
                 return true;
             };
 
