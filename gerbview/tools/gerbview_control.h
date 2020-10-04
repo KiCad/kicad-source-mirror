@@ -23,6 +23,7 @@
 
 #include <tool/tool_interactive.h>
 
+class GERBVIEW_FRAME;
 
 /**
  * PCBNEW_CONTROL
@@ -40,18 +41,11 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     // Display modes
-    int HighContrastMode( const TOOL_EVENT& aEvent );
-    int HighContrastInc( const TOOL_EVENT& aEvent );
-    int HighContrastDec( const TOOL_EVENT& aEvent );
     int DisplayControl( const TOOL_EVENT& aEvent );
 
     // Layer control
-    int LayerSwitch( const TOOL_EVENT& aEvent );
     int LayerNext( const TOOL_EVENT& aEvent );
     int LayerPrev( const TOOL_EVENT& aEvent );
-    int LayerToggle( const TOOL_EVENT& aEvent );
-    int LayerAlphaInc( const TOOL_EVENT& aEvent );
-    int LayerAlphaDec( const TOOL_EVENT& aEvent );
 
     // Files
     int OpenGerber( const TOOL_EVENT& aEvent );
@@ -63,7 +57,6 @@ public:
     int HighlightControl( const TOOL_EVENT& aEvent );
 
     // Miscellaneous
-    int SwitchUnits( const TOOL_EVENT& aEvent );
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
     int Print( const TOOL_EVENT& aEvent );
 
@@ -72,7 +65,6 @@ public:
 
 private:
     GERBVIEW_FRAME* m_frame;
-
 };
 
 #endif
