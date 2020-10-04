@@ -1145,10 +1145,11 @@ std::vector<SHAPE*> DRAWSEGMENT::MakeEffectiveShapes() const
         {
             effectiveShapes.emplace_back( new SHAPE_SIMPLE( l ) );
         }
-        else
+
+        if( !IsPolygonFilled() || m_Width > 0 )
         {
             for( int i = 0; i < l.SegmentCount(); i++ )
-                effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( i ) ) );
+                effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( i ), m_Width ) );
         }
     }
         break;
