@@ -100,9 +100,11 @@ public:
 
             for( auto subshape : subshapes )
             {
-                const BOX2I& bbox       = subshape->BBox();
-                const int       mmin[2] = { bbox.GetX(), bbox.GetY() };
-                const int       mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+                BOX2I       bbox    = subshape->BBox();
+                bbox.Inflate( Millimeter2iu( 20 ) );
+                const int    mmin[2] = { bbox.GetX(), bbox.GetY() };
+                const int    mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+
                 m_tree[layer]->Insert( mmin, mmax, new ITEM_WITH_SHAPE( aItem, subshape, itemShape ) );
                 m_count++;
             }

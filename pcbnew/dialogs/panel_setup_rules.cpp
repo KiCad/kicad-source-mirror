@@ -200,11 +200,22 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
     if( context == SEXPR_OPEN )
     {
         if( sexprs.empty() )
-            tokens = "rule version";
+        {
+            tokens = "rule "
+                     "version";
+        }
         else if( sexprs.top() == "rule" )
-            tokens = "condition constraint layer";
+        {
+            tokens = "condition "
+                     "constraint "
+                     "layer";
+        }
         else if( sexprs.top() == "constraint" )
-            tokens = "max min opt";
+        {
+            tokens = "max "
+                     "min "
+                     "opt";
+        }
     }
     else if( context == SEXPR_TOKEN )
     {
@@ -214,7 +225,20 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         }
         else if( sexprs.top() == "constraint" )
         {
-            tokens = "annulus_width clearance disallow hole track_width";
+            tokens = "annulus_width "
+                     "clearance "
+                     "courtyard_clearance "
+                     "diff_pair_gap "
+                     "diff_pair_uncoupled "
+                     "disallow "
+                     "edge_clearance "
+                     "length "
+                     "hole "
+                     "hole_clearance "
+                     "silk_to_mask "
+                     "silk_to_silk skew "
+                     "track_width "
+                     "via_count ";
         }
         else if( sexprs.top() == "disallow"
               || sexprs.top() == "buried_via"
@@ -227,11 +251,21 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
               || sexprs.top() == "via"
               || sexprs.top() == "zone" )
         {
-            tokens = "buried_via graphic hole micro_via pad text track via zone";
+            tokens = "buried_via "
+                     "graphic "
+                     "hole "
+                     "micro_via "
+                     "pad "
+                     "text "
+                     "track "
+                     "via "
+                     "zone";
         }
         else if( sexprs.top() == "layer" )
         {
-            tokens = "inner outer \"x\"";
+            tokens = "inner "
+                     "outer "
+                     "\"x\"";
         }
     }
     else if( context == STRING && !sexprs.empty() && sexprs.top() == "condition" )

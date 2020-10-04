@@ -68,8 +68,9 @@ enum PCB_DRC_CODE {
     DRCE_NET_CONFLICT,                   // pad net doesn't match netlist
 
     DRCE_UNRESOLVED_VARIABLE,
-    DRCE_SILK_OVER_PAD,                  // silkscreen over component pad(s)
-    DRCE_SILK_CLEARANCE,                 // silk to silk clearance error
+    DRCE_SILK_MASK_CLEARANCE,            // silkscreen clipped by mask (potentially leaving it
+                                         //   over pads, exposed copper, etc.)
+    DRCE_SILK_SILK_CLEARANCE,            // silk to silk clearance error
     DRCE_LENGTH_OUT_OF_RANGE,
     DRCE_SKEW_OUT_OF_RANGE,
     DRCE_TOO_MANY_VIAS,
@@ -152,8 +153,8 @@ private:
     static DRC_ITEM extraFootprint;
     static DRC_ITEM netConflict;
     static DRC_ITEM unresolvedVariable;
-    static DRC_ITEM silkOverPad;
-    static DRC_ITEM silkClearance;
+    static DRC_ITEM silkMaskClearance;
+    static DRC_ITEM silkSilkClearance;
     static DRC_ITEM lengthOutOfRange;
     static DRC_ITEM skewOutOfRange;
     static DRC_ITEM tooManyVias;

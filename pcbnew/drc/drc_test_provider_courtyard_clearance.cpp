@@ -127,7 +127,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
 {
     const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
 
-    if( !reportPhase( _( "Checking footprint courtyard overlap..." ) ) )
+    if( !reportPhase( _( "Checking footprints for overlapping courtyards..." ) ) )
         return;
 
     int ii = 0;

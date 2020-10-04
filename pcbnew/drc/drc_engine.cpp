@@ -126,7 +126,7 @@ void DRC_ENGINE::loadImplicitRules()
     holeClearanceConstraint.Value().SetMin( 0 );
     rule->AddConstraint( courtyardClearanceConstraint );
 
-    DRC_CONSTRAINT silkToPadClearanceConstraint( DRC_CONSTRAINT_TYPE_SILK_TO_PAD );
+    DRC_CONSTRAINT silkToPadClearanceConstraint( DRC_CONSTRAINT_TYPE_SILK_TO_MASK );
     silkToPadClearanceConstraint.Value().SetMin( 0 );
     rule->AddConstraint( silkToPadClearanceConstraint );
 
@@ -237,21 +237,21 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
 
     std::vector<Formatter> formats =
     {
-        { DRC_CONSTRAINT_TYPE_UNKNOWN, "unknown", nullptr },
-        { DRC_CONSTRAINT_TYPE_CLEARANCE, "clearance", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE, "hole_clearance", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE, "edge_clearance", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_HOLE_SIZE, "hole_size", formatMinMax },
+        { DRC_CONSTRAINT_TYPE_UNKNOWN,             "unknown",             nullptr },
+        { DRC_CONSTRAINT_TYPE_CLEARANCE,           "clearance",           formatMinMax },
+        { DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,      "hole_clearance",      formatMinMax },
+        { DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,      "edge_clearance",      formatMinMax },
+        { DRC_CONSTRAINT_TYPE_HOLE_SIZE,           "hole_size",           formatMinMax },
         { DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE, "courtyard_clearance", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_SILK_TO_PAD, "silk_to_pad", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_SILK_TO_SILK, "silk_to_silk", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_TRACK_WIDTH, "track_width", formatMinMax },
+        { DRC_CONSTRAINT_TYPE_SILK_TO_MASK,        "silk_to_mask",        formatMinMax },
+        { DRC_CONSTRAINT_TYPE_SILK_TO_SILK,        "silk_to_silk",        formatMinMax },
+        { DRC_CONSTRAINT_TYPE_TRACK_WIDTH,         "track_width",         formatMinMax },
         { DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH,       "annular_width",       formatMinMax },
-        { DRC_CONSTRAINT_TYPE_DISALLOW, "disallow", nullptr },
-        { DRC_CONSTRAINT_TYPE_VIA_DIAMETER, "via_diameter", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_LENGTH, "length", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_SKEW, "skew", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_VIA_COUNT, "via_count", formatMinMax }
+        { DRC_CONSTRAINT_TYPE_DISALLOW,            "disallow",            nullptr },
+        { DRC_CONSTRAINT_TYPE_VIA_DIAMETER,        "via_diameter",        formatMinMax },
+        { DRC_CONSTRAINT_TYPE_LENGTH,              "length",              formatMinMax },
+        { DRC_CONSTRAINT_TYPE_SKEW,                "skew",                formatMinMax },
+        { DRC_CONSTRAINT_TYPE_VIA_COUNT,           "via_count",           formatMinMax }
     };
 
     for( auto& fmt : formats )
@@ -284,14 +284,14 @@ void DRC_ENGINE::loadRules( const wxFileName& aPath )
         {
             DRC_RULES_PARSER parser( fp, aPath.GetFullPath() );
             parser.Parse( rules, m_reporter );
-            }
+        }
 
         // Copy the rules into the member variable afterwards so that if Parse() throws then
         // the possibly malformed rules won't contaminate the current ruleset.
 
         for( DRC_RULE* rule : rules )
             m_rules.push_back( rule );
-            }
+    }
 }
 
 
@@ -414,9 +414,7 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aTestTracksAgainstZones,
         for( DRC_TEST_PROVIDER* provider : m_testProviders )
         {
             if( provider->IsEnabled() )
-            {
-            phases += provider->GetNumPhases();
-            }
+                phases += provider->GetNumPhases();
         }
 
         m_progressReporter->AddPhases( phases );

@@ -27,7 +27,6 @@
 
 #include <geometry/polygon_test_point_inside.h>
 #include <geometry/seg.h>
-#include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 
 #include <drc/drc_engine.h>
@@ -40,7 +39,7 @@
 /*
     Silk to silk clearance test. Check all silkscreen features against each other.
     Errors generated:
-    - DRCE_SILK_CLEARANCE
+    - DRCE_SILK_SILK_CLEARANCE
 
 */
 
@@ -95,7 +94,7 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
     }
 
     reportAux( "Worst clearance : %d nm", m_largestClearance );
-    reportPhase(( "Silkscreen clearances..." ));
+    reportPhase( _( "Checking silkscreen for overlapping items..." ) );
 
     DRC_RTREE silkTree;
 
@@ -110,7 +109,7 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
             [&]( const DRC_RTREE::LAYER_PAIR& aLayers, DRC_RTREE::ITEM_WITH_SHAPE* aRefItem,
                  DRC_RTREE::ITEM_WITH_SHAPE* aTestItem, bool* aCollisionDetected ) -> bool
             {
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE ) )
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_SILK_CLEARANCE ) )
                     return false;
 
                 auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_TO_SILK,
@@ -162,18 +161,23 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
                         return true;
                 }
 
-                if( ! aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual, &pos ) )
+                if( !aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual, &pos ) )
                     return true;
 
-               std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_CLEARANCE );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_SILK_CLEARANCE );
                 wxString                  msg;
 
+                /* For now we're just reporting silkscreen collisions without any dimensional
+                 * data.  I suspect it's usually noise, and they can always use the clearance
+                 * resolution report if they want.
+                 *
                 msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                             constraint.GetParentRule()->m_Name,
                             MessageTextFromValue( userUnits(), minClearance ),
                             MessageTextFromValue( userUnits(), actual ) );
 
                 drcItem->SetErrorMessage( msg );
+                 */
                 drcItem->SetItems( aRefItem->parent, aTestItem->parent );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 

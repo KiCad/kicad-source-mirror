@@ -51,6 +51,8 @@ add_executable( drc_proto
     ../../pcbnew/drc/drc_test_provider_via_diameter.cpp
     ../../pcbnew/drc/drc_test_provider_lvs.cpp
     ../../pcbnew/drc/drc_test_provider_misc.cpp
+    ../../pcbnew/drc/drc_test_provider_silk_to_mask.cpp
+    ../../pcbnew/drc/drc_test_provider_silk_to_silk.cpp
     ../../pcbnew/drc/drc_engine.cpp
     ../../pcbnew/drc/drc_item.cpp
     ../qa_utils/mocks.cpp

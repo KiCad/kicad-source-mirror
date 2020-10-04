@@ -276,7 +276,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_edge_clearance:      constraint.m_Type = DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE;      break;
     case T_hole:                constraint.m_Type = DRC_CONSTRAINT_TYPE_HOLE_SIZE;           break;
     case T_courtyard_clearance: constraint.m_Type = DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE; break;
-    case T_silk_to_pad:         constraint.m_Type = DRC_CONSTRAINT_TYPE_SILK_TO_PAD;         break;
+    case T_silk_to_mask:        constraint.m_Type = DRC_CONSTRAINT_TYPE_SILK_TO_MASK;         break;
     case T_silk_to_silk:        constraint.m_Type = DRC_CONSTRAINT_TYPE_SILK_TO_SILK;        break;
     case T_track_width:         constraint.m_Type = DRC_CONSTRAINT_TYPE_TRACK_WIDTH;         break;
     case T_annular_width:       constraint.m_Type = DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH;       break;

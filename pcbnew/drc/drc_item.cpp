@@ -164,13 +164,13 @@ DRC_ITEM DRC_ITEM::unresolvedVariable( DRCE_UNRESOLVED_VARIABLE,
         _( "Unresolved text variable" ),
         wxT( "unresolved_variable" ) );
 
-DRC_ITEM DRC_ITEM::silkOverPad( DRCE_SILK_OVER_PAD,
-        _( "Silkscreen overlapping pad" ),
-        wxT( "silk_over_pad" ) );
+DRC_ITEM DRC_ITEM::silkMaskClearance( DRCE_SILK_MASK_CLEARANCE,
+        _( "Silkscreen clipped by solder mask" ),
+        wxT( "silk_over_copper" ) );
 
-DRC_ITEM DRC_ITEM::silkClearance( DRCE_SILK_CLEARANCE,
-        _( "Silkscreen clearance" ),
-        wxT( "silk_clearance" ) );
+DRC_ITEM DRC_ITEM::silkSilkClearance( DRCE_SILK_SILK_CLEARANCE,
+        _( "Silkscreen overlap" ),
+        wxT( "silk_overlap" ) );
 
 DRC_ITEM DRC_ITEM::lengthOutOfRange( DRCE_LENGTH_OUT_OF_RANGE,
         _( "Trace length out of range" ),
@@ -224,8 +224,8 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::extraFootprint,
             DRC_ITEM::netConflict,
             DRC_ITEM::unresolvedVariable,
-            DRC_ITEM::silkClearance,
-            DRC_ITEM::silkOverPad,
+            DRC_ITEM::silkSilkClearance,
+            DRC_ITEM::silkMaskClearance,
             DRC_ITEM::lengthOutOfRange,
             DRC_ITEM::skewOutOfRange,
             DRC_ITEM::tooManyVias,
@@ -270,8 +270,8 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_NET_CONFLICT:             return std::make_shared<DRC_ITEM>( netConflict );
     case DRCE_EXTRA_FOOTPRINT:          return std::make_shared<DRC_ITEM>( extraFootprint );
     case DRCE_UNRESOLVED_VARIABLE:      return std::make_shared<DRC_ITEM>( unresolvedVariable );
-    case DRCE_SILK_OVER_PAD:            return std::make_shared<DRC_ITEM>( silkOverPad );
-    case DRCE_SILK_CLEARANCE:           return std::make_shared<DRC_ITEM>( silkClearance );
+    case DRCE_SILK_SILK_CLEARANCE:      return std::make_shared<DRC_ITEM>( silkSilkClearance );
+    case DRCE_SILK_MASK_CLEARANCE:      return std::make_shared<DRC_ITEM>( silkMaskClearance );
     case DRCE_LENGTH_OUT_OF_RANGE:      return std::make_shared<DRC_ITEM>( lengthOutOfRange );
     case DRCE_SKEW_OUT_OF_RANGE:        return std::make_shared<DRC_ITEM>( skewOutOfRange );
     case DRCE_TOO_MANY_VIAS:            return std::make_shared<DRC_ITEM>( tooManyVias );

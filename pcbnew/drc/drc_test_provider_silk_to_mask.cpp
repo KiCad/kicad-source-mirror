@@ -24,13 +24,9 @@
 #include <common.h>
 #include <class_board.h>
 #include <class_drawsegment.h>
-#include <class_pad.h>
 
-#include <convert_basic_shapes_to_polygon.h>
 #include <geometry/polygon_test_point_inside.h>
 #include <geometry/seg.h>
-#include <geometry/shape_poly_set.h>
-#include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 
 #include <drc/drc_engine.h>
@@ -43,21 +39,21 @@
 /*
     Silk to pads clearance test. Check all pads against silkscreen (mask opening in the pad vs silkscreen)
     Errors generated:
-    - DRCE_SILK_ON_PADS
+    - DRCE_SILK_MASK_CLEARANCE
 */
 
 namespace test {
 
-class DRC_TEST_PROVIDER_SILK_TO_PAD : public ::DRC_TEST_PROVIDER
+class DRC_TEST_PROVIDER_SILK_TO_MASK : public ::DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_SILK_TO_PAD ():
+    DRC_TEST_PROVIDER_SILK_TO_MASK ():
             m_board( nullptr ),
             m_largestClearance( 0 )
     {
     }
 
-    virtual ~DRC_TEST_PROVIDER_SILK_TO_PAD()
+    virtual ~DRC_TEST_PROVIDER_SILK_TO_MASK()
     {
     }
 
@@ -65,12 +61,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "silk_to_pad";
+        return "silk_to_mask";
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests for silkscreen covering components pads";
+        return "Tests for silkscreen being clipped by solder mask";
     }
 
     virtual int GetNumPhases() const override
@@ -89,28 +85,28 @@ private:
 };
 
 
-bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
+bool test::DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
     DRC_CONSTRAINT worstClearanceConstraint;
     m_largestClearance = 0;
 
-    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_SILK_TO_PAD,
+    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_SILK_TO_MASK,
                                            worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
     {
         m_largestClearance = worstClearanceConstraint.m_Value.Min();
     }
 
     reportAux( "Worst clearance : %d nm", m_largestClearance );
-    reportPhase(( "Pad to silkscreen clearances..." ));
+    reportPhase( _( "Checking silkscreen for potential soldermask clipping..." ) );
 
-    DRC_RTREE padTree, silkTree;
+    DRC_RTREE maskTree, silkTree;
 
-    auto addPadToTree =
-            [&padTree]( BOARD_ITEM *item ) -> bool
+    auto addMaskToTree =
+            [&maskTree]( BOARD_ITEM *item ) -> bool
             {
-                padTree.insert( item );
+                maskTree.insert( item );
                 return true;
             };
 
@@ -125,10 +121,10 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
             [&]( const DRC_RTREE::LAYER_PAIR& aLayers, DRC_RTREE::ITEM_WITH_SHAPE* aRefItem,
                  DRC_RTREE::ITEM_WITH_SHAPE* aTestItem, bool* aCollisionDetected ) -> bool
             {
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_OVER_PAD ) )
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
                     return false;
 
-                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_TO_PAD,
+                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_TO_MASK,
                                                                   aRefItem->parent,
                                                                   aTestItem->parent );
 
@@ -147,7 +143,7 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
                 if( !aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual, &pos ) )
                     return true;
 
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_OVER_PAD );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_MASK_CLEARANCE );
                 wxString                  msg;
 
                 drcItem->SetItems( aRefItem->parent, aTestItem->parent );
@@ -159,21 +155,28 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
                 return true;
             };
 
-    int numPads = forEachGeometryItem( { PCB_PAD_T }, LSET::AllTechMask() | LSET::AllCuMask(),
-                                       addPadToTree );
+    int numPads = forEachGeometryItem( { PCB_PAD_T,
+                                         PCB_LINE_T,
+                                         PCB_MODULE_EDGE_T,
+                                         PCB_TEXT_T,
+                                         PCB_MODULE_TEXT_T },
+                                       LSET( 2, F_Mask, B_Mask ), addMaskToTree );
 
-    int numSilk = forEachGeometryItem( { PCB_LINE_T, PCB_MODULE_EDGE_T, PCB_TEXT_T, PCB_MODULE_TEXT_T },
+    int numSilk = forEachGeometryItem( { PCB_LINE_T,
+                                         PCB_MODULE_EDGE_T,
+                                         PCB_TEXT_T,
+                                         PCB_MODULE_TEXT_T },
                                        LSET( 2, F_SilkS, B_SilkS ), addSilkToTree );
 
-    reportAux( _("Testing %d pads against %d silkscreen features."), numPads, numSilk );
+    reportAux( _("Testing %d exposed copper against %d silkscreen features."), numPads, numSilk );
 
     const std::vector<DRC_RTREE::LAYER_PAIR> layerPairs =
     {
-        DRC_RTREE::LAYER_PAIR( F_SilkS, F_Cu ),
-        DRC_RTREE::LAYER_PAIR( B_SilkS, B_Cu )
+        DRC_RTREE::LAYER_PAIR( F_SilkS, F_Mask ),
+        DRC_RTREE::LAYER_PAIR( B_SilkS, B_Mask )
     };
 
-    padTree.QueryCollidingPairs( &silkTree, layerPairs, checkClearance, m_largestClearance );
+    maskTree.QueryCollidingPairs( &silkTree, layerPairs, checkClearance, m_largestClearance );
 
     reportRuleStatistics();
 
@@ -181,13 +184,13 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_SILK_TO_PAD::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_SILK_TO_MASK::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_SILK_TO_PAD };
+    return { DRC_CONSTRAINT_TYPE_SILK_TO_MASK };
 }
 
 
 namespace detail
 {
-    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_SILK_TO_PAD> dummy;
+    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_SILK_TO_MASK> dummy;
 }
