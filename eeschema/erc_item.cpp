@@ -69,7 +69,7 @@ ERC_ITEM ERC_ITEM::noConnectDangling( ERCE_NOCONNECT_NOT_CONNECTED,
         wxT( "no_connect_dangling" ) );
 
 ERC_ITEM ERC_ITEM::labelDangling( ERCE_LABEL_NOT_CONNECTED,
-        _( "Label not connected anywhere else in the schematic" ),
+        _( "Label not connected to anything" ),
         wxT( "label_dangling" ) );
 
 ERC_ITEM ERC_ITEM::globalLabelDangling( ERCE_GLOBLABEL,

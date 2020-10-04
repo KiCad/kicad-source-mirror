@@ -2490,6 +2490,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     if( aSubgraph->m_no_connect )
         return true;
 
+    bool ok = true;
     SCH_TEXT* text = nullptr;
     bool has_other_connections = false;
 
@@ -2500,8 +2501,25 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
+        {
             text = static_cast<SCH_TEXT*>( item );
+
+            // Below, we'll create an ERC if the whole subgraph is unconnected.  But, additionally,
+            // we want to error if an individual label in the subgraph is floating, even if it's
+            // connected to other valid things by way of another label on the same sheet.
+
+            if( text->IsDangling() )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LABEL_NOT_CONNECTED );
+                ercItem->SetItems( text );
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
+                aSubgraph->m_sheet.LastScreen()->Append( marker );
+                ok = false;
+            }
+
             break;
+        }
 
         case SCH_PIN_T:
         case SCH_SHEET_PIN_T:
@@ -2573,7 +2591,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
         return false;
     }
 
-    return true;
+    return ok;
 }
 
 
