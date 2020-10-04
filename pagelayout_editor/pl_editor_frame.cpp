@@ -444,8 +444,9 @@ void PL_EDITOR_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 {
     wxTreebook* book = aParent->GetTreebook();
 
-    book->AddPage( new PANEL_GAL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
-    book->AddPage( new PANEL_PL_EDITOR_COLOR_SETTINGS( this, aParent ), _( "Colors" ) );
+    book->AddPage( new wxPanel( book ), _( "Page Layout Editor" ) );
+    book->AddSubPage( new PANEL_GAL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+    book->AddSubPage( new PANEL_PL_EDITOR_COLOR_SETTINGS( this, aParent ), _( "Colors" ) );
 
     aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
