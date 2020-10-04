@@ -266,6 +266,12 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CH
         }
     }
 
+    if( aB.IsClosed() && aA.GetPointCount() > 0 && aB.PointInside( aA.GetPoint( 0 ) ) )
+    {
+        closest_dist = 0;
+        nearest = aA.GetPoint( 0 );
+    }
+
     if( closest_dist < aClearance )
     {
         if( aLocation )

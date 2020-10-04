@@ -88,11 +88,20 @@ void SHAPE_LINE_CHAIN::convertArc( ssize_t aArcIndex )
 bool SHAPE_LINE_CHAIN_BASE::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
                                      VECTOR2I* aLocation ) const
 {
+    if( IsClosed() && PointInside( aP, aClearance ) )
+    {
+        if( aLocation )
+            *aLocation = aP;
+
+        if( aActual )
+            *aActual = 0;
+
+        return true;
+    }
+
     SEG::ecoord closest_dist_sq = VECTOR2I::ECOORD_MAX;
     SEG::ecoord clearance_sq = SEG::Square( aClearance );
     VECTOR2I nearest;
-
-    // fixme: why this only checks open curves?
 
     for( int i = 0; i < GetSegmentCount(); i++ )
     {
@@ -142,6 +151,17 @@ void SHAPE_LINE_CHAIN::Rotate( double aAngle, const VECTOR2I& aCenter )
 bool SHAPE_LINE_CHAIN_BASE::Collide( const SEG& aSeg, int aClearance, int* aActual,
                                      VECTOR2I* aLocation ) const
 {
+    if( IsClosed() && PointInside( aSeg.A ) )
+    {
+        if( aLocation )
+            *aLocation = aSeg.A;
+
+        if( aActual )
+            *aActual = 0;
+
+        return true;
+    }
+
     SEG::ecoord closest_dist_sq = VECTOR2I::ECOORD_MAX;
     SEG::ecoord clearance_sq = SEG::Square( aClearance );
     VECTOR2I nearest;
@@ -628,7 +648,8 @@ int SHAPE_LINE_CHAIN::PathLength( const VECTOR2I& aP ) const
 }
 
 
-bool SHAPE_LINE_CHAIN_BASE::PointInside( const VECTOR2I& aPt, int aAccuracy, bool aUseBBoxCache ) const
+bool SHAPE_LINE_CHAIN_BASE::PointInside( const VECTOR2I& aPt, int aAccuracy,
+                                         bool aUseBBoxCache ) const
 {
     /*
      * Don't check the bounding box unless it's cached.  Building it is about the same speed as
