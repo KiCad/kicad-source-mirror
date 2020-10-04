@@ -28,7 +28,7 @@ PANEL_LIBEDIT_SETTINGS_BASE::PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 
 	m_lineWidthLabel = new wxStaticText( defaults->GetStaticBox(), wxID_ANY, _("&Default line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lineWidthLabel->Wrap( -1 );
-	fgSizer->Add( m_lineWidthLabel, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer->Add( m_lineWidthLabel, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_lineWidthCtrl = new wxTextCtrl( defaults->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP );
 	fgSizer->Add( m_lineWidthCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -39,7 +39,7 @@ PANEL_LIBEDIT_SETTINGS_BASE::PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 
 	m_textSizeLabel = new wxStaticText( defaults->GetStaticBox(), wxID_ANY, _("Default text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );
-	fgSizer->Add( m_textSizeLabel, 1, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer->Add( m_textSizeLabel, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_textSizeCtrl = new wxTextCtrl( defaults->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer->Add( m_textSizeCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -59,7 +59,7 @@ PANEL_LIBEDIT_SETTINGS_BASE::PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 
 	m_pinLengthLabel = new wxStaticText( defaults->GetStaticBox(), wxID_ANY, _("D&efault pin length:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pinLengthLabel->Wrap( -1 );
-	fgSizer->Add( m_pinLengthLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	fgSizer->Add( m_pinLengthLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_pinLengthCtrl = new wxTextCtrl( defaults->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP );
 	fgSizer->Add( m_pinLengthCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -70,7 +70,7 @@ PANEL_LIBEDIT_SETTINGS_BASE::PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 
 	m_pinNumSizeLabel = new wxStaticText( defaults->GetStaticBox(), wxID_ANY, _("De&fault pin number size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pinNumSizeLabel->Wrap( -1 );
-	fgSizer->Add( m_pinNumSizeLabel, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer->Add( m_pinNumSizeLabel, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_pinNumSizeCtrl = new wxTextCtrl( defaults->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP );
 	fgSizer->Add( m_pinNumSizeCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -81,7 +81,7 @@ PANEL_LIBEDIT_SETTINGS_BASE::PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 
 	m_pinNameSizeLabel = new wxStaticText( defaults->GetStaticBox(), wxID_ANY, _("Def&ault pin name size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pinNameSizeLabel->Wrap( -1 );
-	fgSizer->Add( m_pinNameSizeLabel, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer->Add( m_pinNameSizeLabel, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_pinNameSizeCtrl = new wxTextCtrl( defaults->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP );
 	fgSizer->Add( m_pinNameSizeCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -93,8 +93,8 @@ PANEL_LIBEDIT_SETTINGS_BASE::PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 
 	defaults->Add( fgSizer, 0, wxBOTTOM|wxEXPAND, 5 );
 
-    m_cbShowPinElectricalType = new wxCheckBox( defaults->GetStaticBox(), wxID_ANY, _( "Show pin &electrical type"), wxDefaultPosition, wxDefaultSize, 0 );
-	defaults->Add( m_cbShowPinElectricalType, 0, wxBOTTOM, 5 );
+	m_cbShowPinElectricalType = new wxCheckBox( defaults->GetStaticBox(), wxID_ANY, _("Show pin &electrical type"), wxDefaultPosition, wxDefaultSize, 0 );
+	defaults->Add( m_cbShowPinElectricalType, 0, wxBOTTOM|wxLEFT, 5 );
 
 
 	leftColumn->Add( defaults, 0, wxEXPAND|wxALL, 5 );
@@ -110,7 +110,7 @@ PANEL_LIBEDIT_SETTINGS_BASE::PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 
 	m_hPitchLabel = new wxStaticText( repeats->GetStaticBox(), wxID_ANY, _("&Horizontal pitch:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_hPitchLabel->Wrap( -1 );
-	fgSizer1->Add( m_hPitchLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	fgSizer1->Add( m_hPitchLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_hPitchCtrl = new wxTextCtrl( repeats->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
 	fgSizer1->Add( m_hPitchCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -121,7 +121,7 @@ PANEL_LIBEDIT_SETTINGS_BASE::PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 
 	m_vPitchLabel = new wxStaticText( repeats->GetStaticBox(), wxID_ANY, _("&Vertical pitch:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_vPitchLabel->Wrap( -1 );
-	fgSizer1->Add( m_vPitchLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer1->Add( m_vPitchLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_vPitchCtrl = new wxTextCtrl( repeats->GetStaticBox(), wxID_ANY, _("100"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
 	fgSizer1->Add( m_vPitchCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -132,7 +132,7 @@ PANEL_LIBEDIT_SETTINGS_BASE::PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 
 	m_pinPitchLabel = new wxStaticText( repeats->GetStaticBox(), wxID_ANY, _("&Pitch of repeated pins:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pinPitchLabel->Wrap( -1 );
-	fgSizer1->Add( m_pinPitchLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer1->Add( m_pinPitchLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	wxString m_choicePinDisplacementChoices[] = { _("100"), _("50") };
 	int m_choicePinDisplacementNChoices = sizeof( m_choicePinDisplacementChoices ) / sizeof( wxString );
@@ -146,7 +146,7 @@ PANEL_LIBEDIT_SETTINGS_BASE::PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 
 	m_labelIncrementLabel1 = new wxStaticText( repeats->GetStaticBox(), wxID_ANY, _("Label increment:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelIncrementLabel1->Wrap( -1 );
-	fgSizer1->Add( m_labelIncrementLabel1, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer1->Add( m_labelIncrementLabel1, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_spinRepeatLabel = new wxSpinCtrl( repeats->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, -10, 10, 1 );
 	fgSizer1->Add( m_spinRepeatLabel, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
