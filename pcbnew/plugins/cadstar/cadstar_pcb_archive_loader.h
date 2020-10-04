@@ -307,8 +307,7 @@ private:
     */
     std::vector<TRACK*> makeTracksFromDrawsegments( const std::vector<DRAWSEGMENT*> aDrawsegments,
             BOARD_ITEM_CONTAINER* aParentContainer, NETINFO_ITEM* aNet = nullptr,
-            const PCB_LAYER_ID& aLayerOverride = PCB_LAYER_ID::UNDEFINED_LAYER,
-            int                 aWidthOverride = -1 );
+            PCB_LAYER_ID aLayerOverride = PCB_LAYER_ID::UNDEFINED_LAYER, int aWidthOverride = -1 );
 
     /**
      * @brief Adds a CADSTAR Attribute to a KiCad module

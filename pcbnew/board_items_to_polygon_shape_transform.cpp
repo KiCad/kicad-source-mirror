@@ -97,7 +97,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
 
         switch( item->Type() )
         {
-        case PCB_LINE_T:
+        case PCB_SHAPE_T:
             ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0 );
             break;
 
@@ -220,7 +220,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
 
     for( auto item : GraphicalItems() )
     {
-        if( item->Type() == PCB_MODULE_TEXT_T && aIncludeText )
+        if( item->Type() == PCB_FP_TEXT_T && aIncludeText )
         {
             TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
 
@@ -228,7 +228,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
                 texts.push_back( text );
         }
 
-        if( item->Type() == PCB_MODULE_EDGE_T && aIncludeEdges )
+        if( item->Type() == PCB_FP_SHAPE_T && aIncludeEdges )
         {
             EDGE_MODULE* outline = (EDGE_MODULE*) item;
 
@@ -495,7 +495,7 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
 
     default:
         wxFAIL_MSG( "DRAWSEGMENT::TransformShapeWithClearanceToPolygon no implementation for "
-                    + STROKE_T_asString( m_Shape ) );
+                    + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }
 }

@@ -167,7 +167,7 @@ private:
 
     /**
      * Starts drawing a selected shape (i.e. DRAWSEGMENT).
-     * @param aShape is the type of created shape (@see STROKE_T).
+     * @param aShape is the type of created shape (@see PCB_SHAPE_TYPE_T).
      * @param aGraphic is an object that is going to be used by the tool for drawing. Must be
      *                 already created. The tool deletes the object if it is not added to a BOARD.
      * @param aStartingPoint is a starting point for this new DRAWSEGMENT. If it exists the new

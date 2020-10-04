@@ -156,16 +156,16 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
             };
 
     int numPads = forEachGeometryItem( { PCB_PAD_T,
-                                         PCB_LINE_T,
-                                         PCB_MODULE_EDGE_T,
+                                         PCB_SHAPE_T,
+                                         PCB_FP_SHAPE_T,
                                          PCB_TEXT_T,
-                                         PCB_MODULE_TEXT_T },
+                                         PCB_FP_TEXT_T },
                                        LSET( 2, F_Mask, B_Mask ), addMaskToTree );
 
-    int numSilk = forEachGeometryItem( { PCB_LINE_T,
-                                         PCB_MODULE_EDGE_T,
+    int numSilk = forEachGeometryItem( { PCB_SHAPE_T,
+                                         PCB_FP_SHAPE_T,
                                          PCB_TEXT_T,
-                                         PCB_MODULE_TEXT_T },
+                                         PCB_FP_TEXT_T },
                                        LSET( 2, F_SilkS, B_SilkS ), addSilkToTree );
 
     reportAux( _("Testing %d exposed copper against %d silkscreen features."), numPads, numSilk );

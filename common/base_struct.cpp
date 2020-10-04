@@ -781,10 +781,10 @@ static struct EDA_ITEM_DESC
 
             .Map( PCB_MODULE_T,         _( "Footprint" ) )
             .Map( PCB_PAD_T,            _( "Pad" ) )
-            .Map( PCB_LINE_T,           _( "Line" ) )
+            .Map( PCB_SHAPE_T,          _( "Graphic Shape" ) )
             .Map( PCB_TEXT_T,           _( "Board Text" ) )
-            .Map( PCB_MODULE_TEXT_T,    _( "Footprint Text" ) )
-            .Map( PCB_MODULE_EDGE_T,    _( "Footprint Graphics" ) )
+            .Map( PCB_FP_TEXT_T,        _( "Footprint Text" ) )
+            .Map( PCB_FP_SHAPE_T,       _( "Graphic Shape" ) )
             .Map( PCB_TRACE_T,          _( "Track" ) )
             .Map( PCB_VIA_T,            _( "Via" ) )
             .Map( PCB_MARKER_T,         _( "Board Marker" ) )

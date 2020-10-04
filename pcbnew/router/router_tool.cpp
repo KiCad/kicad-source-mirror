@@ -1443,7 +1443,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 {
                     previewItem = static_cast<BOARD_ITEM*>( drawing->Clone() );
 
-                    if( drawing->Type() == PCB_MODULE_EDGE_T )
+                    if( drawing->Type() == PCB_FP_SHAPE_T )
                     {
                         EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( previewItem );
                         edge->DRAWSEGMENT::Move( (wxPoint) offset );

@@ -1073,7 +1073,7 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
     module->RunOnChildren(
             [&] ( BOARD_ITEM* aChild )
             {
-                if( aChild->Type() == PCB_MODULE_TEXT_T )
+                if( aChild->Type() == PCB_FP_TEXT_T )
                 {
                     TEXTE_MODULE* textItem = static_cast<TEXTE_MODULE*>( aChild );
                     PCB_LAYER_ID  layer = textItem->GetLayer();

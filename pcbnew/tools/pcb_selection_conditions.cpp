@@ -62,7 +62,7 @@ S_C PCB_SELECTION_CONDITIONS::SameLayer()
 }
 
 
-S_C PCB_SELECTION_CONDITIONS::OnlyGraphicShapeTypes( const std::set<STROKE_T> aTypes )
+S_C PCB_SELECTION_CONDITIONS::OnlyGraphicShapeTypes( const std::set<PCB_SHAPE_TYPE_T> aTypes )
 {
     return std::bind( &PCB_SELECTION_CONDITIONS::onlyGraphicShapeTypesFunc, _1, aTypes );
 }
@@ -137,17 +137,17 @@ bool PCB_SELECTION_CONDITIONS::sameLayerFunc( const SELECTION& aSelection )
 
 
 bool PCB_SELECTION_CONDITIONS::onlyGraphicShapeTypesFunc( const SELECTION& aSelection,
-                                                          const std::set<STROKE_T> aTypes )
+                                                          const std::set<PCB_SHAPE_TYPE_T> aTypes )
 {
     if( aSelection.Empty() )
         return false;
 
     for( const EDA_ITEM* item : aSelection )
     {
-        if( item->Type() != PCB_LINE_T && item->Type() != PCB_MODULE_EDGE_T )
+        if( item->Type() != PCB_SHAPE_T && item->Type() != PCB_FP_SHAPE_T )
             return false;
 
-        STROKE_T shape = static_cast<const DRAWSEGMENT*>( item )->GetShape();
+        PCB_SHAPE_TYPE_T shape = static_cast<const DRAWSEGMENT*>( item )->GetShape();
 
         if( !aTypes.count( shape ) )
             return false;

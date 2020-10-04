@@ -37,7 +37,7 @@
 #include <settings/settings_manager.h>
 
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
-        : BOARD_CONNECTED_ITEM( aParent, aInModule ? PCB_MODULE_ZONE_AREA_T : PCB_ZONE_AREA_T ),
+        : BOARD_CONNECTED_ITEM( aParent, aInModule ? PCB_FP_ZONE_AREA_T : PCB_ZONE_AREA_T ),
           m_area( 0.0 )
 {
     m_CornerSelection = nullptr;                // no corner is selected

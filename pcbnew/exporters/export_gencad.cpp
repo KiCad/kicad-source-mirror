@@ -1088,7 +1088,7 @@ static void CreateBoardSection( FILE* aFile, BOARD* aPcb )
     // Extract the board edges
     for( BOARD_ITEM* drawing : aPcb->Drawings() )
     {
-        if( drawing->Type() == PCB_LINE_T )
+        if( drawing->Type() == PCB_SHAPE_T )
         {
             DRAWSEGMENT* drawseg = static_cast<DRAWSEGMENT*>( drawing );
 
@@ -1160,12 +1160,12 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module, const wxString& aS
     {
         switch( PtStruct->Type() )
         {
-        case PCB_MODULE_TEXT_T:
+        case PCB_FP_TEXT_T:
 
             // If we wanted to export text, this is not the correct section
             break;
 
-        case PCB_MODULE_EDGE_T:
+        case PCB_FP_SHAPE_T:
             PtEdge = (EDGE_MODULE*) PtStruct;
             if( PtEdge->GetLayer() == F_SilkS || PtEdge->GetLayer() == B_SilkS )
             {

@@ -476,7 +476,7 @@ int PCB_EDIT_FRAME::inferLegacyEdgeClearance( BOARD* aBoard )
 
     for( int i = 0; i < collector.GetCount(); i++ )
     {
-        if( collector[i]->Type() == PCB_LINE_T )
+        if( collector[i]->Type() == PCB_SHAPE_T )
         {
             int itemWidth = static_cast<DRAWSEGMENT*>( collector[i] )->GetWidth();
 

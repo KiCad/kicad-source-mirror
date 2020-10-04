@@ -148,13 +148,13 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
             BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
             BOARD_ITEM* copy = nullptr;
 
-            if( item->Type() == PCB_MODULE_EDGE_T )
+            if( item->Type() == PCB_FP_SHAPE_T )
             {
-                // Convert to PCB_LINE_T
+                // Convert to PCB_SHAPE_T
                 copy = (BOARD_ITEM*) reinterpret_cast<DRAWSEGMENT*>( item )->Clone();
                 copy->SetLayer( item->GetLayer() );
             }
-            else if( item->Type() == PCB_MODULE_TEXT_T )
+            else if( item->Type() == PCB_FP_TEXT_T )
             {
                 // Convert to PCB_TEXT_T
                 MODULE*       mod = static_cast<MODULE*>( item->GetParent() );
@@ -183,7 +183,7 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
                 mod->Add( pad );
                 copy = mod;
             }
-            else if( item->Type() == PCB_MODULE_ZONE_AREA_T )
+            else if( item->Type() == PCB_FP_ZONE_AREA_T )
             {
                 // Convert to PCB_ZONE_AREA_T
                 ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );

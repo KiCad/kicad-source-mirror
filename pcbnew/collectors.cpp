@@ -48,7 +48,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     //  *** all items in a same list (shown here) must be contiguous ****
     PCB_MARKER_T,                // in m_markers
     PCB_TEXT_T,                  // in m_drawings
-    PCB_LINE_T,                  // in m_drawings
+    PCB_SHAPE_T,                 // in m_drawings
     PCB_DIM_ALIGNED_T,           // in m_drawings
     PCB_DIM_CENTER_T,            // in m_drawings
     PCB_DIM_ORTHOGONAL_T,        // in m_drawings
@@ -58,7 +58,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     PCB_TRACE_T,                 // in m_tracks
     PCB_ARC_T,                   // in m_tracks
     PCB_PAD_T,                   // in modules
-    PCB_MODULE_TEXT_T,           // in modules
+    PCB_FP_TEXT_T,               // in modules
     PCB_MODULE_T,                // in m_modules
     PCB_GROUP_T,                 // in m_groups
     PCB_ZONE_AREA_T,             // in m_zones
@@ -69,7 +69,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
 const KICAD_T GENERAL_COLLECTOR::BoardLevelItems[] = {
     PCB_MARKER_T,
     PCB_TEXT_T,
-    PCB_LINE_T,
+    PCB_SHAPE_T,
     PCB_DIM_ALIGNED_T,
     PCB_DIM_ORTHOGONAL_T,
     PCB_DIM_CENTER_T,
@@ -88,7 +88,7 @@ const KICAD_T GENERAL_COLLECTOR::BoardLevelItems[] = {
 const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
     PCB_MARKER_T,
     PCB_TEXT_T,
-    PCB_LINE_T,
+    PCB_SHAPE_T,
     PCB_DIM_ALIGNED_T,
     PCB_DIM_ORTHOGONAL_T,
     PCB_DIM_CENTER_T,
@@ -98,7 +98,7 @@ const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
     PCB_TRACE_T,
     PCB_ARC_T,
     PCB_PAD_T,
-    PCB_MODULE_TEXT_T,
+    PCB_FP_TEXT_T,
     PCB_MODULE_T,
     PCB_GROUP_T,
     PCB_ZONE_AREA_T,         // if it is visible on screen, it should be selectable
@@ -130,20 +130,20 @@ const KICAD_T GENERAL_COLLECTOR::PadsOrTracks[] = {
 
 const KICAD_T GENERAL_COLLECTOR::ModulesAndTheirItems[] = {
     PCB_MODULE_T,
-    PCB_MODULE_TEXT_T,
-    PCB_MODULE_EDGE_T,
+    PCB_FP_TEXT_T,
+    PCB_FP_SHAPE_T,
     PCB_PAD_T,
-    PCB_MODULE_ZONE_AREA_T,
+    PCB_FP_ZONE_AREA_T,
     PCB_GROUP_T,
     EOT
     };
 
 
 const KICAD_T GENERAL_COLLECTOR::ModuleItems[] = {
-    PCB_MODULE_TEXT_T,
-    PCB_MODULE_EDGE_T,
+    PCB_FP_TEXT_T,
+    PCB_FP_SHAPE_T,
     PCB_PAD_T,
-    PCB_MODULE_ZONE_AREA_T,
+    PCB_FP_ZONE_AREA_T,
     PCB_GROUP_T,
     EOT
     };
@@ -169,7 +169,7 @@ const KICAD_T GENERAL_COLLECTOR::LockableItems[] = {
 
 const KICAD_T GENERAL_COLLECTOR::Zones[] = {
     PCB_ZONE_AREA_T,
-    PCB_MODULE_ZONE_AREA_T,
+    PCB_FP_ZONE_AREA_T,
     EOT
 };
 
@@ -226,7 +226,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         breakhere++;
         break;
 
-    case PCB_LINE_T:
+    case PCB_SHAPE_T:
         breakhere++;
         break;
 
@@ -234,7 +234,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         breakhere++;
         break;
 
-    case PCB_MODULE_TEXT_T:
+    case PCB_FP_TEXT_T:
         {
             TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
 
@@ -303,7 +303,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             goto exit;
         break;
 
-    case PCB_MODULE_ZONE_AREA_T:
+    case PCB_FP_ZONE_AREA_T:
         module = static_cast<MODULE*>( item->GetParent() );
 
         // Fallthrough to get the zone as well
@@ -316,7 +316,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     case PCB_TEXT_T:
         break;
 
-    case PCB_LINE_T:
+    case PCB_SHAPE_T:
         drawSegment = static_cast<DRAWSEGMENT*>( item );
         break;
 
@@ -329,7 +329,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     case PCB_TARGET_T:
         break;
 
-    case PCB_MODULE_TEXT_T:
+    case PCB_FP_TEXT_T:
         {
             TEXTE_MODULE *text = static_cast<TEXTE_MODULE*>( item );
             if( m_Guide->IgnoreMTextsMarkedNoShow() && !text->IsVisible() )
@@ -371,7 +371,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         }
         break;
 
-    case PCB_MODULE_EDGE_T:
+    case PCB_FP_SHAPE_T:
         drawSegment = static_cast<EDGE_MODULE*>( item );
         break;
 
@@ -393,7 +393,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
     // common tests:
 
-    if( module )    // true from case PCB_PAD_T, PCB_MODULE_TEXT_T, or PCB_MODULE_T
+    if( module )    // true from case PCB_PAD_T, PCB_FP_TEXT_T, or PCB_MODULE_T
     {
         if( m_Guide->IgnoreModulesOnBack() && (module->GetLayer() == B_Cu) )
             goto exit;

@@ -783,7 +783,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, wxStri
 
     // Get all the DRAWSEGMENTS and module graphics into 'items',
     // then keep only those on layer == Edge_Cuts.
-    static const KICAD_T  scan_graphics[] = { PCB_LINE_T, PCB_MODULE_EDGE_T, EOT };
+    static const KICAD_T  scan_graphics[] = { PCB_SHAPE_T, PCB_FP_SHAPE_T, EOT };
     items.Collect( aBoard, scan_graphics );
 
     // Make a working copy of aSegList, because the list is modified during calculations
@@ -1004,7 +1004,7 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
 
     // Get all the DRAWSEGMENTS and module graphics into 'items',
     // then keep only those on layer == Edge_Cuts.
-    static const KICAD_T  scan_graphics[] = { PCB_LINE_T, PCB_MODULE_EDGE_T, EOT };
+    static const KICAD_T  scan_graphics[] = { PCB_SHAPE_T, PCB_FP_SHAPE_T, EOT };
     items.Collect( aBoard, scan_graphics );
 
     // Make a working copy of aSegList, because the list is modified during calculations

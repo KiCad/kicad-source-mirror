@@ -72,7 +72,7 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags,
         {
             aCollector.Remove( item );
         }
-        else if( item->Type() == PCB_MODULE_ZONE_AREA_T )
+        else if( item->Type() == PCB_FP_ZONE_AREA_T )
         {
             MODULE* mod = static_cast<MODULE*>( item->GetParent() );
 
@@ -914,9 +914,9 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         // only modify items we can mirror
         switch( item->Type() )
         {
-        case PCB_MODULE_EDGE_T:
-        case PCB_MODULE_TEXT_T:
-        case PCB_MODULE_ZONE_AREA_T:
+        case PCB_FP_SHAPE_T:
+        case PCB_FP_TEXT_T:
+        case PCB_FP_ZONE_AREA_T:
         case PCB_PAD_T:
             // Only create undo entry for items on the board
             if( !item->IsNew() && !EditingModules() )
@@ -930,21 +930,21 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         // modify each object as necessary
         switch( item->Type() )
         {
-        case PCB_MODULE_EDGE_T:
+        case PCB_FP_SHAPE_T:
         {
             EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( item );
             edge->Mirror( mirrorPoint, false );
             break;
         }
 
-        case PCB_MODULE_ZONE_AREA_T:
+        case PCB_FP_ZONE_AREA_T:
         {
             MODULE_ZONE_CONTAINER* zone = static_cast<MODULE_ZONE_CONTAINER*>( item );
             zone->Mirror( mirrorPoint, false );
             break;
         }
 
-        case PCB_MODULE_TEXT_T:
+        case PCB_FP_TEXT_T:
         {
             TEXTE_MODULE* modText = static_cast<TEXTE_MODULE*>( item );
             modText->Mirror( mirrorPoint, false );
@@ -1125,7 +1125,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
         switch( item->Type() )
         {
-        case PCB_MODULE_TEXT_T:
+        case PCB_FP_TEXT_T:
             {
                 TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
                 MODULE*       parent = static_cast<MODULE*>( item->GetParent() );
@@ -1150,7 +1150,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
             }
             break;
 
-        case PCB_MODULE_ZONE_AREA_T:
+        case PCB_FP_ZONE_AREA_T:
             {
                 MODULE_ZONE_CONTAINER* zone = static_cast<MODULE_ZONE_CONTAINER*>( item );
                 MODULE*                parent = static_cast<MODULE*>( item->GetParent() );
@@ -1427,7 +1427,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             {
             case PCB_MODULE_T:
             case PCB_TEXT_T:
-            case PCB_LINE_T:
+            case PCB_SHAPE_T:
             case PCB_TRACE_T:
             case PCB_VIA_T:
             case PCB_ZONE_AREA_T:

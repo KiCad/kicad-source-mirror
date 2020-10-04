@@ -137,8 +137,8 @@ public:
         // Generate list of edit points basing on the item type
         switch( aItem->Type() )
         {
-        case PCB_LINE_T:
-        case PCB_MODULE_EDGE_T:
+        case PCB_SHAPE_T:
+        case PCB_FP_SHAPE_T:
         {
             const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( aItem );
 
@@ -237,7 +237,7 @@ public:
         }
             break;
 
-        case PCB_MODULE_ZONE_AREA_T:
+        case PCB_FP_ZONE_AREA_T:
         case PCB_ZONE_AREA_T:
         {
             auto zone = static_cast<const ZONE_CONTAINER*>( aItem );
@@ -1039,8 +1039,8 @@ void POINT_EDITOR::updateItem() const
 
     switch( item->Type() )
     {
-    case PCB_LINE_T:
-    case PCB_MODULE_EDGE_T:
+    case PCB_SHAPE_T:
+    case PCB_FP_SHAPE_T:
     {
         DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( item );
 
@@ -1294,7 +1294,7 @@ void POINT_EDITOR::updateItem() const
     }
         break;
 
-    case PCB_MODULE_ZONE_AREA_T:
+    case PCB_FP_ZONE_AREA_T:
     case PCB_ZONE_AREA_T:
     {
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
@@ -1480,7 +1480,7 @@ void POINT_EDITOR::finishItem()
     if( !item )
         return;
 
-    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
+    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T )
     {
         auto zone = static_cast<ZONE_CONTAINER*>( item );
 
@@ -1524,8 +1524,8 @@ void POINT_EDITOR::updatePoints()
 
     switch( item->Type() )
     {
-    case PCB_LINE_T:
-    case PCB_MODULE_EDGE_T:
+    case PCB_SHAPE_T:
+    case PCB_FP_SHAPE_T:
     {
         const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( item );
 
@@ -1660,7 +1660,7 @@ void POINT_EDITOR::updatePoints()
     }
         break;
 
-    case PCB_MODULE_ZONE_AREA_T:
+    case PCB_FP_ZONE_AREA_T:
     case PCB_ZONE_AREA_T:
     {
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
@@ -1752,11 +1752,13 @@ void POINT_EDITOR::setAltConstraint( bool aEnabled )
         bool isPoly = false;
 
         if( m_editPoints->GetParent()->Type() == PCB_ZONE_AREA_T
-                || m_editPoints->GetParent()->Type() == PCB_MODULE_ZONE_AREA_T )
+                || m_editPoints->GetParent()->Type() == PCB_FP_ZONE_AREA_T )
+        {
             isPoly = true;
+        }
 
-        else if( m_editPoints->GetParent()->Type() == PCB_LINE_T
-                || m_editPoints->GetParent()->Type() == PCB_MODULE_EDGE_T )
+        else if( m_editPoints->GetParent()->Type() == PCB_SHAPE_T
+                || m_editPoints->GetParent()->Type() == PCB_FP_SHAPE_T )
         {
             DRAWSEGMENT* seg = static_cast<DRAWSEGMENT*>( m_editPoints->GetParent() );
             isPoly = seg->GetShape() == S_POLYGON;
@@ -1786,8 +1788,8 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
 
     switch( item->Type() )
     {
-    case PCB_LINE_T:
-    case PCB_MODULE_EDGE_T:
+    case PCB_SHAPE_T:
+    case PCB_FP_SHAPE_T:
     {
         const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( item );
         {
@@ -1845,10 +1847,16 @@ bool POINT_EDITOR::canAddCorner( const EDA_ITEM& aItem )
     const auto type = aItem.Type();
 
     // Works only for zones and line segments
-    return type == PCB_ZONE_AREA_T || type == PCB_MODULE_ZONE_AREA_T ||
-           ( ( type == PCB_LINE_T || type == PCB_MODULE_EDGE_T ) &&
-             ( static_cast<const DRAWSEGMENT&>( aItem ).GetShape() == S_SEGMENT  ||
-               static_cast<const DRAWSEGMENT&>( aItem ).GetShape() == S_POLYGON ) );
+    if( type == PCB_ZONE_AREA_T || type == PCB_FP_ZONE_AREA_T )
+        return true;
+
+    if( type == PCB_SHAPE_T || type == PCB_FP_SHAPE_T )
+    {
+        const DRAWSEGMENT& shape = static_cast<const DRAWSEGMENT&>( aItem );
+        return shape.GetShape() == S_SEGMENT || shape.GetShape() == S_POLYGON;
+    }
+
+    return false;
 }
 
 
@@ -1886,14 +1894,17 @@ bool POINT_EDITOR::removeCornerCondition( const SELECTION& )
 
     EDA_ITEM* item = m_editPoints->GetParent();
 
-    if( !item || !( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T ||
-            ( ( item->Type() == PCB_MODULE_EDGE_T || item->Type() == PCB_LINE_T ) &&
+    if( !item )
+        return false;
+
+    if( !( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T
+        || ( ( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_SHAPE_T ) &&
                    static_cast<DRAWSEGMENT*>( item )->GetShape() == S_POLYGON ) ) )
         return false;
 
     SHAPE_POLY_SET *polyset;
 
-    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
+    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T )
         polyset = static_cast<ZONE_CONTAINER*>( item )->Outline();
     else
         polyset = &static_cast<DRAWSEGMENT*>( item )->GetPolyShape();
@@ -1936,8 +1947,8 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     DRAWSEGMENT* graphicItem = dynamic_cast<DRAWSEGMENT*>( item );
     BOARD_COMMIT commit( frame );
 
-    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T ||
-            ( graphicItem && graphicItem->GetShape() == S_POLYGON ) )
+    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T ||
+        ( graphicItem && graphicItem->GetShape() == S_POLYGON ) )
     {
         unsigned int nearestIdx = 0;
         unsigned int nextNearestIdx = 0;
@@ -1945,7 +1956,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         unsigned int firstPointInContour = 0;
         SHAPE_POLY_SET* zoneOutline;
 
-        if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
+        if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T )
         {
             ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
             zoneOutline = zone->Outline();
@@ -2001,7 +2012,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         zoneOutline->InsertVertex( nextNearestIdx, nearestPoint );
 
         // We re-hatch the filled zones but not polygons
-        if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
+        if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T )
             static_cast<ZONE_CONTAINER*>( item )->HatchBorder();
 
 
@@ -2018,13 +2029,13 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         // Move the end of the line to the break point..
         graphicItem->SetEnd( wxPoint( nearestPoint.x, nearestPoint.y ) );
 
-        if( graphicItem->Type() == PCB_MODULE_EDGE_T )
+        if( graphicItem->Type() == PCB_FP_SHAPE_T )
             static_cast<EDGE_MODULE*>( graphicItem )->SetLocalCoord();
 
         // and add another one starting from the break point
         DRAWSEGMENT* newSegment;
 
-        if( item->Type() == PCB_MODULE_EDGE_T )
+        if( item->Type() == PCB_FP_SHAPE_T )
         {
             EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( graphicItem );
             assert( edge->GetParent()->Type() == PCB_MODULE_T );
@@ -2039,7 +2050,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         newSegment->SetStart( wxPoint( nearestPoint.x, nearestPoint.y ) );
         newSegment->SetEnd( wxPoint( seg.B.x, seg.B.y ) );
 
-        if( newSegment->Type() == PCB_MODULE_EDGE_T )
+        if( newSegment->Type() == PCB_FP_SHAPE_T )
             static_cast<EDGE_MODULE*>( newSegment )->SetLocalCoord();
 
         commit.Add( newSegment );
@@ -2063,13 +2074,13 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
     SHAPE_POLY_SET* polygon = nullptr;
 
-    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
+    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T )
     {
         auto zone = static_cast<ZONE_CONTAINER*>( item );
         polygon = zone->Outline();
         zone->SetNeedRefill( true );
     }
-    else if( (item->Type() == PCB_MODULE_EDGE_T ) || ( item->Type() == PCB_LINE_T ) )
+    else if( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_SHAPE_T )
     {
         auto ds = static_cast<DRAWSEGMENT*>( item );
 
@@ -2117,7 +2128,7 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
         commit.Push( _( "Remove a zone/polygon corner" ) );
 
         // Refresh zone hatching
-        if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
+        if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T )
             static_cast<ZONE_CONTAINER*>( item )->HatchBorder();
 
         updatePoints();

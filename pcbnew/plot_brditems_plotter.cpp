@@ -330,18 +330,17 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
     {
         switch( item->Type() )
         {
-        case PCB_LINE_T:      PlotDrawSegment( (DRAWSEGMENT*) item); break;
-        case PCB_TEXT_T:      PlotTextePcb( (TEXTE_PCB*) item );     break;
+        case PCB_SHAPE_T:          PlotDrawSegment( (DRAWSEGMENT*) item); break;
+        case PCB_TEXT_T:           PlotTextePcb( (TEXTE_PCB*) item );     break;
 
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_CENTER_T:
         case PCB_DIM_ORTHOGONAL_T:
-        case PCB_DIM_LEADER_T:
-            PlotDimension( (DIMENSION*) item );
-            break;
+        case PCB_DIM_LEADER_T:     PlotDimension( (DIMENSION*) item );    break;
 
-        case PCB_TARGET_T:    PlotPcbTarget( (PCB_TARGET*) item );   break;
-        default:              break;
+        case PCB_TARGET_T:         PlotPcbTarget( (PCB_TARGET*) item );   break;
+
+        default:                                                          break;
         }
     }
 }
@@ -504,7 +503,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( MODULE* aModule )
 //* Plot a graphic item (outline) relative to a footprint
 void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( EDGE_MODULE* aEdge )
 {
-    if( aEdge->Type() != PCB_MODULE_EDGE_T )
+    if( aEdge->Type() != PCB_FP_SHAPE_T )
         return;
 
     m_plotter->SetColor( getColor( aEdge->GetLayer() ) );

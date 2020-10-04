@@ -151,7 +151,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                 return true;
             };
 
-    forEachGeometryItem( { PCB_MODULE_TEXT_T, PCB_TEXT_T }, LSET::AllLayersMask(),
+    forEachGeometryItem( { PCB_FP_TEXT_T, PCB_TEXT_T }, LSET::AllLayersMask(),
                          checkUnresolvedTextVar );
 
     KIGFX::WS_PROXY_VIEW_ITEM* worksheet = m_drcEngine->GetWorksheet();

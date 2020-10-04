@@ -140,7 +140,7 @@ int PCB_VIEWER_TOOLS::GraphicOutlines( const TOOL_EVENT& aEvent )
     {
         for( BOARD_ITEM* item : module->GraphicalItems() )
         {
-            if( item->Type() == PCB_MODULE_EDGE_T )
+            if( item->Type() == PCB_FP_SHAPE_T )
                 view()->Update( item, KIGFX::GEOMETRY );
         }
     }
@@ -149,7 +149,7 @@ int PCB_VIEWER_TOOLS::GraphicOutlines( const TOOL_EVENT& aEvent )
     {
         KICAD_T t = item->Type();
 
-        if( t == PCB_LINE_T || BaseType( t ) == PCB_DIMENSION_T || t == PCB_TARGET_T )
+        if( t == PCB_SHAPE_T || BaseType( t ) == PCB_DIMENSION_T || t == PCB_TARGET_T )
             view()->Update( item, KIGFX::GEOMETRY );
     }
 
@@ -173,7 +173,7 @@ int PCB_VIEWER_TOOLS::TextOutlines( const TOOL_EVENT& aEvent )
 
         for( BOARD_ITEM* item : module->GraphicalItems() )
         {
-            if( item->Type() == PCB_MODULE_TEXT_T )
+            if( item->Type() == PCB_FP_TEXT_T )
                 view()->Update( item, KIGFX::GEOMETRY );
         }
     }

@@ -34,7 +34,7 @@ namespace KI_TEST
 
 void DrawSegment( MODULE& aMod, const SEG& aSeg, int aWidth, PCB_LAYER_ID aLayer )
 {
-    auto seg = std::make_unique<EDGE_MODULE>( &aMod, STROKE_T::S_SEGMENT );
+    auto seg = std::make_unique<EDGE_MODULE>( &aMod, S_SEGMENT );
 
     seg->SetStart0( (wxPoint) aSeg.A );
     seg->SetEnd0( (wxPoint) aSeg.B );
@@ -59,7 +59,7 @@ void DrawPolyline(
 void DrawArc( MODULE& aMod, const VECTOR2I& aCentre, const VECTOR2I& aStart, double aAngle,
         int aWidth, PCB_LAYER_ID aLayer )
 {
-    auto seg = std::make_unique<EDGE_MODULE>( &aMod, STROKE_T::S_ARC );
+    auto seg = std::make_unique<EDGE_MODULE>( &aMod, S_ARC );
 
     seg->SetStart0( (wxPoint) aCentre );
     seg->SetEnd0( (wxPoint) aStart );

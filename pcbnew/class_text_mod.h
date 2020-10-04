@@ -71,7 +71,7 @@ public:
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
-        return aItem && PCB_MODULE_TEXT_T == aItem->Type();
+        return aItem && aItem->Type() == PCB_FP_TEXT_T;
     }
 
     bool IsType( const KICAD_T aScanTypes[] ) const override

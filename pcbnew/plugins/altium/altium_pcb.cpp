@@ -149,181 +149,97 @@ PCB_LAYER_ID ALTIUM_PCB::GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const
 
     switch( aAltiumLayer )
     {
-    case ALTIUM_LAYER::UNKNOWN:
-        return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::UNKNOWN:           return UNDEFINED_LAYER;
 
-    case ALTIUM_LAYER::TOP_LAYER:
-        return F_Cu;
-    case ALTIUM_LAYER::MID_LAYER_1:
-        return In1_Cu; // TODO: stackup same as in KiCad?
-    case ALTIUM_LAYER::MID_LAYER_2:
-        return In2_Cu;
-    case ALTIUM_LAYER::MID_LAYER_3:
-        return In3_Cu;
-    case ALTIUM_LAYER::MID_LAYER_4:
-        return In4_Cu;
-    case ALTIUM_LAYER::MID_LAYER_5:
-        return In5_Cu;
-    case ALTIUM_LAYER::MID_LAYER_6:
-        return In6_Cu;
-    case ALTIUM_LAYER::MID_LAYER_7:
-        return In7_Cu;
-    case ALTIUM_LAYER::MID_LAYER_8:
-        return In8_Cu;
-    case ALTIUM_LAYER::MID_LAYER_9:
-        return In9_Cu;
-    case ALTIUM_LAYER::MID_LAYER_10:
-        return In10_Cu;
-    case ALTIUM_LAYER::MID_LAYER_11:
-        return In11_Cu;
-    case ALTIUM_LAYER::MID_LAYER_12:
-        return In12_Cu;
-    case ALTIUM_LAYER::MID_LAYER_13:
-        return In13_Cu;
-    case ALTIUM_LAYER::MID_LAYER_14:
-        return In14_Cu;
-    case ALTIUM_LAYER::MID_LAYER_15:
-        return In15_Cu;
-    case ALTIUM_LAYER::MID_LAYER_16:
-        return In16_Cu;
-    case ALTIUM_LAYER::MID_LAYER_17:
-        return In17_Cu;
-    case ALTIUM_LAYER::MID_LAYER_18:
-        return In18_Cu;
-    case ALTIUM_LAYER::MID_LAYER_19:
-        return In19_Cu;
-    case ALTIUM_LAYER::MID_LAYER_20:
-        return In20_Cu;
-    case ALTIUM_LAYER::MID_LAYER_21:
-        return In21_Cu;
-    case ALTIUM_LAYER::MID_LAYER_22:
-        return In22_Cu;
-    case ALTIUM_LAYER::MID_LAYER_23:
-        return In23_Cu;
-    case ALTIUM_LAYER::MID_LAYER_24:
-        return In24_Cu;
-    case ALTIUM_LAYER::MID_LAYER_25:
-        return In25_Cu;
-    case ALTIUM_LAYER::MID_LAYER_26:
-        return In26_Cu;
-    case ALTIUM_LAYER::MID_LAYER_27:
-        return In27_Cu;
-    case ALTIUM_LAYER::MID_LAYER_28:
-        return In28_Cu;
-    case ALTIUM_LAYER::MID_LAYER_29:
-        return In29_Cu;
-    case ALTIUM_LAYER::MID_LAYER_30:
-        return In30_Cu;
-    case ALTIUM_LAYER::BOTTOM_LAYER:
-        return B_Cu;
+    case ALTIUM_LAYER::TOP_LAYER:         return F_Cu;
+    case ALTIUM_LAYER::MID_LAYER_1:       return In1_Cu; // TODO: stackup same as in KiCad?
+    case ALTIUM_LAYER::MID_LAYER_2:       return In2_Cu;
+    case ALTIUM_LAYER::MID_LAYER_3:       return In3_Cu;
+    case ALTIUM_LAYER::MID_LAYER_4:       return In4_Cu;
+    case ALTIUM_LAYER::MID_LAYER_5:       return In5_Cu;
+    case ALTIUM_LAYER::MID_LAYER_6:       return In6_Cu;
+    case ALTIUM_LAYER::MID_LAYER_7:       return In7_Cu;
+    case ALTIUM_LAYER::MID_LAYER_8:       return In8_Cu;
+    case ALTIUM_LAYER::MID_LAYER_9:       return In9_Cu;
+    case ALTIUM_LAYER::MID_LAYER_10:      return In10_Cu;
+    case ALTIUM_LAYER::MID_LAYER_11:      return In11_Cu;
+    case ALTIUM_LAYER::MID_LAYER_12:      return In12_Cu;
+    case ALTIUM_LAYER::MID_LAYER_13:      return In13_Cu;
+    case ALTIUM_LAYER::MID_LAYER_14:      return In14_Cu;
+    case ALTIUM_LAYER::MID_LAYER_15:      return In15_Cu;
+    case ALTIUM_LAYER::MID_LAYER_16:      return In16_Cu;
+    case ALTIUM_LAYER::MID_LAYER_17:      return In17_Cu;
+    case ALTIUM_LAYER::MID_LAYER_18:      return In18_Cu;
+    case ALTIUM_LAYER::MID_LAYER_19:      return In19_Cu;
+    case ALTIUM_LAYER::MID_LAYER_20:      return In20_Cu;
+    case ALTIUM_LAYER::MID_LAYER_21:      return In21_Cu;
+    case ALTIUM_LAYER::MID_LAYER_22:      return In22_Cu;
+    case ALTIUM_LAYER::MID_LAYER_23:      return In23_Cu;
+    case ALTIUM_LAYER::MID_LAYER_24:      return In24_Cu;
+    case ALTIUM_LAYER::MID_LAYER_25:      return In25_Cu;
+    case ALTIUM_LAYER::MID_LAYER_26:      return In26_Cu;
+    case ALTIUM_LAYER::MID_LAYER_27:      return In27_Cu;
+    case ALTIUM_LAYER::MID_LAYER_28:      return In28_Cu;
+    case ALTIUM_LAYER::MID_LAYER_29:      return In29_Cu;
+    case ALTIUM_LAYER::MID_LAYER_30:      return In30_Cu;
+    case ALTIUM_LAYER::BOTTOM_LAYER:      return B_Cu;
 
-    case ALTIUM_LAYER::TOP_OVERLAY:
-        return F_SilkS;
-    case ALTIUM_LAYER::BOTTOM_OVERLAY:
-        return B_SilkS;
-    case ALTIUM_LAYER::TOP_PASTE:
-        return F_Paste;
-    case ALTIUM_LAYER::BOTTOM_PASTE:
-        return B_Paste;
-    case ALTIUM_LAYER::TOP_SOLDER:
-        return F_Mask;
-    case ALTIUM_LAYER::BOTTOM_SOLDER:
-        return B_Mask;
+    case ALTIUM_LAYER::TOP_OVERLAY:       return F_SilkS;
+    case ALTIUM_LAYER::BOTTOM_OVERLAY:    return B_SilkS;
+    case ALTIUM_LAYER::TOP_PASTE:         return F_Paste;
+    case ALTIUM_LAYER::BOTTOM_PASTE:      return B_Paste;
+    case ALTIUM_LAYER::TOP_SOLDER:        return F_Mask;
+    case ALTIUM_LAYER::BOTTOM_SOLDER:     return B_Mask;
 
-    case ALTIUM_LAYER::INTERNAL_PLANE_1:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::INTERNAL_PLANE_2:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::INTERNAL_PLANE_3:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::INTERNAL_PLANE_4:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::INTERNAL_PLANE_5:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::INTERNAL_PLANE_6:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::INTERNAL_PLANE_7:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::INTERNAL_PLANE_8:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::INTERNAL_PLANE_9:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::INTERNAL_PLANE_10:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::INTERNAL_PLANE_11:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::INTERNAL_PLANE_12:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::INTERNAL_PLANE_13:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::INTERNAL_PLANE_14:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::INTERNAL_PLANE_15:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::INTERNAL_PLANE_16:
-        return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_1:  return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_2:  return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_3:  return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_4:  return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_5:  return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_6:  return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_7:  return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_8:  return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_9:  return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_10: return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_11: return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_12: return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_13: return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_14: return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_15: return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::INTERNAL_PLANE_16: return UNDEFINED_LAYER;
 
-    case ALTIUM_LAYER::DRILL_GUIDE:
-        return Dwgs_User;
-    case ALTIUM_LAYER::KEEP_OUT_LAYER:
-        return Margin;
+    case ALTIUM_LAYER::DRILL_GUIDE:       return Dwgs_User;
+    case ALTIUM_LAYER::KEEP_OUT_LAYER:    return Margin;
 
-    case ALTIUM_LAYER::MECHANICAL_1:
-        return Dwgs_User; //Edge_Cuts;
-    case ALTIUM_LAYER::MECHANICAL_2:
-        return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_3:
-        return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_4:
-        return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_5:
-        return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_6:
-        return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_7:
-        return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_8:
-        return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_9:
-        return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_10:
-        return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_11:
-        return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_12:
-        return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_13:
-        return F_Fab;
-    case ALTIUM_LAYER::MECHANICAL_14:
-        return B_Fab;
-    case ALTIUM_LAYER::MECHANICAL_15:
-        return F_CrtYd;
-    case ALTIUM_LAYER::MECHANICAL_16:
-        return B_CrtYd;
+    case ALTIUM_LAYER::MECHANICAL_1:      return Dwgs_User; //Edge_Cuts;
+    case ALTIUM_LAYER::MECHANICAL_2:      return Dwgs_User;
+    case ALTIUM_LAYER::MECHANICAL_3:      return Dwgs_User;
+    case ALTIUM_LAYER::MECHANICAL_4:      return Dwgs_User;
+    case ALTIUM_LAYER::MECHANICAL_5:      return Dwgs_User;
+    case ALTIUM_LAYER::MECHANICAL_6:      return Dwgs_User;
+    case ALTIUM_LAYER::MECHANICAL_7:      return Dwgs_User;
+    case ALTIUM_LAYER::MECHANICAL_8:      return Dwgs_User;
+    case ALTIUM_LAYER::MECHANICAL_9:      return Dwgs_User;
+    case ALTIUM_LAYER::MECHANICAL_10:     return Dwgs_User;
+    case ALTIUM_LAYER::MECHANICAL_11:     return Dwgs_User;
+    case ALTIUM_LAYER::MECHANICAL_12:     return Dwgs_User;
+    case ALTIUM_LAYER::MECHANICAL_13:     return F_Fab;
+    case ALTIUM_LAYER::MECHANICAL_14:     return B_Fab;
+    case ALTIUM_LAYER::MECHANICAL_15:     return F_CrtYd;
+    case ALTIUM_LAYER::MECHANICAL_16:     return B_CrtYd;
 
-    case ALTIUM_LAYER::DRILL_DRAWING:
-        return Dwgs_User;
-    case ALTIUM_LAYER::MULTI_LAYER:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::CONNECTIONS:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::BACKGROUND:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::DRC_ERROR_MARKERS:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::SELECTIONS:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::VISIBLE_GRID_1:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::VISIBLE_GRID_2:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::PAD_HOLES:
-        return UNDEFINED_LAYER;
-    case ALTIUM_LAYER::VIA_HOLES:
-        return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::DRILL_DRAWING:     return Dwgs_User;
+    case ALTIUM_LAYER::MULTI_LAYER:       return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::CONNECTIONS:       return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::BACKGROUND:        return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::DRC_ERROR_MARKERS: return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::SELECTIONS:        return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::VISIBLE_GRID_1:    return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::VISIBLE_GRID_2:    return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::PAD_HOLES:         return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::VIA_HOLES:         return UNDEFINED_LAYER;
 
-    default:
-        return UNDEFINED_LAYER;
+    default:                              return UNDEFINED_LAYER;
     }
 }
 
@@ -693,13 +609,13 @@ void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aV
 
             if( !last->isRound && !cur->isRound )
             {
-                ds->SetShape( STROKE_T::S_SEGMENT );
+                ds->SetShape( S_SEGMENT );
                 ds->SetStart( last->position );
                 ds->SetEnd( cur->position );
             }
             else if( cur->isRound )
             {
-                ds->SetShape( STROKE_T::S_ARC );
+                ds->SetShape( S_ARC );
                 ds->SetAngle( -NormalizeAngleDegreesPos( cur->endangle - cur->startangle ) * 10. );
 
                 double  startradiant   = DEG2RAD( cur->startangle );
@@ -717,7 +633,7 @@ void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aV
                     wxPoint arcEnd       = cur->center + arcEndOffset;
 
                     DRAWSEGMENT* ds2 = new DRAWSEGMENT( m_board );
-                    ds2->SetShape( STROKE_T::S_SEGMENT );
+                    ds2->SetShape( S_SEGMENT );
                     m_board->Add( ds2, ADD_MODE::APPEND );
                     ds2->SetWidth( m_board->GetDesignSettings().GetLineThickness( Edge_Cuts ) );
                     ds2->SetLayer( Edge_Cuts );
@@ -997,7 +913,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
         {
             DRAWSEGMENT* ds = new DRAWSEGMENT( m_board );
             m_board->Add( ds, ADD_MODE::APPEND );
-            ds->SetShape( STROKE_T::S_SEGMENT );
+            ds->SetShape( S_SEGMENT );
             ds->SetLayer( klayer );
             ds->SetWidth( aElem.linewidth );
             ds->SetStart( last );
@@ -1018,7 +934,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
 
                 DRAWSEGMENT* ds1 = new DRAWSEGMENT( m_board );
                 m_board->Add( ds1, ADD_MODE::APPEND );
-                ds1->SetShape( STROKE_T::S_SEGMENT );
+                ds1->SetShape( S_SEGMENT );
                 ds1->SetLayer( klayer );
                 ds1->SetWidth( aElem.linewidth );
                 ds1->SetStart( referencePoint0 );
@@ -1028,7 +944,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
 
                 DRAWSEGMENT* ds2 = new DRAWSEGMENT( m_board );
                 m_board->Add( ds2, ADD_MODE::APPEND );
-                ds2->SetShape( STROKE_T::S_SEGMENT );
+                ds2->SetShape( S_SEGMENT );
                 ds2->SetLayer( klayer );
                 ds2->SetWidth( aElem.linewidth );
                 ds2->SetStart( referencePoint0 );
@@ -1069,7 +985,7 @@ void ALTIUM_PCB::HelperParseDimensions6Datum( const ADIMENSION6& aElem )
     {
         DRAWSEGMENT* ds1 = new DRAWSEGMENT( m_board );
         m_board->Add( ds1, ADD_MODE::APPEND );
-        ds1->SetShape( STROKE_T::S_SEGMENT );
+        ds1->SetShape( S_SEGMENT );
         ds1->SetLayer( klayer );
         ds1->SetWidth( aElem.linewidth );
         ds1->SetStart( aElem.referencePoint.at( i ) );
@@ -1090,7 +1006,7 @@ void ALTIUM_PCB::HelperParseDimensions6Center( const ADIMENSION6& aElem )
 
     DRAWSEGMENT* ds1 = new DRAWSEGMENT( m_board );
     m_board->Add( ds1, ADD_MODE::APPEND );
-    ds1->SetShape( STROKE_T::S_SEGMENT );
+    ds1->SetShape( S_SEGMENT );
     ds1->SetLayer( klayer );
     ds1->SetWidth( aElem.linewidth );
 
@@ -1101,7 +1017,7 @@ void ALTIUM_PCB::HelperParseDimensions6Center( const ADIMENSION6& aElem )
 
     DRAWSEGMENT* ds2 = new DRAWSEGMENT( m_board );
     m_board->Add( ds2, ADD_MODE::APPEND );
-    ds2->SetShape( STROKE_T::S_SEGMENT );
+    ds2->SetShape( S_SEGMENT );
     ds2->SetLayer( klayer );
     ds2->SetWidth( aElem.linewidth );
 
@@ -1475,7 +1391,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
 
                 DRAWSEGMENT* ds = new DRAWSEGMENT( m_board );
                 m_board->Add( ds, ADD_MODE::APPEND );
-                ds->SetShape( STROKE_T::S_POLYGON );
+                ds->SetShape( S_POLYGON );
                 ds->SetLayer( klayer );
                 ds->SetWidth( 0 );
 
@@ -1595,12 +1511,12 @@ void ALTIUM_PCB::ParseArcs6Data(
             ds.SetCenter( elem.center );
             if( elem.startangle == 0. && elem.endangle == 360. )
             { // TODO: other variants to define circle?
-                ds.SetShape( STROKE_T::S_CIRCLE );
+                ds.SetShape( S_CIRCLE );
                 ds.SetArcStart( elem.center - wxPoint( 0, elem.radius ) );
             }
             else
             {
-                ds.SetShape( STROKE_T::S_ARC );
+                ds.SetShape( S_ARC );
                 ds.SetAngle( -NormalizeAngleDegreesPos( elem.endangle - elem.startangle ) * 10. );
 
                 double  startradiant   = DEG2RAD( elem.startangle );
@@ -1653,12 +1569,12 @@ void ALTIUM_PCB::ParseArcs6Data(
 
             if( elem.startangle == 0. && elem.endangle == 360. )
             { // TODO: other variants to define circle?
-                ds->SetShape( STROKE_T::S_CIRCLE );
+                ds->SetShape( S_CIRCLE );
                 ds->SetArcStart( elem.center - wxPoint( 0, elem.radius ) );
             }
             else
             {
-                ds->SetShape( STROKE_T::S_ARC );
+                ds->SetShape( S_ARC );
                 ds->SetAngle( -NormalizeAngleDegreesPos( elem.endangle - elem.startangle ) * 10. );
 
                 double  startradiant   = DEG2RAD( elem.startangle );
@@ -1926,7 +1842,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
     {
         // filled rect
         DRAWSEGMENT* ds = HelperCreateAndAddDrawsegment( aElem.component );
-        ds->SetShape( STROKE_T::S_POLYGON );
+        ds->SetShape( S_POLYGON );
         ds->SetLayer( klayer );
         ds->SetWidth( 0 );
 
@@ -1965,13 +1881,13 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
                 wxPoint p22 = aElem.position + wxPoint( -offsetX, -offsetY );
                 wxPoint p21 = aElem.position + wxPoint( -offsetX, offsetY );
 
-                ds->SetShape( STROKE_T::S_POLYGON );
+                ds->SetShape( S_POLYGON );
                 ds->SetPolyPoints( { p11, p12, p22, p21 } );
             }
             else if( aElem.topsize.x == aElem.topsize.y )
             {
                 // circle
-                ds->SetShape( STROKE_T::S_CIRCLE );
+                ds->SetShape( S_CIRCLE );
                 ds->SetCenter( aElem.position );
                 ds->SetWidth( aElem.topsize.x / 2 );
                 ds->SetArcStart( aElem.position - wxPoint( 0, aElem.topsize.x / 4 ) );
@@ -1979,7 +1895,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
             else if( aElem.topsize.x < aElem.topsize.y )
             {
                 // short vertical line
-                ds->SetShape( STROKE_T::S_SEGMENT );
+                ds->SetShape( S_SEGMENT );
                 wxPoint pointOffset( 0, ( aElem.topsize.y - aElem.topsize.x ) / 2 );
                 ds->SetStart( aElem.position + pointOffset );
                 ds->SetEnd( aElem.position - pointOffset );
@@ -1987,7 +1903,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
             else
             {
                 // short horizontal line
-                ds->SetShape( STROKE_T::S_SEGMENT );
+                ds->SetShape( S_SEGMENT );
                 wxPoint pointOffset( ( aElem.topsize.x - aElem.topsize.y ) / 2, 0 );
                 ds->SetStart( aElem.position + pointOffset );
                 ds->SetEnd( aElem.position - pointOffset );
@@ -2004,7 +1920,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
         {
             // filled circle
             DRAWSEGMENT* ds = HelperCreateAndAddDrawsegment( aElem.component );
-            ds->SetShape( STROKE_T::S_CIRCLE );
+            ds->SetShape( S_CIRCLE );
             ds->SetLayer( klayer );
             ds->SetCenter( aElem.position );
             ds->SetWidth( aElem.topsize.x / 2 );
@@ -2015,7 +1931,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
         {
             // short line
             DRAWSEGMENT* ds = HelperCreateAndAddDrawsegment( aElem.component );
-            ds->SetShape( STROKE_T::S_SEGMENT );
+            ds->SetShape( S_SEGMENT );
             ds->SetLayer( klayer );
             ds->SetWidth( std::min( aElem.topsize.x, aElem.topsize.y ) );
             if( aElem.topsize.x < aElem.topsize.y )
@@ -2041,7 +1957,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
     {
         // filled octagon
         DRAWSEGMENT* ds = HelperCreateAndAddDrawsegment( aElem.component );
-        ds->SetShape( STROKE_T::S_POLYGON );
+        ds->SetShape( S_POLYGON );
         ds->SetLayer( klayer );
         ds->SetWidth( 0 );
 
@@ -2160,7 +2076,7 @@ void ALTIUM_PCB::ParseTracks6Data(
         if( elem.is_keepout || IsAltiumLayerAPlane( elem.layer ) )
         {
             DRAWSEGMENT ds( nullptr ); // just a helper to get the graphic
-            ds.SetShape( STROKE_T::S_SEGMENT );
+            ds.SetShape( S_SEGMENT );
             ds.SetStart( elem.start );
             ds.SetEnd( elem.end );
             ds.SetWidth( elem.width );
@@ -2197,7 +2113,7 @@ void ALTIUM_PCB::ParseTracks6Data(
         else
         {
             DRAWSEGMENT* ds = HelperCreateAndAddDrawsegment( elem.component );
-            ds->SetShape( STROKE_T::S_SEGMENT );
+            ds->SetShape( S_SEGMENT );
             ds->SetStart( elem.start );
             ds->SetEnd( elem.end );
             ds->SetWidth( elem.width );
@@ -2455,7 +2371,7 @@ void ALTIUM_PCB::ParseFills6Data(
             DRAWSEGMENT* ds = new DRAWSEGMENT( m_board );
             m_board->Add( ds, ADD_MODE::APPEND );
 
-            ds->SetShape( STROKE_T::S_POLYGON );
+            ds->SetShape( S_POLYGON );
             ds->SetLayer( klayer );
             ds->SetWidth( 0 );
 

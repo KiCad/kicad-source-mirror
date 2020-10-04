@@ -77,7 +77,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
     // Retrieve segments and arcs from the board
     for( auto item : aPcb->Drawings() )
     {
-        if( item->Type() != PCB_LINE_T || item->GetLayer() != Edge_Cuts )
+        if( item->Type() != PCB_SHAPE_T || item->GetLayer() != Edge_Cuts )
             continue;
 
         graphic = (DRAWSEGMENT*) item;
@@ -294,7 +294,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
     // TODO: If module cutouts are supported we must add code here
     // for( EDA_ITEM* item = aModule->GraphicalItems();  item != NULL;  item = item->Next() )
     // {
-    // if( ( item->Type() != PCB_MODULE_EDGE_T )
+    // if( ( item->Type() != PCB_FP_SHAPE_T )
     // || (item->GetLayer() != Edge_Cuts ) ) continue;
     // code to export cutouts
     // }

@@ -113,7 +113,7 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
                 boardItems.push_back( item );
             };
 
-    forEachGeometryItem( { PCB_LINE_T }, LSET( Edge_Cuts ), queryBoardOutlineItems );
+    forEachGeometryItem( { PCB_SHAPE_T }, LSET( Edge_Cuts ), queryBoardOutlineItems );
     forEachGeometryItem( {}, LSET::AllTechMask() | LSET::AllCuMask(), queryBoardGeometryItems );
 
 

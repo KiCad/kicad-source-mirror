@@ -103,7 +103,7 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
         }
         break;
 
-    case PCB_MODULE_TEXT_T:
+    case PCB_FP_TEXT_T:
         {
             const TEXTE_MODULE* text = static_cast<const TEXTE_MODULE*>( aItem );
 
@@ -136,7 +136,7 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
         }
         break;
 
-    case PCB_MODULE_EDGE_T:
+    case PCB_FP_SHAPE_T:
         {
             const EDGE_MODULE* segment = static_cast<const EDGE_MODULE*>( aItem );
             ret = hash_board_item( segment, aFlags );

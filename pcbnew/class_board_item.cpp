@@ -29,7 +29,7 @@
 #include <class_board.h>
 #include <string>
 
-wxString BOARD_ITEM::ShowShape( STROKE_T aShape )
+wxString BOARD_ITEM::ShowShape( PCB_SHAPE_TYPE_T aShape )
 {
     switch( aShape )
     {

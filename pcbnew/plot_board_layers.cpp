@@ -782,7 +782,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         {
             itemplotter.PlotFootprintTextItems( module );
 
-            if( item->Type() == PCB_MODULE_EDGE_T && item->GetLayer() == layer )
+            if( item->Type() == PCB_FP_SHAPE_T && item->GetLayer() == layer )
                 itemplotter.PlotFootprintGraphicItem((EDGE_MODULE*) item );
         }
     }

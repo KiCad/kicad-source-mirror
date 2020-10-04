@@ -942,7 +942,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     if( !m_frame->GetModel() )
         return 0;
 
-    // Note: PlaceImportedGraphics() will convert PCB_LINE_T and PCB_TEXT_T to module graphic
+    // Note: PlaceImportedGraphics() will convert PCB_SHAPE_T and PCB_TEXT_T to footprint
     // items if needed
     DIALOG_IMPORT_GFX dlg( m_frame, m_editModules );
     int dlgResult = dlg.ShowModal();
@@ -975,9 +975,9 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         EDA_ITEM* item = ptr.get();
 
         if( m_editModules )
-            wxASSERT( item->Type() == PCB_MODULE_EDGE_T || item->Type() == PCB_MODULE_TEXT_T );
+            wxASSERT( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_FP_TEXT_T );
         else
-            wxASSERT( item->Type() == PCB_LINE_T || item->Type() == PCB_TEXT_T );
+            wxASSERT( item->Type() == PCB_SHAPE_T || item->Type() == PCB_TEXT_T );
 
         if( grp )
             grp->AddItem( static_cast<BOARD_ITEM*>( item ) );
@@ -1188,7 +1188,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPointManager;
 
     // drawing assistant overlay
-    // TODO: workaround because STROKE_T is not visible from commons.
+    // TODO: workaround because PCB_SHAPE_TYPE_T is not visible from commons.
     KIGFX::PREVIEW::GEOM_SHAPE geomShape( static_cast<KIGFX::PREVIEW::GEOM_SHAPE>( aShape ) );
     KIGFX::PREVIEW::TWO_POINT_ASSISTANT twoPointAsst(
             twoPointManager, m_frame->GetUserUnits(), geomShape );
@@ -1310,7 +1310,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
                 m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
 
                 // Init the new item attributes
-                graphic->SetShape( (STROKE_T) aShape );
+                graphic->SetShape( (PCB_SHAPE_TYPE_T) aShape );
                 graphic->SetWidth( m_lineWidth );
                 graphic->SetLayer( m_frame->GetActiveLayer() );
                 grid.SetSkipPoint( cursorPos );

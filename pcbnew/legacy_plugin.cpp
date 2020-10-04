@@ -1637,8 +1637,8 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
 void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
 {
-    STROKE_T    shape;
-    char*       line = m_reader->Line();     // obtain current (old) line
+    PCB_SHAPE_TYPE_T shape;
+    char*            line = m_reader->Line();     // obtain current (old) line
 
     switch( line[1] )
     {
@@ -1942,7 +1942,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
             if( width < 0 )
                 width = 0;
 
-            dseg->SetShape( STROKE_T( shape ) );
+            dseg->SetShape( PCB_SHAPE_TYPE_T( shape ) );
             dseg->SetWidth( width );
             dseg->SetStart( wxPoint( start_x, start_y ) );
             dseg->SetEnd( wxPoint( end_x, end_y ) );

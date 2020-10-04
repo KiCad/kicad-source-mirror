@@ -176,9 +176,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperTextAndGraphics()
         {
             if( IsCopperLayer( item->GetLayer() ) )
             {
-                if( item->Type() == PCB_MODULE_TEXT_T && ( (TEXTE_MODULE*) item )->IsVisible() )
+                if( item->Type() == PCB_FP_TEXT_T && ( (TEXTE_MODULE*) item )->IsVisible() )
                     testCopperDrawItem( item );
-                else if( item->Type() == PCB_MODULE_EDGE_T )
+                else if( item->Type() == PCB_FP_SHAPE_T )
                     testCopperDrawItem( item );
             }
         }
@@ -254,7 +254,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
             continue;
 
         // Graphic items are allowed to act as net-ties within their own footprint
-        if( aItem->Type() == PCB_MODULE_EDGE_T && pad->GetParent() == aItem->GetParent() )
+        if( aItem->Type() == PCB_FP_SHAPE_T && pad->GetParent() == aItem->GetParent() )
             continue;
 
         // Fast test to detect a pad candidate inside the text bounding box

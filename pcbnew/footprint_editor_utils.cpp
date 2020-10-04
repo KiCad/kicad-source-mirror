@@ -371,15 +371,15 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         GetCanvas()->Refresh();
         break;
 
-    case PCB_MODULE_TEXT_T:
+    case PCB_FP_TEXT_T:
         InstallTextOptionsFrame( aItem );
         break;
 
-    case PCB_MODULE_EDGE_T :
+    case PCB_FP_SHAPE_T :
         InstallGraphicItemPropertiesDialog( aItem );
         break;
 
-    case PCB_MODULE_ZONE_AREA_T:
+    case PCB_FP_ZONE_AREA_T:
     {
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( aItem );
         bool            success = false;

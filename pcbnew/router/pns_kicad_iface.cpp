@@ -983,9 +983,9 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         return;
     }
 
-    for( auto gitem : m_board->Drawings() )
+    for( BOARD_ITEM* gitem : m_board->Drawings() )
     {
-        if ( gitem->Type() == PCB_LINE_T )
+        if ( gitem->Type() == PCB_SHAPE_T )
         {
             syncGraphicalItem( aWorld, static_cast<DRAWSEGMENT*>( gitem ) );
         }
@@ -995,12 +995,12 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         }
     }
 
-    for( auto zone : m_board->Zones() )
+    for( ZONE_CONTAINER* zone : m_board->Zones() )
     {
         syncZone( aWorld, zone );
     }
 
-    for( auto module : m_board->Modules() )
+    for( MODULE* module : m_board->Modules() )
     {
         for( auto pad : module->Pads() )
         {
@@ -1019,20 +1019,20 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         if( module->IsNetTie() )
             continue;
 
-        for( auto mgitem : module->GraphicalItems() )
+        for( BOARD_ITEM* mgitem : module->GraphicalItems() )
         {
-            if( mgitem->Type() == PCB_MODULE_EDGE_T )
+            if( mgitem->Type() == PCB_FP_SHAPE_T )
             {
                 syncGraphicalItem( aWorld, static_cast<DRAWSEGMENT*>( mgitem ) );
             }
-            else if( mgitem->Type() == PCB_MODULE_TEXT_T )
+            else if( mgitem->Type() == PCB_FP_TEXT_T )
             {
                 syncTextItem( aWorld, static_cast<TEXTE_MODULE*>( mgitem ), mgitem->GetLayer() );
             }
         }
     }
 
-    for( auto t : m_board->Tracks() )
+    for( TRACK* t : m_board->Tracks() )
     {
         KICAD_T type = t->Type();
 

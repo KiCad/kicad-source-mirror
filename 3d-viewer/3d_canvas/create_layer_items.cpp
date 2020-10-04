@@ -634,7 +634,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             switch( item->Type() )
             {
-            case PCB_LINE_T:
+            case PCB_SHAPE_T:
             {
                 AddShapeWithClearanceToContainer( (DRAWSEGMENT*)item,
                                                   layerContainer,
@@ -687,7 +687,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                 switch( item->Type() )
                 {
-                case PCB_LINE_T:
+                case PCB_SHAPE_T:
                     ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon( *layerPoly,
                                                                                    cur_layer_id, 0 );
                     break;
@@ -932,7 +932,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             switch( item->Type() )
             {
-            case PCB_LINE_T:
+            case PCB_SHAPE_T:
                 AddShapeWithClearanceToContainer( (DRAWSEGMENT*)item,
                                                   layerContainer,
                                                   curr_layer_id,
@@ -970,7 +970,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             switch( item->Type() )
             {
-            case PCB_LINE_T:
+            case PCB_SHAPE_T:
                 ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon( *layerPoly,
                                                                                curr_layer_id, 0 );
                 break;

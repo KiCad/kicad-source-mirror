@@ -419,7 +419,7 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
                               TO_UTF8( pad ) );
         }
 
-    case PCB_MODULE_TEXT_T:
+    case PCB_FP_TEXT_T:
         {
             module = static_cast<MODULE*>( aItem->GetParent() );
 

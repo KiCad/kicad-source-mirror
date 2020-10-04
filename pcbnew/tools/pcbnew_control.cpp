@@ -551,14 +551,14 @@ void pasteModuleItemsToModEdit( MODULE* aClipModule, BOARD* aBoard,
 
     for( BOARD_ITEM* item : aClipModule->GraphicalItems() )
     {
-        if( item->Type() == PCB_MODULE_EDGE_T )
+        if( item->Type() == PCB_FP_SHAPE_T )
         {
             EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( item );
 
             edge->SetParent( nullptr );
             edge->SetLocalCoord();
         }
-        else if( item->Type() == PCB_MODULE_TEXT_T )
+        else if( item->Type() == PCB_FP_TEXT_T )
         {
             TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
 
@@ -655,11 +655,11 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                 for( BOARD_ITEM* clipDrawItem : clipBoard->Drawings() )
                 {
-                    if( clipDrawItem->Type() == PCB_LINE_T )
+                    if( clipDrawItem->Type() == PCB_SHAPE_T )
                     {
                         DRAWSEGMENT* clipDrawSeg = static_cast<DRAWSEGMENT*>( clipDrawItem );
 
-                        // Convert to PCB_MODULE_EDGE_T
+                        // Convert to PCB_FP_SHAPE_T
                         EDGE_MODULE* pastedDrawSeg = new EDGE_MODULE( editModule );
                         static_cast<DRAWSEGMENT*>( pastedDrawSeg )->SwapData( clipDrawSeg );
                         pastedDrawSeg->SetLocalCoord();
@@ -672,7 +672,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     {
                         TEXTE_PCB* clipTextItem = static_cast<TEXTE_PCB*>( clipDrawItem );
 
-                        // Convert to PCB_MODULE_TEXT_T
+                        // Convert to PCB_FP_TEXT_T
                         TEXTE_MODULE* pastedTextItem = new TEXTE_MODULE( editModule );
                         static_cast<EDA_TEXT*>( pastedTextItem )->SwapText( *clipTextItem );
                         static_cast<EDA_TEXT*>( pastedTextItem )->SwapEffects( *clipTextItem );

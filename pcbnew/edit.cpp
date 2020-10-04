@@ -148,11 +148,11 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         ShowDimensionPropertyDialog( static_cast<DIMENSION*>( aItem ) );
         break;
 
-    case PCB_MODULE_TEXT_T:
+    case PCB_FP_TEXT_T:
         InstallTextOptionsFrame( aItem );
         break;
 
-    case PCB_LINE_T:
+    case PCB_SHAPE_T:
         InstallGraphicItemPropertiesDialog( aItem );
         break;
 

@@ -520,7 +520,7 @@ const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) 
         {
             for( const BOARD_ITEM* item : module->GraphicalItems() )
             {
-                if( item->Type() == PCB_MODULE_TEXT_T )
+                if( item->Type() == PCB_FP_TEXT_T )
                     continue;
 
                 hasGraphicalItem = true;

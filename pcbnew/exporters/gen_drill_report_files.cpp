@@ -191,7 +191,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     {
         switch( PtStruct->Type() )
         {
-        case PCB_LINE_T:
+        case PCB_SHAPE_T:
             itemplotter.PlotDrawSegment( (DRAWSEGMENT*) PtStruct );
             break;
 

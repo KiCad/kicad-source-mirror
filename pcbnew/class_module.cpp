@@ -431,12 +431,12 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 {
     switch( aBoardItem->Type() )
     {
-    case PCB_MODULE_TEXT_T:
+    case PCB_FP_TEXT_T:
         // Only user text can be added this way.
         assert( static_cast<TEXTE_MODULE*>( aBoardItem )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS );
         KI_FALLTHROUGH;
 
-    case PCB_MODULE_EDGE_T:
+    case PCB_FP_SHAPE_T:
         if( aMode == ADD_MODE::APPEND )
             m_drawings.push_back( aBoardItem );
         else
@@ -450,7 +450,7 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
             m_pads.push_front( static_cast<D_PAD*>( aBoardItem ) );
         break;
 
-    case PCB_MODULE_ZONE_AREA_T:
+    case PCB_FP_ZONE_AREA_T:
         if( aMode == ADD_MODE::APPEND )
             m_fp_zones.push_back( static_cast<MODULE_ZONE_CONTAINER*>( aBoardItem ) );
         else
@@ -484,14 +484,14 @@ void MODULE::Remove( BOARD_ITEM* aBoardItem )
 {
     switch( aBoardItem->Type() )
     {
-    case PCB_MODULE_TEXT_T:
+    case PCB_FP_TEXT_T:
         // Only user text can be removed this way.
         wxCHECK_RET(
                 static_cast<TEXTE_MODULE*>( aBoardItem )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS,
                 "Please report this bug: Invalid remove operation on required text" );
         KI_FALLTHROUGH;
 
-    case PCB_MODULE_EDGE_T:
+    case PCB_FP_SHAPE_T:
         for( auto it = m_drawings.begin(); it != m_drawings.end(); ++it )
         {
             if( *it == aBoardItem )
@@ -515,7 +515,7 @@ void MODULE::Remove( BOARD_ITEM* aBoardItem )
 
         break;
 
-    case PCB_MODULE_ZONE_AREA_T:
+    case PCB_FP_ZONE_AREA_T:
         for( auto it = m_fp_zones.begin(); it != m_fp_zones.end(); ++it )
         {
             if( *it == static_cast<MODULE_ZONE_CONTAINER*>( aBoardItem ) )
@@ -574,7 +574,7 @@ EDA_RECT MODULE::GetFootprintRect() const
 
     for( BOARD_ITEM* item : m_drawings )
     {
-        if( item->Type() == PCB_MODULE_EDGE_T )
+        if( item->Type() == PCB_FP_SHAPE_T )
             area.Merge( item->GetBoundingBox() );
     }
 
@@ -625,7 +625,7 @@ const EDA_RECT MODULE::GetBoundingBox( bool aIncludeInvisibleText ) const
     // Add in items not collected by GetFootprintRect():
     for( BOARD_ITEM* item : m_drawings )
     {
-        if( item->Type() != PCB_MODULE_EDGE_T )
+        if( item->Type() != PCB_FP_SHAPE_T )
             area.Merge( item->GetBoundingBox() );
     }
 
@@ -971,12 +971,12 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
             ++p;
             break;
 
-        case PCB_MODULE_ZONE_AREA_T:
+        case PCB_FP_ZONE_AREA_T:
             result = IterateForward<MODULE_ZONE_CONTAINER*>( m_fp_zones, inspector, testData, p );
             ++p;
             break;
 
-        case PCB_MODULE_TEXT_T:
+        case PCB_FP_TEXT_T:
             result = inspector( m_Reference, testData );
 
             if( result == SEARCH_RESULT::QUIT )
@@ -990,7 +990,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
             // Intentionally fall through since m_Drawings can hold TYPETEXTMODULE also
             KI_FALLTHROUGH;
 
-        case PCB_MODULE_EDGE_T:
+        case PCB_FP_SHAPE_T:
             result = IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, p );
 
             // skip over any types handled in the above call.
@@ -998,8 +998,8 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
             {
                 switch( stype = *++p )
                 {
-                case PCB_MODULE_TEXT_T:
-                case PCB_MODULE_EDGE_T:
+                case PCB_FP_TEXT_T:
+                case PCB_FP_SHAPE_T:
                     continue;
 
                 default:
@@ -1235,7 +1235,7 @@ void MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 
     for( BOARD_ITEM* item : m_drawings )
     {
-        if( item->Type() == PCB_MODULE_TEXT_T )
+        if( item->Type() == PCB_FP_TEXT_T )
             static_cast<TEXTE_MODULE*>( item )->KeepUpright(  orientation, newOrientation  );
     }
 }
@@ -1285,11 +1285,11 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     {
         switch( item->Type() )
         {
-        case PCB_MODULE_EDGE_T:
+        case PCB_FP_SHAPE_T:
             static_cast<EDGE_MODULE*>( item )->Flip( m_Pos, false );
             break;
 
-        case PCB_MODULE_TEXT_T:
+        case PCB_FP_TEXT_T:
             static_cast<TEXTE_MODULE*>( item )->Flip( m_Pos, false );
             break;
 
@@ -1328,14 +1328,14 @@ void MODULE::SetPosition( const wxPoint& aPos )
     {
         switch( item->Type() )
         {
-        case PCB_MODULE_EDGE_T:
+        case PCB_FP_SHAPE_T:
         {
             EDGE_MODULE* pt_edgmod = (EDGE_MODULE*) item;
             pt_edgmod->SetDrawCoord();
             break;
         }
 
-        case PCB_MODULE_TEXT_T:
+        case PCB_FP_TEXT_T:
         {
             TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
             text->EDA_TEXT::Offset( delta );
@@ -1385,14 +1385,14 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
     {
         switch( item->Type() )
         {
-        case PCB_MODULE_EDGE_T:
+        case PCB_FP_SHAPE_T:
             {
             EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( item );
             edge->Move( moveVector );
             }
             break;
 
-        case PCB_MODULE_TEXT_T:
+        case PCB_FP_TEXT_T:
             {
             TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
             text->SetPos0( text->GetPos0() + moveVector );
@@ -1435,11 +1435,11 @@ void MODULE::SetOrientation( double aNewAngle )
     // Displace contours and text of the footprint.
     for( BOARD_ITEM* item : m_drawings )
     {
-        if( item->Type() == PCB_MODULE_EDGE_T )
+        if( item->Type() == PCB_FP_SHAPE_T )
         {
             static_cast<EDGE_MODULE*>( item )->SetDrawCoord();
         }
-        else if( item->Type() == PCB_MODULE_TEXT_T )
+        else if( item->Type() == PCB_FP_TEXT_T )
         {
             static_cast<TEXTE_MODULE*>( item )->SetDrawCoord();
         }
@@ -1480,7 +1480,7 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
         break;
     }
 
-    case PCB_MODULE_ZONE_AREA_T:
+    case PCB_FP_ZONE_AREA_T:
     {
         new_zone = new MODULE_ZONE_CONTAINER( *static_cast<const MODULE_ZONE_CONTAINER*>( aItem ) );
         const_cast<KIID&>( new_zone->m_Uuid ) = KIID();
@@ -1492,7 +1492,7 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
         break;
     }
 
-    case PCB_MODULE_TEXT_T:
+    case PCB_FP_TEXT_T:
     {
         TEXTE_MODULE* new_text = new TEXTE_MODULE( *static_cast<const TEXTE_MODULE*>( aItem ) );
         const_cast<KIID&>( new_text->m_Uuid ) = KIID();
@@ -1516,7 +1516,7 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
         break;
     }
 
-    case PCB_MODULE_EDGE_T:
+    case PCB_FP_SHAPE_T:
     {
         EDGE_MODULE* new_edge = new EDGE_MODULE( *static_cast<const EDGE_MODULE*>( aItem ) );
         const_cast<KIID&>( new_edge->m_Uuid ) = KIID();
@@ -1622,7 +1622,7 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
         switch( item->Type() )
         {
         case PCB_TEXT_T:
-        case PCB_MODULE_TEXT_T:
+        case PCB_FP_TEXT_T:
         case PCB_TRACE_T:
         case PCB_ARC_T:
         case PCB_VIA_T:
@@ -1673,17 +1673,17 @@ bool MODULE::BuildPolyCourtyard()
     m_poly_courtyard_front.RemoveAllContours();
     m_poly_courtyard_back.RemoveAllContours();
     // Build the courtyard area from graphic items on the courtyard.
-    // Only PCB_MODULE_EDGE_T have meaning, graphic texts are ignored.
+    // Only PCB_FP_SHAPE_T have meaning, graphic texts are ignored.
     // Collect items:
     std::vector< DRAWSEGMENT* > list_front;
     std::vector< DRAWSEGMENT* > list_back;
 
     for( BOARD_ITEM* item : GraphicalItems() )
     {
-        if( item->GetLayer() == B_CrtYd && item->Type() == PCB_MODULE_EDGE_T )
+        if( item->GetLayer() == B_CrtYd && item->Type() == PCB_FP_SHAPE_T )
             list_back.push_back( static_cast< DRAWSEGMENT* > ( item ) );
 
-        if( item->GetLayer() == F_CrtYd && item->Type() == PCB_MODULE_EDGE_T )
+        if( item->GetLayer() == F_CrtYd && item->Type() == PCB_FP_SHAPE_T )
             list_front.push_back( static_cast< DRAWSEGMENT* > ( item ) );
     }
 
@@ -1746,7 +1746,7 @@ bool MODULE::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOARD_ITE
     if( aFirst->GetLayer() != aSecond->GetLayer() )
         return aFirst->GetLayer() < aSecond->GetLayer();
 
-    if( aFirst->Type() == PCB_MODULE_EDGE_T )
+    if( aFirst->Type() == PCB_FP_SHAPE_T )
     {
         const EDGE_MODULE* dwgA = static_cast<const EDGE_MODULE*>( aFirst );
         const EDGE_MODULE* dwgB = static_cast<const EDGE_MODULE*>( aSecond );

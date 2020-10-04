@@ -1703,11 +1703,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
         DRAWSEGMENT* ds;
 
         if( isModule( aContainer ) )
-            ds = new EDGE_MODULE( (MODULE*) aContainer, STROKE_T::S_POLYGON );
+            ds = new EDGE_MODULE( (MODULE*) aContainer, S_POLYGON );
         else
         {
             ds = new DRAWSEGMENT( aContainer );
-            ds->SetShape( STROKE_T::S_POLYGON );
+            ds->SetShape( S_POLYGON );
         }
 
         ds->SetPolyShape( getPolySetFromCadstarShape( aCadstarShape, -1, aContainer, aMoveVector,
@@ -1812,12 +1812,12 @@ DRAWSEGMENT* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& 
 
         if( isModule( aContainer ) )
         {
-            ds = new EDGE_MODULE( static_cast<MODULE*>( aContainer ), STROKE_T::S_SEGMENT );
+            ds = new EDGE_MODULE( static_cast<MODULE*>( aContainer ), S_SEGMENT );
         }
         else
         {
             ds = new DRAWSEGMENT( aContainer );
-            ds->SetShape( STROKE_T::S_SEGMENT );
+            ds->SetShape( S_SEGMENT );
         }
 
         ds->SetStart( startPoint );
@@ -1834,12 +1834,12 @@ DRAWSEGMENT* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& 
 
         if( isModule( aContainer ) )
         {
-            ds = new EDGE_MODULE( (MODULE*) aContainer, STROKE_T::S_ARC );
+            ds = new EDGE_MODULE( (MODULE*) aContainer, S_ARC );
         }
         else
         {
             ds = new DRAWSEGMENT( aContainer );
-            ds->SetShape( STROKE_T::S_ARC );
+            ds->SetShape( S_ARC );
         }
 
         ds->SetArcStart( startPoint );
@@ -1981,7 +1981,7 @@ SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromDrawsegments(
     {
         switch( ds->GetShape() )
         {
-        case STROKE_T::S_ARC:
+        case S_ARC:
         {
             if( ds->GetClass() == wxT( "MGRAPHIC" ) )
             {
@@ -1996,7 +1996,7 @@ SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromDrawsegments(
             }
         }
         break;
-        case STROKE_T::S_SEGMENT:
+        case S_SEGMENT:
             if( ds->GetClass() == wxT( "MGRAPHIC" ) )
             {
                 EDGE_MODULE* em = (EDGE_MODULE*) ds;
@@ -2024,8 +2024,10 @@ SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromDrawsegments(
 
 
 std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
-        const std::vector<DRAWSEGMENT*> aDrawsegments, BOARD_ITEM_CONTAINER* aParentContainer,
-        NETINFO_ITEM* aNet, const PCB_LAYER_ID& aLayerOverride, int aWidthOverride )
+                                                  const std::vector<DRAWSEGMENT*> aDrawsegments,
+                                                  BOARD_ITEM_CONTAINER* aParentContainer,
+                                                  NETINFO_ITEM* aNet, PCB_LAYER_ID aLayerOverride,
+                                                  int aWidthOverride )
 {
     std::vector<TRACK*> tracks;
 
@@ -2035,7 +2037,7 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
 
         switch( ds->GetShape() )
         {
-        case STROKE_T::S_ARC:
+        case S_ARC:
             if( ds->GetClass() == wxT( "MGRAPHIC" ) )
             {
                 EDGE_MODULE* em = (EDGE_MODULE*) ds;
@@ -2048,7 +2050,7 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
                 track = new ARC( aParentContainer, &arc );
             }
             break;
-        case STROKE_T::S_SEGMENT:
+        case S_SEGMENT:
             if( ds->GetClass() == wxT( "MGRAPHIC" ) )
             {
                 EDGE_MODULE* em = (EDGE_MODULE*) ds;

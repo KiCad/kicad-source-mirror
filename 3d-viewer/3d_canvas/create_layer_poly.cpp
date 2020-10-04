@@ -65,7 +65,7 @@ void BOARD_ADAPTER::transformGraphicModuleEdgeToPolygonSet( const MODULE *aModul
 {
     for( BOARD_ITEM* item : aModule->GraphicalItems() )
     {
-        if( item->Type() == PCB_MODULE_EDGE_T )
+        if( item->Type() == PCB_FP_SHAPE_T )
         {
             EDGE_MODULE* outline = (EDGE_MODULE*) item;
 

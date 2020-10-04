@@ -237,7 +237,8 @@ void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
         break;
 
     default:
-        wxFAIL_MSG( "DRAWSEGMENT::Rotate not implemented for " + STROKE_T_asString( m_Shape ) );
+        wxFAIL_MSG( "DRAWSEGMENT::Rotate not implemented for "
+                    + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }
 }
@@ -292,7 +293,8 @@ void DRAWSEGMENT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         break;
 
     default:
-        wxFAIL_MSG( "DRAWSEGMENT::Flip not implemented for " + STROKE_T_asString( m_Shape ) );
+        wxFAIL_MSG( "DRAWSEGMENT::Flip not implemented for "
+                    + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }
 
@@ -351,7 +353,8 @@ wxPoint DRAWSEGMENT::GetCenter() const
         break;
 
     default:
-        wxFAIL_MSG( "DRAWSEGMENT::GetCentre not implemented for " + STROKE_T_asString( m_Shape ) );
+        wxFAIL_MSG( "DRAWSEGMENT::GetCentre not implemented for "
+                    + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }
 
@@ -614,7 +617,7 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 
     default:
         wxFAIL_MSG( "DRAWSEGMENT::GetBoundingBox not implemented for "
-                    + STROKE_T_asString( m_Shape ) );
+                    + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }
 
@@ -746,7 +749,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
     default:
         wxFAIL_MSG( "DRAWSEGMENT::HitTest (point) not implemented for "
-                    + STROKE_T_asString( m_Shape ) );
+                    + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }
 
@@ -903,7 +906,7 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 
     default:
         wxFAIL_MSG( "DRAWSEGMENT::HitTest (rect) not implemented for "
-                    + STROKE_T_asString( m_Shape ) );
+                    + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }
 
@@ -1156,7 +1159,7 @@ std::vector<SHAPE*> DRAWSEGMENT::MakeEffectiveShapes() const
 
     default:
         wxFAIL_MSG( "DRAWSEGMENT::MakeEffectiveShapes unsupported DRAWSEGMENT shape: "
-                    + STROKE_T_asString( m_Shape ) );
+                    + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }
 
@@ -1242,7 +1245,7 @@ bool DRAWSEGMENT::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOAR
     if( aFirst->GetLayer() != aSecond->GetLayer() )
         return aFirst->GetLayer() < aSecond->GetLayer();
 
-    if( aFirst->Type() == PCB_LINE_T )
+    if( aFirst->Type() == PCB_SHAPE_T )
     {
         const DRAWSEGMENT* dwgA = static_cast<const DRAWSEGMENT*>( aFirst );
         const DRAWSEGMENT* dwgB = static_cast<const DRAWSEGMENT*>( aSecond );

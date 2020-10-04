@@ -609,7 +609,7 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
 {
     switch( aItem->Type() )
     {
-    case PCB_LINE_T:
+    case PCB_SHAPE_T:
     {
         DRAWSEGMENT* seg = (DRAWSEGMENT*) aItem;
         seg->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
@@ -622,14 +622,14 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
         text->TransformBoundingBoxWithClearanceToPolygon( &aHoles, aGap );
         break;
     }
-    case PCB_MODULE_EDGE_T:
+    case PCB_FP_SHAPE_T:
     {
         EDGE_MODULE* edge = (EDGE_MODULE*) aItem;
         edge->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
                                                     aIgnoreLineWidth );
         break;
     }
-    case PCB_MODULE_TEXT_T:
+    case PCB_FP_TEXT_T:
     {
         TEXTE_MODULE* text = (TEXTE_MODULE*) aItem;
 

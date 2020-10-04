@@ -245,7 +245,7 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
     static const KICAD_T top_level_board_stuff[] = {
         PCB_MARKER_T,
         PCB_TEXT_T,
-        PCB_LINE_T,
+        PCB_SHAPE_T,
         PCB_DIM_ALIGNED_T,
         PCB_DIM_LEADER_T,
         PCB_TARGET_T,
@@ -253,7 +253,7 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
         PCB_TRACE_T,
         PCB_ARC_T,
         //        PCB_PAD_T,            Can't be at board level
-        //        PCB_MODULE_TEXT_T,    Can't be at board level
+        //        PCB_FP_TEXT_T,        Can't be at board level
         PCB_MODULE_T,
         PCB_ZONE_AREA_T,
         EOT
@@ -609,7 +609,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     case PCB_DIM_CENTER_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-    case PCB_LINE_T:
+    case PCB_SHAPE_T:
     case PCB_TEXT_T:
     case PCB_TARGET_T:
         if( aMode == ADD_MODE::APPEND )
@@ -699,7 +699,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
     case PCB_DIM_CENTER_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-    case PCB_LINE_T:
+    case PCB_SHAPE_T:
     case PCB_TEXT_T:
     case PCB_TARGET_T:
         m_drawings.erase( std::remove_if( m_drawings.begin(), m_drawings.end(),
@@ -1119,9 +1119,9 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
 
         case PCB_MODULE_T:
         case PCB_PAD_T:
-        case PCB_MODULE_TEXT_T:
-        case PCB_MODULE_EDGE_T:
-        case PCB_MODULE_ZONE_AREA_T:
+        case PCB_FP_TEXT_T:
+        case PCB_FP_SHAPE_T:
+        case PCB_FP_ZONE_AREA_T:
 
             // this calls MODULE::Visit() on each module.
             result = IterateForward<MODULE*>( m_modules, inspector, testData, p );
@@ -1133,9 +1133,9 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
                 {
                 case PCB_MODULE_T:
                 case PCB_PAD_T:
-                case PCB_MODULE_TEXT_T:
-                case PCB_MODULE_EDGE_T:
-                case PCB_MODULE_ZONE_AREA_T:
+                case PCB_FP_TEXT_T:
+                case PCB_FP_SHAPE_T:
+                case PCB_FP_ZONE_AREA_T:
                     continue;
 
                 default:
@@ -1147,7 +1147,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
 
             break;
 
-        case PCB_LINE_T:
+        case PCB_SHAPE_T:
         case PCB_TEXT_T:
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_CENTER_T:
@@ -1161,7 +1161,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             {
                 switch( stype = *++p )
                 {
-                case PCB_LINE_T:
+                case PCB_SHAPE_T:
                 case PCB_TEXT_T:
                 case PCB_DIM_ALIGNED_T:
                 case PCB_DIM_CENTER_T:

@@ -35,8 +35,8 @@
 #include <view/view.h>
 
 
-EDGE_MODULE::EDGE_MODULE( MODULE* parent, STROKE_T aShape ) :
-    DRAWSEGMENT( parent, PCB_MODULE_EDGE_T )
+EDGE_MODULE::EDGE_MODULE( MODULE* parent, PCB_SHAPE_TYPE_T aShape ) :
+    DRAWSEGMENT( parent, PCB_FP_SHAPE_T )
 {
     m_Shape = aShape;
     m_Angle = 0;

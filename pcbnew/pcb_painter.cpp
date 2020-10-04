@@ -342,7 +342,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         color.a *= m_viaOpacity;
     else if( item->Type() == PCB_PAD_T )
         color.a *= m_padOpacity;
-    else if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
+    else if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T )
         color.a *= m_zoneOpacity;
 
     // No special modificators enabled
@@ -412,8 +412,8 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         draw( static_cast<const D_PAD*>( item ), aLayer );
         break;
 
-    case PCB_LINE_T:
-    case PCB_MODULE_EDGE_T:
+    case PCB_SHAPE_T:
+    case PCB_FP_SHAPE_T:
         draw( static_cast<const DRAWSEGMENT*>( item ), aLayer );
         break;
 
@@ -421,7 +421,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         draw( static_cast<const TEXTE_PCB*>( item ), aLayer );
         break;
 
-    case PCB_MODULE_TEXT_T:
+    case PCB_FP_TEXT_T:
         draw( static_cast<const TEXTE_MODULE*>( item ), aLayer );
         break;
 
@@ -437,7 +437,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         draw( static_cast<const ZONE_CONTAINER*>( item ), aLayer );
         break;
 
-    case PCB_MODULE_ZONE_AREA_T:
+    case PCB_FP_ZONE_AREA_T:
         draw( static_cast<const ZONE_CONTAINER*>( item ), aLayer );
         break;
 

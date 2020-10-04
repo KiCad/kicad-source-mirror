@@ -88,11 +88,11 @@ enum KICAD_T
     // Items in pcb
     PCB_MODULE_T,           ///< class MODULE, a footprint
     PCB_PAD_T,              ///< class D_PAD, a pad in a footprint
-    PCB_LINE_T,             ///< class DRAWSEGMENT, a segment not on copper layers
+    PCB_SHAPE_T,            ///< class DRAWSEGMENT, a segment not on copper layers
     PCB_TEXT_T,             ///< class TEXTE_PCB, text on a layer
-    PCB_MODULE_TEXT_T,      ///< class TEXTE_MODULE, text in a footprint
-    PCB_MODULE_EDGE_T,      ///< class EDGE_MODULE, a footprint edge
-    PCB_MODULE_ZONE_AREA_T, ///< class ZONE_CONTAINER, managed by a footprint
+    PCB_FP_TEXT_T,          ///< class TEXTE_MODULE, text in a footprint
+    PCB_FP_SHAPE_T,         ///< class EDGE_MODULE, a footprint edge
+    PCB_FP_ZONE_AREA_T,     ///< class ZONE_CONTAINER, managed by a footprint
     PCB_TRACE_T,            ///< class TRACK, a track segment (segment on a copper layer)
     PCB_VIA_T,              ///< class VIA, a via (like a track segment on a copper layer)
     PCB_ARC_T,              ///< class ARC, an arc track segment on a copper layer

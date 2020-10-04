@@ -68,7 +68,7 @@ public:
      * if aInModule is true, a MODULE_ZONE_CONTAINER is actually built
      * (same item, but with a specific type id:
      * The type is PCB_ZONE_AREA_T for a ZONE_CONTAINER
-     * The type is PCB_MODULE_ZONE_AREA_T for a MODULE_ZONE_CONTAINER
+     * The type is PCB_FP_ZONE_AREA_T for a MODULE_ZONE_CONTAINER
      */
     ZONE_CONTAINER( BOARD_ITEM_CONTAINER* parent, bool aInModule = false );
 

@@ -108,7 +108,7 @@ void ARRAY_CREATOR::Invoke()
                     {
                     case PCB_MODULE_T:
                     case PCB_TEXT_T:
-                    case PCB_LINE_T:
+                    case PCB_SHAPE_T:
                     case PCB_TRACE_T:
                     case PCB_VIA_T:
                     case PCB_ZONE_AREA_T:

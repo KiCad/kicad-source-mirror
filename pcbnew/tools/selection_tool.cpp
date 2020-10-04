@@ -754,9 +754,9 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
                 containsLocked = true;
             break;
 
-        case PCB_MODULE_EDGE_T:
-        case PCB_MODULE_TEXT_T:
-        case PCB_MODULE_ZONE_AREA_T:
+        case PCB_FP_SHAPE_T:
+        case PCB_FP_TEXT_T:
+        case PCB_FP_ZONE_AREA_T:
             if( static_cast<MODULE*>( item->GetParent() )->IsLocked() )
                 containsLocked = true;
             break;
@@ -1394,7 +1394,7 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
             include = aFilterOptions.includeZones;
             break;
         }
-        case PCB_LINE_T:
+        case PCB_SHAPE_T:
         case PCB_TARGET_T:
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_CENTER_T:
@@ -1522,14 +1522,14 @@ bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
 
         break;
     }
-    case PCB_LINE_T:
+    case PCB_SHAPE_T:
     case PCB_TARGET_T:
         if( !m_filter.graphics )
             return false;
 
         break;
 
-    case PCB_MODULE_TEXT_T:
+    case PCB_FP_TEXT_T:
     case PCB_TEXT_T:
         if( !m_filter.text )
             return false;
@@ -1815,7 +1815,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
     switch( aItem->Type() )
     {
     case PCB_ZONE_AREA_T:
-    case PCB_MODULE_ZONE_AREA_T:
+    case PCB_FP_ZONE_AREA_T:
     {
         const ZONE_CONTAINER* zone = static_cast<const ZONE_CONTAINER*>( aItem );
 
@@ -1879,7 +1879,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         return false;
     }
 
-    case PCB_MODULE_TEXT_T:
+    case PCB_FP_TEXT_T:
         // Multiple selection is only allowed in modedit mode.  In pcbnew, you have to select
         // module subparts one by one, rather than with a drag selection.  This is so you can
         // pick up items under an (unlocked) module without also moving the module's sub-parts.
@@ -1894,7 +1894,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
         break;
 
-    case PCB_MODULE_EDGE_T:
+    case PCB_FP_SHAPE_T:
         // Module edge selections are only allowed in modedit mode.
         if( !m_editModules && !checkVisibilityOnly )
             return false;
@@ -2258,7 +2258,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
             BOARD_ITEM* item = aCollector[i];
             KICAD_T type = item->Type();
 
-            if( ( type == PCB_MODULE_TEXT_T || type == PCB_TEXT_T || type == PCB_LINE_T )
+            if( ( type == PCB_FP_TEXT_T || type == PCB_TEXT_T || type == PCB_SHAPE_T )
                     && silkLayers[item->GetLayer()] )
             {
                 preferred.insert( item );
@@ -2301,7 +2301,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
         }
     }
 
-    if( aCollector.CountType( PCB_MODULE_TEXT_T ) > 0 )
+    if( aCollector.CountType( PCB_FP_TEXT_T ) > 0 )
     {
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
@@ -2334,7 +2334,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                         case PCB_TRACE_T:
                         case PCB_ARC_T:
                         case PCB_PAD_T:
-                        case PCB_LINE_T:
+                        case PCB_SHAPE_T:
                         case PCB_VIA_T:
                         case PCB_MODULE_T:
                             if( areaRatio > textToFeatureMinRatio && txtCommonRatio < commonAreaRatio )
@@ -2348,7 +2348,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
         }
     }
 
-    if( aCollector.CountType( PCB_MODULE_EDGE_T ) + aCollector.CountType( PCB_LINE_T ) > 1 )
+    if( aCollector.CountType( PCB_FP_SHAPE_T ) + aCollector.CountType( PCB_SHAPE_T ) > 1 )
     {
         // Prefer exact hits to sloppy ones
         int accuracy = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );

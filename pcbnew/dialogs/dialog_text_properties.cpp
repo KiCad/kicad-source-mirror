@@ -65,7 +65,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_MultiLineText->SetScrollWidth( 1 );
     m_MultiLineText->SetScrollWidthTracking( true );
 
-    if( m_item->Type() == PCB_MODULE_TEXT_T )
+    if( m_item->Type() == PCB_FP_TEXT_T )
     {
         title = _( "Footprint Text Properties" );
 
@@ -248,7 +248,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         m_MultiLineText->SetSelection( -1, -1 );
     }
 
-    if( m_item->Type() == PCB_MODULE_TEXT_T && m_modText )
+    if( m_item->Type() == PCB_FP_TEXT_T && m_modText )
     {
         MODULE*  module = dynamic_cast<MODULE*>( m_modText->GetParent() );
         wxString msg;

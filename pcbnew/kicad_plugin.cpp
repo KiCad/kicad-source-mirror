@@ -399,11 +399,11 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
         format( static_cast<DIMENSION*>( aItem ), aNestLevel );
         break;
 
-    case PCB_LINE_T:
+    case PCB_SHAPE_T:
         format( static_cast<DRAWSEGMENT*>( aItem ), aNestLevel );
         break;
 
-    case PCB_MODULE_EDGE_T:
+    case PCB_FP_SHAPE_T:
         format( static_cast<EDGE_MODULE*>( aItem ), aNestLevel );
         break;
 
@@ -423,7 +423,7 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
         format( static_cast<TEXTE_PCB*>( aItem ), aNestLevel );
         break;
 
-    case PCB_MODULE_TEXT_T:
+    case PCB_FP_TEXT_T:
         format( static_cast<TEXTE_MODULE*>( aItem ), aNestLevel );
         break;
 
@@ -437,7 +437,7 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
         format( static_cast<TRACK*>( aItem ), aNestLevel );
         break;
 
-    case PCB_MODULE_ZONE_AREA_T:
+    case PCB_FP_ZONE_AREA_T:
     case PCB_ZONE_AREA_T:
         format( static_cast<ZONE_CONTAINER*>( aItem ), aNestLevel );
         break;
@@ -832,7 +832,7 @@ void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
 
     default:
         wxFAIL_MSG( "PCB_IO::format cannot format unknown DRAWSEGMENT shape:"
-                    + STROKE_T_asString( aSegment->GetShape() ) );
+                    + PCB_SHAPE_TYPE_T_asString( aSegment->GetShape()) );
         return;
     };
 
@@ -917,7 +917,7 @@ void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
 
     default:
         wxFAIL_MSG( "PCB_IO::format cannot format unknown EDGE_MODULE shape:"
-                    + STROKE_T_asString( aModuleDrawing->GetShape() ) );
+                    + PCB_SHAPE_TYPE_T_asString( aModuleDrawing->GetShape()) );
         return;
     };
 

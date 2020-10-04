@@ -46,11 +46,11 @@ class SHAPE;
 class PCB_GROUP;
 
 /**
- * Enum STROKE_T
- * is the set of shapes for segments (graphic segments and tracks) which are often
+ * Enum PCB_SHAPE_TYPE_T
+ * is the set of shapes for PCB graphics and tracks and footprint graphics
  * in the .m_Shape member
  */
-enum STROKE_T
+enum PCB_SHAPE_TYPE_T
 {
     S_SEGMENT = 0,  ///< usual segment : line with rounded ends
     S_RECT,         ///< segment with non rounded ends
@@ -61,7 +61,7 @@ enum STROKE_T
     S_LAST          ///< last value for this list
 };
 
-static inline wxString STROKE_T_asString( STROKE_T a )
+static inline wxString PCB_SHAPE_TYPE_T_asString( PCB_SHAPE_TYPE_T a )
 {
     switch( a )
     {
@@ -281,9 +281,9 @@ public:
 
     /**
      * Function ShowShape
-     * converts the enum STROKE_T integer value to a wxString.
+     * converts the enum PCB_SHAPE_TYPE_T integer value to a wxString.
      */
-    static wxString ShowShape( STROKE_T aShape );
+    static wxString ShowShape( PCB_SHAPE_TYPE_T aShape );
 
     // Some geometric transforms, that must be rewritten for derived classes
     /**

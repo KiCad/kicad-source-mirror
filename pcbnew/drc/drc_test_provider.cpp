@@ -170,7 +170,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
                 n++;
             }
-            else if( typeMask[ PCB_LINE_T ] && item->Type() == PCB_LINE_T )
+            else if( typeMask[ PCB_SHAPE_T ] && item->Type() == PCB_SHAPE_T )
             {
                 if( !aFunc( item ) )
                     return n;
@@ -210,7 +210,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
     for( MODULE* mod : brd->Modules() )
     {
-        if( typeMask[ PCB_MODULE_TEXT_T ] )
+        if( typeMask[ PCB_FP_TEXT_T ] )
         {
             if( (mod->Reference().GetLayerSet() & aLayers).any() )
             {
@@ -247,14 +247,14 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
         {
             if( (dwg->GetLayerSet() & aLayers).any() )
             {
-                if( typeMask[ PCB_MODULE_TEXT_T ] && dwg->Type() == PCB_MODULE_TEXT_T )
+                if( typeMask[ PCB_FP_TEXT_T ] && dwg->Type() == PCB_FP_TEXT_T )
                 {
                     if( !aFunc( dwg ) )
                         return n;
 
                     n++;
                 }
-                else if( typeMask[ PCB_MODULE_EDGE_T ] && dwg->Type() == PCB_MODULE_EDGE_T )
+                else if( typeMask[ PCB_FP_SHAPE_T ] && dwg->Type() == PCB_FP_SHAPE_T )
                 {
                     if( !aFunc( dwg ) )
                         return n;
@@ -268,7 +268,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
         {
             if( (zone->GetLayerSet() & aLayers).any() )
             {
-                if( typeMask[ PCB_MODULE_ZONE_AREA_T ] && zone->Type() == PCB_MODULE_ZONE_AREA_T )
+                if( typeMask[ PCB_FP_ZONE_AREA_T ] && zone->Type() == PCB_FP_ZONE_AREA_T )
                 {
                     if( ! aFunc( zone ) )
                         return n;

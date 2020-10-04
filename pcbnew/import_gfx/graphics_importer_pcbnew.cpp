@@ -68,7 +68,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D&
     line->SetStart( MapCoordinate( aOrigin ) );
     line->SetEnd( MapCoordinate( aEnd ) );
 
-    if( line->Type() == PCB_MODULE_EDGE_T )
+    if( line->Type() == PCB_FP_SHAPE_T )
         static_cast<EDGE_MODULE*>( line.get() )->SetLocalCoord();
 
     addItem( std::move( line ) );
@@ -84,7 +84,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadiu
     circle->SetCenter( MapCoordinate( aCenter ) );
     circle->SetArcStart( MapCoordinate( VECTOR2D( aCenter.x + aRadius, aCenter.y ) ) );
 
-    if( circle->Type() == PCB_MODULE_EDGE_T )
+    if( circle->Type() == PCB_FP_SHAPE_T )
         static_cast<EDGE_MODULE*>( circle.get() )->SetLocalCoord();
 
     addItem( std::move( circle ) );
@@ -102,7 +102,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
     arc->SetArcStart( MapCoordinate( aStart ) );
     arc->SetAngle( aAngle * 10.0 );     // Pcbnew uses the decidegree
 
-    if( arc->Type() == PCB_MODULE_EDGE_T )
+    if( arc->Type() == PCB_FP_SHAPE_T )
         static_cast<EDGE_MODULE*>( arc.get() )->SetLocalCoord();
 
     addItem( std::move( arc ) );
@@ -122,7 +122,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector< VECTOR2D >& aVerti
     polygon->SetLayer( GetLayer() );
     polygon->SetPolyPoints( convertedPoints );
 
-    if( polygon->Type() == PCB_MODULE_EDGE_T )
+    if( polygon->Type() == PCB_FP_SHAPE_T )
         static_cast<EDGE_MODULE*>( polygon.get() )->SetLocalCoord();
 
     polygon->SetWidth( MapLineWidth( aWidth ) );
@@ -147,7 +147,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString&
     textItem->SetHorizJustify( aHJustify );
     textItem->SetText( aText );
 
-    if( boardItem->Type() == PCB_MODULE_TEXT_T )
+    if( boardItem->Type() == PCB_FP_TEXT_T )
         static_cast<TEXTE_MODULE*>( boardItem.get() )->SetLocalCoord();
 
     addItem( std::move( boardItem ) );
@@ -167,7 +167,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D
     spline->SetEnd( MapCoordinate( aEnd ) );
     spline->RebuildBezierToSegmentsPointsList( aWidth );
 
-    if( spline->Type() == PCB_MODULE_EDGE_T )
+    if( spline->Type() == PCB_FP_SHAPE_T )
         static_cast<EDGE_MODULE*>( spline.get() )->SetLocalCoord();
 
     addItem( std::move( spline ) );

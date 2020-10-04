@@ -197,7 +197,7 @@ void BOARD_ADAPTER::AddGraphicsShapesWithClearanceToContainer( const MODULE* aMo
     {
         switch( item->Type() )
         {
-        case PCB_MODULE_TEXT_T:
+        case PCB_FP_TEXT_T:
         {
             TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
 
@@ -207,7 +207,7 @@ void BOARD_ADAPTER::AddGraphicsShapesWithClearanceToContainer( const MODULE* aMo
         break;
 
 
-        case PCB_MODULE_EDGE_T:
+        case PCB_FP_SHAPE_T:
         {
             outline = (EDGE_MODULE*) item;
 
@@ -751,7 +751,7 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSe
 
     default:
         wxFAIL_MSG( "BOARD_ADAPTER::AddShapeWithClearanceToContainer no implementation for "
-                    + STROKE_T_asString( aDrawSegment->GetShape() ) );
+                    + PCB_SHAPE_TYPE_T_asString( aDrawSegment->GetShape()) );
         break;
     }
 }

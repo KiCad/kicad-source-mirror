@@ -809,7 +809,7 @@ static void export_vrml_drawings( MODEL_VRML& aModel, BOARD* pcb )
 
         switch( drawing->Type() )
         {
-        case PCB_LINE_T:
+        case PCB_SHAPE_T:
             export_vrml_drawsegment( aModel, (DRAWSEGMENT*) drawing );
             break;
 
@@ -1380,11 +1380,11 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
         {
             switch( item->Type() )
             {
-            case PCB_MODULE_TEXT_T:
+            case PCB_FP_TEXT_T:
                 export_vrml_text_module( static_cast<TEXTE_MODULE*>( item ) );
                 break;
 
-            case PCB_MODULE_EDGE_T:
+            case PCB_FP_SHAPE_T:
                 export_vrml_edge_module( aModel, static_cast<EDGE_MODULE*>( item ), aModule );
                 break;
 

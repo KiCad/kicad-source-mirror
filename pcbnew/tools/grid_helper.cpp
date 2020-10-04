@@ -547,8 +547,8 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
             break;
         }
 
-        case PCB_MODULE_EDGE_T:
-        case PCB_LINE_T:
+        case PCB_FP_SHAPE_T:
+        case PCB_SHAPE_T:
         {
             if( !m_magneticSettings->graphics )
                 break;
@@ -714,7 +714,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
             break;
         }
 
-        case PCB_MODULE_TEXT_T:
+        case PCB_FP_TEXT_T:
         case PCB_TEXT_T:
             addAnchor( aItem->GetPosition(), ORIGIN, aItem );
             break;

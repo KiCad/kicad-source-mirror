@@ -148,9 +148,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     if( !( changeFlags & CHT_DONE ) )
                         board->Modules().front()->Add( boardItem );
                 }
-                else if( boardItem->Type() == PCB_MODULE_TEXT_T ||
-                         boardItem->Type() == PCB_MODULE_EDGE_T ||
-                         boardItem->Type() == PCB_MODULE_ZONE_AREA_T )
+                else if( boardItem->Type() == PCB_FP_TEXT_T ||
+                         boardItem->Type() == PCB_FP_SHAPE_T ||
+                         boardItem->Type() == PCB_FP_ZONE_AREA_T )
                 {
                     wxASSERT( boardItem->GetParent() &&
                               boardItem->GetParent()->Type() == PCB_MODULE_T );
@@ -185,13 +185,13 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 {
                 // Module items
                 case PCB_PAD_T:
-                case PCB_MODULE_EDGE_T:
-                case PCB_MODULE_TEXT_T:
-                case PCB_MODULE_ZONE_AREA_T:
+                case PCB_FP_SHAPE_T:
+                case PCB_FP_TEXT_T:
+                case PCB_FP_ZONE_AREA_T:
                     // This level can only handle module items when editing modules
                     wxASSERT( m_editModules );
 
-                    if( boardItem->Type() == PCB_MODULE_TEXT_T )
+                    if( boardItem->Type() == PCB_FP_TEXT_T )
                     {
                         TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( boardItem );
 
@@ -212,7 +212,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     break;
 
                 // Board items
-                case PCB_LINE_T:                // a segment not on copper layers
+                case PCB_SHAPE_T:               // a shape (normally not on copper layers)
                 case PCB_TEXT_T:                // a text on a layer
                 case PCB_TRACE_T:               // a track segment (segment on a copper layer)
                 case PCB_ARC_T:                 // an arced track segment (segment on a copper layer)
@@ -348,9 +348,9 @@ EDA_ITEM* BOARD_COMMIT::parentObject( EDA_ITEM* aItem ) const
     switch( aItem->Type() )
     {
         case PCB_PAD_T:
-        case PCB_MODULE_EDGE_T:
-        case PCB_MODULE_TEXT_T:
-        case PCB_MODULE_ZONE_AREA_T:
+        case PCB_FP_SHAPE_T:
+        case PCB_FP_TEXT_T:
+        case PCB_FP_ZONE_AREA_T:
             return aItem->GetParent();
 
         case PCB_ZONE_AREA_T:

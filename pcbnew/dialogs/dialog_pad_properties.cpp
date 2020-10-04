@@ -2033,7 +2033,7 @@ void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
     if( type == -1 )
         return;
 
-    STROKE_T listtype[] = { S_SEGMENT, S_ARC, S_CURVE, S_CIRCLE, S_POLYGON };
+    PCB_SHAPE_TYPE_T listtype[] = { S_SEGMENT, S_ARC, S_CURVE, S_CIRCLE, S_POLYGON };
 
     DRAWSEGMENT* primitive = new DRAWSEGMENT();
     primitive->SetShape( listtype[type] );

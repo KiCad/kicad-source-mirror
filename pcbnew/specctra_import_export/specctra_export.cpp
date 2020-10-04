@@ -696,7 +696,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
     }
 
 #if 1    // enable image (outline) scopes.
-    static const KICAD_T scanEDGEs[] = { PCB_MODULE_EDGE_T, EOT };
+    static const KICAD_T scanEDGEs[] = { PCB_FP_SHAPE_T, EOT };
 
     // get all the MODULE's EDGE_MODULEs and convert those to DSN outlines.
     moduleItems.Collect( aModule, scanEDGEs );

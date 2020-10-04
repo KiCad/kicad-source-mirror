@@ -161,7 +161,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
             LAYER_NUM layer = dwg->GetLayer();
 
             if( delAll
-                || ( type == PCB_LINE_T && delDrawings && masque_layer[layer] )
+                || ( type == PCB_SHAPE_T && delDrawings && masque_layer[layer] )
                 || ( type == PCB_TEXT_T && delTexts && del_text_layers[layer] ) )
             {
                 commit.Remove( dwg );

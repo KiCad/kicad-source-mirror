@@ -31,7 +31,7 @@
 #include <settings/settings_manager.h>
 
 TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
-    BOARD_ITEM( parent, PCB_MODULE_TEXT_T ),
+    BOARD_ITEM( parent, PCB_FP_TEXT_T ),
     EDA_TEXT()
 {
     MODULE* module = static_cast<MODULE*>( m_Parent );

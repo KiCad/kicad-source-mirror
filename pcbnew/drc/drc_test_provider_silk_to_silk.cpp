@@ -136,12 +136,12 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
                 if ( isInvisibleText( aTestItem->parent ) )
                     return true;
 
-                if( typeRef == PCB_MODULE_EDGE_T || typeRef == PCB_MODULE_TEXT_T )
+                if( typeRef == PCB_FP_SHAPE_T || typeRef == PCB_FP_TEXT_T )
                 {
                     parentModRef = static_cast<MODULE*> ( aRefItem->parent->GetParent() );
                 }
 
-                if( typeTest == PCB_MODULE_EDGE_T || typeTest == PCB_MODULE_TEXT_T )
+                if( typeTest == PCB_FP_SHAPE_T || typeTest == PCB_FP_TEXT_T )
                 {
                     parentModTest = static_cast<MODULE*> ( aTestItem->parent->GetParent() );
                 }
@@ -151,13 +151,13 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
 
                 if( parentModRef && parentModRef == parentModTest )
                 {
-                    if( typeRef == PCB_MODULE_EDGE_T && typeTest == PCB_MODULE_EDGE_T )
+                    if( typeRef == PCB_FP_SHAPE_T && typeTest == PCB_FP_SHAPE_T )
                         return true;
                 }
 
                 if( !parentModRef && !parentModTest )
                 {
-                    if( typeRef == PCB_LINE_T && typeTest == PCB_LINE_T )
+                    if( typeRef == PCB_SHAPE_T && typeTest == PCB_SHAPE_T )
                         return true;
                 }
 
@@ -187,7 +187,7 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
                 return true;
             };
 
-    int numSilk = forEachGeometryItem( { PCB_LINE_T, PCB_MODULE_EDGE_T, PCB_TEXT_T, PCB_MODULE_TEXT_T },
+    int numSilk = forEachGeometryItem( { PCB_SHAPE_T, PCB_FP_SHAPE_T, PCB_TEXT_T, PCB_FP_TEXT_T },
                                        LSET( 2, F_SilkS, B_SilkS ), addToTree );
 
     reportAux( _("Testing %d silkscreen features."),  numSilk );

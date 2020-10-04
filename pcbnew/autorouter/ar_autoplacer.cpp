@@ -133,7 +133,7 @@ int AR_AUTOPLACER::genPlacementRoutingMatrix()
     {
         switch( drawing->Type() )
         {
-        case PCB_LINE_T:
+        case PCB_SHAPE_T:
             if( drawing->GetLayer() != Edge_Cuts )
             {
                 m_matrix.TraceSegmentPcb( (DRAWSEGMENT*)drawing, CELL_IS_HOLE | CELL_IS_EDGE,

@@ -110,7 +110,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 return true;
             };
 
-    forEachGeometryItem( { PCB_LINE_T }, LSET( Edge_Cuts ), queryBoardOutlineItems );
+    forEachGeometryItem( { PCB_SHAPE_T }, LSET( Edge_Cuts ), queryBoardOutlineItems );
     forEachGeometryItem( {}, LSET::AllCuMask(), queryBoardGeometryItems );
 
     wxString val;
