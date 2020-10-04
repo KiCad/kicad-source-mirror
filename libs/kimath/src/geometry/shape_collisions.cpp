@@ -34,7 +34,6 @@
 #include <geometry/shape_circle.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
-#include <geometry/shape_simple.h>
 #include <geometry/shape_compound.h>
 #include <math/vector2d.h>
 
@@ -192,6 +191,13 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN_BASE&
         }
     }
 
+    if( aB.IsClosed() && aB.PointInside( aA.GetCenter() ) )
+    {
+        closest_dist = 0;
+        nearest = aA.GetCenter();
+    }
+
+
     if( closest_dist == 0 || closest_dist < aClearance )
     {
         if( aLocation )
@@ -291,17 +297,6 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_LINE_CHAIN_BASE& a
 {
     // TODO: why doesn't this handle MTV?
 
-    if( aB.IsClosed() && aB.PointInside( aA.Centre() ) )
-    {
-        if( aLocation )
-            *aLocation = aA.Centre();
-
-        if( aActual )
-            *aActual = 0;
-
-        return true;
-    }
-
     int closest_dist = INT_MAX;
     VECTOR2I nearest;
 
@@ -323,6 +318,12 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_LINE_CHAIN_BASE& a
                     break;
             }
         }
+    }
+
+    if( aB.IsClosed() && aB.PointInside( aA.Centre() ) )
+    {
+        nearest = aA.Centre();
+        closest_dist = 0;
     }
 
     if( closest_dist == 0 || closest_dist < aClearance )
