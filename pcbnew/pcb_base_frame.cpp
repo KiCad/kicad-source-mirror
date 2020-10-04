@@ -621,10 +621,6 @@ void PCB_BASE_FRAME::unitsChangeRefresh()
 {
     EDA_DRAW_FRAME::unitsChangeRefresh();    // Update the status bar.
 
-    // Notify all tools the units have changed
-    if( m_toolManager )
-        m_toolManager->RunAction( PCB_ACTIONS::updateUnits, true );
-
     UpdateGridSelectBox();
 }
 

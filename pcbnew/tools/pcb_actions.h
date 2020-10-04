@@ -418,7 +418,6 @@ public:
     static TOOL_ACTION selectionTool;
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION measureTool;
-    static TOOL_ACTION updateUnits;
     static TOOL_ACTION drillOrigin;
     static TOOL_ACTION placeFileOrigin;
     static TOOL_ACTION appendBoard;

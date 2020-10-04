@@ -188,6 +188,10 @@ bool EDA_DRAW_FRAME::LockFile( const wxString& aFileName )
 
 void EDA_DRAW_FRAME::unitsChangeRefresh()
 {
+    // Notify all tools the units have changed
+    if( m_toolManager )
+        m_toolManager->RunAction( ACTIONS::updateUnits, true );
+
     UpdateStatusBar();
     UpdateMsgPanel();
 }

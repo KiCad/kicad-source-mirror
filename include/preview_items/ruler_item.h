@@ -70,13 +70,12 @@ public:
         return wxT( "RULER_ITEM" );
     }
 
-    void SwitchUnits()
-    {
-        if( m_userUnits == EDA_UNITS::INCHES )
-            m_userUnits = EDA_UNITS::MILLIMETRES;
-        else
-            m_userUnits = EDA_UNITS::INCHES;
-    }
+    /**
+     * Switch the ruler units
+     *
+     * @param aUnits is the new unit system the ruler should use
+     */
+    void SwitchUnits( EDA_UNITS aUnits ) { m_userUnits = aUnits; }
 
 private:
     const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr;

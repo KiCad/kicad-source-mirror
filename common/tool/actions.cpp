@@ -473,6 +473,9 @@ TOOL_ACTION ACTIONS::millimetersUnits( "common.Control.metricUnits",
         _( "Millimeters" ), _( "Use millimeters" ),
         unit_mm_xpm, AF_NONE, (void*) EDA_UNITS::MILLIMETRES );
 
+TOOL_ACTION ACTIONS::updateUnits( "common.Control.updateUnits",
+        AS_GLOBAL );
+
 TOOL_ACTION ACTIONS::toggleUnits( "common.Control.toggleUnits",
         AS_GLOBAL,
         MD_CTRL + 'U', LEGACY_HK_NAME( "Switch Units" ),

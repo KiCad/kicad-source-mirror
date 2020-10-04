@@ -297,12 +297,12 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         }
 
         else if( evt->IsAction( &ACTIONS::toggleUnits )
-                 || evt->IsAction( &PCB_ACTIONS::updateUnits ) )
+                 || evt->IsAction( &ACTIONS::updateUnits ) )
         {
             if( frame()->GetUserUnits() != units )
             {
                 units = frame()->GetUserUnits();
-                ruler.SwitchUnits();
+                ruler.SwitchUnits( units );
                 view.Update( &ruler, KIGFX::GEOMETRY );
                 canvas()->Refresh();
             }

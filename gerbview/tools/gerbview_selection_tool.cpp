@@ -569,7 +569,9 @@ int GERBVIEW_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     Activate();
 
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
-    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, m_frame->GetUserUnits() );
+
+    EDA_UNITS                  units = m_frame->GetUserUnits();
+    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, units );
 
     view.Add( &ruler );
     view.SetVisible( &ruler, false );
@@ -660,6 +662,17 @@ int GERBVIEW_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
             view.SetVisible( &ruler, true );
             view.Update( &ruler, KIGFX::GEOMETRY );
+        }
+
+        else if( evt->IsAction( &ACTIONS::toggleUnits )
+                 || evt->IsAction( &ACTIONS::updateUnits ) )
+        {
+            if( m_frame->GetUserUnits() != units )
+            {
+                units = m_frame->GetUserUnits();
+                ruler.SwitchUnits( units );
+                view.Update( &ruler, KIGFX::GEOMETRY );
+            }
         }
 
         else if( evt->IsClick( BUT_RIGHT ) )

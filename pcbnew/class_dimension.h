@@ -292,7 +292,6 @@ protected:
     wxString          m_prefix;          ///< String prepended to the value
     wxString          m_suffix;          ///< String appended to the value
     EDA_UNITS         m_units;           ///< 0 = inches, 1 = mm
-    bool              m_useMils;         ///< If inches, use mils.
     bool              m_autoUnits;       ///< If true, follow the currently selected UI units
     DIM_UNITS_FORMAT  m_unitsFormat;     ///< How to render the units suffix
     int               m_precision;       ///< Number of digits to display after decimal

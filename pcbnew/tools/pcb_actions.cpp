@@ -304,9 +304,6 @@ TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         _( "Properties..." ), _( "Displays item properties dialog" ),
         config_xpm );
 
-TOOL_ACTION PCB_ACTIONS::updateUnits( "pcbnew.InteractiveEdit.updateUnits",
-        AS_GLOBAL );
-
 
 // FOOTPRINT_EDITOR_TOOLS
 //
