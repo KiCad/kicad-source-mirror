@@ -715,6 +715,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     switch( GetUserUnits() )
     {
     case EDA_UNITS::INCHES:      SetStatusText( _( "inches" ), 6 ); break;
+    case EDA_UNITS::MILS:        SetStatusText( _( "mils" ), 6 );   break;
     case EDA_UNITS::MILLIMETRES: SetStatusText( _( "mm" ), 6 );     break;
     case EDA_UNITS::UNSCALED:    SetStatusText( wxEmptyString, 6 ); break;
     default:                     wxASSERT( false );                 break;

@@ -538,6 +538,9 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         case EDA_UNITS::MILLIMETRES:
             formatter = wxT( "r %.6f  theta %.1f" );
             break;
+        case EDA_UNITS::MILS:
+            formatter = wxT( "r %.6f  theta %.1f" );
+            break;
         case EDA_UNITS::UNSCALED:
             formatter = wxT( "r %f  theta %f" );
             break;
@@ -566,6 +569,11 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     case EDA_UNITS::INCHES:
         absformatter = "X %.6f  Y %.6f";
         locformatter = "dx %.6f  dy %.6f  dist %.4f";
+        break;
+
+    case EDA_UNITS::MILS:
+        absformatter = "X %.2f  Y %.2f";
+        locformatter = "dx %.2f  dy %.2f  dist %.4f";
         break;
 
     case EDA_UNITS::MILLIMETRES:

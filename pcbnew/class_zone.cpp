@@ -618,7 +618,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 
     aList.emplace_back( _( "Fill Mode" ), msg, BROWN );
 
-    msg = MessageTextFromValue( units, m_area, EDA_DATA_TYPE::AREA );
+    msg = MessageTextFromValue( units, m_area, true, EDA_DATA_TYPE::AREA );
     aList.emplace_back( _( "Filled Area" ), msg, BLUE );
 
     wxString source;

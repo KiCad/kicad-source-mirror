@@ -157,48 +157,19 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 
     EDA_DRAW_FRAME::UpdateStatusBar();
 
-    // Display absolute coordinates:
+    // Display absolute and relative coordinates
     VECTOR2D cursorPos = GetCanvas()->GetViewControls()->GetCursorPosition();
-    double   dXpos = To_User_Unit( GetUserUnits(), cursorPos.x );
-    double   dYpos = To_User_Unit( GetUserUnits(), cursorPos.y );
+    VECTOR2D d         = cursorPos - screen->m_LocalOrigin;
 
-    wxString absformatter;
-    wxString locformatter;
-
-    switch( GetUserUnits() )
-    {
-    case EDA_UNITS::INCHES:
-        absformatter = "X %.3f  Y %.3f";
-        locformatter = "dx %.3f  dy %.3f  dist %.3f";
-        break;
-
-    case EDA_UNITS::MILLIMETRES:
-        absformatter = "X %.4f  Y %.4f";
-        locformatter = "dx %.4f  dy %.4f  dist %.4f";
-        break;
-
-    case EDA_UNITS::UNSCALED:
-        absformatter = "X %f  Y %f";
-        locformatter = "dx %f  dy %f  dist %f";
-        break;
-
-    default:
-        wxASSERT( false );
-        break;
-    }
-
-    line.Printf( absformatter, dXpos, dYpos );
+    line.Printf( "X %s  Y %s",
+                 MessageTextFromValue( GetUserUnits(), cursorPos.x, false ),
+                 MessageTextFromValue( GetUserUnits(), cursorPos.y, false ) );
     SetStatusText( line, 2 );
 
-    // Display relative coordinates:
-    double dx = cursorPos.x - screen->m_LocalOrigin.x;
-    double dy = cursorPos.y - screen->m_LocalOrigin.y;
-
-    dXpos = To_User_Unit( GetUserUnits(), dx );
-    dYpos = To_User_Unit( GetUserUnits(), dy );
-
-    // We already decided the formatter above
-    line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );
+    line.Printf( "dx %s  dy %s  dist %s",
+                 MessageTextFromValue( GetUserUnits(), d.x, false ),
+                 MessageTextFromValue( GetUserUnits(), d.y, false ),
+                 MessageTextFromValue( GetUserUnits(), hypot( d.x, d.y ), false ) );
     SetStatusText( line, 3 );
 
     // refresh grid display

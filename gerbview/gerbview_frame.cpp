@@ -1014,6 +1014,7 @@ void GERBVIEW_FRAME::DisplayGridMsg()
     switch( m_userUnits )
     {
     case EDA_UNITS::INCHES:      gridformatter = "grid X %.6f  Y %.6f"; break;
+    case EDA_UNITS::MILS:        gridformatter = "grid X %.2f  Y %.2f"; break;
     case EDA_UNITS::MILLIMETRES: gridformatter = "grid X %.6f  Y %.6f"; break;
     default:                     gridformatter = "grid X %f  Y %f";     break;
     }
@@ -1047,6 +1048,7 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         switch( GetUserUnits() )
         {
         case EDA_UNITS::INCHES:      formatter = wxT( "r %.6f  theta %.1f" ); break;
+        case EDA_UNITS::MILS:        formatter = wxT( "r %.6f  theta %.1f" ); break;
         case EDA_UNITS::MILLIMETRES: formatter = wxT( "r %.5f  theta %.1f" ); break;
         case EDA_UNITS::UNSCALED:    formatter = wxT( "r %f  theta %f" );     break;
         default:                     wxASSERT( false );                       break;
@@ -1069,6 +1071,11 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     case EDA_UNITS::INCHES:
         absformatter = wxT( "X %.6f  Y %.6f" );
         relformatter = wxT( "dx %.6f  dy %.6f  dist %.4f" );
+        break;
+
+    case EDA_UNITS::MILS:
+        absformatter = wxT( "X %.2f  Y %.2f" );
+        relformatter = wxT( "dx %.2f  dy %.2f  dist %.4f" );
         break;
 
     case EDA_UNITS::MILLIMETRES:

@@ -469,23 +469,12 @@ void EDA_DRAW_FRAME::DisplayToolMsg( const wxString& msg )
 }
 
 
-/*
- * Display the grid status.
- */
 void EDA_DRAW_FRAME::DisplayGridMsg()
 {
     wxString line;
-    wxString gridformatter;
 
-    switch( m_userUnits )
-    {
-    case EDA_UNITS::INCHES:      gridformatter = "grid %.3f"; break;
-    case EDA_UNITS::MILLIMETRES: gridformatter = "grid %.4f"; break;
-    default:                     gridformatter = "grid %f";   break;
-    }
-
-    double grid = To_User_Unit( m_userUnits, GetCanvas()->GetGAL()->GetGridSize().x );
-    line.Printf( gridformatter, grid );
+    line.Printf( "grid %s",
+                 MessageTextFromValue( GetUserUnits(), GetCanvas()->GetGAL()->GetGridSize().x, false ) );
 
     SetStatusText( line, 4 );
 }
@@ -498,6 +487,7 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
     switch( m_userUnits )
     {
     case EDA_UNITS::INCHES:      msg = _( "Inches" ); break;
+    case EDA_UNITS::MILS:        msg = _( "mils" );   break;
     case EDA_UNITS::MILLIMETRES: msg = _( "mm" );     break;
     default:                     msg = _( "Units" );  break;
     }

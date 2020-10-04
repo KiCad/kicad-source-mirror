@@ -119,21 +119,24 @@ double To_User_Unit( EDA_UNITS aUnit, double aValue )
  */
 
 // A lower-precision (for readability) version of StringFromValue()
-wxString MessageTextFromValue( EDA_UNITS aUnits, int aValue, EDA_DATA_TYPE aType )
+wxString MessageTextFromValue( EDA_UNITS aUnits, int aValue, bool aAddUnitLabel,
+                               EDA_DATA_TYPE aType )
 {
-    return MessageTextFromValue( aUnits, double( aValue ), aType );
+    return MessageTextFromValue( aUnits, double( aValue ), aAddUnitLabel, aType );
 }
 
 
 // A lower-precision (for readability) version of StringFromValue()
-wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue, EDA_DATA_TYPE aType )
+wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue, bool aAddUnitLabel,
+                               EDA_DATA_TYPE aType )
 {
-    return MessageTextFromValue( aUnits, double( aValue ), aType );
+    return MessageTextFromValue( aUnits, double( aValue ), aAddUnitLabel, aType );
 }
 
 
 // A lower-precision (for readability) version of StringFromValue()
-wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, EDA_DATA_TYPE aType )
+wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitLabel,
+                               EDA_DATA_TYPE aType )
 {
     wxString      text;
     const wxChar* format;
@@ -165,7 +168,7 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, EDA_DATA_TYPE aT
         format = wxT( "%.3f" );
 #endif
         break;
-    
+
     case EDA_UNITS::MILS:
 #if defined( EESCHEMA )
         format = wxT( "%.0f" );
@@ -181,12 +184,19 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, EDA_DATA_TYPE aT
         format = wxT( "%.3f" );
 #endif
         break;
+
+    case EDA_UNITS::UNSCALED:
+        format = wxT( "%.0f" );
+        break;
     }
 
     text.Printf( format, value );
-    text += " ";
 
-    text += GetAbbreviatedUnitsLabel( aUnits, aType );
+    if( aAddUnitLabel )
+    {
+        text += " ";
+        text += GetAbbreviatedUnitsLabel( aUnits, aType );
+    }
 
     return text;
 }
@@ -505,7 +515,7 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, EDA_DATA_TYPE aType )
         case EDA_DATA_TYPE::VOLUME:
             return _( "cu. mils" );
         }
-    
+
     case EDA_UNITS::INCHES:
         switch( aType )
         {

@@ -115,14 +115,18 @@ wxString AngleToStringDegrees( double aAngle );
  * @param aUnits The units to show the value in.  The unit string is added to the
  *               message text.
  * @param aValue The double value to convert.
+ * @param aAddUnitLabel If true, adds the unit label to the end of the string
  * @param aType Type of the unit being used (e.g. distance, area, etc.)
  * @return The converted string for display in user interface elements.
  */
-wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitLabel = true,
+                               EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
-wxString MessageTextFromValue( EDA_UNITS aUnits, int aValue, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+wxString MessageTextFromValue( EDA_UNITS aUnits, int aValue, bool aAddUnitLabel = true,
+                               EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
-wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue, bool aAddUnitLabel = true,
+                               EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
 /**
  * Function StringFromValue
@@ -162,7 +166,7 @@ double From_User_Unit( EDA_UNITS aUnit, double aValue );
  * @param aTextValue A reference to a wxString object containing the string to convert.
  * @return A double representing that value in internal units
  */
-double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, 
+double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue,
                               EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
 /**
