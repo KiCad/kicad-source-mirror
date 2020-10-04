@@ -181,7 +181,7 @@ wxGridCellAttr* TEXT_MOD_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr
 
 wxString TEXT_MOD_GRID_TABLE::GetValue( int aRow, int aCol )
 {
-    const TEXTE_MODULE& text = this->at( (size_t) aRow );
+    const FP_TEXT& text = this->at((size_t) aRow );
 
     switch( aCol )
     {
@@ -220,7 +220,7 @@ wxString TEXT_MOD_GRID_TABLE::GetValue( int aRow, int aCol )
 
 bool TEXT_MOD_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
 {
-    TEXTE_MODULE& text = this->at( (size_t) aRow );
+    FP_TEXT& text = this->at((size_t) aRow );
 
     switch( aCol )
     {
@@ -236,7 +236,7 @@ bool TEXT_MOD_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
 
 long TEXT_MOD_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
 {
-    TEXTE_MODULE& text = this->at( (size_t) aRow );
+    FP_TEXT& text = this->at((size_t) aRow );
 
     switch( aCol )
     {
@@ -250,8 +250,8 @@ long TEXT_MOD_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
 
 void TEXT_MOD_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 {
-    TEXTE_MODULE& text = this->at( (size_t) aRow );
-    wxPoint       pos;
+    FP_TEXT& text = this->at((size_t) aRow );
+    wxPoint  pos;
 
     switch( aCol )
     {
@@ -299,7 +299,7 @@ void TEXT_MOD_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 
 void TEXT_MOD_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 {
-    TEXTE_MODULE& text = this->at( (size_t) aRow );
+    FP_TEXT& text = this->at((size_t) aRow );
 
     switch( aCol )
     {
@@ -323,7 +323,7 @@ void TEXT_MOD_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 
 void TEXT_MOD_GRID_TABLE::SetValueAsLong( int aRow, int aCol, long aValue )
 {
-    TEXTE_MODULE& text = this->at( (size_t) aRow );
+    FP_TEXT& text = this->at((size_t) aRow );
 
     switch( aCol )
     {

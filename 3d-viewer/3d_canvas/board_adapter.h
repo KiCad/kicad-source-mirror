@@ -40,8 +40,8 @@
 #include <class_track.h>
 #include <wx/gdicmn.h>
 #include <pcb_base_frame.h>
-#include <class_pcb_text.h>
-#include <class_drawsegment.h>
+#include <pcb_text.h>
+#include <pcb_shape.h>
 #include <class_dimension.h>
 #include <class_zone.h>
 #include <class_module.h>
@@ -560,12 +560,12 @@ class BOARD_ADAPTER
                                                     PCB_LAYER_ID aLayerId,
                                                     int aInflateValue );
 
-    void AddShapeWithClearanceToContainer( const TEXTE_PCB *aTextPCB,
+    void AddShapeWithClearanceToContainer( const PCB_TEXT *aText,
                                            CGENERICCONTAINER2D *aDstContainer,
                                            PCB_LAYER_ID aLayerId,
                                            int aClearanceValue );
 
-    void AddShapeWithClearanceToContainer( const DRAWSEGMENT *aDrawSegment,
+    void AddShapeWithClearanceToContainer( const PCB_SHAPE *aShape,
                                            CGENERICCONTAINER2D *aDstContainer,
                                            PCB_LAYER_ID aLayerId,
                                            int aClearanceValue );

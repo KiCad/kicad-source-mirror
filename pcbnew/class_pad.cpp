@@ -42,7 +42,7 @@
 #include <view/view.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <connectivity/connectivity_data.h>
 #include <geometry/polygon_test_point_inside.h>
 #include <convert_to_biu.h>
@@ -407,7 +407,7 @@ void D_PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
 
     if( GetShape() == PAD_SHAPE_CUSTOM )
     {
-        for( const std::shared_ptr<DRAWSEGMENT>& primitive : m_editPrimitives )
+        for( const std::shared_ptr<PCB_SHAPE>& primitive : m_editPrimitives )
         {
             for( SHAPE* shape : primitive->MakeEffectiveShapes() )
             {
@@ -595,7 +595,7 @@ void D_PAD::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 // Flip (mirror) the basic shapes (primitives), in custom pads
 void D_PAD::FlipPrimitives( bool aFlipLeftRight )
 {
-    for( std::shared_ptr<DRAWSEGMENT>& primitive : m_editPrimitives )
+    for( std::shared_ptr<PCB_SHAPE>& primitive : m_editPrimitives )
         primitive->Flip( wxPoint( 0, 0 ), aFlipLeftRight );
 
     m_shapesDirty = true;

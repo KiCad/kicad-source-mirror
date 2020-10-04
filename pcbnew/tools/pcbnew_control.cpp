@@ -36,7 +36,7 @@
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <confirm.h>
 #include <connectivity/connectivity_data.h>
 #include <kicad_clipboard.h>
@@ -553,17 +553,17 @@ void pasteModuleItemsToModEdit( MODULE* aClipModule, BOARD* aBoard,
     {
         if( item->Type() == PCB_FP_SHAPE_T )
         {
-            EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( item );
+            FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
 
-            edge->SetParent( nullptr );
-            edge->SetLocalCoord();
+            shape->SetParent( nullptr );
+            shape->SetLocalCoord();
         }
         else if( item->Type() == PCB_FP_TEXT_T )
         {
-            TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
+            FP_TEXT* text = static_cast<FP_TEXT*>( item );
 
-            if( text->GetType() != TEXTE_MODULE::TEXT_is_DIVERS )
-                text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
+            if( text->GetType() != FP_TEXT::TEXT_is_DIVERS )
+                text->SetType( FP_TEXT::TEXT_is_DIVERS );
 
             if( text->GetText() == "${VALUE}" )
                 text->SetText( aClipModule->GetValue() );
@@ -584,8 +584,8 @@ void pasteModuleItemsToModEdit( MODULE* aClipModule, BOARD* aBoard,
 
     if( !aClipModule->GetReference().IsEmpty() )
     {
-        TEXTE_MODULE* text = new TEXTE_MODULE( aClipModule->Reference() );
-        text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
+        FP_TEXT* text = new FP_TEXT( aClipModule->Reference() );
+        text->SetType( FP_TEXT::TEXT_is_DIVERS );
         text->SetTextAngle( aClipModule->GetOrientation() );
 
         text->SetParent( nullptr );
@@ -597,8 +597,8 @@ void pasteModuleItemsToModEdit( MODULE* aClipModule, BOARD* aBoard,
 
     if( !aClipModule->GetValue().IsEmpty() )
     {
-        TEXTE_MODULE* text = new TEXTE_MODULE( aClipModule->Value() );
-        text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
+        FP_TEXT* text = new FP_TEXT( aClipModule->Value() );
+        text->SetType( FP_TEXT::TEXT_is_DIVERS );
         text->SetTextAngle( aClipModule->GetOrientation() );
 
         text->SetParent( nullptr );
@@ -657,23 +657,23 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 {
                     if( clipDrawItem->Type() == PCB_SHAPE_T )
                     {
-                        DRAWSEGMENT* clipDrawSeg = static_cast<DRAWSEGMENT*>( clipDrawItem );
+                        PCB_SHAPE* clipShape = static_cast<PCB_SHAPE*>( clipDrawItem );
 
                         // Convert to PCB_FP_SHAPE_T
-                        EDGE_MODULE* pastedDrawSeg = new EDGE_MODULE( editModule );
-                        static_cast<DRAWSEGMENT*>( pastedDrawSeg )->SwapData( clipDrawSeg );
-                        pastedDrawSeg->SetLocalCoord();
+                        FP_SHAPE* pastedShape = new FP_SHAPE( editModule );
+                        static_cast<PCB_SHAPE*>( pastedShape )->SwapData( clipShape );
+                        pastedShape->SetLocalCoord();
 
                         // Replace parent nuked by above call to SwapData()
-                        pastedDrawSeg->SetParent( editModule );
-                        pastedItems.push_back( pastedDrawSeg );
+                        pastedShape->SetParent( editModule );
+                        pastedItems.push_back( pastedShape );
                     }
                     else if( clipDrawItem->Type() == PCB_TEXT_T )
                     {
-                        TEXTE_PCB* clipTextItem = static_cast<TEXTE_PCB*>( clipDrawItem );
+                        PCB_TEXT* clipTextItem = static_cast<PCB_TEXT*>( clipDrawItem );
 
                         // Convert to PCB_FP_TEXT_T
-                        TEXTE_MODULE* pastedTextItem = new TEXTE_MODULE( editModule );
+                        FP_TEXT* pastedTextItem = new FP_TEXT( editModule );
                         static_cast<EDA_TEXT*>( pastedTextItem )->SwapText( *clipTextItem );
                         static_cast<EDA_TEXT*>( pastedTextItem )->SwapEffects( *clipTextItem );
 

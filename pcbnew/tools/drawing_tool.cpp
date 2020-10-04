@@ -41,8 +41,8 @@
 #include <preview_items/arc_assistant.h>
 
 #include <class_board.h>
-#include <class_edge_mod.h>
-#include <class_pcb_text.h>
+#include <fp_shape.h>
+#include <pcb_text.h>
 #include <class_dimension.h>
 #include <class_zone.h>
 #include <class_module.h>
@@ -236,7 +236,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
         return 0;
 
     MODULE*          module = dynamic_cast<MODULE*>( m_frame->GetModel() );
-    DRAWSEGMENT*     line = m_editModules ? new EDGE_MODULE( module ) : new DRAWSEGMENT;
+    PCB_SHAPE*       line = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::LINE );
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
@@ -255,7 +255,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
         if( line )
         {
             if( m_editModules )
-                static_cast<EDGE_MODULE*>( line )->SetLocalCoord();
+                static_cast<FP_SHAPE*>( line )->SetLocalCoord();
 
             commit.Add( line );
             commit.Push( _( "Draw a line segment" ) );
@@ -266,7 +266,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
             startingPoint = NULLOPT;
         }
 
-        line = m_editModules ? new EDGE_MODULE( module ) : new DRAWSEGMENT;
+        line = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
         line->SetFlags( IS_NEW );
     }
 
@@ -280,7 +280,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
         return 0;
 
     MODULE*          module = dynamic_cast<MODULE*>( m_frame->GetModel() );
-    DRAWSEGMENT*     rect = m_editModules ? new EDGE_MODULE( module ) : new DRAWSEGMENT;
+    PCB_SHAPE*       rect = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::RECTANGLE );
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
@@ -299,7 +299,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
         if( rect )
         {
             if( m_editModules )
-                static_cast<EDGE_MODULE*>( rect )->SetLocalCoord();
+                static_cast<FP_SHAPE*>( rect )->SetLocalCoord();
 
             commit.Add( rect );
             commit.Push( _( "Draw a rectangle" ) );
@@ -307,7 +307,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, rect );
         }
 
-        rect = m_editModules ? new EDGE_MODULE( module ) : new DRAWSEGMENT;
+        rect = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
         rect->SetFlags(IS_NEW );
         startingPoint = NULLOPT;
     }
@@ -322,7 +322,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
         return 0;
 
     MODULE*          module = dynamic_cast<MODULE*>( m_frame->GetModel() );
-    DRAWSEGMENT*     circle = m_editModules ? new EDGE_MODULE( module ) : new DRAWSEGMENT;
+    PCB_SHAPE*       circle = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::CIRCLE );
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
@@ -341,7 +341,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
         if( circle )
         {
             if( m_editModules )
-                static_cast<EDGE_MODULE*>( circle )->SetLocalCoord();
+                static_cast<FP_SHAPE*>( circle )->SetLocalCoord();
 
             commit.Add( circle );
             commit.Push( _( "Draw a circle" ) );
@@ -349,7 +349,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, circle );
         }
 
-        circle = m_editModules ? new EDGE_MODULE( module ) : new DRAWSEGMENT;
+        circle = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
         circle->SetFlags( IS_NEW );
         startingPoint = NULLOPT;
     }
@@ -364,7 +364,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         return 0;
 
     MODULE*          module = dynamic_cast<MODULE*>( m_frame->GetModel() );
-    DRAWSEGMENT*     arc = m_editModules ? new EDGE_MODULE( module ) : new DRAWSEGMENT;
+    PCB_SHAPE*       arc = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ARC );
     bool             immediateMode = aEvent.HasPosition();
@@ -380,7 +380,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         if( arc )
         {
             if( m_editModules )
-                static_cast<EDGE_MODULE*>( arc )->SetLocalCoord();
+                static_cast<FP_SHAPE*>( arc )->SetLocalCoord();
 
             commit.Add( arc );
             commit.Push( _( "Draw an arc" ) );
@@ -388,7 +388,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, arc );
         }
 
-        arc = m_editModules ? new EDGE_MODULE( module ) : new DRAWSEGMENT;
+        arc = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
         arc->SetFlags( IS_NEW );
         immediateMode = false;
     }
@@ -479,24 +479,24 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 // Init the new item attributes
                 if( m_editModules )
                 {
-                    TEXTE_MODULE* textMod = new TEXTE_MODULE( (MODULE*) m_frame->GetModel() );
+                    FP_TEXT* fpText = new FP_TEXT( (MODULE*) m_frame->GetModel() );
 
-                    textMod->SetLayer( layer );
-                    textMod->SetTextSize( dsnSettings.GetTextSize( layer ) );
-                    textMod->SetTextThickness( dsnSettings.GetTextThickness( layer ) );
-                    textMod->SetItalic( dsnSettings.GetTextItalic( layer ) );
-                    textMod->SetKeepUpright( dsnSettings.GetTextUpright( layer ) );
-                    textMod->SetTextPos( (wxPoint) cursorPos );
+                    fpText->SetLayer( layer );
+                    fpText->SetTextSize( dsnSettings.GetTextSize( layer ) );
+                    fpText->SetTextThickness( dsnSettings.GetTextThickness( layer ) );
+                    fpText->SetItalic( dsnSettings.GetTextItalic( layer ) );
+                    fpText->SetKeepUpright( dsnSettings.GetTextUpright( layer ) );
+                    fpText->SetTextPos( (wxPoint) cursorPos );
 
-                    text = textMod;
+                    text = fpText;
 
-                    DIALOG_TEXT_PROPERTIES textDialog( m_frame, textMod );
+                    DIALOG_TEXT_PROPERTIES textDialog( m_frame, fpText );
                     bool cancelled;
 
                     RunMainStack( [&]()
                                   {
                                       cancelled = !textDialog.ShowModal()
-                                                    || textMod->GetText().IsEmpty();
+                                                    || fpText->GetText().IsEmpty();
                                   } );
 
                     if( cancelled )
@@ -504,7 +504,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                         delete text;
                         text = nullptr;
                     }
-                    else if( textMod->GetTextPos() != (wxPoint) cursorPos )
+                    else if( fpText->GetTextPos() != (wxPoint) cursorPos )
                     {
                         // If the user modified the location then go ahead and place it there.
                         // Otherwise we'll drag.
@@ -513,30 +513,30 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    TEXTE_PCB* textPcb = new TEXTE_PCB( m_frame->GetModel() );
+                    PCB_TEXT* pcbText = new PCB_TEXT( m_frame->GetModel() );
                     // TODO we have to set IS_NEW, otherwise InstallTextPCB.. creates an undo entry :| LEGACY_CLEANUP
-                    textPcb->SetFlags( IS_NEW );
+                    pcbText->SetFlags( IS_NEW );
 
-                    textPcb->SetLayer( layer );
+                    pcbText->SetLayer( layer );
 
                     // Set the mirrored option for layers on the BACK side of the board
                     if( IsBackLayer( layer ) )
-                        textPcb->SetMirrored( true );
+                        pcbText->SetMirrored( true );
 
-                    textPcb->SetTextSize( dsnSettings.GetTextSize( layer ) );
-                    textPcb->SetTextThickness( dsnSettings.GetTextThickness( layer ) );
-                    textPcb->SetItalic( dsnSettings.GetTextItalic( layer ) );
-                    textPcb->SetTextPos( (wxPoint) cursorPos );
+                    pcbText->SetTextSize( dsnSettings.GetTextSize( layer ) );
+                    pcbText->SetTextThickness( dsnSettings.GetTextThickness( layer ) );
+                    pcbText->SetItalic( dsnSettings.GetTextItalic( layer ) );
+                    pcbText->SetTextPos( (wxPoint) cursorPos );
 
                     RunMainStack( [&]()
                                   {
-                                      m_frame->InstallTextOptionsFrame( textPcb );
+                                      m_frame->InstallTextOptionsFrame( pcbText );
                                   } );
 
-                    if( textPcb->GetText().IsEmpty() )
-                        delete textPcb;
+                    if( pcbText->GetText().IsEmpty() )
+                        delete pcbText;
                     else
-                        text = textPcb;
+                        text = pcbText;
                 }
 
                 if( text )
@@ -1158,11 +1158,10 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
 
 /**
- * Update an DRAWSEGMENT from the current state
- * of an Two POINT Geometry Manager
+ * Update an PCB_SHAPE from the current state of an Two POINT Geometry Manager
  */
 static void updateSegmentFromConstructionMgr(
-        const KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER& aMgr, DRAWSEGMENT* aGraphic )
+        const KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER& aMgr, PCB_SHAPE* aGraphic )
 {
     auto vec = aMgr.GetOrigin();
 
@@ -1173,14 +1172,14 @@ static void updateSegmentFromConstructionMgr(
 }
 
 
-bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMENT** aGraphic,
+bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE** aGraphic,
                                 OPT<VECTOR2D> aStartingPoint )
 {
     // Only three shapes are currently supported
     assert( aShape == S_SEGMENT || aShape == S_CIRCLE || aShape == S_RECT );
     GRID_HELPER   grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
     POINT_EDITOR* pointEditor = m_toolMgr->GetTool<POINT_EDITOR>();
-    DRAWSEGMENT*& graphic = *aGraphic;
+    PCB_SHAPE*&   graphic = *aGraphic;
 
     m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
 
@@ -1332,7 +1331,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
             }
             else
             {
-                auto snapItem = dyn_cast<DRAWSEGMENT*>( grid.GetSnapped() );
+                PCB_SHAPE* snapItem = dyn_cast<PCB_SHAPE*>( grid.GetSnapped() );
 
                 if( twoPointManager.GetOrigin() == twoPointManager.GetEnd()
                         || ( evt->IsDblClick( BUT_LEFT ) && aShape == S_SEGMENT ) || snapItem )
@@ -1424,11 +1423,11 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
 
 
 /**
- * Update an arc DRAWSEGMENT from the current state
+ * Update an arc PCB_SHAPE from the current state
  * of an Arc Geometry Manager
  */
 static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER& aMgr,
-                                          DRAWSEGMENT& aArc )
+                                          PCB_SHAPE& aArc )
 {
     auto vec = aMgr.GetOrigin();
 
@@ -1444,9 +1443,9 @@ static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER
 }
 
 
-bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT** aGraphic, bool aImmediateMode )
+bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool aImmediateMode )
 {
-    DRAWSEGMENT*& graphic = *aGraphic;
+    PCB_SHAPE*& graphic = *aGraphic;
     m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
 
     // Arc geometric construction manager

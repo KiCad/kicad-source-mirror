@@ -28,9 +28,9 @@
 #include <class_pcb_group.h>
 #include <class_module.h>
 #include <class_pad.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <class_zone.h>
-#include <class_pcb_text.h>
+#include <pcb_text.h>
 #include <class_marker_pcb.h>
 #include <class_dimension.h>
 #include <class_pcb_target.h>
@@ -414,15 +414,15 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 
     case PCB_SHAPE_T:
     case PCB_FP_SHAPE_T:
-        draw( static_cast<const DRAWSEGMENT*>( item ), aLayer );
+        draw( static_cast<const PCB_SHAPE*>( item ), aLayer );
         break;
 
     case PCB_TEXT_T:
-        draw( static_cast<const TEXTE_PCB*>( item ), aLayer );
+        draw( static_cast<const PCB_TEXT*>( item ), aLayer );
         break;
 
     case PCB_FP_TEXT_T:
-        draw( static_cast<const TEXTE_MODULE*>( item ), aLayer );
+        draw( static_cast<const FP_TEXT*>( item ), aLayer );
         break;
 
     case PCB_MODULE_T:
@@ -985,13 +985,13 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
+void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 {
-    const COLOR4D& color = m_pcbSettings.GetColor( aSegment, aSegment->GetLayer() );
+    const COLOR4D& color = m_pcbSettings.GetColor( aShape, aShape->GetLayer() );
     bool sketch = m_pcbSettings.m_sketchGraphics;
-    int thickness = getLineThickness( aSegment->GetWidth() );
-    VECTOR2D start( aSegment->GetStart() );
-    VECTOR2D end( aSegment->GetEnd() );
+    int thickness = getLineThickness( aShape->GetWidth() );
+    VECTOR2D start( aShape->GetStart() );
+    VECTOR2D end( aShape->GetEnd() );
 
     m_gal->SetIsFill( !sketch );
     m_gal->SetIsStroke( sketch );
@@ -999,7 +999,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
-    switch( aSegment->GetShape() )
+    switch( aShape->GetShape() )
     {
     case S_SEGMENT:
         m_gal->DrawSegment( start, end, thickness );
@@ -1007,9 +1007,9 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 
     case S_RECT:
     {
-        std::vector<wxPoint> pts = aSegment->GetRectCorners();
+        std::vector<wxPoint> pts = aShape->GetRectCorners();
 
-        if( aSegment->GetWidth() > 0 )
+        if( aShape->GetWidth() > 0 )
         {
            m_gal->DrawSegment( pts[0], pts[1], thickness );
            m_gal->DrawSegment( pts[1], pts[2], thickness );
@@ -1030,30 +1030,30 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         break;
 
     case S_ARC:
-        m_gal->DrawArcSegment( start, aSegment->GetRadius(),
-                DECIDEG2RAD( aSegment->GetArcAngleStart() ),
-                DECIDEG2RAD( aSegment->GetArcAngleStart() + aSegment->GetAngle() ), // Change this
+        m_gal->DrawArcSegment( start, aShape->GetRadius(),
+                DECIDEG2RAD( aShape->GetArcAngleStart() ),
+                DECIDEG2RAD( aShape->GetArcAngleStart() + aShape->GetAngle() ), // Change this
                 thickness );
         break;
 
     case S_CIRCLE:
         if( sketch )
         {
-            m_gal->DrawCircle( start, aSegment->GetRadius() - thickness / 2 );
-            m_gal->DrawCircle( start, aSegment->GetRadius() + thickness / 2 );
+            m_gal->DrawCircle( start, aShape->GetRadius() - thickness / 2 );
+            m_gal->DrawCircle( start, aShape->GetRadius() + thickness / 2 );
         }
         else
         {
             m_gal->SetLineWidth( thickness );
-            m_gal->SetIsFill( aSegment->GetWidth() == 0 );
-            m_gal->SetIsStroke( aSegment->GetWidth() > 0 );
-            m_gal->DrawCircle( start, aSegment->GetRadius() );
+            m_gal->SetIsFill( aShape->GetWidth() == 0 );
+            m_gal->SetIsStroke( aShape->GetWidth() > 0 );
+            m_gal->DrawCircle( start, aShape->GetRadius() );
         }
         break;
 
     case S_POLYGON:
     {
-        SHAPE_POLY_SET& shape = const_cast<DRAWSEGMENT*>( aSegment )->GetPolyShape();
+        SHAPE_POLY_SET& shape = const_cast<PCB_SHAPE*>( aShape )->GetPolyShape();
 
         if( shape.OutlineCount() == 0 )
             break;
@@ -1069,7 +1069,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 
         m_gal->Save();
 
-        if( MODULE* module = aSegment->GetParentModule() )
+        if( MODULE* module = aShape->GetParentModule() )
         {
             m_gal->Translate( module->GetPosition() );
             m_gal->Rotate( -module->GetOrientationRadians() );
@@ -1080,7 +1080,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         if( sketch )
             m_gal->SetIsFill( false );
         else
-            m_gal->SetIsFill( aSegment->IsPolygonFilled() );
+            m_gal->SetIsFill( aShape->IsPolygonFilled() );
 
         m_gal->SetIsStroke( true );
         m_gal->DrawPolygon( shape );
@@ -1095,10 +1095,10 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         m_gal->SetLineWidth( thickness );
         // Use thickness as filter value to convert the curve to polyline
         // when the curve is not supported
-        m_gal->DrawCurve( VECTOR2D( aSegment->GetStart() ),
-                          VECTOR2D( aSegment->GetBezControl1() ),
-                          VECTOR2D( aSegment->GetBezControl2() ),
-                          VECTOR2D( aSegment->GetEnd() ), thickness );
+        m_gal->DrawCurve( VECTOR2D( aShape->GetStart() ),
+                          VECTOR2D( aShape->GetBezControl1() ),
+                          VECTOR2D( aShape->GetBezControl2() ),
+                          VECTOR2D( aShape->GetEnd() ), thickness );
         break;
 
     case S_LAST:
@@ -1107,7 +1107,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
+void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 {
     wxString shownText( aText->GetShownText() );
 
@@ -1136,7 +1136,7 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
+void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
 {
     wxString shownText( aText->GetShownText() );
 
@@ -1379,8 +1379,8 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
         }
     }
     // Draw text
-    TEXTE_PCB& text = aDimension->Text();
-    VECTOR2D position( text.GetTextPos().x, text.GetTextPos().y );
+    PCB_TEXT& text = aDimension->Text();
+    VECTOR2D  position( text.GetTextPos().x, text.GetTextPos().y );
 
     if( m_pcbSettings.m_sketchText )
     {

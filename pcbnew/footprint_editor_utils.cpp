@@ -24,7 +24,7 @@
 #include <3d_viewer/eda_3d_viewer.h>
 #include <board_commit.h>
 #include <class_board.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <class_module.h>
 #include <confirm.h>
 #include <dialog_create_array.h>
@@ -81,17 +81,17 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
 
         // if either m_Reference or m_Value are gone, reinstall them -
         // otherwise you cannot see what you are doing on board
-        TEXTE_MODULE* ref = &fp->Reference();
-        TEXTE_MODULE* val = &fp->Value();
+        FP_TEXT* ref = &fp->Reference();
+        FP_TEXT* val = &fp->Value();
 
         if( val && ref )
         {
-            ref->SetType( TEXTE_MODULE::TEXT_is_REFERENCE );    // just in case ...
+            ref->SetType( FP_TEXT::TEXT_is_REFERENCE );    // just in case ...
 
             if( ref->GetLength() == 0 )
                 ref->SetText( wxT( "Ref**" ) );
 
-            val->SetType( TEXTE_MODULE::TEXT_is_VALUE );        // just in case ...
+            val->SetType( FP_TEXT::TEXT_is_VALUE );        // just in case ...
 
             if( val->GetLength() == 0 )
                 val->SetText( wxT( "Val**" ) );

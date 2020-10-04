@@ -27,7 +27,7 @@
 #include <base_units.h>
 #include <wx/grid.h>
 #include <grid_tricks.h>
-#include <class_text_mod.h>
+#include <fp_text.h>
 
 
 class MODULE;
@@ -51,7 +51,7 @@ enum TEXT_MOD_COL_ORDER
 };
 
 
-class TEXT_MOD_GRID_TABLE : public wxGridTableBase, public std::vector<TEXTE_MODULE>
+class TEXT_MOD_GRID_TABLE : public wxGridTableBase, public std::vector<FP_TEXT>
 {
 public:
     TEXT_MOD_GRID_TABLE( EDA_UNITS userUnits, PCB_BASE_FRAME* aFrame );

@@ -28,8 +28,8 @@
 #include <board_commit.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <class_pcb_text.h>
-#include <class_text_mod.h>
+#include <pcb_text.h>
+#include <fp_text.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <wx/valnum.h>
@@ -41,7 +41,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_Parent( aParent ),
     m_item( aItem ),
     m_edaText( nullptr ),
-    m_modText( nullptr ),
+    m_fpText( nullptr ),
     m_pcbText( nullptr ),
     m_textWidth( aParent, m_SizeXLabel, m_SizeXCtrl, m_SizeXUnits, true ),
     m_textHeight( aParent, m_SizeYLabel, m_SizeYCtrl, m_SizeYUnits, true ),
@@ -69,14 +69,14 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     {
         title = _( "Footprint Text Properties" );
 
-        m_modText = (TEXTE_MODULE*) m_item;
-        m_edaText = static_cast<EDA_TEXT*>( m_modText );
+        m_fpText = (FP_TEXT*) m_item;
+        m_edaText = static_cast<EDA_TEXT*>( m_fpText );
 
-        switch( m_modText->GetType() )
+        switch( m_fpText->GetType() )
         {
-        case TEXTE_MODULE::TEXT_is_REFERENCE: m_TextLabel->SetLabel( _( "Reference:" ) ); break;
-        case TEXTE_MODULE::TEXT_is_VALUE:     m_TextLabel->SetLabel( _( "Value:" ) );     break;
-        case TEXTE_MODULE::TEXT_is_DIVERS:    m_TextLabel->SetLabel( _( "Text:" ) );      break;
+        case FP_TEXT::TEXT_is_REFERENCE: m_TextLabel->SetLabel( _( "Reference:" ) ); break;
+        case FP_TEXT::TEXT_is_VALUE:     m_TextLabel->SetLabel( _( "Value:" ) );     break;
+        case FP_TEXT::TEXT_is_DIVERS:    m_TextLabel->SetLabel( _( "Text:" ) );      break;
         }
 
         SetInitialFocus( m_SingleLineText );
@@ -86,7 +86,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     {
         title = _( "Text Properties" );
 
-        m_pcbText = (TEXTE_PCB*) aItem;
+        m_pcbText = (PCB_TEXT*) aItem;
         m_edaText = static_cast<EDA_TEXT*>( m_pcbText );
 
         SetInitialFocus( m_MultiLineText );
@@ -234,7 +234,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     {
         m_SingleLineText->SetValue( m_edaText->GetText() );
 
-        if( m_modText && m_modText->GetType() == TEXTE_MODULE::TEXT_is_REFERENCE )
+        if( m_fpText && m_fpText->GetType() == FP_TEXT::TEXT_is_REFERENCE )
             SelectReferenceNumber( static_cast<wxTextEntry*>( m_SingleLineText ) );
         else
             m_SingleLineText->SetSelection( -1, -1 );
@@ -248,9 +248,9 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         m_MultiLineText->SetSelection( -1, -1 );
     }
 
-    if( m_item->Type() == PCB_FP_TEXT_T && m_modText )
+    if( m_item->Type() == PCB_FP_TEXT_T && m_fpText )
     {
-        MODULE*  module = dynamic_cast<MODULE*>( m_modText->GetParent() );
+        MODULE*  module = dynamic_cast<MODULE*>( m_fpText->GetParent() );
         wxString msg;
 
         if( module )
@@ -289,8 +289,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     m_OrientValue = m_edaText->GetTextAngleDegrees();
     m_Mirrored->SetValue( m_edaText->IsMirrored() );
 
-    if( m_modText )
-        m_KeepUpright->SetValue( m_modText->IsKeepUpright() );
+    if( m_fpText )
+        m_KeepUpright->SetValue( m_fpText->IsKeepUpright() );
 
     return DIALOG_TEXT_PROPERTIES_BASE::TransferDataToWindow();
 }
@@ -348,8 +348,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     m_edaText->SetTextThickness( m_thickness.GetValue() );
     m_edaText->SetTextPos( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
 
-    if( m_modText )
-        m_modText->SetLocalCoord();
+    if( m_fpText )
+        m_fpText->SetLocalCoord();
 
     // Test for acceptable values for thickness and size and clamp if fails
     int maxPenWidth = Clamp_Text_PenSize( m_edaText->GetTextThickness(), m_edaText->GetTextSize() );
@@ -366,8 +366,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     m_edaText->SetTextAngle( KiROUND( m_OrientValue * 10.0 ) );
     m_edaText->SetMirrored( m_Mirrored->GetValue() );
 
-    if( m_modText )
-        m_modText->SetKeepUpright( m_KeepUpright->GetValue() );
+    if( m_fpText )
+        m_fpText->SetKeepUpright( m_KeepUpright->GetValue() );
 
     switch( m_JustifyChoice->GetSelection() )
     {

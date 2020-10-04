@@ -1053,7 +1053,7 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
 
     for( size_t i = 2; i < settings.m_DefaultFPTextItems.size(); ++i )
     {
-        TEXTE_MODULE* textItem = new TEXTE_MODULE( module );
+        FP_TEXT* textItem = new FP_TEXT( module );
         textItem->SetText( settings.m_DefaultFPTextItems[i].m_Text );
         textItem->SetVisible( settings.m_DefaultFPTextItems[i].m_Visible );
         txt_layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[i].m_Layer;
@@ -1075,8 +1075,8 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
             {
                 if( aChild->Type() == PCB_FP_TEXT_T )
                 {
-                    TEXTE_MODULE* textItem = static_cast<TEXTE_MODULE*>( aChild );
-                    PCB_LAYER_ID  layer = textItem->GetLayer();
+                    FP_TEXT*     textItem = static_cast<FP_TEXT*>( aChild );
+                    PCB_LAYER_ID layer = textItem->GetLayer();
 
                     textItem->SetTextThickness( settings.GetTextThickness( layer ) );
                     textItem->SetTextSize( settings.GetTextSize( layer ) );

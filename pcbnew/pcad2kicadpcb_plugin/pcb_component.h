@@ -38,9 +38,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_edge_mod.h>
 #include <class_zone.h>
-#include <class_pcb_text.h>
 
 namespace PCAD2KICAD {
 

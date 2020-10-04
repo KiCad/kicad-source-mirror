@@ -61,9 +61,9 @@ public:
     static SELECTION_CONDITION SameLayer();
 
     /**
-     * Creates a functor that tests if the selection contains DRAWSEGMENT* items of certain shapes
+     * Creates a functor that tests if the selection contains PCB_SHAPE* items of certain shapes
      * This implicitly includes an OnlyType( PCB_SHAPE_T ) as part of the test
-     * @param aTypes is a list of allowed DRAWSEGMENT shapes (@see PCB_SHAPE_TYPE_T)
+     * @param aTypes is a list of allowed PCB_SHAPE shapes (@see PCB_SHAPE_TYPE_T)
      * @return functor testing if selected items match the given list of allowed shapes
      */
     static SELECTION_CONDITION OnlyGraphicShapeTypes( const std::set<PCB_SHAPE_TYPE_T> aTypes );

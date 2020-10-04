@@ -40,9 +40,6 @@
 
 class PCB_TARGET;
 class MODULE;
-class DRAWSEGMENT;
-class NETINFO;
-class TEXTE_PCB;
 class TRACK;
 class NETCLASS;
 class NETCLASSES;
@@ -50,8 +47,7 @@ class ZONE_CONTAINER;
 class DIMENSION;
 class NETINFO_ITEM;
 class NETINFO_MAPPING;
-class TEXTE_MODULE;
-class EDGE_MODULE;
+class FP_TEXT;
 class TRACK;
 class D_PAD;
 struct LP_CACHE;
@@ -196,7 +192,7 @@ protected:
 
     void load3D( MODULE* aModule );
     void loadPAD( MODULE* aModule );
-    void loadMODULE_TEXT( TEXTE_MODULE* aText );
+    void loadMODULE_TEXT( FP_TEXT* aText );
     void loadMODULE_EDGE( MODULE* aModule );
 
     void loadPCB_LINE();

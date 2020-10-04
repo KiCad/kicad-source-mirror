@@ -20,7 +20,6 @@
 
 #include <common.h>
 #include <class_board.h>
-#include <class_drawsegment.h>
 #include <class_pad.h>
 #include <class_track.h>
 

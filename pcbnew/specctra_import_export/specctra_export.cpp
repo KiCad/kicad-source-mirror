@@ -36,18 +36,17 @@
 #include <gestfich.h>           // EDA_FileSelector()
 #include <trigo.h>              // RotatePoint()
 #include <macros.h>
-#include <math/util.h>      // for KiROUND
+#include <math/util.h>          // for KiROUND
 
 #include <set>                  // std::set
 #include <map>                  // std::map
 
 #include <class_board.h>
 #include <class_module.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <class_track.h>
 #include <class_zone.h>
 #include <base_units.h>
-#include <wildcards_and_files_ext.h>
 #include <collectors.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/convex_hull.h>
@@ -703,9 +702,9 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 
     for( int i = 0; i<moduleItems.GetCount(); ++i )
     {
-        EDGE_MODULE*    graphic = (EDGE_MODULE*) moduleItems[i];
-        SHAPE*          outline;
-        PATH*           path;
+        FP_SHAPE* graphic = (FP_SHAPE*) moduleItems[i];
+        SHAPE*    outline;
+        PATH*     path;
 
         switch( graphic->GetShape() )
         {

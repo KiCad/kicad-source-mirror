@@ -37,7 +37,6 @@
 #include <pcbnew_id.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <class_drawsegment.h>
 #include <collectors.h>
 #include <pcb_draw_panel_gal.h>
 #include <math/vector2d.h>

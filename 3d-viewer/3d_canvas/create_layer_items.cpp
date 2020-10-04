@@ -38,8 +38,8 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_pad.h>
-#include <class_pcb_text.h>
-#include <class_edge_mod.h>
+#include <pcb_text.h>
+#include <fp_shape.h>
 #include <class_zone.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
@@ -636,7 +636,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             {
             case PCB_SHAPE_T:
             {
-                AddShapeWithClearanceToContainer( (DRAWSEGMENT*)item,
+                AddShapeWithClearanceToContainer( (PCB_SHAPE*)item,
                                                   layerContainer,
                                                   curr_layer_id,
                                                   0 );
@@ -644,7 +644,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             break;
 
             case PCB_TEXT_T:
-                AddShapeWithClearanceToContainer( (TEXTE_PCB*) item,
+                AddShapeWithClearanceToContainer( (PCB_TEXT*) item,
                                                   layerContainer,
                                                   curr_layer_id,
                                                   0 );
@@ -688,12 +688,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 switch( item->Type() )
                 {
                 case PCB_SHAPE_T:
-                    ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon( *layerPoly,
-                                                                                   cur_layer_id, 0 );
+                    ( (PCB_SHAPE*) item )->TransformShapeWithClearanceToPolygon( *layerPoly,
+                                                                                 cur_layer_id, 0 );
                     break;
 
                 case PCB_TEXT_T:
-                    ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygonSet( *layerPoly, 0 );
+                    ( (PCB_TEXT*) item )->TransformShapeWithClearanceToPolygonSet( *layerPoly, 0 );
                     break;
 
                 default:
@@ -933,14 +933,14 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             switch( item->Type() )
             {
             case PCB_SHAPE_T:
-                AddShapeWithClearanceToContainer( (DRAWSEGMENT*)item,
+                AddShapeWithClearanceToContainer( (PCB_SHAPE*) item,
                                                   layerContainer,
                                                   curr_layer_id,
                                                   0 );
                 break;
 
             case PCB_TEXT_T:
-                AddShapeWithClearanceToContainer( (TEXTE_PCB*) item,
+                AddShapeWithClearanceToContainer( (PCB_TEXT*) item,
                                                   layerContainer,
                                                   curr_layer_id,
                                                   0 );
@@ -971,12 +971,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             switch( item->Type() )
             {
             case PCB_SHAPE_T:
-                ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon( *layerPoly,
-                                                                               curr_layer_id, 0 );
+                ( (PCB_SHAPE*) item )->TransformShapeWithClearanceToPolygon( *layerPoly,
+                                                                             curr_layer_id, 0 );
                 break;
 
             case PCB_TEXT_T:
-                ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygonSet( *layerPoly, 0 );
+                ( (PCB_TEXT*) item )->TransformShapeWithClearanceToPolygonSet( *layerPoly, 0 );
                 break;
 
             default:

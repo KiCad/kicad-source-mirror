@@ -28,7 +28,7 @@ using namespace std::placeholders;
 
 #include <class_board.h>
 #include <class_dimension.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
@@ -553,30 +553,30 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
             if( !m_magneticSettings->graphics )
                 break;
 
-            DRAWSEGMENT* dseg = static_cast<DRAWSEGMENT*>( aItem );
-            VECTOR2I start = dseg->GetStart();
-            VECTOR2I end = dseg->GetEnd();
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( aItem );
+            VECTOR2I   start = shape->GetStart();
+            VECTOR2I   end = shape->GetEnd();
 
-            switch( dseg->GetShape() )
+            switch( shape->GetShape() )
             {
                 case S_CIRCLE:
                 {
                     int r = ( start - end ).EuclideanNorm();
 
-                    addAnchor( start, ORIGIN | SNAPPABLE, dseg );
-                    addAnchor( start + VECTOR2I( -r, 0 ), OUTLINE | SNAPPABLE, dseg );
-                    addAnchor( start + VECTOR2I( r, 0 ), OUTLINE | SNAPPABLE, dseg );
-                    addAnchor( start + VECTOR2I( 0, -r ), OUTLINE | SNAPPABLE, dseg );
-                    addAnchor( start + VECTOR2I( 0, r ), OUTLINE | SNAPPABLE, dseg );
+                    addAnchor( start, ORIGIN | SNAPPABLE, shape );
+                    addAnchor( start + VECTOR2I( -r, 0 ), OUTLINE | SNAPPABLE, shape );
+                    addAnchor( start + VECTOR2I( r, 0 ), OUTLINE | SNAPPABLE, shape );
+                    addAnchor( start + VECTOR2I( 0, -r ), OUTLINE | SNAPPABLE, shape );
+                    addAnchor( start + VECTOR2I( 0, r ), OUTLINE | SNAPPABLE, shape );
                     break;
                 }
 
                 case S_ARC:
-                    origin = dseg->GetCenter();
-                    addAnchor( dseg->GetArcStart(), CORNER | SNAPPABLE, dseg );
-                    addAnchor( dseg->GetArcEnd(), CORNER | SNAPPABLE, dseg );
-                    addAnchor( dseg->GetArcMid(), CORNER | SNAPPABLE, dseg );
-                    addAnchor( origin, ORIGIN | SNAPPABLE, dseg );
+                    origin = shape->GetCenter();
+                    addAnchor( shape->GetArcStart(), CORNER | SNAPPABLE, shape );
+                    addAnchor( shape->GetArcEnd(), CORNER | SNAPPABLE, shape );
+                    addAnchor( shape->GetArcMid(), CORNER | SNAPPABLE, shape );
+                    addAnchor( origin, ORIGIN | SNAPPABLE, shape );
                     break;
 
                 case S_RECT:
@@ -588,40 +588,40 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
                     SEG third( end, point3 );
                     SEG fourth( point3, start );
 
-                    addAnchor( first.A,         CORNER | SNAPPABLE, dseg );
-                    addAnchor( first.Center(),  CORNER | SNAPPABLE, dseg );
-                    addAnchor( second.A,        CORNER | SNAPPABLE, dseg );
-                    addAnchor( second.Center(), CORNER | SNAPPABLE, dseg );
-                    addAnchor( third.A,         CORNER | SNAPPABLE, dseg );
-                    addAnchor( third.Center(),  CORNER | SNAPPABLE, dseg );
-                    addAnchor( fourth.A,        CORNER | SNAPPABLE, dseg );
-                    addAnchor( fourth.Center(), CORNER | SNAPPABLE, dseg );
+                    addAnchor( first.A,         CORNER | SNAPPABLE, shape );
+                    addAnchor( first.Center(),  CORNER | SNAPPABLE, shape );
+                    addAnchor( second.A,        CORNER | SNAPPABLE, shape );
+                    addAnchor( second.Center(), CORNER | SNAPPABLE, shape );
+                    addAnchor( third.A,         CORNER | SNAPPABLE, shape );
+                    addAnchor( third.Center(),  CORNER | SNAPPABLE, shape );
+                    addAnchor( fourth.A,        CORNER | SNAPPABLE, shape );
+                    addAnchor( fourth.Center(), CORNER | SNAPPABLE, shape );
                     break;
                 }
 
                 case S_SEGMENT:
                     origin.x = start.x + ( start.x - end.x ) / 2;
                     origin.y = start.y + ( start.y - end.y ) / 2;
-                    addAnchor( start, CORNER | SNAPPABLE, dseg );
-                    addAnchor( end, CORNER | SNAPPABLE, dseg );
-                    addAnchor( SEG( start, end ).Center(), CORNER | SNAPPABLE, dseg );
-                    addAnchor( origin, ORIGIN, dseg );
+                    addAnchor( start, CORNER | SNAPPABLE, shape );
+                    addAnchor( end, CORNER | SNAPPABLE, shape );
+                    addAnchor( SEG( start, end ).Center(), CORNER | SNAPPABLE, shape );
+                    addAnchor( origin, ORIGIN, shape );
                     break;
 
                 case S_POLYGON:
-                    for( const VECTOR2I& p : dseg->BuildPolyPointsList() )
-                        addAnchor( p, CORNER | SNAPPABLE, dseg );
+                    for( const VECTOR2I& p : shape->BuildPolyPointsList() )
+                        addAnchor( p, CORNER | SNAPPABLE, shape );
 
                     break;
 
                 case S_CURVE:
-                    addAnchor( start, CORNER | SNAPPABLE, dseg );
-                    addAnchor( end, CORNER | SNAPPABLE, dseg );
+                    addAnchor( start, CORNER | SNAPPABLE, shape );
+                    addAnchor( end, CORNER | SNAPPABLE, shape );
                     KI_FALLTHROUGH;
 
                 default:
-                    origin = dseg->GetStart();
-                    addAnchor( origin, ORIGIN | SNAPPABLE, dseg );
+                    origin = shape->GetStart();
+                    addAnchor( origin, ORIGIN | SNAPPABLE, shape );
                     break;
             }
             break;

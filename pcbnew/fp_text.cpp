@@ -30,7 +30,7 @@
 #include <class_module.h>
 #include <settings/settings_manager.h>
 
-TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
+FP_TEXT::FP_TEXT( MODULE* parent, TEXT_TYPE text_type ) :
     BOARD_ITEM( parent, PCB_FP_TEXT_T ),
     EDA_TEXT()
 {
@@ -59,18 +59,18 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
 }
 
 
-TEXTE_MODULE::~TEXTE_MODULE()
+FP_TEXT::~FP_TEXT()
 {
 }
 
 
-void TEXTE_MODULE::SetTextAngle( double aAngle )
+void FP_TEXT::SetTextAngle( double aAngle )
 {
     EDA_TEXT::SetTextAngle( NormalizeAngle360Min( aAngle ) );
 }
 
 
-bool TEXTE_MODULE::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool FP_TEXT::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
     EDA_RECT rect = GetTextBox();
     wxPoint location = aPoint;
@@ -83,7 +83,7 @@ bool TEXTE_MODULE::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
 }
 
 
-bool TEXTE_MODULE::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy ) const
+bool FP_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy ) const
 {
     EDA_RECT rect = aRect;
 
@@ -96,7 +96,7 @@ bool TEXTE_MODULE::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccu
 }
 
 
-void TEXTE_MODULE::KeepUpright( double aOldOrientation, double aNewOrientation )
+void FP_TEXT::KeepUpright( double aOldOrientation, double aNewOrientation )
 {
     if( !IsKeepUpright() )
         return;
@@ -123,7 +123,7 @@ void TEXTE_MODULE::KeepUpright( double aOldOrientation, double aNewOrientation )
 }
 
 
-void TEXTE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
+void FP_TEXT::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     // Used in footprint editing
     // Note also in module editor, m_Pos0 = m_Pos
@@ -137,7 +137,7 @@ void TEXTE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 }
 
 
-void TEXTE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void FP_TEXT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     // flipping the footprint is relative to the X axis
     if( aFlipLeftRight )
@@ -159,7 +159,7 @@ void TEXTE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     }
 }
 
-bool TEXTE_MODULE::IsParentFlipped() const
+bool FP_TEXT::IsParentFlipped() const
 {
     if( GetParent() &&  GetParent()->GetLayer() == B_Cu )
         return true;
@@ -167,7 +167,7 @@ bool TEXTE_MODULE::IsParentFlipped() const
 }
 
 
-void TEXTE_MODULE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
+void FP_TEXT::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
 {
     // Used in modedit, to transform the footprint
     // the mirror is around the Y axis or X axis if aMirrorAroundXAxis = true
@@ -181,20 +181,20 @@ void TEXTE_MODULE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
 }
 
 
-void TEXTE_MODULE::Move( const wxPoint& aMoveVector )
+void FP_TEXT::Move( const wxPoint& aMoveVector )
 {
     Offset( aMoveVector );
     SetLocalCoord();
 }
 
 
-int TEXTE_MODULE::GetLength() const
+int FP_TEXT::GetLength() const
 {
     return GetText().Len();
 }
 
 
-void TEXTE_MODULE::SetDrawCoord()
+void FP_TEXT::SetDrawCoord()
 {
     const MODULE* module = static_cast<const MODULE*>( m_Parent );
 
@@ -213,7 +213,7 @@ void TEXTE_MODULE::SetDrawCoord()
 }
 
 
-void TEXTE_MODULE::SetLocalCoord()
+void FP_TEXT::SetLocalCoord()
 {
     const MODULE* module = static_cast<const MODULE*>( m_Parent );
 
@@ -231,7 +231,7 @@ void TEXTE_MODULE::SetLocalCoord()
     }
 }
 
-const EDA_RECT TEXTE_MODULE::GetBoundingBox() const
+const EDA_RECT FP_TEXT::GetBoundingBox() const
 {
     double   angle = GetDrawRotation();
     EDA_RECT text_area = GetTextBox();
@@ -243,7 +243,7 @@ const EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 }
 
 
-double TEXTE_MODULE::GetDrawRotation() const
+double FP_TEXT::GetDrawRotation() const
 {
     MODULE* module = (MODULE*) m_Parent;
     double  rotation = GetTextAngle();
@@ -270,7 +270,7 @@ double TEXTE_MODULE::GetDrawRotation() const
 
 
 // see class_text_mod.h
-void TEXTE_MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     MODULE* module = (MODULE*) m_Parent;
 
@@ -324,7 +324,7 @@ void TEXTE_MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
 }
 
 
-wxString TEXTE_MODULE::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString FP_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     switch( m_Type )
     {
@@ -345,19 +345,19 @@ wxString TEXTE_MODULE::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF TEXTE_MODULE::GetMenuImage() const
+BITMAP_DEF FP_TEXT::GetMenuImage() const
 {
     return footprint_text_xpm;
 }
 
 
-EDA_ITEM* TEXTE_MODULE::Clone() const
+EDA_ITEM* FP_TEXT::Clone() const
 {
-    return new TEXTE_MODULE( *this );
+    return new FP_TEXT( *this );
 }
 
 
-const BOX2I TEXTE_MODULE::ViewBBox() const
+const BOX2I FP_TEXT::ViewBBox() const
 {
     double   angle = GetDrawRotation();
     EDA_RECT text_area = GetTextBox();
@@ -369,7 +369,7 @@ const BOX2I TEXTE_MODULE::ViewBBox() const
 }
 
 
-void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
+void FP_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     if( IsVisible() )
         aLayers[0] = GetLayer();
@@ -380,7 +380,7 @@ void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-double TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double FP_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     constexpr double HIDE = (double)std::numeric_limits<double>::max();
 
@@ -418,7 +418,7 @@ double TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-wxString TEXTE_MODULE::GetShownText( int aDepth ) const
+wxString FP_TEXT::GetShownText( int aDepth ) const
 {
     const MODULE* module = static_cast<MODULE*>( GetParent() );
     wxASSERT( module );
@@ -454,7 +454,7 @@ wxString TEXTE_MODULE::GetShownText( int aDepth ) const
 }
 
 
-std::shared_ptr<SHAPE> TEXTE_MODULE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> FP_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
     return GetEffectiveTextShape();
 }
@@ -465,10 +465,10 @@ static struct TEXTE_MODULE_DESC
     TEXTE_MODULE_DESC()
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        REGISTER_TYPE( TEXTE_MODULE );
-        propMgr.AddTypeCast( new TYPE_CAST<TEXTE_MODULE, BOARD_ITEM> );
-        propMgr.AddTypeCast( new TYPE_CAST<TEXTE_MODULE, EDA_TEXT> );
-        propMgr.InheritsAfter( TYPE_HASH( TEXTE_MODULE ), TYPE_HASH( BOARD_ITEM ) );
-        propMgr.InheritsAfter( TYPE_HASH( TEXTE_MODULE ), TYPE_HASH( EDA_TEXT ) );
+        REGISTER_TYPE( FP_TEXT );
+        propMgr.AddTypeCast( new TYPE_CAST<FP_TEXT, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<FP_TEXT, EDA_TEXT> );
+        propMgr.InheritsAfter( TYPE_HASH( FP_TEXT ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( FP_TEXT ), TYPE_HASH( EDA_TEXT ) );
     }
 } _TEXTE_MODULE_DESC;

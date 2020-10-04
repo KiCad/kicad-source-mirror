@@ -30,7 +30,7 @@
 #include <bitmaps.h>
 #include <class_board_item.h>
 #include <class_module.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <board_commit.h>
 #include <dialogs/dialog_push_pad_properties.h>
 #include <tools/pcb_actions.h>
@@ -571,24 +571,24 @@ PCB_LAYER_ID PAD_TOOL::explodePad( D_PAD* aPad )
     {
         commit.Modify( aPad );
 
-        for( const std::shared_ptr<DRAWSEGMENT>& primitive : aPad->GetPrimitives() )
+        for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives() )
         {
-            EDGE_MODULE* ds = new EDGE_MODULE( board()->GetFirstModule() );
+            FP_SHAPE* shape = new FP_SHAPE( board()->GetFirstModule() );
 
-            ds->SetShape( primitive->GetShape() );
-            ds->SetWidth( primitive->GetWidth() );
-            ds->SetStart( primitive->GetStart() );
-            ds->SetEnd( primitive->GetEnd() );
-            ds->SetBezControl1( primitive->GetBezControl1() );
-            ds->SetBezControl2( primitive->GetBezControl2() );
-            ds->SetAngle( primitive->GetAngle() );
-            ds->SetPolyShape( primitive->GetPolyShape() );
-            ds->SetLocalCoord();
-            ds->Move( aPad->GetPosition() );
-            ds->Rotate( aPad->GetPosition(), aPad->GetOrientation() );
-            ds->SetLayer( layer );
+            shape->SetShape( primitive->GetShape() );
+            shape->SetWidth( primitive->GetWidth() );
+            shape->SetStart( primitive->GetStart() );
+            shape->SetEnd( primitive->GetEnd() );
+            shape->SetBezControl1( primitive->GetBezControl1() );
+            shape->SetBezControl2( primitive->GetBezControl2() );
+            shape->SetAngle( primitive->GetAngle() );
+            shape->SetPolyShape( primitive->GetPolyShape() );
+            shape->SetLocalCoord();
+            shape->Move( aPad->GetPosition() );
+            shape->Rotate( aPad->GetPosition(), aPad->GetOrientation() );
+            shape->SetLayer( layer );
 
-            commit.Add( ds );
+            commit.Add( shape );
         }
 
         aPad->SetShape( aPad->GetAnchorPadShape() );
@@ -604,14 +604,14 @@ PCB_LAYER_ID PAD_TOOL::explodePad( D_PAD* aPad )
 
 void PAD_TOOL::recombinePad( D_PAD* aPad )
 {
-    auto findNext = [&]( PCB_LAYER_ID aLayer ) -> EDGE_MODULE*
+    auto findNext = [&]( PCB_LAYER_ID aLayer ) -> FP_SHAPE*
                     {
                         SHAPE_POLY_SET padPoly;
                         aPad->TransformShapeWithClearanceToPolygon( padPoly, aLayer, 0 );
 
                         for( BOARD_ITEM* item : board()->GetFirstModule()->GraphicalItems() )
                         {
-                            DRAWSEGMENT* draw = dynamic_cast<DRAWSEGMENT*>( item );
+                            PCB_SHAPE* draw = dynamic_cast<PCB_SHAPE*>( item );
 
                             if( !draw || ( draw->GetEditFlags() & STRUCT_DELETED ) )
                                 continue;
@@ -624,7 +624,7 @@ void PAD_TOOL::recombinePad( D_PAD* aPad )
                             drawPoly.BooleanIntersection( padPoly, SHAPE_POLY_SET::PM_FAST );
 
                             if( !drawPoly.IsEmpty() )
-                                return (EDGE_MODULE*) item;
+                                return (FP_SHAPE*) item;
                         }
 
                         return nullptr;
@@ -640,7 +640,7 @@ void PAD_TOOL::recombinePad( D_PAD* aPad )
     else
         layer = *aPad->GetLayerSet().UIOrder();
 
-    while( EDGE_MODULE* edge = findNext( layer ) )
+    while( FP_SHAPE* fpShape = findNext( layer ) )
     {
         commit.Modify( aPad );
 
@@ -664,7 +664,7 @@ void PAD_TOOL::recombinePad( D_PAD* aPad )
             aPad->SetSize( aPad->GetDrillSize() + minAnnulus );
             aPad->SetOffset( wxPoint( 0, 0 ) );
 
-            DRAWSEGMENT* shape = new DRAWSEGMENT;
+            PCB_SHAPE* shape = new PCB_SHAPE;
             shape->SetShape( S_POLYGON );
             shape->SetPolyShape( existingOutline );
             shape->Move( - aPad->GetPosition() );
@@ -677,23 +677,23 @@ void PAD_TOOL::recombinePad( D_PAD* aPad )
 
         // Now add the new shape to the primitives list
         //
-        DRAWSEGMENT* ds = new DRAWSEGMENT;
+        PCB_SHAPE* pcbShape = new PCB_SHAPE;
 
-        ds->SetShape( edge->GetShape() );
-        ds->SetWidth( edge->GetWidth() );
-        ds->SetStart( edge->GetStart() );
-        ds->SetEnd( edge->GetEnd() );
-        ds->SetBezControl1( edge->GetBezControl1() );
-        ds->SetBezControl2( edge->GetBezControl2() );
-        ds->SetAngle( edge->GetAngle() );
-        ds->SetPolyShape( edge->GetPolyShape() );
+        pcbShape->SetShape( fpShape->GetShape() );
+        pcbShape->SetWidth( fpShape->GetWidth() );
+        pcbShape->SetStart( fpShape->GetStart() );
+        pcbShape->SetEnd( fpShape->GetEnd() );
+        pcbShape->SetBezControl1( fpShape->GetBezControl1() );
+        pcbShape->SetBezControl2( fpShape->GetBezControl2() );
+        pcbShape->SetAngle( fpShape->GetAngle() );
+        pcbShape->SetPolyShape( fpShape->GetPolyShape() );
 
-        ds->Move( - aPad->GetPosition() );
-        ds->Rotate( wxPoint( 0, 0 ), - aPad->GetOrientation() );
-        aPad->AddPrimitive( ds );
+        pcbShape->Move( - aPad->GetPosition() );
+        pcbShape->Rotate( wxPoint( 0, 0 ), - aPad->GetOrientation() );
+        aPad->AddPrimitive( pcbShape );
 
-        edge->SetFlags( STRUCT_DELETED );
-        commit.Remove( edge );
+        fpShape->SetFlags( STRUCT_DELETED );
+        commit.Remove( fpShape );
     }
 
     commit.Push(_("Recombine pads") );

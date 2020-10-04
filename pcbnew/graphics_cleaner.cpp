@@ -26,8 +26,8 @@
 #include <reporter.h>
 #include <board_commit.h>
 #include <cleanup_item.h>
-#include <class_drawsegment.h>
-#include <class_edge_mod.h>
+#include <pcb_shape.h>
+#include <fp_shape.h>
 #include <graphics_cleaner.h>
 
 
@@ -64,7 +64,7 @@ void GRAPHICS_CLEANER::CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<C
 }
 
 
-bool GRAPHICS_CLEANER::isNullSegment( DRAWSEGMENT* aSegment )
+bool GRAPHICS_CLEANER::isNullSegment( PCB_SHAPE* aSegment )
 {
     switch( aSegment->GetShape() )
     {
@@ -87,47 +87,47 @@ bool GRAPHICS_CLEANER::isNullSegment( DRAWSEGMENT* aSegment )
         return aSegment->GetBezierPoints().empty();
 
     default:
-        wxFAIL_MSG( "GRAPHICS_CLEANER::isNullSegment unsupported DRAWSEGMENT shape: "
+        wxFAIL_MSG( "GRAPHICS_CLEANER::isNullSegment unsupported PCB_SHAPE shape: "
                     + PCB_SHAPE_TYPE_T_asString( aSegment->GetShape()) );
         return false;
     }
 }
 
 
-bool GRAPHICS_CLEANER::areEquivalent( DRAWSEGMENT* aSegment1, DRAWSEGMENT* aSegment2 )
+bool GRAPHICS_CLEANER::areEquivalent( PCB_SHAPE* aShape1, PCB_SHAPE* aShape2 )
 {
-    if( aSegment1->GetShape() != aSegment2->GetShape()
-            || aSegment1->GetLayer() != aSegment2->GetLayer()
-            || aSegment1->GetWidth() != aSegment2->GetWidth() )
+    if( aShape1->GetShape() != aShape2->GetShape()
+            || aShape1->GetLayer() != aShape2->GetLayer()
+            || aShape1->GetWidth() != aShape2->GetWidth() )
     {
         return false;
     }
 
-    switch( aSegment1->GetShape() )
+    switch( aShape1->GetShape() )
     {
     case S_SEGMENT:
     case S_RECT:
     case S_CIRCLE:
-        return aSegment1->GetStart() == aSegment2->GetStart()
-                && aSegment1->GetEnd() == aSegment2->GetEnd();
+        return aShape1->GetStart() == aShape2->GetStart()
+                && aShape1->GetEnd() == aShape2->GetEnd();
 
     case S_ARC:
-        return aSegment1->GetCenter() == aSegment2->GetCenter()
-                && aSegment1->GetArcStart() == aSegment2->GetArcStart()
-                && aSegment1->GetAngle() == aSegment2->GetAngle();
+        return aShape1->GetCenter() == aShape2->GetCenter()
+                && aShape1->GetArcStart() == aShape2->GetArcStart()
+                && aShape1->GetAngle() == aShape2->GetAngle();
 
     case S_POLYGON:
         // TODO
         return false;
 
     case S_CURVE:
-        return aSegment1->GetBezControl1() == aSegment2->GetBezControl1()
-                && aSegment1->GetBezControl2() == aSegment2->GetBezControl2()
-                && aSegment1->GetBezierPoints() == aSegment2->GetBezierPoints();
+        return aShape1->GetBezControl1() == aShape2->GetBezControl1()
+                && aShape1->GetBezControl2() == aShape2->GetBezControl2()
+                && aShape1->GetBezierPoints() == aShape2->GetBezierPoints();
 
     default:
-        wxFAIL_MSG( "GRAPHICS_CLEANER::areEquivalent unsupported DRAWSEGMENT shape: "
-                    + PCB_SHAPE_TYPE_T_asString( aSegment1->GetShape()) );
+        wxFAIL_MSG( "GRAPHICS_CLEANER::areEquivalent unsupported PCB_SHAPE shape: "
+                    + PCB_SHAPE_TYPE_T_asString( aShape1->GetShape()) );
         return false;
     }
 }
@@ -138,7 +138,7 @@ void GRAPHICS_CLEANER::cleanupSegments()
     // Remove duplicate segments (2 superimposed identical segments):
     for( auto it = m_drawings.begin(); it != m_drawings.end(); it++ )
     {
-        DRAWSEGMENT* segment = dynamic_cast<DRAWSEGMENT*>( *it );
+        PCB_SHAPE* segment = dynamic_cast<PCB_SHAPE*>( *it );
 
         if( !segment || segment->GetShape() != S_SEGMENT || segment->HasFlag( IS_DELETED ) )
             continue;
@@ -157,7 +157,7 @@ void GRAPHICS_CLEANER::cleanupSegments()
 
         for( auto it2 = it + 1; it2 != m_drawings.end(); it2++ )
         {
-            DRAWSEGMENT* segment2 = dynamic_cast<DRAWSEGMENT*>( *it2 );
+            PCB_SHAPE* segment2 = dynamic_cast<PCB_SHAPE*>( *it2 );
 
             if( !segment2 || segment2->HasFlag( IS_DELETED ) )
                 continue;
@@ -182,18 +182,18 @@ void GRAPHICS_CLEANER::mergeRects()
 {
     struct SIDE_CANDIDATE
     {
-        SIDE_CANDIDATE( DRAWSEGMENT* aSeg ) :
-            start( aSeg->GetStart() ),
-            end( aSeg->GetEnd() ),
-            seg( aSeg )
+        SIDE_CANDIDATE( PCB_SHAPE* aShape ) :
+            start( aShape->GetStart() ),
+            end( aShape->GetEnd() ),
+            shape( aShape )
         {
             if( start.x > end.x || start.y > end.y )
                 std::swap( start, end );
         }
 
-        wxPoint start;
-        wxPoint end;
-        DRAWSEGMENT* seg;
+        wxPoint    start;
+        wxPoint    end;
+        PCB_SHAPE* shape;
     };
 
     std::vector<SIDE_CANDIDATE*> sides;
@@ -202,14 +202,14 @@ void GRAPHICS_CLEANER::mergeRects()
     // First load all the candidates into the side vector and layer maps
     for( BOARD_ITEM* item : m_drawings )
     {
-        DRAWSEGMENT* seg = dynamic_cast<DRAWSEGMENT*>( item );
+        PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
 
-        if( !seg || seg->GetShape() != S_SEGMENT )
+        if( !shape || shape->GetShape() != S_SEGMENT )
             continue;
 
-        if( seg->GetStart().x == seg->GetEnd().x || seg->GetStart().y == seg->GetEnd().y )
+        if( shape->GetStart().x == shape->GetEnd().x || shape->GetStart().y == shape->GetEnd().y )
         {
-            sides.emplace_back( new SIDE_CANDIDATE( seg ) );
+            sides.emplace_back( new SIDE_CANDIDATE( shape ) );
             ptMap[ sides.back()->start ].push_back( sides.back() );
         }
     }
@@ -217,7 +217,7 @@ void GRAPHICS_CLEANER::mergeRects()
     // Now go through the sides and try and match lines into rectangles
     for( SIDE_CANDIDATE* side : sides )
     {
-        if( side->seg->HasFlag( IS_DELETED ) )
+        if( side->shape->HasFlag( IS_DELETED ) )
             continue;
 
         SIDE_CANDIDATE* left = nullptr;
@@ -227,9 +227,9 @@ void GRAPHICS_CLEANER::mergeRects()
 
         auto viable = [&]( SIDE_CANDIDATE* aCandidate ) -> bool
                       {
-                          return aCandidate->seg->GetLayer() == side->seg->GetLayer()
-                              && aCandidate->seg->GetWidth() == side->seg->GetWidth()
-                              && !aCandidate->seg->HasFlag( IS_DELETED );
+                          return aCandidate->shape->GetLayer() == side->shape->GetLayer()
+                              && aCandidate->shape->GetWidth() == side->shape->GetWidth()
+                              && !aCandidate->shape->HasFlag( IS_DELETED );
                       };
 
         if( side->start.x == side->end.x )
@@ -287,35 +287,35 @@ void GRAPHICS_CLEANER::mergeRects()
 
             if( right && bottom && right->end == bottom->end )
             {
-                left->seg->SetFlags( IS_DELETED );
-                top->seg->SetFlags( IS_DELETED );
-                right->seg->SetFlags( IS_DELETED );
-                bottom->seg->SetFlags( IS_DELETED );
+                left->shape->SetFlags( IS_DELETED );
+                top->shape->SetFlags( IS_DELETED );
+                right->shape->SetFlags( IS_DELETED );
+                bottom->shape->SetFlags( IS_DELETED );
 
                 std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_LINES_TO_RECT ) );
-                item->SetItems( left->seg, top->seg, right->seg, bottom->seg );
+                item->SetItems( left->shape, top->shape, right->shape, bottom->shape );
                 m_itemsList->push_back( item );
 
                 if( !m_dryRun )
                 {
-                    DRAWSEGMENT* rect;
+                    PCB_SHAPE* rect;
 
                     if( m_parentModule )
-                        rect = new EDGE_MODULE( m_parentModule );
+                        rect = new FP_SHAPE( m_parentModule );
                     else
-                        rect = new DRAWSEGMENT();
+                        rect = new PCB_SHAPE();
 
                     rect->SetShape( S_RECT );
                     rect->SetStart( top->start );
                     rect->SetEnd( bottom->end );
-                    rect->SetLayer( top->seg->GetLayer() );
-                    rect->SetWidth( top->seg->GetWidth() );
+                    rect->SetLayer( top->shape->GetLayer() );
+                    rect->SetWidth( top->shape->GetWidth() );
 
                     m_commit.Add( rect );
-                    m_commit.Remove( left->seg );
-                    m_commit.Remove( top->seg );
-                    m_commit.Remove( right->seg );
-                    m_commit.Remove( bottom->seg );
+                    m_commit.Remove( left->shape );
+                    m_commit.Remove( top->shape );
+                    m_commit.Remove( right->shape );
+                    m_commit.Remove( bottom->shape );
                 }
             }
         }

@@ -36,7 +36,7 @@
 #include <list>
 
 #include "zones.h"
-#include <class_text_mod.h>
+#include <fp_text.h>
 #include <class_zone.h>
 #include <functional>
 
@@ -470,12 +470,12 @@ public:
     }
 
     /// read/write accessors:
-    TEXTE_MODULE& Value()       { return *m_Value; }
-    TEXTE_MODULE& Reference()   { return *m_Reference; }
+    FP_TEXT& Value()           { return *m_Value; }
+    FP_TEXT& Reference()       { return *m_Reference; }
 
     /// The const versions to keep the compiler happy.
-    TEXTE_MODULE& Value() const { return *m_Value; }
-    TEXTE_MODULE& Reference() const { return *m_Reference; }
+    FP_TEXT& Value() const     { return *m_Value; }
+    FP_TEXT& Reference() const { return *m_Reference; }
 
     const std::map<wxString, wxString>& GetProperties() const { return m_properties; }
     void SetProperties( const std::map<wxString, wxString>& aProps ) { m_properties = aProps; }
@@ -699,8 +699,8 @@ private:
 
     double         m_Orient;            // Orientation in tenths of a degree, 900=90.0 degrees.
     wxPoint        m_Pos;               // Position of module on the board in internal units.
-    TEXTE_MODULE*  m_Reference;         // Component reference designator value (U34, R18..)
-    TEXTE_MODULE*  m_Value;             // Component value (74LS00, 22K..)
+    FP_TEXT*       m_Reference;         // Component reference designator value (U34, R18..)
+    FP_TEXT*       m_Value;             // Component value (74LS00, 22K..)
     LIB_ID         m_fpid;              // The #LIB_ID of the MODULE.
     int            m_Attributs;         // Flag bits ( see Mod_Attribut )
     int            m_ModuleStatus;      // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)

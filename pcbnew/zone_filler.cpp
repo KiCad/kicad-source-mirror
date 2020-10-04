@@ -31,9 +31,9 @@
 #include <class_board.h>
 #include <class_zone.h>
 #include <class_module.h>
-#include <class_edge_mod.h>
-#include <class_drawsegment.h>
-#include <class_pcb_text.h>
+#include <fp_shape.h>
+#include <pcb_shape.h>
+#include <pcb_text.h>
 #include <class_pcb_target.h>
 #include <class_track.h>
 #include <connectivity/connectivity_data.h>
@@ -611,27 +611,27 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
     {
     case PCB_SHAPE_T:
     {
-        DRAWSEGMENT* seg = (DRAWSEGMENT*) aItem;
-        seg->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
-                                                   aIgnoreLineWidth );
+        PCB_SHAPE* shape = (PCB_SHAPE*) aItem;
+        shape->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
+                                                     aIgnoreLineWidth );
         break;
     }
     case PCB_TEXT_T:
     {
-        TEXTE_PCB* text = (TEXTE_PCB*) aItem;
+        PCB_TEXT* text = (PCB_TEXT*) aItem;
         text->TransformBoundingBoxWithClearanceToPolygon( &aHoles, aGap );
         break;
     }
     case PCB_FP_SHAPE_T:
     {
-        EDGE_MODULE* edge = (EDGE_MODULE*) aItem;
-        edge->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
-                                                    aIgnoreLineWidth );
+        FP_SHAPE* shape = (FP_SHAPE*) aItem;
+        shape->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
+                                                     aIgnoreLineWidth );
         break;
     }
     case PCB_FP_TEXT_T:
     {
-        TEXTE_MODULE* text = (TEXTE_MODULE*) aItem;
+        FP_TEXT* text = (FP_TEXT*) aItem;
 
         if( text->IsVisible() )
             text->TransformBoundingBoxWithClearanceToPolygon( &aHoles, aGap );
@@ -693,7 +693,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE_CONTAINER* aZone, PCB_LAYER
 void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
                                              SHAPE_POLY_SET& aHoles )
 {
-    static DRAWSEGMENT dummyEdge;
+    static PCB_SHAPE dummyEdge;
     dummyEdge.SetParent( m_board );
     dummyEdge.SetLayer( Edge_Cuts );
 

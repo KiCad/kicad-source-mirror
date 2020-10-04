@@ -22,7 +22,7 @@
  */
 
 #include <common.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>
 #include <drc/drc_engine.h>
@@ -93,13 +93,13 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     if( !reportPhase( _( "Checking board edge clearances..." ) ) )
         return false;
     
-    std::vector<DRAWSEGMENT*> boardOutline;
+    std::vector<PCB_SHAPE*>  boardOutline;
     std::vector<BOARD_ITEM*> boardItems;
 
     auto queryBoardOutlineItems =
             [&]( BOARD_ITEM *item ) -> bool
             {
-                boardOutline.push_back( dyn_cast<DRAWSEGMENT*>( item ) );
+                boardOutline.push_back( dyn_cast<PCB_SHAPE*>( item ) );
                 return true;
             };
 
@@ -119,7 +119,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     drc_dbg( 2, "outline: %d items, board: %d items\n",
             (int) boardOutline.size(), (int) boardItems.size() );
 
-    for( DRAWSEGMENT* outlineItem : boardOutline )
+    for( PCB_SHAPE* outlineItem : boardOutline )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE ) )
             break;

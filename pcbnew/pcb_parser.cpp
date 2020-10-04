@@ -37,8 +37,8 @@
 #include <advanced_config.h>
 #include <class_board.h>
 #include <class_dimension.h>
-#include <class_drawsegment.h>
-#include <class_edge_mod.h>
+#include <pcb_shape.h>
+#include <fp_shape.h>
 #include <class_pcb_group.h>
 #include <class_pcb_target.h>
 #include <class_module.h>
@@ -597,11 +597,11 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         case T_gr_rect:
         case T_gr_line:
         case T_gr_poly:
-            m_board->Add( parseDRAWSEGMENT(), ADD_MODE::APPEND );
+            m_board->Add( parsePCB_SHAPE(), ADD_MODE::APPEND );
             break;
 
         case T_gr_text:
-            m_board->Add( parseTEXTE_PCB(), ADD_MODE::APPEND );
+            m_board->Add( parsePCB_TEXT(), ADD_MODE::APPEND );
             break;
 
         case T_dimension:
@@ -2086,20 +2086,20 @@ void PCB_PARSER::parseNETCLASS()
 }
 
 
-DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
+PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( bool aAllowCirclesZeroWidth )
 {
     wxCHECK_MSG( CurTok() == T_gr_arc || CurTok() == T_gr_circle || CurTok() == T_gr_curve ||
                  CurTok() == T_gr_rect || CurTok() == T_gr_line || CurTok() == T_gr_poly, NULL,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as DRAWSEGMENT." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_SHAPE." ) );
 
     T token;
     wxPoint pt;
-    std::unique_ptr< DRAWSEGMENT > segment( new DRAWSEGMENT( NULL ) );
+    std::unique_ptr<PCB_SHAPE> shape( new PCB_SHAPE( NULL ) );
 
     switch( CurTok() )
     {
     case T_gr_arc:
-        segment->SetShape( S_ARC );
+        shape->SetShape( S_ARC );
         NeedLEFT();
         token = NextTok();
 
@@ -2110,7 +2110,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetCenter( pt );
+        shape->SetCenter( pt );
         NeedRIGHT();
         NeedLEFT();
         token = NextTok();
@@ -2120,12 +2120,12 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetArcStart( pt );
+        shape->SetArcStart( pt );
         NeedRIGHT();
         break;
 
     case T_gr_circle:
-        segment->SetShape( S_CIRCLE );
+        shape->SetShape( S_CIRCLE );
         NeedLEFT();
         token = NextTok();
 
@@ -2134,7 +2134,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetCenter( pt );
+        shape->SetCenter( pt );
         NeedRIGHT();
         NeedLEFT();
 
@@ -2145,27 +2145,27 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetEnd( pt );
+        shape->SetEnd( pt );
         NeedRIGHT();
         break;
 
     case T_gr_curve:
-        segment->SetShape( S_CURVE );
+        shape->SetShape( S_CURVE );
         NeedLEFT();
         token = NextTok();
 
         if( token != T_pts )
             Expecting( T_pts );
 
-        segment->SetStart( parseXY() );
-        segment->SetBezControl1( parseXY() );
-        segment->SetBezControl2( parseXY() );
-        segment->SetEnd( parseXY() );
+        shape->SetStart( parseXY() );
+        shape->SetBezControl1( parseXY() );
+        shape->SetBezControl2( parseXY() );
+        shape->SetEnd( parseXY() );
         NeedRIGHT();
         break;
 
     case T_gr_rect:
-        segment->SetShape( S_RECT );
+        shape->SetShape( S_RECT );
         NeedLEFT();
         token = NextTok();
 
@@ -2174,7 +2174,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetStart( pt );
+        shape->SetStart( pt );
         NeedRIGHT();
         NeedLEFT();
         token = NextTok();
@@ -2184,12 +2184,12 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetEnd( pt );
+        shape->SetEnd( pt );
         NeedRIGHT();
         break;
 
     case T_gr_line:
-        // Default DRAWSEGMENT type is S_SEGMENT.
+        // Default PCB_SHAPE type is S_SEGMENT.
         NeedLEFT();
         token = NextTok();
 
@@ -2198,7 +2198,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetStart( pt );
+        shape->SetStart( pt );
         NeedRIGHT();
         NeedLEFT();
         token = NextTok();
@@ -2208,14 +2208,14 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetEnd( pt );
+        shape->SetEnd( pt );
         NeedRIGHT();
         break;
 
     case T_gr_poly:
     {
-        segment->SetShape( S_POLYGON );
-        segment->SetWidth( 0 ); // this is the default value. will be (perhaps) modified later
+        shape->SetShape( S_POLYGON );
+        shape->SetWidth( 0 ); // this is the default value. will be (perhaps) modified later
         NeedLEFT();
         token = NextTok();
 
@@ -2227,7 +2227,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
         while( (token = NextTok()) != T_RIGHT )
             pts.push_back( parseXY() );
 
-        segment->SetPolyPoints( pts );
+        shape->SetPolyPoints( pts );
     }
         break;
 
@@ -2245,25 +2245,25 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
         switch( token )
         {
         case T_angle:
-            segment->SetAngle( parseDouble( "segment angle" ) * 10.0 );
+            shape->SetAngle( parseDouble( "segment angle" ) * 10.0 );
             break;
 
         case T_layer:
-            segment->SetLayer( parseBoardItemLayer() );
+            shape->SetLayer( parseBoardItemLayer() );
             break;
 
         case T_width:
-            segment->SetWidth( parseBoardUnits( T_width ) );
+            shape->SetWidth( parseBoardUnits( T_width ) );
             break;
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( segment->m_Uuid ) = CurStrToKIID();
+            const_cast<KIID&>( shape->m_Uuid ) = CurStrToKIID();
             break;
 
         /// We continue to parse the status field but it is no longer written
         case T_status:
-            segment->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
+            shape->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             break;
 
         default:
@@ -2277,24 +2277,24 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
     // This is not permitted in KiCad but some external tools generate invalid
     // files.
     // However in custom pad shapes, zero-line width is allowed for filled circles
-    if( segment->GetShape() != S_POLYGON && segment->GetWidth() == 0 &&
-        !( segment->GetShape() == S_CIRCLE && aAllowCirclesZeroWidth ) )
+    if( shape->GetShape() != S_POLYGON && shape->GetWidth() == 0 &&
+        !( shape->GetShape() == S_CIRCLE && aAllowCirclesZeroWidth ) )
     {
-        segment->SetWidth( Millimeter2iu( DEFAULT_LINE_WIDTH ) );
+        shape->SetWidth( Millimeter2iu( DEFAULT_LINE_WIDTH ) );
     }
 
-    return segment.release();
+    return shape.release();
 }
 
 
-TEXTE_PCB* PCB_PARSER::parseTEXTE_PCB()
+PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
 {
     wxCHECK_MSG( CurTok() == T_gr_text, NULL,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as TEXTE_PCB." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_TEXT." ) );
 
     T token;
 
-    std::unique_ptr<TEXTE_PCB> text( new TEXTE_PCB( m_board ) );
+    std::unique_ptr<PCB_TEXT> text( new PCB_TEXT( m_board ) );
     NeedSYMBOLorNUMBER();
 
     text->SetText( FromUTF8() );
@@ -2434,7 +2434,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
 
         case T_gr_text:
         {
-            TEXTE_PCB* text = parseTEXTE_PCB();
+            PCB_TEXT* text = parsePCB_TEXT();
             dimension->Text() = *text;
 
             // The text is part of the dimension and shares its uuid
@@ -2979,7 +2979,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
         case T_fp_text:
         {
-            TEXTE_MODULE* text = parseTEXTE_MODULE();
+            FP_TEXT* text = parseFP_TEXT();
             text->SetParent( module.get() );
             double orientation = text->GetTextAngle();
             orientation -= module->GetOrientation();
@@ -2988,13 +2988,13 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
             switch( text->GetType() )
             {
-            case TEXTE_MODULE::TEXT_is_REFERENCE:
+            case FP_TEXT::TEXT_is_REFERENCE:
                 module->Reference() = *text;
                 const_cast<KIID&>( module->Reference().m_Uuid ) = text->m_Uuid;
                 delete text;
                 break;
 
-            case TEXTE_MODULE::TEXT_is_VALUE:
+            case FP_TEXT::TEXT_is_VALUE:
                 module->Value() = *text;
                 const_cast<KIID&>( module->Value().m_Uuid ) = text->m_Uuid;
                 delete text;
@@ -3008,17 +3008,17 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
         case T_fp_arc:
         {
-            EDGE_MODULE* em = parseEDGE_MODULE();
+            FP_SHAPE* shape = parseFP_SHAPE();
 
             // Drop 0 and NaN angles as these can corrupt/crash the schematic
-            if( std::isnormal( em->GetAngle() ) )
+            if( std::isnormal( shape->GetAngle() ) )
             {
-                em->SetParent( module.get() );
-                em->SetDrawCoord();
-                module->Add( em, ADD_MODE::APPEND );
+                shape->SetParent( module.get() );
+                shape->SetDrawCoord();
+                module->Add( shape, ADD_MODE::APPEND );
             }
             else
-                delete em;
+                delete shape;
         }
             break;
 
@@ -3028,10 +3028,10 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
         case T_fp_line:
         case T_fp_poly:
         {
-            EDGE_MODULE* em = parseEDGE_MODULE();
-            em->SetParent( module.get() );
-            em->SetDrawCoord();
-            module->Add( em, ADD_MODE::APPEND );
+            FP_SHAPE* shape = parseFP_SHAPE();
+            shape->SetParent( module.get() );
+            shape->SetDrawCoord();
+            module->Add( shape, ADD_MODE::APPEND );
         }
             break;
 
@@ -3099,25 +3099,25 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 }
 
 
-TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE()
+FP_TEXT* PCB_PARSER::parseFP_TEXT()
 {
     wxCHECK_MSG( CurTok() == T_fp_text, NULL,
-                 wxString::Format( wxT( "Cannot parse %s as TEXTE_MODULE at line %d, offset %d." ),
+                 wxString::Format( wxT( "Cannot parse %s as FP_TEXT at line %d, offset %d." ),
                                    GetChars( GetTokenString( CurTok() ) ),
                                    CurLineNumber(), CurOffset() ) );
 
     T token = NextTok();
 
-    std::unique_ptr<TEXTE_MODULE> text( new TEXTE_MODULE( NULL ) );
+    std::unique_ptr<FP_TEXT> text( new FP_TEXT( NULL ) );
 
     switch( token )
     {
     case T_reference:
-        text->SetType( TEXTE_MODULE::TEXT_is_REFERENCE );
+        text->SetType( FP_TEXT::TEXT_is_REFERENCE );
         break;
 
     case T_value:
-        text->SetType( TEXTE_MODULE::TEXT_is_VALUE );
+        text->SetType( FP_TEXT::TEXT_is_VALUE );
         break;
 
     case T_user:
@@ -3200,21 +3200,21 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE()
 }
 
 
-EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
+FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
 {
     wxCHECK_MSG( CurTok() == T_fp_arc || CurTok() == T_fp_circle || CurTok() == T_fp_curve ||
                  CurTok() == T_fp_rect || CurTok() == T_fp_line || CurTok() == T_fp_poly, NULL,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as EDGE_MODULE." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as FP_SHAPE." ) );
 
     wxPoint pt;
     T token;
 
-    std::unique_ptr< EDGE_MODULE > segment( new EDGE_MODULE( NULL ) );
+    std::unique_ptr<FP_SHAPE> shape( new FP_SHAPE( NULL ) );
 
     switch( CurTok() )
     {
     case T_fp_arc:
-        segment->SetShape( S_ARC );
+        shape->SetShape( S_ARC );
         NeedLEFT();
         token = NextTok();
 
@@ -3225,7 +3225,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetStart0( pt );
+        shape->SetStart0( pt );
         NeedRIGHT();
         NeedLEFT();
         token = NextTok();
@@ -3235,7 +3235,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetEnd0( pt );
+        shape->SetEnd0( pt );
         NeedRIGHT();
         NeedLEFT();
         token = NextTok();
@@ -3245,12 +3245,12 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
 
         // Setting angle will set m_ThirdPoint0, so must be done after setting
         // m_Start0 and m_End0
-        segment->SetAngle( parseDouble( "segment angle" ) * 10.0 );
+        shape->SetAngle( parseDouble( "segment angle" ) * 10.0 );
         NeedRIGHT();
         break;
 
     case T_fp_circle:
-        segment->SetShape( S_CIRCLE );
+        shape->SetShape( S_CIRCLE );
         NeedLEFT();
         token = NextTok();
 
@@ -3259,7 +3259,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetStart0( pt );
+        shape->SetStart0( pt );
         NeedRIGHT();
         NeedLEFT();
         token = NextTok();
@@ -3269,27 +3269,27 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetEnd0( pt );
+        shape->SetEnd0( pt );
         NeedRIGHT();
         break;
 
     case T_fp_curve:
-        segment->SetShape( S_CURVE );
+        shape->SetShape( S_CURVE );
         NeedLEFT();
         token = NextTok();
 
         if( token != T_pts )
             Expecting( T_pts );
 
-        segment->SetStart0( parseXY() );
-        segment->SetBezier0_C1( parseXY() );
-        segment->SetBezier0_C2( parseXY() );
-        segment->SetEnd0( parseXY() );
+        shape->SetStart0( parseXY() );
+        shape->SetBezier0_C1( parseXY() );
+        shape->SetBezier0_C2( parseXY() );
+        shape->SetEnd0( parseXY() );
         NeedRIGHT();
         break;
 
     case T_fp_rect:
-        segment->SetShape( S_RECT );
+        shape->SetShape( S_RECT );
         NeedLEFT();
         token = NextTok();
 
@@ -3298,7 +3298,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetStart0( pt );
+        shape->SetStart0( pt );
 
         NeedRIGHT();
         NeedLEFT();
@@ -3309,12 +3309,12 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetEnd0( pt );
+        shape->SetEnd0( pt );
         NeedRIGHT();
         break;
 
     case T_fp_line:
-        // Default DRAWSEGMENT type is S_SEGMENT.
+        // Default PCB_SHAPE type is S_SEGMENT.
         NeedLEFT();
         token = NextTok();
 
@@ -3323,7 +3323,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetStart0( pt );
+        shape->SetStart0( pt );
 
         NeedRIGHT();
         NeedLEFT();
@@ -3334,13 +3334,13 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetEnd0( pt );
+        shape->SetEnd0( pt );
         NeedRIGHT();
         break;
 
     case T_fp_poly:
     {
-        segment->SetShape( S_POLYGON );
+        shape->SetShape( S_POLYGON );
         NeedLEFT();
         token = NextTok();
 
@@ -3352,7 +3352,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
         while( (token = NextTok()) != T_RIGHT )
             pts.push_back( parseXY() );
 
-        segment->SetPolyPoints( pts );
+        shape->SetPolyPoints( pts );
     }
         break;
 
@@ -3370,21 +3370,21 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
         switch( token )
         {
         case T_layer:
-            segment->SetLayer( parseBoardItemLayer() );
+            shape->SetLayer( parseBoardItemLayer() );
             break;
 
         case T_width:
-            segment->SetWidth( parseBoardUnits( T_width ) );
+            shape->SetWidth( parseBoardUnits( T_width ) );
             break;
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( segment->m_Uuid ) = CurStrToKIID();
+            const_cast<KIID&>( shape->m_Uuid ) = CurStrToKIID();
             break;
 
         /// We continue to parse the status field but it is no longer written
         case T_status:
-            segment->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
+            shape->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             break;
 
         default:
@@ -3396,15 +3396,15 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
 
     // Only filled shapes may have a zero-line width. While not permitted in KiCad, some
     // external tools generate invalid files.
-    if( segment->GetShape() != S_RECT
-     && segment->GetShape() != S_CIRCLE
-     && segment->GetShape() != S_POLYGON
-     && segment->GetWidth() == 0 )
+    if( shape->GetShape() != S_RECT
+        && shape->GetShape() != S_CIRCLE
+        && shape->GetShape() != S_POLYGON
+        && shape->GetWidth() == 0 )
     {
-        segment->SetWidth( Millimeter2iu( DEFAULT_LINE_WIDTH ) );
+        shape->SetWidth( Millimeter2iu( DEFAULT_LINE_WIDTH ) );
     }
 
-    return segment.release();
+    return shape.release();
 }
 
 
@@ -3790,47 +3790,47 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
                     token = NextTok();
 
                 // Currently, I am using parseDRAWSEGMENT() to read basic shapes parameters,
-                // because they are the same as a DRAWSEGMENT.
+                // because they are the same as a PCB_SHAPE.
                 // However it could be better to write a specific parser, to avoid possible issues
-                // if the DRAWSEGMENT parser is modified.
-                DRAWSEGMENT* dummysegm = NULL;
+                // if the PCB_SHAPE parser is modified.
+                PCB_SHAPE* dummysegm = NULL;
 
                 switch( token )
                 {
                 case T_gr_arc:
-                    dummysegm = parseDRAWSEGMENT();
+                    dummysegm = parsePCB_SHAPE();
                     pad->AddPrimitiveArc( dummysegm->GetCenter(), dummysegm->GetArcStart(),
                                           dummysegm->GetAngle(), dummysegm->GetWidth() );
                     break;
 
                 case T_gr_line:
-                    dummysegm = parseDRAWSEGMENT();
+                    dummysegm = parsePCB_SHAPE();
                     pad->AddPrimitiveSegment( dummysegm->GetStart(), dummysegm->GetEnd(),
                                               dummysegm->GetWidth() );
                     break;
 
                 case T_gr_circle:
-                    dummysegm = parseDRAWSEGMENT( true );   // Circles with 0 thickness are allowed
+                    dummysegm = parsePCB_SHAPE( true );   // Circles with 0 thickness are allowed
                                                             // ( filled circles )
                     pad->AddPrimitiveCircle( dummysegm->GetCenter(), dummysegm->GetRadius(),
                                              dummysegm->GetWidth() );
                     break;
 
                 case T_gr_rect:
-                    dummysegm = parseDRAWSEGMENT( true );
+                    dummysegm = parsePCB_SHAPE( true );
                     pad->AddPrimitiveRect( dummysegm->GetStart(), dummysegm->GetEnd(),
                                            dummysegm->GetWidth() );
                     break;
 
 
                 case T_gr_poly:
-                    dummysegm = parseDRAWSEGMENT();
+                    dummysegm = parsePCB_SHAPE();
                     pad->AddPrimitivePoly( dummysegm->BuildPolyPointsList(),
                                            dummysegm->GetWidth() );
                     break;
 
                 case T_gr_curve:
-                    dummysegm = parseDRAWSEGMENT();
+                    dummysegm = parsePCB_SHAPE();
                     pad->AddPrimitiveCurve( dummysegm->GetStart(), dummysegm->GetEnd(),
                                             dummysegm->GetBezControl1(),
                                             dummysegm->GetBezControl2(),

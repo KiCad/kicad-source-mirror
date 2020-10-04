@@ -25,7 +25,6 @@
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_board_item.h>
-#include <class_drawsegment.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>

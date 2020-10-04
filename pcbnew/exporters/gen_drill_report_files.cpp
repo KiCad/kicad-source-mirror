@@ -192,11 +192,11 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         switch( PtStruct->Type() )
         {
         case PCB_SHAPE_T:
-            itemplotter.PlotDrawSegment( (DRAWSEGMENT*) PtStruct );
+            itemplotter.PlotPcbShape( (PCB_SHAPE*) PtStruct );
             break;
 
         case PCB_TEXT_T:
-            itemplotter.PlotTextePcb( (TEXTE_PCB*) PtStruct );
+            itemplotter.PlotPcbText( (PCB_TEXT*) PtStruct );
             break;
 
         case PCB_DIM_ALIGNED_T:

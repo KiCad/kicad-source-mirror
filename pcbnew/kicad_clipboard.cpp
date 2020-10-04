@@ -27,9 +27,9 @@
 #include <build_version.h>
 #include <class_board.h>
 #include <class_track.h>
-#include <class_drawsegment.h>
-#include <class_pcb_text.h>
-#include <class_text_mod.h>
+#include <pcb_shape.h>
+#include <pcb_text.h>
+#include <fp_text.h>
 #include <common.h>
 #include <netinfo.h>
 #include <pcb_parser.h>
@@ -105,8 +105,8 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
             BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( item->Clone() );
 
             // Do not add reference/value - convert them to the common type
-            if( TEXTE_MODULE* text = dyn_cast<TEXTE_MODULE*>( clone ) )
-                text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
+            if( FP_TEXT* text = dyn_cast<FP_TEXT*>( clone ) )
+                text->SetType( FP_TEXT::TEXT_is_DIVERS );
 
             // If it is only a module, clear the nets from the pads
             if( D_PAD* pad = dyn_cast<D_PAD*>( clone ) )
@@ -151,25 +151,25 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
             if( item->Type() == PCB_FP_SHAPE_T )
             {
                 // Convert to PCB_SHAPE_T
-                copy = (BOARD_ITEM*) reinterpret_cast<DRAWSEGMENT*>( item )->Clone();
+                copy = (BOARD_ITEM*) reinterpret_cast<PCB_SHAPE*>( item )->Clone();
                 copy->SetLayer( item->GetLayer() );
             }
             else if( item->Type() == PCB_FP_TEXT_T )
             {
                 // Convert to PCB_TEXT_T
-                MODULE*       mod = static_cast<MODULE*>( item->GetParent() );
-                TEXTE_MODULE* mod_text = static_cast<TEXTE_MODULE*>( item );
-                TEXTE_PCB*    pcb_text = new TEXTE_PCB( m_board );
+                MODULE*   mod = static_cast<MODULE*>( item->GetParent() );
+                FP_TEXT*  fp_text = static_cast<FP_TEXT*>( item );
+                PCB_TEXT* pcb_text = new PCB_TEXT( m_board );
 
-                if( mod_text->GetText() == "${VALUE}" )
+                if( fp_text->GetText() == "${VALUE}" )
                     pcb_text->SetText( mod->GetValue() );
-                else if( mod_text->GetText() == "${REFERENCE}" )
+                else if( fp_text->GetText() == "${REFERENCE}" )
                     pcb_text->SetText( mod->GetReference() );
                 else
-                    pcb_text->CopyText( *mod_text );
+                    pcb_text->CopyText( *fp_text );
 
-                pcb_text->SetEffects( *mod_text );
-                pcb_text->SetLayer( mod_text->GetLayer() );
+                pcb_text->SetEffects( *fp_text );
+                pcb_text->SetLayer( fp_text->GetLayer() );
                 copy = pcb_text;
             }
             else if( item->Type() == PCB_PAD_T )

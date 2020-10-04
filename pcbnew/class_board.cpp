@@ -36,7 +36,6 @@
 #include <class_track.h>
 #include <class_zone.h>
 #include <class_marker_pcb.h>
-#include <class_drawsegment.h>
 #include <class_pcb_target.h>
 #include <connectivity/connectivity_data.h>
 #include <pgm_base.h>

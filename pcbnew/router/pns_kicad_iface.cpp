@@ -22,13 +22,13 @@
 #include <undo_redo_container.h>
 #include <class_board.h>
 #include <board_connected_item.h>
-#include <class_text_mod.h>
-#include <class_edge_mod.h>
+#include <fp_text.h>
+#include <fp_shape.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
-#include <class_drawsegment.h>
-#include <class_pcb_text.h>
+#include <pcb_shape.h>
+#include <pcb_text.h>
 #include <board_commit.h>
 #include <layers_id_colors_and_visibility.h>
 #include <geometry/convex_hull.h>
@@ -846,7 +846,7 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
 }
 
 
-bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
+bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aItem )
 {
     if( aItem->GetLayer() != Edge_Cuts && !IsCopperLayer( aItem->GetLayer() ) )
         return false;
@@ -987,11 +987,11 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
     {
         if ( gitem->Type() == PCB_SHAPE_T )
         {
-            syncGraphicalItem( aWorld, static_cast<DRAWSEGMENT*>( gitem ) );
+            syncGraphicalItem( aWorld, static_cast<PCB_SHAPE*>( gitem ) );
         }
         else if( gitem->Type() == PCB_TEXT_T )
         {
-            syncTextItem( aWorld, static_cast<TEXTE_PCB*>( gitem ), gitem->GetLayer() );
+            syncTextItem( aWorld, static_cast<PCB_TEXT*>( gitem ), gitem->GetLayer() );
         }
     }
 
@@ -1023,11 +1023,11 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         {
             if( mgitem->Type() == PCB_FP_SHAPE_T )
             {
-                syncGraphicalItem( aWorld, static_cast<DRAWSEGMENT*>( mgitem ) );
+                syncGraphicalItem( aWorld, static_cast<PCB_SHAPE*>( mgitem ) );
             }
             else if( mgitem->Type() == PCB_FP_TEXT_T )
             {
-                syncTextItem( aWorld, static_cast<TEXTE_MODULE*>( mgitem ), mgitem->GetLayer() );
+                syncTextItem( aWorld, static_cast<FP_TEXT*>( mgitem ), mgitem->GetLayer() );
             }
         }
     }

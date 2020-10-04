@@ -30,7 +30,7 @@
 #include <math_for_graphics.h>
 #include <trigo.h>
 
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <class_pad.h>
 
 AR_MATRIX::AR_MATRIX()
@@ -762,8 +762,8 @@ void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, LSET a
 }
 
 
-void AR_MATRIX::TraceSegmentPcb(
-        DRAWSEGMENT* pt_segm, int color, int marge, AR_MATRIX::CELL_OP op_logic )
+void AR_MATRIX::TraceSegmentPcb( PCB_SHAPE* pt_segm, int color, int marge,
+                                 AR_MATRIX::CELL_OP op_logic )
 {
     int half_width = ( pt_segm->GetWidth() / 2 ) + marge;
 

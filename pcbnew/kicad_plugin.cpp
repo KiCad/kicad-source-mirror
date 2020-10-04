@@ -29,13 +29,13 @@
 #include <trace_helpers.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <class_pcb_text.h>
+#include <pcb_text.h>
 #include <class_dimension.h>
 #include <class_track.h>
 #include <class_zone.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <class_pcb_target.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <confirm.h>
 #include <zones.h>
 #include <kicad_plugin.h>
@@ -400,11 +400,11 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
         break;
 
     case PCB_SHAPE_T:
-        format( static_cast<DRAWSEGMENT*>( aItem ), aNestLevel );
+        format( static_cast<PCB_SHAPE*>( aItem ), aNestLevel );
         break;
 
     case PCB_FP_SHAPE_T:
-        format( static_cast<EDGE_MODULE*>( aItem ), aNestLevel );
+        format( static_cast<FP_SHAPE*>( aItem ), aNestLevel );
         break;
 
     case PCB_TARGET_T:
@@ -420,11 +420,11 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
         break;
 
     case PCB_TEXT_T:
-        format( static_cast<TEXTE_PCB*>( aItem ), aNestLevel );
+        format( static_cast<PCB_TEXT*>( aItem ), aNestLevel );
         break;
 
     case PCB_FP_TEXT_T:
-        format( static_cast<TEXTE_MODULE*>( aItem ), aNestLevel );
+        format( static_cast<FP_TEXT*>( aItem ), aNestLevel );
         break;
 
     case PCB_GROUP_T:
@@ -756,43 +756,43 @@ void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
+void PCB_IO::format( PCB_SHAPE* aShape, int aNestLevel ) const
 {
-    switch( aSegment->GetShape() )
+    switch( aShape->GetShape() )
     {
     case S_SEGMENT:  // Line
         m_out->Print( aNestLevel, "(gr_line (start %s) (end %s)",
-                      FormatInternalUnits( aSegment->GetStart() ).c_str(),
-                      FormatInternalUnits( aSegment->GetEnd() ).c_str() );
+                      FormatInternalUnits( aShape->GetStart() ).c_str(),
+                      FormatInternalUnits( aShape->GetEnd() ).c_str() );
 
-        if( aSegment->GetAngle() != 0.0 )
-            m_out->Print( 0, " (angle %s)", FormatAngle( aSegment->GetAngle() ).c_str() );
+        if( aShape->GetAngle() != 0.0 )
+            m_out->Print( 0, " (angle %s)", FormatAngle( aShape->GetAngle() ).c_str() );
 
         break;
 
     case S_RECT:  // Rectangle
         m_out->Print( aNestLevel, "(gr_rect (start %s) (end %s)",
-                      FormatInternalUnits( aSegment->GetStart() ).c_str(),
-                      FormatInternalUnits( aSegment->GetEnd() ).c_str() );
+                      FormatInternalUnits( aShape->GetStart() ).c_str(),
+                      FormatInternalUnits( aShape->GetEnd() ).c_str() );
         break;
 
     case S_CIRCLE:  // Circle
         m_out->Print( aNestLevel, "(gr_circle (center %s) (end %s)",
-                      FormatInternalUnits( aSegment->GetStart() ).c_str(),
-                      FormatInternalUnits( aSegment->GetEnd() ).c_str() );
+                      FormatInternalUnits( aShape->GetStart() ).c_str(),
+                      FormatInternalUnits( aShape->GetEnd() ).c_str() );
         break;
 
     case S_ARC:     // Arc
         m_out->Print( aNestLevel, "(gr_arc (start %s) (end %s) (angle %s)",
-                      FormatInternalUnits( aSegment->GetStart() ).c_str(),
-                      FormatInternalUnits( aSegment->GetEnd() ).c_str(),
-                      FormatAngle( aSegment->GetAngle() ).c_str() );
+                      FormatInternalUnits( aShape->GetStart() ).c_str(),
+                      FormatInternalUnits( aShape->GetEnd() ).c_str(),
+                      FormatAngle( aShape->GetAngle() ).c_str() );
         break;
 
     case S_POLYGON: // Polygon
-        if( aSegment->IsPolyShapeValid() )
+        if( aShape->IsPolyShapeValid() )
         {
-            SHAPE_POLY_SET& poly = aSegment->GetPolyShape();
+            SHAPE_POLY_SET& poly = aShape->GetPolyShape();
             SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
             int pointsCount = outline.PointCount();
 
@@ -824,29 +824,29 @@ void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
 
     case S_CURVE:   // Bezier curve
         m_out->Print( aNestLevel, "(gr_curve (pts (xy %s) (xy %s) (xy %s) (xy %s))",
-                      FormatInternalUnits( aSegment->GetStart() ).c_str(),
-                      FormatInternalUnits( aSegment->GetBezControl1() ).c_str(),
-                      FormatInternalUnits( aSegment->GetBezControl2() ).c_str(),
-                      FormatInternalUnits( aSegment->GetEnd() ).c_str() );
+                      FormatInternalUnits( aShape->GetStart() ).c_str(),
+                      FormatInternalUnits( aShape->GetBezControl1() ).c_str(),
+                      FormatInternalUnits( aShape->GetBezControl2() ).c_str(),
+                      FormatInternalUnits( aShape->GetEnd() ).c_str() );
         break;
 
     default:
-        wxFAIL_MSG( "PCB_IO::format cannot format unknown DRAWSEGMENT shape:"
-                    + PCB_SHAPE_TYPE_T_asString( aSegment->GetShape()) );
+        wxFAIL_MSG( "PCB_IO::format cannot format unknown PCB_SHAPE shape:"
+                    + PCB_SHAPE_TYPE_T_asString( aShape->GetShape()) );
         return;
     };
 
-    formatLayer( aSegment );
+    formatLayer( aShape );
 
-    m_out->Print( 0, " (width %s)", FormatInternalUnits( aSegment->GetWidth() ).c_str() );
+    m_out->Print( 0, " (width %s)", FormatInternalUnits( aShape->GetWidth() ).c_str() );
 
-    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aSegment->m_Uuid.AsString() ) );
+    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aShape->m_Uuid.AsString() ) );
 
     m_out->Print( 0, ")\n" );
 }
 
 
-void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
+void PCB_IO::format( FP_SHAPE* aModuleDrawing, int aNestLevel ) const
 {
     switch( aModuleDrawing->GetShape() )
     {
@@ -916,7 +916,7 @@ void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
         break;
 
     default:
-        wxFAIL_MSG( "PCB_IO::format cannot format unknown EDGE_MODULE shape:"
+        wxFAIL_MSG( "PCB_IO::format cannot format unknown FP_SHAPE shape:"
                     + PCB_SHAPE_TYPE_T_asString( aModuleDrawing->GetShape()) );
         return;
     };
@@ -1443,7 +1443,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         int nested_level = aNestLevel+2;
 
         // Output all basic shapes
-        for( const std::shared_ptr<DRAWSEGMENT>& primitive : aPad->GetPrimitives() )
+        for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives() )
         {
             m_out->Print( 0, "\n");
 
@@ -1532,7 +1532,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( TEXTE_PCB* aText, int aNestLevel ) const
+void PCB_IO::format( PCB_TEXT* aText, int aNestLevel ) const
 {
     m_out->Print( aNestLevel, "(gr_text %s (at %s",
                   m_out->Quotew( aText->GetText() ).c_str(),
@@ -1582,15 +1582,15 @@ void PCB_IO::format( PCB_GROUP* aGroup, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( TEXTE_MODULE* aText, int aNestLevel ) const
+void PCB_IO::format( FP_TEXT* aText, int aNestLevel ) const
 {
     std::string type;
 
     switch( aText->GetType() )
     {
-    case TEXTE_MODULE::TEXT_is_REFERENCE: type = "reference";   break;
-    case TEXTE_MODULE::TEXT_is_VALUE:     type = "value";       break;
-    case TEXTE_MODULE::TEXT_is_DIVERS:    type = "user";
+    case FP_TEXT::TEXT_is_REFERENCE: type = "reference";   break;
+    case FP_TEXT::TEXT_is_VALUE: type = "value";       break;
+    case FP_TEXT::TEXT_is_DIVERS: type = "user";
     }
 
     m_out->Print( aNestLevel, "(fp_text %s %s (at %s",
@@ -1607,7 +1607,7 @@ void PCB_IO::format( TEXTE_MODULE* aText, int aNestLevel ) const
     if( parent )
     {
         // GetTextAngle() is always in -360..+360 range because of
-        // TEXTE_MODULE::SetTextAngle(), but summing that angle with an
+        // FP_TEXT::SetTextAngle(), but summing that angle with an
         // additional board angle could kick sum up >= 360 or <= -360, so to have
         // consistent results, normalize again for the BOARD save.  A footprint
         // save does not use this code path since parent is NULL.

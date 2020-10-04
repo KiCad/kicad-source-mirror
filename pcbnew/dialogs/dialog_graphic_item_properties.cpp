@@ -33,8 +33,8 @@
 #include <pcb_layer_box_selector.h>
 #include <html_messagebox.h>
 #include <class_board.h>
-#include <class_drawsegment.h>
-#include <class_edge_mod.h>
+#include <pcb_shape.h>
+#include <fp_shape.h>
 #include <widgets/unit_binder.h>
 
 #include <dialog_graphic_item_properties_base.h>
@@ -43,8 +43,8 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES : public DIALOG_GRAPHIC_ITEM_PROPERTIES_BAS
 {
 private:
     PCB_BASE_EDIT_FRAME*  m_parent;
-    DRAWSEGMENT*          m_item;
-    EDGE_MODULE*          m_moduleItem;
+    PCB_SHAPE*            m_item;
+    FP_SHAPE*             m_moduleItem;
 
     UNIT_BINDER           m_startX, m_startY;
     UNIT_BINDER           m_endX, m_endY;
@@ -96,8 +96,8 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_AngleValue( 0.0 )
 {
     m_parent = aParent;
-    m_item = dynamic_cast<DRAWSEGMENT*>( aItem );
-    m_moduleItem = dynamic_cast<EDGE_MODULE*>( aItem );
+    m_item = dynamic_cast<PCB_SHAPE*>( aItem );
+    m_moduleItem = dynamic_cast<FP_SHAPE*>( aItem );
 
     // Configure display origin transforms
     m_startX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
@@ -360,7 +360,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
 
     default:
         wxASSERT_MSG( false, "DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate not implemented for shape"
-                      + DRAWSEGMENT::ShowShape( m_item->GetShape() ) );
+                             + PCB_SHAPE::ShowShape( m_item->GetShape() ) );
         break;
     }
 

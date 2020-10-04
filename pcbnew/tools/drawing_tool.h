@@ -38,7 +38,7 @@ namespace KIGFX
 }
 class BOARD;
 class PCB_BASE_EDIT_FRAME;
-class DRAWSEGMENT;
+class PCB_SHAPE;
 class POLYGON_GEOM_MANAGER;
 
 /**
@@ -166,17 +166,17 @@ public:
 private:
 
     /**
-     * Starts drawing a selected shape (i.e. DRAWSEGMENT).
+     * Starts drawing a selected shape (i.e. PCB_SHAPE).
      * @param aShape is the type of created shape (@see PCB_SHAPE_TYPE_T).
      * @param aGraphic is an object that is going to be used by the tool for drawing. Must be
      *                 already created. The tool deletes the object if it is not added to a BOARD.
-     * @param aStartingPoint is a starting point for this new DRAWSEGMENT. If it exists the new
+     * @param aStartingPoint is a starting point for this new PCB_SHAPE. If it exists the new
      *                       item has its start point set to aStartingPoint, and its settings
      *                       (width, layer) set to the current default values.
      * @return False if the tool was cancelled before the origin was set or origin and end are
      *         the same point.
      */
-    bool drawSegment( const std::string& aTool, int aShape, DRAWSEGMENT** aGraphic,
+    bool drawSegment( const std::string& aTool, int aShape, PCB_SHAPE** aGraphic,
                       OPT<VECTOR2D> aStartingPoint );
 
     /**
@@ -186,7 +186,7 @@ private:
      * @return False if the tool was cancelled before the origin was set or origin and end are
      *         the same point.
      */
-    bool drawArc( const std::string& aTool, DRAWSEGMENT** aGraphic, bool aImmediateMode );
+    bool drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool aImmediateMode );
 
     /**
      * Draws a polygon, that is added as a zone or a keepout area.

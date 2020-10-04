@@ -33,9 +33,9 @@
 #include "3d_cache/3d_cache.h"
 #include "3d_cache/3d_info.h"
 #include "class_board.h"
-#include "class_edge_mod.h"
+#include "fp_shape.h"
 #include "class_module.h"
-#include "class_pcb_text.h"
+#include "pcb_text.h"
 #include "class_track.h"
 #include "class_zone.h"
 #include "convert_to_biu.h"
@@ -656,8 +656,8 @@ static void export_vrml_arc( MODEL_VRML& aModel, LAYER_NUM layer,
 }
 
 
-static void export_vrml_polygon( MODEL_VRML& aModel, LAYER_NUM layer,
-        DRAWSEGMENT *aOutline, double aOrientation, wxPoint aPos )
+static void export_vrml_polygon( MODEL_VRML& aModel, LAYER_NUM layer, PCB_SHAPE *aOutline,
+                                 double aOrientation, wxPoint aPos )
 {
     if( aOutline->IsPolyShapeValid() )
     {
@@ -692,7 +692,7 @@ static void export_vrml_polygon( MODEL_VRML& aModel, LAYER_NUM layer,
 }
 
 
-static void export_vrml_drawsegment( MODEL_VRML& aModel, DRAWSEGMENT* drawseg )
+static void export_vrml_drawsegment( MODEL_VRML& aModel, PCB_SHAPE* drawseg )
 {
     LAYER_NUM layer = drawseg->GetLayer();
     double  w   = drawseg->GetWidth() * BOARD_SCALE;
@@ -759,7 +759,7 @@ static void vrml_text_callback( int x0, int y0, int xf, int yf, void* aData )
 }
 
 
-static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
+static void export_vrml_pcbtext( MODEL_VRML& aModel, PCB_TEXT* text )
 {
     wxSize size = text->GetTextSize();
 
@@ -810,11 +810,11 @@ static void export_vrml_drawings( MODEL_VRML& aModel, BOARD* pcb )
         switch( drawing->Type() )
         {
         case PCB_SHAPE_T:
-            export_vrml_drawsegment( aModel, (DRAWSEGMENT*) drawing );
+            export_vrml_drawsegment( aModel, (PCB_SHAPE*) drawing );
             break;
 
         case PCB_TEXT_T:
-            export_vrml_pcbtext( aModel, (TEXTE_PCB*) drawing );
+            export_vrml_pcbtext( aModel, (PCB_TEXT*) drawing );
             break;
 
         default:
@@ -1047,7 +1047,7 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb, COMMIT* aCommit 
 }
 
 
-static void export_vrml_text_module( TEXTE_MODULE* item )
+static void export_vrml_text_module( FP_TEXT* item )
 {
     if( item->IsVisible() )
     {
@@ -1069,8 +1069,7 @@ static void export_vrml_text_module( TEXTE_MODULE* item )
 }
 
 
-static void export_vrml_edge_module( MODEL_VRML& aModel, EDGE_MODULE* aOutline,
-                                     MODULE* aModule )
+static void export_vrml_edge_module( MODEL_VRML& aModel, FP_SHAPE* aOutline, MODULE* aModule )
 {
     LAYER_NUM layer = aOutline->GetLayer();
     double  x   = aOutline->GetStart().x * BOARD_SCALE;
@@ -1381,11 +1380,11 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
             switch( item->Type() )
             {
             case PCB_FP_TEXT_T:
-                export_vrml_text_module( static_cast<TEXTE_MODULE*>( item ) );
+                export_vrml_text_module( static_cast<FP_TEXT*>( item ) );
                 break;
 
             case PCB_FP_SHAPE_T:
-                export_vrml_edge_module( aModel, static_cast<EDGE_MODULE*>( item ), aModule );
+                export_vrml_edge_module( aModel, static_cast<FP_SHAPE*>( item ), aModule );
                 break;
 
             default:

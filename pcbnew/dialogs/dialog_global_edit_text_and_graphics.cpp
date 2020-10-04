@@ -28,8 +28,8 @@
 #include <pcb_layer_box_selector.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <class_edge_mod.h>
-#include <class_pcb_text.h>
+#include <fp_shape.h>
+#include <pcb_text.h>
 #include <widgets/unit_binder.h>
 #include <tools/global_edit_tool.h>
 #include <dialog_global_edit_text_and_graphics_base.h>
@@ -270,8 +270,8 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
     aCommit.Modify( aItem );
 
     auto textItem = dynamic_cast<EDA_TEXT*>( aItem );
-    auto drawItem = dynamic_cast<DRAWSEGMENT*>( aItem );
-    auto moduleTextItem = dyn_cast<TEXTE_MODULE*>( aItem );
+    auto drawItem = dynamic_cast<PCB_SHAPE*>( aItem );
+    auto moduleTextItem = dyn_cast<FP_TEXT*>( aItem );
 
     if( m_setToSpecifiedValues->GetValue() )
     {

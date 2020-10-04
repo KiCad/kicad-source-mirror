@@ -25,7 +25,7 @@ using namespace std::placeholders;
 #include <class_board.h>
 #include <class_board_item.h>
 #include <class_module.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <class_pad.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
@@ -1445,8 +1445,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
                     if( drawing->Type() == PCB_FP_SHAPE_T )
                     {
-                        EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( previewItem );
-                        edge->DRAWSEGMENT::Move( (wxPoint) offset );
+                        FP_SHAPE* shape = static_cast<FP_SHAPE*>( previewItem );
+                        shape->PCB_SHAPE::Move( (wxPoint) offset );
                     }
                     else
                     {

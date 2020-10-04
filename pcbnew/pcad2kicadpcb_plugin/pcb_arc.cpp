@@ -29,11 +29,11 @@
 
 #include <wx/wx.h>
 
-#include <common.h>
 #include <math/util.h>      // for KiROUND
 #include <trigo.h>
-
+#include <fp_shape.h>
 #include <pcb_arc.h>
+#include <pcb_shape.h>
 
 namespace PCAD2KICAD {
 
@@ -160,7 +160,7 @@ void PCB_ARC::AddToModule( MODULE* aModule )
 {
     if( IsNonCopperLayer( m_KiCadLayer ) )
     {
-        EDGE_MODULE* arc = new EDGE_MODULE( aModule, ( IsCircle() ? S_CIRCLE : S_ARC ) );
+        FP_SHAPE* arc = new FP_SHAPE( aModule, ( IsCircle() ? S_CIRCLE : S_ARC ) );
         aModule->Add( arc );
 
         arc->m_Start0   = wxPoint( m_positionX, m_positionY );
@@ -180,16 +180,16 @@ void PCB_ARC::AddToModule( MODULE* aModule )
 
 void PCB_ARC::AddToBoard()
 {
-    DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
+    PCB_SHAPE* arc = new PCB_SHAPE( m_board );
 
-    m_board->Add( dseg, ADD_MODE::APPEND );
+    m_board->Add( arc, ADD_MODE::APPEND );
 
-    dseg->SetShape( IsCircle() ? S_CIRCLE : S_ARC );
-    dseg->SetLayer( m_KiCadLayer );
-    dseg->SetStart( wxPoint( m_positionX, m_positionY ) );
-    dseg->SetEnd( wxPoint( m_startX, m_startY ) );
-    dseg->SetAngle( -m_angle );
-    dseg->SetWidth( m_width );
+    arc->SetShape( IsCircle() ? S_CIRCLE : S_ARC );
+    arc->SetLayer( m_KiCadLayer );
+    arc->SetStart( wxPoint( m_positionX, m_positionY ) );
+    arc->SetEnd( wxPoint( m_startX, m_startY ) );
+    arc->SetAngle( -m_angle );
+    arc->SetWidth( m_width );
 }
 
 

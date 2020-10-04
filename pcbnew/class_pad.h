@@ -39,7 +39,7 @@
 #include <pad_shapes.h>
 #include <pcbnew.h>
 
-class DRAWSEGMENT;
+class PCB_SHAPE;
 class PARAM_CFG;
 class SHAPE;
 class SHAPE_SEGMENT;
@@ -53,7 +53,7 @@ enum CUST_PAD_SHAPE_IN_ZONE
 class LINE_READER;
 class EDA_3D_CANVAS;
 class MODULE;
-class EDGE_MODULE;
+class FP_SHAPE;
 class TRACK;
 
 namespace KIGFX
@@ -277,7 +277,7 @@ public:
     /**
      * Accessor to the basic shape list for custom-shaped pads.
      */
-    const std::vector<std::shared_ptr<DRAWSEGMENT>>& GetPrimitives() const
+    const std::vector<std::shared_ptr<PCB_SHAPE>>& GetPrimitives() const
     {
         return m_editPrimitives;
     }
@@ -294,18 +294,18 @@ public:
      * Clear the current custom shape primitives list and import a new list.  Copies the input,
      * which is not altered.
      */
-    void ReplacePrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPrimitivesList );
+    void ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList );
 
     /**
      * Import a custom shape primites list (composed of basic shapes) and add items to the
      * current list.  Copies the input, which is not altered.
      */
-    void AppendPrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPrimitivesList );
+    void AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList );
 
     /**
      * Add item to the custom shape primitives list
      */
-    void AddPrimitive( DRAWSEGMENT* aPrimitive );
+    void AddPrimitive( PCB_SHAPE* aPrimitive );
 
     /**
      * Function SetOrientation
@@ -647,7 +647,7 @@ private:
      * Editing definitions of primitives for custom pad shapes.  In local coordinates relative
      * to m_Pos (NOT shapePos) at orient 0.
      */
-    std::vector<std::shared_ptr<DRAWSEGMENT>> m_editPrimitives;
+    std::vector<std::shared_ptr<PCB_SHAPE>> m_editPrimitives;
 
     // Must be set to true to force rebuild shapes to draw (after geometry change for instance)
     mutable bool                              m_shapesDirty;

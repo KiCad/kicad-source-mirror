@@ -26,8 +26,8 @@
 #include <class_board.h>
 #include <class_marker_pcb.h>
 #include <class_module.h>
-#include <class_pcb_text.h>
-#include <class_text_mod.h>
+#include <pcb_text.h>
+#include <fp_text.h>
 #include <dialog_find.h>
 #include <kicad_string.h>
 #include <pcb_edit_frame.h>
@@ -234,7 +234,7 @@ void DIALOG_FIND::search( bool aDirection )
                 {
                     for( BOARD_ITEM* item : module->GraphicalItems() )
                     {
-                        TEXTE_MODULE* textItem = dynamic_cast<TEXTE_MODULE*>( item );
+                        FP_TEXT* textItem = dynamic_cast<FP_TEXT*>( item );
 
                         if( textItem
                                 && textItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
@@ -249,7 +249,7 @@ void DIALOG_FIND::search( bool aDirection )
             {
                 for( BOARD_ITEM* item : m_frame->GetBoard()->Drawings() )
                 {
-                    TEXTE_PCB* textItem = dynamic_cast<TEXTE_PCB*>( item );
+                    PCB_TEXT* textItem = dynamic_cast<PCB_TEXT*>( item );
 
                     if( textItem && textItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
                     {

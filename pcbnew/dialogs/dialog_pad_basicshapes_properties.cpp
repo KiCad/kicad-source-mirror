@@ -42,7 +42,7 @@
 
 DIALOG_PAD_PRIMITIVES_PROPERTIES::DIALOG_PAD_PRIMITIVES_PROPERTIES( wxWindow* aParent,
                                                                     PCB_BASE_FRAME* aFrame,
-                                                                    DRAWSEGMENT* aShape ) :
+                                                                    PCB_SHAPE* aShape ) :
         DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( aParent ),
         m_shape( aShape ),
         m_startX( aFrame, m_startXLabel, m_startXCtrl, m_startXUnits, true ),
@@ -214,7 +214,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
 
 DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aParent,
                                                                   PCB_BASE_FRAME* aFrame,
-                                                                  DRAWSEGMENT* aShape ) :
+                                                                  PCB_SHAPE* aShape ) :
         DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( aParent ),
         m_shape( aShape ),
         m_thickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true )
@@ -526,7 +526,7 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging( wxGridEvent& event )
 // (move, rotate around origin, scaling factor, duplication).
 DIALOG_PAD_PRIMITIVES_TRANSFORM::DIALOG_PAD_PRIMITIVES_TRANSFORM( wxWindow* aParent,
                                                                   PCB_BASE_FRAME* aFrame,
-                                                                  std::vector<std::shared_ptr<DRAWSEGMENT>>& aList,
+                                                                  std::vector<std::shared_ptr<PCB_SHAPE>>& aList,
                                                                   bool aShowDuplicate ) :
     DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE( aParent ),
     m_list( aList ),
@@ -557,7 +557,7 @@ inline void geom_transf( wxPoint& aCoord, wxPoint& aMove, double aScale, double 
 }
 
 
-void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<std::shared_ptr<DRAWSEGMENT>>* aList,
+void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<std::shared_ptr<PCB_SHAPE>>* aList,
                                                  int aDuplicateCount )
 {
     wxPoint move_vect( m_vectorX.GetValue(), m_vectorY.GetValue() );
@@ -582,13 +582,13 @@ void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<std::shared_ptr<DRA
     do {
         for( unsigned idx = 0; idx < m_list.size(); ++idx )
         {
-            std::shared_ptr<DRAWSEGMENT> shape;
+            std::shared_ptr<PCB_SHAPE> shape;
 
             if( aList == NULL )
                 shape = m_list[idx];
             else
             {
-                aList->emplace_back( std::make_shared<DRAWSEGMENT>( *m_list[idx] ) );
+                aList->emplace_back( std::make_shared<PCB_SHAPE>( *m_list[idx] ) );
                 shape = aList->back();
             }
 

@@ -492,8 +492,8 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/class_board.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/class_board_item.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/class_dimension.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/class_drawsegment.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/class_edge_mod.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_shape.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/fp_shape.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/class_pcb_group.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/class_marker_pcb.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/class_module.cpp
@@ -501,9 +501,9 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/netinfo_list.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/class_pad.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/class_pcb_target.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/class_pcb_text.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_text.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_stackup_manager/class_board_stackup.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/class_text_mod.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/fp_text.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/class_track.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/class_zone.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/collectors.cpp

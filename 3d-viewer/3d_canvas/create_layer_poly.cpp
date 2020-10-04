@@ -30,7 +30,7 @@
 
 #include "board_adapter.h"
 #include <convert_basic_shapes_to_polygon.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <class_module.h>
 
 
@@ -67,7 +67,7 @@ void BOARD_ADAPTER::transformGraphicModuleEdgeToPolygonSet( const MODULE *aModul
     {
         if( item->Type() == PCB_FP_SHAPE_T )
         {
-            EDGE_MODULE* outline = (EDGE_MODULE*) item;
+            FP_SHAPE* outline = (FP_SHAPE*) item;
 
             if( outline->GetLayer() == aLayer )
                 outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0 );

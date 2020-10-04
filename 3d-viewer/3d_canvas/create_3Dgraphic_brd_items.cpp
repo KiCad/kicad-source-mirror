@@ -38,10 +38,10 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_pad.h>
-#include <class_pcb_text.h>
-#include <class_edge_mod.h>
+#include <pcb_text.h>
+#include <fp_shape.h>
 #include <class_zone.h>
-#include <class_text_mod.h>
+#include <fp_text.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
 #include <geometry/shape_segment.h>
@@ -81,9 +81,9 @@ void addTextSegmToContainer( int x0, int y0, int xf, int yf, void* aData )
 
 
 // Based on
-// void TEXTE_PCB::TransformShapeWithClearanceToPolygon
+// void PCB_TEXT::TransformShapeWithClearanceToPolygon
 // board_items_to_polygon_shape_transform.cpp
-void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const TEXTE_PCB* aText,
+void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_TEXT* aText,
                                                       CGENERICCONTAINER2D *aDstContainer,
                                                       PCB_LAYER_ID aLayerId,
                                                       int aClearanceValue )
@@ -190,16 +190,16 @@ void BOARD_ADAPTER::AddGraphicsShapesWithClearanceToContainer( const MODULE* aMo
                                                                PCB_LAYER_ID aLayerId,
                                                                int aInflateValue )
 {
-    std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
-    EDGE_MODULE* outline;
+    std::vector<FP_TEXT*> texts;  // List of FP_TEXT to convert
+    FP_SHAPE* outline;
 
-    for( auto item : aModule->GraphicalItems() )
+    for( BOARD_ITEM* item : aModule->GraphicalItems() )
     {
         switch( item->Type() )
         {
         case PCB_FP_TEXT_T:
         {
-            TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
+            FP_TEXT* text = static_cast<FP_TEXT*>( item );
 
             if( text->GetLayer() == aLayerId && text->IsVisible() )
                 texts.push_back( text );
@@ -209,13 +209,12 @@ void BOARD_ADAPTER::AddGraphicsShapesWithClearanceToContainer( const MODULE* aMo
 
         case PCB_FP_SHAPE_T:
         {
-            outline = (EDGE_MODULE*) item;
+            outline = (FP_SHAPE*) item;
 
             if( outline->GetLayer() != aLayerId )
                 break;
 
-            AddShapeWithClearanceToContainer( (const DRAWSEGMENT *)outline,
-                                              aDstContainer,
+            AddShapeWithClearanceToContainer( (const PCB_SHAPE*) outline, aDstContainer,
                                               aLayerId, 0 );
         }
         break;
@@ -236,7 +235,7 @@ void BOARD_ADAPTER::AddGraphicsShapesWithClearanceToContainer( const MODULE* aMo
     s_dstcontainer = aDstContainer;
     s_biuTo3Dunits = m_biuTo3Dunits;
 
-    for( TEXTE_MODULE* text : texts )
+    for( FP_TEXT* text : texts )
     {
         s_textWidth = text->GetEffectiveTextPenWidth() + ( 2 * aInflateValue );
         wxSize size = text->GetTextSize();
@@ -626,7 +625,7 @@ void BOARD_ADAPTER::TransformArcToSegments( const wxPoint &aCentre,
 // Based on
 // TransformShapeWithClearanceToPolygon
 // board_items_to_polygon_shape_transform.cpp#L431
-void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSegment,
+void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_SHAPE* aDrawSegment,
                                                       CGENERICCONTAINER2D *aDstContainer,
                                                       PCB_LAYER_ID aLayerId,
                                                       int aClearanceValue )

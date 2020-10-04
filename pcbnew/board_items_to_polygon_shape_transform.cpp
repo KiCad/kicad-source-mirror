@@ -31,11 +31,11 @@
 #include <class_board.h>
 #include <class_pad.h>
 #include <class_track.h>
-#include <class_drawsegment.h>
-#include <class_pcb_text.h>
+#include <pcb_shape.h>
+#include <pcb_text.h>
 #include <class_zone.h>
 #include <class_module.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
@@ -98,11 +98,11 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
         switch( item->Type() )
         {
         case PCB_SHAPE_T:
-            ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0 );
+            ( (PCB_SHAPE*) item )->TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0 );
             break;
 
         case PCB_TEXT_T:
-            ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygonSet( aOutlines, 0 );
+            ( (PCB_TEXT*) item )->TransformShapeWithClearanceToPolygonSet( aOutlines, 0 );
             break;
 
         default:
@@ -216,13 +216,13 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
                                                               bool aIncludeText,
                                                               bool aIncludeEdges ) const
 {
-    std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
+    std::vector<FP_TEXT*> texts;  // List of FP_TEXT to convert
 
     for( auto item : GraphicalItems() )
     {
         if( item->Type() == PCB_FP_TEXT_T && aIncludeText )
         {
-            TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
+            FP_TEXT* text = static_cast<FP_TEXT*>( item );
 
             if( aLayer != UNDEFINED_LAYER && text->GetLayer() == aLayer && text->IsVisible() )
                 texts.push_back( text );
@@ -230,7 +230,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
 
         if( item->Type() == PCB_FP_SHAPE_T && aIncludeEdges )
         {
-            EDGE_MODULE* outline = (EDGE_MODULE*) item;
+            FP_SHAPE* outline = static_cast<FP_SHAPE*>( item );
 
             if( aLayer != UNDEFINED_LAYER && outline->GetLayer() == aLayer )
                 outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0, aError );
@@ -248,7 +248,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
 
     prms.m_cornerBuffer = &aCornerBuffer;
 
-    for( TEXTE_MODULE* textmod : texts )
+    for( FP_TEXT* textmod : texts )
     {
         bool forceBold = true;
         int  penWidth = 0;      // force max width for bold text
@@ -338,8 +338,8 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
  * @aClearanceValue = the clearance around the text
  * @aError = the maximum error to allow when approximating curves
  */
-void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
-                                                         int aClearanceValue, int aError ) const
+void PCB_TEXT::TransformShapeWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
+                                                        int aClearanceValue, int aError ) const
 {
     wxSize size = GetTextSize();
 
@@ -377,10 +377,10 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet( SHAPE_POLY_SET& aCorner
 }
 
 
-void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                        PCB_LAYER_ID aLayer,
-                                                        int aClearanceValue, int aError,
-                                                        bool ignoreLineWidth ) const
+void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                      PCB_LAYER_ID aLayer,
+                                                      int aClearanceValue, int aError,
+                                                      bool ignoreLineWidth ) const
 {
     int width = ignoreLineWidth ? 0 : m_Width;
 
@@ -494,7 +494,7 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
         break;
 
     default:
-        wxFAIL_MSG( "DRAWSEGMENT::TransformShapeWithClearanceToPolygon no implementation for "
+        wxFAIL_MSG( "PCB_SHAPE::TransformShapeWithClearanceToPolygon no implementation for "
                     + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }

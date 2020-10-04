@@ -23,7 +23,6 @@
 
 #include <common.h>
 #include <class_board.h>
-#include <class_drawsegment.h>
 
 #include <geometry/polygon_test_point_inside.h>
 #include <geometry/seg.h>

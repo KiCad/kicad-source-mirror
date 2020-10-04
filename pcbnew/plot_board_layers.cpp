@@ -38,10 +38,10 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_edge_mod.h>
-#include <class_pcb_text.h>
+#include <fp_shape.h>
+#include <pcb_text.h>
 #include <class_zone.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <class_pcb_target.h>
 #include <class_dimension.h>
 
@@ -783,7 +783,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             itemplotter.PlotFootprintTextItems( module );
 
             if( item->Type() == PCB_FP_SHAPE_T && item->GetLayer() == layer )
-                itemplotter.PlotFootprintGraphicItem((EDGE_MODULE*) item );
+                itemplotter.PlotFootprintGraphicItem( (FP_SHAPE*) item );
         }
     }
 

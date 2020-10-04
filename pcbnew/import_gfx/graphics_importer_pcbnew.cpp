@@ -26,9 +26,9 @@
 #include "graphics_importer_pcbnew.h"
 
 #include <class_board.h>
-#include <class_edge_mod.h>
-#include <class_pcb_text.h>
-#include <class_text_mod.h>
+#include <fp_shape.h>
+#include <pcb_text.h>
+#include <fp_text.h>
 #include <memory>
 #include <tuple>
 
@@ -61,7 +61,7 @@ int GRAPHICS_IMPORTER_PCBNEW::MapLineWidth( double aLineWidth )
 
 void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd, double aWidth )
 {
-    std::unique_ptr<DRAWSEGMENT> line( createDrawing() );
+    std::unique_ptr<PCB_SHAPE> line( createDrawing() );
     line->SetShape( S_SEGMENT );
     line->SetLayer( GetLayer() );
     line->SetWidth( MapLineWidth( aWidth ) );
@@ -69,7 +69,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D&
     line->SetEnd( MapCoordinate( aEnd ) );
 
     if( line->Type() == PCB_FP_SHAPE_T )
-        static_cast<EDGE_MODULE*>( line.get() )->SetLocalCoord();
+        static_cast<FP_SHAPE*>( line.get() )->SetLocalCoord();
 
     addItem( std::move( line ) );
 }
@@ -77,7 +77,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D&
 
 void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth )
 {
-    std::unique_ptr<DRAWSEGMENT> circle( createDrawing() );
+    std::unique_ptr<PCB_SHAPE> circle( createDrawing() );
     circle->SetShape( S_CIRCLE );
     circle->SetLayer( GetLayer() );
     circle->SetWidth( MapLineWidth( aWidth ) );
@@ -85,7 +85,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadiu
     circle->SetArcStart( MapCoordinate( VECTOR2D( aCenter.x + aRadius, aCenter.y ) ) );
 
     if( circle->Type() == PCB_FP_SHAPE_T )
-        static_cast<EDGE_MODULE*>( circle.get() )->SetLocalCoord();
+        static_cast<FP_SHAPE*>( circle.get() )->SetLocalCoord();
 
     addItem( std::move( circle ) );
 }
@@ -94,7 +94,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadiu
 void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
                                        double aAngle, double aWidth )
 {
-    std::unique_ptr<DRAWSEGMENT> arc( createDrawing() );
+    std::unique_ptr<PCB_SHAPE> arc( createDrawing() );
     arc->SetShape( S_ARC );
     arc->SetLayer( GetLayer() );
     arc->SetWidth( MapLineWidth( aWidth ) );
@@ -103,7 +103,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
     arc->SetAngle( aAngle * 10.0 );     // Pcbnew uses the decidegree
 
     if( arc->Type() == PCB_FP_SHAPE_T )
-        static_cast<EDGE_MODULE*>( arc.get() )->SetLocalCoord();
+        static_cast<FP_SHAPE*>( arc.get() )->SetLocalCoord();
 
     addItem( std::move( arc ) );
 }
@@ -117,13 +117,13 @@ void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector< VECTOR2D >& aVerti
     for( const VECTOR2D& precisePoint : aVertices )
         convertedPoints.emplace_back( MapCoordinate( precisePoint ) );
 
-    std::unique_ptr<DRAWSEGMENT> polygon( createDrawing() );
+    std::unique_ptr<PCB_SHAPE> polygon( createDrawing() );
     polygon->SetShape( S_POLYGON );
     polygon->SetLayer( GetLayer() );
     polygon->SetPolyPoints( convertedPoints );
 
     if( polygon->Type() == PCB_FP_SHAPE_T )
-        static_cast<EDGE_MODULE*>( polygon.get() )->SetLocalCoord();
+        static_cast<FP_SHAPE*>( polygon.get() )->SetLocalCoord();
 
     polygon->SetWidth( MapLineWidth( aWidth ) );
     addItem( std::move( polygon ) );
@@ -148,7 +148,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString&
     textItem->SetText( aText );
 
     if( boardItem->Type() == PCB_FP_TEXT_T )
-        static_cast<TEXTE_MODULE*>( boardItem.get() )->SetLocalCoord();
+        static_cast<FP_TEXT*>( boardItem.get() )->SetLocalCoord();
 
     addItem( std::move( boardItem ) );
 }
@@ -157,7 +157,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString&
 void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D& BezierControl1,
                 const VECTOR2D& BezierControl2, const VECTOR2D& aEnd, double aWidth )
 {
-    std::unique_ptr<DRAWSEGMENT> spline( createDrawing() );
+    std::unique_ptr<PCB_SHAPE> spline( createDrawing() );
     spline->SetShape( S_CURVE );
     spline->SetLayer( GetLayer() );
     spline->SetWidth( MapLineWidth( aWidth ) );
@@ -168,33 +168,33 @@ void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D
     spline->RebuildBezierToSegmentsPointsList( aWidth );
 
     if( spline->Type() == PCB_FP_SHAPE_T )
-        static_cast<EDGE_MODULE*>( spline.get() )->SetLocalCoord();
+        static_cast<FP_SHAPE*>( spline.get() )->SetLocalCoord();
 
     addItem( std::move( spline ) );
 }
 
 
-std::unique_ptr<DRAWSEGMENT> GRAPHICS_IMPORTER_BOARD::createDrawing()
+std::unique_ptr<PCB_SHAPE> GRAPHICS_IMPORTER_BOARD::createDrawing()
 {
-    return std::make_unique<DRAWSEGMENT>( m_board );
+    return std::make_unique<PCB_SHAPE>( m_board );
 }
 
 
 std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> GRAPHICS_IMPORTER_BOARD::createText()
 {
-    TEXTE_PCB* text = new TEXTE_PCB( m_board );
+    PCB_TEXT* text = new PCB_TEXT( m_board );
     return make_pair( std::unique_ptr<BOARD_ITEM>( text ), static_cast<EDA_TEXT*>( text ) );
 }
 
 
-std::unique_ptr<DRAWSEGMENT> GRAPHICS_IMPORTER_MODULE::createDrawing()
+std::unique_ptr<PCB_SHAPE> GRAPHICS_IMPORTER_MODULE::createDrawing()
 {
-    return std::unique_ptr<DRAWSEGMENT>( new EDGE_MODULE( m_module ) );
+    return std::unique_ptr<PCB_SHAPE>( new FP_SHAPE( m_module ) );
 }
 
 
 std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> GRAPHICS_IMPORTER_MODULE::createText()
 {
-    TEXTE_MODULE* text = new TEXTE_MODULE( m_module );
+    FP_TEXT* text = new FP_TEXT( m_module );
     return make_pair( std::unique_ptr<BOARD_ITEM>( text ), static_cast<EDA_TEXT*>( text ) );
 }

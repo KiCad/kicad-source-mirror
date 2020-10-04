@@ -27,7 +27,7 @@
 #include <limits>
 #include <class_board.h>
 #include <class_module.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <collectors.h>
 #include <pcb_edit_frame.h>
 #include <ws_proxy_view_item.h>
@@ -932,8 +932,8 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         {
         case PCB_FP_SHAPE_T:
         {
-            EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( item );
-            edge->Mirror( mirrorPoint, false );
+            FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
+            shape->Mirror( mirrorPoint, false );
             break;
         }
 
@@ -946,8 +946,8 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
         case PCB_FP_TEXT_T:
         {
-            TEXTE_MODULE* modText = static_cast<TEXTE_MODULE*>( item );
-            modText->Mirror( mirrorPoint, false );
+            FP_TEXT* text = static_cast<FP_TEXT*>( item );
+            text->Mirror( mirrorPoint, false );
             break;
         }
 
@@ -1127,10 +1127,10 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         {
         case PCB_FP_TEXT_T:
             {
-                TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
-                MODULE*       parent = static_cast<MODULE*>( item->GetParent() );
+                FP_TEXT* text = static_cast<FP_TEXT*>( item );
+                MODULE*  parent = static_cast<MODULE*>( item->GetParent() );
 
-                if( text->GetType() == TEXTE_MODULE::TEXT_is_DIVERS )
+                if( text->GetType() == FP_TEXT::TEXT_is_DIVERS )
                 {
                     m_commit->Modify( text );
                     getView()->Remove( text );

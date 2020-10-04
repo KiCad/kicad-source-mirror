@@ -39,14 +39,14 @@
 #include <wx/filename.h>
 
 class PLOTTER;
-class TEXTE_PCB;
+class PCB_TEXT;
 class D_PAD;
-class DRAWSEGMENT;
+class PCB_SHAPE;
 class DIMENSION;
 class MODULE;
-class EDGE_MODULE;
+class FP_SHAPE;
 class PCB_TARGET;
-class TEXTE_MODULE;
+class FP_TEXT;
 class ZONE_CONTAINER;
 class BOARD;
 class REPORTER;
@@ -91,8 +91,8 @@ public:
     // Basic functions to plot a board item
     void SetLayerSet( LSET aLayerMask )     { m_layerMask = aLayerMask; }
     void PlotFootprintGraphicItems( MODULE* aModule );
-    void PlotFootprintGraphicItem( EDGE_MODULE* aEdge );
-    void PlotFootprintTextItem( TEXTE_MODULE* aTextMod, COLOR4D aColor );
+    void PlotFootprintGraphicItem( FP_SHAPE* aShape );
+    void PlotFootprintTextItem( FP_TEXT* aText, COLOR4D aColor );
 
     /*
      * Reference, Value, and other fields are plotted only if the corresponding option is enabled.
@@ -103,8 +103,8 @@ public:
     void PlotDimension( DIMENSION* Dimension );
     void PlotPcbTarget( PCB_TARGET* PtMire );
     void PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aPolysList );
-    void PlotTextePcb( TEXTE_PCB* pt_texte );
-    void PlotDrawSegment( DRAWSEGMENT* PtSegm );
+    void PlotPcbText( PCB_TEXT* aText );
+    void PlotPcbShape( PCB_SHAPE* aShape );
 
     /**
      * Plot a pad.

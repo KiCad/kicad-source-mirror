@@ -31,7 +31,7 @@ using namespace std::placeholders;
 #include <class_board_item.h>
 #include <class_track.h>
 #include <class_module.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <class_zone.h>
 #include <collectors.h>
 #include <confirm.h>
@@ -2305,7 +2305,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
     {
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
-            if( TEXTE_MODULE* txt = dyn_cast<TEXTE_MODULE*>( aCollector[i] ) )
+            if( FP_TEXT* txt = dyn_cast<FP_TEXT*>( aCollector[i] ) )
             {
                 double textArea = calcArea( txt );
 
@@ -2358,9 +2358,9 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
         {
             for( int i = 0; i < aCollector.GetCount(); ++i )
             {
-                if( DRAWSEGMENT* drawSegment = dynamic_cast<DRAWSEGMENT*>( aCollector[i] ) )
+                if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aCollector[i] ) )
                 {
-                    if( drawSegment->HitTest( where, dist ) )
+                    if( shape->HitTest( where, dist ) )
                     {
                         found = true;
                         break;
@@ -2373,10 +2373,10 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                 // throw out everything that is more sloppy than what we found
                 for( int i = 0; i < aCollector.GetCount(); ++i )
                 {
-                    if( DRAWSEGMENT* drawSegment = dynamic_cast<DRAWSEGMENT*>( aCollector[i] ) )
+                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aCollector[i] ) )
                     {
-                        if( !drawSegment->HitTest( where, dist ) )
-                            rejected.insert( drawSegment );
+                        if( !shape->HitTest( where, dist ) )
+                            rejected.insert( shape );
                     }
                 }
 

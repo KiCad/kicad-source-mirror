@@ -30,7 +30,7 @@
 #include <unordered_set>
 #include <pcb_edit_frame.h>
 #include <class_board.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <class_module.h>
 #include <view/view.h>
 #include <geometry/shape_null.h>
@@ -56,8 +56,8 @@ MODULE::MODULE( BOARD* parent ) :
     m_ThermalGap = 0;       // Use zone setting by default
 
     // These are special and mandatory text fields
-    m_Reference = new TEXTE_MODULE( this, TEXTE_MODULE::TEXT_is_REFERENCE );
-    m_Value = new TEXTE_MODULE( this, TEXTE_MODULE::TEXT_is_VALUE );
+    m_Reference = new FP_TEXT( this, FP_TEXT::TEXT_is_REFERENCE );
+    m_Value = new FP_TEXT( this, FP_TEXT::TEXT_is_VALUE );
 
     m_3D_Drawings.clear();
 }
@@ -87,9 +87,9 @@ MODULE::MODULE( const MODULE& aModule ) :
     m_ThermalGap = aModule.m_ThermalGap;
 
     // Copy reference and value.
-    m_Reference = new TEXTE_MODULE( *aModule.m_Reference );
+    m_Reference = new FP_TEXT( *aModule.m_Reference );
     m_Reference->SetParent( this );
-    m_Value = new TEXTE_MODULE( *aModule.m_Value );
+    m_Value = new FP_TEXT( *aModule.m_Value );
     m_Value->SetParent( this );
 
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
@@ -433,7 +433,7 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     {
     case PCB_FP_TEXT_T:
         // Only user text can be added this way.
-        assert( static_cast<TEXTE_MODULE*>( aBoardItem )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS );
+        assert( static_cast<FP_TEXT*>( aBoardItem )->GetType() == FP_TEXT::TEXT_is_DIVERS );
         KI_FALLTHROUGH;
 
     case PCB_FP_SHAPE_T:
@@ -487,7 +487,7 @@ void MODULE::Remove( BOARD_ITEM* aBoardItem )
     case PCB_FP_TEXT_T:
         // Only user text can be removed this way.
         wxCHECK_RET(
-                static_cast<TEXTE_MODULE*>( aBoardItem )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS,
+                static_cast<FP_TEXT*>( aBoardItem )->GetType() == FP_TEXT::TEXT_is_DIVERS,
                 "Please report this bug: Invalid remove operation on required text" );
         KI_FALLTHROUGH;
 
@@ -1236,7 +1236,7 @@ void MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
     for( BOARD_ITEM* item : m_drawings )
     {
         if( item->Type() == PCB_FP_TEXT_T )
-            static_cast<TEXTE_MODULE*>( item )->KeepUpright(  orientation, newOrientation  );
+            static_cast<FP_TEXT*>( item )->KeepUpright( orientation, newOrientation  );
     }
 }
 
@@ -1286,11 +1286,11 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         switch( item->Type() )
         {
         case PCB_FP_SHAPE_T:
-            static_cast<EDGE_MODULE*>( item )->Flip( m_Pos, false );
+            static_cast<FP_SHAPE*>( item )->Flip( m_Pos, false );
             break;
 
         case PCB_FP_TEXT_T:
-            static_cast<TEXTE_MODULE*>( item )->Flip( m_Pos, false );
+            static_cast<FP_TEXT*>( item )->Flip( m_Pos, false );
             break;
 
         default:
@@ -1330,14 +1330,14 @@ void MODULE::SetPosition( const wxPoint& aPos )
         {
         case PCB_FP_SHAPE_T:
         {
-            EDGE_MODULE* pt_edgmod = (EDGE_MODULE*) item;
-            pt_edgmod->SetDrawCoord();
+            FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
+            shape->SetDrawCoord();
             break;
         }
 
         case PCB_FP_TEXT_T:
         {
-            TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
+            FP_TEXT* text = static_cast<FP_TEXT*>( item );
             text->EDA_TEXT::Offset( delta );
             break;
         }
@@ -1387,14 +1387,14 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
         {
         case PCB_FP_SHAPE_T:
             {
-            EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( item );
-            edge->Move( moveVector );
+            FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
+                shape->Move( moveVector );
             }
             break;
 
         case PCB_FP_TEXT_T:
             {
-            TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
+            FP_TEXT* text = static_cast<FP_TEXT*>( item );
             text->SetPos0( text->GetPos0() + moveVector );
             text->SetDrawCoord();
             }
@@ -1437,11 +1437,11 @@ void MODULE::SetOrientation( double aNewAngle )
     {
         if( item->Type() == PCB_FP_SHAPE_T )
         {
-            static_cast<EDGE_MODULE*>( item )->SetDrawCoord();
+            static_cast<FP_SHAPE*>( item )->SetDrawCoord();
         }
         else if( item->Type() == PCB_FP_TEXT_T )
         {
-            static_cast<TEXTE_MODULE*>( item )->SetDrawCoord();
+            static_cast<FP_TEXT*>( item )->SetDrawCoord();
         }
     }
 }
@@ -1494,18 +1494,18 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
 
     case PCB_FP_TEXT_T:
     {
-        TEXTE_MODULE* new_text = new TEXTE_MODULE( *static_cast<const TEXTE_MODULE*>( aItem ) );
+        FP_TEXT* new_text = new FP_TEXT( *static_cast<const FP_TEXT*>( aItem ) );
         const_cast<KIID&>( new_text->m_Uuid ) = KIID();
 
-        if( new_text->GetType() == TEXTE_MODULE::TEXT_is_REFERENCE )
+        if( new_text->GetType() == FP_TEXT::TEXT_is_REFERENCE )
         {
             new_text->SetText( wxT( "${REFERENCE}" ) );
-            new_text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
+            new_text->SetType( FP_TEXT::TEXT_is_DIVERS );
         }
-        else if( new_text->GetType() == TEXTE_MODULE::TEXT_is_VALUE )
+        else if( new_text->GetType() == FP_TEXT::TEXT_is_VALUE )
         {
             new_text->SetText( wxT( "${VALUE}" ) );
-            new_text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
+            new_text->SetType( FP_TEXT::TEXT_is_DIVERS );
         }
 
         if( aAddToModule )
@@ -1518,13 +1518,13 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
 
     case PCB_FP_SHAPE_T:
     {
-        EDGE_MODULE* new_edge = new EDGE_MODULE( *static_cast<const EDGE_MODULE*>( aItem ) );
-        const_cast<KIID&>( new_edge->m_Uuid ) = KIID();
+        FP_SHAPE* new_shape = new FP_SHAPE( *static_cast<const FP_SHAPE*>( aItem ) );
+        const_cast<KIID&>( new_shape->m_Uuid ) = KIID();
 
         if( aAddToModule )
-            Add( new_edge );
+            Add( new_shape );
 
-        new_item = new_edge;
+        new_item = new_shape;
         break;
     }
 
@@ -1656,8 +1656,8 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 
 
 // see convert_drawsegment_list_to_polygon.cpp:
-extern bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SET& aPolygons,
-        wxString* aErrorText, unsigned int aTolerance, wxPoint* aErrorLocation = nullptr );
+extern bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET& aPolygons,
+                                     wxString* aErrorText, unsigned int aTolerance, wxPoint* aErrorLocation = nullptr );
 
 
 std::shared_ptr<SHAPE> MODULE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
@@ -1675,16 +1675,16 @@ bool MODULE::BuildPolyCourtyard()
     // Build the courtyard area from graphic items on the courtyard.
     // Only PCB_FP_SHAPE_T have meaning, graphic texts are ignored.
     // Collect items:
-    std::vector< DRAWSEGMENT* > list_front;
-    std::vector< DRAWSEGMENT* > list_back;
+    std::vector<PCB_SHAPE*> list_front;
+    std::vector<PCB_SHAPE*> list_back;
 
     for( BOARD_ITEM* item : GraphicalItems() )
     {
         if( item->GetLayer() == B_CrtYd && item->Type() == PCB_FP_SHAPE_T )
-            list_back.push_back( static_cast< DRAWSEGMENT* > ( item ) );
+            list_back.push_back( static_cast<PCB_SHAPE*>( item ) );
 
         if( item->GetLayer() == F_CrtYd && item->Type() == PCB_FP_SHAPE_T )
-            list_front.push_back( static_cast< DRAWSEGMENT* > ( item ) );
+            list_front.push_back( static_cast<PCB_SHAPE*>( item ) );
     }
 
     // Note: if no item found on courtyard layers, return true.
@@ -1748,8 +1748,8 @@ bool MODULE::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOARD_ITE
 
     if( aFirst->Type() == PCB_FP_SHAPE_T )
     {
-        const EDGE_MODULE* dwgA = static_cast<const EDGE_MODULE*>( aFirst );
-        const EDGE_MODULE* dwgB = static_cast<const EDGE_MODULE*>( aSecond );
+        const FP_SHAPE* dwgA = static_cast<const FP_SHAPE*>( aFirst );
+        const FP_SHAPE* dwgB = static_cast<const FP_SHAPE*>( aSecond );
 
         if( dwgA->GetShape() != dwgB->GetShape() )
             return dwgA->GetShape() < dwgB->GetShape();

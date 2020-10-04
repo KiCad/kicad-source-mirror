@@ -39,7 +39,7 @@ using namespace std::placeholders;
 #include <bitmaps.h>
 #include <status_popup.h>
 #include <pcb_edit_frame.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <class_dimension.h>
 #include <class_zone.h>
 #include <connectivity/connectivity_data.h>
@@ -140,27 +140,27 @@ public:
         case PCB_SHAPE_T:
         case PCB_FP_SHAPE_T:
         {
-            const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( aItem );
+            const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
 
-            switch( segment->GetShape() )
+            switch( shape->GetShape() )
             {
             case S_SEGMENT:
-                points->AddPoint( segment->GetStart() );
-                points->AddPoint( segment->GetEnd() );
+                points->AddPoint( shape->GetStart() );
+                points->AddPoint( shape->GetEnd() );
                 break;
 
             case S_RECT:
-                points->AddPoint( segment->GetStart() );
-                points->AddPoint( wxPoint( segment->GetEnd().x, segment->GetStart().y ) );
-                points->AddPoint( segment->GetEnd() );
-                points->AddPoint( wxPoint( segment->GetStart().x, segment->GetEnd().y ) );
+                points->AddPoint( shape->GetStart() );
+                points->AddPoint( wxPoint( shape->GetEnd().x, shape->GetStart().y ) );
+                points->AddPoint( shape->GetEnd() );
+                points->AddPoint( wxPoint( shape->GetStart().x, shape->GetEnd().y ) );
                 break;
 
             case S_ARC:
-                points->AddPoint( segment->GetCenter() );
-                points->AddPoint( segment->GetArcStart() );
-                points->AddPoint( segment->GetArcMid() );
-                points->AddPoint( segment->GetArcEnd() );
+                points->AddPoint( shape->GetCenter() );
+                points->AddPoint( shape->GetArcStart() );
+                points->AddPoint( shape->GetArcMid() );
+                points->AddPoint( shape->GetArcEnd() );
 
                 // Set constraints
                 // Arc end has to stay at the same radius as the start
@@ -173,19 +173,19 @@ public:
                 break;
 
             case S_CIRCLE:
-                points->AddPoint( segment->GetCenter() );
-                points->AddPoint( segment->GetEnd() );
+                points->AddPoint( shape->GetCenter() );
+                points->AddPoint( shape->GetEnd() );
                 break;
 
             case S_POLYGON:
-                buildForPolyOutline( points, &segment->GetPolyShape(), aGal );
+                buildForPolyOutline( points, &shape->GetPolyShape(), aGal );
                 break;
 
             case S_CURVE:
-                points->AddPoint( segment->GetStart() );
-                points->AddPoint( segment->GetBezControl1() );
-                points->AddPoint( segment->GetBezControl2() );
-                points->AddPoint( segment->GetEnd() );
+                points->AddPoint( shape->GetStart() );
+                points->AddPoint( shape->GetBezControl1() );
+                points->AddPoint( shape->GetBezControl2() );
+                points->AddPoint( shape->GetEnd() );
                 break;
 
             default:        // suppress warnings
@@ -535,7 +535,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-void POINT_EDITOR::editArcEndpointKeepTangent( DRAWSEGMENT* aArc, VECTOR2I aCenter, VECTOR2I aStart,
+void POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
                                                VECTOR2I aMid, VECTOR2I aEnd,
                                                const VECTOR2I aCursor ) const
 {
@@ -809,7 +809,7 @@ static void pinEditedCorner( int aEditedPointIndex, int aMinWidth, int aMinHeigh
 }
 
 
-void POINT_EDITOR::editArcEndpointKeepCenter( DRAWSEGMENT* aArc, VECTOR2I aCenter, VECTOR2I aStart,
+void POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
                                               VECTOR2I aMid, VECTOR2I aEnd,
                                               const VECTOR2I aCursor ) const
 {
@@ -892,8 +892,8 @@ void POINT_EDITOR::editArcEndpointKeepCenter( DRAWSEGMENT* aArc, VECTOR2I aCente
 }
 
 
-void POINT_EDITOR::editArcMidKeepCenter( DRAWSEGMENT* aArc, VECTOR2I aCenter, VECTOR2I aStart,
-                                        VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const
+void POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
+                                         VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const
 {
     // Now, update the edit point position
     // Express the point in a cercle-centered coordinate system.
@@ -950,8 +950,8 @@ void POINT_EDITOR::editArcMidKeepCenter( DRAWSEGMENT* aArc, VECTOR2I aCenter, VE
 }
 
 
-void POINT_EDITOR::editArcMidKeepEnpoints( DRAWSEGMENT* aArc, VECTOR2I aCenter, VECTOR2I aStart,
-        VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const
+void POINT_EDITOR::editArcMidKeepEnpoints( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
+                                           VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const
 {
     bool     clockwise;
     VECTOR2I oldCenter = aArc->GetCenter();
@@ -1042,18 +1042,18 @@ void POINT_EDITOR::updateItem() const
     case PCB_SHAPE_T:
     case PCB_FP_SHAPE_T:
     {
-        DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( item );
+        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
 
-        switch( segment->GetShape() )
+        switch( shape->GetShape() )
         {
         case S_SEGMENT:
             if( isModified( m_editPoints->Point( SEG_START ) ) )
-                segment->SetStart( wxPoint( m_editPoints->Point( SEG_START ).GetPosition().x,
-                                            m_editPoints->Point( SEG_START ).GetPosition().y ) );
+                shape->SetStart( wxPoint( m_editPoints->Point( SEG_START ).GetPosition().x,
+                                          m_editPoints->Point( SEG_START ).GetPosition().y ) );
 
             else if( isModified( m_editPoints->Point( SEG_END ) ) )
-                segment->SetEnd( wxPoint( m_editPoints->Point( SEG_END ).GetPosition().x,
-                                          m_editPoints->Point( SEG_END ).GetPosition().y ) );
+                shape->SetEnd( wxPoint( m_editPoints->Point( SEG_END ).GetPosition().x,
+                                        m_editPoints->Point( SEG_END ).GetPosition().y ) );
 
             break;
 
@@ -1061,21 +1061,21 @@ void POINT_EDITOR::updateItem() const
         {
             if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) ) )
             {
-                segment->SetStart( (wxPoint) m_editPoints->Point( RECT_TOP_LEFT ).GetPosition() );
+                shape->SetStart((wxPoint) m_editPoints->Point( RECT_TOP_LEFT ).GetPosition() );
             }
             else if( isModified( m_editPoints->Point( RECT_TOP_RIGHT ) ) )
             {
-                segment->SetStartY( m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().y );
-                segment->SetEndX( m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().x );
+                shape->SetStartY( m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().y );
+                shape->SetEndX( m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().x );
             }
             else if( isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
             {
-                segment->SetEnd( (wxPoint) m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition() );
+                shape->SetEnd((wxPoint) m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition() );
             }
             else if( isModified( m_editPoints->Point( RECT_BOT_LEFT ) ) )
             {
-                segment->SetStartX( m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().x );
-                segment->SetEndY( m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().y );
+                shape->SetStartX( m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().x );
+                shape->SetEndY( m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().y );
             }
         }
             break;
@@ -1091,18 +1091,18 @@ void POINT_EDITOR::updateItem() const
 
             if( isModified( m_editPoints->Point( ARC_CENTER ) ) )
             {
-                wxPoint moveVector = wxPoint( center.x, center.y ) - segment->GetCenter();
-                segment->Move( moveVector );
+                wxPoint moveVector = wxPoint( center.x, center.y ) - shape->GetCenter();
+                shape->Move( moveVector );
             }
             else if( isModified( m_editPoints->Point( ARC_MID ) ) )
             {
                 if( m_altEditMethod )
                 {
-                    editArcMidKeepCenter( segment, center, start, mid, end, cursorPos );
+                    editArcMidKeepCenter( shape, center, start, mid, end, cursorPos );
                 }
                 else
                 {
-                    editArcMidKeepEnpoints( segment, center, start, mid, end, cursorPos );
+                    editArcMidKeepEnpoints( shape, center, start, mid, end, cursorPos );
                 }
             }
             else if( isModified( m_editPoints->Point( ARC_START ) )
@@ -1110,11 +1110,11 @@ void POINT_EDITOR::updateItem() const
             {
                 if( m_altEditMethod )
                 {
-                    editArcEndpointKeepCenter( segment, center, start, mid, end, cursorPos );
+                    editArcEndpointKeepCenter( shape, center, start, mid, end, cursorPos );
                 }
                 else
                 {
-                    editArcEndpointKeepTangent( segment, center, start, mid, end, cursorPos );
+                    editArcEndpointKeepTangent( shape, center, start, mid, end, cursorPos );
                 }
             }
         }
@@ -1127,19 +1127,19 @@ void POINT_EDITOR::updateItem() const
 
             if( isModified( m_editPoints->Point( CIRC_CENTER ) ) )
             {
-                wxPoint moveVector = wxPoint( center.x, center.y ) - segment->GetCenter();
-                segment->Move( moveVector );
+                wxPoint moveVector = wxPoint( center.x, center.y ) - shape->GetCenter();
+                shape->Move( moveVector );
             }
             else
             {
-                segment->SetEnd( wxPoint( end.x, end.y ) );
+                shape->SetEnd( wxPoint( end.x, end.y ) );
             }
         }
             break;
 
         case S_POLYGON:
         {
-            SHAPE_POLY_SET& outline = segment->GetPolyShape();
+            SHAPE_POLY_SET& outline = shape->GetPolyShape();
 
             for( int i = 0; i < outline.TotalVertices(); ++i )
                 outline.SetVertex( i, m_editPoints->Point( i ).GetPosition() );
@@ -1156,19 +1156,15 @@ void POINT_EDITOR::updateItem() const
 
         case S_CURVE:
             if( isModified( m_editPoints->Point( BEZIER_CURVE_START ) ) )
-                segment->SetStart( wxPoint( m_editPoints->Point( BEZIER_CURVE_START ).GetPosition().x,
-                                            m_editPoints->Point( BEZIER_CURVE_START ).GetPosition().y ) );
+                shape->SetStart( (wxPoint) m_editPoints->Point( BEZIER_CURVE_START ).GetPosition() );
             else if( isModified( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ) ) )
-                segment->SetBezControl1( wxPoint( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).GetPosition().x,
-                                          m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).GetPosition().y ) );
+                shape->SetBezControl1( (wxPoint) m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).GetPosition() );
             else if( isModified( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ) ) )
-                segment->SetBezControl2( wxPoint( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).GetPosition().x,
-                                            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).GetPosition().y ) );
+                shape->SetBezControl2( (wxPoint) m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).GetPosition() );
             else if( isModified( m_editPoints->Point( BEZIER_CURVE_END ) ) )
-                segment->SetEnd( wxPoint( m_editPoints->Point( BEZIER_CURVE_END ).GetPosition().x,
-                                          m_editPoints->Point( BEZIER_CURVE_END ).GetPosition().y ) );
+                shape->SetEnd( (wxPoint) m_editPoints->Point( BEZIER_CURVE_END ).GetPosition() );
 
-            segment->RebuildBezierToSegmentsPointsList( segment->GetWidth() );
+            shape->RebuildBezierToSegmentsPointsList( shape->GetWidth() );
             break;
 
         default:        // suppress warnings
@@ -1176,8 +1172,8 @@ void POINT_EDITOR::updateItem() const
         }
 
         // Update relative coordinates for module edges
-        if( EDGE_MODULE* edge = dyn_cast<EDGE_MODULE*>( item ) )
-            edge->SetLocalCoord();
+        if( FP_SHAPE* fpShape = dyn_cast<FP_SHAPE*>( item ) )
+            fpShape->SetLocalCoord();
 
         break;
     }
@@ -1527,39 +1523,39 @@ void POINT_EDITOR::updatePoints()
     case PCB_SHAPE_T:
     case PCB_FP_SHAPE_T:
     {
-        const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( item );
+        const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
 
-        switch( segment->GetShape() )
+        switch( shape->GetShape() )
         {
         case S_SEGMENT:
-            m_editPoints->Point( SEG_START ).SetPosition( segment->GetStart() );
-            m_editPoints->Point( SEG_END ).SetPosition( segment->GetEnd() );
+            m_editPoints->Point( SEG_START ).SetPosition( shape->GetStart() );
+            m_editPoints->Point( SEG_END ).SetPosition( shape->GetEnd() );
             break;
 
         case S_RECT:
-            m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( segment->GetStart() );
-            m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( segment->GetEnd().x,
-                                                               segment->GetStart().y );
-            m_editPoints->Point( RECT_BOT_RIGHT ).SetPosition( segment->GetEnd() );
-            m_editPoints->Point( RECT_BOT_LEFT ).SetPosition( segment->GetStart().x,
-                                                              segment->GetEnd().y );
+            m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( shape->GetStart() );
+            m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( shape->GetEnd().x,
+                                                               shape->GetStart().y );
+            m_editPoints->Point( RECT_BOT_RIGHT ).SetPosition( shape->GetEnd() );
+            m_editPoints->Point( RECT_BOT_LEFT ).SetPosition( shape->GetStart().x,
+                                                              shape->GetEnd().y );
             break;
 
         case S_ARC:
-            m_editPoints->Point( ARC_CENTER ).SetPosition( segment->GetCenter() );
-            m_editPoints->Point( ARC_START ).SetPosition( segment->GetArcStart() );
-            m_editPoints->Point( ARC_MID ).SetPosition( segment->GetArcMid() );
-            m_editPoints->Point( ARC_END ).SetPosition( segment->GetArcEnd() );
+            m_editPoints->Point( ARC_CENTER ).SetPosition( shape->GetCenter() );
+            m_editPoints->Point( ARC_START ).SetPosition( shape->GetArcStart() );
+            m_editPoints->Point( ARC_MID ).SetPosition( shape->GetArcMid() );
+            m_editPoints->Point( ARC_END ).SetPosition( shape->GetArcEnd() );
             break;
 
         case S_CIRCLE:
-            m_editPoints->Point( CIRC_CENTER ).SetPosition( segment->GetCenter() );
-            m_editPoints->Point( CIRC_END ).SetPosition( segment->GetEnd() );
+            m_editPoints->Point( CIRC_CENTER ).SetPosition( shape->GetCenter() );
+            m_editPoints->Point( CIRC_END ).SetPosition( shape->GetEnd() );
             break;
 
         case S_POLYGON:
         {
-            const auto& points = segment->BuildPolyPointsList();
+            const auto& points = shape->BuildPolyPointsList();
 
             if( m_editPoints->PointsSize() != (unsigned) points.size() )
             {
@@ -1577,10 +1573,10 @@ void POINT_EDITOR::updatePoints()
         }
 
         case S_CURVE:
-            m_editPoints->Point( BEZIER_CURVE_START ).SetPosition( segment->GetStart() );
-            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).SetPosition( segment->GetBezControl1() );
-            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).SetPosition( segment->GetBezControl2() );
-            m_editPoints->Point( BEZIER_CURVE_END ).SetPosition( segment->GetEnd() );
+            m_editPoints->Point( BEZIER_CURVE_START ).SetPosition( shape->GetStart() );
+            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).SetPosition( shape->GetBezControl1() );
+            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).SetPosition( shape->GetBezControl2() );
+            m_editPoints->Point( BEZIER_CURVE_END ).SetPosition( shape->GetEnd() );
             break;
 
         default:        // suppress warnings
@@ -1760,8 +1756,8 @@ void POINT_EDITOR::setAltConstraint( bool aEnabled )
         else if( m_editPoints->GetParent()->Type() == PCB_SHAPE_T
                 || m_editPoints->GetParent()->Type() == PCB_FP_SHAPE_T )
         {
-            DRAWSEGMENT* seg = static_cast<DRAWSEGMENT*>( m_editPoints->GetParent() );
-            isPoly = seg->GetShape() == S_POLYGON;
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( m_editPoints->GetParent() );
+            isPoly = shape->GetShape() == S_POLYGON;
         }
 
         if( line && isPoly )
@@ -1790,25 +1786,20 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
     {
     case PCB_SHAPE_T:
     case PCB_FP_SHAPE_T:
-    {
-        const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( item );
+        switch( static_cast<const PCB_SHAPE*>( item )->GetShape() )
         {
-            switch( segment->GetShape() )
-            {
-            case S_SEGMENT:
-                return *( m_editPoints->Next( *m_editedPoint ) );     // select the other end of line
+        case S_SEGMENT:
+            return *( m_editPoints->Next( *m_editedPoint ) );     // select the other end of line
 
-            case S_ARC:
-            case S_CIRCLE:
-                return m_editPoints->Point( CIRC_CENTER );
+        case S_ARC:
+        case S_CIRCLE:
+            return m_editPoints->Point( CIRC_CENTER );
 
-            default:        // suppress warnings
-                break;
-            }
+        default:        // suppress warnings
+            break;
         }
 
         break;
-    }
 
     case PCB_DIM_ALIGNED_T:
     {
@@ -1852,7 +1843,7 @@ bool POINT_EDITOR::canAddCorner( const EDA_ITEM& aItem )
 
     if( type == PCB_SHAPE_T || type == PCB_FP_SHAPE_T )
     {
-        const DRAWSEGMENT& shape = static_cast<const DRAWSEGMENT&>( aItem );
+        const PCB_SHAPE& shape = static_cast<const PCB_SHAPE&>( aItem );
         return shape.GetShape() == S_SEGMENT || shape.GetShape() == S_POLYGON;
     }
 
@@ -1899,7 +1890,7 @@ bool POINT_EDITOR::removeCornerCondition( const SELECTION& )
 
     if( !( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T
         || ( ( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_SHAPE_T ) &&
-                   static_cast<DRAWSEGMENT*>( item )->GetShape() == S_POLYGON ) ) )
+             static_cast<PCB_SHAPE*>( item )->GetShape() == S_POLYGON ) ) )
         return false;
 
     SHAPE_POLY_SET *polyset;
@@ -1907,7 +1898,7 @@ bool POINT_EDITOR::removeCornerCondition( const SELECTION& )
     if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T )
         polyset = static_cast<ZONE_CONTAINER*>( item )->Outline();
     else
-        polyset = &static_cast<DRAWSEGMENT*>( item )->GetPolyShape();
+        polyset = &static_cast<PCB_SHAPE*>( item )->GetPolyShape();
 
     auto vertex = findVertex( *polyset, *m_editedPoint );
 
@@ -1944,7 +1935,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     if( !item || !canAddCorner( *item ) )
         return 0;
 
-    DRAWSEGMENT* graphicItem = dynamic_cast<DRAWSEGMENT*>( item );
+    PCB_SHAPE* graphicItem = dynamic_cast<PCB_SHAPE*>( item );
     BOARD_COMMIT commit( frame );
 
     if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T ||
@@ -2030,20 +2021,20 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         graphicItem->SetEnd( wxPoint( nearestPoint.x, nearestPoint.y ) );
 
         if( graphicItem->Type() == PCB_FP_SHAPE_T )
-            static_cast<EDGE_MODULE*>( graphicItem )->SetLocalCoord();
+            static_cast<FP_SHAPE*>( graphicItem )->SetLocalCoord();
 
         // and add another one starting from the break point
-        DRAWSEGMENT* newSegment;
+        PCB_SHAPE* newSegment;
 
         if( item->Type() == PCB_FP_SHAPE_T )
         {
-            EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( graphicItem );
+            FP_SHAPE* edge = static_cast<FP_SHAPE*>( graphicItem );
             assert( edge->GetParent()->Type() == PCB_MODULE_T );
-            newSegment = new EDGE_MODULE( *edge );
+            newSegment = new FP_SHAPE( *edge );
         }
         else
         {
-            newSegment = new DRAWSEGMENT( *graphicItem );
+            newSegment = new PCB_SHAPE( *graphicItem );
         }
 
         newSegment->ClearSelected();
@@ -2051,7 +2042,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         newSegment->SetEnd( wxPoint( seg.B.x, seg.B.y ) );
 
         if( newSegment->Type() == PCB_FP_SHAPE_T )
-            static_cast<EDGE_MODULE*>( newSegment )->SetLocalCoord();
+            static_cast<FP_SHAPE*>( newSegment )->SetLocalCoord();
 
         commit.Add( newSegment );
         commit.Push( _( "Split segment" ) );
@@ -2082,7 +2073,7 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
     }
     else if( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_SHAPE_T )
     {
-        auto ds = static_cast<DRAWSEGMENT*>( item );
+        auto ds = static_cast<PCB_SHAPE*>( item );
 
         if( ds->GetShape() == S_POLYGON )
             polygon = &ds->GetPolyShape();

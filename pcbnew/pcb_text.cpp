@@ -28,13 +28,13 @@
 #include <base_units.h>
 #include <bitmaps.h>
 #include <class_board.h>
-#include <class_pcb_text.h>
+#include <pcb_text.h>
 #include <pcb_painter.h>
 
 using KIGFX::PCB_RENDER_SETTINGS;
 
 
-TEXTE_PCB::TEXTE_PCB( BOARD_ITEM* parent ) :
+PCB_TEXT::PCB_TEXT( BOARD_ITEM* parent ) :
     BOARD_ITEM( parent, PCB_TEXT_T ),
     EDA_TEXT()
 {
@@ -42,12 +42,12 @@ TEXTE_PCB::TEXTE_PCB( BOARD_ITEM* parent ) :
 }
 
 
-TEXTE_PCB::~TEXTE_PCB()
+PCB_TEXT::~PCB_TEXT()
 {
 }
 
 
-wxString TEXTE_PCB::GetShownText( int aDepth ) const
+wxString PCB_TEXT::GetShownText( int aDepth ) const
 {
     BOARD* board = dynamic_cast<BOARD*>( GetParent() );
 
@@ -96,17 +96,17 @@ wxString TEXTE_PCB::GetShownText( int aDepth ) const
 }
 
 
-void TEXTE_PCB::SetTextAngle( double aAngle )
+void PCB_TEXT::SetTextAngle( double aAngle )
 {
     EDA_TEXT::SetTextAngle( NormalizeAngle360Min( aAngle ) );
 }
 
 
-void TEXTE_PCB::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString    msg;
 
-    wxCHECK_RET( m_Parent != NULL, wxT( "TEXTE_PCB::GetMsgPanelInfo() m_Parent is NULL." ) );
+    wxCHECK_RET( m_Parent != NULL, wxT( "PCB_TEXT::GetMsgPanelInfo() m_Parent is NULL." ) );
 
     aList.emplace_back( _( "PCB Text" ), GetShownText(), DARKGREEN );
 
@@ -131,7 +131,7 @@ void TEXTE_PCB::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
-const EDA_RECT TEXTE_PCB::GetBoundingBox() const
+const EDA_RECT PCB_TEXT::GetBoundingBox() const
 {
     EDA_RECT rect = GetTextBox();
 
@@ -142,7 +142,7 @@ const EDA_RECT TEXTE_PCB::GetBoundingBox() const
 }
 
 
-void TEXTE_PCB::Rotate( const wxPoint& aRotCentre, double aAngle )
+void PCB_TEXT::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     wxPoint pt = GetTextPos();
     RotatePoint( &pt, aRotCentre, aAngle );
@@ -152,7 +152,7 @@ void TEXTE_PCB::Rotate( const wxPoint& aRotCentre, double aAngle )
 }
 
 
-void TEXTE_PCB::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_TEXT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     double angle = GetTextAngle();
     bool   vertical = KiROUND( angle ) % 1800 == 900;
@@ -210,33 +210,33 @@ void TEXTE_PCB::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 }
 
 
-wxString TEXTE_PCB::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString PCB_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "PCB Text '%s' on %s"), ShortenedShownText(), GetLayerName() );
 }
 
 
-BITMAP_DEF TEXTE_PCB::GetMenuImage() const
+BITMAP_DEF PCB_TEXT::GetMenuImage() const
 {
     return text_xpm;
 }
 
 
-EDA_ITEM* TEXTE_PCB::Clone() const
+EDA_ITEM* PCB_TEXT::Clone() const
 {
-    return new TEXTE_PCB( *this );
+    return new PCB_TEXT( *this );
 }
 
 
-void TEXTE_PCB::SwapData( BOARD_ITEM* aImage )
+void PCB_TEXT::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_TEXT_T );
 
-    std::swap( *((TEXTE_PCB*) this), *((TEXTE_PCB*) aImage) );
+    std::swap( *((PCB_TEXT*) this), *((PCB_TEXT*) aImage) );
 }
 
 
-std::shared_ptr<SHAPE> TEXTE_PCB::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> PCB_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
     return GetEffectiveTextShape();
 }
@@ -247,10 +247,10 @@ static struct TEXTE_PCB_DESC
     TEXTE_PCB_DESC()
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        REGISTER_TYPE( TEXTE_PCB );
-        propMgr.AddTypeCast( new TYPE_CAST<TEXTE_PCB, BOARD_ITEM> );
-        propMgr.AddTypeCast( new TYPE_CAST<TEXTE_PCB, EDA_TEXT> );
-        propMgr.InheritsAfter( TYPE_HASH( TEXTE_PCB ), TYPE_HASH( BOARD_ITEM ) );
-        propMgr.InheritsAfter( TYPE_HASH( TEXTE_PCB ), TYPE_HASH( EDA_TEXT ) );
+        REGISTER_TYPE( PCB_TEXT );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_TEXT, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_TEXT, EDA_TEXT> );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_TEXT ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_TEXT ), TYPE_HASH( EDA_TEXT ) );
     }
 } _TEXTE_PCB_DESC;

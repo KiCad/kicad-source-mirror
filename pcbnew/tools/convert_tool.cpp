@@ -25,8 +25,8 @@
 #include <bitmaps.h>
 #include <board_commit.h>
 #include <class_board.h>
-#include <class_drawsegment.h>
-#include <class_edge_mod.h>
+#include <pcb_shape.h>
+#include <fp_shape.h>
 #include <class_track.h>
 #include <class_zone.h>
 #include <collectors.h>
@@ -124,7 +124,7 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
                 {
                 case PCB_SHAPE_T:
                 case PCB_FP_SHAPE_T:
-                    switch( static_cast<DRAWSEGMENT*>( item )->GetShape() )
+                    switch( static_cast<PCB_SHAPE*>( item )->GetShape() )
                     {
                     case S_SEGMENT:
                     case S_RECT:
@@ -164,8 +164,8 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
 
     bool isFootprint = m_frame->IsType( FRAME_FOOTPRINT_EDITOR );
 
-    if( EDGE_MODULE* edge_mod = dynamic_cast<EDGE_MODULE*>( selection.Front() ) )
-        mod = edge_mod->GetParentModule();
+    if( FP_SHAPE* graphic = dynamic_cast<FP_SHAPE*>( selection.Front() ) )
+        mod = graphic->GetParentModule();
 
     BOARD_COMMIT commit( m_frame );
 
@@ -179,7 +179,7 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
     {
         for( const SHAPE_POLY_SET& poly : polys )
         {
-            DRAWSEGMENT* graphic = isFootprint ? new EDGE_MODULE( mod ) : new DRAWSEGMENT;
+            PCB_SHAPE* graphic = isFootprint ? new FP_SHAPE( mod ) : new PCB_SHAPE;
 
             graphic->SetShape( S_POLYGON );
             graphic->SetLayer( destLayer );
@@ -330,7 +330,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromRects( const std::deque<EDA_ITEM*>& aI
         if( item->Type() != PCB_SHAPE_T && item->Type() != PCB_FP_SHAPE_T )
             continue;
 
-        DRAWSEGMENT* graphic = static_cast<DRAWSEGMENT*>( item );
+        PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( item );
 
         if( graphic->GetShape() != S_RECT )
             continue;
@@ -368,7 +368,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                 {
                 case PCB_SHAPE_T:
                 case PCB_FP_SHAPE_T:
-                    switch( static_cast<DRAWSEGMENT*>( item )->GetShape() )
+                    switch( static_cast<PCB_SHAPE*>( item )->GetShape() )
                     {
                     case S_POLYGON:
                         break;
@@ -410,7 +410,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                 case PCB_SHAPE_T:
                 case PCB_FP_SHAPE_T:
                 {
-                    DRAWSEGMENT* graphic = static_cast<DRAWSEGMENT*>( aItem );
+                    PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( aItem );
 
                     if( graphic->GetShape() == S_POLYGON )
                     {
@@ -474,7 +474,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
         {
             for( SEG& seg : segs )
             {
-                DRAWSEGMENT* graphic = new DRAWSEGMENT;
+                PCB_SHAPE* graphic = new PCB_SHAPE;
 
                 graphic->SetShape( S_SEGMENT );
                 graphic->SetLayer( layer );
@@ -563,8 +563,8 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
 
     if( source->Type() == PCB_SHAPE_T || source->Type() == PCB_FP_SHAPE_T )
     {
-        DRAWSEGMENT* line = static_cast<DRAWSEGMENT*>( source );
-        DRAWSEGMENT* arc  = new DRAWSEGMENT( parent );
+        PCB_SHAPE* line = static_cast<PCB_SHAPE*>( source );
+        PCB_SHAPE* arc  = new PCB_SHAPE( parent );
 
         VECTOR2I center = GetArcCenter( start, mid, end );
 
@@ -607,7 +607,7 @@ OPT<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem )
     case PCB_SHAPE_T:
     case PCB_FP_SHAPE_T:
     {
-        DRAWSEGMENT* line = static_cast<DRAWSEGMENT*>( aItem );
+        PCB_SHAPE* line = static_cast<PCB_SHAPE*>( aItem );
         return boost::make_optional<SEG>( { VECTOR2I( line->GetStart() ),
                                             VECTOR2I( line->GetEnd() ) } );
     }

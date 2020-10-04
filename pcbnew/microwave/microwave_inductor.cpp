@@ -26,7 +26,7 @@
 #include <base_units.h>
 #include <board_commit.h>
 #include <class_pad.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <class_module.h>
 #include <confirm.h>
 #include <dialog_text_entry.h>
@@ -424,16 +424,16 @@ MODULE* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aIn
     // Generate segments
     for( unsigned jj = 1; jj < buffer.size(); jj++ )
     {
-        EDGE_MODULE* PtSegm;
-        PtSegm = new EDGE_MODULE( module );
-        PtSegm->SetStart( buffer[jj - 1] );
-        PtSegm->SetEnd( buffer[jj] );
-        PtSegm->SetWidth( aInductorPattern.m_Width );
-        PtSegm->SetLayer( module->GetLayer() );
-        PtSegm->SetShape( S_SEGMENT );
-        PtSegm->SetStart0( PtSegm->GetStart() - module->GetPosition() );
-        PtSegm->SetEnd0( PtSegm->GetEnd() - module->GetPosition() );
-        module->Add( PtSegm );
+        FP_SHAPE* seg;
+        seg = new FP_SHAPE( module );
+        seg->SetStart( buffer[jj - 1] );
+        seg->SetEnd( buffer[jj] );
+        seg->SetWidth( aInductorPattern.m_Width );
+        seg->SetLayer( module->GetLayer() );
+        seg->SetShape( S_SEGMENT );
+        seg->SetStart0( seg->GetStart() - module->GetPosition() );
+        seg->SetEnd0( seg->GetEnd() - module->GetPosition() );
+        module->Add( seg );
     }
 
     // Place a pad on each end of coil.

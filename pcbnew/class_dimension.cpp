@@ -29,7 +29,7 @@
 #include <base_units.h>
 #include <class_board.h>
 #include <class_dimension.h>
-#include <class_pcb_text.h>
+#include <pcb_text.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
@@ -312,10 +312,10 @@ void DIMENSION::SetEnd( const wxPoint& aEnd )
 
 void DIMENSION::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    // for now, display only the text within the DIMENSION using class TEXTE_PCB.
+    // for now, display only the text within the DIMENSION using class PCB_TEXT.
     wxString    msg;
 
-    wxCHECK_RET( m_Parent != NULL, wxT( "TEXTE_PCB::GetMsgPanelInfo() m_Parent is NULL." ) );
+    wxCHECK_RET( m_Parent != NULL, wxT( "PCB_TEXT::GetMsgPanelInfo() m_Parent is NULL." ) );
 
     aList.emplace_back( _( "Dimension" ), m_text.GetShownText(), DARKGREEN );
 

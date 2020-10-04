@@ -201,7 +201,7 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
     m_cbSuppressZeroes->SetValue( m_dimension->GetSuppressZeroes() );
 
-    TEXTE_PCB& text = m_dimension->Text();
+    PCB_TEXT& text = m_dimension->Text();
 
     m_textWidth.SetValue( text.GetTextSize().x );
     m_textHeight.SetValue( text.GetTextSize().y );
@@ -305,7 +305,7 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( DIMENSION* aTarget 
     aTarget->SetPrecision( m_cbPrecision->GetSelection() );
     aTarget->SetSuppressZeroes( m_cbSuppressZeroes->GetValue() );
 
-    TEXTE_PCB& text = aTarget->Text();
+    PCB_TEXT& text = aTarget->Text();
 
     DIM_TEXT_POSITION tpm = static_cast<DIM_TEXT_POSITION>( m_cbTextPositionMode->GetSelection() );
     aTarget->SetTextPositionMode( tpm );

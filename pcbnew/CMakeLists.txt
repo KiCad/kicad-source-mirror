@@ -474,8 +474,8 @@ if( KICAD_SCRIPTING )   # Generate pcbnew.py and pcbnew_wrap.cxx using swig
         DEPENDS swig/board_item_container.i
         DEPENDS swig/connectivity.i
         DEPENDS swig/dimension.i
-        DEPENDS swig/drawsegment.i
-        DEPENDS swig/edge_mod.i
+        DEPENDS swig/pcb_shape.i
+        DEPENDS swig/fp_shape.i
         DEPENDS swig/marker_pcb.i
         DEPENDS swig/pcb_target.i
         DEPENDS swig/pcb_plot_params.i
@@ -484,7 +484,7 @@ if( KICAD_SCRIPTING )   # Generate pcbnew.py and pcbnew_wrap.cxx using swig
         DEPENDS swig/pad.i
         DEPENDS swig/pcb_text.i
         DEPENDS swig/plugins.i
-        DEPENDS swig/text_mod.i
+        DEPENDS swig/fp_text.i
         DEPENDS swig/track.i
         DEPENDS swig/units.i
         DEPENDS swig/typeinfo.i

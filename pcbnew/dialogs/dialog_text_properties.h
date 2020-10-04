@@ -33,8 +33,8 @@
 class PCB_BASE_EDIT_FRAME;
 class BOARD_ITEM;
 class EDA_TEXT;
-class TEXTE_MODULE;
-class TEXTE_PCB;
+class FP_TEXT;
+class PCB_TEXT;
 
 
 class DIALOG_TEXT_PROPERTIES : public DIALOG_TEXT_PROPERTIES_BASE
@@ -45,10 +45,10 @@ public:
 
 private:
     PCB_BASE_EDIT_FRAME* m_Parent;
-    BOARD_ITEM*          m_item;        // TEXTE_MODULE, TEXTE_PCB, or DIMENSION
+    BOARD_ITEM*          m_item;        // FP_TEXT, PCB_TEXT, or DIMENSION
     EDA_TEXT*            m_edaText;     // always non-null
-    TEXTE_MODULE*        m_modText;     // only non-null for TEXTE_MODULEs
-    TEXTE_PCB*           m_pcbText;     // only non-null for TEXTE_PCBs and DIMENSIONs
+    FP_TEXT*             m_fpText;      // only non-null for FP_TEXTs
+    PCB_TEXT*            m_pcbText;     // only non-null for PCB_TEXTs and DIMENSIONs
 
     UNIT_BINDER          m_textWidth;
     UNIT_BINDER          m_textHeight;

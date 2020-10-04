@@ -32,7 +32,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <class_pad.h>
 #include <board_commit.h>
 #include <connectivity/connectivity_data.h>
@@ -136,7 +136,7 @@ int AR_AUTOPLACER::genPlacementRoutingMatrix()
         case PCB_SHAPE_T:
             if( drawing->GetLayer() != Edge_Cuts )
             {
-                m_matrix.TraceSegmentPcb( (DRAWSEGMENT*)drawing, CELL_IS_HOLE | CELL_IS_EDGE,
+                m_matrix.TraceSegmentPcb( (PCB_SHAPE*) drawing, CELL_IS_HOLE | CELL_IS_EDGE,
                                           m_matrix.m_GridRouting, AR_MATRIX::WRITE_CELL );
             }
             break;

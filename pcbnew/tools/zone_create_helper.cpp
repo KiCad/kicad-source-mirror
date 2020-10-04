@@ -24,8 +24,8 @@
 #include <tools/zone_create_helper.h>
 #include <tool/tool_manager.h>
 #include <class_zone.h>
-#include <class_drawsegment.h>
-#include <class_edge_mod.h>
+#include <pcb_shape.h>
+#include <fp_shape.h>
 #include <board_commit.h>
 #include <pcb_painter.h>
 #include <tools/pcb_actions.h>
@@ -227,8 +227,8 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
 
             if( graphicPolygonsLayers.Contains( m_params.m_layer ) )
             {
-                auto poly = m_tool.m_editModules ? new EDGE_MODULE( (MODULE *) parent )
-                                                 : new DRAWSEGMENT();
+                auto poly = m_tool.m_editModules ? new FP_SHAPE((MODULE *) parent )
+                                                 : new PCB_SHAPE();
                 poly->SetShape ( S_POLYGON );
                 poly->SetLayer( m_params.m_layer );
                 poly->SetPolyShape ( *aZone->Outline() );
@@ -237,12 +237,12 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
             }
             else
             {
-                auto outline = aZone->Outline();
+                SHAPE_POLY_SET* outline = aZone->Outline();
 
                 for( auto seg = outline->CIterateSegments( 0 ); seg; seg++ )
                 {
-                    auto new_seg = m_tool.m_editModules ? new EDGE_MODULE( (MODULE *) parent )
-                                                        : new DRAWSEGMENT();
+                    PCB_SHAPE* new_seg = m_tool.m_editModules ? new FP_SHAPE( (MODULE *) parent )
+                                                              : new PCB_SHAPE();
                     new_seg->SetShape( S_SEGMENT );
                     new_seg->SetLayer( m_params.m_layer );
                     new_seg->SetStart( wxPoint( seg.Get().A.x, seg.Get().A.y ) );

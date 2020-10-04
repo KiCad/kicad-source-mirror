@@ -31,7 +31,7 @@
 
 #include <common.h>
 #include <math/util.h>      // for KiROUND
-
+#include <fp_shape.h>
 #include <pcb_polygon.h>
 
 namespace PCAD2KICAD {
@@ -159,7 +159,7 @@ void PCB_POLYGON::AddToModule( MODULE* aModule )
 {
     if( IsNonCopperLayer( m_KiCadLayer ) )
     {
-        EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
+        FP_SHAPE* dwg = new FP_SHAPE( aModule, S_POLYGON );
         aModule->Add( dwg );
 
         dwg->SetWidth( 0 );

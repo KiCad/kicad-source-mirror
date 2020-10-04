@@ -301,7 +301,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
             for( BOARD_ITEM* item : footprint->GraphicalItems() )
             {
                 if( item->Type() == PCB_FP_SHAPE_T && item->GetLayer() == Edge_Cuts )
-                    brd_plotter.PlotFootprintGraphicItem((EDGE_MODULE*) item );
+                    brd_plotter.PlotFootprintGraphicItem( (FP_SHAPE*) item );
             }
         }
     }

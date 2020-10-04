@@ -23,7 +23,7 @@
 
 #include <common.h>
 #include <class_board.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <class_pad.h>
 #include <class_track.h>
 
@@ -160,8 +160,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperTextAndGraphics()
 
     for( MODULE* module : m_board->Modules() )
     {
-        TEXTE_MODULE& ref = module->Reference();
-        TEXTE_MODULE& val = module->Value();
+        FP_TEXT& ref = module->Reference();
+        FP_TEXT& val = module->Value();
 
         if( ref.IsVisible() && IsCopperLayer( ref.GetLayer() ) )
             testCopperDrawItem( &ref );
@@ -176,7 +176,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperTextAndGraphics()
         {
             if( IsCopperLayer( item->GetLayer() ) )
             {
-                if( item->Type() == PCB_FP_TEXT_T && ( (TEXTE_MODULE*) item )->IsVisible() )
+                if( item->Type() == PCB_FP_TEXT_T && ( (FP_TEXT*) item )->IsVisible() )
                     testCopperDrawItem( item );
                 else if( item->Type() == PCB_FP_SHAPE_T )
                     testCopperDrawItem( item );

@@ -33,7 +33,6 @@
 #include <confirm.h>
 #include <bitmaps.h>
 #include <class_module.h>
-#include <class_edge_mod.h>
 #include <project.h>
 #include <fp_lib_table.h>
 #include <dialogs/dialog_cleanup_graphics.h>

@@ -23,7 +23,7 @@
 
 #include <common.h>
 #include <class_board.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <class_pad.h>
 
 #include <convert_basic_shapes_to_polygon.h>
@@ -98,13 +98,13 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
 
     reportAux( "Worst clearance : %d nm", m_largestClearance );
 
-    std::vector<DRAWSEGMENT*> boardOutline;
+    std::vector<PCB_SHAPE*>  boardOutline;
     std::vector<BOARD_ITEM*> boardItems;
 
     auto queryBoardOutlineItems =
             [&]( BOARD_ITEM *item ) -> int
             {
-                boardOutline.push_back( dyn_cast<DRAWSEGMENT*>( item ) );
+                boardOutline.push_back( dyn_cast<PCB_SHAPE*>( item ) );
             };
 
     auto queryBoardGeometryItems =

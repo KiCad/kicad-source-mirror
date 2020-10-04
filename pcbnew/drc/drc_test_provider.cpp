@@ -28,7 +28,7 @@
 #include <class_module.h>
 #include <class_pad.h>
 #include <class_zone.h>
-#include <class_pcb_text.h>
+#include <pcb_text.h>
 
 DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
     m_drcEngine( nullptr )
@@ -286,13 +286,13 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 bool DRC_TEST_PROVIDER::isInvisibleText( const BOARD_ITEM* aItem ) const
 {
 
-    if( auto text = dyn_cast<const TEXTE_MODULE*>( aItem ) )
+    if( const FP_TEXT* text = dyn_cast<const FP_TEXT*>( aItem ) )
     {
         if( !text->IsVisible() )
             return true;
     }
 
-    if( auto text = dyn_cast<const TEXTE_PCB*>( aItem ) )
+    if( const PCB_TEXT* text = dyn_cast<const PCB_TEXT*>( aItem ) )
     {
         if( !text->IsVisible() )
             return true;

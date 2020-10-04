@@ -235,7 +235,7 @@ As an example:
     modifiedItem->Move( x, y );
 
     // create a new item
-    DRAWSEGMENT* newItem = new DRAWSEGMENT;
+    PCB_SHAPE* newItem = new PCB_SHAPE;
 
     // ... set up item here
 
@@ -516,7 +516,7 @@ Below you will find the contents of useless_tool.cpp:
     int USELESS_TOOL::fixedCircle( const TOOL_EVENT& aEvent )
     {
         // new circle to add (ideally use a smart pointer)
-        DRAWSEGMENT* circle = new DRAWSEGMENT;
+        PCB_SHAPE* circle = new PCB_SHAPE;
 
         // Set the circle attributes
         circle->SetShape( S_CIRCLE );

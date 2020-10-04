@@ -1,6 +1,6 @@
 
-%include class_drawsegment.h
-%extend DRAWSEGMENT
+%include pcb_shape.h
+%extend PCB_SHAPE
 {
     %pythoncode
     %{
@@ -9,6 +9,6 @@
     %}
 }
 %{
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 %}
 

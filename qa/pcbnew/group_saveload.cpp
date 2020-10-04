@@ -28,7 +28,7 @@
 #include <boost/filesystem.hpp>
 #include <class_board.h>
 #include <class_module.h>
-#include <class_pcb_text.h>
+#include <pcb_text.h>
 #include <common.h>
 #include <pcbnew_utils/board_construction_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
@@ -63,7 +63,7 @@ enum ItemType
 // The objects associated with item REMOVED_TEXT and REMOVED_GROUP are not added to the board,
 // so they are not cleaned up when the board is deleted. These pointers stores the objects
 // so they can be deleted once they are done being used.
-static TEXTE_PCB* s_removedText  = nullptr;
+static PCB_TEXT*  s_removedText  = nullptr;
 static PCB_GROUP* s_removedGroup = nullptr;
 
 
@@ -80,7 +80,7 @@ std::unique_ptr<BOARD> createBoard( const std::vector<std::vector<ItemType>>& sp
     // Create text items and add to board.
     for( int idx = 0; idx <= REMOVED_TEXT; idx++ )
     {
-        TEXTE_PCB* textItem = new TEXTE_PCB( board.get() );
+        PCB_TEXT* textItem = new PCB_TEXT( board.get() );
         textItem->SetText( wxString::Format( _( "some text-%d" ), idx ) );
 
         // Don't add REMOVED_TEXT to the board
@@ -142,7 +142,7 @@ std::unique_ptr<BOARD> createBoard( const std::vector<std::vector<ItemType>>& sp
 
     // Delete the removed text item if it isn't used
     if( used.test( REMOVED_TEXT ) )
-        s_removedText = static_cast<TEXTE_PCB*>( items[REMOVED_TEXT] );
+        s_removedText = static_cast<PCB_TEXT*>( items[REMOVED_TEXT] );
     else
         delete items[REMOVED_TEXT];
 

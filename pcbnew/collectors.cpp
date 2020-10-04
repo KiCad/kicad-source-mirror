@@ -26,12 +26,12 @@
 #include <class_board_item.h>             // class BOARD_ITEM
 
 #include <class_module.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <class_pad.h>
 #include <class_track.h>
 #include <class_marker_pcb.h>
 #include <class_zone.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <class_pcb_group.h>
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
@@ -189,13 +189,13 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
     BOARD_ITEM*     item        = (BOARD_ITEM*) testItem;
     MODULE*         module      = nullptr;
-    PCB_GROUP*          group       = nullptr;
+    PCB_GROUP*      group       = nullptr;
     D_PAD*          pad         = nullptr;
     bool            pad_through = false;
     VIA*            via         = nullptr;
     MARKER_PCB*     marker      = nullptr;
     ZONE_CONTAINER* zone        = nullptr;
-    DRAWSEGMENT*    drawSegment = nullptr;
+    PCB_SHAPE*      shape       = nullptr;
 
 #if 0   // debugging
     static int  breakhere = 0;
@@ -236,7 +236,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
     case PCB_FP_TEXT_T:
         {
-            TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
+            FP_TEXT* tm = (FP_TEXT*) item;
 
             if( tm->GetText() == wxT( "10uH" ) )
             {
@@ -317,7 +317,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_SHAPE_T:
-        drawSegment = static_cast<DRAWSEGMENT*>( item );
+        shape = static_cast<PCB_SHAPE*>( item );
         break;
 
     case PCB_DIM_ALIGNED_T:
@@ -331,7 +331,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
     case PCB_FP_TEXT_T:
         {
-            TEXTE_MODULE *text = static_cast<TEXTE_MODULE*>( item );
+            FP_TEXT *text = static_cast<FP_TEXT*>( item );
             if( m_Guide->IgnoreMTextsMarkedNoShow() && !text->IsVisible() )
                 goto exit;
 
@@ -349,17 +349,17 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
             switch( text->GetType() )
             {
-            case TEXTE_MODULE::TEXT_is_REFERENCE:
+            case FP_TEXT::TEXT_is_REFERENCE:
                 if( m_Guide->IgnoreModulesRefs() )
                     goto exit;
                 break;
 
-            case TEXTE_MODULE::TEXT_is_VALUE:
+            case FP_TEXT::TEXT_is_VALUE:
                 if( m_Guide->IgnoreModulesVals() )
                     goto exit;
                 break;
 
-            case TEXTE_MODULE::TEXT_is_DIVERS:
+            case FP_TEXT::TEXT_is_DIVERS:
                 if( !m_Guide->IsLayerVisible( text->GetLayer() )
                         && m_Guide->IgnoreNonVisibleLayers() )
                     goto exit;
@@ -372,7 +372,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_FP_SHAPE_T:
-        drawSegment = static_cast<EDGE_MODULE*>( item );
+        shape = static_cast<FP_SHAPE*>( item );
         break;
 
     case PCB_MODULE_T:
@@ -489,9 +489,9 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                             goto exit;
                         }
                     }
-                    else if( drawSegment )
+                    else if( shape )
                     {
-                        if( drawSegment->HitTest( m_refPos, accuracy ) )
+                        if( shape->HitTest( m_refPos, accuracy ) )
                         {
                             Append( item );
                             goto exit;
@@ -553,9 +553,9 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                             goto exit;
                         }
                     }
-                    else if( drawSegment )
+                    else if( shape )
                     {
-                        if( drawSegment->HitTest( m_refPos, accuracy ) )
+                        if( shape->HitTest( m_refPos, accuracy ) )
                         {
                             Append( item );
                             goto exit;

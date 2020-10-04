@@ -423,15 +423,14 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
         {
             module = static_cast<MODULE*>( aItem->GetParent() );
 
-            TEXTE_MODULE*   text_mod = static_cast<TEXTE_MODULE*>( aItem );
-
-            const char*     text_key;
+            FP_TEXT*    text = static_cast<FP_TEXT*>( aItem );
+            const char* text_key;
 
             /* This can't be a switch since the break need to pull out
              * from the outer switch! */
-            if( text_mod->GetType() == TEXTE_MODULE::TEXT_is_REFERENCE )
+            if( text->GetType() == FP_TEXT::TEXT_is_REFERENCE )
                 text_key = "$REF:";
-            else if( text_mod->GetType() == TEXTE_MODULE::TEXT_is_VALUE )
+            else if( text->GetType() == FP_TEXT::TEXT_is_VALUE )
                 text_key = "$VAL:";
             else
                 break;
@@ -439,7 +438,7 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
             return StrPrintf( "$PART: \"%s\" %s \"%s\"",
                               TO_UTF8( module->GetReference() ),
                               text_key,
-                              TO_UTF8( text_mod->GetText() ) );
+                              TO_UTF8( text->GetText() ) );
         }
 
     default:

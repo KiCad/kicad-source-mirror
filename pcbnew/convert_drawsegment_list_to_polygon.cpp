@@ -33,7 +33,7 @@
 #include <macros.h>
 
 #include <math/vector2d.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <class_module.h>
 #include <base_units.h>
 #include <convert_basic_shapes_to_polygon.h>
@@ -105,15 +105,16 @@ inline bool close_st( const wxPoint& aReference, const wxPoint& aFirst, const wx
 
 
 /**
- * Searches for a DRAWSEGMENT matching a given end point or start point in a list, and
+ * Searches for a PCB_SHAPE matching a given end point or start point in a list, and
  * if found, removes it from the TYPE_COLLECTOR and returns it, else returns NULL.
  * @param aPoint The starting or ending point to search for.
  * @param aList The list to remove from.
  * @param aLimit is the distance from \a aPoint that still constitutes a valid find.
- * @return DRAWSEGMENT* - The first DRAWSEGMENT that has a start or end point matching
+ * @return PCB_SHAPE* - The first PCB_SHAPE that has a start or end point matching
  *   aPoint, otherwise NULL if none.
  */
-static DRAWSEGMENT* findPoint( const wxPoint& aPoint, std::vector< DRAWSEGMENT* >& aList, unsigned aLimit )
+static PCB_SHAPE* findPoint( const wxPoint& aPoint, std::vector< PCB_SHAPE* >& aList,
+                             unsigned aLimit )
 {
     unsigned min_d = INT_MAX;
     int      ndx_min = 0;
@@ -121,8 +122,8 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, std::vector< DRAWSEGMENT* 
     // find the point closest to aPoint and perhaps exactly matching aPoint.
     for( size_t i = 0; i < aList.size(); ++i )
     {
-        DRAWSEGMENT*    graphic = aList[i];
-        unsigned        d;
+        PCB_SHAPE* graphic = aList[i];
+        unsigned   d;
 
         switch( graphic->GetShape() )
         {
@@ -173,7 +174,7 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, std::vector< DRAWSEGMENT* 
 
     if( min_d <= aLimit )
     {
-        DRAWSEGMENT* graphic = aList[ndx_min];
+        PCB_SHAPE* graphic = aList[ndx_min];
         aList.erase( aList.begin() + ndx_min );
         return graphic;
     }
@@ -184,7 +185,7 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, std::vector< DRAWSEGMENT* 
 
 /**
  * Function ConvertOutlineToPolygon
- * build a polygon (with holes) from a DRAWSEGMENT list, which is expected to be
+ * build a polygon (with holes) from a PCB_SHAPE list, which is expected to be
  * a outline, therefore a closed main outline with perhaps closed inner outlines.
  * These closed inner outlines are considered as holes in the main outline
  * @param aSegList the initial list of drawsegments (only lines, circles and arcs).
@@ -194,7 +195,7 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, std::vector< DRAWSEGMENT* 
  * @param aErrorText is a wxString to return error message.
  * @param aErrorLocation is the optional position of the error in the outline
  */
-bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SET& aPolygons,
+bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET& aPolygons,
                               wxString* aErrorText, unsigned int aTolerance,
                               wxPoint* aErrorLocation )
 {
@@ -207,9 +208,9 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
     wxString msg;
 
     // Make a working copy of aSegList, because the list is modified during calculations
-    std::vector< DRAWSEGMENT* > segList = aSegList;
+    std::vector<PCB_SHAPE*> segList = aSegList;
 
-    DRAWSEGMENT* graphic;
+    PCB_SHAPE* graphic;
     wxPoint prevPt;
 
     // Find edge point with minimum x, this should be in the outer polygon
@@ -219,7 +220,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
 
     for( size_t i = 0; i < segList.size(); i++ )
     {
-        graphic = (DRAWSEGMENT*) segList[i];
+        graphic = (PCB_SHAPE*) segList[i];
 
         switch( graphic->GetShape() )
         {
@@ -329,9 +330,9 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
     // can put enough graphics together by matching endpoints to formulate a cohesive
     // polygon.
 
-    graphic = (DRAWSEGMENT*) segList[xmini];
+    graphic = (PCB_SHAPE*) segList[xmini];
 
-    // The first DRAWSEGMENT is in 'graphic', ok to remove it from 'items'
+    // The first PCB_SHAPE is in 'graphic', ok to remove it from 'items'
     segList.erase( segList.begin() + xmini );
 
     // Output the outline perimeter as polygon.
@@ -471,7 +472,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
             default:
                 if( aErrorText )
                 {
-                    msg.Printf( "Unsupported DRAWSEGMENT type %s.",
+                    msg.Printf( "Unsupported PCB_SHAPE type %s.",
                                 BOARD_ITEM::ShowShape( graphic->GetShape() ) );
 
                     *aErrorText << msg << "\n";
@@ -527,7 +528,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
         int hole = aPolygons.NewHole();
         holeNum++;
 
-        graphic = (DRAWSEGMENT*) segList[0];
+        graphic = (PCB_SHAPE*) segList[0];
         segList.erase( segList.begin() );
 
         // Both circles and polygons on the edge cuts layer are closed items that
@@ -680,7 +681,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                 default:
                     if( aErrorText )
                     {
-                        msg.Printf( "Unsupported DRAWSEGMENT type %s.",
+                        msg.Printf( "Unsupported PCB_SHAPE type %s.",
                                     BOARD_ITEM::ShowShape( graphic->GetShape() ) );
 
                         *aErrorText << msg << "\n";
@@ -787,12 +788,12 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, wxStri
     items.Collect( aBoard, scan_graphics );
 
     // Make a working copy of aSegList, because the list is modified during calculations
-    std::vector< DRAWSEGMENT* > segList;
+    std::vector<PCB_SHAPE*> segList;
 
     for( int ii = 0; ii < items.GetCount(); ii++ )
     {
         if( items[ii]->GetLayer() == Edge_Cuts )
-            segList.push_back( static_cast< DRAWSEGMENT* >( items[ii] ) );
+            segList.push_back( static_cast<PCB_SHAPE*>( items[ii] ) );
     }
 
     if( segList.size() )
@@ -1008,12 +1009,12 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
     items.Collect( aBoard, scan_graphics );
 
     // Make a working copy of aSegList, because the list is modified during calculations
-    std::vector< DRAWSEGMENT* > segList;
+    std::vector<PCB_SHAPE*> segList;
 
     for( int ii = 0; ii < items.GetCount(); ii++ )
     {
         if( items[ii]->GetLayer() == Edge_Cuts )
-            segList.push_back( static_cast< DRAWSEGMENT* >( items[ii] ) );
+            segList.push_back( static_cast<PCB_SHAPE*>( items[ii] ) );
     }
 
     bool success = ConvertOutlineToPolygon( segList, outlines, aErrorText, aTolerance, aErrorLocation );

@@ -29,7 +29,7 @@
 
 #include <class_board.h>
 #include <class_board_item.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <class_pad.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_rect.h>
@@ -59,7 +59,7 @@ void D_PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness )
 
 void D_PAD::AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness )
 {
-    DRAWSEGMENT* item = new DRAWSEGMENT();
+    PCB_SHAPE* item = new PCB_SHAPE();
     item->SetShape( S_POLYGON );
     item->SetPolyPoints( aPoly );
     item->SetWidth( aThickness );
@@ -70,7 +70,7 @@ void D_PAD::AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness 
 
 void D_PAD::AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int aThickness )
 {
-    DRAWSEGMENT* item = new DRAWSEGMENT();
+    PCB_SHAPE* item = new PCB_SHAPE();
     item->SetStart( aStart );
     item->SetEnd( aEnd );
     item->SetWidth( aThickness );
@@ -82,7 +82,7 @@ void D_PAD::AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int
 void D_PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aArcAngle,
                              int aThickness )
 {
-    DRAWSEGMENT* item = new DRAWSEGMENT();
+    PCB_SHAPE* item = new PCB_SHAPE();
     item->SetShape( S_ARC );
     item->SetCenter( aCenter );
     item->SetArcStart( aStart );
@@ -96,7 +96,7 @@ void D_PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int 
 void D_PAD::AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const wxPoint& aCtrl1,
                                const wxPoint& aCtrl2, int aThickness )
 {
-    DRAWSEGMENT* item = new DRAWSEGMENT();
+    PCB_SHAPE* item = new PCB_SHAPE();
     item->SetShape( S_CURVE );
     item->SetStart( aStart );
     item->SetEnd( aEnd );
@@ -110,7 +110,7 @@ void D_PAD::AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const
 
 void D_PAD::AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickness )
 {
-    DRAWSEGMENT* item = new DRAWSEGMENT();
+    PCB_SHAPE* item = new PCB_SHAPE();
     item->SetShape( S_CIRCLE );
     item->SetStart( aCenter );
     item->SetEnd( wxPoint( aCenter.x + aRadius, aCenter.y ) );
@@ -122,7 +122,7 @@ void D_PAD::AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickn
 
 void D_PAD::AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThickness )
 {
-    DRAWSEGMENT* item = new DRAWSEGMENT();
+    PCB_SHAPE* item = new PCB_SHAPE();
     item->SetShape( S_RECT );
     item->SetStart( aStart );
     item->SetEnd( aEnd );
@@ -132,7 +132,7 @@ void D_PAD::AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aT
 }
 
 
-void D_PAD::ReplacePrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPrimitivesList )
+void D_PAD::ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList )
 {
     // clear old list
     DeletePrimitivesList();
@@ -145,17 +145,17 @@ void D_PAD::ReplacePrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& 
 }
 
 
-void D_PAD::AppendPrimitives( const std::vector<std::shared_ptr<DRAWSEGMENT>>& aPrimitivesList )
+void D_PAD::AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList )
 {
     // Add duplicates of aPrimitivesList to the pad primitives list:
-    for( const std::shared_ptr<DRAWSEGMENT>& prim : aPrimitivesList )
-        AddPrimitive( new DRAWSEGMENT( *prim ) );
+    for( const std::shared_ptr<PCB_SHAPE>& prim : aPrimitivesList )
+        AddPrimitive( new PCB_SHAPE( *prim ) );
 
     m_shapesDirty = true;
 }
 
 
-void D_PAD::AddPrimitive( DRAWSEGMENT* aPrimitive )
+void D_PAD::AddPrimitive( PCB_SHAPE* aPrimitive )
 {
     m_editPrimitives.emplace_back( aPrimitive );
 
@@ -177,7 +177,7 @@ void D_PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER
 {
     SHAPE_POLY_SET polyset;
 
-    for( const std::shared_ptr<DRAWSEGMENT>& primitive : m_editPrimitives )
+    for( const std::shared_ptr<PCB_SHAPE>& primitive : m_editPrimitives )
         primitive->TransformShapeWithClearanceToPolygon( polyset, aLayer, 0, aError );
 
     polyset.Simplify( SHAPE_POLY_SET::PM_FAST );

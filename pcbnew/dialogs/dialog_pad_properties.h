@@ -33,7 +33,7 @@
 #include <wx/valnum.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <origin_viewitem.h>
 #include <dialog_pad_properties_base.h>
 #include <widgets/text_ctrl_eval.h>
@@ -62,13 +62,13 @@ private:
     bool    m_canUpdate;
     bool    m_canEditNetName;       // true only if the caller is the board editor
 
-    std::vector<std::shared_ptr<DRAWSEGMENT>> m_primitives;   // the custom shape primitives in
+    std::vector<std::shared_ptr<PCB_SHAPE>> m_primitives;     // the custom shape primitives in
                                                               // local coords, orient 0
                                                               // must define a single copper area
     COLOR4D                       m_selectedColor; // color used to draw selected primitives when
                                                    //     editing a custom pad shape
 
-    std::vector<DRAWSEGMENT*>     m_highlight;     // shapes highlighted in GAL mode
+    std::vector<PCB_SHAPE*>       m_highlight;     // shapes highlighted in GAL mode
     PCB_DRAW_PANEL_GAL*           m_padPreviewGAL;
     KIGFX::ORIGIN_VIEWITEM*       m_axisOrigin;    // origin of the preview canvas
     static bool                   m_sketchPreview; // session storage
@@ -171,7 +171,7 @@ class DIALOG_PAD_PRIMITIVES_PROPERTIES: public DIALOG_PAD_PRIMITIVES_PROPERTIES_
 {
 public:
     DIALOG_PAD_PRIMITIVES_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
-                                      DRAWSEGMENT* aShape );
+                                      PCB_SHAPE* aShape );
 
     /**
      * Function TransferDataFromWindow
@@ -187,7 +187,7 @@ private:
     bool TransferDataToWindow() override;
 
     // The basic shape currently edited
-    DRAWSEGMENT* m_shape;
+    PCB_SHAPE*   m_shape;
 
     UNIT_BINDER  m_startX;
     UNIT_BINDER  m_startY;
@@ -208,7 +208,7 @@ private:
 class DIALOG_PAD_PRIMITIVE_POLY_PROPS: public DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE
 {
     // The basic shape currently edited
-    DRAWSEGMENT*         m_shape;
+    PCB_SHAPE*           m_shape;
 
     // The working copy of the basic shape currently edited
     std::vector<wxPoint> m_currPoints;
@@ -217,7 +217,7 @@ class DIALOG_PAD_PRIMITIVE_POLY_PROPS: public DIALOG_PAD_PRIMITIVE_POLY_PROPS_BA
 
 public:
     DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
-                                     DRAWSEGMENT* aShape );
+                                     PCB_SHAPE* aShape );
     ~DIALOG_PAD_PRIMITIVE_POLY_PROPS();
 
     /**
@@ -266,7 +266,7 @@ class DIALOG_PAD_PRIMITIVES_TRANSFORM : public DIALOG_PAD_PRIMITIVES_TRANSFORM_B
 {
 public:
     DIALOG_PAD_PRIMITIVES_TRANSFORM( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
-                                     std::vector<std::shared_ptr<DRAWSEGMENT>>& aList,
+                                     std::vector<std::shared_ptr<PCB_SHAPE>>& aList,
                                      bool aShowDuplicate );
 
     /**
@@ -276,7 +276,7 @@ public:
      * The duplicated items are transformed, but the initial shpes are not modified.
      * The duplicated items are added to aList
      */
-    void Transform( std::vector<std::shared_ptr<DRAWSEGMENT>>* aList = NULL,
+    void Transform( std::vector<std::shared_ptr<PCB_SHAPE>>* aList = nullptr,
                     int aDuplicateCount = 0 );
 
     /**
@@ -285,7 +285,7 @@ public:
     int GetDuplicateCount() { return m_spinCtrlDuplicateCount->GetValue(); }
 
 private:
-    std::vector<std::shared_ptr<DRAWSEGMENT>>& m_list;
+    std::vector<std::shared_ptr<PCB_SHAPE>>& m_list;
 
     UNIT_BINDER  m_vectorX;
     UNIT_BINDER  m_vectorY;

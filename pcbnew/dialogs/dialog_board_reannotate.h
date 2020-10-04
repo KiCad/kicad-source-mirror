@@ -28,7 +28,6 @@
 
 #include <class_board.h>
 #include <class_module.h>
-#include <class_text_mod.h>
 #include <dialogs/dialog_board_reannotate_base.h>
 #include <layers_id_colors_and_visibility.h>
 #include <netlist_reader/pcb_netlist.h>

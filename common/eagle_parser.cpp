@@ -497,8 +497,6 @@ EATTR::EATTR( wxXmlNode* aTree )
     y     = parseOptionalAttribute<ECOORD>( aTree, "y" );
     size  = parseOptionalAttribute<ECOORD>( aTree, "size" );
 
-    // KiCad cannot currently put a TEXTE_MODULE on a different layer than the MODULE
-    // Eagle can it seems.
     layer = parseOptionalAttribute<int>( aTree, "layer" );
     ratio = parseOptionalAttribute<double>( aTree, "ratio" );
     rot   = parseOptionalAttribute<EROT>( aTree, "rot" );

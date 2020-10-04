@@ -32,13 +32,10 @@
 #include <fp_lib_table.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_wizard_frame.h>
-#include <class_drawsegment.h>
-#include <class_pcb_text.h>
 #include <class_pcb_target.h>
 #include <class_module.h>
 #include <class_dimension.h>
 #include <class_zone.h>
-#include <class_edge_mod.h>
 #include <tools/pcb_actions.h>
 #include <router/router_tool.h>
 #include <dialog_find.h>

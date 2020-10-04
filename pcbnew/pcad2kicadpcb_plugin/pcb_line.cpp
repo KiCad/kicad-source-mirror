@@ -30,7 +30,8 @@
 #include <wx/wx.h>
 
 #include <common.h>
-
+#include <fp_shape.h>
+#include <pcb_shape.h>
 #include <pcb_line.h>
 
 namespace PCAD2KICAD {
@@ -118,7 +119,7 @@ void PCB_LINE::AddToModule( MODULE* aModule )
 {
     if( IsNonCopperLayer( m_KiCadLayer ) )
     {
-        EDGE_MODULE* segment = new EDGE_MODULE( aModule, S_SEGMENT );
+        FP_SHAPE* segment = new FP_SHAPE( aModule, S_SEGMENT );
         aModule->Add( segment );
 
         segment->m_Start0   = wxPoint( m_positionX, m_positionY );
@@ -149,13 +150,13 @@ void PCB_LINE::AddToBoard()
     }
     else
     {
-        DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
-        m_board->Add( dseg, ADD_MODE::APPEND );
+        PCB_SHAPE* segment = new PCB_SHAPE( m_board );
+        m_board->Add( segment, ADD_MODE::APPEND );
 
-        dseg->SetLayer( m_KiCadLayer );
-        dseg->SetStart( wxPoint( m_positionX, m_positionY ) );
-        dseg->SetEnd( wxPoint( m_toX, m_toY ) );
-        dseg->SetWidth( m_width );
+        segment->SetLayer( m_KiCadLayer );
+        segment->SetStart( wxPoint( m_positionX, m_positionY ) );
+        segment->SetEnd( wxPoint( m_toX, m_toY ) );
+        segment->SetWidth( m_width );
     }
 }
 

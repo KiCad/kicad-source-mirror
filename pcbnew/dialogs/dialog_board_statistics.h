@@ -29,7 +29,6 @@
 
 #include <base_units.h>
 #include <class_board.h>
-#include <class_drawsegment.h>
 #include <class_track.h>
 #include <confirm.h>
 #include <dialog_board_statistics_base.h>

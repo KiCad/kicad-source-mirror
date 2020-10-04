@@ -36,15 +36,15 @@ class PCB_PARSER;
 class NETINFO_MAPPING;
 class BOARD_DESIGN_SETTINGS;
 class DIMENSION;
-class EDGE_MODULE;
-class DRAWSEGMENT;
+class FP_SHAPE;
+class PCB_SHAPE;
 class PCB_TARGET;
 class D_PAD;
-class TEXTE_MODULE;
+class FP_TEXT;
 class PCB_GROUP;
 class TRACK;
 class ZONE_CONTAINER;
-class TEXTE_PCB;
+class PCB_TEXT;
 
 
 /// Current s-expression file format version.  2 was the last legacy format version.
@@ -57,7 +57,7 @@ class TEXTE_PCB;
 //#define SEXPR_BOARD_FILE_VERSION    20170920  // long pad names and custom pad shape
 //#define SEXPR_BOARD_FILE_VERSION    20170922  // Keepout zones can exist on multiple layers
 //#define SEXPR_BOARD_FILE_VERSION    20171114  // Save 3D model offset in mm, instead of inches
-//#define SEXPR_BOARD_FILE_VERSION    20171125  // Locked/unlocked TEXTE_MODULE
+//#define SEXPR_BOARD_FILE_VERSION    20171125  // Locked/unlocked FP_TEXT
 //#define SEXPR_BOARD_FILE_VERSION    20171130  // 3D model offset written using "offset" parameter
 //#define SEXPR_BOARD_FILE_VERSION    20190331  // hatched zones and chamfered round rect pads
 //#define SEXPR_BOARD_FILE_VERSION    20190421  // curves in custom pads
@@ -260,11 +260,11 @@ private:
 
     void format( DIMENSION* aDimension, int aNestLevel = 0 ) const;
 
-    void format( EDGE_MODULE* aModuleDrawing, int aNestLevel = 0 ) const;
+    void format( FP_SHAPE* aModuleDrawing, int aNestLevel = 0 ) const;
 
     void format( PCB_GROUP* aGroup, int aNestLevel = 0 ) const;
 
-    void format( DRAWSEGMENT* aSegment, int aNestLevel = 0 ) const;
+    void format( PCB_SHAPE* aSegment, int aNestLevel = 0 ) const;
 
     void format( PCB_TARGET* aTarget, int aNestLevel = 0 ) const;
 
@@ -272,9 +272,9 @@ private:
 
     void format( D_PAD* aPad, int aNestLevel = 0 ) const;
 
-    void format( TEXTE_PCB* aText, int aNestLevel = 0 ) const;
+    void format( PCB_TEXT* aText, int aNestLevel = 0 ) const;
 
-    void format( TEXTE_MODULE* aText, int aNestLevel = 0 ) const;
+    void format( FP_TEXT* aText, int aNestLevel = 0 ) const;
 
     void format( TRACK* aTrack, int aNestLevel = 0 ) const;
 

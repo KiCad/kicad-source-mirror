@@ -33,8 +33,6 @@ using namespace std::placeholders;
 #include <class_board_item.h>
 #include <class_track.h>
 #include <class_module.h>
-#include <class_pcb_text.h>
-#include <class_drawsegment.h>
 #include <class_zone.h>
 #include <pcb_edit_frame.h>
 #include <class_draw_panel_gal.h>

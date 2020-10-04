@@ -34,9 +34,9 @@
 
 #include <class_board.h>
 #include <class_module.h>
-#include <class_pcb_text.h>
-#include <class_drawsegment.h>
-#include <class_edge_mod.h>
+#include <pcb_text.h>
+#include <pcb_shape.h>
+#include <fp_shape.h>
 #include <gpcb_plugin.h>
 
 #include <wx/dir.h>
@@ -462,16 +462,16 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
                                    aLineReader->LineNumber(), 0 );
             }
 
-            EDGE_MODULE* drawSeg = new EDGE_MODULE( module.get() );
-            drawSeg->SetLayer( F_SilkS );
-            drawSeg->SetShape( S_SEGMENT );
-            drawSeg->SetStart0( wxPoint( parseInt( parameters[2], conv_unit ),
-                                         parseInt( parameters[3], conv_unit ) ) );
-            drawSeg->SetEnd0( wxPoint( parseInt( parameters[4], conv_unit ),
-                                       parseInt( parameters[5], conv_unit ) ) );
-            drawSeg->SetWidth( parseInt( parameters[6], conv_unit ) );
-            drawSeg->SetDrawCoord();
-            module->Add( drawSeg );
+            FP_SHAPE* shape = new FP_SHAPE( module.get() );
+            shape->SetLayer( F_SilkS );
+            shape->SetShape( S_SEGMENT );
+            shape->SetStart0( wxPoint( parseInt( parameters[2], conv_unit ),
+                                       parseInt( parameters[3], conv_unit ) ) );
+            shape->SetEnd0( wxPoint( parseInt( parameters[4], conv_unit ),
+                                     parseInt( parameters[5], conv_unit ) ) );
+            shape->SetWidth( parseInt( parameters[6], conv_unit ) );
+            shape->SetDrawCoord();
+            module->Add( shape );
             continue;
         }
 
@@ -486,10 +486,10 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
             }
 
             // Pcbnew does know ellipse so we must have Width = Height
-            EDGE_MODULE* drawSeg = new EDGE_MODULE( module.get() );
-            drawSeg->SetLayer( F_SilkS );
-            drawSeg->SetShape( S_ARC );
-            module->Add( drawSeg );
+            FP_SHAPE* shape = new FP_SHAPE( module.get() );
+            shape->SetLayer( F_SilkS );
+            shape->SetShape( S_ARC );
+            module->Add( shape );
 
             // for and arc: ibuf[3] = ibuf[4]. Pcbnew does not know ellipses
             int     radius = ( parseInt( parameters[4], conv_unit ) +
@@ -498,7 +498,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
             wxPoint centre( parseInt( parameters[2], conv_unit ),
                             parseInt( parameters[3], conv_unit ) );
 
-            drawSeg->SetStart0( centre );
+            shape->SetStart0( centre );
 
             // Pcbnew start angles are inverted and 180 degrees from Geda PCB angles.
             double start_angle = parseInt( parameters[6], -10.0 ) + 1800.0;
@@ -508,18 +508,18 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
 
             // Geda PCB does not support circles.
             if( sweep_angle == -3600.0 )
-                drawSeg->SetShape( S_CIRCLE );
+                shape->SetShape( S_CIRCLE );
 
             // Angle value is clockwise in gpcb and Pcbnew.
-            drawSeg->SetAngle( sweep_angle );
-            drawSeg->SetEnd0( wxPoint( radius, 0 ) );
+            shape->SetAngle( sweep_angle );
+            shape->SetEnd0( wxPoint( radius, 0 ) );
 
             // Calculate start point coordinate of arc
-            wxPoint arcStart( drawSeg->GetEnd0() );
+            wxPoint arcStart( shape->GetEnd0() );
             RotatePoint( &arcStart, -start_angle );
-            drawSeg->SetEnd0( centre + arcStart );
-            drawSeg->SetWidth( parseInt( parameters[8], conv_unit ) );
-            drawSeg->SetDrawCoord();
+            shape->SetEnd0( centre + arcStart );
+            shape->SetWidth( parseInt( parameters[8], conv_unit ) );
+            shape->SetDrawCoord();
             continue;
         }
 

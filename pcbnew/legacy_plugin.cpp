@@ -74,12 +74,12 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_pcb_text.h>
+#include <pcb_text.h>
 #include <class_zone.h>
 #include <class_dimension.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <class_pcb_target.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <3d_cache/3d_info.h>
 #include <pcb_plot_params.h>
 #include <pcb_plot_params_parser.h>
@@ -1207,25 +1207,25 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
             // e.g. "T1 6940 -16220 350 300 900 60 M I 20 N "CFCARD"\r\n"
             int tnum = intParse( line + SZ( "T" ) );
 
-            TEXTE_MODULE* textm = nullptr;
+            FP_TEXT* text = nullptr;
 
             switch( tnum )
             {
-            case TEXTE_MODULE::TEXT_is_REFERENCE:
-                textm = &aModule->Reference();
+            case FP_TEXT::TEXT_is_REFERENCE:
+                text = &aModule->Reference();
                 break;
 
-            case TEXTE_MODULE::TEXT_is_VALUE:
-                textm = &aModule->Value();
+            case FP_TEXT::TEXT_is_VALUE:
+                text = &aModule->Value();
                 break;
 
             // All other fields greater than 1.
             default:
-                textm = new TEXTE_MODULE( aModule );
-                aModule->Add( textm );
+                text = new FP_TEXT( aModule );
+                aModule->Add( text );
             }
 
-            loadMODULE_TEXT( textm );
+            loadMODULE_TEXT( text );
         }
 
         else if( TESTLINE( "Po" ) )
@@ -1647,7 +1647,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
     case 'A':   shape = S_ARC;       break;
     case 'P':   shape = S_POLYGON;   break;
     default:
-        m_error.Printf( _( "Unknown EDGE_MODULE type:'%c=0x%02x' on line:%d of footprint:\"%s\"" ),
+        m_error.Printf( _( "Unknown FP_SHAPE type:'%c=0x%02x' on line:%d of footprint:\"%s\"" ),
                         (unsigned char) line[1],
                         (unsigned char) line[1],
                         m_reader->LineNumber(),
@@ -1656,7 +1656,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
         THROW_IO_ERROR( m_error );
     }
 
-    unique_ptr<EDGE_MODULE> dwg( new EDGE_MODULE( aModule, shape ) );    // a drawing
+    unique_ptr<FP_SHAPE> dwg( new FP_SHAPE( aModule, shape ) );    // a drawing
 
     const char* data;
 
@@ -1759,17 +1759,17 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
     dwg->SetWidth( width );
     dwg->SetLayer( leg_layer2new( m_cu_count,  layer ) );
 
-    EDGE_MODULE* em = dwg.release();
+    FP_SHAPE* fpShape = dwg.release();
 
-    aModule->Add( em );
+    aModule->Add( fpShape );
 
     // this had been done at the MODULE level before, presumably because the
-    // EDGE_MODULE needs to be already added to a module before this function will work.
-    em->SetDrawCoord();
+    // FP_SHAPE needs to be already added to a module before this function will work.
+    fpShape->SetDrawCoord();
 }
 
 
-void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
+void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
 {
     const char* data;
     const char* txt_end;
@@ -1817,11 +1817,11 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     char*   hjust   = strtok_r( (char*) txt_end, delims, (char**) &data );
     char*   vjust   = strtok_r( NULL, delims, (char**) &data );
 
-    if( type != TEXTE_MODULE::TEXT_is_REFERENCE
-     && type != TEXTE_MODULE::TEXT_is_VALUE )
-        type = TEXTE_MODULE::TEXT_is_DIVERS;
+    if( type != FP_TEXT::TEXT_is_REFERENCE
+     && type != FP_TEXT::TEXT_is_VALUE )
+        type = FP_TEXT::TEXT_is_DIVERS;
 
-    aText->SetType( static_cast<TEXTE_MODULE::TEXT_TYPE>( type ) );
+    aText->SetType( static_cast<FP_TEXT::TEXT_TYPE>( type ) );
 
     aText->SetPos0( wxPoint( pos0_x, pos0_y ) );
     aText->SetTextSize( wxSize( size0_x, size0_y ) );
@@ -1921,7 +1921,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
         $EndDRAWSEGMENT
     */
 
-    unique_ptr<DRAWSEGMENT>   dseg( new DRAWSEGMENT( m_board ) );
+    unique_ptr<PCB_SHAPE>   dseg( new PCB_SHAPE( m_board ) );
 
     char*   line;
     char*   saveptr;
@@ -2113,7 +2113,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
     char    text[1024];
 
     // maybe someday a constructor that takes all this data in one call?
-    TEXTE_PCB*  pcbtxt = new TEXTE_PCB( m_board );
+    PCB_TEXT*  pcbtxt = new PCB_TEXT( m_board );
     m_board->Add( pcbtxt, ADD_MODE::APPEND );
 
     char*   line;

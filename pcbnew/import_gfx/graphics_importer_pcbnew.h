@@ -33,7 +33,7 @@
 class BOARD_ITEM;
 class BOARD;
 class MODULE;
-class DRAWSEGMENT;
+class PCB_SHAPE;
 class EDA_TEXT;
 
 class GRAPHICS_IMPORTER_PCBNEW : public GRAPHICS_IMPORTER
@@ -89,7 +89,7 @@ public:
 
 protected:
     ///> Create an object representing a graphical shape.
-    virtual std::unique_ptr<DRAWSEGMENT> createDrawing() = 0;
+    virtual std::unique_ptr<PCB_SHAPE> createDrawing() = 0;
 
     ///> Create an object representing a text. Both pointers point to different parts of the
     ///> same object, the EDA_TEXT pointer is simply for convenience.
@@ -109,7 +109,7 @@ public:
     }
 
 protected:
-    std::unique_ptr<DRAWSEGMENT> createDrawing() override;
+    std::unique_ptr<PCB_SHAPE> createDrawing() override;
     std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> createText() override;
 
     BOARD* m_board;
@@ -125,7 +125,7 @@ public:
     }
 
 protected:
-    std::unique_ptr<DRAWSEGMENT> createDrawing() override;
+    std::unique_ptr<PCB_SHAPE> createDrawing() override;
     std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> createText() override;
 
     MODULE* m_module;

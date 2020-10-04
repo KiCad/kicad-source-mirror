@@ -31,7 +31,7 @@
 
 #include <build_version.h>
 #include <class_board.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <confirm.h>
@@ -840,28 +840,24 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
                  mirror, flip );
 
         // Text on silk layer: RefDes and value (are they actually useful?)
-        TEXTE_MODULE *textmod = &module->Reference();
-
-        for( int ii = 0; ii < 2; ii++ )
+        for( FP_TEXT* textItem : { &module->Reference(), &module->Value() } )
         {
-            double txt_orient = textmod->GetTextAngle();
+            double txt_orient = textItem->GetTextAngle();
             std::string layer = GenCADLayerName( cu_count, module->GetFlag() ? B_SilkS : F_SilkS );
 
             fprintf( aFile, "TEXT %g %g %g %g %s %s \"%s\"",
-                     textmod->GetPos0().x / SCALE_FACTOR,
-                    -textmod->GetPos0().y / SCALE_FACTOR,
-                     textmod->GetTextWidth() / SCALE_FACTOR,
+                     textItem->GetPos0().x / SCALE_FACTOR,
+                    -textItem->GetPos0().y / SCALE_FACTOR,
+                     textItem->GetTextWidth() / SCALE_FACTOR,
                      txt_orient / 10.0,
                      mirror,
                      layer.c_str(),
-                     TO_UTF8( escapeString( textmod->GetText() ) ) );
+                     TO_UTF8( escapeString( textItem->GetText() ) ) );
 
             // Please note, the width is approx
             fprintf( aFile, " 0 0 %g %g\n",
-                     ( textmod->GetTextWidth() * textmod->GetLength() ) / SCALE_FACTOR,
-                     textmod->GetTextHeight() / SCALE_FACTOR );
-
-            textmod = &module->Value(); // Dirty trick for the second iteration
+                     ( textItem->GetTextWidth() * textItem->GetLength() ) / SCALE_FACTOR,
+                     textItem->GetTextHeight() / SCALE_FACTOR );
         }
 
         // The SHEET is a 'generic description' for referencing the component
@@ -1090,7 +1086,7 @@ static void CreateBoardSection( FILE* aFile, BOARD* aPcb )
     {
         if( drawing->Type() == PCB_SHAPE_T )
         {
-            DRAWSEGMENT* drawseg = static_cast<DRAWSEGMENT*>( drawing );
+            PCB_SHAPE* drawseg = static_cast<PCB_SHAPE*>( drawing );
 
             if( drawseg->GetLayer() == Edge_Cuts )
             {
@@ -1142,7 +1138,7 @@ static void CreateTracksInfoData( FILE* aFile, BOARD* aPcb )
  */
 static void FootprintWriteShape( FILE* aFile, MODULE* module, const wxString& aShapeName )
 {
-    EDGE_MODULE* PtEdge;
+    FP_SHAPE* shape;
 
     /* creates header: */
     fprintf( aFile, "\nSHAPE \"%s\"\n", TO_UTF8( escapeString( aShapeName ) ) );
@@ -1166,51 +1162,50 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module, const wxString& aS
             break;
 
         case PCB_FP_SHAPE_T:
-            PtEdge = (EDGE_MODULE*) PtStruct;
-            if( PtEdge->GetLayer() == F_SilkS || PtEdge->GetLayer() == B_SilkS )
+            shape = (FP_SHAPE*) PtStruct;
+            if( shape->GetLayer() == F_SilkS || shape->GetLayer() == B_SilkS )
             {
-                switch( PtEdge->GetShape() )
+                switch( shape->GetShape() )
                 {
                 case S_SEGMENT:
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             PtEdge->m_Start0.x / SCALE_FACTOR,
-                             -PtEdge->m_Start0.y / SCALE_FACTOR,
-                             PtEdge->m_End0.x / SCALE_FACTOR,
-                             -PtEdge->m_End0.y / SCALE_FACTOR );
+                             shape->m_Start0.x / SCALE_FACTOR,
+                             -shape->m_Start0.y / SCALE_FACTOR,
+                             shape->m_End0.x / SCALE_FACTOR,
+                             -shape->m_End0.y / SCALE_FACTOR );
                     break;
 
                 case S_RECT:
                 {
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             PtEdge->m_Start0.x / SCALE_FACTOR,
-                             -PtEdge->m_Start0.y / SCALE_FACTOR,
-                             PtEdge->m_End0.x / SCALE_FACTOR,
-                             -PtEdge->m_Start0.y / SCALE_FACTOR );
+                             shape->m_Start0.x / SCALE_FACTOR,
+                             -shape->m_Start0.y / SCALE_FACTOR,
+                             shape->m_End0.x / SCALE_FACTOR,
+                             -shape->m_Start0.y / SCALE_FACTOR );
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             PtEdge->m_End0.x / SCALE_FACTOR,
-                             -PtEdge->m_Start0.y / SCALE_FACTOR,
-                             PtEdge->m_End0.x / SCALE_FACTOR,
-                             -PtEdge->m_End0.y / SCALE_FACTOR );
+                             shape->m_End0.x / SCALE_FACTOR,
+                             -shape->m_Start0.y / SCALE_FACTOR,
+                             shape->m_End0.x / SCALE_FACTOR,
+                             -shape->m_End0.y / SCALE_FACTOR );
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             PtEdge->m_End0.x / SCALE_FACTOR,
-                             -PtEdge->m_End0.y / SCALE_FACTOR,
-                             PtEdge->m_Start0.x / SCALE_FACTOR,
-                             -PtEdge->m_End0.y / SCALE_FACTOR );
+                             shape->m_End0.x / SCALE_FACTOR,
+                             -shape->m_End0.y / SCALE_FACTOR,
+                             shape->m_Start0.x / SCALE_FACTOR,
+                             -shape->m_End0.y / SCALE_FACTOR );
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             PtEdge->m_Start0.x / SCALE_FACTOR,
-                             -PtEdge->m_End0.y / SCALE_FACTOR,
-                             PtEdge->m_Start0.x / SCALE_FACTOR,
-                             -PtEdge->m_Start0.y / SCALE_FACTOR );
+                             shape->m_Start0.x / SCALE_FACTOR,
+                             -shape->m_End0.y / SCALE_FACTOR,
+                             shape->m_Start0.x / SCALE_FACTOR,
+                             -shape->m_Start0.y / SCALE_FACTOR );
                 }
                     break;
 
                 case S_CIRCLE:
                 {
-                    int radius = KiROUND( GetLineLength( PtEdge->m_End0,
-                                                         PtEdge->m_Start0 ) );
+                    int radius = KiROUND( GetLineLength( shape->m_End0, shape->m_Start0 ) );
                     fprintf( aFile, "CIRCLE %g %g %g\n",
-                             PtEdge->m_Start0.x / SCALE_FACTOR,
-                             -PtEdge->m_Start0.y / SCALE_FACTOR,
+                             shape->m_Start0.x / SCALE_FACTOR,
+                             -shape->m_Start0.y / SCALE_FACTOR,
                              radius / SCALE_FACTOR );
                     break;
                 }
@@ -1218,19 +1213,19 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module, const wxString& aS
                 case S_ARC:
                 {
                     int arcendx, arcendy;
-                    arcendx = PtEdge->m_End0.x - PtEdge->m_Start0.x;
-                    arcendy = PtEdge->m_End0.y - PtEdge->m_Start0.y;
-                    RotatePoint( &arcendx, &arcendy, -PtEdge->GetAngle() );
-                    arcendx += PtEdge->GetStart0().x;
-                    arcendy += PtEdge->GetStart0().y;
+                    arcendx = shape->m_End0.x - shape->m_Start0.x;
+                    arcendy = shape->m_End0.y - shape->m_Start0.y;
+                    RotatePoint( &arcendx, &arcendy, -shape->GetAngle() );
+                    arcendx += shape->GetStart0().x;
+                    arcendy += shape->GetStart0().y;
 
                     fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                                PtEdge->m_End0.x / SCALE_FACTOR,
-                                -PtEdge->GetEnd0().y / SCALE_FACTOR,
-                                arcendx / SCALE_FACTOR,
-                                -arcendy / SCALE_FACTOR,
-                                PtEdge->GetStart0().x / SCALE_FACTOR,
-                                -PtEdge->GetStart0().y / SCALE_FACTOR );
+                             shape->m_End0.x / SCALE_FACTOR,
+                             -shape->GetEnd0().y / SCALE_FACTOR,
+                             arcendx / SCALE_FACTOR,
+                             -arcendy / SCALE_FACTOR,
+                             shape->GetStart0().x / SCALE_FACTOR,
+                             -shape->GetStart0().y / SCALE_FACTOR );
                     break;
                 }
 

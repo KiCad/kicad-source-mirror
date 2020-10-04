@@ -401,7 +401,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processModule( MODULE* aModule, const LIB_ID& a
 }
 
 
-void processTextItem( const TEXTE_MODULE& aSrc, TEXTE_MODULE& aDest,
+void processTextItem( const FP_TEXT& aSrc, FP_TEXT& aDest,
                       bool resetText, bool resetTextLayers, bool resetTextEffects )
 {
     if( !resetText )
@@ -423,13 +423,13 @@ void processTextItem( const TEXTE_MODULE& aSrc, TEXTE_MODULE& aDest,
 }
 
 
-TEXTE_MODULE* getMatchingTextItem( TEXTE_MODULE* aRefItem, MODULE* aModule )
+FP_TEXT* getMatchingTextItem( FP_TEXT* aRefItem, MODULE* aModule )
 {
-    std::vector<TEXTE_MODULE*> candidates;
+    std::vector<FP_TEXT*> candidates;
 
     for( BOARD_ITEM* item : aModule->GraphicalItems() )
     {
-        TEXTE_MODULE* candidate = dyn_cast<TEXTE_MODULE*>( item );
+        FP_TEXT* candidate = dyn_cast<FP_TEXT*>( item );
 
         if( candidate && candidate->GetText() == aRefItem->GetText() )
             candidates.push_back( candidate );
@@ -442,9 +442,9 @@ TEXTE_MODULE* getMatchingTextItem( TEXTE_MODULE* aRefItem, MODULE* aModule )
         return candidates[0];
 
     // Try refining the match by layer
-    std::vector<TEXTE_MODULE*> candidatesOnSameLayer;
+    std::vector<FP_TEXT*> candidatesOnSameLayer;
 
-    for( TEXTE_MODULE* candidate : candidates )
+    for( FP_TEXT* candidate : candidates )
     {
         if( candidate->GetLayer() == aRefItem->GetLayer() )
             candidatesOnSameLayer.push_back( candidate );
@@ -454,9 +454,9 @@ TEXTE_MODULE* getMatchingTextItem( TEXTE_MODULE* aRefItem, MODULE* aModule )
         return candidatesOnSameLayer[0];
 
     // Last ditch effort: refine by position
-    std::vector<TEXTE_MODULE*> candidatesAtSamePos;
+    std::vector<FP_TEXT*> candidatesAtSamePos;
 
-    for( TEXTE_MODULE* candidate : candidatesOnSameLayer.size() ? candidatesOnSameLayer : candidates )
+    for( FP_TEXT* candidate : candidatesOnSameLayer.size() ? candidatesOnSameLayer : candidates )
     {
         if( candidate->GetPos0() == aRefItem->GetPos0() )
             candidatesAtSamePos.push_back( candidate );
@@ -528,16 +528,16 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aExisting, MODULE* aNew, BOARD_COM
     // Copy fields in accordance with the reset* flags
     for( BOARD_ITEM* item : aExisting->GraphicalItems() )
     {
-        TEXTE_MODULE* srcItem = dyn_cast<TEXTE_MODULE*>( item );
+        FP_TEXT* srcItem = dyn_cast<FP_TEXT*>( item );
 
         if( srcItem )
         {
-            TEXTE_MODULE* destItem = getMatchingTextItem( srcItem, aNew );
+            FP_TEXT* destItem = getMatchingTextItem( srcItem, aNew );
 
             if( destItem )
                 processTextItem( *srcItem, *destItem, false, resetTextLayers, resetTextEffects );
             else if( !deleteExtraTexts )
-                aNew->Add( new TEXTE_MODULE( *srcItem ) );
+                aNew->Add( new FP_TEXT( *srcItem ) );
         }
     }
 

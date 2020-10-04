@@ -66,9 +66,9 @@ Load() TODO's
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <class_zone.h>
-#include <class_pcb_text.h>
+#include <pcb_text.h>
 #include <class_dimension.h>
 
 #include <eagle_plugin.h>
@@ -582,32 +582,32 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
             if( layer != UNDEFINED_LAYER )
             {
-                DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
-                int          width = w.width.ToPcbUnits();
+                PCB_SHAPE* shape = new PCB_SHAPE( m_board );
+                int        width = w.width.ToPcbUnits();
 
                 // KiCad cannot handle zero or negative line widths
                 if( width <= 0 )
                     width = m_board->GetDesignSettings().GetLineThickness( layer );
 
-                m_board->Add( dseg, ADD_MODE::APPEND );
+                m_board->Add( shape, ADD_MODE::APPEND );
 
                 if( !w.curve )
                 {
-                    dseg->SetStart( start );
-                    dseg->SetEnd( end );
+                    shape->SetStart( start );
+                    shape->SetEnd( end );
                 }
                 else
                 {
                     wxPoint center = ConvertArcCenter( start, end, *w.curve );
 
-                    dseg->SetShape( S_ARC );
-                    dseg->SetStart( center );
-                    dseg->SetEnd( start );
-                    dseg->SetAngle( *w.curve * -10.0 ); // KiCad rotates the other way
+                    shape->SetShape( S_ARC );
+                    shape->SetStart( center );
+                    shape->SetEnd( start );
+                    shape->SetAngle( *w.curve * -10.0 ); // KiCad rotates the other way
                 }
 
-                dseg->SetLayer( layer );
-                dseg->SetWidth( width );
+                shape->SetLayer( layer );
+                shape->SetWidth( width );
             }
 
             m_xpath->pop();
@@ -621,7 +621,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
             if( layer != UNDEFINED_LAYER )
             {
-                TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
+                PCB_TEXT* pcbtxt = new PCB_TEXT( m_board );
                 m_board->Add( pcbtxt, ADD_MODE::APPEND );
 
                 pcbtxt->SetLayer( layer );
@@ -767,8 +767,8 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
                 if( layer != UNDEFINED_LAYER ) // unsupported layer
                 {
-                    DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
-                    m_board->Add( dseg, ADD_MODE::APPEND );
+                    PCB_SHAPE* shape = new PCB_SHAPE( m_board );
+                    m_board->Add( shape, ADD_MODE::APPEND );
 
                     // with == 0 means filled circle
                     if( width <= 0 )
@@ -777,11 +777,11 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                         radius = radius / 2;
                     }
 
-                    dseg->SetShape( S_CIRCLE );
-                    dseg->SetLayer( layer );
-                    dseg->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
-                    dseg->SetEnd( wxPoint( kicad_x( c.x ) + radius, kicad_y( c.y ) ) );
-                    dseg->SetWidth( width );
+                    shape->SetShape( S_CIRCLE );
+                    shape->SetLayer( layer );
+                    shape->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
+                    shape->SetEnd( wxPoint( kicad_x( c.x ) + radius, kicad_y( c.y ) ) );
+                    shape->SetWidth( width );
                 }
             }
             m_xpath->pop();
@@ -1384,8 +1384,8 @@ void EAGLE_PLUGIN::orientModuleAndText( MODULE* m, const EELEMENT& e, const EATT
 }
 
 
-void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
-                            TEXTE_MODULE* txt, const EATTR* aAttr )
+void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e, FP_TEXT* txt,
+                                     const EATTR* aAttr )
 {
     // Smashed part ?
     if( aAttr )
@@ -1609,18 +1609,18 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
 
     // FIXME: the cap attribute is ignored because KiCad can't create lines
     //        with flat ends.
-    EDGE_MODULE* dwg;
+    FP_SHAPE* dwg;
 
     if( !w.curve )
     {
-        dwg = new EDGE_MODULE( aModule, S_SEGMENT );
+        dwg = new FP_SHAPE( aModule, S_SEGMENT );
 
         dwg->SetStart0( start );
         dwg->SetEnd0( end );
     }
     else
     {
-        dwg = new EDGE_MODULE( aModule, S_ARC );
+        dwg = new FP_SHAPE( aModule, S_ARC );
         wxPoint center = ConvertArcCenter( start, end, *w.curve );
 
         dwg->SetStart0( center );
@@ -1746,7 +1746,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
     if( layer == UNDEFINED_LAYER )
         layer = Cmts_User;
 
-    TEXTE_MODULE* txt;
+    FP_TEXT* txt;
 
     if( t.text == ">NAME" || t.text == ">name" )
         txt = &aModule->Reference();
@@ -1755,7 +1755,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
     else
     {
         // FIXME: graphical text items are rotated for some reason.
-        txt = new TEXTE_MODULE( aModule );
+        txt = new FP_TEXT( aModule );
         aModule->Add( txt );
     }
 
@@ -1874,8 +1874,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     else
     {
         PCB_LAYER_ID layer = kicad_layer( r.layer );
-
-        EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
+        FP_SHAPE*    dwg   = new FP_SHAPE( aModule, S_POLYGON );
 
         aModule->Add( dwg );
 
@@ -1980,7 +1979,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
     else
     {
         PCB_LAYER_ID layer = kicad_layer( p.layer );
-        EDGE_MODULE* dwg   = new EDGE_MODULE( aModule, S_POLYGON );
+        FP_SHAPE*    dwg   = new FP_SHAPE( aModule, S_POLYGON );
 
         aModule->Add( dwg );
 
@@ -2040,7 +2039,7 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
     else
     {
         PCB_LAYER_ID layer = kicad_layer( e.layer );
-        EDGE_MODULE* gr    = new EDGE_MODULE( aModule, S_CIRCLE );
+        FP_SHAPE*    gr    = new FP_SHAPE( aModule, S_CIRCLE );
 
         // with == 0 means filled circle
         if( width <= 0 )

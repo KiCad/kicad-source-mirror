@@ -694,7 +694,7 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
 
     for( unsigned ii = 0; ii < m_primitives.size(); ++ii )
     {
-        const std::shared_ptr<DRAWSEGMENT>& primitive = m_primitives[ii];
+        const std::shared_ptr<PCB_SHAPE>& primitive = m_primitives[ii];
 
         for( wxString& s : bs_info )
             s.Empty();
@@ -1354,13 +1354,13 @@ void DIALOG_PAD_PROPERTIES::redraw()
 
     while( select >= 0 )
     {
-        DRAWSEGMENT* dummySegment = (DRAWSEGMENT*) m_primitives[select]->Clone();
-        dummySegment->SetLayer( SELECTED_ITEMS_LAYER );
-        dummySegment->Rotate( wxPoint( 0, 0), m_dummyPad->GetOrientation() );
-        dummySegment->Move( m_dummyPad->GetPosition() );
+        PCB_SHAPE* dummyShape = (PCB_SHAPE*) m_primitives[select]->Clone();
+        dummyShape->SetLayer( SELECTED_ITEMS_LAYER );
+        dummyShape->Rotate( wxPoint( 0, 0), m_dummyPad->GetOrientation() );
+        dummyShape->Move( m_dummyPad->GetPosition() );
 
-        view->Add( dummySegment );
-        m_highlight.push_back( dummySegment );
+        view->Add( dummyShape );
+        m_highlight.push_back( dummyShape );
 
         select = m_listCtrlPrimitives->GetNextSelected( select );
     }
@@ -1938,7 +1938,7 @@ void DIALOG_PAD_PROPERTIES::editPrimitive()
         return;
     }
 
-    std::shared_ptr<DRAWSEGMENT>& shape = m_primitives[select];
+    std::shared_ptr<PCB_SHAPE>& shape = m_primitives[select];
 
     if( shape->GetShape() == S_POLYGON )
     {
@@ -2035,7 +2035,7 @@ void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
 
     PCB_SHAPE_TYPE_T listtype[] = { S_SEGMENT, S_ARC, S_CURVE, S_CIRCLE, S_POLYGON };
 
-    DRAWSEGMENT* primitive = new DRAWSEGMENT();
+    PCB_SHAPE* primitive = new PCB_SHAPE();
     primitive->SetShape( listtype[type] );
     primitive->SetWidth( m_board->GetDesignSettings().GetLineThickness( F_Cu ) );
 
@@ -2077,7 +2077,7 @@ void DIALOG_PAD_PROPERTIES::onGeometryTransform( wxCommandEvent& event )
     }
 
     // Multiple selections are allowed. Build selected shapes list
-    std::vector<std::shared_ptr<DRAWSEGMENT>> shapeList;
+    std::vector<std::shared_ptr<PCB_SHAPE>> shapeList;
     shapeList.emplace_back( m_primitives[select] );
 
     while( ( select = m_listCtrlPrimitives->GetNextSelected( select ) ) >= 0 )
@@ -2111,7 +2111,7 @@ void DIALOG_PAD_PROPERTIES::onDuplicatePrimitive( wxCommandEvent& event )
     }
 
     // Multiple selections are allowed. Build selected shapes list
-    std::vector<std::shared_ptr<DRAWSEGMENT>> shapeList;
+    std::vector<std::shared_ptr<PCB_SHAPE>> shapeList;
     shapeList.emplace_back( m_primitives[select] );
 
     while( ( select = m_listCtrlPrimitives->GetNextSelected( select ) ) >= 0 )
@@ -2125,7 +2125,7 @@ void DIALOG_PAD_PROPERTIES::onDuplicatePrimitive( wxCommandEvent& event )
     // Transfer new settings
     // save duplicates to a separate vector to avoid m_primitives reallocation,
     // as shapeList contains pointers to its elements
-    std::vector<std::shared_ptr<DRAWSEGMENT>> duplicates;
+    std::vector<std::shared_ptr<PCB_SHAPE>> duplicates;
     dlg.Transform( &duplicates, dlg.GetDuplicateCount() );
     std::move( duplicates.begin(), duplicates.end(), std::back_inserter( m_primitives ) );
 

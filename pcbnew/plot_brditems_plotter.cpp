@@ -54,14 +54,14 @@
 #include <class_board.h>
 #include <class_board_item.h>                 // for BOARD_ITEM, S_CIRCLE
 #include <class_dimension.h>
-#include <class_drawsegment.h>
-#include <class_edge_mod.h>
+#include <pcb_shape.h>
+#include <fp_shape.h>
 #include <class_module.h>
-#include <class_text_mod.h>                   // for TEXTE_MODULE
+#include <fp_text.h>                          // for FP_TEXT
 #include <class_track.h>
 #include <class_pad.h>                        // for D_PAD
 #include <class_pcb_target.h>
-#include <class_pcb_text.h>
+#include <pcb_text.h>
 #include <class_zone.h>
 
 #include <wx/debug.h>                         // for wxASSERT_MSG
@@ -275,36 +275,36 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
 
 void BRDITEMS_PLOTTER::PlotFootprintTextItems( MODULE* aModule )
 {
-    TEXTE_MODULE* textModule = &aModule->Reference();
-    LAYER_NUM     textLayer = textModule->GetLayer();
+    FP_TEXT*  textItem = &aModule->Reference();
+    LAYER_NUM textLayer = textItem->GetLayer();
 
     // Reference and value are specfic items, not in graphic items list
     if( GetPlotReference() && m_layerMask[textLayer]
-        && ( textModule->IsVisible() || GetPlotInvisibleText() ) )
+        && ( textItem->IsVisible() || GetPlotInvisibleText() ) )
     {
-        PlotFootprintTextItem( textModule, getColor( textLayer ));
+        PlotFootprintTextItem( textItem, getColor( textLayer ));
     }
 
-    textModule = &aModule->Value();
-    textLayer = textModule->GetLayer();
+    textItem = &aModule->Value();
+    textLayer = textItem->GetLayer();
 
     if( GetPlotValue() && m_layerMask[textLayer]
-        && ( textModule->IsVisible() || GetPlotInvisibleText() ) )
+        && ( textItem->IsVisible() || GetPlotInvisibleText() ) )
     {
-        PlotFootprintTextItem( textModule, getColor( textLayer ));
+        PlotFootprintTextItem( textItem, getColor( textLayer ));
     }
 
-    for( auto item : aModule->GraphicalItems() )
+    for( BOARD_ITEM* item : aModule->GraphicalItems() )
     {
-        textModule = dyn_cast<TEXTE_MODULE*>( item );
+        textItem = dyn_cast<FP_TEXT*>( item );
 
-        if( !textModule )
+        if( !textItem )
             continue;
 
-        if( !textModule->IsVisible() )
+        if( !textItem->IsVisible() )
             continue;
 
-        textLayer = textModule->GetLayer();
+        textLayer = textItem->GetLayer();
 
         if( textLayer >= PCB_LAYER_ID_COUNT )
             return;
@@ -312,13 +312,13 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( MODULE* aModule )
         if( !m_layerMask[textLayer] )
             continue;
 
-        if( textModule->GetText() == wxT( "${REFERENCE}" ) && !GetPlotReference() )
+        if( textItem->GetText() == wxT( "${REFERENCE}" ) && !GetPlotReference() )
             continue;
 
-        if( textModule->GetText() == wxT( "${VALUE}" ) && !GetPlotValue() )
+        if( textItem->GetText() == wxT( "${VALUE}" ) && !GetPlotValue() )
             continue;
 
-        PlotFootprintTextItem( textModule, getColor( textLayer ));
+        PlotFootprintTextItem( textItem, getColor( textLayer ));
     }
 }
 
@@ -330,22 +330,22 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
     {
         switch( item->Type() )
         {
-        case PCB_SHAPE_T:          PlotDrawSegment( (DRAWSEGMENT*) item); break;
-        case PCB_TEXT_T:           PlotTextePcb( (TEXTE_PCB*) item );     break;
+        case PCB_SHAPE_T:          PlotPcbShape( (PCB_SHAPE*) item);    break;
+        case PCB_TEXT_T:           PlotPcbText( (PCB_TEXT*) item );     break;
 
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_CENTER_T:
         case PCB_DIM_ORTHOGONAL_T:
-        case PCB_DIM_LEADER_T:     PlotDimension( (DIMENSION*) item );    break;
+        case PCB_DIM_LEADER_T:     PlotDimension( (DIMENSION*) item );  break;
 
-        case PCB_TARGET_T:         PlotPcbTarget( (PCB_TARGET*) item );   break;
+        case PCB_TARGET_T:         PlotPcbTarget( (PCB_TARGET*) item ); break;
 
-        default:                                                          break;
+        default:                                                        break;
         }
     }
 }
 
-void BRDITEMS_PLOTTER::PlotFootprintTextItem( TEXTE_MODULE* aTextMod, COLOR4D aColor )
+void BRDITEMS_PLOTTER::PlotFootprintTextItem( FP_TEXT* aTextMod, COLOR4D aColor )
 {
     if( aColor == COLOR4D::WHITE )
         aColor = COLOR4D( LIGHTGRAY );
@@ -385,7 +385,7 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
     if( !m_layerMask[aDim->GetLayer()] )
         return;
 
-    DRAWSEGMENT draw;
+    PCB_SHAPE draw;
 
     draw.SetWidth( aDim->GetLineThickness() );
     draw.SetLayer( aDim->GetLayer() );
@@ -396,7 +396,7 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
     // the white items are not seen on a white paper or screen
     m_plotter->SetColor( color != WHITE ? color : LIGHTGRAY);
 
-    PlotTextePcb( &aDim->Text() );
+    PlotPcbText( &aDim->Text() );
 
     for( const std::shared_ptr<SHAPE>& shape : aDim->GetShapes() )
     {
@@ -410,7 +410,7 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
             draw.SetStart( wxPoint( seg.A ) );
             draw.SetEnd( wxPoint( seg.B ) );
 
-            PlotDrawSegment( &draw );
+            PlotPcbShape( &draw );
             break;
         }
 
@@ -423,7 +423,7 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
             draw.SetStart( start );
             draw.SetEnd( wxPoint( start.x + radius, start.y ) );
 
-            PlotDrawSegment( &draw );
+            PlotPcbShape( &draw );
             break;
         }
 
@@ -443,7 +443,7 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
 
     m_plotter->SetColor( getColor( aMire->GetLayer() ) );
 
-    DRAWSEGMENT  draw;
+    PCB_SHAPE  draw;
 
     draw.SetShape( S_CIRCLE );
     draw.SetWidth( aMire->GetWidth() );
@@ -457,7 +457,7 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
     // Draw the circle
     draw.SetEnd( wxPoint( draw.GetStart().x + radius, draw.GetStart().y ));
 
-    PlotDrawSegment( &draw );
+    PlotPcbShape( &draw );
 
     draw.SetShape( S_SEGMENT );
 
@@ -479,11 +479,11 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
     // Draw the X or + shape:
     draw.SetStart( wxPoint( mirePos.x - dx1, mirePos.y - dy1 ));
     draw.SetEnd(   wxPoint( mirePos.x + dx1, mirePos.y + dy1 ));
-    PlotDrawSegment( &draw );
+    PlotPcbShape( &draw );
 
     draw.SetStart( wxPoint( mirePos.x - dx2, mirePos.y - dy2 ));
     draw.SetEnd(   wxPoint( mirePos.x + dx2, mirePos.y + dy2 ));
-    PlotDrawSegment( &draw );
+    PlotPcbShape( &draw );
 }
 
 
@@ -492,7 +492,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( MODULE* aModule )
 {
     for( BOARD_ITEM* item : aModule->GraphicalItems() )
     {
-        EDGE_MODULE* edge = dynamic_cast<EDGE_MODULE*>( item );
+        FP_SHAPE* edge = dynamic_cast<FP_SHAPE*>( item );
 
         if( edge && m_layerMask[ edge->GetLayer() ] )
             PlotFootprintGraphicItem( edge );
@@ -501,20 +501,20 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( MODULE* aModule )
 
 
 //* Plot a graphic item (outline) relative to a footprint
-void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( EDGE_MODULE* aEdge )
+void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
 {
-    if( aEdge->Type() != PCB_FP_SHAPE_T )
+    if( aShape->Type() != PCB_FP_SHAPE_T )
         return;
 
-    m_plotter->SetColor( getColor( aEdge->GetLayer() ) );
+    m_plotter->SetColor( getColor( aShape->GetLayer() ) );
 
-    int     thickness = aEdge->GetWidth();
-    wxPoint pos( aEdge->GetStart() );
-    wxPoint end( aEdge->GetEnd() );
+    int     thickness = aShape->GetWidth();
+    wxPoint pos( aShape->GetStart() );
+    wxPoint end( aShape->GetEnd() );
 
     GBR_METADATA gbr_metadata;
     gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
-    MODULE* parent = static_cast<MODULE*> ( aEdge->GetParent() );
+    MODULE* parent = static_cast<MODULE*> ( aShape->GetParent() );
     gbr_metadata.SetCmpReference( parent->GetReference() );
 
     bool isOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
@@ -524,14 +524,14 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( EDGE_MODULE* aEdge )
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_ETCHEDCMP );
         gbr_metadata.SetCopper( true );
     }
-    else if( aEdge->GetLayer() == Edge_Cuts )   // happens also when plotting copper layers
+    else if( aShape->GetLayer() == Edge_Cuts )   // happens also when plotting copper layers
     {
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_EDGECUT );
     }
 
     int     radius;             // Circle/arc radius.
 
-    switch( aEdge->GetShape() )
+    switch( aShape->GetShape() )
     {
     case S_SEGMENT:
         m_plotter->ThickSegment( pos, end, thickness, GetPlotMode(), &gbr_metadata );
@@ -539,9 +539,9 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( EDGE_MODULE* aEdge )
 
     case S_RECT:
     {
-        std::vector<wxPoint> pts = aEdge->GetRectCorners();
+        std::vector<wxPoint> pts = aShape->GetRectCorners();
 
-        if( aEdge->GetWidth() > 0 )
+        if( aShape->GetWidth() > 0 )
         {
             m_plotter->ThickSegment( pts[0], pts[1], thickness, GetPlotMode(), &gbr_metadata );
             m_plotter->ThickSegment( pts[1], pts[2], thickness, GetPlotMode(), &gbr_metadata );
@@ -563,7 +563,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( EDGE_MODULE* aEdge )
     case S_CIRCLE:
         radius = KiROUND( GetLineLength( end, pos ) );
 
-        if( aEdge->GetWidth() > 0 )
+        if( aShape->GetWidth() > 0 )
             m_plotter->ThickCircle( pos, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
         else
             m_plotter->Circle( pos, radius * 2, FILLED_SHAPE, -1 );
@@ -574,10 +574,10 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( EDGE_MODULE* aEdge )
     {
         radius = KiROUND( GetLineLength( end, pos ) );
         double startAngle  = ArcTangente( end.y - pos.y, end.x - pos.x );
-        double endAngle = startAngle + aEdge->GetAngle();
+        double endAngle = startAngle + aShape->GetAngle();
 
         // when startAngle == endAngle ThickArc() doesn't know whether it's 0 deg and 360 deg
-        if( std::abs( aEdge->GetAngle() ) == 3600.0 )
+        if( std::abs( aShape->GetAngle() ) == 3600.0 )
             m_plotter->ThickCircle( pos, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
         else
             m_plotter->ThickArc( pos, -endAngle, -startAngle, radius, thickness, GetPlotMode(), &gbr_metadata );
@@ -585,13 +585,13 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( EDGE_MODULE* aEdge )
         break;
 
     case S_POLYGON:
-        if( aEdge->IsPolyShapeValid() )
+        if( aShape->IsPolyShapeValid() )
         {
-            const std::vector<wxPoint> &polyPoints = aEdge->BuildPolyPointsList();
+            const std::vector<wxPoint> &polyPoints = aShape->BuildPolyPointsList();
 
             // We must compute true coordinates from m_PolyList
             // which are relative to module position, orientation 0
-            MODULE *module = aEdge->GetParentModule();
+            MODULE *module = aShape->GetParentModule();
 
             std::vector<wxPoint> cornerList;
 
@@ -608,7 +608,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( EDGE_MODULE* aEdge )
                 cornerList.push_back( corner );
             }
 
-            if( !aEdge->IsPolygonFilled() )
+            if( !aShape->IsPolygonFilled() )
             {
                 for( size_t i = 1; i < cornerList.size(); i++ )
                 {
@@ -642,43 +642,43 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( EDGE_MODULE* aEdge )
         break;
 
     case S_CURVE:
-        m_plotter->BezierCurve( aEdge->GetStart(), aEdge->GetBezControl1(),
-                                aEdge->GetBezControl2(), aEdge->GetEnd(),
+        m_plotter->BezierCurve( aShape->GetStart(), aShape->GetBezControl1(),
+                                aShape->GetBezControl2(), aShape->GetEnd(),
                                 0, thickness );
         break;
 
     default:
-        wxASSERT_MSG( false, "Unhandled EDGE_MODULE shape" );
+        wxASSERT_MSG( false, "Unhandled FP_SHAPE shape" );
         break;
     }
 }
 
 
 // Plot a PCB Text, i.e. a text found on a copper or technical layer
-void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
+void BRDITEMS_PLOTTER::PlotPcbText( PCB_TEXT* aText )
 {
-    wxString shownText( pt_texte->GetShownText() );
+    wxString shownText( aText->GetShownText() );
 
     if( shownText.IsEmpty() )
         return;
 
-    if( !m_layerMask[pt_texte->GetLayer()] )
+    if( !m_layerMask[aText->GetLayer()] )
         return;
 
     GBR_METADATA gbr_metadata;
 
-    if( IsCopperLayer( pt_texte->GetLayer() ) )
+    if( IsCopperLayer( aText->GetLayer() ) )
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
 
-    COLOR4D color = getColor( pt_texte->GetLayer() );
+    COLOR4D color = getColor( aText->GetLayer() );
     m_plotter->SetColor( color );
 
-    wxSize  size      = pt_texte->GetTextSize();
-    wxPoint pos       = pt_texte->GetTextPos();
-    double  orient    = pt_texte->GetTextAngle();
-    int     thickness = pt_texte->GetEffectiveTextPenWidth();
+    wxSize  size      = aText->GetTextSize();
+    wxPoint pos       = aText->GetTextPos();
+    double  orient    = aText->GetTextAngle();
+    int     thickness = aText->GetEffectiveTextPenWidth();
 
-    if( pt_texte->IsMirrored() )
+    if( aText->IsMirrored() )
         size.x = -size.x;
 
     // Non bold texts thickness is clamped at 1/6 char size by the low level draw function.
@@ -689,27 +689,27 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
 
     m_plotter->SetCurrentLineWidth( thickness );
 
-    if( pt_texte->IsMultilineAllowed() )
+    if( aText->IsMultilineAllowed() )
     {
         std::vector<wxPoint> positions;
         wxArrayString strings_list;
         wxStringSplit( shownText, strings_list, '\n' );
         positions.reserve(  strings_list.Count() );
 
-        pt_texte->GetLinePositions( positions, strings_list.Count());
+        aText->GetLinePositions( positions, strings_list.Count());
 
         for( unsigned ii = 0; ii <  strings_list.Count(); ii++ )
         {
             wxString& txt =  strings_list.Item( ii );
-            m_plotter->Text( positions[ii], color, txt, orient, size, pt_texte->GetHorizJustify(),
-                             pt_texte->GetVertJustify(), thickness, pt_texte->IsItalic(),
+            m_plotter->Text( positions[ii], color, txt, orient, size, aText->GetHorizJustify(),
+                             aText->GetVertJustify(), thickness, aText->IsItalic(),
                              allow_bold, false, &gbr_metadata );
         }
     }
     else
     {
-        m_plotter->Text( pos, color, shownText, orient, size, pt_texte->GetHorizJustify(),
-                         pt_texte->GetVertJustify(), thickness, pt_texte->IsItalic(), allow_bold,
+        m_plotter->Text( pos, color, shownText, orient, size, aText->GetHorizJustify(),
+                         aText->GetVertJustify(), thickness, aText->IsItalic(), allow_bold,
                          false, &gbr_metadata );
     }
 }
@@ -812,34 +812,34 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& p
 }
 
 
-/* Plot items type DRAWSEGMENT on layers allowed by aLayerMask
+/* Plot items type PCB_SHAPE on layers allowed by aLayerMask
  */
-void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
+void BRDITEMS_PLOTTER::PlotPcbShape( PCB_SHAPE* aShape )
 {
-    if( !m_layerMask[aSeg->GetLayer()] )
+    if( !m_layerMask[aShape->GetLayer()] )
         return;
 
     int     radius = 0;
     double  StAngle = 0, EndAngle = 0;
-    int     thickness = aSeg->GetWidth();
+    int     thickness = aShape->GetWidth();
 
-    m_plotter->SetColor( getColor( aSeg->GetLayer() ) );
+    m_plotter->SetColor( getColor( aShape->GetLayer() ) );
 
-    wxPoint start( aSeg->GetStart() );
-    wxPoint end( aSeg->GetEnd() );
+    wxPoint start( aShape->GetStart() );
+    wxPoint end( aShape->GetEnd() );
 
     GBR_METADATA gbr_metadata;
 
-    if( aSeg->GetLayer() == Edge_Cuts )
+    if( aShape->GetLayer() == Edge_Cuts )
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_EDGECUT );
 
-    if( IsCopperLayer( aSeg->GetLayer() ) )
-        // Graphic items (DRAWSEGMENT, TEXT) having no net have the NonConductor attribute
+    if( IsCopperLayer( aShape->GetLayer() ) )
+        // Graphic items (PCB_SHAPE, TEXT) having no net have the NonConductor attribute
         // Graphic items having a net have the Conductor attribute, but are not (yet?)
         // supported in Pcbnew
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
 
-    switch( aSeg->GetShape() )
+    switch( aShape->GetShape() )
     {
     case S_SEGMENT:
         m_plotter->ThickSegment( start, end, thickness, GetPlotMode(), &gbr_metadata );
@@ -853,25 +853,25 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
     case S_ARC:
         radius = KiROUND( GetLineLength( end, start ) );
         StAngle  = ArcTangente( end.y - start.y, end.x - start.x );
-        EndAngle = StAngle + aSeg->GetAngle();
+        EndAngle = StAngle + aShape->GetAngle();
 
         // when startAngle == endAngle ThickArc() doesn't know whether it's 0 deg and 360 deg
-        if( std::abs( aSeg->GetAngle() ) == 3600.0 )
+        if( std::abs( aShape->GetAngle() ) == 3600.0 )
             m_plotter->ThickCircle( start, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
         else
             m_plotter->ThickArc( start, -EndAngle, -StAngle, radius, thickness, GetPlotMode(), &gbr_metadata );
         break;
 
     case S_CURVE:
-        m_plotter->BezierCurve( aSeg->GetStart(), aSeg->GetBezControl1(), aSeg->GetBezControl2(),
-                                aSeg->GetEnd(), 0, thickness );
+        m_plotter->BezierCurve( aShape->GetStart(), aShape->GetBezControl1(), aShape->GetBezControl2(),
+                                aShape->GetEnd(), 0, thickness );
         break;
 
     case S_POLYGON:
         {
-            if( !aSeg->IsPolygonFilled() )
+            if( !aShape->IsPolygonFilled() )
             {
-                for( auto it = aSeg->GetPolyShape().CIterateSegments( 0 ); it; it++ )
+                for( auto it = aShape->GetPolyShape().CIterateSegments( 0 ); it; it++ )
                 {
                     auto seg = it.Get();
                     m_plotter->ThickSegment( wxPoint( seg.A ), wxPoint( seg.B ),
@@ -886,7 +886,7 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
                 // ( for the future or to show a non expected shape )
                 // This must be simplified and fractured to prevent overlapping polygons
                 // from generating invalid Gerber files
-                auto tmpPoly = SHAPE_POLY_SET( aSeg->GetPolyShape() );
+                auto tmpPoly = SHAPE_POLY_SET( aShape->GetPolyShape() );
                 tmpPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
                 for( int jj = 0; jj < tmpPoly.OutlineCount(); ++jj )
@@ -900,9 +900,9 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
 
     case S_RECT:
     {
-        std::vector<wxPoint> pts = aSeg->GetRectCorners();
+        std::vector<wxPoint> pts = aShape->GetRectCorners();
 
-        if( aSeg->GetWidth() > 0 )
+        if( aShape->GetWidth() > 0 )
         {
             m_plotter->ThickSegment( pts[0], pts[1], thickness, GetPlotMode(), &gbr_metadata );
             m_plotter->ThickSegment( pts[1], pts[2], thickness, GetPlotMode(), &gbr_metadata );
@@ -922,7 +922,7 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
         break;
 
     default:
-        wxASSERT_MSG( false, "Unhandled DRAWSEGMENT shape" );
+        wxASSERT_MSG( false, "Unhandled PCB_SHAPE shape" );
         m_plotter->ThickSegment( start, end, thickness, GetPlotMode(), &gbr_metadata );
     }
 }

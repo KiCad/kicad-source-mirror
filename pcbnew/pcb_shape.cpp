@@ -30,7 +30,7 @@
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 #include <base_units.h>
 #include <geometry/shape_simple.h>
 #include <geometry/shape_segment.h>
@@ -41,7 +41,7 @@
 #include <settings/settings_manager.h>
 
 
-DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :
+PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_ITEM( aParent, idtype )
 {
     m_Type  = 0;
@@ -52,18 +52,18 @@ DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :
 }
 
 
-DRAWSEGMENT::~DRAWSEGMENT()
+PCB_SHAPE::~PCB_SHAPE()
 {
 }
 
 
-void DRAWSEGMENT::SetPosition( const wxPoint& aPos )
+void PCB_SHAPE::SetPosition( const wxPoint& aPos )
 {
     m_Start = aPos;
 }
 
 
-wxPoint DRAWSEGMENT::GetPosition() const
+wxPoint PCB_SHAPE::GetPosition() const
 {
     if( m_Shape == S_POLYGON )
         return (wxPoint) m_Poly.CVertex( 0 );
@@ -72,7 +72,7 @@ wxPoint DRAWSEGMENT::GetPosition() const
 }
 
 
-double DRAWSEGMENT::GetLength() const
+double PCB_SHAPE::GetLength() const
 {
     double length = 0.0;
 
@@ -99,7 +99,7 @@ double DRAWSEGMENT::GetLength() const
         break;
 
     default:
-        wxASSERT_MSG( false, "DRAWSEGMENT::GetLength not implemented for shape"
+        wxASSERT_MSG( false, "PCB_SHAPE::GetLength not implemented for shape"
                 + ShowShape( GetShape() ) );
         break;
     }
@@ -108,7 +108,7 @@ double DRAWSEGMENT::GetLength() const
 }
 
 
-void DRAWSEGMENT::Move( const wxPoint& aMoveVector )
+void PCB_SHAPE::Move( const wxPoint& aMoveVector )
 {
     // Move vector should not affect start/end for polygon since it will
     // be applied directly to polygon outline.
@@ -143,7 +143,7 @@ void DRAWSEGMENT::Move( const wxPoint& aMoveVector )
 }
 
 
-void DRAWSEGMENT::Scale( double aScale )
+void PCB_SHAPE::Scale( double aScale )
 {
     auto scalePt = [&]( wxPoint& pt )
                    {
@@ -189,7 +189,7 @@ void DRAWSEGMENT::Scale( double aScale )
 }
 
 
-void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
+void PCB_SHAPE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     switch( m_Shape )
     {
@@ -237,14 +237,14 @@ void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
         break;
 
     default:
-        wxFAIL_MSG( "DRAWSEGMENT::Rotate not implemented for "
+        wxFAIL_MSG( "PCB_SHAPE::Rotate not implemented for "
                     + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }
 }
 
 
-void DRAWSEGMENT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )
     {
@@ -293,18 +293,18 @@ void DRAWSEGMENT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         break;
 
     default:
-        wxFAIL_MSG( "DRAWSEGMENT::Flip not implemented for "
+        wxFAIL_MSG( "PCB_SHAPE::Flip not implemented for "
                     + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }
 
-    // DRAWSEGMENT items are not allowed on copper layers, so
+    // PCB_SHAPE items are not allowed on copper layers, so
     // copper layers count is not taken in account in Flip transform
     SetLayer( FlipLayer( GetLayer() ) );
 }
 
 
-void DRAWSEGMENT::RebuildBezierToSegmentsPointsList( int aMinSegLen )
+void PCB_SHAPE::RebuildBezierToSegmentsPointsList( int aMinSegLen )
 {
     // Has meaning only for S_CURVE DRAW_SEGMENT shape
     if( m_Shape != S_CURVE )
@@ -317,7 +317,7 @@ void DRAWSEGMENT::RebuildBezierToSegmentsPointsList( int aMinSegLen )
 }
 
 
-const std::vector<wxPoint> DRAWSEGMENT::buildBezierToSegmentsPointsList( int aMinSegLen  ) const
+const std::vector<wxPoint> PCB_SHAPE::buildBezierToSegmentsPointsList( int aMinSegLen  ) const
 {
     std::vector<wxPoint> bezierPoints;
 
@@ -330,7 +330,7 @@ const std::vector<wxPoint> DRAWSEGMENT::buildBezierToSegmentsPointsList( int aMi
 }
 
 
-wxPoint DRAWSEGMENT::GetCenter() const
+wxPoint PCB_SHAPE::GetCenter() const
 {
     wxPoint c;
 
@@ -353,7 +353,7 @@ wxPoint DRAWSEGMENT::GetCenter() const
         break;
 
     default:
-        wxFAIL_MSG( "DRAWSEGMENT::GetCentre not implemented for "
+        wxFAIL_MSG( "PCB_SHAPE::GetCentre not implemented for "
                     + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }
@@ -362,7 +362,7 @@ wxPoint DRAWSEGMENT::GetCenter() const
 }
 
 
-wxPoint DRAWSEGMENT::GetArcEnd() const
+wxPoint PCB_SHAPE::GetArcEnd() const
 {
     wxPoint endPoint( m_End );         // start of arc
 
@@ -380,7 +380,7 @@ wxPoint DRAWSEGMENT::GetArcEnd() const
 }
 
 
-wxPoint DRAWSEGMENT::GetArcMid() const
+wxPoint PCB_SHAPE::GetArcMid() const
 {
     wxPoint endPoint( m_End );
 
@@ -402,7 +402,7 @@ wxPoint DRAWSEGMENT::GetArcMid() const
 }
 
 
-double DRAWSEGMENT::GetArcAngleStart() const
+double PCB_SHAPE::GetArcAngleStart() const
 {
     // due to the Y axis orient atan2 needs - y value
     double angleStart = ArcTangente( GetArcStart().y - GetCenter().y,
@@ -416,7 +416,7 @@ double DRAWSEGMENT::GetArcAngleStart() const
     return angleStart;
 }
 
-double DRAWSEGMENT::GetArcAngleEnd() const
+double PCB_SHAPE::GetArcAngleEnd() const
 {
     // due to the Y axis orient atan2 needs - y value
     double angleStart = ArcTangente( GetArcEnd().y - GetCenter().y,
@@ -431,7 +431,7 @@ double DRAWSEGMENT::GetArcAngleEnd() const
 }
 
 
-void DRAWSEGMENT::SetAngle( double aAngle )
+void PCB_SHAPE::SetAngle( double aAngle )
 {
     // Mark as depreciated.
     // m_Angle does not define the arc anymore
@@ -442,7 +442,7 @@ void DRAWSEGMENT::SetAngle( double aAngle )
 }
 
 
-MODULE* DRAWSEGMENT::GetParentModule() const
+MODULE* PCB_SHAPE::GetParentModule() const
 {
     if( !m_Parent || m_Parent->Type() != PCB_MODULE_T )
         return NULL;
@@ -451,7 +451,7 @@ MODULE* DRAWSEGMENT::GetParentModule() const
 }
 
 
-void DRAWSEGMENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     EDA_UNITS units = aFrame->GetUserUnits();
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
@@ -556,7 +556,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
 }
 
 
-const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
+const EDA_RECT PCB_SHAPE::GetBoundingBox() const
 {
     EDA_RECT bbox;
 
@@ -616,7 +616,7 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
         break;
 
     default:
-        wxFAIL_MSG( "DRAWSEGMENT::GetBoundingBox not implemented for "
+        wxFAIL_MSG( "PCB_SHAPE::GetBoundingBox not implemented for "
                     + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }
@@ -628,7 +628,7 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 }
 
 
-bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool PCB_SHAPE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     int maxdist = aAccuracy + ( m_Width / 2 );
 
@@ -693,7 +693,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
         break;
 
     case S_CURVE:
-        ((DRAWSEGMENT*)this)->RebuildBezierToSegmentsPointsList( m_Width );
+        ( (PCB_SHAPE*) this)->RebuildBezierToSegmentsPointsList( m_Width );
 
         for( unsigned int i= 1; i < m_BezierPoints.size(); i++)
         {
@@ -748,7 +748,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
         break;
 
     default:
-        wxFAIL_MSG( "DRAWSEGMENT::HitTest (point) not implemented for "
+        wxFAIL_MSG( "PCB_SHAPE::HitTest (point) not implemented for "
                     + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }
@@ -757,7 +757,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
-bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool PCB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT arect = aRect;
     arect.Normalize();
@@ -905,7 +905,7 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 
 
     default:
-        wxFAIL_MSG( "DRAWSEGMENT::HitTest (rect) not implemented for "
+        wxFAIL_MSG( "PCB_SHAPE::HitTest (rect) not implemented for "
                     + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }
@@ -914,7 +914,7 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 }
 
 
-wxString DRAWSEGMENT::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString PCB_SHAPE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "%s on %s" ),
                              ShowShape( m_Shape ),
@@ -922,19 +922,19 @@ wxString DRAWSEGMENT::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF DRAWSEGMENT::GetMenuImage() const
+BITMAP_DEF PCB_SHAPE::GetMenuImage() const
 {
     return add_dashed_line_xpm;
 }
 
 
-EDA_ITEM* DRAWSEGMENT::Clone() const
+EDA_ITEM* PCB_SHAPE::Clone() const
 {
-    return new DRAWSEGMENT( *this );
+    return new PCB_SHAPE( *this );
 }
 
 
-const BOX2I DRAWSEGMENT::ViewBBox() const
+const BOX2I PCB_SHAPE::ViewBBox() const
 {
     // For arcs - do not include the center point in the bounding box,
     // it is redundant for displaying an arc
@@ -950,7 +950,7 @@ const BOX2I DRAWSEGMENT::ViewBBox() const
 }
 
 
-std::vector<wxPoint> DRAWSEGMENT::GetRectCorners() const
+std::vector<wxPoint> PCB_SHAPE::GetRectCorners() const
 {
     std::vector<wxPoint> pts;
     MODULE* module = GetParentModule();
@@ -987,7 +987,7 @@ std::vector<wxPoint> DRAWSEGMENT::GetRectCorners() const
 }
 
 
-void DRAWSEGMENT::computeArcBBox( EDA_RECT& aBBox ) const
+void PCB_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
 {
     // Do not include the center, which is not necessarily
     // inside the BB of a arc with a small angle
@@ -1051,7 +1051,7 @@ void DRAWSEGMENT::computeArcBBox( EDA_RECT& aBBox ) const
 }
 
 
-void DRAWSEGMENT::SetPolyPoints( const std::vector<wxPoint>& aPoints )
+void PCB_SHAPE::SetPolyPoints( const std::vector<wxPoint>& aPoints )
 {
     m_Poly.RemoveAllContours();
     m_Poly.NewOutline();
@@ -1061,7 +1061,7 @@ void DRAWSEGMENT::SetPolyPoints( const std::vector<wxPoint>& aPoints )
 }
 
 
-std::vector<SHAPE*> DRAWSEGMENT::MakeEffectiveShapes() const
+std::vector<SHAPE*> PCB_SHAPE::MakeEffectiveShapes() const
 {
     std::vector<SHAPE*> effectiveShapes;
 
@@ -1158,7 +1158,7 @@ std::vector<SHAPE*> DRAWSEGMENT::MakeEffectiveShapes() const
         break;
 
     default:
-        wxFAIL_MSG( "DRAWSEGMENT::MakeEffectiveShapes unsupported DRAWSEGMENT shape: "
+        wxFAIL_MSG( "PCB_SHAPE::MakeEffectiveShapes unsupported PCB_SHAPE shape: "
                     + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
         break;
     }
@@ -1167,13 +1167,13 @@ std::vector<SHAPE*> DRAWSEGMENT::MakeEffectiveShapes() const
 }
 
 
-std::shared_ptr<SHAPE> DRAWSEGMENT::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> PCB_SHAPE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
     return std::shared_ptr<SHAPE>( new SHAPE_COMPOUND( MakeEffectiveShapes() ) );
 }
 
 
-const std::vector<wxPoint> DRAWSEGMENT::BuildPolyPointsList() const
+const std::vector<wxPoint> PCB_SHAPE::BuildPolyPointsList() const
 {
     std::vector<wxPoint> rv;
 
@@ -1190,7 +1190,7 @@ const std::vector<wxPoint> DRAWSEGMENT::BuildPolyPointsList() const
 }
 
 
-bool DRAWSEGMENT::IsPolyShapeValid() const
+bool PCB_SHAPE::IsPolyShapeValid() const
 {
     // return true if the polygonal shape is valid (has more than 2 points)
     if( GetPolyShape().OutlineCount() == 0 )
@@ -1202,7 +1202,7 @@ bool DRAWSEGMENT::IsPolyShapeValid() const
 }
 
 
-int DRAWSEGMENT::GetPointCount() const
+int PCB_SHAPE::GetPointCount() const
 {
     // return the number of corners of the polygonal shape
     // this shape is expected to be only one polygon without hole
@@ -1213,9 +1213,9 @@ int DRAWSEGMENT::GetPointCount() const
 }
 
 
-void DRAWSEGMENT::SwapData( BOARD_ITEM* aImage )
+void PCB_SHAPE::SwapData( BOARD_ITEM* aImage )
 {
-    DRAWSEGMENT* image = dynamic_cast<DRAWSEGMENT*>( aImage );
+    PCB_SHAPE* image = dynamic_cast<PCB_SHAPE*>( aImage );
     assert( image );
 
     std::swap( m_Width, image->m_Width );
@@ -1237,7 +1237,7 @@ void DRAWSEGMENT::SwapData( BOARD_ITEM* aImage )
 }
 
 
-bool DRAWSEGMENT::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const
+bool PCB_SHAPE::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const
 {
     if( aFirst->Type() != aSecond->Type() )
         return aFirst->Type() < aSecond->Type();
@@ -1247,8 +1247,8 @@ bool DRAWSEGMENT::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOAR
 
     if( aFirst->Type() == PCB_SHAPE_T )
     {
-        const DRAWSEGMENT* dwgA = static_cast<const DRAWSEGMENT*>( aFirst );
-        const DRAWSEGMENT* dwgB = static_cast<const DRAWSEGMENT*>( aSecond );
+        const PCB_SHAPE* dwgA = static_cast<const PCB_SHAPE*>( aFirst );
+        const PCB_SHAPE* dwgB = static_cast<const PCB_SHAPE*>( aSecond );
 
         if( dwgA->GetShape() != dwgB->GetShape() )
             return dwgA->GetShape() < dwgB->GetShape();
@@ -1263,19 +1263,19 @@ static struct DRAWSEGMENT_DESC
     DRAWSEGMENT_DESC()
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        REGISTER_TYPE( DRAWSEGMENT );
-        propMgr.InheritsAfter( TYPE_HASH( DRAWSEGMENT ), TYPE_HASH( BOARD_ITEM ) );
+        REGISTER_TYPE( PCB_SHAPE );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ) );
 
-        propMgr.AddProperty( new PROPERTY<DRAWSEGMENT, int>( _( "Thickness" ),
-                    &DRAWSEGMENT::SetWidth, &DRAWSEGMENT::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, int>( _( "Thickness" ),
+                    &PCB_SHAPE::SetWidth, &PCB_SHAPE::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
         // TODO show certain properties depending on the shape
-        propMgr.AddProperty( new PROPERTY<DRAWSEGMENT, double>( _( "Angle" ),
-                    &DRAWSEGMENT::SetAngle, &DRAWSEGMENT::GetAngle, PROPERTY_DISPLAY::DECIDEGREE ) );
+        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, double>( _( "Angle" ),
+                    &PCB_SHAPE::SetAngle, &PCB_SHAPE::GetAngle, PROPERTY_DISPLAY::DECIDEGREE ) );
         // TODO or may have different names (arcs)
         // TODO type?
-        propMgr.AddProperty( new PROPERTY<DRAWSEGMENT, int>( _( "End X" ),
-                    &DRAWSEGMENT::SetEndX, &DRAWSEGMENT::GetEndX, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<DRAWSEGMENT, int>( _( "End Y" ),
-                    &DRAWSEGMENT::SetEndY, &DRAWSEGMENT::GetEndY, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, int>( _( "End X" ),
+                    &PCB_SHAPE::SetEndX, &PCB_SHAPE::GetEndX, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, int>( _( "End Y" ),
+                    &PCB_SHAPE::SetEndY, &PCB_SHAPE::GetEndY, PROPERTY_DISPLAY::DISTANCE ) );
     }
 } _DRAWSEGMENT_DESC;

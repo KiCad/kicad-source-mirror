@@ -37,7 +37,7 @@
 #include <dialog_text_entry.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <microwave/microwave_tool.h>
 #include <pcbnew.h>
 #include <math/util.h>      // for KiROUND
@@ -239,11 +239,11 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
 
 MODULE* MICROWAVE_TOOL::createPolygonShape()
 {
-    D_PAD*       pad1, * pad2;
-    MODULE*      module;
-    wxString     cmp_name;
-    int          pad_count = 2;
-    EDGE_MODULE* edge;
+    D_PAD*    pad1, * pad2;
+    MODULE*   module;
+    wxString  cmp_name;
+    int       pad_count = 2;
+    FP_SHAPE* shape;
 
     PCB_EDIT_FRAME& editFrame  = *getEditFrame<PCB_EDIT_FRAME>();
 
@@ -295,11 +295,11 @@ MODULE* MICROWAVE_TOOL::createPolygonShape()
     pad2->SetX( pad2->GetPos0().x );
 
     // Add a polygonal edge (corners will be added later) on copper layer
-    edge = new EDGE_MODULE( module );
-    edge->SetShape( S_POLYGON );
-    edge->SetLayer( F_Cu );
+    shape = new FP_SHAPE( module );
+    shape->SetShape( S_POLYGON );
+    shape->SetLayer( F_Cu );
 
-    module->Add( edge, ADD_MODE::INSERT );
+    module->Add( shape, ADD_MODE::INSERT );
 
     // Get the corner buffer of the polygonal edge
     std::vector<wxPoint> polyPoints;
@@ -338,10 +338,10 @@ MODULE* MICROWAVE_TOOL::createPolygonShape()
         break;
     }
 
-    edge->SetPolyPoints( polyPoints );
+    shape->SetPolyPoints( polyPoints );
     // Set the polygon outline thickness to 0, only the polygonal shape is filled
     // without extra thickness
-    edge->SetWidth( 0 );
+    shape->SetWidth( 0 );
     PolyEdges.clear();
 
     module->CalculateBoundingBox();

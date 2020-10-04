@@ -193,10 +193,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                     if( boardItem->Type() == PCB_FP_TEXT_T )
                     {
-                        TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( boardItem );
+                        FP_TEXT* text = static_cast<FP_TEXT*>( boardItem );
 
                         // don't allow deletion of Reference or Value
-                        if( text->GetType() != TEXTE_MODULE::TEXT_is_DIVERS )
+                        if( text->GetType() != FP_TEXT::TEXT_is_DIVERS )
                             break;
                     }
 

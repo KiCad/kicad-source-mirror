@@ -25,7 +25,7 @@
 #include "pcb_selection_conditions.h"
 #include "selection_tool.h"
 #include <board_connected_item.h>
-#include <class_drawsegment.h>
+#include <pcb_shape.h>
 
 #include <functional>
 using namespace std::placeholders;
@@ -147,7 +147,7 @@ bool PCB_SELECTION_CONDITIONS::onlyGraphicShapeTypesFunc( const SELECTION& aSele
         if( item->Type() != PCB_SHAPE_T && item->Type() != PCB_FP_SHAPE_T )
             return false;
 
-        PCB_SHAPE_TYPE_T shape = static_cast<const DRAWSEGMENT*>( item )->GetShape();
+        PCB_SHAPE_TYPE_T shape = static_cast<const PCB_SHAPE*>( item )->GetShape();
 
         if( !aTypes.count( shape ) )
             return false;

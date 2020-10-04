@@ -182,7 +182,7 @@ private:
             const wxPoint& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
 
     /**
-     * @brief Uses DRAWSEGMENT to draw the cutouts on mBoard object
+     * @brief Uses PCB_SHAPE to draw the cutouts on mBoard object
      * @param aVertices 
      * @param aKiCadLayer KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
@@ -202,7 +202,7 @@ private:
             const bool& aMirrorInvert = false );
 
     /**
-     * @brief Uses DRAWSEGMENT to draw the vertices on mBoard object
+     * @brief Uses PCB_SHAPE to draw the vertices on mBoard object
      * @param aCadstarVertices 
      * @param aKiCadLayer KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
@@ -223,7 +223,7 @@ private:
             const bool& aMirrorInvert = false );
 
     /**
-     * @brief Returns a vector of pointers to DRAWSEGMENT objects. Caller owns the objects.
+     * @brief Returns a vector of pointers to PCB_SHAPE objects. Caller owns the objects.
      * @param aCadstarVertices
      * @param aContainer to draw on (e.g. mBoard). Can be nullptr.
      * @param aCadstarGroupID to add the shape to
@@ -234,14 +234,14 @@ private:
      * @param aMirrorInvert if true, mirrors the drawsegment
      * @return 
      */
-    std::vector<DRAWSEGMENT*> getDrawSegmentsFromVertices(
+    std::vector<PCB_SHAPE*> getDrawSegmentsFromVertices(
             const std::vector<VERTEX>& aCadstarVertices, BOARD_ITEM_CONTAINER* aContainer = nullptr,
             const GROUP_ID& aCadstarGroupID = wxEmptyString, const wxPoint& aMoveVector = { 0, 0 },
             const double& aRotationAngle = 0.0, const double& aScalingFactor = 1.0,
             const wxPoint& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
 
     /**
-     * @brief Returns a pointer to a DRAWSEGMENT object. Caller owns the object.
+     * @brief Returns a pointer to a PCB_SHAPE object. Caller owns the object.
      * @param aCadstarStartPoint
      * @param aCadstarVertex
      * @param aContainer to draw on (e.g. mBoard). Can be nullptr.
@@ -253,7 +253,7 @@ private:
      * @param aMirrorInvert if true, mirrors the drawsegment
      * @return 
      */
-    DRAWSEGMENT* getDrawSegmentFromVertex( const POINT& aCadstarStartPoint,
+    PCB_SHAPE* getDrawSegmentFromVertex( const POINT& aCadstarStartPoint,
             const VERTEX& aCadstarVertex, BOARD_ITEM_CONTAINER* aContainer = nullptr,
             const GROUP_ID& aCadstarGroupID = wxEmptyString, const wxPoint& aMoveVector = { 0, 0 },
             const double& aRotationAngle = 0.0, const double& aScalingFactor = 1.0,
@@ -288,11 +288,11 @@ private:
             const bool& aMirrorInvert = false );
 
     /**
-     * @brief Returns a SHAPE_LINE_CHAIN object from a series of DRAWSEGMENT objects
+     * @brief Returns a SHAPE_LINE_CHAIN object from a series of PCB_SHAPE objects
      * @param aDrawSegments
      * @return 
      */
-    SHAPE_LINE_CHAIN getLineChainFromDrawsegments( const std::vector<DRAWSEGMENT*> aDrawSegments );
+    SHAPE_LINE_CHAIN getLineChainFromDrawsegments( const std::vector<PCB_SHAPE*> aDrawSegments );
 
     /**
      * @brief Returns a vector of pointers to TRACK/ARC objects. Caller owns the objects
@@ -305,7 +305,7 @@ private:
      *                       in the DrawSegments
      * @return 
     */
-    std::vector<TRACK*> makeTracksFromDrawsegments( const std::vector<DRAWSEGMENT*> aDrawsegments,
+    std::vector<TRACK*> makeTracksFromDrawsegments( const std::vector<PCB_SHAPE*> aDrawsegments,
             BOARD_ITEM_CONTAINER* aParentContainer, NETINFO_ITEM* aNet = nullptr,
             PCB_LAYER_ID aLayerOverride = PCB_LAYER_ID::UNDEFINED_LAYER, int aWidthOverride = -1 );
 

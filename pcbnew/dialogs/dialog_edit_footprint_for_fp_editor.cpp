@@ -216,10 +216,10 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
 
     for( auto item : m_footprint->GraphicalItems() )
     {
-        auto textModule = dyn_cast<TEXTE_MODULE*>( item );
+        auto textItem = dyn_cast<FP_TEXT*>( item );
 
-        if( textModule )
-            m_texts->push_back( *textModule );
+        if( textItem )
+            m_texts->push_back( *textItem );
     }
 
     // notify the grid
@@ -562,7 +562,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::Validate()
     // Check for empty texts.
     for( size_t i = 2; i < m_texts->size(); ++i )
     {
-        TEXTE_MODULE& text = m_texts->at( i );
+        FP_TEXT& text = m_texts->at( i );
 
         if( text.GetText().IsEmpty() )
         {
@@ -615,31 +615,31 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
     m_footprint->Value() = m_texts->at( 1 );
 
     size_t i = 2;
-    std::vector<TEXTE_MODULE*> items_to_remove;
+    std::vector<FP_TEXT*> items_to_remove;
 
     for( BOARD_ITEM* item : m_footprint->GraphicalItems() )
     {
-        TEXTE_MODULE* textModule = dynamic_cast<TEXTE_MODULE*>( item );
+        FP_TEXT* textItem = dynamic_cast<FP_TEXT*>( item );
 
-        if( textModule )
+        if( textItem )
         {
             // copy grid table entries till we run out, then delete any remaining texts
             if( i < m_texts->size() )
-                *textModule = m_texts->at( i++ );
+                *textItem = m_texts->at( i++ );
             else    // store this item to remove and delete it later,
                     // after the graphic list is explored:
-                items_to_remove.push_back( textModule );
+                items_to_remove.push_back( textItem );
         }
     }
 
     // Remove items from m_footprint graphic list:
-    for( TEXTE_MODULE* item: items_to_remove )
+    for( FP_TEXT* item: items_to_remove )
         item->DeleteStructure();
 
     // if there are still grid table entries, create new texts for them
     while( i < m_texts->size() )
     {
-        auto newText = new TEXTE_MODULE( m_texts->at( i++ ) );
+        FP_TEXT* newText = new FP_TEXT( m_texts->at( i++ ) );
         m_footprint->Add( newText, ADD_MODE::APPEND );
         view->Add( newText );
     }
@@ -736,19 +736,19 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAddField( wxCommandEvent& event )
         return;
 
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
-    TEXTE_MODULE textMod( m_footprint );
+    FP_TEXT textItem( m_footprint );
 
     // Set active layer if legal; otherwise copy layer from previous text item
     if( LSET::AllTechMask().test( m_frame->GetActiveLayer() ) )
-        textMod.SetLayer( m_frame->GetActiveLayer() );
+        textItem.SetLayer( m_frame->GetActiveLayer() );
     else
-        textMod.SetLayer( m_texts->at( m_texts->size() - 1 ).GetLayer() );
+        textItem.SetLayer( m_texts->at( m_texts->size() - 1 ).GetLayer() );
 
-    textMod.SetTextSize( dsnSettings.GetTextSize( textMod.GetLayer() ) );
-    textMod.SetTextThickness( dsnSettings.GetTextThickness( textMod.GetLayer() ) );
-    textMod.SetItalic( dsnSettings.GetTextItalic( textMod.GetLayer() ) );
+    textItem.SetTextSize( dsnSettings.GetTextSize( textItem.GetLayer() ) );
+    textItem.SetTextThickness( dsnSettings.GetTextThickness( textItem.GetLayer() ) );
+    textItem.SetItalic( dsnSettings.GetTextItalic( textItem.GetLayer() ) );
 
-    m_texts->push_back( textMod );
+    m_texts->push_back( textItem );
 
     // notify the grid
     wxGridTableMessage msg( m_texts, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );

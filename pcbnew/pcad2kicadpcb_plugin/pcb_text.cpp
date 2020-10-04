@@ -23,15 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_text.cpp
- */
-
 #include <wx/wx.h>
 
 #include <common.h>
-
 #include <pcb_text.h>
+#include <pcad2kicadpcb_plugin/pcb_text.h>
 
 namespace PCAD2KICAD {
 
@@ -104,7 +100,7 @@ void PCB_TEXT::AddToBoard()
     m_name.textPositionY = m_positionY;
     m_name.textRotation = m_rotation;
 
-    TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
+    ::PCB_TEXT* pcbtxt = new ::PCB_TEXT( m_board );
     m_board->Add( pcbtxt, ADD_MODE::APPEND );
 
     pcbtxt->SetText( m_name.text );

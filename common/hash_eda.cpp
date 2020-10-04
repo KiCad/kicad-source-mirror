@@ -26,8 +26,8 @@
 #include <hash_eda.h>
 
 #include <class_module.h>
-#include <class_text_mod.h>
-#include <class_edge_mod.h>
+#include <fp_text.h>
+#include <fp_shape.h>
 #include <class_pad.h>
 
 #include <functional>
@@ -105,12 +105,12 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
 
     case PCB_FP_TEXT_T:
         {
-            const TEXTE_MODULE* text = static_cast<const TEXTE_MODULE*>( aItem );
+            const FP_TEXT* text = static_cast<const FP_TEXT*>( aItem );
 
-            if( !( aFlags & HASH_REF ) && text->GetType() == TEXTE_MODULE::TEXT_is_REFERENCE )
+            if( !( aFlags & HASH_REF ) && text->GetType() == FP_TEXT::TEXT_is_REFERENCE )
                 break;
 
-            if( !( aFlags & HASH_VALUE ) && text->GetType() == TEXTE_MODULE::TEXT_is_VALUE )
+            if( !( aFlags & HASH_VALUE ) && text->GetType() == FP_TEXT::TEXT_is_VALUE )
                 break;
 
             ret = hash_board_item( text, aFlags );
@@ -138,7 +138,7 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
 
     case PCB_FP_SHAPE_T:
         {
-            const EDGE_MODULE* segment = static_cast<const EDGE_MODULE*>( aItem );
+            const FP_SHAPE* segment = static_cast<const FP_SHAPE*>( aItem );
             ret = hash_board_item( segment, aFlags );
             hash_combine( ret, segment->GetType() );
             hash_combine( ret, segment->GetShape() );

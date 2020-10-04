@@ -46,11 +46,11 @@ class BOARD_ITEM_CONTAINER;
 class D_PAD;
 class BOARD_DESIGN_SETTINGS;
 class DIMENSION;
-class DRAWSEGMENT;
+class PCB_SHAPE;
 class EDA_TEXT;
-class EDGE_MODULE;
-class TEXTE_MODULE;
-class TEXTE_PCB;
+class FP_SHAPE;
+class FP_TEXT;
+class PCB_TEXT;
 class TRACK;
 class MODULE;
 class PCB_GROUP;
@@ -157,12 +157,12 @@ class PCB_PARSER : public PCB_LEXER
     void parseNETINFO_ITEM();
     void parseNETCLASS();
 
-    /** Read a DRAWSEGMENT description.
+    /** Read a PCB_SHAPE description.
      * @param aAllowCirclesZeroWidth = true to allow items with 0 width
      * Only used in custom pad shapes for filled circles.
      */
-    DRAWSEGMENT*    parseDRAWSEGMENT( bool aAllowCirclesZeroWidth = false );
-    TEXTE_PCB*      parseTEXTE_PCB();
+    PCB_SHAPE*      parsePCB_SHAPE( bool aAllowCirclesZeroWidth = false );
+    PCB_TEXT*       parsePCB_TEXT();
     DIMENSION*      parseDIMENSION();
 
     /**
@@ -170,8 +170,8 @@ class PCB_PARSER : public PCB_LEXER
      * Parse a module, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
      */
     MODULE*         parseMODULE_unchecked( wxArrayString* aInitialComments = 0 );
-    TEXTE_MODULE*   parseTEXTE_MODULE();
-    EDGE_MODULE*    parseEDGE_MODULE();
+    FP_TEXT*        parseFP_TEXT();
+    FP_SHAPE*       parseFP_SHAPE();
     D_PAD*          parseD_PAD( MODULE* aParent = NULL );
     // Parse only the (option ...) inside a pad description
     bool            parseD_PAD_option( D_PAD* aPad );

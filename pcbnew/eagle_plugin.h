@@ -33,7 +33,7 @@
 #include <wx/xml/xml.h>
 
 class D_PAD;
-class TEXTE_MODULE;
+class FP_TEXT;
 class ZONE_CONTAINER;
 
 typedef std::map<wxString, MODULE*>  MODULE_MAP;
@@ -250,19 +250,11 @@ private:
     ZONE_CONTAINER* loadPolygon( wxXmlNode* aPolyNode );
 
     void orientModuleAndText( MODULE* m, const EELEMENT& e, const EATTR* nameAttr, const EATTR* valueAttr );
-    void orientModuleText( MODULE* m, const EELEMENT& e, TEXTE_MODULE* txt, const EATTR* a );
+    void orientModuleText( MODULE* m, const EELEMENT& e, FP_TEXT* txt, const EATTR* a );
 
 
     /// move the BOARD into the center of the page
     void centerBoard();
-
-    /**
-     * Function fmtDEG
-     * formats an angle in a way particular to a board file format.  This function
-     * is the opposite or complement of degParse().  One has to know what the
-     * other is doing.
-     */
-    wxString fmtDEG( double aAngle ) const;
 
     /**
      * Function makeModule

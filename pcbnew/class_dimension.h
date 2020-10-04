@@ -32,12 +32,11 @@
 
 
 #include <class_board_item.h>
-#include <class_pcb_text.h>
+#include <pcb_text.h>
 #include <geometry/shape.h>
 
 
 class LINE_READER;
-class TEXTE_PCB;
 class MSG_PANEL_ITEM;
 
 
@@ -217,8 +216,8 @@ public:
      */
     const wxString GetText() const;
 
-    TEXTE_PCB&     Text() { return m_text; }
-    TEXTE_PCB&     Text() const { return *( const_cast<TEXTE_PCB*> ( &m_text ) ); }
+    PCB_TEXT&      Text() { return m_text; }
+    PCB_TEXT&      Text() const { return *( const_cast<PCB_TEXT*> ( &m_text ) ); }
 
     /**
      * @return a list of line segments that make up this dimension (for drawing, plotting, etc)
@@ -305,7 +304,7 @@ protected:
     bool              m_keepTextAligned;  ///< Calculate text orientation to match dimension
 
     // Internal
-    TEXTE_PCB         m_text;             ///< The actual text object
+    PCB_TEXT          m_text;             ///< The actual text object
     int               m_measuredValue;    ///< value of PCB dimensions
     wxPoint           m_start;
     wxPoint           m_end;

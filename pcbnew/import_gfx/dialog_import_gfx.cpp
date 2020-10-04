@@ -29,8 +29,6 @@
 #include <pcb_layer_box_selector.h>
 #include <wildcards_and_files_ext.h>
 #include <class_board.h>
-#include <class_edge_mod.h>
-#include <class_text_mod.h>
 
 #include <memory>
 

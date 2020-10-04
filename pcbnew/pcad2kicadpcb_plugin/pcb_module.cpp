@@ -23,13 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_module.cpp
- */
-
 #include <wx/wx.h>
-
-#include <common.h>
 
 #include <pcb_arc.h>
 #include <pcb_copper_pour.h>
@@ -39,7 +33,7 @@
 #include <pcb_module.h>
 #include <pcb_pad.h>
 #include <pcb_polygon.h>
-#include <pcb_text.h>
+#include <pcad2kicadpcb_plugin/pcb_text.h>
 #include <pcb_via.h>
 
 #include <trigo.h>
@@ -521,10 +515,10 @@ void PCB_MODULE::AddToBoard()
     module->SetFPID( fpID );
 
     // reference text
-    TEXTE_MODULE* ref_text = &module->Reference();
+    FP_TEXT* ref_text = &module->Reference();
 
     ref_text->SetText( ValidateReference( m_name.text ) );
-    ref_text->SetType( TEXTE_MODULE::TEXT_is_REFERENCE );
+    ref_text->SetType( FP_TEXT::TEXT_is_REFERENCE );
 
     ref_text->SetPos0( wxPoint( m_name.correctedPositionX, m_name.correctedPositionY ) );
     if( m_name.isTrueType )
@@ -548,10 +542,10 @@ void PCB_MODULE::AddToBoard()
     ref_text->SetDrawCoord();
 
     // value text
-    TEXTE_MODULE* val_text = &module->Value();
+    FP_TEXT* val_text = &module->Value();
 
     val_text->SetText( m_value.text );
-    val_text->SetType( TEXTE_MODULE::TEXT_is_VALUE );
+    val_text->SetType( FP_TEXT::TEXT_is_VALUE );
 
     val_text->SetPos0( wxPoint( m_value.correctedPositionX, m_value.correctedPositionY ) );
     if( m_value.isTrueType )

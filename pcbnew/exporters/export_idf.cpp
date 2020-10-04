@@ -31,7 +31,7 @@
 #include <pcbnew.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <idf_parser.h>
 #include <3d_cache/3d_info.h>
 #include <build_version.h>
@@ -60,7 +60,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
 {
     double scale = aIDFBoard.GetUserScale();
 
-    DRAWSEGMENT* graphic;               // KiCad graphical item
+    PCB_SHAPE* graphic;                 // KiCad graphical item
     IDF_POINT sp, ep;                   // start and end points from KiCad item
 
     std::list< IDF_SEGMENT* > lines;    // IDF intermediate form of KiCad graphical item
@@ -80,7 +80,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
         if( item->Type() != PCB_SHAPE_T || item->GetLayer() != Edge_Cuts )
             continue;
 
-        graphic = (DRAWSEGMENT*) item;
+        graphic = (PCB_SHAPE*) item;
 
         switch( graphic->GetShape() )
         {

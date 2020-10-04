@@ -31,12 +31,12 @@
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <class_edge_mod.h>
+#include <fp_shape.h>
 #include <view/view.h>
 
 
-EDGE_MODULE::EDGE_MODULE( MODULE* parent, PCB_SHAPE_TYPE_T aShape ) :
-    DRAWSEGMENT( parent, PCB_FP_SHAPE_T )
+FP_SHAPE::FP_SHAPE( MODULE* parent, PCB_SHAPE_TYPE_T aShape ) :
+        PCB_SHAPE( parent, PCB_FP_SHAPE_T )
 {
     m_Shape = aShape;
     m_Angle = 0;
@@ -44,12 +44,12 @@ EDGE_MODULE::EDGE_MODULE( MODULE* parent, PCB_SHAPE_TYPE_T aShape ) :
 }
 
 
-EDGE_MODULE::~EDGE_MODULE()
+FP_SHAPE::~FP_SHAPE()
 {
 }
 
 
-void EDGE_MODULE::SetLocalCoord()
+void FP_SHAPE::SetLocalCoord()
 {
     MODULE* module = (MODULE*) m_Parent;
 
@@ -77,7 +77,7 @@ void EDGE_MODULE::SetLocalCoord()
 }
 
 
-void EDGE_MODULE::SetDrawCoord()
+void FP_SHAPE::SetDrawCoord()
 {
     MODULE* module = (MODULE*) m_Parent;
 
@@ -107,7 +107,7 @@ void EDGE_MODULE::SetDrawCoord()
 
 
 // see class_edge_mod.h
-void EDGE_MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void FP_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 
@@ -124,11 +124,11 @@ void EDGE_MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     aList.emplace_back( _( "Footprint" ), module->GetReference(), DARKCYAN );
 
     // append the features shared with the base class
-    DRAWSEGMENT::GetMsgPanelInfo( aFrame, aList );
+    PCB_SHAPE::GetMsgPanelInfo( aFrame, aList );
 }
 
 
-wxString EDGE_MODULE::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString FP_SHAPE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "%s on %s" ),
                              ShowShape( m_Shape  ),
@@ -136,19 +136,19 @@ wxString EDGE_MODULE::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF EDGE_MODULE::GetMenuImage() const
+BITMAP_DEF FP_SHAPE::GetMenuImage() const
 {
     return show_mod_edge_xpm;
 }
 
 
-EDA_ITEM* EDGE_MODULE::Clone() const
+EDA_ITEM* FP_SHAPE::Clone() const
 {
-    return new EDGE_MODULE( *this );
+    return new FP_SHAPE( *this );
 }
 
 
-void EDGE_MODULE::SetAngle( double aAngle )
+void FP_SHAPE::SetAngle( double aAngle )
 {
     // Mark as depreciated.
     // m_Angle does not define the arc anymore
@@ -159,7 +159,7 @@ void EDGE_MODULE::SetAngle( double aAngle )
 }
 
 
-void EDGE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     wxPoint pt( 0, 0 );
 
@@ -213,20 +213,20 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         break;
     }
 
-    // DRAWSEGMENT items are not usually on copper layers, but it can happen in microwave apps.
+    // PCB_SHAPE items are not usually on copper layers, but it can happen in microwave apps.
     // However, currently, only on Front or Back layers.
     // So the copper layers count is not taken in account
     SetLayer( FlipLayer( GetLayer() ) );
 }
 
-bool EDGE_MODULE::IsParentFlipped() const
+bool FP_SHAPE::IsParentFlipped() const
 {
     if( GetParent() &&  GetParent()->GetLayer() == B_Cu )
         return true;
     return false;
 }
 
-void EDGE_MODULE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
+void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
 {
     // Mirror an edge of the footprint. the layer is not modified
     // This is a footprint shape modification.
@@ -274,18 +274,18 @@ void EDGE_MODULE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
     SetDrawCoord();
 }
 
-void EDGE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
+void FP_SHAPE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     // We should rotate the relative coordinates, but to avoid duplicate code do the base class
     // rotation of draw coordinates, which is acceptable because in module editor, m_Pos0 = m_Pos
-    DRAWSEGMENT::Rotate( aRotCentre, aAngle );
+    PCB_SHAPE::Rotate( aRotCentre, aAngle );
 
     // and now update the relative coordinates, which are the reference in most transforms.
     SetLocalCoord();
 }
 
 
-void EDGE_MODULE::Move( const wxPoint& aMoveVector )
+void FP_SHAPE::Move( const wxPoint& aMoveVector )
 {
     // Move an edge of the footprint.
     // This is a footprint shape modification.
@@ -312,7 +312,7 @@ void EDGE_MODULE::Move( const wxPoint& aMoveVector )
 }
 
 
-double EDGE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double FP_SHAPE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     constexpr double HIDE = std::numeric_limits<double>::max();
 
@@ -336,7 +336,7 @@ static struct EDGE_MODULE_DESC
     EDGE_MODULE_DESC()
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        REGISTER_TYPE( EDGE_MODULE );
-        propMgr.InheritsAfter( TYPE_HASH( EDGE_MODULE ), TYPE_HASH( DRAWSEGMENT ) );
+        REGISTER_TYPE( FP_SHAPE );
+        propMgr.InheritsAfter( TYPE_HASH( FP_SHAPE ), TYPE_HASH( PCB_SHAPE ) );
     }
 } _EDGE_MODULE_DESC;

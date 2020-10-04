@@ -23,7 +23,6 @@
 
 #include <pcb_base_edit_frame.h>
 #include <grid_layer_box_helpers.h>
-#include <class_drawsegment.h>
 #include <class_track.h>
 #include <view/view.h>
 #include <widgets/wx_grid.h>
