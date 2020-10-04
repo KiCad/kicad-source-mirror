@@ -43,8 +43,6 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
 {
     EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
 
-    m_choiceUnits->SetSelection( m_frame->GetUserUnits() == EDA_UNITS::INCHES ? 0 : 1 );
-
     m_hPitch.SetValue( Mils2iu( cfg->m_Drawing.default_repeat_offset_x ) );
     m_vPitch.SetValue( Mils2iu( cfg->m_Drawing.default_repeat_offset_y ) );
     m_spinLabelRepeatStep->SetValue( cfg->m_Drawing.repeat_label_increment );
@@ -78,9 +76,6 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
 bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
 {
     EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
-
-    m_frame->SetUserUnits( m_choiceUnits->GetSelection() == 0 ? EDA_UNITS::INCHES
-                                                              : EDA_UNITS::MILLIMETRES );
 
     cfg->m_Drawing.default_sheet_border_color = m_borderColorSwatch->GetSwatchColor();
     cfg->m_Drawing.default_sheet_background_color = m_backgroundColorSwatch->GetSwatchColor();

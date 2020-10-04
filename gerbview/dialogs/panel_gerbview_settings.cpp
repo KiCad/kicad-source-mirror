@@ -47,8 +47,6 @@ PANEL_GERBVIEW_SETTINGS::PANEL_GERBVIEW_SETTINGS( GERBVIEW_FRAME *aFrame, wxWind
 
 bool PANEL_GERBVIEW_SETTINGS::TransferDataToWindow( )
 {
-    m_PolarDisplay->SetSelection( m_Parent->GetShowPolarCoords() ? 1 : 0 );
-    m_BoxUnits->SetSelection( ( m_Parent->GetUserUnits() == EDA_UNITS::MILLIMETRES ) ? 1 : 0 );
     m_ShowPageLimitsOpt->SetValue( m_Parent->GetDisplayOptions().m_DisplayPageLimits );
 
     for( unsigned i = 0;  i < arrayDim( gerberPageSizeList );  ++i )
@@ -66,10 +64,6 @@ bool PANEL_GERBVIEW_SETTINGS::TransferDataToWindow( )
 
 bool PANEL_GERBVIEW_SETTINGS::TransferDataFromWindow()
 {
-    m_Parent->SetShowPolarCoords( m_PolarDisplay->GetSelection() != 0 );
-    m_Parent->SetUserUnits(
-            m_BoxUnits->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES );
-
     auto opts = m_Parent->GetDisplayOptions();
     opts.m_DisplayPageLimits = m_ShowPageLimitsOpt->GetValue();
 

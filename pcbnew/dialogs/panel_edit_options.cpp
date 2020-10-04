@@ -48,9 +48,6 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
     const PCB_DISPLAY_OPTIONS& displ_opts = m_Frame->GetDisplayOptions();
     const PCBNEW_SETTINGS&     general_opts = m_Frame->Settings();
 
-    m_PolarDisplay->SetSelection( m_Frame->GetShowPolarCoords() ? 1 : 0 );
-    m_UnitsSelection->SetSelection( m_Frame->GetUserUnits() == EDA_UNITS::INCHES ? 0 : 1 );
-
     m_Segments_45_Only_Ctrl->SetValue( general_opts.m_Use45DegreeGraphicSegments );
 
     wxString rotationAngle;
@@ -90,10 +87,6 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
 bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
 {
     PCB_DISPLAY_OPTIONS displ_opts = m_Frame->GetDisplayOptions();
-
-    m_Frame->SetShowPolarCoords( m_PolarDisplay->GetSelection() != 0 );
-    m_Frame->SetUserUnits(
-            m_UnitsSelection->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES );
 
     m_Frame->SetRotationAngle( wxRound( 10.0 * wxAtof( m_RotationAngle->GetValue() ) ) );
 

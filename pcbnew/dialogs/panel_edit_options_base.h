@@ -11,12 +11,11 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include <wx/string.h>
-#include <wx/radiobox.h>
+#include <wx/checkbox.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/checkbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
@@ -38,13 +37,9 @@ class PANEL_EDIT_OPTIONS_BASE : public wxPanel
 	protected:
 		enum
 		{
-			wxID_POLAR_CTRL = 1000,
-			wxID_UNITS,
-			wxID_SEGMENTS45
+			wxID_SEGMENTS45 = 1000
 		};
 
-		wxRadioBox* m_PolarDisplay;
-		wxRadioBox* m_UnitsSelection;
 		wxCheckBox* m_MagneticPads;
 		wxCheckBox* m_Segments_45_Only_Ctrl;
 		wxCheckBox* m_FlipLeftRight;

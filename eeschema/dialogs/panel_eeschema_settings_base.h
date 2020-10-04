@@ -12,15 +12,14 @@
 #include <wx/intl.h>
 #include "widgets/color_swatch.h"
 #include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/checkbox.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
-#include <wx/checkbox.h>
+#include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/spinctrl.h>
 #include <wx/panel.h>
@@ -32,16 +31,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 class PANEL_EESCHEMA_SETTINGS_BASE : public wxPanel
 {
-	DECLARE_EVENT_TABLE()
 	private:
 
-		// Private event handlers
-		void _wxFB_OnChooseUnits( wxCommandEvent& event ){ OnChooseUnits( event ); }
-
-
 	protected:
-		wxStaticText* m_staticText2;
-		wxChoice* m_choiceUnits;
 		wxCheckBox* m_checkHVOrientation;
 		wxCheckBox* m_mouseDragIsDrag;
 		wxCheckBox* m_cbAutoStartWires;
@@ -63,10 +55,6 @@ class PANEL_EESCHEMA_SETTINGS_BASE : public wxPanel
 		wxSpinCtrl* m_spinLabelRepeatStep;
 		wxCheckBox* m_footprintPreview;
 		wxCheckBox* m_navigatorStaysOpen;
-
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnChooseUnits( wxCommandEvent& event ) { event.Skip(); }
-
 
 	public:
 

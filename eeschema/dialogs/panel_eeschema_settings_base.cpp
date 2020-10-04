@@ -9,10 +9,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( PANEL_EESCHEMA_SETTINGS_BASE, wxPanel )
-	EVT_CHOICE( wxID_ANY, PANEL_EESCHEMA_SETTINGS_BASE::_wxFB_OnChooseUnits )
-END_EVENT_TABLE()
-
 PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bPanelSizer;
@@ -20,22 +16,6 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 
 	wxBoxSizer* bLeftColumn;
 	bLeftColumn = new wxBoxSizer( wxVERTICAL );
-
-	wxStaticBoxSizer* sbSizer7;
-	sbSizer7 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Units") ), wxHORIZONTAL );
-
-	m_staticText2 = new wxStaticText( sbSizer7->GetStaticBox(), wxID_ANY, _("&Measurement units:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	sbSizer7->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-	wxString m_choiceUnitsChoices[] = { _("inches"), _("millimeters") };
-	int m_choiceUnitsNChoices = sizeof( m_choiceUnitsChoices ) / sizeof( wxString );
-	m_choiceUnits = new wxChoice( sbSizer7->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnitsNChoices, m_choiceUnitsChoices, 0 );
-	m_choiceUnits->SetSelection( 0 );
-	sbSizer7->Add( m_choiceUnits, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-
-	bLeftColumn->Add( sbSizer7, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	wxStaticBoxSizer* sbSizerEditOpt;
 	sbSizerEditOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Editing") ), wxVERTICAL );

@@ -20,22 +20,6 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bMiddleLeftSizer;
 	bMiddleLeftSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxString m_PolarDisplayChoices[] = { _("Cartesian coordinates"), _("Polar coordinates") };
-	int m_PolarDisplayNChoices = sizeof( m_PolarDisplayChoices ) / sizeof( wxString );
-	m_PolarDisplay = new wxRadioBox( this, wxID_POLAR_CTRL, _("Coordinates"), wxDefaultPosition, wxDefaultSize, m_PolarDisplayNChoices, m_PolarDisplayChoices, 1, wxRA_SPECIFY_COLS );
-	m_PolarDisplay->SetSelection( 0 );
-	m_PolarDisplay->SetToolTip( _("Set display of relative (dx/dy) coordinates to Cartesian (rectangular) or polar (angle/distance).") );
-
-	bMiddleLeftSizer->Add( m_PolarDisplay, 0, wxALL|wxEXPAND, 5 );
-
-	wxString m_UnitsSelectionChoices[] = { _("Inches"), _("Millimeters") };
-	int m_UnitsSelectionNChoices = sizeof( m_UnitsSelectionChoices ) / sizeof( wxString );
-	m_UnitsSelection = new wxRadioBox( this, wxID_UNITS, _("Units"), wxDefaultPosition, wxDefaultSize, m_UnitsSelectionNChoices, m_UnitsSelectionChoices, 1, wxRA_SPECIFY_COLS );
-	m_UnitsSelection->SetSelection( 0 );
-	m_UnitsSelection->SetToolTip( _("Set units used to display dimensions and positions.") );
-
-	bMiddleLeftSizer->Add( m_UnitsSelection, 0, wxALL|wxEXPAND, 5 );
-
 	wxStaticBoxSizer* bOptionsSizer;
 	bOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Editing Options") ), wxVERTICAL );
 
