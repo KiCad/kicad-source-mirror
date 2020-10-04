@@ -24,6 +24,8 @@
 
 
 #include "dialog_board_statistics.h"
+#include "base_units.h"
+#include "common.h"
 #include <wildcards_and_files_ext.h>
 
 #define COL_LABEL 0
@@ -337,24 +339,6 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
             }
         }
 
-        switch( GetUserUnits() )
-        {
-        case EDA_UNITS::INCHES:
-            m_boardArea /= ( IU_PER_MILS * IU_PER_MILS * 1000000 );
-            break;
-
-        case EDA_UNITS::MILS:
-            m_boardArea /= ( IU_PER_MILS * IU_PER_MILS );
-            break;
-
-        case EDA_UNITS::MILLIMETRES:
-            m_boardArea /= ( IU_PER_MM * IU_PER_MM );
-            break;
-
-        default:
-            wxASSERT_MSG( false, "Invalid unit" );
-        }
-
         m_boardWidth = bbox.GetWidth();
         m_boardHeight = bbox.GetHeight();
     }
@@ -428,9 +412,7 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
         m_gridBoard->SetCellValue( ROW_BOARD_HEIGHT, COL_AMOUNT,
                                    MessageTextFromValue( GetUserUnits(), m_boardHeight ) + " " );
         m_gridBoard->SetCellValue( ROW_BOARD_AREA, COL_AMOUNT,
-                                   wxString::Format( wxT( "%.3f %s²" ),
-                                                     m_boardArea,
-                                                     GetAbbreviatedUnitsLabel( GetUserUnits() ) ) );
+                                   MessageTextFromValue( GetUserUnits(), m_boardArea, true, EDA_DATA_TYPE::AREA ) );
     }
     else
     {
@@ -670,12 +652,10 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
 
     if( m_hasOutline )
     {
-        msg << _( "- Width: " ) << MessageTextFromValue( GetUserUnits(), m_boardWidth ) << "\n";
+        msg << _( "- Width: " )  << MessageTextFromValue( GetUserUnits(), m_boardWidth ) << "\n";
         msg << _( "- Height: " ) << MessageTextFromValue( GetUserUnits(), m_boardHeight ) << "\n";
-        msg << _( "- Area: " )
-            << wxString::Format(
-                       wxT( "%.3f %s^2" ), m_boardArea, GetAbbreviatedUnitsLabel( GetUserUnits() ) )
-            << "\n";
+        msg << _( "- Area: " )   << MessageTextFromValue( GetUserUnits(), m_boardArea, true, EDA_DATA_TYPE::AREA );
+        msg << "\n";
     }
     else
     {
