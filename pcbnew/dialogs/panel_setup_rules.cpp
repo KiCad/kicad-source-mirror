@@ -35,6 +35,7 @@
 #include <scintilla_tricks.h>
 #include <drc/drc_rule_parser.h>
 #include <tools/drc_tool.h>
+#include <dialog_helpers.h>
 
 PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_RULES_BASE( aParent->GetTreebook() ),
@@ -440,7 +441,7 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
 void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
 {
     wxString msg =
-#include "dialogs/panel_setup_rules_help_txt.h"
+#include "dialogs/panel_setup_rules_help_md.h"
     ;
 
 #ifdef __WXMAC__
@@ -450,6 +451,9 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
     m_helpDialog = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );
     m_helpDialog->SetDialogSizeInDU( 320, 320 );
 
-    m_helpDialog->AddHTML_Text( "<pre>" + EscapedHTML( msg ) + "</pre>" );
+    wxString html_txt;
+    ConvertMarkdown2Html( wxGetTranslation( msg ), html_txt );
+    m_helpDialog->m_htmlWindow->AppendToPage( html_txt );
+
     m_helpDialog->ShowModeless();
 }

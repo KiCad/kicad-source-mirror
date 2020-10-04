@@ -585,21 +585,21 @@ else()
 endif()
 
 
-# Create a C++ compilable string initializer containing text into a *.h file:
+# Create a C++ compilable string initializer containing markdown text into a *.h file:
 add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_txt.h
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_md.h
     COMMAND ${CMAKE_COMMAND}
-        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.txt
-        -DoutputFile=${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_txt.h
-        -P ${CMAKE_MODULE_PATH}/Txt2C.cmake
-    DEPENDS ${CMAKE_MODULE_PATH}/Txt2C.cmake ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.txt
-    COMMENT "creating ${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_txt.h
-       from ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.txt"
+        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.md
+        -DoutputFile=${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_md.h
+        -P ${CMAKE_MODULE_PATH}/markdown2C.cmake
+    DEPENDS ${CMAKE_MODULE_PATH}/markdown2C.cmake ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.md
+    COMMENT "creating ${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_md.h
+       from ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.md"
     )
 
 set_source_files_properties( dialogs/panel_setup_rules.cpp
     PROPERTIES
-        OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_txt.h
+        OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_md.h
     )
 
 if( APPLE )
@@ -723,6 +723,7 @@ set( PCBNEW_KIFACE_LIBRARIES
     tinyspline_lib
     idf3
     nanosvg
+    markdown_lib
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${GITHUB_PLUGIN_LIBRARIES}

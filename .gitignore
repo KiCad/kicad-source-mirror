@@ -24,7 +24,7 @@ common/template_fieldnames_lexer.h
 eeschema/schematic_keywords.*
 pcbnew/pcb_plot_params_keywords.cpp
 pcbnew/pcb_plot_params_lexer.h
-pcbnew/dialogs/panel_setup_rules_help_txt.h
+pcbnew/dialogs/panel_setup_rules_help_md.h
 Makefile
 CMakeCache.txt
 auto_renamed_to_cpp
@@ -109,4 +109,3 @@ CMakeSettings.json
 # KDevelop
 .kdev4/
 *.kdev4
-

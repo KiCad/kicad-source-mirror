@@ -82,6 +82,7 @@ target_link_libraries( qa_pcbnew
     nanosvg
     idf3
     unit_test_utils
+    markdown_lib
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${GITHUB_PLUGIN_LIBRARIES}
