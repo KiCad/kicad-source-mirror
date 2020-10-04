@@ -41,6 +41,7 @@ static DIELECTRIC_SUBSTRATE substrateMaterial[]  =
 {
     { NotSpecifiedPrm(), 0.0, 0.0 },    // Not specified, not in .gbrjob
     { "FR4", 4.5, 0.02 },               // used in .gbrjob file
+    { "FR408-HR", 3.69, 0.0091 },       // used in .gbrjob file
     { "Polyimide", 1.0, 0.0 },          // used in .gbrjob file
     { "Polyolefin", 1.0, 0.0 },         // used in .gbrjob file
     { "Al", 8.7, 0.001 },               // used in .gbrjob file
