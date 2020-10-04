@@ -91,8 +91,6 @@ DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_BASE_FRAME* aParent, BOARD* aBoard ) :
     m_board  = aBoard;
     m_config = Kiface().KifaceSettings();
 
-    memset( m_boxSelectLayer, 0, sizeof( m_boxSelectLayer ) );
-
     m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
     initDialog();

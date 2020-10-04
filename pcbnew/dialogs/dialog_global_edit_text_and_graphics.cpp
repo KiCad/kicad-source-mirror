@@ -191,7 +191,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
 #define SET_BOOL_VALUE( aRow, aCol, aValue ) \
         attr = new wxGridCellAttr; \
         attr->SetRenderer( new wxGridCellBoolRenderer() ); \
-        attr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM ); \
+        attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER ); \
         attr->SetReadOnly(); \
         m_grid->SetAttr( aRow, aCol, attr ); \
         m_grid->SetCellValue( aRow, aCol, ( aValue ) ? "1" : "" )

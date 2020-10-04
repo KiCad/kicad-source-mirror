@@ -889,7 +889,8 @@ void DisposeOutPts( OutPt*& pp )
 
 inline void InitEdge( TEdge* e, TEdge* eNext, TEdge* ePrev, const IntPoint& Pt )
 {
-    std::memset( e, 0, sizeof(TEdge) );
+    // This clears the C++ way
+    *e = TEdge( { 0 } );
 
     e->Next = eNext;
     e->Prev = ePrev;

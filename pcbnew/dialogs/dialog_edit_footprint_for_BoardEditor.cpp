@@ -102,7 +102,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
     attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-    attr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
+    attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
     m_modelsGrid->SetColAttr( 1, attr );
     m_modelsGrid->SetWindowStyleFlag( m_modelsGrid->GetWindowStyle() & ~wxHSCROLL );
 

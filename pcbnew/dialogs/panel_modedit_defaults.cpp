@@ -113,7 +113,7 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataToWindow()
             auto attr = new wxGridCellAttr;
             attr->SetRenderer( new wxGridCellBoolRenderer() );
             attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-            attr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
+            attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
             m_grid->SetAttr( i, COL_TEXT_ITALIC, attr );
         }
     }
