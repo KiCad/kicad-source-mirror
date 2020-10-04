@@ -77,7 +77,7 @@ bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual,
         }
     }
 
-    if( closest_dist_sq < SEG::Square( aClearance ) )
+    if( closest_dist_sq == 0 || closest_dist_sq < SEG::Square( aClearance ) )
     {
         if( aLocation )
             *aLocation = nearest;

@@ -202,7 +202,7 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
     ecoord dist_sq = ( aP - GetCenter() ).SquaredEuclideanNorm();
     ecoord dist_to_edge_sq = abs( dist_sq - r_sq );
 
-    if( dist_to_edge_sq < min_dist_sq )
+    if( dist_to_edge_sq == 0 || dist_to_edge_sq < min_dist_sq )
     {
         if( aLocation )
             *aLocation = ( aP + GetCenter() ) / 2;

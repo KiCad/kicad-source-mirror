@@ -49,7 +49,7 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_CIRCLE& aB, int 
     const VECTOR2I delta = aB.GetCenter() - aA.GetCenter();
     ecoord dist_sq = delta.SquaredEuclideanNorm();
 
-    if( dist_sq < min_dist_sq )
+    if( dist_sq == 0 || dist_sq < min_dist_sq )
     {
         if( aActual )
             *aActual = std::max( 0, (int) sqrt( dist_sq ) - aA.GetRadius() - aB.GetRadius() );
@@ -114,7 +114,7 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_CIRCLE& aB, int aC
         }
     }
 
-    if( inside || nearest_side_dist_sq < min_dist_sq )
+    if( inside || nearest_side_dist_sq == 0 || nearest_side_dist_sq < min_dist_sq )
     {
         if( aLocation )
             *aLocation = nearest;
@@ -192,7 +192,7 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN_BASE&
         }
     }
 
-    if( closest_dist < aClearance )
+    if( closest_dist == 0 || closest_dist < aClearance )
     {
         if( aLocation )
             *aLocation = nearest;
@@ -241,7 +241,6 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CH
                             int aClearance, int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     // TODO: why doesn't this handle MTV?
-    // TODO: worse, why this doesn't handle closed shapes?
 
     int closest_dist = INT_MAX;
     VECTOR2I nearest;
@@ -272,7 +271,7 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CH
         nearest = aA.GetPoint( 0 );
     }
 
-    if( closest_dist < aClearance )
+    if( closest_dist == 0 || closest_dist < aClearance )
     {
         if( aLocation )
             *aLocation = nearest;
@@ -326,7 +325,7 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_LINE_CHAIN_BASE& a
         }
     }
 
-    if( closest_dist < aClearance )
+    if( closest_dist == 0 || closest_dist < aClearance )
     {
         if( aLocation )
             *aLocation = nearest;

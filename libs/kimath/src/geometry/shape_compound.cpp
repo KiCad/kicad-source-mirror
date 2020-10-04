@@ -139,7 +139,7 @@ bool SHAPE_COMPOUND::Collide( const SEG& aSeg, int aClearance, int* aActual,
         }
     }
 
-    if( closest_dist < aClearance )
+    if( closest_dist == 0 || closest_dist < aClearance )
     {
         if( aLocation )
             *aLocation = nearest;
