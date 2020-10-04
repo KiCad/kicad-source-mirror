@@ -330,6 +330,23 @@ set_source_files_properties( dialogs/dialog_bom.cpp
         OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_md.h
     )
 
+# Create a C++ compilable string initializer containing markdown text into a *.h file:
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/sch_text_help_md.h
+    COMMAND ${CMAKE_COMMAND}
+        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/sch_text_help.md
+        -DoutputFile=${CMAKE_CURRENT_SOURCE_DIR}/sch_text_help_md.h
+        -P ${CMAKE_MODULE_PATH}/markdown2C.cmake
+    DEPENDS ${CMAKE_MODULE_PATH}/markdown2C.cmake ${CMAKE_CURRENT_SOURCE_DIR}/sch_text_help.md
+    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/sch_text_help_md.h
+       from ${CMAKE_CURRENT_SOURCE_DIR}/sch_text_help.md"
+    )
+
+set_source_files_properties( sch_text.cpp
+    PROPERTIES
+        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/sch_text_help_md.h
+    )
+
 if( APPLE )
     # setup bundle
     set( EESCHEMA_RESOURCES eeschema.icns eeschema_doc.icns )
