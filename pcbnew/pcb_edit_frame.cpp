@@ -1187,10 +1187,11 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
     }
 
     // Sync visibility with canvas
-    KIGFX::VIEW* view = GetCanvas()->GetView();
+    KIGFX::VIEW* view    = GetCanvas()->GetView();
+    LSET         visible = GetBoard()->GetVisibleLayers();
 
-    for( PCB_LAYER_ID layer : GetBoard()->GetVisibleLayers().Seq() )
-        view->SetLayerVisible( layer, true );
+    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+        view->SetLayerVisible( layer, visible.Contains( layer ) );
 
     // Stackup and/or color theme may have changed
     m_appearancePanel->OnBoardChanged();
