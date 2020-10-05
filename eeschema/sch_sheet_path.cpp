@@ -396,14 +396,14 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName, const wxStr
 }
 
 
-SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet )
+SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet, bool aCheckIntegrity )
 {
     if( aSheet != NULL )
-        BuildSheetList( aSheet );
+        BuildSheetList( aSheet, aCheckIntegrity );
 }
 
 
-void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
+void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity )
 {
     wxCHECK_RET( aSheet != NULL, wxT( "Cannot build sheet list from undefined sheet." ) );
 
@@ -421,25 +421,35 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 
     if( m_currentSheetPath.LastScreen() )
     {
+        wxString               parentFileName = aSheet->GetFileName();
         std::vector<SCH_ITEM*> childSheets;
         m_currentSheetPath.LastScreen()->GetSheets( &childSheets );
 
         for( SCH_ITEM* item : childSheets )
         {
-            auto sheet = static_cast<SCH_SHEET*>( item );
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
 
-            if( !m_currentSheetPath.TestForRecursion(
-                        sheet->GetFileName(), aSheet->GetFileName() ) )
-                BuildSheetList( sheet );
+            if( aCheckIntegrity )
+            {
+                if( !m_currentSheetPath.TestForRecursion( sheet->GetFileName(), parentFileName ) )
+                    BuildSheetList( sheet, true );
+                else
+                    badSheets.push_back( sheet );
+            }
             else
-                badSheets.push_back( sheet );
+            {
+                BuildSheetList( sheet, false );
+            }
         }
     }
 
-    for( auto sheet : badSheets )
+    if( aCheckIntegrity )
     {
-        m_currentSheetPath.LastScreen()->Remove( sheet );
-        m_currentSheetPath.LastScreen()->SetModify();
+        for( SCH_SHEET* sheet : badSheets )
+        {
+            m_currentSheetPath.LastScreen()->Remove( sheet );
+            m_currentSheetPath.LastScreen()->SetModify();
+        }
     }
 
     m_currentSheetPath.pop_back();

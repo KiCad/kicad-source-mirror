@@ -343,7 +343,7 @@ public:
      *
      * If aSheet == NULL, then this is an empty hierarchy which the user can populate.
      */
-    SCH_SHEET_LIST( SCH_SHEET* aSheet = NULL );
+    SCH_SHEET_LIST( SCH_SHEET* aSheet = nullptr, bool aCheckIntegrity = false );
 
     ~SCH_SHEET_LIST() {}
 
@@ -431,7 +431,7 @@ public:
      *               indicating that g_RootSheet should be used.
      * @throw std::bad_alloc if the memory for the sheet path list could not be allocated.
      */
-    void BuildSheetList( SCH_SHEET* aSheet );
+    void BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity );
 
     bool NameExists( const wxString& aSheetName );
 

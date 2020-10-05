@@ -700,7 +700,7 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
         m_out->Print( 0, "\n" );
         m_out->Print( 1, "(symbol_instances\n" );
 
-        SCH_SHEET_LIST sheetPaths( aSheet );
+        SCH_SHEET_LIST sheetPaths( aSheet, true );
 
         for( const SCH_SHEET_PATH& sheetPath : sheetPaths )
         {

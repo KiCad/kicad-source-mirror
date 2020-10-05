@@ -270,6 +270,9 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
     {
         if( !onSheetFilenameChanged( newRelativeFilename ) )
             return false;
+
+        // One last validity check (and potential repair) just to be sure to be sure
+        SCH_SHEET_LIST repairedList( &m_frame->Schematic().Root(), true );
     }
 
     wxString newSheetname = m_fields->at( SHEETNAME ).GetText();

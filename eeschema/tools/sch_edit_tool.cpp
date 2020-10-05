@@ -1503,11 +1503,14 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         SCH_SHEET*     sheet = static_cast<SCH_SHEET*>( item );
         bool           doClearAnnotation;
         bool           doRefresh = false;
-        // Keep track of existing sheet paths. EditSheet() can modify this list
-        SCH_SHEET_LIST initial_sheetpathList = m_frame->Schematic().GetSheets();
 
-        doRefresh = m_frame->EditSheetProperties(
-                sheet, &m_frame->GetCurrentSheet(), &doClearAnnotation );
+        // Keep track of existing sheet paths. EditSheet() can modify this list.
+        // Note that we use the validity checking/repairing version here just to make sure
+        // we've got a valid hierarchy to begin with.
+        SCH_SHEET_LIST initial_sheetpathList( &m_frame->Schematic().Root(), true );
+
+        doRefresh = m_frame->EditSheetProperties( sheet, &m_frame->GetCurrentSheet(),
+                                                  &doClearAnnotation );
 
         // If the sheet file is changed and new sheet contents are loaded then we have to
         // clear the annotations on the new content (as it may have been set from some other

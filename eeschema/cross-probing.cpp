@@ -54,7 +54,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
     if( !aSearchHierarchy )
         sheetList.push_back( m_frame->GetCurrentSheet() );
     else
-        sheetList.BuildSheetList( &m_frame->Schematic().Root() );
+        sheetList = m_frame->Schematic().GetSheets();
 
     for( SCH_SHEET_PATH& sheet : sheetList )
     {
