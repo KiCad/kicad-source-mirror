@@ -1297,12 +1297,12 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     }
 
     COLOR4D color = getRenderColor( aText, aLayer, drawingShadows );
-    m_gal->SetFontUnderlined( false );
+    bool    underline = false;
 
     if( aText->Type() == SCH_IREF_T && ( aText->GetFlags() & IS_ROLLOVER ) > 0 )
     {
         color = BLUE;
-        m_gal->SetFontUnderlined( true );
+        underline = true;
     }
 
     if( m_schematic )
@@ -1326,6 +1326,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     m_gal->SetLineWidth( getTextThickness( aText, drawingShadows ) );
     m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
+    m_gal->SetFontUnderlined( underline );
 
     VECTOR2D text_offset = aText->GetTextPos() + aText->GetSchematicTextOffset( &m_schSettings );
     wxString shownText( aText->GetShownText() );
