@@ -3418,6 +3418,9 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
 
     std::unique_ptr< D_PAD > pad( new D_PAD( aParent ) );
 
+    // File only contains a token if KeepTopBottom is true
+    pad->SetKeepTopBottom( false );
+
     NeedSYMBOLorNUMBER();
     pad->SetName( FromUTF8() );
 
