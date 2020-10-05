@@ -210,7 +210,7 @@ bool D_PAD::FlashLayer( int aLayer ) const
 
     /// Plated through hole pads need copper on the top/bottom layers for proper soldering
     /// Unless the user has removed them in the pad dialog
-    if( aLayer == F_Cu || aLayer == B_Cu )
+    if( m_keepTopBottomLayer && ( aLayer == F_Cu || aLayer == B_Cu ) )
         return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
 
     return board->GetConnectivity()->IsConnectedOnLayer( this, static_cast<int>( aLayer ),
