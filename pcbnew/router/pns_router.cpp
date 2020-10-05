@@ -24,10 +24,8 @@
 #include <vector>
 
 #include <view/view.h>
-#include <view/view_item.h>
 #include <view/view_group.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <gal/color4d.h>
 
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -36,10 +34,6 @@
 #include <pcbnew_settings.h>
 
 #include <geometry/shape.h>
-#include <geometry/shape_line_chain.h>
-#include <geometry/shape_rect.h>
-#include <geometry/shape_circle.h>
-#include <geometry/convex_hull.h>
 
 #include "pns_node.h"
 #include "pns_line_placer.h"

@@ -114,7 +114,11 @@ bool SHAPE_LINE_CHAIN_BASE::Collide( const VECTOR2I& aP, int aClearance, int* aA
             nearest = pn;
             closest_dist_sq = dist_sq;
 
-            if( closest_dist_sq == 0 || !aActual )
+            if( closest_dist_sq == 0 )
+                break;
+
+            // If we're not looking for aActual then any collision will do
+            if( closest_dist_sq < clearance_sq && !aActual )
                 break;
         }
     }
@@ -178,7 +182,11 @@ bool SHAPE_LINE_CHAIN_BASE::Collide( const SEG& aSeg, int aClearance, int* aActu
 
             closest_dist_sq = dist_sq;
 
-            if( closest_dist_sq == 0 || !aActual )
+            if( closest_dist_sq == 0)
+                break;
+
+            // If we're not looking for aActual then any collision will do
+            if( closest_dist_sq < clearance_sq && !aActual )
                 break;
         }
     }
