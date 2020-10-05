@@ -307,7 +307,7 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
         {
             int clearance = aNode->GetClearance( item, obs.m_item );
             std::unique_ptr<ITEM> tmp( obs.m_item->Clone() );
-            tmp->Mark( MK_VIOLATION );
+            tmp->Mark( tmp->Marker() | MK_VIOLATION );
             m_iface->DisplayItem( tmp.get(), -1, clearance );
             aRemoved.push_back( obs.m_item );
         }

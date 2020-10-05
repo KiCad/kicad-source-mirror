@@ -222,7 +222,7 @@ public:
         return Shape();
     }
 
-    virtual void Mark( int aMarker ) const { m_marker |= aMarker; }
+    virtual void Mark( int aMarker ) const { m_marker = aMarker; }
     virtual void Unmark( int aMarker = -1 ) const { m_marker &= ~aMarker; }
     virtual int Marker() const { return m_marker; }
 
