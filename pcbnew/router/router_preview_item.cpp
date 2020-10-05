@@ -152,135 +152,141 @@ const BOX2I ROUTER_PREVIEW_ITEM::ViewBBox() const
 }
 
 
-void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN& aL, KIGFX::GAL* gal ) const
+void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN_BASE* aL, KIGFX::GAL* gal ) const
 {
     gal->SetIsFill( false );
 
-    for( int s = 0; s < aL.SegmentCount(); s++ )
-        gal->DrawLine( aL.CSegment( s ).A, aL.CSegment( s ).B );
+    for( int s = 0; s < aL->GetSegmentCount(); s++ )
+        gal->DrawLine( aL->GetSegment( s ).A, aL->GetSegment( s ).B );
 
-    for( size_t s = 0; s < aL.ArcCount(); s++ )
+    const SHAPE_LINE_CHAIN* lineChain = dynamic_cast<const SHAPE_LINE_CHAIN*>( aL );
+
+    for( size_t s = 0; lineChain && s < lineChain->ArcCount(); s++ )
     {
-        auto arc = aL.CArcs()[s];
+        const SHAPE_ARC& arc = lineChain->CArcs()[s];
 
-        auto start_angle = DEG2RAD( arc.GetStartAngle() );
-        auto angle = DEG2RAD( arc.GetCentralAngle() );
+        double start_angle = DEG2RAD( arc.GetStartAngle() );
+        double angle = DEG2RAD( arc.GetCentralAngle() );
 
         gal->DrawArc( arc.GetCenter(), arc.GetRadius(), start_angle, start_angle + angle);
     }
 
-    if( aL.IsClosed() )
-        gal->DrawLine( aL.CSegment( -1 ).B, aL.CSegment( 0 ).A );
+    if( aL->IsClosed() )
+        gal->DrawLine( aL->GetSegment( -1 ).B, aL->GetSegment( 0 ).A );
 }
 
 
-void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
+void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) const
 {
-    auto gal = aView->GetGAL();
-    //col.Brighten(0.7);
-
-    if( m_type == PR_SHAPE )
+    switch( aShape->Type() )
     {
-        if( !m_shape )
-            return;
+    case SH_POLY_SET_TRIANGLE:
+    {
+        const SHAPE_LINE_CHAIN_BASE* l = (const SHAPE_LINE_CHAIN_BASE*) aShape;
 
-        // N.B. The order of draw here is important
-        // Cairo doesn't current support z-ordering, so we need
-        // to draw the clearance first to ensure it is in the background
-        gal->SetLayerDepth( ClearanceOverlayDepth );
-        //TODO(snh) Add configuration option for the color/alpha here
-        gal->SetStrokeColor( COLOR4D( DARKDARKGRAY ).WithAlpha( 0.9 ) );
-        gal->SetFillColor( COLOR4D( DARKDARKGRAY ).WithAlpha( 0.7 ) );
+        if( m_showTrackClearance && m_clearance > 0 )
+        {
+            gal->SetLineWidth( m_width + 2 * m_clearance );
+            drawLineChain( l, gal );
+        }
+
+        gal->SetLayerDepth( m_depth );
+        gal->SetLineWidth( m_width );
+        gal->SetStrokeColor( m_color );
+        gal->SetFillColor( m_color );
+        drawLineChain( l, gal );
+        break;
+    }
+
+    case SH_LINE_CHAIN:
+    {
+        const SHAPE_LINE_CHAIN* l = (const SHAPE_LINE_CHAIN*) aShape;
+        const int               w = l->Width();
+
+        if( m_showTrackClearance && m_clearance > 0 )
+        {
+            gal->SetLineWidth( w + 2 * m_clearance );
+            drawLineChain( l, gal );
+        }
+
+        gal->SetLayerDepth( m_depth );
+        gal->SetLineWidth( w );
+        gal->SetStrokeColor( m_color );
+        gal->SetFillColor( m_color );
+        drawLineChain( l, gal );
+        break;
+    }
+
+    case SH_SEGMENT:
+    {
+        const SHAPE_SEGMENT* s = (const SHAPE_SEGMENT*) aShape;
+        const int            w = s->GetWidth();
+
+        if( m_showTrackClearance && m_clearance > 0 )
+        {
+            gal->SetLineWidth( w + 2 * m_clearance );
+            gal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() + 2 * m_clearance );
+        }
+
+        gal->SetLayerDepth( m_depth );
+        gal->SetLineWidth( w );
+        gal->SetStrokeColor( m_color );
+        gal->SetFillColor( m_color );
+        gal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() );
+        break;
+    }
+
+    case SH_CIRCLE:
+    {
+        const SHAPE_CIRCLE* c = (const SHAPE_CIRCLE*) aShape;
+        gal->SetStrokeColor( m_color );
+
+        if( m_showViaClearance && m_clearance > 0 )
+        {
+            gal->SetIsStroke( false );
+            gal->DrawCircle( c->GetCenter(), c->GetRadius() + m_clearance );
+        }
+
+        gal->SetLayerDepth( m_depth );
         gal->SetIsStroke( m_width ? true : false );
-        gal->SetIsFill( true );
+        gal->SetLineWidth( m_width );
+        gal->SetFillColor( m_color );
+        gal->DrawCircle( c->GetCenter(), c->GetRadius() );
 
-        switch( m_shape->Type() )
+        break;
+    }
+
+    case SH_RECT:
+    {
+        const SHAPE_RECT* r = (const SHAPE_RECT*) aShape;
+        const int         w = r->GetWidth();
+        gal->SetFillColor( m_color );
+
+        if( m_clearance > 0 )
         {
-        case SH_LINE_CHAIN:
-        {
-            const SHAPE_LINE_CHAIN* l = (const SHAPE_LINE_CHAIN*) m_shape;
-
-            if( m_showTrackClearance && m_clearance > 0 )
-            {
-                gal->SetLineWidth( m_width + 2 * m_clearance );
-                drawLineChain( *l, gal );
-            }
-
-            gal->SetLayerDepth( m_depth );
-            gal->SetLineWidth( m_width );
-            gal->SetStrokeColor( m_color );
-            gal->SetFillColor( m_color );
-            drawLineChain( *l, gal );
-            break;
+            VECTOR2I p0( r->GetPosition() ), s( r->GetSize() );
+            gal->SetIsStroke( true );
+            gal->SetLineWidth( 2 * m_clearance );
+            gal->DrawLine( p0, VECTOR2I( p0.x + s.x, p0.y ) );
+            gal->DrawLine( p0, VECTOR2I( p0.x, p0.y + s.y ) );
+            gal->DrawLine( p0 + s , VECTOR2I( p0.x + s.x, p0.y ) );
+            gal->DrawLine( p0 + s, VECTOR2I( p0.x, p0.y + s.y ) );
         }
 
-        case SH_SEGMENT:
-        {
-            const SHAPE_SEGMENT* s = (const SHAPE_SEGMENT*) m_shape;
+        gal->SetLayerDepth( m_depth );
+        gal->SetIsStroke( w ? true : false );
+        gal->SetLineWidth( w );
+        gal->SetStrokeColor( m_color );
+        gal->DrawRectangle( r->GetPosition(), r->GetPosition() + r->GetSize() );
 
-            if( m_showTrackClearance && m_clearance > 0 )
-            {
-                gal->SetLineWidth( m_width + 2 * m_clearance );
-                gal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() + 2 * m_clearance );
-            }
-
-            gal->SetLayerDepth( m_depth );
-            gal->SetLineWidth( m_width );
-            gal->SetStrokeColor( m_color );
-            gal->SetFillColor( m_color );
-            gal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() );
-            break;
-        }
-
-        case SH_CIRCLE:
-        {
-            const SHAPE_CIRCLE* c = (const SHAPE_CIRCLE*) m_shape;
-            gal->SetStrokeColor( m_color );
-
-            if( m_showViaClearance && m_clearance > 0 )
-            {
-                gal->SetIsStroke( false );
-                gal->DrawCircle( c->GetCenter(), c->GetRadius() + m_clearance );
-            }
-
-            gal->SetLayerDepth( m_depth );
-            gal->SetIsStroke( m_width ? true : false );
-            gal->SetLineWidth( m_width );
-            gal->SetFillColor( m_color );
-            gal->DrawCircle( c->GetCenter(), c->GetRadius() );
-
-            break;
-        }
-
-        case SH_RECT:
-        {
-            const SHAPE_RECT* r = (const SHAPE_RECT*) m_shape;
-            gal->SetFillColor( m_color );
-
-            if( m_clearance > 0 )
-            {
-                VECTOR2I p0( r->GetPosition() ), s( r->GetSize() );
-                gal->SetIsStroke( true );
-                gal->SetLineWidth( 2 * m_clearance );
-                gal->DrawLine( p0, VECTOR2I( p0.x + s.x, p0.y ) );
-                gal->DrawLine( p0, VECTOR2I( p0.x, p0.y + s.y ) );
-                gal->DrawLine( p0 + s , VECTOR2I( p0.x + s.x, p0.y ) );
-                gal->DrawLine( p0 + s, VECTOR2I( p0.x, p0.y + s.y ) );
-            }
-
-            gal->SetLayerDepth( m_depth );
-            gal->SetIsStroke( m_width ? true : false );
-            gal->SetLineWidth( m_width );
-            gal->SetStrokeColor( m_color );
-            gal->DrawRectangle( r->GetPosition(), r->GetPosition() + r->GetSize() );
-
-            break;
-        }
+        break;
+    }
 
     case SH_SIMPLE:
     {
-        const SHAPE_SIMPLE* c = (const SHAPE_SIMPLE*) m_shape;
+        const SHAPE_SIMPLE*  c = (const SHAPE_SIMPLE*) aShape;
         std::deque<VECTOR2D> polygon = std::deque<VECTOR2D>();
+
         for( int i = 0; i < c->PointCount(); i++ )
         {
             polygon.push_back( c->CDPoint( i ) );
@@ -307,7 +313,8 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     case SH_ARC:
     {
-        const auto arc = static_cast<const SHAPE_ARC*>( m_shape );
+        const SHAPE_ARC* arc = static_cast<const SHAPE_ARC*>( aShape );
+        const int        w = arc->GetWidth();
 
         auto start_angle = DEG2RAD( arc->GetStartAngle() );
         auto angle = DEG2RAD( arc->GetCentralAngle() );
@@ -317,21 +324,63 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         if( m_showTrackClearance && m_clearance > 0 )
         {
-            gal->SetLineWidth( m_width + 2 * m_clearance );
+            gal->SetLineWidth( w + 2 * m_clearance );
             gal->DrawArc( arc->GetCenter(), arc->GetRadius(), start_angle, start_angle + angle );
         }
 
         gal->SetLayerDepth( m_depth );
         gal->SetStrokeColor( m_color );
         gal->SetFillColor( m_color );
-        gal->SetLineWidth( m_width );
+        gal->SetLineWidth( w );
         gal->DrawArc( arc->GetCenter(), arc->GetRadius(), start_angle, start_angle + angle );
         break;
     }
 
-    case SH_POLY_SET:
     case SH_COMPOUND:
-        break;          // Not yet in use
+        wxFAIL_MSG( "Router preview item: nested compound shapes not supported" );
+        break;
+
+    case SH_POLY_SET:
+        wxFAIL_MSG( "Router preview item: SHAPE_POLY_SET not supported" );
+        break;
+
+    case SH_NULL:
+        break;
+    }
+}
+
+
+void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
+{
+    GAL* gal = aView->GetGAL();
+    //col.Brighten(0.7);
+
+    if( m_type == PR_SHAPE )
+    {
+        if( !m_shape )
+            return;
+
+        // N.B. The order of draw here is important
+        // Cairo doesn't current support z-ordering, so we need
+        // to draw the clearance first to ensure it is in the background
+        gal->SetLayerDepth( ClearanceOverlayDepth );
+        //TODO(snh) Add configuration option for the color/alpha here
+        gal->SetStrokeColor( COLOR4D( DARKDARKGRAY ).WithAlpha( 0.9 ) );
+        gal->SetFillColor( COLOR4D( DARKDARKGRAY ).WithAlpha( 0.7 ) );
+        gal->SetIsStroke( m_width ? true : false );
+        gal->SetIsFill( true );
+
+        if( m_shape->HasIndexableSubshapes() )
+        {
+            std::vector<SHAPE*> subshapes;
+            m_shape->GetIndexableSubshapes( subshapes );
+
+            for( SHAPE* shape : subshapes )
+                drawShape( shape, gal );
+        }
+        else
+        {
+            drawShape( m_shape, gal );
         }
     }
 }

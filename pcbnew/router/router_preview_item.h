@@ -109,7 +109,9 @@ public:
         aCount = 1;
     }
 
-    void drawLineChain( const SHAPE_LINE_CHAIN& aL, KIGFX::GAL* aGal ) const;
+    void drawLineChain( const SHAPE_LINE_CHAIN_BASE* aL, KIGFX::GAL* aGal ) const;
+
+    void drawShape( const SHAPE* aShape, KIGFX::GAL* aGal ) const;
 
 private:
     const KIGFX::COLOR4D assignColor( int aStyle ) const;

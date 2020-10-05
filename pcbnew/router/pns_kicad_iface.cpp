@@ -23,7 +23,6 @@
 #include <class_board.h>
 #include <board_connected_item.h>
 #include <fp_text.h>
-#include <fp_shape.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
@@ -37,14 +36,11 @@
 #include <view/view.h>
 #include <view/view_item.h>
 #include <view/view_group.h>
-#include <gal/graphics_abstraction_layer.h>
 
 #include <pcb_painter.h>
 
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
-#include <geometry/shape_rect.h>
-#include <geometry/shape_circle.h>
 #include <geometry/shape_arc.h>
 #include <geometry/shape_simple.h>
 
@@ -62,7 +58,6 @@
 #include "pns_solid.h"
 #include "pns_segment.h"
 #include "pns_node.h"
-#include "pns_topology.h"
 #include "pns_router.h"
 #include "pns_debug_decorator.h"
 #include "router_preview_item.h"
@@ -137,11 +132,11 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER_I
     }
 
     // Build clearance cache for pads
-    for( auto mod : m_board->Modules() )
+    for( MODULE* mod : m_board->Modules() )
     {
-        auto moduleClearance = mod->GetLocalClearance();
+        int moduleClearance = mod->GetLocalClearance();
 
-        for( auto pad : mod->Pads() )
+        for( D_PAD* pad : mod->Pads() )
         {
             int padClearance = pad->GetLocalClearance();
 
@@ -582,8 +577,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
     LAYER_RANGE layers( 0, MAX_CU_LAYERS - 1 );
 
     // ignore non-copper pads except for those with holes
-    if( ( aPad->GetLayerSet() & LSET::AllCuMask()).none() &&
-            aPad->GetAttribute() != PAD_ATTRIB_NPTH )
+    if( ( aPad->GetLayerSet() & LSET::AllCuMask() ).none() && aPad->GetDrillSize().x == 0 )
         return NULL;
 
     switch( aPad->GetAttribute() )
@@ -624,9 +618,18 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
 
     std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
 
-    if( aPad->GetAttribute() == PAD_ATTRIB_PTH ||
-            aPad->GetAttribute() == PAD_ATTRIB_NPTH )
-        solid->SetAlternateShape( aPad->GetEffectiveHoleShape()->Clone() );
+    if( aPad->GetDrillSize().x > 0 )
+    {
+        SHAPE_SEGMENT* slot = (SHAPE_SEGMENT*) aPad->GetEffectiveHoleShape()->Clone();
+
+        if( aPad->GetAttribute() != PAD_ATTRIB_NPTH )
+        {
+            BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+            slot->SetWidth( slot->GetWidth() + bds.GetHolePlatingThickness() * 2 );
+        }
+
+        solid->SetAlternateShape( slot );
+    }
 
     if( aPad->GetAttribute() == PAD_ATTRIB_NPTH )
         solid->SetRoutable( false );
@@ -637,7 +640,6 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
     solid->SetPadToDie( aPad->GetPadToDieLength() );
 
     wxPoint wx_c = aPad->ShapePos();
-    wxSize  wx_sz = aPad->GetSize();
     wxPoint offset = aPad->GetOffset();
 
     VECTOR2I c( wx_c.x, wx_c.y );
@@ -646,27 +648,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
 
     solid->SetPos( VECTOR2I( c.x - offset.x, c.y - offset.y ) );
     solid->SetOffset( VECTOR2I( offset.x, offset.y ) );
-
-
-    auto shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
-
-    if( shapes && shapes->Size() == 1 )
-    {
-        solid->SetShape( shapes->Shapes()[0]->Clone() );
-    }
-    else
-    {
-        // JEY TODO:
-        // TOM TODO: move to SHAPE_COMPOUND...
-
-        const std::shared_ptr<SHAPE_POLY_SET>& outline = aPad->GetEffectivePolygon();
-        SHAPE_SIMPLE*                          shape = new SHAPE_SIMPLE();
-
-        for( auto iter = outline->CIterate( 0 ); iter; iter++ )
-            shape->Append( *iter );
-
-        solid->SetShape( shape );
-    }
+    solid->SetShape( aPad->GetEffectiveShape()->Clone() );
 
     return solid;
 }
