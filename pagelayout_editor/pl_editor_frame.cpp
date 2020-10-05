@@ -253,6 +253,9 @@ void PL_EDITOR_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::toggleGrid,        CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleCursorStyle, CHECK( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::millimetersUnits,  CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::inchesUnits,       CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
+    mgr->SetConditions( ACTIONS::milsUnits,         CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
     mgr->SetConditions( ACTIONS::cut,               ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
     mgr->SetConditions( ACTIONS::copy,              ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
