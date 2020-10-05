@@ -98,9 +98,9 @@ enum DRAG_MODE
         virtual void SyncWorld( NODE* aNode ) = 0;
         virtual void AddItem( ITEM* aItem ) = 0;
         virtual void RemoveItem( ITEM* aItem ) = 0;
-        virtual bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) = 0;
-        virtual bool IsItemVisible( const PNS::ITEM* aItem ) = 0;
-        virtual bool IsOnLayer( const PNS::ITEM* aItem, int aLayer ) = 0;
+        virtual bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const = 0;
+        virtual bool IsItemVisible( const PNS::ITEM* aItem ) const = 0;
+        virtual bool IsOnLayer( const PNS::ITEM* aItem, int aLayer ) const = 0;
         virtual void DisplayItem( const ITEM* aItem, int aColor = -1, int aClearance = -1, bool aEdit = false ) = 0;
         virtual void HideItem( ITEM* aItem ) = 0;
         virtual void Commit() = 0;

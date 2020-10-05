@@ -40,7 +40,8 @@ enum LineMarker {
     MK_HEAD         = ( 1 << 0 ),
     MK_VIOLATION    = ( 1 << 3 ),
     MK_LOCKED       = ( 1 << 4 ),
-    MK_DP_COUPLED   = ( 1 << 5 )
+    MK_DP_COUPLED   = ( 1 << 5 ),
+    MK_ALT_SHAPE    = ( 1 << 6 )
 };
 
 
@@ -221,8 +222,8 @@ public:
         return Shape();
     }
 
-    virtual void Mark( int aMarker ) { m_marker = aMarker; }
-    virtual void Unmark( int aMarker = -1 ) { m_marker &= ~aMarker; }
+    virtual void Mark( int aMarker ) const { m_marker |= aMarker; }
+    virtual void Unmark( int aMarker = -1 ) const { m_marker &= ~aMarker; }
     virtual int Marker() const { return m_marker; }
 
     virtual void SetRank( int aRank ) { m_rank = aRank; }
@@ -259,7 +260,7 @@ protected:
 
     bool                    m_movable;
     int                     m_net;
-    int                     m_marker;
+    mutable int             m_marker;
     int                     m_rank;
     bool                    m_routable;
 };

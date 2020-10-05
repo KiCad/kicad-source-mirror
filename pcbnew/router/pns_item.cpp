@@ -31,8 +31,9 @@ namespace PNS {
 bool ITEM::collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV, VECTOR2I* aMTV,
                           const NODE* aParentNode, bool aDifferentNetsOnly ) const
 {
-    const SHAPE* shapeA = Shape();
-    const SHAPE* shapeB = aOther->Shape();
+    const ROUTER_IFACE* iface = ROUTER::GetInstance()->GetInterface();
+    const SHAPE*        shapeA = Shape();
+    const SHAPE*        shapeB = aOther->Shape();
 
     // same nets? no collision!
     if( aDifferentNetsOnly && m_net == aOther->m_net && m_net >= 0 && aOther->m_net >= 0 )
@@ -42,26 +43,36 @@ bool ITEM::collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV, VEC
     if( !m_layers.Overlaps( aOther->m_layers ) )
         return false;
 
-    if( !aOther->Layers().IsMultilayer()
-            && !ROUTER::GetInstance()->GetInterface()->IsOnLayer( this, aOther->Layer() ) )
+    if( !aOther->Layers().IsMultilayer() && !iface->IsOnLayer( this, aOther->Layer() ) )
     {
         if( !AlternateShape() )
-                wxLogError
-                ( "Missing expected Alternate shape for %s at %d %d", m_parent->GetClass(),
-                        Anchor( 0 ).x, Anchor( 0 ).y );
+        {
+            wxLogError( "Missing expected Alternate shape for %s at %d %d",
+                        m_parent->GetClass(),
+                        Anchor( 0 ).x,
+                        Anchor( 0 ).y );
+        }
         else
+        {
             shapeA = AlternateShape();
+            Mark( MK_ALT_SHAPE );
+        }
     }
 
-    if( !Layers().IsMultilayer()
-            && !ROUTER::GetInstance()->GetInterface()->IsOnLayer( aOther, Layer() ) )
+    if( !Layers().IsMultilayer() && !iface->IsOnLayer( aOther, Layer() ) )
     {
         if( !aOther->AlternateShape() )
-                wxLogError
-                ( "Missing expected Alternate shape for %s at %d %d", aOther->Parent()->GetClass(),
-                        aOther->Anchor( 0 ).x, aOther->Anchor( 0 ).y );
+        {
+            wxLogError( "Missing expected Alternate shape for %s at %d %d",
+                        aOther->Parent()->GetClass(),
+                        aOther->Anchor( 0 ).x,
+                        aOther->Anchor( 0 ).y );
+        }
         else
+        {
             shapeB = aOther->AlternateShape();
+            aOther->Mark( MK_ALT_SHAPE );
+        }
     }
 
     if( aNeedMTV )

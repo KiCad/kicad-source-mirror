@@ -85,19 +85,19 @@ LINE* LINE::Clone() const
 }
 
 
-void LINE::Mark( int aMarker )
+void LINE::Mark( int aMarker ) const
 {
     m_marker = aMarker;
 
-    for( auto s : m_links )
+    for( const LINKED_ITEM* s : m_links )
         s->Mark( aMarker );
 
 }
 
 
-void LINE::Unmark( int aMarker )
+void LINE::Unmark( int aMarker ) const
 {
-    for( auto s : m_links )
+    for( const LINKED_ITEM* s : m_links )
         s->Unmark( aMarker );
 
     m_marker = 0;

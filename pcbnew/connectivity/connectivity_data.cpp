@@ -347,15 +347,25 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
 {
     CN_CONNECTIVITY_ALGO::ITEM_MAP_ENTRY &entry = m_connAlgo->ItemEntry( aItem );
 
-    for( auto citem : entry.GetItems() )
+    auto matchType = [&]( KICAD_T aItemType )
     {
-        for( auto connected : citem->ConnectedItems() )
+        if( aTypes.empty() )
+            return true;
+
+        return std::count( aTypes.begin(), aTypes.end(), aItemType ) > 0;
+    };
+
+    for( CN_ITEM* citem : entry.GetItems() )
+    {
+        for( CN_ITEM* connected : citem->ConnectedItems() )
         {
-            if( connected->Valid() && connected->Layers().Overlaps( aLayer )
-                    && ( aTypes.empty()
-                            || std::count( aTypes.begin(), aTypes.end(),
-                                    connected->Parent()->Type() ) > 0 ) )
+            if( connected->Valid()
+                    && connected->Layers().Overlaps( aLayer )
+                    && connected->Net() == aItem->GetNetCode()
+                    && matchType( connected->Parent()->Type() ) )
+            {
                     return true;
+            }
         }
     }
 

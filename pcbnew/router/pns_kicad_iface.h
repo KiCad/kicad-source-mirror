@@ -52,9 +52,9 @@ public:
     void EraseView() override {};
     void SetBoard( BOARD* aBoard );
     void SyncWorld( PNS::NODE* aWorld ) override;
-    bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) override { return true; };
-    bool IsOnLayer( const PNS::ITEM* aItem, int aLayer ) override { return true; };
-    bool IsItemVisible( const PNS::ITEM* aItem ) override { return true; }
+    bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const override { return true; };
+    bool IsOnLayer( const PNS::ITEM* aItem, int aLayer ) const override { return true; };
+    bool IsItemVisible( const PNS::ITEM* aItem ) const override { return true; }
     void HideItem( PNS::ITEM* aItem ) override {}
     void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0, bool aEdit = false ) override {}
     void AddItem( PNS::ITEM* aItem ) override;
@@ -104,9 +104,9 @@ public:
 
     void SetView( KIGFX::VIEW* aView );
     void EraseView() override;
-    bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) override;
-    bool IsItemVisible( const PNS::ITEM* aItem ) override;
-    bool IsOnLayer( const PNS::ITEM* aItem, int aLayer ) override;
+    bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const override;
+    bool IsItemVisible( const PNS::ITEM* aItem ) const override;
+    bool IsOnLayer( const PNS::ITEM* aItem, int aLayer ) const override;
     void HideItem( PNS::ITEM* aItem ) override;
     void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0, bool aEdit = false ) override;
     void Commit() override;

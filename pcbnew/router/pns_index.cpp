@@ -37,11 +37,15 @@ void INDEX::Add( ITEM* aItem )
         if( !ROUTER::GetInstance()->GetInterface()->IsOnLayer( aItem, i ) )
         {
             if( aItem->AlternateShape() )
+            {
                 m_subIndices[i].Add( aItem, aItem->AlternateShape()->BBox() );
+            }
             else
             {
                 wxLogError( "Missing expected Alternate shape for %s at %d %d",
-                        aItem->Parent()->GetClass(), aItem->Anchor( 0 ).x, aItem->Anchor( 0 ).y );
+                            aItem->Parent()->GetClass(),
+                            aItem->Anchor( 0 ).x,
+                            aItem->Anchor( 0 ).y );
                 m_subIndices[i].Add( aItem );
             }
 

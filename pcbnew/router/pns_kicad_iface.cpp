@@ -583,9 +583,9 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
     switch( aPad->GetAttribute() )
     {
     case PAD_ATTRIB_PTH:
+    case PAD_ATTRIB_NPTH:
         break;
 
-    case PAD_ATTRIB_NPTH:
     case PAD_ATTRIB_CONN:
     case PAD_ATTRIB_SMD:
         {
@@ -605,8 +605,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
                 }
             }
 
-            /// Keep the NPTH pads because we will use the drill as alternate shape
-            if( !is_copper && aPad->GetAttribute() != PAD_ATTRIB_NPTH )
+            if( !is_copper )
                 return NULL;
         }
         break;
@@ -865,7 +864,7 @@ void PNS_KICAD_IFACE_BASE::SetBoard( BOARD* aBoard )
 }
 
 
-bool PNS_KICAD_IFACE::IsAnyLayerVisible( const LAYER_RANGE& aLayer )
+bool PNS_KICAD_IFACE::IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const
 {
     if( !m_view )
         return false;
@@ -878,7 +877,7 @@ bool PNS_KICAD_IFACE::IsAnyLayerVisible( const LAYER_RANGE& aLayer )
 }
 
 
-bool PNS_KICAD_IFACE::IsOnLayer( const PNS::ITEM* aItem, int aLayer )
+bool PNS_KICAD_IFACE::IsOnLayer( const PNS::ITEM* aItem, int aLayer ) const
 {
     /// Default is all layers
     if( aLayer < 0 )
@@ -911,7 +910,7 @@ bool PNS_KICAD_IFACE::IsOnLayer( const PNS::ITEM* aItem, int aLayer )
 }
 
 
-bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem )
+bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem ) const
 {
     // by default, all items are visible (new ones created by the router have parent == NULL as they have not been
     // committed yet to the BOARD)
@@ -984,9 +983,9 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
 
     for( MODULE* module : m_board->Modules() )
     {
-        for( auto pad : module->Pads() )
+        for( D_PAD* pad : module->Pads() )
         {
-            if( auto solid = syncPad( pad ) )
+            if( std::unique_ptr<PNS::SOLID> solid = syncPad( pad ) )
                 aWorld->Add( std::move( solid ) );
 
             worstPadClearance = std::max( worstPadClearance, pad->GetLocalClearance() );

@@ -412,11 +412,10 @@ public:
 
     void AllItemsInNet( int aNet, std::set<ITEM*>& aItems, int aKindMask = -1 );
 
-    void ClearRanks( int aMarkerMask = MK_HEAD | MK_VIOLATION );
+    void ClearRanks( int aMarkerMask = MK_HEAD | MK_VIOLATION | MK_ALT_SHAPE );
 
     void RemoveByMarker( int aMarker );
 
-    const ITEM_SET FindItemsByParent( const BOARD_CONNECTED_ITEM* aParent );
     ITEM* FindItemByParent( const BOARD_CONNECTED_ITEM* aParent );
 
     bool HasChildren() const

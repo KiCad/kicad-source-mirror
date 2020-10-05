@@ -238,8 +238,8 @@ public:
 
     const VIA& Via() const { return m_via; }
 
-    virtual void Mark( int aMarker ) override;
-    virtual void Unmark( int aMarker = -1 ) override;
+    virtual void Mark( int aMarker ) const override;
+    virtual void Unmark( int aMarker = -1 ) const override;
     virtual int Marker() const override;
 
     void DragSegment( const VECTOR2I& aP, int aIndex, bool aFreeAngle = false );
