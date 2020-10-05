@@ -177,6 +177,8 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetCanvas()->GetView()->UseDrawPriority( true );
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
 
+    setupUnits( m_settings );
+
     // Set the working/draw area size to display a symbol to a reasonable value:
     // A 600mm x 600mm with a origin at the area center looks like a large working area
     double max_size_x = Millimeter2iu( 600 );

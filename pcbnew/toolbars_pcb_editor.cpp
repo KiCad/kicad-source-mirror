@@ -42,6 +42,7 @@
 #include <settings/common_settings.h>
 #include <tool/action_toolbar.h>
 #include <tool/actions.h>
+#include <tool/common_tools.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
@@ -549,13 +550,43 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 }
 
 
+static wxString ComboBoxUnits( EDA_UNITS aUnits, double aValue, bool aIncludeLabel = true )
+{
+    wxString      text;
+    const wxChar* format;
+
+    switch( aUnits )
+    {
+    default:                     wxASSERT_MSG( false, "Invalid unit" ); KI_FALLTHROUGH;
+    case EDA_UNITS::UNSCALED:    format = wxT( "%.0f" );                break;
+    case EDA_UNITS::MILLIMETRES: format = wxT( "%.3f" );                break;
+    case EDA_UNITS::MILS:        format = wxT( "%.2f" );                break;
+    case EDA_UNITS::INCHES:      format = wxT( "%.5f" );                break;
+    }
+
+    text.Printf( format, To_User_Unit( aUnits, aValue ) );
+
+    if( aIncludeLabel )
+    {
+        text += " ";
+        text += GetAbbreviatedUnitsLabel( aUnits, EDA_DATA_TYPE::DISTANCE );
+    }
+
+    return text;
+}
+
+
 void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, bool aEdit )
 {
     if( aTrackWidthSelectBox == NULL )
         return;
 
+    EDA_UNITS primaryUnit;
+    EDA_UNITS secondaryUnit;
+
+    GetUnitPair( primaryUnit, secondaryUnit );
+
     wxString msg;
-    bool     mmFirst = GetUserUnits() != EDA_UNITS::INCHES;
 
     aTrackWidthSelectBox->Clear();
 
@@ -563,13 +594,8 @@ void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, 
     {
         int size = GetDesignSettings().m_TrackWidthList[ii];
 
-        double valueMils = To_User_Unit( EDA_UNITS::INCHES, size ) * 1000;
-        double value_mm = To_User_Unit( EDA_UNITS::MILLIMETRES, size );
-
-        if( mmFirst )
-            msg.Printf( _( "Track: %.3f mm (%.2f mils)" ), value_mm, valueMils );
-        else
-            msg.Printf( _( "Track: %.2f mils (%.3f mm)" ), valueMils, value_mm );
+        msg.Printf( _( "Track: %s (%s)" ), ComboBoxUnits( primaryUnit, size ),
+                                           ComboBoxUnits( secondaryUnit, size ) );
 
         // Mark the netclass track width value (the first in list)
         if( ii == 0 )
@@ -598,30 +624,48 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
 
     aViaSizeSelectBox->Clear();
 
-    bool mmFirst = GetUserUnits() != EDA_UNITS::INCHES;
+    COMMON_TOOLS* cmnTool  = m_toolManager->GetTool<COMMON_TOOLS>();
+
+    EDA_UNITS primaryUnit   = GetUserUnits();
+    EDA_UNITS secondaryUnit = EDA_UNITS::MILS;
+
+    if( IsImperialUnit( primaryUnit ) )
+    {
+        if( cmnTool )
+            secondaryUnit = cmnTool->GetLastMetricUnits();
+        else
+            secondaryUnit = EDA_UNITS::MILLIMETRES;
+    }
+    else
+    {
+        if( cmnTool )
+            secondaryUnit = cmnTool->GetLastImperialUnits();
+        else
+            secondaryUnit = EDA_UNITS::MILS;
+    }
 
     for( unsigned ii = 0; ii < GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
     {
         VIA_DIMENSION viaDimension = GetDesignSettings().m_ViasDimensionsList[ii];
-        wxString      msg, mmStr, milsStr;
+        wxString      msg, priStr, secStr;
 
-        double diam = To_User_Unit( EDA_UNITS::MILLIMETRES, viaDimension.m_Diameter );
-        double hole = To_User_Unit( EDA_UNITS::MILLIMETRES, viaDimension.m_Drill );
-
-        if( hole > 0 )
-            mmStr.Printf( _( "%.2f / %.2f mm" ), diam, hole );
-        else
-            mmStr.Printf( _( "%.2f mm" ), diam );
-
-        diam = To_User_Unit( EDA_UNITS::INCHES, viaDimension.m_Diameter ) * 1000;
-        hole = To_User_Unit( EDA_UNITS::INCHES, viaDimension.m_Drill ) * 1000;
+        double diam = viaDimension.m_Diameter;
+        double hole = viaDimension.m_Drill;
 
         if( hole > 0 )
-            milsStr.Printf( _( "%.1f / %.1f mils" ), diam, hole );
+        {
+            priStr.Printf( _( "%s / %s" ), ComboBoxUnits( primaryUnit, diam, false ),
+                                           ComboBoxUnits( primaryUnit, hole, true ) );
+            secStr.Printf( _( "%s / %s" ), ComboBoxUnits( secondaryUnit, diam, false ),
+                                           ComboBoxUnits( secondaryUnit, hole, true ) );
+        }
         else
-            milsStr.Printf( _( "%.1f mils" ), diam );
+        {
+            priStr.Printf( _( "%s" ), ComboBoxUnits( primaryUnit, diam, true ) );
+            secStr.Printf( _( "%s" ), ComboBoxUnits( secondaryUnit, diam, true ) );
+        }
 
-        msg.Printf( _( "Via: %s (%s)" ), mmFirst ? mmStr : milsStr, mmFirst ? milsStr : mmStr );
+        msg.Printf( _( "Via: %s (%s)" ), priStr, secStr );
 
         // Mark the netclass via size value (the first in list)
         if( ii == 0 )

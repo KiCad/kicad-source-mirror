@@ -44,7 +44,7 @@ GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) :
     wxArrayString      gridsList;
     int                i = ID_POPUP_GRID_START;
 
-    BuildChoiceList( &gridsList, settings, IsMetricUnit( m_parent->GetUserUnits() ) );
+    BuildChoiceList( &gridsList, settings, m_parent );
 
     for( const wxString& grid : gridsList )
         Append( i++, grid, wxEmptyString, wxITEM_CHECK );
@@ -65,7 +65,7 @@ void GRID_MENU::update()
     unsigned int       current = settings->m_Window.grid.last_size_idx;
     wxArrayString      gridsList;
 
-    BuildChoiceList( &gridsList, settings, m_parent->GetUserUnits() != EDA_UNITS::INCHES );
+    GRID_MENU::BuildChoiceList( &gridsList, settings, m_parent );
 
     for( unsigned int i = 0; i < GetMenuItemCount(); ++i )
     {
@@ -76,39 +76,56 @@ void GRID_MENU::update()
     }
 }
 
+wxString GRID_MENU::GridMenuUnits( EDA_UNITS aUnits, double aValue )
+{
+    wxString      text;
+    const wxChar* format;
 
-void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* aCfg, bool mmFirst )
+    switch( aUnits )
+    {
+    default:                     wxASSERT_MSG( false, "Invalid unit" ); KI_FALLTHROUGH;
+    case EDA_UNITS::UNSCALED:    format = wxT( "%.0f" );                break;
+    case EDA_UNITS::MILLIMETRES: format = wxT( "%.4f" );                break;
+    case EDA_UNITS::MILS:        format = wxT( "%.2f" );                break;
+    case EDA_UNITS::INCHES:      format = wxT( "%.4f" );                break;
+    }
+
+    text.Printf( format, To_User_Unit( aUnits, aValue ) );
+
+    text += " ";
+    text += GetAbbreviatedUnitsLabel( aUnits, EDA_DATA_TYPE::DISTANCE );
+
+    return text;
+}
+
+
+void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* aCfg,
+                                 EDA_DRAW_FRAME* aParent )
 {
     wxString msg;
+
+    EDA_UNITS primaryUnit;
+    EDA_UNITS secondaryUnit;
+
+    aParent->GetUnitPair( primaryUnit, secondaryUnit );
 
     for( const wxString& gridSize : aCfg->m_Window.grid.sizes )
     {
         int val = (int) ValueFromString( EDA_UNITS::MILLIMETRES, gridSize );
-        double gridValueMils = To_User_Unit( EDA_UNITS::INCHES, val ) * 1000;
-        double gridValue_mm = To_User_Unit( EDA_UNITS::MILLIMETRES, val );
 
-        if( mmFirst )
-            msg.Printf( _( "Grid: %.4f mm (%.2f mils)" ), gridValue_mm, gridValueMils );
-        else
-            msg.Printf( _( "Grid: %.2f mils (%.4f mm)" ), gridValueMils, gridValue_mm );
+        msg.Printf( _( "Grid: %s (%s)" ), GRID_MENU::GridMenuUnits( primaryUnit, val ),
+                    GRID_MENU::GridMenuUnits( secondaryUnit, val ) );
 
         aGridsList->Add( msg );
     }
-
 
     if( !aCfg->m_Window.grid.user_grid_x.empty() )
     {
         int val = (int) ValueFromString( EDA_UNITS::INCHES, aCfg->m_Window.grid.user_grid_x );
-        double gridValueMils = To_User_Unit( EDA_UNITS::INCHES, val ) * 1000;
-        double gridValue_mm = To_User_Unit( EDA_UNITS::MILLIMETRES, val );
 
-        if( mmFirst )
-            msg.Printf( _( "User grid: %.4f mm (%.2f mils)" ), gridValue_mm, gridValueMils );
-        else
-            msg.Printf( _( "User grid: %.2f mils (%.4f mm)" ), gridValueMils, gridValue_mm );
+        msg.Printf( _( "User grid: %s (%s)" ), GRID_MENU::GridMenuUnits( primaryUnit, val ),
+                    GRID_MENU::GridMenuUnits( secondaryUnit, val ) );
 
         aGridsList->Add( msg );
     }
 }
-
-

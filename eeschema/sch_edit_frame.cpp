@@ -290,6 +290,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     }
 
     InitExitKey();
+    setupUnits( eeconfig() );
 
     // Net list generator
     DefaultExecFlags();

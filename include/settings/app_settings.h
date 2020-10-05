@@ -145,6 +145,8 @@ public:
         int                   max_undo_items;
         std::vector<wxString> file_history;
         int                   units;
+        int                   last_metric_units;
+        int                   last_imperial_units;
     };
 
     APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaVersion );

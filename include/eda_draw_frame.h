@@ -117,6 +117,8 @@ protected:
 
     void unitsChangeRefresh() override;
 
+    void setupUnits( APP_SETTINGS_BASE* aCfg );
+
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     /**
@@ -186,6 +188,13 @@ public:
     void SetShowPolarCoords( bool aShow ) { m_PolarCoords = aShow; }
 
     void ToggleUserUnits() override;
+
+    /**
+     * Get the pair or units in current use. The primary unit is the main
+     * unit of the frame, and the secondary unit is the unit of the other
+     * system that was used most recently.
+     */
+    void GetUnitPair( EDA_UNITS& aPrimaryUnit, EDA_UNITS& aSecondaryUnits );
 
     /**
      * Return the absolute coordinates of the origin of the snap grid.  This is
@@ -476,11 +485,11 @@ public:
 
     /**
      * Returns bbox of document with option to not include some items.
-     * 
+     *
      * Used most commonly by "Zoom to Fit" and "Zoom to Objects".  In Eeschema
-     * for "Zoom to Fit", it's passed "true" to include worksheet border.  It's 
-     * passed false by "Zoom To Objects" to ignore worksheet border.  In Pcbnew, 
-     * false makes it ignore any items outside the PCB edge such as fabrication 
+     * for "Zoom to Fit", it's passed "true" to include worksheet border.  It's
+     * passed false by "Zoom To Objects" to ignore worksheet border.  In Pcbnew,
+     * false makes it ignore any items outside the PCB edge such as fabrication
      * notes.
      *
      * @param aIncludeAllVisible - True = Include everything visible in bbox calculations

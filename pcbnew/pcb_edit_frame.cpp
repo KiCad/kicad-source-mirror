@@ -340,6 +340,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     }
 
     InitExitKey();
+    setupUnits( config() );
 
     // Ensure the Python interpreter is up to date with its environment variables
     PythonSyncEnvironmentVariables();

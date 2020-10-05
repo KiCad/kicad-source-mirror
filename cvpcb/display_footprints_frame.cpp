@@ -151,6 +151,8 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     ActivateGalCanvas();
 
+    setupUnits( config() );
+
     // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)
     CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() );
 

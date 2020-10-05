@@ -38,10 +38,7 @@ class EDA_DRAW_FRAME;
 class COMMON_TOOLS : public TOOL_INTERACTIVE
 {
 public:
-    COMMON_TOOLS() :
-        TOOL_INTERACTIVE( "common.Control" ),
-        m_frame( nullptr )
-    { }
+    COMMON_TOOLS();
 
     ~COMMON_TOOLS() override { }
 
@@ -73,6 +70,10 @@ public:
     int ToggleUnits( const TOOL_EVENT& aEvent );
     int TogglePolarCoords( const TOOL_EVENT& aEvent );
     int ResetLocalCoords( const TOOL_EVENT& aEvent );
+
+    void SetLastUnits( EDA_UNITS aUnit );
+    EDA_UNITS GetLastMetricUnits() { return m_metricUnit; }
+    EDA_UNITS GetLastImperialUnits() { return m_imperialUnit; }
 
     // Grid control
     int GridNext( const TOOL_EVENT& aEvent );

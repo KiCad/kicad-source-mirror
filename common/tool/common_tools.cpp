@@ -41,11 +41,17 @@
 #include <view/view_controls.h>
 
 
+COMMON_TOOLS::COMMON_TOOLS() :
+    TOOL_INTERACTIVE( "common.Control" ),
+    m_frame( nullptr ),
+    m_imperialUnit( EDA_UNITS::INCHES ),
+    m_metricUnit( EDA_UNITS::MILLIMETRES )
+{
+}
+
 void COMMON_TOOLS::Reset( RESET_REASON aReason )
 {
-    m_frame        = getEditFrame<EDA_DRAW_FRAME>();
-    m_metricUnit   = EDA_UNITS::MILLIMETRES;
-    m_imperialUnit = EDA_UNITS::INCHES;
+    m_frame = getEditFrame<EDA_DRAW_FRAME>();
 
     GRID_SETTINGS& settings = m_toolMgr->GetSettings()->m_Window.grid;
 
@@ -61,6 +67,17 @@ void COMMON_TOOLS::Reset( RESET_REASON aReason )
                           ValueFromString( EDA_UNITS::MILLIMETRES, settings.user_grid_y ) );
 
     OnGridChanged();
+}
+
+
+void COMMON_TOOLS::SetLastUnits( EDA_UNITS aUnit )
+{
+    if( IsImperialUnit( aUnit ) )
+        m_imperialUnit = aUnit;
+    else if( IsMetricUnit( aUnit ) )
+        m_metricUnit = aUnit;
+    else
+        wxASSERT_MSG( false, "Invalid unit" );
 }
 
 

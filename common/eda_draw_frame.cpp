@@ -241,7 +241,7 @@ void EDA_DRAW_FRAME::UpdateGridSelectBox()
     m_gridSelectBox->Clear();
     wxArrayString gridsList;
 
-    GRID_MENU::BuildChoiceList( &gridsList, config(), GetUserUnits() != EDA_UNITS::INCHES );
+    GRID_MENU::BuildChoiceList( &gridsList, config(), this );
 
     for( const wxString& grid : gridsList )
         m_gridSelectBox->Append( grid );
@@ -576,11 +576,25 @@ void EDA_DRAW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     aCfg->m_FindReplace.replace_history.clear();
 
     for( size_t i = 0; i < m_findStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
+    {
         aCfg->m_FindReplace.find_history.push_back( m_findStringHistoryList[ i ].ToStdString() );
+    }
 
     for( size_t i = 0; i < m_replaceStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
+    {
         aCfg->m_FindReplace.replace_history.push_back(
                 m_replaceStringHistoryList[ i ].ToStdString() );
+    }
+
+    // Save the units used in this frame
+    if( m_toolManager )
+    {
+        if( COMMON_TOOLS* cmnTool = m_toolManager->GetTool<COMMON_TOOLS>() )
+        {
+            aCfg->m_System.last_imperial_units = static_cast<int>( cmnTool->GetLastImperialUnits() );
+            aCfg->m_System.last_metric_units   = static_cast<int>( cmnTool->GetLastMetricUnits() );
+        }
+    }
 }
 
 
@@ -923,4 +937,50 @@ COLOR_SETTINGS* EDA_DRAW_FRAME::GetColorSettings()
         m_colorSettings = Pgm().GetSettingsManager().GetColorSettings();
 
     return m_colorSettings;
+}
+
+
+void EDA_DRAW_FRAME::setupUnits( APP_SETTINGS_BASE* aCfg )
+{
+    COMMON_TOOLS* cmnTool = m_toolManager->GetTool<COMMON_TOOLS>();
+
+    if( cmnTool )
+    {
+        // Tell the tool what the units used last session
+        cmnTool->SetLastUnits( static_cast<EDA_UNITS>( aCfg->m_System.last_imperial_units ) );
+        cmnTool->SetLastUnits( static_cast<EDA_UNITS>( aCfg->m_System.last_metric_units ) );
+    }
+
+    // Tell the tool what units the frame is currently using
+    switch( static_cast<EDA_UNITS>( aCfg->m_System.units ) )
+    {
+    default:
+    case EDA_UNITS::MILLIMETRES: m_toolManager->RunAction( ACTIONS::millimetersUnits ); break;
+    case EDA_UNITS::INCHES:      m_toolManager->RunAction( ACTIONS::inchesUnits );      break;
+    case EDA_UNITS::MILS:        m_toolManager->RunAction( ACTIONS::milsUnits );        break;
+    }
+}
+
+
+void EDA_DRAW_FRAME::GetUnitPair( EDA_UNITS& aPrimaryUnit, EDA_UNITS& aSecondaryUnits )
+{
+    COMMON_TOOLS* cmnTool = m_toolManager->GetTool<COMMON_TOOLS>();
+
+    aPrimaryUnit    = GetUserUnits();
+    aSecondaryUnits = EDA_UNITS::MILS;
+
+    if( IsImperialUnit( aPrimaryUnit ) )
+    {
+        if( cmnTool )
+            aSecondaryUnits = cmnTool->GetLastMetricUnits();
+        else
+            aSecondaryUnits = EDA_UNITS::MILLIMETRES;
+    }
+    else
+    {
+        if( cmnTool )
+            aSecondaryUnits = cmnTool->GetLastImperialUnits();
+        else
+            aSecondaryUnits = EDA_UNITS::MILS;
+    }
 }

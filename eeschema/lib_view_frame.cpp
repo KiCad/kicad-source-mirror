@@ -195,6 +195,8 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     SyncView();
     GetCanvas()->SetCanFocus( false );
 
+    setupUnits( config() );
+
     // Set the working/draw area size to display a symbol to a reasonable value:
     // A 450mm x 450mm with a origin at the area center looks like a large working area
     double max_size_x = Millimeter2iu( 450 );

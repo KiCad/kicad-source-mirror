@@ -44,7 +44,7 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
     m_gridOriginY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
     wxArrayString grids;
-    GRID_MENU::BuildChoiceList( &grids, m_parent->config(), GetUserUnits() != EDA_UNITS::INCHES );
+    GRID_MENU::BuildChoiceList( &grids, m_parent->config(), m_parent );
     m_currentGridCtrl->Append( grids );
     m_grid1Ctrl->Append( grids );
     m_grid2Ctrl->Append( grids );

@@ -181,6 +181,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Add the exit key handler
     InitExitKey();
+    setupUnits( config() );
 
     wxPoint originCoord = ReturnCoordOriginCorner();
     SetGridOrigin( originCoord );

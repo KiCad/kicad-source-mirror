@@ -249,6 +249,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
     updateTitle();
     InitExitKey();
+    setupUnits( GetSettings() );
 
     // Default shutdown reason until a file is loaded
     KIPLATFORM::APP::SetShutdownBlockReason( this, _( "Footprint changes are unsaved" ) );

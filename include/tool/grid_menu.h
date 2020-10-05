@@ -25,6 +25,7 @@
 #ifndef GRID_MENU_H
 #define GRID_MENU_H
 
+#include <common.h>
 #include <tool/action_menu.h>
 
 class EDA_DRAW_FRAME;
@@ -35,7 +36,10 @@ class GRID_MENU : public ACTION_MENU
 public:
     GRID_MENU( EDA_DRAW_FRAME* aParent );
 
-    static void BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* aCfg, bool mmFirst );
+    static void BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* aCfg,
+                                 EDA_DRAW_FRAME* aParent );
+
+    static wxString GridMenuUnits( EDA_UNITS aUnits, double aValue );
 
 private:
     ACTION_MENU* create() const override

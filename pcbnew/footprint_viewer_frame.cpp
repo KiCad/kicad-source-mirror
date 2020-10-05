@@ -267,6 +267,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     updateView();
     InitExitKey();
+    setupUnits( config() );
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
     {
