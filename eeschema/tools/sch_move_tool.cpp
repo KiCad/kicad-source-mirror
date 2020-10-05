@@ -723,7 +723,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 
         int style = iref->GetParentLabel()->GetLabelSpinStyle();
 
-        if( iref->GetParent()->IsSelected() )
+        if( iref->GetParentLabel()->IsSelected() )
             break;
 
         if( ( style == LABEL_SPIN_STYLE::RIGHT ) || ( style == LABEL_SPIN_STYLE::LEFT ) )
