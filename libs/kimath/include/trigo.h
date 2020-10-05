@@ -156,10 +156,10 @@ inline double DistanceLinePoint( const wxPoint &linePointA,
     // the division (EuclideanNorm gives a double so from int it would
     // be promoted); that means that the whole expression were
     // vulnerable to overflow during int multiplications
-    return fabs( ( double(linePointB.x - linePointA.x) *
-                   double(linePointA.y - referencePoint.y) -
-                   double(linePointA.x - referencePoint.x ) *
-                   double(linePointB.y - linePointA.y) )
+    return fabs( ( static_cast<double>( linePointB.x - linePointA.x ) *
+                   static_cast<double>( linePointA.y - referencePoint.y ) -
+                   static_cast<double>( linePointA.x  - referencePoint.x ) *
+                   static_cast<double>( linePointB.y - linePointA.y) )
             / EuclideanNorm( linePointB - linePointA ) );
 }
 

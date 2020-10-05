@@ -546,10 +546,10 @@ bool EDA_RECT::IntersectsCircle( const wxPoint& aCenter, const int aRadius ) con
 
     wxPoint closest = ClosestPointTo( aCenter );
 
-    double dx = aCenter.x - closest.x;
-    double dy = aCenter.y - closest.y;
+    double dx = static_cast<double>( aCenter.x ) - closest.x;
+    double dy = static_cast<double>( aCenter.y ) - closest.y;
 
-    double r = (double) aRadius;
+    double r = static_cast<double>( aRadius );
 
     return ( dx * dx + dy * dy ) <= ( r * r );
 }

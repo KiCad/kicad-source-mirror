@@ -40,23 +40,23 @@ static bool VDegenerate( glm::vec3* pts )
 
     double dx, dy, dz;
 
-    dx = pts[1].x - pts[0].x;
-    dy = pts[1].y - pts[0].y;
-    dz = pts[1].z - pts[0].z;
+    dx = double{ pts[1].x } - pts[0].x;
+    dy = double{ pts[1].y } - pts[0].y;
+    dz = double{ pts[1].z } - pts[0].z;
 
     if( ( dx*dx + dy*dy + dz*dz ) < LOWER_LIMIT )
         return true;
 
-    dx = pts[2].x - pts[0].x;
-    dy = pts[2].y - pts[0].y;
-    dz = pts[2].z - pts[0].z;
+    dx = double{ pts[2].x } - pts[0].x;
+    dy = double{ pts[2].y } - pts[0].y;
+    dz = double{ pts[2].z } - pts[0].z;
 
     if( ( dx*dx + dy*dy + dz*dz ) < LOWER_LIMIT )
         return true;
 
-    dx = pts[2].x - pts[1].x;
-    dy = pts[2].y - pts[1].y;
-    dz = pts[2].z - pts[1].z;
+    dx = double{ pts[2].x } - pts[1].x;
+    dy = double{ pts[2].y } - pts[1].y;
+    dz = double{ pts[2].z } - pts[1].z;
 
     if( ( dx*dx + dy*dy + dz*dz ) < LOWER_LIMIT )
         return true;
@@ -118,28 +118,28 @@ static float VCalcCosAngle( const WRLVEC3F& p1, const WRLVEC3F& p2, const WRLVEC
     float p13 = dx*dx + dy*dy + dz*dz;
     l13 = sqrtf( p13 );
 
-    float dn = 2.0 * l12 * l13;
+    float dn = 2.0f * l12 * l13;
 
     // place a limit to prevent calculations from blowing up
     if( dn < LOWER_LIMIT )
     {
         if( (p12 + p13 - p23) < FLT_EPSILON )
-            return -1.0;
+            return -1.0f;
 
         if( (p12 + p13 - p23) > FLT_EPSILON )
-            return 1.0;
+            return 1.0f;
 
-        return 0.0;
+        return 0.0f;
     }
 
     float cosAngle = (p12 + p13 - p23) / dn;
 
     // check the domain; errors in the cosAngle calculation
     // can result in domain errors
-    if( cosAngle > 1.0 )
-        cosAngle = 1.0;
-    else if( cosAngle < -1.0 )
-        cosAngle = -1.0;
+    if( cosAngle > 1.0f )
+        cosAngle = 1.0f;
+    else if( cosAngle < -1.0f )
+        cosAngle = -1.0f;
 
     // note: we are guaranteed that acosf() is never negative
     return cosAngle;
@@ -653,7 +653,7 @@ void FACET::CollectVertices( std::vector< std::list< FACET* > >& aFacetList )
 
     // note: in principle this should never be invoked
     if( (maxIdx + 1) >= (int)aFacetList.size() )
-        aFacetList.resize( maxIdx + 1 );
+        aFacetList.resize( static_cast<std::size_t>( maxIdx ) + 1 );
 
     std::vector< int >::iterator sI = indices.begin();
     std::vector< int >::iterator eI = indices.end();
@@ -729,8 +729,8 @@ SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrd
 
     while( sF != eF )
     {
-        tV = (*sF)->CalcFaceNormal();
-        tmi = (*sF)->GetMaxIndex();
+        tV = ( *sF )->CalcFaceNormal();
+        tmi = ( *sF )->GetMaxIndex();
 
         if( tmi > maxIdx )
             maxIdx = tmi;
@@ -753,8 +753,8 @@ SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrd
 
     while( sF != eF )
     {
-        (*sF)->Renormalize( tV );
-        (*sF)->CollectVertices( flist );
+        ( *sF )->Renormalize( tV );
+        ( *sF )->CollectVertices( flist );
         ++sF;
     }
 
@@ -768,7 +768,7 @@ SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrd
 
         while( sF != eF )
         {
-            (*sF)->CalcVertexNormal( i, flist[i], aCreaseLimit );
+            ( *sF )->CalcVertexNormal( static_cast<int>( i ), flist[i], aCreaseLimit );
             ++sF;
         }
     }
@@ -783,7 +783,7 @@ SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrd
 
     while( sF != eF )
     {
-        (*sF)->GetData( vertices, normals, colors, aVertexOrder );
+        ( *sF )->GetData( vertices, normals, colors, aVertexOrder );
         ++sF;
     }
 

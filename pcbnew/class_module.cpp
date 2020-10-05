@@ -558,8 +558,8 @@ void MODULE::CalculateBoundingBox()
 
 double MODULE::GetArea( int aPadding ) const
 {
-    double w = std::abs( m_BoundaryBox.GetWidth() ) + aPadding;
-    double h = std::abs( m_BoundaryBox.GetHeight() ) + aPadding;
+    double w = std::abs( static_cast<double>( m_BoundaryBox.GetWidth() ) ) + aPadding;
+    double h = std::abs( static_cast<double>( m_BoundaryBox.GetHeight() ) ) + aPadding;
     return w * h;
 }
 

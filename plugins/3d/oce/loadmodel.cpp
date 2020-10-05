@@ -231,10 +231,10 @@ struct DATA
                 return defaultColor;
 
             IFSG_APPEARANCE app( true );
-            app.SetShininess( 0.05 );
-            app.SetSpecular( 0.04, 0.04, 0.04 );
-            app.SetAmbient( 0.1, 0.1, 0.1 );
-            app.SetDiffuse( 0.6,0.6, 0.6 );
+            app.SetShininess( 0.05f );
+            app.SetSpecular( 0.04f, 0.04f, 0.04f );
+            app.SetAmbient( 0.1f, 0.1f, 0.1f );
+            app.SetDiffuse( 0.6f, 0.6f, 0.6f );
 
             defaultColor = app.GetRawPtr();
             return defaultColor;
@@ -248,9 +248,9 @@ struct DATA
             return item->second;
 
         IFSG_APPEARANCE app( true );
-        app.SetShininess( 0.1 );
-        app.SetSpecular( 0.12, 0.12, 0.12 );
-        app.SetAmbient( 0.1, 0.1, 0.1 );
+        app.SetShininess( 0.1f );
+        app.SetSpecular( 0.12f, 0.12f, 0.12f );
+        app.SetAmbient( 0.1f, 0.1f, 0.1f );
         app.SetDiffuse( colorObj->Red(), colorObj->Green(), colorObj->Blue() );
         colors.insert( std::pair< Standard_Real, SGNODE* >( id, app.GetRawPtr() ) );
 

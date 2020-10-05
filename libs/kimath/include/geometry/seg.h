@@ -228,8 +228,8 @@ public:
 
     void CanonicalCoefs( ecoord& qA, ecoord& qB, ecoord& qC ) const
     {
-        qA = A.y - B.y;
-        qB = B.x - A.x;
+        qA = ecoord{ A.y } - B.y;
+        qB = ecoord{ B.x } - A.x;
         qC = -qA * A.x - qB * A.y;
     }
 
@@ -369,16 +369,16 @@ inline VECTOR2I SEG::LineProject( const VECTOR2I& aP ) const
 
     ecoord t = d.Dot( aP - A );
 
-    int xp = rescale( t, (ecoord)d.x, l_squared );
-    int yp = rescale( t, (ecoord)d.y, l_squared );
+    int xp = rescale( t, ecoord{ d.x }, l_squared );
+    int yp = rescale( t, ecoord{ d.y }, l_squared );
 
     return A + VECTOR2I( xp, yp );
 }
 
 inline int SEG::LineDistance( const VECTOR2I& aP, bool aDetermineSide ) const
 {
-    ecoord p = A.y - B.y;
-    ecoord q = B.x - A.x;
+    ecoord p = ecoord{ A.y } - B.y;
+    ecoord q = ecoord{ B.x } - A.x;
     ecoord r = -p * A.x - q * A.y;
 
     ecoord dist = ( p * aP.x + q * aP.y + r ) / sqrt( p * p + q * q );

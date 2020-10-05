@@ -1428,8 +1428,8 @@ void C3D_RENDER_OGL_LEGACY::generate_new_3DGrid( GRID3D_TYPE aGridType )
 
     // Color of grid lines every 5 lines
     const SFVEC3F gridColor_marker = m_boardAdapter.GetColor( LIGHTGRAY );
-    const double scale = m_boardAdapter.BiuTo3Dunits();
-    const double transparency = 0.35;
+    const double  scale            = m_boardAdapter.BiuTo3Dunits();
+    const GLfloat transparency     = 0.35f;
 
     double griSizeMM = 0.0;
 

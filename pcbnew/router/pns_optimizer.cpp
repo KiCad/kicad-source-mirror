@@ -353,8 +353,10 @@ static bool pointInside2( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aP )
                     result = 1 - result;
                 else
                 {
-                    double d = (double) (ip.x -aP.x) * (ipNext.y -aP.y) -
-                               (double) (ipNext.x -aP.x) * (ip.y -aP.y);
+                    double d = static_cast<double>( ip.x - aP.x ) * 
+                               static_cast<double>( ipNext.y - aP.y ) -
+                               static_cast<double>( ipNext.x - aP.x ) * 
+                               static_cast<double>( ip.y - aP.y );
 
                     if( !d )
                         return -1;
@@ -367,8 +369,8 @@ static bool pointInside2( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aP )
             {
                 if( ipNext.x >aP.x )
                 {
-                    double d = (double) (ip.x -aP.x) * (ipNext.y -aP.y) -
-                               (double) (ipNext.x -aP.x) * (ip.y -aP.y);
+                    double d = ((double)ip.x -aP.x) * ((double)ipNext.y -aP.y) -
+                               ((double)ipNext.x -aP.x) * ((double)ip.y -aP.y);
 
                     if( !d )
                         return -1;
@@ -635,7 +637,7 @@ bool OPTIMIZER::mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, int step
     for( int n = 0; n < n_segs - step; n++ )
     {
         // Do not attempt to merge false segments that are part of an arc
-        if( aCurrentPath.isArc( n ) || aCurrentPath.isArc( n + step ) )
+        if( aCurrentPath.isArc( n ) || aCurrentPath.isArc( static_cast<std::size_t>( n ) + step ) )
             continue;
 
         const SEG s1    = aCurrentPath.CSegment( n );
@@ -1089,7 +1091,7 @@ int findCoupledVertices( const VECTOR2I& aVertex, const SEG& aOrigSeg, const SHA
 
         if( s.ApproxParallel ( aOrigSeg ) )
         {
-            int64_t dist = ( projOverCoupled - aVertex ).EuclideanNorm() - aPair->Width();
+            int64_t dist = int64_t{(( projOverCoupled - aVertex ).EuclideanNorm())} - aPair->Width();
 
             if( aPair->GapConstraint().Matches( dist ) )
             {

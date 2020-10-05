@@ -585,10 +585,10 @@ public:
         RELEASER& operator=( RELEASER& aOther ) { return *this; }
 
         // private copy constructor so it's illegal
-        RELEASER( const RELEASER& aOther ) {}
+        RELEASER( const RELEASER& aOther ) : plugin( nullptr ) {}
 
     public:
-        RELEASER( PLUGIN* aPlugin = NULL ) :
+        RELEASER( PLUGIN* aPlugin = nullptr ) :
             plugin( aPlugin )
         {
         }
@@ -602,7 +602,7 @@ public:
         void release()
         {
             IO_MGR::PluginRelease( plugin );
-            plugin = NULL;
+            plugin = nullptr;
         }
 
         void set( PLUGIN* aPlugin )

@@ -132,8 +132,8 @@ private:
 
     bool ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I& aC ) const
     {
-        return (ecoord) ( aC.y - aA.y ) * ( aB.x - aA.x ) >
-               (ecoord) ( aB.y - aA.y ) * ( aC.x - aA.x );
+        return ( ecoord{ aC.y } - aA.y ) * ( ecoord{ aB.x } - aA.x ) >
+               ( ecoord{ aB.y } - aA.y ) * ( ecoord{ aC.x } - aA.x );
     }
 
     void update_bbox();

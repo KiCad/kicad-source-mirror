@@ -35,10 +35,10 @@
 inline void normalise2PI( float& aAngle )
 {
     while( aAngle > 0.0 )
-        aAngle -= M_PI*2;
+        aAngle -= static_cast<float>( M_PI * 2.0f );
 
     while( aAngle < 0.0 )
-        aAngle += M_PI*2;
+        aAngle += static_cast<float>( M_PI * 2.0f );
 }
 
 
@@ -112,14 +112,13 @@ void CCAMERA::Reset_T1()
     // one to where we currently are. That ensures that we rotate
     // the board around the smallest distance getting there.
     if( m_rotate_aux_t0.x > M_PI )
-        m_rotate_aux_t1.x = 2*M_PI;
+        m_rotate_aux_t1.x = static_cast<float>( 2.0f * M_PI );
 
     if( m_rotate_aux_t0.y > M_PI )
-        m_rotate_aux_t1.y = 2*M_PI;
+        m_rotate_aux_t1.y = static_cast<float>( 2.0f * M_PI );
 
     if( m_rotate_aux_t0.z > M_PI )
-        m_rotate_aux_t1.z = 2*M_PI;
-
+        m_rotate_aux_t1.z = static_cast<float>( 2.0f * M_PI );
 }
 
 

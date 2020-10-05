@@ -190,7 +190,7 @@ bool CRectPlacement::AddAtEmptySpotAutoGrow( TRect* pRect, int maxW, int maxH )
 {
     double growing_factor = 1.2;    // Must be > 1.0, and event > 1.1 for fast optimization
 
-    #define GROW(x) ((x * growing_factor) + 1)
+    #define GROW(x) static_cast<int>( (x * growing_factor) + 1 )
 
     if( pRect->w <= 0 )
         return true;

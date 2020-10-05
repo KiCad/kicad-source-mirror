@@ -293,13 +293,13 @@ public:
 
     GAL_SET& set( GAL_LAYER_ID aPos, bool aVal = true )
     {
-        GAL_BASE_SET::set( static_cast<int>( aPos ) - start, aVal );
+        GAL_BASE_SET::set( static_cast<std::size_t>( aPos ) - start, aVal );
         return *this;
     }
 
     bool Contains( GAL_LAYER_ID aPos )
     {
-        return test( static_cast<int>( aPos ) - start );
+        return test( static_cast<std::size_t>( aPos ) - start );
     }
 
     std::vector<GAL_LAYER_ID> Seq() const;

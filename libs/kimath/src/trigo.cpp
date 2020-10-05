@@ -66,8 +66,8 @@ bool SegmentIntersectsSegment( const wxPoint &a_p1_l1, const wxPoint &a_p2_l1,
     //We are forced to use 64bit ints because the internal units can overflow 32bit ints when
     // multiplied with each other, the alternative would be to scale the units down (i.e. divide
     // by a fixed number).
-    long long dX_a, dY_a, dX_b, dY_b, dX_ab, dY_ab;
-    long long num_a, num_b, den;
+    int64_t dX_a, dY_a, dX_b, dY_b, dX_ab, dY_ab;
+    int64_t num_a, num_b, den;
 
     //Test for intersection within the bounds of both line segments using line equations of the
     // form:
@@ -75,12 +75,12 @@ bool SegmentIntersectsSegment( const wxPoint &a_p1_l1, const wxPoint &a_p2_l1,
     // y_k(u_k) = u_k * dY_k + y_k(0)
     // with  0 <= u_k <= 1 and k = [ a, b ]
 
-    dX_a  = a_p2_l1.x - a_p1_l1.x;
-    dY_a  = a_p2_l1.y - a_p1_l1.y;
-    dX_b  = a_p2_l2.x - a_p1_l2.x;
-    dY_b  = a_p2_l2.y - a_p1_l2.y;
-    dX_ab = a_p1_l2.x - a_p1_l1.x;
-    dY_ab = a_p1_l2.y - a_p1_l1.y;
+    dX_a  = int64_t{ a_p2_l1.x } - a_p1_l1.x;
+    dY_a  = int64_t{ a_p2_l1.y } - a_p1_l1.y;
+    dX_b  = int64_t{ a_p2_l2.x } - a_p1_l2.x;
+    dY_b  = int64_t{ a_p2_l2.y } - a_p1_l2.y;
+    dX_ab = int64_t{ a_p1_l2.x } - a_p1_l1.x;
+    dY_ab = int64_t{ a_p1_l2.y } - a_p1_l1.y;
 
     den   = dY_a  * dX_b - dY_b * dX_a ;
 

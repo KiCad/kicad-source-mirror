@@ -130,7 +130,7 @@ void PCB_PARSER::pushValueIntoMap( int aIndex, int aValue )
     // ensure there is room in m_netCodes for that, and add room if needed.
 
     if( (int)m_netCodes.size() <= aIndex )
-        m_netCodes.resize( aIndex+1 );
+        m_netCodes.resize( static_cast<std::size_t>( aIndex ) + 1 );
 
     m_netCodes[aIndex] = aValue;
 }
