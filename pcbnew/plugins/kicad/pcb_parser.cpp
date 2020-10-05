@@ -46,11 +46,11 @@
 #include <class_pad.h>
 #include <class_track.h>
 #include <class_zone.h>
-#include <kicad_plugin.h>
+#include <plugins/kicad/kicad_plugin.h>
 #include <pcb_plot_params_parser.h>
 #include <pcb_plot_params.h>
 #include <zones.h>
-#include <pcb_parser.h>
+#include <plugins/kicad/pcb_parser.h>
 #include <convert_basic_shapes_to_polygon.h>    // for RECT_CHAMFER_POSITIONS definition
 #include <template_fieldnames.h>
 

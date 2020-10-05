@@ -32,9 +32,9 @@
 #include <fp_text.h>
 #include <common.h>
 #include <netinfo.h>
-#include <pcb_parser.h>
+#include <plugins/kicad/pcb_parser.h>
 
-#include <kicad_plugin.h>
+#include <plugins/kicad/kicad_plugin.h>
 #include <kicad_clipboard.h>
 
 CLIPBOARD_IO::CLIPBOARD_IO():

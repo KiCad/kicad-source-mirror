@@ -40,7 +40,7 @@
 #include <sch_iref.h>
 #include <sch_sheet.h>
 #include <schematic.h>
-#include <sch_sexpr_plugin.h>
+#include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <sch_screen.h>
 #include <class_libentry.h>
 #include <class_library.h>
@@ -55,7 +55,7 @@
 #include <eeschema_id.h>       // for MAX_UNIT_COUNT_PER_PACKAGE definition
 #include <sch_file_versions.h>
 #include <schematic_lexer.h>
-#include <sch_sexpr_parser.h>
+#include <sch_plugins/kicad/sch_sexpr_parser.h>
 #include <symbol_lib_table.h>  // for PropPowerSymsOnly definintion.
 #include <ee_selection.h>
 

@@ -39,7 +39,7 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <sch_edit_frame.h>
-#include <sch_sexpr_plugin.h>
+#include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <sch_line.h>
 #include <sch_painter.h>
 #include <sch_sheet.h>

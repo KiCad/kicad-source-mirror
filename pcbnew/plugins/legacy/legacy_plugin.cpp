@@ -62,7 +62,7 @@
 #include <cmath>
 #include <cstdio>
 #include <cstring>
-#include <legacy_plugin.h>   // implement this here
+#include <plugins/legacy/legacy_plugin.h>   // implement this here
 #include <wx/ffile.h>
 #include <wx/string.h>
 

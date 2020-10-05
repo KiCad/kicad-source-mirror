@@ -212,7 +212,7 @@ set( EESCHEMA_SRCS
     sch_io_mgr.cpp
     sch_item.cpp
     sch_junction.cpp
-    sch_legacy_plugin.cpp
+    sch_plugins/legacy/sch_legacy_plugin.cpp
     sch_line.cpp
     sch_marker.cpp
     sch_no_connect.cpp
@@ -220,8 +220,8 @@ set( EESCHEMA_SRCS
     sch_plugin.cpp
     sch_preview_panel.cpp
     sch_screen.cpp
-    sch_sexpr_parser.cpp
-    sch_sexpr_plugin.cpp
+    sch_plugins/kicad/sch_sexpr_parser.cpp
+    sch_plugins/kicad/sch_sexpr_plugin.cpp
     sch_sheet.cpp
     sch_sheet_path.cpp
     sch_sheet_pin.cpp

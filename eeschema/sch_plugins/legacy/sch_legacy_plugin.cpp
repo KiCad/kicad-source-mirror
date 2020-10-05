@@ -50,7 +50,7 @@
 #include <sch_sheet.h>
 #include <sch_bitmap.h>
 #include <bus_alias.h>
-#include <sch_legacy_plugin.h>
+#include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <template_fieldnames.h>
 #include <sch_screen.h>
 #include <schematic.h>

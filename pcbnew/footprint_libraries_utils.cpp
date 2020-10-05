@@ -39,8 +39,8 @@
 #include <board_commit.h>
 #include <footprint_edit_frame.h>
 #include <wildcards_and_files_ext.h>
-#include <kicad_plugin.h>
-#include <legacy_plugin.h>
+#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/legacy/legacy_plugin.h>
 #include <env_paths.h>
 #include <settings/settings_manager.h>
 #include <footprint_editor_settings.h>

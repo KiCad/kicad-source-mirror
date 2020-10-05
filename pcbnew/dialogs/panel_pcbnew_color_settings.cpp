@@ -33,7 +33,7 @@
 #include <ws_proxy_view_item.h>
 #include <pcb_painter.h>
 #include <class_track.h>
-#include <kicad_plugin.h>
+#include <plugins/kicad/kicad_plugin.h>
 
 
 std::string g_previewBoard =

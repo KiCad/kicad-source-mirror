@@ -32,7 +32,7 @@
 #include <kiway.h>
 #include <profile.h>
 #include <sch_io_mgr.h>
-#include <sch_legacy_plugin.h>
+#include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <symbol_lib_table.h>
 #include <list>
 

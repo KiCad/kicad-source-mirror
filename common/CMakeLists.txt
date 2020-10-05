@@ -527,9 +527,9 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/io_mgr.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/kicad_clipboard.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/kicad_netlist_reader.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/kicad_plugin.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/plugins/kicad/kicad_plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/legacy_netlist_reader.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/legacy_plugin.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/plugins/legacy/legacy_plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/netlist_reader.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pad_custom_shape_functions.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_display_options.cpp
@@ -537,7 +537,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/pcb_netlist.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_origin_transforms.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_painter.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_parser.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/plugins/kicad/pcb_parser.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_plot_params.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_screen.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_view.cpp

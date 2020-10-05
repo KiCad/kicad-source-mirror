@@ -24,8 +24,8 @@
 #include <pcbnew_utils/board_file_utils.h>
 
 // For PCB parsing
-#include <kicad_plugin.h>
-#include <pcb_parser.h>
+#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_parser.h>
 #include <richio.h>
 
 #include <class_board.h>

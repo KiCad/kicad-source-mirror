@@ -38,8 +38,8 @@
 #include <lib_manager.h>
 #include <symbol_tree_pane.h>
 #include <widgets/lib_tree.h>
-#include <sch_legacy_plugin.h>
-#include <sch_sexpr_plugin.h>
+#include <sch_plugins/legacy/sch_legacy_plugin.h>
+#include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <dialogs/dialog_lib_new_component.h>
 #include <dialog_helpers.h>
 #include <wx/clipbrd.h>

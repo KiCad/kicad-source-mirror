@@ -43,7 +43,7 @@
 #include <richio.h>
 #include <sch_component.h>
 #include <sch_edit_frame.h>
-#include <sch_legacy_plugin.h>
+#include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <schematic.h>

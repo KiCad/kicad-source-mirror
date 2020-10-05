@@ -50,7 +50,7 @@
 #include <memory>
 #include <compoundfilereader.h>
 #include <plugins/altium/altium_parser.h>
-#include <sch_legacy_plugin.h>
+#include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/textfile.h>
 

@@ -38,8 +38,8 @@
 #include <fp_shape.h>
 #include <confirm.h>
 #include <zones.h>
-#include <kicad_plugin.h>
-#include <pcb_parser.h>
+#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_parser.h>
 #include <pcbnew_settings.h>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <convert_basic_shapes_to_polygon.h>    // for enum RECT_CHAMFER_POSITIONS definition

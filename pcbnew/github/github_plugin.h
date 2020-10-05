@@ -25,7 +25,7 @@
 #ifndef GITHUB_PLUGIN_H_
 #define GITHUB_PLUGIN_H_
 
-#include <kicad_plugin.h>
+#include <plugins/kicad/kicad_plugin.h>
 
 struct GH_CACHE;
 

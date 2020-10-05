@@ -30,7 +30,7 @@
 #include <tool/tool_manager.h>
 #include <wx/clipbrd.h>
 #include <sch_edit_frame.h>
-#include <sch_legacy_plugin.h>
+#include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_view.h>

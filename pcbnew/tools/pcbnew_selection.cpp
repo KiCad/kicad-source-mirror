@@ -49,7 +49,7 @@ using namespace std::placeholders;
 #include "pcb_bright_box.h"
 #include "pcb_actions.h"
 
-#include "kicad_plugin.h"
+#include "plugins/kicad/kicad_plugin.h"
 
 
 

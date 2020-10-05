@@ -50,7 +50,7 @@ using namespace std::placeholders;
 #include "pns_kicad_iface.h"
 
 #ifdef DEBUG
-#include <kicad_plugin.h>
+#include <plugins/kicad/kicad_plugin.h>
 #endif
 
 using namespace KIGFX;

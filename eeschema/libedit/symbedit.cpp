@@ -33,7 +33,7 @@
 #include <lib_edit_frame.h>
 #include <class_libentry.h>
 #include <wildcards_and_files_ext.h>
-#include <sch_legacy_plugin.h>
+#include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <properties.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>

@@ -51,7 +51,7 @@
 #include <project/net_settings.h>
 #include <sch_edit_frame.h>
 #include <sch_junction.h>
-#include <sch_legacy_plugin.h>
+#include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <sch_marker.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>

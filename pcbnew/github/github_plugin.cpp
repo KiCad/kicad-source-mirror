@@ -81,7 +81,7 @@ Vary: Accept-Encoding
 
 #include <io_mgr.h>
 #include <richio.h>
-#include <pcb_parser.h>
+#include <plugins/kicad/pcb_parser.h>
 #include <class_board.h>
 #include <github_plugin.h>
 #include <class_module.h>

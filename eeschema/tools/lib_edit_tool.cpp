@@ -38,7 +38,7 @@
 #include <dialogs/dialog_edit_one_field.h>
 #include <dialogs/dialog_edit_component_in_lib.h>
 #include <dialogs/dialog_lib_edit_pin_table.h>
-#include <sch_sexpr_plugin.h>
+#include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <lib_text.h>
 #include "lib_edit_tool.h"
 #include <math/util.h>      // for KiROUND

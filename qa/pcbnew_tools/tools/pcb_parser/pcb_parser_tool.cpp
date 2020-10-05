@@ -32,8 +32,8 @@
 #include <wx/cmdline.h>
 
 #include <class_board_item.h>
-#include <kicad_plugin.h>
-#include <pcb_parser.h>
+#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_parser.h>
 #include <richio.h>
 
 #include <wx/cmdline.h>

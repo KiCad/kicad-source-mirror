@@ -43,7 +43,7 @@
 
 #include <properties.h>
 #include <class_libentry.h>
-#include <sch_legacy_plugin.h>
+#include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <class_draw_panel_gal.h>
 
 

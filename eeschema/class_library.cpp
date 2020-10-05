@@ -43,7 +43,7 @@
 
 #include <general.h>
 #include <class_library.h>
-#include <sch_legacy_plugin.h>
+#include <sch_plugins/legacy/sch_legacy_plugin.h>
 
 #include <wx/progdlg.h>
 #include <wx/tokenzr.h>
