@@ -355,7 +355,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         m_toolMgr->ProcessEvent( *newEvt );
                         continueSelect = false;
                     }
-                    else if( collector[0]->Type() == SCH_IREF_T )
+                    else if( collector[0]->Type() == SCH_IREF_T
+                            && !m_additive && !m_subtractive && !m_exclusive_or )
                     {
                         wxMenu menu;
 
@@ -363,6 +364,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                         intptr_t sel = m_frame->GetPopupMenuSelectionFromUser( menu );
                         m_toolMgr->RunAction( EE_ACTIONS::hypertextCommand, true, (void*) sel );
+                        continueSelect = false;
                     }
                 }
             }
@@ -371,7 +373,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 // If we didn't click on an anchor, we perform a normal select, pass in the
                 // items we previously collected
-                SelectPoint( collector, nullptr, nullptr, m_additive, m_subtractive,
+                selectPoint( collector, nullptr, nullptr, m_additive, m_subtractive,
                              m_exclusive_or );
             }
         }
@@ -513,7 +515,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     {
                         displayPencil = true;
                     }
-                    else if( collector[0]->Type() == SCH_IREF_T )
+                    else if( collector[0]->Type() == SCH_IREF_T
+                            && !m_additive && !m_subtractive && !m_exclusive_or )
                     {
                         rolloverItem = collector[0]->m_Uuid;
                     }
@@ -631,18 +634,20 @@ void EE_SELECTION_TOOL::narrowSelection( EE_COLLECTOR& collector, const VECTOR2I
 }
 
 
-bool EE_SELECTION_TOOL::SelectPoint( EE_COLLECTOR& aCollector, EDA_ITEM** aItem,
+bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, EDA_ITEM** aItem,
                                      bool* aSelectionCancelledFlag, bool aAdd, bool aSubtract,
                                      bool aExclusiveOr )
 {
     m_selection.ClearReferencePoint();
 
-    // We have to allow SCH_IREFs in Selectable() for hypertext rollovers and linking to work,
-    // but at the end of the day we don't actually want them to be selectable.
-    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+    // Unmodified clicking of SCH_IREFs results in hypertext links rather than selection.
+    if( !aAdd && !aSubtract && !aExclusiveOr )
     {
-        if( aCollector[i]->Type() == SCH_IREF_T )
-            aCollector.Remove( i );
+        for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+        {
+            if( aCollector[i]->Type() == SCH_IREF_T )
+                aCollector.Remove( i );
+        }
     }
 
     // If still more than one item we're going to have to ask the user.
@@ -704,8 +709,9 @@ bool EE_SELECTION_TOOL::SelectPoint( EE_COLLECTOR& aCollector, EDA_ITEM** aItem,
 
 
 bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFilterList,
-        EDA_ITEM** aItem, bool* aSelectionCancelledFlag, bool aCheckLocked, bool aAdd,
-        bool aSubtract, bool aExclusiveOr )
+                                     EDA_ITEM** aItem, bool* aSelectionCancelledFlag,
+                                     bool aCheckLocked, bool aAdd, bool aSubtract,
+                                     bool aExclusiveOr )
 {
     EE_COLLECTOR collector;
 
@@ -714,7 +720,7 @@ bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFil
 
     narrowSelection( collector, aWhere, aCheckLocked );
 
-    return SelectPoint( collector, aItem, aSelectionCancelledFlag, aAdd, aSubtract, aExclusiveOr );
+    return selectPoint( collector, aItem, aSelectionCancelledFlag, aAdd, aSubtract, aExclusiveOr );
 }
 
 
@@ -1032,8 +1038,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
             {
                 EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( pair.first );
 
-                if( item && Selectable( item ) && item->Type() != SCH_IREF_T
-                        && item->HitTest( selectionRect, windowSelection ) )
+                if( item && Selectable( item ) && item->HitTest( selectionRect, windowSelection ) )
                 {
                     if( m_subtractive || ( m_exclusive_or && item->IsSelected() ) )
                     {

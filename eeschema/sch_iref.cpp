@@ -24,14 +24,12 @@
 
 #include <sch_text.h>
 #include <sch_iref.h>
-#include <sch_sheet.h>
 #include <schematic.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_editor_control.h>
 #include <tools/sch_navigate_tool.h>
 
-SCH_IREF::SCH_IREF( const wxPoint& pos, const wxString& text, SCH_GLOBALLABEL* aParent,
-                    KICAD_T aType ) :
+SCH_IREF::SCH_IREF( const wxPoint& pos, const wxString& text, SCH_GLOBALLABEL* aParent ) :
         SCH_TEXT( pos, text, SCH_IREF_T )
 {
     m_Layer  = LAYER_GLOBLABEL;

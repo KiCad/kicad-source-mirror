@@ -92,9 +92,11 @@ public:
      * before calling the primary SelectPoint method.
      *
      * @param aWhere is the location where the item(s) should be collected
-     * @param aItem is set to the newly selected item if only one was selected, otherwise is unchanged.
+     * @param aItem is set to the newly selected item if only one was selected, otherwise is
+     *              unchanged.
      * @param aSelectionCancelledFlag allows the function to inform its caller that a selection
-     * was cancelled (for instance, by clicking outside of the disambiguation menu).
+     *                                was cancelled (for instance, by clicking outside of the
+     *                                disambiguation menu).
      * @param aCheckLocked indicates if locked items should be excluded.
      * @param aAdd indicates if found item(s) should be added to the selection
      * @param aSubtract indicates if found item(s) should be subtracted from the selection
@@ -104,23 +106,6 @@ public:
                       EDA_ITEM** aItem = nullptr, bool* aSelectionCancelledFlag = nullptr,
                       bool aCheckLocked = false, bool aAdd = false, bool aSubtract = false,
                       bool aExclusiveOr = false );
-
-    /**
-     * Function SelectPoint()
-     * This is the primary SelectPoint method that will prompt the user with a menu to disambiguate multiple selections
-     * and then finish by adding, subtracting or toggling the item(s) to the actual selection group.
-     *
-     * @param aCollector is an EE_COLLECTOR that already has collected items
-     * @param aItem is set to the newly selected item if only one was selected, otherwise is unchanged.
-     * @param aSelectionCancelledFlag allows the function to inform its caller that a selection
-     * was cancelled (for instance, by clicking outside of the disambiguation menu).
-     * @param aAdd indicates if found item(s) should be added to the selection
-     * @param aSubtract indicates if found item(s) should be subtracted from the selection
-     * @param aExclusiveOr indicates if found item(s) should be toggle in the selection
-     */
-    bool SelectPoint( EE_COLLECTOR& aCollector, EDA_ITEM** aItem = nullptr,
-                      bool* aSelectionCancelledFlag = nullptr, bool aAdd = false,
-                      bool aSubtract = false, bool aExclusiveOr = false );
 
     int AddItemToSel( const TOOL_EVENT& aEvent );
     void AddItemToSel( EDA_ITEM* aItem, bool aQuietMode = false );
@@ -205,6 +190,26 @@ private:
      * @param aCheckLocked
      */
     void narrowSelection( EE_COLLECTOR& collector, const VECTOR2I& aWhere, bool aCheckLocked );
+
+    /**
+     * Function SelectPoint()
+     * This is the primary SelectPoint method that will prompt the user with a menu to disambiguate
+     * multiple selections and then finish by adding, subtracting or toggling the item(s) to the
+     * actual selection group.
+     *
+     * @param aCollector is an EE_COLLECTOR that already has collected items
+     * @param aItem is set to the newly selected item if only one was selected, otherwise is
+     *              unchanged.
+     * @param aSelectionCancelledFlag allows the function to inform its caller that a selection
+     *                                was cancelled (for instance, by clicking outside of the
+     *                                disambiguation menu).
+     * @param aAdd indicates if found item(s) should be added to the selection
+     * @param aSubtract indicates if found item(s) should be subtracted from the selection
+     * @param aExclusiveOr indicates if found item(s) should be toggle in the selection
+     */
+    bool selectPoint( EE_COLLECTOR& aCollector, EDA_ITEM** aItem = nullptr,
+                      bool* aSelectionCancelledFlag = nullptr, bool aAdd = false,
+                      bool aSubtract = false, bool aExclusiveOr = false );
 
     /**
      * Function selectMultiple()

@@ -39,7 +39,7 @@ class SCH_IREF : public SCH_TEXT
 {
 public:
     SCH_IREF( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString,
-              SCH_GLOBALLABEL* aParent = nullptr, KICAD_T aType = SCH_IREF_T );
+              SCH_GLOBALLABEL* aParent = nullptr );
 
     ~SCH_IREF() { }
 
