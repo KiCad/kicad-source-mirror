@@ -1182,6 +1182,10 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         {
             m_menu.ShowContextMenu( selection() );
         }
+        else
+        {
+            evt->SetPassEvent();
+        }
 
         if( m_cancelled )
         {
@@ -1251,6 +1255,10 @@ void ROUTER_TOOL::performDragging( int aMode )
                 m_cancelled = true;
 
             break;
+        }
+        else
+        {
+            evt->SetPassEvent();
         }
 
         handleCommonEvents( *evt );
