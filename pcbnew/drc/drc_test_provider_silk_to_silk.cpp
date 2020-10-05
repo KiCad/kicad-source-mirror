@@ -93,7 +93,9 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
     }
 
     reportAux( "Worst clearance : %d nm", m_largestClearance );
-    reportPhase( _( "Checking silkscreen for overlapping items..." ) );
+
+    if( !reportPhase( _( "Checking silkscreen for overlapping items..." ) ) )
+        return false;
 
     DRC_RTREE silkTree;
 

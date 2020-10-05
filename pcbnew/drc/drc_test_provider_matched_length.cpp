@@ -234,12 +234,13 @@ bool test::DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode 
 
     if( !aDelayReportMode )
     {
-        reportPhase(( "Gathering length-constrained connections..." ));
+        if( !reportPhase( _( "Gathering length-constrained connections..." ) ) )
+            return false;
     }
 
     std::map<DRC_RULE*, CITEMS> itemSets;
 
-     auto evaluateLengthConstraints =
+    auto evaluateLengthConstraints =
             [&]( BOARD_ITEM *item ) -> bool
             {
                 const DRC_CONSTRAINT_TYPE_T constraintsToCheck[] = {

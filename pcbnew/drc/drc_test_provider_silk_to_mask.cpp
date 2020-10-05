@@ -41,8 +41,6 @@
     - DRCE_SILK_MASK_CLEARANCE
 */
 
-namespace test {
-
 class DRC_TEST_PROVIDER_SILK_TO_MASK : public ::DRC_TEST_PROVIDER
 {
 public:
@@ -81,10 +79,8 @@ private:
     int m_largestClearance;
 };
 
-};
 
-
-bool test::DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
+bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
@@ -98,7 +94,9 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
     }
 
     reportAux( "Worst clearance : %d nm", m_largestClearance );
-    reportPhase( _( "Checking silkscreen for potential soldermask clipping..." ) );
+
+    if( !reportPhase( _( "Checking silkscreen for potential soldermask clipping..." ) ) )
+        return false;
 
     DRC_RTREE maskTree, silkTree;
 
@@ -183,7 +181,7 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_SILK_TO_MASK::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_SILK_TO_MASK::GetConstraintTypes() const
 {
     return { DRC_CONSTRAINT_TYPE_SILK_TO_MASK };
 }
@@ -191,5 +189,5 @@ std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_SILK_TO_MASK::GetConstra
 
 namespace detail
 {
-    static DRC_REGISTER_TEST_PROVIDER<test::DRC_TEST_PROVIDER_SILK_TO_MASK> dummy;
+    static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_SILK_TO_MASK> dummy;
 }
