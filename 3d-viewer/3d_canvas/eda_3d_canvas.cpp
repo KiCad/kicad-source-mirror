@@ -101,6 +101,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* 
           m_parentInfoBar( nullptr ),
           m_glRC( nullptr ),
           m_is_opengl_initialized( false ),
+          m_is_opengl_version_supported( true ),
           m_mouse_is_moving( false ),
           m_mouse_was_moved( false ),
           m_camera_is_moving( false ),
@@ -112,7 +113,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* 
           m_boardAdapter( aBoardAdapter ),
           m_camera( aCamera ),
           m_3d_render( nullptr ),
-          m_opengl_supports_raytracing( false ),
+          m_opengl_supports_raytracing( true ),
           m_render_raytracing_was_requested( false ),
           m_accelerator3DShapes( nullptr ),
           m_currentIntersectedBoardItem( nullptr )
@@ -253,8 +254,6 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
 
     wxStringTokenizer tokenizer( version );
 
-    m_opengl_supports_raytracing = true;
-
     if( tokenizer.HasMoreTokens() )
     {
         long major = 0;
@@ -270,7 +269,7 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
         if( tokenizer.HasMoreTokens() )
             tokenizer.GetNextToken().ToLong( &minor );
 
-        if( major < 2 || ( (major == 2 ) && (minor < 1) ) )
+        if( major < 2 || ( ( major == 2 ) && ( minor < 1 ) ) )
         {
             wxLogTrace( m_logTrace, "EDA_3D_CANVAS::%s OpenGL ray tracing not supported.",
                         __WXFUNCTION__ );
@@ -282,6 +281,14 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
             }
 
             m_opengl_supports_raytracing = false;
+        }
+
+        if( ( major == 1 ) && ( minor < 5 ) )
+        {
+            wxLogTrace( m_logTrace, "EDA_3D_CANVAS::%s OpenGL not supported.",
+                        __WXFUNCTION__ );
+
+            m_is_opengl_version_supported = false;
         }
     }
 
@@ -410,6 +417,26 @@ void EDA_3D_CANVAS::DoRePaint()
 
             return;
         }
+
+        if( !m_is_opengl_version_supported )
+        {
+            warningReporter.Report( _( "Your OpenGL version is not supported. Minimum required is 1.5" ),
+                                    RPT_SEVERITY_WARNING );
+
+            warningReporter.Finalize();
+        }
+    }
+
+    if( !m_is_opengl_version_supported )
+    {
+        glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+        glClear( GL_COLOR_BUFFER_BIT );
+
+        SwapBuffers();
+
+        GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
+
+        return;
     }
 
     // Don't attend to ray trace if OpenGL doesn't support it.

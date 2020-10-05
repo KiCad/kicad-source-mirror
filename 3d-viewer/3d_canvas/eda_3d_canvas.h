@@ -244,6 +244,7 @@ private:
 
     wxGLContext*           m_glRC;                    // Current OpenGL context
     bool                   m_is_opengl_initialized;
+    bool                   m_is_opengl_version_supported;
 
     wxTimer                m_editing_timeout_timer;   // Expires after some time signalling that
                                                       // the mouse / keyboard movements are over
