@@ -29,7 +29,7 @@
 
 #include <am_param.h>
 #include <am_primitive.h>
-#include <macros.h>
+//#include <macros.h>
 
 #include <wx/debug.h>
 

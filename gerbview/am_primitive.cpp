@@ -35,8 +35,6 @@
 #include <gerbview.h>
 #include <gerber_file_image.h>
 
-#include <gr_basic.h>
-
 
 /**
  * Function scaletoIU
@@ -281,8 +279,8 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent,
 
     case AMP_MOIRE:
     {
-        /* Moir�, Primitive Code 6
-         * The moir� primitive is a cross hair centered on concentric rings (annuli).
+        /* Moire, Primitive Code 6
+         * The moire primitive is a cross hair centered on concentric rings (annuli).
          * Exposure is always on.
          */
         curPos += mapPt( params[0].GetValue( tool ), params[1].GetValue( tool ),
@@ -365,6 +363,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent,
         // * the polygon is always closed,
         // * therefore the last XY coordinate is the same as the first
         int prm_idx = 2;    //  params[2] is the first X coordinate
+
         for( int i = 0; i <= numCorners; ++i )
         {
             pos.x = scaletoIU( params[prm_idx].GetValue( tool ), m_GerbMetric );

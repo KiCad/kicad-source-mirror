@@ -40,7 +40,10 @@
 // if GBR_USE_MACROS is defined, pads having a shape that is not a Gerber primitive
 // will use a macro when possible
 // Old code will be removed only after many tests
-// #define GBR_USE_MACROS
+#define GBR_USE_MACROS_FOR_ROUNDRECT
+#define GBR_USE_MACROS_FOR_TRAPEZOID
+#define GBR_USE_MACROS_FOR_ROTATED_OVAL
+#define GBR_USE_MACROS_FOR_ROTATED_RECT
 
 GERBER_PLOTTER::GERBER_PLOTTER()
 {
@@ -293,7 +296,7 @@ bool GERBER_PLOTTER::EndPlot()
                     fputs( APER_MACRO_ROUNDRECT_HEADER, outputFile );
 
                 if( m_hasApertureRotOval )
-                    fputs( APER_MACRO_HORIZ_OVAL_HEADER, outputFile );
+                    fputs( APER_MACRO_SHAPE_OVAL_HEADER, outputFile );
 
                 if( m_hasApertureRotRect )
                     fputs( APER_MACRO_ROT_RECT_HEADER, outputFile );
@@ -561,9 +564,34 @@ void GERBER_PLOTTER::writeApertureList()
             break;
 
         case APERTURE::AM_ROUND_RECT:       // Aperture macro for round rect pads
-            sprintf( cbuf, "%s,%#fX%#fX%#fX%#f*%%\n", APER_MACRO_ROUNDRECT_NAME,
-                     tool.m_Size.x * fscale, tool.m_Size.y * fscale,
-                     tool.m_Radius * fscale, tool.m_Rotation );
+            {
+            // The aperture macro needs coordinates of the centers of the 4 corners
+            std::vector<VECTOR2I> corners;
+            wxSize half_size( tool.m_Size.x/2-tool.m_Radius, tool.m_Size.y/2-tool.m_Radius );
+
+            corners.emplace_back( -half_size.x, -half_size.y );
+            corners.emplace_back( half_size.x, -half_size.y );
+            corners.emplace_back( half_size.x, half_size.y );
+            corners.emplace_back( -half_size.x, half_size.y );
+
+            // Rotate the corner coordinates:
+            for( int ii = 0; ii < 4; ii++ )
+                RotatePoint( corners[ii], tool.m_Rotation*10.0 );
+
+            sprintf( cbuf, "%s,%#fX", APER_MACRO_ROUNDRECT_NAME,
+                     tool.m_Radius * fscale );
+            buffer += cbuf;
+
+            // Add each corner
+            for( int ii = 0; ii < 4; ii++ )
+            {
+                sprintf( cbuf, "%#fX%#fX",
+                         corners[ii].x * fscale, corners[ii].y * fscale );
+                buffer += cbuf;
+            }
+
+            sprintf( cbuf, "0*%%\n" );
+            }
             break;
 
         case APERTURE::AM_ROT_RECT:         // Aperture macro for rotated rect pads
@@ -594,10 +622,20 @@ void GERBER_PLOTTER::writeApertureList()
 
         case APERTURE::AM_ROTATED_OVAL:         // Aperture macro for rotated oval pads
                                                 // (not rotated is a primitive)
-                                                // m_Size.x = lenght; m_Size.y = width
-            sprintf( cbuf, "%s,%#fX%#fX%#f*%%\n", APER_MACRO_HORIZ_OVAL_NAME,
-                     tool.m_Size.x * fscale, tool.m_Size.y * fscale,
-                     tool.m_Rotation );
+            // m_Size.x = lenght; m_Size.y = width, and the macro aperure expects
+            // the position of ends
+            {
+                VECTOR2I start( tool.m_Size.x/2, 0 );
+                VECTOR2I end( -tool.m_Size.x/2, 0 );
+
+                RotatePoint( start, tool.m_Rotation*10.0 );
+                RotatePoint( end, tool.m_Rotation*10.0 );
+
+                sprintf( cbuf, "%s,%#fX%#fX%#fX%#fX%#fX0*%%\n", APER_MACRO_SHAPE_OVAL_NAME,
+                         tool.m_Size.y * fscale,    // width
+                         start.x * fscale, -start.y * fscale,
+                         end.x * fscale, -end.y * fscale );
+            }
             break;
         }
 
@@ -949,7 +987,7 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
     {
         if( trace_mode == FILLED )
         {
-        #ifdef GBR_USE_MACROS
+        #ifdef GBR_USE_MACROS_FOR_ROTATED_OVAL
             m_hasApertureRotOval = true;
             // We are using a aperture macro that expect size.y < size.x
             // i.e draw a horizontal line for rotation = 0.0
@@ -1041,7 +1079,7 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
         break;
 
     default:
-    #ifdef GBR_USE_MACROS
+    #ifdef GBR_USE_MACROS_FOR_ROTATED_RECT
         if( trace_mode != SKETCH )
         {
             m_hasApertureRotRect = true;
@@ -1112,7 +1150,7 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
     }
     else
     {
-    #ifdef GBR_USE_MACROS
+    #ifdef GBR_USE_MACROS_FOR_ROUNDRECT
         m_hasApertureRoundRect = true;
 
         DPOINT pos_dev = userToDeviceCoordinates( aPadPos );
@@ -1353,7 +1391,7 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
     if( aTrace_Mode == SKETCH )
         PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), &metadata );
     else
-    #ifdef GBR_USE_MACROS
+    #ifdef GBR_USE_MACROS_FOR_TRAPEZOID
     {
         m_hasApertureOutline = true;
         DPOINT pos_dev = userToDeviceCoordinates( aPadPos );

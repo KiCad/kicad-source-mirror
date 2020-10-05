@@ -26,27 +26,28 @@
 #pragma once
 
 // A aperture macro to define a rounded rect pad shape
+// In many gerber readers, the rotation of the full shape is broken
+// so we are using primitives that does not need a rotation
 #define APER_MACRO_ROUNDRECT_NAME "RoundRect"
 
 #define APER_MACRO_ROUNDRECT_HEADER \
 "%AMRoundRect*\n\
-0 Rectangle with rounded corners, with rotation*\n\
-0 The origin of the aperture is its center*\n\
-0 $1 X-size*\n\
-0 $2 Y-size*\n\
-0 $3 Rounding radius*\n\
-0 $4 Rotation angle, in degrees counterclockwise*\n\
-0 Add two overlapping rectangle primitives as box body*\n\
-21,1,$1,$2-$3-$3,0,0,$4*\n\
-21,1,$1-$3-$3,$2,0,0,$4*\n\
+0 Rectangle with rounded corners*\n\
+0 $1 Rounding radius*\n\
+0 $2 $3 $4 $5 $6 $7 $8 $9 X,Y pos of 4 corners*\n\
+0 Add a 4 corners polygon primitive as box body*\n\
+4,1,4,$2,$3,$4,$5,$6,$7,$8,$9,$2,$3,0*\n\
 0 Add four circle primitives for the rounded corners*\n\
-$5=$1/2*\n\
-$6=$2/2*\n\
-$7=2x$3*\n\
-1,1,$7,$5-$3,$6-$3,$4*\n\
-1,1,$7,-$5+$3,$6-$3,$4*\n\
-1,1,$7,-$5+$3,-$6+$3,$4*\n\
-1,1,$7,$5-$3,-$6+$3,$4*%\n"
+1,1,$1+$1,$2,$3,0*\n\
+1,1,$1+$1,$4,$5,0*\n\
+1,1,$1+$1,$6,$7,0*\n\
+1,1,$1+$1,$8,$9,0*\n\
+0 Add four rect primitives between the rounded corners*\n\
+20,1,$1+$1,$2,$3,$4,$5,0*\n\
+20,1,$1+$1,$4,$5,$6,$7,0*\n\
+20,1,$1+$1,$6,$7,$8,$9,0*\n\
+20,1,$1+$1,$8,$9,$2,$3,0*\
+%\n"
 
 // A aperture macro to define a rotated rect pad shape
 #define APER_MACRO_ROT_RECT_NAME "RotRect"
@@ -63,23 +64,25 @@ $7=2x$3*\n\
 
 
 // A aperture macro to define a oval pad shape
-#define APER_MACRO_HORIZ_OVAL_NAME "HorizOval"
+// In many gerber readers, the rotation of the full shape is broken
+// so we are using a primitive that does not need a rotation to be
+// plotted
+#define APER_MACRO_SHAPE_OVAL_NAME "HorizOval"
 
-#define APER_MACRO_HORIZ_OVAL_HEADER \
+#define APER_MACRO_SHAPE_OVAL_HEADER \
 "%AMHorizOval*\n\
-0 Thick line with rounded ends, with rotation*\n\
-0 The origin of the aperture is its center*\n\
-0 $1 length (X dim)*\n\
-0 $2 width (Y dim)*\n\
-0 $3 Rotation angle, in degrees counterclockwise*\n\
-0 Add horizontal line*\n\
-21,1,$1-$2,$2,0,0,$3*\n\
-0 Add two circle primitives for the rounded ends*\n\
-$4=($1-$2)/2*\n\
-1,1,$2,$4,0,$3*\n\
-1,1,$2,-$4,0,$3*%\n"
+0 Thick line with rounded ends*\n\
+0 $1 width*\n\
+0 $2 $3 position (X,Y) of the first rounded end (center of the circle)*\n\
+0 $4 $5 position (X,Y) of the second rounded end (center of the circle)*\n\
+0 Add line between two ends*\n\
+20,1,$1,$2,$3,$4,$5,0*\n\
+0 Add two circle primitives to create the rounded ends*\n\
+1,1,$1,$2,$3,0*\n\
+1,1,$1,$4,$5,0*%\n"
 
 // A aperture macro to define a trapezoid (polygon) by 4 corners
+// and a rotation angle
 #define APER_MACRO_OUTLINE4P_NAME "Outline4P"
 
 #define APER_MACRO_OUTLINE4P_HEADER \
