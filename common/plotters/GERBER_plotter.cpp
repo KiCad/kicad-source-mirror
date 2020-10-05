@@ -39,8 +39,8 @@
 
 // if GBR_USE_MACROS is defined, pads having a shape that is not a Gerber primitive
 // will use a macro when possible
-// Old code will be removed after more tests
-#define GBR_USE_MACROS
+// Old code will be removed only after many tests
+// #define GBR_USE_MACROS
 
 GERBER_PLOTTER::GERBER_PLOTTER()
 {
