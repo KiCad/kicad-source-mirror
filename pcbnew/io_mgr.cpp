@@ -31,7 +31,7 @@
 #include <io_mgr.h>
 #include <kicad_plugin.h>
 #include <legacy_plugin.h>
-#include <pcad2kicadpcb_plugin/pcad_plugin.h>
+#include <plugins/pcad/pcad_plugin.h>
 #include <plugins/altium/altium_circuit_maker_plugin.h>
 #include <plugins/altium/altium_circuit_studio_plugin.h>
 #include <plugins/altium/altium_designer_plugin.h>

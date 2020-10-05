@@ -33,7 +33,7 @@
 #include <pcb_module.h>
 #include <pcb_pad.h>
 #include <pcb_polygon.h>
-#include <pcad2kicadpcb_plugin/pcb_text.h>
+#include <plugins/pcad/pcb_text.h>
 #include <pcb_via.h>
 
 #include <trigo.h>

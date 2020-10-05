@@ -27,7 +27,7 @@
 
 #include <common.h>
 #include <pcb_text.h>
-#include <pcad2kicadpcb_plugin/pcb_text.h>
+#include <plugins/pcad/pcb_text.h>
 
 namespace PCAD2KICAD {
 

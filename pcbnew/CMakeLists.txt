@@ -617,7 +617,7 @@ if( APPLE )
 endif()
 
 
-add_subdirectory( pcad2kicadpcb_plugin )
+add_subdirectory( plugins/pcad )
 add_subdirectory( plugins/altium )
 add_subdirectory( plugins/cadstar )
 
