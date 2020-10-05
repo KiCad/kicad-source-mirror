@@ -141,7 +141,6 @@ private:
 
 
 // Static members to remember choices
-int DIALOG_GEN_FOOTPRINT_POSITION::m_unitsOpt = 0;
 int DIALOG_GEN_FOOTPRINT_POSITION::m_fileOpt = 0;
 int DIALOG_GEN_FOOTPRINT_POSITION::m_fileFormat = 0;
 bool DIALOG_GEN_FOOTPRINT_POSITION::m_includeBoardEdge = false;
@@ -154,7 +153,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 
     auto cfg = m_parent->GetPcbNewSettings();
 
-    m_units            = static_cast<EDA_UNITS>( cfg->m_PlaceFile.units );
+    m_units            = cfg->m_PlaceFile.units == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
     m_fileOpt          = cfg->m_PlaceFile.file_options;
     m_fileFormat       = cfg->m_PlaceFile.file_format;
     m_includeBoardEdge = cfg->m_PlaceFile.include_board_edge;
@@ -163,7 +162,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
     m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
 
     // Update Options
-    m_radioBoxUnits->SetSelection( m_unitsOpt );
+    m_radioBoxUnits->SetSelection( cfg->m_PlaceFile.units );
     m_radioBoxFilesCount->SetSelection( m_fileOpt );
     m_rbFormat->SetSelection( m_fileFormat );
     m_cbIncludeBoardEdge->SetValue( m_includeBoardEdge );
@@ -205,14 +204,14 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEve
 
 void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
 {
-    m_unitsOpt = m_radioBoxUnits->GetSelection();
     m_fileOpt = m_radioBoxFilesCount->GetSelection();
     m_fileFormat = m_rbFormat->GetSelection();
     m_includeBoardEdge = m_cbIncludeBoardEdge->GetValue();
 
     auto cfg = m_parent->GetPcbNewSettings();
+    m_units  = m_radioBoxUnits->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
 
-    cfg->m_PlaceFile.units              = static_cast<int>( m_units );
+    cfg->m_PlaceFile.units              = m_units == EDA_UNITS::INCHES ? 0 : 1;
     cfg->m_PlaceFile.file_options       = m_fileOpt;
     cfg->m_PlaceFile.file_format        = m_fileFormat;
     cfg->m_PlaceFile.include_board_edge = m_includeBoardEdge;
