@@ -722,7 +722,7 @@ bool PCBMODEL::CreatePCB()
         {
             wxString msg;
             msg.Printf( "could not close outline (dropping outline data with %d segments)\n",
-                    oln.m_curves.size() );
+                        static_cast<int>( oln.m_curves.size() ) );
 
             for( const auto& c : oln.m_curves )
                 msg << " + " << c.Describe() << "\n";
@@ -770,7 +770,8 @@ bool PCBMODEL::CreatePCB()
 
     // subtract cutouts (if any)
     if( m_cutouts.size() )
-        ReportMessage( wxString::Format( "Build board cutouts and holes (%d holes)\n", (int)m_cutouts.size() ) );
+        ReportMessage( wxString::Format( "Build board cutouts and holes (%d holes)\n",
+                       (int)m_cutouts.size() ) );
 
 #if 0 // First version for holes removing: very slow when having many (> 300) holes
     // Substract holes (cutouts) can be time consuming, so display activity
