@@ -194,6 +194,13 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
         // not return invalid data to the UI, since this invalid data can cause crashes.
         // This is different than the update locker, which locks the UI aspects only.
         wxWindowUpdateLocker updateLock( m_widget );
+        BeforeReset();
+
+        // Even with the updateLock, wxWidgets sometimes ties its knickers in
+        // a knot when trying to run a wxdataview_selection_changed_callback()
+        // on a row that has been deleted.
+        // https://bugs.launchpad.net/kicad/+bug/1756255
+        m_widget->UnselectAll();
         Freeze();
 
         m_tree.ResetScore();
@@ -214,26 +221,9 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
             m_tree.UpdateScore( matcher );
         }
 
-        // Even with the updateLock, wxWidgets sometimes ties its knickers in
-        // a knot when trying to run a wxdataview_selection_changed_callback()
-        // on a row that has been deleted.
-        // https://bugs.launchpad.net/kicad/+bug/1756255
-        m_widget->UnselectAll();
-
         m_tree.SortNodes();
-        Cleared();
+        AfterReset();
         Thaw();
-
-        // This was fixed in wxWidgets 3.0.5 and 3.1.3.
-#if defined( __WXGTK__ ) && ( (wxVERSION_NUMBER < 030005 ) || \
-        ( ( wxVERSION_NUMBER >= 030100 ) && ( wxVERSION_NUMBER < 030103 ) ) )
-        // The fastest method to update wxDataViewCtrl is to rebuild from
-        // scratch by calling Cleared(). Linux requires to reassociate model to
-        // display data, but Windows will create multiple associations.
-        // On MacOS, this crashes kicad. See https://gitlab.com/kicad/code/kicad/issues/3666
-        // and https://gitlab.com/kicad/code/kicad/issues/3653
-        AttachTo( m_widget );
-#endif
     }
 
     LIB_TREE_NODE* bestMatch = ShowResults();
