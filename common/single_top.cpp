@@ -154,6 +154,12 @@ struct APP_SINGLE_TOP : public wxApp
 
     bool OnInit() override
     {
+#if defined( _MSC_VER ) && defined( DEBUG )
+        // wxWidgets turns on leak dumping in debug but its "flawed" and will falsely dump for half a hour
+        // _CRTDBG_ALLOC_MEM_DF is the usual default for MSVC
+        _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF );
+#endif
+
         // Force wxHtmlWinParser initialization when a wxHtmlWindow is used only
         // in a shared modules (.so or .dll file)
         // Otherwise the Html text is displayed as plain text.
