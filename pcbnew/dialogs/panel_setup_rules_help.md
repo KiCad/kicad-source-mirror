@@ -1,11 +1,11 @@
-# Top-level Clauses
+### Top-level Clauses
 
     (version <number>)
 
     (rule <rule_name> <rule_clause> ...)
 
 
-# Rule Clauses
+### Rule Clauses
 
     (constraint <constraint_type> ...)
 
@@ -14,7 +14,7 @@
     (layer "<layer_name>")
 
 
-# Constraint Types
+### Constraint Types
 
  * annular_width
  * clearance
@@ -23,7 +23,7 @@
  * track_width
 
 
-# Item Types
+### Item Types
 
  * buried_via
  * graphic
@@ -36,8 +36,10 @@
  * zone
 
 
-# Examples
+### Examples
 
+    # Comment
+    
     (rule "copper keepout"
        (constraint disallow track via zone)
        (condition "A.insideArea('zone3')"))
@@ -71,7 +73,7 @@
        (condition "A.NetClass == 'HV' && !A.insideArea('Shield*')))
 
 
-# Notes
+### Notes
 
 Version clause must be the first clause.
 
@@ -83,33 +85,33 @@ Use Ctrl+/ to comment or uncomment line(s).
 
 
 
-# Expression functions
+### Expression functions
 
-All function parameters support simple wildcards ('*' and '?').
+All function parameters support simple wildcards (`*` and `?`).
 
-True if any part of A lies within the given footprint's courtyard.
+True if any part of `A` lies within the given footprint's courtyard.
 
     A.insideCourtyard('<footprint_refdes>')
 
 
-True if any part of A lies within the given zone's outline.
+True if any part of `A` lies within the given zone's outline.
 
     A.insideArea('<zone_name>')
 
 
-True if A has a hole which is plated.
+True if `A` has a hole which is plated.
 
     A.isPlated()
 
 
-True if A is a member of the given group. Includes nested membership.
+True if `A` is a member of the given group. Includes nested membership.
 
     A.memberOf('<group_name>')
 
 
-True if A exists on the given layer.  The layer name can be
+True if `A` exists on the given layer.  The layer name can be
 either the name assigned in Board Setup > Board Editor Layers or
-the canonical name (ie: F.Cu).
+the canonical name (ie: `F.Cu`).
 
     A.onLayer('<layer_name>')
 
