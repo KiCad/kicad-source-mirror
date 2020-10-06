@@ -490,7 +490,7 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
 
     switch( m_userUnits )
     {
-    case EDA_UNITS::INCHES:      msg = _( "Inches" ); break;
+    case EDA_UNITS::INCHES:      msg = _( "inches" ); break;
     case EDA_UNITS::MILS:        msg = _( "mils" );   break;
     case EDA_UNITS::MILLIMETRES: msg = _( "mm" );     break;
     default:                     msg = _( "Units" );  break;

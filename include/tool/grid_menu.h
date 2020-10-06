@@ -39,8 +39,6 @@ public:
     static void BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* aCfg,
                                  EDA_DRAW_FRAME* aParent );
 
-    static wxString GridMenuUnits( EDA_UNITS aUnits, double aValue );
-
 private:
     ACTION_MENU* create() const override
     {

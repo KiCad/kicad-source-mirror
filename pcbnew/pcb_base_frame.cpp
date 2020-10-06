@@ -489,18 +489,10 @@ GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
 void PCB_BASE_FRAME::DisplayGridMsg()
 {
     wxString line;
-    wxString gridformatter;
 
-    switch( m_userUnits )
-    {
-    case EDA_UNITS::INCHES:      gridformatter = "grid X %.6f  Y %.6f"; break;
-    case EDA_UNITS::MILLIMETRES: gridformatter = "grid X %.6f  Y %.6f"; break;
-    default:                     gridformatter = "grid X %f  Y %f";     break;
-    }
-
-    double grid_x = To_User_Unit( m_userUnits, GetCanvas()->GetGAL()->GetGridSize().x );
-    double grid_y = To_User_Unit( m_userUnits, GetCanvas()->GetGAL()->GetGridSize().y );
-    line.Printf( gridformatter, grid_x, grid_y );
+    line.Printf( "grid X %s  Y %s",
+                 MessageTextFromValue( m_userUnits, GetCanvas()->GetGAL()->GetGridSize().x ),
+                 MessageTextFromValue( m_userUnits, GetCanvas()->GetGAL()->GetGridSize().y ) );
 
     SetStatusText( line, 4 );
 }
@@ -527,26 +519,10 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         double   dy = cursorPos.y - screen->m_LocalOrigin.y;
         double   theta = RAD2DEG( atan2( -dy, dx ) );
         double   ro = hypot( dx, dy );
-        wxString formatter;
 
-        switch( GetUserUnits() )
-        {
-        case EDA_UNITS::INCHES:
-            formatter = wxT( "r %.6f  theta %.1f" );
-            break;
-        case EDA_UNITS::MILLIMETRES:
-            formatter = wxT( "r %.6f  theta %.1f" );
-            break;
-        case EDA_UNITS::MILS:
-            formatter = wxT( "r %.6f  theta %.1f" );
-            break;
-        case EDA_UNITS::UNSCALED:
-            formatter = wxT( "r %f  theta %f" );
-            break;
-        default:             wxASSERT( false );                       break;
-        }
-
-        line.Printf( formatter, To_User_Unit( GetUserUnits(), ro ), theta );
+        line.Printf( wxT( "r %s  theta %s" ),
+                     MessageTextFromValue( GetUserUnits(), ro, false ),
+                     MessageTextFromValue( EDA_UNITS::DEGREES, theta, false ) );
 
         SetStatusText( line, 3 );
     }
@@ -556,41 +532,9 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     double userYpos = m_originTransforms.ToDisplayAbsY( static_cast<double>( cursorPos.y ) );
 
     // Display absolute coordinates:
-    double dXpos = To_User_Unit( GetUserUnits(), userXpos );
-    double dYpos = To_User_Unit( GetUserUnits(), userYpos );
-
-    // The following sadly is an if Eeschema/if Pcbnew
-    wxString absformatter;
-    wxString locformatter;
-
-    switch( GetUserUnits() )
-    {
-    case EDA_UNITS::INCHES:
-        absformatter = "X %.6f  Y %.6f";
-        locformatter = "dx %.6f  dy %.6f  dist %.4f";
-        break;
-
-    case EDA_UNITS::MILS:
-        absformatter = "X %.2f  Y %.2f";
-        locformatter = "dx %.2f  dy %.2f  dist %.4f";
-        break;
-
-    case EDA_UNITS::MILLIMETRES:
-        absformatter = "X %.6f  Y %.6f";
-        locformatter = "dx %.6f  dy %.6f  dist %.3f";
-        break;
-
-    case EDA_UNITS::UNSCALED:
-        absformatter = "X %f  Y %f";
-        locformatter = "dx %f  dy %f  dist %f";
-        break;
-
-    default:
-        wxASSERT( false );
-        break;
-    }
-
-    line.Printf( absformatter, dXpos, dYpos );
+    line.Printf( wxT( "X %s  Y %s" ),
+                 MessageTextFromValue( GetUserUnits(), userXpos, false ),
+                 MessageTextFromValue( GetUserUnits(), userYpos, false ) );
     SetStatusText( line, 2 );
 
     if( !GetShowPolarCoords() )  // display relative cartesian coordinates
@@ -603,12 +547,10 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         userXpos = m_originTransforms.ToDisplayRelX( relXpos );
         userYpos = m_originTransforms.ToDisplayRelY( relYpos );
 
-        // Display relative coordinates:
-        dXpos = To_User_Unit( GetUserUnits(), userXpos );
-        dYpos = To_User_Unit( GetUserUnits(), userYpos );
-
-        // We already decided the formatter above
-        line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );
+        line.Printf( wxT( "dx %s  dy %s  dist %s" ),
+                     MessageTextFromValue( GetUserUnits(), userXpos, false ),
+                     MessageTextFromValue( GetUserUnits(), userYpos, false ),
+                     MessageTextFromValue( GetUserUnits(), hypot( userXpos, userYpos ), false ) );
         SetStatusText( line, 3 );
     }
 

@@ -163,7 +163,7 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitLab
     default:
     case EDA_UNITS::MILLIMETRES:
 #if defined( EESCHEMA )
-        format = wxT( "%.4f" );
+        format = wxT( "%.2f" );
 #else
         format = wxT( "%.3f" );
 #endif
@@ -179,10 +179,14 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitLab
 
     case EDA_UNITS::INCHES:
 #if defined( EESCHEMA )
-        format = wxT( "%.4f" );
-#else
         format = wxT( "%.3f" );
+#else
+        format = wxT( "%.4f" );
 #endif
+        break;
+
+    case EDA_UNITS::DEGREES:
+        format = wxT( "%.1f" );
         break;
 
     case EDA_UNITS::UNSCALED:

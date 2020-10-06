@@ -76,29 +76,6 @@ void GRID_MENU::update()
     }
 }
 
-wxString GRID_MENU::GridMenuUnits( EDA_UNITS aUnits, double aValue )
-{
-    wxString      text;
-    const wxChar* format;
-
-    switch( aUnits )
-    {
-    default:                     wxASSERT_MSG( false, "Invalid unit" ); KI_FALLTHROUGH;
-    case EDA_UNITS::UNSCALED:    format = wxT( "%.0f" );                break;
-    case EDA_UNITS::MILLIMETRES: format = wxT( "%.4f" );                break;
-    case EDA_UNITS::MILS:        format = wxT( "%.2f" );                break;
-    case EDA_UNITS::INCHES:      format = wxT( "%.4f" );                break;
-    }
-
-    text.Printf( format, To_User_Unit( aUnits, aValue ) );
-
-    text += " ";
-    text += GetAbbreviatedUnitsLabel( aUnits, EDA_DATA_TYPE::DISTANCE );
-
-    return text;
-}
-
-
 void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* aCfg,
                                  EDA_DRAW_FRAME* aParent )
 {
@@ -113,8 +90,9 @@ void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* a
     {
         int val = (int) ValueFromString( EDA_UNITS::MILLIMETRES, gridSize );
 
-        msg.Printf( _( "Grid: %s (%s)" ), GRID_MENU::GridMenuUnits( primaryUnit, val ),
-                    GRID_MENU::GridMenuUnits( secondaryUnit, val ) );
+        msg.Printf( _( "Grid: %s (%s)" ),
+                    MessageTextFromValue( primaryUnit, val ),
+                    MessageTextFromValue( secondaryUnit, val ) );
 
         aGridsList->Add( msg );
     }
@@ -123,8 +101,9 @@ void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* a
     {
         int val = (int) ValueFromString( EDA_UNITS::INCHES, aCfg->m_Window.grid.user_grid_x );
 
-        msg.Printf( _( "User grid: %s (%s)" ), GRID_MENU::GridMenuUnits( primaryUnit, val ),
-                    GRID_MENU::GridMenuUnits( secondaryUnit, val ) );
+        msg.Printf( _( "User grid: %s (%s)" ),
+                    MessageTextFromValue( primaryUnit, val ),
+                    MessageTextFromValue( secondaryUnit, val ) );
 
         aGridsList->Add( msg );
     }
