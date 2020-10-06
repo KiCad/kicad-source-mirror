@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_sch_sheet_props.h>
+#include <dialog_sheet_properties.h>
 #include <kiface_i.h>
 #include <wx/string.h>
 #include <wx/tooltip.h>
@@ -39,9 +39,9 @@
 #include <trace_helpers.h>
 #include "panel_eeschema_color_settings.h"
 
-DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
-                                                bool* aClearAnnotationNewItems ) :
-    DIALOG_SCH_SHEET_PROPS_BASE( aParent ),
+DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
+                                                  bool* aClearAnnotationNewItems ) :
+    DIALOG_SCH_SHEET_PROPERTIES_BASE( aParent ),
     m_frame( aParent ),
     m_clearAnnotationNewItems( aClearAnnotationNewItems ),
     m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits, true )
@@ -86,14 +86,14 @@ DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* aParent, SCH_SHE
 
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
-                     wxGridEventHandler( DIALOG_SCH_SHEET_PROPS::OnGridCellChanging ),
+                     wxGridEventHandler( DIALOG_SHEET_PROPERTIES::OnGridCellChanging ),
                      NULL, this );
 
     FinishDialogSettings();
 }
 
 
-DIALOG_SCH_SHEET_PROPS::~DIALOG_SCH_SHEET_PROPS()
+DIALOG_SHEET_PROPERTIES::~DIALOG_SHEET_PROPERTIES()
 {
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( cfg );
@@ -105,7 +105,7 @@ DIALOG_SCH_SHEET_PROPS::~DIALOG_SCH_SHEET_PROPS()
     m_grid->DestroyTable( m_fields );
 
     m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING,
-                        wxGridEventHandler( DIALOG_SCH_SHEET_PROPS::OnGridCellChanging ),
+                        wxGridEventHandler( DIALOG_SHEET_PROPERTIES::OnGridCellChanging ),
                         NULL, this );
 
     // Delete the GRID_TRICKS.
@@ -113,7 +113,7 @@ DIALOG_SCH_SHEET_PROPS::~DIALOG_SCH_SHEET_PROPS()
 }
 
 
-bool DIALOG_SCH_SHEET_PROPS::TransferDataToWindow()
+bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
         return false;
@@ -170,7 +170,7 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataToWindow()
 }
 
 
-bool DIALOG_SCH_SHEET_PROPS::Validate()
+bool DIALOG_SHEET_PROPERTIES::Validate()
 {
     wxString msg;
     LIB_ID   id;
@@ -229,7 +229,7 @@ static bool positioningChanged( FIELDS_GRID_TABLE<SCH_FIELD>* a, std::vector<SCH
 }
 
 
-bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
+bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )  // Calls our Validate() method.
         return false;
@@ -328,7 +328,7 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
 }
 
 
-bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilename )
+bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilename )
 {
     wxString msg;
 
@@ -569,7 +569,7 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
 }
 
 
-void DIALOG_SCH_SHEET_PROPS::OnGridCellChanging( wxGridEvent& event )
+void DIALOG_SHEET_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 {
     bool              success = true;
     wxGridCellEditor* editor = m_grid->GetCellEditor( event.GetRow(), event.GetCol() );
@@ -619,7 +619,7 @@ void DIALOG_SCH_SHEET_PROPS::OnGridCellChanging( wxGridEvent& event )
 }
 
 
-void DIALOG_SCH_SHEET_PROPS::OnAddField( wxCommandEvent& event )
+void DIALOG_SHEET_PROPERTIES::OnAddField( wxCommandEvent& event )
 {
     if( !m_grid->CommitPendingChanges() )
         return;
@@ -644,7 +644,7 @@ void DIALOG_SCH_SHEET_PROPS::OnAddField( wxCommandEvent& event )
 }
 
 
-void DIALOG_SCH_SHEET_PROPS::OnDeleteField( wxCommandEvent& event )
+void DIALOG_SHEET_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 {
     int curRow = m_grid->GetGridCursorRow();
 
@@ -673,7 +673,7 @@ void DIALOG_SCH_SHEET_PROPS::OnDeleteField( wxCommandEvent& event )
 }
 
 
-void DIALOG_SCH_SHEET_PROPS::OnMoveUp( wxCommandEvent& event )
+void DIALOG_SHEET_PROPERTIES::OnMoveUp( wxCommandEvent& event )
 {
     if( !m_grid->CommitPendingChanges() )
         return;
@@ -695,7 +695,7 @@ void DIALOG_SCH_SHEET_PROPS::OnMoveUp( wxCommandEvent& event )
 }
 
 
-void DIALOG_SCH_SHEET_PROPS::OnMoveDown( wxCommandEvent& event )
+void DIALOG_SHEET_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 {
     if( !m_grid->CommitPendingChanges() )
         return;
@@ -717,7 +717,7 @@ void DIALOG_SCH_SHEET_PROPS::OnMoveDown( wxCommandEvent& event )
 }
 
 
-void DIALOG_SCH_SHEET_PROPS::AdjustGridColumns( int aWidth )
+void DIALOG_SHEET_PROPERTIES::AdjustGridColumns( int aWidth )
 {
     m_width = aWidth;
     // Account for scroll bars
@@ -734,7 +734,7 @@ void DIALOG_SCH_SHEET_PROPS::AdjustGridColumns( int aWidth )
 }
 
 
-void DIALOG_SCH_SHEET_PROPS::OnUpdateUI( wxUpdateUIEvent& event )
+void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
     wxString shownColumns = m_grid->GetShownColumns();
 
@@ -763,7 +763,7 @@ void DIALOG_SCH_SHEET_PROPS::OnUpdateUI( wxUpdateUIEvent& event )
 }
 
 
-void DIALOG_SCH_SHEET_PROPS::OnSizeGrid( wxSizeEvent& event )
+void DIALOG_SHEET_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
 {
     auto new_size = event.GetSize().GetX();
 
@@ -777,7 +777,7 @@ void DIALOG_SCH_SHEET_PROPS::OnSizeGrid( wxSizeEvent& event )
 }
 
 
-void DIALOG_SCH_SHEET_PROPS::OnInitDlg( wxInitDialogEvent& event )
+void DIALOG_SHEET_PROPERTIES::OnInitDlg( wxInitDialogEvent& event )
 {
     TransferDataToWindow();
 

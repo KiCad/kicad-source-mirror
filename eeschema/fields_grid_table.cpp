@@ -134,8 +134,7 @@ void FIELDS_GRID_TABLE<T>::initGrid( DIALOG_SHIM* aDialog )
     exts.push_back( KiCadSchematicFileExtension );
     wildCard += AddFileExtListToFilter( exts );
 
-    GRID_CELL_PATH_EDITOR* filepathEditor =
-            new GRID_CELL_PATH_EDITOR( aDialog, &m_curdir, wildCard );
+    auto filepathEditor = new GRID_CELL_PATH_EDITOR( aDialog, &m_curdir, wildCard );
     filepathEditor->SetValidator( m_filepathValidator );
     m_filepathAttr->SetEditor( filepathEditor );
 

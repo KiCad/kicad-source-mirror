@@ -48,9 +48,13 @@ SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR(  bool aIsLibEditor, int aFieldId, wxSt
     {
         excludes += " ";
     }
-    else if( ( aFieldId == VALUE && m_isLibEditor ) || aFieldId == SHEETFILENAME_V )
+    else if( aFieldId == VALUE && m_isLibEditor )
     {
         excludes += " :/\\";
+    }
+    else if( aFieldId == SHEETFILENAME_V )
+    {
+        excludes += ":/\\";
     }
 
     long style = GetStyle();

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -36,9 +36,9 @@ class WX_GRID;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_SCH_SHEET_PROPS_BASE
+/// Class DIALOG_SHEET_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_SCH_SHEET_PROPS_BASE : public DIALOG_SHIM
+class DIALOG_SHEET_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -75,8 +75,8 @@ class DIALOG_SCH_SHEET_PROPS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Sheet Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
-		~DIALOG_SCH_SHEET_PROPS_BASE();
+		DIALOG_SHEET_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Sheet Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
+		~DIALOG_SHEET_PROPERTIES_BASE();
 
 };
 

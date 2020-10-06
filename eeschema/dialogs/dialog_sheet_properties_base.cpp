@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -7,11 +7,11 @@
 
 #include "widgets/wx_grid.h"
 
-#include "dialog_sch_sheet_props_base.h"
+#include "dialog_sheet_properties_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_SHEET_PROPERTIES_BASE::DIALOG_SHEET_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -201,24 +201,24 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	mainSizer->Fit( this );
 
 	// Connect Events
-	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnInitDlg ) );
-	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnUpdateUI ) );
-	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnSizeGrid ), NULL, this );
-	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnAddField ), NULL, this );
-	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnMoveUp ), NULL, this );
-	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnMoveDown ), NULL, this );
-	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnDeleteField ), NULL, this );
+	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnInitDlg ) );
+	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnUpdateUI ) );
+	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnSizeGrid ), NULL, this );
+	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnAddField ), NULL, this );
+	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnMoveUp ), NULL, this );
+	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnMoveDown ), NULL, this );
+	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnDeleteField ), NULL, this );
 }
 
-DIALOG_SCH_SHEET_PROPS_BASE::~DIALOG_SCH_SHEET_PROPS_BASE()
+DIALOG_SHEET_PROPERTIES_BASE::~DIALOG_SHEET_PROPERTIES_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnInitDlg ) );
-	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnUpdateUI ) );
-	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnSizeGrid ), NULL, this );
-	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnAddField ), NULL, this );
-	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnMoveUp ), NULL, this );
-	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnMoveDown ), NULL, this );
-	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnDeleteField ), NULL, this );
+	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnInitDlg ) );
+	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnUpdateUI ) );
+	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnSizeGrid ), NULL, this );
+	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnAddField ), NULL, this );
+	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnMoveUp ), NULL, this );
+	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnMoveDown ), NULL, this );
+	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PROPERTIES_BASE::OnDeleteField ), NULL, this );
 
 }

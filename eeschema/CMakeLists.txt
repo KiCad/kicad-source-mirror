@@ -101,8 +101,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_edit_sheet_pin.cpp
     dialogs/dialog_sch_import_settings.cpp
     dialogs/dialog_sch_import_settings_base.cpp
-    dialogs/dialog_sch_sheet_props.cpp
-    dialogs/dialog_sch_sheet_props_base.cpp
+    dialogs/dialog_sheet_properties.cpp
+    dialogs/dialog_sheet_properties_base.cpp
     dialogs/dialog_schematic_find.cpp
     dialogs/dialog_schematic_find_base.cpp
     dialogs/dialog_schematic_setup.cpp

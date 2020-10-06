@@ -37,7 +37,7 @@
 #include <sch_painter.h>
 #include <schematic.h>
 #include <symbol_lib_table.h>
-#include <dialogs/dialog_sch_sheet_props.h>
+#include <dialogs/dialog_sheet_properties.h>
 #include <dialogs/dialog_edit_sheet_pin.h>
 #include <tool/actions.h>
 
@@ -467,7 +467,7 @@ bool SCH_EDIT_FRAME::EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHi
         return false;
 
     // Get the new texts
-    DIALOG_SCH_SHEET_PROPS dlg( this, aSheet, aClearAnnotationNewItems );
+    DIALOG_SHEET_PROPERTIES dlg( this, aSheet, aClearAnnotationNewItems );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;

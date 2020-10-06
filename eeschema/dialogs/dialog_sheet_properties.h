@@ -22,25 +22,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __dialog_sch_sheet_props__
-#define __dialog_sch_sheet_props__
+#ifndef DIALOG_SHEET_PROPERTIES_H
+#define DIALOG_SHEET_PROPERTIES_H
 
 #include <fields_grid_table.h>
 #include <widgets/unit_binder.h>
-#include <dialog_sch_sheet_props_base.h>
+#include <dialog_sheet_properties_base.h>
 
 
 class SCH_SHEET;
 class SCH_EDIT_FRAME;
 
 
-class DIALOG_SCH_SHEET_PROPS : public DIALOG_SCH_SHEET_PROPS_BASE
+class DIALOG_SHEET_PROPERTIES : public DIALOG_SHEET_PROPERTIES_BASE
 {
 public:
-    DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
-                            bool* aClearAnnotationNewItems );
+    DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
+                             bool* aClearAnnotationNewItems );
 
-    ~DIALOG_SCH_SHEET_PROPS() override;
+    ~DIALOG_SHEET_PROPERTIES() override;
 
 private:
     SCH_EDIT_FRAME* m_frame;
@@ -75,4 +75,4 @@ private:
     void AdjustGridColumns( int aWidth );
 };
 
-#endif // __dialog_sch_sheet_props__
+#endif // DIALOG_SHEET_PROPERTIES_H

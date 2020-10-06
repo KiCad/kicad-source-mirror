@@ -412,7 +412,7 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
         {
             // If we allowed this we'd have a bunch of work to do here, including warning
             // about it not being undoable, checking for recursive hierarchies, reloading
-            // sheets, etc.  See DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow().
+            // sheets, etc.  See DIALOG_SHEET_PROPERTIES::TransferDataFromWindow().
         }
     }
 
