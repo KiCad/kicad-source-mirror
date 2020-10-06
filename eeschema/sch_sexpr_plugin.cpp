@@ -1624,7 +1624,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveDcmInfoAsFields( LIB_PART* aSymbol, OUTPUTFORMA
             if( tmp.IsEmpty() )
                 tmp = filter;
             else
-                tmp += "\n" + filter;
+                tmp += " " + filter;
         }
 
         LIB_FIELD description( id, wxString( "ki_fp_filters" ) );
