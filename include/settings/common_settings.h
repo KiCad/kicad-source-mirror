@@ -103,8 +103,6 @@ public:
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
-    bool Migrate() override;
-
 private:
     bool migrateSchema0to1();
 

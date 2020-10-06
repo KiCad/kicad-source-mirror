@@ -362,8 +362,6 @@ public:
 
     bool LoadFromFile( const wxString& aDirectory = "" ) override;
 
-    bool Migrate() override;
-
     BOARD_STACKUP& GetStackupDescriptor() { return m_stackup; }
 
     int GetSeverity( int aDRCErrorCode );

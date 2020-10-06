@@ -176,25 +176,8 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "session.remember_open_files",
         &m_Session.remember_open_files, false ) );
-}
 
-
-bool COMMON_SETTINGS::Migrate()
-{
-    bool ret = true;
-    int  filever = at( PointerFromString( "meta.version" ) ).get<int>();
-
-    if( filever == 0 )
-    {
-        ret &= migrateSchema0to1();
-
-        if( ret )
-        {
-            ( *this )[PointerFromString( "meta.version" )] = 1;
-        }
-    }
-
-    return ret;
+    registerMigration( 0, 1, std::bind( &COMMON_SETTINGS::migrateSchema0to1, this ) );
 }
 
 

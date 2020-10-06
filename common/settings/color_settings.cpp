@@ -214,6 +214,19 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
     CLR( "3d_viewer.silkscreen_top",    LAYER_3D_SILKSCREEN_TOP,    COLOR4D( 0.9, 0.9, 0.9, 1.0 ) );
     CLR( "3d_viewer.soldermask",        LAYER_3D_SOLDERMASK,        COLOR4D( 0.08, 0.2, 0.14, 0.83 ) );
     CLR( "3d_viewer.solderpaste",       LAYER_3D_SOLDERPASTE,       COLOR4D( 0.5, 0.5, 0.5, 1.0 ) );
+
+    registerMigration( 0, 1, std::bind( &COLOR_SETTINGS::migrateSchema0to1, this ) );
+
+    registerMigration( 1, 2,
+            [&]()
+            {
+                // Fix LAYER_VIAS_HOLES color - before version 2, this setting had no effect
+                nlohmann::json::json_pointer ptr( "/board/via_hole");
+
+                ( *this )[ptr] = COLOR4D( 0.5, 0.4, 0, 0.8 ).ToWxString( wxC2S_CSS_SYNTAX );
+
+                return true;
+            } );
 }
 
 
@@ -256,33 +269,6 @@ bool COLOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 }
 
 
-bool COLOR_SETTINGS::Migrate()
-{
-    bool ret = true;
-    int  filever = at( PointerFromString( "meta.version" ) ).get<int>();
-
-    if( filever == 0 )
-    {
-        ret &= migrateSchema0to1();
-
-        if( ret )
-            filever = 1;
-    }
-
-    if( filever == 1 )
-    {
-        ret &= migrateSchema1to2();
-
-        if( ret )
-            filever = 2;
-    }
-
-    ( *this )[PointerFromString( "meta.version" )] = filever;
-
-    return ret;
-}
-
-
 bool COLOR_SETTINGS::migrateSchema0to1()
 {
     /**
@@ -304,7 +290,7 @@ bool COLOR_SETTINGS::migrateSchema0to1()
     if( !contains( fpedit ) )
     {
         wxLogTrace( traceSettings, "migrateSchema0to1: %s doesn't have fpedit settings; skipping.",
-                m_filename );
+                    m_filename );
         return true;
     }
 
@@ -326,17 +312,6 @@ bool COLOR_SETTINGS::migrateSchema0to1()
 
     // Now we can get rid of our own copy
     erase( "fpedit" );
-
-    return true;
-}
-
-
-bool COLOR_SETTINGS::migrateSchema1to2()
-{
-    // Fix LAYER_VIAS_HOLES color - before version 2, this setting had no effect
-    nlohmann::json::json_pointer ptr( "/board/via_hole");
-
-    ( *this )[ptr] = COLOR4D( 0.5, 0.4, 0, 0.8 ).ToWxString( wxC2S_CSS_SYNTAX );
 
     return true;
 }

@@ -596,6 +596,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     m_params.emplace_back( new PARAM<bool>( "zones_allow_external_fillets",
             &m_ZoneKeepExternalFillets, false ) );
+
+    registerMigration( 0, 1, std::bind( &BOARD_DESIGN_SETTINGS::migrateSchema0to1, this ) );
 }
 
 
@@ -704,25 +706,6 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
         m_netClasses = aOther.m_netClasses;
 
     m_defaultZoneSettings    = aOther.m_defaultZoneSettings;
-}
-
-
-bool BOARD_DESIGN_SETTINGS::Migrate()
-{
-    bool ret = true;
-    int  filever = at( PointerFromString( "meta.version" ) ).get<int>();
-
-    if( filever == 0 )
-    {
-        ret &= migrateSchema0to1();
-
-        if( ret )
-        {
-            ( *this )[PointerFromString( "meta.version" )] = 1;
-        }
-    }
-
-    return ret;
 }
 
 

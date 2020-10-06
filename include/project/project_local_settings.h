@@ -58,17 +58,12 @@ public:
 
     bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
-    bool Migrate() override;
-
     bool SaveToFile( const wxString& aDirectory = "", bool aForce = false ) override;
 
     void SetProject( PROJECT* aProject )
     {
         m_project = aProject;
     }
-
-private:
-    bool migrateSchema1to2();
 
 protected:
 

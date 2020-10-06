@@ -273,6 +273,8 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
                 { "dimensions", true },
                 { "otherItems", true }
             } ) );
+
+    registerMigration( 0, 1, std::bind( &FOOTPRINT_EDITOR_SETTINGS::migrateSchema0to1, this ) );
 }
 
 
@@ -388,25 +390,6 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
         ( *this )[PointerFromString( "window.grid.user_grid_x" )] = StringFromValue( u, x );
         ( *this )[PointerFromString( "window.grid.user_grid_y" )] = StringFromValue( u, y );
-    }
-
-    return ret;
-}
-
-
-bool FOOTPRINT_EDITOR_SETTINGS::Migrate()
-{
-    bool ret = true;
-    int  filever = at( PointerFromString( "meta.version" ) ).get<int>();
-
-    if( filever == 0 )
-    {
-        ret &= migrateSchema0to1();
-
-        if( ret )
-        {
-            ( *this )[PointerFromString( "meta.version" )] = 1;
-        }
     }
 
     return ret;

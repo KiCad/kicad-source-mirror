@@ -420,10 +420,46 @@ OPT<nlohmann::json> JSON_SETTINGS::GetJson( const std::string& aPath ) const
 }
 
 
+void JSON_SETTINGS::registerMigration( int aOldSchemaVersion, int aNewSchemaVersion,
+                                       std::function<bool()> aMigrator )
+{
+    wxASSERT( aNewSchemaVersion > aOldSchemaVersion );
+    wxASSERT( aNewSchemaVersion <= m_schemaVersion );
+    m_migrators[aOldSchemaVersion] = std::make_pair( aNewSchemaVersion, aMigrator );
+}
+
+
 bool JSON_SETTINGS::Migrate()
 {
-    wxLogTrace( traceSettings, "Migrate() not implemented for %s", typeid( *this ).name() );
-    return false;
+    int filever = at( PointerFromString( "meta.version" ) ).get<int>();
+
+    while( filever < m_schemaVersion )
+    {
+        if( !m_migrators.count( filever ) )
+        {
+            wxLogTrace( traceSettings, "Migrator missing for %s version %d!",
+                        typeid( *this ).name(), filever );
+            return false;
+        }
+
+        std::pair<int, std::function<bool()>> pair = m_migrators.at( filever );
+
+        if( pair.second() )
+        {
+            wxLogTrace( traceSettings, "Migrated %s from %d to %d", typeid( *this ).name(),
+                        filever, pair.first );
+            filever = pair.first;
+            ( *this )[PointerFromString( "meta.version" )] = filever;
+        }
+        else
+        {
+            wxLogTrace( traceSettings, "Migration failed for %s from %d to %d",
+                        typeid( *this ).name(), filever, pair.first );
+            return false;
+        }
+    }
+
+    return true;
 }
 
 

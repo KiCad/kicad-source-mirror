@@ -43,8 +43,6 @@ public:
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
-    bool Migrate() override;
-
     /// Only some of these settings are actually used for footprint editing
     // TODO: factor out the relevant stuff so the whole BDS doesn't have to be here
     BOARD_DESIGN_SETTINGS m_DesignSettings;

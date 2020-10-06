@@ -156,7 +156,7 @@ c     * @return true if the file was saved
      *
      * @return true if migration was successful
      */
-    virtual bool Migrate();
+    bool Migrate();
 
     /**
      * Migrates from wxConfig to JSON-based configuration.  Should be implemented by any subclasses
@@ -228,6 +228,17 @@ c     * @return true if the file was saved
     static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath,
                               unsigned int& aTarget );
 protected:
+
+    /**
+     * Registers a migration from one schema version to another.  If the schema version in the file
+     * loaded from disk is less than the schema version of the JSON_SETTINGS class, migration
+     * functions will be called one after the other until the data is up-to-date.
+     * @param aOldSchemaVersion is the starting schema version for this migration
+     * @param aNewSchemaVersion is the ending schema version for this migration
+     * @param aMigrator is a function that performs the migration and returns true if successful
+     */
+    void registerMigration( int aOldSchemaVersion, int aNewSchemaVersion,
+                            std::function<bool(void)> aMigrator );
 
     /**
     * Translates a legacy wxConfig value to a given JSON pointer value
@@ -308,6 +319,9 @@ protected:
 
     /// A list of JSON pointers that are preserved during a read-update-write to disk
     std::vector<nlohmann::json::json_pointer> m_preserved_paths;
+
+    /// A map of starting schema version to a pair of <ending version, migrator function>
+    std::map<int, std::pair<int, std::function<bool()>>> m_migrators;
 };
 
 // Specializations to allow conversion between wxString and std::string via JSON_SETTINGS API

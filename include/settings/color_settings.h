@@ -74,8 +74,6 @@ public:
 
     bool MigrateFromLegacy( wxConfigBase* aCfg ) override;
 
-    bool Migrate() override;
-
     COLOR4D GetColor( int aLayer ) const;
 
     COLOR4D GetDefaultColor( int aLayer );
@@ -90,7 +88,6 @@ public:
 
 private:
     bool migrateSchema0to1();
-    bool migrateSchema1to2();
 
     void initFromOther( const COLOR_SETTINGS& aOther );
 
