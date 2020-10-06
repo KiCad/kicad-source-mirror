@@ -762,6 +762,11 @@ bool PCBMODEL::CreatePCB()
             }
         }
     }
+    else
+    {
+        ReportMessage( "* could not create closed board outlines *\n" );
+        return false;
+    }
 
     // subtract cutouts (if any)
     if( m_cutouts.size() )

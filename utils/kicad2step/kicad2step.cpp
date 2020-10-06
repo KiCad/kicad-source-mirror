@@ -387,7 +387,14 @@ int PANEL_KICAD2STEP::RunConverter()
         {
             ReportMessage( "Build STEP data\n" );
 
-            pcb.ComposePCB( m_params.m_includeVirtual );
+            res = pcb.ComposePCB( m_params.m_includeVirtual );
+
+            if( !res )
+            {
+                ReportMessage( "\n**Error building STEP board model. Abort export **\n" );
+                return -1;
+            }
+
             ReportMessage( "Write STEP file\n" );
 
         #ifdef SUPPORTS_IGES
@@ -399,7 +406,7 @@ int PANEL_KICAD2STEP::RunConverter()
 
             if( !res )
             {
-                wxMessageBox( "Error Write STEP file" );
+                ReportMessage( "\nError Write STEP file\n" );
                 return -1;
             }
         }
@@ -437,7 +444,7 @@ int PANEL_KICAD2STEP::RunConverter()
     {
         if( !success )
             msg = "Unable to create STEP file.\n"
-                     "Check that the board has a valid outline and models.";
+                  "Check that the board has a valid outline and models.";
         else
         {
             msg = "STEP file has been created, but there are warnings.";
