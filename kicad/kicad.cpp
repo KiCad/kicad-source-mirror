@@ -258,6 +258,12 @@ struct APP_KICAD : public wxApp
 
     bool OnInit()           override
     {
+#if defined( _MSC_VER ) && defined( DEBUG )
+        // wxWidgets turns on leak dumping in debug but its "flawed" and will falsely dump for half a hour
+        // _CRTDBG_ALLOC_MEM_DF is the usual default for MSVC
+        _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF );
+#endif
+
         if( !program.OnPgmInit() )
         {
             program.OnPgmExit();
