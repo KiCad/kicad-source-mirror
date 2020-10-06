@@ -446,14 +446,20 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 
     //change last copper layer to be B_Cu instead of an inner layer
     LAYER_ID     cadstarlastElecLayer = mCopperLayers.rbegin()->second;
+
     PCB_LAYER_ID lastElecBrdId =
             stackup.GetStackupLayer( lastElectricalLayerIndex )->GetBrdLayerId();
-    std::remove( layerIDs.begin(), layerIDs.end(), lastElecBrdId );
+
+    layerIDs.erase(
+            std::remove( layerIDs.begin(), layerIDs.end(), lastElecBrdId ), layerIDs.end() );
+
     layerIDs.push_back( PCB_LAYER_ID::B_Cu );
     tempKiCadLayer = stackup.GetStackupLayer( lastElectricalLayerIndex );
     tempKiCadLayer->SetBrdLayerId( PCB_LAYER_ID::B_Cu );
+
     wxASSERT( mBoard->SetLayerName(
             tempKiCadLayer->GetBrdLayerId(), tempKiCadLayer->GetLayerName() ) );
+
     mLayermap.at( cadstarlastElecLayer ) = PCB_LAYER_ID::B_Cu;
 
     //make all layers enabled and visible
