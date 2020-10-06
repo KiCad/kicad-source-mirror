@@ -38,12 +38,14 @@
 #include <pgm_base.h>
 #include <project.h>
 #include <settings/common_settings.h>
+#include <widgets/infobar.h>
 
 
 PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE* aModule,
                               std::vector<MODULE_3D_SETTINGS>* aParentModelList ) :
         PANEL_PREV_3D_BASE( aParent, wxID_ANY ),
         m_previewPane( nullptr ),
+        m_infobar( nullptr ),
         m_boardAdapter(),
         m_currentCamera( m_trackBallCamera ),
         m_trackBallCamera( RANGE_SCALE_3D )
@@ -87,6 +89,9 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
     m_dummyModule = new MODULE( *aModule );
     m_dummyBoard->Add( m_dummyModule );
 
+    // Create the infobar
+    m_infobar = new WX_INFOBAR( this );
+
     // Create the 3D canvas
     m_previewPane = new EDA_3D_CANVAS( this, COGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
                                        m_dummyBoard, m_boardAdapter, m_currentCamera,
@@ -111,7 +116,12 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
     // Run the viewer control tool, it is supposed to be always active
     m_toolManager->InvokeTool( "3DViewer.Control" );
 
+    m_SizerPanelView->Add( m_infobar, 0, wxEXPAND, 0 );
     m_SizerPanelView->Add( m_previewPane, 1, wxEXPAND, 5 );
+
+    // Tell the canvas about the infobar
+    if( m_previewPane && m_infobar )
+        m_previewPane->SetInfoBar( m_infobar );
 
     for( wxEventType eventType : { wxEVT_MENU_OPEN, wxEVT_MENU_CLOSE, wxEVT_MENU_HIGHLIGHT } )
         Connect( eventType, wxMenuEventHandler( PANEL_PREV_3D::OnMenuEvent ), NULL, this );

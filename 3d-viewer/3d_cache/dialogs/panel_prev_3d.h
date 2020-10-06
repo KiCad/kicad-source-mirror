@@ -64,6 +64,7 @@
 
 
 // Declared classes to create pointers
+class WX_INFOBAR;
 class S3D_CACHE;
 class FILENAME_RESOLVER;
 class BOARD;
@@ -80,6 +81,7 @@ public:
 
 private:
     EDA_3D_CANVAS*                   m_previewPane;
+    WX_INFOBAR*                      m_infobar;
     BOARD_ADAPTER                    m_boardAdapter;
     CCAMERA&                         m_currentCamera;
     CTRACK_BALL                      m_trackBallCamera;
