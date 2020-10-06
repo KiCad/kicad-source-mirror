@@ -83,7 +83,7 @@ static struct PGM_MOCK_EESCHEMA_FRAME : public PGM_BASE
 
         // Destroy everything in PGM_BASE, especially wxSingleInstanceCheckerImpl
         // earlier than wxApp and earlier than static destruction would.
-        PGM_BASE::Destroy();
+        //PGM_BASE::Destroy();
     }
 
     void MacOpenFile( const wxString& aFileName ) override

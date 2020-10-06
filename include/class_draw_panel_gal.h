@@ -49,6 +49,7 @@ class WX_VIEW_CONTROLS;
 class VIEW_CONTROLS;
 class PAINTER;
 class GAL_DISPLAY_OPTIONS;
+class VIEW_OVERLAY;
 }
 
 
@@ -219,6 +220,18 @@ public:
      */
     void DoRePaint();
 
+    /**
+     * Creates an overlay for rendering debug graphics.
+     */
+    std::shared_ptr<KIGFX::VIEW_OVERLAY> DebugOverlay();
+
+
+    /**
+     * Clears the contents of the debug overlay and removes it from the VIEW.
+     */
+    void ClearDebugOverlay();
+
+
 protected:
 
     virtual void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
@@ -275,6 +288,9 @@ protected:
     /// Flag to indicate whether the panel should take focus at certain times (when moused over,
     /// and on various mouse/key events)
     bool                     m_stealsFocus;
+
+    /// Optional overlay for drawing transient debug objects
+    std::shared_ptr<KIGFX::VIEW_OVERLAY> m_debugOverlay;
 };
 
 #endif

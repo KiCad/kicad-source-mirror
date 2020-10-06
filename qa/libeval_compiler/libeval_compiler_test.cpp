@@ -19,10 +19,13 @@ bool testEvalExpr( const std::string expr, LIBEVAL::VALUE expectedResult, bool e
     PCB_EXPR_UCODE ucode;
     bool ok = true;
 
-    ucode.SetItems( itemA, itemB );
+    PCB_EXPR_CONTEXT  context, preflightContext;
 
-    bool error = !compiler.Compile( expr, &ucode );
+    context.SetItems( itemA, itemB );
 
+    bool error = !compiler.Compile( expr, &ucode, &preflightContext );
+    
+    
     if( error )
     {
         if ( expectError )
@@ -40,23 +43,13 @@ bool testEvalExpr( const std::string expr, LIBEVAL::VALUE expectedResult, bool e
 
     if( ok )
     {
-        result = *ucode.Run();
-        ok = (result == expectedResult);
+        result = *ucode.Run( &context );
+        ok = (result.EqualTo( &expectedResult) );
     }
 
     return ok;
 }
 
-bool EvaluatePCBExpression( const std::string& aExpr, int& aResult )
-{
-    PCB_EXPR_COMPILER compiler;
-    PCB_EXPR_UCODE ucode;
-    if( !compiler.Compile( aExpr, &ucode ) )
-        return false;
-
-    auto result = ucode.Run();
-    return true;
-}
 
 int main( int argc, char *argv[] )
 {
@@ -65,6 +58,8 @@ int main( int argc, char *argv[] )
 
 
     using VAL = LIBEVAL::VALUE;
+
+
 
 /*    testEvalExpr( "10mm + 20 mm", VAL(30e6) );
     testEvalExpr( "3*(7+8)", VAL(3*(7+8)) );
@@ -96,6 +91,10 @@ int main( int argc, char *argv[] )
 
     trackA.SetWidth( Mils2iu( 10 ));
     trackB.SetWidth( Mils2iu( 20 ));
+
+    testEvalExpr( "A.fromTo('U1', 'U3') && A.NetClass == 'DDR3_A' ", VAL(0),false, &trackA, &trackB );
+
+    return 0;
 
 //    testEvalExpr( "A.onlayer('F.Cu') || A.onlayer('B.Cu')", VAL( 1.0 ), false, &trackA, &trackB );
     testEvalExpr( "A.type == 'Pad' && B.type == 'Pad' && (A.existsOnLayer('F.Cu'))", VAL( 0.0 ), false, &trackA, &trackB );

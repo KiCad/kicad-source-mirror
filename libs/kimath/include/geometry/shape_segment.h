@@ -150,6 +150,18 @@ public:
         m_seg.B += aVector;
     }
 
+    const std::string Format() const
+    {
+        std::stringstream ss;
+
+        ss << "2 0 ";
+
+        ss << m_seg.A.x << " " << m_seg.A.y << " ";
+        ss << m_seg.B.x << " " << m_seg.B.y << " ";
+
+        return ss.str();
+    }
+
 private:
     SEG m_seg;
     int m_width;

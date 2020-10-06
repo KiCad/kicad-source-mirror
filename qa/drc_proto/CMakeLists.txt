@@ -25,7 +25,7 @@ find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
 
 
-add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW -DDRC_PROTO)
+add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW -DDRC_PROTO -DTEST_APP_NO_MAIN)
 
 if( BUILD_GITHUB_PLUGIN )
     set( GITHUB_PLUGIN_LIBRARIES github_plugin )
@@ -35,6 +35,7 @@ endif()
 
 add_executable( drc_proto
     drc_proto_test.cpp
+    drc_proto.cpp
     ../../pcbnew/drc/drc_rule.cpp
     ../../pcbnew/drc/drc_rule_condition.cpp
     ../../pcbnew/drc/drc_rule_parser.cpp
@@ -53,13 +54,16 @@ add_executable( drc_proto
     ../../pcbnew/drc/drc_test_provider_misc.cpp
     ../../pcbnew/drc/drc_test_provider_silk_to_mask.cpp
     ../../pcbnew/drc/drc_test_provider_silk_to_silk.cpp
+    ../../pcbnew/drc/drc_test_provider_matched_length.cpp
+    ../../pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp
     ../../pcbnew/drc/drc_engine.cpp
     ../../pcbnew/drc/drc_item.cpp
     ../qa_utils/mocks.cpp
     ../pcbnew_utils/board_file_utils.cpp
+    ../qa_utils/test_app_main.cpp
+    ../qa_utils/utility_program.cpp
     ../qa_utils/stdstream_line_reader.cpp
     ../../common/base_units.cpp
-    ../../3d-viewer/3d_viewer/3d_viewer_settings.cpp
 )
 
 add_dependencies( drc_proto pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} ${GITHUB_PLUGIN_LIBRARIES} )
@@ -87,31 +91,25 @@ include_directories(
 )
 
 target_link_libraries( drc_proto
-    pnsrouter
-    common
+    qa_pcbnew_utils
+    3d-viewer
+    connectivity
     pcbcommon
-    bitmaps
     pnsrouter
-    common
-    pcbcommon
-    bitmaps
-    pnsrouter
-    common
-    pcbcommon
-    bitmaps
-    pnsrouter
-    common
-    pcbcommon
-    bitmaps
     gal
     common
-    pcbcommon
+    gal
+    qa_utils
+    dxflib_qcad
+    tinyspline_lib
+    nanosvg
+    idf3
+    unit_test_utils
     ${PCBNEW_IO_LIBRARIES}
-    ${GITHUB_PLUGIN_LIBRARIES}
-    common
-    pcbcommon
-    ${Boost_FILESYSTEM_LIBRARY}
-    ${Boost_SYSTEM_LIBRARY}
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
     ${wxWidgets_LIBRARIES}
+    ${GITHUB_PLUGIN_LIBRARIES}
+    ${GDI_PLUS_LIBRARIES}
+    ${PYTHON_LIBRARIES}
+    ${Boost_LIBRARIES}      # must follow GITHUB
+    ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 )

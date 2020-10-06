@@ -24,6 +24,17 @@
 #include "eeschema_test_utils.h"
 
 #include <cstdlib>
+#include <memory>
+
+#include <eeschema/sch_io_mgr.h>
+#include <eeschema/sch_screen.h>
+#include <eeschema/schematic.h>
+#include <eeschema/connection_graph.h>
+
+
+#ifndef QA_EESCHEMA_DATA_LOCATION
+    #define QA_EESCHEMA_DATA_LOCATION "???"
+#endif
 
 wxFileName KI_TEST::GetEeschemaTestDataDir()
 {
@@ -46,4 +57,38 @@ wxFileName KI_TEST::GetEeschemaTestDataDir()
     fn << "/";
 
     return wxFileName{ fn };
+}
+
+std::unique_ptr<SCHEMATIC> ReadSchematicFromFile( const std::string& aFilename )
+{
+    auto pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
+    std::unique_ptr<SCHEMATIC> schematic( new SCHEMATIC ( nullptr ) );
+    
+    schematic->Reset();
+    schematic->SetRoot( pi->Load( aFilename, schematic.get() ) );
+    schematic->CurrentSheet().push_back( &schematic->Root() );
+
+    SCH_SCREENS screens( schematic->Root() );
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+        screen->UpdateLocalLibSymbolLinks();
+
+    SCH_SHEET_LIST sheets = schematic->GetSheets();
+
+    // Restore all of the loaded symbol instances from the root sheet screen.
+    sheets.UpdateSymbolInstances( schematic->RootScreen()->GetSymbolInstances() );
+
+    sheets.AnnotatePowerSymbols();
+
+    // NOTE: This is required for multi-unit symbols to be correct
+    // Normally called from SCH_EDIT_FRAME::FixupJunctions() but could be refactored
+    for( SCH_SHEET_PATH& sheet : sheets )
+        sheet.UpdateAllScreenReferences();
+
+    // NOTE: SchematicCleanUp is not called; QA schematics must already be clean or else
+    // SchematicCleanUp must be freed from its UI dependencies.
+
+    schematic->ConnectionGraph()->Recalculate( sheets, true );
+
+    return schematic;
 }

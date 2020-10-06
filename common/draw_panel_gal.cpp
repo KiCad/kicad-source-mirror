@@ -587,3 +587,25 @@ void EDA_DRAW_PANEL_GAL::onSetCursor( wxSetCursorEvent& event )
 {
     event.SetCursor( m_currentCursor );
 }
+
+
+std::shared_ptr<KIGFX::VIEW_OVERLAY> EDA_DRAW_PANEL_GAL::DebugOverlay()
+{
+    if( !m_debugOverlay )
+    {
+        m_debugOverlay.reset( new KIGFX::VIEW_OVERLAY() );
+        m_view->Add( m_debugOverlay.get() );
+    }
+
+    return m_debugOverlay;
+}
+
+
+void EDA_DRAW_PANEL_GAL::ClearDebugOverlay()
+{
+    if( m_debugOverlay )
+    {
+        m_view->Remove( m_debugOverlay.get() );
+        m_debugOverlay = nullptr;
+    }
+}
