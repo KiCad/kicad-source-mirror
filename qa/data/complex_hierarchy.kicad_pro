@@ -64,6 +64,8 @@
         "clearance": "error",
         "copper_edge_clearance": "error",
         "courtyards_overlap": "error",
+        "diff_pair_gap_out_of_range": "error",
+        "diff_pair_uncoupled_length_too_long": "error",
         "drill_too_small": "error",
         "duplicate_footprints": "warning",
         "extra_footprint": "warning",
@@ -73,6 +75,7 @@
         "item_on_disabled_layer": "error",
         "items_not_allowed": "error",
         "keepout": "error",
+        "length_out_of_range": "error",
         "malformed_courtyard": "error",
         "microvia_drill_too_small": "error",
         "missing_courtyard": "ignore",
@@ -82,6 +85,10 @@
         "padstack": "error",
         "pth_inside_courtyard": "ignore",
         "shorting_items": "error",
+        "silk_over_copper": "error",
+        "silk_overlap": "error",
+        "skew_out_of_range": "error",
+        "too_many_vias": "error",
         "track_dangling": "warning",
         "track_width": "error",
         "tracks_crossing": "error",
@@ -192,7 +199,8 @@
       "netlist": "",
       "specctra_dsn": "",
       "step": "",
-      "vmrl": ""
+      "vmrl": "",
+      "vrml": ""
     },
     "page_layout_descr_file": ""
   },

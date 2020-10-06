@@ -65,6 +65,8 @@ public:
 
     wxString GetFullFilename() const;
 
+    void SetFilename( const wxString& aFilename ) { m_filename = aFilename; }
+
     SETTINGS_LOC GetLocation() const { return m_location; }
 
     void SetLegacyFilename( const wxString& aFilename ) { m_legacy_filename = aFilename; }

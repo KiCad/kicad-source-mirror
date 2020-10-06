@@ -255,6 +255,12 @@ public:
     bool SaveProject( const wxString& aFullPath = wxEmptyString );
 
     /**
+     * Sets the currently loaded project path and saves it (pointers remain valid)
+     * @param aFullPath is the full filename to set for the project
+     */
+    void SaveProjectAs( const wxString& aFullPath );
+
+    /**
      * @return the full path to where project backups should be stored
      */
     wxString GetProjectBackupsPath() const;
@@ -390,8 +396,11 @@ private:
     /// True if settings loaded successfully at construction
     bool m_ok;
 
+    /// Loaded projects (ownership here)
+    std::vector<std::unique_ptr<PROJECT>> m_projects_list;
+
     /// Loaded projects, mapped according to project full name
-    std::map<wxString, std::unique_ptr<PROJECT>> m_projects;
+    std::map<wxString, PROJECT*> m_projects;
 
     /// Loaded project files, mapped according to project full name
     std::map<wxString, PROJECT_FILE*> m_project_files;

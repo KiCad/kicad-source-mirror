@@ -198,6 +198,15 @@ void SCH_EDIT_FRAME::Save_File( bool doSaveAs )
 
             if( fn.GetExt() == LegacySchematicFileExtension )
                 CreateArchiveLibraryCacheFile( true );
+
+            // If we are saving under a new name, and don't have a real project yet, create one
+            fn.SetExt( ProjectFileExtension );
+
+            if( fn.IsDirWritable() && !fn.FileExists() )
+            {
+                Prj().SetReadOnly( false );
+                GetSettingsManager()->SaveProjectAs( fn.GetFullPath() );
+            }
         }
     }
     else
@@ -291,8 +300,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         GetSettingsManager()->LoadProject( pro.GetFullPath() );
 
         // Do not allow saving a project if one doesn't exist.  This normally happens if we are
-        // standalone and opening a board that has been moved from its project folder.
-        if( !pro.Exists() )
+        // standalone and opening a schematic that has been moved from its project folder.
+        if( !pro.Exists() && !( aCtl & KICTL_CREATE ) )
             Prj().SetReadOnly();
 
         CreateScreens();
@@ -342,6 +351,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         // mark new, unsaved file as modified.
         GetScreen()->SetModify();
+        GetScreen()->SetFileName( fullFileName );
     }
     else
     {

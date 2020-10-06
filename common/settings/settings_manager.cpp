@@ -704,7 +704,7 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     // No MDI yet
     if( aSetActive && !m_projects.empty() )
     {
-        PROJECT* oldProject = m_projects.begin()->second.get();
+        PROJECT* oldProject = m_projects.begin()->second;
         unloadProjectFile( oldProject, true );
         m_projects.erase( m_projects.begin() );
     }
@@ -716,12 +716,13 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
 
     bool success = loadProjectFile( *project );
 
-    m_projects[fullPath].reset( project.release() );
+    m_projects_list.push_back( std::move( project ) );
+    m_projects[fullPath] = m_projects_list.back().get();
 
     wxString fn( path.GetName() );
 
     PROJECT_LOCAL_SETTINGS* settings = static_cast<PROJECT_LOCAL_SETTINGS*>(
-            RegisterSettings( new PROJECT_LOCAL_SETTINGS( m_projects[fullPath].get(), fn ) ) );
+            RegisterSettings( new PROJECT_LOCAL_SETTINGS( m_projects[fullPath], fn ) ) );
 
     m_projects[fullPath]->setLocalSettings( settings );
 
@@ -740,9 +741,20 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
     if( !unloadProjectFile( aProject, aSave ) )
         return false;
 
-    wxLogTrace( traceSettings, "Unload project %s", aProject->GetProjectFullName() );
+    wxString projectPath = aProject->GetProjectFullName();
+    wxLogTrace( traceSettings, "Unload project %s", projectPath );
 
-    m_projects.erase( aProject->GetProjectFullName() );
+    PROJECT* toRemove = m_projects.at( projectPath );
+    auto it = std::find_if( m_projects_list.begin(), m_projects_list.end(),
+                            [&]( const std::unique_ptr<PROJECT>& ptr )
+                            {
+                                return ptr.get() == toRemove;
+                            } );
+
+    wxASSERT( it != m_projects_list.end() );
+    m_projects_list.erase( it );
+
+    m_projects.erase( projectPath );
 
     // Immediately reload a null project; this is required until the rest of the application
     // is refactored to not assume that Prj() always works
@@ -775,7 +787,7 @@ bool SETTINGS_MANAGER::IsProjectOpen() const
 PROJECT* SETTINGS_MANAGER::GetProject( const wxString& aFullPath ) const
 {
     if( m_projects.count( aFullPath ) )
-        return m_projects.at( aFullPath ).get();
+        return m_projects.at( aFullPath );
 
     return nullptr;
 }
@@ -785,7 +797,7 @@ std::vector<wxString> SETTINGS_MANAGER::GetOpenProjects() const
 {
     std::vector<wxString> ret;
 
-    for( const std::pair<const wxString, std::unique_ptr<PROJECT>>& pair : m_projects )
+    for( const std::pair<const wxString, PROJECT*>& pair : m_projects )
         ret.emplace_back( pair.first );
 
     return ret;
@@ -813,6 +825,30 @@ bool SETTINGS_MANAGER::SaveProject( const wxString& aFullPath )
     Prj().GetLocalSettings().SaveToFile( projectPath );
 
     return true;
+}
+
+
+void SETTINGS_MANAGER::SaveProjectAs( const wxString& aFullPath )
+{
+    wxString oldName = Prj().GetProjectFullName();
+
+    // Changing this will cause UnloadProject to not save over the "old" project when loading below
+    Prj().setProjectFullName( aFullPath );
+
+    wxFileName fn( aFullPath );
+
+    PROJECT_FILE* project = m_project_files.at( oldName );
+    project->SetFilename( fn.GetName() );
+    project->SaveToFile( fn.GetPath() );
+
+    Prj().GetLocalSettings().SetFilename( fn.GetName() );
+    Prj().GetLocalSettings().SaveToFile( fn.GetPath() );
+
+    m_project_files[fn.GetFullPath()] = project;
+    m_project_files.erase( oldName );
+
+    m_projects[fn.GetFullPath()] = m_projects[oldName];
+    m_projects.erase( oldName );
 }
 
 
