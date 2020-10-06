@@ -853,8 +853,11 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                         pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
             }
 
-            m_ogl_disp_list_anti_board->ApplyScalePosition( pLayerDispList->GetZBot(),
-                    pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
+            if( m_ogl_disp_list_anti_board )
+            {
+                m_ogl_disp_list_anti_board->ApplyScalePosition( pLayerDispList->GetZBot(),
+                        pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
+            }
 
             if( (!skipRenderHoles) &&
                 m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) &&
