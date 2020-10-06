@@ -166,19 +166,17 @@ bool DRC_TEST_PROVIDER_SILK_TO_SILK::Run()
                     return true;
 
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_SILK_CLEARANCE );
-                wxString                  msg;
 
-                /* For now we're just reporting silkscreen collisions without any dimensional
-                 * data.  I suspect it's usually noise, and they can always use the clearance
-                 * resolution report if they want.
-                 *
-                msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                            constraint.GetParentRule()->m_Name,
-                            MessageTextFromValue( userUnits(), minClearance ),
-                            MessageTextFromValue( userUnits(), actual ) );
+                if( minClearance > 0 )
+                {
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                                  constraint.GetParentRule()->m_Name,
+                                  MessageTextFromValue( userUnits(), minClearance ),
+                                  MessageTextFromValue( userUnits(), actual ) );
 
-                drcItem->SetErrorMessage( msg );
-                 */
+                    drcItem->SetErrorMessage( m_msg );
+                }
+
                 drcItem->SetItems( aRefItem->parent, aTestItem->parent );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 

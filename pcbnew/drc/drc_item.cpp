@@ -77,7 +77,7 @@ DRC_ITEM DRC_ITEM::trackDangling( DRCE_DANGLING_TRACK,
         wxT( "track_dangling" ) );
 
 DRC_ITEM DRC_ITEM::holeClearance( DRCE_HOLE_CLEARANCE,
-        _( "Hole clearance" ),
+        _( "Hole clearance violation" ),
         wxT( "hole_clearance" ) );
 
 DRC_ITEM DRC_ITEM::holeNearHole( DRCE_DRILLED_HOLES_TOO_CLOSE,

@@ -31,13 +31,15 @@
 #include <drc/drc_test_provider_clearance_base.h>
 
 /*
-    Board edge clearance test. Checks all items for their mechanical clearances against the board edge.
+    Board edge clearance test. Checks all items for their mechanical clearances against the board
+    edge.
     Errors generated:
     - DRCE_COPPER_EDGE_CLEARANCE
 
     TODO:
     - separate holes to edge check
-    - tester only looks for edge crossings. it doesn't check if items are inside/outside the board area.
+    - tester only looks for edge crossings. it doesn't check if items are inside/outside the board
+      area.
     - pad test missing!
 */
 
@@ -82,11 +84,6 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     {
         m_largestClearance = worstClearanceConstraint.GetValue().Min();
     }
-    else
-    {
-        reportAux( "No Clearance constraints found..." );
-        return false;
-    }
 
     reportAux( "Worst clearance : %d nm", m_largestClearance );
 
@@ -114,27 +111,30 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     forEachGeometryItem( {}, LSET::AllCuMask(), queryBoardGeometryItems );
 
     wxString val;
-    wxGetEnv( "WXTRACE", &val);
+    wxGetEnv( "WXTRACE", &val );
 
     drc_dbg( 2, "outline: %d items, board: %d items\n",
             (int) boardOutline.size(), (int) boardItems.size() );
 
     for( PCB_SHAPE* outlineItem : boardOutline )
     {
-        if( m_drcEngine->IsErrorLimitExceeded( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE ) )
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_EDGE_CLEARANCE ) )
             break;
 
         const std::shared_ptr<SHAPE>& refShape = outlineItem->GetEffectiveShape();
 
         for( BOARD_ITEM* boardItem : boardItems )
         {
-            if( m_drcEngine->IsErrorLimitExceeded( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE ) )
+            if( m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_EDGE_CLEARANCE ) )
                 break;
 
             drc_dbg( 10, "RefT %d %p %s %d\n", outlineItem->Type(), outlineItem,
                      outlineItem->GetClass(), outlineItem->GetLayer() );
             drc_dbg( 10, "BoardT %d %p %s %d\n", boardItem->Type(), boardItem,
                      boardItem->GetClass(), boardItem->GetLayer() );
+
+            if ( isInvisibleText( boardItem ) )
+                continue;
 
             const std::shared_ptr<SHAPE>& shape = boardItem->GetEffectiveShape();
 
@@ -157,6 +157,62 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                               MessageTextFromValue( userUnits(), actual ) );
 
                 drcItem->SetErrorMessage( m_msg );
+                drcItem->SetItems( outlineItem, boardItem );
+                drcItem->SetViolatingRule( constraint.GetParentRule() );
+
+                reportViolation( drcItem, (wxPoint) pos );
+            }
+        }
+    }
+
+    if( !reportPhase( _( "Checking silkscreen to board edge clearances..." ) ) )
+        return false;
+
+    boardItems.clear();
+    forEachGeometryItem( {}, LSET( 2, F_SilkS, B_SilkS ), queryBoardGeometryItems );
+
+    for( PCB_SHAPE* outlineItem : boardOutline )
+    {
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
+            break;
+
+        const std::shared_ptr<SHAPE>& refShape = outlineItem->GetEffectiveShape();
+
+        for( BOARD_ITEM* boardItem : boardItems )
+        {
+            if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
+                break;
+
+            drc_dbg( 10, "RefT %d %p %s %d\n", outlineItem->Type(), outlineItem,
+                     outlineItem->GetClass(), outlineItem->GetLayer() );
+            drc_dbg( 10, "BoardT %d %p %s %d\n", boardItem->Type(), boardItem,
+                     boardItem->GetClass(), boardItem->GetLayer() );
+
+            const std::shared_ptr<SHAPE>& shape = boardItem->GetEffectiveShape();
+
+            auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_TO_MASK,
+                                                              outlineItem, boardItem );
+
+            int      minClearance = constraint.GetValue().Min();
+            int      actual;
+            VECTOR2I pos;
+
+            accountCheck( constraint );
+
+            if( refShape->Collide( shape.get(), minClearance, &actual, &pos ) )
+            {
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_MASK_CLEARANCE );
+
+                if( minClearance > 0 )
+                {
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                                  constraint.GetName(),
+                                  MessageTextFromValue( userUnits(), minClearance ),
+                                  MessageTextFromValue( userUnits(), actual ) );
+
+                    drcItem->SetErrorMessage( m_msg );
+                }
+
                 drcItem->SetItems( outlineItem, boardItem );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 

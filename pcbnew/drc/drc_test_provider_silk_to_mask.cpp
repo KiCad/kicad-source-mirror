@@ -141,7 +141,16 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
                     return true;
 
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_MASK_CLEARANCE );
-                wxString                  msg;
+
+                if( minClearance > 0 )
+                {
+                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                                  constraint.GetName(),
+                                  MessageTextFromValue( userUnits(), minClearance ),
+                                  MessageTextFromValue( userUnits(), actual ) );
+
+                    drcItem->SetErrorMessage( m_msg );
+                }
 
                 drcItem->SetItems( aRefItem->parent, aTestItem->parent );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
