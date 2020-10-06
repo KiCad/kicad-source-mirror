@@ -72,6 +72,11 @@ public:
     wxPoint GetPosition() const override { return m_Pos; }
     void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }
 
+    wxPoint GetCenter() const override
+    {
+        return GetPosition();
+    }
+
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override
     {
         return HitTestMarker( aPosition, aAccuracy );

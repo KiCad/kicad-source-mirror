@@ -120,12 +120,14 @@ public:
     /**
      * Function GetCenter()
      *
-     * This defaults to the same point as returned by GetPosition(), unless
-     * overridden
+     * This defaults to the center of the bounding box if not overridden.
      *
      * @return centre point of the item
      */
-    virtual wxPoint GetCenter() const { return GetPosition(); }
+    virtual wxPoint GetCenter() const
+    {
+        return GetBoundingBox().GetCenter();
+    }
 
     void SetX( int aX )
     {

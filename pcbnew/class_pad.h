@@ -239,6 +239,8 @@ public:
     void SetOffset( const wxPoint& aOffset )    { m_offset = aOffset; m_shapesDirty = true; }
     const wxPoint& GetOffset() const            { return m_offset; }
 
+    wxPoint GetCenter() const override          { return GetPosition(); }
+
     /**
      * Has meaning only for custom shape pads.
      * add a free shape to the shape list.
