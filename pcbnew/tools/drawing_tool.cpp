@@ -581,7 +581,9 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             }
         }
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     frame()->SetMsgPanel( board() );
@@ -921,7 +923,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             }
         }
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     if( step != SET_ORIGIN )
@@ -1085,7 +1089,9 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
             break;   // This is a one-shot command, not a tool
         }
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     preview.Clear();
@@ -1150,7 +1156,9 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
             break;
         }
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     return 0;
@@ -1211,6 +1219,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     frame()->SetMsgPanel( graphic );
+
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
@@ -1230,15 +1239,16 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
         if( evt->Modifier( MD_CTRL ) )
             limit45 = !limit45;
 
-        auto cleanup = [&] () {
-            preview.Clear();
-            m_view->Update( &preview );
-            delete graphic;
-            graphic = nullptr;
+        auto cleanup = [&]()
+                       {
+                           preview.Clear();
+                           m_view->Update( &preview );
+                           delete graphic;
+                           graphic = nullptr;
 
-            if( !isLocalOriginSet )
-                m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
-        };
+                           if( !isLocalOriginSet )
+                               m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
+                       };
 
         if( evt->IsCancelInteractive() )
         {
@@ -1403,9 +1413,12 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
         else if( evt->IsAction( &ACTIONS::resetLocalCoords ) )
         {
             isLocalOriginSet = true;
+            evt->SetPassEvent();
         }
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     if( !isLocalOriginSet ) // reset the relative coordinte if it was not set before
@@ -1596,7 +1609,9 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
             arcManager.ToggleClockwise();
         }
         else
+        {
             evt->SetPassEvent();
+        }
 
         if( arcManager.IsComplete() )
         {
@@ -1858,7 +1873,9 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
             }
         }
         else
+        {
             evt->SetPassEvent();
+        }
 
     }    // end while
 
