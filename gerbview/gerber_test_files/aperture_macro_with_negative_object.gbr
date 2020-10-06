@@ -1,4 +1,3 @@
-%TF.GerberVersion,J4*%
 %TF.Part,Single*%
 %TF.FileFunction,Other,BugReportExample*%
 
@@ -17,7 +16,7 @@ G04  a rectangular negative object overlapping the other half circle
 G04 ===================================================*
 %AMHALFCIRCLE*
 1,1,1,0,0,0,0*
-2,0,1,0,0,-.5,0,0*%
+21,0, 1,1, -0.5, 0, 0*%
 
 
 
