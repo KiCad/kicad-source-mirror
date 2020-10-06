@@ -256,6 +256,7 @@ struct DIFF_PAIR_KEY
         SEG coupledN, coupledP;
         TRACK* parentN, *parentP;
         int computedGap;
+        PCB_LAYER_ID layer;
         bool couplingOK;
     };
 
@@ -270,10 +271,11 @@ struct DIFF_PAIR_KEY
 
 static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp, DRC_RTREE& aTree )
 {
-
     for( BOARD_CONNECTED_ITEM* itemP : aDp.itemsP )
     {
         auto sp = dyn_cast<TRACK*>( itemP );
+        OPT<DIFF_PAIR_COUPLED_SEGMENTS> bestCoupled;
+        int bestGap = std::numeric_limits<int>::max();
 
         if(!sp)
             continue;
@@ -298,26 +300,59 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp, DRC_RTREE& aTree 
 
                 if( coupled )
                 {
-                    SHAPE_SEGMENT checkSegStart( cpair.coupledP.A, cpair.coupledN.A );
-                    SHAPE_SEGMENT checkSegEnd( cpair.coupledP.B, cpair.coupledN.B );
+                    cpair.parentP = sp;
+                    cpair.parentN = sn;
+                    cpair.layer = sp->GetLayer();
 
-                    // check if there's anyting in between the segments suspected to be coupled. If
-                    // there's nothing, assume they are really coupled.
-
-                    if( !aTree.CheckColliding( &checkSegStart, sp->GetLayer() )
-                            && !aTree.CheckColliding( &checkSegEnd, sp->GetLayer() ) )
+                    int gap = (cpair.coupledP.A - cpair.coupledN.A).EuclideanNorm();
+                    if( gap < bestGap )
                     {
-
-                        cpair.parentP = sp;
-                        cpair.parentN = sn;
-
-                        aDp.coupled.push_back( cpair );
+                        bestGap = gap;
+                        bestCoupled = cpair;
                     }
                 }
+
             }
+        }
+
+        if( bestCoupled )
+        {
+            printf("Best-gap %d\n", bestGap );
+            auto excludeSelf = [&] ( BOARD_ITEM *aItem )
+                                {
+                                    if( aItem == bestCoupled->parentN || aItem == bestCoupled->parentP )
+                                    {
+                                        return false;
+                                    }
+
+                                    if( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_VIA_T )
+                                    {
+                                        auto bci = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
+
+                                        if( bci->GetNetCode() == bestCoupled->parentN->GetNetCode() 
+                                        ||  bci->GetNetCode() == bestCoupled->parentP->GetNetCode() )
+                                            return false;
+                                    }
+
+                                    return true;
+                                };
+
+                                SHAPE_SEGMENT checkSegStart( bestCoupled->coupledP.A, bestCoupled->coupledN.A );
+                                SHAPE_SEGMENT checkSegEnd( bestCoupled->coupledP.B, bestCoupled->coupledN.B );
+
+                                // check if there's anyting in between the segments suspected to be coupled. If
+                                // there's nothing, assume they are really coupled.
+
+                                if( !aTree.CheckColliding( &checkSegStart, sp->GetLayer(), 0, excludeSelf )
+                                      && !aTree.CheckColliding( &checkSegEnd, sp->GetLayer(), 0, excludeSelf ) )
+                                {
+                                    aDp.coupled.push_back( *bestCoupled );
+                                }
+
         }
     }
 }
+
 
 
 bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
@@ -338,6 +373,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                 if( !isNetADiffPair( m_board, refNet, key.netP, key.netN ) ) // not our business
                     return true;
 
+                drc_dbg(10, "eval dp %p\n", item );
+
                 const DRC_CONSTRAINT_TYPE_T constraintsToCheck[] = {
                     DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP,
                     DRC_CONSTRAINT_TYPE_DIFF_PAIR_MAX_UNCOUPLED
@@ -349,6 +386,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                     if( constraint.IsNull() )
                         continue;
+
+                    drc_dbg(10, "cns %d item %p\n", constraintsToCheck[i], item );
 
                     key.parentRule = constraint.GetParentRule();
 
@@ -365,6 +404,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
     forEachGeometryItem( { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T },
                     LSET::AllCuMask(), evaluateDpConstraints );
+
+    drc_dbg(10, "dp rule matches %d\n", dpRuleMatches.size() );
 
 
     DRC_RTREE copperTree;
@@ -429,6 +470,21 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
             gap -= cpair.parentP->GetWidth() / 2;
 
             cpair.computedGap = gap;
+
+            auto overlay = m_drcEngine->GetDebugOverlay();
+
+            printf("Overlay %p\n", overlay.get () );
+
+            if( overlay )
+            {
+                overlay->SetIsFill(false);
+                overlay->SetIsStroke(true);
+                overlay->SetStrokeColor( RED );
+                overlay->SetLineWidth( 100000 );
+                overlay->Line( cpair.coupledP );
+                overlay->SetStrokeColor( BLUE );
+                overlay->Line( cpair.coupledN );
+            }
 
             drc_dbg(10, "               len %d gap %d l %d\n", length, gap, cpair.parentP->GetLayer() );
 

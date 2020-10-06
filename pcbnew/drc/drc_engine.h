@@ -46,6 +46,7 @@ class REPORTER;
 namespace KIGFX
 {
     class WS_PROXY_VIEW_ITEM;
+    class VIEW_OVERLAY;
 };
 
 void drcPrintDebugMessage( int level, const wxString& msg, const char *function, int line );
@@ -95,6 +96,10 @@ public:
 
     void SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet ) { m_worksheet = aWorksheet; }
     KIGFX::WS_PROXY_VIEW_ITEM* GetWorksheet() const { return m_worksheet; }
+
+    void SetDebugOverlay( std::shared_ptr<KIGFX::VIEW_OVERLAY> aOverlay ) { m_debugOverlay = aOverlay; }
+    std::shared_ptr<KIGFX::VIEW_OVERLAY> GetDebugOverlay() const { return m_debugOverlay; }
+
 
     /**
      * Set an optional DRC violation handler (receives DRC_ITEMs and positions).
@@ -224,6 +229,7 @@ protected:
     PROGRESS_REPORTER*               m_progressReporter;
 
     wxString m_msg;  // Allocating strings gets expensive enough to want to avoid it
+    std::shared_ptr<KIGFX::VIEW_OVERLAY> m_debugOverlay;
 };
 
 #endif // DRC_H

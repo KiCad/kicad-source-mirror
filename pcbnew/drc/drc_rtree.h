@@ -239,8 +239,8 @@ public:
 
     bool CheckColliding( SHAPE* aRefShape,
                          PCB_LAYER_ID aTargetLayer,
-                         int aClearance = 0
-                        )
+                         int aClearance = 0,
+                         std::function<bool( BOARD_ITEM*)> aFilter = nullptr )
     {
         BOX2I box = aRefShape->BBox();
         box.Inflate( aClearance );
@@ -253,6 +253,10 @@ public:
         auto visit = [&] ( ITEM_WITH_SHAPE* aItem ) -> bool
         {
             int actual;
+
+            // keep searching
+            if( aFilter && ! aFilter( aItem->parent ) )
+                return true;
 
             bool colliding = aRefShape->Collide( aItem->shape, aClearance, &actual );
 
