@@ -26,6 +26,13 @@
 
 const int netSettingsSchemaVersion = 0;
 
+static OPT<int> getInPcbUnits( const nlohmann::json& aObj, const std::string& aKey, OPT<int> aDefault = OPT<int>() )
+{
+    if( aObj.contains( aKey ) )
+        return PcbMillimeter2iu( aObj[aKey].get<double>() );
+    else
+        return aDefault;
+};
 
 NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
         NESTED_SETTINGS( "net_settings", netSettingsSchemaVersion, aParent, aPath ),
@@ -51,21 +58,40 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                     // are used in which units system.
                     nlohmann::json netclassJson = {
                         { "name",              netclass->GetName().ToUTF8() },
-                        { "clearance",         PcbIu2Millimeter( netclass->GetClearance() ) },
-                        { "track_width",       PcbIu2Millimeter( netclass->GetTrackWidth() ) },
-                        { "via_diameter",      PcbIu2Millimeter( netclass->GetViaDiameter() ) },
-                        { "via_drill",         PcbIu2Millimeter( netclass->GetViaDrill() ) },
-                        { "microvia_diameter", PcbIu2Millimeter( netclass->GetuViaDiameter() ) },
-                        { "microvia_drill",    PcbIu2Millimeter( netclass->GetuViaDrill() ) },
-                        { "diff_pair_width",   PcbIu2Millimeter( netclass->GetDiffPairWidth() ) },
-                        { "diff_pair_gap",     PcbIu2Millimeter( netclass->GetDiffPairGap() ) },
-                        { "diff_pair_via_gap", PcbIu2Millimeter( netclass->GetDiffPairViaGap() ) },
                         { "wire_width",        SchIu2Mils( netclass->GetWireWidth() ) },
                         { "bus_width",         SchIu2Mils( netclass->GetBusWidth() ) },
                         { "line_style",        netclass->GetLineStyle() },
                         { "schematic_color",   netclass->GetSchematicColor() },
                         { "pcb_color",         netclass->GetPcbColor() }
                         };
+
+
+                    if( netclass->HasClearance() )
+                        netclassJson.push_back( { "clearance",         PcbIu2Millimeter( netclass->GetClearance() ) } );
+
+                    if( netclass->HasTrackWidth() )
+                        netclassJson.push_back( { "track_width",       PcbIu2Millimeter( netclass->GetTrackWidth() ) } );
+
+                    if( netclass->HasViaDiameter() )
+                        netclassJson.push_back( { "via_diameter",      PcbIu2Millimeter( netclass->GetViaDiameter() ) } );
+
+                    if( netclass->HasViaDrill() )
+                        netclassJson.push_back( { "via_drill",         PcbIu2Millimeter( netclass->GetViaDrill() ) } );
+
+                    if( netclass->HasuViaDiameter() )
+                        netclassJson.push_back( { "microvia_diameter", PcbIu2Millimeter( netclass->GetuViaDiameter() ) } );
+
+                    if( netclass->HasuViaDrill() )
+                        netclassJson.push_back( { "microvia_drill",    PcbIu2Millimeter( netclass->GetuViaDrill() ) } );
+
+                    if( netclass->HasDiffPairWidth() )
+                        netclassJson.push_back( { "diff_pair_width",   PcbIu2Millimeter( netclass->GetDiffPairWidth() ) } );
+
+                    if( netclass->HasDiffPairGap() )
+                        netclassJson.push_back( { "diff_pair_gap",     PcbIu2Millimeter( netclass->GetDiffPairGap() ) } );
+
+                    if( netclass->HasDiffPairViaGap() )
+                        netclassJson.push_back( { "diff_pair_via_gap", PcbIu2Millimeter( netclass->GetDiffPairViaGap() ) } );
 
                     if( idx > 0 )   // No need to store members of Default netclass
                     {
@@ -95,15 +121,6 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 NETCLASSPTR netclass;
                 NETCLASSPTR defaultClass = m_NetClasses.GetDefault();
 
-                auto getInPcbUnits =
-                        []( const nlohmann::json& aObj, const std::string& aKey, int aDefault )
-                        {
-                            if( aObj.contains( aKey ) )
-                                return PcbMillimeter2iu( aObj[aKey].get<double>() );
-                            else
-                                return aDefault;
-                        };
-
                 auto getInSchematicUnits =
                         []( const nlohmann::json& aObj, const std::string& aKey, int aDefault )
                         {
@@ -125,24 +142,30 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                     else
                         netclass = std::make_shared<NETCLASS>( name );
 
-                    netclass->SetClearance( getInPcbUnits( entry, "clearance",
-                                                           netclass->GetClearance() ) );
-                    netclass->SetTrackWidth( getInPcbUnits( entry, "track_width",
-                                                            netclass->GetTrackWidth() ) );
-                    netclass->SetViaDiameter( getInPcbUnits( entry, "via_diameter",
-                                                             netclass->GetViaDiameter() ) );
-                    netclass->SetViaDrill( getInPcbUnits( entry, "via_drill",
-                                                          netclass->GetViaDrill() ) );
-                    netclass->SetuViaDiameter( getInPcbUnits( entry, "microvia_diameter",
-                                                              netclass->GetuViaDiameter() ) );
-                    netclass->SetuViaDrill( getInPcbUnits( entry, "microvia_drill",
-                                                           netclass->GetuViaDrill() ) );
-                    netclass->SetDiffPairWidth( getInPcbUnits( entry, "diff_pair_width",
-                                                               netclass->GetDiffPairWidth() ) );
-                    netclass->SetDiffPairGap( getInPcbUnits( entry, "diff_pair_gap",
-                                                             netclass->GetDiffPairGap() ) );
-                    netclass->SetDiffPairViaGap( getInPcbUnits( entry, "diff_pair_via_gap",
-                                                                netclass->GetDiffPairViaGap() ) );
+                    if( auto value = getInPcbUnits( entry, "clearance" ) )
+                        netclass->SetClearance( *value );
+
+                    if( auto value = getInPcbUnits( entry, "track_width" ) )
+                        netclass->SetTrackWidth( *value );
+
+                    if( auto value = getInPcbUnits( entry, "via_diameter" ) )
+                        netclass->SetViaDiameter( *value );
+
+                    if( auto value = getInPcbUnits( entry, "microvia_diameter" ) )
+                        netclass->SetuViaDiameter( *value );
+
+                    if( auto value = getInPcbUnits( entry, "microvia_drill" ) )
+                        netclass->SetuViaDrill( *value );
+
+                    if( auto value = getInPcbUnits( entry, "diff_pair_width" ) )
+                        netclass->SetDiffPairWidth( *value );
+
+                    if( auto value = getInPcbUnits( entry, "diff_pair_gap" ) )
+                        netclass->SetDiffPairGap( *value );
+
+                    if( auto value = getInPcbUnits( entry, "diff_pair_via_gap" ) )
+                        netclass->SetDiffPairViaGap( *value );
+
                     netclass->SetWireWidth( getInSchematicUnits( entry, "wire_width",
                                                                  netclass->GetWireWidth() ) );
                     netclass->SetBusWidth( getInSchematicUnits( entry, "bus_width",

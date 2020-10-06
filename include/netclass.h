@@ -29,7 +29,7 @@
 
 #include <macros.h>
 #include <gal/color4d.h>
-
+#include <core/optional.h>
 
 class LINE_READER;
 class BOARD;
@@ -56,18 +56,18 @@ protected:
 
     /// The units on these parameters is Internal Units (1 nm)
 
-    int         m_Clearance;            ///< clearance when routing
+    OPT<int>         m_Clearance;            ///< clearance when routing
 
-    int         m_TrackWidth;           ///< track width used to route NETs in this NETCLASS
-    int         m_ViaDia;               ///< via diameter
-    int         m_ViaDrill;             ///< via drill hole diameter
+    OPT<int>         m_TrackWidth;           ///< track width used to route NETs in this NETCLASS
+    OPT<int>         m_ViaDia;               ///< via diameter
+    OPT<int>         m_ViaDrill;             ///< via drill hole diameter
 
-    int         m_uViaDia;              ///< microvia diameter
-    int         m_uViaDrill;            ///< microvia drill hole diameter
+    OPT<int>         m_uViaDia;              ///< microvia diameter
+    OPT<int>         m_uViaDrill;            ///< microvia drill hole diameter
 
-    int         m_diffPairWidth;
-    int         m_diffPairGap;
-    int         m_diffPairViaGap;
+    OPT<int>         m_diffPairWidth;
+    OPT<int>         m_diffPairGap;
+    OPT<int>         m_diffPairViaGap;
 
     int         m_wireWidth;
     int         m_busWidth;
@@ -155,38 +155,40 @@ public:
     const wxString& GetDescription() const  { return m_Description; }
     void  SetDescription( const wxString& aDesc ) { m_Description = aDesc; }
 
-    int GetClearance( wxString* aSource = nullptr ) const
-    {
-        if( aSource )
-            *aSource = wxString::Format( _( "'%s' netclass" ), m_Name );
-
-        return m_Clearance;
-    }
-
+    bool    HasClearance() const { return (bool) m_Clearance; }
+    int     GetClearance() const { return m_Clearance.value_or(-1); }
     void    SetClearance( int aClearance )  { m_Clearance = aClearance; }
 
-    int     GetTrackWidth() const           { return m_TrackWidth; }
+    bool    HasTrackWidth() const { return (bool) m_TrackWidth; }
+    int     GetTrackWidth() const           { return m_TrackWidth.value_or( -1 ); }
     void    SetTrackWidth( int aWidth )     { m_TrackWidth = aWidth; }
 
-    int     GetViaDiameter() const          { return m_ViaDia; }
+    bool    HasViaDiameter() const          { return (bool) m_ViaDia; }
+    int     GetViaDiameter() const          { return m_ViaDia.value_or( -1 ); }
     void    SetViaDiameter( int aDia )      { m_ViaDia = aDia; }
 
-    int     GetViaDrill() const             { return m_ViaDrill; }
+    int     HasViaDrill() const             { return (bool) m_ViaDrill; }
+    int     GetViaDrill() const             { return m_ViaDrill.value_or( -1 ); }
     void    SetViaDrill( int aSize )        { m_ViaDrill = aSize; }
 
-    int     GetuViaDiameter() const         { return m_uViaDia; }
+    bool    HasuViaDiameter() const         { return (bool) m_uViaDia; }
+    int     GetuViaDiameter() const         { return m_uViaDia.value_or( -1 ); }
     void    SetuViaDiameter( int aSize )    { m_uViaDia = aSize; }
 
-    int     GetuViaDrill() const            { return m_uViaDrill; }
+    bool    HasuViaDrill() const            { return (bool) m_uViaDrill; }
+    int     GetuViaDrill() const            { return m_uViaDrill.value_or( -1 ); }
     void    SetuViaDrill( int aSize )       { m_uViaDrill = aSize; }
 
-    int     GetDiffPairWidth() const        { return m_diffPairWidth; }
+    bool    HasDiffPairWidth() const        { return (bool) m_diffPairWidth; }
+    int     GetDiffPairWidth() const        { return m_diffPairWidth.value_or( -1 ); }
     void    SetDiffPairWidth( int aSize )   { m_diffPairWidth = aSize; }
 
-    int     GetDiffPairGap() const          { return m_diffPairGap; }
+    bool    HasDiffPairGap() const          { return (bool) m_diffPairGap; }
+    int     GetDiffPairGap() const          { return m_diffPairGap.value_or( -1 ); }
     void    SetDiffPairGap( int aSize )     { m_diffPairGap = aSize; }
 
-    int     GetDiffPairViaGap() const       { return m_diffPairViaGap; }
+    bool    HasDiffPairViaGap() const       { return (bool) m_diffPairViaGap; }
+    int     GetDiffPairViaGap() const       { return m_diffPairViaGap.value_or( -1 ); }
     void    SetDiffPairViaGap( int aSize )  { m_diffPairViaGap = aSize; }
 
     COLOR4D GetPcbColor() const             { return m_PcbColor; }
