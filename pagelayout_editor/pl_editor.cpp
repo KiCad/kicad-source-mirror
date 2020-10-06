@@ -124,6 +124,12 @@ PGM_BASE& Pgm()
 }
 
 
+// Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face is run from a python script.
+PGM_BASE* PgmOrNull()
+{
+    return process;
+}
+
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
     InitSettings( new PL_EDITOR_SETTINGS );
