@@ -458,8 +458,6 @@ CLAYERS_OGL_DISP_LISTS* C3D_RENDER_OGL_LEGACY::createBoard( SHAPE_POLY_SET aBoar
 
         const SHAPE_POLY_SET &boardPoly = m_boardAdapter.GetBoardPoly();
 
-        wxASSERT( boardPoly.OutlineCount() > 0 );
-
         if( boardPoly.OutlineCount() > 0 )
         {
             layerTriangles->AddToMiddleContourns( boardPoly,
@@ -514,7 +512,9 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
 
     anti_board.BooleanSubtract( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_FAST );
     m_ogl_disp_list_anti_board = createBoard( anti_board );
-    m_ogl_disp_list_anti_board->SetItIsTransparent( true );
+
+    if( m_ogl_disp_list_anti_board )
+        m_ogl_disp_list_anti_board->SetItIsTransparent( true );
 
     // Create Through Holes and vias
     // /////////////////////////////////////////////////////////////////////////
