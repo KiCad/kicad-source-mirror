@@ -22,9 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <eda_draw_frame.h>
-
+#include <default_values.h>
 #include <dialog_lib_new_component.h>
+#include <eda_draw_frame.h>
 #include <sch_validators.h>
 #include <template_fieldnames.h>
 
@@ -40,7 +40,7 @@ DIALOG_LIB_NEW_COMPONENT::DIALOG_LIB_NEW_COMPONENT( EDA_DRAW_FRAME* aParent,
     m_textName->SetValidator( SCH_FIELD_VALIDATOR( true, VALUE ) );
     m_textReference->SetValidator( SCH_FIELD_VALIDATOR( true, REFERENCE ) );
 
-    m_pinTextPosition.SetValue( Mils2iu( 40 ) );
+    m_pinTextPosition.SetValue( Mils2iu( DEFAULT_PIN_NAME_OFFSET ) );
 
     // initial focus should be on first editable field.
     m_textName->SetFocus();
