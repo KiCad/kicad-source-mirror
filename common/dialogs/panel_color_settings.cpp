@@ -84,8 +84,8 @@ bool PANEL_COLOR_SETTINGS::Show( bool show )
     if( show )
     {
         // In case changes have been made to the current theme in another panel:
-        wxString        currentTheme = m_cbTheme->GetStringSelection();
-        COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings( currentTheme );
+        int idx = m_cbTheme->GetSelection();
+        COLOR_SETTINGS* settings = static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( idx ) );
 
         if( settings )
             *m_currentSettings = *settings;
@@ -204,7 +204,7 @@ void PANEL_COLOR_SETTINGS::createThemeList( const wxString& aCurrent )
     {
         int pos = m_cbTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
 
-        if( settings->GetName() == aCurrent )
+        if( settings->GetFilename() == aCurrent )
             m_cbTheme->SetSelection( pos );
 
         m_cbTheme->GetTextExtent( settings->GetName(), &width, &height );
