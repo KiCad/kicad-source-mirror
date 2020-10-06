@@ -41,7 +41,7 @@
 
 DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
                                                   bool* aClearAnnotationNewItems ) :
-    DIALOG_SCH_SHEET_PROPERTIES_BASE( aParent ),
+    DIALOG_SHEET_PROPERTIES_BASE( aParent ),
     m_frame( aParent ),
     m_clearAnnotationNewItems( aClearAnnotationNewItems ),
     m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits, true )
