@@ -220,7 +220,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     controls.SetAutoPan( false );
     controls.CaptureCursor( false );
 
-    while( auto evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );

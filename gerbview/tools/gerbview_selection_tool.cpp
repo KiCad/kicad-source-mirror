@@ -585,17 +585,21 @@ int GERBVIEW_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         const VECTOR2I cursorPos = controls.GetCursorPosition();
 
-        auto clearRuler = [&] () {
-            view.SetVisible( &ruler, false );
-            controls.SetAutoPan( false );
-            controls.CaptureCursor( false );
-            originSet = false;
-        };
+        auto clearRuler =
+            [&] ()
+            {
+                view.SetVisible( &ruler, false );
+                controls.SetAutoPan( false );
+                controls.CaptureCursor( false );
+                originSet = false;
+            };
 
         if( evt->IsCancelInteractive() )
         {
             if( originSet )
+            {
                 clearRuler();
+            }
             else
             {
                 m_frame->PopTool( tool );
@@ -623,24 +627,13 @@ int GERBVIEW_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         // click or drag starts
         else if( !originSet && ( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
         {
-            if( !evt->IsDrag( BUT_LEFT ) )
-            {
-                twoPtMgr.SetOrigin( cursorPos );
-                twoPtMgr.SetEnd( cursorPos );
-            }
+            twoPtMgr.SetOrigin( cursorPos );
+            twoPtMgr.SetEnd( cursorPos );
 
             controls.CaptureCursor( true );
             controls.SetAutoPan( true );
 
             originSet = true;
-        }
-
-        else if( !originSet && evt->IsMotion() )
-        {
-            // make sure the origin is set before a drag starts
-            // otherwise you can miss a step
-            twoPtMgr.SetOrigin( cursorPos );
-            twoPtMgr.SetEnd( cursorPos );
         }
 
         // second click or mouse up after drag ends
@@ -650,8 +643,6 @@ int GERBVIEW_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
             controls.SetAutoPan( false );
             controls.CaptureCursor( false );
-
-            view.SetVisible( &ruler, false );
         }
 
         // move or drag when origin set updates rules
