@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 CERN
+ * Copyright (C) 2018-2020 CERN
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -36,26 +36,32 @@ enum ERCE_T
 {
     ERCE_UNSPECIFIED = 0,
     ERCE_FIRST,
-    ERCE_DUPLICATE_SHEET_NAME = ERCE_FIRST,  // duplicate sheet names within a given sheet
-    ERCE_PIN_NOT_CONNECTED,     // pin not connected and not no connect symbol
-    ERCE_PIN_NOT_DRIVEN,        // pin connected to some others pins but no pin to drive it
-    ERCE_HIERACHICAL_LABEL,     // mismatch between hierarchical labels and pins sheets
-    ERCE_NOCONNECT_CONNECTED,   // a no connect symbol is connected to more than 1 pin
-    ERCE_NOCONNECT_NOT_CONNECTED, // a no connect symbol is not connected to anything
-    ERCE_LABEL_NOT_CONNECTED,   // label not connected to anything
-    ERCE_SIMILAR_LABELS,        // 2 labels are equal fir case insensitive comparisons
-    ERCE_DIFFERENT_UNIT_FP,     // different units of the same component have different footprints assigned
-    ERCE_DIFFERENT_UNIT_NET,    // a shared pin in a multi-unit component is connected to more than one net
-    ERCE_BUS_ALIAS_CONFLICT,    // conflicting bus alias definitions across sheets
-    ERCE_DRIVER_CONFLICT,       // conflicting drivers (labels, etc) on a subgraph
-    ERCE_BUS_ENTRY_CONFLICT,    // a wire connected to a bus doesn't match the bus
-    ERCE_BUS_LABEL_ERROR,       // a label attached to a bus isn't in bus format
-    ERCE_BUS_TO_BUS_CONFLICT,   // a connection between bus objects doesn't share at least one net
-    ERCE_BUS_TO_NET_CONFLICT,   // a bus wire is graphically connected to a net port/pin (or vice versa)
-    ERCE_GLOBLABEL,             // a global label is unique
-    ERCE_UNRESOLVED_VARIABLE,   // a text variable could not be resolved
-    ERCE_WIRE_DANGLING,         // some wires are not connected to anything else
-    ERCE_LAST = ERCE_WIRE_DANGLING,
+    ERCE_DUPLICATE_SHEET_NAME = ERCE_FIRST,  ///< Duplicate sheet names within a given sheet.
+    ERCE_PIN_NOT_CONNECTED,       ///< Pin not connected and not no connect symbol.
+    ERCE_PIN_NOT_DRIVEN,          ///< Pin connected to some others pins but no pin to drive it.
+    ERCE_HIERACHICAL_LABEL,       ///< Mismatch between hierarchical labels and pins sheets.
+    ERCE_NOCONNECT_CONNECTED,     ///< A no connect symbol is connected to more than 1 pin.
+    ERCE_NOCONNECT_NOT_CONNECTED, ///< A no connect symbol is not connected to anything.
+    ERCE_LABEL_NOT_CONNECTED,     ///< Label not connected to anything.
+    ERCE_SIMILAR_LABELS,          ///< 2 labels are equal for case insensitive comparisons.
+    ERCE_DIFFERENT_UNIT_FP,       ///< Different units of the same component have different
+                                  ///< footprints assigned.
+    ERCE_DIFFERENT_UNIT_NET,      ///< Shared pin in a multi-unit component is connected to
+                                  ///< more than one net.
+    ERCE_BUS_ALIAS_CONFLICT,      ///< Conflicting bus alias definitions across sheets.
+    ERCE_DRIVER_CONFLICT,         ///< Conflicting drivers (labels, etc) on a subgraph.
+    ERCE_BUS_ENTRY_CONFLICT,      ///< A wire connected to a bus doesn't match the bus.
+    ERCE_BUS_LABEL_ERROR,         ///< A label attached to a bus isn't in bus format.
+    ERCE_BUS_TO_BUS_CONFLICT,     ///< A connection between bus objects doesn't share at least
+                                  ///< one net.
+    ERCE_BUS_TO_NET_CONFLICT,     ///< A bus wire is graphically connected to a net port/pin
+                                  ///< (or vice versa).
+    ERCE_GLOBLABEL,               ///< A global label is unique.
+    ERCE_UNRESOLVED_VARIABLE,     ///< A text variable could not be resolved.
+    ERCE_WIRE_DANGLING,           ///< Some wires are not connected to anything else.
+    ERCE_LIB_SYMBOL_ISSUES,       ///< Library symbol changed from current symbol in schematic or
+                                  ///< the library symbol link no longer valid.
+    ERCE_LAST = ERCE_LIB_SYMBOL_ISSUES,
 
     // Errors after this point will not automatically appear in the Severities Panel
 
@@ -91,16 +97,6 @@ public:
     ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
 
     virtual ~ERC_SETTINGS();
-
-    void LoadDefaults()
-    {
-        m_Severities[ERCE_SIMILAR_LABELS]      = RPT_SEVERITY_WARNING;
-        m_Severities[ERCE_GLOBLABEL]           = RPT_SEVERITY_WARNING;
-        m_Severities[ERCE_DRIVER_CONFLICT]     = RPT_SEVERITY_WARNING;
-        m_Severities[ERCE_BUS_ENTRY_CONFLICT]  = RPT_SEVERITY_WARNING;
-        m_Severities[ERCE_BUS_TO_BUS_CONFLICT] = RPT_SEVERITY_ERROR;
-        m_Severities[ERCE_BUS_TO_NET_CONFLICT] = RPT_SEVERITY_ERROR;
-    }
 
     bool operator==( const ERC_SETTINGS& other ) const
     {
@@ -167,8 +163,7 @@ private:
 };
 
 /**
- * SHEETLIST_ERC_ITEMS_PROVIDER
- * is an implementation of the RC_ITEM_LISTinterface which uses the global SHEETLIST
+ * An implementation of the RC_ITEM_LIST interface which uses the global SHEETLIST
  * to fulfill the contract.
  */
 class SHEETLIST_ERC_ITEMS_PROVIDER : public RC_ITEMS_PROVIDER

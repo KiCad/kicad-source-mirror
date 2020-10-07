@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2009-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -60,6 +60,7 @@ public:
     /**
      * Perform ERC testing for electrical conflicts between \a NetItemRef and other items
      * (mainly pin) on the same net.
+     *
      * @param aList = a reference to the list of connected objects
      * @param aNetItemRef = index in list of the current object
      * @param aNetStart = index in list of net objects of the first item
@@ -70,8 +71,9 @@ public:
                           int* aMinConnexion );
 
     /**
-     * inside a given sheet, one cannot have sheets with duplicate names (file
+     * Inside a given sheet, one cannot have sheets with duplicate names (file
      * names can be duplicated).
+     *
      * @return the error count
      * @param aCreateMarker: true = create error markers in schematic,
      *                       false = calculate error count only
@@ -79,12 +81,12 @@ public:
     int TestDuplicateSheetNames( bool aCreateMarker );
 
     /**
-     * Checks for any unresolved text variable references.
+     * Check for any unresolved text variable references.
      */
     void TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet );
 
     /**
-     * Checks that there are not conflicting bus alias definitions in the schematic
+     * Check that there are no conflicting bus alias definitions in the schematic.
      *
      * (for example, two hierarchical sub-sheets contain different definitions for
      * the same bus alias)
@@ -123,6 +125,12 @@ public:
      * @return the error count
      */
     int TestSimilarLabels();
+
+    /**
+     * Test symbols for changed library symbols and broken symbol library links.
+     * @return the number of issues found
+     */
+    int TestLibSymbolIssues();
 
 private:
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@
 #include <dialogs/panel_libedit_settings.h>
 #include <dialogs/dialog_schematic_setup.h>
 #include <eeschema_config.h>
+#include <erc_settings.h>
 #include <kiway.h>
 #include <lib_edit_frame.h>
 #include <panel_gal_display_options.h>

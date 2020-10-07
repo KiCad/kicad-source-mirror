@@ -37,7 +37,6 @@
 #include <config_params.h>
 #include <core/typeinfo.h>
 #include <eda_base_frame.h>
-#include <erc_settings.h>
 #include <eeschema_settings.h>
 #include <math/box2.h>
 #include <sch_base_frame.h>

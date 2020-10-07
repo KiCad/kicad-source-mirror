@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -293,10 +293,22 @@ void DIALOG_ERC::testErc( REPORTER& aReporter )
     }
 
     if( settings.IsTestEnabled( ERCE_UNRESOLVED_VARIABLE ) )
+    {
+        aReporter.ReportTail( _( "Checking for unresolved variables...\n" ) );
         tester.TestTextVars( m_parent->GetCanvas()->GetView()->GetWorksheet() );
+    }
 
     if( settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
+    {
+        aReporter.ReportTail( _( "Checking no connect pins for connections...\n" ) );
         tester.TestNoConnectPins();
+    }
+
+    if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
+    {
+        aReporter.ReportTail( _( "Checking for library symbol issues...\n" ) );
+        tester.TestLibSymbolIssues();
+    }
 
     // Display diags:
     m_markerTreeModel->SetProvider( m_markerProvider );

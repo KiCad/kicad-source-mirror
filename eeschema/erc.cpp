@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,9 +58,12 @@
  */
 
 /* Messages for conflicts :
- *  ELECTRICAL_PINTYPE::PT_INPUT, ELECTRICAL_PINTYPE::PT_OUTPUT, ELECTRICAL_PINTYPE:PT_:BIDI, ELECTRICAL_PINTYPE::PT_TRISTATE, ELECTRICAL_PINTYPE::PT_PASSIVE,
- *  ELECTRICAL_PINTYPE::PT_UNSPECIFIED, ELECTRICAL_PINTYPE::PT_POWER_IN, ELECTRICAL_PINTYPE::PT_POWER_OUT, ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR,
- *  ELECTRICAL_PINTYPE::PT_OPENEMITTER, ELECTRICAL_PINTYPE::PT_NC
+ *   ELECTRICAL_PINTYPE::PT_INPUT, ELECTRICAL_PINTYPE::PT_OUTPUT, ELECTRICAL_PINTYPE:PT_:BIDI,
+ *   ELECTRICAL_PINTYPE::PT_TRISTATE, ELECTRICAL_PINTYPE::PT_PASSIVE,
+ *   ELECTRICAL_PINTYPE::PT_UNSPECIFIED, ELECTRICAL_PINTYPE::PT_POWER_IN,
+ *   ELECTRICAL_PINTYPE::PT_POWER_OUT, ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR,
+ *   ELECTRICAL_PINTYPE::PT_OPENEMITTER, ELECTRICAL_PINTYPE::PT_NC
+ *
  *  These messages are used to show the ERC matrix in ERC dialog
  */
 
@@ -527,6 +530,7 @@ int ERC_TESTER::TestMultUnitPinConflicts()
                         SCH_MARKER* marker = new SCH_MARKER( ercItem,
                                                              pin->GetTransformedPosition() );
                         subgraph->m_sheet.LastScreen()->Append( marker );
+                        errors += 1;
                     }
                 }
             }
@@ -574,6 +578,7 @@ int ERC_TESTER::TestSimilarLabels()
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
                         subgraph->m_sheet.LastScreen()->Append( marker );
+                        errors += 1;
                     }
 
                     break;
@@ -587,4 +592,60 @@ int ERC_TESTER::TestSimilarLabels()
     }
 
     return errors;
+}
+
+
+int ERC_TESTER::TestLibSymbolIssues()
+{
+    wxCHECK( m_schematic, 0 );
+
+    wxString    msg;
+    int         err_count = 0;
+
+    SCH_SCREENS screens( m_schematic->Root() );
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
+    {
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_COMPONENT_T ) )
+        {
+            SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( item );
+
+            wxCHECK2( symbol, continue );
+
+            LIB_PART* libSymbolInSchematic = screen->GetLibSymbols()[
+                    symbol->GetLibId().GetUniStringLibId() ];
+
+            wxCHECK2( libSymbolInSchematic, continue );
+
+            LIB_PART* libSymbol = SchGetLibPart( symbol->GetLibId(),
+                                                 m_schematic->Prj().SchSymbolLibTable() );
+
+            if( libSymbol == nullptr )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
+                ercItem->SetItems( symbol );
+                msg.Printf( "Library symbol link \"%s\" cannot be found in symbol library table",
+                            symbol->GetLibId().GetUniStringLibId() );
+                ercItem->SetErrorMessage( msg );
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, symbol->GetPosition() );
+                screen->Append( marker );
+                err_count += 1;
+            }
+            else if( *libSymbol != *libSymbolInSchematic )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
+                ercItem->SetItems( symbol );
+                msg.Printf( "Library symbol \"%s\" has been modified",
+                            symbol->GetLibId().GetUniStringLibId() );
+                ercItem->SetErrorMessage( msg );
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, symbol->GetPosition() );
+                screen->Append( marker );
+                err_count += 1;
+            }
+        }
+    }
+
+    return err_count;
 }

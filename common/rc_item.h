@@ -36,6 +36,7 @@ class RC_ITEM;
 
 /**
  * Provide an abstract interface of a RC_ITEM* list manager.
+ *
  * The details of the actual list architecture are hidden from the caller.  Any class that
  * implements this interface can then be used by a RC_TREE_MODEL class without it knowing
  * the actual architecture of the list.
@@ -48,14 +49,12 @@ public:
     virtual int GetCount( int aSeverity = -1 ) = 0;
 
     /**
-     * Function GetItem
-     * retrieves a RC_ITEM by index.
+     * Retrieve a RC_ITEM by index.
      */
     virtual std::shared_ptr<RC_ITEM> GetItem( int aIndex ) = 0;
 
     /**
-     * Function DeleteItem
-     * removes (and optionally deletes) the indexed item from the list.
+     * Remove (and optionally deletes) the indexed item from the list.
      * @param aDeep If true, the source item should be deleted as well as its entry in the list.
      */
     virtual void DeleteItem( int aIndex, bool aDeep ) = 0;
@@ -67,25 +66,25 @@ public:
 
 
 /**
- * RC_ITEM
- * is a holder for a DRC (in Pcbnew) or ERC (in Eeschema) error item.
+ * A holder for a rule check item, DRC in Pcbnew or ERC in Eeschema.
+ *
  * RC_ITEMs can have zero, one, or two related EDA_ITEMs.
  */
 class RC_ITEM
 {
 public:
     typedef std::vector<KIID> KIIDS;
+
 protected:
-    int           m_errorCode;         // the error code's numeric value
+    int           m_errorCode;         ///< The error code's numeric value
     wxString      m_errorMessage;      ///< A message describing the details of this specific error
     wxString      m_errorTitle;        ///< The string describing the type of error
     wxString      m_settingsKey;       ///< The key used to describe this type of error in settings
-    MARKER_BASE*  m_parent;            // The marker this item belongs to, if any
+    MARKER_BASE*  m_parent;            ///< The marker this item belongs to, if any
 
     KIIDS m_ids;
 
 public:
-
     RC_ITEM() :
         m_errorCode( 0 ),
         m_parent( nullptr )
@@ -120,7 +119,7 @@ public:
                    EDA_ITEM* dItem = nullptr )
     {
         m_ids.clear();
-        
+
         m_ids.push_back( aItem->m_Uuid );
 
         if( bItem )
@@ -137,7 +136,7 @@ public:
                    const KIID& dItem = niluuid )
     {
         m_ids.clear();
-        
+
         m_ids.push_back( aItem );
         m_ids.push_back( bItem );
         m_ids.push_back( cItem );
@@ -154,8 +153,8 @@ public:
 
 
     /**
-     * Function ShowReport
-     * translates this object into a text string suitable for saving to disk in a report.
+     * Translate this object into a text string suitable for saving to disk in a report.
+     *
      * @return wxString - the simple multi-line report text.
      */
     virtual wxString ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
@@ -165,8 +164,7 @@ public:
     void SetErrorCode( int aCode ) { m_errorCode = aCode; }
 
     /**
-     * Function GetErrorMessage
-     * returns the error message of a RC_ITEM
+     * Return the error message of a RC_ITEM.
      */
     virtual wxString GetErrorMessage() const;
 
@@ -181,8 +179,7 @@ public:
     }
 
     /**
-     * Function ShowCoord
-     * formats a coordinate or position to text.
+     * Format a coordinate or position to text.
      */
     static wxString ShowCoord( EDA_UNITS aUnits, const wxPoint& aPos );
 };
@@ -272,7 +269,7 @@ public:
     }
 
     /**
-     * Called by the wxDataView to fetch an item's formatting.  Return true iff the
+     * Called by the wxDataView to fetch an item's formatting.  Return true if the
      * item has non-default attributes.
      */
     bool GetAttr( wxDataViewItem const&   aItem,
@@ -301,7 +298,5 @@ private:
 
     std::vector<RC_TREE_NODE*> m_tree;              // I own this
 };
-
-
 
 #endif      // RC_ITEM_H

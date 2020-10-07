@@ -89,8 +89,14 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
     for( int i = ERCE_FIRST; i <= ERCE_LAST; ++i )
         m_Severities[ i ] = RPT_SEVERITY_ERROR;
 
-    m_Severities[ERCE_UNSPECIFIED]        = RPT_SEVERITY_UNDEFINED;
-    m_Severities[ERCE_PIN_TO_PIN_WARNING] = RPT_SEVERITY_WARNING;
+    // Error is the default setting so set non-error priorities here.
+    m_Severities[ERCE_UNSPECIFIED]             = RPT_SEVERITY_UNDEFINED;
+    m_Severities[ERCE_PIN_TO_PIN_WARNING]      = RPT_SEVERITY_WARNING;
+    m_Severities[ERCE_SIMILAR_LABELS]          = RPT_SEVERITY_WARNING;
+    m_Severities[ERCE_GLOBLABEL]               = RPT_SEVERITY_WARNING;
+    m_Severities[ERCE_DRIVER_CONFLICT]         = RPT_SEVERITY_WARNING;
+    m_Severities[ERCE_BUS_ENTRY_CONFLICT]      = RPT_SEVERITY_WARNING;
+    m_Severities[ERCE_LIB_SYMBOL_ISSUES]       = RPT_SEVERITY_WARNING;
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "rule_severities",
             [&]() -> nlohmann::json
