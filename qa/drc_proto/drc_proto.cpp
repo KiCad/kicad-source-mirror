@@ -81,7 +81,7 @@ PROJECT_CONTEXT loadKicadProject( wxString filename, OPT<wxString> rulesFilePath
     manager.LoadProject( pro.GetFullPath() );
 
     rv.project = &manager.Prj();
-    rv.board.reset( KI_TEST::ReadBoardFromFileOrStream( (const char *) brdName.GetFullPath() ).release() );
+    rv.board.reset( KI_TEST::ReadBoardFromFileOrStream( std::string( brdName.GetFullPath().ToUTF8() ) ).release() );
     rv.board->SetProject( rv.project );
 
     if( rulesFilePath )

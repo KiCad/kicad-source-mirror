@@ -538,7 +538,7 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
 
 const GENERAL_COLLECTORS_GUIDE SELECTION_TOOL::getCollectorsGuide() const
 {
-
+    return GENERAL_COLLECTORS_GUIDE( LSET(), PCB_LAYER_ID::UNDEFINED_LAYER, nullptr );
 }
 
 
@@ -881,7 +881,9 @@ void PCB_TOOL_BASE::setTransitions()
 
 const PCB_DISPLAY_OPTIONS& PCB_TOOL_BASE::displayOptions() const
 {
-    
+    static PCB_DISPLAY_OPTIONS disp;
+
+    return disp;
 }
 
 PCB_DRAW_PANEL_GAL* PCB_TOOL_BASE::canvas() const
@@ -892,11 +894,17 @@ PCB_DRAW_PANEL_GAL* PCB_TOOL_BASE::canvas() const
 
 const PCBNEW_SELECTION& PCB_TOOL_BASE::selection() const
 {
+    static PCBNEW_SELECTION sel;
+
+    return sel;
 }
 
 
 PCBNEW_SELECTION& PCB_TOOL_BASE::selection()
 {
+    static PCBNEW_SELECTION sel;
+
+    return sel;
 }
 
 
