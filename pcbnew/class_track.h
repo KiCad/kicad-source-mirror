@@ -308,6 +308,8 @@ public:
 
     virtual wxPoint GetPosition() const override;
 
+    virtual wxPoint GetCenter() const override { return GetPosition(); }
+
     double GetRadius() const;
     double GetAngle() const;
     double GetArcAngleStart() const;
