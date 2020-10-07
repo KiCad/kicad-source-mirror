@@ -504,7 +504,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
             if( !m_frame->GetScreen()->GetItem( cursorPos, 0, type ) )
             {
@@ -522,6 +522,12 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     m_frame->SchematicCleanUp();
                     m_frame->OnModify();
                 }
+            }
+
+            if( evt->IsDblClick( BUT_LEFT ) )       // Finish tool.
+            {
+                m_frame->PopTool( tool );
+                break;
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
