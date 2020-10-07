@@ -31,9 +31,10 @@ const std::string SHAPE_COMPOUND::Format() const
 {
     std::stringstream ss;
 
-    ss << "compound";
+    ss << "compound( ";
 
-    // fixme: implement
+    for( auto shape : m_shapes )
+        ss << shape->Format() << " ";
 
     return ss.str();
 }
@@ -150,5 +151,11 @@ bool SHAPE_COMPOUND::Collide( const SEG& aSeg, int aClearance, int* aActual,
         return true;
     }
 
+    return false;
+}
+
+
+bool SHAPE_COMPOUND::ConvertToSimplePolygon( SHAPE_SIMPLE* aOut ) const
+{
     return false;
 }

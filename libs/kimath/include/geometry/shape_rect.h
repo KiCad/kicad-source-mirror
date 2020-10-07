@@ -185,6 +185,8 @@ public:
         return rv;
     }
 
+    virtual const std::string Format( ) const override;
+
 private:
     ///> Top-left corner
     VECTOR2I m_p0;

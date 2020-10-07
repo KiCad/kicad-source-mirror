@@ -959,17 +959,30 @@ const std::string SHAPE_LINE_CHAIN::Format() const
 {
     std::stringstream ss;
 
-    ss << m_points.size() << " " << ( m_closed ? 1 : 0 ) << " " << m_arcs.size() << " ";
 
+    ss << "SHAPE_LINE_CHAIN( { ";
     for( int i = 0; i < PointCount(); i++ )
-        ss << m_points[i].x << " " << m_points[i].y << " " << m_shapes[i];
+    {
+        ss << "VECTOR2I( " << m_points[i].x << ", " << m_points[i].y << ")";
+        if( i != PointCount() -1 )
+            ss << ", ";
+    }
 
+    ss << "}, " << m_closed ? "true" : "false";
+    ss << " );";
+
+
+
+    return ss.str();
+   
+
+   /* fixme: arcs
     for( size_t i = 0; i < m_arcs.size(); i++ )
         ss << m_arcs[i].GetCenter().x << " " << m_arcs[i].GetCenter().y << " "
         << m_arcs[i].GetP0().x << " " << m_arcs[i].GetP0().y << " "
         << m_arcs[i].GetCentralAngle();
 
-    return ss.str();
+    return ss.str();*/
 }
 
 
