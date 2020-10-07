@@ -928,17 +928,6 @@ public:
     void FocusOnItem( SCH_ITEM* aItem );
 
     /**
-     * Convert sheet and symbol legacy time stamp UUIDs to full UUIDs.
-     *
-     * @warning This is a work in progress.  It only contains the original code that automatically
-     *          updated the UUIDs when loading legacy schematics.  This is an incomplete solution
-     *          because a way to force a PCB update from schematic with the update symbol links
-     *          from references setting must be executed to ensure proper synchronization between
-     *          the schematic and board.
-     */
-    void ConvertTimeStampUuids();
-
-    /**
      * Update the #LIB_PART of the currently selected symbol.
      *
      * This is typically called from the symbol editor when editing symbols in place.

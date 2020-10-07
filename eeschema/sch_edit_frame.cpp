@@ -29,9 +29,7 @@
 #include <dialogs/dialog_schematic_find.h>
 #include <eeschema_id.h>
 #include <executable_names.h>
-#include <general.h>
 #include <gestfich.h>
-#include <gr_basic.h>
 #include <hierarch.h>
 #include <html_messagebox.h>
 #include <invoke_sch_dialog.h>
@@ -44,7 +42,7 @@
 #include <profile.h>
 #include <project.h>
 #include <project/project_file.h>
-#include <reporter.h>
+#include <project/net_settings.h>
 #include <sch_edit_frame.h>
 #include <sch_iref.h>
 #include <sch_painter.h>
@@ -73,12 +71,10 @@
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
 #include <tools/sch_navigate_tool.h>
-#include <view/view.h>
 #include <view/view_controls.h>
 #include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/cmdline.h>
-
 #include <gal/graphics_abstraction_layer.h>
 #include <ws_proxy_view_item.h>
 
@@ -1017,6 +1013,53 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 }
 
 
+static void inheritNetclass( const SCH_SHEET_PATH& aSheetPath, SCH_TEXT* aItem )
+{
+    // Netclasses are assigned to subgraphs by association with their netname.  However, when
+    // a new label is attached to an existing subgraph (with an existing netclass association),
+    // the association will be lost as the label will drive its name on to the graph.
+    //
+    // Here we find the previous driver of the subgraph and if it had a netclass we associate
+    // the new netname with that netclass as well.
+    //
+    SCHEMATIC*           schematic = aItem->Schematic();
+    CONNECTION_SUBGRAPH* subgraph = schematic->ConnectionGraph()->GetSubgraphForItem( aItem );
+
+    std::map<wxString, wxString>& netclassAssignments =
+                            schematic->Prj().GetProjectFile().NetSettings().m_NetClassAssignments;
+
+    if( subgraph )
+    {
+        SCH_ITEM* previousDriver = nullptr;
+        CONNECTION_SUBGRAPH::PRIORITY priority = CONNECTION_SUBGRAPH::PRIORITY::INVALID;
+
+        for( SCH_ITEM* item : subgraph->m_items )
+        {
+            if( item == aItem )
+                continue;
+
+            CONNECTION_SUBGRAPH::PRIORITY p = CONNECTION_SUBGRAPH::GetDriverPriority( item );
+
+            if( p > priority )
+            {
+                priority = p;
+                previousDriver = item;
+            }
+        }
+
+        if( previousDriver )
+        {
+            wxString path = aSheetPath.PathHumanReadable();
+            wxString oldDrivenName = path + subgraph->GetNameForDriver( previousDriver );
+            wxString drivenName = path + subgraph->GetNameForDriver( aItem );
+
+            if( netclassAssignments.count( oldDrivenName ) )
+                netclassAssignments[ drivenName ] = netclassAssignments[ oldDrivenName ];
+        }
+    }
+}
+
+
 void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem,
                                                  bool aUndoAppend )
 {
@@ -1072,7 +1115,12 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
 
         // Update connectivity info for new item
         if( !aItem->IsMoving() )
+        {
             RecalculateConnections( LOCAL_CLEANUP );
+
+            if( SCH_TEXT* textItem = dynamic_cast<SCH_TEXT*>( aItem ) )
+                inheritNetclass( GetCurrentSheet(), textItem );
+        }
     }
 
     aItem->ClearFlags( IS_NEW );
@@ -1517,38 +1565,6 @@ void SCH_EDIT_FRAME::FocusOnItem( SCH_ITEM* aItem )
 
         FocusOnLocation( aItem->GetFocusPosition() );
     }
-}
-
-
-void SCH_EDIT_FRAME::ConvertTimeStampUuids()
-{
-    // Remove this once this method is fully implemented.  Otherwise, don't use it.
-    wxCHECK( false, /* void */ );
-
-    // Replace sheet and symbol time stamps with real UUIDs and update symbol instance
-    // sheet paths using the new UUID based sheet paths.
-
-    // Save the time stamp sheet paths.
-    SCH_SHEET_LIST timeStampSheetPaths = Schematic().GetSheets();
-
-    std::vector<KIID_PATH> oldSheetPaths = timeStampSheetPaths.GetPaths();
-
-    // The root sheet now gets a permanent UUID.
-    const_cast<KIID&>( Schematic().Root().m_Uuid ).ConvertTimestampToUuid();
-
-    SCH_SCREENS schematic( Schematic().Root() );
-
-    // Change the sheet and symbol time stamps to UUIDs.
-    for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
-    {
-        for( auto sheet : screen->Items().OfType( SCH_SHEET_T ) )
-            const_cast<KIID&>( sheet->m_Uuid ).ConvertTimestampToUuid();
-
-        for( auto symbol : screen->Items().OfType( SCH_COMPONENT_T ) )
-            const_cast<KIID&>( symbol->m_Uuid ).ConvertTimestampToUuid();
-    }
-
-    timeStampSheetPaths.ReplaceLegacySheetPaths( oldSheetPaths );
 }
 
 

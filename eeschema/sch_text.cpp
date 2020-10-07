@@ -671,7 +671,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 
     if( frame )
     {
-        if( SCH_CONNECTION* conn = Connection( frame->GetCurrentSheet() ) )
+        if( SCH_CONNECTION* conn = Connection() )
         {
             conn->AppendInfoToMsgPanel( aList );
 
@@ -1111,7 +1111,7 @@ void SCH_HIERLABEL::Print( RENDER_SETTINGS* aSettings, const wxPoint& offset )
     static std::vector <wxPoint> Poly;
 
     wxDC*           DC = aSettings->GetPrintDC();
-    SCH_CONNECTION* conn = Connection( Schematic()->CurrentSheet() );
+    SCH_CONNECTION* conn = Connection();
     bool            isBus = conn && conn->IsBus();
     COLOR4D         color = aSettings->GetLayerColor( isBus ? LAYER_BUS : m_Layer );
     int             penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );

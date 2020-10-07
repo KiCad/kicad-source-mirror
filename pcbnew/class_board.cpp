@@ -1388,16 +1388,9 @@ void BOARD::SynchronizeNetsAndNetClasses()
     for( NETINFO_ITEM* net : m_NetInfo )
     {
         const wxString& netname = net->GetNetname();
+        const wxString& netclassName = netSettings->GetNetclassName( netname );
 
-        if( netSettings->m_NetClassAssignments.count( netname ) )
-        {
-            const wxString& classname = netSettings->m_NetClassAssignments[ netname ];
-            net->SetClass( netClasses.Find( classname ) );
-        }
-        else
-        {
-            net->SetClass( defaultNetClass );
-        }
+        net->SetClass( netClasses.Find( netclassName ) );
     }
 
     BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();

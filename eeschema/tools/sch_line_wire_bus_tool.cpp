@@ -119,7 +119,7 @@ private:
             return;
         }
 
-        SCH_CONNECTION* connection = bus->Connection( frame->GetCurrentSheet() );
+        SCH_CONNECTION* connection = bus->Connection();
 
         if( !connection || !connection->IsBus() || connection->Members().empty() )
         {

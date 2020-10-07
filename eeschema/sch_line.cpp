@@ -825,7 +825,7 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 
     if( frame )
     {
-        if( SCH_CONNECTION* conn = Connection( frame->GetCurrentSheet() ) )
+        if( SCH_CONNECTION* conn = Connection() )
         {
             conn->AppendInfoToMsgPanel( aList );
 

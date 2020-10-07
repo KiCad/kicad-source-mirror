@@ -422,7 +422,7 @@ void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEM
     if( !frame )
         return;
 
-    if( auto conn = Connection( frame->GetCurrentSheet() ) )
+    if( SCH_CONNECTION* conn = Connection() )
         conn->AppendInfoToMsgPanel( aList );
 }
 

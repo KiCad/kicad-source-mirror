@@ -643,11 +643,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             if( !item )
                 return false;
 
-            SCH_SHEET_PATH& sheet = m_frame->GetCurrentSheet();
-
             if( item->IsType( wires ) )
             {
-                if( SCH_CONNECTION* conn = static_cast<SCH_ITEM*>( item )->Connection( sheet ) )
+                if( SCH_CONNECTION* conn = static_cast<SCH_ITEM*>( item )->Connection() )
                     simFrame->AddVoltagePlot( UnescapeString( conn->Name() ) );
             }
             else if( item->Type() == SCH_PIN_T )
@@ -667,7 +665,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 else
                     param = wxString::Format( wxT( "I%s" ), pin->GetName().Lower() );
 
-                simFrame->AddCurrentPlot( comp->GetRef( &sheet ), param );
+                simFrame->AddCurrentPlot( comp->GetRef( &m_frame->GetCurrentSheet() ), param );
             }
 
             return true;
@@ -691,7 +689,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             if( wire )
             {
                 item = nullptr;
-                conn = wire->Connection( m_frame->GetCurrentSheet() );
+                conn = wire->Connection();
             }
 
             if( item && item->Type() == SCH_PIN_T )
@@ -853,10 +851,10 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
                     std::vector<SCH_PIN*> pins = comp->GetPins();
 
                     if( pins.size() == 1 )
-                        conn = pins[0]->Connection( editFrame->GetCurrentSheet() );
+                        conn = pins[0]->Connection();
                 }
                 else
-                    conn = item->Connection( editFrame->GetCurrentSheet() );
+                    conn = item->Connection();
             }
         }
     }
@@ -919,17 +917,17 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
 
     if( conn )
     {
-        wxString netName = conn->Name( true );
-
-        if( conn->Name( true ).IsEmpty() )
+        if( !conn->Driver() || CONNECTION_SUBGRAPH::GetDriverPriority( conn->Driver() )
+                                                < CONNECTION_SUBGRAPH::PRIORITY::SHEET_PIN )
         {
             m_frame->ShowInfoBarError( _( "Net must be labelled to assign a netclass." ) );
             highlightNet( m_toolMgr, CLEAR );
             return 0;
         }
 
+        wxString      netName = conn->Name();
         NET_SETTINGS& netSettings = m_frame->Schematic().Prj().GetProjectFile().NetSettings();
-        wxString      netclassName = netSettings.m_NetClassAssignments[ netName ];
+        wxString      netclassName = netSettings.GetNetclassName( netName );
 
         wxArrayString headers;
         std::vector<wxArrayString> items;
@@ -1015,9 +1013,9 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
             comp = static_cast<SCH_COMPONENT*>( item );
 
         if( comp && comp->GetPartRef() && comp->GetPartRef()->IsPower() )
-            itemConn = comp->Connection( m_frame->GetCurrentSheet() );
+            itemConn = comp->Connection();
         else
-            itemConn = item->Connection( m_frame->GetCurrentSheet() );
+            itemConn = item->Connection();
 
         if( selectedIsNoNet && selectedSubgraph )
         {
@@ -1073,7 +1071,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
             for( SCH_PIN* pin : comp->GetPins() )
             {
-                SCH_CONNECTION* pin_conn = pin->Connection( m_frame->GetCurrentSheet() );
+                SCH_CONNECTION* pin_conn = pin->Connection();
 
                 if( pin_conn && pin_conn->Name() == selectedName )
                 {
@@ -1099,7 +1097,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         {
             for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
             {
-                SCH_CONNECTION* pin_conn = pin->Connection( m_frame->GetCurrentSheet() );
+                SCH_CONNECTION* pin_conn = pin->Connection();
                 bool            redrawPin = pin->IsBrightened();
 
                 if( pin_conn && pin_conn->Name() == selectedName )

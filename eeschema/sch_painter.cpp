@@ -1307,7 +1307,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 
     if( m_schematic )
     {
-        SCH_CONNECTION* conn = aText->Connection( m_schematic->CurrentSheet() );
+        SCH_CONNECTION* conn = aText->Connection();
 
         if( conn && conn->IsBus() )
             color = getRenderColor( aText, LAYER_BUS, drawingShadows );
@@ -1612,7 +1612,7 @@ void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
 
     if( m_schematic )
     {
-        SCH_CONNECTION* conn = aLabel->Connection( m_schematic->CurrentSheet() );
+        SCH_CONNECTION* conn = aLabel->Connection();
 
         if( conn && conn->IsBus() )
             color = getRenderColor( aLabel, LAYER_BUS, drawingShadows );

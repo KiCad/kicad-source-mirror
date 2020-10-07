@@ -153,7 +153,7 @@ void NETLIST_EXPORTER::CreatePinList( SCH_COMPONENT* comp, SCH_SHEET_PATH* aShee
     {
         for( const auto& pin : comp->GetPins( aSheetPath ) )
         {
-            if( auto conn = pin->Connection( *aSheetPath ) )
+            if( auto conn = pin->Connection( aSheetPath ) )
             {
                 const wxString& netName = conn->Name();
 
@@ -234,7 +234,7 @@ void NETLIST_EXPORTER::findAllUnitsOfComponent( SCH_COMPONENT* aComponent,
 
             for( const auto& pin : comp2->GetPins( aSheetPath ) )
             {
-                if( auto conn = pin->Connection( *aSheetPath ) )
+                if( auto conn = pin->Connection( aSheetPath ) )
                 {
                     const wxString& netName = conn->Name();
 

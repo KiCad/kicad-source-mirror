@@ -369,7 +369,7 @@ void BACK_ANNOTATE::applyChangelist()
                 const wxString& pinNumber = entry.first;
                 const wxString& shortNetName = entry.second;
                 SCH_PIN*        pin = comp->GetPin( pinNumber );
-                SCH_CONNECTION* conn = pin->Connection( ref.GetSheetPath() );
+                SCH_CONNECTION* conn = pin->Connection( &ref.GetSheetPath() );
 
                 wxString key = shortNetName + ref.GetSheetPath().PathAsString();
 
@@ -492,11 +492,12 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
 
         if( !m_dryRun )
         {
-            SCH_SCREEN* screen = aConn->Sheet().LastScreen();
+            SCH_SHEET_PATH sheet = aConn->Sheet();
+            SCH_SCREEN*    screen = sheet.LastScreen();
 
             for( SCH_ITEM* label : screen->Items().OfType( SCH_LABEL_T ) )
             {
-                SCH_CONNECTION* conn = label->Connection( aConn->Sheet() );
+                SCH_CONNECTION* conn = label->Connection( &sheet );
 
                 if( conn && conn->Driver() == driver )
                 {

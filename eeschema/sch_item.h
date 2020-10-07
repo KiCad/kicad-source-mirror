@@ -411,7 +411,7 @@ public:
      *
      * @note The returned value can be nullptr.
      */
-    SCH_CONNECTION* Connection( const SCH_SHEET_PATH& aPath ) const;
+    SCH_CONNECTION* Connection( const SCH_SHEET_PATH* aSheet = nullptr ) const;
 
     /**
      * Retrieves the set of items connected to this item on the given sheet
@@ -439,7 +439,7 @@ public:
 
     void SetConnectivityDirty( bool aDirty = true ) { m_connectivity_dirty = aDirty; }
 
-    NETCLASSPTR NetClass() const;
+    NETCLASSPTR NetClass( const SCH_SHEET_PATH* aSheet = nullptr ) const;
 
     /**
      * Return whether the fields have been automatically placed.

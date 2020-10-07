@@ -51,6 +51,8 @@ public:
     std::map<wxString, KIGFX::COLOR4D> m_PcbNetColors;
 
 public:
+    const wxString& GetNetclassName( const wxString& aNetName ) const;
+
     /**
      * Parses a bus vector (e.g. A[7..0]) into name, begin, and end.
      * Ensures that begin and end are positive and that end > begin.

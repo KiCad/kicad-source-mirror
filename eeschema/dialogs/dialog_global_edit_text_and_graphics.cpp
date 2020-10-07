@@ -184,7 +184,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     else if( selection.GetSize() )
     {
         SCH_ITEM* sch_item = (SCH_ITEM*) selection.Front();
-        SCH_CONNECTION* connection = sch_item->Connection( m_parent->GetCurrentSheet() );
+        SCH_CONNECTION* connection = sch_item->Connection();
 
         if( connection )
             m_netFilter->SetValue( connection->Name() );
@@ -302,7 +302,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
 {
     if( m_netFilterOpt->GetValue() && !m_netFilter->GetValue().IsEmpty() )
     {
-        SCH_CONNECTION* connection = aItem->Connection( aSheetPath );
+        SCH_CONNECTION* connection = aItem->Connection( &aSheetPath );
 
         if( !connection )
             return;

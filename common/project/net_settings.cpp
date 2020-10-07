@@ -238,10 +238,23 @@ NET_SETTINGS::~NET_SETTINGS()
 }
 
 
+const wxString& NET_SETTINGS::GetNetclassName( const wxString& aNetName ) const
+{
+    static wxString defaultNetname = NETCLASS::Default;
+
+    auto it = m_NetClassAssignments.find( aNetName );
+
+    if( it == m_NetClassAssignments.end() )
+        return defaultNetname;
+    else
+        return it->second;
+}
+
+
 static bool isSuperSub( wxChar c )
 {
     return c == '_' || c == '^';
-};
+}
 
 
 bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,

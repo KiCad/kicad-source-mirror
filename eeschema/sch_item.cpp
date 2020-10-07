@@ -144,28 +144,33 @@ bool SCH_ITEM::IsConnected( const wxPoint& aPosition ) const
 }
 
 
-SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH& aSheet ) const
+SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH* aSheet ) const
 {
-    // Warning: the m_connection_map can be empty.
-    if( m_connection_map.size() && m_connection_map.count( aSheet ) )
-        return m_connection_map.at( aSheet );
+    if( !aSheet )
+        aSheet = &Schematic()->CurrentSheet();
 
-    return nullptr;
+    auto it = m_connection_map.find( *aSheet );
+
+    if( it == m_connection_map.end() )
+        return nullptr;
+    else
+        return it->second;
 }
 
 
-NETCLASSPTR SCH_ITEM::NetClass() const
+NETCLASSPTR SCH_ITEM::NetClass( const SCH_SHEET_PATH* aSheet ) const
 {
     if( m_connection_map.size() )
     {
-        NET_SETTINGS&   netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
-        const wxString& netname = m_connection_map.begin()->second->Name( true );
-        const wxString& netclassName = netSettings.m_NetClassAssignments[ netname ];
+        SCH_CONNECTION* connection = Connection( aSheet );
 
-        if( !netclassName.IsEmpty() )
+        if( connection )
+        {
+            NET_SETTINGS&   netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
+            const wxString& netclassName = netSettings.GetNetclassName( connection->Name() );
+
             return netSettings.m_NetClasses.Find( netclassName );
-        else
-            return netSettings.m_NetClasses.GetDefault();
+        }
     }
 
     return nullptr;
@@ -187,18 +192,20 @@ void SCH_ITEM::AddConnectionTo( const SCH_SHEET_PATH& aSheet, SCH_ITEM* aItem )
 SCH_CONNECTION* SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet,
                                                 CONNECTION_GRAPH* aGraph )
 {
-    if( Connection( aSheet ) )
+    SCH_CONNECTION* connection = Connection( &aSheet );
+
+    if( connection )
     {
-        Connection( aSheet )->Reset();
-        Connection( aSheet )->SetSheet( aSheet );
-        return Connection( aSheet );
+        connection->Reset();
+    }
+    else
+    {
+        connection = new SCH_CONNECTION( this );
+        m_connection_map.insert( std::make_pair( aSheet, connection ) );
+        connection->SetGraph( aGraph );
     }
 
-    auto connection = new SCH_CONNECTION( this );
     connection->SetSheet( aSheet );
-    m_connection_map.insert( std::make_pair( aSheet, connection ) );
-    connection->SetGraph( aGraph );
-
     return connection;
 }
 
