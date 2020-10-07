@@ -367,6 +367,20 @@ public:
     void SetLocalSolderPasteMarginRatio( double aRatio ) { m_localSolderPasteMarginRatio = aRatio; }
 
     /**
+     * Function GetClearance
+     * returns the clearance in internal units.  If \a aItem is not NULL then the
+     * returned clearance is the greater of this object's NETCLASS clearance and
+     * aItem's NETCLASS clearance.  If \a aItem is NULL, then this objects clearance
+     * is returned.
+     * @param aLayer the layer in question
+     * @param aItem is an optional BOARD_ITEM
+     * @param aSource [out] optionally reports the source as a user-readable string
+     * @return int - the clearance in internal units.
+     */
+    int GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem = nullptr,
+                      wxString* aSource = nullptr ) const override;
+
+    /**
      * Function TransformShapeWithClearanceToPolygon
      * Convert the pad shape to a closed polygon. Circles and arcs are approximated by segments.
      * @param aCornerBuffer = a buffer to store the polygon
