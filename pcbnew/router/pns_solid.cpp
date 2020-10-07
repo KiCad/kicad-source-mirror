@@ -26,6 +26,7 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_simple.h>
+#include <geometry/shape_compound.h>
 
 #include "pns_router.h"
 #include "pns_solid.h"
@@ -33,9 +34,51 @@
 
 namespace PNS {
 
-const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
+static const SHAPE_LINE_CHAIN buildHullForPrimitiveShape( const SHAPE* aShape, int aClearance, int aWalkaroundThickness )
 {
     int cl = aClearance + ( aWalkaroundThickness + 1 )/ 2;
+
+    switch( aShape->Type() )
+    {
+    case SH_RECT:
+    {
+        const SHAPE_RECT* rect = static_cast<const SHAPE_RECT*>( aShape );
+        return OctagonalHull( rect->GetPosition(), rect->GetSize(), cl + 1, 0.2 * cl );
+    }
+
+    case SH_CIRCLE:
+    {
+        const SHAPE_CIRCLE* circle = static_cast<const SHAPE_CIRCLE*>( aShape );
+        int r = circle->GetRadius();
+        return OctagonalHull( circle->GetCenter() - VECTOR2I( r, r ), VECTOR2I( 2 * r, 2 * r ),
+                              cl + 1, 0.52 * ( r + cl ) );
+    }
+
+    case SH_SEGMENT:
+    {
+        const SHAPE_SEGMENT* seg = static_cast<const SHAPE_SEGMENT*>( aShape );
+        return SegmentHull( *seg, aClearance, aWalkaroundThickness );
+    }
+
+    case SH_SIMPLE:
+    {
+        const SHAPE_SIMPLE* convex = static_cast<const SHAPE_SIMPLE*>( aShape );
+
+        return ConvexHull( *convex, cl );
+    }
+    default:
+    {
+        wxLogError("Unsupported hull shape: %d", aShape->Type() );
+        break;
+    }
+    }
+
+    return SHAPE_LINE_CHAIN();
+}
+
+
+const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
+{
     SHAPE* shape = m_shape;
 
     if( !ROUTER::GetInstance()->GetInterface()->IsOnLayer( this, aLayer ) )
@@ -48,39 +91,25 @@ const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness, in
         shape = m_alternateShape;
     }
 
-    switch( shape->Type() )
+    if( shape->Type() == SH_COMPOUND )
     {
-    case SH_RECT:
+        auto cmpnd = static_cast<SHAPE_COMPOUND*>( shape );
+        if ( cmpnd->Shapes().size() == 1 )
+        {
+            return buildHullForPrimitiveShape( cmpnd->Shapes()[0], aClearance, aWalkaroundThickness );
+        }
+        else
+        {
+            // fixme - shouldn't happen but one day we should move TransformShapeWithClearanceToPolygon()
+            // to the Geometry Library
+            return SHAPE_LINE_CHAIN();
+        }
+    }
+    else
     {
-        SHAPE_RECT* rect = static_cast<SHAPE_RECT*>( shape );
-        return OctagonalHull( rect->GetPosition(), rect->GetSize(), cl + 1, 0.2 * cl );
+        return buildHullForPrimitiveShape( shape, aClearance, aWalkaroundThickness );
     }
-
-    case SH_CIRCLE:
-    {
-        SHAPE_CIRCLE* circle = static_cast<SHAPE_CIRCLE*>( shape );
-        int r = circle->GetRadius();
-        return OctagonalHull( circle->GetCenter() - VECTOR2I( r, r ), VECTOR2I( 2 * r, 2 * r ),
-                              cl + 1, 0.52 * ( r + cl ) );
-    }
-
-    case SH_SEGMENT:
-    {
-        SHAPE_SEGMENT* seg = static_cast<SHAPE_SEGMENT*>( shape );
-        return SegmentHull( *seg, aClearance, aWalkaroundThickness );
-    }
-
-    case SH_SIMPLE:
-    {
-        SHAPE_SIMPLE* convex = static_cast<SHAPE_SIMPLE*>( shape );
-
-        return ConvexHull( *convex, cl );
-    }
-
-    default:
-        break;
-    }
-
+        
     return SHAPE_LINE_CHAIN();
 }
 

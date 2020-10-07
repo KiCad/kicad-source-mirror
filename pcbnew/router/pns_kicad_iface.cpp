@@ -647,7 +647,31 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
 
     solid->SetPos( VECTOR2I( c.x - offset.x, c.y - offset.y ) );
     solid->SetOffset( VECTOR2I( offset.x, offset.y ) );
-    solid->SetShape( aPad->GetEffectiveShape()->Clone() );
+
+
+    auto shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
+
+    if( shapes && shapes->Size() == 1 )
+    {
+        solid->SetShape( shapes->Clone() );
+    }
+    else
+    {
+        // Fixme (but not urgent). For complex pad shapes, we pass a single simple polygon to the
+        // router, otherwise it won't know how to correctly build walkaround 'hulls' for the pad
+        // primitives - it can recognize only simple shapes, but not COMPOUNDs made of multiple shapes.
+        // The proper way to fix this would be to implement SHAPE_COMPOUND::ConvertToSimplePolygon(),
+        // but the complexity of pad polygonization code (see D_PAD::GetEffectivePolygon), including approximation
+        // error handling makes me slightly scared to do it right now.
+
+        const std::shared_ptr<SHAPE_POLY_SET>& outline = aPad->GetEffectivePolygon();
+        SHAPE_SIMPLE*                          shape = new SHAPE_SIMPLE();
+
+        for( auto iter = outline->CIterate( 0 ); iter; iter++ )
+            shape->Append( *iter );
+
+        solid->SetShape( shape );
+    }
 
     return solid;
 }
