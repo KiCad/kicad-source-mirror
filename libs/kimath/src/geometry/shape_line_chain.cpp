@@ -968,13 +968,13 @@ const std::string SHAPE_LINE_CHAIN::Format() const
             ss << ", ";
     }
 
-    ss << "}, " << m_closed ? "true" : "false";
+    ss << "}, " << ( m_closed ? "true" : "false" );
     ss << " );";
 
 
 
     return ss.str();
-   
+
 
    /* fixme: arcs
     for( size_t i = 0; i < m_arcs.size(); i++ )
