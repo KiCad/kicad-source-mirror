@@ -60,7 +60,4 @@ add_subdirectory( drc_proto )
 add_subdirectory( common_tools )
 add_subdirectory( pcbnew_tools )
 
-#add_subdirectory( libeval_compiler )
-add_subdirectory( pns )
-# add_subdirectory( gal/gal_pixel_alignment )
 
