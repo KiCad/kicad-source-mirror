@@ -30,93 +30,95 @@
 #include <list>
 #include <vector>
 
+class SHAPE_SIMPLE;
+
 class SHAPE_COMPOUND : public SHAPE
 {
-   public:
-      SHAPE_COMPOUND() :
-         SHAPE( SH_COMPOUND ),
-         m_dirty( true )
-         {}
+public:
+    SHAPE_COMPOUND() : SHAPE( SH_COMPOUND ), m_dirty( true )
+    {
+    }
 
 
-      SHAPE_COMPOUND( const std::vector<SHAPE*>& aShapes );
-      
-      SHAPE_COMPOUND( const SHAPE_COMPOUND& aOther );
-      ~SHAPE_COMPOUND();
-      
-      SHAPE_COMPOUND* Clone() const override;
-      const std::string Format() const override;
+    SHAPE_COMPOUND( const std::vector<SHAPE*>& aShapes );
 
-      bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
-                    VECTOR2I* aLocation = nullptr ) const override;
+    SHAPE_COMPOUND( const SHAPE_COMPOUND& aOther );
+    ~SHAPE_COMPOUND();
 
-      bool Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aMTV ) const override
-      {
-         return SHAPE::Collide( aShape, aClearance, aMTV );
-      }
+    SHAPE_COMPOUND*   Clone() const override;
+    const std::string Format() const override;
 
-      bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr,
-                    VECTOR2I* aLocation = nullptr ) const override
-      {
-         return SHAPE::Collide( aShape, aClearance, aActual, aLocation );
-      }
+    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
+            VECTOR2I* aLocation = nullptr ) const override;
 
-      const std::vector<SHAPE*>& Shapes() const
-      {
-         return m_shapes;
-      }
+    bool Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aMTV ) const override
+    {
+        return SHAPE::Collide( aShape, aClearance, aMTV );
+    }
 
-      const BOX2I BBox( int aClearance = 0 ) const override;
+    bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr,
+            VECTOR2I* aLocation = nullptr ) const override
+    {
+        return SHAPE::Collide( aShape, aClearance, aActual, aLocation );
+    }
 
-      int Distance( const SEG& aSeg ) const;
+    const std::vector<SHAPE*>& Shapes() const
+    {
+        return m_shapes;
+    }
 
-      void Move ( const VECTOR2I& aVector ) override;
-      
-      void AddShape( SHAPE* aShape )
-      {
-         m_shapes.push_back( aShape );
-         m_dirty = true;
-      }
+    const BOX2I BBox( int aClearance = 0 ) const override;
 
-   bool Empty() const
-   {
-      return m_shapes.empty();
-   }
+    int Distance( const SEG& aSeg ) const;
 
-   int Size() const
-   {
-      return m_shapes.size();
-   }
+    void Move( const VECTOR2I& aVector ) override;
+
+    void AddShape( SHAPE* aShape )
+    {
+        m_shapes.push_back( aShape );
+        m_dirty = true;
+    }
+
+    bool Empty() const
+    {
+        return m_shapes.empty();
+    }
+
+    int Size() const
+    {
+        return m_shapes.size();
+    }
 
     void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override;
 
     bool IsSolid() const override;
-    
+
     SHAPE* UniqueSubshape() const
     {
-       return m_shapes.size() != 1 ? nullptr : m_shapes[0];
+        return m_shapes.size() != 1 ? nullptr : m_shapes[0];
     }
 
-   virtual bool HasIndexableSubshapes() const override
-   {
-      return true;
-   }
+    virtual bool HasIndexableSubshapes() const override
+    {
+        return true;
+    }
 
-   virtual size_t GetIndexableSubshapeCount() const override
-   {
-      return m_shapes.size();
-   }
+    virtual size_t GetIndexableSubshapeCount() const override
+    {
+        return m_shapes.size();
+    }
 
-   virtual void GetIndexableSubshapes( std::vector<SHAPE*>& aSubshapes ) override
-   {
-      aSubshapes = m_shapes;
-   }
+    virtual void GetIndexableSubshapes( std::vector<SHAPE*>& aSubshapes ) override
+    {
+        aSubshapes = m_shapes;
+    }
 
-   private:
+    bool ConvertToSimplePolygon( SHAPE_SIMPLE* aOut ) const;
 
-      BOX2I m_cachedBBox;
-      bool m_dirty;
-      std::vector<SHAPE*> m_shapes;
+private:
+    BOX2I               m_cachedBBox;
+    bool                m_dirty;
+    std::vector<SHAPE*> m_shapes;
 };
 
 #endif // __SHAPE_COMPOUND_H
