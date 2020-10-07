@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
  * Copyright (C) 2016 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,6 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 %include pcb_target.i
 %include fp_shape.i
 %include fp_text.i
-%include pcb_shape.i
 %include netinfo.i
 %include netclass.i
 %include pcb_plot_params.i
