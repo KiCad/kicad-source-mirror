@@ -1,0 +1,11 @@
+(version 20200610)
+
+
+(rule "pad2pad_clearance_back"
+    (condition "A.type == 'Pad' && B.type == 'Pad' && (A.onlayer('B.Cu'))" )
+    (constraint clearance (min "1mm") )
+)
+
+(rule "default" 
+    (constraint clearance (min "0.2mm") )
+)

@@ -1,0 +1,20 @@
+(version 20200610)
+
+(rule "default"
+
+( constraint edge_clearance (min "0.5mm") )
+
+( constraint silk_pad_clearance (min "0.5mm") )
+( constraint silk_silk_clearance (min "0.5mm") )
+
+( constraint diff_pair_width )
+( constraint diff_pair_gap )
+( constraint diff_pair_via_gap )
+
+( constraint diff_pair_matched_length )
+
+( constraint max_skew )
+
+)
+
+
