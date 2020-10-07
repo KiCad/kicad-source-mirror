@@ -25,7 +25,6 @@
 
 #include <geometry/shape_rect.h>
 
-
 bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual,
                           VECTOR2I* aLocation ) const
 {
@@ -62,31 +61,47 @@ bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual,
 
     for( int i = 0; i < 4; i++ )
     {
-        SEG side = SEG( corners[i], corners[ i + 1] );
-        VECTOR2I pnA = side.NearestPoint( aSeg );
-        VECTOR2I pnB = aSeg.NearestPoint( side );
-        SEG::ecoord dist_sq = ( pnA - pnB ).SquaredEuclideanNorm();
+        SEG side( corners[i], corners[ i + 1] );
+        SEG::ecoord dist_sq = side.SquaredDistance( aSeg );
 
         if( dist_sq < closest_dist_sq )
         {
-            nearest = pnA;
-            closest_dist_sq = dist_sq;
+            if ( aLocation )
+            {
+                nearest = side.NearestPoint( aSeg );
+            }
 
-            if( closest_dist_sq == 0 || !aActual )
-                break;
+            closest_dist_sq = dist_sq;
         }
     }
 
     if( closest_dist_sq == 0 || closest_dist_sq < SEG::Square( aClearance ) )
     {
-        if( aLocation )
-            *aLocation = nearest;
-
         if( aActual )
             *aActual = sqrt( closest_dist_sq );
+
+        if( aLocation )
+            *aLocation = nearest;
 
         return true;
     }
 
     return false;
+}
+
+const std::string SHAPE_RECT::Format( ) const
+{
+    std::stringstream ss;
+
+    ss << "SHAPE_RECT( ";
+    ss << m_p0.x;
+    ss << ", ";
+    ss << m_p0.y;
+    ss << ", ";
+    ss << m_w;
+    ss << ", ";
+    ss << m_h;
+    ss << ");";
+
+    return ss.str();
 }
