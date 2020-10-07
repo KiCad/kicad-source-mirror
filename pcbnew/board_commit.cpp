@@ -245,11 +245,19 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 }
                 break;
 
-                // Metadata items
-                case PCB_NETINFO_T:
                 case PCB_GROUP_T:
                     if( !( changeFlags & CHT_DONE ) )
-                        board->Remove( boardItem );
+                    {
+                        if( m_editModules )
+                            board->GetFirstModule()->Remove( boardItem );
+                        else
+                            board->Remove( boardItem );
+                    }
+                    break;
+
+                // Metadata items
+                case PCB_NETINFO_T:
+                    board->Remove( boardItem );
                     break;
 
                 default:                        // other types do not need to (or should not) be handled
