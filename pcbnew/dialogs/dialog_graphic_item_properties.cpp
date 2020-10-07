@@ -256,6 +256,9 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     if( !DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::TransferDataFromWindow() )
         return false;
 
+    if( !m_thickness.Validate( 0, Millimeter2iu( 1000.0 ) ) )
+        return false;
+
     LAYER_NUM layer = m_LayerSelectionCtrl->GetLayerSelection();
 
     BOARD_COMMIT commit( m_parent );
