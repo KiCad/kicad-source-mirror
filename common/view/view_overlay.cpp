@@ -416,4 +416,11 @@ void VIEW_OVERLAY::SetLineWidth( double aLineWidth )
     m_commands.push_back( new COMMAND_SET_WIDTH( aLineWidth ) );
 }
 
+void VIEW_OVERLAY::Cross( const VECTOR2D& aP, int aSize )
+{
+    Line( aP + VECTOR2D( -aSize, -aSize ),  aP + VECTOR2D( aSize, aSize ) );
+    Line( aP + VECTOR2D( aSize, -aSize ),  aP + VECTOR2D( -aSize, aSize ) );
+}
+
+
 } // namespace

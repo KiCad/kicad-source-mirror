@@ -79,6 +79,7 @@ public:
     void Circle( const VECTOR2D& aCenterPoint, double aRadius );
     void Arc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle, double aEndAngle );
     void Rectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+    void Cross( const VECTOR2D& aP, int aSize );
 
     // Polyline primitives
     void Polyline( std::deque<VECTOR2D>& aPointList );
