@@ -165,7 +165,7 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitLab
 #if defined( EESCHEMA )
         format = wxT( "%.2f" );
 #else
-        format = wxT( "%.3f" );
+        format = wxT( "%.4f" );
 #endif
         break;
 
@@ -173,7 +173,7 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitLab
 #if defined( EESCHEMA )
         format = wxT( "%.0f" );
 #else
-        format = wxT( "%.1f" );
+        format = wxT( "%.2f" );
 #endif
         break;
 
