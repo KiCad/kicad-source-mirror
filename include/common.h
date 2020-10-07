@@ -319,9 +319,6 @@ bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
                                 const wxString& aBaseFilename,
                                 REPORTER*       aReporter = NULL );
 
-/// Put aPriorityPath in front of all paths in the value of aEnvVar.
-const wxString PrePendPath( const wxString& aEnvVar, const wxString& aPriorityPath );
-
 /**
  * Replace any environment variable & text variable references with their values.
  *
