@@ -67,7 +67,7 @@ public:
         return false;
     }
 
-    void SetAngle( double aAngle ) override;
+    void SetAngle( double aAngle, bool aUpdateEnd = true ) override;
 
     /**
      * Move an edge of the footprint.

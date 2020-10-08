@@ -170,6 +170,8 @@ public:
 
                 points->Point( ARC_MID ).SetConstraint( new EC_LINE( points->Point( ARC_MID ),
                                                                      points->Point( ARC_CENTER ) ) );
+
+                points->Point( ARC_MID ).SetGridFree();
                 break;
 
             case S_CIRCLE:
@@ -425,8 +427,6 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     m_refill = false;
     bool inDrag = false;
 
-    frame()->UndoRedoBlock( true );
-
     BOARD_COMMIT commit( editFrame );
     LSET snapLayers = item->GetLayerSet();
 
@@ -454,6 +454,8 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         {
             if( !inDrag )
             {
+                frame()->UndoRedoBlock( true );
+
                 commit.StageItems( selection, CHT_MODIFY );
 
                 controls->ForceCursorPosition( false );
@@ -466,8 +468,15 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
 
             //TODO: unify the constraints to solve simultaneously instead of sequentially
-            m_editedPoint->SetPosition( grid.BestSnapAnchor( evt->Position(),
-                                                             snapLayers, { item } ) );
+            if( m_editedPoint->IsGridFree() )
+            {
+                m_editedPoint->SetPosition( evt->Position() );
+            }
+            else
+            {
+                m_editedPoint->SetPosition( grid.BestSnapAnchor( evt->Position(), snapLayers,
+                                                                 { item } ) );
+            }
 
             // The alternative constraint limits to 45°
             bool enableAltConstraint = !!evt->Modifier( MD_CTRL );
@@ -477,10 +486,11 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             else
                 m_editedPoint->ApplyConstraint();
 
-            // Don't snap the line center to the grid
-            if( !dynamic_cast<EDIT_LINE*>( m_editedPoint) )
+            if( !m_editedPoint->IsGridFree() )
+            {
                 m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(),
                                                                  snapLayers, { item } ) );
+            }
 
             updateItem();
             updatePoints();
@@ -503,15 +513,23 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
             commit.Push( _( "Drag a corner" ) );
             inDrag = false;
+            frame()->UndoRedoBlock( false );
+
             m_refill = true;
         }
 
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             if( inDrag )      // Restore the last change
+            {
                 commit.Revert();
+                inDrag = false;
+                frame()->UndoRedoBlock( false );
+            }
             else if( evt->IsCancelInteractive() )
+            {
                 break;
+            }
 
             if( evt->IsActivate() && !evt->IsMoveTool() )
                 break;
@@ -529,7 +547,6 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         m_editPoints.reset();
     }
 
-    frame()->UndoRedoBlock( false );
     frame()->UpdateMsgPanel();
 
     return 0;
@@ -689,19 +706,13 @@ void POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCenter
 
         if( arcValid )
         {
-            aArc->SetAngle( newAngle );
+            aArc->SetAngle( newAngle, false );
             aArc->SetCenter( wxPoint( aCenter.x, aCenter.y ) );
 
             if( movingStart )
-            {
                 aArc->SetArcStart( wxPoint( aStart.x, aStart.y ) );
-                // Set angle computes the end point, so re-force it now.
-                aArc->SetArcEnd( wxPoint( aEnd.x, aEnd.y ) );
-            }
             else
-            {
                 aArc->SetArcEnd( wxPoint( aEnd.x, aEnd.y ) );
-            }
         }
     }
 }
@@ -876,19 +887,13 @@ void POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter,
     else if( !clockwise && newAngle > 0.0 )
         newAngle -= 3600.0;
 
-    aArc->SetAngle( newAngle );
-    aArc->SetCenter( wxPoint( aCenter.x, aCenter.y ) );
+    aArc->SetAngle( newAngle, false );
+    aArc->SetCenter( (wxPoint) aCenter );
 
     if( movingStart )
-    {
-        aArc->SetArcStart( wxPoint( aStart.x, aStart.y ) );
-        // Set angle computes the end point, so re-force it now.
-        aArc->SetArcEnd( wxPoint( aEnd.x, aEnd.y ) );
-    }
+        aArc->SetArcStart( (wxPoint) aStart );
     else
-    {
-        aArc->SetArcEnd( wxPoint( aEnd.x, aEnd.y ) );
-    }
+        aArc->SetArcEnd( (wxPoint) aEnd );
 }
 
 
@@ -945,8 +950,8 @@ void POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, VECT
     aStart = aStart + aCenter;
     aEnd   = aEnd + aCenter;
 
-    aArc->SetArcStart( wxPoint( aStart.x, aStart.y ) );
-    aArc->SetArcEnd( wxPoint( aEnd.x, aEnd.y ) );
+    aArc->SetArcStart( (wxPoint) aStart );
+    aArc->SetArcEnd( (wxPoint) aEnd );
 }
 
 
@@ -962,7 +967,7 @@ void POINT_EDITOR::editArcMidKeepEnpoints( PCB_SHAPE* aArc, VECTOR2I aCenter, VE
     // Find the new center
     aCenter = GetArcCenter( aStart, aMid, aEnd );
 
-    aArc->SetCenter( wxPoint( aCenter.x, aCenter.y ) );
+    aArc->SetCenter( (wxPoint) aCenter );
 
     // Check if the new arc is CW or CCW
     VECTOR2D startLine = aStart - aCenter;
@@ -994,12 +999,11 @@ void POINT_EDITOR::editArcMidKeepEnpoints( PCB_SHAPE* aArc, VECTOR2I aCenter, VE
         // Cancel Everything
         // If the accuracy is low, we can't draw precisely the arc.
         // It may happen when the radius is *high*
-        aArc->SetCenter( wxPoint( oldCenter.x, oldCenter.y ) );
+        aArc->SetCenter( (wxPoint) oldCenter );
     }
     else
     {
-        aArc->SetAngle( newAngle );
-        aArc->SetArcEnd( wxPoint( aEnd.x, aEnd.y ) );
+        aArc->SetAngle( newAngle, false );
     }
 
     // Now, update the edit point position
@@ -1087,8 +1091,6 @@ void POINT_EDITOR::updateItem() const
             VECTOR2I start = m_editPoints->Point( ARC_START ).GetPosition();
             VECTOR2I end = m_editPoints->Point( ARC_END ).GetPosition();
 
-            const VECTOR2I& cursorPos = getViewControls()->GetCursorPosition();
-
             if( isModified( m_editPoints->Point( ARC_CENTER ) ) )
             {
                 wxPoint moveVector = wxPoint( center.x, center.y ) - shape->GetCenter();
@@ -1096,26 +1098,22 @@ void POINT_EDITOR::updateItem() const
             }
             else if( isModified( m_editPoints->Point( ARC_MID ) ) )
             {
+                const VECTOR2I& cursorPos = getViewControls()->GetCursorPosition( false );
+
                 if( m_altEditMethod )
-                {
                     editArcMidKeepCenter( shape, center, start, mid, end, cursorPos );
-                }
                 else
-                {
                     editArcMidKeepEnpoints( shape, center, start, mid, end, cursorPos );
-                }
             }
             else if( isModified( m_editPoints->Point( ARC_START ) )
                      || isModified( m_editPoints->Point( ARC_END ) ) )
             {
+                const VECTOR2I& cursorPos = getViewControls()->GetCursorPosition();
+
                 if( m_altEditMethod )
-                {
                     editArcEndpointKeepCenter( shape, center, start, mid, end, cursorPos );
-                }
                 else
-                {
                     editArcEndpointKeepTangent( shape, center, start, mid, end, cursorPos );
-                }
             }
         }
             break;

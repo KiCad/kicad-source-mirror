@@ -184,6 +184,9 @@ public:
     bool IsHover() const { return m_isHover; }
     void SetHover( bool aHover = true ) { m_isHover = aHover; }
 
+    bool IsGridFree() const { return m_gridFree; }
+    void SetGridFree( bool aGridFree = true ) { m_gridFree = aGridFree; }
+
     bool operator==( const EDIT_POINT& aOther ) const
     {
         return m_position == aOther.m_position;
@@ -199,21 +202,16 @@ public:
     static const int HOVER_SIZE = 5;
 
 private:
-    ///> Position of EDIT_POINT
-    VECTOR2I  m_position;
+    VECTOR2I  m_position;        // Position of EDIT_POINT
 
-    ///> An optional item to a connected item.  Used to mimic polyLine behaviour
-    ///> with individual line segments.
-    EDA_ITEM* m_connection;
+    EDA_ITEM* m_connection;      // An optional item to a connected item.  Used to mimic
+                                 // polyLine behaviour with individual line segments.
+    bool      m_isActive;        // True if this point is being manipulated
+    bool      m_isHover;         // True if this point is being hovered over
+    bool      m_gridFree;        // True if this point should not be snapped to the grid.
 
     ///> Constraint for the point, NULL if none
     std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT> > m_constraint;
-
-    ///> True if this point is being manipulated
-    bool m_isActive;
-
-    ///> True if this point is being hovered over
-    bool m_isHover;
 };
 
 
@@ -235,8 +233,11 @@ public:
      */
     EDIT_LINE( EDIT_POINT& aOrigin, EDIT_POINT& aEnd ) :
         EDIT_POINT( aOrigin.GetPosition() + ( aEnd.GetPosition() - aOrigin.GetPosition() ) / 2 ),
-        m_origin( aOrigin ), m_end( aEnd )
+        m_origin( aOrigin ),
+        m_end( aEnd )
     {
+        // Don't snap the line center to the grid
+        SetGridFree();
     }
 
     ///> @copydoc EDIT_POINT::GetPosition()

@@ -431,14 +431,16 @@ double PCB_SHAPE::GetArcAngleEnd() const
 }
 
 
-void PCB_SHAPE::SetAngle( double aAngle )
+void PCB_SHAPE::SetAngle( double aAngle, bool aUpdateEnd )
 {
-    // Mark as depreciated.
-    // m_Angle does not define the arc anymore
     // m_Angle must be >= -360 and <= +360 degrees
     m_Angle = NormalizeAngle360Max( aAngle );
-    m_ThirdPoint = m_End;
-    RotatePoint( &m_ThirdPoint, m_Start, -m_Angle );
+
+    if( aUpdateEnd )
+    {
+        m_ThirdPoint = m_End;
+        RotatePoint( &m_ThirdPoint, m_Start, -m_Angle );
+    }
 }
 
 
@@ -1269,8 +1271,8 @@ static struct DRAWSEGMENT_DESC
         propMgr.AddProperty( new PROPERTY<PCB_SHAPE, int>( _( "Thickness" ),
                     &PCB_SHAPE::SetWidth, &PCB_SHAPE::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
         // TODO show certain properties depending on the shape
-        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, double>( _( "Angle" ),
-                    &PCB_SHAPE::SetAngle, &PCB_SHAPE::GetAngle, PROPERTY_DISPLAY::DECIDEGREE ) );
+        //propMgr.AddProperty( new PROPERTY<PCB_SHAPE, double>( _( "Angle" ),
+        //            &PCB_SHAPE::SetAngle, &PCB_SHAPE::GetAngle, PROPERTY_DISPLAY::DECIDEGREE ) );
         // TODO or may have different names (arcs)
         // TODO type?
         propMgr.AddProperty( new PROPERTY<PCB_SHAPE, int>( _( "End X" ),

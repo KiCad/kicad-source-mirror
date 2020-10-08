@@ -338,6 +338,31 @@ void RotatePoint( double* pX, double* pY, double angle )
 }
 
 
+const wxPoint GetArcCenter( VECTOR2I aStart, VECTOR2I aEnd, double aAngle )
+{
+    if( aAngle < 0 )
+    {
+        std::swap( aStart, aEnd );
+        aAngle = abs( aAngle );
+    }
+
+    if( aAngle > 180 )
+    {
+        std::swap( aStart, aEnd );
+        aAngle = 360 - aAngle;
+    }
+
+    int chord = ( aStart - aEnd ).EuclideanNorm();
+    int r = ( chord / 2 ) / sin( aAngle * M_PI / 360.0 );
+
+    VECTOR2I vec = aEnd - aStart;
+    vec = vec.Resize( r );
+    vec = vec.Rotate( ( 180.0 - aAngle ) * M_PI / 360.0 );
+
+    return (wxPoint) ( aStart + vec );
+}
+
+
 const VECTOR2D GetArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd )
 {
     VECTOR2D center;

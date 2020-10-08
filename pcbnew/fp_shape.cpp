@@ -148,14 +148,18 @@ EDA_ITEM* FP_SHAPE::Clone() const
 }
 
 
-void FP_SHAPE::SetAngle( double aAngle )
+void FP_SHAPE::SetAngle( double aAngle, bool aUpdateEnd )
 {
     // Mark as depreciated.
     // m_Angle does not define the arc anymore
     // m_Angle must be >= -360 and <= +360 degrees
     m_Angle = NormalizeAngle360Max( aAngle );
-    m_ThirdPoint0 = m_End0;
-    RotatePoint( &m_ThirdPoint0, m_Start0, -m_Angle );
+
+    if( aUpdateEnd )
+    {
+        m_ThirdPoint0 = m_End0;
+        RotatePoint( &m_ThirdPoint0, m_Start0, -m_Angle );
+    }
 }
 
 

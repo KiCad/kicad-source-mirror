@@ -283,6 +283,15 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                 connectivity->Update( boardItem );
                 view->Update( boardItem );
+
+                if( m_editModules )
+                {
+                    static_cast<MODULE*>( boardItem )->RunOnChildren( [&]( BOARD_ITEM* aChild )
+                                                                      {
+                                                                          view->Update( aChild );
+                                                                      });
+                }
+
                 board->OnItemChanged( boardItem );
 
                 // if no undo entry is needed, the copy would create a memory leak

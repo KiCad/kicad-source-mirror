@@ -178,9 +178,6 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
 
     case S_ARC:
         SetTitle( _( "Arc Properties" ) );
-        m_startPointLabel->SetLabel( _( "Center" ) );
-        m_endPointLabel->SetLabel( _( "Start Point" ) );
-
         m_AngleValue = m_item->GetAngle() / 10.0;
         break;
 
@@ -206,7 +203,12 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         break;
     }
 
-    if( m_flipStartEnd )
+    if( m_item->GetShape() == S_ARC )
+    {
+        m_startX.SetValue( m_item->GetArcStart().x );
+        m_startY.SetValue( m_item->GetArcStart().y );
+    }
+    else if( m_flipStartEnd )
     {
         m_startX.SetValue( m_item->GetEnd().x );
         m_startY.SetValue( m_item->GetEnd().y );
@@ -217,9 +219,14 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_startY.SetValue( m_item->GetStart().y );
     }
 
-    if(  m_item->GetShape() == S_CIRCLE )
+    if( m_item->GetShape() == S_CIRCLE )
     {
         m_endX.SetValue( m_item->GetRadius() );
+    }
+    else if( m_item->GetShape() == S_ARC )
+    {
+        m_endX.SetValue( m_item->GetArcEnd().x );
+        m_endY.SetValue( m_item->GetArcEnd().y );
     }
     else if( m_flipStartEnd )
     {
@@ -264,7 +271,11 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     BOARD_COMMIT commit( m_parent );
     commit.Modify( m_item );
 
-    if( m_flipStartEnd )
+    if( m_item->GetShape() == S_ARC )
+    {
+        m_item->SetArcStart( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
+    }
+    else if( m_flipStartEnd )
     {
         m_item->SetEndX( m_startX.GetValue() );
         m_item->SetEndY( m_startY.GetValue() );
@@ -278,6 +289,10 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     if( m_item->GetShape() == S_CIRCLE )
     {
         m_item->SetEnd( m_item->GetStart() + wxPoint( m_endX.GetValue(), 0 ) );
+    }
+    else if( m_item->GetShape() == S_ARC )
+    {
+        m_item->SetArcEnd( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
     }
     else if( m_flipStartEnd )
     {
@@ -298,9 +313,8 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     }
 
     if( m_moduleItem )
-    {   // We are editing a footprint.
-        // Init the item coordinates relative to the footprint anchor,
-        // that are coordinate references
+    {
+        // We are editing a footprint; init the item coordinates relative to the footprint anchor.
         m_moduleItem->SetStart0( m_moduleItem->GetStart() );
         m_moduleItem->SetEnd0( m_moduleItem->GetEnd() );
 
@@ -315,13 +329,16 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     m_item->SetLayer( ToLAYER_ID( layer ) );
 
     if( m_item->GetShape() == S_ARC )
-        m_item->SetAngle( m_AngleValue * 10.0 );
+    {
+        m_item->SetCenter( GetArcCenter( m_item->GetArcStart(), m_item->GetArcEnd(), m_AngleValue ) );
+        m_item->SetAngle( m_AngleValue * 10.0, false );
+    }
 
     m_item->RebuildBezierToSegmentsPointsList( m_item->GetWidth() );
 
     commit.Push( _( "Modify drawing properties" ) );
 
-    m_parent->SetMsgPanel( m_item );
+    m_parent->UpdateMsgPanel();
 
     return true;
 }

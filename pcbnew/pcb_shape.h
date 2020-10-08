@@ -104,7 +104,7 @@ public:
      * sets the angle for arcs, and normalizes it within the range 0 - 360 degrees.
      * @param aAngle is tenths of degrees, but will soon be degrees.
      */
-    virtual void SetAngle( double aAngle );     // encapsulates the transition to degrees
+    virtual void SetAngle( double aAngle, bool aUpdateEnd = true );
     double GetAngle() const { return m_Angle; }
 
     void SetType( int aType )                       { m_Type = aType; }
