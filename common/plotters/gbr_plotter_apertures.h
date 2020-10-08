@@ -63,6 +63,10 @@ public:
         AM_ROUND_RECT,          // Aperture macro for round rect pads
         AM_ROT_RECT,            // Aperture macro for rotated rect pads
         APER_MACRO_OUTLINE4P,   // Aperture macro for trapezoid pads (outline with 4 corners)
+        APER_MACRO_OUTLINE5P,   // Aperture macro for pad polygons with 5 corners (chamfered pads)
+        APER_MACRO_OUTLINE6P,   // Aperture macro for pad polygons with 6 corners (chamfered pads)
+        APER_MACRO_OUTLINE7P,   // Aperture macro for pad polygons with 7 corners (chamfered pads)
+        APER_MACRO_OUTLINE8P,   // Aperture macro for pad polygons with 8 corners (chamfered pads)
         AM_ROTATED_OVAL         // Aperture macro for rotated oval pads
                                 // (not rotated uses a primitive)
     };

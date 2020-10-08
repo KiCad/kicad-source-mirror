@@ -40,6 +40,7 @@
 // if GBR_USE_MACROS is defined, pads having a shape that is not a Gerber primitive
 // will use a macro when possible
 // Old code will be removed only after many tests
+#define GBR_USE_MACROS_FOR_CHAMFERED_RECT
 #define GBR_USE_MACROS_FOR_ROUNDRECT
 #define GBR_USE_MACROS_FOR_TRAPEZOID
 #define GBR_USE_MACROS_FOR_ROTATED_OVAL
@@ -67,7 +68,10 @@ GERBER_PLOTTER::GERBER_PLOTTER()
     m_hasApertureRoundRect = false;     // true is at least one round rect aperture is in use
     m_hasApertureRotOval = false;       // true is at least one oval rotated aperture is in use
     m_hasApertureRotRect = false;       // true is at least one rect. rotated aperture is in use
-    m_hasApertureOutline = false;       // true is at least one rotated rect/trapezoid aperture is in use
+    m_hasApertureOutline4P = false;       // true is at least one rotated rect or trapezoid pad
+                                        // aperture is in use
+    m_hasApertureChamferedRect = false; // true is at least one chamfered rect
+                                        // (no rounded corner) is in use
 }
 
 
@@ -191,7 +195,8 @@ bool GERBER_PLOTTER::StartPlot()
     m_hasApertureRoundRect = false;     // true is at least one round rect aperture is in use
     m_hasApertureRotOval = false;       // true is at least one oval rotated aperture is in use
     m_hasApertureRotRect = false;       // true is at least one rect. rotated aperture is in use
-    m_hasApertureOutline = false;       // true is at least one rotated rect/trapezoid aperture is in use
+    m_hasApertureOutline4P = false;       // true is at least one rotated rect/trapezoid aperture is in use
+    m_hasApertureChamferedRect = false;  // true is at least one chamfered rect is in use
 
     wxASSERT( outputFile );
 
@@ -288,7 +293,8 @@ bool GERBER_PLOTTER::EndPlot()
         {
             // Add aperture list macro:
             if( m_hasApertureRoundRect | m_hasApertureRotOval ||
-                m_hasApertureOutline || m_hasApertureRotRect )
+                m_hasApertureOutline4P || m_hasApertureRotRect ||
+                m_hasApertureChamferedRect )
             {
                 fputs( "G04 Aperture macros list*\n", outputFile );
 
@@ -301,8 +307,16 @@ bool GERBER_PLOTTER::EndPlot()
                 if( m_hasApertureRotRect )
                     fputs( APER_MACRO_ROT_RECT_HEADER, outputFile );
 
-                if( m_hasApertureOutline )
+                if( m_hasApertureOutline4P )
                     fputs( APER_MACRO_OUTLINE4P_HEADER, outputFile );
+
+                if( m_hasApertureChamferedRect )
+                {
+                    fputs( APER_MACRO_OUTLINE5P_HEADER, outputFile );
+                    fputs( APER_MACRO_OUTLINE6P_HEADER, outputFile );
+                    fputs( APER_MACRO_OUTLINE7P_HEADER, outputFile );
+                    fputs( APER_MACRO_OUTLINE8P_HEADER, outputFile );
+                }
 
                 fputs( "G04 Aperture macros list end*\n", outputFile );
             }
@@ -379,7 +393,8 @@ int GERBER_PLOTTER::GetOrCreateAperture( const std::vector<wxPoint>& aCorners, d
     for( int idx = 0; idx < (int)m_apertures.size(); ++idx )
     {
         APERTURE* tool = &m_apertures[idx];
-        last_D_code = tool->m_DCode;
+
+       last_D_code = tool->m_DCode;
 
         if( (tool->m_Type == aType) && (tool->m_Corners.size() == aCorners.size() ) &&
             (tool->m_ApertureAttribute == aApertureAttribute) )
@@ -601,12 +616,29 @@ void GERBER_PLOTTER::writeApertureList()
             break;
 
         case APERTURE::APER_MACRO_OUTLINE4P:    // Aperture macro for trapezoid pads
-            wxASSERT( tool.m_Corners.size() == 4 );
+        case APERTURE::APER_MACRO_OUTLINE5P:    // Aperture macro for chamfered rect pads
+        case APERTURE::APER_MACRO_OUTLINE6P:    // Aperture macro for chamfered rect pads
+        case APERTURE::APER_MACRO_OUTLINE7P:    // Aperture macro for chamfered rect pads
+        case APERTURE::APER_MACRO_OUTLINE8P:    // Aperture macro for chamfered rect pads
+            switch( tool.m_Type )
+            {
+            case APERTURE::APER_MACRO_OUTLINE4P:
+                sprintf( cbuf, "%s,", APER_MACRO_OUTLINE4P_NAME ); break;
+            case APERTURE::APER_MACRO_OUTLINE5P:
+                sprintf( cbuf, "%s,", APER_MACRO_OUTLINE5P_NAME ); break;
+            case APERTURE::APER_MACRO_OUTLINE6P:
+                sprintf( cbuf, "%s,", APER_MACRO_OUTLINE6P_NAME ); break;
+            case APERTURE::APER_MACRO_OUTLINE7P:
+                sprintf( cbuf, "%s,", APER_MACRO_OUTLINE7P_NAME ); break;
+            case APERTURE::APER_MACRO_OUTLINE8P:
+                sprintf( cbuf, "%s,", APER_MACRO_OUTLINE8P_NAME ); break;
+            default:
+                break;
+            }
 
-            sprintf( cbuf, "%s,", APER_MACRO_OUTLINE4P_NAME );
             buffer += cbuf;
 
-            // Output all corners (should be 4 corners)
+            // Output all corners (should be 4 to 8 corners)
             // Remember: the Y coordinate must be negated, due to the fact in Pcbnew
             // the Y axis is from top to bottom
             for( size_t ii = 0; ii < tool.m_Corners.size(); ii++ )
@@ -1333,7 +1365,6 @@ void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
 
 {
     // A Pad custom is plotted as polygon (a region in Gerber language).
-
     GBR_METADATA gbr_metadata;
 
     if( aData )
@@ -1369,6 +1400,107 @@ void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
 }
 
 
+void GERBER_PLOTTER::FlashPadChamferRoundRect( const wxPoint& aShapePos, const wxSize& aPadSize,
+                                   int aCornerRadius, double aChamferRatio,
+                                   int aChamferPositions,
+                                   double aPadOrient, EDA_DRAW_MODE_T aPlotMode, void* aData )
+
+{
+    GBR_METADATA gbr_metadata;
+
+    if( aData )
+        gbr_metadata = *static_cast<GBR_METADATA*>( aData );
+
+    DPOINT pos_dev = userToDeviceCoordinates( aShapePos );
+
+    SHAPE_POLY_SET outline;
+    // polygon corners list
+    std::vector<wxPoint> cornerList;
+
+    bool hasRoundedCorner = aCornerRadius != 0 && aChamferPositions != 15;
+
+#ifdef GBR_USE_MACROS_FOR_CHAMFERED_RECT
+    if( aPlotMode != FILLED || hasRoundedCorner )   // Sketch mode or round rect shape
+#endif
+    {
+        TransformRoundChamferedRectToPolygon( outline, aShapePos, aPadSize,
+                                              aPadOrient, aCornerRadius,
+                                              aChamferRatio,
+                                              aChamferPositions, m_IUsPerDecimil * 2 );
+
+        // Build the corner list
+        const SHAPE_LINE_CHAIN& corners = outline.Outline(0);
+
+        for( int ii = 0; ii < corners.PointCount(); ii++ )
+            cornerList.emplace_back( corners.CPoint( ii ).x, corners.CPoint( ii ).y );
+
+        // Close the polygon
+        cornerList.push_back( cornerList[0] );
+
+        if( aPlotMode == SKETCH )
+            PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), &gbr_metadata );
+        else    // round rect shapes shapes are plot as region (a AP Macro is not obvious)
+            PlotGerberRegion( cornerList, &gbr_metadata );
+
+        return;
+    }
+
+    // Build the chamfered polygon (4 to 8 corners )
+    TransformRoundChamferedRectToPolygon( outline, wxPoint( 0, 0 ), aPadSize,
+                                          0.0, 0, aChamferRatio,
+                                          aChamferPositions, 0 );
+
+    // Build the corner list
+    const SHAPE_LINE_CHAIN& corners = outline.Outline(0);
+
+    // Generate the polygon (4 to 8 corners )
+    for( int ii = 0; ii < corners.PointCount(); ii++ )
+        cornerList.emplace_back( corners.CPoint( ii ).x, corners.CPoint( ii ).y );
+
+    switch( cornerList.size() )
+    {
+    case 4:
+        m_hasApertureOutline4P = true;
+        selectAperture( cornerList, aPadOrient/10.0,
+                        APERTURE::APER_MACRO_OUTLINE4P, gbr_metadata.GetApertureAttrib() );
+        break;
+
+    case 5:
+        m_hasApertureChamferedRect = true;
+        selectAperture( cornerList, aPadOrient/10.0,
+                        APERTURE::APER_MACRO_OUTLINE5P, gbr_metadata.GetApertureAttrib() );
+        break;
+
+    case 6:
+        m_hasApertureChamferedRect = true;
+        selectAperture( cornerList, aPadOrient/10.0,
+                        APERTURE::APER_MACRO_OUTLINE6P, gbr_metadata.GetApertureAttrib() );
+        break;
+
+    case 7:
+        m_hasApertureChamferedRect = true;
+        selectAperture( cornerList, aPadOrient/10.0,
+                        APERTURE::APER_MACRO_OUTLINE7P, gbr_metadata.GetApertureAttrib() );
+        break;
+
+    case 8:
+        m_hasApertureChamferedRect = true;
+        selectAperture( cornerList, aPadOrient/10.0,
+                        APERTURE::APER_MACRO_OUTLINE8P, gbr_metadata.GetApertureAttrib() );
+        break;
+
+    default:
+        wxLogMessage( "FlashPadChamferRoundRect(): Unexpected number of corners (%d)",
+                      (int)cornerList.size() );
+        break;
+    }
+
+    formatNetAttribute( &gbr_metadata.m_NetlistMetadata );
+
+    emitDcode( pos_dev, 3 );
+}
+
+
 void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCorners,
                                      double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode, void* aData )
 
@@ -1397,7 +1529,7 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
     else
     #ifdef GBR_USE_MACROS_FOR_TRAPEZOID
     {
-        m_hasApertureOutline = true;
+        m_hasApertureOutline4P = true;
         DPOINT pos_dev = userToDeviceCoordinates( aPadPos );
         // polygon corners list
         std::vector<wxPoint> corners = { aCorners[0], aCorners[1], aCorners[2], aCorners[3] };
@@ -1422,6 +1554,11 @@ void GERBER_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos,
 {
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
+    GBR_METADATA metadata;
+
+    if( gbr_metadata )
+        metadata = *gbr_metadata;
+
     if( aTraceMode == SKETCH )
     {
         // Build the polygon:
@@ -1440,7 +1577,7 @@ void GERBER_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos,
 
         cornerList.push_back( cornerList[0] );  // Close the shape
 
-        PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), gbr_metadata );
+        PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), &gbr_metadata );
     }
     else
     {

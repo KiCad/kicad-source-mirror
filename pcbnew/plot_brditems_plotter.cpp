@@ -256,8 +256,20 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
     }
         break;
 
-    default:
     case PAD_SHAPE_CHAMFERED_RECT:
+        if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+        {
+            static_cast<GERBER_PLOTTER*>( m_plotter )->FlashPadChamferRoundRect(
+                                    shape_pos, aPad->GetSize(),
+                                    aPad->GetRoundRectCornerRadius(),
+                                    aPad->GetChamferRectRatio(),
+                                    aPad->GetChamferPositions(),
+                                    aPad->GetOrientation(), aPlotMode, &gbr_metadata );
+            break;
+        }
+        KI_FALLTHROUGH;
+
+    default:
     case PAD_SHAPE_CUSTOM:
     {
         const std::shared_ptr<SHAPE_POLY_SET>& polygons = aPad->GetEffectivePolygon();

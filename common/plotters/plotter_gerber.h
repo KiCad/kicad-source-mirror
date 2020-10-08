@@ -142,10 +142,31 @@ public:
      * TODO: always use flashed shapes (aperture macros)
      */
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+                            double aPadOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
 
     virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
                             double aOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+
+    /**
+     * flash a chamfered round rect pad.
+     * @param aShapePos = position of the pad shape
+     * @param aPadSize = size of the rectangle
+     * @param aCornerRadius = radius of rounded corners
+     * @param aChamferRatio = chamfer value (ratio < 0.5 between smallest size and chamfer)
+     * @param aChamferPositions = identifier of the corners to chamfer:
+     *  0 = no chamfer
+     *  1 = TOP_LEFT
+     *  2 = TOP_RIGHT
+     *  4 = BOTTOM_LEFT
+     *  8 = BOTTOM_RIGHT
+     * @param aPadOrient = rotation in 0.1 degrees of the shape
+     * @param aPlotMode = FILLED or SKETCH
+     * @param aData = a reference to Gerber attributes descr
+     */
+    void FlashPadChamferRoundRect( const wxPoint& aShapePos, const wxSize& aPadSize,
+                                   int aCornerRadius, double aChamferRatio,
+                                   int aChamferPositions,
+                                   double aPadOrient, EDA_DRAW_MODE_T aPlotMode, void* aData );
 
     /**
      * Plot a Gerber region: similar to PlotPoly but plot only filled polygon,
@@ -317,12 +338,15 @@ protected:
      */
     void writeApertureList();
 
-    std::vector<APERTURE> m_apertures; // The list of available apertures
-    int     m_currentApertureIdx;      // The index of the current aperture in m_apertures
-    bool    m_hasApertureRoundRect;    // true is at least one round rect aperture is in use
-    bool    m_hasApertureRotOval;      // true is at least one oval rotated aperture is in use
-    bool    m_hasApertureRotRect;      // true is at least one rect. rotated aperture is in use
-    bool    m_hasApertureOutline;      // true is at least one outline (free polygon) aperture is in use
+    std::vector<APERTURE> m_apertures;  // The list of available apertures
+    int     m_currentApertureIdx;       // The index of the current aperture in m_apertures
+    bool    m_hasApertureRoundRect;     // true is at least one round rect aperture is in use
+    bool    m_hasApertureRotOval;       // true is at least one oval rotated aperture is in use
+    bool    m_hasApertureRotRect;       // true is at least one rect. rotated aperture is in use
+    bool    m_hasApertureOutline4P;     // true is at least one 4 corners outline (free polygon
+                                        // with 4 corners) aperture is in use
+    bool    m_hasApertureChamferedRect; // true is at least one chamfered rect is in use
+                                        // (with no rounded corner)
 
     bool    m_gerberUnitInch;          // true if the gerber units are inches, false for mm
     int     m_gerberUnitFmt;           // number of digits in mantissa.

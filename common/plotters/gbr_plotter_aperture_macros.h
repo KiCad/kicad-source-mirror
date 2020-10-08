@@ -95,3 +95,58 @@
 0 create outline with 4 corners*\n\
 4,1,4,$1,$2,$3,$4,$5,$6,$7,$8,$1,$2,$9*%\n"
 
+// A aperture macro to define a polygon by 5 corners
+// and a rotation angle (usefull for chamfered rect pads)
+#define APER_MACRO_OUTLINE5P_NAME "Outline5P"
+
+#define APER_MACRO_OUTLINE5P_HEADER \
+"%AMOutline5P*\n\
+0 Free polygon, 5 corners , with rotation*\n\
+0 The origin of the aperture is its center*\n\
+0 number of corners: always 8*\n\
+0 $1 to $10 corner X, Y*\n\
+0 $11 Rotation angle, in degrees counterclockwise*\n\
+0 create outline with 8 corners*\n\
+4,1,5,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$1,$2,$11*%\n"
+
+// A aperture macro to define a polygon by 6 corners
+// and a rotation angle (usefull for chamfered rect pads)
+#define APER_MACRO_OUTLINE6P_NAME "Outline6P"
+
+#define APER_MACRO_OUTLINE6P_HEADER \
+"%AMOutline6P*\n\
+0 Free polygon, 6 corners , with rotation*\n\
+0 The origin of the aperture is its center*\n\
+0 number of corners: always 6*\n\
+0 $1 to $12 corner X, Y*\n\
+0 $13 Rotation angle, in degrees counterclockwise*\n\
+0 create outline with 6 corners*\n\
+4,1,6,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$1,$2,$13*%\n"
+
+// A aperture macro to define a polygon by 7 corners
+// and a rotation angle (usefull for chamfered rect pads)
+#define APER_MACRO_OUTLINE7P_NAME "Outline7P"
+
+#define APER_MACRO_OUTLINE7P_HEADER \
+"%AMOutline7P*\n\
+0 Free polygon, 7 corners , with rotation*\n\
+0 The origin of the aperture is its center*\n\
+0 number of corners: always 7*\n\
+0 $1 to $14 corner X, Y*\n\
+0 $15 Rotation angle, in degrees counterclockwise*\n\
+0 create outline with 7 corners*\n\
+4,1,7,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$1,$2,$15*%\n"
+
+// A aperture macro to define a polygon by 8 corners
+// and a rotation angle (usefull for chamfered rect pads)
+#define APER_MACRO_OUTLINE8P_NAME "Outline8P"
+
+#define APER_MACRO_OUTLINE8P_HEADER \
+"%AMOutline8P*\n\
+0 Free polygon, 8 corners , with rotation*\n\
+0 The origin of the aperture is its center*\n\
+0 number of corners: always 8*\n\
+0 $1 to $16 corner X, Y*\n\
+0 $17 Rotation angle, in degrees counterclockwise*\n\
+0 create outline with 8 corners*\n\
+4,1,8,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$1,$2,$17*%\n"
