@@ -296,7 +296,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
+        frame()->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
 
         if( evt->IsCancelInteractive() )
         {

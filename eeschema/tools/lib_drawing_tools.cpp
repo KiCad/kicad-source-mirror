@@ -76,7 +76,8 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
     LIB_PIN_TOOL*     pinTool = type == LIB_PIN_T ? m_toolMgr->GetTool<LIB_PIN_TOOL>() : nullptr;
     VECTOR2I          cursorPos;
-    EDA_ITEM*         item = nullptr;
+    EDA_ITEM*         item   = nullptr;
+    bool              isText = aEvent.IsAction( &EE_ACTIONS::placeSymbolText );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
@@ -92,7 +93,15 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+        if( isText )
+        {
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::TEXT );
+        }
+        else
+        {
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+        }
+
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         auto cleanup = [&] () {
@@ -266,7 +275,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         if( !pointEditor->HasPoint() )
-            m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
@@ -405,7 +414,7 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
+        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
 
         if( evt->IsCancelInteractive() )
         {

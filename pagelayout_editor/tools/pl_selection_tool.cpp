@@ -113,9 +113,6 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( m_frame->ToolStackIsEmpty() )
-            m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
-
         m_additive = m_subtractive = m_exclusive_or = false;
 
         if( evt->Modifier( MD_SHIFT ) && evt->Modifier( MD_CTRL ) )
@@ -124,6 +121,8 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_additive = true;
         else if( evt->Modifier( MD_CTRL ) )
             m_exclusive_or = true;
+
+        bool modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
 
         // Is the user requesting that the selection list include all possible
         // items without removing less likely selection candidates
@@ -159,7 +158,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
-            if( m_additive || m_subtractive || m_exclusive_or || m_selection.Empty() )
+            if( modifier_enabled || m_selection.Empty() )
             {
                 selectMultiple();
             }
@@ -169,7 +168,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( selectionContains( evt->Position() ) )
                 {
                     // Yes -> run the move tool and wait till it finishes
-                    m_toolMgr->InvokeTool( "plEditor.InteractiveEdit" );
+                    m_toolMgr->RunAction( "plEditor.InteractiveMove.move", true );
                 }
                 else
                 {
@@ -197,6 +196,25 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         else
             evt->SetPassEvent();
+
+
+        if( m_frame->ToolStackIsEmpty() )
+        {
+            if( !modifier_enabled && !m_selection.Empty() && !m_frame->GetDragSelects()
+                    && evt->HasPosition() && selectionContains( evt->Position() ) )
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+            else
+            {
+                if( m_additive )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ADD );
+                else if( m_subtractive )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SUBTRACT );
+                else if( m_exclusive_or )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::XOR );
+                else
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+            }
+        }
     }
 
     return 0;

@@ -29,6 +29,7 @@
 #include <kiface_i.h>
 #include <macros.h>
 #include <settings/app_settings.h>
+#include <cursors.h>
 
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
@@ -64,8 +65,9 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
           m_lostFocus( false ),
           m_stealsFocus( true )
 {
-    m_parent        = aParentWindow;
-    m_currentCursor = wxStockCursor( wxCURSOR_ARROW );
+    m_parent          = aParentWindow;
+    m_currentKiCursor = KICURSOR::DEFAULT;
+    SetCurrentCursor( KICURSOR::ARROW );
 
     SetLayoutDirection( wxLayout_LeftToRight );
 
@@ -567,18 +569,16 @@ void EDA_DRAW_PANEL_GAL::onShowTimer( wxTimerEvent& aEvent )
 }
 
 
-void EDA_DRAW_PANEL_GAL::SetCurrentCursor( wxStockCursor aStockCursorID )
+void EDA_DRAW_PANEL_GAL::SetCurrentCursor( KICURSOR cursor )
 {
-    if ( aStockCursorID <= wxCURSOR_NONE || aStockCursorID >= wxCURSOR_MAX )
-        aStockCursorID = wxCURSOR_ARROW;
+    if( m_currentKiCursor == cursor )
+    {
+        return;
+    }
 
-    SetCurrentCursor( wxCursor( aStockCursorID ) );
-}
+    m_currentCursor = CURSOR_STORE::GetCursor( cursor );
+    m_currentKiCursor = cursor;
 
-
-void EDA_DRAW_PANEL_GAL::SetCurrentCursor( const wxCursor& aCursor )
-{
-    m_currentCursor = aCursor;
     SetCursor( m_currentCursor );
 }
 

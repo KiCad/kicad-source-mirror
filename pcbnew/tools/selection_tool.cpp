@@ -208,9 +208,6 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( m_frame->ToolStackIsEmpty() )
-            m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
-
         bool dragAlwaysSelects = getEditFrame<PCB_BASE_FRAME>()->GetDragSelects();
         TRACK_DRAG_ACTION dragAction = getEditFrame<PCB_BASE_FRAME>()->Settings().m_TrackDragAction;
         m_additive = m_subtractive = m_exclusive_or = false;
@@ -227,6 +224,8 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->Modifier( MD_CTRL ) )
             m_exclusive_or = true;
 #endif
+
+        bool modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
 
         // Is the user requesting that the selection list include all possible
         // items without removing less likely selection candidates
@@ -287,7 +286,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             m_frame->FocusOnItem( nullptr );
 
-            if( m_additive || m_subtractive || m_exclusive_or || dragAlwaysSelects )
+            if( modifier_enabled || dragAlwaysSelects )
             {
                 selectMultiple();
             }
@@ -336,6 +335,26 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         else
             evt->SetPassEvent();
+
+
+        if( m_frame->ToolStackIsEmpty() )
+        {
+            //move cursor prediction
+            if( !modifier_enabled && !dragAlwaysSelects && !m_selection.Empty()
+                    && evt->HasPosition() && selectionContains( evt->Position() ) )
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+            else
+            {
+                if( m_additive )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ADD );
+                else if( m_subtractive )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SUBTRACT );
+                else if( m_exclusive_or )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::XOR );
+                else
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+            }
+        }
     }
 
     return 0;

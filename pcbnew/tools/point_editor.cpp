@@ -1724,7 +1724,7 @@ void POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
 
     if( aPoint )
     {
-        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+        frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
         controls->ForceCursorPosition( true, aPoint->GetPosition() );
         controls->ShowCursor( true );
     }

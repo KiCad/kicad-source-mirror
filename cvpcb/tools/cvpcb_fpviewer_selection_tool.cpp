@@ -55,7 +55,7 @@ int CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         if( m_frame->ToolStackIsEmpty() )
-            m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
         // single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )

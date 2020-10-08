@@ -175,7 +175,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     do
     {
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
 
         if( evt->IsAction( &EE_ACTIONS::moveActivate ) || evt->IsAction( &EE_ACTIONS::restartMove )
                 || evt->IsAction( &EE_ACTIONS::move ) || evt->IsAction( &EE_ACTIONS::drag )

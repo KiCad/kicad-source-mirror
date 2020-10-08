@@ -13,6 +13,7 @@ include_directories(
     ./dialogs
     ./widgets
     ./dialog_about
+    ${CMAKE_SOURCE_DIR}/bitmaps_png
     ${CMAKE_SOURCE_DIR}/3d-viewer
     ${CMAKE_SOURCE_DIR}/pcbnew
     ${INC_AFTER}
@@ -310,7 +311,7 @@ set( COMMON_SRCS
     common.cpp
     config_params.cpp
     confirm.cpp
-    cursor_store.cpp
+    cursors.cpp
     dialog_shim.cpp
     gr_text.cpp
     dsnlexer.cpp

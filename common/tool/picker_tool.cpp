@@ -179,7 +179,7 @@ void PICKER_TOOL::setTransitions()
 
 void PICKER_TOOL::resetPicker()
 {
-    m_cursor = wxStockCursor( wxCURSOR_ARROW );
+    m_cursor = KICURSOR::ARROW;
 
     m_picked = NULLOPT;
     m_clickHandler = NULLOPT;

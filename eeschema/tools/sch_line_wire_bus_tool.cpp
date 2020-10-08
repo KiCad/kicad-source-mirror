@@ -481,11 +481,13 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
     if( !m_wires.empty() )
         segment = m_wires.back();
 
+    // Set initial cursor
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::WIRE );
+
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( !pointEditor->HasPoint() )  // Set wxCursor shape when starting the tool
-            m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::WIRE );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         wxPoint cursorPos = wxPoint( grid.BestSnapAnchor(

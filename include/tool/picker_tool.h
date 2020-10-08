@@ -28,6 +28,7 @@
 #include <boost/optional/optional.hpp>
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
+#include <cursors.h>
 
 class EDA_DRAW_FRAME;
 
@@ -62,7 +63,7 @@ public:
     ///> Main event loop.
     int Main( const TOOL_EVENT& aEvent );
 
-    inline void SetCursor( const wxCursor& aCursor ) { m_cursor = aCursor; }
+    inline void SetCursor( KICURSOR aCursor ) { m_cursor = aCursor; }
 
     /**
      * Function SetClickHandler()
@@ -116,8 +117,8 @@ private:
     void setTransitions() override;
 
 private:
-    EDA_DRAW_FRAME*       m_frame;
-    wxCursor              m_cursor;
+    EDA_DRAW_FRAME* m_frame;
+    KICURSOR        m_cursor;
 
     OPT<CLICK_HANDLER>    m_clickHandler;
     OPT<MOTION_HANDLER>   m_motionHandler;

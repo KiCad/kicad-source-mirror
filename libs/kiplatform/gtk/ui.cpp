@@ -47,3 +47,17 @@ void KIPLATFORM::UI::FixupCancelButtonCmdKeyCollision( wxWindow *aWindow )
 {
     // Not needed on this platform
 }
+
+
+bool KIPLATFORM::UI::IsStockCursorOk( wxStockCursor aCursor )
+{
+    switch( aCursor )
+    {
+    case wxCURSOR_BULLSEYE:
+    case wxCURSOR_HAND:
+    case wxCURSOR_ARROW:
+        return true;
+    default:
+        return false;
+    }
+}

@@ -408,7 +408,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     do
     {
         VECTOR2I movement;
-        editFrame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+        editFrame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
 

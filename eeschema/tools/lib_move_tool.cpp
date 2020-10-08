@@ -101,7 +101,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     do
     {
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
 
         if( evt->IsAction( &EE_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::refreshPreview )

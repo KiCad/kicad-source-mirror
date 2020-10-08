@@ -21,6 +21,8 @@
 #ifndef KIPLATFORM_UI_H_
 #define KIPLATFORM_UI_H_
 
+#include <wx/cursor.h>
+
 class wxNonOwnedWindow;
 class wxWindow;
 
@@ -67,6 +69,13 @@ namespace KIPLATFORM
          * German because the button is &Abbrechen.
          */
         void FixupCancelButtonCmdKeyCollision( wxWindow* aWindow );
+
+        /**
+         * Checks if we designated a stock cursor for this OS as "OK" or else we may need to load a custom one
+         *
+         * @param aCursor is wxStockCursor we want to see if its acceptable
+         */
+        bool IsStockCursorOk( wxStockCursor aCursor );
     }
 }
 

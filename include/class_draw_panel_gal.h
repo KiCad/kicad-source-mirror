@@ -36,6 +36,7 @@
 #include <msgpanel.h>
 #include <memory>
 #include <common.h>
+#include <cursors.h>
 
 class BOARD;
 class EDA_DRAW_FRAME;
@@ -197,8 +198,7 @@ public:
      * Function SetCurrentCursor
      * Set the current cursor shape for this panel
      */
-    void SetCurrentCursor( wxStockCursor aStockCursorID );
-    void SetCurrentCursor( const wxCursor& aCursor );
+    void SetCurrentCursor( KICURSOR cursor );
 
     /**
      * Returns the bounding box of the view that should be used if model is not valid
@@ -244,7 +244,8 @@ protected:
 
     static const int MinRefreshPeriod = 17;      ///< 60 FPS.
 
-    wxCursor                 m_currentCursor;    ///< Current mouse cursor shape id.
+    wxCursor                    m_currentCursor;    ///< Current mouse cursor shape id.
+    KICURSOR   m_currentKiCursor;
 
     wxWindow*                m_parent;           ///< Pointer to the parent window
     EDA_DRAW_FRAME*          m_edaFrame;         ///< Parent EDA_DRAW_FRAME (if available)

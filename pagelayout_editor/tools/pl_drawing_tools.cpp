@@ -92,7 +92,8 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( item ? wxCURSOR_ARROW : wxCURSOR_PENCIL );
+        m_frame->GetCanvas()->SetCurrentCursor(
+                item ? KICURSOR::ARROW : KICURSOR::PENCIL );
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         auto cleanup = [&] () {
@@ -212,7 +213,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         if( !pointEditor->HasPoint() )
-            m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 

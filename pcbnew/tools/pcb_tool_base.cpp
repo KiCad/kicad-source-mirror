@@ -82,13 +82,19 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
     if( aOptions & IPO_SINGLE_CLICK )
         makeNewItem( controls()->GetCursorPosition() );
 
+    // Set initial cursor
+    if( !newItem )
+        frame()->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+    else
+        frame()->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
         if( !newItem )
-            frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+            frame()->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
         else
-            frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+            frame()->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
 
         VECTOR2I cursorPos = controls()->GetCursorPosition();
         aPlacer->m_modifiers = evt->Modifier();

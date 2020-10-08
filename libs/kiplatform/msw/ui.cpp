@@ -20,6 +20,7 @@
 
 #include <kiplatform/ui.h>
 
+#include <wx/cursor.h>
 #include <wx/nonownedwnd.h>
 #include <wx/window.h>
 
@@ -46,4 +47,19 @@ void KIPLATFORM::UI::ReparentQuasiModal( wxNonOwnedWindow* aWindow )
 void KIPLATFORM::UI::FixupCancelButtonCmdKeyCollision( wxWindow *aWindow )
 {
     // Not needed on this platform
+}
+
+
+bool KIPLATFORM::UI::IsStockCursorOk( wxStockCursor aCursor )
+{
+    switch( aCursor )
+    {
+    case wxCURSOR_SIZING:
+    case wxCURSOR_BULLSEYE:
+    case wxCURSOR_HAND:
+    case wxCURSOR_ARROW:
+        return true;
+    default:
+        return false;
+    }
 }

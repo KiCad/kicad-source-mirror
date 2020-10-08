@@ -121,7 +121,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     do
     {
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
 
         if( evt->IsAction( &PL_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
             || evt->IsAction( &ACTIONS::refreshPreview ) )
@@ -350,7 +350,7 @@ int PL_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
 
-    picker->SetCursor( wxStockCursor( wxCURSOR_BULLSEYE ) );
+    picker->SetCursor( KICURSOR::REMOVE );
     m_pickerItem = nullptr;
 
     picker->SetClickHandler(

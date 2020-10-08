@@ -297,14 +297,14 @@ const KICAD_T movableSymbolItems[] =
 
 int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
     KIID lastRolloverItem = niluuid;
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        bool displayPencil = false;
+        bool displayWireCursor = false;
         KIID rolloverItem = niluuid;
         m_additive = m_subtractive = m_exclusive_or = false;
 
@@ -314,6 +314,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_additive = true;
         else if( evt->Modifier( MD_CTRL ) )
             m_exclusive_or = true;
+
+        bool modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
 
         // Is the user requesting that the selection list include all possible
         // items without removing less likely selection candidates
@@ -335,7 +337,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 narrowSelection( collector, evt->Position(), false );
 
-                if( collector.GetCount() == 1 && !m_isLibEdit )
+                if( collector.GetCount() == 1 && !m_isLibEdit && !modifier_enabled )
                 {
                     // Check if we want to auto start wires
                     VECTOR2I snappedCursorPos = grid.BestSnapAnchor( evt->Position(), nullptr );
@@ -355,8 +357,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         m_toolMgr->ProcessEvent( *newEvt );
                         continueSelect = false;
                     }
-                    else if( collector[0]->Type() == SCH_IREF_T
-                            && !m_additive && !m_subtractive && !m_exclusive_or )
+                    else if( collector[0]->Type() == SCH_IREF_T )
                     {
                         wxMenu menu;
 
@@ -428,8 +429,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
 
-            if( m_additive || m_subtractive || m_exclusive_or
-                    || ( m_selection.Empty() && m_frame->GetDragSelects() ) )
+            if( modifier_enabled || ( m_selection.Empty() && m_frame->GetDragSelects() ) )
             {
                 selectMultiple();
             }
@@ -506,17 +506,17 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 narrowSelection( collector, evt->Position(), false );
 
-                if( collector.GetCount() == 1 )
+                if( collector.GetCount() == 1 && !modifier_enabled )
                 {
                     VECTOR2I snappedCursorPos = grid.BestSnapAnchor( evt->Position(), nullptr );
 
                     if( m_frame->eeconfig()->m_Drawing.auto_start_wires
                             && collector[0]->IsPointClickableAnchor( (wxPoint) snappedCursorPos ) )
                     {
-                        displayPencil = true;
+                        displayWireCursor = true;
                     }
-                    else if( collector[0]->Type() == SCH_IREF_T
-                            && !m_additive && !m_subtractive && !m_exclusive_or )
+                    else if( collector[0]->Type() == SCH_IREF_T && !m_additive && !m_subtractive
+                             && !m_exclusive_or )
                     {
                         rolloverItem = collector[0]->m_Uuid;
                     }
@@ -550,12 +550,25 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         if( m_frame->ToolStackIsEmpty() )
         {
-            if( displayPencil )
-                m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+            if( displayWireCursor )
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::WIRE );
             else if( rolloverItem != niluuid )
-                m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_HAND );
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::HAND );
+            else if( !modifier_enabled && !m_selection.Empty()
+                     && !m_frame->GetDragSelects() && evt->HasPosition()
+                     && selectionContains( evt->Position() ) ) //move/drag option prediction
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
             else
-                m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+            {
+                if( m_additive )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ADD );
+                else if( m_subtractive )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SUBTRACT );
+                else if( m_exclusive_or )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::XOR );
+                else
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+            }
         }
     }
 

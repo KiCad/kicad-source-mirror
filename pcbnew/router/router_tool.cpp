@@ -916,7 +916,7 @@ void ROUTER_TOOL::performRouting()
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+        frame()->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
 
         // Don't crash if we missed an operation that cancelled routing.
         if( !m_router->RoutingInProgress() )
@@ -1095,7 +1095,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+        frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
 
         if( evt->IsCancelInteractive() )
         {
@@ -1429,7 +1429,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+        frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
         if( evt->IsCancelInteractive() )
         {

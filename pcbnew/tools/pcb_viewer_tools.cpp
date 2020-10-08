@@ -222,7 +222,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+        frame()->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         const VECTOR2I cursorPos = grid.BestSnapAnchor( controls.GetMousePosition(), nullptr );

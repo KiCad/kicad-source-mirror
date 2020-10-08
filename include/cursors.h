@@ -30,6 +30,26 @@
 #include <vector>
 
 
+enum class KICURSOR
+{
+    DEFAULT,
+    ARROW,
+    MOVING,
+    PENCIL,
+    REMOVE,
+    HAND,
+    BULLSEYE,
+    VOLTAGE_PROBE,
+    CURRENT_PROBE,
+    TUNE,
+    TEXT,
+    WIRE,
+    MEASURE,
+    ADD,
+    SUBTRACT,
+    XOR
+};
+
 /**
  * Simple class to construct and store cursors against unique ID keys.
  *
@@ -45,13 +65,15 @@ public:
     struct CURSOR_DEF
     {
         ///> The ID key used to uniquely identify a cursor in a given store
-        int                  m_id_key;
+        KICURSOR m_id_key;
 
         ///> The image data bitmap
         const unsigned char* m_image_data;
 
         ///> The mask data bitmap
         const unsigned char* m_mask_data;
+
+        const char** m_xpm;
 
         ///> The image size in pixels
         wxSize m_size;
@@ -75,11 +97,15 @@ public:
      * @param  aIdKey the ID key to look up
      * @return        the cursor, if found, else wxNullCursor
      */
-    const wxCursor& Get( int aIdKey ) const;
+    const wxCursor& Get( KICURSOR aIdKey ) const;
+
+    static const wxCursor GetCursor( KICURSOR aCursorType );
+
+    static const wxStockCursor GetStockCursor( KICURSOR aCursorType );
 
 private:
     ///> Internal store of cursors by ID
-    std::map<int, wxCursor> m_store;
+    std::map<KICURSOR, wxCursor> m_store;
 };
 
 #endif // CURSOR_STORE__H

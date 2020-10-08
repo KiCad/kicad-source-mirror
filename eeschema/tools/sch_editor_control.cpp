@@ -47,7 +47,6 @@
 #include <schematic.h>
 #include <advanced_config.h>
 #include <sim/sim_plot_frame.h>
-#include <simulation_cursors.h>
 #include <lib_view_frame.h>
 #include <status_popup.h>
 #include <tool/picker_tool.h>
@@ -631,7 +630,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
 
-    picker->SetCursor( SIM_CURSORS::GetCursor( SIM_CURSORS::VOLTAGE_PROBE ) );
+    picker->SetCursor( KICURSOR::VOLTAGE_PROBE );
 
     picker->SetClickHandler(
         [this, simFrame] ( const VECTOR2D& aPosition )
@@ -693,9 +692,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             }
 
             if( item && item->Type() == SCH_PIN_T )
-                picker->SetCursor( SIM_CURSORS::GetCursor( SIM_CURSORS::CURRENT_PROBE ) );
+                picker->SetCursor( KICURSOR::CURRENT_PROBE );
             else
-                picker->SetCursor( SIM_CURSORS::GetCursor( SIM_CURSORS::VOLTAGE_PROBE ) );
+                picker->SetCursor( KICURSOR::VOLTAGE_PROBE );
 
             if( m_pickerItem != item )
             {
@@ -747,7 +746,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
 
-    picker->SetCursor( SIM_CURSORS::GetCursor( SIM_CURSORS::CURSOR::TUNE ) );
+    picker->SetCursor( KICURSOR::TUNE );
 
     picker->SetClickHandler(
         [this] ( const VECTOR2D& aPosition )
@@ -1138,7 +1137,7 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
 
-    picker->SetCursor( wxStockCursor( wxCURSOR_BULLSEYE ) );
+    picker->SetCursor( KICURSOR::BULLSEYE );
 
     picker->SetClickHandler(
         [this] ( const VECTOR2D& aPos )

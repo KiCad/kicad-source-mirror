@@ -51,7 +51,7 @@ int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
             break;

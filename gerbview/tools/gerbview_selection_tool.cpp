@@ -185,7 +185,7 @@ int GERBVIEW_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         if( m_frame->ToolStackIsEmpty() )
-            m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
         m_additive = m_subtractive = m_exclusive_or = false;
 
@@ -582,7 +582,7 @@ int GERBVIEW_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
         const VECTOR2I cursorPos = controls.GetCursorPosition();
 
         auto clearRuler =

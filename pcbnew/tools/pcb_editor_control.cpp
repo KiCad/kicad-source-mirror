@@ -761,10 +761,12 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     else if( aEvent.HasPosition() )
         m_toolMgr->RunAction( PCB_ACTIONS::cursorClick );
 
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
         cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( reselect && module )
@@ -975,10 +977,12 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
+    frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+        frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
         cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( evt->IsCancelInteractive() )
