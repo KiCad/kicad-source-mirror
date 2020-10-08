@@ -355,6 +355,9 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 
         group = new PCB_GROUP( module );
         module->Add( group );
+
+        for( EDA_ITEM* item : selection )
+            group->AddItem( static_cast<BOARD_ITEM*>( item ) );
     }
     else
     {
