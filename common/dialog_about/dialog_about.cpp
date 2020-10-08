@@ -57,6 +57,7 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
     m_picVersion     = KiBitmap( recent_xpm );
     m_picDevelopers  = KiBitmap( preference_xpm );
     m_picDocWriters  = KiBitmap( editor_xpm );
+    m_picLibrarians  = KiBitmap( library_xpm );
     m_picArtists     = KiBitmap( palette_xpm );
     m_picTranslators = KiBitmap( language_xpm );
     m_picLicense     = KiBitmap( tools_xpm );
@@ -116,10 +117,13 @@ void DIALOG_ABOUT::createNotebooks()
 
     createNotebookHtmlPage( m_auiNotebook, _( "Version" ), m_picVersion, version, true );
 
-    createNotebookPage( m_auiNotebook, _( "Developers" ) , m_picDevelopers,
+    createNotebookPageByCategory( m_auiNotebook, _( "Developers" ) , m_picDevelopers,
                         m_info.GetDevelopers() );
     createNotebookPage( m_auiNotebook, _( "Doc Writers" ), m_picDocWriters,
                         m_info.GetDocWriters() );
+
+    createNotebookPageByCategory( m_auiNotebook, _( "Librarians" ), m_picLibrarians,
+                                  m_info.GetLibrarians() );
 
     createNotebookPageByCategory( m_auiNotebook, _( "Artists" ), m_picArtists,
                                   m_info.GetArtists() );
@@ -248,7 +252,7 @@ void DIALOG_ABOUT::createNotebookPageByCategory( wxAuiNotebook* aParent, const w
                                             wxFONTWEIGHT_BOLD, false,
                                             wxEmptyString ) ); // bold font
             m_staticText1->Wrap( -1 );
-            fgSizer1->Add( m_staticText1, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
+            fgSizer1->Add( m_staticText1, 0, wxALIGN_LEFT|wxBOTTOM|wxEXPAND, 2 );
 
             // Nothing at third column
             fgSizer1->AddSpacer( 5 );

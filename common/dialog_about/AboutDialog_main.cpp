@@ -197,45 +197,295 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
      */
 
     // The core developers
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Jean-Pierre Charras" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Dick Hollenbeck" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Wayne Stambaugh" ) );
+#define LEAD_DEV _( "Lead Development Team" )
+#define FORMER_DEV _( "Lead Development Alumni" )
+#define CONTRIB_DEV _( "Additional Contributions By")
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Jean-Pierre Charras", LEAD_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Wayne Stambaugh", LEAD_DEV, nullptr ) );
 
-    // alphabetically by last name after main 3 above:
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Frank Bennett" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Cirilo Bernardo" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Kevin Cozens" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Jonas Diemer" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Jon Evans" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Seth Hillbrand" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Torsten Hüter" ) ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Jerry Jacobs" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Mario Luzeiro" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Daniel Majewski" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Lorenzo Marcantonio" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Marco Mattila" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Ian McInerney" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Russell Oliver" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Alexis Lockwood" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Miguel Angel Ajo Pelayo" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Jacobo Aragunde Perez" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Simon Richter" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Mark Roszko" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Marco Serantoni" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Brian Sidebotham" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mateusz Skowroński" ) ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Rafael Sokolowski" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Vesa Solonen" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Bernhard Stegmaier" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Orson (Maciej Sumiński)" ) ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Oliver Walters" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Tomasz Wlostowski" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Adam Wolf" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Jeff Young" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Alexander Zakamaldin" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Henner Zeller" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Andrew Zonenberg" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Nick Østergaard" ) ) );
+    // Alphabetical after the first two
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Jon Evans", LEAD_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Seth Hillbrand", LEAD_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Ian McInerney", LEAD_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Orson (Maciej Sumiński)" ), LEAD_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Mark Roszko", LEAD_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Thomas Pointhuber", LEAD_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Tomasz Wlostowski", LEAD_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Jeff Young", LEAD_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "John Beard", FORMER_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Dick Hollenbeck", FORMER_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Alexis Lockwood", FORMER_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Brian Sidebotham", FORMER_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin Aberg" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Rohan Agrawal" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Johannes Agricola" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Nabeel Ahmad" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Werner Almesberger" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Shawn Anastasio" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Collin Anderson" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Tom Andrews" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mikael Arguedas" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Lachlan Audas" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jean-Noel Avila" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Pascal Baerten" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Konstantin Baranovskiy" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Roman Bashkov" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Roberto Fernandez Bautista" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Frank Bennett", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michael Beardsworth" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mathew Beckler" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Matthew Beckler" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Konrad Beckmann" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Frank Bennett" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Roman Beranek" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Gustav Bergquist" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Cirilo Bernardo", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Joël Bertrand" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andreas Beutling" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Brian F. G. Bidulock" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Anton Blanchard" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Blair Bonnett" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Stefan Brüns" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andreas Buhr" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ryan Bunch" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Emery Burhan" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Phinitnan Chanasabaeng" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Shivpratap Chauhan" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Kevin Cozens", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Joseph Y. Chen" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexey Chernov" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Ciampa" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marcus Comstedt" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Diogo Condeco" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Colin Cooper" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Fabien Corona" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Garth Corral" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kevin Cozens" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dan Cross" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Jonas Diemer", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrew D'Addesio" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin d'Allens" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Camille Delbegue" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ruben De Smet" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ben Dooks" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrew Downing" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jan Dubiec" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jean Philippe Eimer" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ben Ellis" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Oleg Endo" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Damien Espitallier" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jon Evans" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Paul Ewing" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrey Fedorushkov" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Julian Fellinger" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Joe Ferner" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Thomas Figueroa" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Drew Fustini" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ronnie Gaensli" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Christian Gagneraud" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ben Gamari" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ashutosh Gangwar" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alessandro Gatti" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hal Gentz" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michael Geselbracht" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexander Golubev" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Angus Gratton" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Element Green" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mathias Grimmberger" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hildo Guillardi Júnior" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Niki Guldbrand" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Stefan Hamminga" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ben Harris" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Lukas F. Hartmann" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Aylons Hazzud" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Stefan Helmert" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hartmut Henkel" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Brian Henning" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Paulo Henrique Silva" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hans Henry von Tresckow" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Diego Herranz" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Hess" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mario Hros" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Matt Huszagh" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Torsten Hüter" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "José Ignacio Romero" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Inacio" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kinichiro Inoguchi" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Fabián Inostroza" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Vlad Ivanov" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Jerry Jacobs", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Christian Jacobsen" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michal Jahelka" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin Janitschke" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jonathan Jara-Almonte" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Gilbert J.M. Forkel" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "José Jorge Enríquez" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Franck Jullien" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Eeli Kaikkonen" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Lajos Kamocsay" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Povilas Kanapickas" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mikhail Karpenko" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kerusey Karyu" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michael Kavanagh" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Graham Keeth" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Yury Khalyavin" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Eldar Khayrullin" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ingo Kletti" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Sylwester Kocjan" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Clemens Koller" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Baranovskiy Konstantin" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jakub Kozdon" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Simon Kueppers" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martijn Kuipers" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Robbert Lagerweij" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dimitris Lampridis" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kevin Lannen" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ludovic Léau-mercier" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Paul LeoNerd Evens" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jonatan Liljedahl" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexander Lunev" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Mario Luzeiro", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Johannes Maibaum" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mateusz Majchrzycki" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Daniel Majewski", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Lorenzo Marcantonio", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Marco Mattila", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kirill Mavreshko" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Miles McCoo" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Charles McDowell" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ian McInerney" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Moses McKnight" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin McNamara" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ievgenii Meshcheriakov" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ashley Mills" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Peter Montgomery" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alejandro García Montoro" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Felix Morgner" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jan Mrázek" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michael Narigon" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jon Neal" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Bastian Neumann" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kristian Nielsen" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Henrik Nyberg" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kristoffer Ödmark" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Russell Oliver", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jason Oster" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Miguel Angel Ajo Pelayo", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Patrick Pereira" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Jacobo Aragunde Perez", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Matthew Petroff" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Johannes Pfister" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Brian Piccioni" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Nicolas Planel" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Nicolas PLANEL" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Thomas Pointhuber" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Carl Poirier" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Reece Pollack" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alain Portal" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrei Pozolotin" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Antia Puentes" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Heikki Pulkkinen" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Morgan Quigley" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Urja Rannikko" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Joshua Redstone" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michele Renda" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jean-Samuel Reynaud" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dmitry Rezvanov" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Simon Richter", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Christoph Riehl" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Thiadmer Riemersma" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Gregor Riepl" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Lubomir Rintel" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Érico Rolim" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Heiko Rosemann" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Fabio Rossi" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ian Roth" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "J. Morio Sakaguchi" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ross Schlaikjer" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Julius Schmidt" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marvin Schmidt" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Carsten Schoenert" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Simon Schubert" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Adrian Scripca" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Serantoni" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Frank Severinsen" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Cheng Sheng" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexander Shuklin" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Marco Serantoni", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Guillaume Simard" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin Sivak" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mateusz Skowroński" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Blake Smith" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Rafael Sokolowski", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Vesa Solonen", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ronald Sousa" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Craig Southeren" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Thomas Spindler" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Seppe Stas" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Bernhard Stegmaier", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michael Steinberg" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Sterbik" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexander Stock" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin Stoilov" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hiroki Suenaga" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Karl Thorén" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Vladimir Ur" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Matthias Urlichs" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Vladimir Uryvaev" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Henri Valta" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dave Vandenbout" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Edwin van den Oetelaar" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mark van Doesburg" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Fabio Varesano" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Gerd Egidy" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Benjamin Vernoux" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Frank Villaro-Dixon" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Forrest Voight" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Tormod Volden" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Johannes Wågen" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Oliver Walters", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jonathan Warner" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dan Weatherill" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Simon Wells" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dominik Wernberger" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mikołaj Wielgus" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Nick Winters" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Adam Wolf", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrzej Wolski" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Damian Wrobel" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrew Wygle" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jiaxun Yang" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Robert Yates" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Yegor Yefremov" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kenta Yonekura" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Alexander Zakamaldin", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Henner Zeller", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Andrew Zonenberg", CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Karl Zeilhofer" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kevin Zheng" ), CONTRIB_DEV, nullptr ) );
+
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Nick Østergaard" ), CONTRIB_DEV, nullptr ) );
 
     // The document writers
     aInfo.AddDocWriter( new CONTRIBUTOR( "Jean-Pierre Charras" ) );
@@ -369,6 +619,55 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           OTHERS_IN_TRANSLATION ) );
 
+
+    // Program credits for 3d models
+    #define LIBRARIANS _( "KiCad Librarian Team" )
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Christian Schlüter"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Rene Poeschl"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Daniel Giesbrecht"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "herostrat"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Joel"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Evan Shultz"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "C Presser"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Thomas Pointhuber"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Otavio Augusto Gomes"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Chris Morgan"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Antonio Vázquez Blanco "), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "aris-kimi"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Diego Herranz"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+
+
+    #define MODELS_3D_CONTRIBUTION _( "3D models by" )
+    aInfo.AddLibrarian( new CONTRIBUTOR( "Scripts by Maui",
+                                      wxEmptyString,
+                                      wxEmptyString,
+                                      MODELS_3D_CONTRIBUTION,
+                                      aInfo.CreateKiBitmap( three_d_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( "GitLab contributors",
+                                      wxEmptyString,
+                                      "https://gitlab.com/kicad/libraries/kicad-packages3D/-/graphs/master",
+                                      MODELS_3D_CONTRIBUTION,
+                                      aInfo.CreateKiBitmap( three_d_xpm ) ) );
+
+    #define SYMBOL_LIB_CONTRIBUTION _( "Symbols by" )
+    aInfo.AddLibrarian( new CONTRIBUTOR( "GitLab contributors",
+                                      wxEmptyString,
+                                      "https://gitlab.com/kicad/libraries/kicad-symbols/-/graphs/master",
+                                      SYMBOL_LIB_CONTRIBUTION,
+                                      aInfo.CreateKiBitmap( new_component_xpm ) ) );
+
+    #define FOOTPRINT_LIB_CONTRIBUTION _( "Footprints by" )
+    aInfo.AddLibrarian( new CONTRIBUTOR( "Scripts by Thomas Pointhuber",
+                                      wxEmptyString,
+                                      wxEmptyString,
+                                      FOOTPRINT_LIB_CONTRIBUTION,
+                                      aInfo.CreateKiBitmap( edit_module_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( "GitLab contributors",
+                                      wxEmptyString,
+                                      "https://gitlab.com/kicad/libraries/kicad-footprints/-/graphs/master",
+                                      FOOTPRINT_LIB_CONTRIBUTION,
+                                      aInfo.CreateKiBitmap( edit_module_xpm ) ) );
+
     // Program credits for icons
     #define ICON_CONTRIBUTION _( "Icons by" )
     aInfo.AddArtist( new CONTRIBUTOR( wxT( "Iñigo Zuluaga" ),
@@ -387,39 +686,8 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                       ICON_CONTRIBUTION,
                                       aInfo.CreateKiBitmap( svg_file_xpm ) ) );
 
-    // Program credits for 3d models
-    #define MODELS_3D_CONTRIBUTION _( "3D models by" )
-    aInfo.AddArtist( new CONTRIBUTOR( "GitHub contributors",
-                                      wxEmptyString,
-                                      "https://github.com/KiCad/kicad-packages3D/graphs/contributors",
-                                      MODELS_3D_CONTRIBUTION,
-                                      aInfo.CreateKiBitmap( three_d_xpm ) ) );
-    aInfo.AddArtist( new CONTRIBUTOR( "Christophe Boschat",
-                                      wxEmptyString,
-                                      wxEmptyString,
-                                      MODELS_3D_CONTRIBUTION,
-                                      aInfo.CreateKiBitmap( three_d_xpm ) ) );
-    aInfo.AddArtist( new CONTRIBUTOR( "Renie Marquet",
-                                      wxEmptyString,
-                                      wxEmptyString,
-                                      MODELS_3D_CONTRIBUTION,
-                                      aInfo.CreateKiBitmap( three_d_xpm ) ) );
-
-    #define SYMBOL_LIB_CONTRIBUTION _( "Symbols by" )
-    aInfo.AddArtist( new CONTRIBUTOR( "GitHub contributors",
-                                      wxEmptyString,
-                                      "https://github.com/KiCad/kicad-symbols/graphs/contributors",
-                                      SYMBOL_LIB_CONTRIBUTION,
-                                      aInfo.CreateKiBitmap( new_component_xpm ) ) );
-
-    #define FOOTPRINT_LIB_CONTRIBUTION _( "Footprints by" )
-    aInfo.AddArtist( new CONTRIBUTOR( "GitHub contributors",
-                                      wxEmptyString,
-                                      "https://github.com/KiCad/kicad-footprints/graphs/contributors",
-                                      FOOTPRINT_LIB_CONTRIBUTION,
-                                      aInfo.CreateKiBitmap( edit_module_xpm ) ) );
-
     // Program credits for package developers.
+    aInfo.AddPackager( new CONTRIBUTOR( "Steven Falco" ) );
     aInfo.AddPackager( new CONTRIBUTOR( "Jean-Samuel Reynaud" ) );
     aInfo.AddPackager( new CONTRIBUTOR( "Bernhard Stegmaier" ) );
     aInfo.AddPackager( new CONTRIBUTOR( "Adam Wolf" ) );

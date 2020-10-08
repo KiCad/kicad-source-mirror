@@ -50,38 +50,45 @@ public:
     void AddDeveloper( const CONTRIBUTOR* developer )
     {
         if( developer != NULL )
-            developers.Add( developer );
+            mDevelopers.Add( developer );
     }
 
     void AddDocWriter( const CONTRIBUTOR* docwriter )
     {
         if( docwriter != NULL )
-            docwriters.Add( docwriter );
+            mDocWriters.Add( docwriter );
+    }
+
+    void AddLibrarian( const CONTRIBUTOR* aLibrarian )
+    {
+        if( aLibrarian )
+            mLibrarians.Add( aLibrarian );
     }
 
     void AddArtist( const CONTRIBUTOR* artist )
     {
         if( artist != NULL )
-            artists.Add( artist );
+            mArtists.Add( artist );
     }
 
     void AddTranslator( const CONTRIBUTOR* translator )
     {
         if( translator != NULL )
-            translators.Add( translator );
+            mTranslators.Add( translator );
     }
 
     void AddPackager( const CONTRIBUTOR* packager )
     {
         if( packager   != NULL )
-            packagers.Add( packager );
+            mPackagers.Add( packager );
     }
 
-    CONTRIBUTORS GetDevelopers()  { return developers; }
-    CONTRIBUTORS GetDocWriters()  { return docwriters; }
-    CONTRIBUTORS GetArtists()     { return artists; }
-    CONTRIBUTORS GetTranslators() { return translators; }
-    CONTRIBUTORS GetPackagers()   { return packagers; }
+    CONTRIBUTORS GetDevelopers()  { return mDevelopers; }
+    CONTRIBUTORS GetDocWriters()  { return mDocWriters; }
+    CONTRIBUTORS GetLibrarians()  { return mLibrarians; }
+    CONTRIBUTORS GetArtists()     { return mArtists; }
+    CONTRIBUTORS GetTranslators() { return mTranslators; }
+    CONTRIBUTORS GetPackagers()   { return mPackagers; }
 
     void SetDescription( const wxString& text ) { description = text; }
     wxString& GetDescription() { return description; }
@@ -115,11 +122,12 @@ public:
     }
 
 private:
-    CONTRIBUTORS developers;
-    CONTRIBUTORS docwriters;
-    CONTRIBUTORS artists;
-    CONTRIBUTORS translators;
-    CONTRIBUTORS packagers;
+    CONTRIBUTORS mDevelopers;
+    CONTRIBUTORS mDocWriters;
+    CONTRIBUTORS mLibrarians;
+    CONTRIBUTORS mArtists;
+    CONTRIBUTORS mTranslators;
+    CONTRIBUTORS mPackagers;
 
     wxString     description;
     wxString     license;
@@ -162,6 +170,18 @@ public:
         m_name = aName;
         m_url = aUrl,
         m_email = aEmail;
+        m_category = aCategory;
+        m_icon = aIcon;
+    }
+
+    CONTRIBUTOR( const wxString& aName,
+                 const wxString& aCategory,
+                 wxBitmap*       aIcon )
+    {
+        m_checked = false;
+        m_name = aName;
+        m_url = wxEmptyString,
+        m_email = wxEmptyString;
         m_category = aCategory;
         m_icon = aIcon;
     }

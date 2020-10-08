@@ -46,6 +46,7 @@ private:
     wxBitmap     m_picVersion;
     wxBitmap     m_picDevelopers;
     wxBitmap     m_picDocWriters;
+    wxBitmap     m_picLibrarians;
     wxBitmap     m_picArtists;
     wxBitmap     m_picTranslators;
     wxBitmap     m_picPackagers;
