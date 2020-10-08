@@ -241,24 +241,17 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
                 if( aVal.empty() || !aVal.is_object() )
                     return;
 
-                auto setIfPresent =
-                        [&aVal]( const std::string& aKey, bool& aTarget )
-                        {
-                            if( aVal.contains( aKey ) && aVal.at( aKey ).is_boolean() )
-                                aTarget = aVal.at( aKey ).get<bool>();
-                        };
-
-                setIfPresent( "lockedItems", m_SelectionFilter.lockedItems );
-                setIfPresent( "footprints", m_SelectionFilter.footprints );
-                setIfPresent( "text", m_SelectionFilter.text );
-                setIfPresent( "tracks", m_SelectionFilter.tracks );
-                setIfPresent( "vias", m_SelectionFilter.vias );
-                setIfPresent( "pads", m_SelectionFilter.pads );
-                setIfPresent( "graphics", m_SelectionFilter.graphics );
-                setIfPresent( "zones", m_SelectionFilter.zones );
-                setIfPresent( "keepouts", m_SelectionFilter.keepouts );
-                setIfPresent( "dimensions", m_SelectionFilter.dimensions );
-                setIfPresent( "otherItems", m_SelectionFilter.otherItems );
+                SetIfPresent( aVal, "lockedItems", m_SelectionFilter.lockedItems );
+                SetIfPresent( aVal, "footprints", m_SelectionFilter.footprints );
+                SetIfPresent( aVal, "text", m_SelectionFilter.text );
+                SetIfPresent( aVal, "tracks", m_SelectionFilter.tracks );
+                SetIfPresent( aVal, "vias", m_SelectionFilter.vias );
+                SetIfPresent( aVal, "pads", m_SelectionFilter.pads );
+                SetIfPresent( aVal, "graphics", m_SelectionFilter.graphics );
+                SetIfPresent( aVal, "zones", m_SelectionFilter.zones );
+                SetIfPresent( aVal, "keepouts", m_SelectionFilter.keepouts );
+                SetIfPresent( aVal, "dimensions", m_SelectionFilter.dimensions );
+                SetIfPresent( aVal, "otherItems", m_SelectionFilter.otherItems );
             },
             {
                 { "lockedItems", true },
