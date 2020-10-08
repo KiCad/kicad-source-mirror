@@ -1,4 +1,4 @@
-The following cursors were borrowed by the Inkspace project https://gitlab.com/inkscape/inkscape/
+The following cursors were borrowed from the Inkspace project https://gitlab.com/inkscape/inkscape/
 - cursor-connector.xpm
 - cursor-eraser.xpm
 - cursor-measure.xpm
