@@ -776,6 +776,96 @@ bool DRC_ENGINE::QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T aConstraintId,
 }
 
 
+// fixme: move two functions below to pcbcommon?
+static int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet,
+                          wxString& aBaseDpName )
+{
+    int rv = 0;
+
+    if( aNetName.EndsWith( "+" ) )
+    {
+        aComplementNet = "-";
+        rv = 1;
+    }
+    else if( aNetName.EndsWith( "P" ) )
+    {
+        aComplementNet = "N";
+        rv = 1;
+    }
+    else if( aNetName.EndsWith( "-" ) )
+    {
+        aComplementNet = "+";
+        rv = -1;
+    }
+    else if( aNetName.EndsWith( "N" ) )
+    {
+        aComplementNet = "P";
+        rv = -1;
+    }
+    // Match P followed by 2 digits
+    else if( aNetName.Right( 2 ).IsNumber() && aNetName.Right( 3 ).Left( 1 ) == "P" )
+    {
+        aComplementNet = "N" + aNetName.Right( 2 );
+        rv = 1;
+    }
+    // Match P followed by 1 digit
+    else if( aNetName.Right( 1 ).IsNumber() && aNetName.Right( 2 ).Left( 1 ) == "P" )
+    {
+        aComplementNet = "N" + aNetName.Right( 1 );
+        rv = 1;
+    }
+    // Match N followed by 2 digits
+    else if( aNetName.Right( 2 ).IsNumber() && aNetName.Right( 3 ).Left( 1 ) == "N" )
+    {
+        aComplementNet = "P" + aNetName.Right( 2 );
+        rv = -1;
+    }
+    // Match N followed by 1 digit
+    else if( aNetName.Right( 1 ).IsNumber() && aNetName.Right( 2 ).Left( 1 ) == "N" )
+    {
+        aComplementNet = "P" + aNetName.Right( 1 );
+        rv = -1;
+    }
+    if( rv != 0 )
+    {
+        aBaseDpName = aNetName.Left( aNetName.Length() - aComplementNet.Length() );
+        aComplementNet = aBaseDpName + aComplementNet;
+    }
+
+    return rv;
+}
+
+
+int DRC_ENGINE::IsNetADiffPair( BOARD* aBoard, int aNet, int& aNetP, int& aNetN )
+{
+    wxString refName = aBoard->FindNet( aNet )->GetNetname();
+    wxString dummy, coupledNetName;
+
+    if( int polarity = matchDpSuffix( refName, coupledNetName, dummy ) )
+    {
+        NETINFO_ITEM* net = aBoard->FindNet( coupledNetName );
+
+        if( !net )
+            return false;
+
+        if( polarity > 0 )
+        {
+            aNetP = aNet;
+            aNetN = net->GetNet();
+        }
+        else
+        {
+            aNetP = net->GetNet();
+            aNetN = aNet;
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+
 DRC_TEST_PROVIDER* DRC_ENGINE::GetTestProvider( const wxString& name ) const
 {
     for( auto prov : m_testProviders )
