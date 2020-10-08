@@ -1906,8 +1906,6 @@ SHAPE_POLY_SET &SHAPE_POLY_SET::operator=( const SHAPE_POLY_SET& aOther )
     m_triangulatedPolys.clear();
     m_triangulationValid = false;
 
-    printf("operator= %p %p\n", this, &aOther );
-
     if( aOther.IsTriangulationUpToDate() )
     {
         for( unsigned i = 0; i < aOther.TriangulatedPolyCount(); i++ )
@@ -1932,8 +1930,6 @@ MD5_HASH SHAPE_POLY_SET::GetHash() const
 
 bool SHAPE_POLY_SET::IsTriangulationUpToDate() const
 {
-
-    printf("[%p] IsTriValid %d\n", this, !!m_triangulationValid );
     if( !m_triangulationValid )
         return false;
 
