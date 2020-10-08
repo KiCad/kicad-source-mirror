@@ -28,7 +28,7 @@ const int netSettingsSchemaVersion = 0;
 
 static OPT<int> getInPcbUnits( const nlohmann::json& aObj, const std::string& aKey, OPT<int> aDefault = OPT<int>() )
 {
-    if( aObj.contains( aKey ) )
+    if( aObj.contains( aKey ) && aObj[aKey].is_number() )
         return PcbMillimeter2iu( aObj[aKey].get<double>() );
     else
         return aDefault;
@@ -124,7 +124,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 auto getInSchematicUnits =
                         []( const nlohmann::json& aObj, const std::string& aKey, int aDefault )
                         {
-                            if( aObj.contains( aKey ) )
+                            if( aObj.contains( aKey ) && aObj[aKey].is_number() )
                                 return SchMils2iu( aObj[aKey].get<double>() );
                             else
                                 return aDefault;
