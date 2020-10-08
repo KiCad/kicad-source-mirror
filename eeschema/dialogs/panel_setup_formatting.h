@@ -36,7 +36,6 @@ class PANEL_SETUP_FORMATTING : public PANEL_SETUP_FORMATTING_BASE
     UNIT_BINDER        m_lineWidth;
 
     UNIT_BINDER        m_pinSymbolSize;
-    UNIT_BINDER        m_junctionSize;
 
 public:
     PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame  );

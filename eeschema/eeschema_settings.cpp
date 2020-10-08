@@ -144,6 +144,15 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<COLOR4D>( "drawing.default_sheet_background_color",
             &m_Drawing.default_sheet_background_color, COLOR4D( WHITE ).WithAlpha( 0.0 ) ) );
 
+    m_params.emplace_back( new PARAM_LIST<double>( "drawing.junction_size_mult_list",
+            &m_Drawing.junction_size_mult_list, { 0.0, 1.7, 4.0, 6.0, 9.0, 12.0 } ) );
+
+    m_params.emplace_back(new PARAM <double>( "drawing.junction_size_mult",
+            &m_Drawing.junction_size_mult, 4.0 ) );
+
+    m_params.emplace_back(new PARAM <int>( "drawing.junction_size_choice",
+            &m_Drawing.junction_size_choice, 3 ) );
+
     m_params.emplace_back( new PARAM<bool>( "input.drag_is_move",
             &m_Input.drag_is_move, true ) );
 

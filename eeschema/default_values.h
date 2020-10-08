@@ -55,7 +55,7 @@
 #define DEFAULT_NOCONNECT_SIZE 48
 
 ///< The default junction diameter in mils. (can be changed in preference menu)
-#define DEFAULT_JUNCTION_DIAM 40
+#define DEFAULT_JUNCTION_DIAM 36
 
 ///< The default bus and wire enty size in mils.
 #define DEFAULT_SCH_ENTRY_SIZE 100

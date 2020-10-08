@@ -184,7 +184,8 @@ int SCH_JUNCTION::GetDiameter() const
 
     NETCLASSPTR netclass = NetClass();
 
-    if( netclass )
+    // Diameter 1 means users doesn't want to draw junction dots
+    if( netclass && ( diameter != 1 ) )
         diameter = std::max( diameter, KiROUND( netclass->GetWireWidth() * 1.7 ) );
 
     return std::max( diameter, 1 );

@@ -40,7 +40,7 @@ public:
 
     virtual ~SCHEMATIC_SETTINGS();
 
-    // Default sizes are all stored in IU here, and im mils in the JSON file
+    // Default sizes are all stored in IU here, and in mils in the JSON file
 
     int       m_DefaultLineWidth;
     int       m_DefaultWireThickness;
@@ -48,7 +48,10 @@ public:
     int       m_DefaultTextSize;
     double    m_TextOffsetRatio;
     int       m_PinSymbolSize;
-    int       m_JunctionSize;
+    int       m_JunctionSize; // Size of junction dot in mils
+    // User choice for junction dot size ( e.g. none = 0, smallest = 1, small = 2, etc ) 
+    int       m_JunctionSizeChoice;
+    double    m_JunctionSizeMult; // junction dot size = this value * default line width
 
     bool      m_IntersheetsRefShow;
     bool      m_IntersheetsRefFormatShort;

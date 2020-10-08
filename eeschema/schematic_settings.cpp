@@ -61,6 +61,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             appSettings ? appSettings->m_Drawing.pin_symbol_size : DEFAULT_TEXT_SIZE / 2;
     int defaultJunctionSize =
             appSettings ? appSettings->m_Drawing.default_junction_size : DEFAULT_JUNCTION_DIAM;
+    int defaultJunctionSizeChoice =
+            appSettings ? appSettings->m_Drawing.junction_size_choice : 3; 
     bool defaultIntersheetsRefShow =
             appSettings ? appSettings->m_Drawing.intersheets_ref_show : false;
     bool defaultIntersheetsRefFormatShort =
@@ -111,6 +113,11 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_junction_size",
             &m_JunctionSize,
             Mils2iu( defaultJunctionSize ), Mils2iu( 5 ), Mils2iu( 1000 ), 1 / IU_PER_MILS ) );
+
+    // User choice for junction dot size ( e.g. none = 0, smallest = 1, small = 2, etc ) 
+    m_params.emplace_back(new PARAM<int>("drawing.junction_size_choice",
+           &m_JunctionSizeChoice,
+           defaultJunctionSizeChoice) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "drawing.field_names",
             [&]() -> nlohmann::json

@@ -48,9 +48,8 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* m_pinSymbolSizeLabel;
 		wxTextCtrl* m_pinSymbolSizeCtrl;
 		wxStaticText* m_pinSymbolSizeUnits;
-		wxStaticText* m_jctSizeLabel;
-		wxTextCtrl* m_jctSizeCtrl;
-		wxStaticText* m_jctSizeUnits;
+		wxStaticText* m_staticText261;
+		wxChoice* m_choiceJunctionDotSize;
 		wxCheckBox* m_showIntersheetsReferences;
 		wxRadioButton* m_radioFormatStandard;
 		wxRadioButton* m_radioFormatAbbreviated;

@@ -118,25 +118,21 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	wxStaticBoxSizer* sbSizer2;
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Connections") ), wxVERTICAL );
 
-	wxFlexGridSizer* fgSizer32;
-	fgSizer32 = new wxFlexGridSizer( 0, 3, 5, 0 );
-	fgSizer32->AddGrowableCol( 1 );
-	fgSizer32->SetFlexibleDirection( wxBOTH );
-	fgSizer32->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxBoxSizer* bSizer61;
+	bSizer61 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_jctSizeLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Junction size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_jctSizeLabel->Wrap( -1 );
-	fgSizer32->Add( m_jctSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_staticText261 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Junction dot size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText261->Wrap( -1 );
+	bSizer61->Add( m_staticText261, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_jctSizeCtrl = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer32->Add( m_jctSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-	m_jctSizeUnits = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_jctSizeUnits->Wrap( -1 );
-	fgSizer32->Add( m_jctSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	wxString m_choiceJunctionDotSizeChoices[] = { _("None"), _("Smallest"), _("Small"), _("Default"), _("Large"), _("Largest") };
+	int m_choiceJunctionDotSizeNChoices = sizeof( m_choiceJunctionDotSizeChoices ) / sizeof( wxString );
+	m_choiceJunctionDotSize = new wxChoice( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceJunctionDotSizeNChoices, m_choiceJunctionDotSizeChoices, 0 );
+	m_choiceJunctionDotSize->SetSelection( 3 );
+	bSizer61->Add( m_choiceJunctionDotSize, 1, wxEXPAND|wxRIGHT, 5 );
 
 
-	sbSizer2->Add( fgSizer32, 0, wxEXPAND|wxBOTTOM, 5 );
+	sbSizer2->Add( bSizer61, 1, wxBOTTOM|wxEXPAND, 5 );
 
 
 	bLeftColumn->Add( sbSizer2, 0, wxEXPAND|wxALL, 5 );

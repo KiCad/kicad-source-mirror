@@ -24,6 +24,8 @@
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
 #include <class_libentry.h>
+#include <eeschema_settings.h>
+#include <kiface_i.h>
 #include <panel_setup_formatting.h>
 #include <sch_junction.h>
 #include <schematic.h>
@@ -35,8 +37,7 @@ PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAM
         m_frame( aFrame ),
         m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
         m_lineWidth( aFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
-        m_pinSymbolSize( aFrame, m_pinSymbolSizeLabel, m_pinSymbolSizeCtrl, m_pinSymbolSizeUnits, true ),
-        m_junctionSize( aFrame, m_jctSizeLabel, m_jctSizeCtrl, m_jctSizeUnits, true )
+        m_pinSymbolSize( aFrame, m_pinSymbolSizeLabel, m_pinSymbolSizeCtrl, m_pinSymbolSizeUnits, true )
 {
 }
 
@@ -62,12 +63,11 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_textSize.SetUnits( EDA_UNITS::MILS );
     m_lineWidth.SetUnits( EDA_UNITS::MILS );
     m_pinSymbolSize.SetUnits( EDA_UNITS::MILS );
-    m_junctionSize.SetUnits( EDA_UNITS::MILS );
 
     m_textSize.SetValue( settings.m_DefaultTextSize );
     m_lineWidth.SetValue( settings.m_DefaultLineWidth );
     m_pinSymbolSize.SetValue( settings.m_PinSymbolSize );
-    m_junctionSize.SetValue( settings.m_JunctionSize );
+    m_choiceJunctionDotSize->SetSelection( settings.m_JunctionSizeChoice );
 
     m_showIntersheetsReferences->SetValue( settings.m_IntersheetsRefShow );
     m_radioFormatStandard->SetValue( !settings.m_IntersheetsRefFormatShort );
@@ -110,7 +110,36 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     settings.m_DefaultTextSize = (int) m_textSize.GetValue();
     settings.m_DefaultLineWidth = (int) m_lineWidth.GetValue();
     settings.m_PinSymbolSize = (int) m_pinSymbolSize.GetValue();
-    settings.m_JunctionSize = (int) m_junctionSize.GetValue();
+    
+    // Get the current working size in case of problem with wxChoice widget results
+    int currJunctionDotSize = settings.m_JunctionSize;
+    // See if user has made a junction dot size selection
+    int currDotSizeIndex    = m_choiceJunctionDotSize->GetSelection();
+
+    if( currDotSizeIndex != wxNOT_FOUND )
+    {
+        EESCHEMA_SETTINGS* projSettings =
+                dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
+        if( currDotSizeIndex )
+        {
+            // Junction dots are scaled value of default line width
+            currJunctionDotSize =
+                    settings.m_DefaultLineWidth
+                    * projSettings->m_Drawing.junction_size_mult_list[currDotSizeIndex];
+        }
+        else
+        {
+            // Don't set to zero or else it's set to min of 10 mils in "sch_painter.cpp"
+            currJunctionDotSize = 1;
+        }
+
+        settings.m_JunctionSizeMult =
+                projSettings->m_Drawing.junction_size_mult_list[currDotSizeIndex];
+
+        settings.m_JunctionSizeChoice = currDotSizeIndex; // Store to set pulldown next time
+    }
+    settings.m_JunctionSize = currJunctionDotSize;
 
     settings.m_IntersheetsRefShow        = m_showIntersheetsReferences->GetValue();
     settings.m_IntersheetsRefFormatShort = !m_radioFormatStandard->GetValue();
@@ -140,7 +169,6 @@ void PANEL_SETUP_FORMATTING::ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings )
     m_textSize.SetValue( aSettings.m_DefaultTextSize );
     m_lineWidth.SetValue( aSettings.m_DefaultLineWidth );
     m_pinSymbolSize.SetValue( aSettings.m_PinSymbolSize );
-    m_junctionSize.SetValue( aSettings.m_JunctionSize );
 
     m_showIntersheetsReferences->SetValue( aSettings.m_IntersheetsRefShow );
     m_radioFormatStandard->SetValue( aSettings.m_IntersheetsRefFormatShort );

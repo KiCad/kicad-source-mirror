@@ -1195,12 +1195,15 @@ void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
 
     int junctionSize = aJct->GetDiameter() / 2;
 
-    m_gal->SetIsStroke( drawingShadows );
-    m_gal->SetLineWidth( getLineWidth( aJct, drawingShadows ) );
-    m_gal->SetStrokeColor( color );
-    m_gal->SetIsFill( !drawingShadows );
-    m_gal->SetFillColor( color );
-    m_gal->DrawCircle( aJct->GetPosition(), junctionSize );
+    if( junctionSize > 1 )
+    {
+        m_gal->SetIsStroke( drawingShadows );
+        m_gal->SetLineWidth( getLineWidth( aJct, drawingShadows ) );
+        m_gal->SetStrokeColor( color );
+        m_gal->SetIsFill( !drawingShadows );
+        m_gal->SetFillColor( color );
+        m_gal->DrawCircle( aJct->GetPosition(), junctionSize );
+    }
 }
 
 
