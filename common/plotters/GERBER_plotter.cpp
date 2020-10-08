@@ -576,7 +576,7 @@ void GERBER_PLOTTER::writeApertureList()
 
             // Rotate the corner coordinates:
             for( int ii = 0; ii < 4; ii++ )
-                RotatePoint( corners[ii], tool.m_Rotation*10.0 );
+                RotatePoint( corners[ii], -tool.m_Rotation*10.0 );
 
             sprintf( cbuf, "%s,%#fX", APER_MACRO_ROUNDRECT_NAME,
                      tool.m_Radius * fscale );
@@ -622,19 +622,23 @@ void GERBER_PLOTTER::writeApertureList()
 
         case APERTURE::AM_ROTATED_OVAL:         // Aperture macro for rotated oval pads
                                                 // (not rotated is a primitive)
-            // m_Size.x = lenght; m_Size.y = width, and the macro aperure expects
+            // m_Size.x = full lenght; m_Size.y = width, and the macro aperure expects
             // the position of ends
             {
-                VECTOR2I start( tool.m_Size.x/2, 0 );
-                VECTOR2I end( -tool.m_Size.x/2, 0 );
+                // the seg_len is the distance between the 2 circle centers
+                int seg_len = tool.m_Size.x - tool.m_Size.y;
+                // Center of the circle on the segment start point:
+                VECTOR2I start( seg_len/2, 0 );
+                // Center of the circle on the segment end point:
+                VECTOR2I end( - seg_len/2, 0 );
 
                 RotatePoint( start, tool.m_Rotation*10.0 );
                 RotatePoint( end, tool.m_Rotation*10.0 );
 
                 sprintf( cbuf, "%s,%#fX%#fX%#fX%#fX%#fX0*%%\n", APER_MACRO_SHAPE_OVAL_NAME,
-                         tool.m_Size.y * fscale,    // width
-                         start.x * fscale, -start.y * fscale,
-                         end.x * fscale, -end.y * fscale );
+                         tool.m_Size.y * fscale,                // width
+                         start.x * fscale, -start.y * fscale,   // X,Y corner start pos
+                         end.x * fscale, -end.y * fscale );     // X,Y cornerend  pos
             }
             break;
         }
