@@ -71,7 +71,8 @@ std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
             // These characters must be escaped
             switch( code )
             {
-            // se if '(' and ')' must be escaped.
+            case '(':
+            case ')':
             case '\\':
                 result += '\\';
                 KI_FALLTHROUGH;
