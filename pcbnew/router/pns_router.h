@@ -104,6 +104,7 @@ enum DRAG_MODE
         virtual void DisplayItem( const ITEM* aItem, int aColor = -1, int aClearance = -1, bool aEdit = false ) = 0;
         virtual void HideItem( ITEM* aItem ) = 0;
         virtual void Commit() = 0;
+        virtual bool ImportSizes( SIZES_SETTINGS& aSizes, ITEM* aStartItem, int aNet ) = 0;
 //        virtual void Abort () = 0;
 
         virtual void EraseView() = 0;

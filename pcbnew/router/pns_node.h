@@ -60,7 +60,9 @@ enum class CONSTRAINT_TYPE
     CT_CLEARANCE = 1,
     CT_DIFF_PAIR_GAP = 2,
     CT_LENGTH = 3,
-    CT_WIDTH = 4
+    CT_WIDTH = 4,
+    CT_VIA_DIAMETER = 5,
+    CT_VIA_HOLE = 6
 };
 
 struct CONSTRAINT
@@ -85,7 +87,9 @@ public:
     //virtual int Clearance( int aNetCode ) const = 0;
     virtual int DpCoupledNet( int aNet ) = 0;
     virtual int DpNetPolarity( int aNet ) = 0;
-    virtual bool DpNetPair( ITEM* aItem, int& aNetP, int& aNetN ) = 0;
+    virtual bool DpNetPair( const ITEM* aItem, int& aNetP, int& aNetN ) = 0;
+
+    virtual bool IsDiffPair( const ITEM* aA, const ITEM* aB ) = 0;
 
     virtual bool QueryConstraint( CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA, const PNS::ITEM* aItemB, int aLayer, PNS::CONSTRAINT* aConstraint ) = 0;
     

@@ -36,6 +36,11 @@ class PCB_TOOL_BASE;
 class MODULE;
 class D_PAD;
 
+namespace PNS
+{
+    class SIZES_SETTINGS;
+}
+
 namespace KIGFX
 {
     class VIEW;
@@ -60,6 +65,7 @@ public:
     void AddItem( PNS::ITEM* aItem ) override;
     void RemoveItem( PNS::ITEM* aItem ) override;
     void Commit() override {}
+    bool ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* aStartItem, int aNet ) override;
 
     void UpdateNet( int aNetCode ) override {}
 
@@ -89,6 +95,8 @@ protected:
     bool syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB_LAYER_ID aLayer );
     bool syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aItem );
     bool syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone );
+    int inheritTrackWidth( PNS::ITEM* aItem );
+
 
     PNS::NODE* m_world;
     BOARD* m_board;

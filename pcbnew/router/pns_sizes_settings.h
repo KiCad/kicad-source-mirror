@@ -49,9 +49,6 @@ public:
 
     ~SIZES_SETTINGS() {};
 
-    void Init( BOARD* aBoard, ITEM* aStartItem = NULL, int aNet = -1 );
-    void ImportCurrent( BOARD_DESIGN_SETTINGS& aSettings );
-
     void ClearLayerPairs();
     void AddLayerPair( int aL1, int aL2 );
 

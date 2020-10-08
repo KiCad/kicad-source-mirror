@@ -874,9 +874,10 @@ bool ROUTER_TOOL::prepareInteractive()
 
     PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
 
-    sizes.Init( board(), m_startItem );
+    m_iface->ImportSizes( sizes, m_startItem, -1 );
     sizes.AddLayerPair( frame()->GetScreen()->m_Route_Layer_TOP,
                         frame()->GetScreen()->m_Route_Layer_BOTTOM );
+
     m_router->UpdateSizes( sizes );
 
     if( !m_router->StartRouting( m_startSnapPoint, m_startItem, routingLayer ) )
@@ -1635,7 +1636,8 @@ int ROUTER_TOOL::CustomTrackWidthDialog( const TOOL_EVENT& aEvent )
 int ROUTER_TOOL::onTrackViaSizeChanged( const TOOL_EVENT& aEvent )
 {
     PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
-    sizes.ImportCurrent( board()->GetDesignSettings() );
+    
+    m_iface->ImportSizes( sizes, nullptr, m_router->GetCurrentNets()[0] );
     m_router->UpdateSizes( sizes );
 
     // Changing the track width can affect the placement, so call the

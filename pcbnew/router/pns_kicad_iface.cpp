@@ -57,6 +57,7 @@
 
 #include "pns_arc.h"
 #include "pns_routing_settings.h"
+#include "pns_sizes_settings.h"
 #include "pns_item.h"
 #include "pns_solid.h"
 #include "pns_segment.h"
@@ -80,10 +81,10 @@ public:
     //virtual int Clearance( int aNetCode ) const override;
     virtual int DpCoupledNet( int aNet ) override;
     virtual int DpNetPolarity( int aNet ) override;
-    virtual bool DpNetPair( PNS::ITEM* aItem, int& aNetP, int& aNetN ) override;
+    virtual bool DpNetPair( const PNS::ITEM* aItem, int& aNetP, int& aNetN ) override;
+    virtual bool IsDiffPair( const PNS::ITEM* aA, const PNS::ITEM* aB ) override;
 
     virtual bool QueryConstraint( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA, const PNS::ITEM* aItemB, int aLayer, PNS::CONSTRAINT* aConstraint ) override;
-    
     virtual wxString NetName( int aNet ) override;
 
 private:
@@ -95,15 +96,10 @@ private:
     };
 
     int holeRadius( const PNS::ITEM* aItem ) const;
-    int localPadClearance( const PNS::ITEM* aItem ) const;
     int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet, wxString& aBaseDpName );
 
     PNS::ROUTER_IFACE* m_routerIface;
     BOARD*       m_board;
-
-    std::vector<CLEARANCE_ENT> m_netClearanceCache;
-    std::unordered_map<const D_PAD*, int> m_localClearanceCache;
-    int m_defaultClearance;
 };
 
 
@@ -111,58 +107,6 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER_I
     m_routerIface( aRouterIface ),
     m_board( aBoard )
 {
-    m_netClearanceCache.resize( m_board->GetNetCount() );
-
-    // Build clearance cache for net classes
-    for( unsigned int i = 0; i < m_board->GetNetCount(); i++ )
-    {
-        NETINFO_ITEM* ni = m_board->FindNet( i );
-
-        if( ni == NULL )
-            continue;
-
-        CLEARANCE_ENT ent;
-        ent.coupledNet = DpCoupledNet( i );
-
-        wxString netClassName = ni->GetClassName();
-        NETCLASSPTR nc = m_board->GetDesignSettings().GetNetClasses().Find( netClassName );
-
-        int clearance = nc->GetClearance();
-        ent.clearance = clearance;
-        ent.dpClearance = nc->GetDiffPairGap();
-        m_netClearanceCache[i] = ent;
-
-        wxLogTrace( "PNS", "Add net %u netclass %s clearance %d Diff Pair clearance %d",
-                i, netClassName.mb_str(), clearance, ent.dpClearance );
-    }
-
-    // Build clearance cache for pads
-    for( MODULE* mod : m_board->Modules() )
-    {
-        int moduleClearance = mod->GetLocalClearance();
-
-        for( D_PAD* pad : mod->Pads() )
-        {
-            int padClearance = pad->GetLocalClearance();
-
-            if( padClearance > 0 )
-                m_localClearanceCache[ pad ] = padClearance;
-
-            else if( moduleClearance > 0 )
-                m_localClearanceCache[ pad ] = moduleClearance;
-        }
-    }
-
-    auto defaultRule = m_board->GetDesignSettings().GetNetClasses().Find ("Default");
-
-    if( defaultRule )
-    {
-        m_defaultClearance = defaultRule->GetClearance();
-    }
-    else
-    {
-        m_defaultClearance = Millimeter2iu(0.254);
-    }
 }
 
 
@@ -230,20 +174,21 @@ bool PNS_PCBNEW_RULE_RESOLVER::CollideHoles( const PNS::ITEM* aA, const PNS::ITE
 }
 
 
-int PNS_PCBNEW_RULE_RESOLVER::localPadClearance( const PNS::ITEM* aItem ) const
+bool PNS_PCBNEW_RULE_RESOLVER::IsDiffPair( const PNS::ITEM* aA, const PNS::ITEM* aB )
 {
-    if( !aItem->Parent() || aItem->Parent()->Type() != PCB_PAD_T )
-        return 0;
+    int net_p, net_n;
 
-    const D_PAD* pad = static_cast<D_PAD*>( aItem->Parent() );
+    DpNetPair( aA, net_p, net_n );
 
-    auto i = m_localClearanceCache.find( pad );
+    if( aA->Net() == net_p && aB->Net() == net_n )
+        return true;
+    if( aB->Net() == net_p && aA->Net() == net_n )
+        return true;
 
-    if( i == m_localClearanceCache.end() )
-        return 0;
-
-    return i->second;
+    return false;
 }
+
+
 
 bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA, const PNS::ITEM* aItemB, int aLayer, PNS::CONSTRAINT* aConstraint )
 {
@@ -274,24 +219,188 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType, cons
             return false; // should not happen
     }
 
+    const BOARD_ITEM* parentA = aItemA ? aItemA->Parent() : nullptr;
+    const BOARD_ITEM* parentB = aItemB ? aItemB->Parent() : nullptr;
+
     DRC_CONSTRAINT hostConstraint = drcEngine->EvalRulesForItems( hostRuleType,
-        aItemA->Parent(),
-        aItemB->Parent(),
+        parentA,
+        parentB,
         (PCB_LAYER_ID) aLayer );
 
     if( hostConstraint.IsNull() )
         return false;
+
+    switch ( aType )
+    {
+        case PNS::CONSTRAINT_TYPE::CT_CLEARANCE:
+        case PNS::CONSTRAINT_TYPE::CT_WIDTH:
+        case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP:
+            aConstraint->m_Value = hostConstraint.GetValue();
+            aConstraint->m_RuleName = hostConstraint.GetParentRule()->m_Name;
+            aConstraint->m_Type = aType;
+            return true;
+       }
+
+    return false;
 }
 
 
 int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB )
 {
     PNS::CONSTRAINT constraint;
-    bool ok = QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, aA->Layer(), &constraint );
+    bool ok = false;
+    int rv;
+
+    if( IsDiffPair( aA, aB ) )
+    {
+        // for diff pairs, we use the gap value for shoving/dragging
+        ok = QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, aA, aB, aA->Layer(), &constraint );
+        rv = constraint.m_Value.Opt();
+        printf("QueryDPCL %d\n", rv);
+    }
+
+    if( !ok )
+    {
+        ok = QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, aA->Layer(), &constraint );
+        rv = constraint.m_Value.Min();
+        printf("QueryCL %d\n", rv);
+    }
 
     assert( ok );
 
-    return constraint.m_Value.Min();
+    return rv;
+}
+
+
+int PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem )
+{
+    VECTOR2I p;
+
+    assert( aItem->Owner() != NULL );
+
+    switch( aItem->Kind() )
+    {
+    case PNS::ITEM::VIA_T:
+        p = static_cast<PNS::VIA*>( aItem )->Pos();
+        break;
+
+    case PNS::ITEM::SOLID_T:
+        p = static_cast<PNS::SOLID*>( aItem )->Pos();
+        break;
+
+    case PNS::ITEM::SEGMENT_T:
+        return static_cast<PNS::SEGMENT*>( aItem )->Width();
+
+    default:
+        return 0;
+    }
+
+    PNS::JOINT* jt = static_cast<PNS::NODE*>( aItem->Owner() )->FindJoint( p, aItem );
+
+    assert( jt != NULL );
+
+    int mval = INT_MAX;
+
+
+    PNS::ITEM_SET linkedSegs = jt->Links();
+    linkedSegs.ExcludeItem( aItem ).FilterKinds( PNS::ITEM::SEGMENT_T );
+
+    for( PNS::ITEM* item : linkedSegs.Items() )
+    {
+        int w = static_cast<PNS::SEGMENT*>( item )->Width();
+        mval = std::min( w, mval );
+    }
+
+    return ( mval == INT_MAX ? 0 : mval );
+}
+
+
+bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* aStartItem, int aNet )
+{
+    BOARD_DESIGN_SETTINGS &bds = m_board->GetDesignSettings();
+
+    int net = aNet;
+
+    if( aStartItem )
+        net = aStartItem->Net();
+
+    int trackWidth = 0;
+
+    if( bds.m_UseConnectedTrackWidth && aStartItem != nullptr )
+    {
+        trackWidth = inheritTrackWidth( aStartItem );
+    }
+
+    if( !trackWidth && bds.UseNetClassTrack() ) // netclass value
+    {
+        PNS::CONSTRAINT constraint;
+        bool ok = m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem,
+                nullptr, aStartItem->Layer(), &constraint );
+
+        if( ok )
+        {
+            trackWidth = constraint.m_Value.HasOpt() ? constraint.m_Value.Opt() : constraint.m_Value.Min();
+        }
+    }
+
+    if( !trackWidth )
+    {
+        trackWidth = bds.GetCurrentTrackWidth();
+    }
+
+    aSizes.SetTrackWidth( trackWidth );
+
+    int viaDiameter = 0;
+    int viaDrill = 0;
+
+    if( bds.UseNetClassVia() )   // netclass value
+    {
+        viaDiameter = 0; //netClass->GetViaDiameter();
+        viaDrill    = 0; //netClass->GetViaDrill(); // fixme
+    }
+    else
+    {
+        viaDiameter = bds.GetCurrentViaSize();
+        viaDrill    = bds.GetCurrentViaDrill();
+    }
+
+    aSizes.SetViaDiameter( viaDiameter );
+    aSizes.SetViaDrill( viaDrill );
+
+    int diffPairWidth = 0;
+    int diffPairGap = 0;
+    int diffPairViaGap = 0;
+
+    if( bds.UseNetClassDiffPair() )
+    {
+        PNS::CONSTRAINT widthConstraint, gapConstraint;
+        bool okWidth = m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem,
+                nullptr, aStartItem->Layer(), &widthConstraint );
+        bool okGap = m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, aStartItem,
+                nullptr, aStartItem->Layer(), &gapConstraint );
+
+        if( okWidth )
+            diffPairWidth =  widthConstraint.m_Value.OptThenMin();
+
+        if( okGap )
+            diffPairViaGap = diffPairGap    = gapConstraint.m_Value.OptThenMin();
+    }
+    else if( bds.UseCustomDiffPairDimensions() )
+    {
+        diffPairWidth  = bds.GetCustomDiffPairWidth();
+        diffPairGap    = bds.GetCustomDiffPairGap();
+        diffPairViaGap = bds.GetCustomDiffPairViaGap();
+    }
+
+    //printf("DPWidth: %d gap %d\n", diffPairWidth, diffPairGap );
+
+    aSizes.SetDiffPairWidth( diffPairWidth );
+    aSizes.SetDiffPairGap( diffPairGap );
+    aSizes.SetDiffPairViaGap( diffPairViaGap );
+
+    aSizes.ClearLayerPairs();
+
+    return true;
 }
 
 
@@ -388,7 +497,7 @@ int PNS_PCBNEW_RULE_RESOLVER::DpNetPolarity( int aNet )
 }
 
 
-bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( PNS::ITEM* aItem, int& aNetP, int& aNetN )
+bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( const PNS::ITEM* aItem, int& aNetP, int& aNetN )
 {
     if( !aItem || !aItem->Parent() || !aItem->Parent()->GetNet() )
         return false;
