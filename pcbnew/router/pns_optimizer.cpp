@@ -134,8 +134,7 @@ OPTIMIZER::OPTIMIZER( NODE* aWorld ) :
     m_world( aWorld ),
     m_collisionKindMask( ITEM::ANY_T ),
     m_effortLevel( MERGE_SEGMENTS ),
-    m_keepPostures( false ),
-    m_restrictAreaActive( false )
+    m_keepPostures( false )
 {
 }
 
@@ -319,6 +318,12 @@ bool PRESERVE_VERTEX_CONSTRAINT::Check ( int aVertex1, int aVertex2, LINE* aOrig
     }
 
     return false;
+}
+
+
+bool RESTRICT_VERTEX_RANGE_CONSTRAINT::Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement )
+{
+    return true;
 }
 
 
@@ -604,6 +609,24 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
     m_keepPostures = false;
 
     bool rv = false;
+
+    if ( m_effortLevel & PRESERVE_VERTEX )
+    {
+        auto c = new PRESERVE_VERTEX_CONSTRAINT( m_world, m_preservedVertex );
+        AddConstraint( c );
+    }
+    
+    if ( m_effortLevel & RESTRICT_VERTEX_RANGE )
+    {
+        auto c = new RESTRICT_VERTEX_RANGE_CONSTRAINT( m_world, m_restrictedVertexRange.first, m_restrictedVertexRange.second );
+        AddConstraint( c );
+    }
+
+    if ( m_effortLevel & KEEP_TOPOLOGY )
+    {
+        auto c = new KEEP_TOPOLOGY_CONSTRAINT( m_world );
+        AddConstraint( c );
+    }
 
     if( m_effortLevel & MERGE_SEGMENTS )
         rv |= mergeFull( aResult );
@@ -1016,18 +1039,6 @@ bool OPTIMIZER::Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld, const VEC
 
     opt.SetEffortLevel( aEffortLevel );
     opt.SetCollisionMask( -1 );
-
-    if ( aEffortLevel & PRESERVE_VERTEX )
-    {
-        auto c = new PRESERVE_VERTEX_CONSTRAINT( aWorld, aV );
-        opt.AddConstraint( c );
-    }
-
-    if ( aEffortLevel & KEEP_TOPOLOGY )
-    {
-        auto c = new KEEP_TOPOLOGY_CONSTRAINT( aWorld );
-        opt.AddConstraint( c );
-    }
 
     return opt.Optimize( aLine );
 }

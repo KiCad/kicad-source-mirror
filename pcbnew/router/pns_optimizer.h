@@ -102,7 +102,9 @@ public:
         MERGE_OBTUSE    = 0x04,
         FANOUT_CLEANUP    = 0x08,
         KEEP_TOPOLOGY = 0x10,
-        PRESERVE_VERTEX = 0x20
+        PRESERVE_VERTEX = 0x20,
+        RESTRICT_VERTEX_RANGE = 0x40
+
     };
 
     OPTIMIZER( NODE* aWorld );
@@ -131,10 +133,22 @@ public:
     }
 
 
+    void SetPreserveVertex( const VECTOR2I& aV )
+    {
+        m_preservedVertex = aV;
+        m_effortLevel |= OPTIMIZER::PRESERVE_VERTEX;
+    }
+
+    void SetRestrictVertexRange( int aStart, int aEnd )
+    {
+        m_restrictedVertexRange.first = aStart;
+        m_restrictedVertexRange.second = aEnd;
+        m_effortLevel |= OPTIMIZER::RESTRICT_VERTEX_RANGE;
+    }
+
     void SetRestrictArea( const BOX2I& aArea )
     {
         m_restrictArea = aArea;
-        m_restrictAreaActive = true;
     }
 
     void ClearConstraints();
@@ -195,8 +209,10 @@ private:
     int m_effortLevel;
     bool m_keepPostures;
 
+
+    VECTOR2I m_preservedVertex;
+    std::pair<int, int> m_restrictedVertexRange;
     BOX2I m_restrictArea;
-    bool m_restrictAreaActive;
 };
 
 class OPT_CONSTRAINT
@@ -283,6 +299,22 @@ public:
 private:
 
     VECTOR2I m_v;
+};
+
+class RESTRICT_VERTEX_RANGE_CONSTRAINT: public OPT_CONSTRAINT
+{
+public:
+    RESTRICT_VERTEX_RANGE_CONSTRAINT( NODE* aWorld, int aStart, int aEnd ) :
+        OPT_CONSTRAINT( aWorld ),
+        m_start( aStart ),
+        m_end( aEnd )
+        {};
+
+    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
+private:
+
+    int m_start;
+    int m_end;
 };
 
 

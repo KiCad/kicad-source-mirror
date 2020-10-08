@@ -319,7 +319,7 @@ void DRAGGER::dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const V
 }
 
 
-void DRAGGER::optimizeAndUpdateDraggedLine( LINE& dragged, const VECTOR2I& aP )
+void DRAGGER::optimizeAndUpdateDraggedLine( LINE& dragged, SEG& aDraggedSeg, const VECTOR2I& aP )
 {
     VECTOR2D lockV;
     dragged.ClearLinks();
@@ -329,9 +329,24 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& dragged, const VECTOR2I& aP )
 
     if( Settings().GetOptimizeDraggedTrack() )
     {
-        OPTIMIZER::Optimize( &dragged,
-                OPTIMIZER::MERGE_SEGMENTS | OPTIMIZER::KEEP_TOPOLOGY | OPTIMIZER::PRESERVE_VERTEX,
-                m_lastNode, lockV );
+        OPTIMIZER optimizer( m_lastNode );
+
+        optimizer.SetEffortLevel( OPTIMIZER::MERGE_SEGMENTS | OPTIMIZER::KEEP_TOPOLOGY );
+
+        int startV = dragged.CLine().Find( aDraggedSeg.A );
+        int endV = dragged.CLine().Find( aDraggedSeg.B );
+
+        if ( endV > startV )
+        {
+            std::swap(endV, startV);
+        }
+
+        if( startV >= 0 && endV >= 0)
+        {
+            optimizer.SetPreserveVertex( aP );
+            optimizer.SetRestrictVertexRange( startV, endV );
+            optimizer.Optimize( &dragged );
+        }
     }
 
     m_lastNode->Add( dragged );
@@ -405,7 +420,8 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
         if(ok)
         {
             m_lastNode->Remove( origLine );
-            optimizeAndUpdateDraggedLine( dragged, aP );
+            SEG dummy;
+            optimizeAndUpdateDraggedLine( dragged, dummy, aP );
         }
     break;
     }
