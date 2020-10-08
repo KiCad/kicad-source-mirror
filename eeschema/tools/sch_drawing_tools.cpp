@@ -506,6 +506,8 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     // Prime the pump
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
+    else
+        m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
     auto setCursor =
             [&]()
