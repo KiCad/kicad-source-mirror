@@ -226,7 +226,8 @@ void DRC_ENGINE::loadImplicitRules()
     for( DRC_RULE* netclassRule : netclassRules )
         addRule( netclassRule );
 
-    ReportAux( wxString::Format( "Building %d implicit netclass rules", netclassRules.size() ) );
+    ReportAux( wxString::Format( "Building %d implicit netclass rules",
+                                 (int) netclassRules.size() ) );
 }
 
 static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
