@@ -391,7 +391,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_svgOptionsSizer->Add( m_svgPrecsision, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	m_PlotOptionsSizer->Add( m_svgOptionsSizer, 1, wxEXPAND, 5 );
+	m_PlotOptionsSizer->Add( m_svgOptionsSizer, 1, wxEXPAND|wxALL, 5 );
 
 
 	bmiddleSizer->Add( m_PlotOptionsSizer, 0, 0, 6 );
