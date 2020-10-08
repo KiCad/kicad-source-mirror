@@ -52,7 +52,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
 
     // Menu Files:
     EVT_MENU( ID_NEW_BOARD, GERBVIEW_FRAME::Files_io )
-    EVT_MENU( ID_GERBVIEW_EXPORT_TO_PCBNEW, GERBVIEW_FRAME::ExportDataInPcbnewFormat )
 
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, GERBVIEW_FRAME::OnGbrFileHistory )
     EVT_MENU( ID_FILE_LIST_CLEAR, GERBVIEW_FRAME::OnClearGbrFileHistory )
@@ -70,13 +69,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_GERBVIEW_JOB_FILE_LIST_CLEAR, GERBVIEW_FRAME::OnClearJobFileHistory )
 
     EVT_MENU( wxID_EXIT, GERBVIEW_FRAME::OnQuit )
-
-    // menu Postprocess
-    EVT_MENU( ID_GERBVIEW_SHOW_LIST_DCODES, GERBVIEW_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_GERBVIEW_SHOW_SOURCE, GERBVIEW_FRAME::OnShowGerberSourceFile )
-
-    // menu Miscellaneous
-    EVT_MENU( ID_GERBVIEW_ERASE_CURR_LAYER, GERBVIEW_FRAME::Process_Special_Functions )
 
     EVT_COMBOBOX( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER, GERBVIEW_FRAME::OnSelectActiveLayer )
 
@@ -104,30 +96,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
                          GERBVIEW_FRAME::OnUpdateDrawMode )
 
 END_EVENT_TABLE()
-
-
-/* Handles the selection of tools, menu, and popup menu commands.
- */
-void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
-{
-    switch( event.GetId() )
-    {
-    case ID_GERBVIEW_ERASE_CURR_LAYER:
-        Erase_Current_DrawLayer( true );
-        ClearMsgPanel();
-        break;
-
-    case ID_GERBVIEW_SHOW_LIST_DCODES:
-        Liste_D_Codes();
-        break;
-
-    default:
-        wxFAIL_MSG( wxT( "GERBVIEW_FRAME::Process_Special_Functions error" ) );
-        break;
-    }
-
-    GetCanvas()->Refresh();
-}
 
 
 void GERBVIEW_FRAME::OnSelectHighlightChoice( wxCommandEvent& event )
@@ -178,44 +146,6 @@ void GERBVIEW_FRAME::OnSelectActiveLayer( wxCommandEvent& event )
 
     // Rebuild the DCode list in toolbar (but not the Layer Box) after change
     syncLayerBox( false );
-}
-
-
-void GERBVIEW_FRAME::OnShowGerberSourceFile( wxCommandEvent& event )
-{
-    int     layer = GetActiveLayer();
-    GERBER_FILE_IMAGE* gerber_layer = GetGbrImage( layer );
-
-    if( gerber_layer )
-    {
-        wxString editorname = Pgm().GetEditorName();
-
-        if( !editorname.IsEmpty() )
-        {
-            wxFileName fn( gerber_layer->m_FileName );
-
-            // Call the editor only if the Gerber/drill source file is available.
-            // This is not always the case, because it can be a temporary file
-            // if it comes from a zip archive.
-            if( !fn.FileExists() )
-            {
-                wxString msg;
-                msg.Printf( _( "Source file \"%s\" is not available" ),
-                            GetChars( fn.GetFullPath() ) );
-                wxMessageBox( msg );
-            }
-            else
-                ExecuteFile( this, editorname, QuoteFullPath( fn ) );
-        }
-        else
-            wxMessageBox( _( "No editor defined. Please select one" ) );
-    }
-    else
-    {
-        wxString msg;
-        msg.Printf( _( "No file loaded on the active layer %d" ), layer + 1 );
-        wxMessageBox( msg );
-    }
 }
 
 

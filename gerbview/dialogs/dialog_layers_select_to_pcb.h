@@ -26,10 +26,12 @@
  * @file select_layers_to_pcb.h
  */
 
-#ifndef _SELECT_LAYERS_TO_PCB_H_
-#define _SELECT_LAYERS_TO_PCB_H_
+#ifndef DIALOG_LAYERS_SELECT_TO_PCB_H_
+#define DIALOG_LAYERS_SELECT_TO_PCB_H_
 
 #include <dialogs/dialog_layers_select_to_pcb_base.h>
+
+class GERBVIEW_FRAME;
 
 /*
  * This dialog shows the gerber files loaded, and allows user to choose
@@ -127,4 +129,4 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#endif      // _SELECT_LAYERS_TO_PCB_H_
+#endif      // DIALOG_LAYERS_SELECT_TO_PCB_H_

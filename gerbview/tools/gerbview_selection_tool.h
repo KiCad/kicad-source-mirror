@@ -81,9 +81,6 @@ public:
     int UnselectItem( const TOOL_EVENT& aEvent );
     int UnselectItems( const TOOL_EVENT& aEvent );
 
-    ///> Launches a tool to measure between points
-    int MeasureTool( const TOOL_EVENT& aEvent );
-
     ///> Sets up handlers for various events.
     void setTransitions() override;
 

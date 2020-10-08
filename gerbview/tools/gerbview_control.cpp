@@ -18,11 +18,17 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <view/view.h>
+#include <confirm.h>
+#include <dialogs/dialog_layers_select_to_pcb.h>
+#include <export_to_pcbnew.h>
+#include <gerber_file_image_list.h>
 #include <gerbview_painter.h>
 #include <gerbview_frame.h>
-#include <tool/tool_manager.h>
 #include <menus_helpers.h>
+#include <tool/tool_manager.h>
+#include <view/view.h>
+#include <wildcards_and_files_ext.h>
+
 #include "gerbview_actions.h"
 #include "gerbview_control.h"
 #include "gerbview_selection_tool.h"
@@ -70,6 +76,61 @@ int GERBVIEW_CONTROL::OpenZipFile( const TOOL_EVENT& aEvent )
 {
     m_frame->LoadZipArchiveFile( wxEmptyString );
     m_frame->GetCanvas()->Refresh();
+
+    return 0;
+}
+
+
+int GERBVIEW_CONTROL::ExportToPcbnew( const TOOL_EVENT& aEvent )
+{
+    int layercount = 0;
+
+    GERBER_FILE_IMAGE_LIST* images = m_frame->GetGerberLayout()->GetImagesList();
+
+    // Count the Gerber layers which are actually currently used
+    for( LAYER_NUM ii = 0; ii < (LAYER_NUM)images->ImagesMaxCount(); ++ii )
+    {
+        if( images->GetGbrImage( ii ) )
+            layercount++;
+    }
+
+    if( layercount == 0 )
+    {
+        DisplayInfoMessage( m_frame, _( "None of the Gerber layers contain any data" ) );
+        return 0;
+    }
+
+    wxString        fileDialogName( wxT( "noname." ) + KiCadPcbFileExtension );
+    wxString        path = m_frame->GetMruPath();
+
+    wxFileDialog    filedlg( m_frame, _( "Board File Name" ),
+                             path, fileDialogName, PcbFileWildcard(),
+                             wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( filedlg.ShowModal() == wxID_CANCEL )
+        return 0;
+
+    wxFileName fileName = filedlg.GetPath();
+
+    /* Install a dialog frame to choose the mapping
+     * between gerber layers and Pcbnew layers
+     */
+    LAYERS_MAP_DIALOG* layerdlg = new LAYERS_MAP_DIALOG( m_frame );
+    int ok = layerdlg->ShowModal();
+    layerdlg->Destroy();
+
+    if( ok != wxID_OK )
+        return 0;
+
+    // If no extension was entered, then force the extension to be a KiCad PCB file
+    if( !fileName.HasExt() )
+        fileName.SetExt( KiCadPcbFileExtension );
+
+    m_frame->SetMruPath( fileName.GetPath() );
+
+    GBR_TO_PCB_EXPORTER gbr_exporter( m_frame, fileName.GetFullPath() );
+
+    gbr_exporter.ExportPcb( layerdlg->GetLayersLookUpTable(), layerdlg->GetCopperLayersCount() );
 
     return 0;
 }
@@ -205,6 +266,15 @@ int GERBVIEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 }
 
 
+int GERBVIEW_CONTROL::EraseLayer( const TOOL_EVENT& aEvent )
+{
+    m_frame->Erase_Current_DrawLayer( true );
+    m_frame->ClearMsgPanel();
+
+    return 0;
+}
+
+
 int GERBVIEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
     GERBVIEW_SELECTION_TOOL* selTool = m_toolMgr->GetTool<GERBVIEW_SELECTION_TOOL>();
@@ -233,6 +303,7 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::OpenDrillFile,      GERBVIEW_ACTIONS::openDrillFile.MakeEvent() );
     Go( &GERBVIEW_CONTROL::OpenJobFile,        GERBVIEW_ACTIONS::openJobFile.MakeEvent() );
     Go( &GERBVIEW_CONTROL::OpenZipFile,        GERBVIEW_ACTIONS::openZipFile.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::ExportToPcbnew,     GERBVIEW_ACTIONS::exportToPcbnew.MakeEvent() );
     Go( &GERBVIEW_CONTROL::Print,              ACTIONS::print.MakeEvent() );
 
     Go( &GERBVIEW_CONTROL::HighlightControl,   GERBVIEW_ACTIONS::highlightClear.MakeEvent() );
@@ -242,6 +313,7 @@ void GERBVIEW_CONTROL::setTransitions()
 
     Go( &GERBVIEW_CONTROL::LayerNext,          GERBVIEW_ACTIONS::layerNext.MakeEvent() );
     Go( &GERBVIEW_CONTROL::LayerPrev,          GERBVIEW_ACTIONS::layerPrev.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::EraseLayer,         GERBVIEW_ACTIONS::eraseLayer.MakeEvent() );
 
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::linesDisplayOutlines.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::flashedDisplayOutlines.MakeEvent() );

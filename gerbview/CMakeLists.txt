@@ -21,6 +21,7 @@ set( DIALOGS_SRCS
     dialogs/panel_gerbview_display_options_base.cpp
     dialogs/panel_gerbview_settings.cpp
     dialogs/panel_gerbview_settings_base.cpp
+    dialogs/dialog_layers_select_to_pcb.cpp
     dialogs/dialog_layers_select_to_pcb_base.cpp
     dialogs/dialog_print_gerbview.cpp
     dialogs/dialog_select_one_pcb_layer.cpp
@@ -53,13 +54,13 @@ set( GERBVIEW_SRCS
     rs274_read_XY_and_IJ_coordinates.cpp
     rs274d.cpp
     rs274x.cpp
-    select_layers_to_pcb.cpp
     toolbars_gerber.cpp
 
     gerbview_draw_panel_gal.cpp
     gerbview_painter.cpp
 
     tools/gerbview_actions.cpp
+    tools/gerbview_inspection_tool.cpp
     tools/gerbview_selection.cpp
     tools/gerbview_selection_tool.cpp
     tools/gerbview_control.cpp

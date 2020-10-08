@@ -46,6 +46,7 @@
 #include <tool/editor_conditions.h>
 #include <tool/zoom_tool.h>
 #include <tools/gerbview_actions.h>
+#include <tools/gerbview_inspection_tool.h>
 #include <tools/gerbview_selection.h>
 #include <tools/gerbview_selection_tool.h>
 #include <tools/gerbview_control.h>
@@ -534,91 +535,6 @@ void GERBVIEW_FRAME::syncLayerBox( bool aRebuildLayerBox )
         m_DCodeSelector->SetDCodeSelection( dcodeSelected );
         m_DCodeSelector->Enable( gerber != NULL );
     }
-}
-
-
-void GERBVIEW_FRAME::Liste_D_Codes()
-{
-    int             ii, jj;
-    wxString        Line;
-    wxArrayString   list;
-    int             curr_layer = GetActiveLayer();
-
-    double   scale = 1.0;
-    wxString units;
-
-    switch( GetUserUnits() )
-    {
-        case EDA_UNITS::MILLIMETRES:
-            scale = IU_PER_MM;
-            units = "mm";
-            break;
-
-        case EDA_UNITS::INCHES:
-            scale = IU_PER_MILS * 1000;
-            units = "in";
-            break;
-
-        case EDA_UNITS::MILS:
-            scale = IU_PER_MILS;
-            units = "mil";
-            break;
-
-        default:
-            wxASSERT_MSG( false, "Invalid units" );
-    }
-
-    for( int layer = 0; layer < (int)ImagesMaxCount(); ++layer )
-    {
-        GERBER_FILE_IMAGE* gerber = GetGbrImage( layer );
-
-        if( gerber == NULL )
-            continue;
-
-        if( gerber->GetDcodesCount() == 0 )
-            continue;
-
-        if( layer == curr_layer )
-            Line.Printf( wxT( "*** Active layer (%2.2d) ***" ), layer + 1 );
-        else
-            Line.Printf( wxT( "*** layer %2.2d  ***" ), layer + 1 );
-
-        list.Add( Line );
-
-        for( ii = 0, jj = 1; ii < TOOLS_MAX_COUNT; ii++ )
-        {
-            D_CODE* pt_D_code = gerber->GetDCODE( ii + FIRST_DCODE );
-
-            if( pt_D_code == NULL )
-                continue;
-
-            if( !pt_D_code->m_InUse && !pt_D_code->m_Defined )
-                continue;
-
-            Line.Printf( wxT( "tool %2.2d:   D%2.2d   V %.4f %s  H %.4f %s   %s  attribute '%s'" ),
-                         jj,
-                         pt_D_code->m_Num_Dcode,
-                         pt_D_code->m_Size.y / scale, units,
-                         pt_D_code->m_Size.x / scale, units,
-                         D_CODE::ShowApertureType( pt_D_code->m_Shape ),
-                         pt_D_code->m_AperFunction.IsEmpty()? wxT( "none" ) : GetChars( pt_D_code->m_AperFunction )
-                         );
-
-            if( !pt_D_code->m_Defined )
-                Line += wxT( " (not defined)" );
-
-            if( pt_D_code->m_InUse )
-                Line += wxT( " (in use)" );
-
-            list.Add( Line );
-            jj++;
-        }
-    }
-
-    wxSingleChoiceDialog    dlg( this, wxEmptyString, _( "D Codes" ), list, (void**) NULL,
-                                 wxCHOICEDLG_STYLE & ~wxCANCEL );
-
-    dlg.ShowModal();
 }
 
 
@@ -1145,6 +1061,7 @@ void GERBVIEW_FRAME::setupTools()
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new GERBVIEW_SELECTION_TOOL );
     m_toolManager->RegisterTool( new GERBVIEW_CONTROL );
+    m_toolManager->RegisterTool( new GERBVIEW_INSPECTION_TOOL );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->InitTools();
 

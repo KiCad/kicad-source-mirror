@@ -36,7 +36,7 @@
 #include <kiface_i.h>
 #include <layers_id_colors_and_visibility.h>
 
-#include <select_layers_to_pcb.h>
+#include <dialogs/dialog_layers_select_to_pcb.h>
 
 // Imported function
 extern const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber );

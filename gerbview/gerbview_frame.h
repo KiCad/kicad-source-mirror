@@ -387,8 +387,6 @@ public:
 
     void ShowChangedLanguage() override;
 
-    void Process_Special_Functions( wxCommandEvent& event );
-
     /// Handles the changing of the highlighted component/net/attribute
     void OnSelectHighlightChoice( wxCommandEvent& event );
 
@@ -406,13 +404,6 @@ public:
      *  _ this layer is displayed on top of other layers
      */
     void OnSelectActiveLayer( wxCommandEvent& event );
-
-    /**
-     * Function OnShowGerberSourceFile
-     * Call the preferred editor to show (and edit) the gerber source file
-     * loaded in the active layer
-     */
-    void OnShowGerberSourceFile( wxCommandEvent& event );
 
     /**
      * Function OnSelectDisplayMode
@@ -511,12 +502,6 @@ public:
      */
     bool LoadGerberJobFile( const wxString& aFileName );
 
-
-    /**
-     * Set Size Items (Lines, Flashes) from DCodes List
-     */
-    void Liste_D_Codes();
-
     // PCB handling
     bool Clear_DrawLayers( bool query );
     void Erase_Current_DrawLayer( bool query );
@@ -528,9 +513,6 @@ public:
      * @param aOptions is the new options to apply
      */
     void UpdateDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions );
-
-    // Conversion function
-    void ExportDataInPcbnewFormat( wxCommandEvent& event );
 
     /* SaveCopyInUndoList() virtual
      * currently: do nothing in GerbView.

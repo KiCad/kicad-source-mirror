@@ -46,6 +46,7 @@ public:
     // Layer control
     int LayerNext( const TOOL_EVENT& aEvent );
     int LayerPrev( const TOOL_EVENT& aEvent );
+    int EraseLayer( const TOOL_EVENT& aEvent );
 
     // Files
     int OpenGerber( const TOOL_EVENT& aEvent );
@@ -57,6 +58,7 @@ public:
     int HighlightControl( const TOOL_EVENT& aEvent );
 
     // Miscellaneous
+    int ExportToPcbnew( const TOOL_EVENT& aEvent );
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
     int Print( const TOOL_EVENT& aEvent );
 

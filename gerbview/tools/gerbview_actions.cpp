@@ -58,6 +58,29 @@ TOOL_ACTION GERBVIEW_ACTIONS::openZipFile( "gerbview.Control.openZipFile",
         _( "Open a zipped archive (Gerber and Drill) file" ),
         zip_xpm );
 
+TOOL_ACTION GERBVIEW_ACTIONS::showDCodes( "gerbview.Inspection.showDCodes",
+        AS_GLOBAL, 0, "",
+        _( "List DCodes..." ),
+        _( "List D-codes defined in Gerber files" ),
+        show_dcodenumber_xpm );
+
+TOOL_ACTION GERBVIEW_ACTIONS::showSource( "gerbview.Inspection.showSource",
+        AS_GLOBAL, 0, "",
+        _( "Show Source..." ),
+        _( "Show source file for the current layer" ),
+        tools_xpm );
+
+TOOL_ACTION GERBVIEW_ACTIONS::exportToPcbnew( "gerbview.Control.exportToPcbnew",
+        AS_GLOBAL, 0, "",
+        _( "Export to Pcbnew..." ),
+        _( "Export data in Pcbnew format" ),
+        export_xpm );
+
+TOOL_ACTION GERBVIEW_ACTIONS::eraseLayer( "gerbview.Control.eraseLayer",
+        AS_GLOBAL, 0, "",
+        _( "Clear Current Layer..." ), _( "Clear the selected graphic layer" ),
+        delete_sheet_xpm );
+
 TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( "gerbview.Control.layerChanged",
         AS_GLOBAL, 0, "", "", "",
         nullptr, AF_NOTIFY );

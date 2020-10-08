@@ -55,6 +55,10 @@ public:
 
     /// Activation of the edit tool
     static TOOL_ACTION properties;
+    static TOOL_ACTION showDCodes;
+    static TOOL_ACTION showSource;
+
+    static TOOL_ACTION exportToPcbnew;
 
     // Display modes
     static TOOL_ACTION linesDisplayOutlines;
@@ -68,6 +72,7 @@ public:
     // Layer control
     static TOOL_ACTION layerPrev;
     static TOOL_ACTION layerNext;
+    static TOOL_ACTION eraseLayer;
 
     static TOOL_ACTION layerChanged;        // notification
 

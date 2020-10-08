@@ -146,10 +146,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                    reload2_xpm );
 
     fileMenu->AppendSeparator();
-    fileMenu->Add( _( "Export to Pcbnew..." ),
-                   _( "Export data in Pcbnew format" ),
-                   ID_GERBVIEW_EXPORT_TO_PCBNEW,
-                   export_xpm );
+    fileMenu->Add( GERBVIEW_ACTIONS::exportToPcbnew );
 
     fileMenu->AppendSeparator();
     fileMenu->Add( ACTIONS::print );
@@ -210,23 +207,14 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     //
     ACTION_MENU* toolsMenu = new ACTION_MENU( false, selTool );
 
-    toolsMenu->Add( _( "&List DCodes..." ),
-                    _( "List D-codes defined in Gerber files" ),
-                    ID_GERBVIEW_SHOW_LIST_DCODES,
-                    show_dcodenumber_xpm );
-
-    toolsMenu->Add( _( "&Show Source..." ),
-                    _( "Show source file for the current layer" ),
-                    ID_GERBVIEW_SHOW_SOURCE,
-                    tools_xpm );
+    toolsMenu->Add( GERBVIEW_ACTIONS::showDCodes );
+    toolsMenu->Add( GERBVIEW_ACTIONS::showSource );
 
     toolsMenu->Add( ACTIONS::measureTool );
 
     toolsMenu->AppendSeparator();
-    toolsMenu->Add( _( "Clear Current Layer..." ),
-                    _( "Clear the selected graphic layer" ),
-                    ID_GERBVIEW_ERASE_CURR_LAYER,
-                    delete_sheet_xpm );
+    toolsMenu->Add( GERBVIEW_ACTIONS::eraseLayer );
+
 
     //-- Preferences menu -----------------------------------------------
     //

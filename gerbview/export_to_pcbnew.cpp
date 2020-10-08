@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,12 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file export_to_pcbnew.cpp
- * @brief Export the layers to Pcbnew.
- */
-
 #include <vector>
+
+#include <export_to_pcbnew.h>
 
 #include <confirm.h>
 #include <macros.h>
@@ -35,145 +32,12 @@
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
-#include <select_layers_to_pcb.h>
 #include <build_version.h>
 #include <wildcards_and_files_ext.h>
 #include "excellon_image.h"
 
 // Imported function
 extern const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber );
-
-
-struct EXPORT_VIA
-{
-    EXPORT_VIA( const wxPoint& aPos, int aSize, int aDrill ) :
-            m_Pos( aPos ),
-            m_Size( aSize ),
-            m_Drill( aDrill )
-    { }
-
-    wxPoint m_Pos;
-    int     m_Size;
-    int     m_Drill;
-};
-
-
-/* A helper class to export a Gerber set of files to Pcbnew
- */
-class GBR_TO_PCB_EXPORTER
-{
-private:
-    GERBVIEW_FRAME*         m_gerbview_frame;   // the main gerber frame
-    wxString                m_pcb_file_name;    // BOARD file to write to
-    FILE*                   m_fp;               // the board file
-    int                     m_pcbCopperLayersCount;
-    std::vector<EXPORT_VIA> m_vias;
-public:
-    GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME* aFrame, const wxString& aFileName );
-    ~GBR_TO_PCB_EXPORTER();
-
-    /**
-     * Function ExportPcb
-     * saves a board from a set of Gerber images.
-     */
-    bool    ExportPcb( LAYER_NUM* aLayerLookUpTable, int aCopperLayers );
-
-private:
-    /**
-     * collect holes from a drill layer.
-     * We'll use these later when writing pads & vias.
-     * @param aGbrItem
-     */
-    void    collect_hole( GERBER_DRAW_ITEM* aGbrItem );
-
-    /**
-     * write a via to the board file.
-     * Some of these will represent actual vias while others are used to represent
-     * holes in pads.  (We can't generate actual pads because the Gerbers don't contain
-     * info on how to group them into modules.)
-     * @param aVia
-     */
-    void    export_via( const EXPORT_VIA& aVia );
-
-    /**
-     * write a non copper line or arc to the board file.
-     * @param aGbrItem = the Gerber item (line, arc) to export
-     * @param aLayer = the technical layer to use
-     */
-    void    export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
-
-    /**
-     * write a non-copper polygon to the board file.
-     * @param aLayer = the technical layer to use
-     */
-    void    writePcbPolygon( const SHAPE_POLY_SET& aPolys, LAYER_NUM aLayer,
-                             const wxPoint& aOffset = { 0, 0 } );
-
-    /**
-     * write a zone item to the board file.
-     * Currently: only experimental, for tests
-     * @param aGbrItem = the Gerber item (line, arc) to export
-     * @param aLayer = the technical layer to use
-     */
-    void    writePcbZoneItem( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
-
-    /**
-     * write a track (or via) to the board file.
-     * @param aGbrItem = the Gerber item (line, arc, flashed) to export
-     * @param aLayer = the copper layer to use
-     */
-    void    export_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
-
-    /**
-     * Function export_flashed_copper_item
-     * write a synthetic pad to the board file.
-     * We can't create real pads because the Gerbers don't store grouping/footprint info.
-     * So we synthesize a pad with a via for the hole (if present) and a copper polygon for
-     * the pad.
-     * @param aGbrItem = the flashed Gerber item to export
-     */
-    void    export_flashed_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
-
-    /**
-     * Function export_segline_copper_item
-     * write a track (not via) to the board file.
-     * @param aGbrItem = the Gerber item (line only) to export
-     * @param aLayer = the copper layer to use
-     */
-    void    export_segline_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
-
-    /**
-     * Function export_segarc_copper_item
-     * write a set of tracks (arcs are approximated by track segments)
-     * to the board file.
-     * @param aGbrItem = the Gerber item (arc only) to export
-     * @param aLayer = the copper layer to use
-     */
-    void    export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
-
-    /**
-     * function writeCopperLineItem
-     * basic write function to write a a TRACK item
-     * to the board file, from a non flashed item
-     */
-    void    writeCopperLineItem( wxPoint& aStart, wxPoint& aEnd,
-                                 int aWidth, LAYER_NUM aLayer );
-
-    /**
-     * function writePcbHeader
-     * Write a very basic header to the board file
-     */
-    void    writePcbHeader( LAYER_NUM* aLayerLookUpTable );
-
-    /** In Pcbnew files units are mm for coordinates.
-     * So MapToPcbUnits converts internal gerbview to mm any pcbnew value
-     * @param aValue is a coordinate value to convert in mm
-     */
-    double MapToPcbUnits( int aValue )
-    {
-        return aValue / IU_PER_MM;
-    }
-};
 
 
 GBR_TO_PCB_EXPORTER::GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME* aFrame, const wxString& aFileName )
@@ -187,62 +51,6 @@ GBR_TO_PCB_EXPORTER::GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME* aFrame, const wxString
 
 GBR_TO_PCB_EXPORTER::~GBR_TO_PCB_EXPORTER()
 {
-}
-
-
-/* Export data in Pcbnew format
- * remember Pcbnew uses a Y reversed axis, so we must negate all Y coordinates
- */
-void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
-{
-    int layercount = 0;
-
-    GERBER_FILE_IMAGE_LIST* images = GetGerberLayout()->GetImagesList();
-
-    // Count the Gerber layers which are actually currently used
-    for( LAYER_NUM ii = 0; ii < (LAYER_NUM)images->ImagesMaxCount(); ++ii )
-    {
-        if( images->GetGbrImage( ii ) )
-            layercount++;
-    }
-
-    if( layercount == 0 )
-    {
-        DisplayInfoMessage( this, _( "None of the Gerber layers contain any data" ) );
-        return;
-    }
-
-    wxString        fileDialogName( wxT( "noname." ) + KiCadPcbFileExtension );
-    wxString        path = m_mruPath;
-
-    wxFileDialog    filedlg( this, _( "Board File Name" ),
-                             path, fileDialogName, PcbFileWildcard(),
-                             wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( filedlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    wxFileName fileName = filedlg.GetPath();
-
-    /* Install a dialog frame to choose the mapping
-     * between gerber layers and Pcbnew layers
-     */
-    LAYERS_MAP_DIALOG* layerdlg = new LAYERS_MAP_DIALOG( this );
-    int ok = layerdlg->ShowModal();
-    layerdlg->Destroy();
-
-    if( ok != wxID_OK )
-        return;
-
-    // If no extension was entered, then force the extension to be a KiCad PCB file
-    if( !fileName.HasExt() )
-        fileName.SetExt( KiCadPcbFileExtension );
-
-    m_mruPath = fileName.GetPath();
-
-    GBR_TO_PCB_EXPORTER gbr_exporter( this, fileName.GetFullPath() );
-
-    gbr_exporter.ExportPcb( layerdlg->GetLayersLookUpTable(), layerdlg->GetCopperLayersCount() );
 }
 
 

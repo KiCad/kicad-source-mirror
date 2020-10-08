@@ -28,7 +28,7 @@
  */
 
 #include <gerbview_frame.h>
-#include <select_layers_to_pcb.h>
+#include <dialogs/dialog_layers_select_to_pcb.h>
 
 #define NB_PCB_LAYERS PCB_LAYER_ID_COUNT
 #define FIRST_COPPER_LAYER 0
