@@ -187,6 +187,7 @@ public:
         double fine_scale_y;
         double ps_fine_width_adjust;
         bool   check_zones_before_plotting;
+        bool   mirror;
     };
 
     struct DIALOG_REANNOTATE

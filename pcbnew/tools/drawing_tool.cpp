@@ -620,7 +620,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         return 0;
 
     TOOL_EVENT    originalEvent = aEvent;
-    POINT_EDITOR* pointEditor   = m_toolMgr->GetTool<POINT_EDITOR>();
     DIMENSION*    dimension     = nullptr;
     BOARD_COMMIT  commit( m_frame );
     GRID_HELPER   grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
