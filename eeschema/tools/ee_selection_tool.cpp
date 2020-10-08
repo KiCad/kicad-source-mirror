@@ -353,7 +353,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         newParams->quitOnDraw = true;
                         newEvt->SetParameter( newParams );
 
-                        newEvt->SetMousePosition( evt->Position() );
+                        newEvt->SetMousePosition( snappedCursorPos );
                         m_toolMgr->ProcessEvent( *newEvt );
                         continueSelect = false;
                     }
