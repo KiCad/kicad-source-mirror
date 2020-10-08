@@ -1095,21 +1095,12 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     // As we are about to remove items, they have to be removed from the selection first
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    PCBNEW_SELECTION removed;
-
     for( EDA_ITEM* item : selectionCopy )
     {
-        PCB_GROUP* group = static_cast<BOARD_ITEM*>( item )->GetParentGroup();
+        PCB_GROUP* parentGroup = static_cast<BOARD_ITEM*>( item )->GetParentGroup();
 
-        if( group )
-            group->RemoveItem( static_cast<BOARD_ITEM*>( item ) );
-
-        if( m_editModules )
-        {
-            m_commit->Remove( item );
-            removed.Add( item );
-            continue;
-        }
+        if( parentGroup )
+            parentGroup->RemoveItem( static_cast<BOARD_ITEM*>( item ) );
 
         switch( item->Type() )
         {
@@ -1120,7 +1111,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
                 if( text->GetType() == FP_TEXT::TEXT_is_DIVERS )
                 {
-                    m_commit->Modify( text );
+                    m_commit->Modify( parent );
                     getView()->Remove( text );
                     parent->Remove( text );
                 }
@@ -1193,25 +1184,41 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
                 // Remove the entire zone otherwise
                 m_commit->Remove( item );
-                removed.Add( item );
             }
             break;
 
         case PCB_GROUP_T:
+        {
+            PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+
+            if( m_editModules )
+            {
+                MODULE* parent = static_cast<MODULE*>( item->GetParent() );
+
+                m_commit->Modify( parent );
+                getView()->Remove( group );
+                parent->Remove( group );
+
+                group->RunOnDescendants( [&]( BOARD_ITEM* bItem )
+                                         {
+                                             getView()->Remove( bItem );
+                                             parent->Remove( bItem );
+                                         });
+            }
+            else
             {
                 m_commit->Remove( item );
-                removed.Add( item );
 
-                static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem )
-                                                                   {
-                                                                       m_commit->Remove( bItem );
-                                                                   });
+                group->RunOnDescendants( [&]( BOARD_ITEM* bItem )
+                                         {
+                                             m_commit->Remove( bItem );
+                                         });
             }
+        }
             break;
 
         default:
             m_commit->Remove( item );
-            removed.Add( item );
             break;
         }
     }
