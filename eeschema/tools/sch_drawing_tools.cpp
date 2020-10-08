@@ -113,12 +113,19 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
     else if( aEvent.HasPosition() )
         m_toolMgr->RunAction( EE_ACTIONS::cursorClick );
 
-    m_frame->GetCanvas()->SetCurrentCursor( component ? KICURSOR::MOVING : KICURSOR::PENCIL );
+    auto setCursor = 
+            [&]() 
+            { 
+                m_frame->GetCanvas()->SetCurrentCursor( component ? KICURSOR::MOVING : KICURSOR::PENCIL );
+            };
+
+    // Set initial cursor
+    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( component ? KICURSOR::MOVING : KICURSOR::PENCIL );
+        setCursor();
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         auto cleanup = [&] () {
@@ -187,6 +194,9 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 m_view->ClearPreview();
                 m_view->AddToPreview( component->Clone() );
                 m_selectionTool->AddItemToSel( component );
+
+                // Update cursor now that we have a component
+                setCursor();
             }
             else
             {
@@ -304,13 +314,22 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     else if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
+    auto setCursor = 
+            [&]() 
+            {
+                if( image )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+                else
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
+
     // Set initial cursor
-    m_frame->GetCanvas()->SetCurrentCursor( image ? KICURSOR::MOVING : KICURSOR::PENCIL );
+    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( image ? KICURSOR::MOVING : KICURSOR::PENCIL );
+        setCursor();
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         auto cleanup = [&] () {
@@ -390,6 +409,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 m_selectionTool->AddItemToSel( image );
 
                 getViewControls()->SetCursorPosition( cursorPos, false );
+                setCursor();
             }
             else
             {
@@ -485,13 +505,19 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
+    auto setCursor = 
+            [&]() 
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+            };
+
     // Set initial cursor
-    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+        setCursor();
         cursorPos = (wxPoint) getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( evt->IsCancelInteractive() )
@@ -747,13 +773,23 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
+    auto setCursor = 
+            [&]() 
+            {
+                if( item )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+                else
+                    m_frame->GetCanvas()->SetCurrentCursor( isText ? KICURSOR::TEXT : KICURSOR::PENCIL );
+            };
+
     // Set initial cursor
-    m_frame->GetCanvas()->SetCurrentCursor( isText ? KICURSOR::TEXT : KICURSOR::PENCIL );
+    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( isText ? KICURSOR::TEXT : KICURSOR::PENCIL );
+        setCursor();
+
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         auto cleanup = [&] () {
@@ -863,6 +899,9 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     m_view->ClearPreview();
                     m_view->AddToPreview( item->Clone() );
                     m_selectionTool->AddItemToSel( item );
+
+                    // update the cursor so it looks correct before another event
+                    setCursor();
                 }
 
                 getViewControls()->SetCursorPosition( cursorPos, false );
@@ -945,13 +984,19 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
-    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+    auto setCursor = 
+            [&]() 
+            { 
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
+
+    // Set initial cursor
+    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( !pointEditor->HasPoint() )
-            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+        setCursor();
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 

@@ -135,9 +135,18 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
 
     view.Add( &previewRect );
 
+    auto setCursor = 
+            [&]() 
+            { 
+                frame.GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
+
+    // Set initial cursor
+    setCursor();
+
     while( auto evt = Wait() )
     {
-        frame.GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+        setCursor();
         VECTOR2I cursorPos = controls.GetCursorPosition();
 
         auto cleanup = [&] () {

@@ -580,9 +580,18 @@ int GERBVIEW_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
     controls.ShowCursor( true );
 
+    auto setCursor = 
+            [&]() 
+            { 
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
+            };
+
+    // Set initial cursor
+    setCursor();
+
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
+        setCursor();
         const VECTOR2I cursorPos = controls.GetCursorPosition();
 
         auto clearRuler =

@@ -181,9 +181,18 @@ void LENGTH_TUNER_TOOL::performTuning()
     m_router->Move( end, NULL );
     updateStatusPopup( statusPopup );
 
+    auto setCursor = 
+            [&]() 
+            { 
+                frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+            };
+
+    // Set initial cursor
+    setCursor();
+
     while( TOOL_EVENT* evt = Wait() )
     {
-        frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+        setCursor();
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -271,10 +280,19 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     controls()->ShowCursor( true );
     frame()->UndoRedoBlock( true );
 
+    auto setCursor = 
+            [&]() 
+            { 
+                frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+            };
+
+    // Set initial cursor
+    setCursor();
+
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+        setCursor();
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {

@@ -420,14 +420,22 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
+    auto setCursor = 
+            [&]() 
+            {
+                if( text )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+                else
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::TEXT );
+            };
+
     // Set initial cursor
-    m_frame->GetCanvas()->SetCurrentCursor( text ? KICURSOR::ARROW : KICURSOR::TEXT );
+    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor(
-                text ? KICURSOR::ARROW : KICURSOR::TEXT );
+        setCursor();
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
         auto cleanup = [&]()
@@ -548,6 +556,9 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     m_controls->WarpCursor( text->GetPosition(), true );
                     m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, text );
                     m_view->Update( &selection() );
+
+                    // update the cursor so it looks correct before another event
+                    setCursor();
                 }
             }
 
@@ -645,13 +656,19 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->PrimeTool( aEvent.Position() );
 
+    auto setCursor = 
+            [&]() 
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
+            };
+
     // Set initial cursor
-    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
+    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
+        setCursor();
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( m_frame->IsGridVisible() );
@@ -1043,14 +1060,20 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
     Activate();
+    
+    auto setCursor = 
+            [&]() 
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+            };
 
     // Set initial cursor
-    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+        setCursor();
         cursorPos = m_controls->GetCursorPosition();
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
@@ -1129,12 +1152,18 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
     m_controls->SetAutoPan( true );
     m_controls->CaptureCursor( false );
 
+    auto setCursor = 
+            [&]() 
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
+            };
+
     // Set initial cursor
-    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
+    setCursor();
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
+        setCursor();
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( m_frame->IsGridVisible() );
@@ -1231,14 +1260,20 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     frame()->SetMsgPanel( graphic );
+    
+    auto setCursor = 
+            [&]() 
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
 
     // Set initial cursor
-    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+        setCursor();
         m_frame->SetMsgPanel( graphic );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
@@ -1498,12 +1533,18 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Set initial cursor
-    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+    auto setCursor = 
+            [&]() 
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
+
+    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+        setCursor();
 
         PCB_LAYER_ID layer = m_frame->GetActiveLayer();
         graphic->SetLayer( layer );
@@ -1750,14 +1791,21 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     // Prime the pump
     if( aEvent.HasPosition() )
         m_toolMgr->PrimeTool( aEvent.Position() );
+        
+    auto setCursor = 
+            [&]() 
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
 
     // Set initial cursor
-    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+        setCursor();
+
         LSET layers( m_frame->GetActiveLayer() );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( m_frame->IsGridVisible() );

@@ -294,9 +294,18 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     statusPopup.Popup();
     statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
 
+    auto setCursor = 
+            [&]() 
+            { 
+                frame()->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
+            };
+
+    // Set initial cursor
+    setCursor();
+
     while( TOOL_EVENT* evt = Wait() )
     {
-        frame()->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
+        setCursor();
 
         if( evt->IsCancelInteractive() )
         {

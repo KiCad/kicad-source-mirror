@@ -90,17 +90,22 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
+    auto setCursor = 
+            [&]() 
+            {
+                if( item )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+                else
+                    m_frame->GetCanvas()->SetCurrentCursor( isText ? KICURSOR::TEXT : KICURSOR::PENCIL );
+            };
+
+    // Set initial cursor
+    setCursor();
+
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( isText )
-        {
-            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::TEXT );
-        }
-        else
-        {
-            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
-        }
+        setCursor();
 
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
@@ -189,6 +194,9 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     m_view->ClearPreview();
                     m_view->AddToPreview( item->Clone() );
                     m_selectionTool->AddItemToSel( item );
+
+                    // update the cursor so it looks correct before another event
+                    setCursor();
                 }
 
                 getViewControls()->SetCursorPosition( cursorPos, false );
@@ -271,11 +279,19 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
+    auto setCursor = 
+            [&]() 
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
+
+    // Set initial cursor
+    setCursor();
+
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( !pointEditor->HasPoint() )
-            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+        setCursor();
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
@@ -411,10 +427,19 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
+    auto setCursor = 
+            [&]() 
+            { 
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
+            };
+
+    // Set initial cursor
+    setCursor();
+
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
+        setCursor();
 
         if( evt->IsCancelInteractive() )
         {

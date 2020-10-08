@@ -219,10 +219,19 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     controls.ShowCursor( true );
     controls.SetAutoPan( false );
     controls.CaptureCursor( false );
+    
+    auto setCursor = 
+            [&]() 
+            { 
+                frame()->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
+            };
+
+    // Set initial cursor
+    setCursor();
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        frame()->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
+        setCursor();
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         const VECTOR2I cursorPos = grid.BestSnapAnchor( controls.GetMousePosition(), nullptr );

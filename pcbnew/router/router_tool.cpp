@@ -914,9 +914,18 @@ void ROUTER_TOOL::performRouting()
     if( !prepareInteractive() )
         return;
 
+    auto setCursor = 
+            [&]() 
+            { 
+                frame()->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
+
+    // Set initial cursor
+    setCursor();
+
     while( TOOL_EVENT* evt = Wait() )
     {
-        frame()->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+        setCursor();
 
         // Don't crash if we missed an operation that cancelled routing.
         if( !m_router->RoutingInProgress() )
@@ -1092,10 +1101,19 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->PrimeTool( m_startSnapPoint );
 
+    auto setCursor = 
+            [&]() 
+            { 
+                frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
+
+    // Set initial cursor
+    setCursor();
+
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+        setCursor();
 
         if( evt->IsCancelInteractive() )
         {
@@ -1427,9 +1445,18 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     view()->ClearPreview();
     view()->InitPreview();
 
+    auto setCursor = 
+            [&]() 
+            { 
+                frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+            };
+
+    // Set initial cursor
+    setCursor();
+
     while( TOOL_EVENT* evt = Wait() )
     {
-        frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+        setCursor();
 
         if( evt->IsCancelInteractive() )
         {
