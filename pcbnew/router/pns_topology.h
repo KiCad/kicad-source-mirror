@@ -58,9 +58,6 @@ public:
     const ITEM_SET AssembleTrivialPath( ITEM* aStart );
     const DIFF_PAIR AssembleDiffPair( SEGMENT* aStart );
 
-    int DpCoupledNet( int aNet );
-    int DpNetPolarity( int aNet );
-    const LINE DpCoupledLine( LINE* aLine );
     bool AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair );
 
     const std::set<ITEM*> AssembleCluster( ITEM* aStart, int aLayer );

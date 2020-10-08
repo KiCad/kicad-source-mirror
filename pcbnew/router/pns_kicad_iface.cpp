@@ -44,6 +44,9 @@
 #include <geometry/shape_arc.h>
 #include <geometry/shape_simple.h>
 
+#include <drc/drc_rule.h>
+#include <drc/drc_engine.h>
+
 #include <memory>
 
 #include <advanced_config.h>
@@ -73,12 +76,14 @@ public:
     virtual bool CollideHoles( const PNS::ITEM* aA, const PNS::ITEM* aB,
                                bool aNeedMTV, VECTOR2I* aMTV ) const override;
 
-    virtual int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB ) const override;
-    virtual int Clearance( int aNetCode ) const override;
+    virtual int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB ) override;
+    //virtual int Clearance( int aNetCode ) const override;
     virtual int DpCoupledNet( int aNet ) override;
     virtual int DpNetPolarity( int aNet ) override;
     virtual bool DpNetPair( PNS::ITEM* aItem, int& aNetP, int& aNetN ) override;
 
+    virtual bool QueryConstraint( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA, const PNS::ITEM* aItemB, int aLayer, PNS::CONSTRAINT* aConstraint ) override;
+    
     virtual wxString NetName( int aNet ) override;
 
 private:
@@ -240,47 +245,53 @@ int PNS_PCBNEW_RULE_RESOLVER::localPadClearance( const PNS::ITEM* aItem ) const
     return i->second;
 }
 
-
-int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB ) const
+bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA, const PNS::ITEM* aItemB, int aLayer, PNS::CONSTRAINT* aConstraint )
 {
-    int net_a = aA->Net();
-    int cl_a = Clearance( net_a );
-    int net_b = aB->Net();
-    int cl_b = Clearance( net_b );
+    std::shared_ptr<DRC_ENGINE> drcEngine = m_board->GetDesignSettings().m_DRCEngine;
 
-    // Pad clearance is 0 if the ITEM* is not a pad
-    int pad_a = localPadClearance( aA );
-    int pad_b = localPadClearance( aB );
+    if( !drcEngine )
+    {
+        return false;
+    }
 
-    if( pad_a > 0 )
-        cl_a = pad_a;
+    DRC_CONSTRAINT_TYPE_T hostRuleType;
 
-    if( pad_b > 0 )
-        cl_b = pad_b;
+    switch ( aType )
+    {
+        case PNS::CONSTRAINT_TYPE::CT_CLEARANCE:
+            hostRuleType = DRC_CONSTRAINT_TYPE_CLEARANCE;
+            break;
+        case PNS::CONSTRAINT_TYPE::CT_WIDTH:
+            hostRuleType = DRC_CONSTRAINT_TYPE_TRACK_WIDTH;
+            break;
+        case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP:
+            hostRuleType = DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP;
+            break;
+        case PNS::CONSTRAINT_TYPE::CT_LENGTH:
+            hostRuleType = DRC_CONSTRAINT_TYPE_LENGTH;
+            break;
+        default:
+            return false; // should not happen
+    }
 
-    return std::max( cl_a, cl_b );
+    DRC_CONSTRAINT hostConstraint = drcEngine->EvalRulesForItems( hostRuleType,
+        aItemA->Parent(),
+        aItemB->Parent(),
+        (PCB_LAYER_ID) aLayer );
+
+    if( hostConstraint.IsNull() )
+        return false;
 }
 
 
-int PNS_PCBNEW_RULE_RESOLVER::Clearance( int aNetCode ) const
+int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB )
 {
-    if( aNetCode == -1 )
-    {
-        return 0;
-    }
-    else if( aNetCode == 0 )
-    {
-        return m_defaultClearance;
-    }
-    else if( aNetCode > 0 && aNetCode < (int) m_netClearanceCache.size() )
-    {
-        return m_netClearanceCache[aNetCode].clearance;
-    }
-    else
-    {
-        wxFAIL_MSG( "PNS_PCBNEW_RULE_RESOLVER::Clearance: net not found in clearance cache." );
-        return m_defaultClearance;
-    }
+    PNS::CONSTRAINT constraint;
+    bool ok = QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, aA->Layer(), &constraint );
+
+    assert( ok );
+
+    return constraint.m_Value.Min();
 }
 
 

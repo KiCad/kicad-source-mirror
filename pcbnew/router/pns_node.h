@@ -28,6 +28,7 @@
 #include <unordered_map>
 
 #include <core/optional.h>
+#include <core/minoptmax.h>
 
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
@@ -54,6 +55,24 @@ class NODE;
  * An abstract function object, returning a design rule (clearance, diff pair gap, etc) required between two items.
  **/
 
+enum class CONSTRAINT_TYPE
+{
+    CT_CLEARANCE = 1,
+    CT_DIFF_PAIR_GAP = 2,
+    CT_LENGTH = 3,
+    CT_WIDTH = 4
+};
+
+struct CONSTRAINT
+{
+    CONSTRAINT_TYPE m_Type;
+    MINOPTMAX<int> m_Value;
+    bool m_Allowed;
+    wxString m_RuleName;
+    wxString m_FromName;
+    wxString m_ToName;
+};
+
 class RULE_RESOLVER
 {
 public:
@@ -62,12 +81,14 @@ public:
     virtual bool CollideHoles( const ITEM* aA, const ITEM* aB,
                                bool aNeedMTV, VECTOR2I* aMTV ) const = 0;
 
-    virtual int Clearance( const ITEM* aA, const ITEM* aB ) const = 0;
-    virtual int Clearance( int aNetCode ) const = 0;
+    virtual int Clearance( const ITEM* aA, const ITEM* aB ) = 0;
+    //virtual int Clearance( int aNetCode ) const = 0;
     virtual int DpCoupledNet( int aNet ) = 0;
     virtual int DpNetPolarity( int aNet ) = 0;
     virtual bool DpNetPair( ITEM* aItem, int& aNetP, int& aNetN ) = 0;
 
+    virtual bool QueryConstraint( CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA, const PNS::ITEM* aItemB, int aLayer, PNS::CONSTRAINT* aConstraint ) = 0;
+    
     virtual wxString NetName( int aNet ) = 0;
 };
 

@@ -42,6 +42,17 @@ public:
 
     bool IsNull() const { return m_isNull; }
 
+    T OptThenMin() const 
+    {
+        if( m_hasOpt )
+            return m_opt;
+        else if( m_hasMin )
+            return m_min;
+
+        assert( m_hasMin );
+        return 0;
+    }
+
 private:
     bool m_isNull;
     T m_min;
