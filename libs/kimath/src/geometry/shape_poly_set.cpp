@@ -1906,6 +1906,8 @@ SHAPE_POLY_SET &SHAPE_POLY_SET::operator=( const SHAPE_POLY_SET& aOther )
     m_triangulatedPolys.clear();
     m_triangulationValid = false;
 
+    printf("operator= %p %p\n", this, &aOther );
+
     if( aOther.IsTriangulationUpToDate() )
     {
         for( unsigned i = 0; i < aOther.TriangulatedPolyCount(); i++ )
@@ -1930,6 +1932,8 @@ MD5_HASH SHAPE_POLY_SET::GetHash() const
 
 bool SHAPE_POLY_SET::IsTriangulationUpToDate() const
 {
+
+    printf("[%p] IsTriValid %d\n", this, !!m_triangulationValid );
     if( !m_triangulationValid )
         return false;
 
@@ -2137,10 +2141,12 @@ bool SHAPE_POLY_SET::hasTouchingHoles( const POLYGON& aPoly ) const
     return false;
 }
 
+
 bool SHAPE_POLY_SET::HasIndexableSubshapes() const
 {
     return IsTriangulationUpToDate();
 }
+
 
 size_t SHAPE_POLY_SET::GetIndexableSubshapeCount() const
 {
@@ -2149,6 +2155,7 @@ size_t SHAPE_POLY_SET::GetIndexableSubshapeCount() const
         n += t->GetTriangleCount();
     return n;
 }
+
 
 void SHAPE_POLY_SET:: GetIndexableSubshapes( std::vector<SHAPE*>& aSubshapes )
 {
@@ -2164,3 +2171,53 @@ void SHAPE_POLY_SET:: GetIndexableSubshapes( std::vector<SHAPE*>& aSubshapes )
     }
 }
 
+
+const BOX2I SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI::BBox( int aClearance ) const
+{
+    BOX2I bbox( parent->m_vertices[a] );
+    bbox.Merge( parent->m_vertices[b] );
+    bbox.Merge( parent->m_vertices[c] );
+
+    if( aClearance != 0 )
+        bbox.Inflate( aClearance );
+
+    return bbox;
+}
+
+
+void SHAPE_POLY_SET::TRIANGULATED_POLYGON::AddTriangle( int a, int b, int c )
+{
+    m_triangles.emplace_back( a, b, c, this );
+}
+
+
+SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRIANGULATED_POLYGON( const TRIANGULATED_POLYGON& aOther )
+{
+    m_vertices = aOther.m_vertices;
+    m_triangles = aOther.m_triangles;
+
+    for( TRI& tri : m_triangles )
+        tri.parent = this;
+}
+
+
+SHAPE_POLY_SET::TRIANGULATED_POLYGON& SHAPE_POLY_SET::TRIANGULATED_POLYGON::operator=( const TRIANGULATED_POLYGON& aOther )
+{
+    m_vertices = aOther.m_vertices;
+    m_triangles = aOther.m_triangles;
+
+    for( TRI& tri : m_triangles )
+        tri.parent = this;
+
+    return *this;
+}
+
+
+SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRIANGULATED_POLYGON()
+{
+}
+
+
+SHAPE_POLY_SET::TRIANGULATED_POLYGON::~TRIANGULATED_POLYGON()
+{
+}

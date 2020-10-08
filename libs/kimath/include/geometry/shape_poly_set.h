@@ -88,17 +88,7 @@ class SHAPE_POLY_SET : public SHAPE
 
                 virtual bool IsClosed() const override { return true; }
 
-                virtual const BOX2I BBox( int aClearance = 0 ) const override
-                {
-                    BOX2I bbox( parent->m_vertices[a] );
-                    bbox.Merge( parent->m_vertices[b] );
-                    bbox.Merge( parent->m_vertices[c] );
-
-                    if( aClearance != 0 )
-                        bbox.Inflate( aClearance );
-
-                    return bbox;
-                }
+                virtual const BOX2I BBox( int aClearance = 0 ) const override;
 
                 virtual const VECTOR2I GetPoint( int aIndex ) const override
                 {
@@ -132,6 +122,10 @@ class SHAPE_POLY_SET : public SHAPE
                 TRIANGULATED_POLYGON* parent;
             };
 
+            TRIANGULATED_POLYGON();
+            TRIANGULATED_POLYGON( const TRIANGULATED_POLYGON& aOther );
+            ~TRIANGULATED_POLYGON();
+
             void Clear()
             {
                 m_vertices.clear();
@@ -146,16 +140,10 @@ class SHAPE_POLY_SET : public SHAPE
                 c = m_vertices[ tri.c ];
             }
 
-            void AddTriangle( const TRI& aTri )
-            {
-                m_triangles.push_back( aTri );
-            }
+            TRIANGULATED_POLYGON& operator=( const TRIANGULATED_POLYGON& aOther );
 
-            void AddTriangle( int a, int b, int c )
-            {
-                m_triangles.emplace_back( a, b, c, this );
-            }
-
+            void AddTriangle( int a, int b, int c );
+            
             void AddVertex( const VECTOR2I& aP )
             {
                 m_vertices.push_back( aP );
