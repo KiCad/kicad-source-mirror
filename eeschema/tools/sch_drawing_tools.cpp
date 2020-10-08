@@ -45,6 +45,8 @@
 #include <class_library.h>
 #include <eeschema_settings.h>
 #include <dialogs/dialog_edit_label.h>
+#include <dialogs/dialog_edit_line_style.h>
+#include <dialogs/dialog_junction_props.h>
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
@@ -542,22 +544,19 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         {
             if( !m_frame->GetScreen()->GetItem( cursorPos, 0, type ) )
             {
+                SCH_ITEM* newItem = static_cast<SCH_ITEM*>( previewItem->Clone() );
+                newItem->SetPosition( cursorPos );
+                newItem->SetFlags( IS_NEW );
+
+                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), newItem, false );
+                m_frame->SaveCopyForRepeatItem( newItem );
+
                 if( type == SCH_JUNCTION_T )
-                {
-                    m_frame->AddJunction( m_frame->GetScreen(), cursorPos, false );
-                }
+                    m_frame->TestDanglingEnds();
                 else
-                {
-                    SCH_ITEM* newItem = static_cast<SCH_ITEM*>( previewItem->Clone() );
-                    newItem->SetPosition( cursorPos );
-                    newItem->SetFlags( IS_NEW );
-
-                    m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), newItem, false );
-                    m_frame->SaveCopyForRepeatItem( newItem );
-
                     m_frame->SchematicCleanUp();
-                    m_frame->OnModify();
-                }
+
+                m_frame->OnModify();
             }
 
             if( evt->IsDblClick( BUT_LEFT ) )       // Finish tool.
@@ -599,6 +598,44 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 else if( evt->IsAction( &EE_ACTIONS::mirrorY ) )
                 {
                     busItem->MirrorY( busItem->GetPosition().y );
+                }
+
+                m_view->ClearPreview();
+                m_view->AddToPreview( previewItem->Clone() );
+            }
+            else if( evt->IsAction( &EE_ACTIONS::properties ) )
+            {
+                switch( type )
+                {
+                case SCH_BUS_WIRE_ENTRY_T:
+                {
+                    std::deque<SCH_ITEM*> strokeItems;
+                    strokeItems.push_back( previewItem );
+
+                    DIALOG_EDIT_LINE_STYLE dlg( m_frame, strokeItems );
+
+                    if( dlg.ShowModal() == wxID_OK )
+                    {
+                        m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+                        m_frame->OnModify();
+                    }
+                }
+                break;
+
+                case SCH_JUNCTION_T:
+                {
+                    std::deque<SCH_JUNCTION*> junctions;
+                    junctions.push_back( static_cast<SCH_JUNCTION*>( previewItem ) );
+
+                    DIALOG_JUNCTION_PROPS dlg( m_frame, junctions );
+
+                    if( dlg.ShowModal() == wxID_OK )
+                    {
+                        m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+                        m_frame->OnModify();
+                    }
+                }
+                    break;
                 }
 
                 m_view->ClearPreview();
