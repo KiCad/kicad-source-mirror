@@ -1146,6 +1146,12 @@ void GERBVIEW_FRAME::setupUIConditions()
             return m_DisplayOptions.m_FlipGerberView;
         };
 
+    auto layersManagerShownCondition =
+        [this] ( const SELECTION& aSel )
+        {
+            return m_show_layer_manager_tools;
+        };
+
     mgr->SetConditions( GERBVIEW_ACTIONS::flashedDisplayOutlines,  CHECK( flashedDisplayOutlinesCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::linesDisplayOutlines,    CHECK( linesFillCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::polygonsDisplayOutlines, CHECK( polygonsFilledCond ) );
@@ -1154,17 +1160,7 @@ void GERBVIEW_FRAME::setupUIConditions()
     mgr->SetConditions( GERBVIEW_ACTIONS::toggleDiffMode,          CHECK( diffModeCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::flipGerberView,          CHECK( flipGerberCond ) );
     mgr->SetConditions( ACTIONS::highContrastMode,                 CHECK( highContrastModeCond ) );
-
-
-    auto layersManagerShownCondition =
-        [this] ( const SELECTION& aSel )
-        {
-            return m_show_layer_manager_tools;
-        };
-
-    RegisterUIUpdateHandler( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
-                             CHECK( layersManagerShownCondition ) );
-
+    mgr->SetConditions( GERBVIEW_ACTIONS::toggleLayerManager,      CHECK( layersManagerShownCondition ) );
 
 #undef CHECK
 #undef ENABLE
@@ -1184,4 +1180,14 @@ void GERBVIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 SELECTION& GERBVIEW_FRAME::GetCurrentSelection()
 {
     return m_toolManager->GetTool<GERBVIEW_SELECTION_TOOL>()->GetSelection();
+}
+
+
+void GERBVIEW_FRAME::ToggleLayerManager()
+{
+    m_show_layer_manager_tools = !m_show_layer_manager_tools;
+
+    // show/hide auxiliary Vertical layers and visibility manager toolbar
+    m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
+    m_auimgr.Update();
 }

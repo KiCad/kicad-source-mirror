@@ -21,9 +21,11 @@
 #include <confirm.h>
 #include <dialogs/dialog_layers_select_to_pcb.h>
 #include <export_to_pcbnew.h>
+#include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <gerbview_painter.h>
 #include <gerbview_frame.h>
+#include <excellon_image.h>
 #include <menus_helpers.h>
 #include <tool/tool_manager.h>
 #include <view/view.h>
@@ -57,7 +59,7 @@ int GERBVIEW_CONTROL::OpenGerber( const TOOL_EVENT& aEvent )
 int GERBVIEW_CONTROL::OpenDrillFile( const TOOL_EVENT& aEvent )
 {
     m_frame->LoadExcellonFiles( wxEmptyString );
-    m_frame->GetCanvas()->Refresh();
+    canvas()->Refresh();
 
     return 0;
 }
@@ -66,7 +68,7 @@ int GERBVIEW_CONTROL::OpenDrillFile( const TOOL_EVENT& aEvent )
 int GERBVIEW_CONTROL::OpenJobFile( const TOOL_EVENT& aEvent )
 {
     m_frame->LoadGerberJobFile( wxEmptyString );
-    m_frame->GetCanvas()->Refresh();
+    canvas()->Refresh();
 
     return 0;
 }
@@ -75,7 +77,15 @@ int GERBVIEW_CONTROL::OpenJobFile( const TOOL_EVENT& aEvent )
 int GERBVIEW_CONTROL::OpenZipFile( const TOOL_EVENT& aEvent )
 {
     m_frame->LoadZipArchiveFile( wxEmptyString );
-    m_frame->GetCanvas()->Refresh();
+    canvas()->Refresh();
+
+    return 0;
+}
+
+
+int GERBVIEW_CONTROL::ToggleLayerManager( const TOOL_EVENT& aEvent )
+{
+    m_frame->ToggleLayerManager();
 
     return 0;
 }
@@ -180,8 +190,8 @@ int GERBVIEW_CONTROL::HighlightControl( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
-    m_frame->GetCanvas()->Refresh();
+    canvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
+    canvas()->Refresh();
 
     return 0;
 }
@@ -232,7 +242,7 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
     {
         options.m_FlipGerberView = !options.m_FlipGerberView;
 
-        KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
+        KIGFX::VIEW* view = canvas()->GetView();
         view->SetMirror( options.m_FlipGerberView, false );
         needs_refresh = true;
     }
@@ -266,10 +276,58 @@ int GERBVIEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 }
 
 
-int GERBVIEW_CONTROL::EraseLayer( const TOOL_EVENT& aEvent )
+int GERBVIEW_CONTROL::ClearLayer( const TOOL_EVENT& aEvent )
 {
     m_frame->Erase_Current_DrawLayer( true );
     m_frame->ClearMsgPanel();
+
+    return 0;
+}
+
+
+int GERBVIEW_CONTROL::ClearAllLayers( const TOOL_EVENT& aEvent )
+{
+    m_frame->Clear_DrawLayers( false );
+    m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
+    canvas()->Refresh();
+    m_frame->ClearMsgPanel();
+
+    return 0;
+}
+
+
+int GERBVIEW_CONTROL::ReloadAllLayers( const TOOL_EVENT& aEvent )
+{
+    // Store filenames
+    wxArrayString listOfGerberFiles;
+    std::vector<int> fileType;
+
+    GERBER_FILE_IMAGE_LIST* list = m_frame->GetImagesList();
+
+    for( unsigned i = 0; i < list->ImagesMaxCount(); i++ )
+    {
+        if( list->GetGbrImage( i ) == nullptr )
+            continue;
+
+        if( !list->GetGbrImage( i )->m_InUse )
+            continue;
+
+        auto* drill_file = dynamic_cast<EXCELLON_IMAGE*>( list->GetGbrImage( i ) );
+
+        if( drill_file )
+            fileType.push_back( 1 );
+        else
+            fileType.push_back( 0 );
+
+        listOfGerberFiles.Add( list->GetGbrImage( i )->m_FileName );
+    }
+
+    // Clear all layers
+    m_toolMgr->RunAction( GERBVIEW_ACTIONS::clearAllLayers, true );
+
+    // Load the layers from stored paths
+    wxBusyCursor wait;
+    m_frame->LoadListOfGerberAndDrillFiles( wxEmptyString, listOfGerberFiles, &fileType );
 
     return 0;
 }
@@ -303,6 +361,7 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::OpenDrillFile,      GERBVIEW_ACTIONS::openDrillFile.MakeEvent() );
     Go( &GERBVIEW_CONTROL::OpenJobFile,        GERBVIEW_ACTIONS::openJobFile.MakeEvent() );
     Go( &GERBVIEW_CONTROL::OpenZipFile,        GERBVIEW_ACTIONS::openZipFile.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::ToggleLayerManager, GERBVIEW_ACTIONS::toggleLayerManager.MakeEvent() );
     Go( &GERBVIEW_CONTROL::ExportToPcbnew,     GERBVIEW_ACTIONS::exportToPcbnew.MakeEvent() );
     Go( &GERBVIEW_CONTROL::Print,              ACTIONS::print.MakeEvent() );
 
@@ -313,7 +372,9 @@ void GERBVIEW_CONTROL::setTransitions()
 
     Go( &GERBVIEW_CONTROL::LayerNext,          GERBVIEW_ACTIONS::layerNext.MakeEvent() );
     Go( &GERBVIEW_CONTROL::LayerPrev,          GERBVIEW_ACTIONS::layerPrev.MakeEvent() );
-    Go( &GERBVIEW_CONTROL::EraseLayer,         GERBVIEW_ACTIONS::eraseLayer.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::ClearLayer,         GERBVIEW_ACTIONS::clearLayer.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::ClearAllLayers,     GERBVIEW_ACTIONS::clearAllLayers.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::ReloadAllLayers,    GERBVIEW_ACTIONS::reloadAllLayers.MakeEvent() );
 
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::linesDisplayOutlines.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::flashedDisplayOutlines.MakeEvent() );

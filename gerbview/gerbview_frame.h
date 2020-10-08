@@ -196,18 +196,6 @@ private:
     /// Updates the GAL with display settings changes
     void applyDisplaySettingsToGAL();
 
-    /**
-     * Loads a list of Gerber and NC drill files and updates the view based on them
-     * @param aPath is the base path for the filenames if they are relative
-     * @param aFilenameList is a list of filenames to load
-     * @param aFileType is a list of type of files to load (0 = Gerber, 1 = NC drill)
-     * if nullptr, files are expected Gerber type.
-     * @return true if every file loaded successfully
-     */
-    bool loadListOfGerberAndDrillFiles( const wxString& aPath,
-                                        const wxArrayString& aFilenameList,
-                                        const std::vector<int>* aFileType = nullptr );
-
 public:
     GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~GERBVIEW_FRAME();
@@ -215,6 +203,19 @@ public:
     void doCloseWindow() override;
 
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl ) override;
+
+    /**
+     * Loads a list of Gerber and NC drill files and updates the view based on them
+     *
+     * @param aPath is the base path for the filenames if they are relative
+     * @param aFilenameList is a list of filenames to load
+     * @param aFileType is a list of type of files to load (0 = Gerber, 1 = NC drill)
+     * if nullptr, files are expected Gerber type.
+     * @return true if every file loaded successfully
+     */
+    bool LoadListOfGerberAndDrillFiles( const wxString& aPath,
+                                        const wxArrayString& aFilenameList,
+                                        const std::vector<int>* aFileType = nullptr );
 
     // Virtual basic functions:
     void ReCreateHToolbar() override;
@@ -383,7 +384,7 @@ public:
 
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    void OnToggleShowLayerManager( wxCommandEvent& aEvent );
+    void ToggleLayerManager();
 
     void ShowChangedLanguage() override;
 
@@ -422,8 +423,6 @@ public:
     void OnUpdateDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
-
-    void Files_io( wxCommandEvent& event );
 
     /**
      * Function OnGbrFileHistory

@@ -222,7 +222,7 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
 
             wxArrayString& gbrfiles = gbjReader.GetGerberFiles();
 
-            success = loadListOfGerberAndDrillFiles( currentPath, gbrfiles );
+            success = LoadListOfGerberAndDrillFiles( currentPath, gbrfiles );
         }
     }
 

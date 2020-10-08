@@ -23,6 +23,7 @@
 
 #include <tool/tool_interactive.h>
 
+class EDA_DRAW_PANEL_GAL;
 class GERBVIEW_FRAME;
 
 /**
@@ -46,13 +47,17 @@ public:
     // Layer control
     int LayerNext( const TOOL_EVENT& aEvent );
     int LayerPrev( const TOOL_EVENT& aEvent );
-    int EraseLayer( const TOOL_EVENT& aEvent );
+    int ClearLayer( const TOOL_EVENT& aEvent );
+    int ClearAllLayers( const TOOL_EVENT& aEvent );
+    int ReloadAllLayers( const TOOL_EVENT& aEvent );
 
     // Files
     int OpenGerber( const TOOL_EVENT& aEvent );
     int OpenDrillFile( const TOOL_EVENT& aEvent );
     int OpenJobFile( const TOOL_EVENT& aEvent );
     int OpenZipFile( const TOOL_EVENT& aEvent );
+
+    int ToggleLayerManager( const TOOL_EVENT& aEvent );
 
     // Highlight control
     int HighlightControl( const TOOL_EVENT& aEvent );
@@ -64,6 +69,12 @@ public:
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
+
+protected:
+    EDA_DRAW_PANEL_GAL* canvas()
+    {
+        return m_frame->GetCanvas();
+    }
 
 private:
     GERBVIEW_FRAME* m_frame;

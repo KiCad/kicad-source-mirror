@@ -55,14 +55,8 @@ void GERBVIEW_FRAME::ReCreateHToolbar()
     }
 
     // Set up toolbar
-    m_mainToolBar->AddTool( ID_GERBVIEW_ERASE_ALL, wxEmptyString,
-                            KiScaledBitmap( delete_gerber_xpm, this ),
-                            _( "Clear all layers" ) );
-
-    m_mainToolBar->AddTool( ID_GERBVIEW_RELOAD_ALL, wxEmptyString,
-                            KiScaledBitmap( reload2_xpm, this ),
-                            _( "Reload all layers" ) );
-
+    m_mainToolBar->Add( GERBVIEW_ACTIONS::clearAllLayers );
+    m_mainToolBar->Add( GERBVIEW_ACTIONS::reloadAllLayers );
     m_mainToolBar->Add( GERBVIEW_ACTIONS::openGerber );
     m_mainToolBar->Add( GERBVIEW_ACTIONS::openDrillFile );
 
@@ -264,13 +258,8 @@ void GERBVIEW_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( ACTIONS::highContrastMode,                 ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::flipGerberView,          ACTION_TOOLBAR::TOGGLE );
 
-    // Tools to show/hide toolbars:
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
-                               wxEmptyString,
-                               KiScaledBitmap( layers_manager_xpm, this ),
-                               _( "Show/hide the layers manager toolbar" ),
-                               wxITEM_CHECK );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleLayerManager,      ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->Realize();
 }

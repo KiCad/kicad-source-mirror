@@ -112,60 +112,6 @@ void GERBVIEW_FRAME::OnClearJobFileHistory( wxCommandEvent& aEvent )
     ClearFileHistory( &m_jobFileHistory );
 }
 
-/* File commands. */
-void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
-{
-    switch( event.GetId() )
-    {
-    case ID_GERBVIEW_ERASE_ALL:
-        Clear_DrawLayers( false );
-        Zoom_Automatique( false );
-        GetCanvas()->Refresh();
-        ClearMsgPanel();
-        break;
-
-    case ID_GERBVIEW_RELOAD_ALL:
-    {
-        // Store filenames
-        wxArrayString listOfGerberFiles;
-        std::vector<int> fileType;
-
-        for( unsigned i = 0; i < GetImagesList()->ImagesMaxCount(); i++ )
-        {
-            if( GetImagesList()->GetGbrImage( i ) == nullptr )
-                continue;
-
-            if( !GetImagesList()->GetGbrImage( i )->m_InUse )
-                continue;
-
-            auto* drill_file = dynamic_cast<EXCELLON_IMAGE*>( GetImagesList()->GetGbrImage( i ) );
-
-            if( drill_file )
-                fileType.push_back( 1 );
-            else
-                fileType.push_back( 0 );
-
-            listOfGerberFiles.Add( GetImagesList()->GetGbrImage( i )->m_FileName );
-        }
-
-        // Clear all layers
-        Clear_DrawLayers( false );
-        Zoom_Automatique( false );
-        GetCanvas()->Refresh();
-        ClearMsgPanel();
-
-        // Load the layers from stored paths
-        wxBusyCursor wait;
-        loadListOfGerberAndDrillFiles( wxEmptyString, listOfGerberFiles, &fileType );
-    }
-    break;
-
-    default:
-        wxFAIL_MSG( "File_io: unexpected command id" );
-        break;
-    }
-}
-
 
 bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 {
@@ -245,11 +191,11 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     // Set the busy cursor
     wxBusyCursor wait;
 
-    return loadListOfGerberAndDrillFiles( currentPath, filenamesList );
+    return LoadListOfGerberAndDrillFiles( currentPath, filenamesList );
 }
 
 
-bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
+bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
                                             const wxArrayString& aFilenameList,
                                             const std::vector<int>* aFileType )
 {

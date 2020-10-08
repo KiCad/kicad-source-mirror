@@ -135,15 +135,8 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 #undef FileHistoryCond
 
     fileMenu->AppendSeparator();
-    fileMenu->Add( _( "Clear &All Layers" ),
-                   _( "Clear all layers. All data will be deleted" ),
-                   ID_GERBVIEW_ERASE_ALL,
-                   delete_gerber_xpm );
-
-    fileMenu->Add( _( "Reload All Layers" ),
-                   _( "Reload all layers. All data will be reloaded" ),
-                   ID_GERBVIEW_RELOAD_ALL,
-                   reload2_xpm );
+    fileMenu->Add( GERBVIEW_ACTIONS::clearAllLayers );
+    fileMenu->Add( GERBVIEW_ACTIONS::reloadAllLayers );
 
     fileMenu->AppendSeparator();
     fileMenu->Add( GERBVIEW_ACTIONS::exportToPcbnew );
@@ -159,11 +152,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     //
     ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
-    // Hide layer manager
-    viewMenu->Add( _( "Show &Layers Manager" ),
-                   _( "Show or hide the layer manager" ),
-                   ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
-                   layers_manager_xpm );
+    viewMenu->Add( GERBVIEW_ACTIONS::toggleLayerManager,      ACTION_MENU::CHECK );
 
     viewMenu->AppendSeparator();
     viewMenu->Add( ACTIONS::zoomInCenter );
@@ -213,7 +202,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     toolsMenu->Add( ACTIONS::measureTool );
 
     toolsMenu->AppendSeparator();
-    toolsMenu->Add( GERBVIEW_ACTIONS::eraseLayer );
+    toolsMenu->Add( GERBVIEW_ACTIONS::clearLayer );
 
 
     //-- Preferences menu -----------------------------------------------

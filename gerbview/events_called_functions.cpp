@@ -46,13 +46,7 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( GERBVIEW_FRAME::OnCloseWindow )
     EVT_SIZE( GERBVIEW_FRAME::OnSize )
 
-    EVT_TOOL( ID_GERBVIEW_ERASE_ALL, GERBVIEW_FRAME::Files_io )
-    EVT_TOOL( ID_GERBVIEW_RELOAD_ALL, GERBVIEW_FRAME::Files_io )
-    EVT_TOOL( ID_NEW_BOARD, GERBVIEW_FRAME::Files_io )
-
     // Menu Files:
-    EVT_MENU( ID_NEW_BOARD, GERBVIEW_FRAME::Files_io )
-
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, GERBVIEW_FRAME::OnGbrFileHistory )
     EVT_MENU( ID_FILE_LIST_CLEAR, GERBVIEW_FRAME::OnClearGbrFileHistory )
 
@@ -75,8 +69,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_SELECT_DCODE( ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE, GERBVIEW_FRAME::OnSelectActiveDCode )
 
     // Option toolbar
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
-              GERBVIEW_FRAME::OnToggleShowLayerManager )
     EVT_TOOL_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
                     GERBVIEW_FRAME::OnSelectDisplayMode )
 
@@ -180,14 +172,4 @@ void GERBVIEW_FRAME::ShowChangedLanguage()
     m_auimgr.Update();
 
     ReFillLayerWidget();
-}
-
-
-void GERBVIEW_FRAME::OnToggleShowLayerManager( wxCommandEvent& aEvent )
-{
-    m_show_layer_manager_tools = !m_show_layer_manager_tools;
-
-    // show/hide auxiliary Vertical layers and visibility manager toolbar
-    m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
-    m_auimgr.Update();
 }

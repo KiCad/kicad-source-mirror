@@ -72,7 +72,9 @@ public:
     // Layer control
     static TOOL_ACTION layerPrev;
     static TOOL_ACTION layerNext;
-    static TOOL_ACTION eraseLayer;
+    static TOOL_ACTION clearLayer;
+    static TOOL_ACTION clearAllLayers;
+    static TOOL_ACTION reloadAllLayers;
 
     static TOOL_ACTION layerChanged;        // notification
 
@@ -81,6 +83,9 @@ public:
     static TOOL_ACTION openDrillFile;
     static TOOL_ACTION openJobFile;
     static TOOL_ACTION openZipFile;
+
+    // Open/close the layer manager
+    static TOOL_ACTION toggleLayerManager;
 
     // Highlighting
     static TOOL_ACTION highlightClear;

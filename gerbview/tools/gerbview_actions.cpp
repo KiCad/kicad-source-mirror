@@ -58,6 +58,12 @@ TOOL_ACTION GERBVIEW_ACTIONS::openZipFile( "gerbview.Control.openZipFile",
         _( "Open a zipped archive (Gerber and Drill) file" ),
         zip_xpm );
 
+TOOL_ACTION GERBVIEW_ACTIONS::toggleLayerManager( "gerbview.Control.toggleLayerManager",
+        AS_GLOBAL, 0, "",
+        _( "Show Layers Manager" ),
+        _( "Show or hide the layer manager" ),
+        layers_manager_xpm );
+
 TOOL_ACTION GERBVIEW_ACTIONS::showDCodes( "gerbview.Inspection.showDCodes",
         AS_GLOBAL, 0, "",
         _( "List DCodes..." ),
@@ -76,10 +82,22 @@ TOOL_ACTION GERBVIEW_ACTIONS::exportToPcbnew( "gerbview.Control.exportToPcbnew",
         _( "Export data in Pcbnew format" ),
         export_xpm );
 
-TOOL_ACTION GERBVIEW_ACTIONS::eraseLayer( "gerbview.Control.eraseLayer",
+TOOL_ACTION GERBVIEW_ACTIONS::clearLayer( "gerbview.Control.clearLayer",
         AS_GLOBAL, 0, "",
         _( "Clear Current Layer..." ), _( "Clear the selected graphic layer" ),
         delete_sheet_xpm );
+
+TOOL_ACTION GERBVIEW_ACTIONS::clearAllLayers( "gerbview.Control.clearAllLayers",
+        AS_GLOBAL, 0, "",
+        _( "Clear All Layers" ),
+        _( "Clear all layers. All data will be deleted" ),
+        delete_gerber_xpm );
+
+TOOL_ACTION GERBVIEW_ACTIONS::reloadAllLayers( "gerbview.Control.reloadAllLayers",
+        AS_GLOBAL, 0, "",
+        _( "Reload All Layers" ),
+        _( "Reload all layers. All data will be reloaded" ),
+        reload2_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( "gerbview.Control.layerChanged",
         AS_GLOBAL, 0, "", "", "",
