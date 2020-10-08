@@ -150,7 +150,7 @@ static int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet,
 }
 
 
-static int isNetADiffPair( BOARD* aBoard, int aNet, int& aNetP, int& aNetN )
+int DRC_ENGINE::IsNetADiffPair( BOARD* aBoard, int aNet, int& aNetP, int& aNetN )
 {
     wxString refName = aBoard->FindNet( aNet )->GetNetname();
     wxString dummy, coupledNetName;
@@ -370,7 +370,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                 auto citem = static_cast<BOARD_CONNECTED_ITEM*>( item );
                 int refNet = citem->GetNetCode();
 
-                if( !isNetADiffPair( m_board, refNet, key.netP, key.netN ) ) // not our business
+                if( !DRC_ENGINE::IsNetADiffPair( m_board, refNet, key.netP, key.netN ) ) // not our business
                     return true;
 
                 drc_dbg(10, "eval dp %p\n", item );

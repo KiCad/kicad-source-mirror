@@ -34,6 +34,7 @@
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/from_to_cache.h>
 
+#include <drc/drc_engine.h>
 
 
 bool exprFromTo( LIBEVAL::CONTEXT* aCtx, void* self )
@@ -59,19 +60,11 @@ bool exprFromTo( LIBEVAL::CONTEXT* aCtx, void* self )
         return true;
     }
 
-    int r =0 ;
-
     if( ftCache->IsOnFromToPath( static_cast<BOARD_CONNECTED_ITEM*>( item ),
         argFrom->AsString(), argTo->AsString() ) )
     {
         result->Set(1.0);
-        r = 1;
-
     }
-
-    /*printf("isonfromto %p %s %s -> %d\n", static_cast<BOARD_CONNECTED_ITEM*>( item ),
-        (const char *)argFrom->AsString(),
-        (const char *)argTo->AsString(), r );*/
 
     return true;
 }
@@ -330,8 +323,28 @@ static void isBlindBuriedVia( LIBEVAL::CONTEXT* aCtx, void* self )
     {
         result->Set ( 1.0 );
     }
-
 }
+
+
+static void isDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
+    LIBEVAL::VALUE*   result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( item->IsConnected() )
+    {
+        int net = static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetCode();
+        int net_p, net_n;
+
+        if( DRC_ENGINE::IsNetADiffPair( item->GetBoard(), net, net_p, net_n ) )
+            result->Set( 1.0 );
+    }
+}
+
 
 PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 {
@@ -350,7 +363,7 @@ void PCB_EXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( "isBlindBuriedVia()", isBlindBuriedVia );
     RegisterFunc( "memberOf('x')", memberOf );
     RegisterFunc( "fromTo('x','y')", exprFromTo );
-    //RegisterFunc( "isDiffPair()", exprFromTo );
+    RegisterFunc( "isDiffPair()", isDiffPair );
 }
 
 
