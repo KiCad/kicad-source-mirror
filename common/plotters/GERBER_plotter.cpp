@@ -389,7 +389,7 @@ int GERBER_PLOTTER::GetOrCreateAperture( const std::vector<wxPoint>& aCorners, d
 
             for( size_t ii = 0; ii < aCorners.size(); ii++ )
             {
-                if( aCorners[ii] != m_apertures[m_currentApertureIdx].m_Corners[ii] )
+                if( aCorners[ii] != tool->m_Corners[ii] )
                 {
                     is_same = false;
                     break;
