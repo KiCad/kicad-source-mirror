@@ -1311,13 +1311,14 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
                 m_commit->Modify( item );
 
                 if( item->Type() == PCB_GROUP_T )
-                    {
-                        static_cast<PCB_GROUP*>( item )->RunOnDescendants(
-                                [&]( BOARD_ITEM* bItem )
-                                {
-                                    m_commit->Modify( bItem );
-                                });
-                    }
+                {
+                    PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+
+                    group->RunOnDescendants( [&]( BOARD_ITEM* bItem )
+                                             {
+                                                 m_commit->Modify( bItem );
+                                             });
+                }
             }
 
             item->Move( translation );

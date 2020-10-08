@@ -2576,23 +2576,28 @@ void SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) c
     std::unordered_set<BOARD_ITEM*> toAdd;
 
     // If any element is a member of a group, replace those elements with the top containing group.
-    for( int j = 0; j < aCollector.GetCount(); ++j )
+    for( int j = 0; j < aCollector.GetCount(); )
     {
-        PCB_GROUP* aTop = PCB_GROUP::TopLevelGroup( aCollector[j], m_enteredGroup );
+        BOARD_ITEM* item = aCollector[j];
+        PCB_GROUP*  aTop = PCB_GROUP::TopLevelGroup( item, m_enteredGroup );
 
         if( aTop != NULL )
         {
-            if( aTop != aCollector[j] )
+            if( aTop != item )
             {
                 toAdd.insert( aTop );
-                aCollector.Remove( aCollector[j] );
+                aCollector.Remove( item );
+                continue;
             }
         }
-        else if( m_enteredGroup && !PCB_GROUP::WithinScope( aCollector[j], m_enteredGroup ) )
+        else if( m_enteredGroup && !PCB_GROUP::WithinScope( item, m_enteredGroup ) )
         {
             // If a group is entered, disallow selections of objects outside the group.
-            aCollector.Remove( aCollector[j] );
+            aCollector.Remove( item );
+            continue;
         }
+
+        ++j;
     }
 
     for( BOARD_ITEM* item : toAdd )
