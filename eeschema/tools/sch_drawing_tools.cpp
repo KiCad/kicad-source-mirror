@@ -113,9 +113,9 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
     else if( aEvent.HasPosition() )
         m_toolMgr->RunAction( EE_ACTIONS::cursorClick );
 
-    auto setCursor = 
-            [&]() 
-            { 
+    auto setCursor =
+            [&]()
+            {
                 m_frame->GetCanvas()->SetCurrentCursor( component ? KICURSOR::MOVING : KICURSOR::PENCIL );
             };
 
@@ -314,8 +314,8 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     else if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
-    auto setCursor = 
-            [&]() 
+    auto setCursor =
+            [&]()
             {
                 if( image )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
@@ -505,8 +505,8 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
-    auto setCursor = 
-            [&]() 
+    auto setCursor =
+            [&]()
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
             };
@@ -543,7 +543,9 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             if( !m_frame->GetScreen()->GetItem( cursorPos, 0, type ) )
             {
                 if( type == SCH_JUNCTION_T )
+                {
                     m_frame->AddJunction( m_frame->GetScreen(), cursorPos, false );
+                }
                 else
                 {
                     SCH_ITEM* newItem = static_cast<SCH_ITEM*>( previewItem->Clone() );
@@ -587,18 +589,30 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 // The bus entries only rotate in one direction
                 if( evt->IsAction( &EE_ACTIONS::rotateCW )
                         || evt->IsAction( &EE_ACTIONS::rotateCCW ) )
+                {
                     busItem->Rotate( busItem->GetPosition() );
+                }
                 else if( evt->IsAction( &EE_ACTIONS::mirrorX ) )
+                {
                     busItem->MirrorX( busItem->GetPosition().x );
+                }
                 else if( evt->IsAction( &EE_ACTIONS::mirrorY ) )
+                {
                     busItem->MirrorY( busItem->GetPosition().y );
+                }
 
                 m_view->ClearPreview();
                 m_view->AddToPreview( previewItem->Clone() );
             }
+            else
+            {
+                evt->SetPassEvent();
+            }
         }
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     delete previewItem;
@@ -773,8 +787,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
-    auto setCursor = 
-            [&]() 
+    auto setCursor =
+            [&]()
             {
                 if( item )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
@@ -970,8 +984,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 {
-    EE_POINT_EDITOR* pointEditor = m_toolMgr->GetTool<EE_POINT_EDITOR>();
-    SCH_SHEET*       sheet = nullptr;
+    SCH_SHEET* sheet = nullptr;
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
@@ -984,9 +997,9 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
-    auto setCursor = 
-            [&]() 
-            { 
+    auto setCursor =
+            [&]()
+            {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 
