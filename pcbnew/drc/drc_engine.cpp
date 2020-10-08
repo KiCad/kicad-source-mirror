@@ -179,37 +179,32 @@ void DRC_ENGINE::loadImplicitRules()
 
     // 3) per-netclass rules
 
-    int ruleCount = 0;
+    std::vector<DRC_RULE*> netclassRules;
 
     auto makeNetclassRule =
-            [&]( const NETCLASSPTR& nc, bool isDefault )
+            [&]( const NETCLASSPTR& netclass, bool isDefault )
             {
-                wxString className = nc->GetName();
-                wxString expr;
+                // Only add rules for netclass clearances which are larger than board minimums.
+                // That way board minimums will still enforce a global minimum.
 
-                if( !isDefault )
+                if( netclass->GetClearance() > bds.m_MinClearance )
                 {
-                    expr = wxString::Format( "A.NetClass == '%s' || B.NetClass == '%s'",
-                                             className, className );
-                }
+                    DRC_RULE* rule = new DRC_RULE;
+                    wxString  name = netclass->GetName();
 
-                DRC_RULE_CONDITION* inNetclassCondition = new DRC_RULE_CONDITION ( expr );
-                DRC_RULE* nc_rule = createImplicitRule( wxString::Format( _( "netclass '%s'" ),
-                                                                       className ));
+                    rule->m_Name = wxString::Format( _( "netclass '%s'" ), name );
+                    rule->m_Implicit = true;
 
-                nc_rule->m_Condition = inNetclassCondition;
+                    wxString            expr = wxString::Format( "A.NetClass == '%s'", name );
+                    DRC_RULE_CONDITION* condition = new DRC_RULE_CONDITION( expr );
 
-                // Only add netclass clearances if they're larger than board minimums.  That way
-                // board minimums will still enforce a global minimum.
+                    rule->m_Condition = condition;
+                    netclassRules.push_back( rule );
 
-                if( nc->GetClearance() > bds.m_MinClearance )
-                {
                     DRC_CONSTRAINT ncClearanceConstraint( DRC_CONSTRAINT_TYPE_CLEARANCE );
-                    ncClearanceConstraint.Value().SetMin( nc->GetClearance() );
-                    nc_rule->AddConstraint( ncClearanceConstraint );
+                    ncClearanceConstraint.Value().SetMin( netclass->GetClearance() );
+                    rule->AddConstraint( ncClearanceConstraint );
                 }
-
-                ruleCount++;
             };
 
     m_board->SynchronizeNetsAndNetClasses();
@@ -218,7 +213,20 @@ void DRC_ENGINE::loadImplicitRules()
     for( const std::pair<const wxString, NETCLASSPTR>& netclass : bds.GetNetClasses() )
         makeNetclassRule( netclass.second, false );
 
-    ReportAux( wxString::Format( "Building %d implicit netclass rules", ruleCount ) );
+    // These have to be sorted by min clearance so the right one fires if 'A' and 'B' belong
+    // to two different netclasses.
+
+    std::sort( netclassRules.begin(), netclassRules.end(),
+               []( DRC_RULE* lhs, DRC_RULE* rhs )
+               {
+                   return lhs->m_Constraints[0].m_Value.Min()
+                                < rhs->m_Constraints[0].m_Value.Min();
+               } );
+
+    for( DRC_RULE* netclassRule : netclassRules )
+        addRule( netclassRule );
+
+    ReportAux( wxString::Format( "Building %d implicit netclass rules", netclassRules.size() ) );
 }
 
 static wxString formatConstraint( const DRC_CONSTRAINT& constraint )

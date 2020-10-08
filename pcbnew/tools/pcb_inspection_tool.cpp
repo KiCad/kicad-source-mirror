@@ -271,12 +271,24 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     }
     else
     {
+        auto getItemDescription =
+                [&]( BOARD_ITEM* aItem )
+                {
+                    wxString s = aItem->GetSelectMenuText( r->GetUnits() );
+
+                    if( auto* cItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem ) )
+                        s += wxString::Format( _( " [netclass %s]" ), cItem->GetNetClassName() );
+
+                    return s;
+                };
+
         r->Report( _( "<h7>Clearance resolution for:</h7>" ) );
 
-        r->Report( wxString::Format( _( "<ul><li>Layer %s</li><li>%s</li><li>%s</li></ul>" ),
+        r->Report( wxString::Format( wxT( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>" ),
+                                     _( "Layer" ),
                                      m_frame->GetBoard()->GetLayerName( layer ),
-                                     a->GetSelectMenuText( r->GetUnits() ),
-                                     b->GetSelectMenuText( r->GetUnits() ) ) );
+                                     getItemDescription( a ),
+                                     getItemDescription( b ) ) );
 
         BOARD_CONNECTED_ITEM* ac = dynamic_cast<BOARD_CONNECTED_ITEM*>( a );
         BOARD_CONNECTED_ITEM* bc = dynamic_cast<BOARD_CONNECTED_ITEM*>( b );
