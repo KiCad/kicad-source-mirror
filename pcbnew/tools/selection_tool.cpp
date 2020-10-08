@@ -865,6 +865,8 @@ int SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
         select( item );
     }
 
+    m_frame->GetCanvas()->ForceRefresh();
+
     return 0;
 }
 
