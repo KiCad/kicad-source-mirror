@@ -208,7 +208,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     //-- Tools menu -------------------------------------------------------
     //
-    ACTION_MENU* toolsMenu = new ACTION_MENU( false );
+    ACTION_MENU* toolsMenu = new ACTION_MENU( false, selTool );
 
     toolsMenu->Add( _( "&List DCodes..." ),
                     _( "List D-codes defined in Gerber files" ),
