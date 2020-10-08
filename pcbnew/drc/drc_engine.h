@@ -177,6 +177,8 @@ public:
 
     DRC_TEST_PROVIDER* GetTestProvider( const wxString& name ) const;
 
+    static int IsNetADiffPair( BOARD* aBoard, int aNet, int& aNetP, int& aNetN );
+
 private:
     void addRule( DRC_RULE* rule )
     {
