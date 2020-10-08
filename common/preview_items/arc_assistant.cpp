@@ -86,9 +86,6 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     gal.ResetTextAttributes();
 
-    // angle reference arc size
-    const double innerRad = 12.0 / gal.GetWorldScale();
-
     const auto origin = m_constructMan.GetOrigin();
 
     KIGFX::PREVIEW::DRAW_CONTEXT preview_ctx( *aView );
@@ -107,42 +104,31 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         double initAngle = m_constructMan.GetStartAngle();
 
-        const auto angleRefLineEnd = m_constructMan.GetOrigin() + VECTOR2D( innerRad * 1.5, 0.0 );
-
-        // draw the short reference baseline
-        preview_ctx.DrawLine( origin, angleRefLineEnd, false );
-
-        // draw the angle reference arc
-        preview_ctx.DrawArcWithAngleHighlight( origin, innerRad, initAngle, 0.0 );
-
         // draw the radius guide circle
         preview_ctx.DrawCircle( origin, m_constructMan.GetRadius(), true );
 
         double degs = getNormDeciDegFromRad( initAngle );
 
         cursorStrings.push_back( DimensionLabel( "r", m_constructMan.GetRadius(), m_units ) );
-        cursorStrings.push_back(
-                DimensionLabel( wxString::FromUTF8( "θ" ), degs, EDA_UNITS::DEGREES ) );
+        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), degs,
+                                                 EDA_UNITS::DEGREES ) );
     }
     else
     {
         preview_ctx.DrawLineWithAngleHighlight( origin, m_constructMan.GetEndRadiusEnd(), false );
 
-        auto    start = m_constructMan.GetStartAngle();
-        auto    subtended = m_constructMan.GetSubtended();
-
-        preview_ctx.DrawArcWithAngleHighlight( origin, innerRad, start, start + subtended );
-
-        double  subtendedDeg    = getNormDeciDegFromRad( subtended );
-        double  endAngleDeg     = getNormDeciDegFromRad( start + subtended );
+        double start        = m_constructMan.GetStartAngle();
+        double subtended    = m_constructMan.GetSubtended();
+        double subtendedDeg = getNormDeciDegFromRad( subtended );
+        double endAngleDeg  = getNormDeciDegFromRad( start + subtended );
 
         // draw dimmed extender line to cursor
         preview_ctx.DrawLineWithAngleHighlight( origin, m_constructMan.GetLastPoint(), true );
 
-        cursorStrings.push_back(
-                DimensionLabel( wxString::FromUTF8( "Δθ" ), subtendedDeg, EDA_UNITS::DEGREES ) );
-        cursorStrings.push_back(
-                DimensionLabel( wxString::FromUTF8( "θ" ), endAngleDeg, EDA_UNITS::DEGREES ) );
+        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "Δθ" ), subtendedDeg,
+                                                 EDA_UNITS::DEGREES ) );
+        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), endAngleDeg,
+                                                 EDA_UNITS::DEGREES ) );
     }
 
     // place the text next to cursor, on opposite side from radius

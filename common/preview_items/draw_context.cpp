@@ -65,25 +65,6 @@ void DRAW_CONTEXT::DrawCircle( const VECTOR2I& aOrigin, double aRad, bool aDeEmp
 }
 
 
-void DRAW_CONTEXT::DrawArcWithAngleHighlight(
-        const VECTOR2I& aOrigin, double aRad, double aStartAngle, double aEndAngle )
-{
-    COLOR4D color = m_render_settings.GetLayerColor( m_currLayer );
-
-    if( angleIsSpecial( aStartAngle - aEndAngle ) )
-        color = getSpecialAngleColour();
-
-    m_gal.SetLineWidth( m_lineWidth );
-    m_gal.SetIsStroke( true );
-    m_gal.SetIsFill( true );
-    m_gal.SetStrokeColor( color );
-    m_gal.SetFillColor( color.WithAlpha( 0.2 ) );
-
-    // draw the angle reference arc
-    m_gal.DrawArc( aOrigin, aRad, -aStartAngle, -aEndAngle );
-}
-
-
 void DRAW_CONTEXT::DrawLine( const VECTOR2I& aStart, const VECTOR2I& aEnd, bool aDeEmphasised )
 {
     COLOR4D strokeColor = m_render_settings.GetLayerColor( m_currLayer );
@@ -95,8 +76,8 @@ void DRAW_CONTEXT::DrawLine( const VECTOR2I& aStart, const VECTOR2I& aEnd, bool 
 }
 
 
-void DRAW_CONTEXT::DrawLineWithAngleHighlight(
-        const VECTOR2I& aStart, const VECTOR2I& aEnd, bool aDeEmphasised )
+void DRAW_CONTEXT::DrawLineWithAngleHighlight( const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                                               bool aDeEmphasised )
 {
     const VECTOR2I vec = aEnd - aStart;
     COLOR4D        strokeColor = m_render_settings.GetLayerColor( m_currLayer );
