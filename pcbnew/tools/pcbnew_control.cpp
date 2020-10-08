@@ -456,7 +456,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
 
-    picker->SetCursor( wxStockCursor( wxCURSOR_BULLSEYE ) );
+    picker->SetCursor( KICURSOR::REMOVE );
 
     picker->SetClickHandler(
         [this] ( const VECTOR2D& aPosition ) -> bool

@@ -64,7 +64,7 @@ public:
      */
     inline void SetLayerSet( LSET aLayerSet ) { m_layerMask = aLayerSet; }
 
-    inline void SetCursor( const wxCursor& aCursor ) { m_cursor = aCursor; }
+    inline void SetCursor( KICURSOR aCursor ) { m_cursor = aCursor; }
 
     /**
      * Function SetClickHandler()
@@ -120,7 +120,7 @@ private:
 private:
     ///> The layer set to use for optional snapping
     LSET                  m_layerMask;
-    wxCursor              m_cursor;
+    KICURSOR              m_cursor;
 
     OPT<CLICK_HANDLER>    m_clickHandler;
     OPT<MOTION_HANDLER>   m_motionHandler;

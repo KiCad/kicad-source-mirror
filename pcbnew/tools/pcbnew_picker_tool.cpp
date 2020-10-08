@@ -53,9 +53,18 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     Activate();
     setControls();
 
+    auto setCursor = 
+            [&]() 
+            {
+                frame->GetCanvas()->SetCurrentCursor( m_cursor );
+            };
+
+    // Set initial cursor
+    setCursor();
+
     while( TOOL_EVENT* evt = Wait() )
     {
-        frame->GetCanvas()->SetCursor( m_cursor );
+        setCursor();
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
@@ -171,7 +180,7 @@ void PCBNEW_PICKER_TOOL::setTransitions()
 void PCBNEW_PICKER_TOOL::reset()
 {
     m_layerMask = LSET::AllLayersMask();
-    m_cursor = wxStockCursor( wxCURSOR_ARROW );
+    m_cursor    = KICURSOR::ARROW;
 
     m_picked = NULLOPT;
     m_clickHandler = NULLOPT;
