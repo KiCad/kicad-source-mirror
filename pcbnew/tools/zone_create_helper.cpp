@@ -168,6 +168,7 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINE
     commit.Remove( &aZone );
 
     ZONE_FILLER filler( board, &commit );
+
     if( !filler.Fill( newZones ) )
     {
         commit.Revert();
@@ -177,8 +178,15 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINE
     commit.Push( _( "Add a zone cutout" ) );
 
     // Select the new zone and set it as the source for the next cutout
-    toolMgr->RunAction( PCB_ACTIONS::selectItem, true, newZones[0] );
-    m_params.m_sourceZone = newZones[0];
+    if( newZones.empty() )
+    {
+        m_params.m_sourceZone = nullptr;
+    }
+    else
+    {
+        m_params.m_sourceZone = newZones[0];
+        toolMgr->RunAction( PCB_ACTIONS::selectItem, true, newZones[0] );
+    }
 
 }
 
