@@ -1120,6 +1120,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
 
     KIGFX::PCB_RENDER_SETTINGS* renderSettings = new KIGFX::PCB_RENDER_SETTINGS();
     renderSettings->LoadColors( aPlotOpts->ColorSettings() );
+    renderSettings->SetDefaultPenWidth( Millimeter2iu( 0.0212 ) );  // Hairline at 1200dpi
     plotter->SetRenderSettings( renderSettings );
 
     // Compute the viewport and set the other options

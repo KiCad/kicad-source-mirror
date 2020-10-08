@@ -32,8 +32,6 @@
 #include <settings/color_settings.h>
 
 
-#define PLOT_LINEWIDTH_MIN        ( 0.02 * IU_PER_MM )  // min value for default line thickness
-#define PLOT_LINEWIDTH_MAX        ( 2 * IU_PER_MM )     // max value for default line thickness
 #define PLOT_LINEWIDTH_DEFAULT    ( DEFAULT_TEXT_WIDTH * IU_PER_MM )
 
 #define HPGL_PEN_DIAMETER_MIN     0
@@ -108,7 +106,6 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_svgPrecision               = SVG_PRECISION_DEFAULT;
     m_svgUseInch                 = false;
     m_excludeEdgeLayer           = true;
-    m_lineWidth                  = g_DrawDefaultLineThickness;
     m_plotFrameRef               = false;
     m_plotViaOnMaskLayer         = false;
     m_plotMode                   = FILLED;
@@ -204,8 +201,6 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
 
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_excludeedgelayer ),
                        m_excludeEdgeLayer ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %f)\n", getTokenName( T_linewidth ),
-                       m_lineWidth / IU_PER_MM );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotframeref ),
                        m_plotFrameRef ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_viasonmask ),
@@ -276,8 +271,6 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams, bool aCom
     if( m_gerberPrecision != aPcbPlotParams.m_gerberPrecision )
         return false;
     if( m_excludeEdgeLayer != aPcbPlotParams.m_excludeEdgeLayer )
-        return false;
-    if( m_lineWidth != aPcbPlotParams.m_lineWidth )
         return false;
     if( m_plotFrameRef != aPcbPlotParams.m_plotFrameRef )
         return false;

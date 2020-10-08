@@ -75,9 +75,6 @@ private:
     /// Choose how represent text with PS, PDF and DXF drivers
     PLOT_TEXT_MODE m_textMode;
 
-    /// The default line width (used to draw items having no defined width)
-    int         m_lineWidth;
-
     /// When true set the scale to fit the board in the page
     bool        m_autoScale;
 
