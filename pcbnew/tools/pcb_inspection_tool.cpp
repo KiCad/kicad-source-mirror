@@ -144,7 +144,7 @@ void PCB_INSPECTION_TOOL::reportZoneConnection( ZONE_CONTAINER* aZone, D_PAD* aP
         int gap = aZone->GetThermalReliefGap();
 
         r->Report( wxString::Format( _( "Zone thermal relief: %s." ),
-                                     StringFromValue( r->GetUnits(), gap ) ) );
+                                     StringFromValue( r->GetUnits(), gap, true ) ) );
 
         gap = aZone->GetThermalReliefGap( aPad, &source );
 
@@ -152,7 +152,7 @@ void PCB_INSPECTION_TOOL::reportZoneConnection( ZONE_CONTAINER* aZone, D_PAD* aP
         {
             r->Report( wxString::Format( _( "Overridden by %s; thermal relief: %s." ),
                                          source,
-                                         StringFromValue( r->GetUnits(), gap ) ) );
+                                         StringFromValue( r->GetUnits(), gap, true ) ) );
         }
     }
     else if( connection == ZONE_CONNECTION::NONE )
@@ -160,7 +160,7 @@ void PCB_INSPECTION_TOOL::reportZoneConnection( ZONE_CONTAINER* aZone, D_PAD* aP
         int clearance = aZone->GetLocalClearance();
 
         r->Report( wxString::Format( _( "Zone clearance: %s." ),
-                                     StringFromValue( r->GetUnits(), clearance ) ) );
+                                     StringFromValue( r->GetUnits(), clearance, true ) ) );
 
         if( aZone->GetThermalReliefGap( aPad ) > clearance )
         {
@@ -171,13 +171,14 @@ void PCB_INSPECTION_TOOL::reportZoneConnection( ZONE_CONTAINER* aZone, D_PAD* aP
                 r->Report( wxString::Format( _( "Overridden by larger thermal relief from %s;"
                                                 "clearance: %s." ),
                                              source,
-                                             StringFromValue( r->GetUnits(), clearance ) ) );
+                                             StringFromValue( r->GetUnits(), clearance, true ) ) );
             }
         }
     }
     else
     {
-        r->Report( _( "Clearance is 0." ) );
+        r->Report( wxString::Format( _( "Clearance: %s." ),
+                                     StringFromValue( r->GetUnits(), 0, true ) ) );
     }
 }
 
@@ -205,7 +206,7 @@ void PCB_INSPECTION_TOOL::reportCopperClearance( PCB_LAYER_ID aLayer, BOARD_CONN
 
     if( r )
     {
-        wxString clearance = StringFromValue( r->GetUnits(), constraint.m_Value.Min() );
+        wxString clearance = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Clearance: %s." ), clearance ) );
@@ -374,10 +375,10 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         wxString max = _( "undefined" );
 
         if( constraint.m_Value.HasMin() )
-            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min() );
+            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
 
         if( constraint.m_Value.HasMax() )
-            max = StringFromValue( r->GetUnits(), constraint.m_Value.Max() );
+            max = StringFromValue( r->GetUnits(), constraint.m_Value.Max(), true );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Width constraints: min %s max %s." ),
@@ -402,10 +403,10 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         wxString max = _( "undefined" );
 
         if( constraint.m_Value.HasMin() )
-            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min() );
+            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
 
         if( constraint.m_Value.HasMax() )
-            max = StringFromValue( r->GetUnits(), constraint.m_Value.Max() );
+            max = StringFromValue( r->GetUnits(), constraint.m_Value.Max(), true );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Diameter constraints: min %s max %s." ),
@@ -428,10 +429,10 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         max = _( "undefined" );
 
         if( constraint.m_Value.HasMin() )
-            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min() );
+            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
 
         if( constraint.m_Value.HasMax() )
-            max = StringFromValue( r->GetUnits(), constraint.m_Value.Max() );
+            max = StringFromValue( r->GetUnits(), constraint.m_Value.Max(), true );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Annular width constraints: min %s max %s." ),
@@ -456,7 +457,7 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         wxString min = _( "undefined" );
 
         if( constraint.m_Value.HasMin() )
-            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min() );
+            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Hole constraint: min %s." ), min ) );
