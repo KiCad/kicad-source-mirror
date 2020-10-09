@@ -342,6 +342,17 @@ bool PL_SELECTION_TOOL::selectMultiple()
 
     while( TOOL_EVENT* evt = Wait() )
     {
+        int width = area.GetEnd().x - area.GetOrigin().x;
+
+        /* Selection mode depends on direction of drag-selection:
+         * Left > Right : Select objects that are fully enclosed by selection
+         * Right > Left : Select objects that are crossed by selection
+         */
+        bool windowSelection = width >= 0 ? true : false;
+
+        m_frame->GetCanvas()->SetCurrentCursor(
+                windowSelection ? KICURSOR::SELECT_WINDOW : KICURSOR::SELECT_LASSO );
+
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             cancelled = true;
@@ -372,14 +383,8 @@ bool PL_SELECTION_TOOL::selectMultiple()
             // End drawing the selection box
             view->SetVisible( &area, false );
 
-            int width = area.GetEnd().x - area.GetOrigin().x;
             int height = area.GetEnd().y - area.GetOrigin().y;
 
-            /* Selection mode depends on direction of drag-selection:
-             * Left > Right : Select objects that are fully enclosed by selection
-             * Right > Left : Select objects that are crossed by selection
-             */
-            bool windowSelection = width >= 0 ? true : false;
             bool anyAdded = false;
             bool anySubtracted = false;
 

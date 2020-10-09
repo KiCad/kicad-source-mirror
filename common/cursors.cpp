@@ -33,7 +33,9 @@
 #include <cursors/cursor-net-label.xpm>
 #include <cursors/cursor-measure.xpm>
 #include <cursors/cursor-pencil.xpm>
+#include <cursors/cursor-select-lasso.xpm>
 #include <cursors/cursor-select-m.xpm>
+#include <cursors/cursor-select-window.xpm>
 #include <cursors/cursor-subtract.xpm>
 #include <cursors/cursor-text.xpm>
 #include <cursors/cursor-xor.xpm>
@@ -219,6 +221,22 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         nullptr,
         nullptr,
         cursor_component_xpm,
+        { 32, 32 },
+        { 7, 10 },
+    },
+    {
+        KICURSOR::SELECT_LASSO,
+        nullptr,
+        nullptr,
+        cursor_select_lasso_xpm,
+        { 32, 32 },
+        { 7, 10 },
+    },
+    {
+        KICURSOR::SELECT_WINDOW,
+        nullptr,
+        nullptr,
+        cursor_select_window_xpm,
         { 32, 32 },
         { 7, 10 },
     },

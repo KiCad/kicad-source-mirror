@@ -52,7 +52,9 @@ enum class KICURSOR
     ZOOM_OUT,
     NET_LABEL,
     GLOBAL_LABEL,
-    COMPONENT
+    COMPONENT,
+    SELECT_WINDOW,
+    SELECT_LASSO
 };
 
 /**
