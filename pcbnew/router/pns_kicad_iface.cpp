@@ -178,7 +178,8 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsDiffPair( const PNS::ITEM* aA, const PNS::ITEM*
 {
     int net_p, net_n;
 
-    DpNetPair( aA, net_p, net_n );
+    if( !DpNetPair( aA, net_p, net_n ) )
+        return false;
 
     if( aA->Net() == net_p && aB->Net() == net_n )
         return true;
@@ -262,6 +263,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
     if( !ok )
     {
         ok = QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, aA->Layer(), &constraint );
+        assert( ok );
         rv = constraint.m_Value.Min();
         printf("QueryCL %d\n", rv);
     }
@@ -331,7 +333,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         trackWidth = inheritTrackWidth( aStartItem );
     }
 
-    if( !trackWidth && bds.UseNetClassTrack() ) // netclass value
+    if( !trackWidth && bds.UseNetClassTrack() && aStartItem ) // netclass value
     {
         PNS::CONSTRAINT constraint;
         bool ok = m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem,
@@ -371,7 +373,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     int diffPairGap = 0;
     int diffPairViaGap = 0;
 
-    if( bds.UseNetClassDiffPair() )
+    if( bds.UseNetClassDiffPair() && aStartItem )
     {
         PNS::CONSTRAINT widthConstraint, gapConstraint;
         bool okWidth = m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem,
