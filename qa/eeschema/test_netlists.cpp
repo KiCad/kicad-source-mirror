@@ -241,4 +241,11 @@ BOOST_AUTO_TEST_CASE( ComplexHierarchy )
 }
 
 
+BOOST_AUTO_TEST_CASE( WeakVectorBusDisambiguation )
+{
+    doNetlistTest( "weak_vector_bus_disambiguation" );
+}
+
+
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -866,6 +866,16 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         wxString name = subgraph->m_driver_connection->Name( true );
         m_net_name_to_subgraphs_map[full_name].emplace_back( subgraph );
 
+        // For vector buses, we need to cache the prefix also, as two different instances of the
+        // weakly driven pin may have the same prefix but different vector start and end.  We need
+        // to treat those as needing renaming also, because otherwise if they end up on a sheet with
+        // common usage, they will be incorrectly merged.
+        if( subgraph->m_driver_connection->Type() == CONNECTION_TYPE::BUS )
+        {
+            wxString prefixOnly = full_name.BeforeFirst( '[' ) + wxT( "[]" );
+            m_net_name_to_subgraphs_map[prefixOnly].emplace_back( subgraph );
+        }
+
         subgraph->m_dirty = true;
 
         if( subgraph->m_strong_driver )
@@ -1017,9 +1027,17 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         if( !subgraph->m_strong_driver )
         {
-            auto& vec = m_net_name_to_subgraphs_map.at( name );
+            std::vector<CONNECTION_SUBGRAPH*>* vec = &m_net_name_to_subgraphs_map.at( name );
 
-            if( vec.size() > 1 )
+            // If we are a unique bus vector, check if we aren't actually unique because of another
+            // subgraph with a similar bus vector
+            if( vec->size() <= 1 && subgraph->m_driver_connection->Type() == CONNECTION_TYPE::BUS )
+            {
+                wxString prefixOnly = name.BeforeFirst( '[' ) + wxT( "[]" );
+                vec = &m_net_name_to_subgraphs_map.at( prefixOnly );
+            }
+
+            if( vec->size() > 1 )
             {
                 wxString new_name = create_new_name( connection );
 
@@ -1029,7 +1047,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 wxLogTrace( ConnTrace, "%ld (%s) is weakly driven and not unique. Changing to %s.",
                             subgraph->m_code, name, new_name );
 
-                vec.erase( std::remove( vec.begin(), vec.end(), subgraph ), vec.end() );
+                vec->erase( std::remove( vec->begin(), vec->end(), subgraph ), vec->end() );
 
                 m_net_name_to_subgraphs_map[new_name].emplace_back( subgraph );
 
