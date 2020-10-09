@@ -537,7 +537,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::remapUnsureLayers()
         return;
 
     // Callback:
-    LAYER_MAP reMappedLayers = mLayerMappingHandler( inputLayers );
+    std::map<wxString, PCB_LAYER_ID> reMappedLayers = mLayerMappingHandler( inputLayers );
 
     for( std::pair<wxString, PCB_LAYER_ID> layerPair : reMappedLayers )
     {

@@ -24,6 +24,30 @@
 
 #include <wx/msgdlg.h>
 
+wxString DIALOG_IMPORTED_LAYERS::WrapRequired( const wxString& aLayerName )
+{
+    return aLayerName + " *";
+}
+
+wxString DIALOG_IMPORTED_LAYERS::UnwrapRequired( const wxString& aLayerName )
+{
+    if( !aLayerName.EndsWith( " *" ) )
+        return aLayerName;
+    return aLayerName.Left( aLayerName.Length() - 2 );
+}
+
+const INPUT_LAYER_DESC* DIALOG_IMPORTED_LAYERS::GetLayerDescription(
+        const wxString& aLayerName ) const
+{
+    wxString layerName = UnwrapRequired( aLayerName );
+    for( const INPUT_LAYER_DESC& layerDescription : m_input_layers )
+    {
+        if( layerDescription.Name == layerName )
+            return &layerDescription;
+    }
+    return nullptr;
+}
+
 
 PCB_LAYER_ID DIALOG_IMPORTED_LAYERS::GetSelectedLayerID()
 {
@@ -58,10 +82,14 @@ PCB_LAYER_ID DIALOG_IMPORTED_LAYERS::GetSelectedLayerID()
 
 PCB_LAYER_ID DIALOG_IMPORTED_LAYERS::GetAutoMatchLayerID( wxString aInputLayerName )
 {
+    wxString pureInputLayerName = UnwrapRequired( aInputLayerName );
     for( INPUT_LAYER_DESC inputLayerDesc : m_input_layers )
     {
-        if( inputLayerDesc.Name == aInputLayerName )
+        if( inputLayerDesc.Name == pureInputLayerName
+                && inputLayerDesc.AutoMapLayer != PCB_LAYER_ID::UNSELECTED_LAYER )
+        {
             return inputLayerDesc.AutoMapLayer;
+        }
     }
 
     return PCB_LAYER_ID::UNDEFINED_LAYER;
@@ -90,7 +118,8 @@ void DIALOG_IMPORTED_LAYERS::AddMappings()
         long newItemIndex = m_matched_layers_list->InsertItem( 0, selectedLayerName );
         m_matched_layers_list->SetItem( newItemIndex, 1, kiName );
 
-        m_matched_layers_map.insert( { selectedLayerName, selectedKiCadLayerID } );
+        m_matched_layers_map.insert(
+                { UnwrapRequired( selectedLayerName ), selectedKiCadLayerID } );
 
         // remove selected layer from vector and also GUI list
         for( auto iter = m_unmatched_layer_names.begin(); iter != m_unmatched_layer_names.end();
@@ -121,12 +150,13 @@ void DIALOG_IMPORTED_LAYERS::RemoveMappings( int aStatus )
     while( ( itemIndex = m_matched_layers_list->GetNextItem( itemIndex, wxLIST_NEXT_ALL, aStatus ) )
             != wxNOT_FOUND )
     {
-        wxString selectedLayerName = m_matched_layers_list->GetItemText( itemIndex, 0 );
+        wxString selectedLayerName     = m_matched_layers_list->GetItemText( itemIndex, 0 );
+        wxString pureSelectedLayerName = UnwrapRequired( selectedLayerName );
 
-        wxCHECK( m_matched_layers_map.find( selectedLayerName ) != m_matched_layers_map.end(),
+        wxCHECK( m_matched_layers_map.find( pureSelectedLayerName ) != m_matched_layers_map.end(),
                 /*void*/ );
 
-        m_matched_layers_map.erase( selectedLayerName );
+        m_matched_layers_map.erase( pureSelectedLayerName );
         rowsToDelete.Add( itemIndex );
 
         m_unmatched_layers_list->InsertItem( 0, selectedLayerName );
@@ -169,7 +199,7 @@ void DIALOG_IMPORTED_LAYERS::OnAutoMatchLayersClicked( wxCommandEvent& event )
         long newItemIndex = m_matched_layers_list->InsertItem( 0, layerName );
         m_matched_layers_list->SetItem( newItemIndex, 1, kiName );
 
-        m_matched_layers_map.insert( { layerName, autoMatchLayer } );
+        m_matched_layers_map.insert( { UnwrapRequired( layerName ), autoMatchLayer } );
 
         // remove selected layer from vector and also GUI list
         for( auto iter = m_unmatched_layer_names.begin(); iter != m_unmatched_layer_names.end();
@@ -199,11 +229,12 @@ DIALOG_IMPORTED_LAYERS::DIALOG_IMPORTED_LAYERS( wxWindow* aParent,
     for( INPUT_LAYER_DESC inLayer : aLayerDesc )
     {
         m_input_layers.push_back( inLayer );
-        m_unmatched_layer_names.push_back( inLayer.Name );
+        wxString layerName = inLayer.Required ? WrapRequired( inLayer.Name ) : inLayer.Name;
+        m_unmatched_layer_names.push_back( layerName );
         kiCadLayers |= inLayer.PermittedLayers;
     }
 
-    int maxTextWidth = 0;
+    int maxTextWidth = GetTextExtent( _( "Imported Layer" ) ).x;
 
     for( const INPUT_LAYER_DESC& layer : m_input_layers )
         maxTextWidth = std::max( maxTextWidth, GetTextExtent( layer.Name ).x );
@@ -268,8 +299,21 @@ DIALOG_IMPORTED_LAYERS::DIALOG_IMPORTED_LAYERS( wxWindow* aParent,
     FinishDialogSettings();
 }
 
+std::vector<wxString> DIALOG_IMPORTED_LAYERS::GetUnmappedRequiredLayers() const
+{
+    std::vector<wxString> unmappedLayers;
+    for( const wxString& layerName : m_unmatched_layer_names )
+    {
+        const INPUT_LAYER_DESC* layerDesc = GetLayerDescription( layerName );
+        wxASSERT_MSG( layerDesc != nullptr, "Expected to find layer decription" );
+        if( layerDesc->Required )
+            unmappedLayers.push_back( layerDesc->Name );
+    }
+    return unmappedLayers;
+}
 
-LAYER_MAP DIALOG_IMPORTED_LAYERS::GetMapModal( wxWindow* aParent,
+
+std::map<wxString, PCB_LAYER_ID> DIALOG_IMPORTED_LAYERS::GetMapModal( wxWindow* aParent,
                                                const std::vector<INPUT_LAYER_DESC>& aLayerDesc )
 {
     DIALOG_IMPORTED_LAYERS dlg( aParent, aLayerDesc );
@@ -279,11 +323,12 @@ LAYER_MAP DIALOG_IMPORTED_LAYERS::GetMapModal( wxWindow* aParent,
     {
         dlg.ShowModal();
 
-        if( dlg.m_unmatched_layer_names.size() > 0 )
+        if( dlg.GetUnmappedRequiredLayers().size() > 0 )
         {
-            wxMessageBox( _( "All layers must be matched. Please click on 'Auto-Matched Layers' "
-                             "to automatically match the remaining layers." ),
-                          _( "Unmatched Layers" ), wxICON_ERROR | wxOK );
+            wxMessageBox( _( "All required layers (marked with '*') must be matched. "
+                             "Please click on 'Auto-Match Layers' to "
+                             "automatically match the remaining layers" ),
+                    _( "Unmatched Layers" ), wxICON_ERROR | wxOK );
         }
         else
         {

@@ -30,10 +30,10 @@
 #include <properties.h>
 
 
-LAYER_MAP CADSTAR_PCB_ARCHIVE_PLUGIN::DefaultLayerMappingCallback(
+std::map<wxString, PCB_LAYER_ID> CADSTAR_PCB_ARCHIVE_PLUGIN::DefaultLayerMappingCallback(
         const std::vector<INPUT_LAYER_DESC>& aInputLayerDescriptionVector )
 {
-    LAYER_MAP retval;
+    std::map<wxString, PCB_LAYER_ID> retval;
 
     // Just return a the auto-mapped layers
     for( INPUT_LAYER_DESC layerDesc : aInputLayerDescriptionVector )
@@ -48,7 +48,7 @@ LAYER_MAP CADSTAR_PCB_ARCHIVE_PLUGIN::DefaultLayerMappingCallback(
 void CADSTAR_PCB_ARCHIVE_PLUGIN::RegisterLayerMappingCallback(
         LAYER_MAPPING_HANDLER aLayerMappingHandler )
 {
-    m_layer_mapping_handler       = aLayerMappingHandler;
+    LAYER_REMAPPABLE_PLUGIN::RegisterLayerMappingCallback( aLayerMappingHandler );
     m_show_layer_mapping_warnings = false; // only show warnings with default callback
 }
 
@@ -57,8 +57,9 @@ CADSTAR_PCB_ARCHIVE_PLUGIN::CADSTAR_PCB_ARCHIVE_PLUGIN()
 {
     m_board                       = nullptr;
     m_props                       = nullptr;
-    m_layer_mapping_handler       = CADSTAR_PCB_ARCHIVE_PLUGIN::DefaultLayerMappingCallback;
     m_show_layer_mapping_warnings = true;
+    LAYER_REMAPPABLE_PLUGIN::RegisterLayerMappingCallback(
+        CADSTAR_PCB_ARCHIVE_PLUGIN::DefaultLayerMappingCallback );
 }
 
 

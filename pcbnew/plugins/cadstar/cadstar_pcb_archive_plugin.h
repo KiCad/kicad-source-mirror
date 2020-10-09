@@ -30,45 +30,10 @@
 
 #include <io_mgr.h>
 #include <layers_id_colors_and_visibility.h> // PCB_LAYER_ID
+#include <plugins/common/plugin_common_layer_mapping.h>
 
 
-/**
- * @brief Describes an imported layer and how it could be mapped to KiCad Layers
- */
-struct INPUT_LAYER_DESC
-{
-    wxString     Name;             ///< Imported layer name as displayed in original application.
-    LSET         PermittedLayers;  ///< KiCad layers that the imported layer can be mapped onto.
-    PCB_LAYER_ID AutoMapLayer;     ///< Best guess as to what the equivalent KiCad layer might be.
-
-    INPUT_LAYER_DESC()
-    {
-        Name            = wxEmptyString;
-        PermittedLayers = LSET();
-        AutoMapLayer    = PCB_LAYER_ID::UNDEFINED_LAYER;
-    }
-};
-
-/**
- * A CADSTAR layer name.
- */
-typedef wxString INPUT_LAYER_NAME;
-
-/**
- * @brief Map of CADSTAR (INPUT_LAYER_NAME) to KiCad Layers.
- * If the mapped KiCad layer is UNDEFINED_LAYER, then the CADSTAR layer will not
- * be imported
- */
-typedef std::map<INPUT_LAYER_NAME, PCB_LAYER_ID> LAYER_MAP;
-
-/**
- * @brief Pointer to a function that takes a map of Cadstar and KiCad layers
- * and returns a re-mapped version. If the re-mapped layer
- */
-typedef std::function<LAYER_MAP( const std::vector<INPUT_LAYER_DESC>& )> LAYER_MAPPING_HANDLER;
-
-
-class CADSTAR_PCB_ARCHIVE_PLUGIN : public PLUGIN
+class CADSTAR_PCB_ARCHIVE_PLUGIN : public PLUGIN, public LAYER_REMAPPABLE_PLUGIN
 {
 public:
     // -----<PUBLIC PLUGIN API>--------------------------------------------------
@@ -90,18 +55,18 @@ public:
 
     /**
      * @brief Default callback - just returns the automapped layers
-     * @param aInputLayerDescriptionVector 
+     * @param aInputLayerDescriptionVector
      * @return Auto-mapped layers
      */
-    static LAYER_MAP DefaultLayerMappingCallback(
+    static std::map<wxString, PCB_LAYER_ID> DefaultLayerMappingCallback(
             const std::vector<INPUT_LAYER_DESC>& aInputLayerDescriptionVector );
 
     /**
      * @brief Register a different handler to be called when mapping of Cadstar to KiCad
      * layers occurs
-     * @param aLayerMappingHandler 
+     * @param aLayerMappingHandler
      */
-    void RegisterLayerMappingCallback( LAYER_MAPPING_HANDLER aLayerMappingHandler );
+    void RegisterLayerMappingCallback( LAYER_MAPPING_HANDLER aLayerMappingHandler ) override;
 
     CADSTAR_PCB_ARCHIVE_PLUGIN();
     ~CADSTAR_PCB_ARCHIVE_PLUGIN();
@@ -109,7 +74,6 @@ public:
 private:
     const PROPERTIES*     m_props;
     BOARD*                m_board;
-    LAYER_MAPPING_HANDLER m_layer_mapping_handler;
     bool                  m_show_layer_mapping_warnings;
 };
 

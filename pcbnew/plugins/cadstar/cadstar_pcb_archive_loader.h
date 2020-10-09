@@ -27,7 +27,7 @@
 #define CADSTAR_PCB_ARCHIVE_LOADER_H_
 
 #include <cadstar_pcb_archive_parser.h>
-#include <cadstar_pcb_archive_plugin.h> // LAYER_MAPPING_HANDLER definition
+#include <cadstar_pcb_archive_plugin.h>
 #include <class_board.h>
 #include <set>
 
@@ -65,7 +65,7 @@ public:
 
     /**
      * @brief Loads a CADSTAR PCB Archive file into the KiCad BOARD object given
-     * @param aBoard 
+     * @param aBoard
      */
     void Load( ::BOARD* aBoard );
 
@@ -145,8 +145,8 @@ private:
     //Helper functions for drawing /loading objects onto screen:
 
     /**
-     * @brief 
-     * @param aCadstarText 
+     * @brief
+     * @param aCadstarText
      * @param aContainer to draw on (e.g. mBoard)
      * @param aCadstarGroupID to add the text to
      * @param aCadstarLayerOverride if not empty, overrides the LayerID in aCadstarText
@@ -164,8 +164,8 @@ private:
             const bool& aMirrorInvert = false );
 
     /**
-     * @brief 
-     * @param aCadstarShape 
+     * @brief
+     * @param aCadstarShape
      * @param aCadstarLayerID KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
      * @param aShapeName for reporting warnings/errors to the user
@@ -185,7 +185,7 @@ private:
 
     /**
      * @brief Uses PCB_SHAPE to draw the cutouts on mBoard object
-     * @param aVertices 
+     * @param aVertices
      * @param aKiCadLayer KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
      * @param aContainer to draw on (e.g. mBoard)
@@ -205,7 +205,7 @@ private:
 
     /**
      * @brief Uses PCB_SHAPE to draw the vertices on mBoard object
-     * @param aCadstarVertices 
+     * @param aCadstarVertices
      * @param aKiCadLayer KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
      * @param aContainer to draw on (e.g. mBoard)
@@ -234,7 +234,7 @@ private:
      * @param aScalingFactor scale draw segment by this amount
      * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
      * @param aMirrorInvert if true, mirrors the drawsegment
-     * @return 
+     * @return
      */
     std::vector<PCB_SHAPE*> getDrawSegmentsFromVertices(
             const std::vector<VERTEX>& aCadstarVertices, BOARD_ITEM_CONTAINER* aContainer = nullptr,
@@ -253,7 +253,7 @@ private:
      * @param aScalingFactor scale draw segment by this amount
      * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
      * @param aMirrorInvert if true, mirrors the drawsegment
-     * @return 
+     * @return
      */
     PCB_SHAPE* getDrawSegmentFromVertex( const POINT& aCadstarStartPoint,
             const VERTEX& aCadstarVertex, BOARD_ITEM_CONTAINER* aContainer = nullptr,
@@ -262,8 +262,8 @@ private:
             const wxPoint& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
 
     /**
-     * @brief 
-     * @param aCadstarShape 
+     * @brief
+     * @param aCadstarShape
      * @param aLineThickness Thickness of line to draw with
      * @param aParentContainer Parent object (e.g. mBoard or a MODULE pointer)
      * @return Pointer to ZONE. Caller owns the object.
@@ -281,7 +281,7 @@ private:
      * @param aScalingFactor scale draw segment by this amount
      * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
      * @param aMirrorInvert if true, mirrors the shape
-     * @return 
+     * @return
      */
     SHAPE_POLY_SET getPolySetFromCadstarShape( const SHAPE& aCadstarShape,
             const int& aLineThickness = -1, BOARD_ITEM_CONTAINER* aContainer = nullptr,
@@ -292,20 +292,20 @@ private:
     /**
      * @brief Returns a SHAPE_LINE_CHAIN object from a series of PCB_SHAPE objects
      * @param aDrawSegments
-     * @return 
+     * @return
      */
     SHAPE_LINE_CHAIN getLineChainFromDrawsegments( const std::vector<PCB_SHAPE*> aDrawSegments );
 
     /**
      * @brief Returns a vector of pointers to TRACK/ARC objects. Caller owns the objects
-     * @param aDrawsegments 
+     * @param aDrawsegments
      * @param aParentContainer sets this as the parent of each TRACK object and Add()s it to the parent
      * @param aNet sets all the tracks to this net, unless nullptr
      * @param aLayerOverride Sets all tracks to this layer, or, if it is UNDEFINED_LAYER, uses the layers
      *                       in the DrawSegments
      * @param aWidthOverride Sets all tracks to this width, or, if it is UNDEFINED_LAYER, uses the width
      *                       in the DrawSegments
-     * @return 
+     * @return
     */
     std::vector<TRACK*> makeTracksFromDrawsegments( const std::vector<PCB_SHAPE*> aDrawsegments,
             BOARD_ITEM_CONTAINER* aParentContainer, NETINFO_ITEM* aNet = nullptr,
@@ -313,10 +313,10 @@ private:
 
     /**
      * @brief Adds a CADSTAR Attribute to a KiCad module
-     * @param aCadstarAttrLoc 
+     * @param aCadstarAttrLoc
      * @param aCadstarAttributeID
-     * @param aModule 
-     * @param aAttributeValue 
+     * @param aModule
+     * @param aAttributeValue
      */
     void addAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
             const ATTRIBUTE_ID& aCadstarAttributeID, MODULE* aModule,
@@ -346,15 +346,15 @@ private:
 
     /**
      * @brief Scales, offsets and inverts y axis to make the point usable directly in KiCad
-     * @param aCadstarPoint 
-     * @return 
+     * @param aCadstarPoint
+     * @return
      */
     wxPoint getKiCadPoint( wxPoint aCadstarPoint );
 
     /**
-     * @brief 
-     * @param aCadstarLength 
-     * @return 
+     * @brief
+     * @param aCadstarLength
+     * @return
     */
     int getKiCadLength( long long aCadstarLength )
     {
@@ -362,9 +362,9 @@ private:
     }
 
     /**
-     * @brief 
-     * @param aCadstarAngle 
-     * @return 
+     * @brief
+     * @param aCadstarAngle
+     * @return
     */
     double getAngleTenthDegree( const long long& aCadstarAngle )
     {
@@ -372,9 +372,9 @@ private:
     }
 
     /**
-     * @brief 
-     * @param aCadstarAngle 
-     * @return 
+     * @brief
+     * @param aCadstarAngle
+     * @return
      */
     double getAngleDegrees( const long long& aCadstarAngle )
     {
@@ -382,8 +382,8 @@ private:
     }
 
     /**
-     * @brief 
-     * @param aPoint 
+     * @brief
+     * @param aPoint
      * @return Angle in decidegrees of the polar representation of the point, scaled 0..360
      */
     double getPolarAngle( wxPoint aPoint );
@@ -391,35 +391,35 @@ private:
     /**
      * @brief Searches mNetMap and returns the NETINFO_ITEM pointer if exists. Otherwise
      * creates a new one and adds it to mBoard.
-     * @param aCadstarNetID 
-     * @return 
+     * @param aCadstarNetID
+     * @return
      */
     NETINFO_ITEM* getKiCadNet( const NET_ID& aCadstarNetID );
 
     /**
-     * @brief 
+     * @brief
      * @param aLayerNum Physical / logical layer number (starts at 1)
      * @return PCB_LAYER_ID
      */
     PCB_LAYER_ID getKiCadCopperLayerID( unsigned int aLayerNum );
 
     /**
-     * @brief 
-     * @param aCadstarLayerID 
+     * @brief
+     * @param aCadstarLayerID
      * @return true if the layer corresponds to a KiCad LSET or false if the layer maps directly
      */
     bool isLayerSet( const LAYER_ID& aCadstarLayerID );
 
     /**
-     * @brief 
-     * @param aCadstarLayerID 
+     * @brief
+     * @param aCadstarLayerID
      * @return PCB_LAYER_ID
      */
     PCB_LAYER_ID getKiCadLayer( const LAYER_ID& aCadstarLayerID );
 
     /**
-     * @brief 
-     * @param aCadstarLayerID 
+     * @brief
+     * @param aCadstarLayerID
      * @return LSET
      */
     LSET getKiCadLayerSet( const LAYER_ID& aCadstarLayerID );
@@ -437,7 +437,7 @@ private:
      * @brief Adds a new PCB_GROUP* to mGroupMap
      * @param aName Name to give the group. If name already exists, append "_1", "_2", etc.
      * to the end to ensure it is unique
-     * @return 
+     * @return
      */
     GROUP_ID createUniqueGroupID( const wxString& aName );
 };

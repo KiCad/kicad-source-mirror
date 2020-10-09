@@ -274,8 +274,12 @@ EAGLE_PLUGIN::EAGLE_PLUGIN() :
     m_xpath( new XPATH() ),
     m_mod_time( wxDateTime::Now() )
 {
+    using namespace std::placeholders;
+
     init( NULL );
     clear_cu_map();
+    RegisterLayerMappingCallback( std::bind(
+        &EAGLE_PLUGIN::DefaultLayerMappingCallback, this, _1 ) );
 }
 
 
@@ -297,7 +301,6 @@ const wxString EAGLE_PLUGIN::GetFileExtension() const
 {
     return wxT( "brd" );
 }
-
 
 wxSize inline EAGLE_PLUGIN::kicad_fontz( const ECOORD& d, int aTextThickness ) const
 {
@@ -453,6 +456,7 @@ void EAGLE_PLUGIN::loadAllSections( wxXmlNode* aDoc )
 
         wxXmlNode* layers = drawingChildren["layers"];
         loadLayerDefs( layers );
+        mapEagleLayersToKicad();
 
         m_xpath->pop();
     }
@@ -501,11 +505,13 @@ void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
     wxXmlNode* layerNode = aLayers->GetChildren();
 
     m_eagleLayers.clear();
+    m_eagleLayersIds.clear();
 
     while( layerNode )
     {
         ELAYER elayer( layerNode );
         m_eagleLayers.insert( std::make_pair( elayer.number, elayer ) );
+        m_eagleLayersIds.insert( std::make_pair( elayer.name, elayer.number ) );
 
         // find the subset of layers that are copper and active
         if( elayer.number >= 1 && elayer.number <= 16 && ( !elayer.active || *elayer.active ) )
@@ -1245,6 +1251,15 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
                           || p.layer == EAGLE_LAYER::BRESTRICT
                           || p.layer == EAGLE_LAYER::VRESTRICT );
 
+    if( layer == UNDEFINED_LAYER ) {
+        wxLogMessage( wxString::Format(
+            _( "Ignoring a polygon since Eagle layer '%s' (%d) "
+               "was not mapped" ),
+                    eagle_layer_name( p.layer ),
+                    p.layer ) );
+        return nullptr;
+    }
+
     if( !IsCopperLayer( layer ) && !keepout )
         return nullptr;
 
@@ -1583,6 +1598,15 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
     wxPoint      end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
     int          width = w.width.ToPcbUnits();
 
+    if( layer == UNDEFINED_LAYER ) {
+        wxLogMessage( wxString::Format(
+            _( "Ignoring a wire since Eagle layer '%s' (%d) "
+               "was not mapped" ),
+                    eagle_layer_name( w.layer ),
+                    w.layer ) );
+        return;
+    }
+
     // KiCad cannot handle zero or negative line widths which apparently have meaning in Eagle.
     if( width <= 0 )
     {
@@ -1747,8 +1771,14 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
     ETEXT        t( aTree );
     PCB_LAYER_ID layer = kicad_layer( t.layer );
 
-    if( layer == UNDEFINED_LAYER )
-        layer = Cmts_User;
+    if( layer == UNDEFINED_LAYER ) {
+        wxLogMessage( wxString::Format(
+            _( "Ignoring a text since Eagle layer '%s' (%d) "
+               "was not mapped" ),
+                    eagle_layer_name( t.layer ),
+                    t.layer ) );
+        return;
+    }
 
     FP_TEXT* txt;
 
@@ -1878,7 +1908,16 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     else
     {
         PCB_LAYER_ID layer = kicad_layer( r.layer );
-        FP_SHAPE*    dwg   = new FP_SHAPE( aModule, S_POLYGON );
+        if( layer == UNDEFINED_LAYER ) {
+            wxLogMessage( wxString::Format(
+            _( "Ignoring a rectange since Eagle layer '%s' (%d) "
+               "was not mapped" ),
+                    eagle_layer_name( r.layer ),
+                    r.layer ) );
+            return;
+        }
+
+        FP_SHAPE* dwg = new FP_SHAPE( aModule, S_POLYGON );
 
         aModule->Add( dwg );
 
@@ -1983,7 +2022,16 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
     else
     {
         PCB_LAYER_ID layer = kicad_layer( p.layer );
-        FP_SHAPE*    dwg   = new FP_SHAPE( aModule, S_POLYGON );
+        if( layer == UNDEFINED_LAYER ) {
+            wxLogMessage( wxString::Format(
+            _( "Ignoring a polygon since Eagle layer '%s' (%d) "
+               "was not mapped" ),
+                    eagle_layer_name( p.layer ),
+                    p.layer ) );
+            return;
+        }
+
+        FP_SHAPE* dwg = new FP_SHAPE( aModule, S_POLYGON );
 
         aModule->Add( dwg );
 
@@ -2043,7 +2091,16 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
     else
     {
         PCB_LAYER_ID layer = kicad_layer( e.layer );
-        FP_SHAPE*    gr    = new FP_SHAPE( aModule, S_CIRCLE );
+        if( layer == UNDEFINED_LAYER ) {
+            wxLogMessage( wxString::Format(
+                _( "Ignoring a cricle since Eagle layer '%s' (%d) "
+                   "was not mapped" ),
+                        eagle_layer_name( e.layer ),
+                        e.layer ) );
+            return;
+        }
+
+        FP_SHAPE* gr = new FP_SHAPE( aModule, S_CIRCLE );
 
         // with == 0 means filled circle
         if( width <= 0 )
@@ -2451,78 +2508,172 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
     m_xpath->pop();     // "signals.signal"
 }
 
+std::map<wxString, PCB_LAYER_ID> EAGLE_PLUGIN::DefaultLayerMappingCallback(
+            const std::vector<INPUT_LAYER_DESC>& aInputLayerDescriptionVector )
+{
+    std::map<wxString, PCB_LAYER_ID> layer_map;
+
+    for ( const INPUT_LAYER_DESC& layer : aInputLayerDescriptionVector )
+    {
+        PCB_LAYER_ID layerId = std::get<0>( defaultKicadLayer( eagle_layer_id( layer.Name ) ) );
+        layer_map.emplace( layer.Name, layerId );
+    }
+
+    return layer_map;
+}
+
+void EAGLE_PLUGIN::mapEagleLayersToKicad()
+{
+    std::vector<INPUT_LAYER_DESC> inputDescs;
+
+    for ( const std::pair<int, ELAYER>& layerPair : m_eagleLayers )
+    {
+        const ELAYER& eLayer = layerPair.second;
+
+        INPUT_LAYER_DESC layerDesc;
+        std::tie( layerDesc.AutoMapLayer, layerDesc.PermittedLayers, layerDesc.Required ) =
+                defaultKicadLayer( eLayer.number );
+        if( layerDesc.AutoMapLayer == UNDEFINED_LAYER )
+            continue; // Ignore unused copper layers
+        layerDesc.Name = eLayer.name;
+
+        inputDescs.push_back( layerDesc );
+    }
+
+    m_layer_map = m_layer_mapping_handler( inputDescs );
+}
 
 PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 {
-    int kiLayer;
+    auto result = m_layer_map.find( eagle_layer_name( aEagleLayer ) );
+    return result == m_layer_map.end() ? UNDEFINED_LAYER : result->second;
+}
 
+std::tuple<PCB_LAYER_ID, LSET, bool> EAGLE_PLUGIN::defaultKicadLayer( int aEagleLayer ) const
+{
     // eagle copper layer:
     if( aEagleLayer >= 1 && aEagleLayer < int( arrayDim( m_cu_map ) ) )
     {
-        kiLayer = m_cu_map[aEagleLayer];
-    }
-
-    else
-    {
-        // translate non-copper eagle layer to pcbnew layer
-        switch( aEagleLayer )
+        LSET copperLayers;
+        for( int copperLayer : m_cu_map )
         {
-        // Eagle says "Dimension" layer, but it's for board perimeter
-        case EAGLE_LAYER::DIMENSION:     kiLayer = Edge_Cuts;    break;
-
-        case EAGLE_LAYER::TPLACE:        kiLayer = F_SilkS;      break;
-        case EAGLE_LAYER::BPLACE:        kiLayer = B_SilkS;      break;
-        case EAGLE_LAYER::TNAMES:        kiLayer = F_SilkS;      break;
-        case EAGLE_LAYER::BNAMES:        kiLayer = B_SilkS;      break;
-        case EAGLE_LAYER::TVALUES:       kiLayer = F_Fab;        break;
-        case EAGLE_LAYER::BVALUES:       kiLayer = B_Fab;        break;
-        case EAGLE_LAYER::TSTOP:         kiLayer = F_Mask;       break;
-        case EAGLE_LAYER::BSTOP:         kiLayer = B_Mask;       break;
-        case EAGLE_LAYER::TCREAM:        kiLayer = F_Paste;      break;
-        case EAGLE_LAYER::BCREAM:        kiLayer = B_Paste;      break;
-        case EAGLE_LAYER::TFINISH:       kiLayer = F_Mask;       break;
-        case EAGLE_LAYER::BFINISH:       kiLayer = B_Mask;       break;
-        case EAGLE_LAYER::TGLUE:         kiLayer = F_Adhes;      break;
-        case EAGLE_LAYER::BGLUE:         kiLayer = B_Adhes;      break;
-        case EAGLE_LAYER::DOCUMENT:      kiLayer = Cmts_User;    break;
-        case EAGLE_LAYER::REFERENCELC:   kiLayer = Cmts_User;    break;
-        case EAGLE_LAYER::REFERENCELS:   kiLayer = Cmts_User;    break;
-
-        // Packages show the future chip pins on SMD parts using layer 51.
-        // This is an area slightly smaller than the PAD/SMD copper area.
-        // Carry those visual aids into the MODULE on the fabrication layer,
-        // not silkscreen. This is perhaps not perfect, but there is not a lot
-        // of other suitable paired layers
-        case EAGLE_LAYER::TDOCU:         kiLayer = F_Fab;        break;
-        case EAGLE_LAYER::BDOCU:         kiLayer = B_Fab;        break;
-
-        // these layers are defined as user layers. put them on ECO layers
-        case EAGLE_LAYER::USERLAYER1:    kiLayer = Eco1_User;    break;
-        case EAGLE_LAYER::USERLAYER2:    kiLayer = Eco2_User;    break;
-
-        // these will also appear in the ratsnest, so there's no need for a warning
-        case EAGLE_LAYER::UNROUTED:      kiLayer = Dwgs_User;    break;
-
-        case EAGLE_LAYER::TKEEPOUT:      kiLayer = F_CrtYd;      break;
-        case EAGLE_LAYER::BKEEPOUT:      kiLayer = B_CrtYd;      break;
-
-        case EAGLE_LAYER::MILLING:
-        case EAGLE_LAYER::TTEST:
-        case EAGLE_LAYER::BTEST:
-        case EAGLE_LAYER::HOLES:
-        default:
-            // some layers do not map to KiCad
-            wxLogMessage( wxString::Format( _( "Unsupported Eagle layer '%s' (%d), "
-                                               "converted to Dwgs.User layer" ),
-                                            eagle_layer_name( aEagleLayer ),
-                                            aEagleLayer ) );
-
-            kiLayer = Dwgs_User;
-            break;
+            if( copperLayer >= 0 )
+                copperLayers[copperLayer] = true;
         }
+
+        return { PCB_LAYER_ID( m_cu_map[aEagleLayer] ), copperLayers, true };
     }
 
-    return PCB_LAYER_ID( kiLayer );
+    int  kiLayer  = UNSELECTED_LAYER;
+    bool required = false;
+    LSET permittedLayers;
+
+    permittedLayers.set();
+
+    // translate non-copper eagle layer to pcbnew layer
+    switch( aEagleLayer )
+    {
+    // Eagle says "Dimension" layer, but it's for board perimeter
+    case EAGLE_LAYER::DIMENSION:
+        kiLayer         = Edge_Cuts;
+        required        = true;
+        permittedLayers = LSET( 1, Edge_Cuts );
+        break;
+
+    case EAGLE_LAYER::TPLACE:
+        kiLayer = F_SilkS;
+        break;
+    case EAGLE_LAYER::BPLACE:
+        kiLayer = B_SilkS;
+        break;
+    case EAGLE_LAYER::TNAMES:
+        kiLayer = F_SilkS;
+        break;
+    case EAGLE_LAYER::BNAMES:
+        kiLayer = B_SilkS;
+        break;
+    case EAGLE_LAYER::TVALUES:
+        kiLayer = F_Fab;
+        break;
+    case EAGLE_LAYER::BVALUES:
+        kiLayer = B_Fab;
+        break;
+    case EAGLE_LAYER::TSTOP:
+        kiLayer = F_Mask;
+        break;
+    case EAGLE_LAYER::BSTOP:
+        kiLayer = B_Mask;
+        break;
+    case EAGLE_LAYER::TCREAM:
+        kiLayer = F_Paste;
+        break;
+    case EAGLE_LAYER::BCREAM:
+        kiLayer = B_Paste;
+        break;
+    case EAGLE_LAYER::TFINISH:
+        kiLayer = F_Mask;
+        break;
+    case EAGLE_LAYER::BFINISH:
+        kiLayer = B_Mask;
+        break;
+    case EAGLE_LAYER::TGLUE:
+        kiLayer = F_Adhes;
+        break;
+    case EAGLE_LAYER::BGLUE:
+        kiLayer = B_Adhes;
+        break;
+    case EAGLE_LAYER::DOCUMENT:
+        kiLayer = Cmts_User;
+        break;
+    case EAGLE_LAYER::REFERENCELC:
+        kiLayer = Cmts_User;
+        break;
+    case EAGLE_LAYER::REFERENCELS:
+        kiLayer = Cmts_User;
+        break;
+
+    // Packages show the future chip pins on SMD parts using layer 51.
+    // This is an area slightly smaller than the PAD/SMD copper area.
+    // Carry those visual aids into the MODULE on the fabrication layer,
+    // not silkscreen. This is perhaps not perfect, but there is not a lot
+    // of other suitable paired layers
+    case EAGLE_LAYER::TDOCU:
+        kiLayer = F_Fab;
+        break;
+    case EAGLE_LAYER::BDOCU:
+        kiLayer = B_Fab;
+        break;
+
+    // these layers are defined as user layers. put them on ECO layers
+    case EAGLE_LAYER::USERLAYER1:
+        kiLayer = Eco1_User;
+        break;
+    case EAGLE_LAYER::USERLAYER2:
+        kiLayer = Eco2_User;
+        break;
+
+    // these will also appear in the ratsnest, so there's no need for a warning
+    case EAGLE_LAYER::UNROUTED:
+        kiLayer = Dwgs_User;
+        break;
+
+    case EAGLE_LAYER::TKEEPOUT:
+        kiLayer = F_CrtYd;
+        break;
+    case EAGLE_LAYER::BKEEPOUT:
+        kiLayer = B_CrtYd;
+        break;
+
+    case EAGLE_LAYER::MILLING:
+    case EAGLE_LAYER::TTEST:
+    case EAGLE_LAYER::BTEST:
+    case EAGLE_LAYER::HOLES:
+    default:
+        kiLayer = UNSELECTED_LAYER;
+        break;
+    }
+
+    return { PCB_LAYER_ID( kiLayer ), permittedLayers, required };
 }
 
 
@@ -2531,6 +2682,14 @@ const wxString& EAGLE_PLUGIN::eagle_layer_name( int aLayer ) const
     static const wxString unknown( "unknown" );
     auto it = m_eagleLayers.find( aLayer );
     return it == m_eagleLayers.end() ? unknown : it->second.name;
+}
+
+
+int EAGLE_PLUGIN::eagle_layer_id( const wxString& aLayerName ) const
+{
+    static const int unknown = -1;
+    auto it = m_eagleLayersIds.find( aLayerName );
+    return it == m_eagleLayersIds.end() ? unknown : it->second;
 }
 
 

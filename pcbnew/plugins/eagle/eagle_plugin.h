@@ -28,8 +28,10 @@
 #include <io_mgr.h>
 #include <layers_id_colors_and_visibility.h>
 #include <plugins/eagle/eagle_parser.h>
+#include <plugins/common/plugin_common_layer_mapping.h>
 
 #include <map>
+#include <tuple>
 #include <wx/xml/xml.h>
 
 class D_PAD;
@@ -115,7 +117,7 @@ struct ERULES
  * works with Eagle 6.x XML board files and footprints to implement the
  * Pcbnew PLUGIN API, or a portion of it.
  */
-class EAGLE_PLUGIN : public PLUGIN
+class EAGLE_PLUGIN : public PLUGIN, public LAYER_REMAPPABLE_PLUGIN
 {
 public:
 
@@ -164,12 +166,27 @@ public:
     EAGLE_PLUGIN();
     ~EAGLE_PLUGIN();
 
+    /**
+     * @brief Default callback - just returns the automapped layers
+     *
+     * The callback needs to have the context of the current board so it can
+     * correctly determine copper layer mapping. Thus, it is not static and is
+     * expected to be bind to an instance of EAGLE_PLUGIN.
+     *
+     * @param aInputLayerDescriptionVector
+     * @return Auto-mapped layers
+     */
+    std::map<wxString, PCB_LAYER_ID> DefaultLayerMappingCallback(
+            const std::vector<INPUT_LAYER_DESC>& aInputLayerDescriptionVector );
+
 private:
     typedef std::vector<ELAYER>     ELAYERS;
     typedef ELAYERS::const_iterator EITER;
 
     int         m_cu_map[17];       ///< map eagle to kicad, cu layers only.
     std::map<int, ELAYER> m_eagleLayers; ///< Eagle layers data stored by the layer number
+    std::map<wxString, int> m_eagleLayersIds; ///< Eagle layers id stored by the layer name
+    std::map<wxString, PCB_LAYER_ID> m_layer_map; ///< Mapping of Eagle layers to KiCAD layers
 
     ERULES*     m_rules;            ///< Eagle design rules.
     XPATH*      m_xpath;            ///< keeps track of what we are working on within
@@ -207,11 +224,21 @@ private:
     /// create a font size (fontz) from an eagle font size scalar and KiCAD font thickness
     wxSize  kicad_fontz( const ECOORD& d, int aTextThickness ) const;
 
+    /// Generate mapping between Eagle na KiCAD layers
+    void mapEagleLayersToKicad();
+
     /// Convert an Eagle layer to a KiCad layer.
     PCB_LAYER_ID kicad_layer( int aLayer ) const;
 
+    /// Get default KiCAD layer corresponding to an Eagle layer of the board,
+    /// a set of sensible layer mapping options and required flag
+    std::tuple<PCB_LAYER_ID, LSET, bool> defaultKicadLayer( int aEagleLayer ) const;
+
     /// Get Eagle layer name by its number
     const wxString& eagle_layer_name( int aLayer ) const;
+
+    /// Get Eagle leayer number by its name
+    int eagle_layer_id( const wxString& aLayerName ) const;
 
     /// This PLUGIN only caches one footprint library, this determines which one.
     void    cacheLib( const wxString& aLibraryPath );

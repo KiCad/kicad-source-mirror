@@ -50,6 +50,7 @@
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
+#include <plugins/eagle/eagle_plugin.h>
 #include <dialogs/dialog_imported_layers.h>
 
 
@@ -621,18 +622,13 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
 
-
-        if( pluginType == IO_MGR::CADSTAR_PCB_ARCHIVE )
+        LAYER_REMAPPABLE_PLUGIN* layerRemappable =
+            dynamic_cast< LAYER_REMAPPABLE_PLUGIN* >( (PLUGIN*) pi );
+        if ( layerRemappable )
         {
-            // TODO: Generalise this so that it is applicable to all non-kicad plugins
-            CADSTAR_PCB_ARCHIVE_PLUGIN* cadstarPlugin = nullptr;
-
-            cadstarPlugin = dynamic_cast<CADSTAR_PCB_ARCHIVE_PLUGIN*>( (PLUGIN*) pi );
-
-            wxCHECK( cadstarPlugin, false );
-
-            cadstarPlugin->RegisterLayerMappingCallback(
-                    std::bind( DIALOG_IMPORTED_LAYERS::GetMapModal, this, std::placeholders::_1 ) );
+            using namespace std::placeholders;
+            layerRemappable->RegisterLayerMappingCallback(
+                    std::bind( DIALOG_IMPORTED_LAYERS::GetMapModal, this, _1 ) );
         }
 
         // This will rename the file if there is an autosave and the user want to recover

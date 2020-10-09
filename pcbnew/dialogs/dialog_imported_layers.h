@@ -22,7 +22,7 @@
 #define DIALOG_IMPORTED_LAYERS_H
 
 #include <dialog_imported_layers_base.h>
-#include <plugins/cadstar/cadstar_pcb_archive_plugin.h> // INPUT_LAYER_DESC
+#include <plugins/common/plugin_common_layer_mapping.h>
 
 
 class DIALOG_IMPORTED_LAYERS : public DIALOG_IMPORTED_LAYERS_BASE
@@ -31,16 +31,22 @@ private:
     const int selected = wxLIST_STATE_SELECTED;
     const int allitems = wxLIST_STATE_DONTCARE;
 
-    std::vector<INPUT_LAYER_DESC> m_input_layers;
-    std::vector<wxString>         m_unmatched_layer_names;
-    LAYER_MAP                     m_matched_layers_map;
+    std::vector<INPUT_LAYER_DESC>    m_input_layers;
+    std::vector<wxString>            m_unmatched_layer_names;
+    std::map<wxString, PCB_LAYER_ID> m_matched_layers_map;
 
     //Helper functions
     PCB_LAYER_ID GetSelectedLayerID();
     PCB_LAYER_ID GetAutoMatchLayerID( wxString aInputLayerName );
-    void         AddMappings();
-    void         RemoveMappings( int aStatus );
-    void         DeleteListItems( const wxArrayInt& aRowsToDelete, wxListCtrl* aListCtrl );
+
+    void AddMappings();
+    void RemoveMappings( int aStatus );
+    void DeleteListItems( const wxArrayInt& aRowsToDelete, wxListCtrl* aListCtrl );
+
+    const INPUT_LAYER_DESC* GetLayerDescription( const wxString& aLayerName ) const;
+
+    static wxString WrapRequired( const wxString& aLayerName );
+    static wxString UnwrapRequired( const wxString& aLayerName );
 
     //Event Handlers
     void OnAutoMatchLayersClicked( wxCommandEvent& event ) override;
@@ -55,13 +61,19 @@ public:
     DIALOG_IMPORTED_LAYERS( wxWindow* aParent, const std::vector<INPUT_LAYER_DESC>& aLayerDesc );
 
     /**
-     * @brief Creates and shows a dialog (modal) and returns the data from it after completion.
-     * If the dialog is closed or cancel is pressed, returns an empty LAYER_MAP
+     * @brief Return a list of layers names that are required, but they are not mapped
+     */
+    std::vector<wxString> GetUnmappedRequiredLayers() const;
+
+    /**
+     * @brief Creates and shows a dialog (modal) and returns the data from it
+     * after completion. If the dialog is closed or cancel is pressed, returns
+     * an empty map
      * @param aParent Parent window for the invoked dialog.
      * @param aLayerDesc
      * @return Mapped layers
      */
-    static LAYER_MAP GetMapModal( wxWindow* aParent,
+    static std::map<wxString, PCB_LAYER_ID> GetMapModal( wxWindow* aParent,
                                   const std::vector<INPUT_LAYER_DESC>& aLayerDesc );
 };
 
