@@ -64,9 +64,18 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     setControls();
 
+    auto setCursor =
+            [&]()
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( m_cursor );
+            };
+
+    // Set initial cursor
+    setCursor();
+
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( m_cursor );
+        setCursor();
         VECTOR2D cursorPos = controls->GetCursorPosition( m_frame->IsGridVisible() );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
