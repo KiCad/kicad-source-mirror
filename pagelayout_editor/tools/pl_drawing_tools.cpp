@@ -108,14 +108,16 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        auto cleanup = [&] () {
-            m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
-            delete item;
-            item = nullptr;
+        auto cleanup =
+            [&] ()
+            {
+                m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
+                item = nullptr;
 
-            // There's nothing to roll-back, but we still need to pop the undo stack
-            m_frame->RollbackFromUndo();
-        };
+                // There's nothing to roll-back, but we still need to pop the undo stack
+                // This also deletes the item being placed.
+                m_frame->RollbackFromUndo();
+            };
 
         if( evt->IsCancelInteractive() )
         {
@@ -246,6 +248,8 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             if( item )
             {
                 item = nullptr;
+
+                // Pop the undo stack and delete the item being placed
                 m_frame->RollbackFromUndo();
             }
             else if( evt->IsCancelInteractive() )
