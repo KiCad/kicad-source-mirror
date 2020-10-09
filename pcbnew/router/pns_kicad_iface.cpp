@@ -237,7 +237,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType, cons
         case PNS::CONSTRAINT_TYPE::CT_WIDTH:
         case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP:
             aConstraint->m_Value = hostConstraint.GetValue();
-            aConstraint->m_RuleName = hostConstraint.GetParentRule()->m_Name;
+            aConstraint->m_RuleName = hostConstraint.GetName();
             aConstraint->m_Type = aType;
             return true;
        }
