@@ -134,10 +134,10 @@ static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
             return Cast_to_CENTER_DIMENSION(self)
         elif ct=="ORTHOGONAL_DIMENSION":
             return Cast_to_ORTHOGONAL_DIMENSION(self)
-        elif ct=="DRAWSEGMENT":
+        elif ct=="PCB_SHAPE":
             return Cast_to_PCB_SHAPE(self)
         elif ct=="MGRAPHIC":
-            return Cast_to_FP_GRAPHIC(self)
+            return Cast_to_FP_SHAPE(self)
         elif ct=="MODULE":
             return Cast_to_MODULE(self)
         elif ct=="PCB_GROUP":
