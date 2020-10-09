@@ -205,6 +205,20 @@ ASCH_WIRE::ASCH_WIRE( const std::map<wxString, wxString>& aProperties )
 }
 
 
+ASCH_JUNCTION::ASCH_JUNCTION( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::JUNCTION );
+
+    ownerpartid = ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", -1 );
+
+    int x     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X", 0 );
+    int xfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X_FRAC", 0 );
+    int y     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.Y", 0 );
+    int yfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.Y_FRAC", 0 );
+    location  = wxPoint( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
+}
+
+
 ASCH_DESIGNATOR::ASCH_DESIGNATOR( const std::map<wxString, wxString>& aProperties )
 {
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::DESIGNATOR );

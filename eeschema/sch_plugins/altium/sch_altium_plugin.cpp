@@ -350,6 +350,7 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
         case ALTIUM_SCH_RECORD::TEXT_FRAME:
             break;
         case ALTIUM_SCH_RECORD::JUNCTION:
+            ParseJunction( properties );
             break;
         case ALTIUM_SCH_RECORD::IMAGE:
             break;
@@ -680,6 +681,17 @@ void SCH_ALTIUM_PLUGIN::ParseWire( const std::map<wxString, wxString>& aProperti
         wire->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( wire );
     }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseJunction( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_JUNCTION elem( aProperties );
+
+    SCH_JUNCTION* junction = new SCH_JUNCTION( elem.location );
+
+    junction->SetFlags( IS_NEW );
+    m_currentSheet->GetScreen()->Append( junction );
 }
 
 

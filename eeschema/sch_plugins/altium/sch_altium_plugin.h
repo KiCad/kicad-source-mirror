@@ -104,6 +104,7 @@ private:
     void ParseNetLabel( const std::map<wxString, wxString>& aProperties );
     void ParseBus( const std::map<wxString, wxString>& aProperties );
     void ParseWire( const std::map<wxString, wxString>& aProperties );
+    void ParseJunction( const std::map<wxString, wxString>& aProperties );
     void ParseDesignator( const std::map<wxString, wxString>& aProperties );
 
 private:

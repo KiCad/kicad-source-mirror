@@ -242,6 +242,16 @@ struct ASCH_WIRE
 };
 
 
+struct ASCH_JUNCTION
+{
+    int ownerpartid;
+
+    wxPoint location;
+
+    explicit ASCH_JUNCTION( const std::map<wxString, wxString>& aProperties );
+};
+
+
 struct ASCH_DESIGNATOR
 {
     int ownerindex;
