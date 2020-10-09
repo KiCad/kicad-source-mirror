@@ -43,6 +43,9 @@ CVPCB_SETTINGS::CVPCB_SETTINGS()
     // Init settings:
     m_params.emplace_back( new PARAM<int>( "filter_footprint", &m_FilterFootprint, 0 ) );
 
+    m_params.emplace_back( new PARAM<int>( "libraries_pane_width", &m_LibrariesWidth, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "footprints_pane_width", &m_FootprintsWidth, 0 ) );
+
     addParamsForWindow( &m_FootprintViewer, "footprint_viewer" );
 
     m_params.emplace_back( new PARAM<bool>( "footprint_viewer.pad_fill",

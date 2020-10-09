@@ -162,6 +162,45 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.Update();
     m_initialized = true;
 
+    if( CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() ) )
+    {
+        if( cfg->m_LibrariesWidth > 0 )
+        {
+            wxAuiPaneInfo& librariesPane = m_auimgr.GetPane( "Libraries" );
+
+            // wxAUI hack: force width by setting MinSize() and then Fixed()
+            // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
+            librariesPane.MinSize( cfg->m_LibrariesWidth, -1 );
+            librariesPane.BestSize( cfg->m_LibrariesWidth, -1 );
+            librariesPane.MaxSize( cfg->m_LibrariesWidth, -1 );
+            librariesPane.Fixed();
+            m_auimgr.Update();
+
+            // now make it resizable again
+            librariesPane.MinSize( 20, -1 );
+            librariesPane.Resizable();
+            m_auimgr.Update();
+        }
+
+        if( cfg->m_FootprintsWidth > 0 )
+        {
+            wxAuiPaneInfo& footprintsPane = m_auimgr.GetPane( "Footprints" );
+
+            // wxAUI hack: force width by setting MinSize() and then Fixed()
+            // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
+            footprintsPane.MinSize( cfg->m_FootprintsWidth, -1 );
+            footprintsPane.BestSize( cfg->m_FootprintsWidth, -1 );
+            footprintsPane.MaxSize( cfg->m_FootprintsWidth, -1 );
+            footprintsPane.Fixed();
+            m_auimgr.Update();
+
+            // now make it resizable again
+            footprintsPane.MinSize( 20, -1 );
+            footprintsPane.Resizable();
+            m_auimgr.Update();
+        }
+    }
+
     // Connect Events
     setupEventHandlers();
 
@@ -420,6 +459,9 @@ void CVPCB_MAINFRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     auto cfg = static_cast<CVPCB_SETTINGS*>( aCfg );
     cfg->m_FilterFootprint = m_filteringOptions;
+
+    cfg->m_LibrariesWidth = m_libListBox->GetSize().x;
+    cfg->m_FootprintsWidth = m_footprintListBox->GetSize().x;
 }
 
 

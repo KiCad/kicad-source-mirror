@@ -48,6 +48,8 @@ public:
     double m_FootprintViewerZoom;
 
     int m_FilterFootprint;
+    int m_LibrariesWidth;
+    int m_FootprintsWidth;
 
 protected:
 
