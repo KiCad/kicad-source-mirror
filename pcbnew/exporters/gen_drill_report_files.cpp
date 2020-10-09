@@ -79,8 +79,12 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 
     const PAGE_INFO& page_info = m_pageInfo ? *m_pageInfo : dummy;
 
-    // Calculate dimensions and center of PCB
+    // Calculate dimensions and center of PCB. The Edge_Cuts layer must be visible
+    // to calculate the board edges bounding box
+    LSET visibleLayers = m_pcb->GetVisibleLayers();
+    m_pcb->SetVisibleLayers( visibleLayers | LSET( Edge_Cuts ) );
     EDA_RECT bbbox = m_pcb->GetBoardEdgesBoundingBox();
+    m_pcb->SetVisibleLayers( visibleLayers );
 
     // Calculate the scale for the format type, scale 1 in HPGL, drawing on
     // an A4 sheet in PS, + text description of symbols
