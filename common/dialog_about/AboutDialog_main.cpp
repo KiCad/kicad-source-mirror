@@ -619,18 +619,17 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     #define LIBRARIANS _( "KiCad Librarian Team" )
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Christian Schlüter"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Rene Poeschl"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Daniel Giesbrecht"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "herostrat"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Joel"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Evan Shultz"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "C Presser"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Thomas Pointhuber"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Otavio Augusto Gomes"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Chris Morgan"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Antonio Vázquez Blanco "), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "aris-kimi"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "cpresser"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Daniel Giesbrecht"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Otavio Augusto Gomes"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "herostrat"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Diego Herranz"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
-
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Joel"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Aristeidis Kimirtzis"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Chris Morgan"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Thomas Pointhuber"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Evan Shultz"), LIBRARIANS, aInfo.CreateKiBitmap( library_xpm ) ) );
 
     #define MODELS_3D_CONTRIBUTION _( "3D models by" )
     aInfo.AddLibrarian( new CONTRIBUTOR( "Scripts by Maui",
