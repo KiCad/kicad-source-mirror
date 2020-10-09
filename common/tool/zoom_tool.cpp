@@ -49,9 +49,18 @@ int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
 
+    auto setCursor =
+        [&]()
+        {
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ZOOM_IN );
+        };
+
+    // Set initial cursor
+    setCursor();
+
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+        setCursor();
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
             break;

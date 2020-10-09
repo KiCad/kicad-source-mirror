@@ -34,6 +34,8 @@
 #include <cursors/cursor-subtract.xpm>
 #include <cursors/cursor-text.xpm>
 #include <cursors/cursor-xor.xpm>
+#include <cursors/cursor-zoom.xpm>
+#include <cursors/cursor-zoom-out.xpm>
 
 #include <wx/bitmap.h>
 #include <wx/debug.h>
@@ -176,6 +178,22 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         cursor_xor_xpm,
         { 32, 32 },
         { 7, 10 },
+    },
+    {
+        KICURSOR::ZOOM_IN,
+        nullptr,
+        nullptr,
+        cursor_zoom_xpm,
+        { 32, 32 },
+        { 6, 6 },
+    },
+    {
+        KICURSOR::ZOOM_OUT,
+        nullptr,
+        nullptr,
+        cursor_zoom_out_xpm,
+        { 32, 32 },
+        { 6, 6 },
     },
 };
 

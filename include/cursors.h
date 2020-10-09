@@ -47,7 +47,9 @@ enum class KICURSOR
     MEASURE,
     ADD,
     SUBTRACT,
-    XOR
+    XOR,
+    ZOOM_IN,
+    ZOOM_OUT
 };
 
 /**
