@@ -49,8 +49,8 @@ class PadMaker(object):
         pad = pcbnew.D_PAD(self.module)
         pad.SetSize(pcbnew.wxSize(Hsize, Vsize))
         pad.SetShape(shape)
-        pad.SetAttribute(pcbnew.PAD_ATTRIB_STANDARD)
-        pad.SetLayerSet(pad.StandardMask())
+        pad.SetAttribute(pcbnew.PAD_ATTRIB_PTH)
+        pad.SetLayerSet(pad.PTHMask())
         pad.SetDrillSize(pcbnew.wxSize(drill, drill))
         pad.SetOrientation(rot_degree*10)   # rotation is in 0.1 degrees
 

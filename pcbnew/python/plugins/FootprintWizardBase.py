@@ -481,7 +481,7 @@ class FootprintWizardDrawingAids:
         """!
         Draw a line from (x1, y1) to (x2, y2)
         """
-        outline = pcbnew.EDGE_MODULE(self.module)
+        outline = pcbnew.FP_SHAPE(self.module)
         outline.SetWidth(self.GetLineThickness())
         outline.SetLayer(self.GetLayer())
         outline.SetShape(pcbnew.S_SEGMENT)
@@ -503,7 +503,7 @@ class FootprintWizardDrawingAids:
                        DC line thickness
         """
 
-        circle = pcbnew.EDGE_MODULE(self.module)
+        circle = pcbnew.FP_SHAPE(self.module)
         start = self.TransformPoint(x, y)
 
         if filled:
@@ -533,7 +533,7 @@ class FootprintWizardDrawingAids:
         @param sy: the y co-ordinate of the arc start point
         @param a: the arc's central angle (in deci-degrees)
         """
-        circle = pcbnew.EDGE_MODULE(self.module)
+        circle = pcbnew.FP_SHAPE(self.module)
         circle.SetWidth(self.dc['lineThickness'])
 
         center = self.TransformPoint(cx, cy)

@@ -67,7 +67,7 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
 
     def drawPixelSquareArea( self, layer, size, xposition, yposition):
         # creates a FP_SHAPE of polygon type. The polygon is a square
-        polygon = pcbnew.EDGE_MODULE(self.module)
+        polygon = pcbnew.FP_SHAPE(self.module)
         polygon.SetShape(pcbnew.S_POLYGON)
         polygon.SetWidth( 0 )
         polygon.SetLayer(layer)
