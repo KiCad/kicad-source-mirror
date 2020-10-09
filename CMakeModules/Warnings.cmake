@@ -167,4 +167,13 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         # This one is different, it is used to guard warning removal for this inside the code
         set( HAVE_WIMPLICIT_FLOAT_CONVERSION true )
     endif()
+
+
+    # Avoid ABI warnings, specifically one about an ABI change on ppc64el from gcc5 to gcc 6.
+    CHECK_CXX_COMPILER_FLAG( "-Wpsabi" COMPILER_SUPPORTS_WPSABI )
+
+    if( COMPILER_SUPPORTS_WPSABI )
+        set( WARN_FLAGS_CXX "${WARN_FLAGS_CXX} -Wno-psabi" )
+        message( STATUS "Disabling warning -Wpsabi" )
+    endif()
 endif()
