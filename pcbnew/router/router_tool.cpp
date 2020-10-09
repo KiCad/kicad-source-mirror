@@ -1636,8 +1636,10 @@ int ROUTER_TOOL::CustomTrackWidthDialog( const TOOL_EVENT& aEvent )
 int ROUTER_TOOL::onTrackViaSizeChanged( const TOOL_EVENT& aEvent )
 {
     PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
-    
-    m_iface->ImportSizes( sizes, nullptr, m_router->GetCurrentNets()[0] );
+
+    if( m_router->RoutingInProgress() )
+        m_iface->ImportSizes( sizes, nullptr, m_router->GetCurrentNets()[0] );
+
     m_router->UpdateSizes( sizes );
 
     // Changing the track width can affect the placement, so call the
