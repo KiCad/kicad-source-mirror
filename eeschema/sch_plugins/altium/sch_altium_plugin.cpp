@@ -555,6 +555,22 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
             break;
         }
     }
+    else if( elem.symbolOuterEdge == ASCH_PIN_SYMBOL_OUTEREDGE::LOW_INPUT )
+    {
+        switch( elem.symbolInnerEdge )
+        {
+        case ASCH_PIN_SYMBOL_INNEREDGE::CLOCK:
+            pin->SetShape( GRAPHIC_PINSHAPE::CLOCK_LOW );
+            break;
+        default:
+            pin->SetShape( GRAPHIC_PINSHAPE::INPUT_LOW );
+            break;
+        }
+    }
+    else if( elem.symbolOuterEdge == ASCH_PIN_SYMBOL_OUTEREDGE::LOW_OUTPUT )
+    {
+        pin->SetShape( GRAPHIC_PINSHAPE::OUTPUT_LOW );
+    }
     else
     {
         switch( elem.symbolInnerEdge )

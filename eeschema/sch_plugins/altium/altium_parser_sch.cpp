@@ -74,8 +74,15 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProperties )
     text       = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
     designator = ALTIUM_PARSER::PropertiesReadString( aProperties, "DESIGNATOR", "" );
 
+    int symbolOuterInt = ALTIUM_PARSER::PropertiesReadInt( aProperties, "SYMBOL_OUTER", 0 );
+    symbolOuter        = static_cast<ASCH_PIN_SYMBOL_OUTER>( symbolOuterInt );
+
+    int symbolInnerInt = ALTIUM_PARSER::PropertiesReadInt( aProperties, "SYMBOL_INNER", 0 );
+    symbolInner        = static_cast<ASCH_PIN_SYMBOL_INNER>( symbolInnerInt );
+
     int symbolOuterEdgeInt = ALTIUM_PARSER::PropertiesReadInt( aProperties, "SYMBOL_OUTEREDGE", 0 );
-    symbolOuterEdge        = ( symbolOuterEdgeInt >= 0 && symbolOuterEdgeInt <= 1 ) ?
+    symbolOuterEdge        = ( symbolOuterEdgeInt == 0 || symbolOuterEdgeInt == 1
+                              || symbolOuterEdgeInt == 4 || symbolOuterEdgeInt == 17 ) ?
                               static_cast<ASCH_PIN_SYMBOL_OUTEREDGE>( symbolOuterEdgeInt ) :
                               ASCH_PIN_SYMBOL_OUTEREDGE::UNKNOWN;
 

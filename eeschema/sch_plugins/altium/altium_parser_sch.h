@@ -93,11 +93,44 @@ struct ASCH_COMPONENT
 };
 
 
+enum class ASCH_PIN_SYMBOL_OUTER
+{
+    UNKNOWN                = -1,
+    NO_SYMBOL              = 0,
+    RIGHT_LEFT_SIGNAL_FLOW = 2,
+    ANALOG_SIGNAL_IN       = 5,
+    NOT_LOGIC_CONNECTION   = 6,
+    DIGITAL_SIGNAL_IN      = 25,
+    LEFT_RIGHT_SIGNAL_FLOW = 33,
+    BIDI_SIGNAL_FLOW       = 34
+};
+
+
+enum class ASCH_PIN_SYMBOL_INNER
+{
+    UNKNOWN                = -1,
+    NO_SYMBOL              = 0,
+    POSPONED_OUTPUT        = 8,
+    OPEN_COLLECTOR         = 9,
+    HIZ                    = 10,
+    HIGH_CURRENT           = 11,
+    PULSE                  = 12,
+    SCHMITT                = 13,
+    OPEN_COLLECTOR_PULL_UP = 22,
+    OPEN_EMITTER           = 23,
+    OPEN_EMITTER_PULL_UP   = 24,
+    SHIFT_LEFT             = 30,
+    OPEN_OUTPUT            = 32
+};
+
+
 enum class ASCH_PIN_SYMBOL_OUTEREDGE
 {
-    UNKNOWN   = -1,
-    NO_SYMBOL = 0,
-    NEGATED   = 1,
+    UNKNOWN    = -1,
+    NO_SYMBOL  = 0,
+    NEGATED    = 1,
+    LOW_INPUT  = 4,
+    LOW_OUTPUT = 17
 };
 
 
@@ -141,6 +174,9 @@ struct ASCH_PIN
     wxString name;
     wxString text;
     wxString designator;
+
+    ASCH_PIN_SYMBOL_OUTER symbolOuter;
+    ASCH_PIN_SYMBOL_INNER symbolInner;
 
     ASCH_PIN_SYMBOL_OUTEREDGE symbolOuterEdge;
     ASCH_PIN_SYMBOL_INNEREDGE symbolInnerEdge;
