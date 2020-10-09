@@ -113,7 +113,7 @@ True if `A` exists on the given layer.  The layer name can be
 either the name assigned in Board Setup > Board Editor Layers or
 the canonical name (ie: `F.Cu`).
 
-    A.onLayer('<layer_name>')
+    A.existsOnLayer('<layer_name>')
 
 NB: this returns true if `A` is on the given layer, independently
 of whether or not the rule is being evaluated for that layer.
