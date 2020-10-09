@@ -316,7 +316,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
     forEachGeometryItem( { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T },
                     LSET::AllCuMask(), evaluateDpConstraints );
 
-    drc_dbg(10, "dp rule matches %d\n", dpRuleMatches.size() );
+    drc_dbg( 10, "dp rule matches %d\n", (int) dpRuleMatches.size() );
 
 
     DRC_RTREE copperTree;
