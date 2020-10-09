@@ -622,7 +622,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                         m_frame->OnModify();
                     }
                 }
-                break;
+                    break;
 
                 case SCH_JUNCTION_T:
                 {
@@ -637,6 +637,9 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                         m_frame->OnModify();
                     }
                 }
+                    break;
+                default:
+                    // Do nothing
                     break;
                 }
 

@@ -461,7 +461,6 @@ void SCH_LINE_WIRE_BUS_TOOL::computeBreakPoint( const std::pair<SCH_LINE*, SCH_L
 int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType, bool aQuitOnDraw )
 {
     SCH_SCREEN*      screen = m_frame->GetScreen();
-    EE_POINT_EDITOR* pointEditor = m_toolMgr->GetTool<EE_POINT_EDITOR>();
     SCH_LINE*        segment = nullptr;
     EE_GRID_HELPER   grid( m_toolMgr );
 
@@ -481,8 +480,8 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
     if( !m_wires.empty() )
         segment = m_wires.back();
 
-    auto setCursor = 
-            [&]() 
+    auto setCursor =
+            [&]()
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::WIRE );
             };

@@ -420,8 +420,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
-    auto setCursor = 
-            [&]() 
+    auto setCursor =
+            [&]()
             {
                 if( text )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
@@ -655,8 +655,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->PrimeTool( aEvent.Position() );
 
-    auto setCursor = 
-            [&]() 
+    auto setCursor =
+            [&]()
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
             };
@@ -1059,9 +1059,9 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
     Activate();
-    
-    auto setCursor = 
-            [&]() 
+
+    auto setCursor =
+            [&]()
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
             };
@@ -1151,8 +1151,8 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
     m_controls->SetAutoPan( true );
     m_controls->CaptureCursor( false );
 
-    auto setCursor = 
-            [&]() 
+    auto setCursor =
+            [&]()
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
             };
@@ -1226,7 +1226,6 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
     // Only three shapes are currently supported
     assert( aShape == S_SEGMENT || aShape == S_CIRCLE || aShape == S_RECT );
     GRID_HELPER   grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
-    POINT_EDITOR* pointEditor = m_toolMgr->GetTool<POINT_EDITOR>();
     PCB_SHAPE*&   graphic = *aGraphic;
 
     m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
@@ -1259,9 +1258,9 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     frame()->SetMsgPanel( graphic );
-    
-    auto setCursor = 
-            [&]() 
+
+    auto setCursor =
+            [&]()
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
@@ -1532,8 +1531,8 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Set initial cursor
-    auto setCursor = 
-            [&]() 
+    auto setCursor =
+            [&]()
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
@@ -1790,9 +1789,9 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     // Prime the pump
     if( aEvent.HasPosition() )
         m_toolMgr->PrimeTool( aEvent.Position() );
-        
-    auto setCursor = 
-            [&]() 
+
+    auto setCursor =
+            [&]()
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };

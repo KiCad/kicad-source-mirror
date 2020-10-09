@@ -90,8 +90,8 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
-    auto setCursor = 
-            [&]() 
+    auto setCursor =
+            [&]()
             {
                 if( item )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
@@ -205,7 +205,6 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
 int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
-    PL_POINT_EDITOR*           pointEditor = m_toolMgr->GetTool<PL_POINT_EDITOR>();
     WS_DATA_ITEM::WS_ITEM_TYPE type = aEvent.Parameter<WS_DATA_ITEM::WS_ITEM_TYPE>();
     WS_DRAW_ITEM_BASE*         item = nullptr;
 
@@ -223,10 +222,10 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     // Prime the pump
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
-        
-    auto setCursor = 
-            [&]() 
-            { 
+
+    auto setCursor =
+            [&]()
+            {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 

@@ -90,8 +90,8 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
-    auto setCursor = 
-            [&]() 
+    auto setCursor =
+            [&]()
             {
                 if( item )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
@@ -259,7 +259,6 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
     LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
     KICAD_T           type = aEvent.Parameter<KICAD_T>();
-    EE_POINT_EDITOR*  pointEditor = m_toolMgr->GetTool<EE_POINT_EDITOR>();
 
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
@@ -279,8 +278,8 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
-    auto setCursor = 
-            [&]() 
+    auto setCursor =
+            [&]()
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
@@ -427,9 +426,9 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    auto setCursor = 
-            [&]() 
-            { 
+    auto setCursor =
+            [&]()
+            {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
             };
 
