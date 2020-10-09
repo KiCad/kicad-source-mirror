@@ -74,7 +74,7 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     endif()
 
 
-
+    # Error on variable length arrays (gcc extension)
     CHECK_CXX_COMPILER_FLAG( "-Wvla" COMPILER_SUPPORTS_WVLA )
 
     if( COMPILER_SUPPORTS_WVLA )
