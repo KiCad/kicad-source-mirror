@@ -100,9 +100,9 @@ void GAL_DISPLAY_OPTIONS::ReadCommonConfig( COMMON_SETTINGS& aSettings, wxWindow
             aSettings.m_Graphics.cairo_aa_mode );
 
     m_dpi = DPI_SCALING( &aSettings, aWindow );
-
-    // Also calls NotifyChanged
     UpdateScaleFactor();
+
+    NotifyChanged();
 }
 
 

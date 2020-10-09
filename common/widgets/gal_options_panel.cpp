@@ -222,7 +222,5 @@ bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
 
     m_galOptions.m_forceDisplayCursor = m_forceCursorDisplay->GetValue();
 
-    m_galOptions.NotifyChanged();
-
     return true;
 }
