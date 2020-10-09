@@ -51,7 +51,8 @@ enum class KICURSOR
     ZOOM_IN,
     ZOOM_OUT,
     NET_LABEL,
-    GLOBAL_LABEL
+    GLOBAL_LABEL,
+    COMPONENT
 };
 
 /**

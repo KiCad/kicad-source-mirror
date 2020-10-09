@@ -118,7 +118,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
     auto setCursor =
             [&]()
             {
-                m_frame->GetCanvas()->SetCurrentCursor( component ? KICURSOR::MOVING : KICURSOR::PENCIL );
+                m_frame->GetCanvas()->SetCurrentCursor( component ? KICURSOR::MOVING : KICURSOR::COMPONENT );
             };
 
     // Set initial cursor

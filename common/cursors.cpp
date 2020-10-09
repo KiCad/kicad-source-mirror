@@ -26,6 +26,7 @@
 #include <cursors.h>
 #include <kiplatform/ui.h>
 #include <cursors/cursor-add.xpm>
+#include <cursors/cursor-component.xpm>
 #include <cursors/cursor-connector.xpm>
 #include <cursors/cursor-eraser.xpm>
 #include <cursors/cursor-global-label.xpm>
@@ -210,6 +211,14 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         nullptr,
         nullptr,
         cursor_global_label_xpm,
+        { 32, 32 },
+        { 7, 10 },
+    },
+    {
+        KICURSOR::COMPONENT,
+        nullptr,
+        nullptr,
+        cursor_component_xpm,
         { 32, 32 },
         { 7, 10 },
     },
