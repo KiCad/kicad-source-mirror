@@ -47,20 +47,19 @@
 #include <sch_text.h>
 
 #include "altium_parser_sch.h"
-#include <memory>
 #include <compoundfilereader.h>
+#include <memory>
 #include <plugins/altium/altium_parser.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/textfile.h>
 
 
-const wxPoint calculateComponentPoint( const wxPoint& aPosition, const SCH_COMPONENT* aComponent )
+const wxPoint GetRelativePosition( const wxPoint& aPosition, const SCH_COMPONENT* aComponent )
 {
-    const wxPoint newPos = aPosition - aComponent->GetPosition();
-    return { newPos.x, -newPos.y };
+    TRANSFORM t = aComponent->GetTransform().InverseTransform();
+    return t.TransformCoordinate( aPosition - aComponent->GetPosition() );
 }
-
 
 SCH_ALTIUM_PLUGIN::SCH_ALTIUM_PLUGIN()
 {
@@ -445,7 +444,7 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int index, const std::map<wxString, wxSt
     SCH_COMPONENT* component = new SCH_COMPONENT();
 
     component->SetPosition( elem.location );
-    component->SetOrientation( elem.orientation );
+    //component->SetOrientation( elem.orientation ); // TODO: keep it simple for now, and only set position
     component->SetLibId( libId );
     //component->SetLibSymbol( kpart ); // this has to be done after parsing the LIB_PART!
 
@@ -475,10 +474,99 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
     LIB_PIN* pin = new LIB_PIN( symbol->second );
     symbol->second->AddDrawItem( pin );
 
-    pin->SetPosition( calculateComponentPoint( elem.location, component ) );
-    pin->SetOrientation( elem.orientation );
     pin->SetName( elem.name );
     pin->SetNumber( elem.designator );
+    pin->SetLength( elem.pinlength );
+
+    wxPoint pinLocation = elem.location; // the location given is not the connection point!
+    switch( elem.orientation )
+    {
+    case ASCH_PIN_ORIENTATION::RIGHTWARDS:
+        pin->SetOrientation( DrawPinOrient::PIN_LEFT );
+        pinLocation.x += elem.pinlength;
+        break;
+    case ASCH_PIN_ORIENTATION::UPWARDS:
+        pin->SetOrientation( DrawPinOrient::PIN_DOWN );
+        pinLocation.y -= elem.pinlength;
+        break;
+    case ASCH_PIN_ORIENTATION::LEFTWARDS:
+        pin->SetOrientation( DrawPinOrient::PIN_RIGHT );
+        pinLocation.x -= elem.pinlength;
+        break;
+    case ASCH_PIN_ORIENTATION::DOWNWARDS:
+        pin->SetOrientation( DrawPinOrient::PIN_UP );
+        pinLocation.y += elem.pinlength;
+        break;
+    default:
+        wxLogWarning( "Pin has unexpected orientation" );
+        break;
+    }
+
+    pin->SetPosition( GetRelativePosition( pinLocation, component ) );
+
+    switch( elem.electrical )
+    {
+    case ASCH_PIN_ELECTRICAL::INPUT:
+        pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
+        break;
+    case ASCH_PIN_ELECTRICAL::BIDI:
+        pin->SetType( ELECTRICAL_PINTYPE::PT_BIDI );
+        break;
+    case ASCH_PIN_ELECTRICAL::OUTPUT:
+        pin->SetType( ELECTRICAL_PINTYPE::PT_OUTPUT );
+        break;
+    case ASCH_PIN_ELECTRICAL::OPEN_COLLECTOR:
+        pin->SetType( ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR );
+        break;
+    case ASCH_PIN_ELECTRICAL::PASSIVE:
+        pin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+        break;
+    case ASCH_PIN_ELECTRICAL::TRISTATE:
+        pin->SetType( ELECTRICAL_PINTYPE::PT_TRISTATE );
+        break;
+    case ASCH_PIN_ELECTRICAL::OPEN_EMITTER:
+        pin->SetType( ELECTRICAL_PINTYPE::PT_OPENEMITTER );
+        break;
+    case ASCH_PIN_ELECTRICAL::POWER:
+        pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
+        break;
+    case ASCH_PIN_ELECTRICAL::UNKNOWN:
+    default:
+        pin->SetType( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
+        wxLogWarning( "Pin has unexpected electrical type" );
+        break;
+    }
+
+    if( elem.symbolOuterEdge == ASCH_PIN_SYMBOL_OUTEREDGE::UNKNOWN )
+        wxLogWarning( "Pin has unexpected outer edge type" );
+
+    if( elem.symbolInnerEdge == ASCH_PIN_SYMBOL_INNEREDGE::UNKNOWN )
+        wxLogWarning( "Pin has unexpected inner edge type" );
+
+    if( elem.symbolOuterEdge == ASCH_PIN_SYMBOL_OUTEREDGE::NEGATED )
+    {
+        switch( elem.symbolInnerEdge )
+        {
+        case ASCH_PIN_SYMBOL_INNEREDGE::CLOCK:
+            pin->SetShape( GRAPHIC_PINSHAPE::INVERTED_CLOCK );
+            break;
+        default:
+            pin->SetShape( GRAPHIC_PINSHAPE::INVERTED );
+            break;
+        }
+    }
+    else
+    {
+        switch( elem.symbolInnerEdge )
+        {
+        case ASCH_PIN_SYMBOL_INNEREDGE::CLOCK:
+            pin->SetShape( GRAPHIC_PINSHAPE::CLOCK );
+            break;
+        default:
+            pin->SetShape( GRAPHIC_PINSHAPE::LINE ); // nothing to do
+            break;
+        }
+    }
 }
 
 
@@ -500,8 +588,8 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
 
     LIB_RECTANGLE* rect = new LIB_RECTANGLE( symbol->second );
     symbol->second->AddDrawItem( rect );
-    rect->SetPosition( calculateComponentPoint( elem.topRight, component ) );
-    rect->SetEnd( calculateComponentPoint( elem.bottomLeft, component ) );
+    rect->SetPosition( GetRelativePosition( elem.topRight, component ) );
+    rect->SetEnd( GetRelativePosition( elem.bottomLeft, component ) );
     rect->SetWidth( elem.lineWidth );
     if( elem.isTransparent )
     {

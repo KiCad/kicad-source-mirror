@@ -74,14 +74,36 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProperties )
     text       = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
     designator = ALTIUM_PARSER::PropertiesReadString( aProperties, "DESIGNATOR", "" );
 
+    int symbolOuterEdgeInt = ALTIUM_PARSER::PropertiesReadInt( aProperties, "SYMBOL_OUTEREDGE", 0 );
+    symbolOuterEdge        = ( symbolOuterEdgeInt >= 0 && symbolOuterEdgeInt <= 1 ) ?
+                              static_cast<ASCH_PIN_SYMBOL_OUTEREDGE>( symbolOuterEdgeInt ) :
+                              ASCH_PIN_SYMBOL_OUTEREDGE::UNKNOWN;
+
+    int symbolInnerEdgeInt = ALTIUM_PARSER::PropertiesReadInt( aProperties, "SYMBOL_INNEREDGE", 0 );
+    symbolInnerEdge        = ( symbolInnerEdgeInt == 0 || symbolInnerEdgeInt == 3 ) ?
+                              static_cast<ASCH_PIN_SYMBOL_INNEREDGE>( symbolInnerEdgeInt ) :
+                              ASCH_PIN_SYMBOL_INNEREDGE::UNKNOWN;
+
+    int electricalInt = ALTIUM_PARSER::PropertiesReadInt( aProperties, "ELECTRICAL", 0 );
+    electrical        = ( electricalInt >= 0 && electricalInt <= 7 ) ?
+                         static_cast<ASCH_PIN_ELECTRICAL>( electricalInt ) :
+                         ASCH_PIN_ELECTRICAL::UNKNOWN;
+
     int pinconglomerate = ALTIUM_PARSER::PropertiesReadInt( aProperties, "PINCONGLOMERATE", 0 );
-    orientation         = pinconglomerate & 0x03;
+
+    orientation    = static_cast<ASCH_PIN_ORIENTATION>( pinconglomerate & 0x03 );
+    showPinName    = ( pinconglomerate & 0x08 ) != 0;
+    showDesignator = ( pinconglomerate & 0x10 ) != 0;
 
     int x     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X", 0 );
     int xfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X_FRAC", 0 );
     int y     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.Y", 0 );
     int yfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.Y_FRAC", 0 );
     location  = wxPoint( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
+
+    int p     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "PINLENGTH", 0 );
+    int pfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "PINLENGTH_FRAC", 0 );
+    pinlength = Altium2KiCadUnit( p, pfrac );
 }
 
 

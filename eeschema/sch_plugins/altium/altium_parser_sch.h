@@ -32,7 +32,6 @@
 // this constant specifies a item which is not inside an component
 const int ALTIUM_COMPONENT_NONE = -1;
 
-
 enum class ALTIUM_SCH_RECORD
 {
     HEADER              = 0,
@@ -94,6 +93,46 @@ struct ASCH_COMPONENT
 };
 
 
+enum class ASCH_PIN_SYMBOL_OUTEREDGE
+{
+    UNKNOWN   = -1,
+    NO_SYMBOL = 0,
+    NEGATED   = 1,
+};
+
+
+enum class ASCH_PIN_SYMBOL_INNEREDGE
+{
+    UNKNOWN   = -1,
+    NO_SYMBOL = 0,
+    CLOCK     = 3,
+};
+
+
+enum class ASCH_PIN_ELECTRICAL
+{
+    UNKNOWN = -1,
+
+    INPUT          = 0,
+    BIDI           = 1,
+    OUTPUT         = 2,
+    OPEN_COLLECTOR = 3,
+    PASSIVE        = 4,
+    TRISTATE       = 5,
+    OPEN_EMITTER   = 6,
+    POWER          = 7
+};
+
+
+enum class ASCH_PIN_ORIENTATION
+{
+    RIGHTWARDS = 0,
+    UPWARDS    = 1,
+    LEFTWARDS  = 2,
+    DOWNWARDS  = 3
+};
+
+
 struct ASCH_PIN
 {
     int ownerindex;
@@ -103,8 +142,17 @@ struct ASCH_PIN
     wxString text;
     wxString designator;
 
-    int     orientation;
+    ASCH_PIN_SYMBOL_OUTEREDGE symbolOuterEdge;
+    ASCH_PIN_SYMBOL_INNEREDGE symbolInnerEdge;
+
+    ASCH_PIN_ELECTRICAL  electrical;
+    ASCH_PIN_ORIENTATION orientation;
+
     wxPoint location;
+    int     pinlength;
+
+    bool showPinName;
+    bool showDesignator;
 
     explicit ASCH_PIN( const std::map<wxString, wxString>& aProperties );
 };
