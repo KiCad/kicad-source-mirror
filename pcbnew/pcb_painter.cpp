@@ -1229,9 +1229,9 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
         int unscaledSize = Mils2iu( ptSize );
 
         // Scale by zoom a bit, but not too much
-        int     textSize = ( scaledSize + unscaledSize ) / 2;
-        int     penWidth = textSize / 12;
-        wxPoint textOffset = wxPoint( width.x / 2, - KiROUND( textSize * 0.6 ) );
+        int     textSize = ( scaledSize + ( unscaledSize * 2 ) ) / 3;
+        int     penWidth = textSize / 10;
+        wxPoint textOffset = wxPoint( width.x / 2, - KiROUND( textSize * 0.5 ) );
         wxPoint titleHeight = wxPoint( 0, KiROUND( textSize * 2.0 ) );
 
         if( !name.IsEmpty() && (int) aGroup->GetName().Length() * textSize < bbox.GetWidth() )
@@ -1240,6 +1240,10 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
             m_gal->DrawLine( topLeft - titleHeight, topLeft + width - titleHeight );
             m_gal->DrawLine( topLeft + width - titleHeight, topLeft + width );
 
+            m_gal->SetFontBold( false );
+            m_gal->SetFontItalic( true );
+            m_gal->SetFontUnderlined( false );
+            m_gal->SetTextMirrored( m_gal->IsFlippedX() );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
             m_gal->SetIsFill( false );
