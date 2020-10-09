@@ -28,6 +28,8 @@
 #include <cursors/cursor-add.xpm>
 #include <cursors/cursor-connector.xpm>
 #include <cursors/cursor-eraser.xpm>
+#include <cursors/cursor-global-label.xpm>
+#include <cursors/cursor-net-label.xpm>
 #include <cursors/cursor-measure.xpm>
 #include <cursors/cursor-pencil.xpm>
 #include <cursors/cursor-select-m.xpm>
@@ -194,6 +196,22 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         cursor_zoom_out_xpm,
         { 32, 32 },
         { 6, 6 },
+    },
+    {
+        KICURSOR::NET_LABEL,
+        nullptr,
+        nullptr,
+        cursor_net_label_xpm,
+        { 32, 32 },
+        { 7, 10 },
+    },
+    {
+        KICURSOR::GLOBAL_LABEL,
+        nullptr,
+        nullptr,
+        cursor_global_label_xpm,
+        { 32, 32 },
+        { 7, 10 },
     },
 };
 

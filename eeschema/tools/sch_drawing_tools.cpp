@@ -810,10 +810,12 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
 
 int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 {
-    EDA_ITEM* item = nullptr;
-    bool      importMode = aEvent.IsAction( &EE_ACTIONS::importSheetPin );
-    bool      isText = aEvent.IsAction( &EE_ACTIONS::placeSchematicText );
-    KICAD_T   type = aEvent.Parameter<KICAD_T>();
+    EDA_ITEM* item          = nullptr;
+    bool      isImportMode  = aEvent.IsAction( &EE_ACTIONS::importSheetPin );
+    bool      isText        = aEvent.IsAction( &EE_ACTIONS::placeSchematicText );
+    bool      isGlobalLabel = aEvent.IsAction( &EE_ACTIONS::placeGlobalLabel );
+    bool      isNetLabel    = aEvent.IsAction( &EE_ACTIONS::placeLabel );
+    KICAD_T   type          = aEvent.Parameter<KICAD_T>();
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
@@ -831,8 +833,14 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             {
                 if( item )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+                else if( isText )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::TEXT );
+                else if( isGlobalLabel )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::GLOBAL_LABEL );
+                else if( isNetLabel )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::NET_LABEL );
                 else
-                    m_frame->GetCanvas()->SetCurrentCursor( isText ? KICURSOR::TEXT : KICURSOR::PENCIL );
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 
     // Set initial cursor
@@ -922,7 +930,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                         break;
                     }
 
-                    if( importMode )
+                    if( isImportMode )
                     {
                         label = m_frame->ImportHierLabel( sheet );
 

@@ -49,7 +49,9 @@ enum class KICURSOR
     SUBTRACT,
     XOR,
     ZOOM_IN,
-    ZOOM_OUT
+    ZOOM_OUT,
+    NET_LABEL,
+    GLOBAL_LABEL
 };
 
 /**
