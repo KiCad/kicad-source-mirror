@@ -395,7 +395,6 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     }
 
     bool        restore_state = false;
-    bool        fromOtherCommand = false;
     VECTOR2I    totalMovement;
     GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
     TOOL_EVENT* evt = const_cast<TOOL_EVENT*>( &aEvent );
@@ -509,9 +508,6 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                                                          m_commit->Modify( bItem );
                                                      });
                         }
-
-                        if( item->IsNew() )
-                            fromOtherCommand = true;
                     }
                 }
 
@@ -631,31 +627,17 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     m_dragging = false;
     editFrame->UndoRedoBlock( false );
 
-    // Discard reference point when selection is "dropped" onto the board (ie: not dragging anymore)
+    // Discard reference point when selection is "dropped" onto the board
     selection.ClearReferencePoint();
 
-    // If canceled, we need to remove the dynamic ratsnest from the screen
+    // TODO: there's an ecapsulation leak here: this commit often has more than just the move
+    // in it; for instance it might have a paste, append board, etc. as well.
     if( restore_state )
-    {
         m_commit->Revert();
-
-        if( fromOtherCommand )
-        {
-            PICKED_ITEMS_LIST* undo = editFrame->PopCommandFromUndoList();
-
-            if( undo )
-            {
-                editFrame->PutDataInPreviousState( undo, false );
-                undo->ClearListAndDeleteItems();
-                delete undo;
-            }
-        }
-    }
     else
-    {
         m_commit->Push( _( "Drag" ) );
-    }
 
+    // Remove the dynamic ratsnest from the screen
     m_toolMgr->RunAction( PCB_ACTIONS::hideDynamicRatsnest, true );
 
     if( unselect )
