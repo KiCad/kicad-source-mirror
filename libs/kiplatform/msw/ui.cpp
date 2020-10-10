@@ -23,12 +23,38 @@
 #include <wx/cursor.h>
 #include <wx/nonownedwnd.h>
 #include <wx/window.h>
+#include <wx/msw/registry.h>
 
 
 bool KIPLATFORM::UI::IsDarkTheme()
 {
-    // TODO(ISM): Write this function
+    // NOTE: Disabled for now because we can't yet react to dark mode in Windows reasonably:
+    // Windows 10 dark mode does not change the values returned by wxSystemSettings::GetColour()
+    // so our window backgrounds, text colors, etc will stay in "light mode" until either wxWidgets
+    // implements something or we apply a custom theme ourselves.
+#ifdef NOTYET
+    const wxString lightModeKey = wxT( "AppsUseLightTheme" );
+
+    // Note: registry used because there is not yet an official API for this yet.
+    // This may stop working on future Windows versions
+    wxRegKey themeKey( wxRegKey::HKCU,
+                       wxT( "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize" ) );
+
+    if( !themeKey.Exists() )
+        return false;
+
+    if( !themeKey.HasValue( lightModeKey ) )
+        return false;
+
+    long val = 0;
+    
+    if( !themeKey.QueryValue( lightModeKey, &val ) )
+        return false;
+
+    return ( val == 0 );
+#else
     return false;
+#endif
 }
 
 
