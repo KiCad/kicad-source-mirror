@@ -153,6 +153,48 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProperties )
 }
 
 
+ASCH_BEZIER::ASCH_BEZIER( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::BEZIER );
+
+    ownerindex =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
+    ownerpartid =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+
+    int locationCount = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATIONCOUNT", 0 );
+    for( int i = 1; i <= locationCount; i++ )
+    {
+        const wxString si = std::to_string( i );
+        points.emplace_back( PropertiesReadKiCadUnitFrac( aProperties, "X" + si ),
+                -PropertiesReadKiCadUnitFrac( aProperties, "Y" + si ) );
+    }
+
+    lineWidth = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
+}
+
+
+ASCH_POLYLINE::ASCH_POLYLINE( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::POLYLINE );
+
+    ownerindex =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
+    ownerpartid =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+
+    int locationCount = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATIONCOUNT", 0 );
+    for( int i = 1; i <= locationCount; i++ )
+    {
+        const wxString si = std::to_string( i );
+        points.emplace_back( PropertiesReadKiCadUnitFrac( aProperties, "X" + si ),
+                -PropertiesReadKiCadUnitFrac( aProperties, "Y" + si ) );
+    }
+
+    lineWidth = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
+}
+
+
 ASCH_POLYGON::ASCH_POLYGON( const std::map<wxString, wxString>& aProperties )
 {
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::POLYGON );

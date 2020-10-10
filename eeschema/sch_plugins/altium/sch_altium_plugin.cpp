@@ -26,6 +26,7 @@
 #include <schematic.h>
 
 #include <lib_arc.h>
+#include <lib_bezier.h>
 #include <lib_circle.h>
 #include <lib_id.h>
 #include <lib_item.h>
@@ -308,8 +309,10 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
         case ALTIUM_SCH_RECORD::LABEL:
             break;
         case ALTIUM_SCH_RECORD::BEZIER:
+            ParseBezier( properties );
             break;
         case ALTIUM_SCH_RECORD::POLYLINE:
+            ParsePolyline( properties );
             break;
         case ALTIUM_SCH_RECORD::POLYGON:
             ParsePolygon( properties );
@@ -587,6 +590,83 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
             pin->SetShape( GRAPHIC_PINSHAPE::LINE ); // nothing to do
             break;
         }
+    }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_BEZIER elem( aProperties );
+
+    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    {
+        wxLogError( "Bezier drawing is not possible for now on schematic." );
+    }
+    else
+    {
+        const auto& symbol = m_symbols.find( elem.ownerindex );
+        if( symbol == m_symbols.end() )
+        {
+            // TODO: e.g. can depend on Template (RECORD=39
+            wxLogWarning( wxString::Format(
+                    "Rectangle tries to access symbol with ownerindex %d which does not exist",
+                    elem.ownerindex ) );
+            return;
+        }
+
+        const auto& component = m_components.at( symbol->first );
+
+        LIB_BEZIER* bezier = new LIB_BEZIER( symbol->second );
+        symbol->second->AddDrawItem( bezier );
+
+        for( wxPoint& point : elem.points )
+        {
+            bezier->AddPoint( GetRelativePosition( point, component ) );
+        }
+
+        bezier->SetWidth( elem.lineWidth );
+    }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_POLYLINE elem( aProperties );
+
+    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    {
+        for( int i = 0; i < (int) elem.points.size() - 1; i++ )
+        {
+            SCH_LINE* line = new SCH_LINE( elem.points.at( i ), SCH_LAYER_ID::LAYER_NOTES );
+            line->SetEndPoint( elem.points.at( i + 1 ) );
+
+            line->SetFlags( IS_NEW );
+            m_currentSheet->GetScreen()->Append( line );
+        }
+    }
+    else
+    {
+        const auto& symbol = m_symbols.find( elem.ownerindex );
+        if( symbol == m_symbols.end() )
+        {
+            // TODO: e.g. can depend on Template (RECORD=39
+            wxLogWarning( wxString::Format(
+                    "Rectangle tries to access symbol with ownerindex %d which does not exist",
+                    elem.ownerindex ) );
+            return;
+        }
+
+        const auto& component = m_components.at( symbol->first );
+
+        LIB_POLYLINE* line = new LIB_POLYLINE( symbol->second );
+        symbol->second->AddDrawItem( line );
+
+        for( wxPoint& point : elem.points )
+        {
+            line->AddPoint( GetRelativePosition( point, component ) );
+        }
+
+        line->SetWidth( elem.lineWidth );
     }
 }
 

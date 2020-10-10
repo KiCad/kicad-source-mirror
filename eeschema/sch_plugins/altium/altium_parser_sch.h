@@ -196,6 +196,32 @@ struct ASCH_PIN
 };
 
 
+struct ASCH_BEZIER
+{
+    int ownerindex;
+    int ownerpartid;
+
+    std::vector<wxPoint> points;
+
+    int lineWidth;
+
+    explicit ASCH_BEZIER( const std::map<wxString, wxString>& aProperties );
+};
+
+
+struct ASCH_POLYLINE
+{
+    int ownerindex;
+    int ownerpartid;
+
+    std::vector<wxPoint> points;
+
+    int lineWidth;
+
+    explicit ASCH_POLYLINE( const std::map<wxString, wxString>& aProperties );
+};
+
+
 struct ASCH_POLYGON
 {
     int ownerindex;
