@@ -48,6 +48,7 @@
 #include <sch_text.h>
 
 #include "altium_parser_sch.h"
+#include <bezier_curves.h>
 #include <compoundfilereader.h>
 #include <memory>
 #include <plugins/altium/altium_parser.h>
@@ -326,8 +327,10 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
         case ALTIUM_SCH_RECORD::ELLIPTICAL_ARC:
             break;
         case ALTIUM_SCH_RECORD::ARC:
+            ParseArc( properties );
             break;
         case ALTIUM_SCH_RECORD::LINE:
+            ParseLine( properties );
             break;
         case ALTIUM_SCH_RECORD::RECTANGLE:
             ParseRectangle( properties );
@@ -384,6 +387,8 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
         case ALTIUM_SCH_RECORD::RECORD_47:
             break;
         case ALTIUM_SCH_RECORD::RECORD_48:
+            break;
+        case ALTIUM_SCH_RECORD::RECORD_209:
             break;
         case ALTIUM_SCH_RECORD::RECORD_215:
             break;
@@ -598,9 +603,51 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
 {
     ASCH_BEZIER elem( aProperties );
 
+    if( elem.points.size() < 2 )
+    {
+        wxLogWarning( wxString::Format( "Bezier has %d control points. At least 2 are expected.",
+                static_cast<int>( elem.points.size() ) ) );
+        return;
+    }
+
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        wxLogError( "Bezier drawing is not possible for now on schematic." );
+        for( size_t i = 0; i + 1 < elem.points.size(); i += 3 )
+        {
+            if( i + 2 == elem.points.size() )
+            {
+                // special case: single line
+                SCH_LINE* line = new SCH_LINE( elem.points.at( i ), SCH_LAYER_ID::LAYER_NOTES );
+                line->SetEndPoint( elem.points.at( i + 1 ) );
+                line->SetLineWidth( elem.lineWidth );
+
+                line->SetFlags( IS_NEW );
+                m_currentSheet->GetScreen()->Append( line );
+            }
+            else
+            {
+                // simulate bezier using line segments
+                std::vector<wxPoint> bezierPoints;
+                std::vector<wxPoint> polyPoints;
+                for( size_t j = i; j < elem.points.size() && j < i + 4; j++ )
+                {
+                    bezierPoints.push_back( elem.points.at( j ) );
+                }
+
+                BEZIER_POLY converter( bezierPoints );
+                converter.GetPoly( polyPoints );
+
+                for( size_t k = 0; k < polyPoints.size() - 1; k++ )
+                {
+                    SCH_LINE* line = new SCH_LINE( polyPoints.at( k ), SCH_LAYER_ID::LAYER_NOTES );
+                    line->SetEndPoint( polyPoints.at( k + 1 ) );
+                    line->SetLineWidth( elem.lineWidth );
+
+                    line->SetFlags( IS_NEW );
+                    m_currentSheet->GetScreen()->Append( line );
+                }
+            }
+        }
     }
     else
     {
@@ -609,22 +656,42 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
         {
             // TODO: e.g. can depend on Template (RECORD=39
             wxLogWarning( wxString::Format(
-                    "Rectangle tries to access symbol with ownerindex %d which does not exist",
+                    "Bezier tries to access symbol with ownerindex %d which does not exist",
                     elem.ownerindex ) );
             return;
         }
 
         const auto& component = m_components.at( symbol->first );
 
-        LIB_BEZIER* bezier = new LIB_BEZIER( symbol->second );
-        symbol->second->AddDrawItem( bezier );
-
-        for( wxPoint& point : elem.points )
+        for( size_t i = 0; i + 1 < elem.points.size(); i += 3 )
         {
-            bezier->AddPoint( GetRelativePosition( point, component ) );
-        }
+            if( i + 2 == elem.points.size() )
+            {
+                // special case: single line
+                LIB_POLYLINE* line = new LIB_POLYLINE( symbol->second );
+                symbol->second->AddDrawItem( line );
 
-        bezier->SetWidth( elem.lineWidth );
+                for( size_t j = i; j < elem.points.size() && j < i + 2; j++ )
+                {
+                    line->AddPoint( GetRelativePosition( elem.points.at( j ), component ) );
+                }
+
+                line->SetWidth( elem.lineWidth );
+            }
+            else
+            {
+                // bezier always has maximum of 4 control points
+                LIB_BEZIER* bezier = new LIB_BEZIER( symbol->second );
+                symbol->second->AddDrawItem( bezier );
+
+                for( size_t j = i; j < elem.points.size() && j < i + 4; j++ )
+                {
+                    bezier->AddPoint( GetRelativePosition( elem.points.at( j ), component ) );
+                }
+
+                bezier->SetWidth( elem.lineWidth );
+            }
+        }
     }
 }
 
@@ -635,10 +702,11 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
 
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        for( int i = 0; i < (int) elem.points.size() - 1; i++ )
+        for( size_t i = 0; i < elem.points.size() - 1; i++ )
         {
             SCH_LINE* line = new SCH_LINE( elem.points.at( i ), SCH_LAYER_ID::LAYER_NOTES );
             line->SetEndPoint( elem.points.at( i + 1 ) );
+            line->SetLineWidth( elem.lineWidth );
 
             line->SetFlags( IS_NEW );
             m_currentSheet->GetScreen()->Append( line );
@@ -651,7 +719,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
         {
             // TODO: e.g. can depend on Template (RECORD=39
             wxLogWarning( wxString::Format(
-                    "Rectangle tries to access symbol with ownerindex %d which does not exist",
+                    "Polyline tries to access symbol with ownerindex %d which does not exist",
                     elem.ownerindex ) );
             return;
         }
@@ -678,10 +746,11 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         // TODO: we cannot fill this polygon, only draw it for now
-        for( int i = 0; i < (int) elem.points.size() - 1; i++ )
+        for( size_t i = 0; i < elem.points.size() - 1; i++ )
         {
             SCH_LINE* line = new SCH_LINE( elem.points.at( i ), SCH_LAYER_ID::LAYER_NOTES );
             line->SetEndPoint( elem.points.at( i + 1 ) );
+            line->SetLineWidth( elem.lineWidth );
 
             line->SetFlags( IS_NEW );
             m_currentSheet->GetScreen()->Append( line );
@@ -690,6 +759,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
         // close polygon
         SCH_LINE* line = new SCH_LINE( elem.points.front(), SCH_LAYER_ID::LAYER_NOTES );
         line->SetEndPoint( elem.points.back() );
+        line->SetLineWidth( elem.lineWidth );
 
         line->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( line );
@@ -701,7 +771,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
         {
             // TODO: e.g. can depend on Template (RECORD=39
             wxLogWarning( wxString::Format(
-                    "Rectangle tries to access symbol with ownerindex %d which does not exist",
+                    "Polygon tries to access symbol with ownerindex %d which does not exist",
                     elem.ownerindex ) );
             return;
         }
@@ -716,12 +786,98 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
         {
             line->AddPoint( GetRelativePosition( point, component ) );
         }
+        line->AddPoint( GetRelativePosition( elem.points.front(), component ) );
 
         line->SetWidth( elem.lineWidth );
         if( elem.isSolid )
         {
             line->SetFillMode( FILL_TYPE::FILLED_SHAPE );
         }
+    }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_ARC elem( aProperties );
+
+    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    {
+        wxLogError( "Arc drawing is not possible for now on schematic." );
+    }
+    else
+    {
+        const auto& symbol = m_symbols.find( elem.ownerindex );
+        if( symbol == m_symbols.end() )
+        {
+            // TODO: e.g. can depend on Template (RECORD=39
+            wxLogWarning( wxString::Format(
+                    "Arc tries to access symbol with ownerindex %d which does not exist",
+                    elem.ownerindex ) );
+            return;
+        }
+
+        const auto& component = m_components.at( symbol->first );
+
+        if( elem.startAngle == 0 && ( elem.endAngle == 0 || elem.endAngle == 360 ) )
+        {
+            LIB_CIRCLE* circle = new LIB_CIRCLE( symbol->second );
+            symbol->second->AddDrawItem( circle );
+
+            circle->SetPosition( GetRelativePosition( elem.center, component ) );
+            circle->SetRadius( elem.radius );
+            circle->SetWidth( elem.lineWidth );
+        }
+        else
+        {
+            LIB_ARC* arc = new LIB_ARC( symbol->second );
+            symbol->second->AddDrawItem( arc );
+
+            // TODO: correct?
+            arc->SetPosition( GetRelativePosition( elem.center, component ) );
+            arc->SetRadius( elem.radius );
+            arc->SetFirstRadiusAngle( elem.startAngle * 10. );
+            arc->SetSecondRadiusAngle( elem.endAngle * 10. );
+        }
+    }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_LINE elem( aProperties );
+
+    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    {
+        // close polygon
+        SCH_LINE* line = new SCH_LINE( elem.point1, SCH_LAYER_ID::LAYER_NOTES );
+        line->SetEndPoint( elem.point2 );
+        line->SetLineWidth( elem.lineWidth );
+
+        line->SetFlags( IS_NEW );
+        m_currentSheet->GetScreen()->Append( line );
+    }
+    else
+    {
+        const auto& symbol = m_symbols.find( elem.ownerindex );
+        if( symbol == m_symbols.end() )
+        {
+            // TODO: e.g. can depend on Template (RECORD=39
+            wxLogWarning( wxString::Format(
+                    "Line tries to access symbol with ownerindex %d which does not exist",
+                    elem.ownerindex ) );
+            return;
+        }
+
+        const auto& component = m_components.at( symbol->first );
+
+        LIB_POLYLINE* line = new LIB_POLYLINE( symbol->second );
+        symbol->second->AddDrawItem( line );
+
+        line->AddPoint( GetRelativePosition( elem.point1, component ) );
+        line->AddPoint( GetRelativePosition( elem.point2, component ) );
+
+        line->SetWidth( elem.lineWidth );
     }
 }
 
@@ -738,21 +894,25 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
         // TODO: we cannot fill this rectangle, only draw it for now
         SCH_LINE* lineTop = new SCH_LINE( elem.topRight, SCH_LAYER_ID::LAYER_NOTES );
         lineTop->SetEndPoint( topLeft );
+        lineTop->SetLineWidth( elem.lineWidth );
         lineTop->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( lineTop );
 
         SCH_LINE* lineBottom = new SCH_LINE( elem.bottomLeft, SCH_LAYER_ID::LAYER_NOTES );
         lineBottom->SetEndPoint( bottomRight );
+        lineBottom->SetLineWidth( elem.lineWidth );
         lineBottom->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( lineBottom );
 
         SCH_LINE* lineRight = new SCH_LINE( elem.topRight, SCH_LAYER_ID::LAYER_NOTES );
         lineRight->SetEndPoint( bottomRight );
+        lineRight->SetLineWidth( elem.lineWidth );
         lineRight->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( lineRight );
 
         SCH_LINE* lineLeft = new SCH_LINE( elem.bottomLeft, SCH_LAYER_ID::LAYER_NOTES );
         lineLeft->SetEndPoint( topLeft );
+        lineLeft->SetLineWidth( elem.lineWidth );
         lineLeft->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( lineLeft );
     }
@@ -824,11 +984,11 @@ void SCH_ALTIUM_PLUGIN::ParseBus( const std::map<wxString, wxString>& aPropertie
 {
     ASCH_BUS elem( aProperties );
 
-    for( int i = 0; i < (int) elem.points.size() - 1; i++ )
+    for( size_t i = 0; i < elem.points.size() - 1; i++ )
     {
         SCH_LINE* bus = new SCH_LINE( elem.points.at( i ), SCH_LAYER_ID::LAYER_BUS );
-
         bus->SetEndPoint( elem.points.at( i + 1 ) );
+        bus->SetLineWidth( elem.lineWidth );
 
         bus->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( bus );
@@ -840,11 +1000,11 @@ void SCH_ALTIUM_PLUGIN::ParseWire( const std::map<wxString, wxString>& aProperti
 {
     ASCH_WIRE elem( aProperties );
 
-    for( int i = 0; i < (int) elem.points.size() - 1; i++ )
+    for( size_t i = 0; i < elem.points.size() - 1; i++ )
     {
         SCH_LINE* wire = new SCH_LINE( elem.points.at( i ), SCH_LAYER_ID::LAYER_WIRE );
-
         wire->SetEndPoint( elem.points.at( i + 1 ) );
+        wire->SetLineWidth( elem.lineWidth );
 
         wire->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( wire );

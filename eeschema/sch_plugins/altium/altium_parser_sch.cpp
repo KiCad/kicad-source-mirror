@@ -217,6 +217,44 @@ ASCH_POLYGON::ASCH_POLYGON( const std::map<wxString, wxString>& aProperties )
 }
 
 
+ASCH_ARC::ASCH_ARC( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::ARC );
+
+    ownerindex =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
+    ownerpartid =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+
+    center = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
+    radius = PropertiesReadKiCadUnitFrac( aProperties, "RADIUS" );
+
+    startAngle = ALTIUM_PARSER::PropertiesReadDouble( aProperties, "STARTANGLE", 0 );
+    endAngle   = ALTIUM_PARSER::PropertiesReadDouble( aProperties, "ENDANGLE", 0 );
+
+    lineWidth = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
+}
+
+
+ASCH_LINE::ASCH_LINE( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::LINE );
+
+    ownerindex =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
+    ownerpartid =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+
+    point1 = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
+    point2 = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "CORNER.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "CORNER.Y" ) );
+
+    lineWidth = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
+}
+
+
 ASCH_RECTANGLE::ASCH_RECTANGLE( const std::map<wxString, wxString>& aProperties )
 {
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::RECTANGLE );

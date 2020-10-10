@@ -73,6 +73,7 @@ enum class ALTIUM_SCH_RECORD
     RECORD_46           = 46,
     RECORD_47           = 47,
     RECORD_48           = 48,
+    RECORD_209          = 209,
     RECORD_215          = 215,
     RECORD_216          = 216,
     RECORD_217          = 217,
@@ -233,6 +234,36 @@ struct ASCH_POLYGON
     bool isSolid;
 
     explicit ASCH_POLYGON( const std::map<wxString, wxString>& aProperties );
+};
+
+
+struct ASCH_ARC
+{
+    int ownerindex;
+    int ownerpartid;
+
+    wxPoint center;
+    int     radius;
+    double  startAngle;
+    double  endAngle;
+
+    int lineWidth;
+
+    explicit ASCH_ARC( const std::map<wxString, wxString>& aProperties );
+};
+
+
+struct ASCH_LINE
+{
+    int ownerindex;
+    int ownerpartid;
+
+    wxPoint point1;
+    wxPoint point2;
+
+    int lineWidth;
+
+    explicit ASCH_LINE( const std::map<wxString, wxString>& aProperties );
 };
 
 
