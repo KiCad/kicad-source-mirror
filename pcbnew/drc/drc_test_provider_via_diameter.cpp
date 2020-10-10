@@ -106,17 +106,26 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                     constraintDiameter = constraint.Value().Max();
                 }
 
+                if( fail_min )
+                {
+                    m_msg.Printf( _( " (%s min diameter %s; actual %s)" ),
+                                  constraint.GetName(),
+                                  MessageTextFromValue( userUnits(), constraintDiameter ),
+                                  MessageTextFromValue( userUnits(), actual ) );
+                }
+                else if( fail_max )
+                {
+                    m_msg.Printf( _( " (%s max diameter %s; actual %s)" ),
+                                  constraint.GetName(),
+                                  MessageTextFromValue( userUnits(), constraintDiameter ),
+                                  MessageTextFromValue( userUnits(), actual ) );
+                }
+
                 if( fail_min || fail_max )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_VIA_DIAMETER );
 
-                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s diameter %s; actual %s)" ),
-                                  constraint.GetName(),
-                                  fail_min ? _( "min" ) : _( "max" ),
-                                  MessageTextFromValue( userUnits(), constraintDiameter ) );
-                                  MessageTextFromValue( userUnits(), actual ),
-
-                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + m_msg );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
