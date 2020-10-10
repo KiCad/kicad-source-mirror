@@ -189,7 +189,6 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat )
 {
     aBoard->BuildConnectivity();
     aBoard->SynchronizeNetsAndNetClasses();
-    aBoard->GetDesignSettings().SetCurrentNetClass( NETCLASS::Default );
 
     IO_MGR::Save( aFormat, aFileName, aBoard, NULL );
 
