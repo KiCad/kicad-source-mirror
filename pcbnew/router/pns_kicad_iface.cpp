@@ -357,7 +357,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     int viaDiameter = 0;
     int viaDrill = 0;
 
-    if( bds.UseNetClassVia() )   // netclass value
+    if( bds.UseNetClassVia() && aStartItem )   // netclass value
     {
         PNS::CONSTRAINT diaConstraint, drillConstraint;
         bool okDia = m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER,
