@@ -879,7 +879,8 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( VIA* aVia )
 }
 
 
-bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
+bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone,
+                                     SHAPE_POLY_SET* aBoardOutline )
 {
     SHAPE_POLY_SET poly;
 
@@ -894,7 +895,7 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
         if( ! layers[ layer ] )
             continue;
 
-        aZone->BuildSmoothedPoly( poly, ToLAYER_ID( layer ) );
+        aZone->BuildSmoothedPoly( poly, ToLAYER_ID( layer ), aBoardOutline );
         poly.CacheTriangulation();
 
         if( !poly.IsTriangulationUpToDate() )
@@ -1143,9 +1144,15 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         }
     }
 
+    SHAPE_POLY_SET  buffer;
+    SHAPE_POLY_SET* boardOutline = nullptr;
+
+    if( m_board->GetBoardPolygonOutlines( buffer ) )
+        boardOutline = &buffer;
+
     for( ZONE_CONTAINER* zone : m_board->Zones() )
     {
-        syncZone( aWorld, zone );
+        syncZone( aWorld, zone, boardOutline );
     }
 
     for( MODULE* module : m_board->Modules() )
@@ -1162,7 +1169,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         syncTextItem( aWorld, &module->Value(), module->Value().GetLayer() );
 
         for( MODULE_ZONE_CONTAINER* zone : module->Zones() )
-            syncZone( aWorld, zone );
+            syncZone( aWorld, zone, boardOutline );
 
         if( module->IsNetTie() )
             continue;

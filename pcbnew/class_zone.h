@@ -361,7 +361,7 @@ public:
                                              int aError = ARC_HIGH_DEF ) const;
 
     /**
-     * Function TransformSmoothedOutlineWithClearanceToPolygon
+     * Function TransformSmoothedOutlineToPolygon
      * Convert the outlines shape to a polygon with no holes
      * inflated (optional) by max( aClearanceValue, the zone clearance)
      * (holes are linked to external outline by overlapping segments)
@@ -369,9 +369,10 @@ public:
      * Circles (vias) and arcs (ends of tracks) are approximated by segments
      * @param aCornerBuffer = a buffer to store the polygon
      * @param aClearance = the min clearance around outlines
+     * @param aBoardOutline = the board outline (if a valid one exists; nullptr otherwise)
      */
-    void TransformSmoothedOutlineWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                         int aClearance ) const;
+    void TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearance,
+                                            SHAPE_POLY_SET* aBoardOutline ) const;
 
     /**
      * Function TransformShapeWithClearanceToPolygon
@@ -669,7 +670,8 @@ public:
     /**
      * Function GetSmoothedPoly
      */
-    bool BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer ) const;
+    bool BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer,
+                            SHAPE_POLY_SET* aBoardOutline ) const;
 
     void SetCornerSmoothingType( int aType ) { m_cornerSmoothingType = aType; };
 

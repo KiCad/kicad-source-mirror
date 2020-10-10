@@ -757,6 +757,11 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                           const PCB_PLOT_PARAMS& aPlotOpt, int aMinThickness )
 {
     PCB_LAYER_ID    layer = aLayerMask[B_Mask] ? B_Mask : F_Mask;
+    SHAPE_POLY_SET  buffer;
+    SHAPE_POLY_SET* boardOutline = nullptr;
+
+    if( aBoard->GetBoardPolygonOutlines( buffer ) )
+        boardOutline = &buffer;
 
     // Set the current arc to segment max approx error
     int currMaxError = aBoard->GetDesignSettings().m_MaxError;
@@ -776,9 +781,9 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     itemplotter.PlotBoardGraphicItems();
 
-    for( auto module : aBoard->Modules() )
+    for( MODULE* module : aBoard->Modules() )
     {
-        for( auto item : module->GraphicalItems() )
+        for( BOARD_ITEM* item : module->GraphicalItems() )
         {
             itemplotter.PlotFootprintTextItems( module );
 
@@ -806,7 +811,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 #endif
     {
         // Plot pads
-        for( auto module : aBoard->Modules() )
+        for( MODULE* module : aBoard->Modules() )
         {
             // add shapes with their exact mask layer size in initialPolys
             module->TransformPadsShapesWithClearanceToPolygon( layer, initialPolys, 0 );
@@ -821,7 +826,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             int via_clearance = aBoard->GetDesignSettings().m_SolderMaskMargin;
             int via_margin = via_clearance + inflate;
 
-            for( auto track : aBoard->Tracks() )
+            for( TRACK* track : aBoard->Tracks() )
             {
                 const VIA* via = dyn_cast<const VIA*>( track );
 
@@ -860,9 +865,9 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 continue;
 
             // add shapes inflated by aMinThickness/2 in areas
-            zone->TransformSmoothedOutlineWithClearanceToPolygon( areas, inflate + zone_margin );
+            zone->TransformSmoothedOutlineToPolygon( areas, inflate + zone_margin, boardOutline );
             // add shapes with their exact mask layer size in initialPolys
-            zone->TransformSmoothedOutlineWithClearanceToPolygon( initialPolys, zone_margin );
+            zone->TransformSmoothedOutlineToPolygon( initialPolys, zone_margin, boardOutline );
         }
 
         int maxError = aBoard->GetDesignSettings().m_MaxError;

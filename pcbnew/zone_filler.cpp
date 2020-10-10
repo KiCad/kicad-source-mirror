@@ -843,7 +843,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                         || aZone->GetNetCode() == aKnockout->GetNetCode() )
                     {
                         // Keepouts and same-net zones use outline with no clearance
-                        aKnockout->TransformSmoothedOutlineWithClearanceToPolygon( aHoles, 0 );
+                        aKnockout->TransformSmoothedOutlineToPolygon( aHoles, 0, nullptr );
                     }
                     else
                     {
@@ -852,7 +852,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                         if( bds.m_ZoneFillVersion == 5 )
                         {
                             // 5.x used outline with clearance
-                            aKnockout->TransformSmoothedOutlineWithClearanceToPolygon( aHoles, gap );
+                            aKnockout->TransformSmoothedOutlineToPolygon( aHoles, gap, nullptr );
                         }
                         else
                         {
@@ -1096,14 +1096,15 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
 bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
                                   SHAPE_POLY_SET& aRawPolys, SHAPE_POLY_SET& aFinalPolys )
 {
-    SHAPE_POLY_SET smoothedPoly;
+    SHAPE_POLY_SET* boardOutline = m_brdOutlinesValid ? &m_boardOutline : nullptr;
+    SHAPE_POLY_SET  smoothedPoly;
 
     /*
      * convert outlines + holes to outlines without holes (adding extra segments if necessary)
      * m_Poly data is expected normalized, i.e. NormalizeAreaOutlines was used after building
      * this zone
      */
-    if ( !aZone->BuildSmoothedPoly( smoothedPoly, aLayer ) )
+    if ( !aZone->BuildSmoothedPoly( smoothedPoly, aLayer, boardOutline ) )
         return false;
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
@@ -1121,9 +1122,6 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
         int half_min_width = aZone->GetMinThickness() / 2;
         int epsilon = Millimeter2iu( 0.001 );
         int numSegs = GetArcToSegmentCount( half_min_width, m_maxError, 360.0 );
-
-        if( m_brdOutlinesValid )
-            smoothedPoly.BooleanIntersection( m_boardOutline, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
         smoothedPoly.Deflate( half_min_width - epsilon, numSegs );
 

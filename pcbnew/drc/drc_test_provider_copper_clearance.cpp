@@ -758,6 +758,12 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
 {
     const int delta = 50;  // This is the number of tests between 2 calls to the progress bar
 
+    SHAPE_POLY_SET  buffer;
+    SHAPE_POLY_SET* boardOutline = nullptr;
+
+    if( m_board->GetBoardPolygonOutlines( buffer ) )
+        boardOutline = &buffer;
+
     // Test copper areas for valid netcodes -> fixme, goes to connectivity checks
 
     for( int layer_id = F_Cu; layer_id <= B_Cu; ++layer_id )
@@ -775,7 +781,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
             ZONE_CONTAINER* zoneRef = m_board->GetArea( ii );
 
             if( zoneRef->IsOnLayer( layer ) )
-                zoneRef->BuildSmoothedPoly( smoothed_polys[ii], layer );
+                zoneRef->BuildSmoothedPoly( smoothed_polys[ii], layer, boardOutline );
         }
 
         // iterate through all areas

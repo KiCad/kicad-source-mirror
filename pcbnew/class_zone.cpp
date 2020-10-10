@@ -1159,10 +1159,18 @@ void ZONE_CONTAINER::GetInteractingZones( PCB_LAYER_ID aLayer,
 }
 
 
-bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer ) const
+bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer,
+                                        SHAPE_POLY_SET* aBoardOutline ) const
 {
     if( GetNumCorners() <= 2 )  // malformed zone. polygon calculations will not like it ...
         return false;
+
+    if( GetIsRuleArea() )
+    {
+        // We like keepouts just the way they are....
+        aSmoothedPoly = *m_Poly;
+        return true;
+    }
 
     BOARD* board = GetBoard();
     int    maxError = ARC_HIGH_DEF;
@@ -1215,6 +1223,9 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER
     for( ZONE_CONTAINER* zone : interactingZones )
         aSmoothedPoly.BooleanAdd( *zone->Outline(), SHAPE_POLY_SET::PM_FAST );
 
+    if( !GetIsRuleArea() && aBoardOutline )
+        aSmoothedPoly.BooleanIntersection( *aBoardOutline, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
     smooth( aSmoothedPoly );
 
     aSmoothedPoly.BooleanIntersection( *maxExtents, SHAPE_POLY_SET::PM_FAST );
@@ -1247,16 +1258,17 @@ double ZONE_CONTAINER::CalculateFilledArea()
 
 
 /**
- * Function TransformSmoothedOutlineWithClearanceToPolygon
+ * Function TransformSmoothedOutlineToPolygon
  * Convert the smoothed outline to polygons (optionally inflated by \a aClearance) and copy them
  * into \a aCornerBuffer.
  */
-void ZONE_CONTAINER::TransformSmoothedOutlineWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                                     int aClearance ) const
+void ZONE_CONTAINER::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                        int aClearance,
+                                                        SHAPE_POLY_SET* aBoardOutline ) const
 {
     // Creates the zone outline polygon (with holes if any)
     SHAPE_POLY_SET polybuffer;
-    BuildSmoothedPoly( polybuffer, GetLayer() );
+    BuildSmoothedPoly( polybuffer, GetLayer(), aBoardOutline );
 
     // Calculate the polygon with clearance
     // holes are linked to the main outline, so only one polygon is created.
