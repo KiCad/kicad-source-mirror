@@ -858,17 +858,6 @@ bool ROUTER_TOOL::prepareInteractive()
 
     editFrame->SetActiveLayer( ToLAYER_ID( routingLayer ) );
 
-    // for some reason I don't understand, GetNetclass() may return null sometimes...
-    if( m_startItem && m_startItem->Net() >= 0 &&
-        m_startItem->Parent() && m_startItem->Parent()->GetNetClass() )
-    {
-        highlightNet( true, m_startItem->Net() );
-        // Update track width and via size shown in main toolbar comboboxes
-        editFrame->SetCurrentNetClass( m_startItem->Parent()->GetNetClass()->GetName() );
-    }
-    else
-        editFrame->SetCurrentNetClass( NETCLASS::Default );
-
     controls()->ForceCursorPosition( false );
     controls()->SetAutoPan( true );
 

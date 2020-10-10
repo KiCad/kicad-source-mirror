@@ -719,9 +719,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( !converted )
         UpdateFileHistory( GetBoard()->GetFileName() );
 
-    // Select netclass Default as current netclass (it always exists)
-    SetCurrentNetClass( NETCLASS::Default );
-
     // Rebuild list of nets (full ratsnest rebuild)
     GetBoard()->BuildConnectivity();
     Compile_Ratsnest( true );
@@ -816,9 +813,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     tempFile.SetExt( tempFile.GetExt() + wxT( "$" ) );
 
     GetBoard()->SynchronizeNetsAndNetClasses();
-
-    // Select default Netclass before writing file. Useful to save default values in headers.
-    SetCurrentNetClass( NETCLASS::Default );
 
     // Save various DRC parameters, such as violation severities (which may have been
     // edited via the DRC dialog as well as the Board Setup dialog), DRC exclusions, etc.
@@ -924,10 +918,6 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
     }
 
     GetBoard()->SynchronizeNetsAndNetClasses();
-
-    // Select default Netclass before writing file.
-    // Useful to save default values in headers
-    SetCurrentNetClass( NETCLASS::Default );
 
     try
     {

@@ -82,13 +82,8 @@ BOARD::BOARD() :
     // Initialize default netclass.
     NETCLASS* defaultClass = bds.GetDefault();
     defaultClass->SetDescription( _( "This is the default net class." ) );
-    bds.SetCurrentNetClass( defaultClass->GetName() );
 
-    // Set sensible initial values for custom track width & via size
     bds.UseCustomTrackViaSize( false );
-    bds.SetCustomTrackWidth( bds.GetCurrentTrackWidth() );
-    bds.SetCustomViaSize( bds.GetCurrentViaSize() );
-    bds.SetCustomViaDrill( bds.GetCurrentViaDrill() );
 
     // Initialize ratsnest
     m_connectivity.reset( new CONNECTIVITY_DATA() );

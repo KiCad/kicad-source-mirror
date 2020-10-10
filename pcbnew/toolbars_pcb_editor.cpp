@@ -594,16 +594,14 @@ void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, 
 
     aTrackWidthSelectBox->Clear();
 
-    for( unsigned ii = 0; ii < GetDesignSettings().m_TrackWidthList.size(); ii++ )
+    aTrackWidthSelectBox->Append( _( "Track: use netclass width" ) );
+
+    for( unsigned ii = 1; ii < GetDesignSettings().m_TrackWidthList.size(); ii++ )
     {
         int size = GetDesignSettings().m_TrackWidthList[ii];
 
         msg.Printf( _( "Track: %s (%s)" ), ComboBoxUnits( primaryUnit, size ),
                                            ComboBoxUnits( secondaryUnit, size ) );
-
-        // Mark the netclass track width value (the first in list)
-        if( ii == 0 )
-            msg << wxT( " *" );
 
         aTrackWidthSelectBox->Append( msg );
     }
@@ -648,6 +646,8 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
             secondaryUnit = EDA_UNITS::MILS;
     }
 
+    aViaSizeSelectBox->Append( _( "Via: use netclass sizes" ) );
+
     for( unsigned ii = 0; ii < GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
     {
         VIA_DIMENSION viaDimension = GetDesignSettings().m_ViasDimensionsList[ii];
@@ -670,10 +670,6 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
         }
 
         msg.Printf( _( "Via: %s (%s)" ), priStr, secStr );
-
-        // Mark the netclass via size value (the first in list)
-        if( ii == 0 )
-            msg << wxT( " *" );
 
         aViaSizeSelectBox->Append( msg );
     }
@@ -722,8 +718,16 @@ void PCB_EDIT_FRAME::OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent )
 {
     if( aEvent.GetId() == ID_AUX_TOOLBAR_PCB_TRACK_WIDTH )
     {
-        if( m_SelTrackWidthBox->GetSelection() != (int) GetDesignSettings().GetTrackWidthIndex() )
-            m_SelTrackWidthBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
+        BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
+        int                    sel;
+
+        if( bds.m_UseConnectedTrackWidth || bds.UseCustomTrackViaSize() )
+            sel = wxNOT_FOUND;
+        else
+            sel = bds.GetTrackWidthIndex();
+
+        if( m_SelTrackWidthBox->GetSelection() != sel )
+            m_SelTrackWidthBox->SetSelection( sel );
     }
 }
 
@@ -732,9 +736,25 @@ void PCB_EDIT_FRAME::OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent )
 {
     if( aEvent.GetId() == ID_AUX_TOOLBAR_PCB_VIA_SIZE )
     {
-        if( m_SelViaSizeBox->GetSelection() != (int) GetDesignSettings().GetViaSizeIndex() )
-            m_SelViaSizeBox->SetSelection( GetDesignSettings().GetViaSizeIndex() );
+        BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
+        int                    sel = 0;
+
+        if( bds.UseCustomTrackViaSize() )
+            sel = wxNOT_FOUND;
+        else
+            sel = bds.GetViaSizeIndex();
+
+        if( m_SelViaSizeBox->GetSelection() != sel )
+            m_SelViaSizeBox->SetSelection( sel );
     }
+}
+
+
+void PCB_EDIT_FRAME::OnUpdateSelectAutoWidth( wxUpdateUIEvent& aEvent )
+{
+    BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
+
+    aEvent.Check( bds.m_UseConnectedTrackWidth && !bds.UseCustomTrackViaSize() );
 }
 
 

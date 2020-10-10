@@ -162,6 +162,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_UPDATE_UI( ID_TOOLBARH_PCB_SELECT_LAYER, PCB_EDIT_FRAME::OnUpdateLayerSelectBox )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH, PCB_EDIT_FRAME::OnUpdateSelectTrackWidth )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_VIA_SIZE, PCB_EDIT_FRAME::OnUpdateSelectViaSize )
+    EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, PCB_EDIT_FRAME::OnUpdateSelectAutoWidth )
     EVT_UPDATE_UI_RANGE( ID_POPUP_PCB_SELECT_WIDTH1, ID_POPUP_PCB_SELECT_WIDTH8,
                          PCB_EDIT_FRAME::OnUpdateSelectTrackWidth )
     EVT_UPDATE_UI_RANGE( ID_POPUP_PCB_SELECT_VIASIZE1, ID_POPUP_PCB_SELECT_VIASIZE8,
@@ -889,7 +890,6 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, const w
         Prj().GetProjectFile().NetSettings().ResolveNetClassAssignments( true );
 
         GetBoard()->SynchronizeNetsAndNetClasses();
-        GetBoard()->GetDesignSettings().SetCurrentNetClass( NETCLASS::Default );
         SaveProjectSettings();
 
         UpdateUserInterface();
@@ -1264,17 +1264,6 @@ void PCB_EDIT_FRAME::ToPlotter( int aID )
 
     dlg = new DIALOG_PLOT( this );
     dlg->Show( true );
-}
-
-
-bool PCB_EDIT_FRAME::SetCurrentNetClass( const wxString& aNetClassName )
-{
-    bool change = GetDesignSettings().SetCurrentNetClass( aNetClassName );
-
-    if( change )
-        ReCreateAuxiliaryToolbar();
-
-    return change;
 }
 
 

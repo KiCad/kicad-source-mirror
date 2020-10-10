@@ -191,14 +191,14 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsDiffPair( const PNS::ITEM* aA, const PNS::ITEM*
 
 
 
-bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA, const PNS::ITEM* aItemB, int aLayer, PNS::CONSTRAINT* aConstraint )
+bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
+                                                const PNS::ITEM* aItemA, const PNS::ITEM* aItemB,
+                                                int aLayer, PNS::CONSTRAINT* aConstraint )
 {
     std::shared_ptr<DRC_ENGINE> drcEngine = m_board->GetDesignSettings().m_DRCEngine;
 
     if( !drcEngine )
-    {
         return false;
-    }
 
     DRC_CONSTRAINT_TYPE_T hostRuleType;
 
@@ -216,6 +216,11 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType, cons
         case PNS::CONSTRAINT_TYPE::CT_LENGTH:
             hostRuleType = DRC_CONSTRAINT_TYPE_LENGTH;
             break;
+        case PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER:
+            hostRuleType = DRC_CONSTRAINT_TYPE_VIA_DIAMETER;
+            break;
+        case PNS::CONSTRAINT_TYPE::CT_VIA_HOLE:
+            hostRuleType = DRC_CONSTRAINT_TYPE_HOLE_SIZE;
         default:
             return false; // should not happen
     }
@@ -223,10 +228,8 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType, cons
     const BOARD_ITEM* parentA = aItemA ? aItemA->Parent() : nullptr;
     const BOARD_ITEM* parentB = aItemB ? aItemB->Parent() : nullptr;
 
-    DRC_CONSTRAINT hostConstraint = drcEngine->EvalRulesForItems( hostRuleType,
-        parentA,
-        parentB,
-        (PCB_LAYER_ID) aLayer );
+    DRC_CONSTRAINT hostConstraint = drcEngine->EvalRulesForItems( hostRuleType, parentA, parentB,
+                                                                  (PCB_LAYER_ID) aLayer );
 
     if( hostConstraint.IsNull() )
         return false;
@@ -236,6 +239,8 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType, cons
         case PNS::CONSTRAINT_TYPE::CT_CLEARANCE:
         case PNS::CONSTRAINT_TYPE::CT_WIDTH:
         case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP:
+        case PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER:
+        case PNS::CONSTRAINT_TYPE::CT_VIA_HOLE:
             aConstraint->m_Value = hostConstraint.GetValue();
             aConstraint->m_RuleName = hostConstraint.GetName();
             aConstraint->m_Type = aType;
@@ -321,11 +326,6 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
 {
     BOARD_DESIGN_SETTINGS &bds = m_board->GetDesignSettings();
 
-    int net = aNet;
-
-    if( aStartItem )
-        net = aStartItem->Net();
-
     int trackWidth = 0;
 
     if( bds.m_UseConnectedTrackWidth && aStartItem != nullptr )
@@ -336,12 +336,14 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     if( !trackWidth && bds.UseNetClassTrack() && aStartItem ) // netclass value
     {
         PNS::CONSTRAINT constraint;
-        bool ok = m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem,
-                nullptr, aStartItem->Layer(), &constraint );
+        bool ok = m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH,
+                                                   aStartItem, nullptr, aStartItem->Layer(),
+                                                   &constraint );
 
         if( ok )
         {
-            trackWidth = constraint.m_Value.HasOpt() ? constraint.m_Value.Opt() : constraint.m_Value.Min();
+            trackWidth = constraint.m_Value.HasOpt() ? constraint.m_Value.Opt()
+                                                     : constraint.m_Value.Min();
         }
     }
 
@@ -357,8 +359,25 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
 
     if( bds.UseNetClassVia() )   // netclass value
     {
-        viaDiameter = 0; //netClass->GetViaDiameter();
-        viaDrill    = 0; //netClass->GetViaDrill(); // fixme
+        PNS::CONSTRAINT diaConstraint, drillConstraint;
+        bool okDia = m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER,
+                                                      aStartItem, nullptr, aStartItem->Layer(),
+                                                      &diaConstraint );
+        bool okDrill = m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_HOLE,
+                                                        aStartItem, nullptr, aStartItem->Layer(),
+                                                        &drillConstraint );
+
+        if( okDia )
+        {
+            viaDiameter = diaConstraint.m_Value.HasOpt() ? diaConstraint.m_Value.Opt()
+                                                         : diaConstraint.m_Value.Min();
+        }
+
+        if( okDrill )
+        {
+            viaDrill = drillConstraint.m_Value.HasOpt() ? drillConstraint.m_Value.Opt()
+                                                        : drillConstraint.m_Value.Min();
+        }
     }
     else
     {
@@ -376,10 +395,12 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     if( bds.UseNetClassDiffPair() && aStartItem )
     {
         PNS::CONSTRAINT widthConstraint, gapConstraint;
-        bool okWidth = m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem,
-                nullptr, aStartItem->Layer(), &widthConstraint );
-        bool okGap = m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, aStartItem,
-                nullptr, aStartItem->Layer(), &gapConstraint );
+        bool okWidth = m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH,
+                                                        aStartItem, nullptr, aStartItem->Layer(),
+                                                        &widthConstraint );
+        bool okGap = m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP,
+                                                      aStartItem, nullptr, aStartItem->Layer(),
+                                                      &gapConstraint );
 
         if( okWidth )
             diffPairWidth =  widthConstraint.m_Value.OptThenMin();

@@ -319,6 +319,7 @@ public:
     bool LayerManagerShown();
     void OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
+    void OnUpdateSelectAutoWidth( wxUpdateUIEvent& aEvent );
 
     void RunEeschema();
 
@@ -422,18 +423,6 @@ public:
      */
     void ReCreateLayerBox( bool aForceResizeToolbar = true );
 
-
-    /**
-     * Function SetCurrentNetClass
-     * Must be called after a netclass selection (or after a netclass parameter change
-     * calls BOARD_DESIGN_SETTINGS::SetCurrentNetClass() and update trace width and via size
-     * combo boxes on main toolbar
-     * Initialize vias and tracks values displayed in comb boxes of the auxiliary toolbar
-     * and some others parameters (netclass name ....)
-     * @param aNetClassName = the new netclass name
-     * @return true if lists of tracks and vias sizes are modified
-     */
-    bool SetCurrentNetClass( const wxString& aNetClassName );
 
     /**
      * Function OnModify
