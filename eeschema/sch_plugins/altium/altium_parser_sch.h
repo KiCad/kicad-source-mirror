@@ -194,6 +194,20 @@ struct ASCH_PIN
 };
 
 
+struct ASCH_POLYGON
+{
+    int ownerindex;
+    int ownerpartid;
+
+    std::vector<wxPoint> points;
+
+    int  lineWidth;
+    bool isSolid;
+
+    explicit ASCH_POLYGON( const std::map<wxString, wxString>& aProperties );
+};
+
+
 struct ASCH_RECTANGLE
 {
     int ownerindex;
@@ -223,7 +237,7 @@ struct ASCH_NET_LABEL
 struct ASCH_BUS
 {
     int indexinsheet;
-    int linewidth;
+    int lineWidth;
 
     std::vector<wxPoint> points;
 
@@ -234,7 +248,7 @@ struct ASCH_BUS
 struct ASCH_WIRE
 {
     int indexinsheet;
-    int linewidth;
+    int lineWidth;
 
     std::vector<wxPoint> points;
 

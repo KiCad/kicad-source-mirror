@@ -312,6 +312,7 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
         case ALTIUM_SCH_RECORD::POLYLINE:
             break;
         case ALTIUM_SCH_RECORD::POLYGON:
+            ParsePolygon( properties );
             break;
         case ALTIUM_SCH_RECORD::ELLIPSE:
             break;
@@ -587,38 +588,122 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
 }
 
 
+void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_POLYGON elem( aProperties );
+
+    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    {
+        // TODO: we cannot fill this polygon, only draw it for now
+        for( int i = 0; i < (int) elem.points.size() - 1; i++ )
+        {
+            SCH_LINE* line = new SCH_LINE( elem.points.at( i ), SCH_LAYER_ID::LAYER_NOTES );
+            line->SetEndPoint( elem.points.at( i + 1 ) );
+
+            line->SetFlags( IS_NEW );
+            m_currentSheet->GetScreen()->Append( line );
+        }
+
+        // close polygon
+        SCH_LINE* line = new SCH_LINE( elem.points.front(), SCH_LAYER_ID::LAYER_NOTES );
+        line->SetEndPoint( elem.points.back() );
+
+        line->SetFlags( IS_NEW );
+        m_currentSheet->GetScreen()->Append( line );
+    }
+    else
+    {
+        const auto& symbol = m_symbols.find( elem.ownerindex );
+        if( symbol == m_symbols.end() )
+        {
+            // TODO: e.g. can depend on Template (RECORD=39
+            wxLogWarning( wxString::Format(
+                    "Rectangle tries to access symbol with ownerindex %d which does not exist",
+                    elem.ownerindex ) );
+            return;
+        }
+
+        const auto& component = m_components.at( symbol->first );
+
+        LIB_POLYLINE* line = new LIB_POLYLINE( symbol->second );
+        symbol->second->AddDrawItem( line );
+
+        // TODO: we cannot fill this polygon, only draw it for now?
+        for( wxPoint& point : elem.points )
+        {
+            line->AddPoint( GetRelativePosition( point, component ) );
+        }
+
+        line->SetWidth( elem.lineWidth );
+        if( elem.isSolid )
+        {
+            line->SetFillMode( FILL_TYPE::FILLED_SHAPE );
+        }
+    }
+}
+
+
 void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aProperties )
 {
     ASCH_RECTANGLE elem( aProperties );
 
-    const auto& symbol = m_symbols.find( elem.ownerindex );
-    if( symbol == m_symbols.end() )
+    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        // TODO: e.g. can depend on Template (RECORD=39
-        wxLogWarning( wxString::Format(
-                "Pin tries to access symbol with ownerindex %d which does not exist",
-                elem.ownerindex ) );
-        return;
-    }
+        const wxPoint topLeft     = { elem.bottomLeft.x, elem.topRight.y };
+        const wxPoint bottomRight = { elem.topRight.x, elem.bottomLeft.y };
 
-    const auto& component = m_components.at( symbol->first );
+        // TODO: we cannot fill this rectangle, only draw it for now
+        SCH_LINE* lineTop = new SCH_LINE( elem.topRight, SCH_LAYER_ID::LAYER_NOTES );
+        lineTop->SetEndPoint( topLeft );
+        lineTop->SetFlags( IS_NEW );
+        m_currentSheet->GetScreen()->Append( lineTop );
 
-    LIB_RECTANGLE* rect = new LIB_RECTANGLE( symbol->second );
-    symbol->second->AddDrawItem( rect );
-    rect->SetPosition( GetRelativePosition( elem.topRight, component ) );
-    rect->SetEnd( GetRelativePosition( elem.bottomLeft, component ) );
-    rect->SetWidth( elem.lineWidth );
-    if( elem.isTransparent )
-    {
-        rect->SetFillMode( FILL_TYPE::NO_FILL );
-    }
-    else if( elem.isSolid )
-    {
-        rect->SetFillMode( FILL_TYPE::FILLED_SHAPE );
+        SCH_LINE* lineBottom = new SCH_LINE( elem.bottomLeft, SCH_LAYER_ID::LAYER_NOTES );
+        lineBottom->SetEndPoint( bottomRight );
+        lineBottom->SetFlags( IS_NEW );
+        m_currentSheet->GetScreen()->Append( lineBottom );
+
+        SCH_LINE* lineRight = new SCH_LINE( elem.topRight, SCH_LAYER_ID::LAYER_NOTES );
+        lineRight->SetEndPoint( bottomRight );
+        lineRight->SetFlags( IS_NEW );
+        m_currentSheet->GetScreen()->Append( lineRight );
+
+        SCH_LINE* lineLeft = new SCH_LINE( elem.bottomLeft, SCH_LAYER_ID::LAYER_NOTES );
+        lineLeft->SetEndPoint( topLeft );
+        lineLeft->SetFlags( IS_NEW );
+        m_currentSheet->GetScreen()->Append( lineLeft );
     }
     else
     {
-        rect->SetFillMode( FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
+        const auto& symbol = m_symbols.find( elem.ownerindex );
+        if( symbol == m_symbols.end() )
+        {
+            // TODO: e.g. can depend on Template (RECORD=39
+            wxLogWarning( wxString::Format(
+                    "Rectangle tries to access symbol with ownerindex %d which does not exist",
+                    elem.ownerindex ) );
+            return;
+        }
+
+        const auto& component = m_components.at( symbol->first );
+
+        LIB_RECTANGLE* rect = new LIB_RECTANGLE( symbol->second );
+        symbol->second->AddDrawItem( rect );
+        rect->SetPosition( GetRelativePosition( elem.topRight, component ) );
+        rect->SetEnd( GetRelativePosition( elem.bottomLeft, component ) );
+        rect->SetWidth( elem.lineWidth );
+        if( elem.isTransparent )
+        {
+            rect->SetFillMode( FILL_TYPE::NO_FILL );
+        }
+        else if( elem.isSolid )
+        {
+            rect->SetFillMode( FILL_TYPE::FILLED_SHAPE );
+        }
+        else
+        {
+            rect->SetFillMode( FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
+        }
     }
 }
 

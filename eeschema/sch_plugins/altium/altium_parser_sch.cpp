@@ -44,6 +44,16 @@ constexpr int Altium2KiCadUnit( const int val, const int frac )
 }
 
 
+int PropertiesReadKiCadUnitFrac(
+        const std::map<wxString, wxString>& aProperties, const wxString& aKey )
+{
+    // a unit is stored using two fields, denoting the size in mils and a fraction size
+    int key     = ALTIUM_PARSER::PropertiesReadInt( aProperties, aKey, 0 );
+    int keyFrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, aKey + "_FRAC", 0 );
+    return Altium2KiCadUnit( key, keyFrac );
+}
+
+
 ASCH_COMPONENT::ASCH_COMPONENT( const std::map<wxString, wxString>& aProperties )
 {
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::COMPONENT );
@@ -68,7 +78,8 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProperties )
 
     ownerindex =
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
-    ownerpartid = ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", 0 );
+    ownerpartid =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
 
     name       = ALTIUM_PARSER::PropertiesReadString( aProperties, "NAME", "" );
     text       = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
@@ -114,13 +125,40 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProperties )
 }
 
 
+ASCH_POLYGON::ASCH_POLYGON( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::POLYGON );
+
+    ownerindex =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
+    ownerpartid =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+
+    int locationCount = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATIONCOUNT", 0 );
+    for( int i = 1; i <= locationCount; i++ )
+    {
+        const wxString si = std::to_string( i );
+
+        int x     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "X" + si, 0 );
+        int xfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "X" + si + "_FRAC", 0 );
+        int y     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "Y" + si, 0 );
+        int yfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "Y" + si + "_FRAC", 0 );
+        points.emplace_back( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
+    }
+
+    lineWidth = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
+    isSolid   = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISSOLID", false );
+}
+
+
 ASCH_RECTANGLE::ASCH_RECTANGLE( const std::map<wxString, wxString>& aProperties )
 {
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::RECTANGLE );
 
     ownerindex =
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
-    ownerpartid = ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", 0 );
+    ownerpartid =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
 
     int x      = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X", 0 );
     int xfrac  = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X_FRAC", 0 );
@@ -134,7 +172,7 @@ ASCH_RECTANGLE::ASCH_RECTANGLE( const std::map<wxString, wxString>& aProperties 
     yfrac    = ALTIUM_PARSER::PropertiesReadInt( aProperties, "CORNER.Y_FRAC", 0 );
     topRight = wxPoint( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
 
-    lineWidth     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LINEWIDTH", 0 );
+    lineWidth     = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
     isSolid       = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISSOLID", false );
     isTransparent = ALTIUM_PARSER::PropertiesReadBool( aProperties, "TRANSPARENT", false );
 }
@@ -160,12 +198,11 @@ ASCH_BUS::ASCH_BUS( const std::map<wxString, wxString>& aProperties )
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::BUS );
 
     indexinsheet = ALTIUM_PARSER::PropertiesReadInt( aProperties, "INDEXINSHEET", 0 );
-    linewidth    = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LINEWIDTH", 0 );
 
     int locationcount = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATIONCOUNT", 0 );
-    for( int i = 0; i < locationcount; i++ )
+    for( int i = 1; i <= locationcount; i++ )
     {
-        const wxString si = std::to_string( i + 1 );
+        const wxString si = std::to_string( i );
 
         int x     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "X" + si, 0 );
         int xfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "X" + si + "_FRAC", 0 );
@@ -173,6 +210,8 @@ ASCH_BUS::ASCH_BUS( const std::map<wxString, wxString>& aProperties )
         int yfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "Y" + si + "_FRAC", 0 );
         points.emplace_back( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
     }
+
+    lineWidth = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
 }
 
 
@@ -189,12 +228,11 @@ ASCH_WIRE::ASCH_WIRE( const std::map<wxString, wxString>& aProperties )
     }*/
 
     indexinsheet = ALTIUM_PARSER::PropertiesReadInt( aProperties, "INDEXINSHEET", 0 );
-    linewidth    = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LINEWIDTH", 0 );
 
     int locationcount = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATIONCOUNT", 0 );
-    for( int i = 0; i < locationcount; i++ )
+    for( int i = 1; i <= locationcount; i++ )
     {
-        const wxString si = std::to_string( i + 1 );
+        const wxString si = std::to_string( i );
 
         int x     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "X" + si, 0 );
         int xfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "X" + si + "_FRAC", 0 );
@@ -202,6 +240,8 @@ ASCH_WIRE::ASCH_WIRE( const std::map<wxString, wxString>& aProperties )
         int yfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "Y" + si + "_FRAC", 0 );
         points.emplace_back( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
     }
+
+    lineWidth = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
 }
 
 
