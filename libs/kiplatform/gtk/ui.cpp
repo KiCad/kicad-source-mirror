@@ -21,13 +21,20 @@
 #include <kiplatform/ui.h>
 
 #include <wx/nonownedwnd.h>
+#include <wx/settings.h>
 #include <wx/window.h>
 
 
 bool KIPLATFORM::UI::IsDarkTheme()
 {
-    // TODO(ISM): Write this function
-    return false;
+    wxColour bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
+
+    // Weighted W3C formula
+    double brightness = ( bg.Red() / 255.0 ) * 0.299 +
+                        ( bg.Green() / 255.0 ) * 0.587 +
+                        ( bg.Blue() / 255.0 ) * 0.117;
+
+    return brightness < 0.5;
 }
 
 
