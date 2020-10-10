@@ -135,6 +135,10 @@ void GRID_CELL_LAYER_SELECTOR::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
     // Don't immediately end if we get a kill focus event within BeginEdit
     evtHandler->SetInSetFocus( true );
 
+    // These event handlers are needed to properly dismiss the editor when the popup is closed
+    m_control->Bind(wxEVT_COMBOBOX_DROPDOWN, &GRID_CELL_LAYER_SELECTOR::onComboDropDown, this);
+    m_control->Bind(wxEVT_COMBOBOX_CLOSEUP,  &GRID_CELL_LAYER_SELECTOR::onComboCloseUp,  this);
+
     m_value = (LAYER_NUM) aGrid->GetTable()->GetValueAsLong( aRow, aCol );
 
     // Footprints are defined in a global context and may contain layers not enabled
@@ -192,3 +196,24 @@ void GRID_CELL_LAYER_SELECTOR::Reset()
 }
 
 
+void GRID_CELL_LAYER_SELECTOR::onComboDropDown( wxCommandEvent& aEvent )
+{
+    auto evtHandler = static_cast<wxGridCellEditorEvtHandler*>( m_control->GetEventHandler() );
+
+    // Once the combobox is dropped, reset the flag to allow the focus-loss handler
+    // to function and close the editor.
+    evtHandler->SetInSetFocus( false );
+}
+
+
+void GRID_CELL_LAYER_SELECTOR::onComboCloseUp( wxCommandEvent& aEvent )
+{
+    auto evtHandler = static_cast<wxGridCellEditorEvtHandler*>( m_control->GetEventHandler() );
+
+    // Forward the combobox close up event to the cell event handler as a focus kill event
+    // so that the grid editor is dismissed when the combox closes, otherwise it leaves the
+    // dropdown arrow visible in the cell.
+    wxFocusEvent event( wxEVT_KILL_FOCUS, m_control->GetId() );
+    event.SetEventObject( m_control );
+    evtHandler->ProcessEvent( event );
+}

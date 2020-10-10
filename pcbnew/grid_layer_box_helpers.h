@@ -70,6 +70,10 @@ public:
     void Reset() override;
 
 protected:
+    // Event handlers to properly dismiss the layer selector when it loses focus
+    void onComboDropDown( wxCommandEvent& aEvent );
+    void onComboCloseUp( wxCommandEvent& aEvent );
+
     PCB_LAYER_BOX_SELECTOR* LayerBox() const
     {
         return static_cast<PCB_LAYER_BOX_SELECTOR*>( m_control );
