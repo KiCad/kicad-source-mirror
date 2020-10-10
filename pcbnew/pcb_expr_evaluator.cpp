@@ -335,12 +335,12 @@ static void isDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    if( item->IsConnected() )
+    if( item && item->IsConnected() )
     {
-        int net = static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetCode();
-        int net_p, net_n;
+        NETINFO_ITEM* netinfo = static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNet();
+        int dummy_p, dummy_n;
 
-        if( DRC_ENGINE::IsNetADiffPair( item->GetBoard(), net, net_p, net_n ) )
+        if( netinfo && DRC_ENGINE::IsNetADiffPair( item->GetBoard(), netinfo, dummy_p, dummy_n ) )
             result->Set( 1.0 );
     }
 }

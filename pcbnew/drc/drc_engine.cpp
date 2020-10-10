@@ -837,9 +837,9 @@ static int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet,
 }
 
 
-int DRC_ENGINE::IsNetADiffPair( BOARD* aBoard, int aNet, int& aNetP, int& aNetN )
+int DRC_ENGINE::IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, int& aNetN )
 {
-    wxString refName = aBoard->FindNet( aNet )->GetNetname();
+    wxString refName = aNet->GetNetname();
     wxString dummy, coupledNetName;
 
     if( int polarity = matchDpSuffix( refName, coupledNetName, dummy ) )
@@ -851,13 +851,13 @@ int DRC_ENGINE::IsNetADiffPair( BOARD* aBoard, int aNet, int& aNetP, int& aNetN 
 
         if( polarity > 0 )
         {
-            aNetP = aNet;
+            aNetP = aNet->GetNet();
             aNetN = net->GetNet();
         }
         else
         {
             aNetP = net->GetNet();
-            aNetN = aNet;
+            aNetN = aNet->GetNet();
         }
 
         return true;

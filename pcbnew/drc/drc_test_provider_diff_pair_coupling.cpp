@@ -278,34 +278,36 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
             [&]( BOARD_ITEM *item ) -> bool
             {
                 DIFF_PAIR_KEY key;
-                auto citem = static_cast<BOARD_CONNECTED_ITEM*>( item );
-                int refNet = citem->GetNetCode();
+                BOARD_CONNECTED_ITEM* citem = static_cast<BOARD_CONNECTED_ITEM*>( item );
+                NETINFO_ITEM* refNet = citem->GetNet();
 
-                if( !DRC_ENGINE::IsNetADiffPair( m_board, refNet, key.netP, key.netN ) ) // not our business
-                    return true;
-
-                drc_dbg(10, "eval dp %p\n", item );
-
-                const DRC_CONSTRAINT_TYPE_T constraintsToCheck[] = {
-                    DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP,
-                    DRC_CONSTRAINT_TYPE_DIFF_PAIR_MAX_UNCOUPLED
-                };
-
-                for( int i = 0; i < 2; i++ )
+                if( refNet && DRC_ENGINE::IsNetADiffPair( m_board, refNet, key.netP, key.netN ) )
                 {
-                    auto constraint = m_drcEngine->EvalRulesForItems( constraintsToCheck[i], item, nullptr, item->GetLayer() );
+                    drc_dbg( 10, "eval dp %p\n", item );
 
-                    if( constraint.IsNull() )
-                        continue;
+                    const DRC_CONSTRAINT_TYPE_T constraintsToCheck[] = {
+                        DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP,
+                        DRC_CONSTRAINT_TYPE_DIFF_PAIR_MAX_UNCOUPLED
+                    };
 
-                    drc_dbg(10, "cns %d item %p\n", constraintsToCheck[i], item );
+                    for( int i = 0; i < 2; i++ )
+                    {
+                        auto constraint = m_drcEngine->EvalRulesForItems( constraintsToCheck[i],
+                                                                          item, nullptr,
+                                                                          item->GetLayer() );
 
-                    key.parentRule = constraint.GetParentRule();
+                        if( constraint.IsNull() )
+                            continue;
 
-                    if( refNet == key.netN )
-                        dpRuleMatches[key].itemsN.insert( citem );
-                    else
-                        dpRuleMatches[key].itemsP.insert( citem );
+                        drc_dbg( 10, "cns %d item %p\n", constraintsToCheck[i], item );
+
+                        key.parentRule = constraint.GetParentRule();
+
+                        if( refNet->GetNet() == key.netN )
+                            dpRuleMatches[key].itemsN.insert( citem );
+                        else
+                            dpRuleMatches[key].itemsP.insert( citem );
+                    }
                 }
 
                 return true;

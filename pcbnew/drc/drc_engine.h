@@ -40,6 +40,7 @@ class ZONE_CONTAINER;
 class MARKER_PCB;
 class NETCLASS;
 class NETLIST;
+class NETINFO_ITEM;
 class PROGRESS_REPORTER;
 class REPORTER;
 
@@ -177,7 +178,7 @@ public:
 
     DRC_TEST_PROVIDER* GetTestProvider( const wxString& name ) const;
 
-    static int IsNetADiffPair( BOARD* aBoard, int aNet, int& aNetP, int& aNetN );
+    static int IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, int& aNetN );
 
 private:
     void addRule( DRC_RULE* rule )

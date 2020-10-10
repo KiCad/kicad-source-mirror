@@ -374,22 +374,39 @@ int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
     wxString details;
 
     /*******************************
-     * Repair duplicate IDs
+     * Repair duplicate IDs and missing nets
      */
 
     std::set<KIID> ids;
     int            duplicates = 0;
 
-    auto processItem = [&]( EDA_ITEM* aItem )
-                       {
-                           if( ids.count( aItem->m_Uuid ) )
-                           {
-                               duplicates++;
-                               const_cast<KIID&>( aItem->m_Uuid ) = KIID();
-                           }
+    auto processItem =
+            [&]( EDA_ITEM* aItem )
+            {
+                if( ids.count( aItem->m_Uuid ) )
+                {
+                    duplicates++;
+                    const_cast<KIID&>( aItem->m_Uuid ) = KIID();
+                }
 
-                           ids.insert( aItem->m_Uuid );
-                       };
+                ids.insert( aItem->m_Uuid );
+
+                BOARD_CONNECTED_ITEM* cItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem );
+
+                if( cItem && cItem->GetNetCode() )
+                {
+                    NETINFO_ITEM* netinfo = cItem->GetNet();
+
+                    if( netinfo && !board()->FindNet( netinfo->GetNetname() ) )
+                    {
+                        board()->Add( netinfo );
+
+                        details += wxString::Format( _( "Orphaned net %s re-parented.\n" ),
+                                                     netinfo->GetNetname() );
+                        errors++;
+                    }
+                }
+            };
 
     // Module IDs are the most important, so give them the first crack at "owning" a particular
     // KIID.
@@ -421,6 +438,9 @@ int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
 
         for( ZONE_CONTAINER* zone : module->Zones() )
             processItem( zone );
+
+        for( PCB_GROUP* group : module->Groups() )
+            processItem( group );
     }
 
     for( BOARD_ITEM* drawing : board()->Drawings() )
@@ -431,6 +451,9 @@ int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
 
     for( MARKER_PCB* marker : board()->Markers() )
         processItem( marker );
+
+    for( PCB_GROUP* group : board()->Groups() )
+        processItem( group );
 
     if( duplicates )
     {
