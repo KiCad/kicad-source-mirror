@@ -119,6 +119,37 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProperties )
     int p     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "PINLENGTH", 0 );
     int pfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "PINLENGTH_FRAC", 0 );
     pinlength = Altium2KiCadUnit( p, pfrac );
+
+    // this code calculates the location as required by KiCad without rounding error attached
+    int kicadX     = x;
+    int kicadXfrac = xfrac;
+    int kicadY     = y;
+    int kicadYfrac = yfrac;
+
+    switch( orientation )
+    {
+    case ASCH_PIN_ORIENTATION::RIGHTWARDS:
+        kicadX += p;
+        kicadXfrac += pfrac;
+        break;
+    case ASCH_PIN_ORIENTATION::UPWARDS:
+        kicadY += p;
+        kicadYfrac += pfrac;
+        break;
+    case ASCH_PIN_ORIENTATION::LEFTWARDS:
+        kicadX -= p;
+        kicadXfrac -= pfrac;
+        break;
+    case ASCH_PIN_ORIENTATION::DOWNWARDS:
+        kicadY -= p;
+        kicadYfrac -= pfrac;
+        break;
+    default:
+        wxLogWarning( "Pin has unexpected orientation" );
+        break;
+    }
+    kicadLocation = wxPoint(
+            Altium2KiCadUnit( kicadX, kicadXfrac ), -Altium2KiCadUnit( kicadY, kicadYfrac ) );
 }
 
 

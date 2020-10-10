@@ -504,7 +504,10 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
         break;
     }
 
+    // TODO: position can be sometimes off a little bit!
     pin->SetPosition( GetRelativePosition( pinLocation, component ) );
+    // TODO: the following fix is even worse for now?
+    // pin->SetPosition( GetRelativePosition( elem.kicadLocation, component ) );
 
     switch( elem.electrical )
     {

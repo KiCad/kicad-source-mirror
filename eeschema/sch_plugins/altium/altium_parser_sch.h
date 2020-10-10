@@ -187,6 +187,8 @@ struct ASCH_PIN
     wxPoint location;
     int     pinlength;
 
+    wxPoint kicadLocation; // location of pin in KiCad without rounding error
+
     bool showPinName;
     bool showDesignator;
 
