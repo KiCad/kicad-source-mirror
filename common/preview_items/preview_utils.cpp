@@ -129,7 +129,7 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& a
     // offset (enough to keep clear of a system cursor if present)
     VECTOR2D         textPos = aCursorPos;
 
-    bool             ViewFlipped = gal->IsFlippedX();
+    bool             viewFlipped = gal->IsFlippedX();
 
     // if the text goes above the cursor, shift it up
     if( aTextQuadrant.y > 0 )
@@ -139,7 +139,7 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& a
 
     if( aTextQuadrant.x < 0 )
     {
-        if( ViewFlipped )
+        if( viewFlipped )
             gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
         else
             gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
@@ -151,7 +151,7 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& a
     }
     else
     {
-        if( ViewFlipped )
+        if( viewFlipped )
             gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
         else
             gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
@@ -165,7 +165,7 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& a
     gal->SetIsFill( false );
     gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
     gal->SetLineWidth( textDims.StrokeWidth );
-    gal->SetTextMirrored( ViewFlipped ); // Prevent text flipping when view is flipped
+    gal->SetTextMirrored( viewFlipped ); // Prevent text flipping when view is flipped
 
     if( aDrawingDropShadows )
     {
