@@ -20,17 +20,21 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
- 
+
 #include <vector>
 
 #include <cursors.h>
 #include <kiplatform/ui.h>
 #include <cursors/cursor-add.xpm>
 #include <cursors/cursor-component.xpm>
-#include <cursors/cursor-connector.xpm>
 #include <cursors/cursor-eraser.xpm>
-#include <cursors/cursor-global-label.xpm>
-#include <cursors/cursor-net-label.xpm>
+#include <cursors/cursor-label-global.xpm>
+#include <cursors/cursor-label-hier.xpm>
+#include <cursors/cursor-label-net.xpm>
+#include <cursors/cursor-line-bus.xpm>
+#include <cursors/cursor-line-graphic.xpm>
+#include <cursors/cursor-line-wire.xpm>
+#include <cursors/cursor-line-wire-add.xpm>
 #include <cursors/cursor-measure.xpm>
 #include <cursors/cursor-pencil.xpm>
 #include <cursors/cursor-select-lasso.xpm>
@@ -137,14 +141,6 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         { 4, 4 },
     },
     {
-        KICURSOR::WIRE,
-        nullptr,
-        nullptr,
-        cursor_connector_xpm,
-        { 32, 32 },
-        { 1, 1 },
-    },
-    {
         KICURSOR::TEXT,
         nullptr,
         nullptr,
@@ -201,20 +197,20 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         { 6, 6 },
     },
     {
-        KICURSOR::NET_LABEL,
+        KICURSOR::LABEL_NET,
         nullptr,
         nullptr,
-        cursor_net_label_xpm,
+        cursor_label_net_xpm,
         { 32, 32 },
-        { 7, 10 },
+        { 7, 7 },
     },
     {
-        KICURSOR::GLOBAL_LABEL,
+        KICURSOR::LABEL_GLOBAL,
         nullptr,
         nullptr,
-        cursor_global_label_xpm,
+        cursor_label_global_xpm,
         { 32, 32 },
-        { 7, 10 },
+        { 7, 7 },
     },
     {
         KICURSOR::COMPONENT,
@@ -239,6 +235,46 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         cursor_select_window_xpm,
         { 32, 32 },
         { 7, 10 },
+    },
+    {
+        KICURSOR::LINE_BUS,
+        nullptr,
+        nullptr,
+        cursor_line_bus_xpm,
+        { 32, 32 },
+        { 4, 4 },
+    },
+    {
+        KICURSOR::LINE_WIRE,
+        nullptr,
+        nullptr,
+        cursor_line_wire_xpm,
+        { 32, 32 },
+        { 4, 4 },
+    },
+    {
+        KICURSOR::LINE_WIRE_ADD,
+        nullptr,
+        nullptr,
+        cursor_line_wire_add_xpm,
+        { 32, 32 },
+        { 4, 4 },
+    },
+    {
+        KICURSOR::LINE_GRAPHIC,
+        nullptr,
+        nullptr,
+        cursor_line_graphic_xpm,
+        { 32, 32 },
+        { 4, 4 },
+    },
+    {
+        KICURSOR::LABEL_HIER,
+        nullptr,
+        nullptr,
+        cursor_label_hier_xpm,
+        { 32, 32 },
+        { 7, 7 },
     },
 };
 

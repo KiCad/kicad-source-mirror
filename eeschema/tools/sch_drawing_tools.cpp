@@ -817,6 +817,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     bool      isImportMode  = aEvent.IsAction( &EE_ACTIONS::importSheetPin );
     bool      isText        = aEvent.IsAction( &EE_ACTIONS::placeSchematicText );
     bool      isGlobalLabel = aEvent.IsAction( &EE_ACTIONS::placeGlobalLabel );
+    bool      isHierLabel   = aEvent.IsAction( &EE_ACTIONS::placeHierLabel );
     bool      isNetLabel    = aEvent.IsAction( &EE_ACTIONS::placeLabel );
     KICAD_T   type          = aEvent.Parameter<KICAD_T>();
 
@@ -839,9 +840,11 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 else if( isText )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::TEXT );
                 else if( isGlobalLabel )
-                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::GLOBAL_LABEL );
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LABEL_GLOBAL );
                 else if( isNetLabel )
-                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::NET_LABEL );
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LABEL_NET );
+                else if( isHierLabel )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LABEL_HIER );
                 else
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };

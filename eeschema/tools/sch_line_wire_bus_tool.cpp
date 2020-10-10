@@ -483,7 +483,14 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
     auto setCursor =
             [&]()
             {
-                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::WIRE );
+                if( aType == LAYER_WIRE )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LINE_WIRE );
+                else if( aType == LAYER_BUS )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LINE_BUS );
+                else if( aType == LAYER_NOTES )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LINE_GRAPHIC );
+                else
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LINE_WIRE );
             };
 
     // Set initial cursor

@@ -551,7 +551,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( m_frame->ToolStackIsEmpty() )
         {
             if( displayWireCursor )
-                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::WIRE );
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LINE_WIRE_ADD );
             else if( rolloverItem != niluuid )
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::HAND );
             else if( !modifier_enabled && !m_selection.Empty()

@@ -43,18 +43,22 @@ enum class KICURSOR
     CURRENT_PROBE,
     TUNE,
     TEXT,
-    WIRE,
     MEASURE,
     ADD,
     SUBTRACT,
     XOR,
     ZOOM_IN,
     ZOOM_OUT,
-    NET_LABEL,
-    GLOBAL_LABEL,
+    LABEL_NET,
+    LABEL_GLOBAL,
     COMPONENT,
     SELECT_WINDOW,
-    SELECT_LASSO
+    SELECT_LASSO,
+    LINE_BUS,
+    LINE_GRAPHIC,
+    LINE_WIRE,
+    LINE_WIRE_ADD,
+    LABEL_HIER
 };
 
 /**
