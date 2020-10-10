@@ -263,7 +263,6 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
     case SH_RECT:
     {
         const SHAPE_RECT* r = (const SHAPE_RECT*) aShape;
-        const int         w = r->GetWidth();
         gal->SetFillColor( m_color );
 
         if( m_clearance > 0 )
@@ -278,8 +277,8 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
         }
 
         gal->SetLayerDepth( m_depth );
-        gal->SetIsStroke( w ? true : false );
-        gal->SetLineWidth( w );
+        gal->SetIsStroke( m_width ? true : false );
+        gal->SetLineWidth( m_width);
         gal->SetStrokeColor( m_color );
         gal->DrawRectangle( r->GetPosition(), r->GetPosition() + r->GetSize() );
 
