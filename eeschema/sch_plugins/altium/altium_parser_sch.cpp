@@ -64,11 +64,8 @@ ASCH_COMPONENT::ASCH_COMPONENT( const std::map<wxString, wxString>& aProperties 
 
     orientation = ALTIUM_PARSER::PropertiesReadInt( aProperties, "ORIENTATION", 0 );
 
-    int x     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X", 0 );
-    int xfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X_FRAC", 0 );
-    int y     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.Y", 0 );
-    int yfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.Y_FRAC", 0 );
-    location  = wxPoint( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
+    location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
 }
 
 
@@ -138,12 +135,8 @@ ASCH_POLYGON::ASCH_POLYGON( const std::map<wxString, wxString>& aProperties )
     for( int i = 1; i <= locationCount; i++ )
     {
         const wxString si = std::to_string( i );
-
-        int x     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "X" + si, 0 );
-        int xfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "X" + si + "_FRAC", 0 );
-        int y     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "Y" + si, 0 );
-        int yfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "Y" + si + "_FRAC", 0 );
-        points.emplace_back( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
+        points.emplace_back( PropertiesReadKiCadUnitFrac( aProperties, "X" + si ),
+                -PropertiesReadKiCadUnitFrac( aProperties, "Y" + si ) );
     }
 
     lineWidth = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
@@ -160,17 +153,10 @@ ASCH_RECTANGLE::ASCH_RECTANGLE( const std::map<wxString, wxString>& aProperties 
     ownerpartid =
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
 
-    int x      = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X", 0 );
-    int xfrac  = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X_FRAC", 0 );
-    int y      = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.Y", 0 );
-    int yfrac  = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.Y_FRAC", 0 );
-    bottomLeft = wxPoint( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
-
-    x        = ALTIUM_PARSER::PropertiesReadInt( aProperties, "CORNER.X", 0 );
-    xfrac    = ALTIUM_PARSER::PropertiesReadInt( aProperties, "CORNER.X_FRAC", 0 );
-    y        = ALTIUM_PARSER::PropertiesReadInt( aProperties, "CORNER.Y", 0 );
-    yfrac    = ALTIUM_PARSER::PropertiesReadInt( aProperties, "CORNER.Y_FRAC", 0 );
-    topRight = wxPoint( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
+    bottomLeft = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
+    topRight   = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "CORNER.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "CORNER.Y" ) );
 
     lineWidth     = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
     isSolid       = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISSOLID", false );
@@ -185,11 +171,8 @@ ASCH_NET_LABEL::ASCH_NET_LABEL( const std::map<wxString, wxString>& aProperties 
     text        = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
     orientation = ALTIUM_PARSER::PropertiesReadInt( aProperties, "ORIENTATION", 0 );
 
-    int x     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X", 0 );
-    int xfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X_FRAC", 0 );
-    int y     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.Y", 0 );
-    int yfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.Y_FRAC", 0 );
-    location  = wxPoint( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
+    location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
 }
 
 
@@ -203,12 +186,8 @@ ASCH_BUS::ASCH_BUS( const std::map<wxString, wxString>& aProperties )
     for( int i = 1; i <= locationcount; i++ )
     {
         const wxString si = std::to_string( i );
-
-        int x     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "X" + si, 0 );
-        int xfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "X" + si + "_FRAC", 0 );
-        int y     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "Y" + si, 0 );
-        int yfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "Y" + si + "_FRAC", 0 );
-        points.emplace_back( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
+        points.emplace_back( PropertiesReadKiCadUnitFrac( aProperties, "X" + si ),
+                -PropertiesReadKiCadUnitFrac( aProperties, "Y" + si ) );
     }
 
     lineWidth = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
@@ -233,12 +212,8 @@ ASCH_WIRE::ASCH_WIRE( const std::map<wxString, wxString>& aProperties )
     for( int i = 1; i <= locationcount; i++ )
     {
         const wxString si = std::to_string( i );
-
-        int x     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "X" + si, 0 );
-        int xfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "X" + si + "_FRAC", 0 );
-        int y     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "Y" + si, 0 );
-        int yfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "Y" + si + "_FRAC", 0 );
-        points.emplace_back( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
+        points.emplace_back( PropertiesReadKiCadUnitFrac( aProperties, "X" + si ),
+                -PropertiesReadKiCadUnitFrac( aProperties, "Y" + si ) );
     }
 
     lineWidth = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
@@ -251,11 +226,8 @@ ASCH_JUNCTION::ASCH_JUNCTION( const std::map<wxString, wxString>& aProperties )
 
     ownerpartid = ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", -1 );
 
-    int x     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X", 0 );
-    int xfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X_FRAC", 0 );
-    int y     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.Y", 0 );
-    int yfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.Y_FRAC", 0 );
-    location  = wxPoint( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
+    location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
 }
 
 
@@ -272,9 +244,6 @@ ASCH_DESIGNATOR::ASCH_DESIGNATOR( const std::map<wxString, wxString>& aPropertie
 
     orientation = ALTIUM_PARSER::PropertiesReadInt( aProperties, "ORIENTATION", 0 );
 
-    int x     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X", 0 );
-    int xfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.X_FRAC", 0 );
-    int y     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.Y", 0 );
-    int yfrac = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATION.Y_FRAC", 0 );
-    location  = wxPoint( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
+    location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
 }
