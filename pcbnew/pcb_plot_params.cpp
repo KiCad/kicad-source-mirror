@@ -98,6 +98,7 @@ static bool setDouble( double* aTarget, double aValue, double aMin, double aMax 
 PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 {
     m_useGerberProtelExtensions  = false;
+    m_gerberDisableApertMacros   = false;
     m_useGerberX2format          = true;
     m_includeGerberNetlistInfo   = true;
     m_createGerberJobFile        = true;
@@ -175,6 +176,9 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
 
     aFormatter->Print( aNestLevel+1, "(%s 0x%s)\n", getTokenName( T_layerselection ),
                        m_layerSelection.FmtHex().c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_disableapertmacros ),
+                       m_gerberDisableApertMacros ? trueStr : falseStr );
 
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberextensions ),
                        m_useGerberProtelExtensions ? trueStr : falseStr );
@@ -261,6 +265,8 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams, bool aCom
     if( m_layerSelection != aPcbPlotParams.m_layerSelection )
         return false;
     if( m_useGerberProtelExtensions != aPcbPlotParams.m_useGerberProtelExtensions )
+        return false;
+    if( m_gerberDisableApertMacros != aPcbPlotParams.m_gerberDisableApertMacros )
         return false;
     if( m_useGerberX2format != aPcbPlotParams.m_useGerberX2format )
         return false;
@@ -417,6 +423,10 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
                 else
                     Expecting( "integer or hex layerSelection" );
             }
+            break;
+
+        case T_disableapertmacros:
+            aPcbPlotParams->m_gerberDisableApertMacros = parseBool();
             break;
 
         case T_usegerberextensions:

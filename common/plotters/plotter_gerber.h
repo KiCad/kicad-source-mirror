@@ -197,6 +197,12 @@ public:
     void UseX2format( bool aEnable ) { m_useX2format = aEnable; }
     void UseX2NetAttributes( bool aEnable ) { m_useNetAttributes = aEnable; }
 
+    /** Disable Aperture Macro (AM) command, only for broken Gerber Readers
+     * Regions will be used instead of AM shapes to draw complex shapes
+     * @param aDisable = true to disable Aperture Macro (AM) command.
+     */
+    void DisableApertMacros( bool aDisable ) { m_gerberDisableApertMacros = aDisable; }
+
     /**
      * calling this function allows one to define the beginning of a group
      * of drawing items (used in X2 format with netlist attributes)
@@ -351,6 +357,9 @@ protected:
     bool    m_gerberUnitInch;          // true if the gerber units are inches, false for mm
     int     m_gerberUnitFmt;           // number of digits in mantissa.
                                        // usually 6 in Inches and 5 or 6  in mm
+    bool    m_gerberDisableApertMacros; // True to disable Aperture Macro (AM) command,
+                                       // for broken Gerber Readers
+                                       // Regions will be used instead of AM shapes
     bool    m_useX2format;             // Add X2 file header attributes.  If false, attributes
                                        // will be added as comments.
     bool    m_useNetAttributes;        // In recent gerber files, netlist info can be added.

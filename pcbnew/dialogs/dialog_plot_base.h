@@ -99,6 +99,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxChoice* m_coordFormatCtrl;
 		wxCheckBox* m_useGerberX2Format;
 		wxCheckBox* m_useGerberNetAttributes;
+		wxCheckBox* m_disableApertMacros;
 		wxStaticBoxSizer* m_HPGLOptionsSizer;
 		wxStaticText* m_hpglPenLabel;
 		wxTextCtrl* m_hpglPenCtrl;

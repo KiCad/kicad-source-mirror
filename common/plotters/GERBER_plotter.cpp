@@ -40,6 +40,10 @@
 // if GBR_USE_MACROS is defined, pads having a shape that is not a Gerber primitive
 // will use a macro when possible
 // Old code will be removed only after many tests
+//
+// Note also: setting m_gerberDisableApertMacros to true disable all aperture macros
+// in Gerber files
+//
 #define GBR_USE_MACROS_FOR_CHAMFERED_RECT
 #define GBR_USE_MACROS_FOR_ROUNDRECT
 #define GBR_USE_MACROS_FOR_TRAPEZOID
@@ -64,6 +68,7 @@ GERBER_PLOTTER::GERBER_PLOTTER()
     m_gerberUnitFmt = 6;
     m_useX2format = true;
     m_useNetAttributes = true;
+    m_gerberDisableApertMacros = false;
 
     m_hasApertureRoundRect = false;     // true is at least one round rect aperture is in use
     m_hasApertureRotOval = false;       // true is at least one oval rotated aperture is in use
@@ -1024,34 +1029,37 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
         if( trace_mode == FILLED )
         {
         #ifdef GBR_USE_MACROS_FOR_ROTATED_OVAL
-            m_hasApertureRotOval = true;
-            // We are using a aperture macro that expect size.y < size.x
-            // i.e draw a horizontal line for rotation = 0.0
-            // size.x = length, size.y = width
-            if( size.x < size.y )
+            if( !m_gerberDisableApertMacros )
+        #endif
             {
-                std::swap( size.x, size.y );
-                orient += 900;
+                m_hasApertureRotOval = true;
+                // We are using a aperture macro that expect size.y < size.x
+                // i.e draw a horizontal line for rotation = 0.0
+                // size.x = length, size.y = width
+                if( size.x < size.y )
+                {
+                    std::swap( size.x, size.y );
+                    orient += 900;
 
-                if( orient > 1800 )
-                    orient -= 1800;
+                    if( orient > 1800 )
+                        orient -= 1800;
+                }
+
+                DPOINT pos_dev = userToDeviceCoordinates( pos );
+                int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
+                selectAperture( size, 0, orient/10.0, APERTURE::AM_ROTATED_OVAL, aperture_attrib );
+
+                if( gbr_metadata )
+                    formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
+
+                emitDcode( pos_dev, 3 );
+                return;
             }
-
-            DPOINT pos_dev = userToDeviceCoordinates( pos );
-            int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
-            selectAperture( size, 0, orient/10.0, APERTURE::AM_ROTATED_OVAL, aperture_attrib );
-
-            if( gbr_metadata )
-                formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
-
-            emitDcode( pos_dev, 3 );
-        #else
             // Draw the oval as round rect pad with a radius = 50% min size)
             // In gerber file, it will be drawn as a region with arcs, and can be
             // detected as pads (similar to a flashed pad)
             FlashPadRoundRect( pos, aSize, std::min( aSize.x, aSize.y ) /2,
                                orient, FILLED, aData );
-        #endif
         }
         else    // Non filled shape: plot outlines:
         {
@@ -1116,7 +1124,7 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
 
     default:
     #ifdef GBR_USE_MACROS_FOR_ROTATED_RECT
-        if( trace_mode != SKETCH )
+        if( trace_mode != SKETCH && !m_gerberDisableApertMacros )
         {
             m_hasApertureRotRect = true;
             DPOINT pos_dev = userToDeviceCoordinates( pos );
@@ -1187,18 +1195,22 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
     else
     {
     #ifdef GBR_USE_MACROS_FOR_ROUNDRECT
-        m_hasApertureRoundRect = true;
+        if( !m_gerberDisableApertMacros )
+    #endif
+        {
+            m_hasApertureRoundRect = true;
 
-        DPOINT pos_dev = userToDeviceCoordinates( aPadPos );
-        int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
-        selectAperture( aSize, aCornerRadius, aOrient/10.0,
-                        APERTURE::AM_ROUND_RECT, aperture_attrib );
+            DPOINT pos_dev = userToDeviceCoordinates( aPadPos );
+            int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
+            selectAperture( aSize, aCornerRadius, aOrient/10.0,
+                            APERTURE::AM_ROUND_RECT, aperture_attrib );
 
-        if( gbr_metadata )
-            formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
+            if( gbr_metadata )
+                formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
-        emitDcode( pos_dev, 3 );
-    #else
+            emitDcode( pos_dev, 3 );
+            return;
+        }
         // A Pad RoundRect is plotted as a Gerber region.
         // Initialize region metadata:
         bool clearTA_AperFunction = false;     // true if a TA.AperFunction is used
@@ -1226,7 +1238,6 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
             else
                 fputs( "G04 #@! TD.AperFunction*\n", outputFile );
         }
-    #endif
     }
 }
 
@@ -1420,7 +1431,8 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const wxPoint& aShapePos, const w
     bool hasRoundedCorner = aCornerRadius != 0 && aChamferPositions != 15;
 
 #ifdef GBR_USE_MACROS_FOR_CHAMFERED_RECT
-    if( aPlotMode != FILLED || hasRoundedCorner )   // Sketch mode or round rect shape
+    // Sketch mode or round rect shape or Apert Macros disabled
+    if( aPlotMode != FILLED || hasRoundedCorner || m_gerberDisableApertMacros )
 #endif
     {
         TransformRoundChamferedRectToPolygon( outline, aShapePos, aPadSize,
@@ -1525,9 +1537,15 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
         metadata = *gbr_metadata;
 
     if( aTrace_Mode == SKETCH )
+    {
         PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), &metadata );
-    else
+        return;
+    }
+
+    // Plot a filled polygon:
     #ifdef GBR_USE_MACROS_FOR_TRAPEZOID
+    if( !m_gerberDisableApertMacros )
+    #endif
     {
         m_hasApertureOutline4P = true;
         DPOINT pos_dev = userToDeviceCoordinates( aPadPos );
@@ -1540,10 +1558,10 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
             formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
         emitDcode( pos_dev, 3 );
+        return;
     }
-    #else
-        PlotGerberRegion( cornerList, &metadata );
-    #endif
+
+    PlotGerberRegion( cornerList, &metadata );
 }
 
 

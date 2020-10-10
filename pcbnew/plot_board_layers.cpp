@@ -1143,6 +1143,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
             bool useX2mode = plotOpts.GetUseGerberX2format();
 
             GERBER_PLOTTER* gbrplotter = static_cast <GERBER_PLOTTER*> ( plotter );
+            gbrplotter->DisableApertMacros( plotOpts.GetDisableGerberMacros() );
             gbrplotter->UseX2format( useX2mode );
             gbrplotter->UseX2NetAttributes( plotOpts.GetIncludeGerberNetlistInfo() );
 

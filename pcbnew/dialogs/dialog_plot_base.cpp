@@ -228,7 +228,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_coordFormatCtrl->SetSelection( 0 );
 	gbSizer2->Add( m_coordFormatCtrl, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_useGerberX2Format = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Use extended X2 format"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_useGerberX2Format = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Use extended X2 format (recommended)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_useGerberX2Format->SetToolTip( _("Use X2 Gerber file format.\nInclude  mainly X2 attributes in Gerber headers.\nIf not checked, use X1 format.\nIn X1 format, these attributes are included as comments in files.") );
 
 	gbSizer2->Add( m_useGerberX2Format, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
@@ -237,6 +237,11 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_useGerberNetAttributes->SetToolTip( _("Include netlist metadata and aperture attributes in Gerber files.\nIn X1 format, they are comments.\nUsed to check connectivity in CAM tools and Gerber viewers.") );
 
 	gbSizer2->Add( m_useGerberNetAttributes, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 30 );
+
+	m_disableApertMacros = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Disable aperture macros (non recommended)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_disableApertMacros->SetToolTip( _("Disable aperture macros in Gerber files\nUse *only* for broken Gerber viewers.") );
+
+	gbSizer2->Add( m_disableApertMacros, wxGBPosition( 3, 1 ), wxGBSpan( 1, 2 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 30 );
 
 
 	gbSizer2->AddGrowableCol( 2 );

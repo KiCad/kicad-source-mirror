@@ -108,6 +108,10 @@ private:
     /// Include attributes from the Gerber X2 format (chapter 5 in revision J2)
     bool        m_useGerberX2format;
 
+    /// Disable aperure macros in Gerber format (only for broken Gerber readers)
+    /// Ideally, should be never selected.
+    bool        m_gerberDisableApertMacros;
+
     /// Include netlist info (only in Gerber X2 format) (chapter ? in revision ?)
     bool        m_includeGerberNetlistInfo;
 
@@ -290,6 +294,9 @@ public:
 
     void        SetOutputDirectory( wxString aDir ) { m_outputDirectory = aDir; }
     wxString    GetOutputDirectory() const { return m_outputDirectory; }
+
+    void        SetDisableGerberMacros( bool aDisable ) { m_gerberDisableApertMacros = aDisable; }
+    bool        GetDisableGerberMacros() const { return m_gerberDisableApertMacros; }
 
     void        SetUseGerberX2format( bool aUse ) { m_useGerberX2format = aUse; }
     bool        GetUseGerberX2format() const { return m_useGerberX2format; }

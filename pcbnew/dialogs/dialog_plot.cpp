@@ -136,6 +136,9 @@ void DIALOG_PLOT::init_Dialog()
             m_layerCheckListBox->Check( checkIndex );
     }
 
+    // Option for disabling Gerber Aperture Macro (for broken Gerber readers)
+    m_disableApertMacros->SetValue( m_plotOpts.GetDisableGerberMacros() );
+
     // Option for using proper Gerber extensions. Note also Protel extensions are
     // a broken feature. However, for now, we need to handle it.
     m_useGerberExtensions->SetValue( m_plotOpts.GetUseGerberProtelExtensions() );
@@ -720,6 +723,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     tempOptions.SetFormat( getPlotFormat() );
 
+    tempOptions.SetDisableGerberMacros( m_disableApertMacros->GetValue() );
     tempOptions.SetUseGerberProtelExtensions( m_useGerberExtensions->GetValue() );
     tempOptions.SetUseGerberX2format( m_useGerberX2Format->GetValue() );
     tempOptions.SetIncludeGerberNetlistInfo( m_useGerberNetAttributes->GetValue() );
@@ -881,7 +885,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
         LOCALE_IO toggle;
 
-        PLOTTER*    plotter = StartPlotBoard( board, &m_plotOpts, layer, fn.GetFullPath(), wxEmptyString );
+        PLOTTER* plotter = StartPlotBoard( board, &m_plotOpts, layer, fn.GetFullPath(), wxEmptyString );
 
         // Print diags in messages box:
         wxString msg;
