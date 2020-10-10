@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -77,11 +77,11 @@ DIALOG_ABOUT_BASE::DIALOG_ABOUT_BASE( wxWindow* parent, wxWindowID id, const wxS
 
 	bSizerMain->Add( bSizerTitle, 0, wxEXPAND, 5 );
 
-	m_auiNotebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_SCROLL_BUTTONS );
-	m_auiNotebook->SetMinSize( wxSize( 750,350 ) );
+	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_notebook->SetMinSize( wxSize( 750,350 ) );
 
 
-	bSizerMain->Add( m_auiNotebook, 2, wxALL|wxEXPAND, 5 );
+	bSizerMain->Add( m_notebook, 2, wxEXPAND | wxALL, 5 );
 
 	wxBoxSizer* bSizerButtons;
 	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
@@ -101,6 +101,7 @@ DIALOG_ABOUT_BASE::DIALOG_ABOUT_BASE( wxWindow* parent, wxWindowID id, const wxS
 	// Connect Events
 	m_btCopyVersionInfo->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ABOUT_BASE::onCopyVersionInfo ), NULL, this );
 	m_btReportBug->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ABOUT_BASE::onReportBug ), NULL, this );
+	m_notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_ABOUT_BASE::OnNotebookPageChanged ), NULL, this );
 }
 
 DIALOG_ABOUT_BASE::~DIALOG_ABOUT_BASE()
@@ -108,5 +109,6 @@ DIALOG_ABOUT_BASE::~DIALOG_ABOUT_BASE()
 	// Disconnect Events
 	m_btCopyVersionInfo->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ABOUT_BASE::onCopyVersionInfo ), NULL, this );
 	m_btReportBug->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ABOUT_BASE::onReportBug ), NULL, this );
+	m_notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_ABOUT_BASE::OnNotebookPageChanged ), NULL, this );
 
 }

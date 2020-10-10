@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,7 +22,7 @@
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
-#include <wx/aui/auibook.h>
+#include <wx/notebook.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -42,12 +42,13 @@ class DIALOG_ABOUT_BASE : public wxDialog
 		wxStaticText* m_staticTextLibVersion;
 		wxButton* m_btCopyVersionInfo;
 		wxButton* m_btReportBug;
-		wxAuiNotebook* m_auiNotebook;
+		wxNotebook* m_notebook;
 		wxButton* m_btOk;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void onCopyVersionInfo( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onReportBug( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnNotebookPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 
 
 	public:

@@ -33,6 +33,19 @@
 #include "aboutinfo.h"
 #include "dialog_about_base.h"
 
+// Used for the notebook image list
+enum class IMAGES {
+    INFORMATION,
+    VERSION,
+    DEVELOPERS,
+    DOCWRITERS,
+    LIBRARIANS,
+    ARTISTS,
+    TRANSLATORS,
+    PACKAGERS,
+    LICENSE
+};
+
 /**
  * About dialog to show application specific information.
  * Needs a <code>ABOUT_APP_INFO</code> object that contains the data to be displayed.
@@ -40,17 +53,7 @@
 class DIALOG_ABOUT : public DIALOG_ABOUT_BASE
 {
 private:
-
-    // Icons for the various tabs of wxAuiNotebook
-    wxBitmap     m_picInformation;
-    wxBitmap     m_picVersion;
-    wxBitmap     m_picDevelopers;
-    wxBitmap     m_picDocWriters;
-    wxBitmap     m_picLibrarians;
-    wxBitmap     m_picArtists;
-    wxBitmap     m_picTranslators;
-    wxBitmap     m_picPackagers;
-    wxBitmap     m_picLicense;
+    wxImageList* m_images;
     wxString     m_titleName;
 
     ABOUT_APP_INFO& m_info;
@@ -59,9 +62,10 @@ public:
     DIALOG_ABOUT( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aAppInfo );
     ~DIALOG_ABOUT();
 
-private:
-    void         initDialog();
+protected:
+    void OnNotebookPageChanged( wxNotebookEvent& aEvent ) override;
 
+private:
     void onHtmlLinkClicked( wxHtmlLinkEvent& event );
 
     void onCopyVersionInfo( wxCommandEvent& event ) override;
@@ -71,17 +75,17 @@ private:
     // Notebook pages
     wxFlexGridSizer* createFlexGridSizer();
     void             createNotebooks();
-    void             createNotebookPage( wxAuiNotebook*      aParent,
+    void             createNotebookPage( wxNotebook*         aParent,
                                          const wxString&     aCaption,
-                                         const wxBitmap&     aIcon,
+                                         IMAGES              aIconIndex,
                                          const CONTRIBUTORS& aContributors );
-    void             createNotebookPageByCategory( wxAuiNotebook*      aParent,
+    void             createNotebookPageByCategory( wxNotebook*      aParent,
                                                    const wxString&     aCaption,
-                                                   const wxBitmap&     aIcon,
+                                                   IMAGES              aIconIndex,
                                                    const CONTRIBUTORS& aContributors );
-    void             createNotebookHtmlPage( wxAuiNotebook*  aParent,
+    void             createNotebookHtmlPage( wxNotebook*     aParent,
                                              const wxString& aCaption,
-                                             const wxBitmap& aIcon,
+                                             IMAGES          aIconIndex,
                                              const wxString& aHtmlMessage,
                                              bool aSelection = false );
 

@@ -53,15 +53,20 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
 {
     wxASSERT( aParent != nullptr );
 
-    m_picInformation = KiBitmap( info_xpm );
-    m_picVersion     = KiBitmap( recent_xpm );
-    m_picDevelopers  = KiBitmap( preference_xpm );
-    m_picDocWriters  = KiBitmap( editor_xpm );
-    m_picLibrarians  = KiBitmap( library_xpm );
-    m_picArtists     = KiBitmap( palette_xpm );
-    m_picTranslators = KiBitmap( language_xpm );
-    m_picLicense     = KiBitmap( tools_xpm );
-    m_picPackagers   = KiBitmap( zip_xpm );
+    // TODO: Change these to 16x16 versions when available
+    m_images = new wxImageList( 26, 26, false, 9 );
+
+    m_images->Add( KiBitmap( info_xpm ) );         // INFORMATION
+    m_images->Add( KiBitmap( recent_xpm ) );       // VERSION
+    m_images->Add( KiBitmap( preference_xpm ) );   // DEVELOPERS
+    m_images->Add( KiBitmap( editor_xpm ) );       // DOCWRITERS
+    m_images->Add( KiBitmap( library_xpm ) );      // LIBRARIANS
+    m_images->Add( KiBitmap( palette_xpm ) );      // ARTISTS
+    m_images->Add( KiBitmap( language_xpm ) );     // TRANSLATORS
+    m_images->Add( KiBitmap( zip_xpm ) );          // PACKAGERS
+    m_images->Add( KiBitmap( tools_xpm ) );        // LICENSE
+
+    m_notebook->SetImageList( m_images );
 
     if( m_info.GetAppIcon().IsOk() )
     {
@@ -86,7 +91,6 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
     createNotebooks();
 
     GetSizer()->SetSizeHints( this );
-    m_auiNotebook->Update();
     SetFocus();
     Centre();
 }
@@ -94,6 +98,7 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
 
 DIALOG_ABOUT::~DIALOG_ABOUT()
 {
+    delete m_images;
 }
 
 
@@ -110,37 +115,40 @@ wxFlexGridSizer* DIALOG_ABOUT::createFlexGridSizer()
 
 void DIALOG_ABOUT::createNotebooks()
 {
-    createNotebookHtmlPage( m_auiNotebook, _( "About" ), m_picInformation,
+    createNotebookHtmlPage( m_notebook, _( "About" ), IMAGES::INFORMATION,
             m_info.GetDescription() );
 
     wxString version = GetVersionInfoData( m_titleName, true );
 
-    createNotebookHtmlPage( m_auiNotebook, _( "Version" ), m_picVersion, version, true );
+    createNotebookHtmlPage( m_notebook, _( "Version" ), IMAGES::VERSION, version, true );
 
-    createNotebookPageByCategory( m_auiNotebook, _( "Developers" ) , m_picDevelopers,
+    createNotebookPageByCategory( m_notebook, _( "Developers" ) , IMAGES::DEVELOPERS,
                         m_info.GetDevelopers() );
-    createNotebookPage( m_auiNotebook, _( "Doc Writers" ), m_picDocWriters,
+    createNotebookPage( m_notebook, _( "Doc Writers" ), IMAGES::DOCWRITERS,
                         m_info.GetDocWriters() );
 
-    createNotebookPageByCategory( m_auiNotebook, _( "Librarians" ), m_picLibrarians,
+    createNotebookPageByCategory( m_notebook, _( "Librarians" ), IMAGES::LIBRARIANS,
                                   m_info.GetLibrarians() );
 
-    createNotebookPageByCategory( m_auiNotebook, _( "Artists" ), m_picArtists,
+    createNotebookPageByCategory( m_notebook, _( "Artists" ), IMAGES::ARTISTS,
                                   m_info.GetArtists() );
-    createNotebookPageByCategory( m_auiNotebook, _( "Translators" ), m_picTranslators,
+    createNotebookPageByCategory( m_notebook, _( "Translators" ), IMAGES::TRANSLATORS,
                                   m_info.GetTranslators() );
-    createNotebookPageByCategory( m_auiNotebook, _( "Packagers" ), m_picPackagers,
+    createNotebookPageByCategory( m_notebook, _( "Packagers" ), IMAGES::PACKAGERS,
                                   m_info.GetPackagers() );
 
-    createNotebookHtmlPage( m_auiNotebook, _( "License" ), m_picLicense, m_info.GetLicense() );
+    createNotebookHtmlPage( m_notebook, _( "License" ), IMAGES::LICENSE, m_info.GetLicense() );
 }
 
-void DIALOG_ABOUT::createNotebookPage( wxAuiNotebook* aParent, const wxString& aCaption,
-                                       const wxBitmap& aIcon, const CONTRIBUTORS& aContributors )
+void DIALOG_ABOUT::createNotebookPage( wxNotebook* aParent, const wxString& aCaption,
+                                       IMAGES aIconIndex, const CONTRIBUTORS& aContributors )
 {
+    wxPanel* outerPanel = new wxPanel( aParent );
+    wxBoxSizer* outerSizer = new wxBoxSizer( wxVERTICAL );
+
     wxBoxSizer* bSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    wxScrolledWindow* m_scrolledWindow1 = new wxScrolledWindow( aParent, wxID_ANY,
+    wxScrolledWindow* m_scrolledWindow1 = new wxScrolledWindow( outerPanel, wxID_ANY,
                                                                 wxDefaultPosition,
                                                                 wxDefaultSize,
                                                                 wxHSCROLL|wxVSCROLL );
@@ -193,13 +201,17 @@ void DIALOG_ABOUT::createNotebookPage( wxAuiNotebook* aParent, const wxString& a
     m_scrolledWindow1->SetSizer( bSizer );
     m_scrolledWindow1->Layout();
     bSizer->Fit( m_scrolledWindow1 );
-    aParent->AddPage( m_scrolledWindow1, aCaption, false, aIcon );
+
+    outerSizer->Add( m_scrolledWindow1, 1, wxEXPAND, 0 );
+    outerPanel->SetSizer( outerSizer );
+
+    aParent->AddPage( outerPanel, aCaption, false, static_cast<int>( aIconIndex ) );
 }
 
 
-void DIALOG_ABOUT::createNotebookPageByCategory( wxAuiNotebook* aParent, const wxString& aCaption,
-                                                 const wxBitmap& aIcon,
-                                                 const CONTRIBUTORS& aContributors)
+void DIALOG_ABOUT::createNotebookPageByCategory( wxNotebook* aParent, const wxString& aCaption,
+                                                 IMAGES aIconIndex,
+                                                 const CONTRIBUTORS& aContributors )
 {
     // The left justification between wxStaticText and wxHyperlinkCtrl is different so
     // we must pad to make the alignment look decent.
@@ -212,10 +224,12 @@ void DIALOG_ABOUT::createNotebookPageByCategory( wxAuiNotebook* aParent, const w
 #if defined( __WXGTK__ )
     padding += "      ";
 #endif
+    wxPanel* outerPanel = new wxPanel( aParent );
+    wxBoxSizer* outerSizer = new wxBoxSizer( wxVERTICAL );
 
     wxBoxSizer* bSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    wxScrolledWindow* m_scrolledWindow1 = new wxScrolledWindow( aParent, wxID_ANY,
+    wxScrolledWindow* m_scrolledWindow1 = new wxScrolledWindow( outerPanel, wxID_ANY,
                                                                 wxDefaultPosition,
                                                                 wxDefaultSize,
                                                                 wxHSCROLL|wxVSCROLL );
@@ -363,12 +377,16 @@ void DIALOG_ABOUT::createNotebookPageByCategory( wxAuiNotebook* aParent, const w
     m_scrolledWindow1->SetSizer( bSizer );
     m_scrolledWindow1->Layout();
     bSizer->Fit( m_scrolledWindow1 );
-    aParent->AddPage( m_scrolledWindow1, aCaption, false, aIcon );
+
+    outerSizer->Add( m_scrolledWindow1, 1, wxEXPAND, 0 );
+    outerPanel->SetSizer( outerSizer );
+
+    aParent->AddPage( outerPanel, aCaption, false, static_cast<int>( aIconIndex ) );
 }
 
 
-void DIALOG_ABOUT::createNotebookHtmlPage( wxAuiNotebook* aParent, const wxString& aCaption,
-                                           const wxBitmap& aIcon, const wxString& html,
+void DIALOG_ABOUT::createNotebookHtmlPage( wxNotebook* aParent, const wxString& aCaption,
+                                           IMAGES aIconIndex, const wxString& html,
                                            bool aSelection )
 {
     wxPanel* panel = new wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -381,9 +399,13 @@ void DIALOG_ABOUT::createNotebookHtmlPage( wxAuiNotebook* aParent, const wxStrin
     // to have a unique look background color for HTML pages is set to the default as it is
     // used for all the other widgets
     wxString htmlColor = ( this->GetBackgroundColour() ).GetAsString( wxC2S_HTML_SYNTAX );
+    wxString textColor = GetForegroundColour().GetAsString( wxC2S_HTML_SYNTAX );
+    wxString linkColor =
+            wxSystemSettings::GetColour( wxSYS_COLOUR_HOTLIGHT ).GetAsString( wxC2S_HTML_SYNTAX );
 
     // beginning of HTML structure
-    htmlPage.Append( wxT( "<html><body bgcolor='" ) + htmlColor + wxT( "'>" ) );
+    htmlPage.Append( wxString::Format( wxT( "<html><body bgcolor='%s' text='%s' link='%s'>" ),
+                                       htmlColor, textColor, linkColor ) );
 
     htmlPage.Append( htmlContent );
 
@@ -407,11 +429,10 @@ void DIALOG_ABOUT::createNotebookHtmlPage( wxAuiNotebook* aParent, const wxStrin
                          wxHtmlLinkEventHandler( DIALOG_ABOUT::onHtmlLinkClicked ), NULL, this );
 
     // no additional space around the HTML window as it is also the case by the other notebook pages
-    bSizer->Add( htmlWindow, 1, wxALL|wxEXPAND, 0 );
+    bSizer->Add( htmlWindow, 1, wxEXPAND, 0 );
     panel->SetSizer( bSizer );
-    panel->Layout();
-    bSizer->Fit( panel );
-    aParent->AddPage( panel, aCaption, false, aIcon );
+
+    aParent->AddPage( panel, aCaption, false, static_cast<int>( aIconIndex ) );
 }
 
 
@@ -469,4 +490,16 @@ void DIALOG_ABOUT::onReportBug( wxCommandEvent& event )
 {
     if( TOOL_MANAGER* mgr = static_cast<EDA_BASE_FRAME*>( GetParent() )->GetToolManager() )
         mgr->RunAction( "common.SuiteControl.reportBug", true );
+}
+
+
+void DIALOG_ABOUT::OnNotebookPageChanged( wxNotebookEvent& aEvent )
+{
+    // Work around wxMac issue where the notebook pages are blank
+#ifdef __WXMAC__
+    int page = aEvent.GetSelection();
+
+    if( page >= 0 )
+        m_notebook->ChangeSelection( static_cast<unsigned>( page ) );
+#endif
 }
