@@ -24,10 +24,20 @@ macro(mingw_resource_compiler _NAME)
     foreach(wx_include_dir ${wxWidgets_INCLUDE_DIRS})
         set(_WINDRES_INCLUDE_DIRS ${_WINDRES_INCLUDE_DIRS} -I${wx_include_dir})
     endforeach(wx_include_dir ${wxWidgets_INCLUDE_DIRS})
+
+    foreach(_mingw_rc_include_dir ${mingw_resource_compiler_INCLUDE_DIRS})
+        set(_WINDRES_INCLUDE_DIRS ${_WINDRES_INCLUDE_DIRS} -I${_mingw_rc_include_dir})
+    endforeach()
     dbg_msg("_WINDRES_INCLUDE_DIRS: ${_WINDRES_INCLUDE_DIRS}")
 
+
+    foreach(_mingw_rc_define ${mingw_resource_compiler_DEFINES})
+        set(_WINDRES_DEFINES ${_WINDRES_DEFINES} -D${_mingw_rc_define})
+    endforeach()
+    dbg_msg("_WINDRES_DEFINES: ${_WINDRES_DEFINES}")
+
     # windres arguments.
-    set(_ARGS ${_WINDRES_INCLUDE_DIRS} -i${_IN} -o${_OUT})
+    set(_ARGS ${_WINDRES_INCLUDE_DIRS} ${_WINDRES_DEFINES} -i${_IN} -o${_OUT})
     dbg_msg("_ARGS: ${_ARGS}")
 
     # Compile resource file.

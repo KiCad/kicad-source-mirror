@@ -126,6 +126,10 @@ option( KICAD_NETLIST_QA
     "Run eeschema netlist QA tests (requires Python 3)"
     OFF )
 
+option( KICAD_WIN32_DPI_AWARE
+    "Turn on DPI awareness for Windows builds only"
+    OFF )
+
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
@@ -226,6 +230,18 @@ if( WIN32 )
     # In fully standards-compliant mode, M_PI et al. are defined only if
     # _USE_MATH_DEFINES is set.
     add_definitions( -D_USE_MATH_DEFINES )
+
+    # We need the arch for the resource compiler later
+    if ( NOT CMAKE_SIZEOF_VOID_P EQUAL 8 )
+        set( KICAD_BUILD_ARCH "x86" )
+    elseif( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+        set( KICAD_BUILD_ARCH "x64" )
+    endif()
+    add_definitions( -DKICAD_BUILD_ARCH=${KICAD_BUILD_ARCH} )
+
+    if( KICAD_WIN32_DPI_AWARE )
+        add_definitions( -DKICAD_WIN32_DPI_AWARE=1 )
+    endif()
 endif()
 
 
@@ -309,6 +325,12 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     endif()
 
     if( MINGW )
+        list(APPEND mingw_resource_compiler_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/resources/msw/ )
+        list(APPEND mingw_resource_compiler_DEFINES KICAD_BUILD_ARCH=${KICAD_BUILD_ARCH} )
+        if( KICAD_WIN32_DPI_AWARE )
+            list(APPEND mingw_resource_compiler_DEFINES KICAD_WIN32_DPI_AWARE=1 )
+        endif()
+
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
 
         # Since version 2.8.5, Cmake uses a response file (.rsp) to
@@ -355,6 +377,8 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 endif( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
 if( MSVC )
+    include_directories( ${CMAKE_SOURCE_DIR}/resources/msw/ )
+
     # Disallow implicit linking for Boost
     add_definitions( -DBOOST_ALL_NO_LIB )
     # But allow it for the UUID so that it will link against bcrypt
@@ -375,11 +399,11 @@ if( MSVC )
     string( APPEND CMAKE_CXX_FLAGS_RELEASE " /GF" )
     foreach( type EXE SHARED MODULE)
         # /DEBUG: create PDB
-        string( APPEND CMAKE_${type}_LINKER_FLAGS " /DEBUG" )
+        string( APPEND CMAKE_${type}_LINKER_FLAGS " /DEBUG /MANIFEST:NO" )
         # /OPT:REF: omit unreferenced code
-        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /OPT:REF" )
+        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /OPT:REF /MANIFEST:NO" )
         # /OPT:ICF: fold common data
-        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /OPT:ICF" )
+        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /OPT:ICF /MANIFEST:NO" )
     endforeach()
 
     # Let cl.exe parallelize builds
