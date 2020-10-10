@@ -485,10 +485,7 @@ public:
      * ( using the default netclass value or a preset/custom value )
      * the default netclass is always in m_TrackWidthList[0]
      */
-    inline int GetCurrentTrackWidth() const
-    {
-        return m_useCustomTrackVia ? m_customTrackWidth : m_TrackWidthList[m_trackWidthIndex];
-    }
+    int GetCurrentTrackWidth() const;
 
     /**
      * Function SetCustomTrackWidth
@@ -534,13 +531,7 @@ public:
      * ( using the default netclass value or a preset/custom value )
      * the default netclass is always in m_TrackWidthList[0]
      */
-    inline int GetCurrentViaSize() const
-    {
-        if( m_useCustomTrackVia )
-            return m_customViaSize.m_Diameter;
-        else
-            return m_ViasDimensionsList[m_viaSizeIndex].m_Diameter;
-    }
+    int GetCurrentViaSize() const;
 
     /**
      * Function SetCustomViaSize

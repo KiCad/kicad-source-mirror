@@ -886,14 +886,27 @@ void BOARD_DESIGN_SETTINGS::SetViaSizeIndex( unsigned aIndex )
 }
 
 
+int BOARD_DESIGN_SETTINGS::GetCurrentViaSize() const
+{
+    if( m_useCustomTrackVia )
+        return m_customViaSize.m_Diameter;
+    else if( m_viaSizeIndex == 0 )
+        return GetNetClasses().GetDefaultPtr()->GetViaDiameter();
+    else
+        return m_ViasDimensionsList[ m_viaSizeIndex ].m_Diameter;
+}
+
+
 int BOARD_DESIGN_SETTINGS::GetCurrentViaDrill() const
 {
     int drill;
 
     if( m_useCustomTrackVia )
         drill = m_customViaSize.m_Drill;
+    else if( m_viaSizeIndex == 0 )
+        drill = GetNetClasses().GetDefaultPtr()->GetViaDrill();
     else
-        drill = m_ViasDimensionsList[m_viaSizeIndex].m_Drill;
+        drill = m_ViasDimensionsList[ m_viaSizeIndex ].m_Drill;
 
     return drill > 0 ? drill : -1;
 }
@@ -903,6 +916,17 @@ void BOARD_DESIGN_SETTINGS::SetTrackWidthIndex( unsigned aIndex )
 {
     m_trackWidthIndex = std::min( aIndex, (unsigned) m_TrackWidthList.size() );
     m_useCustomTrackVia = false;
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetCurrentTrackWidth() const
+{
+    if( m_useCustomTrackVia )
+        return m_customTrackWidth;
+    else if( m_trackWidthIndex == 0 )
+        return GetNetClasses().GetDefaultPtr()->GetTrackWidth();
+    else
+        return m_TrackWidthList[ m_trackWidthIndex ];
 }
 
 

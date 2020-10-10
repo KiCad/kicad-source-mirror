@@ -197,13 +197,13 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
     sort( vias.begin(), vias.end() );
     sort( diffPairs.begin(), diffPairs.end() );
 
-    trackWidths.insert( trackWidths.begin(), m_BrdSettings->m_TrackWidthList[ 0 ] );
+    trackWidths.insert( trackWidths.begin(), 0 );         // dummy value for "use netclass"
     m_BrdSettings->m_TrackWidthList = trackWidths;
 
-    vias.insert( vias.begin(), m_BrdSettings->m_ViasDimensionsList[ 0 ] );
+    vias.insert( vias.begin(), { 0, 0 } );                // dummy value for "use netclass"
     m_BrdSettings->m_ViasDimensionsList = vias;
 
-    diffPairs.insert( diffPairs.begin(), m_BrdSettings->m_DiffPairDimensionsList[ 0 ] );
+    diffPairs.insert( diffPairs.begin(), { 0, 0, 0 } );   // dummy value for "use netclass"
     m_BrdSettings->m_DiffPairDimensionsList = diffPairs;
 
     return true;
