@@ -264,6 +264,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // The selection filter doesn't need to grow in the vertical direction when docked
     m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
 
+    m_auimgr.GetArtProvider()->SetColour( wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR,
+                                          wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
+    m_auimgr.GetArtProvider()->SetColour( wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR,
+                                          wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
+
     // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
     // hidding it.
     m_auimgr.Update();

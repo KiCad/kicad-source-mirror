@@ -233,6 +233,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     ActivateGalCanvas();
 
+    m_auimgr.GetArtProvider()->SetColour( wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR,
+                                          wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
+    m_auimgr.GetArtProvider()->SetColour( wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR,
+                                          wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
+
     // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
     // hidding it.
     m_auimgr.Update();
