@@ -1033,7 +1033,7 @@ static void inheritNetclass( const SCH_SHEET_PATH& aSheetPath, SCH_TEXT* aItem )
         SCH_ITEM* previousDriver = nullptr;
         CONNECTION_SUBGRAPH::PRIORITY priority = CONNECTION_SUBGRAPH::PRIORITY::INVALID;
 
-        for( SCH_ITEM* item : subgraph->m_items )
+        for( SCH_ITEM* item : subgraph->m_drivers )
         {
             if( item == aItem )
                 continue;
