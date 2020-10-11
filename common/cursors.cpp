@@ -162,7 +162,7 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         nullptr,
         cursor_add_xpm,
         { 32, 32 },
-        { 7, 10 },
+        { 7, 7 },
     },
     {
         KICURSOR::SUBTRACT,
@@ -170,7 +170,7 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         nullptr,
         cursor_subtract_xpm,
         { 32, 32 },
-        { 7, 10 },
+        { 7, 7 },
     },
     {
         KICURSOR::XOR,
@@ -178,7 +178,7 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         nullptr,
         cursor_xor_xpm,
         { 32, 32 },
-        { 7, 10 },
+        { 7, 7 },
     },
     {
         KICURSOR::ZOOM_IN,
