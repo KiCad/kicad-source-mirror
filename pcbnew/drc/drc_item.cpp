@@ -168,7 +168,7 @@ DRC_ITEM DRC_ITEM::silkMaskClearance( DRCE_SILK_MASK_CLEARANCE,
         _( "Silkscreen clipped by solder mask" ),
         wxT( "silk_over_copper" ) );
 
-DRC_ITEM DRC_ITEM::silkSilkClearance( DRCE_SILK_SILK_CLEARANCE,
+DRC_ITEM DRC_ITEM::silkOverlaps( DRCE_OVERLAPPING_SILK,
         _( "Silkscreen overlap" ),
         wxT( "silk_overlap" ) );
 
@@ -224,7 +224,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::extraFootprint,
             DRC_ITEM::netConflict,
             DRC_ITEM::unresolvedVariable,
-            DRC_ITEM::silkSilkClearance,
+            DRC_ITEM::silkOverlaps,
             DRC_ITEM::silkMaskClearance,
             DRC_ITEM::lengthOutOfRange,
             DRC_ITEM::skewOutOfRange,
@@ -270,7 +270,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_NET_CONFLICT:             return std::make_shared<DRC_ITEM>( netConflict );
     case DRCE_EXTRA_FOOTPRINT:          return std::make_shared<DRC_ITEM>( extraFootprint );
     case DRCE_UNRESOLVED_VARIABLE:      return std::make_shared<DRC_ITEM>( unresolvedVariable );
-    case DRCE_SILK_SILK_CLEARANCE:      return std::make_shared<DRC_ITEM>( silkSilkClearance );
+    case DRCE_OVERLAPPING_SILK:         return std::make_shared<DRC_ITEM>( silkOverlaps );
     case DRCE_SILK_MASK_CLEARANCE:      return std::make_shared<DRC_ITEM>( silkMaskClearance );
     case DRCE_LENGTH_OUT_OF_RANGE:      return std::make_shared<DRC_ITEM>( lengthOutOfRange );
     case DRCE_SKEW_OUT_OF_RANGE:        return std::make_shared<DRC_ITEM>( skewOutOfRange );

@@ -38,7 +38,7 @@
 /*
     Silk to silk clearance test. Check all silkscreen features against each other.
     Errors generated:
-    - DRCE_SILK_SILK_CLEARANCE
+    - DRCE_OVERLAPPING_SILK
 
 */
 
@@ -117,7 +117,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
             [&]( const DRC_RTREE::LAYER_PAIR& aLayers, DRC_RTREE::ITEM_WITH_SHAPE* aRefItem,
                  DRC_RTREE::ITEM_WITH_SHAPE* aTestItem, bool* aCollisionDetected ) -> bool
             {
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_SILK_CLEARANCE ) )
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
                     return false;
 
                 auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,
@@ -178,7 +178,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 if( !aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual, &pos ) )
                     return true;
 
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_SILK_CLEARANCE );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_OVERLAPPING_SILK );
 
                 if( minClearance > 0 )
                 {
