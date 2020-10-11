@@ -630,10 +630,9 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         return 0;
 
     // First see if this is one of the switch layer commands
-    LSEQ layers       = LSET( board()->GetEnabledLayers() & LSET::AllCuMask() ).Seq();
-    int  currentLayer = m_router->GetCurrentLayer();
-
-    PCB_LAYER_ID targetLayer = UNDEFINED_LAYER;
+    LSEQ         layers       = LSET( board()->GetEnabledLayers() & LSET::AllCuMask() ).Seq();
+    PCB_LAYER_ID currentLayer = (PCB_LAYER_ID) m_router->GetCurrentLayer();
+    PCB_LAYER_ID targetLayer  = UNDEFINED_LAYER;
 
     if( aEvent.IsAction( &PCB_ACTIONS::layerNext ) )
     {
@@ -702,8 +701,8 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         {
             wxPoint dlgPosition = wxGetMousePosition();
 
-            targetLayer = frame()->SelectLayer(
-                    static_cast<PCB_LAYER_ID>( currentLayer ), LSET::AllNonCuMask(), dlgPosition );
+            targetLayer = frame()->SelectLayer( static_cast<PCB_LAYER_ID>( currentLayer ),
+                                                LSET::AllNonCuMask(), dlgPosition );
 
             // Reset the cursor to the position where the event occured
             controls()->SetCursorPosition( aEvent.HasPosition() ? aEvent.Position() : dlgPosition );
@@ -755,40 +754,34 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         viaType = VIATYPE::THROUGH;
     }
 
+    std::pair<PCB_LAYER_ID, PCB_LAYER_ID> layerPair;
+
     switch( viaType )
     {
     case VIATYPE::THROUGH:
-        sizes.SetViaDiameter( bds.GetCurrentViaSize() );
-        sizes.SetViaDrill( bds.GetCurrentViaDrill() );
-
-        if( targetLayer != UNDEFINED_LAYER )
-        {
-            // go from the current layer to the chosen layer
-            sizes.AddLayerPair( currentLayer, targetLayer );
-        }
-        else
+        if( targetLayer == UNDEFINED_LAYER )
         {
             // use the default layer pair
-            sizes.AddLayerPair( pairTop, pairBottom );
+            currentLayer = pairTop;
+            targetLayer = pairBottom;
         }
         break;
 
     case VIATYPE::MICROVIA:
-        sizes.SetViaDiameter( bds.GetCurrentMicroViaSize() );
-        sizes.SetViaDrill( bds.GetCurrentMicroViaDrill() );
-
         wxASSERT_MSG( !selectLayer,
                 "Unexpected select layer for microvia (microvia layers are implicit)" );
 
         if( currentLayer == F_Cu || currentLayer == In1_Cu )
         {
             // front-side microvia
-            sizes.AddLayerPair( F_Cu, In1_Cu );
+            currentLayer = F_Cu;
+            targetLayer = In1_Cu;
         }
         else if( currentLayer == B_Cu || currentLayer == layerCount - 2 )
         {
             // back-side microvia
-            sizes.AddLayerPair( B_Cu, layerCount - 2 );
+            currentLayer = B_Cu,
+            targetLayer = (PCB_LAYER_ID) ( layerCount - 2 );
         }
         else
         {
@@ -798,27 +791,20 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         break;
 
     case VIATYPE::BLIND_BURIED:
-        sizes.SetViaDiameter( bds.GetCurrentViaSize() );
-        sizes.SetViaDrill( bds.GetCurrentViaDrill() );
-
-        if( targetLayer != UNDEFINED_LAYER )
-        {
-            // go directly to the user specified layer
-            sizes.AddLayerPair( currentLayer, targetLayer );
-        }
-        else
+        if( targetLayer == UNDEFINED_LAYER )
         {
             if( currentLayer == pairTop || currentLayer == pairBottom )
             {
                 // the current layer is on the defined layer pair,
                 // swap to the other side
-                sizes.AddLayerPair( pairTop, pairBottom );
+                currentLayer = pairTop;
+                targetLayer = pairBottom;
             }
             else
             {
                 // the current layer is not part of the current layer pair,
                 // so fallback and swap to the top layer of the pair by default
-                sizes.AddLayerPair( pairTop, currentLayer );
+                targetLayer = pairTop;
             }
         }
         break;
@@ -828,7 +814,33 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         break;
     }
 
+    if( bds.UseNetClassVia() || viaType == VIATYPE::MICROVIA )
+    {
+        class VIA dummyVia( board() );
+        dummyVia.SetViaType( viaType );
+        dummyVia.SetLayerPair( currentLayer, targetLayer );
+
+        if( !m_router->GetCurrentNets().empty() )
+            dummyVia.SetNetCode( m_router->GetCurrentNets()[0] );
+
+        DRC_CONSTRAINT constraint;
+
+        constraint = bds.m_DRCEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_VIA_DIAMETER,
+                                                         &dummyVia, nullptr, currentLayer );
+        sizes.SetViaDiameter( constraint.m_Value.OptThenMin() );
+
+        constraint = bds.m_DRCEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_SIZE,
+                                                         &dummyVia, nullptr, currentLayer );
+        sizes.SetViaDrill( constraint.m_Value.OptThenMin() );
+    }
+    else
+    {
+        sizes.SetViaDiameter( bds.GetCurrentViaSize() );
+        sizes.SetViaDrill( bds.GetCurrentViaDrill() );
+    }
+
     sizes.SetViaType( viaType );
+    sizes.AddLayerPair( currentLayer, targetLayer );
 
     m_router->UpdateSizes( sizes );
     m_router->ToggleViaPlacement();
