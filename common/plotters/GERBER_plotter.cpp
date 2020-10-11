@@ -44,6 +44,7 @@
 // Note also: setting m_gerberDisableApertMacros to true disable all aperture macros
 // in Gerber files
 //
+#define GBR_USE_MACROS_FOR_CHAMFERED_ROUND_RECT
 #define GBR_USE_MACROS_FOR_CHAMFERED_RECT
 #define GBR_USE_MACROS_FOR_ROUNDRECT
 #define GBR_USE_MACROS_FOR_TRAPEZOID
@@ -676,6 +677,34 @@ void GERBER_PLOTTER::writeApertureList()
                          tool.m_Size.y * fscale,                // width
                          start.x * fscale, -start.y * fscale,   // X,Y corner start pos
                          end.x * fscale, -end.y * fscale );     // X,Y cornerend  pos
+            }
+            break;
+
+            case APERTURE::AM_FREE_POLYGON:
+            {
+                // Write aperture header
+                fprintf( outputFile, "%%%s%d*\n", "AMFp", tool.m_DCode );
+                fprintf( outputFile, "4,1,%d,", (int)tool.m_Corners.size() );
+
+                for( size_t ii = 0; ii <= tool.m_Corners.size(); ii++ )
+                {
+                    int jj = ii;
+
+                    if( ii >= tool.m_Corners.size() )
+                        jj = 0;
+
+                fprintf( outputFile, "%#f,%#f,",
+                         tool.m_Corners[jj].x * fscale, -tool.m_Corners[jj].y * fscale );
+                }
+                // output rotation parameter
+                fputs( "$1*%\n", outputFile );
+
+                // Create specialized macro
+                sprintf( cbuf, "%s%d,", "Fp", tool.m_DCode );
+                buffer += cbuf;
+
+                // close outline and output rotation
+                sprintf( cbuf, "%#f*%%\n", tool.m_Rotation );
             }
             break;
         }
@@ -1451,8 +1480,31 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const wxPoint& aShapePos, const w
 
         if( aPlotMode == SKETCH )
             PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), &gbr_metadata );
-        else    // round rect shapes shapes are plot as region (a AP Macro is not obvious)
+        else
+        {
+#ifdef GBR_USE_MACROS_FOR_CHAMFERED_ROUND_RECT
+            if( m_gerberDisableApertMacros )
+                PlotGerberRegion( cornerList, &gbr_metadata );
+            else
+            {
+               // An AM will be created. the shape must be in position 0,0 and orientation 0
+                // to be able to reuse the same AM for pads having the same shape
+                for( size_t ii = 0; ii < cornerList.size(); ii++ )
+                {
+                    cornerList[ii] -= aShapePos;
+                    RotatePoint( &cornerList[ii], -aPadOrient );
+                }
+
+                selectAperture( cornerList, aPadOrient/10.0,
+                                APERTURE::AM_FREE_POLYGON, gbr_metadata.GetApertureAttrib() );
+                formatNetAttribute( &gbr_metadata.m_NetlistMetadata );
+
+                emitDcode( pos_dev, 3 );
+            }
+#else
             PlotGerberRegion( cornerList, &gbr_metadata );
+#endif
+        }
 
         return;
     }

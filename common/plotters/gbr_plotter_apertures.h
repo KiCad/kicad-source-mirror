@@ -67,8 +67,10 @@ public:
         APER_MACRO_OUTLINE6P,   // Aperture macro for pad polygons with 6 corners (chamfered pads)
         APER_MACRO_OUTLINE7P,   // Aperture macro for pad polygons with 7 corners (chamfered pads)
         APER_MACRO_OUTLINE8P,   // Aperture macro for pad polygons with 8 corners (chamfered pads)
-        AM_ROTATED_OVAL         // Aperture macro for rotated oval pads
+        AM_ROTATED_OVAL,        // Aperture macro for rotated oval pads
                                 // (not rotated uses a primitive)
+        AM_FREE_POLYGON         // Aperture macro to create on the fly a free polygon, with
+                                // only one parameter: rotation
     };
 
     void SetSize( const wxSize& aSize )
