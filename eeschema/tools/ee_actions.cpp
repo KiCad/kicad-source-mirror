@@ -610,7 +610,7 @@ TOOL_ACTION EE_ACTIONS::explicitCrossProbe( "eeschema.EditorControl.explicitCros
 
 TOOL_ACTION EE_ACTIONS::toggleHiddenPins( "eeschema.EditorControl.showHiddenPins",
         AS_GLOBAL, 0, "",
-        _( "Show Hidden Pins" ), "",
+        _( "Show Hidden Pins" ), _( "Switch display of hidden pins" ),
         hidden_pin_xpm );
 
 TOOL_ACTION EE_ACTIONS::toggleHiddenFields( "eeschema.EditorControl.showHiddenFields",
@@ -620,7 +620,7 @@ TOOL_ACTION EE_ACTIONS::toggleHiddenFields( "eeschema.EditorControl.showHiddenFi
 
 TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
         AS_GLOBAL, 0, "",
-        _( "Force H/V Wires and Buses" ), "",
+        _( "Force H/V Wires and Buses" ), _( "Switch H & V only mode for new wires and buses" ),
         lines90_xpm );
 
 
