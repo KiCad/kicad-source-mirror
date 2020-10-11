@@ -122,7 +122,7 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         nullptr,
         cursor_pencil_xpm,
         { 32, 32 },
-        { 4, 4 },
+        { 4, 27 },
     },
     {
         KICURSOR::MOVING,
