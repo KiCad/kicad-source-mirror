@@ -404,10 +404,11 @@ void TRACKS_CLEANER::cleanupSegments()
     if( !m_dryRun )
         removeItems( toRemove );
 
-    bool merged = false;
+    bool merged;
 
     do
     {
+        merged = false;
         m_brd->BuildConnectivity();
 
         // Keep a duplicate deque to all deleting in the primary
