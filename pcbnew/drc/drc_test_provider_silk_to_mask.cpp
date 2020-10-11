@@ -87,7 +87,7 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
     DRC_CONSTRAINT worstClearanceConstraint;
     m_largestClearance = 0;
 
-    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_SILK_TO_MASK,
+    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,
                                            worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
     {
         m_largestClearance = worstClearanceConstraint.m_Value.Min();
@@ -121,7 +121,7 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
                     return false;
 
-                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_TO_MASK,
+                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,
                                                                   aRefItem->parent,
                                                                   aTestItem->parent );
 
@@ -192,7 +192,7 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
 
 std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_SILK_TO_MASK::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_SILK_TO_MASK };
+    return { DRC_CONSTRAINT_TYPE_SILK_CLEARANCE };
 }
 
 

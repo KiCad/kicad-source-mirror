@@ -29,8 +29,7 @@ zone
 edge_clearance
 hole_clearance
 courtyard_clearance
-silk_to_mask
-silk_to_silk
+silk_clearance
 skew
 diff_pair_gap
 diff_pair_uncoupled

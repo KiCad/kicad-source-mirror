@@ -190,7 +190,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
             const std::shared_ptr<SHAPE>& shape = boardItem->GetEffectiveShape();
 
-            auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_TO_MASK,
+            auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,
                                                               outlineItem, boardItem );
 
             int      minClearance = constraint.GetValue().Min();
@@ -235,7 +235,7 @@ int DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetNumPhases() const
 
 std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE };
+    return { DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE, DRC_CONSTRAINT_TYPE_SILK_CLEARANCE };
 }
 
 

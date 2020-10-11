@@ -250,24 +250,22 @@ public:
 
         int count = 0;
 
-        auto visit = [&] ( ITEM_WITH_SHAPE* aItem ) -> bool
-        {
-            int actual;
+        auto visit =
+                [&] ( ITEM_WITH_SHAPE* aItem ) -> bool
+                {
+                    if( !aFilter || aFilter( aItem->parent ) )
+                    {
+                        int actual;
 
-            // keep searching
-            if( aFilter && ! aFilter( aItem->parent ) )
-                return true;
+                        if( aRefShape->Collide( aItem->shape, aClearance, &actual ) )
+                        {
+                            count++;
+                            return false;
+                        }
+                    }
 
-            bool colliding = aRefShape->Collide( aItem->shape, aClearance, &actual );
-
-            if( colliding )
-            {
-                count++;
-                return false;
-            }
-
-            return true;
-        };
+                    return true;
+                };
 
         this->m_tree[aTargetLayer]->Search( min, max, visit );
         return count > 0;
@@ -278,8 +276,7 @@ public:
                         PCB_LAYER_ID aTargetLayer,
                         std::function<bool( BOARD_ITEM*)> aFilter = nullptr,
                         std::function<bool( BOARD_ITEM*, int)> aVisitor = nullptr,
-                        int aClearance = 0
-                        )
+                        int aClearance = 0 )
     {
         // keep track of BOARD_ITEMs that have been already found to collide (some items
         // might be build of COMPOUND/triangulated shapes and a single subshape collision
@@ -296,35 +293,28 @@ public:
 
         int count = 0;
 
-        auto visit = [&] ( ITEM_WITH_SHAPE* aItem ) -> bool
-        {
-            if( collidingCompounds.find( aItem->parent ) != collidingCompounds.end() )
-                return true;
-
-            if( aFilter && !aFilter( aItem->parent ) )
-                return true;
-
-            int actual;
-
-            bool colliding = refShape->Collide( aItem->shape, aClearance, &actual );
-
-            if( colliding )
-            {
-                collidingCompounds.insert( aItem->parent );
-                count++;
-                if( aVisitor )
+        auto visit =
+                [&]( ITEM_WITH_SHAPE* aItem ) -> bool
                 {
-                    return aVisitor( aItem->parent, actual );
-                }
-                else
-                {
+                    if( collidingCompounds.find( aItem->parent ) != collidingCompounds.end() )
+                        return true;
+
+                    if( !aFilter || aFilter( aItem->parent ) )
+                    {
+                        int actual;
+
+                        if( refShape->Collide( aItem->shape, aClearance, &actual ) )
+                        {
+                            collidingCompounds.insert( aItem->parent );
+                            count++;
+
+                            if( aVisitor )
+                                return aVisitor( aItem->parent, actual );
+                        }
+                    }
+
                     return true;
-                }
-            }
-
-
-            return true;
-        };
+                };
 
         this->m_tree[aTargetLayer]->Search( min, max, visit );
         return count;
@@ -389,8 +379,7 @@ public:
 
 #if 0
     std::vector<std::pair<int, BOARD_ITEM*>> GetNearest( const wxPoint &aPoint,
-                                                                   PCB_LAYER_ID aLayer,
-                                                                   int aLimit )
+                                                         PCB_LAYER_ID aLayer, int aLimit )
     {
 
         const int point[2] = { aPoint.x, aPoint.y };

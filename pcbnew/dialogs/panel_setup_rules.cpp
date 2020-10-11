@@ -236,8 +236,8 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                      "length "
                      "hole "
                      "hole_clearance "
-                     "silk_to_mask "
-                     "silk_to_silk skew "
+                     "silk_clearance "
+                     "skew "
                      "track_width "
                      "via_count ";
         }

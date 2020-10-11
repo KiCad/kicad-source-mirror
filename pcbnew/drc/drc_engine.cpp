@@ -129,13 +129,9 @@ void DRC_ENGINE::loadImplicitRules()
     holeClearanceConstraint.Value().SetMin( 0 );
     rule->AddConstraint( courtyardClearanceConstraint );
 
-    DRC_CONSTRAINT silkToPadClearanceConstraint( DRC_CONSTRAINT_TYPE_SILK_TO_MASK );
+    DRC_CONSTRAINT silkToPadClearanceConstraint( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE );
     silkToPadClearanceConstraint.Value().SetMin( 0 );
     rule->AddConstraint( silkToPadClearanceConstraint );
-
-    DRC_CONSTRAINT silkToSilkClearanceConstraint( DRC_CONSTRAINT_TYPE_SILK_TO_SILK );
-    silkToSilkClearanceConstraint.Value().SetMin( 0 );
-    rule->AddConstraint( silkToSilkClearanceConstraint );
 
     DRC_CONSTRAINT diffPairGapConstraint( DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP );
     diffPairGapConstraint.Value().SetMin( bds.GetDefault()->GetClearance() );
@@ -363,8 +359,7 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
         { DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,      "edge_clearance",      formatMinMax },
         { DRC_CONSTRAINT_TYPE_HOLE_SIZE,           "hole_size",           formatMinMax },
         { DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE, "courtyard_clearance", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_SILK_TO_MASK,        "silk_to_mask",        formatMinMax },
-        { DRC_CONSTRAINT_TYPE_SILK_TO_SILK,        "silk_to_silk",        formatMinMax },
+        { DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,      "silk_clearance",      formatMinMax },
         { DRC_CONSTRAINT_TYPE_TRACK_WIDTH,         "track_width",         formatMinMax },
         { DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH,       "annular_width",       formatMinMax },
         { DRC_CONSTRAINT_TYPE_DISALLOW,            "disallow",            nullptr },
@@ -615,30 +610,30 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
     if( m_constraintMap.count( aConstraintId ) )
     {
-    std::vector<CONSTRAINT_WITH_CONDITIONS*>* ruleset = m_constraintMap[ aConstraintId ];
+        std::vector<CONSTRAINT_WITH_CONDITIONS*>* ruleset = m_constraintMap[ aConstraintId ];
 
-    // Last matching rule wins, so process in reverse order
-    for( int ii = (int) ruleset->size() - 1; ii >= 0; --ii )
-    {
-        const CONSTRAINT_WITH_CONDITIONS* rcons = ruleset->at( ii );
-        implicit = rcons->parentRule && rcons->parentRule->m_Implicit;
+        // Last matching rule wins, so process in reverse order
+        for( int ii = (int) ruleset->size() - 1; ii >= 0; --ii )
+        {
+            const CONSTRAINT_WITH_CONDITIONS* rcons = ruleset->at( ii );
+            implicit = rcons->parentRule && rcons->parentRule->m_Implicit;
 
-        REPORT( "" )
+            REPORT( "" )
 
             if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
-        {
+            {
                 int clearance = rcons->constraint.m_Value.Min();
                 REPORT( wxString::Format( implicit ? _( "Checking %s; clearance: %s." )
                                                    : _( "Checking rule %s; clearance: %s."),
                                           rcons->constraint.GetName(),
                                           MessageTextFromValue( UNITS, clearance ) ) )
-        }
-        else
-        {
+            }
+            else
+            {
                 REPORT( wxString::Format( implicit ? _( "Checking %s." )
                                                    : _( "Checking rule %s."),
                                           rcons->constraint.GetName() ) )
-        }
+            }
 
             if( aLayer != UNDEFINED_LAYER && !rcons->layerTest.test( aLayer ) )
             {

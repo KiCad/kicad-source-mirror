@@ -18,9 +18,18 @@
 
  * annular_width
  * clearance
+ * courtyard_clearance
+ * diff_pair_gap
+ * diff_pair_uncoupled
  * disallow
+ * edge_clearance
+ * length
  * hole
+ * hole_clearance
+ * silk_clearance
+ * skew
  * track_width
+ * via_count
 
 
 ### Item Types
