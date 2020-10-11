@@ -427,7 +427,7 @@ compilation errors about missing files, it is probably because your path is too 
 
 ## Building using Visual Studio (2019) ## {#vs_build}
 
-### Environment Setup
+### Environment Setup ## {#env_setup_vs}
 
 #### Visual Studio
 You must first install [Visual Studio][] with the **Desktop development with C++** feature set installed.
@@ -445,7 +445,7 @@ git clone https://github.com/microsoft/vcpkg
 
 which will give you a vcpkg install ready to use with the next steps
 
-## KiCad Specific Setup.
+### KiCad Specific Setup ## {#vs_setup_steps}
 
 vcpkg defaults to x86-windows even on 64-bit machines,
 it is advised for ease of use you set a **USER** or **SYSTEM** environment variable
@@ -453,7 +453,7 @@ with the name **VCPKG_DEFAULT_TRIPLET** and value **x64-windows**
 
 KiCad still supports 32-bit builds for now but may not in the future, thus 64-bit is preferred.
 
-### 1. Install vcpkg packages
+#### 1. Install vcpkg packages
 The following packages are required for vcpkg
 ```
 .\vcpkg install boost
@@ -475,14 +475,14 @@ The following packages are required for vcpkg
 If you did not set the **VCPKG_DEFAULT_TRIPLET** environment variable, you will have to append
 :x64-windows to end of each packages name, `boost:x64-windows` for example.
 
-### 2. CMakeSettings.json
+#### 2. CMakeSettings.json
 Contained in the build root is a `CMakeSettings.json.sample`, copy and rename this file to `CMakeSettings.json`
 Edit `CMakeSettings.json` update the VcPkgDir environment variable up top to match the location of your vcpkg clone.
 ```
 { "VcPkgDir": "D:/vcpkg/" }, 
 ```
 
-### 3. "Open Folder" in Visual Studio
+#### 3. "Open Folder" in Visual Studio
 Launch Visual Studio (only after completing the above steps).
 
 When the initial wizard launches, select to **Open a local folder**
