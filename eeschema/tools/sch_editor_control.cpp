@@ -730,6 +730,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 TOOL_EVENT dummyEvent;
                 UpdateNetHighlighting( dummyEvent );
             }
+
+            // Wake the selection tool after exiting to ensure the cursor gets updated
+            m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
         } );
 
     std::string tool = aEvent.GetCommandStr().get();
@@ -804,6 +807,9 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
         {
             if( m_pickerItem )
                 m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+
+            // Wake the selection tool after exiting to ensure the cursor gets updated
+            m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
         } );
 
     std::string tool = aEvent.GetCommandStr().get();

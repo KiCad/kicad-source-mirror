@@ -1167,6 +1167,9 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
         {
             if( m_pickerItem )
                 m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+
+            // Wake the selection tool after exiting to ensure the cursor gets updated
+            m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
         } );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
