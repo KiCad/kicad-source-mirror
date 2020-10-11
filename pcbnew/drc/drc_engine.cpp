@@ -179,118 +179,155 @@ void DRC_ENGINE::loadImplicitRules()
 
     // 3) per-netclass rules
 
-    std::vector<DRC_RULE*> netclassRules;
+    std::vector<DRC_RULE*> netclassClearanceRules;
+    std::vector<DRC_RULE*> netclassItemSpecificRules;
 
-    auto makeNetclassRule =
-            [&]( const NETCLASSPTR& netclass, bool isDefault )
+    auto makeNetclassRules =
+            [&]( const NETCLASSPTR& nc, bool isDefault )
             {
-                // Only add constraints for netclass values which are larger than board minimums.
-                // That way board minimums will still enforce a global minimum.
+                // Note: only add constraints for netclass values which are larger than board
+                // minimums. (This ensures that the board minimums will still enforce a global
+                // lower bound.)
 
-                DRC_RULE* rule = new DRC_RULE;
-                wxString  name = netclass->GetName();
+                wxString ncName = nc->GetName();
 
-                rule->m_Name = wxString::Format( _( "netclass '%s'" ), name );
-                rule->m_Implicit = true;
+                DRC_RULE* rule;
+                wxString  expr;
 
-                wxString            expr = wxString::Format( "A.NetClass == '%s'", name );
-                DRC_RULE_CONDITION* condition = new DRC_RULE_CONDITION( expr );
-
-                rule->m_Condition = condition;
-                netclassRules.push_back( rule );
-
-                if( netclass->GetClearance() > bds.m_MinClearance )
+                if( nc->GetClearance() > bds.m_MinClearance
+                        || nc->GetTrackWidth() > bds.m_TrackMinWidth )
                 {
-                    DRC_CONSTRAINT ncClearanceConstraint( DRC_CONSTRAINT_TYPE_CLEARANCE );
-                    ncClearanceConstraint.Value().SetMin( netclass->GetClearance() );
-                    rule->AddConstraint( ncClearanceConstraint );
+                    rule = new DRC_RULE;
+                    rule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
+                    rule->m_Implicit = true;
+
+                    expr = wxString::Format( "A.NetClass == '%s'",
+                                             ncName );
+                    rule->m_Condition = new DRC_RULE_CONDITION( expr );
+                    netclassClearanceRules.push_back( rule );
+
+                    if( nc->GetClearance() > bds.m_MinClearance )
+                    {
+                        DRC_CONSTRAINT ncClearanceConstraint( DRC_CONSTRAINT_TYPE_CLEARANCE );
+                        ncClearanceConstraint.Value().SetMin( nc->GetClearance() );
+                        rule->AddConstraint( ncClearanceConstraint );
+                    }
+
+                    if( nc->GetTrackWidth() > bds.m_TrackMinWidth )
+                    {
+                        DRC_CONSTRAINT ncWidthConstraint( DRC_CONSTRAINT_TYPE_TRACK_WIDTH );
+                        ncWidthConstraint.Value().SetMin( nc->GetTrackWidth() );
+                        rule->AddConstraint( ncWidthConstraint );
+                    }
                 }
 
-                if( netclass->GetTrackWidth() > bds.m_TrackMinWidth )
+                if( nc->GetDiffPairWidth() || nc->GetDiffPairGap() )
                 {
-                    DRC_CONSTRAINT ncWidthConstraint( DRC_CONSTRAINT_TYPE_TRACK_WIDTH );
-                    ncWidthConstraint.Value().SetMin( netclass->GetTrackWidth() );
-                    rule->AddConstraint( ncWidthConstraint );
+                    rule = new DRC_RULE;
+                    rule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
+                    rule->m_Implicit = true;
+
+                    expr = wxString::Format( "A.NetClass == '%s' && A.isDiffPair()",
+                                             ncName );
+                    rule->m_Condition = new DRC_RULE_CONDITION( expr );
+                    netclassItemSpecificRules.push_back( rule );
+
+                    if( nc->GetDiffPairWidth() )
+                    {
+                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_TRACK_WIDTH );
+                        constraint.Value().SetMin( nc->GetDiffPairWidth() );
+                        rule->AddConstraint( constraint );
+                    }
+
+                    if( nc->GetDiffPairGap() )
+                    {
+                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP );
+                        constraint.Value().SetMin( nc->GetDiffPairGap() );
+                        rule->AddConstraint( constraint );
+                    }
                 }
 
-                // We need separate rules for micro-vias and other vias because they use the
-                // same constraints.
-                //
-                // Note that since these are unary rules they don't need to be sorted, so we
-                // add them directly to the current rule set.
-
-                rule = new DRC_RULE;
-
-                rule->m_Name = wxString::Format( _( "netclass '%s'" ), name );
-                rule->m_Implicit = true;
-
-                expr = wxString::Format( "A.NetClass == '%s' && A.Via_Type != 'micro_via'", name );
-                condition = new DRC_RULE_CONDITION( expr );
-
-                rule->m_Condition = condition;
-                addRule( rule );
-
-                if( netclass->GetViaDiameter() > bds.m_ViasMinSize )
+                if( nc->GetViaDiameter() > bds.m_ViasMinSize
+                        || nc->GetViaDrill() > bds.m_MinThroughDrill )
                 {
-                    DRC_CONSTRAINT ncViaDiaConstraint( DRC_CONSTRAINT_TYPE_VIA_DIAMETER );
-                    ncViaDiaConstraint.Value().SetMin( netclass->GetViaDiameter() );
-                    rule->AddConstraint( ncViaDiaConstraint );
+                    rule = new DRC_RULE;
+                    rule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
+                    rule->m_Implicit = true;
+
+                    expr = wxString::Format( "A.NetClass == '%s' && A.Via_Type != 'micro_via'",
+                                             ncName );
+                    rule->m_Condition = new DRC_RULE_CONDITION( expr );
+                    netclassItemSpecificRules.push_back( rule );
+
+                    if( nc->GetViaDiameter() > bds.m_ViasMinSize )
+                    {
+                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_VIA_DIAMETER );
+                        constraint.Value().SetMin( nc->GetViaDiameter() );
+                        rule->AddConstraint( constraint );
+                    }
+
+                    if( nc->GetViaDrill() > bds.m_MinThroughDrill )
+                    {
+                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_HOLE_SIZE );
+                        constraint.Value().SetMin( nc->GetViaDrill() );
+                        rule->AddConstraint( constraint );
+                    }
                 }
 
-                if( netclass->GetViaDrill() > bds.m_MinThroughDrill )
+                if( nc->GetuViaDiameter() > bds.m_MicroViasMinSize
+                        || nc->GetuViaDrill() > bds.m_MicroViasMinDrill )
                 {
-                    DRC_CONSTRAINT ncViaDrillConstraint( DRC_CONSTRAINT_TYPE_HOLE_SIZE );
-                    ncViaDrillConstraint.Value().SetMin( netclass->GetViaDrill() );
-                    rule->AddConstraint( ncViaDrillConstraint );
-                }
+                    rule = new DRC_RULE;
+                    rule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
+                    rule->m_Implicit = true;
 
-                rule = new DRC_RULE;
+                    expr = wxString::Format( "A.NetClass == '%s' && A.Via_Type == 'micro_via'",
+                                             ncName );
+                    rule->m_Condition = new DRC_RULE_CONDITION( expr );
+                    netclassItemSpecificRules.push_back( rule );
 
-                rule->m_Name = wxString::Format( _( "netclass '%s'" ), name );
-                rule->m_Implicit = true;
+                    if( nc->GetuViaDiameter() > bds.m_MicroViasMinSize )
+                    {
+                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_VIA_DIAMETER );
+                        constraint.Value().SetMin( nc->GetuViaDiameter() );
+                        rule->AddConstraint( constraint );
+                    }
 
-                expr = wxString::Format( "A.NetClass == '%s' && A.Via_Type == 'micro_via'", name );
-                condition = new DRC_RULE_CONDITION( expr );
-
-                rule->m_Condition = condition;
-                addRule( rule );
-
-                if( netclass->GetuViaDiameter() > bds.m_MicroViasMinSize )
-                {
-                    DRC_CONSTRAINT ncuViaDiaConstraint( DRC_CONSTRAINT_TYPE_VIA_DIAMETER );
-                    ncuViaDiaConstraint.Value().SetMin( netclass->GetuViaDiameter() );
-                    rule->AddConstraint( ncuViaDiaConstraint );
-                }
-
-                if( netclass->GetuViaDrill() > bds.m_MicroViasMinDrill )
-                {
-                    DRC_CONSTRAINT ncuViaDrillConstraint( DRC_CONSTRAINT_TYPE_HOLE_SIZE );
-                    ncuViaDrillConstraint.Value().SetMin( netclass->GetuViaDrill() );
-                    rule->AddConstraint( ncuViaDrillConstraint );
+                    if( nc->GetuViaDrill() > bds.m_MicroViasMinDrill )
+                    {
+                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_HOLE_SIZE );
+                        constraint.Value().SetMin( nc->GetuViaDrill() );
+                        rule->AddConstraint( constraint );
+                    }
                 }
             };
 
     m_board->SynchronizeNetsAndNetClasses();
-    makeNetclassRule( bds.GetNetClasses().GetDefault(), true );
+    makeNetclassRules( bds.GetNetClasses().GetDefault(), true );
 
     for( const std::pair<const wxString, NETCLASSPTR>& netclass : bds.GetNetClasses() )
-        makeNetclassRule( netclass.second, false );
+        makeNetclassRules( netclass.second, false );
 
-    // These have to be sorted by min clearance so the right one fires if 'A' and 'B' belong
-    // to two different netclasses.
+    // The netclass clearance rules have to be sorted by min clearance so the right one fires
+    // if 'A' and 'B' belong to two different netclasses.
+    //
+    // The item-specific netclass rules are all unary, so there's no 'A' vs 'B' issue.
 
-    std::sort( netclassRules.begin(), netclassRules.end(),
+    std::sort( netclassClearanceRules.begin(), netclassClearanceRules.end(),
                []( DRC_RULE* lhs, DRC_RULE* rhs )
                {
                    return lhs->m_Constraints[0].m_Value.Min()
                                 < rhs->m_Constraints[0].m_Value.Min();
                } );
 
-    for( DRC_RULE* netclassRule : netclassRules )
-        addRule( netclassRule );
+    for( DRC_RULE* ncRule : netclassClearanceRules )
+        addRule( ncRule );
+
+    for( DRC_RULE* ncRule : netclassItemSpecificRules )
+        addRule( ncRule );
 
     ReportAux( wxString::Format( "Building %d implicit netclass rules",
-                                 (int) netclassRules.size() ) );
+                                 (int) netclassClearanceRules.size() ) );
 }
 
 static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
