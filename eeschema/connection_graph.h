@@ -137,6 +137,14 @@ public:
      */
     static PRIORITY GetDriverPriority( SCH_ITEM* aDriver );
 
+    PRIORITY GetDriverPriority()
+    {
+        if( m_driver )
+            return GetDriverPriority( m_driver );
+        else
+            return PRIORITY::NONE;
+    }
+
     CONNECTION_GRAPH* m_graph;
 
     bool m_dirty;
