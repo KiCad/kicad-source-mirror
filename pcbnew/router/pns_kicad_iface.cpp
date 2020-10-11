@@ -221,6 +221,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
             break;
         case PNS::CONSTRAINT_TYPE::CT_VIA_HOLE:
             hostRuleType = DRC_CONSTRAINT_TYPE_HOLE_SIZE;
+            break;
         default:
             return false; // should not happen
     }
