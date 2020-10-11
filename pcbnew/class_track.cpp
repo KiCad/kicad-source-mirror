@@ -968,7 +968,10 @@ bool TRACK::cmp_tracks::operator() ( const TRACK* a, const TRACK* b ) const
     if( a->Type() != b->Type() )
         return a->Type() < b->Type();
 
-    return a->m_Uuid < b->m_Uuid;
+    if( a->m_Uuid != b->m_Uuid )
+        return a->m_Uuid < b->m_Uuid;
+
+    return a < b;
 }
 
 

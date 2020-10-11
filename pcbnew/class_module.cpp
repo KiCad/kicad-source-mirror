@@ -1755,7 +1755,10 @@ bool MODULE::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOARD_ITE
             return dwgA->GetShape() < dwgB->GetShape();
     }
 
-    return aFirst->m_Uuid < aSecond->m_Uuid;
+    if( aFirst->m_Uuid != aSecond->m_Uuid ) // shopuld be always the case foer valid boards
+        return aFirst->m_Uuid < aSecond->m_Uuid;
+
+    return aFirst < aSecond;
 }
 
 
@@ -1764,7 +1767,10 @@ bool MODULE::cmp_pads::operator()( const D_PAD* aFirst, const D_PAD* aSecond ) c
     if( aFirst->GetName() != aSecond->GetName() )
         return StrNumCmp( aFirst->GetName(), aSecond->GetName() ) < 0;
 
-    return aFirst->m_Uuid < aSecond->m_Uuid;
+    if( aFirst->m_Uuid != aSecond->m_Uuid ) // shopuld be always the case foer valid boards
+        return aFirst->m_Uuid < aSecond->m_Uuid;
+
+    return aFirst < aSecond;
 }
 
 

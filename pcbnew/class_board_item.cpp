@@ -144,7 +144,10 @@ bool BOARD_ITEM::ptr_cmp::operator() ( const BOARD_ITEM* a, const BOARD_ITEM* b 
     if( a->GetLayer() != b->GetLayer() )
         return a->GetLayer() < b->GetLayer();
 
-    return a->m_Uuid < b->m_Uuid;
+    if( a->m_Uuid != b->m_Uuid )    // shopuld be always the case foer valid boards
+        return a->m_Uuid < b->m_Uuid;
+
+    return a < b;
 }
 
 
