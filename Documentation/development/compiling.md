@@ -324,9 +324,16 @@ CMAKE_INSTALL_PREFIX option to specify a different install path.
 
 # Building KiCad on Windows # {#build_windows}
 
-The preferred Windows build environment is [MSYS2][].  The [MinGW][] build environment is still
-supported but it is not recommended because the developer is responsible for building *all* of
-the dependencies from source which is a huge and frustrating undertaking.  The [MSYS2][] project
+The preferred Windows build environment is currently [MSYS2][].
+[Visual Studio][] with [vcpkg][] is also a supported build environment 
+but does not yet fully support all KiCad features.
+
+
+## Building using MSYS2 ## {#msys2_build}
+
+### Setup
+
+The [MSYS2][] project
 provides packages for all of the require dependencies to build KiCad.  To setup the [MSYS2][]
 build environment, depending on your system download and run either the [MSYS2 32-bit Installer][]
 or the [MSYS2 64-bit Installer][].  After the installer is finished, update to the latest
@@ -334,8 +341,7 @@ package versions by running the `msys2_shell.cmd` file located in the MSYS2 inst
 running the command `pacman -Syu`.  If the msys2-runtime package is updated, close the shell
 and run `msys2_shell.cmd`.
 
-## Building using MSYS2 ## {#msys2_build}
-
+### Building
 The following commands assume you are building for 64-bit Windows, and that you already have
 the KiCad source code in a folder called `kicad-source` in your home directory.  See below
 for changes if you need to build for 32-bit instead.  Run `mingw64.exe` from the MSYS2
@@ -377,13 +383,13 @@ change the paths in the cmake configuration from `/mingw64` to `/mingw32`.
 
 For debug builds, run the cmake command with `-DCMAKE_BUILD_TYPE=Debug` from the `build/debug` folder.
 
-## Known MSYS2 Build Issues ## {#known_issues_msys2}
+### Known MSYS2 Build Issues ## {#known_issues_msys2}
 
 There are some known issues that are specific to MSYS2.  This section provides a list of the
 currently known issues when building KiCad using MSYS2.
 
 
-### 64-bit Package of Boost 1.59 ### {#ki_msys2_64bit_boost}
+#### 64-bit Package of Boost 1.59 ### {#ki_msys2_64bit_boost}
 
 The context library of the x86_64 package of Boost version 1.59 is broken and will cause KiCad
 to crash.  You must downgrade to version 1.57 by running the command:
@@ -398,13 +404,13 @@ configure pacman to prevent upgrading the 64-bit Boost package by adding:
 
 to your /etc/pacman.conf file.
 
-### Building with Boost 1.70 ### {#ki_msys2_boost_1_70}
+#### Building with Boost 1.70 ### {#ki_msys2_boost_1_70}
 
 There is an issue building KiCad with Boost version 1.70 due to CMake not defining the proper
 link libraries during configuration.  Boost 1.70 can be used but `-DBoost_NO_BOOST_CMAKE=ON`
 needs to be added during CMake configuration to insure the link libraries are properly generated.
 
-### Building OCE from source
+#### Building OCE from source
 
 KiCad requires OCE by default, and the version installed by `pacman` can cause build errors in
 x86_64 systems as of March 2018.  In order to work around this, you can build OCE from source on
@@ -418,6 +424,70 @@ compilation errors about missing files, it is probably because your path is too 
     git clone https://github.com/Alexpux/MINGW-packages /c/mwp
     cd /c/mwp/mingw-w64-oce
     makepkg-mingw -is
+
+## Building using Visual Studio (2019) ## {#vs_build}
+
+### Environment Setup
+
+#### Visual Studio
+You must first install [Visual Studio][] with the **Desktop development with C++** feature set installed.
+
+
+#### vcpkg
+**If you are new to vcpkg** you must, pick a spot on your system to put it.
+Then run these three commands
+
+```
+git clone https://github.com/microsoft/vcpkg
+.\vcpkg\bootstrap-vcpkg.bat
+.\vcpkg\vcpkg integrate install
+```
+
+which will give you a vcpkg install ready to use with the next steps
+
+## KiCad Specific Setup.
+
+vcpkg defaults to x86-windows even on 64-bit machines,
+it is advised for ease of use you set a **USER** or **SYSTEM** environment variable
+with the name **VCPKG_DEFAULT_TRIPLET** and value **x64-windows**
+
+KiCad still supports 32-bit builds for now but may not in the future, thus 64-bit is preferred.
+
+### 1. Install vcpkg packages
+The following packages are required for vcpkg
+```
+.\vcpkg install boost
+.\vcpkg install cairo
+.\vcpkg install curl
+.\vcpkg install glew
+.\vcpkg install gettext
+.\vcpkg install glm
+.\vcpkg install icu
+.\vcpkg install ngspice
+.\vcpkg install opencascade
+.\vcpkg install opengl
+.\vcpkg install openssl
+.\vcpkg install python3
+.\vcpkg install wxwidgets
+.\vcpkg install zlib
+```
+
+If you did not set the **VCPKG_DEFAULT_TRIPLET** environment variable, you will have to append
+:x64-windows to end of each packages name, `boost:x64-windows` for example.
+
+### 2. CMakeSettings.json
+Contained in the build root is a `CMakeSettings.json.sample`, copy and rename this file to `CMakeSettings.json`
+Edit `CMakeSettings.json` update the VcPkgDir environment variable up top to match the location of your vcpkg clone.
+```
+{ "VcPkgDir": "D:/vcpkg/" }, 
+```
+
+### 3. "Open Folder" in Visual Studio
+Launch Visual Studio (only after completing the above steps).
+
+When the initial wizard launches, select to **Open a local folder**
+This is the correct way to make Visual Studio directly handle *CMake* projects.
+
 
 # Building KiCad on macOS # {#build_osx}
 
@@ -558,3 +628,5 @@ you will have to apply the Boost patches in the KiCad source [patches folder][].
 [libocc]: https://www.opencascade.com/content/overview
 [libngspice]: https://sourceforge.net/projects/ngspice/
 [ZLib]: http://www.zlib.net/
+[vcpkg]: https://github.com/microsoft/vcpkg
+[Visual Studio]: https://visualstudio.microsoft.com/vs/

@@ -1,0 +1,266 @@
+﻿{
+  "environments": [
+    { "BuildDir": "${workspaceRoot}\\build" },
+    { "InstallDir": "${workspaceRoot}\\build\\install" },
+	{ "VcPkgDir": "D:/vcpkg/" }, 
+  ],
+  "configurations": [
+    {
+      "name": "x86-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "inheritEnvironments": [ "msvc_x86" ],
+      "buildRoot": "${env.BuildDir}\\${name}",
+      "installRoot": "${env.InstallDir}\\${name}",
+      "addressSanitizerEnabled": true,
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "KICAD_SPICE",
+          "value": "ON",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING_PYTHON3",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING_WXPYTHON",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING_MODULES",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_USE_OCE",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_USE_OCC",
+          "value": "ON",
+          "type": "BOOL"
+        },
+        {
+          "name": "KICAD_BUILD_QA_TESTS",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "KICAD_SCRIPTING_WXPYTHON_PHOENIX",
+          "value": "OFF",
+          "type": "BOOL"
+        },
+		{
+          "name": "KICAD_WIN32_DPI_AWARE",
+          "value": "ON",
+          "type": "BOOL"
+		}
+      ],
+      "cmakeToolchain": "${env.VcPkgDir}/scripts/buildsystems/vcpkg.cmake"
+    },
+    {
+      "name": "x86-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "inheritEnvironments": [ "msvc_x86" ],
+      "buildRoot": "${env.BuildDir}\\${name}",
+      "installRoot": "${env.InstallDir}\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "KICAD_SPICE",
+          "value": "ON",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING_PYTHON3",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING_WXPYTHON",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING_MODULES",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_USE_OCE",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_USE_OCC",
+          "value": "ON",
+          "type": "BOOL"
+        },
+        {
+          "name": "KICAD_BUILD_QA_TESTS",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "KICAD_SCRIPTING_WXPYTHON_PHOENIX",
+          "value": "OFF",
+          "type": "BOOL"
+        },
+		{
+          "name": "KICAD_WIN32_DPI_AWARE",
+          "value": "ON",
+          "type": "BOOL"
+		}
+      ],
+      "cmakeToolchain": "${env.VcPkgDir}/scripts/buildsystems/vcpkg.cmake"
+    },
+    {
+      "name": "x64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "buildRoot": "${env.BuildDir}\\${name}",
+      "installRoot": "${env.InstallDir}\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "KICAD_SPICE",
+          "value": "ON",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING_PYTHON3",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING_WXPYTHON",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING_MODULES",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_USE_OCE",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_USE_OCC",
+          "value": "ON",
+          "type": "BOOL"
+        },
+        {
+          "name": "KICAD_BUILD_QA_TESTS",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "KICAD_SCRIPTING_WXPYTHON_PHOENIX",
+          "value": "OFF",
+          "type": "BOOL"
+        },
+		{
+          "name": "KICAD_WIN32_DPI_AWARE",
+          "value": "ON",
+          "type": "BOOL"
+		}
+      ],
+      "cmakeToolchain": "${env.VcPkgDir}/scripts/buildsystems/vcpkg.cmake"
+    },
+    {
+      "name": "x64-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "buildRoot": "${env.BuildDir}\\${name}",
+      "installRoot": "${env.InstallDir}\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "KICAD_SPICE",
+          "value": "ON",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING_PYTHON3",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING_WXPYTHON",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING_MODULES",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_USE_OCE",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_USE_OCC",
+          "value": "ON",
+          "type": "BOOL"
+        },
+        {
+          "name": "KICAD_BUILD_QA_TESTS",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "KICAD_SCRIPTING_WXPYTHON_PHOENIX",
+          "value": "OFF",
+          "type": "BOOL"
+        },
+		{
+          "name": "KICAD_WIN32_DPI_AWARE",
+          "value": "ON",
+          "type": "BOOL"
+		}
+      ],
+      "cmakeToolchain": "${env.VcPkgDir}/scripts/buildsystems/vcpkg.cmake"
+    }
+  ]
+}
