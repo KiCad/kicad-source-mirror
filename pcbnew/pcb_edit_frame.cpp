@@ -971,6 +971,9 @@ void PCB_EDIT_FRAME::SetGridColor( COLOR4D aColor )
 
 void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 {
+    if( GetActiveLayer() == aLayer )
+        return;
+
     PCB_BASE_FRAME::SetActiveLayer( aLayer );
 
     m_appearancePanel->OnLayerChanged();
