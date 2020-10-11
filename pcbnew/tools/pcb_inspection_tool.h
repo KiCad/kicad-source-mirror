@@ -116,8 +116,8 @@ private:
 
     void reportZoneConnection( ZONE_CONTAINER* aZone, D_PAD* aPad, REPORTER* r );
 
-    void reportCopperClearance( PCB_LAYER_ID aLayer, BOARD_CONNECTED_ITEM* aA, BOARD_ITEM* aB,
-                                REPORTER* r );
+    void reportClearance( DRC_CONSTRAINT_TYPE_T aClearanceType, PCB_LAYER_ID aLayer,
+                          BOARD_ITEM* aA, BOARD_ITEM* aB, REPORTER* r );
 
 private:
     PCB_EDIT_FRAME* m_frame;    // Pointer to the currently used edit frame.

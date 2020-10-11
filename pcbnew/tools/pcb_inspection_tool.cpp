@@ -183,8 +183,9 @@ void PCB_INSPECTION_TOOL::reportZoneConnection( ZONE_CONTAINER* aZone, D_PAD* aP
 }
 
 
-void PCB_INSPECTION_TOOL::reportCopperClearance( PCB_LAYER_ID aLayer, BOARD_CONNECTED_ITEM* aA,
-                                                 BOARD_ITEM* aB, REPORTER* r )
+void PCB_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_TYPE_T aClearanceType,
+                                           PCB_LAYER_ID aLayer, BOARD_ITEM* aA, BOARD_ITEM* aB,
+                                           REPORTER* r )
 {
     r->Report( "" );
 
@@ -201,8 +202,7 @@ void PCB_INSPECTION_TOOL::reportCopperClearance( PCB_LAYER_ID aLayer, BOARD_CONN
         return;
     }
 
-    auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aA, aB,
-                                                   aLayer, r );
+    auto constraint = drcEngine.EvalRulesForItems( aClearanceType, aA, aB, aLayer, r );
 
     if( r )
     {
@@ -248,9 +248,32 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     else if( !a->IsConnected() && b->IsConnected() )
         std::swap( a, b );
 
-    if( !IsCopperLayer( layer ) )
+    auto getItemDescription =
+            [&]( BOARD_ITEM* aItem )
+            {
+                wxString s = aItem->GetSelectMenuText( r->GetUnits() );
+
+                if( auto* cItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem ) )
+                    s += wxString::Format( _( " [netclass %s]" ), cItem->GetNetClassName() );
+
+                return s;
+            };
+
+    if( layer == F_SilkS || layer == B_SilkS )
     {
-        r->Report( wxString::Format( _( "Active layer (%s) is not a copper layer.  "
+        r->Report( _( "<h7>Silkscreen clearance resolution for:</h7>" ) );
+
+        r->Report( wxString::Format( wxT( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>" ),
+                                     _( "Layer" ),
+                                     m_frame->GetBoard()->GetLayerName( layer ),
+                                     getItemDescription( a ),
+                                     getItemDescription( b ) ) );
+
+        reportClearance( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE, layer, a, b, r );
+    }
+    else if( !IsCopperLayer( layer ) )
+    {
+        r->Report( wxString::Format( _( "Active layer (%s) is not a silk or copper layer.  "
                                         "No clearance defined." ),
                                      m_frame->GetBoard()->GetLayerName( layer ) ) );
     }
@@ -272,17 +295,6 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     }
     else
     {
-        auto getItemDescription =
-                [&]( BOARD_ITEM* aItem )
-                {
-                    wxString s = aItem->GetSelectMenuText( r->GetUnits() );
-
-                    if( auto* cItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem ) )
-                        s += wxString::Format( _( " [netclass %s]" ), cItem->GetNetClassName() );
-
-                    return s;
-                };
-
         r->Report( _( "<h7>Clearance resolution for:</h7>" ) );
 
         r->Report( wxString::Format( wxT( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>" ),
@@ -311,7 +323,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         else if( ac )
         {
             // Different nets (or second unconnected)....
-            reportCopperClearance( layer, ac, b, r );
+            reportClearance( DRC_CONSTRAINT_TYPE_CLEARANCE, layer, ac, b, r );
         }
     }
 

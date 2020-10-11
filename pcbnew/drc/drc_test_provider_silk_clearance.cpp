@@ -199,11 +199,13 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 return true;
             };
 
-    int numSilk = forEachGeometryItem( { PCB_SHAPE_T, PCB_FP_SHAPE_T, PCB_TEXT_T, PCB_FP_TEXT_T },
-                                       LSET( 2, F_SilkS, B_SilkS ), addToSilkTree );
+    forEachGeometryItem( { PCB_SHAPE_T, PCB_FP_SHAPE_T, PCB_TEXT_T, PCB_FP_TEXT_T },
+                         LSET( 2, F_SilkS, B_SilkS ), addToSilkTree );
     forEachGeometryItem( {}, LSET::FrontMask() | LSET::BackMask(), addToTargetTree );
 
-    reportAux( _("Testing %d silkscreen features."),  numSilk );
+    reportAux( _("Testing %d silkscreen features against %d board items."),
+               silkTree.size(),
+               targetTree.size() );
 
     const std::vector<DRC_RTREE::LAYER_PAIR> layerPairs =
     {
@@ -225,7 +227,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
         DRC_RTREE::LAYER_PAIR( B_SilkS, Edge_Cuts ),
     };
 
-    silkTree.QueryCollidingPairs( &targetTree, layerPairs, checkClearance, m_largestClearance );
+    targetTree.QueryCollidingPairs( &silkTree, layerPairs, checkClearance, m_largestClearance );
 
     reportRuleStatistics();
 

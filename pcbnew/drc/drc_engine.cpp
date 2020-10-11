@@ -620,18 +620,19 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
             REPORT( "" )
 
-            if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
+            if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE
+                    || aConstraintId == DRC_CONSTRAINT_TYPE_SILK_CLEARANCE
+                    || aConstraintId == DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE
+                    || aConstraintId == DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE )
             {
                 int clearance = rcons->constraint.m_Value.Min();
-                REPORT( wxString::Format( implicit ? _( "Checking %s; clearance: %s." )
-                                                   : _( "Checking rule %s; clearance: %s."),
+                REPORT( wxString::Format( _( "Checking %s; clearance: %s." ),
                                           rcons->constraint.GetName(),
                                           MessageTextFromValue( UNITS, clearance ) ) )
             }
             else
             {
-                REPORT( wxString::Format( implicit ? _( "Checking %s." )
-                                                   : _( "Checking rule %s."),
+                REPORT( wxString::Format( _( "Checking %s." ),
                                           rcons->constraint.GetName() ) )
             }
 
