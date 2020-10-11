@@ -100,12 +100,10 @@ void DRC_ENGINE::loadImplicitRules()
 
     DRC_CONSTRAINT widthConstraint( DRC_CONSTRAINT_TYPE_TRACK_WIDTH );
     widthConstraint.Value().SetMin( bds.m_TrackMinWidth );
-    widthConstraint.Value().SetOpt( bds.GetDefault()->GetTrackWidth() );
     rule->AddConstraint( widthConstraint );
 
     DRC_CONSTRAINT drillConstraint( DRC_CONSTRAINT_TYPE_HOLE_SIZE );
     drillConstraint.Value().SetMin( bds.m_MinThroughDrill );
-    drillConstraint.Value().SetOpt( bds.GetDefault()->GetViaDrill() );
     rule->AddConstraint( drillConstraint );
 
     DRC_CONSTRAINT annulusConstraint( DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH );
@@ -114,7 +112,6 @@ void DRC_ENGINE::loadImplicitRules()
 
     DRC_CONSTRAINT diameterConstraint( DRC_CONSTRAINT_TYPE_VIA_DIAMETER );
     diameterConstraint.Value().SetMin( bds.m_ViasMinSize );
-    diameterConstraint.Value().SetOpt( bds.GetDefault()->GetViaDiameter() );
     rule->AddConstraint( diameterConstraint );
 
     DRC_CONSTRAINT edgeClearanceConstraint( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE );
@@ -135,7 +132,6 @@ void DRC_ENGINE::loadImplicitRules()
 
     DRC_CONSTRAINT diffPairGapConstraint( DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP );
     diffPairGapConstraint.Value().SetMin( bds.GetDefault()->GetClearance() );
-    diffPairGapConstraint.Value().SetOpt( bds.GetDefault()->GetClearance() );
     rule->AddConstraint( diffPairGapConstraint );
 
 
@@ -147,12 +143,10 @@ void DRC_ENGINE::loadImplicitRules()
 
     DRC_CONSTRAINT uViaDrillConstraint( DRC_CONSTRAINT_TYPE_HOLE_SIZE );
     uViaDrillConstraint.Value().SetMin( bds.m_MicroViasMinDrill );
-    uViaDrillConstraint.Value().SetOpt( bds.GetDefault()->GetuViaDrill() );
     uViaRule->AddConstraint( uViaDrillConstraint );
 
     DRC_CONSTRAINT uViaDiameterConstraint( DRC_CONSTRAINT_TYPE_VIA_DIAMETER );
     uViaDiameterConstraint.Value().SetMin( bds.m_MicroViasMinSize );
-    uViaDiameterConstraint.Value().SetOpt( bds.GetDefault()->GetuViaDiameter() );
     uViaRule->AddConstraint( uViaDiameterConstraint );
 
     if( !bds.m_MicroViasAllowed )
