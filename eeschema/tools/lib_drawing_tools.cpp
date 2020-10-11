@@ -94,7 +94,7 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             [&]()
             {
                 if( item )
-                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PLACE );
                 else
                     m_frame->GetCanvas()->SetCurrentCursor( isText ? KICURSOR::TEXT : KICURSOR::PENCIL );
             };

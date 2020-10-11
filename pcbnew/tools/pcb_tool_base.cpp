@@ -82,13 +82,13 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
     if( aOptions & IPO_SINGLE_CLICK )
         makeNewItem( controls()->GetCursorPosition() );
 
-    auto setCursor = 
-            [&]() 
+    auto setCursor =
+            [&]()
             {
                 if( !newItem )
                     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
                 else
-                    frame()->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+                    frame()->GetCanvas()->SetCurrentCursor( KICURSOR::PLACE );
             };
 
     // Set initial cursor

@@ -37,6 +37,7 @@
 #include <cursors/cursor-line-wire-add.xpm>
 #include <cursors/cursor-measure.xpm>
 #include <cursors/cursor-pencil.xpm>
+#include <cursors/cursor-place.xpm>
 #include <cursors/cursor-select-lasso.xpm>
 #include <cursors/cursor-select-m.xpm>
 #include <cursors/cursor-select-window.xpm>
@@ -146,7 +147,7 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         nullptr,
         cursor_text_xpm,
         { 32, 32 },
-        { 7, 10 },
+        { 7, 7 },
     },
     {
         KICURSOR::MEASURE,
@@ -218,7 +219,7 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         nullptr,
         cursor_component_xpm,
         { 32, 32 },
-        { 7, 10 },
+        { 7, 7 },
     },
     {
         KICURSOR::SELECT_LASSO,
@@ -226,7 +227,7 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         nullptr,
         cursor_select_lasso_xpm,
         { 32, 32 },
-        { 7, 10 },
+        { 7, 7 },
     },
     {
         KICURSOR::SELECT_WINDOW,
@@ -275,6 +276,14 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         cursor_label_hier_xpm,
         { 32, 32 },
         { 7, 7 },
+    },
+    {
+        KICURSOR::PLACE,
+        nullptr,
+        nullptr,
+        cursor_place_xpm,
+        { 32, 32 },
+        { 1, 1 },
     },
 };
 

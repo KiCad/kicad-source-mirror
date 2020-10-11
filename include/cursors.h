@@ -58,7 +58,8 @@ enum class KICURSOR
     LINE_GRAPHIC,
     LINE_WIRE,
     LINE_WIRE_ADD,
-    LABEL_HIER
+    LABEL_HIER,
+    PLACE
 };
 
 /**
