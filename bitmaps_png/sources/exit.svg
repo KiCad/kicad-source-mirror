@@ -13,7 +13,7 @@
    version="1.1"
    viewBox="0 0 26 26"
    id="svg2"
-   inkscape:version="0.91 r13725"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
    sodipodi:docname="exit.svg">
   <metadata
      id="metadata100">
@@ -36,19 +36,20 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1855"
-     inkscape:window-height="1056"
+     inkscape:window-width="3840"
+     inkscape:window-height="2136"
      id="namedview98"
      showgrid="true"
      inkscape:zoom="14.090478"
      inkscape:cx="35.201658"
      inkscape:cy="8.7626899"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:window-x="3840"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      showguides="true"
-     inkscape:guide-bbox="true">
+     inkscape:guide-bbox="true"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid3020"
@@ -56,8 +57,10 @@
        visible="true"
        enabled="true"
        snapvisiblegridlinesonly="true"
-       spacingx="0.5px"
-       spacingy="0.5px" />
+       spacingx="0.5"
+       spacingy="0.5"
+       originx="0"
+       originy="0" />
   </sodipodi:namedview>
   <defs
      id="defs4">
@@ -529,10 +532,11 @@
      sodipodi:cy="13.018661"
      sodipodi:rx="7.9655924"
      sodipodi:ry="7.9655924"
-     d="m 18.632524,7.3861359 a 7.9655924,7.9655924 0 0 1 1e-6,11.2650491 7.9655924,7.9655924 0 0 1 -11.2650489,0 7.9655924,7.9655924 0 0 1 -1.2e-6,-11.2650482"
+     d="m 18.632524,7.3861362 a 7.9655924,7.9655924 0 0 1 1e-6,11.2650488 7.9655924,7.9655924 0 0 1 -11.265049,0 7.9655924,7.9655924 0 0 1 -1.1e-6,-11.2650482"
      sodipodi:start="5.4977871"
      sodipodi:end="3.9269907"
-     sodipodi:open="true" />
+     sodipodi:open="true"
+     sodipodi:arc-type="arc" />
   <path
      style="fill:none;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 13,4.5220289 0,8.4966331"

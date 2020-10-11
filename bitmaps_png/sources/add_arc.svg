@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
    sodipodi:docname="add_arc.svg">
   <metadata
      id="metadata50">
@@ -34,21 +34,22 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
+     inkscape:window-width="3840"
+     inkscape:window-height="2136"
      id="namedview48"
      showgrid="true"
      inkscape:zoom="8.1181298"
      inkscape:cx="19.123612"
      inkscape:cy="3.4576773"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:window-x="3840"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      inkscape:snap-to-guides="false"
      inkscape:snap-grids="true"
      showguides="true"
-     inkscape:guide-bbox="true">
+     inkscape:guide-bbox="true"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid3006"
@@ -61,17 +62,18 @@
      id="defs4" />
   <path
      sodipodi:type="arc"
-     style="fill:none;stroke:#0000c8;stroke-width:2.16862085;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+     style="fill:none;stroke:#0000c8;stroke-width:2.16862;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
      id="path2986"
      sodipodi:cx="4"
      sodipodi:cy="22"
      sodipodi:rx="19.517588"
      sodipodi:ry="19.517588"
-     d="M 4.0006035,2.4824123 A 19.517588,19.517588 0 0 1 23.517584,21.988092"
+     d="M 4.0006035,2.4824123 A 19.517588,19.517588 0 0 1 23.517588,22"
      transform="matrix(0.92224512,0,0,0.92224512,0.3110195,1.7106073)"
      sodipodi:start="4.7124199"
-     sodipodi:end="6.2825752"
-     sodipodi:open="true" />
+     sodipodi:end="0"
+     sodipodi:open="true"
+     sodipodi:arc-type="arc" />
   <rect
      style="fill:#2ac23c;fill-opacity:1;fill-rule:evenodd;stroke:#666666;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
      id="rect3776"
