@@ -59,6 +59,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
           m_gal( nullptr ),
           m_view( nullptr ),
           m_painter( nullptr ),
+          m_viewControls( nullptr ),
           m_backend( GAL_TYPE_NONE ),
           m_options( aOptions ),
           m_eventDispatcher( nullptr ),
