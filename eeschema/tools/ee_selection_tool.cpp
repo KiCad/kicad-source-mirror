@@ -496,7 +496,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             ClearSelection();
         }
 
-        else if( evt->IsMotion() && !m_isLibEdit )
+        else if( evt->IsMotion() && !m_isLibEdit && m_frame->ToolStackIsEmpty() )
         {
             EE_COLLECTOR collector;
 
@@ -540,7 +540,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             item = m_frame->GetItem( rolloverItem );
 
-            if( item && m_frame->ToolStackIsEmpty() )
+            if( item )
             {
                 item->SetFlags( IS_ROLLOVER );
                 lastRolloverItem = rolloverItem;

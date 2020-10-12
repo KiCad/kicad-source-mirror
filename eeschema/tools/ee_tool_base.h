@@ -121,7 +121,7 @@ protected:
 
         // IS_SELECTED flag should not be set on undo items which were added for
         // a drag operation.
-        if( selected && aItem->HasFlag( TEMP_SELECTED ))
+        if( selected && aItem->HasFlag( TEMP_SELECTED ) )
             aItem->ClearSelected();
 
         if( m_isLibEdit )

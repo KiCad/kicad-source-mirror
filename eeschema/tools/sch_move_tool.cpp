@@ -195,7 +195,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 m_specialCaseLabels.clear();
                 internalPoints.clear();
 
-                for( auto it : m_frame->GetScreen()->Items() )
+                for( SCH_ITEM* it : m_frame->GetScreen()->Items() )
                 {
                     it->ClearFlags( TEMP_SELECTED );
 
@@ -210,18 +210,18 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     // Add connections to the selection for a drag.
                     //
-                    for( EDA_ITEM* item : selection )
+                    for( EDA_ITEM* edaItem : selection )
                     {
+                        SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
                         std::vector<wxPoint> connections;
 
                         if( item->Type() == SCH_LINE_T )
                             static_cast<SCH_LINE*>( item )->GetSelectedPoints( connections );
                         else
-                            connections = static_cast<SCH_ITEM*>( item )->GetConnectionPoints();
+                            connections = item->GetConnectionPoints();
 
                         for( wxPoint point : connections )
-                            getConnectedDragItems( static_cast<SCH_ITEM*>( item ), point,
-                                    m_dragAdditions );
+                            getConnectedDragItems( item, point, m_dragAdditions );
                     }
 
                     m_selectionTool->AddItemsToSel( &m_dragAdditions, QUIET_MODE );
@@ -503,9 +503,20 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoint,
                                            EDA_ITEMS& aList )
 {
-    EE_RTREE& items = m_frame->GetScreen()->Items();
+    EE_RTREE&         items = m_frame->GetScreen()->Items();
+    EE_RTREE::EE_TYPE itemsOverlapping = items.Overlapping( aOriginalItem->GetBoundingBox() );
+    bool              ptHasJunction = false;
 
-    for( SCH_ITEM *test : items.Overlapping( aOriginalItem->GetBoundingBox() ) )
+    for( SCH_ITEM* item : itemsOverlapping )
+    {
+        if( item->Type() == SCH_JUNCTION_T && item->IsConnected( aPoint ) )
+        {
+            ptHasJunction = true;
+            break;
+        }
+    }
+
+    for( SCH_ITEM *test : itemsOverlapping )
     {
         if( test == aOriginalItem || test->IsSelected() || !test->CanConnect( aOriginalItem ) )
             continue;
@@ -516,9 +527,12 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         {
         case SCH_LINE_T:
         {
-            // Select the connected end of wires/bus connections.
+            // Select the connected end of wires/bus connections that don't have a junction to
+            // isolate them from the drag
+            if( ptHasJunction )
+                break;
+
             SCH_LINE* testLine = static_cast<SCH_LINE*>( test );
-            wxPoint   otherEnd;
 
             if( testLine->GetStartPoint() == aPoint )
             {
@@ -526,7 +540,6 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
                     aList.push_back( testLine );
 
                 testLine->SetFlags( STARTPOINT | TEMP_SELECTED );
-                otherEnd = testLine->GetEndPoint();
             }
             else if( testLine->GetEndPoint() == aPoint )
             {
@@ -534,7 +547,6 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
                     aList.push_back( testLine );
 
                 testLine->SetFlags( ENDPOINT | TEMP_SELECTED );
-                otherEnd = testLine->GetStartPoint();
             }
             else
             {
@@ -544,22 +556,26 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
             // Since only one end is going to move, the movement vector of any labels attached
             // to it is scaled by the proportion of the line length the label is from the moving
             // end.
-            for( SCH_ITEM* item : m_frame->GetScreen()->Items().OfType( SCH_LABEL_T ) )
+            for( SCH_ITEM* item : itemsOverlapping )
             {
-                if( item->IsSelected() )
-                    continue;   // These will be moved on their own because they're selected
-
-                if( item->CanConnect( testLine ) && testLine->HitTest( item->GetPosition(), 1 ) )
+                if( item->Type() == SCH_LABEL_T )
                 {
                     SCH_TEXT* label = static_cast<SCH_TEXT*>( item );
 
-                    if( !label->HasFlag( TEMP_SELECTED ) )
-                        aList.push_back( label );
+                    if( label->IsSelected() )
+                        continue;   // These will be moved on their own because they're selected
 
-                    SPECIAL_CASE_LABEL_INFO info;
-                    info.attachedLine = testLine;
-                    info.originalLabelPos = label->GetPosition();
-                    m_specialCaseLabels[label] = info;
+                    if( label->CanConnect( testLine )
+                            && testLine->HitTest( label->GetPosition(), 1 ) )
+                    {
+                        if( !label->HasFlag( TEMP_SELECTED ) )
+                            aList.push_back( label );
+
+                        SPECIAL_CASE_LABEL_INFO info;
+                        info.attachedLine = testLine;
+                        info.originalLabelPos = label->GetPosition();
+                        m_specialCaseLabels[label] = info;
+                    }
                 }
             }
 
@@ -572,10 +588,11 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
             break;
 
         case SCH_COMPONENT_T:
+        case SCH_JUNCTION_T:
             if( test->IsConnected( aPoint ) )
             {
-                // Add a new wire between the component and the selected item so the selected
-                // item can be dragged.
+                // Add a new wire between the component or junction and the selected item so
+                // the selected item can be dragged.
                 SCH_LINE* newWire = new SCH_LINE( aPoint, LAYER_WIRE );
                 newWire->SetFlags( IS_NEW );
                 m_frame->AddToScreen( newWire, m_frame->GetScreen() );
@@ -586,8 +603,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
             break;
 
         case SCH_NO_CONNECT_T:
-        case SCH_JUNCTION_T:
-            // Select no-connects and junctions that are connected to items being moved.
+            // Select no-connects that are connected to items being moved.
             if( !test->HasFlag( TEMP_SELECTED ) && test->IsConnected( aPoint ) )
             {
                 aList.push_back( test );
