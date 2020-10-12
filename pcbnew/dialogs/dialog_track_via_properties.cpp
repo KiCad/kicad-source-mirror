@@ -231,11 +231,12 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
         int viaSelection = wxNOT_FOUND;
 
-        for( unsigned ii = 0; ii < aParent->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
+        // 0 is the netclass place-holder
+        for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
         {
             VIA_DIMENSION* viaDimension = &aParent->GetDesignSettings().m_ViasDimensionsList[ii];
             wxString msg = StringFromValue( m_units, viaDimension->m_Diameter, false )
-                + " / " + StringFromValue( m_units, viaDimension->m_Drill, false );
+                            + " / " + StringFromValue( m_units, viaDimension->m_Drill, false );
             m_DesignRuleViasCtrl->Append( msg, viaDimension );
 
             if( viaSelection == wxNOT_FOUND
@@ -282,7 +283,8 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
         int widthSelection = wxNOT_FOUND;
 
-        for( unsigned ii = 0; ii < aParent->GetDesignSettings().m_TrackWidthList.size(); ii++ )
+        // 0 is the netclass place-holder
+        for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_TrackWidthList.size(); ii++ )
         {
             int width = aParent->GetDesignSettings().m_TrackWidthList[ii];
             wxString msg = StringFromValue( m_units, width, false );
