@@ -38,6 +38,7 @@
 #include <tool/tool_manager.h>
 #include <tools/kicad_manager_actions.h>
 
+#include "kicad_manager_frame.h"
 #include "treeprojectfiles.h"
 #include "pgm_kicad.h"
 #include "tree_project_frame.h"
@@ -45,7 +46,7 @@
 #include "kicad_id.h"
 
 
-TREEPROJECT_ITEM::TREEPROJECT_ITEM( enum TreeFileType type, const wxString& data,
+TREEPROJECT_ITEM::TREEPROJECT_ITEM( TREE_FILE_TYPE type, const wxString& data,
                                     wxTreeCtrl* parent ) :
     wxTreeItemData()
 {
@@ -60,13 +61,14 @@ TREEPROJECT_ITEM::TREEPROJECT_ITEM( enum TreeFileType type, const wxString& data
 
 void TREEPROJECT_ITEM::SetState( int state )
 {
-    wxImageList* imglist = m_parent->GetImageList();
+    wxImageList* imglist     = m_parent->GetImageList();
+    int          treeEnumMax = static_cast<int>( TREE_FILE_TYPE::MAX );
 
-    if( !imglist || state < 0 || state >= imglist->GetImageCount() / ( TREE_MAX - 2 ) )
+    if( !imglist || state < 0 || state >= imglist->GetImageCount() / ( treeEnumMax - 2 ) )
         return;
 
-    m_state = state;
-    int imgid = m_Type - 1 + state * ( TREE_MAX - 1 );
+    m_state   = state;
+    int imgid = static_cast<int>( m_Type ) - 1 + state * ( treeEnumMax - 1 );
     m_parent->SetItemImage( GetId(), imgid );
     m_parent->SetItemImage( GetId(), imgid, wxTreeItemIcon_Selected );
 }
@@ -74,7 +76,7 @@ void TREEPROJECT_ITEM::SetState( int state )
 
 const wxString TREEPROJECT_ITEM::GetDir() const
 {
-    if( TREE_DIRECTORY == m_Type )
+    if( TREE_FILE_TYPE::DIRECTORY == m_Type )
         return GetFileName();
 
     return wxFileName( GetFileName() ).GetPath();
@@ -84,7 +86,7 @@ const wxString TREEPROJECT_ITEM::GetDir() const
 bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
 {
     // this is broken & unsafe to use on linux.
-    if( m_Type == TREE_DIRECTORY )
+    if( m_Type == TREE_FILE_TYPE::DIRECTORY )
         return false;
 
     if( name.IsEmpty() )
@@ -94,7 +96,7 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
     wxString        newFile;
     wxString        dirs = GetDir();
 
-    if( !dirs.IsEmpty() && GetType() != TREE_DIRECTORY )
+    if( !dirs.IsEmpty() && GetType() != TREE_FILE_TYPE::DIRECTORY )
         newFile = dirs + sep + name;
     else
         newFile = name;
@@ -161,20 +163,20 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
 
     switch( GetType() )
     {
-    case TREE_LEGACY_PROJECT:
-    case TREE_JSON_PROJECT:
+    case TREE_FILE_TYPE::LEGACY_PROJECT:
+    case TREE_FILE_TYPE::JSON_PROJECT:
         // Select a new project if this is not the current project:
         if( id != aTreePrjFrame->m_TreeProject->GetRootItem() )
             frame->LoadProject( fullFileName );
 
         break;
 
-    case TREE_DIRECTORY:
+    case TREE_FILE_TYPE::DIRECTORY:
         m_parent->Toggle( id );
         break;
 
-    case TREE_LEGACY_SCHEMATIC:
-    case TREE_SEXPR_SCHEMATIC:
+    case TREE_FILE_TYPE::LEGACY_SCHEMATIC:
+    case TREE_FILE_TYPE::SEXPR_SCHEMATIC:
         // Schematics not part of the project are opened in a separate process.
         if( fullFileName == frame->SchFileName() || fullFileName == frame->SchLegacyFileName() )
             toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSchematic, true );
@@ -183,8 +185,8 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
 
         break;
 
-    case TREE_LEGACY_PCB:
-    case TREE_SEXPR_PCB:
+    case TREE_FILE_TYPE::LEGACY_PCB:
+    case TREE_FILE_TYPE::SEXPR_PCB:
         // Boards not part of the project are opened in a separate process.
         if( fullFileName == frame->PcbFileName() || fullFileName == frame->PcbLegacyFileName() )
             toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editPCB, true );
@@ -193,40 +195,40 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
 
         break;
 
-    case TREE_GERBER:
-    case TREE_GERBER_JOB_FILE:
-    case TREE_DRILL:
-    case TREE_DRILL_NC:
-    case TREE_DRILL_XNC:
+    case TREE_FILE_TYPE::GERBER:
+    case TREE_FILE_TYPE::GERBER_JOB_FILE:
+    case TREE_FILE_TYPE::DRILL:
+    case TREE_FILE_TYPE::DRILL_NC:
+    case TREE_FILE_TYPE::DRILL_XNC:
         toolMgr->RunAction( KICAD_MANAGER_ACTIONS::viewGerbers, true, &fullFileName );
         break;
 
-    case TREE_HTML:
+    case TREE_FILE_TYPE::HTML:
         wxLaunchDefaultBrowser( fullFileName );
         break;
 
-    case TREE_PDF:
+    case TREE_FILE_TYPE::PDF:
         OpenPDF( fullFileName );
         break;
 
-    case TREE_NET:
-    case TREE_TXT:
-    case TREE_REPORT:
+    case TREE_FILE_TYPE::NET:
+    case TREE_FILE_TYPE::TXT:
+    case TREE_FILE_TYPE::REPORT:
         toolMgr->RunAction( KICAD_MANAGER_ACTIONS::openTextEditor, true, &fullFileName );
         break;
 
-    case TREE_PAGE_LAYOUT_DESCR:
+    case TREE_FILE_TYPE::PAGE_LAYOUT_DESCR:
         toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editWorksheet, true, &fullFileName );
         break;
 
-    case TREE_FOOTPRINT_FILE:
+    case TREE_FILE_TYPE::FOOTPRINT_FILE:
         toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editFootprints, true );
         packet = fullFileName.ToStdString();
         kiway.ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_FP_EDIT, packet );
         break;
 
-    case TREE_SCHEMATIC_LIBFILE:
-    case TREE_SEXPR_SYMBOL_LIB_FILE:
+    case TREE_FILE_TYPE::SCHEMATIC_LIBFILE:
+    case TREE_FILE_TYPE::SEXPR_SYMBOL_LIB_FILE:
         toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSymbols, true );
         packet = fullFileName.ToStdString();
         kiway.ExpressMail( FRAME_SCH_LIB_EDITOR, MAIL_LIB_EDIT, packet );

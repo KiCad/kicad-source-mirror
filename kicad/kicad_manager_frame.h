@@ -35,42 +35,6 @@ class TREE_PROJECT_FRAME;
 class ACTION_TOOLBAR;
 class KICAD_SETTINGS;
 
-// Identify the type of files handled by KiCad manager
-//
-// When changing this enum  please verify (and perhaps update)
-// TREE_PROJECT_FRAME::GetFileExt(),
-// s_AllowedExtensionsToList[]
-
-enum TreeFileType {
-    TREE_ROOT = 0,
-    TREE_LEGACY_PROJECT,    // Legacy project file (.pro)
-    TREE_JSON_PROJECT,      // JSON formatted project file (.kicad_pro)
-    TREE_LEGACY_SCHEMATIC,  // Schematic file (.sch)
-    TREE_SEXPR_SCHEMATIC,   // Schematic file (.kicad_sch)
-    TREE_LEGACY_PCB,        // board file (.brd) legacy format
-    TREE_SEXPR_PCB,         // board file (.kicad_brd) new s expression format
-    TREE_GERBER,            // Gerber  file (.pho, .g*)
-    TREE_GERBER_JOB_FILE,   // Gerber  file (.gbrjob)
-    TREE_HTML,              // HTML file (.htm, *.html)
-    TREE_PDF,               // PDF file (.pdf)
-    TREE_TXT,               // ascii text file (.txt)
-    TREE_NET,               // netlist file (.net)
-    TREE_UNKNOWN,
-    TREE_DIRECTORY,
-    TREE_CMP_LINK,          // cmp/footprint link file (.cmp)
-    TREE_REPORT,            // report file (.rpt)
-    TREE_FP_PLACE,          // footprints position (place) file (.pos)
-    TREE_DRILL,             // Excellon drill file (.drl)
-    TREE_DRILL_NC,          // Similar Excellon drill file (.nc)
-    TREE_DRILL_XNC,         // Similar Excellon drill file (.xnc)
-    TREE_SVG,               // SVG file (.svg)
-    TREE_PAGE_LAYOUT_DESCR, // Page layout and title block descr file (.kicad_wks)
-    TREE_FOOTPRINT_FILE,    // footprint file (.kicad_mod)
-    TREE_SCHEMATIC_LIBFILE, // schematic library file (.lib)
-    TREE_SEXPR_SYMBOL_LIB_FILE, // s-expression symbol library file (.kicad_sym)
-    TREE_MAX
-};
-
 
 /**
  * The main KiCad project manager frame.  It is not a KIWAY_PLAYER.

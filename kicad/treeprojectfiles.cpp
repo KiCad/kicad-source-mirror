@@ -53,7 +53,7 @@ TREEPROJECTFILES::TREEPROJECTFILES( TREE_PROJECT_FRAME* parent )
     iconsize.y = dummy.GetHeight();
 
     // Make an image list containing small icons
-    m_ImageList = new wxImageList( iconsize.x, iconsize.y, true, TREE_MAX );
+    m_ImageList = new wxImageList( iconsize.x, iconsize.y, true, static_cast<int>( TREE_FILE_TYPE::MAX ) );
 
     m_ImageList->Add( KiBitmap( new_project_xpm ) );            // TREE_LEGACY_PROJECT
     m_ImageList->Add( KiBitmap( new_project_xpm ) );            // TREE_JSON_PROJECT
@@ -99,10 +99,12 @@ int TREEPROJECTFILES::OnCompareItems( const wxTreeItemId& item1, const wxTreeIte
     if( !myitem1 || !myitem2 )
         return 0;
 
-    if( myitem1->GetType() == TREE_DIRECTORY && myitem2->GetType() != TREE_DIRECTORY )
+    if( myitem1->GetType() == TREE_FILE_TYPE::DIRECTORY
+            && myitem2->GetType() != TREE_FILE_TYPE::DIRECTORY )
         return -1;
 
-    if( myitem2->GetType() == TREE_DIRECTORY && myitem1->GetType() != TREE_DIRECTORY )
+    if( myitem2->GetType() == TREE_FILE_TYPE::DIRECTORY
+            && myitem1->GetType() != TREE_FILE_TYPE::DIRECTORY )
         return 1;
 
     if( myitem1->IsRootFile() && !myitem2->IsRootFile() )

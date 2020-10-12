@@ -27,7 +27,6 @@
 
 #include <pgm_base.h>
 #include <bin_mod.h>
-#include "kicad_settings.h"
 
 /**
  * PGM_KICAD

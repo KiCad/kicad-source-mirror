@@ -30,11 +30,12 @@
 #ifndef TREEPRJ_FRAME_H
 #define TREEPRJ_FRAME_H
 
+#include <vector>
 #include <wx/fswatcher.h>
 #include <wx/laywin.h>
 #include <wx/treebase.h>
 
-#include "kicad_manager_frame.h"
+#include "tree_file_type.h"
 
 
 class KICAD_MANAGER_FRAME;
@@ -80,7 +81,7 @@ public:
     void EmptyTreePrj();
 
 protected:
-    static wxString GetFileExt( TreeFileType type );
+    static wxString GetFileExt( TREE_FILE_TYPE type );
 
     /**
      * Function GetSelectedData

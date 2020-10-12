@@ -28,8 +28,10 @@
 
 #include <wx/treebase.h>
 
-#include "kicad_manager_frame.h"
+#include "tree_file_type.h"
 
+class TREE_PROJECT_FRAME;
+class wxTreeCtrl;
 
 /**
  * TREEPROJECT_ITEM
@@ -39,7 +41,7 @@ class TREEPROJECT_ITEM : public wxTreeItemData
 {
 public:
 
-    TREEPROJECT_ITEM( TreeFileType type, const wxString& data,
+    TREEPROJECT_ITEM( TREE_FILE_TYPE type, const wxString& data,
                       wxTreeCtrl* parent );
 
     TREEPROJECT_ITEM() : m_parent( NULL ) { }
@@ -51,8 +53,8 @@ public:
         m_IsPopulated = false;
     }
 
-    TreeFileType GetType() const                { return m_Type; }
-    void SetType( TreeFileType aType )          { m_Type = aType; }
+    TREE_FILE_TYPE GetType() const                { return m_Type; }
+    void SetType( TREE_FILE_TYPE aType )          { m_Type = aType; }
 
     const wxString& GetFileName() const         { return m_file_name; }
     void SetFileName( const wxString& name )    { m_file_name = name; }
@@ -78,7 +80,7 @@ public:
 
 
 private:
-    TreeFileType    m_Type;         // = TREE_PROJECT, TREE_DIRECTORY ...
+    TREE_FILE_TYPE    m_Type;         // = TREE_PROJECT, TREE_DIRECTORY ...
     wxString        m_file_name;    // Filename for a file, or directory name
     bool            m_IsRootFile;   // True if m_Filename is a root schematic (same name as project)
     bool            m_IsPopulated;  // True if the name is a directory, and its content was read

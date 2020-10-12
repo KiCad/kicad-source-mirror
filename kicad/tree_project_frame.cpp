@@ -45,6 +45,7 @@
 #include "treeprojectfiles.h"
 #include "pgm_kicad.h"
 #include "kicad_id.h"
+#include "kicad_manager_frame.h"
 
 #include "tree_project_frame.h"
 
@@ -262,33 +263,33 @@ void TREE_PROJECT_FRAME::OnCreateNewDirectory( wxCommandEvent& event )
 }
 
 
-wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
+wxString TREE_PROJECT_FRAME::GetFileExt( TREE_FILE_TYPE type )
 {
     switch( type )
     {
-    case TREE_LEGACY_PROJECT:        return LegacyProjectFileExtension;
-    case TREE_JSON_PROJECT:          return ProjectFileExtension;
-    case TREE_LEGACY_SCHEMATIC:      return LegacySchematicFileExtension;
-    case TREE_SEXPR_SCHEMATIC:       return KiCadSchematicFileExtension;
-    case TREE_LEGACY_PCB:            return LegacyPcbFileExtension;
-    case TREE_SEXPR_PCB:             return KiCadPcbFileExtension;
-    case TREE_GERBER:                return GerberFileExtensionWildCard;
-    case TREE_GERBER_JOB_FILE:       return GerberJobFileExtension;
-    case TREE_HTML:                  return HtmlFileExtension;
-    case TREE_PDF:                   return PdfFileExtension;
-    case TREE_TXT:                   return TextFileExtension;
-    case TREE_NET:                   return NetlistFileExtension;
-    case TREE_CMP_LINK:              return ComponentFileExtension;
-    case TREE_REPORT:                return ReportFileExtension;
-    case TREE_FP_PLACE:              return FootprintPlaceFileExtension;
-    case TREE_DRILL:                 return DrillFileExtension;
-    case TREE_DRILL_NC:              return "nc";
-    case TREE_DRILL_XNC:             return "xnc";
-    case TREE_SVG:                   return SVGFileExtension;
-    case TREE_PAGE_LAYOUT_DESCR:     return PageLayoutDescrFileExtension;
-    case TREE_FOOTPRINT_FILE:        return KiCadFootprintFileExtension;
-    case TREE_SCHEMATIC_LIBFILE:     return LegacySymbolLibFileExtension;
-    case TREE_SEXPR_SYMBOL_LIB_FILE: return KiCadSymbolLibFileExtension;
+    case TREE_FILE_TYPE::LEGACY_PROJECT:        return LegacyProjectFileExtension;
+    case TREE_FILE_TYPE::JSON_PROJECT:          return ProjectFileExtension;
+    case TREE_FILE_TYPE::LEGACY_SCHEMATIC:      return LegacySchematicFileExtension;
+    case TREE_FILE_TYPE::SEXPR_SCHEMATIC:       return KiCadSchematicFileExtension;
+    case TREE_FILE_TYPE::LEGACY_PCB:            return LegacyPcbFileExtension;
+    case TREE_FILE_TYPE::SEXPR_PCB:             return KiCadPcbFileExtension;
+    case TREE_FILE_TYPE::GERBER:                return GerberFileExtensionWildCard;
+    case TREE_FILE_TYPE::GERBER_JOB_FILE:       return GerberJobFileExtension;
+    case TREE_FILE_TYPE::HTML:                  return HtmlFileExtension;
+    case TREE_FILE_TYPE::PDF:                   return PdfFileExtension;
+    case TREE_FILE_TYPE::TXT:                   return TextFileExtension;
+    case TREE_FILE_TYPE::NET:                   return NetlistFileExtension;
+    case TREE_FILE_TYPE::CMP_LINK:              return ComponentFileExtension;
+    case TREE_FILE_TYPE::REPORT:                return ReportFileExtension;
+    case TREE_FILE_TYPE::FP_PLACE:              return FootprintPlaceFileExtension;
+    case TREE_FILE_TYPE::DRILL:                 return DrillFileExtension;
+    case TREE_FILE_TYPE::DRILL_NC:              return "nc";
+    case TREE_FILE_TYPE::DRILL_XNC:             return "xnc";
+    case TREE_FILE_TYPE::SVG:                   return SVGFileExtension;
+    case TREE_FILE_TYPE::PAGE_LAYOUT_DESCR:     return PageLayoutDescrFileExtension;
+    case TREE_FILE_TYPE::FOOTPRINT_FILE:        return KiCadFootprintFileExtension;
+    case TREE_FILE_TYPE::SCHEMATIC_LIBFILE:     return LegacySymbolLibFileExtension;
+    case TREE_FILE_TYPE::SEXPR_SYMBOL_LIB_FILE: return KiCadSymbolLibFileExtension;
     default:                         return wxEmptyString;
     }
 }
@@ -298,7 +299,7 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
         const wxString& aName, wxTreeItemId& aRoot, bool aCanResetFileWatcher, bool aRecurse )
 {
     wxTreeItemId newItemId;
-    TreeFileType type = TREE_UNKNOWN;
+    TREE_FILE_TYPE type = TREE_FILE_TYPE::UNKNOWN;
     wxFileName   fn( aName );
 
     // Files/dirs names starting by "." are not visible files under unices.
@@ -308,7 +309,7 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
 
     if( wxDirExists( aName ) )
     {
-        type = TREE_DIRECTORY;
+        type = TREE_FILE_TYPE::DIRECTORY;
     }
     else
     {
@@ -401,14 +402,15 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
             }
         }
 
-        for( int i = TREE_LEGACY_PROJECT; i < TREE_MAX; i++ )
+        for( int i = static_cast<int>( TREE_FILE_TYPE::LEGACY_PROJECT );
+                i < static_cast<int>( TREE_FILE_TYPE::MAX ); i++ )
         {
-            wxString ext = GetFileExt( (TreeFileType) i );
+            wxString ext = GetFileExt( (TREE_FILE_TYPE) i );
 
             if( ext == wxT( "" ) )
                 continue;
 
-            if( i == TREE_GERBER )  // For gerber files, the official ext is gbr
+            if( i == static_cast<int>( TREE_FILE_TYPE::GERBER ) ) // For gerber files, the official ext is gbr
                 ext = "gbr";
 
             reg.Compile( wxString::FromAscii( "^.*\\." ) + ext +
@@ -416,7 +418,7 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
 
             if( reg.Matches( aName ) )
             {
-                type = (TreeFileType) i;
+                type = (TREE_FILE_TYPE) i;
                 break;
             }
         }
@@ -427,7 +429,8 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
     wxFileName project( m_Parent->GetProjectFileName() );
 
     // Ignore legacy projects with the same name as the current project
-    if( ( type == TREE_LEGACY_PROJECT ) && ( currfile.GetName().CmpNoCase( project.GetName() ) == 0 ) )
+    if( ( type == TREE_FILE_TYPE::LEGACY_PROJECT )
+            && ( currfile.GetName().CmpNoCase( project.GetName() ) == 0 ) )
         return newItemId;
 
     // also check to see if it is already there.
@@ -448,7 +451,7 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
     }
 
     // Only show the JSON project files if both legacy and JSON files are present
-    if( ( type == TREE_LEGACY_PROJECT ) || ( type == TREE_JSON_PROJECT ) )
+    if( ( type == TREE_FILE_TYPE::LEGACY_PROJECT ) || ( type == TREE_FILE_TYPE::JSON_PROJECT ) )
     {
         kid = m_TreeProject->GetFirstChild( aRoot, cookie );
 
@@ -463,14 +466,14 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
                 if( fname.GetName().CmpNoCase( currfile.GetName() ) == 0 )
                 {
                     // If the tree item is the legacy project remove it.
-                    if( itemData->GetType() == TREE_LEGACY_PROJECT )
+                    if( itemData->GetType() == TREE_FILE_TYPE::LEGACY_PROJECT )
                     {
                         m_TreeProject->Delete( kid );
                         break;
                     }
                     // If we are the legacy project and the tree was the JSON project, ignore this file
-                    else if( ( itemData->GetType() == TREE_JSON_PROJECT )
-                             && ( type == TREE_LEGACY_PROJECT ) )
+                    else if( ( itemData->GetType() == TREE_FILE_TYPE::JSON_PROJECT )
+                             && ( type == TREE_FILE_TYPE::LEGACY_PROJECT ) )
                     {
                         return newItemId;
                     }
@@ -499,7 +502,7 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
 
     // This section adds dirs and files found in the subdirs
     // in this case AddFile is recursive, but for the first level only.
-    if( TREE_DIRECTORY == type && aRecurse )
+    if( TREE_FILE_TYPE::DIRECTORY == type && aRecurse )
     {
         wxDir dir( aName );
 
@@ -573,12 +576,13 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
     }
 
     // root tree:
-    m_root = m_TreeProject->AddRoot( fn.GetFullName(), TREE_ROOT, TREE_ROOT );
+    m_root = m_TreeProject->AddRoot( fn.GetFullName(), static_cast<int>( TREE_FILE_TYPE::ROOT ),
+            static_cast<int>( TREE_FILE_TYPE::ROOT ) );
     m_TreeProject->SetItemBold( m_root, true );
 
     // The main project file is now a JSON file
-    m_TreeProject->SetItemData( m_root, new TREEPROJECT_ITEM( TREE_JSON_PROJECT, fn.GetFullPath(),
-                                                              m_TreeProject ) );
+    m_TreeProject->SetItemData( m_root,
+            new TREEPROJECT_ITEM( TREE_FILE_TYPE::JSON_PROJECT, fn.GetFullPath(), m_TreeProject ) );
 
     // Now adding all current files if available
     if( prjOpened )
@@ -657,13 +661,12 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
             continue;
         }
 
-        int      tree_id = item->GetType();
         wxString full_file_name = item->GetFileName();
 
-        switch( tree_id )
+        switch( item->GetType() )
         {
-        case TREE_LEGACY_PROJECT:
-        case TREE_JSON_PROJECT:
+        case TREE_FILE_TYPE::LEGACY_PROJECT:
+        case TREE_FILE_TYPE::JSON_PROJECT:
             can_rename = false;
             can_print = false;
 
@@ -679,7 +682,7 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
             }
             break;
 
-        case TREE_DIRECTORY:
+        case TREE_FILE_TYPE::DIRECTORY:
             can_switch_to_project = false;
             can_edit = false;
             can_rename = false;
@@ -915,7 +918,7 @@ void TREE_PROJECT_FRAME::OnExpand( wxTreeEvent& Event )
     if( !tree_data )
         return;
 
-    if( tree_data->GetType() != TREE_DIRECTORY )
+    if( tree_data->GetType() != TREE_FILE_TYPE::DIRECTORY )
         return;
 
     // explore list of non populated subdirs, and populate them
@@ -930,7 +933,7 @@ void TREE_PROJECT_FRAME::OnExpand( wxTreeEvent& Event )
     {
         TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
 
-        if( !itemData || itemData->GetType() != TREE_DIRECTORY )
+        if( !itemData || itemData->GetType() != TREE_FILE_TYPE::DIRECTORY )
             continue;
 
         if( itemData->IsPopulated() )
@@ -1027,7 +1030,7 @@ wxTreeItemId TREE_PROJECT_FRAME::findSubdirTreeItem( const wxString& aSubDir )
 
         TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
 
-        if( itemData && ( itemData->GetType() == TREE_DIRECTORY ) )
+        if( itemData && ( itemData->GetType() == TREE_FILE_TYPE::DIRECTORY ) )
         {
             if( itemData->GetFileName() == aSubDir )    // Found!
             {

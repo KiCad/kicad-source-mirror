@@ -31,14 +31,12 @@
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/stdpaths.h>
-#include <wx/string.h>
 
 #include <filehistory.h>
 #include <hotkeys_basic.h>
 #include <kiway.h>
 #include <settings/settings_manager.h>
 #include <systemdirsappend.h>
-#include <wildcards_and_files_ext.h>
 
 #include <stdexcept>
 
