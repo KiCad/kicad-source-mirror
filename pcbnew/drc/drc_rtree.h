@@ -322,24 +322,35 @@ public:
 
     typedef std::pair<PCB_LAYER_ID, PCB_LAYER_ID> LAYER_PAIR;
 
+    struct PAIR_INFO
+    {
+        PAIR_INFO( LAYER_PAIR aPair, ITEM_WITH_SHAPE* aRef, ITEM_WITH_SHAPE* aTest ) :
+            layerPair( aPair ),
+            refItem( aRef ),
+            testItem( aTest )
+        { };
+
+        LAYER_PAIR       layerPair;
+        ITEM_WITH_SHAPE* refItem;
+        ITEM_WITH_SHAPE* testItem;
+    };
+
     int QueryCollidingPairs( DRC_RTREE* aRefTree,
                              std::vector<LAYER_PAIR> aLayers,
                              std::function<bool( const LAYER_PAIR&,
                                                  ITEM_WITH_SHAPE*, ITEM_WITH_SHAPE*,
                                                  bool* aCollision )> aVisitor,
-                             int aMaxClearance )
+                             int aMaxClearance,
+                             std::function<bool(int, int )> aProgressReporter )
     {
-        // keep track of BOARD_ITEMs pairs that have been already found to collide (some items
-        // might be build of COMPOUND/triangulated shapes and a single subshape collision
-        // means we have a hit)
-        std::set< std::pair<BOARD_ITEM*, BOARD_ITEM*>> collidingCompounds;
+        std::vector< PAIR_INFO > pairsToVisit;
 
-        for( auto refLayerIter : aLayers )
+        for( LAYER_PAIR& refLayerIter : aLayers )
         {
             const PCB_LAYER_ID refLayer = refLayerIter.first;
             const PCB_LAYER_ID targetLayer = refLayerIter.second;
 
-            for( auto refItem : aRefTree->OnLayer( refLayer ) )
+            for( ITEM_WITH_SHAPE* refItem : aRefTree->OnLayer( refLayer ) )
             {
                 BOX2I box = refItem->shape->BBox();
                 box.Inflate( aMaxClearance );
@@ -350,30 +361,44 @@ public:
                 auto visit =
                         [&]( ITEM_WITH_SHAPE* aItemToTest ) -> bool
                         {
-                            const std::pair<BOARD_ITEM*, BOARD_ITEM*>
-                                    chkCompoundPair( refItem->parent, aItemToTest->parent );
-
-                            // don't report multiple collisions for compound or triangulated shapes
-                            if( alg::contains( collidingCompounds, chkCompoundPair ) )
-                                return true;
-
                             // don't collide items against themselves
                             if( refLayer == targetLayer && aItemToTest->parent == refItem->parent )
                                 return true;
 
-                            bool collisionDetected = false;
-                            bool continueSearch = aVisitor( refLayerIter, refItem, aItemToTest,
-                                                            &collisionDetected );
-
-                            if( collisionDetected )
-                                collidingCompounds.insert( chkCompoundPair );
-
-                            return continueSearch;
+                            pairsToVisit.emplace_back( refLayerIter, refItem, aItemToTest );
+                            return true;
                         };
 
                 this->m_tree[targetLayer]->Search( min, max, visit );
             };
         }
+
+        // keep track of BOARD_ITEMs pairs that have been already found to collide (some items
+        // might be build of COMPOUND/triangulated shapes and a single subshape collision
+        // means we have a hit)
+        std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> collidingCompounds;
+
+        int progress = 0;
+        int count = pairsToVisit.size();
+
+        for( PAIR_INFO& pair : pairsToVisit )
+        {
+            if( !aProgressReporter( progress++, count ) )
+                break;
+
+            // don't report multiple collisions for compound or triangulated shapes
+            if( collidingCompounds.count( { pair.refItem->parent, pair.testItem->parent } ) )
+                continue;
+
+            bool collisionDetected = false;
+
+            if( !aVisitor( pair.layerPair, pair.refItem, pair.testItem, &collisionDetected ) )
+                break;
+
+            if( collisionDetected )
+                collidingCompounds[ { pair.refItem->parent, pair.testItem->parent } ] = 1;
+        }
+
         return 0;
     }
 

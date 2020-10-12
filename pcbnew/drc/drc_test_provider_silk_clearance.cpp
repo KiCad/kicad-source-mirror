@@ -179,8 +179,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 return true;
             };
 
-    forEachGeometryItem( { PCB_SHAPE_T, PCB_FP_SHAPE_T, PCB_TEXT_T, PCB_FP_TEXT_T },
-                         LSET( 2, F_SilkS, B_SilkS ), addToSilkTree );
+    forEachGeometryItem( {}, LSET( 2, F_SilkS, B_SilkS ), addToSilkTree );
     forEachGeometryItem( {}, LSET::FrontMask() | LSET::BackMask(), addToTargetTree );
 
     reportAux( _("Testing %d silkscreen features against %d board items."),
@@ -204,10 +203,17 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
         DRC_RTREE::LAYER_PAIR( B_SilkS, B_CrtYd ),
         DRC_RTREE::LAYER_PAIR( B_SilkS, B_Fab ),
         DRC_RTREE::LAYER_PAIR( B_SilkS, B_Cu ),
-        DRC_RTREE::LAYER_PAIR( B_SilkS, Edge_Cuts ),
+        DRC_RTREE::LAYER_PAIR( B_SilkS, Edge_Cuts )
     };
 
-    targetTree.QueryCollidingPairs( &silkTree, layerPairs, checkClearance, m_largestClearance );
+    // This is the number of tests between 2 calls to the progress bar
+    const int delta = 250;
+
+    targetTree.QueryCollidingPairs( &silkTree, layerPairs, checkClearance, m_largestClearance,
+                                    [this]( int aCount, int aSize ) -> bool
+                                    {
+                                        return reportProgress( aCount, aSize, delta );
+                                    } );
 
     reportRuleStatistics();
 

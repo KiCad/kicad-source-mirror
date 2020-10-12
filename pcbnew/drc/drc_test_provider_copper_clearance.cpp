@@ -314,7 +314,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 {
     // This is the number of tests between 2 calls to the progress bar
-    const int delta = m_drcEngine->GetTestTracksAgainstZones() ? 25 : 100;
+    const int delta = 25;
     int       count = m_board->Tracks().size();
 
     reportAux( "Testing %d tracks...", count );

@@ -161,20 +161,10 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
                 return true;
             };
 
-    int numPads = forEachGeometryItem( { PCB_PAD_T,
-                                         PCB_SHAPE_T,
-                                         PCB_FP_SHAPE_T,
-                                         PCB_TEXT_T,
-                                         PCB_FP_TEXT_T },
-                                       LSET( 2, F_Mask, B_Mask ), addMaskToTree );
+    int numMask = forEachGeometryItem( {}, LSET( 2, F_Mask, B_Mask ), addMaskToTree );
+    int numSilk = forEachGeometryItem( {}, LSET( 2, F_SilkS, B_SilkS ), addSilkToTree );
 
-    int numSilk = forEachGeometryItem( { PCB_SHAPE_T,
-                                         PCB_FP_SHAPE_T,
-                                         PCB_TEXT_T,
-                                         PCB_FP_TEXT_T },
-                                       LSET( 2, F_SilkS, B_SilkS ), addSilkToTree );
-
-    reportAux( _("Testing %d exposed copper against %d silkscreen features."), numPads, numSilk );
+    reportAux( _("Testing %d mask apertures against %d silkscreen features."), numMask, numSilk );
 
     const std::vector<DRC_RTREE::LAYER_PAIR> layerPairs =
     {
@@ -182,7 +172,14 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
         DRC_RTREE::LAYER_PAIR( B_SilkS, B_Mask )
     };
 
-    maskTree.QueryCollidingPairs( &silkTree, layerPairs, checkClearance, m_largestClearance );
+    // This is the number of tests between 2 calls to the progress bar
+    const int delta = 250;
+
+    maskTree.QueryCollidingPairs( &silkTree, layerPairs, checkClearance, m_largestClearance,
+                                  [this]( int aCount, int aSize ) -> bool
+                                  {
+                                      return reportProgress( aCount, aSize, delta );
+                                  } );
 
     reportRuleStatistics();
 
