@@ -279,13 +279,12 @@ void CADSTAR_ARCHIVE_PARSER::TEXTCODE::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_ARCHIVE_PARSER::ROUTECODE::Parse( XNODE* aNode )
+void CADSTAR_ARCHIVE_PARSER::ROUTEREASSIGN::Parse( XNODE* aNode )
 {
-    wxASSERT( aNode->GetName() == wxT( "ROUTECODE" ) );
+    wxASSERT( aNode->GetName() == wxT( "ROUTEREASSIGN" ) );
 
-    ID           = GetXmlAttributeIDString( aNode, 0 );
-    Name         = GetXmlAttributeIDString( aNode, 1 );
-    OptimalWidth = GetXmlAttributeIDLong( aNode, 2, false );
+    LayerID      = GetXmlAttributeIDString( aNode, 0 );
+    OptimalWidth = GetXmlAttributeIDLong( aNode, 1, false );
 
     XNODE* cNode = aNode->GetChildren();
 
@@ -303,6 +302,50 @@ void CADSTAR_ARCHIVE_PARSER::ROUTECODE::Parse( XNODE* aNode )
             MaxWidth = GetXmlAttributeIDLong( cNode, 0 );
         else
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+    }
+}
+
+
+void CADSTAR_ARCHIVE_PARSER::ROUTECODE::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "ROUTECODE" ) );
+
+    ID           = GetXmlAttributeIDString( aNode, 0 );
+    Name         = GetXmlAttributeIDString( aNode, 1 );
+    OptimalWidth = GetXmlAttributeIDLong( aNode, 2, false );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        wxString cNodeName = cNode->GetName();
+
+        if( cNodeName == wxT( "NECKWIDTH" ) )
+        {
+            NeckedWidth = GetXmlAttributeIDLong( cNode, 0 );
+        }
+        else if( cNodeName == wxT( "SROUTEWIDTH" ) )
+        {
+            OptimalWidth = GetXmlAttributeIDLong( cNode, 0 );
+        }
+        else if( cNodeName == wxT( "MINWIDTH" ) )
+        {
+            MinWidth = GetXmlAttributeIDLong( cNode, 0 );
+        }
+        else if( cNodeName == wxT( "MAXWIDTH" ) )
+        {
+            MaxWidth = GetXmlAttributeIDLong( cNode, 0 );
+        }
+        else if( cNodeName == wxT( "ROUTEREASSIGN" ) )
+        {
+            ROUTEREASSIGN routereassign;
+            routereassign.Parse( cNode );
+            RouteReassigns.push_back( routereassign );
+        }
+        else
+        {
+            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
     }
 }
 

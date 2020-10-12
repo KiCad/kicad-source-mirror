@@ -245,17 +245,28 @@ public:
     };
 
 
+    struct ROUTEREASSIGN
+    {
+        LAYER_ID LayerID;
+        long     OptimalWidth;
+        long     MinWidth;
+        long     MaxWidth;
+        long     NeckedWidth;
+
+        void Parse( XNODE* aNode );
+    };
+
+
     struct ROUTECODE
     {
-        //TODO: Generalise this so it can also be used with CSA files
-        // (CSA files use "SROUTEWIDTH" subnode, instead of attribute)
-
         ROUTECODE_ID ID;
         wxString     Name;
         long         OptimalWidth;
         long         MinWidth;
         long         MaxWidth;
         long         NeckedWidth;
+
+        std::vector<ROUTEREASSIGN> RouteReassigns;
 
         void Parse( XNODE* aNode );
     };
