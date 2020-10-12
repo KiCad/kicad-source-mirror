@@ -131,23 +131,15 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                                                                   aRefItem->parent,
                                                                   aTestItem->parent,
                                                                   aLayers.second );
+
+                if( constraint.IsNull() )
+                    return true;
+
                 int      minClearance = constraint.GetValue().Min();
                 int      actual;
                 VECTOR2I pos;
 
                 accountCheck( constraint );
-
-                if( minClearance == 0 )
-                {
-                    // MinClearance == 0 means the author didn't specify anything and we want
-                    // to perform a basic silk : silk collision test.
-                    //
-                    // aLayers.first is always a silk layer, so we just need to check that
-                    // aLayers.second matches.
-                    //
-                    if( aLayers.second != aLayers.first )
-                        return true;
-                }
 
                 // Graphics are often compound shapes so ignore collisions between shapes in a
                 // single footprint or on the board.
