@@ -40,6 +40,8 @@
 #include <gal/opengl/opengl_gal.h>
 #include <gal/cairo/cairo_gal.h>
 
+#include <kiplatform/app.h>
+
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 
@@ -295,6 +297,10 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 {
+    // Call to ensure the refresh timer eventually fires during rapid mouse moves
+    // Required for win32
+    KIPLATFORM::APP::ForceTimerMessagesToBeCreatedIfNecessary();
+
     if( m_pendingRefresh )
         return;
 

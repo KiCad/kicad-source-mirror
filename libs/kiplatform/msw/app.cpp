@@ -72,3 +72,11 @@ void KIPLATFORM::APP::SetShutdownBlockReason( wxWindow* aWindow, const wxString&
 
     ShutdownBlockReasonCreate( aWindow->GetHandle(), aReason.wc_str() );
 }
+
+
+void KIPLATFORM::APP::ForceTimerMessagesToBeCreatedIfNecessary()
+{
+    // Taken from https://devblogs.microsoft.com/oldnewthing/20191108-00/?p=103080
+    MSG msg;
+    PeekMessage( &msg, nullptr, WM_TIMER, WM_TIMER, PM_NOREMOVE );
+}

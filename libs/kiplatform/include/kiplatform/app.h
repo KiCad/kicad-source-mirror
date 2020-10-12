@@ -64,6 +64,17 @@ namespace KIPLATFORM
          * @param aWindow that has a shutdown block reason set
          */
         void RemoveShutdownBlockReason( wxWindow* aWindow );
+
+        /**
+         * Forces wxTimers to fire more promptly on Win32.
+         *
+         * wxTimers on win32 are not real timers
+         * They live in the message pump at the absolute lowest priority (only when no other events are pending)
+         * This functions "peeks" the message pump which causes them to get queued immediately
+         *
+         * Call as needed in an application to ensure timers are dispatched
+         */
+        void ForceTimerMessagesToBeCreatedIfNecessary();
     }
 }
 
