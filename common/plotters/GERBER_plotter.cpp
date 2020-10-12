@@ -1000,6 +1000,31 @@ void GERBER_PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width,
 }
 
 
+void GERBER_PLOTTER::FilledCircle( const wxPoint& pos, int diametre,
+                              EDA_DRAW_MODE_T tracemode, void* aData )
+{
+    // A filled circle is a graphic item, not a pad.
+    // So it is drawn, not flashed.
+    GBR_METADATA *gbr_metadata = static_cast<GBR_METADATA*>( aData );
+
+    if( gbr_metadata )
+        formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
+
+    if( tracemode == FILLED )
+    {
+        // Draw a circle of diameter = diametre/2 with a line thickness = radius,
+        // To create a filled circle
+        SetCurrentLineWidth( diametre/2, gbr_metadata );
+        Circle( pos, diametre/2, NO_FILL, DO_NOT_SET_LINE_WIDTH );
+    }
+    else
+    {
+        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, gbr_metadata );
+        Circle( pos, diametre, NO_FILL, DO_NOT_SET_LINE_WIDTH );
+    }
+}
+
+
 void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, EDA_DRAW_MODE_T trace_mode, void* aData )
 {
     wxSize size( diametre, diametre );

@@ -578,7 +578,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
         if( aShape->GetWidth() > 0 )
             m_plotter->ThickCircle( pos, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
         else
-            m_plotter->Circle( pos, radius * 2, FILLED_SHAPE, -1 );
+            m_plotter->FilledCircle( pos, radius * 2, GetPlotMode(), &gbr_metadata );
 
         break;
 
@@ -859,7 +859,11 @@ void BRDITEMS_PLOTTER::PlotPcbShape( PCB_SHAPE* aShape )
 
     case S_CIRCLE:
         radius = KiROUND( GetLineLength( end, start ) );
-        m_plotter->ThickCircle( start, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
+
+        if( thickness > 0 )
+            m_plotter->ThickCircle( start, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
+        else
+            m_plotter->FilledCircle( start, radius * 2, GetPlotMode(), &gbr_metadata );
         break;
 
     case S_ARC:

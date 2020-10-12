@@ -578,6 +578,19 @@ void PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width,
 }
 
 
+void PLOTTER::FilledCircle( const wxPoint& pos, int diametre,
+                            EDA_DRAW_MODE_T tracemode, void* aData )
+{
+    if( tracemode == FILLED )
+        Circle( pos, diametre, FILLED_SHAPE, 0 );
+    else
+    {
+        SetCurrentLineWidth( -1 );
+        Circle( pos, diametre, NO_FILL, -1 );
+    }
+}
+
+
 void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
                        int aWidth, void * aData )
 {

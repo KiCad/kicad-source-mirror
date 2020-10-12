@@ -67,6 +67,8 @@ public:
     // Currently, aScale and aMirror are not used in gerber plotter
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                           double aScale, bool aMirror ) override;
+
+    // Basic plot primitives
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
@@ -74,6 +76,7 @@ public:
     virtual void Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
                       int aRadius, FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
+    // These functions plot an item and manage X2 gerber attributes
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                EDA_DRAW_MODE_T tracemode, void* aData ) override;
 
@@ -83,6 +86,9 @@ public:
                             EDA_DRAW_MODE_T tracemode, void* aData ) override;
     virtual void ThickCircle( const wxPoint& pos, int diametre, int width,
                               EDA_DRAW_MODE_T tracemode, void* aData ) override;
+    virtual void FilledCircle( const wxPoint& pos, int diametre,
+                              EDA_DRAW_MODE_T tracemode, void* aData ) override;
+
     /**
      * Gerber polygon: they can (and *should*) be filled with the
      * appropriate G36/G37 sequence

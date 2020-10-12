@@ -321,6 +321,9 @@ public:
                             EDA_DRAW_MODE_T tracemode, void* aData );
     virtual void ThickCircle( const wxPoint& pos, int diametre, int width,
                               EDA_DRAW_MODE_T tracemode, void* aData );
+    virtual void FilledCircle( const wxPoint& pos, int diametre,
+                              EDA_DRAW_MODE_T tracemode, void* aData );
+
 
     // Flash primitives
 
