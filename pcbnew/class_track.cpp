@@ -528,7 +528,7 @@ double TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 const BOX2I TRACK::ViewBBox() const
 {
     BOX2I bbox = GetBoundingBox();
-    bbox.Inflate( 2 * GetClearance( GetLayer() ) );
+    bbox.Inflate( 2 * GetOwnClearance( GetLayer() ) );
     return bbox;
 }
 
@@ -649,7 +649,7 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
         }
     }
 
-    int clearance = GetClearance( GetLayer(), nullptr, &source );
+    int clearance = GetOwnClearance( GetLayer(), &source );
 
     msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance ) );
     msg2.Printf( _( "(from %s)" ), source );
@@ -698,7 +698,7 @@ void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 
     aList.emplace_back( _( "Drill" ), msg, RED );
 
-    int clearance = GetClearance( GetLayer(), nullptr, &source );
+    int clearance = GetOwnClearance( GetLayer(), &source );
 
     msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance ) );
     msg2.Printf( _( "(from %s)" ), source );

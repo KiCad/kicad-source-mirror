@@ -622,7 +622,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     aList.emplace_back( _( "Filled Area" ), msg, BLUE );
 
     wxString source;
-    int      clearance = GetClearance( GetLayer(), nullptr, &source );
+    int      clearance = GetOwnClearance( GetLayer(), &source );
 
     msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance ) );
     msg2.Printf( _( "(from %s)" ), source );

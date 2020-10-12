@@ -469,7 +469,7 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
         {
             for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
             {
-                int padClearance = pad->GetClearance( layer );
+                int padClearance = pad->GetOwnClearance( layer );
 
                 if( layer == B_Cu || layer == F_Cu )
                     minPadClearanceOuter = std::min( minPadClearanceOuter, padClearance );
@@ -520,7 +520,7 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
 
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
-            int zclerance = zone->GetClearance( layer );
+            int zclerance = zone->GetOwnClearance( layer );
 
             if( layer == B_Cu || layer == F_Cu )
                 minclearanceOuter = std::min( minclearanceOuter, zclerance );

@@ -73,15 +73,9 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetEffectiveNetclass() const
 
 
 /*
- * Clearances exist in a hiearchy.  If a given level is specified then the remaining levels
- * are NOT consulted.
- *
- * LEVEL 1: (highest priority) local overrides (pad, footprint, etc.)
- * LEVEL 2: Rules
- * LEVEL 3: Accumulated local settings, netclass settings, & board design settings
+ * Returns the item's "own" clearance (ie: that not affected by other items).
  */
-int BOARD_CONNECTED_ITEM::GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem,
-                                        wxString* aSource ) const
+int BOARD_CONNECTED_ITEM::GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
     DRC_CONSTRAINT constraint;
 
@@ -90,7 +84,7 @@ int BOARD_CONNECTED_ITEM::GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem,
         BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
 
         constraint = bds.m_DRCEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, this,
-                                                         aItem, aLayer );
+                                                         nullptr, aLayer );
     }
 
     if( constraint.Value().HasMin() )

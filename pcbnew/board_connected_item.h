@@ -158,17 +158,12 @@ public:
 
     /**
      * Function GetClearance
-     * returns the clearance in internal units.  If \a aItem is not NULL then the
-     * returned clearance is the greater of this object's NETCLASS clearance and
-     * aItem's NETCLASS clearance.  If \a aItem is NULL, then this objects clearance
-     * is returned.
+     * returns an item's "own" clearance in internal units.
      * @param aLayer the layer in question
-     * @param aItem is an optional BOARD_ITEM
      * @param aSource [out] optionally reports the source as a user-readable string
      * @return int - the clearance in internal units.
      */
-    virtual int GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem = nullptr,
-                              wxString* aSource = nullptr ) const;
+    virtual int GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSource = nullptr ) const;
 
     /**
      * Function GetLocalClearanceOverrides

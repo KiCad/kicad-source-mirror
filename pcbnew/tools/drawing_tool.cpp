@@ -2034,7 +2034,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 if( TRACK* track = dyn_cast<TRACK*>( item ) )
                 {
                     int max_clearance = std::max( clearance,
-                                                  track->GetClearance( track->GetLayer() ) );
+                                                  track->GetOwnClearance( track->GetLayer() ) );
 
                     if( TestSegmentHit( position, track->GetStart(), track->GetEnd(),
                             ( track->GetWidth() + aVia->GetWidth() ) / 2  + max_clearance ) )
@@ -2043,7 +2043,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                             return true;
 
                         net = track->GetNetCode();
-                        clearance = track->GetClearance( track->GetLayer() );
+                        clearance = track->GetOwnClearance( track->GetLayer() );
                     }
                 }
 
@@ -2061,7 +2061,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                     {
                         for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
                         {
-                            int max_clearance = std::max( clearance, pad->GetClearance( layer ) );
+                            int max_clearance = std::max( clearance, pad->GetOwnClearance( layer ) );
 
                             if( pad->HitTest( aVia->GetBoundingBox(), false, max_clearance ) )
                             {
@@ -2069,7 +2069,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                                     return true;
 
                                 net = pad->GetNetCode();
-                                clearance = pad->GetClearance( layer );
+                                clearance = pad->GetOwnClearance( layer );
                             }
 
                             if( pad->GetDrillSize().x && pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )

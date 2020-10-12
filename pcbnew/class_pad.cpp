@@ -894,7 +894,7 @@ void D_PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
     }
 
     wxString source;
-    int      clearance = GetClearance( GetLayer(), nullptr, &source );
+    int      clearance = GetOwnClearance( GetLayer(), &source );
 
     msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance ) );
     msg2.Printf( _( "(from %s)" ), source );

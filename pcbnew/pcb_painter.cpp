@@ -529,7 +529,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
 
         if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags )
         {
-            int clearance = aTrack->GetClearance( m_pcbSettings.GetActiveLayer() );
+            int clearance = aTrack->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
 
             m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
             m_gal->SetIsFill( false );
@@ -574,7 +574,7 @@ void PCB_PAINTER::draw( const ARC* aArc, int aLayer )
             m_gal->SetStrokeColor( color );
 
             m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle,
-                                   width + aArc->GetClearance( ToLAYER_ID( aLayer ) ) * 2 );
+                                   width + aArc->GetOwnClearance( ToLAYER_ID( aLayer ) ) * 2 );
         }
     }
 }
@@ -716,9 +716,11 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
     if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags
             && aLayer != LAYER_VIAS_HOLES )
     {
-        if( !aVia->FlashLayer( m_pcbSettings.GetActiveLayer() ) )
+        PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
+
+        if( !aVia->FlashLayer( activeLayer ) )
         {
-            radius = getDrillSize(aVia) / 2.0 +
+            radius = getDrillSize( aVia ) / 2.0 +
                             aVia->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
         }
 
@@ -726,7 +728,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color );
-        m_gal->DrawCircle( center, radius + aVia->GetClearance( m_pcbSettings.GetActiveLayer() ) );
+        m_gal->DrawCircle( center, radius + aVia->GetOwnClearance( activeLayer ) );
     }
 }
 
@@ -946,7 +948,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m_gal->SetIsFill( false );
             m_gal->SetStrokeColor( color );
 
-            int clearance = aPad->GetClearance( m_pcbSettings.GetActiveLayer() );
+            int clearance = aPad->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
 
             if( flashLayer )
             {
