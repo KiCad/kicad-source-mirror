@@ -226,11 +226,39 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
             return false; // should not happen
     }
 
+    // A track being routed may not have a BOARD_ITEM associated yet.
+    static TRACK dummyTrack( m_board );
+    static ARC   dummyArc( m_board );
+    static VIA   dummyVia( m_board );
+
     const BOARD_ITEM* parentA = aItemA ? aItemA->Parent() : nullptr;
     const BOARD_ITEM* parentB = aItemB ? aItemB->Parent() : nullptr;
+    DRC_CONSTRAINT    hostConstraint;
 
-    DRC_CONSTRAINT hostConstraint = drcEngine->EvalRulesForItems( hostRuleType, parentA, parentB,
-                                                                  (PCB_LAYER_ID) aLayer );
+    if( !parentA )
+    {
+        switch( aItemA->Kind() )
+        {
+        case PNS::ITEM::ARC_T:
+            dummyArc.SetLayer( (PCB_LAYER_ID) aLayer );
+            parentA = &dummyArc;
+            break;
+        case PNS::ITEM::VIA_T:
+            dummyVia.SetLayer( (PCB_LAYER_ID) aLayer );
+            parentA = &dummyVia;
+            break;
+        default:
+            dummyTrack.SetLayer( (PCB_LAYER_ID) aLayer );
+            parentA = &dummyTrack;
+            break;
+        }
+    }
+
+    if( parentA )
+    {
+        hostConstraint = drcEngine->EvalRulesForItems( hostRuleType, parentA, parentB,
+                                                       (PCB_LAYER_ID) aLayer );
+    }
 
     if( hostConstraint.IsNull() )
         return false;
