@@ -200,7 +200,6 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         }
         else
         {
-            GetDesignSettings().m_UseConnectedTrackWidth = false;
             GetDesignSettings().SetTrackWidthIndex( ii );
         }
 

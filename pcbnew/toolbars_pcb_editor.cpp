@@ -722,7 +722,7 @@ void PCB_EDIT_FRAME::OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent )
         BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
         int                    sel;
 
-        if( bds.m_UseConnectedTrackWidth || bds.UseCustomTrackViaSize() )
+        if( bds.UseCustomTrackViaSize() )
             sel = wxNOT_FOUND;
         else
             sel = bds.GetTrackWidthIndex();
