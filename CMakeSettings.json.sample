@@ -2,7 +2,7 @@
   "environments": [
     { "BuildDir": "${workspaceRoot}\\build" },
     { "InstallDir": "${workspaceRoot}\\build\\install" },
-	{ "VcPkgDir": "D:/vcpkg/" }, 
+    { "VcPkgDir": "D:/vcpkg/" }
   ],
   "configurations": [
     {
