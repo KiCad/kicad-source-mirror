@@ -650,7 +650,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         bool deleteItems;
         std::vector<BOARD_ITEM*> deleteList;
         wxString msg = wxString::Format( _( "Items found on undefined layers.  Do you wish to\n"
-                                            "rescue them to the Cmts.User layer?" ) );
+                                            "rescue them to the User.Comments layer?" ) );
         wxString details = wxString::Format( _( "Undefined layers:" ) );
 
         for( const wxString& undefinedLayer : m_undefinedLayers )
