@@ -293,7 +293,7 @@ protected:
     void draw( const ZONE_CONTAINER* aZone, int aLayer );
     void draw( const DIMENSION* aDimension, int aLayer );
     void draw( const PCB_TARGET* aTarget );
-    void draw( const MARKER_PCB* aMarker );
+    void draw( const MARKER_PCB* aMarker, int aLayer );
 
     /**
      * Function getLineThickness()

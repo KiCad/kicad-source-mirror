@@ -106,10 +106,13 @@ bool MARKER_BASE::HitTestMarker( const wxPoint& aHitPosition, int aAccuracy ) co
 }
 
 
-void MARKER_BASE::ShapeToPolygon( SHAPE_LINE_CHAIN& aPolygon) const
+void MARKER_BASE::ShapeToPolygon( SHAPE_LINE_CHAIN& aPolygon, int aScale ) const
 {
+    if( aScale < 0 )
+        aScale = MarkerScale();
+
     for( const VECTOR2I& corner : MarkerShapeCorners )
-        aPolygon.Append( corner * MarkerScale() );
+        aPolygon.Append( corner * aScale );
 
     // Be sure aPolygon is seen as a closed polyline:
     aPolygon.SetClosed( true );

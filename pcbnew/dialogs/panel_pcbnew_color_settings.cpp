@@ -363,7 +363,8 @@ std::set<int> g_excludedLayers =
             LAYER_MOD_TEXT_BK,
             LAYER_PADS_PLATEDHOLES,
             LAYER_GP_OVERLAY,
-            LAYER_DRAW_BITMAPS
+            LAYER_DRAW_BITMAPS,
+            LAYER_MARKER_SHADOWS
         };
 
 

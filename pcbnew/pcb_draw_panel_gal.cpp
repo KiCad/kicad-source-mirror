@@ -53,7 +53,7 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
 {
     LAYER_GP_OVERLAY,
     LAYER_SELECT_OVERLAY,
-    LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION,
+    LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION, LAYER_MARKER_SHADOWS,
     LAYER_PADS_NETNAMES, LAYER_VIAS_NETNAMES,
     Dwgs_User, Cmts_User, Eco1_User, Eco2_User, Edge_Cuts,
 
@@ -279,7 +279,7 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
                 LAYER_PADS_TH, LAYER_PADS_PLATEDHOLES, LAYER_PADS_NETNAMES,
                 LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION,
                 LAYER_NON_PLATEDHOLES, LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY,
-                LAYER_RATSNEST, LAYER_CURSOR, LAYER_ANCHOR
+                LAYER_RATSNEST, LAYER_CURSOR, LAYER_ANCHOR, LAYER_MARKER_SHADOWS
         };
 
         for( unsigned int i : layers )
@@ -315,7 +315,7 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
             LAYER_VIA_THROUGH, LAYER_VIAS_HOLES, LAYER_VIAS_NETNAMES, LAYER_PADS_TH,
             LAYER_PADS_PLATEDHOLES, LAYER_PADS_NETNAMES, LAYER_NON_PLATEDHOLES,
             LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY, LAYER_RATSNEST, LAYER_DRC_ERROR,
-            LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION
+            LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION, LAYER_MARKER_SHADOWS
     };
 
     for( auto layer : layers )
@@ -406,6 +406,7 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
     m_view->SetLayerVisible( LAYER_GP_OVERLAY, true );
     m_view->SetLayerVisible( LAYER_SELECT_OVERLAY, true );
     m_view->SetLayerVisible( LAYER_RATSNEST, true );
+    m_view->SetLayerVisible( LAYER_MARKER_SHADOWS, true );
 }
 
 
@@ -573,12 +574,21 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetRequired( LAYER_MOD_TEXT_BK, LAYER_MOD_BK );
     m_view->SetRequired( LAYER_PAD_BK_NETNAMES, LAYER_PAD_BK );
 
-    m_view->SetLayerTarget( LAYER_SELECT_OVERLAY , KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerTarget( LAYER_SELECT_OVERLAY, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_SELECT_OVERLAY ) ;
-    m_view->SetLayerTarget( LAYER_GP_OVERLAY , KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerTarget( LAYER_GP_OVERLAY, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_GP_OVERLAY ) ;
     m_view->SetLayerTarget( LAYER_RATSNEST, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_RATSNEST );
+
+    m_view->SetLayerTarget( LAYER_DRC_ERROR, KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( LAYER_DRC_ERROR );
+    m_view->SetLayerTarget( LAYER_DRC_WARNING, KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( LAYER_DRC_WARNING );
+    m_view->SetLayerTarget( LAYER_DRC_EXCLUSION, KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( LAYER_DRC_EXCLUSION );
+    m_view->SetLayerTarget( LAYER_MARKER_SHADOWS, KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( LAYER_MARKER_SHADOWS );
 
     m_view->SetLayerTarget( LAYER_WORKSHEET, KIGFX::TARGET_NONCACHED );
     m_view->SetLayerDisplayOnly( LAYER_WORKSHEET ) ;

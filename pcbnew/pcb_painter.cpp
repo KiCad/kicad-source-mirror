@@ -240,6 +240,17 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     if( m_hiContrastEnabled && IsNetnameLayer( aLayer ) && m_highContrastLayers.count( aLayer ) == 0 )
         return COLOR4D::CLEAR;
 
+    // Marker shadows
+    if( aLayer == LAYER_MARKER_SHADOWS )
+    {
+        COLOR4D shadowColor = m_backgroundColor.WithAlpha( 0.6 );
+
+        if( item && item->IsSelected() )
+            shadowColor.Brighten( m_selectFactor );
+
+        return shadowColor;
+    }
+
     // Normal path: get the layer base color
     COLOR4D color = m_layerColors[aLayer];
 
@@ -461,7 +472,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     case PCB_MARKER_T:
-        draw( static_cast<const MARKER_PCB*>( item ) );
+        draw( static_cast<const MARKER_PCB*>( item ), aLayer );
         break;
 
     default:
@@ -1555,18 +1566,39 @@ void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
 }
 
 
-void PCB_PAINTER::draw( const MARKER_PCB* aMarker )
+void PCB_PAINTER::draw( const MARKER_PCB* aMarker, int aLayer )
 {
+    bool isShadow = aLayer == LAYER_MARKER_SHADOWS;
+
+    // Don't paint shadows for invisible markers.
+    // It would be nice to do this through layer dependencies but we can't do an "or" there today
+    if( isShadow && aMarker->GetBoard() &&
+        !aMarker->GetBoard()->IsElementVisible( aMarker->GetColorLayer() ) )
+        return;
+
     SHAPE_LINE_CHAIN polygon;
     aMarker->ShapeToPolygon( polygon );
 
-    auto strokeColor = m_pcbSettings.GetColor( aMarker, aMarker->GetColorLayer() );
+
+
+    COLOR4D color = m_pcbSettings.GetColor( aMarker, isShadow ? LAYER_MARKER_SHADOWS
+                                                              : aMarker->GetColorLayer() );
 
     m_gal->Save();
     m_gal->Translate( aMarker->GetPosition() );
-    m_gal->SetFillColor( strokeColor );
-    m_gal->SetIsFill( true );
-    m_gal->SetIsStroke( false );
+
+    if( isShadow )
+    {
+        m_gal->SetStrokeColor( color );
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineWidth( aMarker->MarkerScale() );
+    }
+    else
+    {
+        m_gal->SetFillColor( color );
+        m_gal->SetIsFill( true );
+    }
+   
     m_gal->DrawPolygon( polygon );
     m_gal->Restore();
 }

@@ -161,6 +161,7 @@ wxString LayerName( int aLayer )
     case LAYER_DRC_WARNING:             return _( "DRC Warnings" );
     case LAYER_DRC_ERROR:               return _( "DRC Errors" );
     case LAYER_DRC_EXCLUSION:           return _( "DRC Exclusions" );
+    case LAYER_MARKER_SHADOWS:          return _( "DRC Marker Shadows" );
     case LAYER_ANCHOR:                  return _( "Anchors" );
     case LAYER_WORKSHEET:               return _( "Worksheet" );
     case LAYER_CURSOR:                  return _( "Cursor" );

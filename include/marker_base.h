@@ -84,7 +84,7 @@ public:
      * the coordinates are relatives to the marker position (are not absolute)
      * @param aPolygon is the SHAPE_LINE_CHAIN to fill with the shape
      */
-    void ShapeToPolygon( SHAPE_LINE_CHAIN& aPolygon) const;
+    void ShapeToPolygon( SHAPE_LINE_CHAIN& aPolygon, int aScale = -1 ) const;
 
     /**
      * Function PrintMarker

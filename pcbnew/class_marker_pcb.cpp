@@ -38,7 +38,7 @@
 
 
 /// Factor to convert the maker unit shape to internal units:
-#define SCALING_FACTOR  Millimeter2iu( 0.1 )
+#define SCALING_FACTOR  Millimeter2iu( 0.075 )
 
 
 
@@ -144,7 +144,9 @@ BITMAP_DEF MARKER_PCB::GetMenuImage() const
 
 void MARKER_PCB::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount = 1;
+    aCount = 2;
+
+    aLayers[1] = LAYER_MARKER_SHADOWS;
 
     if( IsExcluded() )
     {
