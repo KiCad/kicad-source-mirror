@@ -56,7 +56,7 @@ public:
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override 
+    virtual const wxString GetName() const override
     {
         return "silk_clearance";
     };
@@ -210,7 +210,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     const int delta = 250;
 
     targetTree.QueryCollidingPairs( &silkTree, layerPairs, checkClearance, m_largestClearance,
-                                    [this]( int aCount, int aSize ) -> bool
+                                    [&]( int aCount, int aSize ) -> bool
                                     {
                                         return reportProgress( aCount, aSize, delta );
                                     } );
