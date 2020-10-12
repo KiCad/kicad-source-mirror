@@ -167,7 +167,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 
 	m_staticText23 = new wxStaticText( this, wxID_ANY, _("Copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText23->Wrap( -1 );
-	fgFeatureConstraints->Add( m_staticText23, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgFeatureConstraints->Add( m_staticText23, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -264,7 +264,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 
 	m_staticText24 = new wxStaticText( this, wxID_ANY, _("Holes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText24->Wrap( -1 );
-	fgFeatureConstraints->Add( m_staticText24, 0, wxALL, 5 );
+	fgFeatureConstraints->Add( m_staticText24, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
@@ -317,7 +317,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 
 	m_staticText25 = new wxStaticText( this, wxID_ANY, _("uVias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText25->Wrap( -1 );
-	fgFeatureConstraints->Add( m_staticText25, 0, wxALL, 5 );
+	fgFeatureConstraints->Add( m_staticText25, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
@@ -355,6 +355,45 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	m_uviaMinDrillUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_uviaMinDrillUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_uviaMinDrillUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_staticline111 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline111, 0, wxEXPAND|wxTOP, 20 );
+
+	m_staticline12 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline12, 0, wxEXPAND|wxTOP, 20 );
+
+	m_staticline13 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline13, 0, wxEXPAND|wxTOP, 20 );
+
+	m_staticline14 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline14, 0, wxEXPAND|wxTOP, 20 );
+
+	m_staticText28 = new wxStaticText( this, wxID_ANY, _("Silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText28->Wrap( -1 );
+	fgFeatureConstraints->Add( m_staticText28, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_silkClearanceLabel = new wxStaticText( this, wxID_ANY, _("Minimum item clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_silkClearanceLabel->Wrap( -1 );
+	fgFeatureConstraints->Add( m_silkClearanceLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_silkClearanceCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_silkClearanceCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_silkClearanceUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_silkClearanceUnits->Wrap( -1 );
+	fgFeatureConstraints->Add( m_silkClearanceUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbFeatureConstraints->Add( fgFeatureConstraints, 1, wxEXPAND|wxLEFT, 5 );

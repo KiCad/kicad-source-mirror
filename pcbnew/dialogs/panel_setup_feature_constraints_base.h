@@ -105,6 +105,14 @@ class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_uviaMinDrillLabel;
 		wxTextCtrl* m_uviaMinDrillCtrl;
 		wxStaticText* m_uviaMinDrillUnits;
+		wxStaticLine* m_staticline111;
+		wxStaticLine* m_staticline12;
+		wxStaticLine* m_staticline13;
+		wxStaticLine* m_staticline14;
+		wxStaticText* m_staticText28;
+		wxStaticText* m_silkClearanceLabel;
+		wxTextCtrl* m_silkClearanceCtrl;
+		wxStaticText* m_silkClearanceUnits;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void onChangeOutlineOpt( wxCommandEvent& event ) { event.Skip(); }

@@ -88,6 +88,7 @@
 #define DEFAULT_COPPEREDGECLEARANCE   0.01    // clearance between copper items and edge cuts
 #define LEGACY_COPPEREDGECLEARANCE   -0.01    // A flag to indicate the legacy method (based
                                               // on edge cut line thicknesses) should be used.
+#define DEFAULT_SILKCLEARANCE         0.0
 
 #define MINIMUM_ERROR_SIZE_MM         0.001
 #define MAXIMUM_ERROR_SIZE_MM         0.1
@@ -239,6 +240,7 @@ public:
     int        m_MicroViasMinDrill;         // micro vias min drill diameter
     int        m_CopperEdgeClearance;
     int        m_HoleToHoleMin;             // Min width of peninsula between two drilled holes
+    int        m_SilkClearance;
 
     std::shared_ptr<DRC_ENGINE> m_DRCEngine;
     std::map<int, int>          m_DRCSeverities;   // Map from DRCErrorCode to SEVERITY
@@ -749,6 +751,14 @@ public:
      * @param aValue The minimum distance between copper items and board edges.
      */
     void SetCopperEdgeClearance( int aDistance );
+
+    /**
+     * Function SetSilkEdgeClearance
+     * @param aValue The minimum distance between silk items.  Note that compound graphics
+     * within a single footprint or on the board are not checked, but distances between text
+     * and between graphics from different footprints are.
+     */
+    void SetSilkClearance( int aDistance );
 
     /**
      * Function GetEnabledLayers

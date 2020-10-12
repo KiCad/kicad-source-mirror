@@ -45,6 +45,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* 
         m_uviaMinDrill( aFrame, m_uviaMinDrillLabel, m_uviaMinDrillCtrl, m_uviaMinDrillUnits, true ),
         m_holeToHoleMin( aFrame, m_HoleToHoleTitle, m_SetHoleToHoleCtrl, m_HoleToHoleUnits, true ),
         m_edgeClearance( aFrame, m_EdgeClearanceLabel, m_EdgeClearanceCtrl, m_EdgeClearanceUnits, true ),
+        m_silkClearance( aFrame, m_silkClearanceLabel, m_silkClearanceCtrl, m_silkClearanceUnits, true ),
         m_maxError( aFrame, m_maxErrorTitle, m_maxErrorCtrl, m_maxErrorUnits, true )
 {
     m_Frame = aFrame;
@@ -79,6 +80,8 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataToWindow()
 
     m_uviaMinSize.SetValue( m_BrdSettings->m_MicroViasMinSize );
     m_uviaMinDrill.SetValue( m_BrdSettings->m_MicroViasMinDrill );
+
+    m_silkClearance.SetValue( m_BrdSettings->m_SilkClearance );
 
     return true;
 }
@@ -127,6 +130,8 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
 
     m_BrdSettings->m_MicroViasMinSize = m_uviaMinSize.GetValue();
     m_BrdSettings->m_MicroViasMinDrill = m_uviaMinDrill.GetValue();
+
+    m_BrdSettings->m_SilkClearance = m_silkClearance.GetValue();
 
     return true;
 }

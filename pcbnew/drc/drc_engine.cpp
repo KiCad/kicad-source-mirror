@@ -92,7 +92,7 @@ void DRC_ENGINE::loadImplicitRules()
 
     // 1) global defaults
 
-    DRC_RULE* rule = createImplicitRule( _( "board setup constraints" ));
+    DRC_RULE* rule = createImplicitRule( _( "board setup constraints" ) );
 
     DRC_CONSTRAINT clearanceConstraint( DRC_CONSTRAINT_TYPE_CLEARANCE );
     clearanceConstraint.Value().SetMin( bds.m_MinClearance );
@@ -126,13 +126,15 @@ void DRC_ENGINE::loadImplicitRules()
     holeClearanceConstraint.Value().SetMin( 0 );
     rule->AddConstraint( courtyardClearanceConstraint );
 
-    DRC_CONSTRAINT silkToPadClearanceConstraint( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE );
-    silkToPadClearanceConstraint.Value().SetMin( 0 );
-    rule->AddConstraint( silkToPadClearanceConstraint );
-
     DRC_CONSTRAINT diffPairGapConstraint( DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP );
     diffPairGapConstraint.Value().SetMin( bds.GetDefault()->GetClearance() );
     rule->AddConstraint( diffPairGapConstraint );
+
+    rule = createImplicitRule( _( "board setup constraints" ) );
+    rule->m_LayerCondition = LSET( 2, F_SilkS, B_SilkS );
+    DRC_CONSTRAINT silkClearanceConstraint( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE );
+    silkClearanceConstraint.Value().SetMin( bds.m_SilkClearance );
+    rule->AddConstraint( silkClearanceConstraint );
 
 
     // 2) micro-via specific defaults (new DRC doesn't treat microvias in any special way)

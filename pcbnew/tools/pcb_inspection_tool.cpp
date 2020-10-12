@@ -277,13 +277,13 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                                         "No clearance defined." ),
                                      m_frame->GetBoard()->GetLayerName( layer ) ) );
     }
-    else if( !a->GetLayerSet().test( layer ) )
+    else if( !( a->GetLayerSet() & LSET( 2, layer, Edge_Cuts ) ).any() )
     {
         r->Report( wxString::Format( _( "%s not present on layer %s.  No clearance defined." ),
                                      a->GetSelectMenuText( r->GetUnits() ),
                                      m_frame->GetBoard()->GetLayerName( layer ) ) );
     }
-    else if( !b->GetLayerSet().test( layer ) )
+    else if( !( b->GetLayerSet() & LSET( 2, layer, Edge_Cuts ) ).any() )
     {
         r->Report( wxString::Format( _( "%s not present on layer %s.  No clearance defined." ),
                                      b->GetSelectMenuText( r->GetUnits() ),

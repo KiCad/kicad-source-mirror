@@ -143,6 +143,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_MicroViasMinDrill   = Millimeter2iu( DEFAULT_MICROVIASMINDRILL );
     m_CopperEdgeClearance = Millimeter2iu( DEFAULT_COPPEREDGECLEARANCE );
     m_HoleToHoleMin       = Millimeter2iu( DEFAULT_HOLETOHOLEMIN );
+    m_SilkClearance       = Millimeter2iu( DEFAULT_SILKCLEARANCE );
 
     for( int errorCode = DRCE_FIRST; errorCode <= DRCE_LAST; ++errorCode )
         m_DRCSeverities[ errorCode ] = RPT_SEVERITY_ERROR;
@@ -221,6 +222,10 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_hole_to_hole", &m_HoleToHoleMin,
             Millimeter2iu( DEFAULT_HOLETOHOLEMIN ), Millimeter2iu( 0.00 ), Millimeter2iu( 10.0 ),
+            MM_PER_IU ) );
+
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_silk_clearance", &m_SilkClearance,
+            Millimeter2iu( DEFAULT_SILKCLEARANCE ), Millimeter2iu( 0.00 ), Millimeter2iu( 100.0 ),
             MM_PER_IU ) );
 
     // Note: a clearance of -0.01 is a flag indicating we should use the legacy (pre-6.0) method
@@ -646,6 +651,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_MicroViasMinDrill      = aOther.m_MicroViasMinDrill;
     m_CopperEdgeClearance    = aOther.m_CopperEdgeClearance;
     m_HoleToHoleMin          = aOther.m_HoleToHoleMin;
+    m_SilkClearance          = aOther.m_SilkClearance;
     m_DRCSeverities          = aOther.m_DRCSeverities;
     m_DrcExclusions          = aOther.m_DrcExclusions;
     m_ZoneFillVersion        = aOther.m_ZoneFillVersion;
@@ -946,6 +952,12 @@ void BOARD_DESIGN_SETTINGS::SetMinHoleSeparation( int aDistance )
 void BOARD_DESIGN_SETTINGS::SetCopperEdgeClearance( int aDistance )
 {
     m_CopperEdgeClearance = aDistance;
+}
+
+
+void BOARD_DESIGN_SETTINGS::SetSilkClearance( int aDistance )
+{
+    m_SilkClearance = aDistance;
 }
 
 
