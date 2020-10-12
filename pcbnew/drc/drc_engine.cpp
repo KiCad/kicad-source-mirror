@@ -177,17 +177,12 @@ void DRC_ENGINE::loadImplicitRules()
     auto makeNetclassRules =
             [&]( const NETCLASSPTR& nc, bool isDefault )
             {
-                // Note: only add constraints for netclass values which are larger than board
-                // minimums. (This ensures that the board minimums will still enforce a global
-                // lower bound.)
-
                 wxString ncName = nc->GetName();
 
                 DRC_RULE* rule;
                 wxString  expr;
 
-                if( nc->GetClearance() > bds.m_MinClearance
-                        || nc->GetTrackWidth() > bds.m_TrackMinWidth )
+                if( nc->GetClearance() || nc->GetTrackWidth() )
                 {
                     rule = new DRC_RULE;
                     rule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
@@ -198,18 +193,19 @@ void DRC_ENGINE::loadImplicitRules()
                     rule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassClearanceRules.push_back( rule );
 
-                    if( nc->GetClearance() > bds.m_MinClearance )
+                    if( nc->GetClearance() )
                     {
-                        DRC_CONSTRAINT ncClearanceConstraint( DRC_CONSTRAINT_TYPE_CLEARANCE );
-                        ncClearanceConstraint.Value().SetMin( nc->GetClearance() );
-                        rule->AddConstraint( ncClearanceConstraint );
+                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_CLEARANCE );
+                        constraint.Value().SetMin( std::max( bds.m_MinClearance, nc->GetClearance() ) );
+                        rule->AddConstraint( constraint );
                     }
 
-                    if( nc->GetTrackWidth() > bds.m_TrackMinWidth )
+                    if( nc->GetTrackWidth() )
                     {
-                        DRC_CONSTRAINT ncWidthConstraint( DRC_CONSTRAINT_TYPE_TRACK_WIDTH );
-                        ncWidthConstraint.Value().SetMin( nc->GetTrackWidth() );
-                        rule->AddConstraint( ncWidthConstraint );
+                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_TRACK_WIDTH );
+                        constraint.Value().SetMin( bds.m_TrackMinWidth );
+                        constraint.Value().SetOpt( nc->GetTrackWidth() );
+                        rule->AddConstraint( constraint );
                     }
                 }
 
@@ -227,20 +223,21 @@ void DRC_ENGINE::loadImplicitRules()
                     if( nc->GetDiffPairWidth() )
                     {
                         DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_TRACK_WIDTH );
-                        constraint.Value().SetMin( nc->GetDiffPairWidth() );
+                        constraint.Value().SetMin( bds.m_TrackMinWidth );
+                        constraint.Value().SetOpt( nc->GetDiffPairWidth() );
                         rule->AddConstraint( constraint );
                     }
 
                     if( nc->GetDiffPairGap() )
                     {
                         DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP );
-                        constraint.Value().SetMin( nc->GetDiffPairGap() );
+                        constraint.Value().SetMin( std::max( bds.m_MinClearance, nc->GetClearance() ) );
+                        constraint.Value().SetOpt( nc->GetDiffPairGap() );
                         rule->AddConstraint( constraint );
                     }
                 }
 
-                if( nc->GetViaDiameter() > bds.m_ViasMinSize
-                        || nc->GetViaDrill() > bds.m_MinThroughDrill )
+                if( nc->GetViaDiameter() || nc->GetViaDrill() )
                 {
                     rule = new DRC_RULE;
                     rule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
@@ -251,23 +248,24 @@ void DRC_ENGINE::loadImplicitRules()
                     rule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( rule );
 
-                    if( nc->GetViaDiameter() > bds.m_ViasMinSize )
+                    if( nc->GetViaDiameter() )
                     {
                         DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_VIA_DIAMETER );
-                        constraint.Value().SetMin( nc->GetViaDiameter() );
+                        constraint.Value().SetMin( bds.m_ViasMinSize );
+                        constraint.Value().SetOpt( nc->GetViaDiameter() );
                         rule->AddConstraint( constraint );
                     }
 
-                    if( nc->GetViaDrill() > bds.m_MinThroughDrill )
+                    if( nc->GetViaDrill() )
                     {
                         DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_HOLE_SIZE );
-                        constraint.Value().SetMin( nc->GetViaDrill() );
+                        constraint.Value().SetMin( bds.m_MinThroughDrill );
+                        constraint.Value().SetOpt( nc->GetViaDrill() );
                         rule->AddConstraint( constraint );
                     }
                 }
 
-                if( nc->GetuViaDiameter() > bds.m_MicroViasMinSize
-                        || nc->GetuViaDrill() > bds.m_MicroViasMinDrill )
+                if( nc->GetuViaDiameter() || nc->GetuViaDrill() )
                 {
                     rule = new DRC_RULE;
                     rule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
@@ -278,17 +276,19 @@ void DRC_ENGINE::loadImplicitRules()
                     rule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( rule );
 
-                    if( nc->GetuViaDiameter() > bds.m_MicroViasMinSize )
+                    if( nc->GetuViaDiameter() )
                     {
                         DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_VIA_DIAMETER );
+                        constraint.Value().SetMin( bds.m_MicroViasMinSize );
                         constraint.Value().SetMin( nc->GetuViaDiameter() );
                         rule->AddConstraint( constraint );
                     }
 
-                    if( nc->GetuViaDrill() > bds.m_MicroViasMinDrill )
+                    if( nc->GetuViaDrill() )
                     {
                         DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_HOLE_SIZE );
-                        constraint.Value().SetMin( nc->GetuViaDrill() );
+                        constraint.Value().SetMin( bds.m_MicroViasMinDrill );
+                        constraint.Value().SetOpt( nc->GetuViaDrill() );
                         rule->AddConstraint( constraint );
                     }
                 }
