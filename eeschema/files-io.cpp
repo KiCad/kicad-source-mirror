@@ -698,7 +698,7 @@ bool SCH_EDIT_FRAME::SaveProject()
     wxString    fileName = Prj().AbsolutePath( Schematic().Root().GetFileName() );
     wxFileName  fn = fileName;
 
-    if( !fn.IsDirWritable() )
+    if( fn.IsOk() && !fn.IsDirWritable() )
     {
         msg = wxString::Format( _( "Directory \"%s\" is not writable." ), fn.GetPath() );
         DisplayError( this, msg );
@@ -716,6 +716,9 @@ bool SCH_EDIT_FRAME::SaveProject()
 
         // Convert legacy schematics file name extensions for the new format.
         wxFileName tmpFn = screen->GetFileName();
+
+        if( !tmpFn.IsOk() )
+            continue;
 
         if( tmpFn.GetExt() == KiCadSchematicFileExtension )
             continue;
@@ -761,7 +764,7 @@ bool SCH_EDIT_FRAME::SaveProject()
         // Convert legacy schematics file name extensions for the new format.
         wxFileName tmpFn = screen->GetFileName();
 
-        if( tmpFn.GetExt() != KiCadSchematicFileExtension )
+        if( tmpFn.IsOk() && tmpFn.GetExt() != KiCadSchematicFileExtension )
         {
             updateFileType = true;
             tmpFn.SetExt( KiCadSchematicFileExtension );
@@ -771,7 +774,7 @@ bool SCH_EDIT_FRAME::SaveProject()
                 SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
                 wxFileName sheetFileName = sheet->GetFileName();
 
-                if( sheetFileName.GetExt() == KiCadSchematicFileExtension )
+                if( !sheetFileName.IsOk() || sheetFileName.GetExt() == KiCadSchematicFileExtension )
                     continue;
 
                 sheetFileName.SetExt( KiCadSchematicFileExtension );
