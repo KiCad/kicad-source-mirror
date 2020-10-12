@@ -188,6 +188,9 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
             drc_dbg( 10, "BoardT %d %p %s %d\n", boardItem->Type(), boardItem,
                      boardItem->GetClass(), boardItem->GetLayer() );
 
+            if( isInvisibleText( boardItem ) )
+                continue;
+
             const std::shared_ptr<SHAPE>& shape = boardItem->GetEffectiveShape();
 
             auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,
