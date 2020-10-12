@@ -23,6 +23,7 @@
 
 #include <common.h>
 #include <class_board.h>
+#include <pcb_shape.h>
 
 #include <geometry/polygon_test_point_inside.h>
 #include <geometry/seg.h>
@@ -120,6 +121,12 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
                     return false;
 
+                if ( isInvisibleText( aRefItem->parent ) )
+                    return true;
+
+                if ( isInvisibleText( aTestItem->parent ) )
+                    return true;
+
                 auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,
                                                                   aRefItem->parent,
                                                                   aTestItem->parent,
@@ -132,47 +139,28 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
                 if( minClearance == 0 )
                 {
-                    // MinClearance == 0 means the author didn't specify anything and we want to
-                    // use heuristics for a silk : silk collision.
+                    // MinClearance == 0 means the author didn't specify anything and we want
+                    // to perform a basic silk : silk collision test.
                     //
-                    // MinClearance > 0 means we're in an author-specified condition that the
-                    // rule matched, and we don't want any heuristics.
-
-                    // We know that aLayers.first is a silk layer, so we just need to check that
+                    // aLayers.first is always a silk layer, so we just need to check that
                     // aLayers.second matches.
+                    //
                     if( aLayers.second != aLayers.first )
                         return true;
+                }
 
-                    KICAD_T refType = aRefItem->parent->Type();
-                    KICAD_T testType = aTestItem->parent->Type();
+                // Graphics are often compound shapes so ignore collisions between shapes in a
+                // single footprint or on the board.
+                PCB_SHAPE* refGraphic = dynamic_cast<PCB_SHAPE*>( aRefItem->parent );
+                PCB_SHAPE* testGraphic = dynamic_cast<PCB_SHAPE*>( aTestItem->parent );
 
-                    MODULE *parentModRef = nullptr;
-                    MODULE *parentModTest = nullptr;
+                if( refGraphic && testGraphic )
+                {
+                    MODULE *refParentFP = dynamic_cast<MODULE*>( refGraphic->GetParent() );
+                    MODULE *testParentFP = dynamic_cast<MODULE*>( testGraphic->GetParent() );
 
-                    if ( isInvisibleText( aRefItem->parent ) )
+                    if( refParentFP == testParentFP ) // also true when both are nullptr
                         return true;
-
-                    if ( isInvisibleText( aTestItem->parent ) )
-                        return true;
-
-                    if( refType == PCB_FP_SHAPE_T || refType == PCB_FP_TEXT_T )
-                        parentModRef = static_cast<MODULE*> ( aRefItem->parent->GetParent() );
-
-                    if( testType == PCB_FP_SHAPE_T || testType == PCB_FP_TEXT_T )
-                        parentModTest = static_cast<MODULE*> ( aTestItem->parent->GetParent() );
-
-                    // Silkscreen drawings within the same module (or globally on the board)
-                    // don't report clearance errors. Everything else does.
-                    if( parentModRef && parentModRef == parentModTest )
-                    {
-                        if( refType == PCB_FP_SHAPE_T && testType == PCB_FP_SHAPE_T )
-                            return true;
-                    }
-                    else if( !parentModRef && !parentModTest )
-                    {
-                        if( refType == PCB_SHAPE_T && testType == PCB_SHAPE_T )
-                            return true;
-                    }
                 }
 
                 if( !aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual, &pos ) )
