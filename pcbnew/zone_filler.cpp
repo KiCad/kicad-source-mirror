@@ -719,6 +719,14 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
     MODULE  dummymodule( m_board );
     D_PAD   dummypad( &dummymodule );
 
+    auto evalRulesForItems =
+            [&]( DRC_CONSTRAINT_TYPE_T aConstraint, const BOARD_ITEM* a, const BOARD_ITEM* b,
+                 PCB_LAYER_ID aLayer ) -> int
+            {
+                DRC_CONSTRAINT c = bds.m_DRCEngine->EvalRulesForItems( aConstraint, a, b, aLayer );
+                return c.Value().HasMin() ? c.Value().Min() : 0;
+            };
+
     // Add non-connected pad clearances
     //
     for( MODULE* module : m_board->Modules() )
@@ -744,9 +752,14 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                     // for pads having the same netcode as the zone, the net clearance has no
                     // meaning so use the greater of the zone clearance and the thermal relief
                     if( pad->GetNetCode() > 0 && pad->GetNetCode() == aZone->GetNetCode() )
+                    {
                         gap = std::max( zone_clearance, aZone->GetThermalReliefGap( pad ) );
+                    }
                     else
-                        gap = aZone->GetClearance( aLayer, pad );
+                    {
+                        gap = evalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aZone, pad,
+                                                 aLayer );
+                    }
 
                     addKnockout( pad, aLayer, gap, aHoles );
                 }
@@ -766,7 +779,9 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
         if( track->GetBoundingBox().Intersects( zone_boundingbox ) )
         {
-            int gap = aZone->GetClearance( aLayer, track ) + extra_margin;
+            int gap = evalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aZone, track, aLayer );
+
+            gap += extra_margin;
 
             if( track->Type() == PCB_VIA_T )
             {
@@ -801,18 +816,16 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
                 if( aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
-                    PCB_LAYER_ID layer = aLayer;
-                    bool ignoreLineWidth = false;
+                    int gap = evalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aZone, aItem,
+                                                 aLayer );
 
                     if( aItem->IsOnLayer( Edge_Cuts ) )
                     {
-                        layer = Edge_Cuts;
-                        ignoreLineWidth = true;
+                        gap = std::max( gap, evalRulesForItems( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
+                                                                aZone, aItem, Edge_Cuts ) );
                     }
 
-                    int  gap = aZone->GetClearance( aLayer, aItem ) + extra_margin;
-
-                    addKnockout( aItem, layer, gap, ignoreLineWidth, aHoles );
+                    addKnockout( aItem, aLayer, gap, aItem->IsOnLayer( Edge_Cuts ), aHoles );
                 }
             };
 
@@ -847,7 +860,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                     }
                     else
                     {
-                        int gap = aZone->GetClearance( aLayer, aKnockout );
+                        int gap = evalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aZone,
+                                                     aKnockout, aLayer );
 
                         if( bds.m_ZoneFillVersion == 5 )
                         {

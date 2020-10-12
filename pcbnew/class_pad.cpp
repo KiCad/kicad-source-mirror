@@ -641,35 +641,6 @@ int D_PAD::GetLocalClearance( wxString* aSource ) const
 }
 
 
-int D_PAD::GetClearance( PCB_LAYER_ID aLayer, BOARD_ITEM* aItem, wxString* aSource ) const
-{
-    DRC_CONSTRAINT constraint;
-
-    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
-    {
-        BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
-        DRC_CONSTRAINT_TYPE_T  constraintType = DRC_CONSTRAINT_TYPE_CLEARANCE;
-
-        // A PTH pad has a plated cylinder around the hole so copper clearances apply
-        // whether or not there's a flashed pad.  Not true for NPTHs.
-        if( GetAttribute() == PAD_ATTRIB_NPTH && !FlashLayer( aLayer ) )
-            constraintType = DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE;
-
-        constraint = bds.m_DRCEngine->EvalRulesForItems( constraintType, this, aItem, aLayer );
-    }
-
-    if( constraint.Value().HasMin() )
-    {
-        if( aSource )
-            *aSource = constraint.GetName();
-
-        return constraint.Value().Min();
-    }
-
-    return 0;
-}
-
-
 // Mask margins handling:
 
 int D_PAD::GetSolderMaskMargin() const

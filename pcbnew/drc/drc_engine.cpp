@@ -565,6 +565,19 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
      * kills performance when running bulk DRC tests (where aReporter is nullptr).
      */
 
+    if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
+    {
+        // A PTH pad has a plated cylinder around the hole so copper clearances apply
+        // whether or not there's a flashed pad.  Not true for NPTHs.
+        if( a->Type() == PCB_PAD_T )
+        {
+            const D_PAD* pad = static_cast<const D_PAD*>( a );
+
+            if( pad->GetAttribute() == PAD_ATTRIB_NPTH && !pad->FlashLayer( aLayer ) )
+                aConstraintId = DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE;
+        }
+    }
+
     const BOARD_CONNECTED_ITEM* connectedA = dynamic_cast<const BOARD_CONNECTED_ITEM*>( a );
     const BOARD_CONNECTED_ITEM* connectedB = dynamic_cast<const BOARD_CONNECTED_ITEM*>( b );
     const DRC_CONSTRAINT*       constraintRef = nullptr;
@@ -616,13 +629,38 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
             REPORT( "" )
 
-            if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE
-                    || aConstraintId == DRC_CONSTRAINT_TYPE_SILK_CLEARANCE
-                    || aConstraintId == DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE
-                    || aConstraintId == DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE )
+            if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
             {
                 int clearance = rcons->constraint.m_Value.Min();
                 REPORT( wxString::Format( _( "Checking %s; clearance: %s." ),
+                                          rcons->constraint.GetName(),
+                                          MessageTextFromValue( UNITS, clearance ) ) )
+            }
+            else if( aConstraintId == DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE )
+            {
+                int clearance = rcons->constraint.m_Value.Min();
+                REPORT( wxString::Format( _( "Checking %s; courtyard clearance: %s." ),
+                                          rcons->constraint.GetName(),
+                                          MessageTextFromValue( UNITS, clearance ) ) )
+            }
+            else if( aConstraintId == DRC_CONSTRAINT_TYPE_SILK_CLEARANCE )
+            {
+                int clearance = rcons->constraint.m_Value.Min();
+                REPORT( wxString::Format( _( "Checking %s; silk clearance: %s." ),
+                                          rcons->constraint.GetName(),
+                                          MessageTextFromValue( UNITS, clearance ) ) )
+            }
+            else if( aConstraintId == DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE )
+            {
+                int clearance = rcons->constraint.m_Value.Min();
+                REPORT( wxString::Format( _( "Checking %s; hole clearance: %s." ),
+                                          rcons->constraint.GetName(),
+                                          MessageTextFromValue( UNITS, clearance ) ) )
+            }
+            else if( aConstraintId == DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE )
+            {
+                int clearance = rcons->constraint.m_Value.Min();
+                REPORT( wxString::Format( _( "Checking %s; edge clearance: %s." ),
                                           rcons->constraint.GetName(),
                                           MessageTextFromValue( UNITS, clearance ) ) )
             }
@@ -638,7 +676,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                 {
                     REPORT( wxString::Format( _( "Rule layer \"%s\" not matched." ),
                                               rcons->parentRule->m_LayerSource ) )
-                    REPORT( "Rule not applied." )
+                    REPORT( "Rule ignored." )
                 }
 
                 continue;
@@ -663,7 +701,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
                 if( rcons->condition->EvaluateFor( a, b, aLayer, aReporter ) )
                 {
-                    REPORT( implicit ? _( "Constraint applicable." )
+                    REPORT( implicit ? _( "Constraint applied." )
                                      : _( "Rule applied.  (No further rules will be checked.)" ) )
 
                     constraintRef = &rcons->constraint;
@@ -671,8 +709,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                 }
                 else
                 {
-                    REPORT( implicit ? _( "Membership not satisfied; constraint not applicable." )
-                                     : _( "Condition not satisfied; rule not applied." ) )
+                    REPORT( implicit ? _( "Membership not satisfied; constraint ignored." )
+                                     : _( "Condition not satisfied; rule ignored." ) )
                 }
             }
         }

@@ -202,15 +202,25 @@ void PCB_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_TYPE_T aClearanceType,
         return;
     }
 
+    int clearance = 0;
+
+    if( aClearanceType == DRC_CONSTRAINT_TYPE_CLEARANCE )
+    {
+        auto edgeConstraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
+                                                           aA, aB, aLayer, r );
+
+        clearance = edgeConstraint.m_Value.HasMin() ? edgeConstraint.m_Value.Min() : 0;
+    }
+
     auto constraint = drcEngine.EvalRulesForItems( aClearanceType, aA, aB, aLayer, r );
 
-    if( r )
-    {
-        wxString clearance = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
+    if( constraint.m_Value.HasMin() && constraint.m_Value.Min() > clearance )
+        clearance = constraint.m_Value.Min();
 
-        r->Report( "" );
-        r->Report( wxString::Format( _( "Clearance: %s." ), clearance ) );
-    }
+    wxString clearanceStr = StringFromValue( r->GetUnits(), clearance, true );
+
+    r->Report( "" );
+    r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
 }
 
 
@@ -271,12 +281,6 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
         reportClearance( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE, layer, a, b, r );
     }
-    else if( !IsCopperLayer( layer ) )
-    {
-        r->Report( wxString::Format( _( "Active layer (%s) is not a silk or copper layer.  "
-                                        "No clearance defined." ),
-                                     m_frame->GetBoard()->GetLayerName( layer ) ) );
-    }
     else if( !( a->GetLayerSet() & LSET( 2, layer, Edge_Cuts ) ).any() )
     {
         r->Report( wxString::Format( _( "%s not present on layer %s.  No clearance defined." ),
@@ -288,10 +292,6 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         r->Report( wxString::Format( _( "%s not present on layer %s.  No clearance defined." ),
                                      b->GetSelectMenuText( r->GetUnits() ),
                                      m_frame->GetBoard()->GetLayerName( layer ) ) );
-    }
-    else if( !a->IsConnected() )
-    {
-        r->Report( _( "Items have no electrical connections.  No clearance defined." ) );
     }
     else
     {
@@ -320,10 +320,10 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 r->Report( _( "Items belong to the same net. Clearance is 0." ) );
             }
         }
-        else if( ac )
+        else
         {
-            // Different nets (or second unconnected)....
-            reportClearance( DRC_CONSTRAINT_TYPE_CLEARANCE, layer, ac, b, r );
+            // Different nets (or one or both unconnected)....
+            reportClearance( DRC_CONSTRAINT_TYPE_CLEARANCE, layer, a, b, r );
         }
     }
 
