@@ -599,6 +599,11 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     if( is_new )
     {
+        // Link the existing blank board to the new project
+        GetBoard()->SetProject( &Prj() );
+
+        GetBoard()->SetFileName( fullFileName );
+
         OnModify();
     }
     else
