@@ -265,6 +265,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     bool dimmedMode  = m_contrastModeDisplay == HIGH_CONTRAST_MODE::DIMMED;
     bool highlighted = m_highlightEnabled && m_highlightNetcodes.count( netCode );
     bool activeLayer = m_highContrastLayers.count( aLayer );
+    bool selected    = item->IsSelected();
 
     // Apply net color overrides
     if( conItem && m_netColorMode == NET_COLOR_MODE::ALL && IsNetCopperLayer( aLayer ) )
@@ -287,7 +288,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         if( netColor == COLOR4D::UNSPECIFIED )
             netColor = color;
 
-        if( item->IsSelected() )
+        if( selected )
         {
             // Selection brightening overrides highlighting
             netColor.Brighten( m_selectFactor );
@@ -303,7 +304,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 
         color = netColor;
     }
-    else if( !item->IsSelected() && m_highlightEnabled )
+    else if( !selected && m_highlightEnabled )
     {
         // Single net highlight mode
         color = m_highlightNetcodes.count( netCode ) ? m_layerColorsHi[aLayer]
@@ -311,11 +312,11 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     }
 
     // Apply high-contrast dimming
-    if( dimmedMode && !activeLayer && !highlighted )
+    if( dimmedMode && !activeLayer && !highlighted && !selected )
         color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );
 
     // For vias, some layers depend on other layers in high contrast mode
-    if( m_hiContrastEnabled && !item->IsSelected() && item->Type() == PCB_VIA_T &&
+    if( m_hiContrastEnabled && !selected && item->Type() == PCB_VIA_T &&
         ( aLayer == LAYER_VIAS_HOLES   ||
           aLayer == LAYER_VIA_THROUGH  ||
           aLayer == LAYER_VIA_MICROVIA ||
