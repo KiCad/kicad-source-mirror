@@ -151,6 +151,9 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                     if( auto value = getInPcbUnits( entry, "via_diameter" ) )
                         netclass->SetViaDiameter( *value );
 
+                    if( auto value = getInPcbUnits( entry, "via_drill" ) )
+                        netclass->SetViaDrill( *value );
+
                     if( auto value = getInPcbUnits( entry, "microvia_diameter" ) )
                         netclass->SetuViaDiameter( *value );
 
