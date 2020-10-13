@@ -128,12 +128,19 @@ MODULE::MODULE( const MODULE& aModule ) :
     for( PCB_GROUP* group : aModule.Groups() )
     {
         PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( group->Clone() );
+        ptrMap[ group ] = newGroup;
+        Add( newGroup );
+    }
+
+    // Rebuild groups
+    for( PCB_GROUP* group : aModule.Groups() )
+    {
+        PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( ptrMap[ group ] );
+
         const_cast<std::unordered_set<BOARD_ITEM*>*>( &newGroup->GetItems() )->clear();
 
         for( BOARD_ITEM* member : group->GetItems() )
             newGroup->AddItem( ptrMap[ member ] );
-
-        Add( newGroup );
     }
 
     // Copy auxiliary data: 3D_Drawings info
