@@ -75,7 +75,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
     aIDFBoard.GetUserOffset( offX, offY );
 
     // Retrieve segments and arcs from the board
-    for( auto item : aPcb->Drawings() )
+    for( BOARD_ITEM* item : aPcb->Drawings() )
     {
         if( item->Type() != PCB_SHAPE_T || item->GetLayer() != Edge_Cuts )
             continue;
@@ -273,8 +273,7 @@ UseBoundingBox:
  * compiles data for the PLACEMENT section and compiles data for
  * the library ELECTRICAL section.
  */
-static void idf_export_module( BOARD* aPcb, MODULE* aModule,
-        IDF3_BOARD& aIDFBoard )
+static void idf_export_module( BOARD* aPcb, MODULE* aModule, IDF3_BOARD& aIDFBoard )
 {
     // Reference Designator
     std::string crefdes = TO_UTF8( aModule->Reference().GetShownText() );
@@ -294,9 +293,9 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
     // TODO: If module cutouts are supported we must add code here
     // for( EDA_ITEM* item = aModule->GraphicalItems();  item != NULL;  item = item->Next() )
     // {
-    // if( ( item->Type() != PCB_FP_SHAPE_T )
-    // || (item->GetLayer() != Edge_Cuts ) ) continue;
-    // code to export cutouts
+    //     if( item->Type() != PCB_FP_SHAPE_T || item->GetLayer() != Edge_Cuts )
+    //         continue;
+    //     code to export cutouts
     // }
 
     // Export pads

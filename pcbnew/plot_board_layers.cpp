@@ -56,6 +56,7 @@
 static void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                                  const PCB_PLOT_PARAMS& aPlotOpt, int aMinThickness );
 
+
 void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                         const PCB_PLOT_PARAMS& aPlotOpt )
 {
@@ -381,17 +382,17 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     aPlotter->StartBlock( NULL );
 
-    for( auto track : aBoard->Tracks() )
+    for( TRACK* track : aBoard->Tracks() )
     {
-        const VIA* Via = dyn_cast<const VIA*>( track );
+        const VIA* via = dyn_cast<const VIA*>( track );
 
-        if( !Via )
+        if( !via )
             continue;
 
         // vias are not plotted if not on selected layer, but if layer is SOLDERMASK_LAYER_BACK
         // or SOLDERMASK_LAYER_FRONT, vias are drawn only if they are on the corresponding
         // external copper layer
-        LSET via_mask_layer = Via->GetLayerSet();
+        LSET via_mask_layer = via->GetLayerSet();
 
         if( aPlotOpt.GetPlotViaOnMaskLayer() )
         {
@@ -415,10 +416,10 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         if( ( aLayerMask & LSET::AllCuMask() ).any() )
             width_adj = itemplotter.getFineWidthAdj();
 
-        int diameter = Via->GetWidth() + 2 * via_margin + width_adj;
+        int diameter = via->GetWidth() + 2 * via_margin + width_adj;
 
         /// Vias not connected to copper are optionally not drawn
-        if( onCopperLayer && !Via->FlashLayer( aLayerMask ) )
+        if( onCopperLayer && !via->FlashLayer( aLayerMask ) )
             continue;
 
         // Don't draw a null size item :
@@ -427,16 +428,16 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
         // Some vias can be not connected (no net).
         // Set the m_NotInNet for these vias to force a empty net name in gerber file
-        gbr_metadata.m_NetlistMetadata.m_NotInNet = Via->GetNetname().IsEmpty();
+        gbr_metadata.m_NetlistMetadata.m_NotInNet = via->GetNetname().IsEmpty();
 
-        gbr_metadata.SetNetName( Via->GetNetname() );
+        gbr_metadata.SetNetName( via->GetNetname() );
 
         COLOR4D color = aPlotOpt.ColorSettings()->GetColor(
-                LAYER_VIAS + static_cast<int>( Via->GetViaType() ) );
+                LAYER_VIAS + static_cast<int>( via->GetViaType() ) );
         // Set plot color (change WHITE to LIGHTGRAY because the white items are not seen on a
         // white paper or screen
         aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY );
-        aPlotter->FlashPadCircle( Via->GetStart(), diameter, plotMode, &gbr_metadata );
+        aPlotter->FlashPadCircle( via->GetStart(), diameter, plotMode, &gbr_metadata );
     }
 
     aPlotter->EndBlock( NULL );
@@ -444,7 +445,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
 
     // Plot tracks (not vias) :
-    for( auto track : aBoard->Tracks() )
+    for( TRACK* track : aBoard->Tracks() )
     {
         if( track->Type() == PCB_VIA_T )
             continue;
@@ -464,15 +465,19 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         {
             ARC* arc = static_cast<ARC*>( track );
             VECTOR2D center( arc->GetCenter() );
-            auto radius = arc->GetRadius();
-            auto start_angle = arc->GetArcAngleStart();
-            auto end_angle = start_angle + arc->GetAngle();
+            int radius = arc->GetRadius();
+            double start_angle = arc->GetArcAngleStart();
+            double end_angle = start_angle + arc->GetAngle();
 
             aPlotter->ThickArc( wxPoint( center.x, center.y ), -end_angle, -start_angle,
                                 radius, width, plotMode, &gbr_metadata );
         }
         else
-            aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode, &gbr_metadata );
+        {
+            aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode,
+                                    &gbr_metadata );
+        }
+
     }
 
     aPlotter->EndBlock( NULL );
@@ -480,85 +485,28 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     // Plot filled ares
     aPlotter->StartBlock( NULL );
 
-    // Plot all zones of the same layer & net together so we don't end up with divots where
-    // zones touch each other.
-    std::set<std::pair<PCB_LAYER_ID, ZONE_CONTAINER*>> plotted;
-
     NETINFO_ITEM nonet( aBoard );
 
     for( ZONE_CONTAINER* zone : aBoard->Zones() )
     {
-        int outlineThickness = zone->GetFilledPolysUseThickness() ? zone->GetMinThickness() : 0;
-
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
-            auto pair = std::make_pair( layer, zone );
-
-            if( !aLayerMask[layer] || plotted.count( pair )  )
+            if( !aLayerMask[layer] )
                 continue;
 
-            plotted.insert( pair );
-
-            SHAPE_POLY_SET aggregateArea = zone->GetFilledPolysList( layer );
+            SHAPE_POLY_SET mainArea = zone->GetFilledPolysList( layer );
             SHAPE_POLY_SET islands;
-            bool needFracture = false; // If 2 or more filled areas are combined, resulting
-                                       // aggregateArea will be simplified and fractured
-                                       // (Long calculation time)
 
-            for( int i = aggregateArea.OutlineCount() - 1; i >= 0; i-- )
+            for( int i = mainArea.OutlineCount() - 1; i >= 0; i-- )
             {
                 if( zone->IsIsland( layer, i ) )
                 {
-                    islands.AddOutline( aggregateArea.CPolygon( i )[0] );
-                    aggregateArea.DeletePolygon( i );
+                    islands.AddOutline( mainArea.CPolygon( i )[0] );
+                    mainArea.DeletePolygon( i );
                 }
             }
 
-            for( ZONE_CONTAINER* candidate : aBoard->Zones() )
-            {
-                if( !candidate->IsOnLayer( layer ) )
-                    continue;
-
-                auto candidate_pair = std::make_pair( layer, candidate );
-
-                if( plotted.count( candidate_pair ) )
-                    continue;
-
-                if( candidate->GetNetCode() != zone->GetNetCode() )
-                    continue;
-
-                // Merging zones of the same net can be done only for areas having compatible
-                // settings for filling as the merged zone can only have a single setting.
-                int candidateOutlineThickness = candidate->GetFilledPolysUseThickness() ?
-                                                    candidate->GetMinThickness() : 0;
-
-                if( candidateOutlineThickness != outlineThickness )
-                    continue;
-
-                plotted.insert( candidate_pair );
-
-                SHAPE_POLY_SET candidateArea = candidate->GetFilledPolysList( layer );
-
-                for( int i = candidateArea.OutlineCount() - 1; i >= 0; i-- )
-                {
-                    if( candidate->IsIsland( layer, i ) )
-                    {
-                        islands.AddOutline( candidateArea.CPolygon( i )[0] );
-                        candidateArea.DeletePolygon( i );
-                    }
-                }
-
-                aggregateArea.Append( candidateArea );
-                needFracture = true;
-            }
-
-            if( needFracture )
-            {
-                aggregateArea.Unfracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-                aggregateArea.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-            }
-
-            itemplotter.PlotFilledAreas( zone, aggregateArea );
+            itemplotter.PlotFilledAreas( zone, mainArea );
 
             if( !islands.IsEmpty() )
             {
@@ -568,6 +516,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             }
         }
     }
+
     aPlotter->EndBlock( NULL );
 
     // Adding drill marks, if required and if the plotter is able to plot them:

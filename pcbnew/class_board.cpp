@@ -996,10 +996,10 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
     bool     showInvisibleText = IsElementVisible( LAYER_MOD_TEXT_INVISIBLE )
                                  && PgmOrNull() && !PgmOrNull()->m_Printing;
 
-    // Check segments, dimensions, texts, and fiducials
+    // Check shapes, dimensions, texts, and fiducials
     for( BOARD_ITEM* item : m_drawings )
     {
-        if( aBoardEdgesOnly && ( item->GetLayer() != Edge_Cuts ) )
+        if( aBoardEdgesOnly && ( item->GetLayer() != Edge_Cuts || item->Type() != PCB_SHAPE_T ) )
             continue;
 
         if( ( item->GetLayerSet() & visible ).any() )
@@ -1016,7 +1016,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         {
             for( const BOARD_ITEM* edge : module->GraphicalItems() )
             {
-                if( edge->GetLayer() == Edge_Cuts )
+                if( edge->GetLayer() == Edge_Cuts  && edge->Type() == PCB_FP_SHAPE_T )
                     area.Merge( edge->GetBoundingBox() );
             }
         }

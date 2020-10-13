@@ -185,7 +185,7 @@ PANEL_MODEDIT_DEFAULTS::PANEL_MODEDIT_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame, PA
 
     attr = new wxGridCellAttr;
     attr->SetRenderer( new GRID_CELL_LAYER_RENDERER( m_frame ) );
-    attr->SetEditor( new GRID_CELL_LAYER_SELECTOR( m_frame, LSET::ForbiddenTextLayers() ) );
+    attr->SetEditor( new GRID_CELL_LAYER_SELECTOR( m_frame, {} ) );
     m_textItemsGrid->SetColAttr( 2, attr );
 
     // Work around a bug in wxWidgets where it fails to recalculate the grid height

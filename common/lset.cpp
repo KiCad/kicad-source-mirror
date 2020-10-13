@@ -879,14 +879,7 @@ LSET LSET::BackMask()
 
 LSET LSET::ForbiddenFootprintLayers()
 {
-    static const LSET saved = InternalCuMask().set( Margin );
-    return saved;
-}
-
-
-LSET LSET::ForbiddenTextLayers()
-{
-    static const LSET saved( 1, Edge_Cuts );
+    static const LSET saved = InternalCuMask();
     return saved;
 }
 

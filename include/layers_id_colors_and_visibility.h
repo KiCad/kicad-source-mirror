@@ -658,11 +658,6 @@ public:
     static LSET ForbiddenFootprintLayers();
 
     /**
-     * Layers which are allowed to have text on them.  Currently Edge.Cuts and Margin.
-     */
-    static LSET ForbiddenTextLayers();
-
-    /**
      * Return a sequence of copper layers in starting from the front/top
      * and extending to the back/bottom.  This specific sequence is depended upon
      * in numerous places.

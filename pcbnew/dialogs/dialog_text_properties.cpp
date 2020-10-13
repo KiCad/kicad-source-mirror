@@ -110,7 +110,6 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
         m_LayerSelectionCtrl->ShowNonActivatedLayers( true );
 
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
-    m_LayerSelectionCtrl->SetNotAllowedLayerSet( LSET::ForbiddenTextLayers() );
     m_LayerSelectionCtrl->SetBoardFrame( m_Parent );
     m_LayerSelectionCtrl->Resync();
 
@@ -269,12 +268,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         m_statusLine->Show( false );
     }
 
-    if( m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() ) < 0 )
-    {
-        wxMessageBox( _( "This item was on a non-existing layer.\n"
-                         "It has been moved to the first layer." ) );
-        m_LayerSelectionCtrl->SetSelection( 0 );
-    }
+    m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
 
     m_textWidth.SetValue( m_edaText->GetTextSize().x );
     m_textHeight.SetValue( m_edaText->GetTextSize().y );

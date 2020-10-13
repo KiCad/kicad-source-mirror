@@ -751,9 +751,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                 PCB_LAYER_ID layer = m_frame->GetActiveLayer();
 
-                if( layer == Edge_Cuts )        // dimensions are not allowed on EdgeCuts
-                    layer = Dwgs_User;
-
                 // Init the new item attributes
                 auto setMeasurementAttributes =
                         [&]( DIMENSION* aDim )
@@ -2107,8 +2104,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             for( ZONE_CONTAINER* zone : m_board->Zones() )
             {
                 for( PCB_LAYER_ID layer : LSET( zone->GetLayerSet() & lset ).Seq() )
+                {
                     if( zone->HitTestFilledArea( layer, position ) )
                         foundZones.push_back( zone );
+                }
             }
 
             std::sort( foundZones.begin(), foundZones.end(),

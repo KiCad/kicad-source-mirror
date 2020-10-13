@@ -318,8 +318,8 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( MODULE* aModule )
 
         textLayer = textItem->GetLayer();
 
-        if( textLayer >= PCB_LAYER_ID_COUNT )
-            return;
+        if( textLayer == Edge_Cuts || textLayer >= PCB_LAYER_ID_COUNT )
+            continue;
 
         if( !m_layerMask[textLayer] )
             continue;
@@ -342,17 +342,31 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
     {
         switch( item->Type() )
         {
-        case PCB_SHAPE_T:          PlotPcbShape( (PCB_SHAPE*) item);    break;
-        case PCB_TEXT_T:           PlotPcbText( (PCB_TEXT*) item );     break;
+        case PCB_SHAPE_T:
+            PlotPcbShape( (PCB_SHAPE*) item );
+            break;
+
+        case PCB_TEXT_T:
+            if( item->GetLayer() != Edge_Cuts )
+                PlotPcbText( (PCB_TEXT*) item );
+
+            break;
 
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_CENTER_T:
         case PCB_DIM_ORTHOGONAL_T:
-        case PCB_DIM_LEADER_T:     PlotDimension( (DIMENSION*) item );  break;
+        case PCB_DIM_LEADER_T:
+            if( item->GetLayer() != Edge_Cuts )
+                PlotDimension( (DIMENSION*) item );
 
-        case PCB_TARGET_T:         PlotPcbTarget( (PCB_TARGET*) item ); break;
+            break;
 
-        default:                                                        break;
+        case PCB_TARGET_T:
+            PlotPcbTarget( (PCB_TARGET*) item );
+            break;
+
+        default:
+            break;
         }
     }
 }

@@ -102,7 +102,6 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_cbLayerActual->ShowNonActivatedLayers( true );
 
     m_cbLayerActual->SetLayersHotkeys( false );
-    m_cbLayerActual->SetNotAllowedLayerSet( LSET::ForbiddenTextLayers() );
     m_cbLayerActual->SetBoardFrame( aParent );
     m_cbLayerActual->Resync();
 
