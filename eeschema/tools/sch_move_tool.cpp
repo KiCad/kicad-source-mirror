@@ -505,13 +505,13 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
 {
     EE_RTREE&         items = m_frame->GetScreen()->Items();
     EE_RTREE::EE_TYPE itemsOverlapping = items.Overlapping( aOriginalItem->GetBoundingBox() );
-    bool              ptHasJunction = false;
+    bool              ptHasUnselectedJunction = false;
 
     for( SCH_ITEM* item : itemsOverlapping )
     {
-        if( item->Type() == SCH_JUNCTION_T && item->IsConnected( aPoint ) )
+        if( item->Type() == SCH_JUNCTION_T && item->IsConnected( aPoint ) && !item->IsSelected() )
         {
-            ptHasJunction = true;
+            ptHasUnselectedJunction = true;
             break;
         }
     }
@@ -527,9 +527,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         {
         case SCH_LINE_T:
         {
-            // Select the connected end of wires/bus connections that don't have a junction to
-            // isolate them from the drag
-            if( ptHasJunction )
+            // Select the connected end of wires/bus connections that don't have an unselected
+            // junction isolating them from the drag
+            if( ptHasUnselectedJunction )
                 break;
 
             SCH_LINE* testLine = static_cast<SCH_LINE*>( test );
