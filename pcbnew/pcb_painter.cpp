@@ -649,6 +649,8 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         m_gal->BitmapText( netname, textpos, 0.0 );
 
         m_gal->Restore();
+
+        return;
     }
 
     // Choose drawing settings depending on if we are drawing via's pad or hole
