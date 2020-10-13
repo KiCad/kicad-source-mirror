@@ -287,6 +287,9 @@ int D_PAD::GetBoundingRadius() const
 
 void D_PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
 {
+    BOARD* board = GetBoard();
+    int    maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
+
     m_effectiveShape = std::make_shared<SHAPE_COMPOUND>();
     m_effectiveHoleShape = nullptr;
 
@@ -385,15 +388,10 @@ void D_PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     case PAD_SHAPE_CHAMFERED_RECT:
     {
         SHAPE_POLY_SET outline;
-        auto board = GetBoard();
-        int maxError = ARC_HIGH_DEF;
-
-        if( board )
-            maxError = board->GetDesignSettings().m_MaxError;
 
         TransformRoundChamferedRectToPolygon( outline, shapePos, GetSize(), m_orient,
                                               GetRoundRectCornerRadius(), GetChamferRectRatio(),
-                                              GetChamferPositions(), maxError );
+                                              GetChamferPositions(), maxError, ERROR_INSIDE );
 
         add( new SHAPE_SIMPLE( outline.COutline( 0 ) ) );
     }
@@ -421,7 +419,7 @@ void D_PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     // Polygon
     //
     m_effectivePolygon = std::make_shared<SHAPE_POLY_SET>();
-    TransformShapeWithClearanceToPolygon( *m_effectivePolygon, aLayer, 0 );
+    TransformShapeWithClearanceToPolygon( *m_effectivePolygon, aLayer, 0, maxError, ERROR_INSIDE );
 
     // Bounding box and radius
     //

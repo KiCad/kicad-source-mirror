@@ -45,7 +45,8 @@ void process( const BOARD_CONNECTED_ITEM* item, int net )
 
     SHAPE_POLY_SET pset;
 
-    item->TransformShapeWithClearanceToPolygon( pset, UNDEFINED_LAYER, 1, ARC_HIGH_DEF );
+    item->TransformShapeWithClearanceToPolygon( pset, UNDEFINED_LAYER, 1, ARC_HIGH_DEF,
+                                                ERROR_OUTSIDE );
 
     SHAPE_FILE_IO shapeIo; // default = stdout
     shapeIo.Write( &pset );

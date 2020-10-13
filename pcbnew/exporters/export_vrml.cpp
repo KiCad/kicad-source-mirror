@@ -1146,8 +1146,8 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
     {
         SHAPE_POLY_SET polySet;
         const int corner_radius = aPad->GetRoundRectCornerRadius();
-        TransformRoundChamferedRectToPolygon( polySet, wxPoint( 0, 0 ), aPad->GetSize(),
-                0.0, corner_radius, 0.0, 0, ARC_HIGH_DEF );
+        TransformRoundChamferedRectToPolygon( polySet, wxPoint( 0, 0 ), aPad->GetSize(), 0.0,
+                                              corner_radius, 0.0, 0, ARC_HIGH_DEF, ERROR_INSIDE );
         std::vector< wxRealPoint > cornerList;
         // TransformRoundChamferedRectToPolygon creates only one convex polygon
         SHAPE_LINE_CHAIN poly( polySet.Outline( 0 ) );

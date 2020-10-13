@@ -533,7 +533,7 @@ void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
     {
         TransformOvalToPolygon( bufferOutline, aCornerList[ ii - 1 ], aCornerList[ ii ],
-                                aWidth, GetPlotterArcHighDef() );
+                                aWidth, GetPlotterArcHighDef(), ERROR_INSIDE );
     }
 
     // enter the initial polygon:
@@ -620,7 +620,8 @@ void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int 
     {
         std::vector<wxPoint> cornerList;
         SHAPE_POLY_SET outlineBuffer;
-        TransformOvalToPolygon( outlineBuffer, aStart, aEnd, aWidth, GetPlotterArcHighDef() );
+        TransformOvalToPolygon( outlineBuffer, aStart, aEnd, aWidth, GetPlotterArcHighDef(),
+                                ERROR_INSIDE );
         const SHAPE_LINE_CHAIN& path = outlineBuffer.COutline( 0 );
 
         cornerList.reserve( path.PointCount() );
@@ -777,7 +778,7 @@ void DXF_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize
 {
     SHAPE_POLY_SET outline;
     TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient,
-                                 aCornerRadius, 0.0, 0, GetPlotterArcHighDef() );
+                                 aCornerRadius, 0.0, 0, GetPlotterArcHighDef(), ERROR_INSIDE );
 
     // TransformRoundRectToPolygon creates only one convex polygon
     SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );

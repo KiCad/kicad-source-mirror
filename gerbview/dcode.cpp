@@ -306,7 +306,8 @@ void D_CODE::ConvertShapeToPolygon()
     switch( m_Shape )
     {
     case APT_CIRCLE:        // creates only a circle with rectangular hole
-        TransformCircleToPolygon( m_Polygon, initialpos, m_Size.x >> 1, ARC_HIGH_DEF );
+        TransformCircleToPolygon( m_Polygon, initialpos, m_Size.x >> 1, ARC_HIGH_DEF,
+                                  ERROR_INSIDE );
         addHoleToPolygon( &m_Polygon, m_DrillShape, m_Drill, initialpos );
         break;
 
@@ -428,7 +429,8 @@ static void addHoleToPolygon( SHAPE_POLY_SET*       aPolygon,
 
     if( aHoleShape == APT_DEF_ROUND_HOLE )
     {
-        TransformCircleToPolygon( holeBuffer, wxPoint( 0, 0 ), aSize.x / 2, ARC_HIGH_DEF );
+        TransformCircleToPolygon( holeBuffer, wxPoint( 0, 0 ), aSize.x / 2, ARC_HIGH_DEF,
+                                  ERROR_INSIDE );
     }
     else if( aHoleShape == APT_DEF_RECT_HOLE )
     {

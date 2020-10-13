@@ -128,8 +128,8 @@ void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
 
 
 void BOARD_ITEM::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                       PCB_LAYER_ID aLayer,
-                                                       int aClearanceValue, int aError,
+                                                       PCB_LAYER_ID aLayer, int aClearanceValue,
+                                                       int aError, ERROR_LOC aErrorLoc,
                                                        bool ignoreLineWidth ) const
 {
     wxASSERT_MSG( false, "Called TransformShapeWithClearanceToPolygon() on unsupported BOARD_ITEM." );

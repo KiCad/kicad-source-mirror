@@ -338,7 +338,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
     // Output the outline perimeter as polygon.
     if( graphic->GetShape() == S_CIRCLE )
     {
-        TransformCircleToPolygon( aPolygons, graphic->GetCenter(), graphic->GetRadius(), aTolerance );
+        TransformCircleToPolygon( aPolygons, graphic->GetCenter(), graphic->GetRadius(),
+                                  ARC_LOW_DEF, ERROR_INSIDE );
     }
     else if( graphic->GetShape() == S_RECT )
     {

@@ -349,7 +349,7 @@ void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
     {
         D_PAD dummy( *aPad );
         dummy.SetSize( aPad->GetSize() + aClearanceValue + aClearanceValue );
-        dummy.TransformShapeWithClearanceToPolygon( poly, aLayer, 0 );
+        dummy.TransformShapeWithClearanceToPolygon( poly, aLayer, 0, ARC_HIGH_DEF, ERROR_INSIDE );
         aClearanceValue = { 0, 0 };
     }
     else
@@ -683,7 +683,8 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_SHAPE* aDrawSegm
             SHAPE_POLY_SET polyList;
 
             aDrawSegment->TransformShapeWithClearanceToPolygon( polyList, aLayerId,
-                                                                aClearanceValue );
+                                                                aClearanceValue,
+                                                                ARC_HIGH_DEF, ERROR_INSIDE );
 
             polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
 
@@ -736,7 +737,8 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_SHAPE* aDrawSegm
     {
         SHAPE_POLY_SET polyList;
 
-        aDrawSegment->TransformShapeWithClearanceToPolygon( polyList, aLayerId, aClearanceValue );
+        aDrawSegment->TransformShapeWithClearanceToPolygon( polyList, aLayerId, aClearanceValue,
+                                                            ARC_HIGH_DEF, ERROR_INSIDE );
 
         polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
 

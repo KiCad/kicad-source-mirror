@@ -38,6 +38,13 @@
 class EDA_RECT;
 
 /**
+ * When approximating an arc or circle, should the error be placed on the outside
+ * or inside of the curve?  (Generally speaking filled shape errors go on the inside
+ * and knockout errors go on the outside.  This preserves minimum clearances.)
+ */
+enum ERROR_LOC { ERROR_OUTSIDE, ERROR_INSIDE };
+
+/**
  * @return the number of segments to approximate a arc by segments
  * with a given max error (this number is >= 1)
  * @param aRadius is the radius od the circle or arc

@@ -1227,7 +1227,7 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
     {
         SHAPE_POLY_SET outline;
         TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient,
-                                     aCornerRadius, 0.0, 0, GetPlotterArcHighDef() );
+                                     aCornerRadius, 0.0, 0, GetPlotterArcHighDef(), ERROR_INSIDE );
 
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, &gbr_metadata );
         outline.Inflate( -GetCurrentLineWidth()/2, 16 );
@@ -1489,10 +1489,9 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const wxPoint& aShapePos, const w
     if( aPlotMode != FILLED || hasRoundedCorner || m_gerberDisableApertMacros )
 #endif
     {
-        TransformRoundChamferedRectToPolygon( outline, aShapePos, aPadSize,
-                                              aPadOrient, aCornerRadius,
-                                              aChamferRatio,
-                                              aChamferPositions, m_IUsPerDecimil * 2 );
+        TransformRoundChamferedRectToPolygon( outline, aShapePos, aPadSize, aPadOrient,
+                                              aCornerRadius, aChamferRatio, aChamferPositions,
+                                              GetPlotterArcHighDef(), ERROR_INSIDE );
 
         // Build the corner list
         const SHAPE_LINE_CHAIN& corners = outline.Outline(0);
@@ -1535,9 +1534,9 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const wxPoint& aShapePos, const w
     }
 
     // Build the chamfered polygon (4 to 8 corners )
-    TransformRoundChamferedRectToPolygon( outline, wxPoint( 0, 0 ), aPadSize,
-                                          0.0, 0, aChamferRatio,
-                                          aChamferPositions, 0 );
+    TransformRoundChamferedRectToPolygon( outline, wxPoint( 0, 0 ), aPadSize, 0.0, 0,
+                                          aChamferRatio, aChamferPositions,
+                                          GetPlotterArcHighDef(), ERROR_INSIDE );
 
     // Build the corner list
     const SHAPE_LINE_CHAIN& corners = outline.Outline(0);

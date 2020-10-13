@@ -25,12 +25,10 @@
 #ifndef CONVERT_BASIC_SHAPES_TO_POLYGON_H
 #define CONVERT_BASIC_SHAPES_TO_POLYGON_H
 
-/**
- * @file convert_basic_shapes_to_polygon.h
- */
-
 #include <geometry/shape_poly_set.h>
+#include <geometry/geometry_utils.h>
 #include <wx/gdicmn.h>      // for wxPoint
+
 
 // The chamfer positions of chamfered rect shape.
 // the position is relative to a pad with orientation = 0
@@ -38,13 +36,15 @@
 // The position list is the OR of corner to chamfer
 enum RECT_CHAMFER_POSITIONS : int
 {
-    RECT_NO_CHAMFER = 0,
-    RECT_CHAMFER_TOP_LEFT = 1,
-    RECT_CHAMFER_TOP_RIGHT = 2,
-    RECT_CHAMFER_BOTTOM_LEFT = 4,
+    RECT_NO_CHAMFER           = 0,
+    RECT_CHAMFER_TOP_LEFT     = 1,
+    RECT_CHAMFER_TOP_RIGHT    = 2,
+    RECT_CHAMFER_BOTTOM_LEFT  = 4,
     RECT_CHAMFER_BOTTOM_RIGHT = 8,
-    RECT_CHAMFER_ALL = RECT_CHAMFER_BOTTOM_RIGHT | RECT_CHAMFER_BOTTOM_LEFT
-                     | RECT_CHAMFER_TOP_RIGHT | RECT_CHAMFER_TOP_LEFT
+    RECT_CHAMFER_ALL = RECT_CHAMFER_BOTTOM_RIGHT
+                     | RECT_CHAMFER_BOTTOM_LEFT
+                     | RECT_CHAMFER_TOP_RIGHT
+                     | RECT_CHAMFER_TOP_LEFT
 };
 
 
@@ -55,11 +55,10 @@ enum RECT_CHAMFER_POSITIONS : int
  * @param aCenter = the center of the circle
  * @param aRadius = the radius of the circle
  * @param aError = the IU allowed for error in approximation
- * Note: the polygon is inside the circle, so if you want to have the polygon
- * outside the circle, you should give aRadius calculated with a correction factor
+ * @param aErrorLoc = should the approximation error be placed outside or inside the polygon?
  */
 void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, int aRadius,
-                               int aError );
+                               int aError, ERROR_LOC aErrorLoc );
 
 
 /**
@@ -75,9 +74,10 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, i
  * @param aEnd = the second point of the segment
  * @param aWidth = the width of the segment
  * @param aError = the IU allowed for error in approximation
+ * @param aErrorLoc = should the approximation error be placed outside or inside the polygon?
  */
 void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aEnd,
-                             int aWidth, int aError );
+                             int aWidth, int aError, ERROR_LOC aErrorLoc );
 
 
 /**
@@ -112,11 +112,13 @@ void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius, const wxPoint&
  *  8 = BOTTOM_RIGHT
  * One can have more than one chamfered corner by ORing the corner identifers
  * @param aError = the IU allowed for error in approximation
+ * @param aErrorLoc = should the approximation error be placed outside or inside the polygon?
  */
 void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                            const wxPoint& aPosition, const wxSize& aSize,
                                            double aRotation, int aCornerRadius,
-                                           double aChamferRatio, int aChamferCorners, int aError );
+                                           double aChamferRatio, int aChamferCorners,
+                                           int aError, ERROR_LOC aErrorLoc );
 
 /**
  * Function TransformArcToPolygon
@@ -126,11 +128,12 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * @param aCentre = centre of the arc or circle
  * @param aStart = start point of the arc, or a point on the circle
  * @param aArcAngle = arc angle in 0.1 degrees. For a circle, aArcAngle = 3600
- * @param aError = the IU allowed for error in approximation
  * @param aWidth = width (thickness) of the line
+ * @param aError = the IU allowed for error in approximation
+ * @param aErrorLoc = should the approximation error be placed outside or inside the polygon?
  */
 void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, wxPoint aStart,
-                            double aArcAngle, int aError, int aWidth );
+                            double aArcAngle, int aWidth, int aError, ERROR_LOC aErrorLoc );
 
 /**
  * Function TransformRingToPolygon
@@ -139,10 +142,11 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, wxPo
  * @param aCornerBuffer = a buffer to store the polygon
  * @param aCentre = centre of the arc or circle
  * @param aRadius = radius of the circle
- * @param aError = the IU allowed for error in approximation
  * @param aWidth = width (thickness) of the ring
+ * @param aError = the IU allowed for error in approximation
+ * @param aErrorLoc = should the approximation error be placed outside or inside the polygon?
  */
 void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, int aRadius,
-                             int aError, int aWidth );
+                             int aWidth, int aError, ERROR_LOC aErrorLoc );
 
 #endif     // CONVERT_BASIC_SHAPES_TO_POLYGON_H

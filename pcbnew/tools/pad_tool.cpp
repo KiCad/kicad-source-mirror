@@ -613,31 +613,36 @@ PCB_LAYER_ID PAD_TOOL::explodePad( D_PAD* aPad )
 
 void PAD_TOOL::recombinePad( D_PAD* aPad )
 {
-    auto findNext = [&]( PCB_LAYER_ID aLayer ) -> FP_SHAPE*
-                    {
-                        SHAPE_POLY_SET padPoly;
-                        aPad->TransformShapeWithClearanceToPolygon( padPoly, aLayer, 0 );
+    int  maxError = board()->GetDesignSettings().m_MaxError;
 
-                        for( BOARD_ITEM* item : board()->GetFirstModule()->GraphicalItems() )
-                        {
-                            PCB_SHAPE* draw = dynamic_cast<PCB_SHAPE*>( item );
+    auto findNext =
+            [&]( PCB_LAYER_ID aLayer ) -> FP_SHAPE*
+            {
+                SHAPE_POLY_SET padPoly;
+                aPad->TransformShapeWithClearanceToPolygon( padPoly, aLayer, 0, maxError,
+                                                            ERROR_INSIDE );
 
-                            if( !draw || ( draw->GetEditFlags() & STRUCT_DELETED ) )
-                                continue;
+                for( BOARD_ITEM* item : board()->GetFirstModule()->GraphicalItems() )
+                {
+                    PCB_SHAPE* draw = dynamic_cast<PCB_SHAPE*>( item );
 
-                            if( draw->GetLayer() != aLayer )
-                                continue;
+                    if( !draw || ( draw->GetEditFlags() & STRUCT_DELETED ) )
+                        continue;
 
-                            SHAPE_POLY_SET drawPoly;
-                            draw->TransformShapeWithClearanceToPolygon( drawPoly, aLayer, 0 );
-                            drawPoly.BooleanIntersection( padPoly, SHAPE_POLY_SET::PM_FAST );
+                    if( draw->GetLayer() != aLayer )
+                        continue;
 
-                            if( !drawPoly.IsEmpty() )
-                                return (FP_SHAPE*) item;
-                        }
+                    SHAPE_POLY_SET drawPoly;
+                    draw->TransformShapeWithClearanceToPolygon( drawPoly, aLayer, 0, maxError,
+                                                                ERROR_INSIDE );
+                    drawPoly.BooleanIntersection( padPoly, SHAPE_POLY_SET::PM_FAST );
 
-                        return nullptr;
-                    };
+                    if( !drawPoly.IsEmpty() )
+                        return (FP_SHAPE*) item;
+                }
+
+                return nullptr;
+            };
 
     BOARD_COMMIT commit( frame() );
     PCB_LAYER_ID layer;
@@ -666,7 +671,8 @@ void PAD_TOOL::recombinePad( D_PAD* aPad )
             // to a polygon primitive
             SHAPE_POLY_SET existingOutline;
             int maxError = board()->GetDesignSettings().m_MaxError;
-            aPad->TransformShapeWithClearanceToPolygon( existingOutline, layer, 0, maxError );
+            aPad->TransformShapeWithClearanceToPolygon( existingOutline, layer, 0, maxError,
+                                                        ERROR_INSIDE );
 
             aPad->SetAnchorPadShape( PAD_SHAPE_CIRCLE );
             wxSize minAnnulus( Millimeter2iu( 0.2 ), Millimeter2iu( 0.2 ) );

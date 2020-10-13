@@ -372,10 +372,12 @@ public:
      * @param aCornerBuffer = a buffer to store the polygon
      * @param aClearanceValue = the clearance around the pad
      * @param aMaxError = maximum error from true when converting arcs
+     * @param aErrorLoc = should the approximation error be placed outside or inside the polygon?
      * @param ignoreLineWidth = used for edge cuts where the line width is only for visualization
      */
-    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, PCB_LAYER_ID aLayer,
-                                               int aClearanceValue, int aMaxError = ARC_HIGH_DEF,
+    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                               PCB_LAYER_ID aLayer, int aClearanceValue,
+                                               int aMaxError, ERROR_LOC aErrorLoc,
                                                bool ignoreLineWidth = false ) const override;
 
     /**
@@ -384,10 +386,11 @@ public:
      * @param aCornerBuffer = a buffer to fill.
      * @param aInflateValue = the clearance or margin value.
      * @param aError = maximum deviation of an arc from the polygon approximation
+     * @param aErrorLoc = should the approximation error be placed outside or inside the polygon?
      * @return false if the pad has no hole, true otherwise
      */
     bool TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aInflateValue,
-                                              int aError = ARC_HIGH_DEF ) const;
+                                              int aError, ERROR_LOC aErrorLoc ) const;
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
@@ -634,7 +637,7 @@ public:
 
 private:
     void addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer,
-                                    int aError ) const;
+                                    int aError, ERROR_LOC aErrorLoc ) const;
 
 private:
     wxString      m_name;               // Pad name (pin number in schematic)

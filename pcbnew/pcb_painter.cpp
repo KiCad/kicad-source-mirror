@@ -858,7 +858,8 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     }
 
     // Pad drawing
-    COLOR4D color;
+    BOARD_DESIGN_SETTINGS& bds = aPad->GetBoard()->GetDesignSettings();
+    COLOR4D                color;
 
     // Pad hole color is pad-type-specific: the background color for plated holes and the
     // pad color for NPTHs.  Note the extra check for "should be" NPTHs to keep mis-marked
@@ -947,7 +948,8 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         else
         {
             SHAPE_POLY_SET polySet;
-            aPad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ), margin.x );
+            aPad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ), margin.x,
+                                                        bds.m_MaxError, ERROR_INSIDE );
             m_gal->DrawPolygon( polySet );
         }
 
@@ -991,13 +993,14 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
                 {
                     SHAPE_POLY_SET polySet;
                     aPad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ),
-                                                                clearance );
+                                                                clearance,
+                                                                bds.m_MaxError, ERROR_OUTSIDE );
                     m_gal->DrawPolygon( polySet );
                 }
             }
             else if( aPad->GetEffectiveHoleShape() )
             {
-                clearance += aPad->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
+                clearance += bds.GetHolePlatingThickness();
 
                 const SHAPE_SEGMENT* seg = aPad->GetEffectiveHoleShape();
                 m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B,

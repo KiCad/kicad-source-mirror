@@ -39,14 +39,15 @@
 
 
 void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, wxPoint aCenter, int aRadius,
-                               int aError )
+                               int aError, ERROR_LOC aErrorLoc )
 {
     wxPoint corner_position;
     int     numSegs = GetArcToSegmentCount( aRadius, aError, 360.0 );
     int     delta = 3600 / numSegs;           // rotate angle in 0.1 degree
-    int     correction = GetCircleToPolyCorrection( aError );
-    int     radius = aRadius + correction;    // make segments outside the circles
-    double  halfstep = delta / 2.0;           // the starting value for rot angles
+    int     radius = aRadius;
+
+    if( aErrorLoc == ERROR_OUTSIDE )
+        radius += GetCircleToPolyCorrection( aError );
 
     for( int angle = 0; angle < 3600; angle += delta )
     {
@@ -62,13 +63,15 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, wxPoint aCenter,
 
 
 void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, int aRadius,
-                               int aError )
+                               int aError, ERROR_LOC aErrorLoc )
 {
     wxPoint corner_position;
     int     numSegs = GetArcToSegmentCount( aRadius, aError, 360.0 );
     int     delta = 3600 / numSegs;           // rotate angle in 0.1 degree
-    int     correction = GetCircleToPolyCorrection( aError );
-    int     radius = aRadius + correction;    // make segments outside the circles
+    int     radius = aRadius;
+
+    if( aErrorLoc == ERROR_OUTSIDE )
+        radius += GetCircleToPolyCorrection( aError );
 
     aCornerBuffer.NewOutline();
 
@@ -90,7 +93,7 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, i
 
 
 void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aEnd,
-                             int aWidth, int aError )
+                             int aWidth, int aError, ERROR_LOC aErrorLoc )
 {
     // To build the polygonal shape outside the actual shape, we use a bigger
     // radius to build rounded ends.
@@ -102,7 +105,8 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPo
     int delta = 3600 / numSegs;   // rotate angle in 0.1 degree
     int correction = GetCircleToPolyCorrection( aError );
 
-    radius += correction;         // make segments outside the circles
+    if( aErrorLoc == ERROR_OUTSIDE )
+        radius += correction;
 
     // end point is the coordinate relative to aStart
     wxPoint        endp = aEnd - aStart;
@@ -218,7 +222,7 @@ void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius, const wxPoint&
 void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aPosition,
                                            const wxSize& aSize, double aRotation,
                                            int aCornerRadius, double aChamferRatio,
-                                           int aChamferCorners, int aError )
+                                           int aChamferCorners, int aError, ERROR_LOC aErrorLoc )
 {
     // Build the basic shape in orientation 0.0, position 0,0 for chamfered corners
     // or in actual position/orientation for round rect only
@@ -244,27 +248,12 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const 
     // radius to build rounded corners.
 
     int correction = GetCircleToPolyCorrection( aError );
-    int radius = aCornerRadius + correction;    // make segments outside the circles
+    int radius = aCornerRadius;
+
+    if( aErrorLoc == ERROR_OUTSIDE )
+        radius += correction;
+
     outline.Inflate( radius, numSegs );
-
-    if( correction > 1.0 )
-    {
-        // Refinement: clamp the inflated polygonal shape by the rectangular shape
-        // containing the rounded polygon
-        SHAPE_POLY_SET bbox;    // the rectangular shape
-        bbox.NewOutline();
-
-        for( const wxPoint& corner : corners )
-            bbox.Append( corner );
-
-        // Just build the rectangular bbox
-        bbox.Inflate( aCornerRadius, 1, SHAPE_POLY_SET::CORNER_STRATEGY::ALLOW_ACUTE_CORNERS );
-
-        // Now, clamp the shape
-        outline.BooleanIntersection( bbox, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-        // Note the final polygon is a simple, convex polygon with no hole
-        // due to the shape of initial polygons
-    }
 
     if( aChamferCorners == RECT_NO_CHAMFER )      // no chamfer
     {
@@ -334,7 +323,7 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const 
 
 
 void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, wxPoint aStart,
-                            double aArcAngle, int aError, int aWidth )
+                            double aArcAngle, int aWidth, int aError, ERROR_LOC aErrorLoc )
 {
     wxPoint arc_start, arc_end;
     int     dist = EuclideanNorm( aCentre - aStart );
@@ -360,34 +349,35 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, wxPo
     {
         curr_end = arc_start;
         RotatePoint( &curr_end, aCentre, -ii );
-        TransformOvalToPolygon( aCornerBuffer, curr_start, curr_end, aWidth, aError );
+        TransformOvalToPolygon( aCornerBuffer, curr_start, curr_end, aWidth, aError, aErrorLoc );
         curr_start = curr_end;
     }
 
     if( curr_end != arc_end )
-        TransformOvalToPolygon( aCornerBuffer, curr_end, arc_end, aWidth, aError );
+        TransformOvalToPolygon( aCornerBuffer, curr_end, arc_end, aWidth, aError, aErrorLoc );
 }
 
 
 void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, int aRadius,
-                             int aError, int aWidth )
+                             int aWidth, int aError, ERROR_LOC aErrorLoc )
 {
     int inner_radius = aRadius - ( aWidth / 2 );
     int outer_radius = inner_radius + aWidth;
 
     if( inner_radius <= 0 )
     {   //In this case, the ring is just a circle (no hole inside)
-        TransformCircleToPolygon( aCornerBuffer, aCentre, aRadius + ( aWidth / 2 ), aError );
+        TransformCircleToPolygon( aCornerBuffer, aCentre, aRadius + ( aWidth / 2 ), aError,
+                                  aErrorLoc );
         return;
     }
 
     SHAPE_POLY_SET buffer;
 
-    TransformCircleToPolygon( buffer, aCentre, outer_radius, aError );
+    TransformCircleToPolygon( buffer, aCentre, outer_radius, aError, aErrorLoc );
 
     // Build the hole:
     buffer.NewHole();
-    TransformCircleToPolygon( buffer.Hole( 0, 0 ), aCentre, inner_radius, aError );
+    TransformCircleToPolygon( buffer.Hole( 0, 0 ), aCentre, inner_radius, aError, aErrorLoc );
 
     buffer.Fracture( SHAPE_POLY_SET::PM_FAST );
     aCornerBuffer.Append( buffer );

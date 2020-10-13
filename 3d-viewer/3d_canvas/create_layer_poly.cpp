@@ -41,7 +41,7 @@ void BOARD_ADAPTER::buildPadShapeThickOutlineAsPolygon( const D_PAD* aPad,
     if( aPad->GetShape() == PAD_SHAPE_CIRCLE )    // Draw a ring
     {
         TransformRingToPolygon( aCornerBuffer, aPad->ShapePos(), aPad->GetSize().x / 2,
-                                ARC_HIGH_DEF, aWidth );
+                                aWidth, ARC_HIGH_DEF, ERROR_INSIDE );
         return;
     }
 
@@ -54,7 +54,8 @@ void BOARD_ADAPTER::buildPadShapeThickOutlineAsPolygon( const D_PAD* aPad,
         const VECTOR2I& a = path.CPoint( ii );
         const VECTOR2I& b = path.CPoint( ii + 1 );
 
-        TransformOvalToPolygon( aCornerBuffer, (wxPoint) a, (wxPoint) b, aWidth, ARC_HIGH_DEF );
+        TransformOvalToPolygon( aCornerBuffer, (wxPoint) a, (wxPoint) b, aWidth, ARC_HIGH_DEF,
+                                ERROR_INSIDE );
     }
 }
 
@@ -70,7 +71,10 @@ void BOARD_ADAPTER::transformGraphicModuleEdgeToPolygonSet( const MODULE *aModul
             FP_SHAPE* outline = (FP_SHAPE*) item;
 
             if( outline->GetLayer() == aLayer )
-                outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0 );
+            {
+                outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
+                                                               ARC_HIGH_DEF, ERROR_INSIDE );
+            }
         }
     }
 }

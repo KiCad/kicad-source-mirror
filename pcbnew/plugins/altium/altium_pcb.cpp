@@ -1541,7 +1541,7 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
             zone->SetDoNotAllowCopperPour( true );
 
             shape.TransformShapeWithClearanceToPolygon( *zone->Outline(), klayer, 0, ARC_HIGH_DEF,
-                                                        false );
+                                                        ERROR_INSIDE );
             zone->Outline()->Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); // the outline is not a single polygon!
 
             zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
@@ -2094,7 +2094,7 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
             zone->SetDoNotAllowCopperPour( true );
 
             shape.TransformShapeWithClearanceToPolygon( *zone->Outline(), klayer, 0, ARC_HIGH_DEF,
-                                                        false );
+                                                        ERROR_INSIDE );
 
             zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                          ZONE_CONTAINER::GetDefaultHatchPitch(), true );

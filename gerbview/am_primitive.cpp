@@ -311,11 +311,14 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent,
             if( outerDiam <= penThickness )
             {   // No room to draw a ring (no room for the hole):
                 // draw a circle instead (with no hole), with the right diameter
-                TransformCircleToPolygon( aShapeBuffer, center, outerDiam / 2, ARC_HIGH_DEF );
+                TransformCircleToPolygon( aShapeBuffer, center, outerDiam / 2, ARC_HIGH_DEF,
+                                          ERROR_INSIDE );
             }
             else
+            {
                 TransformRingToPolygon( aShapeBuffer, center, ( outerDiam - penThickness ) / 2,
-                        ARC_HIGH_DEF, penThickness );
+                                        penThickness, ARC_HIGH_DEF, ERROR_INSIDE );
+            }
         }
 
         // Draw the cross:

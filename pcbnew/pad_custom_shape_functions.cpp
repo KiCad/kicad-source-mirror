@@ -173,12 +173,12 @@ void D_PAD::DeletePrimitivesList()
 
 
 void D_PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer,
-                                       int aError ) const
+                                       int aError, ERROR_LOC aErrorLoc ) const
 {
     SHAPE_POLY_SET polyset;
 
     for( const std::shared_ptr<PCB_SHAPE>& primitive : m_editPrimitives )
-        primitive->TransformShapeWithClearanceToPolygon( polyset, aLayer, 0, aError );
+        primitive->TransformShapeWithClearanceToPolygon( polyset, aLayer, 0, aError, aErrorLoc );
 
     polyset.Simplify( SHAPE_POLY_SET::PM_FAST );
 
@@ -192,11 +192,8 @@ void D_PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER
 
 void D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer ) const
 {
-    auto board = GetBoard();
-    int maxError = ARC_HIGH_DEF;
-
-    if( board )
-        maxError = board->GetDesignSettings().m_MaxError;
+    BOARD* board = GetBoard();
+    int    maxError = board ? board->GetDesignSettings().m_MaxError: ARC_HIGH_DEF;
 
     aMergedPolygon->RemoveAllContours();
 
@@ -213,18 +210,19 @@ void D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_
 
     default:
     case PAD_SHAPE_CIRCLE:
-        TransformCircleToPolygon( *aMergedPolygon, wxPoint( 0, 0 ), GetSize().x / 2, maxError );
+        TransformCircleToPolygon( *aMergedPolygon, wxPoint( 0, 0 ), GetSize().x / 2, maxError,
+                                  ERROR_INSIDE );
         break;
     }
 
-    addPadPrimitivesToPolygon( aMergedPolygon, aLayer, maxError );
+    addPadPrimitivesToPolygon( aMergedPolygon, aLayer, maxError, ERROR_INSIDE );
 }
 
 
 bool D_PAD::GetBestAnchorPosition( VECTOR2I& aPos )
 {
     SHAPE_POLY_SET poly;
-    addPadPrimitivesToPolygon( &poly, UNDEFINED_LAYER, ARC_LOW_DEF );
+    addPadPrimitivesToPolygon( &poly, UNDEFINED_LAYER, ARC_LOW_DEF, ERROR_INSIDE );
 
     if( poly.OutlineCount() > 1 )
         return false;

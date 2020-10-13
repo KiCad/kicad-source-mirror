@@ -392,10 +392,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     const int hole_outer_radius = (holediameter / 2) + GetHolePlatingThicknessBIU();
 
                     TransformCircleToPolygon( *layerOuterHolesPoly, via->GetStart(),
-                            hole_outer_radius, ARC_HIGH_DEF );
+                                              hole_outer_radius, ARC_HIGH_DEF, ERROR_INSIDE );
 
                     TransformCircleToPolygon( *layerInnerHolesPoly, via->GetStart(),
-                            holediameter / 2, ARC_HIGH_DEF );
+                                              holediameter / 2, ARC_HIGH_DEF, ERROR_INSIDE );
                 }
                 else if( curr_layer_id == layer_id[0] ) // it only adds once the THT holes
                 {
@@ -406,17 +406,18 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     // Add through hole contourns
                     // /////////////////////////////////////////////////////////
                     TransformCircleToPolygon( m_through_outer_holes_poly, via->GetStart(),
-                            hole_outer_radius, ARC_HIGH_DEF );
+                                              hole_outer_radius, ARC_HIGH_DEF, ERROR_INSIDE );
 
                     // Add same thing for vias only
 
-                    TransformCircleToPolygon( m_through_outer_holes_vias_poly,
-                            via->GetStart(), hole_outer_radius, ARC_HIGH_DEF );
+                    TransformCircleToPolygon( m_through_outer_holes_vias_poly, via->GetStart(),
+                                              hole_outer_radius, ARC_HIGH_DEF, ERROR_INSIDE );
 
                     if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
                     {
                         TransformCircleToPolygon( m_through_outer_ring_holes_poly,
-                                                  via->GetStart(), hole_outer_ring_radius, ARC_HIGH_DEF );
+                                                  via->GetStart(), hole_outer_ring_radius,
+                                                  ARC_HIGH_DEF, ERROR_INSIDE );
                     }
                 }
             }
@@ -451,7 +452,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     continue;
 
                 // Add the track/via contour
-                track->TransformShapeWithClearanceToPolygon( *layerPoly, curr_layer_id, 0 );
+                track->TransformShapeWithClearanceToPolygon( *layerPoly, curr_layer_id, 0,
+                                                             ARC_HIGH_DEF, ERROR_INSIDE );
             }
         }
     }
@@ -506,17 +508,26 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             if( pad->GetAttribute () != PAD_ATTRIB_NPTH )
             {
                 if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
-                    pad->TransformHoleWithClearanceToPolygon( m_through_outer_ring_holes_poly, inflate );
+                {
+                    pad->TransformHoleWithClearanceToPolygon( m_through_outer_ring_holes_poly,
+                                                              inflate,
+                                                              ARC_HIGH_DEF, ERROR_INSIDE );
+                }
 
-                pad->TransformHoleWithClearanceToPolygon( m_through_outer_holes_poly, inflate );
+                pad->TransformHoleWithClearanceToPolygon( m_through_outer_holes_poly, inflate,
+                                                          ARC_HIGH_DEF, ERROR_INSIDE );
             }
             else
             {
                 // If not plated, no copper.
                 if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
-                    pad->TransformHoleWithClearanceToPolygon( m_through_outer_ring_holes_poly, 0 );
+                {
+                    pad->TransformHoleWithClearanceToPolygon( m_through_outer_ring_holes_poly, 0,
+                                                              ARC_HIGH_DEF, ERROR_INSIDE );
+                }
 
-                pad->TransformHoleWithClearanceToPolygon( m_through_outer_holes_poly_NPTH, 0 );
+                pad->TransformHoleWithClearanceToPolygon( m_through_outer_holes_poly_NPTH, 0,
+                                                          ARC_HIGH_DEF, ERROR_INSIDE );
             }
         }
     }
@@ -535,19 +546,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         {
             // Note: NPTH pads are not drawn on copper layers when the pad
             // has same shape as its hole
-            AddPadsShapesWithClearanceToContainer( module,
-                                                   layerContainer,
-                                                   curr_layer_id,
-                                                   0,
-                                                   true,
-                                                   renderPlatedPadsAsPlated,
-                                                   false );
+            AddPadsShapesWithClearanceToContainer( module, layerContainer, curr_layer_id, 0,
+                                                   true, renderPlatedPadsAsPlated, false );
 
             // Micro-wave modules may have items on copper layers
-            AddGraphicsShapesWithClearanceToContainer( module,
-                                                       layerContainer,
-                                                       curr_layer_id,
-                                                       0 );
+            AddGraphicsShapesWithClearanceToContainer( module, layerContainer, curr_layer_id, 0 );
         }
     }
 
@@ -556,21 +559,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         // ADD PLATED PADS
         for( MODULE* module : m_board->Modules() )
         {
-            AddPadsShapesWithClearanceToContainer( module,
-                                                   m_platedpads_container2D_F_Cu,
-                                                   F_Cu,
-                                                   0,
-                                                   true,
-                                                   false,
-                                                   true );
+            AddPadsShapesWithClearanceToContainer( module, m_platedpads_container2D_F_Cu, F_Cu, 0,
+                                                   true, false, true );
 
-            AddPadsShapesWithClearanceToContainer( module,
-                                                   m_platedpads_container2D_B_Cu,
-                                                   B_Cu,
-                                                   0,
-                                                   true,
-                                                   false,
-                                                   true );
+            AddPadsShapesWithClearanceToContainer( module, m_platedpads_container2D_B_Cu, B_Cu, 0,
+                                                   true, false, true );
         }
     }
 
@@ -589,9 +582,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             {
                 // Note: NPTH pads are not drawn on copper layers when the pad
                 // has same shape as its hole
-                module->TransformPadsShapesWithClearanceToPolygon( curr_layer_id, *layerPoly,
-                                                                   0, ARC_HIGH_DEF, true,
-                                                                   renderPlatedPadsAsPlated,
+                module->TransformPadsShapesWithClearanceToPolygon( *layerPoly, curr_layer_id,
+                                                                   0, ARC_HIGH_DEF, ERROR_INSIDE,
+                                                                   true, renderPlatedPadsAsPlated,
                                                                    false );
 
                 transformGraphicModuleEdgeToPolygonSet( module, curr_layer_id, *layerPoly );
@@ -603,15 +596,15 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             // ADD PLATED PADS contourns
             for( auto module : m_board->Modules() )
             {
-                module->TransformPadsShapesWithClearanceToPolygon( F_Cu, *m_F_Cu_PlatedPads_poly,
-                                                                   0, ARC_HIGH_DEF, true,
-                                                                   false, true );
+                module->TransformPadsShapesWithClearanceToPolygon( *m_F_Cu_PlatedPads_poly, F_Cu,
+                                                                   0, ARC_HIGH_DEF, ERROR_INSIDE,
+                                                                   true, false, true );
 
                 //transformGraphicModuleEdgeToPolygonSet( module, F_Cu, *m_F_Cu_PlatedPads_poly );
 
-                module->TransformPadsShapesWithClearanceToPolygon( B_Cu, *m_B_Cu_PlatedPads_poly,
-                                                                   0, ARC_HIGH_DEF, true,
-                                                                   false, true );
+                module->TransformPadsShapesWithClearanceToPolygon( *m_B_Cu_PlatedPads_poly, B_Cu,
+                                                                   0, ARC_HIGH_DEF, ERROR_INSIDE,
+                                                                   true, false, true );
 
                 //transformGraphicModuleEdgeToPolygonSet( module, B_Cu, *m_B_Cu_PlatedPads_poly );
             }
@@ -636,17 +629,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             {
             case PCB_SHAPE_T:
             {
-                AddShapeWithClearanceToContainer( (PCB_SHAPE*)item,
-                                                  layerContainer,
-                                                  curr_layer_id,
+                AddShapeWithClearanceToContainer( (PCB_SHAPE*)item, layerContainer, curr_layer_id,
                                                   0 );
             }
             break;
 
             case PCB_TEXT_T:
-                AddShapeWithClearanceToContainer( (PCB_TEXT*) item,
-                                                  layerContainer,
-                                                  curr_layer_id,
+                AddShapeWithClearanceToContainer( (PCB_TEXT*) item, layerContainer, curr_layer_id,
                                                   0 );
             break;
 
@@ -654,9 +643,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             case PCB_DIM_CENTER_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
-                AddShapeWithClearanceToContainer( (DIMENSION*) item,
-                                                  layerContainer,
-                                                  curr_layer_id,
+                AddShapeWithClearanceToContainer( (DIMENSION*) item, layerContainer, curr_layer_id,
                                                   0 );
             break;
 
@@ -689,11 +676,15 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                 case PCB_SHAPE_T:
                     ( (PCB_SHAPE*) item )->TransformShapeWithClearanceToPolygon( *layerPoly,
-                                                                                 cur_layer_id, 0 );
+                                                                                 cur_layer_id, 0,
+                                                                                 ARC_HIGH_DEF,
+                                                                                 ERROR_INSIDE );
                     break;
 
                 case PCB_TEXT_T:
-                    ( (PCB_TEXT*) item )->TransformShapeWithClearanceToPolygonSet( *layerPoly, 0 );
+                    ( (PCB_TEXT*) item )->TransformShapeWithClearanceToPolygonSet( *layerPoly, 0,
+                                                                                   ARC_HIGH_DEF,
+                                                                                   ERROR_INSIDE );
                     break;
 
                 default:
@@ -972,11 +963,15 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             {
             case PCB_SHAPE_T:
                 ( (PCB_SHAPE*) item )->TransformShapeWithClearanceToPolygon( *layerPoly,
-                                                                             curr_layer_id, 0 );
+                                                                             curr_layer_id, 0,
+                                                                             ARC_HIGH_DEF,
+                                                                             ERROR_INSIDE );
                 break;
 
             case PCB_TEXT_T:
-                ( (PCB_TEXT*) item )->TransformShapeWithClearanceToPolygonSet( *layerPoly, 0 );
+                ( (PCB_TEXT*) item )->TransformShapeWithClearanceToPolygonSet( *layerPoly, 0,
+                                                                               ARC_HIGH_DEF,
+                                                                               ERROR_INSIDE );
                 break;
 
             default:
@@ -1030,11 +1025,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
             else
             {
-                module->TransformPadsShapesWithClearanceToPolygon( curr_layer_id, *layerPoly, 0 );
+                module->TransformPadsShapesWithClearanceToPolygon( *layerPoly, curr_layer_id, 0,
+                                                                   ARC_HIGH_DEF, ERROR_INSIDE );
             }
 
             // On tech layers, use a poor circle approximation, only for texts (stroke font)
-            module->TransformGraphicTextWithClearanceToPolygonSet( curr_layer_id, *layerPoly, 0 );
+            module->TransformGraphicTextWithClearanceToPolygonSet( *layerPoly, curr_layer_id, 0,
+                                                                   ARC_HIGH_DEF, ERROR_INSIDE );
 
             // Add the remaining things with dynamic seg count for circles
             transformGraphicModuleEdgeToPolygonSet( module, curr_layer_id, *layerPoly );

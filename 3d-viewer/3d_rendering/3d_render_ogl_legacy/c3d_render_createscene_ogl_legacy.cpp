@@ -825,9 +825,10 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
                     const int copperThickness = m_boardAdapter.GetHolePlatingThicknessBIU();
 
                     pad->TransformHoleWithClearanceToPolygon( tht_outer_holes_poly,
-                                                              copperThickness, ARC_LOW_DEF );
-                    pad->TransformHoleWithClearanceToPolygon( tht_inner_holes_poly,
-                                                              0, ARC_LOW_DEF );
+                                                              copperThickness,
+                                                              ARC_LOW_DEF, ERROR_INSIDE );
+                    pad->TransformHoleWithClearanceToPolygon( tht_inner_holes_poly, 0,
+                                                              ARC_LOW_DEF, ERROR_INSIDE );
                 }
             }
         }

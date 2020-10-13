@@ -46,40 +46,48 @@
 // These variables are parameters used in addTextSegmToPoly.
 // But addTextSegmToPoly is a call-back function,
 // so we cannot send them as arguments.
-struct TSEGM_2_POLY_PRMS {
+struct TSEGM_2_POLY_PRMS
+{
     int m_textWidth;
     int m_error;
     SHAPE_POLY_SET* m_cornerBuffer;
 };
+
 TSEGM_2_POLY_PRMS prms;
+
 
 // This is a call back function, used by GRText to draw the 3D text shape:
 static void addTextSegmToPoly( int x0, int y0, int xf, int yf, void* aData )
 {
     TSEGM_2_POLY_PRMS* prm = static_cast<TSEGM_2_POLY_PRMS*>( aData );
     TransformOvalToPolygon( *prm->m_cornerBuffer, wxPoint( x0, y0 ), wxPoint( xf, yf ),
-                            prm->m_textWidth, prm->m_error );
+                            prm->m_textWidth, prm->m_error, ERROR_INSIDE );
 }
 
 
 void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aOutlines )
 {
+    int maxError = GetDesignSettings().m_MaxError;
+
     // convert tracks and vias:
     for( auto track : m_tracks )
     {
         if( !track->IsOnLayer( aLayer ) )
             continue;
 
-        track->TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0 );
+        track->TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
+                                                     ERROR_INSIDE );
     }
 
     // convert pads
-    for( auto module : m_modules )
+    for( MODULE* module : m_modules )
     {
-        module->TransformPadsShapesWithClearanceToPolygon( aLayer, aOutlines, 0 );
+        module->TransformPadsShapesWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
+                                                           ERROR_INSIDE );
 
         // Micro-wave modules may have items on copper layers
-        module->TransformGraphicShapesWithClearanceToPolygonSet( aLayer, aOutlines, 0 );
+        module->TransformGraphicShapesWithClearanceToPolygonSet( aOutlines, aLayer, 0, maxError,
+                                                                 ERROR_INSIDE );
     }
 
     // convert copper zones
@@ -90,7 +98,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
     }
 
     // convert graphic items on copper layers (texts)
-    for( auto item : m_drawings )
+    for( BOARD_ITEM* item : m_drawings )
     {
         if( !item->IsOnLayer( aLayer ) )
             continue;
@@ -98,11 +106,18 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
         switch( item->Type() )
         {
         case PCB_SHAPE_T:
-            ( (PCB_SHAPE*) item )->TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0 );
+        {
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+            shape->TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
+                                                         ERROR_INSIDE );
+        }
             break;
 
         case PCB_TEXT_T:
-            ( (PCB_TEXT*) item )->TransformShapeWithClearanceToPolygonSet( aOutlines, 0 );
+        {
+            PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
+            text->TransformShapeWithClearanceToPolygonSet( aOutlines, 0, maxError, ERROR_INSIDE );
+        }
             break;
 
         default:
@@ -112,9 +127,9 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
 }
 
 
-void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
-                                                        SHAPE_POLY_SET& aCornerBuffer,
-                                                        int aInflateValue, int aMaxError,
+void MODULE::TransformPadsShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                        PCB_LAYER_ID aLayer, int aClearance,
+                                                        int aMaxError, ERROR_LOC aErrorLoc,
                                                         bool aSkipNPTHPadsWihNoCopper,
                                                         bool aSkipPlatedPads,
                                                         bool aSkipNonPlatedPads ) const
@@ -160,7 +175,7 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
         if( aSkipNonPlatedPads && !isPlated )
             continue;
 
-        wxSize clearance( aInflateValue, aInflateValue );
+        wxSize clearance( aClearance, aClearance );
 
         switch( aLayer )
         {
@@ -191,12 +206,13 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
         {
             D_PAD dummy( *pad );
             dummy.SetSize( pad->GetSize() + clearance + clearance );
-            dummy.TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0, aMaxError );
+            dummy.TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
+                                                        aMaxError, aErrorLoc );
         }
         else
         {
             pad->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, clearance.x,
-                                                       aMaxError );
+                                                       aMaxError, aErrorLoc );
         }
     }
 }
@@ -209,10 +225,9 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
  * @aIncludeText = indicates footprint text items (reference, value, etc.) should be included
  *                 in the outline
  */
-void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLayer,
-                                                              SHAPE_POLY_SET& aCornerBuffer,
-                                                              int aInflateValue,
-                                                              int aError,
+void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
+                                                              PCB_LAYER_ID aLayer, int aClearance,
+                                                              int aError, ERROR_LOC aErrorLoc,
                                                               bool aIncludeText,
                                                               bool aIncludeEdges ) const
 {
@@ -233,7 +248,10 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
             FP_SHAPE* outline = static_cast<FP_SHAPE*>( item );
 
             if( aLayer != UNDEFINED_LAYER && outline->GetLayer() == aLayer )
-                outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0, aError );
+            {
+                outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
+                                                               aError, aErrorLoc );
+            }
         }
     }
 
@@ -253,7 +271,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
         bool forceBold = true;
         int  penWidth = 0;      // force max width for bold text
 
-        prms.m_textWidth  = textmod->GetEffectiveTextPenWidth() + ( 2 * aInflateValue );
+        prms.m_textWidth  = textmod->GetEffectiveTextPenWidth() + ( 2 * aClearance );
         prms.m_error = aError;
         wxSize size = textmod->GetTextSize();
 
@@ -339,7 +357,8 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
  * @aError = the maximum error to allow when approximating curves
  */
 void PCB_TEXT::TransformShapeWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
-                                                        int aClearanceValue, int aError ) const
+                                                        int aClearanceValue,
+                                                        int aError, ERROR_LOC aErrorLoc ) const
 {
     wxSize size = GetTextSize();
 
@@ -378,8 +397,8 @@ void PCB_TEXT::TransformShapeWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerB
 
 
 void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                      PCB_LAYER_ID aLayer,
-                                                      int aClearanceValue, int aError,
+                                                      PCB_LAYER_ID aLayer, int aClearanceValue,
+                                                      int aError, ERROR_LOC aErrorLoc,
                                                       bool ignoreLineWidth ) const
 {
     int width = ignoreLineWidth ? 0 : m_Width;
@@ -397,9 +416,15 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
     {
     case S_CIRCLE:
         if( width == 0 )
-            TransformCircleToPolygon( aCornerBuffer, GetCenter(), GetRadius(), aError );
+        {
+            TransformCircleToPolygon( aCornerBuffer, GetCenter(), GetRadius(), aError,
+                                      aErrorLoc );
+        }
         else
-            TransformRingToPolygon( aCornerBuffer, GetCenter(), GetRadius(), aError, width );
+        {
+            TransformRingToPolygon( aCornerBuffer, GetCenter(), GetRadius(), width, aError,
+                                    aErrorLoc );
+        }
         break;
 
     case S_RECT:
@@ -417,20 +442,21 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
         if( width > 0 )
         {
             // Add in segments
-            TransformOvalToPolygon( aCornerBuffer, pts[0], pts[1], width, aError );
-            TransformOvalToPolygon( aCornerBuffer, pts[1], pts[2], width, aError );
-            TransformOvalToPolygon( aCornerBuffer, pts[2], pts[3], width, aError );
-            TransformOvalToPolygon( aCornerBuffer, pts[3], pts[0], width, aError );
+            TransformOvalToPolygon( aCornerBuffer, pts[0], pts[1], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aCornerBuffer, pts[1], pts[2], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aCornerBuffer, pts[2], pts[3], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aCornerBuffer, pts[3], pts[0], width, aError, aErrorLoc );
         }
     }
         break;
 
     case S_ARC:
-        TransformArcToPolygon( aCornerBuffer, GetCenter(), GetArcStart(), m_Angle, aError, width );
+        TransformArcToPolygon( aCornerBuffer, GetCenter(), GetArcStart(), m_Angle, width,
+                               aError, aErrorLoc );
         break;
 
     case S_SEGMENT:
-        TransformOvalToPolygon( aCornerBuffer, m_Start, m_End, width, aError );
+        TransformOvalToPolygon( aCornerBuffer, m_Start, m_End, width, aError, aErrorLoc );
         break;
 
     case S_POLYGON:
@@ -470,7 +496,10 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
                 for( wxPoint pt2 : poly )
                 {
                     if( pt2 != pt1 )
-                        TransformOvalToPolygon( aCornerBuffer, pt1, pt2, width, aError );
+                    {
+                        TransformOvalToPolygon( aCornerBuffer, pt1, pt2, width,
+                                                aError, aErrorLoc );
+                    }
 
                     pt1 = pt2;
                 }
@@ -488,7 +517,10 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
             if( width != 0 )
             {
                 for( unsigned ii = 1; ii < poly.size(); ii++ )
-                    TransformOvalToPolygon( aCornerBuffer, poly[ii-1], poly[ii], width, aError );
+                {
+                    TransformOvalToPolygon( aCornerBuffer, poly[ii-1], poly[ii], width,
+                                            aError, aErrorLoc );
+                }
             }
         }
         break;
@@ -502,8 +534,8 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
 
 
 void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                  PCB_LAYER_ID aLayer,
-                                                  int aClearanceValue, int aError,
+                                                  PCB_LAYER_ID aLayer, int aClearanceValue,
+                                                  int aError, ERROR_LOC aErrorLoc,
                                                   bool ignoreLineWidth ) const
 {
     wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for tracks." );
@@ -514,7 +546,7 @@ void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PCB_VIA_T:
     {
         int radius = ( m_Width / 2 ) + aClearanceValue;
-        TransformCircleToPolygon( aCornerBuffer, m_Start, radius, aError );
+        TransformCircleToPolygon( aCornerBuffer, m_Start, radius, aError, aErrorLoc );
     }
         break;
 
@@ -525,7 +557,8 @@ void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         VECTOR2D   center( arc->GetCenter() );
         double     angle = arc->GetAngle();
 
-        TransformArcToPolygon( aCornerBuffer, (wxPoint) center, GetStart(), angle, aError, width );
+        TransformArcToPolygon( aCornerBuffer, (wxPoint) center, GetStart(), angle, width,
+                               aError, aErrorLoc );
     }
         break;
 
@@ -533,7 +566,7 @@ void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     {
         int width = m_Width + ( 2 * aClearanceValue );
 
-        TransformOvalToPolygon( aCornerBuffer, m_Start, m_End, width, aError );
+        TransformOvalToPolygon( aCornerBuffer, m_Start, m_End, width, aError, aErrorLoc );
     }
         break;
     }
@@ -541,8 +574,8 @@ void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
 
 void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                  PCB_LAYER_ID aLayer,
-                                                  int aClearanceValue, int aError,
+                                                  PCB_LAYER_ID aLayer, int aClearanceValue,
+                                                  int aError, ERROR_LOC aErrorLoc,
                                                   bool ignoreLineWidth ) const
 {
     wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for pads." );
@@ -564,7 +597,8 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PAD_SHAPE_OVAL:
         if( dx == dy )
         {
-            TransformCircleToPolygon( aCornerBuffer, padShapePos, dx + aClearanceValue, aError );
+            TransformCircleToPolygon( aCornerBuffer, padShapePos, dx + aClearanceValue, aError,
+                                      aErrorLoc );
         }
         else
         {
@@ -574,7 +608,7 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
             RotatePoint( &delta, angle );
 
             TransformOvalToPolygon( aCornerBuffer, padShapePos - delta, padShapePos + delta,
-                                    ( half_width + aClearanceValue ) * 2, aError );
+                                    ( half_width + aClearanceValue ) * 2, aError, aErrorLoc );
         }
 
         break;
@@ -619,19 +653,19 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PAD_SHAPE_CHAMFERED_RECT:
     case PAD_SHAPE_ROUNDRECT:
     {
-        int    radius = GetRoundRectCornerRadius() + aClearanceValue;
-        int    clearance = aClearanceValue + GetCircleToPolyCorrection( aError );
+        int    radius = GetRoundRectCornerRadius();
         wxSize shapesize( m_size );
+        bool   doChamfer = GetShape() == PAD_SHAPE_CHAMFERED_RECT;
 
-        radius = radius + GetCircleToPolyCorrection( aError );
-        shapesize.x += clearance * 2;
-        shapesize.y += clearance * 2;
-        bool doChamfer = GetShape() == PAD_SHAPE_CHAMFERED_RECT;
+        radius += aClearanceValue;
+        shapesize.x += aClearanceValue * 2;
+        shapesize.y += aClearanceValue * 2;
 
         SHAPE_POLY_SET outline;
         TransformRoundChamferedRectToPolygon( outline, padShapePos, shapesize, angle, radius,
                                               doChamfer ? GetChamferRectRatio() : 0.0,
-                                              doChamfer ? GetChamferPositions() : 0, aError );
+                                              doChamfer ? GetChamferPositions() : 0,
+                                              aError, aErrorLoc );
 
         aCornerBuffer.Append( outline );
     }
@@ -648,7 +682,10 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         {
             int numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ),
                                                           pad_min_seg_per_circle_count );
-            int clearance = aClearanceValue + GetCircleToPolyCorrection( aError );
+            int clearance = aClearanceValue;
+
+            if( aErrorLoc == ERROR_OUTSIDE )
+                clearance += GetCircleToPolyCorrection( aError );
 
             outline.Inflate( clearance, numSegs );
             outline.Simplify( SHAPE_POLY_SET::PM_FAST );
@@ -669,7 +706,7 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
 
 bool D_PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aInflateValue,
-                                                 int aError ) const
+                                                 int aError, ERROR_LOC aErrorLoc ) const
 {
     wxSize drillsize = GetDrillSize();
 
@@ -679,7 +716,7 @@ bool D_PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, 
     const SHAPE_SEGMENT* seg = GetEffectiveHoleShape();
 
     TransformOvalToPolygon( aCornerBuffer, (wxPoint) seg->GetSeg().A, (wxPoint) seg->GetSeg().B,
-                            seg->GetWidth() + aInflateValue * 2, aError );
+                            seg->GetWidth() + aInflateValue * 2, aError, aErrorLoc );
 
     return true;
 }
@@ -687,7 +724,8 @@ bool D_PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, 
 
 void ZONE_CONTAINER::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                            PCB_LAYER_ID aLayer, int aClearance,
-                                                           int aError, bool ignoreLineWidth ) const
+                                                           int aError, ERROR_LOC aErrorLoc,
+                                                           bool ignoreLineWidth ) const
 {
     wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for zones." );
 

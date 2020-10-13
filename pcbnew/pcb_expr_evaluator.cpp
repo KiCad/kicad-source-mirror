@@ -186,7 +186,8 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
 
         SHAPE_POLY_SET testPoly;
 
-        item->TransformShapeWithClearanceToPolygon( testPoly, context->GetLayer(), 0 );
+        item->TransformShapeWithClearanceToPolygon( testPoly, context->GetLayer(), 0,
+                                                    ARC_LOW_DEF, ERROR_INSIDE );
         testPoly.BooleanIntersection( footprintCourtyard, SHAPE_POLY_SET::PM_FAST );
 
         if( testPoly.OutlineCount() )
@@ -242,7 +243,8 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
     {
         SHAPE_POLY_SET testPoly;
 
-        item->TransformShapeWithClearanceToPolygon( testPoly, context->GetLayer(), 0 );
+        item->TransformShapeWithClearanceToPolygon( testPoly, context->GetLayer(), 0,
+                                                    ARC_LOW_DEF, ERROR_INSIDE );
         testPoly.BooleanIntersection( *zone->Outline(), SHAPE_POLY_SET::PM_FAST );
 
         if( testPoly.OutlineCount() )

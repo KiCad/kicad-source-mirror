@@ -756,6 +756,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                           const PCB_PLOT_PARAMS& aPlotOpt, int aMinThickness )
 {
+    int             maxError = aBoard->GetDesignSettings().m_MaxError;
     PCB_LAYER_ID    layer = aLayerMask[B_Mask] ? B_Mask : F_Mask;
     SHAPE_POLY_SET  buffer;
     SHAPE_POLY_SET* boardOutline = nullptr;
@@ -763,14 +764,10 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     if( aBoard->GetBoardPolygonOutlines( buffer ) )
         boardOutline = &buffer;
 
-    // Set the current arc to segment max approx error
-    int currMaxError = aBoard->GetDesignSettings().m_MaxError;
-    aBoard->GetDesignSettings().m_MaxError = Millimeter2iu( 0.005 );
-
     // We remove 1nm as we expand both sides of the shapes, so allowing for
     // a strictly greater than or equal comparison in the shape separation (boolean add)
     // means that we will end up with separate shapes that then are shrunk
-    int             inflate = aMinThickness/2 - 1;
+    int inflate = aMinThickness/2 - 1;
 
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
     itemplotter.SetLayerSet( aLayerMask );
@@ -814,9 +811,11 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         for( MODULE* module : aBoard->Modules() )
         {
             // add shapes with their exact mask layer size in initialPolys
-            module->TransformPadsShapesWithClearanceToPolygon( layer, initialPolys, 0 );
+            module->TransformPadsShapesWithClearanceToPolygon( initialPolys, layer, 0, maxError,
+                                                               ERROR_OUTSIDE );
             // add shapes inflated by aMinThickness/2 in areas
-            module->TransformPadsShapesWithClearanceToPolygon( layer, areas, inflate );
+            module->TransformPadsShapesWithClearanceToPolygon( areas, layer, inflate, maxError,
+                                                               ERROR_OUTSIDE );
         }
 
         // Plot vias on solder masks, if aPlotOpt.GetPlotViaOnMaskLayer() is true,
@@ -846,9 +845,11 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     continue;
 
                 // add shapes with their exact mask layer size in initialPolys
-                via->TransformShapeWithClearanceToPolygon( initialPolys, layer, via_clearance );
+                via->TransformShapeWithClearanceToPolygon( initialPolys, layer, via_clearance,
+                                                           maxError, ERROR_OUTSIDE );
                 // add shapes inflated by aMinThickness/2 in areas
-                via->TransformShapeWithClearanceToPolygon( areas, layer, via_margin );
+                via->TransformShapeWithClearanceToPolygon( areas, layer, via_margin, maxError,
+                                                           ERROR_OUTSIDE );
             }
         }
 
@@ -870,16 +871,12 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             zone->TransformSmoothedOutlineToPolygon( initialPolys, zone_margin, boardOutline );
         }
 
-        int maxError = aBoard->GetDesignSettings().m_MaxError;
         int numSegs = GetArcToSegmentCount( inflate, maxError, 360.0 );
 
         // Merge all polygons: After deflating, not merged (not overlapping) polygons
         // will have the initial shape (with perhaps small changes due to deflating transform)
         areas.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
         areas.Deflate( inflate, numSegs );
-
-        // Restore initial settings:
-        aBoard->GetDesignSettings().m_MaxError = currMaxError;
     }
 
 #if !NEW_ALGO

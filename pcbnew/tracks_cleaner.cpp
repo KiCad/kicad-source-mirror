@@ -342,17 +342,18 @@ void TRACKS_CLEANER::deleteTracksInPads()
             if( pad->HitTest( track->GetStart() ) && pad->HitTest( track->GetEnd() ) )
             {
                 SHAPE_POLY_SET poly;
-                track->TransformShapeWithClearanceToPolygon( poly, track->GetLayer(), 0 );
+                track->TransformShapeWithClearanceToPolygon( poly, track->GetLayer(), 0,
+                                                             ARC_HIGH_DEF, ERROR_INSIDE );
 
                 poly.BooleanSubtract( *pad->GetEffectivePolygon(), SHAPE_POLY_SET::PM_FAST );
 
                 if( poly.IsEmpty() )
-            {
-                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_TRACK_IN_PAD ) );
-                item->SetItems( track );
-                m_itemsList->push_back( item );
+                {
+                    std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_TRACK_IN_PAD ) );
+                    item->SetItems( track );
+                    m_itemsList->push_back( item );
 
-                toRemove.insert( track );
+                    toRemove.insert( track );
                 }
             }
         }

@@ -598,12 +598,9 @@ public:
                                   wxPoint* aErrorLocation = nullptr );
 
     /**
-     * Build a set of polygons which are the outlines of copper items
-     * (pads, tracks, vias, texts, zones)
-     * Holes in vias or pads are ignored
-     * Useful to export the shape of copper layers to dxf polygons
-     * or 3D viewer
-     * the polygons are not merged.
+     * Build a set of polygons which are the outlines of copper items (pads, tracks, vias, texts,
+     * zones).  Holes in vias or pads are ignored.  The polygons are not merged.
+     * Useful to export the shape of copper layers to dxf polygons or 3D viewer
      * @param aLayer = A copper layer, like B_Cu, etc.
      * @param aOutlines The SHAPE_POLY_SET to fill in with items outline.
      */

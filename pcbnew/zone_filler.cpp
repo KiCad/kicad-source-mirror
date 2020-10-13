@@ -577,7 +577,8 @@ void ZONE_FILLER::addKnockout( D_PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE
     if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
     {
         SHAPE_POLY_SET poly;
-        aPad->TransformShapeWithClearanceToPolygon( poly, aLayer, aGap, m_maxError );
+        aPad->TransformShapeWithClearanceToPolygon( poly, aLayer, aGap, m_maxError,
+                                                    ERROR_OUTSIDE );
 
         // the pad shape in zone can be its convex hull or the shape itself
         if( aPad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
@@ -595,7 +596,8 @@ void ZONE_FILLER::addKnockout( D_PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE
     }
     else
     {
-        aPad->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError );
+        aPad->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
+                                                    ERROR_OUTSIDE );
     }
 }
 
@@ -613,7 +615,7 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
     {
         PCB_SHAPE* shape = (PCB_SHAPE*) aItem;
         shape->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
-                                                     aIgnoreLineWidth );
+                                                     ERROR_OUTSIDE, aIgnoreLineWidth );
         break;
     }
     case PCB_TEXT_T:
@@ -626,7 +628,7 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
     {
         FP_SHAPE* shape = (FP_SHAPE*) aItem;
         shape->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
-                                                     aIgnoreLineWidth );
+                                                     ERROR_OUTSIDE, aIgnoreLineWidth );
         break;
     }
     case PCB_FP_TEXT_T:
@@ -790,16 +792,19 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                 if( !via->FlashLayer( aLayer ) )
                 {
                     int radius = via->GetDrillValue() / 2 + bds.GetHolePlatingThickness() + gap;
-                    TransformCircleToPolygon( aHoles, via->GetPosition(), radius, m_maxError );
+                    TransformCircleToPolygon( aHoles, via->GetPosition(), radius, m_maxError,
+                                              ERROR_OUTSIDE );
                 }
                 else
                 {
-                    via->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap, m_maxError );
+                    via->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap, m_maxError,
+                                                               ERROR_OUTSIDE );
                 }
             }
             else
             {
-                track->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap, m_maxError );
+                track->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap, m_maxError,
+                                                             ERROR_OUTSIDE );
             }
         }
     }
@@ -872,7 +877,9 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                         {
                             // 6.0 uses filled areas with clearance
                             SHAPE_POLY_SET poly;
-                            aKnockout->TransformShapeWithClearanceToPolygon( poly, aLayer, gap );
+                            aKnockout->TransformShapeWithClearanceToPolygon( poly, aLayer, gap,
+                                                                             m_maxError,
+                                                                             ERROR_OUTSIDE );
                             aHoles.Append( poly );
                         }
                     }
@@ -1448,7 +1455,8 @@ void ZONE_FILLER::addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, PCB_LAYER
                     int r = std::max( min_apron_radius,
                                       via->GetDrillValue() / 2 + outline_margin );
 
-                    TransformCircleToPolygon( aprons, via->GetPosition(), r, ARC_HIGH_DEF );
+                    TransformCircleToPolygon( aprons, via->GetPosition(), r, ARC_HIGH_DEF,
+                                              ERROR_OUTSIDE );
                 }
             }
         }
@@ -1474,7 +1482,7 @@ void ZONE_FILLER::addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, PCB_LAYER
 
                     clearance = std::max( 0, clearance - linethickness / 2 );
                     pad->TransformShapeWithClearanceToPolygon( aprons, aLayer, clearance,
-                                                               ARC_HIGH_DEF );
+                                                               ARC_HIGH_DEF, ERROR_OUTSIDE );
                 }
             }
         }

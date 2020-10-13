@@ -349,8 +349,7 @@ public:
      * when a full polygonal approach is needed
      * @param aLayer = the layer to consider, or UNDEFINED_LAYER to consider all
      * @param aCornerBuffer = the buffer to store polygons
-     * @param aInflateValue = an additionnal size to add to pad shapes
-     *          aInflateValue = 0 to have the exact pad size
+     * @param aClearance = an additionnal size to add to pad shapes
      * @param aMaxError = Maximum deviation from true for arcs
      * @param aSkipNPTHPadsWihNoCopper = if true, do not add a NPTH pad shape, if the shape has
      *          same size and position as the hole. Usually, these pads are not drawn on copper
@@ -361,11 +360,12 @@ public:
      * @param aSkipPlatedPads = used on 3D-Viewer to extract plated and nontplated pads.
      * @param aSkipNonPlatedPads = used on 3D-Viewer to extract plated and plated pads.
      */
-    void TransformPadsShapesWithClearanceToPolygon(PCB_LAYER_ID aLayer,
-            SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aMaxError = ARC_HIGH_DEF,
-            bool aSkipNPTHPadsWihNoCopper = false,
-            bool aSkipPlatedPads = false,
-            bool aSkipNonPlatedPads = false ) const;
+    void TransformPadsShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                    PCB_LAYER_ID aLayer,int aClearance,
+                                                    int aMaxError, ERROR_LOC aErrorLoc,
+                                                    bool aSkipNPTHPadsWihNoCopper = false,
+                                                    bool aSkipPlatedPads = false,
+                                                    bool aSkipNonPlatedPads = false ) const;
 
     /**
      * function TransformGraphicShapesWithClearanceToPolygonSet
@@ -375,26 +375,28 @@ public:
      * when a full polygonal approach is needed
      * @param aLayer = the layer to consider, or UNDEFINED_LAYER to consider all
      * @param aCornerBuffer = the buffer to store polygons
-     * @param aInflateValue = a value to inflate shapes
-     *          aInflateValue = 0 to have the exact shape size
+     * @param aClearance = a value to inflate shapes
      * @param aError = Maximum error between true arc and polygon approx
      * @param aIncludeText = True to transform text shapes
      * @param aIncludeEdges = True to transform module shapes
      */
-    void TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLayer,
-            SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError = ARC_HIGH_DEF,
-            bool aIncludeText = true, bool aIncludeEdges = true ) const;
+    void TransformGraphicShapesWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
+                                                          PCB_LAYER_ID aLayer, int aClearance,
+                                                          int aError, ERROR_LOC aErrorLoc,
+                                                          bool aIncludeText = true,
+                                                          bool aIncludeEdges = true ) const;
 
     /**
      * @brief TransformGraphicTextWithClearanceToPolygonSet
      * This function is the same as TransformGraphicShapesWithClearanceToPolygonSet
      * but only generate text
      */
-    void TransformGraphicTextWithClearanceToPolygonSet( PCB_LAYER_ID aLayer,
-            SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError = ARC_HIGH_DEF ) const
+    void TransformGraphicTextWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
+                                                        PCB_LAYER_ID aLayer, int aClearance,
+                                                        int aError, ERROR_LOC aErrorLoc ) const
     {
-        TransformGraphicShapesWithClearanceToPolygonSet( aLayer, aCornerBuffer, aInflateValue,
-                                                         aError, true, false );
+        TransformGraphicShapesWithClearanceToPolygonSet( aCornerBuffer, aLayer, aClearance,
+                                                         aError, aErrorLoc, true, false );
     }
 
     /**

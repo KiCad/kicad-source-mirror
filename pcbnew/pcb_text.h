@@ -116,11 +116,11 @@ public:
      * Used in 3D viewer
      * Circles and arcs are approximated by segments
      * @param aCornerBuffer = a buffer to store the polygon
-     * @param aClearanceValue = the clearance around the text
+     * @param aClearance = the clearance around the text
      * @param aError = deviation from true arc position to segment approx
      */
-    void TransformShapeWithClearanceToPolygonSet(
-            SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue, int aError = ARC_HIGH_DEF ) const;
+    void TransformShapeWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerBuffer, int aClearance,
+                                                  int aError, ERROR_LOC aErrorLoc ) const;
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
