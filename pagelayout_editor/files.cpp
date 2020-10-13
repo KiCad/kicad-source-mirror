@@ -26,14 +26,13 @@
 
 #include <confirm.h>
 #include <gestfich.h>
-#include <ws_draw_item.h>
 #include <ws_data_model.h>
-#include <pl_editor_frame.h>
-#include <properties_frame.h>
-#include <pl_editor_id.h>
 #include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
 
+#include "pl_editor_frame.h"
+#include "pl_editor_id.h"
+#include "properties_frame.h"
 
 bool PL_EDITOR_FRAME::saveCurrentPageLayout()
 {

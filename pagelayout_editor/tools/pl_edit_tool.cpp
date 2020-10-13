@@ -24,18 +24,21 @@
 
 #include <tool/tool_manager.h>
 #include <tool/picker_tool.h>
-#include <tools/pl_selection_tool.h>
-#include <tools/pl_actions.h>
-#include <tools/pl_edit_tool.h>
+#include <ws_data_item.h>
 #include <ws_data_model.h>
 #include <ws_draw_item.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <base_struct.h>
-#include <pl_editor_frame.h>
-#include <pl_editor_id.h>
+#include <view/view.h>
 #include <math/util.h>      // for KiROUND
 
+#include "tools/pl_selection_tool.h"
+#include "tools/pl_actions.h"
+#include "tools/pl_edit_tool.h"
+#include "pl_draw_panel_gal.h"
+#include "pl_editor_frame.h"
+#include "pl_editor_id.h"
 
 PL_EDIT_TOOL::PL_EDIT_TOOL() :
         TOOL_INTERACTIVE( "plEditor.InteractiveEdit" ),

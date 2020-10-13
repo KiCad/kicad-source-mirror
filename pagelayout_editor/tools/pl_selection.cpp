@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <tools/pl_selection.h>
+#include "tools/pl_selection.h"
 
 
 EDA_ITEM* PL_SELECTION::GetTopLeftItem( bool onlyModules ) const

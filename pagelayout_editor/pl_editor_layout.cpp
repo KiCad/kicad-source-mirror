@@ -30,7 +30,7 @@
 #include <climits>
 
 #include <eda_rect.h>
-#include <pl_editor_layout.h>
+#include "pl_editor_layout.h"
 
 PL_EDITOR_LAYOUT::PL_EDITOR_LAYOUT()
 {

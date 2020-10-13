@@ -30,11 +30,12 @@
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tool/selection.h>
-#include <tools/pl_actions.h>
-#include <tools/pl_selection_tool.h>
+#include <widgets/wx_menubar.h>
+
 #include "pl_editor_frame.h"
 #include "pl_editor_id.h"
-#include <widgets/wx_menubar.h>
+#include "tools/pl_actions.h"
+#include "tools/pl_selection_tool.h"
 
 
 void PL_EDITOR_FRAME::ReCreateMenuBar()

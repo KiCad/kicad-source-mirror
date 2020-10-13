@@ -22,10 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pl_editor_frame.h>
 #include <ws_data_item.h>
-#include <dialog_new_dataitem_base.h>
 
+#include "dialog_new_dataitem_base.h"
+#include "pl_editor_frame.h"
 
 class DIALOG_NEW_DATAITEM : public DIALOG_NEW_DATAITEM_BASE
 {

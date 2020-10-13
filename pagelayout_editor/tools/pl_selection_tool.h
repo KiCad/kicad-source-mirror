@@ -27,7 +27,7 @@
 
 #include <tool/tool_interactive.h>
 #include <tool/tool_menu.h>
-#include <tools/pl_selection.h>
+#include "tools/pl_selection.h"
 
 class PL_EDITOR_FRAME;
 class SCH_ITEM;

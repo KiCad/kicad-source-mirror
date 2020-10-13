@@ -29,11 +29,11 @@
 #ifndef  _PROPERTIES_FRAME_H
 #define  _PROPERTIES_FRAME_H
 
-#include <pl_editor_frame.h>
-#include <dialogs/properties_frame_base.h>
-#include <scintilla_tricks.h>
+#include "dialogs/properties_frame_base.h"
 
 class WS_DATA_ITEM;
+class PL_EDITOR_FRAME;
+class SCINTILLA_TRICKS;
 
 /**
  * PROPERTIES_FRAME display properties of the current item.

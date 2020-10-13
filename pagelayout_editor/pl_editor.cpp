@@ -34,9 +34,10 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <pgm_base.h>
-#include <pl_editor_frame.h>
-#include <pl_editor_settings.h>
 #include <settings/settings_manager.h>
+
+#include "pl_editor_frame.h"
+#include "pl_editor_settings.h"
 
 
 namespace PGE {

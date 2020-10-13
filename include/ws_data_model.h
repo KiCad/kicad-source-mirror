@@ -27,11 +27,10 @@
 
 #include <math/vector2d.h>
 #include <eda_text.h>
-#include <eda_text.h>
 #include <bitmap_base.h>
-#include <ws_data_item.h>
 
-
+class WS_DATA_ITEM;
+class PAGE_INFO;
 
 /**
  * WS_DATA_MODEL handles the graphic items list to draw/plot the frame and title block

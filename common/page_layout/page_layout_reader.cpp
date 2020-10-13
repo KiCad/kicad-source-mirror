@@ -32,6 +32,7 @@
 #include <base_struct.h>
 #include <ws_painter.h>
 #include <ws_draw_item.h>
+#include <ws_data_item.h>
 #include <ws_data_model.h>
 #include <page_layout/page_layout_reader_lexer.h>
 

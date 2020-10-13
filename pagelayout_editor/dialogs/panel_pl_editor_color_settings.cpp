@@ -17,13 +17,13 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <pl_editor_settings.h>
-#include <pl_editor_frame.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <view/view.h>
 
 #include "panel_pl_editor_color_settings.h"
+#include "pl_editor_frame.h"
+#include "pl_editor_settings.h"
 
 
 PANEL_PL_EDITOR_COLOR_SETTINGS::PANEL_PL_EDITOR_COLOR_SETTINGS( PL_EDITOR_FRAME* aFrame,

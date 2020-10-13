@@ -25,11 +25,8 @@
 #include <functional>
 using namespace std::placeholders;
 
-#include "pl_point_editor.h"
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
-#include <tools/pl_actions.h>
-#include <tools/pl_selection_tool.h>
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/seg.h>
@@ -37,11 +34,14 @@ using namespace std::placeholders;
 
 #include <bitmaps.h>
 #include <status_popup.h>
-#include <pl_editor_frame.h>
 #include <ws_draw_item.h>
 #include <widgets/progress_reporter.h>
-#include <pl_editor_id.h>
 
+#include "pl_editor_frame.h"
+#include "pl_editor_id.h"
+#include "pl_point_editor.h"
+#include "tools/pl_actions.h"
+#include "tools/pl_selection_tool.h"
 
 // Few constants to avoid using bare numbers for point indices
 enum RECTANGLE_POINTS

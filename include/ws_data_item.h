@@ -33,12 +33,16 @@
 #include <math/vector2d.h>
 #include <eda_text.h>
 #include <bitmap_base.h>
-#include <view/view.h>
 #include "ws_draw_item.h"
 
 class WS_DRAW_ITEM_TEXT;            // Forward declaration
 
 #define TB_DEFAULT_TEXTSIZE 1.5     // default worksheet text size in mm
+
+namespace KIGFX
+{
+class VIEW;
+}
 
 /**
  * A coordinate is relative to a page corner.

@@ -24,9 +24,9 @@
 
 #include <tool/tool_action.h>
 #include <bitmaps.h>
-#include <tools/pl_actions.h>
 #include <ws_data_item.h>
 
+#include "tools/pl_actions.h"
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
 // use the _() macro so that string harvesting by the I18N framework doesn't have to be

@@ -27,13 +27,8 @@
 #include <pgm_base.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
-#include <dialogs/panel_pl_editor_color_settings.h>
-#include <pl_editor_frame.h>
-#include <pl_editor_id.h>
-#include <pl_editor_settings.h>
-#include <pl_draw_panel_gal.h>
+#include <ws_data_item.h>
 #include <ws_data_model.h>
-#include <properties_frame.h>
 #include <widgets/paged_dialog.h>
 #include <panel_gal_display_options.h>
 #include <panel_hotkeys_editor.h>
@@ -43,22 +38,27 @@
 #include <tool/selection.h>
 #include <tool/action_toolbar.h>
 #include <tool/editor_conditions.h>
-#include <tool/selection_conditions.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
 #include <tool/picker_tool.h>
 #include <tool/zoom_tool.h>
-#include <tools/pl_actions.h>
-#include <tools/pl_selection_tool.h>
-#include <tools/pl_drawing_tools.h>
-#include <tools/pl_edit_tool.h>
-#include <tools/pl_point_editor.h>
-#include <invoke_pl_editor_dialog.h>
-#include <tools/pl_editor_control.h>
 #include <widgets/infobar.h>
 #include <settings/settings_manager.h>
+
+#include "dialogs/panel_pl_editor_color_settings.h"
+#include "pl_editor_frame.h"
+#include "pl_editor_id.h"
+#include "pl_editor_settings.h"
+#include "properties_frame.h"
+#include "tools/pl_actions.h"
+#include "tools/pl_selection_tool.h"
+#include "tools/pl_drawing_tools.h"
+#include "tools/pl_edit_tool.h"
+#include "tools/pl_point_editor.h"
+#include "invoke_pl_editor_dialog.h"
+#include "tools/pl_editor_control.h"
 
 BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_CLOSE, PL_EDITOR_FRAME::OnExit )

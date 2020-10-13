@@ -21,10 +21,10 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#include <pl_editor_settings.h>
 #include <settings/parameters.h>
 #include <wx/config.h>
 
+#include "pl_editor_settings.h"
 
 ///! Update the schema version whenever a migration is required
 const int plEditorSchemaVersion = 0;

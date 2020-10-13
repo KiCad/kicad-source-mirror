@@ -27,16 +27,18 @@
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <preview_items/selection_area.h>
-#include <pl_editor_frame.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tool/selection.h>
-#include <tools/pl_actions.h>
+#include <ws_data_item.h>
 #include <ws_data_model.h>
 #include <ws_draw_item.h>
 #include <collector.h>
-#include "pl_selection_tool.h"
 #include <math/util.h>      // for KiROUND
+
+#include "pl_editor_frame.h"
+#include "pl_selection_tool.h"
+#include "tools/pl_actions.h"
 
 /**
  * The maximum number of items in the clarify selection context menu.  The current

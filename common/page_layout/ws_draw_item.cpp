@@ -51,6 +51,7 @@
 #include <eda_rect.h>
 #include <eda_draw_frame.h>
 #include <ws_draw_item.h>
+#include <ws_data_item.h>
 #include <ws_data_model.h>
 #include <base_units.h>
 #include <page_info.h>

@@ -57,6 +57,7 @@
 #include <title_block.h>
 #include <ws_draw_item.h>
 #include <ws_data_model.h>
+#include <ws_data_item.h>
 
 using KIGFX::COLOR4D;
 

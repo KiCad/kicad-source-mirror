@@ -30,9 +30,10 @@
 #include <config_params.h>
 #include <eda_draw_frame.h>
 #include <base_screen.h>
-#include <pl_editor_layout.h>
-#include <pl_draw_panel_gal.h>
+#include "pl_editor_layout.h"
+#include "pl_draw_panel_gal.h"
 
+class PL_DRAW_PANEL_GAL;
 class PROPERTIES_FRAME;
 class WS_DATA_ITEM;
 

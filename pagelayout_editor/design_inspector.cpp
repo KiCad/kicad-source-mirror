@@ -26,13 +26,16 @@
 #include <wx/wupdlock.h>
 
 #include <ws_draw_item.h>
+#include <ws_data_item.h>
 #include <ws_data_model.h>
-#include <pl_editor_id.h>
-#include <design_inspector.h>
 #include <tool/tool_manager.h>
-#include <tools/pl_actions.h>
-#include <tools/pl_selection_tool.h>
-#include <properties_frame.h>
+
+#include "dialogs/dialog_design_inspector_base.h"
+#include "design_inspector.h"
+#include "pl_editor_frame.h"
+#include "properties_frame.h"
+#include "tools/pl_actions.h"
+#include "tools/pl_selection_tool.h"
 
 /* XPM
  * This bitmap is used to show item types

@@ -27,9 +27,9 @@
 #define  _DESIGN_INSPECTOR_H
 
 #include <vector>
-#include <dialog_design_inspector_base.h>
-#include <pl_editor_frame.h>
 
+class DIALOG_INSPECTOR_BASE;
+class PL_EDITOR_FRAME;
 
 /**
  * DESIGN_INSPECTOR is the left window showing the list of items

@@ -22,7 +22,9 @@
  */
 
 #include <ws_proxy_undo_item.h>
+#include <ws_data_item.h>
 #include <ws_data_model.h>
+#include <view/view.h>
 #include <eda_draw_frame.h>
 #include <macros.h>
 

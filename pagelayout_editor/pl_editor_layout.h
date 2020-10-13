@@ -28,7 +28,6 @@
 #ifndef CLASS_PL_EDITOR_LAYOUT_H
 #define CLASS_PL_EDITOR_LAYOUT_H
 
-#include <base_struct.h>
 #include <page_info.h>
 #include <title_block.h>
 #include <ws_draw_item.h>

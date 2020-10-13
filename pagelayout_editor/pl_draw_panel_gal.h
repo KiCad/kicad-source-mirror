@@ -21,9 +21,13 @@
 #define PL_DRAW_PANEL_GAL_H
 
 #include <class_draw_panel_gal.h>
-#include <ws_proxy_view_item.h>
-#include <ws_painter.h>
 
+namespace KIGFX
+{
+    class WS_PROXY_VIEW_ITEM;
+}
+
+class WS_DRAW_ITEM_PAGE;
 
 class PL_DRAW_PANEL_GAL : public EDA_DRAW_PANEL_GAL
 {

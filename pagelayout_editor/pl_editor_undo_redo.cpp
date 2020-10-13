@@ -24,12 +24,12 @@
  */
 
 #include <ws_data_model.h>
-#include <pl_editor_frame.h>
-#include <tool/tool_manager.h>
-#include <tools/pl_selection_tool.h>
 #include <ws_proxy_undo_item.h>
+#include <tool/tool_manager.h>
 #include <tool/actions.h>
 
+#include "pl_editor_frame.h"
+#include "tools/pl_selection_tool.h"
 
 void PL_EDITOR_FRAME::SaveCopyInUndoList()
 {

@@ -27,14 +27,16 @@
  */
 
 #include <base_units.h>
-#include <pl_editor_frame.h>
-#include <pl_editor_id.h>
 #include <dialog_helpers.h>
 #include <ws_draw_item.h>
 #include <ws_data_item.h>
 #include <ws_data_model.h>
+#include <ws_painter.h>
 #include <dialog_page_settings.h>
-#include <invoke_pl_editor_dialog.h>
+
+#include "invoke_pl_editor_dialog.h"
+#include "pl_editor_frame.h"
+#include "pl_editor_id.h"
 
 /**
  * Custom print out for printing schematics.

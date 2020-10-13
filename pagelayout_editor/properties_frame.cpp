@@ -23,14 +23,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <ws_draw_item.h>
-#include <ws_data_model.h>
 #include <project.h>
-#include <properties_frame.h>
-#include <tool/tool_manager.h>
-#include <tools/pl_selection_tool.h>
-#include <pl_draw_panel_gal.h>
 #include <scintilla_tricks.h>
+#include <tool/tool_manager.h>
+#include <ws_draw_item.h>
+#include <ws_data_item.h>
+#include <ws_data_model.h>
+#include <view/view.h>
+
+#include "properties_frame.h"
+#include "pl_draw_panel_gal.h"
+#include "pl_editor_frame.h"
+#include "tools/pl_selection_tool.h"
 
 PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
         PANEL_PROPERTIES_BASE( aParent ),
