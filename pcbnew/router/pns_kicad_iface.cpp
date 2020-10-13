@@ -293,19 +293,20 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
         ok = QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, aA, aB, aA->Layer(),
                               &constraint );
         rv = constraint.m_Value.Opt();
-        printf( "QueryDPCL %d\n", rv );
     }
 
     if( !ok )
     {
         ok = QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, aA->Layer(),
                               &constraint );
-        assert( ok );
         rv = constraint.m_Value.Min();
-        printf( "QueryCL %d\n", rv );
     }
 
-    assert( ok );
+    // still no valid clearance rule? fall back to global minimum.
+    if( !ok )
+    {
+        rv = m_board->GetDesignSettings().m_MinClearance;
+    }
 
     return rv;
 }
