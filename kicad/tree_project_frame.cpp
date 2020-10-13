@@ -1213,7 +1213,7 @@ void TREE_PROJECT_FRAME::FileWatcherReset()
 
         TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
 
-        if( itemData && itemData->GetType() == TREE_DIRECTORY )
+        if( itemData && itemData->GetType() == TREE_FILE_TYPE::DIRECTORY )
         {
             // we can see wxString under a debugger, not a wxFileName
             const wxString& path = itemData->GetFileName();
