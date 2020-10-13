@@ -1036,6 +1036,8 @@ public:
             REUSEBLOCKREF ReuseBlockRef;
             bool          Fixed = false;
 
+            void         ParseIdentifiers( XNODE* aNode );
+            bool         ParseSubNode( XNODE* aChildNode );
             virtual void Parse( XNODE* aNode );
         };
 

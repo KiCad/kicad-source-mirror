@@ -97,6 +97,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
     loadCoppers();
     loadNets();
 
+    
+    if( Layout.Trunks.size() > 0 )
+    {
+        wxLogWarning(
+                _( "The CADSTAR design contains Trunk routing elements, which have no KiCad "
+                   "equivalent. These elements were not loaded." ) );
+    }
+
     if( Layout.VariantHierarchy.Variants.size() > 0 )
     {
         wxLogWarning(

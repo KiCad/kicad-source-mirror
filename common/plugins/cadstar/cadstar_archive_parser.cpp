@@ -1727,28 +1727,45 @@ void CADSTAR_ARCHIVE_PARSER::PARTS::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_ARCHIVE_PARSER::NET::JUNCTION::Parse( XNODE* aNode )
+void CADSTAR_ARCHIVE_PARSER::NET::JUNCTION::ParseIdentifiers( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "JPT" ) );
 
-    ID           = GetXmlAttributeIDString( aNode, 0 );
-    LayerID      = GetXmlAttributeIDString( aNode, 1 );
+    ID      = GetXmlAttributeIDString( aNode, 0 );
+    LayerID = GetXmlAttributeIDString( aNode, 1 );
+}
+
+
+bool CADSTAR_ARCHIVE_PARSER::NET::JUNCTION::ParseSubNode( XNODE* aChildNode )
+{
+    wxString cNodeName = aChildNode->GetName();
+
+    if( cNodeName == wxT( "PT" ) )
+        Location.Parse( aChildNode );
+    else if( cNodeName == wxT( "FIX" ) )
+        Fixed = true;
+    else if( cNodeName == wxT( "GROUPREF" ) )
+        GroupID = GetXmlAttributeIDString( aChildNode, 0 );
+    else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
+        ReuseBlockRef.Parse( aChildNode );
+    else
+        return false;
+
+    return true;
+}
+
+
+void CADSTAR_ARCHIVE_PARSER::NET::JUNCTION::Parse( XNODE* aNode )
+{
+    ParseIdentifiers( aNode );
     XNODE* cNode = aNode->GetChildren();
 
     for( ; cNode; cNode = cNode->GetNext() )
     {
-        wxString cNodeName = cNode->GetName();
-
-        if( cNodeName == wxT( "PT" ) )
-            Location.Parse( cNode );
-        else if( cNodeName == wxT( "FIX" ) )
-            Fixed = true;
-        else if( cNodeName == wxT( "GROUPREF" ) )
-            GroupID = GetXmlAttributeIDString( cNode, 0 );
-        else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
-            ReuseBlockRef.Parse( cNode );
+        if( ParseSubNode( cNode ) )
+            continue;
         else
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
     }
 }
 

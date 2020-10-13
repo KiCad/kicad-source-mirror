@@ -1894,6 +1894,15 @@ CADSTAR_PCB_ARCHIVE_PARSER::TESTLAND_SIDE CADSTAR_PCB_ARCHIVE_PARSER::ParseTestl
 }
 
 
+void CADSTAR_PCB_ARCHIVE_PARSER::TRUNK::Parse( XNODE* aNode )
+{
+    wxASSERT( aNode->GetName() == wxT( "TRUNK" ) );
+
+    ID         = GetXmlAttributeIDString( aNode, 0 );
+    Definition = GetXmlAttributeIDString( aNode, 1 );
+}
+
+
 void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::PIN::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "PIN" ) );
@@ -1902,6 +1911,23 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::PIN::Parse( XNODE* aNode )
     ComponentID = GetXmlAttributeIDString( aNode, 1 );
     PadID       = GetXmlAttributeIDLong( aNode, 2 );
     CheckNoChildNodes( aNode );
+}
+
+
+void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::JUNCTION_PCB::Parse( XNODE* aNode )
+{
+    ParseIdentifiers( aNode );
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        if( ParseSubNode( cNode ) )
+            continue;
+        else if( cNode->GetName() == wxT( "TRUNKREF" ) )
+            TrunkID = GetXmlAttributeIDString( cNode, 0 );
+        else
+            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
+    }
 }
 
 
@@ -1929,6 +1955,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::VIA::Parse( XNODE* aNode )
             ReuseBlockRef.Parse( cNode );
         else if( cNodeName == wxT( "TESTLAND" ) )
             TestlandSide = ParseTestlandSide( cNode );
+        else if( cNode->GetName() == wxT( "TRUNKREF" ) )
+            TrunkID = GetXmlAttributeIDString( cNode, 0 );
         else
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
     }
@@ -2026,6 +2054,10 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::CONNECTION_PCB::Parse( XNODE* aNode )
             Unrouted       = true;
             UnrouteLayerID = GetXmlAttributeIDString( cNode, 0 );
         }
+        else if( cNode->GetName() == wxT( "TRUNKREF" ) )
+        {
+            TrunkID = GetXmlAttributeIDString( cNode, 0 );
+        }
         else
         {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "CONN" ) );
@@ -2045,7 +2077,13 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::Parse( XNODE* aNode )
     {
         wxString cNodeName = cNode->GetName();
 
-        if( ParseSubNode( cNode ) )
+        if( cNodeName == wxT( "JPT" ) )
+        {
+            JUNCTION_PCB jpt;
+            jpt.Parse( cNode );
+            Junctions.insert( std::make_pair( jpt.ID, jpt ) );
+        }
+        else if( ParseSubNode( cNode ) )
         {
             continue;
         }
@@ -2439,6 +2477,12 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYOUT::Parse( XNODE* aNode )
             COMPONENT comp;
             comp.Parse( cNode );
             Components.insert( std::make_pair( comp.ID, comp ) );
+        }
+        else if( cNodeName == wxT( "TRUNK" ) )
+        {
+            TRUNK trunk;
+            trunk.Parse( cNode );
+            Trunks.insert( std::make_pair( trunk.ID, trunk ) );
         }
         else if( cNodeName == wxT( "NET" ) )
         {

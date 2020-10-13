@@ -73,6 +73,7 @@ public:
     typedef long     COPPER_TERM_ID;
     typedef wxString COPPER_ID;
     typedef wxString DRILL_TABLE_ID;
+    typedef wxString TRUNK_ID;
 
     /**
      * @brief Type of layer appropriate for the material being set up
@@ -921,6 +922,15 @@ public:
     };
 
 
+    struct TRUNK
+    {
+        TRUNK_ID ID;
+        wxString Definition; // TODO: more work required to fully parse the TRUNK structure
+
+        void Parse( XNODE* aNode );
+    };
+
+
     struct NET_PCB : CADSTAR_ARCHIVE_PARSER::NET
     {
         struct PIN ///< "PIN" nodename (represents a PAD in a PCB component)
@@ -931,6 +941,13 @@ public:
 
             void Parse( XNODE* aNode );
         };
+        
+        struct JUNCTION_PCB : CADSTAR_ARCHIVE_PARSER::NET::JUNCTION ///< "JPT" nodename
+        {
+            TRUNK_ID TrunkID; ///< TRUNKREF Statements
+
+            void Parse( XNODE* aNode ) override;
+        };
 
         struct VIA ///< "VIA" nodename
         {
@@ -938,6 +955,7 @@ public:
             VIACODE_ID    ViaCodeID;
             LAYERPAIR_ID  LayerPairID;
             POINT         Location;
+            TRUNK_ID      TrunkID;                 ///< TRUNKREF Statements
             GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this VIA is part of a group.
             REUSEBLOCKREF ReuseBlockRef;
             TESTLAND_SIDE TestlandSide = TESTLAND_SIDE::NONE;
@@ -983,11 +1001,13 @@ public:
                                     ///< as opposed to a route (track in KiCad terms)
 
             LAYER_ID UnrouteLayerID = wxEmptyString; ///< See Unrouted member variable.
+            TRUNK_ID TrunkID;                        ///< TRUNKREF Statements
 
             void Parse( XNODE* aNode ) override;
         };
 
         std::map<NETELEMENT_ID, PIN>             Pins;
+        std::map<NETELEMENT_ID, JUNCTION_PCB>    Junctions;
         std::map<NETELEMENT_ID, VIA>             Vias;
         std::map<NETELEMENT_ID, COPPER_TERMINAL> CopperTerminals;
         std::vector<CONNECTION_PCB>              Connections;
@@ -1160,6 +1180,7 @@ public:
         std::map<AREA_ID, AREA>                                 Areas;
         std::map<COMPONENT_ID, COMPONENT>                       Components;
         std::map<DOCUMENTATION_SYMBOL_ID, DOCUMENTATION_SYMBOL> DocumentationSymbols;
+        std::map<TRUNK_ID, TRUNK>                               Trunks;
         std::map<NET_ID, NET_PCB>                               Nets; ///< Contains tracks and vias
         std::map<TEMPLATE_ID, TEMPLATE>                         Templates;
         std::map<COPPER_ID, COPPER>                             Coppers;
