@@ -1130,10 +1130,13 @@ void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
             // Add the new item only if it is not the current project file (root item).
             // Remember: this code is called by a wxFileSystemWatcherEvent event, and not always
             // called after an actual file rename, and the cleanup code does not explore the
-            // root item, because it cannot be renamed by the user.
+            // root item, because it cannot be renamed by the user. Also, ensure the new file actually
+            // exists on the file system before it is readded. On Linux, moving a file to the trash
+            // can cause the same path to be returned in both the old and new paths of the event,
+            // even though the file isn't there anymore.
             TREEPROJECT_ITEM* rootData = GetItemIdData( root_id );
 
-            if( newfn != rootData->GetFileName() )
+            if( newpath.Exists() && ( newfn != rootData->GetFileName() ) )
             {
                 wxTreeItemId newroot_id = findSubdirTreeItem( newdir );
                 wxTreeItemId newitem = AddItemToTreeProject( newfn, newroot_id );
