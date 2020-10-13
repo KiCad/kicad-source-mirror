@@ -548,7 +548,7 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
         aClientFilter( aWhere, collector, this );
 
     // Apply the stateful filter
-    filterCollectedItems( collector );
+    FilterCollectedItems( collector );
 
     FilterCollectorForGroups( collector );
 
@@ -715,7 +715,7 @@ bool SELECTION_TOOL::selectMultiple()
             }
 
             // Apply the stateful filter
-            filterCollectedItems( collector );
+            FilterCollectedItems( collector );
 
             FilterCollectorForGroups( collector );
 
@@ -1481,7 +1481,7 @@ int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::filterCollectedItems( GENERAL_COLLECTOR& aCollector )
+void SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector )
 {
     if( aCollector.GetCount() == 0 )
         return;

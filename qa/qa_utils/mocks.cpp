@@ -734,7 +734,7 @@ int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::filterCollectedItems( GENERAL_COLLECTOR& aCollector )
+void SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector )
 {
  
 }

@@ -537,16 +537,15 @@ int PCB_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
  */
  bool PCB_INSPECTION_TOOL::highlightNet( const VECTOR2D& aPosition, bool aUseSelection )
 {
-    BOARD*                  board = static_cast<BOARD*>( m_toolMgr->GetModel() );
-    KIGFX::RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
+    BOARD*                  board         = static_cast<BOARD*>( m_toolMgr->GetModel() );
+    KIGFX::RENDER_SETTINGS* settings      = getView()->GetPainter()->GetSettings();
+    SELECTION_TOOL*         selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
 
     int net = -1;
     bool enableHighlight = false;
 
     if( aUseSelection )
     {
-        SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-
         const PCBNEW_SELECTION& selection = selectionTool->GetSelection();
 
         for( auto item : selection )
@@ -568,8 +567,11 @@ int PCB_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
     // If we didn't get a net to highlight from the selection, use the cursor
     if( net < 0 )
     {
-        auto guide = m_frame->GetCollectorsGuide();
+        GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
         GENERAL_COLLECTOR collector;
+
+        PCB_LAYER_ID activeLayer = static_cast<PCB_LAYER_ID>( view()->GetTopLayer() );
+        guide.SetPreferredLayer( activeLayer );
 
         // Find a connected item for which we are going to highlight a net
         collector.Collect( board, GENERAL_COLLECTOR::PadsOrTracks, (wxPoint) aPosition, guide );
@@ -577,12 +579,23 @@ int PCB_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
         if( collector.GetCount() == 0 )
             collector.Collect( board, GENERAL_COLLECTOR::Zones, (wxPoint) aPosition, guide );
 
+        // Apply the active selection filter
+        selectionTool->FilterCollectedItems( collector );
+
         // Clear the previous highlight
         m_frame->SendMessageToEESCHEMA( nullptr );
 
+        bool         highContrast  = settings->GetHighContrast();
+        PCB_LAYER_ID contrastLayer = settings->GetPrimaryHighContrastLayer();
+
         for( int i = 0; i < collector.GetCount(); i++ )
         {
-            if( ( collector[i]->GetLayerSet() & LSET::AllCuMask() ).none() )
+            LSET itemLayers = collector[i]->GetLayerSet();
+
+            if( ( itemLayers & LSET::AllCuMask() ).none() )
+                collector.Remove( i );
+
+            if( highContrast && !itemLayers.Contains( contrastLayer ) )
                 collector.Remove( i );
 
             if( collector[i]->Type() == PCB_PAD_T )

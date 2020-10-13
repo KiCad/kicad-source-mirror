@@ -197,6 +197,9 @@ public:
 
     PCB_GROUP* GetEnteredGroup() { return m_enteredGroup; }
 
+    ///> Applies the SELECTION_FILTER_OPTIONS to a collection of items
+    void FilterCollectedItems( GENERAL_COLLECTOR& aCollector );
+
 private:
 
     /**
@@ -306,9 +309,6 @@ private:
 
     ///> Invoke filter dialog and modify current selection
     int filterSelection( const TOOL_EVENT& aEvent );
-
-    ///> Applies the SELECTION_FILTER_OPTIONS to a collection of items
-    void filterCollectedItems( GENERAL_COLLECTOR& aCollector );
 
     ///> Returns true if the given item passes the current SELECTION_FILTER_OPTIONS
     bool itemPassesFilter( BOARD_ITEM* aItem );
