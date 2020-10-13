@@ -30,8 +30,8 @@
 
 using namespace KIGFX::PREVIEW;
 
-static SHAPE_POLY_SET getRectangleAlongCentreLine(
-        const VECTOR2D& aClStart, const VECTOR2D& aClEnd, double aAspect )
+static SHAPE_POLY_SET getRectangleAlongCentreLine( const VECTOR2D& aClStart,
+                                                   const VECTOR2D& aClEnd, double aAspect )
 {
     SHAPE_POLY_SET poly;
     poly.NewOutline();
@@ -48,11 +48,15 @@ static SHAPE_POLY_SET getRectangleAlongCentreLine(
      */
 
     // vector down the centre line of the rectangle
-    const VECTOR2D cl    = aClEnd - aClStart;
+    VECTOR2D cl   = aClEnd - aClStart;
+
+    // don't allow degenerate polygons
+    if( cl.x == 0 && cl.y == 0 )
+        cl.x = 1.0;
 
     // the "side" of the rectangle is the centre line rotated by 90 deg
     // and scaled by the aspect ratio
-    const VECTOR2D side = cl.Rotate( M_PI / 2.0 ) * aAspect;
+    VECTOR2D side = cl.Rotate( M_PI / 2.0 ) * aAspect;
 
     VECTOR2D pt = aClStart + ( side / 2.0 );
     poly.Append( pt );
