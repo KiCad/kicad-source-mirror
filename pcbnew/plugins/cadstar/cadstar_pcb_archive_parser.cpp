@@ -684,6 +684,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PAD_SHAPE::Parse( XNODE* aNode )
         LeftLength  = GetXmlAttributeIDLong( aNode, 1 );
         KI_FALLTHROUGH;
 
+    case PAD_SHAPE_TYPE::DIAMOND:
+    case PAD_SHAPE_TYPE::OCTAGON:
     case PAD_SHAPE_TYPE::SQUARE:
 
         if( aNode->GetChildren() )

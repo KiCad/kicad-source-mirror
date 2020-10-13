@@ -946,6 +946,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
                 dimension->Text().SetTextSize( wxSize(
                         getKiCadLength( dimText.Width ), getKiCadLength( dimText.Height ) ) );
 
+                if( csDim.LinearUnits == UNITS::DESIGN )
+                {
+                    csDim.LinearUnits = Assignments.Technology.Units;
+                }
+
                 switch( csDim.LinearUnits )
                 {
                 case UNITS::METER:
@@ -962,6 +967,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
                 case UNITS::THOU:
                     dimension->SetUnits( EDA_UNITS::MILS );
                     break;
+
+                case UNITS::DESIGN:
+                    wxASSERT( false ); // Should not be here
+                    break;
+
                 }
             }
                 continue;
