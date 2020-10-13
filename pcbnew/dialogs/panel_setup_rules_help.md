@@ -82,6 +82,11 @@
        (condition "A.NetClass == 'HV' && !A.insideArea('Shield*')))
 
 
+    # prevent silk over tented vias
+    (rule silk_over_via
+       (constraint silk_clearance (min 0.2mm))
+       (condition "A.Type == '*Text' && B.Type == 'Via'"))
+
 ### Notes
 
 Version clause must be the first clause.
