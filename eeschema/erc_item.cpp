@@ -36,6 +36,8 @@
 #undef _
 #define _(s) s
 
+// NOTE: Avoid changing the settings key for an ERC item after it has been created
+
 ERC_ITEM ERC_ITEM::duplicateSheetName( ERCE_DUPLICATE_SHEET_NAME,
         _( "Duplicate sheet names within a given sheet" ),
         wxT( "duplicate_sheet_names" ) );

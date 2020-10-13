@@ -36,6 +36,8 @@
 #undef _
 #define _(s) s
 
+// NOTE: Avoid changing the settings key for a DRC item after it has been created
+
 DRC_ITEM DRC_ITEM::unconnectedItems( DRCE_UNCONNECTED_ITEMS,
         _( "Unconnected items" ),
         wxT( "unconnected_items" ) );

@@ -87,8 +87,8 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
 
     if( mainItem && auxItem )
     {
-        return wxString::Format( wxT( "ErrType(%d): %s %s\n    %s: %s\n    %s: %s\n" ),
-                                 GetErrorCode(),
+        return wxString::Format( wxT( "[%s]: %s %s\n    %s: %s\n    %s: %s\n" ),
+                                 GetSettingsKey(),
                                  GetErrorMessage(),
                                  severity,
                                  ShowCoord( aUnits, mainItem->GetPosition() ),
@@ -98,8 +98,8 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
     }
     else if( mainItem )
     {
-        return wxString::Format( wxT( "ErrType(%d): %s %s\n    %s: %s\n" ),
-                                 GetErrorCode(),
+        return wxString::Format( wxT( "[%s]: %s %s\n    %s: %s\n" ),
+                                 GetSettingsKey(),
                                  GetErrorMessage(),
                                  severity,
                                  ShowCoord( aUnits, mainItem->GetPosition() ),
@@ -107,8 +107,8 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
     }
     else
     {
-        return wxString::Format( wxT( "ErrType(%d): %s %s\n" ),
-                                 GetErrorCode(),
+        return wxString::Format( wxT( "[%s]: %s %s\n" ),
+                                 GetSettingsKey(),
                                  GetErrorMessage(),
                                  severity );
     }
