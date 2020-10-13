@@ -992,7 +992,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadAreas()
     {
         AREA& area = areaPair.second;
 
-        if( area.NoVias || area.NoTracks || area.Keepout )
+        if( area.NoVias || area.NoTracks || area.Keepout || area.Routing )
         {
             ZONE_CONTAINER* zone = getZoneFromCadstarShape(
                     area.Shape, getLineThickness( area.LineCodeID ), mBoard );
@@ -1015,18 +1015,18 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadAreas()
 
             zone->SetDoNotAllowVias( area.NoVias );
 
-            if( area.Placement || area.Routing )
+            if( area.Placement )
                 wxLogWarning( wxString::Format(
-                        _( "The CADSTAR area '%s' is defined as a placement and/or routing area "
-                           "in CADSTAR, in addition to Keepout. Placement or Routing areas are "
-                           "not supported in KiCad. Only the supported elements were imported." ),
+                        _( "The CADSTAR area '%s' is marked as a placement area in CADSTAR. "
+                           "Placement areas are not supported in KiCad. Only the supported "
+                           "elements for the area were imported." ),
                         area.Name ) );
         }
         else
         {
             wxLogError(
                     wxString::Format( _( "The CADSTAR area '%s' does not have a KiCad equivalent. "
-                                         "Pure Placement or Routing areas are not supported." ),
+                                         "Pure Placement areas are not supported." ),
                             area.Name ) );
         }
 
