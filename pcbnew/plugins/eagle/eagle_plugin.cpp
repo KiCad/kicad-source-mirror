@@ -329,8 +329,10 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
         wxFileName fn = aFileName;
 
         if( !xmlDocument.Load( fn.GetFullPath() ) )
+        {
             THROW_IO_ERROR( wxString::Format( _( "Unable to read file \"%s\"" ),
                                               fn.GetFullPath() ) );
+        }
 
         doc = xmlDocument.GetRoot();
 
@@ -1030,14 +1032,12 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
             THROW_IO_ERROR( emsg );
         }
 
-        // copy constructor to clone the template
-        MODULE* m = new MODULE( *mi->second );
-        const_cast<KIID&>( m->m_Uuid ) = KIID();
+        MODULE* m = static_cast<MODULE*>( mi->second->Duplicate() );
 
         m_board->Add( m, ADD_MODE::APPEND );
 
         // update the nets within the pads of the clone
-        for( auto pad : m->Pads() )
+        for( D_PAD* pad : m->Pads() )
         {
             wxString pn_key = makeKey( e.name, pad->GetName() );
 
@@ -1129,8 +1129,10 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
                             nameAttr->name = reference;
                             m->SetReference( reference );
+
                             if( refanceNamePresetInPackageLayout )
                                 m->Reference().SetVisible( true );
+
                             break;
                         }
                         case EATTR::NAME :
@@ -1144,6 +1146,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
                         case EATTR::BOTH :
                             if( refanceNamePresetInPackageLayout )
                                 m->Reference().SetVisible( true );
+
                             nameAttr->name =  nameAttr->name + " = " + e.name;
                             m->SetReference( "NAME = " + e.name );
                             break;
@@ -1154,6 +1157,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
                         default:
                             nameAttr->name =  e.name;
+
                             if( refanceNamePresetInPackageLayout )
                                 m->Reference().SetVisible( true );
                         }
@@ -1175,19 +1179,23 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
                         case EATTR::VALUE :
                             valueAttr->value = opt_wxString( e.value );
                             m->SetValue( e.value );
+
                             if( valueNamePresetInPackageLayout )
                                 m->Value().SetVisible( true );
+
                             break;
 
                         case EATTR::NAME :
                             if( valueNamePresetInPackageLayout )
                                 m->Value().SetVisible( true );
+
                             m->SetValue( "VALUE" );
                             break;
 
                         case EATTR::BOTH :
                             if( valueNamePresetInPackageLayout )
                                 m->Value().SetVisible( true );
+
                             valueAttr->value = opt_wxString( "VALUE = " + e.value );
                             m->SetValue( "VALUE = " + e.value );
                             break;
@@ -1198,13 +1206,16 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
                         default:
                             valueAttr->value = opt_wxString( e.value );
+
                             if( valueNamePresetInPackageLayout )
                                 m->Value().SetVisible( true );
                         }
                     }
                     else
+                    {
                         // No display, so default is visible, and show value of NAME
                         m->Value().SetVisible( true );
+                    }
 
                 }
 
@@ -1280,12 +1291,12 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
         if( v1.curve )
         {
             EVERTEX v2 = vertices[i + 1];
-            wxPoint center = ConvertArcCenter(
-                    wxPoint( kicad_x( v1.x ), kicad_y( v1.y ) ),
-                    wxPoint( kicad_x( v2.x ), kicad_y( v2.y ) ), *v1.curve );
+            wxPoint center = ConvertArcCenter( wxPoint( kicad_x( v1.x ), kicad_y( v1.y ) ),
+                                               wxPoint( kicad_x( v2.x ), kicad_y( v2.y ) ),
+                                               *v1.curve );
             double angle = DEG2RAD( *v1.curve );
             double end_angle = atan2( kicad_y( v2.y ) - center.y,
-                                        kicad_x( v2.x ) - center.x );
+                                      kicad_x( v2.x ) - center.x );
             double radius = sqrt( pow( center.x - kicad_x( v1.x ), 2 )
                                 + pow( center.y - kicad_y( v1.y ), 2 ) );
 
@@ -1297,7 +1308,7 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
                     a -= delta_angle )
             {
                 polygon.Append( KiROUND( radius * cos( a ) ) + center.x,
-                        KiROUND( radius * sin( a ) ) + center.y );
+                                KiROUND( radius * sin( a ) ) + center.y );
             }
         }
     }
@@ -1335,8 +1346,8 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
 
     // We divide the thickness by half because we are tracing _inside_ the zone outline
     // This means the radius of curvature will be twice the size for an equivalent EAGLE zone
-    zone->SetMinThickness(
-            std::max<int>( ZONE_THICKNESS_MIN_VALUE_MIL * IU_PER_MILS, p.width.ToPcbUnits() / 2 ) );
+    zone->SetMinThickness( std::max<int>( ZONE_THICKNESS_MIN_VALUE_MIL * IU_PER_MILS,
+                                          p.width.ToPcbUnits() / 2 ) );
 
     if( p.isolate )
         zone->SetLocalClearance( p.isolate->ToPcbUnits() );
@@ -1590,19 +1601,15 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
             // line widths.
             switch( layer )
             {
-            case Edge_Cuts:
-                width = Millimeter2iu( DEFAULT_EDGE_WIDTH );
-                break;
+            case Edge_Cuts: width = Millimeter2iu( DEFAULT_EDGE_WIDTH );      break;
+
             case F_SilkS:
-            case B_SilkS:
-                width = Millimeter2iu( DEFAULT_SILK_LINE_WIDTH );
-                break;
+            case B_SilkS:   width = Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ); break;
+
             case F_CrtYd:
-            case B_CrtYd:
-                width = Millimeter2iu( DEFAULT_COURTYARD_WIDTH );
-                break;
-            default:
-                width = Millimeter2iu( DEFAULT_LINE_WIDTH );
+            case B_CrtYd:   width = Millimeter2iu( DEFAULT_COURTYARD_WIDTH ); break;
+
+            default:        width = Millimeter2iu( DEFAULT_LINE_WIDTH );      break;
             }
         }
     }
