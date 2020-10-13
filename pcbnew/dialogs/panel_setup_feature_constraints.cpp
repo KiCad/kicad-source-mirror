@@ -110,11 +110,14 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
     if( !m_holeToHoleMin.Validate( 0, 10, EDA_UNITS::INCHES ) )
         return false;
 
+    // These are all stored in project file, not board, so no need for OnModify()
+
     m_BrdSettings->m_BlindBuriedViaAllowed = m_OptAllowBlindBuriedVias->GetValue();
     m_BrdSettings->m_MicroViasAllowed = m_OptAllowMicroVias->GetValue();
 
     m_BrdSettings->m_MaxError = Clamp<int>( IU_PER_MM * MINIMUM_ERROR_SIZE_MM,
-            m_maxError.GetValue(), IU_PER_MM * MAXIMUM_ERROR_SIZE_MM );
+                                            m_maxError.GetValue(),
+                                            IU_PER_MM * MAXIMUM_ERROR_SIZE_MM );
 
     m_BrdSettings->m_ZoneFillVersion = m_rbOutlinePolygonFastest->GetValue() ? 6 : 5;
     m_BrdSettings->m_ZoneKeepExternalFillets = m_allowExternalFilletsOpt->GetValue();

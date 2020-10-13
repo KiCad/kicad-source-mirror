@@ -1082,6 +1082,9 @@ bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
 
     BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
 
+    STRING_FORMATTER old_stackup;
+    brd_stackup.FormatBoardStackup( &old_stackup, m_board, 0 );
+
     brd_stackup.m_FinishType = m_stackup.m_FinishType;
     brd_stackup.m_HasDielectricConstrains = m_stackup.m_HasDielectricConstrains;
     brd_stackup.m_EdgeConnectorConstraints = m_stackup.m_EdgeConnectorConstraints;
@@ -1091,14 +1094,31 @@ bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
     // copy enabled items to the new board stackup
     brd_stackup.RemoveAll();
 
-    for( auto item : m_stackup.GetList() )
+    for( BOARD_STACKUP_ITEM* item : m_stackup.GetList() )
     {
         if( item->IsEnabled() )
             brd_stackup.Add( new BOARD_STACKUP_ITEM( *item ) );
     }
 
-    m_brdSettings->SetBoardThickness( GetPcbThickness() );
-    m_brdSettings->m_HasStackup = true;
+    STRING_FORMATTER new_stackup;
+    brd_stackup.FormatBoardStackup( &new_stackup, m_board, 0 );
+
+    bool modified = old_stackup.GetString() != new_stackup.GetString();
+
+    if( m_brdSettings->GetBoardThickness() != GetPcbThickness() )
+    {
+        m_brdSettings->SetBoardThickness( GetPcbThickness() );
+        modified = true;
+    }
+
+    if( !m_brdSettings->m_HasStackup )
+    {
+        m_brdSettings->m_HasStackup = true;
+        modified = true;
+    }
+
+    if( modified )
+        m_frame->OnModify();
 
     return true;
 }

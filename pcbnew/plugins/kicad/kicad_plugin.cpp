@@ -465,7 +465,7 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
     BOARD_STACKUP& stackup = aBoard->GetDesignSettings().GetStackupDescriptor();
 
     if( aBoard->GetDesignSettings().m_HasStackup )
-        stackup.FormatBoardStackup( m_out,aBoard, aNestLevel+1 );
+        stackup.FormatBoardStackup( m_out, aBoard, aNestLevel+1 );
 
     BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
 

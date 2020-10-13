@@ -207,7 +207,9 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
                 wxGridCellBoolEditor::IsTrueValue( m_grid->GetCellValue( i, COL_TEXT_UPRIGHT ) );
     }
 
-    int mode = m_dimensionUnits->GetSelection();
+    // These are all stored in project file, not board, so no need for OnModify()
+
+    int mode                                  = m_dimensionUnits->GetSelection();
     m_BrdSettings->m_DimensionUnitsMode       = static_cast<DIM_UNITS_MODE>( mode );
     int format                                = m_dimensionUnitsFormat->GetSelection();
     m_BrdSettings->m_DimensionUnitsFormat     = static_cast<DIM_UNITS_FORMAT>( format );

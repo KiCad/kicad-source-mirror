@@ -536,6 +536,7 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
         return false;
 
     wxString msg;
+    bool     modified = false;
 
     // Check for removed layers with items which will get deleted from the board.
     LSEQ removedLayers = getRemovedLayersWithItems();
@@ -552,14 +553,18 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
                                               "%s\n"
                                               "These items will be no longer accessible\n"
                                               "Do you wish to continue?" ), msg ) ) )
+        {
             return false;
+        }
     }
 
-    if( !removedLayers.empty() &&
-        !IsOK( this, _( "Items have been found on removed layers. This operation will delete "
-                        "all items from removed layers and cannot be undone. Do you wish to "
-                        "continue?" ) ) )
+    if( !removedLayers.empty()
+            && !IsOK( this, _( "Items have been found on removed layers. This operation will "
+                               "delete all items from removed layers and cannot be undone.\n"
+                               "Do you wish to continue?" ) ) )
+    {
         return false;
+    }
 
     // Delete all objects on layers that have been removed.  Leaving them in copper layers
     // can (will?) result in DRC errors and it pollutes the board file with cruft.
@@ -582,6 +587,7 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 
                 layers.reset( layer_id );
                 hasRemovedBoardItems = true;
+                modified = true;
 
                 if( layers.any() )
                 {
@@ -607,6 +613,8 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
          * layers are not visible when exiting this dialog
          */
         m_pcb->SetVisibleLayers( m_enabledLayers );
+
+        modified = true;
     }
 
     for( LSEQ seq = LSET::AllLayersMask().Seq();  seq;  ++seq )
@@ -615,21 +623,38 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 
         if( m_enabledLayers[layer] )
         {
-            m_pcb->SetLayerName( layer, GetLayerName( layer ) );
+            const wxString& newLayerName = GetLayerName( layer );
+
+            if( m_pcb->GetLayerName( layer ) != newLayerName )
+            {
+                m_pcb->SetLayerName( layer, newLayerName );
+                modified = true;
+            }
 
             // Only copper layers have a definable type.
             if( LSET::AllCuMask().Contains( layer ) )
             {
                 LAYER_T t = (LAYER_T) getLayerTypeIndex( layer );
-                m_pcb->SetLayerType( layer, t );
+
+                if( m_pcb->GetLayerType( layer ) != t )
+                {
+                    m_pcb->SetLayerType( layer, t );
+                    modified = true;
+                }
             }
         }
     }
 
     for( LSEQ seq = LSET::UserDefinedLayers().Seq();  seq;  ++seq )
     {
-        if( m_enabledLayers[*seq] )
-            m_pcb->SetLayerName( *seq, GetLayerName( *seq ) );
+        PCB_LAYER_ID    layer = *seq;
+        const wxString& newLayerName = GetLayerName( layer );
+
+        if( m_enabledLayers[ layer ] && m_pcb->GetLayerName( layer ) != newLayerName )
+        {
+            m_pcb->SetLayerName( layer, newLayerName );
+            modified = true;
+        }
     }
 
     // If some board items are deleted: Rebuild the connectivity,
@@ -640,6 +665,9 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
         m_pcb->BuildConnectivity();
         m_frame->Compile_Ratsnest( true );
     }
+
+    if( modified )
+        m_frame->OnModify();
 
     return true;
 }

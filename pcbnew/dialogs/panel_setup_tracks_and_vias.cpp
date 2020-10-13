@@ -51,9 +51,9 @@ enum DIFF_VAR_GRID_COLUMNS
 };
 
 
-PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS(
-                                          PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame,
-                                          PANEL_SETUP_FEATURE_CONSTRAINTS* aConstraintsPanel ) :
+PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent,
+                                                          PCB_EDIT_FRAME* aFrame,
+                                                          PANEL_SETUP_FEATURE_CONSTRAINTS* aConstraintsPanel ) :
     PANEL_SETUP_TRACKS_AND_VIAS_BASE( aParent->GetTreebook() )
 {
     m_Parent = aParent;
@@ -196,6 +196,8 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
     sort( trackWidths.begin(), trackWidths.end() );
     sort( vias.begin(), vias.end() );
     sort( diffPairs.begin(), diffPairs.end() );
+
+    // These are all stored in project file, not board, so no need for OnModify()
 
     trackWidths.insert( trackWidths.begin(), 0 );         // dummy value for "use netclass"
     m_BrdSettings->m_TrackWidthList = trackWidths;

@@ -909,8 +909,6 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, const w
         TOOL_EVENT toolEvent( TC_COMMAND, TA_MODEL_CHANGE, AS_ACTIVE );
         toolEvent.SetHasPosition( false );
         m_toolManager->ProcessEvent( toolEvent );
-
-        OnModify();
     }
 
     GetCanvas()->SetFocus();

@@ -67,6 +67,8 @@ bool PANEL_SETUP_MASK_AND_PASTE::TransferDataToWindow()
 
 bool PANEL_SETUP_MASK_AND_PASTE::TransferDataFromWindow()
 {
+    // These are all stored in project file, not board, so no need for OnModify()
+
     m_BrdSettings->m_SolderMaskMargin = m_maskMargin.GetValue();
     m_BrdSettings->m_SolderMaskMinWidth = m_maskMinWidth.GetValue();
 
