@@ -554,14 +554,13 @@ bool processShell( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
 bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
     std::vector< SGNODE* >* items )
 {
-    TDF_Label label = data.m_assy->FindShape( shape, Standard_False );
-
+    TDF_Label label;
     data.hasSolid = true;
     std::string partID;
     Quantity_Color col;
     Quantity_Color* lcolor = NULL;
 
-    if( label.IsNull() )
+    if( !data.m_assy->Search( shape, label, Standard_False ) )
     {
         static int i = 0;
         std::ostringstream ostr;
