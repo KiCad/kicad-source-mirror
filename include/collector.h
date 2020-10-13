@@ -143,14 +143,12 @@ public:
      */
     void Remove( const EDA_ITEM* aItem )
     {
-        for( size_t i = 0; i < m_list.size(); i++ )
-        {
-            if( m_list[i] == aItem )
-            {
-                m_list.erase( m_list.begin() + i);
-                return;
-            }
-        }
+        m_list.erase( std::remove_if( m_list.begin(), m_list.end(),
+                                      [&aItem]( const EDA_ITEM* aCandidate )
+                                      {
+                                          return aCandidate == aItem;
+                                      } ),
+                      m_list.end() );
     }
 
     /**
