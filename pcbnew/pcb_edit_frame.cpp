@@ -982,6 +982,17 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
     GetCanvas()->SetFocus();                                // allow capture of hotkeys
     GetCanvas()->SetHighContrastLayer( aLayer );
 
+    // Vias on a restricted layer set must be redrawn when the active layer is changed
+    GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+            []( KIGFX::VIEW_ITEM* aItem ) -> bool
+            {
+                if( VIA* via = dynamic_cast<VIA*>( aItem ) )
+                    return ( via->GetViaType() == VIATYPE::BLIND_BURIED ||
+                             via->GetViaType() == VIATYPE::MICROVIA );
+
+                return false;
+            } );
+
     // Clearances could be layer-dependent so redraw them when the active layer is changed
     if( GetDisplayOptions().m_DisplayPadIsol )
     {

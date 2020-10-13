@@ -755,6 +755,7 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
 
 void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions )
 {
+    bool hcChanged   = m_displayOptions.m_ContrastModeDisplay != aOptions.m_ContrastModeDisplay;
     m_displayOptions = aOptions;
 
     EDA_DRAW_PANEL_GAL* canvas = GetCanvas();
@@ -763,6 +764,20 @@ void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions )
     view->UpdateDisplayOptions( aOptions );
     canvas->SetHighContrastLayer( GetActiveLayer() );
     OnDisplayOptionsChanged();
+
+    // Vias on a restricted layer set must be redrawn when high contrast mode is changed
+    if( hcChanged )
+    {
+        GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                []( KIGFX::VIEW_ITEM* aItem ) -> bool
+                {
+                    if( VIA* via = dynamic_cast<VIA*>( aItem ) )
+                        return ( via->GetViaType() == VIATYPE::BLIND_BURIED ||
+                                 via->GetViaType() == VIATYPE::MICROVIA );
+
+                    return false;
+                } );
+    }
 
     canvas->Refresh();
 }

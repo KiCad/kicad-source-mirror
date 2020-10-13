@@ -320,7 +320,8 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         ( aLayer == LAYER_VIAS_HOLES   ||
           aLayer == LAYER_VIA_THROUGH  ||
           aLayer == LAYER_VIA_MICROVIA ||
-          aLayer == LAYER_VIA_BBLIND ) )
+          aLayer == LAYER_VIA_BBLIND ||
+          aLayer == LAYER_VIAS_NETNAMES ) )
     {
         const VIA*   via = static_cast<const VIA*>( item );
         const BOARD* pcb = static_cast<const BOARD*>( item->GetParent() );
@@ -331,6 +332,9 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             auto lay_id = static_cast<PCB_LAYER_ID>( layer );
             viaActiveLayer |= via->IsOnLayer( lay_id ) && pcb->IsLayerVisible( lay_id );
         }
+
+        if( !viaActiveLayer && m_contrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN )
+            return COLOR4D::CLEAR;
 
         if( !viaActiveLayer )
             color.Darken( 1.0 - m_highlightFactor );
@@ -592,45 +596,59 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         VECTOR2D position( center );
 
         // Is anything that we can display enabled?
-        if( m_pcbSettings.m_netNamesOnVias )
+        if( !m_pcbSettings.m_netNamesOnVias || aVia->GetNetname().empty() )
+            return;
+
+        // We won't get CLEAR from GetColor below for a non-through via on an inactive layer in
+        // high contrast mode because LAYER_VIAS_NETNAMES will always be part of the high-contrast
+        // set.  So we do another check here to prevent drawing netnames for these vias.
+        if( m_pcbSettings.GetHighContrast() )
         {
-            bool displayNetname = ( !aVia->GetNetname().empty() );
-            double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE;
-            double size = aVia->GetWidth();
+            bool draw = false;
 
-            // Font size limits
-            if( size > maxSize )
-                size = maxSize;
-
-            m_gal->Save();
-            m_gal->Translate( position );
-
-            // Default font settings
-            m_gal->ResetTextAttributes();
-            m_gal->SetStrokeColor( m_pcbSettings.GetColor( NULL, aLayer ) );
-
-            // Set the text position to the pad shape position (the pad position is not the best place)
-            VECTOR2D textpos( 0.0, 0.0 );
-
-            if( displayNetname )
+            for( unsigned int layer : m_pcbSettings.GetHighContrastLayers() )
             {
-                wxString netname = UnescapeString( aVia->GetShortNetname() );
-                // calculate the size of net name text:
-                double tsize = 1.5 * size / netname.Length();
-                tsize = std::min( tsize, size );
-                // Use a smaller text size to handle interline, pen size..
-                tsize *= 0.7;
-                VECTOR2D namesize( tsize, tsize );
-
-                m_gal->SetGlyphSize( namesize );
-                m_gal->SetLineWidth( namesize.x / 12.0 );
-                m_gal->BitmapText( netname, textpos, 0.0 );
+                if( aVia->IsOnLayer( static_cast<PCB_LAYER_ID>( layer ) ) )
+                {
+                    draw = true;
+                    break;
+                }
             }
 
-
-            m_gal->Restore();
+            if( !draw )
+                return;
         }
-        return;
+
+        double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE;
+        double size = aVia->GetWidth();
+
+        // Font size limits
+        if( size > maxSize )
+            size = maxSize;
+
+        m_gal->Save();
+        m_gal->Translate( position );
+
+        // Default font settings
+        m_gal->ResetTextAttributes();
+        m_gal->SetStrokeColor( m_pcbSettings.GetColor( NULL, aLayer ) );
+
+        // Set the text position to the pad shape position (the pad position is not the best place)
+        VECTOR2D textpos( 0.0, 0.0 );
+
+        wxString netname = UnescapeString( aVia->GetShortNetname() );
+        // calculate the size of net name text:
+        double tsize = 1.5 * size / netname.Length();
+        tsize = std::min( tsize, size );
+        // Use a smaller text size to handle interline, pen size..
+        tsize *= 0.7;
+        VECTOR2D namesize( tsize, tsize );
+
+        m_gal->SetGlyphSize( namesize );
+        m_gal->SetLineWidth( namesize.x / 12.0 );
+        m_gal->BitmapText( netname, textpos, 0.0 );
+
+        m_gal->Restore();
     }
 
     // Choose drawing settings depending on if we are drawing via's pad or hole
@@ -646,6 +664,9 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
     bool sketchMode = false;
     COLOR4D color = m_pcbSettings.GetColor( aVia, aLayer );
+
+    if( color == COLOR4D::CLEAR )
+        return;
 
     switch( aVia->GetViaType() )
     {

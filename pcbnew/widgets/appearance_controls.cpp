@@ -447,8 +447,6 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
                 opts.m_ContrastModeDisplay = aMode;
 
                 m_frame->SetDisplayOptions( opts );
-                m_frame->GetCanvas()->SetHighContrastLayer( m_frame->GetActiveLayer() );
-                m_frame->GetCanvas()->Refresh();
                 passOnFocus();
             };
 
