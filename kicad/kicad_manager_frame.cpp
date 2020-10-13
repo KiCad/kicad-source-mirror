@@ -28,6 +28,7 @@
 #include "tree_project_frame.h"
 #include <bitmaps.h>
 #include <build_version.h>
+#include <eda_base_frame.h>
 #include <filehistory.h>
 #include <kiplatform/app.h>
 #include <kiway.h>

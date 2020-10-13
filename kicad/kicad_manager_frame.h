@@ -27,14 +27,13 @@
 
 
 #include <wx/process.h>
-#include <eda_base_frame.h>
 #include <kiway_player.h>
 
 class TREEPROJECTFILES;
 class TREE_PROJECT_FRAME;
 class ACTION_TOOLBAR;
 class KICAD_SETTINGS;
-
+class EDA_BASE_FRAME;
 
 /**
  * The main KiCad project manager frame.  It is not a KIWAY_PLAYER.
