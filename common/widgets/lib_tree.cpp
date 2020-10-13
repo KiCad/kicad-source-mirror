@@ -411,10 +411,20 @@ void LIB_TREE::onPreselect( wxCommandEvent& aEvent )
         int unit = 0;
         LIB_ID id = GetSelectedLibId( &unit );
 
+        wxString htmlColor = GetBackgroundColour().GetAsString( wxC2S_HTML_SYNTAX );
+        wxString textColor = GetForegroundColour().GetAsString( wxC2S_HTML_SYNTAX );
+        wxString linkColor = wxSystemSettings::GetColour( wxSYS_COLOUR_HOTLIGHT )
+                                     .GetAsString( wxC2S_HTML_SYNTAX );
+
+        wxString html = wxString::Format( wxT( "<html><body bgcolor='%s' text='%s' link='%s'>" ),
+                                          htmlColor, textColor, linkColor );
+
         if( id.IsValid() )
-            m_details_ctrl->SetPage( m_adapter->GenerateInfo( id, unit ) );
-        else
-            m_details_ctrl->SetPage( wxEmptyString );
+            html.Append( m_adapter->GenerateInfo( id, unit ) );
+
+        html.Append( wxT( "</body></html>" ) );
+
+        m_details_ctrl->SetPage( html );
     }
 
     aEvent.Skip();
