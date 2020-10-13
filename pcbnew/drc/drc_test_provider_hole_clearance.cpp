@@ -80,9 +80,9 @@ private:
      * @param aSortedPadsList is the sorted by X pos of all pads
      * @param aRefPadIdx is the index of pad to test inside aSortedPadsList
      * @param aX_limit is the max X pos of others pads that need to be tested
-     * To speed up the test, aSortedPadsList is a pad list sorted by X position,
-     * and only pads after the pad to test are tested, so this function must be called
-     * for each pad for the first in list to the last in list
+     * To speed up the test, aSortedPadsList is a pad list sorted by X position, and only pads
+     * after the pad to test are tested, so this function must be called for each pad for the
+     * first in list to the last in list
      */
     bool doPadToPadHoleDrc( int aRefPadIdx, std::vector<D_PAD*>& aSortedPadsList, int aX_limit );
 
@@ -171,6 +171,7 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::buildDrilledHoleList()
     reportAux( "Total drilled holes : %d", m_drilledHoles.size());
 }
 
+
 void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testPads2Holes()
 {
     const int delta = 25;  // This is the number of tests between 2 calls to the progress bar
@@ -238,76 +239,72 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc( int aRefPadIdx,
         drc_dbg( 10, " chk1 against -> %p x0 %d x2 %d\n",
                  pad, pad->GetDrillSize().x, refPad->GetDrillSize().x );
 
-        // Since a hole pierces all layers we have to test pads which are on any copper layer.
-        // Pads just on technical layers are not an issue.
-        if( ( pad->GetLayerSet() & all_cu ) != 0 || ( refPad->GetLayerSet() & all_cu ) != 0 )
+        if( pad->GetDrillSize().x && ( refPad->GetLayerSet() & all_cu ).any() )
         {
-            drc_dbg( 10, " chk3 against -> %p x0 %d x2 %d\n", pad, pad->GetDrillSize().x,
-                     refPad->GetDrillSize().x );
+            // pad has a hole and refPad is on copper
 
-            if( pad->GetDrillSize().x )     // test pad has a hole
+            auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
+                                                              refPad, pad );
+            int  minClearance = constraint.GetValue().Min();
+            int  actual;
+
+            drc_dbg( 10, "check pad %p rule '%s' cl %d\n",
+                     pad, constraint.GetParentRule()->m_Name, minClearance );
+
+            accountCheck( constraint.GetParentRule() );
+
+            const std::shared_ptr<SHAPE>&  refPadShape = refPad->GetEffectiveShape();
+
+            // fixme: pad stacks...
+            if( refPadShape->Collide( pad->GetEffectiveHoleShape(), minClearance, &actual ) )
             {
-                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
-                                                                  refPad, pad );
-                int  minClearance = constraint.GetValue().Min();
-                int  actual;
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
-                drc_dbg( 10, "check pad %p rule '%s' cl %d\n",
-                         pad, constraint.GetParentRule()->m_Name, minClearance );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                              constraint.GetName(),
+                              MessageTextFromValue( userUnits(), minClearance ),
+                              MessageTextFromValue( userUnits(), actual ) );
 
-                accountCheck( constraint.GetParentRule() );
+                drcItem->SetErrorMessage( m_msg );
+                drcItem->SetItems( pad, refPad );
+                drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                const std::shared_ptr<SHAPE>&  refPadShape = refPad->GetEffectiveShape();
-
-                // fixme: pad stacks...
-                if( refPadShape->Collide( pad->GetEffectiveHoleShape(), minClearance, &actual ) )
-                {
-                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-
-                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                                  constraint.GetName(),
-                                  MessageTextFromValue( userUnits(), minClearance ),
-                                  MessageTextFromValue( userUnits(), actual ) );
-
-                    drcItem->SetErrorMessage( m_msg );
-                    drcItem->SetItems( pad, refPad );
-                    drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-                    reportViolation( drcItem, pad->GetPosition() );
-                    return false;
-                }
+                reportViolation( drcItem, pad->GetPosition() );
+                return false;
             }
+        }
 
-            if( refPad->GetDrillSize().x )     // reference pad has a hole
+        if( refPad->GetDrillSize().x && ( pad->GetLayerSet() & all_cu ).any() )
+        {
+            // refPad has a hole and pad is on copper
+
+            auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
+                                                              refPad, pad );
+            int  minClearance = constraint.GetValue().Min();
+            int  actual;
+
+            accountCheck( constraint.GetParentRule() );
+
+            drc_dbg( 10,"check pad %p rule '%s' cl %d\n", refPad,
+                     constraint.GetParentRule()->m_Name, minClearance );
+
+            const std::shared_ptr<SHAPE>& padShape = pad->GetEffectiveShape();
+
+            if( padShape->Collide( refPad->GetEffectiveHoleShape(), minClearance, &actual ) )
             {
-                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
-                                                                  refPad, pad );
-                int  minClearance = constraint.GetValue().Min();
-                int  actual;
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
-                accountCheck( constraint.GetParentRule() );
+                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                              constraint.GetName(),
+                              MessageTextFromValue( userUnits(), minClearance ),
+                              MessageTextFromValue( userUnits(), actual ) );
 
-                drc_dbg( 10,"check pad %p rule '%s' cl %d\n", refPad,
-                         constraint.GetParentRule()->m_Name, minClearance );
+                drcItem->SetErrorMessage( m_msg );
+                drcItem->SetItems( refPad, pad );
+                drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                const std::shared_ptr<SHAPE>& padShape = pad->GetEffectiveShape();
-
-                if( padShape->Collide( refPad->GetEffectiveHoleShape(), minClearance, &actual ) )
-                {
-                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-
-                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
-                                  constraint.GetName(),
-                                  MessageTextFromValue( userUnits(), minClearance ),
-                                  MessageTextFromValue( userUnits(), actual ) );
-
-                    drcItem->SetErrorMessage( m_msg );
-                    drcItem->SetItems( refPad, pad );
-                    drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-                    reportViolation( drcItem, pad->GetPosition() );
-                    return false;
-                }
+                reportViolation( drcItem, pad->GetPosition() );
+                return false;
             }
         }
     }
