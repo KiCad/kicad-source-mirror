@@ -294,9 +294,9 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     statusPopup.Popup();
     statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
 
-    auto setCursor = 
-            [&]() 
-            { 
+    auto setCursor =
+            [&]()
+            {
                 frame()->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
             };
 
@@ -670,7 +670,6 @@ void PAD_TOOL::recombinePad( D_PAD* aPad )
             // Create a new minimally-sized circular anchor and convert existing pad
             // to a polygon primitive
             SHAPE_POLY_SET existingOutline;
-            int maxError = board()->GetDesignSettings().m_MaxError;
             aPad->TransformShapeWithClearanceToPolygon( existingOutline, layer, 0, maxError,
                                                         ERROR_INSIDE );
 

@@ -723,9 +723,9 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
     auto evalRulesForItems =
             [&]( DRC_CONSTRAINT_TYPE_T aConstraint, const BOARD_ITEM* a, const BOARD_ITEM* b,
-                 PCB_LAYER_ID aLayer ) -> int
+                 PCB_LAYER_ID aCtLayer ) -> int
             {
-                DRC_CONSTRAINT c = bds.m_DRCEngine->EvalRulesForItems( aConstraint, a, b, aLayer );
+                DRC_CONSTRAINT c = bds.m_DRCEngine->EvalRulesForItems( aConstraint, a, b, aCtLayer );
                 return c.Value().HasMin() ? c.Value().Min() : 0;
             };
 
