@@ -12,7 +12,8 @@
 #ifndef ATTENUATORFUNC_H
 #define ATTENUATORFUNC_H
 
-#include <wx/bitmap.h>
+class wxBitmap;
+class wxString;
 
 enum ATTENUATORS_TYPE {
     PI_TYPE,

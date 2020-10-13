@@ -24,7 +24,7 @@
 #ifndef __TWISTEDPAIR_H
 #define __TWISTEDPAIR_H
 
-#include <transline.h>
+#include "transline/transline.h"
 
 class TWISTEDPAIR : public TRANSLINE
 {

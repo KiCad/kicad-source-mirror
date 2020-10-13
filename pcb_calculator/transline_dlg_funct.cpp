@@ -24,7 +24,6 @@
 
 #include "common_data.h"
 #include "pcb_calculator_frame.h"
-#include "widgets/unit_selector.h"
 
 extern double DoubleFromString( const wxString& TextValue );
 

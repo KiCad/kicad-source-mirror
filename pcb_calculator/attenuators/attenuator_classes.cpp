@@ -5,7 +5,7 @@
 **     since 2006/6/14
 **
 *****************************************************************************/
-#include <cmath>
+#include <wx/bitmap.h>
 
 #include <i18n_utility.h>
 #include <kiface_i.h>
@@ -14,27 +14,27 @@
 #include "pcb_calculator_settings.h"
 
 // Bitmaps:
-#include <att_bridge.xpm>
-#include <att_pi.xpm>
-#include <att_splitter.xpm>
-#include <att_tee.xpm>
+#include "bitmaps/att_bridge.xpm"
+#include "bitmaps/att_pi.xpm"
+#include "bitmaps/att_splitter.xpm"
+#include "bitmaps/att_tee.xpm"
 
 
 // Html texts showing the formulas
 wxString pi_formula =
-#include <pi_formula.h>
+#include "attenuators/pi_formula.h"
 
 
 wxString tee_formula =
-#include <tee_formula.h>
+#include "attenuators/tee_formula.h"
 
 
 wxString bridget_tee_formula =
-#include <bridget_tee_formula.h>
+#include "attenuators/bridget_tee_formula.h"
 
 
 wxString splitter_formula =
-#include <splitter_formula.h>
+#include "attenuators/splitter_formula.h"
 
 
 

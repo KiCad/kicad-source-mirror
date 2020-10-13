@@ -25,7 +25,7 @@
 #ifndef __RECTWAVEGUIDE_H
 #define __RECTWAVEGUIDE_H
 
-#include <transline.h>
+#include "transline/transline.h"
 
 #define PHYS_A_PRM PHYS_WIDTH_PRM
 #define PHYS_B_PRM PHYS_S_PRM

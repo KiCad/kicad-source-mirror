@@ -20,11 +20,10 @@
 
 #include <wx/app.h>
 #include <wx/colour.h>
-#include <wx/log.h>
 #include <wx/msgdlg.h>
 
 #include "pcb_calculator_frame.h"
-#include "transline.h"
+#include "transline/transline.h"
 
 /*
  * Return the value from a string,

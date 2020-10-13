@@ -23,8 +23,8 @@
   * a wxChoiceBox to select units in Pcb_Calculator
   */
 
-#ifndef _UnitSelector_h_
-#define _UnitSelector_h_
+#ifndef UNIT_SELECTOR_H
+#define UNIT_SELECTOR_H
 
 
 #include <wx/string.h>
@@ -129,5 +129,5 @@ public:
     virtual double GetUnitScale() override;
 };
 
-#endif  // _UnitSelector_h_
+#endif  // UNIT_SELECTOR_H
 

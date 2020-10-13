@@ -25,7 +25,7 @@
 #ifndef __COPLANAR_H
 #define __COPLANAR_H
 
-#include <transline.h>
+#include "transline/transline.h"
 
 class COPLANAR : public TRANSLINE
 {

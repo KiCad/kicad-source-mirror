@@ -24,28 +24,28 @@
 #include <wx/intl.h>
 #include <wx/arrstr.h>
 
+#include <kiface_i.h>
 
 // Bitmaps:
-#include <c_microstrip.xpm>
-#include <microstrip.xpm>
-#include <twistedpair.xpm>
-#include <coax.xpm>
-#include <cpw.xpm>
-#include <cpw_back.xpm>
-#include <stripline.xpm>
-#include <rectwaveguide.xpm>
+#include "bitmaps/c_microstrip.xpm"
+#include "bitmaps/microstrip.xpm"
+#include "bitmaps/twistedpair.xpm"
+#include "bitmaps/coax.xpm"
+#include "bitmaps/cpw.xpm"
+#include "bitmaps/cpw_back.xpm"
+#include "bitmaps/stripline.xpm"
+#include "bitmaps/rectwaveguide.xpm"
 
 // transline specific functions:
-#include <transline.h>
-#include <microstrip.h>
-#include <coplanar.h>
-#include <rectwaveguide.h>
-#include <coax.h>
-#include <c_microstrip.h>
-#include <stripline.h>
-#include <twistedpair.h>
+#include "transline/transline.h"
+#include "transline/microstrip.h"
+#include "transline/coplanar.h"
+#include "transline/rectwaveguide.h"
+#include "transline/coax.h"
+#include "transline/c_microstrip.h"
+#include "transline/stripline.h"
+#include "transline/twistedpair.h"
 
-#include <kiface_i.h>
 #include "pcb_calculator_settings.h"
 #include "widgets/unit_selector.h"
 #include "transline_ident.h"

@@ -1,9 +1,6 @@
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
-    bitmaps
     dialogs
-    transline
-    attenuators
     ${CMAKE_SOURCE_DIR}/common
     ${INC_AFTER}
     )

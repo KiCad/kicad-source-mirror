@@ -25,7 +25,7 @@
 #ifndef __MICROSTRIP_H
 #define __MICROSTRIP_H
 
-#include <transline.h>
+#include "transline/transline.h"
 
 class MICROSTRIP : public TRANSLINE
 {

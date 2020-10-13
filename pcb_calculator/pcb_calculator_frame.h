@@ -24,7 +24,7 @@
 #ifndef PCB_CALCULATOR_H
 #define PCB_CALCULATOR_H
 
-#include "transline.h" // Included for SUBST_PRMS_ID definition.
+#include "transline/transline.h" // Included for SUBST_PRMS_ID definition.
 #include "transline_ident.h"
 #include "pcb_calculator_frame_base.h"
 

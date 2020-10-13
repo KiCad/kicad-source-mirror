@@ -25,7 +25,7 @@
 #define __STRIPLINE_H
 
 
-#include <transline.h>
+#include "transline/transline.h"
 
 class STRIPLINE : public TRANSLINE
 {

@@ -28,7 +28,7 @@
 #include <vector>
 #include <wx/bitmap.h>
 
-#include "transline.h"
+#include "transline/transline.h"
 
 // An enum to handle muwave shapes:
 enum TRANSLINE_TYPE_ID {

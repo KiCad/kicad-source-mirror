@@ -25,7 +25,7 @@
 #ifndef __COAX_H
 #define __COAX_H
 
-#include <transline.h>
+#include "transline/transline.h"
 
 class COAX : public TRANSLINE
 {
