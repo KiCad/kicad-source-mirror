@@ -1,15 +1,8 @@
-#ifndef CLASS_REGULATOR_DATA_H
-#define CLASS_REGULATOR_DATA_H
-
-
-/**
- * @file class_regulator_data.h
- */
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 jean-pierre.charras
- * Copyright (C) 1992-2011 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2020 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +21,14 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+/**
+ * @file class_regulator_data.h
+ * Contains structures for storage of regulator data
+ */
+
+#ifndef CLASS_REGULATOR_DATA_H
+#define CLASS_REGULATOR_DATA_H
 
 #include <refdes_utils.h>
 

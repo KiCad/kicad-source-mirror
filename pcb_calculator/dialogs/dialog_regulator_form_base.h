@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,9 +28,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_EDITOR_DATA_BASE
+/// Class DIALOG_REGULATOR_FORM_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_EDITOR_DATA_BASE : public DIALOG_SHIM
+class DIALOG_REGULATOR_FORM_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -57,8 +57,8 @@ class DIALOG_EDITOR_DATA_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_EDITOR_DATA_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Regulator Parameters"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_EDITOR_DATA_BASE();
+		DIALOG_REGULATOR_FORM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Regulator Parameters"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~DIALOG_REGULATOR_FORM_BASE();
 
 };
 

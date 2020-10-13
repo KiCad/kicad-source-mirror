@@ -1,6 +1,3 @@
-/**
- * @file regulators_funct.cpp
- */
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
@@ -20,142 +17,30 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/**
+ * @file regulators_funct.cpp
+ * Contains the partial functions of PCB_CALCULATOR_FRAME related to regulators
+ */
+
 #include <wx/wx.h>
 
 #include <macros.h>
 
 #include "class_regulator_data.h"
-#include "dialog_regulator_data_base.h"
 #include "pcb_calculator_frame.h"
 #include "pcb_calculator_settings.h"
 
+#include "dialogs/dialog_regulator_form.h"
+
 extern double DoubleFromString( const wxString& TextValue );
 
-class DIALOG_EDITOR_DATA: public DIALOG_EDITOR_DATA_BASE
-{
-public:
-    DIALOG_EDITOR_DATA( PCB_CALCULATOR_FRAME * parent, const wxString & aRegName )
-        : DIALOG_EDITOR_DATA_BASE( parent )
-    {
-        m_textCtrlName->SetValue( aRegName );
-        m_textCtrlName->Enable( aRegName.IsEmpty() );
-        UpdateDialog();
-
-        m_sdbSizerOK->SetDefault();
-
-        // Now all widgets have the size fixed, call FinishDialogSettings
-        FinishDialogSettings();
-    }
-
-    ~DIALOG_EDITOR_DATA() {};
-
-    // Event called functions:
-    void OnOKClick( wxCommandEvent& event ) override;
-
-    /**
-     * Function IsOK()
-     * @return true if regulator parameters are acceptable
-     */
-    bool IsOK();
-
-    /**
-     * Function CopyRegulatorDataToDialog
-     * Transfert data from dialog to aItem
-     * @param aItem = a pointer to the REGULATOR_DATA
-     */
-    void CopyRegulatorDataToDialog( REGULATOR_DATA * aItem );
-
-    /**
-     * Function BuildRegulatorFromData
-     * Creates a new REGULATOR_DATA from dialog
-     * @return a pointer to the new REGULATOR_DATA
-     */
-    REGULATOR_DATA * BuildRegulatorFromData();
-
-    /**
-     * Enable/disable Iadj realted widgets, according to
-     * the regulator type
-     */
-    void UpdateDialog()
-    {
-        bool enbl = m_choiceRegType->GetSelection() == 1;
-        m_RegulIadjValue->Enable( enbl );
-    }
-
-    /**
-     * called when the current regulator type is changed
-     */
-    void OnRegTypeSelection( wxCommandEvent& event ) override
-    {
-        UpdateDialog();
-    }
-};
-
-
-void DIALOG_EDITOR_DATA::OnOKClick( wxCommandEvent& event )
-{
-    if( !IsOK() )
-    {
-        wxMessageBox( _("Bad or missing parameters!") );
-        return;
-    }
-
-    EndModal( wxID_OK );
-}
-
-bool DIALOG_EDITOR_DATA::IsOK()
-{
-    bool success = true;
-
-    if( m_textCtrlName->GetValue().IsEmpty() )
-        success = false;
-    if( m_textCtrlVref->GetValue().IsEmpty() )
-        success = false;
-    else
-    {
-        double vref = DoubleFromString( m_textCtrlVref->GetValue() );
-        if( fabs(vref) < 0.01 )
-            success = false;
-    }
-    if( m_choiceRegType->GetSelection() == 1 )
-    {
-        if( m_RegulIadjValue->GetValue().IsEmpty() )
-        success = false;
-    }
-
-    return success;
-}
-
-void DIALOG_EDITOR_DATA::CopyRegulatorDataToDialog( REGULATOR_DATA * aItem )
-{
-    m_textCtrlName->SetValue( aItem->m_Name );
-    wxString value;
-    value.Printf( wxT("%g"), aItem->m_Vref );
-    m_textCtrlVref->SetValue( value );
-    value.Printf( wxT("%g"), aItem->m_Iadj );
-    m_RegulIadjValue->SetValue( value );
-    m_choiceRegType->SetSelection( aItem->m_Type );
-    UpdateDialog();
-}
-
-REGULATOR_DATA * DIALOG_EDITOR_DATA::BuildRegulatorFromData()
-{
-    double vref = DoubleFromString( m_textCtrlVref->GetValue() );
-    double iadj = DoubleFromString( m_RegulIadjValue->GetValue() );
-    int type = m_choiceRegType->GetSelection();
-
-    if( type != 1 )
-        iadj = 0.0;
-
-    REGULATOR_DATA * item = new REGULATOR_DATA( m_textCtrlName->GetValue(),
-                                                vref, type, iadj );
-    return item;
-}
 
 void PCB_CALCULATOR_FRAME::OnRegulatorCalcButtonClick( wxCommandEvent& event )
 {
     RegulatorsSolve();
 }
+
 
 void PCB_CALCULATOR_FRAME::OnRegulatorResetButtonClick( wxCommandEvent& event )
 {
@@ -169,6 +54,7 @@ void PCB_CALCULATOR_FRAME::OnRegulatorResetButtonClick( wxCommandEvent& event )
     m_rbRegulVout->SetValue(0);
     RegulatorPageUpdate();
 }
+
 
 void PCB_CALCULATOR_FRAME::RegulatorPageUpdate()
 {
@@ -200,10 +86,12 @@ void PCB_CALCULATOR_FRAME::RegulatorPageUpdate()
     m_panelRegulators->Refresh();
 }
 
+
 void PCB_CALCULATOR_FRAME::OnRegulTypeSelection( wxCommandEvent& event )
 {
     RegulatorPageUpdate();
 }
+
 
 void PCB_CALCULATOR_FRAME::OnRegulatorSelection( wxCommandEvent& event )
 {
@@ -224,6 +112,7 @@ void PCB_CALCULATOR_FRAME::OnRegulatorSelection( wxCommandEvent& event )
     // even if no item selected
     RegulatorPageUpdate();
 }
+
 
 /*
  * Called when ckicking on button Browse:
@@ -274,9 +163,10 @@ void PCB_CALCULATOR_FRAME::OnDataFileSelection( wxCommandEvent& event )
     }
 }
 
+
 void PCB_CALCULATOR_FRAME::OnAddRegulator( wxCommandEvent& event )
 {
-    DIALOG_EDITOR_DATA dlg( this, wxEmptyString );
+    DIALOG_REGULATOR_FORM dlg( this, wxEmptyString );
     if( dlg.ShowModal() != wxID_OK )
         return;
     if( !dlg.IsOK() )
@@ -305,6 +195,7 @@ void PCB_CALCULATOR_FRAME::OnAddRegulator( wxCommandEvent& event )
     }
 }
 
+
 void PCB_CALCULATOR_FRAME::OnEditRegulator( wxCommandEvent& event )
 {
     wxString name = m_choiceRegulatorSelector->GetStringSelection();
@@ -312,7 +203,7 @@ void PCB_CALCULATOR_FRAME::OnEditRegulator( wxCommandEvent& event )
     if( item == NULL )
         return;
 
-    DIALOG_EDITOR_DATA dlg( this, name );
+    DIALOG_REGULATOR_FORM dlg( this, name );
 
     dlg.CopyRegulatorDataToDialog( item );
     if( dlg.ShowModal() != wxID_OK )
@@ -325,6 +216,7 @@ void PCB_CALCULATOR_FRAME::OnEditRegulator( wxCommandEvent& event )
 
     SelectLastSelectedRegulator();
 }
+
 
 void PCB_CALCULATOR_FRAME::OnRemoveRegulator( wxCommandEvent& event )
 {
@@ -342,6 +234,7 @@ void PCB_CALCULATOR_FRAME::OnRemoveRegulator( wxCommandEvent& event )
 
     SelectLastSelectedRegulator();
 }
+
 
 void PCB_CALCULATOR_FRAME::SelectLastSelectedRegulator()
 {
@@ -361,6 +254,7 @@ void PCB_CALCULATOR_FRAME::SelectLastSelectedRegulator()
     wxCommandEvent event;
     OnRegulatorSelection( event );
 }
+
 
 // Calculate a value from the 3 other values
 // Vref is given by the regulator properties, so

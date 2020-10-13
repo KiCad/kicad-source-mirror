@@ -28,6 +28,7 @@ void PCB_CALCULATOR_FRAME::OnToleranceSelection( wxCommandEvent& event )
     ToleranceSelection( event.GetSelection() );
 }
 
+
 void PCB_CALCULATOR_FRAME::ToleranceSelection( int aSelection )
 {
     /* For tolerance = 5 or 10 %, there are 3 bands for the value
@@ -57,4 +58,3 @@ void PCB_CALCULATOR_FRAME::ToleranceSelection( int aSelection )
         m_panelColorCode->Refresh();
     }
 }
-
