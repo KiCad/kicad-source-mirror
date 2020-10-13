@@ -283,6 +283,7 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     if( aEvent.HasPosition() )
     {
@@ -466,7 +467,6 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     controls->ShowCursor( true );
 
 
