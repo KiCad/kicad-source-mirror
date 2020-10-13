@@ -23,9 +23,8 @@
 #include <wx/log.h>
 #include <wx/msgdlg.h>
 
-#include <pcb_calculator.h>
-#include <pcb_calculator_frame_base.h>
-#include <transline.h>
+#include "pcb_calculator_frame.h"
+#include "transline.h"
 
 /*
  * Return the value from a string,
@@ -192,7 +191,7 @@ void PCB_CALCULATOR_FRAME::SetPrmBgColor( enum PRMS_ID aPrmId, const KIGFX::COLO
     {
         return;
     }
-    
+
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
 
     for( unsigned ii = 0; ii < tr_ident->GetPrmsCount(); ii++ )
@@ -206,7 +205,7 @@ void PCB_CALCULATOR_FRAME::SetPrmBgColor( enum PRMS_ID aPrmId, const KIGFX::COLO
             ctl->SetStyle( 0, -1, ctl->GetDefaultStyle() );
             return;
         }
-        
+
     }
 }
 

@@ -16,7 +16,7 @@ class UNIT_SELECTOR_LEN;
 class UNIT_SELECTOR_RESISTOR;
 class UNIT_SELECTOR_THICKNESS;
 
-#include "UnitSelector.h"
+#include "widgets/unit_selector.h"
 #include "kiway_player.h"
 #include <wx/string.h>
 #include <wx/menu.h>

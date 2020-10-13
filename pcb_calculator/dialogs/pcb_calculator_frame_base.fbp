@@ -8151,7 +8151,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h</property>
+                                                                    <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
@@ -8340,7 +8340,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h</property>
+                                                                    <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
@@ -8529,7 +8529,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h</property>
+                                                                    <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
@@ -8718,7 +8718,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h</property>
+                                                                    <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
@@ -8907,7 +8907,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h</property>
+                                                                    <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
@@ -9096,7 +9096,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h</property>
+                                                                    <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
@@ -9317,7 +9317,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">UNIT_SELECTOR_FREQUENCY; UnitSelector.h</property>
+                                                                    <property name="subclass">UNIT_SELECTOR_FREQUENCY; widgets/unit_selector.h</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
@@ -9767,7 +9767,7 @@
                                                                             <property name="show">1</property>
                                                                             <property name="size"></property>
                                                                             <property name="style"></property>
-                                                                            <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h</property>
+                                                                            <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h</property>
                                                                             <property name="toolbar_pane">0</property>
                                                                             <property name="tooltip"></property>
                                                                             <property name="validator_data_type"></property>
@@ -10020,7 +10020,7 @@
                                                                             <property name="show">1</property>
                                                                             <property name="size"></property>
                                                                             <property name="style"></property>
-                                                                            <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h</property>
+                                                                            <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h</property>
                                                                             <property name="toolbar_pane">0</property>
                                                                             <property name="tooltip"></property>
                                                                             <property name="validator_data_type"></property>
@@ -10273,7 +10273,7 @@
                                                                             <property name="show">1</property>
                                                                             <property name="size"></property>
                                                                             <property name="style"></property>
-                                                                            <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h</property>
+                                                                            <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h</property>
                                                                             <property name="toolbar_pane">0</property>
                                                                             <property name="tooltip"></property>
                                                                             <property name="validator_data_type"></property>
@@ -10820,7 +10820,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">UNIT_SELECTOR_RESISTOR; UnitSelector.h</property>
+                                                                    <property name="subclass">UNIT_SELECTOR_RESISTOR; widgets/unit_selector.h</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
@@ -11009,7 +11009,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">UNIT_SELECTOR_RESISTOR; UnitSelector.h</property>
+                                                                    <property name="subclass">UNIT_SELECTOR_RESISTOR; widgets/unit_selector.h</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
@@ -11198,7 +11198,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">UNIT_SELECTOR_ANGLE; UnitSelector.h</property>
+                                                                    <property name="subclass">UNIT_SELECTOR_ANGLE; widgets/unit_selector.h</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
@@ -12444,7 +12444,7 @@
                                                             <property name="show">1</property>
                                                             <property name="size"></property>
                                                             <property name="style"></property>
-                                                            <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h</property>
+                                                            <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h</property>
                                                             <property name="toolbar_pane">0</property>
                                                             <property name="tooltip"></property>
                                                             <property name="validator_data_type"></property>
@@ -12635,7 +12635,7 @@
                                                             <property name="show">1</property>
                                                             <property name="size"></property>
                                                             <property name="style"></property>
-                                                            <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h; Not forward_declare</property>
+                                                            <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h; Not forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
                                                             <property name="tooltip"></property>
                                                             <property name="validator_data_type"></property>
@@ -12826,7 +12826,7 @@
                                                             <property name="show">1</property>
                                                             <property name="size"></property>
                                                             <property name="style"></property>
-                                                            <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h; Not forward_declare</property>
+                                                            <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h; Not forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
                                                             <property name="tooltip"></property>
                                                             <property name="validator_data_type"></property>
@@ -13017,7 +13017,7 @@
                                                             <property name="show">1</property>
                                                             <property name="size"></property>
                                                             <property name="style"></property>
-                                                            <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h; Not forward_declare</property>
+                                                            <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h; Not forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
                                                             <property name="tooltip"></property>
                                                             <property name="validator_data_type"></property>
@@ -13208,7 +13208,7 @@
                                                             <property name="show">1</property>
                                                             <property name="size"></property>
                                                             <property name="style"></property>
-                                                            <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h; Not forward_declare</property>
+                                                            <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h; Not forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
                                                             <property name="tooltip"></property>
                                                             <property name="validator_data_type"></property>
@@ -13399,7 +13399,7 @@
                                                             <property name="show">1</property>
                                                             <property name="size"></property>
                                                             <property name="style"></property>
-                                                            <property name="subclass">UNIT_SELECTOR_RESISTOR; UnitSelector.h; Not forward_declare</property>
+                                                            <property name="subclass">UNIT_SELECTOR_RESISTOR; widgets/unit_selector.h; Not forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
                                                             <property name="tooltip"></property>
                                                             <property name="validator_data_type"></property>
@@ -16978,7 +16978,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h</property>
+                                                                    <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
@@ -17457,7 +17457,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h</property>
+                                                                    <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
@@ -17648,7 +17648,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">UNIT_SELECTOR_THICKNESS; UnitSelector.h</property>
+                                                                    <property name="subclass">UNIT_SELECTOR_THICKNESS; widgets/unit_selector.h</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
@@ -18777,7 +18777,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h</property>
+                                                                    <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
@@ -18968,7 +18968,7 @@
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
-                                                                    <property name="subclass">UNIT_SELECTOR_THICKNESS; UnitSelector.h</property>
+                                                                    <property name="subclass">UNIT_SELECTOR_THICKNESS; widgets/unit_selector.h</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
@@ -19916,7 +19916,7 @@
                                                     <property name="show">1</property>
                                                     <property name="size"></property>
                                                     <property name="style"></property>
-                                                    <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h</property>
+                                                    <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h</property>
                                                     <property name="toolbar_pane">0</property>
                                                     <property name="tooltip"></property>
                                                     <property name="validator_data_type"></property>
@@ -20523,7 +20523,7 @@
                                             <property name="show">1</property>
                                             <property name="size"></property>
                                             <property name="style"></property>
-                                            <property name="subclass">UNIT_SELECTOR_LEN; UnitSelector.h</property>
+                                            <property name="subclass">UNIT_SELECTOR_LEN; widgets/unit_selector.h</property>
                                             <property name="toolbar_pane">0</property>
                                             <property name="tooltip"></property>
                                             <property name="validator_data_type"></property>

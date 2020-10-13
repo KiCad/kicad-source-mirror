@@ -27,9 +27,9 @@
  */
 #include <wx/wx.h>
 
-#include <pcb_calculator.h>
 #include <dialog_helpers.h>
 
+#include "pcb_calculator_frame.h"
 
 extern double DoubleFromString( const wxString& TextValue );
 

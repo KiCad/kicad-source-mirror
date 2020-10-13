@@ -26,7 +26,8 @@
 
 #include <config.h>
 #include <cmath>
-#include <units_scales.h>
+
+#include "units_scales.h"
 
 #ifndef HAVE_CMATH_ASINH
 inline double asinh( double x )

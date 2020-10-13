@@ -46,12 +46,13 @@
 #include <wx/wx.h>
 
 #include <kiface_i.h>
-#include <pcb_calculator.h>
-#include <pcb_calculator_settings.h>
-#include <UnitSelector.h>
-#include <units_scales.h>
 
-#include <common_data.h>
+#include "attenuators/attenuator_classes.h"
+#include "common_data.h"
+#include "class_regulator_data.h"
+#include "pcb_calculator_frame.h"
+#include "pcb_calculator_settings.h"
+#include "units_scales.h"
 
 extern double DoubleFromString( const wxString& TextValue );
 

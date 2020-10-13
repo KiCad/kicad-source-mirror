@@ -21,11 +21,10 @@
 #include <wx/settings.h>
 #include <wx/wx.h>
 
-#include <pcb_calculator_frame_base.h>
 
-#include <pcb_calculator.h>
-#include <UnitSelector.h>
-#include <common_data.h>
+#include "common_data.h"
+#include "pcb_calculator_frame.h"
+#include "widgets/unit_selector.h"
 
 extern double DoubleFromString( const wxString& TextValue );
 

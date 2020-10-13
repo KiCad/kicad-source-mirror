@@ -22,9 +22,8 @@
 #include <kiface_i.h>
 #include <settings/settings_manager.h>
 
-#include <pcb_calculator_frame_base.h>
-#include <pcb_calculator_settings.h>
-#include <pcb_calculator.h>
+#include "pcb_calculator_frame.h"
+#include "pcb_calculator_settings.h"
 
 // Pcb_calculator data file extension:
 const wxString PcbCalcDataFileExt( wxT("pcbcalc") );

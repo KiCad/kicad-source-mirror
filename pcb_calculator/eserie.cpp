@@ -20,7 +20,9 @@
  */
 
 #include <dialog_helpers.h>
-#include <pcb_calculator.h>
+#include "class_regulator_data.h"
+#include "attenuators/attenuator_classes.h"
+#include "pcb_calculator_frame.h"
 #include <wx/wx.h>
 
 #include <array>

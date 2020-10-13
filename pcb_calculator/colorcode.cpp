@@ -21,8 +21,7 @@
 #include <wx/app.h>
 #include <wx/msgdlg.h>
 
-#include <pcb_calculator_frame_base.h>
-#include <pcb_calculator.h>
+#include "pcb_calculator_frame.h"
 
 void PCB_CALCULATOR_FRAME::OnToleranceSelection( wxCommandEvent& event )
 {

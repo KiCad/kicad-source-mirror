@@ -32,8 +32,8 @@
 #include <cstdlib>
 #include <cstring>
 
-#include <coax.h>
-#include <units.h>
+#include "coax.h"
+#include "units.h"
 
 COAX::COAX() : TRANSLINE()
 {
@@ -67,11 +67,11 @@ double COAX::alphac_coax()
 }
 
 
-/** 
+/**
  *  \f$ Z_0 = \frac{Z_{0_{\mathrm{vaccum}}}}{\sqrt{\epsilon_r}}\log_{10}\left( \frac{D_{\mathrm{out}}}{D_{\mathrm{in}}}\right) \f$
- * 
+ *
  *  \f$ \lambda_g = \frac{c}{f \cdot \sqrt{ \epsilon_r \cdot \mu_r}} \f$
- * 
+ *
  *  \f$ L_{[\mathrm{rad}]} = \frac{ 2\pi\cdot L_{[\mathrm{m}]}}{\lambda_g} \f$
  * */
 void COAX::calcAnalyze()
@@ -91,13 +91,13 @@ void COAX::calcAnalyze()
 }
 
 
-/** 
+/**
  *  \f$ D_{\mathrm{in}} = D_{\mathrm{out}}  \cdot e^{-\frac{Z_0*\sqrt{\epsilon_r}}{2\pi \cdot  Z_{0_{\mathrm{vaccum}}}}} \f$
- * 
+ *
  *  \f$ D_{\mathrm{out}} = D_{\mathrm{in}}  \cdot e^{ \frac{Z_0*\sqrt{\epsilon_r}}{2\pi \cdot  Z_{0_{\mathrm{vaccum}}}}} \f$
- * 
+ *
  *  \f$ \lambda_g = \frac{c}{f \cdot \sqrt{ \epsilon_r \cdot \mu_r}} \f$
- * 
+ *
  *  \f$ L_{[\mathrm{m}]} = \frac{ \lambda_g cdot L_{[\mathrm{m}]}}{2\pi} \f$
  * */
 void COAX::calcSynthesize()

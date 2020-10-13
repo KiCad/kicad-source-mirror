@@ -22,15 +22,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <macros.h>
-#include <common.h>
-#include <kicad_string.h>
-#include <pgm_base.h>
-#include <pcb_calculator.h>
-#include <pcb_calculator_datafile_lexer.h>
-#include <class_regulator_data.h>
-#include <datafile_read_write.h>
 #include <build_version.h>
+#include <class_regulator_data.h>
+#include <common.h>
+#include <datafile_read_write.h>
+#include <kicad_string.h>
+#include <macros.h>
+#include <pcb_calculator_datafile_lexer.h>
+#include <pcb_calculator_frame.h>
+#include <pgm_base.h>
 
 
 using namespace PCBCALC_DATA_T;

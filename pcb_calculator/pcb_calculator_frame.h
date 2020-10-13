@@ -24,16 +24,19 @@
 #ifndef PCB_CALCULATOR_H
 #define PCB_CALCULATOR_H
 
-#include <pcb_calculator_frame_base.h>
+#include "transline.h" // Included for SUBST_PRMS_ID definition.
+#include "transline_ident.h"
+#include "pcb_calculator_frame_base.h"
 
-#include <attenuator_classes.h>
-#include <class_regulator_data.h>
-#include <transline.h> // Included for SUBST_PRMS_ID definition.
-#include <transline_ident.h>
+#include "attenuators/attenuator_classes.h"
+#include "class_regulator_data.h"
 
 extern const wxString PcbCalcDataFileExt;
 
+class APP_SETTINGS_BASE;
+class KIWAY;
 class PCB_CALCULATOR_SETTINGS;
+
 
 /* Class PCB_CALCULATOR_FRAME_BASE
 This is the main frame for this application

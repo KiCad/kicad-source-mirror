@@ -27,8 +27,8 @@
 #include <cstdlib>
 #include <cstring>
 
-#include <twistedpair.h>
-#include <units.h>
+#include "twistedpair.h"
+#include "units.h"
 
 TWISTEDPAIR::TWISTEDPAIR() : TRANSLINE()
 {
@@ -39,30 +39,30 @@ TWISTEDPAIR::TWISTEDPAIR() : TRANSLINE()
 
 /**
  *  \f$ \theta = \arctan\left( T \cdot \pi \cdot D_{out} \right) \f$
- * 
+ *
  * Where :
- * - \f$ \theta \f$ : pitch angle 
+ * - \f$ \theta \f$ : pitch angle
  * - \f$ T \f$ : Number of twists per unit length
  * - \f$ D_{out} \f$ : Wire diameter with insulation
- * 
+ *
  *  \f$ e_{eff} = e_{env} \cdot \left( 0.25 + 0.0007 \cdot \theta^2 \right)\cdot\left(e_r-e_{env}\right) \f$
- * 
+ *
  * Where :
  * - \f$ e_{env} \f$ : relative dielectric constant of air ( or some other surronding material ),
  * - \f$ e_r \f$ : relative dielectric constant of the film insulation,
- * - \f$ e_{eff} \f$ : effective relative dielectric constant 
- * 
+ * - \f$ e_{eff} \f$ : effective relative dielectric constant
+ *
  * \f$ Z_0 = \frac{Z_\mathrm{VACCUM}}{\pi \cdot \sqrt{e_{eff}}}\cosh^{-1}\left(\frac{D_{out}}{D_{in}}\right) \f$
- * 
+ *
  * - \f$ Z_0 \f$ : line impedance
  * - \f$ Z_\mathrm{VACCUM} \f$ : vaccum impedance
  * - \f$ D_{in} \f$ : Wire diameter without insulation
- * 
+ *
  * Reference for above equations :
- * 
+ *
  * [1] : P. Lefferson, ``Twisted Magnet Wire Transmission Line,''
  * IEEE Transactions on Parts, Hybrids, and Packaging, vol. PHP-7, no. 4, pp. 148-154, Dec. 1971.
- * 
+ *
  * The following URL can be used as reference : http://qucs.sourceforge.net/tech/node93.html
  **/
 void TWISTEDPAIR::calcAnalyze()

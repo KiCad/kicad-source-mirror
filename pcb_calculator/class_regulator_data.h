@@ -33,6 +33,8 @@
 
 #include <vector>
 
+#include <wx/arrstr.h>
+
 // Helper class to store parameters for a regulator
 class REGULATOR_DATA
 {

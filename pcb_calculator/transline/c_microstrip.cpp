@@ -31,10 +31,10 @@
 #include <cstdlib>
 #include <cstring>
 
-#include <c_microstrip.h>
-#include <microstrip.h>
-#include <transline.h>
-#include <units.h>
+#include "c_microstrip.h"
+#include "microstrip.h"
+#include "transline.h"
+#include "units.h"
 
 C_MICROSTRIP::C_MICROSTRIP() : TRANSLINE(),
         h( 0.0 ),                  // height of substrate

@@ -19,14 +19,14 @@
  */
 #include <wx/wx.h>
 
-#include <pgm_base.h>
-#include <pcb_calculator.h>
-#include <pcb_calculator_settings.h>
-#include <UnitSelector.h>
 #include <bitmaps.h>
 #include <geometry/shape_poly_set.h>
 #include <kiface_i.h>
 
+#include "attenuators/attenuator_classes.h"
+#include "class_regulator_data.h"
+#include "pcb_calculator_frame.h"
+#include "pcb_calculator_settings.h"
 
 // extension of pcb_calculator data filename:
 const wxString DataFileNameExt( wxT("pcbcalc") );

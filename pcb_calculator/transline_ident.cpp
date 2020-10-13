@@ -46,9 +46,9 @@
 #include <twistedpair.h>
 
 #include <kiface_i.h>
-#include <pcb_calculator_settings.h>
-#include <UnitSelector.h>
-#include <transline_ident.h>
+#include "pcb_calculator_settings.h"
+#include "widgets/unit_selector.h"
+#include "transline_ident.h"
 
 
 /*

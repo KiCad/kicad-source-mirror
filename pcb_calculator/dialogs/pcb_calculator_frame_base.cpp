@@ -5,7 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "UnitSelector.h"
+#include "widgets/unit_selector.h"
 
 #include "pcb_calculator_frame_base.h"
 

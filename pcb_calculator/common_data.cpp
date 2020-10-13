@@ -23,7 +23,7 @@
  * @note lists of constants used in different panels
  */
 
-#include <common_data.h>
+#include "common_data.h"
 
 wxArrayString StandardRelativeDielectricConstantList()
 {

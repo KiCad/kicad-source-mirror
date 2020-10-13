@@ -23,7 +23,7 @@ set( PCB_CALCULATOR_SRCS
     tracks_width_versus_current.cpp
     via.cpp
     transline_ident.cpp
-    UnitSelector.cpp
+    widgets/unit_selector.cpp
     transline/transline.cpp
     transline/c_microstrip.cpp
     transline/microstrip.cpp

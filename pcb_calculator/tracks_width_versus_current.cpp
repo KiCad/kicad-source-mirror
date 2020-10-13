@@ -30,15 +30,14 @@
 #include <kiface_i.h>
 #include <dialog_helpers.h>
 
-#include <pcb_calculator_frame_base.h>
-
-#include <pcb_calculator.h>
-#include <pcb_calculator_settings.h>
-#include <UnitSelector.h>
-#include <units_scales.h>
+#include "attenuators/attenuator_classes.h"
+#include "class_regulator_data.h"
+#include "pcb_calculator_frame.h"
+#include "pcb_calculator_settings.h"
+#include "units_scales.h"
 
 wxString tracks_width_versus_current_formula =
-#include <tracks_width_versus_current_formula.h>
+#include "tracks_width_versus_current_formula.h"
 
 extern double DoubleFromString( const wxString& TextValue );
 
@@ -424,7 +423,7 @@ void PCB_CALCULATOR_FRAME::TW_Init()
 
     // Read parameter values.
     auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
-   
+
     m_TrackCurrentValue->SetValue( cfg->m_TrackWidth.current );
     m_TrackDeltaTValue->SetValue( cfg->m_TrackWidth.delta_tc );
     m_TrackLengthValue->SetValue( cfg->m_TrackWidth.track_len );

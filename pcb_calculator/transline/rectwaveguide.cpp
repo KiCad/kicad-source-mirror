@@ -25,8 +25,8 @@
 #include <cstdio>
 #include <cstring>
 
-#include <rectwaveguide.h>
-#include <units.h>
+#include "rectwaveguide.h"
+#include "units.h"
 
 RECTWAVEGUIDE::RECTWAVEGUIDE() : TRANSLINE(),
     mur( 0.0 ),                 // magnetic permeability of substrate

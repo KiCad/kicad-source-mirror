@@ -27,8 +27,8 @@
 #include <cstdlib>
 #include <cstring>
 
-#include <stripline.h>
-#include <units.h>
+#include "stripline.h"
+#include "units.h"
 
 STRIPLINE::STRIPLINE() : TRANSLINE()
 {

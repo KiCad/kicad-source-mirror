@@ -23,8 +23,8 @@
   * a wxChoiceBox to select units in Pcb_Calculator
   */
 
-#include <UnitSelector.h>
-#include <units_scales.h>
+#include "unit_selector.h"
+#include "units_scales.h"
 
 UNIT_SELECTOR_LEN::UNIT_SELECTOR_LEN( wxWindow *parent, wxWindowID id,
                   const wxPoint& pos, const wxSize& size,

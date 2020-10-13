@@ -7,10 +7,11 @@
 *****************************************************************************/
 #include <cmath>
 
-#include <attenuator_classes.h>
 #include <i18n_utility.h>
 #include <kiface_i.h>
-#include <pcb_calculator_settings.h>
+
+#include "attenuator_classes.h"
+#include "pcb_calculator_settings.h"
 
 // Bitmaps:
 #include <att_bridge.xpm>

@@ -28,8 +28,8 @@
 #include <cstdlib>
 #include <cstring>
 
-#include <coplanar.h>
-#include <units.h>
+#include "coplanar.h"
+#include "units.h"
 
 COPLANAR::COPLANAR() : TRANSLINE()
 {
