@@ -36,6 +36,7 @@
 #include <gerbview_draw_panel_gal.h>
 #include <gerbview_settings.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <page_layout/ws_proxy_view_item.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>

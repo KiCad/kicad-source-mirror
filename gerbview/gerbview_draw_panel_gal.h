@@ -21,7 +21,6 @@
 #define GERBVIEW_DRAW_PANEL_GAL_H_
 
 #include <class_draw_panel_gal.h>
-#include <page_layout/ws_proxy_view_item.h>
 
 namespace KIGFX
 {
