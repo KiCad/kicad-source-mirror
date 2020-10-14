@@ -90,13 +90,14 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     if( !reportPhase( _( "Checking board edge clearances..." ) ) )
         return false;
     
-    std::vector<PCB_SHAPE*>  boardOutline;
+    std::vector<PCB_SHAPE>   boardOutline;
     std::vector<BOARD_ITEM*> boardItems;
 
     auto queryBoardOutlineItems =
             [&]( BOARD_ITEM *item ) -> bool
             {
                 boardOutline.push_back( dyn_cast<PCB_SHAPE*>( item ) );
+                boardOutline.back().SetWidth( 0 );
                 return true;
             };
 
@@ -116,20 +117,20 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     drc_dbg( 2, "outline: %d items, board: %d items\n",
             (int) boardOutline.size(), (int) boardItems.size() );
 
-    for( PCB_SHAPE* outlineItem : boardOutline )
+    for( const PCB_SHAPE& outlineItem : boardOutline )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_EDGE_CLEARANCE ) )
             break;
 
-        const std::shared_ptr<SHAPE>& refShape = outlineItem->GetEffectiveShape();
+        const std::shared_ptr<SHAPE>& refShape = outlineItem.GetEffectiveShape();
 
         for( BOARD_ITEM* boardItem : boardItems )
         {
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_EDGE_CLEARANCE ) )
                 break;
 
-            drc_dbg( 10, "RefT %d %p %s %d\n", outlineItem->Type(), outlineItem,
-                     outlineItem->GetClass(), outlineItem->GetLayer() );
+            drc_dbg( 10, "RefT %d %p %s %d\n", outlineItem.Type(), &outlineItem,
+                     outlineItem.GetClass(), outlineItem.GetLayer() );
             drc_dbg( 10, "BoardT %d %p %s %d\n", boardItem->Type(), boardItem,
                      boardItem->GetClass(), boardItem->GetLayer() );
 
@@ -139,7 +140,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
             const std::shared_ptr<SHAPE>& shape = boardItem->GetEffectiveShape();
 
             auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
-                                                              outlineItem, boardItem );
+                                                              &outlineItem, boardItem );
 
             int      minClearance = constraint.GetValue().Min();
             int      actual;
@@ -157,7 +158,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                               MessageTextFromValue( userUnits(), actual ) );
 
                 drcItem->SetErrorMessage( m_msg );
-                drcItem->SetItems( outlineItem, boardItem );
+                drcItem->SetItems( &outlineItem, boardItem );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                 reportViolation( drcItem, (wxPoint) pos );
@@ -171,20 +172,20 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     boardItems.clear();
     forEachGeometryItem( {}, LSET( 2, F_SilkS, B_SilkS ), queryBoardGeometryItems );
 
-    for( PCB_SHAPE* outlineItem : boardOutline )
+    for( const PCB_SHAPE& outlineItem : boardOutline )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
             break;
 
-        const std::shared_ptr<SHAPE>& refShape = outlineItem->GetEffectiveShape();
+        const std::shared_ptr<SHAPE>& refShape = outlineItem.GetEffectiveShape();
 
         for( BOARD_ITEM* boardItem : boardItems )
         {
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
                 break;
 
-            drc_dbg( 10, "RefT %d %p %s %d\n", outlineItem->Type(), outlineItem,
-                     outlineItem->GetClass(), outlineItem->GetLayer() );
+            drc_dbg( 10, "RefT %d %p %s %d\n", outlineItem.Type(), &outlineItem,
+                     outlineItem.GetClass(), outlineItem.GetLayer() );
             drc_dbg( 10, "BoardT %d %p %s %d\n", boardItem->Type(), boardItem,
                      boardItem->GetClass(), boardItem->GetLayer() );
 
@@ -194,7 +195,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
             const std::shared_ptr<SHAPE>& shape = boardItem->GetEffectiveShape();
 
             auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,
-                                                              outlineItem, boardItem );
+                                                              &outlineItem, boardItem );
 
             int      minClearance = constraint.GetValue().Min();
             int      actual;
@@ -216,7 +217,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                     drcItem->SetErrorMessage( m_msg );
                 }
 
-                drcItem->SetItems( outlineItem, boardItem );
+                drcItem->SetItems( &outlineItem, boardItem );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                 reportViolation( drcItem, (wxPoint) pos );

@@ -115,8 +115,8 @@ public:
         m_ids.push_back( aItem->m_Uuid );
     }
 
-    void SetItems( EDA_ITEM* aItem, EDA_ITEM* bItem = nullptr, EDA_ITEM* cItem = nullptr,
-                   EDA_ITEM* dItem = nullptr )
+    void SetItems( const EDA_ITEM* aItem, const EDA_ITEM* bItem = nullptr,
+                   const EDA_ITEM* cItem = nullptr, const EDA_ITEM* dItem = nullptr )
     {
         m_ids.clear();
 
