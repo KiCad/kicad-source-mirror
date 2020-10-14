@@ -323,6 +323,7 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
         case ALTIUM_SCH_RECORD::PIECHART:
             break;
         case ALTIUM_SCH_RECORD::ROUND_RECTANGLE:
+            ParseRoundRectangle( properties );
             break;
         case ALTIUM_SCH_RECORD::ELLIPTICAL_ARC:
             break;
@@ -817,6 +818,81 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
             line->SetFillMode( FILL_TYPE::FILLED_SHAPE );
         else
             line->SetFillMode( FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
+    }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_ROUND_RECTANGLE elem( aProperties );
+
+    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    {
+        const wxPoint topLeft     = { elem.bottomLeft.x, elem.topRight.y };
+        const wxPoint bottomRight = { elem.topRight.x, elem.bottomLeft.y };
+
+        // TODO: we cannot fill this rectangle, only draw it for now
+        // TODO: misses rounded edges
+        SCH_LINE* lineTop = new SCH_LINE( elem.topRight, SCH_LAYER_ID::LAYER_NOTES );
+        lineTop->SetEndPoint( topLeft );
+        lineTop->SetLineWidth( elem.lineWidth );
+        lineTop->SetLineStyle( PLOT_DASH_TYPE::SOLID );
+        lineTop->SetFlags( IS_NEW );
+        m_currentSheet->GetScreen()->Append( lineTop );
+
+        SCH_LINE* lineBottom = new SCH_LINE( elem.bottomLeft, SCH_LAYER_ID::LAYER_NOTES );
+        lineBottom->SetEndPoint( bottomRight );
+        lineBottom->SetLineWidth( elem.lineWidth );
+        lineBottom->SetLineStyle( PLOT_DASH_TYPE::SOLID );
+        lineBottom->SetFlags( IS_NEW );
+        m_currentSheet->GetScreen()->Append( lineBottom );
+
+        SCH_LINE* lineRight = new SCH_LINE( elem.topRight, SCH_LAYER_ID::LAYER_NOTES );
+        lineRight->SetEndPoint( bottomRight );
+        lineRight->SetLineWidth( elem.lineWidth );
+        lineRight->SetLineStyle( PLOT_DASH_TYPE::SOLID );
+        lineRight->SetFlags( IS_NEW );
+        m_currentSheet->GetScreen()->Append( lineRight );
+
+        SCH_LINE* lineLeft = new SCH_LINE( elem.bottomLeft, SCH_LAYER_ID::LAYER_NOTES );
+        lineLeft->SetEndPoint( topLeft );
+        lineLeft->SetLineWidth( elem.lineWidth );
+        lineLeft->SetLineStyle( PLOT_DASH_TYPE::SOLID );
+        lineLeft->SetFlags( IS_NEW );
+        m_currentSheet->GetScreen()->Append( lineLeft );
+    }
+    else
+    {
+        const auto& symbol = m_symbols.find( elem.ownerindex );
+        if( symbol == m_symbols.end() )
+        {
+            // TODO: e.g. can depend on Template (RECORD=39
+            wxLogWarning( wxString::Format(
+                    "Rounded Rectangle tries to access symbol with ownerindex %d which does not exist",
+                    elem.ownerindex ) );
+            return;
+        }
+
+        const auto& component = m_components.at( symbol->first );
+
+        // TODO: misses rounded edges
+        LIB_RECTANGLE* rect = new LIB_RECTANGLE( symbol->second );
+        symbol->second->AddDrawItem( rect );
+        rect->SetPosition( GetRelativePosition( elem.topRight, component ) );
+        rect->SetEnd( GetRelativePosition( elem.bottomLeft, component ) );
+        rect->SetWidth( elem.lineWidth );
+
+        if( elem.isSolid )
+        {
+            if( elem.color == elem.areacolor )
+                rect->SetFillMode( FILLED_SHAPE );
+            else
+                rect->SetFillMode( FILLED_WITH_BG_BODYCOLOR );
+        }
+        else
+        {
+            rect->SetFillMode( NO_FILL );
+        }
     }
 }
 

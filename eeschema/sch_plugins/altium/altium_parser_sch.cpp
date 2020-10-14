@@ -227,6 +227,32 @@ ASCH_POLYGON::ASCH_POLYGON( const std::map<wxString, wxString>& aProperties )
 }
 
 
+ASCH_ROUND_RECTANGLE::ASCH_ROUND_RECTANGLE( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::RECTANGLE );
+
+    ownerindex =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
+    ownerpartid =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+
+    bottomLeft = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
+    topRight   = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "CORNER.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "CORNER.Y" ) );
+
+    topRight = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "CORNERXRADIUS" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "CORNERYRADIUS" ) );
+
+    lineWidth     = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
+    isSolid       = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISSOLID", false );
+    isTransparent = ALTIUM_PARSER::PropertiesReadBool( aProperties, "TRANSPARENT", false );
+
+    color     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "COLOR", 0 );
+    areacolor = ALTIUM_PARSER::PropertiesReadInt( aProperties, "AREACOLOR", 0 );
+}
+
+
 ASCH_ARC::ASCH_ARC( const std::map<wxString, wxString>& aProperties )
 {
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::ARC );

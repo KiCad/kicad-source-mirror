@@ -251,6 +251,27 @@ struct ASCH_POLYGON
 };
 
 
+struct ASCH_ROUND_RECTANGLE
+{
+    int ownerindex;
+    int ownerpartid;
+
+    wxPoint bottomLeft;
+    wxPoint topRight;
+
+    wxSize cornerradius;
+
+    int  lineWidth;
+    bool isSolid;
+    bool isTransparent;
+
+    int color;
+    int areacolor;
+
+    explicit ASCH_ROUND_RECTANGLE( const std::map<wxString, wxString>& aProperties );
+};
+
+
 struct ASCH_ARC
 {
     int ownerindex;

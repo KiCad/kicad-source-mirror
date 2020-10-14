@@ -103,6 +103,7 @@ private:
     void ParseBezier( const std::map<wxString, wxString>& aProperties );
     void ParsePolyline( const std::map<wxString, wxString>& aProperties );
     void ParsePolygon( const std::map<wxString, wxString>& aProperties );
+    void ParseRoundRectangle( const std::map<wxString, wxString>& aProperties );
     void ParseArc( const std::map<wxString, wxString>& aProperties );
     void ParseLine( const std::map<wxString, wxString>& aProperties );
     void ParseRectangle( const std::map<wxString, wxString>& aProperties );
