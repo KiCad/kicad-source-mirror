@@ -48,6 +48,7 @@
 #include <wx/ffile.h>
 #include <erc_item.h>
 #include <eeschema_settings.h>
+#include <kicad_string.h>
 
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
         DIALOG_ERC_BASE( parent, ID_DIALOG_ERC ),  // parent looks for this ID explicitly

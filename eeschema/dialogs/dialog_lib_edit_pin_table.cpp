@@ -33,6 +33,7 @@
 #include <widgets/wx_grid.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <kicad_string.h>
 
 class PIN_TABLE_DATA_MODEL : public wxGridTableBase
 {

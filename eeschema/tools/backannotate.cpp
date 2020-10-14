@@ -32,6 +32,7 @@
 #include <sch_edit_frame.h>
 #include <sch_sheet_path.h>
 #include <schematic.h>
+#include <kicad_string.h>
 #include <kiface_i.h>
 #include <wildcards_and_files_ext.h>
 

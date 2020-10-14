@@ -29,6 +29,7 @@
 #include <lib_arc.h>
 #include <lib_polyline.h>
 #include <lib_text.h>
+#include <kicad_string.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h> //COMPONENT_ORIENTATION_T
 #include <sch_io_mgr.h>
@@ -87,14 +88,14 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( ::SCHEMATIC* aSchematic, ::SCH_SHEET* aRo
     loadFigures();
     loadTexts();
     loadDocumentationSymbols();
-    
+
     if( Schematic.VariantHierarchy.Variants.size() > 0 )
     {
         wxLogWarning(
                 _( "The CADSTAR design contains variants which has no KiCad equivalent. All "
                    "components have been loaded on top of each other. " ) );
     }
-        
+
     if( Schematic.Groups.size() > 0 )
     {
         wxLogWarning(
@@ -1050,11 +1051,11 @@ CADSTAR_SCH_ARCHIVE_LOADER::POINT CADSTAR_SCH_ARCHIVE_LOADER::getLocationOfNetEl
         const NET_SCH& aNet, const NETELEMENT_ID& aNetElementID )
 {
     // clang-format off
-    auto logUnknownNetElementError = 
+    auto logUnknownNetElementError =
         [&]()
         {
-            wxLogError( wxString::Format( _( 
-                "Net %s references unknown net element %s. The net was "                                         
+            wxLogError( wxString::Format( _(
+                "Net %s references unknown net element %s. The net was "
                 "not properly loaded and may require manual fixing." ),
                     getNetName( aNet ), aNetElementID ) );
 

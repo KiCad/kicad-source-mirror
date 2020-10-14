@@ -27,7 +27,6 @@
 
 #include <common.h>                 // wxStringSplit
 #include <eda_rect.h>
-#include "kicad_string.h"
 #include "painter.h"
 
 class SHAPE_COMPOUND;

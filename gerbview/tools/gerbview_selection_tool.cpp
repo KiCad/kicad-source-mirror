@@ -26,6 +26,7 @@ using namespace std::placeholders;
 #include <bitmaps.h>
 #include <gerber_collectors.h>
 #include <class_draw_panel_gal.h>
+#include <kicad_string.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>

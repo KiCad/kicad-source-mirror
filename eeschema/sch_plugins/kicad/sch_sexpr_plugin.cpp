@@ -58,6 +58,7 @@
 #include <sch_plugins/kicad/sch_sexpr_parser.h>
 #include <symbol_lib_table.h>  // for PropPowerSymsOnly definintion.
 #include <ee_selection.h>
+#include <kicad_string.h>
 
 
 using namespace TSCHEMATIC_T;
