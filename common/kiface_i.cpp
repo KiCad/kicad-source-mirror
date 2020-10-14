@@ -66,13 +66,12 @@ static void setSearchPaths( SEARCH_STACK* aDst, KIWAY::FACE_T aId )
         {
             fn.AppendDir( wxT( "modules" ) );
             aDst->AddPaths( fn.GetPath() );
+            fn.RemoveLastDir();
 
             // Add 3D module library file path to search path list.
-            fn.AppendDir( wxT( "packages3d" ) );
+            fn.AppendDir( wxT( "3dmodels" ) );
             aDst->AddPaths( fn.GetPath() );
-
             fn.RemoveLastDir();
-            fn.RemoveLastDir();     // "../../" up twice, remove modules/packages3d
         }
 
         // Add KiCad template file path to search path list.

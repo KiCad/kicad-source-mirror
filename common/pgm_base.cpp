@@ -327,7 +327,8 @@ bool PGM_BASE::InitPgm()
     }
     else
     {
-        tmpFileName.AppendDir( "packages3d" );
+        tmpFileName = baseSharePath;
+        tmpFileName.AppendDir( "3dmodels" );
         envVarItem.SetDefinedExternally( false );
     }
 
