@@ -284,7 +284,7 @@ public:
 
 #define CTL_FOR_CVPCB    (CTL_OMIT_NETS | CTL_OMIT_FILTERS | CTL_OMIT_EXTRA)
 
-    void FormatCbpcbNetlist( OUTPUTFORMATTER* aOut )
+    void FormatCvpcbNetlist( OUTPUTFORMATTER* aOut )
     {
         Format( "cvpcb_netlist", aOut, 0, CTL_FOR_CVPCB );
     }
