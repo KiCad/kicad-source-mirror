@@ -465,12 +465,13 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
             // Remove all pads/drawings/texts, as they become invalid
             // for the VIEW after SwapData() called for modules
-            view->Remove( eda_item );
+            view->Remove( item );
             connectivity->Remove( item );
 
             SwapItemData( item, image );
 
-            view->Add( eda_item );
+            view->Add( item );
+            view->Hide( item, false );
             connectivity->Add( item );
             item->GetBoard()->OnItemChanged( item );
         }
