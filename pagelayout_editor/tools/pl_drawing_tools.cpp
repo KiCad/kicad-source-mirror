@@ -29,8 +29,8 @@
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <bitmaps.h>
-#include <ws_draw_item.h>
-#include <ws_data_item.h>
+#include <page_layout/ws_draw_item.h>
+#include <page_layout/ws_data_item.h>
 
 #include "invoke_pl_editor_dialog.h"
 #include "pl_editor_frame.h"

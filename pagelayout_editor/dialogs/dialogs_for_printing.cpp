@@ -28,10 +28,10 @@
 
 #include <base_units.h>
 #include <dialog_helpers.h>
-#include <ws_draw_item.h>
-#include <ws_data_item.h>
-#include <ws_data_model.h>
-#include <ws_painter.h>
+#include <page_layout/ws_draw_item.h>
+#include <page_layout/ws_data_item.h>
+#include <page_layout/ws_data_model.h>
+#include <page_layout/ws_painter.h>
 #include <dialog_page_settings.h>
 
 #include "invoke_pl_editor_dialog.h"

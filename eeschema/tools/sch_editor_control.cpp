@@ -55,7 +55,7 @@
 #include <tools/ee_selection.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_editor_control.h>
-#include <ws_proxy_undo_item.h>
+#include <page_layout/ws_proxy_undo_item.h>
 #include <dialog_update_from_pcb.h>
 #include <dialog_helpers.h>
 

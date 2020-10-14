@@ -115,7 +115,7 @@
  *
  */
 
-#include <ws_painter.h>
+#include <page_layout/ws_painter.h>
 
 // height of the band reference grid  2.0 mm
 // worksheet frame reference text size 1.3 mm

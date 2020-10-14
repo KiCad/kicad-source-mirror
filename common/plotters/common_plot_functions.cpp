@@ -24,10 +24,10 @@
 
 #include <base_struct.h>
 #include <plotters_specific.h>
-#include <ws_painter.h>
+#include <page_layout/ws_data_item.h>
+#include <page_layout/ws_draw_item.h>
+#include <page_layout/ws_painter.h>
 #include <title_block.h>
-#include "ws_draw_item.h"
-#include "ws_data_item.h"
 #include <wx/filename.h>
 
 

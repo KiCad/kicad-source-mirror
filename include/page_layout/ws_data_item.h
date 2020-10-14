@@ -33,7 +33,7 @@
 #include <math/vector2d.h>
 #include <eda_text.h>
 #include <bitmap_base.h>
-#include "ws_draw_item.h"
+#include "page_layout/ws_draw_item.h"
 
 class WS_DRAW_ITEM_TEXT;            // Forward declaration
 

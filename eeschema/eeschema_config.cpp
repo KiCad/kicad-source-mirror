@@ -47,7 +47,7 @@
 #include <symbol_lib_table.h>
 #include <widgets/paged_dialog.h>
 #include <wildcards_and_files_ext.h>
-#include <ws_data_model.h>
+#include <page_layout/ws_data_model.h>
 
 
 #define FieldNameTemplatesKey         wxT( "FieldNameTemplates" )

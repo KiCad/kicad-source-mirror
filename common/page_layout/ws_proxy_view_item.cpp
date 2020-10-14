@@ -22,13 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <ws_proxy_view_item.h>
-#include <ws_draw_item.h>
-#include <ws_data_item.h>
 #include <layers_id_colors_and_visibility.h>
 #include <page_info.h>
+#include <page_layout/ws_proxy_view_item.h>
+#include <page_layout/ws_draw_item.h>
+#include <page_layout/ws_data_item.h>
+#include <page_layout/ws_painter.h>
 #include <view/view.h>
-#include <ws_painter.h>
 
 using namespace KIGFX;
 

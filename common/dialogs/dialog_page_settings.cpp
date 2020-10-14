@@ -33,8 +33,8 @@
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <wildcards_and_files_ext.h>
-#include <ws_data_model.h>
-#include <ws_painter.h>
+#include <page_layout/ws_data_model.h>
+#include <page_layout/ws_painter.h>
 #include <wx/valgen.h>
 #include <wx/tokenzr.h>
 

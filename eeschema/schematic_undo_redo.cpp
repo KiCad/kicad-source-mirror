@@ -29,7 +29,7 @@
 #include <sch_line.h>
 #include <sch_bitmap.h>
 #include <tools/ee_selection_tool.h>
-#include <ws_proxy_undo_item.h>
+#include <page_layout/ws_proxy_undo_item.h>
 #include <tool/actions.h>
 
 /* Functions to undo and redo edit commands.

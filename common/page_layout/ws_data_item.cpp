@@ -53,11 +53,11 @@
 #include <eda_rect.h>
 #include <math/util.h>      // for KiROUND
 #include <view/view.h>
-#include <ws_painter.h>
 #include <title_block.h>
-#include <ws_draw_item.h>
-#include <ws_data_model.h>
-#include <ws_data_item.h>
+#include <page_layout/ws_data_model.h>
+#include <page_layout/ws_data_item.h>
+#include <page_layout/ws_draw_item.h>
+#include <page_layout/ws_painter.h>
 
 using KIGFX::COLOR4D;
 

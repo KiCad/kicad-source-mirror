@@ -23,10 +23,10 @@
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <view/wx_view_controls.h>
-#include <ws_proxy_view_item.h>
-#include <ws_data_item.h>
-#include <ws_data_model.h>
-#include <ws_painter.h>
+#include <page_layout/ws_proxy_view_item.h>
+#include <page_layout/ws_data_item.h>
+#include <page_layout/ws_data_model.h>
+#include <page_layout/ws_painter.h>
 #include <pgm_base.h>
 #include <kiway.h>
 #include <settings/settings_manager.h>

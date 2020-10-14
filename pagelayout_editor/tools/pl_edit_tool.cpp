@@ -24,9 +24,9 @@
 
 #include <tool/tool_manager.h>
 #include <tool/picker_tool.h>
-#include <ws_data_item.h>
-#include <ws_data_model.h>
-#include <ws_draw_item.h>
+#include <page_layout/ws_data_item.h>
+#include <page_layout/ws_data_model.h>
+#include <page_layout/ws_draw_item.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <base_struct.h>

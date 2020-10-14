@@ -30,7 +30,7 @@
 
 #include <page_info.h>
 #include <title_block.h>
-#include <ws_draw_item.h>
+#include <page_layout/ws_draw_item.h>
 
 
 /**

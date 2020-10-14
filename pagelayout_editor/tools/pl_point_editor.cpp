@@ -34,7 +34,7 @@ using namespace std::placeholders;
 
 #include <bitmaps.h>
 #include <status_popup.h>
-#include <ws_draw_item.h>
+#include <page_layout/ws_draw_item.h>
 #include <widgets/progress_reporter.h>
 
 #include "pl_editor_frame.h"

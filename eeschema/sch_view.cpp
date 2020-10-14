@@ -31,7 +31,7 @@
 #include <view/view_group.h>
 #include <view/view_rtree.h>
 #include <view/wx_view_controls.h>
-#include <ws_proxy_view_item.h>
+#include <page_layout/ws_proxy_view_item.h>
 #include <layers_id_colors_and_visibility.h>
 #include <sch_screen.h>
 #include <schematic.h>

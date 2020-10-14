@@ -26,9 +26,9 @@
 #include <project.h>
 #include <scintilla_tricks.h>
 #include <tool/tool_manager.h>
-#include <ws_draw_item.h>
-#include <ws_data_item.h>
-#include <ws_data_model.h>
+#include <page_layout/ws_draw_item.h>
+#include <page_layout/ws_data_item.h>
+#include <page_layout/ws_data_model.h>
 #include <view/view.h>
 
 #include "properties_frame.h"

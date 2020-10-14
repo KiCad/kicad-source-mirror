@@ -61,7 +61,7 @@
 #include <view/view_controls.h>
 #include <view/view_group.h>
 #include <wildcards_and_files_ext.h>
-#include <ws_proxy_undo_item.h>
+#include <page_layout/ws_proxy_undo_item.h>
 #include <footprint_edit_frame.h>
 
 using namespace std::placeholders;
@@ -784,9 +784,9 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     else if( aEvent.HasPosition() )
         m_toolMgr->RunAction( PCB_ACTIONS::cursorClick );
 
-    auto setCursor = 
-            [&]() 
-            { 
+    auto setCursor =
+            [&]()
+            {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 
@@ -1007,9 +1007,9 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    auto setCursor = 
-            [&]() 
-            { 
+    auto setCursor =
+            [&]()
+            {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
             };
 

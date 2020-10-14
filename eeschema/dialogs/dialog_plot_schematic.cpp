@@ -30,7 +30,7 @@
 #include <kiface_i.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
-#include <ws_painter.h>
+#include <page_layout/ws_painter.h>
 #include <sch_painter.h>
 #include <schematic.h>
 

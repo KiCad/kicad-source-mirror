@@ -76,7 +76,7 @@
 #include <wildcards_and_files_ext.h>
 #include <wx/cmdline.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <ws_proxy_view_item.h>
+#include <page_layout/ws_proxy_view_item.h>
 
 // non-member so it can be moved easily, and kept REALLY private.
 // Do NOT Clear() in here.

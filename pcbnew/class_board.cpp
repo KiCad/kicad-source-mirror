@@ -29,7 +29,7 @@
 #include <iterator>
 #include <pcb_base_frame.h>
 #include <reporter.h>
-#include <ws_proxy_view_item.h>
+#include <page_layout/ws_proxy_view_item.h>
 #include <board_commit.h>
 #include <class_board.h>
 #include <class_module.h>

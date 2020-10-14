@@ -25,11 +25,11 @@
 #include <kiway.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
-#include <ws_painter.h>
 #include <confirm.h>
 #include <bitmaps.h>
 #include <dialog_page_settings.h>
-#include <ws_data_model.h>
+#include <page_layout/ws_data_model.h>
+#include <page_layout/ws_painter.h>
 
 #include "pl_editor_frame.h"
 #include "pl_editor_id.h"

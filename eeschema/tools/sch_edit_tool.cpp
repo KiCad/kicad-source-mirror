@@ -46,7 +46,7 @@
 #include <sch_junction.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
-#include <ws_proxy_view_item.h>
+#include <page_layout/ws_proxy_view_item.h>
 #include <eeschema_id.h>
 #include <status_popup.h>
 #include <wx/gdicmn.h>

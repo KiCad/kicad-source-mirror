@@ -37,8 +37,8 @@
 #include <sch_reference_list.h>
 #include <sch_sheet.h>
 #include <schematic.h>
-#include <ws_draw_item.h>
-#include <ws_proxy_view_item.h>
+#include <page_layout/ws_draw_item.h>
+#include <page_layout/ws_proxy_view_item.h>
 #include <wx/ffile.h>
 
 

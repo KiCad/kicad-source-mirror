@@ -29,7 +29,7 @@
 #include <gal/color4d.h>
 #include <painter.h>
 #include <page_info.h>
-#include <ws_draw_item.h>
+#include <page_layout/ws_draw_item.h>
 
 // Forward declarations:
 class EDA_RECT;

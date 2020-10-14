@@ -51,7 +51,7 @@
 #include <tool/zoom_menu.h>
 #include <trace_helpers.h>
 #include <view/view.h>
-#include <ws_draw_item.h>
+#include <page_layout/ws_draw_item.h>
 #include <wx/snglinst.h>
 #include <dialogs/dialog_grid_settings.h>
 

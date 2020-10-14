@@ -56,7 +56,7 @@
 #include <trace_helpers.h>
 #include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
-#include <ws_data_model.h>
+#include <page_layout/ws_data_model.h>
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
 {

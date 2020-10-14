@@ -21,7 +21,7 @@
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <gerbview_painter.h>
-#include <ws_proxy_view_item.h>
+#include <page_layout/ws_proxy_view_item.h>
 
 #include <gerbview_frame.h>
 #include <gbr_display_options.h>

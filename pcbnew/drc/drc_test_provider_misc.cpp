@@ -26,8 +26,8 @@
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
 
-#include <ws_draw_item.h>
-#include <ws_proxy_view_item.h>
+#include <page_layout/ws_draw_item.h>
+#include <page_layout/ws_proxy_view_item.h>
 
 /*
     Miscellaneous tests:

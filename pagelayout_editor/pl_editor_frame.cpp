@@ -27,8 +27,8 @@
 #include <pgm_base.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
-#include <ws_data_item.h>
-#include <ws_data_model.h>
+#include <page_layout/ws_data_item.h>
+#include <page_layout/ws_data_model.h>
 #include <widgets/paged_dialog.h>
 #include <panel_gal_display_options.h>
 #include <panel_hotkeys_editor.h>

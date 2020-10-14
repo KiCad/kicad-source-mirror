@@ -30,7 +30,7 @@
 #include <fp_shape.h>
 #include <collectors.h>
 #include <pcb_edit_frame.h>
-#include <ws_proxy_view_item.h>
+#include <page_layout/ws_proxy_view_item.h>
 #include <kiway.h>
 #include <array_creator.h>
 #include <pcbnew_settings.h>

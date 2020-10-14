@@ -42,7 +42,7 @@ using namespace std::placeholders;
 #include <tools/selection_tool.h>
 #include <tools/pcbnew_control.h>
 #include <tools/pcb_editor_control.h>
-#include <ws_proxy_undo_item.h>
+#include <page_layout/ws_proxy_undo_item.h>
 
 /* Functions to undo and redo edit commands.
  *  commands to undo are stored in CurrentScreen->m_UndoList

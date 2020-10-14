@@ -41,7 +41,7 @@
 #include <settings/settings_manager.h>
 #include <title_block.h>
 #include <view/view.h>
-#include <ws_proxy_view_item.h>
+#include <page_layout/ws_proxy_view_item.h>
 #include <sch_base_frame.h>
 #include <widgets/color_swatch.h>
 

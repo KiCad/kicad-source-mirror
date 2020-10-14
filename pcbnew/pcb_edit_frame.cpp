@@ -40,7 +40,7 @@
 #include <invoke_pcb_dialog.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <ws_proxy_view_item.h>
+#include <page_layout/ws_proxy_view_item.h>
 #include <connectivity/connectivity_data.h>
 #include <wildcards_and_files_ext.h>
 #include <pcb_draw_panel_gal.h>

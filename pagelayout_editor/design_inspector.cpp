@@ -25,9 +25,9 @@
 #include <wx/imaglist.h>
 #include <wx/wupdlock.h>
 
-#include <ws_draw_item.h>
-#include <ws_data_item.h>
-#include <ws_data_model.h>
+#include <page_layout/ws_draw_item.h>
+#include <page_layout/ws_data_item.h>
+#include <page_layout/ws_data_model.h>
 #include <tool/tool_manager.h>
 
 #include "dialogs/dialog_design_inspector_base.h"
