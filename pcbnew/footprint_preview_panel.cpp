@@ -208,9 +208,9 @@ public:
 
         try
         {
-            aEntry.module.reset( fptbl->FootprintLoadWithOptionalNickname( aEntry.fpid ) );
+            aEntry.footprint.reset( fptbl->FootprintLoadWithOptionalNickname( aEntry.fpid ) );
 
-            if( !aEntry.module )
+            if( !aEntry.footprint )
                 aEntry.status = FPS_NOT_FOUND;
         }
         catch( const IO_ERROR& )
@@ -253,7 +253,7 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
         : PCB_DRAW_PANEL_GAL( aParent, -1, wxPoint( 0, 0 ), wxSize( 200, 200 ), *aOpts, aGalType ),
           KIWAY_HOLDER( aKiway, KIWAY_HOLDER::PANEL ),
           m_displayOptions( std::move( aOpts ) ),
-          m_currentModule( nullptr ),
+          m_currentFootprint( nullptr ),
           m_footprintDisplayed( true )
 {
     m_iface = std::make_shared<FP_THREAD_IFACE>();
@@ -280,11 +280,11 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
 
 FOOTPRINT_PREVIEW_PANEL::~FOOTPRINT_PREVIEW_PANEL( )
 {
-    if( m_currentModule )
+    if( m_currentFootprint )
     {
-        GetView()->Remove( m_currentModule.get() );
+        GetView()->Remove( m_currentFootprint.get() );
         GetView()->Clear();
-        m_currentModule->SetParent( nullptr );
+        m_currentFootprint->SetParent( nullptr );
     }
 
     m_iface->SetPanel( nullptr );
@@ -327,33 +327,33 @@ void FOOTPRINT_PREVIEW_PANEL::CacheFootprint( const LIB_ID& aFPID )
 }
 
 
-void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<MODULE> aModule )
+void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<MODULE> aFootprint )
 {
-    if( m_currentModule )
+    if( m_currentFootprint )
     {
-        GetView()->Remove( m_currentModule.get() );
+        GetView()->Remove( m_currentFootprint.get() );
         GetView()->Clear();
-        m_currentModule->SetParent( nullptr );
+        m_currentFootprint->SetParent( nullptr );
     }
 
-    aModule->SetParent( m_dummyBoard.get() );
+    aFootprint->SetParent( m_dummyBoard.get() );
 
     // Ensure we are not using the high contrast mode to display the selected footprint
     KIGFX::PAINTER* painter = GetView()->GetPainter();
     auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
     settings->SetContrastModeDisplay( HIGH_CONTRAST_MODE::NORMAL );
 
-    GetView()->Add( aModule.get() );
-    GetView()->SetVisible( aModule.get(), true );
-    GetView()->Update( aModule.get(), KIGFX::ALL );
+    GetView()->Add( aFootprint.get() );
+    GetView()->SetVisible( aFootprint.get(), true );
+    GetView()->Update( aFootprint.get(), KIGFX::ALL );
 
-    // Save a reference to the module's shared pointer to say we are using it in the
+    // Save a reference to the footprint's shared pointer to say we are using it in the
     // preview panel
-    m_currentModule = aModule;
+    m_currentFootprint = aFootprint;
 
-    BOX2I bbox = aModule->ViewBBox();
-    bbox.Merge( aModule->Value().ViewBBox() );
-    bbox.Merge( aModule->Reference().ViewBBox() );
+    BOX2I bbox = aFootprint->ViewBBox();
+    bbox.Merge( aFootprint->Value().ViewBBox() );
+    bbox.Merge( aFootprint->Reference().ViewBBox() );
 
     if( bbox.GetSize().x > 0 && bbox.GetSize().y > 0 )
     {
@@ -383,7 +383,7 @@ void FOOTPRINT_PREVIEW_PANEL::DisplayFootprint ( const LIB_ID& aFPID )
     {
         if( !m_footprintDisplayed )
         {
-            renderFootprint( fpe.module );
+            renderFootprint( fpe.footprint );
             m_footprintDisplayed = true;
             Refresh();
         }

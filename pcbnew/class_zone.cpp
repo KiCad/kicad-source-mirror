@@ -37,8 +37,8 @@
 #include <settings/settings_manager.h>
 #include <trigo.h>
 
-ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
-        : BOARD_CONNECTED_ITEM( aParent, aInModule ? PCB_FP_ZONE_AREA_T : PCB_ZONE_AREA_T ),
+ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInFP )
+        : BOARD_CONNECTED_ITEM( aParent, aInFP ? PCB_FP_ZONE_AREA_T : PCB_ZONE_AREA_T ),
           m_area( 0.0 )
 {
     m_CornerSelection = nullptr;                // no corner is selected
@@ -57,17 +57,17 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
     m_hatchBorderAlgorithm = 1;         // 0 = use zone min thickness; 1 = use hatch width
     m_priority = 0;
     m_cornerSmoothingType = ZONE_SETTINGS::SMOOTHING_NONE;
-    SetIsRuleArea( aInModule ? true : false );  // Zones living in modules have the rule area option
-    SetDoNotAllowCopperPour( false );           // has meaning only if m_isRuleArea == true
-    SetDoNotAllowVias( true );                  // has meaning only if m_isRuleArea == true
-    SetDoNotAllowTracks( true );                // has meaning only if m_isRuleArea == true
-    SetDoNotAllowPads( true );                  // has meaning only if m_isRuleArea == true
-    SetDoNotAllowFootprints( false );           // has meaning only if m_isRuleArea == true
+    SetIsRuleArea( aInFP );             // Zones living in footprints have the rule area option
+    SetDoNotAllowCopperPour( false );   // has meaning only if m_isRuleArea == true
+    SetDoNotAllowVias( true );          // has meaning only if m_isRuleArea == true
+    SetDoNotAllowTracks( true );        // has meaning only if m_isRuleArea == true
+    SetDoNotAllowPads( true );          // has meaning only if m_isRuleArea == true
+    SetDoNotAllowFootprints( false );   // has meaning only if m_isRuleArea == true
     m_cornerRadius = 0;
-    SetLocalFlags( 0 );                         // flags tempoarry used in zone calculations
-    m_Poly = new SHAPE_POLY_SET();              // Outlines
-    m_fillVersion = 5;                          // set the "old" way to build filled polygon areas (before 6.0.x)
-    m_islandRemovalMode       = ISLAND_REMOVAL_MODE::ALWAYS;
+    SetLocalFlags( 0 );                 // flags tempoarry used in zone calculations
+    m_Poly = new SHAPE_POLY_SET();      // Outlines
+    m_fillVersion = 5;                  // set the "old" way to build filled polygon areas (< 6.0.x)
+    m_islandRemovalMode = ISLAND_REMOVAL_MODE::ALWAYS;
     aParent->GetZoneSettings().ExportSetting( *this );
 
     m_needRefill = false;   // True only after some edition.
@@ -1395,8 +1395,8 @@ static struct ZONE_CONTAINER_DESC
                     &ZONE_CONTAINER::SetThermalReliefGap, &ZONE_CONTAINER::GetThermalReliefGap,
                     PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _( "Thermal Spoke Width" ),
-                                                                &ZONE_CONTAINER::SetThermalReliefSpokeWidth, &ZONE_CONTAINER::GetThermalReliefSpokeWidth,
-                                                                PROPERTY_DISPLAY::DISTANCE ) );
+                    &ZONE_CONTAINER::SetThermalReliefSpokeWidth, &ZONE_CONTAINER::GetThermalReliefSpokeWidth,
+                    PROPERTY_DISPLAY::DISTANCE ) );
     }
 } _ZONE_CONTAINER_DESC;
 

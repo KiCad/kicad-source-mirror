@@ -23,11 +23,11 @@
  */
 
 
-#ifndef DIALOG_EDIT_FOOTPRINT_FOR_BOARDEDITOR_H
-#define DIALOG_EDIT_FOOTPRINT_FOR_BOARDEDITOR_H
+#ifndef DIALOG_FOOTPRINT_PROPERTIES_H
+#define DIALOG_FOOTPRINT_PROPERTIES_H
 
 
-#include <dialog_edit_footprint_for_BoardEditor_base.h>
+#include <dialog_footprint_properties_base.h>
 #include <wx/valnum.h>
 #include <text_mod_grid_table.h>
 #include <class_module.h>
@@ -38,7 +38,7 @@ class PCB_EDIT_FRAME;
 class PANEL_PREV_3D;
 
 
-class DIALOG_FOOTPRINT_BOARD_EDITOR: public DIALOG_FOOTPRINT_BOARD_EDITOR_BASE
+class DIALOG_FOOTPRINT_PROPERTIES: public DIALOG_FOOTPRINT_PROPERTIES_BASE
 {
 private:
     PCB_EDIT_FRAME*                  m_frame;
@@ -70,19 +70,19 @@ private:
 
 public:
     // The dialog can be closed for several reasons.
-    enum FP_PRM_EDITOR_RETVALUE
+    enum FP_PROPS_RETVALUE
     {
-        PRM_EDITOR_WANT_UPDATE_FP,
-        PRM_EDITOR_WANT_EXCHANGE_FP,
-        PRM_EDITOR_EDIT_OK,
-        PRM_EDITOR_EDIT_BOARD_FOOTPRINT,
-        PRM_EDITOR_EDIT_LIBRARY_FOOTPRINT
+        FP_PROPS_UPDATE_FP,
+        FP_PROPS_CHANGE_FP,
+        FP_PROPS_OK,
+        FP_PROPS_EDIT_BOARD_FP,
+        FP_PROPS_EDIT_LIBRARY_FP
     };
 
 public:
     // Constructor and destructor
-    DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aParent, MODULE* aModule );
-    ~DIALOG_FOOTPRINT_BOARD_EDITOR() override;
+    DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParent, MODULE* aFootprint );
+    ~DIALOG_FOOTPRINT_PROPERTIES() override;
 
     bool Validate() override;
 
@@ -98,9 +98,9 @@ private:
     void OnAdd3DRow( wxCommandEvent&  ) override;
     void EditFootprint( wxCommandEvent&  ) override;
     void EditLibraryFootprint( wxCommandEvent&  ) override;
-    void UpdateModule( wxCommandEvent&  ) override;
-    void ExchangeModule( wxCommandEvent&  ) override;
-    void ModuleOrientEvent( wxCommandEvent&  ) override;
+    void UpdateFootprint( wxCommandEvent&  ) override;
+    void ChangeFootprint( wxCommandEvent&  ) override;
+    void FootprintOrientEvent( wxCommandEvent&  ) override;
     void OnOtherOrientation( wxCommandEvent& aEvent ) override;
     void Cfg3DPath( wxCommandEvent&  ) override;
     void OnGridSize( wxSizeEvent& aEvent ) override;
@@ -121,4 +121,4 @@ private:
 };
 
 
-#endif      // DIALOG_EDIT_FOOTPRINT_FOR_BOARDEDITOR_H
+#endif      // DIALOG_FOOTPRINT_PROPERTIES_H

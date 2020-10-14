@@ -30,7 +30,6 @@
 #include <gestfich.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
-#include <footprint_edit_frame.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
@@ -39,7 +38,6 @@
 #include <class_dimension.h>
 #include <pcb_layer_box_selector.h>
 #include <dialog_drc.h>
-#include <array_creator.h>
 #include <connectivity/connectivity_data.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -125,16 +123,15 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 {
     switch( aItem->Type() )
     {
-    case PCB_TEXT_T:
-        InstallTextOptionsFrame( aItem );
+    case PCB_TEXT_T:ShowTextPropertiesDialog( aItem );
         break;
 
     case PCB_PAD_T:
-        InstallPadOptionsFrame( static_cast<D_PAD*>( aItem ) );
+        ShowPadPropertiesDialog( static_cast<D_PAD*>( aItem ) );
         break;
 
     case PCB_MODULE_T:
-        InstallFootprintPropertiesDialog( static_cast<MODULE*>( aItem ) );
+        ShowFootprintPropertiesDialog( static_cast<MODULE*>( aItem ) );
         break;
 
     case PCB_TARGET_T:
@@ -145,15 +142,14 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     case PCB_DIM_CENTER_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-        ShowDimensionPropertyDialog( static_cast<DIMENSION*>( aItem ) );
+        ShowDimensionPropertiesDialog( static_cast<DIMENSION*>( aItem ) );
         break;
 
     case PCB_FP_TEXT_T:
-        InstallTextOptionsFrame( aItem );
+        ShowTextPropertiesDialog( aItem );
         break;
 
-    case PCB_SHAPE_T:
-        InstallGraphicItemPropertiesDialog( aItem );
+    case PCB_SHAPE_T:ShowGraphicItemPropertiesDialog( aItem );
         break;
 
     case PCB_ZONE_AREA_T:
@@ -170,7 +166,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 }
 
 
-void PCB_EDIT_FRAME::ShowDimensionPropertyDialog( DIMENSION* aDimension )
+void PCB_EDIT_FRAME::ShowDimensionPropertiesDialog( DIMENSION* aDimension )
 {
     if( aDimension == NULL )
         return;

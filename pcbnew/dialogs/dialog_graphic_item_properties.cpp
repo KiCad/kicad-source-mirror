@@ -44,7 +44,7 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES : public DIALOG_GRAPHIC_ITEM_PROPERTIES_BAS
 private:
     PCB_BASE_EDIT_FRAME*  m_parent;
     PCB_SHAPE*            m_item;
-    FP_SHAPE*             m_moduleItem;
+    FP_SHAPE*             m_fp_item;
 
     UNIT_BINDER           m_startX, m_startY;
     UNIT_BINDER           m_endX, m_endY;
@@ -97,7 +97,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
 {
     m_parent = aParent;
     m_item = dynamic_cast<PCB_SHAPE*>( aItem );
-    m_moduleItem = dynamic_cast<FP_SHAPE*>( aItem );
+    m_fp_item = dynamic_cast<FP_SHAPE*>( aItem );
 
     // Configure display origin transforms
     m_startX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
@@ -115,13 +115,13 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_AngleValidator.SetWindow( m_angleCtrl );
 
     // Configure the layers list selector
-    if( m_moduleItem )
+    if( m_fp_item )
     {
         LSET forbiddenLayers = LSET::ForbiddenFootprintLayers();
 
         // If someone went to the trouble of setting the layer in a text editor, then there's
         // very little sense in nagging them about it.
-        forbiddenLayers.set( m_moduleItem->GetLayer(), false );
+        forbiddenLayers.set( m_fp_item->GetLayer(), false );
 
         m_LayerSelectionCtrl->SetNotAllowedLayerSet( forbiddenLayers );
     }
@@ -136,9 +136,9 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
 }
 
 
-void PCB_BASE_EDIT_FRAME::InstallGraphicItemPropertiesDialog( BOARD_ITEM* aItem )
+void PCB_BASE_EDIT_FRAME::ShowGraphicItemPropertiesDialog( BOARD_ITEM* aItem )
 {
-    wxCHECK_RET( aItem != NULL, wxT( "InstallGraphicItemPropertiesDialog() error: NULL item" ) );
+    wxCHECK_RET( aItem != NULL, wxT( "ShowGraphicItemPropertiesDialog() error: NULL item" ) );
 
     DIALOG_GRAPHIC_ITEM_PROPERTIES dlg( this, aItem );
     dlg.ShowModal();
@@ -312,16 +312,16 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         m_item->SetBezControl2( wxPoint( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue() ) );
     }
 
-    if( m_moduleItem )
+    if( m_fp_item )
     {
         // We are editing a footprint; init the item coordinates relative to the footprint anchor.
-        m_moduleItem->SetStart0( m_moduleItem->GetStart() );
-        m_moduleItem->SetEnd0( m_moduleItem->GetEnd() );
+        m_fp_item->SetStart0( m_fp_item->GetStart() );
+        m_fp_item->SetEnd0( m_fp_item->GetEnd() );
 
-        if( m_moduleItem->GetShape() == S_CURVE )
+        if( m_fp_item->GetShape() == S_CURVE )
         {
-            m_moduleItem->SetBezier0_C1( wxPoint( m_bezierCtrl1X.GetValue(), m_bezierCtrl1Y.GetValue() ) );
-            m_moduleItem->SetBezier0_C2( wxPoint( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue() ) );
+            m_fp_item->SetBezier0_C1( wxPoint( m_bezierCtrl1X.GetValue(), m_bezierCtrl1Y.GetValue() ) );
+            m_fp_item->SetBezier0_C2( wxPoint( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue() ) );
         }
     }
 

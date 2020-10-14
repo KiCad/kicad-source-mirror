@@ -65,12 +65,12 @@ public:
     /**
      * The ctor to build ZONE_CONTAINER, but comaptible with MODULE_ZONE_CONTAINER
      * requirement.
-     * if aInModule is true, a MODULE_ZONE_CONTAINER is actually built
+     * if aInFP is true, a MODULE_ZONE_CONTAINER is actually built
      * (same item, but with a specific type id:
      * The type is PCB_ZONE_AREA_T for a ZONE_CONTAINER
      * The type is PCB_FP_ZONE_AREA_T for a MODULE_ZONE_CONTAINER
      */
-    ZONE_CONTAINER( BOARD_ITEM_CONTAINER* parent, bool aInModule = false );
+    ZONE_CONTAINER( BOARD_ITEM_CONTAINER* parent, bool aInFP = false );
 
     ZONE_CONTAINER( const ZONE_CONTAINER& aZone );
     ZONE_CONTAINER& operator=( const ZONE_CONTAINER &aOther );

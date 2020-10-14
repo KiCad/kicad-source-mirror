@@ -299,7 +299,7 @@ int FOOTPRINT_EDITOR_TOOLS::Properties( const TOOL_EVENT& aEvent )
 
 int FOOTPRINT_EDITOR_TOOLS::DefaultPadProperties( const TOOL_EVENT& aEvent )
 {
-    getEditFrame<FOOTPRINT_EDIT_FRAME>()->InstallPadOptionsFrame( nullptr );
+    getEditFrame<FOOTPRINT_EDIT_FRAME>()->ShowPadPropertiesDialog( nullptr );
     return 0;
 }
 

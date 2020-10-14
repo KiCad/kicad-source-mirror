@@ -38,12 +38,12 @@ class DIALOG_EXCHANGE_FOOTPRINTS : public DIALOG_EXCHANGE_FOOTPRINTS_BASE
 private:
     BOARD_COMMIT    m_commit;
     PCB_EDIT_FRAME* m_parent;
-    MODULE*         m_currentModule;
+    MODULE*         m_currentFootprint;
     bool            m_updateMode;
     int*            m_matchMode;
 
 public:
-    DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, MODULE* aModule, bool updateMode,
+    DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, MODULE* aFootprint, bool updateMode,
                                 bool selectedMode );
     ~DIALOG_EXCHANGE_FOOTPRINTS() override;
 
@@ -60,8 +60,8 @@ private:
     wxRadioButton* getRadioButtonForMode();
 
     bool isMatch( MODULE* );
-    bool processMatchingModules();
-    bool processModule( MODULE* aModule, const LIB_ID& aNewFPID );
+    bool processMatchingFootprints();
+    bool processFootprint( MODULE* aFootprint, const LIB_ID& aNewFPID );
 };
 
 #endif // DIALOG_EXCHANGE_FOOTPRINTS_H_

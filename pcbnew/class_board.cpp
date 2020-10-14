@@ -503,15 +503,15 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID aLayer, bool isEnabled )
     {
     case LAYER_RATSNEST:
     {
-        // because we have a tool to show/hide ratsnest relative to a pad or a module
+        // because we have a tool to show/hide ratsnest relative to a pad or a footprint
         // so the hide/show option is a per item selection
 
         for( TRACK* track : Tracks() )
             track->SetLocalRatsnestVisible( isEnabled );
 
-        for( MODULE* mod : Modules() )
+        for( MODULE* footprint : Modules() )
         {
-            for( D_PAD* pad : mod->Pads() )
+            for( D_PAD* pad : footprint->Pads() )
                 pad->SetLocalRatsnestVisible( isEnabled );
         }
 
@@ -763,36 +763,36 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
             return track;
     }
 
-    for( MODULE* module : Modules() )
+    for( MODULE* footprint : Modules() )
     {
-        if( module->m_Uuid == aID )
-            return module;
+        if( footprint->m_Uuid == aID )
+            return footprint;
 
-        for( D_PAD* pad : module->Pads() )
+        for( D_PAD* pad : footprint->Pads() )
         {
             if( pad->m_Uuid == aID )
                 return pad;
         }
 
-        if( module->Reference().m_Uuid == aID )
-            return &module->Reference();
+        if( footprint->Reference().m_Uuid == aID )
+            return &footprint->Reference();
 
-        if( module->Value().m_Uuid == aID )
-            return &module->Value();
+        if( footprint->Value().m_Uuid == aID )
+            return &footprint->Value();
 
-        for( BOARD_ITEM* drawing : module->GraphicalItems() )
+        for( BOARD_ITEM* drawing : footprint->GraphicalItems() )
         {
             if( drawing->m_Uuid == aID )
                 return drawing;
         }
 
-        for( BOARD_ITEM* zone : module->Zones() )
+        for( BOARD_ITEM* zone : footprint->Zones() )
         {
             if( zone->m_Uuid == aID )
                 return zone;
         }
 
-        for( PCB_GROUP* group : module->Groups() )
+        for( PCB_GROUP* group : footprint->Groups() )
         {
             if( group->m_Uuid == aID )
                 return group;
@@ -839,17 +839,17 @@ void BOARD::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
     for( TRACK* track : Tracks() )
         aMap[ track->m_Uuid ] = track;
 
-    for( MODULE* module : Modules() )
+    for( MODULE* footprint : Modules() )
     {
-        aMap[ module->m_Uuid ] = module;
+        aMap[ footprint->m_Uuid ] = footprint;
 
-        for( D_PAD* pad : module->Pads() )
+        for( D_PAD* pad : footprint->Pads() )
             aMap[ pad->m_Uuid ] = pad;
 
-        aMap[ module->Reference().m_Uuid ] = &module->Reference();
-        aMap[ module->Value().m_Uuid ] = &module->Value();
+        aMap[ footprint->Reference().m_Uuid ] = &footprint->Reference();
+        aMap[ footprint->Value().m_Uuid ] = &footprint->Value();
 
-        for( BOARD_ITEM* drawing : module->GraphicalItems() )
+        for( BOARD_ITEM* drawing : footprint->GraphicalItems() )
             aMap[ drawing->m_Uuid ] = drawing;
     }
 
@@ -895,14 +895,14 @@ wxString BOARD::ConvertCrossReferencesToKIIDs( const wxString& aSource )
                 wxString remainder;
                 wxString ref = token.BeforeFirst( ':', &remainder );
 
-                for( MODULE* mod : Modules() )
+                for( MODULE* footprint : Modules() )
                 {
-                    if( mod->GetReference().CmpNoCase( ref ) == 0 )
+                    if( footprint->GetReference().CmpNoCase( ref ) == 0 )
                     {
                         wxString test( remainder );
 
-                        if( mod->ResolveTextVar( &test ) )
-                            token = mod->m_Uuid.AsString() + ":" + remainder;
+                        if( footprint->ResolveTextVar( &test ) )
+                            token = footprint->m_Uuid.AsString() + ":" + remainder;
 
                         break;
                     }
@@ -970,9 +970,9 @@ unsigned BOARD::GetNodesCount( int aNet )
 {
     unsigned retval = 0;
 
-    for( MODULE* mod : Modules() )
+    for( MODULE* footprint : Modules() )
     {
-        for( D_PAD* pad : mod->Pads() )
+        for( D_PAD* pad : footprint->Pads() )
         {
             if( ( aNet == -1 && pad->GetNetCode() > 0 ) || aNet == pad->GetNetCode() )
                 retval++;
@@ -1006,15 +1006,15 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
             area.Merge( item->GetBoundingBox() );
     }
 
-    // Check modules
-    for( MODULE* module : m_modules )
+    // Check footprints
+    for( MODULE* footprint : m_modules )
     {
-        if( !( module->GetLayerSet() & visible ).any() )
+        if( !( footprint->GetLayerSet() & visible ).any() )
             continue;
 
         if( aBoardEdgesOnly )
         {
-            for( const BOARD_ITEM* edge : module->GraphicalItems() )
+            for( const BOARD_ITEM* edge : footprint->GraphicalItems() )
             {
                 if( edge->GetLayer() == Edge_Cuts  && edge->Type() == PCB_FP_SHAPE_T )
                     area.Merge( edge->GetBoundingBox() );
@@ -1022,7 +1022,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         }
         else
         {
-            area.Merge( module->GetBoundingBox( showInvisibleText ) );
+            area.Merge( footprint->GetBoundingBox( showInvisibleText ) );
         }
     }
 
@@ -1249,10 +1249,10 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
 
 MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
 {
-    for( MODULE* module : m_modules )
+    for( MODULE* footprint : m_modules )
     {
-        if( aReference == module->GetReference() )
-            return module;
+        if( aReference == footprint->GetReference() )
+            return footprint;
     }
 
     return nullptr;
@@ -1261,10 +1261,10 @@ MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
 
 MODULE* BOARD::FindModuleByPath( const KIID_PATH& aPath ) const
 {
-    for( MODULE* module : m_modules )
+    for( MODULE* footprint : m_modules )
     {
-        if( module->GetPath() == aPath )
-            return module;
+        if( footprint->GetPath() == aPath )
+            return footprint;
     }
 
     return nullptr;
@@ -1310,7 +1310,7 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 
     for( NETINFO_ITEM* net : m_NetInfo )
     {
-        auto netcode = net->GetNet();
+        int netcode = net->GetNet();
 
         if( netcode > 0 && net->IsCurrent() )
         {
@@ -1443,12 +1443,12 @@ D_PAD* BOARD::GetPad( const wxPoint& aPosition, LSET aLayerSet )
     if( !aLayerSet.any() )
         aLayerSet = LSET::AllCuMask();
 
-    for( auto module : m_modules )
+    for( MODULE* footprint : m_modules )
     {
         D_PAD* pad = NULL;
 
-        if( module->HitTest( aPosition ) )
-            pad = module->GetPad( aPosition, aLayerSet );
+        if( footprint->HitTest( aPosition ) )
+            pad = footprint->GetPad( aPosition, aLayerSet );
 
         if( pad )
             return pad;
@@ -1470,9 +1470,9 @@ D_PAD* BOARD::GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint )
 
 D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, LSET aLayerSet )
 {
-    for( auto mod : Modules() )
+    for( MODULE* footprint : Modules() )
     {
-        for ( auto pad : mod->Pads() )
+        for( D_PAD* pad : footprint->Pads() )
         {
         if( pad->GetPosition() != aPosition )
             continue;
@@ -1596,14 +1596,12 @@ bool sortPadsByXthenYCoord( D_PAD* const & ref, D_PAD* const & comp )
 
 void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNetCode )
 {
-    for ( auto mod : Modules() )
+    for( MODULE* footprint : Modules() )
     {
-        for ( auto pad : mod->Pads( ) )
+        for( D_PAD* pad : footprint->Pads( ) )
         {
             if( aNetCode < 0 ||  pad->GetNetCode() == aNetCode )
-            {
                 aVector.push_back( pad );
-            }
         }
     }
 
@@ -1630,18 +1628,18 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) con
     constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, EOT };
     auto              connectivity = GetBoard()->GetConnectivity();
 
-    for( auto item : connectivity->GetConnectedItems(
+    for( BOARD_CONNECTED_ITEM* item : connectivity->GetConnectedItems(
                  static_cast<const BOARD_CONNECTED_ITEM*>( &aTrack ), types ) )
     {
         count++;
 
-        if( auto track = dyn_cast<TRACK*>( item ) )
+        if( TRACK* track = dyn_cast<TRACK*>( item ) )
         {
             bool inPad = false;
 
             for( auto pad_it : connectivity->GetConnectedPads( item ) )
             {
-                auto pad = static_cast<D_PAD*>( pad_it );
+                D_PAD* pad = static_cast<D_PAD*>( pad_it );
 
                 if( pad->HitTest( track->GetStart(), track->GetWidth() / 2 )
                         && pad->HitTest( track->GetEnd(), track->GetWidth() / 2 ) )
@@ -1654,8 +1652,10 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) con
             if( !inPad )
                 length += track->GetLength();
         }
-        else if( auto pad = dyn_cast<D_PAD*>( item ) )
+        else if( D_PAD* pad = dyn_cast<D_PAD*>( item ) )
+        {
             package_length += pad->GetPadToDieLength();
+        }
     }
 
     return std::make_tuple( count, length, package_length );
@@ -1665,28 +1665,28 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) con
 MODULE* BOARD::GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer,
                              bool aVisibleOnly, bool aIgnoreLocked )
 {
-    MODULE* module      = NULL;
-    MODULE* alt_module  = NULL;
-    int     min_dim     = 0x7FFFFFFF;
-    int     alt_min_dim = 0x7FFFFFFF;
+    MODULE* footprint     = NULL;
+    MODULE* alt_footprint = NULL;
+    int     min_dim       = 0x7FFFFFFF;
+    int     alt_min_dim   = 0x7FFFFFFF;
     bool    current_layer_back = IsBackLayer( aActiveLayer );
 
-    for( auto pt_module : m_modules )
+    for( MODULE* candidate : m_modules )
     {
-        // is the ref point within the module's bounds?
-        if( !pt_module->HitTest( aPosition ) )
+        // is the ref point within the footprint's bounds?
+        if( !candidate->HitTest( aPosition ) )
             continue;
 
-        // if caller wants to ignore locked modules, and this one is locked, skip it.
-        if( aIgnoreLocked && pt_module->IsLocked() )
+        // if caller wants to ignore locked footprints, and this one is locked, skip it.
+        if( aIgnoreLocked && candidate->IsLocked() )
             continue;
 
-        PCB_LAYER_ID layer = pt_module->GetLayer();
+        PCB_LAYER_ID layer = candidate->GetLayer();
 
-        // Filter non visible modules if requested
+        // Filter non visible footprints if requested
         if( !aVisibleOnly || IsModuleLayerVisible( layer ) )
         {
-            EDA_RECT bb = pt_module->GetFootprintRect();
+            EDA_RECT bb = candidate->GetFootprintRect();
 
             int offx = bb.GetX() + bb.GetWidth() / 2;
             int offy = bb.GetY() + bb.GetHeight() / 2;
@@ -1700,7 +1700,7 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer
                 if( dist <= min_dim )
                 {
                     // better footprint shown on the active side
-                    module  = pt_module;
+                    footprint  = candidate;
                     min_dim = dist;
                 }
             }
@@ -1709,22 +1709,18 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer
                 if( dist <= alt_min_dim )
                 {
                     // better footprint shown on the other side
-                    alt_module  = pt_module;
+                    alt_footprint  = candidate;
                     alt_min_dim = dist;
                 }
             }
         }
     }
 
-    if( module )
-    {
-        return module;
-    }
+    if( footprint )
+        return footprint;
 
-    if( alt_module)
-    {
-        return alt_module;
-    }
+    if( alt_footprint)
+        return alt_footprint;
 
     return NULL;
 }
@@ -1739,9 +1735,9 @@ std::list<ZONE_CONTAINER*> BOARD::GetZoneList( bool aIncludeZonesInFootprints )
 
     if( aIncludeZonesInFootprints )
     {
-        for( MODULE* mod : m_modules )
+        for( MODULE* footprint : m_modules )
         {
-            for( MODULE_ZONE_CONTAINER* zone : mod->Zones() )
+            for( MODULE_ZONE_CONTAINER* zone : footprint->Zones() )
                 zones.push_back( zone );
         }
     }
@@ -1869,9 +1865,9 @@ const std::vector<D_PAD*> BOARD::GetPads()
 {
     std::vector<D_PAD*> allPads;
 
-    for( MODULE* mod : Modules() )
+    for( MODULE* footprint : Modules() )
     {
-        for( D_PAD* pad : mod->Pads() )
+        for( D_PAD* pad : footprint->Pads() )
             allPads.push_back( pad );
     }
 
@@ -1883,8 +1879,8 @@ unsigned BOARD::GetPadCount()
 {
     unsigned retval = 0;
 
-    for( MODULE* mod : Modules() )
-        retval += mod->Pads().size();
+    for( MODULE* footprint : Modules() )
+        retval += footprint->Pads().size();
 
     return retval;
 }
@@ -1897,9 +1893,9 @@ const std::vector<BOARD_CONNECTED_ITEM*> BOARD::AllConnectedItems()
     for( TRACK* track : Tracks() )
         items.push_back( track );
 
-    for( MODULE* mod : Modules() )
+    for( MODULE* footprint : Modules() )
     {
-        for( D_PAD* pad : mod->Pads() )
+        for( D_PAD* pad : footprint->Pads() )
             items.push_back( pad );
     }
 

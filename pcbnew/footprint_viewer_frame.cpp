@@ -169,8 +169,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     // Create GAL canvas
     m_canvasType = LoadCanvasTypeSetting();
-    auto drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                             GetGalDisplayOptions(), m_canvasType );
+    PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                                            GetGalDisplayOptions(), m_canvasType );
     SetCanvas( drawPanel );
 
     SetBoard( new BOARD() );
@@ -732,32 +732,32 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
         BOARD_COMMIT commit( pcbframe );
 
-        // Create the "new" module
-        MODULE* newmodule = (MODULE*) GetBoard()->GetFirstModule()->Duplicate();
-        newmodule->SetParent( pcbframe->GetBoard() );
-        newmodule->SetLink( 0 );
+        // Create the "new" footprint
+        MODULE* newFootprint = (MODULE*) GetBoard()->GetFirstModule()->Duplicate();
+        newFootprint->SetParent( pcbframe->GetBoard() );
+        newFootprint->SetLink( 0 );
 
         KIGFX::VIEW_CONTROLS* viewControls = pcbframe->GetCanvas()->GetViewControls();
         VECTOR2D              cursorPos = viewControls->GetCursorPosition();
 
-        commit.Add( newmodule );
+        commit.Add( newFootprint );
         viewControls->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-        pcbframe->PlaceModule( newmodule );
-        newmodule->SetPosition( wxPoint( 0, 0 ) );
+        pcbframe->PlaceModule( newFootprint );
+        newFootprint->SetPosition( wxPoint( 0, 0 ) );
         viewControls->SetCrossHairCursorPosition( cursorPos, false );
-        commit.Push( wxT( "Insert module" ) );
+        commit.Push( wxT( "Insert footprint" ) );
 
         pcbframe->Raise();
-        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::placeModule, true, newmodule );
+        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::placeModule, true, newFootprint );
 
-        newmodule->ClearFlags();
+        newFootprint->ClearFlags();
     }
 }
 
 
 void FOOTPRINT_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
     wxCHECK( cfg, /*void*/ );
 
     // We don't allow people to change this right now, so make sure it's on
@@ -774,7 +774,7 @@ void FOOTPRINT_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
 void FOOTPRINT_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
     wxCHECK( cfg, /*void*/ );
 
     // We don't want to store anything other than the window settings
@@ -786,7 +786,7 @@ void FOOTPRINT_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 WINDOW_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
-    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
     wxCHECK_MSG( cfg, nullptr, "config not existing" );
 
     return &cfg->m_FootprintViewer;

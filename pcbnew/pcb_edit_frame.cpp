@@ -33,7 +33,7 @@
 #include <pcb_layer_box_selector.h>
 #include <footprint_edit_frame.h>
 #include <dialog_plot.h>
-#include <dialog_edit_footprint_for_BoardEditor.h>
+#include <dialog_footprint_properties.h>
 #include <dialogs/dialog_exchange_footprints.h>
 #include <dialog_board_setup.h>
 #include <convert_to_biu.h>
@@ -1538,63 +1538,63 @@ void PCB_EDIT_FRAME::PythonSyncProjectName()
 }
 
 
-void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module )
+void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( MODULE* aFootprint )
 {
-    if( Module == NULL )
+    if( aFootprint == NULL )
         return;
 
-    DIALOG_FOOTPRINT_BOARD_EDITOR* dlg = new DIALOG_FOOTPRINT_BOARD_EDITOR( this, Module );
+    DIALOG_FOOTPRINT_PROPERTIES* dlg = new DIALOG_FOOTPRINT_PROPERTIES( this, aFootprint );
 
     int retvalue = dlg->ShowModal();
     /* retvalue =
-     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_WANT_UPDATE_FP if update footprint
-     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_WANT_EXCHANGE_FP if change footprint
-     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_WANT_MODEDIT for a goto editor command
-     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_EDIT_OK for normal edit
+     *  FP_PROPS_UPDATE_FP if update footprint
+     *  FP_PROPS_CHANGE_FP if change footprint
+     *  PRM_EDITOR_WANT_MODEDIT for a goto editor command
+     *  FP_PROPS_OK for normal edit
      */
 
     dlg->Close();
     dlg->Destroy();
 
-    if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_EDIT_OK )
+    if( retvalue == DIALOG_FOOTPRINT_PROPERTIES::FP_PROPS_OK )
     {
         // If something edited, push a refresh request
         GetCanvas()->Refresh();
     }
-    else if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_EDIT_BOARD_FOOTPRINT )
+    else if( retvalue == DIALOG_FOOTPRINT_PROPERTIES::FP_PROPS_EDIT_BOARD_FP )
     {
         auto editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, true );
 
-        editor->Load_Module_From_BOARD( Module );
+        editor->Load_Module_From_BOARD( aFootprint );
 
         editor->Show( true );
         editor->Raise();        // Iconize( false );
     }
 
-    else if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_EDIT_LIBRARY_FOOTPRINT )
+    else if( retvalue == DIALOG_FOOTPRINT_PROPERTIES::FP_PROPS_EDIT_LIBRARY_FP )
     {
         auto editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, true );
 
-        editor->LoadModuleFromLibrary( Module->GetFPID() );
+        editor->LoadModuleFromLibrary( aFootprint->GetFPID() );
 
         editor->Show( true );
         editor->Raise();        // Iconize( false );
     }
 
-    else if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_WANT_UPDATE_FP )
+    else if( retvalue == DIALOG_FOOTPRINT_PROPERTIES::FP_PROPS_UPDATE_FP )
     {
-        InstallExchangeModuleFrame( Module, true, true );
+        ShowExchangeFootprintsDialog( aFootprint, true, true );
     }
 
-    else if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_WANT_EXCHANGE_FP )
+    else if( retvalue == DIALOG_FOOTPRINT_PROPERTIES::FP_PROPS_CHANGE_FP )
     {
-        InstallExchangeModuleFrame( Module, false, true );
+        ShowExchangeFootprintsDialog( aFootprint, false, true );
     }
 }
 
 
-int PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* aModule, bool updateMode,
-                                                bool selectedMode )
+int PCB_EDIT_FRAME::ShowExchangeFootprintsDialog( MODULE* aModule, bool updateMode,
+                                                  bool selectedMode )
 {
     DIALOG_EXCHANGE_FOOTPRINTS dialog( this, aModule, updateMode, selectedMode );
 

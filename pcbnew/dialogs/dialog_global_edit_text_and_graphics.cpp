@@ -269,9 +269,9 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
 {
     aCommit.Modify( aItem );
 
-    auto textItem = dynamic_cast<EDA_TEXT*>( aItem );
-    auto drawItem = dynamic_cast<PCB_SHAPE*>( aItem );
-    auto moduleTextItem = dyn_cast<FP_TEXT*>( aItem );
+    EDA_TEXT*  textItem = dynamic_cast<EDA_TEXT*>( aItem );
+    PCB_SHAPE* drawItem = dynamic_cast<PCB_SHAPE*>( aItem );
+    FP_TEXT*   fpTextItem = dynamic_cast<FP_TEXT*>( aItem );
 
     if( m_setToSpecifiedValues->GetValue() )
     {
@@ -293,8 +293,8 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
         if( m_Visible->Get3StateValue() != wxCHK_UNDETERMINED && textItem )
             textItem->SetVisible( m_Visible->GetValue() );
 
-        if( m_keepUpright->Get3StateValue() != wxCHK_UNDETERMINED && moduleTextItem )
-            moduleTextItem->SetKeepUpright( m_keepUpright->GetValue() );
+        if( m_keepUpright->Get3StateValue() != wxCHK_UNDETERMINED && fpTextItem )
+            fpTextItem->SetKeepUpright( m_keepUpright->GetValue() );
 
         if( !m_lineWidth.IsIndeterminate() && drawItem )
             drawItem->SetWidth( m_lineWidth.GetValue() );
@@ -310,8 +310,8 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
             textItem->SetItalic( m_brdSettings->GetTextItalic( layer ) );
         }
 
-        if( moduleTextItem )
-            moduleTextItem->SetKeepUpright( m_brdSettings->GetTextUpright( layer ) );
+        if( fpTextItem )
+            fpTextItem->SetKeepUpright( m_brdSettings->GetTextUpright( layer ) );
 
         if( drawItem )
             drawItem->SetWidth( m_brdSettings->GetLineThickness( layer ) );
@@ -329,22 +329,22 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
 
     if( m_referenceFilterOpt->GetValue() && !m_referenceFilter->GetValue().IsEmpty() )
     {
-        MODULE* module = dynamic_cast<MODULE*>( aItem->GetParent() );
+        MODULE* fp = dynamic_cast<MODULE*>( aItem->GetParent() );
 
-        if( module )
+        if( fp )
         {
-            if( !WildCompareString( m_referenceFilter->GetValue(), module->GetReference(), false ) )
+            if( !WildCompareString( m_referenceFilter->GetValue(), fp->GetReference(), false ) )
                 return;
         }
     }
 
     if( m_footprintFilterOpt->GetValue() && !m_footprintFilter->GetValue().IsEmpty() )
     {
-        MODULE* module = dynamic_cast<MODULE*>( aItem->GetParent() );
+        MODULE* fp = dynamic_cast<MODULE*>( aItem->GetParent() );
 
-        if( module )
+        if( fp )
         {
-            if( !WildCompareString( m_footprintFilter->GetValue(), module->GetFPID().Format(), false ) )
+            if( !WildCompareString( m_footprintFilter->GetValue(), fp->GetFPID().Format(), false ) )
                 return;
         }
     }
@@ -363,17 +363,17 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 
     BOARD_COMMIT commit( m_parent );
 
-    // Go through the modules
-    for( MODULE* module : m_parent->GetBoard()->Modules() )
+    // Go through the footprints
+    for( MODULE* fp : m_parent->GetBoard()->Modules() )
     {
         if( m_references->GetValue() )
-            visitItem( commit, &module->Reference() );
+            visitItem( commit, &fp->Reference() );
 
         if( m_values->GetValue() )
-            visitItem( commit, &module->Value() );
+            visitItem( commit, &fp->Value() );
 
-        // Go through all other module items
-        for( BOARD_ITEM* boardItem : module->GraphicalItems() )
+        // Go through all other footprint items
+        for( BOARD_ITEM* boardItem : fp->GraphicalItems() )
         {
             if( boardItem->Type() == PCB_FP_TEXT_T )
             {

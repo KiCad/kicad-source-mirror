@@ -96,7 +96,7 @@ static const LSET std_pad_layers[] =
 };
 
 
-void PCB_BASE_FRAME::InstallPadOptionsFrame( D_PAD* aPad )
+void PCB_BASE_FRAME::ShowPadPropertiesDialog( D_PAD* aPad )
 {
     DIALOG_PAD_PROPERTIES dlg( this, aPad );
 

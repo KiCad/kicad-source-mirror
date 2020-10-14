@@ -109,10 +109,10 @@ class MODULE : public BOARD_ITEM_CONTAINER
 public:
     MODULE( BOARD* parent );
 
-    MODULE( const MODULE& aModule );
+    MODULE( const MODULE& aFootprint );
 
     // Move constructor and operator needed due to std containers inside the module
-    MODULE( MODULE&& aModule );
+    MODULE( MODULE&& aFootprint );
 
     ~MODULE();
 

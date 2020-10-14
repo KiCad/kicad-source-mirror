@@ -461,9 +461,9 @@ std::shared_ptr<SHAPE> FP_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 }
 
 
-static struct TEXTE_MODULE_DESC
+static struct FP_TEXT_DESC
 {
-    TEXTE_MODULE_DESC()
+    FP_TEXT_DESC()
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( FP_TEXT );
@@ -472,4 +472,4 @@ static struct TEXTE_MODULE_DESC
         propMgr.InheritsAfter( TYPE_HASH( FP_TEXT ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( FP_TEXT ), TYPE_HASH( EDA_TEXT ) );
     }
-} _TEXTE_MODULE_DESC;
+} _FP_TEXT_DESC;

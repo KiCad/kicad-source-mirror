@@ -51,9 +51,9 @@ FP_SHAPE::~FP_SHAPE()
 
 void FP_SHAPE::SetLocalCoord()
 {
-    MODULE* module = (MODULE*) m_Parent;
+    MODULE* fp = (MODULE*) m_Parent;
 
-    if( module == NULL )
+    if( fp == NULL )
     {
         m_Start0 = m_Start;
         m_End0 = m_End;
@@ -63,12 +63,12 @@ void FP_SHAPE::SetLocalCoord()
         return;
     }
 
-    m_Start0 = m_Start - module->GetPosition();
-    m_End0 = m_End - module->GetPosition();
-    m_ThirdPoint0 = m_ThirdPoint - module->GetPosition();
-    m_Bezier0_C1 = m_BezierC1 - module->GetPosition();
-    m_Bezier0_C2 = m_BezierC2 - module->GetPosition();
-    double angle = module->GetOrientation();
+    m_Start0 = m_Start - fp->GetPosition();
+    m_End0 = m_End - fp->GetPosition();
+    m_ThirdPoint0 = m_ThirdPoint - fp->GetPosition();
+    m_Bezier0_C1 = m_BezierC1 - fp->GetPosition();
+    m_Bezier0_C2 = m_BezierC2 - fp->GetPosition();
+    double angle = fp->GetOrientation();
     RotatePoint( &m_Start0.x, &m_Start0.y, -angle );
     RotatePoint( &m_End0.x, &m_End0.y, -angle );
     RotatePoint( &m_ThirdPoint0.x, &m_ThirdPoint0.y, -angle );
@@ -79,7 +79,7 @@ void FP_SHAPE::SetLocalCoord()
 
 void FP_SHAPE::SetDrawCoord()
 {
-    MODULE* module = (MODULE*) m_Parent;
+    MODULE* fp = (MODULE*) m_Parent;
 
     m_Start      = m_Start0;
     m_End        = m_End0;
@@ -87,19 +87,19 @@ void FP_SHAPE::SetDrawCoord()
     m_BezierC1   = m_Bezier0_C1;
     m_BezierC2   = m_Bezier0_C2;
 
-    if( module )
+    if( fp )
     {
-        RotatePoint( &m_Start.x, &m_Start.y, module->GetOrientation() );
-        RotatePoint( &m_End.x, &m_End.y, module->GetOrientation() );
-        RotatePoint( &m_ThirdPoint.x, &m_ThirdPoint.y, module->GetOrientation() );
-        RotatePoint( &m_BezierC1.x, &m_BezierC1.y, module->GetOrientation() );
-        RotatePoint( &m_BezierC2.x, &m_BezierC2.y, module->GetOrientation() );
+        RotatePoint( &m_Start.x, &m_Start.y, fp->GetOrientation() );
+        RotatePoint( &m_End.x, &m_End.y, fp->GetOrientation() );
+        RotatePoint( &m_ThirdPoint.x, &m_ThirdPoint.y, fp->GetOrientation() );
+        RotatePoint( &m_BezierC1.x, &m_BezierC1.y, fp->GetOrientation() );
+        RotatePoint( &m_BezierC2.x, &m_BezierC2.y, fp->GetOrientation() );
 
-        m_Start      += module->GetPosition();
-        m_End        += module->GetPosition();
-        m_ThirdPoint += module->GetPosition();
-        m_BezierC1   += module->GetPosition();
-        m_BezierC2   += module->GetPosition();
+        m_Start      += fp->GetPosition();
+        m_End        += fp->GetPosition();
+        m_ThirdPoint += fp->GetPosition();
+        m_BezierC1   += fp->GetPosition();
+        m_BezierC2   += fp->GetPosition();
     }
 
     RebuildBezierToSegmentsPointsList( m_Width );
@@ -111,17 +111,17 @@ void FP_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 {
     wxString msg;
 
-    MODULE*  module = (MODULE*) m_Parent;
+    MODULE*  fp = (MODULE*) m_Parent;
 
-    if( !module )
+    if( !fp )
         return;
 
-    BOARD* board = (BOARD*) module->GetParent();
+    BOARD* board = (BOARD*) fp->GetParent();
 
     if( !board )
         return;
 
-    aList.emplace_back( _( "Footprint" ), module->GetReference(), DARKCYAN );
+    aList.emplace_back( _( "Footprint" ), fp->GetReference(), DARKCYAN );
 
     // append the features shared with the base class
     PCB_SHAPE::GetMsgPanelInfo( aFrame, aList );
@@ -281,7 +281,8 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
 void FP_SHAPE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     // We should rotate the relative coordinates, but to avoid duplicate code do the base class
-    // rotation of draw coordinates, which is acceptable because in module editor, m_Pos0 = m_Pos
+    // rotation of draw coordinates, which is acceptable because in the footprint editor
+    // m_Pos0 = m_Pos
     PCB_SHAPE::Rotate( aRotCentre, aAngle );
 
     // and now update the relative coordinates, which are the reference in most transforms.
@@ -335,12 +336,12 @@ double FP_SHAPE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-static struct EDGE_MODULE_DESC
+static struct FP_SHAPE_DESC
 {
-    EDGE_MODULE_DESC()
+    FP_SHAPE_DESC()
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( FP_SHAPE );
         propMgr.InheritsAfter( TYPE_HASH( FP_SHAPE ), TYPE_HASH( PCB_SHAPE ) );
     }
-} _EDGE_MODULE_DESC;
+} _FP_SHAPE_DESC;

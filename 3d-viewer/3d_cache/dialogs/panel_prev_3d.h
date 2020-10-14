@@ -210,7 +210,7 @@ public:
      * @brief UpdateModelInfoList - copy shapes from the current shape list which are flagged
      * for preview to the copy of module that is on the preview dummy board
      */
-    void UpdateDummyModule( bool aRelaodRequired = true );
+    void UpdateDummyFootprint( bool aRelaodRequired = true );
 };
 
 #endif  // PANEL_PREV_MODEL_H

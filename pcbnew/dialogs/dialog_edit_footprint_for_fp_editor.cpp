@@ -405,7 +405,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
         m_shapes3D_list[ aEvent.GetRow() ].m_Show = ( showValue == wxT( "1" ) );
     }
 
-    m_PreviewPane->UpdateDummyModule();
+    m_PreviewPane->UpdateDummyFootprint();
 }
 
 
@@ -422,7 +422,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnRemove3DModel( wxCommandEvent&  )
         m_modelsGrid->DeleteRows( idx );
 
         select3DModel( idx );       // will clamp idx within bounds
-        m_PreviewPane->UpdateDummyModule();
+        m_PreviewPane->UpdateDummyFootprint();
     }
 }
 
@@ -490,7 +490,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
     m_modelsGrid->SetCellValue( idx, 1, wxT( "1" ) );
 
     select3DModel( idx );
-    m_PreviewPane->UpdateDummyModule();
+    m_PreviewPane->UpdateDummyFootprint();
 }
 
 
@@ -795,7 +795,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnDeleteField( wxCommandEvent& event )
 void DIALOG_FOOTPRINT_FP_EDITOR::Cfg3DPath( wxCommandEvent& event )
 {
     if( S3D::Configure3DPaths( this, Prj().Get3DCacheManager()->GetResolver() ) )
-        m_PreviewPane->UpdateDummyModule();
+        m_PreviewPane->UpdateDummyFootprint();
 }
 
 

@@ -288,7 +288,7 @@ void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
         modelInfo->m_Offset.z = DoubleValueFromString( m_userUnits, zoff->GetValue() ) / IU_PER_MM;
 
         // Update the dummy module for the preview
-        UpdateDummyModule( false );
+        UpdateDummyFootprint( false );
     }
 }
 
@@ -303,7 +303,7 @@ void PANEL_PREV_3D::onOpacitySlider( wxCommandEvent& event )
         modelInfo->m_Opacity = m_opacity->GetValue() / 100.0;
 
         // Update the dummy module for the preview
-        UpdateDummyModule( false );
+        UpdateDummyFootprint( false );
     }
 }
 
@@ -449,7 +449,7 @@ void PANEL_PREV_3D::onMouseWheelOffset( wxMouseEvent& event )
 }
 
 
-void PANEL_PREV_3D::UpdateDummyModule( bool aReloadRequired )
+void PANEL_PREV_3D::UpdateDummyFootprint( bool aReloadRequired )
 {
     m_dummyModule->Models().clear();
 

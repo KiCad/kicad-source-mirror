@@ -357,10 +357,10 @@ LIB_ID FOOTPRINT_EDIT_FRAME::GetTargetFPID() const
 
 LIB_ID FOOTPRINT_EDIT_FRAME::GetLoadedFPID() const
 {
-    MODULE* module = GetBoard()->GetFirstModule();
+    MODULE* footprint = GetBoard()->GetFirstModule();
 
-    if( module )
-        return LIB_ID( module->GetFPID().GetLibNickname(), m_footprintNameWhenLoaded );
+    if( footprint )
+        return LIB_ID( footprint->GetFPID().GetLibNickname(), m_footprintNameWhenLoaded );
     else
         return LIB_ID();
 }
@@ -368,9 +368,9 @@ LIB_ID FOOTPRINT_EDIT_FRAME::GetLoadedFPID() const
 
 bool FOOTPRINT_EDIT_FRAME::IsCurrentFPFromBoard() const
 {
-    MODULE* module = GetBoard()->GetFirstModule();
+    MODULE* footprint = GetBoard()->GetFirstModule();
 
-    return ( module && module->GetLink() != niluuid );
+    return ( footprint && footprint->GetLink() != niluuid );
 }
 
 
@@ -397,10 +397,10 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
         id.SetLibNickname( libNickname );
         id.SetLibItemName( footprintName );
 
-        MODULE* module = loadFootprint( id );
+        MODULE* footprint = loadFootprint( id );
 
-        if( module )
-            AddModuleToBoard( module );
+        if( footprint )
+            AddModuleToBoard( footprint );
     }
 }
 
@@ -516,15 +516,15 @@ MAGNETIC_SETTINGS* FOOTPRINT_EDIT_FRAME::GetMagneticItemsSettings()
 
 const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
-    MODULE* module = GetBoard()->GetFirstModule();
+    MODULE* footprint = GetBoard()->GetFirstModule();
 
-    if( module )
+    if( footprint )
     {
-        bool hasGraphicalItem = module->Pads().size() || module->Zones().size();
+        bool hasGraphicalItem = footprint->Pads().size() || footprint->Zones().size();
 
         if( !hasGraphicalItem )
         {
-            for( const BOARD_ITEM* item : module->GraphicalItems() )
+            for( const BOARD_ITEM* item : footprint->GraphicalItems() )
             {
                 if( item->Type() == PCB_FP_TEXT_T )
                     continue;
@@ -536,13 +536,13 @@ const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) 
 
         if( hasGraphicalItem )
         {
-            return module->GetFootprintRect();
+            return footprint->GetFootprintRect();
         }
         else
         {
-            BOX2I newModuleBB( { 0, 0 }, { 0, 0 } );
-            newModuleBB.Inflate( Millimeter2iu( 12 ) );
-            return newModuleBB;
+            BOX2I newFootprintBB( { 0, 0 }, { 0, 0 } );
+            newFootprintBB.Inflate( Millimeter2iu( 12 ) );
+            return newFootprintBB;
         }
     }
 
@@ -627,19 +627,19 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent 
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
-    MODULE* module_in_edit = GetBoard()->GetFirstModule();
-    bool canInsert = frame && module_in_edit && module_in_edit->GetLink() == niluuid;
+    MODULE* editorFootprint = GetBoard()->GetFirstModule();
+    bool canInsert = frame && editorFootprint && editorFootprint->GetLink() == niluuid;
 
-    // If the source was deleted, the module can inserted but not updated in the board.
-    if( frame && module_in_edit && module_in_edit->GetLink() != niluuid ) // this is not a new module
+    // If the source was deleted, the footprint can inserted but not updated in the board.
+    if( frame && editorFootprint && editorFootprint->GetLink() != niluuid )
     {
         BOARD*  mainpcb = frame->GetBoard();
         canInsert = true;
 
-        // search if the source module was not deleted:
-        for( auto source_module : mainpcb->Modules() )
+        // search if the source footprint was not deleted:
+        for( MODULE* candidate : mainpcb->Modules() )
         {
-            if( module_in_edit->GetLink() == source_module->m_Uuid )
+            if( editorFootprint->GetLink() == candidate->m_Uuid )
             {
                 canInsert = false;
                 break;

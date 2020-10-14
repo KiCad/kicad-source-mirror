@@ -56,13 +56,14 @@ bool g_resetFabricationAttrs[2] = { false, true };
 bool g_reset3DModels[2]         = { false, true };
 
 
-DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, MODULE* aModule,
+DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
+                                                        MODULE* aFootprint,
                                                         bool updateMode, bool selectedMode ) :
-    DIALOG_EXCHANGE_FOOTPRINTS_BASE( aParent ),
-    m_commit( aParent ),
-    m_parent( aParent ),
-    m_currentModule( aModule ),
-    m_updateMode( updateMode )
+        DIALOG_EXCHANGE_FOOTPRINTS_BASE( aParent ),
+        m_commit( aParent ),
+        m_parent( aParent ),
+        m_currentFootprint( aFootprint ),
+        m_updateMode( updateMode )
 {
     wxString title = updateMode ? _( "Update Footprints from Library" ) : _( "Change Footprints" );
     wxString verb  = updateMode ? _( "Update" )                         : _( "Change" );
@@ -83,11 +84,11 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
         m_newIDBrowseButton->SetBitmap( KiBitmap( small_library_xpm ) );
     }
 
-    if( m_currentModule )
+    if( m_currentFootprint )
     {
         label.Printf( m_matchSelected->GetLabel(), verb );
         m_matchSelected->SetLabel( label );
-        m_newID->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
+        m_newID->AppendText( FROM_UTF8( m_currentFootprint->GetFPID().Format().c_str() ) );
     }
     else
         m_upperSizer->FindItem( m_matchSelected )->Show( false );
@@ -96,20 +97,20 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     m_matchSpecifiedRef->SetLabel( label );
 
     // Use ChangeValue() instead of SetValue() so we don't generate events.
-    if( m_currentModule )
-        m_specifiedRef->ChangeValue( m_currentModule->GetReference() );
+    if( m_currentFootprint )
+        m_specifiedRef->ChangeValue( m_currentFootprint->GetReference() );
 
     label.Printf( m_matchSpecifiedValue->GetLabel(), verb );
     m_matchSpecifiedValue->SetLabel( label );
 
-    if( m_currentModule )
-        m_specifiedValue->ChangeValue( m_currentModule->GetValue() );
+    if( m_currentFootprint )
+        m_specifiedValue->ChangeValue( m_currentFootprint->GetValue() );
 
     label.Printf( m_matchSpecifiedID->GetLabel(), verb );
     m_matchSpecifiedID->SetLabel( label );
 
-    if( m_currentModule )
-        m_specifiedID->ChangeValue( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
+    if( m_currentFootprint )
+        m_specifiedID->ChangeValue( FROM_UTF8( m_currentFootprint->GetFPID().Format().c_str() ) );
 
     m_specifiedIDBrowseButton->SetBitmap( KiBitmap( small_library_xpm ) );
 
@@ -181,7 +182,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::~DIALOG_EXCHANGE_FOOTPRINTS()
 }
 
 
-bool DIALOG_EXCHANGE_FOOTPRINTS::isMatch( MODULE* aModule )
+bool DIALOG_EXCHANGE_FOOTPRINTS::isMatch( MODULE* aFootprint )
 {
     LIB_ID specifiedID;
 
@@ -190,14 +191,14 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::isMatch( MODULE* aModule )
     case ID_MATCH_FP_ALL:
         return true;
     case ID_MATCH_FP_SELECTED:
-        return aModule == m_currentModule;
+        return aFootprint == m_currentFootprint;
     case ID_MATCH_FP_REF:
-        return WildCompareString( m_specifiedRef->GetValue(), aModule->GetReference(), false );
+        return WildCompareString( m_specifiedRef->GetValue(), aFootprint->GetReference(), false );
     case ID_MATCH_FP_VAL:
-        return WildCompareString( m_specifiedValue->GetValue(), aModule->GetValue(), false );
+        return WildCompareString( m_specifiedValue->GetValue(), aFootprint->GetValue(), false );
     case ID_MATCH_FP_ID:
         specifiedID.Parse( m_specifiedID->GetValue(), LIB_ID::ID_PCB );
-        return aModule->GetFPID() == specifiedID;
+        return aFootprint->GetFPID() == specifiedID;
     default:
         return false;   // just to quiet compiler warnings....
     }
@@ -307,7 +308,7 @@ void DIALOG_EXCHANGE_FOOTPRINTS::OnOKClicked( wxCommandEvent& event )
     m_MessageWindow->Clear();
     m_MessageWindow->Flush( false );
 
-    if( processMatchingModules() )
+    if( processMatchingFootprints() )
     {
         m_parent->Compile_Ratsnest( true );
         m_parent->GetCanvas()->Refresh();
@@ -319,7 +320,7 @@ void DIALOG_EXCHANGE_FOOTPRINTS::OnOKClicked( wxCommandEvent& event )
 }
 
 
-bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingModules()
+bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingFootprints()
 {
     bool     change = false;
     LIB_ID   newFPID;
@@ -336,8 +337,8 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingModules()
             return false;
     }
 
-    /* The change is done from the last module because processModule() modifies the last item
-     * in the list.
+    /* The change is done from the last footprint because processFootprint() modifies the last
+     * item in the list.
      */
     for( auto it = m_parent->GetBoard()->Modules().rbegin();
             it != m_parent->GetBoard()->Modules().rend(); it++ )
@@ -349,12 +350,12 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingModules()
 
         if( m_updateMode )
         {
-            if( processModule( mod, mod->GetFPID() ) )
+            if( processFootprint( mod, mod->GetFPID()) )
                 change = true;
         }
         else
         {
-            if( processModule( mod, newFPID ) )
+            if( processFootprint( mod, newFPID ) )
                 change = true;
         }
     }
@@ -363,36 +364,36 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingModules()
 }
 
 
-bool DIALOG_EXCHANGE_FOOTPRINTS::processModule( MODULE* aModule, const LIB_ID& aNewFPID )
+bool DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( MODULE* aFootprint, const LIB_ID& aNewFPID )
 {
-    LIB_ID    oldFPID = aModule->GetFPID();
+    LIB_ID    oldFPID = aFootprint->GetFPID();
     wxString  msg;
 
-    // Load new module.
+    // Load new footprint.
     msg.Printf( _( "%s footprint \"%s\" (from \"%s\") to \"%s\"" ),
                 m_updateMode ? _( "Update" ) : _( "Change" ),
-                aModule->GetReference(),
+                aFootprint->GetReference(),
                 oldFPID.Format().c_str(),
                 aNewFPID.Format().c_str() );
 
-    MODULE* newModule = m_parent->LoadFootprint( aNewFPID );
+    MODULE* newFootprint = m_parent->LoadFootprint( aNewFPID );
 
-    if( !newModule )
+    if( !newFootprint )
     {
         msg << ": " << _( "*** footprint not found ***" );
         m_MessageWindow->Report( msg, RPT_SEVERITY_ERROR );
         return false;
     }
 
-    m_parent->Exchange_Module( aModule, newModule, m_commit,
-                               m_removeExtraBox->GetValue(),
-                               m_resetTextItemLayers->GetValue(),
-                               m_resetTextItemEffects->GetValue(),
-                               m_resetFabricationAttrs->GetValue(),
-                               m_reset3DModels->GetValue() );
+    m_parent->ExchangeFootprint( aFootprint, newFootprint, m_commit,
+                                 m_removeExtraBox->GetValue(),
+                                 m_resetTextItemLayers->GetValue(),
+                                 m_resetTextItemEffects->GetValue(),
+                                 m_resetFabricationAttrs->GetValue(),
+                                 m_reset3DModels->GetValue());
 
-    if( aModule == m_currentModule )
-        m_currentModule = newModule;
+    if( aFootprint == m_currentFootprint )
+        m_currentFootprint = newFootprint;
 
     msg += ": OK";
     m_MessageWindow->Report( msg, RPT_SEVERITY_ACTION );
@@ -423,11 +424,11 @@ void processTextItem( const FP_TEXT& aSrc, FP_TEXT& aDest,
 }
 
 
-FP_TEXT* getMatchingTextItem( FP_TEXT* aRefItem, MODULE* aModule )
+FP_TEXT* getMatchingTextItem( FP_TEXT* aRefItem, MODULE* aFootprint )
 {
     std::vector<FP_TEXT*> candidates;
 
-    for( BOARD_ITEM* item : aModule->GraphicalItems() )
+    for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
         FP_TEXT* candidate = dyn_cast<FP_TEXT*>( item );
 
@@ -471,10 +472,10 @@ FP_TEXT* getMatchingTextItem( FP_TEXT* aRefItem, MODULE* aModule )
 }
 
 
-void PCB_EDIT_FRAME::Exchange_Module( MODULE* aExisting, MODULE* aNew, BOARD_COMMIT& aCommit,
-                                      bool deleteExtraTexts, bool resetTextLayers,
-                                      bool resetTextEffects, bool resetFabricationAttrs,
-                                      bool reset3DModels )
+void PCB_EDIT_FRAME::ExchangeFootprint( MODULE* aExisting, MODULE* aNew, BOARD_COMMIT& aCommit,
+                                        bool deleteExtraTexts, bool resetTextLayers,
+                                        bool resetTextEffects, bool resetFabricationAttrs,
+                                        bool reset3DModels )
 {
     PCB_GROUP* parentGroup = aExisting->GetParentGroup();
 
@@ -488,7 +489,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aExisting, MODULE* aNew, BOARD_COM
 
     PlaceModule( aNew, false );
 
-    // PlaceModule will move the module to the cursor position, which we don't want.  Copy
+    // PlaceModule will move the footprint to the cursor position, which we don't want.  Copy
     // the original position across.
     aNew->SetPosition( aExisting->GetPosition() );
 

@@ -736,9 +736,9 @@ public:
     bool ImportSpecctraSession( const wxString& aFullFilename );
 
     // Footprint editing (see also PCB_BASE_FRAME)
-    void InstallFootprintPropertiesDialog( MODULE* Module );
+    void ShowFootprintPropertiesDialog( MODULE* aFootprint );
 
-    int InstallExchangeModuleFrame( MODULE* aModule, bool updateMode, bool selectedMode );
+    int ShowExchangeFootprintsDialog( MODULE* aModule, bool updateMode, bool selectedMode );
 
     /**
      * Function Exchange_Module
@@ -749,10 +749,10 @@ public:
      * @param aNew = footprint to put
      * @param aCommit = commit that should store the changes
      */
-    void Exchange_Module( MODULE* aExisting, MODULE* aNew, BOARD_COMMIT& aCommit,
-                          bool deleteExtraTexts = true, bool resetTextLayers = true,
-                          bool resetTextEffects = true, bool resetFabricationAttrs = true,
-                          bool reset3DModels = true );
+    void ExchangeFootprint( MODULE* aExisting, MODULE* aNew, BOARD_COMMIT& aCommit,
+                            bool deleteExtraTexts = true, bool resetTextLayers = true,
+                            bool resetTextEffects = true, bool resetFabricationAttrs = true,
+                            bool reset3DModels = true );
 
     // loading modules: see PCB_BASE_FRAME
 
@@ -791,7 +791,7 @@ public:
 
     // Properties dialogs
     void ShowTargetOptionsDialog( PCB_TARGET* aTarget );
-    void ShowDimensionPropertyDialog( DIMENSION* aDimension );
+    void ShowDimensionPropertiesDialog( DIMENSION* aDimension );
     void ShowGroupPropertiesDialog( PCB_GROUP* aGroup );
     void InstallNetlistFrame();
 

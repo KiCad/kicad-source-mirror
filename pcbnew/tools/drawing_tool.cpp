@@ -542,7 +542,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
                     RunMainStack( [&]()
                                   {
-                                      m_frame->InstallTextOptionsFrame( pcbText );
+                                      m_frame->ShowTextPropertiesDialog( pcbText );
                                   } );
 
                     if( pcbText->GetText().IsEmpty() )

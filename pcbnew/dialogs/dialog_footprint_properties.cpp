@@ -44,15 +44,15 @@
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
 #include "3d_cache/dialogs/panel_prev_3d.h"
 
-#include <dialog_edit_footprint_for_BoardEditor.h>
+#include <dialog_footprint_properties.h>
 
 
-int DIALOG_FOOTPRINT_BOARD_EDITOR::m_page = 0;     // remember the last open page during session
+int DIALOG_FOOTPRINT_PROPERTIES::m_page = 0;     // remember the last open page during session
 
 
-DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aParent,
-                                                              MODULE* aModule ) :
-    DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( aParent ),
+DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParent,
+                                                          MODULE* aFootprint ) :
+    DIALOG_FOOTPRINT_PROPERTIES_BASE( aParent ),
     m_posX( aParent, m_XPosLabel, m_ModPositionX, m_XPosUnit ),
     m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit ),
     m_OrientValidator( 1, &m_OrientValue ),
@@ -63,7 +63,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_inSelect( false )
 {
     m_frame     = aParent;
-    m_footprint = aModule;
+    m_footprint = aFootprint;
 
     // Configure display origin transforms
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
@@ -176,7 +176,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
 }
 
 
-DIALOG_FOOTPRINT_BOARD_EDITOR::~DIALOG_FOOTPRINT_BOARD_EDITOR()
+DIALOG_FOOTPRINT_PROPERTIES::~DIALOG_FOOTPRINT_PROPERTIES()
 {
     m_frame->GetPcbNewSettings()->m_FootprintTextShownColumns =
             m_itemsGrid->GetShownColumns().ToStdString();
@@ -200,31 +200,31 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::~DIALOG_FOOTPRINT_BOARD_EDITOR()
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::EditFootprint( wxCommandEvent&  )
+void DIALOG_FOOTPRINT_PROPERTIES::EditFootprint( wxCommandEvent&  )
 {
-    EndModal( PRM_EDITOR_EDIT_BOARD_FOOTPRINT );
+    EndModal( FP_PROPS_EDIT_BOARD_FP );
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::EditLibraryFootprint( wxCommandEvent&  )
+void DIALOG_FOOTPRINT_PROPERTIES::EditLibraryFootprint( wxCommandEvent&  )
 {
-    EndModal( PRM_EDITOR_EDIT_LIBRARY_FOOTPRINT );
+    EndModal( FP_PROPS_EDIT_LIBRARY_FP );
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::UpdateModule( wxCommandEvent&  )
+void DIALOG_FOOTPRINT_PROPERTIES::UpdateFootprint( wxCommandEvent&  )
 {
-    EndModal( PRM_EDITOR_WANT_UPDATE_FP );
+    EndModal( FP_PROPS_UPDATE_FP );
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::ExchangeModule( wxCommandEvent&  )
+void DIALOG_FOOTPRINT_PROPERTIES::ChangeFootprint( wxCommandEvent&  )
 {
-    EndModal( PRM_EDITOR_WANT_EXCHANGE_FP );
+    EndModal( FP_PROPS_CHANGE_FP );
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::ModuleOrientEvent( wxCommandEvent&  )
+void DIALOG_FOOTPRINT_PROPERTIES::FootprintOrientEvent( wxCommandEvent&  )
 {
     if( m_Orient0->GetValue() )
         m_OrientValue = 0.0;
@@ -239,7 +239,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::ModuleOrientEvent( wxCommandEvent&  )
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::OnOtherOrientation( wxCommandEvent& aEvent )
+void DIALOG_FOOTPRINT_PROPERTIES::OnOtherOrientation( wxCommandEvent& aEvent )
 {
     m_OrientOther->SetValue( true );
 
@@ -247,7 +247,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnOtherOrientation( wxCommandEvent& aEvent )
 }
 
 
-bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
+bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
         return false;
@@ -258,7 +258,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     if( !m_Panel3D->TransferDataToWindow() )
         return false;
 
-    // Module Texts
+    // Footprint Texts
 
     m_texts->push_back( m_footprint->Reference() );
     m_texts->push_back( m_footprint->Value() );
@@ -275,7 +275,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     wxGridTableMessage tmsg( m_texts, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_texts->GetNumberRows() );
     m_itemsGrid->ProcessTableMessage( tmsg );
 
-    // Module Properties
+    // Footprint Properties
 
     m_posX.SetValue( m_footprint->GetPosition().x );
     m_posY.SetValue( m_footprint->GetPosition().y );
@@ -379,7 +379,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     }
 
     select3DModel( 0 );   // will clamp idx within bounds
-    m_PreviewPane->UpdateDummyModule();
+    m_PreviewPane->UpdateDummyFootprint();
 
     // Show the footprint's FPID.
     m_tcLibraryID->SetValue( m_footprint->GetFPID().Format() );
@@ -409,7 +409,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::select3DModel( int aModelIdx )
+void DIALOG_FOOTPRINT_PROPERTIES::select3DModel( int aModelIdx )
 {
     m_inSelect = true;
 
@@ -428,14 +428,14 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::select3DModel( int aModelIdx )
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::On3DModelSelected( wxGridEvent& aEvent )
+void DIALOG_FOOTPRINT_PROPERTIES::On3DModelSelected( wxGridEvent& aEvent )
 {
     if( !m_inSelect )
         select3DModel( aEvent.GetRow() );
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
+void DIALOG_FOOTPRINT_PROPERTIES::On3DModelCellChanged( wxGridEvent& aEvent )
 {
     if( aEvent.GetCol() == 0 )
     {
@@ -475,11 +475,11 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
         m_shapes3D_list[ aEvent.GetRow() ].m_Show = ( showValue == wxT( "1" ) );
     }
 
-    m_PreviewPane->UpdateDummyModule();
+    m_PreviewPane->UpdateDummyFootprint();
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::OnRemove3DModel( wxCommandEvent&  )
+void DIALOG_FOOTPRINT_PROPERTIES::OnRemove3DModel( wxCommandEvent&  )
 {
     m_modelsGrid->CommitPendingChanges( true /* quiet mode */ );
 
@@ -491,12 +491,12 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnRemove3DModel( wxCommandEvent&  )
         m_modelsGrid->DeleteRows( idx, 1 );
 
         select3DModel( idx );       // will clamp idx within bounds
-        m_PreviewPane->UpdateDummyModule();
+        m_PreviewPane->UpdateDummyFootprint();
     }
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAdd3DModel( wxCommandEvent&  )
+void DIALOG_FOOTPRINT_PROPERTIES::OnAdd3DModel( wxCommandEvent&  )
 {
     if( !m_modelsGrid->CommitPendingChanges() )
         return;
@@ -559,11 +559,11 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAdd3DModel( wxCommandEvent&  )
     m_modelsGrid->SetCellValue( idx, 1, wxT( "1" ) );
 
     select3DModel( idx );
-    m_PreviewPane->UpdateDummyModule();
+    m_PreviewPane->UpdateDummyFootprint();
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAdd3DRow( wxCommandEvent&  )
+void DIALOG_FOOTPRINT_PROPERTIES::OnAdd3DRow( wxCommandEvent&  )
 {
     if( !m_modelsGrid->CommitPendingChanges() )
         return;
@@ -588,7 +588,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAdd3DRow( wxCommandEvent&  )
 }
 
 
-bool DIALOG_FOOTPRINT_BOARD_EDITOR::Validate()
+bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
 {
     if( !m_itemsGrid->CommitPendingChanges() )
         return false;
@@ -622,7 +622,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::Validate()
 }
 
 
-bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataFromWindow()
+bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
 {
     if( !Validate() )
         return false;
@@ -696,9 +696,9 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataFromWindow()
     case 3:  m_footprint->SetZoneConnection( ZONE_CONNECTION::NONE );      break;
     }
 
-    // Set Module Position
-    wxPoint modpos( m_posX.GetValue(), m_posY.GetValue() );
-    m_footprint->SetPosition( modpos );
+    // Set Footprint Position
+    wxPoint pos( m_posX.GetValue(), m_posY.GetValue() );
+    m_footprint->SetPosition( pos );
     m_footprint->SetLocked( m_AutoPlaceCtrl->GetSelection() == 2 );
     m_footprint->SetPadsLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
 
@@ -755,14 +755,14 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataFromWindow()
 
     // This is a simple edit, we must create an undo entry
     if( m_footprint->GetEditFlags() == 0 )    // i.e. not edited, or moved
-        commit.Push( _( "Modify module properties" ) );
+        commit.Push( _( "Modify footprint properties" ) );
 
-    SetReturnCode( PRM_EDITOR_EDIT_OK );
+    SetReturnCode( FP_PROPS_OK );
     return true;
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAddField( wxCommandEvent&  )
+void DIALOG_FOOTPRINT_PROPERTIES::OnAddField( wxCommandEvent&  )
 {
     if( !m_itemsGrid->CommitPendingChanges() )
         return;
@@ -797,7 +797,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAddField( wxCommandEvent&  )
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::OnDeleteField( wxCommandEvent&  )
+void DIALOG_FOOTPRINT_PROPERTIES::OnDeleteField( wxCommandEvent&  )
 {
     m_itemsGrid->CommitPendingChanges( true /* quiet mode */ );
 
@@ -825,14 +825,14 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnDeleteField( wxCommandEvent&  )
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::Cfg3DPath( wxCommandEvent&  )
+void DIALOG_FOOTPRINT_PROPERTIES::Cfg3DPath( wxCommandEvent&  )
 {
     if( S3D::Configure3DPaths( this, Prj().Get3DCacheManager()->GetResolver() ) )
-        m_PreviewPane->UpdateDummyModule();
+        m_PreviewPane->UpdateDummyFootprint();
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::adjustGridColumns( int aWidth )
+void DIALOG_FOOTPRINT_PROPERTIES::adjustGridColumns( int aWidth )
 {
     // Account for scroll bars
     int itemsWidth = aWidth - ( m_itemsGrid->GetSize().x - m_itemsGrid->GetClientSize().x );
@@ -853,7 +853,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::adjustGridColumns( int aWidth )
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::OnUpdateUI( wxUpdateUIEvent&  )
+void DIALOG_FOOTPRINT_PROPERTIES::OnUpdateUI( wxUpdateUIEvent&  )
 {
     if( !m_itemsGrid->IsCellEditControlShown() && !m_modelsGrid->IsCellEditControlShown() )
         adjustGridColumns( m_itemsGrid->GetRect().GetWidth());
@@ -910,7 +910,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnUpdateUI( wxUpdateUIEvent&  )
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::OnGridSize( wxSizeEvent& aEvent )
+void DIALOG_FOOTPRINT_PROPERTIES::OnGridSize( wxSizeEvent& aEvent )
 {
     adjustGridColumns( aEvent.GetSize().GetX());
 
@@ -918,7 +918,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnGridSize( wxSizeEvent& aEvent )
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::OnPageChange( wxNotebookEvent& aEvent )
+void DIALOG_FOOTPRINT_PROPERTIES::OnPageChange( wxNotebookEvent& aEvent )
 {
     int page = aEvent.GetSelection();
 
@@ -941,7 +941,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnPageChange( wxNotebookEvent& aEvent )
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::updateOrientationControl()
+void DIALOG_FOOTPRINT_PROPERTIES::updateOrientationControl()
 {
     KIUI::ValidatorTransferToWindowWithoutEvents( m_OrientValidator );
 }

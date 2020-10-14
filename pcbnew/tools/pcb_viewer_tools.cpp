@@ -98,9 +98,9 @@ int PCB_VIEWER_TOOLS::ShowPadNumbers( const TOOL_EVENT& aEvent )
     Flip( opts.m_DisplayPadNum );
     frame()->SetDisplayOptions( opts );
 
-    for( auto module : board()->Modules() )
+    for( MODULE* fp : board()->Modules() )
     {
-        for( auto pad : module->Pads() )
+        for( D_PAD* pad : fp->Pads() )
             view()->Update( pad, KIGFX::GEOMETRY );
     }
 
@@ -117,9 +117,9 @@ int PCB_VIEWER_TOOLS::PadDisplayMode( const TOOL_EVENT& aEvent )
     Flip( opts.m_DisplayPadFill );
     frame()->SetDisplayOptions( opts );
 
-    for( auto module : board()->Modules() )
+    for( MODULE* fp : board()->Modules() )
     {
-        for( auto pad : module->Pads() )
+        for( D_PAD* pad : fp->Pads() )
             view()->Update( pad, KIGFX::GEOMETRY );
     }
 
@@ -136,9 +136,9 @@ int PCB_VIEWER_TOOLS::GraphicOutlines( const TOOL_EVENT& aEvent )
     Flip( opts.m_DisplayGraphicsFill );
     frame()->SetDisplayOptions( opts );
 
-    for( MODULE* module : board()->Modules() )
+    for( MODULE* fp : board()->Modules() )
     {
-        for( BOARD_ITEM* item : module->GraphicalItems() )
+        for( BOARD_ITEM* item : fp->GraphicalItems() )
         {
             if( item->Type() == PCB_FP_SHAPE_T )
                 view()->Update( item, KIGFX::GEOMETRY );
@@ -166,12 +166,12 @@ int PCB_VIEWER_TOOLS::TextOutlines( const TOOL_EVENT& aEvent )
     Flip( opts.m_DisplayTextFill );
     frame()->SetDisplayOptions( opts );
 
-    for( MODULE* module : board()->Modules() )
+    for( MODULE* fp : board()->Modules() )
     {
-        view()->Update( &module->Reference(), KIGFX::GEOMETRY );
-        view()->Update( &module->Value(), KIGFX::GEOMETRY );
+        view()->Update( &fp->Reference(), KIGFX::GEOMETRY );
+        view()->Update( &fp->Value(), KIGFX::GEOMETRY );
 
-        for( BOARD_ITEM* item : module->GraphicalItems() )
+        for( BOARD_ITEM* item : fp->GraphicalItems() )
         {
             if( item->Type() == PCB_FP_TEXT_T )
                 view()->Update( item, KIGFX::GEOMETRY );

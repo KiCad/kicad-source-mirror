@@ -311,7 +311,7 @@ public:
      */
     void PlaceModule( MODULE* aModule, bool aRecreateRatsnest = true );
 
-    void InstallPadOptionsFrame( D_PAD* pad );
+    void ShowPadPropertiesDialog( D_PAD* aPad );
 
     /**
      * Function SelectFootprintFromLibTree

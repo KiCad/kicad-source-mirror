@@ -229,7 +229,7 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcb
 
     if( !m_isDryRun )
     {
-        m_frame->Exchange_Module( aPcbComponent, newFootprint, m_commit );
+        m_frame->ExchangeFootprint( aPcbComponent, newFootprint, m_commit );
         return newFootprint;
     }
     else

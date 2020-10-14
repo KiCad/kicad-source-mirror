@@ -408,18 +408,18 @@ int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
                 }
             };
 
-    // Module IDs are the most important, so give them the first crack at "owning" a particular
-    // KIID.
+    // Footprint IDs are the most important, so give them the first crack at "claiming" a
+    // particular KIID.
 
-    for( MODULE* module : board()->Modules() )
-        processItem( module );
+    for( MODULE* footprint : board()->Modules() )
+        processItem( footprint );
 
     // After that the principal use is for DRC marker pointers, which are most likely to pads
     // or tracks.
 
-    for( MODULE* module : board()->Modules() )
+    for( MODULE* footprint : board()->Modules() )
     {
-        for( D_PAD* pad : module->Pads() )
+        for( D_PAD* pad : footprint->Pads() )
             processItem( pad );
     }
 
@@ -428,18 +428,18 @@ int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
 
     // From here out I don't think order matters much.
 
-    for( MODULE* module : board()->Modules() )
+    for( MODULE* footprint : board()->Modules() )
     {
-        processItem( &module->Reference() );
-        processItem( &module->Value() );
+        processItem( &footprint->Reference() );
+        processItem( &footprint->Value() );
 
-        for( BOARD_ITEM* item : module->GraphicalItems() )
+        for( BOARD_ITEM* item : footprint->GraphicalItems() )
             processItem( item );
 
-        for( ZONE_CONTAINER* zone : module->Zones() )
+        for( ZONE_CONTAINER* zone : footprint->Zones() )
             processItem( zone );
 
-        for( PCB_GROUP* group : module->Groups() )
+        for( PCB_GROUP* group : footprint->Groups() )
             processItem( group );
     }
 
@@ -758,7 +758,7 @@ int PCB_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 {
-    MODULE* module = aEvent.Parameter<MODULE*>();
+    MODULE* fp = aEvent.Parameter<MODULE*>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     BOARD_COMMIT commit( m_frame );
     BOARD* board = getModel<BOARD>();
@@ -772,13 +772,13 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 
     VECTOR2I cursorPos = controls->GetCursorPosition();
     bool     reselect = false;
-    bool     fromOtherCommand = module != nullptr;
+    bool     fromOtherCommand = fp != nullptr;
 
     // Prime the pump
-    if( module )
+    if( fp )
     {
-        module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
+        fp->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
     }
     else if( aEvent.HasPosition() )
@@ -799,8 +799,8 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         setCursor();
         cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( reselect && module )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
+        if( reselect && fp )
+            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
 
         auto cleanup = [&] ()
         {
@@ -819,12 +819,12 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 }
             }
 
-            module = NULL;
+            fp = NULL;
         };
 
         if( evt->IsCancelInteractive() )
         {
-            if( module )
+            if( fp )
                 cleanup();
             else
             {
@@ -835,7 +835,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 
         else if( evt->IsActivate() )
         {
-            if( module )
+            if( fp )
                 cleanup();
 
             if( evt->IsMoveTool() )
@@ -852,38 +852,38 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            if( !module )
+            if( !fp )
             {
-                // Pick the module to be placed
-                module = m_frame->SelectFootprintFromLibTree();
+                // Pick the footprint to be placed
+                fp = m_frame->SelectFootprintFromLibTree();
 
-                if( module == NULL )
+                if( fp == NULL )
                     continue;
 
-                module->SetLink( niluuid );
+                fp->SetLink( niluuid );
 
-                module->SetFlags( IS_NEW ); // whatever
+                fp->SetFlags(IS_NEW ); // whatever
 
                 // Set parent so that clearance can be loaded
-                module->SetParent( board );
+                fp->SetParent( board );
 
                 // Put it on FRONT layer,
                 // (Can be stored flipped if the lib is an archive built from a board)
-                if( module->IsFlipped() )
-                    module->Flip( module->GetPosition(), m_frame->Settings().m_FlipLeftRight );
+                if( fp->IsFlipped() )
+                    fp->Flip( fp->GetPosition(), m_frame->Settings().m_FlipLeftRight );
 
-                module->SetOrientation( 0 );
-                module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+                fp->SetOrientation( 0 );
+                fp->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
-                commit.Add( module );
-                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
+                commit.Add( fp );
+                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
                 controls->SetCursorPosition( cursorPos, false );
             }
             else
             {
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-                commit.Push( _( "Place a module" ) );
-                module = NULL;  // to indicate that there is no module that we currently modify
+                commit.Push( _( "Place a footprint" ) );
+                fp = NULL;  // to indicate that there is no footprint that we currently modify
             }
         }
 
@@ -892,14 +892,14 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
             m_menu.ShowContextMenu(  selection()  );
         }
 
-        else if( module && ( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) ) )
+        else if( fp && ( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) ) )
         {
-            module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+            fp->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
             selection().SetReferencePoint( cursorPos );
             getView()->Update( & selection()  );
         }
 
-        else if( module && evt->IsAction( &PCB_ACTIONS::properties ) )
+        else if( fp && evt->IsAction( &PCB_ACTIONS::properties ) )
         {
             // Calling 'Properties' action clears the selection, so we need to restore it
             reselect = true;
@@ -908,9 +908,9 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         else
             evt->SetPassEvent();
 
-        // Enable autopanning and cursor capture only when there is a module to be placed
-        controls->SetAutoPan( !!module );
-        controls->CaptureCursor( !!module );
+        // Enable autopanning and cursor capture only when there is a footprint to be placed
+        controls->SetAutoPan( !!fp );
+        controls->CaptureCursor( !!fp );
     }
 
     return 0;
@@ -1251,16 +1251,16 @@ int PCB_EDITOR_CONTROL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    MODULE* mod = selection.FirstOfKind<MODULE>();
+    MODULE* fp = selection.FirstOfKind<MODULE>();
 
-    if( !mod )
+    if( !fp )
         return 0;
 
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
     auto editor = (FOOTPRINT_EDIT_FRAME*) editFrame->Kiway().Player( FRAME_FOOTPRINT_EDITOR, true );
 
-    editor->Load_Module_From_BOARD( mod );
+    editor->Load_Module_From_BOARD( fp );
 
     editor->Show( true );
     editor->Raise();        // Iconize( false );

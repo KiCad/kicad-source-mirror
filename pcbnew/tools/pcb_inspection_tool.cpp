@@ -760,28 +760,28 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
             if( selection.Empty() )
             {
                 // Clear the previous local ratsnest if we click off all items
-                for( MODULE* mod : board->Modules() )
+                for( MODULE* fp : board->Modules() )
                 {
-                    for( D_PAD* pad : mod->Pads() )
+                    for( D_PAD* pad : fp->Pads() )
                         pad->SetLocalRatsnestVisible( opt.m_ShowGlobalRatsnest );
                 }
             }
             else
             {
-                for( auto item : selection )
+                for( EDA_ITEM* item : selection )
                 {
                     if( D_PAD* pad = dyn_cast<D_PAD*>(item) )
                     {
                         pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
                     }
-                    else if( MODULE* mod = dyn_cast<MODULE*>(item) )
+                    else if( MODULE* fp = dyn_cast<MODULE*>( item) )
                     {
-                        if( !mod->Pads().empty() )
+                        if( !fp->Pads().empty() )
                         {
-                            bool enable = !( *( mod->Pads().begin() ) )->GetLocalRatsnestVisible();
+                            bool enable = !fp->Pads()[0]->GetLocalRatsnestVisible();
 
-                            for( auto modpad : mod->Pads() )
-                                modpad->SetLocalRatsnestVisible( enable );
+                            for( D_PAD* childPad : fp->Pads() )
+                                childPad->SetLocalRatsnestVisible( enable );
                         }
                     }
                 }
@@ -797,9 +797,9 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
         {
             if( aCondition != PCBNEW_PICKER_TOOL::END_ACTIVATE )
             {
-                for( MODULE* mod : board->Modules() )
+                for( MODULE* fp : board->Modules() )
                 {
-                    for( D_PAD* pad : mod->Pads() )
+                    for( D_PAD* pad : fp->Pads() )
                         pad->SetLocalRatsnestVisible( opt.m_ShowGlobalRatsnest );
                 }
             }

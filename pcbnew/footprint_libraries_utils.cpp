@@ -814,7 +814,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     {
         // In the main board the new module replaces the old module (pos, orient, ref, value,
         // connections and properties are kept) and the source_module (old module) is deleted
-        pcbframe->Exchange_Module( source_module, newmodule, commit );
+        pcbframe->ExchangeFootprint( source_module, newmodule, commit );
         const_cast<KIID&>( newmodule->m_Uuid ) = module_in_edit->GetLink();
         commit.Push( wxT( "Update module" ) );
     }

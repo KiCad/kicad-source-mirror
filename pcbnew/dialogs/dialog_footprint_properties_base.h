@@ -44,9 +44,9 @@ class WX_GRID;
 #define ID_NOTEBOOK 1000
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE
+/// Class DIALOG_FOOTPRINT_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
+class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
 		wxBoxSizer* m_GeneralBoxSizer;
@@ -131,9 +131,10 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ModuleOrientEvent( wxCommandEvent& event ) { event.Skip(); }
+		virtual void FootprintOrientEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOtherOrientation( wxCommandEvent& event ) { event.Skip(); }
-		virtual void UpdateModule( wxCommandEvent& event ) { event.Skip(); }
-		virtual void ExchangeModule( wxCommandEvent& event ) { event.Skip(); }
+		virtual void UpdateFootprint( wxCommandEvent& event ) { event.Skip(); }
+		virtual void ChangeFootprint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EditFootprint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EditLibraryFootprint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void On3DModelCellChanged( wxGridEvent& event ) { event.Skip(); }
@@ -146,8 +147,8 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_FOOTPRINT_BOARD_EDITOR_BASE();
+		DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~DIALOG_FOOTPRINT_PROPERTIES_BASE();
 
 };
 

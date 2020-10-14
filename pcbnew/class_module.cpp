@@ -63,39 +63,39 @@ MODULE::MODULE( BOARD* parent ) :
 }
 
 
-MODULE::MODULE( const MODULE& aModule ) :
-    BOARD_ITEM_CONTAINER( aModule )
+MODULE::MODULE( const MODULE& aFootprint ) :
+    BOARD_ITEM_CONTAINER( aFootprint )
 {
-    m_Pos = aModule.m_Pos;
-    m_fpid = aModule.m_fpid;
-    m_Attributs = aModule.m_Attributs;
-    m_ModuleStatus = aModule.m_ModuleStatus;
-    m_Orient = aModule.m_Orient;
-    m_BoundaryBox = aModule.m_BoundaryBox;
-    m_CntRot90 = aModule.m_CntRot90;
-    m_CntRot180 = aModule.m_CntRot180;
-    m_LastEditTime = aModule.m_LastEditTime;
-    m_Link = aModule.m_Link;
-    m_Path = aModule.m_Path;
+    m_Pos = aFootprint.m_Pos;
+    m_fpid = aFootprint.m_fpid;
+    m_Attributs = aFootprint.m_Attributs;
+    m_ModuleStatus = aFootprint.m_ModuleStatus;
+    m_Orient = aFootprint.m_Orient;
+    m_BoundaryBox = aFootprint.m_BoundaryBox;
+    m_CntRot90 = aFootprint.m_CntRot90;
+    m_CntRot180 = aFootprint.m_CntRot180;
+    m_LastEditTime = aFootprint.m_LastEditTime;
+    m_Link = aFootprint.m_Link;
+    m_Path = aFootprint.m_Path;
 
-    m_LocalClearance = aModule.m_LocalClearance;
-    m_LocalSolderMaskMargin = aModule.m_LocalSolderMaskMargin;
-    m_LocalSolderPasteMargin = aModule.m_LocalSolderPasteMargin;
-    m_LocalSolderPasteMarginRatio = aModule.m_LocalSolderPasteMarginRatio;
-    m_ZoneConnection = aModule.m_ZoneConnection;
-    m_ThermalWidth = aModule.m_ThermalWidth;
-    m_ThermalGap = aModule.m_ThermalGap;
+    m_LocalClearance = aFootprint.m_LocalClearance;
+    m_LocalSolderMaskMargin = aFootprint.m_LocalSolderMaskMargin;
+    m_LocalSolderPasteMargin = aFootprint.m_LocalSolderPasteMargin;
+    m_LocalSolderPasteMarginRatio = aFootprint.m_LocalSolderPasteMarginRatio;
+    m_ZoneConnection = aFootprint.m_ZoneConnection;
+    m_ThermalWidth = aFootprint.m_ThermalWidth;
+    m_ThermalGap = aFootprint.m_ThermalGap;
 
     // Copy reference and value.
-    m_Reference = new FP_TEXT( *aModule.m_Reference );
+    m_Reference = new FP_TEXT( *aFootprint.m_Reference );
     m_Reference->SetParent( this );
-    m_Value = new FP_TEXT( *aModule.m_Value );
+    m_Value = new FP_TEXT( *aFootprint.m_Value );
     m_Value->SetParent( this );
 
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
     // Copy pads
-    for( D_PAD* pad : aModule.Pads() )
+    for( D_PAD* pad : aFootprint.Pads() )
     {
         D_PAD* newPad = static_cast<D_PAD*>( pad->Clone() );
         ptrMap[ pad ] = newPad;
@@ -103,7 +103,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     }
 
     // Copy zones
-    for( MODULE_ZONE_CONTAINER* zone : aModule.Zones() )
+    for( MODULE_ZONE_CONTAINER* zone : aFootprint.Zones() )
     {
         MODULE_ZONE_CONTAINER* newZone = static_cast<MODULE_ZONE_CONTAINER*>( zone->Clone() );
         ptrMap[ zone ] = newZone;
@@ -117,7 +117,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     }
 
     // Copy drawings
-    for( BOARD_ITEM* item : aModule.GraphicalItems() )
+    for( BOARD_ITEM* item : aFootprint.GraphicalItems() )
     {
         BOARD_ITEM* newItem = static_cast<BOARD_ITEM*>( item->Clone() );
         ptrMap[ item ] = newItem;
@@ -125,7 +125,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     }
 
     // Copy groups
-    for( PCB_GROUP* group : aModule.Groups() )
+    for( PCB_GROUP* group : aFootprint.Groups() )
     {
         PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( group->Clone() );
         ptrMap[ group ] = newGroup;
@@ -133,7 +133,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     }
 
     // Rebuild groups
-    for( PCB_GROUP* group : aModule.Groups() )
+    for( PCB_GROUP* group : aFootprint.Groups() )
     {
         PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( ptrMap[ group ] );
 
@@ -144,26 +144,26 @@ MODULE::MODULE( const MODULE& aModule ) :
     }
 
     // Copy auxiliary data: 3D_Drawings info
-    m_3D_Drawings = aModule.m_3D_Drawings;
+    m_3D_Drawings = aFootprint.m_3D_Drawings;
 
-    m_Doc         = aModule.m_Doc;
-    m_KeyWord     = aModule.m_KeyWord;
-    m_properties  = aModule.m_properties;
+    m_Doc         = aFootprint.m_Doc;
+    m_KeyWord     = aFootprint.m_KeyWord;
+    m_properties  = aFootprint.m_properties;
 
     m_arflag = 0;
 
     // Ensure auxiliary data is up to date
     CalculateBoundingBox();
 
-    m_initial_comments = aModule.m_initial_comments ?
-                            new wxArrayString( *aModule.m_initial_comments ) : nullptr;
+    m_initial_comments = aFootprint.m_initial_comments ?
+                         new wxArrayString( *aFootprint.m_initial_comments ) : nullptr;
 }
 
 
-MODULE::MODULE( MODULE&& aModule ) :
-    BOARD_ITEM_CONTAINER( aModule )
+MODULE::MODULE( MODULE&& aFootprint ) :
+    BOARD_ITEM_CONTAINER( aFootprint )
 {
-    *this = std::move( aModule );
+    *this = std::move( aFootprint );
 }
 
 
@@ -429,7 +429,7 @@ void MODULE::ClearAllNets()
 {
     // Force the ORPHANED dummy net info for all pads.
     // ORPHANED dummy net does not depend on a board
-    for( auto pad : m_pads )
+    for( D_PAD* pad : m_pads )
         pad->SetNetCode( NETINFO_LIST::ORPHANED );
 }
 
@@ -606,13 +606,14 @@ EDA_RECT MODULE::GetFpPadsLocalBbox() const
     MODULE dummy( *this );
 
     dummy.SetPosition( wxPoint( 0, 0 ) );
+
     if( dummy.IsFlipped() )
         dummy.Flip( wxPoint( 0, 0 ) , false );
 
     if( dummy.GetOrientation() )
         dummy.SetOrientation( 0 );
 
-    for( auto pad : dummy.Pads() )
+    for( D_PAD* pad : dummy.Pads() )
         area.Merge( pad->GetBoundingBox() );
 
     return area;
@@ -744,12 +745,12 @@ void MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
     }
 
     auto addToken = []( wxString* aStr, const wxString& aAttr )
-                   {
-                       if( !aStr->IsEmpty() )
-                           *aStr += wxT( ", " );
+                    {
+                        if( !aStr->IsEmpty() )
+                            *aStr += wxT( ", " );
 
-                       *aStr += aAttr;
-                   };
+                        *aStr += aAttr;
+                    };
 
     wxString status;
     wxString attrs;
@@ -1120,7 +1121,8 @@ void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
     switch( m_Layer )
     {
     default:
-        wxASSERT_MSG( false, "Illegal layer" );    // do you really have modules placed on other layers?
+        wxASSERT_MSG( false, "Illegal layer" );    // do you really have footprints placed on
+                                                   // other layers?
         KI_FALLTHROUGH;
 
     case F_Cu:
@@ -1136,7 +1138,7 @@ void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
     // layer as well so that the component can be edited with the silkscreen layer
     bool f_silk = false, b_silk = false, non_silk = false;
 
-    for( auto item : m_drawings )
+    for( BOARD_ITEM* item : m_drawings )
     {
         if( item->GetLayer() == F_SilkS )
             f_silk = true;
@@ -1250,7 +1252,7 @@ void MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 
 void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
-    // Move module to its final position:
+    // Move footprint to its final position:
     wxPoint finalPos = m_Pos;
 
     // Now Flip the footprint.
@@ -1276,11 +1278,11 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     NORMALIZE_ANGLE_180( m_Orient );
 
     // Mirror pads to other side of board.
-    for( auto pad : m_pads )
+    for( D_PAD* pad : m_pads )
         pad->Flip( m_Pos, false );
 
     // Mirror zones to other side of board.
-    for( auto zone : m_fp_zones )
+    for( ZONE_CONTAINER* zone : m_fp_zones )
         zone->Flip( m_Pos, aFlipLeftRight );
 
     // Mirror reference and value.
@@ -1288,7 +1290,7 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     m_Value->Flip( m_Pos, false );
 
     // Reverse mirror module graphics and texts.
-    for( auto item : m_drawings )
+    for( BOARD_ITEM* item : m_drawings )
     {
         switch( item->Type() )
         {
@@ -1323,15 +1325,13 @@ void MODULE::SetPosition( const wxPoint& aPos )
     m_Reference->EDA_TEXT::Offset( delta );
     m_Value->EDA_TEXT::Offset( delta );
 
-    for( auto pad : m_pads )
-    {
+    for( D_PAD* pad : m_pads )
         pad->SetPosition( pad->GetPosition() + delta );
-    }
 
-    for( auto zone : m_fp_zones )
+    for( ZONE_CONTAINER* zone : m_fp_zones )
         zone->Move( delta );
 
-    for( auto item : m_drawings )
+    for( BOARD_ITEM* item : m_drawings )
     {
         switch( item->Type() )
         {
@@ -1540,7 +1540,7 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
         break;
 
     case PCB_MODULE_T:
-        // Ignore the module itself
+        // Ignore the footprint itself
         break;
 
     default:
@@ -1573,9 +1573,11 @@ wxString MODULE::GetNextPadName( const wxString& aLastPadName ) const
 
 void MODULE::IncrementReference( int aDelta )
 {
-    const auto& refdes = GetReference();
-    SetReference( wxString::Format( wxT( "%s%i" ), UTIL::GetReferencePrefix( refdes ),
-            GetTrailingInt( refdes ) + aDelta ) );
+    const wxString& refdes = GetReference();
+
+    SetReference( wxString::Format( wxT( "%s%i" ),
+                  UTIL::GetReferencePrefix( refdes ),
+                  GetTrailingInt( refdes ) + aDelta ) );
 }
 
 
@@ -1584,6 +1586,7 @@ void MODULE::IncrementReference( int aDelta )
 static double polygonArea( SHAPE_POLY_SET& aPolySet )
 {
     double area = 0.0;
+
     for( int ii = 0; ii < aPolySet.OutlineCount(); ii++ )
     {
         SHAPE_LINE_CHAIN& outline = aPolySet.Outline( ii );
@@ -1609,14 +1612,14 @@ static void addRect( SHAPE_POLY_SET& aPolySet, wxRect aRect )
 
 double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 {
-    double moduleArea = GetFootprintRect().GetArea();
+    double fpArea = GetFootprintRect().GetArea();
     SHAPE_POLY_SET coveredRegion;
     addRect( coveredRegion, GetFootprintRect() );
 
     // build list of holes (covered areas not available for selection)
     SHAPE_POLY_SET holes;
 
-    for( auto pad : m_pads )
+    for( D_PAD* pad : m_pads )
         addRect( holes, pad->GetBoundingBox() );
 
     addRect( holes, m_Reference->GetBoundingBox() );
@@ -1655,8 +1658,8 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
     }
 
     double uncoveredRegionArea = polygonArea( uncoveredRegion );
-    double coveredArea = moduleArea - uncoveredRegionArea;
-    double ratio = ( coveredArea / moduleArea );
+    double coveredArea = fpArea - uncoveredRegionArea;
+    double ratio = ( coveredArea / fpArea );
 
     return std::min( ratio, 1.0 );
 }
@@ -1664,7 +1667,8 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 
 // see convert_drawsegment_list_to_polygon.cpp:
 extern bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET& aPolygons,
-                                     wxString* aErrorText, unsigned int aTolerance, wxPoint* aErrorLocation = nullptr );
+                                     wxString* aErrorText, unsigned int aTolerance,
+                                     wxPoint* aErrorLocation = nullptr );
 
 
 std::shared_ptr<SHAPE> MODULE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const

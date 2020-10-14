@@ -362,8 +362,7 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 {
     switch( aItem->Type() )
     {
-    case PCB_PAD_T:
-        InstallPadOptionsFrame( static_cast<D_PAD*>( aItem ) );
+    case PCB_PAD_T:ShowPadPropertiesDialog( static_cast<D_PAD*>( aItem ));
         break;
 
     case PCB_MODULE_T:
@@ -371,12 +370,10 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         GetCanvas()->Refresh();
         break;
 
-    case PCB_FP_TEXT_T:
-        InstallTextOptionsFrame( aItem );
+    case PCB_FP_TEXT_T:ShowTextPropertiesDialog( aItem );
         break;
 
-    case PCB_FP_SHAPE_T :
-        InstallGraphicItemPropertiesDialog( aItem );
+    case PCB_FP_SHAPE_T :ShowGraphicItemPropertiesDialog( aItem );
         break;
 
     case PCB_FP_ZONE_AREA_T:
