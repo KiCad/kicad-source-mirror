@@ -583,11 +583,11 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     }
         break;
 
-    case MAIL_BACKANNOTATE_FOOTPRINTS:
+    case MAIL_ASSIGN_FOOTPRINTS:
         try
         {
             SCH_EDITOR_CONTROL* controlTool = m_toolManager->GetTool<SCH_EDITOR_CONTROL>();
-            controlTool->BackAnnotateFootprints( payload );
+            controlTool->AssignFootprints( payload );
         }
         catch( const IO_ERROR& )
         {

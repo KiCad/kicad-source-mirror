@@ -27,7 +27,6 @@
 #include <kicad_string.h>
 #include <kiface_i.h>
 #include <sch_edit_frame.h>
-#include <build_version.h>
 #include <wildcards_and_files_ext.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
@@ -40,7 +39,7 @@
 #include <tools/sch_editor_control.h>
 
 
-void SCH_EDITOR_CONTROL::BackAnnotateFootprints( const std::string& aChangedSetOfReferences )
+void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfReferences )
 {
     // Build a flat list of components in schematic:
     SCH_REFERENCE_LIST  refs;
@@ -56,7 +55,7 @@ void SCH_EDITOR_CONTROL::BackAnnotateFootprints( const std::string& aChangedSetO
     {
         Scan( &doc, &lexer );
 
-        CPTREE& back_anno = doc.get_child( "back_annotation" );
+        CPTREE& back_anno = doc.get_child( "cvpcb_netlist" );
         wxString footprint;
 
         for( PTREE::const_iterator ref = back_anno.begin();  ref != back_anno.end();  ++ref )

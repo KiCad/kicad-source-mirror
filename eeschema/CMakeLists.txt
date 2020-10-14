@@ -248,7 +248,7 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_pspice.cpp
 
     tools/backannotate.cpp
-    tools/backanno.cpp
+    tools/assign_footprints.cpp
     tools/ee_actions.cpp
     tools/ee_grid_helper.cpp
     tools/ee_inspection_tool.cpp

@@ -284,10 +284,10 @@ bool CVPCB_MAINFRAME::SaveFootprintAssociation( bool doSaveSchematic )
     std::string      payload;
     STRING_FORMATTER sf;
 
-    m_netlist.FormatBackAnnotation( &sf );
+    m_netlist.FormatCvpcbNetlist( &sf );
 
     payload = sf.GetString();
-    Kiway().ExpressMail( FRAME_SCH, MAIL_BACKANNOTATE_FOOTPRINTS, payload );
+    Kiway().ExpressMail( FRAME_SCH, MAIL_ASSIGN_FOOTPRINTS, payload );
 
     if( doSaveSchematic )
     {

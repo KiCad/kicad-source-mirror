@@ -137,7 +137,7 @@ public:
     int ToggleHiddenFields( const TOOL_EVENT& aEvent );
     int ToggleForceHV( const TOOL_EVENT& aEvent );
 
-    void BackAnnotateFootprints( const std::string& aChangedSetOfReferences );
+    void AssignFootprints( const std::string& aChangedSetOfReferences );
 
     /**
      * Finds a component in the schematic and an item in this component.

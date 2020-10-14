@@ -282,11 +282,11 @@ public:
 #define CTL_OMIT_NETS       (1<<1)
 #define CTL_OMIT_FILTERS    (1<<2)
 
-#define CTL_FOR_BACKANNO    (CTL_OMIT_NETS | CTL_OMIT_FILTERS | CTL_OMIT_EXTRA)
+#define CTL_FOR_CVPCB    (CTL_OMIT_NETS | CTL_OMIT_FILTERS | CTL_OMIT_EXTRA)
 
-    void FormatBackAnnotation( OUTPUTFORMATTER* aOut )
+    void FormatCbpcbNetlist( OUTPUTFORMATTER* aOut )
     {
-        Format( "back_annotation", aOut, 0, CTL_FOR_BACKANNO );
+        Format( "cvpcb_netlist", aOut, 0, CTL_FOR_CVPCB );
     }
 };
 

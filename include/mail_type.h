@@ -37,7 +37,7 @@
 enum MAIL_T
 {
     MAIL_CROSS_PROBE,              // PCB<->SCH, CVPCB->SCH cross-probing.
-    MAIL_BACKANNOTATE_FOOTPRINTS,  // CVPCB->SCH footprint stuffing
+    MAIL_ASSIGN_FOOTPRINTS,        // CVPCB->SCH footprint stuffing
     MAIL_SCH_SAVE,                 // CVPCB->SCH save the schematic
     MAIL_EESCHEMA_NETLIST,         // SCH->CVPCB netlist immediately after launching CVPCB
     MAIL_PCB_UPDATE,               // SCH->PCB forward update
