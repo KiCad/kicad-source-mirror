@@ -31,7 +31,6 @@
 #ifndef  BASE_SCREEN_H
 #define  BASE_SCREEN_H
 
-#include <eda_draw_frame.h>
 #include <eda_item.h>
 #include <common.h>
 

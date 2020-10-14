@@ -74,6 +74,11 @@ class SCH_PLUGIN;
 #define USE_OLD_DOC_FILE_FORMAT( major, minor )                 \
     ( LIB_VERSION( major, minor ) <= LIB_VERSION( 2, 4 ) )
 
+enum class SCH_LIB_TYPE
+{
+    LT_EESCHEMA,
+    LT_SYMBOL
+};
 // Helper class to filter a list of libraries, and/or a list of PART_LIB
 // in dialogs
 class SCHLIB_FILTER
@@ -302,7 +307,7 @@ public:
  */
 class PART_LIB
 {
-    int             type;           ///< Library type indicator.
+    SCH_LIB_TYPE    type;           ///< Library type indicator.
     wxFileName      fileName;       ///< Library file name.
     wxDateTime      timeStamp;      ///< Library save time and date.
     int             versionMajor;   ///< Library major version number.
@@ -316,7 +321,7 @@ class PART_LIB
     std::unique_ptr< PROPERTIES > m_properties;   ///< Library properties
 
 public:
-    PART_LIB( int aType, const wxString& aFileName,
+    PART_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
               SCH_IO_MGR::SCH_FILE_T aPluginType = SCH_IO_MGR::SCH_LEGACY );
     ~PART_LIB();
 

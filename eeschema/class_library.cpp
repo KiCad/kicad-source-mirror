@@ -54,7 +54,7 @@
         "This may cause some unexpected behavior when loading components into a schematic." )
 
 
-PART_LIB::PART_LIB( int aType, const wxString& aFileName, SCH_IO_MGR::SCH_FILE_T aPluginType ) :
+PART_LIB::PART_LIB( SCH_LIB_TYPE aType, const wxString& aFileName, SCH_IO_MGR::SCH_FILE_T aPluginType ) :
     // start @ != 0 so each additional library added
     // is immediately detectable, zero would not be.
     m_mod_hash( PART_LIBS::s_modify_generation ),
@@ -237,7 +237,7 @@ LIB_PART* PART_LIB::ReplacePart( LIB_PART* aOldPart, LIB_PART* aNewPart )
 
 PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName )
 {
-    std::unique_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );
+    std::unique_ptr<PART_LIB> lib( new PART_LIB( SCH_LIB_TYPE::LT_EESCHEMA, aFileName ) );
 
     std::vector<LIB_PART*> parts;
     // This loads the library.

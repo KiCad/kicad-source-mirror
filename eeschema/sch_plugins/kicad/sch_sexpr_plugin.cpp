@@ -296,7 +296,7 @@ class SCH_SEXPR_PLUGIN_CACHE
     bool            m_isModified;
     int             m_versionMajor;
     int             m_versionMinor;
-    int             m_libType;      // Is this cache a component or symbol library.
+    SCH_LIB_TYPE    m_libType; // Is this cache a component or symbol library.
 
     static FILL_T   parseFillMode( LINE_READER& aReader, const char* aLine,
                                    const char** aOutput );
@@ -1247,7 +1247,7 @@ SCH_SEXPR_PLUGIN_CACHE::SCH_SEXPR_PLUGIN_CACHE( const wxString& aFullPathAndFile
 {
     m_versionMajor = -1;
     m_versionMinor = -1;
-    m_libType = LIBRARY_TYPE_EESCHEMA;
+    m_libType      = SCH_LIB_TYPE::LT_EESCHEMA;
 }
 
 

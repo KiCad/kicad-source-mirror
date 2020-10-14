@@ -31,6 +31,7 @@
 #include <base_screen.h>
 #include <bitmaps.h>
 #include <eda_item.h>
+#include <eda_rect.h>
 #include <trace_helpers.h>
 #include <trigo.h>
 

@@ -69,7 +69,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     SCH_SCREENS       screens( Schematic().Root() );
 
     // Create a new empty library to archive components:
-    std::unique_ptr<PART_LIB> archLib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );
+    std::unique_ptr<PART_LIB> archLib( new PART_LIB( SCH_LIB_TYPE::LT_EESCHEMA, aFileName ) );
 
     // Save symbols to file only when the library will be fully filled
     archLib->EnableBuffering();

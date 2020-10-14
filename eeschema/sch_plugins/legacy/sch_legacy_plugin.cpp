@@ -484,7 +484,7 @@ class SCH_LEGACY_PLUGIN_CACHE
     bool            m_isModified;
     int             m_versionMajor;
     int             m_versionMinor;
-    int             m_libType;      // Is this cache a component or symbol library.
+    SCH_LIB_TYPE    m_libType; // Is this cache a component or symbol library.
 
     void                  loadHeader( FILE_LINE_READER& aReader );
     static void           loadAliases( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader,
@@ -2406,7 +2406,7 @@ SCH_LEGACY_PLUGIN_CACHE::SCH_LEGACY_PLUGIN_CACHE( const wxString& aFullPathAndFi
 {
     m_versionMajor = -1;
     m_versionMinor = -1;
-    m_libType = LIBRARY_TYPE_EESCHEMA;
+    m_libType = SCH_LIB_TYPE::LT_EESCHEMA;
 }
 
 
@@ -2604,13 +2604,13 @@ void SCH_LEGACY_PLUGIN_CACHE::Load()
     if( strCompare( "SYMBOL", line, &line ) )
     {
         // Symbol files add date and time stamp info to the header.
-        m_libType = LIBRARY_TYPE_SYMBOL;
+        m_libType = SCH_LIB_TYPE::LT_SYMBOL;
 
         /// @todo Probably should check for a valid date and time stamp even though it's not used.
     }
     else
     {
-        m_libType = LIBRARY_TYPE_EESCHEMA;
+        m_libType = SCH_LIB_TYPE::LT_EESCHEMA;
     }
 
     while( reader.ReadLine() )
@@ -2621,7 +2621,7 @@ void SCH_LEGACY_PLUGIN_CACHE::Load()
             continue;
 
         // Headers where only supported in older library file formats.
-        if( m_libType == LIBRARY_TYPE_EESCHEMA && strCompare( "$HEADER", line ) )
+        if( m_libType == SCH_LIB_TYPE::LT_EESCHEMA && strCompare( "$HEADER", line ) )
             loadHeader( reader );
 
         if( strCompare( "DEF", line ) )
