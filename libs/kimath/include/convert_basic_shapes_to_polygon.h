@@ -81,20 +81,6 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPo
 
 
 /**
- * Helper function GetRoundRectCornerCenters
- * Has meaning only for rounded rect
- * Returns the centers of the rounded corners.
- * @param aCenters is the buffer to store the 4 coordinates.
- * @param aRadius = the radius of the of the rounded corners.
- * @param aPosition = position of the round rect
- * @param aSize = size of the of the round rect.
- * @param aRotation = rotation of the of the round rect
- */
-void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius, const wxPoint& aPosition,
-                                const wxSize& aSize, double aRotation );
-
-
-/**
  * convert a rectangle with rounded corners and/or chamfered corners to a polygon
  * Convert rounded corners arcs to multiple straight lines.  This will generate at least
  * 16 segments per circle

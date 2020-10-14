@@ -969,7 +969,9 @@ void PCB_EDIT_FRAME::SetGridColor( COLOR4D aColor )
 
 void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 {
-    if( GetActiveLayer() == aLayer )
+    PCB_LAYER_ID oldLayer = GetActiveLayer();
+
+    if( oldLayer == aLayer )
         return;
 
     PCB_BASE_FRAME::SetActiveLayer( aLayer );
@@ -985,30 +987,56 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
             []( KIGFX::VIEW_ITEM* aItem ) -> bool
             {
                 if( VIA* via = dynamic_cast<VIA*>( aItem ) )
+                {
                     return ( via->GetViaType() == VIATYPE::BLIND_BURIED ||
                              via->GetViaType() == VIATYPE::MICROVIA );
+                }
 
                 return false;
             } );
 
     // Clearances could be layer-dependent so redraw them when the active layer is changed
+
     if( GetDisplayOptions().m_DisplayPadIsol )
     {
         GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                []( KIGFX::VIEW_ITEM* aItem ) -> bool
+                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
                 {
-                    return dynamic_cast<D_PAD*>( aItem ) != nullptr;
-                });
+                    if( D_PAD* pad = dynamic_cast<D_PAD*>( aItem ) )
+                    {
+                        // Round-corner rects are expensive to draw, but are mostly found on
+                        // SMD pads which only need redrawing on an active-to-not-active
+                        // switch.
+                        if( pad->GetAttribute() == PAD_ATTRIB_SMD )
+                        {
+                            if( ( oldLayer == F_Cu || aLayer == F_Cu ) && pad->IsOnLayer( F_Cu ) )
+                                return true;
+
+                            if( ( oldLayer == B_Cu || aLayer == B_Cu ) && pad->IsOnLayer( B_Cu ) )
+                                return true;
+                        }
+
+                        return true;
+                    }
+
+                    return false;
+                } );
     }
 
-    // Clearances could be layer-dependent so redraw them when the active layer is changed
-    if( GetDisplayOptions().m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS )
+    if( GetDisplayOptions().m_ShowTrackClearanceMode )
     {
         GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                []( KIGFX::VIEW_ITEM* aItem ) -> bool
+                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
                 {
-                    return dynamic_cast<TRACK*>( aItem ) != nullptr;
-                });
+                    if( TRACK* track = dynamic_cast<TRACK*>( aItem ) )
+                    {
+                        // Tracks aren't particularly expensive to draw, but it's an easy
+                        // check.
+                        return track->IsOnLayer( oldLayer ) || track->IsOnLayer( aLayer );
+                    }
+
+                    return false;
+                } );
     }
 
     GetCanvas()->Refresh();

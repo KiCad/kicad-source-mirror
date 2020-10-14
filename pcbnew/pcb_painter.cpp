@@ -45,7 +45,9 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_line_chain.h>
+#include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
+#include <geometry/shape_simple.h>
 #include <geometry/shape_circle.h>
 
 using namespace KIGFX;
@@ -936,19 +938,104 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         }
 
         auto shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
+        bool simpleShapes = true;
 
-        if( shapes && shapes->Size() == 1 && shapes->Shapes()[0]->Type() == SH_SEGMENT )
+        for( SHAPE* shape : shapes->Shapes() )
         {
-            const SHAPE_SEGMENT* seg = (SHAPE_SEGMENT*) shapes->Shapes()[0];
-            m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B, seg->GetWidth() + 2 * margin.x );
+            // Drawing components of compound shapes in outline mode produces a mess.
+            if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
+                simpleShapes = false;
+
+            if( !simpleShapes )
+                break;
+
+            switch( shape->Type() )
+            {
+            case SH_SEGMENT:
+            case SH_CIRCLE:
+            case SH_RECT:
+            case SH_SIMPLE:
+                // OK so far
+                break;
+
+            default:
+                // Not OK
+                simpleShapes = false;
+                break;
+            }
         }
-        else if( shapes && shapes->Size() == 1 && shapes->Shapes()[0]->Type() == SH_CIRCLE )
+
+        if( simpleShapes )
         {
-            const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shapes->Shapes()[0];
-            m_gal->DrawCircle( circle->GetCenter(), circle->GetRadius() + margin.x );
+            for( SHAPE* shape : shapes->Shapes() )
+            {
+                switch( shape->Type() )
+                {
+                case SH_SEGMENT:
+                {
+                    const SHAPE_SEGMENT* seg = (SHAPE_SEGMENT*) shape;
+                    m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B,
+                                        seg->GetWidth() + 2 * margin.x );
+                }
+                    break;
+
+                case SH_CIRCLE:
+                {
+                    const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shape;
+                    m_gal->DrawCircle( circle->GetCenter(), circle->GetRadius() + margin.x );
+                }
+                    break;
+
+                case SH_RECT:
+                {
+                    const SHAPE_RECT* r = (SHAPE_RECT*) shape;
+
+                    m_gal->DrawRectangle( r->GetPosition(), r->GetPosition() + r->GetSize() );
+
+                    if( margin.x > 0 )
+                    {
+                        m_gal->DrawSegment( r->GetPosition(),
+                                            r->GetPosition() + VECTOR2I( r->GetWidth(), 0 ),
+                                            margin.x * 2 );
+                        m_gal->DrawSegment( r->GetPosition() + VECTOR2I( r->GetWidth(), 0 ),
+                                            r->GetPosition() + r->GetSize(),
+                                            margin.x * 2 );
+                        m_gal->DrawSegment( r->GetPosition() + r->GetSize(),
+                                            r->GetPosition() + VECTOR2I( 0, r->GetHeight() ),
+                                            margin.x * 2 );
+                        m_gal->DrawSegment( r->GetPosition() + VECTOR2I( 0, r->GetHeight() ),
+                                            r->GetPosition(),
+                                            margin.x * 2 );
+                    }
+                }
+                    break;
+
+                case SH_SIMPLE:
+                {
+                    const SHAPE_SIMPLE* poly = static_cast<const SHAPE_SIMPLE*>( shape );
+                    m_gal->DrawPolygon( poly->Vertices() );
+
+                    if( margin.x > 0 )
+                    {
+                        for( size_t ii = 0; ii < poly->GetSegmentCount(); ++ii )
+                        {
+                            SEG seg = poly->GetSegment( ii );
+                            m_gal->DrawSegment( seg.A, seg.B, margin.x * 2 );
+                        }
+                    }
+                }
+                    break;
+
+                default:
+                    // Better not get here; we already pre-flighted the shapes...
+                    break;
+                }
+            }
         }
         else
         {
+            // This is expensive.  Avoid if possible.
+
             SHAPE_POLY_SET polySet;
             aPad->TransformShapeWithClearanceToPolygon( polySet, ToLAYER_ID( aLayer ), margin.x,
                                                         bds.m_MaxError, ERROR_INSIDE );
@@ -965,9 +1052,9 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags
             && ( aLayer == LAYER_PAD_FR || aLayer == LAYER_PAD_BK || aLayer == LAYER_PADS_TH ) )
     {
-        bool flashLayer = aPad->FlashLayer( m_pcbSettings.GetActiveLayer() );
+        bool flashActiveLayer = aPad->FlashLayer( m_pcbSettings.GetActiveLayer() );
 
-        if( flashLayer || aPad->GetDrillSize().x )
+        if( flashActiveLayer || aPad->GetDrillSize().x )
         {
             m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
             m_gal->SetIsStroke( true );
@@ -976,7 +1063,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
             int clearance = aPad->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
 
-            if( flashLayer )
+            if( flashActiveLayer )
             {
                 auto shape = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
 

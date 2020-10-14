@@ -324,29 +324,14 @@ void D_PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
         break;
 
     case PAD_SHAPE_RECT:
-        if( m_orient == 0 || m_orient == 1800 )
-        {
-            add( new SHAPE_RECT( shapePos - m_size / 2, m_size.x, m_size.y ) );
-            break;
-        }
-        else if( m_orient == 900 || m_orient == -900 )
-        {
-            wxSize rot_size( m_size.y, m_size.x );
-            add( new SHAPE_RECT( shapePos - rot_size / 2, rot_size.x, rot_size.y ) );
-            break;
-        }
-
-        // Not at a cartesian angle; fall through to general case
-        KI_FALLTHROUGH;
-
     case PAD_SHAPE_TRAPEZOID:
     case PAD_SHAPE_ROUNDRECT:
     {
-        int     r = GetRoundRectCornerRadius();
+        int     r = ( effectiveShape == PAD_SHAPE_ROUNDRECT ) ? GetRoundRectCornerRadius() : 0;
         wxPoint half_size( m_size.x / 2, m_size.y / 2 );
         wxSize  trap_delta( 0, 0 );
 
-        if( effectiveShape == PAD_SHAPE_ROUNDRECT )
+        if( r )
         {
             half_size -= wxPoint( r, r );
 
@@ -361,7 +346,9 @@ void D_PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
             }
         }
         else if( effectiveShape == PAD_SHAPE_TRAPEZOID )
+        {
             trap_delta = m_deltaSize / 2;
+        }
 
         SHAPE_LINE_CHAIN corners;
 
@@ -373,9 +360,23 @@ void D_PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
         corners.Rotate( -DECIDEG2RAD( m_orient ) );
         corners.Move( shapePos );
 
-        add( new SHAPE_SIMPLE( corners ) );
+        // GAL renders rectangles faster than 4-point polygons so it's worth checking if our
+        // body shape is a rectangle.
+        if( corners.PointCount() == 4
+                && corners.CPoint( 0 ).y == corners.CPoint( 1 ).y
+                && corners.CPoint( 1 ).x == corners.CPoint( 2 ).x
+                && corners.CPoint( 2 ).y == corners.CPoint( 3 ).y
+                && corners.CPoint( 4 ).x == corners.CPoint( 0 ).x )
+        {
+            VECTOR2I size = corners.CPoint( 2 ) - corners.CPoint( 0 );
+            add( new SHAPE_RECT( corners.CPoint( 0 ), size.x, size.y ) );
+        }
+        else
+        {
+            add( new SHAPE_SIMPLE( corners ) );
+        }
 
-        if( effectiveShape == PAD_SHAPE_ROUNDRECT )
+        if( r )
         {
             add( new SHAPE_SEGMENT( corners.CPoint( 0 ), corners.CPoint( 1 ), r * 2 ) );
             add( new SHAPE_SEGMENT( corners.CPoint( 1 ), corners.CPoint( 2 ), r * 2 ) );
