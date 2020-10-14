@@ -65,7 +65,6 @@ PANEL_MODEDIT_COLOR_SETTINGS::PANEL_MODEDIT_COLOR_SETTINGS( FOOTPRINT_EDIT_FRAME
     for( int id = GAL_LAYER_ID_START; id < GAL_LAYER_ID_END; id++ )
     {
         if( id == LAYER_VIAS
-         || id == LAYER_GRID_AXES
          || id == LAYER_PADS_PLATEDHOLES
          || id == LAYER_VIAS_HOLES )
         {

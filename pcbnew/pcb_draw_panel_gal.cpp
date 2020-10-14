@@ -251,6 +251,7 @@ void PCB_DRAW_PANEL_GAL::UpdateColors()
     rs->LoadColors( cs );
 
     m_gal->SetGridColor( cs->GetColor( LAYER_GRID ) );
+    m_gal->SetAxesColor( cs->GetColor( LAYER_GRID_AXES ) );
     m_gal->SetCursorColor( cs->GetColor( LAYER_CURSOR ) );
 }
 
