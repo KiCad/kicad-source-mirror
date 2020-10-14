@@ -144,7 +144,10 @@ bool ALTIUM_PARSER::PropertiesReadBool(
         const std::map<wxString, wxString>& aProperties, const wxString& aKey, bool aDefault )
 {
     const std::map<wxString, wxString>::const_iterator& value = aProperties.find( aKey );
-    return value == aProperties.end() ? aDefault : value->second == "TRUE";
+    if( value == aProperties.end() )
+        return aDefault;
+    else
+        return value->second == "T" || value->second == "TRUE";
 }
 
 int32_t ALTIUM_PARSER::PropertiesReadKicadUnit( const std::map<wxString, wxString>& aProperties,

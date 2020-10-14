@@ -210,6 +210,15 @@ struct ASCH_BEZIER
 };
 
 
+enum class ASCH_POLYLINE_LINESTYLE
+{
+    SOLID       = 0,
+    DASHED      = 1,
+    DOTTED      = 2,
+    DASH_DOTTED = 3
+};
+
+
 struct ASCH_POLYLINE
 {
     int ownerindex;
@@ -218,6 +227,8 @@ struct ASCH_POLYLINE
     std::vector<wxPoint> points;
 
     int lineWidth;
+
+    ASCH_POLYLINE_LINESTYLE linestyle;
 
     explicit ASCH_POLYLINE( const std::map<wxString, wxString>& aProperties );
 };
@@ -232,6 +243,9 @@ struct ASCH_POLYGON
 
     int  lineWidth;
     bool isSolid;
+
+    int color;
+    int areacolor;
 
     explicit ASCH_POLYGON( const std::map<wxString, wxString>& aProperties );
 };
@@ -278,6 +292,9 @@ struct ASCH_RECTANGLE
     int  lineWidth;
     bool isSolid;
     bool isTransparent;
+
+    int color;
+    int areacolor;
 
     explicit ASCH_RECTANGLE( const std::map<wxString, wxString>& aProperties );
 };

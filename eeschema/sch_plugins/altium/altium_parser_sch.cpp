@@ -192,6 +192,13 @@ ASCH_POLYLINE::ASCH_POLYLINE( const std::map<wxString, wxString>& aProperties )
     }
 
     lineWidth = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
+
+    int linestyleVar = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LINESTYLEEXT", 0 );
+    linestyleVar     = ALTIUM_PARSER::PropertiesReadInt(
+            aProperties, "LINESTYLE", linestyleVar ); // overwrite if present
+    linestyle = linestyleVar >= 0 && linestyleVar <= 3 ?
+                        static_cast<ASCH_POLYLINE_LINESTYLE>( linestyleVar ) :
+                        ASCH_POLYLINE_LINESTYLE::SOLID;
 }
 
 
@@ -214,6 +221,9 @@ ASCH_POLYGON::ASCH_POLYGON( const std::map<wxString, wxString>& aProperties )
 
     lineWidth = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
     isSolid   = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISSOLID", false );
+
+    color     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "COLOR", 0 );
+    areacolor = ALTIUM_PARSER::PropertiesReadInt( aProperties, "AREACOLOR", 0 );
 }
 
 
@@ -272,6 +282,9 @@ ASCH_RECTANGLE::ASCH_RECTANGLE( const std::map<wxString, wxString>& aProperties 
     lineWidth     = PropertiesReadKiCadUnitFrac( aProperties, "LINEWIDTH" );
     isSolid       = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISSOLID", false );
     isTransparent = ALTIUM_PARSER::PropertiesReadBool( aProperties, "TRANSPARENT", false );
+
+    color     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "COLOR", 0 );
+    areacolor = ALTIUM_PARSER::PropertiesReadInt( aProperties, "AREACOLOR", 0 );
 }
 
 

@@ -620,6 +620,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
                 SCH_LINE* line = new SCH_LINE( elem.points.at( i ), SCH_LAYER_ID::LAYER_NOTES );
                 line->SetEndPoint( elem.points.at( i + 1 ) );
                 line->SetLineWidth( elem.lineWidth );
+                line->SetLineStyle( PLOT_DASH_TYPE::SOLID );
 
                 line->SetFlags( IS_NEW );
                 m_currentSheet->GetScreen()->Append( line );
@@ -702,11 +703,30 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
 
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
+        PLOT_DASH_TYPE dashType = PLOT_DASH_TYPE::DEFAULT;
+        switch( elem.linestyle )
+        {
+        default:
+        case ASCH_POLYLINE_LINESTYLE::SOLID:
+            dashType = PLOT_DASH_TYPE::SOLID;
+            break;
+        case ASCH_POLYLINE_LINESTYLE::DASHED:
+            dashType = PLOT_DASH_TYPE::DASH;
+            break;
+        case ASCH_POLYLINE_LINESTYLE::DOTTED:
+            dashType = PLOT_DASH_TYPE::DOT;
+            break;
+        case ASCH_POLYLINE_LINESTYLE::DASH_DOTTED:
+            dashType = PLOT_DASH_TYPE::DASHDOT;
+            break;
+        }
+
         for( size_t i = 0; i < elem.points.size() - 1; i++ )
         {
             SCH_LINE* line = new SCH_LINE( elem.points.at( i ), SCH_LAYER_ID::LAYER_NOTES );
             line->SetEndPoint( elem.points.at( i + 1 ) );
             line->SetLineWidth( elem.lineWidth );
+            line->SetLineStyle( dashType );
 
             line->SetFlags( IS_NEW );
             m_currentSheet->GetScreen()->Append( line );
@@ -751,6 +771,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
             SCH_LINE* line = new SCH_LINE( elem.points.at( i ), SCH_LAYER_ID::LAYER_NOTES );
             line->SetEndPoint( elem.points.at( i + 1 ) );
             line->SetLineWidth( elem.lineWidth );
+            line->SetLineStyle( PLOT_DASH_TYPE::SOLID );
 
             line->SetFlags( IS_NEW );
             m_currentSheet->GetScreen()->Append( line );
@@ -760,6 +781,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
         SCH_LINE* line = new SCH_LINE( elem.points.front(), SCH_LAYER_ID::LAYER_NOTES );
         line->SetEndPoint( elem.points.back() );
         line->SetLineWidth( elem.lineWidth );
+        line->SetLineStyle( PLOT_DASH_TYPE::SOLID );
 
         line->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( line );
@@ -781,7 +803,6 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
         LIB_POLYLINE* line = new LIB_POLYLINE( symbol->second );
         symbol->second->AddDrawItem( line );
 
-        // TODO: we cannot fill this polygon, only draw it for now?
         for( wxPoint& point : elem.points )
         {
             line->AddPoint( GetRelativePosition( point, component ) );
@@ -789,10 +810,13 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
         line->AddPoint( GetRelativePosition( elem.points.front(), component ) );
 
         line->SetWidth( elem.lineWidth );
-        if( elem.isSolid )
-        {
+
+        if( !elem.isSolid )
+            line->SetFillMode( FILL_TYPE::NO_FILL );
+        else if( elem.color == elem.areacolor )
             line->SetFillMode( FILL_TYPE::FILLED_SHAPE );
-        }
+        else
+            line->SetFillMode( FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
     }
 }
 
@@ -853,6 +877,7 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
         SCH_LINE* line = new SCH_LINE( elem.point1, SCH_LAYER_ID::LAYER_NOTES );
         line->SetEndPoint( elem.point2 );
         line->SetLineWidth( elem.lineWidth );
+        line->SetLineStyle( PLOT_DASH_TYPE::SOLID ); // TODO?
 
         line->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( line );
@@ -895,24 +920,28 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
         SCH_LINE* lineTop = new SCH_LINE( elem.topRight, SCH_LAYER_ID::LAYER_NOTES );
         lineTop->SetEndPoint( topLeft );
         lineTop->SetLineWidth( elem.lineWidth );
+        lineTop->SetLineStyle( PLOT_DASH_TYPE::SOLID );
         lineTop->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( lineTop );
 
         SCH_LINE* lineBottom = new SCH_LINE( elem.bottomLeft, SCH_LAYER_ID::LAYER_NOTES );
         lineBottom->SetEndPoint( bottomRight );
         lineBottom->SetLineWidth( elem.lineWidth );
+        lineBottom->SetLineStyle( PLOT_DASH_TYPE::SOLID );
         lineBottom->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( lineBottom );
 
         SCH_LINE* lineRight = new SCH_LINE( elem.topRight, SCH_LAYER_ID::LAYER_NOTES );
         lineRight->SetEndPoint( bottomRight );
         lineRight->SetLineWidth( elem.lineWidth );
+        lineRight->SetLineStyle( PLOT_DASH_TYPE::SOLID );
         lineRight->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( lineRight );
 
         SCH_LINE* lineLeft = new SCH_LINE( elem.bottomLeft, SCH_LAYER_ID::LAYER_NOTES );
         lineLeft->SetEndPoint( topLeft );
         lineLeft->SetLineWidth( elem.lineWidth );
+        lineLeft->SetLineStyle( PLOT_DASH_TYPE::SOLID );
         lineLeft->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( lineLeft );
     }
@@ -935,18 +964,13 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
         rect->SetPosition( GetRelativePosition( elem.topRight, component ) );
         rect->SetEnd( GetRelativePosition( elem.bottomLeft, component ) );
         rect->SetWidth( elem.lineWidth );
-        if( elem.isTransparent )
-        {
+
+        if( !elem.isSolid )
             rect->SetFillMode( FILL_TYPE::NO_FILL );
-        }
-        else if( elem.isSolid )
-        {
+        else if( elem.color == elem.areacolor )
             rect->SetFillMode( FILL_TYPE::FILLED_SHAPE );
-        }
         else
-        {
             rect->SetFillMode( FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
-        }
     }
 }
 
