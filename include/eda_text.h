@@ -25,7 +25,6 @@
 #ifndef EDA_TEXT_H_
 #define EDA_TEXT_H_
 
-#include <trigo.h>                  // NORMALIZE_ANGLE_POS( angle );
 #include <common.h>                 // wxStringSplit
 #include <eda_rect.h>
 #include "kicad_string.h"

@@ -44,6 +44,7 @@
 #include <settings/color_settings.h>
 #include <kicad_string.h>
 #include <trace_helpers.h>
+#include <trigo.h>
 
 
 SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_ITEM* aParent,

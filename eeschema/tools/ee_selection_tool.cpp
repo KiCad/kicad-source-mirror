@@ -49,6 +49,7 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_grid_helper.h>
 #include <tools/sch_line_wire_bus_tool.h>
+#include <trigo.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>

@@ -36,6 +36,7 @@
 #include <base_units.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
+#include <trigo.h>
 
 
 PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent ) :

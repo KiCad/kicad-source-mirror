@@ -31,6 +31,7 @@
 #include <sch_text.h>
 #include <settings/color_settings.h>
 #include <netclass.h>
+#include <trigo.h>
 #include "sch_painter.h"
 
 

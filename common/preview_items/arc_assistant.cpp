@@ -31,6 +31,7 @@
 
 #include <common.h>
 #include <base_units.h>
+#include <trigo.h>
 
 using namespace KIGFX::PREVIEW;
 

@@ -34,6 +34,7 @@
 #include <widgets/ui_common.h>
 #include <pgm_base.h>
 #include <drc/drc_item.h>
+#include <trigo.h>
 
 
 /// Factor to convert the maker unit shape to internal units:

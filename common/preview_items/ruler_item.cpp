@@ -28,6 +28,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <painter.h>
 #include <view/view.h>
+#include <trigo.h>
 
 #include <common.h>
 

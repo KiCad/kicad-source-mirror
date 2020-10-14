@@ -24,6 +24,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <convert_to_biu.h>
 #include <gerbview.h>
+#include <trigo.h>
 
 #include <dcode.h>
 #include <gerber_draw_item.h>

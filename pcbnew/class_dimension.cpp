@@ -35,6 +35,7 @@
 #include <geometry/shape_segment.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
+#include <trigo.h>
 
 
 DIMENSION::DIMENSION( BOARD_ITEM* aParent, KICAD_T aType ) :

@@ -33,6 +33,7 @@
 #include <macros.h>
 #include <kicad_string.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <trigo.h>
 
 /**
  * Oblique angle for DXF native text

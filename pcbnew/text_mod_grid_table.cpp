@@ -26,6 +26,7 @@
 #include <text_mod_grid_table.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_combobox.h>
+#include <trigo.h>
 #include "grid_layer_box_helpers.h"
 
 enum

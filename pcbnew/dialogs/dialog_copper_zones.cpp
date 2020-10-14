@@ -32,6 +32,7 @@
 #include <widgets/unit_binder.h>
 #include <class_zone.h>
 #include <class_board.h>
+#include <trigo.h>
 
 #include <dialog_copper_zones_base.h>
 

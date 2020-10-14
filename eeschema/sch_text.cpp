@@ -45,6 +45,7 @@
 #include <project/net_settings.h>
 #include <sch_iref.h>
 #include <dialog_helpers.h>
+#include <trigo.h>
 
 using KIGFX::SCH_RENDER_SETTINGS;
 

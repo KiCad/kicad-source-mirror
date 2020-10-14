@@ -51,6 +51,7 @@
 #include <tools/gerbview_selection.h>
 #include <tools/gerbview_selection_tool.h>
 #include <tools/gerbview_control.h>
+#include <trigo.h>
 #include <view/view.h>
 #include <base_screen.h>
 #include <gerbview_painter.h>

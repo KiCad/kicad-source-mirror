@@ -295,10 +295,7 @@ public:
 
     void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
-    void SetTextAngle( double aAngle ) override
-    {
-        EDA_TEXT::SetTextAngle( NormalizeAngle360Min( aAngle ) );
-    }
+    void SetTextAngle( double aAngle ) override;
 
     wxPoint GetPosition() const override { return GetTextPos(); }
     void SetPosition( const wxPoint& aPos ) override { SetTextPos( aPos ); }

@@ -29,6 +29,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <settings/settings_manager.h>
+#include <trigo.h>
 
 FP_TEXT::FP_TEXT( MODULE* parent, TEXT_TYPE text_type ) :
     BOARD_ITEM( parent, PCB_FP_TEXT_T ),

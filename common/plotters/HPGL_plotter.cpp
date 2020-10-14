@@ -200,6 +200,7 @@
 #include <kicad_string.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <math/util.h>      // for KiROUND
+#include <trigo.h>
 
 #include "plotter_hpgl.h"
 

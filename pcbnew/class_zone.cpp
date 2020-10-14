@@ -35,6 +35,7 @@
 #include <math_for_graphics.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
+#include <trigo.h>
 
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
         : BOARD_CONNECTED_ITEM( aParent, aInModule ? PCB_FP_ZONE_AREA_T : PCB_ZONE_AREA_T ),

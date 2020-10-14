@@ -30,6 +30,7 @@
 #include <schematic.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
+#include <trigo.h>
 
 
 SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :

@@ -57,6 +57,7 @@
 #include <page_info.h>
 #include <layers_id_colors_and_visibility.h>
 #include <gr_basic.h>
+#include <trigo.h>
 
 // ============================ BASE CLASS ==============================
 
@@ -186,6 +187,11 @@ wxString WS_DRAW_ITEM_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
                              GetShownText() );
 }
 
+
+void WS_DRAW_ITEM_TEXT::SetTextAngle( double aAngle )
+{
+    EDA_TEXT::SetTextAngle( NormalizeAngle360Min( aAngle ) );
+}
 
 // ============================ POLYGON =================================
 

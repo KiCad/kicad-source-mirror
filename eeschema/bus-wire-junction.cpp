@@ -38,6 +38,7 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
+#include <trigo.h>
 
 
 std::vector<wxPoint> SCH_EDIT_FRAME::GetSchematicConnections()

@@ -33,6 +33,7 @@
 #include <base_units.h>
 #include <eda_draw_frame.h>
 #include <sch_bitmap.h>
+#include <trigo.h>
 
 #include <wx/mstream.h>
 

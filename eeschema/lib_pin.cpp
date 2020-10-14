@@ -34,6 +34,7 @@
 #include <lib_pin.h>
 #include <settings/settings_manager.h>
 #include <libedit/libedit_settings.h>
+#include <trigo.h>
 #include "sch_painter.h"
 
 // small margin in internal units between the pin text and the pin line

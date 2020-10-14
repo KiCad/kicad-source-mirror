@@ -30,6 +30,7 @@
 #include <class_board.h>
 #include <pcb_text.h>
 #include <pcb_painter.h>
+#include <trigo.h>
 
 using KIGFX::PCB_RENDER_SETTINGS;
 

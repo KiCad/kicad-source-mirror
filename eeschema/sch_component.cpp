@@ -32,6 +32,7 @@
 #include <sch_sheet_path.h>
 #include <schematic.h>
 #include <trace_helpers.h>
+#include <trigo.h>
 
 
 /**

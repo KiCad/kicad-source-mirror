@@ -26,6 +26,7 @@
 #include <confirm.h>
 #include <dialog_text_entry.h>
 #include <microwave/microwave_tool.h>
+#include <trigo.h>
 
 
 MODULE* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintShape )

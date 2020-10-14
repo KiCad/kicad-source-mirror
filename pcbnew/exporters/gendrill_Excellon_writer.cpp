@@ -41,6 +41,7 @@
 #include <pgm_base.h>
 #include <build_version.h>
 #include <math/util.h>      // for KiROUND
+#include <trigo.h>
 
 #include <pcbplot.h>
 #include <class_board.h>

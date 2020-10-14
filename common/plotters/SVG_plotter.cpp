@@ -98,6 +98,7 @@
 #include <eda_item.h>
 #include <common.h>
 #include <kicad_string.h>
+#include <trigo.h>
 
 #include <cstdint>
 #include <wx/mstream.h>
