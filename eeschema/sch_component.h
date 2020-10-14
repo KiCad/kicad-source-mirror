@@ -27,7 +27,7 @@
 #ifndef COMPONENT_CLASS_H
 #define COMPONENT_CLASS_H
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <common.h>
 #include <core/typeinfo.h>
 #include <layers_id_colors_and_visibility.h>

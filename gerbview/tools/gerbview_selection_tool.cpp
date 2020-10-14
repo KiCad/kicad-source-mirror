@@ -22,7 +22,7 @@
 #include <functional>
 using namespace std::placeholders;
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <bitmaps.h>
 #include <gerber_collectors.h>
 #include <class_draw_panel_gal.h>

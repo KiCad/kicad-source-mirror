@@ -24,7 +24,7 @@
  */
 
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <layers_id_colors_and_visibility.h>
 
 #include <view/view.h>

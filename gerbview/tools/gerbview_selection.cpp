@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <view/view_group.h>
 #include <gerber_draw_item.h>
 #include <tools/gerbview_selection.h>

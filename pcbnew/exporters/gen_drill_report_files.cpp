@@ -28,7 +28,7 @@
  */
 
 #include <plotter.h>
-#include <base_struct.h>
+#include <eda_item.h>
 #include <gr_text.h>
 #include <confirm.h>
 #include <kicad_string.h>

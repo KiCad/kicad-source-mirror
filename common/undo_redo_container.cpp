@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <undo_redo_container.h>
 
 

@@ -35,7 +35,7 @@
 #include <wx/string.h>
 
 #include <base_screen.h>
-#include <base_struct.h>
+#include <eda_item.h>
 #include <core/typeinfo.h>
 #include <kiway_holder.h>
 #include <layers_id_colors_and_visibility.h>

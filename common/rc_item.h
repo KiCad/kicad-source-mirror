@@ -26,7 +26,7 @@
 
 #include <wx/dataview.h>
 #include <macros.h>
-#include <base_struct.h>
+#include <eda_item.h>
 #include <reporter.h>
 
 class MARKER_BASE;

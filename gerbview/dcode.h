@@ -32,7 +32,7 @@
 
 #include <vector>
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <gal/color4d.h>
 #include <geometry/shape_poly_set.h>
 

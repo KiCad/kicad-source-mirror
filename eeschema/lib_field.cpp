@@ -23,7 +23,7 @@
  */
 
 #include <pgm_base.h>
-#include <base_struct.h>
+#include <eda_item.h>
 #include <gr_text.h>
 #include <kicad_string.h>
 #include <sch_draw_panel.h>

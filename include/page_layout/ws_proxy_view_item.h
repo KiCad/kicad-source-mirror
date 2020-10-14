@@ -25,7 +25,7 @@
 #ifndef WS_PROXY_VIEW_ITEM_H
 #define WS_PROXY_VIEW_ITEM_H
 
-#include <base_struct.h>
+#include <eda_item.h>
 
 class BOARD;
 class PAGE_INFO;

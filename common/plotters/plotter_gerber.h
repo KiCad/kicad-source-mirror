@@ -28,7 +28,7 @@
 
 #include <vector>
 #include <math/box2.h>
-#include <base_struct.h>       // FILL_T
+#include <eda_item.h>       // FILL_T
 
 #include <plotter.h>
 #include "gbr_plotter_apertures.h"

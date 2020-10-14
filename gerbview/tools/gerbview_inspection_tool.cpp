@@ -19,7 +19,7 @@
  */
 
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <bitmaps.h>
 #include <class_draw_panel_gal.h>
 #include <dialogs/dialog_layers_select_to_pcb.h>

@@ -29,7 +29,7 @@
 
 #include <trigo.h>
 #include <eda_base_frame.h>
-#include <base_struct.h>
+#include <eda_item.h>
 #include <wx/zstream.h>
 #include <wx/mstream.h>
 #include <math/util.h>      // for KiROUND

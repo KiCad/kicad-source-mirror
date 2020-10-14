@@ -31,7 +31,7 @@
 #ifndef CLASS_DRAWSHEET_PATH_H
 #define CLASS_DRAWSHEET_PATH_H
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <erc_item.h>
 
 #include <map>

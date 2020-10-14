@@ -25,7 +25,7 @@
 #ifndef HASHTABLES_H_
 #define HASHTABLES_H_
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <wx/string.h>
 
 // Two competing strategies for providing portable hashtables are given:

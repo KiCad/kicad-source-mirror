@@ -24,7 +24,7 @@
 #ifndef PREVIEW_ITEMS_ARC_ASSISTANT_H
 #define PREVIEW_ITEMS_ARC_ASSISTANT_H
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <preview_items/arc_geom_manager.h>
 #include <layers_id_colors_and_visibility.h>
 

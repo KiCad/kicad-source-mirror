@@ -32,7 +32,7 @@
 #define  PCB_BASE_FRAME_H
 
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <class_board.h>
 #include <eda_draw_frame.h>
 #include <eda_text.h> // EDA_DRAW_MODE_T

@@ -30,7 +30,7 @@
  * They can be renamed and can appear in reports
  */
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <gr_text.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>

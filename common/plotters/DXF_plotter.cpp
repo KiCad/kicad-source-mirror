@@ -28,7 +28,7 @@
 
 #include <config.h>
 #include <eda_base_frame.h>
-#include <base_struct.h>
+#include <eda_item.h>
 #include <plotters_specific.h>
 #include <macros.h>
 #include <kicad_string.h>

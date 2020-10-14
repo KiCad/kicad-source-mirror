@@ -29,7 +29,7 @@
  */
 
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
 #include <pcb_base_frame.h>

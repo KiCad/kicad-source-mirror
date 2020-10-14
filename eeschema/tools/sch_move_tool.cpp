@@ -28,7 +28,7 @@
 #include <tools/sch_line_wire_bus_tool.h>
 #include <ee_actions.h>
 #include <bitmaps.h>
-#include <base_struct.h>
+#include <eda_item.h>
 #include <sch_iref.h>
 #include <sch_item.h>
 #include <sch_component.h>

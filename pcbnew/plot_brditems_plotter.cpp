@@ -27,7 +27,7 @@
 #include <stddef.h>                           // for NULL, size_t
 #include <vector>                             // for vector, __vector_base<>...
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <common.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/seg.h>                     // for SEG

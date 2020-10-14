@@ -24,7 +24,7 @@
 #ifndef PREVIEW_SIMPLE_OUTLINE_ITEM__H_
 #define PREVIEW_SIMPLE_OUTLINE_ITEM__H_
 
-#include <base_struct.h>
+#include <eda_item.h>
 
 #include <layers_id_colors_and_visibility.h>
 #include <gal/color4d.h>

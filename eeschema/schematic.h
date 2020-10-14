@@ -20,7 +20,7 @@
 #ifndef KICAD_SCHEMATIC_H
 #define KICAD_SCHEMATIC_H
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <sch_sheet_path.h>
 #include <schematic_settings.h>
 

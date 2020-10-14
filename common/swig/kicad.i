@@ -82,7 +82,7 @@ principle should be easily implemented by adapting the current STL containers.
 %{
     #include <macros.h>
     #include <cstddef>
-    #include <base_struct.h>
+    #include <eda_item.h>
     #include <eda_rect.h>
     #include <common.h>
     #include <wx_python_helpers.h>
@@ -109,7 +109,7 @@ principle should be easily implemented by adapting the current STL containers.
 // header files that must be wrapped
 %include macros.h
 %include core/typeinfo.h
-%include base_struct.h
+%include eda_item.h
 %include eda_rect.h
 %include common.h
 %include title_block.h

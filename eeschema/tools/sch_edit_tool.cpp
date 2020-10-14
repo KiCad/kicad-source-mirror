@@ -32,7 +32,7 @@
 #include <ee_actions.h>
 #include <bitmaps.h>
 #include <confirm.h>
-#include <base_struct.h>
+#include <eda_item.h>
 #include <reporter.h>
 #include <sch_item.h>
 #include <sch_component.h>

@@ -25,7 +25,7 @@
 #define __SCH_DRAW_PANEL_H
 
 #include <class_draw_panel_gal.h>
-#include <base_struct.h>
+#include <eda_item.h>
 #include <gr_basic.h>
 #include <eda_rect.h>
 #include <sch_view.h>

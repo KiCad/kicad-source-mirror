@@ -32,7 +32,7 @@
 #include <type_traits>        // for swap
 #include <vector>             // for vector
 
-#include <base_struct.h>      // for EDA_ITEM
+#include <eda_item.h>         // for EDA_ITEM
 #include <base_units.h>
 #include <basic_gal.h>        // for BASIC_GAL, basic_gal
 #include <common.h>           // for wxStringSplit

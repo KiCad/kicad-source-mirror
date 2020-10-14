@@ -196,7 +196,7 @@
 
 #include <config.h>
 #include <eda_base_frame.h>
-#include <base_struct.h>
+#include <eda_item.h>
 #include <kicad_string.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <math/util.h>      // for KiROUND

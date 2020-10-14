@@ -24,7 +24,7 @@
 #ifndef PREVIEW_ITEMS_TWO_POINT_ASSISTANT_H
 #define PREVIEW_ITEMS_TWO_POINT_ASSISTANT_H
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <preview_items/two_point_geom_manager.h>
 #include <layers_id_colors_and_visibility.h>
 

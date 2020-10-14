@@ -30,7 +30,7 @@
 #include <core/optional.h>
 #include <deque>
 #include <eda_rect.h>
-#include <base_struct.h>
+#include <eda_item.h>
 #include <view/view_group.h>
 
 

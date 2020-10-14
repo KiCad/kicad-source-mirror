@@ -24,7 +24,7 @@
 #ifndef PREVIEW_ITEMS_RULER_ITEM_H
 #define PREVIEW_ITEMS_RULER_ITEM_H
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <preview_items/two_point_geom_manager.h>
 
 namespace KIGFX

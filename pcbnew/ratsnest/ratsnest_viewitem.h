@@ -31,7 +31,7 @@
 #define RATSNEST_VIEWITEM_H
 
 #include <memory>
-#include <base_struct.h>
+#include <eda_item.h>
 #include <math/vector2d.h>
 
 class GAL;

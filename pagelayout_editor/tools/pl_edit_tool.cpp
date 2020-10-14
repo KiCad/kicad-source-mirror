@@ -29,7 +29,7 @@
 #include <page_layout/ws_draw_item.h>
 #include <bitmaps.h>
 #include <confirm.h>
-#include <base_struct.h>
+#include <eda_item.h>
 #include <view/view.h>
 #include <math/util.h>      // for KiROUND
 

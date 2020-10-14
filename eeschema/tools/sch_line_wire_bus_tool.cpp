@@ -36,7 +36,7 @@
 #include <utility>
 #include <vector>
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <bitmaps.h>
 #include <core/typeinfo.h>
 #include <layers_id_colors_and_visibility.h>

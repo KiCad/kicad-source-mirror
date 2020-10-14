@@ -31,7 +31,7 @@
 #ifndef __INCLUDE__DRAWTXT_H__
 #define __INCLUDE__DRAWTXT_H__ 1
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <eda_text.h>               // EDA_TEXT_HJUSTIFY_T and EDA_TEXT_VJUSTIFY_T
 
 /* Minimum dimension in pixel for drawing/no drawing a text

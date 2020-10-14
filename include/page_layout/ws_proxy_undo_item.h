@@ -25,7 +25,7 @@
 #ifndef WS_PROXY_UNDO_ITEM_H
 #define WS_PROXY_UNDO_ITEM_H
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <title_block.h>
 #include <page_info.h>
 

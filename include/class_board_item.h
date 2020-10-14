@@ -31,7 +31,7 @@
 #define BOARD_ITEM_STRUCT_H
 
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <common.h>
 #include <convert_to_biu.h>
 #include <gr_basic.h>

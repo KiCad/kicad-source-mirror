@@ -27,7 +27,7 @@
 
 #include <math/box2.h>
 #include <view/view.h>
-#include <base_struct.h>
+#include <eda_item.h>
 #include <layers_id_colors_and_visibility.h>
 #include <gal/color4d.h>
 

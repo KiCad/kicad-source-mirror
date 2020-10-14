@@ -26,7 +26,7 @@
 #include <algorithm>
 
 #include <commit.h>
-#include <base_struct.h>
+#include <eda_item.h>
 
 COMMIT::COMMIT()
 {

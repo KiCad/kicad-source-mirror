@@ -26,7 +26,7 @@
 #ifndef _LIB_ITEM_H_
 #define _LIB_ITEM_H_
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <eda_rect.h>
 #include <transform.h>
 #include <gr_basic.h>

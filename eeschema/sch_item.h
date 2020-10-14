@@ -29,7 +29,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <plotter.h>      // for PLOT_DASH_TYPE definition
 
 #include <gal/color4d.h>

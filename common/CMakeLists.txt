@@ -301,7 +301,6 @@ set( COMMON_SRCS
     array_axis.cpp
     array_options.cpp
     base64.cpp
-    base_struct.cpp
     bin_mod.cpp
     bitmap.cpp
     bitmap_base.cpp
@@ -319,7 +318,9 @@ set( COMMON_SRCS
     eda_dde.cpp
     eda_doc.cpp
     eda_draw_frame.cpp
+    eda_item.cpp
     eda_pattern_match.cpp
+    eda_rect.cpp
     eda_size_ctrl.cpp
     env_paths.cpp
     env_vars.cpp

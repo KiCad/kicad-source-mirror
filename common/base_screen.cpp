@@ -25,7 +25,7 @@
  */
 
 #include <base_screen.h>
-#include <base_struct.h>
+#include <eda_item.h>
 #include <trace_helpers.h>
 
 

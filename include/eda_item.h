@@ -24,8 +24,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef BASE_STRUCT_H_
-#define BASE_STRUCT_H_
+#ifndef EDA_ITEM_H
+#define EDA_ITEM_H
 
 #include <deque>
 
@@ -587,5 +587,4 @@ inline EDA_ITEM* new_clone( const EDA_ITEM& aItem ) { return aItem.Clone(); }
  */
 typedef std::vector< EDA_ITEM* > EDA_ITEMS;
 
-
-#endif // BASE_STRUCT_H_
+#endif // EDA_ITEM_H

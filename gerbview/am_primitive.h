@@ -33,7 +33,7 @@
 #include <vector>
 #include <set>
 
-#include <base_struct.h>
+#include <eda_item.h>
 #include <am_param.h>
 #include <eda_rect.h>
 
