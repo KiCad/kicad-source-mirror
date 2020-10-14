@@ -1301,6 +1301,15 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aColor, int aClea
 }
 
 
+void PNS_KICAD_IFACE::DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aColor )
+{
+    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( nullptr, m_view );
+    pitem->Line( aRatline, 10000, aColor );
+    m_previewItems->Add( pitem );
+    m_view->Update( m_previewItems );
+}
+
+
 void PNS_KICAD_IFACE::HideItem( PNS::ITEM* aItem )
 {
     BOARD_CONNECTED_ITEM* parent = aItem->Parent();
