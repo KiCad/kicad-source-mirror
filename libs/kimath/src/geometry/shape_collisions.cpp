@@ -247,6 +247,9 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_SEGMENT& aSeg, i
         if( aMTV )
             *aMTV = -pushoutForce( aA, aSeg.GetSeg(), aClearance + aSeg.GetWidth() / 2);
 
+        if( aActual )
+            *aActual = std::max( 0, *aActual - aSeg.GetWidth() / 2 );
+
         return true;
     }
 
