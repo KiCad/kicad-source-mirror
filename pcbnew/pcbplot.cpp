@@ -39,6 +39,7 @@
 #include <dialog_plot.h>
 #include <build_version.h>
 #include <gbr_metadata.h>
+#include <render_settings.h>
 
 
 const wxString GetGerberProtelExtension( LAYER_NUM aLayer )
