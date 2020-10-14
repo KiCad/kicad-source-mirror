@@ -24,6 +24,7 @@
 
 #include "graphics_import_mgr.h"
 
+#include <eda_item.h>
 #include "dxf_import_plugin.h"
 #include "svg_import_plugin.h"
 

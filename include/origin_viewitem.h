@@ -31,6 +31,8 @@
 #include <layers_id_colors_and_visibility.h>
 #include <gal/color4d.h>
 
+class EDA_ITEM;
+
 /**
  * ORIGIN_VIEWITEM
  *

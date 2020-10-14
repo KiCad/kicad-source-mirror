@@ -25,6 +25,7 @@
 #ifndef  WS_DRAW_ITEM_H
 #define  WS_DRAW_ITEM_H
 
+#include <core/typeinfo.h>
 #include <math/vector2d.h>
 #include <eda_text.h>
 #include <bitmap_base.h>
@@ -37,6 +38,8 @@
 class WS_DATA_ITEM;
 class TITLE_BLOCK;
 class PAGE_INFO;
+class EDA_ITEM;
+class EDA_DRAW_FRAME;
 
 /*
  * Helper classes to handle basic graphic items used to draw/plot

@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <eda_item.h>
 #include <page_layout/ws_data_item.h>
 
 #include "dialog_new_dataitem_base.h"

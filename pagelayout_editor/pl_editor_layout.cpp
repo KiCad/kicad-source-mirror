@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <climits>
 
+#include <eda_item.h>
 #include <eda_rect.h>
 #include "pl_editor_layout.h"
 

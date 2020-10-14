@@ -24,6 +24,7 @@
 
 #include <tool/tool_action.h>
 #include <bitmaps.h>
+#include <eda_item.h>
 #include <page_layout/ws_data_item.h>
 
 #include "tools/pl_actions.h"

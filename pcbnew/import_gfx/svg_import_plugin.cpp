@@ -32,6 +32,7 @@
 #include <math/vector2d.h>
 
 #include "convert_to_biu.h"
+#include <eda_item.h>
 #include "graphics_importer.h"
 
 static VECTOR2D calculateBezierBoundingBoxExtremity( const float* aCurvePoints,

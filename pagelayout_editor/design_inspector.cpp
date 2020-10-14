@@ -25,6 +25,7 @@
 #include <wx/imaglist.h>
 #include <wx/wupdlock.h>
 
+#include <eda_item.h>
 #include <page_layout/ws_draw_item.h>
 #include <page_layout/ws_data_item.h>
 #include <page_layout/ws_data_model.h>

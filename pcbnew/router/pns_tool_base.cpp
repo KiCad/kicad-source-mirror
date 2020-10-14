@@ -23,6 +23,7 @@
 #include <functional>
 using namespace std::placeholders;
 
+#include <eda_item.h>
 #include <id.h>
 #include <view/view.h>
 #include <view/view_controls.h>

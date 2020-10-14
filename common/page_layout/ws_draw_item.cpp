@@ -56,6 +56,7 @@
 #include <base_units.h>
 #include <page_info.h>
 #include <layers_id_colors_and_visibility.h>
+#include <gr_basic.h>
 
 // ============================ BASE CLASS ==============================
 

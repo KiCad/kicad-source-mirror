@@ -27,15 +27,16 @@
 
 #include <trigo.h>                  // NORMALIZE_ANGLE_POS( angle );
 #include <common.h>                 // wxStringSplit
-#include <gr_basic.h>               // EDA_DRAW_MODE_T
-#include <eda_item.h>            // EDA_RECT
+#include <eda_rect.h>
 #include "kicad_string.h"
 #include "painter.h"
 
 class SHAPE_COMPOUND;
 class SHAPE_POLY_SET;
+class wxFindReplaceData;
 
 using KIGFX::RENDER_SETTINGS;
+using KIGFX::COLOR4D;
 
 // part of the kicad_plugin.h family of defines.
 // See kicad_plugin.h for the choice of the value

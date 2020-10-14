@@ -26,6 +26,7 @@
 #include <dialog_page_settings.h>
 #include <eda_draw_frame.h>
 #include <eda_item.h>
+#include <gr_basic.h>
 #include <kiface_i.h>
 #include <math/util.h>      // for KiROUND, Clamp
 #include <project.h>

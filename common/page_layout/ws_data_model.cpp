@@ -46,6 +46,7 @@
 
 #include <kiface_i.h>
 #include <title_block.h>
+#include <eda_item.h>
 #include <page_layout/ws_data_item.h>
 #include <page_layout/ws_data_model.h>
 #include <page_layout/ws_draw_item.h>
