@@ -32,6 +32,7 @@
 #include <eda_item.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <math/util.h>      // for KiROUND
+#include <render_settings.h>
 #include <trigo.h>
 
 #include "plotters_pslike.h"

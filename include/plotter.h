@@ -36,12 +36,20 @@
 #include <math/box2.h>
 #include <gr_text.h>
 #include <page_info.h>
+#include <gal/color4d.h>
 #include <eda_item.h>       // FILL_T
 
 class COLOR_SETTINGS;
 class SHAPE_POLY_SET;
 class SHAPE_LINE_CHAIN;
 class GBR_NETLIST_METADATA;
+
+namespace KIGFX
+{
+    class RENDER_SETTINGS;
+}
+
+using KIGFX::RENDER_SETTINGS;
 
 /**
  * Enum PlotFormat

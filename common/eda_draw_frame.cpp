@@ -36,6 +36,7 @@
 #include <msgpanel.h>
 #include <page_info.h>
 #include <pgm_base.h>
+#include <render_settings.h>
 #include <settings/app_settings.h>
 #include <settings/color_settings.h>
 #include <settings/common_settings.h>

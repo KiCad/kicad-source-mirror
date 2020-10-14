@@ -35,6 +35,8 @@
 
 #include <view/view_overlay.h>
 
+class EDA_ITEM;
+
 namespace KIGFX
 {
 class PAINTER;

@@ -27,11 +27,16 @@
 
 #include <common.h>                 // wxStringSplit
 #include <eda_rect.h>
-#include "painter.h"
 
 class SHAPE_COMPOUND;
 class SHAPE_POLY_SET;
 class wxFindReplaceData;
+
+namespace KIGFX
+{
+    class RENDER_SETTINGS;
+    class COLOR4D;
+}
 
 using KIGFX::RENDER_SETTINGS;
 using KIGFX::COLOR4D;

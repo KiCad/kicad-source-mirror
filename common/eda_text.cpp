@@ -46,6 +46,7 @@
 #include <kicad_string.h>     // for UnescapeString
 #include <math/util.h>          // for KiROUND
 #include <math/vector2d.h>    // for VECTOR2D
+#include <render_settings.h>
 #include <trigo.h>            // for RotatePoint
 
 #include <geometry/shape.h>

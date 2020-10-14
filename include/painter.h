@@ -35,9 +35,6 @@
 #include <layers_id_colors_and_visibility.h>
 #include <memory>
 
-class EDA_ITEM;
-class COLOR_SETTINGS;
-
 namespace KIGFX
 {
 class GAL;

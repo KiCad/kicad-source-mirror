@@ -33,6 +33,7 @@
 #include <wx/zstream.h>
 #include <wx/mstream.h>
 #include <math/util.h>      // for KiROUND
+#include <render_settings.h>
 
 #include <algorithm>
 

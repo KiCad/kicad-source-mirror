@@ -19,6 +19,7 @@
 
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <painter.h>
 #include <view/view.h>
 
 #include "panel_pl_editor_color_settings.h"

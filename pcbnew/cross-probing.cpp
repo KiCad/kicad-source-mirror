@@ -40,8 +40,10 @@
 #include <kiway_express.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/board_netlist_updater.h>
+#include <painter.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
+#include <render_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>

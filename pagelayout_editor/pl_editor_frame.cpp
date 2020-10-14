@@ -36,6 +36,7 @@
 #include <view/view.h>
 #include <confirm.h>
 #include <kiplatform/app.h>
+#include <painter.h>
 #include <tool/selection.h>
 #include <tool/action_toolbar.h>
 #include <tool/editor_conditions.h>

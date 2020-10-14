@@ -102,6 +102,7 @@
 
 #include <cstdint>
 #include <wx/mstream.h>
+#include <render_settings.h>
 
 #include "plotters_pslike.h"
 
