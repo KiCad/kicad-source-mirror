@@ -231,7 +231,11 @@ endif()
 #=====================================================================
 if(wxWidgets_FIND_STYLE STREQUAL "win32")
   # Useful common wx libs needed by almost all components.
-  set(wxWidgets_COMMON_LIBRARIES png tiff jpeg zlib regex expat)
+  if(VCPKG_TOOLCHAIN)
+    set(wxWidgets_COMMON_LIBRARIES libpng16 tiff jpeg zlib libexpat)
+  else()
+    set(wxWidgets_COMMON_LIBRARIES png tiff jpeg zlib regex expat)
+  endif()
 
   # DEPRECATED: Use find_package(wxWidgets COMPONENTS mono) instead.
   if(NOT wxWidgets_FIND_COMPONENTS)
@@ -282,6 +286,7 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
         NAMES
         wx${LIB}${_UCD}${_DBG} # for regex
         wx${LIB}${_DBG}
+        ${LIB}${_DBG}          # vcpkg libraries aren't specific to wx
         PATHS ${WX_LIB_DIR}
         NO_DEFAULT_PATH
         )
@@ -509,7 +514,7 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
     else()
       set(WX_LIB_DIR_PREFIX vc)
     endif()
-  
+
   if(VCPKG_TOOLCHAIN)
     set(wxWidgets_FOUND TRUE)
       find_path(wxWidgets_ROOT_DIR
