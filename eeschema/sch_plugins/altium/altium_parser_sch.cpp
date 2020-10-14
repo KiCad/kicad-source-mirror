@@ -106,7 +106,7 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProperties )
 
     int pinconglomerate = ALTIUM_PARSER::PropertiesReadInt( aProperties, "PINCONGLOMERATE", 0 );
 
-    orientation    = static_cast<ASCH_PIN_ORIENTATION>( pinconglomerate & 0x03 );
+    orientation    = static_cast<ASCH_RECORD_ORIENTATION>( pinconglomerate & 0x03 );
     showPinName    = ( pinconglomerate & 0x08 ) != 0;
     showDesignator = ( pinconglomerate & 0x10 ) != 0;
 
@@ -128,19 +128,19 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProperties )
 
     switch( orientation )
     {
-    case ASCH_PIN_ORIENTATION::RIGHTWARDS:
+    case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
         kicadX += p;
         kicadXfrac += pfrac;
         break;
-    case ASCH_PIN_ORIENTATION::UPWARDS:
+    case ASCH_RECORD_ORIENTATION::UPWARDS:
         kicadY += p;
         kicadYfrac += pfrac;
         break;
-    case ASCH_PIN_ORIENTATION::LEFTWARDS:
+    case ASCH_RECORD_ORIENTATION::LEFTWARDS:
         kicadX -= p;
         kicadXfrac -= pfrac;
         break;
-    case ASCH_PIN_ORIENTATION::DOWNWARDS:
+    case ASCH_RECORD_ORIENTATION::DOWNWARDS:
         kicadY -= p;
         kicadYfrac -= pfrac;
         break;
@@ -331,10 +331,14 @@ ASCH_NET_LABEL::ASCH_NET_LABEL( const std::map<wxString, wxString>& aProperties 
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::NET_LABEL );
 
     text        = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
-    orientation = ALTIUM_PARSER::PropertiesReadInt( aProperties, "ORIENTATION", 0 );
 
     location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
             -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
+
+    int orientationRaw = ALTIUM_PARSER::PropertiesReadInt( aProperties, "ORIENTATION", 0 );
+    orientation        = orientationRaw >= 0 && orientationRaw <= 3 ?
+                          static_cast<ASCH_RECORD_ORIENTATION>( orientationRaw ) :
+                          ASCH_RECORD_ORIENTATION::RIGHTWARDS;
 }
 
 

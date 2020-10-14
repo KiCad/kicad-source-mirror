@@ -82,6 +82,15 @@ enum class ALTIUM_SCH_RECORD
 };
 
 
+enum class ASCH_RECORD_ORIENTATION
+{
+    RIGHTWARDS = 0,
+    UPWARDS    = 1,
+    LEFTWARDS  = 2,
+    DOWNWARDS  = 3
+};
+
+
 struct ASCH_COMPONENT
 {
     int      currentpartid;
@@ -158,15 +167,6 @@ enum class ASCH_PIN_ELECTRICAL
 };
 
 
-enum class ASCH_PIN_ORIENTATION
-{
-    RIGHTWARDS = 0,
-    UPWARDS    = 1,
-    LEFTWARDS  = 2,
-    DOWNWARDS  = 3
-};
-
-
 struct ASCH_PIN
 {
     int ownerindex;
@@ -183,7 +183,7 @@ struct ASCH_PIN
     ASCH_PIN_SYMBOL_INNEREDGE symbolInnerEdge;
 
     ASCH_PIN_ELECTRICAL  electrical;
-    ASCH_PIN_ORIENTATION orientation;
+    ASCH_RECORD_ORIENTATION orientation;
 
     wxPoint location;
     int     pinlength;
@@ -335,8 +335,10 @@ struct ASCH_NO_ERC
 struct ASCH_NET_LABEL
 {
     wxString text;
-    int      orientation;
+
     wxPoint  location;
+
+    ASCH_RECORD_ORIENTATION orientation;
 
     explicit ASCH_NET_LABEL( const std::map<wxString, wxString>& aProperties );
 };

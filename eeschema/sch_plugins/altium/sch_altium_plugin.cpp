@@ -493,19 +493,19 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
     wxPoint pinLocation = elem.location; // the location given is not the connection point!
     switch( elem.orientation )
     {
-    case ASCH_PIN_ORIENTATION::RIGHTWARDS:
+    case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
         pin->SetOrientation( DrawPinOrient::PIN_LEFT );
         pinLocation.x += elem.pinlength;
         break;
-    case ASCH_PIN_ORIENTATION::UPWARDS:
+    case ASCH_RECORD_ORIENTATION::UPWARDS:
         pin->SetOrientation( DrawPinOrient::PIN_DOWN );
         pinLocation.y -= elem.pinlength;
         break;
-    case ASCH_PIN_ORIENTATION::LEFTWARDS:
+    case ASCH_RECORD_ORIENTATION::LEFTWARDS:
         pin->SetOrientation( DrawPinOrient::PIN_RIGHT );
         pinLocation.x -= elem.pinlength;
         break;
-    case ASCH_PIN_ORIENTATION::DOWNWARDS:
+    case ASCH_RECORD_ORIENTATION::DOWNWARDS:
         pin->SetOrientation( DrawPinOrient::PIN_UP );
         pinLocation.y += elem.pinlength;
         break;
@@ -1074,16 +1074,16 @@ void SCH_ALTIUM_PLUGIN::ParseNetLabel( const std::map<wxString, wxString>& aProp
 
     switch( elem.orientation )
     {
-    case 0:
-        label->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
-        break;
-    case 1:
-        label->SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
-        break;
-    case 2:
+    case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
         label->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
         break;
-    case 3:
+    case ASCH_RECORD_ORIENTATION::UPWARDS:
+        label->SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
+        break;
+    case ASCH_RECORD_ORIENTATION::LEFTWARDS:
+        label->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+        break;
+    case ASCH_RECORD_ORIENTATION::DOWNWARDS:
         label->SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );
         break;
     default:
