@@ -87,6 +87,12 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     DRC_CONSTRAINT worstClearanceConstraint;
     m_largestClearance = 0;
 
+    if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
+    {
+        reportAux( "Silkscreen clearance testing not run." );
+        return false;
+    }
+
     if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,
                                            worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
     {
