@@ -321,6 +321,17 @@ struct ASCH_RECTANGLE
 };
 
 
+struct ASCH_NO_ERC
+{
+    wxPoint location;
+
+    bool isActive;
+    bool supressAll;
+
+    explicit ASCH_NO_ERC( const std::map<wxString, wxString>& aProperties );
+};
+
+
 struct ASCH_NET_LABEL
 {
     wxString text;

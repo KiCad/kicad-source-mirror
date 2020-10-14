@@ -229,7 +229,7 @@ ASCH_POLYGON::ASCH_POLYGON( const std::map<wxString, wxString>& aProperties )
 
 ASCH_ROUND_RECTANGLE::ASCH_ROUND_RECTANGLE( const std::map<wxString, wxString>& aProperties )
 {
-    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::RECTANGLE );
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::ROUND_RECTANGLE );
 
     ownerindex =
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
@@ -311,6 +311,18 @@ ASCH_RECTANGLE::ASCH_RECTANGLE( const std::map<wxString, wxString>& aProperties 
 
     color     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "COLOR", 0 );
     areacolor = ALTIUM_PARSER::PropertiesReadInt( aProperties, "AREACOLOR", 0 );
+}
+
+
+ASCH_NO_ERC::ASCH_NO_ERC( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::NO_ERC );
+
+    location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
+
+    isActive   = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISACTIVE", true );
+    supressAll = ALTIUM_PARSER::PropertiesReadInt( aProperties, "SUPPRESSALL", true );
 }
 
 

@@ -345,6 +345,7 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
         case ALTIUM_SCH_RECORD::PORT:
             break;
         case ALTIUM_SCH_RECORD::NO_ERC:
+            ParseNoERC( properties );
             break;
         case ALTIUM_SCH_RECORD::NET_LABEL:
             ParseNetLabel( properties );
@@ -1047,6 +1048,20 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
             rect->SetFillMode( FILL_TYPE::FILLED_SHAPE );
         else
             rect->SetFillMode( FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
+    }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseNoERC( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_NO_ERC elem( aProperties );
+
+    if( elem.isActive )
+    {
+        SCH_NO_CONNECT* noConnect = new SCH_NO_CONNECT( elem.location );
+
+        noConnect->SetFlags( IS_NEW );
+        m_currentSheet->GetScreen()->Append( noConnect );
     }
 }
 
