@@ -588,20 +588,15 @@ int PCB_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
         bool         highContrast  = settings->GetHighContrast();
         PCB_LAYER_ID contrastLayer = settings->GetPrimaryHighContrastLayer();
 
-        for( int i = 0; i < collector.GetCount(); i++ )
+        for( int i = collector.GetCount() - 1; i >= 0; i-- )
         {
             LSET itemLayers = collector[i]->GetLayerSet();
 
-            if( ( itemLayers & LSET::AllCuMask() ).none() )
-                collector.Remove( i );
-
-            if( highContrast && !itemLayers.Contains( contrastLayer ) )
-                collector.Remove( i );
-
-            if( collector[i]->Type() == PCB_PAD_T )
+            if( ( itemLayers & LSET::AllCuMask() ).none() ||
+                ( highContrast && !itemLayers.Contains( contrastLayer ) ) )
             {
-                m_frame->SendMessageToEESCHEMA( static_cast<BOARD_CONNECTED_ITEM*>( collector[i] ) );
-                break;
+                collector.Remove( i );
+                continue;
             }
         }
 
@@ -609,7 +604,14 @@ int PCB_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
 
         // Obtain net code for the clicked item
         if( enableHighlight )
-            net = static_cast<BOARD_CONNECTED_ITEM*>( collector[0] )->GetNetCode();
+        {
+            BOARD_CONNECTED_ITEM* targetItem = static_cast<BOARD_CONNECTED_ITEM*>( collector[0] );
+
+            if( targetItem->Type() == PCB_PAD_T )
+                m_frame->SendMessageToEESCHEMA( targetItem );
+
+            net = targetItem->GetNetCode();
+        }
     }
 
     auto& netcodes = settings->GetHighlightNetCodes();
