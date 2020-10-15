@@ -28,6 +28,7 @@
 #include <class_track.h>
 #include <dialog_select_net_from_list.h>
 #include <eda_pattern_match.h>
+#include <kicad_string.h>
 #include <wildcards_and_files_ext.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>

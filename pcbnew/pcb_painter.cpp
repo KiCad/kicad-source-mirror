@@ -29,6 +29,7 @@
 #include <class_module.h>
 #include <class_pad.h>
 #include <pcb_shape.h>
+#include <kicad_string.h>
 #include <class_zone.h>
 #include <pcb_text.h>
 #include <class_marker_pcb.h>

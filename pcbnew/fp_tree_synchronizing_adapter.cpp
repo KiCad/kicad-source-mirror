@@ -27,6 +27,7 @@
 #include <footprint_edit_frame.h>
 #include <fp_lib_table.h>
 #include <footprint_info_impl.h>
+#include <kicad_string.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <tool/tool_manager.h>

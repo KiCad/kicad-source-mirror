@@ -40,6 +40,7 @@
 #include <class_pad.h>
 #include <class_track.h>
 #include <class_zone.h>
+#include <kicad_string.h>
 
 #include "pcb_netlist.h"
 #include <connectivity/connectivity_data.h>

@@ -18,6 +18,7 @@
  */
 
 #include <wx/tokenzr.h>
+#include <kicad_string.h>
 #include <eda_pattern_match.h>
 #include <fp_lib_table.h>
 #include <footprint_info.h>

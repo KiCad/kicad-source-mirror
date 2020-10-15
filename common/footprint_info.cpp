@@ -32,6 +32,7 @@
 #include <fp_lib_table.h>
 #include <html_messagebox.h>
 #include <io_mgr.h>
+#include <kicad_string.h>
 #include <kiface_ids.h>
 #include <kiway.h>
 #include <lib_id.h>
@@ -74,6 +75,24 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
 bool FOOTPRINT_INFO::InLibrary( const wxString& aLibrary ) const
 {
     return aLibrary == m_nickname;
+}
+
+
+/**
+ * Less than operator implementation for FOOTPRINT_INFO
+ */
+bool operator<( const FOOTPRINT_INFO& lhs, const FOOTPRINT_INFO& rhs )
+{
+    int retv = StrNumCmp( lhs.m_nickname, rhs.m_nickname, false );
+
+    if( retv != 0 )
+        return retv < 0;
+
+    // Technically footprint names are not case sensitive because the file name is used
+    // as the footprint name.  On windows this would be problematic because windows does
+    // not support case sensitive file names by default.  This should not cause any issues
+    // and allow for a future change to use the name defined in the footprint file.
+    return StrNumCmp( lhs.m_fpname, rhs.m_fpname, false ) < 0;
 }
 
 

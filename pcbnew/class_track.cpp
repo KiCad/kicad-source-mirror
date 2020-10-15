@@ -30,6 +30,7 @@
 #include <class_track.h>
 #include <base_units.h>
 #include <bitmaps.h>
+#include <kicad_string.h>
 #include <view/view.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>

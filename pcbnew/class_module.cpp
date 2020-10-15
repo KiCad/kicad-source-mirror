@@ -28,6 +28,7 @@
 #include <refdes_utils.h>
 #include <bitmaps.h>
 #include <unordered_set>
+#include <kicad_string.h>
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <fp_shape.h>

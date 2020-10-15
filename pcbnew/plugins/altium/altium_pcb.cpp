@@ -30,6 +30,7 @@
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <class_track.h>
+#include <kicad_string.h>
 
 #include <fp_shape.h>
 #include <fp_text.h>

@@ -22,6 +22,7 @@
 #include <reporter.h>
 #include <class_board.h>
 #include <class_track.h>
+#include <kicad_string.h>
 
 #include <pcb_expr_evaluator.h>
 

@@ -38,6 +38,7 @@
 #include <geometry/shape_simple.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_compound.h>
+#include <kicad_string.h>
 #include <pcbnew.h>
 #include <view/view.h>
 #include <class_board.h>

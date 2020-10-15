@@ -27,6 +27,7 @@
 #include <class_board_item.h>
 #include <connectivity/connectivity_data.h>
 #include <drc/drc_engine.h>
+#include <kicad_string.h>
 
 using namespace std::placeholders;
 
@@ -115,6 +116,22 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
 wxString BOARD_CONNECTED_ITEM::GetNetClassName() const
 {
     return m_netinfo->GetClassName();
+}
+
+
+wxString BOARD_CONNECTED_ITEM::GetNetnameMsg() const
+{
+    if( !GetBoard() )
+        return wxT( "[** NO BOARD DEFINED **]" );
+
+    wxString netname = GetNetname();
+
+    if( !netname.length() )
+        return wxT( "[<no net>]" );
+    else if( GetNetCode() < 0 )
+        return wxT( "[" + UnescapeString( netname ) + "](" + _( "Not Found" ) + ")" );
+    else
+        return wxT( "[" + UnescapeString( netname ) + "]" );
 }
 
 

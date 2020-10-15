@@ -38,6 +38,7 @@
 #include <class_marker_pcb.h>
 #include <class_pcb_target.h>
 #include <connectivity/connectivity_data.h>
+#include <kicad_string.h>
 #include <pgm_base.h>
 #include <pcbnew_settings.h>
 #include <project.h>

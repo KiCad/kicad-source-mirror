@@ -29,7 +29,6 @@
 #include <class_board_item.h>
 #include <netinfo.h>
 #include <reporter.h>
-#include <kicad_string.h>
 
 class NETCLASS;
 class TRACK;
@@ -132,20 +131,7 @@ public:
      * @return wxString - the full netname or "<no net>" in square braces, followed by
      * "(Not Found)" if the netcode is undefined.
      */
-    wxString GetNetnameMsg() const
-    {
-        if( !GetBoard() )
-            return wxT( "[** NO BOARD DEFINED **]" );
-
-        wxString netname = GetNetname();
-
-        if( !netname.length() )
-            return wxT( "[<no net>]" );
-        else if( GetNetCode() < 0 )
-            return wxT( "[" + UnescapeString( netname ) + "](" + _( "Not Found" ) + ")" );
-        else
-            return wxT( "[" + UnescapeString( netname ) + "]" );
-    }
+    wxString GetNetnameMsg() const;
 
     /**
      * Function GetShortNetname

@@ -33,7 +33,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <import_export.h>
 #include <ki_exception.h>
-#include <kicad_string.h>
 #include <sync_queue.h>
 #include <lib_tree_item.h>
 #include <atomic>
@@ -138,6 +137,11 @@ public:
      */
     bool InLibrary( const wxString& aLibrary ) const;
 
+    /**
+     * Less than comparison operator, intended for sorting FOOTPRINT_INFO objects
+     */
+    friend bool operator<( const FOOTPRINT_INFO& lhs, const FOOTPRINT_INFO& rhs );
+
 protected:
     void ensure_loaded()
     {
@@ -160,22 +164,6 @@ protected:
     wxString m_doc;              ///< Footprint description.
     wxString m_keywords;         ///< Footprint keywords.
 };
-
-
-/// FOOTPRINT object list sort function.
-inline bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 )
-{
-    int retv = StrNumCmp( item1.m_nickname, item2.m_nickname, false );
-
-    if( retv != 0 )
-        return retv < 0;
-
-    // Technically footprint names are not case sensitive because the file name is used
-    // as the footprint name.  On windows this would be problematic because windows does
-    // not support case sensitive file names by default.  This should not cause any issues
-    // and allow for a future change to use the name defined in the footprint file.
-    return StrNumCmp( item1.m_fpname, item2.m_fpname, false ) < 0;
-}
 
 
 /**

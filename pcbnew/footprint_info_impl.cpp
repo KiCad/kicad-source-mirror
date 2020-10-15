@@ -27,6 +27,7 @@
 #include <fp_lib_table.h>
 #include <html_messagebox.h>
 #include <io_mgr.h>
+#include <kicad_string.h>
 #include <kiface_ids.h>
 #include <kiway.h>
 #include <lib_id.h>
