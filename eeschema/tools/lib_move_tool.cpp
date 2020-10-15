@@ -239,6 +239,10 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 chain_commands = true;
                 break;
             }
+            else
+            {
+                evt->SetPassEvent();
+            }
         }
         //------------------------------------------------------------------------
         // Handle context menu
@@ -263,7 +267,9 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             break; // Finish
         }
         else
+        {
             evt->SetPassEvent();
+        }
 
     } while( ( evt = Wait() ) );  // Assignment intentional; not equality test
 
