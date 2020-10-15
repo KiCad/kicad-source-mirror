@@ -32,7 +32,6 @@
 
 #include <vector>
 
-#include <eda_item.h>
 #include <gal/color4d.h>
 #include <geometry/shape_poly_set.h>
 
@@ -40,6 +39,7 @@ using KIGFX::COLOR4D;
 
 class wxDC;
 class GERBER_DRAW_ITEM;
+class EDA_RECT;
 
 
 /**

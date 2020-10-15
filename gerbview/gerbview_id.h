@@ -26,7 +26,6 @@
 #define __GERBVIEW_ID_H__
 
 #include <id.h>
-#include <pgm_base.h>
 
 /**
  * Please add IDs that are unique to the gerber file viewer (GerbView) here and not in
