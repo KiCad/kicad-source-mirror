@@ -649,7 +649,7 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
 
     aViaSizeSelectBox->Append( _( "Via: use netclass sizes" ) );
 
-    for( unsigned ii = 0; ii < GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
+    for( unsigned ii = 1; ii < GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
     {
         VIA_DIMENSION viaDimension = GetDesignSettings().m_ViasDimensionsList[ii];
         wxString      msg, priStr, secStr;
