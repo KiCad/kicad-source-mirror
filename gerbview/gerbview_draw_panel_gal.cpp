@@ -24,7 +24,6 @@
 #include <page_layout/ws_proxy_view_item.h>
 
 #include <gerbview_frame.h>
-#include <gbr_display_options.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <settings/settings_manager.h>
 
