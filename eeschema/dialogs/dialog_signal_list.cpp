@@ -23,6 +23,7 @@
  */
 
 #include "dialog_signal_list.h"
+#include <kicad_string.h>
 #include <sim/sim_plot_frame.h>
 
 #include <sim/netlist_exporter_pspice_sim.h>

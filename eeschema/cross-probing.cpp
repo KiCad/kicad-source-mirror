@@ -30,6 +30,7 @@
 #include <sch_component.h>
 #include <schematic.h>
 #include <reporter.h>
+#include <kicad_string.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>

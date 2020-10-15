@@ -27,6 +27,7 @@
 #include <confirm.h>
 
 #include <connection_graph.h>
+#include <kicad_string.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 

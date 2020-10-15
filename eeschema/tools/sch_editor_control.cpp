@@ -34,6 +34,7 @@
 #include <project_rescue.h>
 #include <erc.h>
 #include <invoke_sch_dialog.h>
+#include <kicad_string.h>
 #include <kiway.h>
 #include <netlist_exporters/netlist_exporter_pspice.h>
 #include <project/project_file.h>

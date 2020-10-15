@@ -23,6 +23,7 @@
  */
 
 #include "netlist_exporter_pspice_sim.h"
+#include <kicad_string.h>
 #include <wx/regex.h>
 #include <wx/tokenzr.h>
 

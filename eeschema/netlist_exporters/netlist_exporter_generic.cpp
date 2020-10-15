@@ -28,6 +28,7 @@
 #include <build_version.h>
 #include <sch_base_frame.h>
 #include <class_library.h>
+#include <kicad_string.h>
 #include <connection_graph.h>
 #include <refdes_utils.h>
 
