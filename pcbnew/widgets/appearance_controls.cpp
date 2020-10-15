@@ -338,7 +338,7 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
     RR( _( "Through-hole Pads" ),LAYER_PADS_TH,            _( "Show through-hole pads" ) ),
     RR( _( "Values" ),           LAYER_MOD_VALUES,         _( "Show footprint values" ) ),
     RR( _( "References" ),       LAYER_MOD_REFERENCES,     _( "Show footprint references" ) ),
-    RR( _( "Footprint Text" ),   LAYER_MOD_TEXT_FR,        _( "Show footprint text" ) ),
+    RR( _( "Footprint Text" ),   LAYER_MOD_TEXT_FR,        _( "Show all footprint text" ) ),
     RR( _( "Hidden Text" ),      LAYER_MOD_TEXT_INVISIBLE, _( "Show footprint text marked as invisible" ) ),
     RR(),
     RR(),
@@ -1719,8 +1719,6 @@ void APPEARANCE_CONTROLS::onLayerVisibilityChanged( PCB_LAYER_ID aLayer, bool is
 void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool isVisible,
                                                      bool isFinal )
 {
-    GAL_SET visible = getVisibleObjects();
-
     // Special-case controls
     switch( aLayer )
     {
@@ -1747,9 +1745,20 @@ void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool i
         syncLayerPresetSelection();
         break;
 
+    case LAYER_MOD_TEXT_FR:
+        // Because Footprint Text is a meta-control that also can disable values/references,
+        // drag them along here so that the user is less likely to be confused.
+        onObjectVisibilityChanged( LAYER_MOD_REFERENCES, isVisible, false );
+        onObjectVisibilityChanged( LAYER_MOD_VALUES, isVisible, false );
+        m_objectSettingsMap[LAYER_MOD_REFERENCES]->ctl_visibility->SetValue( isVisible );
+        m_objectSettingsMap[LAYER_MOD_VALUES]->ctl_visibility->SetValue( isVisible );
+        break;
+
     default:
         break;
     }
+
+    GAL_SET visible = getVisibleObjects();
 
     if( visible.Contains( aLayer ) != isVisible )
     {
