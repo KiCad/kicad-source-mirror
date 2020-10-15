@@ -854,11 +854,14 @@ if( KICAD_SCRIPTING_WXPYTHON AND NOT KICAD_SCRIPTING_WXPYTHON_PHOENIX )
     endif()
 endif()
 
-if( MINGW AND ( ${wxWidgets_VERSION_STRING} VERSION_LESS 3.1 ) )
-    # Work around a bug in wx < 3.1 -- when wx itself is compiled with
-    # compiler extensions enabled, it assumes these are also available for
-    # applications.
-    add_definitions( -U__STRICT_ANSI__ )
+if( MINGW )
+    # This needs to be on a separate line to protect against a broken FindWxWidgets.cmake in vcpkg
+    if( ${wxWidgets_VERSION_STRING} VERSION_LESS 3.1 )
+        # Work around a bug in wx < 3.1 -- when wx itself is compiled with
+        # compiler extensions enabled, it assumes these are also available for
+        # applications.
+        add_definitions( -U__STRICT_ANSI__ )
+    endif()
 endif()
 
 if( APPLE )
