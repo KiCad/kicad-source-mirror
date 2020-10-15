@@ -25,6 +25,9 @@
 #ifndef EDA_TEXT_H_
 #define EDA_TEXT_H_
 
+#include <memory>
+#include <vector>
+
 #include <eda_rect.h>
 
 class OUTPUTFORMATTER;
