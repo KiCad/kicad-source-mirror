@@ -40,6 +40,7 @@
 
 #include <core/optional.h>
 #include <wx/stc/stc.h>
+#include <kiplatform/app.h>
 
 ///> Stores information about a mouse button state
 struct TOOL_DISPATCHER::BUTTON_STATE
@@ -416,6 +417,10 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     bool            keyIsEscape  = false;  // True if the keypress was the escape key
     bool            keyIsSpecial = false;  // True if the key is a special key code
     wxWindow*       focus = wxWindow::FindFocus();
+
+    // Required in win32 to ensure wxTimer events get scheduled in between other events
+    // Or else we may stall them out entirely and never get them during actions like rapid mouse moves
+    KIPLATFORM::APP::ForceTimerMessagesToBeCreatedIfNecessary();
 
     int type = aEvent.GetEventType();
 
