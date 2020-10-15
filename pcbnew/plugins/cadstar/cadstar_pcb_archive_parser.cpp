@@ -2143,11 +2143,11 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::POURING::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "FILLED" ) )
         {
-            FillType = COPPER_FILL_TYPE::FILLED;
+            FillType = COPPER_FILL_TYPEYPE::FILLED;
         }
         else if( cNodeName == wxT( "HATCHCODEREF" ) )
         {
-            FillType    = COPPER_FILL_TYPE::HATCHED;
+            FillType    = COPPER_FILL_TYPEYPE::HATCHED;
             HatchCodeID = GetXmlAttributeIDString( cNode, 0 );
         }
         else

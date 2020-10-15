@@ -341,7 +341,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         comp_body->SetUnit( 0 );
         comp_body->SetConvert( 0 );
         comp_body->SetWidth( Mils2iu( 10 ) );
-        comp_body->SetFillMode( FILLED_WITH_BG_BODYCOLOR );
+        comp_body->SetFillMode( FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
         comp_body->AddPoint( wxPoint( Mils2iu( p.x - 200 ), Mils2iu( p.y + 200 ) ) );
         comp_body->AddPoint( wxPoint( Mils2iu( p.x + 200 ), Mils2iu( p.y ) ) );
         comp_body->AddPoint( wxPoint( Mils2iu( p.x - 200 ), Mils2iu( p.y - 200 ) ) );

@@ -68,7 +68,7 @@ class TITLE_BLOCK;
 class FILL_PARAMS
 {
 public:
-    FILL_T m_FillType;
+    FILL_TYPE m_FillType;
     COLOR4D m_Color;
 };
 

@@ -194,9 +194,8 @@
  */
 
 
-#include <config.h>
 #include <eda_base_frame.h>
-#include <eda_item.h>
+#include <fill_type.h>
 #include <kicad_string.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <math/util.h>      // for KiROUND
@@ -274,7 +273,7 @@ void HPGL_PLOTTER::SetPenDiameter( double diameter )
 /**
  * HPGL rectangle: fill not supported
  */
-void HPGL_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int width )
+void HPGL_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, int width )
 {
     wxASSERT( outputFile );
     DPOINT p2dev = userToDeviceCoordinates( p2 );
@@ -285,14 +284,14 @@ void HPGL_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int 
 
 
 // HPGL circle
-void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill,
+void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill,
                            int width )
 {
     wxASSERT( outputFile );
     double radius = userToDeviceSize( diameter / 2 );
     SetCurrentLineWidth( width );
 
-    if( fill == FILLED_SHAPE )
+    if( fill == FILL_TYPE::FILLED_SHAPE )
     {
         // Draw the filled area
         MoveTo( centre );
@@ -315,7 +314,7 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill,
  */
 
 void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
-                             FILL_T aFill, int aWidth, void * aData )
+                             FILL_TYPE aFill, int aWidth, void * aData )
 {
     if( aCornerList.size() <= 1 )
         return;
@@ -323,7 +322,7 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
     SetCurrentLineWidth( aWidth );
     MoveTo( aCornerList[0] );
 
-    if( aFill == FILLED_SHAPE )
+    if( aFill == FILL_TYPE::FILLED_SHAPE )
     {
         // Draw the filled area
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
@@ -346,7 +345,7 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
             LineTo( aCornerList[ii] );
 
         // Always close polygon if filled.
-        if( aFill )
+        if( aFill != FILL_TYPE::NO_FILL )
         {
             int ii = aCornerList.size() - 1;
 
@@ -469,7 +468,7 @@ void HPGL_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end,
  * Or PU PY x, y; PD start_arc_X AA, start_arc_Y, angle, PU;
  */
 void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
-                        FILL_T fill, int width )
+                        FILL_TYPE fill, int width )
 {
     wxASSERT( outputFile );
     double angle;
@@ -616,7 +615,7 @@ void HPGL_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
         corners[ii] += pos;
     }
 
-    PlotPoly( corners, trace_mode == FILLED ? FILLED_SHAPE : NO_FILL );
+    PlotPoly( corners, trace_mode == FILLED ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL );
 }
 
 
@@ -655,7 +654,7 @@ void HPGL_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSiz
     if( cornerList.back() != cornerList.front() )
         cornerList.push_back( cornerList.front() );
 
-    PlotPoly( cornerList, aTraceMode == FILLED ? FILLED_SHAPE : NO_FILL );
+    PlotPoly( cornerList, aTraceMode == FILLED ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL );
 }
 
 void HPGL_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
@@ -677,7 +676,7 @@ void HPGL_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
         if( cornerList.back() != cornerList.front() )
             cornerList.push_back( cornerList.front() );
 
-        PlotPoly( cornerList, aTraceMode == FILLED ? FILLED_SHAPE : NO_FILL );
+        PlotPoly( cornerList, aTraceMode == FILLED ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL );
     }
 }
 
@@ -699,7 +698,7 @@ void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint* aCorne
     // Close polygon
     cornerList.push_back( cornerList.front() );
 
-    PlotPoly( cornerList, aTraceMode == FILLED ? FILLED_SHAPE : NO_FILL );
+    PlotPoly( cornerList, aTraceMode == FILLED ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL );
 }
 
 

@@ -34,17 +34,6 @@
 #include <bitmap_types.h>
 #include <view/view_item.h>
 
-/**
- * Enum FILL_T
- * is the set of fill types used in plotting or drawing enclosed areas.
- */
-enum FILL_T {
-    NO_FILL,
-    FILLED_SHAPE,                // Fill with object color ("Solid shape")
-    FILLED_WITH_BG_BODYCOLOR,    // Fill with background body color
-                                 //   (not filled in B&W mode when plotting or printing)
-    FILLED_WITH_COLOR            // Fill with a user-defined color (currently sheets only)
-};
 
 
 enum class SEARCH_RESULT

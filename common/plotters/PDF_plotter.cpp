@@ -219,7 +219,7 @@ void PDF_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 /**
  * Rectangles in PDF. Supported by the native operator
  */
-void PDF_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int width )
+void PDF_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, int width )
 {
     wxASSERT( workFile );
     DPOINT p1_dev = userToDeviceCoordinates( p1 );
@@ -227,15 +227,14 @@ void PDF_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int w
 
     SetCurrentLineWidth( width );
     fprintf( workFile, "%g %g %g %g re %c\n", p1_dev.x, p1_dev.y,
-             p2_dev.x - p1_dev.x, p2_dev.y - p1_dev.y,
-             fill == NO_FILL ? 'S' : 'B' );
+             p2_dev.x - p1_dev.x, p2_dev.y - p1_dev.y, fill == FILL_TYPE::NO_FILL ? 'S' : 'B' );
 }
 
 
 /**
  * Circle drawing for PDF. They're approximated by curves, but fill is supported
  */
-void PDF_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T aFill, int width )
+void PDF_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_TYPE aFill, int width )
 {
     wxASSERT( workFile );
     DPOINT pos_dev = userToDeviceCoordinates( pos );
@@ -250,9 +249,9 @@ void PDF_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T aFill, int wi
     SetCurrentLineWidth( width );
 
     // If diameter is less than width, switch to filled mode
-    if( aFill == NO_FILL && diametre < width )
+    if( aFill == FILL_TYPE::NO_FILL && diametre < width )
     {
-        aFill = FILLED_SHAPE;
+        aFill = FILL_TYPE::FILLED_SHAPE;
         SetCurrentLineWidth( 0 );
 
         radius = userToDeviceSize( ( diametre / 2.0 ) + ( width / 2.0 ) );
@@ -284,7 +283,7 @@ void PDF_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T aFill, int wi
              pos_dev.x - radius, pos_dev.y - magic,
              pos_dev.x - radius, pos_dev.y,
 
-             aFill == NO_FILL ? 's' : 'b' );
+             aFill == FILL_TYPE::NO_FILL ? 's' : 'b' );
 }
 
 
@@ -293,12 +292,12 @@ void PDF_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T aFill, int wi
  * So no filled arcs (not a great loss... )
  */
 void PDF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
-                      FILL_T fill, int width )
+                      FILL_TYPE fill, int width )
 {
     wxASSERT( workFile );
     if( radius <= 0 )
     {
-        Circle( centre, width, FILLED_SHAPE, 0 );
+        Circle( centre, width, FILL_TYPE::FILLED_SHAPE, 0 );
         return;
     }
 
@@ -332,7 +331,7 @@ void PDF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 
     // The arc is drawn... if not filled we stroke it, otherwise we finish
     // closing the pie at the center
-    if( fill == NO_FILL )
+    if( fill == FILL_TYPE::NO_FILL )
     {
         fputs( "S\n", workFile );
     }
@@ -348,7 +347,7 @@ void PDF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
  * Polygon plotting for PDF. Everything is supported
  */
 void PDF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth, void * aData )
+                           FILL_TYPE aFill, int aWidth, void * aData )
 {
     wxASSERT( workFile );
     if( aCornerList.size() <= 1 )
@@ -366,7 +365,7 @@ void PDF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
     }
 
     // Close path and stroke(/fill)
-    fprintf( workFile, "%c\n", aFill == NO_FILL ? 'S' : 'b' );
+    fprintf( workFile, "%c\n", aFill == FILL_TYPE::NO_FILL ? 'S' : 'b' );
 }
 
 

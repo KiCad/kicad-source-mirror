@@ -446,7 +446,7 @@ kbool:
 ================================================================================
 +eeschema
     Fixed a bug plotting pins with circles in them from eeschema.
-    Added type FILL_T.
+    Added type FILL_TYPE.
 
 
 2008-Aug-26 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

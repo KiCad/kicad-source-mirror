@@ -581,7 +581,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
             for( const wxPoint& pt : pts )
                 poly.Append( pt );
 
-            m_plotter->PlotPoly( poly, FILLED_SHAPE, -1, &gbr_metadata );
+            m_plotter->PlotPoly( poly, FILL_TYPE::FILLED_SHAPE, -1, &gbr_metadata );
         }
     }
         break;
@@ -661,7 +661,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
                 for( int jj = 0; jj < tmpPoly.OutlineCount(); ++jj )
                 {
                     SHAPE_LINE_CHAIN &poly = tmpPoly.Outline( jj );
-                    m_plotter->PlotPoly( poly, FILLED_SHAPE, thickness, &gbr_metadata );
+                    m_plotter->PlotPoly( poly, FILL_TYPE::FILLED_SHAPE, thickness, &gbr_metadata );
                 }
             }
         }
@@ -807,14 +807,14 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& p
                 if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
                 {
                     if( outline_thickness > 0 )
-                        m_plotter->PlotPoly( cornerList, NO_FILL,
+                        m_plotter->PlotPoly( cornerList, FILL_TYPE::NO_FILL,
                                              outline_thickness, &gbr_metadata );
 
                     static_cast<GERBER_PLOTTER*>( m_plotter )->PlotGerberRegion(
                                                         cornerList, &gbr_metadata );
                 }
                 else
-                    m_plotter->PlotPoly( cornerList, FILLED_SHAPE,
+                    m_plotter->PlotPoly( cornerList, FILL_TYPE::FILLED_SHAPE,
                                          outline_thickness, &gbr_metadata );
             }
             else
@@ -922,7 +922,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( PCB_SHAPE* aShape )
                 for( int jj = 0; jj < tmpPoly.OutlineCount(); ++jj )
                 {
                     SHAPE_LINE_CHAIN& poly = tmpPoly.Outline( jj );
-                    m_plotter->PlotPoly( poly, FILLED_SHAPE, thickness, &gbr_metadata );
+                    m_plotter->PlotPoly( poly, FILL_TYPE::FILLED_SHAPE, thickness, &gbr_metadata );
                 }
             }
         }
@@ -946,7 +946,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( PCB_SHAPE* aShape )
             for( const wxPoint& pt : pts )
                 poly.Append( pt );
 
-            m_plotter->PlotPoly( poly, FILLED_SHAPE, -1, &gbr_metadata );
+            m_plotter->PlotPoly( poly, FILL_TYPE::FILLED_SHAPE, -1, &gbr_metadata );
         }
     }
         break;

@@ -27,9 +27,7 @@
  * @brief Kicad: specialized plotter for PS files format
  */
 
-#include <config.h>
 #include <eda_base_frame.h>
-#include <eda_item.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <math/util.h>      // for KiROUND
 #include <render_settings.h>
@@ -110,7 +108,7 @@ void PSLIKE_PLOTTER::FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
                                      EDA_DRAW_MODE_T aTraceMode, void* aData )
 {
     if( aTraceMode == FILLED )
-        Circle( aPadPos, aDiameter, FILLED_SHAPE, 0 );
+        Circle( aPadPos, aDiameter, FILL_TYPE::FILLED_SHAPE, 0 );
     else    // Plot a ring:
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
@@ -120,7 +118,7 @@ void PSLIKE_PLOTTER::FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
         if( linewidth > aDiameter-2 )
             linewidth = aDiameter-2;
 
-        Circle( aPadPos, aDiameter - linewidth, NO_FILL, linewidth );
+        Circle( aPadPos, aDiameter - linewidth, FILL_TYPE::NO_FILL, linewidth );
     }
 
     SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
@@ -172,7 +170,7 @@ void PSLIKE_PLOTTER::FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
 
     cornerList.push_back( cornerList[0] );
 
-    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILLED_SHAPE : NO_FILL,
+    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL,
               GetCurrentLineWidth() );
 }
 
@@ -208,7 +206,7 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
     // Close polygon
     cornerList.push_back( cornerList[0] );
 
-    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILLED_SHAPE : NO_FILL,
+    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL,
               GetCurrentLineWidth() );
 }
 
@@ -241,7 +239,7 @@ void PSLIKE_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
         // Close polygon
         cornerList.push_back( cornerList[0] );
 
-        PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILLED_SHAPE : NO_FILL,
+        PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL,
                   GetCurrentLineWidth() );
     }
 }
@@ -287,7 +285,7 @@ void PSLIKE_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCor
     }
 
     cornerList.push_back( cornerList[0] );
-    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILLED_SHAPE : NO_FILL,
+    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL,
               GetCurrentLineWidth() );
 }
 
@@ -575,7 +573,7 @@ void PS_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 }
 
 
-void PS_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int width )
+void PS_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, int width )
 {
     DPOINT p1_dev = userToDeviceCoordinates( p1 );
     DPOINT p2_dev = userToDeviceCoordinates( p2 );
@@ -586,7 +584,7 @@ void PS_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int wi
 }
 
 
-void PS_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T fill, int width )
+void PS_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_TYPE fill, int width )
 {
     wxASSERT( outputFile );
     DPOINT pos_dev = userToDeviceCoordinates( pos );
@@ -598,7 +596,7 @@ void PS_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T fill, int widt
 
 
 void PS_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int radius, FILL_T fill, int width )
+                      int radius, FILL_TYPE fill, int width )
 {
     wxASSERT( outputFile );
     if( radius <= 0 )
@@ -634,7 +632,7 @@ void PS_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle,
 
 
 void PS_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth, void * aData )
+                           FILL_TYPE aFill, int aWidth, void * aData )
 {
     if( aCornerList.size() <= 1 )
         return;

@@ -505,15 +505,15 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
     rect->SetWidth( elem.lineWidth );
     if( elem.isTransparent )
     {
-        rect->SetFillMode( NO_FILL );
+        rect->SetFillMode( FILL_TYPE::NO_FILL );
     }
     else if( elem.isSolid )
     {
-        rect->SetFillMode( FILLED_SHAPE );
+        rect->SetFillMode( FILL_TYPE::FILLED_SHAPE );
     }
     else
     {
-        rect->SetFillMode( FILLED_WITH_BG_BODYCOLOR );
+        rect->SetFillMode( FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
     }
 }
 

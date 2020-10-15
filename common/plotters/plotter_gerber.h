@@ -28,7 +28,7 @@
 
 #include <vector>
 #include <math/box2.h>
-#include <eda_item.h>       // FILL_T
+#include <eda_item.h>       // FILL_TYPE
 
 #include <plotter.h>
 #include "gbr_plotter_apertures.h"
@@ -69,12 +69,12 @@ public:
                           double aScale, bool aMirror ) override;
 
     // Basic plot primitives
-    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
+    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
+    virtual void Circle( const wxPoint& pos, int diametre, FILL_TYPE fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
-                      int aRadius, FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+                      int aRadius, FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
     // These functions plot an item and manage X2 gerber attributes
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
@@ -94,7 +94,7 @@ public:
      * appropriate G36/G37 sequence
      */
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
+                           FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
                            void* aData = nullptr ) override;
 
     virtual void PenTo( const wxPoint& pos, char plume ) override;

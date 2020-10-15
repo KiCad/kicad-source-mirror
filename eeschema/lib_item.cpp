@@ -29,14 +29,14 @@
 #include <general.h>
 #include <lib_item.h>
 
-const int fill_tab[3] = { 'N', 'F', 'f' };
+const int FILL_TYPEab[3] = { 'N', 'F', 'f' };
 
 
 LIB_ITEM::LIB_ITEM( KICAD_T        aType,
                     LIB_PART*      aComponent,
                     int            aUnit,
                     int            aConvert,
-                    FILL_T         aFillType ) :
+                    FILL_TYPE         aFillType ) :
     EDA_ITEM( aType )
 {
     m_Unit              = aUnit;
@@ -84,7 +84,7 @@ int LIB_ITEM::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareF
        return m_Convert - m_Convert;
 
     if( m_Fill != aOther.m_Fill )
-        return m_Fill - aOther.m_Fill;
+        return static_cast<int>( m_Fill ) - static_cast<int>( aOther.m_Fill );
 
     return 0;
 }

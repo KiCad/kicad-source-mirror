@@ -446,7 +446,7 @@ void LIB_PART::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, int aM
     {
         for( LIB_ITEM& drawItem : m_drawings )
         {
-            if( drawItem.m_Fill != FILLED_WITH_BG_BODYCOLOR )
+            if( drawItem.m_Fill != FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
                 continue;
 
             // Do not draw items not attached to the current part
@@ -495,7 +495,7 @@ void LIB_PART::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, int aM
         }
         else
         {
-            bool forceNoFill = drawItem.m_Fill == FILLED_WITH_BG_BODYCOLOR;
+            bool forceNoFill = drawItem.m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
             drawItem.Print( aSettings, aOffset, (void*) forceNoFill, aOpts.transform );
         }
     }
@@ -525,7 +525,7 @@ void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
         if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
             continue;
 
-        if( item.m_Fill == FILLED_WITH_BG_BODYCOLOR )
+        if( item.m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
             item.Plot( aPlotter, aOffset, fill, aTransform );
     }
 
@@ -542,7 +542,7 @@ void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
         if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
             continue;
 
-        item.Plot( aPlotter, aOffset, fill && ( item.m_Fill != FILLED_WITH_BG_BODYCOLOR ),
+        item.Plot( aPlotter, aOffset, fill && ( item.m_Fill != FILL_TYPE::FILLED_WITH_BG_BODYCOLOR ),
                    aTransform );
     }
 }

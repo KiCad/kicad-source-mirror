@@ -82,9 +82,13 @@ static void formatFill( const LIB_ITEM* aItem, OUTPUTFORMATTER& aFormatter, int 
 
     switch( aItem->GetFillMode() )
     {
-    case FILLED_SHAPE:              fillType = "outline";   break;
-    case FILLED_WITH_BG_BODYCOLOR:  fillType = "background";  break;
-    case NO_FILL:
+    case FILL_TYPE::FILLED_SHAPE:
+        fillType = "outline";
+        break;
+    case FILL_TYPE::FILLED_WITH_BG_BODYCOLOR:
+        fillType = "background";
+        break;
+    case FILL_TYPE::NO_FILL:
         KI_FALLTHROUGH;
     default:
         fillType = "none";
@@ -299,7 +303,7 @@ class SCH_SEXPR_PLUGIN_CACHE
     int             m_versionMinor;
     SCH_LIB_TYPE    m_libType; // Is this cache a component or symbol library.
 
-    static FILL_T   parseFillMode( LINE_READER& aReader, const char* aLine,
+    static FILL_TYPE   parseFillMode( LINE_READER& aReader, const char* aLine,
                                    const char** aOutput );
     LIB_PART*       removeSymbol( LIB_PART* aAlias );
 

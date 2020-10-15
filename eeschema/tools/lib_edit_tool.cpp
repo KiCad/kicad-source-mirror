@@ -439,7 +439,7 @@ void LIB_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
         return;
 
     if( aItem->IsFillable() )
-        aItem->SetFillMode( (FILL_T) dialog.GetFillStyle() );
+        aItem->SetFillMode( (FILL_TYPE) dialog.GetFillStyle() );
 
     aItem->SetWidth( dialog.GetWidth() );
 

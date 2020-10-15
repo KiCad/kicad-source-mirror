@@ -32,12 +32,13 @@
 #ifndef PLOT_COMMON_H_
 #define PLOT_COMMON_H_
 
+#include <fill_type.h>
 #include <vector>
 #include <math/box2.h>
 #include <gr_text.h>
 #include <page_info.h>
 #include <gal/color4d.h>
-#include <eda_item.h>       // FILL_T
+#include <eda_item.h>       // FILL_TYPE
 #include <render_settings.h>
 
 class COLOR_SETTINGS;
@@ -227,16 +228,16 @@ public:
     int GetPlotterArcHighDef() const { return m_IUsPerDecimil * 2; }
 
     // Low level primitives
-    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
+    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) = 0;
-    virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
+    virtual void Circle( const wxPoint& pos, int diametre, FILL_TYPE fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) = 0;
 
     /**
      * Generic fallback: arc rendered as a polyline
      */
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
+                      int rayon, FILL_TYPE fill, int width = USE_DEFAULT_LINE_WIDTH );
 
     /**
      * Generic fallback: Cubic Bezier curve rendered as a polyline
@@ -288,7 +289,7 @@ public:
      * @param aWidth = line width
      * @param aData an auxiliary info (mainly for gerber format)
      */
-    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill,
+    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_TYPE aFill,
                int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL ) = 0;
 
     /**
@@ -300,7 +301,7 @@ public:
      * @param aWidth = line width
      * @param aData an auxiliary info (mainly for gerber format)
      */
-    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
+    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_TYPE aFill,
                int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL );
 
     /**

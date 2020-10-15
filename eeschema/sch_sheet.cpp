@@ -962,7 +962,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     aPlotter->SetColor( backgroundColor );
     // Do not fill shape in B&W mode, otherwise texts are unreadable
     bool fill = aPlotter->GetColorMode();
-    aPlotter->Rect( m_pos, m_pos + m_size, fill ? FILLED_SHAPE : NO_FILL, 1.0 );
+    aPlotter->Rect( m_pos, m_pos + m_size, fill ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL, 1.0 );
 
     aPlotter->SetColor( borderColor );
 

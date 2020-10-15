@@ -39,7 +39,7 @@ LIB_RECTANGLE::LIB_RECTANGLE( LIB_PART*      aParent ) :
     LIB_ITEM( LIB_RECTANGLE_T, aParent )
 {
     m_Width                = 0;
-    m_Fill                 = NO_FILL;
+    m_Fill       = FILL_TYPE::NO_FILL;
     m_isFillable           = true;
 }
 
@@ -130,13 +130,13 @@ void LIB_RECTANGLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     wxPoint pos = aTransform.TransformCoordinate( m_Pos ) + aOffset;
     wxPoint end = aTransform.TransformCoordinate( m_End ) + aOffset;
 
-    if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
+    if( aFill && m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
     {
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
-        aPlotter->Rect( pos, end, FILLED_WITH_BG_BODYCOLOR, 0 );
+        aPlotter->Rect( pos, end, FILL_TYPE::FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
-    bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
+    bool already_filled = m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
     int  pen_size = GetPenWidth();
 
     if( !already_filled || pen_size > 0 )
@@ -144,7 +144,7 @@ void LIB_RECTANGLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
         pen_size = std::max( pen_size, aPlotter->RenderSettings()->GetMinPenWidth() );
 
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
-        aPlotter->Rect( pos, end, already_filled ? NO_FILL : m_Fill, pen_size );
+        aPlotter->Rect( pos, end, already_filled ? FILL_TYPE::NO_FILL : m_Fill, pen_size );
     }
 }
 
@@ -152,7 +152,7 @@ void LIB_RECTANGLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 int LIB_RECTANGLE::GetPenWidth() const
 {
     // Historically 0 meant "default width" and negative numbers meant "don't stroke".
-    if( m_Width < 0 && GetFillMode() != NO_FILL )
+    if( m_Width < 0 && GetFillMode() != FILL_TYPE::NO_FILL )
         return 0;
     else
         return std::max( m_Width, 1 );
@@ -165,7 +165,7 @@ void LIB_RECTANGLE::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, v
     bool forceNoFill = static_cast<bool>( aData );
     int  penWidth = GetPenWidth();
 
-    if( forceNoFill && m_Fill != NO_FILL && penWidth == 0 )
+    if( forceNoFill && m_Fill != FILL_TYPE::NO_FILL && penWidth == 0 )
         return;
 
     wxDC*   DC      = aSettings->GetPrintDC();
@@ -173,14 +173,14 @@ void LIB_RECTANGLE::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, v
     wxPoint pt1 = aTransform.TransformCoordinate( m_Pos ) + aOffset;
     wxPoint pt2 = aTransform.TransformCoordinate( m_End ) + aOffset;
 
-    if( forceNoFill || m_Fill == NO_FILL )
+    if( forceNoFill || m_Fill == FILL_TYPE::NO_FILL )
     {
         penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
         GRRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, penWidth, color );
     }
     else
     {
-        if( m_Fill == FILLED_WITH_BG_BODYCOLOR )
+        if( m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
             color = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
 
         GRFilledRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, penWidth, color, color );

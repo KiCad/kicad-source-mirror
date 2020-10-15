@@ -1193,7 +1193,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
 
         zone->SetLocalClearance( getKiCadLength( csTemplate.Pouring.AdditionalIsolation ) );
 
-        if( csTemplate.Pouring.FillType == TEMPLATE::POURING::COPPER_FILL_TYPE::HATCHED )
+        if( csTemplate.Pouring.FillType == TEMPLATE::POURING::COPPER_FILL_TYPEYPE::HATCHED )
         {
             zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
             zone->SetHatchGap( getKiCadHatchCodeGap( csTemplate.Pouring.HatchCodeID ) );

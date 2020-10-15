@@ -50,6 +50,7 @@
 
 #include <eda_rect.h>
 #include <eda_draw_frame.h>
+#include <fill_type.h>
 #include <page_layout/ws_draw_item.h>
 #include <page_layout/ws_data_item.h>
 #include <page_layout/ws_data_model.h>
@@ -215,7 +216,7 @@ void WS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( RENDER_SETTINGS* aSettings, const w
                                        outline.CPoint( ii ).y + aOffset.y );
         }
 
-        GRPoly( nullptr, DC, points_moved.size(), &points_moved[0], FILLED_SHAPE, penWidth,
+        GRPoly( nullptr, DC, points_moved.size(), &points_moved[0], true, penWidth,
                 color, color );
     }
 }

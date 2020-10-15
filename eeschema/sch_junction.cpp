@@ -237,7 +237,7 @@ void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
     if( m_diameter != 0 )
         diameter = m_diameter;
 
-    aPlotter->Circle( m_pos, diameter, FILLED_SHAPE );
+    aPlotter->Circle( m_pos, diameter, FILL_TYPE::FILLED_SHAPE );
 }
 
 

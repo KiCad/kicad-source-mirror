@@ -159,7 +159,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
         wxPoint end( plotter->PageSettings().GetWidthIU(),
                      plotter->PageSettings().GetHeightIU() );
-        plotter->Rect( wxPoint( 0, 0 ), end, FILLED_SHAPE, 1.0 );
+        plotter->Rect( wxPoint( 0, 0 ), end, FILL_TYPE::FILLED_SHAPE, 1.0 );
     }
 
     if( aPlotFrameRef )

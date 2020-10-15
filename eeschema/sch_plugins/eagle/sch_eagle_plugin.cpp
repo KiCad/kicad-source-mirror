@@ -1571,7 +1571,7 @@ LIB_RECTANGLE* SCH_EAGLE_PLUGIN::loadSymbolRectangle(
 
     rectangle->SetUnit( aGateNumber );
     // Eagle rectangles are filled by definition.
-    rectangle->SetFillMode( FILLED_SHAPE );
+    rectangle->SetFillMode( FILL_TYPE::FILLED_SHAPE );
 
     return rectangle.release();
 }
@@ -1622,7 +1622,7 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire(
                      * 2;
 
             arc->SetWidth( 1 );
-            arc->SetFillMode( FILLED_SHAPE );
+            arc->SetFillMode( FILL_TYPE::FILLED_SHAPE );
         }
         else
         {
@@ -1685,7 +1685,7 @@ LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine(
         vertex = vertex->GetNext();
     }
 
-    polyLine->SetFillMode( FILLED_SHAPE );
+    polyLine->SetFillMode( FILL_TYPE::FILLED_SHAPE );
     polyLine->SetUnit( aGateNumber );
 
     return polyLine.release();

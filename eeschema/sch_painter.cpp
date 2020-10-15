@@ -460,7 +460,7 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
         return false;
 
     case LAYER_DEVICE_BACKGROUND:
-        if( aItem->GetFillMode() == FILLED_WITH_BG_BODYCOLOR )
+        if( aItem->GetFillMode() == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
         {
             COLOR4D fillColor = getRenderColor( aItem, LAYER_DEVICE_BACKGROUND, false );
 
@@ -468,7 +468,7 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
             if( aItem->IsMoving() || aItem->IsDragging() || aItem->IsResized() )
                 fillColor = fillColor.WithAlpha( 0.75 );
 
-            m_gal->SetIsFill( aItem->GetFillMode() == FILLED_WITH_BG_BODYCOLOR );
+            m_gal->SetIsFill( aItem->GetFillMode() == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
             m_gal->SetFillColor( fillColor );
             m_gal->SetIsStroke( false );
             return true;
@@ -477,10 +477,10 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
         return false;
 
     case LAYER_DEVICE:
-        m_gal->SetIsFill( aItem->GetFillMode() == FILLED_SHAPE );
+        m_gal->SetIsFill( aItem->GetFillMode() == FILL_TYPE::FILLED_SHAPE );
         m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE, false ) );
 
-        if( aItem->GetPenWidth() > 0 || aItem->GetFillMode() == NO_FILL )
+        if( aItem->GetPenWidth() > 0 || aItem->GetFillMode() == FILL_TYPE::NO_FILL )
         {
             m_gal->SetIsStroke( true );
             m_gal->SetLineWidth( getLineWidth( aItem, false ) );

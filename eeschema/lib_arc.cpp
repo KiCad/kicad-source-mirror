@@ -50,7 +50,7 @@ LIB_ARC::LIB_ARC( LIB_PART*      aParent ) : LIB_ITEM( LIB_ARC_T, aParent )
     m_t1            = 0;
     m_t2            = 0;
     m_Width         = 0;
-    m_Fill          = NO_FILL;
+    m_Fill          = FILL_TYPE::NO_FILL;
     m_isFillable    = true;
     m_editState     = 0;
 }
@@ -261,13 +261,13 @@ void LIB_ARC::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     aTransform.MapAngles( &t1, &t2 );
 
-    if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
+    if( aFill && m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
     {
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
-        aPlotter->Arc( pos, -t2, -t1, m_Radius, FILLED_WITH_BG_BODYCOLOR, 0 );
+        aPlotter->Arc( pos, -t2, -t1, m_Radius, FILL_TYPE::FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
-    bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
+    bool already_filled = m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
     int  pen_size = GetPenWidth();
 
     if( !already_filled || pen_size > 0 )
@@ -275,7 +275,8 @@ void LIB_ARC::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
         pen_size = std::max( pen_size, aPlotter->RenderSettings()->GetMinPenWidth() );
 
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
-        aPlotter->Arc( pos, -t2, -t1, m_Radius, already_filled ? NO_FILL : m_Fill, pen_size );
+        aPlotter->Arc(
+                pos, -t2, -t1, m_Radius, already_filled ? FILL_TYPE::NO_FILL : m_Fill, pen_size );
     }
 }
 
@@ -283,7 +284,7 @@ void LIB_ARC::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 int LIB_ARC::GetPenWidth() const
 {
     // Historically 0 meant "default width" and negative numbers meant "don't stroke".
-    if( m_Width < 0 && GetFillMode() != NO_FILL )
+    if( m_Width < 0 && GetFillMode() != FILL_TYPE::NO_FILL )
         return 0;
     else
         return std::max( m_Width, 1 );
@@ -296,7 +297,7 @@ void LIB_ARC::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* a
     bool forceNoFill = static_cast<bool>( aData );
     int  penWidth = GetPenWidth();
 
-    if( forceNoFill && m_Fill != NO_FILL && penWidth == 0 )
+    if( forceNoFill && m_Fill != FILL_TYPE::NO_FILL && penWidth == 0 )
         return;
 
     wxDC*   DC = aSettings->GetPrintDC();
@@ -316,7 +317,7 @@ void LIB_ARC::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* a
         std::swap( pos1.y, pos2.y );
     }
 
-    if( forceNoFill || m_Fill == NO_FILL )
+    if( forceNoFill || m_Fill == FILL_TYPE::NO_FILL )
     {
         penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
 
@@ -324,7 +325,7 @@ void LIB_ARC::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* a
     }
     else
     {
-        if( m_Fill == FILLED_WITH_BG_BODYCOLOR )
+        if( m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
             color = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
 
         GRFilledArc( nullptr, DC, posc.x, posc.y, pt1, pt2, m_Radius, penWidth, color, color );

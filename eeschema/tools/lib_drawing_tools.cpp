@@ -48,7 +48,7 @@ static void* g_lastPinWeakPtr;
 LIB_DRAWING_TOOLS::LIB_DRAWING_TOOLS() :
         EE_TOOL_BASE<LIB_EDIT_FRAME>( "eeschema.SymbolDrawing" ),
         m_lastTextAngle( 0.0 ),
-        m_lastFillStyle( NO_FILL ),
+        m_lastFillStyle( FILL_TYPE::NO_FILL ),
         m_drawSpecificConvert( true ),
         m_drawSpecificUnit( false )
 {

@@ -104,7 +104,7 @@ void PlotWorkSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK
             {
                 WS_DRAW_ITEM_RECT* rect = (WS_DRAW_ITEM_RECT*) item;
                 int penWidth = std::max( rect->GetPenWidth(), defaultPenWidth );
-                plotter->Rect( rect->GetStart(), rect->GetEnd(), NO_FILL, penWidth );
+                plotter->Rect( rect->GetStart(), rect->GetEnd(), FILL_TYPE::NO_FILL, penWidth );
             }
             break;
 
@@ -133,7 +133,7 @@ void PlotWorkSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK
                     for( int ii = 0; ii < outline.PointCount(); ii++ )
                         points.emplace_back( outline.CPoint( ii ).x, outline.CPoint( ii ).y );
 
-                    plotter->PlotPoly( points, FILLED_SHAPE, penWidth );
+                    plotter->PlotPoly( points, FILL_TYPE::FILLED_SHAPE, penWidth );
                 }
             }
             break;

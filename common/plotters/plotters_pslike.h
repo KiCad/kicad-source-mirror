@@ -27,7 +27,7 @@
 
 #include <vector>
 #include <math/box2.h>
-#include <eda_item.h>       // FILL_T
+#include <eda_item.h>       // FILL_TYPE
 #include <plotter.h>
 
 
@@ -160,15 +160,15 @@ public:
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror ) override;
-    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
+    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
+    virtual void Circle( const wxPoint& pos, int diametre, FILL_TYPE fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
+                      int rayon, FILL_TYPE fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
+                           FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
                            void * aData = NULL ) override;
 
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
@@ -234,15 +234,15 @@ public:
      * with the outputFile open (but not inside a page stream!) */
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror ) override;
-    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
+    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
+    virtual void Circle( const wxPoint& pos, int diametre, FILL_TYPE fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
+                      int rayon, FILL_TYPE fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
+                           FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
                            void * aData = NULL ) override;
 
     virtual void PenTo( const wxPoint& pos, char plume ) override;
@@ -308,12 +308,12 @@ public:
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror ) override;
-    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
+    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
+    virtual void Circle( const wxPoint& pos, int diametre, FILL_TYPE fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
+                      int rayon, FILL_TYPE fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
 
     virtual void BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
                               const wxPoint& aControl2, const wxPoint& aEnd,
@@ -321,7 +321,7 @@ public:
                               int aLineThickness = USE_DEFAULT_LINE_WIDTH ) override;
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
+                           FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
                            void * aData = NULL ) override;
 
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
@@ -370,7 +370,7 @@ public:
                        void* aData = NULL ) override;
 
 protected:
-    FILL_T        m_fillMode;           // true if the current contour
+    FILL_TYPE        m_fillMode;           // true if the current contour
                                         // rect, arc, circle, polygon must be filled
     long          m_pen_rgb_color;      // current rgb color value: each color has
                                         // a value 0 ... 255, and the 3 colors are
@@ -410,5 +410,5 @@ protected:
      * function setFillMode()
      * prepare parameters for setSVGPlotStyle()
      */
-    void setFillMode( FILL_T fill );
+    void setFillMode( FILL_TYPE fill );
 };

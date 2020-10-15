@@ -238,7 +238,7 @@ public:
          *        - V_S = Via to SMD Pad (Optional Rule)
          *        - V_V = Via to Via
          *
-         * Other design rules are in: 
+         * Other design rules are in:
          * TECHNOLOGY->MAXMITER = Maximum Mitre (This parameter is not actually checked in Cadstar)
          * TECHNOLOGY->MINMITER = Minimum Mitre (This parameter is not actually checked in Cadstar)
          * TECHNOLOGY->MINUNNECKED = Minimum Thicker Track Length
@@ -446,7 +446,7 @@ public:
     /**
      * @brief From CADSTAR Help: "Area is for creating areas within which, and nowhere else, certain
      * operations are carried out (e.g. Placement.); and for creating 'keep out' areas, within which
-     * no operations are carried out and where no items are placed by operations such as Placement 
+     * no operations are carried out and where no items are placed by operations such as Placement
      * and Routing."
      */
     struct COMPONENT_AREA
@@ -470,7 +470,7 @@ public:
     };
 
     /**
-     * @brief From CADSTAR Help: "This parameter indicates the physical layers on which the selected 
+     * @brief From CADSTAR Help: "This parameter indicates the physical layers on which the selected
      * pad is placed. Note: When you change the Side parameter in PCB Design, the Side assigned to the
      * pad in the library is not overwritten."
      */
@@ -488,15 +488,15 @@ public:
 
     /**
      * @brief From CADSTAR help: "For specifying the directions in which routes can enter or exit the
-     * pad. There are eight pre-defined directions to choose from, North, South, East, West, 
+     * pad. There are eight pre-defined directions to choose from, North, South, East, West,
      * North-East, North-West, South-East and South-West, plus "Free Angle" which allows routes to exit
      * in any direction.
      *
-     * If none of the direction boxes are checked, the system uses the default which is all directions 
-     * (as shown above) for all pad shapes, except the long (drawn) Routes exit from the short sides of 
+     * If none of the direction boxes are checked, the system uses the default which is all directions
+     * (as shown above) for all pad shapes, except the long (drawn) Routes exit from the short sides of
      * long pads - in other words in line with the long axis.
      *
-     * Note: These Exit Directions are applied to the PCB component. If the PCB component is rotated 
+     * Note: These Exit Directions are applied to the PCB component. If the PCB component is rotated
      * when it is used on a PCB Design, the Exit Directions will rotate with it."
      *
      * The main thing to note is that the exit angle is not relative to the pad (even if the pad is
@@ -605,7 +605,7 @@ public:
 
         /**
          * @brief Contains formatting specific for a CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION object.
-         * Note that none of the parameters has any effect on the position of the dimension text - 
+         * Note that none of the parameters has any effect on the position of the dimension text -
          * it is more of an "intention" of where it should be placed. The user can manually
          * drag the location of the dimension text. Therefore, the actual position of the dimension
          * text is as defined in the `Text` object within CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION.
@@ -615,7 +615,7 @@ public:
          * on top of the dimension line, if the dimension line is STYLE::INTERNAL).
          *
          * Note: the token is "DIMTEXT" in the CADSTAR format, but this has been renamed to
-         * TEXTFORMAT in the cadstar2kicadplugin for ease of understanding. 
+         * TEXTFORMAT in the cadstar2kicadplugin for ease of understanding.
          */
         struct TEXTFORMAT
         {
@@ -809,7 +809,7 @@ public:
     /**
      * @brief From CADSTAR Help: "Area is for creating areas within which, and nowhere else, certain
      * operations are carried out (e.g. Placement.); and for creating 'keep out' areas, within which
-     * no operations are carried out and where no items are placed by operations such as Placement 
+     * no operations are carried out and where no items are placed by operations such as Placement
      * and Routing. [...]
      * More than one function can be assigned to an area."
      */
@@ -1005,14 +1005,14 @@ public:
     {
         struct POURING
         {
-            enum class COPPER_FILL_TYPE
+            enum class COPPER_FILL_TYPEYPE
             {
                 FILLED,
                 HATCHED ///< This is a user defined HATCHCODE_ID
             };
 
             /**
-             * @brief From CADSTAR Help: "With this parameter you can select one of two ways in 
+             * @brief From CADSTAR Help: "With this parameter you can select one of two ways in
              * which to generate thermal reliefs."
              * Note: there doesn't appear to be any noticeable difference between the options.
              */
@@ -1062,7 +1062,7 @@ public:
             bool TargetForAutorouting = false; ///< true when subnode "AUTOROUTETARGET" is present
 
             RELIEF_TYPE      ReliefType  = RELIEF_TYPE::CROSS;       ///< See RELIEF_TYPE
-            COPPER_FILL_TYPE FillType    = COPPER_FILL_TYPE::FILLED; ///< Assume solid fill
+            COPPER_FILL_TYPEYPE FillType    = COPPER_FILL_TYPEYPE::FILLED; ///< Assume solid fill
             HATCHCODE_ID     HatchCodeID = wxEmptyString; ///< Only for FillType = HATCHED
 
             void Parse( XNODE* aNode );

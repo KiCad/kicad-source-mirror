@@ -153,7 +153,7 @@ void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter,
         aPlotter->SetColor( aPlotter->RenderSettings()->GetBackgroundColor() );
         wxPoint end( aPlotter->PageSettings().GetWidthIU(),
                      aPlotter->PageSettings().GetHeightIU() );
-        aPlotter->Rect( wxPoint( 0, 0 ), end, FILLED_SHAPE, 1.0 );
+        aPlotter->Rect( wxPoint( 0, 0 ), end, FILL_TYPE::FILLED_SHAPE, 1.0 );
     }
 
     if( aPlotFrameRef )

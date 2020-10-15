@@ -27,7 +27,7 @@
 
 #include <vector>
 #include <math/box2.h>
-#include <eda_item.h>       // FILL_T
+#include <eda_item.h>       // FILL_TYPE
 #include <plotter.h>
 
 
@@ -76,16 +76,16 @@ public:
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror ) override;
-    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
+    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
+    virtual void Circle( const wxPoint& pos, int diametre, FILL_TYPE fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL ) override;
+                           FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL ) override;
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                EDA_DRAW_MODE_T tracemode, void* aData ) override;
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
+                      int rayon, FILL_TYPE fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void PenTo( const wxPoint& pos, char plume ) override;
 
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,

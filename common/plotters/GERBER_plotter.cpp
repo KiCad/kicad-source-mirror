@@ -23,9 +23,8 @@
  * @brief specialized plotter for GERBER files format
  */
 
-#include <config.h>
 #include <eda_base_frame.h>
-#include <eda_item.h>
+#include <fill_type.h>
 #include <kicad_string.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <math/util.h>      // for KiROUND
@@ -754,7 +753,7 @@ void GERBER_PLOTTER::PenTo( const wxPoint& aPos, char plume )
 }
 
 
-void GERBER_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int width )
+void GERBER_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, int width )
 {
     std::vector< wxPoint > cornerList;
 
@@ -772,14 +771,14 @@ void GERBER_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, in
 }
 
 
-void GERBER_PLOTTER::Circle( const wxPoint& aCenter, int aDiameter, FILL_T aFill, int aWidth )
+void GERBER_PLOTTER::Circle( const wxPoint& aCenter, int aDiameter, FILL_TYPE aFill, int aWidth )
 {
     Arc( aCenter, 0, 3600, aDiameter / 2, aFill, aWidth );
 }
 
 
 void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
-                          int aRadius, FILL_T aFill, int aWidth )
+                          int aRadius, FILL_TYPE aFill, int aWidth )
 {
     SetCurrentLineWidth( aWidth );
 
@@ -841,7 +840,7 @@ void GERBER_PLOTTER::PlotGerberRegion( const std::vector< wxPoint >& aCornerList
         }
     }
 
-    PlotPoly( aCornerList, FILLED_SHAPE, 0 , gbr_metadata );
+    PlotPoly( aCornerList, FILL_TYPE::FILLED_SHAPE, 0, gbr_metadata );
 
     // Clear the TA attribute, to avoid the next item to inherit it:
     if( clearTA_AperFunction )
@@ -858,7 +857,7 @@ void GERBER_PLOTTER::PlotGerberRegion( const std::vector< wxPoint >& aCornerList
 }
 
 void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
-                               FILL_T aFill, int aWidth, void * aData )
+                               FILL_TYPE aFill, int aWidth, void * aData )
 {
     if( aCornerList.size() <= 1 )
         return;
@@ -871,7 +870,7 @@ void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
     if( gbr_metadata )
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
-    if( aFill )
+    if( aFill != FILL_TYPE::NO_FILL )
     {
         fputs( "G36*\n", outputFile );
 
@@ -899,7 +898,7 @@ void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
 
         // Ensure the thick outline is closed for filled polygons
         // (if not filled, could be only a polyline)
-        if( aFill && ( aCornerList[aCornerList.size()-1] != aCornerList[0] ) )
+        if( aFill != FILL_TYPE::NO_FILL &&( aCornerList[aCornerList.size() - 1] != aCornerList[0] ) )
             LineTo( aCornerList[0] );
 
         PenFinish();
@@ -938,15 +937,14 @@ void GERBER_PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double End
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
     if( tracemode == FILLED )
-        Arc( centre, StAngle, EndAngle, radius, NO_FILL, DO_NOT_SET_LINE_WIDTH );
+        Arc( centre, StAngle, EndAngle, radius, FILL_TYPE::NO_FILL, DO_NOT_SET_LINE_WIDTH );
     else
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
         Arc( centre, StAngle, EndAngle,
-             radius - ( width - currentPenWidth ) / 2,
-             NO_FILL, DO_NOT_SET_LINE_WIDTH );
-        Arc( centre, StAngle, EndAngle,
-             radius + ( width - currentPenWidth ) / 2, NO_FILL,
+             radius - ( width - currentPenWidth ) / 2, FILL_TYPE::NO_FILL,
+                DO_NOT_SET_LINE_WIDTH );
+        Arc( centre, StAngle, EndAngle, radius + ( width - currentPenWidth ) / 2, FILL_TYPE::NO_FILL,
              DO_NOT_SET_LINE_WIDTH );
     }
 }
@@ -962,7 +960,7 @@ void GERBER_PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
     if( tracemode == FILLED )
-        Rect( p1, p2, NO_FILL, DO_NOT_SET_LINE_WIDTH );
+        Rect( p1, p2, FILL_TYPE::NO_FILL, DO_NOT_SET_LINE_WIDTH );
     else
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
@@ -970,12 +968,12 @@ void GERBER_PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
                           p1.y - (width - currentPenWidth) / 2 );
         wxPoint offsetp2( p2.x + (width - currentPenWidth) / 2,
               p2.y + (width - currentPenWidth) / 2 );
-        Rect( offsetp1, offsetp2, NO_FILL, -1 );
+        Rect( offsetp1, offsetp2, FILL_TYPE::NO_FILL, -1 );
         offsetp1.x += (width - currentPenWidth);
         offsetp1.y += (width - currentPenWidth);
         offsetp2.x -= (width - currentPenWidth);
         offsetp2.y -= (width - currentPenWidth);
-        Rect( offsetp1, offsetp2, NO_FILL, DO_NOT_SET_LINE_WIDTH );
+        Rect( offsetp1, offsetp2, FILL_TYPE::NO_FILL, DO_NOT_SET_LINE_WIDTH );
     }
 }
 
@@ -990,14 +988,14 @@ void GERBER_PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width,
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
     if( tracemode == FILLED )
-        Circle( pos, diametre, NO_FILL, DO_NOT_SET_LINE_WIDTH );
+        Circle( pos, diametre, FILL_TYPE::NO_FILL, DO_NOT_SET_LINE_WIDTH );
     else
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, gbr_metadata );
         Circle( pos, diametre - (width - currentPenWidth),
-                    NO_FILL, DO_NOT_SET_LINE_WIDTH );
+                    FILL_TYPE::NO_FILL, DO_NOT_SET_LINE_WIDTH );
         Circle( pos, diametre + (width - currentPenWidth),
-                    NO_FILL, DO_NOT_SET_LINE_WIDTH );
+                    FILL_TYPE::NO_FILL, DO_NOT_SET_LINE_WIDTH );
     }
 }
 
@@ -1017,12 +1015,12 @@ void GERBER_PLOTTER::FilledCircle( const wxPoint& pos, int diametre,
         // Draw a circle of diameter = diametre/2 with a line thickness = radius,
         // To create a filled circle
         SetCurrentLineWidth( diametre/2, gbr_metadata );
-        Circle( pos, diametre/2, NO_FILL, DO_NOT_SET_LINE_WIDTH );
+        Circle( pos, diametre/2, FILL_TYPE::NO_FILL, DO_NOT_SET_LINE_WIDTH );
     }
     else
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, gbr_metadata );
-        Circle( pos, diametre, NO_FILL, DO_NOT_SET_LINE_WIDTH );
+        Circle( pos, diametre, FILL_TYPE::NO_FILL, DO_NOT_SET_LINE_WIDTH );
     }
 }
 
@@ -1039,7 +1037,7 @@ void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, EDA_DRAW_
 
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
 
-        Circle( pos, diametre - currentPenWidth, NO_FILL, DO_NOT_SET_LINE_WIDTH );
+        Circle( pos, diametre - currentPenWidth, FILL_TYPE::NO_FILL, DO_NOT_SET_LINE_WIDTH );
     }
     else
     {
@@ -1163,7 +1161,7 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
                            pos.y - (size.y - GetCurrentLineWidth()) / 2 ),
                   wxPoint( pos.x + (size.x - GetCurrentLineWidth()) / 2,
                            pos.y + (size.y - GetCurrentLineWidth()) / 2 ),
-                  NO_FILL, GetCurrentLineWidth() );
+                  FILL_TYPE::NO_FILL, GetCurrentLineWidth() );
         }
         else
         {
@@ -1246,7 +1244,7 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
         cornerList.push_back( cornerList[0] );
 
         // plot outlines
-        PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), gbr_metadata );
+        PlotPoly( cornerList, FILL_TYPE::NO_FILL, GetCurrentLineWidth(), gbr_metadata );
     }
     else
     {
@@ -1460,7 +1458,7 @@ void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
         cornerList.push_back( cornerList[0] );
 
         if( aTraceMode == SKETCH )
-            PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), &gbr_metadata );
+            PlotPoly( cornerList, FILL_TYPE::NO_FILL, GetCurrentLineWidth(), &gbr_metadata );
         else
             PlotGerberRegion( cornerList, &gbr_metadata );
     }
@@ -1505,7 +1503,7 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const wxPoint& aShapePos, const w
         cornerList.push_back( cornerList[0] );
 
         if( aPlotMode == SKETCH )
-            PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), &gbr_metadata );
+            PlotPoly( cornerList, FILL_TYPE::NO_FILL, GetCurrentLineWidth(), &gbr_metadata );
         else
         {
 #ifdef GBR_USE_MACROS_FOR_CHAMFERED_ROUND_RECT
@@ -1616,7 +1614,7 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
 
     if( aTrace_Mode == SKETCH )
     {
-        PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), &metadata );
+        PlotPoly( cornerList, FILL_TYPE::NO_FILL, GetCurrentLineWidth(), &metadata );
         return;
     }
 
@@ -1673,7 +1671,7 @@ void GERBER_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos,
 
         cornerList.push_back( cornerList[0] );  // Close the shape
 
-        PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), &gbr_metadata );
+        PlotPoly( cornerList, FILL_TYPE::NO_FILL, GetCurrentLineWidth(), &gbr_metadata );
     }
     else
     {

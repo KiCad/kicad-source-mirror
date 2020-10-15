@@ -622,7 +622,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 if( cornerList[0] != cornerList[cornerList.size() - 1] )
                     cornerList.push_back( cornerList[0] );
 
-                aPlotter->PlotPoly( cornerList, NO_FILL );
+                aPlotter->PlotPoly( cornerList, FILL_TYPE::NO_FILL );
             }
         }
 
@@ -644,7 +644,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     if( hole.x == hole.y )
                     {
                         hole.x = std::min( smallDrill, hole.x );
-                        aPlotter->Circle( pad->GetPosition(), hole.x, NO_FILL );
+                        aPlotter->Circle( pad->GetPosition(), hole.x, FILL_TYPE::NO_FILL );
                     }
                     else
                     {
@@ -665,7 +665,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
             if( via && via->IsOnLayer( layer ) )    // via holes can be not through holes
             {
-                aPlotter->Circle( via->GetPosition(), via->GetDrillValue(), NO_FILL );
+                aPlotter->Circle( via->GetPosition(), via->GetDrillValue(), FILL_TYPE::NO_FILL );
             }
         }
     }
@@ -889,7 +889,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         if( cornerList[0] != cornerList[cornerList.size() - 1] )
             cornerList.push_back( cornerList[0] );
 
-        aPlotter->PlotPoly( cornerList, FILLED_SHAPE );
+        aPlotter->PlotPoly( cornerList, FILL_TYPE::FILLED_SHAPE );
     }
 #endif
 }
@@ -992,7 +992,7 @@ static void FillNegativeKnockout( PLOTTER *aPlotter, const EDA_RECT &aBbbox )
     aPlotter->SetColor( WHITE );        // Which will be plotted as black
     EDA_RECT area = aBbbox;
     area.Inflate( margin );
-    aPlotter->Rect( area.GetOrigin(), area.GetEnd(), FILLED_SHAPE );
+    aPlotter->Rect( area.GetOrigin(), area.GetEnd(), FILL_TYPE::FILLED_SHAPE );
     aPlotter->SetColor( BLACK );
 }
 

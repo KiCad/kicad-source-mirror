@@ -69,7 +69,7 @@ bool DIALOG_LIB_EDIT_DRAW_ITEM::TransferDataToWindow()
 
     m_checkApplyToAllConversions->Enable( enblConvOptStyle );
 
-    m_fillCtrl->SetSelection( m_item->GetFillMode() );
+    m_fillCtrl->SetSelection( static_cast<int>( m_item->GetFillMode() ) );
     m_fillCtrl->Enable( m_item->IsFillable() );
 
     return true;
