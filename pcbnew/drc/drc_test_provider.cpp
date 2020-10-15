@@ -194,11 +194,11 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
         }
     }
 
-    for( ZONE_CONTAINER* item : brd->Zones() )
+    if( typeMask[ PCB_ZONE_AREA_T ] )
     {
-        if( (item->GetLayerSet() & aLayers).any() )
+        for( ZONE_CONTAINER* item : brd->Zones() )
         {
-            if( typeMask[ PCB_ZONE_AREA_T ] && item->Type() == PCB_ZONE_AREA_T )
+            if( (item->GetLayerSet() & aLayers).any() )
             {
                 if( !aFunc( item ) )
                     return n;
@@ -229,11 +229,11 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
             }
         }
 
-        for( D_PAD* pad : mod->Pads() )
+        if( typeMask[ PCB_PAD_T ] )
         {
-            if( (pad->GetLayerSet() & aLayers).any() )
+            for( D_PAD* pad : mod->Pads() )
             {
-                if( typeMask[ PCB_PAD_T ] && pad->Type() == PCB_PAD_T )
+                if( ( pad->GetLayerSet() & aLayers ).any() )
                 {
                     if( !aFunc( pad ) )
                         return n;
@@ -264,11 +264,11 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
             }
         }
 
-        for( ZONE_CONTAINER* zone : mod->Zones() )
+        if( typeMask[ PCB_FP_ZONE_AREA_T ] )
         {
-            if( (zone->GetLayerSet() & aLayers).any() )
+            for( ZONE_CONTAINER* zone : mod->Zones() )
             {
-                if( typeMask[ PCB_FP_ZONE_AREA_T ] && zone->Type() == PCB_FP_ZONE_AREA_T )
+                if( (zone->GetLayerSet() & aLayers).any() )
                 {
                     if( ! aFunc( zone ) )
                         return n;

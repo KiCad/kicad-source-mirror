@@ -90,14 +90,49 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     if( !reportPhase( _( "Checking board edge clearances..." ) ) )
         return false;
     
-    std::vector<PCB_SHAPE>   boardOutline;
-    std::vector<BOARD_ITEM*> boardItems;
+    std::vector<std::unique_ptr<PCB_SHAPE>> boardOutline;
+    std::vector<BOARD_ITEM*>                boardItems;
 
     auto queryBoardOutlineItems =
             [&]( BOARD_ITEM *item ) -> bool
             {
-                boardOutline.push_back( dyn_cast<PCB_SHAPE*>( item ) );
-                boardOutline.back().SetWidth( 0 );
+                PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+                if( shape->GetShape() == S_RECT )
+                {
+                    // A single rectangle for the board would make the RTree useless, so
+                    // convert to 4 edges
+                    boardOutline.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
+                    boardOutline.back()->SetShape( S_SEGMENT );
+                    boardOutline.back()->SetEndX( shape->GetStartX() );
+                    boardOutline.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
+                    boardOutline.back()->SetShape( S_SEGMENT );
+                    boardOutline.back()->SetEndY( shape->GetStartY() );
+                    boardOutline.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
+                    boardOutline.back()->SetShape( S_SEGMENT );
+                    boardOutline.back()->SetStartX( shape->GetEndX() );
+                    boardOutline.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
+                    boardOutline.back()->SetShape( S_SEGMENT );
+                    boardOutline.back()->SetStartY( shape->GetEndY() );
+                    return true;
+                }
+                else if( shape->GetShape() == S_POLYGON )
+                {
+                    // Same for polygons
+                    SHAPE_LINE_CHAIN poly = shape->GetPolyShape().Outline( 0 );
+
+                    for( size_t ii = 0; ii < poly.GetSegmentCount(); ++ii )
+                    {
+                        SEG seg = poly.CSegment( ii );
+                        boardOutline.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
+                        boardOutline.back()->SetShape( S_SEGMENT );
+                        boardOutline.back()->SetStart( (wxPoint) seg.A );
+                        boardOutline.back()->SetEnd( (wxPoint) seg.B );
+                    }
+                }
+
+                boardOutline.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
+                boardOutline.back()->SetWidth( 0 );
                 return true;
             };
 
@@ -117,20 +152,20 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     drc_dbg( 2, "outline: %d items, board: %d items\n",
             (int) boardOutline.size(), (int) boardItems.size() );
 
-    for( const PCB_SHAPE& outlineItem : boardOutline )
+    for( const std::unique_ptr<PCB_SHAPE>& outlineItem : boardOutline )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_EDGE_CLEARANCE ) )
             break;
 
-        const std::shared_ptr<SHAPE>& refShape = outlineItem.GetEffectiveShape();
+        const std::shared_ptr<SHAPE>& refShape = outlineItem->GetEffectiveShape();
 
         for( BOARD_ITEM* boardItem : boardItems )
         {
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_EDGE_CLEARANCE ) )
                 break;
 
-            drc_dbg( 10, "RefT %d %p %s %d\n", outlineItem.Type(), &outlineItem,
-                     outlineItem.GetClass(), outlineItem.GetLayer() );
+            drc_dbg( 10, "RefT %d %p %s %d\n", outlineItem->Type(), outlineItem.get(),
+                     outlineItem->GetClass(), outlineItem->GetLayer() );
             drc_dbg( 10, "BoardT %d %p %s %d\n", boardItem->Type(), boardItem,
                      boardItem->GetClass(), boardItem->GetLayer() );
 
@@ -140,7 +175,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
             const std::shared_ptr<SHAPE>& shape = boardItem->GetEffectiveShape();
 
             auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
-                                                              &outlineItem, boardItem );
+                                                              outlineItem.get(), boardItem );
 
             int      minClearance = constraint.GetValue().Min();
             int      actual;
@@ -158,7 +193,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                               MessageTextFromValue( userUnits(), actual ) );
 
                 drcItem->SetErrorMessage( m_msg );
-                drcItem->SetItems( &outlineItem, boardItem );
+                drcItem->SetItems( outlineItem->m_Uuid, boardItem->m_Uuid );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                 reportViolation( drcItem, (wxPoint) pos );
@@ -172,20 +207,20 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     boardItems.clear();
     forEachGeometryItem( {}, LSET( 2, F_SilkS, B_SilkS ), queryBoardGeometryItems );
 
-    for( const PCB_SHAPE& outlineItem : boardOutline )
+    for( const std::unique_ptr<PCB_SHAPE>& outlineItem : boardOutline )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
             break;
 
-        const std::shared_ptr<SHAPE>& refShape = outlineItem.GetEffectiveShape();
+        const std::shared_ptr<SHAPE>& refShape = outlineItem->GetEffectiveShape();
 
         for( BOARD_ITEM* boardItem : boardItems )
         {
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
                 break;
 
-            drc_dbg( 10, "RefT %d %p %s %d\n", outlineItem.Type(), &outlineItem,
-                     outlineItem.GetClass(), outlineItem.GetLayer() );
+            drc_dbg( 10, "RefT %d %p %s %d\n", outlineItem->Type(), outlineItem.get(),
+                     outlineItem->GetClass(), outlineItem->GetLayer() );
             drc_dbg( 10, "BoardT %d %p %s %d\n", boardItem->Type(), boardItem,
                      boardItem->GetClass(), boardItem->GetLayer() );
 
@@ -195,7 +230,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
             const std::shared_ptr<SHAPE>& shape = boardItem->GetEffectiveShape();
 
             auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,
-                                                              &outlineItem, boardItem );
+                                                              outlineItem.get(), boardItem );
 
             int      minClearance = constraint.GetValue().Min();
             int      actual;
@@ -217,7 +252,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                     drcItem->SetErrorMessage( m_msg );
                 }
 
-                drcItem->SetItems( &outlineItem, boardItem );
+                drcItem->SetItems( outlineItem->m_Uuid, boardItem->m_Uuid );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                 reportViolation( drcItem, (wxPoint) pos );

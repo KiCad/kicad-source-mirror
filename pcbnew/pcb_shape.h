@@ -48,7 +48,7 @@ protected:
     wxPoint              m_End;          // Line end point or circle and arc start point
     wxPoint              m_ThirdPoint;   // Used only for Arcs: arc end point
 
-    PCB_SHAPE_TYPE_T    m_Shape;        // Shape: line, Circle, Arc
+    PCB_SHAPE_TYPE_T     m_Shape;        // Shape: line, Circle, Arc
     int                  m_Type;         // Used in complex associations ( Dimensions.. )
     double               m_Angle;        // Used only for Arcs: Arc angle in 1/10 deg
     wxPoint              m_BezierC1;     // Bezier Control Point 1
