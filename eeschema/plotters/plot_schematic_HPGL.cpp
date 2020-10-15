@@ -144,6 +144,11 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef,
         try
         {
             wxString fname = m_parent->GetUniqueFilenameForCurrentSheet();
+            // The sub sheet can be in a sub_hierarchy, but we plot the file in the
+            // main project folder (or the folder specified by the caller),
+            // so replace separators to create a unique filename:
+            fname.Replace("/", "_" );
+            fname.Replace("\\", "_" );
             wxString ext = HPGL_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( fname, ext, &reporter );
 
