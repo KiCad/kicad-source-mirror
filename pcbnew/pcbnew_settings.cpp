@@ -706,7 +706,7 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     // Migrate color settings that were stored in the pcbnew config file
 
-    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings();
+    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetMigratedColorSettings();
 
     auto migrateLegacyColor = [&] ( const std::string& aKey, int aLayerId ) {
         wxString str;
@@ -739,6 +739,8 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( "Color4DWorksheet",          LAYER_WORKSHEET );
 
     Pgm().GetSettingsManager().SaveColorSettings( cs, "board" );
+
+    ( *this )[PointerFromString( "appearance.color_theme" )] = cs->GetFilename();
 
     double x, y;
 

@@ -331,7 +331,7 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     SETTINGS_MANAGER& manager = Pgm().GetSettingsManager();
     COLOR_SETTINGS* cs = manager.AddNewColorSettings( "user_footprints" );
 
-    cs->SetName( wxT( "KiCad Default (Footprints)" ) );
+    cs->SetName( wxT( "User (Footprints)" ) );
     manager.Save( cs );
 
     auto migrateLegacyColor = [&] ( const std::string& aKey, int aLayerId )

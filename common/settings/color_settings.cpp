@@ -24,6 +24,8 @@
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
 
+#include "builtin_color_themes.h"
+
 
 ///! Update the schema version whenever a migration is required
 const int colorsSchemaVersion = 2;
@@ -37,22 +39,20 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
     m_params.emplace_back( new PARAM<wxString>( "meta.name", &m_displayName, "KiCad Default" ) );
 
     std::vector<COLOR4D> default_palette = {
-            COLOR4D( RED ),
-            COLOR4D( YELLOW ),
-            COLOR4D( LIGHTMAGENTA ),
-            COLOR4D( LIGHTRED ),
-            COLOR4D( CYAN ),
-            COLOR4D( GREEN ),
-            COLOR4D( BLUE ),
-            COLOR4D( DARKGRAY ),
-            COLOR4D( MAGENTA ),
-            COLOR4D( LIGHTGRAY ),
-            COLOR4D( MAGENTA ),
-            COLOR4D( RED ),
-            COLOR4D( BROWN ),
-            COLOR4D( LIGHTGRAY ),
-            COLOR4D( BLUE ),
-            COLOR4D( GREEN )
+            CSS_COLOR( 200, 52,  52,  1 ),
+            CSS_COLOR( 127, 200, 127, 1 ),
+            CSS_COLOR( 206, 125, 44,  1 ),
+            CSS_COLOR( 79,  203, 203, 1 ),
+            CSS_COLOR( 219, 98, 139,  1 ),
+            CSS_COLOR( 167, 165, 198, 1 ),
+            CSS_COLOR( 40,  204, 217, 1 ),
+            CSS_COLOR( 232, 178, 167, 1 ),
+            CSS_COLOR( 242, 237, 161, 1 ),
+            CSS_COLOR( 141, 203, 129, 1 ),
+            CSS_COLOR( 237, 124, 51,  1 ),
+            CSS_COLOR( 91,  195, 235, 1 ),
+            CSS_COLOR( 247, 111, 142, 1 ),
+            CSS_COLOR( 77,  127, 196, 1 )
             };
 
     // TODO(JE) in actual usage, how long does the default palette need to be?
@@ -61,159 +61,160 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
     m_params.emplace_back( new PARAM<bool>( "schematic.override_item_colors",
                                             &m_overrideSchItemColors, false ) );
 
-#define CLR( x, y, z ) m_params.emplace_back( new COLOR_MAP_PARAM( x, y, z, &m_colors ) )
+#define CLR( x, y ) \
+    wxASSERT( s_defaultTheme.count( y ) ); \
+    m_params.emplace_back( new COLOR_MAP_PARAM( x, y, s_defaultTheme.at( y ), &m_colors ) );
 
-    CLR( "schematic.aux_items",         LAYER_SCHEMATIC_AUX_ITEMS,  COLOR4D( BLACK ) );
-    CLR( "schematic.background",        LAYER_SCHEMATIC_BACKGROUND, COLOR4D( WHITE ) );
-    CLR( "schematic.brightened",        LAYER_BRIGHTENED,           COLOR4D( PUREMAGENTA ) );
-    CLR( "schematic.bus",               LAYER_BUS,                  COLOR4D( BLUE ) );
-    CLR( "schematic.bus_junction",      LAYER_BUS_JUNCTION,         COLOR4D( BLUE ) );
-    CLR( "schematic.component_body",    LAYER_DEVICE_BACKGROUND,    COLOR4D( LIGHTYELLOW ) );
-    CLR( "schematic.component_outline", LAYER_DEVICE,               COLOR4D( RED ) );
-    CLR( "schematic.cursor",            LAYER_SCHEMATIC_CURSOR,     COLOR4D( BLACK ) );
-    CLR( "schematic.erc_error",         LAYER_ERC_ERR,              COLOR4D( PURERED ).WithAlpha( 0.8 ) );
-    CLR( "schematic.erc_warning",       LAYER_ERC_WARN,             COLOR4D( PUREGREEN ).WithAlpha( 0.8 ) );
-    CLR( "schematic.fields",            LAYER_FIELDS,               COLOR4D( MAGENTA ) );
-    CLR( "schematic.grid",              LAYER_SCHEMATIC_GRID,       COLOR4D( DARKGRAY ) );
-    CLR( "schematic.grid_axes",         LAYER_SCHEMATIC_GRID_AXES,  COLOR4D( BLUE ) );
-    CLR( "schematic.hidden",            LAYER_HIDDEN,               COLOR4D( LIGHTGRAY ) );
-    CLR( "schematic.junction",          LAYER_JUNCTION,             COLOR4D( GREEN ) );
-    CLR( "schematic.label_global",      LAYER_GLOBLABEL,            COLOR4D( RED ) );
-    CLR( "schematic.label_hier",        LAYER_HIERLABEL,            COLOR4D( BROWN ) );
-    CLR( "schematic.label_local",       LAYER_LOCLABEL,             COLOR4D( BLACK ) );
-    CLR( "schematic.net_name",          LAYER_NETNAM,               COLOR4D( DARKGRAY ) );
-    CLR( "schematic.no_connect",        LAYER_NOCONNECT,            COLOR4D( BLUE ) );
-    CLR( "schematic.note",              LAYER_NOTES,                COLOR4D( LIGHTBLUE ) );
-    CLR( "schematic.pin",               LAYER_PIN,                  COLOR4D( RED ) );
-    CLR( "schematic.pin_name",          LAYER_PINNAM,               COLOR4D( CYAN ) );
-    CLR( "schematic.pin_number",        LAYER_PINNUM,               COLOR4D( RED ) );
-    CLR( "schematic.reference",         LAYER_REFERENCEPART,        COLOR4D( CYAN ) );
+    CLR( "schematic.aux_items",         LAYER_SCHEMATIC_AUX_ITEMS  );
+    CLR( "schematic.background",        LAYER_SCHEMATIC_BACKGROUND );
+    CLR( "schematic.brightened",        LAYER_BRIGHTENED           );
+    CLR( "schematic.bus",               LAYER_BUS                  );
+    CLR( "schematic.bus_junction",      LAYER_BUS_JUNCTION         );
+    CLR( "schematic.component_body",    LAYER_DEVICE_BACKGROUND    );
+    CLR( "schematic.component_outline", LAYER_DEVICE               );
+    CLR( "schematic.cursor",            LAYER_SCHEMATIC_CURSOR     );
+    CLR( "schematic.erc_error",         LAYER_ERC_ERR              );
+    CLR( "schematic.erc_warning",       LAYER_ERC_WARN             );
+    CLR( "schematic.fields",            LAYER_FIELDS               );
+    CLR( "schematic.grid",              LAYER_SCHEMATIC_GRID       );
+    CLR( "schematic.grid_axes",         LAYER_SCHEMATIC_GRID_AXES  );
+    CLR( "schematic.hidden",            LAYER_HIDDEN               );
+    CLR( "schematic.junction",          LAYER_JUNCTION             );
+    CLR( "schematic.label_global",      LAYER_GLOBLABEL            );
+    CLR( "schematic.label_hier",        LAYER_HIERLABEL            );
+    CLR( "schematic.label_local",       LAYER_LOCLABEL             );
+    CLR( "schematic.net_name",          LAYER_NETNAM               );
+    CLR( "schematic.no_connect",        LAYER_NOCONNECT            );
+    CLR( "schematic.note",              LAYER_NOTES                );
+    CLR( "schematic.pin",               LAYER_PIN                  );
+    CLR( "schematic.pin_name",          LAYER_PINNAM               );
+    CLR( "schematic.pin_number",        LAYER_PINNUM               );
+    CLR( "schematic.reference",         LAYER_REFERENCEPART        );
     // Macs look better with a lighter shadow
 #ifdef __WXMAC__
-    CLR( "schematic.shadow",            LAYER_SELECTION_SHADOWS,    COLOR4D( .78, .92, 1.0, 0.8 ) );
+    CLR( "schematic.shadow",            LAYER_SELECTION_SHADOWS );
 #else
-    CLR( "schematic.shadow",            LAYER_SELECTION_SHADOWS,    COLOR4D( .4, .7, 1.0, 0.8 ) );
+    CLR( "schematic.shadow",            LAYER_SELECTION_SHADOWS );
 #endif
-    CLR( "schematic.sheet",             LAYER_SHEET,                COLOR4D( MAGENTA ) );
-    CLR( "schematic.sheet_background",  LAYER_SHEET_BACKGROUND,     COLOR4D( WHITE ).WithAlpha( 0.0 ) );
-    CLR( "schematic.sheet_filename",    LAYER_SHEETFILENAME,        COLOR4D( BROWN ) );
-    CLR( "schematic.sheet_fields",      LAYER_SHEETFIELDS,          COLOR4D( MAGENTA ) );
-    CLR( "schematic.sheet_label",       LAYER_SHEETLABEL,           COLOR4D( CYAN ) );
-    CLR( "schematic.sheet_name",        LAYER_SHEETNAME,            COLOR4D( CYAN ) );
-    CLR( "schematic.value",             LAYER_VALUEPART,            COLOR4D( CYAN ) );
-    CLR( "schematic.wire",              LAYER_WIRE,                 COLOR4D( GREEN ) );
-    CLR( "schematic.worksheet",         LAYER_SCHEMATIC_WORKSHEET,  COLOR4D( RED ) );
+    CLR( "schematic.sheet",             LAYER_SHEET                );
+    CLR( "schematic.sheet_background",  LAYER_SHEET_BACKGROUND     );
+    CLR( "schematic.sheet_filename",    LAYER_SHEETFILENAME        );
+    CLR( "schematic.sheet_fields",      LAYER_SHEETFIELDS          );
+    CLR( "schematic.sheet_label",       LAYER_SHEETLABEL           );
+    CLR( "schematic.sheet_name",        LAYER_SHEETNAME            );
+    CLR( "schematic.value",             LAYER_VALUEPART            );
+    CLR( "schematic.wire",              LAYER_WIRE                 );
+    CLR( "schematic.worksheet",         LAYER_SCHEMATIC_WORKSHEET  );
 
-    CLR( "gerbview.axes",               LAYER_GERBVIEW_AXES,        COLOR4D( BLUE ) );
-    CLR( "gerbview.background",         LAYER_GERBVIEW_BACKGROUND,  COLOR4D( BLACK ) );
-    CLR( "gerbview.dcodes",             LAYER_DCODES,               COLOR4D( WHITE ) );
-    CLR( "gerbview.grid",               LAYER_GERBVIEW_GRID,        COLOR4D( MAGENTA ) );
-    CLR( "gerbview.negative_objects",   LAYER_NEGATIVE_OBJECTS,     COLOR4D( DARKGRAY ) );
-    CLR( "gerbview.worksheet",          LAYER_GERBVIEW_WORKSHEET,   COLOR4D( RED ) );
+    CLR( "gerbview.axes",               LAYER_GERBVIEW_AXES        );
+    CLR( "gerbview.background",         LAYER_GERBVIEW_BACKGROUND  );
+    CLR( "gerbview.dcodes",             LAYER_DCODES               );
+    CLR( "gerbview.grid",               LAYER_GERBVIEW_GRID        );
+    CLR( "gerbview.negative_objects",   LAYER_NEGATIVE_OBJECTS     );
+    CLR( "gerbview.worksheet",          LAYER_GERBVIEW_WORKSHEET   );
 
-    // TODO(JE) New default scheme for GerbView
     for( int i = 0, id = GERBVIEW_LAYER_ID_START;
          id < GERBER_DRAWLAYERS_COUNT + GERBVIEW_LAYER_ID_START; ++i, ++id )
     {
-        CLR( "gerbview.layers." + std::to_string( i ), id,
-                default_palette[ i % default_palette.size() ] );
+        m_params.emplace_back( new COLOR_MAP_PARAM( "gerbview.layers." + std::to_string( i ), id,
+                                                    default_palette[ i % default_palette.size() ],
+                                                    &m_colors ) );
     }
 
-    CLR( "board.anchor",                   LAYER_ANCHOR,             COLOR4D( BLUE ) );
-    CLR( "board.aux_items",                LAYER_AUX_ITEMS,          COLOR4D( WHITE ) );
-    CLR( "board.background",               LAYER_PCB_BACKGROUND,     COLOR4D( BLACK ) );
-    CLR( "board.cursor",                   LAYER_CURSOR,             COLOR4D( WHITE ) );
-    CLR( "board.drc_error",                LAYER_DRC_ERROR,          COLOR4D( PURERED ) );
-    CLR( "board.drc_warning",              LAYER_DRC_WARNING,        COLOR4D( PUREYELLOW ) );
-    CLR( "board.drc_exclusion",            LAYER_DRC_EXCLUSION,      COLOR4D( WHITE ) );
-    CLR( "board.footprint_text_invisible", LAYER_MOD_TEXT_INVISIBLE, COLOR4D( LIGHTGRAY ) );
-    CLR( "board.grid",                     LAYER_GRID,               COLOR4D( DARKGRAY ) );
-    CLR( "board.grid_axes",                LAYER_GRID_AXES,          COLOR4D( LIGHTGRAY ) );
-    CLR( "board.no_connect",               LAYER_NO_CONNECTS,        COLOR4D( BLUE ) );
-    CLR( "board.pad_back",                 LAYER_PAD_BK,             COLOR4D( GREEN ) );
-    CLR( "board.pad_front",                LAYER_PAD_FR,             COLOR4D( RED ) );
-    CLR( "board.pad_plated_hole",          LAYER_PADS_PLATEDHOLES,   COLOR4D( YELLOW ) );
-    CLR( "board.pad_through_hole",         LAYER_PADS_TH,            COLOR4D( YELLOW ) );
-    CLR( "board.plated_hole",              LAYER_NON_PLATEDHOLES,    COLOR4D( YELLOW ) );
-    CLR( "board.ratsnest",                 LAYER_RATSNEST,           COLOR4D( WHITE ) );
-    CLR( "board.select_overlay",           LAYER_SELECT_OVERLAY,     COLOR4D( PUREGREEN ) );
-    CLR( "board.through_via",              LAYER_VIA_THROUGH,        COLOR4D( LIGHTGRAY ) );
-    CLR( "board.via_blind_buried",         LAYER_VIA_BBLIND,         COLOR4D( BROWN ) );
-    CLR( "board.via_hole",                 LAYER_VIAS_HOLES,         COLOR4D( 0.5, 0.4, 0, 0.8 ) );
-    CLR( "board.via_micro",                LAYER_VIA_MICROVIA,       COLOR4D( CYAN ) );
-    CLR( "board.via_through",              LAYER_VIA_THROUGH,        COLOR4D( LIGHTGRAY ) );
-    CLR( "board.worksheet",                LAYER_WORKSHEET,          COLOR4D( DARKRED ) );
+    CLR( "board.anchor",                   LAYER_ANCHOR             );
+    CLR( "board.aux_items",                LAYER_AUX_ITEMS          );
+    CLR( "board.background",               LAYER_PCB_BACKGROUND     );
+    CLR( "board.cursor",                   LAYER_CURSOR             );
+    CLR( "board.drc_error",                LAYER_DRC_ERROR          );
+    CLR( "board.drc_warning",              LAYER_DRC_WARNING        );
+    CLR( "board.drc_exclusion",            LAYER_DRC_EXCLUSION      );
+    CLR( "board.footprint_text_invisible", LAYER_MOD_TEXT_INVISIBLE );
+    CLR( "board.grid",                     LAYER_GRID               );
+    CLR( "board.grid_axes",                LAYER_GRID_AXES          );
+    CLR( "board.no_connect",               LAYER_NO_CONNECTS        );
+    CLR( "board.pad_back",                 LAYER_PAD_BK             );
+    CLR( "board.pad_front",                LAYER_PAD_FR             );
+    CLR( "board.pad_plated_hole",          LAYER_PADS_PLATEDHOLES   );
+    CLR( "board.pad_through_hole",         LAYER_PADS_TH            );
+    CLR( "board.plated_hole",              LAYER_NON_PLATEDHOLES    );
+    CLR( "board.ratsnest",                 LAYER_RATSNEST           );
+    CLR( "board.select_overlay",           LAYER_SELECT_OVERLAY     );
+    CLR( "board.via_blind_buried",         LAYER_VIA_BBLIND         );
+    CLR( "board.via_hole",                 LAYER_VIAS_HOLES         );
+    CLR( "board.via_micro",                LAYER_VIA_MICROVIA       );
+    CLR( "board.via_through",              LAYER_VIA_THROUGH        );
+    CLR( "board.worksheet",                LAYER_WORKSHEET          );
 
-    CLR( "board.copper.f",      F_Cu,       COLOR4D( RED ) );
-    CLR( "board.copper.in1",    In1_Cu,     COLOR4D( YELLOW ) );
-    CLR( "board.copper.in2",    In2_Cu,     COLOR4D( LIGHTMAGENTA ) );
-    CLR( "board.copper.in3",    In3_Cu,     COLOR4D( LIGHTRED ) );
-    CLR( "board.copper.in4",    In4_Cu,     COLOR4D( CYAN ) );
-    CLR( "board.copper.in5",    In5_Cu,     COLOR4D( GREEN ) );
-    CLR( "board.copper.in6",    In6_Cu,     COLOR4D( BLUE ) );
-    CLR( "board.copper.in7",    In7_Cu,     COLOR4D( DARKGRAY ) );
-    CLR( "board.copper.in8",    In8_Cu,     COLOR4D( MAGENTA ) );
-    CLR( "board.copper.in9",    In9_Cu,     COLOR4D( LIGHTGRAY ) );
-    CLR( "board.copper.in10",   In10_Cu,    COLOR4D( MAGENTA ) );
-    CLR( "board.copper.in11",   In11_Cu,    COLOR4D( RED ) );
-    CLR( "board.copper.in12",   In12_Cu,    COLOR4D( BROWN ) );
-    CLR( "board.copper.in13",   In13_Cu,    COLOR4D( LIGHTGRAY ) );
-    CLR( "board.copper.in14",   In14_Cu,    COLOR4D( BLUE ) );
-    CLR( "board.copper.in15",   In15_Cu,    COLOR4D( GREEN ) );
-    CLR( "board.copper.in16",   In16_Cu,    COLOR4D( RED ) );
-    CLR( "board.copper.in17",   In17_Cu,    COLOR4D( YELLOW ) );
-    CLR( "board.copper.in18",   In18_Cu,    COLOR4D( LIGHTMAGENTA ) );
-    CLR( "board.copper.in19",   In19_Cu,    COLOR4D( LIGHTRED ) );
-    CLR( "board.copper.in20",   In20_Cu,    COLOR4D( CYAN ) );
-    CLR( "board.copper.in21",   In21_Cu,    COLOR4D( GREEN ) );
-    CLR( "board.copper.in22",   In22_Cu,    COLOR4D( BLUE ) );
-    CLR( "board.copper.in23",   In23_Cu,    COLOR4D( DARKGRAY ) );
-    CLR( "board.copper.in24",   In24_Cu,    COLOR4D( MAGENTA ) );
-    CLR( "board.copper.in25",   In25_Cu,    COLOR4D( LIGHTGRAY ) );
-    CLR( "board.copper.in26",   In26_Cu,    COLOR4D( MAGENTA ) );
-    CLR( "board.copper.in27",   In27_Cu,    COLOR4D( RED ) );
-    CLR( "board.copper.in28",   In28_Cu,    COLOR4D( BROWN ) );
-    CLR( "board.copper.in29",   In29_Cu,    COLOR4D( LIGHTGRAY ) );
-    CLR( "board.copper.in30",   In30_Cu,    COLOR4D( BLUE ) );
-    CLR( "board.copper.b",      B_Cu,       COLOR4D( GREEN ) );
+    CLR( "board.copper.f",      F_Cu    );
+    CLR( "board.copper.in1",    In1_Cu  );
+    CLR( "board.copper.in2",    In2_Cu  );
+    CLR( "board.copper.in3",    In3_Cu  );
+    CLR( "board.copper.in4",    In4_Cu  );
+    CLR( "board.copper.in5",    In5_Cu  );
+    CLR( "board.copper.in6",    In6_Cu  );
+    CLR( "board.copper.in7",    In7_Cu  );
+    CLR( "board.copper.in8",    In8_Cu  );
+    CLR( "board.copper.in9",    In9_Cu  );
+    CLR( "board.copper.in10",   In10_Cu );
+    CLR( "board.copper.in11",   In11_Cu );
+    CLR( "board.copper.in12",   In12_Cu );
+    CLR( "board.copper.in13",   In13_Cu );
+    CLR( "board.copper.in14",   In14_Cu );
+    CLR( "board.copper.in15",   In15_Cu );
+    CLR( "board.copper.in16",   In16_Cu );
+    CLR( "board.copper.in17",   In17_Cu );
+    CLR( "board.copper.in18",   In18_Cu );
+    CLR( "board.copper.in19",   In19_Cu );
+    CLR( "board.copper.in20",   In20_Cu );
+    CLR( "board.copper.in21",   In21_Cu );
+    CLR( "board.copper.in22",   In22_Cu );
+    CLR( "board.copper.in23",   In23_Cu );
+    CLR( "board.copper.in24",   In24_Cu );
+    CLR( "board.copper.in25",   In25_Cu );
+    CLR( "board.copper.in26",   In26_Cu );
+    CLR( "board.copper.in27",   In27_Cu );
+    CLR( "board.copper.in28",   In28_Cu );
+    CLR( "board.copper.in29",   In29_Cu );
+    CLR( "board.copper.in30",   In30_Cu );
+    CLR( "board.copper.b",      B_Cu    );
 
-    CLR( "board.b_adhes",       B_Adhes,    COLOR4D( BLUE ) );
-    CLR( "board.f_adhes",       F_Adhes,    COLOR4D( MAGENTA ) );
-    CLR( "board.b_paste",       B_Paste,    COLOR4D( LIGHTCYAN ) );
-    CLR( "board.f_paste",       F_Paste,    COLOR4D( RED ) );
-    CLR( "board.b_silks",       B_SilkS,    COLOR4D( MAGENTA ) );
-    CLR( "board.f_silks",       F_SilkS,    COLOR4D( CYAN ) );
-    CLR( "board.b_mask",        B_Mask,     COLOR4D( BROWN ) );
-    CLR( "board.f_mask",        F_Mask,     COLOR4D( MAGENTA ) );
-    CLR( "board.dwgs_user",     Dwgs_User,  COLOR4D( LIGHTGRAY ) );
-    CLR( "board.cmts_user",     Cmts_User,  COLOR4D( BLUE ) );
-    CLR( "board.eco1_user",     Eco1_User,  COLOR4D( GREEN ) );
-    CLR( "board.eco2_user",     Eco2_User,  COLOR4D( YELLOW ) );
-    CLR( "board.edge_cuts",     Edge_Cuts,  COLOR4D( YELLOW ) );
-    CLR( "board.margin",        Margin,     COLOR4D( LIGHTMAGENTA ) );
-    CLR( "board.b_crtyd",       B_CrtYd,    COLOR4D( DARKGRAY ) );
-    CLR( "board.f_crtyd",       F_CrtYd,    COLOR4D( LIGHTGRAY ) );
-    CLR( "board.b_fab",         B_Fab,      COLOR4D( BLUE ) );
-    CLR( "board.f_fab",         F_Fab,      COLOR4D( DARKGRAY ) );
-    CLR( "board.user_1",        User_1,     COLOR4D( BLUE ) );
-    CLR( "board.user_2",        User_2,     COLOR4D( BLUE ) );
-    CLR( "board.user_3",        User_3,     COLOR4D( BLUE ) );
-    CLR( "board.user_4",        User_4,     COLOR4D( BLUE ) );
-    CLR( "board.user_5",        User_5,     COLOR4D( BLUE ) );
-    CLR( "board.user_6",        User_6,     COLOR4D( BLUE ) );
-    CLR( "board.user_7",        User_7,     COLOR4D( BLUE ) );
-    CLR( "board.user_8",        User_8,     COLOR4D( BLUE ) );
-    CLR( "board.user_9",        User_9,     COLOR4D( BLUE ) );
+    CLR( "board.b_adhes",       B_Adhes   );
+    CLR( "board.f_adhes",       F_Adhes   );
+    CLR( "board.b_paste",       B_Paste   );
+    CLR( "board.f_paste",       F_Paste   );
+    CLR( "board.b_silks",       B_SilkS   );
+    CLR( "board.f_silks",       F_SilkS   );
+    CLR( "board.b_mask",        B_Mask    );
+    CLR( "board.f_mask",        F_Mask    );
+    CLR( "board.dwgs_user",     Dwgs_User );
+    CLR( "board.cmts_user",     Cmts_User );
+    CLR( "board.eco1_user",     Eco1_User );
+    CLR( "board.eco2_user",     Eco2_User );
+    CLR( "board.edge_cuts",     Edge_Cuts );
+    CLR( "board.margin",        Margin    );
+    CLR( "board.b_crtyd",       B_CrtYd   );
+    CLR( "board.f_crtyd",       F_CrtYd   );
+    CLR( "board.b_fab",         B_Fab     );
+    CLR( "board.f_fab",         F_Fab     );
+    CLR( "board.user_1",        User_1    );
+    CLR( "board.user_2",        User_2    );
+    CLR( "board.user_3",        User_3    );
+    CLR( "board.user_4",        User_4    );
+    CLR( "board.user_5",        User_5    );
+    CLR( "board.user_6",        User_6    );
+    CLR( "board.user_7",        User_7    );
+    CLR( "board.user_8",        User_8    );
+    CLR( "board.user_9",        User_9    );
 
     // Colors for 3D viewer, which are used as defaults unless overridden by the board
-    CLR( "3d_viewer.background_bottom", LAYER_3D_BACKGROUND_BOTTOM, COLOR4D( 0.4, 0.4, 0.5, 1.0 ) );
-    CLR( "3d_viewer.background_top",    LAYER_3D_BACKGROUND_TOP,    COLOR4D( 0.8, 0.8, 0.9, 1.0 ) );
-    CLR( "3d_viewer.board",             LAYER_3D_BOARD,             COLOR4D( 0.2, 0.17, 0.09, 0.9 ) );
-    CLR( "3d_viewer.copper",            LAYER_3D_COPPER,            COLOR4D( 0.7, 0.61, 0.0, 1.0 ) );
-    CLR( "3d_viewer.silkscreen_bottom", LAYER_3D_SILKSCREEN_BOTTOM, COLOR4D( 0.9, 0.9, 0.9, 1.0 ) );
-    CLR( "3d_viewer.silkscreen_top",    LAYER_3D_SILKSCREEN_TOP,    COLOR4D( 0.9, 0.9, 0.9, 1.0 ) );
-    CLR( "3d_viewer.soldermask",        LAYER_3D_SOLDERMASK,        COLOR4D( 0.08, 0.2, 0.14, 0.83 ) );
-    CLR( "3d_viewer.solderpaste",       LAYER_3D_SOLDERPASTE,       COLOR4D( 0.5, 0.5, 0.5, 1.0 ) );
+    CLR( "3d_viewer.background_bottom", LAYER_3D_BACKGROUND_BOTTOM );
+    CLR( "3d_viewer.background_top",    LAYER_3D_BACKGROUND_TOP    );
+    CLR( "3d_viewer.board",             LAYER_3D_BOARD             );
+    CLR( "3d_viewer.copper",            LAYER_3D_COPPER            );
+    CLR( "3d_viewer.silkscreen_bottom", LAYER_3D_SILKSCREEN_BOTTOM );
+    CLR( "3d_viewer.silkscreen_top",    LAYER_3D_SILKSCREEN_TOP    );
+    CLR( "3d_viewer.soldermask",        LAYER_3D_SOLDERMASK        );
+    CLR( "3d_viewer.solderpaste",       LAYER_3D_SOLDERPASTE       );
 
     registerMigration( 0, 1, std::bind( &COLOR_SETTINGS::migrateSchema0to1, this ) );
 
@@ -253,6 +254,7 @@ void COLOR_SETTINGS::initFromOther( const COLOR_SETTINGS& aOther )
     m_overrideSchItemColors = aOther.m_overrideSchItemColors;
     m_colors                = aOther.m_colors;
     m_defaultColors         = aOther.m_defaultColors;
+    m_writeFile             = aOther.m_writeFile;
 
     // Ensure default colors are present
     for( PARAM_BASE* param : aOther.m_params )
@@ -353,4 +355,27 @@ COLOR4D COLOR_SETTINGS::GetDefaultColor( int aLayer )
 void COLOR_SETTINGS::SetColor( int aLayer, COLOR4D aColor )
 {
     m_colors[ aLayer ] = aColor;
+}
+
+
+std::vector<COLOR_SETTINGS*> COLOR_SETTINGS::CreateBuiltinColorSettings()
+{
+    COLOR_SETTINGS* defaultTheme = new COLOR_SETTINGS( wxT( "_builtin_default" ) );
+    defaultTheme->SetName( _( "KiCad Default" ) );
+    defaultTheme->m_writeFile = false;
+    defaultTheme->Load();   // We can just get the colors out of the param defaults for this one
+
+    COLOR_SETTINGS* classicTheme = new COLOR_SETTINGS( wxT( "_builtin_classic" ) );
+    classicTheme->SetName( _( "KiCad Classic" ) );
+    classicTheme->m_writeFile = false;
+
+    for( const std::pair<int, COLOR4D> entry : s_classicTheme )
+        classicTheme->m_colors[entry.first] = entry.second;
+
+    std::vector<COLOR_SETTINGS*> ret;
+
+    ret.push_back( defaultTheme );
+    ret.push_back( classicTheme );
+
+    return ret;
 }

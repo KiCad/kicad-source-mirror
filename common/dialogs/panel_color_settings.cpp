@@ -107,6 +107,7 @@ void PANEL_COLOR_SETTINGS::OnLeftDownTheme( wxMouseEvent& event )
     event.Skip();
 }
 
+
 void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
 {
     int idx = m_cbTheme->GetSelection();
@@ -145,6 +146,7 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
         SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
         COLOR_SETTINGS*   newSettings = settingsMgr.AddNewColorSettings( themeName );
         newSettings->SetName( themeName );
+        newSettings->SetReadOnly( false );
 
         for( auto layer : m_validLayers )
             newSettings->SetColor( layer, m_currentSettings->GetColor( layer ) );
@@ -157,6 +159,7 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
         m_optOverrideColors->SetValue( newSettings->GetOverrideSchItemColors() );
 
         *m_currentSettings = *newSettings;
+        updateSwatches();
         onNewThemeSelected();
     }
     else
@@ -180,12 +183,14 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
 
 void PANEL_COLOR_SETTINGS::updateSwatches()
 {
+    bool    isReadOnly = m_currentSettings->IsReadOnly();
     COLOR4D background = m_currentSettings->GetColor( m_backgroundLayer );
 
     for( std::pair<int, COLOR_SWATCH*> pair : m_swatches )
     {
         pair.second->SetSwatchBackground( background );
         pair.second->SetSwatchColor( m_currentSettings->GetColor( pair.first ), false );
+        pair.second->SetReadOnly( isReadOnly );
     }
 }
 
@@ -202,12 +207,17 @@ void PANEL_COLOR_SETTINGS::createThemeList( const wxString& aCurrent )
 
     for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
     {
-        int pos = m_cbTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
+        wxString name = settings->GetName();
+
+        if( settings->IsReadOnly() )
+            name += _( " (read-only)" );
+
+        int pos = m_cbTheme->Append( name, static_cast<void*>( settings ) );
 
         if( settings->GetFilename() == aCurrent )
             m_cbTheme->SetSelection( pos );
 
-        m_cbTheme->GetTextExtent( settings->GetName(), &width, &height );
+        m_cbTheme->GetTextExtent( name, &width, &height );
         minwidth = std::max( minwidth, width );
     }
 
@@ -251,8 +261,9 @@ void PANEL_COLOR_SETTINGS::createSwatch( int aLayer, const wxString& aName )
     swatch->Bind( wxEVT_RIGHT_DOWN,
                   [&, aLayer]( wxMouseEvent& aEvent )
                   {
-                    ShowColorContextMenu( aEvent, aLayer );
+                      ShowColorContextMenu( aEvent, aLayer );
                   } );
+
     swatch->Bind( COLOR_SWATCH_CHANGED, &PANEL_COLOR_SETTINGS::OnColorChanged, this );
 }
 
@@ -262,17 +273,18 @@ void PANEL_COLOR_SETTINGS::ShowColorContextMenu( wxMouseEvent& aEvent, int aLaye
     auto selected =
             static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( m_cbTheme->GetSelection() ) );
 
-    COLOR4D current = m_currentSettings->GetColor( aLayer );
-    COLOR4D saved   = selected->GetColor( aLayer );
+    COLOR4D current  = m_currentSettings->GetColor( aLayer );
+    COLOR4D saved    = selected->GetColor( aLayer );
+    bool    readOnly = m_currentSettings->IsReadOnly();
 
     wxMenu menu;
 
     AddMenuItem( &menu, ID_COPY, _( "Copy color" ), KiBitmap( copy_xpm ) );
 
-    if( m_copied != COLOR4D::UNSPECIFIED )
+    if( !readOnly && m_copied != COLOR4D::UNSPECIFIED )
         AddMenuItem( &menu, ID_PASTE, _( "Paste color" ), KiBitmap( paste_xpm ) );
 
-    if( current != saved )
+    if( !readOnly && current != saved )
         AddMenuItem( &menu, ID_REVERT, _( "Revert to saved color" ), KiBitmap( undo_xpm ) );
 
     menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
@@ -336,6 +348,9 @@ void PANEL_COLOR_SETTINGS::updateColor( int aLayer, const KIGFX::COLOR4D& aColor
 
 bool PANEL_COLOR_SETTINGS::saveCurrentTheme( bool aValidate )
 {
+    if( m_currentSettings->IsReadOnly() )
+        return true;
+
     if( aValidate && !validateSave() )
         return false;
 

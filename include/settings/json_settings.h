@@ -71,6 +71,9 @@ public:
 
     void SetLegacyFilename( const wxString& aFilename ) { m_legacy_filename = aFilename; }
 
+    bool IsReadOnly() const { return !m_writeFile; }
+    void SetReadOnly( bool aReadOnly ) { m_writeFile = !aReadOnly; }
+
     /**
      * Updates the parameters of this object based on the current JSON document contents
      */

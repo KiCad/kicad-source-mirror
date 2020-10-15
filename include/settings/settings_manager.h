@@ -156,6 +156,13 @@ public:
     COLOR_SETTINGS* AddNewColorSettings( const wxString& aFilename );
 
     /**
+     * Returns a color theme for storing colors migrated from legacy (5.x and earlier) settings,
+     * creating the theme if necessary.  This theme will be called "user.json" / "User".
+     * @return the color settings to be used for migrating legacy settings
+     */
+    COLOR_SETTINGS* GetMigratedColorSettings();
+
+    /**
      * Retrieves the common settings shared by all applications
      * @return a pointer to a loaded COMMON_SETTINGS
      */

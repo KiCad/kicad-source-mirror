@@ -121,7 +121,7 @@ bool GERBVIEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
         }
     }
 
-    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings();
+    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetMigratedColorSettings();
 
     auto migrateLegacyColor = [&] ( const std::string& aKey, int aLayerId ) {
         wxString str;
@@ -129,7 +129,7 @@ bool GERBVIEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
         if( aCfg->Read( aKey, &str ) )
             cs->SetColor( aLayerId, COLOR4D( str ) );
     };
-
+*
     migrateLegacyColor( "BackgroundColorEx",       LAYER_GERBVIEW_BACKGROUND );
     migrateLegacyColor( "DCodeColorEx",            LAYER_DCODES );
     migrateLegacyColor( "GridColorEx",             LAYER_GERBVIEW_GRID );
@@ -146,6 +146,8 @@ bool GERBVIEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     }
 
     Pgm().GetSettingsManager().SaveColorSettings( cs, "gerbview" );
+
+    ( *this )[PointerFromString( "appearance.color_theme" )] = cs->GetFilename();
 
     return ret;
 }

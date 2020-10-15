@@ -118,7 +118,8 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, COLOR4D aColor, int aID, COLOR4D 
         wxPanel( aParent, aID ),
         m_color( aColor ),
         m_background( aBackground ),
-        m_default( aDefault )
+        m_default( aDefault ),
+        m_readOnly( false )
 {
     wxASSERT_MSG( aSwatchSize != SWATCH_EXPAND, "SWATCH_EXPAND not supported in COLOR_SWATCH" );
 
@@ -148,7 +149,8 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, COLOR4D aColor, int aID, COLOR4D 
 
 COLOR_SWATCH::COLOR_SWATCH( wxWindow *aParent, wxWindowID aID, const wxPoint &aPos,
                             const wxSize &aSize, long aStyle ) :
-        wxPanel( aParent, aID, aPos, aSize, aStyle )
+        wxPanel( aParent, aID, aPos, aSize, aStyle ),
+        m_readOnly( false )
 {
     if( aSize == wxDefaultSize )
         m_size = ConvertDialogToPixels( SWATCH_SIZE_MEDIUM_DU );
@@ -263,6 +265,14 @@ COLOR4D COLOR_SWATCH::GetSwatchColor() const
 
 void COLOR_SWATCH::GetNewSwatchColor()
 {
+    if( m_readOnly )
+    {
+        if( m_readOnlyCallback )
+            m_readOnlyCallback();
+
+        return;
+    }
+
     DIALOG_COLOR_PICKER dialog( ::wxGetTopLevelParent( this ), m_color, true, nullptr, m_default );
 
     if( dialog.ShowModal() == wxID_OK )

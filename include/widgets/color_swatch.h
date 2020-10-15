@@ -97,6 +97,12 @@ public:
      */
     void GetNewSwatchColor();
 
+    void SetReadOnly( bool aReadOnly = true ) { m_readOnly = aReadOnly; }
+    bool IsReadOnly() const { return m_readOnly; }
+
+    /// Registers a handler for when the user tries to interact with a read-only swatch
+    void SetReadOnlyCallback( std::function<void()> aCallback ) { m_readOnlyCallback = aCallback; }
+
     static wxBitmap MakeBitmap( KIGFX::COLOR4D aColor, KIGFX::COLOR4D aBackground, wxSize aSize,
                                 wxSize aCheckerboardSize, KIGFX::COLOR4D aCheckerboardBackground );
 
@@ -117,6 +123,10 @@ private:
     wxSize          m_size;
     wxSize          m_checkerboardSize;
     KIGFX::COLOR4D  m_checkerboardBg;
+
+    /// A read-only swatch won't show the color chooser dialog but otherwise works normally
+    bool            m_readOnly;
+    std::function<void()> m_readOnlyCallback;
 };
 
 

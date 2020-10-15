@@ -455,6 +455,8 @@ private:
     void passOnFocus();
 
     void idleFocusHandler( wxIdleEvent& aEvent );
+
+    void onReadOnlySwatch();
 };
 
 #endif

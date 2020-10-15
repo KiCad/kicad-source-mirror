@@ -121,7 +121,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
             &m_System.last_imperial_units, static_cast<int>( EDA_UNITS::INCHES ) ) );
 
     m_params.emplace_back( new PARAM<wxString>( "appearance.color_theme",
-            &m_ColorTheme, "user" ) );
+            &m_ColorTheme, "_builtin_default" ) );
 
     addParamsForWindow( &m_Window, "window" );
 

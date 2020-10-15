@@ -40,7 +40,9 @@
 #include <widgets/grid_color_swatch_helpers.h>
 #include <widgets/grid_text_helpers.h>
 #include <widgets/indicator_icon.h>
+#include <widgets/infobar.h>
 #include <widgets/wx_grid.h>
+#include <wx/hyperlink.h>
 #include <wx/statline.h>
 
 
@@ -1277,6 +1279,7 @@ void APPEARANCE_CONTROLS::rebuildLayers()
     COLOR_SETTINGS* theme      = m_frame->GetColorSettings();
     COLOR4D         bgColor    = theme->GetColor( LAYER_PCB_BACKGROUND );
     bool            firstLayer = true;
+    bool            readOnly   = theme->IsReadOnly();
 
 #ifdef __WXMAC__
     wxSizerItem* m_windowLayersSizerItem = m_panelLayersSizer->GetItem( m_windowLayers );
@@ -1366,6 +1369,9 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 
                 swatch->Bind( COLOR_SWATCH_CHANGED, &APPEARANCE_CONTROLS::OnColorSwatchChanged,
                               this );
+                swatch->SetReadOnlyCallback(std::bind( &APPEARANCE_CONTROLS::onReadOnlySwatch,
+                                                       this ) );
+                swatch->SetReadOnly( readOnly );
 
                 auto rightClickHandler =
                         [&]( wxMouseEvent& aEvent )
@@ -1641,8 +1647,10 @@ void APPEARANCE_CONTROLS::SetTabIndex( int aTab )
 
 void APPEARANCE_CONTROLS::syncColorsAndVisibility()
 {
-    LSET    visible = getVisibleLayers();
-    GAL_SET objects = getVisibleObjects();
+    COLOR_SETTINGS* theme    = m_frame->GetColorSettings();
+    bool            readOnly = theme->IsReadOnly();
+    LSET            visible  = getVisibleLayers();
+    GAL_SET         objects  = getVisibleObjects();
 
     Freeze();
 
@@ -1655,8 +1663,9 @@ void APPEARANCE_CONTROLS::syncColorsAndVisibility()
 
         if( setting->ctl_color )
         {
-            const COLOR4D& color = m_frame->GetColorSettings()->GetColor( layer );
+            const COLOR4D& color = theme->GetColor( layer );
             setting->ctl_color->SetSwatchColor( color, false );
+            setting->ctl_color->SetReadOnly( readOnly );
         }
     }
 
@@ -1669,8 +1678,9 @@ void APPEARANCE_CONTROLS::syncColorsAndVisibility()
 
         if( setting->ctl_color )
         {
-            const COLOR4D& color = m_frame->GetColorSettings()->GetColor( layer );
+            const COLOR4D& color = theme->GetColor( layer );
             setting->ctl_color->SetSwatchColor( color, false );
+            setting->ctl_color->SetReadOnly( readOnly );
         }
     }
 
@@ -2701,4 +2711,28 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
 void APPEARANCE_CONTROLS::passOnFocus()
 {
     m_focusOwner->SetFocus();
+}
+
+
+void APPEARANCE_CONTROLS::onReadOnlySwatch()
+{
+    WX_INFOBAR* infobar = m_frame->GetInfoBar();
+
+    wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Open Preferences" ),
+                                                   wxEmptyString );
+
+    button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+            [&]( wxHyperlinkEvent& aEvent )
+            {
+                 wxCommandEvent dummy;
+                m_frame->OnPreferences( dummy );
+            } ) );
+
+    infobar->RemoveAllButtons();
+    infobar->AddButton( button );
+    infobar->AddCloseButton();
+
+    infobar->ShowMessageFor( _( "The current color theme is read-only.  Create a new theme in "
+                                "Preferences to enable color editing." ),
+                             10000, wxICON_INFORMATION );
 }

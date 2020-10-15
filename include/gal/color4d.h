@@ -131,6 +131,13 @@ public:
      */
     COLOR4D( EDA_COLOR_T aColor );
 
+    /**
+     * Initializes the color from a RGBA value with 0-255 red/green/blue and 0-1 alpha.
+     * Suitable for taking the values directly from the "CSS syntax" from ToWxString
+     * @return this color
+     */
+    COLOR4D& FromCSSRGBA( int aRed, int aGreen, int aBlue, double aAlpha = 1.0 );
+
 #ifdef WX_COMPATIBILITY
     /**
      * @brief Constructor

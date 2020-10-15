@@ -472,3 +472,13 @@ EDA_COLOR_T COLOR4D::FindNearestLegacyColor( int aR, int aG, int aB )
 
     return candidate;
 }
+
+COLOR4D& COLOR4D::FromCSSRGBA( int aRed, int aGreen, int aBlue, double aAlpha )
+{
+    r = std::max( 0, std::min( 255, aRed ) ) / 255.0;
+    g = std::max( 0, std::min( 255, aGreen ) ) / 255.0;
+    b = std::max( 0, std::min( 255, aBlue ) ) / 255.0;
+    a = std::max( 0.0, std::min( 1.0, aAlpha ) );
+
+    return *this;
+}

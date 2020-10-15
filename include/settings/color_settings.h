@@ -23,6 +23,7 @@
 
 #include <gal/color4d.h>
 #include <settings/json_settings.h>
+#include <settings/parameters.h>
 
 using KIGFX::COLOR4D;
 
@@ -45,11 +46,6 @@ using KIGFX::COLOR4D;
  * Each application (eeschema, gerbview, pcbnew) can have a different active color scheme selected.
  * The "child applications" (library editors) inherit from either eeschema or pcbnew.
  */
-
-#include <settings/json_settings.h>
-#include <settings/parameters.h>
-
-
 class COLOR_SETTINGS : public JSON_SETTINGS
 {
 public:
@@ -85,6 +81,15 @@ public:
 
     bool GetOverrideSchItemColors() const { return m_overrideSchItemColors; }
     void SetOverrideSchItemColors( bool aFlag ) { m_overrideSchItemColors = aFlag; }
+
+    /**
+     * Constructs and returns a list of color settings objects based on the built-in color themes.
+     * These color settings are not backed by a file and cannot be modified by the user.
+     * This is expected to be called by SETTINGS_MANAGER which will take ownership of the objects
+     * and handle freeing them at the end of its lifetime.
+     * @return a list of pointers COLOR_SETTINGS objects containing the default color theme(s)
+     */
+    static std::vector<COLOR_SETTINGS*> CreateBuiltinColorSettings();
 
 private:
     bool migrateSchema0to1();
@@ -124,7 +129,7 @@ public:
             ( *m_map )[ m_key ] = m_default;
     }
 
-    void Store( JSON_SETTINGS* aSettings) const override
+    void Store( JSON_SETTINGS* aSettings ) const override
     {
         aSettings->Set<COLOR4D>( m_path, ( *m_map )[ m_key ] );
     }

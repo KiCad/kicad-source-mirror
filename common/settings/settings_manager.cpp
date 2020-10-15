@@ -227,9 +227,6 @@ public:
         if( file.GetExt() != "json" )
             return wxDIR_CONTINUE;
 
-        if( file.GetName() == "user" )
-            return wxDIR_CONTINUE;
-
         m_action( file.GetName() );
 
         return wxDIR_CONTINUE;
@@ -264,10 +261,27 @@ COLOR_SETTINGS* SETTINGS_MANAGER::AddNewColorSettings( const wxString& aFilename
 }
 
 
+COLOR_SETTINGS* SETTINGS_MANAGER::GetMigratedColorSettings()
+{
+    if( !m_color_settings.count( "user" ) )
+    {
+        registerColorSettings( wxT( "user" ) );
+        m_color_settings.at( "user" )->SetName( wxT( "User" ) );
+        Save( m_color_settings.at( "user" ) );
+    }
+
+    return m_color_settings.at( "user" );
+}
+
+
 void SETTINGS_MANAGER::loadAllColorSettings()
 {
-    // Create the default color settings
-    registerColorSettings( "user" );
+    // Create the built-in color settings
+    for( COLOR_SETTINGS* settings : COLOR_SETTINGS::CreateBuiltinColorSettings() )
+    {
+        m_color_settings[settings->GetFilename()] =
+                static_cast<COLOR_SETTINGS*>( RegisterSettings( settings, false ) );
+    }
 
     // Search for and load any other settings
     COLOR_SETTINGS_LOADER loader( [&]( const wxString& aFilename )
