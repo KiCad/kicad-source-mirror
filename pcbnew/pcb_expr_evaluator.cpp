@@ -578,7 +578,8 @@ bool PCB_EXPR_EVALUATOR::Evaluate( const wxString& aExpr )
     PCB_EXPR_UCODE   ucode;
     PCB_EXPR_CONTEXT preflightContext( F_Cu );
 
-    m_compiler.Compile( aExpr.ToUTF8().data(), &ucode, &preflightContext );
+    if( !m_compiler.Compile( aExpr.ToUTF8().data(), &ucode, &preflightContext ) )
+        return false;
 
     PCB_EXPR_CONTEXT evaluationContext( F_Cu );
     LIBEVAL::VALUE*  result = ucode.Run( &evaluationContext );

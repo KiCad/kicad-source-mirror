@@ -438,7 +438,7 @@ void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult 
         {
             wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
                                              CurLineNumber(),
-                                             CurOffset(),
+                                             CurOffset() + aOffset,
                                              first,
                                              rest );
 
@@ -450,7 +450,8 @@ void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult 
                                              first,
                                              rest );
 
-            THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+            THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(),
+                               CurOffset() + aOffset );
         }
     };
 

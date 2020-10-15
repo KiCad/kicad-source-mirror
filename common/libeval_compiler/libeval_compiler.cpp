@@ -892,7 +892,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     {
                         // Preflight the function call
 
-                        for( auto pnode : params )
+                        for( TREE_NODE* pnode : params )
                         {
                             VALUE*   param = aPreflightContext->AllocValue();
                             param->Set( *pnode->value.str );
@@ -918,7 +918,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
                     node->leaf[0]->isVisited = true;
                     node->leaf[1]->isVisited = true;
-                    node->leaf[1]->leaf[0]->isVisited = true;;
+                    node->leaf[1]->leaf[0]->isVisited = true;
                     node->leaf[1]->leaf[1]->isVisited = true;
 
                     // Our non-terminal-node stacking algorithm can't handle doubly-nested
@@ -926,16 +926,38 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     // a TR_OP_FUNC_CALL and its function parameter
                     stack.pop_back();
                     stack.push_back( node->leaf[1] );
-                    //stack.push_back( node->leaf[1]->leaf[1] );
-                    for( auto pnode : params )
-                    {
+
+                    for( TREE_NODE* pnode : params )
                         stack.push_back( pnode );
-                    }
 
                     node->leaf[1]->SetUop( TR_OP_METHOD_CALL, func, std::move( vref ) );
                     node->isTerminal = false;
                     break;
                 }
+
+                default:
+                    // leaf[0]: object
+                    // leaf[1]: malformed syntax
+
+                    wxString itemName = *node->leaf[0]->value.str;
+                    wxString propName = *node->leaf[1]->value.str;
+                    std::unique_ptr<VAR_REF> vref = aCode->CreateVarRef( itemName, propName );
+
+                    if( !vref )
+                    {
+                        msg.Printf( _( "Unrecognized item '%s'" ), itemName );
+                        reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos - (int) itemName.length() );
+                    }
+
+                    msg.Printf( _( "Unrecognized property '%s'" ), propName );
+                    reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos + 1 );
+
+                    node->leaf[0]->isVisited = true;
+                    node->leaf[1]->isVisited = true;
+
+                    node->SetUop( TR_UOP_PUSH_VALUE, 0.0 );
+                    node->isTerminal = true;
+                    break;
             }
             break;
         }
@@ -1001,13 +1023,13 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             if( node->leaf[0] && !node->leaf[0]->isVisited )
             {
                 stack.push_back( node->leaf[0] );
-                node->leaf[0]->isVisited = true;;
+                node->leaf[0]->isVisited = true;
                 continue;
             }
             else if( node->leaf[1] && !node->leaf[1]->isVisited )
             {
                 stack.push_back( node->leaf[1] );
-                node->leaf[1]->isVisited = true;;
+                node->leaf[1]->isVisited = true;
             }
 
             continue;
@@ -1149,15 +1171,21 @@ VALUE* UCODE::Run( CONTEXT* ctx )
         return &g_false;
     }
 
-    assert( ctx->SP() == 1 );
+    if( ctx->SP() == 1 )
+    {
+        return ctx->Pop();
+    }
+    else
+    {
+        // If stack is corrupted after execution it suggests a problem with the compiler, not
+        // the rule....
 
-    // non-well-formed rules should not be fired
-    // fixme: not sure it's a good idea, if stack is corrupted after execution it means
-    // a problem with the compiler, not the rule...
-    if( ctx->SP() != 1 )
+        // do not use "assert"; it crashes outright on OSX
+        wxASSERT( ctx->SP() == 1 );
+
+        // non-well-formed rules should not be fired on a release build
         return &g_false;
-
-    return ctx->Pop();
+    }
 }
 
 
