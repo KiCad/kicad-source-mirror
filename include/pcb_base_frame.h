@@ -35,7 +35,7 @@
 #include <eda_item.h>
 #include <class_board.h>
 #include <eda_draw_frame.h>
-#include <eda_text.h> // EDA_DRAW_MODE_T
+#include <plot_mode.h>
 #include <lib_id.h>
 #include <pcb_display_options.h>
 #include <pcb_draw_panel_gal.h>
@@ -140,14 +140,14 @@ public:
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override
     {
         /* "Zoom to Fit" calls this with "aIncludeAllVisible" as true.  Since that
-        * feature always ignored the page and border, this function returns a bbox 
-        * without them as well when passed true.  This technically is not all things 
+        * feature always ignored the page and border, this function returns a bbox
+        * without them as well when passed true.  This technically is not all things
         * visible, but it keeps behavior consistent.
-        * 
-        * When passed false, this function returns a bbox of just the board edge.  
+        *
+        * When passed false, this function returns a bbox of just the board edge.
         * This allows things like fabrication text or anything else outside the board
         * edge to be ignored, and just zooms up to the board itself.
-        * 
+        *
         * Calling "GetBoardBoundingBox(true)" when edge cuts are turned off will return bbox of
         * entire page and border, so we make sure to do "GetBoardBoundingBox(false)" instead.
         */

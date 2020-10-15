@@ -37,6 +37,7 @@
 #include <math/box2.h>
 #include <gr_text.h>
 #include <page_info.h>
+#include <plot_mode.h>
 #include <gal/color4d.h>
 #include <eda_item.h>       // FILL_TYPE
 #include <render_settings.h>

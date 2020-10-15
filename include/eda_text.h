@@ -28,6 +28,7 @@
 #include <memory>
 #include <vector>
 
+#include <plot_mode.h>
 #include <eda_rect.h>
 
 class OUTPUTFORMATTER;
@@ -63,13 +64,6 @@ enum EDA_TEXT_VJUSTIFY_T {
     GR_TEXT_VJUSTIFY_TOP    = -1,
     GR_TEXT_VJUSTIFY_CENTER = 0,
     GR_TEXT_VJUSTIFY_BOTTOM = 1
-};
-
-
-/* Options to draw items with thickness ( segments, arcs, circles, texts...) */
-enum EDA_DRAW_MODE_T {
-    FILLED = true,      // normal mode: solid segments
-    SKETCH = false      // sketch mode: draw segments outlines only
 };
 
 
