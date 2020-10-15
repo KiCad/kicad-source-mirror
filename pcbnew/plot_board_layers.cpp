@@ -207,7 +207,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     itemplotter.SetLayerSet( aLayerMask );
 
-    PLOT_MODE plotMode = aPlotOpt.GetPlotMode();
+    OUTLINE_MODE plotMode = aPlotOpt.GetPlotMode();
     bool onCopperLayer = ( LSET::AllCuMask() & aLayerMask ).any();
     bool onSolderMaskLayer = ( LSET( 2, F_Mask, B_Mask ) & aLayerMask ).any();
     bool onSolderPasteLayer = ( LSET( 2, F_Paste, B_Paste ) & aLayerMask ).any();
@@ -233,7 +233,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
         for( D_PAD* pad : module->Pads() )
         {
-            PLOT_MODE padPlotMode = plotMode;
+            OUTLINE_MODE padPlotMode = plotMode;
 
             if( !( pad->GetLayerSet() & aLayerMask ).any() )
             {

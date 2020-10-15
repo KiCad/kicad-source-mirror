@@ -66,22 +66,22 @@ public:
 
     // Pad routines are handled with lower level primitives
     virtual void FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
-                                 PLOT_MODE aTraceMode, void* aData ) override;
+                                 OUTLINE_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
-                               PLOT_MODE aTraceMode, void* aData ) override;
+                               OUTLINE_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
-                               double aPadOrient, PLOT_MODE aTraceMode,
+                               double aPadOrient, OUTLINE_MODE aTraceMode,
                                void* aData ) override;
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                     int aCornerRadius, double aOrient,
-                                    PLOT_MODE aTraceMode, void* aData ) override;
+                                    OUTLINE_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                  SHAPE_POLY_SET* aPolygons,
-                                 PLOT_MODE aTraceMode, void* aData ) override;
+                                 OUTLINE_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, PLOT_MODE aTraceMode, void* aData ) override;
+                                 double aPadOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
     virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
-                            double aOrient, PLOT_MODE aTraceMode, void* aData ) override;
+                            double aOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
 
     /** The SetColor implementation is split with the subclasses:
      * The PSLIKE computes the rgb values, the subclass emits the

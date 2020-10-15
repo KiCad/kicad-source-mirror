@@ -37,7 +37,7 @@
 #include <math/box2.h>
 #include <gr_text.h>
 #include <page_info.h>
-#include <plot_mode.h>
+#include <outline_mode.h>
 #include <gal/color4d.h>
 #include <eda_item.h>       // FILL_TYPE
 #include <render_settings.h>
@@ -320,15 +320,15 @@ public:
 
     // Higher level primitives -- can be drawn as line, sketch or 'filled'
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
-                               PLOT_MODE tracemode, void* aData );
+                               OUTLINE_MODE tracemode, void* aData );
     virtual void ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
-                           int rayon, int width, PLOT_MODE tracemode, void* aData );
+                           int rayon, int width, OUTLINE_MODE tracemode, void* aData );
     virtual void ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
-                            PLOT_MODE tracemode, void* aData );
+                            OUTLINE_MODE tracemode, void* aData );
     virtual void ThickCircle( const wxPoint& pos, int diametre, int width,
-                              PLOT_MODE tracemode, void* aData );
+                              OUTLINE_MODE tracemode, void* aData );
     virtual void FilledCircle( const wxPoint& pos, int diametre,
-                              PLOT_MODE tracemode, void* aData );
+                              OUTLINE_MODE tracemode, void* aData );
 
 
     // Flash primitives
@@ -341,7 +341,7 @@ public:
      * @param aData an auxiliary info (mainly for gerber format attributes)
      */
     virtual void FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
-                                 PLOT_MODE aTraceMode, void* aData ) = 0;
+                                 OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
      * virtual function FlashPadOval
@@ -352,7 +352,7 @@ public:
      * @param aData an auxiliary info (mainly for gerber format attributes)
      */
     virtual void FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
-                               PLOT_MODE aTraceMode, void* aData ) = 0;
+                               OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
      * virtual function FlashPadRect
@@ -363,7 +363,7 @@ public:
      * @param aData an auxuliary info (mainly for gerber format attributes)
      */
     virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
-                               double aPadOrient, PLOT_MODE aTraceMode, void* aData ) = 0;
+                               double aPadOrient, OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
      * virtual function FlashPadRoundRect
@@ -376,7 +376,7 @@ public:
      */
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                     int aCornerRadius, double aOrient,
-                                    PLOT_MODE aTraceMode, void* aData ) = 0;
+                                    OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
      * virtual function FlashPadCustom
@@ -388,7 +388,7 @@ public:
      */
     virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                  SHAPE_POLY_SET* aPolygons,
-                                 PLOT_MODE aTraceMode, void* aData ) = 0;
+                                 OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /** virtual function FlashPadTrapez
      * flash a trapezoidal pad
@@ -400,7 +400,7 @@ public:
      * @param aData an auxiliary info (mainly for gerber format attributes)
      */
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, PLOT_MODE aTraceMode,
+                                 double aPadOrient, OUTLINE_MODE aTraceMode,
                                  void* aData ) = 0;
 
     /** Flash a regular polygon. Usefull only in Gerber files to flash a regular polygon
@@ -412,7 +412,7 @@ public:
      * specific to the plotter
      */
     virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
-                            double aOrient, PLOT_MODE aTraceMode, void* aData ) = 0 ;
+                            double aOrient, OUTLINE_MODE aTraceMode, void* aData ) = 0 ;
 
     /**
      * Draws text with the plotter. For convenience it accept the color to use
@@ -538,7 +538,7 @@ protected:
      * Cdonvert a thick segment and plot it as an oval
      */
     void segmentAsOval( const wxPoint& start, const wxPoint& end, int width,
-                        PLOT_MODE tracemode );
+                        OUTLINE_MODE tracemode );
 
     void sketchOval( const wxPoint& pos, const wxSize& size, double orient, int width );
 

@@ -42,7 +42,7 @@
 
 #include <board_design_settings.h>            // for BOARD_DESIGN_SETTINGS
 #include <core/typeinfo.h>                    // for dyn_cast, PCB_DIMENSION_T
-#include <plot_mode.h>
+#include <outline_mode.h>
 #include <gal/color4d.h>                      // for COLOR4D, operator!=
 #include <gbr_metadata.h>
 #include <gbr_netlist_metadata.h>             // for GBR_NETLIST_METADATA
@@ -85,7 +85,7 @@ COLOR4D BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
 }
 
 
-void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, PLOT_MODE aPlotMode )
+void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMode )
 {
     wxPoint shape_pos = aPad->ShapePos();
     GBR_METADATA gbr_metadata;

@@ -88,7 +88,7 @@ void PSLIKE_PLOTTER::SetColor( COLOR4D color )
 
 
 void PSLIKE_PLOTTER::FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize,
-                                   double aPadOrient, PLOT_MODE aTraceMode, void* aData )
+                                   double aPadOrient, OUTLINE_MODE aTraceMode, void* aData )
 {
     wxASSERT( outputFile );
     int x0, y0, x1, y1, delta;
@@ -118,7 +118,7 @@ void PSLIKE_PLOTTER::FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize,
 
 
 void PSLIKE_PLOTTER::FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
-                                     PLOT_MODE aTraceMode, void* aData )
+                                     OUTLINE_MODE aTraceMode, void* aData )
 {
     if( aTraceMode == FILLED )
         Circle( aPadPos, aDiameter, FILL_TYPE::FILLED_SHAPE, 0 );
@@ -139,7 +139,7 @@ void PSLIKE_PLOTTER::FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
 
 
 void PSLIKE_PLOTTER::FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
-                                   double aPadOrient, PLOT_MODE aTraceMode, void* aData )
+                                   double aPadOrient, OUTLINE_MODE aTraceMode, void* aData )
 {
     static std::vector< wxPoint > cornerList;
     wxSize size( aSize );
@@ -189,7 +189,7 @@ void PSLIKE_PLOTTER::FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
 
 void PSLIKE_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                         int aCornerRadius, double aOrient,
-                                        PLOT_MODE aTraceMode, void* aData )
+                                        OUTLINE_MODE aTraceMode, void* aData )
 {
     wxSize size( aSize );
 
@@ -225,7 +225,7 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
 
 void PSLIKE_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                      SHAPE_POLY_SET* aPolygons,
-                                     PLOT_MODE aTraceMode, void* aData )
+                                     OUTLINE_MODE aTraceMode, void* aData )
 {
     wxSize size( aSize );
 
@@ -258,7 +258,7 @@ void PSLIKE_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
 }
 
 void PSLIKE_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                     double aPadOrient, PLOT_MODE aTraceMode, void* aData )
+                                     double aPadOrient, OUTLINE_MODE aTraceMode, void* aData )
 {
     static std::vector< wxPoint > cornerList;
     cornerList.clear();
@@ -305,7 +305,7 @@ void PSLIKE_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCor
 
 void PSLIKE_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos,
                             int aRadius, int aCornerCount,
-                            double aOrient, PLOT_MODE aTraceMode, void* aData )
+                            double aOrient, OUTLINE_MODE aTraceMode, void* aData )
 {
     // Do nothing
     wxASSERT( 0 );

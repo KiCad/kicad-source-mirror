@@ -35,7 +35,7 @@
 #include <eda_item.h>
 #include <class_board.h>
 #include <eda_draw_frame.h>
-#include <plot_mode.h>
+#include <outline_mode.h>
 #include <lib_id.h>
 #include <pcb_display_options.h>
 #include <pcb_draw_panel_gal.h>

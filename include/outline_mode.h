@@ -17,11 +17,11 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLOT_MODE_H
-#define PLOT_MODE_H
+#ifndef OUTLINE_MODE_H
+#define OUTLINE_MODE_H
 
 /* Options to draw items with thickness ( segments, arcs, circles, texts...) */
-enum PLOT_MODE
+enum OUTLINE_MODE
 {
     SKETCH = 0,  // sketch mode: draw segments outlines only
     FILLED = 1 // normal mode: solid segments

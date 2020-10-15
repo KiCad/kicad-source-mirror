@@ -907,7 +907,7 @@ void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
 
 
 void GERBER_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end, int width,
-                            PLOT_MODE tracemode, void* aData )
+                            OUTLINE_MODE tracemode, void* aData )
 {
     if( tracemode == FILLED )
     {
@@ -928,7 +928,7 @@ void GERBER_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end, int
 }
 
 void GERBER_PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
-                           int radius, int width, PLOT_MODE tracemode, void* aData )
+                           int radius, int width, OUTLINE_MODE tracemode, void* aData )
 {
     GBR_METADATA *gbr_metadata = static_cast<GBR_METADATA*>( aData );
     SetCurrentLineWidth( width, gbr_metadata );
@@ -951,7 +951,7 @@ void GERBER_PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double End
 
 
 void GERBER_PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
-                            PLOT_MODE tracemode, void* aData )
+                            OUTLINE_MODE tracemode, void* aData )
 {
     GBR_METADATA *gbr_metadata = static_cast<GBR_METADATA*>( aData );
     SetCurrentLineWidth( width, gbr_metadata );
@@ -979,7 +979,7 @@ void GERBER_PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
 
 
 void GERBER_PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width,
-                              PLOT_MODE tracemode, void* aData )
+                              OUTLINE_MODE tracemode, void* aData )
 {
     GBR_METADATA *gbr_metadata = static_cast<GBR_METADATA*>( aData );
     SetCurrentLineWidth( width, gbr_metadata );
@@ -1001,7 +1001,7 @@ void GERBER_PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width,
 
 
 void GERBER_PLOTTER::FilledCircle( const wxPoint& pos, int diametre,
-                              PLOT_MODE tracemode, void* aData )
+                              OUTLINE_MODE tracemode, void* aData )
 {
     // A filled circle is a graphic item, not a pad.
     // So it is drawn, not flashed.
@@ -1025,7 +1025,7 @@ void GERBER_PLOTTER::FilledCircle( const wxPoint& pos, int diametre,
 }
 
 
-void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, PLOT_MODE trace_mode, void* aData )
+void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, OUTLINE_MODE trace_mode, void* aData )
 {
     wxSize size( diametre, diametre );
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
@@ -1055,7 +1055,7 @@ void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, PLOT_MODE
 
 
 void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
-                                   PLOT_MODE trace_mode, void* aData )
+                                   OUTLINE_MODE trace_mode, void* aData )
 {
     wxASSERT( outputFile );
     wxSize size( aSize );
@@ -1134,7 +1134,7 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
 
 
 void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
-                                   double orient, PLOT_MODE trace_mode, void* aData )
+                                   double orient, OUTLINE_MODE trace_mode, void* aData )
 
 {
     wxASSERT( outputFile );
@@ -1218,7 +1218,7 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
 
 void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                      int aCornerRadius, double aOrient,
-                                     PLOT_MODE aTraceMode, void* aData )
+                                     OUTLINE_MODE aTraceMode, void* aData )
 
 {
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
@@ -1426,7 +1426,7 @@ void GERBER_PLOTTER::plotRoundRectAsRegion( const wxPoint& aRectCenter, const wx
 
 void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                      SHAPE_POLY_SET* aPolygons,
-                                     PLOT_MODE aTraceMode, void* aData )
+                                     OUTLINE_MODE aTraceMode, void* aData )
 
 {
     // A Pad custom is plotted as polygon (a region in Gerber language).
@@ -1468,7 +1468,7 @@ void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
 void GERBER_PLOTTER::FlashPadChamferRoundRect( const wxPoint& aShapePos, const wxSize& aPadSize,
                                    int aCornerRadius, double aChamferRatio,
                                    int aChamferPositions,
-                                   double aPadOrient, PLOT_MODE aPlotMode, void* aData )
+                                   double aPadOrient, OUTLINE_MODE aPlotMode, void* aData )
 
 {
     GBR_METADATA gbr_metadata;
@@ -1590,7 +1590,7 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const wxPoint& aShapePos, const w
 
 
 void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCorners,
-                                     double aPadOrient, PLOT_MODE aTrace_Mode, void* aData )
+                                     double aPadOrient, OUTLINE_MODE aTrace_Mode, void* aData )
 
 {
     // polygon corners list
@@ -1643,7 +1643,7 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
 
 void GERBER_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos,
                                           int aDiameter, int aCornerCount,
-                                          double aOrient, PLOT_MODE aTraceMode,
+                                          double aOrient, OUTLINE_MODE aTraceMode,
                                           void* aData )
 {
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );

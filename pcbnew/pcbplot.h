@@ -112,7 +112,7 @@ public:
      * and be drawn as a non filled item although the plot mode is filled
      * color and plot mode are needed by this function
      */
-    void PlotPad( D_PAD* aPad, COLOR4D aColor, PLOT_MODE aPlotMode );
+    void PlotPad( D_PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMode );
 
     /**
      * plot items like text and graphics,

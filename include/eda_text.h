@@ -28,7 +28,7 @@
 #include <memory>
 #include <vector>
 
-#include <plot_mode.h>
+#include <outline_mode.h>
 #include <eda_rect.h>
 
 class OUTPUTFORMATTER;
@@ -268,7 +268,7 @@ public:
      * @param aDisplay_mode = FILLED or SKETCH
      */
     void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, COLOR4D aColor,
-                PLOT_MODE aDisplay_mode = FILLED );
+                OUTLINE_MODE aDisplay_mode = FILLED );
 
     /**
      * Convert the text shape to a list of segment.
@@ -396,7 +396,7 @@ private:
      * @param aPos = the position of this line ).
      */
     void printOneLineOfText( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, COLOR4D aColor,
-                             PLOT_MODE aFillMode, const wxString& aText,
+                             OUTLINE_MODE aFillMode, const wxString& aText,
                              const wxPoint& aPos );
 };
 

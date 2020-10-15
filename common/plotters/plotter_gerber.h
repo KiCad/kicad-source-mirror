@@ -78,16 +78,16 @@ public:
 
     // These functions plot an item and manage X2 gerber attributes
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
-                               PLOT_MODE tracemode, void* aData ) override;
+                               OUTLINE_MODE tracemode, void* aData ) override;
 
     virtual void ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
-                           int rayon, int width, PLOT_MODE tracemode, void* aData ) override;
+                           int rayon, int width, OUTLINE_MODE tracemode, void* aData ) override;
     virtual void ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
-                            PLOT_MODE tracemode, void* aData ) override;
+                            OUTLINE_MODE tracemode, void* aData ) override;
     virtual void ThickCircle( const wxPoint& pos, int diametre, int width,
-                              PLOT_MODE tracemode, void* aData ) override;
+                              OUTLINE_MODE tracemode, void* aData ) override;
     virtual void FilledCircle( const wxPoint& pos, int diametre,
-                              PLOT_MODE tracemode, void* aData ) override;
+                              OUTLINE_MODE tracemode, void* aData ) override;
 
     /**
      * Gerber polygon: they can (and *should*) be filled with the
@@ -116,20 +116,20 @@ public:
      * Filled circular flashes are stored as apertures
      */
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
-                                 PLOT_MODE trace_mode, void* aData ) override;
+                                 OUTLINE_MODE trace_mode, void* aData ) override;
 
     /**
      * Filled oval flashes are handled as aperture in the 90 degree positions only
      */
     virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
-                               PLOT_MODE trace_mode, void* aData ) override;
+                               OUTLINE_MODE trace_mode, void* aData ) override;
     /**
      * Filled rect flashes are handled as aperture in the 0 90 180 or 270 degree orientation only
      * and as polygon for other orientations
      * TODO: always use flashed shapes (aperture macros)
      */
     virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
-                               double orient, PLOT_MODE trace_mode, void* aData ) override;
+                               double orient, OUTLINE_MODE trace_mode, void* aData ) override;
 
     /**
      * Roundrect pad at the moment are not handled as aperture, since
@@ -138,20 +138,20 @@ public:
      */
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                     int aCornerRadius, double aOrient,
-                                    PLOT_MODE aTraceMode, void* aData ) override;
+                                    OUTLINE_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                  SHAPE_POLY_SET* aPolygons,
-                                 PLOT_MODE aTraceMode, void* aData ) override;
+                                 OUTLINE_MODE aTraceMode, void* aData ) override;
     /**
      * Trapezoidal pad at the moment are *never* handled as aperture, since
      * they require aperture macros
      * TODO: always use flashed shapes (aperture macros)
      */
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                            double aPadOrient, PLOT_MODE aTraceMode, void* aData ) override;
+                            double aPadOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
 
     virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
-                            double aOrient, PLOT_MODE aTraceMode, void* aData ) override;
+                            double aOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
 
     /**
      * flash a chamfered round rect pad.
@@ -172,7 +172,7 @@ public:
     void FlashPadChamferRoundRect( const wxPoint& aShapePos, const wxSize& aPadSize,
                                    int aCornerRadius, double aChamferRatio,
                                    int aChamferPositions,
-                                   double aPadOrient, PLOT_MODE aPlotMode, void* aData );
+                                   double aPadOrient, OUTLINE_MODE aPlotMode, void* aData );
 
     /**
      * Plot a Gerber region: similar to PlotPoly but plot only filled polygon,

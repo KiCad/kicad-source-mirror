@@ -614,7 +614,7 @@ void DXF_PLOTTER::SetDash( PLOT_DASH_TYPE aDashed )
 
 
 void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int aWidth,
-                                PLOT_MODE aPlotMode, void* aData )
+                                OUTLINE_MODE aPlotMode, void* aData )
 {
     if( aPlotMode == SKETCH )
     {
@@ -676,7 +676,7 @@ void DXF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
  * DXF oval pad: always done in sketch mode
  */
 void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
-                                PLOT_MODE trace_mode, void* aData )
+                                OUTLINE_MODE trace_mode, void* aData )
 {
     wxASSERT( outputFile );
     wxSize size( aSize );
@@ -698,7 +698,7 @@ void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double 
  * pretty if other kinds of pad aren't...
  */
 void DXF_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
-                                    PLOT_MODE trace_mode, void* aData )
+                                    OUTLINE_MODE trace_mode, void* aData )
 {
     wxASSERT( outputFile );
     Circle( pos, diametre, FILL_TYPE::NO_FILL );
@@ -709,7 +709,7 @@ void DXF_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
  * DXF rectangular pad: alwayd done in sketch mode
  */
 void DXF_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
-                                double orient, PLOT_MODE trace_mode, void* aData )
+                                double orient, OUTLINE_MODE trace_mode, void* aData )
 {
     wxASSERT( outputFile );
     wxSize size;
@@ -774,7 +774,7 @@ void DXF_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
 
 void DXF_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                      int aCornerRadius, double aOrient,
-                                     PLOT_MODE aTraceMode, void* aData )
+                                     OUTLINE_MODE aTraceMode, void* aData )
 {
     SHAPE_POLY_SET outline;
     TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient,
@@ -793,7 +793,7 @@ void DXF_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize
 
 void DXF_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                    SHAPE_POLY_SET* aPolygons,
-                                   PLOT_MODE aTraceMode, void* aData )
+                                   OUTLINE_MODE aTraceMode, void* aData )
 {
     for( int cnt = 0; cnt < aPolygons->OutlineCount(); ++cnt )
     {
@@ -813,7 +813,7 @@ void DXF_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
  * DXF trapezoidal pad: only sketch mode is supported
  */
 void DXF_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                  double aPadOrient, PLOT_MODE aTrace_Mode, void* aData )
+                                  double aPadOrient, OUTLINE_MODE aTrace_Mode, void* aData )
 {
     wxASSERT( outputFile );
     wxPoint coord[4];       /* coord actual corners of a trapezoidal trace */
@@ -836,7 +836,7 @@ void DXF_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorner
 
 void DXF_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos,
                             int aRadius, int aCornerCount,
-                            double aOrient, PLOT_MODE aTraceMode, void* aData )
+                            double aOrient, OUTLINE_MODE aTraceMode, void* aData )
 {
     // Do nothing
     wxASSERT( 0 );
