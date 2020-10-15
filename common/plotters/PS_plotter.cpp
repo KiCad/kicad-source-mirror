@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,19 @@ extern const double hvo_widths[256];
 extern const double hvbo_widths[256];
 
 const double PSLIKE_PLOTTER::postscriptTextAscent = 0.718;
+
+// return a id used to select a ps macro (see StartPlot() ) from a FILL_TYPE
+// fill mode, for arc, rect, circle and poly draw primitives
+static int getFillId( FILL_TYPE aFill )
+{
+    if( aFill == FILL_TYPE::NO_FILL )
+        return 0;
+
+    if( aFill == FILL_TYPE::FILLED_SHAPE )
+        return 1;
+
+    return 2;
+}
 
 
 // Common routines for Postscript-like plotting engines
@@ -580,7 +593,7 @@ void PS_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, int
 
     SetCurrentLineWidth( width );
     fprintf( outputFile, "%g %g %g %g rect%d\n", p1_dev.x, p1_dev.y,
-             p2_dev.x - p1_dev.x, p2_dev.y - p1_dev.y, fill );
+             p2_dev.x - p1_dev.x, p2_dev.y - p1_dev.y, getFillId( fill ) );
 }
 
 
@@ -591,7 +604,7 @@ void PS_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_TYPE fill, int w
     double radius = userToDeviceSize( diametre / 2.0 );
 
     SetCurrentLineWidth( width );
-    fprintf( outputFile, "%g %g %g cir%d\n", pos_dev.x, pos_dev.y, radius, fill );
+    fprintf( outputFile, "%g %g %g cir%d\n", pos_dev.x, pos_dev.y, radius, getFillId( fill ) );
 }
 
 
@@ -599,6 +612,7 @@ void PS_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int radius, FILL_TYPE fill, int width )
 {
     wxASSERT( outputFile );
+
     if( radius <= 0 )
         return;
 
@@ -627,7 +641,7 @@ void PS_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle,
     }
 
     fprintf( outputFile, "%g %g %g %g %g arc%d\n", centre_dev.x, centre_dev.y,
-             radius_dev, StAngle / 10.0, EndAngle / 10.0, fill );
+             radius_dev, StAngle / 10.0, EndAngle / 10.0, getFillId( fill ) );
 }
 
 
@@ -649,7 +663,7 @@ void PS_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
     }
 
     // Close/(fill) the path
-    fprintf( outputFile, "poly%d\n", aFill );
+    fprintf( outputFile, "poly%d\n", getFillId( aFill ) );
 }
 
 
