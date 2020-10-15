@@ -336,7 +336,13 @@ void PANEL_SETUP_RULES::OnCompile( wxCommandEvent& event )
     }
     catch( PARSE_ERROR& pe )
     {
-        m_Parent->SetError( pe.What(), this, m_textEditor, pe.lineNumber, pe.byteIndex );
+        wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
+                                         pe.lineNumber,
+                                         pe.byteIndex,
+                                         pe.ParseProblem(),
+                                         wxEmptyString );
+
+        m_errorsReport->Report( msg, RPT_SEVERITY_ERROR );
     }
 
     m_errorsReport->Flush();
@@ -403,20 +409,6 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
 
     if( m_frame->Prj().IsNullProject() )
         return true;
-
-    try
-    {
-        std::vector<DRC_RULE*> dummyRules;
-
-        DRC_RULES_PARSER parser( m_textEditor->GetText(), _( "DRC rules" ) );
-
-        parser.Parse( dummyRules, m_errorsReport );
-    }
-    catch( PARSE_ERROR& pe )
-    {
-        m_Parent->SetError( pe.What(), this, m_textEditor, pe.lineNumber, pe.byteIndex );
-        return false;
-    }
 
     wxString rulesFilepath = m_frame->GetDesignRulesPath();
 

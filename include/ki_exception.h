@@ -154,8 +154,17 @@ struct PARSE_ERROR : public IO_ERROR
 
     ~PARSE_ERROR() throw () {}
 
+    const wxString ParseProblem() { return parseProblem; }
+
 protected:
-    PARSE_ERROR(): IO_ERROR(), lineNumber( 0 ), byteIndex( 0 ) {}
+    PARSE_ERROR() :
+        IO_ERROR(),
+        lineNumber( 0 ),
+        byteIndex( 0 )
+    {}
+
+protected:
+    wxString parseProblem;
 };
 
 

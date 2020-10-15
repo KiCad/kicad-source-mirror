@@ -70,6 +70,8 @@ void PARSE_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
                         const wxString& aSource, const char* aInputLine, int aLineNumber,
                         int aByteIndex )
 {
+    parseProblem = aProblem;
+
     problem.Printf( _( "%s in \"%s\", line %d, offset %d" ),
                     aProblem,
                     aSource,
