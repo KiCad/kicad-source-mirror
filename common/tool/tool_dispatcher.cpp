@@ -315,6 +315,14 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     int unicode = 0;
     bool keyIsSpecial = false;  // True if the key is a special key code
 
+#if defined(_WIN32)
+    // Fix a constant stream of events being able to stall out wxTimers from firing
+    // Which results in GAL not updating
+    // https://devblogs.microsoft.com/oldnewthing/20191108-00/?p=103080
+    MSG msg;
+    PeekMessage(&msg, nullptr, WM_TIMER, WM_TIMER, PM_NOREMOVE);
+#endif
+
     int type = aEvent.GetEventType();
 
     // Sometimes there is no window that has the focus (it happens when another PCB_BASE_FRAME
