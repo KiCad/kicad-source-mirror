@@ -28,6 +28,7 @@
 #include <confirm.h>
 #include <kiface_i.h>
 #include <pin_number.h>
+#include <kicad_string.h>
 #include <menus_helpers.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/wx_grid.h>
