@@ -31,6 +31,7 @@
 #include <pcb_screen.h>
 #include <class_board.h>
 #include <class_zone.h>
+#include <kicad_string.h>
 #include <math_for_graphics.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>

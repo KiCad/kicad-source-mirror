@@ -290,4 +290,15 @@ static inline std::vector<std::string> split( const std::string& aStr, const std
     return tokens;
 }
 
+
+/// Utility to build comma separated lists in messages
+inline void AccumulateDescription( wxString& aDesc, const wxString& aItem )
+{
+    if( !aDesc.IsEmpty() )
+        aDesc << wxT( ", " );
+
+    aDesc << aItem;
+}
+
+
 #endif  // KICAD_STRING_H_
