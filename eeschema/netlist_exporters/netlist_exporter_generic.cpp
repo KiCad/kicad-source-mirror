@@ -48,7 +48,7 @@ bool NETLIST_EXPORTER_GENERIC::WriteNetlist( const wxString& aOutFileName,
 }
 
 
-XNODE* NETLIST_EXPORTER_GENERIC::makeRoot( int aCtl )
+XNODE* NETLIST_EXPORTER_GENERIC::makeRoot( unsigned aCtl )
 {
     XNODE*      xroot = node( "export" );
 
@@ -69,7 +69,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeRoot( int aCtl )
         xroot->AddChild( makeLibraries() );
 
     if( aCtl & GNL_NETS )
-        xroot->AddChild( makeListOfNets() );
+        xroot->AddChild( makeListOfNets( aCtl ) );
 
     return xroot;
 }
@@ -272,7 +272,9 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
             if( !comp
                || ( ( aCtl & GNL_OPT_BOM ) && !comp->GetIncludeInBom() )
                || ( ( aCtl & GNL_OPT_KICAD ) && !comp->GetIncludeOnBoard() ) )
+            {
                 continue;
+            }
 
             // Output the component's elements in order of expected access frequency.
             // This may not always look best, but it will allow faster execution
@@ -570,7 +572,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
 }
 
 
-XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets()
+XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( unsigned aCtl )
 {
     XNODE*      xnets = node( "nets" );      // auto_ptr if exceptions ever get used.
     wxString    netCodeTxt;
@@ -607,7 +609,19 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets()
             for( SCH_ITEM* item : subgraph->m_items )
             {
                 if( item->Type() == SCH_PIN_T )
-                    sorted_items.emplace_back( static_cast<SCH_PIN*>( item ), sheet );
+                {
+                    SCH_PIN*       pin = static_cast<SCH_PIN*>( item );
+                    SCH_COMPONENT* comp = pin->GetParentComponent();
+
+                    if( !comp
+                       || ( ( aCtl & GNL_OPT_BOM ) && !comp->GetIncludeInBom() )
+                       || ( ( aCtl & GNL_OPT_KICAD ) && !comp->GetIncludeOnBoard() ) )
+                    {
+                        continue;
+                    }
+
+                    sorted_items.emplace_back( pin, sheet );
+                }
             }
         }
 

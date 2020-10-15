@@ -103,7 +103,7 @@ protected:
      * @param aCtl - a bitset or-ed together from GNL_ENUM values
      * @return XNODE* - the root nodes
      */
-    XNODE* makeRoot( int aCtl = GNL_ALL );
+    XNODE* makeRoot( unsigned aCtl = GNL_ALL );
 
     /**
      * @return XNODE* - returns a sub-tree holding all the schematic components.
@@ -126,7 +126,7 @@ protected:
      * Fill out an XML node with a list of nets and returns it.
      * @return XNODE* - the list of nets nodes
      */
-    XNODE* makeListOfNets();
+    XNODE* makeListOfNets( unsigned aCtl );
 
     /**
      * Fill out an XML node with a list of used libraries and returns it.
