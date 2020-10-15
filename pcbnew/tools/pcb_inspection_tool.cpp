@@ -352,6 +352,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
     r->Flush();
 
+    m_inspectClearanceDialog->Raise();
     m_inspectClearanceDialog->Show( true );
     return 0;
 }
@@ -500,6 +501,7 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     }
 
     m_inspectConstraintsDialog->FinishInitialization();
+    m_inspectConstraintsDialog->Raise();
     m_inspectConstraintsDialog->Show( true );
     return 0;
 }
@@ -951,6 +953,7 @@ int PCB_INSPECTION_TOOL::ListNets( const TOOL_EVENT& aEvent )
                 this );
     }
 
+    m_listNetsDialog->Raise();
     m_listNetsDialog->Show( true );
     return 0;
 }
