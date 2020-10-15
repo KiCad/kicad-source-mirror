@@ -3207,14 +3207,10 @@ FILL_TYPE SCH_LEGACY_PLUGIN_CACHE::parseFillMode( LINE_READER& aReader, const ch
 {
     switch ( parseChar( aReader, aLine, aOutput ) )
     {
-    case 'F':
-        return FILL_TYPE::FILLED_SHAPE;
-    case 'f':
-        return FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
-    case 'N':
-        return FILL_TYPE::NO_FILL;
-    default:
-        SCH_PARSE_ERROR( "invalid fill type, expected f, F, or N", aReader, aLine );
+    case 'F': return FILL_TYPE::FILLED_SHAPE;
+    case 'f': return FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
+    case 'N': return FILL_TYPE::NO_FILL;
+    default:  SCH_PARSE_ERROR( "invalid fill type, expected f, F, or N", aReader, aLine );
     }
 
     // This will never be reached but quiets the compiler warnings
@@ -3944,7 +3940,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveArc( LIB_ARC* aArc,
     aFormatter.Print( 0, "A %d %d %d %d %d %d %d %d %c %d %d %d %d\n",
                       Iu2Mils( aArc->GetPosition().x ), Iu2Mils( aArc->GetPosition().y ),
                       Iu2Mils( aArc->GetRadius() ), x1, x2, aArc->GetUnit(), aArc->GetConvert(),
-                      Iu2Mils( aArc->GetWidth() ), FILL_TYPEab[ static_cast<int>( aArc->GetFillMode() ) ],
+                      Iu2Mils( aArc->GetWidth() ), fill_tab[ static_cast<int>( aArc->GetFillMode() ) ],
                       Iu2Mils( aArc->GetStart().x ), Iu2Mils( aArc->GetStart().y ),
                       Iu2Mils( aArc->GetEnd().x ), Iu2Mils( aArc->GetEnd().y ) );
 }
@@ -3961,7 +3957,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveBezier( LIB_BEZIER* aBezier,
     for( const auto& pt : aBezier->GetPoints() )
         aFormatter.Print( 0, " %d %d", Iu2Mils( pt.x ), Iu2Mils( pt.y ) );
 
-    aFormatter.Print( 0, " %c\n", FILL_TYPEab[static_cast<int>( aBezier->GetFillMode() )] );
+    aFormatter.Print( 0, " %c\n", fill_tab[static_cast<int>( aBezier->GetFillMode() )] );
 }
 
 
@@ -3973,7 +3969,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveCircle( LIB_CIRCLE* aCircle,
     aFormatter.Print( 0, "C %d %d %d %d %d %d %c\n",
                       Iu2Mils( aCircle->GetPosition().x ), Iu2Mils( aCircle->GetPosition().y ),
                       Iu2Mils( aCircle->GetRadius() ), aCircle->GetUnit(), aCircle->GetConvert(),
-                      Iu2Mils( aCircle->GetWidth() ), FILL_TYPEab[static_cast<int>( aCircle->GetFillMode() )] );
+                      Iu2Mils( aCircle->GetWidth() ), fill_tab[static_cast<int>( aCircle->GetFillMode() )] );
 }
 
 
@@ -4160,7 +4156,7 @@ void SCH_LEGACY_PLUGIN_CACHE::savePolyLine( LIB_POLYLINE* aPolyLine,
         aFormatter.Print( 0, " %d %d", Iu2Mils( pt.x ), Iu2Mils( pt.y ) );
     }
 
-    aFormatter.Print( 0, " %c\n", FILL_TYPEab[static_cast<int>( aPolyLine->GetFillMode() )] );
+    aFormatter.Print( 0, " %c\n", fill_tab[static_cast<int>( aPolyLine->GetFillMode() )] );
 }
 
 
@@ -4175,7 +4171,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveRectangle( LIB_RECTANGLE* aRectangle,
                       Iu2Mils( aRectangle->GetPosition().y ),
                       Iu2Mils( aRectangle->GetEnd().x ), Iu2Mils( aRectangle->GetEnd().y ),
                       aRectangle->GetUnit(), aRectangle->GetConvert(),
-                      Iu2Mils( aRectangle->GetWidth() ), FILL_TYPEab[static_cast<int>( aRectangle->GetFillMode() )] );
+                      Iu2Mils( aRectangle->GetWidth() ), fill_tab[static_cast<int>( aRectangle->GetFillMode() )] );
 }
 
 

@@ -42,7 +42,7 @@ class MSG_PANEL_ITEM;
 
 using KIGFX::RENDER_SETTINGS;
 
-extern const int FILL_TYPEab[];
+extern const int fill_tab[];
 
 
 #define MINIMUM_SELECTION_DISTANCE 2 // Minimum selection distance in internal units

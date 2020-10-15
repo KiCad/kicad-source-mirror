@@ -1396,7 +1396,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::Parse( XNODE* aNode )
     LayerID             = GetXmlAttributeIDString( aNode, 1 );
     wxString subTypeStr = GetXmlAttributeIDString( aNode, 2 );
 
-    std::map<wxString, SUBTYPE> subTypeMap = { 
+    std::map<wxString, SUBTYPE> subTypeMap = {
         { wxT( "DIMENSION_ORTHOGONAL" ), SUBTYPE::ORTHOGONAL },
         { wxT( "DIMENSION_DIRECT" ),     SUBTYPE::DIRECT },
         { wxT( "DIMENSION_ANGLED" ),     SUBTYPE::ANGLED },
@@ -2143,11 +2143,11 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::POURING::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "FILLED" ) )
         {
-            FillType = COPPER_FILL_TYPEYPE::FILLED;
+            FillType = COPPER_FILL_TYPE::FILLED;
         }
         else if( cNodeName == wxT( "HATCHCODEREF" ) )
         {
-            FillType    = COPPER_FILL_TYPEYPE::HATCHED;
+            FillType    = COPPER_FILL_TYPE::HATCHED;
             HatchCodeID = GetXmlAttributeIDString( cNode, 0 );
         }
         else

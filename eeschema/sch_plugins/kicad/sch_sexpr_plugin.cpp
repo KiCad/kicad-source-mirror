@@ -82,16 +82,10 @@ static void formatFill( const LIB_ITEM* aItem, OUTPUTFORMATTER& aFormatter, int 
 
     switch( aItem->GetFillMode() )
     {
-    case FILL_TYPE::FILLED_SHAPE:
-        fillType = "outline";
-        break;
-    case FILL_TYPE::FILLED_WITH_BG_BODYCOLOR:
-        fillType = "background";
-        break;
-    case FILL_TYPE::NO_FILL:
-        KI_FALLTHROUGH;
-    default:
-        fillType = "none";
+    case FILL_TYPE::FILLED_SHAPE:             fillType = "outline";    break;
+    case FILL_TYPE::FILLED_WITH_BG_BODYCOLOR: fillType = "background"; break;
+    case FILL_TYPE::NO_FILL:                                           KI_FALLTHROUGH;
+    default:                                  fillType = "none";
     }
 
     aFormatter.Print( aNestLevel, "(fill (type %s))", fillType );

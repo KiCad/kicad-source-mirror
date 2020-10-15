@@ -1005,7 +1005,7 @@ public:
     {
         struct POURING
         {
-            enum class COPPER_FILL_TYPEYPE
+            enum class COPPER_FILL_TYPE
             {
                 FILLED,
                 HATCHED ///< This is a user defined HATCHCODE_ID
@@ -1062,7 +1062,7 @@ public:
             bool TargetForAutorouting = false; ///< true when subnode "AUTOROUTETARGET" is present
 
             RELIEF_TYPE      ReliefType  = RELIEF_TYPE::CROSS;       ///< See RELIEF_TYPE
-            COPPER_FILL_TYPEYPE FillType    = COPPER_FILL_TYPEYPE::FILLED; ///< Assume solid fill
+            COPPER_FILL_TYPE FillType    = COPPER_FILL_TYPE::FILLED; ///< Assume solid fill
             HATCHCODE_ID     HatchCodeID = wxEmptyString; ///< Only for FillType = HATCHED
 
             void Parse( XNODE* aNode );

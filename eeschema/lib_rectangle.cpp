@@ -35,12 +35,11 @@
 #include <transform.h>
 
 
-LIB_RECTANGLE::LIB_RECTANGLE( LIB_PART*      aParent ) :
-    LIB_ITEM( LIB_RECTANGLE_T, aParent )
+LIB_RECTANGLE::LIB_RECTANGLE( LIB_PART* aParent ) : LIB_ITEM( LIB_RECTANGLE_T, aParent )
 {
-    m_Width                = 0;
+    m_Width      = 0;
     m_Fill       = FILL_TYPE::NO_FILL;
-    m_isFillable           = true;
+    m_isFillable = true;
 }
 
 

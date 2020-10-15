@@ -513,17 +513,10 @@ void SCH_SEXPR_PARSER::parseFill( FILL_PARAMS& aFill )
 
             switch( token )
             {
-            case T_none:
-                aFill.m_FillType = FILL_TYPE::NO_FILL;
-                break;
-            case T_outline:
-                aFill.m_FillType = FILL_TYPE::FILLED_SHAPE;
-                break;
-            case T_background:
-                aFill.m_FillType = FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
-                break;
-            default:
-                Expecting( "none, outline, or background" );
+            case T_none:       aFill.m_FillType = FILL_TYPE::NO_FILL;                  break;
+            case T_outline:    aFill.m_FillType = FILL_TYPE::FILLED_SHAPE;             break;
+            case T_background: aFill.m_FillType = FILL_TYPE::FILLED_WITH_BG_BODYCOLOR; break;
+            default:           Expecting( "none, outline, or background" );
             }
 
             NeedRIGHT();

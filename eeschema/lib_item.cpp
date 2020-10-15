@@ -29,7 +29,7 @@
 #include <general.h>
 #include <lib_item.h>
 
-const int FILL_TYPEab[3] = { 'N', 'F', 'f' };
+const int fill_tab[3] = { 'N', 'F', 'f' };
 
 
 LIB_ITEM::LIB_ITEM( KICAD_T        aType,
