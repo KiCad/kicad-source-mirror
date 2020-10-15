@@ -24,9 +24,6 @@
 
 #include <vector>
 #include <bezier_curves.h>
-#include <base_units.h>     // for IU_PER_MM
-#include <pcbnew.h>
-#include <pcb_edit_frame.h>
 #include <trigo.h>
 #include <class_board.h>
 #include <class_pad.h>
@@ -39,7 +36,6 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
-#include <math/util.h>      // for KiROUND
 
 
 // A helper struct for the callback function

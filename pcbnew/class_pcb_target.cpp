@@ -30,7 +30,6 @@
  */
 
 #include <bitmaps.h>
-#include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_pcb_target.h>
 #include <base_units.h>

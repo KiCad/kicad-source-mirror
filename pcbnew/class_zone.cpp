@@ -27,11 +27,10 @@
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_null.h>
 #include <advanced_config.h>
-#include <pcb_base_frame.h>
+#include <pcb_edit_frame.h>
 #include <pcb_screen.h>
 #include <class_board.h>
 #include <class_zone.h>
-#include <pcb_edit_frame.h> // current layer for msgpanel
 #include <math_for_graphics.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>

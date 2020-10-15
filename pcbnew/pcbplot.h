@@ -36,7 +36,6 @@
 #include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
-#include <wx/filename.h>
 
 class PLOTTER;
 class PCB_TEXT;
@@ -50,6 +49,7 @@ class FP_TEXT;
 class ZONE_CONTAINER;
 class BOARD;
 class REPORTER;
+class wxFileName;
 
 
 // Define min and max reasonable values for plot/print scale

@@ -28,12 +28,10 @@
 
 #include <eda_base_frame.h>
 #include <kiway_player.h>
-#include <climits>
 #include <gal/gal_display_options.h>
 #include <gal/color4d.h>
 #include <class_draw_panel_gal.h>
 #include <origin_transforms.h>
-#include <wx/fdrepdlg.h>
 #include "hotkeys_basic.h"
 
 class wxSingleInstanceChecker;
@@ -41,6 +39,7 @@ class ACTION_TOOLBAR;
 class COLOR_SETTINGS;
 class TOOL_MENU;
 class APP_SETTINGS_BASE;
+class wxFindReplaceData;
 
 namespace KIGFX
 {
