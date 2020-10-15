@@ -617,101 +617,120 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         }
     }
 
+    auto processConstraint =
+            [&]( const CONSTRAINT_WITH_CONDITIONS* c )
+            {
+                implicit = c->parentRule && c->parentRule->m_Implicit;
+
+                REPORT( "" )
+
+                if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
+                {
+                    int clearance = c->constraint.m_Value.Min();
+                    REPORT( wxString::Format( _( "Checking %s; clearance: %s." ),
+                                              c->constraint.GetName(),
+                                              MessageTextFromValue( UNITS, clearance ) ) )
+                }
+                else if( aConstraintId == DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE )
+                {
+                    int clearance = c->constraint.m_Value.Min();
+                    REPORT( wxString::Format( _( "Checking %s; courtyard clearance: %s." ),
+                                              c->constraint.GetName(),
+                                              MessageTextFromValue( UNITS, clearance ) ) )
+                }
+                else if( aConstraintId == DRC_CONSTRAINT_TYPE_SILK_CLEARANCE )
+                {
+                    int clearance = c->constraint.m_Value.Min();
+                    REPORT( wxString::Format( _( "Checking %s; silk clearance: %s." ),
+                                              c->constraint.GetName(),
+                                              MessageTextFromValue( UNITS, clearance ) ) )
+                }
+                else if( aConstraintId == DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE )
+                {
+                    int clearance = c->constraint.m_Value.Min();
+                    REPORT( wxString::Format( _( "Checking %s; hole clearance: %s." ),
+                                              c->constraint.GetName(),
+                                              MessageTextFromValue( UNITS, clearance ) ) )
+                }
+                else if( aConstraintId == DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE )
+                {
+                    int clearance = c->constraint.m_Value.Min();
+                    REPORT( wxString::Format( _( "Checking %s; edge clearance: %s." ),
+                                              c->constraint.GetName(),
+                                              MessageTextFromValue( UNITS, clearance ) ) )
+                }
+                else
+                {
+                    REPORT( wxString::Format( _( "Checking %s." ),
+                                              c->constraint.GetName() ) )
+                }
+
+                if( aLayer != UNDEFINED_LAYER && !c->layerTest.test( aLayer ) )
+                {
+                    if( c->parentRule )
+                    {
+                        REPORT( wxString::Format( _( "Rule layer \"%s\" not matched." ),
+                                                  c->parentRule->m_LayerSource ) )
+                        REPORT( "Rule ignored." )
+                    }
+
+                    return false;
+                }
+
+                if( !c->condition || c->condition->GetExpression().IsEmpty() )
+                {
+                    REPORT( implicit ? _( "Unconditional constraint applied." )
+                                     : _( "Unconditional rule applied." ) );
+
+                    constraintRef = &c->constraint;
+                    return true;
+                }
+                else
+                {
+                    // Don't report on implicit rule conditions; they're synthetic.
+                    if( !implicit )
+                    {
+                        REPORT( wxString::Format( _( "Checking rule condition \"%s\"." ),
+                                                  c->condition->GetExpression() ) )
+                    }
+
+                    if( c->condition->EvaluateFor( a, b, aLayer, aReporter ) )
+                    {
+                        REPORT( implicit ? _( "Constraint applied." )
+                                         : _( "Rule applied; overrides previous constraints." ) )
+
+                        constraintRef = &c->constraint;
+                        return true;
+                    }
+                    else
+                    {
+                        REPORT( implicit ? _( "Membership not satisfied; constraint ignored." )
+                                         : _( "Condition not satisfied; rule ignored." ) )
+
+                        return false;
+                    }
+                }
+            };
+
     if( m_constraintMap.count( aConstraintId ) )
     {
         std::vector<CONSTRAINT_WITH_CONDITIONS*>* ruleset = m_constraintMap[ aConstraintId ];
 
-        // Last matching rule wins, so process in reverse order
-        for( int ii = (int) ruleset->size() - 1; ii >= 0; --ii )
+        if( aReporter )
         {
-            const CONSTRAINT_WITH_CONDITIONS* rcons = ruleset->at( ii );
-            implicit = rcons->parentRule && rcons->parentRule->m_Implicit;
-
-            REPORT( "" )
-
-            if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
+            // We want to see all results so process in "natural" order
+            for( int ii = 0; ii < (int) ruleset->size(); ++ii )
             {
-                int clearance = rcons->constraint.m_Value.Min();
-                REPORT( wxString::Format( _( "Checking %s; clearance: %s." ),
-                                          rcons->constraint.GetName(),
-                                          MessageTextFromValue( UNITS, clearance ) ) )
+                processConstraint( ruleset->at( ii ) );
             }
-            else if( aConstraintId == DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE )
+        }
+        else
+        {
+            // Last matching rule wins, so process in reverse order and quit when match found
+            for( int ii = (int) ruleset->size() - 1; ii >= 0; --ii )
             {
-                int clearance = rcons->constraint.m_Value.Min();
-                REPORT( wxString::Format( _( "Checking %s; courtyard clearance: %s." ),
-                                          rcons->constraint.GetName(),
-                                          MessageTextFromValue( UNITS, clearance ) ) )
-            }
-            else if( aConstraintId == DRC_CONSTRAINT_TYPE_SILK_CLEARANCE )
-            {
-                int clearance = rcons->constraint.m_Value.Min();
-                REPORT( wxString::Format( _( "Checking %s; silk clearance: %s." ),
-                                          rcons->constraint.GetName(),
-                                          MessageTextFromValue( UNITS, clearance ) ) )
-            }
-            else if( aConstraintId == DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE )
-            {
-                int clearance = rcons->constraint.m_Value.Min();
-                REPORT( wxString::Format( _( "Checking %s; hole clearance: %s." ),
-                                          rcons->constraint.GetName(),
-                                          MessageTextFromValue( UNITS, clearance ) ) )
-            }
-            else if( aConstraintId == DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE )
-            {
-                int clearance = rcons->constraint.m_Value.Min();
-                REPORT( wxString::Format( _( "Checking %s; edge clearance: %s." ),
-                                          rcons->constraint.GetName(),
-                                          MessageTextFromValue( UNITS, clearance ) ) )
-            }
-            else
-            {
-                REPORT( wxString::Format( _( "Checking %s." ),
-                                          rcons->constraint.GetName() ) )
-            }
-
-            if( aLayer != UNDEFINED_LAYER && !rcons->layerTest.test( aLayer ) )
-            {
-                if( rcons->parentRule )
-                {
-                    REPORT( wxString::Format( _( "Rule layer \"%s\" not matched." ),
-                                              rcons->parentRule->m_LayerSource ) )
-                    REPORT( "Rule ignored." )
-                }
-
-                continue;
-            }
-
-            if( !rcons->condition || rcons->condition->GetExpression().IsEmpty() )
-            {
-                REPORT( implicit ? _( "Unconditional constraint applied." )
-                                 : _( "Unconditional rule applied." ) )
-
-                constraintRef = &rcons->constraint;
-                break;
-            }
-            else
-            {
-                // Don't report on implicit rule conditions; they're synthetic.
-                if( !implicit )
-                {
-                    REPORT( wxString::Format( _( "Checking rule condition \"%s\"." ),
-                                              rcons->condition->GetExpression() ) )
-                }
-
-                if( rcons->condition->EvaluateFor( a, b, aLayer, aReporter ) )
-                {
-                    REPORT( implicit ? _( "Constraint applied." )
-                                     : _( "Rule applied.  (No further rules will be checked.)" ) )
-
-                    constraintRef = &rcons->constraint;
+                if( processConstraint( ruleset->at( ii ) ) )
                     break;
-                }
-                else
-                {
-                    REPORT( implicit ? _( "Membership not satisfied; constraint ignored." )
-                                     : _( "Condition not satisfied; rule ignored." ) )
-                }
             }
         }
     }

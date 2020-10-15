@@ -253,6 +253,29 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     BOARD_ITEM* a = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
     BOARD_ITEM* b = static_cast<BOARD_ITEM*>( selection.GetItem( 1 ) );
 
+    if( a->Type() == PCB_TRACE_T || a->Type() == PCB_ARC_T )
+        layer = a->GetLayer();
+    else if( b->Type() == PCB_TRACE_T || b->Type() == PCB_ARC_T )
+        layer = b->GetLayer();
+    else if( a->Type() == PCB_PAD_T && static_cast<D_PAD*>( a )->GetAttribute() == PAD_ATTRIB_SMD )
+    {
+        D_PAD* pad = static_cast<D_PAD*>( a );
+
+        if( pad->GetAttribute() == PAD_ATTRIB_SMD && pad->IsOnLayer( F_Cu ) )
+            layer = F_Cu;
+        else
+            layer = B_Cu;
+    }
+    else if( b->Type() == PCB_PAD_T )
+    {
+        D_PAD* pad = static_cast<D_PAD*>( b );
+
+        if( pad->GetAttribute() == PAD_ATTRIB_SMD && pad->IsOnLayer( F_Cu ) )
+            layer = F_Cu;
+        else
+            layer = B_Cu;
+    }
+
     if( a->Type() != PCB_ZONE_AREA_T && b->Type() == PCB_ZONE_AREA_T )
         std::swap( a, b );
     else if( !a->IsConnected() && b->IsConnected() )
