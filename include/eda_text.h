@@ -25,9 +25,9 @@
 #ifndef EDA_TEXT_H_
 #define EDA_TEXT_H_
 
-#include <common.h>                 // wxStringSplit
 #include <eda_rect.h>
 
+class OUTPUTFORMATTER;
 class SHAPE_COMPOUND;
 class SHAPE_POLY_SET;
 class wxFindReplaceData;
