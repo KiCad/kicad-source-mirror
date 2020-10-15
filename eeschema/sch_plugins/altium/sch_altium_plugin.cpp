@@ -883,17 +883,12 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
         rect->SetEnd( GetRelativePosition( elem.bottomLeft, component ) );
         rect->SetWidth( elem.lineWidth );
 
-        if( elem.isSolid )
-        {
-            if( elem.color == elem.areacolor )
-                rect->SetFillMode( FILLED_SHAPE );
-            else
-                rect->SetFillMode( FILLED_WITH_BG_BODYCOLOR );
-        }
+        if( !elem.isSolid )
+            rect->SetFillMode( FILL_TYPE::NO_FILL );
+        else if( elem.color == elem.areacolor )
+            rect->SetFillMode( FILL_TYPE::FILLED_SHAPE );
         else
-        {
-            rect->SetFillMode( NO_FILL );
-        }
+            rect->SetFillMode( FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
     }
 }
 
