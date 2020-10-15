@@ -82,7 +82,7 @@ private:
     void        applyPlotSettings();
     PLOT_FORMAT getPlotFormat();
 
-    void        setPlotModeChoiceSelection( EDA_DRAW_MODE_T aPlotMode )
+    void        setPlotModeChoiceSelection( PLOT_MODE aPlotMode )
     {
         m_plotModeOpt->SetSelection( aPlotMode == SKETCH ? 1 : 0 );
     }

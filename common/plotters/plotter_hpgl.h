@@ -83,27 +83,27 @@ public:
                            void * aData = NULL) override;
 
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
-                               EDA_DRAW_MODE_T tracemode, void* aData ) override;
+                               PLOT_MODE tracemode, void* aData ) override;
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int rayon, FILL_TYPE fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void PenTo( const wxPoint& pos, char plume ) override;
     virtual void FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
-                                 EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+                                 PLOT_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
-                               EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+                               PLOT_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
-                               double aOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+                               double aOrient, PLOT_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                     int aCornerRadius, double aOrient,
-                                    EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+                                    PLOT_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                  SHAPE_POLY_SET* aPolygons,
-                                 EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+                                 PLOT_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, EDA_DRAW_MODE_T aTraceMode,
+                                 double aPadOrient, PLOT_MODE aTraceMode,
                                  void* aData ) override;
     virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
-                            double aOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+                            double aOrient, PLOT_MODE aTraceMode, void* aData ) override;
 
 protected:
     void penControl( char plume );

@@ -66,22 +66,22 @@ public:
 
     // Pad routines are handled with lower level primitives
     virtual void FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
-                                 EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+                                 PLOT_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
-                               EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+                               PLOT_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
-                               double aPadOrient, EDA_DRAW_MODE_T aTraceMode,
+                               double aPadOrient, PLOT_MODE aTraceMode,
                                void* aData ) override;
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                     int aCornerRadius, double aOrient,
-                                    EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+                                    PLOT_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                  SHAPE_POLY_SET* aPolygons,
-                                 EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+                                 PLOT_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+                                 double aPadOrient, PLOT_MODE aTraceMode, void* aData ) override;
     virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
-                            double aOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+                            double aOrient, PLOT_MODE aTraceMode, void* aData ) override;
 
     /** The SetColor implementation is split with the subclasses:
      * The PSLIKE computes the rgb values, the subclass emits the

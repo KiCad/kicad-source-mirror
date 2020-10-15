@@ -435,7 +435,7 @@ void PLOTTER::Marker( const wxPoint& position, int diametre, unsigned aShapeId )
 
 
 void PLOTTER::segmentAsOval( const wxPoint& start, const wxPoint& end, int width,
-                             EDA_DRAW_MODE_T tracemode )
+                             PLOT_MODE tracemode )
 {
     wxPoint center( (start.x + end.x) / 2, (start.y + end.y) / 2 );
     wxSize  size( end.x - start.x, end.y - start.y );
@@ -504,7 +504,7 @@ void PLOTTER::sketchOval( const wxPoint& pos, const wxSize& aSize, double orient
 
 
 void PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end, int width,
-                            EDA_DRAW_MODE_T tracemode, void* aData )
+                            PLOT_MODE tracemode, void* aData )
 {
     if( tracemode == FILLED )
     {
@@ -528,7 +528,7 @@ void PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end, int width,
 
 
 void PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
-                        int radius, int width, EDA_DRAW_MODE_T tracemode, void* aData )
+                        int radius, int width, PLOT_MODE tracemode, void* aData )
 {
     if( tracemode == FILLED )
         Arc( centre, StAngle, EndAngle, radius, FILL_TYPE::NO_FILL, width );
@@ -544,7 +544,7 @@ void PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
 
 
 void PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
-                         EDA_DRAW_MODE_T tracemode, void* aData )
+                         PLOT_MODE tracemode, void* aData )
 {
     if( tracemode == FILLED )
         Rect( p1, p2, FILL_TYPE::NO_FILL, width );
@@ -566,7 +566,7 @@ void PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
 
 
 void PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width,
-                           EDA_DRAW_MODE_T tracemode, void* aData )
+                           PLOT_MODE tracemode, void* aData )
 {
     if( tracemode == FILLED )
         Circle( pos, diametre, FILL_TYPE::NO_FILL, width );
@@ -580,7 +580,7 @@ void PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width,
 
 
 void PLOTTER::FilledCircle( const wxPoint& pos, int diametre,
-                            EDA_DRAW_MODE_T tracemode, void* aData )
+                            PLOT_MODE tracemode, void* aData )
 {
     if( tracemode == FILLED )
         Circle( pos, diametre, FILL_TYPE::FILLED_SHAPE, 0 );

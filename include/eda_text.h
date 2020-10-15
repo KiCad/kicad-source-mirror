@@ -268,7 +268,7 @@ public:
      * @param aDisplay_mode = FILLED or SKETCH
      */
     void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, COLOR4D aColor,
-                EDA_DRAW_MODE_T aDisplay_mode = FILLED );
+                PLOT_MODE aDisplay_mode = FILLED );
 
     /**
      * Convert the text shape to a list of segment.
@@ -396,7 +396,7 @@ private:
      * @param aPos = the position of this line ).
      */
     void printOneLineOfText( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, COLOR4D aColor,
-                             EDA_DRAW_MODE_T aFillMode, const wxString& aText,
+                             PLOT_MODE aFillMode, const wxString& aText,
                              const wxPoint& aPos );
 };
 

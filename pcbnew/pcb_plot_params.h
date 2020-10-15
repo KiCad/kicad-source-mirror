@@ -24,7 +24,7 @@
  */
 
 #include <wx/wx.h>
-#include <eda_text.h>                // EDA_DRAW_MODE_T
+#include <plot_mode.h>
 #include <plotters_specific.h>
 #include <layers_id_colors_and_visibility.h>
 
@@ -53,7 +53,7 @@ private:
     /** FILLED or SKETCH selects how to plot filled objects.
      *  FILLED or SKETCH not available with all drivers: some have fixed mode
      */
-    EDA_DRAW_MODE_T m_plotMode;
+    PLOT_MODE m_plotMode;
 
     /** DXF format: Plot items in outline (polygon) mode
      * In polygon mode, each item to plot is converted to a polygon, and all
@@ -223,8 +223,8 @@ public:
         return m_textMode;
     }
 
-    void        SetPlotMode( EDA_DRAW_MODE_T aPlotMode ) { m_plotMode = aPlotMode; }
-    EDA_DRAW_MODE_T GetPlotMode() const { return m_plotMode; }
+    void        SetPlotMode( PLOT_MODE aPlotMode ) { m_plotMode = aPlotMode; }
+    PLOT_MODE GetPlotMode() const { return m_plotMode; }
 
     void        SetDXFPlotPolygonMode( bool aFlag ) { m_DXFplotPolygonMode = aFlag; }
     bool        GetDXFPlotPolygonMode() const { return m_DXFplotPolygonMode; }

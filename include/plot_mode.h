@@ -21,7 +21,7 @@
 #define PLOT_MODE_H
 
 /* Options to draw items with thickness ( segments, arcs, circles, texts...) */
-enum EDA_DRAW_MODE_T
+enum PLOT_MODE
 {
     SKETCH = 0,  // sketch mode: draw segments outlines only
     FILLED = 1 // normal mode: solid segments
