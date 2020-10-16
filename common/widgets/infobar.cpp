@@ -26,6 +26,7 @@
 #include <wx/infobar.h>
 #include <wx/sizer.h>
 #include <wx/timer.h>
+#include <wx/hyperlink.h>
 
 
 wxDEFINE_EVENT( KIEVT_SHOW_INFOBAR,    wxCommandEvent );
@@ -193,6 +194,19 @@ void WX_INFOBAR::AddButton( wxButton* aButton )
     aButton->SetWindowVariant( wxWINDOW_VARIANT_SMALL );
 #endif // __WXMAC__
     sizer->Add( aButton, wxSizerFlags().Centre().Border( wxRIGHT ) );
+
+    if( IsShown() )
+        sizer->Layout();
+}
+
+
+void WX_INFOBAR::AddButton( wxHyperlinkCtrl* aHypertextButton )
+{
+    wxSizer* sizer = GetSizer();
+
+    wxASSERT( aHypertextButton );
+
+    sizer->Add( aHypertextButton, wxSizerFlags().Centre().Border( wxRIGHT ) );
 
     if( IsShown() )
         sizer->Layout();

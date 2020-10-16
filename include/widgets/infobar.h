@@ -25,7 +25,9 @@
 #include <wx/infobar.h>
 #include <wx/wx.h>
 
+
 class wxAuiManager;
+class wxHyperlinkCtrl;
 
 
 enum
@@ -104,6 +106,14 @@ public:
      * @param aButton is the button to add
      */
     void AddButton( wxButton* aButton );
+
+    /**
+     * Add an already created hypertext link to the infobar.
+     * New buttons are added in the right-most position.
+     *
+     * @param aHypertextButton is the button to add
+     */
+    void AddButton( wxHyperlinkCtrl* aHypertextButton );
 
     /**
      * Add a button with the provided ID and text.

@@ -475,9 +475,7 @@ public:
     /**
      * Function ShowBoardSetupDialog
      */
-    void ShowBoardSetupDialog( const wxString& aInitialPage = wxEmptyString,
-                               const wxString& aErrorMsg = wxEmptyString, int aErrorCtrlId = -1,
-                               int aErrorLine = -1, int aErrorCol = -1 );
+    void ShowBoardSetupDialog( const wxString& aInitialPage = wxEmptyString );
 
     /* toolbars update UI functions: */
 

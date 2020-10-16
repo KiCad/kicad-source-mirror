@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <wx/numdlg.h>
+#include <wx/hyperlink.h>
 #include <functional>
 using namespace std::placeholders;
 #include <class_board.h>
@@ -32,6 +32,7 @@ using namespace std::placeholders;
 #include <dialogs/dialog_pns_settings.h>
 #include <dialogs/dialog_pns_diff_pair_dimensions.h>
 #include <dialogs/dialog_track_via_size.h>
+#include <widgets/infobar.h>
 #include <confirm.h>
 #include <bitmaps.h>
 #include <tool/action_menu.h>
@@ -717,15 +718,39 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         // Cannot place microvias or blind vias if not allowed (obvious)
         if( ( viaType == VIATYPE::BLIND_BURIED ) && ( !bds.m_BlindBuriedViaAllowed ) )
         {
-            frame()->ShowInfoBarError( _( "Blind/buried vias have to be enabled in "
-                                          "Board Setup > Design Rules > Constraints." ) );
+            WX_INFOBAR* infobar = frame()->GetInfoBar();
+            wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY,
+                                                           _("Show board setup"), wxEmptyString );
+
+            button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                    [&]( wxHyperlinkEvent& aEvent )
+                    {
+                        getEditFrame<PCB_EDIT_FRAME>()->ShowBoardSetupDialog( _( "Constraints" ) );
+                    } ) );
+
+            infobar->ShowMessageFor( _( "Blind/buried vias have to be enabled in "
+                                        "Board Setup > Design Rules > Constraints." ),
+                                     10000, wxICON_ERROR );
+            infobar->AddButton( button );
             return false;
         }
 
         if( ( viaType == VIATYPE::MICROVIA ) && ( !bds.m_MicroViasAllowed ) )
         {
-            frame()->ShowInfoBarError( _( "Microvias have to be enabled in "
-                                          "Board Setup > Design Rules > Constraints." ) );
+            WX_INFOBAR* infobar = frame()->GetInfoBar();
+            wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY,
+                                                           _("Show board setup"), wxEmptyString );
+
+            button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                    [&]( wxHyperlinkEvent& aEvent )
+                    {
+                        getEditFrame<PCB_EDIT_FRAME>()->ShowBoardSetupDialog( _( "Constraints" ) );
+                    } ) );
+
+            infobar->ShowMessageFor( _( "Microvias have to be enabled in "
+                                        "Board Setup > Design Rules > Constraints." ),
+                                     10000, wxICON_ERROR );
+            infobar->AddButton( button );
             return false;
         }
 

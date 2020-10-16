@@ -210,8 +210,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
         // issues (on at least OSX) if we don't.
         drcTool->DestroyDRCDialog();
 
-        m_brdEditor->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
-                                           pe.lineNumber, pe.byteIndex );
+        m_brdEditor->ShowBoardSetupDialog( _( "Rules" ) );
 
         return;
     }

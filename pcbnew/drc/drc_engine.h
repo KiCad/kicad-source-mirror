@@ -164,7 +164,7 @@ public:
     bool GetReportAllTrackErrors() const { return m_reportAllTrackErrors; }
     bool GetTestFootprints() const { return m_testFootprints; }
 
-    bool CompileRules();
+    bool RulesValid() { return m_rulesValid; }
 
     void ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos );
     bool ReportProgress( double aProgress );
@@ -193,7 +193,7 @@ private:
      */
     void loadRules( const wxFileName& aPath );
 
-    void freeCompiledRules();
+    void compileRules();
 
     struct CONSTRAINT_WITH_CONDITIONS
     {
@@ -215,6 +215,7 @@ protected:
 
     std::vector<DRC_RULE_CONDITION*> m_ruleConditions;
     std::vector<DRC_RULE*>           m_rules;
+    bool                             m_rulesValid;
     std::vector<DRC_TEST_PROVIDER*>  m_testProviders;
 
     EDA_UNITS                        m_userUnits;

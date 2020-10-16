@@ -28,7 +28,9 @@
 #include <connectivity/connectivity_data.h>
 #include <board_commit.h>
 #include <widgets/progress_reporter.h>
+#include <widgets/infobar.h>
 #include <wx/event.h>
+#include <wx/hyperlink.h>
 #include <tool/tool_manager.h>
 #include "pcb_actions.h"
 #include "zone_filler_tool.h"
@@ -101,6 +103,23 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
         toFill.push_back( zone );
 
     ZONE_FILLER filler( board(), &commit );
+
+    if( !board()->GetDesignSettings().m_DRCEngine->RulesValid() )
+    {
+        WX_INFOBAR* infobar = frame()->GetInfoBar();
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _("Show DRC rules"),
+                                                       wxEmptyString );
+
+        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                      [&]( wxHyperlinkEvent& aEvent )
+                      {
+                          getEditFrame<PCB_EDIT_FRAME>()->ShowBoardSetupDialog( _( "Rules" ) );
+                      } ) );
+
+        infobar->ShowMessageFor( _( "Zone fills may be inaccurate.  DRC rules contain errors." ),
+                                 10000, wxICON_WARNING );
+        infobar->AddButton( button );
+    }
 
     if( aReporter )
         filler.SetProgressReporter( aReporter );

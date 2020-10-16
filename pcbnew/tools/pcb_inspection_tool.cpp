@@ -197,8 +197,7 @@ void PCB_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_TYPE_T aClearanceType,
     }
     catch( PARSE_ERROR& pe )
     {
-        m_frame->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
-                                       pe.lineNumber, pe.byteIndex );
+        m_frame->ShowBoardSetupDialog( _( "Rules" ) );
         return;
     }
 
@@ -390,8 +389,7 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     }
     catch( PARSE_ERROR& pe )
     {
-        m_frame->ShowBoardSetupDialog( _( "Rules" ), pe.What(), ID_RULES_EDITOR,
-                                       pe.lineNumber, pe.byteIndex );
+        m_frame->ShowBoardSetupDialog( _( "Rules" ) );
         return 1;
     }
 

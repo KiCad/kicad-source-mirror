@@ -386,6 +386,9 @@ bool PANEL_SETUP_RULES::TransferDataToWindow()
                 ConvertSmartQuotesAndDashes( &str );
                 m_textEditor->AddText( str << '\n' );
             }
+
+            wxCommandEvent dummy;
+            OnCompile( dummy );
         }
     }
 

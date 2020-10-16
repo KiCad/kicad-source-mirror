@@ -406,7 +406,7 @@ void DRC_ENGINE::loadRules( const wxFileName& aPath )
 }
 
 
-bool DRC_ENGINE::CompileRules()
+void DRC_ENGINE::compileRules()
 {
     ReportAux( wxString::Format( "Compiling Rules (%d rules, %d conditions): ",
                                  (int) m_rules.size(),
@@ -477,8 +477,6 @@ bool DRC_ENGINE::CompileRules()
             }
         }
     }
-
-    return true;
 }
 
 
@@ -497,14 +495,17 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
 
     m_ruleConditions.clear();
     m_rules.clear();
+    m_rulesValid = false;
 
     loadImplicitRules();
     loadRules( aRulePath );
 
-    CompileRules();
+    compileRules();
 
     for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
         m_errorLimits[ ii ] = INT_MAX;
+
+    m_rulesValid = true;
 }
 
 

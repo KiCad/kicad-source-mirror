@@ -876,8 +876,7 @@ void PCB_EDIT_FRAME::ActivateGalCanvas()
 }
 
 
-void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, const wxString& aErrorMsg,
-                                           int aErrorCtrlId, int aErrorLine, int aErrorCol )
+void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
 {
     // Make sure everything's up-to-date
     GetBoard()->BuildListOfNets();
@@ -886,9 +885,6 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, const w
 
     if( !aInitialPage.IsEmpty() )
         dlg.SetInitialPage( aInitialPage, wxEmptyString );
-
-    if( !aErrorMsg.IsEmpty() )
-        dlg.SetError( aErrorMsg, aInitialPage, aErrorCtrlId, aErrorLine, aErrorCol );
 
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
