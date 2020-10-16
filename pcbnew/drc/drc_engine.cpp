@@ -497,10 +497,26 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
     m_rules.clear();
     m_rulesValid = false;
 
-    loadImplicitRules();
-    loadRules( aRulePath );
+    try         // attempt to load full set of rules (implicit + user rules)
+    {
+        loadImplicitRules();
+        loadRules( aRulePath );
+        compileRules();
+    }
+    catch( PARSE_ERROR& original_parse_error )
+    {
+        try     // try again with just our implicit rules
+        {
+            loadImplicitRules();
+            compileRules();
+        }
+        catch( PARSE_ERROR& ignore )
+        {
+            wxFAIL_MSG( "Compiling implict rules failed." );
+        }
 
-    compileRules();
+        throw original_parse_error;
+    }
 
     for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
         m_errorLimits[ ii ] = INT_MAX;
