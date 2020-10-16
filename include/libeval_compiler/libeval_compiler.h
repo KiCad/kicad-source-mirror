@@ -168,6 +168,11 @@ public:
         return nullUnits;
     }
 
+    virtual wxString GetSupportedUnitsMessage() const
+    {
+        return wxEmptyString;
+    }
+
     virtual double Convert( const wxString& aString, int unitType ) const
     {
         return 0.0;

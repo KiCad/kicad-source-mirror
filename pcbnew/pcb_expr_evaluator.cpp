@@ -542,6 +542,11 @@ public:
         return pcbUnits;
     }
 
+    virtual wxString GetSupportedUnitsMessage() const override
+    {
+        return _( "must be mm, in, or mil" );
+    }
+
     virtual double Convert( const wxString& aString, int unitId ) const override
     {
         double v = wxAtof( aString );

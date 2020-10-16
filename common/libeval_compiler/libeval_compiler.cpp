@@ -549,7 +549,8 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
 
 
         default:
-            reportError( CST_PARSE, wxString::Format( _( "Unrecognized character '%c'" ), (char) ch ) );
+            reportError( CST_PARSE, wxString::Format( _( "Unrecognized character '%c'" ),
+                                                      (char) ch ) );
             break;
         }
 
@@ -979,6 +980,11 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             }
             else
             {
+                msg.Printf( _( "Missing units for '%s'| (%s)" ),
+                            *node->value.str,
+                            m_unitResolver->GetSupportedUnitsMessage() );
+                reportError( CST_CODEGEN, msg, node->srcPos );
+
                 value = DoubleValueFromString( EDA_UNITS::UNSCALED, *node->value.str );
             }
 
