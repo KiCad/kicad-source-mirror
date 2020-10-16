@@ -3,35 +3,38 @@ msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-15 17:08-0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2020-10-16 16:04+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
+"master-source/nb_NO/>\n"
+"Language: no\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:50
 msgid "All Files (*.*)|*.*"
-msgstr ""
+msgstr "Alle filer (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:95
 #, c-format
 msgid "All supported files (%s)"
-msgstr ""
+msgstr "Alle støttede filer (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
 msgid "Available paths:"
-msgstr ""
+msgstr "Tilgjengelige stier:"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
 msgid "Configure Paths"
-msgstr ""
+msgstr "Sett opp stier"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.h:63
 msgid "Select 3D Model"
-msgstr ""
+msgstr "Velg 3D-modell"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56
@@ -58,7 +61,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1330
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:63
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:39
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:84
@@ -83,13 +86,13 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1341
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:80
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:49
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:94
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:139
 msgid "Z:"
-msgstr ""
+msgstr "Z:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:698 pcbnew/class_module.cpp:776
