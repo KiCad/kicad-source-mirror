@@ -28,6 +28,7 @@
 #include <connectivity/connectivity_data.h>
 #include <drc/drc_engine.h>
 #include <kicad_string.h>
+#include <i18n_utility.h>
 
 using namespace std::placeholders;
 
@@ -153,15 +154,15 @@ static struct BOARD_CONNECTED_ITEM_DESC
         REGISTER_TYPE( BOARD_CONNECTED_ITEM );
         propMgr.InheritsAfter( TYPE_HASH( BOARD_CONNECTED_ITEM ), TYPE_HASH( BOARD_ITEM ) );
 
-        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _( "Layer" ),
-                new PROPERTY_ENUM<BOARD_CONNECTED_ITEM, PCB_LAYER_ID, BOARD_ITEM>( _( "Layer" ),
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ),
+                new PROPERTY_ENUM<BOARD_CONNECTED_ITEM, PCB_LAYER_ID, BOARD_ITEM>( _HKI( "Layer" ),
                     &BOARD_CONNECTED_ITEM::SetLayer, &BOARD_CONNECTED_ITEM::GetLayer ) );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<BOARD_CONNECTED_ITEM, int>( _( "Net" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<BOARD_CONNECTED_ITEM, int>( _HKI( "Net" ),
                     &BOARD_CONNECTED_ITEM::SetNetCode, &BOARD_CONNECTED_ITEM::GetNetCode ) );
-        propMgr.AddProperty( new PROPERTY<BOARD_CONNECTED_ITEM, wxString>( _( "NetName" ),
+        propMgr.AddProperty( new PROPERTY<BOARD_CONNECTED_ITEM, wxString>( _HKI( "NetName" ),
                     NO_SETTER( BOARD_CONNECTED_ITEM, wxString ), &BOARD_CONNECTED_ITEM::GetNetname ) );
-        propMgr.AddProperty( new PROPERTY<BOARD_CONNECTED_ITEM, wxString>( _( "NetClass" ),
+        propMgr.AddProperty( new PROPERTY<BOARD_CONNECTED_ITEM, wxString>( _HKI( "NetClass" ),
                     NO_SETTER( BOARD_CONNECTED_ITEM, wxString ), &BOARD_CONNECTED_ITEM::GetNetClassName ) );
     }
 } _BOARD_CONNECTED_ITEM_DESC;

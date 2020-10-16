@@ -36,6 +36,7 @@
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <trigo.h>
+#include <i18n_utility.h>
 
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInFP )
         : BOARD_CONNECTED_ITEM( aParent, aInFP ? PCB_FP_ZONE_AREA_T : PCB_ZONE_AREA_T ),
@@ -1368,33 +1369,33 @@ static struct ZONE_CONTAINER_DESC
     ZONE_CONTAINER_DESC()
     {
         ENUM_MAP<ZONE_CONNECTION>::Instance()
-                .Map( ZONE_CONNECTION::INHERITED,   _( "Inherited" ) )
-                .Map( ZONE_CONNECTION::NONE,        _( "None" ) )
-                .Map( ZONE_CONNECTION::THERMAL,     _( "Thermal reliefs" ) )
-                .Map( ZONE_CONNECTION::FULL,        _( "Solid" ) )
-                .Map( ZONE_CONNECTION::THT_THERMAL, _( "Reliefs for PTH" ) );
+                .Map( ZONE_CONNECTION::INHERITED,   _HKI( "Inherited" ) )
+                .Map( ZONE_CONNECTION::NONE,        _HKI( "None" ) )
+                .Map( ZONE_CONNECTION::THERMAL,     _HKI( "Thermal reliefs" ) )
+                .Map( ZONE_CONNECTION::FULL,        _HKI( "Solid" ) )
+                .Map( ZONE_CONNECTION::THT_THERMAL, _HKI( "Reliefs for PTH" ) );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( ZONE_CONTAINER );
         propMgr.InheritsAfter( TYPE_HASH( ZONE_CONTAINER ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
-        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, unsigned>( _( "Priority" ),
+        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, unsigned>( _HKI( "Priority" ),
                     &ZONE_CONTAINER::SetPriority, &ZONE_CONTAINER::GetPriority ) );
         //propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, bool>( "Filled",
                     //&ZONE_CONTAINER::SetIsFilled, &ZONE_CONTAINER::IsFilled ) );
-        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, wxString>( _( "Name" ),
+        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, wxString>( _HKI( "Name" ),
                     &ZONE_CONTAINER::SetZoneName, &ZONE_CONTAINER::GetZoneName ) );
-        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _( "Clearance" ),
+        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _HKI( "Clearance" ),
                     &ZONE_CONTAINER::SetLocalClearance, &ZONE_CONTAINER::GetLocalClearance,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _( "Min Width" ),
+        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _HKI( "Min Width" ),
                     &ZONE_CONTAINER::SetMinThickness, &ZONE_CONTAINER::GetMinThickness,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY_ENUM<ZONE_CONTAINER, ZONE_CONNECTION>( _( "Pad Connections" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<ZONE_CONTAINER, ZONE_CONNECTION>( _HKI( "Pad Connections" ),
                     &ZONE_CONTAINER::SetPadConnection, &ZONE_CONTAINER::GetPadConnection ) );
-        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _( "Thermal Clearance" ),
+        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _HKI( "Thermal Clearance" ),
                     &ZONE_CONTAINER::SetThermalReliefGap, &ZONE_CONTAINER::GetThermalReliefGap,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _( "Thermal Spoke Width" ),
+        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _HKI( "Thermal Spoke Width" ),
                     &ZONE_CONTAINER::SetThermalReliefSpokeWidth, &ZONE_CONTAINER::GetThermalReliefSpokeWidth,
                     PROPERTY_DISPLAY::DISTANCE ) );
     }

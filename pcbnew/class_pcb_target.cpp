@@ -36,6 +36,7 @@
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <trigo.h>
+#include <i18n_utility.h>
 
 
 PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent ) :
@@ -148,15 +149,15 @@ static struct PCB_TARGET_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( PCB_TARGET );
         propMgr.InheritsAfter( TYPE_HASH( PCB_TARGET ), TYPE_HASH( BOARD_ITEM ) );
-        propMgr.AddProperty( new PROPERTY<PCB_TARGET, int>( _( "Size" ),
+        propMgr.AddProperty( new PROPERTY<PCB_TARGET, int>( _HKI( "Size" ),
                     &PCB_TARGET::SetSize, &PCB_TARGET::GetSize, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<PCB_TARGET, int>( _( "Width" ),
+        propMgr.AddProperty( new PROPERTY<PCB_TARGET, int>( _HKI( "Width" ),
                     &PCB_TARGET::SetWidth, &PCB_TARGET::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
 
-        auto shape = new PROPERTY<PCB_TARGET, int>( _( "Shape" ),
+        auto shape = new PROPERTY<PCB_TARGET, int>( _HKI( "Shape" ),
                 &PCB_TARGET::SetShape, &PCB_TARGET::GetShape );
         // TODO change the integer to an enum?
-        //shape->SetValues( { { 0, _( "Cross" ) }, { 1, ( "Plus" ) } } );
+        //shape->SetValues( { { 0, _HKI( "Cross" ) }, { 1, ( "Plus" ) } } );
         propMgr.AddProperty( shape );
     }
 } _PCB_TARGET_DESC;

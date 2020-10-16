@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcbnew.h>
 #include <wx/debug.h>
-
+#include <i18n_utility.h>
 #include <class_board.h>
 #include <string>
 
@@ -181,13 +180,13 @@ static struct BOARD_ITEM_DESC
         REGISTER_TYPE( BOARD_ITEM );
         propMgr.InheritsAfter( TYPE_HASH( BOARD_ITEM ), TYPE_HASH( EDA_ITEM ) );
 
-        propMgr.AddProperty( new PROPERTY<BOARD_ITEM, int>( _( "Position X" ),
+        propMgr.AddProperty( new PROPERTY<BOARD_ITEM, int>( _HKI( "Position X" ),
                     &BOARD_ITEM::SetX, &BOARD_ITEM::GetX, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<BOARD_ITEM, int>( _( "Position Y" ),
+        propMgr.AddProperty( new PROPERTY<BOARD_ITEM, int>( _HKI( "Position Y" ),
                     &BOARD_ITEM::SetY, &BOARD_ITEM::GetY, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY_ENUM<BOARD_ITEM, PCB_LAYER_ID>( _( "Layer" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<BOARD_ITEM, PCB_LAYER_ID>( _HKI( "Layer" ),
                     &BOARD_ITEM::SetLayer, &BOARD_ITEM::GetLayer ) );
-        propMgr.AddProperty( new PROPERTY<BOARD_ITEM, bool>( _( "Locked" ),
+        propMgr.AddProperty( new PROPERTY<BOARD_ITEM, bool>( _HKI( "Locked" ),
                     &BOARD_ITEM::SetLocked, &BOARD_ITEM::IsLocked ) );
     }
 } _BOARD_ITEM_DESC;

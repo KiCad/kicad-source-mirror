@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,20 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @brief Implementation of EDA_ITEM base class for KiCad.
- */
+#include <algorithm>
 
-#include <deque>
-
-#include <base_screen.h>
 #include <bitmaps.h>
 #include <eda_item.h>
 #include <eda_rect.h>
 #include <trace_helpers.h>
 #include <trigo.h>
-
-#include <algorithm>
+#include <i18n_utility.h>
 
 
 static const unsigned char dummy_png[] = {
@@ -262,63 +256,64 @@ static struct EDA_ITEM_DESC
         ENUM_MAP<KICAD_T>::Instance()
             .Undefined( TYPE_NOT_INIT )
             .Map( NOT_USED,             wxT( "<not used>" ) )
-            .Map( SCREEN_T,             _( "Screen" ) )
+            .Map( SCREEN_T,             _HKI( "Screen" ) )
 
-            .Map( PCB_MODULE_T,         _( "Footprint" ) )
-            .Map( PCB_PAD_T,            _( "Pad" ) )
-            .Map( PCB_SHAPE_T,          _( "Graphic Shape" ) )
-            .Map( PCB_TEXT_T,           _( "Board Text" ) )
-            .Map( PCB_FP_TEXT_T,        _( "Footprint Text" ) )
-            .Map( PCB_FP_SHAPE_T,       _( "Graphic Shape" ) )
-            .Map( PCB_TRACE_T,          _( "Track" ) )
-            .Map( PCB_VIA_T,            _( "Via" ) )
-            .Map( PCB_MARKER_T,         _( "Board Marker" ) )
-            .Map( PCB_DIM_ALIGNED_T,    _( "Aligned Dimension" ) )
-            .Map( PCB_DIM_ORTHOGONAL_T, _( "Orthogonal Dimension" ) )
-            .Map( PCB_DIM_CENTER_T,     _( "Center Dimension" ) )
-            .Map( PCB_DIM_LEADER_T,     _( "Leader" ) )
-            .Map( PCB_TARGET_T,         _( "Target" ) )
-            .Map( PCB_ZONE_AREA_T,      _( "Zone" ) )
-            .Map( PCB_ITEM_LIST_T,      _( "Item List" ) )
-            .Map( PCB_NETINFO_T,        _( "Net Info" ) )
-            .Map( PCB_GROUP_T,          _( "Group" ) )
+            .Map( PCB_MODULE_T,         _HKI( "Footprint" ) )
+            .Map( PCB_PAD_T,            _HKI( "Pad" ) )
+            .Map( PCB_SHAPE_T,          _HKI( "Graphic Shape" ) )
+            .Map( PCB_TEXT_T,           _HKI( "Board Text" ) )
+            .Map( PCB_FP_TEXT_T,        _HKI( "Footprint Text" ) )
+            .Map( PCB_FP_SHAPE_T,       _HKI( "Graphic Shape" ) )
+            .Map( PCB_TRACE_T,          _HKI( "Track" ) )
+            .Map( PCB_VIA_T,            _HKI( "Via" ) )
+            .Map( PCB_MARKER_T,         _HKI( "Board Marker" ) )
+            .Map( PCB_DIM_ALIGNED_T,    _HKI( "Aligned Dimension" ) )
+            .Map( PCB_DIM_ORTHOGONAL_T, _HKI( "Orthogonal Dimension" ) )
+            .Map( PCB_DIM_CENTER_T,     _HKI( "Center Dimension" ) )
+            .Map( PCB_DIM_LEADER_T,     _HKI( "Leader" ) )
+            .Map( PCB_TARGET_T,         _HKI( "Target" ) )
+            .Map( PCB_ZONE_AREA_T,      _HKI( "Zone" ) )
+            .Map( PCB_ITEM_LIST_T,      _HKI( "Item List" ) )
+            .Map( PCB_NETINFO_T,        _HKI( "Net Info" ) )
+            .Map( PCB_GROUP_T,          _HKI( "Group" ) )
 
-            .Map( SCH_MARKER_T,         _( "Schematic Marker" ) )
-            .Map( SCH_JUNCTION_T,       _( "Junction" ) )
-            .Map( SCH_NO_CONNECT_T,     _( "No-Connect Flag" ) )
-            .Map( SCH_BUS_WIRE_ENTRY_T, _( "Wire Entry" ) )
-            .Map( SCH_BUS_BUS_ENTRY_T,  _( "Bus Entry" ) )
-            .Map( SCH_LINE_T,           _( "Graphic Line" ) )
-            .Map( SCH_BITMAP_T,         _( "Bitmap" ) )
-            .Map( SCH_TEXT_T,           _( "Schematic Text" ) )
-            .Map( SCH_LABEL_T,          _( "Net Label" ) )
-            .Map( SCH_GLOBAL_LABEL_T,   _( "Global Label" ) )
-            .Map( SCH_HIER_LABEL_T,     _( "Hierarchical Label" ) )
-            .Map( SCH_FIELD_T,          _( "Schematic Field" ) )
-            .Map( SCH_COMPONENT_T,      _( "Component" ) )
-            .Map( SCH_SHEET_PIN_T,      _( "Sheet Pin" ) )
-            .Map( SCH_SHEET_T,          _( "Sheet" ) )
+            .Map( SCH_MARKER_T,         _HKI( "Schematic Marker" ) )
+            .Map( SCH_JUNCTION_T,       _HKI( "Junction" ) )
+            .Map( SCH_NO_CONNECT_T,     _HKI( "No-Connect Flag" ) )
+            .Map( SCH_BUS_WIRE_ENTRY_T, _HKI( "Wire Entry" ) )
+            .Map( SCH_BUS_BUS_ENTRY_T,  _HKI( "Bus Entry" ) )
+            .Map( SCH_LINE_T,           _HKI( "Graphic Line" ) )
+            .Map( SCH_BITMAP_T,         _HKI( "Bitmap" ) )
+            .Map( SCH_TEXT_T,           _HKI( "Schematic Text" ) )
+            .Map( SCH_LABEL_T,          _HKI( "Net Label" ) )
+            .Map( SCH_GLOBAL_LABEL_T,   _HKI( "Global Label" ) )
+            .Map( SCH_HIER_LABEL_T,     _HKI( "Hierarchical Label" ) )
+            .Map( SCH_FIELD_T,          _HKI( "Schematic Field" ) )
+            .Map( SCH_COMPONENT_T,      _HKI( "Component" ) )
+            .Map( SCH_SHEET_PIN_T,      _HKI( "Sheet Pin" ) )
+            .Map( SCH_SHEET_T,          _HKI( "Sheet" ) )
 
-            .Map( SCH_FIELD_LOCATE_REFERENCE_T, _( "Field Locate Reference" ) )
-            .Map( SCH_FIELD_LOCATE_VALUE_T,     _( "Field Locate Value" ) )
-            .Map( SCH_FIELD_LOCATE_FOOTPRINT_T, _( "Field Locate Footprint" ) )
+            // Synthetic search tokens don't need to be included...
+            //.Map( SCH_FIELD_LOCATE_REFERENCE_T, _HKI( "Field Locate Reference" ) )
+            //.Map( SCH_FIELD_LOCATE_VALUE_T,     _HKI( "Field Locate Value" ) )
+            //.Map( SCH_FIELD_LOCATE_FOOTPRINT_T, _HKI( "Field Locate Footprint" ) )
 
-            .Map( SCH_SCREEN_T,         _( "SCH Screen" ) )
+            .Map( SCH_SCREEN_T,         _HKI( "SCH Screen" ) )
 
-            .Map( LIB_PART_T,           _( "Symbol" ) )
-            .Map( LIB_ALIAS_T,          _( "Alias" ) )
-            .Map( LIB_ARC_T,            _( "Arc" ) )
-            .Map( LIB_CIRCLE_T,         _( "Circle" ) )
-            .Map( LIB_TEXT_T,           _( "Symbol Text" ) )
-            .Map( LIB_RECTANGLE_T,      _( "Rectangle" ) )
-            .Map( LIB_POLYLINE_T,       _( "Polyline" ) )
-            .Map( LIB_BEZIER_T,         _( "Bezier" ) )
-            .Map( LIB_PIN_T,            _( "Pin" ) )
-            .Map( LIB_FIELD_T,          _( "Symbol Field" ) )
+            .Map( LIB_PART_T,           _HKI( "Symbol" ) )
+            .Map( LIB_ALIAS_T,          _HKI( "Alias" ) )
+            .Map( LIB_ARC_T,            _HKI( "Arc" ) )
+            .Map( LIB_CIRCLE_T,         _HKI( "Circle" ) )
+            .Map( LIB_TEXT_T,           _HKI( "Symbol Text" ) )
+            .Map( LIB_RECTANGLE_T,      _HKI( "Rectangle" ) )
+            .Map( LIB_POLYLINE_T,       _HKI( "Polyline" ) )
+            .Map( LIB_BEZIER_T,         _HKI( "Bezier" ) )
+            .Map( LIB_PIN_T,            _HKI( "Pin" ) )
+            .Map( LIB_FIELD_T,          _HKI( "Symbol Field" ) )
 
-            .Map( GERBER_LAYOUT_T,      _( "Gerber Layout" ) )
-            .Map( GERBER_DRAW_ITEM_T,   _( "Draw Item" ) )
-            .Map( GERBER_IMAGE_T,       _( "Image" ) );
+            .Map( GERBER_LAYOUT_T,      _HKI( "Gerber Layout" ) )
+            .Map( GERBER_DRAW_ITEM_T,   _HKI( "Draw Item" ) )
+            .Map( GERBER_IMAGE_T,       _HKI( "Image" ) );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( EDA_ITEM );

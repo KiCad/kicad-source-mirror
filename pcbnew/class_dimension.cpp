@@ -31,11 +31,11 @@
 #include <class_dimension.h>
 #include <pcb_text.h>
 #include <geometry/shape_circle.h>
-#include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <trigo.h>
+#include <i18n_utility.h>
 
 
 DIMENSION::DIMENSION( BOARD_ITEM* aParent, KICAD_T aType ) :
@@ -501,19 +501,6 @@ OPT_VECTOR2I DIMENSION::segPolyIntersection( SHAPE_POLY_SET& aPoly, SEG& aSeg, b
 
     return OPT_VECTOR2I( endpoint );
 }
-
-
-static struct DIMENSION_DESC
-{
-    DIMENSION_DESC()
-    {
-        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        REGISTER_TYPE( DIMENSION );
-        propMgr.InheritsAfter( TYPE_HASH( DIMENSION ), TYPE_HASH( BOARD_ITEM ) );
-        //propMgr.AddProperty( new PROPERTY<DIMENSION, int>( "Height",
-                    //&DIMENSION::SetHeight, &DIMENSION::GetHeight, PROPERTY_DISPLAY::DISTANCE ) );
-    }
-} _DIMENSION_DESC;
 
 
 ALIGNED_DIMENSION::ALIGNED_DIMENSION( BOARD_ITEM* aParent, KICAD_T aType ) :
@@ -1059,3 +1046,19 @@ void CENTER_DIMENSION::updateGeometry()
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( center - arm, center + arm ) );
 }
+
+
+static struct DIMENSION_DESC
+{
+    DIMENSION_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( DIMENSION );
+        propMgr.InheritsAfter( TYPE_HASH( DIMENSION ), TYPE_HASH( BOARD_ITEM ) );
+        // TODO: add dimension properties:
+        //propMgr.AddProperty( new PROPERTY<DIMENSION, int>( _HKI( "Height" ),
+                    //&DIMENSION::SetHeight, &DIMENSION::GetHeight, PROPERTY_DISPLAY::DISTANCE ) );
+    }
+} _DIMENSION_DESC;
+
+

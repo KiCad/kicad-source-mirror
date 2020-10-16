@@ -39,6 +39,7 @@
 #include <origin_transforms.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
+#include <i18n_utility.h>
 
 
 PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T idtype ) :
@@ -1268,16 +1269,16 @@ static struct DRAWSEGMENT_DESC
         REGISTER_TYPE( PCB_SHAPE );
         propMgr.InheritsAfter( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ) );
 
-        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, int>( _( "Thickness" ),
+        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, int>( _HKI( "Thickness" ),
                     &PCB_SHAPE::SetWidth, &PCB_SHAPE::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
         // TODO show certain properties depending on the shape
-        //propMgr.AddProperty( new PROPERTY<PCB_SHAPE, double>( _( "Angle" ),
+        //propMgr.AddProperty( new PROPERTY<PCB_SHAPE, double>( _HKI( "Angle" ),
         //            &PCB_SHAPE::SetAngle, &PCB_SHAPE::GetAngle, PROPERTY_DISPLAY::DECIDEGREE ) );
         // TODO or may have different names (arcs)
         // TODO type?
-        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, int>( _( "End X" ),
+        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, int>( _HKI( "End X" ),
                     &PCB_SHAPE::SetEndX, &PCB_SHAPE::GetEndX, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, int>( _( "End Y" ),
+        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, int>( _HKI( "End Y" ),
                     &PCB_SHAPE::SetEndY, &PCB_SHAPE::GetEndY, PROPERTY_DISPLAY::DISTANCE ) );
     }
 } _DRAWSEGMENT_DESC;

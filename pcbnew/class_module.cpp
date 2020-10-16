@@ -35,6 +35,7 @@
 #include <class_module.h>
 #include <view/view.h>
 #include <geometry/shape_null.h>
+#include <i18n_utility.h>
 
 MODULE::MODULE( BOARD* parent ) :
     BOARD_ITEM_CONTAINER( (BOARD_ITEM*) parent, PCB_MODULE_T ),
@@ -1809,30 +1810,30 @@ static struct MODULE_DESC
         propMgr.InheritsAfter( TYPE_HASH( MODULE ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( MODULE ), TYPE_HASH( BOARD_ITEM_CONTAINER ) );
 
-        auto layer = new PROPERTY_ENUM<MODULE, PCB_LAYER_ID, BOARD_ITEM>( _( "Layer" ),
+        auto layer = new PROPERTY_ENUM<MODULE, PCB_LAYER_ID, BOARD_ITEM>( _HKI( "Layer" ),
                     &MODULE::SetLayer, &MODULE::GetLayer );
         layer->SetChoices( fpLayers );
-        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _( "Layer" ), layer );
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ), layer );
 
-        propMgr.AddProperty( new PROPERTY<MODULE, wxString>( _( "Reference" ),
+        propMgr.AddProperty( new PROPERTY<MODULE, wxString>( _HKI( "Reference" ),
                     &MODULE::SetReference, &MODULE::GetReference ) );
-        propMgr.AddProperty( new PROPERTY<MODULE, wxString>( _( "Value" ),
+        propMgr.AddProperty( new PROPERTY<MODULE, wxString>( _HKI( "Value" ),
                     &MODULE::SetValue, &MODULE::GetValue ) );
-        propMgr.AddProperty( new PROPERTY<MODULE, double>( _( "Orientation" ),
+        propMgr.AddProperty( new PROPERTY<MODULE, double>( _HKI( "Orientation" ),
                     &MODULE::SetOrientationDegrees, &MODULE::GetOrientationDegrees,
                     PROPERTY_DISPLAY::DEGREE ) );
-        propMgr.AddProperty( new PROPERTY<MODULE, int>( _( "Local Clearance" ),
+        propMgr.AddProperty( new PROPERTY<MODULE, int>( _HKI( "Local Clearance" ),
                     &MODULE::SetLocalClearance, &MODULE::GetLocalClearance,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<MODULE, int>( _( "Local Solderpaste Margin" ),
+        propMgr.AddProperty( new PROPERTY<MODULE, int>( _HKI( "Local Solderpaste Margin" ),
                     &MODULE::SetLocalSolderPasteMargin, &MODULE::GetLocalSolderPasteMargin,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<MODULE, double>( _( "Local Solderpaste Margin Ratio" ),
+        propMgr.AddProperty( new PROPERTY<MODULE, double>( _HKI( "Local Solderpaste Margin Ratio" ),
                     &MODULE::SetLocalSolderPasteMarginRatio, &MODULE::GetLocalSolderPasteMarginRatio ) );
-        propMgr.AddProperty( new PROPERTY<MODULE, int>( _( "Thermal Width" ),
+        propMgr.AddProperty( new PROPERTY<MODULE, int>( _HKI( "Thermal Width" ),
                     &MODULE::SetThermalWidth, &MODULE::GetThermalWidth,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<MODULE, int>( _( "Thermal Gap" ),
+        propMgr.AddProperty( new PROPERTY<MODULE, int>( _HKI( "Thermal Gap" ),
                     &MODULE::SetThermalGap, &MODULE::GetThermalGap,
                     PROPERTY_DISPLAY::DISTANCE ) );
         // TODO zone connection, FPID?

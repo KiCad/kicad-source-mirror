@@ -34,7 +34,7 @@
 #include <view/view.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
-
+#include <i18n_utility.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_arc.h>
@@ -1048,9 +1048,9 @@ static struct TRACK_VIA_DESC
     {
         ENUM_MAP<VIATYPE>::Instance()
             .Undefined( VIATYPE::NOT_DEFINED )
-            .Map( VIATYPE::THROUGH, _( "Through" ) )
-            .Map( VIATYPE::BLIND_BURIED, _( "Blind/buried" ) )
-            .Map( VIATYPE::MICROVIA, _( "Micro" ) );
+            .Map( VIATYPE::THROUGH,      _HKI( "Through" ) )
+            .Map( VIATYPE::BLIND_BURIED, _HKI( "Blind/buried" ) )
+            .Map( VIATYPE::MICROVIA,     _HKI( "Micro" ) );
 
         ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
@@ -1068,17 +1068,17 @@ static struct TRACK_VIA_DESC
         REGISTER_TYPE( TRACK );
         propMgr.InheritsAfter( TYPE_HASH( TRACK ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
 
-        propMgr.AddProperty( new PROPERTY<TRACK, int>( _( "Width" ),
+        propMgr.AddProperty( new PROPERTY<TRACK, int>( _HKI( "Width" ),
             &TRACK::SetWidth, &TRACK::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _( "Position X" ),
-            new PROPERTY<TRACK, int, BOARD_ITEM>( _( "Origin X" ),
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ),
+            new PROPERTY<TRACK, int, BOARD_ITEM>( _HKI( "Origin X" ),
             &TRACK::SetX, &TRACK::GetX, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _( "Position Y" ),
-            new PROPERTY<TRACK, int, BOARD_ITEM>( _( "Origin Y" ),
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ),
+            new PROPERTY<TRACK, int, BOARD_ITEM>( _HKI( "Origin Y" ),
             &TRACK::SetY, &TRACK::GetY, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<TRACK, int>( _( "End X" ),
+        propMgr.AddProperty( new PROPERTY<TRACK, int>( _HKI( "End X" ),
             &TRACK::SetEndX, &TRACK::GetEndX, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<TRACK, int>( _( "End Y" ),
+        propMgr.AddProperty( new PROPERTY<TRACK, int>( _HKI( "End Y" ),
             &TRACK::SetEndY, &TRACK::GetEndY, PROPERTY_DISPLAY::DISTANCE ) );
 
         // Via
@@ -1087,17 +1087,17 @@ static struct TRACK_VIA_DESC
 
         // TODO layerset for vias?
         // TODO test drill, use getdrillvalue?
-        propMgr.ReplaceProperty( TYPE_HASH( TRACK ), _( "Width" ),
-            new PROPERTY<VIA, int, TRACK>( _( "Diameter" ),
+        propMgr.ReplaceProperty( TYPE_HASH( TRACK ), _HKI( "Width" ),
+            new PROPERTY<VIA, int, TRACK>( _HKI( "Diameter" ),
             &VIA::SetWidth, &VIA::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<VIA, int>( _( "Drill" ),
+        propMgr.AddProperty( new PROPERTY<VIA, int>( _HKI( "Drill" ),
             &VIA::SetDrill, &VIA::GetDrillValue, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _( "Layer" ),
-            new PROPERTY_ENUM<VIA, PCB_LAYER_ID, BOARD_ITEM>( _( "Layer Top" ),
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ),
+            new PROPERTY_ENUM<VIA, PCB_LAYER_ID, BOARD_ITEM>( _HKI( "Layer Top" ),
             &VIA::SetLayer, &VIA::GetLayer ) );
-        propMgr.AddProperty( new PROPERTY_ENUM<VIA, PCB_LAYER_ID>( _( "Layer Bottom" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<VIA, PCB_LAYER_ID>( _HKI( "Layer Bottom" ),
             &VIA::SetBottomLayer, &VIA::BottomLayer ) );
-        propMgr.AddProperty( new PROPERTY_ENUM<VIA, VIATYPE>( _( "Via Type" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<VIA, VIATYPE>( _HKI( "Via Type" ),
             &VIA::SetViaType, &VIA::GetViaType ) );
     }
 } _TRACK_VIA_DESC;

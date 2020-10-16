@@ -39,7 +39,7 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_compound.h>
 #include <kicad_string.h>
-#include <pcbnew.h>
+#include <i18n_utility.h>
 #include <view/view.h>
 #include <class_board.h>
 #include <class_module.h>
@@ -1326,67 +1326,67 @@ static struct PAD_DESC
     PAD_DESC()
     {
         ENUM_MAP<PAD_ATTR_T>::Instance()
-                .Map( PAD_ATTRIB_PTH,             _( "Through-hole" ) )
-                .Map( PAD_ATTRIB_SMD,             _( "SMD" ) )
-                .Map( PAD_ATTRIB_CONN,            _( "Edge connector" ) )
-                .Map( PAD_ATTRIB_NPTH,            _( "NPTH, mechanical" ) );
+                .Map( PAD_ATTRIB_PTH,             _HKI( "Through-hole" ) )
+                .Map( PAD_ATTRIB_SMD,             _HKI( "SMD" ) )
+                .Map( PAD_ATTRIB_CONN,            _HKI( "Edge connector" ) )
+                .Map( PAD_ATTRIB_NPTH,            _HKI( "NPTH, mechanical" ) );
 
         ENUM_MAP<PAD_SHAPE_T>::Instance()
-                .Map( PAD_SHAPE_CIRCLE,           _( "Circle" ) )
-                .Map( PAD_SHAPE_RECT,             _( "Rectangle" ) )
-                .Map( PAD_SHAPE_OVAL,             _( "Oval" ) )
-                .Map( PAD_SHAPE_TRAPEZOID,        _( "Trapezoid" ) )
-                .Map( PAD_SHAPE_ROUNDRECT,        _( "Rounded rectangle" ) )
-                .Map( PAD_SHAPE_CHAMFERED_RECT,   _( "Chamfered rectangle" ) )
-                .Map( PAD_SHAPE_CUSTOM,           _( "Custom" ) );
+                .Map( PAD_SHAPE_CIRCLE,           _HKI( "Circle" ) )
+                .Map( PAD_SHAPE_RECT,             _HKI( "Rectangle" ) )
+                .Map( PAD_SHAPE_OVAL,             _HKI( "Oval" ) )
+                .Map( PAD_SHAPE_TRAPEZOID,        _HKI( "Trapezoid" ) )
+                .Map( PAD_SHAPE_ROUNDRECT,        _HKI( "Rounded rectangle" ) )
+                .Map( PAD_SHAPE_CHAMFERED_RECT,   _HKI( "Chamfered rectangle" ) )
+                .Map( PAD_SHAPE_CUSTOM,           _HKI( "Custom" ) );
 
         ENUM_MAP<PAD_PROP_T>::Instance()
-                .Map( PAD_PROP_NONE,              _( "None" ) )
-                .Map( PAD_PROP_BGA,               _( "BGA pad" ) )
-                .Map( PAD_PROP_FIDUCIAL_GLBL,     _( "Fiducial, global to board" ) )
-                .Map( PAD_PROP_FIDUCIAL_LOCAL,    _( "Fiducial, local to footprint" ) )
-                .Map( PAD_PROP_TESTPOINT,         _( "Test point pad" ) )
-                .Map( PAD_PROP_HEATSINK,          _( "Heatsink pad" ) )
-                .Map( PAD_PROP_CASTELLATED,       _( "Castellated pad" ) );
+                .Map( PAD_PROP_NONE,              _HKI( "None" ) )
+                .Map( PAD_PROP_BGA,               _HKI( "BGA pad" ) )
+                .Map( PAD_PROP_FIDUCIAL_GLBL,     _HKI( "Fiducial, global to board" ) )
+                .Map( PAD_PROP_FIDUCIAL_LOCAL,    _HKI( "Fiducial, local to footprint" ) )
+                .Map( PAD_PROP_TESTPOINT,         _HKI( "Test point pad" ) )
+                .Map( PAD_PROP_HEATSINK,          _HKI( "Heatsink pad" ) )
+                .Map( PAD_PROP_CASTELLATED,       _HKI( "Castellated pad" ) );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( D_PAD );
         propMgr.InheritsAfter( TYPE_HASH( D_PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
 
-        auto padType = new PROPERTY_ENUM<D_PAD, PAD_ATTR_T>( _( "Pad Type" ),
+        auto padType = new PROPERTY_ENUM<D_PAD, PAD_ATTR_T>( _HKI( "Pad Type" ),
                     &D_PAD::SetAttribute, &D_PAD::GetAttribute );
         propMgr.AddProperty( padType );
 
-        auto shape = new PROPERTY_ENUM<D_PAD, PAD_SHAPE_T>( _( "Shape" ),
+        auto shape = new PROPERTY_ENUM<D_PAD, PAD_SHAPE_T>( _HKI( "Shape" ),
                     &D_PAD::SetShape, &D_PAD::GetShape );
         propMgr.AddProperty( shape );
 
-        propMgr.AddProperty( new PROPERTY<D_PAD, wxString>( _( "Name" ),
+        propMgr.AddProperty( new PROPERTY<D_PAD, wxString>( _HKI( "Name" ),
                     &D_PAD::SetName, &D_PAD::GetName ) );
-        propMgr.AddProperty( new PROPERTY<D_PAD, double>( _( "Orientation" ),
+        propMgr.AddProperty( new PROPERTY<D_PAD, double>( _HKI( "Orientation" ),
                     &D_PAD::SetOrientationDegrees, &D_PAD::GetOrientationDegrees,
                     PROPERTY_DISPLAY::DEGREE ) );
-        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Pad To Die Length" ),
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _HKI( "Pad To Die Length" ),
                     &D_PAD::SetPadToDieLength, &D_PAD::GetPadToDieLength,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Local Soldermask Margin" ),
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _HKI( "Local Soldermask Margin" ),
                     &D_PAD::SetLocalSolderMaskMargin, &D_PAD::GetLocalSolderMaskMargin,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Local Solderpaste Margin" ),
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _HKI( "Local Solderpaste Margin" ),
                     &D_PAD::SetLocalSolderPasteMargin, &D_PAD::GetLocalSolderPasteMargin,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<D_PAD, double>( _( "Local Solderpaste Margin Ratio" ),
+        propMgr.AddProperty( new PROPERTY<D_PAD, double>( _HKI( "Local Solderpaste Margin Ratio" ),
                     &D_PAD::SetLocalSolderPasteMarginRatio, &D_PAD::GetLocalSolderPasteMarginRatio ) );
-        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Thermal Relief Spoke Width" ),
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _HKI( "Thermal Relief Spoke Width" ),
                     &D_PAD::SetThermalSpokeWidth, &D_PAD::GetThermalSpokeWidth,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Thermal Relief" ),
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _HKI( "Thermal Relief" ),
                     &D_PAD::SetThermalGap, &D_PAD::GetThermalGap,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY_ENUM<D_PAD, PAD_PROP_T>( _( "Fabrication Property" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<D_PAD, PAD_PROP_T>( _HKI( "Fabrication Property" ),
                     &D_PAD::SetProperty, &D_PAD::GetProperty ) );
 
-        auto roundRadiusRatio = new PROPERTY<D_PAD, double>( _( "Round Radius Ratio" ),
+        auto roundRadiusRatio = new PROPERTY<D_PAD, double>( _HKI( "Round Radius Ratio" ),
                     &D_PAD::SetRoundRectRadiusRatio, &D_PAD::GetRoundRectRadiusRatio );
         roundRadiusRatio->SetAvailableFunc(
                     [=]( INSPECTABLE* aItem ) -> bool
@@ -1395,7 +1395,7 @@ static struct PAD_DESC
                     } );
         propMgr.AddProperty( roundRadiusRatio );
 
-        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Local Clearance" ),
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _HKI( "Local Clearance" ),
                     &D_PAD::SetLocalClearance, &D_PAD::GetLocalClearance,
                     PROPERTY_DISPLAY::DISTANCE ) );
         // TODO delta, size, drill size, dirill shape offset, layerset, zone connection
