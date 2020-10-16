@@ -26,22 +26,24 @@
 
 #include <dialog_constraints_reporter_base.h>
 
-class PCB_BASE_FRAME;
+class PCB_EDIT_FRAME;
 class WX_HTML_REPORT_BOX;
 
 
 class DIALOG_CONSTRAINTS_REPORTER : public DIALOG_CONSTRAINTS_REPORTER_BASE
 {
 public:
-    DIALOG_CONSTRAINTS_REPORTER( PCB_BASE_FRAME* aParent );
+    DIALOG_CONSTRAINTS_REPORTER( PCB_EDIT_FRAME* aParent );
 
     void FinishInitialization();
+
+    void OnErrorLinkClicked( wxHtmlLinkEvent& event );
 
     void DeleteAllPages();
     WX_HTML_REPORT_BOX* AddPage( const wxString& pageTitle );
 
 protected:
-    PCB_BASE_FRAME* m_frame;
+    PCB_EDIT_FRAME* m_frame;
 };
 
 #endif // DIALOG_CONSTRAINTS_REPORTER_H

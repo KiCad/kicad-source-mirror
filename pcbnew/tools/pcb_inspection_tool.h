@@ -34,6 +34,22 @@
 
 class CONNECTIVITY_DATA;
 
+
+class DIALOG_INSPECTION_REPORTER : public DIALOG_HTML_REPORTER
+{
+public:
+    DIALOG_INSPECTION_REPORTER( PCB_EDIT_FRAME* aFrame ) :
+            DIALOG_HTML_REPORTER( aFrame ),
+            m_frame( aFrame )
+    { }
+
+    void OnErrorLinkClicked( wxHtmlLinkEvent& event ) override;
+
+protected:
+    PCB_EDIT_FRAME* m_frame;
+};
+
+
 /**
  * PCB_INSPECTION_TOOL
  *
@@ -130,7 +146,7 @@ private:
     std::unique_ptr<DIALOG_SELECT_NET_FROM_LIST> m_listNetsDialog;
     DIALOG_SELECT_NET_FROM_LIST::SETTINGS        m_listNetsDialogSettings;
 
-    std::unique_ptr<DIALOG_HTML_REPORTER>        m_inspectClearanceDialog;
+    std::unique_ptr<DIALOG_INSPECTION_REPORTER>  m_inspectClearanceDialog;
     std::unique_ptr<DIALOG_CONSTRAINTS_REPORTER> m_inspectConstraintsDialog;
 };
 

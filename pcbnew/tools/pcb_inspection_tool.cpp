@@ -37,6 +37,12 @@
 #include "pcb_inspection_tool.h"
 
 
+void DIALOG_INSPECTION_REPORTER::OnErrorLinkClicked( wxHtmlLinkEvent& event )
+{
+    m_frame->ShowBoardSetupDialog( _( "Rules" ) );
+}
+
+
 PCB_INSPECTION_TOOL::PCB_INSPECTION_TOOL() :
         PCB_TOOL_BASE( "pcbnew.InspectionTool" ),
         m_frame( nullptr )
@@ -197,7 +203,11 @@ void PCB_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_TYPE_T aClearanceType,
     }
     catch( PARSE_ERROR& pe )
     {
-        m_frame->ShowBoardSetupDialog( _( "Rules" ) );
+        r->Report( "" );
+        r->Report( _( "Report incomplete: could not compile design rules.  " )
+                        + wxT( "<a href='boardsetup'>" )
+                        + _( "Show design rules." )
+                        + wxT( "</a>" ) );
         return;
     }
 
@@ -237,7 +247,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
     if( m_inspectClearanceDialog == nullptr )
     {
-        m_inspectClearanceDialog = std::make_unique<DIALOG_HTML_REPORTER>( m_frame );
+        m_inspectClearanceDialog = std::make_unique<DIALOG_INSPECTION_REPORTER>( m_frame );
         m_inspectClearanceDialog->SetTitle( _( "Clearance Report" ) );
 
         m_inspectClearanceDialog->Connect( wxEVT_CLOSE_WINDOW,
@@ -382,6 +392,7 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
     DRC_ENGINE  drcEngine( m_frame->GetBoard(), &m_frame->GetBoard()->GetDesignSettings() );
+    bool        compileError = false;
 
     try
     {
@@ -389,8 +400,7 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     }
     catch( PARSE_ERROR& pe )
     {
-        m_frame->ShowBoardSetupDialog( _( "Rules" ) );
-        return 1;
+        compileError = true;
     }
 
     if( item->Type() == PCB_TRACE_T )
@@ -402,22 +412,34 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
                                      item->GetSelectMenuText( r->GetUnits() ) ) );
         r->Report( "" );
 
-        auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_TRACK_WIDTH, item,
-                                                       nullptr, UNDEFINED_LAYER, r );
+        if( compileError )
+        {
+            r->Report( "" );
+            r->Report( _( "Report incomplete: could not compile design rules.  " )
+                            + wxT( "<a href='boardsetup'>" )
+                            + _( "Show design rules." )
+                            + wxT( "</a>" ) );
+        }
+        else
+        {
+            auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_TRACK_WIDTH, item,
+                                                           nullptr, UNDEFINED_LAYER, r );
 
-        wxString min = _( "undefined" );
-        wxString max = _( "undefined" );
+            wxString min = _( "undefined" );
+            wxString max = _( "undefined" );
 
-        if( constraint.m_Value.HasMin() )
-            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
+            if( constraint.m_Value.HasMin() )
+                min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
 
-        if( constraint.m_Value.HasMax() )
-            max = StringFromValue( r->GetUnits(), constraint.m_Value.Max(), true );
+            if( constraint.m_Value.HasMax() )
+                max = StringFromValue( r->GetUnits(), constraint.m_Value.Max(), true );
 
-        r->Report( "" );
-        r->Report( wxString::Format( _( "Width constraints: min %s max %s." ),
-                                     min,
-                                     max ) );
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Width constraints: min %s max %s." ),
+                                         min,
+                                         max ) );
+        }
+
         r->Flush();
     }
 
@@ -430,24 +452,35 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
                                      item->GetSelectMenuText( r->GetUnits() ) ) );
         r->Report( "" );
 
-        auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_VIA_DIAMETER, item,
-                                                       nullptr, UNDEFINED_LAYER, r );
+        if( compileError )
+        {
+            r->Report( "" );
+            r->Report( _( "Report incomplete: could not compile design rules.  " )
+                            + wxT( "<a href='boardsetup'>" )
+                            + _( "Show design rules." )
+                            + wxT( "</a>" ) );
+        }
+        else
+        {
+            auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_VIA_DIAMETER,
+                                                           item, nullptr, UNDEFINED_LAYER, r );
 
-        wxString min = _( "undefined" );
-        wxString max = _( "undefined" );
+            wxString min = _( "undefined" );
+            wxString max = _( "undefined" );
 
-        if( constraint.m_Value.HasMin() )
-            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
+            if( constraint.m_Value.HasMin() )
+                min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
 
-        if( constraint.m_Value.HasMax() )
-            max = StringFromValue( r->GetUnits(), constraint.m_Value.Max(), true );
+            if( constraint.m_Value.HasMax() )
+                max = StringFromValue( r->GetUnits(), constraint.m_Value.Max(), true );
 
-        r->Report( "" );
-        r->Report( wxString::Format( _( "Diameter constraints: min %s max %s." ),
-                                     min,
-                                     max ) );
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Diameter constraints: min %s max %s." ),
+                                         min,
+                                         max ) );
+        }
+
         r->Flush();
-
 
         r = m_inspectConstraintsDialog->AddPage( "Via Annular Width" );
 
@@ -456,22 +489,34 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
                                      item->GetSelectMenuText( r->GetUnits() ) ) );
         r->Report( "" );
 
-        constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH, item,
-                                                  nullptr, UNDEFINED_LAYER, r );
+        if( compileError )
+        {
+            r->Report( "" );
+            r->Report( _( "Report incomplete: could not compile design rules.  " )
+                            + wxT( "<a href='boardsetup'>" )
+                            + _( "Show design rules." )
+                            + wxT( "</a>" ) );
+        }
+        else
+        {
+            auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH,
+                                                           item, nullptr, UNDEFINED_LAYER, r );
 
-        min = _( "undefined" );
-        max = _( "undefined" );
+            wxString min = _( "undefined" );
+            wxString max = _( "undefined" );
 
-        if( constraint.m_Value.HasMin() )
-            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
+            if( constraint.m_Value.HasMin() )
+                min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
 
-        if( constraint.m_Value.HasMax() )
-            max = StringFromValue( r->GetUnits(), constraint.m_Value.Max(), true );
+            if( constraint.m_Value.HasMax() )
+                max = StringFromValue( r->GetUnits(), constraint.m_Value.Max(), true );
 
-        r->Report( "" );
-        r->Report( wxString::Format( _( "Annular width constraints: min %s max %s." ),
-                                     min,
-                                     max ) );
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Annular width constraints: min %s max %s." ),
+                                         min,
+                                         max ) );
+        }
+
         r->Flush();
     }
 
@@ -485,16 +530,28 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
                                      item->GetSelectMenuText( r->GetUnits() ) ) );
         r->Report( "" );
 
-        auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_SIZE, item,
-                                                       nullptr, UNDEFINED_LAYER, r );
+        if( compileError )
+        {
+            r->Report( "" );
+            r->Report( _( "Report incomplete: could not compile design rules.  " )
+                            + wxT( "<a href='boardsetup'>" )
+                            + _( "Show design rules." )
+                            + wxT( "</a>" ) );
+        }
+        else
+        {
+            auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_SIZE, item,
+                                                           nullptr, UNDEFINED_LAYER, r );
 
-        wxString min = _( "undefined" );
+            wxString min = _( "undefined" );
 
-        if( constraint.m_Value.HasMin() )
-            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
+            if( constraint.m_Value.HasMin() )
+                min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
 
-        r->Report( "" );
-        r->Report( wxString::Format( _( "Hole constraint: min %s." ), min ) );
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Hole constraint: min %s." ), min ) );
+        }
+
         r->Flush();
     }
 

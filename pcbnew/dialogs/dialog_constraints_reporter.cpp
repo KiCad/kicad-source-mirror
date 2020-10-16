@@ -22,11 +22,11 @@
  */
 
 #include <dialog_constraints_reporter.h>
-#include <pcb_base_frame.h>
+#include <pcb_edit_frame.h>
 #include <wx_html_report_box.h>
 
 
-DIALOG_CONSTRAINTS_REPORTER::DIALOG_CONSTRAINTS_REPORTER( PCB_BASE_FRAME* aParent ) :
+DIALOG_CONSTRAINTS_REPORTER::DIALOG_CONSTRAINTS_REPORTER( PCB_EDIT_FRAME* aParent ) :
         DIALOG_CONSTRAINTS_REPORTER_BASE( aParent ),
         m_frame( aParent )
 {
@@ -42,6 +42,12 @@ void DIALOG_CONSTRAINTS_REPORTER::FinishInitialization()
 void DIALOG_CONSTRAINTS_REPORTER::DeleteAllPages()
 {
     m_notebook->DeleteAllPages();
+}
+
+
+void DIALOG_CONSTRAINTS_REPORTER::OnErrorLinkClicked( wxHtmlLinkEvent& event )
+{
+    m_frame->ShowBoardSetupDialog( _( "Rules" ) );
 }
 
 
@@ -61,6 +67,7 @@ WX_HTML_REPORT_BOX* DIALOG_CONSTRAINTS_REPORTER::AddPage( const wxString& aTitle
     m_notebook->AddPage( panel, aTitle );
 
     reporter->SetUnits( m_frame->GetUserUnits() );
+    reporter->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( DIALOG_CONSTRAINTS_REPORTER::OnErrorLinkClicked ), NULL, this );
 
     return reporter;
 }
