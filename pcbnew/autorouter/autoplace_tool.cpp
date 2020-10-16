@@ -68,6 +68,7 @@ int AUTOPLACE_TOOL::autoplace( std::vector<MODULE*>& aModules, bool aPlaceOffboa
         wxString msg = wxString::Format( _( "Board edges must be defined on the %s layer." ),
                                          LayerName( Edge_Cuts ) );
 
+        frame()->GetInfoBar()->RemoveAllButtons();
         frame()->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_ERROR );
         return 0;
     }

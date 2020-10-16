@@ -116,9 +116,11 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
                           getEditFrame<PCB_EDIT_FRAME>()->ShowBoardSetupDialog( _( "Rules" ) );
                       } ) );
 
+        infobar->RemoveAllButtons();
+        infobar->AddButton( button );
+
         infobar->ShowMessageFor( _( "Zone fills may be inaccurate.  DRC rules contain errors." ),
                                  10000, wxICON_WARNING );
-        infobar->AddButton( button );
     }
 
     if( aReporter )

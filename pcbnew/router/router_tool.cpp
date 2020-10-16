@@ -728,10 +728,12 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
                         getEditFrame<PCB_EDIT_FRAME>()->ShowBoardSetupDialog( _( "Constraints" ) );
                     } ) );
 
+            infobar->RemoveAllButtons();
+            infobar->AddButton( button );
+
             infobar->ShowMessageFor( _( "Blind/buried vias have to be enabled in "
                                         "Board Setup > Design Rules > Constraints." ),
                                      10000, wxICON_ERROR );
-            infobar->AddButton( button );
             return false;
         }
 
@@ -747,10 +749,12 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
                         getEditFrame<PCB_EDIT_FRAME>()->ShowBoardSetupDialog( _( "Constraints" ) );
                     } ) );
 
+            infobar->RemoveAllButtons();
+            infobar->AddButton( button );
+
             infobar->ShowMessageFor( _( "Microvias have to be enabled in "
                                         "Board Setup > Design Rules > Constraints." ),
                                      10000, wxICON_ERROR );
-            infobar->AddButton( button );
             return false;
         }
 

@@ -666,18 +666,21 @@ void EDA_BASE_FRAME::PrintMsg( const wxString& text )
 
 void EDA_BASE_FRAME::ShowInfoBarError( const wxString& aErrorMsg )
 {
+    m_infoBar->RemoveAllButtons();
     GetInfoBar()->ShowMessageFor( aErrorMsg, 5000, wxICON_ERROR );
 }
 
 
 void EDA_BASE_FRAME::ShowInfoBarWarning( const wxString& aWarningMsg )
 {
+    m_infoBar->RemoveAllButtons();
     GetInfoBar()->ShowMessageFor( aWarningMsg, 5000, wxICON_WARNING );
 }
 
 
 void EDA_BASE_FRAME::ShowInfoBarMsg( const wxString& aMsg )
 {
+    m_infoBar->RemoveAllButtons();
     GetInfoBar()->ShowMessageFor( aMsg, 10000, wxICON_INFORMATION );
 }
 
