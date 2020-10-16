@@ -5,10 +5,10 @@ cvpcb
 eeschema
 gerbview
 include
+libs
 kicad
 pagelayout_editor
 pcb_calculator
 pcbnew
-polygon
-potrace
+plugins
 tools
