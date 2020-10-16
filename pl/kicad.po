@@ -5630,54 +5630,6 @@ msgstr "Powiększ"
 msgid "Zoom Out"
 msgstr "Pomniejsz"
 
-#: common/tool/actions.cpp:309
-msgid "Zoom to Selection"
-msgstr "Przybliż zaznaczenie"
-
-#: common/tool/actions.cpp:322
-#, fuzzy
-msgid "Cursor Up"
-msgstr "Kursor"
-
-#: common/tool/actions.cpp:328
-#, fuzzy
-msgid "Cursor Down"
-msgstr "Opcje kursora"
-
-#: common/tool/actions.cpp:334
-#, fuzzy
-msgid "Cursor Left"
-msgstr "Kursor"
-
-#: common/tool/actions.cpp:340
-#, fuzzy
-msgid "Cursor Right"
-msgstr "Dolny prawy"
-
-#: common/tool/actions.cpp:347
-#, fuzzy
-msgid "Cursor Up Fast"
-msgstr "Kursory"
-
-#: common/tool/actions.cpp:353
-#, fuzzy
-msgid "Cursor Down Fast"
-msgstr "Opcje kursora"
-
-#: common/tool/actions.cpp:359
-#, fuzzy
-msgid "Cursor Left Fast"
-msgstr "Kursory"
-
-#: common/tool/actions.cpp:365
-#, fuzzy
-msgid "Cursor Right Fast"
-msgstr "Kształt kursora"
-
-#: common/tool/actions.cpp:371
-msgid "Click"
-msgstr ""
-
 #: common/tool/actions.cpp:371
 msgid "Performs left mouse button click"
 msgstr ""
@@ -5700,26 +5652,6 @@ msgstr "Biblioteka"
 #, fuzzy
 msgid "Unpin Library"
 msgstr "Biblioteka"
-
-#: common/tool/actions.cpp:396
-#, fuzzy
-msgid "Pan Up"
-msgstr "Panoramuj w górę/dół"
-
-#: common/tool/actions.cpp:402
-#, fuzzy
-msgid "Pan Down"
-msgstr "Panoramuj w górę/dół"
-
-#: common/tool/actions.cpp:408
-#, fuzzy
-msgid "Pan Left"
-msgstr "Panoramuj w lewo/prawo"
-
-#: common/tool/actions.cpp:414
-#, fuzzy
-msgid "Pan Right"
-msgstr "Panoramuj w lewo/prawo"
 
 #: common/tool/actions.cpp:421
 #, fuzzy
@@ -5808,11 +5740,6 @@ msgstr "Współrzędne polarne"
 #: common/tool/actions.cpp:487
 msgid "Switch between polar and cartesian coordinate systems"
 msgstr "Przełącza pomiędzy polarnym i kartezjańskim układem wpółrzędnych"
-
-#: common/tool/actions.cpp:493
-#, fuzzy
-msgid "Reset Local Coordinates"
-msgstr "Użyj współrzędnych polarnych"
 
 #: common/tool/actions.cpp:499
 msgid "Always Show Cursor"
@@ -19515,21 +19442,6 @@ msgstr ""
 msgid "User defined"
 msgstr "Zdefiniowany przez użytkownika"
 
-#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:70
-#, fuzzy
-msgid "Green"
-msgstr "Zielony:"
-
-#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:71
-#, fuzzy
-msgid "Red"
-msgstr "Czerwony:"
-
-#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:72
-#, fuzzy
-msgid "Blue"
-msgstr "Niebieski:"
-
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:73
 msgid "Black"
 msgstr "Czarny"
@@ -19537,11 +19449,6 @@ msgstr "Czarny"
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:74
 msgid "White"
 msgstr "Biały"
-
-#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:75
-#, fuzzy
-msgid "Yellow"
-msgstr "Jasny Żółty"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:51
 #, fuzzy
