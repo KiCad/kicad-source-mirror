@@ -1361,11 +1361,23 @@ static struct PAD_DESC
                     &D_PAD::SetShape, &D_PAD::GetShape );
         propMgr.AddProperty( shape );
 
-        propMgr.AddProperty( new PROPERTY<D_PAD, wxString>( _HKI( "Name" ),
+        propMgr.AddProperty( new PROPERTY<D_PAD, wxString>( _HKI( "Pad Number" ),
                     &D_PAD::SetName, &D_PAD::GetName ) );
         propMgr.AddProperty( new PROPERTY<D_PAD, double>( _HKI( "Orientation" ),
                     &D_PAD::SetOrientationDegrees, &D_PAD::GetOrientationDegrees,
                     PROPERTY_DISPLAY::DEGREE ) );
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _HKI( "Size X" ),
+                    &D_PAD::SetSizeX, &D_PAD::GetSizeX,
+                    PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _HKI( "Size Y" ),
+                    &D_PAD::SetSizeY, &D_PAD::GetSizeY,
+                    PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _HKI( "Hole Size X" ),
+                    &D_PAD::SetDrillSizeX, &D_PAD::GetDrillSizeX,
+                    PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _HKI( "Hole Size Y" ),
+                    &D_PAD::SetDrillSizeY, &D_PAD::GetDrillSizeY,
+                    PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<D_PAD, int>( _HKI( "Pad To Die Length" ),
                     &D_PAD::SetPadToDieLength, &D_PAD::GetPadToDieLength,
                     PROPERTY_DISPLAY::DISTANCE ) );
@@ -1398,7 +1410,7 @@ static struct PAD_DESC
         propMgr.AddProperty( new PROPERTY<D_PAD, int>( _HKI( "Local Clearance" ),
                     &D_PAD::SetLocalClearance, &D_PAD::GetLocalClearance,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        // TODO delta, size, drill size, dirill shape offset, layerset, zone connection
+        // TODO delta, dirill shape offset, layerset, zone connection
     }
 } _PAD_DESC;
 

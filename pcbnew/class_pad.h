@@ -229,12 +229,20 @@ public:
 
     void SetSize( const wxSize& aSize )         { m_size = aSize; m_shapesDirty = true; }
     const wxSize& GetSize() const               { return m_size; }
+    void SetSizeX( const int aX )               { m_size.x = aX; m_shapesDirty = true; }
+    const int GetSizeX() const                  { return m_size.x; }
+    void SetSizeY( const int aY )               { m_size.y = aY; m_shapesDirty = true; }
+    const int GetSizeY() const                  { return m_size.y; }
 
     void SetDelta( const wxSize& aSize )        { m_deltaSize = aSize; m_shapesDirty = true; }
     const wxSize& GetDelta() const              { return m_deltaSize; }
 
     void SetDrillSize( const wxSize& aSize )    { m_drill = aSize; m_shapesDirty = true; }
     const wxSize& GetDrillSize() const          { return m_drill; }
+    void SetDrillSizeX( const int aX )          { m_drill.x = aX; m_shapesDirty = true; }
+    const int GetDrillSizeX() const             { return m_drill.x; }
+    void SetDrillSizeY( const int aY )          { m_drill.y = aY; m_shapesDirty = true; }
+    const int GetDrillSizeY() const             { return m_drill.y; }
 
     void SetOffset( const wxPoint& aOffset )    { m_offset = aOffset; m_shapesDirty = true; }
     const wxPoint& GetOffset() const            { return m_offset; }
