@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 10:50-0700\n"
-"PO-Revision-Date: 2020-10-16 20:27+0000\n"
+"PO-Revision-Date: 2020-10-17 07:28+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -213,28 +213,28 @@ msgstr "3B modeller yükleniyor"
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:1036
 #, c-format
 msgid "Reload time %.3f s"
-msgstr ""
+msgstr "Yeniden yükleme süresi %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:924
 #, c-format
 msgid "Loading %s"
-msgstr ""
+msgstr "%s yükleniyor"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.cpp:576
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:178
 #: common/widgets/footprint_preview_widget.cpp:108
 msgid "Loading..."
-msgstr ""
+msgstr "Yükleniyor..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:358
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr ""
+msgstr "Oluşturma süresi %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:413
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr ""
+msgstr "Oluşturuluyor: %% %.0f"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:917
 msgid "Rendering: Post processing shader"
@@ -242,21 +242,21 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:49
 msgid "Export Current View as PNG..."
-msgstr ""
+msgstr "Geçerli Görünümü PNG Olarak Dışa Aktar..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:54
 msgid "Export Current View as JPEG..."
-msgstr ""
+msgstr "Geçerli Görünümü JPEG Olarak Dışa Aktar..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:60 common/hotkey_store.cpp:70
 #: common/tool/actions.cpp:535 pcbnew/footprint_viewer_frame.cpp:949
 #: pcbnew/pcb_base_frame.cpp:400
 msgid "3D Viewer"
-msgstr ""
+msgstr "3B Görüntüleyici"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:68
 msgid "Copy 3D Image"
-msgstr ""
+msgstr "3B Görüntüyü Kopyala"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:106
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:282
@@ -264,30 +264,30 @@ msgstr ""
 #: gerbview/gerbview_frame.cpp:1049 pagelayout_editor/pl_editor_frame.cpp:454
 #: pcbnew/footprint_edit_frame.cpp:838 pcbnew/pcbnew_config.cpp:62
 msgid "Display Options"
-msgstr ""
+msgstr "Görüntüleme Seçenekleri"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:806
 msgid "Raytracing"
-msgstr ""
+msgstr "Işın İzleme"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:28
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:568
 msgid "Render Options"
-msgstr ""
+msgstr "Oluşturma Seçenekleri"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:122
 msgid "Material Properties"
-msgstr ""
+msgstr "Malzeme Özellikleri"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Raytracing Options"
-msgstr ""
+msgstr "Işın İzleme Seçenekleri"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:153
 msgid "Choose Colors"
-msgstr ""
+msgstr "Renkleri Seç"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:156
 msgid "Background Top Color..."
@@ -327,7 +327,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:210
 msgid "Reset to Default Settings"
-msgstr ""
+msgstr "Öntanımlı Ayarlara Sıfırla"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:213 cvpcb/menubar.cpp:71
 #: eeschema/libedit/menubar_libedit.cpp:161 eeschema/menubar.cpp:264
@@ -335,7 +335,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:231
 #: pcbnew/menubar_pcb_editor.cpp:448
 msgid "Preferences...\tCTRL+,"
-msgstr ""
+msgstr "Tercihler...\tCTRL+,"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:214 cvpcb/menubar.cpp:72
 #: eeschema/libedit/menubar_libedit.cpp:162 eeschema/menubar.cpp:265
@@ -343,7 +343,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:157 pcbnew/menubar_footprint_editor.cpp:232
 #: pcbnew/menubar_pcb_editor.cpp:449
 msgid "Show preferences for all open tools"
-msgstr ""
+msgstr "Tüm açık araçlar için tercihleri göster"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:221 cvpcb/menubar.cpp:84
 #: eeschema/libedit/menubar_libedit.cpp:178 eeschema/menubar.cpp:281
@@ -352,14 +352,14 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:247 pcbnew/menubar_pcb_editor.cpp:465
 #: pcbnew/toolbars_footprint_viewer.cpp:176
 msgid "&File"
-msgstr ""
+msgstr "&Dosya"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:222 cvpcb/menubar.cpp:85
 #: eeschema/libedit/menubar_libedit.cpp:179 eeschema/menubar.cpp:282
 #: pagelayout_editor/menubar.cpp:167 pcbnew/menubar_footprint_editor.cpp:248
 #: pcbnew/menubar_pcb_editor.cpp:466
 msgid "&Edit"
-msgstr ""
+msgstr "Dü&zenle"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:223
 #: eeschema/libedit/menubar_libedit.cpp:180 eeschema/menubar.cpp:283
@@ -368,36 +368,36 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:249 pcbnew/menubar_pcb_editor.cpp:467
 #: pcbnew/toolbars_footprint_viewer.cpp:177
 msgid "&View"
-msgstr ""
+msgstr "&Görünüm"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:224 cvpcb/menubar.cpp:86
 #: gerbview/menubar.cpp:232 kicad/menubar.cpp:179
 msgid "&Preferences"
-msgstr ""
+msgstr "&Tercihler"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:57
 msgid "Reload board"
-msgstr ""
+msgstr "Kartı yeniden yükle"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:62
 msgid "Copy 3D image to clipboard"
-msgstr ""
+msgstr "3B görüntüyü panoya kopyala"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
 msgid "Set display options, and some layers visibility"
-msgstr ""
+msgstr "Görüntüleme seçeneklerini ve bazı katmanların görünürlüğünü ayarla"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Render current view using Raytracing"
-msgstr ""
+msgstr "Geçerli görünümü ışın izleme kullanarak oluştur"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:41
 msgid "Realistic mode"
-msgstr ""
+msgstr "Gerçekçi mod"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:50
 msgid "Show board body"
-msgstr ""
+msgstr "Kart gövdesini göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:59
 msgid "Show filled areas in zones"
@@ -423,7 +423,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:98
 msgid "3D Model Visibility"
-msgstr ""
+msgstr "3B Model Görünürlüğü"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:111
 msgid "Show 3D through hole models"
@@ -431,7 +431,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:120
 msgid "Show 3D SMD models"
-msgstr ""
+msgstr "3B SMD modellerini göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:129
 msgid "Show 3D virtual models"
@@ -439,7 +439,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:148
 msgid "Board Layers"
-msgstr ""
+msgstr "Kart Katmanları"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:161
 msgid "Show silkscreen layers"
@@ -471,7 +471,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:230
 msgid "Camera Options"
-msgstr ""
+msgstr "Kamera Seçenekleri"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:235
 msgid "Rotation Increment:"
@@ -485,19 +485,19 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:342
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1362
 msgid "deg"
-msgstr ""
+msgstr "derece"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:253
 msgid "Enable animation"
-msgstr ""
+msgstr "Canlandırmayı etkinleştir"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:260
 msgid "Animation speed:"
-msgstr ""
+msgstr "Canlandırma hızı:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
 msgid "OpenGL Render Options"
-msgstr ""
+msgstr "OpenGL Oluşturma Seçenekleri"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:304
 msgid "Show model bounding boxes"
@@ -505,37 +505,39 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:313
 msgid "Show copper thickness"
-msgstr ""
+msgstr "Bakır kalınlığını göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:323
 msgid "Other Options"
-msgstr ""
+msgstr "Diğer Seçenekler"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:333
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:445
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
 msgid "Anti-aliasing"
-msgstr ""
+msgstr "Kenar yumuşatma"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "Disabled"
-msgstr ""
+msgstr "Devre dışı"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "2x"
-msgstr ""
+msgstr "2x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "4x"
-msgstr ""
+msgstr "4x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "8x"
-msgstr ""
+msgstr "8x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:341
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
+"Bu ayarın uygulanması için 3B Görüntüleyici kapatılmalı ve yeniden "
+"açılmalıdır"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:348
 msgid "Selection color"
@@ -547,7 +549,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:372
 msgid "Disable anti-aliasing"
-msgstr ""
+msgstr "Kenar yumuşatmayı devre dışı bırak"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:378
 msgid "Disable thickness"
@@ -563,11 +565,11 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:406
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:420
 msgid "Raytracing Render Options"
-msgstr ""
+msgstr "Işın İzleme Oluşturma Seçenekleri"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:431
 msgid "Procedural textures"
@@ -679,7 +681,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:108
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:676
 #: pcbnew/dialogs/dialog_create_array_base.cpp:35
@@ -690,7 +692,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:112
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:173
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:689
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:36
@@ -698,7 +700,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:109
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:705
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:36
@@ -706,21 +708,21 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:113
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:174
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:718
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:51
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:110
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:171
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:734
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:114
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:175
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:747
 #: pcbnew/dialogs/dialog_create_array_base.cpp:258
@@ -729,7 +731,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:111
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:172
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:763
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:36
@@ -737,15 +739,15 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:115
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:176
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:785
 msgid "Reset to defaults"
-msgstr ""
+msgstr "Öntanımlılara sıfırla"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.h:179
 msgid "3D Display Options"
-msgstr ""
+msgstr "3B Görüntüleme Seçenekleri"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:337
 msgid "Background Color, Bottom"
@@ -757,7 +759,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:807
 msgid "3D Image File Name"
-msgstr ""
+msgstr "3B Görüntü Dosyası Adı"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:828
 #, c-format
@@ -765,21 +767,23 @@ msgid ""
 "Insufficient permissions required to save file\n"
 "%s"
 msgstr ""
+"Dosyayı kaydetmek için gereken izinler yok\n"
+"%s"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:829 common/confirm.cpp:124
 #: common/confirm.cpp:256 common/dialogs/panel_setup_severities.cpp:39
 #: kicad/tools/kicad_manager_control.cpp:173
 #: pcbnew/router/length_tuner_tool.cpp:166
 msgid "Error"
-msgstr ""
+msgstr "Hata"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:860
 msgid "Failed to copy image to clipboard"
-msgstr ""
+msgstr "Görüntüyü panoya kopyalama başarısız oldu"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:871
 msgid "Can't save file"
-msgstr ""
+msgstr "Dosya kaydedilemiyor"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:922
 msgid "Silkscreen Color"
