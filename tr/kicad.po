@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 10:50-0700\n"
-"PO-Revision-Date: 2020-10-16 19:55+0000\n"
+"PO-Revision-Date: 2020-10-16 20:27+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -123,31 +123,31 @@ msgstr "Ön izleme"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:192
 msgid "Change to isometric perspective"
-msgstr ""
+msgstr "Eş ölçümlü görünüme geç"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:221
 msgid "Reload board and 3D models"
-msgstr ""
+msgstr "Kartı ve 3B modelleri yeniden yükle"
 
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:333
 msgid "no such file"
-msgstr ""
+msgstr "böyle bir dosya yok"
 
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:364
 msgid "failed to open file"
-msgstr ""
+msgstr "dosyayı açma başarısız oldu"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:426
 msgid "Build board body"
-msgstr ""
+msgstr "Kart gövdesini oluştur"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:439
 msgid "Create layers"
-msgstr ""
+msgstr "Katmanları oluştur"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:475
 msgid "Board outline is not closed: "
-msgstr ""
+msgstr "Kartın dış çizgileri kapalı değil: "
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
@@ -175,12 +175,12 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:423
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr ""
+msgstr "OpenGL sürümünüz desteklenmiyor. En azından 1.5 sürümü gereklidir"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
 msgid "Render time %.0f ms ( %.1f fps)"
-msgstr ""
+msgstr "Oluşturma süresi %.0f ms ( %.1f fps)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:734
 #, c-format
@@ -207,7 +207,7 @@ msgstr ""
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:656
 msgid "Loading 3D models"
-msgstr ""
+msgstr "3B modeller yükleniyor"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:666
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:1036
