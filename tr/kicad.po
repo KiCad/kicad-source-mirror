@@ -3,46 +3,48 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 10:50-0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2020-10-16 19:52+0000\n"
+"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:50
 msgid "All Files (*.*)|*.*"
-msgstr ""
+msgstr "Tüm Dosyalar (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:95
 #, c-format
 msgid "All supported files (%s)"
-msgstr ""
+msgstr "Desteklenen tüm dosyalar (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
 msgid "Available paths:"
-msgstr ""
+msgstr "Kullanılabilir yollar:"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
 msgid "Configure Paths"
-msgstr ""
+msgstr "Yolları Yapılandır"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.h:63
 msgid "Select 3D Model"
-msgstr ""
+msgstr "3B Model Seç"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56
 msgid "Scale"
-msgstr ""
+msgstr "Ölçek"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:29
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:74
@@ -64,7 +66,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1330
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:63
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:39
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:84
@@ -89,23 +91,23 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1341
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:80
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:49
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:94
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:139
 msgid "Z:"
-msgstr ""
+msgstr "Z:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:698 pcbnew/class_module.cpp:777
 #: pcbnew/class_pad.cpp:874
 msgid "Rotation"
-msgstr ""
+msgstr "Döndürme"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:111
 msgid "Offset"
-msgstr ""
+msgstr "Kaydırma"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
 msgid "Opacity"
