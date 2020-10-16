@@ -3,18 +3,17 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-07 19:27+0200\n"
-"PO-Revision-Date: 2020-10-16 17:52+0000\n"
-"Last-Translator: Christian Schlüter <chschlue@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
-"master-source/de/>\n"
-"Language: de\n"
+"PO-Revision-Date: 2020-04-07 19:30+0200\n"
+"Last-Translator: Carsten Schoenert <c.schoenert@t-online.de>\n"
+"Language-Team: \n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
+"X-Generator: Poedit 2.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Bookmarks: -1,2168,-1,-1,-1,-1,-1,-1,-1,-1\n"
 "X-Poedit-SearchPath-0: 3d-viewer\n"
@@ -367,14 +366,14 @@ msgstr "Anzeige der Einstellungen für alle geöffneten Tools"
 #: pcbnew/menubar_footprint_editor.cpp:247 pcbnew/menubar_pcb_editor.cpp:465
 #: pcbnew/toolbars_footprint_viewer.cpp:176
 msgid "&File"
-msgstr "&amp;Datei"
+msgstr "&Datei"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:222 cvpcb/menubar.cpp:85
 #: eeschema/libedit/menubar_libedit.cpp:179 eeschema/menubar.cpp:282
 #: pagelayout_editor/menubar.cpp:167 pcbnew/menubar_footprint_editor.cpp:248
 #: pcbnew/menubar_pcb_editor.cpp:466
 msgid "&Edit"
-msgstr "&amp;Bearbeiten"
+msgstr "&Bearbeiten"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:223
 #: eeschema/libedit/menubar_libedit.cpp:180 eeschema/menubar.cpp:283
@@ -383,12 +382,12 @@ msgstr "&amp;Bearbeiten"
 #: pcbnew/menubar_footprint_editor.cpp:249 pcbnew/menubar_pcb_editor.cpp:467
 #: pcbnew/toolbars_footprint_viewer.cpp:177
 msgid "&View"
-msgstr "&amp;Ansicht"
+msgstr "&Ansicht"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:224 cvpcb/menubar.cpp:86
 #: gerbview/menubar.cpp:232 kicad/menubar.cpp:179
 msgid "&Preferences"
-msgstr "&amp;Einstellungen"
+msgstr "&Einstellungen"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:57
 msgid "Reload board"
