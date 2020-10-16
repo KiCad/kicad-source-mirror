@@ -185,7 +185,7 @@ void FP_CACHE::Save( MODULE* aModule )
         // renaming the file.
         {
             wxLogTrace( traceKicadPcbPlugin, wxT( "Creating temporary library file %s" ),
-                        GetChars( tempFileName ) );
+                    tempFileName );
 
             FILE_OUTPUTFORMATTER formatter( tempFileName );
 
@@ -204,9 +204,7 @@ void FP_CACHE::Save( MODULE* aModule )
         {
             wxString msg = wxString::Format(
                     _( "Cannot rename temporary file \"%s\" to footprint library file \"%s\"" ),
-                    GetChars( tempFileName ),
-                    GetChars( fn.GetFullPath() )
-                    );
+                    tempFileName, fn.GetFullPath() );
             THROW_IO_ERROR( msg );
         }
 #endif
@@ -2233,8 +2231,8 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
         if( !m_cache->Exists() )
         {
             const wxString msg = wxString::Format( _( "Library \"%s\" does not exist.\n"
-                                                   "Would you like to create it?"),
-                                                   GetChars( aLibraryPath ) );
+                                                      "Would you like to create it?"),
+                                                      aLibraryPath );
 
             if( wxMessageBox( msg, _( "Library Not Found"), wxYES_NO | wxICON_QUESTION ) != wxYES )
                 return;

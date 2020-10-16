@@ -151,25 +151,25 @@ const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx, bool aNameOnly 
             {
                 name.Printf( "%s (%s, %s, %s)",
                              filename.GetData(),
-                             GetChars( gerber->m_FileFunction->GetFileType() ),
-                             GetChars( gerber->m_FileFunction->GetBrdLayerId() ),
-                             GetChars( gerber->m_FileFunction->GetBrdLayerSide() ) );
+                             gerber->m_FileFunction->GetFileType(),
+                             gerber->m_FileFunction->GetBrdLayerId(),
+                             gerber->m_FileFunction->GetBrdLayerSide() );
             }
             if( gerber->m_FileFunction->IsDrillFile() )
             {
                 name.Printf( "%s (%s,%s,%s,%s)",
                              filename.GetData(),
-                             GetChars( gerber->m_FileFunction->GetFileType() ),
-                             GetChars( gerber->m_FileFunction->GetDrillLayerPair() ),
-                             GetChars( gerber->m_FileFunction->GetLPType() ),
-                             GetChars( gerber->m_FileFunction->GetRouteType() ) );
+                             gerber->m_FileFunction->GetFileType(),
+                             gerber->m_FileFunction->GetDrillLayerPair(),
+                             gerber->m_FileFunction->GetLPType(),
+                             gerber->m_FileFunction->GetRouteType() );
             }
             else
             {
                 name.Printf( "%s (%s, %s)",
                              filename.GetData(),
-                             GetChars( gerber->m_FileFunction->GetFileType() ),
-                             GetChars( gerber->m_FileFunction->GetBrdLayerId() ) );
+                             gerber->m_FileFunction->GetFileType(),
+                             gerber->m_FileFunction->GetBrdLayerId() );
             }
         }
         else

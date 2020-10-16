@@ -250,8 +250,8 @@ bool SCH_SHEET::UsesDefaultStroke() const
 void SCH_SHEET::SwapData( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem->Type() == SCH_SHEET_T,
-                 wxString::Format( wxT( "SCH_SHEET object cannot swap data with %s object." ),
-                                   GetChars( aItem->GetClass() ) ) );
+            wxString::Format( wxT( "SCH_SHEET object cannot swap data with %s object." ),
+                    aItem->GetClass() ) );
 
     SCH_SHEET* sheet = ( SCH_SHEET* ) aItem;
 

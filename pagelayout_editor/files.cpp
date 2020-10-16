@@ -67,7 +67,7 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
         if( LoadPageLayoutDescrFile( filename ) )
         {
             wxString msg;
-            msg.Printf( _( "File \"%s\" loaded"), GetChars( filename ) );
+            msg.Printf( _( "File \"%s\" loaded"), filename );
             SetStatusText( msg );
         }
 
@@ -125,14 +125,14 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
         if( ! InsertPageLayoutDescrFile( filename ) )
         {
-            msg.Printf( _( "Unable to load %s file" ), GetChars( filename ) );
+            msg.Printf( _( "Unable to load %s file" ), filename );
             wxMessageBox( msg );
         }
         else
         {
             GetScreen()->SetModify();
             HardRedraw();
-            msg.Printf( _( "File \"%s\" inserted" ), GetChars( filename ) );
+            msg.Printf( _( "File \"%s\" inserted" ), filename );
             SetStatusText( msg );
         }
     }
@@ -150,13 +150,13 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
         if( ! LoadPageLayoutDescrFile( filename ) )
         {
-            msg.Printf( _( "Unable to load %s file" ), GetChars( filename ) );
+            msg.Printf( _( "Unable to load %s file" ), filename );
             wxMessageBox( msg );
         }
         else
         {
             OnNewPageLayout();
-            msg.Printf( _( "File \"%s\" loaded" ), GetChars( filename ) );
+            msg.Printf( _( "File \"%s\" loaded" ), filename );
             SetStatusText( msg );
         }
     }
@@ -165,12 +165,12 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     case wxID_SAVE:
         if( !SavePageLayoutDescrFile( filename ) )
         {
-            msg.Printf( _( "Unable to write \"%s\"" ), GetChars( filename ) );
+            msg.Printf( _( "Unable to write \"%s\"" ), filename );
             wxMessageBox( msg );
         }
         else
         {
-            msg.Printf( _("File \"%s\" written"), GetChars( filename ) );
+            msg.Printf( _("File \"%s\" written"), filename );
             SetStatusText( msg );
         }
         break;
@@ -195,13 +195,13 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
         if( !SavePageLayoutDescrFile( filename ) )
         {
-            msg.Printf( _("Unable to create \"%s\""), GetChars( filename ) );
+            msg.Printf( _("Unable to create \"%s\""), filename );
             wxMessageBox( msg );
         }
 
         else
         {
-            msg.Printf( _("File \"%s\" written"), GetChars( filename ) );
+            msg.Printf( _("File \"%s\" written"), filename );
             SetStatusText( msg );
 
             if( GetCurrentFileName().IsEmpty() )

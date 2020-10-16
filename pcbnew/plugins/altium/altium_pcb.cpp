@@ -1102,7 +1102,7 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
         {
             wxLogError( wxString::Format(
                     _( "Cannot create directory \"%s\" -> no 3D-models will be imported." ),
-                    GetChars( altiumModelsPath.GetFullPath() ) ) );
+                    altiumModelsPath.GetFullPath() ) );
             return;
         }
     }
@@ -1127,7 +1127,7 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
         {
             wxLogError(
                     wxString::Format( _( "You do not have write permissions to save file \"%s\"." ),
-                            GetChars( storagePath.GetFullPath() ) ) );
+                            storagePath.GetFullPath() ) );
             continue;
         }
 

@@ -292,12 +292,11 @@ struct APP_KICAD : public wxApp
         catch( const std::exception& e )
         {
             wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
-                GetChars( FROM_UTF8( typeid(e).name() )),
-                GetChars( FROM_UTF8( e.what() ) ) );
+                    FROM_UTF8( typeid( e ).name() ), FROM_UTF8( e.what() ) );
         }
         catch( const IO_ERROR& ioe )
         {
-            wxLogError( GetChars( ioe.What() ) );
+            wxLogError( ioe.What() );
         }
         catch(...)
         {

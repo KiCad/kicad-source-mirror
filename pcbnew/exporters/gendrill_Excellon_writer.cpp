@@ -116,7 +116,7 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
                 {
                     if( aReporter )
                     {
-                        msg.Printf( _( "** Unable to create %s **\n" ), GetChars( fullFilename ) );
+                        msg.Printf( _( "** Unable to create %s **\n" ), fullFilename );
                         aReporter->Report( msg );
                     }
                     break;
@@ -125,7 +125,7 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
                 {
                     if( aReporter )
                     {
-                        msg.Printf( _( "Create file %s\n" ), GetChars( fullFilename ) );
+                        msg.Printf( _( "Create file %s\n" ), fullFilename );
                         aReporter->Report( msg );
                     }
                 }

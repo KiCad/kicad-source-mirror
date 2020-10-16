@@ -517,8 +517,7 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
         if( !fullFileName.IsEmpty() && !wxFileExists( fullFileName ) )
         {
             wxString msg;
-            msg.Printf( _( "Page layout description file \"%s\" not found." ),
-                        GetChars( fullFileName ) );
+            msg.Printf( _( "Page layout description file \"%s\" not found." ), fullFileName );
             wxMessageBox( msg );
             return false;
         }
@@ -902,7 +901,7 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
                 "Do you want to use the relative path:\n"
                 "\"%s\"\n"
                 "instead of\n"
-                "\"%s\"?" ), GetChars( shortFileName ), GetChars( fileName ) );
+                "\"%s\"?" ), shortFileName, fileName );
 
         if( !IsOK( this, msg ) )
             shortFileName = fileName;

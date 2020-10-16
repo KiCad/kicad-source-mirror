@@ -63,7 +63,7 @@ bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename, NETLIST& aN
 
         if( !netlistReader.get() )
         {
-            msg.Printf( _( "Cannot open netlist file \"%s\"." ), GetChars( aFilename ) );
+            msg.Printf( _( "Cannot open netlist file \"%s\"." ), aFilename );
             wxMessageBox( msg, _( "Netlist Load Error." ), wxOK | wxICON_ERROR, this );
             return false;
         }
@@ -169,8 +169,8 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
         {
             msg.Printf( _( "Footprint of %s changed: board footprint \"%s\", netlist footprint \"%s\"." ),
                         component->GetReference(),
-                        GetChars( fpOnBoard->GetFPID().Format() ),
-                        GetChars( component->GetFPID().Format() ) );
+                        fpOnBoard->GetFPID().Format().wx_str(),
+                        component->GetFPID().Format().wx_str() );
             aReporter.Report( msg, RPT_SEVERITY_WARNING );
 
             continue;
@@ -192,7 +192,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
             {
                 msg.Printf( _( "%s footprint ID \"%s\" is not valid." ),
                             component->GetReference(),
-                            GetChars( component->GetFPID().Format() ) );
+                            component->GetFPID().Format().wx_str() );
                 aReporter.Report( msg, RPT_SEVERITY_ERROR );
 
                 continue;
@@ -209,7 +209,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
             {
                 msg.Printf( _( "%s footprint \"%s\" not found in any libraries in the footprint library table.\n" ),
                             component->GetReference(),
-                            GetChars( component->GetFPID().GetLibItemName() ) );
+                            component->GetFPID().GetLibItemName().wx_str() );
                 aReporter.Report( msg, RPT_SEVERITY_ERROR );
 
                 continue;

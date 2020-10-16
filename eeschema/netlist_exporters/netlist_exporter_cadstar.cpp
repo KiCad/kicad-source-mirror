@@ -45,8 +45,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
     if( ( f = wxFopen( aOutFileName, wxT( "wt" ) ) ) == NULL )
     {
         wxString msg;
-        msg.Printf( _( "Failed to create file \"%s\"" ),
-                    GetChars( aOutFileName ) );
+        msg.Printf( _( "Failed to create file \"%s\"" ), aOutFileName );
         DisplayError( NULL, msg );
         return false;
     }
@@ -181,12 +180,9 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
             switch( print_ter )
             {
             case 0:
-                {
-                    InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
-                                            GetChars( InitNetDesc ),
-                                            GetChars( refText ),
-                                            GetChars( pinText ),
-                                            GetChars( netName ) );
+            {
+                InitNetDescLine.Printf(
+                        wxT( "\n%s   %s   %.4s     %s" ), InitNetDesc, refText, pinText, netName );
                 }
                 print_ter++;
                 break;

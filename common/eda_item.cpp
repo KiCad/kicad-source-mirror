@@ -180,8 +180,7 @@ bool EDA_ITEM::Replace( wxFindReplaceData& aSearchData, wxString& aText )
         suffix = aText.Right( aText.length() - ( aSearchData.GetFindString().length() + result ) );
 
     wxLogTrace( traceFindReplace, wxT( "Replacing '%s', prefix '%s', replace '%s', suffix '%s'." ),
-                GetChars( aText ), GetChars( prefix ), GetChars( aSearchData.GetReplaceString() ),
-                GetChars( suffix ) );
+                aText, prefix, aSearchData.GetReplaceString(), suffix );
 
     aText = prefix + aSearchData.GetReplaceString() + suffix;
 
@@ -192,7 +191,7 @@ bool EDA_ITEM::Replace( wxFindReplaceData& aSearchData, wxString& aText )
 bool EDA_ITEM::operator<( const EDA_ITEM& aItem ) const
 {
     wxFAIL_MSG( wxString::Format( wxT( "Less than operator not defined for item type %s." ),
-                                  GetChars( GetClass() ) ) );
+                                 GetClass() ) );
 
     return false;
 }

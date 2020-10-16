@@ -820,17 +820,17 @@ bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName )
     if( fn.IsDir() && !fn.IsDirWritable() )
     {
         msg.Printf( _( "You do not have write permissions to folder \"%s\"." ),
-                    GetChars( fn.GetPath() ) );
+                    fn.GetPath() );
     }
     else if( !fn.FileExists() && !fn.IsDirWritable() )
     {
         msg.Printf( _( "You do not have write permissions to save file \"%s\" to folder \"%s\"." ),
-                    GetChars( fn.GetFullName() ), GetChars( fn.GetPath() ) );
+                    fn.GetFullName(), fn.GetPath() );
     }
     else if( fn.FileExists() && !fn.IsFileWritable() )
     {
         msg.Printf( _( "You do not have write permissions to save file \"%s\"." ),
-                    GetChars( fn.GetFullPath() ) );
+                    fn.GetFullPath() );
     }
 
     if( !msg.IsEmpty() )
@@ -863,7 +863,7 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
             "It appears that the last time you were editing the file\n"
             "\"%s\"\n"
             "it was not saved properly.  Do you wish to restore the last saved edits you made?" ),
-            GetChars( aFileName.GetFullName() )
+            aFileName.GetFullName()
         );
 
     int response = wxMessageBox( msg, Pgm().App().GetAppName(), wxYES_NO | wxICON_QUESTION, this );

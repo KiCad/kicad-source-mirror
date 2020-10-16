@@ -1488,7 +1488,7 @@ void SCH_SEXPR_PARSER::parsePAGE_INFO( PAGE_INFO& aPageInfo )
     if( !aPageInfo.SetType( pageType ) )
     {
         wxString err;
-        err.Printf( _( "Page type \"%s\" is not valid " ), GetChars( FromUTF8() ) );
+        err.Printf( _( "Page type \"%s\" is not valid " ), FromUTF8() );
         THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
 
@@ -2101,7 +2101,7 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
             {
                 error.Printf( _( "Invalid symbol library ID in\nfile: \"%s\"\nline: %d\n"
                                  "offset: %d" ),
-                              GetChars( CurSource() ), CurLineNumber(), CurOffset() );
+                        CurSource(), CurLineNumber(), CurOffset() );
                 THROW_IO_ERROR( error );
             }
 

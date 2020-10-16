@@ -227,7 +227,7 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 
             wxString msg = wxString::Format(
                                 _( "Duplicate library nickname \"%s\" found in symbol library "
-                                   "table file line %d" ), GetChars( nickname ), lineNum );
+                                   "table file line %d" ), nickname, lineNum );
 
             if( !errMsg.IsEmpty() )
                 errMsg << '\n';
@@ -492,8 +492,8 @@ bool SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE& aTable )
 
         if( !fn.DirExists() && !fn.Mkdir( 0x777, wxPATH_MKDIR_FULL ) )
         {
-            THROW_IO_ERROR( wxString::Format( _( "Cannot create global library table path \"%s\"." ),
-                                              GetChars( fn.GetPath() ) ) );
+            THROW_IO_ERROR( wxString::Format(
+                    _( "Cannot create global library table path \"%s\"." ), fn.GetPath() ) );
         }
 
         // Attempt to copy the default global file table from the KiCad

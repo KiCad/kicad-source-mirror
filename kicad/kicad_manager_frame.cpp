@@ -651,8 +651,7 @@ void KICAD_MANAGER_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 
 void KICAD_MANAGER_FRAME::PrintPrjInfo()
 {
-    wxString msg = wxString::Format( _( "Project name:\n%s\n" ),
-                        GetChars( GetProjectFileName() ) );
+    wxString msg = wxString::Format( _( "Project name:\n%s\n" ), GetProjectFileName() );
     PrintMsg( msg );
 }
 

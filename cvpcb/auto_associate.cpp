@@ -103,7 +103,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wx
             {
                 error_msg.Printf( _( "Equivalence file \"%s\" could not be found in the "
                                      "default search paths." ),
-                            GetChars( fn.GetFullName() ) );
+                        fn.GetFullName() );
 
                 if( ! aErrorMessages->IsEmpty() )
                     *aErrorMessages << wxT("\n\n");
@@ -122,7 +122,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wx
 
             if( aErrorMessages )
             {
-                error_msg.Printf( _( "Error opening equivalence file \"%s\"." ), GetChars( tmp ) );
+                error_msg.Printf( _( "Error opening equivalence file \"%s\"." ), tmp );
 
                 if( ! aErrorMessages->IsEmpty() )
                     *aErrorMessages << wxT("\n\n");
@@ -258,8 +258,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
             {
                 msg.Printf( _( "Component %s: footprint %s not found in any of the project "
                                "footprint libraries." ),
-                            GetChars( component->GetReference() ),
-                            GetChars( equivItem.m_FootprintFPID ) );
+                        component->GetReference(), equivItem.m_FootprintFPID );
 
                 if( ! error_msg.IsEmpty() )
                     error_msg << wxT("\n\n");

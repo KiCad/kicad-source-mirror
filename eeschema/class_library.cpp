@@ -554,7 +554,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
             {
                 wxString msg;
                 msg.Printf( _( "Symbol library \"%s\" failed to load. Error:\n %s" ),
-                            GetChars( filename ), GetChars( ioe.What() ) );
+                            filename, ioe.What() );
 
                 wxLogError( msg );
             }
@@ -576,11 +576,9 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
         }
         catch( const IO_ERROR& ioe )
         {
-            wxString msg = wxString::Format( _(
-                    "Symbol library \"%s\" failed to load.\nError: %s" ),
-                    GetChars( cache_name ),
-                    GetChars( ioe.What() )
-                    );
+            wxString msg =
+                    wxString::Format( _( "Symbol library \"%s\" failed to load.\nError: %s" ),
+                            cache_name, ioe.What() );
 
             THROW_IO_ERROR( msg );
         }

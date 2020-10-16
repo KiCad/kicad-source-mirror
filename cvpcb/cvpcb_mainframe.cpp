@@ -721,7 +721,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
     if( filters.IsEmpty() )
         msg = _( "No filtering" );
     else
-        msg.Printf( _( "Filtered by %s" ), GetChars( filters ) );
+        msg.Printf( _( "Filtered by %s" ), filters );
 
     msg << wxT( ": " ) << m_footprintListBox->GetCount();
 

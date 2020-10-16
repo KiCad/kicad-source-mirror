@@ -572,7 +572,7 @@ void FOOTPRINT_WIZARD_FRAME::OnActivate( wxActivateEvent& event )
 void FOOTPRINT_WIZARD_FRAME::Update3DView( bool aForceReload, const wxString* aTitle )
 {
     wxString frm3Dtitle;
-    frm3Dtitle.Printf( _( "ModView: 3D Viewer [%s]" ), GetChars( m_wizardName ) );
+    frm3Dtitle.Printf( _( "ModView: 3D Viewer [%s]" ), m_wizardName );
     PCB_BASE_FRAME::Update3DView( aForceReload, &frm3Dtitle );
 }
 

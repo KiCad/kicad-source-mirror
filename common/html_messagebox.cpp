@@ -107,7 +107,7 @@ void HTML_MESSAGE_BOX::ListSet( const wxArrayString& aList )
 void HTML_MESSAGE_BOX::MessageSet( const wxString& message )
 {
     wxString message_value = wxString::Format(
-                wxT( "<b>%s</b><br>" ), GetChars( message ) );
+                wxT( "<b>%s</b><br>" ), message );
 
     m_htmlWindow->AppendToPage( message_value );
 }

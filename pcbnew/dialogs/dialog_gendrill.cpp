@@ -292,7 +292,7 @@ void DIALOG_GENDRILL::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
     wxFileName fn( Prj().AbsolutePath( m_board->GetFileName() ) );
     wxString   defaultPath = fn.GetPathWithSep();
     wxString   msg;
-    msg.Printf( _( "Do you want to use a path relative to\n\"%s\"" ), GetChars( defaultPath ) );
+    msg.Printf( _( "Do you want to use a path relative to\n\"%s\"" ), defaultPath );
 
     wxMessageDialog dialog( this, msg, _( "Plot Output Directory" ),
                             wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
@@ -371,7 +371,7 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
     {
         wxString msg;
         msg.Printf( _( "Could not write drill and/or map files to folder \"%s\"." ),
-                    GetChars( outputDir.GetPath() ) );
+                outputDir.GetPath() );
         DisplayError( this, msg );
         return;
     }
@@ -445,12 +445,12 @@ void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
 
     if( ! success )
     {
-        msg.Printf(  _( "** Unable to create %s **\n" ), GetChars( dlg.GetPath() ) );
+        msg.Printf(  _( "** Unable to create %s **\n" ), dlg.GetPath() );
         m_messagesBox->AppendText( msg );
     }
     else
     {
-        msg.Printf( _( "Report file %s created\n" ), GetChars( dlg.GetPath() ) );
+        msg.Printf( _( "Report file %s created\n" ), dlg.GetPath() );
         m_messagesBox->AppendText( msg );
     }
 }

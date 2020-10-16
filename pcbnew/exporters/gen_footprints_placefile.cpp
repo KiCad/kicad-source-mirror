@@ -345,8 +345,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 
     if( !EnsureFileDirectoryExists( &outputDir, boardFilename, m_reporter ) )
     {
-        msg.Printf( _( "Could not write plot files to folder \"%s\"." ),
-                    GetChars( outputDir.GetPath() ) );
+        msg.Printf( _( "Could not write plot files to folder \"%s\"." ), outputDir.GetPath() );
         DisplayError( this, msg );
         return false;
     }

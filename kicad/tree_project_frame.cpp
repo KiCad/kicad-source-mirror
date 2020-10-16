@@ -248,8 +248,7 @@ void TREE_PROJECT_FRAME::OnCreateNewDirectory( wxCommandEvent& event )
                 curr_dir += wxFileName::GetPathSeparator();
         }
 
-        wxString msg =
-                wxString::Format( _( "Current project directory:\n%s" ), GetChars( prj_dir ) );
+        wxString msg    = wxString::Format( _( "Current project directory:\n%s" ), prj_dir );
         wxString subdir = wxGetTextFromUser( msg, _( "Create New Directory" ), curr_dir );
 
         if( subdir.IsEmpty() )

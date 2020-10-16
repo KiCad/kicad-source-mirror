@@ -184,7 +184,7 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
 #endif
 
     wxString msg;
-    msg.Printf( _( "Command \"%s\" could not found" ), GetChars( fullFileName ) );
+    msg.Printf( _( "Command \"%s\" could not found" ), fullFileName );
     DisplayError( frame, msg, 20 );
     return -1;
 }

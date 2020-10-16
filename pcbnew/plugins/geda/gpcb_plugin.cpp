@@ -344,7 +344,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
 
     if( parameters[0].CmpNoCase( wxT( "Element" ) ) != 0 )
     {
-        msg.Printf( _( "unknown token \"%s\"" ), GetChars( parameters[0] ) );
+        msg.Printf( _( "unknown token \"%s\"" ), parameters[0] );
         THROW_PARSE_ERROR( msg, aLineReader->GetSource(), (const char *)aLineReader,
                            aLineReader->LineNumber(), 0 );
     }
@@ -449,8 +449,8 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
                 conv_unit = NEW_GPCB_UNIT_CONV;
         }
 
-        wxLogTrace( traceGedaPcbPlugin, wxT( "%s parameter count = %d." ),
-                    GetChars( parameters[0] ), paramCnt );
+        wxLogTrace(
+                traceGedaPcbPlugin, wxT( "%s parameter count = %d." ), parameters[0], paramCnt );
 
         // Parse a line with format: ElementLine [X1 Y1 X2 Y2 Thickness]
         if( parameters[0].CmpNoCase( wxT( "ElementLine" ) ) == 0 )

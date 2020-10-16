@@ -122,30 +122,6 @@ static inline wxString FROM_UTF8( const char* cstring )
     return line;
 }
 
-/**
- * Function GetChars
- * returns a wxChar* to the actual wxChar* data within a wxString, and is
- * helpful for passing strings to wxString::Printf() and wxString::Format().
- * It can also be passed a UTF8 parameter which will be converted to wxString
- * by the compiler.
- * <p>
- * Example:  wxString::Format( wxT( "%s" ), GetChars( UTF( "some text" ) ) );
- * <p>
- * When wxWidgets is properly built for KiCad, a const wxChar* points to either:
- * <ul>
- * <li> 32 bit unicode characters on linux/OSX or </li>
- * <li> 16 bit UTF16 characters on windows. </li>
- * </ul>
- * Note that you cannot pass 8 bit strings to wxString::Format() or Printf() so this
- * is a useful conversion function to wxChar*, which is needed by wxString::Format().
- *
- * @return const wxChar* - a pointer to the UNICODE or UTF16 (on windows) text.
- */
-static inline const wxChar* GetChars( const wxString& s )
-{
-    return (const wxChar*) s.c_str();
-}
-
 /// # of elements in an array.  This implements type-safe compile time checking
 template <typename T, std::size_t N>
 constexpr std::size_t arrayDim(T const (&)[N]) noexcept

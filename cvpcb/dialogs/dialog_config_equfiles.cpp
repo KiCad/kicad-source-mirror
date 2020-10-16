@@ -45,9 +45,8 @@ DIALOG_CONFIG_EQUFILES::DIALOG_CONFIG_EQUFILES( CVPCB_MAINFRAME* aParent ) :
 {
     m_Parent = aParent;
 
-    PROJECT&    prj = Prj();
-    SetTitle( wxString::Format( _( "Project file: \"%s\"" ),
-                                GetChars( prj.GetProjectFullName() ) ) );
+    PROJECT& prj = Prj();
+    SetTitle( wxString::Format( _( "Project file: \"%s\"" ), prj.GetProjectFullName() ) );
 
     Init( );
 
@@ -270,9 +269,8 @@ void DIALOG_CONFIG_EQUFILES::OnAddFiles( wxCommandEvent& event )
                 if( fn.MakeRelativeTo( libpath ) )
                 {
                     equFilename.Printf( wxT( "${%s}%c%s" ),
-                                        GetChars( m_gridEnvVars->GetCellValue( wxGridCellCoords( row, 0 ) ) ),
-                                        fn.GetPathSeparator(),
-                                        GetChars( fn.GetFullPath() ) );
+                            m_gridEnvVars->GetCellValue( wxGridCellCoords( row, 0 ) ),
+                            fn.GetPathSeparator(), fn.GetFullPath() );
                     break;
                 }
             }

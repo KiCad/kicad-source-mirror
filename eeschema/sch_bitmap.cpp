@@ -93,8 +93,8 @@ EDA_ITEM* SCH_BITMAP::Clone() const
 void SCH_BITMAP::SwapData( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem->Type() == SCH_BITMAP_T,
-                 wxString::Format( wxT( "SCH_BITMAP object cannot swap data with %s object." ),
-                                   GetChars( aItem->GetClass() ) ) );
+            wxString::Format( wxT( "SCH_BITMAP object cannot swap data with %s object." ),
+                    aItem->GetClass() ) );
 
     SCH_BITMAP* item = (SCH_BITMAP*) aItem;
     std::swap( m_pos, item->m_pos );

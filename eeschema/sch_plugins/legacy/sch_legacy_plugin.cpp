@@ -806,8 +806,8 @@ void SCH_LEGACY_PLUGIN::loadHeader( LINE_READER& aReader, SCH_SCREEN* aScreen )
 
     if( !line || !strCompare( "Eeschema Schematic File Version", line, &line ) )
     {
-        m_error.Printf( _( "\"%s\" does not appear to be an Eeschema file" ),
-                        GetChars( aScreen->GetFileName() ) );
+        m_error.Printf(
+                _( "\"%s\" does not appear to be an Eeschema file" ), aScreen->GetFileName() );
         THROW_IO_ERROR( m_error );
     }
 

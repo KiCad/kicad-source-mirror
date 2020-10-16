@@ -677,7 +677,7 @@ void LIB_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
         }
         catch( IO_ERROR& e )
         {
-            wxLogMessage( "Can not paste: %s", GetChars( e.Problem() ) );
+            wxLogMessage( "Can not paste: %s", e.Problem() );
             return;
         }
     }

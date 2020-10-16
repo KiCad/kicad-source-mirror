@@ -1014,7 +1014,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
         else if( !isdigit(*aText)  )     // Ill. symbol
         {
             msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": ill. symbol, line: \"%s\"" ),
-                        GetChars( am.name ), GetChars( FROM_UTF8( aBuff ) ) );
+                        am.name, FROM_UTF8( aBuff ) );
             AddMessageToList( msg );
             primitive_type = AMP_COMMENT;
         }
@@ -1072,7 +1072,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
 
         default:
             msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": Invalid primitive id code %d, line %d: \"%s\"" ),
-                        GetChars( am.name ), primitive_type, m_LineNum, GetChars( FROM_UTF8( aBuff ) ) );
+                        am.name, primitive_type, m_LineNum, FROM_UTF8( aBuff ) );
             AddMessageToList( msg );
             return false;
         }

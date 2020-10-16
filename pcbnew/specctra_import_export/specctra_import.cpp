@@ -163,8 +163,8 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
     if( layerNdx == -1 )
     {
         wxString layerName = FROM_UTF8( aPath->layer_id.c_str() );
-        THROW_IO_ERROR( wxString::Format( _("Session file uses invalid layer id \"%s\""),
-                                          GetChars( layerName ) ) );
+        THROW_IO_ERROR(
+                wxString::Format( _( "Session file uses invalid layer id \"%s\"" ), layerName ) );
     }
 
     TRACK* track = new TRACK( sessionBoard );
@@ -222,8 +222,8 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
         shape = (SHAPE*) (*aPadstack)[0];
         DSN_T type = shape->shape->Type();
         if( type != T_circle )
-            THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s"),
-                                              GetChars( GetTokenString( type ) ) ) );
+            THROW_IO_ERROR(
+                    wxString::Format( _( "Unsupported via shape: %s" ), GetTokenString( type ) ) );
 
         CIRCLE* circle = (CIRCLE*) shape->shape;
         int viaDiam = scale( circle->diameter, routeResolution );
@@ -240,8 +240,8 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
         shape = (SHAPE*) (*aPadstack)[0];
         DSN_T type = shape->shape->Type();
         if( type != T_circle )
-            THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s"),
-                                              GetChars( GetTokenString( type ) ) ) );
+            THROW_IO_ERROR(
+                    wxString::Format( _( "Unsupported via shape: %s" ), GetTokenString( type ) ) );
 
         CIRCLE* circle = (CIRCLE*) shape->shape;
         int viaDiam = scale( circle->diameter, routeResolution );
@@ -265,8 +265,8 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
             shape = (SHAPE*) (*aPadstack)[i];
             DSN_T type = shape->shape->Type();
             if( type != T_circle )
-                THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s"),
-                                                  GetChars( GetTokenString( type ) ) ) );
+                THROW_IO_ERROR( wxString::Format(
+                        _( "Unsupported via shape: %s" ), GetTokenString( type ) ) );
 
             CIRCLE* circle = (CIRCLE*) shape->shape;
 
@@ -274,8 +274,8 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
             if( layerNdx == -1 )
             {
                 wxString layerName = FROM_UTF8( circle->layer_id.c_str() );
-                THROW_IO_ERROR( wxString::Format( _("Session file uses invalid layer id \"%s\""),
-                                                  GetChars( layerName ) ) );
+                THROW_IO_ERROR( wxString::Format(
+                        _( "Session file uses invalid layer id \"%s\"" ), layerName ) );
             }
 
             if( layerNdx > topLayerNdx )
@@ -493,8 +493,8 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                 // wire_via to text and put that text into the exception.
                 wxString psid( FROM_UTF8( wire_via->GetPadstackId().c_str() ) );
 
-                THROW_IO_ERROR( wxString::Format( _("A wire_via references a missing padstack \"%s\""),
-                                                  GetChars( psid ) ) );
+                THROW_IO_ERROR( wxString::Format(
+                        _( "A wire_via references a missing padstack \"%s\"" ), psid ) );
             }
 
             NETCLASSPTR netclass = aBoard->GetDesignSettings().GetNetClasses().GetDefault();

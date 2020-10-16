@@ -198,7 +198,7 @@ const wxString GetGerberFileFunctionAttribute( const BOARD *aBoard, LAYER_NUM aL
 #endif
 
     wxString fileFct;
-    fileFct.Printf( "%%TF.FileFunction,%s*%%", GetChars( attrib ) );
+    fileFct.Printf( "%%TF.FileFunction,%s*%%", attrib );
 
     return fileFct;
 }
@@ -318,7 +318,7 @@ void AddGerberX2Header( PLOTTER * aPlotter,
     if( rev.IsEmpty() )
         rev = wxT( "rev?" );
 
-    text.Printf( wxT( "%%TF.ProjectId,%s,%s,%s*%%" ), msg.ToAscii(), GetChars( guid ), rev.ToAscii() );
+    text.Printf( wxT( "%%TF.ProjectId,%s,%s,%s*%%" ), msg.ToAscii(), guid, rev.ToAscii() );
     aPlotter->AddLineToHeader( makeStringCompatX1( text, aUseX1CompatibilityMode ) );
 
     // Add the TF.SameCoordinates, that specify all gerber files uses the same

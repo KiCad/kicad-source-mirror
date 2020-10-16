@@ -295,8 +295,8 @@ void GITHUB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxStrin
         {
             wxString msg = wxString::Format(
                     _( "Footprint\n\"%s\"\nis not in the writable portion of this Github library\n\"%s\"" ),
-                    GetChars( aFootprintName ),
-                    GetChars( aLibraryPath )
+                    aFootprintName,
+                    aLibraryPath
                     );
 
             THROW_IO_ERROR( msg );
@@ -400,8 +400,8 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
                 {
                     wxString msg = wxString::Format(
                             _( "option \"%s\" for Github library \"%s\" must point to a writable directory ending with '.pretty'." ),
-                            GetChars( FROM_UTF8( PRETTY_DIR ) ),
-                            GetChars( aLibraryPath )
+                            FROM_UTF8( PRETTY_DIR ),
+                            aLibraryPath
                             );
 
                     THROW_IO_ERROR( msg );
@@ -553,7 +553,7 @@ void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL )
 
     if( !repoURL_zipURL( aRepoURL, &zip_url ) )
     {
-        wxString msg = wxString::Format( _( "Unable to parse URL:\n\"%s\"" ), GetChars( aRepoURL ) );
+        wxString msg = wxString::Format( _( "Unable to parse URL:\n\"%s\"" ), aRepoURL );
         THROW_IO_ERROR( msg );
     }
 

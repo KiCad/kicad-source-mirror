@@ -907,16 +907,18 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             if( module->GetReference() == wxEmptyString )
             {
-                THROW_IO_ERROR( wxString::Format( _( "Symbol with value of \"%s\" has empty reference id." ),
-                                                  GetChars( module->GetValue() ) ) );
+                THROW_IO_ERROR( wxString::Format(
+                        _( "Symbol with value of \"%s\" has empty reference id." ),
+                        module->GetValue() ) );
             }
 
             // if we cannot insert OK, that means the reference has been seen before.
             STRINGSET_PAIR refpair = refs.insert( TO_UTF8( module->GetReference() ) );
             if( !refpair.second )      // insert failed
             {
-                THROW_IO_ERROR( wxString::Format( _( "Multiple symbols have identical reference IDs of \"%s\"." ),
-                                                  GetChars( module->GetReference() ) ) );
+                THROW_IO_ERROR( wxString::Format(
+                        _( "Multiple symbols have identical reference IDs of \"%s\"." ),
+                        module->GetReference() ) );
             }
         }
     }

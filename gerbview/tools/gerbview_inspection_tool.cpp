@@ -127,7 +127,7 @@ int GERBVIEW_INSPECTION_TOOL::ShowDCodes( const TOOL_EVENT& aEvent )
                          pt_D_code->m_Size.y / scale, units,
                          pt_D_code->m_Size.x / scale, units,
                          D_CODE::ShowApertureType( pt_D_code->m_Shape ),
-                         pt_D_code->m_AperFunction.IsEmpty()? wxT( "none" ) : GetChars( pt_D_code->m_AperFunction )
+                         pt_D_code->m_AperFunction.IsEmpty()? wxT( "none" ) : pt_D_code->m_AperFunction
                          );
 
             if( !pt_D_code->m_Defined )
@@ -169,8 +169,7 @@ int GERBVIEW_INSPECTION_TOOL::ShowSource( const TOOL_EVENT& aEvent )
             if( !fn.FileExists() )
             {
                 wxString msg;
-                msg.Printf( _( "Source file \"%s\" is not available" ),
-                            GetChars( fn.GetFullPath() ) );
+                msg.Printf( _( "Source file \"%s\" is not available" ), fn.GetFullPath() );
                 wxMessageBox( msg );
             }
             else

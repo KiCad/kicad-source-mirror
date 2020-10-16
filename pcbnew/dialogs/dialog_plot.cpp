@@ -387,8 +387,7 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
     // Test if making the path relative is possible before asking the user if they want to do it
     if( relPathTest.MakeRelativeTo( defaultPath ) )
     {
-        msg.Printf( _( "Do you want to use a path relative to\n\"%s\"" ),
-                       GetChars( defaultPath ) );
+        msg.Printf( _( "Do you want to use a path relative to\n\"%s\"" ), defaultPath );
 
         wxMessageDialog dialog( this, msg, _( "Plot Output Directory" ),
                                 wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
@@ -804,8 +803,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     if( !EnsureFileDirectoryExists( &outputDir, boardFilename, &reporter ) )
     {
         wxString msg;
-        msg.Printf( _( "Could not write plot files to folder \"%s\"." ),
-                    GetChars( outputDir.GetPath() ) );
+        msg.Printf( _( "Could not write plot files to folder \"%s\"." ), outputDir.GetPath() );
         DisplayError( this, msg );
         return;
     }

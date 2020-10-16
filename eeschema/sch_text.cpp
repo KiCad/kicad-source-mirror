@@ -547,7 +547,7 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
 
 wxString SCH_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Graphic Text '%s'" ), GetChars( ShortenedShownText() ) );
+    return wxString::Format( _( "Graphic Text '%s'" ), ShortenedShownText() );
 }
 
 

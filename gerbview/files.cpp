@@ -525,7 +525,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
                 reported_no_more_layer = true;
 
                 // Report the name of not loaded files:
-                msg.Printf( MSG_NOT_LOADED, GetChars( entry->GetName() ) );
+                msg.Printf( MSG_NOT_LOADED, entry->GetName() );
                 aReporter->Report( msg, RPT_SEVERITY_ERROR );
             }
 

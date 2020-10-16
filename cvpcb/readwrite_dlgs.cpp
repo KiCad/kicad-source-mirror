@@ -145,16 +145,16 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
                         case 1:
                             msg += wxString::Format( _(
                                     "Component \"%s\" footprint \"%s\" was <b>not found</b> in any library.\n" ),
-                                    GetChars( component->GetReference() ),
-                                    GetChars( component->GetFPID().GetLibItemName() )
+                                    component->GetReference(),
+                                    component->GetFPID().GetLibItemName().wx_str()
                                     );
                             break;
 
                         case 2:
                             msg += wxString::Format( _(
                                     "Component \"%s\" footprint \"%s\" was found in <b>multiple</b> libraries.\n" ),
-                                    GetChars( component->GetReference() ),
-                                    GetChars( component->GetFPID().GetLibItemName() )
+                                    component->GetReference(),
+                                    component->GetFPID().GetLibItemName().wx_str()
                                     );
                             break;
                         }
@@ -263,9 +263,9 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
         COMPONENT* component = m_netlist.GetComponent( i );
 
         msg.Printf( CMP_FORMAT, m_compListBox->GetCount() + 1,
-                    GetChars( component->GetReference() ),
-                    GetChars( component->GetValue() ),
-                    GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
+                    component->GetReference(),
+                    component->GetValue(),
+                    FROM_UTF8( component->GetFPID().Format().c_str() ) );
 
         m_compListBox->AppendLine( msg );
     }

@@ -331,7 +331,7 @@ void GENDRILL_WRITER_BASE::CreateMapFilesSet( const wxString& aPlotDirectory,
             {
                 if( aReporter )
                 {
-                    msg.Printf( _( "** Unable to create %s **\n" ), GetChars( fullfilename ) );
+                    msg.Printf( _( "** Unable to create %s **\n" ), fullfilename );
                     aReporter->Report( msg );
                 }
 
@@ -341,7 +341,7 @@ void GENDRILL_WRITER_BASE::CreateMapFilesSet( const wxString& aPlotDirectory,
             {
                 if( aReporter )
                 {
-                    msg.Printf( _( "Create file %s\n" ), GetChars( fullfilename ) );
+                    msg.Printf( _( "Create file %s\n" ), fullfilename );
                     aReporter->Report( msg );
                 }
             }

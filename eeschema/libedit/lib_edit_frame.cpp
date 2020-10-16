@@ -490,7 +490,7 @@ void LIB_EDIT_FRAME::RebuildSymbolUnitsList()
         for( int i = 0; i < m_my_part->GetUnitCount(); i++ )
         {
             wxString sub  = LIB_PART::SubReference( i+1, false );
-            wxString unit = wxString::Format( _( "Unit %s" ), GetChars( sub ) );
+            wxString unit = wxString::Format( _( "Unit %s" ), sub );
             m_unitSelectBox->Append( unit );
         }
     }

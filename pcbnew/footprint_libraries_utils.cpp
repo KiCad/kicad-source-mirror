@@ -973,7 +973,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
     if( GetScreen()->IsModify() && m_revertModule )
     {
         wxString msg = wxString::Format( _( "Revert \"%s\" to last version saved?" ),
-                                         GetChars( GetLoadedFPID().GetLibItemName() ) );
+                GetLoadedFPID().GetLibItemName().wx_str() );
 
         if( ConfirmRevertDialog( this, msg ) )
         {

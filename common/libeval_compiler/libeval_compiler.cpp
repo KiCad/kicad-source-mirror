@@ -142,7 +142,7 @@ wxString UOP::Format() const
         else if( m_value->GetType() == VT_NUMERIC )
             str = wxString::Format( "PUSH NUM [%.10f]", m_value->AsDouble() );
         else
-            str = wxString::Format( "PUSH STR [%ls]", GetChars( m_value->AsString() ) );
+            str = wxString::Format( "PUSH STR [%ls]", m_value->AsString() );
     }
         break;
 

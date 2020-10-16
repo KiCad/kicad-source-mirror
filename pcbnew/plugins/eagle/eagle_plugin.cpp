@@ -949,10 +949,7 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
             const wxString& pkg = pack_ref;
 
             wxString emsg = wxString::Format(
-                _( "<package> name: \"%s\" duplicated in eagle <library>: \"%s\"" ),
-                GetChars( pkg ),
-                GetChars( lib )
-                );
+                    _( "<package> name: \"%s\" duplicated in eagle <library>: \"%s\"" ), pkg, lib );
             THROW_IO_ERROR( emsg );
         }
 
@@ -1027,8 +1024,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
         if( mi == m_templates.end() )
         {
             wxString emsg = wxString::Format( _( "No \"%s\" package in library \"%s\"" ),
-                                              GetChars( FROM_UTF8( e.package.c_str() ) ),
-                                              GetChars( FROM_UTF8( e.library.c_str() ) ) );
+                    FROM_UTF8( e.package.c_str() ), FROM_UTF8( e.library.c_str() ) );
             THROW_IO_ERROR( emsg );
         }
 
