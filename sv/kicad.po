@@ -3,14 +3,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 10:50-0700\n"
-"PO-Revision-Date: 2018-10-06 19:01+0200\n"
-"Last-Translator: Martin Nielsen-Lönn <martin.nielsen.lonn@gmail.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2020-10-16 20:27+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -30,20 +32,17 @@ msgid "All supported files (%s)"
 msgstr ""
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
-#, fuzzy
 msgid "Available paths:"
-msgstr "Filnamn:"
+msgstr "Tillgängliga vägar:"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
-#, fuzzy
 msgid "Configure Paths"
-msgstr "Konfiguration"
+msgstr "Konfigurera banor"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.h:63
-#, fuzzy
 msgid "Select 3D Model"
-msgstr "Välj nät"
+msgstr "Välj 3D-modell"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56
@@ -106,9 +105,8 @@ msgstr ""
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:698 pcbnew/class_module.cpp:777
 #: pcbnew/class_pad.cpp:874
-#, fuzzy
 msgid "Rotation"
-msgstr "Rotera pinne"
+msgstr "Rotation"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:111
 msgid "Offset"
@@ -131,28 +129,24 @@ msgid "Change to isometric perspective"
 msgstr ""
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:221
-#, fuzzy
 msgid "Reload board and 3D models"
-msgstr "Ladda om kretskort"
+msgstr "Ladda ombord och 3D-modeller"
 
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:333
-#, fuzzy
 msgid "no such file"
-msgstr "Packa upp arkivfil"
+msgstr "ingen sådan fil"
 
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:364
-#, fuzzy
 msgid "failed to open file"
-msgstr "Kunde inte öppna filen "
+msgstr "misslyckades att öppna fil"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:426
 msgid "Build board body"
 msgstr ""
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:439
-#, fuzzy
 msgid "Create layers"
-msgstr "&Spara lager"
+msgstr "Skapa lager"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:475
 msgid "Board outline is not closed: "
@@ -163,9 +157,8 @@ msgid "Create tracks and vias"
 msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:702
-#, fuzzy
 msgid "Create zones"
-msgstr "Radera zoner"
+msgstr "Skapa zoner"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:772
 msgid "Simplifying copper layers polygons"
@@ -204,23 +197,20 @@ msgid "Net %s\tNetClass %s"
 msgstr ""
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:498
-#, fuzzy
 msgid "Load OpenGL: board"
-msgstr "Ladda om kretskort"
+msgstr "Ladda OpenGL: kretskort"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:523
 msgid "Load OpenGL: holes and vias"
 msgstr ""
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:615
-#, fuzzy
 msgid "Load OpenGL: layers"
-msgstr "alla kopparlager"
+msgstr "Ladda OpenGL: lager"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:656
-#, fuzzy
 msgid "Loading 3D models"
-msgstr "Laddar "
+msgstr "Laddar 3D-modeller"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:666
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:1036
@@ -229,16 +219,15 @@ msgid "Reload time %.3f s"
 msgstr ""
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:924
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s"
-msgstr "Laddar '%s'"
+msgstr "Läser in %s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.cpp:576
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:178
 #: common/widgets/footprint_preview_widget.cpp:108
-#, fuzzy
 msgid "Loading..."
-msgstr "Laddar "
+msgstr "Läser in..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:358
 #, c-format
@@ -269,9 +258,8 @@ msgid "3D Viewer"
 msgstr "3D-visare"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:68
-#, fuzzy
 msgid "Copy 3D Image"
-msgstr "Kopiera 3D bild till urklipp"
+msgstr "Kopiera 3D-bild"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:106
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:282
@@ -289,24 +277,20 @@ msgstr ""
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:28
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:568
-#, fuzzy
 msgid "Render Options"
-msgstr "Allmäna inställningar"
+msgstr "Renderalternativ"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:122
-#, fuzzy
 msgid "Material Properties"
-msgstr "Rutnäts egenskaper"
+msgstr "Materialegenskaper"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
-#, fuzzy
 msgid "Raytracing Options"
-msgstr "Linjeegenskaper"
+msgstr "Raytracing-alternativ"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:153
-#, fuzzy
 msgid "Choose Colors"
-msgstr "Färger"
+msgstr "Välj Färger"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:156
 #, fuzzy
