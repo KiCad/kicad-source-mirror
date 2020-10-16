@@ -153,15 +153,15 @@ typedef std::unordered_set<SCH_ITEM*> SCH_ITEM_SET;
 class STROKE_PARAMS
 {
     int m_width;
-    PLOT_DASH_TYPE m_type;
+    PLOT_DASH_TYPE m_plotstyle;
     COLOR4D m_color;
 
 public:
     STROKE_PARAMS( int aWidth = Mils2iu( DEFAULT_LINE_THICKNESS ),
-                   PLOT_DASH_TYPE aType = PLOT_DASH_TYPE::DEFAULT,
+                   PLOT_DASH_TYPE aPlotStyle = PLOT_DASH_TYPE::DEFAULT,
                    const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) :
             m_width( aWidth ),
-            m_type( aType ),
+            m_plotstyle( aPlotStyle ),
             m_color( aColor )
     {
     }
@@ -169,8 +169,8 @@ public:
     int GetWidth() const { return m_width; }
     void SetWidth( int aWidth ) { m_width = aWidth; }
 
-    PLOT_DASH_TYPE GetType() const { return m_type; }
-    void SetType( PLOT_DASH_TYPE aType ) { m_type = aType; }
+    PLOT_DASH_TYPE GetPlotStyle() const { return m_plotstyle; }
+    void SetPlotStyle( PLOT_DASH_TYPE aPlotStyle ) { m_plotstyle = aPlotStyle; }
 
     COLOR4D GetColor() const { return m_color; }
     void SetColor( const COLOR4D& aColor ) { m_color = aColor; }
@@ -178,7 +178,7 @@ public:
     bool operator!=( const STROKE_PARAMS& aOther )
     {
         return m_width != aOther.m_width
-                || m_type != aOther.m_type
+                || m_plotstyle != aOther.m_plotstyle
                 || m_color != aOther.m_color;
     }
 };

@@ -270,7 +270,7 @@ static void formatStroke( OUTPUTFORMATTER* aFormatter, int aNestLevel,
 
     aFormatter->Print( aNestLevel, "(stroke (width %s) (type %s) (color %d %d %d %s))",
                        FormatInternalUnits( aStroke.GetWidth() ).c_str(),
-                       TO_UTF8( getLineStyleToken( aStroke.GetType() ) ),
+                       TO_UTF8( getLineStyleToken( aStroke.GetPlotStyle() ) ),
                        KiROUND( aStroke.GetColor().r * 255.0 ),
                        KiROUND( aStroke.GetColor().g * 255.0 ),
                        KiROUND( aStroke.GetColor().b * 255.0 ),

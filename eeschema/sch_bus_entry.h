@@ -78,7 +78,7 @@ public:
     virtual void SetStroke( const STROKE_PARAMS& aStroke ) override { m_stroke = aStroke; }
 
     PLOT_DASH_TYPE GetStrokeStyle() const;
-    void SetStrokeStyle( PLOT_DASH_TYPE aStyle ) { m_stroke.SetType( aStyle ); }
+    void SetStrokeStyle( PLOT_DASH_TYPE aStyle ) { m_stroke.SetPlotStyle( aStyle ); }
 
     COLOR4D GetStrokeColor() const;
     void SetStrokeColor( const COLOR4D& aColor ) { m_stroke.SetColor( aColor ); }

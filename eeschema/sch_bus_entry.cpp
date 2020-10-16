@@ -141,7 +141,7 @@ PLOT_DASH_TYPE SCH_BUS_ENTRY_BASE::GetStrokeStyle() const
     if( netclass )
         return (PLOT_DASH_TYPE) netclass->GetLineStyle();
 
-    return m_stroke.GetType();
+    return m_stroke.GetPlotStyle();
 }
 
 

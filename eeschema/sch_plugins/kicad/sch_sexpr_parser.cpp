@@ -429,7 +429,7 @@ void SCH_SEXPR_PARSER::parseStroke( STROKE_PARAMS& aStroke )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a stroke." ) );
 
     aStroke.SetWidth( Mils2iu( DEFAULT_LINE_THICKNESS ) );
-    aStroke.SetType( PLOT_DASH_TYPE::DEFAULT );
+    aStroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
     aStroke.SetColor( COLOR4D::UNSPECIFIED );
 
     T token;
@@ -454,10 +454,10 @@ void SCH_SEXPR_PARSER::parseStroke( STROKE_PARAMS& aStroke )
 
             switch( token )
             {
-            case T_dash:      aStroke.SetType( PLOT_DASH_TYPE::DASH );      break;
-            case T_dot:       aStroke.SetType( PLOT_DASH_TYPE::DOT );       break;
-            case T_dash_dot:  aStroke.SetType( PLOT_DASH_TYPE::DASHDOT );   break;
-            case T_solid:     aStroke.SetType( PLOT_DASH_TYPE::SOLID );     break;
+            case T_dash:      aStroke.SetPlotStyle( PLOT_DASH_TYPE::DASH );      break;
+            case T_dot:       aStroke.SetPlotStyle( PLOT_DASH_TYPE::DOT );       break;
+            case T_dash_dot:  aStroke.SetPlotStyle( PLOT_DASH_TYPE::DASHDOT );   break;
+            case T_solid:     aStroke.SetPlotStyle( PLOT_DASH_TYPE::SOLID );     break;
             default:
                 Expecting( "solid, dash, dash_dot, or dot" );
             }

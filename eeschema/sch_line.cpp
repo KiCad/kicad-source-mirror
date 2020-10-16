@@ -40,7 +40,7 @@ SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
     m_end             = pos;
     m_startIsDangling = m_endIsDangling = false;
     m_stroke.SetWidth( 0 );
-    m_stroke.SetType( PLOT_DASH_TYPE::DEFAULT );
+    m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
     m_stroke.SetColor( COLOR4D::UNSPECIFIED );
 
     switch( layer )
@@ -237,16 +237,16 @@ void SCH_LINE::SetLineStyle( const int aStyleId )
 void SCH_LINE::SetLineStyle( const PLOT_DASH_TYPE aStyle )
 {
     if( aStyle == GetDefaultStyle() )
-        m_stroke.SetType( PLOT_DASH_TYPE::DEFAULT );
+        m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
     else
-        m_stroke.SetType( aStyle );
+        m_stroke.SetPlotStyle( aStyle );
 }
 
 
 PLOT_DASH_TYPE SCH_LINE::GetLineStyle() const
 {
-    if( m_stroke.GetType() != PLOT_DASH_TYPE::DEFAULT )
-        return m_stroke.GetType();
+    if( m_stroke.GetPlotStyle() != PLOT_DASH_TYPE::DEFAULT )
+        return m_stroke.GetPlotStyle();
 
     return GetDefaultStyle();
 }
@@ -254,8 +254,8 @@ PLOT_DASH_TYPE SCH_LINE::GetLineStyle() const
 
 PLOT_DASH_TYPE SCH_LINE::GetEffectiveLineStyle() const
 {
-    if( m_stroke.GetType() != PLOT_DASH_TYPE::DEFAULT )
-        return m_stroke.GetType();
+    if( m_stroke.GetPlotStyle() != PLOT_DASH_TYPE::DEFAULT )
+        return m_stroke.GetPlotStyle();
 
     NETCLASSPTR netclass = NetClass();
 
@@ -858,6 +858,6 @@ bool SCH_LINE::IsWire() const
 bool SCH_LINE::UsesDefaultStroke() const
 {
     return m_stroke.GetWidth() == 0 && m_stroke.GetColor() == COLOR4D::UNSPECIFIED
-            && ( m_stroke.GetType() == GetDefaultStyle()
-            || m_stroke.GetType() == PLOT_DASH_TYPE::DEFAULT );
+            && ( m_stroke.GetPlotStyle() == GetDefaultStyle()
+            || m_stroke.GetPlotStyle() == PLOT_DASH_TYPE::DEFAULT );
 }

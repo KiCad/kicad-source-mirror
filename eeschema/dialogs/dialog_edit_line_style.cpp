@@ -112,10 +112,10 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
     if( std::all_of( m_strokeItems.begin() + 1, m_strokeItems.end(),
             [&]( const SCH_ITEM* r )
             {
-                return r->GetStroke().GetType() == first_stroke_item->GetStroke().GetType();
+                return r->GetStroke().GetPlotStyle() == first_stroke_item->GetStroke().GetPlotStyle();
             } ) )
     {
-        int style = static_cast<int>( first_stroke_item->GetStroke().GetType() );
+        int style = static_cast<int>( first_stroke_item->GetStroke().GetPlotStyle() );
 
         if( style == -1 )
             m_typeCombo->SetStringSelection( DEFAULT_STYLE );
@@ -166,9 +166,9 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
         std::advance( it, m_typeCombo->GetSelection() );
 
         if( it == lineTypeNames.end() )
-            stroke.SetType( PLOT_DASH_TYPE::DEFAULT );
+            stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
         else
-            stroke.SetType( it->first );
+            stroke.SetPlotStyle( it->first );
 
         stroke.SetColor( m_colorSwatch->GetSwatchColor() );
 
