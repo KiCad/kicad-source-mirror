@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-08 21:33+0100\n"
-"PO-Revision-Date: 2020-10-16 17:52+0000\n"
+"PO-Revision-Date: 2020-10-16 19:10+0000\n"
 "Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -178,6 +178,7 @@ msgstr "Construir BVH para orificios y vías"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:423
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
 msgstr ""
+"Su versión de OpenGL no está soportada. La mínima versión requerida es 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
