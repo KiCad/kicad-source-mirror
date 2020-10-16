@@ -3488,57 +3488,6 @@ msgstr "Błąd zapisu pliku"
 msgid "Output Messages"
 msgstr "Komunikaty wyjściowe"
 
-<<<<<<< HEAD
-#: common/dialogs/wx_html_report_panel_base.cpp:31
-#: eeschema/dialogs/dialog_erc_base.cpp:67
-#: pcbnew/dialogs/dialog_drc_base.cpp:150
-msgid "Show:"
-msgstr "Pokaż:"
-
-#: common/dialogs/wx_html_report_panel_base.cpp:35
-#: eeschema/dialogs/dialog_erc_base.cpp:71 eeschema/lib_item.cpp:57
-#: eeschema/sch_pin.cpp:148 pcbnew/dialogs/dialog_board_reannotate.cpp:82
-#: pcbnew/dialogs/dialog_board_reannotate_base.cpp:170
-#: pcbnew/dialogs/dialog_drc_base.cpp:154
-#: pcbnew/widgets/appearance_controls.cpp:647
-msgid "All"
-msgstr "Wszystkie"
-
-#: common/dialogs/wx_html_report_panel_base.cpp:50
-#: eeschema/dialogs/dialog_erc_base.cpp:85
-#: pcbnew/dialogs/dialog_drc_base.cpp:168
-msgid "Warnings"
-msgstr "Ostrzeżenia"
-
-#: common/dialogs/wx_html_report_panel_base.cpp:58
-msgid "Actions"
-msgstr "Akcje"
-
-#: common/dialogs/wx_html_report_panel_base.cpp:64
-msgid "Infos"
-msgstr "Informacje"
-
-#: common/dialogs/wx_html_report_panel_base.cpp:70
-#: eeschema/dialogs/dialog_erc_base.cpp:102
-#: pcbnew/dialogs/dialog_drc_base.cpp:185
-msgid "Save..."
-msgstr "Zapisz..."
-
-#: common/draw_panel_gal.cpp:247 common/draw_panel_gal.cpp:431
-msgid "Could not use OpenGL, falling back to software rendering"
-msgstr ""
-"Nie można uruchomić akceleracji OpenGL, przełączam się w tryb emulacji "
-"programowej"
-
-#: common/draw_panel_gal.cpp:253 common/draw_panel_gal.cpp:438
-#, fuzzy
-msgid "Could not use OpenGL"
-msgstr "Nie można uruchomić CvPcb"
-
-#: common/dsnlexer.cpp:34
-msgid "clipboard"
-msgstr "schowek"
-=======
 #: common/tool/actions.cpp:286
 msgid "Zoom to Selection"
 msgstr "Przybliż zaznaczenie"
@@ -3578,34 +3527,12 @@ msgstr "Kursor w prawo szybko"
 #: common/tool/actions.cpp:348
 msgid "Click"
 msgstr "Kliknij"
->>>>>>> weblate/master
 
 #: common/dsnlexer.cpp:324
 #, fuzzy, c-format
 msgid "Expecting %s"
 msgstr "Spodziewano się \"%s\""
 
-<<<<<<< HEAD
-#: common/dsnlexer.cpp:332
-#, fuzzy, c-format
-msgid "Expecting '%s'"
-msgstr "Wykonuję '%s'"
-
-#: common/dsnlexer.cpp:340
-#, fuzzy, c-format
-msgid "Unexpected %s"
-msgstr "Nie spodziewano się \"%s\""
-
-#: common/dsnlexer.cpp:348
-#, c-format
-msgid "%s is a duplicate"
-msgstr "%s jest duplikatem"
-
-#: common/dsnlexer.cpp:356
-#, fuzzy, c-format
-msgid "Unexpected '%s'"
-msgstr "Nie spodziewano się \"%s\""
-=======
 #: common/tool/actions.cpp:363
 msgid "Pan Up"
 msgstr "Panoramuj w górę"
@@ -3621,7 +3548,6 @@ msgstr "Panoramuj w lewo"
 #: common/tool/actions.cpp:381
 msgid "Pan Right"
 msgstr "Panoramuj w prawo"
->>>>>>> weblate/master
 
 #: common/dsnlexer.cpp:401
 #, fuzzy, c-format
@@ -3726,16 +3652,9 @@ msgstr "Nieznany typ MIME dla pliku dokumentacji \"%s\""
 msgid "Inches"
 msgstr "Cale"
 
-<<<<<<< HEAD
-#: common/eda_draw_frame.cpp:251
-#, fuzzy
-msgid "Edit User Grid..."
-msgstr "Edytuj rozmiar siatki użytkownika..."
-=======
 #: common/tool/actions.cpp:452
 msgid "Reset Local Coordinates"
 msgstr "Zresetuj lokalne współrzędne"
->>>>>>> weblate/master
 
 #: common/eda_draw_frame.cpp:360
 msgid "Zoom Auto"
@@ -6124,16 +6043,9 @@ msgstr "Przelotka %s (%s)"
 msgid "User grid: %s (%s)"
 msgstr "Siatka użytkownika: %.2f mils (%.4f mm)"
 
-<<<<<<< HEAD
-#: common/tool/zoom_menu.cpp:48
-#, c-format
-msgid "Zoom: %.2f"
-msgstr "Powiększenie: %.2f"
-=======
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
 msgid "Symbol values"
 msgstr "Wartości symboli"
->>>>>>> weblate/master
 
 #: common/validators.cpp:250
 #, c-format
@@ -25384,35 +25296,6 @@ msgstr "Omijaj przeszkody"
 msgid "Mode:"
 msgstr "Tryb:"
 
-<<<<<<< HEAD
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
-msgid "Mouse drag behavior:"
-msgstr "Przy przeciąganiu myszą:"
-
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:38
-msgid "Move item"
-msgstr "Przesuń element"
-
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:38
-msgid "Interactive drag"
-msgstr "Interaktywne przeciąganie"
-
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:47
-msgid "Free angle mode (no shove/walkaround)"
-msgstr "Tryb swobodny (bez rozpychania/omijania przeszkód)"
-
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:50
-msgid "Shove vias"
-msgstr "Rozsuwaj przelotki"
-
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
-msgid ""
-"When disabled, vias are treated as un-movable objects and hugged instead of "
-"shoved."
-msgstr ""
-"Gdy wyłączone, przelotki są traktowane jako obiekty nie przesuwne i będą "
-"otaczane zamiast przesuwania."
-=======
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:65
 msgid "Green"
 msgstr "Zielony"
@@ -25432,26 +25315,14 @@ msgstr "Żółty"
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:71
 msgid "Purple"
 msgstr "Fioletowy"
->>>>>>> weblate/master
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
 msgid "Jump over obstacles"
 msgstr "Przeskakuj ponad przeszkodami"
 
-<<<<<<< HEAD
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
-msgid ""
-"When enabled, the router tries to move colliding traces behind solid "
-"obstacles (e.g. pads) instead of \"reflecting\" back the collision"
-msgstr ""
-"Gdy włączone, router będzie starał się przesuwać kolidujące ścieżki przed "
-"zablokowanymi przeszkodami (np. polami lutowniczymi) zamiast \"odzwierciedlać"
-"\" miejsca kolizji"
-=======
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:83
 msgid "FR4"
 msgstr "FR4"
->>>>>>> weblate/master
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
 msgid "Remove redundant tracks"
@@ -25474,19 +25345,6 @@ msgstr ""
 msgid "Optimize pad connections"
 msgstr "Optymalizuj łącza pól lutowniczych"
 
-<<<<<<< HEAD
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
-msgid ""
-"When enabled, the router tries to break out pads/vias in a clean way, "
-"avoiding acute angles and jagged breakout traces."
-msgstr ""
-"Gdy włączone router będzie próbował lepiej układać pola/przelotki, unikając "
-"ostych kątów i wielu podziałów w ścieżkach."
-
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:71
-msgid "Smooth dragged segments"
-msgstr "Wygładzaj przeciągane segmenty"
-=======
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:87
 msgid "PTFE"
 msgstr "PTFE"
@@ -25494,7 +25352,6 @@ msgstr "PTFE"
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:88
 msgid "Teflon"
 msgstr "Teflon"
->>>>>>> weblate/master
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid ""
