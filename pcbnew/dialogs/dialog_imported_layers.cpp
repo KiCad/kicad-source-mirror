@@ -107,6 +107,9 @@ void DIALOG_IMPORTED_LAYERS::AddMappings()
     }
 
     DeleteListItems( rowsToDelete, m_unmatched_layers_list );
+
+    // Auto select the first item to improve ease-of-use
+    m_unmatched_layers_list->SetItemState( 0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 }
 
 
@@ -238,6 +241,9 @@ DIALOG_IMPORTED_LAYERS::DIALOG_IMPORTED_LAYERS( wxWindow* aParent,
         ++row;
     }
 
+    // Auto select the first item to improve ease-of-use
+    m_unmatched_layers_list->SetItemState( 0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+
     // Load the KiCad Layer names
     row = 0;
     LSEQ kicadLayersSeq = kiCadLayers.Seq();
@@ -252,6 +258,9 @@ DIALOG_IMPORTED_LAYERS::DIALOG_IMPORTED_LAYERS( wxWindow* aParent,
         m_kicad_layers_list->InsertItem( item );
         ++row;
     }
+
+    // Auto select the first item to improve ease-of-use
+    m_kicad_layers_list->SetItemState( 0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 
     m_sdbSizerOK->SetDefault();
 
