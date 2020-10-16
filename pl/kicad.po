@@ -2,20 +2,29 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2020-10-16 10:50-0700\n"
 "PO-Revision-Date: 2019-06-20 10:04+0200\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCad Translators: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu, Daniel Dawid Majewski, Marek Ledworowski\n"
 "Language: pl_PL\n"
+=======
+"POT-Creation-Date: 2019-07-09 10:02+0200\n"
+"PO-Revision-Date: 2020-10-16 17:52+0000\n"
+"Last-Translator: Mark Roszko <mark.roszko@gmail.com>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
+"Language: pl\n"
+>>>>>>> weblate/master
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.3.1-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
-"X-Generator: Poedit 2.2.3\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: new\n"
 "X-Poedit-SearchPathExcluded-1: resources\n"
@@ -3488,6 +3497,7 @@ msgstr "Błąd zapisu pliku"
 msgid "Output Messages"
 msgstr "Komunikaty wyjściowe"
 
+<<<<<<< HEAD
 #: common/dialogs/wx_html_report_panel_base.cpp:31
 #: eeschema/dialogs/dialog_erc_base.cpp:67
 #: pcbnew/dialogs/dialog_drc_base.cpp:150
@@ -3537,12 +3547,54 @@ msgstr "Nie można uruchomić CvPcb"
 #: common/dsnlexer.cpp:34
 msgid "clipboard"
 msgstr "schowek"
+=======
+#: common/tool/actions.cpp:286
+msgid "Zoom to Selection"
+msgstr "Przybliż zaznaczenie"
+
+#: common/tool/actions.cpp:299
+msgid "Cursor Up"
+msgstr "Kursor w górę"
+
+#: common/tool/actions.cpp:305
+msgid "Cursor Down"
+msgstr "Kursor w dół"
+
+#: common/tool/actions.cpp:311
+msgid "Cursor Left"
+msgstr "Kursor w lewo"
+
+#: common/tool/actions.cpp:317
+msgid "Cursor Right"
+msgstr "Kursor w prawo"
+
+#: common/tool/actions.cpp:324
+msgid "Cursor Up Fast"
+msgstr "Kursor w górę szybko"
+
+#: common/tool/actions.cpp:330
+msgid "Cursor Down Fast"
+msgstr "Kursor w dół szybko"
+
+#: common/tool/actions.cpp:336
+msgid "Cursor Left Fast"
+msgstr "Kursor w lewo szybko"
+
+#: common/tool/actions.cpp:342
+msgid "Cursor Right Fast"
+msgstr "Kursor w prawo szybko"
+
+#: common/tool/actions.cpp:348
+msgid "Click"
+msgstr "Kliknij"
+>>>>>>> weblate/master
 
 #: common/dsnlexer.cpp:324
 #, fuzzy, c-format
 msgid "Expecting %s"
 msgstr "Spodziewano się \"%s\""
 
+<<<<<<< HEAD
 #: common/dsnlexer.cpp:332
 #, fuzzy, c-format
 msgid "Expecting '%s'"
@@ -3562,6 +3614,23 @@ msgstr "%s jest duplikatem"
 #, fuzzy, c-format
 msgid "Unexpected '%s'"
 msgstr "Nie spodziewano się \"%s\""
+=======
+#: common/tool/actions.cpp:363
+msgid "Pan Up"
+msgstr "Panoramuj w górę"
+
+#: common/tool/actions.cpp:369
+msgid "Pan Down"
+msgstr "Panoramuj w dół"
+
+#: common/tool/actions.cpp:375
+msgid "Pan Left"
+msgstr "Panoramuj w lewo"
+
+#: common/tool/actions.cpp:381
+msgid "Pan Right"
+msgstr "Panoramuj w prawo"
+>>>>>>> weblate/master
 
 #: common/dsnlexer.cpp:401
 #, fuzzy, c-format
@@ -3666,10 +3735,16 @@ msgstr "Nieznany typ MIME dla pliku dokumentacji \"%s\""
 msgid "Inches"
 msgstr "Cale"
 
+<<<<<<< HEAD
 #: common/eda_draw_frame.cpp:251
 #, fuzzy
 msgid "Edit User Grid..."
 msgstr "Edytuj rozmiar siatki użytkownika..."
+=======
+#: common/tool/actions.cpp:452
+msgid "Reset Local Coordinates"
+msgstr "Zresetuj lokalne współrzędne"
+>>>>>>> weblate/master
 
 #: common/eda_draw_frame.cpp:360
 msgid "Zoom Auto"
@@ -6058,10 +6133,16 @@ msgstr "Przelotka %s (%s)"
 msgid "User grid: %s (%s)"
 msgstr "Siatka użytkownika: %.2f mils (%.4f mm)"
 
+<<<<<<< HEAD
 #: common/tool/zoom_menu.cpp:48
 #, c-format
 msgid "Zoom: %.2f"
 msgstr "Powiększenie: %.2f"
+=======
+#: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
+msgid "Symbol values"
+msgstr "Wartości symboli"
+>>>>>>> weblate/master
 
 #: common/validators.cpp:250
 #, c-format
@@ -25312,6 +25393,7 @@ msgstr "Omijaj przeszkody"
 msgid "Mode:"
 msgstr "Tryb:"
 
+<<<<<<< HEAD
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
 msgid "Mouse drag behavior:"
 msgstr "Przy przeciąganiu myszą:"
@@ -25339,11 +25421,33 @@ msgid ""
 msgstr ""
 "Gdy wyłączone, przelotki są traktowane jako obiekty nie przesuwne i będą "
 "otaczane zamiast przesuwania."
+=======
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:65
+msgid "Green"
+msgstr "Zielony"
+
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:66
+msgid "Red"
+msgstr "Czerwony"
+
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:67
+msgid "Blue"
+msgstr "Niebieski"
+
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:70
+msgid "Yellow"
+msgstr "Żółty"
+
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:71
+msgid "Purple"
+msgstr "Fioletowy"
+>>>>>>> weblate/master
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
 msgid "Jump over obstacles"
 msgstr "Przeskakuj ponad przeszkodami"
 
+<<<<<<< HEAD
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
 msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
@@ -25352,6 +25456,11 @@ msgstr ""
 "Gdy włączone, router będzie starał się przesuwać kolidujące ścieżki przed "
 "zablokowanymi przeszkodami (np. polami lutowniczymi) zamiast \"odzwierciedlać"
 "\" miejsca kolizji"
+=======
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:83
+msgid "FR4"
+msgstr "FR4"
+>>>>>>> weblate/master
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
 msgid "Remove redundant tracks"
@@ -25374,6 +25483,7 @@ msgstr ""
 msgid "Optimize pad connections"
 msgstr "Optymalizuj łącza pól lutowniczych"
 
+<<<<<<< HEAD
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
@@ -25385,6 +25495,15 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:71
 msgid "Smooth dragged segments"
 msgstr "Wygładzaj przeciągane segmenty"
+=======
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:87
+msgid "PTFE"
+msgstr "PTFE"
+
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:88
+msgid "Teflon"
+msgstr "Teflon"
+>>>>>>> weblate/master
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid ""
