@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-09 10:02+0200\n"
-"PO-Revision-Date: 2020-10-16 17:52+0000\n"
+"PO-Revision-Date: 2020-10-16 19:52+0000\n"
 "Last-Translator: Mark Roszko <mark.roszko@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -25,9 +25,9 @@ msgid "All Files (*.*)|*.*"
 msgstr "Wszystkie pliki (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "All supported files (%s)"
-msgstr "Wszystkie obsługiwane formaty|"
+msgstr "Wszystkie obsługiwane formaty (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
 #, fuzzy
@@ -502,9 +502,8 @@ msgid "Enable animation"
 msgstr "Włącz akcelerację grafiki"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:260
-#, fuzzy
 msgid "Animation speed:"
-msgstr "Numerowanie wykonane."
+msgstr "Szybkość animacji:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
 #, fuzzy
@@ -5056,9 +5055,9 @@ msgstr ""
 #: common/libeval_compiler/libeval_compiler.cpp:875
 #: common/libeval_compiler/libeval_compiler.cpp:948
 #: common/libeval_compiler/libeval_compiler.cpp:1005
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'"
-msgstr "Niepołączone elementy"
+msgstr "Nierozpoznana element '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:852
 #: common/libeval_compiler/libeval_compiler.cpp:952
@@ -5128,9 +5127,9 @@ msgid "Comment"
 msgstr "Komentarz"
 
 #: common/page_layout/ws_draw_item.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Text '%s'"
-msgstr "Pliki tekstowe"
+msgstr "Tekst '%s'"
 
 #: common/page_layout/ws_draw_item.cpp:356 eeschema/lib_rectangle.cpp:259
 #, fuzzy, c-format
