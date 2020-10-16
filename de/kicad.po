@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-07 19:27+0200\n"
-"PO-Revision-Date: 2020-10-16 20:27+0000\n"
+"PO-Revision-Date: 2020-10-17 07:28+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -198,15 +198,15 @@ msgid "Render time %.0f ms ( %.1f fps)"
 msgstr "Wiedergabezeit %.0f ms ( %.1f fps)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr "Parameter der Netzklassen"
+msgstr "Netz %s\tNetzklasse %s\tPadname %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:761
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNetClass %s"
-msgstr "Netzklassen"
+msgstr "Netz %s\tNetclasse %s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:498
 msgid "Load OpenGL: board"
@@ -5036,9 +5036,9 @@ msgstr ""
 #: common/libeval_compiler/libeval_compiler.cpp:875
 #: common/libeval_compiler/libeval_compiler.cpp:948
 #: common/libeval_compiler/libeval_compiler.cpp:1005
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'"
-msgstr "Nicht verbundene Elemente"
+msgstr "Nicht erkanntes Element '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:852
 #: common/libeval_compiler/libeval_compiler.cpp:952
@@ -5110,17 +5110,17 @@ msgstr "Kommentar"
 #: common/page_layout/ws_draw_item.cpp:188
 #, fuzzy, c-format
 msgid "Text '%s'"
-msgstr "Textdateien"
+msgstr "Text '%s'"
 
 #: common/page_layout/ws_draw_item.cpp:356 eeschema/lib_rectangle.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle, width %s height %s"
-msgstr "Papiergröße: Breite %.4g Höhe %.4g"
+msgstr "Rechteck, Breite %s Höhe %s"
 
 #: common/page_layout/ws_draw_item.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Line, length %s"
-msgstr "Leiterlänge"
+msgstr "Linie, Länge %s"
 
 #: common/page_layout/ws_draw_item.cpp:445
 #, fuzzy
@@ -5182,9 +5182,9 @@ msgid "Missing node '%s' in '%s'"
 msgstr ""
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:42
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr "Unbekanntes Vorkommnis \"%s\""
+msgstr "Unbekanntes Vorkommnis '%s' in '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:45
 #, c-format
@@ -5197,11 +5197,9 @@ msgid "Unknown Parameter '%s' in '%s'"
 msgstr ""
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:51
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr ""
-"Konnte die folgende URL nicht parsen:\n"
-"\"%s\""
+msgstr "'%s' in '%s' kann nicht analysiert werden"
 
 #: common/plugins/eagle/eagle_parser.cpp:113
 #, c-format
@@ -5254,11 +5252,9 @@ msgid "Archive file \"%s\": Failed!\n"
 msgstr "Archivdatei \"%s\""
 
 #: common/project/project_archiver.cpp:270
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive \"%s\" created (%s uncompressed, %s compressed)\n"
-msgstr ""
-"\n"
-"Zip-Archiv \"%s\" erstellt (%d Bytes)"
+msgstr "Zip-Archiv \"%s\" erstellt (%s unkomprimiert, %s komprimiert)\n"
 
 #: common/rc_item.cpp:321
 msgid "Excluded "
@@ -5995,9 +5991,9 @@ msgid "Grid: %s (%s)"
 msgstr "DuKo: %s (%s)"
 
 #: common/tool/grid_menu.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "User grid: %s (%s)"
-msgstr "Benutzerspezifisches Raster: %.2f mils (%.4f mm)"
+msgstr "Benutzerspezifisches Raster: %s (%s)"
 
 #: common/tool/zoom_menu.cpp:48
 #, c-format
@@ -6761,9 +6757,9 @@ msgid "Footprint ID \"%s\" is not valid."
 msgstr "Die Footprint-ID \"%s\" ist nicht zulässig."
 
 #: cvpcb/display_footprints_frame.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid "Library \"%s\" is not in the footprint library table."
-msgstr "Bibliothek nicht in der Footprintbibliothekstabelle gefunden."
+msgstr "Bibliothek \"%s\" nicht in der Footprintbibliothekstabelle gefunden."
 
 #: cvpcb/display_footprints_frame.cpp:407
 #: cvpcb/display_footprints_frame.cpp:429
@@ -7053,11 +7049,11 @@ msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Unterschiedliche Werte für %s%d%s (%s) und %s%d%s (%s)"
 
 #: eeschema/connection_graph.cpp:2641
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet port %s has no matching hierarchical label inside the sheet"
 msgstr ""
-"Hierarchischen Schaltplanpin hinzufügen, korrespondierend zu entsprechendem "
-"hierarchischen Bezeichner im Schaltplan"
+"Hierarchischen Schaltplanpin %s hat keine entsprechendem hierarchischen "
+"Bezeichner im Schaltplan"
 
 #: eeschema/cross-probing.cpp:253
 #, c-format
@@ -7701,9 +7697,9 @@ msgid "Change Symbol(s)"
 msgstr "Bauteil im Schaltplan:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:467
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s \"%s\" from \"%s\" to \"%s\""
-msgstr "%s Footprint \"%s\" (von \"%s\") nach \"%s\""
+msgstr "%s %s \"%s\" von \"%s\" nach \"%s\""
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:469
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:31
@@ -7725,14 +7721,14 @@ msgid "*** new symbol has too few units ***"
 msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
-#, fuzzy, c-format
+#, c-format
 msgid "%s all symbols in schematic"
-msgstr "Massenbearbeitung der Felder von allen Bauteilen im Schaltplan"
+msgstr "Alle Symbole im Schaltplan %s"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "%s selected symbol"
-msgstr "Bauteil löschen"
+msgstr "Ausgewähltes Symbol %s"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 #, fuzzy, c-format
@@ -7745,9 +7741,9 @@ msgid "%s symbols matching value:"
 msgstr "%s Footprints mit Wert:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:45
-#, fuzzy, c-format
+#, c-format
 msgid "%s symbols matching library indentifier:"
-msgstr "Ungültige Bezeichnung für ein Bibliothekssymbol"
+msgstr "Symbole %s, die mit Bibliothekssymbol übereinstimmen:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:72
 #, fuzzy
@@ -7755,18 +7751,18 @@ msgid "New library identifier:"
 msgstr "Keine Bibliothek angegeben!"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "%s Fields"
-msgstr "Felder"
+msgstr "%s Felder"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:108
 msgid "Select None"
 msgstr "Nichts auswählen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Remove fields if not in %s symbol"
-msgstr "Entferne nicht vorhandene Felder in der Bibliothek"
+msgstr "Entferne nicht vorhandene Felder in der %s Symbole"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:120
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
@@ -7775,24 +7771,24 @@ msgstr ""
 "Entfernt Felder welche nicht in den originalen Bibliothekssymbolen vorkommen."
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Reset fields if empty in %s symbol"
-msgstr "Zurücksetzen der Felder die in der Bibliothek leer sind"
+msgstr "Zurücksetzen der Felder die im %s-Symbol leer sind"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
-#, fuzzy, c-format
+#, c-format
 msgid "%s field visibilities"
-msgstr "Zurücksetzen Sichtbarkeit der Felder"
+msgstr "%s Sichtbarkeit der Felder"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "%s field sizes and styles"
-msgstr "Zurücksetzen der Testgröße und Textart"
+msgstr "Testgröße und Textart %s"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "%s field positions"
-msgstr "Zurücksetzen Positionen der Felder"
+msgstr "Positionen der Felder %s"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:96
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:86
@@ -8725,9 +8721,8 @@ msgid "Some components are not annotated.  ERC cannot be run."
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:141
-#, fuzzy
 msgid "Delete exclusions too?"
-msgstr "Werkzeug \"Element(e) löschen\""
+msgstr "Ausschlüsse auch löschen?"
 
 #: eeschema/dialogs/dialog_erc.cpp:141 pcbnew/dialogs/dialog_drc.cpp:760
 #: pcbnew/dialogs/dialog_drc_base.cpp:202
@@ -11821,11 +11816,9 @@ msgid "Bus alias %s has conflicting definitions on %s and %s"
 msgstr "Bus Alias %s hat widersprüchliche Definitionen bei %s und %s"
 
 #: eeschema/erc.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Different footprints assigned to %s and %s"
-msgstr ""
-"Unterschiedlicher Footprint der einer anderen Einheit des gleichen Bauteils "
-"zugewiesen ist"
+msgstr "Unterschiedlicher Footprints, die %s und %s zugewiesen ist"
 
 #: eeschema/erc.cpp:399
 #, fuzzy
@@ -11833,14 +11826,14 @@ msgid "Pins with \"no connection\" type are connected"
 msgstr "Ein Pin mit einer \"keine Verbindung\" Markierung ist verbunden"
 
 #: eeschema/erc.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Pins of type %s and %s are connected"
-msgstr "Pin %s (%s) von Bauteil %s ist verbunden mit "
+msgstr "Pins vom Typ %s und %s sind verbunden"
 
 #: eeschema/erc.cpp:525
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s is connected to both %s and %s"
-msgstr "Pin %s auf %s ist zu beiden verbunden, %s und %s"
+msgstr "Pin %s ist sowohl mit %s als auch mit %s verbunden"
 
 #: eeschema/erc_item.cpp:42
 msgid "Duplicate sheet names within a given sheet"
@@ -12108,12 +12101,15 @@ msgid "Project Save Warning"
 msgstr "Fehler aufgetreten beim Laden des Projektes"
 
 #: eeschema/files-io.cpp:748
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
 "%s"
-msgstr "Die folgenden Verzeichnisse konnten nicht geöffnet werden:\n"
+msgstr ""
+"Die folgenden Verzeichnisse werden überschrieben:\n"
+"\n"
+"%s"
 
 #: eeschema/files-io.cpp:749
 #, fuzzy
@@ -12265,9 +12261,9 @@ msgid "Pos Y"
 msgstr "Pos Y"
 
 #: eeschema/lib_pin.cpp:1161
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s [%s, %s, %s]"
-msgstr "Pin %s, %s, %s"
+msgstr "Pin %s [%s, %s, %s]"
 
 #: eeschema/lib_pin.cpp:1169
 #, fuzzy, c-format
@@ -12275,9 +12271,9 @@ msgid "Pin %s [%s, %s]"
 msgstr "Pin %s, %s, %s"
 
 #: eeschema/lib_polyline.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline, %d points"
-msgstr "Linienzug bei (%s, %s) mit %d Punkten"
+msgstr "Linienzug mit %d Punkten"
 
 #: eeschema/lib_polyline.h:53
 msgid "PolyLine"
@@ -12575,9 +12571,9 @@ msgstr ""
 "Bibliothek(en) zu entfernen."
 
 #: eeschema/libedit/libedit.cpp:55
-#, fuzzy, c-format
+#, c-format
 msgid "%s from schematic"
-msgstr "Sonde vom Schaltplan"
+msgstr "%s vom Schaltplan"
 
 #: eeschema/libedit/libedit.cpp:64
 #, fuzzy
@@ -13160,9 +13156,9 @@ msgid "Back"
 msgstr "Rückseite"
 
 #: eeschema/sch_line.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical Wire, length %s"
-msgstr "&Vertikaler Pitch"
+msgstr "&Vertikaler Elektr. Verbindungen, länge %s"
 
 #: eeschema/sch_line.cpp:649
 #, fuzzy, c-format
@@ -24421,7 +24417,7 @@ msgstr "Padgröße muss größer als Null sein"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1176
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr ""
-"Inkorrekter Wert für Pad Bohrdurchmesser: Bohrdurchmesser ist größer als Pad."
+"Inkorrekter Wert für Pad Bohrdurchmesser: Bohrdurchmesser ist größer als Pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1183
 msgid "Pad local clearance must be zero or greater than zero"
@@ -28949,7 +28945,7 @@ msgstr ""
 "was in diesem Verzeichnis gespeichert wird hat Vorrang vor Dateien die mit "
 "dem gleichen Namen im GitHub Repository vorhanden sind. Diese gespeicherten "
 "Footprints können dann als Update zum Maintainer der Bibliothek geschickt "
-"werden. Das Verzeichnis <b>muss</b> eine Namenserweiterung <b>.pretty</b> "
+"werden. <p>Das Verzeichnis <b>muss</b> eine Namenserweiterung <b>.pretty</b> "
 "besitzen da die neuen Dateien im pretty Format abgespeichert werden.</p>"
 
 #: pcbnew/github/github_plugin.cpp:402
@@ -32954,9 +32950,8 @@ msgid "Constraints Report"
 msgstr "Footprint Protokolldatei"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:400
-#, fuzzy
 msgid "<h7>Track width resolution for:</h7>"
-msgstr "Leiterbahn Breitenkorrektur:"
+msgstr "<h7>Leiterbahn Breitenkorrektur:</h7>"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:401
 #: pcbnew/tools/pcb_inspection_tool.cpp:429
