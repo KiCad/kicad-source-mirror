@@ -70,7 +70,12 @@ bool EDA_VIEW_SWITCHER::Show( bool aShow )
     bool ret = DIALOG_SHIM::Show( aShow );
 
     if( aShow )
+    {
         m_receivingEvents = true;
+
+        // Force the dialog to always be centered over the window
+        Centre();
+    }
 
     return ret;
 }
