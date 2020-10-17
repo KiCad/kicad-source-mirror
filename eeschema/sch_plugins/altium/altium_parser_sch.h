@@ -220,8 +220,11 @@ struct ASCH_LABEL
 
     wxPoint location;
 
-    wxString                 text;
-    bool                     isMirrored;
+    wxString text;
+
+    int  fontId;
+    bool isMirrored;
+
     ASCH_LABEL_JUSTIFICATION justification;
 
     explicit ASCH_LABEL( const std::map<wxString, wxString>& aProperties );
@@ -404,6 +407,28 @@ struct ASCH_JUNCTION
     wxPoint location;
 
     explicit ASCH_JUNCTION( const std::map<wxString, wxString>& aProperties );
+};
+
+
+struct ASCH_SHEET_FONT
+{
+    wxString fontname;
+
+    int size;
+    int rotation;
+
+    bool italic;
+    bool bold;
+    bool underline;
+
+    explicit ASCH_SHEET_FONT( const std::map<wxString, wxString>& aProperties, int aId );
+};
+
+struct ASCH_SHEET
+{
+    std::vector<ASCH_SHEET_FONT> fonts;
+
+    explicit ASCH_SHEET( const std::map<wxString, wxString>& aProperties );
 };
 
 

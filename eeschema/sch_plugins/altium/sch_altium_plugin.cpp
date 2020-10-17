@@ -365,6 +365,7 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
         case ALTIUM_SCH_RECORD::IMAGE:
             break;
         case ALTIUM_SCH_RECORD::SHEET:
+            ParseSheet( properties );
             break;
         case ALTIUM_SCH_RECORD::SHEET_NAME:
             break;
@@ -652,12 +653,22 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
 {
     ASCH_LABEL elem( aProperties );
 
+    // TODO: text variable support
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         SCH_TEXT* text = new SCH_TEXT( elem.location, elem.text );
         text->SetMirrored( elem.isMirrored );
 
         SetEdaTextJustification( text, elem.justification );
+
+        size_t fontId = static_cast<int>( elem.fontId );
+        if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
+        {
+            const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
+            text->SetItalic( font.italic );
+            text->SetBold( font.bold );
+            text->SetTextSize( { font.size / 2, font.size / 2 } );
+        }
 
         text->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( text );
@@ -683,6 +694,15 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
         text->SetText( elem.text );
 
         SetEdaTextJustification( text, elem.justification );
+
+        size_t fontId = static_cast<int>( elem.fontId );
+        if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
+        {
+            const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
+            text->SetItalic( font.italic );
+            text->SetBold( font.bold );
+            text->SetTextSize( { font.size / 2, font.size / 2 } );
+        }
     }
 }
 
@@ -1216,6 +1236,12 @@ void SCH_ALTIUM_PLUGIN::ParseJunction( const std::map<wxString, wxString>& aProp
 
     junction->SetFlags( IS_NEW );
     m_currentSheet->GetScreen()->Append( junction );
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseSheet( const std::map<wxString, wxString>& aProperties )
+{
+    m_altiumSheet = std::make_unique<ASCH_SHEET>( aProperties );
 }
 
 

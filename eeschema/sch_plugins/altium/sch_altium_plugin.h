@@ -28,6 +28,8 @@
 #include <sch_io_mgr.h>
 #include <wx/filename.h>
 
+struct ASCH_SHEET;
+
 class SCH_COMPONENT;
 
 namespace CFB
@@ -113,6 +115,7 @@ private:
     void ParseBus( const std::map<wxString, wxString>& aProperties );
     void ParseWire( const std::map<wxString, wxString>& aProperties );
     void ParseJunction( const std::map<wxString, wxString>& aProperties );
+    void ParseSheet( const std::map<wxString, wxString>& aProperties );
     void ParseDesignator( const std::map<wxString, wxString>& aProperties );
 
 private:
@@ -125,6 +128,7 @@ private:
     SCH_PLUGIN::SCH_PLUGIN_RELEASER m_pi;         ///< Plugin to create the KiCad symbol library.
     std::unique_ptr<PROPERTIES>     m_properties; ///< Library plugin properties.
 
+    std::unique_ptr<ASCH_SHEET>   m_altiumSheet;
     std::map<int, SCH_COMPONENT*> m_components;
     std::map<int, LIB_PART*>      m_symbols; // for the start, every component has its unique symbol
 };

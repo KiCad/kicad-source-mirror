@@ -174,8 +174,11 @@ ASCH_LABEL::ASCH_LABEL( const std::map<wxString, wxString>& aProperties )
     location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
             -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
 
-    text          = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
-    isMirrored    = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISMIRRORED", false );
+    text = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
+
+    fontId     = ALTIUM_PARSER::PropertiesReadInt( aProperties, "FONTID", 0 );
+    isMirrored = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISMIRRORED", false );
+
     justification = PropertiesReadEnum<ASCH_LABEL_JUSTIFICATION>(
             aProperties, "JUSTIFICATION", 0, 8, ASCH_LABEL_JUSTIFICATION::UNKNOWN );
 }
@@ -358,7 +361,7 @@ ASCH_NET_LABEL::ASCH_NET_LABEL( const std::map<wxString, wxString>& aProperties 
 {
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::NET_LABEL );
 
-    text        = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
+    text = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
 
     location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
             -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
@@ -422,6 +425,32 @@ ASCH_JUNCTION::ASCH_JUNCTION( const std::map<wxString, wxString>& aProperties )
             -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
 }
 
+ASCH_SHEET_FONT::ASCH_SHEET_FONT( const std::map<wxString, wxString>& aProperties, int aId )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::SHEET );
+
+    const wxString sid = std::to_string( aId );
+
+    fontname = ALTIUM_PARSER::PropertiesReadString( aProperties, "FONTNAME" + sid, "" );
+
+    size     = PropertiesReadKiCadUnitFrac( aProperties, "SIZE" + sid );
+    rotation = ALTIUM_PARSER::PropertiesReadInt( aProperties, "ROTATION" + sid, 0 );
+
+    italic    = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ITALIC" + sid, false );
+    bold      = ALTIUM_PARSER::PropertiesReadBool( aProperties, "BOLD" + sid, false );
+    underline = ALTIUM_PARSER::PropertiesReadBool( aProperties, "UNDERLINE" + sid, false );
+}
+
+ASCH_SHEET::ASCH_SHEET( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::SHEET );
+
+    int fontidcount = ALTIUM_PARSER::PropertiesReadInt( aProperties, "FONTIDCOUNT", 0 );
+    for( int i = 1; i <= fontidcount; i++ )
+    {
+        fonts.emplace_back( aProperties, i );
+    }
+}
 
 ASCH_DESIGNATOR::ASCH_DESIGNATOR( const std::map<wxString, wxString>& aProperties )
 {
