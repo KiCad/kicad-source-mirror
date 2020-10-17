@@ -87,7 +87,7 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
     {
         reportAux( "Silkscreen clipping tests not run." );
-        return false;
+        return true;
     }
 
     DRC_CONSTRAINT worstClearanceConstraint;

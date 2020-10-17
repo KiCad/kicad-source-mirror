@@ -90,7 +90,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
     {
         reportAux( "Silkscreen clearance testing not run." );
-        return false;
+        return true;
     }
 
     if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,
