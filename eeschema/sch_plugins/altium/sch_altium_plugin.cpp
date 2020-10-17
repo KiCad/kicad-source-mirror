@@ -457,7 +457,7 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int index, const std::map<wxString, wxSt
     // each component has its own symbol for now
     SCH_COMPONENT* component = new SCH_COMPONENT();
 
-    component->SetPosition( elem.location );
+    component->SetPosition( elem.location + m_sheetOffset );
     //component->SetOrientation( elem.orientation ); // TODO: keep it simple for now, and only set position
     component->SetLibId( libId );
     //component->SetLibSymbol( kpart ); // this has to be done after parsing the LIB_PART!
@@ -517,7 +517,7 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
     }
 
     // TODO: position can be sometimes off a little bit!
-    pin->SetPosition( GetRelativePosition( pinLocation, component ) );
+    pin->SetPosition( GetRelativePosition( pinLocation + m_sheetOffset, component ) );
     // TODO: the following fix is even worse for now?
     // pin->SetPosition( GetRelativePosition( elem.kicadLocation, component ) );
 
@@ -656,7 +656,7 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
     // TODO: text variable support
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        SCH_TEXT* text = new SCH_TEXT( elem.location, elem.text );
+        SCH_TEXT* text = new SCH_TEXT( elem.location + m_sheetOffset, elem.text );
         text->SetMirrored( elem.isMirrored );
 
         SetEdaTextJustification( text, elem.justification );
@@ -690,7 +690,7 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
         LIB_TEXT* text = new LIB_TEXT( symbol->second );
         symbol->second->AddDrawItem( text );
 
-        text->SetPosition( GetRelativePosition( elem.location, component ) );
+        text->SetPosition( GetRelativePosition( elem.location + m_sheetOffset, component ) );
         text->SetText( elem.text );
 
         SetEdaTextJustification( text, elem.justification );
@@ -725,8 +725,9 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
             if( i + 2 == elem.points.size() )
             {
                 // special case: single line
-                SCH_LINE* line = new SCH_LINE( elem.points.at( i ), SCH_LAYER_ID::LAYER_NOTES );
-                line->SetEndPoint( elem.points.at( i + 1 ) );
+                SCH_LINE* line = new SCH_LINE(
+                        elem.points.at( i ) + m_sheetOffset, SCH_LAYER_ID::LAYER_NOTES );
+                line->SetEndPoint( elem.points.at( i + 1 ) + m_sheetOffset );
                 line->SetLineWidth( elem.lineWidth );
                 line->SetLineStyle( PLOT_DASH_TYPE::SOLID );
 
@@ -740,7 +741,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
                 std::vector<wxPoint> polyPoints;
                 for( size_t j = i; j < elem.points.size() && j < i + 4; j++ )
                 {
-                    bezierPoints.push_back( elem.points.at( j ) );
+                    bezierPoints.push_back( elem.points.at( j ) + m_sheetOffset );
                 }
 
                 BEZIER_POLY converter( bezierPoints );
@@ -748,8 +749,9 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
 
                 for( size_t k = 0; k < polyPoints.size() - 1; k++ )
                 {
-                    SCH_LINE* line = new SCH_LINE( polyPoints.at( k ), SCH_LAYER_ID::LAYER_NOTES );
-                    line->SetEndPoint( polyPoints.at( k + 1 ) );
+                    SCH_LINE* line = new SCH_LINE(
+                            polyPoints.at( k ) + m_sheetOffset, SCH_LAYER_ID::LAYER_NOTES );
+                    line->SetEndPoint( polyPoints.at( k + 1 ) + m_sheetOffset );
                     line->SetLineWidth( elem.lineWidth );
 
                     line->SetFlags( IS_NEW );
@@ -782,7 +784,8 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
 
                 for( size_t j = i; j < elem.points.size() && j < i + 2; j++ )
                 {
-                    line->AddPoint( GetRelativePosition( elem.points.at( j ), component ) );
+                    line->AddPoint(
+                            GetRelativePosition( elem.points.at( j ) + m_sheetOffset, component ) );
                 }
 
                 line->SetWidth( elem.lineWidth );
@@ -795,7 +798,8 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
 
                 for( size_t j = i; j < elem.points.size() && j < i + 4; j++ )
                 {
-                    bezier->AddPoint( GetRelativePosition( elem.points.at( j ), component ) );
+                    bezier->AddPoint(
+                            GetRelativePosition( elem.points.at( j ) + m_sheetOffset, component ) );
                 }
 
                 bezier->SetWidth( elem.lineWidth );
@@ -831,8 +835,9 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
 
         for( size_t i = 0; i < elem.points.size() - 1; i++ )
         {
-            SCH_LINE* line = new SCH_LINE( elem.points.at( i ), SCH_LAYER_ID::LAYER_NOTES );
-            line->SetEndPoint( elem.points.at( i + 1 ) );
+            SCH_LINE* line =
+                    new SCH_LINE( elem.points.at( i ) + m_sheetOffset, SCH_LAYER_ID::LAYER_NOTES );
+            line->SetEndPoint( elem.points.at( i + 1 ) + m_sheetOffset );
             line->SetLineWidth( elem.lineWidth );
             line->SetLineStyle( dashType );
 
@@ -859,7 +864,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
 
         for( wxPoint& point : elem.points )
         {
-            line->AddPoint( GetRelativePosition( point, component ) );
+            line->AddPoint( GetRelativePosition( point + m_sheetOffset, component ) );
         }
 
         line->SetWidth( elem.lineWidth );
@@ -876,8 +881,9 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
         // TODO: we cannot fill this polygon, only draw it for now
         for( size_t i = 0; i < elem.points.size() - 1; i++ )
         {
-            SCH_LINE* line = new SCH_LINE( elem.points.at( i ), SCH_LAYER_ID::LAYER_NOTES );
-            line->SetEndPoint( elem.points.at( i + 1 ) );
+            SCH_LINE* line =
+                    new SCH_LINE( elem.points.at( i ) + m_sheetOffset, SCH_LAYER_ID::LAYER_NOTES );
+            line->SetEndPoint( elem.points.at( i + 1 ) + m_sheetOffset );
             line->SetLineWidth( elem.lineWidth );
             line->SetLineStyle( PLOT_DASH_TYPE::SOLID );
 
@@ -886,8 +892,9 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
         }
 
         // close polygon
-        SCH_LINE* line = new SCH_LINE( elem.points.front(), SCH_LAYER_ID::LAYER_NOTES );
-        line->SetEndPoint( elem.points.back() );
+        SCH_LINE* line =
+                new SCH_LINE( elem.points.front() + m_sheetOffset, SCH_LAYER_ID::LAYER_NOTES );
+        line->SetEndPoint( elem.points.back() + m_sheetOffset );
         line->SetLineWidth( elem.lineWidth );
         line->SetLineStyle( PLOT_DASH_TYPE::SOLID );
 
@@ -913,9 +920,9 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
 
         for( wxPoint& point : elem.points )
         {
-            line->AddPoint( GetRelativePosition( point, component ) );
+            line->AddPoint( GetRelativePosition( point + m_sheetOffset, component ) );
         }
-        line->AddPoint( GetRelativePosition( elem.points.front(), component ) );
+        line->AddPoint( GetRelativePosition( elem.points.front() + m_sheetOffset, component ) );
 
         line->SetWidth( elem.lineWidth );
 
@@ -933,35 +940,38 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
 {
     ASCH_ROUND_RECTANGLE elem( aProperties );
 
+    wxPoint sheetTopRight   = elem.topRight + m_sheetOffset;
+    wxPoint sheetBottomLeft = elem.bottomLeft + m_sheetOffset;
+
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        const wxPoint topLeft     = { elem.bottomLeft.x, elem.topRight.y };
-        const wxPoint bottomRight = { elem.topRight.x, elem.bottomLeft.y };
+        const wxPoint topLeft     = { sheetBottomLeft.x, sheetTopRight.y };
+        const wxPoint bottomRight = { sheetTopRight.x, sheetBottomLeft.y };
 
         // TODO: we cannot fill this rectangle, only draw it for now
         // TODO: misses rounded edges
-        SCH_LINE* lineTop = new SCH_LINE( elem.topRight, SCH_LAYER_ID::LAYER_NOTES );
+        SCH_LINE* lineTop = new SCH_LINE( sheetTopRight, SCH_LAYER_ID::LAYER_NOTES );
         lineTop->SetEndPoint( topLeft );
         lineTop->SetLineWidth( elem.lineWidth );
         lineTop->SetLineStyle( PLOT_DASH_TYPE::SOLID );
         lineTop->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( lineTop );
 
-        SCH_LINE* lineBottom = new SCH_LINE( elem.bottomLeft, SCH_LAYER_ID::LAYER_NOTES );
+        SCH_LINE* lineBottom = new SCH_LINE( sheetBottomLeft, SCH_LAYER_ID::LAYER_NOTES );
         lineBottom->SetEndPoint( bottomRight );
         lineBottom->SetLineWidth( elem.lineWidth );
         lineBottom->SetLineStyle( PLOT_DASH_TYPE::SOLID );
         lineBottom->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( lineBottom );
 
-        SCH_LINE* lineRight = new SCH_LINE( elem.topRight, SCH_LAYER_ID::LAYER_NOTES );
+        SCH_LINE* lineRight = new SCH_LINE( sheetTopRight, SCH_LAYER_ID::LAYER_NOTES );
         lineRight->SetEndPoint( bottomRight );
         lineRight->SetLineWidth( elem.lineWidth );
         lineRight->SetLineStyle( PLOT_DASH_TYPE::SOLID );
         lineRight->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( lineRight );
 
-        SCH_LINE* lineLeft = new SCH_LINE( elem.bottomLeft, SCH_LAYER_ID::LAYER_NOTES );
+        SCH_LINE* lineLeft = new SCH_LINE( sheetBottomLeft, SCH_LAYER_ID::LAYER_NOTES );
         lineLeft->SetEndPoint( topLeft );
         lineLeft->SetLineWidth( elem.lineWidth );
         lineLeft->SetLineStyle( PLOT_DASH_TYPE::SOLID );
@@ -985,8 +995,8 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
         // TODO: misses rounded edges
         LIB_RECTANGLE* rect = new LIB_RECTANGLE( symbol->second );
         symbol->second->AddDrawItem( rect );
-        rect->SetPosition( GetRelativePosition( elem.topRight, component ) );
-        rect->SetEnd( GetRelativePosition( elem.bottomLeft, component ) );
+        rect->SetPosition( GetRelativePosition( elem.topRight + m_sheetOffset, component ) );
+        rect->SetEnd( GetRelativePosition( elem.bottomLeft + m_sheetOffset, component ) );
         rect->SetWidth( elem.lineWidth );
 
         if( !elem.isSolid )
@@ -1026,7 +1036,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             LIB_CIRCLE* circle = new LIB_CIRCLE( symbol->second );
             symbol->second->AddDrawItem( circle );
 
-            circle->SetPosition( GetRelativePosition( elem.center, component ) );
+            circle->SetPosition( GetRelativePosition( elem.center + m_sheetOffset, component ) );
             circle->SetRadius( elem.radius );
             circle->SetWidth( elem.lineWidth );
         }
@@ -1036,7 +1046,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             symbol->second->AddDrawItem( arc );
 
             // TODO: correct?
-            arc->SetPosition( GetRelativePosition( elem.center, component ) );
+            arc->SetPosition( GetRelativePosition( elem.center + m_sheetOffset, component ) );
             arc->SetRadius( elem.radius );
             arc->SetFirstRadiusAngle( elem.startAngle * 10. );
             arc->SetSecondRadiusAngle( elem.endAngle * 10. );
@@ -1052,8 +1062,8 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         // close polygon
-        SCH_LINE* line = new SCH_LINE( elem.point1, SCH_LAYER_ID::LAYER_NOTES );
-        line->SetEndPoint( elem.point2 );
+        SCH_LINE* line = new SCH_LINE( elem.point1 + m_sheetOffset, SCH_LAYER_ID::LAYER_NOTES );
+        line->SetEndPoint( elem.point2 + m_sheetOffset );
         line->SetLineWidth( elem.lineWidth );
         line->SetLineStyle( PLOT_DASH_TYPE::SOLID ); // TODO?
 
@@ -1077,8 +1087,8 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
         LIB_POLYLINE* line = new LIB_POLYLINE( symbol->second );
         symbol->second->AddDrawItem( line );
 
-        line->AddPoint( GetRelativePosition( elem.point1, component ) );
-        line->AddPoint( GetRelativePosition( elem.point2, component ) );
+        line->AddPoint( GetRelativePosition( elem.point1 + m_sheetOffset, component ) );
+        line->AddPoint( GetRelativePosition( elem.point2 + m_sheetOffset, component ) );
 
         line->SetWidth( elem.lineWidth );
     }
@@ -1089,34 +1099,37 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
 {
     ASCH_RECTANGLE elem( aProperties );
 
+    wxPoint sheetTopRight   = elem.topRight + m_sheetOffset;
+    wxPoint sheetBottomLeft = elem.bottomLeft + m_sheetOffset;
+
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        const wxPoint topLeft     = { elem.bottomLeft.x, elem.topRight.y };
-        const wxPoint bottomRight = { elem.topRight.x, elem.bottomLeft.y };
+        const wxPoint topLeft     = { sheetBottomLeft.x, sheetTopRight.y };
+        const wxPoint bottomRight = { sheetTopRight.x, sheetBottomLeft.y };
 
         // TODO: we cannot fill this rectangle, only draw it for now
-        SCH_LINE* lineTop = new SCH_LINE( elem.topRight, SCH_LAYER_ID::LAYER_NOTES );
+        SCH_LINE* lineTop = new SCH_LINE( sheetTopRight, SCH_LAYER_ID::LAYER_NOTES );
         lineTop->SetEndPoint( topLeft );
         lineTop->SetLineWidth( elem.lineWidth );
         lineTop->SetLineStyle( PLOT_DASH_TYPE::SOLID );
         lineTop->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( lineTop );
 
-        SCH_LINE* lineBottom = new SCH_LINE( elem.bottomLeft, SCH_LAYER_ID::LAYER_NOTES );
+        SCH_LINE* lineBottom = new SCH_LINE( sheetBottomLeft, SCH_LAYER_ID::LAYER_NOTES );
         lineBottom->SetEndPoint( bottomRight );
         lineBottom->SetLineWidth( elem.lineWidth );
         lineBottom->SetLineStyle( PLOT_DASH_TYPE::SOLID );
         lineBottom->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( lineBottom );
 
-        SCH_LINE* lineRight = new SCH_LINE( elem.topRight, SCH_LAYER_ID::LAYER_NOTES );
+        SCH_LINE* lineRight = new SCH_LINE( sheetTopRight, SCH_LAYER_ID::LAYER_NOTES );
         lineRight->SetEndPoint( bottomRight );
         lineRight->SetLineWidth( elem.lineWidth );
         lineRight->SetLineStyle( PLOT_DASH_TYPE::SOLID );
         lineRight->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( lineRight );
 
-        SCH_LINE* lineLeft = new SCH_LINE( elem.bottomLeft, SCH_LAYER_ID::LAYER_NOTES );
+        SCH_LINE* lineLeft = new SCH_LINE( sheetBottomLeft, SCH_LAYER_ID::LAYER_NOTES );
         lineLeft->SetEndPoint( topLeft );
         lineLeft->SetLineWidth( elem.lineWidth );
         lineLeft->SetLineStyle( PLOT_DASH_TYPE::SOLID );
@@ -1139,8 +1152,8 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
 
         LIB_RECTANGLE* rect = new LIB_RECTANGLE( symbol->second );
         symbol->second->AddDrawItem( rect );
-        rect->SetPosition( GetRelativePosition( elem.topRight, component ) );
-        rect->SetEnd( GetRelativePosition( elem.bottomLeft, component ) );
+        rect->SetPosition( GetRelativePosition( sheetTopRight, component ) );
+        rect->SetEnd( GetRelativePosition( sheetBottomLeft, component ) );
         rect->SetWidth( elem.lineWidth );
 
         if( !elem.isSolid )
@@ -1159,7 +1172,7 @@ void SCH_ALTIUM_PLUGIN::ParseNoERC( const std::map<wxString, wxString>& aPropert
 
     if( elem.isActive )
     {
-        SCH_NO_CONNECT* noConnect = new SCH_NO_CONNECT( elem.location );
+        SCH_NO_CONNECT* noConnect = new SCH_NO_CONNECT( elem.location + m_sheetOffset );
 
         noConnect->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( noConnect );
@@ -1171,7 +1184,7 @@ void SCH_ALTIUM_PLUGIN::ParseNetLabel( const std::map<wxString, wxString>& aProp
 {
     ASCH_NET_LABEL elem( aProperties );
 
-    SCH_LABEL* label = new SCH_LABEL( elem.location, elem.text );
+    SCH_LABEL* label = new SCH_LABEL( elem.location + m_sheetOffset, elem.text );
 
     switch( elem.orientation )
     {
@@ -1202,8 +1215,9 @@ void SCH_ALTIUM_PLUGIN::ParseBus( const std::map<wxString, wxString>& aPropertie
 
     for( size_t i = 0; i < elem.points.size() - 1; i++ )
     {
-        SCH_LINE* bus = new SCH_LINE( elem.points.at( i ), SCH_LAYER_ID::LAYER_BUS );
-        bus->SetEndPoint( elem.points.at( i + 1 ) );
+        SCH_LINE* bus =
+                new SCH_LINE( elem.points.at( i ) + m_sheetOffset, SCH_LAYER_ID::LAYER_BUS );
+        bus->SetEndPoint( elem.points.at( i + 1 ) + m_sheetOffset );
         bus->SetLineWidth( elem.lineWidth );
 
         bus->SetFlags( IS_NEW );
@@ -1218,8 +1232,9 @@ void SCH_ALTIUM_PLUGIN::ParseWire( const std::map<wxString, wxString>& aProperti
 
     for( size_t i = 0; i < elem.points.size() - 1; i++ )
     {
-        SCH_LINE* wire = new SCH_LINE( elem.points.at( i ), SCH_LAYER_ID::LAYER_WIRE );
-        wire->SetEndPoint( elem.points.at( i + 1 ) );
+        SCH_LINE* wire =
+                new SCH_LINE( elem.points.at( i ) + m_sheetOffset, SCH_LAYER_ID::LAYER_WIRE );
+        wire->SetEndPoint( elem.points.at( i + 1 ) + m_sheetOffset );
         wire->SetLineWidth( elem.lineWidth );
 
         wire->SetFlags( IS_NEW );
@@ -1232,7 +1247,7 @@ void SCH_ALTIUM_PLUGIN::ParseJunction( const std::map<wxString, wxString>& aProp
 {
     ASCH_JUNCTION elem( aProperties );
 
-    SCH_JUNCTION* junction = new SCH_JUNCTION( elem.location );
+    SCH_JUNCTION* junction = new SCH_JUNCTION( elem.location + m_sheetOffset );
 
     junction->SetFlags( IS_NEW );
     m_currentSheet->GetScreen()->Append( junction );
@@ -1242,6 +1257,72 @@ void SCH_ALTIUM_PLUGIN::ParseJunction( const std::map<wxString, wxString>& aProp
 void SCH_ALTIUM_PLUGIN::ParseSheet( const std::map<wxString, wxString>& aProperties )
 {
     m_altiumSheet = std::make_unique<ASCH_SHEET>( aProperties );
+
+    PAGE_INFO pageInfo;
+
+    bool isPortrait = m_altiumSheet->sheetOrientation == ASCH_SHEET_WORKSPACEORIENTATION::PORTRAIT;
+    switch( m_altiumSheet->sheetSize )
+    {
+    default:
+    case ASCH_SHEET_SIZE::A4:
+        pageInfo.SetType( "A4", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::A3:
+        pageInfo.SetType( "A3", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::A2:
+        pageInfo.SetType( "A2", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::A1:
+        pageInfo.SetType( "A1", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::A0:
+        pageInfo.SetType( "A0", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::A:
+        pageInfo.SetType( "A", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::B:
+        pageInfo.SetType( "B", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::C:
+        pageInfo.SetType( "C", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::D:
+        pageInfo.SetType( "D", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::E:
+        pageInfo.SetType( "E", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::LETTER:
+        pageInfo.SetType( "USLetter", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::LEGAL:
+        pageInfo.SetType( "USLegal", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::TABLOID:
+        pageInfo.SetType( "A3", isPortrait ); // TODO: use User
+        break;
+    case ASCH_SHEET_SIZE::ORCAD_A:
+        pageInfo.SetType( "A", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::ORCAD_B:
+        pageInfo.SetType( "B", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::ORCAD_C:
+        pageInfo.SetType( "C", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::ORCAD_D:
+        pageInfo.SetType( "D", isPortrait );
+        break;
+    case ASCH_SHEET_SIZE::ORCAD_E:
+        pageInfo.SetType( "E", isPortrait );
+        break;
+    }
+
+    m_currentSheet->GetScreen()->SetPageSettings( pageInfo );
+
+    m_sheetOffset = { 0, pageInfo.GetHeightIU() };
 }
 
 
@@ -1269,7 +1350,7 @@ void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aPr
     LIB_TEXT* text = new LIB_TEXT( symbol );
     symbol->AddDrawItem( text );
 
-    text->SetPosition( elem.location );
+    text->SetPosition( elem.location + m_sheetOffset );
     text->SetTextAngle( elem.orientation * 90. );
     text->SetText( elem.name ); // TODO: use variable
 }

@@ -424,9 +424,47 @@ struct ASCH_SHEET_FONT
     explicit ASCH_SHEET_FONT( const std::map<wxString, wxString>& aProperties, int aId );
 };
 
+
+enum class ASCH_SHEET_SIZE
+{
+    UNKNOWN = -1, // use A4
+
+    A4      = 0,  // 1150 × 760
+    A3      = 1,  // 1550 × 1110
+    A2      = 2,  // 2230 × 1570
+    A1      = 3,  // 3150 × 2230
+    A0      = 4,  // 4460 × 3150
+    A       = 5,  // 950 × 750
+    B       = 6,  // 1500 × 950
+    C       = 7,  // 2000 × 1500
+    D       = 8,  // 3200 × 2000
+    E       = 9,  // 4200 × 3200
+    LETTER  = 10, // 1100 × 850
+    LEGAL   = 11, // 1400 × 850
+    TABLOID = 12, // 1700 × 1100
+    ORCAD_A = 13, // 990 × 790
+    ORCAD_B = 14, // 1540 × 990
+    ORCAD_C = 15, // 2060 × 1560
+    ORCAD_D = 16, // 3260 × 2060
+    ORCAD_E = 17  // 4280 × 3280
+};
+
+wxPoint ASchSheetGetSize( ASCH_SHEET_SIZE aSheetSize );
+
+
+enum class ASCH_SHEET_WORKSPACEORIENTATION
+{
+    LANDSCAPE = 0,
+    PORTRAIT  = 1
+};
+
+
 struct ASCH_SHEET
 {
     std::vector<ASCH_SHEET_FONT> fonts;
+
+    ASCH_SHEET_SIZE                 sheetSize;
+    ASCH_SHEET_WORKSPACEORIENTATION sheetOrientation;
 
     explicit ASCH_SHEET( const std::map<wxString, wxString>& aProperties );
 };

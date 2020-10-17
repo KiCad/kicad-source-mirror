@@ -27,6 +27,7 @@
 #include <memory>
 #include <sch_io_mgr.h>
 #include <wx/filename.h>
+#include <wx/gdicmn.h>
 
 struct ASCH_SHEET;
 
@@ -128,6 +129,7 @@ private:
     SCH_PLUGIN::SCH_PLUGIN_RELEASER m_pi;         ///< Plugin to create the KiCad symbol library.
     std::unique_ptr<PROPERTIES>     m_properties; ///< Library plugin properties.
 
+    wxPoint                       m_sheetOffset;
     std::unique_ptr<ASCH_SHEET>   m_altiumSheet;
     std::map<int, SCH_COMPONENT*> m_components;
     std::map<int, LIB_PART*>      m_symbols; // for the start, every component has its unique symbol

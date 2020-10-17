@@ -441,6 +441,52 @@ ASCH_SHEET_FONT::ASCH_SHEET_FONT( const std::map<wxString, wxString>& aPropertie
     underline = ALTIUM_PARSER::PropertiesReadBool( aProperties, "UNDERLINE" + sid, false );
 }
 
+wxPoint ASchSheetGetSize( ASCH_SHEET_SIZE aSheetSize )
+{
+    // From: https://github.com/vadmium/python-altium/blob/master/format.md#sheet
+    switch( aSheetSize )
+    {
+    default:
+    case ASCH_SHEET_SIZE::A4:
+        return { 1150, 760 };
+    case ASCH_SHEET_SIZE::A3:
+        return { 1550, 1110 };
+    case ASCH_SHEET_SIZE::A2:
+        return { 2230, 1570 };
+    case ASCH_SHEET_SIZE::A1:
+        return { 3150, 2230 };
+    case ASCH_SHEET_SIZE::A0:
+        return { 4460, 3150 };
+    case ASCH_SHEET_SIZE::A:
+        return { 950, 750 };
+    case ASCH_SHEET_SIZE::B:
+        return { 1500, 950 };
+    case ASCH_SHEET_SIZE::C:
+        return { 2000, 1500 };
+    case ASCH_SHEET_SIZE::D:
+        return { 3200, 2000 };
+    case ASCH_SHEET_SIZE::E:
+        return { 4200, 3200 };
+    case ASCH_SHEET_SIZE::LETTER:
+        return { 1100, 850 };
+    case ASCH_SHEET_SIZE::LEGAL:
+        return { 1400, 850 };
+    case ASCH_SHEET_SIZE::TABLOID:
+        return { 1700, 1100 };
+    case ASCH_SHEET_SIZE::ORCAD_A:
+        return { 990, 790 };
+    case ASCH_SHEET_SIZE::ORCAD_B:
+        return { 1540, 990 };
+    case ASCH_SHEET_SIZE::ORCAD_C:
+        return { 2060, 1560 };
+    case ASCH_SHEET_SIZE::ORCAD_D:
+        return { 3260, 2060 };
+    case ASCH_SHEET_SIZE::ORCAD_E:
+        return { 4280, 3280 };
+    }
+}
+
+
 ASCH_SHEET::ASCH_SHEET( const std::map<wxString, wxString>& aProperties )
 {
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::SHEET );
@@ -450,6 +496,11 @@ ASCH_SHEET::ASCH_SHEET( const std::map<wxString, wxString>& aProperties )
     {
         fonts.emplace_back( aProperties, i );
     }
+
+    sheetSize = PropertiesReadEnum<ASCH_SHEET_SIZE>(
+            aProperties, "SHEETSTYLE", 0, 17, ASCH_SHEET_SIZE::UNKNOWN );
+    sheetOrientation = PropertiesReadEnum<ASCH_SHEET_WORKSPACEORIENTATION>(
+            aProperties, "WORKSPACEORIENTATION", 0, 1, ASCH_SHEET_WORKSPACEORIENTATION::LANDSCAPE );
 }
 
 ASCH_DESIGNATOR::ASCH_DESIGNATOR( const std::map<wxString, wxString>& aProperties )
