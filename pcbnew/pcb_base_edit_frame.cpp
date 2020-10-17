@@ -205,6 +205,13 @@ void PCB_BASE_EDIT_FRAME::SetGridVisibility( bool aVisible )
 }
 
 
+void PCB_BASE_EDIT_FRAME::SetObjectVisible( GAL_LAYER_ID aLayer, bool aVisible )
+{
+    if( m_appearancePanel )
+        m_appearancePanel->SetObjectVisible( aLayer, aVisible );
+}
+
+
 COLOR_SETTINGS* PCB_BASE_EDIT_FRAME::GetColorSettings()
 {
     return Pgm().GetSettingsManager().GetColorSettings( GetPcbNewSettings()->m_ColorTheme );

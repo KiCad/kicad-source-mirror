@@ -168,6 +168,8 @@ public:
      */
     void SetGridVisibility( bool aVisible ) override;
 
+    void SetObjectVisible( GAL_LAYER_ID aLayer, bool aVisible = true );
+
     /**
      * Function GetRotationAngle()
      * Returns the angle used for rotate operations.

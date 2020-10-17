@@ -1039,12 +1039,14 @@ void APPEARANCE_CONTROLS::SetLayerVisible( LAYER_NUM aLayer, bool isVisible )
 
 void APPEARANCE_CONTROLS::SetObjectVisible( GAL_LAYER_ID aLayer, bool isVisible )
 {
-    // Currently only used for the grid, so we just update the ui
     if( m_objectSettingsMap.count( aLayer ) )
     {
         APPEARANCE_SETTING* setting = m_objectSettingsMap.at( aLayer );
         setting->ctl_visibility->SetValue( isVisible );
     }
+
+    m_frame->GetCanvas()->GetView()->SetLayerVisible( aLayer, isVisible );
+    m_frame->GetCanvas()->Refresh();
 }
 
 

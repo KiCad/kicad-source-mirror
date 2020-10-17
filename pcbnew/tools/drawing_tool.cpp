@@ -1753,6 +1753,9 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     if( !getSourceZoneForAction( zoneMode, &sourceZone ) )
         return 0;
 
+    // Turn zones on if they are off, so that the created object will be visible after completion
+    m_frame->SetObjectVisible( LAYER_ZONES );
+
     ZONE_CREATE_HELPER::PARAMS params;
 
     params.m_keepout = drawMode == MODE::KEEPOUT;
