@@ -80,6 +80,8 @@ private:
     void OnDeleteAllClick( wxCommandEvent& aEvent ) override;
     void OnRunDRCClick( wxCommandEvent& aEvent ) override;
 
+    void OnErrorLinkClicked( wxHtmlLinkEvent& event ) override;
+
     // These require special handling while the DRC tests are running.
     void OnCancelClick( wxCommandEvent& aEvent ) override;
     void OnClose( wxCloseEvent& event ) override;

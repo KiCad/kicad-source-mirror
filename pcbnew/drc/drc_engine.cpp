@@ -52,6 +52,7 @@ DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
     m_board( aBoard ),
     m_worksheet( nullptr ),
     m_schematicNetlist( nullptr ),
+    m_rulesValid( false ),
     m_userUnits( EDA_UNITS::MILLIMETRES ),
     m_testTracksAgainstZones( false ),
     m_reportAllTrackErrors( false ),

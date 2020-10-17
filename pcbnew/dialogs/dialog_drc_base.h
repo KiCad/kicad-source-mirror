@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_HTML_REPORT_BOX;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/checkbox.h>
@@ -18,7 +20,7 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
-#include <wx/textctrl.h>
+#include <wx/html/htmlwin.h>
 #include <wx/gauge.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
@@ -54,7 +56,7 @@ class DIALOG_DRC_BASE : public DIALOG_SHIM
 		wxPanel* running;
 		wxNotebook* m_runningNotebook;
 		wxPanel* m_panelMessages;
-		wxTextCtrl* m_Messages;
+		WX_HTML_REPORT_BOX* m_Messages;
 		wxGauge* m_gauge;
 		wxPanel* results;
 		wxNotebook* m_Notebook;
@@ -83,6 +85,7 @@ class DIALOG_DRC_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnActivateDlg( wxActivateEvent& event ) { event.Skip(); }
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnErrorLinkClicked( wxHtmlLinkEvent& event ) { event.Skip(); }
 		virtual void OnChangingNotebookPage( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnDRCItemDClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnDRCItemRClick( wxDataViewEvent& event ) { event.Skip(); }

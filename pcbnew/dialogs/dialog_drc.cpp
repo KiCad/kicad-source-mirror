@@ -38,7 +38,7 @@
 #include <widgets/appearance_controls.h>
 #include <widgets/ui_common.h>
 #include <widgets/progress_reporter.h>
-#include <drc/drc_engine.h>
+#include <dialogs/wx_html_report_box.h>
 #include <dialogs/panel_setup_rules_base.h>
 #include <tools/drc_tool.h>
 #include <kiplatform/ui.h>
@@ -167,7 +167,7 @@ void DIALOG_DRC::AdvancePhase( const wxString& aMessage )
     PROGRESS_REPORTER::AdvancePhase( aMessage );
     SetCurrentProgress( 0.0 );
 
-    m_Messages->AppendText( aMessage + "\n" );
+    m_Messages->Report( aMessage + "<br>" );
 }
 
 
@@ -190,6 +190,12 @@ void DIALOG_DRC::syncCheckboxes()
 }
 
 
+void DIALOG_DRC::OnErrorLinkClicked( wxHtmlLinkEvent& event )
+{
+    m_brdEditor->ShowBoardSetupDialog( _( "Rules" ) );
+}
+
+
 void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 {
     DRC_TOOL* drcTool = m_brdEditor->GetToolManager()->GetTool<DRC_TOOL>();
@@ -206,12 +212,19 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     }
     catch( PARSE_ERROR& pe )
     {
-        // Shouldn't be necessary, but we get into all kinds of wxWidgets window ordering
-        // issues (on at least OSX) if we don't.
-        drcTool->DestroyDRCDialog();
+        m_runningResultsBook->ChangeSelection( 0 );   // Display the "Tests Running..." tab
+        m_DeleteCurrentMarkerButton->Enable( false );
+        m_DeleteAllMarkersButton->Enable( false );
+        m_saveReport->Enable( false );
 
-        m_brdEditor->ShowBoardSetupDialog( _( "Rules" ) );
+        m_Messages->Clear();
+        m_Messages->Report( _( "DRC incomplete: could not compile design rules.  " )
+                        + wxT( "<a href='boardsetup'>" )
+                        + _( "Show design rules." )
+                        + wxT( "</a>" ) );
+        m_Messages->Flush();
 
+        Raise();
         return;
     }
 
@@ -241,9 +254,9 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
                        testFootprints );
 
     if( m_cancelled )
-        m_Messages->AppendText( _( "-------- DRC cancelled by user.\n\n" ) );
+        m_Messages->Report( _( "-------- DRC cancelled by user.<br><br>" ) );
     else
-        m_Messages->AppendText( _( "Done.\n\n" ) );
+        m_Messages->Report( _( "Done.<br><br>" ) );
 
     Raise();
     wxYield();                                    // Allow time slice to refresh Messages
@@ -579,8 +592,8 @@ void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
 
     if( writeReport( fn.GetFullPath() ) )
     {
-        m_Messages->AppendText( wxString::Format( _( "Report file '%s' created\n" ),
-                                                  fn.GetFullPath() ) );
+        m_Messages->Report( wxString::Format( _( "Report file '%s' created<br>" ),
+                                              fn.GetFullPath() ) );
     }
     else
     {
