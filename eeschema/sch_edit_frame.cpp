@@ -47,6 +47,7 @@
 #include <sch_edit_frame.h>
 #include <sch_iref.h>
 #include <sch_painter.h>
+#include <sch_view.h>
 #include <sch_sheet.h>
 #include <schematic.h>
 #include <settings/settings_manager.h>
@@ -713,6 +714,21 @@ void SCH_EDIT_FRAME::OnModify()
 
     if( ADVANCED_CFG::GetCfg().m_realTimeConnectivity && CONNECTION_GRAPH::m_allowRealTime )
         RecalculateConnections( NO_CLEANUP );
+
+    GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+            []( KIGFX::VIEW_ITEM* aItem )
+            {
+                SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItem );
+                SCH_CONNECTION* connection = item ? item->Connection() : nullptr;
+
+                if( connection && connection->HasDriverChanged() )
+                {
+                    connection->ClearDriverChanged();
+                    return true;
+                }
+
+                return false;
+            } );
 
     GetCanvas()->Refresh();
 }

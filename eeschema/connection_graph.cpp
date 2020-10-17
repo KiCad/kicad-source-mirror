@@ -110,9 +110,9 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
                 // We have multiple options, and they are all hierarchical
                 // sheet pins.  Let's prefer outputs over inputs.
 
-                for( auto c : candidates )
+                for( SCH_ITEM* c : candidates )
                 {
-                    auto p = static_cast<SCH_SHEET_PIN*>( c );
+                    SCH_SHEET_PIN* p = static_cast<SCH_SHEET_PIN*>( c );
 
                     if( p->GetShape() == PINSHEETLABEL_SHAPE::PS_OUTPUT )
                     {
@@ -123,6 +123,21 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
             }
             else
             {
+                // See if a previous driver is still a candidate
+                void* previousDriver = nullptr;
+
+                for( SCH_ITEM* member : m_items )
+                {
+                    if( SCH_CONNECTION* mc = member->Connection( &m_sheet ) )
+                    {
+                        if( mc->GetLastDriver() )
+                        {
+                            previousDriver = mc->GetLastDriver();
+                            break;
+                        }
+                    }
+                }
+
                 // For all other driver types, sort by name
                 std::sort( candidates.begin(), candidates.end(),
                            [&]( SCH_ITEM* a, SCH_ITEM* b ) -> bool
@@ -134,7 +149,12 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
                                if( ac->IsBus() && bc->IsBus() )
                                    return bc->IsSubsetOf( ac );
 
-                               return GetNameForDriver( a ) < GetNameForDriver( b );
+                               if( a == previousDriver )
+                                   return true;
+                               else if( b == previousDriver )
+                                   return false;
+                               else
+                                   return GetNameForDriver( a ) < GetNameForDriver( b );
                            } );
             }
         }
@@ -750,7 +770,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
      * you regenerate.
      *
      * Right now, we are clearing out the old connections up in
-     * UpdateItemConnectivity(), but that is useful information, so maybe we
+     * updateItemConnectivity(), but that is useful information, so maybe we
      * need to just set the dirty flag or something.
      *
      * That way, ResolveDrivers() can check what the driver of the subgraph was

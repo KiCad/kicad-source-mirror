@@ -98,7 +98,7 @@ void SCH_CONNECTION::SetDriver( SCH_ITEM* aItem )
 
     recacheName();
 
-    for( const auto& member : m_members )
+    for( const std::shared_ptr<SCH_CONNECTION>& member : m_members )
         member->SetDriver( aItem );
 }
 
@@ -109,7 +109,7 @@ void SCH_CONNECTION::SetSheet( SCH_SHEET_PATH aSheet )
 
     recacheName();
 
-    for( const auto& member : m_members )
+    for( const std::shared_ptr<SCH_CONNECTION>& member : m_members )
         member->SetSheet( aSheet );
 }
 
@@ -203,6 +203,7 @@ void SCH_CONNECTION::Reset()
     m_prefix.Empty();
     m_bus_prefix.Empty();
     m_suffix .Empty();
+    m_lastDriver = m_driver;
     m_driver = nullptr;
     m_members.clear();
     m_dirty = true;
@@ -220,6 +221,7 @@ void SCH_CONNECTION::Clone( SCH_CONNECTION& aOther )
 {
     m_graph = aOther.m_graph;
     m_type = aOther.Type();
+    m_lastDriver = aOther.GetLastDriver();
     m_driver = aOther.Driver();
     m_sheet = aOther.Sheet();
     m_name = aOther.m_name;
@@ -268,6 +270,19 @@ bool SCH_CONNECTION::IsDriver() const
         return false;
     }
 }
+
+
+bool SCH_CONNECTION::HasDriverChanged() const
+{
+    return m_driver != m_lastDriver;
+}
+
+
+void SCH_CONNECTION::ClearDriverChanged()
+{
+    m_lastDriver = m_driver;
+}
+
 
 
 wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const

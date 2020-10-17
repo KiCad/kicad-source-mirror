@@ -101,23 +101,12 @@ public:
      */
     void Clone( SCH_CONNECTION& aOther );
 
-    SCH_ITEM* Parent() const
-    {
-        return m_parent;
-    }
+    SCH_ITEM* Parent() const { return m_parent; }
 
-    SCH_ITEM* Driver() const
-    {
-        return m_driver;
-    }
-
-    SCH_SHEET_PATH Sheet() const
-    {
-        return m_sheet;
-    }
-
+    SCH_ITEM* Driver() const { return m_driver; }
     void SetDriver( SCH_ITEM* aItem );
 
+    SCH_SHEET_PATH Sheet() const { return m_sheet; }
     void SetSheet( SCH_SHEET_PATH aSheet );
 
     /**
@@ -138,27 +127,15 @@ public:
         return ( m_type == CONNECTION_TYPE::NET );
     }
 
-    bool IsDirty() const
-    {
-        return m_dirty;
-    }
+    bool IsDirty() const { return m_dirty; }
+    void SetDirty() { m_dirty = true; }
+    void ClearDirty() { m_dirty = false; }
 
-    void SetDirty()
-    {
-        m_dirty = true;
-    }
-
-    void ClearDirty()
-    {
-        m_dirty = false;
-    }
+    bool HasDriverChanged() const;
+    void ClearDriverChanged();
+    void* GetLastDriver() const { return m_lastDriver; }
 
     wxString Name( bool aIgnoreSheet = false ) const;
-
-    const wxString& RawName() const
-    {
-        return m_name;
-    }
 
     wxString LocalName() const { return m_local_name; }
 
@@ -173,29 +150,15 @@ public:
         recacheName();
     }
 
-    wxString Prefix() const
-    {
-        return m_prefix;
-    }
-
-    wxString BusPrefix() const
-    {
-        return m_bus_prefix;
-    }
-
-    wxString Suffix() const
-    {
-        return m_suffix;
-    }
-
+    wxString Prefix() const { return m_prefix; }
     void SetPrefix( const wxString& aPrefix );
 
+    wxString BusPrefix() const { return m_bus_prefix; }
+
+    wxString Suffix() const { return m_suffix; }
     void SetSuffix( const wxString& aSuffix );
 
-    CONNECTION_TYPE Type() const
-    {
-        return m_type;
-    }
+    CONNECTION_TYPE Type() const { return m_type; }
 
     void SetType( CONNECTION_TYPE aType )
     {
@@ -203,55 +166,21 @@ public:
         recacheName();
     }
 
-    int NetCode() const
-    {
-        return m_net_code;
-    }
+    int NetCode() const { return m_net_code; }
+    void SetNetCode( int aCode ) { m_net_code = aCode; }
 
-    void SetNetCode( int aCode )
-    {
-        m_net_code = aCode;
-    }
+    int BusCode() const { return m_bus_code; }
+    void SetBusCode( int aCode ) { m_bus_code = aCode; }
 
-    int BusCode() const
-    {
-        return m_bus_code;
-    }
+    int SubgraphCode() const { return m_subgraph_code; }
+    void SetSubgraphCode( int aCode ) { m_subgraph_code = aCode; }
 
-    void SetBusCode( int aCode )
-    {
-        m_bus_code = aCode;
-    }
+    long VectorStart() const { return m_vector_start; }
+    long VectorEnd() const { return m_vector_end; }
 
-    int SubgraphCode() const
-    {
-        return m_subgraph_code;
-    }
+    long VectorIndex() const { return m_vector_index; }
 
-    void SetSubgraphCode( int aCode )
-    {
-        m_subgraph_code = aCode;
-    }
-
-    long VectorStart() const
-    {
-        return m_vector_start;
-    }
-
-    long VectorEnd() const
-    {
-        return m_vector_end;
-    }
-
-    long VectorIndex() const
-    {
-        return m_vector_index;
-    }
-
-    wxString VectorPrefix() const
-    {
-        return m_vector_prefix;
-    }
+    wxString VectorPrefix() const { return m_vector_prefix; }
 
     std::vector< std::shared_ptr< SCH_CONNECTION > >& Members()
     {
@@ -310,6 +239,9 @@ private:
     SCH_SHEET_PATH m_sheet; ///< The hierarchical sheet this connection is on
 
     SCH_ITEM* m_parent;     ///< The SCH_ITEM this connection is owned by
+
+    void*     m_lastDriver; ///< WEAK POINTER (there is no guarantee it is still allocated)
+                            ///< Equality comparisons are OK, but that's pretty much it
 
     SCH_ITEM* m_driver;     ///< The SCH_ITEM that drives this connection's net
 
