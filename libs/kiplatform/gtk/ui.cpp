@@ -20,9 +20,12 @@
 
 #include <kiplatform/ui.h>
 
+#include <wx/choice.h>
 #include <wx/nonownedwnd.h>
 #include <wx/settings.h>
 #include <wx/window.h>
+
+#include <gtk/gtk.h>
 
 
 bool KIPLATFORM::UI::IsDarkTheme()
@@ -67,4 +70,24 @@ bool KIPLATFORM::UI::IsStockCursorOk( wxStockCursor aCursor )
     default:
         return false;
     }
+}
+
+
+void KIPLATFORM::UI::EllipsizeChoiceBox( wxChoice* aChoice )
+{
+    // This function is based on the code inside the function post_process_ui in gtkfilechooserwidget.c
+    GList* cells = gtk_cell_layout_get_cells( GTK_CELL_LAYOUT( aChoice->m_widget ) );
+
+    if( !cells )
+        return;
+
+    GtkCellRenderer* cell = (GtkCellRenderer*) cells->data;
+
+    if( !cell )
+        return;
+
+    g_object_set( G_OBJECT( cell ), "ellipsize", PANGO_ELLIPSIZE_END, NULL );
+
+    // Only the list of cells must be freed, the renderer isn't ours to free
+    g_list_free( cells );
 }

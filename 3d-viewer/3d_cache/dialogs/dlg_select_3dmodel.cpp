@@ -35,6 +35,8 @@
 #include <filename_resolver.h>
 #include <pcbnew/class_module.h>
 
+#include <kiplatform/ui.h>
+
 
 DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheManager,
     MODULE_3D_SETTINGS* aModelItem, wxString& prevModelSelectDir, int& prevModelWildcard ) :
@@ -116,6 +118,12 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
         prevModelWildcard = 0;
         m_FileTree->SetFilterIndex( 0 );
     }
+
+    // Fix the filter box on the file selector widget so that it always shows the start of the filter
+    // string in the combobox. Otherwise it will only show the end of the string, which is empty for
+    // all but the all supported filters option.
+    wxChoice* filterBox = m_FileTree->GetFilterListCtrl();
+    KIPLATFORM::UI::EllipsizeChoiceBox( filterBox );
 
     m_FileTree->SetPath( m_previousDir );
     updateDirChoiceList();

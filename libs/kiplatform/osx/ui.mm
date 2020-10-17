@@ -85,3 +85,9 @@ bool KIPLATFORM::UI::IsStockCursorOk( wxStockCursor aCursor )
         return false;
     }
 }
+
+
+void KIPLATFORM::UI::EllipsizeChoiceBox( wxChoice* aChoice )
+{
+    // Not implemented
+}

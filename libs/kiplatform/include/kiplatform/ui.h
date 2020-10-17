@@ -23,6 +23,7 @@
 
 #include <wx/cursor.h>
 
+class wxChoice;
 class wxNonOwnedWindow;
 class wxWindow;
 
@@ -76,6 +77,14 @@ namespace KIPLATFORM
          * @param aCursor is wxStockCursor we want to see if its acceptable
          */
         bool IsStockCursorOk( wxStockCursor aCursor );
+
+        /**
+         * Configure a wxChoice control to ellipsize the shown text in the button with the ellipses
+         * placed at the end of the string.
+         *
+         * @param aChoice is the choice box to ellipsize
+         */
+        void EllipsizeChoiceBox( wxChoice* aChoice );
     }
 }
 

@@ -47,7 +47,7 @@ bool KIPLATFORM::UI::IsDarkTheme()
         return false;
 
     long val = 0;
-    
+
     if( !themeKey.QueryValue( lightModeKey, &val ) )
         return false;
 
@@ -88,4 +88,10 @@ bool KIPLATFORM::UI::IsStockCursorOk( wxStockCursor aCursor )
     default:
         return false;
     }
+}
+
+
+void KIPLATFORM::UI::EllipsizeChoiceBox( wxChoice* aChoice )
+{
+    // Not implemented
 }
