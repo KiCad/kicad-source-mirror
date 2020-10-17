@@ -22,10 +22,10 @@
  */
 
 
-#ifndef _DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_H_
-#define _DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_H_
+#ifndef DIALOG_SYMBOL_PROPERTIES_H
+#define DIALOG_SYMBOL_PROPERTIES_H
 
-#include <dialog_edit_component_in_schematic_base.h>
+#include <dialog_symbol_properties_base.h>
 #include <fields_grid_table.h>
 #include <sch_pin.h>
 
@@ -49,14 +49,14 @@ enum SYMBOL_PROPS_RETVALUE
 /**
  * Dialog used to edit #SCH_COMPONENT objects in a schematic.
  *
- * This is derived from DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE which is maintained by
+ * This is derived from DIALOG_SYMBOL_PROPERTIES_BASE which is maintained by
  * wxFormBuilder.
  */
-class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
+class DIALOG_SYMBOL_PROPERTIES : public DIALOG_SYMBOL_PROPERTIES_BASE
 {
 public:
-    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aComponent );
-    ~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC() override;
+    DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aComponent );
+    ~DIALOG_SYMBOL_PROPERTIES() override;
 
     SCH_EDIT_FRAME* GetParent();
 
@@ -102,4 +102,4 @@ private:
     SCH_PIN_TABLE_DATA_MODEL*     m_dataModel;
 };
 
-#endif // _DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_H_
+#endif // DIALOG_SYMBOL_PROPERTIES_H

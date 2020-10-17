@@ -39,9 +39,9 @@ class WX_GRID;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
+/// Class DIALOG_SYMBOL_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE : public DIALOG_SHIM
+class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -97,8 +97,8 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Symbol Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
-		~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE();
+		DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Symbol Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
+		~DIALOG_SYMBOL_PROPERTIES_BASE();
 
 };
 

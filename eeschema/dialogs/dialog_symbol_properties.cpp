@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "dialog_edit_component_in_schematic.h"
+#include "dialog_symbol_properties.h"
 
 #include <wx/tooltip.h>
 #include <grid_tricks.h>
@@ -269,9 +269,9 @@ public:
 };
 
 
-DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT_FRAME* aParent,
-                                                                        SCH_COMPONENT* aComponent ) :
-    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE( aParent )
+DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
+                                                    SCH_COMPONENT* aComponent ) :
+        DIALOG_SYMBOL_PROPERTIES_BASE( aParent )
 {
     m_comp = aComponent;
     m_part = m_comp->GetPartRef().get();
@@ -346,18 +346,18 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
 
     // wxFormBuilder doesn't include this event...
     m_fieldsGrid->Connect( wxEVT_GRID_CELL_CHANGING,
-                    wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging ),
+                    wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging ),
                     nullptr, this );
 
     m_pinGrid->Connect( wxEVT_GRID_COL_SORT,
-                    wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnPinTableColSort ),
+                    wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort ),
                     nullptr, this );
 
     FinishDialogSettings();
 }
 
 
-DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC()
+DIALOG_SYMBOL_PROPERTIES::~DIALOG_SYMBOL_PROPERTIES()
 {
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
@@ -369,10 +369,10 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC()
     m_pinGrid->DestroyTable( m_dataModel );
 
     m_fieldsGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
-                    wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging ),
+                    wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging ),
                     nullptr, this );
     m_pinGrid->Disconnect( wxEVT_GRID_COL_SORT,
-                           wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnPinTableColSort ),
+                           wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort ),
                            nullptr, this );
 
     // Delete the GRID_TRICKS.
@@ -381,13 +381,13 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC()
 }
 
 
-SCH_EDIT_FRAME* DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::GetParent()
+SCH_EDIT_FRAME* DIALOG_SYMBOL_PROPERTIES::GetParent()
 {
     return dynamic_cast<SCH_EDIT_FRAME*>( wxDialog::GetParent() );
 }
 
 
-bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
+bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
         return false;
@@ -484,7 +484,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnEditSpiceModel( wxCommandEvent& event )
+void DIALOG_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 {
 #ifdef KICAD_SPICE
     int diff = m_fields->size();
@@ -512,7 +512,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnEditSpiceModel( wxCommandEvent& event
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnCancelButtonClick( wxCommandEvent& event )
+void DIALOG_SYMBOL_PROPERTIES::OnCancelButtonClick( wxCommandEvent& event )
 {
     // Running the Footprint Browser gums up the works and causes the automatic cancel
     // stuff to no longer work.  So we do it here ourselves.
@@ -520,7 +520,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnCancelButtonClick( wxCommandEvent& ev
 }
 
 
-bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
+bool DIALOG_SYMBOL_PROPERTIES::Validate()
 {
     wxString msg;
     LIB_ID   id;
@@ -561,7 +561,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
 }
 
 
-bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
+bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )  // Calls our Validate() method.
         return false;
@@ -717,7 +717,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging( wxGridEvent& event )
+void DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 {
     wxGridCellEditor* editor = m_fieldsGrid->GetCellEditor( event.GetRow(), event.GetCol() );
     wxControl* control = editor->GetControl();
@@ -754,14 +754,14 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging( wxGridEvent& event 
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridEditorShown( wxGridEvent& aEvent )
+void DIALOG_SYMBOL_PROPERTIES::OnGridEditorShown( wxGridEvent& aEvent )
 {
     if( aEvent.GetRow() == REFERENCE && aEvent.GetCol() == FDC_VALUE )
         m_delayedSelection= true;
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnAddField( wxCommandEvent& event )
+void DIALOG_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
 {
     if( !m_fieldsGrid->CommitPendingChanges() )
         return;
@@ -788,7 +788,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnAddField( wxCommandEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnDeleteField( wxCommandEvent& event )
+void DIALOG_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 {
     int curRow = m_fieldsGrid->GetGridCursorRow();
 
@@ -819,7 +819,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnDeleteField( wxCommandEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnMoveUp( wxCommandEvent& event )
+void DIALOG_SYMBOL_PROPERTIES::OnMoveUp( wxCommandEvent& event )
 {
     if( !m_fieldsGrid->CommitPendingChanges() )
         return;
@@ -843,7 +843,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnMoveUp( wxCommandEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnMoveDown( wxCommandEvent& event )
+void DIALOG_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 {
     if( !m_fieldsGrid->CommitPendingChanges() )
         return;
@@ -867,31 +867,31 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnMoveDown( wxCommandEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnEditSymbol( wxCommandEvent&  )
+void DIALOG_SYMBOL_PROPERTIES::OnEditSymbol( wxCommandEvent&  )
 {
     EndQuasiModal( SYMBOL_PROPS_EDIT_SCHEMATIC_SYMBOL );
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnEditLibrarySymbol( wxCommandEvent&  )
+void DIALOG_SYMBOL_PROPERTIES::OnEditLibrarySymbol( wxCommandEvent&  )
 {
     EndQuasiModal( SYMBOL_PROPS_EDIT_LIBRARY_SYMBOL );
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnUpdateSymbol( wxCommandEvent&  )
+void DIALOG_SYMBOL_PROPERTIES::OnUpdateSymbol( wxCommandEvent&  )
 {
     EndQuasiModal( SYMBOL_PROPS_WANT_UPDATE_SYMBOL );
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnExchangeSymbol( wxCommandEvent&  )
+void DIALOG_SYMBOL_PROPERTIES::OnExchangeSymbol( wxCommandEvent&  )
 {
     EndQuasiModal( SYMBOL_PROPS_WANT_EXCHANGE_SYMBOL );
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnPinTableCellEdited( wxGridEvent& aEvent )
+void DIALOG_SYMBOL_PROPERTIES::OnPinTableCellEdited( wxGridEvent& aEvent )
 {
     int row = aEvent.GetRow();
 
@@ -906,7 +906,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnPinTableCellEdited( wxGridEvent& aEve
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnPinTableColSort( wxGridEvent& aEvent )
+void DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort( wxGridEvent& aEvent )
 {
     int sortCol = aEvent.GetCol();
     bool ascending;
@@ -924,7 +924,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnPinTableColSort( wxGridEvent& aEvent 
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::AdjustGridColumns( int aWidth )
+void DIALOG_SYMBOL_PROPERTIES::AdjustGridColumns( int aWidth )
 {
     wxGridUpdateLocker deferRepaintsTillLeavingScope;
 
@@ -958,7 +958,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::AdjustGridColumns( int aWidth )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
+void DIALOG_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
     wxString shownColumns = m_fieldsGrid->GetShownColumns();
 
@@ -999,7 +999,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSizeGrid( wxSizeEvent& event )
+void DIALOG_SYMBOL_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
 {
     auto new_size = event.GetSize().GetX();
 
@@ -1013,7 +1013,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSizeGrid( wxSizeEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnInitDlg( wxInitDialogEvent& event )
+void DIALOG_SYMBOL_PROPERTIES::OnInitDlg( wxInitDialogEvent& event )
 {
     TransferDataToWindow();
 

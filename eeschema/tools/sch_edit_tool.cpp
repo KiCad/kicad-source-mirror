@@ -54,7 +54,7 @@
 #include <dialogs/dialog_change_symbols.h>
 #include <dialogs/dialog_image_editor.h>
 #include <dialogs/dialog_edit_line_style.h>
-#include <dialogs/dialog_edit_component_in_schematic.h>
+#include <dialogs/dialog_symbol_properties.h>
 #include <dialogs/dialog_edit_sheet_pin.h>
 #include <dialogs/dialog_edit_one_field.h>
 #include <dialogs/dialog_junction_props.h>
@@ -1375,7 +1375,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_COMPONENT_T:
     {
         SCH_COMPONENT* component = (SCH_COMPONENT*) item;
-        DIALOG_EDIT_COMPONENT_IN_SCHEMATIC symbolPropsDialog( m_frame, component );
+        DIALOG_SYMBOL_PROPERTIES symbolPropsDialog( m_frame, component );
 
         // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
         // frame. Therefore this dialog as a modal frame parent, MUST be run under
