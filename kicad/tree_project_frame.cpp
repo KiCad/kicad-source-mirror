@@ -124,6 +124,7 @@ BEGIN_EVENT_TABLE( TREE_PROJECT_FRAME, wxSashLayoutWindow )
     EVT_MENU( ID_PROJECT_NEWDIR, TREE_PROJECT_FRAME::OnCreateNewDirectory )
     EVT_MENU( ID_PROJECT_DELETE, TREE_PROJECT_FRAME::OnDeleteFile )
     EVT_MENU( ID_PROJECT_RENAME, TREE_PROJECT_FRAME::OnRenameFile )
+    EVT_IDLE( TREE_PROJECT_FRAME::OnIdle )
 END_EVENT_TABLE()
 
 
@@ -134,6 +135,7 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
 {
     m_Parent = parent;
     m_TreeProject = NULL;
+    m_selectedItem = nullptr;
 
     m_watcher = NULL;
     Connect( wxEVT_FSWATCHER,
@@ -821,7 +823,22 @@ void TREE_PROJECT_FRAME::OnSelect( wxTreeEvent& Event )
     if( !selected_item )
         return;
 
-    selected_item->Activate( this );
+    // Bookmark the selected item but don't try and activate it until later
+    // if we do it now, there will be more events at least on Windows in this frame
+    // that will steal focus from any newly launched windows
+    m_selectedItem = selected_item;
+}
+
+
+void TREE_PROJECT_FRAME::OnIdle( wxIdleEvent& aEvent )
+{
+    // Idle executes once all other events finished processing
+    // This makes it ideal to launch a new window without starting Focus wars.
+    if( m_selectedItem != nullptr )
+    {
+        m_selectedItem->Activate( this );
+        m_selectedItem = nullptr;
+    }
 }
 
 

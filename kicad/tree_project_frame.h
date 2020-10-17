@@ -55,6 +55,7 @@ private:
     wxTreeItemId            m_root;
     std::vector<wxString>   m_filters;
     wxFileSystemWatcher*    m_watcher; // file system watcher (since wxWidgets 2.9.2)
+    TREEPROJECT_ITEM*       m_selectedItem;
 
 public:
     TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent );
@@ -157,6 +158,12 @@ private:
     }
 
     void                            RemoveFilter( const wxString& filter );
+
+    /**
+     * Idle event handler, used process the selected items at a point in time
+     * when all other events have been consumed
+     */
+    void OnIdle( wxIdleEvent &aEvent );
 
     /**
      * Function AddItemToTreeProject
