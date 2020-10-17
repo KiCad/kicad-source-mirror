@@ -126,18 +126,19 @@ public:
     void UpdateNet( int aNetCode ) override;
 
 private:
-    struct OFFSET {
+    struct OFFSET
+    {
         VECTOR2I p_old, p_new;
     };
 
-    std::map<D_PAD*, OFFSET> m_moduleOffsets;
-    KIGFX::VIEW* m_view;
-    KIGFX::VIEW_GROUP* m_previewItems;
-    std::unordered_set<BOARD_CONNECTED_ITEM*> m_hiddenItems;
+    std::map<D_PAD*, OFFSET>        m_moduleOffsets;
+    KIGFX::VIEW*                    m_view;
+    KIGFX::VIEW_GROUP*              m_previewItems;
+    std::unordered_set<BOARD_ITEM*> m_hiddenItems;
 
-    PCB_TOOL_BASE* m_tool;
-    std::unique_ptr<BOARD_COMMIT> m_commit;
-    const PCB_DISPLAY_OPTIONS* m_dispOptions;
+    PCB_TOOL_BASE*                  m_tool;
+    std::unique_ptr<BOARD_COMMIT>   m_commit;
+    const PCB_DISPLAY_OPTIONS*      m_dispOptions;
 };
 
 

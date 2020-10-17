@@ -540,16 +540,24 @@ int PNS_PCBNEW_RULE_RESOLVER::DpNetPolarity( int aNet )
 
 bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( const PNS::ITEM* aItem, int& aNetP, int& aNetN )
 {
-    if( !aItem || !aItem->Parent() || !aItem->Parent()->GetNet() )
+    if( !aItem || !aItem->Parent() || !aItem->Parent()->IsConnected() )
         return false;
 
-    wxString netNameP = aItem->Parent()->GetNet()->GetNetname();
+    BOARD_CONNECTED_ITEM* cItem = static_cast<BOARD_CONNECTED_ITEM*>( aItem->Parent() );
+    NETINFO_ITEM*         netInfo = cItem->GetNet();
+
+    if( !netInfo )
+        return false;
+
+    wxString netNameP = netInfo->GetNetname();
     wxString netNameN, netNameCoupled, netNameBase;
 
     int r = matchDpSuffix( netNameP, netNameCoupled, netNameBase );
 
     if( r == 0 )
+    {
         return false;
+    }
     else if( r == 1 )
     {
         netNameN = netNameCoupled;
@@ -982,7 +990,7 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
 
         solid->SetLayer( aLayer );
         solid->SetNet( -1 );
-        solid->SetParent( nullptr );
+        solid->SetParent( dynamic_cast<BOARD_ITEM*>( aText ) );
         solid->SetShape( new SHAPE_SEGMENT( start, end, textWidth ) );
         solid->SetRoutable( false );
 
@@ -1032,7 +1040,7 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aIte
             solid->SetLayer( aItem->GetLayer() );
 
         solid->SetNet( -1 );
-        solid->SetParent( nullptr );
+        solid->SetParent( aItem );
         solid->SetShape( shape );
         solid->SetRoutable( false );
 
@@ -1069,27 +1077,27 @@ bool PNS_KICAD_IFACE::IsOnLayer( const PNS::ITEM* aItem, int aLayer ) const
     if( aLayer < 0 )
         return true;
 
-    if( !aItem->Parent() )
-        return aItem->Layers().Overlaps( aLayer );
-
-    switch( aItem->Parent()->Type() )
+    if( aItem->Parent() )
     {
-    case PCB_VIA_T:
-    {
-        const VIA* via = static_cast<const VIA*>( aItem->Parent() );
+        switch( aItem->Parent()->Type() )
+        {
+        case PCB_VIA_T:
+        {
+            const VIA* via = static_cast<const VIA*>( aItem->Parent() );
 
-        return via->FlashLayer( static_cast<PCB_LAYER_ID>( aLayer ));
-    }
+            return via->FlashLayer( static_cast<PCB_LAYER_ID>( aLayer ));
+        }
 
-    case PCB_PAD_T:
-    {
-        const D_PAD* pad = static_cast<const D_PAD*>( aItem->Parent() );
+        case PCB_PAD_T:
+        {
+            const D_PAD* pad = static_cast<const D_PAD*>( aItem->Parent() );
 
-        return pad->FlashLayer( static_cast<PCB_LAYER_ID>( aLayer ));
-    }
+            return pad->FlashLayer( static_cast<PCB_LAYER_ID>( aLayer ));
+        }
 
-    default:
-        break;
+        default:
+            break;
+        }
     }
 
     return aItem->Layers().Overlaps( aLayer );
@@ -1098,13 +1106,13 @@ bool PNS_KICAD_IFACE::IsOnLayer( const PNS::ITEM* aItem, int aLayer ) const
 
 bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem ) const
 {
-    // by default, all items are visible (new ones created by the router have parent == NULL as they have not been
-    // committed yet to the BOARD)
+    // by default, all items are visible (new ones created by the router have parent == NULL
+    // as they have not been committed yet to the BOARD)
     if( !m_view || !aItem->Parent() )
         return true;
 
-    auto item = aItem->Parent();
-    bool isOnVisibleLayer = true;
+    BOARD_ITEM* item = aItem->Parent();
+    bool        isOnVisibleLayer = true;
 
     if( m_view->GetPainter()->GetSettings()->GetHighContrast() )
     {
@@ -1312,7 +1320,7 @@ void PNS_KICAD_IFACE::DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aCol
 
 void PNS_KICAD_IFACE::HideItem( PNS::ITEM* aItem )
 {
-    BOARD_CONNECTED_ITEM* parent = aItem->Parent();
+    BOARD_ITEM* parent = aItem->Parent();
 
     if( parent )
     {
@@ -1333,12 +1341,12 @@ void PNS_KICAD_IFACE_BASE::RemoveItem( PNS::ITEM* aItem )
 
 void PNS_KICAD_IFACE::RemoveItem( PNS::ITEM* aItem )
 {
-    BOARD_CONNECTED_ITEM* parent = aItem->Parent();
+    BOARD_ITEM* parent = aItem->Parent();
 
     if ( aItem->OfKind(PNS::ITEM::SOLID_T) )
     {
-        auto pad = static_cast<D_PAD*>( parent );
-        auto pos = static_cast<PNS::SOLID*>( aItem )->Pos();
+        D_PAD*   pad = static_cast<D_PAD*>( parent );
+        VECTOR2I pos = static_cast<PNS::SOLID*>( aItem )->Pos();
 
         m_moduleOffsets[ pad ].p_old = pos;
         return;
@@ -1405,8 +1413,8 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
 
     case PNS::ITEM::SOLID_T:
     {
-        auto pad = static_cast<D_PAD*>( aItem->Parent() );
-        auto pos = static_cast<PNS::SOLID*>( aItem )->Pos();
+        D_PAD*   pad = static_cast<D_PAD*>( aItem->Parent() );
+        VECTOR2I pos = static_cast<PNS::SOLID*>( aItem )->Pos();
 
         m_moduleOffsets[ pad ].p_new = pos;
         return;

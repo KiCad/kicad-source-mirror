@@ -1445,15 +1445,22 @@ int NODE::QueryJoints( const BOX2I& aBox,
 }
 
 
-ITEM *NODE::FindItemByParent( const BOARD_CONNECTED_ITEM* aParent )
+ITEM *NODE::FindItemByParent( const BOARD_ITEM* aParent )
 {
-    INDEX::NET_ITEMS_LIST* l_cur = m_index->GetItemsForNet( aParent->GetNetCode() );
-
-    if( l_cur )
+    if( aParent->IsConnected() )
     {
-        for( ITEM* item : *l_cur )
-            if( item->Parent() == aParent )
-                return item;
+        const BOARD_CONNECTED_ITEM* cItem = static_cast<const BOARD_CONNECTED_ITEM*>( aParent );
+
+        INDEX::NET_ITEMS_LIST* l_cur = m_index->GetItemsForNet( cItem->GetNetCode() );
+
+        if( l_cur )
+        {
+            for( ITEM* item : *l_cur )
+            {
+                if( item->Parent() == aParent )
+                    return item;
+            }
+        }
     }
 
     return NULL;

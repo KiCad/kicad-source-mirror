@@ -441,7 +441,7 @@ public:
 
     void RemoveByMarker( int aMarker );
 
-    ITEM* FindItemByParent( const BOARD_CONNECTED_ITEM* aParent );
+    ITEM* FindItemByParent( const BOARD_ITEM* aParent );
 
     bool HasChildren() const
     {

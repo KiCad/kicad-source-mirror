@@ -1440,7 +1440,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     }
     else
     {
-        startItem = m_router->GetWorld()->FindItemByParent( static_cast<const BOARD_CONNECTED_ITEM*>( item ) );
+        startItem = m_router->GetWorld()->FindItemByParent( item );
 
         if( startItem)
             itemsToDrag.Add( startItem );

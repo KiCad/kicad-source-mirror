@@ -30,7 +30,7 @@
 
 #include "pns_layerset.h"
 
-class BOARD_CONNECTED_ITEM;
+class BOARD_ITEM;
 
 namespace PNS {
 
@@ -143,8 +143,8 @@ public:
      */
     std::string KindStr() const;
 
-    void SetParent( BOARD_CONNECTED_ITEM* aParent ) { m_parent = aParent; }
-    BOARD_CONNECTED_ITEM* Parent() const { return m_parent; }
+    void SetParent( BOARD_ITEM* aParent ) { m_parent = aParent; }
+    BOARD_ITEM* Parent() const { return m_parent; }
 
     void SetNet( int aNet ) { m_net = aNet; }
     int Net() const { return m_net;  }
@@ -252,17 +252,17 @@ private:
                         const NODE* aParentNode, bool aDifferentNetsOnly ) const;
 
 protected:
-    PnsKind                 m_kind;
+    PnsKind       m_kind;
 
-    BOARD_CONNECTED_ITEM*   m_parent;
-    NODE*                   m_owner;
-    LAYER_RANGE             m_layers;
+    BOARD_ITEM*   m_parent;
+    NODE*         m_owner;
+    LAYER_RANGE   m_layers;
 
-    bool                    m_movable;
-    int                     m_net;
-    mutable int             m_marker;
-    int                     m_rank;
-    bool                    m_routable;
+    bool          m_movable;
+    int           m_net;
+    mutable int   m_marker;
+    int           m_rank;
+    bool          m_routable;
 };
 
 template< typename T, typename S >
