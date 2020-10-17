@@ -285,6 +285,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
     m_width = 0;
     m_delayedFocusRow = REFERENCE;
     m_delayedFocusColumn = FDC_VALUE;
+    m_delayedSelection = true;
 
 #ifndef KICAD_SPICE
     m_spiceFieldsButton->Hide();
@@ -533,6 +534,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
 
         m_delayedFocusColumn = FDC_VALUE;
         m_delayedFocusRow = REFERENCE;
+        m_delayedSelection = false;
 
         return false;
     }
@@ -549,6 +551,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
 
             m_delayedFocusColumn = FDC_NAME;
             m_delayedFocusRow = i;
+            m_delayedSelection = false;
 
             return false;
         }
@@ -724,6 +727,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging( wxGridEvent& event 
         event.Veto();
         m_delayedFocusRow = event.GetRow();
         m_delayedFocusColumn = event.GetCol();
+        m_delayedSelection = false;
     }
     else if( event.GetCol() == FDC_NAME )
     {
@@ -741,11 +745,19 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging( wxGridEvent& event 
                 event.Veto();
                 m_delayedFocusRow = event.GetRow();
                 m_delayedFocusColumn = event.GetCol();
+                m_delayedSelection = false;
             }
         }
     }
 
     editor->DecRef();
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridEditorShown( wxGridEvent& aEvent )
+{
+    if( aEvent.GetRow() == REFERENCE && aEvent.GetCol() == FDC_VALUE )
+        m_delayedSelection= true;
 }
 
 
@@ -965,12 +977,24 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
         m_fieldsGrid->MakeCellVisible( m_delayedFocusRow, m_delayedFocusColumn );
         m_fieldsGrid->SetGridCursor( m_delayedFocusRow, m_delayedFocusColumn );
 
-
         m_fieldsGrid->EnableCellEditControl( true );
         m_fieldsGrid->ShowCellEditControl();
 
         m_delayedFocusRow = -1;
         m_delayedFocusColumn = -1;
+    }
+
+    // Handle a delayed selection
+    if( m_delayedSelection )
+    {
+        wxGridCellEditor* cellEditor = m_fieldsGrid->GetCellEditor( REFERENCE, FDC_VALUE );
+
+        if( cellEditor->GetControl() )
+            SelectReferenceNumber( dynamic_cast<wxTextEntry*>( cellEditor->GetControl() ) );
+
+        cellEditor->DecRef();   // we're done; must release
+
+        m_delayedSelection = false;
     }
 }
 

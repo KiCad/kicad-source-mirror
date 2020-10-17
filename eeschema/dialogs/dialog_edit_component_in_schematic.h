@@ -79,6 +79,7 @@ private:
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnCancelButtonClick( wxCommandEvent& event ) override;
     void OnInitDlg( wxInitDialogEvent& event ) override;
+    void OnGridEditorShown( wxGridEvent& event ) override;
 
     void OnEditSymbol( wxCommandEvent&  ) override;
     void OnEditLibrarySymbol( wxCommandEvent&  ) override;
@@ -94,6 +95,7 @@ private:
     int            m_width;
     int            m_delayedFocusRow;
     int            m_delayedFocusColumn;
+    bool           m_delayedSelection;
     wxString       m_shownColumns;
 
     FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
