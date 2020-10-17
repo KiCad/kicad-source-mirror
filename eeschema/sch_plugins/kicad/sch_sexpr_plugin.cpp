@@ -1138,12 +1138,22 @@ void SCH_SEXPR_PLUGIN::saveLine( SCH_LINE* aLine, int aNestLevel )
 
     wxString lineType;
 
+    // Lines having the plot style == PLOT_DASH_TYPE::DEFAULT are saved in file
+    // as SOLID by formatStroke().
+    // This is incorrect for graphic lines that use the DASH style for default
+    // So the plot style need adjustments to use the right style
+    // (TODO perhaps use "default" as keyword for line style in .kicad_sch file)
+    STROKE_PARAMS line_stroke = aLine->GetStroke();
+
+    if( line_stroke.GetPlotStyle() == PLOT_DASH_TYPE::DEFAULT )
+        line_stroke.SetPlotStyle( aLine->GetDefaultStyle() );
+
     switch( aLine->GetLayer() )
     {
-    case LAYER_BUS:    lineType = "bus";       break;
-    case LAYER_WIRE:   lineType = "wire";      break;
+    case LAYER_BUS:     lineType = "bus";       break;
+    case LAYER_WIRE:    lineType = "wire";      break;
     case LAYER_NOTES:
-    default:           lineType = "polyline";  break;
+    default:            lineType = "polyline";  break;
     }
 
     m_out->Print( aNestLevel, "(%s (pts (xy %s %s) (xy %s %s))\n",
@@ -1153,7 +1163,7 @@ void SCH_SEXPR_PLUGIN::saveLine( SCH_LINE* aLine, int aNestLevel )
                   FormatInternalUnits( aLine->GetEndPoint().x ).c_str(),
                   FormatInternalUnits( aLine->GetEndPoint().y ).c_str() );
 
-    formatStroke( m_out, aNestLevel + 1, aLine->GetStroke() );
+    formatStroke( m_out, aNestLevel + 1, line_stroke );
     m_out->Print( 0, "\n" );
     m_out->Print( aNestLevel, ")\n" );
 }
