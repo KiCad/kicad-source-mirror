@@ -118,6 +118,7 @@ private:
     void ParseJunction( const std::map<wxString, wxString>& aProperties );
     void ParseSheet( const std::map<wxString, wxString>& aProperties );
     void ParseDesignator( const std::map<wxString, wxString>& aProperties );
+    void ParseBusEntry( const std::map<wxString, wxString>& aProperties );
 
 private:
     SCH_SHEET* m_rootSheet;    ///< The root sheet of the schematic being loaded..

@@ -375,6 +375,7 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
             ParseDesignator( properties );
             break;
         case ALTIUM_SCH_RECORD::BUS_ENTRY:
+            ParseBusEntry( properties );
             break;
         case ALTIUM_SCH_RECORD::TEMPLATE:
             break;
@@ -1353,4 +1354,18 @@ void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aPr
     text->SetPosition( elem.location + m_sheetOffset );
     text->SetTextAngle( elem.orientation * 90. );
     text->SetText( elem.name ); // TODO: use variable
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseBusEntry( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_BUS_ENTRY elem( aProperties );
+
+    SCH_BUS_WIRE_ENTRY* busWireEntry = new SCH_BUS_WIRE_ENTRY( elem.location + m_sheetOffset );
+
+    wxPoint vector = elem.corner - elem.location;
+    busWireEntry->SetSize( { vector.x, vector.y } );
+
+    busWireEntry->SetFlags( IS_NEW );
+    m_currentSheet->GetScreen()->Append( busWireEntry );
 }

@@ -484,4 +484,13 @@ struct ASCH_DESIGNATOR
     explicit ASCH_DESIGNATOR( const std::map<wxString, wxString>& aProperties );
 };
 
+
+struct ASCH_BUS_ENTRY
+{
+    wxPoint location;
+    wxPoint corner;
+
+    explicit ASCH_BUS_ENTRY( const std::map<wxString, wxString>& aProperties );
+};
+
 #endif //ALTIUM_PARSER_SCH_H
