@@ -369,8 +369,12 @@ void D_PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
                 && corners.CPoint( 2 ).y == corners.CPoint( 3 ).y
                 && corners.CPoint( 4 ).x == corners.CPoint( 0 ).x )
         {
-            VECTOR2I size = corners.CPoint( 2 ) - corners.CPoint( 0 );
-            add( new SHAPE_RECT( corners.CPoint( 0 ), size.x, size.y ) );
+            int width  = std::abs( corners.CPoint( 2 ).x - corners.CPoint( 0 ).x );
+            int height = std::abs( corners.CPoint( 2 ).y - corners.CPoint( 0 ).y );
+            VECTOR2I pos( std::min( corners.CPoint( 2 ).x, corners.CPoint( 0 ).x ),
+                          std::min( corners.CPoint( 2 ).y, corners.CPoint( 0 ).y ) );
+
+            add( new SHAPE_RECT( pos, width, height ) );
         }
         else
         {
