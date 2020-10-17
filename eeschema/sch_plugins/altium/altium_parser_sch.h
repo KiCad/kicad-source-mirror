@@ -182,7 +182,7 @@ struct ASCH_PIN
     ASCH_PIN_SYMBOL_OUTEREDGE symbolOuterEdge;
     ASCH_PIN_SYMBOL_INNEREDGE symbolInnerEdge;
 
-    ASCH_PIN_ELECTRICAL  electrical;
+    ASCH_PIN_ELECTRICAL     electrical;
     ASCH_RECORD_ORIENTATION orientation;
 
     wxPoint location;
@@ -194,6 +194,37 @@ struct ASCH_PIN
     bool showDesignator;
 
     explicit ASCH_PIN( const std::map<wxString, wxString>& aProperties );
+};
+
+
+enum class ASCH_LABEL_JUSTIFICATION
+{
+    UNKNOWN = -1,
+
+    BOTTOM_LEFT   = 0,
+    BOTTOM_CENTER = 1,
+    BOTTOM_RIGHT  = 2,
+    CENTER_LEFT   = 3,
+    CENTER_CENTER = 4,
+    CENTER_RIGHT  = 5,
+    TOP_LEFT      = 6,
+    TOP_CENTER    = 7,
+    TOP_RIGHT     = 8
+};
+
+
+struct ASCH_LABEL
+{
+    int ownerindex;
+    int ownerpartid;
+
+    wxPoint location;
+
+    wxString                 text;
+    bool                     isMirrored;
+    ASCH_LABEL_JUSTIFICATION justification;
+
+    explicit ASCH_LABEL( const std::map<wxString, wxString>& aProperties );
 };
 
 
@@ -336,7 +367,7 @@ struct ASCH_NET_LABEL
 {
     wxString text;
 
-    wxPoint  location;
+    wxPoint location;
 
     ASCH_RECORD_ORIENTATION orientation;
 

@@ -100,6 +100,7 @@ public:
 private:
     void ParseComponent( int index, const std::map<wxString, wxString>& aProperties );
     void ParsePin( const std::map<wxString, wxString>& aProperties );
+    void ParseLabel( const std::map<wxString, wxString>& aProperties );
     void ParseBezier( const std::map<wxString, wxString>& aProperties );
     void ParsePolyline( const std::map<wxString, wxString>& aProperties );
     void ParsePolygon( const std::map<wxString, wxString>& aProperties );

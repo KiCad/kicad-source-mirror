@@ -308,6 +308,7 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
         case ALTIUM_SCH_RECORD::IEEE_SYMBOL:
             break;
         case ALTIUM_SCH_RECORD::LABEL:
+            ParseLabel( properties );
             break;
         case ALTIUM_SCH_RECORD::BEZIER:
             ParseBezier( properties );
@@ -597,6 +598,91 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
             pin->SetShape( GRAPHIC_PINSHAPE::LINE ); // nothing to do
             break;
         }
+    }
+}
+
+
+void SetEdaTextJustification( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification )
+{
+    switch( justification )
+    {
+    default:
+    case ASCH_LABEL_JUSTIFICATION::UNKNOWN:
+    case ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT:
+    case ASCH_LABEL_JUSTIFICATION::BOTTOM_CENTER:
+    case ASCH_LABEL_JUSTIFICATION::BOTTOM_RIGHT:
+        text->SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM );
+        break;
+    case ASCH_LABEL_JUSTIFICATION::CENTER_LEFT:
+    case ASCH_LABEL_JUSTIFICATION::CENTER_CENTER:
+    case ASCH_LABEL_JUSTIFICATION::CENTER_RIGHT:
+        text->SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_CENTER );
+        break;
+    case ASCH_LABEL_JUSTIFICATION::TOP_LEFT:
+    case ASCH_LABEL_JUSTIFICATION::TOP_CENTER:
+    case ASCH_LABEL_JUSTIFICATION::TOP_RIGHT:
+        text->SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_TOP );
+        break;
+    }
+
+    switch( justification )
+    {
+    default:
+    case ASCH_LABEL_JUSTIFICATION::UNKNOWN:
+    case ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT:
+    case ASCH_LABEL_JUSTIFICATION::CENTER_LEFT:
+    case ASCH_LABEL_JUSTIFICATION::TOP_LEFT:
+        text->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
+        break;
+    case ASCH_LABEL_JUSTIFICATION::BOTTOM_CENTER:
+    case ASCH_LABEL_JUSTIFICATION::CENTER_CENTER:
+    case ASCH_LABEL_JUSTIFICATION::TOP_CENTER:
+        text->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_CENTER );
+        break;
+    case ASCH_LABEL_JUSTIFICATION::BOTTOM_RIGHT:
+    case ASCH_LABEL_JUSTIFICATION::CENTER_RIGHT:
+    case ASCH_LABEL_JUSTIFICATION::TOP_RIGHT:
+        text->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+    }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_LABEL elem( aProperties );
+
+    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    {
+        SCH_TEXT* text = new SCH_TEXT( elem.location, elem.text );
+        text->SetMirrored( elem.isMirrored );
+
+        SetEdaTextJustification( text, elem.justification );
+
+        text->SetFlags( IS_NEW );
+        m_currentSheet->GetScreen()->Append( text );
+    }
+    else
+    {
+        const auto& symbol = m_symbols.find( elem.ownerindex );
+        if( symbol == m_symbols.end() )
+        {
+            // TODO: e.g. can depend on Template (RECORD=39
+            wxLogWarning( wxString::Format(
+                    "Label tries to access symbol with ownerindex %d which does not exist",
+                    elem.ownerindex ) );
+            return;
+        }
+
+        const auto& component = m_components.at( symbol->first );
+
+        LIB_TEXT* text = new LIB_TEXT( symbol->second );
+        symbol->second->AddDrawItem( text );
+
+        text->SetPosition( GetRelativePosition( elem.location, component ) );
+        text->SetText( elem.text );
+
+        SetEdaTextJustification( text, elem.justification );
     }
 }
 

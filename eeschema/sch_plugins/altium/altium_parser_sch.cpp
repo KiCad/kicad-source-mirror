@@ -54,6 +54,18 @@ int PropertiesReadKiCadUnitFrac(
 }
 
 
+template <typename T>
+T PropertiesReadEnum( const std::map<wxString, wxString>& aProperties, const wxString& aKey,
+        int aLower, int aUpper, T aDefault )
+{
+    int value = ALTIUM_PARSER::PropertiesReadInt( aProperties, aKey, static_cast<int>( aDefault ) );
+    if( value < aLower || value > aUpper )
+        return aDefault;
+    else
+        return static_cast<T>( value );
+}
+
+
 ASCH_COMPONENT::ASCH_COMPONENT( const std::map<wxString, wxString>& aProperties )
 {
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::COMPONENT );
@@ -98,11 +110,8 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProperties )
     symbolInnerEdge        = ( symbolInnerEdgeInt == 0 || symbolInnerEdgeInt == 3 ) ?
                               static_cast<ASCH_PIN_SYMBOL_INNEREDGE>( symbolInnerEdgeInt ) :
                               ASCH_PIN_SYMBOL_INNEREDGE::UNKNOWN;
-
-    int electricalInt = ALTIUM_PARSER::PropertiesReadInt( aProperties, "ELECTRICAL", 0 );
-    electrical        = ( electricalInt >= 0 && electricalInt <= 7 ) ?
-                         static_cast<ASCH_PIN_ELECTRICAL>( electricalInt ) :
-                         ASCH_PIN_ELECTRICAL::UNKNOWN;
+    electrical = PropertiesReadEnum<ASCH_PIN_ELECTRICAL>(
+            aProperties, "ELECTRICAL", 0, 7, ASCH_PIN_ELECTRICAL::UNKNOWN );
 
     int pinconglomerate = ALTIUM_PARSER::PropertiesReadInt( aProperties, "PINCONGLOMERATE", 0 );
 
@@ -150,6 +159,25 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProperties )
     }
     kicadLocation = wxPoint(
             Altium2KiCadUnit( kicadX, kicadXfrac ), -Altium2KiCadUnit( kicadY, kicadYfrac ) );
+}
+
+
+ASCH_LABEL::ASCH_LABEL( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::LABEL );
+
+    ownerindex =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
+    ownerpartid =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+
+    location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
+
+    text          = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
+    isMirrored    = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISMIRRORED", false );
+    justification = PropertiesReadEnum<ASCH_LABEL_JUSTIFICATION>(
+            aProperties, "JUSTIFICATION", 0, 8, ASCH_LABEL_JUSTIFICATION::UNKNOWN );
 }
 
 
@@ -335,10 +363,8 @@ ASCH_NET_LABEL::ASCH_NET_LABEL( const std::map<wxString, wxString>& aProperties 
     location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
             -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
 
-    int orientationRaw = ALTIUM_PARSER::PropertiesReadInt( aProperties, "ORIENTATION", 0 );
-    orientation        = orientationRaw >= 0 && orientationRaw <= 3 ?
-                          static_cast<ASCH_RECORD_ORIENTATION>( orientationRaw ) :
-                          ASCH_RECORD_ORIENTATION::RIGHTWARDS;
+    orientation = PropertiesReadEnum<ASCH_RECORD_ORIENTATION>(
+            aProperties, "ORIENTATION", 0, 3, ASCH_RECORD_ORIENTATION::RIGHTWARDS );
 }
 
 
