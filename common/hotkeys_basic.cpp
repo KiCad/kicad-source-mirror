@@ -92,6 +92,22 @@ static struct hotkey_name_descr hotkeyNameList[] =
 
     { wxT( "Space" ),        WXK_SPACE                                                },
 
+    { wxT( "Num Pad 0" ),    WXK_NUMPAD0                                              },
+    { wxT( "Num Pad 1" ),    WXK_NUMPAD1                                              },
+    { wxT( "Num Pad 2" ),    WXK_NUMPAD2                                              },
+    { wxT( "Num Pad 3" ),    WXK_NUMPAD3                                              },
+    { wxT( "Num Pad 4" ),    WXK_NUMPAD4                                              },
+    { wxT( "Num Pad 5" ),    WXK_NUMPAD5                                              },
+    { wxT( "Num Pad 6" ),    WXK_NUMPAD6                                              },
+    { wxT( "Num Pad 7" ),    WXK_NUMPAD7                                              },
+    { wxT( "Num Pad 8" ),    WXK_NUMPAD8                                              },
+    { wxT( "Num Pad 9" ),    WXK_NUMPAD9                                              },
+    { wxT( "Num Pad +" ),    WXK_NUMPAD_ADD                                           },
+    { wxT( "Num Pad -" ),    WXK_NUMPAD_SUBTRACT                                      },
+    { wxT( "Num Pad *" ),    WXK_NUMPAD_MULTIPLY                                      },
+    { wxT( "Num Pad /" ),    WXK_NUMPAD_DIVIDE                                        },
+    { wxT( "Num Pad ." ),    WXK_NUMPAD_SEPARATOR                                     },
+
     { wxT( "" ),             0                                                        },
 
     { wxT( "Click" ),        PSEUDO_WXK_CLICK                                         },
