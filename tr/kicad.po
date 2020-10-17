@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-16 10:50-0700\n"
-"PO-Revision-Date: 2020-10-17 07:28+0000\n"
+"PO-Revision-Date: 2020-10-19 17:26+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -1156,7 +1156,7 @@ msgstr ""
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:101
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:143
 msgid "mm"
-msgstr ""
+msgstr "mm"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:154
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
@@ -1167,31 +1167,31 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:752
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
 msgid "Inch"
-msgstr ""
+msgstr "İnç"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:154
 msgid "DPI"
-msgstr ""
+msgstr "DPI"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:330
 #: eeschema/tools/sch_drawing_tools.cpp:381
 #: pagelayout_editor/pl_editor_frame.cpp:842
 msgid "Choose Image"
-msgstr ""
+msgstr "Görüntü Seç"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:331
 #: eeschema/tools/sch_drawing_tools.cpp:382
 #: pagelayout_editor/pl_editor_frame.cpp:843
 msgid "Image Files "
-msgstr ""
+msgstr "Görüntü Dosyaları "
 
 #: bitmap2component/bitmap2cmp_gui.cpp:687
 msgid "Unable to export to the Clipboard"
-msgstr ""
+msgstr "Panoya aktarılamıyor"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:722
 msgid "Create Logo File"
-msgstr ""
+msgstr "Logo Dosyası Oluştur"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:740
 #: bitmap2component/bitmap2cmp_gui.cpp:780
@@ -1199,15 +1199,15 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_gui.cpp:858
 #, c-format
 msgid "File \"%s\" could not be created."
-msgstr ""
+msgstr "\"%s\" dosyası oluşturulamadı."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:760
 msgid "Create Postscript File"
-msgstr ""
+msgstr "Postscript Dosyası Oluştur"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:800
 msgid "Create Symbol Library"
-msgstr ""
+msgstr "Simge Kütüphanesi Oluştur"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:839
 msgid "Create Footprint Library"
@@ -1224,27 +1224,27 @@ msgstr ""
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1062
 #: pcbnew/dialogs/dialog_drc_base.cpp:160
 msgid "Errors"
-msgstr ""
+msgstr "Hatalar"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:24
 msgid "Original Picture"
-msgstr ""
+msgstr "Orijinal Resim"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:29
 msgid "Greyscale Picture"
-msgstr ""
+msgstr "Gri Tonlamalı Resim"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:32
 msgid "Black&&White Picture"
-msgstr ""
+msgstr "Siyah Beyaz Resim"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:41
 msgid "Bitmap Info:"
-msgstr ""
+msgstr "Bitmap Bilgileri:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:50
 msgid "Bitmap size:"
-msgstr ""
+msgstr "Bitmap boyutu:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:54
 #: bitmap2component/bitmap2cmp_gui_base.cpp:58
@@ -1252,27 +1252,27 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_gui_base.cpp:74
 #: bitmap2component/bitmap2cmp_gui_base.cpp:86
 msgid "0000"
-msgstr ""
+msgstr "0000"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:62
 msgid "pixels"
-msgstr ""
+msgstr "piksel"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:66
 msgid "Bitmap PPI:"
-msgstr ""
+msgstr "Bitmap PPI:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:78
 msgid "PPI"
-msgstr ""
+msgstr "PPI"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:82
 msgid "BPP:"
-msgstr ""
+msgstr "BPP:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:90
 msgid "bits"
-msgstr ""
+msgstr "bit"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:104
 msgid "Output Parameters:"
@@ -1550,73 +1550,76 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:862
 #: pcbnew/footprint_libraries_utils.cpp:1098
 msgid "Description"
-msgstr ""
+msgstr "Açıklama"
 
 #: common/dialog_about/AboutDialog_main.cpp:118
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
 msgstr ""
+"KiCad EDA Paketi, elektronik şemaların ve baskı devre kartlarının "
+"oluşturulması için kullanılan açık kaynaklı uygulamalar kümesidir."
 
 #: common/dialog_about/AboutDialog_main.cpp:126
 msgid "KiCad on the web"
-msgstr ""
+msgstr "Web'de KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:132
 msgid "The official KiCad website - "
-msgstr ""
+msgstr "Resmi KiCad web sitesi - "
 
 #: common/dialog_about/AboutDialog_main.cpp:136
 msgid "Developer website on Launchpad - "
-msgstr ""
+msgstr "Launchpad üzerinde geliştirici web sitesi - "
 
 #: common/dialog_about/AboutDialog_main.cpp:141
 msgid "Official KiCad library repositories - "
-msgstr ""
+msgstr "Resmi KiCad kütüphane depoları - "
 
 #: common/dialog_about/AboutDialog_main.cpp:148
 msgid "Bug tracker"
-msgstr ""
+msgstr "Hata izleyici"
 
 #: common/dialog_about/AboutDialog_main.cpp:154
 msgid "Report or examine bugs - "
-msgstr ""
+msgstr "Hataları bildirin veya inceleyin - "
 
 #: common/dialog_about/AboutDialog_main.cpp:160
 msgid "KiCad user's groups and community"
-msgstr ""
+msgstr "KiCad kullanıcı grupları ve topluluğu"
 
 #: common/dialog_about/AboutDialog_main.cpp:165
 msgid "KiCad forum - "
-msgstr ""
+msgstr "KiCad forumu - "
 
 #: common/dialog_about/AboutDialog_main.cpp:179
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr ""
+msgstr "KiCad EDA Paketinin tamamı"
 
 #: common/dialog_about/AboutDialog_main.cpp:181
 msgid "GNU General Public License (GPL) version 3 or any later version"
 msgstr ""
+"GNU Genel Kamu Lisansı (GPL) sürüm 3 veya sonrası altında yayınlanmıştır"
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Team"
-msgstr ""
+msgstr "Lider Geliştirme Takımı"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Alumni"
-msgstr ""
+msgstr "Eski Lider Geliştiriciler"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
-msgstr ""
+msgstr "Ek Katkıda Bulunanlar"
 
 #: common/dialog_about/AboutDialog_main.cpp:599
 msgid "Others"
-msgstr ""
+msgstr "Diğerleri"
 
 #: common/dialog_about/AboutDialog_main.cpp:619
 msgid "KiCad Librarian Team"
-msgstr ""
+msgstr "KiCad Kütüphaneci Takımı"
 
 #: common/dialog_about/AboutDialog_main.cpp:634
 msgid "3D models by"
@@ -1637,92 +1640,92 @@ msgstr ""
 #: common/dialog_about/dialog_about.cpp:90
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "%s Hakkında"
 
 #: common/dialog_about/dialog_about.cpp:118
 #: common/dialog_about/dialog_about_base.h:56
 msgid "About"
-msgstr ""
+msgstr "Hakkında"
 
 #: common/dialog_about/dialog_about.cpp:123
 msgid "Version"
-msgstr ""
+msgstr "Sürüm"
 
 #: common/dialog_about/dialog_about.cpp:125
 msgid "Developers"
-msgstr ""
+msgstr "Geliştiriciler"
 
 #: common/dialog_about/dialog_about.cpp:127
 msgid "Doc Writers"
-msgstr ""
+msgstr "Belge Yazarları"
 
 #: common/dialog_about/dialog_about.cpp:130
 msgid "Librarians"
-msgstr ""
+msgstr "Kütüphaneciler"
 
 #: common/dialog_about/dialog_about.cpp:133
 msgid "Artists"
-msgstr ""
+msgstr "Tasarımcılar"
 
 #: common/dialog_about/dialog_about.cpp:135
 msgid "Translators"
-msgstr ""
+msgstr "Çevirenler"
 
 #: common/dialog_about/dialog_about.cpp:137
 msgid "Packagers"
-msgstr ""
+msgstr "Paketleyenler"
 
 #: common/dialog_about/dialog_about.cpp:140
 msgid "License"
-msgstr ""
+msgstr "Lisans"
 
 #: common/dialog_about/dialog_about.cpp:476
 msgid "Could not open clipboard to write version information."
-msgstr ""
+msgstr "Sürüm bilgilerini yazmak için pano açılamadı."
 
 #: common/dialog_about/dialog_about.cpp:477
 msgid "Clipboard Error"
-msgstr ""
+msgstr "Pano Hatası"
 
 #: common/dialog_about/dialog_about.cpp:485
 msgid "Copied..."
-msgstr ""
+msgstr "Kopyalandı..."
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
-msgstr ""
+msgstr "Uygulama Başlığı"
 
 #: common/dialog_about/dialog_about_base.cpp:37
 msgid "Copyright Info"
-msgstr ""
+msgstr "Telif Hakkı Bilgileri"
 
 #: common/dialog_about/dialog_about_base.cpp:41
 msgid "Build Version Info"
-msgstr ""
+msgstr "Derleme Sürüm Bilgileri"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
-msgstr ""
+msgstr "Kütüphane Sürüm Bilgileri"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
-msgstr ""
+msgstr "Sürüm Bilgilerini &Kopyala"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
-msgstr ""
+msgstr "KiCad sürüm bilgilerini panoya kopyalayın"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr ""
+msgstr "Hata &Bildir"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:623
 msgid "Report a problem with KiCad"
-msgstr ""
+msgstr "KiCad ile ilgili bir sorun bildirin"
 
 #: common/dialog_about/dialog_about_base.cpp:89
 msgid "&OK"
-msgstr ""
+msgstr "&Tamam"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:46
 msgid "Report"
