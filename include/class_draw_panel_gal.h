@@ -253,7 +253,7 @@ protected:
 
     virtual void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
-    void onEnter( wxEvent& aEvent );
+    void onEnter( wxMouseEvent& aEvent );
     void onLostFocus( wxFocusEvent& aEvent );
     void onRefreshTimer( wxTimerEvent& aEvent );
     void onShowTimer( wxTimerEvent& aEvent );

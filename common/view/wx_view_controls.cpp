@@ -273,7 +273,20 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& aEvent )
 {
+#if defined( _WIN32 )
+    // Win32 transmits mouse move and wheel events to all controls below the mouse regardless of focus
+    // Forcing the focus here will cause the EDA FRAMES to immediately become the top level active window
+    if( m_parentPanel->GetParent() != nullptr )
+    {
+        // this assumes the parent panel's parent is the eda window
+        if( GetForegroundWindow() == m_parentPanel->GetParent()->GetHWND() )
+        {
+            m_parentPanel->SetFocus();
+        }
+    }
+#else
     m_parentPanel->SetFocus();
+#endif
 }
 
 

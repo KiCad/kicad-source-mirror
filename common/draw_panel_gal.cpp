@@ -76,7 +76,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     EnableScrolling( false, false );    // otherwise Zoom Auto disables GAL canvas
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
-    Connect( wxEVT_ENTER_WINDOW, wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
+    Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
     Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( EDA_DRAW_PANEL_GAL::onLostFocus ), NULL, this );
 
     const wxEventType events[] =
@@ -132,15 +132,6 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 
 void EDA_DRAW_PANEL_GAL::SetFocus()
 {
-// Windows has a strange manner on bringing up and activating windows
-// containing a GAL canvas just after moving the mouse cursor into its area.
-// Feel free to uncomment or extend the following #ifdef if you experience
-// similar problems on your platform.
-#ifdef __WINDOWS__
-    if( !GetParent()->IsDescendant( wxWindow::FindFocus() ) )
-        return;
-#endif
-
     wxScrolledCanvas::SetFocus();
     m_lostFocus = false;
 }
@@ -457,7 +448,15 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
 void EDA_DRAW_PANEL_GAL::OnEvent( wxEvent& aEvent )
 {
-    if( m_lostFocus && m_stealsFocus )
+    bool shouldSetFocus = m_lostFocus && m_stealsFocus;
+
+#if defined( _WIN32 )
+    // Ensure we are the active foreground window before we attempt to steal focus
+    // mouse events are generated on Win32 regardless if window is active
+    shouldSetFocus = shouldSetFocus && ( m_edaFrame->GetHWND() == GetForegroundWindow() );
+#endif
+
+    if( shouldSetFocus )
         SetFocus();
 
     if( !m_eventDispatcher )
@@ -469,10 +468,18 @@ void EDA_DRAW_PANEL_GAL::OnEvent( wxEvent& aEvent )
 }
 
 
-void EDA_DRAW_PANEL_GAL::onEnter( wxEvent& aEvent )
+void EDA_DRAW_PANEL_GAL::onEnter( wxMouseEvent& aEvent )
 {
+    bool shouldSetFocus = m_stealsFocus;
+
+#if defined( _WIN32 )
+    // Ensure we are the active foreground window before we attempt to steal focus
+    // mouse events are generated on Win32 regardless if window is active
+    shouldSetFocus = shouldSetFocus && ( m_edaFrame->GetHWND() == GetForegroundWindow() );
+#endif
+
     // Getting focus is necessary in order to receive key events properly
-    if( m_stealsFocus )
+    if( shouldSetFocus )
         SetFocus();
 
     aEvent.Skip();
