@@ -458,8 +458,9 @@ void SCH_SEXPR_PARSER::parseStroke( STROKE_PARAMS& aStroke )
             case T_dot:       aStroke.SetPlotStyle( PLOT_DASH_TYPE::DOT );       break;
             case T_dash_dot:  aStroke.SetPlotStyle( PLOT_DASH_TYPE::DASHDOT );   break;
             case T_solid:     aStroke.SetPlotStyle( PLOT_DASH_TYPE::SOLID );     break;
+            case T_default:   aStroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );   break;
             default:
-                Expecting( "solid, dash, dash_dot, or dot" );
+                Expecting( "solid, dash, dash_dot, dot or default" );
             }
 
             NeedRIGHT();
