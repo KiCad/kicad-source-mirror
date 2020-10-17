@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-09 10:02+0200\n"
-"PO-Revision-Date: 2020-10-16 19:52+0000\n"
+"PO-Revision-Date: 2020-10-17 07:28+0000\n"
 "Last-Translator: Mark Roszko <mark.roszko@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -178,8 +178,9 @@ msgid "Build BVH for holes and vias"
 msgstr "Tworzenie BVH dla otworów i przelotek"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:423
+#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr ""
+msgstr "Twoja wersja OpenGL nie jest obsługiwana. Wymagane minimum to 1,5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
@@ -426,9 +427,8 @@ msgid ""
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:98
-#, fuzzy
 msgid "3D Model Visibility"
-msgstr "Widoczność modeli 3D:"
+msgstr "Widoczność modeli 3D"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:111
 msgid "Show 3D through hole models"
@@ -443,9 +443,8 @@ msgid "Show 3D virtual models"
 msgstr "Pokaż modele 3D komponentów wirtualnych"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:148
-#, fuzzy
 msgid "Board Layers"
-msgstr "Warstwy płytki:"
+msgstr "Warstwy płytki"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:161
 msgid "Show silkscreen layers"
@@ -464,9 +463,8 @@ msgid "Show adhesive layers"
 msgstr "Pokaż warstwy kleju"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:198
-#, fuzzy
 msgid "User Layers (not shown in realistic mode)"
-msgstr "Warstwy użytkownika (nie pokazywane w trybie realistycznym):"
+msgstr "Warstwy użytkownika (nie pokazywane w trybie realistycznym)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "Show comments and drawings layers"
@@ -477,14 +475,12 @@ msgid "Show ECO layers"
 msgstr "Pokaż warstwy ECO"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:230
-#, fuzzy
 msgid "Camera Options"
-msgstr "Opcje główne"
+msgstr "Opcje kamery"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:235
-#, fuzzy
 msgid "Rotation Increment:"
-msgstr "Zmiana pozycji przy powtarzaniu"
+msgstr "Przyrost rotacji:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:243
 #: common/base_units.cpp:544 pcbnew/dialogs/dialog_copper_zones_base.cpp:298
@@ -497,18 +493,16 @@ msgid "deg"
 msgstr "st"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:253
-#, fuzzy
 msgid "Enable animation"
-msgstr "Włącz akcelerację grafiki"
+msgstr "Włącz animację"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:260
 msgid "Animation speed:"
 msgstr "Szybkość animacji:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
-#, fuzzy
 msgid "OpenGL Render Options"
-msgstr "Opcje renderingu"
+msgstr "Opcje renderowania OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:304
 msgid "Show model bounding boxes"
@@ -519,9 +513,8 @@ msgid "Show copper thickness"
 msgstr "Pokaż grubość miedzi"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:323
-#, fuzzy
 msgid "Other Options"
-msgstr "Pozostałe opcje:"
+msgstr "Inne opcje"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:333
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:445
@@ -530,72 +523,65 @@ msgid "Anti-aliasing"
 msgstr "Anty-aliasing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
+#, fuzzy
 msgid "Disabled"
-msgstr ""
+msgstr "Wyłączony"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "2x"
-msgstr "2"
+msgstr "2x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "4x"
-msgstr "4"
+msgstr "4x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "8x"
-msgstr "8"
+msgstr "8x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:341
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:348
-#, fuzzy
 msgid "Selection color"
-msgstr "Skopiowano zaznaczenie."
+msgstr "Kolor selekcji"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "While Moving"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:372
-#, fuzzy
 msgid "Disable anti-aliasing"
-msgstr "Anty-aliasing zbalansowany"
+msgstr "Wyłącz antyaliasing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:378
 #, fuzzy
 msgid "Disable thickness"
-msgstr "Grubość linii:"
+msgstr "Wyłącz grubość"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:384
 msgid "Disable vias"
-msgstr ""
+msgstr "Wyłącz przelotki"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:390
+#, fuzzy
 msgid "Disable holes"
-msgstr ""
+msgstr "Wyłącz dziury"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:406
-#, fuzzy
 msgid "OpenGL"
-msgstr "Otwórz"
+msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:420
-#, fuzzy
 msgid "Raytracing Render Options"
-msgstr "Opcje raytracingu"
+msgstr "Opcje renderowania raytracingu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:431
-#, fuzzy
 msgid "Procedural textures"
 msgstr "Tekstury proceduralne"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:438
-#, fuzzy
 msgid "Add floor"
 msgstr "Dodaj podłoże"
 
@@ -620,7 +606,7 @@ msgstr ""
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:488
 #, fuzzy
 msgid "Shadows"
-msgstr "Renderuj cienie"
+msgstr "Cienie"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:493
 msgid ""
@@ -664,34 +650,31 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:574
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:798
-#, fuzzy
 msgid "Lights configuration"
-msgstr "Potwierdzenie"
+msgstr "Konfiguracja świateł"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:582
+#, fuzzy
 msgid "Ambient Camera Light"
-msgstr ""
+msgstr "Oświetlenie otoczenia"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
-#, fuzzy
 msgid "Top Light"
-msgstr "Górny prawy"
+msgstr "Światło górne"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:611
-#, fuzzy
 msgid "Bottom Light"
-msgstr "Dolny prawy"
+msgstr "Dolne światło"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:635
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:652
-#, fuzzy
 msgid "Elevation (degrees)"
-msgstr "Kąt w stopniach:"
+msgstr "Kąt w stopniach"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:639
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:656
 msgid "Azimuth (degrees)"
-msgstr ""
+msgstr "Azymut w stopniach"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:660
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
@@ -789,11 +772,13 @@ msgid "3D Image File Name"
 msgstr "Nazwa pliku obrazu 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:828
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Insufficient permissions required to save file\n"
 "%s"
-msgstr "Wymagane są prawa zapisu by zapisać w bibliotece \"%s\"."
+msgstr ""
+"Wymagane są prawa zapisu by zapisać w bibliotece \n"
+"%s"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:829 common/confirm.cpp:124
 #: common/confirm.cpp:256 common/dialogs/panel_setup_severities.cpp:39
@@ -864,24 +849,20 @@ msgid "Rotate Z Counterclockwise"
 msgstr "Obróć Z w lewo"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:79
-#, fuzzy
 msgid "Move board Left"
-msgstr "Przesuń w lewo"
+msgstr "Przesuń płytkę w lewo"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:85
-#, fuzzy
 msgid "Move board Right"
-msgstr "Przesuń w prawo"
+msgstr "Przesuń płytkę w prawo"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:91
-#, fuzzy
 msgid "Move board Up"
-msgstr "Przesuń w górę"
+msgstr "Przesuń płytkę w górę"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:97
-#, fuzzy
 msgid "Move board Down"
-msgstr "Przesuń w dół"
+msgstr "Przesuń płytkę w dół"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:103
 #, fuzzy
@@ -6921,9 +6902,8 @@ msgid "Filter footprint list by library"
 msgstr "Filtruj listę footprintów według wybranej bibioteki"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:267
-#, fuzzy
 msgid "Delete all associations?"
-msgstr "Usuń wszystkie przydzielnia footprintów"
+msgstr "Usuń wszystkie przydzielnia footprintów?"
 
 #: eeschema/annotate.cpp:127
 #, c-format
@@ -7823,7 +7803,7 @@ msgstr "Słowa kluczowe:"
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:145
 #, fuzzy
 msgid "Derive from symbol:"
-msgstr "Usunąć dodatkowe części z symbolu?"
+msgstr "Usunąć dodatkowe części z symbolu:"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:149
 #, fuzzy
@@ -11459,13 +11439,12 @@ msgid "Add Anyway"
 msgstr "Dodaj mimo to"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:862
-#, fuzzy
 msgid ""
 "Modifications have been made to one or more symbol libraries.\n"
 "Changes must be saved or discarded before the symbol library table can be "
 "modified."
 msgstr ""
-"Zostały wprowadzone modyfikacje w jednej lub więcej bibliotek symboli.  "
+"Zostały wprowadzone modyfikacje w jednej lub więcej bibliotek symboli.\n"
 "Zmiany te muszą być zapisane lub porzucone zanim modyfikacja tabeli "
 "bibliotek będzie możliwa."
 
@@ -15610,7 +15589,7 @@ msgstr "Wyczyścić warstwę %d?"
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:152
 #, c-format
 msgid "Layer %d"
-msgstr "Warstwa  %d"
+msgstr "Warstwa %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:178
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:238
@@ -16805,7 +16784,7 @@ msgstr "Nie można otworzyć ścieżki z szablonami! "
 
 #: kicad/project_template.cpp:57
 msgid "Couldn't open the meta information directory for this template! "
-msgstr "Nie można otworzyć meta-informacji z folderu tego szablonu!  "
+msgstr "Nie można otworzyć meta-informacji z folderu tego szablonu! "
 
 #: kicad/project_template.cpp:63
 msgid "Cound't find the meta HTML information file for this template!"
