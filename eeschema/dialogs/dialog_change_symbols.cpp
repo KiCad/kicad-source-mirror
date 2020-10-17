@@ -501,7 +501,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* a
         SCH_FIELD* field = aSymbol->GetField( (int) i ) ;
         LIB_FIELD* libField = nullptr;
 
-        if( alg::contains( m_updateFields, field->GetName() ) )
+        if( !alg::contains( m_updateFields, field->GetName() ) )
             continue;
 
         if( i < MANDATORY_FIELDS )
@@ -511,8 +511,15 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* a
 
         if( libField )
         {
-            if( resetEmpty && libField->GetText().IsEmpty() )
-                field->SetText( wxEmptyString );
+            if( libField->GetText().IsEmpty() )
+            {
+                if( resetEmpty )
+                    field->SetText( wxEmptyString );
+            }
+            else
+            {
+                field->SetText( libField->GetText() );
+            }
 
             if( resetVis )
                 field->SetVisible( libField->IsVisible() );
