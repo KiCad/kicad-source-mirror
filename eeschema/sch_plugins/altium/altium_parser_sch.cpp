@@ -104,14 +104,14 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProperties )
     symbolOuterEdge        = ( symbolOuterEdgeInt == 0 || symbolOuterEdgeInt == 1
                               || symbolOuterEdgeInt == 4 || symbolOuterEdgeInt == 17 ) ?
                               static_cast<ASCH_PIN_SYMBOL_OUTEREDGE>( symbolOuterEdgeInt ) :
-                              ASCH_PIN_SYMBOL_OUTEREDGE::UNKNOWN;
+                              ASCH_PIN_SYMBOL_OUTEREDGE::NO_SYMBOL;
 
     int symbolInnerEdgeInt = ALTIUM_PARSER::PropertiesReadInt( aProperties, "SYMBOL_INNEREDGE", 0 );
     symbolInnerEdge        = ( symbolInnerEdgeInt == 0 || symbolInnerEdgeInt == 3 ) ?
                               static_cast<ASCH_PIN_SYMBOL_INNEREDGE>( symbolInnerEdgeInt ) :
-                              ASCH_PIN_SYMBOL_INNEREDGE::UNKNOWN;
+                              ASCH_PIN_SYMBOL_INNEREDGE::NO_SYMBOL;
     electrical = PropertiesReadEnum<ASCH_PIN_ELECTRICAL>(
-            aProperties, "ELECTRICAL", 0, 7, ASCH_PIN_ELECTRICAL::UNKNOWN );
+            aProperties, "ELECTRICAL", 0, 7, ASCH_PIN_ELECTRICAL::INPUT );
 
     int pinconglomerate = ALTIUM_PARSER::PropertiesReadInt( aProperties, "PINCONGLOMERATE", 0 );
 
@@ -180,7 +180,7 @@ ASCH_LABEL::ASCH_LABEL( const std::map<wxString, wxString>& aProperties )
     isMirrored = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISMIRRORED", false );
 
     justification = PropertiesReadEnum<ASCH_LABEL_JUSTIFICATION>(
-            aProperties, "JUSTIFICATION", 0, 8, ASCH_LABEL_JUSTIFICATION::UNKNOWN );
+            aProperties, "JUSTIFICATION", 0, 8, ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT );
 }
 
 
@@ -498,7 +498,7 @@ ASCH_SHEET::ASCH_SHEET( const std::map<wxString, wxString>& aProperties )
     }
 
     sheetSize = PropertiesReadEnum<ASCH_SHEET_SIZE>(
-            aProperties, "SHEETSTYLE", 0, 17, ASCH_SHEET_SIZE::UNKNOWN );
+            aProperties, "SHEETSTYLE", 0, 17, ASCH_SHEET_SIZE::A4 );
     sheetOrientation = PropertiesReadEnum<ASCH_SHEET_WORKSPACEORIENTATION>(
             aProperties, "WORKSPACEORIENTATION", 0, 1, ASCH_SHEET_WORKSPACEORIENTATION::LANDSCAPE );
 }
