@@ -37,8 +37,6 @@
 
 #include <memory>
 
-class EDA_DRAW_PANEL_GAL;
-
 namespace KIGFX
 {
 
