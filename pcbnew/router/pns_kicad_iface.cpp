@@ -366,7 +366,8 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     {
         trackWidth = inheritTrackWidth( aStartItem );
     }
-    else if( bds.UseNetClassTrack() && aStartItem ) // netclass value
+
+    if( trackWidth == 0 && bds.UseNetClassTrack() && aStartItem ) // netclass value
     {
         if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem, nullptr,
                                              aStartItem->Layer(), &constraint ) )
@@ -374,7 +375,8 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
             trackWidth = constraint.m_Value.OptThenMin();
         }
     }
-    else
+
+    if( trackWidth == 0 )
     {
         trackWidth = bds.GetCurrentTrackWidth();
     }
