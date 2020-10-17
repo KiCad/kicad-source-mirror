@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,25 +24,25 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	m_matchSizer->SetFlexibleDirection( wxBOTH );
 	m_matchSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_matchAll = new wxRadioButton( this, wxID_ANY, _("%s all symbols in schematic"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchAll = new wxRadioButton( this, wxID_ANY, _("Update all symbols in schematic"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_matchSizer->Add( m_matchAll, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
-	m_matchBySelection = new wxRadioButton( this, wxID_ANY, _("%s selected symbol"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchBySelection = new wxRadioButton( this, wxID_ANY, _("Update selected symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_matchSizer->Add( m_matchBySelection, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
-	m_matchByReference = new wxRadioButton( this, wxID_ANY, _("%s symbols matching reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchByReference = new wxRadioButton( this, wxID_ANY, _("Update symbols matching reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_matchSizer->Add( m_matchByReference, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 2 );
 
 	m_specifiedReference = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 200,-1 ), wxTE_PROCESS_ENTER );
 	m_matchSizer->Add( m_specifiedReference, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM, 2 );
 
-	m_matchByValue = new wxRadioButton( this, wxID_ANY, _("%s symbols matching value:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchByValue = new wxRadioButton( this, wxID_ANY, _("Update symbols matching value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_matchSizer->Add( m_matchByValue, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_specifiedValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_matchSizer->Add( m_specifiedValue, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_matchById = new wxRadioButton( this, wxID_ANY, _("%s symbols matching library indentifier:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchById = new wxRadioButton( this, wxID_ANY, _("Update symbols matching library identifier:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_matchSizer->Add( m_matchById, wxGBPosition( 4, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxTOP, 6 );
 
 	m_specifiedId = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
@@ -91,7 +91,7 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizerUpdate;
 	bSizerUpdate = new wxBoxSizer( wxHORIZONTAL );
 
-	m_updateFieldsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("%s Fields") ), wxVERTICAL );
+	m_updateFieldsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Reset Fields") ), wxVERTICAL );
 
 	wxArrayString m_fieldsBoxChoices;
 	m_fieldsBox = new wxCheckListBox( m_updateFieldsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fieldsBoxChoices, wxLB_NEEDED_SB );
@@ -116,24 +116,24 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 
 	m_updateOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
 
-	m_removeExtraBox = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Remove fields if not in %s symbol"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_removeExtraBox = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Remove fields if not in library symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_removeExtraBox->SetToolTip( _("Removes fields that do not occur in the original library symbols") );
 
 	m_updateOptionsSizer->Add( m_removeExtraBox, 0, wxBOTTOM|wxRIGHT, 4 );
 
-	m_resetEmptyFields = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset fields if empty in %s symbol"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetEmptyFields = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset fields if empty in library symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetEmptyFields, 0, wxBOTTOM|wxRIGHT, 4 );
 
 
 	m_updateOptionsSizer->Add( 0, 15, 0, wxEXPAND, 5 );
 
-	m_resetFieldVisibilities = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("%s field visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetFieldVisibilities = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset field visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetFieldVisibilities, 0, wxBOTTOM|wxRIGHT, 4 );
 
-	m_resetFieldEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("%s field sizes and styles"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetFieldEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset field sizes and styles"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetFieldEffects, 0, wxBOTTOM|wxRIGHT, 4 );
 
-	m_resetFieldPositions = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("%s field positions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetFieldPositions = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset field positions"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetFieldPositions, 0, wxBOTTOM|wxRIGHT, 4 );
 
 

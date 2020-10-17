@@ -50,22 +50,15 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
     m_mode( aMode )
 {
     wxASSERT( aParent );
-    wxString label;
-    wxString verb  =   ( m_mode == MODE::UPDATE ) ? _( "Update" ) :  _( "Change" );
-    wxString reset =   ( m_mode == MODE::UPDATE ) ? _( "Reset" ) :   _( "Update" );
-    wxString library = ( m_mode == MODE::UPDATE ) ? _( "library" ) : _( "new" );
-
-    label.Printf( m_matchAll->GetLabel(), verb );
 
     if( m_mode == MODE::UPDATE )
     {
-        m_matchAll->SetLabel( label );
-        SetTitle( _( "Update Symbol(s) from Library" ) );
         m_newIdSizer->Show( false );
     }
     else
     {
-        SetTitle( _( "Change Symbol(s)" ) );
+        m_matchAll->SetLabel( _( "Change all symbols in schematic" ) );
+        SetTitle( _( "Change Symbols" ) );
         m_matchSizer->FindItem( m_matchAll )->Show( false );
     }
 
@@ -73,8 +66,9 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
     {
         SCH_SHEET_PATH* currentSheet = &aParent->Schematic().CurrentSheet();
 
-        label.Printf( m_matchBySelection->GetLabel(), verb );
-        m_matchBySelection->SetLabel( label );
+        if( m_mode == MODE::CHANGE )
+            m_matchBySelection->SetLabel( _( "Change selected Symbol" ) );
+
         m_newId->AppendText( FROM_UTF8( m_symbol->GetLibId().Format().c_str() ) );
         m_specifiedReference->ChangeValue( m_symbol->GetRef( currentSheet ) );
         m_specifiedValue->ChangeValue( m_symbol->GetValue( currentSheet ) );
@@ -88,12 +82,12 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
     m_matchIdBrowserButton->SetBitmap( KiBitmap( small_library_xpm ) );
     m_newIdBrowserButton->SetBitmap( KiBitmap( small_library_xpm ) );
 
-    label.Printf( m_matchByReference->GetLabel(), verb );
-    m_matchByReference->SetLabel( label );
-    label.Printf( m_matchByValue->GetLabel(), verb );
-    m_matchByValue->SetLabel( label );
-    label.Printf( m_matchById->GetLabel(), verb );
-    m_matchById->SetLabel( label );
+    if( m_mode == MODE::CHANGE )
+    {
+        m_matchByReference->SetLabel( _( "Change symbols matching reference designator:" ) );
+        m_matchByValue->SetLabel( _( "Change symbols matching value:" ) );
+        m_matchById->SetLabel( _( "Change symbols matching library identifier:" ) );
+    }
 
     m_matchSizer->SetEmptyCellSize( wxSize( 0, 0 ) );
     m_matchSizer->Layout();
@@ -122,23 +116,15 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
             m_matchByReference->SetValue( true );
     }
 
-    label.Printf( m_updateFieldsSizer->GetStaticBox()->GetLabel(), reset );
-    m_updateFieldsSizer->GetStaticBox()->SetLabel( label );
-
-    label.Printf( m_removeExtraBox->GetLabel(), library );
-    m_removeExtraBox->SetLabel( label );
-
-    label.Printf( m_resetEmptyFields->GetLabel(), library );
-    m_resetEmptyFields->SetLabel( label );
-
-    label.Printf( m_resetFieldVisibilities->GetLabel(), reset );
-    m_resetFieldVisibilities->SetLabel( label );
-
-    label.Printf( m_resetFieldEffects->GetLabel(), reset );
-    m_resetFieldEffects->SetLabel( label );
-
-    label.Printf( m_resetFieldPositions->GetLabel(), reset );
-    m_resetFieldPositions->SetLabel( label );
+    if( m_mode == MODE::CHANGE )
+    {
+        m_updateFieldsSizer->GetStaticBox()->SetLabel( _( "Update Fields") );
+        m_removeExtraBox->SetLabel( _( "Remove fields if not in new symbol" ) );
+        m_resetEmptyFields->SetLabel( _( "Reset fields if empty in new symbol" ) );
+        m_resetFieldVisibilities->SetLabel( _( "Update field visibilities" ) );
+        m_resetFieldEffects->SetLabel( _( "Update field sizes and styles" ) );
+        m_resetFieldPositions->SetLabel( _( "Update field positions" ) );
+    }
 
     m_removeExtraBox->SetValue( g_removeExtraFields );
     m_resetEmptyFields->SetValue( g_resetEmptyFields );
@@ -153,7 +139,12 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
     // Ensure m_closeButton (with id = wxID_CANCEL) has the right label
     // (to fix automatic renaming of button label )
     m_sdbSizerCancel->SetLabel( _( "Close" ) );
-    m_sdbSizerOK->SetLabel( verb );
+
+    if( m_mode == MODE::CHANGE )
+        m_sdbSizerOK->SetLabel( _( "Change" ) );
+    else
+        m_sdbSizerOK->SetLabel( _( "Update" ) );
+
     m_sdbSizerOK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
