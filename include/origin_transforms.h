@@ -87,7 +87,7 @@ public:
         T displayValue;
 
         displayValue.x = ToDisplay( aValue.x, ABS_X_COORD );
-        displayValue.x = ToDisplay( aValue.y, ABS_Y_COORD );
+        displayValue.y = ToDisplay( aValue.y, ABS_Y_COORD );
         return displayValue;
     }
 
@@ -97,7 +97,7 @@ public:
         T displayValue;
 
         displayValue.x = ToDisplay( aValue.x, REL_X_COORD );
-        displayValue.x = ToDisplay( aValue.y, REL_Y_COORD );
+        displayValue.y = ToDisplay( aValue.y, REL_Y_COORD );
         return displayValue;
     }
 
@@ -108,7 +108,7 @@ public:
         T displayValue;
 
         displayValue.x = FromDisplay( aValue.x, ABS_X_COORD );
-        displayValue.x = FromDisplay( aValue.y, ABS_Y_COORD );
+        displayValue.y = FromDisplay( aValue.y, ABS_Y_COORD );
         return displayValue;
     }
 
@@ -118,7 +118,7 @@ public:
         T displayValue;
 
         displayValue.x = FromDisplay( aValue.x, REL_X_COORD );
-        displayValue.x = FromDisplay( aValue.y, REL_Y_COORD );
+        displayValue.y = FromDisplay( aValue.y, REL_Y_COORD );
         return displayValue;
     }
 
