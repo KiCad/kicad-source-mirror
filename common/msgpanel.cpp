@@ -32,6 +32,7 @@
 
 #include <wx/dcscreen.h>
 #include <wx/dcclient.h>
+#include <wx/settings.h>
 
 
 BEGIN_EVENT_TABLE( EDA_MSG_PANEL, wxPanel )

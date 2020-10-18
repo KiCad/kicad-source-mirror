@@ -24,6 +24,7 @@
 
 #include <wx/wupdlock.h>
 #include <wx/dataview.h>
+#include <wx/settings.h>
 #include <widgets/ui_common.h>
 #include <marker_base.h>
 #include <eda_draw_frame.h>

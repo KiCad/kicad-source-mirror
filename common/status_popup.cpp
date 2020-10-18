@@ -26,6 +26,7 @@
  * Transient mouse following popup window implementation.
  */
 
+#include <wx/settings.h>
 #include <status_popup.h>
 #include <eda_draw_frame.h>
 
