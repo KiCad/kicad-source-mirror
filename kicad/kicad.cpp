@@ -31,6 +31,7 @@
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/app.h>
+#include <wx/stdpaths.h>
 
 #include <filehistory.h>
 #include <hotkeys_basic.h>
