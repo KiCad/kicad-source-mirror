@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -55,8 +55,9 @@ wxString GetDefaultPlotExtension( PLOT_FORMAT aFormat )
 
 
 void PlotWorkSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK& aTitleBlock,
-                    const PAGE_INFO& aPageInfo, int aSheetNumber, int aNumberOfSheets,
-                    const wxString &aSheetDesc, const wxString &aFilename, COLOR4D aColor )
+                    const PAGE_INFO& aPageInfo, const wxString&  aSheetNumber, int aNumberOfSheets,
+                    const wxString& aSheetDesc, const wxString& aFilename, COLOR4D aColor,
+                    bool aIsFirstPage )
 {
     /* Note: Page sizes values are given in mils
      */
@@ -76,11 +77,12 @@ void PlotWorkSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK
     // Prepare plot parameters
     drawList.SetDefaultPenSize( PLOTTER::USE_DEFAULT_LINE_WIDTH );
     drawList.SetMilsToIUfactor( iusPerMil );
-    drawList.SetSheetNumber( aSheetNumber );
+    drawList.SetPageNumber( aSheetNumber );
     drawList.SetSheetCount( aNumberOfSheets );
     drawList.SetFileName( fn.GetFullName() );   // Print only the short filename
     drawList.SetSheetName( aSheetDesc );
     drawList.SetProject( aProject );
+    drawList.SetIsFirstPage( aIsFirstPage );
 
     drawList.BuildWorkSheetGraphicList( aPageInfo, aTitleBlock );
 

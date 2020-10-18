@@ -487,22 +487,21 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
     int              sheet_number      = 1;
     const KIID_PATH& current_sheetpath = GetCurrentSheet().Path();
 
-    // Examine all sheets path to find the current sheets path,
-    // and count them from root to the current sheet path:
+    // @todo Remove all psuedo page number system is left over from prior to real page number
+    //       implementation.
     for( const SCH_SHEET_PATH& sheet : Schematic().GetSheets() )
     {
-        if( sheet.Path() == current_sheetpath )   // Current sheet path found
+        if( sheet.Path() == current_sheetpath )  // Current sheet path found
             break;
 
-        sheet_number++;                         // Not found, increment before this current path
+        sheet_number++;                          // Not found, increment before this current path
     }
 
-    GetCurrentSheet().SetPageNumber( sheet_number );
-
     for( screen = s_list.GetFirst(); screen != NULL; screen = s_list.GetNext() )
-        screen->m_NumberOfScreens = sheet_count;
+        screen->SetPageCount( sheet_count );
 
-    GetScreen()->m_ScreenNumber = sheet_number;
+    GetScreen()->SetVirtualPageNumber( sheet_number );
+    GetScreen()->SetPageNumber( GetCurrentSheet().GetPageNumber() );
 }
 
 
@@ -1231,10 +1230,10 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 
 int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
 {
-    SCHEMATIC_SETTINGS& settings = Schematic().Settings();
-    std::vector<int>    pagesNumbers;
-    SCH_GLOBALLABEL*    gLabel;
-    SCH_IREF*           iref;
+    SCHEMATIC_SETTINGS&   settings = Schematic().Settings();
+    std::vector<wxString> pagesNumbers;
+    SCH_GLOBALLABEL*      gLabel;
+    SCH_IREF*             iref;
 
     m_labelTable.clear();
 
@@ -1280,10 +1279,10 @@ int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
                     iref = gLabel->GetIref();
                 }
 
-                iref->GetRefTable()->clear();
-                iref->GetRefTable()->insert( iref->GetRefTable()->end(),
-                                             pagesNumbers.begin(),
-                                             pagesNumbers.end() );
+                iref->GetRefTable().clear();
+                iref->GetRefTable().insert( iref->GetRefTable().end(),
+                                            pagesNumbers.begin(),
+                                            pagesNumbers.end() );
             }
         }
     }
@@ -1295,9 +1294,9 @@ int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
         {
             if( iter->GetText().IsSameAs( item->GetText() ) && ( iter != item ) )
             {
-                iter->GetIref()->GetRefTable()->insert( iter->GetIref()->GetRefTable()->end(),
-                                                        item->GetIref()->GetRefTable()->begin(),
-                                                        item->GetIref()->GetRefTable()->end() );
+                iter->GetIref()->GetRefTable().insert( iter->GetIref()->GetRefTable().end(),
+                                                       item->GetIref()->GetRefTable().begin(),
+                                                       item->GetIref()->GetRefTable().end() );
             }
         }
     }
@@ -1309,23 +1308,23 @@ int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
 
         iref = item->GetIref();
 
-        sort( iref->GetRefTable()->begin(), iref->GetRefTable()->end() );
-        iref->GetRefTable()->erase( unique( iref->GetRefTable()->begin(),
-                                            iref->GetRefTable()->end() ),
-                                    iref->GetRefTable()->end() );
+        std::sort( iref->GetRefTable().begin(), iref->GetRefTable().end() );
+        iref->GetRefTable().erase( std::unique( iref->GetRefTable().begin(),
+                                                iref->GetRefTable().end() ),
+                                   iref->GetRefTable().end() );
 
         text.Printf( "%s", settings.m_IntersheetsRefPrefix );
 
-        if( ( settings.m_IntersheetsRefFormatShort ) && ( iref->GetRefTable()->size() > 2 ) )
+        if( ( settings.m_IntersheetsRefFormatShort ) && ( iref->GetRefTable().size() > 2 ) )
         {
-            tmp.Printf( "%d..%d", iref->GetRefTable()->front(), iref->GetRefTable()->back() );
+            tmp.Printf( "%s..%s", iref->GetRefTable().front(), iref->GetRefTable().back() );
             text.Append( tmp );
         }
         else
         {
-            for( int ref : *( iref->GetRefTable() ) )
+            for( wxString ref : iref->GetRefTable() )
             {
-                tmp.Printf( "%d,", ref );
+                tmp.Printf( "%s,", ref );
                 text.Append( tmp );
             }
 

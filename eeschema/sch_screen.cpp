@@ -206,7 +206,7 @@ void SCH_SCREEN::Clear( bool aFree )
     }
 
     // Clear the project settings
-    m_ScreenNumber = m_NumberOfScreens = 1;
+    m_virtualPageNumber = m_pageCount = 1;
 
     m_titles.Clear();
 }

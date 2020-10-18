@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2019 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -153,7 +153,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     editMenu->Add( ACTIONS::deleteTool );
     editMenu->Add( EE_ACTIONS::editTextAndGraphics );
     editMenu->Add( EE_ACTIONS::changeSymbols );
-
+    editMenu->Add( EE_ACTIONS::editPageNumber );
 
     //-- View menu -----------------------------------------------------------
     //

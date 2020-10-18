@@ -6,6 +6,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -63,6 +65,7 @@ public:
     void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo ) override;
     void PrintPage( int aPageNum );
 };
+
 
 /**
  * Custom print preview frame.
@@ -123,10 +126,13 @@ private:
     DECLARE_NO_COPY_CLASS( PLEDITOR_PREVIEW_FRAME )
 };
 
+
 wxPoint PLEDITOR_PREVIEW_FRAME::s_pos;
 wxSize  PLEDITOR_PREVIEW_FRAME::s_size;
 
+
 IMPLEMENT_CLASS( PLEDITOR_PREVIEW_FRAME, wxPreviewFrame )
+
 
 BEGIN_EVENT_TABLE( PLEDITOR_PREVIEW_FRAME, wxPreviewFrame )
     EVT_CLOSE( PLEDITOR_PREVIEW_FRAME::OnCloseWindow )
@@ -180,7 +186,7 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
     COLOR4D bg_color = m_parent->GetDrawBgColor();
     m_parent->SetDrawBgColor( WHITE );
 
-    screen->m_ScreenNumber = aPageNum;
+    screen->SetVirtualPageNumber( aPageNum );
 
     KIGFX::WS_RENDER_SETTINGS renderSettings;
     renderSettings.SetDefaultPenWidth( 1 );
@@ -241,6 +247,7 @@ int InvokeDialogPrint( PL_EDITOR_FRAME* aCaller, wxPrintData* aPrintData,
 
     return 1;
 }
+
 
 int InvokeDialogPrintPreview( PL_EDITOR_FRAME* aCaller, wxPrintData* aPrintData )
 {

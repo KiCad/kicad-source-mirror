@@ -144,11 +144,11 @@ bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString&  aFileName,
     if( aPlotFrameRef )
     {
         PlotWorkSheet( plotter, &m_parent->Prj(), m_parent->GetTitleBlock(), pageInfo,
-                       aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
+                       aScreen->GetPageNumber(), aScreen->GetPageCount(),
                        m_parent->GetScreenDesc(), aScreen->GetFileName(),
                        plotter->GetColorMode() ?
                        plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_WORKSHEET ) :
-                       COLOR4D::BLACK );
+                       COLOR4D::BLACK, aScreen->GetVirtualPageNumber() == 1 );
     }
 
     aScreen->Plot( plotter );

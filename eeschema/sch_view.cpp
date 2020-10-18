@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2018 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -63,6 +63,7 @@ SCH_VIEW::~SCH_VIEW()
 {
 }
 
+
 void SCH_VIEW::Cleanup()
 {
     Clear();
@@ -100,11 +101,12 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
                                                       &aScreen->GetPageSettings(),
                                                       &aScreen->Schematic()->Prj(),
                                                       &aScreen->GetTitleBlock() ) );
-    m_worksheet->SetSheetNumber( aScreen->m_ScreenNumber );
-    m_worksheet->SetSheetCount( aScreen->m_NumberOfScreens );
+    m_worksheet->SetPageNumber( TO_UTF8( aScreen->GetPageNumber() ) );
+    m_worksheet->SetSheetCount( aScreen->GetPageCount() );
     m_worksheet->SetFileName( TO_UTF8( aScreen->GetFileName() ) );
     m_worksheet->SetColorLayer( LAYER_SCHEMATIC_WORKSHEET );
     m_worksheet->SetPageBorderColorLayer( LAYER_SCHEMATIC_GRID );
+    m_worksheet->SetIsFirstPage( aScreen->GetVirtualPageNumber() == 1 );
 
     if( m_frame && m_frame->IsType( FRAME_SCH ) )
         m_worksheet->SetSheetName( TO_UTF8( m_frame->GetScreenDesc() ) );

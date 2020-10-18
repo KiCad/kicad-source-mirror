@@ -888,8 +888,8 @@ void SCH_LEGACY_PLUGIN::loadPageSettings( LINE_READER& aReader, SCH_SCREEN* aScr
 
         if( strCompare( "Sheet", line, &line ) )
         {
-            aScreen->m_ScreenNumber = parseInt( aReader, line, &line );
-            aScreen->m_NumberOfScreens = parseInt( aReader, line, &line );
+            aScreen->SetVirtualPageNumber( parseInt( aReader, line, &line ) );
+            aScreen->SetPageCount( parseInt( aReader, line, &line ) );
         }
         else if( strCompare( "Title", line, &line ) )
         {
@@ -1871,7 +1871,7 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SHEET* aSheet )
                   page.GetHeightMils(),
                   !page.IsCustom() && page.IsPortrait() ? " portrait" : "" );
     m_out->Print( 0, "encoding utf-8\n" );
-    m_out->Print( 0, "Sheet %d %d\n", screen->m_ScreenNumber, screen->m_NumberOfScreens );
+    m_out->Print( 0, "Sheet %d %d\n", screen->GetVirtualPageNumber(), screen->GetPageCount() );
     m_out->Print( 0, "Title %s\n",    EscapedUTF8( tb.GetTitle() ).c_str() );
     m_out->Print( 0, "Date %s\n",     EscapedUTF8( tb.GetDate() ).c_str() );
     m_out->Print( 0, "Rev %s\n",      EscapedUTF8( tb.GetRevision() ).c_str() );

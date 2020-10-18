@@ -216,8 +216,9 @@ bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
     if( aPlotFrameRef )
     {
         PlotWorkSheet( plotter, &m_parent->Prj(), m_parent->GetTitleBlock(), aPageInfo,
-                       aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
-                       m_parent->GetScreenDesc(), aScreen->GetFileName(), COLOR4D::BLACK );
+                       aScreen->GetPageNumber(), aScreen->GetPageCount(),
+                       m_parent->GetScreenDesc(), aScreen->GetFileName(), COLOR4D::BLACK,
+                       aScreen->GetVirtualPageNumber() == 1 );
     }
 
     aScreen->Plot( plotter );

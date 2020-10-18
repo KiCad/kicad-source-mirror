@@ -36,14 +36,16 @@ int SCH_NAVIGATE_TOOL::NavigateHierarchy( const TOOL_EVENT& aEvent )
 
 int SCH_NAVIGATE_TOOL::HypertextCommand( const TOOL_EVENT& aEvent )
 {
-    intptr_t target = aEvent.Parameter<intptr_t>();
+    wxString* page = aEvent.Parameter<wxString*>();
+
+    wxCHECK( page, 0 );
 
     auto goToPage =
-            [&]( intptr_t aPage )
+            [&]( wxString* aPage )
             {
                 for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetSheets() )
                 {
-                    if( sheet.GetPageNumber() == aPage )
+                    if( sheet.GetPageNumber() == *aPage )
                     {
                         m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
                         m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
@@ -56,18 +58,18 @@ int SCH_NAVIGATE_TOOL::HypertextCommand( const TOOL_EVENT& aEvent )
                 }
             };
 
-    if( target == ID_HYPERTEXT_BACK )
+    if( aEvent.GetCommandId() == ID_HYPERTEXT_BACK )
     {
         if( m_hypertextStack.size() > 0 )
         {
-            goToPage( m_hypertextStack.top() );
+            goToPage( &m_hypertextStack.top() );
             m_hypertextStack.pop();
         }
     }
     else
     {
         m_hypertextStack.push( m_frame->GetCurrentSheet().GetPageNumber() );
-        goToPage( target );
+        goToPage( page );
     }
 
     return 0;

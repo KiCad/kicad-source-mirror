@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -56,6 +56,8 @@ class DIALOG_SHEET_PROPERTIES_BASE : public DIALOG_SHIM
 		COLOR_SWATCH* m_borderSwatch;
 		wxStaticText* m_backgroundColorLabel;
 		COLOR_SWATCH* m_backgroundSwatch;
+		wxStaticText* m_pageNumberStaticText;
+		wxTextCtrl* m_pageNumberTextCtrl;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_hiearchicalPathLabel;
 		wxTextCtrl* m_heirarchyPath;

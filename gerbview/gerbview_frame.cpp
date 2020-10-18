@@ -61,6 +61,7 @@
 #include <panel_hotkeys_editor.h>
 #include <wx/wupdlock.h>
 
+
 GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
         : EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ), wxDefaultPosition,
                 wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME ),
@@ -875,7 +876,7 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 
     if( GetScreen() )
     {
-        worksheet->SetSheetNumber( 1 );
+        worksheet->SetPageNumber( "1" );
         worksheet->SetSheetCount( 1 );
     }
 

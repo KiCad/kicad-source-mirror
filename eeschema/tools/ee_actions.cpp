@@ -560,6 +560,12 @@ TOOL_ACTION EE_ACTIONS::schematicSetup( "eeschema.EditorControl.schematicSetup",
         _( "Edit schematic setup including annotation styles and electrical rules" ),
         options_schematic_xpm );
 
+TOOL_ACTION EE_ACTIONS::editPageNumber( "eeschema.EditorControl.editPageNumber",
+        AS_GLOBAL, 0, "",
+        _( "Edit Page Number..." ),
+        _( "Edit the page number of the current or selected sheet" ),
+        nullptr );
+
 TOOL_ACTION EE_ACTIONS::rescueSymbols( "eeschema.EditorControl.rescueSymbols",
         AS_GLOBAL, 0, "",
         _( "Rescue Symbols..." ),

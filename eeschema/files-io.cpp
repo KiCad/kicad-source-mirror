@@ -406,6 +406,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                                    "versions of KiCad." ) );
         }
 
+        if( sheetList.AllSheetPageNumbersEmpty() )
+            sheetList.SetInitialPageNumbers();
+
         UpdateFileHistory( fullFileName );
 
         SCH_SCREENS schematic( Schematic().Root() );
@@ -494,8 +497,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
                 screen->UpdateLocalLibSymbolLinks();
 
-            // Restore all of the loaded symbol instances from the root sheet screen.
+            // Restore all of the loaded symbol and sheet instances from the root sheet.
             sheetList.UpdateSymbolInstances( Schematic().RootScreen()->GetSymbolInstances() );
+            sheetList.UpdateSheetInstances( Schematic().RootScreen()->GetSheetInstances() );
         }
 
         Schematic().ConnectionGraph()->Reset();
@@ -788,9 +792,9 @@ bool SCH_EDIT_FRAME::SaveProject()
         std::vector<SCH_SHEET_PATH>& sheets = screen->GetClientSheetPaths();
 
         if( sheets.size() == 1 )
-            screen->m_ScreenNumber = sheets[0].GetPageNumber();
+            screen->SetVirtualPageNumber( 1 );
         else
-            screen->m_ScreenNumber = 0;   // multiple uses; no way to store the real sheet #
+            screen->SetVirtualPageNumber( 0 );  // multiple uses; no way to store the real sheet #
 
         success &= SaveEEFile( screens.GetSheet( i ) );
     }

@@ -54,7 +54,20 @@ struct COMPONENT_INSTANCE_REFERENCE
 };
 
 
-/** Info about complex hierarchies handling:
+/**
+ * A simple container for sheet instance infromation.
+ */
+struct SCH_SHEET_INSTANCE
+{
+    KIID_PATH m_Path;
+
+    wxString  m_PageNumber;
+};
+
+
+/**
+ * Complex hierarchies
+ *
  * A hierarchical schematic uses sheets (hierarchical sheets) included in a
  * given sheet.  Each sheet corresponds to a schematic drawing handled by a
  * SCH_SCREEN structure.  A SCH_SCREEN structure contains drawings, and have
@@ -106,15 +119,12 @@ class SCH_REFERENCE_LIST;
 
 
 /**
- * Type SCH_MULTI_UNIT_REFERENCE_MAP
- * is used to create a map of reference designators for multi-unit parts.
+ * Container to map reference designators for multi-unit parts.
  */
 typedef std::map<wxString, SCH_REFERENCE_LIST> SCH_MULTI_UNIT_REFERENCE_MAP;
 
 /**
- * SCH_SHEET_PATH
- *
- * handles access to a stack of flattened #SCH_SHEET objects by way of a path for
+ * Handle access to a stack of flattened #SCH_SHEET objects by way of a path for
  * creating a flattened schematic hierarchy.
  *
  * <p>
@@ -176,9 +186,9 @@ public:
 
     size_t GetCurrentHash() const { return m_current_hash; }
 
-    void SetPageNumber( int aPageNumber ) { m_pageNumber = aPageNumber; }
+    void SetPageNumber( const wxString& aPageNumber );
 
-    int GetPageNumber() const { return m_pageNumber; }
+    wxString GetPageNumber() const;
 
     const SCH_SHEET* GetSheet( unsigned aIndex ) const
     {
@@ -191,8 +201,8 @@ public:
     }
 
     /**
-     * Function Cmp
      * Compare if this is the same sheet path as aSheetPathToTest
+     *
      * @param aSheetPathToTest = sheet path to compare
      * @return 1 if this sheet path has more sheets than aSheetPathToTest,
      *   -1 if this sheet path has fewer sheets than aSheetPathToTest,
@@ -201,15 +211,14 @@ public:
     int Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const;
 
     /**
-     * Function Last
-     * returns a pointer to the last sheet of the list
-     * One can see the others sheet as the "path" to reach this last sheet
+     * Return a pointer to the last #SCH_SHEET of the list.
+     *
+     * One can see the others sheet as the "path" to reach this last sheet.
      */
     SCH_SHEET* Last() const;
 
     /**
-     * Function LastScreen
-     * @return the SCH_SCREEN relative to the last sheet in list
+     * @return the #SCH_SCREEN relative to the last sheet in list.
      */
     SCH_SCREEN* LastScreen();
 
@@ -218,52 +227,57 @@ public:
     SCH_SCREEN* LastScreen() const;
 
     /**
-     * Function PathAsString
-     * the path uses the time stamps which do not changes even when editing
-     * sheet parameters
-     * a path is something like / (root) or /34005677 or /34005677/00AE4523
+     * Return the path of time stamps which do not changes even when editing sheet parameters.
+     *
+     * A path is something like / (root) or /34005677 or /34005677/00AE4523.
      */
     wxString PathAsString() const;
 
     /**
-     * Get the sheet path as an KIID_PATH.
+     * Get the sheet path as an #KIID_PATH.
+     *
+     * @note This #KIID_PATH includes the root sheet UUID prefixed to the path.
      * @return
      */
     KIID_PATH Path() const;
 
     /**
-     * Function PathHumanReadable
-     * returns the sheet path in a human readable form, i.e. as a path made
-     * from sheet names.  The the "normal" path instead uses the time
-     * stamps in the path.  (Time stamps do not change even when editing
-     * sheet parameters).
+     * Get the sheet path as an #KIID_PATH without the root sheet UUID prefix.
+     *
+     * @note This #KIID_PATH does not include the root sheet UUID prefixed to the path.
+     * @return
+     */
+    KIID_PATH PathWithoutRootUuid() const;
+
+    /**
+     * Return the sheet path in a human readable form made from thesheet names.
+     *
+     * The the "normal" path instead uses the #KIID objects in the path that do not change
+     * even when editing sheet parameters.
      */
     wxString PathHumanReadable() const;
 
     /**
-     * @return a PathName for the root sheet (like "/" or "<root>"
+     * @return a path name for the root sheet (like "/" or "<root>"
      * @param aUseShortName: true to return "/", false to return a longer name
      */
     static wxString GetRootPathName( bool aUseShortName = true );
 
     /**
-     * Function UpdateAllScreenReferences
-     * updates the reference and the m_Multi parameter (part selection) for all
-     * components on a screen depending on the actual sheet path.
-     * Mandatory in complex hierarchies because sheets use the same screen
-     * (basic schematic)
-     * but with different references and part selections according to the
-     * displayed sheet
+     * Update all the symbol references for this sheet path.
+     *
+     * Mandatory in complex hierarchies because sheets may use the same screen (basic schematic)
+     * more than once but with different references and units according to the displayed sheet.
      */
     void UpdateAllScreenReferences();
 
     /**
-     * Function GetComponents
-     * adds a SCH_REFERENCE() object to \a aReferences for each component in the sheet.
+     * Adds #SCH_REFERENCE object to \a aReferences for each component in the sheet.
      *
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols : false to only get normal components.
-     * @param aForceIncludeOrphanComponents : true to include components having no symbol found in lib.
+     * @param aForceIncludeOrphanComponents : true to include components having no symbol found
+     * in lib.
      * ( orphan components)
      * The normal option is false, and set to true only to build the full list of components.
      */
@@ -271,10 +285,10 @@ public:
                         bool aForceIncludeOrphanComponents = false ) const;
 
     /**
-     * Function GetMultiUnitComponents
-     * adds a SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
-     * multi-unit parts in the sheet. The map key for each element will be the
-     * reference designator.
+     * Add a #SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
+     * multi-unit parts in the sheet.
+     *
+     * The map key for each element will be the reference designator.
      *
      * @param aRefList Map of reference designators to reference lists
      * @param aIncludePowerSymbols : false to only get normal components.
@@ -283,9 +297,7 @@ public:
                                  bool aIncludePowerSymbols = true ) const;
 
     /**
-     * Function TestForRecursion
-     *
-     * test the SCH_SHEET_PATH file names to check adding the sheet stored in the file
+     * Test the SCH_SHEET_PATH file names to check adding the sheet stored in the file
      * \a aSrcFileName to the sheet stored in file \a aDestFileName  will cause a sheet
      * path recursion.
      *
@@ -321,9 +333,7 @@ typedef SCH_SHEET_PATHS::iterator                SCH_SHEET_PATHS_ITER;
 
 
 /**
- * SCH_SHEET_LIST
- *
- * handles a list of #SCH_SHEET_PATH objects in a flattened hierarchy.
+ * A container for handling #SCH_SHEET_PATH objects in a flattened hierarchy.
  *
  * #SCH_SHEET objects are not unique, there can be many sheets with the same filename and
  * that share the same #SCH_SCREEN reference.   Each The schematic file (#SCH_SCREEN) may
@@ -338,8 +348,7 @@ private:
 public:
 
     /**
-     * Constructor
-     * build a flattened list of SCH_SHEET_PATH objects from \a aSheet.
+     * Construct a flattened list of SCH_SHEET_PATH objects from \a aSheet.
      *
      * If aSheet == NULL, then this is an empty hierarchy which the user can populate.
      */
@@ -348,8 +357,8 @@ public:
     ~SCH_SHEET_LIST() {}
 
     /**
-     * Function IsModified
-     * checks the entire hierarchy for any modifications.
+     * Check the entire hierarchy for any modifications.
+     *
      * @return True if the hierarchy is modified otherwise false.
      */
     bool IsModified();
@@ -367,9 +376,9 @@ public:
     void FillItemMap( std::map<KIID, EDA_ITEM*>& aMap );
 
     /**
-     * Function AnnotatePowerSymbols
-     * Silently annotates the not yet annotated power symbols of the entire hierarchy
-     * of the sheet path list.
+     * Silently annotate the not yet annotated power symbols of the entire hierarchy of the
+     * sheet path list.
+     *
      * It is called before creating a netlist, to annotate power symbols, without prompting
      * the user about not annotated or duplicate for these symbols, if only these symbols
      * need annotation ( a very frequent case ).
@@ -377,13 +386,13 @@ public:
     void AnnotatePowerSymbols();
 
     /**
-     * Function GetComponents
-     * adds a SCH_REFERENCE() object to \a aReferences for each component in the list
+     * Add a #SCH_REFERENCE object to \a aReferences for each component in the list
      * of sheets.
      *
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols Set to false to only get normal components.
-     * @param aForceIncludeOrphanComponents : true to include components having no symbol found in lib.
+     * @param aForceIncludeOrphanComponents : true to include components having no symbol found
+     * in lib.
      * ( orphan components)
      * The normal option is false, and set to true only to build the full list of components.
      */
@@ -391,8 +400,7 @@ public:
                         bool aForceIncludeOrphanComponents = false ) const;
 
     /**
-     * Function GetMultiUnitComponents
-     * adds a SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
+     * Add a #SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
      * multi-unit parts in the list of sheets. The map key for each element will be the
      * reference designator.
      *
@@ -403,9 +411,7 @@ public:
                                  bool aIncludePowerSymbols = true ) const;
 
     /**
-     * Function TestForRecursion
-     *
-     * test every SCH_SHEET_PATH in the SCH_SHEET_LIST to verify if adding the sheets stored
+     * Test every #SCH_SHEET_PATH in this #SCH_SHEET_LIST to verify if adding the sheets stored
      * in \a aSrcSheetHierarchy to the sheet stored in \a aDestFileName  will cause recursion.
      *
      * @param aSrcSheetHierarchy is the SCH_SHEET_LIST of the source sheet add to \a aDestFileName.
@@ -416,15 +422,14 @@ public:
                            const wxString& aDestFileName );
 
     /**
-     * Function FindSheetForScreen
-     *
-     * returns the first sheetPath (not necessarily the only one) using a particular screen
+     * Return a pointer to the first #SCH_SHEET_PATH object (not necessarily the only one) using
+     * a particular screen.
      */
     SCH_SHEET_PATH* FindSheetForScreen( SCH_SCREEN* aScreen );
 
     /**
-     * Function BuildSheetList
-     * builds the list of sheets and their sheet path from \a aSheet.
+     * Build the list of sheets and their sheet path from \a aSheet.
+     *
      * If \a aSheet is the root sheet, the full sheet path and sheet list are built.
      *
      * @param aSheet is the starting sheet from which the list is built, or NULL
@@ -442,6 +447,15 @@ public:
      */
     void UpdateSymbolInstances( const std::vector<COMPONENT_INSTANCE_REFERENCE>& aSymbolInstances );
 
+    /**
+     * Update all of the sheet instance information using \a aSheetInstances.
+     *
+     * @warning Do not call this on anything other than the full hierarchy.
+     *
+     * @param aSymbolInstances is the symbol path information loaded from the root schematic.
+     */
+    void UpdateSheetInstances( const std::vector<SCH_SHEET_INSTANCE>& aSheetInstances );
+
     std::vector<KIID_PATH> GetPaths() const;
 
     /**
@@ -457,6 +471,24 @@ public:
      * @param aOldSheetPaths is the #SHEET_PATH_LIST to update from.
      */
     void ReplaceLegacySheetPaths( const std::vector<KIID_PATH>& aOldSheetPaths );
+
+    /**
+     * Check all of the sheet instance for empty page numbers.
+     *
+     * @note This should only return true when loading a legacy schematic or an s-expression
+     *       schematic before version 20201005.
+     *
+     * @return true if all sheet instance page numbers are not defined.  Otherwise false.
+     */
+    bool AllSheetPageNumbersEmpty() const;
+
+    /**
+     * Set initial sheet page numbers.
+     *
+     * The number scheme is base on the old psuedo sheet numbering algorithm prior to
+     * the implementation of user defineable sheet page numbers.
+     */
+    void SetInitialPageNumbers();
 };
 
 #endif // CLASS_DRAWSHEET_PATH_H

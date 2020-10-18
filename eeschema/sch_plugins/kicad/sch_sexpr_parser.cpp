@@ -1799,6 +1799,63 @@ SCH_SHEET_PIN* SCH_SEXPR_PARSER::parseSchSheetPin( SCH_SHEET* aSheet )
 }
 
 
+void SCH_SEXPR_PARSER::parseSchSheetInstances( SCH_SCREEN* aScreen )
+{
+    wxCHECK_RET( CurTok() == T_sheet_instances,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
+                 wxT( " as a instances token." ) );
+    wxCHECK( aScreen, /* void */ );
+
+    T token;
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_path:
+        {
+            NeedSYMBOL();
+
+            SCH_SHEET_INSTANCE instance;
+
+            instance.m_Path = KIID_PATH( FromUTF8() );
+
+            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_page:
+                    NeedSYMBOL();
+                    instance.m_PageNumber = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
+                default:
+                    Expecting( "path or page" );
+                }
+            }
+
+            aScreen->m_sheetInstances.emplace_back( instance );
+            break;
+        }
+
+        default:
+            Expecting( "path" );
+        }
+    }
+}
+
+
 void SCH_SEXPR_PARSER::parseSchSymbolInstances( SCH_SCREEN* aScreen )
 {
     wxCHECK_RET( CurTok() == T_symbol_instances,
@@ -2018,6 +2075,13 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
         case T_global_label:
         case T_hierarchical_label:
             screen->Append( static_cast<SCH_ITEM*>( parseSchText() ) );
+            break;
+
+        case T_sheet_instances:
+            if( aIsCopyableOnly )
+                Unexpected( T_sheet_instances );
+
+            parseSchSheetInstances( screen );
             break;
 
         case T_symbol_instances:

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -159,29 +159,36 @@ DIALOG_SHEET_PROPERTIES_BASE::DIALOG_SHEET_PROPERTIES_BASE( wxWindow* parent, wx
 
 	mainSizer->Add( m_longForm, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_pageNumberStaticText = new wxStaticText( this, wxID_ANY, _("Page number:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pageNumberStaticText->Wrap( -1 );
+	bSizer6->Add( m_pageNumberStaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_pageNumberTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer6->Add( m_pageNumberTextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+
+	bSizer6->Add( 0, 0, 3, wxEXPAND, 5 );
+
+
+	mainSizer->Add( bSizer6, 0, wxALL|wxEXPAND, 5 );
+
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 1, 2, 0, 0 );
-	fgSizer1->AddGrowableCol( 1 );
-	fgSizer1->SetFlexibleDirection( wxHORIZONTAL );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
 	m_hiearchicalPathLabel = new wxStaticText( this, wxID_ANY, _("Hierarchical path:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_hiearchicalPathLabel->Wrap( -1 );
-	fgSizer1->Add( m_hiearchicalPathLabel, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
+	bSizerBottom->Add( m_hiearchicalPathLabel, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
 
 	m_heirarchyPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
 	m_heirarchyPath->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 
-	fgSizer1->Add( m_heirarchyPath, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-
-	bSizerBottom->Add( fgSizer1, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizerBottom->Add( m_heirarchyPath, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	m_stdDialogButtonSizerOK = new wxButton( this, wxID_OK );
@@ -190,10 +197,10 @@ DIALOG_SHEET_PROPERTIES_BASE::DIALOG_SHEET_PROPERTIES_BASE( wxWindow* parent, wx
 	m_stdDialogButtonSizer->AddButton( m_stdDialogButtonSizerCancel );
 	m_stdDialogButtonSizer->Realize();
 
-	bSizerBottom->Add( m_stdDialogButtonSizer, 0, wxEXPAND|wxALL, 5 );
+	bSizerBottom->Add( m_stdDialogButtonSizer, 0, wxEXPAND, 5 );
 
 
-	mainSizer->Add( bSizerBottom, 0, wxEXPAND|wxLEFT, 5 );
+	mainSizer->Add( bSizerBottom, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( mainSizer );

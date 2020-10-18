@@ -58,7 +58,7 @@ private:
     void setTransitions() override;
 
 private:
-    std::stack<int> m_hypertextStack;
+    std::stack<wxString> m_hypertextStack;
 };
 
 

@@ -161,6 +161,18 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
     m_borderSwatch->SetSwatchBackground( canvas );
     m_backgroundSwatch->SetSwatchBackground( canvas );
 
+    SCH_SHEET_LIST hierarchy = m_frame->Schematic().GetFullHierarchy();
+    SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
+
+    wxString nextPageNumber;
+
+    if( m_sheet->IsNew() )
+        nextPageNumber.Printf( "%z", hierarchy.size() + 1 );
+    else
+        nextPageNumber = m_sheet->GetPageNumber( instance );
+
+    m_pageNumberTextCtrl->ChangeValue( nextPageNumber );
+
     // set up the read-only fields
     m_heirarchyPath->SetValue( m_frame->GetCurrentSheet().PathHumanReadable() );
 
@@ -315,6 +327,17 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
     m_sheet->SetBorderColor( m_borderSwatch->GetSwatchColor() );
     m_sheet->SetBackgroundColor( m_backgroundSwatch->GetSwatchColor() );
+
+    SCH_SHEET_LIST hierarchy = m_frame->Schematic().GetFullHierarchy();
+    SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
+
+    if( m_sheet->IsNew() )
+    {
+        instance.push_back( m_sheet );
+        m_sheet->AddInstance( instance.Path() );
+    }
+
+    m_sheet->SetPageNumber( instance, m_pageNumberTextCtrl->GetValue() );
 
     m_frame->TestDanglingEnds();
 

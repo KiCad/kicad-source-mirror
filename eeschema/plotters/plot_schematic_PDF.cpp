@@ -48,7 +48,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef,
 
     /* When printing all pages, the printed page is not the current page.  In
      * complex hierarchies, we must update component references and others
-     * parameters in the given printed SCH_SCREEN, accordint to the sheet path
+     * parameters in the given printed SCH_SCREEN, accordant to the sheet path
      * because in complex hierarchies a SCH_SCREEN (a drawing ) is shared
      * between many sheets and component references depend on the actual sheet
      * path used
@@ -164,12 +164,12 @@ void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter,
     if( aPlotFrameRef )
     {
         PlotWorkSheet( aPlotter, &aScreen->Schematic()->Prj(), m_parent->GetTitleBlock(),
-                       m_parent->GetPageSettings(), aScreen->m_ScreenNumber,
-                       aScreen->m_NumberOfScreens, m_parent->GetScreenDesc(),
+                       m_parent->GetPageSettings(), aScreen->GetPageNumber(),
+                       aScreen->GetPageCount(), m_parent->GetScreenDesc(),
                        aScreen->GetFileName(),
                        aPlotter->GetColorMode() ?
                        aPlotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_WORKSHEET ) :
-                       COLOR4D::BLACK );
+                       COLOR4D::BLACK, aScreen->GetVirtualPageNumber() == 1 );
     }
 
     aScreen->Plot( aPlotter );

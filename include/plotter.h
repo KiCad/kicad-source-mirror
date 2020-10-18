@@ -23,7 +23,6 @@
  */
 
 /**
- * Common plot library \n
  * Plot settings, and plotting engines (Postscript, Gerber, HPGL and DXF)
  *
  * @file plotter.h
@@ -50,9 +49,9 @@ class GBR_NETLIST_METADATA;
 using KIGFX::RENDER_SETTINGS;
 
 /**
- * Enum PlotFormat
- * is the set of supported output plot formats.  They should be kept in order
- * of the radio buttons in the plot panel/windows.
+ * The set of supported output plot formats.
+ *
+   They should be kept in order of the radio buttons in the plot panel/windows.
  */
 enum class PLOT_FORMAT
 {
@@ -68,8 +67,9 @@ enum class PLOT_FORMAT
 };
 
 /**
- * Enum for choosing which kind of text to output with the PSLIKE
- * plotters. You can:
+ * Which kind of text to output with the PSLIKE plotters.
+ *
+ * You can:
  * 1) only use the internal vector font
  * 2) only use native postscript fonts
  * 3) use the internal vector font and add 'phantom' text to aid
@@ -88,7 +88,7 @@ enum class PLOT_TEXT_MODE
 };
 
 /**
- * Enum for choosing dashed line type
+ * Dashed line types.
  */
 enum class PLOT_DASH_TYPE
 {
@@ -143,7 +143,8 @@ public:
         negativeMode = aNegative;
     }
 
-    /** Plot in B/W or color.
+    /**
+     * Plot in B/W or color.
      * @param aColorMode = true to plot in color, false to plot in black and white
      */
     virtual void SetColorMode( bool aColorMode ) { colorMode = aColorMode; }
@@ -178,7 +179,6 @@ public:
     }
 
     /**
-     * Function AddLineToHeader
      * Add a line to the list of free lines to print at the beginning of the file
      * @param aExtraString is the string to print
      */
@@ -188,8 +188,7 @@ public:
     }
 
     /**
-     * Function ClearHeaderLinesList
-     * remove all lines from the list of free lines to print at the beginning of the file
+     * Remove all lines from the list of free lines to print at the beginning of the file
      */
     void ClearHeaderLinesList()
     {
@@ -242,7 +241,7 @@ public:
 
     /**
      * Generic fallback: Cubic Bezier curve rendered as a polyline
-     * In Kicad the bezier curves have 4 control points:
+     * In KiCad the bezier curves have 4 control points:
      * start ctrl1 ctrl2 end
      */
     virtual void BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
@@ -283,8 +282,7 @@ public:
     }
 
     /**
-     * Function PlotPoly
-     * @brief Draw a polygon ( filled or not )
+     * Draw a polygon ( filled or not )
      * @param aCornerList = corners list (a std::vector< wxPoint >)
      * @param aFill = type of fill
      * @param aWidth = line width
@@ -294,8 +292,7 @@ public:
                int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL ) = 0;
 
     /**
-     * Function PlotPoly
-     * @brief Draw a polygon ( filled or not )
+     * Draw a polygon ( filled or not )
      * @param aCornerList = corners list (a SHAPE_LINE_CHAIN).
      * must be closed (IsClosed() == true) for a polygon. Otherwise this is a polyline
      * @param aFill = type of fill
@@ -306,9 +303,10 @@ public:
                int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL );
 
     /**
-     * Function PlotImage
-     * Only Postscript plotters can plot bitmaps
-     * for plotters that cannot plot a bitmap, a rectangle is plotted
+     * Only Postscript plotters can plot bitmaps.
+     *
+     * A rectangle is plotted for plotters that cannot plot a bitmap.
+     *
      * @brief Draw an image bitmap
      * @param aImage = the bitmap
      * @param aPos = position of the center of the bitmap
@@ -334,7 +332,6 @@ public:
     // Flash primitives
 
     /**
-     * virtual function FlashPadCircle
      * @param aPadPos Position of the shape (center of the rectangle
      * @param aDiameter diameter of round pad
      * @param aTraceMode FILLED or SKETCH
@@ -344,7 +341,6 @@ public:
                                  OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
-     * virtual function FlashPadOval
      * @param aPadPos Position of the shape (center of the rectangle
      * @param aSize = size of oblong shape
      * @param aPadOrient The rotation of the shape
@@ -355,18 +351,16 @@ public:
                                OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
-     * virtual function FlashPadRect
      * @param aPadPos Position of the shape (center of the rectangle
      * @param aSize = size of rounded rect
      * @param aPadOrient The rotation of the shape
      * @param aTraceMode FILLED or SKETCH
-     * @param aData an auxuliary info (mainly for gerber format attributes)
+     * @param aData an auxiliary info (mainly for gerber format attributes)
      */
     virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
                                double aPadOrient, OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
-     * virtual function FlashPadRoundRect
      * @param aPadPos Position of the shape (center of the rectangle
      * @param aSize = size of rounded rect
      * @param aCornerRadius Radius of the rounded corners
@@ -379,7 +373,6 @@ public:
                                     OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
-     * virtual function FlashPadCustom
      * @param aPadPos Position of the shape (center of the rectangle
      * @param aSize = size of round reference pad
      * @param aPolygons the shape as polygon set
@@ -390,8 +383,8 @@ public:
                                  SHAPE_POLY_SET* aPolygons,
                                  OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
-    /** virtual function FlashPadTrapez
-     * flash a trapezoidal pad
+    /**
+     * Flash a trapezoidal pad
      * @param aPadPos = the position of the shape
      * @param aCorners = the list of 4 corners positions,
      * 		relative to the shape position, pad orientation 0
@@ -403,7 +396,8 @@ public:
                                  double aPadOrient, OUTLINE_MODE aTraceMode,
                                  void* aData ) = 0;
 
-    /** Flash a regular polygon. Usefull only in Gerber files to flash a regular polygon
+    /**
+     * Flash a regular polygon. Useful only in Gerber files to flash a regular polygon
      * @param aShapePos is the center of the circle containing the polygon
      * @param aRadius is the radius of the circle containing the polygon
      * @param aCornerCount is the number of vertices
@@ -444,8 +438,7 @@ public:
     void Marker( const wxPoint& position, int diametre, unsigned aShapeId );
 
     /**
-     * Function SetLayerPolarity
-     * sets current Gerber layer polarity to positive or negative
+     * Set the current Gerber layer polarity to positive or negative
      * by writing \%LPD*\% or \%LPC*\% to the Gerber file, respectively.
      * (obviously starts a new Gerber layer, too)
      * @param aPositive is the layer polarity and true for positive.
@@ -535,7 +528,7 @@ protected:
     // Helper function for sketched filler segment
 
     /**
-     * Cdonvert a thick segment and plot it as an oval
+     * Convert a thick segment and plot it as an oval
      */
     void segmentAsOval( const wxPoint& start, const wxPoint& end, int width,
                         OUTLINE_MODE tracemode );
@@ -574,8 +567,8 @@ protected:      // variables used in most of plotters:
     double        plotScale;
 
     /* Caller scale (how many IUs in a decimil - always); it's a double
-     * because in eeschema there are 0.1 IUs in a decimil (eeschema
-     * always works in mils internally) while pcbnew can work in decimil
+     * because in Eeschema there are 0.1 IUs in a decimil (Eeschema
+     * always works in mils internally) while PcbNew can work in decimil
      * or nanometers, so this value would be >= 1 */
     double        m_IUsPerDecimil;
 
@@ -616,9 +609,9 @@ protected:      // variables used in most of plotters:
 class TITLE_BLOCK;
 
 void PlotWorkSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK& aTitleBlock,
-                    const PAGE_INFO& aPageInfo, int aSheetNumber, int aNumberOfSheets,
-                    const wxString &aSheetDesc, const wxString &aFilename,
-                    COLOR4D aColor = COLOR4D::UNSPECIFIED );
+                    const PAGE_INFO& aPageInfo, const wxString& aSheetNumber, int aNumberOfSheets,
+                    const wxString& aSheetDesc, const wxString& aFilename,
+                    COLOR4D aColor = COLOR4D::UNSPECIFIED, bool aIsFirstPage = true );
 
 /** Returns the default plot extension for a format
   */

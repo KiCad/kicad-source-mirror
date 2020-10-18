@@ -32,6 +32,8 @@ class ERC_SETTINGS;
 class PROJECT;
 class SCH_SCREEN;
 class SCH_SHEET;
+class SCH_SHEET_LIST;
+
 
 /**
  * Holds all the data relating to one schematic
@@ -157,6 +159,11 @@ public:
 
     wxString ConvertRefsToKIIDs( const wxString& aSource ) const;
     wxString ConvertKIIDsToRefs( const wxString& aSource ) const;
+
+    /**
+     * Return the full schematic flattened hiearchical sheet list.
+     */
+    SCH_SHEET_LIST& GetFullHierarchy() const;
 
 
 #if defined(DEBUG)

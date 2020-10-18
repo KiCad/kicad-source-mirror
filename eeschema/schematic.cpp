@@ -311,3 +311,12 @@ wxString SCHEMATIC::ConvertKIIDsToRefs( const wxString& aSource ) const
 }
 
 
+SCH_SHEET_LIST& SCHEMATIC::GetFullHierarchy() const
+{
+    static SCH_SHEET_LIST hierarchy;
+
+    hierarchy.clear();
+    hierarchy.BuildSheetList( m_rootSheet, false );
+
+    return hierarchy;
+}

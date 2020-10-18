@@ -47,6 +47,7 @@ input_low
 inverted
 inverted_clock
 in_bom
+iref
 italic
 junction
 justify
@@ -102,8 +103,8 @@ rev
 right
 scale
 shape
-iref
 sheet
+sheet_instances
 size
 solid
 start

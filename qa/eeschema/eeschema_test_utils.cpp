@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,11 +59,12 @@ wxFileName KI_TEST::GetEeschemaTestDataDir()
     return wxFileName{ fn };
 }
 
+
 std::unique_ptr<SCHEMATIC> ReadSchematicFromFile( const std::string& aFilename )
 {
     auto pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
     std::unique_ptr<SCHEMATIC> schematic( new SCHEMATIC ( nullptr ) );
-    
+
     schematic->Reset();
     schematic->SetRoot( pi->Load( aFilename, schematic.get() ) );
     schematic->CurrentSheet().push_back( &schematic->Root() );

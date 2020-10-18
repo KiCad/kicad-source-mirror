@@ -847,7 +847,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     // Remove initial shapes: each shape will be added later, as flashed item or region
     // with a suitable attribute.
-    // Do not merge pads is mandatory in Gerber files: They must be indentified as pads
+    // Do not merge pads is mandatory in Gerber files: They must be identified as pads
 
     // we deflate areas in polygons, to avoid after subtracting initial shapes
     // having small artifacts due to approximations during polygon transforms
@@ -1108,7 +1108,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
         if( aPlotOpts->GetPlotFrameRef() )
         {
             PlotWorkSheet( plotter, aBoard->GetProject(), aBoard->GetTitleBlock(),
-                           aBoard->GetPageSettings(), 1, 1, aSheetDesc, aBoard->GetFileName() );
+                           aBoard->GetPageSettings(), "1", 1, aSheetDesc, aBoard->GetFileName() );
 
             if( aPlotOpts->GetMirror() )
                 initializePlotter( plotter, aBoard, aPlotOpts );

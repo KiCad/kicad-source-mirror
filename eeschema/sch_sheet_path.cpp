@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -213,6 +213,17 @@ KIID_PATH SCH_SHEET_PATH::Path() const
 }
 
 
+KIID_PATH SCH_SHEET_PATH::PathWithoutRootUuid() const
+{
+    KIID_PATH path;
+
+    for( size_t i = 1; i < size(); i++ )
+        path.push_back( at( i )->m_Uuid );
+
+    return path;
+}
+
+
 wxString SCH_SHEET_PATH::GetRootPathName( bool aUseShortName )
 {
     // return a PathName for the root sheet (like "/" or "<root>"
@@ -396,6 +407,26 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName, const wxStr
 }
 
 
+wxString SCH_SHEET_PATH::GetPageNumber() const
+{
+    SCH_SHEET* sheet = Last();
+
+    wxCHECK( sheet, wxEmptyString );
+
+    return sheet->GetPageNumber( *this );
+}
+
+
+void SCH_SHEET_PATH::SetPageNumber( const wxString& aPageNumber )
+{
+    SCH_SHEET* sheet = Last();
+
+    wxCHECK( sheet, /* void */ );
+
+    sheet->SetPageNumber( *this, aPageNumber );
+}
+
+
 SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet, bool aCheckIntegrity )
 {
     if( aSheet != NULL )
@@ -411,12 +442,6 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity )
 
     m_currentSheetPath.push_back( aSheet );
 
-    /**
-     * @todo:  Schematic page number is currently a left over relic and is generated as
-     *         SCH_SHEET_PATH object is pushed to the list.  This only has meaning when
-     *         entire hierarchy is created from the root sheet down.
-     */
-    m_currentSheetPath.SetPageNumber( size() + 1 );
     push_back( m_currentSheetPath );
 
     if( m_currentSheetPath.LastScreen() )
@@ -804,6 +829,34 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
 }
 
 
+void SCH_SHEET_LIST::UpdateSheetInstances( const std::vector<SCH_SHEET_INSTANCE>& aSheetInstances )
+{
+
+    for( const SCH_SHEET_PATH& instance : *this )
+    {
+        auto it = std::find_if( aSheetInstances.begin(), aSheetInstances.end(),
+                                [ instance ]( const SCH_SHEET_INSTANCE& r ) -> bool
+                                {
+                                    return instance.PathWithoutRootUuid() == r.m_Path;
+                                } );
+
+        if( it == aSheetInstances.end() )
+        {
+            wxLogTrace( traceSchSheetPaths, "No sheet instance found for path \"%s\"",
+                        instance.PathWithoutRootUuid().AsString() );
+            continue;
+        }
+
+        SCH_SHEET* sheet = instance.Last();
+
+        wxCHECK2( sheet, continue );
+
+        sheet->AddInstance( instance.Path() );
+        sheet->SetPageNumber( instance, it->m_PageNumber );
+    }
+}
+
+
 std::vector<KIID_PATH> SCH_SHEET_LIST::GetPaths() const
 {
     std::vector<KIID_PATH> paths;
@@ -832,5 +885,43 @@ void SCH_SHEET_LIST::ReplaceLegacySheetPaths( const std::vector<KIID_PATH>& aOld
             static_cast<SCH_COMPONENT*>( symbol )->ReplaceInstanceSheetPath( oldSheetPath,
                                                                              newSheetPath );
         }
+    }
+}
+
+
+bool SCH_SHEET_LIST::AllSheetPageNumbersEmpty() const
+{
+    for( const SCH_SHEET_PATH& instance : *this )
+    {
+        const SCH_SHEET* sheet = instance.Last();
+
+        wxCHECK2( sheet, continue );
+
+        if( !sheet->GetPageNumber( instance ).IsEmpty() )
+            return false;
+    }
+
+    return true;
+}
+
+
+void SCH_SHEET_LIST::SetInitialPageNumbers()
+{
+    // Don't accidently renumber existing sheets.
+    wxCHECK( AllSheetPageNumbersEmpty(), /* void */ );
+
+    wxString tmp;
+    int pageNumber = 1;
+
+    for( const SCH_SHEET_PATH& instance : *this )
+    {
+        SCH_SHEET* sheet = instance.Last();
+
+        wxCHECK2( sheet, continue );
+
+        sheet->AddInstance( instance.Path() );
+        tmp.Printf( "%d", pageNumber );
+        sheet->SetPageNumber( instance, tmp );
+        pageNumber += 1;
     }
 }

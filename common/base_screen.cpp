@@ -35,13 +35,13 @@ wxString BASE_SCREEN::m_PageLayoutDescrFileName;   // the name of the page layou
 BASE_SCREEN::BASE_SCREEN( EDA_ITEM* aParent, KICAD_T aType ) :
     EDA_ITEM( aParent, aType )
 {
-    m_Initialized      = false;
-    m_ScreenNumber     = 1;
-    m_NumberOfScreens  = 1;      // Hierarchy: Root: ScreenNumber = 1
-    m_Center           = true;
+    m_Initialized       = false;
+    m_virtualPageNumber = 1;
+    m_pageCount         = 1;         // Hierarchy: Root: ScreenNumber = 1
+    m_Center            = true;
 
-    m_FlagModified     = false;     // Set when any change is made on board.
-    m_FlagSave         = false;     // Used in auto save set when an auto save is required.
+    m_FlagModified      = false;     // Set when any change is made on board.
+    m_FlagSave          = false;     // Used in auto save set when an auto save is required.
 }
 
 
@@ -65,6 +65,27 @@ void BASE_SCREEN::InitDataPoints( const wxSize& aPageSizeIU )
     }
 
     m_LocalOrigin = { 0, 0 };
+}
+
+
+void BASE_SCREEN::SetPageCount( int aPageCount )
+{
+    wxCHECK( aPageCount > 0, /* void */ );
+
+    m_pageCount = aPageCount;
+}
+
+
+const wxString& BASE_SCREEN::GetPageNumber() const
+{
+    static wxString pageNumber;
+
+    if( m_pageNumber.IsEmpty() )
+        pageNumber.Printf( "%d", m_virtualPageNumber );
+    else
+        pageNumber = m_pageNumber;
+
+    return pageNumber;
 }
 
 

@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -48,28 +49,32 @@ public:
                         const TITLE_BLOCK* aTitleBlock );
 
     /**
-     * Function SetFileName()
-     * Sets the file name displayed in the title block.
+     * Set the file name displayed in the title block.
      */
     void SetFileName( const std::string& aFileName ) { m_fileName = aFileName; }
 
     /**
-     * Function SetSheetName()
-     * Sets the sheet name displayed in the title block.
+     * Set the sheet name displayed in the title block.
      */
     void SetSheetName( const std::string& aSheetName ) { m_sheetName = aSheetName; }
 
     /**
-     * Function SetSheetNumber()
-     * Changes the sheet number displayed in the title block.
+     * Changes the page number displayed in the title block.
      */
-    void SetSheetNumber( int aSheetNumber ) { m_sheetNumber = aSheetNumber; }
+    void SetPageNumber( const std::string& aPageNumber ) { m_pageNumber = aPageNumber; }
 
     /**
-     * Function SetSheetCount()
-     * Changes the sheets count number displayed in the title block.
+     * Change the sheets count number displayed in the title block.
      */
     void SetSheetCount( int aSheetCount ) { m_sheetCount = aSheetCount; }
+
+    /**
+     * Change if this is first page.
+     *
+     * Title blocks have an option to allow all subsequent pages to not display a title
+     * block.  This needs to be set to false when displaying any page but the first page.
+     */
+    void SetIsFirstPage( bool aIsFirstPage ) { m_isFirstPage = aIsFirstPage; }
 
     /**
      * Can be used to override which layer ID is used for worksheet item colors
@@ -127,8 +132,9 @@ protected:
     std::string        m_sheetName;
     const TITLE_BLOCK* m_titleBlock;
     const PAGE_INFO*   m_pageInfo;
-    int                m_sheetNumber;
+    std::string        m_pageNumber;
     int                m_sheetCount;
+    bool               m_isFirstPage;
     const PROJECT*     m_project;
 
     /// Layer that is used for worksheet color (LAYER_WORKSHEET is always used for visibility)

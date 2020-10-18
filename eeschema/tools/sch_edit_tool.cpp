@@ -48,6 +48,7 @@
 #include <sch_edit_frame.h>
 #include <schematic.h>
 #include <page_layout/ws_proxy_view_item.h>
+#include <page_layout/ws_proxy_undo_item.h>
 #include <eeschema_id.h>
 #include <status_popup.h>
 #include <wx/gdicmn.h>
@@ -1731,6 +1732,75 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
+{
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::SheetsOnly );
+
+    if( selection.GetSize() > 1 )
+        return 0;
+
+    SCH_SHEET* sheet = (SCH_SHEET*) selection.Front();
+
+    SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
+
+    SCH_SCREEN* screen;
+
+    if( sheet )
+    {
+        // When changing the page number of a selected sheet, the current screen owns the sheet.
+        screen = m_frame->GetScreen();
+
+        instance.push_back( sheet );
+    }
+    else
+    {
+        SCH_SHEET_PATH prevInstance = instance;
+
+        // When change the page number in the screen, the previous screen owns the sheet.
+        if( prevInstance.size() )
+        {
+            prevInstance.pop_back();
+            screen = prevInstance.LastScreen();
+        }
+        else
+        {
+            // The root sheet and root screen are effectively the same thing.
+            screen = m_frame->GetScreen();
+        }
+
+        sheet = m_frame->GetCurrentSheet().Last();
+    }
+
+    wxString msg;
+    wxString sheetPath = instance.PathAsString();
+    wxString pageNumber = instance.GetPageNumber();
+
+    msg.Printf( _( "Enter page number for sheet path%s" ),
+                ( sheetPath.Length() > 20 ) ? "\n" + sheetPath : " " + sheetPath );
+
+    wxTextEntryDialog dlg( m_frame, msg, _( "Edit Page Number" ), pageNumber );
+
+    dlg.SetTextValidator( wxFILTER_ALPHANUMERIC );  // No white space.
+
+    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetValue() == instance.GetPageNumber() )
+        return 0;
+
+    m_frame->SaveCopyInUndoList( screen, sheet, UNDO_REDO::CHANGED, false );
+
+    instance.SetPageNumber( dlg.GetValue() );
+
+    if( instance == m_frame->GetCurrentSheet() )
+    {
+        m_frame->GetScreen()->SetPageNumber( dlg.GetValue() );
+        m_frame->OnPageSettingsChange();
+    }
+
+    m_frame->OnModify();
+
+    return 0;
+}
+
+
 void SCH_EDIT_TOOL::setTransitions()
 {
     Go( &SCH_EDIT_TOOL::Duplicate,          ACTIONS::duplicate.MakeEvent() );
@@ -1764,4 +1834,5 @@ void SCH_EDIT_TOOL::setTransitions()
 
     Go( &SCH_EDIT_TOOL::CleanupSheetPins,   EE_ACTIONS::cleanupSheetPins.MakeEvent() );
     Go( &SCH_EDIT_TOOL::GlobalEdit,         EE_ACTIONS::editTextAndGraphics.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::EditPageNumber,     EE_ACTIONS::editPageNumber.MakeEvent() );
 }

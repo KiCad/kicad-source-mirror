@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -42,6 +42,7 @@
 #include <wx_html_report_panel.h>
 #include "sch_painter.h"
 #include <plotters_specific.h>
+
 
 void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef,
                                            RENDER_SETTINGS* aRenderSettings )
@@ -145,11 +146,11 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( const wxString&  aFileName,
     if( aPlotFrameRef )
     {
         PlotWorkSheet( plotter, &aScreen->Schematic()->Prj(), m_parent->GetTitleBlock(), pageInfo,
-                       aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
+                       aScreen->GetPageNumber(), aScreen->GetPageCount(),
                        m_parent->GetScreenDesc(), aScreen->GetFileName(),
                        plotter->GetColorMode() ?
                        plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_WORKSHEET ) :
-                       COLOR4D::BLACK );
+                       COLOR4D::BLACK, aScreen->GetVirtualPageNumber() == 1 );
     }
 
     aScreen->Plot( plotter );

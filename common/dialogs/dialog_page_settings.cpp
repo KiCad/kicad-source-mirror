@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,11 +166,11 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 #ifdef EESCHEMA
     // Init display value for schematic sub-sheet number
     wxString format = m_TextSheetCount->GetLabel();
-    msg.Printf( format, m_screen->m_NumberOfScreens );
+    msg.Printf( format, m_screen->GetPageCount() );
     m_TextSheetCount->SetLabel( msg );
 
     format = m_TextSheetNumber->GetLabel();
-    msg.Printf( format, m_screen->m_ScreenNumber );
+    msg.Printf( format, m_screen->GetVirtualPageNumber() );
     m_TextSheetNumber->SetLabel( msg );
 #else
     m_TextSheetCount->Show( false );
@@ -771,7 +771,8 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         GRFilledRect( NULL, &memDC, 0, 0, m_layout_size.x, m_layout_size.y, WHITE, WHITE );
 
         PrintPageLayout( &renderSettings, pageDUMMY, emptyString, emptyString, m_tb,
-                         m_screen->m_NumberOfScreens, m_screen->m_ScreenNumber, 1, &Prj() );
+                         m_screen->GetPageCount(), m_screen->GetPageNumber(), 1, &Prj(),
+                         wxEmptyString, m_screen->GetVirtualPageNumber() ==  1 );
 
         memDC.SelectObject( wxNullBitmap );
         m_PageLayoutExampleBitmap->SetBitmap( *m_page_bitmap );

@@ -37,6 +37,7 @@
 #include <dialog_plot_schematic.h>
 #include <wx_html_report_panel.h>
 
+
 void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
                                           RENDER_SETTINGS* aRenderSettings )
 {
@@ -45,7 +46,7 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
 
     /* When printing all pages, the printed page is not the current page.
      * In complex hierarchies, we must update component references
-     *  and others parameters in the given printed SCH_SCREEN, accordint to the sheet path
+     *  and others parameters in the given printed SCH_SCREEN, accordant to the sheet path
      *  because in complex hierarchies a SCH_SCREEN (a drawing )
      *  is shared between many sheets and component references depend on the actual sheet path used
      */
@@ -170,11 +171,11 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
     if( aPlotFrameRef )
     {
         PlotWorkSheet( plotter, &aScreen->Schematic()->Prj(), m_parent->GetTitleBlock(), aPageInfo,
-                       aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
+                       aScreen->GetPageNumber(), aScreen->GetPageCount(),
                        m_parent->GetScreenDesc(), aScreen->GetFileName(),
                        plotter->GetColorMode() ?
                        plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_WORKSHEET ) :
-                       COLOR4D::BLACK );
+                       COLOR4D::BLACK, aScreen->GetVirtualPageNumber() == 1 );
     }
 
     aScreen->Plot( plotter );

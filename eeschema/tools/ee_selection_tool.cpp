@@ -122,7 +122,9 @@ EE_SELECTION_TOOL::~EE_SELECTION_TOOL()
     getView()->Remove( &m_selection );
 }
 
+
 using E_C = EE_CONDITIONS;
+
 
 bool EE_SELECTION_TOOL::Init()
 {
@@ -201,6 +203,7 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::breakBus,           busSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::importSheetPin,     sheetSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::assignNetclass,     connectedSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::editPageNumber,     E_C::Empty || sheetSelection, 250 );
 
     menu.AddSeparator( 400 );
     menu.AddItem( EE_ACTIONS::symbolProperties,   havePartCondition && EE_CONDITIONS::Empty, 400 );
@@ -966,7 +969,7 @@ void EE_SELECTION_TOOL::updateReferencePoint()
 
 bool EE_SELECTION_TOOL::selectMultiple()
 {
-    bool cancelled = false;     // Was the tool cancelled while it was running?
+    bool cancelled = false;     // Was the tool canceled while it was running?
     m_multiple = true;          // Multiple selection mode is active
     KIGFX::VIEW* view = getView();
 
@@ -1493,7 +1496,7 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
 
 bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityOnly ) const
 {
-    // NOTE: in the future this is where eeschema layer/itemtype visibility will be handled
+    // NOTE: in the future this is where Eeschema layer/itemtype visibility will be handled
     LIB_EDIT_FRAME* symbeditFrame = dynamic_cast< LIB_EDIT_FRAME* >( m_frame );
 
     switch( aItem->Type() )

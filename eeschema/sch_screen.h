@@ -137,6 +137,7 @@ private:
      *          schematic files.
      */
     std::vector<COMPONENT_INSTANCE_REFERENCE> m_symbolInstances;
+    std::vector<SCH_SHEET_INSTANCE> m_sheetInstances;
 
     friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.
     friend SCH_SEXPR_PARSER;   // Only to load instance information from schematic file.
@@ -497,6 +498,11 @@ public:
         return m_symbolInstances;
     }
 
+    const std::vector<SCH_SHEET_INSTANCE>& GetSheetInstances() const
+    {
+        return m_sheetInstances;
+    }
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
@@ -625,7 +631,6 @@ public:
      * built the list of sheet paths sharing a screen for each screen in use
      */
     void BuildClientSheetPathList();
-
 
     /**
      * Check \a aSchematicFileName for a potential file name case sensitivity issue.

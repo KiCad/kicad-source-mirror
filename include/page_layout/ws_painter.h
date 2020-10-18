@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,10 +41,9 @@ namespace KIGFX
 {
 
 /**
- * WS_RENDER_SETTINGS
- * Stores page-layout-specific render settings.
+ * Store page-layout-specific render settings.
  */
-class   WS_RENDER_SETTINGS : public RENDER_SETTINGS
+class WS_RENDER_SETTINGS : public RENDER_SETTINGS
 {
 public:
     friend class WS_PAINTER;
@@ -94,8 +93,7 @@ private:
 
 
 /**
- * WS_PAINTER
- * Contains methods for drawing worksheet items.
+ * Methods for drawing worksheet items.
  */
 class WS_PAINTER : public PAINTER
 {
@@ -134,17 +132,18 @@ private:
 
 
 /**
- * Function PrintPageLayout is a core function to print the page layout with the frame and the
- * basic inscriptions.
+ * Print the border and title block.
+ *
  * @param aDC The device context.
  * @param aPageInfo for margins and page size (in mils).
  * @param aFullSheetName The sheetpath (full sheet name), for basic inscriptions.
  * @param aFileName The file name, for basic inscriptions.
  * @param aTitleBlock The sheet title block, for basic inscriptions.
  * @param aSheetCount The number of sheets (for basic inscriptions).
- * @param aSheetNumber The sheet number (for basic inscriptions).
+ * @param aPageNumber The page number.
  * @param aScalar the scale factor to convert from mils to internal units.
- * @param aSheetLayer The layer from pcbnew.
+ * @param aSheetLayer The layer from Pcbnew.
+ * @param aIsFirstPage True when this is the first page.  This only has meaning for schematics.
  *
  * Parameters used in aPageInfo
  * - the size of the page layout.
@@ -153,8 +152,8 @@ private:
  */
 void PrintPageLayout( RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
                       const wxString& aFullSheetName, const wxString& aFileName,
-                      const TITLE_BLOCK& aTitleBlock, int aSheetCount, int aSheetNumber,
+                      const TITLE_BLOCK& aTitleBlock, int aSheetCount, const wxString& aPageNumber,
                       double aScalar, const PROJECT* aProject,
-                      const wxString& aSheetLayer = wxEmptyString );
+                      const wxString& aSheetLayer = wxEmptyString, bool aIsFirstPage = true );
 
 #endif // WS_PAINTER_H

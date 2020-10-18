@@ -38,7 +38,7 @@ WS_PROXY_VIEW_ITEM::WS_PROXY_VIEW_ITEM( int aMils2IUscalefactor, const PAGE_INFO
         m_mils2IUscalefactor( aMils2IUscalefactor ),
         m_titleBlock( aTitleBlock ),
         m_pageInfo( aPageInfo ),
-        m_sheetNumber( 1 ),
+        m_pageNumber( "1" ),
         m_sheetCount( 1 ),
         m_project( aProject ),
         m_colorLayer( LAYER_WORKSHEET ),
@@ -77,7 +77,8 @@ void WS_PROXY_VIEW_ITEM::buildDrawList( VIEW* aView, WS_DRAW_ITEM_LIST* aDrawLis
     // worksheet items coordinates and sizes are stored in mils,
     // and must be scaled to the same units as the caller
     aDrawList->SetMilsToIUfactor( m_mils2IUscalefactor );
-    aDrawList->SetSheetNumber( m_sheetNumber );
+    aDrawList->SetIsFirstPage( m_isFirstPage );
+    aDrawList->SetPageNumber( m_pageNumber );
     aDrawList->SetSheetCount( m_sheetCount );
     aDrawList->SetFileName( fileName );
     aDrawList->SetSheetName( sheetName );

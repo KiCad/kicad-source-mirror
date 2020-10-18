@@ -56,5 +56,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200714  // Add alternate pin definitions.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200820
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200827  // Remove host tag
-
-#define SEXPR_SCHEMATIC_FILE_VERSION 20200828   // Add footprint to symbol_instances.
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20200828  // Add footprint to symbol_instances.
+#define SEXPR_SCHEMATIC_FILE_VERSION 20201015    // Add sheet instance properties.

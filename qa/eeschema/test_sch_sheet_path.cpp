@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 
 /**
  * @file
- * Test suite for SCH_SHEET_PATH
+ * Test suite for #SCH_SHEET_PATH and #SCH_SHEET_LIST
  */
 
 #include <unit_test_utils/unit_test_utils.h>
@@ -85,7 +85,8 @@ BOOST_AUTO_TEST_CASE( Empty )
 
     BOOST_CHECK_THROW( m_empty_path.at( 0 ), std::out_of_range );
 
-    BOOST_CHECK_EQUAL( m_empty_path.GetPageNumber(), 0 );
+    // Sheet paths with no SCH_SCHEET object are illegal.
+    CHECK_WX_ASSERT( m_empty_path.GetPageNumber() );
 
     // These accessors return nullptr when empty (i.e. they don't crash)
     BOOST_CHECK_EQUAL( m_empty_path.Last(), nullptr );
@@ -107,8 +108,6 @@ BOOST_AUTO_TEST_CASE( NonEmpty )
     BOOST_CHECK_EQUAL( m_linear.at( 1 ), &m_sheets[1] );
     BOOST_CHECK_EQUAL( m_linear.at( 2 ), &m_sheets[2] );
 
-    BOOST_CHECK_EQUAL( m_linear.GetPageNumber(), 0 );
-
     BOOST_CHECK_EQUAL( m_linear.Last(), &m_sheets[2] );
     BOOST_CHECK_EQUAL( m_linear.LastScreen(), nullptr );
 
@@ -129,5 +128,22 @@ BOOST_AUTO_TEST_CASE( Compare )
 
     BOOST_CHECK( m_empty_path != m_linear );
 }
+
+
+/**
+ * Test sheet path page number properties.
+ */
+BOOST_AUTO_TEST_CASE( SheetPathPageProperties )
+{
+    BOOST_CHECK_EQUAL( m_linear.GetPageNumber(), wxEmptyString );
+
+    // Add new instance to sheet object.
+    BOOST_CHECK( m_linear.Last()->AddInstance( m_linear.Path() ) );
+    m_linear.SetPageNumber( "1" );
+    BOOST_CHECK_EQUAL( m_linear.GetPageNumber(), "1" );
+    m_linear.SetPageNumber( "i" );
+    BOOST_CHECK_EQUAL( m_linear.GetPageNumber(), "i" );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

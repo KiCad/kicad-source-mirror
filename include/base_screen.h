@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -52,6 +52,35 @@ private:
      */
     wxPoint     m_crossHairPosition;
 
+protected:
+    /**
+     * The number of #BASE_SCREEN objects in this design.
+     *
+     * This currently only has meaning for #SCH_SCREEN objects because #PCB_SCREEN object
+     * are limited to a single file.  The count is virtual because #SCH_SCREEN objects can be
+     * used more than once so the screen (page) count can be more than the number of screen
+     * objects.
+     */
+    int         m_pageCount;
+
+    /**
+     * An integer based page number used for printing a range of pages.
+     *
+     * This page number is set before printing and plotting because page numbering does not
+     * reflect the actual page number in complex hiearachies in #SCH_SCREEN objects.
+     */
+    int         m_virtualPageNumber;
+
+    /**
+     * A user defined string page number used for printing and plotting.
+     *
+     * This currently only has meaning for #SCH_SCREEN objects because #PCB_SCREEN object
+     * are limited to a single file.  This must be set before displaying, printing, or
+     * plotting the current sheet.  If empty, the #m_virtualPageNumber value is converted
+     * to a string.
+     */
+    wxString    m_pageNumber;
+
 public:
     static  wxString m_PageLayoutDescrFileName; ///< the name of the page layout descr file,
                                                 ///< or emty to used the default pagelayout
@@ -75,9 +104,6 @@ public:
 
     bool        m_Initialized;
 
-    int         m_ScreenNumber;
-    int         m_NumberOfScreens;
-
 public:
     BASE_SCREEN( EDA_ITEM* aParent, KICAD_T aType = SCREEN_T );
 
@@ -95,7 +121,6 @@ public:
 
     void InitDataPoints( const wxSize& aPageSizeInternalUnits );
 
-
     void SetModify()        { m_FlagModified = true; }
     void ClrModify()        { m_FlagModified = false; }
     void SetSave()          { m_FlagSave = true; }
@@ -104,8 +129,8 @@ public:
     bool IsSave() const     { return m_FlagSave; }
 
     /**
-     * Function GetClass
-     * returns the class name.
+     * Return the class name.
+     *
      * @return wxString
      */
     virtual wxString GetClass() const override
@@ -113,6 +138,14 @@ public:
         return wxT( "BASE_SCREEN" );
     }
 
+    int GetPageCount() const { return m_pageCount; }
+    void SetPageCount( int aPageCount );
+
+    int GetVirtualPageNumber() const { return m_virtualPageNumber; }
+    void SetVirtualPageNumber( int aPageNumber ) { m_virtualPageNumber = aPageNumber; }
+
+    const wxString& GetPageNumber() const;
+    void SetPageNumber( const wxString& aPageNumber ) { m_pageNumber = aPageNumber; }
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif

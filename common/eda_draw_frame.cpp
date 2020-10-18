@@ -89,7 +89,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_gridColor           = COLOR4D( DARKGRAY );   // Default grid color
     m_showPageLimits      = false;
     m_drawBgColor         = COLOR4D( BLACK );   // the background color of the draw canvas:
-                                                // BLACK for Pcbnew, BLACK or WHITE for eeschema
+                                                // BLACK for Pcbnew, BLACK or WHITE for Eeschema
     m_colorSettings       = nullptr;
     m_MsgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
     m_userUnits           = EDA_UNITS::MILLIMETRES;
@@ -819,19 +819,21 @@ static const wxString productName = wxT( "KiCad E.D.A.  " );
 
 void PrintPageLayout( RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
                       const wxString& aFullSheetName, const wxString& aFileName,
-                      const TITLE_BLOCK& aTitleBlock, int aSheetCount, int aSheetNumber,
-                      double aScalar, const PROJECT* aProject, const wxString& aSheetLayer )
+                      const TITLE_BLOCK& aTitleBlock, int aSheetCount, const wxString& aPageNumber,
+                      double aScalar, const PROJECT* aProject, const wxString& aSheetLayer,
+                      bool aIsFirstPage )
 {
     WS_DRAW_ITEM_LIST drawList;
 
     drawList.SetDefaultPenSize( aSettings->GetDefaultPenWidth() );
     drawList.SetMilsToIUfactor( aScalar );
-    drawList.SetSheetNumber( aSheetNumber );
+    drawList.SetPageNumber( aPageNumber );
     drawList.SetSheetCount( aSheetCount );
     drawList.SetFileName( aFileName );
     drawList.SetSheetName( aFullSheetName );
     drawList.SetSheetLayer( aSheetLayer );
     drawList.SetProject( aProject );
+    drawList.SetIsFirstPage( aIsFirstPage );
 
     drawList.BuildWorkSheetGraphicList( aPageInfo, aTitleBlock );
 
@@ -857,8 +859,8 @@ void EDA_DRAW_FRAME::PrintWorkSheet( RENDER_SETTINGS* aSettings, BASE_SCREEN* aS
     }
 
     PrintPageLayout( aSettings, GetPageSettings(), GetScreenDesc(), aFilename, GetTitleBlock(),
-                     aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber, aScalar, &Prj(),
-                     aSheetLayer );
+                     aScreen->GetPageCount(), aScreen->GetPageNumber(), aScalar, &Prj(),
+                     aSheetLayer, aScreen->GetVirtualPageNumber() == 1 );
 
     if( origin.y > 0 )
     {
@@ -873,6 +875,7 @@ wxString EDA_DRAW_FRAME::GetScreenDesc() const
     // Virtual function. Base class implementation returns an empty string.
     return wxEmptyString;
 }
+
 
 bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
                                          const wxString& wildcard, const wxString& ext,

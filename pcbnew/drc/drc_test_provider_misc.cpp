@@ -160,7 +160,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
         return;
 
     wsItems.SetMilsToIUfactor( IU_PER_MILS );
-    wsItems.SetSheetNumber( 1 );
+    wsItems.SetPageNumber( "1" );
     wsItems.SetSheetCount( 1 );
     wsItems.SetFileName( "dummyFilename" );
     wsItems.SetSheetName( "dummySheet" );

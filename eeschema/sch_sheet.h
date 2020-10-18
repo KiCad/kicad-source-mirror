@@ -29,6 +29,7 @@
 #include <sch_text.h>
 #include <sch_field.h>
 
+class KIID;
 class LINE_READER;
 class SCH_SCREEN;
 class SCH_SHEET;
@@ -234,6 +235,8 @@ class SCH_SHEET : public SCH_ITEM
     int                         m_borderWidth;
     KIGFX::COLOR4D              m_borderColor;
     KIGFX::COLOR4D              m_backgroundColor;
+
+    std::vector<SCH_SHEET_INSTANCE> m_instances;
 
 public:
     SCH_SHEET( EDA_ITEM* aParent = nullptr, const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -575,6 +578,38 @@ public:
     void Plot( PLOTTER* aPlotter ) override;
 
     EDA_ITEM* Clone() const override;
+
+    /**
+     * @return the list of #SCH_SHEET_INSTANCE objects for this sheet.
+     */
+    const std::vector<SCH_SHEET_INSTANCE> GetInstances() const;
+
+    /**
+     * Add a new instance \a aSheetPath to the instance list.
+     *
+     * If \a aSheetPath  does not already exist, it is added to the list.  If already exists
+     * in the list, do nothing.  Sheet instances allow for the sharing in complex hierarchies
+     * which allows for per instance data such as page number for sheets to stored.
+     *
+     * @param aInstance is the #KIID_PATH of the sheet instanceadd to the instance list.
+     * @return false if the instance already exists, true if the instance was added.
+     */
+    bool AddInstance( const KIID_PATH& aInstance );
+
+    /**
+     * Return the sheet page number for \a aInstance.
+     *
+     * @return the page number for the requested sheet instance.
+     */
+    wxString GetPageNumber( const SCH_SHEET_PATH& aInstance ) const;
+
+    /**
+     * Set the page number for the sheet instance \a aInstance.
+     *
+     * @param aInstance is the hierarchical path of the sheet.
+     * @param aReference is the new page number for the sheet.
+     */
+    void SetPageNumber( const SCH_SHEET_PATH& aInstance, const wxString& aPageNumber );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;

@@ -223,7 +223,7 @@ int SCH_EDITOR_CONTROL::Quit( const TOOL_EVENT& aEvent )
 }
 
 
-// A dummy wxFindReplaceData signalling any marker should be found
+// A dummy wxFindReplaceData signaling any marker should be found
 static wxFindReplaceData g_markersOnly;
 
 
@@ -458,7 +458,7 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
         wxString msg = searchAllSheets ? _( "Reached end of schematic." )
                                        : _( "Reached end of sheet." );
 
-       // Show the popup during the timeperiod the user can wrap the search
+       // Show the popup during the time period the user can wrap the search
         m_frame->ShowFindReplaceStatus( msg + _( " Find again to wrap around to the start." ),
                                         4000 );
         wrapAroundTimer.StartOnce( 4000 );
@@ -915,7 +915,7 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
         // Ensure the netlist data is up to date:
         m_frame->RecalculateConnections( NO_CLEANUP );
 
-    // Remove selection in favour of highlighting so the whole net is highlighted
+    // Remove selection in favor of highlighting so the whole net is highlighted
     selectionTool->ClearSelection();
     highlightNet( m_toolMgr, cursorPos );
 
@@ -926,7 +926,7 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
         if( !conn->Driver() || CONNECTION_SUBGRAPH::GetDriverPriority( conn->Driver() )
                                                 < CONNECTION_SUBGRAPH::PRIORITY::SHEET_PIN )
         {
-            m_frame->ShowInfoBarError( _( "Net must be labelled to assign a netclass." ) );
+            m_frame->ShowInfoBarError( _( "Net must be labeled to assign a netclass." ) );
             highlightNet( m_toolMgr, CLEAR );
             return 0;
         }
@@ -1182,6 +1182,7 @@ int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
     m_frame->SetSheetNumberAndCount();
     m_frame->TestDanglingEnds();
 
+    m_frame->OnPageSettingsChange();
     m_frame->SyncView();
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify();
@@ -1214,6 +1215,7 @@ int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
     m_frame->SetSheetNumberAndCount();
     m_frame->TestDanglingEnds();
 
+    m_frame->OnPageSettingsChange();
     m_frame->SyncView();
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify();

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
 
 #include <sch_edit_frame.h>
 #include <tool/tool_manager.h>
+#include <schematic.h>
 #include <sch_bus_entry.h>
 #include <sch_junction.h>
 #include <sch_line.h>
@@ -31,6 +32,7 @@
 #include <tools/ee_selection_tool.h>
 #include <page_layout/ws_proxy_undo_item.h>
 #include <tool/actions.h>
+
 
 /* Functions to undo and redo edit commands.
  *
@@ -95,14 +97,13 @@
 
 void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN*    aScreen,
                                          SCH_ITEM*      aItem,
-                                         UNDO_REDO    aCommandType,
+                                         UNDO_REDO      aCommandType,
                                          bool           aAppend,
                                          const wxPoint& aTransformPoint )
 {
     PICKED_ITEMS_LIST* commandToUndo = nullptr;
 
-    if( !aItem )
-        return;
+    wxCHECK( aItem, /* void */ );
 
     // Connectivity may change
     aItem->SetConnectivityDirty();
@@ -155,7 +156,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN*    aScreen,
 
 
 void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                                         UNDO_REDO              aTypeCommand,
+                                         UNDO_REDO                aTypeCommand,
                                          bool                     aAppend,
                                          const wxPoint&           aTransformPoint )
 {
@@ -286,11 +287,14 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         }
         else if( dynamic_cast<SCH_ITEM*>( eda_item ) )
         {
-            // everthing else is modified in place
-
+            // everything else is modified in place
             SCH_ITEM* item = (SCH_ITEM*) eda_item;
             SCH_ITEM* alt_item = (SCH_ITEM*) aList->GetPickedItemLink( (unsigned) ii );
-            RemoveFromScreen( item, (SCH_SCREEN*) aList->GetScreenForItem( (unsigned) ii ) );
+
+            // The root sheet is a pseudo object that owns the root screen object but is not on
+            // the root screen so do not attempt to remove it from the screen it owns.
+            if( item != &Schematic().Root() )
+                RemoveFromScreen( item, (SCH_SCREEN*) aList->GetScreenForItem( (unsigned) ii ) );
 
             switch( status )
             {
@@ -334,7 +338,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
                 break;
             }
 
-            AddToScreen( item, (SCH_SCREEN*) aList->GetScreenForItem( (unsigned) ii ) );
+            if( item != &Schematic().Root() )
+                AddToScreen( item, (SCH_SCREEN*) aList->GetScreenForItem( (unsigned) ii ) );
         }
     }
 

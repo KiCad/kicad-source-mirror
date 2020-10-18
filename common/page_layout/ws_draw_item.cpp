@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2013 Jean-Pierre Charras <jp.charras at wanadoo.fr>.
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -253,7 +253,8 @@ bool WS_DRAW_ITEM_POLYPOLYGONS::HitTest( const wxPoint& aPosition, int aAccuracy
 }
 
 
-bool WS_DRAW_ITEM_POLYPOLYGONS::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool WS_DRAW_ITEM_POLYPOLYGONS::HitTest( const EDA_RECT& aRect, bool aContained,
+                                         int aAccuracy ) const
 {
     EDA_RECT sel = aRect;
 
@@ -407,7 +408,7 @@ const EDA_RECT WS_DRAW_ITEM_BITMAP::GetBoundingBox() const
     auto*    bitmap = static_cast<const WS_DATA_ITEM_BITMAP*>( m_peer );
     wxSize bm_size = bitmap->m_ImageBitmap->GetSize();
 
-    // bm_size is in Eeschma unit (100nm), convert to iu (0.001 mm)
+    // bm_size is in Eeschema unit (100nm), convert to iu (0.001 mm)
     bm_size.x /= 10;
     bm_size.y /= 10;
 
@@ -450,11 +451,12 @@ const EDA_RECT WS_DRAW_ITEM_PAGE::GetBoundingBox() const
 {
     EDA_RECT dummy;
 
-    // We want this graphic item alway visible. So gives the max size to the
+    // We want this graphic item always visible. So gives the max size to the
     // bounding box to avoid any clamping:
     dummy.SetSize( wxSize( std::numeric_limits<int>::max(), std::numeric_limits<int>::max() ) );
     return dummy;
 }
+
 
 // ====================== WS_DRAW_ITEM_LIST ==============================
 
@@ -475,9 +477,9 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( const PAGE_INFO& aPageInfo,
     for( WS_DATA_ITEM* wsItem : model.GetItems() )
     {
         // Generate it only if the page option allows this
-        if( wsItem->GetPage1Option() == FIRST_PAGE_ONLY && m_sheetNumber != 1 )
+        if( wsItem->GetPage1Option() == FIRST_PAGE_ONLY && !m_isFirstPage )
             continue;
-        else if( wsItem->GetPage1Option() == SUBSEQUENT_PAGES && m_sheetNumber == 1 )
+        else if( wsItem->GetPage1Option() == SUBSEQUENT_PAGES && m_isFirstPage )
             continue;
 
         wsItem->SyncDrawItems( this, nullptr );

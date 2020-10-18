@@ -62,6 +62,7 @@
 #include "invoke_pl_editor_dialog.h"
 #include "tools/pl_editor_control.h"
 
+
 BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_CLOSE, PL_EDITOR_FRAME::OnExit )
     EVT_MENU( wxID_EXIT, PL_EDITOR_FRAME::OnExit )
@@ -210,6 +211,7 @@ PL_EDITOR_FRAME::~PL_EDITOR_FRAME()
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
 }
+
 
 void PL_EDITOR_FRAME::setupTools()
 {
@@ -766,7 +768,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 
 void PL_EDITOR_FRAME::PrintPage( RENDER_SETTINGS* aSettings )
 {
-    GetScreen()->m_ScreenNumber = GetPageNumberOption() ? 1 : 2;
+    GetScreen()->SetVirtualPageNumber( GetPageNumberOption() ? 1 : 2 );
     WS_DATA_MODEL&     model = WS_DATA_MODEL::GetTheInstance();
 
     for( WS_DATA_ITEM* dataItem : model.GetItems() )

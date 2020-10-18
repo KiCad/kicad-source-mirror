@@ -55,7 +55,7 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    std::vector<int>* GetRefTable() { return &m_refTable; }
+    std::vector<wxString>& GetRefTable() { return m_refTable; }
 
     bool IsDangling() const override { return false; }
 
@@ -81,9 +81,9 @@ private:
     // the inherited one.
     using EDA_ITEM::SetParent;
 
-    std::vector<int> m_refTable;
-    SCH_GLOBALLABEL* m_parentLabel;
-    SCH_SCREEN*      m_screen;
+    std::vector<wxString> m_refTable;
+    SCH_GLOBALLABEL*      m_parentLabel;
+    SCH_SCREEN*           m_screen;
 };
 
 #endif

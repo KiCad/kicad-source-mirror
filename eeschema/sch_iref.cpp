@@ -57,6 +57,7 @@ void SCH_IREF::PlaceAtDefaultPosition()
     SetTextPos( m_parentLabel->GetPosition() + offset );
 }
 
+
 wxPoint SCH_IREF::GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const
 {
     return m_parentLabel->GetSchematicTextOffset( aSettings );
@@ -83,6 +84,7 @@ void SCH_IREF::SetIrefOrientation( LABEL_SPIN_STYLE aSpinStyle )
         pt.y = 0;
         pt.x = offset;
         break;
+
     case LABEL_SPIN_STYLE::UP:
         SetTextAngle( TEXT_ANGLE_VERT );
         SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
@@ -90,6 +92,7 @@ void SCH_IREF::SetIrefOrientation( LABEL_SPIN_STYLE aSpinStyle )
         pt.y = -offset;
         pt.x = 0;
         break;
+
     case LABEL_SPIN_STYLE::LEFT:
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
@@ -97,6 +100,7 @@ void SCH_IREF::SetIrefOrientation( LABEL_SPIN_STYLE aSpinStyle )
         pt.y = 0;
         pt.x = -offset;
         break;
+
     case LABEL_SPIN_STYLE::BOTTOM:
         SetTextAngle( TEXT_ANGLE_VERT );
         SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
@@ -122,16 +126,19 @@ void SCH_IREF::CopyParentStyle()
 
 void SCH_IREF::BuildHypertextMenu( wxMenu* aMenu )
 {
-    std::map<int, wxString> sheetNames;
+    std::map<wxString, wxString> sheetNames;
 
     for( const SCH_SHEET_PATH& sheet : Schematic()->GetSheets() )
         sheetNames[ sheet.GetPageNumber() ] = sheet.Last()->GetName();
 
-    for( int i : m_refTable )
+    int id = ID_HYPERTEXT_BACK;
+
+    for( wxString& i : m_refTable )
     {
-        aMenu->Append( i, wxString::Format( _( "Go to Page %d (%s)" ),
-                                            i,
-                                            i == 1 ? _( "Root" ) : sheetNames[ i ] ) );
+        aMenu->Append( id, wxString::Format( _( "Go to Page %s (%s)" ),
+                                             i,
+                                             i == "/" ? _( "Root" ) : sheetNames[ i ] ) );
+        id++;
     }
 
     aMenu->AppendSeparator();

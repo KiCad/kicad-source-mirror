@@ -133,7 +133,7 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 }
                 else if( token->IsSameAs( wxT( "#" ) ) )
                 {
-                    *token = wxString::Format( wxT( "%d" ), m_sheetNumber );
+                    *token = wxString::Format( wxT( "%s" ), m_pageNumber );
                     tokenUpdated = true;
                 }
                 else if( token->IsSameAs( wxT( "##" ) ) )
@@ -348,7 +348,7 @@ void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_PAGE* aItem, int aLayer ) const
     m_gal->SetStrokeColor( m_renderSettings.m_pageBorderColor );
     VECTOR2D pos = VECTOR2D( aItem->GetMarkerPos().x, aItem->GetMarkerPos().y );
 
-    // Draw a cirle and a X
+    // Draw a circle and a X
     m_gal->DrawCircle( pos, marker_size );
     m_gal->DrawLine( VECTOR2D( pos.x - marker_size, pos.y - marker_size),
                      VECTOR2D( pos.x + marker_size, pos.y + marker_size ) );

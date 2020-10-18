@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ class PAGE_INFO;
 class EDA_ITEM;
 class EDA_DRAW_FRAME;
 
-/*
+/**
  * Helper classes to handle basic graphic items used to draw/plot
  *   title blocks and frame references
  *   segments
@@ -150,6 +150,7 @@ public:
 #endif
 };
 
+
 // This class draws a polygon
 class WS_DRAW_ITEM_POLYPOLYGONS : public WS_DRAW_ITEM_BASE
 {
@@ -159,7 +160,7 @@ class WS_DRAW_ITEM_POLYPOLYGONS : public WS_DRAW_ITEM_BASE
 
 public:
     /** The list of polygons. Because these polygons are only for drawing purposes,
-     * each polygon is expected having no holes, jusst a main outline
+     * each polygon is expected having no holes, just a main outline
      */
     SHAPE_POLY_SET m_Polygons;
 
@@ -190,6 +191,7 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 };
+
 
 // This class draws a not filled rectangle with thick segment
 class WS_DRAW_ITEM_RECT : public WS_DRAW_ITEM_BASE
@@ -272,8 +274,9 @@ public:
 #endif
 };
 
+
 // This class draws a graphic text.
-// it is derived from an EDA_TEXT, so it handle all caracteristics
+// it is derived from an EDA_TEXT, so it handle all characteristics
 // of this graphic text (justification, rotation ... )
 class WS_DRAW_ITEM_TEXT : public WS_DRAW_ITEM_BASE, public EDA_TEXT
 {
@@ -311,6 +314,7 @@ public:
 #endif
 };
 
+
 // This class draws a bitmap.
 class WS_DRAW_ITEM_BITMAP : public WS_DRAW_ITEM_BASE
 {
@@ -343,8 +347,9 @@ public:
 #endif
 };
 
-/*
- * this class stores the list of graphic items:
+
+/**
+ * Store the list of graphic items:
  * rect, lines, polygons and texts to draw/plot
  * the title block and frame references, and parameters to
  * draw/plot them
@@ -358,13 +363,14 @@ protected:
                                           // to draw/plot units.
     int                m_penSize;         // The default line width for drawings.
                                           // used when an item has a pen size = 0
-    int                m_sheetNumber;     // the value of the sheet number, for basic inscriptions
-    int                m_sheetCount;      // the value of the number of sheets, in schematic
+    bool               m_isFirstPage;     ///< Is this the first page or not.
+    int                m_sheetCount;      ///< The number of sheets
                                           // for basic inscriptions, in schematic
     const TITLE_BLOCK* m_titleBlock;      // for basic inscriptions
     const wxString*    m_paperFormat;     // for basic inscriptions
     wxString           m_fileName;        // for basic inscriptions
     wxString           m_sheetFullName;   // for basic inscriptions
+    wxString           m_pageNumber;      ///< The actual page number displayed in the title block.
     const wxString*    m_sheetLayer;      // for basic inscriptions
     const PROJECT*     m_project;         // for project-based variable substitutions
 
@@ -374,12 +380,13 @@ public:
         m_idx = 0;
         m_milsToIu = 1.0;
         m_penSize = 1;
-        m_sheetNumber = 1;
+        m_pageNumber = "1";
         m_sheetCount = 1;
         m_sheetLayer = nullptr;
         m_titleBlock = nullptr;
         m_paperFormat = nullptr;
         m_project = nullptr;
+        m_isFirstPage = true;
     }
 
     ~WS_DRAW_ITEM_LIST()
@@ -429,7 +436,6 @@ public:
     int GetDefaultPenSize() const { return m_penSize; }
 
     /**
-     * Function SetMilsToIUfactor
      * Set the scalar to convert pages units (mils) to draw/plot units
      */
     void SetMilsToIUfactor( double aScale )
@@ -438,16 +444,19 @@ public:
     }
 
     /**
-     * Function SetSheetNumber
-     * Set the value of the sheet number, for basic inscriptions
+     * Set the value of the sheet number.
      */
-    void SetSheetNumber( int aSheetNumber )
+    void SetPageNumber( const wxString& aPageNumber )
     {
-        m_sheetNumber = aSheetNumber;
+        m_pageNumber = aPageNumber;
     }
 
     /**
-     * Function SetSheetCount
+     * Set if the page is the first page.
+     */
+    void SetIsFirstPage( bool aIsFirstPage ) { m_isFirstPage = aIsFirstPage; }
+
+    /**
      * Set the value of the count of sheets, for basic inscriptions
      */
     void SetSheetCount( int aSheetCount )
@@ -497,8 +506,7 @@ public:
     void Print( RENDER_SETTINGS* aSettings );
 
     /**
-     * Function BuildWorkSheetGraphicList is a core function for drawing or plotting the
-     * page layout with the frame and the basic inscriptions.
+     * Drawing or plot the page layout.
      *
      * Before calling this function, some parameters should be initialized by calling:
      *   SetPenSize( aPenWidth );
@@ -518,8 +526,7 @@ public:
     static void GetTextVars( wxArrayString* aVars );
 
     /**
-     * Function BuildFullText
-     * returns the full text corresponding to the aTextbase,
+     * Return the full text corresponding to the aTextbase,
      * after replacing format symbols by the corresponding value
      *
      * Basic texts in Ki_WorkSheetData struct use format notation

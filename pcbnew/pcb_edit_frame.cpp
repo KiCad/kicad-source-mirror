@@ -441,8 +441,8 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 
     if( screen != NULL )
     {
-        worksheet->SetSheetNumber( screen->m_ScreenNumber );
-        worksheet->SetSheetCount( screen->m_NumberOfScreens );
+        worksheet->SetPageNumber( TO_UTF8( screen->GetPageNumber() ) );
+        worksheet->SetSheetCount( screen->GetPageCount() );
     }
 
     if( auto board = GetBoard() )
@@ -811,6 +811,7 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
     return true;
 }
+
 
 void PCB_EDIT_FRAME::doCloseWindow()
 {
