@@ -63,6 +63,8 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
     m_brdEditor    = aEditorFrame;
     m_currentBoard = m_brdEditor->GetBoard();
 
+    m_messages->SetImmediateMode();
+
     m_markerTreeModel = new RC_TREE_MODEL( m_brdEditor, m_markerDataView );
     m_markerDataView->AssociateModel( m_markerTreeModel );
 
@@ -167,7 +169,7 @@ void DIALOG_DRC::AdvancePhase( const wxString& aMessage )
     PROGRESS_REPORTER::AdvancePhase( aMessage );
     SetCurrentProgress( 0.0 );
 
-    m_Messages->Report( aMessage + "<br>" );
+    m_messages->Report( aMessage );
 }
 
 
@@ -217,12 +219,12 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
         m_DeleteAllMarkersButton->Enable( false );
         m_saveReport->Enable( false );
 
-        m_Messages->Clear();
-        m_Messages->Report( _( "DRC incomplete: could not compile design rules.  " )
-                        + wxT( "<a href='boardsetup'>" )
-                        + _( "Show design rules." )
-                        + wxT( "</a>" ) );
-        m_Messages->Flush();
+        m_messages->Clear();
+        m_messages->Report( _( "DRC incomplete: could not compile design rules.  " )
+                            + wxT( "<a href='boardsetup'>" )
+                            + _( "Show design rules." )
+                            + wxT( "</a>" ) );
+        m_messages->Flush();
 
         Raise();
         return;
@@ -240,7 +242,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     Raise();
 
     m_runningResultsBook->ChangeSelection( 0 );   // Display the "Tests Running..." tab
-    m_Messages->Clear();
+    m_messages->Clear();
     wxYield();                                    // Allow time slice to refresh Messages
 
     m_running = true;
@@ -254,9 +256,9 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
                        testFootprints );
 
     if( m_cancelled )
-        m_Messages->Report( _( "-------- DRC cancelled by user.<br><br>" ) );
+        m_messages->Report( _( "-------- DRC cancelled by user.<br><br>" ) );
     else
-        m_Messages->Report( _( "Done.<br><br>" ) );
+        m_messages->Report( _( "Done.<br><br>" ) );
 
     Raise();
     wxYield();                                    // Allow time slice to refresh Messages
@@ -592,12 +594,12 @@ void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
 
     if( writeReport( fn.GetFullPath() ) )
     {
-        m_Messages->Report( wxString::Format( _( "Report file '%s' created<br>" ),
+        m_messages->Report( wxString::Format( _( "Report file '%s' created<br>" ),
                                               fn.GetFullPath() ) );
     }
     else
     {
-        DisplayError( this, wxString::Format( _( "Unable to create report file '%s'" ),
+        DisplayError( this, wxString::Format( _( "Unable to create report file '%s'<br>" ),
                                               fn.GetFullPath() ) );
     }
 }

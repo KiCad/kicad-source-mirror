@@ -56,7 +56,7 @@ class DIALOG_DRC_BASE : public DIALOG_SHIM
 		wxPanel* running;
 		wxNotebook* m_runningNotebook;
 		wxPanel* m_panelMessages;
-		WX_HTML_REPORT_BOX* m_Messages;
+		WX_HTML_REPORT_BOX* m_messages;
 		wxGauge* m_gauge;
 		wxPanel* results;
 		wxNotebook* m_Notebook;

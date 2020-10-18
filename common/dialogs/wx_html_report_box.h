@@ -44,6 +44,8 @@ public:
     void SetUnits( EDA_UNITS aUnits ) { m_units = aUnits; }
     EDA_UNITS GetUnits() const override { return m_units; }
 
+    void SetImmediateMode() { m_immediateMode = true; }
+
     void Flush();
     void Clear();
 
@@ -52,6 +54,10 @@ private:
     wxString generateHtml( const wxString& aLine );
 
     EDA_UNITS             m_units;
+
+    // Indicates messages should be flushed as they are added.  Required for progress-related
+    // reports, but can be very slow for larger reports.
+    bool                  m_immediateMode;
 
     ///> copy of the report, stored for filtering
     std::vector<wxString> m_messages;

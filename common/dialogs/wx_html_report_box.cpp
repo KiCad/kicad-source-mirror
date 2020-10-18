@@ -34,6 +34,10 @@ WX_HTML_REPORT_BOX::WX_HTML_REPORT_BOX( wxWindow* parent, wxWindowID id, const w
 REPORTER& WX_HTML_REPORT_BOX::Report( const wxString& aText, SEVERITY aSeverity )
 {
     m_messages.push_back( aText );
+
+    if( m_immediateMode )
+        Flush();
+
     return *this;
 }
 

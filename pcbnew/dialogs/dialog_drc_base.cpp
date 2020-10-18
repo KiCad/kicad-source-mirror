@@ -62,8 +62,8 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
 
-	m_Messages = new WX_HTML_REPORT_BOX( m_panelMessages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
-	bSizer10->Add( m_Messages, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+    m_messages = new WX_HTML_REPORT_BOX( m_panelMessages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
+	bSizer10->Add( m_messages, 1, wxEXPAND | wxTOP | wxRIGHT | wxLEFT, 5 );
 
 	wxBoxSizer* bGaugeMargins;
 	bGaugeMargins = new wxBoxSizer( wxVERTICAL );
@@ -224,7 +224,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	// Connect Events
 	this->Connect( wxEVT_ACTIVATE, wxActivateEventHandler( DIALOG_DRC_BASE::OnActivateDlg ) );
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_DRC_BASE::OnClose ) );
-	m_Messages->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( DIALOG_DRC_BASE::OnErrorLinkClicked ), NULL, this );
+	m_messages->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( DIALOG_DRC_BASE::OnErrorLinkClicked ), NULL, this );
 	m_Notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_DRC_BASE::OnChangingNotebookPage ), NULL, this );
 	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_BASE::OnDRCItemDClick ), NULL, this );
 	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_DRC_BASE::OnDRCItemRClick ), NULL, this );
@@ -249,7 +249,7 @@ DIALOG_DRC_BASE::~DIALOG_DRC_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_ACTIVATE, wxActivateEventHandler( DIALOG_DRC_BASE::OnActivateDlg ) );
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_DRC_BASE::OnClose ) );
-	m_Messages->Disconnect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( DIALOG_DRC_BASE::OnErrorLinkClicked ), NULL, this );
+	m_messages->Disconnect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( DIALOG_DRC_BASE::OnErrorLinkClicked ), NULL, this );
 	m_Notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_DRC_BASE::OnChangingNotebookPage ), NULL, this );
 	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_BASE::OnDRCItemDClick ), NULL, this );
 	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_DRC_BASE::OnDRCItemRClick ), NULL, this );
