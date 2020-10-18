@@ -128,6 +128,7 @@ protected:
     FRAME_T         m_Ident;                // Id Type (pcb, schematic, library..)
     wxPoint         m_FramePos;
     wxSize          m_FrameSize;
+    bool            m_maximizeByDefault;
 
     // These contain the frame size and position for when it is not maximized
     wxPoint         m_NormalFramePos;

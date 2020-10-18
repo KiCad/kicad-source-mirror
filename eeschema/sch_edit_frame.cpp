@@ -212,6 +212,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_highlightedConn( nullptr ),
     m_item_to_repeat( nullptr )
 {
+    m_maximizeByDefault = true;
     m_schematic = new SCHEMATIC( nullptr );
 
     m_showBorderAndTitleBlock = true;   // true to show sheet references

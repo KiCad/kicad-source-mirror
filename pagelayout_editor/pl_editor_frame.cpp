@@ -86,6 +86,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_pageSelectBox( nullptr ),
         m_propertiesPagelayout( nullptr )
 {
+    m_maximizeByDefault = true;
     m_userUnits = EDA_UNITS::MILLIMETRES;
 
     m_showBorderAndTitleBlock   = true; // true for reference drawings.

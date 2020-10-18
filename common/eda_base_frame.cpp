@@ -62,6 +62,9 @@ wxDEFINE_EVENT( UNITS_CHANGED, wxCommandEvent );
 static const int s_minsize_x = 500;
 static const int s_minsize_y = 400;
 
+static const int s_defaultSize_x = 1280;
+static const int s_defaultSize_y = 720;
+
 
 BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::OnKicadAbout )
@@ -82,6 +85,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         TOOLS_HOLDER(),
         KIWAY_HOLDER( aKiway, KIWAY_HOLDER::FRAME ),
         m_Ident( aFrameType ),
+        m_maximizeByDefault( false ),
         m_infoBar( nullptr ),
         m_settingsManager( nullptr ),
         m_fileHistory( nullptr ),
@@ -95,7 +99,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
 {
     m_autoSaveTimer = new wxTimer( this, ID_AUTO_SAVE_TIMER );
     m_mruPath       = wxStandardPaths::Get().GetDocumentsDir();
-    m_FrameSize     = wxSize( s_minsize_x, s_minsize_y );
+    m_FrameSize     = wxSize( s_defaultSize_x, s_defaultSize_y );
 
     m_auimgr.SetArtProvider( new WX_AUI_DOCK_ART() );
 
@@ -437,6 +441,8 @@ void EDA_BASE_FRAME::LoadWindowState( const wxString& aFileName )
 
 void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
 {
+    bool wasDefault = false;
+
     m_FramePos.x  = aState.pos_x;
     m_FramePos.y  = aState.pos_y;
     m_FrameSize.x = aState.size_x;
@@ -448,8 +454,9 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
     // Ensure minimum size is set if the stored config was zero-initialized
     if( m_FrameSize.x < s_minsize_x || m_FrameSize.y < s_minsize_y )
     {
-        m_FrameSize.x = s_minsize_x;
-        m_FrameSize.y = s_minsize_y;
+        m_FrameSize.x = s_defaultSize_x;
+        m_FrameSize.y = s_defaultSize_y;
+        wasDefault    = true;
 
         wxLogTrace( traceDisplayLocation, "Using minimum size (%d, %d)", m_FrameSize.x, m_FrameSize.y );
     }
@@ -528,7 +535,7 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
     m_NormalFramePos  = m_FramePos;
 
     // Maximize if we were maximized before
-    if( aState.maximized )
+    if( aState.maximized || ( wasDefault && m_maximizeByDefault ) )
     {
         wxLogTrace( traceDisplayLocation, "Maximizing window" );
         Maximize();

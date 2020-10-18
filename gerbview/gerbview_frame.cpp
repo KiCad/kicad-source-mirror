@@ -73,6 +73,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
                   ID_GERBVIEW_JOB_FILE_LIST_CLEAR, _( "Clear Recent Job Files" ) ),
           m_TextInfo( nullptr )
 {
+    m_maximizeByDefault = true;
     m_gerberLayout = nullptr;
     m_show_layer_manager_tools = true;
     m_showBorderAndTitleBlock = false;      // true for reference drawings.
