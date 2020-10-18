@@ -1079,8 +1079,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
 
         if( comp.Mirror )
         {
-            m->Flip( getKiCadPoint( comp.Origin ), false );
-            m->SetOrientation( m->GetOrientation() + 1800.0 );
+            double mirroredAngle = - getAngleTenthDegree( comp.OrientAngle );
+            NORMALIZE_ANGLE_180( mirroredAngle );
+            m->SetOrientation( mirroredAngle );
+            m->Flip( getKiCadPoint( comp.Origin ), true );
         }
 
         loadComponentAttributes( comp, m );
