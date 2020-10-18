@@ -70,6 +70,14 @@ void PANEL_SETUP_PINMAP::ResetPanel()
 }
 
 
+#ifdef __WXMAC__
+#define COL_LABEL_PLATFORM_FUDGE wxPoint( 5, 0 )
+#elif __WXGTK3__
+#define COL_LABEL_PLATFORM_FUDGE wxPoint( 0, 0 )    // TODO: needs testing...
+#else
+#define COL_LABEL_PLATFORM_FUDGE wxPoint( 0, -2 )
+#endif
+
 void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 {
     // Try to know the size of bitmap button used in drc matrix
@@ -132,8 +140,9 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
             if( ( ii == jj ) && !m_initialized )
             {
                 wxPoint txtpos;
-                txtpos.x = x + ( bmapSize.x / 2 );
+                txtpos.x = x + ( bmapSize.x / 2 ) - ( sqrt( 2 ) * txtSize.y / 2 );
                 txtpos.y = y - txtSize.y;
+                txtpos += COL_LABEL_PLATFORM_FUDGE;
                 new WX_ANGLE_TEXT( m_matrixPanel, wxID_ANY, CommentERC_V[ii], txtpos, 450 );
             }
 

@@ -94,7 +94,11 @@ wxSize WX_ANGLE_TEXT::GetTextSize( wxWindow* aWindow, const wxString& aLabel )
 {
     // Create the font used for the text
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    font.SetPointSize( font.GetPointSize() + 2 );   // rotated text looks visually smaller
+
+#ifdef __WXMAC__
+    // Rotated text looks visually smaller on OSX
+    font.SetPointSize( font.GetPointSize() + 2 );
+#endif
 
     // Measure the size of the text
     wxClientDC dc( aWindow );
