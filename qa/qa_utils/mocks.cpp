@@ -28,6 +28,7 @@
 #include <eda_dde.h>
 #include <wx/file.h>
 #include <wx/snglinst.h>
+#include <wx/app.h>
 #include <class_board.h>
 #include <fp_lib_table.h>
 #include <footprint_viewer_frame.h>
@@ -318,25 +319,25 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
         m_currentCamera( m_trackBallCamera ),
         m_trackBallCamera( RANGE_SCALE_3D )
 {
-   
+
 }
 
 
 EDA_3D_VIEWER::~EDA_3D_VIEWER()
 {
-   
+
 }
 
 
 void EDA_3D_VIEWER::setupUIConditions()
 {
-  
+
 }
 
 
 void EDA_3D_VIEWER::ReloadRequest()
 {
-   
+
 }
 
 
@@ -348,80 +349,80 @@ void EDA_3D_VIEWER::NewDisplay( bool aForceImmediateRedraw )
 
 void EDA_3D_VIEWER::Exit3DFrame( wxCommandEvent &event )
 {
-    
+
 }
 
 
 void EDA_3D_VIEWER::OnCloseWindow( wxCloseEvent &event )
 {
-   
+
 }
 
 
 void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 {
-   
+
 }
 
 
 void EDA_3D_VIEWER::OnRenderEngineSelection( wxCommandEvent &event )
 {
-   
+
 }
 
 
 void EDA_3D_VIEWER::OnDisableRayTracing( wxCommandEvent& aEvent )
 {
-   
+
 }
 
 
 void EDA_3D_VIEWER::OnActivate( wxActivateEvent &event )
 {
-    
+
 }
 
 
 void EDA_3D_VIEWER::OnSetFocus(wxFocusEvent &event)
 {
-   
+
 }
 
 
 void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
 {
-   
+
 }
 
 
 void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
 {
-   
+
 }
 
 
 void EDA_3D_VIEWER::SynchroniseColoursWithBoard()
 {
-   
+
 }
 
 
 void EDA_3D_VIEWER::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
-   
+
 }
 
 
 void EDA_3D_VIEWER::takeScreenshot( wxCommandEvent& event )
 {
-   
+
 
 }
 
 
 void EDA_3D_VIEWER::RenderEngineChanged()
 {
-   
+
 }
 
 
@@ -430,7 +431,7 @@ bool EDA_3D_VIEWER::Set3DColorFromUser( SFVEC4F &aColor, const wxString& aTitle,
                                         bool aAllowOpacityControl,
                                         KIGFX::COLOR4D aDefaultColor )
 {
-  
+
     return true;
 }
 
@@ -480,7 +481,7 @@ SELECTION_TOOL::SELECTION_TOOL() :
         m_enteredGroup( NULL ),
         m_priv( nullptr )
 {
-  
+
 }
 
 
@@ -491,33 +492,33 @@ SELECTION_TOOL::~SELECTION_TOOL()
 
 bool SELECTION_TOOL::Init()
 {
-  
+
     return true;
 }
 
 
 void SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
-    
+
 }
 
 
 int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-   
+
     return 0;
 }
 
 
 void SELECTION_TOOL::EnterGroup()
 {
-  
+
 }
 
 
 void SELECTION_TOOL::ExitGroup( bool aSelectGroup )
 {
-   
+
 }
 
 
@@ -531,7 +532,7 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
                                                     std::vector<BOARD_ITEM*>* aFiltered,
                                                     bool aConfirmLockedItems )
 {
-  
+
     return m_selection;
 }
 
@@ -546,7 +547,7 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
                                   bool* aSelectionCancelledFlag,
                                   CLIENT_SELECTION_FILTER aClientFilter )
 {
-   
+
 
     return false;
 }
@@ -561,14 +562,14 @@ bool SELECTION_TOOL::selectCursor( bool aForceSelect, CLIENT_SELECTION_FILTER aC
 
 bool SELECTION_TOOL::selectMultiple()
 {
-   
+
     return false;
 }
 
 
 SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
 {
-  
+
     return SELECTION_UNLOCKED;
 }
 
@@ -589,7 +590,7 @@ int SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 
 int SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
 {
-   
+
     return 0;
 }
 
@@ -602,7 +603,7 @@ int SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 
 int SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 {
-  
+
 
     return 0;
 }
@@ -610,13 +611,13 @@ int SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::AddItemToSel( BOARD_ITEM* aItem, bool aQuietMode )
 {
-    
+
 }
 
 
 int SELECTION_TOOL::UnselectItems( const TOOL_EVENT& aEvent )
 {
-  
+
     return 0;
 }
 
@@ -629,7 +630,7 @@ int SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::RemoveItemFromSel( BOARD_ITEM* aItem, bool aQuietMode )
 {
-  
+
 }
 
 
@@ -647,7 +648,7 @@ void SELECTION_TOOL::UnbrightenItem( BOARD_ITEM* aItem )
 
 int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 {
-    
+
     return 0;
 }
 
@@ -655,58 +656,58 @@ int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
                                             STOP_CONDITION aStopCondition )
 {
-  
+
 }
 
 
 void SELECTION_TOOL::selectAllItemsOnNet( int aNetCode, bool aSelect )
 {
-    
+
 }
 
 
 int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 {
-   
+
     return 0;
 }
 
 
 void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 {
-  
+
 }
 
 
 void SELECTION_TOOL::zoomFitSelection()
 {
-   
+
 }
 
 
 int SELECTION_TOOL::selectSheetContents( const TOOL_EVENT& aEvent )
 {
-    
+
     return 0;
 }
 
 
 int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 {
-   
+
     return 0;
 }
 
 
 void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
 {
-    
+
 }
 
 
 int SELECTION_TOOL::find( const TOOL_EVENT& aEvent )
 {
-   
+
     return 0;
 }
 
@@ -721,7 +722,7 @@ int SELECTION_TOOL::find( const TOOL_EVENT& aEvent )
 static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard,
                                     const DIALOG_FILTER_SELECTION::OPTIONS& aFilterOptions )
 {
-   
+
 
     return false;
 }
@@ -729,20 +730,20 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
 
 int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 {
-    
+
     return 0;
 }
 
 
 void SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector )
 {
- 
+
 }
 
 
 bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
 {
-   
+
 
     return true;
 }
@@ -750,13 +751,13 @@ bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
 
 void SELECTION_TOOL::ClearSelection( bool aQuietMode )
 {
-    
+
 }
 
 
 void SELECTION_TOOL::RebuildSelection()
 {
- 
+
 }
 
 
@@ -787,41 +788,41 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
 void SELECTION_TOOL::select( BOARD_ITEM* aItem )
 {
-    
+
 }
 
 
 void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 {
-  
+
 }
 
 void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup )
 {
-  
+
 }
 
 void SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup, bool isChild )
 {
-  
+
 }
 
 
 void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup )
 {
-  
+
 }
 
 
 void SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup, bool isChild )
 {
-   
+
 }
 
 
 bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 {
-   
+
 
     return false;
 }
@@ -829,13 +830,13 @@ bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                                                const VECTOR2I& aWhere ) const
 {
- 
+
 }
 
 
 void SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) const
 {
-   
+
 }
 
 
@@ -848,7 +849,7 @@ int SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
 
 int SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
 {
-   
+
     return 0;
 }
 

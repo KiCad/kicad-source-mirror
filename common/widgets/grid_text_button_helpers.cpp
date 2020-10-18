@@ -22,6 +22,9 @@
  */
 
 #include <wx/combo.h>
+#include <wx/filedlg.h>
+#include <wx/dirdlg.h>
+
 #include <bitmap_types.h>
 #include <bitmaps.h>
 #include <kiway.h>
@@ -315,7 +318,7 @@ class TEXT_BUTTON_FILE_BROWSER : public wxComboCtrl
 {
 public:
     TEXT_BUTTON_FILE_BROWSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg,
-                              wxString* aCurrentDir, wxString* aExt = nullptr, 
+                              wxString* aCurrentDir, wxString* aExt = nullptr,
                               bool aNormalize = false, wxString aNormalizeBasePath = wxEmptyString ) :
             wxComboCtrl( aParent ),
             m_dlg( aParentDlg ),
@@ -356,9 +359,9 @@ protected:
 
                 if( m_normalize )
                 {
-                    relPath = NormalizePath( filePath, &Pgm().GetLocalEnvVariables(), 
+                    relPath = NormalizePath( filePath, &Pgm().GetLocalEnvVariables(),
                                              m_normalizeBasePath );
-                    lastPath = NormalizePath( dlg.GetDirectory(), &Pgm().GetLocalEnvVariables(), 
+                    lastPath = NormalizePath( dlg.GetDirectory(), &Pgm().GetLocalEnvVariables(),
                                               m_normalizeBasePath );
                 }
 
@@ -381,7 +384,7 @@ protected:
 
                 if ( m_normalize )
                 {
-                    relPath = NormalizePath( filePath, &Pgm().GetLocalEnvVariables(), 
+                    relPath = NormalizePath( filePath, &Pgm().GetLocalEnvVariables(),
                                              m_normalizeBasePath );
                 }
 
@@ -406,10 +409,10 @@ void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                     wxEvtHandler* aEventHandler )
 {
     if( m_ext.IsEmpty() )
-        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_currentDir, nullptr, 
+        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_currentDir, nullptr,
                                                   m_normalize, m_normalizeBasePath );
     else
-        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_currentDir, &m_ext, 
+        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_currentDir, &m_ext,
                                                   m_normalize, m_normalizeBasePath );
 
 #if wxUSE_VALIDATORS

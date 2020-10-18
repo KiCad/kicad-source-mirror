@@ -27,6 +27,8 @@
 #ifndef DCODESELECTIONBOX_H
 #define DCODESELECTIONBOX_H
 
+#include <wx/combobox.h>
+
 /* helper class to display a DCode list and select a DCode id.
  */
 

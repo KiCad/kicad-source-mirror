@@ -31,6 +31,8 @@
 #include <layers_id_colors_and_visibility.h>
 #include <memory>
 
+#include <wx/dc.h>
+
 class COLOR_SETTINGS;
 
 namespace KIGFX

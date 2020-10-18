@@ -25,6 +25,7 @@
 #include "dialog_template_selector.h"
 
 #include <wx/dir.h>
+#include <wx/dirdlg.h>
 #include <wx/settings.h>
 
 

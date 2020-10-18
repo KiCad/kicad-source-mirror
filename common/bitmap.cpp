@@ -29,6 +29,9 @@
 #include <wx/menu.h>
 #include <wx/menuitem.h>
 #include <wx/aui/auibar.h>
+#include <wx/dc.h>
+#include <wx/dcclient.h>
+#include <wx/dcmemory.h>
 
 #include <cstdint>
 #include <mutex>

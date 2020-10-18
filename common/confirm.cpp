@@ -24,6 +24,7 @@
 
 #include <wx/stockitem.h>
 #include <wx/richmsgdlg.h>
+#include <wx/choicdlg.h>
 #include <confirm.h>
 #include <bitmaps.h>
 #include <html_messagebox.h>

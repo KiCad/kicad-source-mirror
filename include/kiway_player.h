@@ -26,6 +26,8 @@
 #define KIWAY_PLAYER_H_
 
 #include <wx/frame.h>
+#include <wx/cmdline.h>
+
 #include <vector>
 #include <kiway_holder.h>
 #include <eda_base_frame.h>

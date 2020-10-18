@@ -22,6 +22,8 @@
 #include <dialogs/dialog_migrate_settings.h>
 #include <settings/settings_manager.h>
 
+#include <wx/dirdlg.h>
+
 
 DIALOG_MIGRATE_SETTINGS::DIALOG_MIGRATE_SETTINGS( SETTINGS_MANAGER* aManager ) :
         DIALOG_MIGRATE_SETTINGS_BASE( nullptr ), m_manager( aManager )

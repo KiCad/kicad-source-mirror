@@ -35,6 +35,7 @@
 #include <widgets/grid_text_button_helpers.h>
 
 #include <algorithm>
+#include <wx/dirdlg.h>
 
 enum TEXT_VAR_GRID_COLUMNS
 {

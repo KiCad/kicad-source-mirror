@@ -26,6 +26,8 @@
 #include <widgets/widget_hotkey_list.h>
 #include <wx/statline.h>
 #include <wx/treelist.h>
+#include <wx/msgdlg.h>
+#include <wx/menu.h>
 #include <tool/tool_action.h>
 #include <dialog_shim.h>
 

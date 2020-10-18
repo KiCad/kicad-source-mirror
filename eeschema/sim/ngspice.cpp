@@ -26,6 +26,7 @@
  */
 
 #include <config.h>     // Needed for MSW compilation
+#include <wx/log.h>
 
 #include "ngspice.h"
 #include "spice_reporter.h"

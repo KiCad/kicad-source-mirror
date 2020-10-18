@@ -30,6 +30,9 @@
 
 #include <msgpanel.h>
 
+#include <wx/dcscreen.h>
+#include <wx/dcclient.h>
+
 
 BEGIN_EVENT_TABLE( EDA_MSG_PANEL, wxPanel )
     EVT_PAINT( EDA_MSG_PANEL::OnPaint )

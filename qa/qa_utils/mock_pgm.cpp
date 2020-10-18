@@ -26,6 +26,8 @@
 #include <kiway.h>
 #include <kiway_player.h>
 
+#include <wx/app.h>
+
 
 static struct IFACE : public KIFACE_I
 {

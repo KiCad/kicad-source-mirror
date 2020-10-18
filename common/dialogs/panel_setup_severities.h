@@ -28,10 +28,10 @@
 #include <map>
 #include <wx/panel.h>
 
-
 class PAGED_DIALOG;
 class EDA_DRAW_FRAME;
 class wxRadioBox;
+class wxRadioButton;
 
 
 class PANEL_SETUP_SEVERITIES : public wxPanel

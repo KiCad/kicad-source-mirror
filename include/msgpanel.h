@@ -35,6 +35,7 @@
 #include <gal/color4d.h>
 
 #include <wx/window.h>
+#include <wx/panel.h>
 
 #include <vector>
 

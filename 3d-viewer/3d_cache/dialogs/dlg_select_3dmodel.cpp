@@ -35,6 +35,8 @@
 #include <filename_resolver.h>
 #include <pcbnew/class_module.h>
 
+#include <wx/filedlg.h>
+
 #include <kiplatform/ui.h>
 
 

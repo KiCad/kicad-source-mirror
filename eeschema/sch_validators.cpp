@@ -27,8 +27,10 @@
  * @brief Implementation of control validators for schematic dialogs.
  */
 
-#include <sch_connection.h>
 #include <wx/combo.h>
+#include <wx/msgdlg.h>
+
+#include <sch_connection.h>
 #include <sch_validators.h>
 #include <project/net_settings.h>
 #include <template_fieldnames.h>

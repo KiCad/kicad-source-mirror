@@ -23,7 +23,7 @@
  */
 
 #include "dialog_dielectric_list_manager.h"
-
+#include <wx/msgdlg.h>
 
 DIALOG_DIELECTRIC_MATERIAL::DIALOG_DIELECTRIC_MATERIAL( wxWindow* aParent,
                                                         DIELECTRIC_SUBSTRATE_LIST& aMaterialList )

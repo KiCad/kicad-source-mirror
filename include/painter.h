@@ -30,6 +30,8 @@
 #include <map>
 #include <set>
 
+#include <wx/dc.h>
+
 #include <gal/color4d.h>
 #include <render_settings.h>
 #include <layers_id_colors_and_visibility.h>

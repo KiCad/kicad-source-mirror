@@ -18,6 +18,7 @@
  */
 
 #include <wx/statline.h>
+#include <wx/button.h>
 
 #include "dialog_edit_library_tables.h"
 

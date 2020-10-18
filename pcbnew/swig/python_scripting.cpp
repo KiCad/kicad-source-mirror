@@ -39,6 +39,8 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 
+#include <wx/app.h>
+
 /* init functions defined by swig */
 
 #if PY_MAJOR_VERSION >= 3

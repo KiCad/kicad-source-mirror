@@ -29,6 +29,8 @@
 #include <gal/color4d.h>
 #include <vector>
 #include <eda_rect.h>
+#include <wx/pen.h>
+#include <wx/dc.h>
 
 using KIGFX::COLOR4D;
 

@@ -31,7 +31,8 @@
 #include <nlohmann/json_fwd.hpp>
 
 #ifdef WX_COMPATIBILITY
-#include <wx/wx.h>
+#include <wx/colour.h>
+#include <wx/string.h>
 #endif
 
 /**

@@ -26,8 +26,9 @@
 #ifndef UI_COMMON_H
 #define UI_COMMON_H
 
-#include <wx/wx.h>
+#include <wx/string.h>
 
+class wxWindow;
 
 namespace KIUI
 {

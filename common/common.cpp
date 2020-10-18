@@ -34,6 +34,7 @@
 #include <wx/utils.h>
 #include <wx/stdpaths.h>
 #include <wx/url.h>
+#include <wx/wx.h>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/functional/hash.hpp>

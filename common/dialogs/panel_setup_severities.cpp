@@ -25,6 +25,7 @@
 #include <widgets/ui_common.h>
 #include <rc_item.h>
 #include "panel_setup_severities.h"
+#include <wx/radiobut.h>
 
 
 PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,

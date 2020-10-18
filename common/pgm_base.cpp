@@ -38,6 +38,7 @@
 #include <wx/stdpaths.h>
 #include <wx/sysopt.h>
 #include <wx/richmsgdlg.h>
+#include <wx/filedlg.h>
 
 #include <build_version.h>
 #include <config_params.h>

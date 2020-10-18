@@ -30,7 +30,7 @@
 
 #include <wx/filename.h>
 #include <wx/log.h>
-#include <wx/stdpaths.h>
+#include <wx/app.h>
 
 #include <filehistory.h>
 #include <hotkeys_basic.h>

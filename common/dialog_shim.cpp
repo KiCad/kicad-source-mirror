@@ -32,6 +32,8 @@
 
 #include <wx/display.h>
 #include <wx/evtloop.h>
+#include <wx/app.h>
+#include <wx/event.h>
 #include <wx/grid.h>
 
 #include <algorithm>

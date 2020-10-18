@@ -41,7 +41,7 @@ popt.SetOutputDirectory(plotDir)
 
 # Set some important plot options (see pcb_plot_params.h):
 popt.SetPlotFrameRef(False)     #do not change it
-popt.SetLineWidth(FromMM(0.35))
+popt.SetSketchPadLineWidth(FromMM(0.1))
 
 popt.SetAutoScale(False)        #do not change it
 popt.SetScale(1)                #do not change it

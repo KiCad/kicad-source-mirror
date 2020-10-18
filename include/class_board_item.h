@@ -38,6 +38,8 @@
 #include <layers_id_colors_and_visibility.h>
 #include <geometry/geometry_utils.h>
 
+#include <wx/msgdlg.h>
+
 class BOARD;
 class BOARD_ITEM_CONTAINER;
 class SHAPE_POLY_SET;

@@ -26,12 +26,11 @@
  * @file eda_dde.cpp
  */
 
-//#include <fctsys.h>
 #include <eda_dde.h>
 #include <eda_draw_frame.h>
 #include <id.h>
-//#include <common.h>
-//#include <macros.h>
+
+#include <wx/wx.h>
 
 static const wxString HOSTNAME( wxT( "localhost" ) );
 

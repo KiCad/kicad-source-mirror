@@ -35,6 +35,8 @@
 #include <fp_lib_table.h>
 #include <class_module.h>
 
+#include <wx/hash.h>
+
 #define OPT_SEP     '|'         ///< options separator character
 
 using namespace LIB_TABLE_T;

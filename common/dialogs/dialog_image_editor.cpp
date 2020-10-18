@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/dcclient.h>
 #include <confirm.h>
 #include <bitmap_base.h>
 

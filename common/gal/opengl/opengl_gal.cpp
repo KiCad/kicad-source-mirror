@@ -44,6 +44,8 @@
 #include <bezier_curves.h>
 #include <math/util.h>      // for KiROUND
 
+#include <wx/frame.h>
+
 #include <macros.h>
 
 #ifdef __WXDEBUG__

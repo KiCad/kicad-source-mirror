@@ -32,9 +32,7 @@
 #define _DIALOG_TEXT_ENTRY_H_
 
 #include <dialog_text_entry_base.h>
-
-
-class wxTextValidator;
+#include <wx/valtext.h>
 
 
 class WX_TEXT_ENTRY_DIALOG : public WX_TEXT_ENTRY_DIALOG_BASE
