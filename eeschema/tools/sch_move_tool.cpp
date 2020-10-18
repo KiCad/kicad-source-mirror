@@ -157,19 +157,25 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     // Keep an original copy of the starting points for cleanup after the move
     std::vector<DANGLING_END_ITEM> internalPoints;
 
-    if( selection.Empty() )
-        return 0;
-
     Activate();
     controls->ShowCursor( true );
+
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
+
+    if( selection.Empty() )
+    {
+        // Note that it's important to go through push/pop even when the selection is empty.
+        // This keeps other tools from having to special-case an empty move.
+        m_frame->PopTool( tool );
+        return 0;
+    }
 
     bool        restore_state = false;
     bool        chain_commands = false;
     TOOL_EVENT* evt = const_cast<TOOL_EVENT*>( &aEvent );
     VECTOR2I    prevPos;
 
-    std::string tool = aEvent.GetCommandStr().get();
-    m_frame->PushTool( tool );
     m_cursor = controls->GetCursorPosition();
 
     // Main loop: keep receiving events
