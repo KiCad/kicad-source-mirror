@@ -75,7 +75,7 @@ void PANEL_SETUP_PINMAP::ResetPanel()
 #elif __WXGTK3__
 #define COL_LABEL_PLATFORM_FUDGE wxPoint( 0, 0 )    // TODO: needs testing...
 #else
-#define COL_LABEL_PLATFORM_FUDGE wxPoint( 0, -2 )
+#define COL_LABEL_PLATFORM_FUDGE wxPoint( 0, 2 )
 #endif
 
 void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
