@@ -1572,6 +1572,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
     txt->SetPosition( rotatedTextPos );
 
     txt->SetTextAngle( getAngleTenthDegree( aCadstarText.OrientAngle ) + aRotationAngle );
+
+    if( !aCadstarText.Mirror != !aMirrorInvert ) // If mirroring, invert angle to match CADSTAR
+        txt->SetTextAngle( -txt->GetTextAngle() );
+
     txt->SetMirrored( aCadstarText.Mirror );
 
     TEXTCODE tc = getTextCode( aCadstarText.TextCodeID );
@@ -2164,6 +2168,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
     txt->SetMirrored( aCadstarAttrLoc.Mirror );
     txt->SetTextAngle(
             getAngleTenthDegree( aCadstarAttrLoc.OrientAngle ) - aModule->GetOrientation() );
+
+    if( aCadstarAttrLoc.Mirror ) // If mirroring, invert angle to match CADSTAR
+        txt->SetTextAngle( -txt->GetTextAngle() );
 
     TEXTCODE tc = getTextCode( aCadstarAttrLoc.TextCodeID );
 
