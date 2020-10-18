@@ -142,6 +142,10 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
                 std::sort( candidates.begin(), candidates.end(),
                            [&]( SCH_ITEM* a, SCH_ITEM* b ) -> bool
                            {
+                               // meet irreflexive requirements of std::sort
+                               if( a == b )
+                                   return false;
+
                                SCH_CONNECTION* ac = a->Connection( &m_sheet );
                                SCH_CONNECTION* bc = b->Connection( &m_sheet );
 
