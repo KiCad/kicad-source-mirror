@@ -47,6 +47,7 @@
 #include <kiway_holder.h>
 #include <tool/tools_holder.h>
 #include <widgets/ui_common.h>
+#include <widgets/wx_aui_dock_art.h>
 #include <undo_redo_container.h>
 
 // Option for main frames
@@ -135,6 +136,7 @@ protected:
 
     wxString        m_AboutTitle;           // Name of program displayed in About.
 
+    WX_AUI_DOCK_ART m_auiDockArt;           // Our custom dock art provider we feed to the aui manager
     wxAuiManager    m_auimgr;
     wxString        m_perspective;          // wxAuiManager perspective.
 
