@@ -800,8 +800,8 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
     for( size_t i = 0; i < book->GetPageCount(); ++i )
         book->GetPage( i )->Layout();
 
-    if( dlg.ShowModal() == wxID_OK )
-        dlg.Kiway().CommonSettingsChanged( false, false );
+  //  if( dlg.ShowModal() == wxID_OK )
+  //      dlg.Kiway().CommonSettingsChanged( false, false );
 }
 
 
