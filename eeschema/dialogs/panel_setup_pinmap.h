@@ -48,7 +48,6 @@ private:
 public:
     PANEL_SETUP_PINMAP( wxWindow* aWindow, SCH_EDIT_FRAME* aParent );
 
-    bool Show( bool show ) override;
     void ImportSettingsFrom( PIN_ERROR aPinMap[][ELECTRICAL_PINTYPES_TOTAL] );
 
     void ResetPanel() override;

@@ -25,7 +25,6 @@
 #include <sch_edit_frame.h>
 #include <kiface_i.h>
 #include <bitmaps.h>
-#include <reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <schematic.h>
 #include <connection_graph.h>
@@ -34,7 +33,7 @@
 #include <panel_setup_pinmap.h>
 #include <erc.h>
 #include <id.h>
-#include <widgets/wx_angle_text.h>
+#include <wx/statline.h>
 
 
 // Control identifiers for events
@@ -70,14 +69,6 @@ void PANEL_SETUP_PINMAP::ResetPanel()
 }
 
 
-#ifdef __WXMAC__
-#define COL_LABEL_PLATFORM_FUDGE wxPoint( 5, 0 )
-#elif __WXGTK3__
-#define COL_LABEL_PLATFORM_FUDGE wxPoint( 0, 0 )    // TODO: needs testing...
-#else
-#define COL_LABEL_PLATFORM_FUDGE wxPoint( 0, 2 )
-#endif
-
 void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 {
     // Try to know the size of bitmap button used in drc matrix
@@ -85,16 +76,8 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
     wxSize          bmapSize = dummy->GetSize();
     delete dummy;
 
-    wxPoint pos;
-    // Get the text size for the angled text
-    EDA_RECT      bbox    = WX_ANGLE_TEXT::GetBoundingBox( m_matrixPanel, CommentERC_V[0], 450 );
-    wxSize        txtSize = WX_ANGLE_TEXT::GetTextSize( m_matrixPanel, CommentERC_V[0] );
-
-    bmapSize.y = std::max( bmapSize.y, txtSize.y );
-
-    // compute the Y pos interval:
-    pos.y = bbox.GetHeight();
-
+    wxSize        charSize = GetTextSize( "X", m_matrixPanel );
+    wxPoint       pos( 0, charSize.y * 2 );
     wxStaticText* text;
 
     if( !m_initialized )
@@ -106,7 +89,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
         {
             int y = pos.y + (ii * bmapSize.y);
             text = new wxStaticText( m_matrixPanel, -1, CommentERC_H[ii],
-                                     wxPoint( 5, y + ( bmapSize.y / 2 ) - ( txtSize.y / 2 ) ) );
+                                     wxPoint( 5, y + ( bmapSize.y / 2 ) - ( 12 / 2 ) ) );
             labels.push_back( text );
 
             int x = text->GetRect().GetRight();
@@ -139,11 +122,13 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 
             if( ( ii == jj ) && !m_initialized )
             {
-                wxPoint txtpos;
-                txtpos.x = x + ( bmapSize.x / 2 ) - ( sqrt( 2 ) * txtSize.y / 2 );
-                txtpos.y = y - txtSize.y;
-                txtpos += COL_LABEL_PLATFORM_FUDGE;
-                new WX_ANGLE_TEXT( m_matrixPanel, wxID_ANY, CommentERC_V[ii], txtpos, 450 );
+                wxPoint textPos( x + KiROUND( bmapSize.x / 2 ) - KiROUND( charSize.x / 2 ),
+                                 y - charSize.y * 2 );
+                new wxStaticText( m_matrixPanel, wxID_ANY, CommentERC_V[ii], textPos );
+
+                wxPoint calloutPos( x + KiROUND( bmapSize.x / 2 ) - 2,
+                                    y - charSize.y );
+                new wxStaticText( m_matrixPanel, wxID_ANY, "|", calloutPos );
             }
 
             int event_id = ID_MATRIX_0 + ii + ( jj * ELECTRICAL_PINTYPES_TOTAL );
@@ -159,27 +144,6 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
     }
 
     m_initialized = true;
-}
-
-
-bool PANEL_SETUP_PINMAP::Show( bool show )
-{
-    wxPanel::Show( show );
-
-    // For some reason the angle text doesn't get drawn if the paint events are fired while
-    // it's not the active tab.
-    if( show )
-    {
-        for( wxWindow* win : m_matrixPanel->GetChildren() )
-        {
-            WX_ANGLE_TEXT* angleText = dynamic_cast<WX_ANGLE_TEXT*>( win );
-
-            if( angleText )
-                angleText->Refresh();
-        }
-    }
-
-    return true;
 }
 
 
