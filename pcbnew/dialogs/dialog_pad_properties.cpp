@@ -169,6 +169,10 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     else    // We are editing a "master" pad, i.e. a template to create new pads
         *m_dummyPad = *m_padMaster;
 
+    // Pad needs to have a parent for painting; use the parent board for its design settings
+    if( !m_dummyPad->GetParent() )
+        m_dummyPad->SetParent( m_board );
+
     initValues();
 
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
