@@ -39,6 +39,7 @@
 #include <page_layout/page_layout_reader_lexer.h>
 #include <convert_to_biu.h>
 
+#include <wx/msgdlg.h>
 
 using namespace TB_READER_T;
 

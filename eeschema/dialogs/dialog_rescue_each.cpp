@@ -35,6 +35,9 @@
 #include <symbol_preview_widget.h>
 #include <vector>
 
+#include <wx/msgdlg.h>
+#include <wx/dcclient.h>
+
 
 class DIALOG_RESCUE_EACH: public DIALOG_RESCUE_EACH_BASE
 {

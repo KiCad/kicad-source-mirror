@@ -28,7 +28,6 @@
  */
 
 #include "cbbox.h"
-#include <fctsys.h>
 #include <wx/debug.h>
 
 // This BBOX Ray intersection test have the following credits:

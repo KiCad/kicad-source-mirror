@@ -30,7 +30,6 @@
 #include "3d_fastmath.h"
 
 #include "cbbox2d.h"
-#include <fctsys.h>
 #include <wx/debug.h>
 
 

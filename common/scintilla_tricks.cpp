@@ -22,7 +22,6 @@
  */
 
 
-#include <fctsys.h>
 #include <kicad_string.h>
 #include <scintilla_tricks.h>
 #include <wx/stc/stc.h>

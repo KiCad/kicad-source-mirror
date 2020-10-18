@@ -26,6 +26,10 @@
 
 #include "dialog_bus_manager.h"
 
+#include <wx/button.h>
+#include <wx/valtext.h>
+
+
 
 BEGIN_EVENT_TABLE( DIALOG_BUS_MANAGER, DIALOG_SHIM )
     EVT_BUTTON( wxID_OK, DIALOG_BUS_MANAGER::OnOkClick )

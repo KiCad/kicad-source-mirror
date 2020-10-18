@@ -34,6 +34,8 @@
 #include <geometry/shape_arc.h>
 #include <math/util.h>      // for KiROUND
 
+#include <wx/msgdlg.h>
+
 GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberImageFile ) :
     EDA_ITEM( (EDA_ITEM*)NULL, GERBER_DRAW_ITEM_T )
 {

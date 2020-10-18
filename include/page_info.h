@@ -30,7 +30,7 @@
 #ifndef PAGE_INFO_H
 #define PAGE_INFO_H
 
-#include <wx/wx.h>
+#include <wx/string.h>
 
 #include <richio.h>         // for OUTPUTFORMATTER and IO_ERROR
 #include <base_units.h>     // for IU_PER_MILS

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,8 @@
 
 #include <gerbview_frame.h>
 #include <dialogs/dialog_layers_select_to_pcb.h>
+
+#include <wx/radiobox.h>
 
 #define NB_PCB_LAYERS PCB_LAYER_ID_COUNT
 #define FIRST_COPPER_LAYER 0

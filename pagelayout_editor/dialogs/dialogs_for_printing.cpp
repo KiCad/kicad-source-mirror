@@ -40,6 +40,8 @@
 #include "pl_editor_frame.h"
 #include "pl_editor_id.h"
 
+#include <wx/msgdlg.h>
+
 /**
  * Custom print out for printing schematics.
  */

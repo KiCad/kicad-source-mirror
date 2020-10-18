@@ -28,6 +28,8 @@
 #include <sch_edit_frame.h>
 #include <settings/settings_manager.h>
 
+#include <wx/app.h>
+
 
 // a transform matrix, to display components in lib editor
 TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );

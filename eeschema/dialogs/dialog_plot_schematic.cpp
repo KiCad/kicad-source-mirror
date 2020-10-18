@@ -34,6 +34,9 @@
 #include <sch_painter.h>
 #include <schematic.h>
 
+#include <wx/dirdlg.h>
+#include <wx/msgdlg.h>
+
 // static members (static to remember last state):
 int DIALOG_PLOT_SCHEMATIC::m_pageSizeSelect = PAGE_SIZE_AUTO;
 int DIALOG_PLOT_SCHEMATIC::m_HPGLPaperSizeSelect = PAGE_SIZE_AUTO;

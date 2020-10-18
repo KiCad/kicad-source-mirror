@@ -35,6 +35,8 @@
 #include <page_layout/ws_painter.h>
 #include <page_layout/ws_data_item.h>
 
+#include <wx/app.h>
+
 using namespace KIGFX;
 
 static const wxString productName = wxT( "KiCad E.D.A.  " );

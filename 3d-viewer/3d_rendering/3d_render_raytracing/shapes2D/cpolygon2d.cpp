@@ -29,7 +29,6 @@
 
 #include "cpolygon2d.h"
 #include <wx/debug.h>
-#include <fctsys.h>
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
 #include <stdio.h>

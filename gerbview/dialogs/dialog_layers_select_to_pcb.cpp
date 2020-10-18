@@ -38,6 +38,8 @@
 
 #include <dialogs/dialog_layers_select_to_pcb.h>
 
+#include <wx/msgdlg.h>
+
 // Imported function
 extern const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber );
 

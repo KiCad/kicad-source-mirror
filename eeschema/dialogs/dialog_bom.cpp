@@ -47,6 +47,9 @@
 
 #include <dialogs/dialog_bom_cfg_lexer.h>
 
+#include <wx/filedlg.h>
+#include <wx/textdlg.h>
+
 static constexpr wxChar BOM_TRACE[] = wxT( "BOM_GENERATORS" );
 
 wxString s_bomHelpInfo =
