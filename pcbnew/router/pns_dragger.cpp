@@ -291,9 +291,20 @@ void DRAGGER::dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const V
     {
         return;
     }
+
     
     for( ITEM* item : fanout.Items() )
     {
+        if ( VIA *via = dyn_cast<VIA*>( item ) )
+        {
+            auto draggedVia = Clone( *via );
+
+            draggedVia->SetPos( aP );
+            m_draggedItems.Add( draggedVia.get() );
+
+        }
+
+        /*
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
         {
             LINE origLine( *l );
@@ -307,27 +318,18 @@ void DRAGGER::dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const V
             m_lastNode->Remove( origLine );
             m_lastNode->Add( draggedLine );
         }
-        else if ( VIA *via = dyn_cast<VIA*>( item ) )
-        {
-            auto nvia = Clone( *via );
-
-            nvia->SetPos( aP );
-            m_draggedItems.Add( nvia.get() );
-
-            m_lastNode->Remove( via );
-            m_lastNode->Add( std::move( nvia ) );
-        }
+        else */
     }
 }
 
 
-void DRAGGER::optimizeAndUpdateDraggedLine( LINE& dragged, SEG& aDraggedSeg, const VECTOR2I& aP )
+void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, SEG& aDraggedSeg, const VECTOR2I& aP )
 {
     VECTOR2D lockV;
-    dragged.ClearLinks();
-    dragged.Unmark();
+    aDragged.ClearLinks();
+    aDragged.Unmark();
 
-    lockV = dragged.CLine().NearestPoint( aP );
+    lockV = aDragged.CLine().NearestPoint( aP );
 
     if( Settings().GetOptimizeDraggedTrack() )
     {
@@ -335,25 +337,29 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& dragged, SEG& aDraggedSeg, con
 
         optimizer.SetEffortLevel( OPTIMIZER::MERGE_SEGMENTS | OPTIMIZER::KEEP_TOPOLOGY );
 
-        int startV = dragged.CLine().Find( aDraggedSeg.A );
-        int endV = dragged.CLine().Find( aDraggedSeg.B );
+        OPT_BOX2I affectedArea = *aDragged.ChangedArea( &aOrig );
 
-        if ( endV > startV )
-        {
-            std::swap(endV, startV);
-        }
+        optimizer.SetPreserveVertex( aP );
 
-        if( startV >= 0 && endV >= 0)
+        if( affectedArea )
         {
-            optimizer.SetPreserveVertex( aP );
-            optimizer.SetRestrictVertexRange( startV, endV );
-            optimizer.Optimize( &dragged );
+            //Dbg()->AddBox( *affectedArea, 2 );
+            optimizer.SetRestrictArea( *affectedArea );
+            optimizer.Optimize( &aDragged );
+
+        
+
+            OPT_BOX2I optArea = *aDragged.ChangedArea( &aOrig );
+            if( optArea )
+                Dbg()->AddBox( *optArea, 4 );
+
+
         }
     }
 
-    m_lastNode->Add( dragged );
+    m_lastNode->Add( aDragged );
     m_draggedItems.Clear();
-    m_draggedItems.Add( dragged );
+    m_draggedItems.Add( aDragged );
 }
 
 
@@ -419,15 +425,14 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
             ok = true;
         }
 
-        if( ok )
+        if(ok)
         {
             m_lastNode->Remove( origLine );
             SEG dummy;
-            optimizeAndUpdateDraggedLine( dragged, dummy, aP );
+            optimizeAndUpdateDraggedLine( dragged, origLine, dummy, aP );
         }
+    		break;
     }
-        break;
-
     case DM_VIA: // fixme...
     {
         dragViaWalkaround( m_initialVia, m_lastNode, aP );
@@ -568,20 +573,20 @@ bool DRAGGER::Drag( const VECTOR2I& aP )
         switch( m_currentMode )
         {
         case RM_MarkObstacles:
-            ret = dragMarkObstacles( aP );
-            break;
+                ret = dragMarkObstacles( aP );
+                break;
 
         case RM_Shove:
         case RM_Smart:
-            ret = dragShove( aP );
-            break;
+                ret = dragShove( aP );
+                break;
 
         case RM_Walkaround:
-            ret = dragWalkaround( aP );
-            break;
+                ret = dragWalkaround( aP );
+                break;
 
         default:
-            break;
+                break;
         }
     }
 
@@ -594,7 +599,7 @@ bool DRAGGER::Drag( const VECTOR2I& aP )
 
 NODE* DRAGGER::CurrentNode() const
 {
-   return m_lastNode;
+   return m_lastNode ? m_lastNode : m_world;
 }
 
 

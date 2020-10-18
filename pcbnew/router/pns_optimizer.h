@@ -249,7 +249,7 @@ public:
 
     virtual ~ANGLE_CONSTRAINT_45() {};
 
-    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
+    virtual bool Check ( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
 
 private:
     int m_entryDirectionMask;

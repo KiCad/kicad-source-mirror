@@ -674,18 +674,18 @@ public:
         m_view->Add( m_items );
     }
 
-    void AddPoint( VECTOR2I aP, int aColor, const std::string aName = "" ) override
+    virtual void AddPoint( VECTOR2I aP, int aColor, int aSize, const std::string aName ) override
     {
         SHAPE_LINE_CHAIN l;
 
-        l.Append( aP - VECTOR2I( -50000, -50000 ) );
-        l.Append( aP + VECTOR2I( -50000, -50000 ) );
+        l.Append( aP - VECTOR2I( -aSize, -aSize ) );
+        l.Append( aP + VECTOR2I( -aSize, -aSize ) );
 
         AddLine( l, aColor, 10000 );
 
         l.Clear();
-        l.Append( aP - VECTOR2I( 50000, -50000 ) );
-        l.Append( aP + VECTOR2I( 50000, -50000 ) );
+        l.Append( aP - VECTOR2I( aSize, -aSize ) );
+        l.Append( aP + VECTOR2I( aSize, -aSize ) );
 
         AddLine( l, aColor, 10000 );
     }

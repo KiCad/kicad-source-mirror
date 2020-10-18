@@ -123,7 +123,7 @@ private:
     bool startDragVia( VIA* aVia );
     void dragViaMarkObstacles( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2I& aP );
     void dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2I& aP );
-    void optimizeAndUpdateDraggedLine( LINE& dragged, SEG& aDraggedSeg, const VECTOR2I& aP );
+    void optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, SEG& aDraggedSeg, const VECTOR2I& aP );
 
 private:
     VIA_HANDLE             m_initialVia;
