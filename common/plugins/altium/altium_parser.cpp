@@ -109,7 +109,8 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
         wxString key( keyS.c_str(), wxConvISO8859_1 );
         wxString value( valueS.c_str(), wxConvISO8859_1 );
 
-        kv.insert( { key.Trim(), value.Trim() } );
+        // Altium stores keys either in Upper, or in CamelCase. Lets unify it.
+        kv.insert( { key.Trim().MakeUpper(), value.Trim() } );
     }
 
     return kv;
