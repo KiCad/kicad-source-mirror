@@ -47,6 +47,7 @@
 #include <trace_helpers.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/infobar.h>
+#include <widgets/wx_aui_dock_art.h>
 #include <wx/display.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
@@ -96,7 +97,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
     m_mruPath       = wxStandardPaths::Get().GetDocumentsDir();
     m_FrameSize     = wxSize( s_minsize_x, s_minsize_y );
 
-    m_auimgr.SetArtProvider( &m_auiDockArt );
+    m_auimgr.SetArtProvider( new WX_AUI_DOCK_ART() );
 
     m_settingsManager = &Pgm().GetSettingsManager();
 
