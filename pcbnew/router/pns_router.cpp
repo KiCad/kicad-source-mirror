@@ -155,9 +155,16 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
     m_dragger->SetMode( aDragMode );
     m_dragger->SetWorld( m_world.get() );
     m_dragger->SetLogger( m_logger );
-    m_dragger->SetDebugDecorator( m_iface->GetDebugDecorator() );
+    m_dragger->SetDebugDecorator ( m_iface->GetDebugDecorator () );
 
-    if( m_dragger->Start( aP, aStartItems ) )
+    m_logger->Clear();
+
+    if( m_logger && aStartItems.Size() )
+    {
+        m_logger->Log( LOGGER::EVT_START_DRAG, aP, aStartItems[0] );
+    }
+
+    if( m_dragger->Start ( aP, aStartItems ) )
     {
         m_state = DRAG_SEGMENT;
     }
@@ -361,8 +368,10 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
 
     m_placer->UpdateSizes( m_sizes );
     m_placer->SetLayer( aLayer );
-    m_placer->SetDebugDecorator( m_iface->GetDebugDecorator() );
+    m_placer->SetDebugDecorator( m_iface->GetDebugDecorator () );
     m_placer->SetLogger( m_logger );
+
+    m_logger->Clear();
 
     if( m_logger )
         m_logger->Log( LOGGER::EVT_START_ROUTE, aP, aStartItem );
@@ -513,7 +522,9 @@ void ROUTER::UpdateSizes( const SIZES_SETTINGS& aSizes )
 
     // Change track/via size settings
     if( m_state == ROUTE_TRACK)
+    {
         m_placer->UpdateSizes( m_sizes );
+    }
 }
 
 
@@ -786,7 +797,7 @@ void ROUTER::BreakSegment( ITEM *aItem, const VECTOR2I& aP )
 
     LINE_PLACER placer( this );
 
-    if( placer.SplitAdjacentSegments( node, aItem, aP ) )
+    if ( placer.SplitAdjacentSegments( node, aItem, aP ) )
     {
         CommitRouting( node );
     }

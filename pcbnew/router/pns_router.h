@@ -119,7 +119,7 @@ enum DRAG_MODE
 
 class ROUTER
 {
-private:
+public:
     enum RouterState
     {
         IDLE,
@@ -134,6 +134,10 @@ public:
     void SetInterface( ROUTER_IFACE* aIface );
     void SetMode ( ROUTER_MODE aMode );
     ROUTER_MODE Mode() const { return m_mode; }
+
+    RouterState GetState() const { return m_state; }
+
+    DRAG_ALGO* GetDragger() { return m_dragger.get(); }
 
     static ROUTER* GetInstance();
 
