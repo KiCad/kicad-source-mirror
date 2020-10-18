@@ -96,7 +96,7 @@ protected:
     bool syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB_LAYER_ID aLayer );
     bool syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aItem );
     bool syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone, SHAPE_POLY_SET* aBoardOutline );
-    int inheritTrackWidth( PNS::ITEM* aItem );
+    bool inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedWidth );
 
 
     PNS::NODE* m_world;

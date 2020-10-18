@@ -312,7 +312,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
 }
 
 
-int PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem )
+bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedWidth )
 {
     VECTOR2I p;
 
@@ -329,10 +329,11 @@ int PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem )
         break;
 
     case PNS::ITEM::SEGMENT_T:
-        return static_cast<PNS::SEGMENT*>( aItem )->Width();
+        *aInheritedWidth = static_cast<PNS::SEGMENT*>( aItem )->Width();
+        return true;
 
     default:
-        return 0;
+        return false;
     }
 
     PNS::JOINT* jt = static_cast<PNS::NODE*>( aItem->Owner() )->FindJoint( p, aItem );
@@ -340,7 +341,6 @@ int PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem )
     assert( jt != NULL );
 
     int mval = INT_MAX;
-
 
     PNS::ITEM_SET linkedSegs = jt->Links();
     linkedSegs.ExcludeItem( aItem ).FilterKinds( PNS::ITEM::SEGMENT_T );
@@ -351,7 +351,11 @@ int PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem )
         mval = std::min( w, mval );
     }
 
-    return ( mval == INT_MAX ? 0 : mval );
+    if( mval == INT_MAX )
+        return false;
+
+    *aInheritedWidth = mval;
+    return true;
 }
 
 
@@ -360,23 +364,25 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     PNS::CONSTRAINT        constraint;
 
-    int trackWidth = bds.m_TrackMinWidth;
+    int  trackWidth = bds.m_TrackMinWidth;
+    bool found = false;
 
     if( bds.m_UseConnectedTrackWidth && aStartItem != nullptr )
     {
-        trackWidth = inheritTrackWidth( aStartItem );
+        found = inheritTrackWidth( aStartItem, &trackWidth );
     }
 
-    if( trackWidth == 0 && bds.UseNetClassTrack() && aStartItem ) // netclass value
+    if( !found && bds.UseNetClassTrack() && aStartItem )
     {
         if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem, nullptr,
                                              aStartItem->Layer(), &constraint ) )
         {
             trackWidth = constraint.m_Value.OptThenMin();
+            found = true;    // Note: allowed to override anything, including bds.m_TrackMinWidth
         }
     }
 
-    if( trackWidth == 0 )
+    if( !found )
     {
         trackWidth = bds.GetCurrentTrackWidth();
     }

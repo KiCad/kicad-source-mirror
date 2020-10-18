@@ -101,7 +101,7 @@ public:
 
 private:
 
-    int inheritTrackWidth( ITEM* aItem );
+    bool inheritTrackWidth( ITEM* aItem, int* aInheritedWidth );
 
     int m_trackWidth;
     int m_diffPairWidth;
