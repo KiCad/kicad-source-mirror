@@ -41,6 +41,8 @@
 
 #include <dialog_edit_components_libid_base.h>
 #include <wx/tokenzr.h>
+#include <wx/choicdlg.h>
+#include <wx/dcclient.h>
 #include <grid_tricks.h>
 #include <widgets/grid_text_button_helpers.h>
 

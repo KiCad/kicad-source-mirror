@@ -32,6 +32,8 @@
 #include <html_messagebox.h>
 #include <macros.h>
 
+#include <wx/msgdlg.h>
+
 /* Read a gerber file, RS274D, RS274X or RS274X2 format.
  */
 bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
