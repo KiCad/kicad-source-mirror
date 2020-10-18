@@ -100,10 +100,11 @@ public:
         SMART_PADS            = 0x02,   ///< Reroute pad exits
         MERGE_OBTUSE          = 0x04,   ///< Reduce corner cost by merging obtuse segments
         FANOUT_CLEANUP        = 0x08,   ///< Simplify pad-pad and pad-via connections if possible
-        KEEP_TOPOLOGY         = 0x10,
-        PRESERVE_VERTEX       = 0x20,
+        KEEP_TOPOLOGY = 0x10,
+        PRESERVE_VERTEX = 0x20,
         RESTRICT_VERTEX_RANGE = 0x40,
-        MERGE_COLINEAR        = 0x80    ///< Merge co-linear segments
+        MERGE_COLINEAR        = 0x80,    ///< Merge co-linear segments
+        RESTRICT_AREA = 0x100
     };
 
     OPTIMIZER( NODE* aWorld );
@@ -194,17 +195,19 @@ private:
     ITEM* findPadOrVia( int aLayer, int aNet, const VECTOR2I& aP ) const;
 
 private:
-    SHAPE_INDEX_LIST<ITEM*>                m_cache;
+    SHAPE_INDEX_LIST<ITEM*> m_cache;
     std::vector<OPT_CONSTRAINT*>           m_constraints;
     std::unordered_map<ITEM*, CACHED_ITEM> m_cacheTags;
 
-    NODE*               m_world;
-    int                 m_collisionKindMask;
-    int                 m_effortLevel;
+    NODE* m_world;
+    int m_collisionKindMask;
+    int m_effortLevel;
+    bool m_keepPostures;
 
-    VECTOR2I            m_preservedVertex;
+
+    VECTOR2I m_preservedVertex;
     std::pair<int, int> m_restrictedVertexRange;
-    BOX2I               m_restrictArea;
+    BOX2I m_restrictArea;
 };
 
 
@@ -213,9 +216,9 @@ class OPT_CONSTRAINT
 public:
     OPT_CONSTRAINT( NODE* aWorld ) :
         m_world( aWorld )
-    {
-        m_priority = 0;
-    };
+        {
+            m_priority = 0;
+        };
 
     virtual ~OPT_CONSTRAINT()
     {
@@ -230,9 +233,28 @@ public:
 
 protected:
     NODE* m_world;
-    int   m_priority;
+    int m_priority;
 };
 
+class ANGLE_CONSTRAINT_45: public OPT_CONSTRAINT
+{
+public:
+    ANGLE_CONSTRAINT_45( NODE* aWorld, int aEntryDirectionMask = -1, int aExitDirectionMask = -1 ) :
+        OPT_CONSTRAINT( aWorld ),
+        m_entryDirectionMask( aEntryDirectionMask ),
+        m_exitDirectionMask( aExitDirectionMask )
+        {
+
+        }
+
+    virtual ~ANGLE_CONSTRAINT_45() {};
+
+    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
+
+private:
+    int m_entryDirectionMask;
+    int m_exitDirectionMask;
+};
 
 class AREA_CONSTRAINT : public OPT_CONSTRAINT
 {
@@ -249,6 +271,7 @@ public:
 
 private:
     BOX2I m_allowedArea;
+
 };
 
 
@@ -279,6 +302,7 @@ public:
                 const SHAPE_LINE_CHAIN& aCurrentPath,
                 const SHAPE_LINE_CHAIN& aReplacement ) override;
 private:
+
     VECTOR2I m_v;
 };
 
@@ -297,6 +321,7 @@ public:
                         const SHAPE_LINE_CHAIN& aCurrentPath,
                         const SHAPE_LINE_CHAIN& aReplacement ) override;
 private:
+
     int m_start;
     int m_end;
 };

@@ -237,8 +237,7 @@ bool PRESERVE_VERTEX_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* 
 
     for( int i = aVertex1; i < aVertex2; i++ )
     {
-        SEG::ecoord dist = aCurrentPath.CSegment(i).SquaredDistance( m_v );
-
+        int dist = aCurrentPath.CSegment(i).Distance( m_v );
         if ( dist <= 1 )
         {
             cv = true;
@@ -254,7 +253,9 @@ bool PRESERVE_VERTEX_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* 
         SEG::ecoord dist = aReplacement.CSegment(i).SquaredDistance( m_v );
 
         if ( dist <= 1 )
+        {
             return true;
+	}
     }
 
     return false;
@@ -306,9 +307,9 @@ static bool pointInside2( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aP )
                     result = 1 - result;
                 else
                 {
-                    double d = static_cast<double>( ip.x - aP.x ) *
+                    double d = static_cast<double>( ip.x - aP.x ) * 
                                static_cast<double>( ipNext.y - aP.y ) -
-                               static_cast<double>( ipNext.x - aP.x ) *
+                               static_cast<double>( ipNext.x - aP.x ) * 
                                static_cast<double>( ip.y - aP.y );
 
                     if( !d )
@@ -592,13 +593,20 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
         auto c = new PRESERVE_VERTEX_CONSTRAINT( m_world, m_preservedVertex );
         AddConstraint( c );
     }
-
+    
     if( m_effortLevel & RESTRICT_VERTEX_RANGE )
     {
         auto c = new RESTRICT_VERTEX_RANGE_CONSTRAINT( m_world, m_restrictedVertexRange.first,
                                                        m_restrictedVertexRange.second );
         AddConstraint( c );
     }
+
+    if ( m_effortLevel & RESTRICT_AREA )
+    {
+        auto c = new AREA_CONSTRAINT( m_world, m_restrictArea );
+        AddConstraint( c );
+    }
+
 
     if( m_effortLevel & KEEP_TOPOLOGY )
     {
