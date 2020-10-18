@@ -129,7 +129,7 @@ bool GERBVIEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
         if( aCfg->Read( aKey, &str ) )
             cs->SetColor( aLayerId, COLOR4D( str ) );
     };
-*
+
     migrateLegacyColor( "BackgroundColorEx",       LAYER_GERBVIEW_BACKGROUND );
     migrateLegacyColor( "DCodeColorEx",            LAYER_DCODES );
     migrateLegacyColor( "GridColorEx",             LAYER_GERBVIEW_GRID );
