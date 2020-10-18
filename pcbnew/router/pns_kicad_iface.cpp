@@ -290,16 +290,22 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
     if( IsDiffPair( aA, aB ) )
     {
         // for diff pairs, we use the gap value for shoving/dragging
-        ok = QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, aA, aB, aA->Layer(),
-                              &constraint );
-        rv = constraint.m_Value.Opt();
+        if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, aA, aB, aA->Layer(),
+                             &constraint ) )
+        {
+            rv = constraint.m_Value.Opt();
+            ok = true;
+        }
     }
 
     if( !ok )
     {
-        ok = QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, aA->Layer(),
-                              &constraint );
-        rv = constraint.m_Value.Min();
+        if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, aA->Layer(),
+                             &constraint ) )
+        {
+            rv = constraint.m_Value.Min();
+            ok = true;
+        }
     }
 
     // still no valid clearance rule? fall back to global minimum.
