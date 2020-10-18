@@ -748,7 +748,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
                 BEZIER_POLY converter( bezierPoints );
                 converter.GetPoly( polyPoints );
 
-                for( size_t k = 0; k < polyPoints.size() - 1; k++ )
+                for( size_t k = 0; k + 1 < polyPoints.size(); k++ )
                 {
                     SCH_LINE* line = new SCH_LINE(
                             polyPoints.at( k ) + m_sheetOffset, SCH_LAYER_ID::LAYER_NOTES );
@@ -834,7 +834,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
             break;
         }
 
-        for( size_t i = 0; i < elem.points.size() - 1; i++ )
+        for( size_t i = 0; i + 1 < elem.points.size(); i++ )
         {
             SCH_LINE* line =
                     new SCH_LINE( elem.points.at( i ) + m_sheetOffset, SCH_LAYER_ID::LAYER_NOTES );
@@ -880,7 +880,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         // TODO: we cannot fill this polygon, only draw it for now
-        for( size_t i = 0; i < elem.points.size() - 1; i++ )
+        for( size_t i = 0; i + 1 < elem.points.size(); i++ )
         {
             SCH_LINE* line =
                     new SCH_LINE( elem.points.at( i ) + m_sheetOffset, SCH_LAYER_ID::LAYER_NOTES );
@@ -1214,7 +1214,7 @@ void SCH_ALTIUM_PLUGIN::ParseBus( const std::map<wxString, wxString>& aPropertie
 {
     ASCH_BUS elem( aProperties );
 
-    for( size_t i = 0; i < elem.points.size() - 1; i++ )
+    for( size_t i = 0; i + 1 < elem.points.size(); i++ )
     {
         SCH_LINE* bus =
                 new SCH_LINE( elem.points.at( i ) + m_sheetOffset, SCH_LAYER_ID::LAYER_BUS );
@@ -1231,7 +1231,7 @@ void SCH_ALTIUM_PLUGIN::ParseWire( const std::map<wxString, wxString>& aProperti
 {
     ASCH_WIRE elem( aProperties );
 
-    for( size_t i = 0; i < elem.points.size() - 1; i++ )
+    for( size_t i = 0; i + 1 < elem.points.size(); i++ )
     {
         SCH_LINE* wire =
                 new SCH_LINE( elem.points.at( i ) + m_sheetOffset, SCH_LAYER_ID::LAYER_WIRE );
