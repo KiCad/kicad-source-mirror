@@ -26,6 +26,9 @@
 #include <plugins/cadstar/cadstar_archive_parser.h>
 
 
+const double CADSTAR_ARCHIVE_PARSER::TXT_HEIGHT_RATIO = ( 24.0 - 5.0 ) / 24.0;
+
+
 void CADSTAR_ARCHIVE_PARSER::FORMAT::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "FORMAT" ) );

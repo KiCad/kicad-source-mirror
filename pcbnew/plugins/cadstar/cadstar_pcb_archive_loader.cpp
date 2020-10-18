@@ -1580,7 +1580,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
 
     wxSize unscaledTextSize;
     unscaledTextSize.x = getKiCadLength( tc.Width );
-    unscaledTextSize.y = getKiCadLength( tc.Height );
+    unscaledTextSize.y = KiROUND( TXT_HEIGHT_RATIO * (double) getKiCadLength( tc.Height ) );
     txt->SetTextSize( unscaledTextSize );
 
     switch( aCadstarText.Alignment )
@@ -2114,7 +2114,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
     FP_TEXT* txt;
 
     if( aCadstarAttributeID == COMPONENT_NAME_ATTRID )
+    {
         txt = &aModule->Reference(); //text should be set outside this function
+    }
     else if( aCadstarAttributeID == PART_NAME_ATTRID )
     {
         if( aModule->Value().GetText().IsEmpty() )
@@ -2166,7 +2168,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
     TEXTCODE tc = getTextCode( aCadstarAttrLoc.TextCodeID );
 
     txt->SetTextThickness( getKiCadLength( tc.LineWidth ) );
-    txt->SetTextSize( { getKiCadLength( tc.Width ), getKiCadLength( tc.Height ) } );
+
+    wxSize txtSize;
+    txtSize.x = getKiCadLength( tc.Width );
+    txtSize.y = KiROUND( TXT_HEIGHT_RATIO * (double) getKiCadLength( tc.Height ) );
+    txt->SetTextSize( txtSize );
 
     switch( aCadstarAttrLoc.Alignment )
     {
