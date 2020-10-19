@@ -606,6 +606,8 @@ int ERC_TESTER::TestLibSymbolIssues()
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
     {
+        std::vector<SCH_MARKER*> markers;
+
         for( SCH_ITEM* item : screen->Items().OfType( SCH_COMPONENT_T ) )
         {
             SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( item );
@@ -628,9 +630,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                             symbol->GetLibId().GetUniStringLibId() );
                 ercItem->SetErrorMessage( msg );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, symbol->GetPosition() );
-                screen->Append( marker );
-                err_count += 1;
+                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
             }
             else if( *libSymbol != *libSymbolInSchematic )
             {
@@ -640,10 +640,14 @@ int ERC_TESTER::TestLibSymbolIssues()
                             symbol->GetLibId().GetUniStringLibId() );
                 ercItem->SetErrorMessage( msg );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, symbol->GetPosition() );
-                screen->Append( marker );
-                err_count += 1;
+                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
             }
+        }
+
+        for( SCH_MARKER* marker : markers )
+        {
+            screen->Append( marker );
+            err_count += 1;
         }
     }
 
