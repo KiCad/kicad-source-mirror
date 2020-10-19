@@ -22,13 +22,14 @@
 #include <tool/selection.h>
 #include <eda_base_frame.h>
 #include <eda_item.h>
+#include <import_export.h>
 
 #include <algorithm>
 #include <set>
 
 using namespace std;
 
-extern wxPGGlobalVarsClass* wxPGGlobalVars;
+extern APIIMPORT wxPGGlobalVarsClass* wxPGGlobalVars;
 
 PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame )
     : wxPanel( aParent ), m_frame( aFrame )
@@ -42,7 +43,7 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame )
 
     m_grid = new wxPropertyGrid( this, wxID_ANY, wxDefaultPosition, wxSize( 300, 400 ),
             wxPG_AUTO_SORT | wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE );
-    m_grid->SetUnspecifiedValueAppearance( wxPGCell( "<...>" ) );
+    m_grid->SetUnspecifiedValueAppearance( wxPGCell( wxT( "<...>" ) ) );
     mainSizer->Add( m_grid, 1, wxALL | wxEXPAND, 5 );
 
     SetSizer( mainSizer );

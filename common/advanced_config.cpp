@@ -191,6 +191,8 @@ static const wxChar AllowManualCanvasScale[] = wxT( "AllowManualCanvasScale" );
 
 static const wxChar UpdateUIEventInterval[] = wxT( "UpdateUIEventInterval" );
 
+static const wxChar ShowPropertiesPanel[] = wxT( "ShowPropertiesPanel" );
+
 static const wxChar V3DRT_BevelHeight_um[] = wxT( "V3DRT_BevelHeight_um" );
 
 static const wxChar V3DRT_BevelExtentFactor[] = wxT( "V3DRT_BevelExtentFactor" );
@@ -315,8 +317,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_AllowManualCanvasScale    = false;
     m_CompactSave               = false;
     m_UpdateUIEventInterval     = 0;
-
     m_ShowRepairSchematic       = false;
+    m_ShowPropertiesPanel       = false;
 
     m_3DRT_BevelHeight_um       = 30;
     m_3DRT_BevelExtentFactor    = 1.0 / 16.0;
@@ -466,6 +468,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     // Because we even use wxLogTrace inside of advanced config
     wxString traceMasks = "";
     configParams.push_back( new PARAM_CFG_WXSTRING( true, AC_KEYS::TraceMasks, &traceMasks, "" ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowPropertiesPanel,
+                                                &m_ShowPropertiesPanel, false ) );
 
     // Load the config from file
     wxConfigLoadSetups( &aCfg, configParams );

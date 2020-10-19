@@ -248,6 +248,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
+    m_propertiesPanel = new PCB_PROPERTIES_PANEL( this, this );
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
 
     m_appearancePanel = new APPEARANCE_CONTROLS( this, GetCanvas() );
@@ -289,10 +290,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false )
                       .MinSize( 180, -1 ).BestSize( 180, -1 ) );
 
-    m_auimgr.AddPane( m_tabbedPanel,    // TODO check
-                      EDA_PANE().Palette().Name( "TabbedPanel" ).Right().Layer( 3 )
-                      .PaneBorder( false ).MinSize( 300, -1 )
-                      .TopDockable( false ).BottomDockable( false ) );
+    m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( "PropertiesManager" )
+                      .Left().Layer( 2 )
+                      .Caption( _( "Properties" ) ).PaneBorder( false )
+                      .MinSize( 240, -1 ).BestSize( 300, -1 ) );
 
     // Center
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" )
@@ -300,6 +301,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
+
+    bool showProperties = ADVANCED_CFG::GetCfg().m_ShowPropertiesPanel && m_show_properties;
+    m_auimgr.GetPane( "PropertiesManager" ).Show( showProperties );
 
     // The selection filter doesn't need to grow in the vertical direction when docked
     m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
@@ -451,6 +455,7 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
     delete m_selectionFilterPanel;
     delete m_appearancePanel;
     delete m_exportNetlistAction;
+    delete m_propertiesPanel;
 }
 
 
@@ -699,6 +704,12 @@ void PCB_EDIT_FRAME::setupUIConditions()
                 return LayerManagerShown();
             };
 
+    auto propertiesCond =
+        [this] ( const SELECTION& )
+        {
+            return PropertiesShown();
+        };
+
     auto highContrastCond =
             [this] ( const SELECTION& )
             {
@@ -740,6 +751,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::toggleNetHighlight,   CHECK( netHighlightCond )
                                                            .Enable( enableNetHighlightCond ) );
     mgr->SetConditions( PCB_ACTIONS::boardSetup,           ENABLE( enableBoardSetupCondition ) );
+    mgr->SetConditions( PCB_ACTIONS::showProperties,       CHECK( propertiesCond ) );
 
     auto isHighlightMode =
             [this]( const SELECTION& )
@@ -1330,10 +1342,9 @@ void PCB_EDIT_FRAME::ShowChangedLanguage()
     // call my base class
     PCB_BASE_EDIT_FRAME::ShowChangedLanguage();
 
-    wxAuiPaneInfo& ap_pane_info = m_auimgr.GetPane( m_appearancePanel );
-    ap_pane_info.Caption( _( "Appearance" ) );
-    wxAuiPaneInfo& sf_pane_info = m_auimgr.GetPane( m_selectionFilterPanel );
-    sf_pane_info.Caption( _( "Selection Filter" ) );
+    m_auimgr.GetPane( m_appearancePanel ).Caption( _( "Appearance" ) );
+    m_auimgr.GetPane( m_selectionFilterPanel ).Caption( _( "Selection Filter" ) );
+    m_auimgr.GetPane( m_propertiesPanel ).Caption( _( "Properties" ) );
     m_auimgr.Update();
 
     m_appearancePanel->OnLanguageChanged();
@@ -1958,6 +1969,12 @@ wxString PCB_EDIT_FRAME::GetCurrentFileName() const
 bool PCB_EDIT_FRAME::LayerManagerShown()
 {
     return m_auimgr.GetPane( "LayersManager" ).IsShown();
+}
+
+
+bool PCB_EDIT_FRAME::PropertiesShown()
+{
+    return m_auimgr.GetPane( "PropertiesManager" ).IsShown();
 }
 
 
