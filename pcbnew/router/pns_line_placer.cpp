@@ -31,7 +31,7 @@
 #include "pns_solid.h"
 #include "pns_topology.h"
 #include "pns_walkaround.h"
-
+#include "pns_mouse_trail_tracer.h"
 
 namespace PNS {
 
@@ -607,7 +607,7 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead )
 
         int effortLevel = OPTIMIZER::MERGE_OBTUSE;
 
-        if( Settings().SmartPads() && !m_postureSolver.IsManuallyForced() )
+        if( Settings().SmartPads() && !m_mouseTrailTracer.IsManuallyForced() )
             effortLevel = OPTIMIZER::SMART_PADS;
 
         optimizer.SetEffortLevel( effortLevel );
@@ -803,7 +803,7 @@ const ITEM_SET LINE_PLACER::Traces()
 
 void LINE_PLACER::FlipPosture()
 {
-    m_postureSolver.FlipPosture();
+    m_mouseTrailTracer.FlipPosture();
 }
 
 
@@ -912,11 +912,11 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
     wxLogTrace( "PNS", "Posture: init %s, last seg %s", initialDir.Format(), lastSegDir.Format() );
 
-    m_postureSolver.Clear();
-    m_postureSolver.AddTrailPoint( aP );
-    m_postureSolver.SetTolerance( m_head.Width() );
-    m_postureSolver.SetDefaultDirections( initialDir, lastSegDir );
-    m_postureSolver.SetMouseDisabled( !Settings().GetAutoPosture() );
+    m_mouseTrailTracer.Clear();
+    m_mouseTrailTracer.AddTrailPoint( aP );
+    m_mouseTrailTracer.SetTolerance( m_head.Width() );
+    m_mouseTrailTracer.SetDefaultDirections( m_initial_direction, DIRECTION_45::UNDEFINED );
+    m_mouseTrailTracer.SetMouseDisabled( !Settings().GetAutoPosture() );
 
     NODE *n;
 
@@ -1013,7 +1013,7 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     }
 
     updateLeadingRatLine();
-    m_postureSolver.AddTrailPoint( aP );
+    m_mouseTrailTracer.AddTrailPoint( aP );
     return true;
 }
 
@@ -1169,10 +1169,10 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
         DIRECTION_45 lastSegDir = pl.EndsWithVia() ? DIRECTION_45::UNDEFINED : d_last;
 
-        m_postureSolver.Clear();
-        m_postureSolver.SetTolerance( m_head.Width() );
-        m_postureSolver.AddTrailPoint( m_currentStart );
-        m_postureSolver.SetDefaultDirections( m_initial_direction, lastSegDir );
+        m_mouseTrailTracer.Clear();
+        m_mouseTrailTracer.SetTolerance( m_head.Width() );
+        m_mouseTrailTracer.AddTrailPoint( m_currentStart );
+        m_mouseTrailTracer.SetDefaultDirections( m_initial_direction, lastSegDir );
 
         m_placementCorrect = true;
     }
@@ -1206,9 +1206,9 @@ bool LINE_PLACER::UnfixRoute()
     m_head.RemoveVia();
     m_tail.RemoveVia();
 
-    m_postureSolver.Clear();
-    m_postureSolver.SetDefaultDirections( m_initial_direction, m_direction );
-    m_postureSolver.AddTrailPoint( m_p_start );
+    m_mouseTrailTracer.Clear();
+    m_mouseTrailTracer.SetDefaultDirections( m_initial_direction, m_direction );
+    m_mouseTrailTracer.AddTrailPoint( m_p_start );
 
     if( m_shove )
     {
@@ -1314,6 +1314,13 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
 
 void LINE_PLACER::UpdateSizes( const SIZES_SETTINGS& aSizes )
 {
+    // initPlacement will kill the tail, don't do that unless the track size has changed
+    if( !m_idle && aSizes.TrackWidth() != m_sizes.TrackWidth() )
+    {
+        m_sizes = aSizes;
+        initPlacement();
+    }
+
     m_sizes = aSizes;
 
     if( !m_idle )
@@ -1350,7 +1357,7 @@ void LINE_PLACER::SetOrthoMode( bool aOrthoMode )
 bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead )
 {
     SHAPE_LINE_CHAIN l;
-    DIRECTION_45 guessedDir = m_postureSolver.GetPosture( aP );
+    DIRECTION_45 guessedDir = m_mouseTrailTracer.GetPosture( aP );
 
     wxLogTrace( "PNS", "buildInitialLine: m_direction %s, guessedDir %s, tail points %d",
                 m_direction.Format(), guessedDir.Format(), m_tail.PointCount() );
@@ -1480,240 +1487,6 @@ bool FIXED_TAIL::PopStage( FIXED_TAIL::STAGE& aStage )
 int FIXED_TAIL::StageCount() const
 {
     return m_stages.size();
-}
-
-
-POSTURE_SOLVER::POSTURE_SOLVER()
-{
-    m_tolerance = 0;
-    m_disableMouse = false;
-    Clear();
-}
-
-
-POSTURE_SOLVER::~POSTURE_SOLVER() {}
-
-
-void POSTURE_SOLVER::Clear()
-{
-    m_forced         = false;
-    m_manuallyForced = false;
-    m_trail.Clear();
-}
-
-
-void POSTURE_SOLVER::AddTrailPoint( const VECTOR2I& aP )
-{
-    if( m_trail.SegmentCount() == 0 )
-    {
-        m_trail.Append( aP );
-    }
-    else
-    {
-        SEG s_new( m_trail.CPoint( -1 ), aP );
-
-        for( int i = 0; i < m_trail.SegmentCount() - 1; i++ )
-        {
-            const SEG& s_trail = m_trail.CSegment( i );
-
-            if( s_trail.Distance( s_new ) <= m_tolerance )
-            {
-                m_trail = m_trail.Slice( 0, i );
-                break;
-            }
-        }
-
-        m_trail.Append( aP );
-    }
-
-    m_trail.Simplify();
-
-    ROUTER::GetInstance()->GetInterface()->GetDebugDecorator()->AddLine( m_trail, 5, 100000 );
-}
-
-
-DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
-{
-    // Tuning factor for how good the "fit" of the trail must be to the posture
-    const double areaRatioThreshold = 1.3;
-
-    // Tuning factor to minimize flutter
-    const double areaRatioEpsilon = 0.25;
-
-    // Minimum distance factor of the trail before the min area test is used to lock the solver
-    const double minAreaCutoffDistanceFactor = 6;
-
-    // Adjusts how far away from p0 we get before whatever posture we solved is locked in
-    const int lockDistanceFactor = 25;
-
-    // Adjusts how close to p0 we unlock the posture again if one was locked already
-    const int unlockDistanceFactor = 4;
-
-    if( m_trail.PointCount() < 2 || m_manuallyForced )
-    {
-        // If mouse trail detection is enabled; using the last seg direction as a starting point
-        // will give the best results.  Otherwise, just assume that we switch postures every
-        // segment.
-        if( !m_manuallyForced && m_lastSegDirection != DIRECTION_45::UNDEFINED )
-            m_direction = m_disableMouse ? m_lastSegDirection.Right() : m_lastSegDirection;
-
-        return m_direction;
-    }
-
-    DEBUG_DECORATOR* dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
-    VECTOR2I         p0 = m_trail.CPoint( 0 );
-    double           refLength = SEG( p0, aP ).Length();
-    SHAPE_LINE_CHAIN straight( DIRECTION_45().BuildInitialTrace( p0, aP, false, false ) );
-
-    straight.SetClosed( true );
-    straight.Append( m_trail.Reverse() );
-    straight.Simplify();
-    dbg->AddLine( straight, m_forced ? 3 : 2, 100000 );
-
-    double areaS = std::abs( straight.Area() );
-
-    SHAPE_LINE_CHAIN diag( DIRECTION_45().BuildInitialTrace( p0, aP, true, false ) );
-    diag.Append( m_trail.Reverse() );
-    diag.SetClosed( true );
-    diag.Simplify();
-    dbg->AddLine( diag, 1, 100000 );
-
-    double areaDiag = std::abs( diag.Area() );
-    double ratio    = areaS / ( areaDiag + 1.0 );
-
-    // heuristic to detect that the user dragged back the cursor to the beginning of the trace
-    // in this case, we cancel any forced posture and restart the trail
-    if( m_forced && refLength < unlockDistanceFactor * m_tolerance )
-    {
-        wxLogTrace( "PNS", "Posture: Unlocked and reset" );
-        m_forced = false;
-        VECTOR2I start = p0;
-        m_trail.Clear();
-        m_trail.Append( start );
-    }
-
-    bool areaOk = false;
-
-    // Check the actual trail area against the cutoff.  This prevents flutter when the trail is
-    // very close to a straight line.
-    if( !m_forced && refLength > minAreaCutoffDistanceFactor * m_tolerance )
-    {
-        double areaCutoff = m_tolerance * refLength;
-        SHAPE_LINE_CHAIN trail( m_trail );
-        trail.SetClosed( true );
-
-        if( std::abs( trail.Area() ) > areaCutoff )
-            areaOk = true;
-    }
-
-    DIRECTION_45 straightDirection;
-    DIRECTION_45 diagDirection;
-    DIRECTION_45 newDirection = m_direction;
-
-    straightDirection = DIRECTION_45( straight.CSegment( 0 ) );
-    diagDirection     = DIRECTION_45( diag.CSegment( 0 ) );
-
-    if( !m_forced && areaOk && ratio > areaRatioThreshold + areaRatioEpsilon )
-        newDirection = diagDirection;
-    else if( !m_forced && areaOk && ratio < ( 1.0 / areaRatioThreshold ) - areaRatioEpsilon )
-        newDirection = straightDirection;
-    else
-        newDirection = m_direction.IsDiagonal() ? diagDirection : straightDirection;
-
-    if( !m_disableMouse && newDirection != m_direction )
-    {
-        wxLogTrace( "PNS", "Posture: direction update %s => %s", m_direction.Format(),
-                    newDirection.Format() );
-        m_direction = newDirection;
-    }
-
-    // If we have a last segment, correct the direction relative to it.  For segment exit, we want
-    // to correct to the least obtuse
-    if( !m_manuallyForced && !m_disableMouse && m_lastSegDirection != DIRECTION_45::UNDEFINED )
-    {
-        wxLogTrace( "PNS", "Posture: checking direction %s against last seg %s",
-                    m_direction.Format(), m_lastSegDirection.Format() );
-
-        if( straightDirection == m_lastSegDirection )
-        {
-            if( m_direction != straightDirection )
-            {
-                wxLogTrace( "PNS", "Posture: forcing straight => %s", straightDirection.Format() );
-            }
-
-            m_direction = straightDirection;
-        }
-        else if( diagDirection == m_lastSegDirection )
-        {
-            if( m_direction != diagDirection )
-            {
-                wxLogTrace( "PNS", "Posture: forcing diagonal => %s", diagDirection.Format() );
-            }
-
-            m_direction = diagDirection;
-        }
-        else
-        {
-            switch( m_direction.Angle( m_lastSegDirection ) )
-            {
-            case DIRECTION_45::ANG_HALF_FULL:
-                // Force a better (acute) connection
-                m_direction = m_direction.IsDiagonal() ? straightDirection : diagDirection;
-                wxLogTrace( "PNS", "Posture: correcting half full => %s", m_direction.Format() );
-                break;
-
-            case DIRECTION_45::ANG_ACUTE:
-            {
-                // Force a better connection by flipping if possible
-                DIRECTION_45 candidate = m_direction.IsDiagonal() ? straightDirection
-                                                                  : diagDirection;
-
-                if( candidate.Angle( m_lastSegDirection ) == DIRECTION_45::ANG_RIGHT )
-                {
-                    wxLogTrace( "PNS", "Posture: correcting right => %s", candidate.Format() );
-                    m_direction = candidate;
-                }
-
-                break;
-            }
-
-            case DIRECTION_45::ANG_RIGHT:
-            {
-                // Force a better connection by flipping if possible
-                DIRECTION_45 candidate = m_direction.IsDiagonal() ? straightDirection
-                                                                  : diagDirection;
-
-                if( candidate.Angle( m_lastSegDirection ) == DIRECTION_45::ANG_OBTUSE )
-                {
-                    wxLogTrace( "PNS", "Posture: correcting obtuse => %s", candidate.Format() );
-                    m_direction = candidate;
-                }
-
-                break;
-            }
-
-            default:
-                break;
-            }
-        }
-    }
-
-    // If we get far away from the initial point, lock in the current solution to prevent flutter
-    if( !m_forced && refLength > lockDistanceFactor * m_tolerance )
-    {
-        wxLogTrace( "PNS", "Posture: solution locked" );
-        m_forced = true;
-    }
-
-    return m_direction;
-}
-
-
-void POSTURE_SOLVER::FlipPosture()
-{
-    m_direction = m_direction.Right();
-    m_forced = true;
-    m_manuallyForced = true;
 }
 
 }

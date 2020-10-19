@@ -29,6 +29,7 @@ set( PCBNEW_PNS_SRCS
     pns_meander_placer.cpp
     pns_meander_placer_base.cpp
     pns_meander_skew_placer.cpp
+    pns_mouse_trail_tracer.cpp
     pns_node.cpp
     pns_optimizer.cpp
     pns_router.cpp

@@ -33,6 +33,7 @@
 #include "pns_via.h"
 #include "pns_line.h"
 #include "pns_placement_algo.h"
+#include "pns_mouse_trail_tracer.h"
 
 namespace PNS {
 
@@ -74,50 +75,10 @@ private:
 };
 
 
-class POSTURE_SOLVER
-{
-public:
-    POSTURE_SOLVER();
-    ~POSTURE_SOLVER();
-
-    void Clear();
-
-    void AddTrailPoint( const VECTOR2I& aP );
-
-    void SetTolerance( int toll ) { m_tolerance = toll; }
-
-    void SetDefaultDirections( DIRECTION_45 aInitDirection, DIRECTION_45 aLastSegDir )
-    {
-        m_direction        = aInitDirection;
-        m_lastSegDirection = aLastSegDir;
-    }
-
-    DIRECTION_45 GetPosture( const VECTOR2I& aP );
-
-    void FlipPosture();
-
-    /**
-     * Disable the mouse-trail portion of the posture solver; leaving only the manual posture
-     * switch and the previous-segment posture algorithm
-     */
-    void SetMouseDisabled( bool aDisabled = true ) { m_disableMouse = aDisabled; }
-
-    bool IsManuallyForced() const { return m_manuallyForced; }
-
-private:
-    SHAPE_LINE_CHAIN m_trail;
-    int              m_tolerance;
-    DIRECTION_45     m_direction;
-    DIRECTION_45     m_lastSegDirection;
-    bool             m_forced;
-    bool             m_disableMouse;
-    bool             m_manuallyForced;
-};
 
 /**
- * Single track placement algorithm.
- *
- * Interactively routes a track and applies shove and walk around algorithms when needed.
+ * Single track placement algorithm. Interactively routes a track.
+ * Applies shove and walkaround algorithms when needed.
  */
 
 class LINE_PLACER : public PLACEMENT_ALGO
@@ -225,6 +186,7 @@ public:
     /**
      * Perform on-the-fly update of the width, via diameter & drill size from a settings class.
      *
+     * Performs on-the-fly update of the width, via diameter & drill size from a settings class.
      * Used to dynamically change these parameters as the track is routed.
      */
     void UpdateSizes( const SIZES_SETTINGS& aSizes ) override;
@@ -336,7 +298,7 @@ private:
      * colliding solid or non-movable items.  Movable segments are ignored, as they'll be
      * handled later by the shove algorithm.
      */
-    bool routeHead( const VECTOR2I& aP, LINE& aNewHead );
+    bool routeHead( const VECTOR2I& aP, LINE& aNewHead);
 
     /**
      * Perform a single routing algorithm step, for the end point \a aP.
@@ -347,10 +309,10 @@ private:
     void routeStep( const VECTOR2I& aP );
 
     ///< Route step walk around mode.
-    bool rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead );
+    bool rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead);
 
     ///< Route step shove mode.
-    bool rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead );
+    bool rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead);
 
     ///< Route step mark obstacles mode.
     bool rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead );
@@ -398,7 +360,7 @@ private:
     bool           m_placementCorrect;
 
     FIXED_TAIL     m_fixedTail;
-    POSTURE_SOLVER m_postureSolver;
+    MOUSE_TRAIL_TRACER m_mouseTrailTracer;
 };
 
 }
