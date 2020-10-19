@@ -315,6 +315,14 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
     double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
                                                 fabs( vsize.y / screenSize.y ) );
 
+    // if the scale isn't finite (most likely due to an empty canvas)
+    // simply just make sure we are centered and quit out of trying to zoom to fit
+    if( !std::isfinite( scale ) )
+    {
+        view->SetCenter( VECTOR2D( 0, 0 ) );
+        return 0;
+    }
+
     // Reserve a 2% margin around bounding boxes.
     double margin_scale_factor = 1.02;
 
