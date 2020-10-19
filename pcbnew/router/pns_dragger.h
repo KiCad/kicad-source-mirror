@@ -31,7 +31,7 @@
 #include "pns_drag_algo.h"
 #include "pns_itemset.h"
 #include "pns_layerset.h"
-
+#include "pns_mouse_trail_tracer.h"
 
 namespace PNS {
 
@@ -121,11 +121,13 @@ private:
     bool startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg );
     bool startDragArc( const VECTOR2D& aP, ARC* aArc );
     bool startDragVia( VIA* aVia );
-    void dragViaMarkObstacles( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2I& aP );
-    void dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2I& aP );
-    void optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, SEG& aDraggedSeg, const VECTOR2I& aP );
+    bool dragViaMarkObstacles( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2I& aP );
+    bool dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2I& aP );
+    void optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, const VECTOR2I& aP );
+    bool propagateViaForces( NODE* node, std::set<VIA*>& vias );
+    bool tryWalkaround( NODE* aNode, LINE& aOrig, LINE& aWalk );
 
-private:
+
     VIA_HANDLE             m_initialVia;
     VIA_HANDLE             m_draggedVia;
 
@@ -136,6 +138,7 @@ private:
     int                    m_draggedSegmentIndex;
     bool                   m_dragStatus;
     PNS_MODE               m_currentMode;
+    ITEM_SET m_origViaConnections;
     VECTOR2D               m_lastValidPoint;
 
     ///< Contains the list of items that are currently modified by the dragger
@@ -143,6 +146,7 @@ private:
 
     ///< If true, moves the connection lines without maintaining 45 degrees corners
     bool                   m_freeAngleMode;
+    MOUSE_TRAIL_TRACER m_mouseTrailTracer;
 };
 
 }
