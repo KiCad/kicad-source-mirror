@@ -148,9 +148,10 @@ struct DATA_MODEL_ROW
 };
 
 
-#define FIELD_NAME_COLUMN 0
-#define SHOW_FIELD_COLUMN 1
-#define GROUP_BY_COLUMN   2
+#define DISPLAY_NAME_COLUMN   0
+#define SHOW_FIELD_COLUMN     1
+#define GROUP_BY_COLUMN       2
+#define CANONICAL_NAME_COLUMN 3
 
 #define QUANTITY_COLUMN   ( GetNumberCols() - 1 )
 
@@ -219,6 +220,17 @@ public:
 
 
     wxString GetColLabelValue( int aCol ) override
+    {
+        if( aCol == QUANTITY_COLUMN )
+            return _( "Qty" );
+        else if( aCol < MANDATORY_FIELDS )
+            return TEMPLATE_FIELDNAME::GetDefaultFieldName( aCol );
+        else
+            return m_fieldNames[ aCol ];
+    }
+
+
+    wxString GetCanonicalColLabel( int aCol )
     {
         if( aCol == QUANTITY_COLUMN )
             return _( "Qty" );
@@ -435,7 +447,7 @@ public:
             if( !fieldsCtrl->GetToggleValue( i, GROUP_BY_COLUMN ) )
                 continue;
 
-            wxString fieldName = fieldsCtrl->GetTextValue( i, FIELD_NAME_COLUMN );
+            wxString fieldName = fieldsCtrl->GetTextValue( i, CANONICAL_NAME_COLUMN );
 
             if( m_dataStore[ lhRefID ][ fieldName ] != m_dataStore[ rhRefID ][ fieldName ] )
                 return false;
@@ -723,11 +735,11 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
 
     for( int row = 0; row < m_fieldsCtrl->GetItemCount(); ++row )
     {
-        const wxString& fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
+        const wxString& fieldName = m_fieldsCtrl->GetTextValue( row, DISPLAY_NAME_COLUMN );
         nameColWidth = std::max( nameColWidth, GetTextSize( fieldName, m_fieldsCtrl ).x );
     }
 
-    m_fieldsCtrl->GetColumn( FIELD_NAME_COLUMN )->SetWidth( nameColWidth );
+    m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( nameColWidth );
     m_splitter1->SetSashPosition( nameColWidth + m_showColWidth + m_groupByColWidth + 40 );
 
     m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
@@ -785,7 +797,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
         if( m_grid->IsColShown( col ) )
         {
             EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-            std::string        key( m_dataModel->GetColLabelValue( col ).ToUTF8() );
+            std::string        key( m_dataModel->GetCanonicalColLabel( col ).ToUTF8() );
 
             if( cfg->m_FieldEditorPanel.column_widths.count( key ) )
             {
@@ -905,10 +917,11 @@ bool DIALOG_FIELDS_EDITOR_GLOBAL::TransferDataFromWindow()
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::AddField( const wxString& aName,
+void DIALOG_FIELDS_EDITOR_GLOBAL::AddField( const wxString& aDisplayName,
+                                            const wxString& aCanonicalName,
                                             bool defaultShow, bool defaultSortBy )
 {
-    m_dataModel->AddColumn( aName );
+    m_dataModel->AddColumn( aCanonicalName );
 
     wxVector<wxVariant> fieldsCtrlRow;
 
@@ -916,7 +929,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::AddField( const wxString& aName,
     bool               show    = defaultShow;
     bool               sort_by = defaultSortBy;
 
-    std::string key( aName.ToUTF8() );
+    std::string key( aCanonicalName.ToUTF8() );
 
     if( cfg->m_FieldEditorPanel.fields_show.count( key ) )
         show = cfg->m_FieldEditorPanel.fields_show.at( key );
@@ -925,9 +938,10 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::AddField( const wxString& aName,
         sort_by = cfg->m_FieldEditorPanel.fields_group_by.at( key );
 
     // Don't change these to emplace_back: some versions of wxWidgets don't support it
-    fieldsCtrlRow.push_back( wxVariant( aName ) );
+    fieldsCtrlRow.push_back( wxVariant( aDisplayName ) );
     fieldsCtrlRow.push_back( wxVariant( show ) );
     fieldsCtrlRow.push_back( wxVariant( sort_by ) );
+    fieldsCtrlRow.push_back( wxVariant( aCanonicalName ) );
 
     m_fieldsCtrl->AppendItem( fieldsCtrlRow );
 }
@@ -955,23 +969,20 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
 
     cfg->m_FieldEditorPanel.fields_show["Reference"] = true;
 
-    // *DO NOT* use translated mandatory field names:
-    // They are also used as keyword to find fields in component list.
-    // Changing that is not a basic change
-    AddField( "Reference", true, true  );
-    AddField( "Value",     true, true  );
-    AddField( "Footprint", true, true  );
-    AddField( "Datasheet", true, false );
+    AddField( _( "Reference" ), wxT( "Reference" ), true, true  );
+    AddField( _( "Value" ),     wxT( "Value" ),     true, true  );
+    AddField( _( "Footprint" ), wxT( "Footprint" ), true, true  );
+    AddField( _( "Datasheet" ), wxT( "Datasheet" ), true, false );
 
     for( const wxString& fieldName : userFieldNames )
-        AddField( fieldName, true, false );
+        AddField( fieldName, fieldName, true, false );
 
     // Add any templateFieldNames which aren't already present in the userFieldNames
     for( const TEMPLATE_FIELDNAME& templateFieldname :
             m_parent->Schematic().Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
     {
         if( userFieldNames.count( templateFieldname.m_Name ) == 0 )
-            AddField( templateFieldname.m_Name, false, false );
+            AddField( templateFieldname.m_Name, templateFieldname.m_Name, false, false );
     }
 }
 
@@ -1011,7 +1022,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnAddField( wxCommandEvent& event )
     auto cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     cfg->m_FieldEditorPanel.fields_show[key] = true;
 
-    AddField( fieldName, true, false );
+    AddField( fieldName, fieldName, true, false );
 
     wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_INSERTED,
                             m_fieldsCtrl->GetItemCount(), 1 );
@@ -1051,7 +1062,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
             m_fieldsCtrl->SetToggleValue( value, row, col );
         }
 
-        std::string fieldName( m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ).ToUTF8() );
+        std::string fieldName( m_fieldsCtrl->GetTextValue( row, CANONICAL_NAME_COLUMN ).ToUTF8() );
         cfg->m_FieldEditorPanel.fields_show[fieldName] = value;
 
         if( value )
@@ -1064,7 +1075,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
     case GROUP_BY_COLUMN:
     {
         bool value = m_fieldsCtrl->GetToggleValue( row, col );
-        std::string fieldName( m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ).ToUTF8() );
+        std::string fieldName( m_fieldsCtrl->GetTextValue( row, CANONICAL_NAME_COLUMN ).ToUTF8() );
         cfg->m_FieldEditorPanel.fields_group_by[fieldName] = value;
 
         m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
@@ -1113,7 +1124,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableColSize( wxGridSizeEvent& aEvent )
 {
     EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     int                col = aEvent.GetRowOrCol();
-    std::string        key( m_grid->GetColLabelValue( col ).ToUTF8() );
+    std::string        key( m_dataModel->GetCanonicalColLabel( col ).ToUTF8() );
 
     if( m_grid->GetColSize( col ) )
         cfg->m_FieldEditorPanel.column_widths[ key ] = m_grid->GetColSize( col );

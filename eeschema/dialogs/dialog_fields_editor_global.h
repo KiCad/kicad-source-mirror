@@ -51,7 +51,8 @@ private:
     SCH_REFERENCE_LIST             m_componentRefs;
     FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
 
-    void AddField( const wxString& aName, bool defaultShow, bool defaultSortBy );
+    void AddField( const wxString& displayName, const wxString& aCanonicalName, bool defaultShow,
+                   bool defaultSortBy );
     void LoadFieldNames();
 
     void OnColSort( wxGridEvent& aEvent );

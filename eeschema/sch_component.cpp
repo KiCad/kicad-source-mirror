@@ -683,7 +683,7 @@ wxString SCH_COMPONENT::GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME
 {
     for( const SCH_FIELD& field : m_Fields )
     {
-        if( aFieldName == field.GetName() )
+        if( aFieldName == field.GetName() || aFieldName == field.GetCanonicalName() )
             return field.GetText();
     }
 
