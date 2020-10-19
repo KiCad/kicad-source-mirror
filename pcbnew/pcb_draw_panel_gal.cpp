@@ -548,11 +548,13 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerDisplayOnly( LAYER_ANCHOR );
 
     // Some more required layers settings
-    m_view->SetRequired( LAYER_VIAS_HOLES, LAYER_VIA_THROUGH );
-    m_view->SetRequired( LAYER_VIAS_NETNAMES, LAYER_VIA_THROUGH );
-    m_view->SetRequired( LAYER_PADS_PLATEDHOLES, LAYER_PADS_TH );
-    m_view->SetRequired( LAYER_NON_PLATEDHOLES, LAYER_PADS_TH );
-    m_view->SetRequired( LAYER_PADS_NETNAMES, LAYER_PADS_TH );
+    m_view->SetRequired( LAYER_VIAS_NETNAMES, LAYER_VIAS );
+    m_view->SetRequired( LAYER_PADS_NETNAMES, LAYER_PADS );
+
+    // Holes can be independent of their host objects (cf: printing drill marks)
+    m_view->SetRequired( LAYER_VIAS_HOLES, LAYER_VIAS );
+    m_view->SetRequired( LAYER_PADS_PLATEDHOLES, LAYER_PADS );
+    m_view->SetRequired( LAYER_NON_PLATEDHOLES, LAYER_PADS );
 
     // Via visibility
     m_view->SetRequired( LAYER_VIA_MICROVIA, LAYER_VIAS );

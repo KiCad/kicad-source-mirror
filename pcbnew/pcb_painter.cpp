@@ -666,17 +666,25 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
         return;
     }
-
-    // Choose drawing settings depending on if we are drawing via's pad or hole
-    if( aLayer == LAYER_VIAS_HOLES )
+    else if( aLayer == LAYER_VIAS_HOLES )
+    {
         radius = getDrillSize( aVia ) / 2.0;
-    else
+    }
+    else if(   ( aLayer == LAYER_VIA_THROUGH && aVia->GetViaType() == VIATYPE::THROUGH )
+            || ( aLayer == LAYER_VIA_BBLIND && aVia->GetViaType() == VIATYPE::BLIND_BURIED )
+            || ( aLayer == LAYER_VIA_MICROVIA && aVia->GetViaType() == VIATYPE::MICROVIA ) )
+    {
         radius = aVia->GetWidth() / 2.0;
+    }
+    else
+    {
+        return;
+    }
 
     /// Vias not connected to copper are optionally not drawn
     /// We draw instead the hole size to ensure we show the proper clearance
     if( IsCopperLayer( aLayer ) && !aVia->FlashLayer( aLayer ) )
-        radius = getDrillSize(aVia) / 2.0 ;
+        radius = getDrillSize( aVia ) / 2.0 ;
 
     bool sketchMode = false;
     COLOR4D color = m_pcbSettings.GetColor( aVia, aLayer );
@@ -878,10 +886,10 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     COLOR4D                color;
 
     // Pad hole color is pad-type-specific: the background color for plated holes and the
-    // pad color for NPTHs.  Note the extra check for "should be" NPTHs to keep mis-marked
-    // holes with no annular ring from getting "lost" in the background.
-    if( ( aLayer == LAYER_PADS_PLATEDHOLES ) && !aPad->PadShouldBeNPTH() )
-        color = m_pcbSettings.GetBackgroundColor();
+    // pad color for NPTHs.  However if a pad is mis-marked as plated but has no annular ring
+    // then it will get "lost" in the background.
+    if( aLayer == LAYER_PADS_PLATEDHOLES && aPad->PadShouldBeNPTH() )
+        color = m_pcbSettings.GetColor( aPad, LAYER_NON_PLATEDHOLES );
     else
         color = m_pcbSettings.GetColor( aPad, aLayer );
 
@@ -907,7 +915,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         const SHAPE_SEGMENT* seg = aPad->GetEffectiveHoleShape();
 
         if( seg->GetSeg().A == seg->GetSeg().B )    // Circular hole
-            m_gal->DrawCircle( seg->GetSeg().A, seg->GetWidth()/2 );
+            m_gal->DrawCircle( seg->GetSeg().A, getDrillSize( aPad ).x / 2 );
         else
             m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B, seg->GetWidth() );
     }

@@ -253,7 +253,7 @@ public:
     void SetSelectFactor( float aFactor ) { m_selectFactor = aFactor; }
     void SetHighContrastFactor( float aFactor ) { m_hiContrastFactor = aFactor; }
 
-    // TODO: these can go away once we have Cairo-based printing
+    // TODO: these can go away once the worksheet is moved to Cairo-based printing
     wxDC* GetPrintDC() { return m_printDC; }
     void SetPrintDC( wxDC* aDC ) { m_printDC = aDC; }
 
@@ -294,7 +294,8 @@ protected:
                                           // lines.  This sets an absolute minimum.
     bool          m_showPageLimits;
 
-    wxDC*         m_printDC;              // This can go away once we have Cairo-based printing.
+    wxDC*         m_printDC;              // This can go away once the worksheet is moved to
+                                          // Cairo-based printing.
 };
 
 }

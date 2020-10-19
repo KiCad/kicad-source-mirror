@@ -142,11 +142,12 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
 
     if( m_pcbnewSettings.m_asItemCheckboxes )
     {
-        auto setVisibility = [&]( GAL_LAYER_ID aLayer )
-                             {
-                                 if( m_board->IsElementVisible( aLayer ) )
-                                     aView.SetLayerVisible( aLayer );
-                             };
+        auto setVisibility =
+                [&]( GAL_LAYER_ID aLayer )
+                {
+                    if( m_board->IsElementVisible( aLayer ) )
+                        aView.SetLayerVisible( aLayer );
+                };
 
         setVisibility( LAYER_MOD_FR );
         setVisibility( LAYER_MOD_BK );
@@ -172,9 +173,11 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
 
         // Keep certain items always enabled and just rely on either the finer or coarser
         // visibility controls
-        const int alwaysEnabled[] = {
-            LAYER_ZONES, LAYER_PADS, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND, LAYER_VIA_THROUGH
-        };
+        const int alwaysEnabled[] =
+                {
+                    LAYER_ZONES, LAYER_PADS, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND,
+                    LAYER_VIA_THROUGH
+                };
 
         for( int item : alwaysEnabled )
             aView.SetLayerVisible( item, true );
@@ -191,32 +194,33 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
         if( ( aLayerSet & LSET::AllCuMask() ).any() )   // Items visible on any copper layer
         {
             // Enable items on copper layers, but do not draw holes
-            for( GAL_LAYER_ID item : { LAYER_PADS_TH, LAYER_VIAS } )
+            for( GAL_LAYER_ID item : { LAYER_PADS_TH, LAYER_VIA_THROUGH } )
             {
                 aView.SetLayerVisible( item, true );
-            }
-
-            if( m_pcbnewSettings.m_drillMarks != PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE )
-            {
-                // Enable hole layers to draw drill marks
-                for( GAL_LAYER_ID holeLayer : { LAYER_PADS_PLATEDHOLES, LAYER_NON_PLATEDHOLES,
-                                                LAYER_VIAS_HOLES } )
-                {
-                    aView.SetLayerVisible( holeLayer, true );
-                    aView.SetTopLayer( holeLayer, true );
-                }
             }
         }
 
         // Keep certain items always enabled/disabled and just rely on the layer visibility
-        const int alwaysEnabled[] = {
-            LAYER_MOD_TEXT_FR, LAYER_MOD_TEXT_BK, LAYER_MOD_FR, LAYER_MOD_BK,
-            LAYER_MOD_VALUES, LAYER_MOD_REFERENCES, LAYER_TRACKS, LAYER_ZONES, LAYER_PADS,
-            LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND, LAYER_VIA_THROUGH
-        };
+        const int alwaysEnabled[] =
+                {
+                    LAYER_MOD_TEXT_FR, LAYER_MOD_TEXT_BK, LAYER_MOD_FR, LAYER_MOD_BK,
+                    LAYER_MOD_VALUES, LAYER_MOD_REFERENCES, LAYER_TRACKS, LAYER_ZONES, LAYER_PADS,
+                    LAYER_VIAS, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND
+                };
 
         for( int item : alwaysEnabled )
             aView.SetLayerVisible( item, true );
+    }
+
+    if( m_pcbnewSettings.m_drillMarks != PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE )
+    {
+        // Enable hole layers to draw drill marks
+        for( GAL_LAYER_ID holeLayer : { LAYER_PADS_PLATEDHOLES, LAYER_NON_PLATEDHOLES,
+                                        LAYER_VIAS_HOLES } )
+        {
+            aView.SetLayerVisible( holeLayer, true );
+            aView.SetTopLayer( holeLayer, true );
+        }
     }
 }
 
@@ -229,25 +233,29 @@ void PCBNEW_PRINTOUT::setupPainter( KIGFX::PAINTER& aPainter )
 
     switch( m_pcbnewSettings.m_drillMarks )
     {
-        case PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE:
-            painter.SetDrillMarks( false, 0 );
-            break;
+    case PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE:
+        painter.SetDrillMarks( false, 0 );
+        break;
 
-        case PCBNEW_PRINTOUT_SETTINGS::SMALL_DRILL_SHAPE:
-            painter.SetDrillMarks( false, Millimeter2iu( 0.3 ) );
-            break;
+    case PCBNEW_PRINTOUT_SETTINGS::SMALL_DRILL_SHAPE:
+        painter.SetDrillMarks( false, Millimeter2iu( 0.3 ) );
 
-        case PCBNEW_PRINTOUT_SETTINGS::FULL_DRILL_SHAPE:
-            painter.SetDrillMarks( true );
-            break;
+        painter.GetSettings()->SetLayerColor( LAYER_PADS_PLATEDHOLES, COLOR4D::BLACK );
+        painter.GetSettings()->SetLayerColor( LAYER_NON_PLATEDHOLES, COLOR4D::BLACK );
+        painter.GetSettings()->SetLayerColor( LAYER_VIAS_HOLES, COLOR4D::BLACK );
+        break;
+
+    case PCBNEW_PRINTOUT_SETTINGS::FULL_DRILL_SHAPE:
+        painter.SetDrillMarks( true );
+
+        painter.GetSettings()->SetLayerColor( LAYER_PADS_PLATEDHOLES, COLOR4D::BLACK );
+        painter.GetSettings()->SetLayerColor( LAYER_NON_PLATEDHOLES, COLOR4D::BLACK );
+        painter.GetSettings()->SetLayerColor( LAYER_VIAS_HOLES, COLOR4D::BLACK );
+        break;
     }
 
     painter.GetSettings()->SetDrawIndividualViaLayers(
             m_pcbnewSettings.m_pagination == PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE );
-
-    painter.GetSettings()->SetLayerColor( LAYER_PADS_PLATEDHOLES, COLOR4D::WHITE );
-    painter.GetSettings()->SetLayerColor( LAYER_NON_PLATEDHOLES, COLOR4D::WHITE );
-    painter.GetSettings()->SetLayerColor( LAYER_VIAS_HOLES, COLOR4D::WHITE );
 }
 
 
