@@ -312,6 +312,7 @@ set( BMAPS_MID
     move_relative
     mw_add_gap
     mw_add_line
+    mw_add_shape
     mw_add_stub_arc
     mw_add_stub
     mw_toolbar

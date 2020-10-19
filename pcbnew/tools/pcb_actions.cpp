@@ -458,7 +458,7 @@ TOOL_ACTION PCB_ACTIONS::microwaveCreateStubArc( "pcbnew.MicrowaveTool.createStu
 TOOL_ACTION PCB_ACTIONS::microwaveCreateFunctionShape( "pcbnew.MicrowaveTool.createFunctionShape",
         AS_GLOBAL, 0, "",
         _( "Add Microwave Polygonal Shape" ), _( "Create a microwave polygonal shape from a list of vertices" ),
-        mw_add_gap_xpm, AF_ACTIVATE, (void*) MICROWAVE_FOOTPRINT_SHAPE::FUNCTION_SHAPE );
+        mw_add_shape_xpm, AF_ACTIVATE, (void*) MICROWAVE_FOOTPRINT_SHAPE::FUNCTION_SHAPE );
 
 TOOL_ACTION PCB_ACTIONS::microwaveCreateLine( "pcbnew.MicrowaveTool.createLine",
         AS_GLOBAL, 0, "",
