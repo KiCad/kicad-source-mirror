@@ -632,15 +632,20 @@ int ERC_TESTER::TestLibSymbolIssues()
 
                 markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
             }
-            else if( *libSymbol != *libSymbolInSchematic )
+            else
             {
-                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
-                ercItem->SetItems( symbol );
-                msg.Printf( "Library symbol \"%s\" has been modified",
-                            symbol->GetLibId().GetUniStringLibId() );
-                ercItem->SetErrorMessage( msg );
+                std::unique_ptr<LIB_PART> flattenedSymbol = libSymbol->Flatten();
 
-                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                if( *flattenedSymbol != *libSymbolInSchematic )
+                {
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
+                    ercItem->SetItems( symbol );
+                    msg.Printf( "Library symbol \"%s\" has been modified",
+                                symbol->GetLibId().GetUniStringLibId() );
+                    ercItem->SetErrorMessage( msg );
+
+                    markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                }
             }
         }
 
