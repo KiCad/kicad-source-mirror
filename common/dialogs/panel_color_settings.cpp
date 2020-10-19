@@ -63,7 +63,7 @@ void PANEL_COLOR_SETTINGS::OnBtnOpenThemeFolderClicked( wxCommandEvent& event )
 
 void PANEL_COLOR_SETTINGS::ResetPanel()
 {
-    if( !m_currentSettings )
+    if( !m_currentSettings || m_currentSettings->IsReadOnly() )
         return;
 
     for( const std::pair<const int, COLOR_SWATCH*>& pair : m_swatches )
