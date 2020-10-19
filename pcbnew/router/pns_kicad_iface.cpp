@@ -884,7 +884,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
 
     if( shapes && shapes->Size() == 1 )
     {
-        solid->SetShape( shapes->Clone() );
+        solid->SetShape( shapes->Shapes()[0]->Clone() );
     }
     else
     {
@@ -1616,7 +1616,7 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
 
     delete m_debugDecorator;
 
-    auto dec = new PNS_PCBNEW_DEBUG_DECORATOR();
+    auto dec = new PNS_PCBNEW_DEBUG_DECORATOR( m_view );
     m_debugDecorator = dec;
 
     if( ADVANCED_CFG::GetCfg().m_ShowRouterDebugGraphics )
