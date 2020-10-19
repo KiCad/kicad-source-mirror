@@ -177,7 +177,7 @@ COLOR_SETTINGS* SETTINGS_MANAGER::GetColorSettings( const wxString& aName )
 
     // This had better work
     if( !ret )
-        ret = m_color_settings.at( "user" );
+        ret = m_color_settings.at( "_builtin_default" );
 
     return ret;
 }
