@@ -177,14 +177,19 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 
     for( auto it = cpaLayerStack.begin(); it != cpaLayerStack.end(); ++it )
     {
-        LAYER                   curLayer       = cpaLayers[*it];
         BOARD_STACKUP_ITEM_TYPE kicadLayerType = BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_UNDEFINED;
         LAYER_T                 copperType     = LAYER_T::LT_UNDEFINED;
         PCB_LAYER_ID            kicadLayerID   = PCB_LAYER_ID::UNDEFINED_LAYER;
         wxString                layerTypeName  = wxEmptyString;
 
-        if( cpaLayers.count( *it ) == 0 )
-            wxASSERT_MSG( true, wxT( "Unable to find layer index" ) );
+        if( cpaLayers.find( *it ) == cpaLayers.end() )
+        {
+            THROW_IO_ERROR( _( "The selected file is not valid or might be corrupt: The layer "
+                               "stack refers to layer ID '%s' which does not exist in the layer "
+                               "definitions." ) );
+        }
+        
+        LAYER curLayer = cpaLayers.at( *it );
 
         if( prevWasDielectric && ( curLayer.Type != LAYER_TYPE::CONSTRUCTION ) )
         {
@@ -382,13 +387,13 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
                 break;
 
             default:
-                wxASSERT_MSG( true, wxT( "Unknown CADSTAR Layer Sub-type" ) );
+                wxFAIL_MSG( "Unknown CADSTAR Layer Sub-type" );
                 break;
             }
             break;
 
         default:
-            wxASSERT_MSG( true, wxT( "Unknown CADSTAR Layer Type" ) );
+            wxFAIL_MSG( "Unknown CADSTAR Layer Type" );
             break;
         }
 
@@ -516,7 +521,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::remapUnsureLayers()
     {
         if( layerPair.second == PCB_LAYER_ID::UNDEFINED_LAYER )
         {
-            wxASSERT_MSG( false, "Unexpected Layer ID" );
+            wxFAIL_MSG( "Unexpected Layer ID" );
             continue;
         }
 
@@ -708,7 +713,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent, 
             break;
 
         default:
-            wxASSERT_MSG( true, "Unknown Pad type" );
+            wxFAIL_MSG( "Unknown Pad type" );
         }
 
         pad->SetName( csPad.Identifier.IsEmpty() ? wxString::Format( wxT( "%ld" ), csPad.ID ) :
@@ -796,7 +801,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent, 
             break;
 
         default:
-            wxASSERT_MSG( true, "Unknown Pad Shape" );
+            wxFAIL_MSG( "Unknown Pad Shape" );
         }
 
         if( csPadcode.ReliefClearance != UNDEFINED_VALUE )
@@ -969,7 +974,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
                     break;
 
                 case UNITS::DESIGN:
-                    wxASSERT( false ); // Should not be here
+                    wxFAIL_MSG( "DESIGN units requested - this should not happen." );
                     break;
 
                 }
@@ -1573,7 +1578,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
 
     txt->SetTextAngle( getAngleTenthDegree( aCadstarText.OrientAngle ) + aRotationAngle );
 
-    if( !aCadstarText.Mirror != !aMirrorInvert ) // If mirroring, invert angle to match CADSTAR
+    if( aCadstarText.Mirror != aMirrorInvert ) // If mirroring, invert angle to match CADSTAR
         txt->SetTextAngle( -txt->GetTextAngle() );
 
     txt->SetMirrored( aCadstarText.Mirror );
@@ -1636,7 +1641,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
         break;
 
     default:
-        wxASSERT_MSG( true, "Unknown Aligment - needs review!" );
+        wxFAIL_MSG( "Unknown Aligment - needs review!" );
     }
 
     if( aMirrorInvert )
@@ -2031,7 +2036,7 @@ SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromDrawsegments(
             break;
 
         default:
-            wxASSERT_MSG( true, "Drawsegment type is unexpected. Ignored." );
+            wxFAIL_MSG( "Drawsegment type is unexpected. Ignored." );
         }
     }
 
@@ -2087,7 +2092,7 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
             break;
 
         default:
-            wxASSERT_MSG( true, "Drawsegment type is unexpected. Ignored." );
+            wxFAIL_MSG( "Drawsegment type is unexpected. Ignored." );
             continue;
         }
 
@@ -2230,7 +2235,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
         break;
 
     default:
-        wxASSERT_MSG( true, "Unknown Aligment - needs review!" );
+        wxFAIL_MSG( "Unknown Aligment - needs review!" );
     }
 
     //TODO Handle different font types when KiCad can support it.
@@ -2521,7 +2526,7 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
             }
             else
             {
-                wxASSERT_MSG( false, "A net with no pins associated?" );
+                wxFAIL_MSG( "A net with no pins associated?" );
                 newName = wxT( "csNet-" );
                 newName << wxString::Format( "%i", csNet.SignalNum );
             }

@@ -25,7 +25,7 @@
 
 #include <plugins/cadstar/cadstar_archive_parser.h>
 
-
+// Ratio derived from CADSTAR default font. See doxygen comment in cadstar_archive_parser.h
 const double CADSTAR_ARCHIVE_PARSER::TXT_HEIGHT_RATIO = ( 24.0 - 5.0 ) / 24.0;
 
 
