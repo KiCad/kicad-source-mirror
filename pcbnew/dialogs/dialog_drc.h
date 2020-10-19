@@ -97,7 +97,6 @@ private:
     // PROGRESS_REPORTER calls
     bool updateUI() override;
     void AdvancePhase( const wxString& aMessage ) override;
-    void SetCurrentProgress( double aProgress ) override;
 
     BOARD_DESIGN_SETTINGS& bds() { return m_currentBoard->GetDesignSettings(); }
 

@@ -28,7 +28,6 @@
 #include <sch_screen.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
-#include <invoke_sch_dialog.h>
 #include <project.h>
 #include <kiface_i.h>
 #include <bitmaps.h>
@@ -36,7 +35,6 @@
 #include <wildcards_and_files_ext.h>
 #include <sch_view.h>
 #include <sch_marker.h>
-#include <sch_component.h>
 #include <connection_graph.h>
 #include <tools/ee_actions.h>
 #include <tool/tool_manager.h>
@@ -45,28 +43,30 @@
 #include <id.h>
 #include <confirm.h>
 #include <widgets/infobar.h>
+#include <dialogs/wx_html_report_box.h>
 #include <wx/ffile.h>
+#include <wx/hyperlink.h>
 #include <erc_item.h>
 #include <eeschema_settings.h>
 #include <kicad_string.h>
+#include <kiplatform/ui.h>
 
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
         DIALOG_ERC_BASE( parent, ID_DIALOG_ERC ),  // parent looks for this ID explicitly
+        PROGRESS_REPORTER( 1 ),
         m_parent( parent ),
+        m_running( false ),
         m_ercRun( false ),
         m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
 {
     EESCHEMA_SETTINGS* settings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     m_severities = settings->m_Appearance.erc_severities;
 
+    m_messages->SetImmediateMode();
+
     m_markerProvider = new SHEETLIST_ERC_ITEMS_PROVIDER( &m_parent->Schematic() );
     m_markerTreeModel = new RC_TREE_MODEL( parent, m_markerDataView );
     m_markerDataView->AssociateModel( m_markerTreeModel );
-
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_textMarkers->SetFont( infoFont );
-    m_titleMessages->SetFont( infoFont );
 
     m_markerTreeModel->SetSeverities( m_severities );
     m_markerTreeModel->SetProvider( m_markerProvider );
@@ -75,14 +75,30 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Run" ) );
+    m_sdbSizer1OK->SetLabel( _( "Run ERC" ) );
     m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
     m_sdbSizer1->Layout();
 
     m_sdbSizer1OK->SetDefault();
 
     if( m_parent->CheckAnnotate( NULL_REPORTER::GetInstance(), false ) )
-        m_infoBar->ShowMessage( _( "Some components are not annotated.  ERC cannot be run." ) );
+    {
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY,
+                                                       _("Show Annotation dialog"),
+                                                       wxEmptyString );
+
+        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                      [&]( wxHyperlinkEvent& aEvent )
+                      {
+                          wxHtmlLinkEvent htmlEvent( aEvent.GetId(),
+                                                     wxHtmlLinkInfo( aEvent.GetURL() ) );
+                          OnLinkClicked( htmlEvent );
+                      } ) );
+
+        m_infoBar->RemoveAllButtons();
+        m_infoBar->AddButton( button );
+        m_infoBar->ShowMessage( _( "Annotation not complete.  ERC cannot be run." ) );
+    }
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
@@ -98,6 +114,37 @@ DIALOG_ERC::~DIALOG_ERC()
         settings->m_Appearance.erc_severities = m_severities;
 
     m_markerTreeModel->DecRef();
+}
+
+
+// PROGRESS_REPORTER calls
+
+bool DIALOG_ERC::updateUI()
+{
+    // If ERC checks ever get slow enough we'll want a progress indicator...
+    //
+    // double cur = (double) m_progress.load() / m_maxProgress;
+    // cur = std::max( 0.0, std::min( cur, 1.0 ) );
+    //
+    // m_gauge->SetValue( KiROUND( cur * 1000.0 ) );
+    // wxSafeYield( this );
+
+    return !m_cancelled;
+}
+
+
+void DIALOG_ERC::AdvancePhase( const wxString& aMessage )
+{
+    PROGRESS_REPORTER::AdvancePhase( aMessage );
+    SetCurrentProgress( 0.0 );
+
+    m_messages->Report( aMessage );
+}
+
+
+void DIALOG_ERC::Report( const wxString& aMessage )
+{
+    m_messages->Report( aMessage );
 }
 
 
@@ -159,8 +206,14 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 
 
 // This is a modeless dialog so we have to handle these ourselves.
-void DIALOG_ERC::OnButtonCloseClick( wxCommandEvent& event )
+void DIALOG_ERC::OnCancelClick( wxCommandEvent& aEvent )
 {
+    if( m_running )
+    {
+        m_cancelled = true;
+        return;
+    }
+
     m_parent->FocusOnItem( nullptr );
 
     Close();
@@ -187,16 +240,78 @@ void DIALOG_ERC::syncCheckboxes()
 }
 
 
+void DIALOG_ERC::OnLinkClicked( wxHtmlLinkEvent& event )
+{
+    wxCommandEvent dummy;
+    m_parent->OnAnnotate( dummy );
+
+    // We don't actually get notified when the annotation error is resolved, but we can assume
+    // that the user will take corrective action.  If they don't, we can just show the infobar
+    // again.
+    m_infoBar->Hide();
+}
+
+
 void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
 {
     wxBusyCursor busy;
+
+    SCHEMATIC* sch = &m_parent->Schematic();
+
+    // Build the whole sheet list in hierarchy (sheet, not screen)
+    sch->GetSheets().AnnotatePowerSymbols();
+
+    if( m_parent->CheckAnnotate( NULL_REPORTER::GetInstance(), false ) )
+    {
+        m_notebook->ChangeSelection( 0 );   // Display the "Tests Running..." tab
+
+        m_messages->Clear();
+        m_messages->Report( _( "Annotation not complete.  ERC cannot be run.  " )
+                            + wxT( "<a href='annotate'>" )
+                            + _( "Show Annotation dialog." )
+                            + wxT( "</a>" ) );
+
+        m_messages->Flush();
+        m_infoBar->Hide();      // No need for duplicated error messages
+        return;
+    }
+
+    m_infoBar->Hide();
+
     deleteAllMarkers( true );
 
-    m_MessagesList->Clear();
-    wxSafeYield();      // m_MarkersList must be redraw
+    m_notebook->ChangeSelection( 0 );   // Display the "Tests Running..." tab
+    m_messages->Clear();
+    wxYield();                          // Allow time slice to refresh Messages
 
-    WX_TEXT_CTRL_REPORTER reporter( m_MessagesList );
-    testErc( reporter );
+    m_running = true;
+    m_sdbSizer1Cancel->SetLabel( _( "Cancel" ) );
+    m_sdbSizer1OK->Enable( false );
+    m_buttondelmarkers->Enable( false );
+    m_saveReport->Enable( false );
+
+    testErc();
+
+    if( m_cancelled )
+        m_messages->Report( _( "-------- ERC cancelled by user.<br><br>" ) );
+    else
+        m_messages->Report( _( "Done.<br><br>" ) );
+
+    Raise();
+    wxYield();                                    // Allow time slice to refresh Messages
+
+    m_running = false;
+    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
+    m_sdbSizer1OK->Enable( true );
+    m_buttondelmarkers->Enable( true );
+    m_saveReport->Enable( true );
+
+    if( !m_cancelled )
+    {
+        wxMilliSleep( 500 );
+        m_notebook->ChangeSelection( 1 );
+        KIPLATFORM::UI::ForceFocus( m_markerDataView );
+    }
 
     m_ercRun = true;
     updateDisplayedCounts();
@@ -211,7 +326,7 @@ void DIALOG_ERC::redrawDrawPanel()
 }
 
 
-void DIALOG_ERC::testErc( REPORTER& aReporter )
+void DIALOG_ERC::testErc()
 {
     wxFileName fn;
 
@@ -220,27 +335,14 @@ void DIALOG_ERC::testErc( REPORTER& aReporter )
     // Build the whole sheet list in hierarchy (sheet, not screen)
     sch->GetSheets().AnnotatePowerSymbols();
 
-    if( m_parent->CheckAnnotate( aReporter, false ) )
+    if( m_parent->CheckAnnotate( NULL_REPORTER::GetInstance(), false ) )
     {
-        if( aReporter.HasMessage() )
-            aReporter.ReportTail( _( "Some components are not annotated.  ERC cannot be run." ),
-                                  RPT_SEVERITY_ERROR );
+        Report( _( "Annotation not complete.  ERC cannot be run.  " )
+                    + wxT( "<a href='annotate'>" )
+                    + _( "Show Annotation dialog." )
+                    + wxT( "</a>" ) );
 
-        if( IsOK( m_parent, _( "Some components are not annotated.  Open annotation dialog?" ) ) )
-        {
-            wxCommandEvent dummy;
-            m_parent->OnAnnotate( dummy );
-
-            // We don't actually get notified when the annotation error is resolved, but we can
-            // assume that the user will take corrective action.  If they don't, we can just show
-            // the dialog again.
-            m_infoBar->Hide();
-        }
-        else
-        {
-            m_infoBar->ShowMessage( _( "Some components are not annotated.  ERC cannot be run." ) );
-        }
-
+        m_infoBar->Hide();      // No need for duplicated error messages
         return;
     }
 
@@ -254,29 +356,29 @@ void DIALOG_ERC::testErc( REPORTER& aReporter )
     // to the same file, each must have a unique name.
     if( settings.IsTestEnabled( ERCE_DUPLICATE_SHEET_NAME ) )
     {
-        aReporter.ReportTail( _( "Checking sheet names...\n" ), RPT_SEVERITY_INFO );
+        AdvancePhase( _( "Checking sheet names..." ) );
         tester.TestDuplicateSheetNames( true );
     }
 
     if( settings.IsTestEnabled( ERCE_BUS_ALIAS_CONFLICT ) )
     {
-        aReporter.ReportTail( _( "Checking bus conflicts...\n" ), RPT_SEVERITY_INFO );
+        AdvancePhase( _( "Checking bus conflicts..." ) );
         tester.TestConflictingBusAliases();
     }
 
     // The connection graph has a whole set of ERC checks it can run
-    aReporter.ReportTail( _( "Checking conflicts...\n" ) );
+    AdvancePhase( _( "Checking conflicts..." ) );
     m_parent->RecalculateConnections( NO_CLEANUP );
     sch->ConnectionGraph()->RunERC();
 
     // Test is all units of each multiunit component have the same footprint assigned.
     if( settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_FP ) )
     {
-        aReporter.ReportTail( _( "Checking footprints...\n" ), RPT_SEVERITY_INFO );
+        AdvancePhase( _( "Checking footprints..." ) );
         tester.TestMultiunitFootprints();
     }
 
-    aReporter.ReportTail( _( "Checking pins...\n" ), RPT_SEVERITY_INFO );
+    AdvancePhase( _( "Checking pins..." ) );
 
     if( settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_NET ) )
         tester.TestMultUnitPinConflicts();
@@ -289,25 +391,25 @@ void DIALOG_ERC::testErc( REPORTER& aReporter )
     // using case insensitive comparisons)
     if( settings.IsTestEnabled( ERCE_SIMILAR_LABELS ) )
     {
-        aReporter.ReportTail( _( "Checking labels...\n" ), RPT_SEVERITY_INFO );
+        AdvancePhase( _( "Checking labels..." ) );
         tester.TestSimilarLabels();
     }
 
     if( settings.IsTestEnabled( ERCE_UNRESOLVED_VARIABLE ) )
     {
-        aReporter.ReportTail( _( "Checking for unresolved variables...\n" ) );
+        AdvancePhase( _( "Checking for unresolved variables..." ) );
         tester.TestTextVars( m_parent->GetCanvas()->GetView()->GetWorksheet() );
     }
 
     if( settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
     {
-        aReporter.ReportTail( _( "Checking no connect pins for connections...\n" ) );
+        AdvancePhase( _( "Checking no connect pins for connections..." ) );
         tester.TestNoConnectPins();
     }
 
     if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
     {
-        aReporter.ReportTail( _( "Checking for library symbol issues...\n" ) );
+        AdvancePhase( _( "Checking for library symbol issues..." ) );
         tester.TestLibSymbolIssues();
     }
 
@@ -323,7 +425,7 @@ void DIALOG_ERC::testErc( REPORTER& aReporter )
     m_parent->GetCanvas()->Refresh();
 
     // Display message
-    aReporter.ReportTail( _( "Finished.\n" ), RPT_SEVERITY_INFO );
+    Report( _( "Done.<br><br>" ) );
 }
 
 
@@ -568,8 +670,8 @@ void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
 
     if( writeReport( fn.GetFullPath() ) )
     {
-        m_MessagesList->AppendText( wxString::Format( _( "Report file '%s' created\n" ),
-                                                      fn.GetFullPath() ) );
+        m_messages->Report( wxString::Format( _( "Report file '%s' created\n" ),
+                                              fn.GetFullPath() ) );
     }
     else
     {

@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_HTML_REPORT_BOX;
 class WX_INFOBAR;
 
 #include "dialog_shim.h"
@@ -19,14 +20,16 @@ class WX_INFOBAR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
+#include <wx/html/htmlwin.h>
 #include <wx/sizer.h>
-#include <wx/dataview.h>
-#include <wx/checkbox.h>
+#include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/dataview.h>
+#include <wx/notebook.h>
+#include <wx/stattext.h>
+#include <wx/checkbox.h>
 #include <wx/statbmp.h>
 #include <wx/button.h>
 #include <wx/statline.h>
@@ -45,9 +48,10 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 
 	protected:
 		WX_INFOBAR* m_infoBar;
-		wxStaticText* m_titleMessages;
-		wxTextCtrl* m_MessagesList;
-		wxStaticText* m_textMarkers;
+		wxNotebook* m_notebook;
+		wxPanel* messagesPanel;
+		WX_HTML_REPORT_BOX* m_messages;
+		wxPanel* violationsPanel;
 		wxDataViewCtrl* m_markerDataView;
 		wxStaticText* m_showLabel;
 		wxCheckBox* m_showAll;
@@ -67,13 +71,14 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseErcDialog( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnLinkClicked( wxHtmlLinkEvent& event ) { event.Skip(); }
 		virtual void OnERCItemDClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnERCItemRClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnERCItemSelected( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnSeverity( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveReport( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEraseDrcMarkersClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonCloseClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRunERCClick( wxCommandEvent& event ) { event.Skip(); }
 
 

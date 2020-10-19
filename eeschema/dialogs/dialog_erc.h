@@ -30,11 +30,12 @@
 #include <lib_pin.h>        // For PINTYPE_COUNT definition
 
 #include <dialog_erc_base.h>
+#include <widgets/progress_reporter.h>
 #include <erc_settings.h>
 
 // DIALOG_ERC class declaration
 
-class DIALOG_ERC : public DIALOG_ERC_BASE
+class DIALOG_ERC : public DIALOG_ERC_BASE, PROGRESS_REPORTER
 {
 private:
     SCH_EDIT_FRAME*    m_parent;
@@ -42,6 +43,7 @@ private:
     RC_ITEMS_PROVIDER* m_markerProvider;
     RC_TREE_MODEL*     m_markerTreeModel;
 
+    bool               m_running;
     bool               m_ercRun;
 
     int                m_severities;
@@ -49,6 +51,11 @@ private:
 public:
     DIALOG_ERC( SCH_EDIT_FRAME* parent );
     ~DIALOG_ERC();
+
+    // PROGRESS_REPORTER calls
+    bool updateUI() override;
+    void AdvancePhase( const wxString& aMessage ) override;
+    void Report( const wxString& aMessage ) override;
 
 private:
     // from DIALOG_ERC_BASE:
@@ -58,14 +65,15 @@ private:
     void OnERCItemSelected( wxDataViewEvent& aEvent ) override;
     void OnERCItemDClick( wxDataViewEvent& aEvent ) override;
     void OnERCItemRClick( wxDataViewEvent& aEvent ) override;
+    void OnLinkClicked( wxHtmlLinkEvent& event ) override;
 
     void OnSeverity( wxCommandEvent& aEvent ) override;
     void OnSaveReport( wxCommandEvent& aEvent ) override;
-    void OnButtonCloseClick( wxCommandEvent& event ) override;
+    void OnCancelClick( wxCommandEvent& event ) override;
 
     void redrawDrawPanel();
 
-    void testErc( REPORTER& aReporter );
+    void testErc();
 
     bool writeReport( const wxString& aFullFileName );
 

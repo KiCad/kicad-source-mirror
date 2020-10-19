@@ -173,12 +173,6 @@ void DIALOG_DRC::AdvancePhase( const wxString& aMessage )
 }
 
 
-void DIALOG_DRC::SetCurrentProgress( double aProgress )
-{
-    PROGRESS_REPORTER::SetCurrentProgress( aProgress );
-}
-
-
 // Don't globally define this; different facilities use different definitions of "ALL"
 static int RPT_SEVERITY_ALL = RPT_SEVERITY_WARNING | RPT_SEVERITY_ERROR | RPT_SEVERITY_EXCLUSION;
 
