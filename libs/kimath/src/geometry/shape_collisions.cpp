@@ -175,12 +175,29 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN_BASE&
                             int aClearance, int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     int closest_dist = INT_MAX;
+    int closest_mtv_dist = INT_MAX;
     VECTOR2I nearest;
+    int closest_mtv_seg = -1;
 
     if( aB.IsClosed() && aB.PointInside( aA.GetCenter() ) )
     {
-        closest_dist = 0;
         nearest = aA.GetCenter();
+        closest_dist = 0;
+
+        if( aMTV )
+        {
+            for( int s = 0; s < aB.GetSegmentCount(); s++ )
+            {
+                int dist = aB.GetSegment(s).Distance( aA.GetCenter() );
+
+                if( dist < closest_mtv_dist )
+                {
+                    closest_mtv_dist = dist;
+                    closest_mtv_seg = s;
+                }
+            }
+        }
+
     }
     else
     {
@@ -222,7 +239,19 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN_BASE&
             SHAPE_CIRCLE cmoved( aA );
             VECTOR2I f_total( 0, 0 );
 
-            for( size_t s = 0; s < aB.GetSegmentCount(); s++ )
+            VECTOR2I f;
+
+            if (closest_mtv_seg >= 0)
+            {
+                SEG cs = aB.GetSegment( closest_mtv_seg );
+                VECTOR2I np = cs.NearestPoint( aA.GetCenter() );
+                f = ( np - aA.GetCenter() ) + ( np - aA.GetCenter() ).Resize( aA.GetRadius() );
+            }
+
+            cmoved.SetCenter( cmoved.GetCenter() + f );
+            f_total += f;
+
+            for( int s = 0; s < aB.GetSegmentCount(); s++ )
             {
                 VECTOR2I f = pushoutForce( cmoved, aB.GetSegment( s ), aClearance );
                 cmoved.SetCenter( cmoved.GetCenter() + f );
@@ -529,7 +558,7 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
 {
     switch( aA->Type() )
     {
-    case SH_NULL:
+    case SH_NULL: 
         return false;
 
     case SH_RECT:
@@ -583,7 +612,7 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
 
         case SH_ARC:
             return CollCaseReversed<SHAPE_CIRCLE, SHAPE_ARC>( aA, aB, aClearance, aActual, aLocation, aMTV );
-
+    
         case SH_NULL:
             return false;
 
@@ -832,7 +861,7 @@ static bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int
     {
         return collideSingleShapes( aA, aB, aClearance, aActual, aLocation, aMTV );
     }
-
+    
     if( colliding )
     {
         if( aLocation )
