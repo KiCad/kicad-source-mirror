@@ -337,9 +337,9 @@ public:
     virtual double GetLength() const override
     {
         double radius = GetRadius();
-        double angle  = GetAngle();
+        double includedAngle  = std::abs( GetAngle() );
 
-        return radius * M_PI * angle / 180.0;
+        return radius * M_PI * includedAngle / 180.0;
     }
 
     EDA_ITEM* Clone() const override;
