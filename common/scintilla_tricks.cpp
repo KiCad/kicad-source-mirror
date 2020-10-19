@@ -28,6 +28,7 @@
 #include <gal/color4d.h>
 #include <dialog_shim.h>
 #include <wx/clipbrd.h>
+#include <wx/settings.h>
 
 SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces ) :
         m_te( aScintilla ),
