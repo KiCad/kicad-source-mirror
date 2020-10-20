@@ -90,7 +90,7 @@ wxString BOARD_ITEM::LayerMaskDescribe() const
                 wxString layerInfo = board->GetLayerName( static_cast<PCB_LAYER_ID>( bit ) );
 
                 if( testLayers.count() > 1 )
-                    layerInfo << _( " and others" );
+                    layerInfo << wxS( " " ) + _( "and others" );
 
                 return layerInfo;
             }

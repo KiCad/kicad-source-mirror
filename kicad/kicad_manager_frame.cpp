@@ -601,7 +601,7 @@ void KICAD_MANAGER_FRAME::ProjectChanged()
         title += fn.GetName();
 
         if( !fn.IsDirWritable() )
-            title += _( " [Read Only]" );
+            title += wxS( " " ) + _( "[Read Only]" );
 
         title += wxS(" \u2014 ");
     }

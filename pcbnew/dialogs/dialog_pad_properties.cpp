@@ -703,27 +703,27 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
         for( wxString& s : bs_info )
             s.Empty();
 
-        bs_info[4] = _( "width " ) + MessageTextFromValue( m_units, primitive->GetWidth() );
+        bs_info[4] = _( "width" ) + wxS( " " )+ MessageTextFromValue( m_units, primitive->GetWidth() );
 
         switch( primitive->GetShape() )
         {
         case S_SEGMENT:         // usual segment : line with rounded ends
             bs_info[0] = _( "Segment" );
-            bs_info[1] = _( "from " ) + formatCoord( m_units, primitive->GetStart() );
-            bs_info[2] = _( "to " ) +  formatCoord( m_units, primitive->GetEnd() );
+            bs_info[1] = _( "from" ) + wxS( " " )+ formatCoord( m_units, primitive->GetStart() );
+            bs_info[2] = _( "to" ) + wxS( " " )+  formatCoord( m_units, primitive->GetEnd() );
             break;
 
         case S_CURVE:         // Bezier segment
             bs_info[0] = _( "Bezier" );
-            bs_info[1] = _( "from " ) + formatCoord( m_units, primitive->GetStart() );
-            bs_info[2] = _( "to " ) +  formatCoord( m_units, primitive->GetEnd() );
+            bs_info[1] = _( "from" ) + wxS( " " )+ formatCoord( m_units, primitive->GetStart() );
+            bs_info[2] = _( "to" ) + wxS( " " )+  formatCoord( m_units, primitive->GetEnd() );
             break;
 
         case S_ARC:             // Arc with rounded ends
             bs_info[0] = _( "Arc" );
-            bs_info[1] = _( "center " ) + formatCoord( m_units, primitive->GetCenter() );
-            bs_info[2] = _( "start " ) + formatCoord( m_units, primitive->GetArcStart() );
-            bs_info[3] = _( "angle " ) + FormatAngle( primitive->GetAngle() );
+            bs_info[1] = _( "center" ) + wxS( " " )+ formatCoord( m_units, primitive->GetCenter() );
+            bs_info[2] = _( "start" ) + wxS( " " )+ formatCoord( m_units, primitive->GetArcStart() );
+            bs_info[3] = _( "angle" ) + wxS( " " )+ FormatAngle( primitive->GetAngle() );
             break;
 
         case S_CIRCLE:          //  ring or circle
@@ -733,7 +733,7 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
                 bs_info[0] = _( "circle" );
 
             bs_info[1] = formatCoord( m_units, primitive->GetStart() );
-            bs_info[2] = _( "radius " ) + MessageTextFromValue( m_units, primitive->GetRadius() );
+            bs_info[2] = _( "radius" ) + wxS( " " )+ MessageTextFromValue( m_units, primitive->GetRadius() );
             break;
 
         case S_POLYGON:         // polygon

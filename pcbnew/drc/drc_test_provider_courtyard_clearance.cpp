@@ -113,7 +113,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (not a closed shape)" ) );
+            m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(not a closed shape)" ) );
 
             drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( footprint );

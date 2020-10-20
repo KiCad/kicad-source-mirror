@@ -108,14 +108,14 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
 
                 if( fail_min )
                 {
-                    m_msg.Printf( _( " (%s min diameter %s; actual %s)" ),
+                    m_msg.Printf( wxS( " " ) + _( "(%s min diameter %s; actual %s)" ),
                                   constraint.GetName(),
                                   MessageTextFromValue( userUnits(), constraintDiameter ),
                                   MessageTextFromValue( userUnits(), actual ) );
                 }
                 else if( fail_max )
                 {
-                    m_msg.Printf( _( " (%s max diameter %s; actual %s)" ),
+                    m_msg.Printf( wxS( " " ) + _( "(%s max diameter %s; actual %s)" ),
                                   constraint.GetName(),
                                   MessageTextFromValue( userUnits(), constraintDiameter ),
                                   MessageTextFromValue( userUnits(), actual ) );

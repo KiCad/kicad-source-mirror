@@ -772,7 +772,7 @@ void MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
     if( m_Attributs & MOD_EXCLUDE_FROM_BOM )
         addToken( &attrs, _( "exclude from BOM" ) );
 
-    aList.emplace_back( _( "Status: " ) + status, _( "Attributes: " ) + attrs, BROWN );
+    aList.emplace_back( _( "Status: " ) + status, _( "Attributes:" ) + wxS( " " ) + attrs, BROWN );
 
     msg.Printf( "%.2f", GetOrientationDegrees() );
     aList.emplace_back( _( "Rotation" ), msg, BROWN );

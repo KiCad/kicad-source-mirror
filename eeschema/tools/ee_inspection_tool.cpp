@@ -151,30 +151,61 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
 
         dup_error++;
 
-        /* TODO I dare someone to find a way to make happy translators on this thing! Lorenzo */
-
-        msg = wxString::Format( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
-                                   " conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>" ),
-                                next->GetNumber(),
-                                next->GetName(),
-                                next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
-                                pin->GetNumber(),
-                                pin->GetName(),
-                                pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
-
-        if( aPart->GetUnitCount() > 1 )
+        if( aPart->HasConversion() && next->GetConvert() )
         {
-            msg += wxString::Format( _( " in units %c and %c" ),
-                                     'A' + next->GetUnit() - 1,
-                                     'A' + pin->GetUnit() - 1 );
-        }
-
-        if( aPart->HasConversion() )
-        {
-            if( next->GetConvert() )
-                msg += _( "  of converted" );
+            if( aPart->GetUnitCount() <= 1 )
+            {
+                msg = wxString::Format( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
+                                           " conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b> of converted" ),
+                                        next->GetNumber(),
+                                        next->GetName(),
+                                        next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
+                                        pin->GetNumber(),
+                                        pin->GetName(),
+                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
+            }
             else
-                msg += _( "  of normal" );
+            {
+                msg = wxString::Format( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
+                                           " conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
+                                           " in units %c and %c of converted" ),
+                                        next->GetNumber(),
+                                        next->GetName(),
+                                        next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
+                                        pin->GetNumber(),
+                                        pin->GetName(),
+                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
+                                        'A' + next->GetUnit() - 1,
+                                        'A' + pin->GetUnit() - 1 );
+            }
+        }
+        else
+        {
+            if( aPart->GetUnitCount() <= 1 )
+            {
+                msg = wxString::Format( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
+                                           " conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>" ),
+                                        next->GetNumber(),
+                                        next->GetName(),
+                                        next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
+                                        pin->GetNumber(),
+                                        pin->GetName(),
+                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
+            }
+            else
+            {
+                msg = wxString::Format( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
+                                           " conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
+                                           " in units %c and %c" ),
+                                        next->GetNumber(),
+                                        next->GetName(),
+                                        next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
+                                        pin->GetNumber(),
+                                        pin->GetName(),
+                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
+                                        'A' + next->GetUnit() - 1,
+                                        'A' + pin->GetUnit() - 1 );
+            }
         }
 
         msg += wxT( ".<br>" );
@@ -200,14 +231,14 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
                                 pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
 
         if( aPart->GetUnitCount() > 1 )
-            msg += wxString::Format( _( " in symbol %c" ), 'A' + pin->GetUnit() - 1 );
+            msg += wxString::Format( wxS( " " ) + _( "in symbol %c" ), 'A' + pin->GetUnit() - 1 );
 
         if( aPart->HasConversion() )
         {
             if( pin->GetConvert() )
-                msg += _( " of converted" );
+                msg += wxS( " " ) + _( "of converted" );
             else
-                msg += _( " of normal" );
+                msg += wxS( " " ) + _( "of normal" );
         }
 
         msg += wxT( ".<br>" );

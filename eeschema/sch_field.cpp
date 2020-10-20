@@ -169,7 +169,7 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
     else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
     {
         if( m_id == SHEETFILENAME )
-            text = _( "File: " ) + text;
+            text = _( "File:" ) + wxS( " " )+ text;
     }
 
     return text;

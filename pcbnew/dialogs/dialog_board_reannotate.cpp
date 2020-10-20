@@ -527,10 +527,12 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
 
     if( !m_ExcludeArray.empty() )
     {
-        message += _( "\nExcluding: " );
-        for( wxString& Exclude : m_ExcludeArray ) //Show the refdes we are excluding
-            message += Exclude + " ";
-        message += _( " from reannotation\n\n" );
+        wxString excludes;
+
+        for( wxString& exclude : m_ExcludeArray ) //Show the refdes we are excluding
+            excludes += exclude + " ";
+
+        message += wxString::Format( _( "\nExcluding: %s from reannotation\n\n" ), excludes );
     }
 
     message += _( "\n    Change Array\n***********************\n" );
@@ -539,7 +541,7 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
     {
         message += wxString::Format( "%s -> %s  %s %s\n", Change.OldRefDesString, Change.NewRefDes,
                 ActionMessage[Change.Action],
-                UpdateRefDes != Change.Action ? _( " will be ignored" ) : wxString("") );
+                UpdateRefDes != Change.Action ? wxS( " " ) + _( "will be ignored" ) : wxString("") );
     }
 
     ShowReport( message, RPT_SEVERITY_INFO );
@@ -932,6 +934,6 @@ RefDesChange* DIALOG_BOARD_REANNOTATE::GetNewRefDes( MODULE* aMod )
         if( aMod->m_Uuid == m_ChangeArray[i].Uuid )
             return ( &m_ChangeArray[i] );
 
-    ShowReport( _( "Module not found in changelist " ) + aMod->GetReference(), RPT_SEVERITY_ERROR );
+    ShowReport( _( "Module not found in changelist" ) + wxS( " " )+ aMod->GetReference(), RPT_SEVERITY_ERROR );
     return nullptr; //Should never happen
 }

@@ -89,7 +89,7 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
 
     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
 
-    m_msg.Printf( drcItem->GetErrorText() + _( " (not a closed shape)" ) );
+    m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(not a closed shape)" ) );
 
     drcItem->SetErrorMessage( m_msg );
     drcItem->SetItems( m_board );
@@ -114,7 +114,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                 {
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
 
-                    m_msg.Printf( drcItem->GetErrorText() + _( " (layer %s)" ),
+                    m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(layer %s)" ),
                                   item->GetLayerName() );
 
                     drcItem->SetErrorMessage( m_msg );

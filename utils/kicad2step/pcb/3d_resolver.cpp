@@ -573,13 +573,13 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
     {
         if( !tpath.m_alias.Cmp( sPL->m_alias ) )
         {
-            wxString msg = _( "Alias: " );
+            wxString msg = _( "Alias:" ) + wxS( " " );
             msg.append( tpath.m_alias );
             msg.append( "\n" );
-            msg.append( _( "This path: " ) );
+            msg.append( _( "This path:" ) + wxS( " " ) );
             msg.append( tpath.m_pathvar );
             msg.append( "\n" );
-            msg.append( _( "Existing path: " ) );
+            msg.append( _( "Existing path:" ) + wxS( " " ) );
             msg.append( sPL->m_pathvar );
             wxMessageBox( msg, _( "Bad alias (duplicate name)" ) );
 

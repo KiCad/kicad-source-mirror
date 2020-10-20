@@ -59,7 +59,7 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
             [&]( const wxString& aMessage, int aOffset )
             {
                 if( aReporter )
-                    aReporter->Report( _( "ERROR: " ) + aMessage );
+                    aReporter->Report( _( "ERROR:" ) + wxS( " " )+ aMessage );
             } );
 
     BOARD_ITEM* a = const_cast<BOARD_ITEM*>( aItemA );

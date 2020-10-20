@@ -140,7 +140,7 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( D_PAD* aPad )
     {
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_DRILL );
 
-        m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s %s; actual %s)" ),
                       constraint.GetName(),
                       MessageTextFromValue( userUnits(), minHole ),
                       MessageTextFromValue( userUnits(), holeSize ) );
@@ -182,7 +182,7 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via, bool aExceedMicro, bool aE
     {
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( errorCode );
 
-        m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s %s; actual %s)" ),
                       constraint.GetName(),
                       MessageTextFromValue( userUnits(), minHole ),
                       MessageTextFromValue( userUnits(), via->GetDrillValue() ) );

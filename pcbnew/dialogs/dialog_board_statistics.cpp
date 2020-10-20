@@ -643,35 +643,35 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     }
 
     msg << _( "PCB statistics report\n=====================" ) << "\n";
-    msg << _( "- Date: " ) << wxDateTime::Now().Format() << "\n";
-    msg << _( "- Project: " ) << Prj().GetProjectName() << "\n";
-    msg << _( "- Board name: " ) << boardName << "\n";
+    msg << wxS( "- " ) << _( "Date" ) << wxS( ": " ) << wxDateTime::Now().Format() << "\n";
+    msg << wxS( "- " ) << _( "Project" ) << wxS( ": " )<< Prj().GetProjectName() << "\n";
+    msg << wxS( "- " ) << _( "Board name" ) << wxS( ": " )<< boardName << "\n";
 
     msg << "\n";
-    msg << _( "Board\n-----" ) << "\n";
+    msg << _( "Board" ) << "\n-----\n";
 
     if( m_hasOutline )
     {
-        msg << _( "- Width: " )  << MessageTextFromValue( GetUserUnits(), m_boardWidth ) << "\n";
-        msg << _( "- Height: " ) << MessageTextFromValue( GetUserUnits(), m_boardHeight ) << "\n";
-        msg << _( "- Area: " )   << MessageTextFromValue( GetUserUnits(), m_boardArea, true, EDA_DATA_TYPE::AREA );
+        msg << wxS( "- " ) << _( "Width" ) << wxS( ": " ) << MessageTextFromValue( GetUserUnits(), m_boardWidth ) << "\n";
+        msg << wxS( "- " ) << _( "Height" ) << wxS( ": " )<< MessageTextFromValue( GetUserUnits(), m_boardHeight ) << "\n";
+        msg << wxS( "- " ) << _( "Area" ) + wxS( ": " )  << MessageTextFromValue( GetUserUnits(), m_boardArea, true, EDA_DATA_TYPE::AREA );
         msg << "\n";
     }
     else
     {
-        msg << _( "- Width: " ) << _( "unknown" ) << "\n";
-        msg << _( "- Height: " ) << _( "unknown" ) << "\n";
-        msg << _( "- Area: " ) << _( "unknown" ) << "\n";
+        msg << wxS( "- " ) << _( "Width" ) << wxS( ": " ) << _( "unknown" ) << "\n";
+        msg << wxS( "- " ) << _( "Height" ) << wxS( ": " ) << _( "unknown" ) << "\n";
+        msg << wxS( "- " ) << _( "Area" ) << wxS( ": " ) << _( "unknown" ) << "\n";
     }
 
     msg << "\n";
-    msg << _( "Pads\n----" ) << "\n";
+    msg << _( "Pads" ) << "\n----\n";
 
     for( auto& type : m_padsTypes )
         msg << "- " << type.title << " " << type.qty << "\n";
 
     msg << "\n";
-    msg << _( "Vias\n----" ) << "\n";
+    msg << _( "Vias" ) << "\n----\n";
 
     for( auto& type : m_viasTypes )
         msg << "- " << type.title << " " << type.qty << "\n";
@@ -707,13 +707,13 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
 
     //Write components amount to file
     msg << "\n";
-    msg << _( "Components\n----------" ) << "\n";
+    msg << _( "Components" ) << "\n----------\n";
     msg << "\n";
 
     printGridToStringAsTable( m_gridComponents, msg, false, false, true );
 
     msg << "\n";
-    msg << _( "Drill holes\n-----------" ) << "\n";
+    msg << _( "Drill holes" ) << "\n-----------\n";
     msg << "\n";
 
     printGridToStringAsTable( m_gridDrills, msg, false, true, false );

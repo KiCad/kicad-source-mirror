@@ -234,7 +234,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+            m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s clearance %s; actual %s)" ),
                           constraint.GetName(),
                           MessageTextFromValue( userUnits(), minClearance ),
                           MessageTextFromValue( userUnits(), std::max( 0, actual ) ) );
@@ -297,7 +297,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testCopperDrawItem( BOARD_ITEM* aItem )
 
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
-        m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s clearance %s; actual %s)" ),
                       constraint.GetName(),
                       MessageTextFromValue( userUnits(), minClearance ),
                       MessageTextFromValue( userUnits(), actual ) );
@@ -406,7 +406,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s clearance %s; actual %s)" ),
                               constraint.GetName(),
                               MessageTextFromValue( userUnits(), minClearance ),
                               MessageTextFromValue( userUnits(), actual ) );
@@ -482,7 +482,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+            m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s clearance %s; actual %s)" ),
                           constraint.GetName(),
                           MessageTextFromValue( userUnits(), minClearance ),
                           MessageTextFromValue( userUnits(), actual ) );
@@ -580,7 +580,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
                 actual = std::max( 0, actual - halfWidth );
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s clearance %s; actual %s)" ),
                               constraint.GetName(),
                               MessageTextFromValue( userUnits(), minClearance ),
                               MessageTextFromValue( userUnits(), actual ) );
@@ -684,7 +684,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( int aRefPadIdx,
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (nets %s and %s)" ),
+                m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(nets %s and %s)" ),
                               pad->GetNetname(), refPad->GetNetname() );
 
                 drcItem->SetErrorMessage( m_msg );
@@ -764,7 +764,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doPadToPadsDrc( int aRefPadIdx,
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s clearance %s; actual %s)" ),
                               constraint.GetName(),
                               MessageTextFromValue( userUnits(), minClearance ),
                               MessageTextFromValue( userUnits(), actual ) );
@@ -950,7 +950,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
                     {
                         drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
 
-                        m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s clearance %s; actual %s)" ),
                                       constraint.GetName(),
                                       MessageTextFromValue( userUnits(), zone2zoneClearance ),
                                       MessageTextFromValue( userUnits(), conflict.second ) );

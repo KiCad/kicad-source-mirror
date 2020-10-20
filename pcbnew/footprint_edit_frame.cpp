@@ -712,7 +712,7 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
         // Note: don't used GetLoadedFPID(); footprint name may have been edited
         title += wxString::Format( wxT( "%s %s\u2014 " ),
                 FROM_UTF8( GetBoard()->GetFirstModule()->GetFPID().Format().c_str() ),
-                writable ? wxString( wxEmptyString ) : _( "[Read Only] " ) );
+                writable ? wxString( wxEmptyString ) : _( "[Read Only]" ) + wxS( "" ) + wxS( " " ));
     }
     else if( !fpid.GetLibItemName().empty() )
     {

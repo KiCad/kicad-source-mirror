@@ -35,13 +35,13 @@ EDA_POSITION_CTRL::EDA_POSITION_CTRL( wxWindow* parent, const wxString& title, c
 {
     m_UserUnit = user_unit;
 
-    m_TextX = new wxStaticText( parent, -1, title + _( " X:" ) );
+    m_TextX = new wxStaticText( parent, -1, title + wxS( " " ) + _( "X:" ) );
     BoxSizer->Add( m_TextX, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     m_FramePosX = new wxTextCtrl( parent, -1, wxEmptyString, wxDefaultPosition );
     BoxSizer->Add( m_FramePosX, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
-    m_TextY = new wxStaticText( parent, -1, title + _( " Y:" ) );
+    m_TextY = new wxStaticText( parent, -1, title + wxS( " " ) + _( "Y:" ) );
     BoxSizer->Add( m_TextY, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     m_FramePosY = new wxTextCtrl( parent, -1, wxEmptyString );

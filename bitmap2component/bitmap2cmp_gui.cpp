@@ -328,7 +328,7 @@ void BM2CMP_FRAME::OnLoadFile( wxCommandEvent& event )
         path = m_mruPath;
 
     wxFileDialog fileDlg( this, _( "Choose Image" ), path, wxEmptyString,
-                          _( "Image Files " ) + wxImage::GetImageExtWildcard(),
+                          _( "Image Files" ) + wxS( " " )+ wxImage::GetImageExtWildcard(),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     int diag = fileDlg.ShowModal();

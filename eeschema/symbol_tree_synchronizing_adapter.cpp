@@ -246,7 +246,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
         if( node->m_Type == LIB_TREE_NODE::LIB )
         {
             if( !m_libMgr->IsLibraryLoaded( node->m_Name ) )
-                aVariant = _( "(failed to load) " ) + aVariant.GetString();
+                aVariant = _( "(failed to load)" ) + wxS( " " ) + aVariant.GetString();
         }
 
         break;

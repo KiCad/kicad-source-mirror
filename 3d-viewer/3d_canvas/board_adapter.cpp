@@ -472,7 +472,7 @@ bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
         success = m_board->GetBoardPolygonOutlines( m_board_poly, &msg );
 
         if( aErrorMsg )
-            *aErrorMsg = _( "Board outline is not closed: " ) + msg;
+            *aErrorMsg = _( "Board outline is not closed:" ) + wxS( " " )+ msg;
     }
 
     return success;

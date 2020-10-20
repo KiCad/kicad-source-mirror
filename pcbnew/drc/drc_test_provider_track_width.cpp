@@ -123,11 +123,20 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TRACK_WIDTH );
 
-                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s %s width %s; actual %s)" ),
-                                  constraint.GetName(),
-                                  fail_min ? _( "min" ) : _( "max" ),
-                                  MessageTextFromValue( userUnits(), constraintWidth ),
-                                  MessageTextFromValue( userUnits(), actual ) );
+                    if( fail_min )
+                    {
+                        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s min width %s; actual %s)" ),
+                                      constraint.GetName(),
+                                      MessageTextFromValue( userUnits(), constraintWidth ),
+                                      MessageTextFromValue( userUnits(), actual ) );
+                    }
+                    else
+                    {
+                        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s max width %s; actual %s)" ),
+                                      constraint.GetName(),
+                                      MessageTextFromValue( userUnits(), constraintWidth ),
+                                      MessageTextFromValue( userUnits(), actual ) );
+                    }
 
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( item );

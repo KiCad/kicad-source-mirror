@@ -482,10 +482,10 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
             wxString msg = _( "Alias: " );
             msg.append( tpath.m_alias );
             msg.append( wxT( "\n" ) );
-            msg.append( _( "This path: " ) );
+            msg.append( _( "This path:" ) + wxS( " " ));
             msg.append( tpath.m_pathvar );
             msg.append( wxT( "\n" ) );
-            msg.append( _( "Existing path: " ) );
+            msg.append( _( "Existing path:" ) + wxS( " " ));
             msg.append( sPL->m_pathvar );
             wxMessageBox( msg, _( "Bad alias (duplicate name)" ) );
 

@@ -150,7 +150,7 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
 
                 if( minClearance > 0 )
                 {
-                    m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                    m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s clearance %s; actual %s)" ),
                                   constraint.GetName(),
                                   MessageTextFromValue( userUnits(), minClearance ),
                                   MessageTextFromValue( userUnits(), actual ) );

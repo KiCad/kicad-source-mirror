@@ -379,7 +379,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
                 wxFileDialog dlg( m_frame, _( "Choose Image" ), wxEmptyString, wxEmptyString,
-                                  _( "Image Files " ) + wxImage::GetImageExtWildcard(), wxFD_OPEN );
+                                  _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(), wxFD_OPEN );
 
                 if( dlg.ShowModal() != wxID_OK )
                     continue;

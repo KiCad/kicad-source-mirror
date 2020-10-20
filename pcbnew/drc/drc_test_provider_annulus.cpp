@@ -118,13 +118,13 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ANNULAR_WIDTH );
 
                     if( fail_min )
-                        m_msg.Printf( drcItem->GetErrorText() + _( " (%s min annular width %s; actual %s)" ),
+                        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s min annular width %s; actual %s)" ),
                                       constraint.GetName(),
                                       MessageTextFromValue( userUnits(), v_min ),
                                       MessageTextFromValue( userUnits(), annulus ) );
 
                     if( fail_max )
-                        m_msg.Printf( drcItem->GetErrorText() + _( " (%s max annular width %s; actual %s)" ),
+                        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s max annular width %s; actual %s)" ),
                                       constraint.GetName(),
                                       MessageTextFromValue( userUnits(), v_max ),
                                       MessageTextFromValue( userUnits(), annulus ) );

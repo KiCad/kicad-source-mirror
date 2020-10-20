@@ -49,12 +49,12 @@ PROJECT_TEMPLATE::PROJECT_TEMPLATE( const wxString& aPath )
     if( !wxFileName::DirExists( m_basePath.GetPath() ) )
     {
         // Error, the path doesn't exist!
-        m_title = _( "Could open the template path! " ) + aPath;
+        m_title = _( "Could open the template path!" ) + wxS( " " ) + aPath;
     }
     else if( !wxFileName::DirExists( m_metaPath.GetPath() ) )
     {
         // Error, the meta information directory doesn't exist!
-        m_title = _( "Couldn't open the meta information directory for this template! " ) +
+        m_title = _( "Couldn't open the meta information directory for this template!" ) + wxS( " " ) +
                   m_metaPath.GetPath();
     }
     else if( !wxFileName::FileExists( m_metaHtmlFile.GetFullPath() ) )

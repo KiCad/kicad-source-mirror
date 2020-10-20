@@ -1187,7 +1187,7 @@ void SCH_EDIT_FRAME::UpdateTitle()
         if( fn.FileExists() )
         {
             if( !fn.IsFileWritable() )
-                append = _( "[Read Only] " );
+                append = _( "[Read Only]" ) + wxS( " " );
         }
         else
             append = nofile;

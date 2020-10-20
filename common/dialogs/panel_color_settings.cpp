@@ -210,7 +210,7 @@ void PANEL_COLOR_SETTINGS::createThemeList( const wxString& aCurrent )
         wxString name = settings->GetName();
 
         if( settings->IsReadOnly() )
-            name += _( " (read-only)" );
+            name += wxS( " " ) + _( "(read-only)" );
 
         int pos = m_cbTheme->Append( name, static_cast<void*>( settings ) );
 

@@ -260,7 +260,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc( int aRefPadIdx,
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s clearance %s; actual %s)" ),
                               constraint.GetName(),
                               MessageTextFromValue( userUnits(), minClearance ),
                               MessageTextFromValue( userUnits(), actual ) );
@@ -294,7 +294,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::doPadToPadHoleDrc( int aRefPadIdx,
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s clearance %s; actual %s)" ),
                               constraint.GetName(),
                               MessageTextFromValue( userUnits(), minClearance ),
                               MessageTextFromValue( userUnits(), actual ) );
@@ -383,7 +383,7 @@ void DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoles2Holes()
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DRILLED_HOLES_TOO_CLOSE );
 
-                m_msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s clearance %s; actual %s)" ),
                               constraint.GetName(),
                               MessageTextFromValue( userUnits(), minClearance ),
                               MessageTextFromValue( userUnits(), actual ) );

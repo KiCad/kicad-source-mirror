@@ -335,13 +335,36 @@ protected:
             DIFF_PAIR_DIMENSION diffPair = bds.m_DiffPairDimensionsList[i];
             wxString            msg;
 
-            msg << _( "Width " ) << MessageTextFromValue( units, diffPair.m_Width );
-
-            if( diffPair.m_Gap > 0 )
-                msg << _( ", gap " ) << MessageTextFromValue( units, diffPair.m_Gap );
-
-            if( diffPair.m_ViaGap > 0 )
-                msg << _( ", via gap " ) << MessageTextFromValue( units, diffPair.m_ViaGap );
+            if( diffPair.m_Gap <= 0 )
+            {
+                if( diffPair.m_ViaGap <= 0 )
+                {
+                    msg.Printf( _( "Width %s" ),
+                                    MessageTextFromValue( units, diffPair.m_Width ) );
+                }
+                else
+                {
+                    msg.Printf( _( "Width %s, via gap %s " ),
+                                    MessageTextFromValue( units, diffPair.m_Width ),
+                                    MessageTextFromValue( units, diffPair.m_ViaGap ) );
+                }
+            }
+            else
+            {
+                if( diffPair.m_ViaGap <= 0 )
+                {
+                    msg.Printf( _( "Width %s, gap %s" ),
+                                    MessageTextFromValue( units, diffPair.m_Width ),
+                                    MessageTextFromValue( units, diffPair.m_Gap ) );
+                }
+                else
+                {
+                    msg.Printf( _( "Width %s, gap %s, via gap %s " ),
+                                    MessageTextFromValue( units, diffPair.m_Width ),
+                                    MessageTextFromValue( units, diffPair.m_Gap ),
+                                    MessageTextFromValue( units, diffPair.m_ViaGap ) );
+                }
+            }
 
             int menuIdx = ID_POPUP_PCB_SELECT_DIFFPAIR1 + i - 1;
             Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );
@@ -948,9 +971,9 @@ void ROUTER_TOOL::performRouting()
     if( !prepareInteractive() )
         return;
 
-    auto setCursor = 
-            [&]() 
-            { 
+    auto setCursor =
+            [&]()
+            {
                 frame()->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 
@@ -1135,9 +1158,9 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         m_toolMgr->PrimeTool( m_startSnapPoint );
 
-    auto setCursor = 
-            [&]() 
-            { 
+    auto setCursor =
+            [&]()
+            {
                 frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 
@@ -1479,9 +1502,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     view()->ClearPreview();
     view()->InitPreview();
 
-    auto setCursor = 
-            [&]() 
-            { 
+    auto setCursor =
+            [&]()
+            {
                 frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
             };
 

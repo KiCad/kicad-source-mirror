@@ -1188,9 +1188,9 @@ void PCB_EDIT_FRAME::UpdateTitle()
     wxString fileinfo;
 
     if( fileName.IsOk() && fileName.FileExists() )
-        fileinfo = fileName.IsFileWritable() ? wxString( wxEmptyString ) : _( " [Read Only]" );
+        fileinfo = fileName.IsFileWritable() ? wxString( wxEmptyString ) : wxS( " " ) + _( "[Read Only]" );
     else
-        fileinfo = _( " [Unsaved]" );
+        fileinfo = wxS( " " ) + _( "[Unsaved]" );
 
     SetTitle( wxString::Format( wxT( "%s%s \u2014 " ) + _( "Pcbnew" ),
                                 fileName.GetName(),

@@ -309,7 +309,7 @@ bool COLOR_SETTINGS::migrateSchema0to1()
 
     fpsettings->erase( "fpedit" );
     fpsettings->Load();
-    fpsettings->SetName( fpsettings->GetName() + _( " (Footprints)" ) );
+    fpsettings->SetName( fpsettings->GetName() + wxS( " " ) + _( "(Footprints)" ) );
     m_manager->Save( fpsettings );
 
     // Now we can get rid of our own copy

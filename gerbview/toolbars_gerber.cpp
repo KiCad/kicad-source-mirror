@@ -116,10 +116,10 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
                                           ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
 
     if( !m_cmpText )
-        m_cmpText = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Cmp: ") );
+        m_cmpText = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Cmp:" ) + wxS( " " ) );
 
     m_SelComponentBox->SetToolTip( _("Highlight items belonging to this component") );
-    m_cmpText->SetLabel( _( "Cmp: ") );     // can change when changing the language
+    m_cmpText->SetLabel( _( "Cmp:" ) + wxS( " " ) );     // can change when changing the language
     m_auxiliaryToolBar->AddControl( m_cmpText );
     m_auxiliaryToolBar->AddControl( m_SelComponentBox );
     m_auxiliaryToolBar->AddSpacer( 5 );

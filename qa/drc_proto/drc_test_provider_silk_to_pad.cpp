@@ -140,7 +140,7 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_COPPER_EDGE_CLEARANCE );
                 wxString msg;
 
-                msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
+                msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s clearance %s; actual %s)" ),
                             rule->GetName(),
                             MessageTextFromValue( userUnits(), minClearance ),
                             MessageTextFromValue( userUnits(), actual ) );

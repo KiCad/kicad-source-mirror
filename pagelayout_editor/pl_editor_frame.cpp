@@ -843,7 +843,7 @@ WS_DATA_ITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
     case WS_DATA_ITEM::WS_BITMAP:
     {
         wxFileDialog fileDlg( this, _( "Choose Image" ), wxEmptyString, wxEmptyString,
-                              _( "Image Files " ) + wxImage::GetImageExtWildcard(), wxFD_OPEN );
+                              _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(), wxFD_OPEN );
 
         if( fileDlg.ShowModal() != wxID_OK )
             return NULL;

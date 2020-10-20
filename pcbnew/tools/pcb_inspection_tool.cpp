@@ -294,7 +294,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 wxString s = aItem->GetSelectMenuText( r->GetUnits() );
 
                 if( auto* cItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem ) )
-                    s += " " + wxString::Format( _( "[netclass %s]" ), cItem->GetNetClassName() );
+                    s += wxS( " " ) + wxString::Format( _( "[netclass %s]" ), cItem->GetNetClassName() );
 
                 return s;
             };

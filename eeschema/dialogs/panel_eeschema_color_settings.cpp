@@ -200,7 +200,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createSwatches()
         wxString name = LayerName( layer );
 
         if( layer == LAYER_SCHEMATIC_GRID_AXES )
-            name += _( " (symbol editor only)" );
+            name += wxS( " " ) + _( "(symbol editor only)" );
 
         createSwatch( layer, name );
     }

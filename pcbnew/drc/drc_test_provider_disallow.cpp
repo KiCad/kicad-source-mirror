@@ -84,7 +84,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
 
-            m_msg.Printf( drcItem->GetErrorText() + _( " (%s)" ),
+            m_msg.Printf( drcItem->GetErrorText() + wxS( " (%s)" ),
                           constraint.GetName() );
 
             drcItem->SetErrorMessage( m_msg );
