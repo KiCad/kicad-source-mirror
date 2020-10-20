@@ -517,8 +517,7 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellChange( wxGridEvent& aEvent )
 
 void DIALOG_CONFIGURE_PATHS::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    if( m_gridWidthsDirty && ( !m_EnvVars->IsCellEditControlShown()
-                               && !m_SearchPaths->IsCellEditControlShown() ) )
+    if( m_gridWidthsDirty )
     {
         int width = m_EnvVars->GetClientRect().GetWidth();
 

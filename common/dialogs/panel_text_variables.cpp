@@ -188,7 +188,7 @@ void PANEL_TEXT_VARIABLES::OnGridCellChange( wxGridEvent& aEvent )
 
 void PANEL_TEXT_VARIABLES::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    if( m_gridWidthsDirty && ( !m_TextVars->IsCellEditControlShown() ) )
+    if( m_gridWidthsDirty )
     {
         int width = m_TextVars->GetClientRect().GetWidth();
 
