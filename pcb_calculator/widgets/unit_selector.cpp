@@ -99,7 +99,7 @@ UNIT_SELECTOR_FREQUENCY::UNIT_SELECTOR_FREQUENCY( wxWindow *parent, wxWindowID i
 {
     Append( _( "GHz" ) );
     Append( _( "MHz" ) );
-    Append( _( "KHz" ) );
+    Append( _( "kHz" ) );
     Append( _( "Hz" ) );
 }
 
