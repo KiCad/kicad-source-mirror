@@ -800,7 +800,7 @@ AVIA6::AVIA6( ALTIUM_PARSER& aReader )
     }
 
     // Subrecord 1
-    aReader.ReadAndSetSubrecordLength();
+    size_t subrecord1 = aReader.ReadAndSetSubrecordLength();
 
     aReader.Skip( 1 );
 
@@ -821,8 +821,16 @@ AVIA6::AVIA6( ALTIUM_PARSER& aReader )
 
     layer_start = static_cast<ALTIUM_LAYER>( aReader.Read<uint8_t>() );
     layer_end   = static_cast<ALTIUM_LAYER>( aReader.Read<uint8_t>() );
-    aReader.Skip( 43 );
-    viamode = static_cast<ALTIUM_PAD_MODE>( aReader.Read<uint8_t>() );
+
+    if( subrecord1 <= 74 )
+    {
+        viamode = ALTIUM_PAD_MODE::SIMPLE;
+    }
+    else
+    {
+        aReader.Skip( 43 );
+        viamode = static_cast<ALTIUM_PAD_MODE>( aReader.Read<uint8_t>() );
+    }
 
     aReader.SkipSubrecord();
 
