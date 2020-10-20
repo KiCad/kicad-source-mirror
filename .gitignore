@@ -110,3 +110,8 @@ CMakeSettings.json
 # KDevelop
 .kdev4/
 *.kdev4
+
+# Translations
+*.mo
+i18n_status.svg
+i18n_status.csv
