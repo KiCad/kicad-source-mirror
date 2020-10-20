@@ -1500,14 +1500,6 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
 
         PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
 
-        if( klayer == UNDEFINED_LAYER )
-        {
-            wxLogWarning( wxString::Format(
-                    _( "Arc on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
-                    elem.layer ) );
-            klayer = Eco1_User;
-        }
-
         if( elem.is_keepout || IsAltiumLayerAPlane( elem.layer ) )
         {
             PCB_SHAPE shape( nullptr ); // just a helper to get the graphic
@@ -1533,13 +1525,30 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
             ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
             m_board->Add( zone, ADD_MODE::APPEND );
 
-            zone->SetLayer( klayer );
             zone->SetIsRuleArea( true );
             zone->SetDoNotAllowTracks( false );
             zone->SetDoNotAllowVias( false );
             zone->SetDoNotAllowPads( false );
             zone->SetDoNotAllowFootprints( false );
             zone->SetDoNotAllowCopperPour( true );
+
+            if( elem.layer == ALTIUM_LAYER::MULTI_LAYER )
+            {
+                zone->SetLayer( F_Cu );
+                zone->SetLayerSet( LSET::AllCuMask() );
+            }
+            else
+            {
+                PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
+                if( klayer == UNDEFINED_LAYER )
+                {
+                    wxLogWarning( wxString::Format(
+                            _( "Arc Keepout on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
+                            elem.layer ) );
+                    klayer = Eco1_User;
+                }
+                zone->SetLayer( klayer );
+            }
 
             shape.TransformShapeWithClearanceToPolygon( *zone->Outline(), klayer, 0, ARC_HIGH_DEF,
                                                         ERROR_INSIDE );
@@ -1548,6 +1557,14 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
             zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                          ZONE_CONTAINER::GetDefaultHatchPitch(), true );
             continue;
+        }
+
+        if( klayer == UNDEFINED_LAYER )
+        {
+            wxLogWarning( wxString::Format(
+                    _( "Arc on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
+                    elem.layer ) );
+            klayer = Eco1_User;
         }
 
         if( klayer >= F_Cu && klayer <= B_Cu )
@@ -2068,13 +2085,6 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
         //    continue;
 
         PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
-        if( klayer == UNDEFINED_LAYER )
-        {
-            wxLogWarning( wxString::Format(
-                    _( "Track on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
-                    elem.layer ) );
-            klayer = Eco1_User;
-        }
 
         if( elem.is_keepout || IsAltiumLayerAPlane( elem.layer ) )
         {
@@ -2086,7 +2096,7 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
 
             ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
             m_board->Add( zone, ADD_MODE::APPEND );
-            zone->SetLayer( klayer );
+
             zone->SetIsRuleArea( true );
             zone->SetDoNotAllowTracks( false );
             zone->SetDoNotAllowVias( false );
@@ -2094,12 +2104,38 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
             zone->SetDoNotAllowFootprints( false );
             zone->SetDoNotAllowCopperPour( true );
 
+            if( elem.layer == ALTIUM_LAYER::MULTI_LAYER )
+            {
+                zone->SetLayer( F_Cu );
+                zone->SetLayerSet( LSET::AllCuMask() );
+            }
+            else
+            {
+                PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
+                if( klayer == UNDEFINED_LAYER )
+                {
+                    wxLogWarning( wxString::Format(
+                            _( "Track Keepout on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
+                            elem.layer ) );
+                    klayer = Eco1_User;
+                }
+                zone->SetLayer( klayer );
+            }
+
             shape.TransformShapeWithClearanceToPolygon( *zone->Outline(), klayer, 0, ARC_HIGH_DEF,
                                                         ERROR_INSIDE );
 
             zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                          ZONE_CONTAINER::GetDefaultHatchPitch(), true );
             continue;
+        }
+
+        if( klayer == UNDEFINED_LAYER )
+        {
+            wxLogWarning( wxString::Format(
+                    _( "Track on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
+                    elem.layer ) );
+            klayer = Eco1_User;
         }
 
         if( klayer >= F_Cu && klayer <= B_Cu )
