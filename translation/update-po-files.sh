@@ -13,7 +13,7 @@
 export LC_ALL=C
 
 display_help() {
-  echo "Usage: $0 [-k] [-p] [locale]"
+  echo "Usage: $0 [-k] [-p] [-s=<path>] <locale|all>"
   echo "  -k keep pot template and not delete it"
   echo "  -p plot the translation statistics [requires python with matplotlib]"
   echo "  -s=<path> path to kicad source code"
@@ -45,8 +45,10 @@ case $i in
 esac
 done
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 if [ -z ${SOURCEDIR} ]; then
-  SOURCEDIR=../kicad
+  SOURCEDIR=${DIR}/..
   echo "Using default SOURCEDIR=${SOURCEDIR}"
 fi
 
@@ -54,7 +56,6 @@ fi
 cd $(dirname ${BASH_SOURCE[0]})
 LOCALDIR=$PWD
 CSVFILE=${PWD}/i18n_status.csv
-LINGUAS=`cat $LOCALDIR/LINGUAS|grep -v '^#'|grep -v '^\s*$'` #Read file without comment and empty lines
 POTDIRS=`cat $LOCALDIR/POTDIRS|grep -v '^#'|grep -v '^\s*$'` #Read file without comment and empty lines
 
 cd $SOURCEDIR
@@ -68,17 +69,20 @@ find $POTDIRS -name '*.cpp' -or -name '*.h' |
 validate() { echo $LINGUAS | grep -F -q -w "$1"; }
 
 #If supplied, update only the specified locale
-if [ ! "$SINGLE_LANG" = "" ] ; then
-  if ! validate "$SINGLE_LANG"; then
-    echo "Error!"
-    echo "Locale argument \"$1\" not present in current locale list:"
-    for i in $LINGUAS; do echo -n "$i "; done
-    echo # newline
-    exit 1
-  else
-    LINGUAS="$SINGLE_LANG"
-  fi
+if [ "$SINGLE_LANG" = "" ] ; then
+  display_help
+elif [ "$SINGLE_LANG" = "all" ] ; then
+  LINGUAS=`cat $LOCALDIR/LINGUAS|grep -v '^#'|grep -v '^\s*$'` #Read file without comment and empty lines
+elif validate "$SINGLE_LANG"; then
+  LINGUAS="$SINGLE_LANG"
+else
+  echo "Error!"
+  echo "Locale argument \"$1\" not present in current locale list:"
+  for i in $LINGUAS; do echo -n "$i "; done
+  echo # newline
+  exit 1
 fi
+
 
 echo "Writing summary to ${CSVFILE}"
 echo "LANG;TRANSLATED;FUZZY;UNTRANSLATED" > "${CSVFILE}"
