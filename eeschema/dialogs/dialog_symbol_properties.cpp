@@ -271,7 +271,11 @@ public:
 
 DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
                                                     SCH_COMPONENT* aComponent ) :
-        DIALOG_SYMBOL_PROPERTIES_BASE( aParent )
+        DIALOG_SYMBOL_PROPERTIES_BASE( aParent ),
+        m_comp( nullptr ),
+        m_part( nullptr ),
+        m_fields( nullptr ),
+        m_dataModel( nullptr )
 {
     m_comp = aComponent;
     m_part = m_comp->GetPartRef().get();
@@ -316,16 +320,27 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
         m_fieldsGrid->ShowHideColumns( m_shownColumns );
     }
 
-    m_dataModel = new SCH_PIN_TABLE_DATA_MODEL();
+    if( m_part->HasConversion() )
+    {
+        // DeMorgan conversions are a subclass of alternate pin assignments, so don't allow
+        // free-form alternate assignments as well.  (We won't know how to map the alternates
+        // back and forth when the conversion is changed.)
+        m_notebook1->RemovePage( 1 );
+    }
+    else
+    {
+        m_dataModel = new SCH_PIN_TABLE_DATA_MODEL();
 
-    // Make a copy of the pins for editing
-    for( const std::unique_ptr<SCH_PIN>& pin : m_comp->GetRawPins() )
-        m_dataModel->push_back( *pin );
+        // Make a copy of the pins for editing
+        for( const std::unique_ptr<SCH_PIN>& pin : m_comp->GetRawPins() )
+            m_dataModel->push_back( *pin );
 
-    m_dataModel->SortRows( COL_NUMBER, true );
-    m_dataModel->BuildAttrs();
+        m_dataModel->SortRows( COL_NUMBER, true );
+        m_dataModel->BuildAttrs();
 
-    m_pinGrid->SetTable( m_dataModel );
+        m_pinGrid->SetTable( m_dataModel );
+    }
+
     m_pinGrid->PushEventHandler( new GRID_TRICKS( m_pinGrid ) );
 
     // Set font size for items showing long strings:
@@ -346,12 +361,12 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
 
     // wxFormBuilder doesn't include this event...
     m_fieldsGrid->Connect( wxEVT_GRID_CELL_CHANGING,
-                    wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging ),
-                    nullptr, this );
+                           wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging ),
+                           nullptr, this );
 
     m_pinGrid->Connect( wxEVT_GRID_COL_SORT,
-                    wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort ),
-                    nullptr, this );
+                        wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort ),
+                        nullptr, this );
 
     FinishDialogSettings();
 }
@@ -366,11 +381,14 @@ DIALOG_SYMBOL_PROPERTIES::~DIALOG_SYMBOL_PROPERTIES()
 
     // Prevents crash bug in wxGrid's d'tor
     m_fieldsGrid->DestroyTable( m_fields );
-    m_pinGrid->DestroyTable( m_dataModel );
+
+    if( m_dataModel )
+        m_pinGrid->DestroyTable( m_dataModel );
 
     m_fieldsGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
-                    wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging ),
-                    nullptr, this );
+                              wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging ),
+                              nullptr, this );
+
     m_pinGrid->Disconnect( wxEVT_GRID_COL_SORT,
                            wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort ),
                            nullptr, this );
@@ -698,11 +716,14 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     }
 
     // Update any assignments
-    for( const SCH_PIN& model_pin : *m_dataModel )
+    if( m_dataModel )
     {
-        // map from the edited copy back to the "real" pin in the component
-        SCH_PIN* src_pin = m_comp->GetPin( model_pin.GetLibPin() );
-        src_pin->SetAlt( model_pin.GetAlt() );
+        for( const SCH_PIN& model_pin : *m_dataModel )
+        {
+            // map from the edited copy back to the "real" pin in the component
+            SCH_PIN* src_pin = m_comp->GetPin( model_pin.GetLibPin() );
+            src_pin->SetAlt( model_pin.GetAlt() );
+        }
     }
 
     currentScreen->Append( m_comp );
