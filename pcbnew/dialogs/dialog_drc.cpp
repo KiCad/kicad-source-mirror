@@ -854,11 +854,11 @@ void DIALOG_DRC::updateDisplayedCounts()
         numExcluded += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
     }
 
-    if( !m_drcRun )
-    {
+    if( !m_drcRun && numErrors == 0 )
         numErrors = -1;
+
+    if( !m_drcRun && numWarnings == 0 )
         numWarnings = -1;
-    }
 
     m_errorsBadge->SetMaximumNumber( numErrors );
     m_errorsBadge->UpdateNumber( numErrors, RPT_SEVERITY_ERROR );
