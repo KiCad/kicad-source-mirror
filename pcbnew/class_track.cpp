@@ -978,27 +978,20 @@ bool TRACK::cmp_tracks::operator() ( const TRACK* a, const TRACK* b ) const
 
 std::shared_ptr<SHAPE> TRACK::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
-    std::shared_ptr<SHAPE_SEGMENT> shape( new SHAPE_SEGMENT( m_Start, m_End, m_Width ) );
-
-    return shape;
+    return std::make_shared<SHAPE_SEGMENT>( m_Start, m_End, m_Width );
 }
 
 
 std::shared_ptr<SHAPE> VIA::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
     // fixme: pad stack support (depending on aLayer )
-    std::shared_ptr<SHAPE_CIRCLE> shape( new SHAPE_CIRCLE( m_Start, m_Width / 2 ) );
-
-    return shape;
+    return std::make_shared<SHAPE_CIRCLE>( m_Start, m_Width / 2 );
 }
 
 
 std::shared_ptr<SHAPE> ARC::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
-    std::shared_ptr<SHAPE_ARC> shape( new SHAPE_ARC( GetStart(), GetMid(), GetEnd(),
-                GetWidth() ) );
-
-    return shape;
+    return std::make_shared<SHAPE_ARC>( GetStart(), GetMid(), GetEnd(), GetWidth() );
 }
 
 

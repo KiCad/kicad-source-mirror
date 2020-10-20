@@ -27,7 +27,7 @@
 #include <class_pad.h>
 #include <class_track.h>
 
-//#include <geometry/polygon_test_point_inside.h>
+#include <geometry/shape_arc.h>
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
@@ -508,8 +508,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
                     || static_cast<VIA*>( aRefSeg )->FlashLayer( aLayer )
                     || static_cast<VIA*>( aRefSeg )->GetDrill() > 0 ) )
     {
-        SEG testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
-
         for( ZONE_CONTAINER* zone : m_board->Zones() )
         {
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
@@ -543,12 +541,41 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             int allowedDist  = minClearance + halfWidth - bds.GetDRCEpsilon();
 
             const SHAPE_POLY_SET& zonePoly = zone->GetFilledPolysList( aLayer );
-            int                   actual;
+            int                   actual = INT_MAX;
             VECTOR2I              location;
 
             accountCheck( constraint );
 
-            if( zonePoly.Collide( testSeg, allowedDist, &actual, &location ) )
+            if( aRefSeg->Type() == PCB_ARC_T )
+            {
+                std::shared_ptr<SHAPE> refShape = aRefSeg->GetEffectiveShape();
+                SHAPE_ARC*             refArc = dynamic_cast<SHAPE_ARC*>( refShape.get() );
+                SHAPE_LINE_CHAIN       refArcSegs = refArc->ConvertToPolyline( bds.m_MaxError );
+
+                for( int i = 0; i < refArcSegs.SegmentCount(); ++i )
+                {
+                    SEG      refArcSeg = refArcSegs.Segment( i );
+                    int      segActual;
+                    VECTOR2I segLocation;
+
+                    if( zonePoly.Collide( refArcSeg, allowedDist, &segActual, &segLocation ) )
+                    {
+                        if( segActual < actual )
+                        {
+                            actual = segActual;
+                            location = segLocation;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                SEG testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
+
+                zonePoly.Collide( testSeg, allowedDist, &actual, &location );
+            }
+
+            if( actual != INT_MAX )
             {
                 actual = std::max( 0, actual - halfWidth );
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
