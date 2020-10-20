@@ -307,10 +307,11 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
     const KIID&   itemID = node ? RC_TREE_MODEL::ToUUID( aEvent.GetItem() ) : niluuid;
     BOARD_ITEM*   item = board->GetItem( itemID );
 
-    if( item )
+    if( item && node )
     {
-        PCB_LAYER_ID principalLayer = item->GetLayer();
-        std::shared_ptr<RC_ITEM>     rc_item = node->m_RcItem;
+        PCB_LAYER_ID             principalLayer = item->GetLayer();
+        std::shared_ptr<RC_ITEM> rc_item        = node->m_RcItem;
+
         BOARD_ITEM*  a = board->GetItem( rc_item->GetMainItemID() );
         BOARD_ITEM*  b = board->GetItem( rc_item->GetAuxItemID() );
         BOARD_ITEM*  c = board->GetItem( rc_item->GetAuxItem2ID() );

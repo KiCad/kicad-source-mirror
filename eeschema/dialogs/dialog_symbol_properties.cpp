@@ -1010,8 +1010,8 @@ void DIALOG_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     {
         wxGridCellEditor* cellEditor = m_fieldsGrid->GetCellEditor( REFERENCE, FDC_VALUE );
 
-        if( cellEditor->GetControl() )
-            SelectReferenceNumber( dynamic_cast<wxTextEntry*>( cellEditor->GetControl() ) );
+        if( wxTextEntry* txt = dynamic_cast<wxTextEntry*>( cellEditor->GetControl() ) )
+            SelectReferenceNumber( txt );
 
         cellEditor->DecRef();   // we're done; must release
 

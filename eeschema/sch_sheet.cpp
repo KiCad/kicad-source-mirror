@@ -1016,7 +1016,7 @@ SCH_SHEET& SCH_SHEET::operator=( const SCH_ITEM& aItem )
             m_pins.back()->SetParent( this );
         }
 
-        for( const SCH_SHEET_INSTANCE instance : sheet->m_instances )
+        for( const SCH_SHEET_INSTANCE& instance : sheet->m_instances )
             m_instances.emplace_back( instance );
     }
 
