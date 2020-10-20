@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-08 21:33+0100\n"
-"PO-Revision-Date: 2020-10-20 16:52+0000\n"
+"PO-Revision-Date: 2020-10-20 20:21+0000\n"
 "Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -321,8 +321,9 @@ msgid "Board Body Color..."
 msgstr "Color del cuerpo de la placa..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:187
+#, fuzzy
 msgid "Get colors from physical stackup"
-msgstr ""
+msgstr "Obtener colores del apilado de capas"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:198
 msgid "3D Grid"
@@ -337,9 +338,8 @@ msgstr "Restablecer los ajustes predeterminados"
 #: gerbview/menubar.cpp:212 kicad/menubar.cpp:165
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:231
 #: pcbnew/menubar_pcb_editor.cpp:448
-#, fuzzy
 msgid "Preferences...\tCTRL+,"
-msgstr "&Preferencias"
+msgstr "Preferencias....\tCTRL+,"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:214 cvpcb/menubar.cpp:72
 #: eeschema/libedit/menubar_libedit.cpp:162 eeschema/menubar.cpp:265
@@ -347,7 +347,7 @@ msgstr "&Preferencias"
 #: pagelayout_editor/menubar.cpp:157 pcbnew/menubar_footprint_editor.cpp:232
 #: pcbnew/menubar_pcb_editor.cpp:449
 msgid "Show preferences for all open tools"
-msgstr ""
+msgstr "Mostrar preferencias para todas las herramientas abiertas"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:221 cvpcb/menubar.cpp:84
 #: eeschema/libedit/menubar_libedit.cpp:178 eeschema/menubar.cpp:281
@@ -414,8 +414,9 @@ msgid "Subtract soldermask from silkscreen"
 msgstr "Restar la máscara de soldadura de la serigrafía"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:77
+#, fuzzy
 msgid "Clip silkscreen at via annulus"
-msgstr ""
+msgstr "Recortar serigrafía en el anillo de la vía"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:86
 msgid "Non plated pads copper as bare copper"
