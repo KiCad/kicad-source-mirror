@@ -28,8 +28,6 @@
 
 #include <wx/string.h>
 
-class wxWindow;
-
 namespace KIUI
 {
 
@@ -53,13 +51,8 @@ enum SEVERITY {
     RPT_SEVERITY_IGNORE    = 0x20
 };
 
-wxBitmap MakeBadge( SEVERITY aStyle, int aCount, wxWindow* aWindow, int aDepth = 1 );
-
 SEVERITY SeverityFromString( const wxString& aSeverity );
 
 wxString SeverityToString( const SEVERITY& aSeverity );
-
-
-
 
 #endif // UI_COMMON_H

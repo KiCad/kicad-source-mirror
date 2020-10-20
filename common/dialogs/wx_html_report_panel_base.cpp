@@ -42,18 +42,14 @@ WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindow
 	m_checkBoxShowErrors = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("Errors"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerBottom->Add( m_checkBoxShowErrors, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	m_errorsBadge = new wxStaticBitmap( m_box->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	m_errorsBadge->SetMinSize( wxSize( 20,20 ) );
-
-	bSizerBottom->Add( m_errorsBadge, 0, wxBOTTOM|wxRIGHT|wxTOP|wxALIGN_CENTER_VERTICAL, 4 );
+	m_errorsBadge = new NUMBER_BADGE( m_box->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerBottom->Add( m_errorsBadge, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 4 );
 
 	m_checkBoxShowWarnings = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("Warnings"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerBottom->Add( m_checkBoxShowWarnings, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	m_warningsBadge = new wxStaticBitmap( m_box->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	m_warningsBadge->SetMinSize( wxSize( 20,20 ) );
-
-	bSizerBottom->Add( m_warningsBadge, 0, wxBOTTOM|wxRIGHT|wxTOP|wxALIGN_CENTER_VERTICAL, 4 );
+	m_warningsBadge = new NUMBER_BADGE( m_box->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerBottom->Add( m_warningsBadge, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 4 );
 
 	m_checkBoxShowActions = new wxCheckBox( m_box->GetStaticBox(), wxID_ANY, _("Actions"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerBottom->Add( m_checkBoxShowActions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );

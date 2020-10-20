@@ -62,8 +62,8 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
 
-    m_messages = new WX_HTML_REPORT_BOX( m_panelMessages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
-	bSizer10->Add( m_messages, 1, wxEXPAND | wxTOP | wxRIGHT | wxLEFT, 5 );
+	m_messages = new WX_HTML_REPORT_BOX( m_panelMessages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
+	bSizer10->Add( m_messages, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bGaugeMargins;
 	bGaugeMargins = new wxBoxSizer( wxVERTICAL );
@@ -162,24 +162,20 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_showErrors = new wxCheckBox( this, wxID_ANY, _("Errors"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSeveritySizer->Add( m_showErrors, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_errorsBadge = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	m_errorsBadge->SetMinSize( wxSize( 20,20 ) );
-
-	bSeveritySizer->Add( m_errorsBadge, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 25 );
+	m_errorsBadge = new NUMBER_BADGE( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	bSeveritySizer->Add( m_errorsBadge, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 25 );
 
 	m_showWarnings = new wxCheckBox( this, wxID_ANY, _("Warnings"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSeveritySizer->Add( m_showWarnings, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_warningsBadge = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	m_warningsBadge->SetMinSize( wxSize( 20,20 ) );
-
-	bSeveritySizer->Add( m_warningsBadge, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 25 );
+	m_warningsBadge = new NUMBER_BADGE( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	bSeveritySizer->Add( m_warningsBadge, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 25 );
 
 	m_showExclusions = new wxCheckBox( this, wxID_ANY, _("Exclusions"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSeveritySizer->Add( m_showExclusions, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_exclusionsBadge = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSeveritySizer->Add( m_exclusionsBadge, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 25 );
+	m_exclusionsBadge = new NUMBER_BADGE( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	bSeveritySizer->Add( m_exclusionsBadge, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 25 );
 
 
 	bSeveritySizer->Add( 5, 0, 1, wxEXPAND, 5 );

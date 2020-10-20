@@ -36,6 +36,7 @@
 #include <class_marker_pcb.h>
 #include <wx/wupdlock.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/number_badge.h>
 #include <widgets/ui_common.h>
 #include <widgets/progress_reporter.h>
 #include <dialogs/wx_html_report_box.h>
@@ -83,6 +84,10 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
     m_sizerButtons->Layout();
 
     m_sdbSizerOK->SetDefault();
+
+    m_errorsBadge->SetMaximumNumber( 999 );
+    m_warningsBadge->SetMaximumNumber( 999 );
+    m_exclusionsBadge->SetMaximumNumber( 999 );
 
     initValues();
     syncCheckboxes();
@@ -859,7 +864,7 @@ void DIALOG_DRC::updateDisplayedCounts()
         numWarnings = -1;
     }
 
-    m_errorsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_ERROR, numErrors, m_errorsBadge ) );
-    m_warningsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_WARNING, numWarnings, m_warningsBadge ) );
-    m_exclusionsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_EXCLUSION, numExcluded, m_exclusionsBadge ) );
+    m_errorsBadge->UpdateNumber( numErrors, RPT_SEVERITY_ERROR );
+    m_warningsBadge->UpdateNumber( numWarnings, RPT_SEVERITY_WARNING );
+    m_exclusionsBadge->UpdateNumber( numExcluded, RPT_SEVERITY_EXCLUSION );
 }

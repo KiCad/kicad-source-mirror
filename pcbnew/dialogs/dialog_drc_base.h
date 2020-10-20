@@ -30,7 +30,7 @@ class WX_HTML_REPORT_BOX;
 #include <wx/dataview.h>
 #include <wx/simplebook.h>
 #include <wx/stattext.h>
-#include <wx/statbmp.h>
+#include <widgets/number_badge.h>
 #include <wx/button.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
@@ -68,11 +68,11 @@ class DIALOG_DRC_BASE : public DIALOG_SHIM
 		wxStaticText* m_showLabel;
 		wxCheckBox* m_showAll;
 		wxCheckBox* m_showErrors;
-		wxStaticBitmap* m_errorsBadge;
+		NUMBER_BADGE* m_errorsBadge;
 		wxCheckBox* m_showWarnings;
-		wxStaticBitmap* m_warningsBadge;
+		NUMBER_BADGE* m_warningsBadge;
 		wxCheckBox* m_showExclusions;
-		wxStaticBitmap* m_exclusionsBadge;
+		NUMBER_BADGE* m_exclusionsBadge;
 		wxButton* m_saveReport;
 		wxStaticLine* m_staticline1;
 		wxBoxSizer* m_sizerButtons;

@@ -28,10 +28,10 @@
 #include <wx/clipbrd.h>
 #include <kicad_string.h>
 
-WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent, 
-                                            wxWindowID id, 
-                                            const wxPoint& pos, 
-                                            const wxSize& size, 
+WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent,
+                                            wxWindowID id,
+                                            const wxPoint& pos,
+                                            const wxSize& size,
                                             long style ) :
     WX_HTML_REPORT_PANEL_BASE( parent, id, pos, size, style ),
     m_reporter( this ),
@@ -135,10 +135,10 @@ void WX_HTML_REPORT_PANEL::scrollToBottom()
 void WX_HTML_REPORT_PANEL::updateBadges()
 {
     int count = Count(RPT_SEVERITY_ERROR );
-    m_errorsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_ERROR, count, m_errorsBadge, 2 ) );
+    m_errorsBadge->UpdateNumber( count, RPT_SEVERITY_ERROR );
 
     count = Count(RPT_SEVERITY_WARNING );
-    m_warningsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_WARNING, count, m_warningsBadge, 2 ) );
+    m_warningsBadge->UpdateNumber( count, RPT_SEVERITY_WARNING );
 }
 
 

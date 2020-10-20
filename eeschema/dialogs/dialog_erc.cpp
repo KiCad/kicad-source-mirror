@@ -81,6 +81,10 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
     m_sdbSizer1OK->SetDefault();
 
+    m_errorsBadge->SetMaximumNumber( 999 );
+    m_warningsBadge->SetMaximumNumber( 999 );
+    m_exclusionsBadge->SetMaximumNumber( 999 );
+
     if( m_parent->CheckAnnotate( NULL_REPORTER::GetInstance(), false ) )
     {
         wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY,
@@ -167,9 +171,9 @@ void DIALOG_ERC::updateDisplayedCounts()
         numWarnings = -1;
     }
 
-    m_errorsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_ERROR, numErrors, m_errorsBadge ) );
-    m_warningsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_WARNING, numWarnings, m_warningsBadge ) );
-    m_exclusionsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_EXCLUSION, numExcluded, m_exclusionsBadge ) );
+    m_errorsBadge->UpdateNumber( numErrors, RPT_SEVERITY_ERROR );
+    m_warningsBadge->UpdateNumber( numWarnings, RPT_SEVERITY_WARNING );
+    m_exclusionsBadge->UpdateNumber( numExcluded, RPT_SEVERITY_EXCLUSION );
 }
 
 

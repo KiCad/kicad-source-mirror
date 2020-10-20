@@ -223,6 +223,7 @@ set( COMMON_WIDGET_SRCS
     widgets/layer_box_selector.cpp
     widgets/lib_tree.cpp
     widgets/mathplot.cpp
+    widgets/number_badge.cpp
     widgets/paged_dialog.cpp
     widgets/progress_reporter.cpp
     widgets/split_button.cpp
