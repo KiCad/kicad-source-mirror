@@ -107,6 +107,26 @@ void NUMBER_BADGE::SetTextSize( int aSize )
 }
 
 
+// OSX has prevalent badges in the application bar at the bottom of the screen so we try to
+// match those.  Other platforms may also need tweaks to spacing, fontweight, etc.
+#ifdef __WXMAC__
+#define BADGE_FONTWEIGHT wxFONTWEIGHT_NORMAL
+#define PLATFORM_FUDGE_X 0.8
+#define PLATFORM_FUDGE_Y 1.6
+#endif
+
+#ifdef __WXGTK__
+#define BADGE_FONTWEIGHT wxFONTWEIGHT_BOLD
+#define PLATFORM_FUDGE_X 1.0
+#define PLATFORM_FUDGE_Y 1.0
+#endif
+
+#ifdef __WXMSW__
+#define BADGE_FONTWEIGHT wxFONTWEIGHT_BOLD
+#define PLATFORM_FUDGE_X 1.0
+#define PLATFORM_FUDGE_Y 1.0
+#endif
+
 void NUMBER_BADGE::computeSize()
 {
     wxClientDC dc( this );
@@ -120,9 +140,14 @@ void NUMBER_BADGE::computeSize()
     test.Pad( len, '9' );
     test += "+";
 
-    dc.SetFont( wxFont( m_textSize, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD ) );
+    dc.SetFont( wxFont( m_textSize, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, BADGE_FONTWEIGHT ) );
+    wxSize size = dc.GetTextExtent( test );
 
-    SetMinSize( dc.GetTextExtent( test ) );
+    size.y *= PLATFORM_FUDGE_Y;
+    size.x = std::max<int>( size.x * PLATFORM_FUDGE_X, size.y );
+
+    SetMinSize( size );
+    SetSize( size );
 }
 
 
@@ -142,8 +167,8 @@ void NUMBER_BADGE::onPaint( wxPaintEvent& aEvt )
     if( !m_showBadge )
         return;
 
-    // The rectangle the color is drawn in needs to be shrunk by 1px on each axis because for some reason it seems
-    // to be padded out by 1px and is cutoff otherwise.
+    // The rectangle the color is drawn in needs to be shrunk by 1px on each axis because for some
+    // reason it seems to be padded out by 1px and is cutoff otherwise.
     wxRect rect( wxPoint( 0, 0 ), clientSize - wxSize( 1, 1 ) );
 
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
@@ -158,7 +183,7 @@ void NUMBER_BADGE::onPaint( wxPaintEvent& aEvt )
     else
         text = wxString::Format( wxT( "%d" ), m_currentNumber );
 
-    dc.SetFont( wxFont( m_textSize, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD ) );
+    dc.SetFont( wxFont( m_textSize, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, BADGE_FONTWEIGHT ) );
     dc.SetTextForeground( m_textColour );
     dc.DrawLabel( text, wxRect( wxPoint( 0, 0 ), clientSize ), wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL );
 }

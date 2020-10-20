@@ -85,10 +85,6 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
 
     m_sdbSizerOK->SetDefault();
 
-    m_errorsBadge->SetMaximumNumber( 999 );
-    m_warningsBadge->SetMaximumNumber( 999 );
-    m_exclusionsBadge->SetMaximumNumber( 999 );
-
     initValues();
     syncCheckboxes();
 
@@ -864,7 +860,12 @@ void DIALOG_DRC::updateDisplayedCounts()
         numWarnings = -1;
     }
 
+    m_errorsBadge->SetMaximumNumber( numErrors );
     m_errorsBadge->UpdateNumber( numErrors, RPT_SEVERITY_ERROR );
+
+    m_warningsBadge->SetMaximumNumber( numWarnings );
     m_warningsBadge->UpdateNumber( numWarnings, RPT_SEVERITY_WARNING );
+
+    m_exclusionsBadge->SetMaximumNumber( numExcluded );
     m_exclusionsBadge->UpdateNumber( numExcluded, RPT_SEVERITY_EXCLUSION );
 }
