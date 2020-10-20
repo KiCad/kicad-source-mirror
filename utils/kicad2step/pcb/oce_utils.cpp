@@ -1591,9 +1591,9 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
             TColgp_Array1OfPnt poles(0, 3);
             gp_Pnt pt = gp_Pnt( aCurve.m_start.x, aCurve.m_start.y, 0.0 );
             poles(0) = pt;
-            pt = gp_Pnt( aCurve.m_bezierctrl1.x, aCurve.m_bezierctrl1.y, 0.0 );
+            pt = gp_Pnt( aCurve.m_bezierctrl1.x, -aCurve.m_bezierctrl1.y, 0.0 );
             poles(1) = pt;
-            pt = gp_Pnt( aCurve.m_bezierctrl2.x, aCurve.m_bezierctrl2.y, 0.0 );
+            pt = gp_Pnt( aCurve.m_bezierctrl2.x, -aCurve.m_bezierctrl2.y, 0.0 );
             poles(2) = pt;
             pt = gp_Pnt( endPoint.x, endPoint.y, 0.0 );
             poles(3) = pt;
