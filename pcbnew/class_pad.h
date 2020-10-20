@@ -108,7 +108,7 @@ public:
         return false;
     }
 
-    MODULE* GetParent() const { return (MODULE*) m_Parent; }
+    MODULE* GetParent() const;
 
     /**
      * Imports the pad settings from aMasterPad.

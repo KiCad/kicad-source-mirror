@@ -1233,6 +1233,12 @@ const BOX2I D_PAD::ViewBBox() const
 }
 
 
+MODULE* D_PAD::GetParent() const
+{
+    return dynamic_cast<MODULE*>( m_Parent );
+}
+
+
 void D_PAD::ImportSettingsFrom( const D_PAD& aMasterPad )
 {
     SetShape( aMasterPad.GetShape() );
