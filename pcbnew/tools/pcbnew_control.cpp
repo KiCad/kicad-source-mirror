@@ -1075,7 +1075,7 @@ int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
         wxString doc, keyword;
         doc.Printf( _( "Doc: %s" ), footprint->GetDescription() );
-        keyword.Printf( _( "Key Words: %s" ), footprint->GetKeywords() );
+        keyword.Printf( _( "Keywords: %s" ), footprint->GetKeywords() );
         msgItems.emplace_back( MSG_PANEL_ITEM( doc, keyword, BLACK ) );
 
         m_frame->SetMsgPanel( msgItems );

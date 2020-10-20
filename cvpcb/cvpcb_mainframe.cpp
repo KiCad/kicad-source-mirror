@@ -673,7 +673,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
             }
         }
 
-        filters += _( "key words" );
+        filters += _( "Keywords" );
 
         if( !msg.IsEmpty() )
             filters += wxString::Format( wxT( " (%s)" ), msg );
@@ -689,7 +689,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
         if( !filters.IsEmpty() )
             filters += wxT( ", " );
 
-        filters += _( "pin count" );
+        filters += _( "Pin Count" );
 
         if( !msg.IsEmpty() )
             filters += wxString::Format( wxT( " (%s)" ), msg );
@@ -702,7 +702,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
         if( !filters.IsEmpty() )
             filters += wxT( ", " );
 
-        filters += _( "library" );
+        filters += _( "Library" );
 
         if( !msg.IsEmpty() )
             filters += wxString::Format( wxT( " (%s)" ), msg );
@@ -715,11 +715,11 @@ void CVPCB_MAINFRAME::DisplayStatus()
         if( !filters.IsEmpty() )
             filters += wxT( ", " );
 
-        filters += _( "search text" ) + wxString::Format( wxT( " (%s)" ), textFilter );
+        filters += _( "Search Text" ) + wxString::Format( wxT( " (%s)" ), textFilter );
     }
 
     if( filters.IsEmpty() )
-        msg = _( "No filtering" );
+        msg = _( "No Filtering" );
     else
         msg.Printf( _( "Filtered by %s" ), filters );
 
@@ -735,7 +735,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
 
     if( module )    // can be NULL if no netlist loaded
     {
-        msg = wxString::Format( _( "Description: %s;  Key words: %s" ),
+        msg = wxString::Format( _( "Description: %s;  Keywords: %s" ),
                                 module->GetDescription(),
                                 module->GetKeywords() );
     }

@@ -238,6 +238,6 @@ void LIB_EDIT_FRAME::DisplayCmpDoc()
 
     AppendMsgPanel( _( "Type" ), msg, MAGENTA, 8 );
     AppendMsgPanel( _( "Description" ), m_my_part->GetDescription(), CYAN, 8 );
-    AppendMsgPanel( _( "Key words" ), m_my_part->GetKeyWords(), DARKDARKGRAY );
+    AppendMsgPanel( _( "Keywords" ), m_my_part->GetKeyWords(), DARKDARKGRAY );
     AppendMsgPanel( _( "Datasheet" ), m_my_part->GetDatasheetField().GetText(), DARKDARKGRAY );
 }

@@ -1375,7 +1375,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
             // Display description of the component, and keywords found in lib
             aList.push_back( MSG_PANEL_ITEM( _( "Description" ), m_part->GetDescription(),
                                              DARKCYAN ) );
-            aList.push_back( MSG_PANEL_ITEM( _( "Key words" ), m_part->GetKeyWords(), DARKCYAN ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "Keywords" ), m_part->GetKeyWords(), DARKCYAN ) );
         }
     }
     else

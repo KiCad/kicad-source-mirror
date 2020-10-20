@@ -359,7 +359,7 @@ void LIB_VIEW_FRAME::updatePreviewSymbol()
         AppendMsgPanel( _( "Name" ), m_previewItem->GetName(), BLUE, 6 );
         AppendMsgPanel( _( "Parent" ),  parentName, RED, 6 );
         AppendMsgPanel( _( "Description" ), m_previewItem->GetDescription(), CYAN, 6 );
-        AppendMsgPanel( _( "Key words" ), m_previewItem->GetKeyWords(), DARKDARKGRAY );
+        AppendMsgPanel( _( "Keywords" ), m_previewItem->GetKeyWords(), DARKDARKGRAY );
     }
 
     GetCanvas()->ForceRefresh();
