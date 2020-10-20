@@ -136,9 +136,16 @@ static void reverseCurve( KICADCURVE& aCurve )
     if( CURVE_NONE ==  aCurve.m_form || CURVE_CIRCLE == aCurve.m_form )
         return;
 
-    if( CURVE_LINE == aCurve.m_form )
+    if( CURVE_LINE == aCurve.m_form  )
     {
         std::swap( aCurve.m_start, aCurve.m_end );
+        return;
+    }
+
+    if( CURVE_BEZIER == aCurve.m_form )
+    {
+        std::swap( aCurve.m_start, aCurve.m_end );
+        std::swap( aCurve.m_bezierctrl1, aCurve.m_bezierctrl2 );
         return;
     }
 
@@ -259,7 +266,7 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
     if( NULL == aCurve || LAYER_EDGE != aCurve->m_layer || CURVE_NONE == aCurve->m_form )
         return false;
 
-    if( CURVE_LINE == aCurve->m_form )
+    if( CURVE_LINE == aCurve->m_form  || CURVE_BEZIER == aCurve->m_form )
     {
         // reject zero - length lines
         double dx = aCurve->m_end.x - aCurve->m_start.x;
@@ -419,12 +426,27 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
 
             break;
 
+        case CURVE_BEZIER:
+            if( aCurve->m_start.x < m_minx )
+            {
+                m_minx = aCurve->m_start.x;
+                m_mincurve = --(m_curves.end());
+            }
+
+            if( aCurve->m_end.x < m_minx )
+            {
+                m_minx = aCurve->m_end.x;
+                m_mincurve = --(m_curves.end());
+            }
+
+            break;
+
         default:
             // unexpected curve type
             do
             {
                 wxString msg;
-                msg.Printf( "  * AddOutlineSegment() unsupported curve type: %s\n",
+                msg.Printf( "  * AddOutlineSegment() unsupported curve type: %d\n",
                             aCurve->m_form );
                 ReportMessage( msg );
             } while( 0 );
@@ -1528,6 +1550,7 @@ bool OUTLINE::MakeShape( TopoDS_Shape& aShape, double aThickness )
     return true;
 }
 
+#include <Geom_BezierCurve.hxx>
 
 bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBLET& aLastPoint )
 {
@@ -1560,6 +1583,28 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
         case CURVE_CIRCLE:
             edge = BRepBuilderAPI_MakeEdge( gp_Circ( gp_Ax2( gp_Pnt( aCurve.m_start.x, aCurve.m_start.y, 0.0 ),
                 gp_Dir( 0.0, 0.0, 1.0 ) ), aCurve.m_radius ) );
+            break;
+
+        case CURVE_BEZIER:
+            {
+#if 0      // TODO: this code is not working. so fix it or replace the curve by a set of segments
+            TColgp_Array1OfPnt poles(0, 3);
+            gp_Pnt pt = gp_Pnt( aCurve.m_start.x, aCurve.m_start.y, 0.0 );
+            poles(0) = pt;
+            pt = gp_Pnt( aCurve.m_bezierctrl1.x, aCurve.m_bezierctrl1.y, 0.0 );
+            poles(1) = pt;
+            pt = gp_Pnt( aCurve.m_bezierctrl2.x, aCurve.m_bezierctrl2.y, 0.0 );
+            poles(2) = pt;
+            pt = gp_Pnt( endPoint.x, endPoint.y, 0.0 );
+            poles(3) = pt;
+
+            Geom_BezierCurve* bezier_curve = new Geom_BezierCurve( poles );
+            edge = BRepBuilderAPI_MakeEdge( bezier_curve );
+#else       // Generate a segment between ends
+            edge = BRepBuilderAPI_MakeEdge( gp_Pnt( aLastPoint.x, aLastPoint.y, 0.0 ),
+                                            gp_Pnt( endPoint.x, endPoint.y, 0.0 ) );
+#endif
+            }
             break;
 
         default:

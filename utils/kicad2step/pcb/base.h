@@ -47,7 +47,8 @@ enum CURVE_TYPE
     CURVE_NONE = 0, // invalid curve
     CURVE_LINE,
     CURVE_ARC,
-    CURVE_CIRCLE
+    CURVE_CIRCLE,
+    CURVE_BEZIER
 };
 
 /*

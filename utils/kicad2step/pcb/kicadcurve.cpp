@@ -50,14 +50,14 @@ KICADCURVE::~KICADCURVE()
     return;
 }
 
+#include <sexpr/sexpr_parser.h>
 
 bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
 {
-    if( CURVE_LINE != aCurveType && CURVE_ARC != aCurveType && CURVE_CIRCLE != aCurveType )
+    if( CURVE_LINE != aCurveType && CURVE_ARC != aCurveType
+        && CURVE_CIRCLE != aCurveType && CURVE_BEZIER != aCurveType )
     {
-        std::ostringstream ostr;
-        ostr << "* Unsupported curve type: " << aCurveType;
-        wxLogMessage( "%s\n", ostr.str().c_str() );
+        wxLogMessage( "* Unsupported curve type: %d\n", aCurveType );
         return false;
     }
 
@@ -67,11 +67,10 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
 
     if( ( CURVE_CIRCLE == aCurveType && nchild < 5 )
         || ( CURVE_ARC == aCurveType && nchild < 6 )
-        || ( CURVE_LINE == aCurveType && nchild < 5 ) )
+        || ( CURVE_LINE == aCurveType && nchild < 5 )
+        || ( CURVE_BEZIER == aCurveType && nchild < 5 ) )
     {
-        std::ostringstream ostr;
-        ostr << "* bad curve data; not enough parameters";
-        wxLogMessage( "%s\n", ostr.str().c_str() );
+        wxLogMessage( "* bad curve data; not enough parameters\n" );
         return false;
     }
 
@@ -87,7 +86,45 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
 
         text = child->GetChild( 0 )->GetSymbol();
 
-        if( text == "start" || text == "center" )
+        if( text == "pts" )
+        {
+            // Parse and extract the list of xy coordinates
+            SEXPR::PARSER parser;
+            std::unique_ptr<SEXPR::SEXPR> prms = parser.Parse( child->AsString() );
+
+            // We need 4 XY parametres (and "pts" that is the firast parameter)
+            if( prms->GetNumberOfChildren() != 5 )
+                return false;
+
+            // Extract xy coordintes from pts list
+            SEXPR::SEXPR_VECTOR const* list = prms->GetChildren();
+            int ii = 0;
+
+            // The first parameter is "pts", so skip it.
+            for( std::vector<SEXPR::SEXPR*>::const_iterator it = list->begin()+1;
+                 it != list->end(); ++it, ++ii )
+            {
+                SEXPR::SEXPR* sub_child = (*it);
+                text = sub_child->GetChild( 0 )->GetSymbol();
+
+                if( text == "xy" )
+                {
+                    DOUBLET coord;
+
+                    if( !Get2DCoordinate( sub_child, coord ) )
+                        return false;
+
+                    switch( ii )
+                    {
+                    case 0: m_start = coord; break;
+                    case 1: m_bezierctrl1 = coord; break;
+                    case 2: m_bezierctrl2 = coord; break;
+                    case 3:  m_end = coord; break;
+                    }
+                }
+            }
+        }
+        else if( text == "start" || text == "center" )
         {
             if( !Get2DCoordinate( child, m_start ) )
                 return false;
@@ -103,9 +140,7 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
                 || ( !child->GetChild( 1 )->IsDouble()
                      && !child->GetChild( 1 )->IsInteger() ) )
             {
-                std::ostringstream ostr;
-                ostr << "* bad angle data";
-                wxLogMessage( "%s\n", ostr.str().c_str() );
+                wxLogMessage( "* bad angle data\n" );
                 return false;
             }
 
@@ -156,6 +191,11 @@ std::string KICADCURVE::Describe() const
 
         case CURVE_CIRCLE:
             desc << "circle center: " << m_start << " radius: " << m_radius;
+            break;
+
+        case CURVE_BEZIER:
+            desc << "bezier start: " << m_start << " end: " << m_end
+                 << " ctrl1: " << m_bezierctrl1 << " ctrl2: " << m_bezierctrl2 ;
             break;
 
         default:

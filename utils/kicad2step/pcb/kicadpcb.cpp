@@ -230,6 +230,8 @@ bool KICADPCB::parsePCB( SEXPR::SEXPR* data )
                 result = result && parseRect( child );
             else if( symname == "gr_circle" )
                 result = result && parseCurve( child, CURVE_CIRCLE );
+            else if( symname == "gr_curve" )
+                result = result && parseCurve( child, CURVE_BEZIER );
         }
 
         return result;

@@ -50,13 +50,15 @@ public:
     ///> Returns human-readable description of the curve.
     std::string Describe() const;
 
-    CURVE_TYPE m_form;  // form of curve: line, arc, circle
-    LAYERS     m_layer; // layer of the glyph
-    DOUBLET    m_start; // start point of line or center for arc and circle
-    DOUBLET    m_end;   // end point of line, first point on arc or circle
-    DOUBLET    m_ep;    // actual endpoint, to be computed in the case of arcs
-    double     m_radius;// radius; to be computed in the case of arcs and circles
-    double     m_angle; // subtended angle of arc
+    CURVE_TYPE m_form;          // form of curve: line, arc, circle
+    LAYERS     m_layer;         // layer of the glyph
+    DOUBLET    m_start;         // start point of line or center for arc and circle
+    DOUBLET    m_end;           // end point of line, first point on arc or circle
+    DOUBLET    m_ep;            // actual endpoint, to be computed in the case of arcs
+    DOUBLET    m_bezierctrl1;   // for bezier curve only first control point
+    DOUBLET    m_bezierctrl2;   // for bezier curve only second control point
+    double     m_radius;        // radius; to be computed in the case of arcs and circles
+    double     m_angle;         // subtended angle of arc
     double     m_startangle;
     double     m_endangle;
 };
