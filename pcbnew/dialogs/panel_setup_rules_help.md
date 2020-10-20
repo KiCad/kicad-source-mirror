@@ -19,8 +19,8 @@
  * annular_width
  * clearance
  * courtyard_clearance
- * diff_pair_gap
- * diff_pair_uncoupled
+ * diff\_pair\_gap
+ * diff\_pair\_uncoupled
  * disallow
  * edge_clearance
  * length
