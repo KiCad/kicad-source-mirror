@@ -28,7 +28,6 @@
 
 #include <bitmaps.h>
 #include <class_board.h>
-#include <confirm.h>
 #include <dialog_helpers.h>
 #include <kiface_i.h>
 #include <pcb_edit_frame.h>
@@ -46,15 +45,11 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
-#include <view/view.h>
 #include <wx/wupdlock.h>
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
 #endif
-
-#define SEL_LAYER_HELP _( \
-        "Show active layer selections\nand select layer pair for route and place via" )
 
 
 /* Data to build the layer pair indicator button */
@@ -659,15 +654,15 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
 
         if( hole > 0 )
         {
-            priStr.Printf( _( "%s / %s" ), ComboBoxUnits( primaryUnit, diam, false ),
-                                           ComboBoxUnits( primaryUnit, hole, true ) );
-            secStr.Printf( _( "%s / %s" ), ComboBoxUnits( secondaryUnit, diam, false ),
-                                           ComboBoxUnits( secondaryUnit, hole, true ) );
+            priStr = ComboBoxUnits( primaryUnit, diam, false ) + " / "
+                        + ComboBoxUnits( primaryUnit, hole, true );
+            secStr = ComboBoxUnits( secondaryUnit, diam, false ) + " / "
+                        + ComboBoxUnits( secondaryUnit, hole, true );
         }
         else
         {
-            priStr.Printf( _( "%s" ), ComboBoxUnits( primaryUnit, diam, true ) );
-            secStr.Printf( _( "%s" ), ComboBoxUnits( secondaryUnit, diam, true ) );
+            priStr = ComboBoxUnits( primaryUnit, diam, true );
+            secStr = ComboBoxUnits( secondaryUnit, diam, true );
         }
 
         msg.Printf( _( "Via: %s (%s)" ), priStr, secStr );

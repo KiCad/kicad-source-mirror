@@ -205,9 +205,7 @@ void PCB_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_TYPE_T aClearanceType,
     {
         r->Report( "" );
         r->Report( _( "Report incomplete: could not compile design rules.  " )
-                        + wxT( "<a href='boardsetup'>" )
-                        + _( "Show design rules." )
-                        + wxT( "</a>" ) );
+                   + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
         return;
     }
 
@@ -296,7 +294,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 wxString s = aItem->GetSelectMenuText( r->GetUnits() );
 
                 if( auto* cItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem ) )
-                    s += wxString::Format( _( " [netclass %s]" ), cItem->GetNetClassName() );
+                    s += " " + wxString::Format( _( "[netclass %s]" ), cItem->GetNetClassName() );
 
                 return s;
             };
@@ -305,7 +303,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     {
         r->Report( _( "<h7>Silkscreen clearance resolution for:</h7>" ) );
 
-        r->Report( wxString::Format( wxT( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>" ),
+        r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
                                      _( "Layer" ),
                                      m_frame->GetBoard()->GetLayerName( layer ),
                                      getItemDescription( a ),
@@ -329,7 +327,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     {
         r->Report( _( "<h7>Clearance resolution for:</h7>" ) );
 
-        r->Report( wxString::Format( wxT( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>" ),
+        r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
                                      _( "Layer" ),
                                      m_frame->GetBoard()->GetLayerName( layer ),
                                      getItemDescription( a ),
@@ -408,17 +406,14 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( "Track Width" );
 
         r->Report( _( "<h7>Track width resolution for:</h7>" ) );
-        r->Report( wxString::Format( _( "<ul><li>%s</li></ul>" ),
-                                     item->GetSelectMenuText( r->GetUnits() ) ) );
+        r->Report( "<ul><li>" + item->GetSelectMenuText( r->GetUnits() ) + "</li></ul>" );
         r->Report( "" );
 
         if( compileError )
         {
             r->Report( "" );
             r->Report( _( "Report incomplete: could not compile design rules.  " )
-                            + wxT( "<a href='boardsetup'>" )
-                            + _( "Show design rules." )
-                            + wxT( "</a>" ) );
+                       + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
         }
         else
         {
@@ -448,17 +443,14 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( "Via Diameter" );
 
         r->Report( _( "<h7>Via diameter resolution for:</h7>" ) );
-        r->Report( wxString::Format( _( "<ul><li>%s</li></ul>" ),
-                                     item->GetSelectMenuText( r->GetUnits() ) ) );
+        r->Report( "<ul><li>" + item->GetSelectMenuText( r->GetUnits() ) + "</li></ul>" );
         r->Report( "" );
 
         if( compileError )
         {
             r->Report( "" );
             r->Report( _( "Report incomplete: could not compile design rules.  " )
-                            + wxT( "<a href='boardsetup'>" )
-                            + _( "Show design rules." )
-                            + wxT( "</a>" ) );
+                       + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
         }
         else
         {
@@ -485,17 +477,14 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         r = m_inspectConstraintsDialog->AddPage( "Via Annular Width" );
 
         r->Report( _( "<h7>Via annular width resolution for:</h7>" ) );
-        r->Report( wxString::Format( _( "<ul><li>%s</li></ul>" ),
-                                     item->GetSelectMenuText( r->GetUnits() ) ) );
+        r->Report( "<ul><li>" + item->GetSelectMenuText( r->GetUnits() ) + "</li></ul>" );
         r->Report( "" );
 
         if( compileError )
         {
             r->Report( "" );
             r->Report( _( "Report incomplete: could not compile design rules.  " )
-                            + wxT( "<a href='boardsetup'>" )
-                            + _( "Show design rules." )
-                            + wxT( "</a>" ) );
+                       + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
         }
         else
         {
@@ -526,17 +515,14 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( "Hole Size" );
 
         r->Report( _( "<h7>Hole diameter resolution for:</h7>" ) );
-        r->Report( wxString::Format( _( "<ul><li>%s</li></ul>" ),
-                                     item->GetSelectMenuText( r->GetUnits() ) ) );
+        r->Report( "<ul><li>" + item->GetSelectMenuText( r->GetUnits() ) + "</li></ul>" );
         r->Report( "" );
 
         if( compileError )
         {
             r->Report( "" );
             r->Report( _( "Report incomplete: could not compile design rules.  " )
-                            + wxT( "<a href='boardsetup'>" )
-                            + _( "Show design rules." )
-                            + wxT( "</a>" ) );
+                       + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
         }
         else
         {
