@@ -585,6 +585,14 @@ void pasteModuleItemsToModEdit( MODULE* aClipModule, BOARD* aBoard,
 
     aClipModule->GraphicalItems().clear();
 
+    for( PCB_GROUP* group : aClipModule->Groups() )
+    {
+        group->SetParent( editModule );
+        aPastedItems.push_back( group );
+    }
+
+    aClipModule->Groups().clear();
+
     if( !aClipModule->GetReference().IsEmpty() )
     {
         FP_TEXT* text = new FP_TEXT( aClipModule->Reference() );
