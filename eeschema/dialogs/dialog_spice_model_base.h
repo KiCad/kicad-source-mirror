@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -57,33 +57,33 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticText32;
 		wxStaticText* m_staticText321;
-		wxStaticText* m_staticText341;
-		wxStaticText* m_staticText_femto;
-		wxStaticText* m_staticText36;
-		wxStaticText* m_staticText37;
-		wxStaticText* m_staticText38;
-		wxStaticText* m_staticText39;
-		wxStaticText* m_staticText40;
-		wxStaticText* m_staticText41;
-		wxStaticText* m_staticText42;
-		wxStaticText* m_staticText43;
-		wxStaticText* m_staticText44;
-		wxStaticText* m_staticText46;
-		wxStaticText* m_staticText47;
-		wxStaticText* m_staticText48;
-		wxStaticText* m_staticText45;
-		wxStaticText* m_staticText49;
-		wxStaticText* m_staticText50;
-		wxStaticText* m_staticText51;
-		wxStaticText* m_staticText52;
-		wxStaticText* m_staticText53;
-		wxStaticText* m_staticText54;
-		wxStaticText* m_staticText55;
-		wxStaticText* m_staticText56;
-		wxStaticText* m_staticText57;
-		wxStaticText* m_staticText58;
-		wxStaticText* m_staticText59;
-		wxStaticText* m_staticText60;
+		wxStaticText* m_staticTextF1;
+		wxStaticText* m_staticTextF2;
+		wxStaticText* m_staticTextF3;
+		wxStaticText* m_staticTextP1;
+		wxStaticText* m_staticTextP2;
+		wxStaticText* m_staticTextP3;
+		wxStaticText* m_staticTextN1;
+		wxStaticText* m_staticTextN2;
+		wxStaticText* m_staticTextN3;
+		wxStaticText* m_staticTextU1;
+		wxStaticText* m_staticTextU2;
+		wxStaticText* m_staticTextU3;
+		wxStaticText* m_staticTextM1;
+		wxStaticText* m_staticTextM2;
+		wxStaticText* m_staticTextM3;
+		wxStaticText* m_staticTextK1;
+		wxStaticText* m_staticTextK2;
+		wxStaticText* m_staticTextK3;
+		wxStaticText* m_staticTextMeg1;
+		wxStaticText* m_staticTextMeg2;
+		wxStaticText* m_staticTextMeg3;
+		wxStaticText* m_staticTextG1;
+		wxStaticText* m_staticTextG2;
+		wxStaticText* m_staticTextG3;
+		wxStaticText* m_staticTextT1;
+		wxStaticText* m_staticTextT2;
+		wxStaticText* m_staticTextT3;
 		wxPanel* m_model;
 		wxStaticText* m_staticText7;
 		wxTextCtrl* m_modelLibrary;
@@ -251,7 +251,7 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Spice Model Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 494,604 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Spice Model Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 669,861 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_SPICE_MODEL_BASE();
 
 };

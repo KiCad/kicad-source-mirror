@@ -184,6 +184,36 @@ void DIALOG_SPICE_MODEL::Init()
 
     m_sdbSizerOK->SetDefault();
 
+    m_staticTextF1->SetLabel( wxS( "f" ) );
+    m_staticTextP1->SetLabel( wxS( "p" ) );
+    m_staticTextN1->SetLabel( wxS( "n" ) );
+    m_staticTextU1->SetLabel( wxS( "u" ) );
+    m_staticTextM1->SetLabel( wxS( "m" ) );
+    m_staticTextK1->SetLabel( wxS( "k" ) );
+    m_staticTextMeg1->SetLabel( wxS( "meg" ) );
+    m_staticTextG1->SetLabel( wxS( "g" ) );
+    m_staticTextT1->SetLabel( wxS( "t" ) );
+
+    m_staticTextF2->SetLabel( wxS( "femto" ) );
+    m_staticTextP2->SetLabel( wxS( "pico" ) );
+    m_staticTextN2->SetLabel( wxS( "nano" ) );
+    m_staticTextU2->SetLabel( wxS( "micro" ) );
+    m_staticTextM2->SetLabel( wxS( "milli" ) );
+    m_staticTextK2->SetLabel( wxS( "kilo" ) );
+    m_staticTextMeg2->SetLabel( wxS( "mega" ) );
+    m_staticTextG2->SetLabel( wxS( "giga" ) );
+    m_staticTextT2->SetLabel( wxS( "terra" ) );
+
+    m_staticTextF3->SetLabel( wxS( "1e-15" ) );
+    m_staticTextP3->SetLabel( wxS( "1e-12" ) );
+    m_staticTextN3->SetLabel( wxS( "1e-9" ) );
+    m_staticTextU3->SetLabel( wxS( "1e-6" ) );
+    m_staticTextM3->SetLabel( wxS( "1e-3" ) );
+    m_staticTextK3->SetLabel( wxS( "1e3" ) );
+    m_staticTextMeg3->SetLabel( wxS( "1e6" ) );
+    m_staticTextG3->SetLabel( wxS( "1e9" ) );
+    m_staticTextT3->SetLabel( wxS( "1e12" ) );
+
     // Hide pages that aren't fully implemented yet
     // wxPanel::Hide() isn't enough on some platforms
     m_powerNotebook->RemovePage( m_powerNotebook->FindPage( m_pwrTransNoise ) );

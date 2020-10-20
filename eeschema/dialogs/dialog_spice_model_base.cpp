@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -78,113 +78,113 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	fgSizerUnitSymbols->SetFlexibleDirection( wxBOTH );
 	fgSizerUnitSymbols->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticText341 = new wxStaticText( m_passive, wxID_ANY, _("f"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText341->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText341, 0, wxALL, 5 );
+	m_staticTextF1 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextF1->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextF1, 0, wxALL, 5 );
 
-	m_staticText_femto = new wxStaticText( m_passive, wxID_ANY, _("femto"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText_femto->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText_femto, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_staticTextF2 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextF2->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextF2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
-	m_staticText36 = new wxStaticText( m_passive, wxID_ANY, _("1e-15"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText36->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText36, 0, wxALL, 5 );
+	m_staticTextF3 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextF3->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextF3, 0, wxALL, 5 );
 
-	m_staticText37 = new wxStaticText( m_passive, wxID_ANY, _("p"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText37->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText37, 0, wxALL, 5 );
+	m_staticTextP1 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextP1->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextP1, 0, wxALL, 5 );
 
-	m_staticText38 = new wxStaticText( m_passive, wxID_ANY, _("pico"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText38->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText38, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_staticTextP2 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextP2->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextP2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
-	m_staticText39 = new wxStaticText( m_passive, wxID_ANY, _("1e-12"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText39->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText39, 0, wxALL, 5 );
+	m_staticTextP3 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextP3->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextP3, 0, wxALL, 5 );
 
-	m_staticText40 = new wxStaticText( m_passive, wxID_ANY, _("n"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText40->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText40, 0, wxALL, 5 );
+	m_staticTextN1 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextN1->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextN1, 0, wxALL, 5 );
 
-	m_staticText41 = new wxStaticText( m_passive, wxID_ANY, _("nano"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText41->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText41, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_staticTextN2 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextN2->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextN2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
-	m_staticText42 = new wxStaticText( m_passive, wxID_ANY, _("1e-9"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText42->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText42, 0, wxALL, 5 );
+	m_staticTextN3 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextN3->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextN3, 0, wxALL, 5 );
 
-	m_staticText43 = new wxStaticText( m_passive, wxID_ANY, _("u"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText43->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText43, 0, wxALL, 5 );
+	m_staticTextU1 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextU1->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextU1, 0, wxALL, 5 );
 
-	m_staticText44 = new wxStaticText( m_passive, wxID_ANY, _("micro"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText44->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText44, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_staticTextU2 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextU2->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextU2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
-	m_staticText46 = new wxStaticText( m_passive, wxID_ANY, _("1e-6"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText46->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText46, 0, wxALL, 5 );
+	m_staticTextU3 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextU3->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextU3, 0, wxALL, 5 );
 
-	m_staticText47 = new wxStaticText( m_passive, wxID_ANY, _("m"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText47->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText47, 0, wxALL, 5 );
+	m_staticTextM1 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextM1->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextM1, 0, wxALL, 5 );
 
-	m_staticText48 = new wxStaticText( m_passive, wxID_ANY, _("milli"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText48->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText48, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_staticTextM2 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextM2->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextM2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
-	m_staticText45 = new wxStaticText( m_passive, wxID_ANY, _("1e-3"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText45->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText45, 0, wxALL, 5 );
+	m_staticTextM3 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextM3->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextM3, 0, wxALL, 5 );
 
-	m_staticText49 = new wxStaticText( m_passive, wxID_ANY, _("k"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText49->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText49, 0, wxALL, 5 );
+	m_staticTextK1 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextK1->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextK1, 0, wxALL, 5 );
 
-	m_staticText50 = new wxStaticText( m_passive, wxID_ANY, _("kilo"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText50->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText50, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_staticTextK2 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextK2->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextK2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
-	m_staticText51 = new wxStaticText( m_passive, wxID_ANY, _("1e3"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText51->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText51, 0, wxALL, 5 );
+	m_staticTextK3 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextK3->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextK3, 0, wxALL, 5 );
 
-	m_staticText52 = new wxStaticText( m_passive, wxID_ANY, _("meg"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText52->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText52, 0, wxALL, 5 );
+	m_staticTextMeg1 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextMeg1->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextMeg1, 0, wxALL, 5 );
 
-	m_staticText53 = new wxStaticText( m_passive, wxID_ANY, _("mega"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText53->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText53, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_staticTextMeg2 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextMeg2->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextMeg2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
-	m_staticText54 = new wxStaticText( m_passive, wxID_ANY, _("1e6"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText54->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText54, 0, wxALL, 5 );
+	m_staticTextMeg3 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextMeg3->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextMeg3, 0, wxALL, 5 );
 
-	m_staticText55 = new wxStaticText( m_passive, wxID_ANY, _("g"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText55->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText55, 0, wxALL, 5 );
+	m_staticTextG1 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextG1->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextG1, 0, wxALL, 5 );
 
-	m_staticText56 = new wxStaticText( m_passive, wxID_ANY, _("giga"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText56->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText56, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_staticTextG2 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextG2->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextG2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
-	m_staticText57 = new wxStaticText( m_passive, wxID_ANY, _("1e9"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText57->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText57, 0, wxALL, 5 );
+	m_staticTextG3 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextG3->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextG3, 0, wxALL, 5 );
 
-	m_staticText58 = new wxStaticText( m_passive, wxID_ANY, _("t"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText58->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText58, 0, wxALL, 5 );
+	m_staticTextT1 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextT1->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextT1, 0, wxALL, 5 );
 
-	m_staticText59 = new wxStaticText( m_passive, wxID_ANY, _("tera"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText59->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText59, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_staticTextT2 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextT2->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextT2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
-	m_staticText60 = new wxStaticText( m_passive, wxID_ANY, _("1e12"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText60->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText60, 0, wxALL, 5 );
+	m_staticTextT3 = new wxStaticText( m_passive, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextT3->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticTextT3, 0, wxALL, 5 );
 
 
 	bSizerUnits->Add( fgSizerUnitSymbols, 1, wxEXPAND, 5 );
