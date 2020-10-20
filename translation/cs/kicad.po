@@ -5,22 +5,24 @@
 # Roman Ondráček <ondracek.roman@centrum.cz>, 2017.
 # Michal Jahelka <michal.jahelka@pavelek.cz>, 2019
 # translation of kicad.po to
+# Radovan Blažek <blazra@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-20 14:37-0700\n"
-"PO-Revision-Date: 2019-03-07 20:09+0100\n"
-"Last-Translator: Martin Kratoška <martin@ok1rr.com>\n"
-"Language-Team: Čeština <cs@li.org>\n"
-"Language: cs_CZ\n"
+"PO-Revision-Date: 2020-10-21 02:48+0000\n"
+"Last-Translator: Radovan Blažek <blazra@gmail.com>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 4.3.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 1.8.7.1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:50
 msgid "All Files (*.*)|*.*"
@@ -181,7 +183,7 @@ msgstr "Vytvořit BVH pro díry a průchodky"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:423
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr ""
+msgstr "Vaše verze OpenGL není podporovaná. Nejnižší podporovaná verze je 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
