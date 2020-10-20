@@ -1,18 +1,19 @@
+# Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-20 14:37-0700\n"
-"PO-Revision-Date: 2020-10-16 20:27+0000\n"
+"PO-Revision-Date: 2020-10-21 02:48+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.1-dev\n"
+"X-Generator: Weblate 4.3.1\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -5283,9 +5284,8 @@ msgid "Error: "
 msgstr "Fel"
 
 #: common/rc_item.cpp:327
-#, fuzzy
 msgid "Warning: "
-msgstr "Varning"
+msgstr "Varning: "
 
 #: common/richio.cpp:171
 #, c-format
@@ -5652,14 +5652,12 @@ msgid "Refresh"
 msgstr "Uppdatera projektträd"
 
 #: common/tool/actions.cpp:258
-#, fuzzy
 msgid "Zoom to Fit"
-msgstr "Zooma "
+msgstr "Zooma för att passa"
 
 #: common/tool/actions.cpp:263
-#, fuzzy
 msgid "Zoom to Objects"
-msgstr "Zooma "
+msgstr "Zooma till objekt"
 
 #: common/tool/actions.cpp:274
 msgid "Zoom In at Cursor"
@@ -6102,9 +6100,9 @@ msgid "User grid: %s (%s)"
 msgstr ""
 
 #: common/tool/zoom_menu.cpp:48
-#, fuzzy, c-format
+#, c-format
 msgid "Zoom: %.2f"
-msgstr "Zoom: "
+msgstr "Zoom: %.2f"
 
 #: common/validators.cpp:250
 #, fuzzy, c-format
@@ -6386,19 +6384,16 @@ msgid "KiCad drawing symbol files"
 msgstr "Redigera fält"
 
 #: common/wildcards_and_files_ext.cpp:187
-#, fuzzy
 msgid "KiCad symbol library files"
-msgstr "Kunde inte skapa filen "
+msgstr "KiCad-symbolbiblioteksfiler"
 
 #: common/wildcards_and_files_ext.cpp:193
-#, fuzzy
 msgid "KiCad legacy symbol library files"
-msgstr "Kunde inte skapa filen "
+msgstr "KiCad äldre symbolbiblioteksfiler"
 
 #: common/wildcards_and_files_ext.cpp:199
-#, fuzzy
 msgid "All KiCad symbol library files"
-msgstr "Kunde inte skapa filen "
+msgstr "Alla KiCad-symbolbiblioteksfiler"
 
 #: common/wildcards_and_files_ext.cpp:205
 #, fuzzy
@@ -6547,9 +6542,8 @@ msgid "CSV Files"
 msgstr "&Arkiv"
 
 #: common/wildcards_and_files_ext.cpp:392
-#, fuzzy
 msgid "Portable document format files"
-msgstr "Kunde inte skapa filen "
+msgstr "Portable Document Format (PDF) files"
 
 #: common/wildcards_and_files_ext.cpp:398
 #, fuzzy
@@ -7924,9 +7918,8 @@ msgstr "Vertikalt"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:57
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
 #: eeschema/fields_grid_table.cpp:201
-#, fuzzy
 msgid "Text Size"
-msgstr "Text "
+msgstr "Textstorlek"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:64
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120
@@ -8485,9 +8478,8 @@ msgid "Errors, Warnings and Exclusions"
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:273 eeschema/dialogs/dialog_erc.cpp:344
-#, fuzzy
 msgid "Annotation not complete.  ERC cannot be run.  "
-msgstr "Annotera schema komponenter"
+msgstr "Anteckningen är inte slutförd.  DET går inte att köra ERC.  "
 
 #: eeschema/dialogs/dialog_erc.cpp:275 eeschema/dialogs/dialog_erc.cpp:346
 #, fuzzy
@@ -8519,9 +8511,8 @@ msgid "Checking conflicts..."
 msgstr "Kontrollera moduler"
 
 #: eeschema/dialogs/dialog_erc.cpp:381
-#, fuzzy
 msgid "Checking footprints..."
-msgstr "Laddar "
+msgstr "Kontrollerar fotspår..."
 
 #: eeschema/dialogs/dialog_erc.cpp:385
 #, fuzzy
@@ -8636,9 +8627,9 @@ msgid "Report file '%s' created\n"
 msgstr "Kunde inte skapa '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:682
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create report file '%s'"
-msgstr "Kunde inte skapa filen "
+msgstr "Det gick inte att skapa rapportfilen '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:695
 #, c-format
@@ -8854,9 +8845,8 @@ msgid "Filter items by parent reference designator:"
 msgstr "Föredragen redigerare:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:102
-#, fuzzy
 msgid "Filter items by parent symbol library id:"
-msgstr "Kunde inte skapa filen "
+msgstr "Filtrera objekt efter överordnad symbolbiblioteks-id:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:108
 msgid "Filter items by parent symbol type:"
@@ -10468,9 +10458,8 @@ msgid "Spice unit symbols in values (case insensitive):"
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:210
-#, fuzzy
 msgid "Library:"
-msgstr "Bibliotek: "
+msgstr "Bibliotek:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:220
 #, fuzzy
@@ -10894,9 +10883,8 @@ msgstr "Automatiskt associering"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:521
-#, fuzzy
 msgid "Library link:"
-msgstr "Bibliotek: "
+msgstr "Bibliotekslänk:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:307
 msgid ""
@@ -11006,14 +10994,14 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_remap.cpp:451
 #: eeschema/dialogs/dialog_symbol_remap.cpp:467
 #: eeschema/dialogs/dialog_symbol_remap.cpp:483
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to back up file \"%s\".\n"
-msgstr "Kunde inte öppna filen "
+msgstr "Det gick inte att säkerhetskopiera filen \"%s\".\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:406
 #, fuzzy, c-format
 msgid "Failed to create backup folder \"%s\"\n"
-msgstr "Kunde inte skapa filen "
+msgstr "Det gick inte att skapa säkerhetskopieringsmappen \"%s\"\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:489
 msgid "Some of the project files could not be backed up."
@@ -11822,9 +11810,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:124 pcbnew/files.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file \"%s\""
-msgstr "Kunde inte skapa filen "
+msgstr "Det gick inte att skapa temporär fil \"%s\""
 
 #: eeschema/files-io.cpp:140
 #, c-format
@@ -11834,9 +11822,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:145 pcbnew/files.cpp:868
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to rename temporary file \"%s\""
-msgstr "Kunde inte skapa filen "
+msgstr "Det gick inte att byta namn på temporär fil \"%s\""
 
 #: eeschema/files-io.cpp:175
 #, c-format
@@ -12275,9 +12263,9 @@ msgid "Add To Library Table"
 msgstr "Välj bibliotek"
 
 #: eeschema/libedit/lib_edit_frame.cpp:911
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save backup to \"%s\""
-msgstr "Kunde inte skapa filen "
+msgstr "Det gick inte att spara backup till \"%s\""
 
 #: eeschema/libedit/lib_edit_frame.cpp:1053
 #, c-format
@@ -12345,9 +12333,9 @@ msgid "Write permissions are required to save library \"%s\"."
 msgstr ""
 
 #: eeschema/libedit/lib_export.cpp:184 eeschema/project_rescue.cpp:682
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create symbol library file \"%s\""
-msgstr "Kunde inte skapa filen "
+msgstr "Det gick inte att skapa symbolbiblioteksfil \"%s\""
 
 #: eeschema/libedit/lib_export.cpp:186
 #, c-format
@@ -12631,7 +12619,7 @@ msgstr "&Verktyg"
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:53
 #, fuzzy, c-format
 msgid "Failed to create file \"%s\""
-msgstr "Kunde inte skapa filen "
+msgstr "Det gick inte att skapa fil \"%s\""
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:104
 #, fuzzy, c-format
@@ -12741,7 +12729,7 @@ msgstr ""
 #: eeschema/plotters/plot_schematic_PS.cpp:117
 #, fuzzy, c-format
 msgid "Unable to create file \"%s\".\n"
-msgstr "Kunde inte skapa filen "
+msgstr "Det gick inte att skapa fil \"%s\".\n"
 
 #: eeschema/plotters/plot_schematic_SVG.cpp:84
 #, fuzzy, c-format
@@ -13162,9 +13150,9 @@ msgstr ""
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:408
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:333
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2608
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read file \"%s\""
-msgstr "Kunde inte skapa filen "
+msgstr "Kunde inte läsa fil: \"%s\""
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1097
 #, c-format
@@ -13368,9 +13356,9 @@ msgstr ""
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1492
 #: pcbnew/plugins/kicad/pcb_parser.cpp:893
-#, fuzzy, c-format
+#, c-format
 msgid "Page type \"%s\" is not valid "
-msgstr "Filnamnet är inte giltigt!"
+msgstr "Sidtyp \"%s\" är inte giltig "
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1730
 #, c-format
@@ -14018,9 +14006,9 @@ msgid "You need to select the simulation settings first."
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:505
-#, fuzzy, c-format
+#, c-format
 msgid "Plot%u - "
-msgstr "Plotta"
+msgstr "Tomt%u - "
 
 #: eeschema/sim/sim_plot_frame.cpp:598
 msgid "Error: simulation type not defined!\n"
@@ -15097,9 +15085,8 @@ msgid "Edit links between schematic and library symbols"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:543
-#, fuzzy
 msgid "Assign Footprints..."
-msgstr "Laddar "
+msgstr "Tilldela Fotspår..."
 
 #: eeschema/tools/ee_actions.cpp:543
 #, fuzzy
@@ -15621,9 +15608,9 @@ msgid "Clear layer %d?"
 msgstr "Rensa alla lager"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid "Layer %d"
-msgstr "Lager "
+msgstr "Skikt %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:180
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:240
@@ -15758,7 +15745,7 @@ msgstr "Välj nät"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:112
 #, fuzzy, c-format
 msgid "Select Layer: %s"
-msgstr "Radera lager "
+msgstr "Välj Lager: %s"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:171
 #: pcbnew/board_connected_item.cpp:157 pcbnew/board_connected_item.cpp:158
@@ -21574,7 +21561,7 @@ msgstr "Sidinställningar"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
 #, fuzzy
 msgid "Grid Array"
-msgstr "Rutnät: "
+msgstr "Rutnätsmatris"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:207
 msgid "Horizontal center:"
@@ -21971,9 +21958,9 @@ msgid "Report file '%s' created<br>"
 msgstr "Kunde inte skapa '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:597
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create report file '%s'<br>"
-msgstr "Kunde inte skapa filen "
+msgstr "Det gick inte att skapa rapportfilen %s'<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:769
 msgid "Do you wish to delete excluded markers as well?"
