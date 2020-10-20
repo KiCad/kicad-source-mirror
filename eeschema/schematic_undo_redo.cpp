@@ -300,6 +300,10 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             {
             case UNDO_REDO::CHANGED:
                 item->SwapData( alt_item );
+
+                if( item->Type() == SCH_COMPONENT_T )
+                    static_cast<SCH_COMPONENT*>( item )->UpdatePins();
+
                 break;
 
             case UNDO_REDO::MOVED:
