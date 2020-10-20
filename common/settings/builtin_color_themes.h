@@ -28,7 +28,7 @@
 static const std::map<int, COLOR4D> s_defaultTheme =
         {
             { LAYER_SCHEMATIC_AUX_ITEMS,  CSS_COLOR( 0,   0,   0,   1 ) },
-            { LAYER_SCHEMATIC_BACKGROUND, CSS_COLOR( 245, 241, 237, 1 ) },
+            { LAYER_SCHEMATIC_BACKGROUND, CSS_COLOR( 245, 244, 239, 1 ) },
             { LAYER_BRIGHTENED,           CSS_COLOR( 255, 0,   255, 1 ) },
             { LAYER_BUS,                  CSS_COLOR( 0,   0,   132, 1 ) },
             { LAYER_BUS_JUNCTION,         CSS_COLOR( 0,   0,   132, 1 ) },
