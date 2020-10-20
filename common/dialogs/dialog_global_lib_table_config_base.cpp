@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  5 2019)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,33 +18,33 @@ DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE::DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE( wxWind
 
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Temp"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( 500 );
 	bSizer2->Add( m_staticText1, 0, wxALL, 5 );
 
 
 	bSizer2->Add( 0, 0, 0, wxALL|wxEXPAND, 5 );
 
-	m_defaultRb = new wxRadioButton( this, wxID_ANY, _("temp1"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_defaultRb = new wxRadioButton( this, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_defaultRb->SetValue( true );
-	m_defaultRb->SetToolTip( _("Temp") );
+	m_defaultRb->SetToolTip( _("dummy") );
 
 	bSizer2->Add( m_defaultRb, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
-	m_customRb = new wxRadioButton( this, wxID_ANY, _("temp2"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_customRb->SetToolTip( _("Temp") );
+	m_customRb = new wxRadioButton( this, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_customRb->SetToolTip( _("dummy") );
 
 	bSizer2->Add( m_customRb, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
-	m_emptyRb = new wxRadioButton( this, wxID_ANY, _("temp3"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_emptyRb->SetToolTip( _("Temp") );
+	m_emptyRb = new wxRadioButton( this, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_emptyRb->SetToolTip( _("dummy") );
 
 	bSizer2->Add( m_emptyRb, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizer2->Add( 0, 0, 0, wxALL|wxEXPAND, 5 );
 
-	m_staticText2 = new wxStaticText( this, wxID_ANY, _("temp"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2 = new wxStaticText( this, wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
 	bSizer2->Add( m_staticText2, 0, wxALL, 5 );
 

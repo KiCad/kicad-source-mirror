@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -94,7 +94,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_RegulR1Value = new wxTextCtrl( m_panelRegulators, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerRegParams->Add( m_RegulR1Value, 0, wxALL|wxEXPAND, 5 );
 
-	m_UnitRegultR11 = new wxStaticText( m_panelRegulators, wxID_ANY, _("KOhm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_UnitRegultR11 = new wxStaticText( m_panelRegulators, wxID_ANY, _("kOhm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_UnitRegultR11->Wrap( -1 );
 	fgSizerRegParams->Add( m_UnitRegultR11, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -108,7 +108,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_RegulR2Value = new wxTextCtrl( m_panelRegulators, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerRegParams->Add( m_RegulR2Value, 0, wxALL|wxEXPAND, 5 );
 
-	m_UnitRegultR1 = new wxStaticText( m_panelRegulators, wxID_ANY, _("KOhm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_UnitRegultR1 = new wxStaticText( m_panelRegulators, wxID_ANY, _("kOhm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_UnitRegultR1->Wrap( -1 );
 	fgSizerRegParams->Add( m_UnitRegultR1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -258,7 +258,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelRegulators->SetSizer( bSizerMainReg );
 	m_panelRegulators->Layout();
 	bSizerMainReg->Fit( m_panelRegulators );
-	m_Notebook->AddPage( m_panelRegulators, _("Regulators"), false );
+	m_Notebook->AddPage( m_panelRegulators, _("Regulators"), true );
 	m_panelAttenuators = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerAtt;
 	bSizerAtt = new wxBoxSizer( wxHORIZONTAL );
@@ -462,7 +462,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_ResRequired = new wxTextCtrl( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerAttPrms1->Add( m_ResRequired, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_UnitRegultR111 = new wxStaticText( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, _("KOhm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_UnitRegultR111 = new wxStaticText( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, _("kOhm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_UnitRegultR111->Wrap( -1 );
 	fgSizerAttPrms1->Add( m_UnitRegultR111, 0, wxALL, 5 );
 
@@ -473,7 +473,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_ResExclude1 = new wxTextCtrl( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerAttPrms1->Add( m_ResExclude1, 0, wxALL, 5 );
 
-	m_UnitRegultR1111 = new wxStaticText( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, _("KOhm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_UnitRegultR1111 = new wxStaticText( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, _("kOhm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_UnitRegultR1111->Wrap( -1 );
 	fgSizerAttPrms1->Add( m_UnitRegultR1111, 0, wxALL, 5 );
 
@@ -484,7 +484,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_ResExclude2 = new wxTextCtrl( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerAttPrms1->Add( m_ResExclude2, 0, wxALL, 5 );
 
-	m_UnitRegultR1112 = new wxStaticText( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, _("KOhm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_UnitRegultR1112 = new wxStaticText( sbSizerESeriesInput->GetStaticBox(), wxID_ANY, _("kOhm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_UnitRegultR1112->Wrap( -1 );
 	fgSizerAttPrms1->Add( m_UnitRegultR1112, 0, wxALL, 5 );
 
@@ -606,7 +606,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelESeries->SetSizer( bSizerESerie );
 	m_panelESeries->Layout();
 	bSizerESerie->Fit( m_panelESeries );
-	m_Notebook->AddPage( m_panelESeries, _("E-Series"), true );
+	m_Notebook->AddPage( m_panelESeries, _("E-Series"), false );
 	m_panelColorCode = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelColorCode;
 	bSizerPanelColorCode = new wxBoxSizer( wxHORIZONTAL );
@@ -891,7 +891,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	fgSizerPhysPrms->SetFlexibleDirection( wxBOTH );
 	fgSizerPhysPrms->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_phys_prm1_label = new wxStaticText( btranslineRightSizer->GetStaticBox(), wxID_ANY, _("Prm1"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_phys_prm1_label = new wxStaticText( btranslineRightSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_phys_prm1_label->Wrap( -1 );
 	fgSizerPhysPrms->Add( m_phys_prm1_label, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 
@@ -906,7 +906,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_radioBtnPrm1 = new wxRadioButton( btranslineRightSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	fgSizerPhysPrms->Add( m_radioBtnPrm1, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_phys_prm2_label = new wxStaticText( btranslineRightSizer->GetStaticBox(), wxID_ANY, _("prm2"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_phys_prm2_label = new wxStaticText( btranslineRightSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_phys_prm2_label->Wrap( -1 );
 	fgSizerPhysPrms->Add( m_phys_prm2_label, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 
@@ -921,7 +921,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_radioBtnPrm2 = new wxRadioButton( btranslineRightSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerPhysPrms->Add( m_radioBtnPrm2, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_phys_prm3_label = new wxStaticText( btranslineRightSizer->GetStaticBox(), wxID_ANY, _("prm3"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_phys_prm3_label = new wxStaticText( btranslineRightSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_phys_prm3_label->Wrap( -1 );
 	fgSizerPhysPrms->Add( m_phys_prm3_label, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 
