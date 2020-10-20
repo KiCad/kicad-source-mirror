@@ -757,7 +757,7 @@ void BM2CMP_FRAME::exportPostScriptFormat()
     if( path.IsEmpty() || !wxDirExists( path ) )
         path = ::wxGetCwd();
 
-    wxFileDialog fileDlg( this, _( "Create Postscript File" ),
+    wxFileDialog fileDlg( this, _( "Create PostScript File" ),
                           path, wxEmptyString,
                           PSFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );

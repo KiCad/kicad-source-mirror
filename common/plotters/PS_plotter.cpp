@@ -59,7 +59,7 @@ static int getFillId( FILL_TYPE aFill )
 }
 
 
-// Common routines for Postscript-like plotting engines
+// Common routines for PostScript-like plotting engines
 
 void PSLIKE_PLOTTER::SetColor( COLOR4D color )
 {
@@ -561,7 +561,7 @@ void PS_PLOTTER::emitSetRGBColor( double r, double g, double b )
 
 
 /**
- * Postscript supports dashed lines
+ * PostScript supports dashed lines
  */
 void PS_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 {
@@ -668,7 +668,7 @@ void PS_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
 
 
 /**
- * Postscript-likes at the moment are the only plot engines supporting bitmaps...
+ * PostScript-likes at the moment are the only plot engines supporting bitmaps...
  */
 void PS_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
                             double aScaleFactor )

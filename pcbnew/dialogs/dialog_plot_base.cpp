@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -285,7 +285,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	fgSizer2->Add( m_fineAdjustXLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_fineAdjustXCtrl = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fineAdjustXCtrl->SetToolTip( _("Set global X scale adjust for exact scale postscript output.") );
+	m_fineAdjustXCtrl->SetToolTip( _("Set global X scale adjust for exact scale PostScript output.") );
 
 	fgSizer2->Add( m_fineAdjustXCtrl, 0, wxEXPAND|wxRIGHT, 5 );
 
@@ -297,7 +297,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	fgSizer2->Add( m_fineAdjustYLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
 	m_fineAdjustYCtrl = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fineAdjustYCtrl->SetToolTip( _("Set global Y scale adjust for exact scale postscript output.") );
+	m_fineAdjustYCtrl->SetToolTip( _("Set global Y scale adjust for exact scale PostScript output.") );
 
 	fgSizer2->Add( m_fineAdjustYCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 30 );
 
@@ -309,7 +309,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	fgSizer2->Add( m_widthAdjustLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_widthAdjustCtrl = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_widthAdjustCtrl->SetToolTip( _("Set global width correction for exact width postscript output.\nThese width correction is intended to compensate tracks width and also pads and vias size errors.\nThe reasonable width correction value must be in a range of [-(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils.") );
+	m_widthAdjustCtrl->SetToolTip( _("Set global width correction for exact width PostScript output.\nThese width correction is intended to compensate tracks width and also pads and vias size errors.\nThe reasonable width correction value must be in a range of [-(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils.") );
 
 	fgSizer2->Add( m_widthAdjustCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 

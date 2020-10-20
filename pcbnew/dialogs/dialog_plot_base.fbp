@@ -2729,7 +2729,7 @@
                                     <property name="border">5</property>
                                     <property name="flag">wxALL|wxEXPAND</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxStaticBoxSizer" expanded="0">
+                                    <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
                                         <property name="label">Postscript Options</property>
                                         <property name="minimum_size"></property>
@@ -2737,11 +2737,11 @@
                                         <property name="orient">wxVERTICAL</property>
                                         <property name="parent">1</property>
                                         <property name="permission">protected</property>
-                                        <object class="sizeritem" expanded="0">
+                                        <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
                                             <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                                             <property name="proportion">1</property>
-                                            <object class="wxFlexGridSizer" expanded="0">
+                                            <object class="wxFlexGridSizer" expanded="1">
                                                 <property name="cols">6</property>
                                                 <property name="flexible_direction">wxBOTH</property>
                                                 <property name="growablecols">1,4</property>
@@ -2867,7 +2867,7 @@
                                                         <property name="style"></property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip">Set global X scale adjust for exact scale postscript output.</property>
+                                                        <property name="tooltip">Set global X scale adjust for exact scale PostScript output.</property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>
@@ -3002,7 +3002,7 @@
                                                         <property name="style"></property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip">Set global Y scale adjust for exact scale postscript output.</property>
+                                                        <property name="tooltip">Set global Y scale adjust for exact scale PostScript output.</property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>
@@ -3137,7 +3137,7 @@
                                                         <property name="style"></property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip">Set global width correction for exact width postscript output.&#x0A;These width correction is intended to compensate tracks width and also pads and vias size errors.&#x0A;The reasonable width correction value must be in a range of [-(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils.</property>
+                                                        <property name="tooltip">Set global width correction for exact width PostScript output.&#x0A;These width correction is intended to compensate tracks width and also pads and vias size errors.&#x0A;The reasonable width correction value must be in a range of [-(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils.</property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>

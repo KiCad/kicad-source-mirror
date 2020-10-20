@@ -611,7 +611,7 @@ void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
 
 
 /**
- * Postscript-likes at the moment are the only plot engines supporting bitmaps...
+ * PostScript-likes at the moment are the only plot engines supporting bitmaps...
  */
 void SVG_PLOTTER::PlotImage( const wxImage& aImage, const wxPoint& aPos,
                              double aScaleFactor )

@@ -23,7 +23,7 @@
  */
 
 /**
- * Plot settings, and plotting engines (Postscript, Gerber, HPGL and DXF)
+ * Plot settings, and plotting engines (PostScript, Gerber, HPGL and DXF)
  *
  * @file plotter.h
  */
@@ -303,7 +303,7 @@ public:
                int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL );
 
     /**
-     * Only Postscript plotters can plot bitmaps.
+     * Only PostScript plotters can plot bitmaps.
      *
      * A rectangle is plotted for plotters that cannot plot a bitmap.
      *

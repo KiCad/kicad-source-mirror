@@ -18,7 +18,7 @@
  */
 
 /**
- * Plotting engines similar to ps (Postscript, Gerber, svg)
+ * Plotting engines similar to ps (PostScript, Gerber, svg)
  *
  * @file plotters_pslike.h
  */

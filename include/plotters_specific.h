@@ -19,7 +19,7 @@
  */
 
 /**
- * Plotting engines (Postscript, Gerber, HPGL and DXF)
+ * Plotting engines (PostScript, Gerber, HPGL and DXF)
  *
  * @file plotters_specific.h
  */

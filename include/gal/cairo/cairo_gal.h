@@ -47,7 +47,7 @@
  *   API for software developers. It is designed to provide primitives for 2-dimensional
  *   drawing across a number of different backends. "
  * <br>
- * Cairo offers also backends for Postscript and PDF surfaces. So it can be used for printing
+ * Cairo offers also backends for PostScript and PDF surfaces. So it can be used for printing
  * of KiCad graphics surfaces as well.
  *
  */

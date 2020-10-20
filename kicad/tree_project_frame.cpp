@@ -96,7 +96,7 @@ static const wxChar* s_allowedExtensionsToList[] = {
     wxT( "^.*\\.nc$" ),            // Excellon NC drill files (alternate file ext)
     wxT( "^.*\\.xnc$" ),           // Excellon NC drill files (alternate file ext)
     wxT( "^.*\\.svg$" ),           // SVG print/plot files
-    wxT( "^.*\\.ps$" ),            // Postscript plot files
+    wxT( "^.*\\.ps$" ),            // PostScript plot files
     NULL                           // end of list
 };
 
