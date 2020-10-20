@@ -48,7 +48,7 @@ class SCH_TEXT;
 DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
     DIALOG_LABEL_EDITOR_BASE( aParent ),
     m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false ),
-    m_netNameValidator( true ),
+    m_netNameValidator(),
     m_scintillaTricks( nullptr ),
     m_helpWindow( nullptr )
 {

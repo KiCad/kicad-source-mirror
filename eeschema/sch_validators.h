@@ -81,10 +81,6 @@ public:
             NETNAME_VALIDATOR( aVal )
     { }
 
-    SCH_NETNAME_VALIDATOR( bool aAllowSpaces ) :
-            NETNAME_VALIDATOR( aAllowSpaces )
-    { }
-
     SCH_NETNAME_VALIDATOR( const SCH_NETNAME_VALIDATOR& aValidator ) :
             NETNAME_VALIDATOR( aValidator )
     { }

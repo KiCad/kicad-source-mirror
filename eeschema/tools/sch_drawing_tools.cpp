@@ -664,27 +664,11 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 }
 
 
-// History lists for placing labels and text
-
-SCH_TEXT* SCH_DRAWING_TOOLS::getNextNewText()
-{
-    if( m_queuedTexts.empty() )
-        return nullptr;
-
-    auto next_text = std::move( m_queuedTexts.front() );
-    m_queuedTexts.pop_front();
-
-    return next_text.release();
-}
-
-
 SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType )
 {
     SCHEMATIC*          schematic = getModel<SCHEMATIC>();
     SCHEMATIC_SETTINGS& settings = schematic->Settings();
     SCH_TEXT*           textItem = nullptr;
-
-    m_queuedTexts.clear();
 
     switch( aType )
     {
@@ -725,80 +709,6 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     {
         delete textItem;
         return nullptr;
-    }
-
-    if( aType != LAYER_NOTES )
-    {
-        UTF8 text( textItem->GetText() );
-        int  brace_count = 0;
-        int  bracket_count = 0;
-        bool last_space = false;
-        UTF8 token;
-
-        for( auto chIt = text.ubegin(); chIt != text.uend(); chIt++ )
-        {
-            switch( *chIt )
-            {
-            case '{':
-                brace_count++;
-                last_space = false;
-                break;
-
-            case '[':
-                bracket_count++;
-                last_space = false;
-                break;
-
-            case '}':
-                brace_count = std::max( 0, brace_count - 1 );
-                last_space = false;
-                break;
-
-            case ']':
-                bracket_count = std::max( 0, bracket_count - 1 );
-                last_space = false;
-                break;
-
-            case ' ':
-            case '\n':
-            case '\r':
-            case '\t':
-                if( !token.empty() && bracket_count == 0 && brace_count == 0 )
-                {
-                    std::unique_ptr<SCH_TEXT> nextitem( static_cast<SCH_TEXT*>( textItem->Clone() ) );
-                    nextitem->SetText( token.wx_str() );
-                    m_queuedTexts.push_back( std::move( nextitem ) );
-                    token.clear();
-                    continue;
-                }
-
-                // Skip leading whitespace
-                if( token.empty() || last_space )
-                    continue;
-
-                last_space = true;
-                break;
-
-            default:
-                last_space = false;
-                break;
-            }
-
-            token += *chIt;
-        }
-
-        if( !token.empty() )
-        {
-            std::unique_ptr<SCH_TEXT> nextitem( static_cast<SCH_TEXT*>( textItem->Clone() ) );
-            nextitem->SetText( token.wx_str() );
-            m_queuedTexts.push_back( std::move( nextitem ) );
-        }
-
-        delete textItem;
-        textItem = getNextNewText();
-
-        if( !textItem )
-            return nullptr;
     }
 
     m_lastTextBold = textItem->IsBold();
@@ -980,20 +890,9 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             {
                 item->ClearFlags( IS_MOVED );
                 m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), (SCH_ITEM*) item, false );
-                item = getNextNewText();
+                item = nullptr;
 
-                if( item )
-                {
-                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-                    item->SetFlags( IS_NEW | IS_MOVED );
-                    m_view->ClearPreview();
-                    m_view->AddToPreview( item->Clone() );
-                    m_selectionTool->AddItemToSel( item );
-                }
-                else
-                {
-                    m_view->ClearPreview();
-                }
+                m_view->ClearPreview();
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )

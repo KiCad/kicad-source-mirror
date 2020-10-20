@@ -200,8 +200,6 @@ class NETNAME_VALIDATOR : public wxTextValidator
 public:
     NETNAME_VALIDATOR( wxString *aVal = nullptr );
 
-    NETNAME_VALIDATOR( bool aAllowSpaces );
-
     NETNAME_VALIDATOR( const NETNAME_VALIDATOR& aValidator );
 
     virtual wxObject* Clone() const override { return new NETNAME_VALIDATOR( *this ); }
@@ -215,9 +213,6 @@ public:
 protected:
     // returns the error message if the contents of 'val' are invalid
     wxString IsValid( const wxString& aVal ) const override;
-
-private:
-    bool m_allowSpaces;
 };
 
 
