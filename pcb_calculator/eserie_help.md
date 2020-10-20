@@ -10,7 +10,7 @@ intended for resistors.
 	E1:  1,0  -   -   -   -   -   -   -   -   -   -   -
 If your design requires any resistor value which is not readily available,
 this calculator will find a combination of standard E-series components to
-create it.  You can enter the required resistance from 0,0025 to 4000 KOhm. 
+create it.  You can enter the required resistance from 0,0025 to 4000 kOhm. 
 Solutions using 3 or 4 resistors are given if a better match can be found. 
 The 4R checkbox option will take longer to process is considered for the E12
 series only.  Optionally it is possible to exclude up to two additional
@@ -26,6 +26,6 @@ Solutions are given in the following formats:
 __Example:__ Voltage dividers, commonly used for 1:10 range selection
 require resistor ratio values 1:9.  Unfortunately the "9" is a value, what
 is not even in the E192 series available.  Deviation of 1% and more is yet
-unacceptable for 8 bit accuracy.  For a required resistor value of 9 KOhm,
+unacceptable for 8 bit accuracy.  For a required resistor value of 9 kOhm,
 the calculator suggests the E6 values 2k2 + 6k8 in series as a possible
 exact solution.

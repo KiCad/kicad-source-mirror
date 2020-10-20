@@ -152,7 +152,7 @@ UNIT_SELECTOR_RESISTOR::UNIT_SELECTOR_RESISTOR( wxWindow *parent, wxWindowID id,
                 : UNIT_SELECTOR( parent, id, pos, size, choices, style )
 {
     Append( _( "Ohm" ) );
-    Append( _( "KOhm" ) );
+    Append( _( "kOhm" ) );
 }
 
 

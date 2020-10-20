@@ -11,7 +11,7 @@ _HKI( "E-series defined in IEC 60063 are a widely accepted system of preferred\n
 "	E1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
 "If your design requires any resistor value which is not readily available,\n"
 "this calculator will find a combination of standard E-series components to\n"
-"create it.  You can enter the required resistance from 0,0025 to 4000 KOhm. \n"
+"create it.  You can enter the required resistance from 0,0025 to 4000 kOhm. \n"
 "Solutions using 3 or 4 resistors are given if a better match can be found. \n"
 "The 4R checkbox option will take longer to process is considered for the E12\n"
 "series only.  Optionally it is possible to exclude up to two additional\n"
@@ -27,7 +27,7 @@ _HKI( "E-series defined in IEC 60063 are a widely accepted system of preferred\n
 "__Example:__ Voltage dividers, commonly used for 1:10 range selection\n"
 "require resistor ratio values 1:9.  Unfortunately the \"9\" is a value, what\n"
 "is not even in the E192 series available.  Deviation of 1% and more is yet\n"
-"unacceptable for 8 bit accuracy.  For a required resistor value of 9 KOhm,\n"
+"unacceptable for 8 bit accuracy.  For a required resistor value of 9 kOhm,\n"
 "the calculator suggests the E6 values 2k2 + 6k8 in series as a possible\n"
 "exact solution.\n"
 "" );
