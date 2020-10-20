@@ -133,8 +133,8 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                 << HtmlHyperlink( "http://www.kicad-pcb.org" )
                 << "</li>";
     description << "<li>"
-                << _( "Developer website on Launchpad - " )
-                << HtmlHyperlink( "https://launchpad.net/kicad" )
+                << _( "Developer website - " )
+                << HtmlHyperlink( "https://gitlab.com/kicad" )
                 << "</li>";
 
     description << "<li>"
@@ -157,7 +157,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     description << "</ul></p>";
 
     description << "<p><b><u>"
-                << _( "KiCad user's groups and community" )
+                << _( "KiCad users group and community" )
                 << "</u></b>"; // bold & underlined font caption
 
     description << "<ul>";
