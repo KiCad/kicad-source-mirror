@@ -683,26 +683,30 @@ static int processEdge( FractureEdgeSet& edges, FractureEdge* edge )
 
     FractureEdge* e_nearest = NULL;
 
-    for( FractureEdgeSet::iterator i = edges.begin(); i != edges.end(); ++i )
+    for( FractureEdge* e : edges )
     {
-        if( !(*i)->matches( y ) )
+        if( !e->matches( y ) )
             continue;
 
         int x_intersect;
 
-        if( (*i)->m_p1.y == (*i)->m_p2.y ) // horizontal edge
-            x_intersect = std::max( (*i)->m_p1.x, (*i)->m_p2.x );
+        if( e->m_p1.y == e->m_p2.y ) // horizontal edge
+        {
+            x_intersect = std::max( e->m_p1.x, e->m_p2.x );
+        }
         else
-            x_intersect = (*i)->m_p1.x + rescale( (*i)->m_p2.x - (*i)->m_p1.x, y - (*i)->m_p1.y,
-                    (*i)->m_p2.y - (*i)->m_p1.y );
+        {
+            x_intersect = e->m_p1.x + rescale( e->m_p2.x - e->m_p1.x, y - e->m_p1.y,
+                                               e->m_p2.y - e->m_p1.y );
+        }
 
         int dist = ( x - x_intersect );
 
-        if( dist >= 0 && dist < min_dist && (*i)->m_connected )
+        if( dist >= 0 && dist < min_dist && e->m_connected )
         {
             min_dist    = dist;
             x_nearest   = x_intersect;
-            e_nearest   = (*i);
+            e_nearest   = e;
         }
     }
 
@@ -710,12 +714,9 @@ static int processEdge( FractureEdgeSet& edges, FractureEdge* edge )
     {
         int count = 0;
 
-        FractureEdge* lead1 =
-            new FractureEdge( true, VECTOR2I( x_nearest, y ), VECTOR2I( x, y ) );
-        FractureEdge* lead2 =
-            new FractureEdge( true, VECTOR2I( x, y ), VECTOR2I( x_nearest, y ) );
-        FractureEdge* split_2 =
-            new FractureEdge( true, VECTOR2I( x_nearest, y ), e_nearest->m_p2 );
+        FractureEdge* lead1 = new FractureEdge( true, VECTOR2I( x_nearest, y ), VECTOR2I( x, y ) );
+        FractureEdge* lead2 = new FractureEdge( true, VECTOR2I( x, y ), VECTOR2I( x_nearest, y ) );
+        FractureEdge* split_2 = new FractureEdge( true, VECTOR2I( x_nearest, y ), e_nearest->m_p2 );
 
         edges.push_back( split_2 );
         edges.push_back( lead1 );
