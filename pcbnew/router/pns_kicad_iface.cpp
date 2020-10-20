@@ -928,7 +928,8 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone,
     if( !aZone->GetIsRuleArea() || !aZone->GetDoNotAllowTracks() )
         return false;
 
-    LSET layers = aZone->GetLayerSet();
+    LSET      layers = aZone->GetLayerSet();
+    EDA_UNITS units = EDA_UNITS::MILLIMETRES;       // TODO: get real units
 
     for( int layer = F_Cu; layer <= B_Cu; layer++ )
     {
@@ -940,12 +941,13 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone,
 
         if( !poly.IsTriangulationUpToDate() )
         {
-            KIDIALOG dlg( nullptr, wxString::Format( _( "Malformed keep-out zone at (%d, %d)" ),
-                    aZone->GetPosition().x, aZone->GetPosition().y ), KIDIALOG::KD_WARNING );
-            dlg.ShowDetailedText(
-                    wxString::Format( _( "%s\nThis zone cannot be handled by the track layout tool.\n"
-                                         "Please verify it is not a self-intersecting polygon." ),
-                            aZone->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) ) );
+            KIDIALOG dlg( nullptr, wxString::Format( _( "%s is malformed." ),
+                                                     aZone->GetSelectMenuText( units ) ),
+                          KIDIALOG::KD_WARNING );
+            dlg.ShowDetailedText( wxString::Format( _( "This zone cannot be handled by the track "
+                                                       "layout tool.\n"
+                                                       "Please verify it is not a "
+                                                       "self-intersecting polygon." ) ) );
             dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
             dlg.ShowModal();
 
@@ -954,13 +956,13 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone,
 
         for( int outline = 0; outline < poly.OutlineCount(); outline++ )
         {
-            auto tri = poly.TriangulatedPolygon( outline );
+            const SHAPE_POLY_SET::TRIANGULATED_POLYGON* tri = poly.TriangulatedPolygon( outline );
 
             for( size_t i = 0; i < tri->GetTriangleCount(); i++)
             {
                 VECTOR2I a, b, c;
                 tri->GetTriangle( i, a, b, c );
-                auto triShape = new SHAPE_SIMPLE;
+                SHAPE_SIMPLE* triShape = new SHAPE_SIMPLE;
 
                 triShape->Append( a );
                 triShape->Append( b );
