@@ -1484,7 +1484,8 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     {
         DIALOG_LABEL_EDITOR dlg( m_frame, (SCH_TEXT*) item );
 
-        if( dlg.ShowModal() == wxID_OK )
+        // Must be quasi modal for syntax help
+        if( dlg.ShowQuasiModal() == wxID_OK )
         {
             m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->OnModify();

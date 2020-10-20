@@ -720,7 +720,8 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
 
     DIALOG_LABEL_EDITOR dlg( m_frame, textItem );
 
-    if( dlg.ShowModal() != wxID_OK || textItem->GetText().IsEmpty() )
+    // Must be quasi modal for syntax help
+    if( dlg.ShowQuasiModal() != wxID_OK || textItem->GetText().IsEmpty() )
     {
         delete textItem;
         return nullptr;
