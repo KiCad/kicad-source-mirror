@@ -64,7 +64,6 @@ void PCB_PARSER::init()
     m_requiredVersion = 0;
     m_layerIndices.clear();
     m_layerMasks.clear();
-    m_groupInfos.clear();
     m_resetKIIDMap.clear();
 
     // Add untranslated default (i.e. English) layernames.
@@ -487,6 +486,8 @@ BOARD_ITEM* PCB_PARSER::Parse()
     T               token;
     BOARD_ITEM*     item;
     LOCALE_IO       toggle;
+
+    m_groupInfos.clear();
 
     // MODULEs can be prefixed with an initial block of single line comments and these
     // are kept for Format() so they round trip in s-expression form.  BOARDs might
