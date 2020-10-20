@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-09 10:02+0200\n"
-"PO-Revision-Date: 2020-10-17 07:28+0000\n"
+"PO-Revision-Date: 2020-10-20 16:52+0000\n"
 "Last-Translator: Mark Roszko <mark.roszko@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.1-dev\n"
+"X-Generator: Weblate 4.3.1\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -1639,8 +1639,9 @@ msgid "Official KiCad library repositories - "
 msgstr "Oficjalne repozytoria bibliotek programu KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:148
+#, fuzzy
 msgid "Bug tracker"
-msgstr "Bug tracker"
+msgstr "Tracker błędów"
 
 #: common/dialog_about/AboutDialog_main.cpp:154
 msgid "Report or examine bugs - "
@@ -3110,9 +3111,8 @@ msgid "Zoom faster when scrolling quickly"
 msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:45
-#, fuzzy
 msgid "Zoom speed:"
-msgstr "Powiększenie "
+msgstr "Szybkość powiększenia:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:51
 msgid "How far to zoom in for each rotation of the mouse wheel"
@@ -5252,11 +5252,11 @@ msgid "Archive file \"%s\": Failed!\n"
 msgstr "Plik archiwum \"%s\""
 
 #: common/project/project_archiver.cpp:270
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive \"%s\" created (%s uncompressed, %s compressed)\n"
 msgstr ""
-"\n"
-"Archiwum ZIP \"%s\" zostało utworzone (%d bajtów)"
+"Archiwum ZIP \"%s\" zostało utworzone ((%s nieskompresowane, %s "
+"skompresowane)\n"
 
 #: common/rc_item.cpp:321
 msgid "Excluded "
@@ -7518,9 +7518,9 @@ msgid "New library identifier:"
 msgstr "Nie zdefiniowano biblioteki!"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "%s Fields"
-msgstr "Pola"
+msgstr "%s Elementów"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:108
 msgid "Select None"
@@ -10426,7 +10426,7 @@ msgstr "p"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:97
 msgid "pico"
-msgstr "pico"
+msgstr "piko"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:101
 msgid "1e-12"
@@ -10453,7 +10453,7 @@ msgstr "u"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:121
 msgid "micro"
-msgstr "micro"
+msgstr "mikro"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:125
 msgid "1e-6"
@@ -10465,7 +10465,7 @@ msgstr "m"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:133
 msgid "milli"
-msgstr "milli"
+msgstr "mili"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:137
 msgid "1e-3"
@@ -17172,9 +17172,9 @@ msgid "Failed to delete '%s'"
 msgstr "Niepowodzenie przy tworzeniu \"%s\""
 
 #: libs/kiplatform/msw/environment.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Error code: %d"
-msgstr "Błąd: "
+msgstr "Kod błędu: %d"
 
 #: pagelayout_editor/design_inspector.cpp:223
 msgid "Layout"
@@ -17959,9 +17959,8 @@ msgstr "Symulacja"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:521
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:541
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:561
-#, fuzzy
 msgid "Error:"
-msgstr "Błąd: "
+msgstr "Błąd:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:532
 #, fuzzy
@@ -19637,14 +19636,12 @@ msgid "exclude from BOM"
 msgstr ""
 
 #: pcbnew/class_module.cpp:774
-#, fuzzy
 msgid "Status: "
-msgstr "Status"
+msgstr "Status: "
 
 #: pcbnew/class_module.cpp:774
-#, fuzzy
 msgid "Attributes: "
-msgstr "Atrybuty"
+msgstr "Atrybuty: "
 
 #: pcbnew/class_module.cpp:780
 #, fuzzy, c-format
@@ -19786,7 +19783,7 @@ msgstr "Minimalny prześwit"
 #: pcbnew/class_track.cpp:711 pcbnew/class_zone.cpp:629
 #, fuzzy, c-format
 msgid "(from %s)"
-msgstr "z "
+msgstr "(z %s)"
 
 #: pcbnew/class_pad.cpp:1029 pcbnew/class_pad.cpp:1337
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:104
@@ -24086,7 +24083,7 @@ msgstr "start "
 #: pcbnew/dialogs/dialog_pad_properties.cpp:722
 #, fuzzy
 msgid "angle "
-msgstr "kąt %s"
+msgstr "kąt "
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:727
 msgid "ring"
@@ -24097,9 +24094,8 @@ msgid "circle"
 msgstr "okrąg"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:732
-#, fuzzy
 msgid "radius "
-msgstr "promień %s"
+msgstr "promień "
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:737
 #, c-format
@@ -32940,7 +32936,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:589
 msgid "Dim"
-msgstr ""
+msgstr "Przyciemnić"
 
 #: pcbnew/widgets/appearance_controls.cpp:591
 msgid "Non-active layers will be dimmed"
@@ -32948,11 +32944,11 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:595
 msgid "Hide"
-msgstr ""
+msgstr "Ukryć"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Non-active layers will be hidden"
-msgstr ""
+msgstr "Warstwy nieaktywne zostaną ukryte"
 
 #: pcbnew/widgets/appearance_controls.cpp:607
 #, fuzzy
@@ -33231,7 +33227,7 @@ msgstr "Pokaż ukryte nazwy pinów"
 #: pcbnew/widgets/appearance_controls.cpp:1866
 #, c-format
 msgid "Set opacity of %s"
-msgstr ""
+msgstr "Ustaw przeźroczystość na %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2019
 #, fuzzy, c-format
@@ -33296,7 +33292,7 @@ msgstr "Wybierz listę sieci"
 #: pcbnew/widgets/panel_selection_filter.cpp:130
 #, c-format
 msgid "Only %s"
-msgstr ""
+msgstr "Tylko %s"
 
 #: pcbnew/zone_filler.cpp:103
 msgid "Building zone fills..."
