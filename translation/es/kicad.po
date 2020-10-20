@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-08 21:33+0100\n"
-"PO-Revision-Date: 2020-10-16 19:10+0000\n"
+"PO-Revision-Date: 2020-10-20 16:52+0000\n"
 "Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.1-dev\n"
+"X-Generator: Weblate 4.3.1\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -11627,7 +11627,7 @@ msgstr "Aplicar esquema de &colores"
 
 #: eeschema/dialogs/panel_libedit_color_settings_base.cpp:25
 msgid "Use Eeschema color theme"
-msgstr ""
+msgstr "Usar el tema de color de Eeschema"
 
 #: eeschema/dialogs/panel_libedit_settings_base.cpp:29
 msgid "&Default line width:"
@@ -32814,7 +32814,7 @@ msgstr "¿Eliminar todos lo alias de la lista?"
 
 #: pcbnew/tools/pcb_actions.cpp:659
 msgid "Enter Group"
-msgstr ""
+msgstr "Entrar en el Grupo"
 
 #: pcbnew/tools/pcb_actions.cpp:659
 #, fuzzy
