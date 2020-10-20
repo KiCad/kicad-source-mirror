@@ -668,21 +668,25 @@ void ALTIUM_PCB::ParseClasses6Data(
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
-    BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
-
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
         ACLASS6 elem( reader );
 
         if( elem.kind == ALTIUM_CLASS_KIND::NET_CLASS )
         {
-            const NETCLASSPTR& netclass = std::make_shared<NETCLASS>( elem.name );
-            designSettings.GetNetClasses().Add( netclass );
+            NETCLASSPTR nc = std::make_shared<NETCLASS>( elem.name );
 
             for( const auto& name : elem.names )
             {
-                netclass->Add(
-                        name ); // TODO: it seems it can happen that we have names not attached to any net.
+                // TODO: it seems it can happen that we have names not attached to any net.
+                nc->Add( name );
+            }
+
+            if( !m_board->GetDesignSettings().GetNetClasses().Add( nc ) )
+            {
+                // Name conflict, this is likely a bad board file.
+                // unique_ptr will delete nc on this code path
+                THROW_IO_ERROR( wxString::Format( _( "Duplicated Netclass name \"%s\"" ), elem.name ) );
             }
         }
     }
@@ -691,6 +695,8 @@ void ALTIUM_PCB::ParseClasses6Data(
     {
         THROW_IO_ERROR( "Classes6 stream is not fully parsed" );
     }
+
+    m_board->m_LegacyNetclassesLoaded = true;
 }
 
 void ALTIUM_PCB::ParseComponents6Data(
