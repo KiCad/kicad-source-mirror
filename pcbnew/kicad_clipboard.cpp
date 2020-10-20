@@ -102,7 +102,13 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
 
         for( const EDA_ITEM* item : aSelected )
         {
-            BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( item->Clone() );
+            const PCB_GROUP* group = dynamic_cast<const PCB_GROUP*>( item );
+            BOARD_ITEM*      clone;
+
+            if( group )
+                clone = static_cast<BOARD_ITEM*>( group->DeepClone() );
+            else
+                clone = static_cast<BOARD_ITEM*>( item->Clone() );
 
             // Do not add reference/value - convert them to the common type
             if( FP_TEXT* text = dyn_cast<FP_TEXT*>( clone ) )
@@ -114,6 +120,15 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
 
             // Add the pad to the new module before moving to ensure the local coords are correct
             partialModule.Add( clone );
+
+            if( group )
+            {
+                static_cast<PCB_GROUP*>( clone )->RunOnDescendants(
+                        [&]( BOARD_ITEM* descendant )
+                        {
+                            partialModule.Add( descendant );
+                        } );
+            }
 
             // locate the reference point at (0, 0) in the copied items
             clone->Move( (wxPoint) -refPoint );
