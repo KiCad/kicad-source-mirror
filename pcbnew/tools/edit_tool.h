@@ -124,6 +124,12 @@ public:
     int ChangeTrackWidth( const TOOL_EVENT& aEvent );
 
     /**
+     * Function FilletTracks()
+     * Fillets (i.e. adds an arc tangent to) all selected straight tracks by a user defined radius
+     */
+    int FilletTracks( const TOOL_EVENT& aEvent );
+
+    /**
      * Function Remove()
      * Deletes currently selected items. The rotation point is the current cursor position.
      */

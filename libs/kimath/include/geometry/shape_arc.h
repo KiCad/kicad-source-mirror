@@ -34,6 +34,11 @@ class SHAPE_LINE_CHAIN;
 class SHAPE_ARC : public SHAPE
 {
 public:
+    /**
+     * @brief This is the minimum precision for all the points in the arc shape.
+     */
+    static const int MIN_PRECISION_IU = 4;
+
     SHAPE_ARC() :
         SHAPE( SH_ARC ), m_width( 0 ) {};
 
@@ -56,6 +61,16 @@ public:
      */
     SHAPE_ARC( const VECTOR2I& aArcStart, const VECTOR2I& aArcMid,
                const VECTOR2I& aArcEnd, int aWidth );
+   
+    /**
+     * SHAPE_ARC ctor.
+     * Builds a SHAPE_ARC which is tangent to two segments and a given radius
+     * @param aSegmentA is the first segment
+     * @param aSegmentB is the second segment
+     * @param aRadius is the arc radius
+     * @param aWidth is the arc line thickness
+     */
+    SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, int aWidth = 0 );
 
     SHAPE_ARC( const SHAPE_ARC& aOther );
 

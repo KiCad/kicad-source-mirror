@@ -51,8 +51,11 @@ struct ARC_PROPERTIES
 
 /**
  * Check a #SHAPE_ARC against a given set of geometric properties
+ * @param aArc Arc to test
+ * @param aProps Properties to test against
+ * @param aSynErrIU Permitted error for synthetic points and dimensions (currently radius and center)
  */
-static void CheckArcGeom( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps )
+static void CheckArcGeom( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps, const int aSynErrIU = 1 )
 {
     // Angular error - note this can get quite large for very small arcs,
     // as the integral position rounding has a relatively greater effect
@@ -66,7 +69,7 @@ static void CheckArcGeom( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps )
     BOOST_CHECK_PREDICATE(
             KI_TEST::IsVecWithinTol<VECTOR2I>, ( aArc.GetP1() )( aProps.m_end_point )( pos_tol ) );
     BOOST_CHECK_PREDICATE( KI_TEST::IsVecWithinTol<VECTOR2I>,
-            ( aArc.GetCenter() )( aProps.m_center_point )( pos_tol ) );
+            ( aArc.GetCenter() )( aProps.m_center_point )( aSynErrIU ) );
     BOOST_CHECK_PREDICATE( KI_TEST::IsWithinWrapped<double>,
             ( aArc.GetCentralAngle() )( aProps.m_center_angle )( 360.0 )( angle_tol_deg ) );
     BOOST_CHECK_PREDICATE( KI_TEST::IsWithinWrapped<double>,
@@ -74,7 +77,7 @@ static void CheckArcGeom( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps )
     BOOST_CHECK_PREDICATE( KI_TEST::IsWithinWrapped<double>,
             ( aArc.GetEndAngle() )( aProps.m_end_angle )( 360.0 )( angle_tol_deg ) );
     BOOST_CHECK_PREDICATE(
-            KI_TEST::IsWithin<double>, ( aArc.GetRadius() )( aProps.m_radius )( pos_tol ) );
+            KI_TEST::IsWithin<double>, ( aArc.GetRadius() )( aProps.m_radius )( aSynErrIU ) );
 
     /// Check the chord agrees
     const auto chord = aArc.GetChord();
@@ -96,11 +99,14 @@ static void CheckArcGeom( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps )
 
 /**
  * Check an arcs geometry and other class functions
+ * @param aArc Arc to test
+ * @param aProps Properties to test against
+ * @param aSynErrIU Permitted error for synthetic points and dimensions (currently radius and center)
  */
-static void CheckArc( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps )
+static void CheckArc( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps, const int aSynErrIU = 1 )
 {
     // Check the original arc
-    CheckArcGeom( aArc, aProps );
+    CheckArcGeom( aArc, aProps, aSynErrIU );
 
     // Test the Clone function (also tests copy-ctor)
     std::unique_ptr<SHAPE> new_shape{ aArc.Clone() };
@@ -112,7 +118,7 @@ static void CheckArc( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps )
     BOOST_REQUIRE( new_arc != nullptr );
 
     /// Should have identical geom props
-    CheckArcGeom( *new_arc, aProps );
+    CheckArcGeom( *new_arc, aProps, aSynErrIU );
 }
 
 /**
@@ -326,6 +332,152 @@ BOOST_AUTO_TEST_CASE( BasicCPAGeom )
         }
     }
 }
+
+
+
+/**
+ * Info to set up an arc by tangent to two segments and a radius
+ */
+struct ARC_TAN_TAN_RADIUS
+{
+    SEG m_segment_1;
+    SEG m_segment_2;
+    int m_radius;
+};
+
+
+struct ARC_TTR_CASE
+{
+    /// The text context name
+    std::string m_ctx_name;
+
+    /// Geom of the arc
+    ARC_TAN_TAN_RADIUS m_geom;
+
+    /// Arc line width
+    int m_width;
+
+    /// Expected properties
+    ARC_PROPERTIES m_properties;
+};
+
+
+static const std::vector<ARC_TTR_CASE> arc_ttr_cases = {
+    {
+            "90 degree segments intersecting",
+            {
+                    { 0, 0, 0, 1000 },
+                    { 0, 0, 1000, 0 },
+                    1000,
+            },
+            0,
+            {
+                    { 1000, 1000 },
+                    { 0, 1000 },    //start on first segment
+                    { 1000, 0 },    //end on second segment
+                    90,             //positive angle due to start/end
+                    180,
+                    270,
+                    1000,
+                    { { 0, 0 }, { 1000, 1000 } },
+            }
+    },
+    {
+            "45 degree segments intersecting",
+            {
+                    { 0, 0, 0, 1000 },
+                    { 0, 0, 1000, 1000 },
+                    1000,
+            },
+            0,
+            {
+                    { 1000, 2414 },
+                    { 0, 2414 },       //start on first segment
+                    { 1707, 1707 },    //end on second segment
+                    135,               //positive angle due to start/end
+                    180,
+                    225,
+                    1000,
+                    { { 0, 1414 }, { 1707, 1000 } },
+            }
+    },
+    {
+            "135 degree segments intersecting",
+            {
+                    { 0, 0, 0, 1000 },
+                    { 0, 0, 1000, -1000 },
+                    1000,
+            },
+            0,
+            {
+                    { 1000, 414 },
+                    { 0, 414 },       //start on first segment ( radius * tan(45 /2) )
+                    { 293, -293 },    //end on second segment (radius * 1-cos(45)) )
+                    45,               //positive angle due to start/end
+                    180,
+                    225,
+                    1000,
+                    { { 0, -293 }, { 293, 707 } },
+            }
+    }
+
+
+};
+
+
+BOOST_AUTO_TEST_CASE( BasicTTRGeom )
+{
+    for( const auto& c : arc_ttr_cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_ctx_name )
+        {
+            for( int testCase = 0; testCase < 8; ++testCase )
+            {
+                SEG            seg1  = c.m_geom.m_segment_1;
+                SEG            seg2  = c.m_geom.m_segment_2;
+                ARC_PROPERTIES props = c.m_properties;
+
+                if( testCase > 3 )
+                {
+                    //Swap input segments.
+                    seg1 = c.m_geom.m_segment_2;
+                    seg2 = c.m_geom.m_segment_1; 
+
+                    //The result should swap start and end points and invert the angles:
+                    props.m_end_point    = c.m_properties.m_start_point;
+                    props.m_start_point  = c.m_properties.m_end_point;
+                    props.m_start_angle  = c.m_properties.m_end_angle;
+                    props.m_end_angle    = c.m_properties.m_start_angle;
+                    props.m_center_angle = -c.m_properties.m_center_angle;
+                }
+                
+                //Test all combinations of start and end points for the segments
+                if( ( testCase % 4 ) == 1 || ( testCase % 4 ) == 3 )
+                {
+                    //Swap start and end points for seg1
+                    VECTOR2I temp = seg1.A;
+                    seg1.A = seg1.B;
+                    seg1.B = temp;
+                }
+                
+                if( ( testCase % 4 ) == 2 || ( testCase % 4 ) == 3 )
+                {
+                    //Swap start and end points for seg2
+                    VECTOR2I temp = seg2.A;
+                    seg2.A        = seg2.B;
+                    seg2.B        = temp;
+                }
+
+                const auto this_arc = SHAPE_ARC{ seg1, seg2,
+                    c.m_geom.m_radius, c.m_width };
+
+                // Error of 4 IU permitted for the center and radius calculation
+                CheckArc( this_arc, props, SHAPE_ARC::MIN_PRECISION_IU );
+            }
+        }
+    }
+}
+
 
 
 struct ARC_TO_POLYLINE_CASE

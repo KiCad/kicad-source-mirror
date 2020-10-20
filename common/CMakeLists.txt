@@ -180,6 +180,8 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_print_generic.cpp
     dialogs/dialog_print_generic_base.cpp
     dialogs/dialog_text_entry.cpp
+    dialogs/dialog_unit_entry.cpp
+    dialogs/dialog_unit_entry_base.cpp
     dialogs/eda_list_dialog.cpp
     dialogs/eda_list_dialog_base.cpp
     dialogs/eda_view_switcher.cpp

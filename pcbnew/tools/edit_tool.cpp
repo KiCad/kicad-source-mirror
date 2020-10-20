@@ -56,6 +56,7 @@ using namespace std::placeholders;
 #include <router/router_tool.h>
 #include <dialogs/dialog_move_exact.h>
 #include <dialogs/dialog_track_via_properties.h>
+#include <dialogs/dialog_unit_entry.h>
 #include <board_commit.h>
 #include <zone_filler.h>
 
@@ -193,6 +194,7 @@ bool EDIT_TOOL::Init()
                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
     menu.AddItem( PCB_ACTIONS::drag45Degree, SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
     menu.AddItem( PCB_ACTIONS::dragFreeAngle, SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
+    menu.AddItem( PCB_ACTIONS::filletTracks, SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
     menu.AddItem( PCB_ACTIONS::rotateCcw, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );
@@ -698,6 +700,182 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 
         // Notify other tools of the changes -- This updates the visual ratsnest
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+    }
+
+    return 0;
+}
+
+
+int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
+{
+    // Store last used fillet radius to allow pressing "enter" if repeat fillet is required
+    static long long filletRadiusIU = 0;
+
+    auto& selection = m_selectionTool->RequestSelection(
+        []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+        {
+                EditToolSelectionFilter(
+                        aCollector, EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
+        },
+        nullptr, !m_dragging );
+
+    if( selection.Size() < 2 )
+    {
+        m_statusPopup.reset( new STATUS_TEXT_POPUP( frame() ) );
+        m_statusPopup->SetText( _( "A minimum of two straight track segments must be selected." ) );
+        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+        m_statusPopup->PopupFor( 2000 );
+        return 0;
+    }
+
+    WX_UNIT_ENTRY_DIALOG dia(
+            frame(), _( "Enter fillet radius:" ), _( "Fillet Tracks" ), filletRadiusIU );
+
+    if( dia.ShowModal() == wxID_CANCEL )
+        return 0;
+
+    filletRadiusIU = dia.GetValue();
+
+    if( filletRadiusIU == 0 )
+    {
+        m_statusPopup.reset( new STATUS_TEXT_POPUP( frame() ) );
+        m_statusPopup->SetText( _( "A radius of zero was entered.\n"
+                                   "The fillet operation was not performed." ) );
+        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+        m_statusPopup->PopupFor( 2000 );
+        return 0;
+    }
+
+    bool operationPerformedOnAtLeastOne = false;
+    bool didOneAttemptFail  = false;
+
+    std::vector<BOARD_ITEM*> itemsToAddToSelection;
+
+    for( auto it = selection.begin(); it != selection.end(); it++ )
+    {
+        TRACK* track1 = dyn_cast<TRACK*>( *it );
+
+        if( !track1 || track1->Type() != PCB_TRACE_T || track1->IsLocked()
+                || track1->GetLength() == 0 )
+        {
+            continue;
+        }
+
+        for( auto it2 = it + 1; it2 != selection.end(); it2++ )
+        {
+            TRACK* track2 = dyn_cast<TRACK*>( *it2 );
+
+            if( !track2 || track2->Type() != PCB_TRACE_T || track2->IsLocked()
+                    || track2->GetLength() == 0 )
+            {
+                continue;
+            }
+
+            bool trackOnStart = track1->IsPointOnEnds( track2->GetStart() );
+            bool trackOnEnd   = track1->IsPointOnEnds( track2->GetEnd() );
+
+            if( trackOnStart && trackOnEnd )
+                continue; // Ignore duplicate tracks
+
+            if( ( trackOnStart || trackOnEnd ) && track1->GetLayer() == track2->GetLayer() )
+            {
+                SEG t1Seg( track1->GetStart(), track1->GetEnd() );
+                SEG t2Seg( track2->GetStart(), track2->GetEnd() );
+
+                if( t1Seg.ApproxCollinear( t2Seg ) )
+                    continue;
+
+                SHAPE_ARC sArc( t1Seg, t2Seg, filletRadiusIU );
+
+                wxPoint t1newPoint, t2newPoint;
+
+                auto setIfPointOnSeg =
+                        []( wxPoint& aPointToSet, SEG aSegment, VECTOR2I aVecToTest ) 
+                        {
+                            // Find out if we are within the segment
+                            if( ( aSegment.NearestPoint( aVecToTest ) - aVecToTest ).EuclideanNorm()
+                                  < SHAPE_ARC::MIN_PRECISION_IU )
+                            {
+                                aPointToSet.x = aVecToTest.x;
+                                aPointToSet.y = aVecToTest.y;
+                                return true;
+                            }
+
+                            return false;
+                        };
+
+                //Do not draw a fillet if the end points of the arc are not within the track segments
+                if( !setIfPointOnSeg( t1newPoint, t1Seg, sArc.GetP0() )
+                        && !setIfPointOnSeg( t2newPoint, t2Seg, sArc.GetP0() ) )
+                {
+                    didOneAttemptFail = true;
+                    continue;
+                }
+
+                if( !setIfPointOnSeg( t1newPoint, t1Seg, sArc.GetP1() )
+                        && !setIfPointOnSeg( t2newPoint, t2Seg, sArc.GetP1() ) )
+                {
+                    didOneAttemptFail = true;
+                    continue;
+                }
+
+                ARC* tArc = new ARC( frame()->GetBoard(), &sArc );
+                tArc->SetLayer( track1->GetLayer() );
+                tArc->SetWidth( track1->GetWidth() );
+                tArc->SetNet( track1->GetNet() );
+                m_commit->Add( tArc );
+                itemsToAddToSelection.push_back( tArc );
+
+                m_commit->Modify( track1 );
+                m_commit->Modify( track2 );
+
+                if( track1->GetStart() == track2->GetStart() )
+                {
+                    track1->SetStart( t1newPoint );
+                    track2->SetStart( t2newPoint );
+                }
+                else if( track1->GetStart() == track2->GetEnd() )
+                {
+                    track1->SetStart( t1newPoint );
+                    track2->SetEnd( t2newPoint );
+                }
+                else if( track1->GetEnd() == track2->GetEnd() )
+                {
+                    track1->SetEnd( t1newPoint );
+                    track2->SetEnd( t2newPoint );
+                }
+                else
+                {
+                    track1->SetEnd( t1newPoint );
+                    track2->SetStart( t2newPoint );
+                }
+
+                operationPerformedOnAtLeastOne = true;
+            }
+        }
+    }
+
+    m_commit->Push( _( "Fillet Tracks" ) );
+
+    //select the newly created arcs
+    for( BOARD_ITEM* item : itemsToAddToSelection )
+    {
+        m_selectionTool->AddItemToSel( item );
+    }
+
+    if( !operationPerformedOnAtLeastOne )
+    {
+        m_statusPopup.reset( new STATUS_TEXT_POPUP( frame() ) );
+        m_statusPopup->SetText( _( "Unable to fillet the selected track segments." ) );
+        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+        m_statusPopup->PopupFor( 2000 );
+    }
+    else if( didOneAttemptFail )
+    {
+        m_statusPopup.reset( new STATUS_TEXT_POPUP( frame() ) );
+        m_statusPopup->SetText( _( "Some of the track segments could not be filleted." ) );
+        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+        m_statusPopup->PopupFor( 2000 );
     }
 
     return 0;
@@ -1692,6 +1870,7 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::CreateArray,         PCB_ACTIONS::createArray.MakeEvent() );
     Go( &EDIT_TOOL::Mirror,              PCB_ACTIONS::mirror.MakeEvent() );
     Go( &EDIT_TOOL::ChangeTrackWidth,    PCB_ACTIONS::changeTrackWidth.MakeEvent() );
+    Go( &EDIT_TOOL::FilletTracks,        PCB_ACTIONS::filletTracks.MakeEvent() );
 
     Go( &EDIT_TOOL::copyToClipboard,     ACTIONS::copy.MakeEvent() );
     Go( &EDIT_TOOL::cutToClipboard,      ACTIONS::cut.MakeEvent() );

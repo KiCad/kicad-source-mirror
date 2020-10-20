@@ -54,6 +54,109 @@ SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcStart, const VECTOR2I& aArcMid,
 }
 
 
+SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, int aWidth )
+        : SHAPE( SH_ARC )
+{
+    /*
+     * Construct an arc that is tangent to two segments with a given radius.
+     * 
+     *               p
+     *                A
+     *             A   \
+     *            /     \
+     *           / , * , \ segB
+     *          /*       *\
+     *   segA  /     c     \
+     *        /             B
+     *       /
+     *      /
+     *     B
+     * 
+     *
+     * segA is the fist segment (with its points A and B)
+     * segB is the second segment (with its points A and B)
+     * p is the point at which segA and segB would intersect if they were projected
+     * c is the centre of the arc to be constructed
+     * rad is the radius of the arc to be constructed
+     * 
+     * We can create two vectors, betweeen point p and segA /segB
+     *    pToA = p - segA.B   //< note that segA.A would also be valid as it is colinear
+     *    pToB = p - segB.B   //< note that segB.A would also be valid as it is colinear
+     * 
+     * Let the angle formed by segA and segB be called 'alpha': 
+     *   alpha = angle( pToA ) - angle( pToB )
+     * 
+     * The distance PC can be computed as
+     *   distPC = rad / abs( sin( alpha / 2 ) )
+     * 
+     * The polar angle of the vector PC can be computed as:
+     *   anglePC = angle( pToA ) + alpha / 2
+     * 
+     * Therefore:
+     *    C.x = P.x + distPC*cos( anglePC )
+     *    C.y = P.y + distPC*sin( anglePC )
+     */
+
+    OPT_VECTOR2I p = aSegmentA.Intersect( aSegmentB, true, true );
+
+    if( !p || aSegmentA.Length() == 0 || aSegmentB.Length() == 0 )
+    {
+        // Catch bugs in debug
+        wxASSERT_MSG( false, "The input segments do not intersect or one is zero length." );
+
+        // Make a 180 degree arc around aSegmentA in case we end up here in release
+        m_start = aSegmentA.A;
+        m_end   = aSegmentA.B;
+        m_mid   = m_start;
+
+        VECTOR2I arcCenter = aSegmentA.Center();
+        RotatePoint( m_mid, arcCenter, 900.0 ); // mid point at 90 degrees
+    }
+    else
+    {
+        VECTOR2I pToA = aSegmentA.B - p.get();
+        VECTOR2I pToB = aSegmentB.B - p.get();
+
+        if( pToA.EuclideanNorm() == 0 )
+            pToA = aSegmentA.A - p.get();
+        
+        if( pToB.EuclideanNorm() == 0 )
+            pToB = aSegmentB.A - p.get();
+
+        double pToAangle = ArcTangente( pToA.y, pToA.x );
+        double pToBangle = ArcTangente( pToB.y, pToB.x );
+
+        double alpha = NormalizeAngle180( pToAangle - pToBangle );
+
+        double distPC = (double) aRadius / abs( sin( DECIDEG2RAD( alpha / 2 ) ) );
+        double angPC  = pToAangle - alpha / 2;
+
+        VECTOR2I arcCenter;
+
+        arcCenter.x = p.get().x + KiROUND( distPC * cos( DECIDEG2RAD( angPC ) ) );
+        arcCenter.y = p.get().y + KiROUND( distPC * sin( DECIDEG2RAD( angPC ) ) );
+
+        // The end points of the arc are the orthogonal projected lines from the line segments
+        // to the center of the arc
+        m_start = aSegmentA.LineProject( arcCenter );
+        m_end = aSegmentB.LineProject( arcCenter );
+
+        //The mid point is rotated start point around center, half the angle of the arc.
+        VECTOR2I startVector = m_start - arcCenter;
+        VECTOR2I endVector   = m_end - arcCenter;
+
+        double startAngle = ArcTangente( startVector.y, startVector.x );
+        double endAngle   = ArcTangente( endVector.y, endVector.x );
+
+        double midPointRotAngle = NormalizeAngle180( startAngle - endAngle ) / 2;
+        m_mid = m_start;
+        RotatePoint( m_mid, arcCenter, midPointRotAngle );
+    }
+
+    update_bbox();
+}
+
+
 SHAPE_ARC::SHAPE_ARC( const SHAPE_ARC& aOther )
     : SHAPE( SH_ARC )
 {
