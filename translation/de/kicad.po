@@ -1,18 +1,19 @@
+# Christian Schlüter <chschlue@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-20 14:37-0700\n"
-"PO-Revision-Date: 2020-10-17 07:28+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2020-10-21 18:39+0000\n"
+"Last-Translator: Christian Schlüter <chschlue@gmail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.1-dev\n"
+"X-Generator: Weblate 4.3.1\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -41,9 +42,8 @@ msgid "All supported files (%s)"
 msgstr "Alle unterstützten Formate (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
-#, fuzzy
 msgid "Available paths:"
-msgstr "Verfügbare Materialien:"
+msgstr "Verfügbare Pfade:"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
@@ -123,7 +123,6 @@ msgid "Offset"
 msgstr "Offset"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
-#, fuzzy
 msgid "Opacity"
 msgstr "Opazität:"
 
@@ -160,9 +159,8 @@ msgid "Create layers"
 msgstr "Lagen erstellen"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:475
-#, fuzzy
 msgid "Board outline is not closed:"
-msgstr "Warnung: Boardumriss bildet kein geschlossenes Polygon"
+msgstr "Boardumriss ist nicht geschlossen:"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
@@ -191,6 +189,7 @@ msgstr "Baue BVH für Bohrungen und Vias"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:423
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
 msgstr ""
+"Ihre OpenGL-Version wird nicht unterstützt. Minimal erforderlich ist 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
@@ -425,7 +424,7 @@ msgstr "Subtrahiere Lötstoppmaske von Siebdruckmaske"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:77
 msgid "Clip silkscreen at via annulus"
-msgstr ""
+msgstr "Positionsdruck an Via-Restring abschneiden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:86
 msgid "Non plated pads copper as bare copper"
@@ -437,9 +436,8 @@ msgid ""
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:98
-#, fuzzy
 msgid "3D Model Visibility"
-msgstr "Sichtbarkeit von 3D-Modellen:"
+msgstr "Sichtbarkeit von 3D-Modellen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:111
 msgid "Show 3D through hole models"
@@ -455,9 +453,8 @@ msgid "Show 3D virtual models"
 msgstr "Modelle von virtuellen Bauteilen einblenden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:148
-#, fuzzy
 msgid "Board Layers"
-msgstr "Platinenlagen:"
+msgstr "Platinenlagen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:161
 msgid "Show silkscreen layers"
@@ -476,9 +473,8 @@ msgid "Show adhesive layers"
 msgstr "Kleberlagen einblenden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:198
-#, fuzzy
 msgid "User Layers (not shown in realistic mode)"
-msgstr "Benutzerlagen (nicht angezeigt im realistischen Modus):"
+msgstr "Benutzerlagen (nicht angezeigt im realistischen Modus)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "Show comments and drawings layers"
@@ -489,14 +485,12 @@ msgid "Show ECO layers"
 msgstr "E.C.O.-Lagen einblenden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:230
-#, fuzzy
 msgid "Camera Options"
-msgstr "Allgemeine Optionen"
+msgstr "Kameraoptionen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:235
-#, fuzzy
 msgid "Rotation Increment:"
-msgstr "Wiederholen inkrementieren Position"
+msgstr "Rotationsinkrement:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:243
 #: common/base_units.cpp:544 pcbnew/dialogs/dialog_copper_zones_base.cpp:298
@@ -509,19 +503,16 @@ msgid "deg"
 msgstr "Grad"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:253
-#, fuzzy
 msgid "Enable animation"
-msgstr "Grafikbeschleunigung &einschalten"
+msgstr "Animation einschalten"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:260
-#, fuzzy
 msgid "Animation speed:"
-msgstr "Annotation vollständig."
+msgstr "Animationsgeschwindigkeit:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
-#, fuzzy
 msgid "OpenGL Render Options"
-msgstr "Render Optionen"
+msgstr "OpenGL-Renderoptionen"
 
 # Einen Bereich (gezeichnete Elemente) umgebendes Rechteck.
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:304
@@ -533,9 +524,8 @@ msgid "Show copper thickness"
 msgstr "Kupferstärke einblenden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:323
-#, fuzzy
 msgid "Other Options"
-msgstr "Andere Optionen:"
+msgstr "Andere Optionen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:333
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:445
