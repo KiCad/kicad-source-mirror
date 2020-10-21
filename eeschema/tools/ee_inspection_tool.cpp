@@ -225,7 +225,7 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
         // "pin" is off grid here.
         offgrid_error++;
 
-        if( aPart->HasConversion() && next->GetConvert() )
+        if( aPart->HasConversion() && pin->GetConvert() )
         {
             if( aPart->GetUnitCount() <= 1 )
             {
