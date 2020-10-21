@@ -185,10 +185,13 @@ public:
      * two lines overlap.  This method is used to merge multiple line segments into a single
      * line.
      *
+     * @param aScreen - the current screen
      * @param aLine - Line to compare.
+     * @param aCheckJunctions - indicates we need to check for a junction if the two segments
+     *                          are colinear and touch
      * @return New line that combines the two or NULL on non-overlapping segments.
      */
-    SCH_LINE* MergeOverlap( SCH_LINE* aLine );
+    SCH_LINE* MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCheckJunctions );
 
     /**
      * Check if two lines are in the same quadrant as each other, using a reference point as

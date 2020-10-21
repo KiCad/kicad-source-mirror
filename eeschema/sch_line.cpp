@@ -400,12 +400,13 @@ bool SCH_LINE::IsParallel( SCH_LINE* aLine )
 }
 
 
-SCH_LINE* SCH_LINE::MergeOverlap( SCH_LINE* aLine )
+SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCheckJunctions )
 {
     auto less = []( const wxPoint& lhs, const wxPoint& rhs ) -> bool
     {
         if( lhs.x == rhs.x )
             return lhs.y < rhs.y;
+
         return lhs.x < rhs.x;
     };
 
@@ -427,19 +428,18 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_LINE* aLine )
     if( rightmost_start != std::min( { rightmost_start, rightmost_end }, less ) )
         std::swap( rightmost_start, rightmost_end );
 
-    // -leftmost is the line that starts farthest to the left
-    // -other is the line that is _not_ leftmost
-    // -rightmost is the line that ends farthest to the right.  This may or
-    //   may not be 'other' as the second line may be completely covered by
-    //   the first.
+    // - leftmost is the line that starts farthest to the left
+    // - other is the line that is _not_ leftmost
+    // - rightmost is the line that ends farthest to the right.  This may or may not be 'other'
+    //      as the second line may be completely covered by the first.
     if( less( rightmost_start, leftmost_start ) )
     {
         std::swap( leftmost_start, rightmost_start );
         std::swap( leftmost_end, rightmost_end );
     }
 
-    auto other_start = rightmost_start;
-    auto other_end = rightmost_end;
+    wxPoint other_start = rightmost_start;
+    wxPoint other_end = rightmost_end;
 
     if( less( rightmost_end, leftmost_end ) )
     {
@@ -482,10 +482,9 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_LINE* aLine )
     else
     {
         // We use long long here to avoid overflow -- it enforces promotion
-        // Don't use double as we need to make a direct comparison
-        // The slope of the left-most line is dy/dx.  Then we check that the slope
-        // from the left most start to the right most start is the same as well as
-        // the slope from the left most start to right most end.
+        // The slope of the left-most line is dy/dx.  Then we check that the slope from the
+        // left most start to the right most start is the same as well as the slope from the
+        // left most start to right most end.
         long long dx = leftmost_end.x - leftmost_start.x;
         long long dy = leftmost_end.y - leftmost_start.y;
         colinear = ( ( ( other_start.y - leftmost_start.y ) * dx ==
@@ -494,22 +493,28 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_LINE* aLine )
                        ( other_end.x - leftmost_start.x ) * dy ) );
     }
 
+    if( !colinear )
+        return nullptr;
+
+    // We either have a true overlap or colinear touching segments.  We always want to merge
+    // the former, but the later only get merged if there no junction at the touch point.
+
+    bool touching = leftmost_end == rightmost_start;
+
+    if( touching && aCheckJunctions && aScreen->IsJunctionNeeded( leftmost_end ) )
+        return nullptr;
+
     // Make a new segment that merges the 2 segments
-    if( colinear )
-    {
-        leftmost_end = rightmost_end;
+    leftmost_end = rightmost_end;
 
-        auto ret = new SCH_LINE( *aLine );
-        ret->SetStartPoint( leftmost_start );
-        ret->SetEndPoint( leftmost_end );
+    auto ret = new SCH_LINE( *aLine );
+    ret->SetStartPoint( leftmost_start );
+    ret->SetEndPoint( leftmost_end );
 
-        if( IsSelected() || aLine->IsSelected() )
-            ret->SetSelected();
+    if( IsSelected() || aLine->IsSelected() )
+        ret->SetSelected();
 
-        return ret;
-    }
-
-    return nullptr;
+    return ret;
 }
 
 

@@ -815,15 +815,12 @@ void SCH_LINE_WIRE_BUS_TOOL::simplifyWireList()
 
         SCH_LINE* next_line = *next_it;
 
-        if( line->IsParallel( next_line ) )
+        if( SCH_LINE* merged = line->MergeOverlap( m_frame->GetScreen(), next_line, false ) )
         {
-            if( SCH_LINE* merged = line->MergeOverlap( next_line ) )
-            {
-                delete line;
-                delete next_line;
-                it = m_wires.erase( it );
-                *it = merged;
-            }
+            delete line;
+            delete next_line;
+            it = m_wires.erase( it );
+            *it = merged;
         }
 
         ++it;

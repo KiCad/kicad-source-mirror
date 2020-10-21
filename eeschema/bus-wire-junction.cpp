@@ -243,7 +243,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
                     continue;
 
                 if( !secondLine->IsParallel( firstLine )
-                        || secondLine->IsStrokeEquivalent( firstLine )
+                        || !secondLine->IsStrokeEquivalent( firstLine )
                         || secondLine->GetLayer() != firstLine->GetLayer() )
                 {
                     continue;
@@ -257,15 +257,11 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
                     continue;
                 }
 
-                // If the end points overlap, check if we still need the junction
-                if( secondLine->IsEndPoint( firstLine->GetStartPoint() ) )
-                    needed = aScreen->IsJunctionNeeded( firstLine->GetStartPoint() );
-                else if( secondLine->IsEndPoint( firstLine->GetEndPoint() ) )
-                    needed = aScreen->IsJunctionNeeded( firstLine->GetEndPoint() );
-
+                // See if we can merge an overlap (or two colinear touching segments with
+                // no junction where they meet).
                 SCH_LINE* mergedLine = nullptr;
 
-                if( !needed && ( mergedLine = secondLine->MergeOverlap( firstLine ) ) )
+                if( mergedLine = secondLine->MergeOverlap( aScreen, firstLine, true ) )
                 {
                     remove_item( firstLine );
                     remove_item( secondLine );
@@ -426,7 +422,7 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
                 }
 
                 // Try to merge the remaining lines
-                if( SCH_LINE* line = secondLine->MergeOverlap( firstLine ) )
+                if( SCH_LINE* line = secondLine->MergeOverlap( screen, firstLine, false ) )
                 {
                     remove_item( firstLine );
                     remove_item( secondLine );
