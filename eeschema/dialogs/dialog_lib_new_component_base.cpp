@@ -98,7 +98,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	fgSizer4->SetFlexibleDirection( wxBOTH );
 	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticPinTextPositionLabel = new wxStaticText( this, wxID_ANY, _("Pin text position offset:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticPinTextPositionLabel = new wxStaticText( this, wxID_ANY, _("Pin name position offset:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticPinTextPositionLabel->Wrap( -1 );
 	fgSizer4->Add( m_staticPinTextPositionLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
