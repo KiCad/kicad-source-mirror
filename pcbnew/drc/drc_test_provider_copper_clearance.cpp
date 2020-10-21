@@ -522,7 +522,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
             if( zone->GetFilledPolysList( aLayer ).IsEmpty() )
                 continue;
 
-            if( !refSegInflatedBB.Intersects( zone->GetBoundingBox() ) )
+            if( !refSegInflatedBB.Intersects( zone->GetCachedBoundingBox() ) )
                 continue;
 
             int halfWidth = refSegWidth / 2;

@@ -73,29 +73,43 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     if( !reportPhase( _( "Checking keepouts & disallow constraints..." ) ) )
         return false;
 
-    auto checkItem = [&]( BOARD_ITEM *item ) -> bool
-    {
-        if( m_drcEngine->IsErrorLimitExceeded( DRCE_ALLOWED_ITEMS ) )
-            return false;
+    auto doCheckItem =
+            [&]( BOARD_ITEM* item )
+            {
+                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_DISALLOW,
+                                                                  item );
+                if( constraint.m_DisallowFlags )
+                {
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
 
-        auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_DISALLOW, item );
+                    m_msg.Printf( drcItem->GetErrorText() + wxS( " (%s)" ),
+                                  constraint.GetName() );
 
-        if( constraint.m_DisallowFlags )
-        {
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
+                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetItems( item );
+                    drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-            m_msg.Printf( drcItem->GetErrorText() + wxS( " (%s)" ),
-                          constraint.GetName() );
+                    reportViolation( drcItem, item->GetPosition());
+                }
+            };
 
-            drcItem->SetErrorMessage( m_msg );
-            drcItem->SetItems( item );
-            drcItem->SetViolatingRule( constraint.GetParentRule() );
+    auto checkItem =
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_ALLOWED_ITEMS ) )
+                    return false;
 
-            reportViolation( drcItem, item->GetPosition());
-        }
+                item->ClearFlags( HOLE_PROXY );
+                doCheckItem( item );
 
-        return true;
-    };
+                if( item->Type() == PCB_VIA_T || item->Type() == PCB_PAD_T )
+                {
+                    item->SetFlags( HOLE_PROXY );
+                    doCheckItem( item );
+                }
+
+                return true;
+            };
 
     forEachGeometryItem( {}, LSET::AllLayersMask(), checkItem );
 

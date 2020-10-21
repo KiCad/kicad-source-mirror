@@ -1040,6 +1040,22 @@ class SHAPE_POLY_SET : public SHAPE
         bool PointOnEdge( const VECTOR2I& aP ) const;
 
         /**
+         * Function Collide()
+         *
+         * Checks if the boundary of shape (this) lies closer to the shape aShape than aClearance,
+         * indicating a collision.
+         * @param aShape shape to check collision against
+         * @param aClearance minimum clearance
+         * @param aActual [out] an optional pointer to an int to store the actual distance in the
+         *                event of a collision.
+         * @param aLocation [out] an option pointer to a point to store a nearby location in the
+         *                  event of a collision.
+         * @return true, if there is a collision.
+         */
+        bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr,
+                      VECTOR2I* aLocation = nullptr ) const override;
+
+        /**
          * Function Collide
          * Checks whether the point aP is either inside or on the edge of the polygon set.
          *

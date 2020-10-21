@@ -24,10 +24,9 @@
 
 #include <cstdio>
 #include <memory>
-#include <reporter.h>
 #include <class_board.h>
 #include <class_track.h>
-
+#include <geometry/shape_segment.h>
 #include <pcb_expr_evaluator.h>
 
 #include <connectivity/connectivity_data.h>
@@ -35,7 +34,7 @@
 #include <connectivity/from_to_cache.h>
 
 #include <drc/drc_engine.h>
-
+#include <libs/kimath/include/geometry/shape_circle.h>
 
 bool exprFromTo( LIBEVAL::CONTEXT* aCtx, void* self )
 {
@@ -241,14 +240,35 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
     if( zone )
     {
-        SHAPE_POLY_SET testPoly;
+        if( !zone->GetCachedBoundingBox().Intersects( item->GetBoundingBox() ) )
+            return;
 
-        item->TransformShapeWithClearanceToPolygon( testPoly, context->GetLayer(), 0,
-                                                    ARC_LOW_DEF, ERROR_INSIDE );
-        testPoly.BooleanIntersection( *zone->Outline(), SHAPE_POLY_SET::PM_FAST );
+        if( item->GetFlags() & HOLE_PROXY )
+        {
+            if( item->Type() == PCB_PAD_T )
+            {
+                D_PAD*               pad = static_cast<D_PAD*>( item );
+                const SHAPE_SEGMENT* holeShape = pad->GetEffectiveHoleShape();
 
-        if( testPoly.OutlineCount() )
-            result->Set( 1.0 );
+                if( zone->Outline()->Collide( holeShape ) )
+                    result->Set( 1.0 );
+            }
+            else if( item->Type() == PCB_VIA_T )
+            {
+                VIA*               via = static_cast<VIA*>( item );
+                const SHAPE_CIRCLE holeShape( via->GetPosition(), via->GetDrillValue() );
+
+                if( zone->Outline()->Collide( &holeShape ) )
+                    result->Set( 1.0 );
+            }
+        }
+        else
+        {
+            std::shared_ptr<SHAPE> itemShape = item->GetEffectiveShape( context->GetLayer() );
+
+            if( zone->Outline()->Collide( itemShape.get() ) )
+                result->Set( 1.0 );
+        }
     }
 }
 

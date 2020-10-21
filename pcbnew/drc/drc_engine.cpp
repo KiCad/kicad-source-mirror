@@ -30,6 +30,7 @@
 #include <drc/drc_rule.h>
 #include <drc/drc_rule_condition.h>
 #include <drc/drc_test_provider.h>
+#include <class_track.h>
 
 void drcPrintDebugMessage( int level, const wxString& msg, const char *function, int line )
 {
@@ -140,9 +141,9 @@ void DRC_ENGINE::loadImplicitRules()
 
     // 2) micro-via specific defaults (new DRC doesn't treat microvias in any special way)
 
-    DRC_RULE* uViaRule = createImplicitRule( _( "board setup micro-via constraints" ));
+    DRC_RULE* uViaRule = createImplicitRule( _( "board setup micro-via constraints" ) );
 
-    uViaRule->m_Condition = new DRC_RULE_CONDITION ( "A.Via_Type == 'micro_via'" );
+    uViaRule->m_Condition = new DRC_RULE_CONDITION( "A.Via_Type == 'micro_via'" );
 
     DRC_CONSTRAINT uViaDrillConstraint( DRC_CONSTRAINT_TYPE_HOLE_SIZE );
     uViaDrillConstraint.Value().SetMin( bds.m_MicroViasMinDrill );
@@ -161,9 +162,9 @@ void DRC_ENGINE::loadImplicitRules()
 
     if( !bds.m_BlindBuriedViaAllowed )
     {
-        DRC_RULE* bbViaRule = createImplicitRule( _( "board setup constraints" ));
+        DRC_RULE* bbViaRule = createImplicitRule( _( "board setup constraints" ) );
 
-        bbViaRule->m_Condition = new DRC_RULE_CONDITION ( "A.Via_Type == 'buried_via'" );
+        bbViaRule->m_Condition = new DRC_RULE_CONDITION( "A.Via_Type == 'buried_via'" );
 
         DRC_CONSTRAINT disallowConstraint( DRC_CONSTRAINT_TYPE_DISALLOW );
         disallowConstraint.m_DisallowFlags = DRC_DISALLOW_BB_VIAS;
@@ -318,6 +319,67 @@ void DRC_ENGINE::loadImplicitRules()
 
     for( DRC_RULE* ncRule : netclassItemSpecificRules )
         addRule( ncRule );
+
+    // 3) keepout area rules
+
+    auto addKeepoutConstraint =
+            [&rule]( int aConstraint )
+            {
+                DRC_CONSTRAINT disallowConstraint( DRC_CONSTRAINT_TYPE_DISALLOW );
+                disallowConstraint.m_DisallowFlags = aConstraint;
+                rule->AddConstraint( disallowConstraint );
+            };
+
+    auto isKeepoutZone =
+            []( ZONE_CONTAINER* aZone )
+            {
+                return aZone->GetIsRuleArea() && (    aZone->GetDoNotAllowTracks()
+                                                   || aZone->GetDoNotAllowVias()
+                                                   || aZone->GetDoNotAllowPads()
+                                                   || aZone->GetDoNotAllowCopperPour()
+                                                   || aZone->GetDoNotAllowFootprints() );
+            };
+
+    std::vector<ZONE_CONTAINER*> keepoutZones;
+
+    for( ZONE_CONTAINER* zone : m_board->Zones() )
+    {
+        if( isKeepoutZone( zone ) )
+            keepoutZones.push_back( zone );
+    }
+
+    for( MODULE* footprint : m_board->Modules() )
+    {
+        for( ZONE_CONTAINER* zone : footprint->Zones() )
+        {
+            if( isKeepoutZone( zone ) )
+                keepoutZones.push_back( zone );
+        }
+    }
+
+    for( ZONE_CONTAINER* zone : keepoutZones )
+    {
+        if( zone->GetZoneName().IsEmpty() )
+            zone->SetZoneName( KIID().AsString() );
+
+        rule = createImplicitRule( _( "keepout area" ) );
+        rule->m_Condition = new DRC_RULE_CONDITION( wxString::Format( "A.insideArea('%s')",
+                                                                      zone->GetZoneName() ) );
+        if( zone->GetDoNotAllowTracks() )
+            addKeepoutConstraint( DRC_DISALLOW_TRACKS );
+
+        if( zone->GetDoNotAllowVias() )
+            addKeepoutConstraint( DRC_DISALLOW_VIAS );
+
+        if( zone->GetDoNotAllowPads() )
+            addKeepoutConstraint( DRC_DISALLOW_PADS );
+
+        if( zone->GetDoNotAllowCopperPour() )
+            addKeepoutConstraint( DRC_DISALLOW_ZONES );
+
+        if( zone->GetDoNotAllowFootprints() )
+            addKeepoutConstraint( DRC_DISALLOW_FOOTPRINTS );
+    }
 
     ReportAux( wxString::Format( "Building %d implicit netclass rules",
                                  (int) netclassClearanceRules.size() ) );
@@ -557,6 +619,15 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aTestTracksAgainstZones,
             m_errorLimits[ ii ] = INT_MAX;
     }
 
+    for( ZONE_CONTAINER* zone : m_board->Zones() )
+        zone->CacheBoundingBox();
+
+    for( MODULE* module : m_board->Modules() )
+    {
+        for( ZONE_CONTAINER* zone : module->Zones() )
+            zone->CacheBoundingBox();
+    }
+
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
         if( !provider->IsEnabled() )
@@ -676,6 +747,45 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                     REPORT( wxString::Format( _( "Checking %s; edge clearance: %s." ),
                                               c->constraint.GetName(),
                                               MessageTextFromValue( UNITS, clearance ) ) )
+                }
+                else if( aConstraintId == DRC_CONSTRAINT_TYPE_DISALLOW )
+                {
+                    int mask;
+
+                    if( a->GetFlags() & HOLE_PROXY )
+                    {
+                        mask = DRC_DISALLOW_HOLES;
+                    }
+                    else if( a->Type() == PCB_VIA_T )
+                    {
+                        if( static_cast<const VIA*>( a )->GetViaType() == VIATYPE::BLIND_BURIED )
+                            mask = DRC_DISALLOW_VIAS | DRC_DISALLOW_BB_VIAS;
+                        else if( static_cast<const VIA*>( a )->GetViaType() == VIATYPE::MICROVIA )
+                            mask = DRC_DISALLOW_VIAS | DRC_DISALLOW_MICRO_VIAS;
+                        else
+                            mask = DRC_DISALLOW_VIAS;
+                    }
+                    else
+                    {
+                        switch( a->Type() )
+                        {
+                        case PCB_TRACE_T:        mask = DRC_DISALLOW_TRACKS;     break;
+                        case PCB_ARC_T:          mask = DRC_DISALLOW_TRACKS;     break;
+                        case PCB_PAD_T:          mask = DRC_DISALLOW_PADS;       break;
+                        case PCB_MODULE_T:       mask = DRC_DISALLOW_FOOTPRINTS; break;
+                        case PCB_SHAPE_T:        mask = DRC_DISALLOW_GRAPHICS;   break;
+                        case PCB_FP_SHAPE_T:     mask = DRC_DISALLOW_GRAPHICS;   break;
+                        case PCB_TEXT_T:         mask = DRC_DISALLOW_TEXTS;      break;
+                        case PCB_FP_TEXT_T:      mask = DRC_DISALLOW_TEXTS;      break;
+                        case PCB_ZONE_AREA_T:    mask = DRC_DISALLOW_ZONES;      break;
+                        case PCB_FP_ZONE_AREA_T: mask = DRC_DISALLOW_ZONES;      break;
+                        case PCB_LOCATE_HOLE_T:  mask = DRC_DISALLOW_HOLES;      break;
+                        default:                 mask = 0;                       break;
+                        }
+                    }
+
+                    if( ( c->constraint.m_DisallowFlags & mask ) == 0 )
+                        return false;
                 }
                 else
                 {

@@ -27,6 +27,7 @@
 #define __SHAPE_ARC_H
 
 #include <geometry/shape.h>
+#include <include/convert_to_biu.h>
 #include <math/vector2d.h>   // for VECTOR2I
 
 class SHAPE_LINE_CHAIN;
@@ -134,14 +135,14 @@ public:
     /**
      * Constructs a SHAPE_LINE_CHAIN of segments from a given arc
      * @param aAccuracy maximum divergence from true arc given in internal units
-     *   ** Note that the default of 500.0 here is given using ARC_DEF_HIGH_ACCURACY
-     *      for pcbnew units.  This is to allow common geometry collision functions
+     *   ** Note that the default is ARC_HIGH_DEF in PCBNew units
+     *      This is to allow common geometry collision functions
      *      Other programs should call this using explicit accuracy values
      *      TODO: unify KiCad internal units
      *
      * @return a SHAPE_LINE_CHAIN
      */
-    const SHAPE_LINE_CHAIN ConvertToPolyline( double aAccuracy = 500.0 ) const;
+    const SHAPE_LINE_CHAIN ConvertToPolyline( double aAccuracy = 0.005 * PCB_IU_PER_MM ) const;
 
 private:
 

@@ -50,7 +50,10 @@
 #include <math/util.h>                       // for KiROUND, rescale
 #include <math/vector2d.h>                   // for VECTOR2I, VECTOR2D, VECTOR2
 #include <md5_hash.h>
-
+#include <libs/kimath/include/geometry/shape_segment.h>
+#include <libs/kimath/include/geometry/shape_circle.h>
+#include <libs/kimath/include/geometry/shape_simple.h>
+#include <libs/kimath/include/geometry/shape_compound.h>
 
 using namespace ClipperLib;
 
@@ -1267,6 +1270,84 @@ bool SHAPE_POLY_SET::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
 }
 
 
+bool SHAPE_POLY_SET::Collide( const SHAPE* aShape, int aClearance, int* aActual,
+                              VECTOR2I* aLocation ) const
+{
+    // A couple of simple cases are worth trying before we fall back on triangulation.
+
+    if( aShape->Type() == SH_SEGMENT )
+    {
+        const SHAPE_SEGMENT* segment = static_cast<const SHAPE_SEGMENT*>( aShape );
+        int                  extra = segment->GetWidth() / 2;
+
+        if( Collide( segment->GetSeg(), aClearance + extra, aActual, aLocation ) )
+        {
+            if( aActual )
+                *aActual = std::max( 0, *aActual - extra );
+
+            return true;
+        }
+
+        return false;
+    }
+
+    if( aShape->Type() == SH_CIRCLE )
+    {
+        const SHAPE_CIRCLE* circle = static_cast<const SHAPE_CIRCLE*>( aShape );
+        int                 extra = circle->GetRadius();
+
+        if( Collide( circle->GetCenter(), aClearance + extra, aActual, aLocation ) )
+        {
+            if( aActual )
+                *aActual = std::max( 0, *aActual - extra );
+
+            return true;
+        }
+
+        return false;
+    }
+
+    const_cast<SHAPE_POLY_SET*>( this )->CacheTriangulation( true );
+
+    int      actual = INT_MAX;
+    VECTOR2I location;
+
+    for( auto& tpoly : m_triangulatedPolys )
+    {
+        for ( auto& tri : tpoly->Triangles() )
+        {
+            int      triActual;
+            VECTOR2I triLocation;
+
+            if( aShape->Collide( &tri, aClearance, &triActual, &triLocation ) )
+            {
+                if( !aActual && !aLocation )
+                    return true;
+
+                if( triActual < actual )
+                {
+                    actual = triActual;
+                    location = triLocation;
+                }
+            }
+        }
+    }
+
+    if( actual < INT_MAX )
+    {
+        if( aActual )
+            *aActual = std::max( 0, actual );
+
+        if( aLocation )
+            *aLocation = location;
+
+        return true;
+    }
+
+    return false;
+}
+
+
 void SHAPE_POLY_SET::RemoveAllContours()
 {
     m_polys.clear();
@@ -2148,8 +2229,10 @@ bool SHAPE_POLY_SET::HasIndexableSubshapes() const
 size_t SHAPE_POLY_SET::GetIndexableSubshapeCount() const
 {
     size_t n = 0;
+
     for( auto& t : m_triangulatedPolys )
         n += t->GetTriangleCount();
+
     return n;
 }
 
