@@ -560,20 +560,59 @@ bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
     Quantity_Color col;
     Quantity_Color* lcolor = NULL;
 
-    if( !data.m_assy->Search( shape, label, Standard_False ) )
+    // Search the whole model first to make sure something exists (may or may not have color)
+    if( !data.m_assy->Search( shape, label ) )
     {
         static int i = 0;
         std::ostringstream ostr;
         ostr << "KMISC_" << i++;
         partID = ostr.str();
+        printf("Missing lable\n");
     }
     else
     {
-        getTag( label, partID );
-
+        bool found_color = false;
 
         if( getColor( data, label, col ) )
+        {
+            found_color = true;
             lcolor = &col;
+        }
+
+        // If the top-level label doesn't have the color information, search components
+        if( !found_color )
+        {
+            if( data.m_assy->Search( shape, label, Standard_False, Standard_True, Standard_True ) &&
+                    getColor( data, label, col ) )
+            {
+                found_color = true;
+                lcolor = &col;
+            }
+        }
+
+        // If the components do not have color information, search all components without location
+        if( !found_color )
+        {
+            if( data.m_assy->Search( shape, label, Standard_False, Standard_False, Standard_True ) &&
+                    getColor( data, label, col ) )
+            {
+                found_color = true;
+                lcolor = &col;
+            }
+        }
+
+        // Our last chance to find the color looks for color as a subshape of top-level simple shapes
+        if( !found_color )
+        {
+            if( data.m_assy->Search( shape, label, Standard_False, Standard_False, Standard_False ) &&
+                    getColor( data, label, col ) )
+            {
+                found_color = true;
+                lcolor = &col;
+            }
+        }
+
+        getTag( label, partID );
     }
 
     TopoDS_Iterator it;
