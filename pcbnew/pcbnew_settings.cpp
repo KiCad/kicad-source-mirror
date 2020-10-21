@@ -366,8 +366,8 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>(
             "place_file.include_board_edge", &m_PlaceFile.include_board_edge, false ) );
 
-    m_params.emplace_back( new PARAM<int>( "plot.one_page_per_layer",
-            &m_Plot.one_page_per_layer, 1 ) );
+    m_params.emplace_back( new PARAM<int>( "plot.all_layers_on_one_page",
+            &m_Plot.all_layers_on_one_page, 1 ) );
 
     m_params.emplace_back(
             new PARAM<int>( "plot.pads_drill_mode", &m_Plot.pads_drill_mode, 2 ) );
@@ -656,7 +656,7 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<int>(    aCfg, "PlaceFileFormat",         "place_file.file_format" );
     ret &= fromLegacy<bool>(   aCfg, "PlaceFileIncludeBrdEdge", "place_file.include_board_edge" );
 
-    ret &= fromLegacy<int>(    aCfg, "PrintSinglePage",          "plot.one_page_per_layer" );
+    ret &= fromLegacy<int>(    aCfg, "PrintSinglePage",          "plot.all_layers_on_one_page" );
     ret &= fromLegacy<int>(    aCfg, "PrintPadsDrillOpt",        "plot.pads_drill_mode" );
     ret &= fromLegacy<double>( aCfg, "PlotXFineScaleAdj",        "plot.fine_scale_x" );
     ret &= fromLegacy<double>( aCfg, "PlotYFineScaleAdj",        "plot.fine_scale_y" );

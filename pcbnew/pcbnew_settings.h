@@ -180,7 +180,7 @@ public:
 
     struct DIALOG_PLOT
     {
-        int    one_page_per_layer;
+        int    all_layers_on_one_page;
         int    pads_drill_mode;
         double fine_scale_x;
         double fine_scale_y;

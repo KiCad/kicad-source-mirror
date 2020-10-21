@@ -50,7 +50,7 @@ void PCBNEW_PRINTOUT_SETTINGS::Load( APP_SETTINGS_BASE* aConfig )
     if( auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aConfig ) )
     {
         m_drillMarks = static_cast<DRILL_MARK_SHAPE_T>( cfg->m_Plot.pads_drill_mode );
-        m_pagination = static_cast<PAGINATION_T>( cfg->m_Plot.one_page_per_layer );
+        m_pagination = static_cast<PAGINATION_T>( cfg->m_Plot.all_layers_on_one_page );
         m_mirror     = cfg->m_Plot.mirror;
     }
 }
@@ -62,9 +62,9 @@ void PCBNEW_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
 
     if( auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aConfig ) )
     {
-        cfg->m_Plot.pads_drill_mode    = m_drillMarks;
-        cfg->m_Plot.one_page_per_layer = m_pagination;
-        cfg->m_Plot.mirror             = m_mirror;
+        cfg->m_Plot.pads_drill_mode        = m_drillMarks;
+        cfg->m_Plot.all_layers_on_one_page = m_pagination;
+        cfg->m_Plot.mirror                 = m_mirror;
     }
 }
 
