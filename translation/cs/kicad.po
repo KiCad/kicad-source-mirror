@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-20 14:37-0700\n"
-"PO-Revision-Date: 2020-10-21 02:48+0000\n"
+"PO-Revision-Date: 2020-10-23 22:26+0000\n"
 "Last-Translator: Radovan Blažek <blazra@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -29,14 +29,13 @@ msgid "All Files (*.*)|*.*"
 msgstr "Všechny soubory (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "All supported files (%s)"
-msgstr "Všechny podporované formáty knihoven"
+msgstr "Všechny podporované soubory (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
-#, fuzzy
 msgid "Available paths:"
-msgstr "Dostupné:"
+msgstr "Dostupné cesty:"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
@@ -155,7 +154,7 @@ msgstr "Vytvořit vrstvy"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:475
 #, fuzzy
 msgid "Board outline is not closed:"
-msgstr "Obrys desky nevytváří uzavřený mnohoúhelník"
+msgstr "Obrys desky nevytváří uzavřený mnohoúhelník:"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
@@ -502,14 +501,12 @@ msgid "deg"
 msgstr "stupňů"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:253
-#, fuzzy
 msgid "Enable animation"
-msgstr "Povolit akc&eleraci"
+msgstr "Povolit animaci"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:260
-#, fuzzy
 msgid "Animation speed:"
-msgstr "Očíslování:"
+msgstr "Rychlost animace:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
 #, fuzzy
@@ -538,40 +535,35 @@ msgstr "Anti-aliasing"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 #, fuzzy
 msgid "Disabled"
-msgstr "Povoleno"
+msgstr "Vypnuto"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "2x"
-msgstr "2"
+msgstr "2x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "4x"
-msgstr "4"
+msgstr "4x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "8x"
-msgstr "8"
+msgstr "8x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:341
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:348
-#, fuzzy
 msgid "Selection color"
-msgstr "Výběr byl zkopírován."
+msgstr "Barva označení"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "While Moving"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:372
-#, fuzzy
 msgid "Disable anti-aliasing"
-msgstr "Vyvážený antialiasing"
+msgstr "Vypnout anti-aliasing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:378
 #, fuzzy
@@ -613,9 +605,8 @@ msgid "Post-processing"
 msgstr "Post-processing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:473
-#, fuzzy
 msgid "Number of Samples"
-msgstr "Počet vývodů"
+msgstr "Počet vzorků"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:477
 msgid "Spread Factor %"
@@ -626,9 +617,8 @@ msgid "Recursive Level"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:488
-#, fuzzy
 msgid "Shadows"
-msgstr "Vykreslit stíny"
+msgstr "Stíny"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:493
 msgid ""
@@ -672,9 +662,8 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:574
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:798
-#, fuzzy
 msgid "Lights configuration"
-msgstr "Nastavení"
+msgstr "Nastavení světel"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:582
 msgid "Ambient Camera Light"
@@ -686,21 +675,18 @@ msgid "Top Light"
 msgstr "Těsná"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:611
-#, fuzzy
 msgid "Bottom Light"
-msgstr "Pohled zespodu"
+msgstr "Spodní světlo"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:635
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:652
-#, fuzzy
 msgid "Elevation (degrees)"
-msgstr "Natočení (stupňů):"
+msgstr "Elevace (stupňů)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:639
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:656
-#, fuzzy
 msgid "Azimuth (degrees)"
-msgstr "Natočení (stupňů):"
+msgstr "Azimut (stupňů)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:660
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
@@ -798,11 +784,13 @@ msgid "3D Image File Name"
 msgstr "Název 3D obrázku"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:828
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Insufficient permissions required to save file\n"
 "%s"
-msgstr "Pro ukládání knihovny je vyžadováno oprávnění pro zápis \"%s\"."
+msgstr ""
+"Nedostatečná oprávnění pro uložení souboru\n"
+"%s"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:829 common/confirm.cpp:125
 #: common/confirm.cpp:257 common/dialogs/panel_setup_severities.cpp:40
@@ -820,9 +808,8 @@ msgid "Can't save file"
 msgstr "Nelze uložit soubor"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:922
-#, fuzzy
 msgid "Silkscreen Color"
-msgstr "Barva potisku..."
+msgstr "Barva potisku"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:954
 msgid "Solder Mask Color"
@@ -914,7 +901,6 @@ msgid "Toggle orthographic projection"
 msgstr "Povolit/Zakázat ortogonální projekci"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
-#, fuzzy
 msgid "Enable/disable orthographic projection"
 msgstr "Povolit/Zakázat ortogonální projekci"
 
@@ -1359,7 +1345,7 @@ msgstr "Parametry:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
-msgstr ""
+msgstr "Uzamknout poměr výška/šířka"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:122
 #: common/dialogs/dialog_page_settings_base.cpp:32
@@ -1383,9 +1369,8 @@ msgstr "Exportovat SVG soubor"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:155
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:178
-#, fuzzy
 msgid "Export to Clipboard"
-msgstr "Kreslit do schránky"
+msgstr "Kopírovat do schránky"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Eeschema (.lib file)"
@@ -2272,11 +2257,12 @@ msgstr "Ukončit KiCad"
 #: common/dialogs/dialog_migrate_settings.cpp:51
 #, c-format
 msgid "Welcome to KiCad %s!"
-msgstr ""
+msgstr "Vítejte v KiCadu %s!"
 
 #: common/dialogs/dialog_migrate_settings.cpp:58
+#, fuzzy
 msgid "Import settings from a previous version (none found)"
-msgstr ""
+msgstr "Importovat nastavení z předchozí verze (žádná nenalezena)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:118
 #, fuzzy
@@ -2285,7 +2271,7 @@ msgstr "Vyberte cestu"
 
 #: common/dialogs/dialog_page_settings.cpp:62
 msgid "A5 148x210mm"
-msgstr ""
+msgstr "A5 148x210mm"
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "A4 210x297mm"
@@ -2696,7 +2682,7 @@ msgstr "Nic k tisku"
 #: common/dialogs/dialog_print_generic.cpp:229
 #: eeschema/dialogs/dialog_print_using_printer.cpp:312
 msgid "Previous print job not yet complete."
-msgstr ""
+msgstr "Předchozí tisková úloha ještě není dokončena."
 
 #: common/dialogs/dialog_print_generic.cpp:253
 msgid "There was a problem printing."
@@ -2813,7 +2799,7 @@ msgstr "&Nový symbol..."
 
 #: common/dialogs/panel_color_settings.cpp:213
 msgid "(read-only)"
-msgstr ""
+msgstr "(jen pro čtení)"
 
 #: common/dialogs/panel_color_settings.cpp:282
 #, fuzzy
@@ -2916,8 +2902,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:61
+#, fuzzy
 msgid "Days"
-msgstr ""
+msgstr "Dnů"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
 #, fuzzy
@@ -3068,7 +3055,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:235
 msgid "Maximum backups per day:"
-msgstr ""
+msgstr "Max. počet záloh za den:"
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "How many backup files to keep each day (set to 0 for no limit)"
@@ -3076,7 +3063,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:244
 msgid "Minimum time between backups:"
-msgstr ""
+msgstr "Min. interval mezi zálohami:"
 
 #: common/dialogs/panel_common_settings_base.cpp:246
 msgid ""
@@ -3085,29 +3072,28 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:257
-#, fuzzy
 msgid "Maximum total backup size:"
-msgstr "Minimální velikost průchodky:"
+msgstr "Max. celková velikost záloh:"
 
 #: common/dialogs/panel_common_settings_base.cpp:259
 msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
+"Pokud celková velikost zálohovaných souborů přesáhne tento limit, staré "
+"zálohy budou vymazány (0 znamená nelimitovat)"
 
 #: common/dialogs/panel_common_settings_base.cpp:266
-#, fuzzy
 msgid "MB"
-msgstr "B"
+msgstr "MB"
 
 #: common/dialogs/panel_common_settings_base.cpp:277
-#, fuzzy
 msgid "Session"
-msgstr "Revize"
+msgstr "Relace"
 
 #: common/dialogs/panel_common_settings_base.cpp:279
 msgid "Remember open files for next project launch"
-msgstr ""
+msgstr "Pamatovat si otevřené soubory v projektu"
 
 #: common/dialogs/panel_common_settings_base.cpp:281
 msgid ""
@@ -33366,9 +33352,9 @@ msgid "Set net color"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight %s"
-msgstr "Zvýraznění"
+msgstr "Zvýraznit %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:836
 #: pcbnew/widgets/appearance_controls.cpp:2070
@@ -33398,15 +33384,12 @@ msgid "Click to show ratsnest for %s"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:1313
-#, fuzzy
 msgid "Double click or middle click for color change, right click for menu"
-msgstr ""
-"Levý klik pro výběr, prostřední klik pro změnu barvy, pravý pro nabídku"
+msgstr "Dvojklik nebo prostřední klik pro změnu barvy, pravý pro nabídku"
 
 #: pcbnew/widgets/appearance_controls.cpp:1320
-#, fuzzy
 msgid "Show or hide this layer"
-msgstr "Ukázat/skrýt panel nástrojů správce vrstev"
+msgstr "Ukázat/skrýt tuto vrstvu"
 
 #: pcbnew/widgets/appearance_controls.cpp:1400
 msgid "Front copper layer"
@@ -33576,9 +33559,9 @@ msgid "Show Only Back Assembly Layers"
 msgstr "Zobrazit všechny zadní vrstvy"
 
 #: pcbnew/widgets/appearance_controls.cpp:1837
-#, fuzzy, c-format
+#, c-format
 msgid "Show or hide %s"
-msgstr "Ukázat nebo skrýt DCodes"
+msgstr "Ukázat nebo skrýt %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:1878
 #, c-format
@@ -33659,7 +33642,7 @@ msgstr ""
 #: pcbnew/widgets/panel_selection_filter.cpp:130
 #, c-format
 msgid "Only %s"
-msgstr ""
+msgstr "Jen %s"
 
 #: pcbnew/zone_filler.cpp:103
 #, fuzzy
@@ -33697,7 +33680,7 @@ msgstr "Vyplnit/znovu vyplnit %d zóny"
 
 #: plugins/3d/vrml/vrml.cpp:219
 msgid "[INFO] load failed: input line too long\n"
-msgstr ""
+msgstr "[INFO] načtení se nezdařilo: vstupní řádek je moc dlouhý\n"
 
 #~ msgid "Info: "
 #~ msgstr "Info: "
