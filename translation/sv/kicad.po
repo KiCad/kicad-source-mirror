@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-20 14:37-0700\n"
-"PO-Revision-Date: 2020-10-21 02:48+0000\n"
+"PO-Revision-Date: 2020-10-23 22:26+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -25,12 +25,12 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:50
 msgid "All Files (*.*)|*.*"
-msgstr ""
+msgstr "Alla filer (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:99
 #, c-format
 msgid "All supported files (%s)"
-msgstr ""
+msgstr "Filformat som stöds (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
 msgid "Available paths:"
@@ -70,7 +70,7 @@ msgstr "Skala"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1330
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:63
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:39
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:84
@@ -95,13 +95,13 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1341
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:80
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:49
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:94
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:139
 msgid "Z:"
-msgstr ""
+msgstr "Z:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:700 pcbnew/class_module.cpp:778
@@ -111,11 +111,11 @@ msgstr "Rotation"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:111
 msgid "Offset"
-msgstr ""
+msgstr "Förskjutning"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
 msgid "Opacity"
-msgstr ""
+msgstr "Opacitet"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:171
 #: common/dialogs/dialog_page_settings_base.cpp:118
@@ -127,7 +127,7 @@ msgstr "Förhandsgranskning"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:192
 msgid "Change to isometric perspective"
-msgstr ""
+msgstr "Ändra till isometriskt perspektiv"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:221
 msgid "Reload board and 3D models"
@@ -143,7 +143,7 @@ msgstr "misslyckades att öppna fil"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:426
 msgid "Build board body"
-msgstr ""
+msgstr "Bygg brädkropp"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:439
 msgid "Create layers"
@@ -156,7 +156,7 @@ msgstr "Lägg till linje"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
-msgstr ""
+msgstr "Skapa spår och vias"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:702
 msgid "Create zones"
@@ -164,39 +164,39 @@ msgstr "Skapa zoner"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:772
 msgid "Simplifying copper layers polygons"
-msgstr ""
+msgstr "Förenkla polygoner av kopparskikt"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:851
 msgid "Simplify holes contours"
-msgstr ""
+msgstr "Förenkla hålkonturerna"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:880
 msgid "Build Tech layers"
-msgstr ""
+msgstr "Bygg Tekniska Lager"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1065
 msgid "Build BVH for holes and vias"
-msgstr ""
+msgstr "Bygg begränsande volymhierarki för hål och via"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:423
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr ""
+msgstr "Din OpenGL-version stöds inte. Minsta krävs är 1,5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
 msgid "Render time %.0f ms ( %.1f fps)"
-msgstr ""
+msgstr "Render tid %.0f ms (%.1f fps)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:734
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr ""
+msgstr "Net %s\tNetClass %s\tPadName %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:761
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:775
 #, c-format
 msgid "Net %s\tNetClass %s"
-msgstr ""
+msgstr "Net %s\tNetClass %s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:498
 msgid "Load OpenGL: board"
@@ -204,7 +204,7 @@ msgstr "Ladda OpenGL: kretskort"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:523
 msgid "Load OpenGL: holes and vias"
-msgstr ""
+msgstr "Ladda OpenGL: hål och vias"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:615
 msgid "Load OpenGL: layers"
@@ -218,7 +218,7 @@ msgstr "Laddar 3D-modeller"
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:1036
 #, c-format
 msgid "Reload time %.3f s"
-msgstr ""
+msgstr "Ladda om tid %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:924
 #, c-format
@@ -234,24 +234,24 @@ msgstr "Läser in..."
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:358
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr ""
+msgstr "Renderingstid %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:413
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr ""
+msgstr "Rendering: %.0f %%"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:917
 msgid "Rendering: Post processing shader"
-msgstr ""
+msgstr "Rendering: Skugga för efterbearbetning"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:49
 msgid "Export Current View as PNG..."
-msgstr ""
+msgstr "Exportera Aktuell Vy som PNG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:54
 msgid "Export Current View as JPEG..."
-msgstr ""
+msgstr "Exportera Aktuell Vy som JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:60 common/hotkey_store.cpp:70
 #: common/tool/actions.cpp:535 pcbnew/footprint_viewer_frame.cpp:949
@@ -274,7 +274,7 @@ msgstr "Visningsalternativ"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:806
 msgid "Raytracing"
-msgstr ""
+msgstr "Raytracing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:28
@@ -306,19 +306,19 @@ msgstr "Bakgrundsfärg:"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:164
 msgid "Silkscreen Color..."
-msgstr ""
+msgstr "Silkscreen Färg..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:168
 msgid "Solder Mask Color..."
-msgstr ""
+msgstr "Lödmask Färg ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:172
 msgid "Solder Paste Color..."
-msgstr ""
+msgstr "Lödpasta Färg ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:176
 msgid "Copper/Surface Finish Color..."
-msgstr ""
+msgstr "Färg för Finish för Koppar/Yta..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:180
 #, fuzzy
@@ -327,7 +327,7 @@ msgstr "Bakgrundsfärg:"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:187
 msgid "Get colors from physical stackup"
-msgstr ""
+msgstr "Hämta färger från fysisk stackup"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:198
 #, fuzzy
@@ -336,7 +336,7 @@ msgstr "Rutnät"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:210
 msgid "Reset to Default Settings"
-msgstr ""
+msgstr "Återställ Standardinställningar"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:213 cvpcb/menubar.cpp:71
 #: eeschema/libedit/menubar_libedit.cpp:161 eeschema/menubar.cpp:264
@@ -353,7 +353,7 @@ msgstr "&Inställningar"
 #: pagelayout_editor/menubar.cpp:157 pcbnew/menubar_footprint_editor.cpp:232
 #: pcbnew/menubar_pcb_editor.cpp:449
 msgid "Show preferences for all open tools"
-msgstr ""
+msgstr "Visa preferenser för alla öppna verktyg"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:221 cvpcb/menubar.cpp:84
 #: eeschema/libedit/menubar_libedit.cpp:178 eeschema/menubar.cpp:281
@@ -396,36 +396,36 @@ msgstr "Kopiera 3D bild till urklipp"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
 msgid "Set display options, and some layers visibility"
-msgstr ""
+msgstr "Ange visningsalternativ, och vissa lager synlighet"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Render current view using Raytracing"
-msgstr ""
+msgstr "Gör aktuell vy med Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:41
 msgid "Realistic mode"
-msgstr ""
+msgstr "Realistiskt läge"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:50
 msgid "Show board body"
-msgstr ""
+msgstr "Visa brädkropp"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:59
 msgid "Show filled areas in zones"
-msgstr ""
+msgstr "Visa fyllda områden i zoner"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
 msgid "Subtract soldermask from silkscreen"
-msgstr ""
+msgstr "Subtrahera lödmask från silkscreen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:77
 msgid "Clip silkscreen at via annulus"
-msgstr ""
+msgstr "Clip silkscreen på via ringform"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:86
 msgid "Non plated pads copper as bare copper"
-msgstr ""
+msgstr "Icke-pläterade dynor koppar som bar koppar"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:87
 msgid ""
@@ -1020,9 +1020,8 @@ msgid "Toggle 3D models with 'Through hole' attribute"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
-#, fuzzy
 msgid "Toggle SMD 3D models"
-msgstr "Laddar "
+msgstr "Växla SMD 3D-modeller"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
 msgid "Toggle 3D models with 'Surface mount' attribute"
@@ -1661,9 +1660,8 @@ msgid "KiCad on the web"
 msgstr "KiCad på internet"
 
 #: common/dialog_about/AboutDialog_main.cpp:132
-#, fuzzy
 msgid "The official KiCad website - "
-msgstr "Den nya KiCad hemsidan"
+msgstr "Den officiella KiCad-webbplatsen - "
 
 #: common/dialog_about/AboutDialog_main.cpp:136
 #, fuzzy
@@ -1687,9 +1685,8 @@ msgid "KiCad user's groups and community"
 msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:165
-#, fuzzy
 msgid "KiCad forum - "
-msgstr "KiCad på internet"
+msgstr "KiCad forum - "
 
 #: common/dialog_about/AboutDialog_main.cpp:179
 msgid "The complete KiCad EDA Suite is released under the"
@@ -1856,9 +1853,8 @@ msgid "Green:"
 msgstr "Grekiska"
 
 #: common/dialogs/dialog_color_picker_base.cpp:54
-#, fuzzy
 msgid "Blue:"
-msgstr "Värde "
+msgstr "Blå:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:74
 msgid "HSV"
@@ -3205,9 +3201,8 @@ msgstr ""
 #: common/dialogs/panel_mouse_settings_base.cpp:101
 #: common/dialogs/panel_mouse_settings_base.cpp:111
 #: common/tool/zoom_menu.cpp:42
-#, fuzzy
 msgid "Zoom"
-msgstr "Zooma "
+msgstr "Zoom"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:101
 #: common/dialogs/panel_mouse_settings_base.cpp:111
@@ -3259,9 +3254,8 @@ msgid "Alt"
 msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:155
-#, fuzzy
 msgid "Zoom:"
-msgstr "Zoom: "
+msgstr "Zoom:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:171
 msgid "Pan up / down:"
@@ -3715,9 +3709,9 @@ msgid "Zoom Auto"
 msgstr ""
 
 #: common/eda_draw_frame.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Zoom %.2f"
-msgstr "Zoom: "
+msgstr "Zooma %.2f"
 
 #: common/eda_draw_frame.cpp:494 pagelayout_editor/pl_editor_frame.cpp:727
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:143
@@ -5279,9 +5273,8 @@ msgid "Excluded "
 msgstr ""
 
 #: common/rc_item.cpp:326
-#, fuzzy
 msgid "Error: "
-msgstr "Fel"
+msgstr "Fel: "
 
 #: common/rc_item.cpp:327
 msgid "Warning: "
@@ -15997,9 +15990,9 @@ msgid "Info: skip file \"%s\" (gerber job file)\n"
 msgstr ""
 
 #: gerbview/files.cpp:548
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file \"%s\"</b>\n"
-msgstr "Kunde inte skapa filen "
+msgstr "<b> Det gick inte att skapa temporär fil \"%s\"</b>\n"
 
 #: gerbview/files.cpp:578
 #, c-format
@@ -32349,9 +32342,8 @@ msgid "Constraints Report"
 msgstr "Porträtt"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:408
-#, fuzzy
 msgid "<h7>Track width resolution for:</h7>"
-msgstr "Text bredd:"
+msgstr "<h7>Spårbreddsupplösning för:</h7>"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:423
 #: pcbnew/tools/pcb_inspection_tool.cpp:424
