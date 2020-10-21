@@ -37,6 +37,7 @@
 #include <bitmap_base.h>
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
 
 #include <pixman.h>
@@ -999,12 +1000,12 @@ void CAIRO_GAL_BASE::drawGridCross( const VECTOR2D& aPoint )
 {
     syncLineWidth();
     VECTOR2D offset( 0, 0 );
-    auto size = 2.0 * lineWidthInPixels;
+    double size = 2.0 * lineWidthInPixels + 0.5;
 
-    auto p0 = roundp( xform( aPoint ) ) - VECTOR2D( size, 0 ) + offset;
-    auto p1 = roundp( xform( aPoint ) ) + VECTOR2D( size, 0 ) + offset;
-    auto p2 = roundp( xform( aPoint ) ) - VECTOR2D( 0, size ) + offset;
-    auto p3 = roundp( xform( aPoint ) ) + VECTOR2D( 0, size ) + offset;
+    VECTOR2D p0 = roundp( xform( aPoint ) ) - VECTOR2D( size, 0 ) + offset;
+    VECTOR2D p1 = roundp( xform( aPoint ) ) + VECTOR2D( size, 0 ) + offset;
+    VECTOR2D p2 = roundp( xform( aPoint ) ) - VECTOR2D( 0, size ) + offset;
+    VECTOR2D p3 = roundp( xform( aPoint ) ) + VECTOR2D( 0, size ) + offset;
 
     cairo_set_source_rgba( currentContext, gridColor.r, gridColor.g, gridColor.b, gridColor.a );
     cairo_move_to( currentContext, p0.x, p0.y );
@@ -1015,15 +1016,16 @@ void CAIRO_GAL_BASE::drawGridCross( const VECTOR2D& aPoint )
 }
 
 
-void CAIRO_GAL_BASE::drawGridPoint( const VECTOR2D& aPoint, double aSize )
+void CAIRO_GAL_BASE::drawGridPoint( const VECTOR2D& aPoint, double aWidth, double aHeight )
 {
-    auto p = roundp( xform( aPoint ) );
-    auto s = std::max( 1.0, xform( aSize / 2.0 ) );
+    VECTOR2D p = roundp( xform( aPoint ) );
+
+    double sw = std::max( 1.0, aWidth );
+    double sh = std::max( 1.0, aHeight );
 
     cairo_set_source_rgba( currentContext, gridColor.r, gridColor.g, gridColor.b, gridColor.a );
-    cairo_move_to( currentContext, p.x, p.y );
-    cairo_arc( currentContext, p.x, p.y, s, 0.0, 2.0 * M_PI );
-    cairo_close_path( currentContext );
+    cairo_rectangle( currentContext, p.x - std::floor( sw / 2 ) - 0.5,
+            p.y - std::floor( sh / 2 ) - 0.5, sw, sh );
 
     cairo_fill( currentContext );
 }
@@ -1621,6 +1623,8 @@ void CAIRO_GAL_BASE::DrawGrid()
     }
     else    // Dots or Crosses grid
     {
+        lineWidthIsOdd = true;
+        isStrokeEnabled = true;
         for( int j = gridStartY; j <= gridEndY; j++ )
         {
             bool tickY = ( j % gridTick == 0 );
@@ -1628,14 +1632,20 @@ void CAIRO_GAL_BASE::DrawGrid()
             for( int i = gridStartX; i <= gridEndX; i++ )
             {
                 bool tickX = ( i % gridTick == 0 );
-                SetLineWidth( ( ( tickX && tickY ) ? doubleMarker : marker ) );
-                auto pos = VECTOR2D( i * gridScreenSize.x + gridOrigin.x,
-                                     j * gridScreenSize.y + gridOrigin.y );
+                VECTOR2D pos{ i * gridScreenSize.x + gridOrigin.x,
+                              j * gridScreenSize.y + gridOrigin.y };
 
                 if( gridStyle == GRID_STYLE::SMALL_CROSS )
+                {
+                    SetLineWidth( ( tickX && tickY ) ? doubleMarker : marker );
                     drawGridCross( pos );
+                }
                 else if( gridStyle == GRID_STYLE::DOTS )
-                    drawGridPoint( pos, GetLineWidth() );
+                {
+                    double doubleGridLineWidth = gridLineWidth * 2.0f;
+                    drawGridPoint( pos, ( tickX ) ? doubleGridLineWidth : gridLineWidth,
+                                        ( tickY ) ? doubleGridLineWidth : gridLineWidth );
+                }
             }
         }
     }

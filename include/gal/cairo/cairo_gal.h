@@ -244,7 +244,7 @@ protected:
      */
     void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
     void drawGridCross( const VECTOR2D& aPoint );
-    void drawGridPoint( const VECTOR2D& aPoint, double aSize );
+    void drawGridPoint( const VECTOR2D& aPoint, double aWidth, double aHeight );
     void drawAxes( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
     /// Super class definition
