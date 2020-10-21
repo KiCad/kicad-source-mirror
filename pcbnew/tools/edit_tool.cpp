@@ -727,10 +727,8 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
 
     if( selection.Size() < 2 )
     {
-        m_statusPopup.reset( new STATUS_TEXT_POPUP( frame() ) );
-        m_statusPopup->SetText( _( "A minimum of two straight track segments must be selected." ) );
-        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-        m_statusPopup->PopupFor( 2000 );
+        frame()->ShowInfoBarMsg(
+                _( "A minimum of two straight track segments must be selected." ) );
         return 0;
     }
 
@@ -744,11 +742,8 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
 
     if( filletRadiusIU == 0 )
     {
-        m_statusPopup.reset( new STATUS_TEXT_POPUP( frame() ) );
-        m_statusPopup->SetText( _( "A radius of zero was entered.\n"
-                                   "The fillet operation was not performed." ) );
-        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-        m_statusPopup->PopupFor( 2000 );
+        frame()->ShowInfoBarMsg( _( "A radius of zero was entered.\n"
+                                    "The fillet operation was not performed." ) );
         return 0;
     }
 
@@ -871,17 +866,11 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
 
     if( !operationPerformedOnAtLeastOne )
     {
-        m_statusPopup.reset( new STATUS_TEXT_POPUP( frame() ) );
-        m_statusPopup->SetText( _( "Unable to fillet the selected track segments." ) );
-        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-        m_statusPopup->PopupFor( 2000 );
+        frame()->ShowInfoBarMsg( _( "Unable to fillet the selected track segments." ) );
     }
     else if( didOneAttemptFail )
     {
-        m_statusPopup.reset( new STATUS_TEXT_POPUP( frame() ) );
-        m_statusPopup->SetText( _( "Some of the track segments could not be filleted." ) );
-        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-        m_statusPopup->PopupFor( 2000 );
+        frame()->ShowInfoBarMsg( _( "Some of the track segments could not be filleted." ) );
     }
 
     return 0;
