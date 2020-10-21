@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,7 +104,7 @@ PGM_BASE& Pgm()
     return program;
 }
 
-// A module to allow Html footprints initialization/cleanup
+// A module to allow Html module initialization/cleanup
 // When a wxHtmlWindow is used *only* in a dll/so module, the Html text is displayed
 // as plain text.
 // This helper class is just used to force wxHtmlWinParser initialization
@@ -161,7 +161,7 @@ struct APP_SINGLE_TOP : public wxApp
 #endif
 
         // Force wxHtmlWinParser initialization when a wxHtmlWindow is used only
-        // in a shared footprints (.so or .dll file)
+        // in a shared library (.so or .dll file)
         // Otherwise the Html text is displayed as plain text.
         HtmlModule html_init;
 
