@@ -32,7 +32,8 @@ class TEST_SCH_SHEET_LIST_FIXTURE
 {
 public:
     TEST_SCH_SHEET_LIST_FIXTURE() :
-            m_schematic( nullptr )
+            m_schematic( nullptr ),
+            m_manager( true )
     {
         m_pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
     }
