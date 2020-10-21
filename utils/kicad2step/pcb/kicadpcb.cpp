@@ -480,11 +480,18 @@ bool KICADPCB::ComposePCB( bool aComposeVirtual )
             continue;
 
         // adjust the coordinate system
+        // Note: we negate the Y coordinates due to the fact in Pcbnew the Y axis
+        // is from top to bottom.
         KICADCURVE lcurve = *i;
         lcurve.m_start.y = -( lcurve.m_start.y - origin.y );
         lcurve.m_end.y = -( lcurve.m_end.y - origin.y );
         lcurve.m_start.x -= origin.x;
         lcurve.m_end.x -= origin.x;
+        // used in bezier curves:
+        lcurve.m_bezierctrl1.y = -( lcurve.m_bezierctrl1.y - origin.y );
+        lcurve.m_bezierctrl1.x -= origin.x;
+        lcurve.m_bezierctrl2.y = -( lcurve.m_bezierctrl2.y - origin.y );
+        lcurve.m_bezierctrl2.x -= origin.x;
 
         if( CURVE_ARC == lcurve.m_form )
             lcurve.m_angle = -lcurve.m_angle;

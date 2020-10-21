@@ -80,6 +80,7 @@
 #include <gp_Circ.hxx>
 #include <gp_Dir.hxx>
 #include <gp_Pnt.hxx>
+#include <Geom_BezierCurve.hxx>
 
 static constexpr double USER_PREC = 1e-4;
 static constexpr double USER_ANGLE_PREC = 1e-6;
@@ -1550,7 +1551,6 @@ bool OUTLINE::MakeShape( TopoDS_Shape& aShape, double aThickness )
     return true;
 }
 
-#include <Geom_BezierCurve.hxx>
 
 bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBLET& aLastPoint )
 {
@@ -1587,23 +1587,18 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
 
         case CURVE_BEZIER:
             {
-#if 0      // TODO: this code is not working. so fix it or replace the curve by a set of segments
             TColgp_Array1OfPnt poles(0, 3);
             gp_Pnt pt = gp_Pnt( aCurve.m_start.x, aCurve.m_start.y, 0.0 );
             poles(0) = pt;
-            pt = gp_Pnt( aCurve.m_bezierctrl1.x, -aCurve.m_bezierctrl1.y, 0.0 );
+            pt = gp_Pnt( aCurve.m_bezierctrl1.x, aCurve.m_bezierctrl1.y, 0.0 );
             poles(1) = pt;
-            pt = gp_Pnt( aCurve.m_bezierctrl2.x, -aCurve.m_bezierctrl2.y, 0.0 );
+            pt = gp_Pnt( aCurve.m_bezierctrl2.x, aCurve.m_bezierctrl2.y, 0.0 );
             poles(2) = pt;
             pt = gp_Pnt( endPoint.x, endPoint.y, 0.0 );
             poles(3) = pt;
 
             Geom_BezierCurve* bezier_curve = new Geom_BezierCurve( poles );
             edge = BRepBuilderAPI_MakeEdge( bezier_curve );
-#else       // Generate a segment between ends
-            edge = BRepBuilderAPI_MakeEdge( gp_Pnt( aLastPoint.x, aLastPoint.y, 0.0 ),
-                                            gp_Pnt( endPoint.x, endPoint.y, 0.0 ) );
-#endif
             }
             break;
 
