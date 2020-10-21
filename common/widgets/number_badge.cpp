@@ -24,6 +24,8 @@
 #include <gal/color4d.h>
 #include <widgets/number_badge.h>
 
+#include <algorithm>
+
 
 NUMBER_BADGE::NUMBER_BADGE( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos,
                             const wxSize& aSize, int aStyles ) :
