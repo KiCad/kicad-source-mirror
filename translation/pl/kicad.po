@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-20 14:37-0700\n"
-"PO-Revision-Date: 2020-10-21 02:48+0000\n"
+"PO-Revision-Date: 2020-10-21 18:39+0000\n"
 "Last-Translator: Mark Roszko <mark.roszko@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -522,7 +522,6 @@ msgid "Anti-aliasing"
 msgstr "Anty-aliasing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "Disabled"
 msgstr "Wyłączony"
 
@@ -555,7 +554,6 @@ msgid "Disable anti-aliasing"
 msgstr "Wyłącz antyaliasing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:378
-#, fuzzy
 msgid "Disable thickness"
 msgstr "Wyłącz grubość"
 
@@ -564,7 +562,6 @@ msgid "Disable vias"
 msgstr "Wyłącz przelotki"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:390
-#, fuzzy
 msgid "Disable holes"
 msgstr "Wyłącz dziury"
 
@@ -603,7 +600,6 @@ msgid "Recursive Level"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:488
-#, fuzzy
 msgid "Shadows"
 msgstr "Cienie"
 
@@ -1232,9 +1228,8 @@ msgstr "Wybierz obraz"
 #: bitmap2component/bitmap2cmp_gui.cpp:331
 #: eeschema/tools/sch_drawing_tools.cpp:382
 #: pagelayout_editor/pl_editor_frame.cpp:846
-#, fuzzy
 msgid "Image Files"
-msgstr "Pliki obrazów "
+msgstr "Pliki obrazów"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:687
 msgid "Unable to export to the Clipboard"
@@ -29596,9 +29591,9 @@ msgstr ""
 "Wprowadź moduł języka Python który implementuje funkcje PLUGIN::Footrpint*()."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'"
-msgstr "Nie znaleziono pliku:"
+msgstr "Nie znaleziono pliku: '%s'"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:689
 #, fuzzy, c-format
@@ -30694,9 +30689,9 @@ msgid "Specify custom differential pair dimensions"
 msgstr "Określ własne rozmiary par różnicowych"
 
 #: pcbnew/router/router_tool.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Width %s"
-msgstr "Szerokość "
+msgstr "Szerokość %s"
 
 #: pcbnew/router/router_tool.cpp:347
 #, fuzzy, c-format
@@ -32681,9 +32676,9 @@ msgid "Overridden by larger thermal relief from %s;clearance: %s."
 msgstr ""
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "Clearance: %s."
-msgstr "Prześwit:"
+msgstr "Prześwit: %s"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:207
 #: pcbnew/tools/pcb_inspection_tool.cpp:415
@@ -32694,9 +32689,9 @@ msgid "Report incomplete: could not compile design rules.  "
 msgstr ""
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:230
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved clearance: %s."
-msgstr "Prześwit pola lutowniczego:"
+msgstr "Prześwit pola lutowniczego: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:242
 msgid "Select two items for a clearance resolution report."
@@ -33147,9 +33142,9 @@ msgid "Set net color"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight %s"
-msgstr "Podświetlenie"
+msgstr "Wyróżnij %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:836
 #: pcbnew/widgets/appearance_controls.cpp:2070
