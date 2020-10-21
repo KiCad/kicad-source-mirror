@@ -609,16 +609,38 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromLibrary( const LIB_ID& aFPID, bool aC
 }
 
 
-void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName,
-                                            wxString* aLibPath )
+void PCB_EDIT_FRAME::HarvestFootprintsToLibrary( bool aStoreInNewLib, const wxString& aLibName,
+                                                 wxString* aLibPath )
 {
     if( GetBoard()->GetFirstModule() == NULL )
     {
-        DisplayInfoMessage( this, _( "No footprints to archive!" ) );
+        DisplayInfoMessage( this, _( "No footprints to harvest!" ) );
         return;
     }
 
     wxString footprintName;
+
+    auto resetReference =
+            []( MODULE* aFootprint )
+            {
+                wxString reference;
+
+                if( aFootprint->GetAttributes() & MOD_SMD )
+                {
+                    reference = "REF**";
+                }
+                else
+                {
+                    reference = aFootprint->GetReference();
+
+                    while( reference.Last() == '*' || wxIsdigit( reference.Last() ) )
+                        reference.RemoveLast();
+
+                    reference += wxT( "**" );
+                }
+
+                aFootprint->SetReference( reference );
+            };
 
     if( !aStoreInNewLib )
     {
@@ -632,19 +654,26 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString&
 
         prj.SetRString( PROJECT::PCB_LIB_NICKNAME, nickname );
 
-        try
+        for( MODULE* footprint : GetBoard()->Modules() )
         {
-            FP_LIB_TABLE* tbl = prj.PcbFootprintLibs();
-
-            for( auto curr_fp : GetBoard()->Modules() )
+            try
             {
-                if( !curr_fp->GetFPID().GetLibItemName().empty() )   // Can happen with old boards.
-                    tbl->FootprintSave( nickname, curr_fp, false );
+                FP_LIB_TABLE* tbl = prj.PcbFootprintLibs();
+
+                if( !footprint->GetFPID().GetLibItemName().empty() )    // Handle old boards.
+                {
+                    MODULE* fpCopy = static_cast<MODULE*>( footprint->Duplicate() );
+
+                    resetReference( fpCopy );
+                    tbl->FootprintSave( nickname, fpCopy, true );
+
+                    delete fpCopy;
+                }
             }
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            DisplayError( this, ioe.What() );
+            catch( const IO_ERROR& ioe )
+            {
+                DisplayError( this, ioe.What() );
+            }
         }
     }
     else
@@ -662,12 +691,19 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString&
         IO_MGR::PCB_FILE_T  piType = IO_MGR::KICAD_SEXP;
         PLUGIN::RELEASER  pi( IO_MGR::PluginFind( piType ) );
 
-        for( auto curr_fp : GetBoard()->Modules() )
+        for( MODULE* footprint : GetBoard()->Modules() )
         {
             try
             {
-                if( !curr_fp->GetFPID().GetLibItemName().empty() )   // Can happen with old boards.
-                    pi->FootprintSave( libPath, curr_fp );
+                if( !footprint->GetFPID().GetLibItemName().empty() )    // Handle old boards.
+                {
+                    MODULE* fpCopy = static_cast<MODULE*>( footprint->Duplicate() );
+
+                    resetReference( fpCopy );
+                    pi->FootprintSave( libPath, fpCopy );
+
+                    delete fpCopy;
+                }
             }
             catch( const IO_ERROR& ioe )
             {

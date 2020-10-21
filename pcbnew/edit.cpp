@@ -61,12 +61,12 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             GetCanvas()->Refresh();
         break;
 
-    case ID_MENU_ARCHIVE_MODULES_IN_LIBRARY:
-        ArchiveModulesOnBoard( false );
+    case ID_MENU_HARVEST_FOOTPRINTS_TO_LIBRARY:
+        HarvestFootprintsToLibrary( false );
         break;
 
-    case ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES:
-        ArchiveModulesOnBoard( true );
+    case ID_MENU_HARVEST_FOOTPRINTS_TO_NEW_LIBRARY:
+        HarvestFootprintsToLibrary( true );
         break;
 
     default:

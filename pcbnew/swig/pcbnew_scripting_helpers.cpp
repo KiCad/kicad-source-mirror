@@ -301,11 +301,11 @@ bool ImportSpecctraSES( wxString& aFullFilename )
 }
 
 
-bool ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName, wxString* aLibPath )
+bool HarvestFootprintsToLibrary( bool aStoreInNewLib, const wxString& aLibName, wxString* aLibPath )
 {
     if( s_PcbEditFrame )
     {
-        s_PcbEditFrame->ArchiveModulesOnBoard( aStoreInNewLib, aLibName, aLibPath );
+        s_PcbEditFrame->HarvestFootprintsToLibrary( aStoreInNewLib, aLibName, aLibPath );
         return true;
     }
     else

@@ -173,25 +173,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->Add( ACTIONS::print );
     fileMenu->Add( ACTIONS::plot );
 
-    // Archive submenu
-    ACTION_MENU* submenuArchive = new ACTION_MENU( false );
-    submenuArchive->SetTool( selTool );
-    submenuArchive->SetTitle( _( "Archive Footprints" ) );
-    submenuArchive->SetIcon( library_archive_xpm );
-
-    submenuArchive->Add( _( "&Archive Footprints in Existing Library..." ),
-                         _( "Archive all footprints to existing library in footprint Lib table"
-                            "(does not remove other footprints in this library)" ),
-                         ID_MENU_ARCHIVE_MODULES_IN_LIBRARY, library_archive_xpm );
-
-    submenuArchive->Add( _( "&Create New Library and Archive Footprints..." ),
-                         _( "Archive all footprints to a new library\n"
-                            "(if the library already exists it will be replaced)" ),
-                         ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES, library_archive_as_xpm );
-
-    fileMenu->AppendSeparator();
-    fileMenu->Add( submenuArchive );
-
     fileMenu->AppendSeparator();
     fileMenu->AddQuitOrClose( &Kiface(), _( "Pcbnew" ) );
 
@@ -395,6 +376,17 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     toolsMenu->Add( PCB_ACTIONS::boardReannotate );
     toolsMenu->Add( PCB_ACTIONS::removeUnusedPads );
     toolsMenu->Add( PCB_ACTIONS::repairBoard );
+
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( _( "&Harvest Footprints to Library..." ),
+                    _( "Add footprints used on board to an existing footprint library\n"
+                       "(does not remove other footprints from this library)" ),
+                    ID_MENU_HARVEST_FOOTPRINTS_TO_LIBRARY, library_archive_xpm );
+
+    toolsMenu->Add( _( "&Harvest Footprints to New Library..." ),
+                    _( "Create a new footprint library containing the footprints used on board\n"
+                       "(if the library already exists it will be replaced)" ),
+                    ID_MENU_HARVEST_FOOTPRINTS_TO_NEW_LIBRARY, library_archive_as_xpm );
 
 #if defined(KICAD_SCRIPTING_WXPYTHON)
     toolsMenu->AppendSeparator();

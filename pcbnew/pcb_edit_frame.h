@@ -616,7 +616,7 @@ public:
     void RecreateCmpFileFromBoard( wxCommandEvent& aEvent );
 
     /**
-     * Function ArchiveModulesOnBoard
+     * Function HarvestFootprintsToLibrary
      * Save footprints in a library:
      * @param aStoreInNewLib:
      *              true : save footprints in a existing lib. Existing footprints will be kept
@@ -629,8 +629,8 @@ public:
      *              optional library name to create, stops dialog call.
      *              must be called with aStoreInNewLib as true
      */
-    void ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName = wxEmptyString,
-                                wxString* aLibPath = NULL );
+    void HarvestFootprintsToLibrary( bool aStoreInNewLib, const wxString& aLibName = wxEmptyString,
+                                     wxString* aLibPath = NULL );
 
     /**
      * Function RecreateBOMFileFromBoard

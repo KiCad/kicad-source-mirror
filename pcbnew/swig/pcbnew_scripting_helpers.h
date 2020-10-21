@@ -98,7 +98,7 @@ bool ExportVRML( const wxString& aFullFileName, double aMMtoWRMLunit,
 bool ImportSpecctraSES( wxString& aFullFilename );
 
 /**
- * Function ArchiveModulesOnBoard
+ * Function HarvestFootprintsToLibrary
  * Save footprints in a library:
  * @param aStoreInNewLib:
  *              true : save footprints in a existing lib. Existing footprints will be kept
@@ -111,8 +111,9 @@ bool ImportSpecctraSES( wxString& aFullFilename );
  *              optional library name to create, stops dialog call.
  *              must be called with aStoreInNewLib as true
  */
-bool ArchiveModulesOnBoard(
-        bool aStoreInNewLib, const wxString& aLibName = wxEmptyString, wxString* aLibPath = NULL );
+bool HarvestFootprintsToLibrary( bool aStoreInNewLib, const wxString& aLibName = wxEmptyString,
+                                 wxString* aLibPath = NULL );
+
 /**
  * Update the board display after modifying it by a python script
  * (note: it is automatically called by action plugins, after running the plugin,
