@@ -48,6 +48,16 @@ class GBR_NETLIST_METADATA;
 
 using KIGFX::RENDER_SETTINGS;
 
+
+// Must be in the same order as the drop-down list in the plot dialog inside pcbnew
+// Units (inch/mm for DXF plotter
+enum class DXF_UNITS
+{
+    INCHES = 0,
+    MILLIMETERS = 1
+};
+
+
 /**
  * The set of supported output plot formats.
  *

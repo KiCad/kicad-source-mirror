@@ -119,13 +119,6 @@ public:
                        void* aData = NULL ) override;
 
 
-    // Must be in the same order as the drop-down list in the plot dialog inside pcbnew
-    enum class DXF_UNITS
-    {
-        INCHES = 0,
-        MILLIMETERS = 1
-    };
-
     /**
      * Set the units to use for plotting the DXF file.
      *

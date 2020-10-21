@@ -111,7 +111,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_plotViaOnMaskLayer         = false;
     m_plotMode                   = FILLED;
     m_DXFplotPolygonMode         = true;
-    m_DXFplotUnits = DXF_PLOTTER::DXF_UNITS::INCHES;
+    m_DXFplotUnits               = DXF_UNITS::INCHES;
     m_useAuxOrigin               = false;
     m_HPGLPenNum                 = 1;
     m_HPGLPenSpeed               = 20;        // this param is always in cm/s

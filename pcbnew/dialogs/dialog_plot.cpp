@@ -196,7 +196,7 @@ void DIALOG_PLOT::init_Dialog()
     m_DXF_plotTextStrokeFontOpt->SetValue( m_plotOpts.GetTextMode() == PLOT_TEXT_MODE::DEFAULT );
 
     // DXF units selection
-    m_DXF_plotUnits->SetSelection( static_cast<int>( m_plotOpts.GetDXFPlotUnits() ) );
+    m_DXF_plotUnits->SetSelection( m_plotOpts.GetDXFPlotUnits() == DXF_UNITS::INCHES ? 0 : 1);
 
     // Plot mirror option
     m_plotMirrorOpt->SetValue( m_plotOpts.GetMirror() );
@@ -641,7 +641,7 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetDXFPlotPolygonMode( m_DXF_plotModeOpt->GetValue() );
 
     sel = m_DXF_plotUnits->GetSelection();
-    tempOptions.SetDXFPlotUnits( static_cast<DXF_PLOTTER::DXF_UNITS>( sel ) );
+    tempOptions.SetDXFPlotUnits( sel == 0 ? DXF_UNITS::INCHES : DXF_UNITS::MILLIMETERS );
 
     tempOptions.SetPlotViaOnMaskLayer( m_plotNoViaOnMaskOpt->GetValue() );
 

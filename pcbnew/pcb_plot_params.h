@@ -64,7 +64,7 @@ private:
     /**
      * DXF format: Units to use when plotting the DXF
      */
-    DXF_PLOTTER::DXF_UNITS m_DXFplotUnits;
+    DXF_UNITS m_DXFplotUnits;
 
     /// Plot format type (chooses the driver to be used)
     PLOT_FORMAT m_format;
@@ -229,12 +229,12 @@ public:
     void        SetDXFPlotPolygonMode( bool aFlag ) { m_DXFplotPolygonMode = aFlag; }
     bool        GetDXFPlotPolygonMode() const { return m_DXFplotPolygonMode; }
 
-    void SetDXFPlotUnits( DXF_PLOTTER::DXF_UNITS aUnit )
+    void SetDXFPlotUnits( DXF_UNITS aUnit )
     {
         m_DXFplotUnits = aUnit;
     }
 
-    DXF_PLOTTER::DXF_UNITS GetDXFPlotUnits() const
+    DXF_UNITS GetDXFPlotUnits() const
     {
         return m_DXFplotUnits;
     }
