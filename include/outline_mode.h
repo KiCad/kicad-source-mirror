@@ -23,8 +23,8 @@
 /* Options to draw items with thickness ( segments, arcs, circles, texts...) */
 enum OUTLINE_MODE
 {
-    SKETCH = 0,  // sketch mode: draw segments outlines only
-    FILLED = 1 // normal mode: solid segments
+    SKETCH = 0,     // sketch mode: draw segments outlines only
+    FILLED = 1      // normal mode: solid segments
 };
 
 #endif

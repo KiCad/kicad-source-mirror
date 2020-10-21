@@ -80,6 +80,7 @@ principle should be easily implemented by adapting the current STL containers.
 // headers/imports that must be included in the _wrapper.cpp at top
 
 %{
+    #include <outline_mode.h>
     #include <macros.h>
     #include <cstddef>
     #include <eda_item.h>
@@ -107,6 +108,7 @@ principle should be easily implemented by adapting the current STL containers.
 %ignore GetNewConfig;
 
 // header files that must be wrapped
+%include <outline_mode.h>
 %include macros.h
 %include core/typeinfo.h
 %include eda_item.h
