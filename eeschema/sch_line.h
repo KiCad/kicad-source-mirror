@@ -128,6 +128,22 @@ public:
     virtual STROKE_PARAMS GetStroke() const override { return m_stroke; }
     virtual void SetStroke( const STROKE_PARAMS& aStroke ) override { m_stroke = aStroke; }
 
+    bool IsStrokeEquivalent( const SCH_LINE* aLine )
+    {
+        if( m_stroke.GetWidth() != aLine->GetStroke().GetWidth() )
+            return false;
+
+        if( m_stroke.GetColor() != aLine->GetStroke().GetColor() )
+            return false;
+
+        PLOT_DASH_TYPE style_a = m_stroke.GetPlotStyle();
+        PLOT_DASH_TYPE style_b = aLine->GetStroke().GetPlotStyle();
+
+        return style_a == style_b
+               || ( style_a == PLOT_DASH_TYPE::DEFAULT && style_b == PLOT_DASH_TYPE::SOLID )
+               || ( style_a == PLOT_DASH_TYPE::SOLID   && style_b == PLOT_DASH_TYPE::DEFAULT );
+    }
+
     /**
      * Test if the #SCH_LINE object uses the default stroke settings.
      *

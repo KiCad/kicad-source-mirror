@@ -243,9 +243,11 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
                     continue;
 
                 if( !secondLine->IsParallel( firstLine )
-                        || secondLine->GetStroke() != firstLine->GetStroke()
+                        || secondLine->IsStrokeEquivalent( firstLine )
                         || secondLine->GetLayer() != firstLine->GetLayer() )
+                {
                     continue;
+                }
 
                 // Remove identical lines
                 if( firstLine->IsEndPoint( secondLine->GetStartPoint() )
@@ -300,7 +302,9 @@ bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint,
 {
     if( !IsPointOnSegment( aSegment->GetStartPoint(), aSegment->GetEndPoint(), aPoint )
             || aSegment->IsEndPoint( aPoint ) )
+    {
         return false;
+    }
 
     if( aScreen == nullptr )
         aScreen = GetScreen();
