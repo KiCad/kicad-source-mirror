@@ -623,23 +623,7 @@ void PCB_EDIT_FRAME::HarvestFootprintsToLibrary( bool aStoreInNewLib, const wxSt
     auto resetReference =
             []( MODULE* aFootprint )
             {
-                wxString reference;
-
-                if( aFootprint->GetAttributes() & MOD_SMD )
-                {
-                    reference = "REF**";
-                }
-                else
-                {
-                    reference = aFootprint->GetReference();
-
-                    while( reference.Last() == '*' || wxIsdigit( reference.Last() ) )
-                        reference.RemoveLast();
-
-                    reference += wxT( "**" );
-                }
-
-                aFootprint->SetReference( reference );
+                aFootprint->SetReference( "REF**" );
             };
 
     if( !aStoreInNewLib )
