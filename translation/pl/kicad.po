@@ -1,12 +1,13 @@
+# Mark Roszko <mark.roszko@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-20 14:37-0700\n"
-"PO-Revision-Date: 2020-10-20 16:52+0000\n"
+"PO-Revision-Date: 2020-10-21 02:48+0000\n"
 "Last-Translator: Mark Roszko <mark.roszko@gmail.com>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -112,9 +113,8 @@ msgid "Offset"
 msgstr "Przesunięcie"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
-#, fuzzy
 msgid "Opacity"
-msgstr "Przeźroczystość:"
+msgstr "Przeźroczystość"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:171
 #: common/dialogs/dialog_page_settings_base.cpp:118
@@ -178,7 +178,6 @@ msgid "Build BVH for holes and vias"
 msgstr "Tworzenie BVH dla otworów i przelotek"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:423
-#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
 msgstr "Twoja wersja OpenGL nie jest obsługiwana. Wymagane minimum to 1,5"
 
@@ -3503,15 +3502,13 @@ msgstr "Błąd:"
 
 #: common/dialogs/wx_html_report_panel.cpp:183
 #: common/dialogs/wx_html_report_panel.cpp:206
-#, fuzzy
 msgid "Warning:"
-msgstr "Ostrzeżenie: "
+msgstr "Ostrzeżenie:"
 
 #: common/dialogs/wx_html_report_panel.cpp:186
 #: common/dialogs/wx_html_report_panel.cpp:208
-#, fuzzy
 msgid "Info:"
-msgstr "Informacja: "
+msgstr "Informacja:"
 
 #: common/dialogs/wx_html_report_panel.cpp:322
 #: eeschema/dialogs/dialog_erc.cpp:658 pcbnew/dialogs/dialog_drc.cpp:573
@@ -4273,9 +4270,8 @@ msgid "Alias: "
 msgstr "Alias: "
 
 #: common/filename_resolver.cpp:485
-#, fuzzy
 msgid "This path:"
-msgstr "Ścieżka obecna: "
+msgstr "Ścieżka obecna:"
 
 #: common/filename_resolver.cpp:488
 #, fuzzy
@@ -7208,9 +7204,8 @@ msgid "Component %s not found"
 msgstr "Symbol %s nie został znaleziony"
 
 #: eeschema/cross-probing.cpp:313
-#, fuzzy
 msgid "Selected net:"
-msgstr "Zaznaczona sieć: "
+msgstr "Zaznaczona sieć:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:96
 msgid "Annotation Messages:"
