@@ -225,23 +225,47 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
         // "pin" is off grid here.
         offgrid_error++;
 
-        msg = wxString::Format( _( "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>" ),
-                                pin->GetNumber(),
-                                pin->GetName(),
-                                pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
-
-        if( aPart->GetUnitCount() > 1 )
-            msg += wxString::Format( wxS( " " ) + _( "in symbol %c" ), 'A' + pin->GetUnit() - 1 );
-
-        if( aPart->HasConversion() )
+        if( aPart->HasConversion() && next->GetConvert() )
         {
-            if( pin->GetConvert() )
-                msg += wxS( " " ) + _( "of converted" );
+            if( aPart->GetUnitCount() <= 1 )
+            {
+                msg = wxString::Format( _( "<b>Off grid pin %s</b> \"%s\" at location "
+                                           "<b>(%.3f, %.3f)</b> of converted.<br>" ),
+                                        pin->GetNumber(),
+                                        pin->GetName(),
+                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
+            }
             else
-                msg += wxS( " " ) + _( "of normal" );
+            {
+                msg = wxString::Format( _( "<b>Off grid pin %s</b> \"%s\" at location "
+                                           "<b>(%.3f, %.3f)</b> in symbol %c of converted.<br>" ),
+                                        pin->GetNumber(),
+                                        pin->GetName(),
+                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
+                                        'A' + pin->GetUnit() - 1 );
+            }
+        }
+        else
+        {
+            if( aPart->GetUnitCount() <= 1 )
+            {
+                msg = wxString::Format( _( "<b>Off grid pin %s</b> \"%s\" at location "
+                                           "<b>(%.3f, %.3f)</b>.<br>" ),
+                                        pin->GetNumber(),
+                                        pin->GetName(),
+                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
+            }
+            else
+            {
+                msg = wxString::Format( _( "<b>Off grid pin %s</b> \"%s\" at location "
+                                           "<b>(%.3f, %.3f)</b> in symbol %c.<br>" ),
+                                        pin->GetNumber(),
+                                        pin->GetName(),
+                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
+                                        'A' + pin->GetUnit() - 1 );
+            }
         }
 
-        msg += wxT( ".<br>" );
         messages.push_back( msg );
     }
 
