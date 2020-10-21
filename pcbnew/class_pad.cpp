@@ -45,7 +45,6 @@
 #include <class_module.h>
 #include <pcb_shape.h>
 #include <connectivity/connectivity_data.h>
-#include <geometry/polygon_test_point_inside.h>
 #include <convert_to_biu.h>
 #include <convert_basic_shapes_to_polygon.h>
 

@@ -24,7 +24,6 @@
 #include <common.h>
 #include <class_board.h>
 
-#include <geometry/polygon_test_point_inside.h>
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>
 

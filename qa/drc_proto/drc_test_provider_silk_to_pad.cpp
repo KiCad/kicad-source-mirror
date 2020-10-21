@@ -27,7 +27,6 @@
 #include <class_pad.h>
 
 #include <convert_basic_shapes_to_polygon.h>
-#include <geometry/polygon_test_point_inside.h>
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
@@ -56,15 +55,15 @@ public:
     {
     }
 
-    virtual ~DRC_TEST_PROVIDER_SILK_TO_PAD() 
+    virtual ~DRC_TEST_PROVIDER_SILK_TO_PAD()
     {
     }
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override 
+    virtual const wxString GetName() const override
     {
-        return "silk_to_pad"; 
+        return "silk_to_pad";
     };
 
     virtual const wxString GetDescription() const override
@@ -127,7 +126,7 @@ bool test::DRC_TEST_PROVIDER_SILK_TO_PAD::Run()
         for( auto boardItem : boardItems )
         {
 //            printf("BoardT %d\n", boardItem->Type() );
-            
+
             auto shape = boardItem->GetEffectiveShape();
 
             auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,

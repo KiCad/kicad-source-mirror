@@ -25,7 +25,6 @@
 #include <class_board.h>
 #include <pcb_shape.h>
 
-#include <geometry/polygon_test_point_inside.h>
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>
 
