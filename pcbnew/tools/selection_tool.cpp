@@ -1115,7 +1115,7 @@ void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
 
 void SELECTION_TOOL::selectAllItemsOnNet( int aNetCode, bool aSelect )
 {
-    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
+    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, EOT };
     auto connectivity = board()->GetConnectivity();
 
     for( BOARD_CONNECTED_ITEM* item : connectivity->GetNetItems( aNetCode, types ) )
