@@ -123,7 +123,7 @@ int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 
     for( auto track : board()->Tracks() )
     {
-        if( track->Type() == PCB_TRACE_T )
+        if( track->Type() == PCB_TRACE_T || track->Type() == PCB_ARC_T )
             view()->Update( track, KIGFX::GEOMETRY );
     }
 
