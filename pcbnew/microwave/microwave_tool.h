@@ -28,7 +28,7 @@
 
 #include <tool/tool_menu.h>
 
-// Microwave shapes that are created as board modules when the user requests them.
+// Microwave shapes that are created as board footprints when the user requests them.
 enum class MICROWAVE_FOOTPRINT_SHAPE
 {
     GAP,

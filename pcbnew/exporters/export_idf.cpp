@@ -268,7 +268,7 @@ UseBoundingBox:
 
 /**
  * Function idf_export_module
- * retrieves information from all board modules, adds drill holes to
+ * retrieves information from all board footprints, adds drill holes to
  * the DRILLED_HOLES or BOARD_OUTLINE section as appropriate,
  * compiles data for the PLACEMENT section and compiles data for
  * the library ELECTRICAL section.
@@ -351,7 +351,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule, IDF3_BOARD& aIDFBoa
 
                 double dlength = pad->GetDrillSize().y * scale;
 
-                // NOTE: The orientation of modules and pads have
+                // NOTE: The orientation of footprints and pads have
                 // the opposite sense due to KiCad drawing on a
                 // screen with a LH coordinate system
                 double angle = pad->GetOrientation() / 10.0;

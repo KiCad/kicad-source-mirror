@@ -86,7 +86,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateMenuBar();
     ReCreateHToolbar();
 
-    // Create list of available modules and components of the schematic
+    // Create list of available footprints and components of the schematic
     BuildCmpListBox();
     BuildFOOTPRINTS_LISTBOX();
     BuildLIBRARY_LISTBOX();

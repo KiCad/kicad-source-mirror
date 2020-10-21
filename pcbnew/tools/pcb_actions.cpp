@@ -1177,13 +1177,13 @@ TOOL_ACTION PCB_ACTIONS::deselectNet( "pcbnew.InteractiveSelection.DeselectNet",
 TOOL_ACTION PCB_ACTIONS::selectOnSheetFromEeschema( "pcbnew.InteractiveSelection.SelectOnSheet",
         AS_GLOBAL, 0, "",
         _( "Sheet" ),
-        _( "Selects all modules and tracks in the schematic sheet" ),
+        _( "Selects all footprints and tracks in the schematic sheet" ),
         select_same_sheet_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectSameSheet( "pcbnew.InteractiveSelection.SelectSameSheet",
         AS_GLOBAL,  0, "",
         _( "Items in Same Hierarchical Sheet" ),
-        _( "Selects all modules and tracks in the same schematic sheet" ),
+        _( "Selects all footprints and tracks in the same schematic sheet" ),
         select_same_sheet_xpm );
 
 TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSelection",

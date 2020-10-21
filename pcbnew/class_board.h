@@ -349,7 +349,7 @@ public:
     }
 
     /**
-     * Removes all modules from the deque and frees the memory associated with them
+     * Removes all footprints from the deque and frees the memory associated with them
      */
     void DeleteAllModules()
     {
@@ -546,7 +546,7 @@ public:
     /**
      * Expect either of the two layers on which a module can reside, and returns
      * whether that layer is visible.
-     * @param aLayer One of the two allowed layers for modules: F_Cu or B_Cu
+     * @param aLayer One of the two allowed layers for footprints: F_Cu or B_Cu
      * @return bool - true if the layer is visible, else false.
      */
     bool IsModuleLayerVisible( PCB_LAYER_ID aLayer );
@@ -1082,7 +1082,7 @@ public:
      * @param aPosition A wxPoint object containing the position to test.
      * @param aActiveLayer Layer to test.
      * @param aVisibleOnly Search only the visible layers if true.
-     * @param aIgnoreLocked Ignore locked modules when true.
+     * @param aIgnoreLocked Ignore locked footprints when true.
      * @return MODULE* The best module or NULL if none.
      */
     MODULE* GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer,

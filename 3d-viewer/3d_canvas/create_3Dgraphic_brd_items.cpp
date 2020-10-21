@@ -224,7 +224,7 @@ void BOARD_ADAPTER::AddGraphicsShapesWithClearanceToContainer( const MODULE* aMo
         }
     }
 
-    // Convert texts sur modules
+    // Convert texts sur footprints
     if( aModule->Reference().GetLayer() == aLayerId && aModule->Reference().IsVisible() )
         texts.push_back( &aModule->Reference() );
 

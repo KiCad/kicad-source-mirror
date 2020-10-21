@@ -241,7 +241,7 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, LA
 
 
 /*
- * Many holes will be pads, but we have no way to create those without modules, and creating
+ * Many holes will be pads, but we have no way to create those without footprints, and creating
  * a module per pad is not really viable.
  *
  * So we use vias to mimic holes, with the loss of any hole shape (as we only have round holes

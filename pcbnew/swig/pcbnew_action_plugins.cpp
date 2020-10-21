@@ -216,7 +216,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         itemsList.PushItem( picker );
     }
 
-    // Append modules:
+    // Append footprints:
     for( MODULE* item : currentPcb->Modules() )
     {
         ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
@@ -273,7 +273,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     for( TRACK* item : currentPcb->Tracks() )
         currItemList.insert( item );
 
-    // Append modules:
+    // Append footprints:
     for( MODULE* item : currentPcb->Modules() )
         currItemList.insert( item );
 
@@ -285,7 +285,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     for( ZONE_CONTAINER* zone : currentPcb->Zones() )
         currItemList.insert( zone );
 
-    // Found deleted modules
+    // Found deleted footprints
     for( unsigned int i = 0; i < oldBuffer->GetCount(); i++ )
     {
         BOARD_ITEM* item = (BOARD_ITEM*) oldBuffer->GetPickedItem( i );
@@ -303,7 +303,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         oldBuffer->PushItem( deletedItemsList.GetItemWrapper( i ) );
     }
 
-    // Find new modules
+    // Find new footprints
     for( MODULE* item : currentPcb->Modules() )
     {
         if( !oldBuffer->ContainsItem( item ) )

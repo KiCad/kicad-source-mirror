@@ -81,7 +81,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
         module->TransformPadsShapesWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
                                                            ERROR_INSIDE );
 
-        // Micro-wave modules may have items on copper layers
+        // Micro-wave footprints may have items on copper layers
         module->TransformGraphicShapesWithClearanceToPolygonSet( aOutlines, aLayer, 0, maxError,
                                                                  ERROR_INSIDE );
     }

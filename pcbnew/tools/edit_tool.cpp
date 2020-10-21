@@ -483,7 +483,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
                 m_dragging = true;
 
-                // When editing modules, all items have the same parent
+                // When editing footprints, all items have the same parent
                 if( EditingModules() )
                 {
                     m_commit->Modify( selection.Front() );
@@ -953,7 +953,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     auto refPt = selection.GetReferencePoint();
     const int rotateAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *editFrame, aEvent );
 
-    // When editing modules, all items have the same parent
+    // When editing footprints, all items have the same parent
     if( EditingModules() )
         m_commit->Modify( selection.Front() );
 
@@ -1053,7 +1053,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     auto refPoint = selection.GetReferencePoint();
     wxPoint mirrorPoint( refPoint.x, refPoint.y );
 
-    // When editing modules, all items have the same parent
+    // When editing footprints, all items have the same parent
     if( EditingModules() )
         m_commit->Modify( selection.Front() );
 
@@ -1159,7 +1159,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
     bool leftRight = frame()->Settings().m_FlipLeftRight;
 
-    // When editing modules, all items have the same parent
+    // When editing footprints, all items have the same parent
     if( EditingModules() )
         m_commit->Modify( selection.Front() );
 
@@ -1458,7 +1458,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         // Make sure the rotation is from the right reference point
         selCenter += translation;
 
-        // When editing modules, all items have the same parent
+        // When editing footprints, all items have the same parent
         if( EditingModules() )
             m_commit->Modify( selection.Front() );
 

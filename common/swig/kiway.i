@@ -117,7 +117,7 @@ static struct PGM_PYTHON : public PGM_BASE
 #if defined(PGM_DATA_FILE_EXT)
                 // PGM_DATA_FILE_EXT, if present, may be different for each compile,
                 // it may come from CMake on the compiler command line, but often does not.
-                // This facillity is mostly useful for those program modules
+                // This facillity is mostly useful for those program footprints
                 // supporting a single argv[1].
                 if( !argv1.GetExt() )
                     argv1.SetExt( wxT( PGM_DATA_FILE_EXT ) );

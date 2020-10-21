@@ -264,7 +264,7 @@ public:
      */
     virtual bool IsLocked() const
     {
-        // only MODULEs & TRACKs can be locked at this time.
+        // only footprints & TRACKs can be locked at this time.
         return false;
     }
 
@@ -274,7 +274,7 @@ public:
      */
     virtual void SetLocked( bool aLocked )
     {
-        // only MODULEs & TRACKs can be locked at this time.
+        // only footprints & TRACKs can be locked at this time.
     }
 
     /**

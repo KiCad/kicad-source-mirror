@@ -103,7 +103,7 @@ private:
 
     /**
      * Find the "best" module place. The criteria are:
-     * - Maximum ratsnest with modules already placed
+     * - Maximum ratsnest with footprints already placed
      * - Max size, and number of pads max
      */
     MODULE*      pickModule();

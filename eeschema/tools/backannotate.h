@@ -74,7 +74,7 @@ public:
         std::map<wxString, wxString> m_pinMap;
     };
 
-    ///> Map to hold NETLIST modules data
+    ///> Map to hold NETLIST footprints data
     using PCB_MODULES_MAP = std::map<wxString, std::shared_ptr<PCB_MODULE_DATA>>;
 
     using CHANGELIST_ITEM = std::pair<SCH_REFERENCE, std::shared_ptr<PCB_MODULE_DATA>>;
@@ -131,7 +131,7 @@ private:
     void getChangeList();
 
     /**
-     * @brief Check if some symbols are not represented in PCB modules and vice versa.
+     * @brief Check if some symbols are not represented in PCB footprints and vice versa.
      * \ref m_refs must be sorted by path
      */
     void checkForUnusedSymbols();

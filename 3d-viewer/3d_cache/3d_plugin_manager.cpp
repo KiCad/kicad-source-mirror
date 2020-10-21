@@ -290,7 +290,7 @@ void S3D_PLUGIN_MANAGER::listPlugins( const wxString& aPath,
 {
     // list potential plugins given a search path
 
-    wxString nameFilter;                // filter for user-loadable libraries (aka modules)
+    wxString nameFilter;                // filter for user-loadable libraries (aka footprints)
     wxString lName;                     // stores name of enumerated files
     wxString fName;                     // full name of file
     wxDir wd;

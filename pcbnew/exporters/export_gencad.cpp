@@ -202,7 +202,7 @@ static const wxString getShapeName( MODULE* aModule )
 // GerbTool chokes on units different than INCH so this is the conversion factor
 const static double SCALE_FACTOR = 1000.0 * IU_PER_MILS;
 
-/* Two helper functions to calculate coordinates of modules in gencad values
+/* Two helper functions to calculate coordinates of footprints in gencad values
  * (GenCAD Y axis from bottom to top)
  */
 static double MapXTo( int aX )
@@ -662,7 +662,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 }
 
 
-/// Compute hashes for modules without taking into account their position, rotation or layer
+/// Compute hashes for footprints without taking into account their position, rotation or layer
 static size_t hashModule( const MODULE* aModule )
 {
     size_t ret = 0x11223344;
@@ -780,7 +780,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
             double orient = pad->GetOrientation() - module->GetOrientation();
             NORMALIZE_ANGLE_POS( orient );
 
-            // Bottom side modules use the flipped padstack
+            // Bottom side footprints use the flipped padstack
             fprintf( aFile, ( flipBottomPads && module->GetFlag() ) ?
                      "PIN \"%s\" PAD%dF %g %g %s %g %s\n" :
                      "PIN \"%s\" PAD%d %g %g %s %g %s\n",

@@ -286,7 +286,7 @@ public:
      */
     virtual void OnModify();
 
-    // Modules (footprints)
+    // footprints (footprints)
 
     /**
      * Function CreateNewModule

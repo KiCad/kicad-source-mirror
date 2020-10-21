@@ -155,7 +155,7 @@ public:
     }
 
     /**
-     * @return bool - true if should ignore modules values.
+     * @return bool - true if should ignore footprints values.
      */
     virtual     bool IgnoreModulesVals() const = 0;
 
@@ -454,7 +454,7 @@ public:
         m_IgnoreMTextsMarkedNoShow  = true; // g_ModuleTextNOVColor;
         m_IgnoreMTextsOnBack        = true;
         m_IgnoreMTextsOnFront       = false;
-        m_IgnoreModulesOnBack       = true; // !Show_Modules_Cmp;
+        m_IgnoreModulesOnBack       = true; // !Show_footprints_Cmp;
         m_IgnoreModulesOnFront      = false;
 
         m_IgnorePadsOnFront         = false;
@@ -588,13 +588,13 @@ public:
     void SetIgnoreThroughHolePads(bool ignore) { m_IgnoreThroughHolePads = ignore; }
 
     /**
-     * @return bool - true if should ignore modules values.
+     * @return bool - true if should ignore footprints values.
      */
     bool IgnoreModulesVals() const override { return m_IgnoreModulesVals; }
     void SetIgnoreModulesVals(bool ignore) { m_IgnoreModulesVals = ignore; }
 
     /**
-     * @return bool - true if should ignore modules references.
+     * @return bool - true if should ignore footprints references.
      */
     bool IgnoreModulesRefs() const override { return m_IgnoreModulesRefs; }
     void SetIgnoreModulesRefs(bool ignore) { m_IgnoreModulesRefs = ignore; }

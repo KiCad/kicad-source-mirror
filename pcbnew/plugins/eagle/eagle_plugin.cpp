@@ -921,7 +921,7 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
     m_xpath->push( "packages" );
 
     // Create a MODULE for all the eagle packages, for use later via a copy constructor
-    // to instantiate needed MODULES in our BOARD.  Save the MODULE templates in
+    // to instantiate needed footprints in our BOARD.  Save the MODULE templates in
     // a MODULE_MAP using a single lookup key consisting of libname+pkgname.
 
     // Get the first package and iterate

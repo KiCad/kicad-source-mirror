@@ -75,7 +75,7 @@ class PCB_TEXT;
 //#define SEXPR_BOARD_FILE_VERSION    20200628  // remove visibility settings
 //#define SEXPR_BOARD_FILE_VERSION    20200724  // Add KIID to module components
 //#define SEXPR_BOARD_FILE_VERSION    20200807  // Add zone hatch advanced settings
-//#define SEXPR_BOARD_FILE_VERSION    20200808  // Add properties to modules
+//#define SEXPR_BOARD_FILE_VERSION    20200808  // Add properties to footprints
 //#define SEXPR_BOARD_FILE_VERSION    20200809  // Add REMOVE_UNUSED_LAYERS option to vias and THT pads
 //#define SEXPR_BOARD_FILE_VERSION    20200811  // Add groups
 //#define SEXPR_BOARD_FILE_VERSION    20200818  // Remove Status flag bitmap and setup counts

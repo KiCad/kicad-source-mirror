@@ -62,7 +62,7 @@ const int scale = (int)(0.01 * IU_PER_MM);
 
 const int PADDING = (int)(1 * IU_PER_MM);
 
-// Populates a list of rectangles, from a list of modules
+// Populates a list of rectangles, from a list of footprints
 void fillRectList( CSubRectArray& vecSubRects, std::vector <MODULE*>& aModuleList )
 {
     vecSubRects.clear();

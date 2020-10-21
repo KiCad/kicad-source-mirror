@@ -42,7 +42,7 @@ namespace PCAD2KICAD {
 class PCB : public PCB_MODULE, public PCB_CALLBACKS
 {
 public:
-    PCB_COMPONENTS_ARRAY    m_pcbComponents;    // PCB Modules,Lines,Routes,Texts, .... and so on
+    PCB_COMPONENTS_ARRAY    m_pcbComponents;    // PCB footprints,Lines,Routes,Texts, .... and so on
     PCB_NETS_ARRAY          m_pcbNetlist;       // net objects collection
     wxString                m_defaultMeasurementUnit;
     std::map<int, TLAYER>   m_layersMap;        // flexible layers mapping

@@ -283,7 +283,7 @@ public:
      */
     bool IsFlipped() const { return GetLayer() == B_Cu; }
 
-// m_ModuleStatus bits:
+// m_footprintstatus bits:
 #define MODULE_is_LOCKED    0x01        ///< module LOCKED: no autoplace allowed
 #define MODULE_is_PLACED    0x02        ///< In autoplace: module automatically placed
 #define MODULE_to_PLACE     0x04        ///< In autoplace: module waiting for autoplace

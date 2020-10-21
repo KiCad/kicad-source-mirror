@@ -3963,13 +3963,13 @@ public:
 
     /**
      * Function FlipMODULEs
-     * flips the modules which are on the back side of the board to the front.
+     * flips the footprints which are on the back side of the board to the front.
      */
     void FlipMODULEs( BOARD* aBoard );
 
     /**
      * Function RevertMODULEs
-     * flips the modules which were on the back side of the board back to the back.
+     * flips the footprints which were on the back side of the board back to the back.
      */
     void RevertMODULEs( BOARD* aBoard );
 };

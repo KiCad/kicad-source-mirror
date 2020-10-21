@@ -57,9 +57,9 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     PCB_VIA_T,                   // in m_tracks
     PCB_TRACE_T,                 // in m_tracks
     PCB_ARC_T,                   // in m_tracks
-    PCB_PAD_T,                   // in modules
-    PCB_FP_TEXT_T,               // in modules
-    PCB_MODULE_T,                // in m_modules
+    PCB_PAD_T,                   // in footprints
+    PCB_FP_TEXT_T,               // in footprints
+    PCB_MODULE_T,                // in m_footprints
     PCB_GROUP_T,                 // in m_groups
     PCB_ZONE_AREA_T,             // in m_zones
     EOT
@@ -454,7 +454,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     {
         PCB_LAYER_ID layer = item->GetLayer();
 
-        // Modules and their subcomponents: reference, value and pads are not sensitive
+        // footprints and their subcomponents: reference, value and pads are not sensitive
         // to the layer visibility controls.  They all have their own separate visibility
         // controls for vias, GetLayer() has no meaning, but IsOnLayer() works fine. User
         // text in module *is* sensitive to layer visibility but that was already handled.
@@ -518,7 +518,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
         PCB_LAYER_ID layer = item->GetLayer();
 
-        // Modules and their subcomponents: reference, value and pads are not sensitive
+        // footprints and their subcomponents: reference, value and pads are not sensitive
         // to the layer visibility controls.  They all have their own separate visibility
         // controls for vias, GetLayer() has no meaning, but IsOnLayer() works fine. User
         // text in module *is* sensitive to layer visibility but that was already handled.

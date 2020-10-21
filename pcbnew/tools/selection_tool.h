@@ -293,11 +293,11 @@ private:
      */
     void selectAllItemsOnSheet( wxString& aSheetPath );
 
-    ///> Selects all modules belonging to same sheet, from Eeschema,
+    ///> Selects all footprints belonging to same sheet, from Eeschema,
     ///> using crossprobing
     int selectSheetContents( const TOOL_EVENT& aEvent );
 
-    ///> Selects all modules belonging to same hierarchical sheet
+    ///> Selects all footprints belonging to same hierarchical sheet
     ///> as the selected footprint (same sheet path).
     int selectSameSheet( const TOOL_EVENT& aEvent );
 

@@ -1106,7 +1106,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             break;
 
         /*  Instances of the requested KICAD_T live in a list, either one
-         *   that I manage, or that my modules manage.  If it's a type managed
+         *   that I manage, or that my footprints manage.  If it's a type managed
          *   by class MODULE, then simply pass it on to each module's
          *   MODULE::Visit() function by way of the
          *   IterateForward( m_Modules, ... ) call.

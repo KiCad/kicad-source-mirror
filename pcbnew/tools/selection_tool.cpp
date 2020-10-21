@@ -1163,7 +1163,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 {
     std::list<MODULE*> modList;
 
-    // store all modules that are on that sheet path
+    // store all footprints that are on that sheet path
     for( MODULE* module : board()->Modules() )
     {
         if( module == nullptr )
@@ -1202,8 +1202,8 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
     for( D_PAD* pad : padList )
         selectConnectedTracks( *pad, STOP_NEVER );
 
-    // now we need to find all modules that are connected to each of these nets
-    // then we need to determine if these modules are in the list of modules
+    // now we need to find all footprints that are connected to each of these nets
+    // then we need to determine if these modules are in the list of footprints
     // belonging to this sheet ( modList )
     std::list<int> removeCodeList;
     constexpr KICAD_T padType[] = { PCB_PAD_T, EOT };
@@ -1300,7 +1300,7 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
     if( !selectCursor( true ) )
         return 0;
 
-    // this function currently only supports modules since they are only
+    // this function currently only supports footprints since they are only
     // on one sheet.
     auto item = m_selection.Front();
 
@@ -1790,7 +1790,7 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
             return NULL;
     }
 
-    // All are modules, now find smallest MODULE
+    // All are footprints, now find smallest MODULE
     int minDim = 0x7FFFFFFF;
     int minNdx = 0;
 
@@ -2061,7 +2061,7 @@ void SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode,
             aSelectionViewGroup->Add( aItem );
     }
 
-    // Modules are treated in a special way - when they are highlighted, we have to highlight
+    // footprints are treated in a special way - when they are highlighted, we have to highlight
     // all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
     {
@@ -2119,7 +2119,7 @@ void SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode,
             view()->Update( aItem );
     }
 
-    // Modules are treated in a special way - when they are highlighted, we have to
+    // footprints are treated in a special way - when they are highlighted, we have to
     // highlight all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
     {

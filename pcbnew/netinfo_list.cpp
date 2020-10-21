@@ -217,7 +217,7 @@ void NETINFO_MAPPING::Update()
     for( TRACK* track : m_board->Tracks() )
         nets.insert( track->GetNetCode() );
 
-    // Modules/pads
+    // footprints/pads
     for( MODULE* module : m_board->Modules() )
     {
         for( D_PAD* pad : module->Pads() )

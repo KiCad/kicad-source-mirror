@@ -109,7 +109,7 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
 
     SpreadFootprints( &newFootprints, areaPosition );
 
-    // Start drag command for new modules
+    // Start drag command for new footprints
     if( !newFootprints.empty() )
     {
         for( MODULE* footprint : newFootprints )

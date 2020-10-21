@@ -196,7 +196,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
     for( auto track : aBoard->Tracks() )
         m_view->Add( track );
 
-    // Load modules and its additional elements
+    // Load footprints and its additional elements
     for( auto module : aBoard->Modules() )
         m_view->Add( module );
 
@@ -566,12 +566,12 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetRequired( LAYER_PAD_FR, LAYER_PADS );
     m_view->SetRequired( LAYER_PAD_BK, LAYER_PADS );
 
-    // Front modules
+    // Front footprints
     m_view->SetRequired( LAYER_PAD_FR, F_Cu );
     m_view->SetRequired( LAYER_MOD_TEXT_FR, LAYER_MOD_FR );
     m_view->SetRequired( LAYER_PAD_FR_NETNAMES, LAYER_PAD_FR );
 
-    // Back modules
+    // Back footprints
     m_view->SetRequired( LAYER_PAD_BK, B_Cu );
     m_view->SetRequired( LAYER_MOD_TEXT_BK, LAYER_MOD_BK );
     m_view->SetRequired( LAYER_PAD_BK_NETNAMES, LAYER_PAD_BK );

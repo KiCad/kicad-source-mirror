@@ -231,7 +231,7 @@ class BOARD_ADAPTER
     /**
      * @brief GetModulesZcoord3DIU - Get the position of the module in 3d integer units
      * considering if it is flipped or not.
-     * @param aIsFlipped: true for use in modules on Front (top) layer, false
+     * @param aIsFlipped: true for use in footprints on Front (top) layer, false
      *                    if module is on back (bottom) layer
      * @return the Z position of 3D shapes, in 3D integer units
      */

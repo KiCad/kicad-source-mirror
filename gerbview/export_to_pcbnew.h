@@ -78,7 +78,7 @@ private:
      * write a via to the board file.
      * Some of these will represent actual vias while others are used to represent
      * holes in pads.  (We can't generate actual pads because the Gerbers don't contain
-     * info on how to group them into modules.)
+     * info on how to group them into footprints.)
      * @param aVia
      */
     void    export_via( const EXPORT_VIA& aVia );

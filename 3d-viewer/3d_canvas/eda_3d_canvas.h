@@ -271,7 +271,7 @@ private:
     bool                   m_opengl_supports_raytracing;
     bool                   m_render_raytracing_was_requested;
 
-    CCONTAINER             m_3DShapes_container;      // Holds 3D shapes from modules
+    CCONTAINER             m_3DShapes_container;      // Holds 3D shapes from footprints
     CGENERICACCELERATOR    *m_accelerator3DShapes;    // used for mouse over searching
 
     BOARD_ITEM*            m_currentIntersectedBoardItem;

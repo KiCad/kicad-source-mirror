@@ -811,7 +811,7 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, const wxS
 
         while( aNode )
         {
-            // Components/modules
+            // Components/footprints
             if( aNode->GetName() == wxT( "multiLayer" ) )
                 DoPCBComponents( aNode, aXmlDoc, aActualConversion, aStatusBar );
 

@@ -140,7 +140,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
             {
                 if( m_editModules )
                 {
-                    // modules inside modules are not supported yet
+                    // footprints inside footprints are not supported yet
                     wxASSERT( boardItem->Type() != PCB_MODULE_T );
 
                     boardItem->SetParent( board->Modules().front() );
@@ -188,7 +188,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_FP_SHAPE_T:
                 case PCB_FP_TEXT_T:
                 case PCB_FP_ZONE_AREA_T:
-                    // This level can only handle module items when editing modules
+                    // This level can only handle module items when editing footprints
                     wxASSERT( m_editModules );
 
                     if( boardItem->Type() == PCB_FP_TEXT_T )
@@ -233,7 +233,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                 case PCB_MODULE_T:
                 {
-                    // There are no modules inside a module yet
+                    // There are no footprints inside a module yet
                     wxASSERT( !m_editModules );
 
                     MODULE* module = static_cast<MODULE*>( boardItem );

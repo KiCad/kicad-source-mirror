@@ -104,7 +104,7 @@ PGM_BASE& Pgm()
     return program;
 }
 
-// A module to allow Html modules initialization/cleanup
+// A module to allow Html footprints initialization/cleanup
 // When a wxHtmlWindow is used *only* in a dll/so module, the Html text is displayed
 // as plain text.
 // This helper class is just used to force wxHtmlWinParser initialization
@@ -161,7 +161,7 @@ struct APP_SINGLE_TOP : public wxApp
 #endif
 
         // Force wxHtmlWinParser initialization when a wxHtmlWindow is used only
-        // in a shared modules (.so or .dll file)
+        // in a shared footprints (.so or .dll file)
         // Otherwise the Html text is displayed as plain text.
         HtmlModule html_init;
 
@@ -402,7 +402,7 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 #if defined(PGM_DATA_FILE_EXT)
             // PGM_DATA_FILE_EXT, if present, may be different for each compile,
             // it may come from CMake on the compiler command line, but often does not.
-            // This facility is mostly useful for those program modules
+            // This facility is mostly useful for those program footprints
             // supporting a single argv[1].
             if( !argv1.GetExt() )
                 argv1.SetExt( wxT( PGM_DATA_FILE_EXT ) );

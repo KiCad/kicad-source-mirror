@@ -80,14 +80,14 @@ std::ostream& operator<<( std::ostream& os, const COURTYARD_COLLISION& aColl )
 
 
 /**
- * A complete courtyard overlap test case: a name, the board modules list
+ * A complete courtyard overlap test case: a name, the board footprint list
  * and the expected collisions.
  */
 struct COURTYARD_OVERLAP_TEST_CASE
 {
     std::string m_case_name;
 
-    // The modules in the test case
+    // The footprint in the test case
     std::vector<COURTYARD_TEST_MODULE> m_mods;
 
     // The expected number of collisions
@@ -162,11 +162,11 @@ BOOST_FIXTURE_TEST_SUITE( DrcCourtyardOverlap, COURTYARD_TEST_FIXTURE )
 static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
     {
         "empty board",
-        {}, // no modules
+        {}, // no footprint
         {}, // no collisions
     },
     {
-        "single empty mod",
+        "single empty footprint",
         {
             {
                 "U1",
@@ -177,8 +177,8 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
         {}, // no collisions
     },
     {
-        // A single module can't overlap itself
-        "single mod, single courtyard",
+        // A single footprint can't overlap itself
+        "single footprint, single courtyard",
         {
             {
                 "U1",
@@ -196,7 +196,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
         {}, // no collisions
     },
     {
-        "two modules, no overlap",
+        "two footprint, no overlap",
         {
             {
                 "U1",
@@ -226,7 +226,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
         {}, // no collisions
     },
     {
-        "two modules, touching, no overlap",
+        "two footprints, touching, no overlap",
         {
             {
                 "U1",
@@ -256,7 +256,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
         {}, // Touching means not colliding
     },
     {
-        "two modules, overlap",
+        "two footprints, overlap",
         {
             {
                 "U1",
@@ -288,7 +288,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
         },
     },
     {
-        "two modules, overlap, different sides",
+        "two footprints, overlap, different sides",
         {
             {
                 "U1",
@@ -318,7 +318,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
         {}, // but on different sides
     },
     {
-        "two modules, multiple courtyards, overlap",
+        "two footprints, multiple courtyards, overlap",
         {
             {
                 "U1",
@@ -357,7 +357,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
     },
     {
         // The courtyards do not overlap, but their bounding boxes do
-        "two modules, no overlap, bbox overlap",
+        "two footprints, no overlap, bbox overlap",
         {
             {
                 "U1",

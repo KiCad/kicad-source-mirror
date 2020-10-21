@@ -458,7 +458,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-    // Add holes of modules
+    // Add holes of footprints
     // /////////////////////////////////////////////////////////////////////////
     for( MODULE* module : m_board->Modules() )
     {
@@ -534,7 +534,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     const bool renderPlatedPadsAsPlated = GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED );
 
-    // Add modules PADs objects to containers
+    // Add footprints PADs objects to containers
     for( PCB_LAYER_ID curr_layer_id : layer_id )
     {
         wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
@@ -549,7 +549,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             AddPadsShapesWithClearanceToContainer( module, layerContainer, curr_layer_id, 0,
                                                    true, renderPlatedPadsAsPlated, false );
 
-            // Micro-wave modules may have items on copper layers
+            // Micro-wave footprints may have items on copper layers
             AddGraphicsShapesWithClearanceToContainer( module, layerContainer, curr_layer_id, 0 );
         }
     }
@@ -567,7 +567,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-    // Add modules PADs poly contourns (vertical outlines)
+    // Add footprints PADs poly contourns (vertical outlines)
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
@@ -980,7 +980,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
 
 
-        // Add modules tech layers - objects
+        // Add footprints tech layers - objects
         // /////////////////////////////////////////////////////////////////////
         for( MODULE* module : m_board->Modules() )
         {
@@ -1008,7 +1008,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
 
 
-        // Add modules tech layers - contours
+        // Add footprints tech layers - contours
         for( MODULE* module : m_board->Modules() )
         {
             if( (curr_layer_id == F_SilkS) || (curr_layer_id == B_SilkS) )

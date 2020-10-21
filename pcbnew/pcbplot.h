@@ -116,7 +116,7 @@ public:
 
     /**
      * plot items like text and graphics,
-     *  but not tracks and modules
+     *  but not tracks and footprints
      */
     void PlotBoardGraphicItems();
 

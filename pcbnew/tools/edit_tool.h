@@ -46,7 +46,7 @@ namespace KIGFX {
 /**
  * Function EditToolSelectionFilter
  *
- * A CLIENT_SELECTION_FILTER which promotes pad selections to their parent modules and
+ * A CLIENT_SELECTION_FILTER which promotes pad selections to their parent footprints and
  * optionally excludes locked items and/or transient items (such as markers).
  */
 

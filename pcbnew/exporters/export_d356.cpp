@@ -88,7 +88,7 @@ static int iu_to_d356(int iu, int clamp)
     return val;
 }
 
-/* Extract the D356 record from the modules (pads) */
+/* Extract the D356 record from the footprints (pads) */
 static void build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecords )
 {
     wxPoint origin = aPcb->GetDesignSettings().m_AuxOrigin;

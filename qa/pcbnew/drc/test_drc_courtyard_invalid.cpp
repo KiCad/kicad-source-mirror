@@ -84,13 +84,13 @@ struct COURTYARD_INVALID_CASE
 static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
 {
     {
-        // Empty board has no modules to be invalid
+        // Empty board has no footprints to be invalid
         "empty board",
         {},
         {},
     },
     {
-        "single mod, no courtyard",
+        "single footprint, no courtyard",
         {
             {
                 "U1",
@@ -98,7 +98,7 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
                 { 0, 0 },
             },
         },
-        {   // one error: the module has no courtyard
+        {   // one error: the footprint has no courtyard
             {
                 "U1",
                     DRCE_MISSING_COURTYARD,
@@ -106,7 +106,7 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
         },
     },
     {
-        "single mod, unclosed courtyard",
+        "single footprint, unclosed courtyard",
         {
             {
                 "U1",
@@ -117,7 +117,7 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
                 { 0, 0 },
             },
         },
-        {   // one error: the module has malformed courtyard
+        {   // one error: the footprint has malformed courtyard
             {
                 "U1",
                     DRCE_MALFORMED_COURTYARD,
@@ -125,7 +125,7 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
         },
     },
     {
-        "single mod, disjoint courtyard",
+        "single footprint, disjoint courtyard",
         {
             {
                 "U1",
@@ -144,7 +144,7 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
         },
     },
     {
-        "two mods, one OK, one malformed",
+        "two footprints, one OK, one malformed",
         {
             {
                 "U1",

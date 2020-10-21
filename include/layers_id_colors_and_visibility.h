@@ -194,10 +194,10 @@ enum GAL_LAYER_ID: int
     LAYER_GRID,
     LAYER_GRID_AXES,
     LAYER_NO_CONNECTS,          ///< show a marker on pads with no nets
-    LAYER_MOD_FR,               ///< show modules on front
-    LAYER_MOD_BK,               ///< show modules on back
-    LAYER_MOD_VALUES,           ///< show modules values (when texts are visibles)
-    LAYER_MOD_REFERENCES,       ///< show modules references (when texts are visibles)
+    LAYER_MOD_FR,               ///< show footprints on front
+    LAYER_MOD_BK,               ///< show footprints on back
+    LAYER_MOD_VALUES,           ///< show footprints values (when texts are visibles)
+    LAYER_MOD_REFERENCES,       ///< show footprints references (when texts are visibles)
     LAYER_TRACKS,
     LAYER_PADS_TH,              ///< multilayer pads, usually with holes
     LAYER_PADS_PLATEDHOLES,     ///< to draw pad holes (plated)

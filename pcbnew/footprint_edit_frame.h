@@ -245,10 +245,10 @@ public:
     bool Load_Module_From_BOARD( MODULE* Module );
 
     /**
-     * Display the list of modules currently existing on the BOARD.
+     * Display the list of footprints currently existing on the BOARD.
      *
      * @return a pointer to a module if this module is selected or NULL otherwise
-     * @param aPcb = the board from modules can be loaded
+     * @param aPcb = the board from footprints can be loaded
      */
     MODULE* SelectFootprintFromBoard( BOARD* aPcb );
 

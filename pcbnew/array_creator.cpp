@@ -127,7 +127,7 @@ void ARRAY_CREATOR::Invoke()
 
                     // PCB items keep the same numbering
 
-                    // @TODO: renumber modules if asked. This needs UI to enable.
+                    // @TODO: renumber footprints if asked. This needs UI to enable.
                     // something like this, but needs a "block offset" to prevent
                     // multiple selections overlapping.
                     // if( new_item->Type() == PCB_MODULE_T )

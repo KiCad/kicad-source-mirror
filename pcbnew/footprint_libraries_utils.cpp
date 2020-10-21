@@ -1022,7 +1022,7 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
         return NULL;
     }
 
-    // Creates the new module and add it to the head of the linked list of modules
+    // Creates the new module and add it to the head of the linked list of footprints
     MODULE* module = new MODULE( GetBoard() );
 
     // Update parameters: timestamp ...

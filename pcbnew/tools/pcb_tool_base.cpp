@@ -73,7 +73,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
             {
                 auto module = dyn_cast<MODULE*>( newItem.get() );
 
-                // modules have more drawable parts
+                // footprints have more drawable parts
                 module->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add, &preview, _1 ) );
             }
         }

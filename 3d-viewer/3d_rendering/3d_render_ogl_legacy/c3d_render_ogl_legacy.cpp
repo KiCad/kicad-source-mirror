@@ -1255,7 +1255,7 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot, boo
 
     C_OGL_3DMODEL::BeginDrawMulti( !aRenderSelectedOnly );
 
-    // Go for all modules
+    // Go for all footprints
     for( auto module : m_boardAdapter.GetBoard()->Modules() )
     {
         const bool isIntersected = ( module == m_currentIntersectedBoardItem );

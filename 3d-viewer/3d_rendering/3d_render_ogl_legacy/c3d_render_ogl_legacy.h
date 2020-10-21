@@ -95,7 +95,7 @@ private:
     CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_outer_ring;
     //CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_vias_inner; // Not in use
 
-    // This is for pads holes of the modules
+    // This is for pads holes of the footprints
     //CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_vias_and_pad_holes_inner_contourn_and_caps;
     CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_vias_and_pad_holes_outer_contourn_and_caps;
 

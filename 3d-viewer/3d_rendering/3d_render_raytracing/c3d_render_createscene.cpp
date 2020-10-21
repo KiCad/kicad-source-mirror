@@ -1267,7 +1267,7 @@ void C3D_RENDER_RAYTRACING::add_3D_vias_and_pads_to_container()
 
 void C3D_RENDER_RAYTRACING::load_3D_models( CCONTAINER &aDstContainer, bool aSkipMaterialInformation )
 {
-    // Go for all modules
+    // Go for all footprints
     for( auto module : m_boardAdapter.GetBoard()->Modules() )
     {
         if((!module->Models().empty() ) &&

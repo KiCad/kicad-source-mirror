@@ -99,12 +99,12 @@ bool ImportSpecctraSES( wxString& aFullFilename );
 
 /**
  * Function ArchiveModulesOnBoard
- * Save modules in a library:
+ * Save footprints in a library:
  * @param aStoreInNewLib:
- *              true : save modules in a existing lib. Existing footprints will be kept
+ *              true : save footprints in a existing lib. Existing footprints will be kept
  *              or updated.
  *              This lib should be in fp lib table, and is type is .pretty
- *              false: save modules in a new lib. It it is an existing lib,
+ *              false: save footprints in a new lib. It it is an existing lib,
  *              previous footprints will be removed
  *
  * @param aLibName:

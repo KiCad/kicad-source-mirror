@@ -453,7 +453,7 @@ static bool ChangeArrayCompare( const RefDesChange& aA, const RefDesChange& aB )
 
 
 //
-/// Compare function to sort modules.
+/// Compare function to sort footprints.
 /// @return true if the first coordinate should be before the second coordinate
 static bool ModuleCompare( const RefDesInfo& aA, const RefDesInfo& aB )
 {
@@ -549,13 +549,13 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
 
 
 //
-/// Create a list of the modules and their coordinates
+/// Create a list of the footprints and their coordinates
 void DIALOG_BOARD_REANNOTATE::LogModules( wxString& aMessage, std::vector<RefDesInfo>& aModules )
 {
     wxString message = aMessage;
 
     if( aModules.empty() )
-        message += _( "\nNo modules" );
+        message += _( "\nNo footprints" );
     else
     {
         int i = 1;
@@ -706,7 +706,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
     if( m_AnnotateSelection->GetValue() )
     {
         for( EDA_ITEM* item : m_selection )
-        { //Get the timestamps of selected modules
+        { //Get the timestamps of selected footprints
             if( item->Type() == PCB_MODULE_T )
                 selected.push_back( item->m_Uuid );
         }
@@ -782,7 +782,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
             for( KIID sel : selected )
             {
                 if( thismodule.Uuid == sel )
-                {                                     //Found in selected modules
+                {                                     //Found in selected footprints
                     thismodule.Action = UpdateRefDes; //Update it
                     break;
                 }
@@ -796,10 +796,10 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
     }
 
     SetSortCodes( FrontDirectionsArray, m_SortCode ); //Determine the sort order for the front
-    sort( m_FrontModules.begin(), m_FrontModules.end(),ModuleCompare ); //Sort the front modules
+    sort( m_FrontModules.begin(), m_FrontModules.end(),ModuleCompare ); //Sort the front footprints
 
     SetSortCodes( BackDirectionsArray, m_SortCode ); //Determine the sort order for the back
-    sort( m_BackModules.begin(), m_BackModules.end(), ModuleCompare ); //Sort the back modules
+    sort( m_BackModules.begin(), m_BackModules.end(), ModuleCompare ); //Sort the back footprints
 
     m_RefDesTypes.clear();
     m_ChangeArray.clear();

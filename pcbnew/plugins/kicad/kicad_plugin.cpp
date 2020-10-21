@@ -630,7 +630,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     formatHeader( aBoard, aNestLevel );
 
-    // Save the modules.
+    // Save the footprints.
     for( BOARD_ITEM* module : sorted_modules )
     {
         Format( module, aNestLevel );

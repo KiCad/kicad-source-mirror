@@ -194,14 +194,14 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
     commandToUndo->m_TransformPoint = aTransformPoint;
 
     // First, filter unnecessary stuff from the list (i.e. for multiple pads / labels modified),
-    // take the first occurence of the module (we save copies of modules when one of its subitems
+    // take the first occurence of the module (we save copies of footprints when one of its subitems
     // is changed).
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         ITEM_PICKER curr_picker = aItemsList.GetItemWrapper(ii);
         BOARD_ITEM* item        = dynamic_cast<BOARD_ITEM*>( aItemsList.GetPickedItem( ii ) );
 
-        // For items belonging to modules, we need to save state of the parent module
+        // For items belonging to footprints, we need to save state of the parent module
         if( item && item->GetParent() && item->GetParent()->Type() == PCB_MODULE_T )
         {
             item = item->GetParent();
@@ -464,7 +464,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
 
             // Remove all pads/drawings/texts, as they become invalid
-            // for the VIEW after SwapData() called for modules
+            // for the VIEW after SwapData() called for footprints
             view->Remove( item );
             connectivity->Remove( item );
 

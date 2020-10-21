@@ -908,7 +908,7 @@ void C3D_RENDER_OGL_LEGACY::load_3D_models( REPORTER* aStatusReporter )
        (!m_boardAdapter.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL )) )
         return;
 
-    // Go for all modules
+    // Go for all footprints
     for( MODULE* module : m_boardAdapter.GetBoard()->Modules() )
     {
         for( const MODULE_3D_SETTINGS& model : module->Models() )
