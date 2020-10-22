@@ -67,7 +67,7 @@ bool LIB_MANAGER::HasModifications() const
 {
     for( const auto& lib : m_libs )
     {
-        if( lib.second.IsModified() )
+        if( lib.second.IsModified() && !IsLibraryReadOnly( lib.first ) )
             return true;
     }
 

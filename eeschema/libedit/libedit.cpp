@@ -25,7 +25,6 @@
 
 #include <pgm_base.h>
 #include <confirm.h>
-//#include <gestfich.h>
 #include <widgets/infobar.h>
 #include <tools/ee_actions.h>
 #include <tools/lib_drawing_tools.h>
@@ -900,6 +899,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
 bool LIB_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
 {
+    wxString msg;
     bool doSave = true;
     int dirtyCount = 0;
     bool applyToAll = false;
@@ -916,8 +916,7 @@ bool LIB_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
         {
             if( aRequireConfirmation && !applyToAll )
             {
-                wxString msg = wxString::Format( _( "Save changes to \"%s\" before closing?" ),
-                                                 libNickname );
+                msg.Printf( _( "Save changes to \"%s\" before closing?" ), libNickname );
 
                 switch( UnsavedChangesDialog( this, msg, dirtyCount > 1 ? &applyToAll : nullptr ) )
                 {
@@ -932,8 +931,16 @@ bool LIB_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
             {
                 // If saving under existing name fails then do a Save As..., and if that
                 // fails then cancel close action.
-                if( !m_libMgr->IsLibraryReadOnly( libNickname )
-                  && saveLibrary( libNickname, false ) )
+                if( m_libMgr->IsLibraryReadOnly( libNickname ) )
+                {
+                    m_infoBar->Dismiss();
+                    msg.Printf( _( "Library \"%s\" is read only and must be saved as a "
+                                   "different library." ), libNickname );
+                    m_infoBar->ShowMessageFor( msg, 3000, wxICON_EXCLAMATION );
+                    continue;
+                }
+
+                if( saveLibrary( libNickname, false ) )
                     continue;
 
                 if( !saveLibrary( libNickname, true ) )
