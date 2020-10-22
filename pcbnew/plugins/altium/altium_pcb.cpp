@@ -146,12 +146,9 @@ void ALTIUM_PCB::HelperDrawsegmentSetLocalCoord( PCB_SHAPE* aShape, uint16_t aCo
 
 
 void HelperShapeLineChainFromAltiumVertices(
-        SHAPE_LINE_CHAIN& line, const std::vector<ALTIUM_VERTICE>& vertices )
+        SHAPE_LINE_CHAIN& aLine, const std::vector<ALTIUM_VERTICE>& aVertices )
 {
-    if( vertices.empty() )
-        THROW_IO_ERROR( "no vertices which can be interpreted" );
-
-    for( auto& vertice : vertices )
+    for( auto& vertice : aVertices )
     {
         if( vertice.isRound )
         {
@@ -171,20 +168,20 @@ void HelperShapeLineChainFromAltiumVertices(
             if( GetLineLength( arcStart, vertice.position )
                     < GetLineLength( arcEnd, vertice.position ) )
             {
-                line.Append( SHAPE_ARC( vertice.center, arcStart, -angle ) );
+                aLine.Append( SHAPE_ARC( vertice.center, arcStart, -angle ) );
             }
             else
             {
-                line.Append( SHAPE_ARC( vertice.center, arcEnd, angle ) );
+                aLine.Append( SHAPE_ARC( vertice.center, arcEnd, angle ) );
             }
         }
         else
         {
-            line.Append( vertice.position );
+            aLine.Append( vertice.position );
         }
     }
 
-    line.SetClosed( true );
+    aLine.SetClosed( true );
 }
 
 
