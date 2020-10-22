@@ -867,6 +867,10 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 // Set parent so that clearance can be loaded
                 fp->SetParent( board );
 
+                // Pads in the library all have orphaned nets.  Replace with Default.
+                for( D_PAD* pad : fp->Pads() )
+                    pad->SetNetCode( 0 );
+
                 // Put it on FRONT layer,
                 // (Can be stored flipped if the lib is an archive built from a board)
                 if( fp->IsFlipped() )
