@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-20 14:37-0700\n"
-"PO-Revision-Date: 2020-10-21 18:39+0000\n"
+"PO-Revision-Date: 2020-10-23 22:26+0000\n"
 "Last-Translator: Mark Roszko <mark.roszko@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -1054,9 +1054,8 @@ msgid "Toggle board body display"
 msgstr "Pokaż ciało płytki"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:278
-#, fuzzy
 msgid "Show 3D Axis"
-msgstr "Pok&aż osie 3D"
+msgstr "Pokaż oś 3D"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:283
 #, fuzzy
@@ -2240,9 +2239,8 @@ msgid "Image Editor"
 msgstr "Edytor obrazów"
 
 #: common/dialogs/dialog_migrate_settings.cpp:31
-#, fuzzy
 msgid "Quit KiCad"
-msgstr "O progr&amie KiCad"
+msgstr "Zamknij KiCad"
 
 #: common/dialogs/dialog_migrate_settings.cpp:51
 #, c-format
@@ -3618,11 +3616,11 @@ msgstr "Separator musi być pojedynczym znakiem: ', \" lub $"
 
 #: common/eda_base_frame.cpp:391
 msgid "&About KiCad"
-msgstr "O progr&amie KiCad"
+msgstr "&O programie KiCad"
 
 #: common/eda_base_frame.cpp:393
 msgid "&Help"
-msgstr "Pomo&c"
+msgstr "&Pomoc"
 
 #: common/eda_base_frame.cpp:738
 #, c-format
@@ -6673,7 +6671,7 @@ msgstr "Footprinty filtrowane"
 #: cvpcb/cvpcb_mainframe.cpp:142
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:105
 msgid "Apply, Save Schematic && Continue"
-msgstr "Zastosuj, zapisz schemat && Kontynuuj"
+msgstr "Zastosuj, Zapisz Schemat && Kontynuuj"
 
 #: cvpcb/cvpcb_mainframe.cpp:210
 #, fuzzy
@@ -7988,7 +7986,7 @@ msgstr "Słowa kluczowe:"
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:145
 #, fuzzy
 msgid "Derive from symbol:"
-msgstr "Usunąć dodatkowe części z symbolu:"
+msgstr "Wyprowadź z symbolu:"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:149
 #, fuzzy
@@ -9315,9 +9313,8 @@ msgid "%s Export"
 msgstr "%s Eksportuj"
 
 #: eeschema/dialogs/dialog_netlist.cpp:709
-#, fuzzy
 msgid "This plugin already exists."
-msgstr "Ta wtyczka już istnieje. Przerwano"
+msgstr "Ta wtyczka już istnieje."
 
 #: eeschema/dialogs/dialog_netlist.cpp:737
 msgid "Error. You must provide a command String"
@@ -17236,9 +17233,8 @@ msgid "Are you sure you want to delete '%s'?"
 msgstr "Czy chcesz usunąć '%s'?"
 
 #: kicad/tree_project_frame.cpp:846
-#, fuzzy
 msgid "Delete Directory"
-msgstr "U&suń folder"
+msgstr "Usuń folder"
 
 #: kicad/tree_project_frame.cpp:846
 msgid "Delete File"
@@ -20965,9 +20961,8 @@ msgstr "W sumie:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:662
 #: pcbnew/dialogs/dialog_board_statistics.cpp:663
 #: pcbnew/dialogs/dialog_board_statistics.cpp:664
-#, fuzzy
 msgid "unknown"
-msgstr "<Nieznany>"
+msgstr "nieznany"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:449
 #, fuzzy
@@ -23865,9 +23860,8 @@ msgid "Remove selected layers from matched layers list."
 msgstr "Usuwa zaznaczony symbol z biblioteki"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
-#, fuzzy
 msgid "<<"
-msgstr "<<<"
+msgstr "<<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:73
 #, fuzzy
@@ -25972,7 +25966,7 @@ msgstr "Pokaż numery pola"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:49
 msgid "Show pad <no net> indicator"
-msgstr "Pokazuj znacznik <no net>"
+msgstr "Pokazuj znacznik <brak sieci>"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:57
 msgid "Clearance Outlines"
@@ -29079,9 +29073,8 @@ msgid "Reveals the plugins folder in a Finder window"
 msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:420
-#, fuzzy
 msgid "Open Plugin Directory"
-msgstr "U&suń folder"
+msgstr "Otwórz Folder Wtyczek"
 
 #: pcbnew/menubar_pcb_editor.cpp:443
 msgid "Add &3D Shapes Libraries Wizard..."
@@ -29578,7 +29571,7 @@ msgstr "Wiele warstw"
 
 #: pcbnew/plugin.cpp:146
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
-msgstr "Włącz logowanie błędów dla funkcji Footprint*() w tej wtyczce."
+msgstr "Włącz logowanie <b>błędów</b> dla funkcji Footprint*() w tej wtyczce."
 
 #: pcbnew/plugin.cpp:150
 msgid "Regular expression <b>footprint name</b> filter."
@@ -32735,9 +32728,8 @@ msgid "Constraints Report"
 msgstr "Raport ilościowy footprintów"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:408
-#, fuzzy
 msgid "<h7>Track width resolution for:</h7>"
-msgstr "Korekcja szerokości ścieżek:"
+msgstr "<h7>Rozdzielczość szerokości ścieżek:</h7>"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:423
 #: pcbnew/tools/pcb_inspection_tool.cpp:424
