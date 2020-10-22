@@ -110,6 +110,31 @@ KIID::KIID( const wxString& aString ) :
 }
 
 
+bool KIID::SniffTest( const wxString& aCandidate )
+{
+    static wxString niluuidStr = niluuid.AsString();
+
+    if( aCandidate.Length() != niluuidStr.Length() )
+        return false;
+
+    for( wxChar c : aCandidate )
+    {
+        if( c >= '0' && c <= '9' )
+            continue;
+
+        if( c >= 'a' && c <= 'f' )
+            continue;
+
+        if( c >= 'A' && c <= 'F' )
+            continue;
+
+        return false;
+    }
+
+    return true;
+}
+
+
 KIID::KIID( timestamp_t aTimestamp )
 {
     m_cached_timestamp = aTimestamp;

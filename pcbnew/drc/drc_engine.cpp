@@ -73,6 +73,23 @@ DRC_ENGINE::~DRC_ENGINE()
 }
 
 
+static bool isKeepoutZone( const BOARD_ITEM* aItem )
+{
+    if( aItem && ( aItem->Type() == PCB_ZONE_AREA_T || aItem->Type() == PCB_FP_ZONE_AREA_T ) )
+    {
+        const ZONE_CONTAINER* zone = static_cast<const ZONE_CONTAINER*>( aItem );
+
+        return zone->GetIsRuleArea() && (    zone->GetDoNotAllowTracks()
+                                          || zone->GetDoNotAllowVias()
+                                          || zone->GetDoNotAllowPads()
+                                          || zone->GetDoNotAllowCopperPour()
+                                          || zone->GetDoNotAllowFootprints() );
+    }
+
+    return false;
+}
+
+
 DRC_RULE* DRC_ENGINE::createImplicitRule( const wxString& name )
 {
     DRC_RULE *rule = new DRC_RULE;
@@ -330,16 +347,6 @@ void DRC_ENGINE::loadImplicitRules()
                 rule->AddConstraint( disallowConstraint );
             };
 
-    auto isKeepoutZone =
-            []( ZONE_CONTAINER* aZone )
-            {
-                return aZone->GetIsRuleArea() && (    aZone->GetDoNotAllowTracks()
-                                                   || aZone->GetDoNotAllowVias()
-                                                   || aZone->GetDoNotAllowPads()
-                                                   || aZone->GetDoNotAllowCopperPour()
-                                                   || aZone->GetDoNotAllowFootprints() );
-            };
-
     std::vector<ZONE_CONTAINER*> keepoutZones;
 
     for( ZONE_CONTAINER* zone : m_board->Zones() )
@@ -362,7 +369,13 @@ void DRC_ENGINE::loadImplicitRules()
         if( zone->GetZoneName().IsEmpty() )
             zone->SetZoneName( KIID().AsString() );
 
-        rule = createImplicitRule( _( "keepout area" ) );
+        wxString name = zone->GetZoneName();
+
+        if( KIID::SniffTest( name ) )       // Synthetic name; don't show to user
+            rule = createImplicitRule( _( "keepout area" ) );
+        else
+            rule = createImplicitRule( wxString::Format( _( "keepout area '%s'" ), name ) );
+
         rule->m_Condition = new DRC_RULE_CONDITION( wxString::Format( "A.insideArea('%s')",
                                                                       zone->GetZoneName() ) );
         if( zone->GetDoNotAllowTracks() )
@@ -707,7 +720,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
     }
 
     auto processConstraint =
-            [&]( const CONSTRAINT_WITH_CONDITIONS* c )
+            [&]( const CONSTRAINT_WITH_CONDITIONS* c ) -> bool
             {
                 implicit = c->parentRule && c->parentRule->m_Implicit;
 
@@ -748,6 +761,19 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                                               c->constraint.GetName(),
                                               MessageTextFromValue( UNITS, clearance ) ) )
                 }
+                else
+                {
+                    REPORT( wxString::Format( _( "Checking %s." ), c->constraint.GetName() ) )
+                }
+
+                if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
+                {
+                    if( implicit && ( isKeepoutZone( a ) || isKeepoutZone( b ) ) )
+                    {
+                        REPORT( _( "Board and netclass clearances not applied to keepout zones" ) );
+                        return true;
+                    }
+                }
                 else if( aConstraintId == DRC_CONSTRAINT_TYPE_DISALLOW )
                 {
                     int mask;
@@ -785,12 +811,23 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                     }
 
                     if( ( c->constraint.m_DisallowFlags & mask ) == 0 )
-                        return false;
-                }
-                else
-                {
-                    REPORT( wxString::Format( _( "Checking %s." ),
-                                              c->constraint.GetName() ) )
+                    {
+                        if( implicit )
+                        {
+                            REPORT( _( "Keepout constraint not met." ) )
+
+                            // Keepout areas unioned in classic system
+                            return false;
+                        }
+                        else
+                        {
+                            REPORT( _( "Disallow constraint not met." ) )
+
+                            // First matching rule wins in rule system
+                            REPORT( "Item allowed." );
+                            return true;
+                        }
+                    }
                 }
 
                 if( aLayer != UNDEFINED_LAYER && !c->layerTest.test( aLayer ) )

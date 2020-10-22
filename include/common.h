@@ -85,6 +85,8 @@ public:
     wxString AsString() const;
     wxString AsLegacyTimestampString() const;
 
+    static bool SniffTest( const wxString& aCandidate );
+
     /**
      * Change an existing time stamp based UUID into a true UUID.
      *
