@@ -1098,21 +1098,27 @@ const std::string SHAPE_POLY_SET::Format() const
 {
     std::stringstream ss;
 
-    ss << "polyset " << m_polys.size() << "\n";
+    ss << "SHAPE_LINE_CHAIN poly; \n";
 
     for( unsigned i = 0; i < m_polys.size(); i++ )
     {
-        ss << "poly " << m_polys[i].size() << "\n";
-
         for( unsigned j = 0; j < m_polys[i].size(); j++ )
         {
-            ss << m_polys[i][j].PointCount() << "\n";
 
-            for( int v = 0; v < m_polys[i][j].PointCount(); v++ )
-                ss << m_polys[i][j].CPoint( v ).x << " " << m_polys[i][j].CPoint( v ).y << "\n";
+            ss << "{ auto tmp = " << m_polys[i][j].Format() << ";\n";
+
+            SHAPE_POLY_SET poly;
+
+            if( j == 0 )
+            {
+                ss << " poly.AddOutline(tmp); } \n";
+            }
+            else
+            {
+                ss << " poly.AddHole(tmp); } \n";
+            }
+
         }
-
-        ss << "\n";
     }
 
     return ss.str();
