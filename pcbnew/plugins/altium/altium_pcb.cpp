@@ -1232,6 +1232,18 @@ void ALTIUM_PCB::ParsePolygons6Data(
             continue;
         }
 
+        SHAPE_LINE_CHAIN linechain;
+        HelperShapeLineChainFromAltiumVertices( linechain, elem.vertices );
+
+        if( linechain.PointCount() < 2 )
+        {
+            wxLogError( wxString::Format(
+                    _( "Polygon has only %d point extracted from %ld vertices. At least 2 points are required." ),
+                    linechain.PointCount(), elem.vertices.size() ) );
+            m_polygons.emplace_back( nullptr );
+            continue;
+        }
+
         ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
         m_board->Add( zone, ADD_MODE::APPEND );
         m_polygons.emplace_back( zone );
@@ -1241,13 +1253,10 @@ void ALTIUM_PCB::ParsePolygons6Data(
         zone->SetPosition( elem.vertices.at( 0 ).position );
         zone->SetLocked( elem.locked );
         zone->SetPriority( elem.pourindex > 0 ? elem.pourindex : 0 );
+        zone->Outline()->AddOutline( linechain );
 
         if( elem.pourindex > m_highest_pour_index )
             m_highest_pour_index = elem.pourindex;
-
-        SHAPE_LINE_CHAIN linechain;
-        HelperShapeLineChainFromAltiumVertices( linechain, elem.vertices );
-        zone->Outline()->AddOutline( linechain );
 
         // TODO: more flexible rule parsing
         const ARULE6* clearanceRule = GetRuleDefault( ALTIUM_RULE_KIND::PLANE_CLEARANCE );
@@ -1389,6 +1398,17 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
         }
         else if( elem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT || elem.is_keepout )
         {
+            SHAPE_LINE_CHAIN linechain;
+            HelperShapeLineChainFromAltiumVertices( linechain, elem.vertices );
+
+            if( linechain.PointCount() < 2 )
+            {
+                wxLogError( wxString::Format(
+                        _( "ShapeBasedRegion has only %d point extracted from %ld vertices. At least 2 points are required." ),
+                        linechain.PointCount(), elem.vertices.size() ) );
+                continue;
+            }
+
             ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
             m_board->Add( zone, ADD_MODE::APPEND );
 
@@ -1398,6 +1418,9 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
             zone->SetDoNotAllowPads( false );
             zone->SetDoNotAllowFootprints( false );
             zone->SetDoNotAllowCopperPour( true );
+
+            zone->SetPosition( elem.vertices.at( 0 ).position );
+            zone->Outline()->AddOutline( linechain );
 
             if( elem.layer == ALTIUM_LAYER::MULTI_LAYER )
             {
@@ -1417,12 +1440,6 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
                 zone->SetLayer( klayer );
             }
 
-            zone->SetPosition( elem.vertices.at( 0 ).position );
-
-            SHAPE_LINE_CHAIN linechain;
-            HelperShapeLineChainFromAltiumVertices( linechain, elem.vertices );
-            zone->Outline()->AddOutline( linechain );
-
             zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                          ZONE_CONTAINER::GetDefaultHatchPitch(), true );
         }
@@ -1439,14 +1456,23 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
                     klayer = Eco1_User;
                 }
 
+                SHAPE_LINE_CHAIN linechain;
+                HelperShapeLineChainFromAltiumVertices( linechain, elem.vertices );
+
+                if( linechain.PointCount() < 2 )
+                {
+                    wxLogError( wxString::Format(
+                            _( "Polygon has only %d point extracted from %ld vertices. At least 2 points are required." ),
+                            linechain.PointCount(), elem.vertices.size() ) );
+                    continue;
+                }
+
                 PCB_SHAPE* shape = new PCB_SHAPE( m_board );
                 m_board->Add( shape, ADD_MODE::APPEND );
                 shape->SetShape( S_POLYGON );
                 shape->SetLayer( klayer );
                 shape->SetWidth( 0 );
 
-                SHAPE_LINE_CHAIN linechain;
-                HelperShapeLineChainFromAltiumVertices( linechain, elem.vertices );
                 shape->SetPolyShape( linechain );
             }
         }
