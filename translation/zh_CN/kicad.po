@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-20 14:37-0700\n"
-"PO-Revision-Date: 2020-10-21 18:39+0000\n"
+"PO-Revision-Date: 2020-10-23 22:26+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -17481,7 +17481,7 @@ msgstr "R1："
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:487
 #: pcb_calculator/widgets/unit_selector.cpp:155
 msgid "kOhm"
-msgstr "kΩ"
+msgstr "kOhm"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:104
 msgid "R2:"
