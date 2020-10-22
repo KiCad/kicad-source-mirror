@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,12 +22,12 @@
  */
 
 
-#ifndef _DIALOG_EDIT_COMPONENT_IN_LIB_H_
-#define _DIALOG_EDIT_COMPONENT_IN_LIB_H_
+#ifndef DIALOG_LIB_SYMBOL_PROPERTIES_H
+#define DIALOG_LIB_SYMBOL_PROPERTIES_H
 
 #include <fields_grid_table.h>
 #include <widgets/unit_binder.h>
-#include <dialog_edit_component_in_lib_base.h>
+#include <dialog_lib_symbol_properties_base.h>
 
 
 class LIB_EDIT_FRAME;
@@ -35,7 +35,7 @@ class LIB_PART;
 class WX_GRID;
 
 
-class DIALOG_EDIT_COMPONENT_IN_LIBRARY: public DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE
+class DIALOG_LIB_SYMBOL_PROPERTIES: public DIALOG_LIB_SYMBOL_PROPERTIES_BASE
 {
     static int m_lastOpenedPage;    // To remember the last notebook selection
 
@@ -65,22 +65,20 @@ public:
     wxString        m_shownColumns;
     int             m_width;
 
+public:
+    /// Constructors
+    DIALOG_LIB_SYMBOL_PROPERTIES( LIB_EDIT_FRAME* parent, LIB_PART* aLibEntry );
+    ~DIALOG_LIB_SYMBOL_PROPERTIES();
+
+protected:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
     bool Validate() override;
 
-public:
-    /// Constructors
-    DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRAME* parent, LIB_PART* aLibEntry );
-    ~DIALOG_EDIT_COMPONENT_IN_LIBRARY();
-
-protected:
     virtual void onPowerCheckBox( wxCommandEvent& aEvent ) override;
 
 private:
-    void transferAliasDataToBuffer();
-
     void OnAddField( wxCommandEvent& event ) override;
     void OnDeleteField( wxCommandEvent& event ) override;
     void OnMoveUp( wxCommandEvent& event ) override;
@@ -101,4 +99,4 @@ private:
     void syncControlStates( bool aIsAlias );
 };
 
-#endif // _DIALOG_EDIT_COMPONENT_IN_LIB_H_
+#endif // DIALOG_LIB_SYMBOL_PROPERTIES_H

@@ -38,19 +38,19 @@
 #include <dialog_spice_model.h>
 #endif /* KICAD_SPICE */
 
-#include <dialog_edit_component_in_lib.h>
+#include <dialog_lib_symbol_properties.h>
 #include <settings/settings_manager.h>
 #include <libedit_settings.h>
 
 
-int DIALOG_EDIT_COMPONENT_IN_LIBRARY::m_lastOpenedPage = 0;
-DIALOG_EDIT_COMPONENT_IN_LIBRARY::LAST_LAYOUT
-    DIALOG_EDIT_COMPONENT_IN_LIBRARY::m_lastLayout = DIALOG_EDIT_COMPONENT_IN_LIBRARY::NONE;
+int DIALOG_LIB_SYMBOL_PROPERTIES::m_lastOpenedPage = 0;
+DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT
+    DIALOG_LIB_SYMBOL_PROPERTIES::m_lastLayout = DIALOG_LIB_SYMBOL_PROPERTIES::NONE;
 
 
-DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRAME* aParent,
+DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( LIB_EDIT_FRAME* aParent,
                                                                     LIB_PART* aLibEntry ) :
-    DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( aParent ),
+    DIALOG_LIB_SYMBOL_PROPERTIES_BASE( aParent ),
     m_Parent( aParent ),
     m_libEntry( aLibEntry ),
     m_pinNameOffset( aParent, m_nameOffsetLabel, m_nameOffsetCtrl, m_nameOffsetUnits, true ),
@@ -94,20 +94,20 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
 
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
-                     wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnGridCellChanging ),
+                     wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ),
                      NULL, this );
 
-    if( m_lastLayout != DIALOG_EDIT_COMPONENT_IN_LIBRARY::NONE )
+    if( m_lastLayout != DIALOG_LIB_SYMBOL_PROPERTIES::NONE )
     {
-        if( ( m_lastLayout == DIALOG_EDIT_COMPONENT_IN_LIBRARY::ALIAS && aLibEntry->IsRoot() )
-          || ( m_lastLayout == DIALOG_EDIT_COMPONENT_IN_LIBRARY::PARENT && aLibEntry->IsAlias() ) )
+        if( ( m_lastLayout == DIALOG_LIB_SYMBOL_PROPERTIES::ALIAS && aLibEntry->IsRoot() )
+          || ( m_lastLayout == DIALOG_LIB_SYMBOL_PROPERTIES::PARENT && aLibEntry->IsAlias() ) )
         {
             ResetSize();
         }
     }
 
-    m_lastLayout = ( aLibEntry->IsAlias() ) ? DIALOG_EDIT_COMPONENT_IN_LIBRARY::ALIAS :
-                   DIALOG_EDIT_COMPONENT_IN_LIBRARY::PARENT;
+    m_lastLayout = ( aLibEntry->IsAlias() ) ? DIALOG_LIB_SYMBOL_PROPERTIES::ALIAS
+                                            : DIALOG_LIB_SYMBOL_PROPERTIES::PARENT;
 
     m_grid->GetParent()->Layout();
     syncControlStates( m_libEntry->IsAlias() );
@@ -117,7 +117,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
 }
 
 
-DIALOG_EDIT_COMPONENT_IN_LIBRARY::~DIALOG_EDIT_COMPONENT_IN_LIBRARY()
+DIALOG_LIB_SYMBOL_PROPERTIES::~DIALOG_LIB_SYMBOL_PROPERTIES()
 {
     m_lastOpenedPage = m_NoteBook->GetSelection( );
 
@@ -128,7 +128,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::~DIALOG_EDIT_COMPONENT_IN_LIBRARY()
     m_grid->DestroyTable( m_fields );
 
     m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING,
-                        wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnGridCellChanging ),
+                        wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ),
                         NULL, this );
 
     // Delete the GRID_TRICKS.
@@ -136,7 +136,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::~DIALOG_EDIT_COMPONENT_IN_LIBRARY()
 }
 
 
-bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
+bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
         return false;
@@ -208,7 +208,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
 }
 
 
-bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::Validate()
+bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
 {
     if( !m_grid->CommitPendingChanges() )
         return false;
@@ -284,7 +284,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::Validate()
 }
 
 
-bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
+bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
         return false;
@@ -389,7 +389,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnGridCellChanging( wxGridEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 {
     wxGridCellEditor* editor = m_grid->GetCellEditor( event.GetRow(), event.GetCol() );
     wxControl* control = editor->GetControl();
@@ -429,13 +429,13 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnGridCellChanging( wxGridEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSymbolNameText( wxCommandEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnSymbolNameText( wxCommandEvent& event )
 {
     m_grid->SetCellValue( VALUE, FDC_VALUE, m_SymbolNameCtrl->GetValue() );
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSymbolNameKillFocus( wxFocusEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnSymbolNameKillFocus( wxFocusEvent& event )
 {
     if( !m_delayedFocusCtrl && !m_SymbolNameCtrl->GetValidator()->Validate( m_SymbolNameCtrl ) )
     {
@@ -447,7 +447,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSymbolNameKillFocus( wxFocusEvent& even
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAddField( wxCommandEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
 {
     if( !m_grid->CommitPendingChanges() )
         return;
@@ -473,12 +473,14 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAddField( wxCommandEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnDeleteField( wxCommandEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 {
     int curRow = m_grid->GetGridCursorRow();
 
     if( curRow < 0 )
+    {
         return;
+    }
     else if( curRow < MANDATORY_FIELDS )
     {
         DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
@@ -502,7 +504,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnDeleteField( wxCommandEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnMoveUp( wxCommandEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnMoveUp( wxCommandEvent& event )
 {
     if( !m_grid->CommitPendingChanges() )
         return;
@@ -524,7 +526,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnMoveUp( wxCommandEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnMoveDown( wxCommandEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 {
     if( !m_grid->CommitPendingChanges() )
         return;
@@ -546,7 +548,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnMoveDown( wxCommandEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnEditSpiceModel( wxCommandEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 {
 #ifdef KICAD_SPICE
     int diff = m_fields->size();
@@ -575,7 +577,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnEditSpiceModel( wxCommandEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnFilterDClick( wxMouseEvent& event)
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnFilterDClick( wxMouseEvent& event)
 {
     int idx = m_FootprintFilterListBox->HitTest( event.GetPosition() );
     wxCommandEvent dummy;
@@ -587,7 +589,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnFilterDClick( wxMouseEvent& event)
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnCancelButtonClick( wxCommandEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnCancelButtonClick( wxCommandEvent& event )
 {
     // Running the Footprint Browser gums up the works and causes the automatic cancel
     // stuff to no longer work.  So we do it here ourselves.
@@ -595,7 +597,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnCancelButtonClick( wxCommandEvent& even
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAddFootprintFilter( wxCommandEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddFootprintFilter( wxCommandEvent& event )
 {
     wxString  filterLine;
     WX_TEXT_ENTRY_DIALOG dlg( this, _( "Filter:" ), _( "Add Footprint Filter" ), filterLine );
@@ -613,7 +615,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAddFootprintFilter( wxCommandEvent& eve
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnDeleteFootprintFilter( wxCommandEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnDeleteFootprintFilter( wxCommandEvent& event )
 {
     int ii = m_FootprintFilterListBox->GetSelection();
 
@@ -629,7 +631,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnDeleteFootprintFilter( wxCommandEvent& 
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnEditFootprintFilter( wxCommandEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditFootprintFilter( wxCommandEvent& event )
 {
     int idx = m_FootprintFilterListBox->GetSelection();
 
@@ -645,7 +647,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnEditFootprintFilter( wxCommandEvent& ev
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::adjustGridColumns( int aWidth )
+void DIALOG_LIB_SYMBOL_PROPERTIES::adjustGridColumns( int aWidth )
 {
     m_width = aWidth;
 
@@ -663,7 +665,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::adjustGridColumns( int aWidth )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnUpdateUI( wxUpdateUIEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
     m_OptionPartsLocked->Enable( m_SelNumberOfUnits->GetValue() > 1 );
     m_pinNameOffset.Enable( m_PinsNameInsideButt->GetValue() );
@@ -739,7 +741,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnUpdateUI( wxUpdateUIEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSizeGrid( wxSizeEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
 {
     auto new_size = event.GetSize().GetX();
 
@@ -753,7 +755,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSizeGrid( wxSizeEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::syncControlStates( bool aIsAlias )
+void DIALOG_LIB_SYMBOL_PROPERTIES::syncControlStates( bool aIsAlias )
 {
     // Remove the not wanted notebook page.
     // *Do not use* Hide(), it is suitable to hide a widget,
@@ -774,7 +776,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::syncControlStates( bool aIsAlias )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::onPowerCheckBox( wxCommandEvent& aEvent )
+void DIALOG_LIB_SYMBOL_PROPERTIES::onPowerCheckBox( wxCommandEvent& aEvent )
 {
     if( m_OptionPower->IsChecked() )
     {

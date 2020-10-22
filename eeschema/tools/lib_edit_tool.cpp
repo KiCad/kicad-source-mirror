@@ -36,7 +36,7 @@
 #include <dialogs/dialog_lib_edit_draw_item.h>
 #include <dialogs/dialog_lib_edit_text.h>
 #include <dialogs/dialog_edit_one_field.h>
-#include <dialogs/dialog_edit_component_in_lib.h>
+#include <dialogs/dialog_lib_symbol_properties.h>
 #include <dialogs/dialog_lib_edit_pin_table.h>
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <lib_text.h>
@@ -541,7 +541,7 @@ void LIB_EDIT_TOOL::editSymbolProperties()
     m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( m_frame, part );
+    DIALOG_LIB_SYMBOL_PROPERTIES dlg( m_frame, part );
 
     // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
     // frame. Therefore this dialog as a modal frame parent, MUST be run under

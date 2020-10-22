@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -41,9 +41,9 @@ class WX_GRID;
 #define ID_LIBEDIT_NOTEBOOK 1000
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE
+/// Class DIALOG_LIB_SYMBOL_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
+class DIALOG_LIB_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -107,8 +107,8 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wxWindow* parent, wxWindowID id = ID_LIBEDIT_NOTEBOOK, const wxString& title = _("Library Symbol Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE();
+		DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = ID_LIBEDIT_NOTEBOOK, const wxString& title = _("Library Symbol Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~DIALOG_LIB_SYMBOL_PROPERTIES_BASE();
 
 };
 
