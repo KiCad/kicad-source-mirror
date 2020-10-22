@@ -1054,7 +1054,7 @@
                                                         <property name="style"></property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip">Use auxiliary axis as coordinates origin in plot files</property>
+                                                        <property name="tooltip">Use the drill/place file origin as the coordinate origin for plotted files</property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>
