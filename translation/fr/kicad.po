@@ -1,19 +1,21 @@
+# J. Lavoie <j.lavoie@net-c.ca>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-20 14:37-0700\n"
-"PO-Revision-Date: 2020-10-17 09:24+0200\n"
-"Last-Translator: \n"
-"Language-Team: jp-charras\n"
-"Language: fr_FR\n"
+"PO-Revision-Date: 2020-10-23 22:26+0000\n"
+"Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/kicad/"
+"master-source/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.3.1\n"
 "X-Poedit-Basepath: f:/kicad-launchpad/git_testing\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
-"X-Generator: Poedit 2.4.1\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
 "X-Poedit-SearchPath-1: eeschema\n"
@@ -1756,7 +1758,7 @@ msgstr "Copier les infos de version de KiCad dans le presse-papier"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr "Rapporter un Bug"
+msgstr "&Signaler une erreur"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:623
 msgid "Report a problem with KiCad"
@@ -1768,11 +1770,11 @@ msgstr "&OK"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:46
 msgid "Report"
-msgstr "Rapport"
+msgstr "Signaler"
 
 #: common/dialogs/dialog_color_picker.cpp:92
 msgid "Clear Color"
-msgstr ""
+msgstr "Effacer la couleur"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -1780,15 +1782,15 @@ msgstr "RVB"
 
 #: common/dialogs/dialog_color_picker_base.cpp:46
 msgid "Red:"
-msgstr "Rouge:"
+msgstr "Rouge :"
 
 #: common/dialogs/dialog_color_picker_base.cpp:50
 msgid "Green:"
-msgstr "Vert:"
+msgstr "Vert :"
 
 #: common/dialogs/dialog_color_picker_base.cpp:54
 msgid "Blue:"
-msgstr "Bleu:"
+msgstr "Bleu :"
 
 #: common/dialogs/dialog_color_picker_base.cpp:74
 msgid "HSV"
@@ -1796,11 +1798,11 @@ msgstr "HSV"
 
 #: common/dialogs/dialog_color_picker_base.cpp:91
 msgid "Hue:"
-msgstr "Teinte:"
+msgstr "Teinte :"
 
 #: common/dialogs/dialog_color_picker_base.cpp:95
 msgid "Saturation:"
-msgstr "Saturation:"
+msgstr "Saturation :"
 
 #: common/dialogs/dialog_color_picker_base.cpp:114
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45
@@ -1809,28 +1811,28 @@ msgstr "Saturation:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:94
 #: pcbnew/dialogs/dialog_text_properties.cpp:78
 msgid "Value:"
-msgstr "Valeur:"
+msgstr "Valeur :"
 
 #: common/dialogs/dialog_color_picker_base.cpp:134
 #: common/dialogs/dialog_color_picker_base.h:96
 msgid "Color Picker"
-msgstr "Sélecteur de Couleurs"
+msgstr "Sélecteur de couleurs"
 
 #: common/dialogs/dialog_color_picker_base.cpp:154
 msgid "Defined Colors"
-msgstr "Couleurs Définies"
+msgstr "Couleurs définies"
 
 #: common/dialogs/dialog_color_picker_base.cpp:163
 msgid "Opacity:"
-msgstr "Opacité:"
+msgstr "Opacité :"
 
 #: common/dialogs/dialog_color_picker_base.cpp:185
 msgid "Preview (old/new):"
-msgstr "Prévisualisation (ancien/nouveau):"
+msgstr "Prévisualisation (ancien/nouveau) :"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
 msgid "Reset to Default"
-msgstr "Réinitialiser à Défaut"
+msgstr "Réinitialiser à défaut"
 
 #: common/dialogs/dialog_configure_paths.cpp:248
 #: common/dialogs/dialog_configure_paths.cpp:318
@@ -2730,20 +2732,20 @@ msgstr "Révéler dans Finder"
 
 #: common/dialogs/panel_color_settings.cpp:130
 msgid "New theme name:"
-msgstr "Nouveau nom du thème:"
+msgstr "Nouveau nom du thème :"
 
 #: common/dialogs/panel_color_settings.cpp:130
 msgid "Add Color Theme"
-msgstr "Ajouter Thème de Couleur"
+msgstr "Ajouter un thème de couleur"
 
 #: common/dialogs/panel_color_settings.cpp:142
 msgid "Theme already exists!"
-msgstr "Le thème existe déjà!"
+msgstr "Le thème existe déjà !"
 
 #: common/dialogs/panel_color_settings.cpp:203
 #: common/dialogs/panel_color_settings.cpp:225
 msgid "New Theme..."
-msgstr "Nouveau Thème..."
+msgstr "Nouveau thème…"
 
 #: common/dialogs/panel_color_settings.cpp:213
 msgid "(read-only)"
@@ -8489,7 +8491,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc.cpp:302 eeschema/dialogs/dialog_erc.cpp:432
 #: pcbnew/dialogs/dialog_drc.cpp:256
 msgid "Done.<br><br>"
-msgstr ""
+msgstr "Terminé.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:363
 #, fuzzy
@@ -20414,25 +20416,30 @@ msgstr ""
 "Tous les types de référence %s ne seront pas numérotés."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:309
-#, fuzzy
 msgid ""
 "\n"
 "Locked footprints will not be annotated"
-msgstr "Charger une empreinte à partir du C.I. courant"
+msgstr ""
+"\n"
+"Charger une empreinte à partir du CI courant"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Front footprints will start at %s"
-msgstr "Charger une empreinte à partir du C.I. courant"
+msgstr ""
+"\n"
+"Charger une empreinte à partir du CI courant"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Back footprints will start at %s."
-msgstr "Charger une empreinte à partir du C.I. courant"
+msgstr ""
+"\n"
+"Charger une empreinte à partir du CI courant"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:323
 #, fuzzy
@@ -20494,18 +20501,20 @@ msgid "reference designator location"
 msgstr "Référence schématique"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:369
-#, fuzzy
 msgid ""
 "\n"
 "The schematic will be updated."
-msgstr "Le nouveau fichier schématique n'est pas sauvé"
+msgstr ""
+"\n"
+"Le nouveau fichier schématique n'est pas sauvé"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:371
-#, fuzzy
 msgid ""
 "\n"
 "The schematic will not be updated."
-msgstr "La schématique pour ce circiut imprimé ne peut pas être trouvée."
+msgstr ""
+"\n"
+"La schématique pour ce circiut imprimé ne peut pas être trouvée."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:521
 #, c-format
@@ -20517,13 +20526,14 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:535
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Excluding: %s from reannotation\n"
 "\n"
 msgstr ""
-" de renumérotation\n"
+"\n"
+"Exclusion : %s de renumérotation\n"
 "\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:538
@@ -20564,11 +20574,13 @@ msgid "Reference Designator Coordinates"
 msgstr "Coordonnées Référence Schématique"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:568
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Sort Code %d"
-msgstr "Code des Couleurs"
+msgstr ""
+"\n"
+"Code des couleurs %d"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:572
 #, c-format
