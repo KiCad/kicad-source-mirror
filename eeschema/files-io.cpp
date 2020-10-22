@@ -57,6 +57,7 @@
 #include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
 #include <page_layout/ws_data_model.h>
+#include <wx/stdpaths.h>
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
 {
@@ -80,10 +81,18 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
 
     if( aSaveUnderNewName )
     {
-        wxString wildcards = KiCadSchematicFileWildcard();
+        wxFileName savePath( Prj().GetProjectFullName() );
 
-        wxFileDialog dlg( this, _( "Schematic Files" ), wxPathOnly( Prj().GetProjectFullName() ),
-                          schematicFileName.GetFullName(), wildcards,
+        if( !savePath.IsOk() || !savePath.IsDirWritable() )
+        {
+            savePath = GetMruPath();
+
+            if( !savePath.IsOk() || !savePath.IsDirWritable() )
+                savePath = wxStandardPaths::Get().GetDocumentsDir();
+        }
+
+        wxFileDialog dlg( this, _( "Schematic Files" ), savePath.GetPath(),
+                          schematicFileName.GetFullName(), KiCadSchematicFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( dlg.ShowModal() == wxID_CANCEL )

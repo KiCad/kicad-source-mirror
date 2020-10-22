@@ -395,8 +395,17 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
                 orig_name = _( "noname" );
             }
 
-            wxString    pro_dir = wxPathOnly( Prj().GetProjectFullName() );
-            wxFileName  fn( pro_dir, orig_name, KiCadPcbFileExtension );
+            wxFileName savePath( Prj().GetProjectFullName() );
+
+            if( !savePath.IsOk() || !savePath.IsDirWritable() )
+            {
+                savePath = GetMruPath();
+
+                if( !savePath.IsOk() || !savePath.IsDirWritable() )
+                    savePath = wxStandardPaths::Get().GetDocumentsDir();
+            }
+
+            wxFileName  fn( savePath.GetPath(), orig_name, KiCadPcbFileExtension );
             wxString    filename = fn.GetFullPath();
 
             bool createProject = false;
