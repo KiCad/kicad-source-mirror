@@ -27,7 +27,7 @@
 #define __SHAPE_ARC_H
 
 #include <geometry/shape.h>
-#include <include/convert_to_biu.h>
+#include <convert_to_biu.h>
 #include <math/vector2d.h>   // for VECTOR2I
 
 class SHAPE_LINE_CHAIN;

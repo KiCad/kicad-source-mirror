@@ -34,7 +34,7 @@
 #include <connectivity/from_to_cache.h>
 
 #include <drc/drc_engine.h>
-#include <libs/kimath/include/geometry/shape_circle.h>
+#include <geometry/shape_circle.h>
 
 bool exprFromTo( LIBEVAL::CONTEXT* aCtx, void* self )
 {

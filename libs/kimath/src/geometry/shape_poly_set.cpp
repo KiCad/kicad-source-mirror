@@ -50,10 +50,10 @@
 #include <math/util.h>                       // for KiROUND, rescale
 #include <math/vector2d.h>                   // for VECTOR2I, VECTOR2D, VECTOR2
 #include <md5_hash.h>
-#include <libs/kimath/include/geometry/shape_segment.h>
-#include <libs/kimath/include/geometry/shape_circle.h>
-#include <libs/kimath/include/geometry/shape_simple.h>
-#include <libs/kimath/include/geometry/shape_compound.h>
+#include <geometry/shape_segment.h>
+#include <geometry/shape_circle.h>
+#include <geometry/shape_simple.h>
+#include <geometry/shape_compound.h>
 
 using namespace ClipperLib;
 
