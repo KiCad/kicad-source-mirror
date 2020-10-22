@@ -459,8 +459,15 @@ int ERC_TESTER::TestPinToPin()
         {
             ELECTRICAL_PINTYPE refType = refPin->GetType();
 
-            if( !needsDriver && DrivenPinTypes.count( refType ) )
-                needsDriver = refPin;
+            if( DrivenPinTypes.count( refType ) )
+            {
+                // needsDriver will be the pin shown in the error report eventually, so try to
+                // upgrade to a "better" pin if possible: something visible and not a power symbol
+                if( !needsDriver ||
+                        ( !needsDriver->IsVisible() && refPin->IsVisible() ) ||
+                        ( needsDriver->IsPowerConnection() && !refPin->IsPowerConnection() ) )
+                    needsDriver = refPin;
+            }
 
             hasDriver |= DrivingPinTypes.count( refType );
 
