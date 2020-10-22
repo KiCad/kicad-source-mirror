@@ -49,11 +49,11 @@ DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aPar
                                          GencadFileWildcard(),
                                          wxDefaultPosition, wxSize( -1,-1 ),
                                          wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
-    m_mainSizer->Add( m_filePicker, 0, wxEXPAND | wxRIGHT, 5 );
+    m_mainSizer->Add( m_filePicker, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 5 );
 
     m_optsSizer = new wxGridSizer( 0, 1, 3, 3 );
     createOptCheckboxes();
-    m_mainSizer->Add( m_optsSizer, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+    m_mainSizer->Add( m_optsSizer, 1, wxEXPAND | wxALL, 10 );
 
     wxSizer* stdButtons = CreateSeparatedButtonSizer( wxOK | wxCANCEL );
     m_mainSizer->Add( stdButtons, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
@@ -135,7 +135,7 @@ void DIALOG_GENCAD_EXPORT_OPTIONS::createOptCheckboxes()
         { FLIP_BOTTOM_PADS,    _( "Flip bottom footprint padstacks" ) },
         { UNIQUE_PIN_NAMES,    _( "Generate unique pin names" ) },
         { INDIVIDUAL_SHAPES,   _( "Generate a new shape for each footprint instance (do not reuse shapes)" ) },
-        { USE_AUX_ORIGIN,      _( "Use auxiliary axis as origin" ) },
+        { USE_AUX_ORIGIN,      _( "Use drill/place file origin as origin" ) },
         { STORE_ORIGIN_COORDS, _( "Save the origin coordinates in the file" ) }
     };
 

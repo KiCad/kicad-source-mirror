@@ -97,11 +97,11 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxString m_Choice_Drill_OffsetChoices[] = { _("Absolute"), _("Auxiliary axis") };
+	wxString m_Choice_Drill_OffsetChoices[] = { _("Absolute"), _("Drill/place file origin") };
 	int m_Choice_Drill_OffsetNChoices = sizeof( m_Choice_Drill_OffsetChoices ) / sizeof( wxString );
 	m_Choice_Drill_Offset = new wxRadioBox( this, wxID_ANY, _("Drill Origin"), wxDefaultPosition, wxDefaultSize, m_Choice_Drill_OffsetNChoices, m_Choice_Drill_OffsetChoices, 1, wxRA_SPECIFY_COLS );
-	m_Choice_Drill_Offset->SetSelection( 0 );
-	m_Choice_Drill_Offset->SetToolTip( _("Choose the coordinate origin: absolute or relative to the auxiliray axis") );
+	m_Choice_Drill_Offset->SetSelection( 1 );
+	m_Choice_Drill_Offset->SetToolTip( _("Choose the coordinate origin: absolute or relative to the drill/place file origin") );
 
 	bLeftSizer->Add( m_Choice_Drill_Offset, 0, wxALL|wxEXPAND, 5 );
 
