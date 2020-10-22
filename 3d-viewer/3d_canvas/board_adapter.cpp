@@ -443,8 +443,9 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
 
 extern bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
-                                           wxString* aErrorText, unsigned int aTolerance,
-                                           wxPoint* aErrorLocation );
+                                           unsigned int aTolerance, wxString* aErrorText,
+                                           std::vector<wxPoint>* aDiscontinuities = nullptr,
+                                           std::vector<wxPoint>* aIntersections = nullptr );
 
 
 bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
@@ -456,9 +457,8 @@ bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
 
     if( m_board->IsFootprintHolder() )
     {
-        success = BuildFootprintPolygonOutlines( m_board, m_board_poly, &msg,
-                                                 m_board->GetDesignSettings().m_MaxError,
-                                                 nullptr );
+        success = BuildFootprintPolygonOutlines( m_board, m_board_poly,
+                                                 m_board->GetDesignSettings().m_MaxError, &msg );
 
         // Make polygon strictly simple to avoid issues (especially in 3D viewer)
         m_board_poly.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );

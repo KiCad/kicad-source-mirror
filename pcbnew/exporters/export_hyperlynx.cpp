@@ -293,12 +293,10 @@ void HYPERLYNX_EXPORTER::writeSinglePadStack( HYPERLYNX_PAD_STACK& aStack )
 bool HYPERLYNX_EXPORTER::writeBoardInfo()
 {
     SHAPE_POLY_SET outlines;
-    wxString       errText;
-    wxPoint        errLoc;
 
     m_out->Print( 0, "{BOARD \"%s\"\n", (const char*) m_board->GetFileName().c_str() );
 
-    if( !m_board->GetBoardPolygonOutlines( outlines, &errText, &errLoc ) )
+    if( !m_board->GetBoardPolygonOutlines( outlines ) )
     {
         return false;
     }

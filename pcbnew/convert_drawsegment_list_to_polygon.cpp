@@ -105,16 +105,16 @@ inline bool close_st( const wxPoint& aReference, const wxPoint& aFirst, const wx
 
 
 /**
- * Searches for a PCB_SHAPE matching a given end point or start point in a list, and
- * if found, removes it from the TYPE_COLLECTOR and returns it, else returns NULL.
+ * Searches for a PCB_SHAPE matching a given end point or start point in a list.
+ * @param aShape The starting shape.
  * @param aPoint The starting or ending point to search for.
  * @param aList The list to remove from.
  * @param aLimit is the distance from \a aPoint that still constitutes a valid find.
  * @return PCB_SHAPE* - The first PCB_SHAPE that has a start or end point matching
  *   aPoint, otherwise NULL if none.
  */
-static PCB_SHAPE* findPoint( const wxPoint& aPoint, std::vector< PCB_SHAPE* >& aList,
-                             unsigned aLimit )
+static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const wxPoint& aPoint,
+                            const std::vector<PCB_SHAPE*>& aList, unsigned aLimit )
 {
     unsigned min_d = INT_MAX;
     int      ndx_min = 0;
@@ -123,6 +123,10 @@ static PCB_SHAPE* findPoint( const wxPoint& aPoint, std::vector< PCB_SHAPE* >& a
     for( size_t i = 0; i < aList.size(); ++i )
     {
         PCB_SHAPE* graphic = aList[i];
+
+        if( graphic == aShape )
+            continue;
+
         unsigned   d;
 
         switch( graphic->GetShape() )
@@ -130,7 +134,6 @@ static PCB_SHAPE* findPoint( const wxPoint& aPoint, std::vector< PCB_SHAPE* >& a
         case S_ARC:
             if( aPoint == graphic->GetArcStart() || aPoint == graphic->GetArcEnd() )
             {
-                aList.erase( aList.begin() + i );
                 return graphic;
             }
 
@@ -152,7 +155,6 @@ static PCB_SHAPE* findPoint( const wxPoint& aPoint, std::vector< PCB_SHAPE* >& a
         default:
             if( aPoint == graphic->GetStart() || aPoint == graphic->GetEnd() )
             {
-                aList.erase( aList.begin() + i );
                 return graphic;
             }
 
@@ -174,9 +176,7 @@ static PCB_SHAPE* findPoint( const wxPoint& aPoint, std::vector< PCB_SHAPE* >& a
 
     if( min_d <= aLimit )
     {
-        PCB_SHAPE* graphic = aList[ndx_min];
-        aList.erase( aList.begin() + ndx_min );
-        return graphic;
+        return aList[ndx_min];
     }
 
     return NULL;
@@ -193,34 +193,37 @@ static PCB_SHAPE* findPoint( const wxPoint& aPoint, std::vector< PCB_SHAPE* >& a
  * @param aTolerance is the max distance between points that is still accepted as connected
  *                   (internal units)
  * @param aErrorText is a wxString to return error message.
- * @param aErrorLocation is the optional position of the error in the outline
+ * @param aDiscontinuities = an optional array of wxPoint giving the locations of
+ *                           discontinuities in the outline
+ * @param aIntersections = an optional array of wxPoint giving the locations of self-
+ *                         intersections in the outline
  */
 bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET& aPolygons,
-                              wxString* aErrorText, unsigned int aTolerance,
-                              wxPoint* aErrorLocation )
+                              unsigned int aTolerance, wxString* aErrorText,
+                              std::vector<wxPoint>* aDiscontinuities,
+                              std::vector<wxPoint>* aIntersections )
 {
     if( aSegList.size() == 0 )
         return true;
 
-    // Return value
-    bool polygonComplete = true;
+    bool polygonComplete = false;
+    bool selfIntersecting = false;
 
-    wxString msg;
-
-    // Make a working copy of aSegList, because the list is modified during calculations
-    std::vector<PCB_SHAPE*> segList = aSegList;
-
+    wxString   msg;
     PCB_SHAPE* graphic;
-    wxPoint prevPt;
+    wxPoint    prevPt;
+
+    std::set<PCB_SHAPE*> startCandidates( aSegList.begin(), aSegList.end() );
 
     // Find edge point with minimum x, this should be in the outer polygon
     // which will define the perimeter polygon polygon.
     wxPoint xmin    = wxPoint( INT_MAX, 0 );
     int     xmini   = 0;
 
-    for( size_t i = 0; i < segList.size(); i++ )
+    for( size_t i = 0; i < aSegList.size(); i++ )
     {
-        graphic = (PCB_SHAPE*) segList[i];
+        graphic = (PCB_SHAPE*) aSegList[i];
+        graphic->ClearFlags( SKIP_STRUCT );
 
         switch( graphic->GetShape() )
         {
@@ -330,10 +333,10 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
     // can put enough graphics together by matching endpoints to formulate a cohesive
     // polygon.
 
-    graphic = (PCB_SHAPE*) segList[xmini];
+    graphic = (PCB_SHAPE*) aSegList[xmini];
 
-    // The first PCB_SHAPE is in 'graphic', ok to remove it from 'items'
-    segList.erase( segList.begin() + xmini );
+    graphic->SetFlags( SKIP_STRUCT );
+    startCandidates.erase( graphic );
 
     // Output the outline perimeter as polygon.
     if( graphic->GetShape() == S_CIRCLE )
@@ -412,6 +415,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                     double  angle   = -graphic->GetAngle();
                     double  radius  = graphic->GetRadius();
                     int     steps   = GetArcToSegmentCount( radius, aTolerance, angle / 10.0 );
+                    double  delta   = angle / steps;
 
                     if( !close_enough( prevPt, pstart, aTolerance ) )
                     {
@@ -421,18 +425,17 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                         std::swap( pstart, pend );
                     }
 
-                    wxPoint nextPt;
-
-                    for( int step = 1; step<=steps; ++step )
+                    for( double rotation = delta; rotation < angle; rotation += delta )
                     {
-                        double rotation = ( angle * step ) / steps;
-                        nextPt = pstart;
-                        RotatePoint( &nextPt, pcenter, rotation );
+                        wxPoint pt = pstart;
+                        RotatePoint( &pt, pcenter, rotation );
 
-                        aPolygons.Append( nextPt );
+                        aPolygons.Append( pt );
                     }
 
-                    prevPt = nextPt;
+                    aPolygons.Append( pend );
+
+                    prevPt = pend;
                 }
                 break;
 
@@ -471,51 +474,49 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 break;
 
             default:
-                if( aErrorText )
-                {
-                    msg.Printf( "Unsupported PCB_SHAPE type %s.",
-                                BOARD_ITEM::ShowShape( graphic->GetShape() ) );
-
-                    *aErrorText << msg << "\n";
-                }
-
-                if( aErrorLocation )
-                    *aErrorLocation = graphic->GetPosition();
-
+                wxFAIL_MSG( "Unsupported PCB_SHAPE type "
+                                + BOARD_ITEM::ShowShape( graphic->GetShape() ) );
                 return false;
             }
 
             // Get next closest segment.
 
-            graphic = findPoint( prevPt, segList, aTolerance );
+            graphic = findNext( graphic, prevPt, aSegList, aTolerance );
 
-            // If there are no more close segments, check if the board
-            // outline polygon can be closed.
-
-            if( !graphic )
+            if( graphic && !( graphic->GetFlags() & SKIP_STRUCT ) )
             {
-                if( close_enough( startPt, prevPt, aTolerance ) )
+                graphic->SetFlags( SKIP_STRUCT );
+                startCandidates.erase( graphic );
+                continue;
+            }
+
+            // Finished, or ran into trouble...
+
+            if( close_enough( startPt, prevPt, aTolerance ) )
+            {
+                polygonComplete = true;
+                break;
+            }
+            else if( graphic )  // encountered already-used segment, but not at the start
+            {
+                polygonComplete = false;
+                break;
+            }
+            else                // encountered discontinuity
+            {
+                if( aErrorText )
                 {
-                    // Close the polygon back to start point
-                    // aPolygons.Append( startPt ); // not needed
+                    msg.Printf( _( "Unable to find edge with an endpoint of (%s, %s)." ),
+                                StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.x ),
+                                StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.y ) );
+
+                    *aErrorText << msg << "\n";
                 }
-                else
-                {
-                    if( aErrorText )
-                    {
-                        msg.Printf( _( "Unable to find edge with an endpoint of (%s, %s)." ),
-                                    StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.x ),
-                                    StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.y ) );
 
-                        *aErrorText << msg << "\n";
-                    }
+                if( aDiscontinuities )
+                    aDiscontinuities->emplace_back( prevPt );
 
-                    if( aErrorLocation )
-                        *aErrorLocation = prevPt;
-
-                    polygonComplete = false;
-                    break;
-                }
+                polygonComplete = false;
                 break;
             }
         }
@@ -523,14 +524,14 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
 
     int holeNum = -1;
 
-    while( segList.size() )
+    while( startCandidates.size() )
     {
-        // emit a signal layers keepout for every interior polygon left...
         int hole = aPolygons.NewHole();
         holeNum++;
 
-        graphic = (PCB_SHAPE*) segList[0];
-        segList.erase( segList.begin() );
+        graphic = (PCB_SHAPE*) *startCandidates.begin();
+        graphic->SetFlags( SKIP_STRUCT );
+        startCandidates.erase( startCandidates.begin() );
 
         // Both circles and polygons on the edge cuts layer are closed items that
         // do not connect to other elements, so we process them independently
@@ -619,6 +620,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                         double  angle   = -graphic->GetAngle();
                         int     radius  = graphic->GetRadius();
                         int     steps = GetArcToSegmentCount( radius, aTolerance, angle / 10.0 );
+                        double  delta   = angle / steps;
 
                         if( !close_enough( prevPt, pstart, aTolerance ) )
                         {
@@ -628,19 +630,17 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                             std::swap( pstart, pend );
                         }
 
-                        wxPoint nextPt;
-
-                        for( int step = 1; step <= steps; ++step )
+                        for( double rotation = delta; rotation < angle; rotation += delta )
                         {
-                            double rotation = ( angle * step ) / steps;
+                            wxPoint pt = pstart;
+                            RotatePoint( &pt, pcenter, rotation );
 
-                            nextPt = pstart;
-                            RotatePoint( &nextPt, pcenter, rotation );
-
-                            aPolygons.Append( nextPt, -1, hole );
+                            aPolygons.Append( pt, -1, hole );
                         }
 
-                        prevPt = nextPt;
+                        aPolygons.Append( pend );
+
+                        prevPt = pend;
                     }
                     break;
 
@@ -680,56 +680,57 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                     break;
 
                 default:
-                    if( aErrorText )
-                    {
-                        msg.Printf( "Unsupported PCB_SHAPE type %s.",
-                                    BOARD_ITEM::ShowShape( graphic->GetShape() ) );
-
-                        *aErrorText << msg << "\n";
-                    }
-
-                    if( aErrorLocation )
-                        *aErrorLocation = graphic->GetPosition();
+                    wxFAIL_MSG( "Unsupported PCB_SHAPE type "
+                                    + BOARD_ITEM::ShowShape( graphic->GetShape() ) );
 
                     return false;
                 }
 
                 // Get next closest segment.
 
-                graphic = findPoint( prevPt, segList, aTolerance );
+                graphic = findNext( graphic, prevPt, aSegList, aTolerance );
 
-                // If there are no more close segments, check if polygon
-                // can be closed.
-
-                if( !graphic )
+                if( graphic && !( graphic->GetFlags() & SKIP_STRUCT ) )
                 {
-                    if( close_enough( startPt, prevPt, aTolerance ) )
+                    graphic->SetFlags( SKIP_STRUCT );
+                    startCandidates.erase( graphic );
+                    continue;
+                }
+
+                // Finished, or ran into trouble...
+
+                if( close_enough( startPt, prevPt, aTolerance ) )
+                {
+                    break;
+                }
+                else if( graphic )  // encountered already-used segment, but not at the start
+                {
+                    polygonComplete = false;
+                    break;
+                }
+                else                // encountered discontinuity
+                {
+                    if( aErrorText )
                     {
-                        // Close the polygon back to start point
-                        // aPolygons.Append( startPt, -1, hole );   // not needed
+                        msg.Printf( _( "Unable to find edge with an endpoint of (%s, %s)." ),
+                                    StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.x ),
+                                    StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.y ) );
+
+                        *aErrorText << msg << "\n";
                     }
-                    else
-                    {
-                        if( aErrorText )
-                        {
-                            msg.Printf( _( "Unable to find edge with an endpoint of (%s, %s)." ),
-                                        StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.x ),
-                                        StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.y ) );
 
-                            *aErrorText << msg << "\n";
-                        }
+                    if( aDiscontinuities )
+                        aDiscontinuities->emplace_back( prevPt );
 
-                        if( aErrorLocation )
-                            *aErrorLocation = prevPt;
-
-                        aPolygons.Hole( 0, holeNum ).SetClosed( false );
-                        polygonComplete = false;
-                    }
+                    polygonComplete = false;
                     break;
                 }
             }
         }
     }
+
+    if( !polygonComplete )
+        return false;
 
     // All of the silliness that follows is to work around the segment iterator
     // while checking for collisions.
@@ -745,29 +746,23 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
             if( *seg1 == *seg2 ||
                     ( ( *seg1 ).A == ( *seg2 ).B && ( *seg1 ).B == ( *seg2 ).A ) )
             {
-                if( aErrorLocation )
-                {
-                    aErrorLocation->x = ( *seg1 ).A.x;
-                    aErrorLocation->y = ( *seg1 ).A.y;
-                }
+                if( aIntersections )
+                    aIntersections->emplace_back( ( *seg1 ).A.x, ( *seg1 ).A.y );
 
-                return false;
+                selfIntersecting = true;
             }
 
             if( boost::optional<VECTOR2I> pt = seg1.Get().Intersect( seg2.Get(), true ) )
             {
-                if( aErrorLocation )
-                {
-                    aErrorLocation->x = pt->x;
-                    aErrorLocation->y = pt->y;
-                }
+                if( aIntersections )
+                    aIntersections->emplace_back( (wxPoint) pt.get() );
 
-                return false;
+                selfIntersecting = true;
             }
         }
     }
 
-    return polygonComplete;
+    return !selfIntersecting;
 }
 
 #include <class_board.h>
@@ -777,8 +772,9 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
  * Any closed outline inside the main outline is a hole
  * All contours should be closed, i.e. valid closed polygon vertices
  */
-bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, wxString* aErrorText,
-                                unsigned int aTolerance, wxPoint* aErrorLocation )
+bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, unsigned int aTolerance,
+                                wxString* aErrorText, std::vector<wxPoint>* aDiscontinuities,
+                                std::vector<wxPoint>* aIntersections )
 {
     PCB_TYPE_COLLECTOR  items;
     bool                success = false;
@@ -799,8 +795,8 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, wxStri
 
     if( segList.size() )
     {
-        success = ConvertOutlineToPolygon( segList, aOutlines, aErrorText, aTolerance,
-                                           aErrorLocation );
+        success = ConvertOutlineToPolygon( segList, aOutlines, aTolerance, aErrorText,
+                                           aDiscontinuities, aIntersections );
     }
     else if( aErrorText )
     {
@@ -997,8 +993,9 @@ int findEndSegments( SHAPE_LINE_CHAIN& aChain, SEG& aStartSeg, SEG& aEndSeg )
  *   as a hole, and the outer edge will be formed using the bounding box.
  */
 bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
-                                    wxString* aErrorText, unsigned int aTolerance,
-                                    wxPoint* aErrorLocation )
+                                    unsigned int aTolerance, wxString* aErrorText,
+                                    std::vector<wxPoint>* aDiscontinuities,
+                                    std::vector<wxPoint>* aIntersections )
 {
     PCB_TYPE_COLLECTOR  items;
 
@@ -1018,7 +1015,8 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
             segList.push_back( static_cast<PCB_SHAPE*>( items[ii] ) );
     }
 
-    bool success = ConvertOutlineToPolygon( segList, outlines, aErrorText, aTolerance, aErrorLocation );
+    bool success = ConvertOutlineToPolygon( segList, outlines, aTolerance, aErrorText,
+                                            aDiscontinuities, aIntersections );
 
     MODULE* boardMod = aBoard->GetFirstModule();
 

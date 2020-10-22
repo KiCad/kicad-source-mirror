@@ -1845,15 +1845,17 @@ bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAI
  * return true if success, false if a contour is not valid
  */
 extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
-                                       wxString* aErrorText, unsigned int aTolerance,
-                                       wxPoint* aErrorLocation = nullptr );
+                                       unsigned int aTolerance, wxString* aErrorText,
+                                       std::vector<wxPoint>* aDiscontinuities = nullptr,
+                                       std::vector<wxPoint>* aIntersections = nullptr );
 
 
 bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, wxString* aErrorText,
-                                     wxPoint* aErrorLocation )
+                                     std::vector<wxPoint>* aDiscontinuities,
+                                     std::vector<wxPoint>* aIntersections )
 {
-    bool success = BuildBoardPolygonOutlines( this, aOutlines, aErrorText,
-                                              GetDesignSettings().m_MaxError, aErrorLocation );
+    bool success = BuildBoardPolygonOutlines( this, aOutlines, GetDesignSettings().m_MaxError,
+                                              aErrorText, aDiscontinuities, aIntersections );
 
     // Make polygon strictly simple to avoid issues (especially in 3D viewer)
     aOutlines.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );

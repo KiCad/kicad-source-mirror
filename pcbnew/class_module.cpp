@@ -1668,8 +1668,9 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 
 // see convert_drawsegment_list_to_polygon.cpp:
 extern bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET& aPolygons,
-                                     wxString* aErrorText, unsigned int aTolerance,
-                                     wxPoint* aErrorLocation = nullptr );
+                                     unsigned int aTolerance, wxString* aErrorText,
+                                     std::vector<wxPoint>* aDiscontinuities = nullptr,
+                                     std::vector<wxPoint>* aIntersections = nullptr );
 
 
 std::shared_ptr<SHAPE> MODULE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
@@ -1709,20 +1710,19 @@ bool MODULE::BuildPolyCourtyard()
 
     #define ARC_ERROR_MAX 0.02      /* error max in mm to approximate a arc by segments */
     bool success = ConvertOutlineToPolygon( list_front, m_poly_courtyard_front,
-                                            &error_msg,
-                                            (unsigned) Millimeter2iu( ARC_ERROR_MAX ) );
+                                            (unsigned) Millimeter2iu( ARC_ERROR_MAX ), &error_msg );
 
     if( success )
     {
         success = ConvertOutlineToPolygon( list_back, m_poly_courtyard_back,
-                                           &error_msg,
-                                           (unsigned) Millimeter2iu( ARC_ERROR_MAX ) );
+                                           (unsigned) Millimeter2iu( ARC_ERROR_MAX ), &error_msg );
     }
 
     if( !error_msg.IsEmpty() )
     {
-        wxLogMessage( wxString::Format(
-                _( "Processing courtyard of \"%s\": %s" ), GetFPID().Format().wx_str(), error_msg ) );
+        wxLogMessage( wxString::Format( _( "Processing courtyard of \"%s\": %s" ),
+                                        GetFPID().Format().wx_str(),
+                                        error_msg ) );
     }
 
     return success;

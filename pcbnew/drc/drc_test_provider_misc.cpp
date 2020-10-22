@@ -80,21 +80,40 @@ private:
 
 void DRC_TEST_PROVIDER_MISC::testOutline()
 {
-    wxPoint error_loc( m_board->GetBoardEdgesBoundingBox().GetPosition() );
+    std::vector<wxPoint> discontinuities;
+    std::vector<wxPoint> intersections;
 
     SHAPE_POLY_SET boardOutlines;
 
-    if( m_board->GetBoardPolygonOutlines( boardOutlines, nullptr, &error_loc ) )
+    if( m_board->GetBoardPolygonOutlines( boardOutlines, nullptr, &discontinuities,
+                                          &intersections ) )
+    {
         return;
+    }
 
-    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
+    for( wxPoint pt : discontinuities )
+    {
+        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
 
-    m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(not a closed shape)" ) );
+        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(not a closed shape)" ) );
 
-    drcItem->SetErrorMessage( m_msg );
-    drcItem->SetItems( m_board );
+        drcItem->SetErrorMessage( m_msg );
+        drcItem->SetItems( m_board );
 
-    reportViolation( drcItem, error_loc );
+        reportViolation( drcItem, pt );
+    }
+
+    for( wxPoint pt : intersections )
+    {
+        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
+
+        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(self-intersecting)" ) );
+
+        drcItem->SetErrorMessage( m_msg );
+        drcItem->SetItems( m_board );
+
+        reportViolation( drcItem, pt );
+    }
 }
 
 

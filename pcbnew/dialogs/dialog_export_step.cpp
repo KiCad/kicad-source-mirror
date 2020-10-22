@@ -235,8 +235,9 @@ void DIALOG_EXPORT_STEP::onUpdateYPos( wxUpdateUIEvent& aEvent )
 }
 
 extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
-                                wxString* aErrorText, unsigned int aTolerance,
-                                wxPoint* aErrorLocation = nullptr );
+                                       unsigned int aTolerance, wxString* aErrorText,
+                                       std::vector<wxPoint>* aDiscontinuities = nullptr,
+                                       std::vector<wxPoint>* aIntersections = nullptr );
 
 void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 {
@@ -246,7 +247,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     wxString msg;
 
     // Check if the board outline is continuous
-    if( !BuildBoardPolygonOutlines( m_parent->GetBoard(), outline, &msg, Millimeter2iu( 0.01 ) ) )
+    if( !BuildBoardPolygonOutlines( m_parent->GetBoard(), outline, Millimeter2iu( 0.01 ), &msg ) )
     {
         DisplayErrorMessage( this, _( "Cannot determine the board outline." ), msg );
         return;
