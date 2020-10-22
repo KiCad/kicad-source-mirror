@@ -145,6 +145,49 @@ void ALTIUM_PCB::HelperDrawsegmentSetLocalCoord( PCB_SHAPE* aShape, uint16_t aCo
 }
 
 
+void HelperShapeLineChainFromAltiumVertices(
+        SHAPE_LINE_CHAIN& line, const std::vector<ALTIUM_VERTICE>& vertices )
+{
+    if( vertices.empty() )
+        THROW_IO_ERROR( "no vertices which can be interpreted" );
+
+    for( auto& vertice : vertices )
+    {
+        if( vertice.isRound )
+        {
+            double angle = NormalizeAngleDegreesPos( vertice.endangle - vertice.startangle );
+
+            double  startradiant   = DEG2RAD( vertice.startangle );
+            double  endradiant     = DEG2RAD( vertice.endangle );
+            wxPoint arcStartOffset = wxPoint( KiROUND( std::cos( startradiant ) * vertice.radius ),
+                    -KiROUND( std::sin( startradiant ) * vertice.radius ) );
+
+            wxPoint arcEndOffset = wxPoint( KiROUND( std::cos( endradiant ) * vertice.radius ),
+                    -KiROUND( std::sin( endradiant ) * vertice.radius ) );
+
+            wxPoint arcStart = vertice.center + arcStartOffset;
+            wxPoint arcEnd   = vertice.center + arcEndOffset;
+
+            if( GetLineLength( arcStart, vertice.position )
+                    < GetLineLength( arcEnd, vertice.position ) )
+            {
+                line.Append( SHAPE_ARC( vertice.center, arcStart, -angle ) );
+            }
+            else
+            {
+                line.Append( SHAPE_ARC( vertice.center, arcEnd, angle ) );
+            }
+        }
+        else
+        {
+            line.Append( vertice.position );
+        }
+    }
+
+    line.SetClosed( true );
+}
+
+
 PCB_LAYER_ID ALTIUM_PCB::GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const
 {
     auto override = m_layermap.find( aAltiumLayer );
@@ -1205,10 +1248,9 @@ void ALTIUM_PCB::ParsePolygons6Data(
         if( elem.pourindex > m_highest_pour_index )
             m_highest_pour_index = elem.pourindex;
 
-        for( auto& vertice : elem.vertices )
-        {
-            zone->AppendCorner( vertice.position, -1 ); // TODO: arcs
-        }
+        SHAPE_LINE_CHAIN linechain;
+        HelperShapeLineChainFromAltiumVertices( linechain, elem.vertices );
+        zone->Outline()->AddOutline( linechain );
 
         // TODO: more flexible rule parsing
         const ARULE6* clearanceRule = GetRuleDefault( ALTIUM_RULE_KIND::PLANE_CLEARANCE );
@@ -1380,10 +1422,9 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
 
             zone->SetPosition( elem.vertices.at( 0 ).position );
 
-            for( auto& vertice : elem.vertices )
-            {
-                zone->AppendCorner( vertice.position, -1 );
-            }
+            SHAPE_LINE_CHAIN linechain;
+            HelperShapeLineChainFromAltiumVertices( linechain, elem.vertices );
+            zone->Outline()->AddOutline( linechain );
 
             zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                          ZONE_CONTAINER::GetDefaultHatchPitch(), true );
@@ -1407,12 +1448,9 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
                 shape->SetLayer( klayer );
                 shape->SetWidth( 0 );
 
-                std::vector<wxPoint> pts;
-                for( auto& vertice : elem.vertices )
-                {
-                    pts.push_back( vertice.position );
-                }
-                shape->SetPolyPoints( pts );
+                SHAPE_LINE_CHAIN linechain;
+                HelperShapeLineChainFromAltiumVertices( linechain, elem.vertices );
+                shape->SetPolyShape( linechain );
             }
         }
         else
