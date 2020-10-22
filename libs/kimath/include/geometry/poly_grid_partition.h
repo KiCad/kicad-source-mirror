@@ -39,20 +39,32 @@
 #include <math/vector2d.h>
 
 /**
- * POLY_GRID_PARTITION
+ * Class POLY_GRID_PARTITION
  *
- * Provides a fast test for point inside polygon by splitting the edges
- * of the polygon into a rectangular grid.
+ * Provides a fast test for point inside polygon.
+ *
+ * Takes a large poly and splits it into a grid of rectangular cells, forming a spatial hash table.
+ * Each cell contains only the edges that 'touch it' (any point of the edge belongs to the cell).
+ * Edges can be marked as leading or trailing. Leading edge indicates that space to the left of it (x-wise) is outside the polygon.
+ * Trailing edge, conversely, means space to the right is outside the polygon.
+ * The point inside check for point (p) works as follows:
+ * - determine the cell coordinates of (p) (poly2grid)
+ * - find the matching grid cell ( O(0), if the cell coordinates are outside the range, the point is not in the polygon )
+ * - if the cell contains edges, find the first edge to the left or right of the point, whichever comes first.
+ * - if the edge to the left is the 'lead edge', the point is inside. if it's a trailing edge, the point is outside.
+ * - idem for the edge to the right of (p), just reverse the edge types
+ * - if the cell doesn't contain any edges, scan horizontal cells to the left and right (switching sides with each iteration)
+ *   until an edge if found.
  */
+
 class POLY_GRID_PARTITION
 {
 private:
-enum HASH_FLAG
+
+    enum HASH_FLAG
     {
-        LEAD_H  = 1,
-        LEAD_V  = 2,
-        TRAIL_H = 4,
-        TRAIL_V = 8
+        LEAD_EDGE  = 1,
+        TRAIL_EDGE = 2,
     };
 
     using EDGE_LIST = std::vector<int>;
@@ -80,6 +92,7 @@ enum HASH_FLAG
         }
     };
 
+    // convertes grid cell coordinates to the polygon coordinates
     const VECTOR2I grid2poly( const VECTOR2I& p ) const
     {
         int px  = rescale( p.x, m_bbox.GetWidth(), m_gridSize ) + m_bbox.GetPosition().x;
@@ -208,11 +221,11 @@ enum HASH_FLAG
             {
                 if( dir.Dot( ref_h ) < 0 )
                 {
-                    flags |= LEAD_H;
+                    flags |= LEAD_EDGE;
                 }
                 else if( dir.Dot( ref_h ) > 0 )
                 {
-                    flags |= TRAIL_H;
+                    flags |= TRAIL_EDGE;
                 }
 
             }
@@ -310,6 +323,10 @@ enum HASH_FLAG
         int cx0 = grid2polyX(cx);
         int cx1 = grid2polyX(cx + 1);
 
+        #ifdef TOM_EXTRA_VERBOSE
+        printf("Scan %d %d\n", cx, cy );
+        #endif
+
         for( auto index : cell )
         {
             const SEG& edge = m_outline.CSegment( index );
@@ -329,6 +346,9 @@ enum HASH_FLAG
 
             if( inRange( edge.A.y, edge.B.y, aP.y ) )
             {
+                #ifdef TOM_EXTRA_VERBOSE
+                printf("Test edge: %d [%d %d %d %d] p %d %d flags %d\n", index, edge.A.x, edge.A.y, edge.B.x, edge.B.y, aP.x, aP.y );
+                #endif
                 int dist = 0;
                 int x0;
                 if( edge.A.y == aP.y )
@@ -344,12 +364,18 @@ enum HASH_FLAG
                     x0 = edge.A.x + rescale( ( edge.B.x - edge.A.x ), (aP.y - edge.A.y), (edge.B.y - edge.A.y ) );
                 }
 
+
+                dist = aP.x - x0;
+
+                #ifdef TOM_EXTRA_VERBOSE
+                printf("    x0 %d dist %d [%s]\n", x0, dist, x0 < cx0 || x0 > cx1 ? "outside" : "inside" );
+                #endif
+
                 if( x0 < cx0 || x0 > cx1 )
                 {
                     continue;
                 }
 
-                dist = aP.x - x0;
 
                 if( dist == 0 )
                 {
@@ -427,30 +453,37 @@ public:
             }
         }
 
+        #ifdef TOM_EXTRA_VERBOSE
+        printf("Nearest: %d prev: %d dmax %d\n", state.nearest, state.nearest_prev, state.dist_max );
+        #endif
+
         if( state.nearest < 0 )
             return 0;
 
         if( state.dist_max == 0 )
             return 1;
 
-        // special case for diagonal 'slits', e.g. two segments that partially overlap each other.
+
+        // special case for diagonal 'slits', e.g. two segments that partially overlap each other. 
+        // Just love handling degeneracy... As I can't find any reliable way of fixing it for the moment,
+        // let's fall back to the good old O(N) point-in-polygon test
         if( state.nearest_prev >= 0 && state.dist_max == state.dist_prev )
         {
             int d = std::abs( state.nearest_prev - state.nearest );
 
             if( (d == 1) && ( (m_flags[state.nearest_prev] & m_flags[state.nearest]) == 0 ) )
             {
-                return 0;
+                return m_outline.PointInside( aP );
             }
         }
 
         if( state.dist_max > 0 )
         {
-            return m_flags[state.nearest] & LEAD_H ? 1 : 0;
+            return m_flags[state.nearest] & LEAD_EDGE ? 1 : 0;
         }
         else
         {
-            return m_flags[state.nearest] & TRAIL_H ? 1 : 0;
+            return m_flags[state.nearest] & TRAIL_EDGE ? 1 : 0;
         }
     }
 
