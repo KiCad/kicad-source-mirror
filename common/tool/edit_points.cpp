@@ -261,27 +261,33 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     double borderSize = aView->ToWorld( EDIT_POINT::BORDER_SIZE );
     double hoverSize  = aView->ToWorld( EDIT_POINT::HOVER_SIZE );
 
-    for( const EDIT_POINT& point : m_points )
-    {
-        if( point.IsHover() || point.IsActive() )
-        {
-            gal->SetStrokeColor( highlightColor );
-            gal->SetLineWidth( hoverSize );
-        }
-        else
-        {
-            gal->SetStrokeColor( bgColor );
-            gal->SetLineWidth( borderSize );
-        }
+    auto drawPoint =
+            [&]( const EDIT_POINT& aPoint, bool aDrawCircle = false )
+            {
+                if( aPoint.IsHover() || aPoint.IsActive() )
+                {
+                    gal->SetStrokeColor( highlightColor );
+                    gal->SetLineWidth( hoverSize );
+                }
+                else
+                {
+                    gal->SetStrokeColor( bgColor );
+                    gal->SetLineWidth( borderSize );
+                }
 
-        gal->SetFillColor( point.IsActive() ? highlightColor : drawColor );
-        gal->DrawRectangle( point.GetPosition() - size, point.GetPosition() + size );
-    }
+                gal->SetFillColor( aPoint.IsActive() ? highlightColor : drawColor );
+
+                if( aDrawCircle )
+                    gal->DrawCircle( aPoint.GetPosition(), size );
+                else
+                    gal->DrawRectangle( aPoint.GetPosition() - size, aPoint.GetPosition() + size );
+            };
+
+    for( const EDIT_POINT& point : m_points )
+        drawPoint( point );
 
     for( const EDIT_LINE& line : m_lines )
-    {
-        gal->DrawCircle( line.GetPosition(), size );
-    }
+        drawPoint( line, true );
 
     gal->PopDepth();
 }
