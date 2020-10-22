@@ -2337,6 +2337,8 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         bool has_other_items = false;
         SCH_PIN* pin = nullptr;
         std::vector<SCH_ITEM*> invalid_items;
+        wxPoint noConnectPos = aSubgraph->m_no_connect->GetPosition();
+        double minDist = 0;
 
         // Any subgraph that contains both a pin and a no-connect should not
         // contain any other driving items.
@@ -2346,9 +2348,21 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             switch( item->Type() )
             {
             case SCH_PIN_T:
-                pin = static_cast<SCH_PIN*>( item );
+            {
+                SCH_PIN* candidate = static_cast<SCH_PIN*>( item );
+                double   dist      = VECTOR2I( candidate->GetTransformedPosition() - noConnectPos )
+                                            .SquaredEuclideanNorm();
+
+                if( !pin || dist < minDist )
+                {
+                    pin = candidate;
+                    minDist = dist;
+                }
+
+                has_invalid_items |= has_other_items;
                 has_other_items = true;
                 break;
+            }
 
             case SCH_LINE_T:
             case SCH_JUNCTION_T:
@@ -2525,9 +2539,10 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     if( aSubgraph->m_no_connect )
         return true;
 
-    bool ok = true;
-    SCH_TEXT* text = nullptr;
-    bool has_other_connections = false;
+    bool      ok                  = true;
+    SCH_TEXT* text                = nullptr;
+    bool      hasOtherConnections = false;
+    int       pinCount            = 0;
 
     for( auto item : aSubgraph->m_items )
     {
@@ -2558,7 +2573,8 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
         case SCH_PIN_T:
         case SCH_SHEET_PIN_T:
-            has_other_connections = true;
+            hasOtherConnections = true;
+            pinCount++;
             break;
 
         default:
@@ -2583,15 +2599,13 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     {
         // This will be set to true if the global is connected to a pin above, but we
         // want to reset this to false so that globals get flagged if they only have a
-        // single instance
-        has_other_connections = false;
+        // single instance connected to a single pin
+        hasOtherConnections = ( pinCount < 2 );
 
         if( m_net_name_to_subgraphs_map.count( name ) )
         {
-            if( m_net_name_to_subgraphs_map.at( name ).size() > 1 )
-                has_other_connections = true;
-            else if( aSubgraph->m_multiple_drivers )
-                has_other_connections = true;
+            if( m_net_name_to_subgraphs_map.at( name ).size() > 1 || aSubgraph->m_multiple_drivers )
+                hasOtherConnections = true;
         }
     }
     else if( text->Type() == SCH_HIER_LABEL_T )
@@ -2603,7 +2617,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
         {
             // For now, a simple check: if there is more than one driver, the parent is probably
             // connected elsewhere (because at least one driver will be the hier pin itself)
-            has_other_connections = true;
+            hasOtherConnections = true;
         }
     }
     else
@@ -2611,10 +2625,10 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
         auto pair = std::make_pair( aSubgraph->m_sheet, name );
 
         if( m_local_label_cache.count( pair ) && m_local_label_cache.at( pair ).size() > 1 )
-            has_other_connections = true;
+            hasOtherConnections = true;
     }
 
-    if( !has_other_connections )
+    if( !hasOtherConnections )
     {
         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( isGlobal ? ERCE_GLOBLABEL
                                                                        : ERCE_LABEL_NOT_CONNECTED );
