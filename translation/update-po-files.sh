@@ -65,22 +65,24 @@ find $POTDIRS -name '*.cpp' -or -name '*.h' |
   sort |
   xgettext -f- -k_ -k_HKI -kwxPLURAL:1,2 --force-po --from-code utf-8 -o $LOCALDIR/kicad.pot
 
+LINGUAS=`cat $LOCALDIR/LINGUAS|grep -v '^#'|grep -v '^\s*$'` #Read file without comment and empty lines
+
 #check if present in locale list
 validate() { echo $LINGUAS | grep -F -q -w "$1"; }
 
+if [ "$SINGLE_LANG" != "all" ] ; then
 #If supplied, update only the specified locale
-if [ "$SINGLE_LANG" = "" ] ; then
-  display_help
-elif [ "$SINGLE_LANG" = "all" ] ; then
-  LINGUAS=`cat $LOCALDIR/LINGUAS|grep -v '^#'|grep -v '^\s*$'` #Read file without comment and empty lines
-elif validate "$SINGLE_LANG"; then
-  LINGUAS="$SINGLE_LANG"
-else
-  echo "Error!"
-  echo "Locale argument \"$1\" not present in current locale list:"
-  for i in $LINGUAS; do echo -n "$i "; done
-  echo # newline
-  exit 1
+  if [ "$SINGLE_LANG" = "" ] ; then
+    display_help
+  elif validate "$SINGLE_LANG"; then
+    LINGUAS="$SINGLE_LANG"
+  else
+    echo "Error!"
+    echo "Locale argument \"$1\" not present in current locale list:"
+    for i in $LINGUAS; do echo -n "$i "; done
+    echo # newline
+    exit 1
+  fi
 fi
 
 
