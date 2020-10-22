@@ -1083,7 +1083,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
             int clearance = aPad->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
 
-            if( flashActiveLayer )
+            if( flashActiveLayer && clearance > 0 )
             {
                 auto shape = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
 
@@ -1107,7 +1107,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
                     m_gal->DrawPolygon( polySet );
                 }
             }
-            else if( aPad->GetEffectiveHoleShape() )
+            else if( aPad->GetEffectiveHoleShape() && clearance > 0 )
             {
                 clearance += bds.GetHolePlatingThickness();
 
@@ -1115,7 +1115,6 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
                 m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B,
                                     seg->GetWidth() + 2 * clearance );
             }
-
         }
     }
 }
