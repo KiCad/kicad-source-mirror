@@ -47,7 +47,7 @@ ERC_ITEM ERC_ITEM::pinNotConnected( ERCE_PIN_NOT_CONNECTED,
         wxT( "pin_not_connected" ) );
 
 ERC_ITEM ERC_ITEM::pinNotDriven( ERCE_PIN_NOT_DRIVEN,
-        _( "Pin connected to other pins, but not driven by any pin" ),
+        _( "Input pin not driven by any Output pins" ),
         wxT( "pin_not_driven" ) );
 
 ERC_ITEM ERC_ITEM::pinTableWarning( ERCE_PIN_TO_PIN_WARNING,

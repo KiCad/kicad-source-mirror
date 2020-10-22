@@ -100,6 +100,20 @@ const wxString CommentERC_V[] =
 };
 
 
+// List of pin types that are considered drivers
+const std::set<ELECTRICAL_PINTYPE> DrivingPinTypes =
+        {
+            ELECTRICAL_PINTYPE::PT_OUTPUT,
+            ELECTRICAL_PINTYPE::PT_POWER_OUT
+        };
+
+// List of pin types that require a driver elsewhere on the net
+const std::set<ELECTRICAL_PINTYPE> DrivenPinTypes =
+        {
+            ELECTRICAL_PINTYPE::PT_INPUT,
+            ELECTRICAL_PINTYPE::PT_POWER_IN
+        };
+
 int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
 {
     SCH_SCREEN* screen;
@@ -438,9 +452,17 @@ int ERC_TESTER::TestPinToPin()
 
         std::set<std::pair<SCH_PIN*, SCH_PIN*>> tested;
 
+        SCH_PIN* needsDriver = nullptr;
+        bool     hasDriver   = false;
+
         for( SCH_PIN* refPin : pins )
         {
             ELECTRICAL_PINTYPE refType = refPin->GetType();
+
+            if( !needsDriver && DrivenPinTypes.count( refType ) )
+                needsDriver = refPin;
+
+            hasDriver |= DrivingPinTypes.count( refType );
 
             for( SCH_PIN* testPin : pins )
             {
@@ -457,6 +479,8 @@ int ERC_TESTER::TestPinToPin()
                 tested.insert( pair2 );
 
                 ELECTRICAL_PINTYPE testType = testPin->GetType();
+
+                hasDriver |= DrivingPinTypes.count( testType );
 
                 PIN_ERROR erc = settings.GetPinMapValue( refType, testType );
 
@@ -478,6 +502,16 @@ int ERC_TESTER::TestPinToPin()
                     errors++;
                 }
             }
+        }
+
+        if( needsDriver && !hasDriver )
+        {
+            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_DRIVEN );
+            ercItem->SetItems( needsDriver );
+
+            SCH_MARKER* marker = new SCH_MARKER( ercItem, needsDriver->GetTransformedPosition() );
+            pinToScreenMap[needsDriver]->Append( marker );
+            errors++;
         }
     }
 
