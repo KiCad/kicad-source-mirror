@@ -118,8 +118,8 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * @param aError = the IU allowed for error in approximation
  * @param aErrorLoc = should the approximation error be placed outside or inside the polygon?
  */
-void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, wxPoint aStart,
-                            double aArcAngle, int aWidth, int aError, ERROR_LOC aErrorLoc );
+void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aMid,
+                            wxPoint aEnd, int aWidth, int aError, ERROR_LOC aErrorLoc );
 
 /**
  * Function TransformRingToPolygon

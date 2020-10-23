@@ -534,6 +534,14 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::doTrackDrc( TRACK* aRefSeg, PCB_LAYER_I
                 if( !refVia->FlashLayer( aLayer ) )
                     halfWidth = refVia->GetDrill() / 2 + bds.GetHolePlatingThickness();
             }
+            else if ( aRefSeg->Type() == PCB_ARC_T )
+            {
+                // We're going to do a collision with the arc "spine" using an increased
+                // clearance to proxy for both the clearance and the arc track width.  We
+                // therefore need to subtract the polygonization error from the track width
+                // so that it is all "inside" the track.
+                halfWidth -= bds.m_MaxError / 2;
+            }
 
             auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
                                                               aRefSeg, zone, aLayer );

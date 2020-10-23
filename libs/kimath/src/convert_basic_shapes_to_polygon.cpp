@@ -322,39 +322,26 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const 
 }
 
 
-void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, wxPoint aStart,
-                            double aArcAngle, int aWidth, int aError, ERROR_LOC aErrorLoc )
+void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aMid,
+                            wxPoint aEnd, int aWidth, int aError, ERROR_LOC aErrorLoc )
 {
-    wxPoint arc_start, arc_end;
-    int     dist = EuclideanNorm( aCentre - aStart );
-    int     numSegs = GetArcToSegmentCount( dist, aError, 360.0 );
-    int     delta = 3600 / numSegs;   // rotate angle in 0.1 degree
+    SHAPE_ARC        arc( aStart, aMid, aEnd, aWidth );
+    SHAPE_LINE_CHAIN arcSpine = arc.ConvertToPolyline( aError );
 
-    arc_end = arc_start = aStart;
+    if( aErrorLoc == ERROR_OUTSIDE )
+        aWidth += 2 * aError;
+    else
+        aWidth -= 2 * aError;
 
-    if( aArcAngle != 3600 )
-        RotatePoint( &arc_end, aCentre, -aArcAngle );
-
-    if( aArcAngle < 0 )
+    for( int ii = 0; ii < arcSpine.GetSegmentCount(); ++ii )
     {
-        std::swap( arc_start, arc_end );
-        aArcAngle = -aArcAngle;
+        SEG seg = arcSpine.GetSegment( ii );
+
+        // Note that the error here is only for the rounded ends; we still need to shrink or
+        // expand the width above for the segments themselves.
+        TransformOvalToPolygon( aCornerBuffer, (wxPoint) seg.A, (wxPoint) seg.B, aWidth, aError,
+                                aErrorLoc );
     }
-
-    // Compute the ends of segments and creates poly
-    wxPoint curr_end    = arc_start;
-    wxPoint curr_start  = arc_start;
-
-    for( int ii = delta; ii < aArcAngle; ii += delta )
-    {
-        curr_end = arc_start;
-        RotatePoint( &curr_end, aCentre, -ii );
-        TransformOvalToPolygon( aCornerBuffer, curr_start, curr_end, aWidth, aError, aErrorLoc );
-        curr_start = curr_end;
-    }
-
-    if( curr_end != arc_end )
-        TransformOvalToPolygon( aCornerBuffer, curr_end, arc_end, aWidth, aError, aErrorLoc );
 }
 
 

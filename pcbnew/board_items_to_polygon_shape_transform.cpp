@@ -401,13 +401,6 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
 
     width += 2 * aClearanceValue;
 
-    // Creating a reliable clearance shape for circles and arcs is not so easy, due to
-    // the error created by segment approximation.
-    // for a circle this is not so hard: create a polygon from a circle slightly bigger:
-    // thickness = width + s_error_max, and radius = initial radius + s_error_max/2
-    // giving a shape with a suitable internal radius and external radius
-    // For an arc this is more tricky: TODO
-
     switch( m_Shape )
     {
     case S_CIRCLE:
@@ -447,7 +440,7 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
         break;
 
     case S_ARC:
-        TransformArcToPolygon( aCornerBuffer, GetCenter(), GetArcStart(), m_Angle, width,
+        TransformArcToPolygon( aCornerBuffer, GetArcStart(), GetArcMid(), GetArcEnd(), width,
                                aError, aErrorLoc );
         break;
 
@@ -550,11 +543,9 @@ void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     {
         const ARC* arc = static_cast<const ARC*>( this );
         int        width = m_Width + ( 2 * aClearanceValue );
-        VECTOR2D   center( arc->GetCenter() );
-        double     angle = arc->GetAngle();
 
-        TransformArcToPolygon( aCornerBuffer, (wxPoint) center, GetStart(), angle, width,
-                               aError, aErrorLoc );
+        TransformArcToPolygon( aCornerBuffer, (wxPoint) arc->GetStart(), (wxPoint) arc->GetMid(),
+                               (wxPoint) arc->GetEnd(), width, aError, aErrorLoc );
     }
         break;
 
