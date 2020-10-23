@@ -24,6 +24,7 @@
 #include "altium_pcb.h"
 #include "altium_parser_pcb.h"
 #include "plugins/altium/altium_parser.h"
+#include <plugins/altium/altium_parser_utils.h>
 
 #include <class_board.h>
 #include <class_dimension.h>
@@ -753,15 +754,8 @@ void ALTIUM_PCB::ParseComponents6Data(
         m_board->Add( module, ADD_MODE::APPEND );
         m_components.emplace_back( module );
 
-        wxString pack_ref = elem.sourcelibreference;
-        wxString lib_ref  = elem.sourcefootprintlibrary; // TODO: remove ".PcbLib" part
-        ReplaceIllegalFileNameChars( lib_ref, '_' );
-        ReplaceIllegalFileNameChars( pack_ref, '_' );
+        LIB_ID fpID = AltiumToKiCadLibID(LIB_ID::ID_PCB, elem.sourcefootprintlibrary, elem.sourcelibreference );
 
-        wxString key = !lib_ref.empty() ? lib_ref + ":" + pack_ref : pack_ref;
-
-        LIB_ID fpID;
-        fpID.Parse( key, LIB_ID::ID_PCB, true );
         module->SetFPID( fpID );
 
         module->SetPosition( elem.position );

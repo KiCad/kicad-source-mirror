@@ -29,6 +29,9 @@
 #include <map>
 #include <vector>
 
+#include <wx/gdicmn.h>
+#include <wx/string.h>
+
 // this constant specifies a item which is not inside an component
 const int ALTIUM_COMPONENT_NONE = -1;
 

@@ -21,7 +21,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <memory>
+
+#include "altium_parser_sch.h"
+#include <plugins/altium/altium_parser.h>
+#include <plugins/altium/altium_parser_utils.h>
 #include <sch_plugins/altium/sch_altium_plugin.h>
+#include <sch_plugins/legacy/sch_legacy_plugin.h>
 
 #include <schematic.h>
 
@@ -41,18 +47,14 @@
 #include <sch_component.h>
 #include <sch_junction.h>
 #include <sch_line.h>
-#include <sch_marker.h>
 #include <sch_no_connect.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <sch_text.h>
 
-#include "altium_parser_sch.h"
 #include <bezier_curves.h>
 #include <compoundfilereader.h>
-#include <memory>
-#include <plugins/altium/altium_parser.h>
-#include <sch_plugins/legacy/sch_legacy_plugin.h>
+#include <kicad_string.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/textfile.h>
 
@@ -448,7 +450,7 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int index, const std::map<wxString, wxSt
 {
     ASCH_COMPONENT elem( aProperties );
 
-    LIB_ID libId( getLibName(), elem.libreference );
+    LIB_ID libId = AltiumToKiCadLibID( LIB_ID::ID_SCH, getLibName(), elem.libreference );
 
     LIB_PART* kpart = new LIB_PART( wxEmptyString );
     kpart->SetName( elem.libreference );
