@@ -1014,6 +1014,7 @@ void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
     {
         switch( item->Type() )
         {
+        case PCB_ARC_T:
         case PCB_TRACE_T:
         {
             TRACK* track = static_cast<TRACK*>( item );
@@ -1048,6 +1049,7 @@ void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
     // Set up the initial active points
     switch( aStartItem.Type() )
     {
+    case PCB_ARC_T:
     case PCB_TRACE_T:
         activePts.push_back( static_cast<TRACK*>( &aStartItem )->GetStart() );
         activePts.push_back( static_cast<TRACK*>( &aStartItem )->GetEnd() );
@@ -1233,7 +1235,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
     }
 
     std::list<BOARD_CONNECTED_ITEM*> localConnectionList;
-    constexpr KICAD_T trackViaType[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
+    constexpr KICAD_T trackViaType[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, EOT };
 
     for( int netCode : netcodeList )
     {
@@ -2244,7 +2246,7 @@ double calcRatio( double a, double b )
 // there might not be any area left to click to select the larger item.  In this case we must
 // leave the items in the collector and bring up a Selection Clarification menu.
 //
-// We currently check for pads and text mostly covering a footprint, but we don’t check for
+// We currently check for pads and text mostly covering a footprint, but we don't check for
 // smaller footprints mostly covering a larger footprint.
 //
 void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
