@@ -413,6 +413,7 @@ void LIB_EDIT_FRAME::OnToggleSearchTree( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::FreezeSearchTree()
 {
+    m_treePane->Freeze();
     m_libMgr->GetAdapter()->Freeze();
 }
 
@@ -420,6 +421,7 @@ void LIB_EDIT_FRAME::FreezeSearchTree()
 void LIB_EDIT_FRAME::ThawSearchTree()
 {
     m_libMgr->GetAdapter()->Thaw();
+    m_treePane->Thaw();
 }
 
 
