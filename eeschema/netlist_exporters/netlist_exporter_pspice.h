@@ -59,6 +59,7 @@ enum SPICE_PRIMITIVE {
     SP_MOSFET       = 'M',
     SP_JFET         = 'J',
     SP_SUBCKT       = 'X',
+    SP_CODEMODEL    = 'A',
     SP_VSOURCE      = 'V',
     SP_ISOURCE      = 'I'
 };
