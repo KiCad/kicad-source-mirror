@@ -181,6 +181,7 @@ struct ASCH_PIN
 {
     int ownerindex;
     int ownerpartid;
+    int ownerpartdisplaymode;
 
     wxString name;
     wxString text;
@@ -245,6 +246,7 @@ struct ASCH_BEZIER
 {
     int ownerindex;
     int ownerpartid;
+    int ownerpartdisplaymode;
 
     std::vector<wxPoint> points;
 
@@ -267,6 +269,7 @@ struct ASCH_POLYLINE
 {
     int ownerindex;
     int ownerpartid;
+    int ownerpartdisplaymode;
 
     std::vector<wxPoint> points;
 
@@ -282,6 +285,7 @@ struct ASCH_POLYGON
 {
     int ownerindex;
     int ownerpartid;
+    int ownerpartdisplaymode;
 
     std::vector<wxPoint> points;
 
@@ -299,6 +303,7 @@ struct ASCH_ROUND_RECTANGLE
 {
     int ownerindex;
     int ownerpartid;
+    int ownerpartdisplaymode;
 
     wxPoint bottomLeft;
     wxPoint topRight;
@@ -320,6 +325,7 @@ struct ASCH_ARC
 {
     int ownerindex;
     int ownerpartid;
+    int ownerpartdisplaymode;
 
     wxPoint center;
     int     radius;
@@ -336,6 +342,7 @@ struct ASCH_LINE
 {
     int ownerindex;
     int ownerpartid;
+    int ownerpartdisplaymode;
 
     wxPoint point1;
     wxPoint point2;
@@ -350,6 +357,7 @@ struct ASCH_RECTANGLE
 {
     int ownerindex;
     int ownerpartid;
+    int ownerpartdisplaymode;
 
     wxPoint bottomLeft;
     wxPoint topRight;

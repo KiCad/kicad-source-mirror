@@ -96,6 +96,8 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProperties )
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
     ownerpartid =
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+    ownerpartdisplaymode =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTDISPLAYMODE", 0 );
 
     name       = ALTIUM_PARSER::PropertiesReadString( aProperties, "NAME", "" );
     text       = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
@@ -199,6 +201,8 @@ ASCH_BEZIER::ASCH_BEZIER( const std::map<wxString, wxString>& aProperties )
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
     ownerpartid =
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+    ownerpartdisplaymode =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTDISPLAYMODE", 0 );
 
     int locationCount = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATIONCOUNT", 0 );
     for( int i = 1; i <= locationCount; i++ )
@@ -220,6 +224,8 @@ ASCH_POLYLINE::ASCH_POLYLINE( const std::map<wxString, wxString>& aProperties )
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
     ownerpartid =
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+    ownerpartdisplaymode =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTDISPLAYMODE", 0 );
 
     int locationCount = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATIONCOUNT", 0 );
     for( int i = 1; i <= locationCount; i++ )
@@ -248,6 +254,8 @@ ASCH_POLYGON::ASCH_POLYGON( const std::map<wxString, wxString>& aProperties )
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
     ownerpartid =
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+    ownerpartdisplaymode =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTDISPLAYMODE", 0 );
 
     int locationCount = ALTIUM_PARSER::PropertiesReadInt( aProperties, "LOCATIONCOUNT", 0 );
     for( int i = 1; i <= locationCount; i++ )
@@ -273,6 +281,8 @@ ASCH_ROUND_RECTANGLE::ASCH_ROUND_RECTANGLE( const std::map<wxString, wxString>& 
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
     ownerpartid =
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+    ownerpartdisplaymode =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTDISPLAYMODE", 0 );
 
     bottomLeft = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
             -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
@@ -299,6 +309,8 @@ ASCH_ARC::ASCH_ARC( const std::map<wxString, wxString>& aProperties )
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
     ownerpartid =
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+    ownerpartdisplaymode =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTDISPLAYMODE", 0 );
 
     center = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
             -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
@@ -319,6 +331,8 @@ ASCH_LINE::ASCH_LINE( const std::map<wxString, wxString>& aProperties )
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
     ownerpartid =
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+    ownerpartdisplaymode =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTDISPLAYMODE", 0 );
 
     point1 = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
             -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
@@ -337,6 +351,8 @@ ASCH_RECTANGLE::ASCH_RECTANGLE( const std::map<wxString, wxString>& aProperties 
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
     ownerpartid =
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+    ownerpartdisplaymode =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTDISPLAYMODE", 0 );
 
     bottomLeft = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
             -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );

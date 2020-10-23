@@ -442,10 +442,22 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
     m_currentSheet->SetModified();
 }
 
+bool SCH_ALTIUM_PLUGIN::IsCmpPartVisible(
+        int aOwnerindex, int aOwnerpartid, int aOwnerpartdisplaymode ) const
+{
+    const auto& component = m_altiumComponents.find( aOwnerindex );
+    if( component == m_altiumComponents.end() )
+        return false;
+
+    const ASCH_COMPONENT& cmp = component->second;
+    return ( cmp.currentpartid == aOwnerpartid ) && ( cmp.displaymode == aOwnerpartdisplaymode );
+}
+
 
 void SCH_ALTIUM_PLUGIN::ParseComponent( int index, const std::map<wxString, wxString>& aProperties )
 {
-    ASCH_COMPONENT elem( aProperties );
+    auto pair = m_altiumComponents.insert( { index, ASCH_COMPONENT( aProperties ) } );
+    const ASCH_COMPONENT& elem = pair.first->second;
 
     LIB_ID libId = AltiumToKiCadLibID( LIB_ID::ID_SCH, getLibName(), elem.libreference );
 
@@ -466,7 +478,6 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int index, const std::map<wxString, wxSt
     m_currentSheet->GetScreen()->Append( component );
 
     m_components.insert( { index, component } );
-    std::cout << "component index: " << index << " partid: " << elem.currentpartid << std::endl;
 }
 
 
@@ -483,6 +494,9 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
                 elem.ownerindex ) );
         return;
     }
+
+    if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+        return;
 
     const auto& component = m_components.at( symbol->first );
 
@@ -773,6 +787,9 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
             return;
         }
 
+        if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+            return;
+
         const auto& component = m_components.at( symbol->first );
 
         for( size_t i = 0; i + 1 < elem.points.size(); i += 3 )
@@ -858,6 +875,9 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
             return;
         }
 
+        if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+            return;
+
         const auto& component = m_components.at( symbol->first );
 
         LIB_POLYLINE* line = new LIB_POLYLINE( symbol->second );
@@ -913,6 +933,9 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
                     elem.ownerindex ) );
             return;
         }
+
+        if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+            return;
 
         const auto& component = m_components.at( symbol->first );
 
@@ -991,6 +1014,9 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
             return;
         }
 
+        if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+            return;
+
         const auto& component = m_components.at( symbol->first );
 
         // TODO: misses rounded edges
@@ -1029,6 +1055,9 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
                     elem.ownerindex ) );
             return;
         }
+
+        if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+            return;
 
         const auto& component = m_components.at( symbol->first );
 
@@ -1082,6 +1111,9 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
                     elem.ownerindex ) );
             return;
         }
+
+        if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+            return;
 
         const auto& component = m_components.at( symbol->first );
 
@@ -1148,6 +1180,9 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
                     elem.ownerindex ) );
             return;
         }
+
+        if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+            return;
 
         const auto& component = m_components.at( symbol->first );
 

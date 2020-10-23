@@ -29,7 +29,8 @@
 #include <wx/filename.h>
 #include <wx/gdicmn.h>
 
-struct ASCH_SHEET;
+#include "altium_parser_sch.h"
+
 
 class SCH_COMPONENT;
 
@@ -101,6 +102,8 @@ public:
     void Parse( const CFB::CompoundFileReader& aReader );
 
 private:
+    bool IsCmpPartVisible( int aOwnerindex, int aOwnerpartid, int aOwnerpartdisplaymode ) const;
+
     void ParseComponent( int index, const std::map<wxString, wxString>& aProperties );
     void ParsePin( const std::map<wxString, wxString>& aProperties );
     void ParseLabel( const std::map<wxString, wxString>& aProperties );
@@ -134,6 +137,8 @@ private:
     std::unique_ptr<ASCH_SHEET>   m_altiumSheet;
     std::map<int, SCH_COMPONENT*> m_components;
     std::map<int, LIB_PART*>      m_symbols; // for the start, every component has its unique symbol
+
+    std::map<int, ASCH_COMPONENT> m_altiumComponents;
 };
 
 #endif // _SCH_ALTIUM_PLUGIN_H_
