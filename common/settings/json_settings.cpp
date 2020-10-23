@@ -204,46 +204,58 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
     }
     else
     {
+        if( !path.IsFileWritable() )
+            m_writeFile = false;
+
         try
         {
             FILE* fp = wxFopen( path.GetFullPath(), wxT( "rt" ) );
-            *static_cast<nlohmann::json*>( this ) = nlohmann::json::parse( fp, nullptr,
-                    /* allow_exceptions = */ true,
-                    /* ignore_comments  = */ true );
 
-            // If parse succeeds, check if schema migration is required
-            int filever = -1;
-
-            try
+            if( fp )
             {
-                filever = at( PointerFromString( "meta.version" ) ).get<int>();
-            }
-            catch( ... )
-            {
-                wxLogTrace(
-                        traceSettings, "%s: file version could not be read!", GetFullFilename() );
-                success = false;
-            }
+                *static_cast<nlohmann::json*>( this ) = nlohmann::json::parse( fp, nullptr,
+                                                      /* allow_exceptions = */ true,
+                                                      /* ignore_comments  = */ true );
 
-            if( filever >= 0 && filever < m_schemaVersion )
-            {
-                wxLogTrace( traceSettings, "%s: attempting migration from version %d to %d",
-                            GetFullFilename(), filever, m_schemaVersion );
+                // If parse succeeds, check if schema migration is required
+                int filever = -1;
 
-                if( Migrate() )
+                try
                 {
-                    migrated = true;
+                    filever = at( PointerFromString( "meta.version" ) ).get<int>();
                 }
-                else
+                catch( ... )
                 {
-                    wxLogTrace( traceSettings, "%s: migration failed!", GetFullFilename() );
+                    wxLogTrace( traceSettings, "%s: file version could not be read!",
+                                GetFullFilename() );
+                    success = false;
+                }
+
+                if( filever >= 0 && filever < m_schemaVersion )
+                {
+                    wxLogTrace( traceSettings, "%s: attempting migration from version %d to %d",
+                                GetFullFilename(), filever, m_schemaVersion );
+
+                    if( Migrate() )
+                    {
+                        migrated = true;
+                    }
+                    else
+                    {
+                        wxLogTrace( traceSettings, "%s: migration failed!", GetFullFilename() );
+                    }
+                }
+                else if( filever > m_schemaVersion )
+                {
+                    wxLogTrace( traceSettings,
+                                "%s: warning: file version %d is newer than latest (%d)",
+                                GetFullFilename(), filever, m_schemaVersion );
                 }
             }
-            else if( filever > m_schemaVersion )
+            else
             {
-                wxLogTrace( traceSettings,
-                        "%s: warning: file version %d is newer than latest (%d)", GetFullFilename(),
-                        filever, m_schemaVersion );
+                wxLogTrace( traceSettings, "%s exists but can't be opened for read",
+                            GetFullFilename() );
             }
         }
         catch( nlohmann::json::parse_error& error )

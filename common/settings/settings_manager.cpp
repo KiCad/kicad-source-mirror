@@ -730,6 +730,9 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
 
     bool success = loadProjectFile( *project );
 
+    if( success )
+        project->SetReadOnly( project->GetProjectFile().IsReadOnly() );
+
     m_projects_list.push_back( std::move( project ) );
     m_projects[fullPath] = m_projects_list.back().get();
 
