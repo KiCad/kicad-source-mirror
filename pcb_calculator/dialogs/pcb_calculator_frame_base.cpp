@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -258,7 +258,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelRegulators->SetSizer( bSizerMainReg );
 	m_panelRegulators->Layout();
 	bSizerMainReg->Fit( m_panelRegulators );
-	m_Notebook->AddPage( m_panelRegulators, _("Regulators"), true );
+	m_Notebook->AddPage( m_panelRegulators, _("Regulators"), false );
 	m_panelAttenuators = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerAtt;
 	bSizerAtt = new wxBoxSizer( wxHORIZONTAL );
@@ -268,7 +268,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 
 	wxString m_AttenuatorsSelectionChoices[] = { _("PI"), _("Tee"), _("Bridged Tee"), _("Resistive Splitter") };
 	int m_AttenuatorsSelectionNChoices = sizeof( m_AttenuatorsSelectionChoices ) / sizeof( wxString );
-	m_AttenuatorsSelection = new wxRadioBox( m_panelAttenuators, wxID_ANY, _("Attenuators:"), wxDefaultPosition, wxDefaultSize, m_AttenuatorsSelectionNChoices, m_AttenuatorsSelectionChoices, 1, wxRA_SPECIFY_COLS );
+	m_AttenuatorsSelection = new wxRadioBox( m_panelAttenuators, wxID_ANY, _("Attenuators"), wxDefaultPosition, wxDefaultSize, m_AttenuatorsSelectionNChoices, m_AttenuatorsSelectionChoices, 1, wxRA_SPECIFY_COLS );
 	m_AttenuatorsSelection->SetSelection( 0 );
 	bLeftSizerAtt->Add( m_AttenuatorsSelection, 0, wxEXPAND|wxALL, 5 );
 
@@ -282,7 +282,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bMiddleSizerAtt = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerAttPrms;
-	sbSizerAttPrms = new wxStaticBoxSizer( new wxStaticBox( m_panelAttenuators, wxID_ANY, _("Parameters:") ), wxVERTICAL );
+	sbSizerAttPrms = new wxStaticBoxSizer( new wxStaticBox( m_panelAttenuators, wxID_ANY, _("Parameters") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerAttPrms;
 	fgSizerAttPrms = new wxFlexGridSizer( 3, 3, 0, 0 );
@@ -681,7 +681,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 
 	wxString m_TranslineSelectionChoices[] = { _("Microstrip Line"), _("Coplanar wave guide"), _("Coplanar wave guide with ground plane"), _("Rectangular Waveguide"), _("Coaxial Line"), _("Coupled Microstrip Line"), _("Stripline"), _("Twisted Pair") };
 	int m_TranslineSelectionNChoices = sizeof( m_TranslineSelectionChoices ) / sizeof( wxString );
-	m_TranslineSelection = new wxRadioBox( m_panelTransline, wxID_ANY, _("Transmission Line Type:"), wxDefaultPosition, wxDefaultSize, m_TranslineSelectionNChoices, m_TranslineSelectionChoices, 1, wxRA_SPECIFY_COLS );
+	m_TranslineSelection = new wxRadioBox( m_panelTransline, wxID_ANY, _("Transmission Line Type"), wxDefaultPosition, wxDefaultSize, m_TranslineSelectionNChoices, m_TranslineSelectionChoices, 1, wxRA_SPECIFY_COLS );
 	m_TranslineSelection->SetSelection( 1 );
 	bLeftSizer->Add( m_TranslineSelection, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
@@ -880,7 +880,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* btranslineRightSizer;
-	btranslineRightSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelTransline, wxID_ANY, _("Physical Parameters:") ), wxVERTICAL );
+	btranslineRightSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelTransline, wxID_ANY, _("Physical Parameters") ), wxVERTICAL );
 
 	wxBoxSizer* sbRightBoxizer;
 	sbRightBoxizer = new wxBoxSizer( wxVERTICAL );
@@ -974,7 +974,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bRightSizer->Add( btranslineButtonsSizer, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 
 	wxStaticBoxSizer* sbElectricalResultsSizer;
-	sbElectricalResultsSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelTransline, wxID_ANY, _("Electrical Parameters:") ), wxVERTICAL );
+	sbElectricalResultsSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelTransline, wxID_ANY, _("Electrical Parameters") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerResults;
 	fgSizerResults = new wxFlexGridSizer( 3, 3, 0, 0 );
@@ -1025,7 +1025,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bRightSizer->Add( sbElectricalResultsSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	wxStaticBoxSizer* sbMessagesSizer;
-	sbMessagesSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelTransline, wxID_ANY, _("Results:") ), wxVERTICAL );
+	sbMessagesSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelTransline, wxID_ANY, _("Results") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerTranslResults;
 	fgSizerTranslResults = new wxFlexGridSizer( 7, 2, 0, 0 );
@@ -1111,7 +1111,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizerViaSize = new wxBoxSizer( wxHORIZONTAL );
 
 	wxStaticBoxSizer* sbSizerVS_Inputs;
-	sbSizerVS_Inputs = new wxStaticBoxSizer( new wxStaticBox( m_panelViaSize, wxID_ANY, _("Parameters:") ), wxVERTICAL );
+	sbSizerVS_Inputs = new wxStaticBoxSizer( new wxStaticBox( m_panelViaSize, wxID_ANY, _("Parameters") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerVS_Inputs;
 	fgSizerVS_Inputs = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -1282,7 +1282,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerVS_Result;
-	sbSizerVS_Result = new wxStaticBoxSizer( new wxStaticBox( m_panelViaSize, wxID_ANY, _("Results:") ), wxVERTICAL );
+	sbSizerVS_Result = new wxStaticBoxSizer( new wxStaticBox( m_panelViaSize, wxID_ANY, _("Results") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerTW_Results11;
 	fgSizerTW_Results11 = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -1446,7 +1446,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizeLeft = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerTW_Prms;
-	sbSizerTW_Prms = new wxStaticBoxSizer( new wxStaticBox( m_panelTrackWidth, wxID_ANY, _("Parameters:") ), wxVERTICAL );
+	sbSizerTW_Prms = new wxStaticBoxSizer( new wxStaticBox( m_panelTrackWidth, wxID_ANY, _("Parameters") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerTWprms;
 	fgSizerTWprms = new wxFlexGridSizer( 4, 3, 0, 0 );
@@ -1517,7 +1517,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizeRight = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerTW_Result;
-	sbSizerTW_Result = new wxStaticBoxSizer( new wxStaticBox( m_panelTrackWidth, wxID_ANY, _("External layer traces:") ), wxVERTICAL );
+	sbSizerTW_Result = new wxStaticBoxSizer( new wxStaticBox( m_panelTrackWidth, wxID_ANY, _("External Layer Traces") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerTW_Results;
 	fgSizerTW_Results = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -1615,7 +1615,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizeRight->Add( sbSizerTW_Result, 1, wxEXPAND|wxALL, 5 );
 
 	wxStaticBoxSizer* sbSizerTW_Result1;
-	sbSizerTW_Result1 = new wxStaticBoxSizer( new wxStaticBox( m_panelTrackWidth, wxID_ANY, _("Internal layer traces:") ), wxVERTICAL );
+	sbSizerTW_Result1 = new wxStaticBoxSizer( new wxStaticBox( m_panelTrackWidth, wxID_ANY, _("Internal Layer Traces") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerTW_Results1;
 	fgSizerTW_Results1 = new wxFlexGridSizer( 6, 3, 0, 0 );
@@ -1873,7 +1873,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelBoardClass->SetSizer( bSizerBoardClass );
 	m_panelBoardClass->Layout();
 	bSizerBoardClass->Fit( m_panelBoardClass );
-	m_Notebook->AddPage( m_panelBoardClass, _("Board Classes"), false );
+	m_Notebook->AddPage( m_panelBoardClass, _("Board Classes"), true );
 
 	bmainFrameSizer->Add( m_Notebook, 1, wxEXPAND, 5 );
 

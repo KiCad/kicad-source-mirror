@@ -14,6 +14,7 @@
         <property name="file">dialog_create_array_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">DIALOG_CREATE_ARRAY_BASE</property>
@@ -25,6 +26,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -119,7 +121,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap">Load From File; </property>
                             <property name="label">Grid Array</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -1407,7 +1409,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Stagger Type:</property>
+                                                    <property name="label">Stagger Type</property>
                                                     <property name="majorDimension">1</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
@@ -1494,7 +1496,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Numbering Direction:</property>
+                                                    <property name="label">Numbering Direction</property>
                                                     <property name="majorDimension">1</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
@@ -1624,7 +1626,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Initial Pad Number:</property>
+                                                    <property name="label">Initial Pad Number</property>
                                                     <property name="majorDimension">1</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
@@ -1691,7 +1693,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Pad Numbering Scheme:</property>
+                                                    <property name="label">Pad Numbering Scheme</property>
                                                     <property name="majorDimension">1</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
@@ -2379,7 +2381,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Circular Array</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -3512,7 +3514,7 @@
                                         <property name="proportion">0</property>
                                         <object class="wxStaticBoxSizer" expanded="1">
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">Numbering Options:</property>
+                                            <property name="label">Numbering Options</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_circPadNumberingSizer</property>
                                             <property name="orient">wxVERTICAL</property>

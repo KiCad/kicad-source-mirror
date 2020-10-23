@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -90,7 +90,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizer21;
-	sbSizer21 = new wxStaticBoxSizer( new wxStaticBox( m_pgDC, wxID_ANY, _("DC sweep source 1:") ), wxVERTICAL );
+	sbSizer21 = new wxStaticBoxSizer( new wxStaticBox( m_pgDC, wxID_ANY, _("DC Sweep Source 1") ), wxVERTICAL );
 
 	m_dcEnable1 = new wxCheckBox( sbSizer21->GetStaticBox(), wxID_ANY, _("Enable"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_dcEnable1->SetValue(true);
@@ -151,7 +151,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizer4->Add( sbSizer21, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_pgDC, wxID_ANY, _("DC sweep source 2:") ), wxVERTICAL );
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_pgDC, wxID_ANY, _("DC Sweep Source 2") ), wxVERTICAL );
 
 	m_dcEnable2 = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Enable"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer2->Add( m_dcEnable2, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
