@@ -48,6 +48,7 @@
 #include <ratsnest/ratsnest_data.h>
 #include <ratsnest/ratsnest_viewitem.h>
 #include <tool/selection_conditions.h>
+#include <convert_drawsegment_list_to_polygon.h>
 
 /* This is an odd place for this, but CvPcb won't link if it is
  *  in class_board_item.cpp like I first tried it.
@@ -1836,18 +1837,6 @@ bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAI
 
     return true;
 }
-
-
-/* Extracts the board outlines and build a closed polygon
- * from lines, arcs and circle items on edge cut layer
- * Any closed outline inside the main outline is a hole
- * All contours should be closed, i.e. are valid vertices for a closed polygon
- * return true if success, false if a contour is not valid
- */
-extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
-                                       unsigned int aTolerance, wxString* aErrorText,
-                                       std::vector<wxPoint>* aDiscontinuities = nullptr,
-                                       std::vector<wxPoint>* aIntersections = nullptr );
 
 
 bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, wxString* aErrorText,

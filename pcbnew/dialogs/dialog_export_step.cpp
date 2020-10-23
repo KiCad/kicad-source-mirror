@@ -36,6 +36,7 @@
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <widgets/text_ctrl_eval.h>
 #include <wx_html_report_panel.h>
+#include <convert_drawsegment_list_to_polygon.h>
 
 
 class DIALOG_EXPORT_STEP: public DIALOG_EXPORT_STEP_BASE
@@ -234,10 +235,6 @@ void DIALOG_EXPORT_STEP::onUpdateYPos( wxUpdateUIEvent& aEvent )
     aEvent.Enable( m_rbUserDefinedOrigin->GetValue() );
 }
 
-extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
-                                       unsigned int aTolerance, wxString* aErrorText,
-                                       std::vector<wxPoint>* aDiscontinuities = nullptr,
-                                       std::vector<wxPoint>* aIntersections = nullptr );
 
 void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 {

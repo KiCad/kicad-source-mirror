@@ -36,6 +36,8 @@
 #include <view/view.h>
 #include <geometry/shape_null.h>
 #include <i18n_utility.h>
+#include <convert_drawsegment_list_to_polygon.h>
+
 
 MODULE::MODULE( BOARD* parent ) :
     BOARD_ITEM_CONTAINER( (BOARD_ITEM*) parent, PCB_MODULE_T ),
@@ -1664,13 +1666,6 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 
     return std::min( ratio, 1.0 );
 }
-
-
-// see convert_drawsegment_list_to_polygon.cpp:
-extern bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET& aPolygons,
-                                     unsigned int aTolerance, wxString* aErrorText,
-                                     std::vector<wxPoint>* aDiscontinuities = nullptr,
-                                     std::vector<wxPoint>* aIntersections = nullptr );
 
 
 std::shared_ptr<SHAPE> MODULE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const

@@ -39,6 +39,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/geometry_utils.h>
+#include <convert_drawsegment_list_to_polygon.h>
 
 #include <wx/log.h>
 
