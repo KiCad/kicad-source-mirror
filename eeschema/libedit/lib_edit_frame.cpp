@@ -28,7 +28,6 @@
 #include <confirm.h>
 #include <eeschema_id.h>
 #include <eeschema_settings.h>
-//#include <general.h>
 #include <kiface_i.h>
 #include <kiplatform/app.h>
 #include <kiway_express.h>
@@ -455,6 +454,27 @@ bool LIB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
             && IsContentModified() )
     {
         return false;
+    }
+
+    if( m_isSymbolFromSchematic && IsContentModified() )
+    {
+        SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
+
+        switch( UnsavedChangesDialog( this,
+                                      _( "Save changes to schematic before closing?" ),
+                                      nullptr ) )
+        {
+        case wxID_YES:
+            if( schframe && GetCurPart() )  // Should be always the case
+                schframe->UpdateSymbolFromEditor( *GetCurPart() );
+
+            return true;
+
+        case wxID_NO: return true;
+
+        default:
+        case wxID_CANCEL: return false;
+        }
     }
 
     if( !saveAllLibraries( true ) )
