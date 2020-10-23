@@ -98,9 +98,16 @@ struct ASCH_COMPONENT
 {
     int      currentpartid;
     wxString libreference;
+    wxString sourcelibraryname;
+    wxString componentdescription;
 
     int     orientation;
+    bool    isMirrored;
     wxPoint location;
+
+    int partcount;
+    int displaymodecount;
+    int displaymode;
 
     explicit ASCH_COMPONENT( const std::map<wxString, wxString>& aProperties );
 };

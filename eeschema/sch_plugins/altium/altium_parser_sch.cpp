@@ -73,11 +73,18 @@ ASCH_COMPONENT::ASCH_COMPONENT( const std::map<wxString, wxString>& aProperties 
     currentpartid =
             ALTIUM_PARSER::PropertiesReadInt( aProperties, "CURRENTPARTID", ALTIUM_COMPONENT_NONE );
     libreference = ALTIUM_PARSER::PropertiesReadString( aProperties, "LIBREFERENCE", "" );
+    sourcelibraryname = ALTIUM_PARSER::PropertiesReadString( aProperties, "SOURCELIBRARYNAME", "" );
+    componentdescription =
+            ALTIUM_PARSER::PropertiesReadString( aProperties, "COMPONENTDESCRIPTION", "" );
 
     orientation = ALTIUM_PARSER::PropertiesReadInt( aProperties, "ORIENTATION", 0 );
-
+    isMirrored  = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISMIRRORED", false );
     location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
             -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
+
+    partcount        = ALTIUM_PARSER::PropertiesReadInt( aProperties, "PARTCOUNT", 0 );
+    displaymodecount = ALTIUM_PARSER::PropertiesReadInt( aProperties, "DISPLAYMODECOUNT", 0 );
+    displaymode      = ALTIUM_PARSER::PropertiesReadInt( aProperties, "DISPLAYMODE", 0 );
 }
 
 

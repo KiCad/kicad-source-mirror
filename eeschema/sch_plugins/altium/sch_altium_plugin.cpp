@@ -27,7 +27,6 @@
 #include <plugins/altium/altium_parser.h>
 #include <plugins/altium/altium_parser_utils.h>
 #include <sch_plugins/altium/sch_altium_plugin.h>
-#include <sch_plugins/legacy/sch_legacy_plugin.h>
 
 #include <schematic.h>
 
@@ -175,8 +174,6 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
     wxCHECK_MSG( libTable, NULL, "Could not load symbol lib table." );
 
     m_pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-    m_properties                                        = std::make_unique<PROPERTIES>();
-    ( *m_properties )[SCH_LEGACY_PLUGIN::PropBuffering] = "";
 
     /// @note No check is being done here to see if the existing symbol library exists so this
     ///       will overwrite the existing one.
@@ -200,7 +197,7 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
             libTable->Format( &formatter, 0 );
         }
 
-        // Relaod the symbol library table.
+        // Reload the symbol library table.
         m_schematic->Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
         m_schematic->Prj().SchSymbolLibTable();
     }
@@ -454,6 +451,7 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int index, const std::map<wxString, wxSt
 
     LIB_PART* kpart = new LIB_PART( wxEmptyString );
     kpart->SetName( elem.libreference );
+    kpart->SetDescription( elem.componentdescription );
     kpart->SetLibId( libId );
     m_symbols.insert( { index, kpart } );
 
