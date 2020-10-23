@@ -102,7 +102,7 @@ public:
     void Parse( const CFB::CompoundFileReader& aReader );
 
 private:
-    bool IsCmpPartVisible( int aOwnerindex, int aOwnerpartid, int aOwnerpartdisplaymode ) const;
+    bool IsComponentPartVisible( int aOwnerindex, int aOwnerpartdisplaymode ) const;
 
     void ParseComponent( int index, const std::map<wxString, wxString>& aProperties );
     void ParsePin( const std::map<wxString, wxString>& aProperties );

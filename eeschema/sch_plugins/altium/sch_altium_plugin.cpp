@@ -442,15 +442,14 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
     m_currentSheet->SetModified();
 }
 
-bool SCH_ALTIUM_PLUGIN::IsCmpPartVisible(
-        int aOwnerindex, int aOwnerpartid, int aOwnerpartdisplaymode ) const
+
+bool SCH_ALTIUM_PLUGIN::IsComponentPartVisible( int aOwnerindex, int aOwnerpartdisplaymode ) const
 {
     const auto& component = m_altiumComponents.find( aOwnerindex );
     if( component == m_altiumComponents.end() )
         return false;
 
-    const ASCH_COMPONENT& cmp = component->second;
-    return ( cmp.currentpartid == aOwnerpartid ) && ( cmp.displaymode == aOwnerpartdisplaymode );
+    return component->second.displaymode == aOwnerpartdisplaymode;
 }
 
 
@@ -475,6 +474,8 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int index, const std::map<wxString, wxSt
     component->SetLibId( libId );
     //component->SetLibSymbol( kpart ); // this has to be done after parsing the LIB_PART!
 
+    component->SetUnit( elem.currentpartid );
+
     m_currentSheet->GetScreen()->Append( component );
 
     m_components.insert( { index, component } );
@@ -495,13 +496,15 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
         return;
     }
 
-    if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+    if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
         return;
 
     const auto& component = m_components.at( symbol->first );
 
     LIB_PIN* pin = new LIB_PIN( symbol->second );
     symbol->second->AddDrawItem( pin );
+
+    pin->SetUnit( elem.ownerpartid );
 
     pin->SetName( elem.name );
     pin->SetNumber( elem.designator );
@@ -705,6 +708,8 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
         LIB_TEXT* text = new LIB_TEXT( symbol->second );
         symbol->second->AddDrawItem( text );
 
+        text->SetUnit( elem.ownerpartid );
+
         text->SetPosition( GetRelativePosition( elem.location + m_sheetOffset, component ) );
         text->SetText( elem.text );
 
@@ -787,7 +792,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
             return;
         }
 
-        if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+        if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
         const auto& component = m_components.at( symbol->first );
@@ -799,6 +804,8 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
                 // special case: single line
                 LIB_POLYLINE* line = new LIB_POLYLINE( symbol->second );
                 symbol->second->AddDrawItem( line );
+
+                line->SetUnit( elem.ownerpartid );
 
                 for( size_t j = i; j < elem.points.size() && j < i + 2; j++ )
                 {
@@ -813,6 +820,8 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
                 // bezier always has maximum of 4 control points
                 LIB_BEZIER* bezier = new LIB_BEZIER( symbol->second );
                 symbol->second->AddDrawItem( bezier );
+
+                bezier->SetUnit( elem.ownerpartid );
 
                 for( size_t j = i; j < elem.points.size() && j < i + 4; j++ )
                 {
@@ -875,13 +884,15 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
             return;
         }
 
-        if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+        if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
         const auto& component = m_components.at( symbol->first );
 
         LIB_POLYLINE* line = new LIB_POLYLINE( symbol->second );
         symbol->second->AddDrawItem( line );
+
+        line->SetUnit( elem.ownerpartid );
 
         for( wxPoint& point : elem.points )
         {
@@ -934,13 +945,15 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
             return;
         }
 
-        if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+        if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
         const auto& component = m_components.at( symbol->first );
 
         LIB_POLYLINE* line = new LIB_POLYLINE( symbol->second );
         symbol->second->AddDrawItem( line );
+
+        line->SetUnit( elem.ownerpartid );
 
         for( wxPoint& point : elem.points )
         {
@@ -1014,7 +1027,7 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
             return;
         }
 
-        if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+        if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
         const auto& component = m_components.at( symbol->first );
@@ -1022,6 +1035,9 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
         // TODO: misses rounded edges
         LIB_RECTANGLE* rect = new LIB_RECTANGLE( symbol->second );
         symbol->second->AddDrawItem( rect );
+
+        rect->SetUnit( elem.ownerpartid );
+
         rect->SetPosition( GetRelativePosition( elem.topRight + m_sheetOffset, component ) );
         rect->SetEnd( GetRelativePosition( elem.bottomLeft + m_sheetOffset, component ) );
         rect->SetWidth( elem.lineWidth );
@@ -1056,7 +1072,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             return;
         }
 
-        if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+        if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
         const auto& component = m_components.at( symbol->first );
@@ -1066,6 +1082,8 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             LIB_CIRCLE* circle = new LIB_CIRCLE( symbol->second );
             symbol->second->AddDrawItem( circle );
 
+            circle->SetUnit( elem.ownerpartid );
+
             circle->SetPosition( GetRelativePosition( elem.center + m_sheetOffset, component ) );
             circle->SetRadius( elem.radius );
             circle->SetWidth( elem.lineWidth );
@@ -1074,6 +1092,8 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
         {
             LIB_ARC* arc = new LIB_ARC( symbol->second );
             symbol->second->AddDrawItem( arc );
+
+            arc->SetUnit( elem.ownerpartid );
 
             // TODO: correct?
             arc->SetPosition( GetRelativePosition( elem.center + m_sheetOffset, component ) );
@@ -1112,13 +1132,15 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
             return;
         }
 
-        if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+        if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
         const auto& component = m_components.at( symbol->first );
 
         LIB_POLYLINE* line = new LIB_POLYLINE( symbol->second );
         symbol->second->AddDrawItem( line );
+
+        line->SetUnit( elem.ownerpartid );
 
         line->AddPoint( GetRelativePosition( elem.point1 + m_sheetOffset, component ) );
         line->AddPoint( GetRelativePosition( elem.point2 + m_sheetOffset, component ) );
@@ -1181,13 +1203,16 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
             return;
         }
 
-        if( !IsCmpPartVisible( elem.ownerindex, elem.ownerpartid, elem.ownerpartdisplaymode ) )
+        if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
         const auto& component = m_components.at( symbol->first );
 
         LIB_RECTANGLE* rect = new LIB_RECTANGLE( symbol->second );
         symbol->second->AddDrawItem( rect );
+
+        rect->SetUnit( elem.ownerpartid );
+
         rect->SetPosition( GetRelativePosition( sheetTopRight, component ) );
         rect->SetEnd( GetRelativePosition( sheetBottomLeft, component ) );
         rect->SetWidth( elem.lineWidth );
