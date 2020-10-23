@@ -630,7 +630,6 @@ bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
         std::ostringstream ostr;
         ostr << "KMISC_" << i++;
         partID = ostr.str();
-        printf("Missing lable\n");
     }
     else
     {
