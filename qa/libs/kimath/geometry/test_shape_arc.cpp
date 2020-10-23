@@ -493,11 +493,11 @@ struct ARC_TO_POLYLINE_CASE
  * @param  aPolyline the polyline to check
  * @param  aCentre   the circle centre
  * @param  aRad      the circle radius
- * @param  aTolEnds  the tolerance for the endpoint-centre distance
+ * @param  aTolerance  the tolerance for the endpoint-centre distance
  * @return           true if predicate met
  */
-bool ArePolylineEndPointsNearCircle(
-        const SHAPE_LINE_CHAIN& aPolyline, const VECTOR2I& aCentre, int aRad, int aTolEnds )
+bool ArePolylineEndPointsNearCircle( const SHAPE_LINE_CHAIN& aPolyline, const VECTOR2I& aCentre,
+                                     int aRad, int aTolerance )
 {
     std::vector<VECTOR2I> points;
 
@@ -506,7 +506,7 @@ bool ArePolylineEndPointsNearCircle(
         points.push_back( aPolyline.CPoint( i ) );
     }
 
-    return GEOM_TEST::ArePointsNearCircle( points, aCentre, aRad, aTolEnds );
+    return GEOM_TEST::ArePointsNearCircle( points, aCentre, aRad, aTolerance );
 }
 
 
@@ -519,8 +519,8 @@ bool ArePolylineEndPointsNearCircle(
  * @param  aTolEnds  the tolerance for the midpoint-centre distance
  * @return           true if predicate met
  */
-bool ArePolylineMidPointsNearCircle(
-        const SHAPE_LINE_CHAIN& aPolyline, const VECTOR2I& aCentre, int aRad, int aTolMidPts )
+bool ArePolylineMidPointsNearCircle( const SHAPE_LINE_CHAIN& aPolyline, const VECTOR2I& aCentre,
+                                     int aRad, int aTolerance )
 {
     std::vector<VECTOR2I> points;
 
@@ -530,7 +530,7 @@ bool ArePolylineMidPointsNearCircle(
         points.push_back( mid_pt );
     }
 
-    return GEOM_TEST::ArePointsNearCircle( points, aCentre, aRad, aTolMidPts );
+    return GEOM_TEST::ArePointsNearCircle( points, aCentre, aRad, aTolerance );
 }
 
 
@@ -549,17 +549,17 @@ BOOST_AUTO_TEST_CASE( ArcToPolyline )
             "Semicircle",
             {
                 { 0, 0 },
-                { -10, 0 },
+                { -1000000, 0 },
                 180,
             },
         },
         {
-            // check larger sizes still have required precisions
-            // and that reverse angles work too
-            "Larger semicircle",
+            // check that very small circles don't fall apart and that reverse angles
+            // work too
+            "Extremely small semicircle",
             {
                 { 0, 0 },
-                { -10000, 0 },
+                { -1000, 0 },
                 -180,
             },
         },
@@ -568,44 +568,45 @@ BOOST_AUTO_TEST_CASE( ArcToPolyline )
             "Non-round geometry",
             {
                 { 0, 0 },
-                { -1234, 0 },
+                { 1234567, 0 },
                 42.22,
             },
         },
     };
 
-    const int    width = 0;
-    const double accuracy = 1.0;
+    const int width = 0;
+
+    // Note: do not expect accuracies around 1 to work.  We use integers internally so we're
+    // liable to rounding errors.  In PCBNew accuracy defaults to 5000 and we don't recommend
+    // anything lower than 1000 (for performance reasons).
+    const int accuracy = 100;
+    const int epsilon  = 1;
 
     for( const auto& c : cases )
     {
         BOOST_TEST_CONTEXT( c.m_ctx_name )
         {
             const SHAPE_ARC this_arc{ c.m_geom.m_center_point, c.m_geom.m_start_point,
-                c.m_geom.m_center_angle, width };
+                                      c.m_geom.m_center_angle, width };
 
             const SHAPE_LINE_CHAIN chain = this_arc.ConvertToPolyline( accuracy );
 
             BOOST_TEST_MESSAGE( "Polyline has " << chain.PointCount() << " points" );
 
-            const int pt_tol = 1;
-
-            // Start point where expected
+            // Start point (exactly) where expected
             BOOST_CHECK_EQUAL( chain.CPoint( 0 ), c.m_geom.m_start_point );
 
-            // End point where expected
-            BOOST_CHECK_PREDICATE( KI_TEST::IsVecWithinTol<VECTOR2I>,
-                    ( chain.CPoint( -1 ) )( this_arc.GetP1() )( pt_tol ) );
+            // End point (exactly) where expected
+            BOOST_CHECK_EQUAL( chain.CPoint( -1 ), this_arc.GetP1() );
 
-            const int radius = ( c.m_geom.m_center_point - c.m_geom.m_start_point ).EuclideanNorm();
+            int radius = ( c.m_geom.m_center_point - c.m_geom.m_start_point ).EuclideanNorm();
 
-            const int ep_tol = 2;
+            // Other points within accuracy + epsilon (for rounding) of where they should be
             BOOST_CHECK_PREDICATE( ArePolylineEndPointsNearCircle,
-                    ( chain )( c.m_geom.m_center_point )( radius )( ep_tol ) );
+                    ( chain )( c.m_geom.m_center_point )( radius )( accuracy + epsilon ) );
 
-            const int mp_tol = 3;
             BOOST_CHECK_PREDICATE( ArePolylineMidPointsNearCircle,
-                    ( chain )( c.m_geom.m_center_point )( radius )( mp_tol ) );
+                    ( chain )( c.m_geom.m_center_point )( radius )( accuracy + epsilon ) );
         }
     }
 }

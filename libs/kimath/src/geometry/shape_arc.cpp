@@ -376,16 +376,19 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
     int n;
 
     if( r < aAccuracy )
-    {
         n = 0;
-    }
     else
-    {
         n = GetArcToSegmentCount( r, aAccuracy, ca );
-        r -= aAccuracy / 2;         // Split the error on either side of arc
-    }
 
-    for( int i = 0; i <= n ; i++ )
+    // Split the error on either side of the arc.  Since we want the start and end points
+    // to be exactly on the arc, the first and last segments need to be shorter to stay within
+    // the error band (since segments normally start 1/2 the error band outside the arc).
+    r += aAccuracy / 2;
+    n = n * 2;
+
+    rv.Append( m_start );
+
+    for( int i = 1; i < n ; i += 2 )
     {
         double a = sa;
 
@@ -397,6 +400,8 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
 
         rv.Append( KiROUND( x ), KiROUND( y ) );
     }
+
+    rv.Append( m_end );
 
     return rv;
 }
