@@ -63,6 +63,14 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 
 	bSizerMain->Add( bSizerMiddle, 1, wxEXPAND, 5 );
 
+	wxString m_curveChoices[] = { _("10A Log"), _("15A Log"), _("15A Log S"), _("10C Rev Log"), _("15C Rev Log"), _("15C Rev Log S"), _("0B Lin"), _("4B S-Curve"), _("5B S-Curve"), _("Switch") };
+	int m_curveNChoices = sizeof( m_curveChoices ) / sizeof( wxString );
+	m_curve = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_curveNChoices, m_curveChoices, 0 );
+	m_curve->SetSelection( 6 );
+	m_curve->SetToolTip( _("Characteristic Curve") );
+
+	bSizerMain->Add( m_curve, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
 	m_saveBtn = new wxButton( this, wxID_ANY, _("Save"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMain->Add( m_saveBtn, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
@@ -87,6 +95,7 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 	m_valueText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onValueTextEnter ), NULL, this );
 	m_minText->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TUNER_SLIDER_BASE::onMinKillFocus ), NULL, this );
 	m_minText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onMinTextEnter ), NULL, this );
+	m_curve->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( TUNER_SLIDER_BASE::onCurveChoice ), NULL, this );
 	m_saveBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onSave ), NULL, this );
 }
 
@@ -109,6 +118,7 @@ TUNER_SLIDER_BASE::~TUNER_SLIDER_BASE()
 	m_valueText->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onValueTextEnter ), NULL, this );
 	m_minText->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TUNER_SLIDER_BASE::onMinKillFocus ), NULL, this );
 	m_minText->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onMinTextEnter ), NULL, this );
+	m_curve->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( TUNER_SLIDER_BASE::onCurveChoice ), NULL, this );
 	m_saveBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onSave ), NULL, this );
 
 }

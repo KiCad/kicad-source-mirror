@@ -31,6 +31,132 @@
 #include <template_fieldnames.h>
 #include <sim/netlist_exporter_pspice_sim.h>
 
+#include <cmath>   // log log1p expm1
+#include <complex> // norm
+
+
+// characteristic curves (default: 0B Lin)
+static const struct { double m_law, m_mid; } CURVES[] =
+{
+    // same order as choices in m_curve
+    { 1.00, 0.10 }, // 10A Log
+    { 1.00, 0.15 }, // 15A Log
+    { 0.90, 0.13 }, // 15A Log S
+    { 0.00, 0.10 }, // 10C Rev Log
+    { 0.00, 0.15 }, // 15C Rev Log
+    { 0.10, 0.13 }, // 15C Rev Log S
+    { 0.50, 0.50 }, // 0B Lin
+    { 0.50, 0.15 }, // 4B S-Curve
+    { 0.50, 0.10 }, // 5B S-Curve
+    { 0.50, 0.00 }  // Switch
+};
+
+template <typename T, int S>
+static inline int arraysize( const T (&v)[S] ) { return S; }
+
+
+/**
+ * Transform ratio according to linear, logarithmic or reverse logarithmic laws
+ * (characteristic curve or taper) of rotary or slide potentiometer (pot or fader).
+ *
+ * Parameters corresponding to *IEC 60393-1:2008* and *JIS C 5260-1* code letters:
+ *
+ * | @p aLaw | @p aMid | Code | Resistance Law (Taper)
+ * | ------: | ------: | ---: | :---------------------
+ * |    1.00 |    0.10 |  10A | CW logarithmic
+ * |     ^   |    0.15 |  15A | CW logarithmic (audio)
+ * |    0.90 |    0.13 |   ^  | CW logarithmic (high-end audio)
+ * |    0.00 |    0.10 |  10C | CCW/reverse logarithmic
+ * |     ^   |    0.15 |  15C | CCW/reverse logarithmic (reverse audio)
+ * |    0.10 |    0.13 |   ^  | CCW/reverse logarithmic (high-end reverse audio)
+ * |    0.50 |    0.50 |   0B | (ideal) linear
+ * |     ^   |    0.15 |   4B | symmetric (audio S-curve)
+ * |     ^   |    0.10 |   5B | symmetric (S-curve)
+ * |     ^   |    0.00 |   —  | switch
+ *
+ * Standards code letters cross-reference:
+ *
+ * |  IEC 60393-1:2008 | IEC 60393-1:1989 | MIL-R-94 | Resistance Law
+ * | ----------------: | :--------------: | :------: | :-------------
+ * |                0B |         A        |     A    | linear
+ * |               10A |         B        |     C    | logarithmic
+ * |               15A |         ^        |     —    | ^
+ * |               10C |         C        |     F    | reverse logarithmic
+ * |               15C |         ^        |     —    | ^
+ *
+ * **Logarithmic Law** is for *levels* (logarithmic units) and is actually an exponential curve.
+ * **Reverse** refers to a reverse-mounted resistive element or shaft on a potentiometer
+ * (resulting in a reflected curve). An **S-curve** is a curve joined to its (scaled) reflection,
+ * and *may* be symmetric or linear. **Inverse** refers to the mathematical inverse of a function.
+ *
+ * @tparam F is a floating point type.
+ * @param  aRatio    is the input (travel) ratio or moving contact (wiper) position, from
+ *                   0%/CCW/left (0) through 50%/mid-travel/center (½) to 100%/CW/right (1).
+ * @param  aMid      is the logarithmic laws' output ratio at 50%/mid-travel/center (½)
+ *                   input ratio.
+ * @param  aLaw      is the (resistance) law, interpolating from *reverse logarithmic* (0)
+ *                   through *symmetric/linear* (½) to *logarithmic* (1).
+ * @param  aInverse  swaps input and output ratios (inverse function, where possible),
+ *                   if @c true.
+ * @return the output (resistance or voltage) ratio in [0, 1].
+ */
+template <typename F>
+static F taper( F aRatio, F aMid = 0.5, F aLaw = 1.0, bool aInverse = false )
+{
+    // clamp to [0, 1] and short-cut
+    if( aRatio <= 0 )
+        return 0;
+    if( aRatio >= 1 )
+        return 1;
+
+    // short-cut for ideal linear or at S-curve inflection point
+    if( aMid == 0.5 || aRatio == aLaw )
+        return aRatio;
+
+    F t = aRatio;
+
+    // clamp to [0, 1] and short-cut at (non-invertible) limits
+    if( aMid <= 0 )
+        t = aInverse ? 1 : 0;
+    else if( aMid >= 1 )
+        t = aInverse ? 0 : 1;
+    else
+    {
+        // clamp, and reflect and/or scale for reverse…symmetric…normal laws
+        if( aLaw >= 1 )
+            t =     t;
+        else if( aLaw <= 0 )
+            t =   1-t;
+        else if( aRatio <= aLaw )
+            t =     t   /     aLaw;
+        else
+            t = ( 1-t ) / ( 1-aLaw );
+
+        // scaling factors for domain and range in [0, 1]
+        F a = std::norm( 1 - 1/aMid );
+        F b = std::log( a );
+        F c = a - 1;
+
+        // scaling: a = (1 - 1/m)²
+        // log law: (aᵗ - 1) / (a - 1)
+        // inverse: logₐ(1 + t (a - 1))
+        t = aInverse ? std::log1p( t * c ) / b : std::expm1( t * b ) / c;
+    }
+
+    // clamp, and scale and/or reflect for reverse…symmetric…normal laws
+    if( aLaw >= 1 )
+        t =     t;
+    else if( aLaw <= 0 )
+        t = 1 - t;
+    else if( aRatio <= aLaw )
+        t =     t *     aLaw;
+    else
+        t = 1 - t * ( 1-aLaw );
+
+    return t;
+}
+
+
 TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBOL* aSymbol ) :
     TUNER_SLIDER_BASE( aParent ),
     m_symbol( aSymbol ),
@@ -142,7 +268,12 @@ void TUNER_SLIDER::updateSlider()
 {
     assert( m_max >= m_value && m_value >= m_min );
 
-    m_slider->SetValue( ( ( m_value - m_min ) / ( m_max - m_min ) ).ToDouble() * 100.0 );
+    int choice = m_curve->GetSelection();
+    wxCHECK( choice >= 0 && choice < arraysize( CURVES ), /*void*/ );
+
+    double ratio  = ( ( m_value - m_min ) / ( m_max - m_min ) ).ToDouble();
+    double travel = taper( ratio, CURVES[choice].m_mid, CURVES[choice].m_law, true );
+    m_slider->SetValue( KiROUND( travel * 100.0 ) );
 }
 
 
@@ -213,10 +344,21 @@ void TUNER_SLIDER::onSave( wxCommandEvent& event )
 
 void TUNER_SLIDER::onSliderChanged( wxScrollEvent& event )
 {
-    m_value = m_min + ( m_max - m_min ) * SPICE_VALUE( m_slider->GetValue() / 100.0 );
+    int choice = m_curve->GetSelection();
+    wxCHECK( choice >= 0 && choice < arraysize( CURVES ), /*void*/ );
+
+    double travel = m_slider->GetValue() / 100.0;
+    double ratio  = taper( travel, CURVES[choice].m_mid, CURVES[choice].m_law, false );
+    m_value = m_min + ( m_max - m_min ) * SPICE_VALUE( ratio );
     updateValueText();
     updateComponentValue();
     m_changed = true;
+}
+
+
+void TUNER_SLIDER::onCurveChoice( wxCommandEvent& event )
+{
+    updateValue();
 }
 
 

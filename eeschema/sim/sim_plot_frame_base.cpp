@@ -142,7 +142,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_splitterPlotAndConsole->SetMinimumPaneSize( 50 );
 
 	m_plotPanel = new wxPanel( m_splitterPlotAndConsole, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_plotPanel->SetMinSize( wxSize( -1,200 ) );
+	m_plotPanel->SetMinSize( wxSize( -1,250 ) );
 
 	m_sizerPlot = new wxBoxSizer( wxHORIZONTAL );
 
