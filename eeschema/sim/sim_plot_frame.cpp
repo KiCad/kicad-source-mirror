@@ -539,11 +539,11 @@ void SIM_PLOT_FRAME::AddTuner( SCH_SYMBOL* aSymbol )
     if( !plotPanel )
         return;
 
-    // For now limit the tuner tool to RLC components
+    // For now limit the tuner tool to RLC and code model components
     char primitiveType = NETLIST_EXPORTER_PSPICE::GetSpiceField( SF_PRIMITIVE, aSymbol, 0 )[0];
 
     if( primitiveType != SP_RESISTOR && primitiveType != SP_CAPACITOR
-      && primitiveType != SP_INDUCTOR )
+        && primitiveType != SP_INDUCTOR && primitiveType != SP_CODEMODEL )
         return;
 
     const wxString componentName = aSymbol->GetField( REFERENCE_FIELD )->GetText();
@@ -917,11 +917,15 @@ void SIM_PLOT_FRAME::applyTuners()
 {
     for( auto& tuner : m_tuners )
     {
-        /// @todo no ngspice hard coding
-        std::string command( "alter @" + tuner->GetSpiceName()
-                + "=" + tuner->GetValue().ToSpiceString() );
+        std::pair<wxString, bool> command = tuner->GetSpiceTuningCommand();
+        const SPICE_VALUE&        value   = tuner->GetValue();
 
-        m_simulator->Command( command );
+        // 0 < value < 1 for model parameter to avoid division by zero, etc.
+        command.first += command.second
+                            ? wxString::FromCDouble( Clamp( 1e-9, value.ToDouble() / 100.0, 1-1e-9 ), 9 )
+                            : value.ToSpiceString();
+
+        m_simulator->Command( command.first.ToStdString() );
     }
 }
 

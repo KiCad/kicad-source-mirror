@@ -61,6 +61,36 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceDevice( const wxString& aSymbol ) cons
 }
 
 
+// most part is identical to above GetSpiceDevice()
+std::pair<wxString, bool>
+NETLIST_EXPORTER_PSPICE::GetSpiceTuningCommand( const wxString& aSymbol ) const
+{
+    const std::list<SPICE_ITEM>& spiceItems = GetSpiceItems();
+
+    auto it = std::find_if( spiceItems.begin(), spiceItems.end(),
+                            [&]( const SPICE_ITEM& item )
+                            {
+                                return item.m_refName == aSymbol;
+                            } );
+
+    if( it == spiceItems.end() )
+        return { wxEmptyString, false };
+
+    /// @todo assuming ngspice potentiometer code model
+    /// @todo no ngspice hard coding
+    if( it->m_primitive == SP_CODEMODEL )
+        return { "altermod @" + it->m_model.Lower() + "[position]=", true };
+
+    // Prefix the device type if plain reference would result in a different device type
+    wxString name = it->m_primitive != it->m_refName[0]
+                            ? wxString( it->m_primitive + it->m_refName )
+                            : it->m_refName;
+
+    /// @todo no ngspice hard coding
+    return { "alter @" + name.Lower() + "=", false };
+}
+
+
 bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
     FILE_OUTPUTFORMATTER outputFile( aOutFileName, wxT( "wt" ), '\'' );

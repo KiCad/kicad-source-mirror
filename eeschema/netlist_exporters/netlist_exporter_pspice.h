@@ -119,6 +119,16 @@ public:
      */
     wxString GetSpiceDevice( const wxString& aSymbol ) const;
 
+
+    /**
+     * @brief Returns the command to alter a Spice parameter of a schematic symbol.
+     *
+     * @param aSymbol is the symbol reference.
+     * @return Spice command or empty string if there is no such component in the netlist,
+     * and true if it is a code model parameter, false if it is an instance parameter.
+     */
+    std::pair<wxString, bool> GetSpiceTuningCommand( const wxString& aSymbol ) const;
+
     /**
      * Write to specified output file
      */

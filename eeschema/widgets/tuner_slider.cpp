@@ -34,26 +34,40 @@
 TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBOL* aSymbol ) :
     TUNER_SLIDER_BASE( aParent ),
     m_symbol( aSymbol ),
+    m_fieldId( MANDATORY_FIELD_T::VALUE_FIELD ),
     m_min( 0.0 ),
     m_max( 0.0 ),
-    m_changed( false ),
+    m_value( 0.0 ),
     m_frame ( aFrame )
 {
     const wxString compName = aSymbol->GetField( REFERENCE_FIELD )->GetText();
     m_name->SetLabel( compName );
+    m_spiceTuningCommand = aFrame->GetExporter()->GetSpiceTuningCommand( compName );
 
-    if( aSymbol->FindField( NETLIST_EXPORTER_PSPICE::GetSpiceFieldName( SF_MODEL ) ) )
-        m_fieldId = aSymbol->FindField( NETLIST_EXPORTER_PSPICE::GetSpiceFieldName( SF_MODEL ) )->GetId();
+    if( m_spiceTuningCommand.second )
+    {
+        // model parameter, with fixed %-range and unknown initial value
+        m_min   =   0;
+        m_max   = 100;
+        m_value = ( m_max - m_min ) / 2.0; // midpoint
+        m_minText->Disable();
+        m_maxText->Disable();
+        m_saveBtn->Disable(); // not an instance parameter that could be updated (invalid m_fieldId)
+    }
     else
-        m_fieldId = aSymbol->GetField( VALUE_FIELD )->GetId();
+    {
+        // instance parameter
+        if( aSymbol->FindField( NETLIST_EXPORTER_PSPICE::GetSpiceFieldName( SF_MODEL ) ) )
+            m_fieldId = aSymbol->FindField( NETLIST_EXPORTER_PSPICE::GetSpiceFieldName( SF_MODEL ) )->GetId();
+        else
+            m_fieldId = aSymbol->GetField( VALUE_FIELD )->GetId();
 
-    m_value = SPICE_VALUE( aSymbol->GetFieldById( m_fieldId )->GetText() );
-    m_spiceName = aFrame->GetExporter()->GetSpiceDevice( compName ).Lower();
+        m_value = SPICE_VALUE( aSymbol->GetFieldById( m_fieldId )->GetText() );
+        m_min   = SPICE_VALUE( 0.5 ) * m_value;
+        m_max   = SPICE_VALUE( 2.0 ) * m_value;
+    }
 
     // Call Set*() methods to update fields and slider
-    m_max = SPICE_VALUE( 2.0 ) * m_value;
-    m_min = SPICE_VALUE( 0.5 ) * m_value;
-
     m_minText->SetValue( m_min.ToOrigString() );
     m_maxText->SetValue( m_max.ToOrigString() );
 
