@@ -863,8 +863,16 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             SCH_SHEET*     sheet         = (SCH_SHEET*) newItem;
             SCH_FIELD&     nameField     = sheet->GetFields()[SHEETNAME];
             wxString       baseName      = nameField.GetText();
-            wxString       candidateName = baseName;
-            int            uniquifier    = 1;
+            wxString       number;
+
+            while( !baseName.IsEmpty() && wxIsdigit( baseName.Last() ) )
+            {
+                number = baseName.Last() + number;
+                baseName.RemoveLast();
+            }
+
+            int      uniquifier = std::max( 0, wxAtoi( number ) ) + 1;
+            wxString candidateName = wxString::Format( wxT( "%s%d" ), baseName, uniquifier++ );
 
             while( hierarchy.NameExists( candidateName ) )
                 candidateName = wxString::Format( wxT( "%s%d" ), baseName, uniquifier++ );

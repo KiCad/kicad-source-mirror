@@ -1483,7 +1483,15 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             SCH_SCREEN* existingScreen = nullptr;
             wxString    baseName       = nameField.GetText();
             wxString    candidateName  = baseName;
-            int         uniquifier     = 1;
+            wxString    number;
+
+            while( !baseName.IsEmpty() && wxIsdigit( baseName.Last() ) )
+            {
+                number = baseName.Last() + number;
+                baseName.RemoveLast();
+            }
+
+            int uniquifier = std::max( 0, wxAtoi( number ) ) + 1;
 
             while( hierarchy.NameExists( candidateName ) )
                 candidateName = wxString::Format( wxT( "%s%d" ), baseName, uniquifier++ );
