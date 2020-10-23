@@ -100,7 +100,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DUPLICATE_FOOTPRINT );
             drcItem->SetItems( mod, *ins.first );
 
-            reportViolation( drcItem, mod->GetPosition());
+            reportViolation( drcItem, mod->GetPosition() );
         }
     }
 
@@ -122,7 +122,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
 
             drcItem->SetErrorMessage( m_msg );
-            reportViolation( drcItem, wxPoint());
+            reportViolation( drcItem, wxPoint() );
         }
         else
         {
@@ -141,7 +141,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad );
-                    reportViolation( drcItem, module->GetPosition());
+                    reportViolation( drcItem, module->GetPosition() );
                 }
                 else if( pcb_netname.IsEmpty() && !sch_net.GetNetName().IsEmpty() )
                 {
@@ -151,7 +151,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad );
-                    reportViolation( drcItem, module->GetPosition());
+                    reportViolation( drcItem, module->GetPosition() );
                 }
                 else if( pcb_netname != sch_net.GetNetName() )
                 {
@@ -162,7 +162,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad );
-                    reportViolation( drcItem, module->GetPosition());
+                    reportViolation( drcItem, module->GetPosition() );
                 }
             }
 
@@ -181,7 +181,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( module );
-                    reportViolation( drcItem, module->GetPosition());
+                    reportViolation( drcItem, module->GetPosition() );
                 }
             }
         }
@@ -193,12 +193,15 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_EXTRA_FOOTPRINT ) )
             break;
 
+        if( module->GetAttributes() & MOD_BOARD_ONLY )
+            continue;
+
         if( !aNetlist.GetComponentByReference( module->GetReference() ) )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_EXTRA_FOOTPRINT );
 
             drcItem->SetItems( module );
-            reportViolation( drcItem, module->GetPosition());
+            reportViolation( drcItem, module->GetPosition() );
         }
     }
 }
