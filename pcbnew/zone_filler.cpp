@@ -119,6 +119,24 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
         }
     }
 
+    // Update (and cache) the zone bounding boxes as well.
+    for( ZONE_CONTAINER* zone : m_board->Zones() )
+    {
+        zone->CacheBoundingBox();
+        worstClearance = std::max( worstClearance, zone->GetLocalClearance() );
+
+    }
+
+    for( MODULE* module : m_board->Modules() )
+    {
+        for( ZONE_CONTAINER* zone : module->Zones() )
+        {
+            zone->CacheBoundingBox();
+            worstClearance = std::max( worstClearance, zone->GetLocalClearance() );
+
+        }
+    }
+
     // Sort by priority to reduce deferrals waiting on higher priority zones.
     std::sort( aZones.begin(), aZones.end(),
                []( const ZONE_CONTAINER* lhs, const ZONE_CONTAINER* rhs )
@@ -128,8 +146,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
 
     for( ZONE_CONTAINER* zone : aZones )
     {
-        zone->CacheBoundingBox();
-
         // Rule areas are not filled
         if( zone->GetIsRuleArea() )
             continue;
