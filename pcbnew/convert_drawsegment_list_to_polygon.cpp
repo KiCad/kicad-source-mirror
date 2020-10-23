@@ -344,6 +344,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
     {
         TransformCircleToPolygon( aPolygons, graphic->GetCenter(), graphic->GetRadius(),
                                   ARC_LOW_DEF, ERROR_INSIDE );
+        polygonComplete = true;
     }
     else if( graphic->GetShape() == S_RECT )
     {
@@ -353,6 +354,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
 
         for( const wxPoint& pt : pts )
             aPolygons.Append( pt );
+
+        polygonComplete = true;
     }
     else if( graphic->GetShape() == S_POLYGON )
     {
@@ -416,7 +419,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                     double  angle   = -graphic->GetAngle();
                     double  radius  = graphic->GetRadius();
                     int     steps   = GetArcToSegmentCount( radius, aTolerance, angle / 10.0 );
-                    double  delta   = angle / steps;
 
                     if( !close_enough( prevPt, pstart, aTolerance ) )
                     {
@@ -426,8 +428,9 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                         std::swap( pstart, pend );
                     }
 
-                    for( double rotation = delta; rotation < angle; rotation += delta )
+                    for( int step = 1; step<=steps; ++step )
                     {
+                        double rotation = ( angle * step ) / steps;
                         wxPoint pt = pstart;
                         RotatePoint( &pt, pcenter, rotation );
 
@@ -621,7 +624,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                         double  angle   = -graphic->GetAngle();
                         int     radius  = graphic->GetRadius();
                         int     steps = GetArcToSegmentCount( radius, aTolerance, angle / 10.0 );
-                        double  delta   = angle / steps;
 
                         if( !close_enough( prevPt, pstart, aTolerance ) )
                         {
@@ -631,8 +633,9 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                             std::swap( pstart, pend );
                         }
 
-                        for( double rotation = delta; rotation < angle; rotation += delta )
+                        for( int step = 1; step<=steps; ++step )
                         {
+                            double rotation = ( angle * step ) / steps;
                             wxPoint pt = pstart;
                             RotatePoint( &pt, pcenter, rotation );
 
