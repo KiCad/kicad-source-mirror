@@ -310,6 +310,10 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
 COLOR_SETTINGS* DIALOG_PLOT_SCHEMATIC::getColorSettings()
 {
     int selection = m_colorTheme->GetSelection();
+
+    if( selection < 0 )
+        return Pgm().GetSettingsManager().GetColorSettings( "_builtin_default" );
+
     return static_cast<COLOR_SETTINGS*>( m_colorTheme->GetClientData( selection ) );
 }
 
