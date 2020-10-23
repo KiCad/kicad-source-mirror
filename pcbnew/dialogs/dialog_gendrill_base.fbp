@@ -794,7 +794,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;Absolute&quot; &quot;Auxiliary axis&quot;</property>
+                                        <property name="choices">&quot;Absolute&quot; &quot;Drill/place file origin&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
@@ -826,13 +826,13 @@
                                         <property name="pin_button">1</property>
                                         <property name="pos"></property>
                                         <property name="resize">Resizable</property>
-                                        <property name="selection">0</property>
+                                        <property name="selection">1</property>
                                         <property name="show">1</property>
                                         <property name="size"></property>
                                         <property name="style">wxRA_SPECIFY_COLS</property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Choose the coordinate origin: absolute or relative to the auxiliray axis</property>
+                                        <property name="tooltip">Choose the coordinate origin: absolute or relative to the drill/place file origin</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
