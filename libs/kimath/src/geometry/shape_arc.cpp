@@ -375,13 +375,14 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
 
     int n;
 
-    if( r == 0.0 )
+    if( r < aAccuracy )
     {
         n = 0;
     }
     else
     {
         n = GetArcToSegmentCount( r, aAccuracy, ca );
+        r -= aAccuracy / 2;         // Split the error on either side of arc
     }
 
     for( int i = 0; i <= n ; i++ )

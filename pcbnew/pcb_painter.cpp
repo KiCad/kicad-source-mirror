@@ -587,13 +587,15 @@ void PCB_PAINTER::draw( const ARC* aArc, int aLayer )
 
         if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags )
         {
+            int clearance = aArc->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
+
             m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );
             m_gal->SetStrokeColor( color );
 
             m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle,
-                                   width + aArc->GetOwnClearance( ToLAYER_ID( aLayer ) ) * 2 );
+                                   width + clearance * 2 );
         }
     }
 }

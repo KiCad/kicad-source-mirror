@@ -841,7 +841,12 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, d
     // Swap the angles, if start angle is greater than end angle
     SWAP( aStartAngle, >, aEndAngle );
 
-    const double alphaIncrement = calcAngleStep( aRadius );
+    // Bigger arcs need smaller alpha increment to make them look smooth
+    const double alphaIncrement = std::min( 1e6 / aRadius, 2.0 * M_PI / CIRCLE_POINTS );
+
+    // Draw entirely within the real arc boundary (ie: put all polygonization error inside)
+    double correctionFactor = cos( M_PI / (double) CIRCLE_POINTS );
+    aRadius *= correctionFactor;
 
     Save();
     currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );

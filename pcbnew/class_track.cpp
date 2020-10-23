@@ -1074,6 +1074,23 @@ static struct TRACK_VIA_DESC
         propMgr.AddProperty( new PROPERTY<TRACK, int>( _HKI( "End Y" ),
             &TRACK::SetEndY, &TRACK::GetEndY, PROPERTY_DISPLAY::DISTANCE ) );
 
+        // Arc
+        REGISTER_TYPE( ARC );
+        propMgr.InheritsAfter( TYPE_HASH( ARC ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
+
+        propMgr.AddProperty( new PROPERTY<TRACK, int>( _HKI( "Width" ),
+            &ARC::SetWidth, &ARC::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ),
+            new PROPERTY<ARC, int, BOARD_ITEM>( _HKI( "Origin X" ),
+            &TRACK::SetX, &ARC::GetX, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ),
+            new PROPERTY<ARC, int, BOARD_ITEM>( _HKI( "Origin Y" ),
+            &TRACK::SetY, &ARC::GetY, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<TRACK, int>( _HKI( "End X" ),
+            &TRACK::SetEndX, &ARC::GetEndX, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<TRACK, int>( _HKI( "End Y" ),
+            &TRACK::SetEndY, &ARC::GetEndY, PROPERTY_DISPLAY::DISTANCE ) );
+
         // Via
         REGISTER_TYPE( VIA );
         propMgr.InheritsAfter( TYPE_HASH( VIA ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
