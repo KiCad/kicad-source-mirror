@@ -30,6 +30,7 @@
 #include <kiway.h>
 #include <kiway_player.h>
 #include <dialog_shim.h>
+#include <common.h>
 #include <env_paths.h>
 
 #include <widgets/grid_text_button_helpers.h>

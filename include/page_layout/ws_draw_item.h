@@ -31,6 +31,7 @@
 #include <bitmap_base.h>
 #include "msgpanel.h"
 #include <geometry/shape_poly_set.h>
+#include <eda_units.h>
 
 #include <algorithm>
 #include <vector>
@@ -40,6 +41,7 @@ class TITLE_BLOCK;
 class PAGE_INFO;
 class EDA_ITEM;
 class EDA_DRAW_FRAME;
+class PROJECT;
 
 /**
  * Helper classes to handle basic graphic items used to draw/plot

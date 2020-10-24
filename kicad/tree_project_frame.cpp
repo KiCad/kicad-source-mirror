@@ -36,7 +36,9 @@
 #include <wx/string.h>
 
 #include <bitmaps.h>
+#include <common.h>
 #include <gestfich.h>
+#include <macros.h>
 #include <menus_helpers.h>
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>

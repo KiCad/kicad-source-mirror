@@ -61,28 +61,6 @@ class REPORTER;
 #define TEXT_ANGLE_HORIZ    0
 #define TEXT_ANGLE_VERT     900
 
-/**
- * The type of unit.
- */
-enum class EDA_DATA_TYPE
-{
-    DISTANCE = 0,
-    AREA     = 1,
-    VOLUME   = 2
-};
-
-enum class EDA_UNITS
-{
-    INCHES = 0,
-    MILLIMETRES = 1,
-    UNSCALED = 2,
-    DEGREES = 3,
-    PERCENT = 4,
-    MILS = 5,
-};
-
-bool IsImperialUnit( EDA_UNITS aUnit );
-bool IsMetricUnit( EDA_UNITS aUnit );
 
 /**
  * Return the size of @a aSingleLine of text when it is rendered in @a aWindow

@@ -40,6 +40,7 @@
 #include <thread>
 #include <utility>
 #include <wildcards_and_files_ext.h>
+#include <wx/textfile.h>
 
 
 FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aLibNickname,

@@ -34,7 +34,7 @@
 
 #include <string>
 
-#include <common.h>
+#include <eda_units.h>
 #include <convert_to_biu.h>
 #include <math/util.h>      // for KiROUND
 #include <math/vector2d.h>

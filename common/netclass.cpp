@@ -24,6 +24,7 @@
  */
 
 #include <netclass.h>
+#include <macros.h>
 #include <base_units.h>
 
 // This will get mapped to "kicad_default" in the specctra_export.

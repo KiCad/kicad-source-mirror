@@ -30,6 +30,7 @@
 #include <grid_tricks.h>
 #include <widgets/wx_grid.h>
 #include <bitmaps.h>
+#include <macros.h>
 
 
 #define INITIAL_HELP    \

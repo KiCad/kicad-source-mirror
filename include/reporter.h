@@ -25,8 +25,8 @@
 #ifndef _REPORTER_H_
 #define _REPORTER_H_
 
+#include <eda_units.h>
 #include <wx/string.h>
-#include <common.h>
 #include <widgets/ui_common.h>
 
 /**

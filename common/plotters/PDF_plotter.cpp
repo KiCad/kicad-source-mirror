@@ -32,6 +32,7 @@
 #include <eda_item.h>
 #include <wx/zstream.h>
 #include <wx/mstream.h>
+#include <macros.h>
 #include <math/util.h>      // for KiROUND
 #include <render_settings.h>
 

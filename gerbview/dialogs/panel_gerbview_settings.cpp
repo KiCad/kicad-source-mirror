@@ -21,6 +21,7 @@
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
+#include <macros.h>
 
 #include "panel_gerbview_settings.h"
 

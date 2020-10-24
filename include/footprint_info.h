@@ -47,6 +47,7 @@ class FOOTPRINT_ASYNC_LOADER;
 class PROGRESS_REPORTER;
 class wxTopLevelWindow;
 class KIWAY;
+class wxTextFile;
 
 
 /*

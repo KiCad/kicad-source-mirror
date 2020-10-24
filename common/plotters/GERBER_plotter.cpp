@@ -27,6 +27,7 @@
 #include <fill_type.h>
 #include <kicad_string.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <macros.h>
 #include <math/util.h>      // for KiROUND
 #include <render_settings.h>
 #include <trigo.h>

@@ -28,8 +28,10 @@
 
 #include <sch_draw_panel.h>
 #include <trigo.h>
+#include <common.h>
 #include <plotter.h>
 #include <bitmaps.h>
+#include <macros.h>
 
 #include <sch_painter.h>
 #include <sch_junction.h>

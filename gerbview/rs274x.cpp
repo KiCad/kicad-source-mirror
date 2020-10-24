@@ -31,6 +31,7 @@
 
 #include <gerbview.h>
 #include <gerber_file_image.h>
+#include <macros.h>
 #include <X2_gerber_attributes.h>
 #include <gbr_metadata.h>
 

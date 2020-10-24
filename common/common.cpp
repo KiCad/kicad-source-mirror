@@ -37,37 +37,6 @@
 #include <wx/wx.h>
 
 
-bool IsImperialUnit( EDA_UNITS aUnit )
-{
-    switch( aUnit )
-    {
-        case EDA_UNITS::INCHES:
-        case EDA_UNITS::MILS:
-            return true;
-
-        default:
-            return false;
-    }
-
-    return false;
-}
-
-
-bool IsMetricUnit( EDA_UNITS aUnit )
-{
-    switch( aUnit )
-    {
-        case EDA_UNITS::MILLIMETRES:
-            return true;
-
-        default:
-            return false;
-    }
-
-    return false;
-}
-
-
 wxSize GetTextSize( const wxString& aSingleLine, wxWindow* aWindow )
 {
     wxCoord width;

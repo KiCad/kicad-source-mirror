@@ -627,7 +627,7 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
     EDA_UNITS primaryUnit   = GetUserUnits();
     EDA_UNITS secondaryUnit = EDA_UNITS::MILS;
 
-    if( IsImperialUnit( primaryUnit ) )
+    if( EDA_UNIT_UTILS::IsImperialUnit( primaryUnit ) )
     {
         if( cmnTool )
             secondaryUnit = cmnTool->GetLastMetricUnits();

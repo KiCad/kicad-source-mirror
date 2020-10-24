@@ -29,6 +29,7 @@
 
 #include <eda_base_frame.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <macros.h>
 #include <math/util.h>      // for KiROUND
 #include <render_settings.h>
 #include <trigo.h>

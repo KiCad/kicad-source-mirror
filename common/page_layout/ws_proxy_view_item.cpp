@@ -28,6 +28,7 @@
 #include <page_layout/ws_draw_item.h>
 #include <page_layout/ws_data_item.h>
 #include <page_layout/ws_painter.h>
+#include <project.h>
 #include <view/view.h>
 
 using namespace KIGFX;

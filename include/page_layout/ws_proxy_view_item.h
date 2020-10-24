@@ -30,6 +30,7 @@
 
 class BOARD;
 class PAGE_INFO;
+class PROJECT;
 class TITLE_BLOCK;
 class WS_DRAW_ITEM_LINE;
 class WS_DRAW_ITEM_RECT;

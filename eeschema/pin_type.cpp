@@ -24,6 +24,7 @@
 #include <pin_type.h>
 #include <lib_pin.h>
 #include <base_units.h>
+#include <macros.h>
 
 
 // These are true singletons so it's OK for them to be globals.

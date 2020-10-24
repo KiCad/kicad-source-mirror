@@ -30,6 +30,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <netclass.h>
 #include <libeval_compiler/libeval_compiler.h>
+#include <wx/intl.h>
 
 class BOARD_ITEM;
 class PCB_EXPR_UCODE;

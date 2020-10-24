@@ -31,6 +31,7 @@
 #include <layers_id_colors_and_visibility.h> // SCH_LAYER_ID
 #include <plotter.h>                         // PLOT_DASH_TYPE
 #include <sch_io_mgr.h>
+#include <wx/filename.h>
 
 class EDA_TEXT;
 class LABEL_SPIN_STYLE;
@@ -65,8 +66,8 @@ public:
 
     /**
      * @brief Loads a CADSTAR PCB Archive file into the KiCad BOARD object given
-     * @param aSchematic Schematic to add the design onto 
-     * @param aRootSheet Root sheet to add the design onto 
+     * @param aSchematic Schematic to add the design onto
+     * @param aRootSheet Root sheet to add the design onto
      */
     void Load( ::SCHEMATIC* aSchematic, ::SCH_SHEET* aRootSheet,
             SCH_PLUGIN::SCH_PLUGIN_RELEASER* aSchPlugin, wxFileName aLibraryFileName );
@@ -200,9 +201,9 @@ private:
     }
 
     /**
-     * @brief 
-     * @param aCadstarAngle 
-     * @return 
+     * @brief
+     * @param aCadstarAngle
+     * @return
     */
     double getAngleTenthDegree( const long long& aCadstarAngle )
     {
@@ -210,9 +211,9 @@ private:
     }
 
     /**
-     * @brief 
-     * @param aCadstarAngle 
-     * @return 
+     * @brief
+     * @param aCadstarAngle
+     * @return
      */
     double getAngleDegrees( const long long& aCadstarAngle )
     {
@@ -220,15 +221,15 @@ private:
     }
 
     /**
-     * @brief 
-     * @param aPoint 
+     * @brief
+     * @param aPoint
      * @return Angle in decidegrees of the polar representation of the point, scaled 0..360
      */
     double getPolarAngle( wxPoint aPoint );
 
     /**
-     * @brief 
-     * @param aPoint 
+     * @brief
+     * @param aPoint
      * @return Radius of polar representation of the point
      */
     double getPolarRadius( wxPoint aPoint );

@@ -43,6 +43,7 @@ class NETLIST;
 class NETINFO_ITEM;
 class PROGRESS_REPORTER;
 class REPORTER;
+class wxFileName;
 
 namespace KIGFX
 {

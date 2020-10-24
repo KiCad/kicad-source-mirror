@@ -24,7 +24,7 @@
 #ifndef PREVIEW_PREVIEW_UTILS__H_
 #define PREVIEW_PREVIEW_UTILS__H_
 
-#include <common.h>
+#include <eda_units.h>
 #include <gal/color4d.h>
 #include <math/vector2d.h>
 

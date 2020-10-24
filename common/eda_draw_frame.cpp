@@ -973,7 +973,7 @@ void EDA_DRAW_FRAME::GetUnitPair( EDA_UNITS& aPrimaryUnit, EDA_UNITS& aSecondary
     aPrimaryUnit    = GetUserUnits();
     aSecondaryUnits = EDA_UNITS::MILS;
 
-    if( IsImperialUnit( aPrimaryUnit ) )
+    if( EDA_UNIT_UTILS::IsImperialUnit( aPrimaryUnit ) )
     {
         if( cmnTool )
             aSecondaryUnits = cmnTool->GetLastMetricUnits();

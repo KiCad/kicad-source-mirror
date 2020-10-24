@@ -72,9 +72,9 @@ void COMMON_TOOLS::Reset( RESET_REASON aReason )
 
 void COMMON_TOOLS::SetLastUnits( EDA_UNITS aUnit )
 {
-    if( IsImperialUnit( aUnit ) )
+    if( EDA_UNIT_UTILS::IsImperialUnit( aUnit ) )
         m_imperialUnit = aUnit;
-    else if( IsMetricUnit( aUnit ) )
+    else if( EDA_UNIT_UTILS::IsMetricUnit( aUnit ) )
         m_metricUnit = aUnit;
     else
         wxASSERT_MSG( false, "Invalid unit" );
@@ -514,9 +514,9 @@ int COMMON_TOOLS::SwitchUnits( const TOOL_EVENT& aEvent )
 {
     EDA_UNITS newUnit = aEvent.Parameter<EDA_UNITS>();
 
-    if( IsMetricUnit( newUnit ) )
+    if( EDA_UNIT_UTILS::IsMetricUnit( newUnit ) )
         m_metricUnit = newUnit;
-    else if( IsImperialUnit( newUnit ) )
+    else if( EDA_UNIT_UTILS::IsImperialUnit( newUnit ) )
         m_imperialUnit = newUnit;
     else
         wxASSERT_MSG( false, "Invalid unit for the frame" );
@@ -528,7 +528,7 @@ int COMMON_TOOLS::SwitchUnits( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::ToggleUnits( const TOOL_EVENT& aEvent )
 {
-    m_frame->ChangeUserUnits( IsImperialUnit( m_frame->GetUserUnits() ) ?
+    m_frame->ChangeUserUnits( EDA_UNIT_UTILS::IsImperialUnit( m_frame->GetUserUnits() ) ?
                                       m_metricUnit :
                                       m_imperialUnit );
     return 0;

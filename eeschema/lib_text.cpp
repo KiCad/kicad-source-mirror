@@ -25,6 +25,7 @@
  * @file lib_text.cpp
  */
 
+#include <common.h>
 #include <sch_draw_panel.h>
 #include <plotter.h>
 #include <gr_text.h>

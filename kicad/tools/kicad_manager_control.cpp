@@ -31,6 +31,7 @@
 #include <tools/kicad_manager_control.h>
 #include <dialogs/dialog_template_selector.h>
 #include <gestfich.h>
+#include <wx/dir.h>
 
 ///> Helper widget to select whether a new directory should be created for a project
 class DIR_CHECKBOX : public wxPanel

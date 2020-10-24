@@ -29,7 +29,7 @@
 #include <set>
 #include <vector>
 #include <memory>
-#include <common.h>
+#include <eda_units.h>
 
 class PROPERTY_BASE;
 class TYPE_CAST_BASE;

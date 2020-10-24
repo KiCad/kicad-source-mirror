@@ -23,6 +23,7 @@
  */
 
 #include <pgm_base.h>
+#include <common.h>
 #include <eda_item.h>
 #include <gr_text.h>
 #include <kicad_string.h>

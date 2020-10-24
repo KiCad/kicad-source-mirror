@@ -48,6 +48,7 @@
 #include <tool/tools_holder.h>
 #include <widgets/ui_common.h>
 #include <undo_redo_container.h>
+#include <eda_units.h>
 
 // Option for main frames
 #define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
@@ -74,6 +75,7 @@ class DIALOG_EDIT_LIBRARY_TABLES;
 class PANEL_HOTKEYS_EDITOR;
 class FILE_HISTORY;
 class SETTINGS_MANAGER;
+class SEARCH_STACK;
 class APP_SETTINGS_BASE;
 class WX_INFOBAR;
 struct WINDOW_SETTINGS;

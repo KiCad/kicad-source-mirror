@@ -33,6 +33,7 @@
 #include <gerbview.h>
 #include <richio.h>
 #include <locale_io.h>
+#include <macros.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <gerbview_frame.h>

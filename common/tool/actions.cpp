@@ -24,6 +24,7 @@
 
 #include <bitmaps.h>
 #include <common.h>
+#include <eda_units.h>
 #include <frame_type.h>
 #include <tool/actions.h>
 

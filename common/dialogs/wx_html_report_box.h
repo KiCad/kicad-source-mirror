@@ -24,6 +24,7 @@
 #include <reporter.h>
 #include <vector>
 #include <wx/html/htmlwin.h>
+#include <eda_units.h>
 
 /**
  * WX_HTML_REPORT_BOX

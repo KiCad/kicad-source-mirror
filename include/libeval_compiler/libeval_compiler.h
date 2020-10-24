@@ -28,6 +28,7 @@
 #include <stack>
 
 #include <base_units.h>
+#include <wx/intl.h>
 
 #if defined(WIN32)
 // This gets leaked by python headers on MSVC only and will cause chaos

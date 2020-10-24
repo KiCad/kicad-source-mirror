@@ -30,6 +30,7 @@
 #include <confirm.h>
 #include <project.h>
 
+#include <wx/textfile.h>
 #include <wx/tokenzr.h>
 #include <wx/wupdlock.h>
 
