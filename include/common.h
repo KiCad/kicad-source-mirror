@@ -52,6 +52,7 @@
 #include <boost/uuid/uuid.hpp>
 #include <core/kicad_algo.h>
 #include <macros.h>
+#include <macros_swig.h>
 
 class PROJECT;
 class SEARCH_STACK;

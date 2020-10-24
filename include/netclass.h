@@ -27,9 +27,9 @@
 #define CLASS_NETCLASS_H
 
 
-#include <macros.h>
 #include <gal/color4d.h>
 #include <core/optional.h>
+#include <macros_swig.h>
 
 class LINE_READER;
 class BOARD;
