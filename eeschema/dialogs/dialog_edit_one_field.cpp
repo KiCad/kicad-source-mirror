@@ -425,23 +425,39 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
 
     // The value, footprint and datasheet fields should be kept in sync in multi-unit parts.
     // Of course the component must be annotated to collect other units.
-    if( editFrame && parent && parent->Type() == SCH_COMPONENT_T
-            && ( fieldType == VALUE || fieldType == FOOTPRINT || fieldType == DATASHEET ) )
+    if( editFrame && parent && parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* thisUnit = static_cast<SCH_COMPONENT*>( parent );
+        SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( parent );
 
-        for( SCH_SHEET_PATH& sheet : editFrame->Schematic().GetSheets() )
+        if( symbol->IsAnnotated( aSheetPath ) && ( fieldType == VALUE
+                                                || fieldType == FOOTPRINT
+                                                || fieldType == DATASHEET ) )
         {
-            SCH_SCREEN*                 screen = sheet.LastScreen();
-            std::vector<SCH_COMPONENT*> otherUnits;
+            wxString ref = symbol->GetRef( aSheetPath );
+            int      unit = symbol->GetUnit();
 
-            CollectOtherUnits( sheet, thisUnit, &otherUnits );
-
-            for( SCH_COMPONENT* otherUnit : otherUnits )
+            for( SCH_SHEET_PATH& sheet : editFrame->Schematic().GetSheets() )
             {
-                editFrame->SaveCopyInUndoList( screen, otherUnit, UNDO_REDO::CHANGED, true /* append */);
-                otherUnit->GetField( fieldType )->SetText( m_text );
-                editFrame->UpdateItem( otherUnit );
+                SCH_SCREEN*                 screen = sheet.LastScreen();
+                std::vector<SCH_COMPONENT*> otherUnits;
+                constexpr bool              appendUndo = true;
+
+                CollectOtherUnits( ref, unit, sheet, &otherUnits );
+
+                for( SCH_COMPONENT* otherUnit : otherUnits )
+                {
+                    editFrame->SaveCopyInUndoList( screen, otherUnit, UNDO_REDO::CHANGED,
+                                                   appendUndo );
+
+                    if( fieldType == VALUE )
+                        otherUnit->SetValue( m_text );
+                    else if( fieldType == FOOTPRINT )
+                        otherUnit->SetFootprint( m_text );
+                    else
+                        otherUnit->GetField( fieldType )->SetText( m_text );
+
+                    editFrame->UpdateItem( otherUnit );
+                }
             }
         }
     }

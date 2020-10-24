@@ -693,20 +693,25 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // The value, footprint and datasheet fields and exclude from bill of materials setting
     // should be kept in sync in multi-unit parts.
-    if( m_comp->GetUnitCount() > 1 )
+    if( m_comp->GetUnitCount() > 1 && m_comp->IsAnnotated( &GetParent()->GetCurrentSheet() ) )
     {
+        wxString ref = m_comp->GetRef( &GetParent()->GetCurrentSheet() );
+        int      unit = m_comp->GetUnit();
+
         for( SCH_SHEET_PATH& sheet : GetParent()->Schematic().GetSheets() )
         {
             SCH_SCREEN*                 screen = sheet.LastScreen();
             std::vector<SCH_COMPONENT*> otherUnits;
+            constexpr bool              appendUndo = true;
 
-            CollectOtherUnits( sheet, m_comp, &otherUnits );
+            CollectOtherUnits( ref, unit, sheet, &otherUnits );
 
             for( SCH_COMPONENT* otherUnit : otherUnits )
             {
-                GetParent()->SaveCopyInUndoList( screen, otherUnit, UNDO_REDO::CHANGED, true /* append */);
-                otherUnit->GetField( VALUE )->SetText( m_fields->at( VALUE ).GetText() );
-                otherUnit->GetField( FOOTPRINT )->SetText( m_fields->at( FOOTPRINT ).GetText() );
+                GetParent()->SaveCopyInUndoList( screen, otherUnit, UNDO_REDO::CHANGED,
+                                                 appendUndo );
+                otherUnit->SetValue( m_fields->at( VALUE ).GetText() );
+                otherUnit->SetFootprint( m_fields->at( FOOTPRINT ).GetText() );
                 otherUnit->GetField( DATASHEET )->SetText( m_fields->at( DATASHEET ).GetText() );
                 otherUnit->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
                 otherUnit->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );

@@ -186,26 +186,18 @@ bool EE_COLLECTOR::IsCorner() const
 }
 
 
-void CollectOtherUnits( SCH_SHEET_PATH& aSheet, SCH_COMPONENT* aUnit,
+void CollectOtherUnits( const wxString& aRef, int aUnit, SCH_SHEET_PATH& aSheet,
                         std::vector<SCH_COMPONENT*>* otherUnits )
 {
-    // Obviously, one can collect other units only if aUnit is annotated.
-    if( aUnit->GetUnitCount() > 1 && aUnit->IsAnnotated( &aSheet ) )
+    SCH_REFERENCE_LIST components;
+    aSheet.GetComponents( components );
+
+    for( unsigned i = 0; i < components.GetCount(); i++ )
     {
-        const LIB_ID   thisLibId = aUnit->GetLibId();
-        const wxString thisRef   = aUnit->GetRef( &aSheet );
-        int            thisUnit  = aUnit->GetUnit();
+        SCH_REFERENCE component = components[i];
 
-        SCH_REFERENCE_LIST components;
-        aSheet.GetComponents( components );
-
-        for( unsigned i = 0; i < components.GetCount(); i++ )
-        {
-            SCH_REFERENCE component = components[i];
-
-            if( component.GetRef() == thisRef && component.GetUnit() != thisUnit )
-                otherUnits->push_back( component.GetComp() );
-        }
+        if( component.GetRef() == aRef && component.GetUnit() != aUnit )
+            otherUnits->push_back( component.GetComp() );
     }
 }
 

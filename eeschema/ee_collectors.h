@@ -111,7 +111,7 @@ public:
 };
 
 
-void CollectOtherUnits( SCH_SHEET_PATH& aSheet, SCH_COMPONENT* aUnit,
+void CollectOtherUnits( const wxString& thisRef, int thisUnit, SCH_SHEET_PATH& aSheet,
                         std::vector<SCH_COMPONENT*>* otherUnits );
 
 #endif // EE_COLLECTORS_H
