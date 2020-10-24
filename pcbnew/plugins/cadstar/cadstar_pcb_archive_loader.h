@@ -48,6 +48,7 @@ public:
         mDoneCopperWarning       = false;
         mDoneSpacingClassWarning = false;
         mDoneNetClassWarning     = false;
+        mloggedSlotOrientWarning = false;
         mNumNets                 = 0;
     }
 
@@ -105,6 +106,8 @@ private:
     bool mDoneSpacingClassWarning;                       ///< Used by getKiCadNet() to avoid
                                                          ///< multiple duplicate warnings
     bool mDoneNetClassWarning;                           ///< Used by getKiCadNet() to avoid
+                                                         ///< multiple duplicate warnings
+    bool mloggedSlotOrientWarning;                       ///< Used by getKiCadPad() to avoid
                                                          ///< multiple duplicate warnings
     int mNumNets;                                        ///< Number of nets loaded so far
 

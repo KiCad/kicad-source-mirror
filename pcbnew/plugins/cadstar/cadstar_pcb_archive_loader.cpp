@@ -726,12 +726,12 @@ D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* 
                           wxString::Format( wxT( "%ld" ), aCadstarPad.ID ) :
                           aCadstarPad.Identifier );
 
-    pad->SetPos0( getKiCadPoint( aCadstarPad.Position ) - aParent->GetPosition() );
-    pad->SetOrientation( getAngleTenthDegree( aCadstarPad.OrientAngle ) );
-
     if( csPadcode.Shape.Size == 0 )
         // zero sized pads seems to break KiCad so lets make it very small instead
         csPadcode.Shape.Size = 1;
+
+    wxPoint padOffset = { 0, 0 }; // offset of the pad origin (before rotating)
+    wxPoint drillOffset = { 0, 0 }; // offset of the drill origin w.r.t. the pad (before rotating)
 
     switch( csPadcode.Shape.ShapeType )
     {
@@ -752,6 +752,9 @@ D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* 
                                   | RECT_CHAMFER_POSITIONS::RECT_CHAMFER_TOP_LEFT );
         pad->SetRoundRectRadiusRatio( 0.5 );
         pad->SetChamferRectRatio( 0.0 );
+
+        padOffset.x = getKiCadLength( ( (long long) csPadcode.Shape.LeftLength / 2 ) -
+                                      ( (long long) csPadcode.Shape.RightLength / 2 ) );
         break;
 
     case PAD_SHAPE_TYPE::CIRCLE:
@@ -761,10 +764,17 @@ D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* 
         break;
 
     case PAD_SHAPE_TYPE::DIAMOND:
+    {
+        // Cadstar diamond shape is a square rotated 45 degrees
+        // We convert it in KiCad to a square with chamfered edges
+        int sizeOfSquare = (double) getKiCadLength( csPadcode.Shape.Size ) * sqrt(2.0);
         pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
-        pad->SetOrientation( pad->GetOrientation() + 450.0 ); // rotate 45deg anticlockwise
-        pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
-                getKiCadLength( csPadcode.Shape.Size ) } );
+        pad->SetChamferRectRatio( 0.5 );
+        pad->SetSize( { sizeOfSquare, sizeOfSquare } );
+
+        padOffset.x = getKiCadLength( ( (long long) csPadcode.Shape.LeftLength / 2 ) -
+                                      ( (long long) csPadcode.Shape.RightLength / 2 ) );
+    }
         break;
 
     case PAD_SHAPE_TYPE::FINGER:
@@ -773,6 +783,9 @@ D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* 
                                         + (long long) csPadcode.Shape.LeftLength
                                         + (long long) csPadcode.Shape.RightLength ),
                 getKiCadLength( csPadcode.Shape.Size ) } );
+        
+        padOffset.x = getKiCadLength( ( (long long) csPadcode.Shape.LeftLength / 2 ) -
+                                      ( (long long) csPadcode.Shape.RightLength / 2 ) );
         break;
 
     case PAD_SHAPE_TYPE::OCTAGON:
@@ -789,6 +802,9 @@ D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* 
                                         + (long long) csPadcode.Shape.LeftLength
                                         + (long long) csPadcode.Shape.RightLength ),
                 getKiCadLength( csPadcode.Shape.Size ) } );
+
+        padOffset.x = getKiCadLength( ( (long long) csPadcode.Shape.LeftLength / 2 ) -
+                                      ( (long long) csPadcode.Shape.RightLength / 2 ) );
         break;
 
     case PAD_SHAPE_TYPE::ROUNDED_RECT:
@@ -798,6 +814,9 @@ D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* 
                                         + (long long) csPadcode.Shape.LeftLength
                                         + (long long) csPadcode.Shape.RightLength ),
                 getKiCadLength( csPadcode.Shape.Size ) } );
+        
+        padOffset.x = getKiCadLength( ( (long long) csPadcode.Shape.LeftLength / 2 ) -
+                                      ( (long long) csPadcode.Shape.RightLength / 2 ) );
         break;
 
 
@@ -817,23 +836,48 @@ D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* 
     if( csPadcode.ReliefWidth != UNDEFINED_VALUE )
         pad->SetThermalSpokeWidth( getKiCadLength( csPadcode.ReliefWidth ) );
 
-    pad->SetOrientation(
-            pad->GetOrientation() + getAngleTenthDegree( csPadcode.Shape.OrientAngle ) );
 
     if( csPadcode.DrillDiameter != UNDEFINED_VALUE )
     {
         if( csPadcode.SlotLength != UNDEFINED_VALUE )
         {
+            pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_OBLONG );
             pad->SetDrillSize( { getKiCadLength( csPadcode.DrillDiameter ),
-                    getKiCadLength( (long long) csPadcode.DrillOversize
+                    getKiCadLength( (long long) csPadcode.SlotLength
                                     + (long long) csPadcode.DrillDiameter ) } );
+
+            if( csPadcode.SlotOrientation != 0 && !mloggedSlotOrientWarning )
+            {
+               //TODO: Redraw the pad using custom shape
+                wxLogError( _(
+                        "The CADSTAR design contains one or more pads with non-zero slot "
+                        "orientation. This importer does not yet support slot orientation so the "
+                        "slotted holes have been imported with an orientation of 0 degrees." ) );
+               mloggedSlotOrientWarning = true;
+            }
         }
         else
         {
+            pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
             pad->SetDrillSize( { getKiCadLength( csPadcode.DrillDiameter ),
                     getKiCadLength( csPadcode.DrillDiameter ) } );
         }
+
+        drillOffset.x = -getKiCadLength( csPadcode.DrillXoffset );
+        drillOffset.y = getKiCadLength( csPadcode.DrillYoffset );
+
+        pad->SetOffset( drillOffset );
     }
+
+    double padOrientation = getAngleTenthDegree( aCadstarPad.OrientAngle )
+                            + getAngleTenthDegree( csPadcode.Shape.OrientAngle );
+
+    RotatePoint( &padOffset, padOrientation );
+    RotatePoint( &drillOffset, padOrientation );
+    pad->SetPos0( getKiCadPoint( aCadstarPad.Position ) - aParent->GetPosition() - padOffset
+                  - drillOffset );
+    pad->SetOrientation( padOrientation );
+
     //TODO handle csPadcode.Reassigns when KiCad supports full padstacks
 
     return pad;
