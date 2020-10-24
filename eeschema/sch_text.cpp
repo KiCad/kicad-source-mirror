@@ -34,6 +34,7 @@
 #include <msgpanel.h>
 #include <gal/stroke_font.h>
 #include <bitmaps.h>
+#include <kicad_string.h>
 #include <sch_text.h>
 #include <schematic.h>
 #include <settings/color_settings.h>

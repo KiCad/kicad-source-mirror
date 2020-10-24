@@ -32,6 +32,7 @@
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <kicad_string.h>
 #include <kiface_i.h>
 #include <dialog_footprint_wizard_list.h>
 #include <footprint_wizard_frame.h>

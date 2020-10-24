@@ -313,29 +313,6 @@ void SelectReferenceNumber( wxTextEntry* aTextEntry )
 }
 
 
-void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSplitter )
-{
-    wxString tmp;
-
-    for( unsigned ii = 0; ii < aText.Length(); ii++ )
-    {
-        if( aText[ii] == aSplitter )
-        {
-            aStrings.Add( tmp );
-            tmp.Clear();
-        }
-
-        else
-            tmp << aText[ii];
-    }
-
-    if( !tmp.IsEmpty() )
-    {
-        aStrings.Add( tmp );
-    }
-}
-
-
 int ProcessExecute( const wxString& aCommandLine, int aFlags, wxProcess *callback )
 {
     return (int) wxExecute( aCommandLine, aFlags, callback );

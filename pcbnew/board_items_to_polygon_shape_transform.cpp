@@ -28,6 +28,7 @@
 #include <class_board.h>
 #include <class_pad.h>
 #include <class_track.h>
+#include <kicad_string.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <class_zone.h>

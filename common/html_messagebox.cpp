@@ -24,6 +24,7 @@
 
 #include <html_messagebox.h>
 
+#include <kicad_string.h>
 
 HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* aParent, const wxString& aTitle,
                                     const wxPoint& aPosition, const wxSize& aSize ) :

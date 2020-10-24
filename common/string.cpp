@@ -790,3 +790,26 @@ bool ReplaceIllegalFileNameChars( wxString& aName, int aReplaceChar )
 
     return changed;
 }
+
+
+void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSplitter )
+{
+    wxString tmp;
+
+    for( unsigned ii = 0; ii < aText.Length(); ii++ )
+    {
+        if( aText[ii] == aSplitter )
+        {
+            aStrings.Add( tmp );
+            tmp.Clear();
+        }
+
+        else
+            tmp << aText[ii];
+    }
+
+    if( !tmp.IsEmpty() )
+    {
+        aStrings.Add( tmp );
+    }
+}

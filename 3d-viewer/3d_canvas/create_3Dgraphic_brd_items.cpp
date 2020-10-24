@@ -41,6 +41,7 @@
 #include <pcb_text.h>
 #include <fp_shape.h>
 #include <class_zone.h>
+#include <kicad_string.h>
 #include <fp_text.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>

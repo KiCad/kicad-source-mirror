@@ -301,4 +301,14 @@ inline void AccumulateDescription( wxString& aDesc, const wxString& aItem )
 }
 
 
+/**
+ * Split \a aString to a string list separated at \a aSplitter.
+ *
+ * @param aText is the text to split
+ * @param aStrings will contain the splitted lines
+ * @param aSplitter is the 'split' character
+ */
+void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSplitter );
+
+
 #endif  // KICAD_STRING_H_
