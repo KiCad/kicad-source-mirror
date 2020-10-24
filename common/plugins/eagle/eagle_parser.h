@@ -38,7 +38,6 @@
 
 #include <layers_id_colors_and_visibility.h>
 #include <convert_to_biu.h>
-#include <macros.h>
 #include <trigo.h>
 #include <kicad_string.h>
 #include <common.h>

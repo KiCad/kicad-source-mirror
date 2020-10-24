@@ -27,7 +27,6 @@
 #define CADSTAR_ARCHIVE_PARSER_H_
 
 #include <dsnlexer.h>
-#include <macros.h>
 #include <vector>
 #include <wx/log.h>
 #include <wx/xml/xml.h>
@@ -110,10 +109,10 @@ public:
     /**
      * CADSTAR fonts are drawn on a 24x24 integer matrix, where the each axis goes from 0 to 24.
      * The characters can each specify a width of between 12 and 24, but the height is fixed at 24.
-     * 
+     *
      * The default CADSTAR font uses y=5 as the starting point for capital letters, leaving space
      * for the tails of letters such as "g", "p", "y", "q", etc.
-     * 
+     *
      * The font height in CADSTAR corresponds to the full 24 point height. In KiCad it only
      * corresponds to the height above the guide line, meaning the overall text height will be
      * larger in KiCad.

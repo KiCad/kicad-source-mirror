@@ -30,7 +30,6 @@
 #define CLASS_IREF_H
 
 
-#include <macros.h>
 #include <sch_text.h>
 
 class SCH_GLOBALLABEL;

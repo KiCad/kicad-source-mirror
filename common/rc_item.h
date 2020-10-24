@@ -25,7 +25,6 @@
 #define RC_ITEM_H
 
 #include <wx/dataview.h>
-#include <macros.h>
 #include <eda_item.h>
 #include <reporter.h>
 

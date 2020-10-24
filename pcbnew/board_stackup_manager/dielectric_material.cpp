@@ -27,6 +27,7 @@
  * @file dielectric_material.cpp
  */
 
+#include <macros.h>
 #include "stackup_predefined_prms.h"
 #include "dielectric_material.h"
 

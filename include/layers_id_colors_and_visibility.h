@@ -35,7 +35,6 @@
 #include <vector>
 #include <bitset>
 #include <wx/string.h>
-#include <macros.h>
 
 
 /**

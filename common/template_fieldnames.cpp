@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <macros.h>
 #include <template_fieldnames.h>
 #include <pgm_base.h>
 
