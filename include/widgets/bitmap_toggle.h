@@ -27,8 +27,6 @@
 
 #include <wx/wx.h>
 
-//#include <common.h>
-
 #include <gal/color4d.h>
 
 

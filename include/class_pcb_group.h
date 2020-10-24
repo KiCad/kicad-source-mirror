@@ -37,7 +37,6 @@
 
 #include <board_commit.h>
 #include <class_board_item.h>
-#include <common.h>
 #include <unordered_set>
 
 namespace KIGFX

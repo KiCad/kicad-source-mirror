@@ -25,7 +25,6 @@
 #ifndef GRID_MENU_H
 #define GRID_MENU_H
 
-#include <common.h>
 #include <tool/action_menu.h>
 
 class EDA_DRAW_FRAME;

@@ -23,7 +23,7 @@
 #define __PNS_ITEMSET_H
 
 #include <vector>
-#include <common.h>
+#include <core/kicad_algo.h>
 #include "pns_item.h"
 
 namespace PNS {

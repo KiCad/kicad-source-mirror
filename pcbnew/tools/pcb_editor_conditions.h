@@ -25,7 +25,6 @@
 #ifndef PCB_EDITOR_CONDITIONS_H_
 #define PCB_EDITOR_CONDITIONS_H_
 
-#include <common.h>
 #include <functional>
 #include <tool/editor_conditions.h>
 #include <tool/selection.h>

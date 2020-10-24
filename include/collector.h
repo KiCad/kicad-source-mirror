@@ -33,7 +33,6 @@
 #include <vector>
 
 #include <eda_item.h>    // SEARCH_RESULT
-#include <common.h>         // GetNewTimeStamp()
 #include <eda_rect.h>
 
 

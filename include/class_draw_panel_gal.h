@@ -35,7 +35,6 @@
 #include <math/vector2d.h>
 #include <msgpanel.h>
 #include <memory>
-#include <common.h>
 #include <cursors.h>
 
 class BOARD;
