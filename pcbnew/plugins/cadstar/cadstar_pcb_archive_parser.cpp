@@ -1764,6 +1764,11 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PADEXCEPTION::Parse( XNODE* aNode )
         {
             PadCode = GetXmlAttributeIDString( cNode, 0 );
         }
+        else if( cNodeName == wxT( "EXITS" ) )
+        {
+            OverrideExits = true;
+            Exits.Parse( cNode );
+        }
         else if( cNodeName == wxT( "SIDE" ) )
         {
             OverrideSide = true;

@@ -878,6 +878,8 @@ public:
     {
         PAD_ID     ID;
         PADCODE_ID PadCode      = wxEmptyString; ///< If not empty, override padcode
+        bool       OverrideExits = false;
+        PAD_EXITS  Exits;
         bool       OverrideSide = false;
         PAD_SIDE   Side;
         bool       OverrideOrientation = false;
@@ -916,7 +918,8 @@ public:
                                                               ///< to be out of sync.
                                                               ///< See PART::DEFINITION::PIN::Label
         std::map<PART_DEFINITION_PIN_ID, PIN_ATTRIBUTE> PinAttributes;
-        std::map<PAD_ID, PADEXCEPTION>                  PadExceptions;
+        std::map<PAD_ID, PADEXCEPTION>                  PadExceptions; ///< Override pad definitions
+                                                                       ///< for this instance
 
         void Parse( XNODE* aNode );
     };
