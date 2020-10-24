@@ -32,6 +32,7 @@
 #include <gr_text.h>
 #include <confirm.h>
 #include <kicad_string.h>
+#include <locale_io.h>
 #include <math/util.h>      // for KiROUND
 
 #include <class_board.h>

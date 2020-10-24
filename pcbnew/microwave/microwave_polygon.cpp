@@ -30,6 +30,7 @@
 #include <gestfich.h>
 #include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
+#include <locale_io.h>
 #include <richio.h>
 #include <filter_reader.h>
 #include <base_units.h>

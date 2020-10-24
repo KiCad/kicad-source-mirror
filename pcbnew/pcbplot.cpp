@@ -30,6 +30,7 @@
 #include <plotter.h>
 #include <pcbplot.h>
 #include <base_units.h>
+#include <locale_io.h>
 #include <reporter.h>
 #include <class_board.h>
 #include <plotcontroller.h>

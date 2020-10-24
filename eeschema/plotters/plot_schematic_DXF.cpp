@@ -25,6 +25,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <locale_io.h>
 #include <plotters_specific.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet_path.h>

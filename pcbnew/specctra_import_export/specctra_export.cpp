@@ -35,6 +35,7 @@
 #include <confirm.h>            // DisplayError()
 #include <gestfich.h>           // EDA_FileSelector()
 #include <trigo.h>              // RotatePoint()
+#include <locale_io.h>
 #include <macros.h>
 #include <math/util.h>          // for KiROUND
 

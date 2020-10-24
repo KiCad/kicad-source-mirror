@@ -23,6 +23,7 @@
  */
 
 #include <kicad_string.h>
+#include <locale_io.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>

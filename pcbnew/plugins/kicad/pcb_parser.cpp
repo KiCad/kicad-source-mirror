@@ -49,6 +49,7 @@
 #include <plugins/kicad/kicad_plugin.h>
 #include <pcb_plot_params_parser.h>
 #include <pcb_plot_params.h>
+#include <locale_io.h>
 #include <zones.h>
 #include <plugins/kicad/pcb_parser.h>
 #include <convert_basic_shapes_to_polygon.h>    // for RECT_CHAMFER_POSITIONS definition

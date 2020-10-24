@@ -26,6 +26,7 @@
 
 #include "dialog_import_gfx.h"
 #include <kiface_i.h>
+#include <locale_io.h>
 #include <pcb_layer_box_selector.h>
 #include <wildcards_and_files_ext.h>
 #include <class_board.h>

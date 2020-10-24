@@ -212,31 +212,6 @@ enum class EDA_UNITS
 bool IsImperialUnit( EDA_UNITS aUnit );
 bool IsMetricUnit( EDA_UNITS aUnit );
 
-
-/**
- * Instantiate the current locale within a scope in which you are expecting
- * exceptions to be thrown.
- *
- * The constructor sets a "C" language locale option, to read/print files with floating
- * point  numbers.  The destructor insures that the default locale is restored if an
- * exception is thrown or not.
- */
-class LOCALE_IO
-{
-public:
-    LOCALE_IO();
-    ~LOCALE_IO();
-
-private:
-    // allow for nesting of LOCALE_IO instantiations
-    static std::atomic<unsigned int> m_c_count;
-
-    // The locale in use before switching to the "C" locale
-    // (the locale can be set by user, and is not always the system locale)
-    std::string m_user_locale;
-    wxLocale*   m_wxLocale;
-};
-
 /**
  * Return the size of @a aSingleLine of text when it is rendered in @a aWindow
  * using whatever font is currently set in that window.

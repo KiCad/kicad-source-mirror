@@ -28,6 +28,7 @@
 #include <html_messagebox.h>
 #include <io_mgr.h>
 #include <kicad_string.h>
+#include <locale_io.h>
 #include <kiface_ids.h>
 #include <kiway.h>
 #include <lib_id.h>

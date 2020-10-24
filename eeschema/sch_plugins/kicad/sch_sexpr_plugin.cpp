@@ -29,6 +29,7 @@
 #include <advanced_config.h>
 #include <pgm_base.h>
 #include <trace_helpers.h>
+#include <locale_io.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_component.h>

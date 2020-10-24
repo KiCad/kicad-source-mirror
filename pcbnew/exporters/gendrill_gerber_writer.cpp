@@ -31,6 +31,7 @@
 
 #include <plotter.h>
 #include <kicad_string.h>
+#include <locale_io.h>
 #include <pcb_edit_frame.h>
 #include <pgm_base.h>
 #include <build_version.h>

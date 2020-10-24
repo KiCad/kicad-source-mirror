@@ -32,6 +32,7 @@
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <layers_id_colors_and_visibility.h>
+#include <locale_io.h>
 #include <bitmaps.h>
 #include <class_board.h>
 #include <dialog_plot.h>

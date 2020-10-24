@@ -29,6 +29,7 @@
 #include <reporter.h>
 #include <confirm.h>
 #include <pcbplot.h>
+#include <locale_io.h>
 #include <class_board.h>
 #include <dialog_export_svg_base.h>
 #include <wx_html_report_panel.h>

@@ -25,6 +25,7 @@
 #include <sch_plugins/eagle/sch_eagle_plugin.h>
 
 #include <kiway.h>
+#include <locale_io.h>
 #include <properties.h>
 
 #include <algorithm>

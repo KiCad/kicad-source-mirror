@@ -27,6 +27,7 @@
 
 
 #include <list>
+#include <locale_io.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew.h>
 #include <class_board.h>

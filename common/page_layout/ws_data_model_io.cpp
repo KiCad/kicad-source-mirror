@@ -31,6 +31,7 @@
  */
 
 #include <eda_item.h>
+#include <locale_io.h>
 #include <page_layout/ws_painter.h>
 #include <page_layout/ws_draw_item.h>
 #include <page_layout/ws_data_item.h>

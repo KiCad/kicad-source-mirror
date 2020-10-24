@@ -31,6 +31,7 @@
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <base_units.h>
+#include <locale_io.h>
 #include <lib_edit_frame.h>
 #include <sch_sheet_path.h>
 #include <schematic.h>

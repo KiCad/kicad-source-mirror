@@ -32,6 +32,7 @@
 #include <confirm.h>
 #include <common.h>
 #include <ki_exception.h>
+#include <locale_io.h>
 
 SPICE_VALUE::SPICE_VALUE( const wxString& aString )
 {

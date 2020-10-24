@@ -37,6 +37,7 @@
 #include <class_pcb_target.h>
 #include <fp_shape.h>
 #include <confirm.h>
+#include <locale_io.h>
 #include <zones.h>
 #include <plugins/kicad/kicad_plugin.h>
 #include <plugins/kicad/pcb_parser.h>

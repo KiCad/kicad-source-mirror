@@ -24,6 +24,7 @@
 
 #include <sch_painter.h>
 #include <lib_edit_frame.h>
+#include <locale_io.h>
 #include <class_libentry.h>
 #include <class_library.h>
 #include <plotters_specific.h>

@@ -28,6 +28,7 @@
 #include <sch_edit_frame.h>
 #include <base_units.h>
 #include <sch_sheet_path.h>
+#include <locale_io.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <reporter.h>

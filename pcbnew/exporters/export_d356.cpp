@@ -35,6 +35,7 @@
 #include <build_version.h>
 #include <macros.h>
 #include <wildcards_and_files_ext.h>
+#include <locale_io.h>
 #include <pcbnew.h>
 #include <class_board.h>
 #include <class_module.h>

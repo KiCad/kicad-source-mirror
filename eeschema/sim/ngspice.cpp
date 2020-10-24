@@ -32,6 +32,7 @@
 #include "spice_reporter.h"
 
 #include <common.h>
+#include <locale_io.h>
 
 #include <wx/stdpaths.h>
 #include <wx/dir.h>

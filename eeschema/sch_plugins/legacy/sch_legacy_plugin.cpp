@@ -33,6 +33,7 @@
 #include <gr_text.h>
 #include <kiway.h>
 #include <kicad_string.h>
+#include <locale_io.h>
 #include <richio.h>
 #include <core/typeinfo.h>
 #include <properties.h>

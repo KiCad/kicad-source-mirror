@@ -32,6 +32,7 @@
 #include <wildcards_and_files_ext.h>
 #include <gerbview.h>
 #include <richio.h>
+#include <locale_io.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <gerbview_frame.h>

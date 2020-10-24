@@ -28,6 +28,7 @@
 #include <plotters_specific.h>
 #include <sch_edit_frame.h>
 #include <base_units.h>
+#include <locale_io.h>
 #include <sch_sheet_path.h>
 #include <sch_painter.h>
 #include <schematic.h>

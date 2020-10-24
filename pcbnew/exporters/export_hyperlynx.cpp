@@ -31,6 +31,7 @@
 #include <cstdio>
 #include <vector>
 #include <ki_exception.h>
+#include <locale_io.h>
 #include <reporter.h>
 
 #include <exporters/board_exporter_base.h>

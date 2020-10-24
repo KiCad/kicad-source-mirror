@@ -34,6 +34,7 @@
 
 #include <class_board.h>
 #include <class_module.h>
+#include <locale_io.h>
 #include <pcb_text.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>

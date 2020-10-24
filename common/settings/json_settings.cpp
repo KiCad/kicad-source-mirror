@@ -24,13 +24,14 @@
 #include <utility>
 #include <sstream>
 
-#include <common.h>
+#include <locale_io.h>
 #include <gal/color4d.h>
 #include <settings/json_settings.h>
 #include <settings/nested_settings.h>
 #include <settings/parameters.h>
 #include <wx/config.h>
 #include <wx/debug.h>
+#include <wx/fileconf.h>
 #include <wx/filename.h>
 
 const wxChar* const traceSettings = wxT( "KICAD_SETTINGS" );

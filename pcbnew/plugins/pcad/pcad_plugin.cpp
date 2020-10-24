@@ -33,6 +33,7 @@
 #include <wx/filename.h>
 #include <wx/xml/xml.h>
 
+#include <locale_io.h>
 #include <pcad_plugin.h>
 #include <s_expr_loader.h>
 #include <pcb.h>

@@ -32,6 +32,7 @@
 #include "reporter.h"
 #include "class_board.h"
 #include "dialog_export_step_base.h"
+#include <locale_io.h>
 #include <pcbnew_settings.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <widgets/text_ctrl_eval.h>

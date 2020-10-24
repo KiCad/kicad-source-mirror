@@ -27,6 +27,7 @@
 #include <common.h>
 #include <datafile_read_write.h>
 #include <kicad_string.h>
+#include <locale_io.h>
 #include <macros.h>
 #include <pcb_calculator_datafile_lexer.h>
 #include <pcb_calculator_frame.h>

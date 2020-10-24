@@ -29,6 +29,7 @@
 #include "wx/string.h"
 
 #include <base_units.h>
+#include <locale_io.h>
 
 #include "class_board_stackup.h"
 #include "stackup_predefined_prms.h"

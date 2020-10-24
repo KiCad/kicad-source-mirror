@@ -32,6 +32,7 @@
 #include <vector>
 
 #include <build_version.h>
+#include <locale_io.h>
 #include <pcb_edit_frame.h>
 #include <plotter.h>
 

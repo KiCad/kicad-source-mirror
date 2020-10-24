@@ -27,6 +27,7 @@
 #include <export_to_pcbnew.h>
 
 #include <confirm.h>
+#include <locale_io.h>
 #include <macros.h>
 #include <trigo.h>
 #include <gerbview_frame.h>

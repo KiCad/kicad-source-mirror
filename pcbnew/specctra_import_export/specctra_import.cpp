@@ -35,6 +35,7 @@
 #include <confirm.h>            // DisplayError()
 #include <gestfich.h>           // EDA_FileSelector()
 #include <pcb_edit_frame.h>
+#include <locale_io.h>
 #include <macros.h>
 #include <class_board.h>
 #include <class_module.h>
