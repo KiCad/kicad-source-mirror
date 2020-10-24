@@ -708,19 +708,16 @@ int SCH_SHEET::CountSheets() const
 void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     aList.emplace_back( _( "Sheet Name" ), m_fields[ SHEETNAME ].GetText(), CYAN );
-    aList.emplace_back( _( "File Name" ), m_fields[ SHEETFILENAME ].GetText(), BROWN );
 
-#if 1   // Set to 1 to display the sheet UUID and hierarchical path
-
-    if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) )
+    if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) )
     {
-        wxString msgU, msgL;
-        msgU << _( "UUID" ) << ": " << m_Uuid.AsString();
-        msgL << _( "Path" ) << ": " << schframe->GetCurrentSheet().PathHumanReadable();
+        SCH_SHEET_PATH path = schframe->GetCurrentSheet();
+        path.push_back( this );
 
-        aList.push_back( MSG_PANEL_ITEM( msgU, msgL, BLUE ) );
+        aList.emplace_back( _( "Hierarchical Path" ), path.PathHumanReadable( false ), BLUE );
     }
-#endif
+
+    aList.emplace_back( _( "File Name" ), m_fields[ SHEETFILENAME ].GetText(), BROWN );
 }
 
 

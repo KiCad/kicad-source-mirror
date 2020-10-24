@@ -255,7 +255,7 @@ public:
      * The the "normal" path instead uses the #KIID objects in the path that do not change
      * even when editing sheet parameters.
      */
-    wxString PathHumanReadable() const;
+    wxString PathHumanReadable( bool aUseShortRootName = true ) const;
 
     /**
      * @return a path name for the root sheet (like "/" or "<root>"

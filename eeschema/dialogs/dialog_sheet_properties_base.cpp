@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -181,14 +181,9 @@ DIALOG_SHEET_PROPERTIES_BASE::DIALOG_SHEET_PROPERTIES_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
-	m_hiearchicalPathLabel = new wxStaticText( this, wxID_ANY, _("Hierarchical path:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_hiearchicalPathLabel->Wrap( -1 );
-	bSizerBottom->Add( m_hiearchicalPathLabel, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
-
-	m_heirarchyPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
-	m_heirarchyPath->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-
-	bSizerBottom->Add( m_heirarchyPath, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_hierarchicalPathLabel = new wxStaticText( this, wxID_ANY, _("Hierarchical path:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hierarchicalPathLabel->Wrap( -1 );
+	bSizerBottom->Add( m_hierarchicalPathLabel, 1, wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
 
 	m_stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	m_stdDialogButtonSizerOK = new wxButton( this, wxID_OK );

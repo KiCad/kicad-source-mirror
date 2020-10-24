@@ -234,16 +234,16 @@ wxString SCH_SHEET_PATH::GetRootPathName( bool aUseShortName )
 }
 
 
-wxString SCH_SHEET_PATH::PathHumanReadable() const
+wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName ) const
 {
     wxString s;
 
-    if( size() == 1 )
-        return GetRootPathName( true );  // Use only the short name in netlists
+    if( aUseShortRootName )
+        s = GetRootPathName( true );  // Use only the short name in netlists
+    else
+        s = GetRootPathName( false ) + wxT( "/" );
 
-    s = wxT( "/" );
-
-    // Start at 1 to avoid the root sheet, as above.
+    // Start at 1 since we've already processed the root sheet.
     for( unsigned i = 1; i < size(); i++ )
         s = s + at( i )->GetFields()[ SHEETNAME ].GetShownText() + wxT( "/" );
 

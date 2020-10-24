@@ -80,9 +80,7 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     // Set font sizes
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_hiearchicalPathLabel->SetFont( infoFont );
-    m_heirarchyPath->SetFont( infoFont );
-    m_heirarchyPath->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+    m_hierarchicalPathLabel->SetFont( infoFont );
 
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
@@ -174,9 +172,6 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
         nextPageNumber = m_sheet->GetPageNumber( instance );
 
     m_pageNumberTextCtrl->ChangeValue( nextPageNumber );
-
-    // set up the read-only fields
-    m_heirarchyPath->SetValue( instance.PathHumanReadable() );
 
     Layout();
 
@@ -769,6 +764,28 @@ void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         if( !m_grid->IsCellEditControlShown() )
             AdjustGridColumns( m_grid->GetRect().GetWidth() );
     }
+
+    // Propagate changes in sheetname to displayed hierarchical path
+    wxString hierarchicalPath = _( "Hierarchical path: " );
+
+    hierarchicalPath += m_frame->GetCurrentSheet().PathHumanReadable( false );
+
+    if( hierarchicalPath.Last() != '/' )
+        hierarchicalPath.Append( '/' );
+
+    wxGridCellEditor* editor = m_grid->GetCellEditor( SHEETNAME, FDC_VALUE );
+    wxControl*        control = editor->GetControl();
+    wxTextEntry*      textControl = dynamic_cast<wxTextEntry*>( control );
+
+    if( textControl )
+        hierarchicalPath += textControl->GetValue();
+    else
+        hierarchicalPath += m_grid->GetCellValue( SHEETNAME, FDC_VALUE );
+
+    editor->DecRef();
+
+    if( m_hierarchicalPathLabel->GetLabel() != hierarchicalPath )
+        m_hierarchicalPathLabel->SetLabel( hierarchicalPath );
 
     // Handle a delayed focus
     if( m_delayedFocusRow >= 0 )
