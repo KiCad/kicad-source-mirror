@@ -21,8 +21,7 @@
 
 #include <map>
 
-#include <common.h>
-
+#include <wx/translation.h>
 #include <wx/utils.h>
 
 using STRING_MAP = std::map<wxString, wxString>;
