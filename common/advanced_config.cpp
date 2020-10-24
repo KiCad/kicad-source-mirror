@@ -23,7 +23,6 @@
 
 #include <advanced_config.h>
 
-#include <common.h>
 #include <config_params.h>
 #include <settings/settings_manager.h>
 
@@ -318,7 +317,7 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::DebugZoneFiller,
                                                 &m_DebugZoneFiller, false ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::SkipBoundingBoxFpLoad, 
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::SkipBoundingBoxFpLoad,
                                                 &m_SkipBoundingBoxOnFpLoad, false ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
