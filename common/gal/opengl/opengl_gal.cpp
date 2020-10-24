@@ -841,8 +841,7 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, d
     // Swap the angles, if start angle is greater than end angle
     SWAP( aStartAngle, >, aEndAngle );
 
-    // Bigger arcs need smaller alpha increment to make them look smooth
-    double alphaIncrement = std::min( 1e6 / aRadius, 2.0 * M_PI / CIRCLE_POINTS );
+    double alphaIncrement = calcAngleStep( aRadius );
 
     // Refinement: Use a segment count multiple of 2, because we have a control point
     // on the middle of the arc, and the look is better if it is on a segment junction
@@ -854,18 +853,6 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, d
 
     // Recalculate alphaIncrement with a even integer number of segment
     alphaIncrement = (aEndAngle -aStartAngle ) / seg_count;
-
-    // Code disabled because it creates serious issues:
-    // - The arc is inside the polygonization error, but the interior of arc is also important
-    // and putting error inside the arc creates significant errors inside this arc
-    // - for thin arcs the control points are not even inside the arc, and HitTest is
-    // not even working
-    // I am also pretty sure the formula is incorrect. (JPC)
-#if 0
-    // Draw entirely within the real arc boundary (ie: put all polygonization error inside)
-    double correctionFactor = cos( M_PI / (double) CIRCLE_POINTS );
-    aRadius *= correctionFactor;
-#endif
 
     Save();
     currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );
