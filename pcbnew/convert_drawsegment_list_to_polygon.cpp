@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -208,7 +208,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
         return true;
 
     bool polygonComplete = false;
-    bool selfIntersecting = false;
 
     wxString   msg;
     PCB_SHAPE* graphic;
@@ -428,7 +427,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                         std::swap( pstart, pend );
                     }
 
-                    for( int step = 1; step<=steps; ++step )
+                    // Create intermediate points between start and end:
+                    for( int step = 1; step < steps; ++step )
                     {
                         double rotation = ( angle * step ) / steps;
                         wxPoint pt = pstart;
@@ -437,6 +437,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                         aPolygons.Append( pt );
                     }
 
+                    // Append the last arc end point
                     aPolygons.Append( pend );
 
                     prevPt = pend;
@@ -614,9 +615,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                     break;
 
                 case S_ARC:
-                    // Freerouter does not yet understand arcs, so approximate
-                    // an arc with a series of short lines and put those
-                    // line segments into the !same! PATH.
+                    // We do not support arcs in polygons, so approximate an arc with a series of
+                    // short lines and put those line segments into the !same! PATH.
                     {
                         wxPoint pstart  = graphic->GetArcStart();
                         wxPoint pend    = graphic->GetArcEnd();
@@ -633,7 +633,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                             std::swap( pstart, pend );
                         }
 
-                        for( int step = 1; step<=steps; ++step )
+                        // Create intermediate points between start and end:
+                         for( int step = 1; step < steps; ++step )
                         {
                             double rotation = ( angle * step ) / steps;
                             wxPoint pt = pstart;
@@ -642,7 +643,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                             aPolygons.Append( pt, -1, hole );
                         }
 
-                        aPolygons.Append( pend );
+                        // Append the last arc end point
+                        aPolygons.Append( pend, -1, hole );
 
                         prevPt = pend;
                     }
@@ -739,6 +741,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
     // All of the silliness that follows is to work around the segment iterator
     // while checking for collisions.
     // TODO: Implement proper segment and point iterators that follow std
+    bool selfIntersecting = false;
+
     for( auto seg1 = aPolygons.IterateSegmentsWithHoles(); seg1; seg1++ )
     {
         auto seg2 = seg1;
