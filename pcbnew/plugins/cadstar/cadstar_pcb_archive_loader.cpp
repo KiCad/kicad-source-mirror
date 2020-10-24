@@ -681,154 +681,162 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent, 
 {
     for( std::pair<PAD_ID, PAD> padPair : aComponent.Pads )
     {
-        PAD&    csPad     = padPair.second; //Cadstar pad
-        PADCODE csPadcode = getPadCode( csPad.PadCodeID );
-
-        D_PAD* pad = new D_PAD( aModule );
+        D_PAD* pad = getKiCadPad( padPair.second, aModule );
         aModule->Add( pad,
                 ADD_MODE::INSERT ); // insert so that we get correct behaviour when finding pads
                                     // in the module by PAD_ID - see loadNets()
-
-        switch( csPad.Side )
-        {
-        case PAD_SIDE::MAXIMUM: //Bottom side
-            pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
-            pad->SetLayerSet( LSET( 3, B_Cu, B_Paste, B_Mask ) );
-            break;
-
-        case PAD_SIDE::MINIMUM: //TOP side
-            pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
-            pad->SetLayerSet( LSET( 3, F_Cu, F_Paste, F_Mask ) );
-            break;
-
-        case PAD_SIDE::THROUGH_HOLE:
-
-            if( csPadcode.Plated )
-                pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_PTH );
-            else
-                pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_NPTH );
-
-            pad->SetLayerSet( pad->PTHMask() ); // for now we will assume no paste layers
-            //TODO: We need to read the csPad->Reassigns vector to make sure no paste
-            break;
-
-        default:
-            wxFAIL_MSG( "Unknown Pad type" );
-        }
-
-        pad->SetName( csPad.Identifier.IsEmpty() ? wxString::Format( wxT( "%ld" ), csPad.ID ) :
-                                                   csPad.Identifier );
-
-        pad->SetPos0( getKiCadPoint( csPad.Position ) - aModule->GetPosition() );
-        pad->SetOrientation( getAngleTenthDegree( csPad.OrientAngle ) );
-
-        if( csPadcode.Shape.Size == 0 )
-            // zero sized pads seems to break KiCad so lets make it very small instead
-            csPadcode.Shape.Size = 1;
-
-        switch( csPadcode.Shape.ShapeType )
-        {
-        case PAD_SHAPE_TYPE::ANNULUS:
-            //todo fix: use custom shape instead (Donught shape, i.e. a circle with a hole)
-            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_CIRCLE );
-            pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
-                    getKiCadLength( csPadcode.Shape.Size ) } );
-            break;
-
-        case PAD_SHAPE_TYPE::BULLET:
-            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_CHAMFERED_RECT );
-            pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
-                                            + (long long) csPadcode.Shape.LeftLength
-                                            + (long long) csPadcode.Shape.RightLength ),
-                    getKiCadLength( csPadcode.Shape.Size ) } );
-            pad->SetChamferPositions( RECT_CHAMFER_POSITIONS::RECT_CHAMFER_BOTTOM_LEFT
-                                      | RECT_CHAMFER_POSITIONS::RECT_CHAMFER_TOP_LEFT );
-            pad->SetRoundRectRadiusRatio( 0.5 );
-            pad->SetChamferRectRatio( 0.0 );
-            break;
-
-        case PAD_SHAPE_TYPE::CIRCLE:
-            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_CIRCLE );
-            pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
-                    getKiCadLength( csPadcode.Shape.Size ) } );
-            break;
-
-        case PAD_SHAPE_TYPE::DIAMOND:
-            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
-            pad->SetOrientation( pad->GetOrientation() + 450.0 ); // rotate 45deg anticlockwise
-            pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
-                    getKiCadLength( csPadcode.Shape.Size ) } );
-            break;
-
-        case PAD_SHAPE_TYPE::FINGER:
-            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_OVAL );
-            pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
-                                            + (long long) csPadcode.Shape.LeftLength
-                                            + (long long) csPadcode.Shape.RightLength ),
-                    getKiCadLength( csPadcode.Shape.Size ) } );
-            break;
-
-        case PAD_SHAPE_TYPE::OCTAGON:
-            pad->SetShape( PAD_SHAPE_CHAMFERED_RECT );
-            pad->SetChamferPositions( RECT_CHAMFER_POSITIONS::RECT_CHAMFER_ALL );
-            pad->SetChamferRectRatio( 0.25 );
-            pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
-                    getKiCadLength( csPadcode.Shape.Size ) } );
-            break;
-
-        case PAD_SHAPE_TYPE::RECTANGLE:
-            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
-            pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
-                                            + (long long) csPadcode.Shape.LeftLength
-                                            + (long long) csPadcode.Shape.RightLength ),
-                    getKiCadLength( csPadcode.Shape.Size ) } );
-            break;
-
-        case PAD_SHAPE_TYPE::ROUNDED_RECT:
-            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
-            pad->SetRoundRectCornerRadius( getKiCadLength( csPadcode.Shape.InternalFeature ) );
-            pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
-                                            + (long long) csPadcode.Shape.LeftLength
-                                            + (long long) csPadcode.Shape.RightLength ),
-                    getKiCadLength( csPadcode.Shape.Size ) } );
-            break;
-
-
-        case PAD_SHAPE_TYPE::SQUARE:
-            pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
-            pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
-                    getKiCadLength( csPadcode.Shape.Size ) } );
-            break;
-
-        default:
-            wxFAIL_MSG( "Unknown Pad Shape" );
-        }
-
-        if( csPadcode.ReliefClearance != UNDEFINED_VALUE )
-            pad->SetThermalGap( getKiCadLength( csPadcode.ReliefClearance ) );
-
-        if( csPadcode.ReliefWidth != UNDEFINED_VALUE )
-            pad->SetThermalSpokeWidth( getKiCadLength( csPadcode.ReliefWidth ) );
-
-        pad->SetOrientation(
-                pad->GetOrientation() + getAngleTenthDegree( csPadcode.Shape.OrientAngle ) );
-
-        if( csPadcode.DrillDiameter != UNDEFINED_VALUE )
-        {
-            if( csPadcode.SlotLength != UNDEFINED_VALUE )
-            {
-                pad->SetDrillSize( { getKiCadLength( csPadcode.DrillDiameter ),
-                        getKiCadLength( (long long) csPadcode.DrillOversize
-                                        + (long long) csPadcode.DrillDiameter ) } );
-            }
-            else
-            {
-                pad->SetDrillSize( { getKiCadLength( csPadcode.DrillDiameter ),
-                        getKiCadLength( csPadcode.DrillDiameter ) } );
-            }
-        }
-        //TODO handle csPadcode.Reassigns when KiCad supports full padstacks
     }
+}
+
+
+D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* aParent )
+{
+    PADCODE csPadcode = getPadCode( aCadstarPad.PadCodeID );
+
+    D_PAD* pad = new D_PAD( aParent );
+
+    switch( aCadstarPad.Side )
+    {
+    case PAD_SIDE::MAXIMUM: //Bottom side
+        pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
+        pad->SetLayerSet( LSET( 3, B_Cu, B_Paste, B_Mask ) );
+        break;
+
+    case PAD_SIDE::MINIMUM: //TOP side
+        pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
+        pad->SetLayerSet( LSET( 3, F_Cu, F_Paste, F_Mask ) );
+        break;
+
+    case PAD_SIDE::THROUGH_HOLE:
+
+        if( csPadcode.Plated )
+            pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_PTH );
+        else
+            pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_NPTH );
+
+        pad->SetLayerSet( pad->PTHMask() ); // for now we will assume no paste layers
+        //TODO: We need to read the csPad->Reassigns vector to make sure no paste
+        break;
+
+    default:
+        wxFAIL_MSG( "Unknown Pad type" );
+    }
+
+    pad->SetName( aCadstarPad.Identifier.IsEmpty() ?
+                          wxString::Format( wxT( "%ld" ), aCadstarPad.ID ) :
+                          aCadstarPad.Identifier );
+
+    pad->SetPos0( getKiCadPoint( aCadstarPad.Position ) - aParent->GetPosition() );
+    pad->SetOrientation( getAngleTenthDegree( aCadstarPad.OrientAngle ) );
+
+    if( csPadcode.Shape.Size == 0 )
+        // zero sized pads seems to break KiCad so lets make it very small instead
+        csPadcode.Shape.Size = 1;
+
+    switch( csPadcode.Shape.ShapeType )
+    {
+    case PAD_SHAPE_TYPE::ANNULUS:
+        //todo fix: use custom shape instead (Donught shape, i.e. a circle with a hole)
+        pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_CIRCLE );
+        pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
+                getKiCadLength( csPadcode.Shape.Size ) } );
+        break;
+
+    case PAD_SHAPE_TYPE::BULLET:
+        pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_CHAMFERED_RECT );
+        pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
+                                        + (long long) csPadcode.Shape.LeftLength
+                                        + (long long) csPadcode.Shape.RightLength ),
+                getKiCadLength( csPadcode.Shape.Size ) } );
+        pad->SetChamferPositions( RECT_CHAMFER_POSITIONS::RECT_CHAMFER_BOTTOM_LEFT
+                                  | RECT_CHAMFER_POSITIONS::RECT_CHAMFER_TOP_LEFT );
+        pad->SetRoundRectRadiusRatio( 0.5 );
+        pad->SetChamferRectRatio( 0.0 );
+        break;
+
+    case PAD_SHAPE_TYPE::CIRCLE:
+        pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_CIRCLE );
+        pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
+                getKiCadLength( csPadcode.Shape.Size ) } );
+        break;
+
+    case PAD_SHAPE_TYPE::DIAMOND:
+        pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
+        pad->SetOrientation( pad->GetOrientation() + 450.0 ); // rotate 45deg anticlockwise
+        pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
+                getKiCadLength( csPadcode.Shape.Size ) } );
+        break;
+
+    case PAD_SHAPE_TYPE::FINGER:
+        pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_OVAL );
+        pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
+                                        + (long long) csPadcode.Shape.LeftLength
+                                        + (long long) csPadcode.Shape.RightLength ),
+                getKiCadLength( csPadcode.Shape.Size ) } );
+        break;
+
+    case PAD_SHAPE_TYPE::OCTAGON:
+        pad->SetShape( PAD_SHAPE_CHAMFERED_RECT );
+        pad->SetChamferPositions( RECT_CHAMFER_POSITIONS::RECT_CHAMFER_ALL );
+        pad->SetChamferRectRatio( 0.25 );
+        pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
+                getKiCadLength( csPadcode.Shape.Size ) } );
+        break;
+
+    case PAD_SHAPE_TYPE::RECTANGLE:
+        pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
+        pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
+                                        + (long long) csPadcode.Shape.LeftLength
+                                        + (long long) csPadcode.Shape.RightLength ),
+                getKiCadLength( csPadcode.Shape.Size ) } );
+        break;
+
+    case PAD_SHAPE_TYPE::ROUNDED_RECT:
+        pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
+        pad->SetRoundRectCornerRadius( getKiCadLength( csPadcode.Shape.InternalFeature ) );
+        pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
+                                        + (long long) csPadcode.Shape.LeftLength
+                                        + (long long) csPadcode.Shape.RightLength ),
+                getKiCadLength( csPadcode.Shape.Size ) } );
+        break;
+
+
+    case PAD_SHAPE_TYPE::SQUARE:
+        pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
+        pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
+                getKiCadLength( csPadcode.Shape.Size ) } );
+        break;
+
+    default:
+        wxFAIL_MSG( "Unknown Pad Shape" );
+    }
+
+    if( csPadcode.ReliefClearance != UNDEFINED_VALUE )
+        pad->SetThermalGap( getKiCadLength( csPadcode.ReliefClearance ) );
+
+    if( csPadcode.ReliefWidth != UNDEFINED_VALUE )
+        pad->SetThermalSpokeWidth( getKiCadLength( csPadcode.ReliefWidth ) );
+
+    pad->SetOrientation(
+            pad->GetOrientation() + getAngleTenthDegree( csPadcode.Shape.OrientAngle ) );
+
+    if( csPadcode.DrillDiameter != UNDEFINED_VALUE )
+    {
+        if( csPadcode.SlotLength != UNDEFINED_VALUE )
+        {
+            pad->SetDrillSize( { getKiCadLength( csPadcode.DrillDiameter ),
+                    getKiCadLength( (long long) csPadcode.DrillOversize
+                                    + (long long) csPadcode.DrillDiameter ) } );
+        }
+        else
+        {
+            pad->SetDrillSize( { getKiCadLength( csPadcode.DrillDiameter ),
+                    getKiCadLength( csPadcode.DrillDiameter ) } );
+        }
+    }
+    //TODO handle csPadcode.Reassigns when KiCad supports full padstacks
+
+    return pad;
 }
 
 
@@ -1074,6 +1082,38 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
         const_cast<KIID&>( m->m_Uuid ) = KIID();
 
         mBoard->Add( m, ADD_MODE::APPEND );
+
+        //Override pads with pad exceptions
+        if( comp.PadExceptions.size() > 0 )
+        {
+            SYMDEF_PCB fpLibEntry = Library.ComponentDefinitions.at( comp.SymdefID );
+
+            for( std::pair<PAD_ID, PADEXCEPTION> padPair : comp.PadExceptions )
+            {
+                PADEXCEPTION& padEx = padPair.second;
+                PAD           csPad = fpLibEntry.Pads.at( padPair.first );
+
+                if( !padEx.PadCode.IsEmpty() )
+                    csPad.PadCodeID = padEx.PadCode;
+
+                if( padEx.OverrideExits )
+                    csPad.Exits = padEx.Exits;
+
+                if( padEx.OverrideOrientation )
+                    csPad.OrientAngle = padEx.OrientAngle;
+
+                if( padEx.OverrideSide )
+                    csPad.Side = padEx.Side;
+
+                //Find the pad in the module definition
+                D_PAD* kiPad = m->Pads().at( padEx.ID - (long) 1 );
+                
+                if( kiPad )
+                    delete kiPad;
+
+                m->Pads().at( padEx.ID - (long) 1 ) = getKiCadPad( csPad, m );
+            }
+        }
 
         //set to empty string to avoid duplication when loading attributes:
         m->SetValue( wxEmptyString );
