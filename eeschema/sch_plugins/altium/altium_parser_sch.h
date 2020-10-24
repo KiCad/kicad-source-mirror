@@ -373,6 +373,39 @@ struct ASCH_RECTANGLE
 };
 
 
+enum class ASCH_POWER_PORT_STYLE
+{
+    UNKNOWN = -1,
+
+    CIRCLE            = 0,
+    ARROW             = 1,
+    BAR               = 2,
+    WAVE              = 3,
+    POWER_GROUND      = 4,
+    SIGNAL_GROUND     = 5,
+    EARTH             = 6,
+    GOST_ARROW        = 7,
+    GOST_POWER_GROUND = 8,
+    GOST_EARTH        = 9,
+    GOST_BAR          = 10
+};
+
+
+struct ASCH_POWER_PORT
+{
+    int ownerpartid;
+
+    wxString text;
+    bool     showNetName;
+
+    wxPoint                 location;
+    ASCH_RECORD_ORIENTATION orientation;
+    ASCH_POWER_PORT_STYLE   style;
+
+    explicit ASCH_POWER_PORT( const std::map<wxString, wxString>& aProperties );
+};
+
+
 struct ASCH_NO_ERC
 {
     wxPoint location;

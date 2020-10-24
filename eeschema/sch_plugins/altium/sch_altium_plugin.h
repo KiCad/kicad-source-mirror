@@ -114,6 +114,7 @@ private:
     void ParseArc( const std::map<wxString, wxString>& aProperties );
     void ParseLine( const std::map<wxString, wxString>& aProperties );
     void ParseRectangle( const std::map<wxString, wxString>& aProperties );
+    void ParsePowerPort( const std::map<wxString, wxString>& aProperties );
     void ParseNoERC( const std::map<wxString, wxString>& aProperties );
     void ParseNetLabel( const std::map<wxString, wxString>& aProperties );
     void ParseBus( const std::map<wxString, wxString>& aProperties );
@@ -137,6 +138,8 @@ private:
     std::unique_ptr<ASCH_SHEET>   m_altiumSheet;
     std::map<int, SCH_COMPONENT*> m_components;
     std::map<int, LIB_PART*>      m_symbols; // for the start, every component has its unique symbol
+
+    std::map<wxString, LIB_PART*> m_powerSymbols;
 
     std::map<int, ASCH_COMPONENT> m_altiumComponents;
 };

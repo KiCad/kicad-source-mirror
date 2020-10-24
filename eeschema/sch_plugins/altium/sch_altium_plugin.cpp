@@ -54,6 +54,7 @@
 #include <bezier_curves.h>
 #include <compoundfilereader.h>
 #include <kicad_string.h>
+#include <sch_edit_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/textfile.h>
 
@@ -341,6 +342,7 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
         case ALTIUM_SCH_RECORD::SHEET_ENTRY:
             break;
         case ALTIUM_SCH_RECORD::POWER_PORT:
+            ParsePowerPort( properties );
             break;
         case ALTIUM_SCH_RECORD::PORT:
             break;
@@ -1224,6 +1226,304 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
         else
             rect->SetFillMode( FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
     }
+}
+
+
+wxPoint HelperGeneratePowerPortGraphics( LIB_PART* aKPart, ASCH_POWER_PORT_STYLE aStyle )
+{
+    if( aStyle == ASCH_POWER_PORT_STYLE::CIRCLE || aStyle == ASCH_POWER_PORT_STYLE::ARROW )
+    {
+        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKPart );
+        aKPart->AddDrawItem( line1 );
+        line1->SetWidth( Mils2iu( 10 ) );
+        line1->AddPoint( { 0, 0 } );
+        line1->AddPoint( { 0, Mils2iu( -50 ) } );
+
+        if( aStyle == ASCH_POWER_PORT_STYLE::CIRCLE )
+        {
+            LIB_CIRCLE* circle = new LIB_CIRCLE( aKPart );
+            aKPart->AddDrawItem( circle );
+            circle->SetWidth( Mils2iu( 5 ) );
+            circle->SetRadius( Mils2iu( 25 ) );
+            circle->SetPosition( { Mils2iu( 0 ), Mils2iu( -75 ) } );
+        }
+        else
+        {
+            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
+            aKPart->AddDrawItem( line2 );
+            line2->SetWidth( Mils2iu( 10 ) );
+            line2->AddPoint( { Mils2iu( -25 ), Mils2iu( -50 ) } );
+            line2->AddPoint( { Mils2iu( 25 ), Mils2iu( -50 ) } );
+            line2->AddPoint( { Mils2iu( 0 ), Mils2iu( -100 ) } );
+            line2->AddPoint( { Mils2iu( -25 ), Mils2iu( -50 ) } );
+        }
+
+        return { 0, Mils2iu( 150 ) };
+    }
+    else if( aStyle == ASCH_POWER_PORT_STYLE::WAVE )
+    {
+        LIB_POLYLINE* line = new LIB_POLYLINE( aKPart );
+        aKPart->AddDrawItem( line );
+        line->SetWidth( Mils2iu( 10 ) );
+        line->AddPoint( { 0, 0 } );
+        line->AddPoint( { 0, Mils2iu( -72 ) } );
+
+        LIB_BEZIER* bezier = new LIB_BEZIER( aKPart );
+        aKPart->AddDrawItem( bezier );
+        bezier->SetWidth( Mils2iu( 5 ) );
+        bezier->AddPoint( { Mils2iu( 30 ), Mils2iu( -50 ) } );
+        bezier->AddPoint( { Mils2iu( 30 ), Mils2iu( -87 ) } );
+        bezier->AddPoint( { Mils2iu( -30 ), Mils2iu( -63 ) } );
+        bezier->AddPoint( { Mils2iu( -30 ), Mils2iu( -100 ) } );
+
+        return { 0, Mils2iu( 150 ) };
+    }
+    else if( aStyle == ASCH_POWER_PORT_STYLE::POWER_GROUND
+             || aStyle == ASCH_POWER_PORT_STYLE::SIGNAL_GROUND
+             || aStyle == ASCH_POWER_PORT_STYLE::EARTH
+             || aStyle == ASCH_POWER_PORT_STYLE::GOST_ARROW )
+    {
+        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKPart );
+        aKPart->AddDrawItem( line1 );
+        line1->SetWidth( Mils2iu( 10 ) );
+        line1->AddPoint( { 0, 0 } );
+        line1->AddPoint( { 0, Mils2iu( -100 ) } );
+
+        if( aStyle == ASCH_POWER_PORT_STYLE::POWER_GROUND )
+        {
+            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
+            aKPart->AddDrawItem( line2 );
+            line2->SetWidth( Mils2iu( 10 ) );
+            line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
+            line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -100 ) } );
+
+            LIB_POLYLINE* line3 = new LIB_POLYLINE( aKPart );
+            aKPart->AddDrawItem( line3 );
+            line3->SetWidth( Mils2iu( 10 ) );
+            line3->AddPoint( { Mils2iu( -70 ), Mils2iu( -130 ) } );
+            line3->AddPoint( { Mils2iu( 70 ), Mils2iu( -130 ) } );
+
+            LIB_POLYLINE* line4 = new LIB_POLYLINE( aKPart );
+            aKPart->AddDrawItem( line4 );
+            line4->SetWidth( Mils2iu( 10 ) );
+            line4->AddPoint( { Mils2iu( -40 ), Mils2iu( -160 ) } );
+            line4->AddPoint( { Mils2iu( 40 ), Mils2iu( -160 ) } );
+
+            LIB_POLYLINE* line5 = new LIB_POLYLINE( aKPart );
+            aKPart->AddDrawItem( line5 );
+            line5->SetWidth( Mils2iu( 10 ) );
+            line5->AddPoint( { Mils2iu( -10 ), Mils2iu( -190 ) } );
+            line5->AddPoint( { Mils2iu( 10 ), Mils2iu( -190 ) } );
+        }
+        else if( aStyle == ASCH_POWER_PORT_STYLE::SIGNAL_GROUND )
+        {
+            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
+            aKPart->AddDrawItem( line2 );
+            line2->SetWidth( Mils2iu( 10 ) );
+            line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
+            line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -100 ) } );
+            line2->AddPoint( { Mils2iu( 0 ), Mils2iu( -200 ) } );
+            line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
+        }
+        else if( aStyle == ASCH_POWER_PORT_STYLE::EARTH )
+        {
+            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
+            aKPart->AddDrawItem( line2 );
+            line2->SetWidth( Mils2iu( 10 ) );
+            line2->AddPoint( { Mils2iu( -150 ), Mils2iu( -200 ) } );
+            line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
+            line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -100 ) } );
+            line2->AddPoint( { Mils2iu( 50 ), Mils2iu( -200 ) } );
+
+            LIB_POLYLINE* line3 = new LIB_POLYLINE( aKPart );
+            aKPart->AddDrawItem( line3 );
+            line3->SetWidth( Mils2iu( 10 ) );
+            line3->AddPoint( { Mils2iu( 0 ), Mils2iu( -100 ) } );
+            line3->AddPoint( { Mils2iu( -50 ), Mils2iu( -200 ) } );
+        }
+        else // ASCH_POWER_PORT_STYLE::GOST_ARROW
+        {
+            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
+            aKPart->AddDrawItem( line2 );
+            line2->SetWidth( Mils2iu( 10 ) );
+            line2->AddPoint( { Mils2iu( -25 ), Mils2iu( -50 ) } );
+            line2->AddPoint( { Mils2iu( 0 ), Mils2iu( -100 ) } );
+            line2->AddPoint( { Mils2iu( 25 ), Mils2iu( -50 ) } );
+
+            return { 0, Mils2iu( 150 ) }; // special case
+        }
+
+        return { 0, Mils2iu( 250 ) };
+    }
+    else if( aStyle == ASCH_POWER_PORT_STYLE::GOST_POWER_GROUND
+             || aStyle == ASCH_POWER_PORT_STYLE::GOST_EARTH )
+    {
+        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKPart );
+        aKPart->AddDrawItem( line1 );
+        line1->SetWidth( Mils2iu( 10 ) );
+        line1->AddPoint( { 0, 0 } );
+        line1->AddPoint( { 0, Mils2iu( -160 ) } );
+
+        LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
+        aKPart->AddDrawItem( line2 );
+        line2->SetWidth( Mils2iu( 10 ) );
+        line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -160 ) } );
+        line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -160 ) } );
+
+        LIB_POLYLINE* line3 = new LIB_POLYLINE( aKPart );
+        aKPart->AddDrawItem( line3 );
+        line3->SetWidth( Mils2iu( 10 ) );
+        line3->AddPoint( { Mils2iu( -60 ), Mils2iu( -200 ) } );
+        line3->AddPoint( { Mils2iu( 60 ), Mils2iu( -200 ) } );
+
+        LIB_POLYLINE* line4 = new LIB_POLYLINE( aKPart );
+        aKPart->AddDrawItem( line4 );
+        line4->SetWidth( Mils2iu( 10 ) );
+        line4->AddPoint( { Mils2iu( -20 ), Mils2iu( -240 ) } );
+        line4->AddPoint( { Mils2iu( 20 ), Mils2iu( -240 ) } );
+
+        if( aStyle == ASCH_POWER_PORT_STYLE::GOST_POWER_GROUND )
+            return { 0, Mils2iu( 300 ) };
+
+        LIB_CIRCLE* circle = new LIB_CIRCLE( aKPart );
+        aKPart->AddDrawItem( circle );
+        circle->SetWidth( Mils2iu( 10 ) );
+        circle->SetRadius( Mils2iu( 120 ) );
+        circle->SetPosition( { Mils2iu( 0 ), Mils2iu( -160 ) } );
+
+        return { 0, Mils2iu( 350 ) };
+    }
+    else if( aStyle == ASCH_POWER_PORT_STYLE::GOST_BAR )
+    {
+        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKPart );
+        aKPart->AddDrawItem( line1 );
+        line1->SetWidth( Mils2iu( 10 ) );
+        line1->AddPoint( { 0, 0 } );
+        line1->AddPoint( { 0, Mils2iu( -200 ) } );
+
+        LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
+        aKPart->AddDrawItem( line2 );
+        line2->SetWidth( Mils2iu( 10 ) );
+        line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -200 ) } );
+        line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -200 ) } );
+
+        return { 0, Mils2iu( 250 ) };
+    }
+    else
+    {
+        if( aStyle != ASCH_POWER_PORT_STYLE::BAR )
+            wxLogWarning( "Power Port has unknown style, use bar instead. " );
+
+        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKPart );
+        aKPart->AddDrawItem( line1 );
+        line1->SetWidth( Mils2iu( 10 ) );
+        line1->AddPoint( { 0, 0 } );
+        line1->AddPoint( { 0, Mils2iu( -100 ) } );
+
+        LIB_POLYLINE* line2 = new LIB_POLYLINE( aKPart );
+        aKPart->AddDrawItem( line2 );
+        line2->SetWidth( Mils2iu( 10 ) );
+        line2->AddPoint( { Mils2iu( -50 ), Mils2iu( -100 ) } );
+        line2->AddPoint( { Mils2iu( 50 ), Mils2iu( -100 ) } );
+
+        return { 0, Mils2iu( 150 ) };
+    }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_POWER_PORT elem( aProperties );
+
+    LIB_ID libId = AltiumToKiCadLibID( LIB_ID::ID_SCH, getLibName(), elem.text );
+
+    LIB_PART* kpart = nullptr;
+
+    const auto& symbol = m_powerSymbols.find( elem.text );
+    if( symbol != m_powerSymbols.end() )
+    {
+        kpart = symbol->second; // cache hit
+    }
+    else
+    {
+        kpart = new LIB_PART( wxEmptyString );
+        kpart->SetPower();
+        kpart->SetName( elem.text );
+        kpart->GetReferenceField().SetText( "#PWR" );
+        kpart->GetValueField().SetText( elem.text );
+        kpart->GetValueField().SetVisible( true ); // TODO: why does this not work?
+        kpart->SetDescription( wxString::Format(
+                "Power symbol creates a global label with name \"%s\"", elem.text ) );
+        kpart->SetKeyWords( "power-flag" );
+        kpart->SetLibId( libId );
+
+        // generate graphic
+        LIB_PIN* pin = new LIB_PIN( kpart );
+        kpart->AddDrawItem( pin );
+
+        pin->SetName( elem.text );
+        pin->SetPosition( { 0, 0 } );
+        pin->SetLength( 0 );
+
+        // marks the pin as a global label
+        pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
+        pin->SetVisible( false );
+
+        wxPoint valueFieldPos = HelperGeneratePowerPortGraphics( kpart, elem.style );
+
+        kpart->GetValueField().SetPosition( valueFieldPos );
+
+        // this has to be done after parsing the LIB_PART!
+        m_pi->SaveSymbol( getLibFileName().GetFullPath(), kpart, m_properties.get() );
+        m_powerSymbols.insert( { elem.text, kpart } );
+    }
+
+    SCH_SHEET_PATH sheetpath;
+    m_rootSheet->LocatePathOfScreen( m_currentSheet->GetScreen(), &sheetpath );
+
+    // each component has its own symbol for now
+    SCH_COMPONENT* component = new SCH_COMPONENT();
+    component->SetRef( &sheetpath, "#PWR?" );
+    component->SetValue( elem.text );
+    component->SetLibId( libId );
+    component->SetLibSymbol( new LIB_PART( *kpart ) );
+
+    SCH_FIELD* valueField = component->GetField( VALUE );
+
+    // TODO: Why do I need to set those a second time?
+    valueField->SetVisible( true );
+    valueField->SetPosition( kpart->GetValueField().GetPosition() );
+
+    component->SetPosition( elem.location + m_sheetOffset );
+
+    switch( elem.orientation )
+    {
+    case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
+        component->SetOrientation( COMPONENT_ORIENTATION_T::CMP_ORIENT_90 );
+        valueField->SetTextAngle( -900. );
+        valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
+        break;
+    case ASCH_RECORD_ORIENTATION::UPWARDS:
+        component->SetOrientation( COMPONENT_ORIENTATION_T::CMP_ORIENT_180 );
+        valueField->SetTextAngle( -1800. );
+        valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_CENTER );
+        break;
+    case ASCH_RECORD_ORIENTATION::LEFTWARDS:
+        component->SetOrientation( COMPONENT_ORIENTATION_T::CMP_ORIENT_270 );
+        valueField->SetTextAngle( -2700. );
+        valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+    case ASCH_RECORD_ORIENTATION::DOWNWARDS:
+        component->SetOrientation( COMPONENT_ORIENTATION_T::CMP_ORIENT_0 );
+        valueField->SetTextAngle( 0. );
+        valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_CENTER );
+        break;
+    default:
+        wxLogWarning( "Pin has unexpected orientation" );
+        break;
+    }
+
+    m_currentSheet->GetScreen()->Append( component );
 }
 
 

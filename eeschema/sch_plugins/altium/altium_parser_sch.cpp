@@ -368,6 +368,26 @@ ASCH_RECTANGLE::ASCH_RECTANGLE( const std::map<wxString, wxString>& aProperties 
 }
 
 
+ASCH_POWER_PORT::ASCH_POWER_PORT( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::POWER_PORT );
+
+    ownerpartid =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+
+    location    = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
+    orientation = PropertiesReadEnum<ASCH_RECORD_ORIENTATION>(
+            aProperties, "ORIENTATION", 0, 3, ASCH_RECORD_ORIENTATION::RIGHTWARDS );
+
+    text        = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
+    showNetName = ALTIUM_PARSER::PropertiesReadBool( aProperties, "SHOWNETNAME", true );
+
+    style = PropertiesReadEnum<ASCH_POWER_PORT_STYLE>(
+            aProperties, "STYLE", 0, 10, ASCH_POWER_PORT_STYLE::CIRCLE );
+}
+
+
 ASCH_NO_ERC::ASCH_NO_ERC( const std::map<wxString, wxString>& aProperties )
 {
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::NO_ERC );
