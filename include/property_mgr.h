@@ -31,6 +31,9 @@
 #include <memory>
 #include <eda_units.h>
 
+// Needed for stl hash extensions
+#include <common.h>
+
 class PROPERTY_BASE;
 class TYPE_CAST_BASE;
 
