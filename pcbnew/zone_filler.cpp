@@ -92,7 +92,8 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
     std::unique_lock<std::mutex> lock( connectivity->GetLock(), std::try_to_lock );
 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-    int                    worstClearance = bds.GetBiggestClearanceValue();
+
+    m_worstClearance = bds.GetBiggestClearanceValue();
 
     if( !lock )
         return false;
@@ -109,7 +110,14 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
     m_boardOutline.RemoveAllContours();
     m_brdOutlinesValid = m_board->GetBoardPolygonOutlines( m_boardOutline );
 
-    // Update the bounding box and shape caches in the pads to prevent multi-threaded rebuilds.
+    // Update and cache zone bounding boxes and pad effective shapes so that we don't have to
+    // make them thread-safe.
+    for( ZONE_CONTAINER* zone : m_board->Zones() )
+    {
+        zone->CacheBoundingBox();
+        m_worstClearance = std::max( m_worstClearance, zone->GetLocalClearance() );
+    }
+
     for( MODULE* module : m_board->Modules() )
     {
         for( D_PAD* pad : module->Pads() )
@@ -117,23 +125,11 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
             if( pad->IsDirty() )
                 pad->BuildEffectiveShapes( UNDEFINED_LAYER );
         }
-    }
 
-    // Update (and cache) the zone bounding boxes as well.
-    for( ZONE_CONTAINER* zone : m_board->Zones() )
-    {
-        zone->CacheBoundingBox();
-        worstClearance = std::max( worstClearance, zone->GetLocalClearance() );
-
-    }
-
-    for( MODULE* module : m_board->Modules() )
-    {
         for( ZONE_CONTAINER* zone : module->Zones() )
         {
             zone->CacheBoundingBox();
-            worstClearance = std::max( worstClearance, zone->GetLocalClearance() );
-
+            m_worstClearance = std::max( m_worstClearance, zone->GetLocalClearance() );
         }
     }
 
@@ -204,7 +200,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
                 // A higher priority zone is found: if we intersect and it's not filled yet
                 // then we have to wait.
                 EDA_RECT inflatedBBox = aZone->GetCachedBoundingBox();
-                inflatedBBox.Inflate( worstClearance );
+                inflatedBBox.Inflate( m_worstClearance );
 
                 return inflatedBBox.Intersects( aOtherZone->GetCachedBoundingBox() );
             };
@@ -715,8 +711,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
     // Items outside the zone bounding box are skipped, so it needs to be inflated by the
     // largest clearance value found in the netclasses and rules
-    int biggest_clearance = std::max( zone_clearance, bds.GetBiggestClearanceValue() );
-    zone_boundingbox.Inflate( biggest_clearance + extra_margin );
+    zone_boundingbox.Inflate( m_worstClearance + extra_margin );
 
     // Use a dummy pad to calculate hole clearance when a pad has a hole but is not on the
     // zone's copper layer.  The dummy pad has the size and shape of the original pad's hole.
@@ -850,7 +845,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
     for( BOARD_ITEM* item : m_board->Drawings() )
         doGraphicItem( item );
 
-    // Add keepout zones and higher-priority zones
+    // Add non-connected zone clearances
     //
     auto knockoutZone =
             [&]( ZONE_CONTAINER* aKnockout )
@@ -859,51 +854,46 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                 if( !aKnockout->GetLayerSet().test( aLayer ) )
                     return;
 
-                if( aKnockout->GetBoundingBox().Intersects( zone_boundingbox ) )
+                if( aKnockout->GetCachedBoundingBox().Intersects( zone_boundingbox ) )
                 {
-                    if( aKnockout->GetIsRuleArea()
-                        || aZone->GetNetCode() == aKnockout->GetNetCode() )
+                    if( aKnockout->GetIsRuleArea() )
                     {
-                        // Keepouts and same-net zones use outline with no clearance
+                        // Keepouts use outline with no clearance
                         aKnockout->TransformSmoothedOutlineToPolygon( aHoles, 0, nullptr );
                     }
-                    else
+                    else if( bds.m_ZoneFillVersion == 5 )
                     {
+                        // 5.x used outline with clearance
                         int gap = evalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aZone,
                                                      aKnockout, aLayer );
 
-                        if( bds.m_ZoneFillVersion == 5 )
-                        {
-                            // 5.x used outline with clearance
-                            aKnockout->TransformSmoothedOutlineToPolygon( aHoles, gap, nullptr );
-                        }
-                        else
-                        {
-                            // 6.0 uses filled areas with clearance
-                            SHAPE_POLY_SET poly;
-                            aKnockout->TransformShapeWithClearanceToPolygon( poly, aLayer, gap,
-                                                                             m_maxError,
-                                                                             ERROR_OUTSIDE );
-                            aHoles.Append( poly );
-                        }
+                        aKnockout->TransformSmoothedOutlineToPolygon( aHoles, gap, nullptr );
+                    }
+                    else
+                    {
+                        // 6.0 uses filled areas with clearance
+                        int gap = evalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aZone,
+                                                     aKnockout, aLayer );
+
+                        SHAPE_POLY_SET poly;
+                        aKnockout->TransformShapeWithClearanceToPolygon( poly, aLayer, gap,
+                                                                         m_maxError,
+                                                                         ERROR_OUTSIDE );
+                        aHoles.Append( poly );
                     }
                 }
             };
 
     for( ZONE_CONTAINER* otherZone : m_board->Zones() )
     {
-        if( otherZone == aZone )
-            continue;
-
-        if( otherZone->GetIsRuleArea() )
+        if( otherZone->GetNetCode() != aZone->GetNetCode()
+                && otherZone->GetPriority() > aZone->GetPriority() )
         {
-            if( otherZone->GetDoNotAllowCopperPour() )
-                knockoutZone( otherZone );
+            knockoutZone( otherZone );
         }
-        else
+        else if( otherZone->GetIsRuleArea() && otherZone->GetDoNotAllowCopperPour() )
         {
-            if( otherZone->GetPriority() > aZone->GetPriority() )
-                knockoutZone( otherZone );
+            knockoutZone( otherZone );
         }
     }
 
@@ -911,20 +901,62 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
     {
         for( ZONE_CONTAINER* otherZone : module->Zones() )
         {
-            if( otherZone->GetIsRuleArea() )
+            if( otherZone->GetNetCode() != aZone->GetNetCode()
+                    && otherZone->GetPriority() > aZone->GetPriority() )
             {
-                if( otherZone->GetDoNotAllowCopperPour() )
-                    knockoutZone( otherZone );
+                knockoutZone( otherZone );
             }
-            else
+            else if( otherZone->GetIsRuleArea() && otherZone->GetDoNotAllowCopperPour() )
             {
-                if( otherZone->GetPriority() > aZone->GetPriority() )
-                    knockoutZone( otherZone );
+                knockoutZone( otherZone );
             }
         }
     }
 
     aHoles.Simplify( SHAPE_POLY_SET::PM_FAST );
+}
+
+
+/**
+ * Removes the outlines of higher-proirity zones with the same net.  These zones should be
+ * in charge of the fill parameters within their own outlines.
+ */
+void ZONE_FILLER::subtractHigherPriorityZones( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+                                               SHAPE_POLY_SET& aRawFill )
+{
+    auto knockoutZone =
+            [&]( ZONE_CONTAINER* aKnockout )
+            {
+                // If the zones share no common layers
+                if( !aKnockout->GetLayerSet().test( aLayer ) )
+                    return;
+
+                if( aKnockout->GetCachedBoundingBox().Intersects( aZone->GetCachedBoundingBox() ) )
+                {
+                    aRawFill.BooleanSubtract( *aKnockout->Outline(), SHAPE_POLY_SET::PM_FAST );
+                }
+            };
+
+    for( ZONE_CONTAINER* otherZone : m_board->Zones() )
+    {
+        if( otherZone->GetNetCode() == aZone->GetNetCode()
+                && otherZone->GetPriority() > aZone->GetPriority() )
+        {
+            knockoutZone( otherZone );
+        }
+    }
+
+    for( MODULE* module : m_board->Modules() )
+    {
+        for( ZONE_CONTAINER* otherZone : module->Zones() )
+        {
+            if( otherZone->GetNetCode() == aZone->GetNetCode()
+                    && otherZone->GetPriority() > aZone->GetPriority() )
+            {
+                knockoutZone( otherZone );
+            }
+        }
+    }
 }
 
 
@@ -1118,6 +1150,9 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
     DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In12_Cu, "after-trim-to-outline" );
     aRawPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
     DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In13_Cu, "after-trim-to-clearance-holes" );
+
+    // Lastly give any same-net but higher-priority zones control over their own area.
+    subtractHigherPriorityZones( aZone, aLayer, aRawPolys );
 
     aRawPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
 

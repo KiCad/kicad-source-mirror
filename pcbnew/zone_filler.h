@@ -60,6 +60,9 @@ private:
     void buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
                                     SHAPE_POLY_SET& aHoles );
 
+    void subtractHigherPriorityZones( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+                                      SHAPE_POLY_SET& aRawFill );
+
     /**
      * Function computeRawFilledArea
      * Add non copper areas polygons (pads and tracks with clearance)
@@ -118,6 +121,7 @@ private:
     std::unique_ptr<WX_PROGRESS_REPORTER> m_uniqueReporter;
 
     int                   m_maxError;
+    int                   m_worstClearance;
 
     bool                  m_debugZoneFiller;
 };
