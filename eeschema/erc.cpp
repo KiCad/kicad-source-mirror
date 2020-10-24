@@ -469,7 +469,7 @@ int ERC_TESTER::TestPinToPin()
                     needsDriver = refPin;
             }
 
-            hasDriver |= DrivingPinTypes.count( refType );
+            hasDriver |= ( DrivingPinTypes.count( refType ) != 0 );
 
             for( SCH_PIN* testPin : pins )
             {
