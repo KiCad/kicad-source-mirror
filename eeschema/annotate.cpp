@@ -261,10 +261,11 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 int SCH_EDIT_FRAME::CheckAnnotate( REPORTER& aReporter, bool aOneSheetOnly )
 {
     SCH_REFERENCE_LIST  componentsList;
+    constexpr bool      includePowerSymbols = false;
 
     // Build the list of components
     if( !aOneSheetOnly )
-        Schematic().GetSheets().GetComponents( componentsList );
+        Schematic().GetSheets().GetComponents( componentsList, includePowerSymbols );
     else
         GetCurrentSheet().GetComponents( componentsList );
 
