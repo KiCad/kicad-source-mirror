@@ -38,6 +38,8 @@
 #include <eda_rect.h>
 #include <printout.h>
 
+#include <memory>
+
 namespace KIGFX {
 class GAL;
 class VIEW;
