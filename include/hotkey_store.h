@@ -26,6 +26,7 @@
 
 #include <hotkeys_basic.h>
 #include <tool/tool_action.h>
+#include <vector>
 
 class TOOL_MANAGER;
 
