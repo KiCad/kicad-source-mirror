@@ -213,7 +213,6 @@ protected:
     KIGFX::WS_PROXY_VIEW_ITEM*       m_worksheet;
     NETLIST*                         m_schematicNetlist;
 
-    std::vector<DRC_RULE_CONDITION*> m_ruleConditions;
     std::vector<DRC_RULE*>           m_rules;
     bool                             m_rulesValid;
     std::vector<DRC_TEST_PROVIDER*>  m_testProviders;

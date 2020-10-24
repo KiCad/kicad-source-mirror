@@ -70,6 +70,17 @@ DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
 
 DRC_ENGINE::~DRC_ENGINE()
 {
+    for( DRC_RULE* rule : m_rules )
+        delete rule;
+
+    for( std::pair< DRC_CONSTRAINT_TYPE_T,
+                    std::vector<CONSTRAINT_WITH_CONDITIONS*>* > pair : m_constraintMap )
+    {
+        for( CONSTRAINT_WITH_CONDITIONS* constraintWithCondition : *pair.second )
+            delete constraintWithCondition;
+
+        delete pair.second;
+    }
 }
 
 
@@ -484,9 +495,8 @@ void DRC_ENGINE::loadRules( const wxFileName& aPath )
 
 void DRC_ENGINE::compileRules()
 {
-    ReportAux( wxString::Format( "Compiling Rules (%d rules, %d conditions): ",
-                                 (int) m_rules.size(),
-                                 (int) m_ruleConditions.size() ) );
+    ReportAux( wxString::Format( "Compiling Rules (%d rules): ",
+                                 (int) m_rules.size() ) );
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
@@ -569,9 +579,22 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
         provider->SetDRCEngine( this );
     }
 
-    m_ruleConditions.clear();
+    for( DRC_RULE* rule : m_rules )
+        delete rule;
+
     m_rules.clear();
     m_rulesValid = false;
+
+    for( std::pair< DRC_CONSTRAINT_TYPE_T,
+                    std::vector<CONSTRAINT_WITH_CONDITIONS*>* > pair : m_constraintMap )
+    {
+        for( CONSTRAINT_WITH_CONDITIONS* constraintWithCondition : *pair.second )
+            delete constraintWithCondition;
+
+        delete pair.second;
+    }
+
+    m_constraintMap.clear();
 
     try         // attempt to load full set of rules (implicit + user rules)
     {

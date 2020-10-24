@@ -78,6 +78,7 @@ public:
     void SetDRCEngine( DRC_ENGINE *engine )
     {
         m_drcEngine = engine;
+        m_stats.clear();
     }
 
     /**
@@ -126,7 +127,7 @@ protected:
     DRC_ENGINE* m_drcEngine;
     std::unordered_map<const DRC_RULE*, int> m_stats;
     bool        m_isRuleDriven = true;
-    bool m_enabled = true;
+    bool        m_enabled = true;
 
     wxString    m_msg;  // Allocating strings gets expensive enough to want to avoid it
 };
