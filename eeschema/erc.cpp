@@ -487,7 +487,7 @@ int ERC_TESTER::TestPinToPin()
 
                 ELECTRICAL_PINTYPE testType = testPin->GetType();
 
-                hasDriver |= DrivingPinTypes.count( testType );
+                hasDriver |= ( DrivingPinTypes.count( testType ) != 0 );
 
                 PIN_ERROR erc = settings.GetPinMapValue( refType, testType );
 
