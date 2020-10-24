@@ -259,9 +259,9 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
 
                 // See if we can merge an overlap (or two colinear touching segments with
                 // no junction where they meet).
-                SCH_LINE* mergedLine = nullptr;
+                SCH_LINE* mergedLine = secondLine->MergeOverlap( aScreen, firstLine, true );
 
-                if( mergedLine = secondLine->MergeOverlap( aScreen, firstLine, true ) )
+                if( mergedLine != nullptr )
                 {
                     remove_item( firstLine );
                     remove_item( secondLine );
