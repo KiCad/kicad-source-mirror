@@ -37,7 +37,6 @@
 #include <mutex>
 #include <unordered_map>
 
-#include <common.h>
 #include <bitmaps.h>
 #include <pgm_base.h>
 #include <eda_base_frame.h>
