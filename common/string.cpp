@@ -26,6 +26,7 @@
  * @brief Some useful functions to handle strings.
  */
 
+#include <clocale>
 #include <macros.h>
 #include <richio.h>                        // StrPrintf
 #include <kicad_string.h>
@@ -811,5 +812,27 @@ void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSpli
     if( !tmp.IsEmpty() )
     {
         aStrings.Add( tmp );
+    }
+}
+
+
+void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed )
+{
+    struct lconv* lc      = localeconv();
+    char          sep     = lc->decimal_point[0];
+    unsigned      sep_pos = aStringValue.Find( sep );
+
+    if( sep_pos > 0 )
+    {
+        // We want to keep at least aTrailingZeroAllowed digits after the separator
+        unsigned min_len = sep_pos + aTrailingZeroAllowed + 1;
+
+        while( aStringValue.Len() > min_len )
+        {
+            if( aStringValue.Last() == '0' )
+                aStringValue.RemoveLast();
+            else
+                break;
+        }
     }
 }

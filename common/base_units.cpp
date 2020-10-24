@@ -36,6 +36,7 @@
 
 #include <base_units.h>
 #include <common.h>
+#include <kicad_string.h>
 #include <math/util.h>      // for KiROUND
 #include <macros.h>
 #include <title_block.h>
@@ -203,31 +204,6 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitLab
     }
 
     return text;
-}
-
-/* Remove trailing 0 from a string containing a converted float number.
- * the trailing 0 are removed if the mantissa has more
- * than aTrailingZeroAllowed digits and some trailing 0
- */
-void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed )
-{
-    struct lconv * lc = localeconv();
-    char sep = lc->decimal_point[0];
-    unsigned sep_pos = aStringValue.Find( sep );
-
-    if( sep_pos > 0 )
-    {
-        // We want to keep at least aTrailingZeroAllowed digits after the separator
-        unsigned min_len = sep_pos + aTrailingZeroAllowed + 1;
-
-        while( aStringValue.Len() > min_len )
-        {
-            if( aStringValue.Last() == '0' )
-                aStringValue.RemoveLast();
-            else
-                break;
-        }
-    }
 }
 
 

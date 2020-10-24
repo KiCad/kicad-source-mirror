@@ -310,5 +310,12 @@ inline void AccumulateDescription( wxString& aDesc, const wxString& aItem )
  */
 void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSplitter );
 
+/**
+ * Function StripTrailingZeros
+ * Remove trailing 0 from a string containing a converted float number.
+ * The trailing 0 are removed if the mantissa has more
+ * than aTrailingZeroAllowed digits and some trailing 0
+ */
+void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed = 1 );
 
 #endif  // KICAD_STRING_H_

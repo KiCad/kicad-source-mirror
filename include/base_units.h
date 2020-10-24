@@ -75,15 +75,6 @@ inline int Mils2mm( double x ) { return KiROUND( x * 25.4 / 1000. ); }
 std::string Double2Str( double aValue );
 
 /**
- * Function StripTrailingZeros
- * Remove trailing 0 from a string containing a converted float number.
- * The trailing 0 are removed if the mantissa has more
- * than aTrailingZeroAllowed digits and some trailing 0
- */
-void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed = 1 );
-
-
-/**
  * Function To_User_Unit
  * convert \a aValue in internal units to the appropriate user units defined by \a aUnit.
  *
