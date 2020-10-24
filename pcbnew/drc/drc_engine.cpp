@@ -160,7 +160,7 @@ void DRC_ENGINE::loadImplicitRules()
 
     DRC_RULE* uViaRule = createImplicitRule( _( "board setup micro-via constraints" ) );
 
-    uViaRule->m_Condition = new DRC_RULE_CONDITION( "A.Via_Type == 'micro_via'" );
+    uViaRule->m_Condition = new DRC_RULE_CONDITION( "A.Via_Type == 'Micro'" );
 
     DRC_CONSTRAINT uViaDrillConstraint( DRC_CONSTRAINT_TYPE_HOLE_SIZE );
     uViaDrillConstraint.Value().SetMin( bds.m_MicroViasMinDrill );
@@ -181,7 +181,7 @@ void DRC_ENGINE::loadImplicitRules()
     {
         DRC_RULE* bbViaRule = createImplicitRule( _( "board setup constraints" ) );
 
-        bbViaRule->m_Condition = new DRC_RULE_CONDITION( "A.Via_Type == 'buried_via'" );
+        bbViaRule->m_Condition = new DRC_RULE_CONDITION( "A.Via_Type == 'Blind/buried'" );
 
         DRC_CONSTRAINT disallowConstraint( DRC_CONSTRAINT_TYPE_DISALLOW );
         disallowConstraint.m_DisallowFlags = DRC_DISALLOW_BB_VIAS;
@@ -262,7 +262,7 @@ void DRC_ENGINE::loadImplicitRules()
                     rule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
                     rule->m_Implicit = true;
 
-                    expr = wxString::Format( "A.NetClass == '%s' && A.Via_Type != 'micro_via'",
+                    expr = wxString::Format( "A.NetClass == '%s' && A.Via_Type != 'Micro'",
                                              ncName );
                     rule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( rule );
@@ -290,7 +290,7 @@ void DRC_ENGINE::loadImplicitRules()
                     rule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
                     rule->m_Implicit = true;
 
-                    expr = wxString::Format( "A.NetClass == '%s' && A.Via_Type == 'micro_via'",
+                    expr = wxString::Format( "A.NetClass == '%s' && A.Via_Type == 'Micro'",
                                              ncName );
                     rule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( rule );
