@@ -842,7 +842,18 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, d
     SWAP( aStartAngle, >, aEndAngle );
 
     // Bigger arcs need smaller alpha increment to make them look smooth
-    const double alphaIncrement = std::min( 1e6 / aRadius, 2.0 * M_PI / CIRCLE_POINTS );
+    double alphaIncrement = std::min( 1e6 / aRadius, 2.0 * M_PI / CIRCLE_POINTS );
+
+    // Refinement: Use a segment count multiple of 2, because we have a control point
+    // on the middle of the arc, and the look is better if it is on a segment junction
+    // because there is no approx error
+    int seg_count = KiROUND( (aEndAngle -aStartAngle ) / alphaIncrement );
+
+    if( seg_count %2 != 0 )
+        seg_count += 1;
+
+    // Recalculate alphaIncrement with a even integer number of segment
+    alphaIncrement = (aEndAngle -aStartAngle ) / seg_count;
 
     // Code disabled because it creates serious issues:
     // - The arc is inside the polygonization error, but the interior of arc is also important
