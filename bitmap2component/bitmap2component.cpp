@@ -31,7 +31,6 @@
 #include <string>
 #include <vector>
 
-#include <common.h>
 #include <layers_id_colors_and_visibility.h>
 
 #include <locale_io.h>

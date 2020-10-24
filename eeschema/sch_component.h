@@ -28,7 +28,6 @@
 #define COMPONENT_CLASS_H
 
 #include <eda_item.h>
-#include <common.h>
 #include <core/typeinfo.h>
 #include <layers_id_colors_and_visibility.h>
 #include <lib_id.h>

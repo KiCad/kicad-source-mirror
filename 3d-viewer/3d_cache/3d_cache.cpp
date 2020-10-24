@@ -53,7 +53,6 @@
 #include "sg/scenegraph.h"
 #include "plugins/3dapi/ifsg_api.h"
 
-#include <common.h>
 #include <filename_resolver.h>
 #include <pgm_base.h>
 #include <project.h>

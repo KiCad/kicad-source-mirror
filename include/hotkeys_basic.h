@@ -24,8 +24,8 @@
 #ifndef  HOTKEYS_BASIC_H
 #define  HOTKEYS_BASIC_H
 
+#include <wx/string.h>
 #include <map>
-#include <common.h>
 
 #define DEFAULT_HOTKEY_FILENAME_EXT wxT( "hotkeys" )
 #define EESCHEMA_HOTKEY_NAME wxT( "Eeschema" )
@@ -86,7 +86,7 @@ enum HOTKEY_ACTION_TYPE
  * @param aStyle - IS_HOTKEY to add <tab><keyname> (shortcuts in menus, same as hotkeys)
  *                 IS_COMMENT to add <spaces><(keyname)> mainly in tool tips
  */
-wxString AddHotkeyName(  const wxString& aText, int aHotKey, 
+wxString AddHotkeyName(  const wxString& aText, int aHotKey,
                          HOTKEY_ACTION_TYPE aStyle = IS_HOTKEY);
 
 /**
@@ -102,7 +102,7 @@ void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, TOOL_MANAGER* aToolMgr );
  * Function ReadotKeyConfig
  * Reads a hotkey config file into a map.  If aFileName is empty it will read in the defualt
  * hotkeys file.
- * @param aHotKeys 
+ * @param aHotKeys
  */
 void ReadHotKeyConfig( wxString aFileName, std::map<std::string, int>& aHotKeys );
 
@@ -117,7 +117,7 @@ int WriteHotKeyConfig( const std::map<std::string, TOOL_ACTION*>& aActionMap );
  * Read hotkey configuration for a given app,
  * possibly before the frame for that app has been created
  * @param aFilename = the filename to save the hotkeys as
- * @param aMap The list of keycodes mapped by legacy property names 
+ * @param aMap The list of keycodes mapped by legacy property names
  * @return 1 on success, 0 on failure
 */
 int ReadLegacyHotkeyConfigFile( const wxString& aFilename, std::map<std::string, int>& aMap );
@@ -126,7 +126,7 @@ int ReadLegacyHotkeyConfigFile( const wxString& aFilename, std::map<std::string,
  * Function ReadLegacyHotkeyConfig
  * Read configuration data and fill the current hotkey list with hotkeys
  * @param aAppname = the value of the app's m_FrameName
- * @param aMap The list of keycodes mapped by legacy property names 
+ * @param aMap The list of keycodes mapped by legacy property names
  */
 int ReadLegacyHotkeyConfig( const wxString& aAppname, std::map<std::string, int>& aMap );
 
