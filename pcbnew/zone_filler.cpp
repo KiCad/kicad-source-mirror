@@ -222,7 +222,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
 
                     // Check for any fill dependencies.  If our zone needs to be clipped by
                     // another zone then we can't fill until that zone is filled.
-                    for( ZONE_CONTAINER* otherZone : m_board->Zones() )
+                    for( ZONE_CONTAINER* otherZone : aZones )
                     {
                         if( otherZone == zone )
                             continue;
@@ -231,18 +231,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
                         {
                             canFill = false;
                             break;
-                        }
-                    }
-
-                    for( MODULE* module : m_board->Modules() )
-                    {
-                        for( ZONE_CONTAINER* otherZone : module->Zones() )
-                        {
-                            if( check_fill_dependency( zone, layer, otherZone ) )
-                            {
-                                canFill = false;
-                                break;
-                            }
                         }
                     }
 
