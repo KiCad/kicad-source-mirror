@@ -46,7 +46,7 @@
 
 #include <github_getliblist.h>
 #include <macros.h>
-#include <common.h>
+#include <richio.h>
 #include <html_link_parser.h>
 
 

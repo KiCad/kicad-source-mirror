@@ -26,6 +26,8 @@
 
 #include <plugins/eagle/eagle_parser.h>
 
+#include <richio.h>
+
 #include <functional>
 #include <sstream>
 #include <iomanip>

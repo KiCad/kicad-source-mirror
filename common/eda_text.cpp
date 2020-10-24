@@ -35,7 +35,6 @@
 #include <eda_item.h>         // for EDA_ITEM
 #include <base_units.h>
 #include <basic_gal.h>        // for BASIC_GAL, basic_gal
-#include <common.h>           // for wxStringSplit
 #include <convert_to_biu.h>   // for Mils2iu
 #include <eda_rect.h>         // for EDA_RECT
 #include <eda_text.h>         // for EDA_TEXT, TEXT_EFFECTS, GR_TEXT_VJUSTIF...
@@ -45,6 +44,7 @@
 #include <kicad_string.h>     // for UnescapeString
 #include <math/util.h>          // for KiROUND
 #include <math/vector2d.h>    // for VECTOR2D
+#include <richio.h>
 #include <render_settings.h>
 #include <trigo.h>            // for RotatePoint
 #include <i18n_utility.h>

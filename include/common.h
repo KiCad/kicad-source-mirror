@@ -42,8 +42,6 @@
 #include <wx/textctrl.h>
 #include <wx/gdicmn.h>
 
-#include <richio.h>
-
 #include <atomic>
 #include <limits>
 #include <memory>

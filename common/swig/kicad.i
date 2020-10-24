@@ -87,6 +87,7 @@ principle should be easily implemented by adapting the current STL containers.
     #include <eda_item.h>
     #include <eda_rect.h>
     #include <common.h>
+    #include <richio.h>
     #include <wx_python_helpers.h>
     #include <cstddef>
     #include <vector>
@@ -116,6 +117,7 @@ principle should be easily implemented by adapting the current STL containers.
 %include eda_item.h
 %include eda_rect.h
 %include common.h
+%include richio.h
 %include title_block.h
 %include gal/color4d.h
 %include marker_base.h
