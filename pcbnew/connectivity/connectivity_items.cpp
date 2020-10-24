@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <core/kicad_algo.h>
 #include <connectivity/connectivity_items.h>
 
 int CN_ITEM::AnchorCount() const

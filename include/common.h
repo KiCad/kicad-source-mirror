@@ -47,7 +47,6 @@
 #include <memory>
 #include <type_traits>
 #include <typeinfo>
-#include <core/kicad_algo.h>
 #include <macros.h>
 
 class PROJECT;

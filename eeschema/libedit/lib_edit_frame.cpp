@@ -26,6 +26,7 @@
 #include <base_screen.h>
 #include <class_library.h>
 #include <confirm.h>
+#include <core/kicad_algo.h>
 #include <eeschema_id.h>
 #include <eeschema_settings.h>
 #include <kiface_i.h>

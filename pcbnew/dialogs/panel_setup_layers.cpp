@@ -25,6 +25,7 @@
 
 
 #include <confirm.h>
+#include <core/kicad_algo.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <class_board.h>

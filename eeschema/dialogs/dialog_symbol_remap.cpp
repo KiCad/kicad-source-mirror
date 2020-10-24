@@ -32,6 +32,7 @@
 #include <wx_html_report_panel.h>
 
 #include <class_library.h>
+#include <core/kicad_algo.h>
 #include <lib_view_frame.h>
 #include <project_rescue.h>
 #include <sch_io_mgr.h>

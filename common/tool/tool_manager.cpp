@@ -25,6 +25,7 @@
  */
 
 #include <algorithm>
+#include <core/kicad_algo.h>
 #include <core/optional.h>
 #include <map>
 #include <stack>

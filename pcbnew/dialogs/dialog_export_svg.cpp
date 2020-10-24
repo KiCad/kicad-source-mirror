@@ -28,6 +28,7 @@
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
 #include <confirm.h>
+#include <core/kicad_algo.h>
 #include <pcbplot.h>
 #include <locale_io.h>
 #include <class_board.h>

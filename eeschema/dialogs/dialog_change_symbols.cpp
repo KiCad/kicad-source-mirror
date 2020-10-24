@@ -26,6 +26,7 @@
 #include <kiway.h>
 #include <lib_id.h>
 
+#include <core/kicad_algo.h>
 #include <dialog_change_symbols.h>
 #include <sch_component.h>
 #include <sch_edit_frame.h>

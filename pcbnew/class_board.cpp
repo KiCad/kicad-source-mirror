@@ -37,6 +37,7 @@
 #include <class_zone.h>
 #include <class_marker_pcb.h>
 #include <class_pcb_target.h>
+#include <core/kicad_algo.h>
 #include <connectivity/connectivity_data.h>
 #include <kicad_string.h>
 #include <pgm_base.h>

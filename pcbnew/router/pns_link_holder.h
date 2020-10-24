@@ -22,6 +22,7 @@
 #ifndef PCBNEW_ROUTER_PNS_LINK_HOLDER_H_
 #define PCBNEW_ROUTER_PNS_LINK_HOLDER_H_
 
+#include <core/kicad_algo.h>
 #include "pns_item.h"
 #include "pns_linked_item.h"
 

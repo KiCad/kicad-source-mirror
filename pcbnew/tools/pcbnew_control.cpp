@@ -39,6 +39,7 @@
 #include <fp_shape.h>
 #include <confirm.h>
 #include <connectivity/connectivity_data.h>
+#include <core/kicad_algo.h>
 #include <kicad_clipboard.h>
 #include <origin_viewitem.h>
 #include <pcb_edit_frame.h>
