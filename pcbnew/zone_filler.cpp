@@ -932,10 +932,11 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
     { if( m_debugZoneFiller && dumpLayer == b ) \
         { \
             m_board->SetLayerName( b, c ); \
-            a.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); \
-            a.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); \
-            aRawPolys = a; \
-            aFinalPolys = a; \
+            SHAPE_POLY_SET d = a; \
+            d.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); \
+            d.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); \
+            aRawPolys = d; \
+            aFinalPolys = d; \
             return; \
         } \
     }
@@ -999,6 +1000,7 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
         return;
 
     buildCopperItemClearances( aZone, aLayer, clearanceHoles );
+    DUMP_POLYS_TO_COPPER_LAYER( clearanceHoles, In3_Cu, "clearance-holes" );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return;
@@ -1013,16 +1015,16 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
     static const bool USE_BBOX_CACHES = true;
     SHAPE_POLY_SET testAreas = aRawPolys;
     testAreas.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
-    DUMP_POLYS_TO_COPPER_LAYER( testAreas, In3_Cu, "minus-clearance-holes" );
+    DUMP_POLYS_TO_COPPER_LAYER( testAreas, In4_Cu, "minus-clearance-holes" );
 
     // Prune features that don't meet minimum-width criteria
     if( half_min_width - epsilon > epsilon )
     {
         testAreas.Deflate( half_min_width - epsilon, numSegs, fastCornerStrategy );
-        DUMP_POLYS_TO_COPPER_LAYER( testAreas, In4_Cu, "spoke-test-deflated" );
+        DUMP_POLYS_TO_COPPER_LAYER( testAreas, In5_Cu, "spoke-test-deflated" );
 
         testAreas.Inflate( half_min_width - epsilon, numSegs, fastCornerStrategy );
-        DUMP_POLYS_TO_COPPER_LAYER( testAreas, In5_Cu, "spoke-test-reinflated" );
+        DUMP_POLYS_TO_COPPER_LAYER( testAreas, In6_Cu, "spoke-test-reinflated" );
     }
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
@@ -1033,6 +1035,8 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
     testAreas.BuildBBoxCaches();
     int interval = 0;
 
+    SHAPE_POLY_SET debugSpokes;
+
     for( const SHAPE_LINE_CHAIN& spoke : thermalSpokes )
     {
         const VECTOR2I& testPt = spoke.CPoint( 3 );
@@ -1040,6 +1044,9 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
         // Hit-test against zone body
         if( testAreas.Contains( testPt, -1, 1, USE_BBOX_CACHES ) )
         {
+            if( m_debugZoneFiller )
+                debugSpokes.AddOutline( spoke );
+
             aRawPolys.AddOutline( spoke );
             continue;
         }
@@ -1057,25 +1064,28 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
         {
             if( &other != &spoke && other.PointInside( testPt, 1, USE_BBOX_CACHES  ) )
             {
+                if( m_debugZoneFiller )
+                    debugSpokes.AddOutline( spoke );
+
                 aRawPolys.AddOutline( spoke );
                 break;
             }
         }
     }
 
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In6_Cu, "plus-spokes" );
+    DUMP_POLYS_TO_COPPER_LAYER( debugSpokes, In7_Cu, "spokes" );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return;
 
     aRawPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In7_Cu, "trimmed-spokes" );
+    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In8_Cu, "after-spoke-trimming" );
 
     // Prune features that don't meet minimum-width criteria
     if( half_min_width - epsilon > epsilon )
         aRawPolys.Deflate( half_min_width - epsilon, numSegs, cornerStrategy );
 
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In8_Cu, "deflated" );
+    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In9_Cu, "deflated" );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return;
@@ -1084,7 +1094,7 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
         addHatchFillTypeOnZone( aZone, aLayer, aRawPolys );
 
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In9_Cu, "after-hatching" );
+    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In10_Cu, "after-hatching" );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return;
@@ -1100,12 +1110,14 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_I
         aRawPolys.Inflate( half_min_width - epsilon, numSegs, cornerStrategy );
     }
 
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In10_Cu, "after-reinflating" );
+    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In11_Cu, "after-reinflating" );
 
     // Ensure additive changes (thermal stubs and particularly inflating acute corners) do not
     // add copper outside the zone boundary or inside the clearance holes
     aRawPolys.BooleanIntersection( aSmoothedOutline, SHAPE_POLY_SET::PM_FAST );
+    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In12_Cu, "after-trim-to-outline" );
     aRawPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
+    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In13_Cu, "after-trim-to-clearance-holes" );
 
     aRawPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
 
