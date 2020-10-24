@@ -27,8 +27,12 @@
 
 using namespace TFIELD_T;
 
+#define REFCANONICAL "Reference"
+#define VALCANONICAL "Value"
+#define FTPCANONICAL "Footprint"
+#define DSHCANONICAL "Datasheet"
 
-const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
+const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTranslate )
 {
     static void* locale = nullptr;
     static wxString referenceDefault;
@@ -37,14 +41,25 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
     static wxString datasheetDefault;
     static wxString fieldDefault;
 
+    if( !aTranslate )
+    {
+        switch( aFieldNdx )
+        {
+        case  REFERENCE: return REFCANONICAL;   // The component reference, R1, C1, etc.
+        case  VALUE:     return VALCANONICAL;   // The component value + name
+        case  FOOTPRINT: return FTPCANONICAL;   // The footprint for use with Pcbnew
+        case  DATASHEET: return DSHCANONICAL;   // Link to a datasheet for component
+        }
+    }
+
     // Fetching translations can take a surprising amount of time when loading libraries,
     // so only do it when necessary.
     if( Pgm().GetLocale() != locale )
     {
-        referenceDefault = _( "Reference" );
-        valueDefault     = _( "Value" );
-        footprintDefault = _( "Footprint" );
-        datasheetDefault = _( "Datasheet" );
+        referenceDefault = _( REFCANONICAL );
+        valueDefault     = _( VALCANONICAL );
+        footprintDefault = _( FTPCANONICAL );
+        datasheetDefault = _( DSHCANONICAL );
         fieldDefault     = _( "Field%d" );
         locale = Pgm().GetLocale();
     }
@@ -58,7 +73,14 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
     case  DATASHEET: return datasheetDefault;   // Link to a datasheet for component
     default:         return wxString::Format( fieldDefault, aFieldNdx );
     }
+
 }
+
+#undef REFCANONICAL
+#undef VALCANONICAL
+#undef FTPCANONICAL
+#undef DSHCANONICAL
+
 
 void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 {

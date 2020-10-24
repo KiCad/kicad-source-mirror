@@ -120,8 +120,9 @@ struct TEMPLATE_FIELDNAME
      * returns a default symbol field name for field \a aFieldNdx for all components.
      * These fieldnames are not modifiable, but template fieldnames are.
      * @param aFieldNdx The field number index, > 0
+     * @param aTranslate If true, return the translated field name, else get the canonical name
      */
-    static const wxString GetDefaultFieldName( int aFieldNdx );
+    static const wxString GetDefaultFieldName( int aFieldNdx, bool aTranslate = true );
 };
 
 typedef std::vector< TEMPLATE_FIELDNAME > TEMPLATE_FIELDNAMES;

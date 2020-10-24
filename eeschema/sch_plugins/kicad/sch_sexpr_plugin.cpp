@@ -985,7 +985,7 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
     if( aField->GetParent()->Type() == SCH_COMPONENT_T )
     {
         if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
-            fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId() );
+            fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId(), false );
     }
     else if( aField->GetParent()->Type() == SCH_SHEET_T )
     {
