@@ -38,6 +38,8 @@ protected:
     // Handlers for HTML_MESSAGE_BOX_BASE events.
     void OnOKButtonClick( wxCommandEvent& event ) override;
 
+    virtual void OnCharHook( wxKeyEvent& aEvt ) override;
+
 public:
     HTML_MESSAGE_BOX( wxWindow* aParent, const wxString& aTitle = wxEmptyString,
                       const wxPoint& aPosition = wxDefaultPosition,

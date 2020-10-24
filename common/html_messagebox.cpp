@@ -127,3 +127,16 @@ void HTML_MESSAGE_BOX::ShowModeless()
 
     Show( true );
 }
+
+
+void HTML_MESSAGE_BOX::OnCharHook( wxKeyEvent& aEvent )
+{
+    // shift-return (Mac default) or Ctrl-Return (GTK) for OK
+    if( aEvent.GetKeyCode() == WXK_ESCAPE )
+    {
+        wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+        return;
+    }
+
+    aEvent.Skip();
+}

@@ -94,7 +94,8 @@ class DIALOG_SHIM : public wxDialog, public KIWAY_HOLDER
      */
     void OnButton( wxCommandEvent& aEvent );
 
-    void OnCharHook( wxKeyEvent& aEvt );
+protected:
+    virtual void OnCharHook( wxKeyEvent& aEvt );
 
 public:
 
