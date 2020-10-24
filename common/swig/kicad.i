@@ -82,6 +82,7 @@ principle should be easily implemented by adapting the current STL containers.
 %{
     #include <outline_mode.h>
     #include <macros_swig.h>
+    #include <kiid.h>
     #include <cstddef>
     #include <eda_item.h>
     #include <eda_rect.h>
@@ -110,6 +111,7 @@ principle should be easily implemented by adapting the current STL containers.
 // header files that must be wrapped
 %include <outline_mode.h>
 %include macros_swig.h
+%include kiid.h
 %include core/typeinfo.h
 %include eda_item.h
 %include eda_rect.h

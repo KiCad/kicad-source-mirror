@@ -29,7 +29,7 @@
 #ifndef CLASS_NETINFO_
 #define CLASS_NETINFO_
 
-#include <macros.h>
+#include <macros_swig.h>
 #include <gr_basic.h>
 #include <netclass.h>
 #include <class_board_item.h>

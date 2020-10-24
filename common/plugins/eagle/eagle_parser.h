@@ -29,6 +29,7 @@
 #define _EAGLE_PARSER_H_
 
 #include <cerrno>
+#include <map>
 #include <unordered_map>
 
 #include <wx/xml/xml.h>

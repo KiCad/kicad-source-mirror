@@ -34,6 +34,7 @@
 #include <wx/filedlg.h>
 
 #include <pgm_base.h>
+#include <common.h>
 #include <confirm.h>
 #include <gestfich.h>
 

@@ -343,6 +343,7 @@ set( COMMON_SRCS
     hotkeys_basic.cpp
     html_messagebox.cpp
     kiface_i.cpp
+    kiid.cpp
     kiway.cpp
     kiway_express.cpp
     kiway_holder.cpp

@@ -27,6 +27,7 @@
  */
 
 #include <pgm_base.h>
+#include <common.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <settings/common_settings.h>

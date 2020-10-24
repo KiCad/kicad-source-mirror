@@ -54,4 +54,4 @@
 #define DECL_SET_FOR_SWIG(TypeName, MemberType) typedef std::set<MemberType> TypeName;
 #endif
 
-#endif // MACROS2_H
+#endif // MACROS_SWIG_H

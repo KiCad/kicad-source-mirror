@@ -33,6 +33,7 @@
 #include <wx/fdrepdlg.h>
 #include <bitmap_types.h>
 #include <view/view_item.h>
+#include <kiid.h>
 
 
 

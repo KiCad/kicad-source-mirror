@@ -26,12 +26,12 @@
 /**
  * @file project.h
  */
-
+#include <map>
 #include <vector>
+#include <kiid.h>
 #include <wx/string.h>
 #include <wx/filename.h>
 #include <core/typeinfo.h>
-#include <common.h>
 
 /// A variable name whose value holds the current project directory.
 /// Currently an environment variable, eventually a project variable.
