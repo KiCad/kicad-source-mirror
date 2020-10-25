@@ -196,38 +196,7 @@ std::ostream& operator<<( std::ostream& out, const wxSize& size );
  */
 std::ostream& operator<<( std::ostream& out, const wxPoint& pt );
 
-
-/**
- * A wrapper around a wxFileName which is much more performant with a subset of the API.
- */
-class WX_FILENAME
-{
-public:
-    WX_FILENAME( const wxString& aPath, const wxString& aFilename );
-
-    void SetFullName( const wxString& aFileNameAndExtension );
-
-    wxString GetName() const;
-    wxString GetFullName() const;
-    wxString GetPath() const;
-    wxString GetFullPath() const;
-
-    // Avoid multiple calls to stat() on POSIX kernels.
-    long long GetTimestamp();
-
-private:
-    // Write cached values to the wrapped wxFileName.  MUST be called before using m_fn.
-    void resolve();
-
-    wxFileName m_fn;
-    wxString   m_path;
-    wxString   m_fullName;
-};
-
-
 long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec );
-
-
 
 
 #endif  // INCLUDE__COMMON_H_

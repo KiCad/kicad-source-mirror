@@ -29,7 +29,7 @@
 #include <unit_test_utils/unit_test_utils.h>
 
 // Code under test
-#include <common.h>
+#include <wx_filename.h>
 
 /**
  * Declare the test suite

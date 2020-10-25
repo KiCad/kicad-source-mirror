@@ -45,6 +45,7 @@
 #include <boost/ptr_container/ptr_map.hpp>
 #include <convert_basic_shapes_to_polygon.h>    // for enum RECT_CHAMFER_POSITIONS definition
 #include <kiface_i.h>
+#include <wx_filename.h>
 
 using namespace PCB_KEYS_T;
 
