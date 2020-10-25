@@ -22,7 +22,7 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 
 	m_checkHVOrientation = new wxCheckBox( sbSizerEditOpt->GetStaticBox(), wxID_ANY, _("&Restrict buses and wires to H and V orientation"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkHVOrientation->SetValue(true);
-	sbSizerEditOpt->Add( m_checkHVOrientation, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbSizerEditOpt->Add( m_checkHVOrientation, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_mouseDragIsDrag = new wxCheckBox( sbSizerEditOpt->GetStaticBox(), wxID_ANY, _("Mouse drag performs drag (G) operation"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_mouseDragIsDrag->SetToolTip( _("If unchecked, mouse drag will perform move (M) operation") );
@@ -73,7 +73,7 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 	m_cbPinSelectionOpt = new wxCheckBox( sbSizerPinSel->GetStaticBox(), wxID_ANY, _("Clicking on a pin selects the symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbPinSelectionOpt->SetToolTip( _("In schematic editor:\nIf enabled, clicking on a pin select the parent symbol.\nIf disabled, clicking on a pin select only the pin.") );
 
-	sbSizerPinSel->Add( m_cbPinSelectionOpt, 0, wxALL, 5 );
+	sbSizerPinSel->Add( m_cbPinSelectionOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bLeftColumn->Add( sbSizerPinSel, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -88,7 +88,7 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 	sbSizerFieldAutoPlace = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Symbol Field Automatic Placement") ), wxVERTICAL );
 
 	m_checkAutoplaceFields = new wxCheckBox( sbSizerFieldAutoPlace->GetStaticBox(), wxID_ANY, _("A&utomatically place symbol fields"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerFieldAutoPlace->Add( m_checkAutoplaceFields, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbSizerFieldAutoPlace->Add( m_checkAutoplaceFields, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_checkAutoplaceJustify = new wxCheckBox( sbSizerFieldAutoPlace->GetStaticBox(), wxID_ANY, _("A&llow field autoplace to change justification"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerFieldAutoPlace->Add( m_checkAutoplaceJustify, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -152,7 +152,7 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 	sbSizer6 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Dialog Preferences") ), wxVERTICAL );
 
 	m_footprintPreview = new wxCheckBox( sbSizer6->GetStaticBox(), wxID_ANY, _("Show footprint previews in Symbol Chooser"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer6->Add( m_footprintPreview, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	sbSizer6->Add( m_footprintPreview, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_navigatorStaysOpen = new wxCheckBox( sbSizer6->GetStaticBox(), wxID_ANY, _("Keep hierarchy navigator open"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_navigatorStaysOpen->SetValue(true);

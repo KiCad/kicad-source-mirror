@@ -77,7 +77,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
+                                    <property name="flag">wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxCheckBox" expanded="0">
                                         <property name="BottomDockable">1</property>
@@ -554,7 +554,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALL</property>
+                                    <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxCheckBox" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -643,7 +643,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
+                                    <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxCheckBox" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -1386,7 +1386,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                    <property name="flag">wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxCheckBox" expanded="1">
                                         <property name="BottomDockable">1</property>
