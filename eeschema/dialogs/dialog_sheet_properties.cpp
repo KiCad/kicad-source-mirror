@@ -167,9 +167,14 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
     wxString nextPageNumber;
 
     if( m_sheet->IsNew() )
+    {
         nextPageNumber.Printf( "%d", static_cast<int>( hierarchy.size() ) + 1 );
+    }
     else
+    {
+        instance.push_back( m_sheet );
         nextPageNumber = m_sheet->GetPageNumber( instance );
+    }
 
     m_pageNumberTextCtrl->ChangeValue( nextPageNumber );
 
@@ -331,11 +336,10 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     SCH_SHEET_LIST hierarchy = m_frame->Schematic().GetFullHierarchy();
     SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
 
+    instance.push_back( m_sheet );
+
     if( m_sheet->IsNew() )
-    {
-        instance.push_back( m_sheet );
         m_sheet->AddInstance( instance.Path() );
-    }
 
     m_sheet->SetPageNumber( instance, m_pageNumberTextCtrl->GetValue() );
 
