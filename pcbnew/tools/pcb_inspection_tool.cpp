@@ -301,7 +301,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
     if( layer == F_SilkS || layer == B_SilkS )
     {
-        r->Report( _( "<h7>Silkscreen clearance resolution for:</h7>" ) );
+        r->Report( "<h7>" + _( "Silkscreen clearance resolution for:" ) + "</h7>" );
 
         r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
                                      _( "Layer" ),
@@ -325,7 +325,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     }
     else
     {
-        r->Report( _( "<h7>Clearance resolution for:</h7>" ) );
+        r->Report( "<h7>" + _( "Clearance resolution for:" ) + "</h7>" );
 
         r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
                                      _( "Layer" ),
@@ -401,11 +401,20 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         compileError = true;
     }
 
+    for( ZONE_CONTAINER* zone : m_frame->GetBoard()->Zones() )
+        zone->CacheBoundingBox();
+
+    for( MODULE* module : m_frame->GetBoard()->Modules() )
+    {
+        for( ZONE_CONTAINER* zone : module->Zones() )
+            zone->CacheBoundingBox();
+    }
+
     if( item->Type() == PCB_TRACE_T )
     {
-        WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( "Track Width" );
+        WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( _( "Track Width" ) );
 
-        r->Report( _( "<h7>Track width resolution for:</h7>" ) );
+        r->Report( "<h7>" + _( "Track width resolution for:" ) + "</h7>" );
         r->Report( "<ul><li>" + item->GetSelectMenuText( r->GetUnits() ) + "</li></ul>" );
         r->Report( "" );
 
@@ -440,9 +449,9 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
     if( item->Type() == PCB_VIA_T )
     {
-        WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( "Via Diameter" );
+        WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( _( "Via Diameter" ) );
 
-        r->Report( _( "<h7>Via diameter resolution for:</h7>" ) );
+        r->Report( "<h7>" + _( "Via diameter resolution for:" ) + "</h7>" );
         r->Report( "<ul><li>" + item->GetSelectMenuText( r->GetUnits() ) + "</li></ul>" );
         r->Report( "" );
 
@@ -474,9 +483,9 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
         r->Flush();
 
-        r = m_inspectConstraintsDialog->AddPage( "Via Annular Width" );
+        r = m_inspectConstraintsDialog->AddPage( _( "Via Annular Width" ) );
 
-        r->Report( _( "<h7>Via annular width resolution for:</h7>" ) );
+        r->Report( "<h7>" + _( "Via annular width resolution for:" ) + "</h7>" );
         r->Report( "<ul><li>" + item->GetSelectMenuText( r->GetUnits() ) + "</li></ul>" );
         r->Report( "" );
 
@@ -512,9 +521,9 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     if( ( item->Type() == PCB_PAD_T && static_cast<D_PAD*>( item )->GetDrillSize().x > 0 )
             || item->Type() == PCB_VIA_T )
     {
-        WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( "Hole Size" );
+        WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( _( "Hole Size" ) );
 
-        r->Report( _( "<h7>Hole diameter resolution for:</h7>" ) );
+        r->Report( "<h7>" + _( "Hole diameter resolution for:" ) + "</h7>" );
         r->Report( "<ul><li>" + item->GetSelectMenuText( r->GetUnits() ) + "</li></ul>" );
         r->Report( "" );
 
@@ -540,6 +549,33 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
         r->Flush();
     }
+
+    WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( _( "Keepouts" ) );
+
+    r->Report( "<h7>" + _( "Keepout resolution for:" ) + "</h7>" );
+    r->Report( "<ul><li>" + item->GetSelectMenuText( r->GetUnits() ) + "</li></ul>" );
+    r->Report( "" );
+
+    if( compileError )
+    {
+        r->Report( "" );
+        r->Report( _( "Report incomplete: could not compile design rules.  " )
+                   + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
+    }
+    else
+    {
+        auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_DISALLOW, item,
+                                                       nullptr, UNDEFINED_LAYER, r );
+
+        r->Report( "" );
+
+        if( constraint.m_DisallowFlags )
+            r->Report( _( "Item disallowed at current location." ) );
+        else
+            r->Report( _( "Item allowed at current location." ) );
+    }
+
+    r->Flush();
 
     m_inspectConstraintsDialog->FinishInitialization();
     m_inspectConstraintsDialog->Raise();
