@@ -53,7 +53,7 @@
 #include <footprint_wizard_frame.h>
 #include <footprint_preview_panel.h>
 #include <footprint_info_impl.h>
-#include <dialog_configure_paths.h>
+#include <dialogs/dialog_configure_paths.h>
 #include "invoke_pcb_dialog.h"
 #include "dialog_global_fp_lib_table_config.h"
 

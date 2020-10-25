@@ -20,7 +20,7 @@
 #include <wx/statline.h>
 #include <wx/button.h>
 
-#include "dialog_edit_library_tables.h"
+#include <dialogs/dialog_edit_library_tables.h>
 
 
 DIALOG_EDIT_LIBRARY_TABLES::DIALOG_EDIT_LIBRARY_TABLES( wxWindow* aParent,

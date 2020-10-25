@@ -21,7 +21,7 @@
 #ifndef PANEL_SYM_LIB_TABLE_H
 #define PANEL_SYM_LIB_TABLE_H
 
-#include <dialog_edit_library_tables.h>
+#include <dialogs/dialog_edit_library_tables.h>
 #include <panel_sym_lib_table_base.h>
 
 class SYMBOL_LIB_TABLE;

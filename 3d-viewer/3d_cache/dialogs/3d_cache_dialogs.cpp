@@ -22,10 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <dialogs/dialog_configure_paths.h>
+
 #include "3d_info.h"
 #include "3d_cache.h"
 #include "3d_cache_dialogs.h"
-#include "dialog_configure_paths.h"
 #include "dlg_select_3dmodel.h"
 
 

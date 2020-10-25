@@ -51,7 +51,7 @@
 #include <pgm_base.h>
 #include <pcb_edit_frame.h>
 #include <env_paths.h>
-#include <dialog_edit_library_tables.h>
+#include <dialogs/dialog_edit_library_tables.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_edit_frame.h>
 #include <kiway.h>

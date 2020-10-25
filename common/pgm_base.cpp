@@ -43,7 +43,7 @@
 #include <build_version.h>
 #include <config_params.h>
 #include <confirm.h>
-#include <dialog_configure_paths.h>
+#include <dialogs/dialog_configure_paths.h>
 #include <eda_base_frame.h>
 #include <eda_draw_frame.h>
 #include <gal/gal_display_options.h>

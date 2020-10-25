@@ -20,7 +20,6 @@
 #ifndef PANEL_FP_LIB_TABLE_H
 #define PANEL_FP_LIB_TABLE_H
 
-#include <dialog_edit_library_tables.h>
 #include <panel_fp_lib_table_base.h>
 #include <widgets/wx_grid.h>
 

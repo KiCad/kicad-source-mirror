@@ -37,7 +37,7 @@
 #include <project.h>
 #include <kiface_i.h>
 #include <kicad_curl/kicad_curl_easy.h>
-#include <dialog_configure_paths.h>
+#include <dialogs/dialog_configure_paths.h>
 #include <eda_doc.h>
 
 #define URL_GET_INVOLVED "http://kicad-pcb.org/contribute/"

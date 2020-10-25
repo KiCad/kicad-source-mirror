@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_configure_paths.h>
+#include <dialogs/dialog_configure_paths.h>
 
 #include <confirm.h>
 #include <menus_helpers.h>

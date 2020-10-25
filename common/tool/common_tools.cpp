@@ -27,7 +27,7 @@
 #include <base_units.h>
 #include <bitmaps.h>
 #include <class_draw_panel_gal.h>
-#include <dialog_configure_paths.h>
+#include <dialogs/dialog_configure_paths.h>
 #include <eda_draw_frame.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <id.h>
