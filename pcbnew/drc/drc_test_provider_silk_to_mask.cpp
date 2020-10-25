@@ -166,8 +166,8 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
                 return true;
             };
 
-    int numMask = forEachGeometryItem( {}, LSET( 2, F_Mask, B_Mask ), addMaskToTree );
-    int numSilk = forEachGeometryItem( {}, LSET( 2, F_SilkS, B_SilkS ), addSilkToTree );
+    int numMask = forEachGeometryItem( s_allBasicItems, LSET( 2, F_Mask, B_Mask ), addMaskToTree );
+    int numSilk = forEachGeometryItem( s_allBasicItems, LSET( 2, F_SilkS, B_SilkS ), addSilkToTree );
 
     reportAux( _("Testing %d mask apertures against %d silkscreen features."), numMask, numSilk );
 
