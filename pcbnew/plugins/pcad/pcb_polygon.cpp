@@ -40,7 +40,12 @@ PCB_POLYGON::PCB_POLYGON( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLay
     PCB_COMPONENT( aCallbacks, aBoard )
 {
     m_width      = 0;
-    m_priority   = 0;
+
+    // P-CAD polygons are similar to zones (and we're going to convert them as such), except
+    // that they don't avoid other copper pours.  So effectively they're very-high-priority
+    // zones.
+    m_priority   = 100000;
+
     m_objType    = wxT( 'Z' );
     m_PCadLayer  = aPCadLayer;
     m_KiCadLayer = GetKiCadLayer();
