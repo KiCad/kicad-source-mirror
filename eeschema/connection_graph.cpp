@@ -203,8 +203,15 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
                               static_cast<SCH_PIN*>( candidates[0] )->GetTransformedPosition() :
                               candidates[0]->GetPosition();
 
+            wxString msg = wxString::Format( _( "Both %s and %s are attached to the same "
+                                                "items; %s will be used in the netlist" ),
+                                             first,
+                                             GetNameForDriver( second_item ),
+                                             first );
+
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DRIVER_CONFLICT );
             ercItem->SetItems( candidates[0], second_item );
+            ercItem->SetErrorMessage( msg );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
             m_sheet.LastScreen()->Append( marker );
