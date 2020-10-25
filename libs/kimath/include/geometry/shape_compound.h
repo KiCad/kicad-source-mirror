@@ -75,7 +75,20 @@ public:
 
     void AddShape( SHAPE* aShape )
     {
-        m_shapes.push_back( aShape );
+        // Don't make clients deal with nested SHAPE_COMPOUNDs
+        if( aShape->HasIndexableSubshapes() )
+        {
+            std::vector<SHAPE*> subshapes;
+            aShape->GetIndexableSubshapes( subshapes );
+
+            for( SHAPE* subshape : subshapes )
+                m_shapes.push_back( subshape );
+        }
+        else
+        {
+            m_shapes.push_back( aShape );
+        }
+
         m_dirty = true;
     }
 
