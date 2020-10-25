@@ -29,7 +29,9 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 
 	sbSizerEditOpt->Add( m_mouseDragIsDrag, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
-	m_cbAutoStartWires = new wxCheckBox( sbSizerEditOpt->GetStaticBox(), wxID_ANY, _("Automatically start wires on junctions and unused anchors"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbAutoStartWires = new wxCheckBox( sbSizerEditOpt->GetStaticBox(), wxID_ANY, _("Automatically start wires on unconnected pins"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbAutoStartWires->SetToolTip( _("When enabled, you can start wiring by clicking on unconnected pins even when the wire tool is not active") );
+
 	sbSizerEditOpt->Add( m_cbAutoStartWires, 0, wxALL, 5 );
 
 
