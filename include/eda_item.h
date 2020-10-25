@@ -120,7 +120,7 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 #define TRACK_LOCKED   (1 << 18)   ///< Pcbnew: track locked: protected from global deletion
 #define TRACK_AR       (1 << 19)   ///< Pcbnew: autorouted track
 #define OBSOLETE_1     (1 << 20)   ///< Not presently used
-#define OBSOLETE_2     (1 << 21)   ///< Not presently used
+#define MALFORMED_COURTYARD (1 << 21)
 #define BEGIN_ONPAD    (1 << 22)   ///< Pcbnew: flag set for track segment starting on a pad
 #define END_ONPAD      (1 << 23)   ///< Pcbnew: flag set for track segment ending on a pad
 #define HOLE_PROXY     (1 << 24)   ///< Indicates the BOARD_ITEM is a proxy for its hole

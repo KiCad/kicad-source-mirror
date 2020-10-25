@@ -336,13 +336,11 @@ void AR_AUTOPLACER::buildFpAreas( MODULE* aFootprint, int aFpClearance )
     m_fpAreaTop.RemoveAllContours();
     m_fpAreaBottom.RemoveAllContours();
 
-    if( aFootprint->BuildPolyCourtyard() )
-    {
-        m_fpAreaTop = aFootprint->GetPolyCourtyardFront();
-        m_fpAreaBottom = aFootprint->GetPolyCourtyardBack();
-    }
+    aFootprint->BuildPolyCourtyards();
+    m_fpAreaTop = aFootprint->GetPolyCourtyardFront();
+    m_fpAreaBottom = aFootprint->GetPolyCourtyardBack();
 
-    LSET        layerMask;
+    LSET layerMask;
 
     if( aFootprint->GetLayer() == F_Cu )
         layerMask.set( F_Cu );
@@ -350,7 +348,7 @@ void AR_AUTOPLACER::buildFpAreas( MODULE* aFootprint, int aFpClearance )
     if( aFootprint->GetLayer() == B_Cu )
         layerMask.set( B_Cu );
 
-    EDA_RECT    fpBBox = aFootprint->GetBoundingBox();
+    EDA_RECT fpBBox = aFootprint->GetBoundingBox();
 
     fpBBox.Inflate( ( m_matrix.m_GridRouting / 2 ) + aFpClearance );
 

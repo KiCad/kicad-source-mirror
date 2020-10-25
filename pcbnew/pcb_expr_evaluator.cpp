@@ -213,18 +213,97 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
     PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
-    ZONE_CONTAINER*   zone = nullptr;
 
     if( !item )
         return;
 
+    auto insideZone =
+            [&]( ZONE_CONTAINER* zone ) -> bool
+            {
+                if( !zone )
+                    return false;
+
+                if( !zone->GetCachedBoundingBox().Intersects( item->GetBoundingBox() ) )
+                    return false;
+
+                if( item->GetFlags() & HOLE_PROXY )
+                {
+                    if( item->Type() == PCB_PAD_T )
+                    {
+                        D_PAD*               pad = static_cast<D_PAD*>( item );
+                        const SHAPE_SEGMENT* holeShape = pad->GetEffectiveHoleShape();
+
+                        return zone->Outline()->Collide( holeShape );
+                    }
+                    else if( item->Type() == PCB_VIA_T )
+                    {
+                        VIA*               via = static_cast<VIA*>( item );
+                        const SHAPE_CIRCLE holeShape( via->GetPosition(), via->GetDrillValue() );
+
+                        return zone->Outline()->Collide( &holeShape );
+                    }
+
+                    return false;
+                }
+
+                if( item->Type() == PCB_MODULE_T )
+                {
+                    MODULE* footprint = static_cast<MODULE*>( item );
+
+                    if( ( footprint->GetFlags() & MALFORMED_COURTYARD ) != 0 )
+                    {
+                        aCtx->ReportError( _( "Footprint's courtyard is not a single, closed shape." ) );
+                        return false;
+                    }
+
+                    if( ( zone->GetLayerSet() & LSET::FrontMask() ).any() )
+                    {
+                        SHAPE_POLY_SET courtyard = footprint->GetPolyCourtyardFront();
+
+                        if( courtyard.OutlineCount() == 0 )
+                        {
+                            aCtx->ReportError( _( "Footprint has no front courtyard." ) );
+                            return false;
+                        }
+                        else
+                        {
+                            return zone->Outline()->Collide( &courtyard.Outline( 0 ) );
+                        }
+                    }
+
+                    if( ( zone->GetLayerSet() & LSET::BackMask() ).any() )
+                    {
+                        SHAPE_POLY_SET courtyard = footprint->GetPolyCourtyardBack();
+
+                        if( courtyard.OutlineCount() == 0 )
+                        {
+                            aCtx->ReportError( _( "Footprint has no back courtyard." ) );
+                            return false;
+                        }
+                        else
+                        {
+                            return zone->Outline()->Collide( &courtyard.Outline( 0 ) );
+                        }
+                    }
+
+                    return false;
+                }
+
+
+                std::shared_ptr<SHAPE> shape = item->GetEffectiveShape( context->GetLayer() );
+
+                return zone->Outline()->Collide( shape.get() );
+            };
+
     if( arg->AsString() == "A" )
     {
-        zone = dynamic_cast<ZONE_CONTAINER*>( context->GetItem( 0 ) );
+        if( insideZone( dynamic_cast<ZONE_CONTAINER*>( context->GetItem( 0 ) ) ) )
+            result->Set( 1.0 );
     }
     else if( arg->AsString() == "B" )
     {
-        zone = dynamic_cast<ZONE_CONTAINER*>( context->GetItem( 1 ) );
+        if( insideZone( dynamic_cast<ZONE_CONTAINER*>( context->GetItem( 1 ) ) ) )
+            result->Set( 1.0 );
     }
     else
     {
@@ -232,42 +311,12 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
         {
             if( candidate->GetZoneName().Matches( arg->AsString() ) )
             {
-                zone = candidate;
-                break;
-            }
-        }
-    }
-
-    if( zone )
-    {
-        if( !zone->GetCachedBoundingBox().Intersects( item->GetBoundingBox() ) )
-            return;
-
-        if( item->GetFlags() & HOLE_PROXY )
-        {
-            if( item->Type() == PCB_PAD_T )
-            {
-                D_PAD*               pad = static_cast<D_PAD*>( item );
-                const SHAPE_SEGMENT* holeShape = pad->GetEffectiveHoleShape();
-
-                if( zone->Outline()->Collide( holeShape ) )
+                if( insideZone( candidate ) )
+                {
                     result->Set( 1.0 );
+                    return;
+                }
             }
-            else if( item->Type() == PCB_VIA_T )
-            {
-                VIA*               via = static_cast<VIA*>( item );
-                const SHAPE_CIRCLE holeShape( via->GetPosition(), via->GetDrillValue() );
-
-                if( zone->Outline()->Collide( &holeShape ) )
-                    result->Set( 1.0 );
-            }
-        }
-        else
-        {
-            std::shared_ptr<SHAPE> itemShape = item->GetEffectiveShape( context->GetLayer() );
-
-            if( zone->Outline()->Collide( itemShape.get() ) )
-                result->Set( 1.0 );
         }
     }
 }

@@ -270,12 +270,20 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
             {
                 if( (zone->GetLayerSet() & aLayers).any() )
                 {
-                    if( ! aFunc( zone ) )
+                    if( !aFunc( zone ) )
                         return n;
 
                     n++;
                 }
             }
+        }
+
+        if( typeMask[ PCB_MODULE_T ] )
+        {
+            if( !aFunc( mod ) )
+                return n;
+
+            n++;
         }
     }
 

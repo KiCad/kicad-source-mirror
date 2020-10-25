@@ -662,6 +662,8 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aTestTracksAgainstZones,
     {
         for( ZONE_CONTAINER* zone : module->Zones() )
             zone->CacheBoundingBox();
+
+        module->BuildPolyCourtyards();
     }
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )

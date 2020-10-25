@@ -177,7 +177,9 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
         // If not, the pads bounding box will be used.
         bool useFpPadsBbox = true;
 
-        if( footprint->BuildPolyCourtyard() )
+        footprint->BuildPolyCourtyards();
+
+        if( ( footprint->GetFlags() & MALFORMED_COURTYARD ) == 0 )
         {
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_COURTYARD );
 

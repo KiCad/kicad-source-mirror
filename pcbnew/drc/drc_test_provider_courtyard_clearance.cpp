@@ -88,25 +88,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
         if( !reportProgress( ii++, m_board->Modules().size(), delta ) )
             return;
 
-        if( footprint->BuildPolyCourtyard() )
-        {
-            if( footprint->GetPolyCourtyardFront().OutlineCount() == 0
-                && footprint->GetPolyCourtyardBack().OutlineCount() == 0 )
-            {
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_COURTYARD ) )
-                    continue;
-
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_COURTYARD );
-                drcItem->SetItems( footprint );
-                reportViolation( drcItem, footprint->GetPosition());
-            }
-            else
-            {
-                footprint->GetPolyCourtyardFront().BuildBBoxCaches();
-                footprint->GetPolyCourtyardBack().BuildBBoxCaches();
-            }
-        }
-        else
+        if( ( footprint->GetFlags() & MALFORMED_COURTYARD ) != 0 )
         {
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_MALFORMED_COURTYARD) )
                 continue;
@@ -118,6 +100,21 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
             drcItem->SetErrorMessage( m_msg );
             drcItem->SetItems( footprint );
             reportViolation( drcItem, footprint->GetPosition());
+        }
+        else if( footprint->GetPolyCourtyardFront().OutlineCount() == 0
+                && footprint->GetPolyCourtyardBack().OutlineCount() == 0 )
+        {
+            if( m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_COURTYARD ) )
+                continue;
+
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_COURTYARD );
+            drcItem->SetItems( footprint );
+            reportViolation( drcItem, footprint->GetPosition());
+        }
+        else
+        {
+            footprint->GetPolyCourtyardFront().BuildBBoxCaches();
+            footprint->GetPolyCourtyardBack().BuildBBoxCaches();
         }
     }
 }

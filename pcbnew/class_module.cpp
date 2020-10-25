@@ -1676,10 +1676,12 @@ std::shared_ptr<SHAPE> MODULE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 }
 
 
-bool MODULE::BuildPolyCourtyard()
+void MODULE::BuildPolyCourtyards()
 {
     m_poly_courtyard_front.RemoveAllContours();
     m_poly_courtyard_back.RemoveAllContours();
+    ClearFlags( MALFORMED_COURTYARD );
+
     // Build the courtyard area from graphic items on the courtyard.
     // Only PCB_FP_SHAPE_T have meaning, graphic texts are ignored.
     // Collect items:
@@ -1695,22 +1697,22 @@ bool MODULE::BuildPolyCourtyard()
             list_front.push_back( static_cast<PCB_SHAPE*>( item ) );
     }
 
-    // Note: if no item found on courtyard layers, return true.
-    // false is returned only when the shape defined on courtyard layers
-    // is not convertible to a polygon
     if( !list_front.size() && !list_back.size() )
-        return true;
+        return;
 
     wxString error_msg;
 
     #define ARC_ERROR_MAX 0.02      /* error max in mm to approximate a arc by segments */
-    bool success = ConvertOutlineToPolygon( list_front, m_poly_courtyard_front,
-                                            (unsigned) Millimeter2iu( ARC_ERROR_MAX ), &error_msg );
-
-    if( success )
+    if( !ConvertOutlineToPolygon( list_front, m_poly_courtyard_front,
+                                  (unsigned) Millimeter2iu( ARC_ERROR_MAX ), &error_msg ) )
     {
-        success = ConvertOutlineToPolygon( list_back, m_poly_courtyard_back,
-                                           (unsigned) Millimeter2iu( ARC_ERROR_MAX ), &error_msg );
+        SetFlags( MALFORMED_COURTYARD );
+    }
+
+    if( !ConvertOutlineToPolygon( list_back, m_poly_courtyard_back,
+                                  (unsigned) Millimeter2iu( ARC_ERROR_MAX ), &error_msg ) )
+    {
+        SetFlags( MALFORMED_COURTYARD );
     }
 
     if( !error_msg.IsEmpty() )
@@ -1719,8 +1721,6 @@ bool MODULE::BuildPolyCourtyard()
                                         GetFPID().Format().wx_str(),
                                         error_msg ) );
     }
-
-    return success;
 }
 
 

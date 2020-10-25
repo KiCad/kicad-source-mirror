@@ -668,11 +668,11 @@ public:
     SHAPE_POLY_SET& GetPolyCourtyardBack() { return m_poly_courtyard_back; }
 
     /**
-     * Builds a complex polygon of the courtyard area from graphic items on the courtyard layer
-     * @return true if OK, or no courtyard defined,
-     *         false only if the polygon cannot be built due to a malformed courtyard shape
+     * Builds complex polygons of the courtyard areas from graphic items on the courtyard layers
+     * @remark sets the MALFORMED_FRONT_COURTYARD and MALFORMED_BACK_COURTYARD status flags if
+     *         the given courtyard layer does not contain a (single) closed shape
      */
-    bool BuildPolyCourtyard();
+    void BuildPolyCourtyards();
 
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 

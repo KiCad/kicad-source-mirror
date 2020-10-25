@@ -408,6 +408,8 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     {
         for( ZONE_CONTAINER* zone : module->Zones() )
             zone->CacheBoundingBox();
+
+        module->BuildPolyCourtyards();
     }
 
     if( item->Type() == PCB_TRACE_T )
@@ -570,7 +572,7 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         r->Report( "" );
 
         if( constraint.m_DisallowFlags )
-            r->Report( _( "Item disallowed at current location." ) );
+            r->Report( _( "Item <b>disallowed</b> at current location." ) );
         else
             r->Report( _( "Item allowed at current location." ) );
     }
