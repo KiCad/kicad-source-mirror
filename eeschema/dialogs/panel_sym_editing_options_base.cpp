@@ -5,11 +5,11 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "panel_libedit_settings_base.h"
+#include "panel_sym_editing_options_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_LIBEDIT_SETTINGS_BASE::PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* p1mainSizer;
 	p1mainSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -172,6 +172,6 @@ PANEL_LIBEDIT_SETTINGS_BASE::PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 	p1mainSizer->Fit( this );
 }
 
-PANEL_LIBEDIT_SETTINGS_BASE::~PANEL_LIBEDIT_SETTINGS_BASE()
+PANEL_SYM_EDITING_OPTIONS_BASE::~PANEL_SYM_EDITING_OPTIONS_BASE()
 {
 }

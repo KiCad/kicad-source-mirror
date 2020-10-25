@@ -25,10 +25,10 @@
 #include <confirm.h>
 #include <dialogs/panel_eeschema_color_settings.h>
 #include <dialogs/panel_eeschema_display_options.h>
-#include <dialogs/panel_eeschema_settings.h>
+#include <dialogs/panel_eeschema_editing_options.h>
 #include <dialogs/panel_eeschema_template_fieldnames.h>
-#include <dialogs/panel_libedit_color_settings.h>
-#include <dialogs/panel_libedit_settings.h>
+#include <dialogs/panel_sym_color_settings.h>
+#include <dialogs/panel_sym_editing_options.h>
 #include <dialogs/dialog_schematic_setup.h>
 #include <eeschema_config.h>
 #include <erc_settings.h>
@@ -222,7 +222,7 @@ void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 
     book->AddPage( new wxPanel( book ), _( "Eeschema" ) );
     book->AddSubPage( new PANEL_EESCHEMA_DISPLAY_OPTIONS( this, book ), _( "Display Options" ) );
-    book->AddSubPage( new PANEL_EESCHEMA_SETTINGS( this, book ), _( "Editing Options" ) );
+    book->AddSubPage( new PANEL_EESCHEMA_EDITING_OPTIONS( this, book ), _( "Editing Options" ) );
     book->AddSubPage( new PANEL_EESCHEMA_COLOR_SETTINGS( this, book ), _( "Colors" ) );
     book->AddSubPage( new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( this, book, true ),
                       _( "Field Name Templates" ) );
@@ -393,8 +393,8 @@ void LIB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 
     book->AddPage( new wxPanel( book ), _( "Symbol Editor" ) );
     book->AddSubPage( new PANEL_GAL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
-    book->AddSubPage( new PANEL_LIBEDIT_SETTINGS( this, book ), _( "Editing Options" ) );
-    book->AddSubPage( new PANEL_LIBEDIT_COLOR_SETTINGS( this, book ), _( "Colors" ) );
+    book->AddSubPage( new PANEL_SYM_EDITING_OPTIONS( this, book ), _( "Editing Options" ) );
+    book->AddSubPage( new PANEL_SYM_COLOR_SETTINGS( this, book ), _( "Colors" ) );
 
     aHotkeysPanel->AddHotKeys( GetToolManager() );
 }

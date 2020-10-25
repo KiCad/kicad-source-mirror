@@ -115,16 +115,16 @@ set( EESCHEMA_DLGS
     dialogs/panel_eeschema_template_fieldnames_base.cpp
     dialogs/panel_eeschema_display_options.cpp
     dialogs/panel_eeschema_display_options_base.cpp
-    dialogs/panel_eeschema_settings.cpp
-    dialogs/panel_eeschema_settings_base.cpp
-    dialogs/panel_libedit_settings.cpp
-    dialogs/panel_libedit_settings_base.cpp
-    dialogs/panel_libedit_color_settings.cpp
-    dialogs/panel_libedit_color_settings_base.cpp
+    dialogs/panel_eeschema_editing_options.cpp
+    dialogs/panel_eeschema_editing_options_base.cpp
     dialogs/panel_setup_formatting.cpp
     dialogs/panel_setup_formatting_base.cpp
     dialogs/panel_setup_pinmap.cpp
     dialogs/panel_setup_pinmap_base.cpp
+    dialogs/panel_sym_editing_options.cpp
+    dialogs/panel_sym_editing_options_base.cpp
+    dialogs/panel_sym_color_settings.cpp
+    dialogs/panel_sym_color_settings_base.cpp
     dialogs/panel_sym_lib_table.cpp
     dialogs/panel_sym_lib_table_base.cpp
     )

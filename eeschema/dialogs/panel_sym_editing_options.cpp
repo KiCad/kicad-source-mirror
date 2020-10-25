@@ -28,11 +28,11 @@
 #include <settings/settings_manager.h>
 #include <libedit/libedit_settings.h>
 
-#include "panel_libedit_settings.h"
+#include "panel_sym_editing_options.h"
 
 
-PANEL_LIBEDIT_SETTINGS::PANEL_LIBEDIT_SETTINGS( LIB_EDIT_FRAME* aFrame, wxWindow* aWindow ) :
-        PANEL_LIBEDIT_SETTINGS_BASE( aWindow ),
+PANEL_SYM_EDITING_OPTIONS::PANEL_SYM_EDITING_OPTIONS( LIB_EDIT_FRAME* aFrame, wxWindow* aWindow ) :
+        PANEL_SYM_EDITING_OPTIONS_BASE( aWindow ),
         m_frame( aFrame ),
         m_lineWidth( aFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
         m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
@@ -44,7 +44,7 @@ PANEL_LIBEDIT_SETTINGS::PANEL_LIBEDIT_SETTINGS( LIB_EDIT_FRAME* aFrame, wxWindow
 {}
 
 
-bool PANEL_LIBEDIT_SETTINGS::TransferDataToWindow()
+bool PANEL_SYM_EDITING_OPTIONS::TransferDataToWindow()
 {
     LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
 
@@ -64,7 +64,7 @@ bool PANEL_LIBEDIT_SETTINGS::TransferDataToWindow()
 }
 
 
-bool PANEL_LIBEDIT_SETTINGS::TransferDataFromWindow()
+bool PANEL_SYM_EDITING_OPTIONS::TransferDataFromWindow()
 {
     LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
 

@@ -17,24 +17,31 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_PANEL_EESCHEMA_SETTINGS_H
-#define KICAD_PANEL_EESCHEMA_SETTINGS_H
+#ifndef PANEL_SYM_EDITING_OPTIONS_H
+#define PANEL_SYM_EDITING_OPTIONS_H
 
 #include <widgets/unit_binder.h>
-#include "panel_eeschema_settings_base.h"
+#include "panel_sym_editing_options_base.h"
 
-class SCH_EDIT_FRAME;
+class LIB_EDIT_FRAME;
 
 
-class PANEL_EESCHEMA_SETTINGS : public PANEL_EESCHEMA_SETTINGS_BASE
+class PANEL_SYM_EDITING_OPTIONS : public PANEL_SYM_EDITING_OPTIONS_BASE
 {
-    SCH_EDIT_FRAME* m_frame;
+    LIB_EDIT_FRAME* m_frame;
+
+    UNIT_BINDER     m_lineWidth;
+    UNIT_BINDER     m_textSize;
+
+    UNIT_BINDER     m_pinLength;
+    UNIT_BINDER     m_pinNameSize;
+    UNIT_BINDER     m_pinNumberSize;
 
     UNIT_BINDER     m_hPitch;
     UNIT_BINDER     m_vPitch;
 
 public:
-    PANEL_EESCHEMA_SETTINGS( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow );
+    PANEL_SYM_EDITING_OPTIONS( LIB_EDIT_FRAME* aFrame, wxWindow* aWindow );
 
 private:
     bool TransferDataToWindow() override;
@@ -42,4 +49,4 @@ private:
 };
 
 
-#endif //KICAD_PANEL_EESCHEMA_SETTINGS_H
+#endif //PANEL_SYM_EDITING_OPTIONS_H

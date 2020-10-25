@@ -5,15 +5,15 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "panel_libedit_color_settings_base.h"
+#include "panel_sym_color_settings_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( PANEL_LIBEDIT_COLOR_SETTINGS_BASE, wxPanel )
-	EVT_CHECKBOX( wxID_ANY, PANEL_LIBEDIT_COLOR_SETTINGS_BASE::_wxFB_OnUseEeschemaThemeChanged )
+BEGIN_EVENT_TABLE( PANEL_SYM_COLOR_SETTINGS_BASE, wxPanel )
+	EVT_CHECKBOX( wxID_ANY, PANEL_SYM_COLOR_SETTINGS_BASE::_wxFB_OnUseEeschemaThemeChanged )
 END_EVENT_TABLE()
 
-PANEL_LIBEDIT_COLOR_SETTINGS_BASE::PANEL_LIBEDIT_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_SYM_COLOR_SETTINGS_BASE::PANEL_SYM_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* p1mainSizer;
 	p1mainSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -51,6 +51,6 @@ PANEL_LIBEDIT_COLOR_SETTINGS_BASE::PANEL_LIBEDIT_COLOR_SETTINGS_BASE( wxWindow* 
 	p1mainSizer->Fit( this );
 }
 
-PANEL_LIBEDIT_COLOR_SETTINGS_BASE::~PANEL_LIBEDIT_COLOR_SETTINGS_BASE()
+PANEL_SYM_COLOR_SETTINGS_BASE::~PANEL_SYM_COLOR_SETTINGS_BASE()
 {
 }

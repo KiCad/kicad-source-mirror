@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,18 +28,19 @@
 #include <painter.h>
 #include <pgm_base.h>
 #include <eeschema_settings.h>
-#include "panel_eeschema_settings.h"
+#include "panel_eeschema_editing_options.h"
 
 
-PANEL_EESCHEMA_SETTINGS::PANEL_EESCHEMA_SETTINGS( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow ) :
-        PANEL_EESCHEMA_SETTINGS_BASE( aWindow ),
+PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( SCH_EDIT_FRAME* aFrame,
+                                                                wxWindow* aWindow ) :
+        PANEL_EESCHEMA_EDITING_OPTIONS_BASE( aWindow ),
         m_frame( aFrame ),
         m_hPitch( aFrame, m_hPitchLabel, m_hPitchCtrl, m_hPitchUnits, true ),
         m_vPitch( aFrame, m_vPitchLabel, m_vPitchCtrl, m_vPitchUnits, true )
 {}
 
 
-bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
+bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataToWindow()
 {
     EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
 
@@ -73,7 +74,7 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
 }
 
 
-bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
+bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataFromWindow()
 {
     EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
 

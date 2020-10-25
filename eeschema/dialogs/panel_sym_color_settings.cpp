@@ -29,17 +29,17 @@
 #include <settings/settings_manager.h>
 #include <view/view.h>
 
-#include "panel_libedit_color_settings.h"
+#include "panel_sym_color_settings.h"
 
 
-PANEL_LIBEDIT_COLOR_SETTINGS::PANEL_LIBEDIT_COLOR_SETTINGS( LIB_EDIT_FRAME* aFrame,
+PANEL_SYM_COLOR_SETTINGS::PANEL_SYM_COLOR_SETTINGS( LIB_EDIT_FRAME* aFrame,
                                                             wxWindow* aWindow )
-        : PANEL_LIBEDIT_COLOR_SETTINGS_BASE( aWindow ), m_frame( aFrame )
+        : PANEL_SYM_COLOR_SETTINGS_BASE( aWindow ), m_frame( aFrame )
 {
 }
 
 
-bool PANEL_LIBEDIT_COLOR_SETTINGS::TransferDataToWindow()
+bool PANEL_SYM_COLOR_SETTINGS::TransferDataToWindow()
 {
     auto cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
 
@@ -75,7 +75,7 @@ bool PANEL_LIBEDIT_COLOR_SETTINGS::TransferDataToWindow()
 }
 
 
-bool PANEL_LIBEDIT_COLOR_SETTINGS::TransferDataFromWindow()
+bool PANEL_SYM_COLOR_SETTINGS::TransferDataFromWindow()
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
@@ -102,7 +102,7 @@ bool PANEL_LIBEDIT_COLOR_SETTINGS::TransferDataFromWindow()
 }
 
 
-void PANEL_LIBEDIT_COLOR_SETTINGS::OnUseEeschemaThemeChanged( wxCommandEvent& event )
+void PANEL_SYM_COLOR_SETTINGS::OnUseEeschemaThemeChanged( wxCommandEvent& event )
 {
     bool useEeschema = m_useEeschemaTheme->GetValue();
 

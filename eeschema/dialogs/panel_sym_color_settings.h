@@ -21,20 +21,20 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#ifndef PANEL_LIBEDIT_COLOR_SETTINGS_H
-#define PANEL_LIBEDIT_COLOR_SETTINGS_H
+#ifndef PANEL_SYM_COLOR_SETTINGS_H
+#define PANEL_SYM_COLOR_SETTINGS_H
 
-#include "panel_libedit_color_settings_base.h"
+#include "panel_sym_color_settings_base.h"
 
 class LIB_EDIT_FRAME;
 
 
-class PANEL_LIBEDIT_COLOR_SETTINGS : public PANEL_LIBEDIT_COLOR_SETTINGS_BASE
+class PANEL_SYM_COLOR_SETTINGS : public PANEL_SYM_COLOR_SETTINGS_BASE
 {
     LIB_EDIT_FRAME* m_frame;
 
 public:
-    PANEL_LIBEDIT_COLOR_SETTINGS( LIB_EDIT_FRAME* aFrame, wxWindow* aWindow );
+    PANEL_SYM_COLOR_SETTINGS( LIB_EDIT_FRAME* aFrame, wxWindow* aWindow );
 
 protected:
     void OnUseEeschemaThemeChanged( wxCommandEvent& event ) override;

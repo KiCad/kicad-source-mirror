@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,31 +17,24 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_LIBEDIT_SETTINGS_H
-#define PANEL_LIBEDIT_SETTINGS_H
+#ifndef PANEL_EESCHEMA_EDITING_OPTIONS_H
+#define PANEL_EESCHEMA_EDITING_OPTIONS_H
 
 #include <widgets/unit_binder.h>
-#include "panel_libedit_settings_base.h"
+#include "panel_eeschema_editing_options_base.h"
 
-class LIB_EDIT_FRAME;
+class SCH_EDIT_FRAME;
 
 
-class PANEL_LIBEDIT_SETTINGS : public PANEL_LIBEDIT_SETTINGS_BASE
+class PANEL_EESCHEMA_EDITING_OPTIONS : public PANEL_EESCHEMA_EDITING_OPTIONS_BASE
 {
-    LIB_EDIT_FRAME* m_frame;
-
-    UNIT_BINDER     m_lineWidth;
-    UNIT_BINDER     m_textSize;
-
-    UNIT_BINDER     m_pinLength;
-    UNIT_BINDER     m_pinNameSize;
-    UNIT_BINDER     m_pinNumberSize;
+    SCH_EDIT_FRAME* m_frame;
 
     UNIT_BINDER     m_hPitch;
     UNIT_BINDER     m_vPitch;
 
 public:
-    PANEL_LIBEDIT_SETTINGS( LIB_EDIT_FRAME* aFrame, wxWindow* aWindow );
+    PANEL_EESCHEMA_EDITING_OPTIONS( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow );
 
 private:
     bool TransferDataToWindow() override;
@@ -49,4 +42,4 @@ private:
 };
 
 
-#endif //PANEL_LIBEDIT_SETTINGS_H
+#endif //PANEL_EESCHEMA_EDITING_OPTIONS_H

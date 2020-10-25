@@ -28,9 +28,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_LIBEDIT_SETTINGS_BASE
+/// Class PANEL_SYM_EDITING_OPTIONS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_LIBEDIT_SETTINGS_BASE : public wxPanel
+class PANEL_SYM_EDITING_OPTIONS_BASE : public wxPanel
 {
 	private:
 
@@ -65,8 +65,8 @@ class PANEL_LIBEDIT_SETTINGS_BASE : public wxPanel
 
 	public:
 
-		PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
-		~PANEL_LIBEDIT_SETTINGS_BASE();
+		PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		~PANEL_SYM_EDITING_OPTIONS_BASE();
 
 };
 
