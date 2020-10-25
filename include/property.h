@@ -25,6 +25,8 @@
 #include <wx/any.h>
 #include <wx/string.h>
 #include <wx/bitmap.h>
+#include <wx/font.h>        // required for propgrid
+#include <wx/validate.h>    // required for propgrid
 #include <wx/propgrid/property.h>
 
 #include <functional>
