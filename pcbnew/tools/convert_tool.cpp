@@ -33,6 +33,7 @@
 #include <confirm.h>
 #include <menus_helpers.h>
 #include <pcb_edit_frame.h>
+#include <footprint_edit_frame.h>
 #include <trigo.h>
 #include <tool/tool_manager.h>
 #include <tools/edit_tool.h>
@@ -91,9 +92,16 @@ bool CONVERT_TOOL::Init()
     if( m_frame->IsType( FRAME_PCB_EDITOR ) )
         m_menu->AddItem( PCB_ACTIONS::convertToZone, anyLines );
 
-    m_menu->AddItem( PCB_ACTIONS::convertToKeepout, anyLines );
+    if( m_frame->IsType( FRAME_PCB_EDITOR ) )
+        m_menu->AddItem( PCB_ACTIONS::convertToKeepout, anyLines );
+
     m_menu->AddItem( PCB_ACTIONS::convertToLines, anyPolys );
-    m_menu->AddItem( PCB_ACTIONS::convertToTracks, anyPolys );
+
+    // Currently the code exists, but tracks are not really existing in footprints
+    // only segments on copper layers
+    if( m_frame->IsType( FRAME_PCB_EDITOR ) )
+        m_menu->AddItem( PCB_ACTIONS::convertToTracks, anyPolys );
+
     m_menu->AddItem( PCB_ACTIONS::convertToArc, lineToArc );
 
     for( std::shared_ptr<ACTION_MENU>& subMenu : m_selectionTool->GetToolMenu().GetSubMenus() )
@@ -463,6 +471,12 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
             };
 
     BOARD_COMMIT commit( m_frame );
+    FOOTPRINT_EDIT_FRAME* fpEditor = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame );
+
+    MODULE* footprint = nullptr;
+
+    if( fpEditor )
+        footprint = fpEditor->GetBoard()->GetFirstModule();
 
     for( EDA_ITEM* item : selection )
     {
@@ -474,14 +488,27 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
         {
             for( SEG& seg : segs )
             {
-                PCB_SHAPE* graphic = new PCB_SHAPE;
+                if( fpEditor )
+                {
+                    FP_SHAPE* graphic = new FP_SHAPE( footprint, S_SEGMENT );
 
-                graphic->SetShape( S_SEGMENT );
-                graphic->SetLayer( layer );
-                graphic->SetStart( wxPoint( seg.A ) );
-                graphic->SetEnd( wxPoint( seg.B ) );
+                    graphic->SetLayer( layer );
+                    graphic->SetStart( wxPoint( seg.A ) );
+                    graphic->SetStart0( wxPoint( seg.A ) );
+                    graphic->SetEnd( wxPoint( seg.B ) );
+                    graphic->SetEnd0( wxPoint( seg.B ) );
+                    commit.Add( graphic );
+                }
+                else
+                {
+                    PCB_SHAPE* graphic = new PCB_SHAPE;
 
-                commit.Add( graphic );
+                    graphic->SetShape( S_SEGMENT );
+                    graphic->SetLayer( layer );
+                    graphic->SetStart( wxPoint( seg.A ) );
+                    graphic->SetEnd( wxPoint( seg.B ) );
+                    commit.Add( graphic );
+                }
             }
         }
         else
@@ -492,16 +519,34 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
             if( !IsCopperLayer( layer ) )
                 layer = frame->SelectLayer( F_Cu, LSET::AllNonCuMask() );
 
-            // Creating tracks
-            for( SEG& seg : segs )
+            // I am really unsure converting a polygon to "tracks" (i.e. segments on
+            // copper layers) make sense for footprints, but anyway this code exists
+            if( fpEditor )
             {
-                TRACK* track = new TRACK( parent );
+                // Creating segments on copper layer
+                for( SEG& seg : segs )
+                {
+                    FP_SHAPE* graphic = new FP_SHAPE( footprint, S_SEGMENT );
+                    graphic->SetLayer( layer );
+                    graphic->SetStart( wxPoint( seg.A ) );
+                    graphic->SetStart0( wxPoint( seg.A ) );
+                    graphic->SetEnd( wxPoint( seg.B ) );
+                    graphic->SetEnd0( wxPoint( seg.B ) );
+                    commit.Add( graphic );
+                }
+            }
+            else
+            {
+                // Creating tracks
+                for( SEG& seg : segs )
+                {
+                    TRACK* track = new TRACK( parent );
 
-                track->SetLayer( layer );
-                track->SetStart( wxPoint( seg.A ) );
-                track->SetEnd( wxPoint( seg.B ) );
-
-                commit.Add( track );
+                    track->SetLayer( layer );
+                    track->SetStart( wxPoint( seg.A ) );
+                    track->SetEnd( wxPoint( seg.B ) );
+                    commit.Add( track );
+                }
             }
         }
     }
