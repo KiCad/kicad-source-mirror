@@ -1672,7 +1672,7 @@ bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxStr
         }
 
         menu.AppendSeparator();
-        menu.Add( _( "Select &All\tA" ), limit + 1, net_highlight_xpm );
+        menu.Add( _( "Select &All\tA" ), limit + 1, plus_xpm );
 
         if( !expandSelection && aCollector->HasAdditionalItems() )
             menu.Add( _( "&Expand Selection\tE" ), limit + 2, nullptr );
