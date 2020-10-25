@@ -26,7 +26,7 @@
 #include "bitmap2component.h"
 
 #include "bitmap2cmp_gui_base.h"
-#include <common.h> // for EDA_UNITS
+#include <eda_units.h>
 #include <potracelib.h>
 
 

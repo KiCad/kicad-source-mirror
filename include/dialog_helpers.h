@@ -33,7 +33,7 @@
 
 
 #include <../common/dialogs/eda_list_dialog_base.h>
-#include <common.h> // EDA_UNITS
+#include <eda_units.h>
 
 void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput );
 

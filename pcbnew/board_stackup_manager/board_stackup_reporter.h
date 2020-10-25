@@ -28,7 +28,7 @@
 #ifndef BOARD_STACKUP_REPORTER_H
 #define BOARD_STACKUP_REPORTER_H
 
-#include <common.h> // for EDA_UNITS
+#include <eda_units.h>
 
 class BOARD_STACKUP;
 
