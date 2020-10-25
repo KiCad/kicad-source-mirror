@@ -27,7 +27,7 @@
 #include <plotter.h>
 #include <trigo.h>
 #include <base_units.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <math/util.h>      // for KiROUND
 #include <eda_draw_frame.h>

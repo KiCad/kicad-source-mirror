@@ -29,7 +29,7 @@
 
 #include <pcb_base_frame.h>
 #include <kicad_string.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <base_units.h>
 #include <class_board.h>
 #include <class_track.h>

@@ -24,7 +24,7 @@
 
 #include <sch_draw_panel.h>
 #include <trigo.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <base_units.h>
 #include <erc_settings.h>

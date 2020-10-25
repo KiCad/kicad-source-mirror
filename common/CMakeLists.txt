@@ -225,6 +225,7 @@ set( COMMON_WIDGET_SRCS
     widgets/layer_box_selector.cpp
     widgets/lib_tree.cpp
     widgets/mathplot.cpp
+    widgets/msgpanel.cpp
     widgets/number_badge.cpp
     widgets/paged_dialog.cpp
     widgets/progress_reporter.cpp
@@ -360,7 +361,6 @@ set( COMMON_SRCS
     lockfile.cpp
     lset.cpp
     marker_base.cpp
-    msgpanel.cpp
     netclass.cpp
     observable.cpp
     origin_transforms.cpp

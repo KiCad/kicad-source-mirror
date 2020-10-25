@@ -29,7 +29,7 @@
 #include <dialog_helpers.h>
 #include <pcb_base_frame.h>
 #include <base_units.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <pgm_base.h>
 #include <3d_viewer/eda_3d_viewer.h>          // To include VIEWER3D_FRAMENAME
 #include <footprint_editor_settings.h>

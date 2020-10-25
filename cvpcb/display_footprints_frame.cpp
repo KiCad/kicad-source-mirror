@@ -35,7 +35,7 @@
 #include <kiface_i.h>
 #include <lib_id.h>
 #include <macros.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_painter.h>
 #include <pgm_base.h>

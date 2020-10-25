@@ -25,7 +25,6 @@
 #include <trigo.h>
 #include <bitmaps.h>
 #include <eda_text.h>
-#include <msgpanel.h>
 #include <gerbview_frame.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <gerber_draw_item.h>
@@ -34,6 +33,7 @@
 #include <kicad_string.h>
 #include <geometry/shape_arc.h>
 #include <math/util.h>      // for KiROUND
+#include <widgets/msgpanel.h>
 
 #include <wx/msgdlg.h>
 

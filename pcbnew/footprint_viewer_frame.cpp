@@ -35,7 +35,7 @@
 #include <footprint_viewer_frame.h>
 #include <fp_lib_table.h>
 #include <kiway.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_painter.h>
 #include <pcbnew_id.h>

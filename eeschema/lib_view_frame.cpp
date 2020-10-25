@@ -34,7 +34,7 @@
 #include <kiface_i.h>
 #include <kiway.h>
 #include <lib_view_frame.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <sch_view.h>
 #include <sch_painter.h>
 #include <symbol_lib_table.h>

@@ -28,7 +28,7 @@
 #include <pcb_draw_panel_gal.h>
 #include <pcb_edit_frame.h>
 #include <3d_viewer/eda_3d_viewer.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <grid_tricks.h>
 #include <class_board.h>

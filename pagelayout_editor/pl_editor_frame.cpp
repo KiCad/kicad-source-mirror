@@ -25,7 +25,6 @@
 
 #include <kiface_i.h>
 #include <pgm_base.h>
-#include <msgpanel.h>
 #include <bitmaps.h>
 #include <eda_item.h>
 #include <page_layout/ws_data_item.h>
@@ -47,6 +46,7 @@
 #include <tool/picker_tool.h>
 #include <tool/zoom_tool.h>
 #include <widgets/infobar.h>
+#include <widgets/msgpanel.h>
 #include <settings/settings_manager.h>
 
 #include "dialogs/panel_pl_editor_color_settings.h"

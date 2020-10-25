@@ -28,7 +28,6 @@
  * D_PAD class implementation.
  */
 
-#include <msgpanel.h>
 #include <base_units.h>
 #include <bitmaps.h>
 #include <math/util.h>      // for KiROUND
@@ -47,6 +46,7 @@
 #include <connectivity/connectivity_data.h>
 #include <convert_to_biu.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <widgets/msgpanel.h>
 
 #include <memory>
 

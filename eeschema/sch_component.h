@@ -31,7 +31,7 @@
 #include <core/typeinfo.h>
 #include <layers_id_colors_and_visibility.h>
 #include <lib_id.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 
 #include <memory>
 #include <string>

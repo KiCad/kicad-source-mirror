@@ -28,7 +28,7 @@
 #include <confirm.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>

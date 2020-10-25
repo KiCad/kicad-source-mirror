@@ -27,7 +27,7 @@
 #include <bezier_curves.h>
 #include <base_units.h>
 #include <eda_draw_frame.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <eda_draw_frame.h>
 #include <general.h>
 #include <lib_bezier.h>

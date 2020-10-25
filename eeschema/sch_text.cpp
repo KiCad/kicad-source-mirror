@@ -31,7 +31,7 @@
 #include <sch_component.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <gal/stroke_font.h>
 #include <bitmaps.h>
 #include <kicad_string.h>

@@ -33,7 +33,6 @@
 #include <kiface_i.h>
 #include <lockfile.h>
 #include <macros.h>
-#include <msgpanel.h>
 #include <page_info.h>
 #include <pgm_base.h>
 #include <render_settings.h>
@@ -53,6 +52,7 @@
 #include <trace_helpers.h>
 #include <view/view.h>
 #include <page_layout/ws_draw_item.h>
+#include <widgets/msgpanel.h>
 #include <wx/snglinst.h>
 #include <dialogs/dialog_grid_settings.h>
 

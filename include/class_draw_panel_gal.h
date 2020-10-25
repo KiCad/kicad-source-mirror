@@ -33,7 +33,7 @@
 #include <wx/grid.h> // needed for MSVC to see wxScrolledCanvas indirectly exported
 #include <math/box2.h>
 #include <math/vector2d.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <memory>
 #include <cursors.h>
 

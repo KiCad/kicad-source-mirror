@@ -27,7 +27,7 @@
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <base_units.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <general.h>
 #include <lib_edit_frame.h>
 #include <class_libentry.h>

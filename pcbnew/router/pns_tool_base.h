@@ -30,7 +30,7 @@
 #include <tools/pcb_tool_base.h>
 #include <board_commit.h>
 
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 
 #include "pns_router.h"
 

@@ -23,7 +23,7 @@
  */
 
 #include <sch_edit_frame.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <lib_rectangle.h>
 #include <lib_pin.h>

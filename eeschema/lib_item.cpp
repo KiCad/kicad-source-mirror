@@ -24,7 +24,7 @@
  */
 
 #include <sch_draw_panel.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 
 #include <general.h>
 #include <lib_item.h>

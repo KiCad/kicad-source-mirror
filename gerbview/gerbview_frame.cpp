@@ -23,7 +23,6 @@
 #include <eda_base_frame.h>
 #include <base_units.h>
 #include <gbr_layer_box_selector.h>
-#include <msgpanel.h>
 #include <bitmaps.h>
 #include <wildcards_and_files_ext.h>
 #include <gerbview.h>
@@ -55,6 +54,7 @@
 #include <view/view.h>
 #include <base_screen.h>
 #include <gerbview_painter.h>
+#include <widgets/msgpanel.h>
 #include <widgets/paged_dialog.h>
 #include <dialogs/panel_gerbview_settings.h>
 #include <dialogs/panel_gerbview_display_options.h>

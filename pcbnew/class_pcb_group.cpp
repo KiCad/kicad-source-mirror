@@ -26,7 +26,7 @@
 #include <class_board_item.h>
 #include <class_pcb_group.h>
 #include <confirm.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <view/view.h>
 
 PCB_GROUP::PCB_GROUP( BOARD_ITEM* aParent ) :

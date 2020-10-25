@@ -28,7 +28,7 @@
 #include <wx/regex.h>
 
 #include <bus_alias.h>
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 #include <sch_sheet_path.h>
 
 

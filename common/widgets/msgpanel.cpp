@@ -28,7 +28,7 @@
  * @brief Message panel implementation file.
  */
 
-#include <msgpanel.h>
+#include <widgets/msgpanel.h>
 
 #include <wx/dcscreen.h>
 #include <wx/dcclient.h>
