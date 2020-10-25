@@ -352,7 +352,7 @@ void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
     if( page + 1 <= m_macHack.size() && m_macHack[ page ] )
     {
         wxSize pageSize = m_treebook->GetPage( page )->GetSize();
-        pageSize.x -= 3;
+        pageSize.x -= 5;
         pageSize.y += 2;
 
         m_treebook->GetPage( page )->SetSize( pageSize );
