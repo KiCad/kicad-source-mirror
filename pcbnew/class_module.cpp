@@ -1674,7 +1674,7 @@ std::shared_ptr<SHAPE> MODULE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 
     // There are several possible interpretations here:
     // 1) the bounding box (without or without invisible items)
-    // 2) just the pads and "edges" (ie: graphic items)
+    // 2) just the pads and "edges" (ie: non-text graphic items)
     // 3) the courtyard
 
     // We'll go with (2) for now....
@@ -1683,7 +1683,10 @@ std::shared_ptr<SHAPE> MODULE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
         shape->AddShape( pad->GetEffectiveShape( aLayer ).get() );
 
     for( BOARD_ITEM* item : GraphicalItems() )
-        shape->AddShape( item->GetEffectiveShape( aLayer ).get() );
+    {
+        if( item->Type() == PCB_FP_SHAPE_T )
+            shape->AddShape( item->GetEffectiveShape( aLayer ).get() );
+    }
 
     return shape;
 }
