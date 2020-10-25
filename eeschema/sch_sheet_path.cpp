@@ -224,24 +224,11 @@ KIID_PATH SCH_SHEET_PATH::PathWithoutRootUuid() const
 }
 
 
-wxString SCH_SHEET_PATH::GetRootPathName( bool aUseShortName )
-{
-    // return a PathName for the root sheet (like "/" or "<root>"
-    // DO NOT use it in netlists, because it can easily break these netlists
-    // especially after translation, because many netlists (i.e. spice) do not accept any char
-    // Use only the short name ("/") and the full name only in messages
-    return aUseShortName ? wxT( "/" ) : _( "<root_sheet>" );
-}
-
-
-wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName ) const
+wxString SCH_SHEET_PATH::PathHumanReadable() const
 {
     wxString s;
 
-    if( aUseShortRootName )
-        s = GetRootPathName( true );  // Use only the short name in netlists
-    else
-        s = GetRootPathName( false ) + wxT( "/" );
+    s = wxT( "/" );
 
     // Start at 1 since we've already processed the root sheet.
     for( unsigned i = 1; i < size(); i++ )
