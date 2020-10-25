@@ -573,6 +573,16 @@ wxString SETTINGS_MANAGER::GetColorSettingsPath()
     path.AssignDir( GetUserSettingsPath() );
     path.AppendDir( "colors" );
 
+    if( !path.DirExists() )
+    {
+        if( !wxMkdir( path.GetPath() ) )
+        {
+            wxLogTrace( traceSettings,
+                        "GetColorSettingsPath(): Path %s missing and could not be created!",
+                        path.GetPath() );
+        }
+    }
+
     return path.GetPath();
 }
 

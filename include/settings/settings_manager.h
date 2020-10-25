@@ -297,7 +297,7 @@ public:
     static bool IsSettingsPathValid( const wxString& aPath );
 
     /**
-     * Returns the path where color scheme files are stored
+     * Returns the path where color scheme files are stored; creating it if missing
      * (normally ./colors/ under the user settings path)
      */
     static wxString GetColorSettingsPath();
