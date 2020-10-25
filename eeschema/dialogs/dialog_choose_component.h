@@ -168,7 +168,7 @@ protected:
     wxPanel* ConstructRightPanel( wxWindow* aParent );
 
     void OnInitDialog( wxInitDialogEvent& aEvent );
-    void OnCharHook( wxKeyEvent& aEvt );
+    void OnCharHook( wxKeyEvent& aEvt ) override;
     void OnCloseTimer( wxTimerEvent& aEvent );
     void OnUseBrowser( wxCommandEvent& aEvent );
 

@@ -63,7 +63,7 @@ private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void OnCharHook( wxKeyEvent& aEvent );
+    void OnCharHook( wxKeyEvent& aEvent ) override;
 };
 
 

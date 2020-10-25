@@ -57,9 +57,11 @@ SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcStart, const VECTOR2I& aArcMid,
 SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, int aWidth )
         : SHAPE( SH_ARC )
 {
+    m_width = aWidth;
+
     /*
      * Construct an arc that is tangent to two segments with a given radius.
-     * 
+     *
      *               p
      *                A
      *             A   \
@@ -71,27 +73,27 @@ SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, i
      *       /
      *      /
      *     B
-     * 
+     *
      *
      * segA is the fist segment (with its points A and B)
      * segB is the second segment (with its points A and B)
      * p is the point at which segA and segB would intersect if they were projected
      * c is the centre of the arc to be constructed
      * rad is the radius of the arc to be constructed
-     * 
+     *
      * We can create two vectors, betweeen point p and segA /segB
      *    pToA = p - segA.B   //< note that segA.A would also be valid as it is colinear
      *    pToB = p - segB.B   //< note that segB.A would also be valid as it is colinear
-     * 
-     * Let the angle formed by segA and segB be called 'alpha': 
+     *
+     * Let the angle formed by segA and segB be called 'alpha':
      *   alpha = angle( pToA ) - angle( pToB )
-     * 
+     *
      * The distance PC can be computed as
      *   distPC = rad / abs( sin( alpha / 2 ) )
-     * 
+     *
      * The polar angle of the vector PC can be computed as:
      *   anglePC = angle( pToA ) + alpha / 2
-     * 
+     *
      * Therefore:
      *    C.x = P.x + distPC*cos( anglePC )
      *    C.y = P.y + distPC*sin( anglePC )
@@ -119,7 +121,7 @@ SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, i
 
         if( pToA.EuclideanNorm() == 0 )
             pToA = aSegmentA.A - p.get();
-        
+
         if( pToB.EuclideanNorm() == 0 )
             pToB = aSegmentB.A - p.get();
 

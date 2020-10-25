@@ -41,6 +41,7 @@ WS_PROXY_VIEW_ITEM::WS_PROXY_VIEW_ITEM( int aMils2IUscalefactor, const PAGE_INFO
         m_pageInfo( aPageInfo ),
         m_pageNumber( "1" ),
         m_sheetCount( 1 ),
+        m_isFirstPage( false ),
         m_project( aProject ),
         m_colorLayer( LAYER_WORKSHEET ),
         m_pageBorderColorLayer( LAYER_GRID )

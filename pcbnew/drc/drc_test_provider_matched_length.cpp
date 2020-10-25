@@ -47,7 +47,8 @@ namespace test {
 class DRC_TEST_PROVIDER_MATCHED_LENGTH : public DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_MATCHED_LENGTH ()
+    DRC_TEST_PROVIDER_MATCHED_LENGTH () :
+        m_board( nullptr )
     {
     }
 

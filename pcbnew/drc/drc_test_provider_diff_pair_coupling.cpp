@@ -44,7 +44,7 @@
     - DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE
     - DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG
     - DRCE_TOO_MANY_VIAS
-    Todo: 
+    Todo:
     - arc support.
     - improve recognition of coupled segments (now anything that's parallel is considered coupled, causing
       DRC errors on meanders)
@@ -55,17 +55,18 @@ namespace test {
 class DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING : public DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING ()
+    DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING () :
+        m_board( nullptr )
     {
     }
 
-    virtual ~DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING() 
+    virtual ~DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING()
     {
     }
 
     virtual bool Run() override;
 
-    virtual const wxString GetName() const override 
+    virtual const wxString GetName() const override
     {
         return "diff_pair_coupling";
     };
@@ -240,7 +241,7 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp, DRC_RTREE& aTree 
                                     {
                                         auto bci = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
 
-                                        if( bci->GetNetCode() == bestCoupled->parentN->GetNetCode() 
+                                        if( bci->GetNetCode() == bestCoupled->parentN->GetNetCode()
                                         ||  bci->GetNetCode() == bestCoupled->parentP->GetNetCode() )
                                             return false;
                                     }
@@ -270,7 +271,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
-    
+
 
     std::map<DIFF_PAIR_KEY, DIFF_PAIR_ITEMS> dpRuleMatches;
 
@@ -424,7 +425,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         int totalLen = std::max( it.second.totalLengthN, it.second.totalLengthP );
             reportAux( wxString::Format( "   - coupled length: %s, total length: %s",
 
-            MessageTextFromValue( userUnits(), it.second.totalCoupled ), 
+            MessageTextFromValue( userUnits(), it.second.totalCoupled ),
             MessageTextFromValue( userUnits(), totalLen ) ) );
 
         int totalUncoupled = totalLen - it.second.totalCoupled;
