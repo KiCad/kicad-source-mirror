@@ -30,7 +30,7 @@
 #include <gerber_file_image_list.h>
 #include <view/view.h>
 
-#include <html_messagebox.h>
+#include <dialogs/html_messagebox.h>
 #include <macros.h>
 
 #include <wx/msgdlg.h>

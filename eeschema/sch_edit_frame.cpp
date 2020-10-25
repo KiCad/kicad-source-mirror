@@ -31,7 +31,7 @@
 #include <executable_names.h>
 #include <gestfich.h>
 #include <hierarch.h>
-#include <html_messagebox.h>
+#include <dialogs/html_messagebox.h>
 #include <invoke_sch_dialog.h>
 #include <kicad_string.h>
 #include <kiface_i.h>

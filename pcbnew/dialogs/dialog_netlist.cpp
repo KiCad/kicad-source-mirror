@@ -24,7 +24,7 @@
 #include <project.h>
 #include <kiface_i.h>
 #include <confirm.h>
-#include <html_messagebox.h>
+#include <dialogs/html_messagebox.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <reporter.h>

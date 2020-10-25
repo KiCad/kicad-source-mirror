@@ -25,7 +25,7 @@
 
 #include <confirm.h>
 #include <fp_lib_table.h>
-#include <html_messagebox.h>
+#include <dialogs/html_messagebox.h>
 #include <kiway.h>
 #include <lib_id.h>
 

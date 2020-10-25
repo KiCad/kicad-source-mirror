@@ -26,7 +26,7 @@
 #include <sch_sheet.h>
 #include <sch_validators.h>
 #include <dialog_edit_sheet_pin.h>
-#include <html_messagebox.h>
+#include <dialogs/html_messagebox.h>
 #include <kicad_string.h>
 
 

@@ -77,7 +77,7 @@
 
 #include <cmath>
 
-#include <html_messagebox.h>
+#include <dialogs/html_messagebox.h>
 
 // Default format for dimensions: they are the default values, not the actual values
 // number of digits in mantissa:

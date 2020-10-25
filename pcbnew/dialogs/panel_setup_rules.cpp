@@ -32,7 +32,7 @@
 #include <tool/tool_manager.h>
 #include <panel_setup_rules.h>
 #include <wx_html_report_box.h>
-#include <html_messagebox.h>
+#include <dialogs/html_messagebox.h>
 #include <scintilla_tricks.h>
 #include <drc/drc_rule_parser.h>
 #include <tools/drc_tool.h>

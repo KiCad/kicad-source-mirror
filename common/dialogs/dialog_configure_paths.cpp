@@ -27,7 +27,7 @@
 #include <confirm.h>
 #include <menus_helpers.h>
 #include <validators.h>
-#include <html_messagebox.h>
+#include <dialogs/html_messagebox.h>
 #include <filename_resolver.h>
 #include <env_vars.h>
 #include <grid_tricks.h>

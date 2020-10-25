@@ -39,7 +39,7 @@
 #include <gerbview_frame.h>
 #include <reporter.h>
 #include <gbr_metadata.h>
-#include <html_messagebox.h>
+#include <dialogs/html_messagebox.h>
 #include <view/view.h>
 
 using json = nlohmann::json;

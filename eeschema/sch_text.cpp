@@ -41,7 +41,7 @@
 #include <sch_painter.h>
 #include <default_values.h>
 #include <wx/debug.h>
-#include <html_messagebox.h>
+#include <dialogs/html_messagebox.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <sch_iref.h>

@@ -186,6 +186,7 @@ set( COMMON_DLG_SRCS
     dialogs/eda_list_dialog_base.cpp
     dialogs/eda_view_switcher.cpp
     dialogs/eda_view_switcher_base.cpp
+    dialogs/html_messagebox.cpp
     dialogs/panel_color_settings_base.cpp
     dialogs/panel_color_settings.cpp
     dialogs/panel_common_settings.cpp
@@ -343,7 +344,6 @@ set( COMMON_SRCS
     grid_tricks.cpp
     hotkey_store.cpp
     hotkeys_basic.cpp
-    html_messagebox.cpp
     kiface_i.cpp
     kiid.cpp
     kiway.cpp

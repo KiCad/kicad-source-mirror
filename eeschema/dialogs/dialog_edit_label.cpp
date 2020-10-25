@@ -34,7 +34,7 @@
 #include <sch_reference_list.h>
 #include <schematic.h>
 #include <widgets/unit_binder.h>
-#include <html_messagebox.h>
+#include <dialogs/html_messagebox.h>
 #include <dialog_edit_label.h>
 #include <kicad_string.h>
 #include <tool/actions.h>

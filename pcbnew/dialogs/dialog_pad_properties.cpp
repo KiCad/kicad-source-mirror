@@ -33,7 +33,7 @@
 #include <convert_basic_shapes_to_polygon.h> // for enum RECT_CHAMFER_POSITIONS definition
 #include <dialog_pad_properties.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <html_messagebox.h>
+#include <dialogs/html_messagebox.h>
 #include <macros.h>
 #include <pcb_base_frame.h>
 #include <pcb_painter.h>
