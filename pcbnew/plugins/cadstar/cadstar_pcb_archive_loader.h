@@ -48,7 +48,6 @@ public:
         mDoneCopperWarning       = false;
         mDoneSpacingClassWarning = false;
         mDoneNetClassWarning     = false;
-        mloggedSlotOrientWarning = false;
         mNumNets                 = 0;
     }
 
@@ -101,13 +100,13 @@ private:
                                                          ///< so that it fits in KiCad canvas
     std::set<HATCHCODE_ID> mHatchcodesTested;            ///< Used by checkAndLogHatchCode() to
                                                          ///< avoid multiple duplicate warnings
+    std::set<PADCODE_ID> mPadcodesTested;                ///< Used by getKiCadPad() to avoid
+                                                         ///< multiple duplicate warnings
     bool mDoneCopperWarning;                             ///< Used by loadCoppers() to avoid
                                                          ///< multiple duplicate warnings
     bool mDoneSpacingClassWarning;                       ///< Used by getKiCadNet() to avoid
                                                          ///< multiple duplicate warnings
     bool mDoneNetClassWarning;                           ///< Used by getKiCadNet() to avoid
-                                                         ///< multiple duplicate warnings
-    bool mloggedSlotOrientWarning;                       ///< Used by getKiCadPad() to avoid
                                                          ///< multiple duplicate warnings
     int mNumNets;                                        ///< Number of nets loaded so far
 

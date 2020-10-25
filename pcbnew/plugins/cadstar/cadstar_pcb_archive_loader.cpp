@@ -842,19 +842,9 @@ D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* 
         if( csPadcode.SlotLength != UNDEFINED_VALUE )
         {
             pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_OBLONG );
-            pad->SetDrillSize( { getKiCadLength( csPadcode.DrillDiameter ),
-                    getKiCadLength( (long long) csPadcode.SlotLength
-                                    + (long long) csPadcode.DrillDiameter ) } );
-
-            if( csPadcode.SlotOrientation != 0 && !mloggedSlotOrientWarning )
-            {
-               //TODO: Redraw the pad using custom shape
-                wxLogError( _(
-                        "The CADSTAR design contains one or more pads with non-zero slot "
-                        "orientation. This importer does not yet support slot orientation so the "
-                        "slotted holes have been imported with an orientation of 0 degrees." ) );
-               mloggedSlotOrientWarning = true;
-            }
+            pad->SetDrillSize( { getKiCadLength( (long long) csPadcode.SlotLength + 
+                                                 (long long) csPadcode.DrillDiameter ),
+                                 getKiCadLength( csPadcode.DrillDiameter ) } );
         }
         else
         {
@@ -865,7 +855,71 @@ D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* 
 
         drillOffset.x = -getKiCadLength( csPadcode.DrillXoffset );
         drillOffset.y = getKiCadLength( csPadcode.DrillYoffset );
+    }
 
+    
+    if( csPadcode.SlotOrientation != 0 )
+    {
+        LSET lset = pad->GetLayerSet();
+        lset &= LSET::AllCuMask();
+
+        if( lset.size() > 0 )
+        {
+            SHAPE_POLY_SET padOutline;
+            PCB_LAYER_ID   layer = lset.Seq().at( 0 );
+            int            maxError = mBoard->GetDesignSettings().m_MaxError;
+
+            pad->SetPosition( { 0, 0 } );
+            pad->SetPos0( { 0, 0 } );
+            pad->TransformShapeWithClearanceToPolygon( padOutline, layer, 0, maxError,
+                                                       ERROR_LOC::ERROR_INSIDE );
+
+            PCB_SHAPE* padShape = new PCB_SHAPE;
+            padShape->SetShape( PCB_SHAPE_TYPE_T::S_POLYGON );
+            padShape->SetPolyShape( padOutline );
+            padShape->SetWidth( 0 );
+            padShape->Move( padOffset - drillOffset );
+            padShape->Rotate( wxPoint( 0, 0 ), 1800.0 - getAngleTenthDegree( csPadcode.SlotOrientation ) );
+
+
+            SHAPE_POLY_SET editedPadOutline = padShape->GetPolyShape();
+
+            if( editedPadOutline.Contains( { 0, 0 } ) )
+            { 
+                pad->SetAnchorPadShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
+                pad->SetSize( wxSize( { 4, 4 } ) );
+                pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_CUSTOM );
+                pad->AddPrimitive( padShape );
+                padOffset   = { 0, 0 };
+            }
+            else
+            {
+                // The CADSTAR pad has the hole shape outside the pad shape
+                // Lets just put the hole in the center of the pad instead
+                csPadcode.SlotOrientation = 0;
+                drillOffset               = { 0, 0 };
+
+                if( mPadcodesTested.find( csPadcode.ID ) == mPadcodesTested.end() )
+                {
+                    wxLogError( wxString::Format(
+                            _( "The CADSTAR pad definition '%s' has the hole shape outside the "
+                               "pad shape. The hole has been moved to the center of the pad." ),
+                            csPadcode.Name ) );
+
+                    mPadcodesTested.insert( csPadcode.ID );
+                }
+            }
+
+        }
+        else
+        {
+            wxFAIL_MSG( "No copper layers defined in the pad?" );
+            csPadcode.SlotOrientation = 0;
+            pad->SetOffset( drillOffset );
+        }
+    }
+    else
+    {
         pad->SetOffset( drillOffset );
     }
 
@@ -876,7 +930,7 @@ D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* 
     RotatePoint( &drillOffset, padOrientation );
     pad->SetPos0( getKiCadPoint( aCadstarPad.Position ) - aParent->GetPosition() - padOffset
                   - drillOffset );
-    pad->SetOrientation( padOrientation );
+    pad->SetOrientation( padOrientation + getAngleTenthDegree( csPadcode.SlotOrientation ) );
 
     //TODO handle csPadcode.Reassigns when KiCad supports full padstacks
 
