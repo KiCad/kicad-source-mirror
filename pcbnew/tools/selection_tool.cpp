@@ -285,6 +285,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsDrag( BUT_LEFT ) )
         {
             m_frame->FocusOnItem( nullptr );
+            m_toolMgr->ProcessEvent( EVENTS::InhibitSelectionEditing );
 
             if( modifier_enabled || dragAlwaysSelects )
             {
@@ -755,6 +756,8 @@ bool SELECTION_TOOL::selectMultiple()
 
     if( !cancelled )
         m_selection.ClearReferencePoint();
+
+    m_toolMgr->ProcessEvent( EVENTS::UninhibitSelectionEditing );
 
     return cancelled;
 }

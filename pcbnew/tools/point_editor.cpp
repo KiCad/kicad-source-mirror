@@ -394,7 +394,7 @@ void POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 
 int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 {
-    if( !m_selectionTool )
+    if( !m_selectionTool || aEvent.Matches( EVENTS::InhibitSelectionEditing ) )
         return 0;
 
     const PCBNEW_SELECTION& selection = m_selectionTool->GetSelection();
@@ -439,7 +439,8 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( editFrame->IsGridVisible() );
 
-        if( !m_editPoints || evt->IsSelectionEvent() )
+        if( !m_editPoints || evt->IsSelectionEvent() ||
+                evt->Matches( EVENTS::InhibitSelectionEditing ) )
             break;
 
         EDIT_POINT* prevHover = m_hoveredPoint;
@@ -2148,4 +2149,6 @@ void POINT_EDITOR::setTransitions()
     Go( &POINT_EDITOR::OnSelectionChange, EVENTS::SelectedEvent );
     Go( &POINT_EDITOR::OnSelectionChange, EVENTS::UnselectedEvent );
     Go( &POINT_EDITOR::changeEditMethod,  ACTIONS::changeEditMethod.MakeEvent() );
+    Go( &POINT_EDITOR::OnSelectionChange, EVENTS::InhibitSelectionEditing );
+    Go( &POINT_EDITOR::OnSelectionChange, EVENTS::UninhibitSelectionEditing );
 }

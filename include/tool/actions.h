@@ -214,6 +214,10 @@ public:
 
     //< Selected items were moved, this can be very high frequency on the canvas, use with care
     const static TOOL_EVENT SelectedItemsMoved;
+
+    ///> Used to inform tools that the selection should temporarily be non-editable
+    const static TOOL_EVENT InhibitSelectionEditing;
+    const static TOOL_EVENT UninhibitSelectionEditing;
 };
 
 #endif // __ACTIONS_H
