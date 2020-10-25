@@ -45,6 +45,11 @@ namespace KIGFX
 using KIGFX::RENDER_SETTINGS;
 using KIGFX::COLOR4D;
 
+/// Frequent text rotations, used with {Set,Get}TextAngle(),
+/// in 0.1 degrees for now, hoping to migrate to degrees eventually.
+#define TEXT_ANGLE_HORIZ 0
+#define TEXT_ANGLE_VERT 900
+
 // part of the kicad_plugin.h family of defines.
 // See kicad_plugin.h for the choice of the value
 // When set when calling  EDA_TEXT::Format, disable writing the "hide" keyword in save file

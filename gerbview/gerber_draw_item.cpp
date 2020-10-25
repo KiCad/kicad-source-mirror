@@ -24,7 +24,7 @@
 
 #include <trigo.h>
 #include <bitmaps.h>
-#include <common.h>
+#include <eda_text.h>
 #include <msgpanel.h>
 #include <gerbview_frame.h>
 #include <convert_basic_shapes_to_polygon.h>

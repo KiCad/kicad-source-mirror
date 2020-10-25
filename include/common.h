@@ -56,12 +56,6 @@ class REPORTER;
 /// default name for nameless projects
 #define NAMELESS_PROJECT wxT( "noname" )
 
-/// Frequent text rotations, used with {Set,Get}TextAngle(),
-/// in 0.1 degrees for now, hoping to migrate to degrees eventually.
-#define TEXT_ANGLE_HORIZ    0
-#define TEXT_ANGLE_VERT     900
-
-
 /**
  * Return the size of @a aSingleLine of text when it is rendered in @a aWindow
  * using whatever font is currently set in that window.
