@@ -97,6 +97,9 @@ public:
     /// move with a reference point
     static TOOL_ACTION moveWithReference;
 
+    /// copy command with manual reference point selection
+    static TOOL_ACTION copyWithReference;
+
     /// Rotation of selected objects
     static TOOL_ACTION rotateCw;
     static TOOL_ACTION rotateCcw;

@@ -246,6 +246,11 @@ TOOL_ACTION PCB_ACTIONS::moveWithReference( "pcbnew.InteractiveMove.moveWithRefe
         _( "Moves the selected item(s) with a specified starting point" ),
         move_xpm, AF_ACTIVATE );
 
+TOOL_ACTION PCB_ACTIONS::copyWithReference( "pcbnew.InteractiveMove.copyWithReference",
+        AS_GLOBAL, 0, "", _( "Copy with Reference" ),
+        _( "Copy selected item(s) to clipboard with a specified starting point" ),
+        copy_xpm, AF_ACTIVATE );
+
 TOOL_ACTION PCB_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIncrementPads",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'D', LEGACY_HK_NAME( "Duplicate Item and Increment" ),

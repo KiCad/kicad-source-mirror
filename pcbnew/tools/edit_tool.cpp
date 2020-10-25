@@ -1820,8 +1820,21 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
         for( EDA_ITEM* item : selection )
             items.push_back( static_cast<BOARD_ITEM*>( item ) );
 
-        VECTOR2I refPoint = grid.BestDragOrigin( getViewControls()->GetCursorPosition( false ),
-                                                 items );
+        VECTOR2I refPoint;
+
+        if( aEvent.IsAction( &PCB_ACTIONS::copyWithReference ) )
+        {
+            if( !pickReferencePoint( _( "Select reference point for the copy..." ),
+                                     _( "Selection copied" ),
+                                     _( "Copy cancelled" ),
+                                     refPoint ) )
+                return 0;
+        }
+        else
+        {
+            refPoint = grid.BestDragOrigin( getViewControls()->GetCursorPosition( false ), items );
+        }
+
         selection.SetReferencePoint( refPoint );
 
         io.SetBoard( board() );
@@ -1873,6 +1886,7 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::FilletTracks,        PCB_ACTIONS::filletTracks.MakeEvent() );
 
     Go( &EDIT_TOOL::copyToClipboard,     ACTIONS::copy.MakeEvent() );
+    Go( &EDIT_TOOL::copyToClipboard,     PCB_ACTIONS::copyWithReference.MakeEvent() );
     Go( &EDIT_TOOL::cutToClipboard,      ACTIONS::cut.MakeEvent() );
 }
 
