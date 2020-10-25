@@ -82,7 +82,9 @@ public:
             aShape->GetIndexableSubshapes( subshapes );
 
             for( SHAPE* subshape : subshapes )
-                m_shapes.push_back( subshape );
+                m_shapes.push_back( subshape->Clone() );
+
+            delete aShape;
         }
         else
         {

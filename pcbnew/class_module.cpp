@@ -1680,12 +1680,12 @@ std::shared_ptr<SHAPE> MODULE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
     // We'll go with (2) for now....
 
     for( D_PAD* pad : Pads() )
-        shape->AddShape( pad->GetEffectiveShape( aLayer ).get() );
+        shape->AddShape( pad->GetEffectiveShape( aLayer )->Clone() );
 
     for( BOARD_ITEM* item : GraphicalItems() )
     {
         if( item->Type() == PCB_FP_SHAPE_T )
-            shape->AddShape( item->GetEffectiveShape( aLayer ).get() );
+            shape->AddShape( item->GetEffectiveShape( aLayer )->Clone() );
     }
 
     return shape;
