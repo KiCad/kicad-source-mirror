@@ -2081,7 +2081,7 @@ int CONNECTION_GRAPH::RunERC()
          * format due to their TestDanglingEnds() implementation.
          */
 
-        if( settings.IsTestEnabled( ERCE_DRIVER_CONFLICT ) && !subgraph->ResolveDrivers() )
+        if( settings.IsTestEnabled( ERCE_DRIVER_CONFLICT ) && !subgraph->ResolveDrivers( true ) )
             error_count++;
 
         if( settings.IsTestEnabled( ERCE_BUS_TO_NET_CONFLICT )
