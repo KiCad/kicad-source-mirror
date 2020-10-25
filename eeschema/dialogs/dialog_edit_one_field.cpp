@@ -172,7 +172,7 @@ void DIALOG_EDIT_ONE_FIELD::OnSetFocusText( wxFocusEvent& event )
 #endif
 
     if( m_fieldId == REFERENCE )
-        SelectReferenceNumber( static_cast<wxTextEntry*>( m_TextCtrl ) );
+        KIUI::SelectReferenceNumber( static_cast<wxTextEntry*>( m_TextCtrl ) );
     else if( m_fieldId == VALUE || m_fieldId == SHEETNAME_V )
         m_TextCtrl->SetSelection( -1, -1 );
 

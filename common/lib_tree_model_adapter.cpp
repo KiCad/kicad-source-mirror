@@ -26,6 +26,7 @@
 #include <lib_tree_model_adapter.h>
 #include <project/project_file.h>
 #include <settings/app_settings.h>
+#include <widgets/ui_common.h>
 #include <wx/tokenzr.h>
 #include <wx/wupdlock.h>
 
@@ -266,7 +267,7 @@ void LIB_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
 
     // The extent of the text doesn't take into account the space on either side
     // in the header, so artificially pad it by M
-    wxSize partHeadMinWidth = GetTextSize( partHead + "M", aDataViewCtrl );
+    wxSize partHeadMinWidth = KIUI::GetTextSize( partHead + "M", aDataViewCtrl );
 
     if( aDataViewCtrl->GetColumnCount() > 0 )
     {

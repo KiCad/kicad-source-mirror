@@ -39,8 +39,8 @@
 #include <wx/fileconf.h>
 #include <wx/dir.h>
 #include <wx/string.h>
-#include <wx/textctrl.h>
 #include <wx/gdicmn.h>
+#include <wx/process.h>
 
 #include <atomic>
 #include <limits>
@@ -55,33 +55,6 @@ class REPORTER;
 
 /// default name for nameless projects
 #define NAMELESS_PROJECT wxT( "noname" )
-
-/**
- * Return the size of @a aSingleLine of text when it is rendered in @a aWindow
- * using whatever font is currently set in that window.
- */
-wxSize GetTextSize( const wxString& aSingleLine, wxWindow* aWindow );
-
-/**
- * Set the minimum pixel width on a text control in order to make a text
- * string be fully visible within it.
- *
- * The current font within the text control is considered.  The text can come either from
- * the control or be given as an argument.  If the text control is larger than needed, then
- * nothing is done.
- *
- * @param aCtrl the text control to potentially make wider.
- * @param aString the text that is used in sizing the control's pixel width.
- * If NULL, then
- *   the text already within the control is used.
- * @return bool - true if the \a aCtrl had its size changed, else false.
- */
-bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString = NULL );
-
-/**
- * Select the number (or "?") in a reference for ease of editing.
- */
-void SelectReferenceNumber( wxTextEntry* aTextEntry );
 
 /**
  * Run a command in a child process.

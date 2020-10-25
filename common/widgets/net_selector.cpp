@@ -268,7 +268,7 @@ protected:
     wxSize updateSize()
     {
         int    listTop = m_listBox->GetRect().y;
-        int    itemHeight = GetTextSize( wxT( "Xy" ), this ).y + LIST_ITEM_PADDING;
+        int itemHeight = KIUI::GetTextSize( wxT( "Xy" ), this ).y + LIST_ITEM_PADDING;
         int    listHeight = m_listBox->GetCount() * itemHeight + LIST_PADDING;
 
         if( listTop + listHeight >= m_maxPopupHeight )
@@ -278,7 +278,7 @@ protected:
 
         for( size_t i = 0; i < m_listBox->GetCount(); ++i )
         {
-            int itemWidth = GetTextSize( m_listBox->GetString( i ), m_listBox ).x;
+            int itemWidth = KIUI::GetTextSize( m_listBox->GetString( i ), m_listBox ).x;
             listWidth = std::max( listWidth, itemWidth + LIST_PADDING * 3 );
         }
 

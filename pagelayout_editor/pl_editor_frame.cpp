@@ -131,22 +131,22 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         // as the width of '0' unless the font is fixed width, and it usually won't be.
 
         // zoom:
-        GetTextSize( wxT( "Z 762000" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "Z 762000" ), stsbar ).x + 10,
 
         // cursor coords
-        GetTextSize( wxT( "X 0234.567  Y 0234.567" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "X 0234.567  Y 0234.567" ), stsbar ).x + 10,
 
         // delta distances
-        GetTextSize( wxT( "dx 0234.567  dx 0234.567" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "dx 0234.567  dx 0234.567" ), stsbar ).x + 10,
 
         // grid size
-        GetTextSize( wxT( "grid 0234.567" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "grid 0234.567" ), stsbar ).x + 10,
 
         // Coord origin (use the bigger message)
-        GetTextSize( _( "coord origin: Right Bottom page corner" ), stsbar ).x + 10,
+        KIUI::GetTextSize( _( "coord origin: Right Bottom page corner" ), stsbar ).x + 10,
 
         // units display, Inches is bigger than mm
-        GetTextSize( _( "Inches" ), stsbar ).x + 20
+        KIUI::GetTextSize( _( "Inches" ), stsbar ).x + 20
     };
 
     SetStatusWidths( arrayDim( dims ), dims );

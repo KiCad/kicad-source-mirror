@@ -92,7 +92,7 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
 
     for( int ii = 0; ii < 5; ii++ )
     {
-        int width = GetTextSize( choiceList[ii], m_originSelectBox ).x;
+        int width = KIUI::GetTextSize( choiceList[ii], m_originSelectBox ).x;
         minwidth = std::max( minwidth, width );
     }
 

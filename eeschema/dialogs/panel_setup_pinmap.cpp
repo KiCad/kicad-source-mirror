@@ -76,7 +76,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
     wxSize          bmapSize = dummy->GetSize();
     delete dummy;
 
-    wxSize        charSize = GetTextSize( "X", m_matrixPanel );
+    wxSize        charSize = KIUI::GetTextSize( "X", m_matrixPanel );
     wxPoint       pos( 0, charSize.y * 2 );
     wxStaticText* text;
 

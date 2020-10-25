@@ -784,7 +784,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::AdjustGridColumns( int aWidth )
     for( int row = 0; row < m_grid->GetNumberRows(); ++row )
     {
         wxString cellValue = m_grid->GetCellValue( row, COL_CURR_LIBID );
-        colWidth = std::max( colWidth, GetTextSize( cellValue, m_grid ).x );
+        colWidth           = std::max( colWidth, KIUI::GetTextSize( cellValue, m_grid ).x );
     }
 
     colWidth += 20;
@@ -795,7 +795,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::AdjustGridColumns( int aWidth )
     for( int row = 0; row < m_grid->GetNumberRows(); ++row )
     {
         wxString cellValue = m_grid->GetCellValue( row, COL_NEW_LIBID );
-        colWidth = std::max( colWidth, GetTextSize( cellValue, m_grid ).x );
+        colWidth           = std::max( colWidth, KIUI::GetTextSize( cellValue, m_grid ).x );
     }
 
     colWidth += 20;

@@ -898,7 +898,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnUpdateUI( wxUpdateUIEvent&  )
                 auto referenceEditor = grid->GetCellEditor( 0, 0 );
 
                 if( auto textEntry = dynamic_cast<wxTextEntry*>( referenceEditor->GetControl() ) )
-                    SelectReferenceNumber( textEntry );
+                    KIUI::SelectReferenceNumber( textEntry );
 
                 referenceEditor->DecRef();
             }

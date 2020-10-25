@@ -155,10 +155,10 @@ void DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::OnSize( wxSizeEvent& aEvent )
 
 void DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::recalculateColumns()
 {
-    const int margin = 16;
-    int totalLength = 0;
-    int sel_length = GetTextSize( wxT("XX"), m_listFp ).x;
-    int maxRefLength = GetTextSize( wxT("XXX"), m_listFp ).x;
+    const int margin       = 16;
+    int       totalLength  = 0;
+    int       sel_length   = KIUI::GetTextSize( wxT( "XX" ), m_listFp ).x;
+    int       maxRefLength = KIUI::GetTextSize( wxT( "XXX" ), m_listFp ).x;
 
     sel_length += margin;
     m_listFp->SetColumnWidth( COL_SELSCH, sel_length );
@@ -167,7 +167,7 @@ void DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::recalculateColumns()
     // Find max character width of column Reference
     for( int i = 0; i < m_listFp->GetItemCount(); i++ )
     {
-        int length = GetTextSize( m_listFp->GetItemText( i, COL_REF ), m_listFp ).x;
+        int length = KIUI::GetTextSize( m_listFp->GetItemText( i, COL_REF ), m_listFp ).x;
 
         if( length > maxRefLength )
             maxRefLength = length;

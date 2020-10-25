@@ -55,6 +55,7 @@
 #include <widgets/msgpanel.h>
 #include <wx/snglinst.h>
 #include <dialogs/dialog_grid_settings.h>
+#include <widgets/ui_common.h>
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum size of the find/replace history stacks.
 
@@ -113,22 +114,22 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
         // as the width of '0' unless the font is fixed width, and it usually won't be.
 
         // zoom:
-        GetTextSize( wxT( "Z 762000" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "Z 762000" ), stsbar ).x + 10,
 
         // cursor coords
-        GetTextSize( wxT( "X 0234.567890  Y 0234.567890" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "X 0234.567890  Y 0234.567890" ), stsbar ).x + 10,
 
         // delta distances
-        GetTextSize( wxT( "dx 0234.567890  dx 0234.567890  d 0234.567890" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "dx 0234.567890  dx 0234.567890  d 0234.567890" ), stsbar ).x + 10,
 
         // grid size
-        GetTextSize( wxT( "grid X 0234.567890  Y 0234.567890" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "grid X 0234.567890  Y 0234.567890" ), stsbar ).x + 10,
 
         // units display, Inches is bigger than mm
-        GetTextSize( _( "Inches" ), stsbar ).x + 10,
+        KIUI::GetTextSize( _( "Inches" ), stsbar ).x + 10,
 
             // Size for the "Current Tool" panel; longest string from SetTool()
-        GetTextSize( wxT( "Add layer alignment target" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "Add layer alignment target" ), stsbar ).x + 10,
     };
 
     SetStatusWidths( arrayDim( dims ), dims );

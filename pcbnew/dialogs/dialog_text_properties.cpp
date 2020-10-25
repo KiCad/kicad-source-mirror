@@ -234,7 +234,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         m_SingleLineText->SetValue( m_edaText->GetText() );
 
         if( m_fpText && m_fpText->GetType() == FP_TEXT::TEXT_is_REFERENCE )
-            SelectReferenceNumber( static_cast<wxTextEntry*>( m_SingleLineText ) );
+            KIUI::SelectReferenceNumber( static_cast<wxTextEntry*>( m_SingleLineText ) );
         else
             m_SingleLineText->SetSelection( -1, -1 );
     }

@@ -216,7 +216,7 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
             layerName = _( "Inner layers" );
 
         // wxCOL_WIDTH_AUTOSIZE doesn't work on all platforms, so we calculate width here
-        textWidth = std::max( textWidth, GetTextSize( layerName, aList ).x );
+        textWidth = std::max( textWidth, KIUI::GetTextSize( layerName, aList ).x );
 
         COLOR4D layerColor = aFrame->GetColorSettings()->GetColor( layerID );
         auto bitmap = COLOR_SWATCH::MakeBitmap( layerColor, backgroundColor, LAYER_BITMAP_SIZE,

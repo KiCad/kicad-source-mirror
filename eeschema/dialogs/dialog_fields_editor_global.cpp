@@ -667,7 +667,7 @@ public:
         {
             for( int row = 0; row < GetNumberRows(); ++row )
             {
-                width = std::max( width, GetTextSize( GetValue( row, aCol ), GetView() ).x );
+                width = std::max( width, KIUI::GetTextSize( GetValue( row, aCol ), GetView() ).x );
             }
         }
         else
@@ -679,7 +679,7 @@ public:
                 const KIID& compId = m_componentRefs[ compRef ].GetComp()->m_Uuid;
                 wxString    text = m_dataStore[ compId ][ column_label ];
 
-                width = std::max( width, GetTextSize( text, GetView() ).x );
+                width = std::max( width, KIUI::GetTextSize( text, GetView() ).x );
             }
         }
 
@@ -714,11 +714,11 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     // SetWidth( wxCOL_WIDTH_AUTOSIZE ) fails here on GTK, so we calculate the title sizes and
     // set the column widths ourselves.
     auto column = m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN );
-    m_showColWidth = GetTextSize( column->GetTitle(), m_fieldsCtrl ).x + COLUMN_MARGIN;
+    m_showColWidth = KIUI::GetTextSize( column->GetTitle(), m_fieldsCtrl ).x + COLUMN_MARGIN;
     column->SetWidth( m_showColWidth );
 
     column = m_fieldsCtrl->GetColumn( GROUP_BY_COLUMN );
-    m_groupByColWidth = GetTextSize( column->GetTitle(), m_fieldsCtrl ).x + COLUMN_MARGIN;
+    m_groupByColWidth = KIUI::GetTextSize( column->GetTitle(), m_fieldsCtrl ).x + COLUMN_MARGIN;
     column->SetWidth( m_groupByColWidth );
 
     // The fact that we're a list should keep the control from reserving space for the
@@ -736,7 +736,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     for( int row = 0; row < m_fieldsCtrl->GetItemCount(); ++row )
     {
         const wxString& fieldName = m_fieldsCtrl->GetTextValue( row, DISPLAY_NAME_COLUMN );
-        nameColWidth = std::max( nameColWidth, GetTextSize( fieldName, m_fieldsCtrl ).x );
+        nameColWidth = std::max( nameColWidth, KIUI::GetTextSize( fieldName, m_fieldsCtrl ).x );
     }
 
     m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( nameColWidth );

@@ -651,7 +651,7 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
         info.Printf( _( "Drawing layer %d not in use" ), GetActiveLayer() + 1 );
         m_TextInfo->SetValue( info );
 
-        if( EnsureTextCtrlWidth( m_TextInfo, &info ) )  // Resized
+        if( KIUI::EnsureTextCtrlWidth( m_TextInfo, &info ) ) // Resized
            m_auimgr.Update();
 
         ClearMsgPanel();
@@ -692,7 +692,7 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
 
         m_TextInfo->SetValue( info );
 
-        if( EnsureTextCtrlWidth( m_TextInfo, &info ) )  // Resized
+        if( KIUI::EnsureTextCtrlWidth( m_TextInfo, &info ) ) // Resized
             m_auimgr.Update();
     }
 }
