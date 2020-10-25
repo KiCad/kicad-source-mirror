@@ -305,16 +305,66 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
         if( insideZone( dynamic_cast<ZONE_CONTAINER*>( context->GetItem( 1 ) ) ) )
             result->Set( 1.0 );
     }
-    else
+    else if( KIID::SniffTest( arg->AsString() ) )
+    {
+        KIID target( arg->AsString() );
+
+        for( ZONE_CONTAINER* candidate : item->GetBoard()->Zones() )
+        {
+            // Only a single zone can match the UUID; exit once we find a match whether
+            // "inside" or not
+            if( candidate->m_Uuid == target )
+            {
+                if( insideZone( candidate ) )
+                    result->Set( 1.0 );
+
+                return;
+            }
+        }
+
+        for( MODULE* module : item->GetBoard()->Modules() )
+        {
+            for( ZONE_CONTAINER* candidate : module->Zones() )
+            {
+                // Only a single zone can match the UUID; exit once we find a match whether
+                // "inside" or not
+                if( candidate->m_Uuid == target )
+                {
+                    if( insideZone( candidate ) )
+                        result->Set( 1.0 );
+
+                    return;
+                }
+            }
+        }
+    }
+    else  // Match on zone name
     {
         for( ZONE_CONTAINER* candidate : item->GetBoard()->Zones() )
         {
             if( candidate->GetZoneName().Matches( arg->AsString() ) )
             {
+                // Many zones can match the name; exit only when we find an "inside"
                 if( insideZone( candidate ) )
                 {
                     result->Set( 1.0 );
                     return;
+                }
+            }
+        }
+
+        for( MODULE* module : item->GetBoard()->Modules() )
+        {
+            for( ZONE_CONTAINER* candidate : module->Zones() )
+            {
+                // Many zones can match the name; exit only when we find an "inside"
+                if( candidate->GetZoneName().Matches( arg->AsString() ) )
+                {
+                    if( insideZone( candidate ) )
+                    {
+                        result->Set( 1.0 );
+                        return;
+                    }
                 }
             }
         }

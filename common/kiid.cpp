@@ -111,6 +111,9 @@ bool KIID::SniffTest( const wxString& aCandidate )
         if( c >= 'A' && c <= 'F' )
             continue;
 
+        if( c == '-' )
+            continue;
+
         return false;
     }
 
