@@ -69,11 +69,15 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
           m_show_footprints( aShowFootprints ),
           m_external_browser_requested( false )
 {
+    // Never show footprints in power symbol mode
+    if( aAdapter->GetFilter() == SYMBOL_TREE_MODEL_ADAPTER::CMP_FILTER_POWER )
+        m_show_footprints = false;
+
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
     // Use a slightly different layout, with a details pane spanning the entire window,
     // if we're not showing footprints.
-    if( aShowFootprints )
+    if( m_show_footprints )
     {
         m_hsplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                             wxSP_LIVE_UPDATE );
