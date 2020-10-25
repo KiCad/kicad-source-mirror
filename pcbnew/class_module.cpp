@@ -1670,7 +1670,20 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 
 std::shared_ptr<SHAPE> MODULE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
-    std::shared_ptr<SHAPE> shape ( new SHAPE_NULL );
+    std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
+
+    // There are several possible interpretations here:
+    // 1) the bounding box (without or without invisible items)
+    // 2) just the pads and "edges" (ie: graphic items)
+    // 3) the courtyard
+
+    // We'll go with (2) for now....
+
+    for( D_PAD* pad : Pads() )
+        shape->AddShape( pad->GetEffectiveShape( aLayer ).get() );
+
+    for( BOARD_ITEM* item : GraphicalItems() )
+        shape->AddShape( item->GetEffectiveShape( aLayer ).get() );
 
     return shape;
 }
