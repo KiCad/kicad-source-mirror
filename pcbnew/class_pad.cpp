@@ -1193,9 +1193,18 @@ double D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( IsBackLayer( (PCB_LAYER_ID) aLayer ) && !aView->IsLayerVisible( LAYER_PAD_BK ) )
         return HIDE;
 
-    // Only draw the pad if at least one of the layers it crosses is being displayed
-    if( board && !FlashLayer( board->GetVisibleLayers()) )
-        return HIDE;
+    if( board )
+    {
+        LSET visible = board->GetVisibleLayers() & board->GetEnabledLayers();
+
+        // Only draw the pad if at least one of the layers it crosses is being displayed
+        if( !FlashLayer( visible ) )
+            return HIDE;
+
+        // Don't draw the copper ring of a PTH if none of the copper layers are visible
+        if( aLayer == LAYER_PADS_TH && ( LSET::AllCuMask() & GetLayerSet() & visible ).none() )
+            return HIDE;
+    }
 
     // Netnames will be shown only if zoom is appropriate
     if( IsNetnameLayer( aLayer ) )
