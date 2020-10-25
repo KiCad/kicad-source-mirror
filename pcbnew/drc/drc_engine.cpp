@@ -392,6 +392,8 @@ void DRC_ENGINE::loadImplicitRules()
         rule->m_Condition = new DRC_RULE_CONDITION( wxString::Format( "A.insideArea('%s')",
                                                                       name ) );
 
+        rule->m_LayerCondition = zone->GetLayerSet();
+
         if( zone->GetDoNotAllowTracks() )
             addKeepoutConstraint( DRC_DISALLOW_TRACKS );
 
@@ -841,29 +843,50 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                     if( ( c->constraint.m_DisallowFlags & mask ) == 0 )
                     {
                         if( implicit )
-                        {
                             REPORT( _( "Keepout constraint not met." ) )
+                        else
+                            REPORT( _( "Disallow constraint not met." ) )
 
-                            // Keepout areas unioned in classic system
-                            return false;
+                        return false;
+                    }
+
+                    if( !( c->layerTest & a->GetLayerSet() ).any() )
+                    {
+                        if( implicit )
+                        {
+                            REPORT( _( "Keepout layer(s) not matched." ) )
+                        }
+                        else if( c->parentRule )
+                        {
+                            REPORT( wxString::Format( _( "Rule layer \"%s\" not matched." ),
+                                                      c->parentRule->m_LayerSource ) )
+                            REPORT( "Rule ignored." )
                         }
                         else
                         {
-                            REPORT( _( "Disallow constraint not met." ) )
-
-                            // First matching rule wins in rule system
-                            REPORT( "Item allowed." );
-                            return true;
+                            REPORT( _( "Rule layer not matched." ) )
+                            REPORT( "Rule ignored." )
                         }
+
+                        return false;
                     }
                 }
 
                 if( aLayer != UNDEFINED_LAYER && !c->layerTest.test( aLayer ) )
                 {
-                    if( c->parentRule )
+                    if( implicit )
+                    {
+                        REPORT( "Constraint layer not matched." )
+                    }
+                    else if( c->parentRule )
                     {
                         REPORT( wxString::Format( _( "Rule layer \"%s\" not matched." ),
                                                   c->parentRule->m_LayerSource ) )
+                        REPORT( "Rule ignored." )
+                    }
+                    else
+                    {
+                        REPORT( _( "Rule layer not matched." ) )
                         REPORT( "Rule ignored." )
                     }
 
@@ -880,8 +903,11 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                 }
                 else
                 {
-                    // Don't report on implicit rule conditions; they're synthetic.
-                    if( !implicit )
+                    if( implicit )
+                    {
+                        // Don't report on implicit rule conditions; they're synthetic.
+                    }
+                    else
                     {
                         REPORT( wxString::Format( _( "Checking rule condition \"%s\"." ),
                                                   c->condition->GetExpression() ) )
