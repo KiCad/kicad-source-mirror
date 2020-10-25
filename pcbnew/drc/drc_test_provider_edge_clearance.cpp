@@ -144,7 +144,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
             };
 
     forEachGeometryItem( { PCB_SHAPE_T }, LSET( Edge_Cuts ), queryBoardOutlineItems );
-    forEachGeometryItem( {}, LSET::AllCuMask(), queryBoardGeometryItems );
+    forEachGeometryItem( s_allBasicItems, LSET::AllCuMask(), queryBoardGeometryItems );
 
     wxString val;
     wxGetEnv( "WXTRACE", &val );
@@ -205,7 +205,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
         return false;
 
     boardItems.clear();
-    forEachGeometryItem( {}, LSET( 2, F_SilkS, B_SilkS ), queryBoardGeometryItems );
+    forEachGeometryItem( s_allBasicItems, LSET( 2, F_SilkS, B_SilkS ),
+                         queryBoardGeometryItems );
 
     for( const std::unique_ptr<PCB_SHAPE>& outlineItem : boardOutline )
     {

@@ -34,8 +34,7 @@
 class DRC_ENGINE;
 class DRC_TEST_PROVIDER;
 
-
-class DRC_TEST_PROVIDER_REGISTRY 
+class DRC_TEST_PROVIDER_REGISTRY
 {
 public:
     DRC_TEST_PROVIDER_REGISTRY() {};
@@ -122,6 +121,9 @@ protected:
     virtual void accountCheck( const DRC_CONSTRAINT& constraintToTest );
 
     bool isInvisibleText( const BOARD_ITEM* aItem ) const;
+
+    // List of basic (ie: non-compound) geometry items
+    static std::vector<KICAD_T> s_allBasicItems;
 
     EDA_UNITS   userUnits() const;
     DRC_ENGINE* m_drcEngine;

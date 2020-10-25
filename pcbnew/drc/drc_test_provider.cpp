@@ -30,6 +30,11 @@
 #include <class_zone.h>
 #include <pcb_text.h>
 
+
+// A list of all basic (ie: non-compound) board geometry items
+std::vector<KICAD_T> DRC_TEST_PROVIDER::s_allBasicItems;
+
+
 DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
     m_drcEngine( nullptr )
 {
@@ -125,6 +130,15 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
     BOARD *brd = m_drcEngine->GetBoard();
     std::bitset<MAX_STRUCT_TYPE_ID> typeMask;
     int n = 0;
+
+    if( s_allBasicItems.size() == 0 )
+    {
+        for( int i = 0; i < MAX_STRUCT_TYPE_ID; i++ )
+        {
+            if( i != PCB_MODULE_T && i != PCB_GROUP_T )
+                s_allBasicItems.push_back( (KICAD_T) i );
+        }
+    }
 
     if( aTypes.size() == 0 )
     {
