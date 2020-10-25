@@ -164,22 +164,19 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
     SCH_SHEET_LIST hierarchy = m_frame->Schematic().GetFullHierarchy();
     SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
 
+    instance.push_back( m_sheet );
+
     wxString nextPageNumber;
 
     if( m_sheet->IsNew() )
-    {
         nextPageNumber.Printf( "%d", static_cast<int>( hierarchy.size() ) + 1 );
-    }
     else
-    {
-        instance.push_back( m_sheet );
         nextPageNumber = m_sheet->GetPageNumber( instance );
-    }
 
     m_pageNumberTextCtrl->ChangeValue( nextPageNumber );
 
     // set up the read-only fields
-    m_heirarchyPath->SetValue( m_frame->GetCurrentSheet().PathHumanReadable() );
+    m_heirarchyPath->SetValue( instance.PathHumanReadable() );
 
     Layout();
 
