@@ -205,6 +205,9 @@ bool PANEL_SETUP_SEVERITIES::TransferDataFromWindow()
     {
         int errorCode = item.GetErrorCode();
 
+        if( m_pinMapSpecialCase && m_pinMapSpecialCase->GetErrorCode() == errorCode )
+            continue;
+
         if( !m_buttonMap[ errorCode ][0] )  // this entry does not actually exist
             continue;
 
