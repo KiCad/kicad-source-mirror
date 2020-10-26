@@ -406,6 +406,45 @@ struct ASCH_POWER_PORT
 };
 
 
+enum class ASCH_PORT_IOTYPE
+{
+    UNSPECIFIED = 0,
+    OUTPUT      = 1,
+    INPUT       = 2,
+    BIDI        = 3,
+};
+
+
+enum class ASCH_PORT_STYLE
+{
+    NONE_HORIZONTAL = 0,
+    LEFT            = 1,
+    RIGHT           = 2,
+    LEFT_RIGHT      = 3,
+    NONE_VERTICAL   = 4,
+    TOP             = 5,
+    BOTTOM          = 6,
+    TOP_BOTTOM      = 7
+};
+
+
+struct ASCH_PORT
+{
+    int ownerpartid;
+
+    wxString name;
+
+    wxPoint location;
+    int     width;
+    int     height;
+
+    ASCH_PORT_IOTYPE iotype;
+    ASCH_PORT_STYLE  style;
+
+    explicit ASCH_PORT( const std::map<wxString, wxString>& aProperties );
+};
+
+
 struct ASCH_NO_ERC
 {
     wxPoint location;

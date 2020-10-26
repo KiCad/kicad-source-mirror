@@ -345,6 +345,7 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
             ParsePowerPort( properties );
             break;
         case ALTIUM_SCH_RECORD::PORT:
+            ParsePort( properties );
             break;
         case ALTIUM_SCH_RECORD::NO_ERC:
             ParseNoERC( properties );
@@ -1524,6 +1525,85 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
     }
 
     m_currentSheet->GetScreen()->Append( component );
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParsePort( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_PORT elem( aProperties );
+
+    SCH_TEXT* const label = new SCH_GLOBALLABEL( elem.location + m_sheetOffset, elem.name );
+    // TODO: detect correct label type depending on sheet settings, etc.
+    // label = new SCH_HIERLABEL( elem.location + m_sheetOffset, elem.name );
+
+    switch( elem.iotype )
+    {
+    default:
+    case ASCH_PORT_IOTYPE::UNSPECIFIED:
+        label->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );
+        break;
+    case ASCH_PORT_IOTYPE::OUTPUT:
+        label->SetShape( PINSHEETLABEL_SHAPE::PS_OUTPUT );
+        break;
+    case ASCH_PORT_IOTYPE::INPUT:
+        label->SetShape( PINSHEETLABEL_SHAPE::PS_INPUT );
+        break;
+    case ASCH_PORT_IOTYPE::BIDI:
+        label->SetShape( PINSHEETLABEL_SHAPE::PS_BIDI );
+        break;
+    }
+
+    switch( elem.style )
+    {
+    default:
+    case ASCH_PORT_STYLE::NONE_HORIZONTAL:
+    case ASCH_PORT_STYLE::LEFT:
+    case ASCH_PORT_STYLE::RIGHT:
+    case ASCH_PORT_STYLE::LEFT_RIGHT:
+        label->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+        break;
+    case ASCH_PORT_STYLE::NONE_VERTICAL:
+    case ASCH_PORT_STYLE::TOP:
+    case ASCH_PORT_STYLE::BOTTOM:
+    case ASCH_PORT_STYLE::TOP_BOTTOM:
+        label->SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
+        break;
+    }
+
+    label->SetFlags( IS_NEW );
+    m_currentSheet->GetScreen()->Append( label );
+
+    // TODO: This is a hack until we know where we need to connect the label.
+    // The problem is that, apparently, Altium allows us to connect to the label from both sides
+    wxPoint start = elem.location + m_sheetOffset;
+    switch( elem.style )
+    {
+    default:
+    case ASCH_PORT_STYLE::NONE_HORIZONTAL:
+    case ASCH_PORT_STYLE::LEFT:
+    case ASCH_PORT_STYLE::RIGHT:
+    case ASCH_PORT_STYLE::LEFT_RIGHT:
+    {
+        SCH_LINE* wire = new SCH_LINE( start, SCH_LAYER_ID::LAYER_WIRE );
+        wire->SetEndPoint( { start.x + elem.width, start.y } );
+        wire->SetLineWidth( Mils2iu( 2 ) );
+        wire->SetFlags( IS_NEW );
+        m_currentSheet->GetScreen()->Append( wire );
+        break;
+    }
+    case ASCH_PORT_STYLE::NONE_VERTICAL:
+    case ASCH_PORT_STYLE::TOP:
+    case ASCH_PORT_STYLE::BOTTOM:
+    case ASCH_PORT_STYLE::TOP_BOTTOM:
+    {
+        SCH_LINE* wire = new SCH_LINE( start, SCH_LAYER_ID::LAYER_WIRE );
+        wire->SetEndPoint( { start.x, start.y - elem.width } );
+        wire->SetLineWidth( Mils2iu( 2 ) );
+        wire->SetFlags( IS_NEW );
+        m_currentSheet->GetScreen()->Append( wire );
+        break;
+    }
+    }
 }
 
 

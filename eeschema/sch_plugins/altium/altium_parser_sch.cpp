@@ -387,6 +387,27 @@ ASCH_POWER_PORT::ASCH_POWER_PORT( const std::map<wxString, wxString>& aPropertie
             aProperties, "STYLE", 0, 10, ASCH_POWER_PORT_STYLE::CIRCLE );
 }
 
+ASCH_PORT::ASCH_PORT( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::PORT );
+
+    ownerpartid =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", ALTIUM_COMPONENT_NONE );
+
+    location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
+
+    name = ALTIUM_PARSER::PropertiesReadString( aProperties, "NAME", "" );
+
+    width  = PropertiesReadKiCadUnitFrac( aProperties, "WIDTH" );
+    height = PropertiesReadKiCadUnitFrac( aProperties, "HEIGHT" );
+
+    iotype = PropertiesReadEnum<ASCH_PORT_IOTYPE>(
+            aProperties, "IOTYPE", 0, 3, ASCH_PORT_IOTYPE::UNSPECIFIED );
+    style = PropertiesReadEnum<ASCH_PORT_STYLE>(
+            aProperties, "STYLE", 0, 7, ASCH_PORT_STYLE::NONE_HORIZONTAL );
+}
+
 
 ASCH_NO_ERC::ASCH_NO_ERC( const std::map<wxString, wxString>& aProperties )
 {

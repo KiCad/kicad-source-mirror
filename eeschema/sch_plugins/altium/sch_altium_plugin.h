@@ -115,6 +115,7 @@ private:
     void ParseLine( const std::map<wxString, wxString>& aProperties );
     void ParseRectangle( const std::map<wxString, wxString>& aProperties );
     void ParsePowerPort( const std::map<wxString, wxString>& aProperties );
+    void ParsePort( const std::map<wxString, wxString>& aProperties );
     void ParseNoERC( const std::map<wxString, wxString>& aProperties );
     void ParseNetLabel( const std::map<wxString, wxString>& aProperties );
     void ParseBus( const std::map<wxString, wxString>& aProperties );
