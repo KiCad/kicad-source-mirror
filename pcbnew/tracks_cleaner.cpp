@@ -31,8 +31,8 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/global_edit_tool.h>
+#include <drc/drc_rtree.h>
 #include <tracks_cleaner.h>
-
 
 TRACKS_CLEANER::TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit ) :
         m_brd( aPcb ),
@@ -58,20 +58,7 @@ void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLE
     m_dryRun = aDryRun;
     m_itemsList = aItemsList;
 
-    // Clear the flag used to mark some segments as deleted, in dry run:
-    for( TRACK* segment : m_brd->Tracks() )
-        segment->ClearFlags( IS_DELETED );
-
-    // delete redundant vias
-    if( aCleanVias )
-        cleanupVias();
-
-    // Remove null segments and intermediate points on aligned segments
-    // If not asked, remove null segments only if remove misconnected is asked
-    if( aMergeSegments )
-        cleanupSegments();
-    else if( aRemoveMisConnected )
-        deleteNullSegments( m_brd->Tracks() );
+    cleanup( aCleanVias, aMergeSegments || aRemoveMisConnected, aMergeSegments, aMergeSegments );
 
     if( aRemoveMisConnected )
         removeShortingTrackSegments();
@@ -79,20 +66,14 @@ void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLE
     if( aDeleteTracksinPad )
         deleteTracksInPads();
 
-    // Delete dangling tracks
     if( aDeleteUnconnected )
         has_deleted = deleteDanglingTracks( false );
 
-    // Delete dangling vias
     if( aDeleteDanglingVias )
         has_deleted |= deleteDanglingTracks( true );
 
     if( has_deleted && aMergeSegments )
-        cleanupSegments();
-
-    // Clear the flag used to mark some segments:
-    for( TRACK* segment : m_brd->Tracks() )
-        segment->ClearFlags( IS_DELETED );
+        cleanup( false, false, false, true );
 }
 
 
@@ -137,73 +118,6 @@ void TRACKS_CLEANER::removeShortingTrackSegments()
                 m_itemsList->push_back( item );
 
                 toRemove.insert( segment );
-            }
-        }
-    }
-
-    if( !m_dryRun )
-        removeItems( toRemove );
-}
-
-
-void TRACKS_CLEANER::cleanupVias()
-{
-    std::set<BOARD_ITEM*> toRemove;
-    std::vector<VIA*>     vias;
-
-    for( TRACK* track : m_brd->Tracks() )
-    {
-        if( track->Type() == PCB_VIA_T )
-            vias.push_back( static_cast<VIA*>( track ) );
-    }
-
-    for( auto via1_it = vias.begin(); via1_it != vias.end(); via1_it++ )
-    {
-        VIA* via1 = *via1_it;
-
-        if( via1->IsLocked() )
-            continue;
-
-        if( via1->GetStart() != via1->GetEnd() )
-            via1->SetEnd( via1->GetStart() );
-
-        // To delete through Via on THT pads at same location
-        // Examine the list of connected pads:
-        // if a through pad is found, the via can be removed
-
-        const std::vector<D_PAD*> pads = m_brd->GetConnectivity()->GetConnectedPads( via1 );
-
-        for( D_PAD* pad : pads )
-        {
-            const LSET all_cu = LSET::AllCuMask();
-
-            if( ( pad->GetLayerSet() & all_cu ) == all_cu )
-            {
-                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_REDUNDANT_VIA ) );
-                item->SetItems( via1, pad );
-                m_itemsList->push_back( item );
-
-                // redundant: delete the via
-                toRemove.insert( via1 );
-                break;
-            }
-        }
-
-        for( auto via2_it = via1_it + 1; via2_it != vias.end(); via2_it++ )
-        {
-            VIA* via2 = *via2_it;
-
-            if( via1->GetPosition() != via2->GetPosition() || via2->IsLocked() )
-                continue;
-
-            if( via1->GetViaType() == via2->GetViaType() )
-            {
-                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_REDUNDANT_VIA ) );
-                item->SetItems( via1, via2 );
-                m_itemsList->push_back( item );
-
-                toRemove.insert( via2 );
-                break;
             }
         }
     }
@@ -302,28 +216,6 @@ bool TRACKS_CLEANER::deleteDanglingTracks( bool aVia )
 }
 
 
-// Delete null length track segments
-void TRACKS_CLEANER::deleteNullSegments( TRACKS& aTracks )
-{
-    std::set<BOARD_ITEM *> toRemove;
-
-    for( TRACK* segment : aTracks )
-    {
-        if( segment->IsNull() && segment->Type() == PCB_TRACE_T && !segment->IsLocked() )
-        {
-            std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_ZERO_LENGTH_TRACK ) );
-            item->SetItems( segment );
-            m_itemsList->push_back( item );
-
-            toRemove.insert( segment );
-        }
-    }
-
-    if( !m_dryRun )
-        removeItems( toRemove );
-}
-
-
 void TRACKS_CLEANER::deleteTracksInPads()
 {
     std::set<BOARD_ITEM*> toRemove;
@@ -364,95 +256,174 @@ void TRACKS_CLEANER::deleteTracksInPads()
 }
 
 
-// Delete null length segments, and intermediate points ..
-void TRACKS_CLEANER::cleanupSegments()
+/**
+ * Geometry-based cleanup: duplicate items, null items, colinear items.
+ */
+void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegments,
+                              bool aDeleteDuplicateSegments, bool aMergeSegments )
 {
-    // Easy things first
-    deleteNullSegments( m_brd->Tracks() );
+    DRC_RTREE rtree;
+
+    for( TRACK* track : m_brd->Tracks() )
+    {
+        track->ClearFlags( IS_DELETED );
+        rtree.insert( track );
+    }
 
     std::set<BOARD_ITEM*> toRemove;
 
-    // Remove duplicate segments (2 superimposed identical segments):
-    for( size_t ii = 0; ii < m_brd->Tracks().size(); ++ii )
+    for( TRACK* track : m_brd->Tracks() )
     {
-        TRACK* track1 = m_brd->Tracks()[ii];
-
-        if( track1->Type() != PCB_TRACE_T || track1->HasFlag( IS_DELETED ) || track1->IsLocked() )
+        if( track->HasFlag( IS_DELETED ) || track->IsLocked() )
             continue;
 
-        for( size_t jj = ii + 1; jj < m_brd->Tracks().size(); ++jj )
+        if( aDeleteDuplicateVias && track->Type() == PCB_VIA_T )
         {
-            TRACK* track2 = m_brd->Tracks()[jj];
+            VIA* via = static_cast<VIA*>( track );
 
-            if( track2->Type() != PCB_TRACE_T || track2->HasFlag( IS_DELETED ) )
-                continue;
+            if( via->GetStart() != via->GetEnd() )
+                via->SetEnd( via->GetStart() );
 
-            if( track1->IsPointOnEnds( track2->GetStart() )
-                    && track1->IsPointOnEnds( track2->GetEnd() )
-                    && track1->GetWidth() == track2->GetWidth()
-                    && track1->GetLayer() == track2->GetLayer() )
+            rtree.QueryColliding( via, via->GetLayer(), via->GetLayer(), nullptr,
+                    [&]( BOARD_ITEM* aItem, int ) -> bool
+                    {
+                        if( aItem->Type() != PCB_VIA_T || aItem->HasFlag( IS_DELETED ) )
+                            return true;
+
+                        VIA* other = static_cast<VIA*>( aItem );
+
+                        if( via->GetPosition() == other->GetPosition()
+                                && via->GetViaType() == other->GetViaType()
+                                && via->GetLayerSet() == other->GetLayerSet() )
+                        {
+                            auto item = std::make_shared<CLEANUP_ITEM>( CLEANUP_REDUNDANT_VIA );
+                            item->SetItems( via );
+                            m_itemsList->push_back( item );
+
+                            via->SetFlags( IS_DELETED );
+                            toRemove.insert( via );
+                        }
+
+                        return true;
+                    } );
+
+            // To delete through Via on THT pads at same location
+            // Examine the list of connected pads: if a through pad is found, the via is redundant
+            for( D_PAD* pad : m_brd->GetConnectivity()->GetConnectedPads( via ) )
             {
-                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_DUPLICATE_TRACK ) );
-                item->SetItems( track2 );
+                const LSET all_cu = LSET::AllCuMask();
+
+                if( ( pad->GetLayerSet() & all_cu ) == all_cu )
+                {
+                    auto item = std::make_shared<CLEANUP_ITEM>( CLEANUP_REDUNDANT_VIA );
+                    item->SetItems( via, pad );
+                    m_itemsList->push_back( item );
+
+                    via->SetFlags( IS_DELETED );
+                    toRemove.insert( via );
+                    break;
+                }
+            }
+        }
+
+        if( aDeleteNullSegments && track->Type() != PCB_VIA_T )
+        {
+            if( track->IsNull() )
+            {
+                auto item = std::make_shared<CLEANUP_ITEM>( CLEANUP_ZERO_LENGTH_TRACK );
+                item->SetItems( track );
                 m_itemsList->push_back( item );
 
-                track2->SetFlags( IS_DELETED );
-                toRemove.insert( track2 );
+                track->SetFlags( IS_DELETED );
+                toRemove.insert( track );
             }
+        }
+
+        if( aDeleteDuplicateSegments && track->Type() == PCB_TRACE_T )
+        {
+            rtree.QueryColliding( track, track->GetLayer(), track->GetLayer(), nullptr,
+                    [&]( BOARD_ITEM* aItem, int ) -> bool
+                    {
+                        if( aItem->Type() != PCB_TRACE_T || aItem->HasFlag( IS_DELETED ) )
+                            return true;
+
+                        TRACK* other = static_cast<TRACK*>( aItem );
+
+                        if( track->IsPointOnEnds( other->GetStart() )
+                                && track->IsPointOnEnds( other->GetEnd() )
+                                && track->GetWidth() == other->GetWidth()
+                                && track->GetLayer() == other->GetLayer() )
+                        {
+                            auto item = std::make_shared<CLEANUP_ITEM>( CLEANUP_DUPLICATE_TRACK );
+                            item->SetItems( track );
+                            m_itemsList->push_back( item );
+
+                            track->SetFlags( IS_DELETED );
+                            toRemove.insert( track );
+                        }
+
+                        return true;
+                    } );
         }
     }
 
     if( !m_dryRun )
         removeItems( toRemove );
 
-    bool merged;
-
-    do
+    if( aMergeSegments )
     {
-        merged = false;
-        m_brd->BuildConnectivity();
+        bool merged;
 
-        // Keep a duplicate deque to all deleting in the primary
-        std::deque<TRACK*> temp_segments( m_brd->Tracks() );
-
-        // merge collinear segments:
-        for( TRACK* segment : temp_segments )
+        do
         {
-            if( segment->Type() != PCB_TRACE_T )    // one can merge only track collinear segments, not vias.
-                continue;
+            merged = false;
+            m_brd->BuildConnectivity();
 
-            if( segment->HasFlag( IS_DELETED ) )  // already taken in account
-                continue;
+            // Keep a duplicate deque to all deleting in the primary
+            std::deque<TRACK*> temp_segments( m_brd->Tracks() );
 
-            auto connectivity = m_brd->GetConnectivity();
-
-            auto& entry = connectivity->GetConnectivityAlgo()->ItemEntry( segment );
-
-            for( CN_ITEM* citem : entry.GetItems() )
+            // merge collinear segments:
+            for( TRACK* segment : temp_segments )
             {
-                for( CN_ITEM* connected : citem->ConnectedItems() )
+                if( segment->Type() != PCB_TRACE_T )    // one can merge only track collinear segments, not vias.
+                    continue;
+
+                if( segment->HasFlag( IS_DELETED ) )  // already taken in account
+                    continue;
+
+                auto connectivity = m_brd->GetConnectivity();
+
+                auto& entry = connectivity->GetConnectivityAlgo()->ItemEntry( segment );
+
+                for( CN_ITEM* citem : entry.GetItems() )
                 {
-                    if( !connected->Valid() )
-                        continue;
-
-                    BOARD_CONNECTED_ITEM* candidateItem = connected->Parent();
-
-                    if( candidateItem->Type() == PCB_TRACE_T && !candidateItem->HasFlag( IS_DELETED ) )
+                    for( CN_ITEM* connected : citem->ConnectedItems() )
                     {
-                        TRACK* candidateSegment = static_cast<TRACK*>( candidateItem );
-
-                        // Do not merge segments having different widths: it is a frequent case
-                        // to draw a track between 2 pads:
-                        if( candidateSegment->GetWidth() != segment->GetWidth() )
+                        if( !connected->Valid() )
                             continue;
 
-                        if( segment->ApproxCollinear( *candidateSegment ) )
-                            merged = mergeCollinearSegments( segment, candidateSegment );
+                        BOARD_CONNECTED_ITEM* candidateItem = connected->Parent();
+
+                        if( candidateItem->Type() == PCB_TRACE_T && !candidateItem->HasFlag( IS_DELETED ) )
+                        {
+                            TRACK* candidateSegment = static_cast<TRACK*>( candidateItem );
+
+                            // Do not merge segments having different widths: it is a frequent case
+                            // to draw a track between 2 pads:
+                            if( candidateSegment->GetWidth() != segment->GetWidth() )
+                                continue;
+
+                            if( segment->ApproxCollinear( *candidateSegment ) )
+                                merged = mergeCollinearSegments( segment, candidateSegment );
+                        }
                     }
                 }
             }
-        }
-    } while( merged );
+        } while( merged );
+    }
+
+    for( TRACK* track : m_brd->Tracks() )
+        track->ClearFlags( IS_DELETED );
 }
 
 

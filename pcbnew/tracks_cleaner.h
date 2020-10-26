@@ -58,11 +58,6 @@ private:
     void removeShortingTrackSegments();
 
     /**
-     * Removes redundant vias like vias at same location or on pad through.
-     */
-    void cleanupVias();
-
-    /**
      * Removes tracks or vias only connected on one end
      * @param aVia if true, clean vias, if false clean tracks
      * @return true if any items were deleted
@@ -71,12 +66,11 @@ private:
 
     void deleteTracksInPads();
 
-    void deleteNullSegments( TRACKS& aTracks );
-
     /**
-     * Merge collinear segments and remove duplicated and null length segments.
+     * Geometry-based cleanup: duplicate items, null items, colinear items.
      */
-    void cleanupSegments();
+    void cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegments,
+                  bool aDeleteDuplicateSegments, bool aMergeSegments );
 
     /**
      * helper function

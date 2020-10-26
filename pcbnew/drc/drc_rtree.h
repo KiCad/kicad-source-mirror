@@ -296,6 +296,9 @@ public:
         auto visit =
                 [&]( ITEM_WITH_SHAPE* aItem ) -> bool
                 {
+                    if( aItem->parent == aRefItem )
+                        return true;
+
                     if( collidingCompounds.find( aItem->parent ) != collidingCompounds.end() )
                         return true;
 
