@@ -731,6 +731,29 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
     // Add non-connected pad clearances
     //
+    auto knockoutPad =
+            [&]( D_PAD* aPad )
+            {
+                if( aPad->GetBoundingBox().Intersects( zone_boundingbox ) )
+                {
+                    int gap;
+
+                    // for pads having the same netcode as the zone, the net clearance has no
+                    // meaning so use the greater of the zone clearance and the thermal relief
+                    if( aPad->GetNetCode() > 0 && aPad->GetNetCode() == aZone->GetNetCode() )
+                    {
+                        gap = std::max( zone_clearance, aZone->GetThermalReliefGap( aPad ) );
+                    }
+                    else
+                    {
+                        gap = evalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aZone, aPad,
+                                                 aLayer );
+                    }
+
+                    addKnockout( aPad, aLayer, gap, aHoles );
+                }
+            };
+
     for( MODULE* module : m_board->Modules() )
     {
         for( D_PAD* pad : module->Pads() )
@@ -747,30 +770,47 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
             if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0
                     || aZone->GetPadConnection( pad ) == ZONE_CONNECTION::NONE )
             {
-                if( pad->GetBoundingBox().Intersects( zone_boundingbox ) )
-                {
-                    int gap;
-
-                    // for pads having the same netcode as the zone, the net clearance has no
-                    // meaning so use the greater of the zone clearance and the thermal relief
-                    if( pad->GetNetCode() > 0 && pad->GetNetCode() == aZone->GetNetCode() )
-                    {
-                        gap = std::max( zone_clearance, aZone->GetThermalReliefGap( pad ) );
-                    }
-                    else
-                    {
-                        gap = evalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aZone, pad,
-                                                 aLayer );
-                    }
-
-                    addKnockout( pad, aLayer, gap, aHoles );
-                }
+                knockoutPad( pad );
             }
         }
     }
 
     // Add non-connected track clearances
     //
+    auto knockoutTrack =
+            [&]( TRACK* aTrack )
+            {
+                if( aTrack->GetBoundingBox().Intersects( zone_boundingbox ) )
+                {
+                    int gap = evalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aZone, aTrack,
+                                                 aLayer );
+
+                    gap += extra_margin;
+
+                    if( aTrack->Type() == PCB_VIA_T )
+                    {
+                        VIA* via = static_cast<VIA*>( aTrack );
+
+                        if( !via->FlashLayer( aLayer ) )
+                        {
+                            int radius = via->GetDrillValue() / 2 + bds.GetHolePlatingThickness();
+                            TransformCircleToPolygon( aHoles, via->GetPosition(), radius + gap,
+                                                      m_maxError, ERROR_OUTSIDE );
+                        }
+                        else
+                        {
+                            via->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap,
+                                                                       m_maxError, ERROR_OUTSIDE );
+                        }
+                    }
+                    else
+                    {
+                        aTrack->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap,
+                                                                      m_maxError, ERROR_OUTSIDE );
+                    }
+                }
+            };
+
     for( TRACK* track : m_board->Tracks() )
     {
         if( !track->IsOnLayer( aLayer ) )
@@ -779,40 +819,13 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
         if( track->GetNetCode() == aZone->GetNetCode()  && ( aZone->GetNetCode() != 0) )
             continue;
 
-        if( track->GetBoundingBox().Intersects( zone_boundingbox ) )
-        {
-            int gap = evalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aZone, track, aLayer );
-
-            gap += extra_margin;
-
-            if( track->Type() == PCB_VIA_T )
-            {
-                VIA* via = static_cast<VIA*>( track );
-
-                if( !via->FlashLayer( aLayer ) )
-                {
-                    int radius = via->GetDrillValue() / 2 + bds.GetHolePlatingThickness() + gap;
-                    TransformCircleToPolygon( aHoles, via->GetPosition(), radius, m_maxError,
-                                              ERROR_OUTSIDE );
-                }
-                else
-                {
-                    via->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap, m_maxError,
-                                                               ERROR_OUTSIDE );
-                }
-            }
-            else
-            {
-                track->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap, m_maxError,
-                                                             ERROR_OUTSIDE );
-            }
-        }
+        knockoutTrack( track );
     }
 
     // Add graphic item clearances.  They are by definition unconnected, and have no clearance
     // definitions of their own.
     //
-    auto doGraphicItem =
+    auto knockoutGraphic =
             [&]( BOARD_ITEM* aItem )
             {
                 // A item on the Edge_Cuts is always seen as on any layer:
@@ -836,15 +849,15 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
     for( MODULE* module : m_board->Modules() )
     {
-        doGraphicItem( &module->Reference() );
-        doGraphicItem( &module->Value() );
+        knockoutGraphic( &module->Reference() );
+        knockoutGraphic( &module->Value() );
 
         for( BOARD_ITEM* item : module->GraphicalItems() )
-            doGraphicItem( item );
+            knockoutGraphic( item );
     }
 
     for( BOARD_ITEM* item : m_board->Drawings() )
-        doGraphicItem( item );
+        knockoutGraphic( item );
 
     // Add non-connected zone clearances
     //
