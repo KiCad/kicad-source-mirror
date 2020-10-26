@@ -31,6 +31,7 @@
 #include <class_module.h>
 #include <confirm.h>
 #include <convert_basic_shapes_to_polygon.h> // for enum RECT_CHAMFER_POSITIONS definition
+#include <geometry/shape_segment.h>
 #include <dialog_pad_properties.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <dialogs/html_messagebox.h>
@@ -1165,6 +1166,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     bool skip_tstoffset = false;    // the offset prm is not always tested
 
     wxArrayString error_msgs;
+    wxArrayString warning_msgs;
     wxString msg;
 
     // Test for incorrect values
@@ -1174,10 +1176,26 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         error_msgs.Add( _( "Pad size must be greater than zero" ) );
     }
 
-    if( (m_dummyPad->GetSize().x < m_dummyPad->GetDrillSize().x) ||
-        (m_dummyPad->GetSize().y < m_dummyPad->GetDrillSize().y) )
+    // Test hole size against pad size
+    LSET lset = m_dummyPad->GetLayerSet() & LSET::AllCuMask();
+    PCB_LAYER_ID   layer    = lset.Seq().at( 0 );
+    int            maxError = m_board->GetDesignSettings().m_MaxError;
+    SHAPE_POLY_SET padOutline, drillOutline;
+
+    m_dummyPad->TransformShapeWithClearanceToPolygon( padOutline, layer, 0, maxError,
+                                                       ERROR_LOC::ERROR_INSIDE );
+
+    const SHAPE_SEGMENT* drillShape = m_dummyPad->GetEffectiveHoleShape();
+    const SEG            drillSeg   = drillShape->GetSeg();
+
+    TransformOvalToPolygon( drillOutline, (wxPoint) drillSeg.A, (wxPoint) drillSeg.B,
+                            drillShape->GetWidth(), maxError, ERROR_LOC::ERROR_INSIDE );
+    
+    drillOutline.BooleanSubtract( padOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+
+    if( ( drillOutline.BBox().GetWidth() > 0 ) || ( drillOutline.BBox().GetHeight() > 0 ) )
     {
-        error_msgs.Add(  _( "Incorrect value for pad drill: pad drill bigger than pad size" ) );
+        warning_msgs.Add( _( "Warning: Pad drill bigger than pad size or shapes do not overlap" ) );
         skip_tstoffset = true;  // offset prm will be not tested because if the drill value
                                 // is incorrect the offset prm is always seen as incorrect, even if it is 0
     }
@@ -1226,12 +1244,13 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
                 && m_dummyPad->GetAttribute() != PAD_ATTRIB_NPTH )
         {
             // Note: he message is shown in an HTML window
-            msg = _( "Error: plated through holes must have a copper pad on at least one layer" );
-            error_msgs.Add( msg );
+            msg = _( "Warning: plated through holes should normally have a copper pad on at least one layer" );
+            warning_msgs.Add( msg );
         }
     }
 
-    if( !skip_tstoffset )
+    //Note: the below test might be unnecessary
+    if( !skip_tstoffset && m_dummyPad->GetShape() != PAD_SHAPE_CUSTOM )
     {
         wxPoint max_size;
         max_size.x = std::abs( m_dummyPad->GetOffset().x );
@@ -1270,7 +1289,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
         if( ( padlayers_mask[F_Cu] && padlayers_mask[B_Cu] ) ||
             innerlayers_mask.count() != 0 )
-            error_msgs.Add( _( "Error: only one external copper layer allowed for SMD or Connector pads" ) );
+            warning_msgs.Add( _( "Warning: The pad has been defined in an inner layer only." ) );
         }
         break;
     }
@@ -1320,7 +1339,20 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     {
         HTML_MESSAGE_BOX dlg( this, _("Pad setup errors list" ) );
         dlg.ListSet( error_msgs );
+
+        if( warning_msgs.GetCount() )
+        {
+            dlg.ListSet( warning_msgs );
+        }
+
         dlg.ShowModal();
+    }
+    else
+    {
+        for( int i = 0; i < warning_msgs.GetCount(); ++i )
+        {
+            m_parent->ShowInfoBarWarning( warning_msgs[i] );
+        }
     }
 
     return error_msgs.GetCount() == 0;
