@@ -125,6 +125,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
 
         m_changesTreeModel->SetProvider( nullptr );
         m_items.clear();
+        m_firstRun = false;
     }
 
     // Old model has to be refreshed, GAL normally does not keep updating it
