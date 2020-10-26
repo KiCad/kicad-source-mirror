@@ -87,8 +87,10 @@ enum class ALTIUM_REGION_KIND
 
     COPPER            = 0, // KIND=0
     POLYGON_CUTOUT    = 1, // KIND=1
-    BOARD_CUTOUT      = 2, // KIND=0 AND ISBOARDCUTOUT=TRUE
-    CAVITY_DEFINITION = 3, // KIND=4
+    UNKNOWN_2         = 2, // KIND=2
+    UNKNOWN_3         = 3, // KIND=3
+    CAVITY_DEFINITION = 4, // KIND=4
+    BOARD_CUTOUT      = 5, // KIND=0 AND ISBOARDCUTOUT=TRUE
 };
 
 enum class ALTIUM_RULE_KIND
@@ -492,7 +494,7 @@ struct AREGION6
     uint16_t     component;
     uint16_t     subpolyindex;
 
-    ALTIUM_REGION_KIND kind; // I asume this means if normal or keepout?
+    ALTIUM_REGION_KIND kind; // I assume this means if normal or keepout?
 
     std::vector<ALTIUM_VERTICE> vertices;
 

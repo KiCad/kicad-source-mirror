@@ -1023,6 +1023,12 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
     case 1:
         kind = ALTIUM_REGION_KIND::POLYGON_CUTOUT;
         break;
+    case 2:
+        kind = ALTIUM_REGION_KIND::UNKNOWN_2; // TODO: what kind is this?
+        break;
+    case 3:
+        kind = ALTIUM_REGION_KIND::UNKNOWN_3; // TODO: what kind is this?
+        break;
     case 4:
         kind = ALTIUM_REGION_KIND::CAVITY_DEFINITION;
         break;
