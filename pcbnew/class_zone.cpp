@@ -1353,7 +1353,7 @@ std::shared_ptr<SHAPE> ZONE_CONTAINER::GetEffectiveShape( PCB_LAYER_ID aLayer ) 
 
     if( m_FilledPolysList.find( aLayer ) == m_FilledPolysList.end() )
     {
-        shape.reset( new SHAPE_NULL );
+        shape = std::make_shared<SHAPE_NULL>();
     }
     else
     {

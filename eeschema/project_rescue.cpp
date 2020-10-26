@@ -643,8 +643,8 @@ void LEGACY_RESCUER::OpenRescueLibrary()
 {
     wxFileName fn = GetRescueLibraryFileName( m_schematic );
 
-    std::unique_ptr<PART_LIB> rescue_lib(
-            new PART_LIB( SCH_LIB_TYPE::LT_EESCHEMA, fn.GetFullPath() ) );
+    std::unique_ptr<PART_LIB> rescue_lib = std::make_unique<PART_LIB>( SCH_LIB_TYPE::LT_EESCHEMA,
+                                                                       fn.GetFullPath() );
 
     m_rescue_lib = std::move( rescue_lib );
     m_rescue_lib->EnableBuffering();

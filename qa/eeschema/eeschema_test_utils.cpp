@@ -63,7 +63,7 @@ wxFileName KI_TEST::GetEeschemaTestDataDir()
 std::unique_ptr<SCHEMATIC> ReadSchematicFromFile( const std::string& aFilename )
 {
     auto pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
-    std::unique_ptr<SCHEMATIC> schematic( new SCHEMATIC ( nullptr ) );
+    std::unique_ptr<SCHEMATIC> schematic = std::make_unique<SCHEMATIC>( nullptr );
 
     schematic->Reset();
     schematic->SetRoot( pi->Load( aFilename, schematic.get() ) );

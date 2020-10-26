@@ -192,7 +192,7 @@ bool TRACKS_CLEANER::deleteDanglingTracks( bool aVia )
                 int errorCode =
                         ( track->Type() != PCB_VIA_T ) ?
                                 CLEANUP_DANGLING_TRACK : CLEANUP_DANGLING_VIA;
-                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( errorCode ) );
+                std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( errorCode );
                 item->SetItems( track );
                 m_itemsList->push_back( item );
 
@@ -241,7 +241,7 @@ void TRACKS_CLEANER::deleteTracksInPads()
 
                 if( poly.IsEmpty() )
                 {
-                    std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_TRACK_IN_PAD ) );
+                    std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( CLEANUP_TRACK_IN_PAD );
                     item->SetItems( track );
                     m_itemsList->push_back( item );
 
@@ -473,7 +473,7 @@ bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
             return false;
     }
 
-    std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_MERGE_TRACKS ) );
+    std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( CLEANUP_MERGE_TRACKS );
     item->SetItems( aSeg1, aSeg2 );
     m_itemsList->push_back( item );
 

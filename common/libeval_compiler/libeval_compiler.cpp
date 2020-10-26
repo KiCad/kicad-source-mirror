@@ -690,7 +690,7 @@ void TREE_NODE::SetUop( int aOp, double aValue )
 {
     delete uop;
 
-    std::unique_ptr<VALUE> val( new VALUE( aValue ) );
+    std::unique_ptr<VALUE> val = std::make_unique<VALUE>( aValue );
     uop = new UOP( aOp, std::move( val ) );
 }
 
@@ -699,7 +699,7 @@ void TREE_NODE::SetUop( int aOp, const wxString& aValue, bool aStringIsWildcard 
 {
     delete uop;
 
-    std::unique_ptr<VALUE> val( new VALUE( aValue, aStringIsWildcard ) );
+    std::unique_ptr<VALUE> val = std::make_unique<VALUE>( aValue, aStringIsWildcard );
     uop = new UOP( aOp, std::move( val ) );
 }
 
@@ -785,7 +785,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
     if( !m_tree )
     {
-        std::unique_ptr<VALUE> val( new VALUE( 1.0 ) );
+        std::unique_ptr<VALUE> val = std::make_unique<VALUE>( 1.0 );
         // Empty expression returns true
         aCode->AddOp( new UOP( TR_UOP_PUSH_VALUE, std::move(val) ) );
         return true;

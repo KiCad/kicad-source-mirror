@@ -82,7 +82,7 @@ NETLIST_READER* NETLIST_READER::GetNetlistReader( NETLIST*        aNetlist,
 {
     wxASSERT( aNetlist != NULL );
 
-    std::unique_ptr< FILE_LINE_READER > file_rdr(new FILE_LINE_READER( aNetlistFileName ) );
+    std::unique_ptr<FILE_LINE_READER> file_rdr = std::make_unique<FILE_LINE_READER>( aNetlistFileName );
 
     NETLIST_FILE_T type = GuessNetlistFileType( file_rdr.get() );
     file_rdr->Rewind();

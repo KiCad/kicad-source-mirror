@@ -115,7 +115,7 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 
     while( ( tok = in->NextTok() ) != T_RIGHT )
     {
-        std::unique_ptr< SYMBOL_LIB_TABLE_ROW > row( new SYMBOL_LIB_TABLE_ROW );
+        std::unique_ptr< SYMBOL_LIB_TABLE_ROW > row = std::make_unique<SYMBOL_LIB_TABLE_ROW>();
 
         if( tok == T_EOF )
             in->Expecting( T_RIGHT );

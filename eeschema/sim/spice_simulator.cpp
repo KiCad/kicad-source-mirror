@@ -33,7 +33,7 @@ std::shared_ptr<SPICE_SIMULATOR> SPICE_SIMULATOR::CreateInstance( const std::str
         static std::shared_ptr<SPICE_SIMULATOR> ngspiceInstance;
 
         if( !ngspiceInstance )
-            ngspiceInstance.reset( new NGSPICE );
+            ngspiceInstance = std::make_shared<NGSPICE>();
 
         return ngspiceInstance;
     }

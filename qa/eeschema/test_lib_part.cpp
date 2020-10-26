@@ -441,9 +441,9 @@ BOOST_AUTO_TEST_CASE( GetUnitDrawItems )
  */
 BOOST_AUTO_TEST_CASE( Inheritance )
 {
-    std::unique_ptr< LIB_PART > parent( new LIB_PART( "parent" ) );
+    std::unique_ptr<LIB_PART> parent = std::make_unique<LIB_PART>( "parent" );
     BOOST_CHECK( parent->IsRoot() );
-    std::unique_ptr< LIB_PART > child1( new LIB_PART( "child1", parent.get() ) );
+    std::unique_ptr<LIB_PART> child1 = std::make_unique<LIB_PART>( "child1", parent.get() );
     BOOST_CHECK( child1->IsAlias() );
     PART_SPTR parentRef = child1->GetParent().lock();
     BOOST_CHECK( parentRef );
@@ -464,7 +464,7 @@ BOOST_AUTO_TEST_CASE( Inheritance )
  */
 BOOST_AUTO_TEST_CASE( CopyConstructor )
 {
-    std::shared_ptr< LIB_PART > copy( new LIB_PART( m_part_no_data ) );
+    std::shared_ptr<LIB_PART> copy = std::make_shared<LIB_PART>( m_part_no_data );
     BOOST_CHECK( m_part_no_data == *copy.get() );
 }
 

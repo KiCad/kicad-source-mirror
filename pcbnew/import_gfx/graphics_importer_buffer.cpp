@@ -30,7 +30,7 @@ using namespace std;
 template <typename T, typename... Args>
 static std::unique_ptr<T> make_shape( const Args&... aArguments )
 {
-    return std::unique_ptr<T>( new T( aArguments... ) );
+    return std::make_unique<T>( aArguments... );
 }
 
 void GRAPHICS_IMPORTER_BUFFER::AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth )

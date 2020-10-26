@@ -219,7 +219,7 @@ bool PGM_BASE::InitPgm()
             return false;
     }
 
-    m_settings_manager = std::unique_ptr<SETTINGS_MANAGER>( new SETTINGS_MANAGER );
+    m_settings_manager = std::make_unique<SETTINGS_MANAGER>();
 
     // Something got in the way of settings load: can't continue
     if( !m_settings_manager->IsOK() )

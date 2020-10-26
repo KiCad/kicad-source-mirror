@@ -62,7 +62,7 @@ namespace SCH {
 static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFilename )
 {
     auto pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
-    std::unique_ptr<SCHEMATIC> schematic( new SCHEMATIC ( nullptr ) );
+    std::unique_ptr<SCHEMATIC> schematic = std::make_unique<SCHEMATIC>( nullptr );
 
     auto &manager = Pgm().GetSettingsManager();
 
@@ -100,7 +100,7 @@ static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFil
 
 bool generateSchematicNetlist( const wxString& aFilename, wxString& aNetlist )
 {
-    std::unique_ptr<SCHEMATIC> schematic ( readSchematicFromFile( aFilename.ToStdString() ) );
+    std::unique_ptr<SCHEMATIC> schematic = readSchematicFromFile( aFilename.ToStdString() );
     NETLIST_EXPORTER_KICAD exporter( schematic.get() );
     STRING_FORMATTER formatter;
 

@@ -145,7 +145,7 @@ void GRAPHICS_CLEANER::cleanupSegments()
 
         if( isNullSegment( segment ) )
         {
-            std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_NULL_GRAPHIC ) );
+            std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( CLEANUP_NULL_GRAPHIC );
             item->SetItems( segment );
             m_itemsList->push_back( item );
 
@@ -164,7 +164,7 @@ void GRAPHICS_CLEANER::cleanupSegments()
 
             if( areEquivalent( segment, segment2 ) )
             {
-                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_DUPLICATE_GRAPHIC ) );
+                std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( CLEANUP_DUPLICATE_GRAPHIC );
                 item->SetItems( segment2 );
                 m_itemsList->push_back( item );
 
@@ -292,7 +292,7 @@ void GRAPHICS_CLEANER::mergeRects()
                 right->shape->SetFlags( IS_DELETED );
                 bottom->shape->SetFlags( IS_DELETED );
 
-                std::shared_ptr<CLEANUP_ITEM> item( new CLEANUP_ITEM( CLEANUP_LINES_TO_RECT ) );
+                std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( CLEANUP_LINES_TO_RECT );
                 item->SetItems( left->shape, top->shape, right->shape, bottom->shape );
                 m_itemsList->push_back( item );
 

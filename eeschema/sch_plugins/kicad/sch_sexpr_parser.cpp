@@ -129,7 +129,7 @@ LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap, int aFileV
     wxString name;
     wxString error;
     LIB_ITEM* item;
-    std::unique_ptr<LIB_PART> symbol( new LIB_PART( wxEmptyString ) );
+    std::unique_ptr<LIB_PART> symbol = std::make_unique<LIB_PART>( wxEmptyString );
 
     m_requiredVersion = aFileVersion;
     symbol->SetUnitCount( 1 );
@@ -722,7 +722,7 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
     wxString error;
     wxString name;
     wxString value;
-    std::unique_ptr<LIB_FIELD> field( new LIB_FIELD( aSymbol.get(), MANDATORY_FIELDS ) );
+    std::unique_ptr<LIB_FIELD> field = std::make_unique<LIB_FIELD>( aSymbol.get(), MANDATORY_FIELDS );
 
     T token = NextTok();
 
@@ -849,7 +849,7 @@ LIB_ARC* SCH_SEXPR_PARSER::parseArc()
     wxPoint pos;
     FILL_PARAMS fill;
     bool hasMidPoint = false;
-    std::unique_ptr<LIB_ARC> arc( new LIB_ARC( nullptr ) );
+    std::unique_ptr<LIB_ARC> arc = std::make_unique<LIB_ARC>( nullptr );
 
     arc->SetUnit( m_unit );
     arc->SetConvert( m_convert );
@@ -967,7 +967,7 @@ LIB_BEZIER* SCH_SEXPR_PARSER::parseBezier()
 
     T token;
     FILL_PARAMS fill;
-    std::unique_ptr<LIB_BEZIER> bezier( new LIB_BEZIER( nullptr ) );
+    std::unique_ptr<LIB_BEZIER> bezier = std::make_unique<LIB_BEZIER>( nullptr );
 
     bezier->SetUnit( m_unit );
     bezier->SetConvert( m_convert );
@@ -1032,7 +1032,7 @@ LIB_CIRCLE* SCH_SEXPR_PARSER::parseCircle()
 
     T token;
     FILL_PARAMS fill;
-    std::unique_ptr<LIB_CIRCLE> circle( new LIB_CIRCLE( nullptr ) );
+    std::unique_ptr<LIB_CIRCLE> circle = std::make_unique<LIB_CIRCLE>( nullptr );
 
     circle->SetUnit( m_unit );
     circle->SetConvert( m_convert );
@@ -1135,7 +1135,7 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
     T token;
     wxString tmp;
     wxString error;
-    std::unique_ptr<LIB_PIN> pin( new LIB_PIN( nullptr ) );
+    std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( nullptr );
 
     pin->SetUnit( m_unit );
     pin->SetConvert( m_convert );
@@ -1309,7 +1309,7 @@ LIB_POLYLINE* SCH_SEXPR_PARSER::parsePolyLine()
 
     T token;
     FILL_PARAMS fill;
-    std::unique_ptr<LIB_POLYLINE> polyLine( new LIB_POLYLINE( nullptr ) );
+    std::unique_ptr<LIB_POLYLINE> polyLine = std::make_unique<LIB_POLYLINE>( nullptr );
 
     polyLine->SetUnit( m_unit );
     polyLine->SetConvert( m_convert );
@@ -1374,7 +1374,7 @@ LIB_RECTANGLE* SCH_SEXPR_PARSER::parseRectangle()
 
     T token;
     FILL_PARAMS fill;
-    std::unique_ptr<LIB_RECTANGLE> rectangle( new LIB_RECTANGLE( nullptr ) );
+    std::unique_ptr<LIB_RECTANGLE> rectangle = std::make_unique<LIB_RECTANGLE>( nullptr );
 
     rectangle->SetUnit( m_unit );
     rectangle->SetConvert( m_convert );
@@ -1432,7 +1432,7 @@ LIB_TEXT* SCH_SEXPR_PARSER::parseText()
     T token;
     wxString tmp;
     wxString error;
-    std::unique_ptr<LIB_TEXT> text( new LIB_TEXT( nullptr ) );
+    std::unique_ptr<LIB_TEXT> text = std::make_unique<LIB_TEXT>( nullptr );
 
     text->SetUnit( m_unit );
     text->SetConvert( m_convert );
@@ -1674,7 +1674,7 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
     // Empty property values are valid.
     value = FromUTF8();
 
-    std::unique_ptr<SCH_FIELD> field( new SCH_FIELD( wxDefaultPosition, -1, aParent, name ) );
+    std::unique_ptr<SCH_FIELD> field = std::make_unique<SCH_FIELD>( wxDefaultPosition, -1, aParent, name );
 
     field->SetText( value );
     field->SetVisible( true );
@@ -1741,7 +1741,7 @@ SCH_SHEET_PIN* SCH_SEXPR_PARSER::parseSchSheetPin( SCH_SHEET* aSheet )
         THROW_IO_ERROR( error );
     }
 
-    std::unique_ptr<SCH_SHEET_PIN> sheetPin( new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), name ) );
+    std::unique_ptr<SCH_SHEET_PIN> sheetPin = std::make_unique<SCH_SHEET_PIN>( aSheet, wxPoint( 0, 0 ), name );
 
     token = NextTok();
 
@@ -2119,7 +2119,7 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
     wxString error;
     wxString libName;
     SCH_FIELD* field;
-    std::unique_ptr<SCH_COMPONENT> symbol( new SCH_COMPONENT() );
+    std::unique_ptr<SCH_COMPONENT> symbol = std::make_unique<SCH_COMPONENT>();
     TRANSFORM transform;
     std::set<int> fieldIDsRead;
 
@@ -2331,7 +2331,7 @@ SCH_BITMAP* SCH_SEXPR_PARSER::parseImage()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as an image." ) );
 
     T token;
-    std::unique_ptr<SCH_BITMAP> bitmap( new SCH_BITMAP() );
+    std::unique_ptr<SCH_BITMAP> bitmap = std::make_unique<SCH_BITMAP>();
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2404,7 +2404,7 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
     FILL_PARAMS fill;
     SCH_FIELD* field;
     std::vector<SCH_FIELD> fields;
-    std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET() );
+    std::unique_ptr<SCH_SHEET> sheet = std::make_unique<SCH_SHEET>();
     std::set<int> fieldIDsRead;
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
@@ -2499,7 +2499,7 @@ SCH_JUNCTION* SCH_SEXPR_PARSER::parseJunction()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a junction." ) );
 
     T token;
-    std::unique_ptr<SCH_JUNCTION> junction( new SCH_JUNCTION() );
+    std::unique_ptr<SCH_JUNCTION> junction = std::make_unique<SCH_JUNCTION>();
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2549,7 +2549,7 @@ SCH_NO_CONNECT* SCH_SEXPR_PARSER::parseNoConnect()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a no connect." ) );
 
     T token;
-    std::unique_ptr<SCH_NO_CONNECT> no_connect( new SCH_NO_CONNECT() );
+    std::unique_ptr<SCH_NO_CONNECT> no_connect = std::make_unique<SCH_NO_CONNECT>();
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2581,7 +2581,7 @@ SCH_BUS_WIRE_ENTRY* SCH_SEXPR_PARSER::parseBusEntry()
 
     T token;
     STROKE_PARAMS stroke;
-    std::unique_ptr<SCH_BUS_WIRE_ENTRY> busEntry( new SCH_BUS_WIRE_ENTRY() );
+    std::unique_ptr<SCH_BUS_WIRE_ENTRY> busEntry = std::make_unique<SCH_BUS_WIRE_ENTRY>();
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2626,7 +2626,7 @@ SCH_LINE* SCH_SEXPR_PARSER::parseLine()
 {
     T token;
     STROKE_PARAMS stroke;
-    std::unique_ptr<SCH_LINE> line( new SCH_LINE() );
+    std::unique_ptr<SCH_LINE> line = std::make_unique<SCH_LINE>();
 
     switch( CurTok() )
     {
@@ -2688,10 +2688,10 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
 
     switch( CurTok() )
     {
-    case T_text:                text.reset( new SCH_TEXT );          break;
-    case T_label:               text.reset( new SCH_LABEL );         break;
-    case T_global_label:        text.reset( new SCH_GLOBALLABEL );   break;
-    case T_hierarchical_label:  text.reset( new SCH_HIERLABEL );     break;
+    case T_text:                text = std::make_unique<SCH_TEXT>();          break;
+    case T_label:               text = std::make_unique<SCH_LABEL>();         break;
+    case T_global_label:        text = std::make_unique<SCH_GLOBALLABEL>();   break;
+    case T_hierarchical_label:  text = std::make_unique<SCH_HIERLABEL>();     break;
     default:
         wxCHECK_MSG( false, nullptr,
                      wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as text." ) );
@@ -2783,7 +2783,7 @@ void SCH_SEXPR_PARSER::parseBusAlias( SCH_SCREEN* aScreen )
     wxCHECK( aScreen, /* void */ );
 
     T token;
-    auto busAlias = std::make_shared< BUS_ALIAS >( aScreen );
+    auto busAlias = std::make_shared<BUS_ALIAS>( aScreen );
 
     NeedSYMBOL();
     busAlias->SetName( FromUTF8() );

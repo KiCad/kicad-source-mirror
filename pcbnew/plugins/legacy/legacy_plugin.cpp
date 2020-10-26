@@ -237,10 +237,6 @@ static inline char* ReadLine( LINE_READER* rdr, const char* caller )
 #endif
 
 
-
-using std::unique_ptr;
-
-
 static EDA_TEXT_HJUSTIFY_T horizJustify( const char* horizontal )
 {
     if( !strcmp( "L", horizontal ) )
@@ -406,7 +402,7 @@ BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
         m_board->SetFileName( aFileName );
 
     // delete on exception, iff I own m_board, according to aAppendToMe
-    unique_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
+    std::unique_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
 
     FILE_LINE_READER    reader( aFileName );
 
@@ -438,7 +434,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
         if( TESTLINE( "$MODULE" ) )
         {
-            unique_ptr<MODULE>    module( new MODULE( m_board ) );
+            std::unique_ptr<MODULE> module = std::make_unique<MODULE>( m_board );
 
             LIB_ID      fpid;
             std::string fpName = StrPurge( line + SZ( "$MODULE" ) );
@@ -1402,7 +1398,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
 
 void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 {
-    unique_ptr<D_PAD> pad( new D_PAD( aModule ) );
+    std::unique_ptr<D_PAD> pad = std::make_unique<D_PAD>( aModule );
     char*           line;
     char*           saveptr;
 
@@ -1656,7 +1652,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
         THROW_IO_ERROR( m_error );
     }
 
-    unique_ptr<FP_SHAPE> dwg( new FP_SHAPE( aModule, shape ) );    // a drawing
+    std::unique_ptr<FP_SHAPE> dwg = std::make_unique<FP_SHAPE>( aModule, shape );    // a drawing
 
     const char* data;
 
@@ -1921,7 +1917,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
         $EndDRAWSEGMENT
     */
 
-    unique_ptr<PCB_SHAPE>   dseg( new PCB_SHAPE( m_board ) );
+    std::unique_ptr<PCB_SHAPE> dseg = std::make_unique<PCB_SHAPE>( m_board );
 
     char*   line;
     char*   saveptr;
@@ -2438,7 +2434,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
 
 void LEGACY_PLUGIN::loadZONE_CONTAINER()
 {
-    unique_ptr<ZONE_CONTAINER> zc( new ZONE_CONTAINER( m_board ) );
+    std::unique_ptr<ZONE_CONTAINER> zc = std::make_unique<ZONE_CONTAINER>( m_board );
 
     ZONE_BORDER_DISPLAY_STYLE outline_hatch = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;
     bool    endContour = false;
@@ -2732,7 +2728,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
 void LEGACY_PLUGIN::loadDIMENSION()
 {
-    unique_ptr<ALIGNED_DIMENSION> dim( new ALIGNED_DIMENSION( m_board ) );
+    std::unique_ptr<ALIGNED_DIMENSION> dim = std::make_unique<ALIGNED_DIMENSION>( m_board );
 
     char*   line;
 
@@ -3248,7 +3244,7 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
         // test first for the $MODULE, even before reading because of INDEX bug.
         if( TESTLINE( "$MODULE" ) )
         {
-            unique_ptr<MODULE>    module( new MODULE( m_owner->m_board ) );
+            std::unique_ptr<MODULE> module = std::make_unique<MODULE>( m_owner->m_board );
 
             std::string         footprintName = StrPurge( line + SZ( "$MODULE" ) );
 

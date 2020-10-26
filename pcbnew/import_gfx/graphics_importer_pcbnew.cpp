@@ -189,7 +189,7 @@ std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> GRAPHICS_IMPORTER_BOARD::creat
 
 std::unique_ptr<PCB_SHAPE> GRAPHICS_IMPORTER_MODULE::createDrawing()
 {
-    return std::unique_ptr<PCB_SHAPE>( new FP_SHAPE( m_module ) );
+    return std::make_unique<FP_SHAPE>( m_module );
 }
 
 

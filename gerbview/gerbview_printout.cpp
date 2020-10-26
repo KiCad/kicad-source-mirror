@@ -105,5 +105,5 @@ EDA_RECT GERBVIEW_PRINTOUT::getBoundingBox()
 
 std::unique_ptr<KIGFX::PAINTER> GERBVIEW_PRINTOUT::getPainter( KIGFX::GAL* aGal )
 {
-    return std::unique_ptr<KIGFX::PAINTER>( new KIGFX::GERBVIEW_PAINTER( aGal ) );
+    return std::make_unique<KIGFX::GERBVIEW_PAINTER>( aGal );
 }

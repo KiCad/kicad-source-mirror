@@ -112,7 +112,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     SCH_SCREEN* currentScreen = aHierarchy->LastScreen();
     SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( aFileName );
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( schFileType ) );
-    std::unique_ptr< SCH_SHEET> newSheet( new SCH_SHEET( &Schematic() ) );
+    std::unique_ptr< SCH_SHEET> newSheet = std::make_unique<SCH_SHEET>( &Schematic() );
 
     // This will cause the sheet UUID to be set to the loaded schematic UUID.  This is required
     // to ensure all of the sheet paths in any subsheets are correctly generated.

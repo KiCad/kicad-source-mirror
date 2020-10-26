@@ -632,7 +632,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
     if( aAppendToMe == NULL )
     {
         // Clean up any allocated memory if an exception occurs loading the schematic.
-        std::unique_ptr< SCH_SHEET > newSheet( new SCH_SHEET( aSchematic ) );
+        std::unique_ptr<SCH_SHEET> newSheet = std::make_unique<SCH_SHEET>( aSchematic );
         newSheet->SetFileName( aFileName );
         m_rootSheet = newSheet.get();
         loadHierarchy( newSheet.get() );
@@ -970,7 +970,7 @@ void SCH_LEGACY_PLUGIN::loadPageSettings( LINE_READER& aReader, SCH_SCREEN* aScr
 
 SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
 {
-    std::unique_ptr< SCH_SHEET > sheet( new SCH_SHEET() );
+    std::unique_ptr<SCH_SHEET> sheet = std::make_unique<SCH_SHEET>();
 
     const char* line = aReader.ReadLine();
 
@@ -1018,7 +1018,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
             else                                   // Sheet pin.
             {
                 // Use a unique_ptr so that we clean up in the case of a throw
-                std::unique_ptr< SCH_SHEET_PIN > sheetPin( new SCH_SHEET_PIN( sheet.get() ) );
+                std::unique_ptr<SCH_SHEET_PIN> sheetPin = std::make_unique<SCH_SHEET_PIN>( sheet.get() );
 
                 sheetPin->SetNumber( fieldId );
 
@@ -1080,7 +1080,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
 
 SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( LINE_READER& aReader )
 {
-    std::unique_ptr< SCH_BITMAP > bitmap( new SCH_BITMAP );
+    std::unique_ptr<SCH_BITMAP> bitmap = std::make_unique<SCH_BITMAP>();
 
     const char* line = aReader.Line();
 
@@ -1165,7 +1165,7 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( LINE_READER& aReader )
 
 SCH_JUNCTION* SCH_LEGACY_PLUGIN::loadJunction( LINE_READER& aReader )
 {
-    std::unique_ptr< SCH_JUNCTION > junction( new SCH_JUNCTION );
+    std::unique_ptr<SCH_JUNCTION> junction = std::make_unique<SCH_JUNCTION>();
 
     const char* line = aReader.Line();
 
@@ -1187,7 +1187,7 @@ SCH_JUNCTION* SCH_LEGACY_PLUGIN::loadJunction( LINE_READER& aReader )
 
 SCH_NO_CONNECT* SCH_LEGACY_PLUGIN::loadNoConnect( LINE_READER& aReader )
 {
-    std::unique_ptr< SCH_NO_CONNECT > no_connect( new SCH_NO_CONNECT );
+    std::unique_ptr<SCH_NO_CONNECT> no_connect = std::make_unique<SCH_NO_CONNECT>();
 
     const char* line = aReader.Line();
 
@@ -1209,7 +1209,7 @@ SCH_NO_CONNECT* SCH_LEGACY_PLUGIN::loadNoConnect( LINE_READER& aReader )
 
 SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( LINE_READER& aReader )
 {
-    std::unique_ptr< SCH_LINE > wire( new SCH_LINE );
+    std::unique_ptr<SCH_LINE> wire = std::make_unique<SCH_LINE>();
 
     const char* line = aReader.Line();
 
@@ -1311,18 +1311,18 @@ SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( LINE_READER& aReader )
 
     wxCHECK( strCompare( "Entry", line, &line ), NULL );
 
-    std::unique_ptr< SCH_BUS_ENTRY_BASE > busEntry;
+    std::unique_ptr<SCH_BUS_ENTRY_BASE> busEntry;
 
     if( strCompare( "Wire", line, &line ) )
     {
-        busEntry.reset( new SCH_BUS_WIRE_ENTRY );
+        busEntry = std::make_unique<SCH_BUS_WIRE_ENTRY>();
 
         if( !strCompare( "Line", line, &line ) )
             SCH_PARSE_ERROR( "invalid bus entry definition expected 'Line'", aReader, line );
     }
     else if( strCompare( "Bus", line, &line ) )
     {
-        busEntry.reset( new SCH_BUS_BUS_ENTRY );
+        busEntry = std::make_unique<SCH_BUS_BUS_ENTRY>();
 
         if( !strCompare( "Bus", line, &line ) )
             SCH_PARSE_ERROR( "invalid bus entry definition expected 'Bus'", aReader, line );
@@ -1367,7 +1367,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
 
     wxCHECK( strCompare( "Text", line, &line ), NULL );
 
-    std::unique_ptr< SCH_TEXT> text;
+    std::unique_ptr<SCH_TEXT> text;
 
     if( strCompare( "Notes", line, &line ) )
         text.reset( new SCH_TEXT );
@@ -1379,9 +1379,9 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
     {
         // Prior to version 2, the SCH_GLOBALLABEL object did not exist.
         if( m_version == 1 )
-            text.reset( new SCH_HIERLABEL );
+            text = std::make_unique<SCH_HIERLABEL>();
         else
-            text.reset( new SCH_GLOBALLABEL );
+            text = std::make_unique<SCH_GLOBALLABEL>();
     }
     else
         SCH_PARSE_ERROR( "unknown Text type", aReader, line );
@@ -1484,7 +1484,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
 
     wxCHECK( strCompare( "$Comp", line, &line ), NULL );
 
-    std::unique_ptr< SCH_COMPONENT > component( new SCH_COMPONENT() );
+    std::unique_ptr<SCH_COMPONENT> component = std::make_unique<SCH_COMPONENT>();
 
     line = aReader.ReadLine();
 
@@ -1796,7 +1796,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
 std::shared_ptr<BUS_ALIAS> SCH_LEGACY_PLUGIN::loadBusAlias( LINE_READER& aReader,
                                                             SCH_SCREEN* aScreen )
 {
-    auto busAlias = std::make_shared< BUS_ALIAS >( aScreen );
+    auto busAlias = std::make_shared<BUS_ALIAS>( aScreen );
     const char* line = aReader.Line();
 
     wxCHECK( strCompare( "BusAlias", line, &line ), NULL );
@@ -2789,7 +2789,7 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
         SCH_PARSE_ERROR( "invalid symbol definition", aReader, line );
 
     // Read DEF line:
-    std::unique_ptr< LIB_PART > part( new LIB_PART( wxEmptyString ) );
+    std::unique_ptr<LIB_PART> part = std::make_unique<LIB_PART>( wxEmptyString );
 
     wxString name, prefix, tmp;
 
@@ -3727,7 +3727,7 @@ void SCH_LEGACY_PLUGIN_CACHE::Save( bool aSaveDocFile )
     // Write through symlinks, don't replace them
     wxFileName fn = GetRealFile();
 
-    std::unique_ptr< FILE_OUTPUTFORMATTER > formatter( new FILE_OUTPUTFORMATTER( fn.GetFullPath() ) );
+    auto formatter = std::make_unique<FILE_OUTPUTFORMATTER>( fn.GetFullPath() );
     formatter->Print( 0, "%s %d.%d\n", LIBFILE_IDENT, LIB_VERSION_MAJOR, LIB_VERSION_MINOR );
     formatter->Print( 0, "#encoding utf-8\n");
 

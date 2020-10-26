@@ -323,7 +323,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
     wxPoint               textPos;
     wxString              msg;
     wxArrayString         parameters;
-    std::unique_ptr<MODULE> module( new MODULE( NULL ) );
+    std::unique_ptr<MODULE> module = std::make_unique<MODULE>( nullptr );
 
 
     if( aLineReader->ReadLine() == NULL )

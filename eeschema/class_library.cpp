@@ -237,7 +237,7 @@ LIB_PART* PART_LIB::ReplacePart( LIB_PART* aOldPart, LIB_PART* aNewPart )
 
 PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName )
 {
-    std::unique_ptr<PART_LIB> lib( new PART_LIB( SCH_LIB_TYPE::LT_EESCHEMA, aFileName ) );
+    std::unique_ptr<PART_LIB> lib = std::make_unique<PART_LIB>( SCH_LIB_TYPE::LT_EESCHEMA, aFileName );
 
     std::vector<LIB_PART*> parts;
     // This loads the library.

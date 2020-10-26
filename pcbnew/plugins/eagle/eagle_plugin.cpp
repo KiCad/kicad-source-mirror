@@ -1528,7 +1528,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e, FP_TEXT* txt,
 
 MODULE* EAGLE_PLUGIN::makeModule( wxXmlNode* aPackage, const wxString& aPkgName )
 {
-    std::unique_ptr<MODULE> m( new MODULE( m_board ) );
+    std::unique_ptr<MODULE> m = std::make_unique<MODULE>( m_board );
 
     LIB_ID fpID;
     fpID.Parse( aPkgName, LIB_ID::ID_PCB, true );

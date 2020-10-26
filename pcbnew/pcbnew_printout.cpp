@@ -274,7 +274,7 @@ EDA_RECT PCBNEW_PRINTOUT::getBoundingBox()
 
 std::unique_ptr<KIGFX::PAINTER> PCBNEW_PRINTOUT::getPainter( KIGFX::GAL* aGal )
 {
-    return std::unique_ptr<KIGFX::PAINTER>( new KIGFX::PCB_PRINT_PAINTER( aGal ) );
+    return std::make_unique<KIGFX::PCB_PRINT_PAINTER>( aGal );
 }
 
 

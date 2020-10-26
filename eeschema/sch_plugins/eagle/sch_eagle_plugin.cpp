@@ -556,7 +556,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
     while( partNode )
     {
-        std::unique_ptr<EPART> epart( new EPART( partNode ) );
+        std::unique_ptr<EPART> epart = std::make_unique<EPART>( partNode );
 
         // N.B. Eagle parts are case-insensitive in matching but we keep the display case
         m_partlist[epart->name.Upper()] = std::move( epart );
@@ -596,8 +596,8 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
         while( sheetNode )
         {
-            wxPoint                    pos = wxPoint( x * Mils2iu( 1000 ), y * Mils2iu( 1000 ) );
-            std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET( m_rootSheet, pos ) );
+            wxPoint                    pos    = wxPoint( x * Mils2iu( 1000 ), y * Mils2iu( 1000 ) );
+            std::unique_ptr<SCH_SHEET> sheet  = std::make_unique<SCH_SHEET>( m_rootSheet, pos );
             SCH_SCREEN*                screen = new SCH_SCREEN( m_schematic );
 
             sheet->SetScreen( screen );
@@ -964,7 +964,7 @@ void SCH_EAGLE_PLUGIN::loadSegments(
 
 SCH_LINE* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode )
 {
-    std::unique_ptr<SCH_LINE> wire( new SCH_LINE );
+    std::unique_ptr<SCH_LINE> wire = std::make_unique<SCH_LINE>();
 
     auto ewire = EWIRE( aWireNode );
 
@@ -989,7 +989,7 @@ SCH_LINE* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode )
 
 SCH_JUNCTION* SCH_EAGLE_PLUGIN::loadJunction( wxXmlNode* aJunction )
 {
-    std::unique_ptr<SCH_JUNCTION> junction( new SCH_JUNCTION );
+    std::unique_ptr<SCH_JUNCTION> junction = std::make_unique<SCH_JUNCTION>();
 
     auto    ejunction = EJUNCTION( aJunction );
     wxPoint pos( ejunction.x.ToSchUnits(), -ejunction.y.ToSchUnits() );
@@ -1011,9 +1011,9 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
     std::unique_ptr<SCH_TEXT> label;
 
     if( global )
-        label.reset( new SCH_GLOBALLABEL );
+        label = std::make_unique<SCH_GLOBALLABEL>();
     else
-        label.reset( new SCH_LABEL );
+        label = std::make_unique<SCH_LABEL>();
 
     label->SetPosition( elabelpos );
     label->SetText( escapeName( elabel.netname ) );
@@ -1131,7 +1131,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     }
 
     LIB_ID                         libId( getLibName(), kisymbolname );
-    std::unique_ptr<SCH_COMPONENT> component( new SCH_COMPONENT() );
+    std::unique_ptr<SCH_COMPONENT> component = std::make_unique<SCH_COMPONENT>();
     component->SetLibId( libId );
     component->SetUnit( unit );
     component->SetPosition( wxPoint( einstance.x.ToSchUnits(), -einstance.y.ToSchUnits() ) );
@@ -1596,7 +1596,7 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire(
     // if the wire is an arc
     if( ewire.curve )
     {
-        std::unique_ptr<LIB_ARC> arc( new LIB_ARC( aPart.get() ) );
+        std::unique_ptr<LIB_ARC> arc    = std::make_unique<LIB_ARC>( aPart.get() );
         wxPoint                  center = ConvertArcCenter( begin, end, *ewire.curve * -1 );
 
         double radius = sqrt( abs( ( ( center.x - begin.x ) * ( center.x - begin.x ) )
@@ -1651,7 +1651,7 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire(
     }
     else
     {
-        std::unique_ptr<LIB_POLYLINE> polyLine( new LIB_POLYLINE( aPart.get() ) );
+        std::unique_ptr<LIB_POLYLINE> polyLine = std::make_unique<LIB_POLYLINE>( aPart.get() );
 
         polyLine->AddPoint( begin );
         polyLine->AddPoint( end );
@@ -1666,7 +1666,7 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire(
 LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine(
         std::unique_ptr<LIB_PART>& aPart, wxXmlNode* aPolygonNode, int aGateNumber )
 {
-    std::unique_ptr<LIB_POLYLINE> polyLine( new LIB_POLYLINE( aPart.get() ) );
+    std::unique_ptr<LIB_POLYLINE> polyLine = std::make_unique<LIB_POLYLINE>( aPart.get() );
 
     EPOLYGON   epoly( aPolygonNode );
     wxXmlNode* vertex = aPolygonNode->GetChildren();
@@ -1696,7 +1696,7 @@ LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine(
 LIB_PIN* SCH_EAGLE_PLUGIN::loadPin(
         std::unique_ptr<LIB_PART>& aPart, wxXmlNode* aPin, EPIN* aEPin, int aGateNumber )
 {
-    std::unique_ptr<LIB_PIN> pin( new LIB_PIN( aPart.get() ) );
+    std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( aPart.get() );
     pin->SetPosition( wxPoint( aEPin->x.ToSchUnits(), aEPin->y.ToSchUnits() ) );
     pin->SetName( aEPin->name );
     pin->SetUnit( aGateNumber );
@@ -1799,7 +1799,7 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin(
 LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText(
         std::unique_ptr<LIB_PART>& aPart, wxXmlNode* aLibText, int aGateNumber )
 {
-    std::unique_ptr<LIB_TEXT> libtext( new LIB_TEXT( aPart.get() ) );
+    std::unique_ptr<LIB_TEXT> libtext = std::make_unique<LIB_TEXT>( aPart.get() );
     ETEXT                     etext( aLibText );
 
     libtext->SetUnit( aGateNumber );
@@ -1823,8 +1823,8 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText(
 
 SCH_TEXT* SCH_EAGLE_PLUGIN::loadPlainText( wxXmlNode* aSchText )
 {
-    std::unique_ptr<SCH_TEXT> schtext( new SCH_TEXT() );
-    ETEXT                     etext = ETEXT( aSchText );
+    std::unique_ptr<SCH_TEXT> schtext = std::make_unique<SCH_TEXT>();
+    ETEXT                     etext   = ETEXT( aSchText );
 
     const wxString& thetext = aSchText->GetNodeContent();
     schtext->SetText( thetext.IsEmpty() ? "\" \"" : escapeName( thetext ) );

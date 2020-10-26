@@ -798,7 +798,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
         return NULL;
     }
 
-    std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
+    std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
 
     if( aPad->GetDrillSize().x > 0 )
     {
@@ -862,9 +862,8 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
 
 std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE_BASE::syncTrack( TRACK* aTrack )
 {
-    std::unique_ptr< PNS::SEGMENT > segment(
-        new PNS::SEGMENT( SEG( aTrack->GetStart(), aTrack->GetEnd() ), aTrack->GetNetCode() )
-    );
+    auto segment = std::make_unique<PNS::SEGMENT>( SEG( aTrack->GetStart(), aTrack->GetEnd() ),
+                                                     aTrack->GetNetCode() );
 
     segment->SetWidth( aTrack->GetWidth() );
     segment->SetLayers( LAYER_RANGE( aTrack->GetLayer() ) );
@@ -879,10 +878,9 @@ std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE_BASE::syncTrack( TRACK* aTrack )
 
 std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( ARC* aArc )
 {
-    std::unique_ptr< PNS::ARC > arc(
-        new PNS::ARC( SHAPE_ARC( aArc->GetStart(), aArc->GetMid(), aArc->GetEnd(),
-                aArc->GetWidth() ), aArc->GetNetCode() )
-    );
+    auto arc = std::make_unique<PNS::ARC>( SHAPE_ARC( aArc->GetStart(), aArc->GetMid(), aArc->GetEnd(),
+                                                      aArc->GetWidth() ),
+                                           aArc->GetNetCode() );
 
     arc->SetLayers( LAYER_RANGE( aArc->GetLayer() ) );
     arc->SetParent( aArc );
@@ -901,14 +899,12 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( VIA* aVia )
     PCB_LAYER_ID top, bottom;
     aVia->LayerPair( &top, &bottom );
 
-    std::unique_ptr<PNS::VIA> via( new PNS::VIA(
-            aVia->GetPosition(),
-            LAYER_RANGE( aVia->TopLayer(), aVia->BottomLayer() ),
-            aVia->GetWidth(),
-            aVia->GetDrillValue(),
-            aVia->GetNetCode(),
-            aVia->GetViaType() )
-    );
+    auto via = std::make_unique<PNS::VIA>( aVia->GetPosition(),
+                                           LAYER_RANGE( aVia->TopLayer(), aVia->BottomLayer() ),
+                                           aVia->GetWidth(),
+                                           aVia->GetDrillValue(),
+                                           aVia->GetNetCode(),
+                                           aVia->GetViaType() );
 
     via->SetParent( aVia );
 
@@ -968,7 +964,7 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone,
                 triShape->Append( b );
                 triShape->Append( c );
 
-                std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
+                std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
 
                 solid->SetLayer( layer );
                 solid->SetNet( -1 );
@@ -1002,7 +998,7 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
     {
         VECTOR2I start( textShape[jj] );
         VECTOR2I end( textShape[jj+1] );
-        std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
+        std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
 
         solid->SetLayer( aLayer );
         solid->SetNet( -1 );
@@ -1048,7 +1044,7 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aIte
 
     for( SHAPE* shape : aItem->MakeEffectiveShapes() )
     {
-        std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
+        std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
 
         if( aItem->GetLayer() == Edge_Cuts )
             solid->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );

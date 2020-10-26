@@ -431,7 +431,7 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     if( aAppendToMe == NULL )
     {
         // Clean up any allocated memory if an exception occurs loading the schematic.
-        std::unique_ptr< SCH_SHEET > newSheet( new SCH_SHEET( aSchematic ) );
+        std::unique_ptr<SCH_SHEET> newSheet = std::make_unique<SCH_SHEET>( aSchematic );
         newSheet->SetFileName( aFileName );
         m_rootSheet = newSheet.get();
         loadHierarchy( newSheet.get() );
@@ -1481,7 +1481,7 @@ void SCH_SEXPR_PLUGIN_CACHE::Save()
     // Write through symlinks, don't replace them.
     wxFileName fn = GetRealFile();
 
-    std::unique_ptr< FILE_OUTPUTFORMATTER > formatter( new FILE_OUTPUTFORMATTER( fn.GetFullPath() ) );
+    auto formatter = std::make_unique<FILE_OUTPUTFORMATTER>( fn.GetFullPath() );
 
     formatter->Print( 0, "(kicad_symbol_lib (version %d) (generator kicad_symbol_editor)\n",
                       SEXPR_SYMBOL_LIB_FILE_VERSION );

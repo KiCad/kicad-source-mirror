@@ -1172,7 +1172,7 @@ std::vector<SHAPE*> PCB_SHAPE::MakeEffectiveShapes() const
 
 std::shared_ptr<SHAPE> PCB_SHAPE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
-    return std::shared_ptr<SHAPE>( new SHAPE_COMPOUND( MakeEffectiveShapes() ) );
+    return std::make_shared<SHAPE_COMPOUND>( MakeEffectiveShapes() );
 }
 
 

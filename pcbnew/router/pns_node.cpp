@@ -602,7 +602,7 @@ void NODE::Add( LINE& aLine, bool aAllowRedundant )
             }
             else
             {
-                std::unique_ptr< SEGMENT > newseg( new SEGMENT( aLine, s ) );
+                std::unique_ptr<SEGMENT> newseg = std::make_unique<SEGMENT>( aLine, s );
                 aLine.Link( newseg.get() );
                 Add( std::move( newseg ), true );
             }

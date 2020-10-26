@@ -585,21 +585,13 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
     std::unique_ptr<PCB_EXPR_VAR_REF> vref;
 
     if( aVar == "A" )
-    {
-        vref.reset( new PCB_EXPR_VAR_REF( 0 ) );
-    }
+        vref = std::make_unique<PCB_EXPR_VAR_REF>( 0 );
     else if( aVar == "B" )
-    {
-        vref.reset( new PCB_EXPR_VAR_REF( 1 ) );
-    }
+        vref = std::make_unique<PCB_EXPR_VAR_REF>( 1 );
     else if( aVar == "L" )
-    {
-        vref.reset( new PCB_EXPR_VAR_REF( 2 ) );
-    }
+        vref = std::make_unique<PCB_EXPR_VAR_REF>( 2 );
     else
-    {
         return nullptr;
-    }
 
     if( aField.length() == 0 ) // return reference to base object
     {

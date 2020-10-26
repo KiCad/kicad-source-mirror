@@ -2096,7 +2096,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( bool aAllowCirclesZeroWidth )
 
     T token;
     wxPoint pt;
-    std::unique_ptr<PCB_SHAPE> shape( new PCB_SHAPE( NULL ) );
+    std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( nullptr );
 
     switch( CurTok() )
     {
@@ -2296,7 +2296,7 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
 
     T token;
 
-    std::unique_ptr<PCB_TEXT> text( new PCB_TEXT( m_board ) );
+    std::unique_ptr<PCB_TEXT> text = std::make_unique<PCB_TEXT>( m_board );
     NeedSYMBOLorNUMBER();
 
     text->SetText( FromUTF8() );
@@ -2786,7 +2786,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
     LIB_ID   fpid;
     int      attributes = 0;
 
-    std::unique_ptr<MODULE> module( new MODULE( m_board ) );
+    std::unique_ptr<MODULE> module = std::make_unique<MODULE>( m_board );
 
     std::map<wxString, wxString> properties;
 
@@ -3110,7 +3110,7 @@ FP_TEXT* PCB_PARSER::parseFP_TEXT()
 
     T token = NextTok();
 
-    std::unique_ptr<FP_TEXT> text( new FP_TEXT( NULL ) );
+    std::unique_ptr<FP_TEXT> text = std::make_unique<FP_TEXT>( nullptr );
 
     switch( token )
     {
@@ -3211,7 +3211,7 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
     wxPoint pt;
     T token;
 
-    std::unique_ptr<FP_SHAPE> shape( new FP_SHAPE( NULL ) );
+    std::unique_ptr<FP_SHAPE> shape = std::make_unique<FP_SHAPE>( nullptr );
 
     switch( CurTok() )
     {
@@ -3418,7 +3418,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
     wxSize  sz;
     wxPoint pt;
 
-    std::unique_ptr< D_PAD > pad( new D_PAD( aParent ) );
+    std::unique_ptr<D_PAD> pad = std::make_unique<D_PAD>( aParent );
 
     // File only contains a token if KeepTopBottom is true
     pad->SetKeepTopBottom( false );
@@ -4017,7 +4017,7 @@ ARC* PCB_PARSER::parseARC()
     wxPoint pt;
     T       token;
 
-    std::unique_ptr<ARC> arc( new ARC( m_board ) );
+    std::unique_ptr<ARC> arc = std::make_unique<ARC>( m_board );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -4094,7 +4094,7 @@ TRACK* PCB_PARSER::parseTRACK()
     wxPoint pt;
     T token;
 
-    std::unique_ptr< TRACK > track( new TRACK( m_board ) );
+    std::unique_ptr<TRACK> track = std::make_unique<TRACK>( m_board );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -4165,7 +4165,7 @@ VIA* PCB_PARSER::parseVIA()
     wxPoint pt;
     T token;
 
-    std::unique_ptr< VIA > via( new VIA( m_board ) );
+    std::unique_ptr<VIA> via = std::make_unique<VIA>( m_board );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -4280,9 +4280,12 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
     if( dynamic_cast<MODULE*>( aParent ) )      // The zone belongs a footprint
         inModule = true;
 
-    std::unique_ptr<ZONE_CONTAINER> zone( inModule ?
-                                          new MODULE_ZONE_CONTAINER( aParent ) :
-                                          new ZONE_CONTAINER( aParent ) );
+    std::unique_ptr<ZONE_CONTAINER> zone;
+
+    if( inModule )
+        zone = std::make_unique<MODULE_ZONE_CONTAINER>( aParent );
+    else
+        zone = std::make_unique<ZONE_CONTAINER>( aParent );
 
     zone->SetPriority( 0 );
 
@@ -4817,7 +4820,7 @@ PCB_TARGET* PCB_PARSER::parsePCB_TARGET()
     wxPoint pt;
     T token;
 
-    std::unique_ptr< PCB_TARGET > target( new PCB_TARGET( NULL ) );
+    std::unique_ptr<PCB_TARGET> target = std::make_unique<PCB_TARGET>( nullptr );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
