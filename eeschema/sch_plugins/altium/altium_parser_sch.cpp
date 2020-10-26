@@ -567,6 +567,7 @@ ASCH_SHEET::ASCH_SHEET( const std::map<wxString, wxString>& aProperties )
             aProperties, "WORKSPACEORIENTATION", 0, 1, ASCH_SHEET_WORKSPACEORIENTATION::LANDSCAPE );
 }
 
+
 ASCH_DESIGNATOR::ASCH_DESIGNATOR( const std::map<wxString, wxString>& aProperties )
 {
     wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::DESIGNATOR );
@@ -578,11 +579,13 @@ ASCH_DESIGNATOR::ASCH_DESIGNATOR( const std::map<wxString, wxString>& aPropertie
     name = ALTIUM_PARSER::PropertiesReadString( aProperties, "NAME", "" );
     text = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
 
-    orientation = ALTIUM_PARSER::PropertiesReadInt( aProperties, "ORIENTATION", 0 );
+    orientation = PropertiesReadEnum<ASCH_RECORD_ORIENTATION>(
+            aProperties, "ORIENTATION", 0, 3, ASCH_RECORD_ORIENTATION::RIGHTWARDS );
 
     location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
             -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
 }
+
 
 ASCH_BUS_ENTRY::ASCH_BUS_ENTRY( const std::map<wxString, wxString>& aProperties )
 {
@@ -592,4 +595,27 @@ ASCH_BUS_ENTRY::ASCH_BUS_ENTRY( const std::map<wxString, wxString>& aProperties 
             -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
     corner   = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "CORNER.X" ),
             -PropertiesReadKiCadUnitFrac( aProperties, "CORNER.Y" ) );
+}
+
+
+ASCH_PARAMETER::ASCH_PARAMETER( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::PARAMETER );
+
+    ownerindex =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
+    ownerpartid = ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERPARTID", 0 );
+
+    location = wxPoint( PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.X" ),
+            -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
+
+    orientation = PropertiesReadEnum<ASCH_RECORD_ORIENTATION>(
+            aProperties, "ORIENTATION", 0, 3, ASCH_RECORD_ORIENTATION::RIGHTWARDS );
+
+    name = ALTIUM_PARSER::PropertiesReadString( aProperties, "NAME", "" );
+    text = ALTIUM_PARSER::PropertiesReadString( aProperties, "TEXT", "" );
+
+    isHidden   = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISHIDDEN", false );
+    isMirrored = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISMIRRORED", false );
+    isShowName = ALTIUM_PARSER::PropertiesReadBool( aProperties, "SHOWNAME", false );
 }

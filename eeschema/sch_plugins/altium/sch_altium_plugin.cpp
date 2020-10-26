@@ -204,7 +204,9 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
     }
 
     m_currentSheet = m_rootSheet;
+    m_currentTitleBlock = std::make_unique<TITLE_BLOCK>();
     ParseAltiumSch( aFileName );
+    m_currentSheet->GetScreen()->SetTitleBlock( *m_currentTitleBlock );
 
     m_pi->SaveLibrary( getLibFileName().GetFullPath() );
 
@@ -382,6 +384,7 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
         case ALTIUM_SCH_RECORD::TEMPLATE:
             break;
         case ALTIUM_SCH_RECORD::PARAMETER:
+            ParseParameter( properties );
             break;
         case ALTIUM_SCH_RECORD::WARNING_SIGN:
             break;
@@ -1771,29 +1774,48 @@ void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aPr
 {
     ASCH_DESIGNATOR elem( aProperties );
 
-    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
-    {
-        return; // TODO: what to do?
-    }
-
-    const auto& component = m_components.find( elem.ownerpartid );
-    if( component == m_components.end() )
+    const auto& symbol = m_symbols.find( elem.ownerindex );
+    if( symbol == m_symbols.end() )
     {
         // TODO: e.g. can depend on Template (RECORD=39
-        THROW_IO_ERROR( wxString::Format(
-                "Designator tries to access component with ownerpartid %d which does not exist",
-                elem.ownerpartid ) );
+        wxLogWarning( wxString::Format(
+                "Designator tries to access symbol with ownerindex %d which does not exist",
+                elem.ownerindex ) );
+        return;
     }
 
-    LIB_PART* symbol = m_symbols.at( elem.ownerpartid );
-    // TODO: component->second->SetRef(m_sheet, elem.name);
+    const auto& component = m_components.at( symbol->first );
 
-    LIB_TEXT* text = new LIB_TEXT( symbol );
-    symbol->AddDrawItem( text );
+    SCH_SHEET_PATH sheetpath;
+    m_rootSheet->LocatePathOfScreen( m_currentSheet->GetScreen(), &sheetpath );
 
-    text->SetPosition( elem.location + m_sheetOffset );
-    text->SetTextAngle( elem.orientation * 90. );
-    text->SetText( elem.name ); // TODO: use variable
+    component->SetRef( &sheetpath, elem.text );
+
+    SCH_FIELD* refField = component->GetField( REFERENCE );
+
+    refField->SetPosition( elem.location + m_sheetOffset );
+    refField->SetVisible( true );
+
+    refField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
+    refField->SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM );
+
+    switch( elem.orientation )
+    {
+    case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
+        refField->SetTextAngle( 0 );
+        break;
+    case ASCH_RECORD_ORIENTATION::UPWARDS:
+        refField->SetTextAngle( 90 );
+        break;
+    case ASCH_RECORD_ORIENTATION::LEFTWARDS:
+        refField->SetTextAngle( 180 );
+        break;
+    case ASCH_RECORD_ORIENTATION::DOWNWARDS:
+        refField->SetTextAngle( 270 );
+        break;
+    default:
+        break;
+    }
 }
 
 
@@ -1808,4 +1830,73 @@ void SCH_ALTIUM_PLUGIN::ParseBusEntry( const std::map<wxString, wxString>& aProp
 
     busWireEntry->SetFlags( IS_NEW );
     m_currentSheet->GetScreen()->Append( busWireEntry );
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_PARAMETER elem( aProperties );
+
+    if( elem.ownerindex <= 0 && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    {
+        // This is some sheet parameter
+        if( elem.text == "*" )
+            return; // indicates parameter not set?
+
+        SCH_SHEET_PATH sheetpath;
+        m_rootSheet->LocatePathOfScreen( m_currentSheet->GetScreen(), &sheetpath );
+
+        if( elem.name == "SheetNumber" )
+            m_rootSheet->SetPageNumber( sheetpath, elem.text );
+        else if( elem.name == "Title" )
+            m_currentTitleBlock->SetTitle( elem.text );
+        else if( elem.name == "Revision" )
+            m_currentTitleBlock->SetRevision( elem.text );
+        else if( elem.name == "Date" )
+            m_currentTitleBlock->SetDate( elem.text );
+        else if( elem.name == "CompanyName" )
+            m_currentTitleBlock->SetCompany( elem.text );
+        // TODO: parse other parameters
+        // TODO: handle parameters in labels
+    }
+    else
+    {
+        const auto& symbol = m_symbols.find( elem.ownerindex );
+        if( symbol == m_symbols.end() )
+        {
+            // TODO: e.g. can depend on Template (RECORD=39
+            return;
+        }
+
+        const auto& component = m_components.at( symbol->first );
+
+        int fieldIdx = component->GetFieldCount() + 1;
+
+        // TODO: location not correct?
+        SCH_FIELD field( elem.location + m_sheetOffset, fieldIdx, component, elem.name );
+        field.SetText( elem.text );
+        field.SetVisible( !elem.isHidden );
+        field.SetMirrored( elem.isMirrored );
+        field.SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
+
+        switch( elem.orientation )
+        {
+        case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
+            field.SetTextAngle( 0 );
+            break;
+        case ASCH_RECORD_ORIENTATION::UPWARDS:
+            field.SetTextAngle( 90 );
+            break;
+        case ASCH_RECORD_ORIENTATION::LEFTWARDS:
+            field.SetTextAngle( 180 );
+            break;
+        case ASCH_RECORD_ORIENTATION::DOWNWARDS:
+            field.SetTextAngle( 270 );
+            break;
+        default:
+            break;
+        }
+
+        component->AddField( field );
+    }
 }

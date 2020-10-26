@@ -33,6 +33,7 @@
 
 
 class SCH_COMPONENT;
+class TITLE_BLOCK;
 
 namespace CFB
 {
@@ -124,6 +125,7 @@ private:
     void ParseSheet( const std::map<wxString, wxString>& aProperties );
     void ParseDesignator( const std::map<wxString, wxString>& aProperties );
     void ParseBusEntry( const std::map<wxString, wxString>& aProperties );
+    void ParseParameter( const std::map<wxString, wxString>& aProperties );
 
 private:
     SCH_SHEET* m_rootSheet;    ///< The root sheet of the schematic being loaded..
@@ -134,6 +136,9 @@ private:
 
     SCH_PLUGIN::SCH_PLUGIN_RELEASER m_pi;         ///< Plugin to create the KiCad symbol library.
     std::unique_ptr<PROPERTIES>     m_properties; ///< Library plugin properties.
+
+    std::unique_ptr<TITLE_BLOCK>
+            m_currentTitleBlock; /// Will be assigned at the end of parsing a sheet
 
     wxPoint                       m_sheetOffset;
     std::unique_ptr<ASCH_SHEET>   m_altiumSheet;

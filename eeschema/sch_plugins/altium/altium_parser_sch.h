@@ -568,7 +568,7 @@ struct ASCH_DESIGNATOR
     wxString name;
     wxString text;
 
-    int     orientation;
+    ASCH_RECORD_ORIENTATION orientation;
     wxPoint location;
 
     explicit ASCH_DESIGNATOR( const std::map<wxString, wxString>& aProperties );
@@ -581,6 +581,25 @@ struct ASCH_BUS_ENTRY
     wxPoint corner;
 
     explicit ASCH_BUS_ENTRY( const std::map<wxString, wxString>& aProperties );
+};
+
+
+struct ASCH_PARAMETER
+{
+    int ownerindex;
+    int ownerpartid;
+
+    wxPoint                 location;
+    ASCH_RECORD_ORIENTATION orientation;
+
+    wxString name;
+    wxString text;
+
+    bool isHidden;
+    bool isMirrored;
+    bool isShowName;
+
+    explicit ASCH_PARAMETER( const std::map<wxString, wxString>& aProperties );
 };
 
 #endif //ALTIUM_PARSER_SCH_H
