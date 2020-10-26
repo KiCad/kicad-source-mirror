@@ -24,6 +24,8 @@
 #include <kiface_i.h>
 #include <settings/app_settings.h>
 #include <widgets/color_swatch.h>
+#include <wx/bitmap.h>
+#include <wx/dcmemory.h>
 
 #define ALPHA_MAX 100   // the max value returned by the alpha (opacity) slider
 

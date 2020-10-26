@@ -22,6 +22,7 @@
  */
 
 #include <widgets/color_swatch.h>
+#include <wx/dcmemory.h>
 
 #include "dialog_color_picker.h"
 #include <memory>

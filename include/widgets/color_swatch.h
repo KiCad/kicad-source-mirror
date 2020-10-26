@@ -24,7 +24,13 @@
 #ifndef COLOR_SWATCH__H_
 #define COLOR_SWATCH__H_
 
-#include <wx/wx.h>
+#include <wx/bitmap.h>
+#include <wx/gdicmn.h>
+#include <wx/panel.h>
+#include <wx/statbmp.h>
+#include <wx/window.h>
+
+#include <functional>
 
 #include <gal/color4d.h>
 
