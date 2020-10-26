@@ -1050,27 +1050,15 @@ void ALTIUM_PCB::HelperParseDimensions6Center( const ADIMENSION6& aElem )
         klayer = Eco1_User;
     }
 
-    PCB_SHAPE* shape1 = new PCB_SHAPE( m_board );
-    m_board->Add( shape1, ADD_MODE::APPEND );
-    shape1->SetShape( S_SEGMENT );
-    shape1->SetLayer( klayer );
-    shape1->SetWidth( aElem.linewidth );
+    wxPoint vec = wxPoint( 0, aElem.height / 2 );
+    RotatePoint( &vec, aElem.angle * 10. );
 
-    wxPoint vec1 = wxPoint( 0, aElem.height / 2 );
-    RotatePoint( &vec1, aElem.angle * 10. );
-    shape1->SetStart( aElem.xy1 + vec1 );
-    shape1->SetEnd( aElem.xy1 - vec1 );
-
-    PCB_SHAPE* shape2 = new PCB_SHAPE( m_board );
-    m_board->Add( shape2, ADD_MODE::APPEND );
-    shape2->SetShape( S_SEGMENT );
-    shape2->SetLayer( klayer );
-    shape2->SetWidth( aElem.linewidth );
-
-    wxPoint vec2 = wxPoint( aElem.height / 2, 0 );
-    RotatePoint( &vec2, aElem.angle * 10. );
-    shape2->SetStart( aElem.xy1 + vec2 );
-    shape2->SetEnd( aElem.xy1 - vec2 );
+    CENTER_DIMENSION* dimension = new CENTER_DIMENSION( m_board );
+    m_board->Add( dimension, ADD_MODE::APPEND );
+    dimension->SetLayer( klayer );
+    dimension->SetLineThickness( aElem.linewidth );
+    dimension->SetStart( aElem.xy1 );
+    dimension->SetEnd( aElem.xy1 + vec );
 }
 
 
