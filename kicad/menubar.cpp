@@ -157,6 +157,9 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     toolsMenu->Add( KICAD_MANAGER_ACTIONS::convertImage );
     toolsMenu->Add( KICAD_MANAGER_ACTIONS::showCalculator );
     toolsMenu->Add( KICAD_MANAGER_ACTIONS::editDrawingSheet );
+#ifdef PCM
+    toolsMenu->Add( KICAD_MANAGER_ACTIONS::showPluginManager );
+#endif
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( _( "Edit Local File..." ),

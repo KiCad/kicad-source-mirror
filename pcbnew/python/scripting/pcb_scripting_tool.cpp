@@ -83,7 +83,7 @@ int SCRIPTING_TOOL::reloadPlugins( const TOOL_EVENT& aEvent )
         ACTION_PLUGINS::UnloadAll();
 
     {
-        PyLOCK      lock;
+        PyLOCK lock;
         callLoadPlugins();
     }
 
@@ -104,18 +104,18 @@ void SCRIPTING_TOOL::callLoadPlugins()
     // Load pcbnew inside Python and load all the user plugins and package-based plugins
     using namespace pybind11::literals;
 
-    auto locals = pybind11::dict( "sys_path"_a = TO_UTF8( SCRIPTING::PyScriptingPath(
-                                            SCRIPTING::PATH_TYPE::STOCK ) ),
-                                    "user_path"_a = TO_UTF8( SCRIPTING::PyScriptingPath(
-                                            SCRIPTING::PATH_TYPE::USER ) ),
-                                    "third_party_path"_a = TO_UTF8( SCRIPTING::PyPluginsPath(
-                                            SCRIPTING::PATH_TYPE::THIRDPARTY ) ) );
+    auto locals = pybind11::dict(
+            "sys_path"_a = TO_UTF8( SCRIPTING::PyScriptingPath( SCRIPTING::PATH_TYPE::STOCK ) ),
+            "user_path"_a = TO_UTF8( SCRIPTING::PyScriptingPath( SCRIPTING::PATH_TYPE::USER ) ),
+            "third_party_path"_a =
+                    TO_UTF8( SCRIPTING::PyPluginsPath( SCRIPTING::PATH_TYPE::THIRDPARTY ) ) );
 
     pybind11::exec( R"(
 import sys
 import pcbnew
 pcbnew.LoadPlugins( sys_path, user_path, third_party_path )
-    )", pybind11::globals(), locals );
+    )",
+                    pybind11::globals(), locals );
 }
 
 

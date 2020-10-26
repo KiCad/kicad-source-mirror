@@ -19,7 +19,7 @@
  */
 
 #include "kicad_settings.h"
-#include "nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
 #include <settings/parameters.h>
 
 
@@ -46,6 +46,7 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
                 {
                     js.push_back( nlohmann::json( { { "name", pair.first.ToUTF8() },
                                                     { "url", pair.second.ToUTF8() } } ) );
+                }
 
                 return js;
             },

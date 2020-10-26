@@ -111,6 +111,14 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editDrawingSheet( "kicad.Control.editDrawingS
         _( "Drawing Sheet Editor" ), _( "Edit drawing sheet borders and title block" ),
         BITMAPS::icon_pagelayout_editor_24 );
 
+#ifdef PCM
+TOOL_ACTION KICAD_MANAGER_ACTIONS::showPluginManager( "kicad.Control.pluginContentManager",
+        AS_GLOBAL,
+        MD_CTRL + 'M', "",
+        _( "Plugin and Content Manager" ), _( "Run Plugin and Content Manager" ),
+        BITMAPS::icon_pcm_24 );
+#endif
+
 TOOL_ACTION KICAD_MANAGER_ACTIONS::openTextEditor( "kicad.Control.openTextEditor",
         AS_GLOBAL,
         0, "",

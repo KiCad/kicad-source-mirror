@@ -459,8 +459,12 @@ wxString SCRIPTING::PyScriptingPath( PATH_TYPE aPathType )
     //@todo This should this be a user configurable variable eg KISCRIPT?
     switch( aPathType )
     {
-    case STOCK: path = PATHS::GetStockScriptingPath(); break;
-    case USER: path = PATHS::GetUserScriptingPath(); break;
+    case STOCK:
+        path = PATHS::GetStockScriptingPath();
+        break;
+    case USER:
+        path = PATHS::GetUserScriptingPath();
+        break;
     case THIRDPARTY:
         const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
         auto               it = env.find( "KICAD6_3RD_PARTY" );

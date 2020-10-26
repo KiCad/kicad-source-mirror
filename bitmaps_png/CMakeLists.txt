@@ -280,6 +280,7 @@ set( BMAPS_MID
     icon_cvpcb_24
     icon_footprint_browser
     icon_gerbview_24
+    icon_pcm_24
     import3d
     image
     import_brd_file
@@ -529,6 +530,7 @@ set( BMAPS_BIG
     icon_bitmap2component
     icon_pagelayout_editor
     icon_pcbcalculator
+    icon_pcm
     reannotate_down_left
     reannotate_down_right
     reannotate_left_down

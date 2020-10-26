@@ -13,6 +13,11 @@ include_directories(
     ${INC_AFTER}
     )
 
+if ( KICAD_PCM )
+    add_definitions( -DPCM )
+    add_subdirectory( pcm )
+    include_directories( ./pcm )
+endif ( KICAD_PCM )
 
 set( KICAD_SRCS
     dialogs/dialog_template_selector_base.cpp
@@ -89,6 +94,10 @@ else()
         ${wxWidgets_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
         )
+endif()
+
+if( KICAD_PCM )
+    target_link_libraries( kicad pcm )
 endif()
 
 install( TARGETS kicad

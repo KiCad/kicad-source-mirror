@@ -20,7 +20,8 @@ ICON_FILES="icon_3d.svg
             icon_pl_editor.svg
             icon_cvpcb.svg
             icon_pcbnew.svg
-            icon_eeschema.svg"
+            icon_eeschema.svg
+            icon_pcm.svg"
 
 # convert .svg files into .png files
 for fl in $ICON_FILES

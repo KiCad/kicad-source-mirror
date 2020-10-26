@@ -29,6 +29,7 @@
 #include <project/project_archiver.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
+#include <wxstream_helper.h>
 #include <wx/log.h>
 
 
@@ -41,46 +42,6 @@ PROJECT_ARCHIVER::PROJECT_ARCHIVER()
 
 
 // Unarchive Files code comes from wxWidgets sample/archive/archive.cpp
-static bool CopyStreamData( wxInputStream& inputStream, wxOutputStream& outputStream,
-                            wxFileOffset size )
-{
-    wxChar buf[128 * 1024];
-    int readSize = 128 * 1024;
-    wxFileOffset copiedData = 0;
-
-    for( ; ; )
-    {
-        if(size != -1 && copiedData + readSize > size )
-            readSize = size - copiedData;
-
-        inputStream.Read( buf, readSize );
-
-        size_t actuallyRead = inputStream.LastRead();
-        outputStream.Write( buf, actuallyRead );
-
-        if( outputStream.LastWrite() != actuallyRead )
-        {
-            wxLogError( _( "Failed to output data." ) );
-            //return false;
-        }
-
-        if( size == -1 )
-        {
-            if( inputStream.Eof() )
-                break;
-        }
-        else
-        {
-            copiedData += actuallyRead;
-            if( copiedData >= size )
-                break;
-        }
-    }
-
-    return true;
-}
-
-
 bool PROJECT_ARCHIVER::Unarchive( const wxString& aSrcFile, const wxString& aDestDir,
                                   REPORTER& aReporter )
 {
@@ -113,30 +74,12 @@ bool PROJECT_ARCHIVER::Unarchive( const wxString& aSrcFile, const wxString& aDes
 
         wxString fullname = aDestDir + entry->GetName();
 
-        // Ensure the target directory exists and created it if not
+        // Ensure the target directory exists and create it if not
         wxString t_path = wxPathOnly( fullname );
 
         if( !wxDirExists( t_path ) )
         {
-            // To create t_path, we need to create all subdirs from unzipDir
-            // to t_path.
-            wxFileName pathToCreate;
-            pathToCreate.AssignDir( t_path );
-            pathToCreate.MakeRelativeTo( aDestDir );
-
-            // Create the list of subdirs candidates
-            wxArrayString subDirs;
-            subDirs = pathToCreate.GetDirs();
-            pathToCreate.AssignDir( aDestDir );
-
-            for( size_t ii = 0; ii < subDirs.Count(); ii++ )
-            {
-                pathToCreate.AppendDir( subDirs[ii] );
-                wxString currPath = pathToCreate.GetPath();
-
-                if( !wxDirExists( currPath ) )
-                    wxMkdir( currPath );
-            }
+            wxFileName::Mkdir( t_path, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
         }
 
         // Directory entries need only be created, not extracted (0 size)

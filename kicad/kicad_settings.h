@@ -27,7 +27,6 @@
 class KICAD_SETTINGS : public APP_SETTINGS_BASE
 {
 public:
-
     KICAD_SETTINGS();
 
     virtual ~KICAD_SETTINGS() {}
@@ -44,7 +43,6 @@ public:
 #endif
 
 protected:
-
     virtual std::string getLegacyFrameName() const override { return "KicadFrame"; }
 };
 

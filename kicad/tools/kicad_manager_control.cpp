@@ -34,8 +34,12 @@
 #include <wx/checkbox.h>
 #include <wx/dir.h>
 #include <wx/filedlg.h>
+#ifdef PCM
+#include "dialog_pcm.h"
+#endif
 
-///< Helper widget to select whether a new directory should be created for a project.
+
+///> Helper widget to select whether a new directory should be created for a project.
 class DIR_CHECKBOX : public wxPanel
 {
 public:
@@ -752,6 +756,14 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
         execFile = EESCHEMA_EXE;
     else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editOtherPCB ) )
         execFile = PCBNEW_EXE;
+#ifdef PCM
+    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::showPluginManager ) )
+    {
+        DIALOG_PCM* pcm = new DIALOG_PCM( m_frame );
+        pcm->ShowModal();
+        pcm->Destroy();
+    }
+#endif
     else
         wxFAIL_MSG( "Execute(): unexpected request" );
 
@@ -814,4 +826,8 @@ void KICAD_MANAGER_CONTROL::setTransitions()
 
     Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::editOtherSch.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::editOtherPCB.MakeEvent() );
+
+#ifdef PCM
+    Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::showPluginManager.MakeEvent() );
+#endif
 }
