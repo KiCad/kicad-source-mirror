@@ -237,7 +237,6 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
             for( ++it2; it2 != lines.end(); ++it2 )
             {
                 SCH_LINE* secondLine = *it2;
-                bool      needed     = false;
 
                 if( secondLine->GetFlags() & STRUCT_DELETED )
                     continue;

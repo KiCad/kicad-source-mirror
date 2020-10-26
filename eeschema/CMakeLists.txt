@@ -191,7 +191,6 @@ set( EESCHEMA_SRCS
     lib_view_frame.cpp
     libarch.cpp
     menubar.cpp
-    netlist_generator.cpp
     pin_number.cpp
     pin_type.cpp
     plotters/plot_schematic_DXF.cpp
@@ -246,6 +245,7 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_kicad.cpp
     netlist_exporters/netlist_exporter_orcadpcb2.cpp
     netlist_exporters/netlist_exporter_pspice.cpp
+    netlist_exporters/netlist_generator.cpp
 
     tools/backannotate.cpp
     tools/assign_footprints.cpp
