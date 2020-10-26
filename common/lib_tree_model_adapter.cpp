@@ -138,41 +138,36 @@ void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( wxString const& aNodeName, wxString c
 
 void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
 {
-    m_tree.ResetScore();
-
-    wxStringTokenizer tokenizer( aSearch );
-
-    while( tokenizer.HasMoreTokens() )
     {
-        const wxString term = tokenizer.GetNextToken().Lower();
-        EDA_COMBINED_MATCHER matcher( term );
-
-        m_tree.UpdateScore( matcher );
-    }
-
-    m_tree.SortNodes();
-
-    {
+        // DO NOT REMOVE THE FREEZE/THAW. This freeze/thaw is a flag for this model adapter
+        // that tells it when it shouldn't trust any of the data in the model. When set, it will
+        // not return invalid data to the UI, since this invalid data can cause crashes.
+        // This is different than the update locker, which locks the UI aspects only.
         wxWindowUpdateLocker updateLock( m_widget );
+        BeforeReset();
 
-        Freeze();
         // Even with the updateLock, wxWidgets sometimes ties its knickers in
         // a knot when trying to run a wxdataview_selection_changed_callback()
         // on a row that has been deleted.
         // https://bugs.launchpad.net/kicad/+bug/1756255
         m_widget->UnselectAll();
+        Freeze();
 
-        Cleared();
+        m_tree.ResetScore();
+
+        wxStringTokenizer tokenizer( aSearch );
+
+        while( tokenizer.HasMoreTokens() )
+        {
+            const wxString term = tokenizer.GetNextToken().Lower();
+            EDA_COMBINED_MATCHER matcher( term );
+
+            m_tree.UpdateScore( matcher );
+        }
+
+        m_tree.SortNodes();
+        AfterReset();
         Thaw();
-
-        // This was fixed in wxWidgets 3.0.5 and 3.1.3.
-#if defined( __WXGTK__ ) && ( (wxVERSION_NUMBER < 030005 ) || \
-        ( ( wxVERSION_NUMBER >= 030100 ) && ( wxVERSION_NUMBER < 030103 ) ) )
-        // The fastest method to update wxDataViewCtrl is to rebuild from
-        // scratch by calling Cleared(). Linux requires to reassociate model to
-        // display data, but Windows will create multiple associations.
-        AttachTo( m_widget );
-#endif
     }
 
     LIB_TREE_NODE* bestMatch = ShowResults();
