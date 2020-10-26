@@ -154,8 +154,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
     m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "ComponentTree" ).Left().Layer(2)
-                      .Caption( _( "Libraries" ) ).MinSize( 250, -1 )
-                      .BestSize( m_settings->m_LibWidth, -1 ).Resizable() );
+                      .Caption( _( "Libraries" ) ).MinSize( 250, -1 ).BestSize( 250, -1 ) );
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(2) );
     m_auimgr.AddPane( m_infoBar,
                       EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
@@ -169,6 +168,25 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // We don't want the infobar displayed right away
     m_auimgr.GetPane( "InfoBar" ).Hide();
     m_auimgr.Update();
+
+    if( m_settings->m_LibWidth > 0 )
+    {
+        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "ComponentTree" );
+
+        // wxAUI hack: force width by setting MinSize() and then Fixed()
+        // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
+        treePane.MinSize( m_settings->m_LibWidth, -1 );
+        treePane.Fixed();
+        m_auimgr.Update();
+
+        // now make it resizable again
+        treePane.Resizable();
+        m_auimgr.Update();
+
+        // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
+        // back to minimum.
+        treePane.MinSize( 250, -1 );
+    }
 
     Raise();
     Show( true );
