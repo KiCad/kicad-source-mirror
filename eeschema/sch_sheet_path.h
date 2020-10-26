@@ -141,7 +141,7 @@ protected:
 
     size_t m_current_hash;
 
-    int m_pageNumber;              /// Page numbers are maintained by the sheet load order.
+    int m_virtualPageNumber;           /// Page numbers are maintained by the sheet load order.
 
     std::map<std::pair<wxString, wxString>, bool> m_recursion_test_cache;
 
@@ -186,6 +186,24 @@ public:
 
     size_t GetCurrentHash() const { return m_current_hash; }
 
+    /**
+     * Set the sheet instance virtual page number.
+     *
+     * Virtual page numbers are incremental integers set automatically when the sheet path
+     * hierarchy is created (@see #SCH_SHEET_LIST::BuildSheetList).  The virtual page
+     * numbering is ordered by the X and Y position of the sheet in a schematic which
+     * mimics the page numbering code prior to the addition of actual user definable page
+     * numbers.  Virtual page numbers should only be use when annotating schematics.
+     */
+    void SetVirtualPageNumber( int aPageNumber ) { m_virtualPageNumber = aPageNumber; }
+
+    int GetVirtualPageNumber() const { return m_virtualPageNumber; }
+
+    /**
+     * Set the sheet instance user definable page number.
+     *
+     * @note User definable page numbers can be any string devoid of white space characters.
+     */
     void SetPageNumber( const wxString& aPageNumber );
 
     wxString GetPageNumber() const;

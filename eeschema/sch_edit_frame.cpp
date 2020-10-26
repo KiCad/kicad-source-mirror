@@ -500,6 +500,7 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
     for( screen = s_list.GetFirst(); screen != NULL; screen = s_list.GetNext() )
         screen->SetPageCount( sheet_count );
 
+    GetCurrentSheet().SetVirtualPageNumber( sheet_number );
     GetScreen()->SetVirtualPageNumber( sheet_number );
     GetScreen()->SetPageNumber( GetCurrentSheet().GetPageNumber() );
 }

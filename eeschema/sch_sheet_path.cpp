@@ -96,7 +96,7 @@ namespace std
 
 SCH_SHEET_PATH::SCH_SHEET_PATH()
 {
-    m_pageNumber = 0;
+    m_virtualPageNumber = 0;
     m_current_hash = 0;
 }
 
@@ -116,9 +116,9 @@ SCH_SHEET_PATH& SCH_SHEET_PATH::operator=( const SCH_SHEET_PATH& aOther )
 
 void SCH_SHEET_PATH::initFromOther( const SCH_SHEET_PATH& aOther )
 {
-    m_sheets       = aOther.m_sheets;
-    m_pageNumber   = aOther.m_pageNumber;
-    m_current_hash = aOther.m_current_hash;
+    m_sheets            = aOther.m_sheets;
+    m_virtualPageNumber = aOther.m_virtualPageNumber;
+    m_current_hash      = aOther.m_current_hash;
 
     // Note: don't copy m_recursion_test_cache as it is slow and we want SCH_SHEET_PATHS to be
     // very fast to construct for use in the connectivity algorithm.
@@ -282,7 +282,7 @@ void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aInclu
             {
                 SCH_REFERENCE schReference( component, part, *this );
 
-                schReference.SetSheetNumber( m_pageNumber );
+                schReference.SetSheetNumber( m_virtualPageNumber );
                 aReferences.AddItem( schReference );
             }
         }
@@ -307,7 +307,7 @@ void SCH_SHEET_PATH::GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP& aRefL
         if( part && part->GetUnitCount() > 1 )
         {
             SCH_REFERENCE schReference = SCH_REFERENCE( component, part, *this );
-            schReference.SetSheetNumber( m_pageNumber );
+            schReference.SetSheetNumber( m_virtualPageNumber );
             wxString reference_str = schReference.GetRef();
 
             // Never lock unassigned references
@@ -441,7 +441,7 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity )
     std::vector<SCH_SHEET*> badSheets;
 
     m_currentSheetPath.push_back( aSheet );
-
+    m_currentSheetPath.SetVirtualPageNumber( static_cast<int>( size() ) + 1 );
     push_back( m_currentSheetPath );
 
     if( m_currentSheetPath.LastScreen() )
