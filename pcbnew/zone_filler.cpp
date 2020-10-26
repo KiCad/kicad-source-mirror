@@ -696,6 +696,14 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE_CONTAINER* aZone, PCB_LAYER
 void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
                                              SHAPE_POLY_SET& aHoles )
 {
+    long ticker = 0;
+
+    auto checkForCancel =
+            [&ticker]( PROGRESS_REPORTER* aReporter ) -> bool
+            {
+                return aReporter && ( ticker++ % 50 ) == 0 && aReporter->IsCancelled();
+            };
+
     static PCB_SHAPE dummyEdge;
     dummyEdge.SetParent( m_board );
     dummyEdge.SetLayer( Edge_Cuts );
@@ -758,6 +766,9 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
     {
         for( D_PAD* pad : module->Pads() )
         {
+            if( checkForCancel( m_progressReporter ) )
+                return;
+
             if( !pad->FlashLayer( aLayer ) )
             {
                 if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
@@ -819,6 +830,9 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
         if( track->GetNetCode() == aZone->GetNetCode()  && ( aZone->GetNetCode() != 0) )
             continue;
 
+        if( checkForCancel( m_progressReporter ) )
+            return;
+
         knockoutTrack( track );
     }
 
@@ -853,11 +867,21 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
         knockoutGraphic( &module->Value() );
 
         for( BOARD_ITEM* item : module->GraphicalItems() )
+        {
+            if( checkForCancel( m_progressReporter ) )
+                return;
+
             knockoutGraphic( item );
+        }
     }
 
     for( BOARD_ITEM* item : m_board->Drawings() )
+    {
+        if( checkForCancel( m_progressReporter ) )
+            return;
+
         knockoutGraphic( item );
+    }
 
     // Add non-connected zone clearances
     //
@@ -900,6 +924,9 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
     for( ZONE_CONTAINER* otherZone : m_board->Zones() )
     {
+        if( checkForCancel( m_progressReporter ) )
+            return;
+
         if( otherZone->GetNetCode() != aZone->GetNetCode()
                 && otherZone->GetPriority() > aZone->GetPriority() )
         {
@@ -915,6 +942,9 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
     {
         for( ZONE_CONTAINER* otherZone : module->Zones() )
         {
+            if( checkForCancel( m_progressReporter ) )
+                return;
+
             if( otherZone->GetNetCode() != aZone->GetNetCode()
                     && otherZone->GetPriority() > aZone->GetPriority() )
             {

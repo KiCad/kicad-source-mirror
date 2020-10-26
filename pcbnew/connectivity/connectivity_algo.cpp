@@ -226,7 +226,9 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
     if( m_progressReporter )
     {
         m_progressReporter->SetMaxProgress( dirtyItems.size() );
-        m_progressReporter->KeepRefreshing();
+
+        if( !m_progressReporter->KeepRefreshing() )
+            return;
     }
 
     if( m_itemList.IsDirty() )
@@ -247,7 +249,12 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
                         aItemList->FindNearby( dirtyItems[i], visitor );
 
                         if( aReporter )
-                            aReporter->AdvanceProgress();
+                        {
+                            if( aReporter->IsCancelled() )
+                                break;
+                            else
+                                aReporter->AdvanceProgress();
+                        }
                     }
 
                     return 1;
@@ -350,6 +357,9 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
 
     std::for_each( m_itemList.begin(), m_itemList.end(), addToSearchList );
 
+    if( m_progressReporter && m_progressReporter->IsCancelled() )
+        return CLUSTERS();
+
     while( !item_set.empty() )
     {
         CN_CLUSTER_PTR cluster ( new CN_CLUSTER() );
@@ -391,6 +401,8 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
         clusters.push_back( cluster );
     }
 
+    if( m_progressReporter && m_progressReporter->IsCancelled() )
+        return CLUSTERS();
 
     std::sort( clusters.begin(), clusters.end(),
                []( CN_CLUSTER_PTR a, CN_CLUSTER_PTR b )
