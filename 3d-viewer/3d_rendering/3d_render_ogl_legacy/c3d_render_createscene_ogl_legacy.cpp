@@ -405,19 +405,18 @@ CLAYERS_OGL_DISP_LISTS* C3D_RENDER_OGL_LEGACY::generateLayerListFromContainer( c
                                                   m_boardAdapter.BiuTo3Dunits(), false );
     // Create display list
     // /////////////////////////////////////////////////////////////////////
-    return new CLAYERS_OGL_DISP_LISTS( *layerTriangles,
-                                       m_ogl_circle_texture,
-                                       layer_z_bot,
-                                       layer_z_top );
+    return new CLAYERS_OGL_DISP_LISTS( *layerTriangles, m_ogl_circle_texture,
+                                       layer_z_bot, layer_z_top );
 }
 
 
-CLAYERS_OGL_DISP_LISTS* C3D_RENDER_OGL_LEGACY::createBoard( SHAPE_POLY_SET aBoardPoly )
+CLAYERS_OGL_DISP_LISTS* C3D_RENDER_OGL_LEGACY::createBoard( const SHAPE_POLY_SET& aBoardPoly )
 {
     CLAYERS_OGL_DISP_LISTS* dispLists = nullptr;
     CCONTAINER2D boardContainer;
-    Convert_shape_line_polygon_to_triangles( aBoardPoly,
-                                             boardContainer,
+    SHAPE_POLY_SET brd_outlines = aBoardPoly;
+
+    Convert_shape_line_polygon_to_triangles( brd_outlines, boardContainer,
                                              m_boardAdapter.BiuTo3Dunits(),
                                              (const BOARD_ITEM &)*m_boardAdapter.GetBoard() );
 

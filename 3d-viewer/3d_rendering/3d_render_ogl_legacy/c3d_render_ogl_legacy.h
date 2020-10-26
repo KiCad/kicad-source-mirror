@@ -73,7 +73,7 @@ public:
 
 private:
     bool initializeOpenGL();
-    CLAYERS_OGL_DISP_LISTS* createBoard( SHAPE_POLY_SET aBoardPoly );
+    CLAYERS_OGL_DISP_LISTS* createBoard( const SHAPE_POLY_SET& aBoardPoly );
     void reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
 
     void ogl_set_arrow_material();

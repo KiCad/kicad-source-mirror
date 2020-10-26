@@ -852,7 +852,8 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, d
         seg_count += 1;
 
     // Recalculate alphaIncrement with a even integer number of segment
-    alphaIncrement = (aEndAngle -aStartAngle ) / seg_count;
+    if( seg_count )
+        alphaIncrement = (aEndAngle -aStartAngle ) / seg_count;
 
     Save();
     currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );
