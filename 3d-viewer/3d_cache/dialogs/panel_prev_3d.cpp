@@ -120,7 +120,7 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
     m_SizerPanelView->Add( m_previewPane, 1, wxEXPAND, 5 );
 
     // Tell the canvas about the infobar
-    if( m_previewPane && m_infobar )
+    if( m_infobar )
         m_previewPane->SetInfoBar( m_infobar );
 
     for( wxEventType eventType : { wxEVT_MENU_OPEN, wxEVT_MENU_CLOSE, wxEVT_MENU_HIGHLIGHT } )

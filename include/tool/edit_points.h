@@ -55,7 +55,8 @@ public:
         m_position( aPoint ),
         m_connection( aConnection ),
         m_isActive( false ),
-        m_isHover( false )
+        m_isHover( false ),
+        m_gridFree( false )
     {
     }
 

@@ -45,7 +45,9 @@
 class DRC_TEST_PROVIDER_SILK_CLEARANCE : public DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_SILK_CLEARANCE ()
+    DRC_TEST_PROVIDER_SILK_CLEARANCE ():
+        m_board( nullptr ),
+        m_largestClearance( 0 )
     {
     }
 
