@@ -386,6 +386,24 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 
                 break;
 
+            case LAYER_SUBTYPE::LAYERSUBTYPE_ROUT:
+                if( numElecAndPowerLayers > 0 )
+                    kicadLayerID = PCB_LAYER_ID::Eco2_User;
+                else
+                    kicadLayerID = PCB_LAYER_ID::Eco1_User;
+
+                logBoardStackupWarning( curLayer.Name, kicadLayerID );
+                break;
+
+            case LAYER_SUBTYPE::LAYERSUBTYPE_CLEARANCE:
+                if( numElecAndPowerLayers > 0 )
+                    kicadLayerID = PCB_LAYER_ID::Eco2_User;
+                else
+                    kicadLayerID = PCB_LAYER_ID::Eco1_User;
+
+                logBoardStackupWarning( curLayer.Name, kicadLayerID );
+                break;
+
             default:
                 wxFAIL_MSG( "Unknown CADSTAR Layer Sub-type" );
                 break;
@@ -499,7 +517,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::remapUnsureLayers()
         //Only remap layers that we aren't sure about
         if( curLayer->Type == LAYER_TYPE::DOC
                 || ( curLayer->Type == LAYER_TYPE::NONELEC
-                        && curLayer->SubType == LAYER_SUBTYPE::LAYERSUBTYPE_NONE ) )
+                        && curLayer->SubType == LAYER_SUBTYPE::LAYERSUBTYPE_NONE )
+                || ( curLayer->Type == LAYER_TYPE::NONELEC
+                        && curLayer->SubType == LAYER_SUBTYPE::LAYERSUBTYPE_ROUT )
+                || ( curLayer->Type == LAYER_TYPE::NONELEC
+                        && curLayer->SubType == LAYER_SUBTYPE::LAYERSUBTYPE_CLEARANCE ) )
         {
             INPUT_LAYER_DESC iLdesc;
             iLdesc.Name            = curLayer->Name;

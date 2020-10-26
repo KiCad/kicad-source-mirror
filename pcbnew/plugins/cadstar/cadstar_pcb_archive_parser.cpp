@@ -533,6 +533,14 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYER::Parse( XNODE* aNode )
             {
                 this->SubType = LAYER_SUBTYPE::LAYERSUBTYPE_SOLDERRESIST;
             }
+            else if( sSubType == wxT( "LAYERSUBTYPE_CLEARANCE" ) )
+            {
+                this->SubType = LAYER_SUBTYPE::LAYERSUBTYPE_CLEARANCE;
+            }
+            else if( sSubType == wxT( "LAYERSUBTYPE_ROUT" ) )
+            {
+                this->SubType = LAYER_SUBTYPE::LAYERSUBTYPE_ROUT;
+            }
             else
             {
                 THROW_UNKNOWN_PARAMETER_IO_ERROR(
