@@ -439,8 +439,11 @@ bool CN_CLUSTER::Contains( const CN_ITEM* aItem )
 
 bool CN_CLUSTER::Contains( const BOARD_CONNECTED_ITEM* aItem )
 {
-    return std::find_if( m_items.begin(), m_items.end(), [ &aItem ] ( const CN_ITEM* item )
-            { return item->Valid() && item->Parent() == aItem; } ) != m_items.end();
+    return std::find_if( m_items.begin(), m_items.end(),
+                         [ &aItem ] ( const CN_ITEM* item )
+                         {
+                             return item->Valid() && item->Parent() == aItem;
+                         } ) != m_items.end();
 }
 
 
@@ -448,10 +451,16 @@ void CN_CLUSTER::Dump()
 {
     for( auto item : m_items )
     {
-        wxLogTrace( "CN", " - item : %p bitem : %p type : %d inet %s\n", item, item->Parent(),
-                item->Parent()->Type(), (const char*) item->Parent()->GetNetname().c_str() );
-        wxLogTrace( "CN", "- item : %p bitem : %p type : %d inet %s\n", item, item->Parent(),
-                item->Parent()->Type(), (const char*) item->Parent()->GetNetname().c_str() );
+        wxLogTrace( "CN", " - item : %p bitem : %p type : %d inet %s\n",
+                    item,
+                    item->Parent(),
+                    item->Parent()->Type(),
+                    (const char*) item->Parent()->GetNetname().c_str() );
+        wxLogTrace( "CN", "- item : %p bitem : %p type : %d inet %s\n",
+                    item,
+                    item->Parent(),
+                    item->Parent()->Type(),
+                    (const char*) item->Parent()->GetNetname().c_str() );
         item->Dump();
     }
 }

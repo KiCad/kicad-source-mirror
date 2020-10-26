@@ -218,7 +218,10 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
     std::vector<CN_ITEM*> dirtyItems;
     std::copy_if( m_itemList.begin(), m_itemList.end(), std::back_inserter( dirtyItems ),
-            [] ( CN_ITEM* aItem ) { return aItem->Dirty(); } );
+                  [] ( CN_ITEM* aItem )
+                  {
+                      return aItem->Dirty();
+                  } );
 
     if( m_progressReporter )
     {
@@ -229,33 +232,36 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
     if( m_itemList.IsDirty() )
     {
         size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
-                ( dirtyItems.size() + 7 ) / 8 );
+                                                       ( dirtyItems.size() + 7 ) / 8 );
 
         std::atomic<size_t> nextItem( 0 );
         std::vector<std::future<size_t>> returns( parallelThreadCount );
 
-        auto conn_lambda = [&nextItem, &dirtyItems]
-                            ( CN_LIST* aItemList, PROGRESS_REPORTER* aReporter) -> size_t
-        {
-            for( size_t i = nextItem++; i < dirtyItems.size(); i = nextItem++ )
-            {
-                CN_VISITOR visitor( dirtyItems[i] );
-                aItemList->FindNearby( dirtyItems[i], visitor );
+        auto conn_lambda =
+                [&nextItem, &dirtyItems]( CN_LIST* aItemList,
+                                          PROGRESS_REPORTER* aReporter) -> size_t
+                {
+                    for( size_t i = nextItem++; i < dirtyItems.size(); i = nextItem++ )
+                    {
+                        CN_VISITOR visitor( dirtyItems[i] );
+                        aItemList->FindNearby( dirtyItems[i], visitor );
 
-                if( aReporter )
-                    aReporter->AdvanceProgress();
-            }
+                        if( aReporter )
+                            aReporter->AdvanceProgress();
+                    }
 
-            return 1;
-        };
+                    return 1;
+                };
 
         if( parallelThreadCount <= 1 )
             conn_lambda( &m_itemList, m_progressReporter );
         else
         {
             for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-                returns[ii] = std::async( std::launch::async, conn_lambda,
-                        &m_itemList, m_progressReporter );
+            {
+                returns[ii] = std::async( std::launch::async, conn_lambda, &m_itemList,
+                                          m_progressReporter );
+            }
 
             for( size_t ii = 0; ii < parallelThreadCount; ++ii )
             {
@@ -285,10 +291,10 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
 const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode )
 {
-    constexpr KICAD_T types[] =
-    { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_AREA_T, PCB_MODULE_T, EOT };
-    constexpr KICAD_T no_zones[] =
-    { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_MODULE_T, EOT };
+    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_AREA_T,
+                                  PCB_MODULE_T, EOT };
+    constexpr KICAD_T no_zones[] = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T,
+                                     PCB_MODULE_T, EOT };
 
     if( aMode == CSM_PROPAGATE )
         return SearchClusters( aMode, no_zones, -1 );
@@ -298,7 +304,8 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
 
 
 const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode,
-        const KICAD_T aTypes[], int aSingleNet )
+                                                                           const KICAD_T aTypes[],
+                                                                           int aSingleNet )
 {
     bool withinAnyNet = ( aMode != CSM_PROPAGATE );
 
@@ -310,35 +317,36 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
     if( m_itemList.IsDirty() )
         searchConnections();
 
-    auto addToSearchList = [&item_set, withinAnyNet, aSingleNet, aTypes] ( CN_ITEM *aItem )
-    {
-        if( withinAnyNet && aItem->Net() <= 0 )
-            return;
-
-        if( !aItem->Valid() )
-            return;
-
-        if( aSingleNet >=0 && aItem->Net() != aSingleNet )
-            return;
-
-        bool found = false;
-
-        for( int i = 0; aTypes[i] != EOT; i++ )
-        {
-            if( aItem->Parent()->Type() == aTypes[i] )
+    auto addToSearchList =
+            [&item_set, withinAnyNet, aSingleNet, aTypes]( CN_ITEM *aItem )
             {
-                found = true;
-                break;
-            }
-        }
+                if( withinAnyNet && aItem->Net() <= 0 )
+                    return;
 
-        if( !found )
-            return;
+                if( !aItem->Valid() )
+                    return;
 
-        aItem->SetVisited( false );
+                if( aSingleNet >=0 && aItem->Net() != aSingleNet )
+                    return;
 
-        item_set.insert( aItem );
-    };
+                bool found = false;
+
+                for( int i = 0; aTypes[i] != EOT; i++ )
+                {
+                    if( aItem->Parent()->Type() == aTypes[i] )
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if( !found )
+                    return;
+
+                aItem->SetVisited( false );
+
+                item_set.insert( aItem );
+            };
 
     std::for_each( m_itemList.begin(), m_itemList.end(), addToSearchList );
 
@@ -355,7 +363,7 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
             break;
 
         root = *it;
-        root->SetVisited ( true );
+        root->SetVisited( true );
 
         Q.clear();
         Q.push_back( root );
@@ -384,9 +392,11 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
     }
 
 
-    std::sort( clusters.begin(), clusters.end(), []( CN_CLUSTER_PTR a, CN_CLUSTER_PTR b ) {
-        return a->OriginNet() < b->OriginNet();
-    } );
+    std::sort( clusters.begin(), clusters.end(),
+               []( CN_CLUSTER_PTR a, CN_CLUSTER_PTR b )
+               {
+                   return a->OriginNet() < b->OriginNet();
+               } );
 
     return clusters;
 }
@@ -569,18 +579,18 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLAT
 
     m_connClusters = SearchClusters( CSM_CONNECTIVITY_CHECK );
 
-    for( auto& zone : aZones )
+    for( CN_ZONE_ISOLATED_ISLAND_LIST& zone : aZones )
     {
         for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
         {
             if( zone.m_zone->GetFilledPolysList( layer ).IsEmpty() )
                 continue;
 
-            for( const auto& cluster : m_connClusters )
+            for( const CN_CLUSTER_PTR& cluster : m_connClusters )
             {
                 if( cluster->Contains( zone.m_zone ) && cluster->IsOrphaned() )
                 {
-                    for( auto z : *cluster )
+                    for( CN_ITEM* z : *cluster )
                     {
                         if( z->Parent() == zone.m_zone && z->Layer() == layer )
                         {
