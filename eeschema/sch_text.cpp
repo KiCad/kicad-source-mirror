@@ -186,7 +186,7 @@ void SCH_TEXT::MirrorY( int aYaxis_position )
     // Text is NOT really mirrored; it is moved to a suitable horizontal position
     SetLabelSpinStyle( GetLabelSpinStyle().MirrorY() );
 
-    SetTextX( Mirror( GetTextPos().x, aYaxis_position ) );
+    SetTextX( MIRRORVAL( GetTextPos().x, aYaxis_position ) );
 }
 
 
@@ -195,7 +195,7 @@ void SCH_TEXT::MirrorX( int aXaxis_position )
     // Text is NOT really mirrored; it is moved to a suitable vertical position
     SetLabelSpinStyle( GetLabelSpinStyle().MirrorX() );
 
-    SetTextY( Mirror( GetTextPos().y, aXaxis_position ) );
+    SetTextY( MIRRORVAL( GetTextPos().y, aXaxis_position ) );
 }
 
 

@@ -142,9 +142,9 @@ void FP_TEXT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     // flipping the footprint is relative to the X axis
     if( aFlipLeftRight )
-        SetTextX( ::Mirror( GetTextPos().x, aCentre.x ) );
+        SetTextX( ::MIRRORVAL( GetTextPos().x, aCentre.x ) );
     else
-        SetTextY( ::Mirror( GetTextPos().y, aCentre.y ) );
+        SetTextY( ::MIRRORVAL( GetTextPos().y, aCentre.y ) );
 
     SetTextAngle( -GetTextAngle() );
 
@@ -174,9 +174,9 @@ void FP_TEXT::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
     // the mirror is around the Y axis or X axis if aMirrorAroundXAxis = true
     // the position is mirrored, but the text itself is not mirrored
     if( aMirrorAroundXAxis )
-        SetTextY( ::Mirror( GetTextPos().y, aCentre.y ) );
+        SetTextY( ::MIRRORVAL( GetTextPos().y, aCentre.y ) );
     else
-        SetTextX( ::Mirror( GetTextPos().x, aCentre.x ) );
+        SetTextX( ::MIRRORVAL( GetTextPos().x, aCentre.x ) );
 
     SetLocalCoord();
 }

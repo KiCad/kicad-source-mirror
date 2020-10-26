@@ -128,14 +128,14 @@ constexpr std::size_t arrayDim(T const (&)[N]) noexcept
  * Mirror @a aPoint in @a aMirrorRef.
  */
 template<typename T>
-T Mirror( T aPoint, T aMirrorRef )
+T MIRRORVAL( T aPoint, T aMirrorRef )
 {
     return -( aPoint - aMirrorRef ) + aMirrorRef;
 }
 template<typename T>
 void MIRROR( T& aPoint, const T& aMirrorRef )
 {
-    aPoint = Mirror( aPoint, aMirrorRef );
+    aPoint = MIRRORVAL( aPoint, aMirrorRef );
 }
 
 #endif // MACROS_H
