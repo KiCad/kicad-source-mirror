@@ -176,23 +176,19 @@ bool TRACKS_CLEANER::deleteDanglingTracks( bool aVia )
 
         for( TRACK* track : temp_tracks )
         {
-            bool    flag_erase = false; // Start without a good reason to erase it
-
-            if( aVia && track->Type() != PCB_VIA_T )
-                continue;
-            else if( !aVia && track->Type() == PCB_VIA_T )
+            if( ( aVia && track->Type() != PCB_VIA_T ) || ( !aVia && track->Type() == PCB_VIA_T ) )
                 continue;
 
-            // Tst if a track (or a via) endpoint is not connected to another track or to a zone.
+            // Test if a track (or a via) endpoint is not connected to another track or zone.
             if( m_brd->GetConnectivity()->TestTrackEndpointDangling( track ) )
-                flag_erase = true;
-
-            if( flag_erase )
             {
-                int errorCode =
-                        ( track->Type() != PCB_VIA_T ) ?
-                                CLEANUP_DANGLING_TRACK : CLEANUP_DANGLING_VIA;
-                std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( errorCode );
+                std::shared_ptr<CLEANUP_ITEM> item;
+
+                if( track->Type() == PCB_VIA_T )
+                    item = std::make_shared<CLEANUP_ITEM>( CLEANUP_DANGLING_VIA );
+                else
+                    item = std::make_shared<CLEANUP_ITEM>( CLEANUP_DANGLING_TRACK );
+
                 item->SetItems( track );
                 m_itemsList->push_back( item );
 
@@ -266,7 +262,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
 
     for( TRACK* track : m_brd->Tracks() )
     {
-        track->ClearFlags( IS_DELETED );
+        track->ClearFlags( IS_DELETED | SKIP_STRUCT );
         rtree.insert( track );
     }
 
@@ -287,10 +283,13 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
             rtree.QueryColliding( via, via->GetLayer(), via->GetLayer(), nullptr,
                     [&]( BOARD_ITEM* aItem, int ) -> bool
                     {
-                        if( aItem->Type() != PCB_VIA_T || aItem->HasFlag( IS_DELETED ) )
+                        if( aItem->Type() != PCB_VIA_T )
                             return true;
 
                         VIA* other = static_cast<VIA*>( aItem );
+
+                        if( other->HasFlag( SKIP_STRUCT ) || other->HasFlag( IS_DELETED ) )
+                            return true;
 
                         if( via->GetPosition() == other->GetPosition()
                                 && via->GetViaType() == other->GetViaType()
@@ -324,6 +323,8 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                     break;
                 }
             }
+
+            via->SetFlags( SKIP_STRUCT );
         }
 
         if( aDeleteNullSegments && track->Type() != PCB_VIA_T )
@@ -344,10 +345,13 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
             rtree.QueryColliding( track, track->GetLayer(), track->GetLayer(), nullptr,
                     [&]( BOARD_ITEM* aItem, int ) -> bool
                     {
-                        if( aItem->Type() != PCB_TRACE_T || aItem->HasFlag( IS_DELETED ) )
+                        if( aItem->Type() != PCB_TRACE_T )
                             return true;
 
                         TRACK* other = static_cast<TRACK*>( aItem );
+
+                        if( other->HasFlag( SKIP_STRUCT )|| other->HasFlag( IS_DELETED ) )
+                            return true;
 
                         if( track->IsPointOnEnds( other->GetStart() )
                                 && track->IsPointOnEnds( other->GetEnd() )
@@ -364,6 +368,8 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
 
                         return true;
                     } );
+
+            track->SetFlags( SKIP_STRUCT );
         }
     }
 
@@ -423,7 +429,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
     }
 
     for( TRACK* track : m_brd->Tracks() )
-        track->ClearFlags( IS_DELETED );
+        track->ClearFlags( IS_DELETED | SKIP_STRUCT );
 }
 
 
