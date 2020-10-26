@@ -990,7 +990,12 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     PCB_GROUP*       grp = nullptr;
 
     if( dlg.ShouldGroupItems() )
-        grp = new PCB_GROUP( m_frame->GetBoard() );
+    {
+        if( m_editModules )
+            grp = new PCB_GROUP( m_frame->GetBoard()->GetFirstModule() );
+        else
+            grp = new PCB_GROUP( m_frame->GetBoard() );
+    }
 
     // Build the undo list & add items to the current view
     for( auto& ptr : list)
