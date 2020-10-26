@@ -122,6 +122,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
         m_changesTreeModel->SetProvider( provider );
 
         m_parentFrame->GetToolManager()->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( this );
+        wxSafeYield();  // Timeslice to close zone progress reporter
 
         m_changesTreeModel->SetProvider( nullptr );
         m_items.clear();

@@ -373,18 +373,18 @@ void TRACKS_CLEANER::cleanupSegments()
     std::set<BOARD_ITEM*> toRemove;
 
     // Remove duplicate segments (2 superimposed identical segments):
-    for( auto it = m_brd->Tracks().begin(); it != m_brd->Tracks().end(); it++ )
+    for( size_t ii = 0; ii < m_brd->Tracks().size(); ++ii )
     {
-        TRACK* track1 = *it;
+        TRACK* track1 = m_brd->Tracks()[ii];
 
         if( track1->Type() != PCB_TRACE_T || track1->HasFlag( IS_DELETED ) || track1->IsLocked() )
             continue;
 
-        for( auto it2 = it + 1; it2 != m_brd->Tracks().end(); it2++ )
+        for( size_t jj = ii + 1; jj < m_brd->Tracks().size(); ++jj )
         {
-            TRACK* track2 = *it2;
+            TRACK* track2 = m_brd->Tracks()[jj];
 
-            if( track2->HasFlag( IS_DELETED ) )
+            if( track2->Type() != PCB_TRACE_T || track2->HasFlag( IS_DELETED ) )
                 continue;
 
             if( track1->IsPointOnEnds( track2->GetStart() )
