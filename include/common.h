@@ -53,9 +53,6 @@ class PROJECT;
 class SEARCH_STACK;
 class REPORTER;
 
-/// default name for nameless projects
-#define NAMELESS_PROJECT wxT( "noname" )
-
 /**
  * Run a command in a child process.
  *

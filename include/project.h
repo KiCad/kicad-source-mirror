@@ -37,6 +37,8 @@
 /// Currently an environment variable, eventually a project variable.
 #define PROJECT_VAR_NAME            wxT( "KIPRJMOD" )
 
+/// default name for nameless projects
+#define NAMELESS_PROJECT wxT( "noname" )
 
 class wxConfigBase;
 class PARAM_CFG;
