@@ -29,7 +29,7 @@
 #include <board_item_container.h>
 #include <class_pcb_group.h>
 #include <class_module.h>
-#include <common.h> // PAGE_INFO
+#include <common.h> // Needed for stl hash extensions
 #include <layers_id_colors_and_visibility.h>
 #include <netinfo.h>
 #include <pcb_plot_params.h>

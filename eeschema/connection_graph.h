@@ -24,7 +24,6 @@
 #include <mutex>
 #include <vector>
 
-#include <common.h>
 #include <erc_settings.h>
 #include <sch_connection.h>
 #include <sch_item.h>

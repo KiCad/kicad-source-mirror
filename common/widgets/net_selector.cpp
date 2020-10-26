@@ -267,9 +267,9 @@ public:
 protected:
     wxSize updateSize()
     {
-        int    listTop = m_listBox->GetRect().y;
+        int listTop    = m_listBox->GetRect().y;
         int itemHeight = KIUI::GetTextSize( wxT( "Xy" ), this ).y + LIST_ITEM_PADDING;
-        int    listHeight = m_listBox->GetCount() * itemHeight + LIST_PADDING;
+        int listHeight = m_listBox->GetCount() * itemHeight + LIST_PADDING;
 
         if( listTop + listHeight >= m_maxPopupHeight )
             listHeight = m_maxPopupHeight - listTop - 1;

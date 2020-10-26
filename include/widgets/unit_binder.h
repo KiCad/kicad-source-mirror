@@ -26,7 +26,7 @@
 #ifndef __UNIT_BINDER_H_
 #define __UNIT_BINDER_H_
 
-#include <common.h>
+#include <eda_units.h>
 #include <base_units.h>
 #include <eda_item.h>
 #include <origin_transforms.h>

@@ -24,7 +24,6 @@
 #ifndef DRC_RULE_CONDITION_H
 #define DRC_RULE_CONDITION_H
 
-#include <common.h>
 #include <core/typeinfo.h>
 #include <layers_id_colors_and_visibility.h>
 

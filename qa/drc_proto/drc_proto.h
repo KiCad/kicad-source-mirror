@@ -26,7 +26,6 @@
 
 #include <string>
 
-#include <common.h>
 #include <widgets/progress_reporter.h>
 #include <reporter.h>
 #include <core/optional.h>

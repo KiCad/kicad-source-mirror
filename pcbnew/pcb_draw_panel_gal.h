@@ -28,7 +28,6 @@
 #include <class_draw_panel_gal.h>
 #include <layers_id_colors_and_visibility.h>
 #include <pcb_view.h>
-#include <common.h>
 
 namespace KIGFX
 {

@@ -26,7 +26,6 @@
 #define EDITOR_CONDITIONS_H_
 
 #include <class_draw_panel_gal.h>
-#include <common.h>
 #include <functional>
 #include <tool/selection.h>
 #include <tool/selection_conditions.h>

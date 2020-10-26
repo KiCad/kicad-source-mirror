@@ -21,7 +21,7 @@
 #ifndef KICAD_PROJECT_FILE_H
 #define KICAD_PROJECT_FILE_H
 
-#include <common.h>
+#include <common.h> // needed for wxstring hash template
 #include <project/board_project_settings.h>
 #include <settings/json_settings.h>
 #include <settings/nested_settings.h>

@@ -22,8 +22,6 @@
 
 #include <set>
 
-#include <common.h>
-
 class D_PAD;
 class BOARD_CONNECTED_ITEM;
 

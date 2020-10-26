@@ -26,8 +26,6 @@
 
 #include <preview_items/multistep_geom_manager.h>
 
-#include <common.h>
-
 namespace KIGFX {
 namespace PREVIEW {
 

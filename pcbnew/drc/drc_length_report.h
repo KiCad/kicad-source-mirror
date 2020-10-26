@@ -22,8 +22,6 @@
 
 #include <set>
 
-#include <common.h>
-
 class DRC_RULE;
 
 class DRC_LENGTH_REPORT

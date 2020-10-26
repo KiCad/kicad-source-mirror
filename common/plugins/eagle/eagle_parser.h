@@ -40,7 +40,7 @@
 #include <convert_to_biu.h>
 #include <trigo.h>
 #include <kicad_string.h>
-#include <common.h>
+#include <common.h> // needed for wxString hash template
 
 class MODULE;
 struct EINSTANCE;

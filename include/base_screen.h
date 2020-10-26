@@ -32,7 +32,6 @@
 #define  BASE_SCREEN_H
 
 #include <eda_item.h>
-#include <common.h>
 
 
 /**
