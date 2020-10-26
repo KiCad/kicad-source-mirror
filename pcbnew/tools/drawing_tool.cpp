@@ -1418,8 +1418,8 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
         else if( evt->IsMotion() )
         {
             // 45 degree lines
-            if( ( limit45 && aShape == S_SEGMENT )
-                    || ( evt->Modifier( MD_CTRL ) && aShape == S_RECT ) )
+            if( started && ( ( limit45 && aShape == S_SEGMENT )
+                             || ( evt->Modifier( MD_CTRL ) && aShape == S_RECT ) ) )
             {
                 const VECTOR2I lineVector( cursorPos - VECTOR2I( twoPointManager.GetOrigin() ) );
 
