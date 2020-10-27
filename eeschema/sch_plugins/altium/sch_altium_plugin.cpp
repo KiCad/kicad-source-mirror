@@ -204,9 +204,7 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
     }
 
     m_currentSheet = m_rootSheet;
-    m_currentTitleBlock = std::make_unique<TITLE_BLOCK>();
     ParseAltiumSch( aFileName );
-    m_currentSheet->GetScreen()->SetTitleBlock( *m_currentTitleBlock );
 
     m_pi->SaveLibrary( getLibFileName().GetFullPath() );
 
@@ -288,6 +286,12 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
         }
     }
 
+    // Prepare some local variables
+    wxASSERT( m_altiumPortsCurrentSheet.empty() );
+    wxASSERT( !m_currentTitleBlock );
+
+    m_currentTitleBlock = std::make_unique<TITLE_BLOCK>();
+
     // index is required required to resolve OWNERINDEX
     for( int index = 0; reader.GetRemainingBytes() > 0; index++ )
     {
@@ -347,7 +351,10 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
             ParsePowerPort( properties );
             break;
         case ALTIUM_SCH_RECORD::PORT:
-            ParsePort( properties );
+            //ParsePort( properties );
+            // Ports are parsed after the sheet was parsed
+            // This is required because we need all electrical connection points before placing.
+            m_altiumPortsCurrentSheet.emplace_back( properties );
             break;
         case ALTIUM_SCH_RECORD::NO_ERC:
             ParseNoERC( properties );
@@ -440,6 +447,17 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
 
         component.second->SetLibSymbol( kpart->second );
     }
+
+    // Handle title blocks
+    m_currentSheet->GetScreen()->SetTitleBlock( *m_currentTitleBlock );
+    m_currentTitleBlock.reset();
+
+    // Handle Ports
+    for( const ASCH_PORT& port : m_altiumPortsCurrentSheet )
+    {
+        ParsePort( port );
+    }
+    m_altiumPortsCurrentSheet.clear();
 
     m_components.clear();
     m_symbols.clear();
@@ -1531,15 +1549,54 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParsePort( const std::map<wxString, wxString>& aProperties )
+void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
 {
-    ASCH_PORT elem( aProperties );
+    // Get both connection points where we could connect to
+    wxPoint start = aElem.location + m_sheetOffset;
+    wxPoint end   = start;
 
-    SCH_TEXT* const label = new SCH_GLOBALLABEL( elem.location + m_sheetOffset, elem.name );
+    switch( aElem.style )
+    {
+    default:
+    case ASCH_PORT_STYLE::NONE_HORIZONTAL:
+    case ASCH_PORT_STYLE::LEFT:
+    case ASCH_PORT_STYLE::RIGHT:
+    case ASCH_PORT_STYLE::LEFT_RIGHT:
+        end.x += aElem.width;
+        break;
+    case ASCH_PORT_STYLE::NONE_VERTICAL:
+    case ASCH_PORT_STYLE::TOP:
+    case ASCH_PORT_STYLE::BOTTOM:
+    case ASCH_PORT_STYLE::TOP_BOTTOM:
+        end.y -= aElem.width;
+        break;
+    }
+
+    // Check which connection points exists in the schematic
+    SCH_SCREEN* screen = m_currentSheet->GetScreen();
+
+    bool startIsWireTerminal = screen->IsTerminalPoint( start, LAYER_WIRE );
+    bool startIsBusTerminal  = screen->IsTerminalPoint( start, LAYER_BUS );
+
+    bool endIsWireTerminal = screen->IsTerminalPoint( end, LAYER_WIRE );
+    bool endIsBusTerminal  = screen->IsTerminalPoint( end, LAYER_BUS );
+
+    // check if any of the points is a terminal point
+    // TODO: there seems a problem to detect approximated connections towards component pins?
+    bool connectionFound =
+            startIsWireTerminal || startIsBusTerminal || endIsWireTerminal || endIsBusTerminal;
+    if( !connectionFound )
+        wxLogError( wxString::Format(
+                "There is a Port for \"%s\", but no connections towards it?", aElem.name ) );
+
+    // Select label position. In case both match, we will add a line later.
+    wxPoint position = ( startIsWireTerminal || startIsBusTerminal ) ? start : end;
+
+    SCH_TEXT* const label = new SCH_GLOBALLABEL( position, aElem.name );
     // TODO: detect correct label type depending on sheet settings, etc.
     // label = new SCH_HIERLABEL( elem.location + m_sheetOffset, elem.name );
 
-    switch( elem.iotype )
+    switch( aElem.iotype )
     {
     default:
     case ASCH_PORT_IOTYPE::UNSPECIFIED:
@@ -1556,56 +1613,48 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const std::map<wxString, wxString>& aProperti
         break;
     }
 
-    switch( elem.style )
+    switch( aElem.style )
     {
     default:
     case ASCH_PORT_STYLE::NONE_HORIZONTAL:
     case ASCH_PORT_STYLE::LEFT:
     case ASCH_PORT_STYLE::RIGHT:
     case ASCH_PORT_STYLE::LEFT_RIGHT:
-        label->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+        if( ( startIsWireTerminal || startIsBusTerminal ) )
+            label->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+        else
+            label->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
         break;
     case ASCH_PORT_STYLE::NONE_VERTICAL:
     case ASCH_PORT_STYLE::TOP:
     case ASCH_PORT_STYLE::BOTTOM:
     case ASCH_PORT_STYLE::TOP_BOTTOM:
-        label->SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
+        if( ( startIsWireTerminal || startIsBusTerminal ) )
+            label->SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
+        else
+            label->SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );
         break;
     }
 
     label->SetFlags( IS_NEW );
     m_currentSheet->GetScreen()->Append( label );
 
-    // TODO: This is a hack until we know where we need to connect the label.
-    // The problem is that, apparently, Altium allows us to connect to the label from both sides
-    wxPoint start = elem.location + m_sheetOffset;
-    switch( elem.style )
-    {
-    default:
-    case ASCH_PORT_STYLE::NONE_HORIZONTAL:
-    case ASCH_PORT_STYLE::LEFT:
-    case ASCH_PORT_STYLE::RIGHT:
-    case ASCH_PORT_STYLE::LEFT_RIGHT:
+    // This is a hack, for the case both connection points are valid: add a small wire
+    if( ( startIsWireTerminal && endIsWireTerminal ) || !connectionFound )
     {
         SCH_LINE* wire = new SCH_LINE( start, SCH_LAYER_ID::LAYER_WIRE );
-        wire->SetEndPoint( { start.x + elem.width, start.y } );
+        wire->SetEndPoint( end );
         wire->SetLineWidth( Mils2iu( 2 ) );
         wire->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( wire );
-        break;
     }
-    case ASCH_PORT_STYLE::NONE_VERTICAL:
-    case ASCH_PORT_STYLE::TOP:
-    case ASCH_PORT_STYLE::BOTTOM:
-    case ASCH_PORT_STYLE::TOP_BOTTOM:
+    else if( startIsBusTerminal && endIsBusTerminal )
     {
-        SCH_LINE* wire = new SCH_LINE( start, SCH_LAYER_ID::LAYER_WIRE );
-        wire->SetEndPoint( { start.x, start.y - elem.width } );
+        SCH_LINE* wire = new SCH_LINE( start, SCH_LAYER_ID::LAYER_BUS );
+        wire->SetEndPoint( end );
         wire->SetLineWidth( Mils2iu( 2 ) );
         wire->SetFlags( IS_NEW );
         m_currentSheet->GetScreen()->Append( wire );
-        break;
-    }
     }
 }
 

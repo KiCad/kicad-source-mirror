@@ -116,7 +116,7 @@ private:
     void ParseLine( const std::map<wxString, wxString>& aProperties );
     void ParseRectangle( const std::map<wxString, wxString>& aProperties );
     void ParsePowerPort( const std::map<wxString, wxString>& aProperties );
-    void ParsePort( const std::map<wxString, wxString>& aProperties );
+    void ParsePort( const ASCH_PORT& aElem );
     void ParseNoERC( const std::map<wxString, wxString>& aProperties );
     void ParseNetLabel( const std::map<wxString, wxString>& aProperties );
     void ParseBus( const std::map<wxString, wxString>& aProperties );
@@ -148,6 +148,7 @@ private:
     std::map<wxString, LIB_PART*> m_powerSymbols;
 
     std::map<int, ASCH_COMPONENT> m_altiumComponents;
+    std::vector<ASCH_PORT>        m_altiumPortsCurrentSheet; // we require all connections first
 };
 
 #endif // _SCH_ALTIUM_PLUGIN_H_
