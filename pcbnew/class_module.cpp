@@ -1250,6 +1250,8 @@ void MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
         if( item->Type() == PCB_FP_TEXT_T )
             static_cast<FP_TEXT*>( item )->KeepUpright( orientation, newOrientation  );
     }
+
+    CalculateBoundingBox();
 }
 
 
