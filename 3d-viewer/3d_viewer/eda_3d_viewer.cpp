@@ -683,11 +683,11 @@ void EDA_3D_VIEWER::OnDisableRayTracing( wxCommandEvent& aEvent )
 }
 
 
-void EDA_3D_VIEWER::OnActivate( wxActivateEvent &event )
+void EDA_3D_VIEWER::OnActivate( wxActivateEvent &aEvent )
 {
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::OnActivate" );
 
-    if( m_canvas )
+    if( aEvent.GetActive() && m_canvas )
     {
         // Reload data if 3D frame shows a board,
         // because it can be changed since last frame activation
@@ -698,17 +698,17 @@ void EDA_3D_VIEWER::OnActivate( wxActivateEvent &event )
         m_canvas->SetFocus();
     }
 
-    event.Skip();    // required under wxMAC
+    aEvent.Skip(); // required under wxMAC
 }
 
 
-void EDA_3D_VIEWER::OnSetFocus(wxFocusEvent &event)
+void EDA_3D_VIEWER::OnSetFocus( wxFocusEvent& aEvent )
 {
     // Activates again the focus of the canvas so it will catch mouse and key events
     if( m_canvas )
         m_canvas->SetFocus();
 
-    event.Skip();
+    aEvent.Skip();
 }
 
 
