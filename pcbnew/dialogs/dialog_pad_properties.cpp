@@ -481,21 +481,22 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_parentInfo->SetLabel( msg );
     }
 
+    if( m_currentPad )
+    {
+        MODULE* footprint = m_currentPad->GetParent();
+
+        if( footprint )
+        {
+            angle = m_dummyPad->GetOrientation();
+            angle -= footprint->GetOrientation();
+            m_dummyPad->SetOrientation( angle );
+        }
+    }
+
     if( m_isFlipped )
     {
-        wxPoint pt = m_dummyPad->GetOffset();
-        pt.y = -pt.y;
-        m_dummyPad->SetOffset( pt );
-
-        wxSize sz = m_dummyPad->GetDelta();
-        sz.y = -sz.y;
-        m_dummyPad->SetDelta( sz );
-
-        // flip pad's layers
-        m_dummyPad->SetLayerSet( FlipLayerMask( m_dummyPad->GetLayerSet() ) );
-
-        // flip custom pad shapes (up/down)
-        m_dummyPad->FlipPrimitives( false );
+        // flip pad (up/down) around its position
+        m_dummyPad->Flip( m_dummyPad->GetPosition(), false );
     }
 
     m_primitives = m_dummyPad->GetPrimitives();
@@ -565,23 +566,8 @@ void DIALOG_PAD_PROPERTIES::initValues()
     else
         m_ZoneCustomPadShape->SetSelection( 0 );
 
-    if( m_currentPad )
-    {
-        angle = m_currentPad->GetOrientation();
-        MODULE* footprint = m_currentPad->GetParent();
-
-        if( footprint )
-            angle -= footprint->GetOrientation();
-
-        if( m_isFlipped )
-            angle = -angle;
-
-        m_dummyPad->SetOrientation( angle );
-    }
-
     angle = m_dummyPad->GetOrientation();
-
-    NORMALIZE_ANGLE_180( angle );    // ? normalizing is in D_PAD::SetOrientation()
+    NORMALIZE_ANGLE_180( angle );
 
     // Pad Orient
     // Note: use ChangeValue() instead of SetValue() so that we don't generate events
@@ -1190,7 +1176,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     TransformOvalToPolygon( drillOutline, (wxPoint) drillSeg.A, (wxPoint) drillSeg.B,
                             drillShape->GetWidth(), maxError, ERROR_LOC::ERROR_INSIDE );
-    
+
     drillOutline.BooleanSubtract( padOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
     if( ( drillOutline.BBox().GetWidth() > 0 ) || ( drillOutline.BBox().GetHeight() > 0 ) )
@@ -1349,7 +1335,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     }
     else
     {
-        for( int i = 0; i < warning_msgs.GetCount(); ++i )
+        for( size_t i = 0; i < warning_msgs.GetCount(); ++i )
         {
             m_parent->ShowInfoBarWarning( warning_msgs[i] );
         }
@@ -1465,8 +1451,6 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     if( !padValuesOK() )
         return false;
 
-    int  isign = m_isFlipped ? -1 : 1;
-
     transferDataToPad( m_padMaster );
     // m_padMaster is a pattern: ensure there is no net for this pad:
     m_padMaster->SetNetCode( NETINFO_LIST::UNCONNECTED );
@@ -1485,34 +1469,20 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetShape( m_padMaster->GetShape() );
     m_currentPad->SetAttribute( m_padMaster->GetAttribute() );
     m_currentPad->SetPosition( m_padMaster->GetPosition() );
+    m_currentPad->SetOrientation( m_padMaster->GetOrientation() );
 
     wxSize  size;
     MODULE* footprint = m_currentPad->GetParent();
 
-    if( footprint )
-    {
-        footprint->SetLastEditTime();
-
-        // compute the pos 0 value, i.e. pad position for footprint with orientation = 0
-        // i.e. relative to footprint origin (footprint position)
-        wxPoint pt = m_currentPad->GetPosition() - footprint->GetPosition();
-        RotatePoint( &pt, -footprint->GetOrientation() );
-        m_currentPad->SetPos0( pt );
-        m_currentPad->SetOrientation( m_padMaster->GetOrientation() * isign
-                                        + footprint->GetOrientation() );
-    }
-
     m_currentPad->SetSize( m_padMaster->GetSize() );
 
     size = m_padMaster->GetDelta();
-    size.y *= isign;
     m_currentPad->SetDelta( size );
 
     m_currentPad->SetDrillSize( m_padMaster->GetDrillSize() );
     m_currentPad->SetDrillShape( m_padMaster->GetDrillShape() );
 
     wxPoint offset = m_padMaster->GetOffset();
-    offset.y *= isign;
     m_currentPad->SetOffset( offset );
 
     m_currentPad->SetPadToDieLength( m_padMaster->GetPadToDieLength() );
@@ -1524,19 +1494,9 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetAnchorPadShape( m_padMaster->GetAnchorPadShape() );
     m_currentPad->ReplacePrimitives( m_padMaster->GetPrimitives() );
 
-    if( m_isFlipped )
-    {
-        m_currentPad->SetLayerSet( FlipLayerMask( m_currentPad->GetLayerSet() ) );
-        // flip custom pad shapes (up/down)
-        m_currentPad->FlipPrimitives( false );
-    }
-
     m_currentPad->SetLayerSet( m_padMaster->GetLayerSet() );
     m_currentPad->SetRemoveUnconnected( m_padMaster->GetRemoveUnconnected() );
     m_currentPad->SetKeepTopBottom( m_padMaster->GetKeepTopBottom() );
-
-    if( m_isFlipped )
-        m_currentPad->SetLayerSet( FlipLayerMask( m_currentPad->GetLayerSet() ) );
 
     m_currentPad->SetName( m_padMaster->GetName() );
 
@@ -1571,6 +1531,25 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     // define the way the clearance area is defined in zones
     m_currentPad->SetCustomShapeInZoneOpt( m_padMaster->GetCustomShapeInZoneOpt() );
+
+    if( m_isFlipped )
+    {
+        // flip pad (up/down) around its position
+         m_currentPad->Flip( m_currentPad->GetPosition(), false );
+    }
+
+    if( footprint )
+    {
+        footprint->SetLastEditTime();
+
+        // compute the pos 0 value, i.e. pad position for footprint with orientation = 0
+        // i.e. relative to footprint origin (footprint position)
+        wxPoint pt = m_currentPad->GetPosition() - footprint->GetPosition();
+        RotatePoint( &pt, -footprint->GetOrientation() );
+        m_currentPad->SetPos0( pt );
+        m_currentPad->SetOrientation( m_currentPad->GetOrientation() +
+                                      footprint->GetOrientation() );
+    }
 
     if( footprint )
         footprint->CalculateBoundingBox();
@@ -1658,7 +1637,6 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     }
 
     aPad->SetPosition( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
-    aPad->SetPos0( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
 
     if( m_holeShapeCtrl->GetSelection() == 0 )
     {
@@ -1925,10 +1903,10 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 
 void DIALOG_PAD_PROPERTIES::OnOffsetCheckbox( wxCommandEvent& event )
 {
-    if( m_offsetShapeOpt->GetValue() && m_currentPad )
+    if( m_offsetShapeOpt->GetValue() )
     {
-        m_offsetX.SetValue( m_currentPad->GetOffset().x );
-        m_offsetY.SetValue( m_currentPad->GetOffset().y );
+        m_offsetX.SetValue( m_dummyPad->GetOffset().x );
+        m_offsetY.SetValue( m_dummyPad->GetOffset().y );
     }
 
     // Show/hide controls depending on m_offsetShapeOpt being enabled
