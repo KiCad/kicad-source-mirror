@@ -1,11 +1,12 @@
 # uLe <uestrada@mafu-robotics.de>, 2020.
+# Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-20 14:37-0700\n"
-"PO-Revision-Date: 2020-10-27 16:26+0000\n"
-"Last-Translator: uLe <uestrada@mafu-robotics.de>\n"
+"PO-Revision-Date: 2020-10-28 14:47+0000\n"
+"Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -107,7 +108,7 @@ msgstr "Rotación"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:111
 msgid "Offset"
-msgstr "Offset"
+msgstr "Desplazar"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
 msgid "Opacity"
@@ -147,7 +148,7 @@ msgstr "Crear capas"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:475
 msgid "Board outline is not closed:"
-msgstr "Contorno del PCB no esta cerrado:"
+msgstr "Contorno de la placa no está cerrado:"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
@@ -418,12 +419,14 @@ msgstr "Recortar serigrafía en el anillo de la vía"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:86
 msgid "Non plated pads copper as bare copper"
-msgstr ""
+msgstr "Pads no metalizados como cobre desnudo"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:87
 msgid ""
 "Display plated pads as plated but other copper as raw copper material. (Slow)"
 msgstr ""
+"Mostrar pads metalizados con metalizado pero las otras superficies de cobre "
+"como cobre bruto. (Lento)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:98
 #, fuzzy
@@ -552,7 +555,7 @@ msgstr "8"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:341
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
-msgstr ""
+msgstr "El visor 3D debe cerrarse y reabrirse para aplicar esta configuración"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:348
 #, fuzzy
@@ -561,7 +564,7 @@ msgstr "Selección"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "While Moving"
-msgstr ""
+msgstr "Durante el Desplazamiento"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:372
 #, fuzzy
@@ -614,11 +617,11 @@ msgstr "Número de pads"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:477
 msgid "Spread Factor %"
-msgstr ""
+msgstr "Factor de Propagación %"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:481
 msgid "Recursive Level"
-msgstr ""
+msgstr "Nivel de Recursión"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:488
 #, fuzzy
@@ -630,12 +633,14 @@ msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
 msgstr ""
+"Número de rayos que se lanzarán, en la dirección de la luz, para evaluar un "
+"punto de sombra"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:499
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:520
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:543
 msgid "Random direction factor of the cast rays"
-msgstr ""
+msgstr "Factor de dirección aleatoria de los rayos trazados"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:509
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
@@ -644,13 +649,16 @@ msgstr "Reflejos"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:514
 msgid "Number of rays that will be cast to evaluate a reflection point"
-msgstr ""
+msgstr "Número de rayos que se lanzarán para evaluar un punto de reflexión"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:525
 msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
+"Número de interacciones que un rayo puede experimentar a través de objetos. ("
+"un número mayor de niveles mejora los resultados, especialmente para placas "
+"transparentes)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:532
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:247
@@ -659,11 +667,13 @@ msgstr "Refracciones"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:537
 msgid "Number of rays that will be cast to evaluate a refraction point"
-msgstr ""
+msgstr "Número de rayos que se lanzarán para evaluar un punto de refracción"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:548
 msgid "Number of bounces that a ray can hit reflective objects"
 msgstr ""
+"Número de rebotes que un rayo puede experimentar al golpear a objetos "
+"reflectores"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:574
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:798
@@ -673,7 +683,7 @@ msgstr "Configuración de rutas"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:582
 msgid "Ambient Camera Light"
-msgstr ""
+msgstr "Luz de Cámara Ambiente"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
 #, fuzzy
@@ -1144,7 +1154,7 @@ msgstr "Mostrar capas de comentarios y dibujos"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:313
 msgid "Toggle ECO display"
-msgstr ""
+msgstr "Alternar la visualización de las capas ECO"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:313
 #, fuzzy
@@ -1362,7 +1372,7 @@ msgstr "Parámetros:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
-msgstr ""
+msgstr "Bloquear la relación altura/anchura"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:122
 #: common/dialogs/dialog_page_settings_base.cpp:32
@@ -1471,11 +1481,11 @@ msgstr "Conversor de Bitmap a Componente"
 
 #: common/base_units.cpp:504
 msgid "sq. mm"
-msgstr ""
+msgstr "mm²"
 
 #: common/base_units.cpp:506
 msgid "cu. mm"
-msgstr ""
+msgstr "mm³"
 
 #: common/base_units.cpp:516 common/eda_draw_frame.cpp:495
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
@@ -1515,11 +1525,11 @@ msgstr "in"
 
 #: common/base_units.cpp:532
 msgid "sq. in"
-msgstr ""
+msgstr "in²"
 
 #: common/base_units.cpp:534
 msgid "cu. in"
-msgstr ""
+msgstr "in³"
 
 #: common/base_units.cpp:538
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:71
@@ -1601,12 +1611,11 @@ msgstr "Deshacer cambios"
 
 #: common/confirm.cpp:159 common/confirm.cpp:227
 msgid "Apply to all"
-msgstr ""
+msgstr "Aplicar a todo"
 
 #: common/confirm.cpp:195
-#, fuzzy
 msgid "Your current changes will be permanently lost."
-msgstr "Si no los guarda, todos los cambios se perderán de forma permanente."
+msgstr "Todos los cambios se perderán de forma permanente."
 
 #: common/confirm.cpp:196 common/tool/actions.cpp:88
 msgid "Revert"
@@ -1701,15 +1710,15 @@ msgstr "licencia \"GNU General Public License (GPL)\" versión 2 o posterior"
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Team"
-msgstr ""
+msgstr "Equipo Principal de Desarrollo"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Alumni"
-msgstr ""
+msgstr "Antiguos Desarrolladores Principales"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
-msgstr ""
+msgstr "Contribuciones Adicionales de"
 
 #: common/dialog_about/AboutDialog_main.cpp:599
 msgid "Others"
@@ -1717,7 +1726,7 @@ msgstr "Otras"
 
 #: common/dialog_about/AboutDialog_main.cpp:619
 msgid "KiCad Librarian Team"
-msgstr ""
+msgstr "Equipo de Bibliotecarios de KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:634
 msgid "3D models by"
@@ -1843,11 +1852,11 @@ msgstr "Color del cobre"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
-msgstr ""
+msgstr "RGB"
 
 #: common/dialogs/dialog_color_picker_base.cpp:46
 msgid "Red:"
-msgstr ""
+msgstr "Rojo:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:50
 #, fuzzy
@@ -1855,9 +1864,8 @@ msgid "Green:"
 msgstr "Verde 1"
 
 #: common/dialogs/dialog_color_picker_base.cpp:54
-#, fuzzy
 msgid "Blue:"
-msgstr "Azul 1"
+msgstr "Azul:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:74
 #, fuzzy
@@ -1866,7 +1874,7 @@ msgstr "SVG"
 
 #: common/dialogs/dialog_color_picker_base.cpp:91
 msgid "Hue:"
-msgstr ""
+msgstr "Matiz:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:95
 #, fuzzy
@@ -1895,11 +1903,11 @@ msgstr "Taladros definidos"
 
 #: common/dialogs/dialog_color_picker_base.cpp:163
 msgid "Opacity:"
-msgstr ""
+msgstr "Opacidad:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:185
 msgid "Preview (old/new):"
-msgstr ""
+msgstr "Vista previa (viejo/nuevo):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
 msgid "Reset to Default"
@@ -1912,17 +1920,13 @@ msgstr "El nombre de la variable de entorno no puede estar vacío."
 
 #: common/dialogs/dialog_configure_paths.cpp:256
 #: common/dialogs/dialog_configure_paths.cpp:320
-#, fuzzy
 msgid "Environment variable path cannot be empty."
-msgstr "El nombre de la variable de entorno no puede estar vacío."
+msgstr "La ruta de la variable de entorno no puede estar vacía."
 
 #: common/dialogs/dialog_configure_paths.cpp:283
 #: common/dialogs/dialog_configure_paths.cpp:325
-#, fuzzy
 msgid "3D search path alias cannot be empty."
-msgstr ""
-"La lista de rutas de búsqueda 3D está vacía;\n"
-"¿desea escribir un archivo vacío?"
+msgstr "El alias de la ruta de búsqueda 3D no puede estar vacío."
 
 #: common/dialogs/dialog_configure_paths.cpp:291
 #: common/dialogs/dialog_configure_paths.cpp:327
@@ -1957,7 +1961,7 @@ msgstr ""
 #: common/dialogs/dialog_configure_paths.cpp:357
 #, c-format
 msgid "The name %s is reserved, and cannot be used here"
-msgstr ""
+msgstr "El nombre %s está reservado y no se puede utilizar aquí"
 
 #: common/dialogs/dialog_configure_paths.cpp:493
 #, fuzzy
@@ -2281,6 +2285,8 @@ msgstr "Número de escala incorrecto"
 msgid ""
 "This scale results in an image which is too small (%.2f mm or %.1f mil)."
 msgstr ""
+"Esta escala da como resultado una imagen demasiado pequeña (%.2f mm o %.1f "
+"mil)."
 
 #: common/dialogs/dialog_image_editor.cpp:93
 #, c-format
@@ -2288,6 +2294,8 @@ msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
 msgstr ""
+"Esta escala da como resultado una imagen muy grande (%.1f mm o %.2f pulgadas)"
+". ¿Está seguro?"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33
 msgid "Grey"
@@ -2309,11 +2317,12 @@ msgstr "Cerrar KiCad"
 #: common/dialogs/dialog_migrate_settings.cpp:51
 #, c-format
 msgid "Welcome to KiCad %s!"
-msgstr ""
+msgstr "¡Bienvenido a KiCad %s!"
 
 #: common/dialogs/dialog_migrate_settings.cpp:58
 msgid "Import settings from a previous version (none found)"
 msgstr ""
+"Importar configuración de una versión anterior (no se ha encontrado ninguna)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:118
 #, fuzzy
@@ -2322,7 +2331,7 @@ msgstr "Seleccionar todas"
 
 #: common/dialogs/dialog_page_settings.cpp:62
 msgid "A5 148x210mm"
-msgstr ""
+msgstr "A5 148x210mm"
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "A4 210x297mm"
@@ -2740,7 +2749,7 @@ msgstr "No se ha encontrado nada"
 #: common/dialogs/dialog_print_generic.cpp:229
 #: eeschema/dialogs/dialog_print_using_printer.cpp:312
 msgid "Previous print job not yet complete."
-msgstr ""
+msgstr "El trabajo de impresión anterior aún no se ha completado."
 
 #: common/dialogs/dialog_print_generic.cpp:253
 msgid "There was a problem printing."
@@ -2831,12 +2840,13 @@ msgstr "Elementos:"
 
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
+#, fuzzy
 msgid "View Preset Switcher"
-msgstr ""
+msgstr "Ver conmutador de ajustes preestablecidos"
 
 #: common/dialogs/panel_color_settings.cpp:49
 msgid "Reveal Themes in Finder"
-msgstr ""
+msgstr "Revelar temas en Finder"
 
 #: common/dialogs/panel_color_settings.cpp:130
 #, fuzzy
@@ -2861,7 +2871,7 @@ msgstr "&Nuevo símbolo..."
 
 #: common/dialogs/panel_color_settings.cpp:213
 msgid "(read-only)"
-msgstr ""
+msgstr "(sólo lectura)"
 
 #: common/dialogs/panel_color_settings.cpp:282
 #, fuzzy
@@ -2881,22 +2891,26 @@ msgstr "Volver a la an&terior"
 #: common/dialogs/panel_color_settings.h:50
 msgid "Reset all colors in this theme to the KiCad defaults"
 msgstr ""
+"Restablecer todos los colores de este tema a los valores predeterminados de "
+"KiCad"
 
 #: common/dialogs/panel_color_settings_base.cpp:19
 #: eeschema/dialogs/panel_libedit_color_settings_base.cpp:29
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:21
 msgid "Theme:"
-msgstr ""
+msgstr "Tema:"
 
 #: common/dialogs/panel_color_settings_base.cpp:33
 msgid "Override individual item colors"
-msgstr ""
+msgstr "Reemplazar los colores individuales de los elementos"
 
 #: common/dialogs/panel_color_settings_base.cpp:34
 msgid ""
 "Show all items in their default color even if they have specific colors set "
 "in their properties."
 msgstr ""
+"Mostrar todos los elementos en su color predeterminado, incluso si tienen "
+"colores específicos establecidos en sus propiedades."
 
 #: common/dialogs/panel_color_settings_base.cpp:41
 #, fuzzy
@@ -2905,7 +2919,7 @@ msgstr "Emisor abierto"
 
 #: common/dialogs/panel_color_settings_base.cpp:42
 msgid "Open the folder containing color themes"
-msgstr ""
+msgstr "Abrir la carpeta que contiene los temas de color"
 
 #: common/dialogs/panel_common_settings.cpp:52
 msgid ""
@@ -2918,6 +2932,15 @@ msgid ""
 "If this does not match the system DPI scaling, the canvas will not match the "
 "window size and cursor position."
 msgstr ""
+"Establezca la escala para el lienzo.\n"
+"\n"
+"En pantallas de alto PPP en algunas plataformas, KiCad no puede determinar "
+"el factor de escala. En este caso, es posible que deba establecer esto en un "
+"valor que coincida con la escala de DPI de su sistema. 2.0 es un valor "
+"común. \n"
+"\n"
+"Si esto no coincide con la escala de PPP del sistema, el lienzo no "
+"coincidirá con el tamaño de la ventana y la posición del cursor."
 
 #: common/dialogs/panel_common_settings.cpp:62
 msgid ""
@@ -2926,6 +2949,10 @@ msgid ""
 "On some platforms, the automatic value is incorrect and should be set "
 "manually."
 msgstr ""
+"Utilice un valor automático para la escala del lienzo.\n"
+"\n"
+"En algunas plataformas, el valor automático es incorrecto y debe "
+"configurarse manualmente."
 
 #: common/dialogs/panel_common_settings.cpp:281
 msgid "Executable files ("
@@ -2956,17 +2983,19 @@ msgstr "minutos"
 
 #: common/dialogs/panel_common_settings_base.cpp:46
 msgid "File history size:"
-msgstr ""
+msgstr "Tamaño del historial de archivos:"
 
 #: common/dialogs/panel_common_settings_base.cpp:57
 msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
+"Los archivos de caché 3D más antiguos que esto se eliminan.\n"
+"Si se ha introducido 0, el borrado de la caché está deshabilitado"
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid "Days"
-msgstr ""
+msgstr "Días"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
 #, fuzzy
@@ -2996,7 +3025,7 @@ msgstr "Supermuestreo (4x)"
 
 #: common/dialogs/panel_common_settings_base.cpp:79
 msgid "Fallback graphics:"
-msgstr ""
+msgstr "Motor de gráficos alternativo:"
 
 #: common/dialogs/panel_common_settings_base.cpp:83
 #, fuzzy
@@ -3076,7 +3105,7 @@ msgstr "Preferir seleccionar a arrastrar"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
 msgid "Warp mouse to origin of moved object"
-msgstr ""
+msgstr "Mover el cursor al origen del objeto movido"
 
 #: common/dialogs/panel_common_settings_base.cpp:200
 #, fuzzy
@@ -3088,6 +3117,9 @@ msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
 msgstr ""
+"Si no se ha marcado, las teclas de acceso directo realizarán la acción "
+"inmediatamente aunque no se haya seleccionado previamente la herramienta "
+"correspondiente."
 
 #: common/dialogs/panel_common_settings_base.cpp:209
 #, fuzzy
@@ -3103,20 +3135,25 @@ msgstr "Enrutar red automáticamente"
 msgid ""
 "Automatically create backup archives of the current project when saving files"
 msgstr ""
+"Crear automáticamente archivos de copia de seguridad del proyecto actual al "
+"guardar archivos"
 
 #: common/dialogs/panel_common_settings_base.cpp:221
 msgid "Create backups when auto save occurs"
-msgstr ""
+msgstr "Crear copias de seguridad al guardar automáticamente"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 msgid ""
 "Create backups when the auto save feature is enabled.  If not checked, "
 "backups will only be created when you manually save a file."
 msgstr ""
+"Crear copias de seguridad cuando la función de guardado automático esté "
+"habilitada. Si no se ha marcado, las copias de seguridad solo se crearán "
+"cuando guarde un archivo manualmente."
 
 #: common/dialogs/panel_common_settings_base.cpp:226
 msgid "Maximum backups to keep:"
-msgstr ""
+msgstr "Máximo N.º de copias a mantener:"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
 msgid "How many backup files total to keep (set to 0 for no limit)"
@@ -23889,7 +23926,7 @@ msgstr "Generar archivo Map"
 #: pcbnew/dialogs/dialog_gendrill.cpp:303
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
-"¡No puede crearse una ruta relativa (el volumen de destino difiere del del "
+"¡No puede crearse una ruta relativa (el volumen de destino difiere del "
 "archivo)!"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:373
@@ -24941,7 +24978,7 @@ msgstr "El tamaño del pad debe ser mayor de cero"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1180
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
-msgstr "Valor incorrecto para el taladro: taladro mayor que el pad"
+msgstr "Valor incorrecto para el taladro:  el taladro es más grande que el pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1187
 msgid "Pad local clearance must be zero or greater than zero"
@@ -25145,8 +25182,8 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "Note: IPC norm gives a max value = 0.25mm."
 msgstr ""
-"Radio de redondeo.\n"
-"No puede ser mayor que la mitad la la anchura del pad.\n"
+"Radio de esquina.\n"
+"No puede ser mayor que la mitad de la anchura del pad.\n"
 "La anchura es el menor valor entre la dimensión X y la dimensión Y.\n"
 "Nota: la norma IPC da un valor máximo de 0,25 mm."
 
@@ -33713,9 +33750,8 @@ msgid "Constraints Report"
 msgstr "Informe de huellas"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:408
-#, fuzzy
 msgid "<h7>Track width resolution for:</h7>"
-msgstr "Corrección de ancho:"
+msgstr "<h7>Corrección de ancho:</h7>"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:423
 #: pcbnew/tools/pcb_inspection_tool.cpp:424
