@@ -482,10 +482,13 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int index, const std::map<wxString, wxSt
     auto pair = m_altiumComponents.insert( { index, ASCH_COMPONENT( aProperties ) } );
     const ASCH_COMPONENT& elem = pair.first->second;
 
-    LIB_ID libId = AltiumToKiCadLibID( LIB_ID::ID_SCH, getLibName(), elem.libreference );
+    // TODO: this is a hack until we correctly apply all transformations to every element
+    wxString name = wxString::Format(
+            "%d%s_%s", elem.orientation, elem.isMirrored ? "_mirrored" : "", elem.libreference );
+    LIB_ID libId = AltiumToKiCadLibID( LIB_ID::ID_SCH, getLibName(), name );
 
     LIB_PART* kpart = new LIB_PART( wxEmptyString );
-    kpart->SetName( elem.libreference );
+    kpart->SetName( name );
     kpart->SetDescription( elem.componentdescription );
     kpart->SetLibId( libId );
     m_symbols.insert( { index, kpart } );
