@@ -44,7 +44,7 @@
 
 
 void CADSTAR_SCH_ARCHIVE_LOADER::Load( ::SCHEMATIC* aSchematic, ::SCH_SHEET* aRootSheet,
-        SCH_PLUGIN::SCH_PLUGIN_RELEASER* aSchPlugin, wxFileName aLibraryFileName )
+        SCH_PLUGIN::SCH_PLUGIN_RELEASER* aSchPlugin, const wxFileName& aLibraryFileName )
 {
     Parse();
 

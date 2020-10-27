@@ -29,11 +29,13 @@
 ///! Update the schema version whenever a migration is required
 const int cvpcbSchemaVersion = 0;
 
-CVPCB_SETTINGS::CVPCB_SETTINGS()
-        : APP_SETTINGS_BASE( "cvpcb", cvpcbSchemaVersion ),
-          m_FootprintViewerAutoZoom( false ),
-          m_FootprintViewerZoom( 1.0 ),
-          m_FilterFootprint( 0 )
+CVPCB_SETTINGS::CVPCB_SETTINGS() :
+        APP_SETTINGS_BASE( "cvpcb", cvpcbSchemaVersion ),
+        m_FootprintViewerAutoZoom( false ),
+        m_FootprintViewerZoom( 1.0 ),
+        m_FilterFootprint( 0 ),
+        m_LibrariesWidth( 0 ),
+        m_FootprintsWidth( 0 )
 {
     // We always snap and don't let the user configure it
     m_FootprintViewerMagneticSettings.pads     = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;

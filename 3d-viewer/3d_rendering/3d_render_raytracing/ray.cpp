@@ -44,6 +44,7 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
     m_Dir = d;
     m_InvDir = 1.0f / d;
 
+    rayID = 0;  // Not used, just set to 0
     //rayID = gs_next_rayID;
     //gs_next_rayID++;
 

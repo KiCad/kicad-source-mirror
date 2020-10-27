@@ -317,7 +317,8 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
         m_mainToolBar( nullptr ),
         m_canvas( nullptr ),
         m_currentCamera( m_trackBallCamera ),
-        m_trackBallCamera( RANGE_SCALE_3D )
+        m_trackBallCamera( RANGE_SCALE_3D ),
+        m_disable_ray_tracing( true )
 {
 
 }
