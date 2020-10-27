@@ -33,6 +33,7 @@
 
 
 class SCH_COMPONENT;
+class SCH_SHEET;
 class TITLE_BLOCK;
 
 namespace CFB
@@ -105,7 +106,7 @@ public:
 private:
     bool IsComponentPartVisible( int aOwnerindex, int aOwnerpartdisplaymode ) const;
 
-    void ParseComponent( int index, const std::map<wxString, wxString>& aProperties );
+    void ParseComponent( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParsePin( const std::map<wxString, wxString>& aProperties );
     void ParseLabel( const std::map<wxString, wxString>& aProperties );
     void ParseBezier( const std::map<wxString, wxString>& aProperties );
@@ -115,6 +116,8 @@ private:
     void ParseArc( const std::map<wxString, wxString>& aProperties );
     void ParseLine( const std::map<wxString, wxString>& aProperties );
     void ParseRectangle( const std::map<wxString, wxString>& aProperties );
+    void ParseSheetSymbol( int aIndex, const std::map<wxString, wxString>& aProperties );
+    void ParseSheetEntry( const std::map<wxString, wxString>& aProperties );
     void ParsePowerPort( const std::map<wxString, wxString>& aProperties );
     void ParsePort( const ASCH_PORT& aElem );
     void ParseNoERC( const std::map<wxString, wxString>& aProperties );
@@ -123,6 +126,8 @@ private:
     void ParseWire( const std::map<wxString, wxString>& aProperties );
     void ParseJunction( const std::map<wxString, wxString>& aProperties );
     void ParseSheet( const std::map<wxString, wxString>& aProperties );
+    void ParseSheetName( const std::map<wxString, wxString>& aProperties );
+    void ParseFileName( const std::map<wxString, wxString>& aProperties );
     void ParseDesignator( const std::map<wxString, wxString>& aProperties );
     void ParseBusEntry( const std::map<wxString, wxString>& aProperties );
     void ParseParameter( const std::map<wxString, wxString>& aProperties );
@@ -143,6 +148,7 @@ private:
     wxPoint                       m_sheetOffset;
     std::unique_ptr<ASCH_SHEET>   m_altiumSheet;
     std::map<int, SCH_COMPONENT*> m_components;
+    std::map<int, SCH_SHEET*>     m_sheets;
     std::map<int, LIB_PART*>      m_symbols; // for the start, every component has its unique symbol
 
     std::map<wxString, LIB_PART*> m_powerSymbols;

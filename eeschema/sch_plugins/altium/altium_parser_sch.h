@@ -373,6 +373,68 @@ struct ASCH_RECTANGLE
 };
 
 
+struct ASCH_SHEET_SYMBOL
+{
+    wxPoint location;
+    wxSize  size;
+
+    bool isSolid;
+
+    int color;
+    int areacolor;
+
+    explicit ASCH_SHEET_SYMBOL( const std::map<wxString, wxString>& aProperties );
+};
+
+
+enum class ASCH_SHEET_ENTRY_SIDE
+{
+    LEFT   = 0,
+    RIGHT  = 1,
+    TOP    = 2,
+    BOTTOM = 3
+};
+
+
+enum class ASCH_PORT_IOTYPE
+{
+    UNSPECIFIED = 0,
+    OUTPUT      = 1,
+    INPUT       = 2,
+    BIDI        = 3,
+};
+
+
+enum class ASCH_PORT_STYLE
+{
+    NONE_HORIZONTAL = 0,
+    LEFT            = 1,
+    RIGHT           = 2,
+    LEFT_RIGHT      = 3,
+    NONE_VERTICAL   = 4,
+    TOP             = 5,
+    BOTTOM          = 6,
+    TOP_BOTTOM      = 7
+};
+
+
+struct ASCH_SHEET_ENTRY
+{
+    int ownerindex;
+    int ownerpartid;
+
+    int distanceFromTop;
+
+    ASCH_SHEET_ENTRY_SIDE side;
+    ASCH_PORT_IOTYPE      iotype;
+    ASCH_PORT_STYLE       style;
+
+    wxString name;
+
+    explicit ASCH_SHEET_ENTRY( const std::map<wxString, wxString>& aProperties );
+};
+
+
 enum class ASCH_POWER_PORT_STYLE
 {
     UNKNOWN = -1,
@@ -403,28 +465,6 @@ struct ASCH_POWER_PORT
     ASCH_POWER_PORT_STYLE   style;
 
     explicit ASCH_POWER_PORT( const std::map<wxString, wxString>& aProperties );
-};
-
-
-enum class ASCH_PORT_IOTYPE
-{
-    UNSPECIFIED = 0,
-    OUTPUT      = 1,
-    INPUT       = 2,
-    BIDI        = 3,
-};
-
-
-enum class ASCH_PORT_STYLE
-{
-    NONE_HORIZONTAL = 0,
-    LEFT            = 1,
-    RIGHT           = 2,
-    LEFT_RIGHT      = 3,
-    NONE_VERTICAL   = 4,
-    TOP             = 5,
-    BOTTOM          = 6,
-    TOP_BOTTOM      = 7
 };
 
 
@@ -557,6 +597,38 @@ struct ASCH_SHEET
     ASCH_SHEET_WORKSPACEORIENTATION sheetOrientation;
 
     explicit ASCH_SHEET( const std::map<wxString, wxString>& aProperties );
+};
+
+
+struct ASCH_SHEET_NAME
+{
+    int ownerindex;
+    int ownerpartid;
+
+    wxString text;
+
+    ASCH_RECORD_ORIENTATION orientation;
+    wxPoint                 location;
+
+    bool isHidden;
+
+    explicit ASCH_SHEET_NAME( const std::map<wxString, wxString>& aProperties );
+};
+
+
+struct ASCH_FILE_NAME
+{
+    int ownerindex;
+    int ownerpartid;
+
+    wxString text;
+
+    ASCH_RECORD_ORIENTATION orientation;
+    wxPoint                 location;
+
+    bool isHidden;
+
+    explicit ASCH_FILE_NAME( const std::map<wxString, wxString>& aProperties );
 };
 
 

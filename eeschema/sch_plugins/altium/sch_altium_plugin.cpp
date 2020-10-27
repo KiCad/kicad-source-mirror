@@ -65,6 +65,16 @@ const wxPoint GetRelativePosition( const wxPoint& aPosition, const SCH_COMPONENT
     return t.TransformCoordinate( aPosition - aComponent->GetPosition() );
 }
 
+
+COLOR4D GetColorFromInt( int color )
+{
+    int red   = color & 0x0000FF;
+    int green = ( color & 0x00FF00 ) >> 8;
+    int blue  = ( color & 0xFF0000 ) >> 16;
+
+    return COLOR4D().FromCSSRGBA( red, green, blue, 1.0 );
+}
+
 SCH_ALTIUM_PLUGIN::SCH_ALTIUM_PLUGIN()
 {
     m_rootSheet    = nullptr;
@@ -344,14 +354,15 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
             ParseRectangle( properties );
             break;
         case ALTIUM_SCH_RECORD::SHEET_SYMBOL:
+            ParseSheetSymbol( index, properties );
             break;
         case ALTIUM_SCH_RECORD::SHEET_ENTRY:
+            ParseSheetEntry( properties );
             break;
         case ALTIUM_SCH_RECORD::POWER_PORT:
             ParsePowerPort( properties );
             break;
         case ALTIUM_SCH_RECORD::PORT:
-            //ParsePort( properties );
             // Ports are parsed after the sheet was parsed
             // This is required because we need all electrical connection points before placing.
             m_altiumPortsCurrentSheet.emplace_back( properties );
@@ -379,8 +390,10 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
             ParseSheet( properties );
             break;
         case ALTIUM_SCH_RECORD::SHEET_NAME:
+            ParseSheetName( properties );
             break;
         case ALTIUM_SCH_RECORD::FILE_NAME:
+            ParseFileName( properties );
             break;
         case ALTIUM_SCH_RECORD::DESIGNATOR:
             ParseDesignator( properties );
@@ -477,9 +490,10 @@ bool SCH_ALTIUM_PLUGIN::IsComponentPartVisible( int aOwnerindex, int aOwnerpartd
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseComponent( int index, const std::map<wxString, wxString>& aProperties )
+void SCH_ALTIUM_PLUGIN::ParseComponent(
+        int aIndex, const std::map<wxString, wxString>& aProperties )
 {
-    auto pair = m_altiumComponents.insert( { index, ASCH_COMPONENT( aProperties ) } );
+    auto pair = m_altiumComponents.insert( { aIndex, ASCH_COMPONENT( aProperties ) } );
     const ASCH_COMPONENT& elem = pair.first->second;
 
     // TODO: this is a hack until we correctly apply all transformations to every element
@@ -491,7 +505,7 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int index, const std::map<wxString, wxSt
     kpart->SetName( name );
     kpart->SetDescription( elem.componentdescription );
     kpart->SetLibId( libId );
-    m_symbols.insert( { index, kpart } );
+    m_symbols.insert( { aIndex, kpart } );
 
     // each component has its own symbol for now
     SCH_COMPONENT* component = new SCH_COMPONENT();
@@ -505,7 +519,7 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int index, const std::map<wxString, wxSt
 
     m_currentSheet->GetScreen()->Append( component );
 
-    m_components.insert( { index, component } );
+    m_components.insert( { aIndex, component } );
 }
 
 
@@ -1254,6 +1268,97 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
 }
 
 
+void SCH_ALTIUM_PLUGIN::ParseSheetSymbol(
+        int aIndex, const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_SHEET_SYMBOL elem( aProperties );
+
+    SCH_SHEET*  sheet  = new SCH_SHEET( m_currentSheet, elem.location + m_sheetOffset );
+    SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
+
+    sheet->SetSize( elem.size );
+
+    sheet->SetBorderColor( GetColorFromInt( elem.color ) );
+    if( elem.isSolid )
+        sheet->SetBackgroundColor( GetColorFromInt( elem.areacolor ) );
+
+    sheet->SetScreen( screen );
+
+    sheet->SetFlags( IS_NEW );
+    m_currentSheet->GetScreen()->Append( sheet );
+
+    m_sheets.insert( { aIndex, sheet } );
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_SHEET_ENTRY elem( aProperties );
+
+    const auto& sheet = m_sheets.find( elem.ownerindex );
+    if( sheet == m_sheets.end() )
+    {
+        wxLogError( wxString::Format(
+                "Sheet Entry tries to access sheet with ownerindex %d which does not exist",
+                elem.ownerindex ) );
+        return;
+    }
+
+    SCH_SHEET_PIN* sheetPin = new SCH_SHEET_PIN( sheet->second );
+    sheet->second->AddPin( sheetPin );
+
+    sheetPin->SetText( elem.name );
+    sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );
+    //sheetPin->SetLabelSpinStyle( getSpinStyle( term.OrientAngle, false ) );
+    //sheetPin->SetPosition( getKiCadPoint( term.Position ) );
+
+    wxPoint pos  = sheet->second->GetPosition();
+    wxSize  size = sheet->second->GetSize();
+
+    switch( elem.side )
+    {
+    default:
+    case ASCH_SHEET_ENTRY_SIDE::LEFT:
+        sheetPin->SetPosition( { pos.x, pos.y + elem.distanceFromTop } );
+        sheetPin->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+        sheetPin->SetEdge( SHEET_SIDE::SHEET_LEFT_SIDE );
+        break;
+    case ASCH_SHEET_ENTRY_SIDE::RIGHT:
+        sheetPin->SetPosition( { pos.x + size.x, pos.y + elem.distanceFromTop } );
+        sheetPin->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+        sheetPin->SetEdge( SHEET_SIDE::SHEET_RIGHT_SIDE );
+        break;
+    case ASCH_SHEET_ENTRY_SIDE::TOP:
+        sheetPin->SetPosition( { pos.x + elem.distanceFromTop, pos.y } );
+        sheetPin->SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
+        sheetPin->SetEdge( SHEET_SIDE::SHEET_TOP_SIDE );
+        break;
+    case ASCH_SHEET_ENTRY_SIDE::BOTTOM:
+        sheetPin->SetPosition( { pos.x + elem.distanceFromTop, pos.y + size.y } );
+        sheetPin->SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );
+        sheetPin->SetEdge( SHEET_SIDE::SHEET_BOTTOM_SIDE );
+        break;
+    }
+
+    switch( elem.iotype )
+    {
+    default:
+    case ASCH_PORT_IOTYPE::UNSPECIFIED:
+        sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );
+        break;
+    case ASCH_PORT_IOTYPE::OUTPUT:
+        sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_OUTPUT );
+        break;
+    case ASCH_PORT_IOTYPE::INPUT:
+        sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_INPUT );
+        break;
+    case ASCH_PORT_IOTYPE::BIDI:
+        sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_BIDI );
+        break;
+    }
+}
+
+
 wxPoint HelperGeneratePowerPortGraphics( LIB_PART* aKPart, ASCH_POWER_PORT_STYLE aStyle )
 {
     if( aStyle == ASCH_POWER_PORT_STYLE::CIRCLE || aStyle == ASCH_POWER_PORT_STYLE::ARROW )
@@ -1822,6 +1927,79 @@ void SCH_ALTIUM_PLUGIN::ParseSheet( const std::map<wxString, wxString>& aPropert
 }
 
 
+void SetFieldOrientation( SCH_FIELD& aField, ASCH_RECORD_ORIENTATION aOrientation )
+{
+    switch( aOrientation )
+    {
+    default:
+    case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
+        aField.SetTextAngle( 0 );
+        break;
+    case ASCH_RECORD_ORIENTATION::UPWARDS:
+        aField.SetTextAngle( 900 );
+        break;
+    case ASCH_RECORD_ORIENTATION::LEFTWARDS:
+        aField.SetTextAngle( 1800 );
+        break;
+    case ASCH_RECORD_ORIENTATION::DOWNWARDS:
+        aField.SetTextAngle( 2700 );
+        break;
+    }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseSheetName( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_SHEET_NAME elem( aProperties );
+
+    const auto& sheet = m_sheets.find( elem.ownerindex );
+    if( sheet == m_sheets.end() )
+    {
+        wxLogError( wxString::Format(
+                "Sheet Name tries to access sheet with ownerindex %d which does not exist",
+                elem.ownerindex ) );
+        return;
+    }
+
+    SCH_FIELD& sheetNameField = sheet->second->GetFields()[SHEETNAME];
+
+    sheetNameField.SetPosition( elem.location + m_sheetOffset );
+    sheetNameField.SetText( elem.text );
+    sheetNameField.SetVisible( !elem.isHidden );
+
+    sheetNameField.SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
+    sheetNameField.SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM );
+
+    SetFieldOrientation( sheetNameField, elem.orientation );
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseFileName( const std::map<wxString, wxString>& aProperties )
+{
+    ASCH_FILE_NAME elem( aProperties );
+
+    const auto& sheet = m_sheets.find( elem.ownerindex );
+    if( sheet == m_sheets.end() )
+    {
+        wxLogError( wxString::Format(
+                "File Name tries to access sheet with ownerindex %d which does not exist",
+                elem.ownerindex ) );
+        return;
+    }
+
+    SCH_FIELD& filenameField = sheet->second->GetFields()[SHEETFILENAME];
+
+    filenameField.SetPosition( elem.location + m_sheetOffset );
+    filenameField.SetText( elem.text ); // TODO: use kicad_sch
+    filenameField.SetVisible( !elem.isHidden );
+
+    filenameField.SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
+    filenameField.SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM );
+
+    SetFieldOrientation( filenameField, elem.orientation );
+}
+
+
 void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aProperties )
 {
     ASCH_DESIGNATOR elem( aProperties );
@@ -1851,23 +2029,7 @@ void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aPr
     refField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
     refField->SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM );
 
-    switch( elem.orientation )
-    {
-    case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
-        refField->SetTextAngle( 0 );
-        break;
-    case ASCH_RECORD_ORIENTATION::UPWARDS:
-        refField->SetTextAngle( 90 );
-        break;
-    case ASCH_RECORD_ORIENTATION::LEFTWARDS:
-        refField->SetTextAngle( 180 );
-        break;
-    case ASCH_RECORD_ORIENTATION::DOWNWARDS:
-        refField->SetTextAngle( 270 );
-        break;
-    default:
-        break;
-    }
+    SetFieldOrientation( *refField, elem.orientation );
 }
 
 
