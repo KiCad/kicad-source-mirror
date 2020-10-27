@@ -560,12 +560,13 @@ TOOL_ACTION ACTIONS::showFootprintEditor( "common.Control.showFootprintEditor",
 TOOL_ACTION ACTIONS::updatePcbFromSchematic( "common.Control.updatePcbFromSchematic",
         AS_GLOBAL,
         WXK_F8, LEGACY_HK_NAME( "Update PCB from Schematic" ),
-        _( "Update PCB from Schematic..." ), _( "Push changes from schematic to PCB" ),
+        _( "Update PCB from Schematic..." ), _( "Update PCB with changes made to schematic" ),
         update_pcb_from_sch_xpm );
 
-TOOL_ACTION ACTIONS::updateSchematicFromPcb( "common.Control.updateSchematicFromPCB", AS_GLOBAL, 0,
-        LEGACY_HK_NAME( "Update Schematic from PCB" ), _( "Update Schematic from PCB..." ),
-        _( "Push changes from PCB to Schematic" ), update_sch_from_pcb_xpm );
+TOOL_ACTION ACTIONS::updateSchematicFromPcb( "common.Control.updateSchematicFromPCB",
+        AS_GLOBAL, 0, "",
+        _( "Update Schematic from PCB..." ), _( "Update schematic with changes made to PCB" ),
+        update_sch_from_pcb_xpm );
 
 TOOL_ACTION ACTIONS::acceleratedGraphics( "common.Control.acceleratedGraphics",
         AS_GLOBAL, 0, "",
