@@ -20,7 +20,6 @@
 
 #include <common.h>
 #include <class_board.h>
-#include <class_pad.h>
 #include <class_track.h>
 
 #include <drc/drc_engine.h>
@@ -30,13 +29,11 @@
 #include <drc/drc_length_report.h>
 #include <drc/drc_rtree.h>
 
-#include <geometry/shape.h>
 #include <geometry/shape_segment.h>
 
 #include <connectivity/connectivity_data.h>
 #include <connectivity/from_to_cache.h>
 
-#include <pcb_expr_evaluator.h>
 
 /*
     Differential pair gap/coupling test.
@@ -148,14 +145,7 @@ struct DIFF_PAIR_KEY
                 else if( netN > b.netN )
                     return false;
                 else
-                {
-                    if( parentRule < b.parentRule )
-                        return true;
-                    else
-                    {
-                        return false;
-                    }
-                }
+                    return parentRule < b.parentRule;
             }
         }
 
@@ -185,7 +175,7 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp, DRC_RTREE& aTree 
 {
     for( BOARD_CONNECTED_ITEM* itemP : aDp.itemsP )
     {
-        auto sp = dyn_cast<TRACK*>( itemP );
+        TRACK* sp = dyn_cast<TRACK*>( itemP );
         OPT<DIFF_PAIR_COUPLED_SEGMENTS> bestCoupled;
         int bestGap = std::numeric_limits<int>::max();
 
@@ -230,37 +220,37 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp, DRC_RTREE& aTree 
         if( bestCoupled )
         {
             printf("Best-gap %d\n", bestGap );
-            auto excludeSelf = [&] ( BOARD_ITEM *aItem )
-                                {
-                                    if( aItem == bestCoupled->parentN || aItem == bestCoupled->parentP )
-                                    {
-                                        return false;
-                                    }
+            auto excludeSelf =
+                    [&] ( BOARD_ITEM *aItem )
+                    {
+                        if( aItem == bestCoupled->parentN || aItem == bestCoupled->parentP )
+                        {
+                            return false;
+                        }
 
-                                    if( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_VIA_T )
-                                    {
-                                        auto bci = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
+                        if( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_VIA_T )
+                        {
+                            auto bci = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
 
-                                        if( bci->GetNetCode() == bestCoupled->parentN->GetNetCode()
-                                        ||  bci->GetNetCode() == bestCoupled->parentP->GetNetCode() )
-                                            return false;
-                                    }
+                            if( bci->GetNetCode() == bestCoupled->parentN->GetNetCode()
+                            ||  bci->GetNetCode() == bestCoupled->parentP->GetNetCode() )
+                                return false;
+                        }
 
-                                    return true;
-                                };
+                        return true;
+                    };
 
-                                SHAPE_SEGMENT checkSegStart( bestCoupled->coupledP.A, bestCoupled->coupledN.A );
-                                SHAPE_SEGMENT checkSegEnd( bestCoupled->coupledP.B, bestCoupled->coupledN.B );
+            SHAPE_SEGMENT checkSegStart( bestCoupled->coupledP.A, bestCoupled->coupledN.A );
+            SHAPE_SEGMENT checkSegEnd( bestCoupled->coupledP.B, bestCoupled->coupledN.B );
 
-                                // check if there's anyting in between the segments suspected to be coupled. If
-                                // there's nothing, assume they are really coupled.
+            // check if there's anyting in between the segments suspected to be coupled. If
+            // there's nothing, assume they are really coupled.
 
-                                if( !aTree.CheckColliding( &checkSegStart, sp->GetLayer(), 0, excludeSelf )
-                                      && !aTree.CheckColliding( &checkSegEnd, sp->GetLayer(), 0, excludeSelf ) )
-                                {
-                                    aDp.coupled.push_back( *bestCoupled );
-                                }
-
+            if( !aTree.CheckColliding( &checkSegStart, sp->GetLayer(), 0, excludeSelf )
+                  && !aTree.CheckColliding( &checkSegEnd, sp->GetLayer(), 0, excludeSelf ) )
+            {
+                aDp.coupled.push_back( *bestCoupled );
+            }
         }
     }
 }
@@ -438,54 +428,53 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
             if ( val.HasMax() && totalUncoupled > val.Max() )
             {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG );
-                wxString                  msg =
-                    drcItem->GetErrorText() + " (" + maxUncoupledConstraint->GetParentRule()->m_Name + " ";
+                auto drce = DRC_ITEM::Create( DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG );
 
-                msg += wxString::Format( _( "maximum uncoupled length: %s; actual: %s)" ),
-                        MessageTextFromValue( userUnits(), val.Max() ),
-                        MessageTextFromValue( userUnits(), totalUncoupled ) );
+                m_msg = wxString::Format( _( "(%s maximum uncoupled length: %s; actual: %s)" ),
+                                          maxUncoupledConstraint->GetParentRule()->m_Name,
+                                          MessageTextFromValue( userUnits(), val.Max() ),
+                                          MessageTextFromValue( userUnits(), totalUncoupled ) );
 
-                drcItem->SetErrorMessage( msg );
+                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
 
-                for( auto offendingTrack : it.second.itemsP )
-                    drcItem->AddItem( offendingTrack );
-                for( auto offendingTrack : it.second.itemsN )
-                    drcItem->AddItem( offendingTrack );
+                for( BOARD_CONNECTED_ITEM* offendingTrack : it.second.itemsP )
+                    drce->AddItem( offendingTrack );
+
+                for( BOARD_CONNECTED_ITEM* offendingTrack : it.second.itemsN )
+                    drce->AddItem( offendingTrack );
 
                 uncoupledViolation = true;
 
-                drcItem->SetViolatingRule( maxUncoupledConstraint->GetParentRule() );
+                drce->SetViolatingRule( maxUncoupledConstraint->GetParentRule() );
 
-                reportViolation( drcItem, (*it.second.itemsP.begin())->GetPosition() );
+                reportViolation( drce, (*it.second.itemsP.begin())->GetPosition() );
             }
         }
 
-        if ( gapConstraint && (uncoupledViolation || !maxUncoupledConstraint ) )
+        if ( gapConstraint && ( uncoupledViolation || !maxUncoupledConstraint ) )
         {
             for( auto& cpair : it.second.coupled )
             {
                 if( !cpair.couplingOK )
                 {
                     auto val = gapConstraint->GetValue();
+                    auto drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE );
 
-                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE );
-                    wxString                  msg =
-                    drcItem->GetErrorText() + " (" + maxUncoupledConstraint->GetParentRule()->m_Name + " ";
+                    m_msg = drcItem->GetErrorText() + " (" + gapConstraint->GetParentRule()->m_Name + " ";
 
                     if( val.HasMin() )
-                        msg += wxString::Format( _( "minimum gap: %s; " ),
+                        m_msg += wxString::Format( _( "minimum gap: %s; " ),
                         MessageTextFromValue( userUnits(), val.Min() ) );
 
                     if( val.HasMax() )
-                        msg += wxString::Format( _( "maximum gap: %s; " ),
+                        m_msg += wxString::Format( _( "maximum gap: %s; " ),
                         MessageTextFromValue( userUnits(), val.Max() ) );
 
 
-                    msg += wxString::Format( _( "actual: %s)" ),
+                    m_msg += wxString::Format( _( "actual: %s)" ),
                         MessageTextFromValue( userUnits(), cpair.computedGap ) );
 
-                    drcItem->SetErrorMessage( msg );
+                    drcItem->SetErrorMessage( m_msg );
 
                     drcItem->AddItem( cpair.parentP );
                     drcItem->AddItem( cpair.parentN );
