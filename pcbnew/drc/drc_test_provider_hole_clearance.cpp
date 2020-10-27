@@ -25,11 +25,11 @@
 #include <class_pad.h>
 #include <class_track.h>
 #include <geometry/shape_segment.h>
+#include <geometry/shape_circle.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>
-#include <libs/kimath/include/geometry/shape_circle.h>
 #include "drc_rtree.h"
 
 /*

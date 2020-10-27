@@ -32,6 +32,7 @@
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
+#include <geometry/shape_null.h>
 
 #include <drc/drc_engine.h>
 #include <drc/drc_rtree.h>
@@ -39,7 +40,6 @@
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>
 #include <class_dimension.h>
-#include <libs/kimath/include/geometry/shape_null.h>
 
 /*
     Copper clearance test. Checks all copper items (pads, vias, tracks, drawings, zones) for their electrical clearance.
