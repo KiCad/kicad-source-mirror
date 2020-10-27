@@ -1528,7 +1528,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     {
         m_currentPad->SetLayerSet( FlipLayerMask( m_currentPad->GetLayerSet() ) );
         // flip custom pad shapes (up/down)
-        m_dummyPad->FlipPrimitives( false );
+        m_currentPad->FlipPrimitives( false );
     }
 
     m_currentPad->SetLayerSet( m_padMaster->GetLayerSet() );
