@@ -117,7 +117,7 @@ public:
         return wxT( "LIB_PIN" );
     }
 
-    wxString GetTypeName() override
+    wxString GetTypeName() const override
     {
         return _( "Pin" );
     }

@@ -1063,7 +1063,7 @@ EDA_ITEM* MODULE::Clone() const
 }
 
 
-void MODULE::RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction )
+void MODULE::RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction ) const
 {
     try
     {

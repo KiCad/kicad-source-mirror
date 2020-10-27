@@ -39,7 +39,7 @@ PCB_ORIGIN_TRANSFORMS::~PCB_ORIGIN_TRANSFORMS()
 {}
 
 long long int PCB_ORIGIN_TRANSFORMS::ToDisplay( long long int aValue,
-                                                COORD_TYPES_T aCoordType )
+                                                COORD_TYPES_T aCoordType ) const
 {
     long long int value = aValue;
 
@@ -57,7 +57,7 @@ long long int PCB_ORIGIN_TRANSFORMS::ToDisplay( long long int aValue,
 }
 
 double PCB_ORIGIN_TRANSFORMS::ToDisplay( double        aValue,
-                                         COORD_TYPES_T aCoordType )
+                                         COORD_TYPES_T aCoordType ) const
 {
     double value = aValue;
 
@@ -75,7 +75,7 @@ double PCB_ORIGIN_TRANSFORMS::ToDisplay( double        aValue,
 }
 
 long long int PCB_ORIGIN_TRANSFORMS::FromDisplay( long long int aValue,
-                                                  COORD_TYPES_T aCoordType )
+                                                  COORD_TYPES_T aCoordType ) const
 {
     long long value = aValue;
 
@@ -93,7 +93,7 @@ long long int PCB_ORIGIN_TRANSFORMS::FromDisplay( long long int aValue,
 }
 
 double PCB_ORIGIN_TRANSFORMS::FromDisplay( double        aValue,
-                                           COORD_TYPES_T aCoordType )
+                                           COORD_TYPES_T aCoordType ) const
 {
     double value = aValue;
 

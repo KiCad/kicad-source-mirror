@@ -78,7 +78,7 @@ public:
      * @return number of items found.
      */
     template<class Visitor>
-    int Query( const ITEM* aItem, int aMinDistance, Visitor& aVisitor );
+    int Query( const ITEM* aItem, int aMinDistance, Visitor& aVisitor ) const;
 
     /**
      * Searches items in the index that are in proximity of aShape.
@@ -92,7 +92,7 @@ public:
      * @return number of items found.
      */
     template<class Visitor>
-    int Query( const SHAPE* aShape, int aMinDistance, Visitor& aVisitor );
+    int Query( const SHAPE* aShape, int aMinDistance, Visitor& aVisitor ) const;
 
     /**
      * Returns list of all items in a given net.
@@ -120,7 +120,7 @@ public:
 private:
 
     template <class Visitor>
-    int querySingle( std::size_t aIndex, const SHAPE* aShape, int aMinDistance, Visitor& aVisitor );
+    int querySingle( std::size_t aIndex, const SHAPE* aShape, int aMinDistance, Visitor& aVisitor ) const;
 
     std::deque<ITEM_SHAPE_INDEX> m_subIndices;
     std::map<int, NET_ITEMS_LIST> m_netMap;
@@ -129,16 +129,16 @@ private:
 
 
 template<class Visitor>
-int INDEX::querySingle( std::size_t aIndex, const SHAPE* aShape, int aMinDistance, Visitor& aVisitor )
+int INDEX::querySingle( std::size_t aIndex, const SHAPE* aShape, int aMinDistance, Visitor& aVisitor ) const
 {
     if( aIndex >= m_subIndices.size() )
         return 0;
 
-    return m_subIndices[aIndex].Query( aShape, aMinDistance, aVisitor, false );
+    return m_subIndices[aIndex].Query( aShape, aMinDistance, aVisitor);
 }
 
 template<class Visitor>
-int INDEX::Query( const ITEM* aItem, int aMinDistance, Visitor& aVisitor )
+int INDEX::Query( const ITEM* aItem, int aMinDistance, Visitor& aVisitor ) const
 {
     int total = 0;
 
@@ -151,7 +151,7 @@ int INDEX::Query( const ITEM* aItem, int aMinDistance, Visitor& aVisitor )
 }
 
 template<class Visitor>
-int INDEX::Query( const SHAPE* aShape, int aMinDistance, Visitor& aVisitor )
+int INDEX::Query( const SHAPE* aShape, int aMinDistance, Visitor& aVisitor ) const
 {
     int total = 0;
 

@@ -594,7 +594,7 @@ public:
      * Note that this function should not add or remove items to the module
      * @param aFunction is the function to be invoked.
      */
-    void RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction );
+    void RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction ) const;
 
     /**
      * Returns a set of all layers that this module has drawings on similar to ViewGetLayers()

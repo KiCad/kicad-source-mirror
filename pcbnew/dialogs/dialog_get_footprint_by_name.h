@@ -55,7 +55,7 @@ public:
     }
 
     // returns the selected text (fp reference)
-    const wxString GetValue()
+    const wxString GetValue() const
     {
         return m_SearchTextCtrl->GetValue();
     }

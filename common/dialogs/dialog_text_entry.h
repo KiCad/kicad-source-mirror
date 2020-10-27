@@ -44,7 +44,7 @@ public:
     void SetTextValidator( wxTextValidatorStyle style );
     void SetTextValidator( const wxTextValidator& validator );
 
-    wxString GetValue();
+    wxString GetValue() const;
 };
 
 #endif      // _DIALOG_TEXT_ENTRY_H_

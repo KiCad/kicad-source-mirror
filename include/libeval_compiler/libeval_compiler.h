@@ -254,7 +254,7 @@ public:
     VAR_REF() {};
     virtual ~VAR_REF() {};
 
-    virtual VAR_TYPE_T GetType() = 0;
+    virtual VAR_TYPE_T GetType() const = 0;
     virtual VALUE GetValue( CONTEXT* aCtx ) = 0;
 };
 

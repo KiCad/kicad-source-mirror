@@ -48,7 +48,7 @@ public:
         return wxT( "LIB_CIRCLE" );
     }
 
-    wxString GetTypeName() override
+    wxString GetTypeName() const override
     {
         return _( "Circle" );
     }

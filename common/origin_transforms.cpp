@@ -33,37 +33,37 @@ ORIGIN_TRANSFORMS::~ORIGIN_TRANSFORMS()
 
 
 int ORIGIN_TRANSFORMS::ToDisplay( int           aValue,
-                                  COORD_TYPES_T aCoordType )
+                                  COORD_TYPES_T aCoordType ) const
 {
     return static_cast<int>( ToDisplay( static_cast<long long int>( aValue ), aCoordType ) );
 }
 
 long long int ORIGIN_TRANSFORMS::ToDisplay( long long int aValue,
-                                            COORD_TYPES_T aCoordType )
+                                            COORD_TYPES_T aCoordType ) const
 {
     return aValue;
 }
 
 double ORIGIN_TRANSFORMS::ToDisplay( double        aValue,
-                                     COORD_TYPES_T aCoordType )
+                                     COORD_TYPES_T aCoordType ) const
 {
     return aValue;
 }
 
 int ORIGIN_TRANSFORMS::FromDisplay( int           aValue,
-                                    COORD_TYPES_T aCoordType )
+                                    COORD_TYPES_T aCoordType ) const
 {
     return static_cast<int>( FromDisplay( static_cast<long long int>( aValue ), aCoordType ) );
 }
 
 long long int ORIGIN_TRANSFORMS::FromDisplay( long long int aValue,
-                                              COORD_TYPES_T aCoordType )
+                                              COORD_TYPES_T aCoordType ) const
 {
     return aValue;
 }
 
 double ORIGIN_TRANSFORMS::FromDisplay( double        aValue,
-                                       COORD_TYPES_T aCoordType )
+                                       COORD_TYPES_T aCoordType ) const
 {
     return aValue;
 }

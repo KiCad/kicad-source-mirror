@@ -179,7 +179,7 @@ public:
     ///> Zooms the screen to center and fit the current selection.
     void zoomFitSelection();
 
-    BOARD* GetBoard()
+    BOARD* GetBoard() const
     {
         return board();
     }
@@ -394,4 +394,4 @@ private:
     std::unique_ptr<PRIV> m_priv;
 };
 
-#endif
+#endif /* __SELECTION_TOOL_H */

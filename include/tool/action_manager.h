@@ -110,7 +110,7 @@ public:
     /**
      * Get a list of currently-registered actions mapped by their name.
      */
-    const std::map<std::string, TOOL_ACTION*>& GetActions();
+    const std::map<std::string, TOOL_ACTION*>& GetActions() const;
 
     /**
      * Finds an action with a given name (if there is one available).

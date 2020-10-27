@@ -77,7 +77,7 @@ public:
      * with aBounds.
      */
     template <class Visitor>
-    void Query( const BOX2I& aBounds, Visitor& aVisitor )    // const
+    void Query( const BOX2I& aBounds, Visitor& aVisitor ) const
     {
         int   mmin[2] = { aBounds.GetX(), aBounds.GetY() };
         int   mmax[2] = { aBounds.GetRight(), aBounds.GetBottom() };

@@ -310,7 +310,7 @@ void PCB_GROUP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
-void PCB_GROUP::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction )
+void PCB_GROUP::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction ) const
 {
     try
     {
@@ -324,7 +324,7 @@ void PCB_GROUP::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFuncti
 }
 
 
-void PCB_GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction )
+void PCB_GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction ) const
 {
     try
     {

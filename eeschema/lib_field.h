@@ -97,7 +97,7 @@ public:
         return wxT( "LIB_FIELD" );
     }
 
-    wxString GetTypeName() override
+    wxString GetTypeName() const override
     {
         return _( "Field" );
     }

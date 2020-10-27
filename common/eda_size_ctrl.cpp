@@ -62,7 +62,7 @@ EDA_POSITION_CTRL::~EDA_POSITION_CTRL()
 
 /* Returns (in internal units) to coordinate between (in user units)
  */
-wxPoint EDA_POSITION_CTRL::GetValue()
+wxPoint EDA_POSITION_CTRL::GetValue() const
 {
     return wxPoint( ValueFromString( m_UserUnit, m_FramePosX->GetValue() ),
                     ValueFromString( m_UserUnit, m_FramePosY->GetValue() ) );
@@ -93,7 +93,7 @@ EDA_SIZE_CTRL::EDA_SIZE_CTRL( wxWindow* parent, const wxString& title, const wxS
 }
 
 
-wxSize EDA_SIZE_CTRL::GetValue()
+wxSize EDA_SIZE_CTRL::GetValue() const
 {
     wxPoint pos = EDA_POSITION_CTRL::GetValue();
 

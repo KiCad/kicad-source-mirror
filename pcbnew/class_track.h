@@ -259,7 +259,7 @@ public:
 #endif
 
 protected:
-    void GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
+    void GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) const;
 
 
     int         m_Width;            ///< Thickness of track, or via diameter

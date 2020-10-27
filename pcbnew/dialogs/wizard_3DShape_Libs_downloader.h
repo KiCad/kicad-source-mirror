@@ -95,7 +95,7 @@ protected:
     }
 
     ///> Gets the current target for downloaded libraries
-    inline wxString getDownloadDir()
+    inline wxString getDownloadDir() const
     {
         return m_downloadDir->GetValue();
     }

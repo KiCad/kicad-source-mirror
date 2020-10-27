@@ -107,7 +107,7 @@ public:
 
     void Clear() { clear(); }
 
-    const wxString& GetValue() { return m_field; }
+    const wxString& GetValue() const { return m_field; }
 
     void SetField( const wxString& aField, bool aUseUTF8, bool aEscapeString )
     {
@@ -116,7 +116,7 @@ public:
         m_escapeString = aEscapeString;
     }
 
-    bool IsEmpty() { return m_field.IsEmpty(); }
+    bool IsEmpty() const { return m_field.IsEmpty(); }
 
     std::string GetGerberString();
 

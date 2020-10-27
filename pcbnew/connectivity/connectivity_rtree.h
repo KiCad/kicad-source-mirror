@@ -107,7 +107,7 @@ public:
      * with aBounds.
      */
     template <class Visitor>
-    void Query( const BOX2I& aBounds, const LAYER_RANGE& aRange, Visitor& aVisitor )
+    void Query( const BOX2I& aBounds, const LAYER_RANGE& aRange, Visitor& aVisitor ) const
     {
         const int   mmin[3] = { aRange.Start(), aBounds.GetX(), aBounds.GetY() };
         const int   mmax[3] = { aRange.End(), aBounds.GetRight(), aBounds.GetBottom() };

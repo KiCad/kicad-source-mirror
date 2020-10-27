@@ -112,7 +112,7 @@ public:
 
     NET_GRID_ENTRY& GetEntry( int aRow );
 
-    int GetRowByNetcode( int aCode );
+    int GetRowByNetcode( int aCode ) const;
 
     void Rebuild();
 

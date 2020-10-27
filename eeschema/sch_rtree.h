@@ -119,7 +119,7 @@ public:
      * @param aRobust If true, search the whole tree, not just the bounding box
      * @return true if the item definitely exists, false if it does not exist within bbox
      */
-    bool contains( SCH_ITEM* aItem, bool aRobust = false )
+    bool contains( const SCH_ITEM* aItem, bool aRobust = false ) const
     {
         const EDA_RECT& bbox    = aItem->GetBoundingBox();
         const int       type    = int( aItem->Type() );
@@ -158,12 +158,12 @@ public:
      * Returns the number of items in the tree
      * @return number of elements in the tree;
      */
-    size_t size()
+    size_t size() const
     {
         return m_count;
     }
 
-    bool empty()
+    bool empty() const
     {
         return m_count == 0;
     }

@@ -481,7 +481,7 @@ void EDA_TEXT::printOneLineOfText( RENDER_SETTINGS* aSettings, const wxPoint& aO
 }
 
 
-wxString EDA_TEXT::GetTextStyleName()
+wxString EDA_TEXT::GetTextStyleName() const
 {
     int style = 0;
 

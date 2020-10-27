@@ -173,7 +173,7 @@ class SHAPE_INDEX
              * Checks if the iterator has reached the end.
              * @return true if it is in an invalid position (data finished)
              */
-            bool IsNull()
+            bool IsNull() const
             {
                 return iterator.IsNull();
             }
@@ -184,7 +184,7 @@ class SHAPE_INDEX
              * Checks if the iterator has not reached the end.
              * @return true if it is in an valid position (data not finished)
              */
-            bool IsNotNull()
+            bool IsNotNull() const
             {
                 return iterator.IsNotNull();
             }
@@ -275,7 +275,7 @@ class SHAPE_INDEX
          * @param aVisitor object to be invoked on every object contained in the search area.
          */
         template <class V>
-        int Query( const SHAPE *aShape, int aMinDistance, V& aVisitor, bool aExact )
+        int Query( const SHAPE *aShape, int aMinDistance, V& aVisitor) const
         {
             BOX2I box = aShape->BBox();
             box.Inflate( aMinDistance );
@@ -377,4 +377,4 @@ typename SHAPE_INDEX<T>::Iterator SHAPE_INDEX<T>::Begin()
     return Iterator( this );
 }
 
-#endif
+#endif /* __SHAPE_INDEX_H */

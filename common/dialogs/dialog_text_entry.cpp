@@ -48,7 +48,7 @@ void WX_TEXT_ENTRY_DIALOG::SetTextValidator( const wxTextValidator& validator )
 }
 
 
-wxString WX_TEXT_ENTRY_DIALOG::GetValue()
+wxString WX_TEXT_ENTRY_DIALOG::GetValue() const
 {
     return m_textCtrl->GetValue();
 }

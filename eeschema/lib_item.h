@@ -120,7 +120,7 @@ public:
      * Provide a user-consumable name of the object type.  Perform localization when
      * called so that run-time language selection works.
      */
-    virtual wxString GetTypeName() = 0;
+    virtual wxString GetTypeName() const = 0;
 
     /**
      * Begin drawing a component library draw item at \a aPosition.

@@ -54,7 +54,7 @@ public:
         return wxT( "LIB_TEXT" );
     }
 
-    wxString GetTypeName() override
+    wxString GetTypeName() const override
     {
         return _( "Text" );
     }

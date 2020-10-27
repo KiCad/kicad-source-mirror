@@ -96,8 +96,8 @@ public:
     void SetValue( int aRow, int aCol, const wxString &aValue ) override;
     void SetValueAsBool( int aRow, int aCol, bool aValue ) override;
 
-    wxString StringFromBool( bool aValue );
-    bool BoolFromString( wxString aValue );
+    wxString StringFromBool( bool aValue ) const;
+    bool BoolFromString( wxString aValue ) const;
 
 protected:
     void initGrid( DIALOG_SHIM* aDialog );

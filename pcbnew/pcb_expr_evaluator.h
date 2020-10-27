@@ -97,7 +97,7 @@ public:
     bool IsEnum() const { return m_isEnum; }
 
     void SetType( LIBEVAL::VAR_TYPE_T type ) { m_type = type; }
-    LIBEVAL::VAR_TYPE_T GetType() override { return m_type; }
+    LIBEVAL::VAR_TYPE_T GetType() const override { return m_type; }
 
     void AddAllowedClass( TYPE_ID type_hash, PROPERTY_BASE* prop )
     {
@@ -106,7 +106,7 @@ public:
 
     virtual LIBEVAL::VALUE GetValue( LIBEVAL::CONTEXT* aCtx ) override;
 
-    BOARD_ITEM* GetObject( LIBEVAL::CONTEXT* aCtx ) const;
+    BOARD_ITEM* GetObject( const LIBEVAL::CONTEXT* aCtx ) const;
 
 private:
     std::unordered_map<TYPE_ID, PROPERTY_BASE*> m_matchingTypes;

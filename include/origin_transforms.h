@@ -23,7 +23,7 @@
  */
 
 #ifndef ORIGIN_TRANSFORMS_H_
-#define ORIGIN_TRANSFORMS_H_ 1
+#define ORIGIN_TRANSFORMS_H_
 
 /**
  * A class to perform either relative or absolute display origin
@@ -61,28 +61,28 @@ public:
     // =============== Single-axis Transforms ===============
 
     virtual int ToDisplay( int           aValue,
-                           COORD_TYPES_T aCoordType );
+                           COORD_TYPES_T aCoordType ) const;
 
     virtual long long int ToDisplay( long long int aValue,
-                                     COORD_TYPES_T aCoordType );
+                                     COORD_TYPES_T aCoordType ) const;
 
     virtual double ToDisplay( double        aValue,
-                              COORD_TYPES_T aCoordType );
+                              COORD_TYPES_T aCoordType ) const;
 
     virtual int FromDisplay( int           aValue,
-                             COORD_TYPES_T aCoordType );
+                             COORD_TYPES_T aCoordType ) const;
 
     virtual long long int FromDisplay( long long int aValue,
-                                       COORD_TYPES_T aCoordType );
+                                       COORD_TYPES_T aCoordType ) const;
 
     virtual double FromDisplay( double        aValue,
-                                COORD_TYPES_T aCoordType );
+                                COORD_TYPES_T aCoordType ) const;
 
 
     // =============== Two-axis Transforms ===============
 
     template<class T>
-    T ToDisplayAbs( const T& aValue )
+    T ToDisplayAbs( const T& aValue ) const
     {
         T displayValue;
 
@@ -92,7 +92,7 @@ public:
     }
 
     template<class T>
-    T ToDisplayRel( const T& aValue )
+    T ToDisplayRel( const T& aValue ) const
     {
         T displayValue;
 
@@ -103,7 +103,7 @@ public:
 
 
     template<class T>
-    T FromDisplayAbs( const T& aValue )
+    T FromDisplayAbs( const T& aValue ) const
     {
         T displayValue;
 
@@ -113,7 +113,7 @@ public:
     }
 
     template<class T>
-    T FromDisplayRel( const T& aValue )
+    T FromDisplayRel( const T& aValue ) const
     {
         T displayValue;
 

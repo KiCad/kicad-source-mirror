@@ -351,7 +351,7 @@ public:
     /**
      * @return a wxString with the style name( Normal, Italic, Bold, Bold+Italic)
      */
-    wxString GetTextStyleName();
+    wxString GetTextStyleName() const;
 
     /**
      * Populate \a aPositions with the position of each line of

@@ -106,7 +106,7 @@ public:
      * @brief GetSizeMax
      * @return the max size dimension
      */
-    int GetSizeMax() const { return ( m_Size.x > m_Size.y )?m_Size.x:m_Size.y; }
+    int GetSizeMax() const { return ( m_Size.x > m_Size.y ) ? m_Size.x : m_Size.y; }
 
     int GetX() const { return m_Pos.x; }
     int GetY() const { return m_Pos.y; }

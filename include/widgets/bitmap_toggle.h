@@ -50,7 +50,7 @@ public:
     void SetValue( bool aValue );
 
     ///> Read the checkbox state
-    bool GetValue() { return m_checked; }
+    bool GetValue() const { return m_checked; }
 
 private:
     bool m_checked;

@@ -178,7 +178,7 @@ public:
      *
      * @param aCommit is the commit to add the children to.
      */
-    void AddChildrenToCommit( BOARD_COMMIT& aCommit )
+    void AddChildrenToCommit( BOARD_COMMIT& aCommit ) const
     {
         RunOnChildren( [&]( BOARD_ITEM* bItem )
                        {
@@ -191,7 +191,7 @@ public:
      * Note that this function should not add or remove items to the group
      * @param aFunction is the function to be invoked.
      */
-    void RunOnChildren( const std::function<void ( BOARD_ITEM* )>& aFunction );
+    void RunOnChildren( const std::function<void ( BOARD_ITEM* )>& aFunction ) const;
 
     /**
      * Invokes a function on all descendents of the group.
@@ -199,7 +199,7 @@ public:
      * groups.
      * @param aFunction is the function to be invoked.
      */
-    void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction );
+    void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction ) const;
 
 private:
     std::unordered_set<BOARD_ITEM*> m_items;     // Members of the group

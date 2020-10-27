@@ -46,10 +46,10 @@ public:
     virtual void Remove( VIEW_ITEM* aItem ) override;
 
     /// @copydoc VIEW::Update()
-    virtual void Update( VIEW_ITEM* aItem, int aUpdateFlags ) override;
+    virtual void Update( const VIEW_ITEM* aItem, int aUpdateFlags ) const override;
 
     /// @copydoc VIEW::Update()
-    virtual void Update( VIEW_ITEM* aItem ) override;
+    virtual void Update( const VIEW_ITEM* aItem ) const override;
 
     void UpdateDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions );
 };

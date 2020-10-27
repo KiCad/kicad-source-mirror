@@ -240,7 +240,7 @@ public:
     bool CheckColliding( SHAPE* aRefShape,
                          PCB_LAYER_ID aTargetLayer,
                          int aClearance = 0,
-                         std::function<bool( BOARD_ITEM*)> aFilter = nullptr )
+                         std::function<bool( BOARD_ITEM*)> aFilter = nullptr ) const
     {
         BOX2I box = aRefShape->BBox();
         box.Inflate( aClearance );
@@ -276,7 +276,7 @@ public:
                         PCB_LAYER_ID aTargetLayer,
                         std::function<bool( BOARD_ITEM*)> aFilter = nullptr,
                         std::function<bool( BOARD_ITEM*, int)> aVisitor = nullptr,
-                        int aClearance = 0 )
+                        int aClearance = 0 ) const
     {
         // keep track of BOARD_ITEMs that have been already found to collide (some items
         // might be build of COMPOUND/triangulated shapes and a single subshape collision
@@ -344,7 +344,7 @@ public:
                                                  ITEM_WITH_SHAPE*, ITEM_WITH_SHAPE*,
                                                  bool* aCollision )> aVisitor,
                              int aMaxClearance,
-                             std::function<bool(int, int )> aProgressReporter )
+                             std::function<bool(int, int )> aProgressReporter ) const
     {
         std::vector< PAIR_INFO > pairsToVisit;
 
@@ -463,12 +463,12 @@ public:
      * Returns the number of items in the tree
      * @return number of elements in the tree;
      */
-    size_t size()
+    size_t size() const
     {
         return m_count;
     }
 
-    bool empty()
+    bool empty() const
     {
         return m_count == 0;
     }

@@ -48,7 +48,7 @@ public:
         return wxT( "LIB_POLYLINE" );
     }
 
-    wxString GetTypeName() override
+    wxString GetTypeName() const override
     {
         return _( "PolyLine" );
     }

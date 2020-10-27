@@ -117,7 +117,7 @@ public:
 
     void    Enable( bool x_win_on, bool y_win_on );
     void    SetValue( int x_value, int y_value );
-    wxPoint GetValue();
+    wxPoint GetValue() const;
 };
 
 
@@ -132,7 +132,7 @@ public:
                    EDA_UNITS user_unit, wxBoxSizer* BoxSizer );
 
     ~EDA_SIZE_CTRL() { }
-    wxSize GetValue();
+    wxSize GetValue() const;
 };
 
 

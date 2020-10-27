@@ -263,13 +263,13 @@ public:
             return GetValue( m_rows[ aRow ], aCol );
     }
 
-    std::vector<SCH_REFERENCE> GetRowReferences( int aRow )
+    std::vector<SCH_REFERENCE> GetRowReferences( int aRow ) const
     {
         wxCHECK( aRow < (int)m_rows.size(), std::vector<SCH_REFERENCE>() );
         return m_rows[ aRow ].m_Refs;
     }
 
-    wxString GetValue( DATA_MODEL_ROW& group, int aCol )
+    wxString GetValue( const DATA_MODEL_ROW& group, int aCol )
     {
         std::vector<SCH_REFERENCE> references;
         wxString                   fieldValue;

@@ -613,7 +613,7 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 
 
 template <class T>
-wxString FIELDS_GRID_TABLE<T>::StringFromBool( bool aValue )
+wxString FIELDS_GRID_TABLE<T>::StringFromBool( bool aValue ) const
 {
     if( aValue )
         return wxT( "1" );
@@ -623,7 +623,7 @@ wxString FIELDS_GRID_TABLE<T>::StringFromBool( bool aValue )
 
 
 template <class T>
-bool FIELDS_GRID_TABLE<T>::BoolFromString( wxString aValue )
+bool FIELDS_GRID_TABLE<T>::BoolFromString( wxString aValue ) const
 {
     if( aValue == "1" )
     {

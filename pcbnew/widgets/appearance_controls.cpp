@@ -208,18 +208,18 @@ NET_GRID_ENTRY& NET_GRID_TABLE::GetEntry( int aRow )
 }
 
 
-int NET_GRID_TABLE::GetRowByNetcode( int aCode )
+int NET_GRID_TABLE::GetRowByNetcode( int aCode ) const
 {
-    auto it = std::find_if( m_nets.begin(), m_nets.end(),
+    auto it = std::find_if( m_nets.cbegin(), m_nets.cend(),
             [aCode]( const NET_GRID_ENTRY& aEntry )
             {
                 return aEntry.code == aCode;
             } );
 
-    if( it == m_nets.end() )
+    if( it == m_nets.cend() )
         return -1;
 
-    return std::distance( m_nets.begin(), it );
+    return std::distance( m_nets.cbegin(), it );
 }
 
 

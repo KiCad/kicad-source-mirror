@@ -23,7 +23,7 @@
  */
 
 #ifndef PCB_ORIGIN_TRANSFORM_H_
-#define PCB_ORIGIN_TRANSFORM_H_ 1
+#define PCB_ORIGIN_TRANSFORM_H_
 
 #include <origin_transforms.h>
 
@@ -38,16 +38,16 @@ public:
 
     using ORIGIN_TRANSFORMS::ToDisplay;
 
-    virtual long long int ToDisplay( long long int aValue, COORD_TYPES_T aCoordType ) override;
+    virtual long long int ToDisplay( long long int aValue, COORD_TYPES_T aCoordType ) const override;
 
-    virtual double ToDisplay( double aValue, COORD_TYPES_T aCoordType ) override;
+    virtual double ToDisplay( double aValue, COORD_TYPES_T aCoordType ) const override;
 
 
     using ORIGIN_TRANSFORMS::FromDisplay;
 
-    virtual long long int FromDisplay( long long int aValue, COORD_TYPES_T aCoordType ) override;
+    virtual long long int FromDisplay( long long int aValue, COORD_TYPES_T aCoordType ) const override;
 
-    virtual double FromDisplay( double aValue, COORD_TYPES_T aCoordType ) override;
+    virtual double FromDisplay( double aValue, COORD_TYPES_T aCoordType ) const override;
 
 
     /**

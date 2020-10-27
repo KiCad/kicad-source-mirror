@@ -1504,13 +1504,13 @@ bool VIEW::IsVisible( const VIEW_ITEM* aItem ) const
 }
 
 
-void VIEW::Update( VIEW_ITEM* aItem )
+void VIEW::Update( const VIEW_ITEM* aItem ) const
 {
     Update( aItem, ALL );
 }
 
 
-void VIEW::Update( VIEW_ITEM* aItem, int aUpdateFlags )
+void VIEW::Update( const VIEW_ITEM* aItem, int aUpdateFlags ) const
 {
     VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
 

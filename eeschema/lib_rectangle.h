@@ -49,7 +49,7 @@ public:
         return wxT( "LIB_RECTANGLE" );
     }
 
-    wxString GetTypeName() override
+    wxString GetTypeName() const override
     {
         return _( "Rectangle" );
     }

@@ -65,7 +65,7 @@ public:
         return wxT( "LIB_ARC" );
     }
 
-    wxString GetTypeName() override
+    wxString GetTypeName() const override
     {
         return _( "Arc" );
     }

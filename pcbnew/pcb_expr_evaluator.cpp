@@ -488,9 +488,9 @@ void PCB_EXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
 }
 
 
-BOARD_ITEM* PCB_EXPR_VAR_REF::GetObject( LIBEVAL::CONTEXT* aCtx ) const
+BOARD_ITEM* PCB_EXPR_VAR_REF::GetObject( const LIBEVAL::CONTEXT* aCtx ) const
 {
-    wxASSERT( dynamic_cast<PCB_EXPR_CONTEXT*>( aCtx ) );
+    wxASSERT( dynamic_cast<const PCB_EXPR_CONTEXT*>( aCtx ) );
 
     const PCB_EXPR_CONTEXT* ctx = static_cast<const PCB_EXPR_CONTEXT*>( aCtx );
     BOARD_ITEM*             item  = ctx->GetItem( m_itemIndex );

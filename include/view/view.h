@@ -141,8 +141,8 @@ public:
      * @param aItem: the item to update.
      * @param aUpdateFlags: how much the object has changed.
      */
-    virtual void Update( VIEW_ITEM* aItem, int aUpdateFlags );
-    virtual void Update( VIEW_ITEM* aItem );
+    virtual void Update( const VIEW_ITEM* aItem, int aUpdateFlags ) const;
+    virtual void Update( const VIEW_ITEM* aItem ) const;
 
     /**
      * Function SetRequired()

@@ -225,7 +225,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 }
 
 
-const std::map<std::string, TOOL_ACTION*>& ACTION_MANAGER::GetActions()
+const std::map<std::string, TOOL_ACTION*>& ACTION_MANAGER::GetActions() const
 {
     return m_actionNameIndex;
 }

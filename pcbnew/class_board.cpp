@@ -969,7 +969,7 @@ wxString BOARD::ConvertKIIDsToCrossReferences( const wxString& aSource )
 }
 
 
-unsigned BOARD::GetNodesCount( int aNet )
+unsigned BOARD::GetNodesCount( int aNet ) const
 {
     unsigned retval = 0;
 
@@ -1854,7 +1854,7 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, wxString* aError
 }
 
 
-const std::vector<D_PAD*> BOARD::GetPads()
+const std::vector<D_PAD*> BOARD::GetPads() const
 {
     std::vector<D_PAD*> allPads;
 
@@ -1868,7 +1868,7 @@ const std::vector<D_PAD*> BOARD::GetPads()
 }
 
 
-unsigned BOARD::GetPadCount()
+unsigned BOARD::GetPadCount() const
 {
     unsigned retval = 0;
 

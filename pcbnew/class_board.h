@@ -680,7 +680,7 @@ public:
      * @param aNet Only count nodes belonging to this net
      * @return the number of pads members of nets (i.e. with netcode > 0)
      */
-    unsigned GetNodesCount( int aNet = -1 );
+    unsigned GetNodesCount( int aNet = -1 ) const;
 
     /**
      * @return the number of unconnected nets in the current ratsnest.
@@ -690,7 +690,7 @@ public:
     /**
      * @return the number of pads in board
      */
-    unsigned GetPadCount();
+    unsigned GetPadCount() const;
 
     /**
      * Return a reference to a list of all the pads.
@@ -700,7 +700,7 @@ public:
      *
      * @return D_PADS - a full list of pads
      */
-    const std::vector<D_PAD*> GetPads();
+    const std::vector<D_PAD*> GetPads() const;
 
     void BuildListOfNets()
     {
