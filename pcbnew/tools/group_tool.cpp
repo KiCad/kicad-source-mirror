@@ -331,7 +331,13 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
     while( !done )
-        Wait()->SetPassEvent();
+    {
+        // Pass events unless we receive a null event, then we must shut down
+        if( TOOL_EVENT* evt = Wait() )
+            evt->SetPassEvent();
+        else
+            break;
+    }
 
     return 0;
 }

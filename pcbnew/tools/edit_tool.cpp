@@ -790,7 +790,7 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
                 wxPoint t1newPoint, t2newPoint;
 
                 auto setIfPointOnSeg =
-                        []( wxPoint& aPointToSet, SEG aSegment, VECTOR2I aVecToTest ) 
+                        []( wxPoint& aPointToSet, SEG aSegment, VECTOR2I aVecToTest )
                         {
                             // Find out if we are within the segment
                             if( ( aSegment.NearestPoint( aVecToTest ) - aVecToTest ).EuclideanNorm()
@@ -1785,7 +1785,13 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
     while( !done )
-        Wait()->SetPassEvent();
+    {
+        // Pass events unless we receive a null event, then we must shut down
+        if( TOOL_EVENT* evt = Wait() )
+            evt->SetPassEvent();
+        else
+            break;
+    }
 
     // Ensure statusPopup is hidden after use and before deleting it:
     m_statusPopup->Hide();
