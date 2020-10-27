@@ -768,7 +768,7 @@ void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     // Propagate changes in sheetname to displayed hierarchical path
     wxString hierarchicalPath = _( "Hierarchical path: " );
 
-    hierarchicalPath += m_frame->GetCurrentSheet().PathHumanReadable();
+    hierarchicalPath += m_frame->GetCurrentSheet().PathHumanReadable( false );
 
     if( hierarchicalPath.Last() != '/' )
         hierarchicalPath.Append( '/' );

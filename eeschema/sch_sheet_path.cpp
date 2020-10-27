@@ -224,11 +224,17 @@ KIID_PATH SCH_SHEET_PATH::PathWithoutRootUuid() const
 }
 
 
-wxString SCH_SHEET_PATH::PathHumanReadable() const
+wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName ) const
 {
     wxString s;
 
-    s = wxT( "/" );
+    wxString    fileName = at( 0 )->GetScreen()->GetFileName();
+    wxFileName  fn = fileName;
+
+    if( aUseShortRootName )
+        s = wxT( "/" );  // Use only the short name in netlists
+    else
+        s = fn.GetName() + wxT( "/" );
 
     // Start at 1 since we've already processed the root sheet.
     for( unsigned i = 1; i < size(); i++ )

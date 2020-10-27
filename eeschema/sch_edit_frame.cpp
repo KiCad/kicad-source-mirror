@@ -1206,7 +1206,7 @@ void SCH_EDIT_FRAME::UpdateTitle()
 
         title.Printf( wxT( "%s [%s] %s\u2014 " ) + app,
                       fn.GetName(),
-                      GetCurrentSheet().PathHumanReadable(),
+                      GetCurrentSheet().PathHumanReadable( false ),
                       append );
     }
 

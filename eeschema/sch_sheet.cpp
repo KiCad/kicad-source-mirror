@@ -712,7 +712,7 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList 
         SCH_SHEET_PATH path = schframe->GetCurrentSheet();
         path.push_back( this );
 
-        aList.emplace_back( _( "Hierarchical Path" ), path.PathHumanReadable(), BLUE );
+        aList.emplace_back( _( "Hierarchical Path" ), path.PathHumanReadable( false ), BLUE );
     }
 
     aList.emplace_back( _( "File Name" ), m_fields[ SHEETFILENAME ].GetText(), BROWN );
