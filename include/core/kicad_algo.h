@@ -78,7 +78,7 @@ void for_all_pairs( _InputIterator __first, _InputIterator __last, _Function __f
  * @brief Returns true if the container contains the given value.
  */
 template <class _Container, typename _Value>
-bool contains( _Container __container, _Value __value )
+bool contains( const _Container& __container, _Value __value )
 {
     return std::find( __container.begin(), __container.end(), __value ) != __container.end();
 }
