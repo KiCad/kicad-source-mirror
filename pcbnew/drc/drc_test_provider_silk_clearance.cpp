@@ -83,6 +83,9 @@ private:
 
 bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 {
+    // This is the number of tests between 2 calls to the progress bar
+    const int delta = 250;
+
     m_board = m_drcEngine->GetBoard();
 
     DRC_CONSTRAINT worstClearanceConstraint;
@@ -105,18 +108,31 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     if( !reportPhase( _( "Checking silkscreen for overlapping items..." ) ) )
         return false;
 
-    DRC_RTREE silkTree, targetTree;
+    DRC_RTREE silkTree;
+    DRC_RTREE targetTree;
+    int       ii = 0;
+    int       targets = 0;
 
     auto addToSilkTree =
-            [&silkTree]( BOARD_ITEM *item ) -> bool
+            [&silkTree]( BOARD_ITEM* item ) -> bool
             {
                 silkTree.insert( item );
                 return true;
             };
 
-    auto addToTargetTree =
-            [&targetTree]( BOARD_ITEM *item ) -> bool
+    auto countTargets =
+            [&targets]( BOARD_ITEM* item ) -> bool
             {
+                ++targets;
+                return true;
+            };
+
+    auto addToTargetTree =
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                if( !reportProgress( ii++, targets, delta ) )
+                    return false;
+
                 targetTree.insert( item );
                 return true;
             };
@@ -187,6 +203,10 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
             };
 
     forEachGeometryItem( s_allBasicItems, LSET( 2, F_SilkS, B_SilkS ), addToSilkTree );
+    forEachGeometryItem( s_allBasicItems, LSET::FrontMask() | LSET::BackMask(), countTargets );
+
+    targets *= 2;  // One for adding to RTree; one for testing
+
     forEachGeometryItem( s_allBasicItems, LSET::FrontMask() | LSET::BackMask(), addToTargetTree );
 
     reportAux( _("Testing %d silkscreen features against %d board items."),
@@ -213,13 +233,10 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
         DRC_RTREE::LAYER_PAIR( B_SilkS, Edge_Cuts )
     };
 
-    // This is the number of tests between 2 calls to the progress bar
-    const int delta = 250;
-
     targetTree.QueryCollidingPairs( &silkTree, layerPairs, checkClearance, m_largestClearance,
                                     [&]( int aCount, int aSize ) -> bool
                                     {
-                                        return reportProgress( aCount, aSize, delta );
+                                        return reportProgress( ++ii, targets, delta );
                                     } );
 
     reportRuleStatistics();

@@ -48,10 +48,13 @@ public:
 
     struct ITEM_WITH_SHAPE
     {
-        ITEM_WITH_SHAPE( BOARD_ITEM *aParent, SHAPE* aShape, std::shared_ptr<SHAPE> aParentShape = nullptr ) :
+        ITEM_WITH_SHAPE( BOARD_ITEM *aParent, SHAPE* aShape,
+                         std::shared_ptr<SHAPE> aParentShape = nullptr ) :
             parent ( aParent ),
             shape ( aShape ),
-            parentShape( aParentShape ) {};
+            parentShape( aParentShape )
+        {};
+
         BOARD_ITEM* parent;
         SHAPE* shape;
         std::shared_ptr<SHAPE> parentShape;
@@ -81,92 +84,45 @@ public:
      * Function Insert()
      * Inserts an item into the tree. Item's bounding box is taken via its GetBoundingBox() method.
      */
-    void insert( BOARD_ITEM* aItem )
+    void insert( BOARD_ITEM* aItem, int aWorstClearance = 0, int aLayer = UNDEFINED_LAYER )
     {
         std::vector<SHAPE*> subshapes;
 
-        for( int layer : aItem->GetLayerSet().Seq() )
+        auto addLayer =
+                [&]( PCB_LAYER_ID layer )
+                {
+                    std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( layer );
+
+                    if( shape->HasIndexableSubshapes() )
+                        shape->GetIndexableSubshapes( subshapes );
+                    else
+                        subshapes.push_back( shape.get() );
+
+                    for( SHAPE* subshape : subshapes )
+                    {
+                        BOX2I bbox = subshape->BBox();
+
+                        bbox.Inflate( aWorstClearance );
+
+                        const int mmin[2] = { bbox.GetX(), bbox.GetY() };
+                        const int mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+
+                        m_tree[layer]->Insert( mmin, mmax,
+                                               new ITEM_WITH_SHAPE( aItem, subshape, shape ) );
+                        m_count++;
+                    }
+                };
+
+        if( aLayer != UNDEFINED_LAYER )
         {
-            std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( (PCB_LAYER_ID) layer );
-
-            if( itemShape->HasIndexableSubshapes() )
-            {
-                itemShape->GetIndexableSubshapes( subshapes );
-            }
-            else
-            {
-                subshapes.push_back( itemShape.get() );
-            }
-
-            for( auto subshape : subshapes )
-            {
-                BOX2I     bbox    = subshape->BBox();
-                const int mmin[2] = { bbox.GetX(), bbox.GetY() };
-                const int mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
-
-                m_tree[layer]->Insert( mmin, mmax, new ITEM_WITH_SHAPE( aItem, subshape, itemShape ) );
-                m_count++;
-            }
+            addLayer( (PCB_LAYER_ID) aLayer );
+        }
+        else
+        {
+            for( int layer : aItem->GetLayerSet().Seq() )
+                addLayer( (PCB_LAYER_ID) layer );
         }
     }
-
-#if 0
-    /**
-     * Function Remove()
-     * Removes an item from the tree. Removal is done by comparing pointers, attempting
-     * to remove a copy of the item will fail.
-     */
-    bool remove( BOARD_ITEM* aItem )
-    {
-        // First, attempt to remove the item using its given BBox
-        const EDA_RECT& bbox    = aItem->GetBoundingBox();
-        const int       mmin[2] = { bbox.GetX(), bbox.GetY() };
-        const int       mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
-        bool            removed = false;
-
-        for( auto layer : aItem->GetLayerSet().Seq() )
-        {
-            if( ZONE_CONTAINER* zone = dyn_cast<ZONE_CONTAINER*>( aItem ) )
-            {
-                // Continue removing the zone elements from the tree until they cannot be found
-                while( !m_tree[int( layer )]->Remove( mmin, mmax, aItem ) )
-                    ;
-
-                const int mmin2[2] = { INT_MIN, INT_MIN };
-                const int mmax2[2] = { INT_MAX, INT_MAX };
-
-            // If we are not successful ( true == not found ), then we expand
-            // the search to the full tree
-                while( !m_tree[int( layer )]->Remove( mmin2, mmax2, aItem ) )
-                    ;
-
-                // Loop to the next layer
-                continue;
-            }
-
-            // The non-zone search expects only a single element in the tree with the same
-            // pointer aItem
-            if( m_tree[int( layer )]->Remove( mmin, mmax, aItem ) )
-            {
-                // N.B. We must search the whole tree for the pointer to remove
-                // because the item may have been moved before we have the chance to
-                // delete it from the tree
-                const int mmin2[2] = { INT_MIN, INT_MIN };
-                const int mmax2[2] = { INT_MAX, INT_MAX };
-
-                if( m_tree[int( layer )]->Remove( mmin2, mmax2, aItem ) )
-                    continue;
-            }
-
-            removed = true;
-        }
-
-        m_count -= int( removed );
-
-        return removed;
-    }
-
-#endif
 
     /**
      * Function RemoveAll()
@@ -180,66 +136,7 @@ public:
         m_count = 0;
     }
 
-#if 0
-    /**
-     * Determine if a given item exists in the tree.  Note that this does not search the full tree
-     * so if the item has been moved, this will return false when it should be true.
-     *
-     * @param aItem Item that may potentially exist in the tree
-     * @param aRobust If true, search the whole tree, not just the bounding box
-     * @return true if the item definitely exists, false if it does not exist within bbox
-     */
-    bool contains( BOARD_ITEM* aItem, bool aRobust = false )
-    {
-        const EDA_RECT& bbox    = aItem->GetBoundingBox();
-        const int       mmin[2] = { bbox.GetX(), bbox.GetY() };
-        const int       mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
-        bool            found   = false;
-
-        auto search = [&found, &aItem]( const ITEM_WITH_SHAPE* aSearchItem ) {
-            if( aSearchItem->parent == aItem )
-            {
-                found = true;
-                return false;
-            }
-
-            return true;
-        };
-
-        for( int layer : aItem->GetLayerSet().Seq() )
-        {
-            m_tree[layer]->Search( mmin, mmax, search );
-
-            if( found )
-                break;
-        }
-
-        if( !found && aRobust )
-        {
-            for( int layer : LSET::AllCuMask().Seq() )
-            {
-                // N.B. We must search the whole tree for the pointer to remove
-                // because the item may have been moved.  We do not expand the item
-                // layer search as this should not change.
-
-                const int mmin2[2] = { INT_MIN, INT_MIN };
-                const int mmax2[2] = { INT_MAX, INT_MAX };
-
-                m_tree[layer]->Search( mmin2, mmax2, search );
-
-                if( found )
-                    break;
-            }
-        }
-
-        return found;
-    }
-
-#endif
-
-    bool CheckColliding( SHAPE* aRefShape,
-                         PCB_LAYER_ID aTargetLayer,
-                         int aClearance = 0,
+    bool CheckColliding( SHAPE* aRefShape, PCB_LAYER_ID aTargetLayer, int aClearance = 0,
                          std::function<bool( BOARD_ITEM*)> aFilter = nullptr ) const
     {
         BOX2I box = aRefShape->BBox();
@@ -404,60 +301,6 @@ public:
 
         return 0;
     }
-
-#if 0
-    std::vector<std::pair<int, BOARD_ITEM*>> GetNearest( const wxPoint &aPoint,
-                                                         PCB_LAYER_ID aLayer, int aLimit )
-    {
-
-        const int point[2] = { aPoint.x, aPoint.y };
-        auto result = m_tree[int( aLayer )]->NearestNeighbors( point,
-                [aLimit]( std::size_t a_count, int a_maxDist ) -> bool
-                {
-                    return a_count >= aLimit;
-                },
-                []( BOARD_ITEM* aElement) -> bool
-                {
-                    // Don't remove any elements from the list
-                    return false;
-                },
-                [aLayer]( const int* a_point, BOARD_ITEM* a_data ) -> int
-                {
-                    switch( a_data->Type() )
-                    {
-                    case PCB_TRACE_T:
-                    {
-                        TRACK* track = static_cast<TRACK*>( a_data );
-                        SEG seg( track->GetStart(), track->GetEnd() );
-                        return seg.Distance( VECTOR2I( a_point[0], a_point[1] ) ) -
-                                           ( track->GetWidth() + 1 ) / 2;
-                    }
-                    case PCB_VIA_T:
-                    {
-                        VIA* via = static_cast<VIA*>( a_data );
-                        return ( VECTOR2I( via->GetPosition() ) -
-                                 VECTOR2I( a_point[0], a_point[1] ) ).EuclideanNorm() -
-                               ( via->GetWidth() + 1 ) / 2;
-
-                    }
-                    default:
-                    {
-                        VECTOR2I point( a_point[0], a_point[1] );
-                        int      dist = 0;
-                        auto     shape = a_data->GetEffectiveShape( aLayer );
-
-                        // Here we use a hack to get the distance by colliding with a large area
-                        // However, we can't use just MAX_INT because we will overflow the collision calculations
-                        shape->Collide( point, std::numeric_limits<int>::max() / 2, &dist);
-                        return dist;
-                    }
-                    }
-                    return 0;
-                });
-
-        return result;
-    }
-#endif
 
     /**
      * Returns the number of items in the tree

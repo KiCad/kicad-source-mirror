@@ -33,6 +33,7 @@
 
 // A list of all basic (ie: non-compound) board geometry items
 std::vector<KICAD_T> DRC_TEST_PROVIDER::s_allBasicItems;
+std::vector<KICAD_T> DRC_TEST_PROVIDER::s_allBasicItemsButZones;
 
 
 DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
@@ -136,7 +137,12 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
         for( int i = 0; i < MAX_STRUCT_TYPE_ID; i++ )
         {
             if( i != PCB_MODULE_T && i != PCB_GROUP_T )
+            {
                 s_allBasicItems.push_back( (KICAD_T) i );
+
+                if( i != PCB_ZONE_AREA_T && i != PCB_FP_ZONE_AREA_T )
+                    s_allBasicItemsButZones.push_back( (KICAD_T) i );
+            }
         }
     }
 

@@ -192,6 +192,10 @@ bool D_PAD::FlashLayer( LSET aLayers ) const
 
 bool D_PAD::FlashLayer( int aLayer ) const
 {
+    // Return the "normal" shape if the caller doesn't specify a particular layer
+    if( aLayer == UNDEFINED_LAYER )
+        return true;
+
     BOARD* board = GetBoard();
 
     if( !board )

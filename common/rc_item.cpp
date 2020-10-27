@@ -199,7 +199,13 @@ void RC_TREE_MODEL::rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities 
 
     m_tree.clear();
 
-    for( int i = 0; m_rcItemsProvider && i < m_rcItemsProvider->GetCount(); ++i )
+    // wxDataView::ExpandAll() pukes with large lists
+    int count = 0;
+
+    if( m_rcItemsProvider )
+        count = std::min( 1000, m_rcItemsProvider->GetCount() );
+
+    for( int i = 0; i < count; ++i )
     {
         std::shared_ptr<RC_ITEM> rcItem = m_rcItemsProvider->GetItem( i );
 

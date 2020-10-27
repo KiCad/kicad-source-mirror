@@ -480,6 +480,10 @@ bool VIA::FlashLayer( LSET aLayers ) const
 
 bool VIA::FlashLayer( int aLayer ) const
 {
+    // Return the "normal" shape if the caller doesn't specify a particular layer
+    if( aLayer == UNDEFINED_LAYER )
+        return true;
+
     BOARD* board = GetBoard();
 
     if( !board )
@@ -984,8 +988,10 @@ std::shared_ptr<SHAPE> TRACK::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 
 std::shared_ptr<SHAPE> VIA::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
-    // fixme: pad stack support (depending on aLayer )
-    return std::make_shared<SHAPE_CIRCLE>( m_Start, m_Width / 2 );
+    if( FlashLayer( aLayer ) )
+        return std::make_shared<SHAPE_CIRCLE>( m_Start, m_Width / 2 );
+    else
+        return std::make_shared<SHAPE_CIRCLE>( m_Start, GetDrillValue() / 2 );
 }
 
 

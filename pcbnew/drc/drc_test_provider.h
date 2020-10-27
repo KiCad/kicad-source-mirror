@@ -124,6 +124,7 @@ protected:
 
     // List of basic (ie: non-compound) geometry items
     static std::vector<KICAD_T> s_allBasicItems;
+    static std::vector<KICAD_T> s_allBasicItemsButZones;
 
     EDA_UNITS   userUnits() const;
     DRC_ENGINE* m_drcEngine;
