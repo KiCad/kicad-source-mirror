@@ -117,7 +117,8 @@ static struct IFACE : public KIFACE_I
             // module.  So set it directly.
             dlg.SetKiway( &dlg, aKiway );
 
-            if( dlg.ShowModal() == wxID_OK )
+            // Use QuasiModal so that HTML help window will work
+            if( dlg.ShowQuasiModal() == wxID_OK )
                 aKiway->CommonSettingsChanged( true, false );
 
             // Dialog has completed; nothing to return.
