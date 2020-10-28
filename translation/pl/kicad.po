@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-20 14:37-0700\n"
-"PO-Revision-Date: 2020-10-23 22:26+0000\n"
+"PO-Revision-Date: 2020-10-28 18:37+0000\n"
 "Last-Translator: Mark Roszko <mark.roszko@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.1\n"
+"X-Generator: Weblate 4.3.2-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -3594,7 +3594,7 @@ msgstr "Spodziewano się \"%s\""
 #: common/dsnlexer.cpp:348
 #, fuzzy, c-format
 msgid "%s is a duplicate"
-msgstr "Powiel"
+msgstr "%s jest duplikatem"
 
 #: common/dsnlexer.cpp:356
 #, fuzzy, c-format
@@ -5110,7 +5110,7 @@ msgstr ""
 #: common/libeval_compiler/libeval_compiler.cpp:983
 #, fuzzy, c-format
 msgid "Missing units for '%s'| (%s)"
-msgstr "Brakujący footprint"
+msgstr "Brakujące jednostki dla '%s'| (%s)"
 
 #: common/page_layout/page_layout_reader.cpp:852
 #, c-format
@@ -5181,7 +5181,7 @@ msgstr "Rozmiar strony: szerokość %.4g wysokość %.4g"
 #: common/page_layout/ws_draw_item.cpp:390
 #, fuzzy, c-format
 msgid "Line, length %s"
-msgstr "Długość linii"
+msgstr "Linia, długość %s"
 
 #: common/page_layout/ws_draw_item.cpp:446
 #, fuzzy
@@ -5245,7 +5245,7 @@ msgstr ""
 #: common/plugins/cadstar/cadstar_archive_parser.h:42
 #, fuzzy, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr "Nieznany token \"%s\""
+msgstr "Nieznany token '%s' w '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:45
 #, c-format
@@ -6728,9 +6728,9 @@ msgid "Description: %s;  Keywords: %s"
 msgstr "Oznaczenie: %s;  Słowa kluczowe: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:770
-#, fuzzy, c-format
+#, c-format
 msgid "Library location: %s"
-msgstr "Biblioteka nie została znaleziona"
+msgstr "Lokalizacja biblioteki: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:772
 #, fuzzy
@@ -6862,9 +6862,10 @@ msgid "Footprint ID \"%s\" is not valid."
 msgstr "ID footprintu \"%s\" nie jest prawidłowy."
 
 #: cvpcb/display_footprints_frame.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid "Library \"%s\" is not in the footprint library table."
-msgstr "Biblioteka nie została znaleziona w tabeli bibliotek footprintów."
+msgstr ""
+"Biblioteka \"%s\" nie została znaleziona w tabeli bibliotek footprintów."
 
 #: cvpcb/display_footprints_frame.cpp:407
 #: cvpcb/display_footprints_frame.cpp:429
@@ -16025,12 +16026,13 @@ msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 msgstr "Warstwy mechaniczne (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 
 #: gerbview/files.cpp:152
+#, fuzzy
 msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
-msgstr "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
+msgstr "Główny pad master (*.GPT)|*.GPT;*.gpt|"
 
 #: gerbview/files.cpp:153
 msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
-msgstr "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
+msgstr "Dolny Pad Master (*.GPB)|*.GPB;*.gpb|"
 
 #: gerbview/files.cpp:171
 msgid "Open Gerber File(s)"
