@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-20 14:37-0700\n"
-"PO-Revision-Date: 2020-10-28 14:54+0000\n"
+"PO-Revision-Date: 2020-10-28 18:37+0000\n"
 "Last-Translator: Iñigo Figuero Sanz <news@imagedworld.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -186,15 +186,15 @@ msgid "Render time %.0f ms ( %.1f fps)"
 msgstr "Tiempo de renderizado %.0f ms ( %.1f fps)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr "Parámetros clase de red"
+msgstr "Red %s\tclase de red %s\tNombre de pad %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:761
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNetClass %s"
-msgstr "Clases de red"
+msgstr "Red %s\tClase de red %s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:498
 msgid "Load OpenGL: board"
@@ -515,9 +515,8 @@ msgid "Show copper thickness"
 msgstr "Mostrar grosor del cobre"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:323
-#, fuzzy
 msgid "Other Options"
-msgstr "Otras opciones:"
+msgstr "Otras opciones"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:333
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:445
@@ -547,9 +546,8 @@ msgstr ""
 "El Visor 3D debe cerrarse y volver a abrir para aplicar esta configuración"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:348
-#, fuzzy
 msgid "Selection color"
-msgstr "Selección"
+msgstr "Selección de color"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "While Moving"
@@ -593,9 +591,8 @@ msgid "Post-processing"
 msgstr "Post-procesado"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:473
-#, fuzzy
 msgid "Number of Samples"
-msgstr "Número de pads"
+msgstr "Número de muestras"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:477
 msgid "Spread Factor %"
@@ -658,35 +655,30 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:574
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:798
-#, fuzzy
 msgid "Lights configuration"
-msgstr "Configuración de rutas"
+msgstr "Configuración de luces"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:582
 msgid "Ambient Camera Light"
 msgstr "Luz de Cámara Ambiente"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
-#, fuzzy
 msgid "Top Light"
-msgstr "Derecha"
+msgstr "Iluminación superior"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:611
-#, fuzzy
 msgid "Bottom Light"
-msgstr "Vista inferior"
+msgstr "Iluminación inferior"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:635
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:652
-#, fuzzy
 msgid "Elevation (degrees)"
-msgstr "Rotación (grados)"
+msgstr "Elevación (grados)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:639
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:656
-#, fuzzy
 msgid "Azimuth (degrees)"
-msgstr "Rotación (grados)"
+msgstr "Azimut (grados)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:660
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
@@ -735,17 +727,15 @@ msgstr "6"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:51
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:110
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:171
-#, fuzzy
 msgid "3"
-msgstr "A3"
+msgstr "3"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:734
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:114
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:175
-#, fuzzy
 msgid "7"
-msgstr "A7"
+msgstr "7"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:747
 #: pcbnew/dialogs/dialog_create_array_base.cpp:258
@@ -765,7 +755,6 @@ msgid "8"
 msgstr "8"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:785
-#, fuzzy
 msgid "Reset to defaults"
 msgstr "Restablecer ajustes predeterminados"
 
@@ -1214,9 +1203,8 @@ msgstr "Elegir imagen"
 #: bitmap2component/bitmap2cmp_gui.cpp:331
 #: eeschema/tools/sch_drawing_tools.cpp:382
 #: pagelayout_editor/pl_editor_frame.cpp:846
-#, fuzzy
 msgid "Image Files"
-msgstr "Archivos de imagen "
+msgstr "Archivos de imagen"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:687
 msgid "Unable to export to the Clipboard"
@@ -1235,7 +1223,6 @@ msgid "File \"%s\" could not be created."
 msgstr "No ha podido crearse el archivo \"%s\"."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:760
-#, fuzzy
 msgid "Create PostScript File"
 msgstr "Crear archivo Postscript"
 
@@ -1349,7 +1336,6 @@ msgid "Pcbnew (.kicad_mod file)"
 msgstr "Pcbnew (archivo .kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "PostScript (.ps file)"
 msgstr "Postscript (archivo .ps)"
 
@@ -1702,7 +1688,6 @@ msgid "Doc Writers"
 msgstr "Escritores de la documentación"
 
 #: common/dialog_about/dialog_about.cpp:130
-#, fuzzy
 msgid "Librarians"
 msgstr "Librerías"
 
@@ -1772,14 +1757,12 @@ msgid "&OK"
 msgstr "&Aceptar"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:46
-#, fuzzy
 msgid "Report"
-msgstr "Informe ERC"
+msgstr "Informe"
 
 #: common/dialogs/dialog_color_picker.cpp:92
-#, fuzzy
 msgid "Clear Color"
-msgstr "Color del cobre"
+msgstr "Eliminar color"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -2731,7 +2714,6 @@ msgstr "Elementos:"
 
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
-#, fuzzy
 msgid "View Preset Switcher"
 msgstr "Ver conmutador de ajustes preestablecidos"
 
@@ -2920,9 +2902,8 @@ msgid "High Quality Antialiasing"
 msgstr "Antialiasing alta calidad"
 
 #: common/dialogs/panel_common_settings_base.cpp:89
-#, fuzzy
 msgid "3D cache file duration:"
-msgstr "Configuración de las rutas de búsqueda 3D"
+msgstr "Duración del archivo de caché 3D:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
 msgid "Helper Applications"
@@ -3069,19 +3050,20 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_common_settings_base.cpp:277
-#, fuzzy
 msgid "Session"
-msgstr "Revisión"
+msgstr "Sesión"
 
 #: common/dialogs/panel_common_settings_base.cpp:279
 msgid "Remember open files for next project launch"
-msgstr ""
+msgstr "Recordar archivos abiertos en la próxima apertura del proyecto"
 
 #: common/dialogs/panel_common_settings_base.cpp:281
 msgid ""
 "If checked, launching a project will also launch tools such as eeschema and "
 "pcbnew with previously open files"
 msgstr ""
+"Si se selecciona, al lanzar un proyecto también se abrirán herramientas como "
+"Eeschema o Pcbnew con los archivos abiertos previamente"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:72
 msgid "Type filter text"
@@ -3452,15 +3434,13 @@ msgstr "Sustitución de texto"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:521
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:541
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:561
-#, fuzzy
 msgid "Error:"
-msgstr "Error: "
+msgstr "Error:"
 
 #: common/dialogs/wx_html_report_panel.cpp:183
 #: common/dialogs/wx_html_report_panel.cpp:206
-#, fuzzy
 msgid "Warning:"
-msgstr "Aviso: "
+msgstr "Aviso:"
 
 #: common/dialogs/wx_html_report_panel.cpp:186
 #: common/dialogs/wx_html_report_panel.cpp:208
@@ -3525,9 +3505,8 @@ msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "No puede utilizarse OpenGL, se utiliza renderizado por software"
 
 #: common/draw_panel_gal.cpp:244 common/draw_panel_gal.cpp:429
-#, fuzzy
 msgid "Could not use OpenGL"
-msgstr "No ha pudido abrirse CvPcb"
+msgstr "No puede utilizarse OpenGL"
 
 #: common/dsnlexer.cpp:34
 msgid "clipboard"
@@ -3714,9 +3693,8 @@ msgid "Pad"
 msgstr "Pad"
 
 #: common/eda_item.cpp:263 common/eda_item.cpp:266
-#, fuzzy
 msgid "Graphic Shape"
-msgstr "E&stilo gráfico:"
+msgstr "Forma gráfica"
 
 #: common/eda_item.cpp:264
 msgid "Board Text"
@@ -3740,23 +3718,20 @@ msgid "Board Marker"
 msgstr "Marcador de la placa"
 
 #: common/eda_item.cpp:270
-#, fuzzy
 msgid "Aligned Dimension"
-msgstr "&Dimensiones"
+msgstr "Dimensión alineada"
 
 #: common/eda_item.cpp:271
-#, fuzzy
 msgid "Orthogonal Dimension"
-msgstr "Editar dimensión"
+msgstr "Dimensión ortogonal"
 
 #: common/eda_item.cpp:272
-#, fuzzy
 msgid "Center Dimension"
-msgstr "Eliminar dimensión"
+msgstr "Centrar dimensión"
 
 #: common/eda_item.cpp:273 pcbnew/class_dimension.cpp:968
 msgid "Leader"
-msgstr ""
+msgstr "Líder"
 
 #: common/eda_item.cpp:274 pcbnew/class_pcb_target.cpp:121
 msgid "Target"
@@ -3776,9 +3751,8 @@ msgstr "Información de red"
 
 #: common/eda_item.cpp:278 pcbnew/class_pcb_group.cpp:307
 #: pcbnew/tools/pcb_actions.cpp:644
-#, fuzzy
 msgid "Group"
-msgstr "Agrupar por"
+msgstr "Grupo"
 
 #: common/eda_item.cpp:280
 msgid "Schematic Marker"
@@ -4153,7 +4127,7 @@ msgid "%s in \"%s\", line %d, offset %d"
 msgstr "%s en \"%s\", línea %d, desplazamiento %d"
 
 #: common/exceptions.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file, as it was created with a more\n"
 "recent version than the one you are running.\n"
@@ -4164,7 +4138,7 @@ msgid ""
 "Full error text:\n"
 "%s"
 msgstr ""
-"KiCad no ha podido abrir el archivo ya que ha sido creado\n"
+"KiCad no ha podido abrir el archivo, ya que ha sido creado\n"
 "con una versión más reciente de la que está en uso.\n"
 "Para abrirlo, necesita actualizar KiCad a una versión más reciente.\n"
 "\n"
@@ -4190,14 +4164,12 @@ msgid "Alias: "
 msgstr "Alias: "
 
 #: common/filename_resolver.cpp:485
-#, fuzzy
 msgid "This path:"
-msgstr "Esta ruta: "
+msgstr "Esta ruta:"
 
 #: common/filename_resolver.cpp:488
-#, fuzzy
 msgid "Existing path:"
-msgstr "Ruta existente: "
+msgstr "Ruta existente:"
 
 #: common/filename_resolver.cpp:490
 msgid "Bad alias (duplicate name)"
@@ -4429,9 +4401,9 @@ msgid "Error loading editor"
 msgstr "Error al cargar el editor"
 
 #: common/kiway.cpp:476
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to switch language to %s"
-msgstr "No se puede escribir \"%s\""
+msgstr "No puede cambiarse el idioma a %s"
 
 #: common/languages_menu.cpp:49
 msgid "Set Language"
@@ -4439,283 +4411,239 @@ msgstr "Seleccionar idioma"
 
 #: common/layer_id.cpp:32
 msgid "F.Cu"
-msgstr ""
+msgstr "F.Cu"
 
 #: common/layer_id.cpp:33
 msgid "In1.Cu"
-msgstr ""
+msgstr "In1.Cu"
 
 #: common/layer_id.cpp:34
 msgid "In2.Cu"
-msgstr ""
+msgstr "In2.Cu"
 
 #: common/layer_id.cpp:35
 msgid "In3.Cu"
-msgstr ""
+msgstr "In3.Cu"
 
 #: common/layer_id.cpp:36
 msgid "In4.Cu"
-msgstr ""
+msgstr "In4.Cu"
 
 #: common/layer_id.cpp:37
 msgid "In5.Cu"
-msgstr ""
+msgstr "In5.Cu"
 
 #: common/layer_id.cpp:38
 msgid "In6.Cu"
-msgstr ""
+msgstr "In6.Cu"
 
 #: common/layer_id.cpp:39
 msgid "In7.Cu"
-msgstr ""
+msgstr "In7.Cu"
 
 #: common/layer_id.cpp:40
 msgid "In8.Cu"
-msgstr ""
+msgstr "In8.Cu"
 
 #: common/layer_id.cpp:41
 msgid "In9.Cu"
-msgstr ""
+msgstr "In9.Cu"
 
 #: common/layer_id.cpp:42
-#, fuzzy
 msgid "In10.Cu"
-msgstr "In10"
+msgstr "In10.Cu"
 
 #: common/layer_id.cpp:43
-#, fuzzy
 msgid "In11.Cu"
-msgstr "In11"
+msgstr "In11.Cu"
 
 #: common/layer_id.cpp:44
-#, fuzzy
 msgid "In12.Cu"
-msgstr "In12"
+msgstr "In12.Cu"
 
 #: common/layer_id.cpp:45
-#, fuzzy
 msgid "In13.Cu"
-msgstr "In13"
+msgstr "In13.Cu"
 
 #: common/layer_id.cpp:46
-#, fuzzy
 msgid "In14.Cu"
-msgstr "In14"
+msgstr "In14.Cu"
 
 #: common/layer_id.cpp:47
-#, fuzzy
 msgid "In15.Cu"
-msgstr "In15"
+msgstr "In15.Cu"
 
 #: common/layer_id.cpp:48
-#, fuzzy
 msgid "In16.Cu"
-msgstr "In16"
+msgstr "In16.Cu"
 
 #: common/layer_id.cpp:49
-#, fuzzy
 msgid "In17.Cu"
-msgstr "In17"
+msgstr "In17.Cu"
 
 #: common/layer_id.cpp:50
-#, fuzzy
 msgid "In18.Cu"
-msgstr "In18"
+msgstr "In18.Cu"
 
 #: common/layer_id.cpp:51
-#, fuzzy
 msgid "In19.Cu"
-msgstr "In19"
+msgstr "In19.Cu"
 
 #: common/layer_id.cpp:52
-#, fuzzy
 msgid "In20.Cu"
-msgstr "In20"
+msgstr "In20.Cu"
 
 #: common/layer_id.cpp:53
-#, fuzzy
 msgid "In21.Cu"
-msgstr "In21"
+msgstr "In21.Cu"
 
 #: common/layer_id.cpp:54
-#, fuzzy
 msgid "In22.Cu"
-msgstr "In22"
+msgstr "In22.Cu"
 
 #: common/layer_id.cpp:55
-#, fuzzy
 msgid "In23.Cu"
-msgstr "In23"
+msgstr "In23.Cu"
 
 #: common/layer_id.cpp:56
-#, fuzzy
 msgid "In24.Cu"
-msgstr "In24"
+msgstr "In24.Cu"
 
 #: common/layer_id.cpp:57
-#, fuzzy
 msgid "In25.Cu"
-msgstr "In25"
+msgstr "In25.Cu"
 
 #: common/layer_id.cpp:58
-#, fuzzy
 msgid "In26.Cu"
-msgstr "In26"
+msgstr "In26.Cu"
 
 #: common/layer_id.cpp:59
-#, fuzzy
 msgid "In27.Cu"
-msgstr "In27"
+msgstr "In27.Cu"
 
 #: common/layer_id.cpp:60
-#, fuzzy
 msgid "In28.Cu"
-msgstr "In28"
+msgstr "In28.Cu"
 
 #: common/layer_id.cpp:61
-#, fuzzy
 msgid "In29.Cu"
-msgstr "In29"
+msgstr "In29.Cu"
 
 #: common/layer_id.cpp:62
-#, fuzzy
 msgid "In30.Cu"
-msgstr "In30"
+msgstr "In30.Cu"
 
 #: common/layer_id.cpp:63
 msgid "B.Cu"
-msgstr ""
+msgstr "B.Cu"
 
 #: common/layer_id.cpp:66
-#, fuzzy
 msgid "B.Adhesive"
-msgstr "Adhes  Cmp"
+msgstr "B.Adhesive"
 
 #: common/layer_id.cpp:67
-#, fuzzy
 msgid "F.Adhesive"
-msgstr "Adhes  Cmp"
+msgstr "F.Adhesive"
 
 #: common/layer_id.cpp:68
-#, fuzzy
 msgid "B.Paste"
-msgstr "Pegar"
+msgstr "B.Paste"
 
 #: common/layer_id.cpp:69
-#, fuzzy
 msgid "F.Paste"
-msgstr "Pegar"
+msgstr "F.Paste"
 
 #: common/layer_id.cpp:70
-#, fuzzy
 msgid "B.Silkscreen"
-msgstr "Serigrafía"
+msgstr "B.Silkscreen"
 
 #: common/layer_id.cpp:71
-#, fuzzy
 msgid "F.Silkscreen"
-msgstr "Serigrafía"
+msgstr "F.Silkscreen"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
-msgstr ""
+msgstr "B.Mask"
 
 #: common/layer_id.cpp:73
 msgid "F.Mask"
-msgstr ""
+msgstr "F.Mask"
 
 #: common/layer_id.cpp:76
-#, fuzzy
 msgid "User.Drawings"
-msgstr "Dibujos"
+msgstr "User.Drawings"
 
 #: common/layer_id.cpp:77
-#, fuzzy
 msgid "User.Comments"
-msgstr "Comentarios "
+msgstr "User.Comments"
 
 #: common/layer_id.cpp:78
-#, fuzzy
 msgid "User.Eco1"
-msgstr "Capa de usuario Eco1"
+msgstr "User.Eco1"
 
 #: common/layer_id.cpp:79
-#, fuzzy
 msgid "User.Eco2"
-msgstr "Utilizar capa Eco2"
+msgstr "User.Eco2"
 
 #: common/layer_id.cpp:80
-#, fuzzy
 msgid "Edge.Cuts"
-msgstr "Contornos:"
+msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:679
-#, fuzzy
 msgid "Margin"
-msgstr "Margin_later"
+msgstr "Margen"
 
 #: common/layer_id.cpp:84
-#, fuzzy
 msgid "F.Courtyard"
-msgstr "Solapamiento de áreas"
+msgstr "F.Courtyard"
 
 #: common/layer_id.cpp:85
-#, fuzzy
 msgid "B.Courtyard"
-msgstr "Solapamiento de áreas"
+msgstr "B.Courtyard"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
-msgstr ""
+msgstr "F.Fab"
 
 #: common/layer_id.cpp:87
 msgid "B.Fab"
-msgstr ""
+msgstr "B.Fab"
 
 #: common/layer_id.cpp:90
-#, fuzzy
 msgid "User.1"
-msgstr "Usuario"
+msgstr "User.1"
 
 #: common/layer_id.cpp:91
-#, fuzzy
 msgid "User.2"
-msgstr "Usuario"
+msgstr "User.2"
 
 #: common/layer_id.cpp:92
-#, fuzzy
 msgid "User.3"
-msgstr "Usuario"
+msgstr "User.3"
 
 #: common/layer_id.cpp:93
-#, fuzzy
 msgid "User.4"
-msgstr "Usuario"
+msgstr "User.4"
 
 #: common/layer_id.cpp:94
-#, fuzzy
 msgid "User.5"
-msgstr "Usuario"
+msgstr "User.5"
 
 #: common/layer_id.cpp:95
-#, fuzzy
 msgid "User.6"
-msgstr "Usuario"
+msgstr "User.6"
 
 #: common/layer_id.cpp:96
-#, fuzzy
 msgid "User.7"
-msgstr "Usuario"
+msgstr "User.7"
 
 #: common/layer_id.cpp:97
-#, fuzzy
 msgid "User.8"
-msgstr "Usuario"
+msgstr "User.8"
 
 #: common/layer_id.cpp:98
-#, fuzzy
 msgid "User.9"
-msgstr "Usuario"
+msgstr "User.9"
 
 #: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:663
 msgid "Rescue"
@@ -4926,9 +4854,8 @@ msgid "Micro Via"
 msgstr "Microvía"
 
 #: common/layer_id.cpp:157
-#, fuzzy
 msgid "Via Holes"
-msgstr "Mostrar agujeros de Vias"
+msgstr "Orificios de vía"
 
 #: common/layer_id.cpp:158
 msgid "Non Plated Holes"
@@ -4955,7 +4882,7 @@ msgstr "Errores de DRC"
 
 #: common/layer_id.cpp:163 pcbnew/widgets/appearance_controls.cpp:351
 msgid "DRC Exclusions"
-msgstr ""
+msgstr "Exclusiones DRC"
 
 #: common/layer_id.cpp:164
 #, fuzzy
