@@ -48,6 +48,8 @@ class SCH_PIN : public SCH_ITEM
 public:
     SCH_PIN( LIB_PIN* aLibPin, SCH_COMPONENT* aParentComponent );
 
+    SCH_PIN( SCH_COMPONENT* aParentComponent, const wxString& aNumber, const wxString& aAlt );
+
     SCH_PIN( const SCH_PIN& aPin );
 
     SCH_PIN& operator=( const SCH_PIN& aPin );

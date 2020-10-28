@@ -2286,17 +2286,24 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
         case T_pin:
         {
-            SCH_PIN* pin = new SCH_PIN( nullptr, symbol.get() );
+            // Read an alternate pin designation
+            wxString number;
+            wxString alt;
 
             NeedSYMBOL();
-            pin->SetNumber( FromUTF8() );
+            number = FromUTF8();
+
+            token = NextTok();
+
+            if( token != T_LEFT )
+                Expecting( T_LEFT );
 
             token = NextTok();
 
             if( token == T_alternate )
             {
                 NeedSYMBOL();
-                pin->SetAlt( FromUTF8() );
+                alt = FromUTF8();
                 NeedRIGHT();
             }
             else
@@ -2304,7 +2311,10 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
                 Expecting( "alternate" );
             }
 
-            symbol->GetPins().push_back( pin );
+            // Create a proxy pin to hold the alternate designation until the parent
+            // component resolves its pins.
+            symbol->GetRawPins().emplace_back( std::make_unique<SCH_PIN>( symbol.get(),
+                                                                          number, alt ) );
 
             NeedRIGHT();
         }

@@ -37,6 +37,21 @@ SCH_PIN::SCH_PIN( LIB_PIN* aLibPin, SCH_COMPONENT* aParentComponent ) :
 }
 
 
+/**
+ * Create a proxy pin from an alternate pin designation.
+ * The LIB_PIN data will be filled in when the pin is resolved (see SCH_COMPONENT::UpdatePins).
+ */
+SCH_PIN::SCH_PIN( SCH_COMPONENT* aParentComponent, const wxString& aNumber,
+                  const wxString& aAlt ) :
+    SCH_ITEM( aParentComponent, SCH_PIN_T )
+{
+    m_alt = aAlt;
+    m_number = aNumber;
+    m_libPin = nullptr;
+    m_isDangling = true;
+}
+
+
 SCH_PIN::SCH_PIN( const SCH_PIN& aPin ) :
         SCH_ITEM( aPin )
 {
