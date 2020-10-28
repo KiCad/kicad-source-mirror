@@ -609,7 +609,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
 
         for( const RefDesInfo& mod : BadRefDes )
         {
-            badrefdes += wxString::Format( _( "\nRefDes: %s Module: %s:%s at %s on PCB." ),
+            badrefdes += wxString::Format( _( "\nRefDes: %s Footprint: %s:%s at %s on PCB." ),
                                            mod.RefDesString,
                                            mod.FPID.GetLibNickname().wx_str(),
                                            mod.FPID.GetLibItemName().wx_str(),
@@ -934,6 +934,6 @@ RefDesChange* DIALOG_BOARD_REANNOTATE::GetNewRefDes( MODULE* aMod )
         if( aMod->m_Uuid == m_ChangeArray[i].Uuid )
             return ( &m_ChangeArray[i] );
 
-    ShowReport( _( "Module not found in changelist" ) + wxS( " " )+ aMod->GetReference(), RPT_SEVERITY_ERROR );
+    ShowReport( _( "Footprint not found in changelist" ) + wxS( " " )+ aMod->GetReference(), RPT_SEVERITY_ERROR );
     return nullptr; //Should never happen
 }
