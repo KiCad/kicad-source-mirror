@@ -469,22 +469,25 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
 
         found = true;
 
-        wxDataViewItem      markerItem = ToItem( m_tree[i] );
-        wxDataViewItemArray childItems;
-        wxDataViewItem      parentItem = ToItem( m_tree[i]->m_Parent );
-
-        for( RC_TREE_NODE* child : m_tree[i]->m_Children )
+        if( i < (int) m_tree.size() )   // Careful; tree is truncated for large datasets
         {
-            childItems.push_back( ToItem( child ) );
-            delete child;
+            wxDataViewItem      markerItem = ToItem( m_tree[i] );
+            wxDataViewItemArray childItems;
+            wxDataViewItem      parentItem = ToItem( m_tree[i]->m_Parent );
+
+            for( RC_TREE_NODE* child : m_tree[i]->m_Children )
+            {
+                childItems.push_back( ToItem( child ) );
+                delete child;
+            }
+
+            m_tree[i]->m_Children.clear();
+            ItemsDeleted( markerItem, childItems );
+
+            delete m_tree[i];
+            m_tree.erase( m_tree.begin() + i );
+            ItemDeleted( parentItem, markerItem );
         }
-
-        m_tree[i]->m_Children.clear();
-        ItemsDeleted( markerItem, childItems );
-
-        delete m_tree[i];
-        m_tree.erase( m_tree.begin() + i );
-        ItemDeleted( parentItem, markerItem );
 
         // Only deep delete the current item here; others will be done through the
         // DeleteAllItems() call below, which is more efficient.
