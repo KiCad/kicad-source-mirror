@@ -70,7 +70,7 @@ public:
     int GetNumPhases() const override;
 
 private:
-    bool testHoleAgainst( BOARD_ITEM* aItem, SHAPE_CIRCLE* aHole, BOARD_ITEM* aOther );
+    bool testHoleAgainstHole( BOARD_ITEM* aItem, SHAPE_CIRCLE* aHole, BOARD_ITEM* aOther );
 
     BOARD*    m_board;
     DRC_RTREE m_holeTree;
@@ -187,7 +187,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
                 },
                 [&]( BOARD_ITEM* other, int ) -> bool
                 {
-                    return testHoleAgainst( via, holeShape.get(), other );
+                    return testHoleAgainstHole( via, holeShape.get(), other );
                 },
                 m_largestClearance );
 
@@ -213,7 +213,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
                     },
                     [&]( BOARD_ITEM* other, int ) -> bool
                     {
-                        return testHoleAgainst( pad, holeShape.get(), other );
+                        return testHoleAgainstHole( pad, holeShape.get(), other );
                     },
                     m_largestClearance );
 
@@ -227,8 +227,8 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 }
 
 
-bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoleAgainst( BOARD_ITEM* aItem, SHAPE_CIRCLE* aHole,
-                                                        BOARD_ITEM* aOther )
+bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoleAgainstHole( BOARD_ITEM* aItem, SHAPE_CIRCLE* aHole,
+                                                            BOARD_ITEM* aOther )
 {
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE ) )
         return false;

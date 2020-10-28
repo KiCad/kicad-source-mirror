@@ -220,8 +220,6 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksA
     }
 
     commit.Push( _( "DRC" ), false );
-    aProgressReporter->AdvancePhase( _( "Formatting results..." ) );
-    wxSafeYield();
 
     m_drcRunning = false;
 

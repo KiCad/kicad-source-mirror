@@ -81,11 +81,12 @@ public:
     int GetNumPhases() const override;
 
 private:
-    bool testTrackAgainst( TRACK* track, SHAPE* trackShape, PCB_LAYER_ID layer, BOARD_ITEM* other );
+    bool testTrackAgainstItem( TRACK* track, SHAPE* trackShape, PCB_LAYER_ID layer,
+                               BOARD_ITEM* other );
 
     void testTrackClearances();
 
-    bool testPadAgainst( D_PAD* pad, SHAPE* padShape, PCB_LAYER_ID layer, BOARD_ITEM* other );
+    bool testPadAgainstItem( D_PAD* pad, SHAPE* padShape, PCB_LAYER_ID layer, BOARD_ITEM* other );
 
     void testPadClearances();
 
@@ -204,8 +205,9 @@ static std::shared_ptr<SHAPE> getShape( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
 }
 
 
-bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainst( TRACK* track, SHAPE* trackShape,
-                                                           PCB_LAYER_ID layer, BOARD_ITEM* other )
+bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( TRACK* track, SHAPE* trackShape,
+                                                               PCB_LAYER_ID layer,
+                                                               BOARD_ITEM* other )
 {
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
         return false;
@@ -404,7 +406,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                     },
                     [&]( BOARD_ITEM* other, int ) -> bool
                     {
-                        return testTrackAgainst( track, trackShape.get(), layer, other );
+                        return testTrackAgainstItem( track, trackShape.get(), layer, other );
                     },
                     m_largestClearance );
 
@@ -417,8 +419,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 }
 
 
-bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainst( D_PAD* pad, SHAPE* padShape,
-                                                         PCB_LAYER_ID layer, BOARD_ITEM* other )
+bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( D_PAD* pad, SHAPE* padShape,
+                                                             PCB_LAYER_ID layer,
+                                                             BOARD_ITEM* other )
 {
     bool testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
     bool testShorting = !m_drcEngine->IsErrorLimitExceeded( DRCE_SHORTING_ITEMS );
@@ -561,7 +564,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                         },
                         [&]( BOARD_ITEM* other, int ) -> bool
                         {
-                            return testPadAgainst( pad, padShape.get(), layer, other );
+                            return testPadAgainstItem( pad, padShape.get(), layer, other );
                         },
                         m_largestClearance );
             }
@@ -581,8 +584,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
 
     if( m_board->GetBoardPolygonOutlines( buffer ) )
         boardOutline = &buffer;
-
-    // Test copper areas for valid netcodes -> fixme, goes to connectivity checks
 
     for( int layer_id = F_Cu; layer_id <= B_Cu; ++layer_id )
     {
