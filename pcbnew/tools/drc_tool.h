@@ -115,8 +115,8 @@ public:
     /**
      * Run the DRC tests.
      */
-    void RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksAgainstZones,
-                   bool aRefillZones, bool aReportAllTrackErrors, bool aTestFootprints );
+    void RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones,
+                   bool aReportAllTrackErrors, bool aTestFootprints );
 };
 
 

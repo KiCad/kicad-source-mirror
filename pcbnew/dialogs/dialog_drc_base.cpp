@@ -24,15 +24,13 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxVERTICAL );
 
+	m_cbRefillZones = new wxCheckBox( this, wxID_ANY, _("Refill all zones before performing DRC"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_cbRefillZones, 0, wxALL, 5 );
+
 	m_cbReportAllTrackErrors = new wxCheckBox( this, wxID_ANY, _("Report all errors for each track"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbReportAllTrackErrors->SetToolTip( _("If selected, all DRC violations for tracks will be reported.  This can be slow for complicated designs.\n\nIf unselected, only the first DRC violation will be reported for each track connection.") );
 
-	bSizer12->Add( m_cbReportAllTrackErrors, 0, wxALL, 5 );
-
-	m_cbReportTracksToZonesErrors = new wxCheckBox( this, wxID_ANY, _("Test tracks against zone fills (slow)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbReportTracksToZonesErrors->SetToolTip( _("If selected, tracks will be tested against copper zones. \nIf copper zones are up to date, this test should be not needed.\n\nThis test can be *very slow* for complicated designs.") );
-
-	bSizer12->Add( m_cbReportTracksToZonesErrors, 0, wxBOTTOM|wxLEFT, 5 );
+	bSizer12->Add( m_cbReportAllTrackErrors, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerOptions->Add( bSizer12, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -40,11 +38,8 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bSizerOptSettings;
 	bSizerOptSettings = new wxBoxSizer( wxVERTICAL );
 
-	m_cbRefillZones = new wxCheckBox( this, wxID_ANY, _("Refill all zones before performing DRC"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerOptSettings->Add( m_cbRefillZones, 0, wxALL, 5 );
-
 	m_cbTestFootprints = new wxCheckBox( this, wxID_ANY, _("Test for parity between PCB and schematic"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerOptSettings->Add( m_cbTestFootprints, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerOptSettings->Add( m_cbTestFootprints, 0, wxALL, 5 );
 
 
 	bSizerOptions->Add( bSizerOptSettings, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );

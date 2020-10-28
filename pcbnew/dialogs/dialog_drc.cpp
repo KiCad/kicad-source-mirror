@@ -98,7 +98,6 @@ DIALOG_DRC::~DIALOG_DRC()
 
     PCBNEW_SETTINGS* settings = m_brdEditor->GetPcbNewSettings();
     settings->m_DrcDialog.refill_zones          = m_cbRefillZones->GetValue();
-    settings->m_DrcDialog.test_track_to_zone    = m_cbReportTracksToZonesErrors->GetValue();
     settings->m_DrcDialog.test_all_track_errors = m_cbReportAllTrackErrors->GetValue();
 
     if( !Kiface().IsSingle() )
@@ -134,7 +133,6 @@ void DIALOG_DRC::initValues()
     auto cfg = m_brdEditor->GetPcbNewSettings();
 
     m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );
-    m_cbReportTracksToZonesErrors->SetValue( cfg->m_DrcDialog.test_track_to_zone );
     m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_all_track_errors );
 
     if( Kiface().IsSingle() )
@@ -196,7 +194,6 @@ void DIALOG_DRC::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 {
     DRC_TOOL* drcTool = m_brdEditor->GetToolManager()->GetTool<DRC_TOOL>();
-    bool      testTracksAgainstZones = m_cbReportTracksToZonesErrors->GetValue();
     bool      refillZones            = m_cbRefillZones->GetValue();
     bool      reportAllTrackErrors   = m_cbReportAllTrackErrors->GetValue();
     bool      testFootprints         = m_cbTestFootprints->GetValue();
@@ -247,8 +244,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     m_DeleteAllMarkersButton->Enable( false );
     m_saveReport->Enable( false );
 
-    drcTool->RunTests( this, testTracksAgainstZones, refillZones, reportAllTrackErrors,
-                       testFootprints );
+    drcTool->RunTests( this, refillZones, reportAllTrackErrors, testFootprints );
 
     if( m_cancelled )
         m_messages->Report( _( "-------- DRC cancelled by user.<br><br>" ) );

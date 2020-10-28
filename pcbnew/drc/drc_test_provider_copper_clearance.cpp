@@ -48,8 +48,6 @@
     - DRCE_TRACKS_CROSSING
     - DRCE_ZONES_INTERSECT
     - DRCE_SHORTING_ITEMS
-
-    TODO: improve zone clearance check (super slow)
 */
 
 class DRC_TEST_PROVIDER_COPPER_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
@@ -92,11 +90,15 @@ private:
 
     void testZones();
 
-    void testTrackAgainstZones( TRACK* aTrack, PCB_LAYER_ID aLayer );
+    void testItemAgainstZones( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
 
 private:
     DRC_RTREE m_copperTree;
     int       m_drcEpsilon;
+
+    std::vector<ZONE_CONTAINER*>                          m_zones;
+    std::map<ZONE_CONTAINER*, std::unique_ptr<DRC_RTREE>> m_zoneTrees;
+
 };
 
 
@@ -118,12 +120,29 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
     m_drcEpsilon = m_board->GetDesignSettings().GetDRCEpsilon();
 
+    m_zones.clear();
+
+    for( ZONE_CONTAINER* zone : m_board->Zones() )
+    {
+        if( !zone->GetIsRuleArea() )
+            m_zones.push_back( zone );
+    }
+
+    for( MODULE* footprint : m_board->Modules() )
+    {
+        for( ZONE_CONTAINER* zone : footprint->Zones() )
+        {
+            if( !zone->GetIsRuleArea() )
+                m_zones.push_back( zone );
+        }
+    }
+
     reportAux( "Worst clearance : %d nm", m_largestClearance );
 
     // This is the number of tests between 2 calls to the progress bar
-    const size_t delta = 50;
-    size_t       count = 0;
-    size_t       ii = 0;
+    size_t delta = 50;
+    size_t count = 0;
+    size_t ii = 0;
 
     auto countItems =
             [&]( BOARD_ITEM* item ) -> bool
@@ -159,7 +178,24 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
     forEachGeometryItem( itemTypes, LSET::AllCuMask(), countItems );
     forEachGeometryItem( itemTypes, LSET::AllCuMask(), addToCopperTree );
 
-    reportAux( "Testing %d copper items...", count );
+    if( !reportPhase( _( "Tessellating copper zones..." ) ) )
+        return false;
+
+    delta = 5;
+    ii = 0;
+    m_zoneTrees.clear();
+
+    for( ZONE_CONTAINER* zone : m_zones )
+    {
+        if( !reportProgress( ii++, m_zones.size(), delta ) )
+            break;
+
+        zone->CacheBoundingBox();
+        m_zoneTrees[ zone ] = std::make_unique<DRC_RTREE>();
+        m_zoneTrees[ zone ]->insert( zone );
+    }
+
+    reportAux( "Testing %d copper items and %d zones...", count, m_zones.size() );
 
     if( !reportPhase( _( "Checking track & via clearances..." ) ) )
         return false;
@@ -262,112 +298,46 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( TRACK* track, SHA
 }
 
 
-void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstZones( TRACK* aTrack, PCB_LAYER_ID aLayer )
+void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem,
+                                                               PCB_LAYER_ID aLayer )
 {
-    BOARD_DESIGN_SETTINGS&  bds = m_board->GetDesignSettings();
-
-    SHAPE_SEGMENT refSeg( aTrack->GetStart(), aTrack->GetEnd(), aTrack->GetWidth() );
-    EDA_RECT      refSegInflatedBB = aTrack->GetBoundingBox();
-    int           refSegWidth = aTrack->GetWidth();
-
-    refSegInflatedBB.Inflate( m_largestClearance );
-
-    // Can be *very* time consuming.
-
-    if( ( aTrack->Type() != PCB_VIA_T
-             || static_cast<VIA*>( aTrack )->FlashLayer( aLayer )
-             || static_cast<VIA*>( aTrack )->GetDrill() > 0 ) )
+    for( ZONE_CONTAINER* zone : m_zones )
     {
-        for( ZONE_CONTAINER* zone : m_board->Zones() )
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
+            break;
+
+        if( !zone->GetLayerSet().test( aLayer ) )
+            continue;
+
+        if( zone->GetNetCode() && aItem->IsConnected() )
         {
-            if( m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
-                break;
-
-            if( !zone->GetLayerSet().test( aLayer ) || zone->GetIsRuleArea() )
+            if( zone->GetNetCode() == static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode() )
                 continue;
+        }
 
-            if( zone->GetNetCode() && zone->GetNetCode() == aTrack->GetNetCode() )
-                continue;
-
-            if( zone->GetFilledPolysList( aLayer ).IsEmpty() )
-                continue;
-
-            if( !refSegInflatedBB.Intersects( zone->GetCachedBoundingBox() ) )
-                continue;
-
-            int halfWidth = refSegWidth / 2;
-
-            if( aTrack->Type() == PCB_VIA_T )
-            {
-                VIA* refVia = static_cast<VIA*>( aTrack );
-
-                if( !refVia->FlashLayer( aLayer ) )
-                    halfWidth = refVia->GetDrill() / 2 + bds.GetHolePlatingThickness();
-            }
-            else if ( aTrack->Type() == PCB_ARC_T )
-            {
-                // We're going to do a collision with the arc "spine" using an increased
-                // clearance to proxy for both the clearance and the arc track width.  We
-                // therefore need to subtract the polygonization error from the track width
-                // so that it is all "inside" the track.
-                halfWidth -= bds.m_MaxError / 2;
-            }
-
+        if( aItem->GetBoundingBox().Intersects( zone->GetCachedBoundingBox() ) )
+        {
             auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                                              aTrack, zone, aLayer );
-            int minClearance = constraint.GetValue().Min();
-            int allowedDist  = minClearance + halfWidth - bds.GetDRCEpsilon();
+                                                              aItem, zone, aLayer );
+            int        clearance = constraint.GetValue().Min();
+            int        actual;
+            VECTOR2I   pos;
+            DRC_RTREE* zoneTree = m_zoneTrees[ zone ].get();
 
-            const SHAPE_POLY_SET& zonePoly = zone->GetFilledPolysList( aLayer );
-            int                   actual = INT_MAX;
-            VECTOR2I              location;
-
-            accountCheck( constraint );
-
-            if( aTrack->Type() == PCB_ARC_T )
+            if( zoneTree->QueryColliding( aItem, aLayer, clearance - m_drcEpsilon, &actual, &pos ) )
             {
-                std::shared_ptr<SHAPE> refShape = aTrack->GetEffectiveShape();
-                SHAPE_ARC*             refArc = dynamic_cast<SHAPE_ARC*>( refShape.get() );
-                SHAPE_LINE_CHAIN       refArcSegs = refArc->ConvertToPolyline( bds.m_MaxError );
-
-                for( int i = 0; i < refArcSegs.SegmentCount(); ++i )
-                {
-                    SEG      refArcSeg = refArcSegs.Segment( i );
-                    int      segActual;
-                    VECTOR2I segLocation;
-
-                    if( zonePoly.Collide( refArcSeg, allowedDist, &segActual, &segLocation ) )
-                    {
-                        if( segActual < actual )
-                        {
-                            actual = segActual;
-                            location = segLocation;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                SEG testSeg( aTrack->GetStart(), aTrack->GetEnd() );
-
-                zonePoly.Collide( testSeg, allowedDist, &actual, &location );
-            }
-
-            if( actual != INT_MAX )
-            {
-                actual = std::max( 0, actual - halfWidth );
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
 
                 m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
                               constraint.GetName(),
-                              MessageTextFromValue( userUnits(), minClearance ),
+                              MessageTextFromValue( userUnits(), clearance ),
                               MessageTextFromValue( userUnits(), actual ) );
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
-                drce->SetItems( aTrack, zone );
+                drce->SetItems( aItem, zone );
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drce, (wxPoint) location );
+                reportViolation( drce, (wxPoint) pos );
             }
         }
     }
@@ -410,8 +380,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                     },
                     m_largestClearance );
 
-            if( m_drcEngine->GetTestTracksAgainstZones() )
-                testTrackAgainstZones( track, layer );
+            testItemAgainstZones( track, layer );
         }
 
         track->SetFlags( SKIP_STRUCT );
@@ -567,6 +536,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                             return testPadAgainstItem( pad, padShape.get(), layer, other );
                         },
                         m_largestClearance );
+
+                testItemAgainstZones( pad, layer );
             }
 
             pad->SetFlags( SKIP_STRUCT );
@@ -585,49 +556,38 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
     if( m_board->GetBoardPolygonOutlines( buffer ) )
         boardOutline = &buffer;
 
-    std::vector<ZONE_CONTAINER*> zones;
-
-    for( ZONE_CONTAINER* zone : m_board->Zones() )
-        zones.push_back( zone );
-
-    for( MODULE* footprint : m_board->Modules() )
-    {
-        for( ZONE_CONTAINER* zone : footprint->Zones() )
-            zones.push_back( zone );
-    }
-
     for( int layer_id = F_Cu; layer_id <= B_Cu; ++layer_id )
     {
         PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( layer_id );
         std::vector<SHAPE_POLY_SET> smoothed_polys;
-        smoothed_polys.resize( zones.size() );
+        smoothed_polys.resize( m_zones.size() );
 
         // Skip over layers not used on the current board
         if( !m_board->IsLayerEnabled( layer ) )
             continue;
 
-        for( size_t ii = 0; ii < zones.size(); ii++ )
+        for( size_t ii = 0; ii < m_zones.size(); ii++ )
         {
-            if( zones[ii]->IsOnLayer( layer ) )
-                zones[ii]->BuildSmoothedPoly( smoothed_polys[ii], layer, boardOutline );
+            if( m_zones[ii]->IsOnLayer( layer ) )
+                m_zones[ii]->BuildSmoothedPoly( smoothed_polys[ii], layer, boardOutline );
         }
 
         // iterate through all areas
-        for( size_t ia = 0; ia < zones.size(); ia++ )
+        for( size_t ia = 0; ia < m_zones.size(); ia++ )
         {
-            if( !reportProgress( layer_id * zones.size() + ia, B_Cu * zones.size(), delta ) )
+            if( !reportProgress( layer_id * m_zones.size() + ia, B_Cu * m_zones.size(), delta ) )
                 break;
 
-            ZONE_CONTAINER* zoneRef = zones[ia];
+            ZONE_CONTAINER* zoneRef = m_zones[ia];
 
             if( !zoneRef->IsOnLayer( layer ) )
                 continue;
 
             // If we are testing a single zone, then iterate through all other zones
             // Otherwise, we have already tested the zone combination
-            for( size_t ia2 = ia + 1; ia2 < zones.size(); ia2++ )
+            for( size_t ia2 = ia + 1; ia2 < m_zones.size(); ia2++ )
             {
-                ZONE_CONTAINER* zoneToTest = zones[ia2];
+                ZONE_CONTAINER* zoneToTest = m_zones[ia2];
 
                 if( zoneRef == zoneToTest )
                     continue;
@@ -772,7 +732,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
 
 int DRC_TEST_PROVIDER_COPPER_CLEARANCE::GetNumPhases() const
 {
-    return 4;
+    return 5;
 }
 
 

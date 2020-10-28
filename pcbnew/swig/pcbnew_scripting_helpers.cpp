@@ -405,7 +405,7 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
                 }
             } );
 
-    engine->RunTests( aUnits, aTestTracksAgainstZones, aReportAllTrackErrors, false );
+    engine->RunTests( aUnits, aReportAllTrackErrors, false );
     engine->ClearViolationHandler();
 
     // TODO: Unify this with DIALOG_DRC::writeReport

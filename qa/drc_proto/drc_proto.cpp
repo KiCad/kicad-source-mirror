@@ -132,6 +132,6 @@ int runDRCProto( PROJECT_CONTEXT project, std::shared_ptr<KIGFX::VIEW_OVERLAY> a
           //  provider->Enable(false);
     }
 
-    drcEngine->RunTests();
+    drcEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
     return 0;
 }

@@ -309,7 +309,7 @@ void DoCourtyardInvalidTest( const COURTYARD_INVALID_CASE& aCase,
                 }
             } );
 
-    drcEngine.RunTests();
+    drcEngine.RunTests( EDA_UNITS::MILLIMETRES, true, false );
 
     CheckInvalidsMatchExpected( *board, markers, aCase.m_exp_errors );
 }

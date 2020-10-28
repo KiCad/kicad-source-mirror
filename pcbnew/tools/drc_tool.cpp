@@ -139,8 +139,8 @@ void DRC_TOOL::DestroyDRCDialog()
 }
 
 
-void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksAgainstZones,
-                         bool aRefillZones, bool aReportAllTrackErrors, bool aTestFootprints )
+void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones,
+                         bool aReportAllTrackErrors, bool aTestFootprints )
 {
     // One at a time, please.
     // Note that the main GUI entry points to get here are blocked, so this is really an
@@ -205,8 +205,7 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksA
                 }
             } );
 
-    m_drcEngine->RunTests( m_editFrame->GetUserUnits(), aTestTracksAgainstZones,
-                           aReportAllTrackErrors, aTestFootprints );
+    m_drcEngine->RunTests( m_editFrame->GetUserUnits(), aReportAllTrackErrors, aTestFootprints );
 
     m_drcEngine->SetProgressReporter( nullptr );
     m_drcEngine->ClearViolationHandler();

@@ -168,6 +168,11 @@ public:
         return count > 0;
     }
 
+    /**
+     * This is a fast test which essentially does bounding-box overlap given a worst-case
+     * clearance.  It's used when looking up the specific item-to-item clearance might be
+     * expensive and should be deferred till we know we have a possible hit.
+     */
     int QueryColliding( BOARD_ITEM* aRefItem,
                         PCB_LAYER_ID aRefLayer,
                         PCB_LAYER_ID aTargetLayer,
@@ -216,6 +221,60 @@ public:
 
         this->m_tree[aTargetLayer]->Search( min, max, visit );
         return count;
+    }
+
+    /**
+     * This one is for tessellated items.  (All shapes in the tree will be from a single
+     * BOARD_ITEM.)
+     * It checks all items in the bbox overlap to find the minimal actual distance and
+     * position.
+     */
+    bool QueryColliding( BOARD_ITEM* aRefItem, PCB_LAYER_ID aLayer,
+                         int aClearance, int* aActual, VECTOR2I* aPos ) const
+    {
+        EDA_RECT box = aRefItem->GetBoundingBox();
+        box.Inflate( aClearance );
+
+        int min[2] = { box.GetX(),         box.GetY() };
+        int max[2] = { box.GetRight(),     box.GetBottom() };
+
+        std::shared_ptr<SHAPE> refShape = aRefItem->GetEffectiveShape( aLayer );
+
+        bool     collision = false;
+        int      actual = INT_MAX;
+        VECTOR2I pos;
+
+        auto visit =
+                [&]( ITEM_WITH_SHAPE* aItem ) -> bool
+                {
+                    int      curActual;
+                    VECTOR2I curPos;
+
+                    if( refShape->Collide( aItem->shape, aClearance, &curActual, &curPos ) )
+                    {
+                        collision = true;
+
+                        if( curActual < actual )
+                        {
+                            actual = curActual;
+                            pos = curPos;
+                        }
+                    }
+
+                    return true;
+                };
+
+        this->m_tree[aLayer]->Search( min, max, visit );
+
+        if( collision )
+        {
+            *aActual = std::max( 0, actual );
+            *aPos = pos;
+
+            return true;
+        }
+
+        return false;
     }
 
     typedef std::pair<PCB_LAYER_ID, PCB_LAYER_ID> LAYER_PAIR;

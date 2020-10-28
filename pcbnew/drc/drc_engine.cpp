@@ -55,7 +55,6 @@ DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
     m_schematicNetlist( nullptr ),
     m_rulesValid( false ),
     m_userUnits( EDA_UNITS::MILLIMETRES ),
-    m_testTracksAgainstZones( false ),
     m_reportAllTrackErrors( false ),
     m_testFootprints( false ),
     m_reporter( nullptr ),
@@ -629,13 +628,11 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
 }
 
 
-void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aTestTracksAgainstZones,
-                           bool aReportAllTrackErrors, bool aTestFootprints )
+void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aTestFootprints )
 {
     m_userUnits = aUnits;
 
     // Note: set these first.  The phase counts may be dependent on some of them.
-    m_testTracksAgainstZones = aTestTracksAgainstZones;
     m_reportAllTrackErrors = aReportAllTrackErrors;
     m_testFootprints = aTestFootprints;
 

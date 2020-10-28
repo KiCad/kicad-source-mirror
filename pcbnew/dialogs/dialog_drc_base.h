@@ -48,9 +48,8 @@ class DIALOG_DRC_BASE : public DIALOG_SHIM
 		wxPanel* m_panelUnconnectedItems;
 
 	protected:
-		wxCheckBox* m_cbReportAllTrackErrors;
-		wxCheckBox* m_cbReportTracksToZonesErrors;
 		wxCheckBox* m_cbRefillZones;
+		wxCheckBox* m_cbReportAllTrackErrors;
 		wxCheckBox* m_cbTestFootprints;
 		wxSimplebook* m_runningResultsBook;
 		wxPanel* running;

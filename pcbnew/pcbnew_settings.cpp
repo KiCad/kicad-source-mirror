@@ -206,9 +206,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "drc_dialog.refill_zones",
             &m_DrcDialog.refill_zones, false ) );
 
-    m_params.emplace_back( new PARAM<bool>( "drc_dialog.test_track_to_zone",
-            &m_DrcDialog.test_track_to_zone, false ) );
-
     m_params.emplace_back( new PARAM<bool>( "drc_dialog.test_all_track_errors",
             &m_DrcDialog.test_all_track_errors, false ) );
 
@@ -541,7 +538,6 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     aCfg->SetPath( "../.." );
 
     ret &= fromLegacy<bool>(   aCfg, "RefillZonesBeforeDrc", "drc_dialog.refill_zones" );
-    ret &= fromLegacy<bool>(   aCfg, "DrcTrackToZoneTest",   "drc_dialog.test_track_to_zone" );
     ret &= fromLegacy<bool>(   aCfg, "DrcTestFootprints",    "drc_dialog.test_footprints" );
 
     ret &= fromLegacy<bool>(   aCfg, "DrillMergePTHNPTH",   "gen_drill.merge_pth_npth" );

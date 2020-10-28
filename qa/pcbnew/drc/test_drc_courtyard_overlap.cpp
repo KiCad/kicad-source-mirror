@@ -478,7 +478,7 @@ static void DoCourtyardOverlapTest( const COURTYARD_OVERLAP_TEST_CASE& aCase,
                 }
             } );
 
-    drcEngine.RunTests();
+    drcEngine.RunTests( EDA_UNITS::MILLIMETRES, true, false );
 
     CheckCollisionsMatchExpected( *board, markers, aCase.m_collisions );
 }

@@ -140,13 +140,8 @@ public:
 
     /**
      * Runs the DRC tests.
-     * @param aUnits
-     * @param aTestTracksAgainstZones
-     * @param aReportAllTrackErrors
-     * @param aTestFootprints
      */
-    void RunTests( EDA_UNITS aUnits = EDA_UNITS::MILLIMETRES, bool aTestTracksAgainstZones = true,
-                   bool aReportAllTrackErrors = true, bool aTestFootprints = true );
+    void RunTests( EDA_UNITS aUnits,  bool aReportAllTrackErrors, bool aTestFootprints );
 
 
     bool IsErrorLimitExceeded( int error_code );
@@ -161,7 +156,6 @@ public:
     bool HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T constraintID );
 
     EDA_UNITS UserUnits() const { return m_userUnits; }
-    bool GetTestTracksAgainstZones() const { return m_testTracksAgainstZones; }
     bool GetReportAllTrackErrors() const { return m_reportAllTrackErrors; }
     bool GetTestFootprints() const { return m_testFootprints; }
 
@@ -220,7 +214,6 @@ protected:
 
     EDA_UNITS                        m_userUnits;
     std::vector<int>                 m_errorLimits;
-    bool                             m_testTracksAgainstZones;
     bool                             m_reportAllTrackErrors;
     bool                             m_testFootprints;
 
