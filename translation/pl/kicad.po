@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-28 18:37+0000\n"
+"PO-Revision-Date: 2020-10-29 15:47+0000\n"
 "Last-Translator: Mark Roszko <mark.roszko@gmail.com>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28144,9 +28144,8 @@ msgid "(%s max width %s; actual %s)"
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:75
-#, fuzzy
 msgid "Checking via diameters..."
-msgstr "Minimalny rozmiar przelotki:"
+msgstr "Sprawdzanie rozmiar przelotki..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:111
 #, c-format
@@ -29635,9 +29634,9 @@ msgid "Missing argument to '%s'"
 msgstr ""
 
 #: pcbnew/pcb_expr_evaluator.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized layer '%s'"
-msgstr "Niezdefiniowana warstwa:"
+msgstr "Nierozpoznana warstwa '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:255
 #, fuzzy
@@ -32971,9 +32970,8 @@ msgid "Width constraints: min %s max %s."
 msgstr ""
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:454
-#, fuzzy
 msgid "Via Diameter"
-msgstr "Średnica przelotki:"
+msgstr "Średnica przelotki"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:456
 #, fuzzy
@@ -32986,9 +32984,8 @@ msgid "Diameter constraints: min %s max %s."
 msgstr ""
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:488
-#, fuzzy
 msgid "Via Annular Width"
-msgstr "Szerokość impulsu:"
+msgstr "Szerokość impulsu"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:490
 #, fuzzy
@@ -33517,49 +33514,40 @@ msgid "Footprint assembly on board's back"
 msgstr "Informacje montażowe footprintu na warstwie dolnej"
 
 #: pcbnew/widgets/appearance_controls.cpp:1446
-#, fuzzy
 msgid "User defined layer 1"
-msgstr "Niezdefiniowana warstwa:"
+msgstr "Warstwa użytkownika 1"
 
 #: pcbnew/widgets/appearance_controls.cpp:1447
-#, fuzzy
 msgid "User defined layer 2"
-msgstr "Niezdefiniowana warstwa:"
+msgstr "Warstwa użytkownika 2"
 
 #: pcbnew/widgets/appearance_controls.cpp:1448
-#, fuzzy
 msgid "User defined layer 3"
-msgstr "Niezdefiniowana warstwa:"
+msgstr "Warstwa użytkownika 3"
 
 #: pcbnew/widgets/appearance_controls.cpp:1449
-#, fuzzy
 msgid "User defined layer 4"
-msgstr "Niezdefiniowana warstwa:"
+msgstr "Warstwa użytkownika 4"
 
 #: pcbnew/widgets/appearance_controls.cpp:1450
-#, fuzzy
 msgid "User defined layer 5"
-msgstr "Niezdefiniowana warstwa:"
+msgstr "Warstwa użytkownika 5"
 
 #: pcbnew/widgets/appearance_controls.cpp:1451
-#, fuzzy
 msgid "User defined layer 6"
-msgstr "Niezdefiniowana warstwa:"
+msgstr "Warstwa użytkownika 6"
 
 #: pcbnew/widgets/appearance_controls.cpp:1452
-#, fuzzy
 msgid "User defined layer 7"
-msgstr "Niezdefiniowana warstwa:"
+msgstr "Warstwa użytkownika 7"
 
 #: pcbnew/widgets/appearance_controls.cpp:1453
-#, fuzzy
 msgid "User defined layer 8"
-msgstr "Niezdefiniowana warstwa:"
+msgstr "Warstwa użytkownika 8"
 
 #: pcbnew/widgets/appearance_controls.cpp:1454
-#, fuzzy
 msgid "User defined layer 9"
-msgstr "Niezdefiniowana warstwa:"
+msgstr "Warstwa użytkownika 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1492
 msgid "Show All Copper Layers"
