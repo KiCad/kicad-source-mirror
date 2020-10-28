@@ -359,7 +359,8 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
     selToolMenu.AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
     selToolMenu.AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleComponentCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleComponentCondition
+                                                        || singleSheetCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toggleDeMorgan,   E_C::SingleSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu3 = std::make_shared<SYMBOL_UNIT_MENU>();
@@ -1260,20 +1261,29 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOrSheets );
 
     if( selection.Empty() )
         return 0;
 
-    SCH_COMPONENT* component = (SCH_COMPONENT*) selection.Front();
+    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.Front() );
 
-    if( !component->IsNew() )
-        saveCopyInUndoList( component, UNDO_REDO::CHANGED );
+    if( !item->IsNew() )
+        saveCopyInUndoList( item, UNDO_REDO::CHANGED );
 
-    component->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
+    if( item->Type() == SCH_COMPONENT_T )
+    {
+        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
+        component->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
+    }
+    else if( item->Type() == SCH_SHEET_T )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+        sheet->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
+    }
 
-    m_frame->GetScreen()->Update( component );
-    updateView( component );
+    m_frame->GetScreen()->Update( item );
+    updateView( item );
     m_frame->OnModify();
 
     if( selection.IsHover() )

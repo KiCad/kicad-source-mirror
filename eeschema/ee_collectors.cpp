@@ -71,6 +71,13 @@ const KICAD_T EE_COLLECTOR::SheetsOnly[] = {
 };
 
 
+const KICAD_T EE_COLLECTOR::ComponentsOrSheets[] = {
+    SCH_COMPONENT_T,
+    SCH_SHEET_T,
+    EOT
+};
+
+
 SEARCH_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 {
     if( aItem->Type() == LIB_PIN_T )

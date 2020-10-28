@@ -393,7 +393,7 @@ TOOL_ACTION EE_ACTIONS::editFootprint( "eeschema.InteractiveEdit.editFootprint",
 TOOL_ACTION EE_ACTIONS::autoplaceFields( "eeschema.InteractiveEdit.autoplaceFields",
         AS_GLOBAL,
         'O', LEGACY_HK_NAME( "Autoplace Fields" ),
-        _( "Autoplace Fields" ), _( "Runs the automatic placement algorithm on the symbol's fields" ),
+        _( "Autoplace Fields" ), _( "Runs the automatic placement algorithm on the symbol or sheet's fields" ),
         autoplace_fields_xpm );
 
 TOOL_ACTION EE_ACTIONS::changeSymbols( "eeschema.InteractiveEdit.changeSymbols",

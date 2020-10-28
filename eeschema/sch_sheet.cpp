@@ -497,8 +497,6 @@ int SCH_SHEET::GetPenWidth() const
 
 void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 {
-    wxASSERT_MSG( !aManual, "manual autoplacement not currently supported for sheets" );
-
     wxSize textSize = m_fields[ SHEETNAME ].GetTextSize();
     int    borderMargin = KiROUND( GetPenWidth() / 2.0 ) + 4;
     int    margin = borderMargin + KiROUND( std::max( textSize.x, textSize.y ) * 0.5 );
