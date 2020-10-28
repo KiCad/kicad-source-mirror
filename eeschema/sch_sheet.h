@@ -225,13 +225,10 @@ class SCH_SHEET : public SCH_ITEM
                                 // complex hierarchies multiple sheets can share a common screen.
 
     std::vector<SCH_SHEET_PIN*> m_pins;               // The list of sheet connection points.
-
     std::vector<SCH_FIELD>      m_fields;
-    FIELDS_AUTOPLACED           m_fieldsAutoplaced;   // Indicates status of field autoplacement.
 
     wxPoint                     m_pos;                // The position of the sheet.
     wxSize                      m_size;               // The size of the sheet.
-
     int                         m_borderWidth;
     KIGFX::COLOR4D              m_borderColor;
     KIGFX::COLOR4D              m_backgroundColor;
