@@ -790,21 +790,54 @@ void DIALOG_DRC::OnDeleteAllClick( wxCommandEvent& aEvent )
 
 void DIALOG_DRC::updateDisplayedCounts()
 {
+    // Collect counts:
+
+    int numMarkers = 0;
+    int numUnconnected = 0;
+    int numFootprints = 0;
+
+    int numErrors = 0;
+    int numWarnings = 0;
+    int numExcluded = 0;
+
+    if( m_markersProvider )
+    {
+        numMarkers += m_markersProvider->GetCount();
+        numErrors += m_markersProvider->GetCount( RPT_SEVERITY_ERROR );
+        numWarnings += m_markersProvider->GetCount( RPT_SEVERITY_WARNING );
+        numExcluded += m_markersProvider->GetCount( RPT_SEVERITY_EXCLUSION );
+    }
+
+    if( m_unconnectedItemsProvider )
+    {
+        numUnconnected += m_unconnectedItemsProvider->GetCount();
+        numErrors += m_unconnectedItemsProvider->GetCount( RPT_SEVERITY_ERROR );
+        numWarnings += m_unconnectedItemsProvider->GetCount( RPT_SEVERITY_WARNING );
+        numExcluded += m_unconnectedItemsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
+    }
+
+    if( m_footprintTestsRun && m_footprintWarningsProvider )
+    {
+        numFootprints += m_footprintWarningsProvider->GetCount();
+        numErrors += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_ERROR );
+        numWarnings += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_WARNING );
+        numExcluded += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
+    }
+
     wxString msg;
 
-    // First the tab headers:
-    //
+    // Update tab headers:
 
     if( m_drcRun )
     {
-        msg.sprintf( m_markersTitleTemplate, m_markerTreeModel->GetDRCItemCount() );
+        msg.sprintf( m_markersTitleTemplate, numMarkers );
         m_Notebook->SetPageText( 0, msg );
 
-        msg.sprintf( m_unconnectedTitleTemplate, m_unconnectedTreeModel->GetDRCItemCount() );
+        msg.sprintf( m_unconnectedTitleTemplate, numUnconnected );
         m_Notebook->SetPageText( 1, msg );
 
         if( m_footprintTestsRun )
-            msg.sprintf( m_footprintsTitleTemplate, m_footprintWarningsTreeModel->GetDRCItemCount() );
+            msg.sprintf( m_footprintsTitleTemplate, numFootprints );
         else
         {
             msg = m_footprintsTitleTemplate;
@@ -827,33 +860,7 @@ void DIALOG_DRC::updateDisplayedCounts()
         m_Notebook->SetPageText( 2, msg );
     }
 
-    // And now the badges:
-    //
-
-    int numErrors = 0;
-    int numWarnings = 0;
-    int numExcluded = 0;
-
-    if( m_markersProvider )
-    {
-        numErrors += m_markersProvider->GetCount( RPT_SEVERITY_ERROR );
-        numWarnings += m_markersProvider->GetCount( RPT_SEVERITY_WARNING );
-        numExcluded += m_markersProvider->GetCount( RPT_SEVERITY_EXCLUSION );
-    }
-
-    if( m_unconnectedItemsProvider )
-    {
-        numErrors += m_unconnectedItemsProvider->GetCount( RPT_SEVERITY_ERROR );
-        numWarnings += m_unconnectedItemsProvider->GetCount( RPT_SEVERITY_WARNING );
-        numExcluded += m_unconnectedItemsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
-    }
-
-    if( m_footprintTestsRun && m_footprintWarningsProvider )
-    {
-        numErrors += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_ERROR );
-        numWarnings += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_WARNING );
-        numExcluded += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
-    }
+    // Update badges:
 
     if( !m_drcRun && numErrors == 0 )
         numErrors = -1;
