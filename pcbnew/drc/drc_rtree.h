@@ -171,8 +171,8 @@ public:
     int QueryColliding( BOARD_ITEM* aRefItem,
                         PCB_LAYER_ID aRefLayer,
                         PCB_LAYER_ID aTargetLayer,
-                        std::function<bool( BOARD_ITEM*)> aFilter = nullptr,
-                        std::function<bool( BOARD_ITEM*, int)> aVisitor = nullptr,
+                        std::function<bool( BOARD_ITEM* )> aFilter = nullptr,
+                        std::function<bool( BOARD_ITEM* )> aVisitor = nullptr,
                         int aClearance = 0 ) const
     {
         // keep track of BOARD_ITEMs that have been already found to collide (some items
@@ -201,15 +201,13 @@ public:
 
                     if( !aFilter || aFilter( aItem->parent ) )
                     {
-                        int actual;
-
-                        if( refShape->Collide( aItem->shape, aClearance, &actual ) )
+                        if( refShape->Collide( aItem->shape, aClearance ) )
                         {
                             collidingCompounds.insert( aItem->parent );
                             count++;
 
                             if( aVisitor )
-                                return aVisitor( aItem->parent, actual );
+                                return aVisitor( aItem->parent );
                         }
                     }
 

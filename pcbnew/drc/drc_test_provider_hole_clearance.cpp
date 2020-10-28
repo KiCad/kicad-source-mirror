@@ -185,7 +185,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
                     return true;
                 },
-                [&]( BOARD_ITEM* other, int ) -> bool
+                [&]( BOARD_ITEM* other ) -> bool
                 {
                     return testHoleAgainstHole( via, holeShape.get(), other );
                 },
@@ -211,7 +211,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
                         return true;
                     },
-                    [&]( BOARD_ITEM* other, int ) -> bool
+                    [&]( BOARD_ITEM* other ) -> bool
                     {
                         return testHoleAgainstHole( pad, holeShape.get(), other );
                     },

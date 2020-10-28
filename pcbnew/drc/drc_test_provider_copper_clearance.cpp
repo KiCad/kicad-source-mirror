@@ -404,7 +404,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 
                         return true;
                     },
-                    [&]( BOARD_ITEM* other, int ) -> bool
+                    [&]( BOARD_ITEM* other ) -> bool
                     {
                         return testTrackAgainstItem( track, trackShape.get(), layer, other );
                     },
@@ -562,7 +562,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 
                             return true;
                         },
-                        [&]( BOARD_ITEM* other, int ) -> bool
+                        [&]( BOARD_ITEM* other ) -> bool
                         {
                             return testPadAgainstItem( pad, padShape.get(), layer, other );
                         },

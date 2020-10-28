@@ -223,7 +223,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
         if( testCopper && item->IsOnCopperLayer() )
         {
             edgesTree.QueryColliding( item, UNDEFINED_LAYER, Edge_Cuts, nullptr,
-                    [&]( BOARD_ITEM* edge, int ) -> bool
+                    [&]( BOARD_ITEM* edge ) -> bool
                     {
                         return testAgainstEdge( item, itemShape.get(), edge,
                                                 DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
@@ -235,7 +235,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
         if( testSilk && ( item->GetLayer() == F_SilkS || item->GetLayer() == B_SilkS ) )
         {
             edgesTree.QueryColliding( item, UNDEFINED_LAYER, Edge_Cuts, nullptr,
-                    [&]( BOARD_ITEM* edge, int ) -> bool
+                    [&]( BOARD_ITEM* edge ) -> bool
                     {
                         return testAgainstEdge( item, itemShape.get(), edge,
                                                 DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,

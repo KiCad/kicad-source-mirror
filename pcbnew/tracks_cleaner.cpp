@@ -281,7 +281,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                 via->SetEnd( via->GetStart() );
 
             rtree.QueryColliding( via, via->GetLayer(), via->GetLayer(), nullptr,
-                    [&]( BOARD_ITEM* aItem, int ) -> bool
+                    [&]( BOARD_ITEM* aItem ) -> bool
                     {
                         if( aItem->Type() != PCB_VIA_T )
                             return true;
@@ -343,7 +343,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
         if( aDeleteDuplicateSegments && track->Type() == PCB_TRACE_T )
         {
             rtree.QueryColliding( track, track->GetLayer(), track->GetLayer(), nullptr,
-                    [&]( BOARD_ITEM* aItem, int ) -> bool
+                    [&]( BOARD_ITEM* aItem ) -> bool
                     {
                         if( aItem->Type() != PCB_TRACE_T )
                             return true;
