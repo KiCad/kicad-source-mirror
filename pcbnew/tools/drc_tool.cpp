@@ -151,6 +151,7 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksA
     ZONE_FILLER_TOOL* zoneFiller = m_toolMgr->GetTool<ZONE_FILLER_TOOL>();
     BOARD_COMMIT      commit( m_editFrame );
     NETLIST           netlist;
+    bool              netlistFetched = false;
     wxWindowDisabler  disabler( /* disable everything except: */ m_drcDialog );
 
     m_drcRunning = true;
@@ -172,7 +173,8 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksA
 
     if( aTestFootprints && !Kiface().IsSingle() )
     {
-        m_editFrame->FetchNetlistFromSchematic( netlist, PCB_EDIT_FRAME::ANNOTATION_DIALOG );
+        if( m_editFrame->FetchNetlistFromSchematic( netlist, PCB_EDIT_FRAME::ANNOTATION_DIALOG ) )
+            netlistFetched = true;
 
         if( m_drcDialog )
             m_drcDialog->Raise();
@@ -213,7 +215,7 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aTestTracksA
     {
         m_drcDialog->SetDrcRun();
 
-        if( !netlist.IsEmpty() )
+        if( aTestFootprints && netlistFetched )
             m_drcDialog->SetFootprintTestsRun();
     }
 
