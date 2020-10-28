@@ -46,6 +46,19 @@
 #include "dialog_fields_editor_global.h"
 
 
+#define DISPLAY_NAME_COLUMN   0
+#define SHOW_FIELD_COLUMN     1
+#define GROUP_BY_COLUMN       2
+#define CANONICAL_NAME_COLUMN 3
+
+#define QUANTITY_COLUMN   ( GetNumberCols() - 1 )
+
+#ifdef __WXMAC__
+#define COLUMN_MARGIN 5
+#else
+#define COLUMN_MARGIN 15
+#endif
+
 enum
 {
     MYID_SELECT_FOOTPRINT = 991,         // must be within GRID_TRICKS' enum range
@@ -146,20 +159,6 @@ struct DATA_MODEL_ROW
     GROUP_TYPE                 m_Flag;
     std::vector<SCH_REFERENCE> m_Refs;
 };
-
-
-#define DISPLAY_NAME_COLUMN   0
-#define SHOW_FIELD_COLUMN     1
-#define GROUP_BY_COLUMN       2
-#define CANONICAL_NAME_COLUMN 3
-
-#define QUANTITY_COLUMN   ( GetNumberCols() - 1 )
-
-#ifdef __WXMAC__
-#define COLUMN_MARGIN 5
-#else
-#define COLUMN_MARGIN 15
-#endif
 
 
 class FIELDS_EDITOR_GRID_DATA_MODEL : public wxGridTableBase
@@ -710,16 +709,17 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
                                       0 );
     m_fieldsCtrl->AppendToggleColumn( _( "Group By" ), wxDATAVIEW_CELL_ACTIVATABLE, 0,
                                       wxALIGN_CENTER, 0 );
+    m_fieldsCtrl->AppendTextColumn(   _( "Name" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
 
     // SetWidth( wxCOL_WIDTH_AUTOSIZE ) fails here on GTK, so we calculate the title sizes and
     // set the column widths ourselves.
-    auto column = m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN );
+    wxDataViewColumn* column = m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN );
     m_showColWidth = KIUI::GetTextSize( column->GetTitle(), m_fieldsCtrl ).x + COLUMN_MARGIN;
-    column->SetWidth( m_showColWidth );
+    column->SetMinWidth( m_showColWidth );
 
     column = m_fieldsCtrl->GetColumn( GROUP_BY_COLUMN );
     m_groupByColWidth = KIUI::GetTextSize( column->GetTitle(), m_fieldsCtrl ).x + COLUMN_MARGIN;
-    column->SetWidth( m_groupByColWidth );
+    column->SetMinWidth( m_groupByColWidth );
 
     // The fact that we're a list should keep the control from reserving space for the
     // expander buttons... but it doesn't.  Fix by forcing the indent to 0.
@@ -737,10 +737,18 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     {
         const wxString& fieldName = m_fieldsCtrl->GetTextValue( row, DISPLAY_NAME_COLUMN );
         nameColWidth = std::max( nameColWidth, KIUI::GetTextSize( fieldName, m_fieldsCtrl ).x );
+        const wxString& canon_Name = m_fieldsCtrl->GetTextValue( row, CANONICAL_NAME_COLUMN );
+        m_canonicalNameColWidth = std::max( nameColWidth,
+                                            KIUI::GetTextSize( canon_Name, m_fieldsCtrl ).x );
     }
 
+    int fieldsMinWidth = nameColWidth + m_canonicalNameColWidth +
+                         m_groupByColWidth + m_showColWidth + 40;
+
     m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( nameColWidth );
-    m_splitter1->SetSashPosition( nameColWidth + m_showColWidth + m_groupByColWidth + 40 );
+    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetWidth( nameColWidth );
+    m_splitter1->SetSashPosition( fieldsMinWidth );
+    //m_splitter1->SetSashPosition( fieldsMinWidth );
 
     m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
     m_dataModel->Sort( 0, true );
@@ -1180,10 +1188,11 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnSizeFieldList( wxSizeEvent& event )
     int nameColWidth = event.GetSize().GetX() - m_showColWidth - m_groupByColWidth - 8;
 
     // GTK loses its head and messes these up when resizing the splitter bar:
-    m_fieldsCtrl->GetColumn( 1 )->SetWidth( m_showColWidth );
-    m_fieldsCtrl->GetColumn( 2 )->SetWidth( m_groupByColWidth );
+    m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN )->SetWidth( m_showColWidth );
+    m_fieldsCtrl->GetColumn( GROUP_BY_COLUMN )->SetWidth( m_groupByColWidth );
 
-    m_fieldsCtrl->GetColumn( 0 )->SetWidth( nameColWidth );
+    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetWidth( nameColWidth/2 );
+    m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( nameColWidth/2 );
 
     event.Skip();
 }
