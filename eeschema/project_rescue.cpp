@@ -147,11 +147,14 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
     LIB_ALIAS* case_sensitive_match = nullptr;
     std::vector<LIB_ALIAS*> case_insensitive_matches;
 
+    wxString part_name;
+    wxString search_name;
     wxString last_part_name;
 
     for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
     {
-        wxString part_name = each_component->GetLibId().GetLibItemName();
+        part_name = each_component->GetLibId().GetLibItemName();
+        search_name = LIB_ID::FixIllegalChars( part_name, LIB_ID::ID_SCH );
 
         if( last_part_name != part_name )
         {
@@ -160,14 +163,14 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
             last_part_name = part_name;
             case_insensitive_matches.clear();
 
-            LIB_ID id( wxEmptyString, part_name );
+            LIB_ID id( wxEmptyString, search_name );
 
             case_sensitive_match = aRescuer.GetPrj()->SchLibs()->FindLibraryAlias( id );
 
+            // If the case sensitive match failed, try a case insensitive match.
             if( !case_sensitive_match )
-                // the case sensitive match failed. Try a case insensitive match
                 aRescuer.GetPrj()->SchLibs()->FindLibraryNearEntries( case_insensitive_matches,
-                                                                      part_name );
+                                                                      search_name );
         }
 
         if( case_sensitive_match || !( case_insensitive_matches.size() ) )
@@ -192,7 +195,7 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
 wxString RESCUE_CASE_CANDIDATE::GetActionDescription() const
 {
     wxString action;
-    action.Printf( _( "Rename to %s" ), m_new_name );
+    action.Printf( _( "Rename %s to %s" ), m_requested_name, m_new_name );
     return action;
 }
 
@@ -249,39 +252,37 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
     // So a search in libraries is made only once by group
     LIB_PART* cache_match = nullptr;
     LIB_PART* lib_match = nullptr;
+    wxString part_name;
+    wxString search_name;
     wxString old_part_name;
 
     for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
     {
-        wxString part_name = each_component->GetLibId().GetLibItemName();
+        part_name = each_component->GetLibId().GetLibItemName();
+        search_name = LIB_ID::FixIllegalChars( part_name, LIB_ID::ID_SCH );
 
         if( old_part_name != part_name )
         {
             // A new part name is found (a new group starts here).
             // Search the symbol names candidates only once for this group:
             old_part_name = part_name;
-            cache_match = find_component( part_name, aRescuer.GetPrj()->SchLibs(), true );
-            lib_match = find_component( part_name, aRescuer.GetPrj()->SchLibs(), false );
+            cache_match = find_component( search_name, aRescuer.GetPrj()->SchLibs(), true );
+            lib_match = find_component( search_name, aRescuer.GetPrj()->SchLibs(), false );
 
             if( !cache_match && !lib_match )
                 continue;
 
             // Test whether there is a conflict or if the symbol can only be found in the cache
             // and the symbol name does not have any illegal characters.
-            if( LIB_ID::HasIllegalChars( part_name, LIB_ID::ID_SCH ) == -1 )
-            {
-                if( cache_match && lib_match &&
-                    !cache_match->PinsConflictWith( *lib_match, true, true, true, true, false ) )
-                    continue;
+            if( cache_match && lib_match &&
+                !cache_match->PinsConflictWith( *lib_match, true, true, true, true, false ) )
+                continue;
 
-                if( !cache_match && lib_match )
-                    continue;
-            }
+            if( !cache_match && lib_match )
+                continue;
 
             // Check if the symbol has already been rescued.
-            wxString new_name = LIB_ID::FixIllegalChars( part_name, LIB_ID::ID_SCH );
-
-            RESCUE_CACHE_CANDIDATE candidate( part_name, new_name, cache_match, lib_match,
+            RESCUE_CACHE_CANDIDATE candidate( part_name, search_name, cache_match, lib_match,
                                               each_component->GetUnit(),
                                               each_component->GetConvert() );
 
