@@ -1449,6 +1449,9 @@ void SCH_EDIT_FRAME::UpdateNetHighlightStatus()
 
 void SCH_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 {
+    if( m_toolManager )
+        m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
+
     SCH_BASE_FRAME::SetScreen( aScreen );
     GetCanvas()->DisplaySheet( static_cast<SCH_SCREEN*>( aScreen ) );
 }
