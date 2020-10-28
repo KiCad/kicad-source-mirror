@@ -247,5 +247,11 @@ BOOST_AUTO_TEST_CASE( WeakVectorBusDisambiguation )
 }
 
 
+BOOST_AUTO_TEST_CASE( BusJunctions )
+{
+    doNetlistTest( "bus_junctions" );
+}
+
+
 
 BOOST_AUTO_TEST_SUITE_END()
