@@ -1836,8 +1836,13 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField,
 {
     wxCHECK_RET( aField && aField->Type() == LIB_FIELD_T, "Invalid LIB_FIELD object." );
 
+    wxString fieldName = aField->GetName();
+
+    if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
+        fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId(), false );
+
     aFormatter.Print( aNestLevel, "(property %s %s (id %d) (at %s %s %g)\n",
-                      aFormatter.Quotew( aField->GetName() ).c_str(),
+                      aFormatter.Quotew( fieldName ).c_str(),
                       aFormatter.Quotew( aField->GetText() ).c_str(),
                       aField->GetId(),
                       FormatInternalUnits( aField->GetPosition().x ).c_str(),
