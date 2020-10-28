@@ -27,6 +27,7 @@
 #include <schematic.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h>
+#include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_text.h>
 #include <settings/color_settings.h>
@@ -457,6 +458,13 @@ bool SCH_BUS_WIRE_ENTRY::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
     // a connectivity change at that point (e.g. A[7..0] to A7)
     if( ( aItem->Type() == SCH_LINE_T ) &&
         ( static_cast<const SCH_LINE*>( aItem )->GetLayer() == LAYER_BUS ) )
+    {
+        return false;
+    }
+
+    // Same for bus junctions
+    if( ( aItem->Type() == SCH_JUNCTION_T ) &&
+        ( static_cast<const SCH_JUNCTION*>( aItem )->GetLayer() == LAYER_BUS_JUNCTION ) )
     {
         return false;
     }
