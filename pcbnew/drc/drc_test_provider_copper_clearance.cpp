@@ -585,40 +585,49 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
     if( m_board->GetBoardPolygonOutlines( buffer ) )
         boardOutline = &buffer;
 
+    std::vector<ZONE_CONTAINER*> zones;
+
+    for( ZONE_CONTAINER* zone : m_board->Zones() )
+        zones.push_back( zone );
+
+    for( MODULE* footprint : m_board->Modules() )
+    {
+        for( ZONE_CONTAINER* zone : footprint->Zones() )
+            zones.push_back( zone );
+    }
+
     for( int layer_id = F_Cu; layer_id <= B_Cu; ++layer_id )
     {
         PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( layer_id );
         std::vector<SHAPE_POLY_SET> smoothed_polys;
-        smoothed_polys.resize( m_board->GetAreaCount() );
+        smoothed_polys.resize( zones.size() );
 
         // Skip over layers not used on the current board
         if( !m_board->IsLayerEnabled( layer ) )
             continue;
 
-        for( int ii = 0; ii < m_board->GetAreaCount(); ii++ )
+        for( size_t ii = 0; ii < zones.size(); ii++ )
         {
-            ZONE_CONTAINER* zoneRef = m_board->GetArea( ii );
-
-            if( zoneRef->IsOnLayer( layer ) )
-                zoneRef->BuildSmoothedPoly( smoothed_polys[ii], layer, boardOutline );
+            if( zones[ii]->IsOnLayer( layer ) )
+                zones[ii]->BuildSmoothedPoly( smoothed_polys[ii], layer, boardOutline );
         }
 
         // iterate through all areas
-        for( int ia = 0; ia < m_board->GetAreaCount(); ia++ )
+        for( size_t ia = 0; ia < zones.size(); ia++ )
         {
-            if( !reportProgress( ia, m_board->GetAreaCount(), delta ) )
+            if( !reportProgress( layer_id * zones.size() + ia, B_Cu * zones.size(), delta ) )
                 break;
 
-            ZONE_CONTAINER* zoneRef = m_board->GetArea( ia );
+            ZONE_CONTAINER* zoneRef = zones[ia];
 
             if( !zoneRef->IsOnLayer( layer ) )
                 continue;
 
             // If we are testing a single zone, then iterate through all other zones
             // Otherwise, we have already tested the zone combination
-            for( int ia2 = ia + 1; ia2 < m_board->GetAreaCount(); ia2++ )
+            for( size_t ia2 = ia + 1; ia2 < zones.size(); ia2++ )
             {
-                ZONE_CONTAINER* zoneToTest = m_board->GetArea( ia2 );
+                ZONE_CONTAINER* zoneToTest = zones[ia2];
 
                 if( zoneRef == zoneToTest )
                     continue;
