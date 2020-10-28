@@ -2259,6 +2259,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 
     SCH_BUS_WIRE_ENTRY* bus_entry = nullptr;
     SCH_ITEM* bus_wire = nullptr;
+    wxString bus_name;
 
     for( auto item : aSubgraph->m_items )
     {
@@ -2288,6 +2289,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
             && bus_wire->Connection( &sheet ) )
         {
             conflict = true;
+            bus_name = bus_wire->Connection( &sheet )->Name( true );
 
             auto test_name = bus_entry->Connection( &sheet )->Name( true );
 
@@ -2317,8 +2319,13 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 
     if( conflict )
     {
+        wxString msg = wxString::Format( _( "Net %s is graphically connected to bus %s but is not a"
+                                            " member of that bus" ),
+                                         aSubgraph->m_driver_connection->Name( true ),
+                                         bus_name );
         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_CONFLICT );
         ercItem->SetItems( bus_entry, bus_wire );
+        ercItem->SetErrorMessage( msg );
 
         SCH_MARKER* marker = new SCH_MARKER( ercItem, bus_entry->GetPosition() );
         screen->Append( marker );
