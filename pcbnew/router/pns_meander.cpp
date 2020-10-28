@@ -206,29 +206,9 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( VECTOR2D aP, VECTOR2D aDir, bool
     {
     case MEANDER_STYLE_ROUND:
     {
-        const int ArcSegments = Settings().m_cornerArcSegments;
+        VECTOR2D center = aP + dir_v * ( aSide ? -1.0 : 1.0 );
 
-        double radius = (double) aDir.EuclideanNorm();
-        double angleStep = M_PI / 2.0 / (double) ArcSegments;
-
-        double correction = 12.0 * radius * ( 1.0 - cos( angleStep / 2.0 ) );
-
-        if( !m_dual )
-            correction = 0.0;
-        else if( radius < m_meanCornerRadius )
-            correction = 0.0;
-
-        VECTOR2D dir_uu = dir_u.Resize( radius - correction );
-        VECTOR2D dir_vv = dir_v.Resize( radius - correction );
-
-        VECTOR2D shift = dir_u.Resize( correction );
-
-        for( int i = ArcSegments - 1; i >= 0; i-- )
-        {
-            double alpha = (double) i / (double) ( ArcSegments - 1 ) * M_PI / 2.0;
-            p = aP + shift + dir_uu * cos( alpha ) + dir_vv * ( aSide ? -1.0 : 1.0 ) * ( 1.0 - sin( alpha ) );
-            lc.Append( ( int ) p.x, ( int ) p.y );
-        }
+        lc.Append( SHAPE_ARC( center, aP, ( aSide ? -90 : 90 ) ) );
     }
         break;
 
