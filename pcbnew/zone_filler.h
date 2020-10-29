@@ -47,6 +47,8 @@ public:
     bool Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck = false,
                wxWindow* aParent = nullptr );
 
+    bool IsDebug() const { return m_debugZoneFiller; }
+
 private:
 
     void addKnockout( D_PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_POLY_SET& aHoles );
@@ -74,9 +76,11 @@ private:
      *  filled copper area polygon (without clearance areas
      * @param aPcb: the current board
      */
-    void computeRawFilledArea( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+    bool computeRawFilledArea( const ZONE_CONTAINER* aZone,
+                               PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
                                const SHAPE_POLY_SET& aSmoothedOutline,
-                               SHAPE_POLY_SET& aRawPolys, SHAPE_POLY_SET& aFinalPolys );
+                               const SHAPE_POLY_SET& aMaxExtents,
+                               SHAPE_POLY_SET& aRawPolys );
 
     /**
      * Function buildThermalSpokes
@@ -109,8 +113,8 @@ private:
      * @param aRawPolys: A reference to a SHAPE_POLY_SET buffer containing the initial
      * filled areas, and after adding the grid pattern, the modified filled areas with holes
      */
-    void addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
-                                 SHAPE_POLY_SET& aRawPolys );
+    bool addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+                                 PCB_LAYER_ID aDebugLayer, SHAPE_POLY_SET& aRawPolys );
 
     BOARD*                m_board;
     SHAPE_POLY_SET        m_boardOutline;       // the board outlines, if exists

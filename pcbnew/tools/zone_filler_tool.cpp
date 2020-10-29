@@ -138,6 +138,9 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
         commit.Revert();
     }
 
+    if( filler.IsDebug() )
+        getEditFrame<PCB_EDIT_FRAME>()->UpdateUserInterface();
+
     canvas()->Refresh();
 
     // wxWidgets has keyboard focus issues after the progress reporter.  Re-setting the focus

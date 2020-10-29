@@ -672,7 +672,8 @@ public:
      * Function GetSmoothedPoly
      */
     bool BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer,
-                            SHAPE_POLY_SET* aBoardOutline ) const;
+                            SHAPE_POLY_SET* aBoardOutline,
+                            SHAPE_POLY_SET* aSmoothedPolyWithApron = nullptr ) const;
 
     void SetCornerSmoothingType( int aType ) { m_cornerSmoothingType = aType; };
 

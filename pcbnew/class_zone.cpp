@@ -1162,7 +1162,8 @@ void ZONE_CONTAINER::GetInteractingZones( PCB_LAYER_ID aLayer,
 
 
 bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer,
-                                        SHAPE_POLY_SET* aBoardOutline ) const
+                                        SHAPE_POLY_SET* aBoardOutline,
+                                        SHAPE_POLY_SET* aSmoothedPolyWithApron ) const
 {
     if( GetNumCorners() <= 2 )  // malformed zone. polygon calculations will not like it ...
         return false;
@@ -1229,6 +1230,14 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER
         aSmoothedPoly.BooleanIntersection( *aBoardOutline, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
     smooth( aSmoothedPoly );
+
+    if( aSmoothedPolyWithApron )
+    {
+        SHAPE_POLY_SET bufferedExtents = *maxExtents;
+        bufferedExtents.Inflate( m_ZoneMinThickness, 8 );
+        *aSmoothedPolyWithApron = aSmoothedPoly;
+        aSmoothedPolyWithApron->BooleanIntersection( bufferedExtents, SHAPE_POLY_SET::PM_FAST );
+    }
 
     aSmoothedPoly.BooleanIntersection( *maxExtents, SHAPE_POLY_SET::PM_FAST );
 
