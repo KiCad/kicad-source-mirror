@@ -1,21 +1,22 @@
 # Lithuanian translation of kicad.po
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
+# WhiteChairFromIkea <dainius.mazuika@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-21 02:48+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/lt/>\n"
+"PO-Revision-Date: 2020-10-29 15:47+0000\n"
+"Last-Translator: WhiteChairFromIkea <dainius.mazuika@gmail.com>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/"
+"master-source/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 4.3.1\n"
+"X-Generator: Weblate 4.3.2-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -42,14 +43,13 @@ msgid "All Files (*.*)|*.*"
 msgstr "Visi failai (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "All supported files (%s)"
-msgstr "Все поддерживаемые форматы библиотек|"
+msgstr "Visi palaikomi formatai (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
-#, fuzzy
 msgid "Available paths:"
-msgstr "Доступные переменные окружения для относительных путей:"
+msgstr "Galimi keliai:"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
@@ -141,9 +141,8 @@ msgid "Preview"
 msgstr "Peržiūra"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:192
-#, fuzzy
 msgid "Change to isometric perspective"
-msgstr "Bus pritaikyti šie keitimai:"
+msgstr "Perjungti į izometrinį vaizdavimą"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:221
 msgid "Reload board and 3D models"
@@ -154,24 +153,20 @@ msgid "no such file"
 msgstr "nėra tokio failo"
 
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:364
-#, fuzzy
 msgid "failed to open file"
-msgstr "Не удалось открыть файл  '%s'"
+msgstr "nepavyko atidaryti bylos"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:426
-#, fuzzy
 msgid "Build board body"
-msgstr "Построение тела платы"
+msgstr "Sukurti plokštės pagrindą"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:439
-#, fuzzy
 msgid "Create layers"
-msgstr "Failas"
+msgstr "Kurti sluoksnius"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:475
-#, fuzzy
 msgid "Board outline is not closed:"
-msgstr "Plokštės perimetras"
+msgstr "Plokštės perimetras neuždaras:"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 #, fuzzy
@@ -179,9 +174,8 @@ msgid "Create tracks and vias"
 msgstr "Nauji takeliai ir perėjimai"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:702
-#, fuzzy
 msgid "Create zones"
-msgstr "Kampas"
+msgstr "Kurti zonas"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:772
 msgid "Simplifying copper layers polygons"
@@ -207,7 +201,7 @@ msgstr "Jūsų OpenGL versija nepalaikoma. Reikalinga minimum v1.5"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
 msgid "Render time %.0f ms ( %.1f fps)"
-msgstr ""
+msgstr "Renderinimo laikas %.0f ms ( %.1f fps)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:734
 #, fuzzy, c-format
@@ -261,7 +255,7 @@ msgstr "Время построения %.3f с"
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:413
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr ""
+msgstr "Renderinama: %.0f %%"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:917
 msgid "Rendering: Post processing shader"
@@ -282,9 +276,8 @@ msgid "3D Viewer"
 msgstr "3D Viewer"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:68
-#, fuzzy
 msgid "Copy 3D Image"
-msgstr "Копировать 3D изображение в буфер обмена"
+msgstr "Kopijuoti 3D vaizdą"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:106
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:282
@@ -297,67 +290,57 @@ msgstr "Atvaizdavimo nustatymai"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:806
 msgid "Raytracing"
-msgstr ""
+msgstr "\"Raytracing\""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:28
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:568
-#, fuzzy
 msgid "Render Options"
-msgstr "Параметры отображения"
+msgstr "Renderinimo Parametrai"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:122
-#, fuzzy
 msgid "Material Properties"
-msgstr "Отображать свойства материала"
+msgstr "Medžiagų Savybės"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
-#, fuzzy
 msgid "Raytracing Options"
-msgstr "Параметры трассировщика..."
+msgstr "\"Raytracing\" Nustatymai"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:153
 msgid "Choose Colors"
 msgstr "Parinkti spalvas"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:156
-#, fuzzy
 msgid "Background Top Color..."
-msgstr "Цвет фона верха"
+msgstr "Fono Spalva Viršuje..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:160
-#, fuzzy
 msgid "Background Bottom Color..."
-msgstr "Fono spalva apačioje"
+msgstr "Fono Spalva Apačioje..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:164
-#, fuzzy
 msgid "Silkscreen Color..."
-msgstr "Šilkografikos spalva"
+msgstr "Šilkografijos Spalva..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:168
-#, fuzzy
 msgid "Solder Mask Color..."
-msgstr "Lydmetalio šablono spalva"
+msgstr "Litavimo Kaukės Spalva..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:172
-#, fuzzy
 msgid "Solder Paste Color..."
-msgstr "Lydmetalio pastos spalva"
+msgstr "Litavimo Pastos Spalva..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:176
-#, fuzzy
 msgid "Copper/Surface Finish Color..."
-msgstr "Цвет покрытия поверхности меди"
+msgstr "Vario/Paviršiaus Padengimo Spalva..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:180
-#, fuzzy
 msgid "Board Body Color..."
-msgstr "Plokštės spalva"
+msgstr "Plokštės Spalva..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:187
 msgid "Get colors from physical stackup"
-msgstr ""
+msgstr "Pasiimti spalvas iš plokštės sąstato nustatymų"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:198
 msgid "3D Grid"
@@ -373,9 +356,8 @@ msgstr "Atstatyti į numatytas reikšmes"
 #: gerbview/menubar.cpp:212 kicad/menubar.cpp:165
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:231
 #: pcbnew/menubar_pcb_editor.cpp:440
-#, fuzzy
 msgid "Preferences...\tCTRL+,"
-msgstr "Tinkinti"
+msgstr "Nustatymai...\tCTRL+,"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:214 cvpcb/menubar.cpp:72
 #: eeschema/libedit/menubar_libedit.cpp:162 eeschema/menubar.cpp:265
@@ -383,7 +365,7 @@ msgstr "Tinkinti"
 #: pagelayout_editor/menubar.cpp:157 pcbnew/menubar_footprint_editor.cpp:232
 #: pcbnew/menubar_pcb_editor.cpp:441
 msgid "Show preferences for all open tools"
-msgstr ""
+msgstr "Rodyti nustatymus visiems atidarytiems įrankiams"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:221 cvpcb/menubar.cpp:84
 #: eeschema/libedit/menubar_libedit.cpp:178 eeschema/menubar.cpp:281
@@ -420,42 +402,37 @@ msgid "Reload board"
 msgstr "Atnaujinti plokštę iš failo"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:62
-#, fuzzy
 msgid "Copy 3D image to clipboard"
-msgstr "Копировать 3D изображение в буфер обмена"
+msgstr "Kopijuoti 3D vaizdą"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
-#, fuzzy
 msgid "Set display options, and some layers visibility"
-msgstr "Параметры отображения и видимости слоев"
+msgstr "Nustatyti vaizdavimo nustatymus, bei kai kurių sluoksnių matomumą"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Render current view using Raytracing"
-msgstr ""
+msgstr "Atvaizduoti dabartinį vaizdą naudojant \"Raytracing\""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:41
 msgid "Realistic mode"
 msgstr "Realistinis režimas"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:50
-#, fuzzy
 msgid "Show board body"
-msgstr "Показать тело платы"
+msgstr "Rodyti plokštės pagrindą"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:59
-#, fuzzy
 msgid "Show filled areas in zones"
-msgstr "Показать заливку в зонах"
+msgstr "Zonose rodyti užpildytus plotus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
-#, fuzzy
 msgid "Subtract soldermask from silkscreen"
-msgstr "Маскировать шелкографию"
+msgstr "Atimti litavimo kaukę iš šilkografijos"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:77
 msgid "Clip silkscreen at via annulus"
-msgstr ""
+msgstr "Nuimti šilkografiją nuo metalizuotų skylių"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:86
 msgid "Non plated pads copper as bare copper"
@@ -471,24 +448,20 @@ msgid "3D Model Visibility"
 msgstr "3D modelių matomumas"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:111
-#, fuzzy
 msgid "Show 3D through hole models"
-msgstr "Показать сквозные перех.отв."
+msgstr "Rodyti išvadinių komponentų 3D modelius"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:120
-#, fuzzy
 msgid "Show 3D SMD models"
-msgstr "Rodyti 3D modelius"
+msgstr "Rodyti SMD komponentų 3D modelius"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:129
-#, fuzzy
 msgid "Show 3D virtual models"
-msgstr "Rodyti 3D modelius"
+msgstr "Rodyti virtualius 3D modelius"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:148
-#, fuzzy
 msgid "Board Layers"
-msgstr "Plokštės klasė"
+msgstr "Plokštės sluoksniai"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:161
 msgid "Show silkscreen layers"
@@ -508,27 +481,23 @@ msgstr "Rodyti klijų sluoksnius"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:198
 msgid "User Layers (not shown in realistic mode)"
-msgstr ""
+msgstr "Vartotojo sluoksniai (realistiškame atvaizdavime nerodomi)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
-#, fuzzy
 msgid "Show comments and drawings layers"
-msgstr "Показать слои комментариев и чертежа"
+msgstr "Rodyti komentarų ir grafikos sluoksnius"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:220
-#, fuzzy
 msgid "Show ECO layers"
-msgstr "Показать дополнительные слои"
+msgstr "Rodyti \"ECO\" sluoksnius"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:230
-#, fuzzy
 msgid "Camera Options"
-msgstr "Lapo savybės"
+msgstr "\"Kameros\" nustatymai"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:235
-#, fuzzy
 msgid "Rotation Increment:"
-msgstr "Teksto padidėjimas"
+msgstr "Sukimo kampinis žingsnis:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:243
 #: common/base_units.cpp:520 pcbnew/dialogs/dialog_copper_zones_base.cpp:298
@@ -541,103 +510,88 @@ msgid "deg"
 msgstr "°"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:253
-#, fuzzy
 msgid "Enable animation"
-msgstr "Вкл. авто удаление дорожки"
+msgstr "Naudoti animaciją"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:260
-#, fuzzy
 msgid "Animation speed:"
-msgstr "Выбор варианта обозначений"
+msgstr "Animacijos greitis:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
-#, fuzzy
 msgid "OpenGL Render Options"
-msgstr "Параметры отображения"
+msgstr "OpenGL Renderinimo Nustatymai"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:304
-#, fuzzy
 msgid "Show model bounding boxes"
-msgstr "Показать ограничивающий параллелепипед модели"
+msgstr "Rodyti modelių išorinius kontūrus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:313
 msgid "Show copper thickness"
 msgstr "Rodyti vario storį"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:323
-#, fuzzy
 msgid "Other Options"
-msgstr "Kelio tipas:"
+msgstr "Kiti Nustatymai"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:333
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:445
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
-#, fuzzy
 msgid "Anti-aliasing"
-msgstr "Italiano"
+msgstr "Vaizdo glotninimas"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "Disabled"
-msgstr "Įjungtas"
+msgstr "Išjungtas"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "2x"
-msgstr "2"
+msgstr "2x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "4x"
-msgstr "4"
+msgstr "4x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "8x"
-msgstr "8"
+msgstr "8x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:341
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
+"Kad įsigaliotų šis nustatymas, 3D langas turi būti išjungtas ir įjungtas "
+"pakartotinai"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:348
-#, fuzzy
 msgid "Selection color"
-msgstr "Parinkti failą ..."
+msgstr "Pasirinkimo spalva"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "While Moving"
-msgstr ""
+msgstr "Kol Judinama"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:372
-#, fuzzy
 msgid "Disable anti-aliasing"
-msgstr "Italiano"
+msgstr "Išjungti vaizdo glotninimą"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:378
-#, fuzzy
 msgid "Disable thickness"
-msgstr "Linijos plotis:"
+msgstr "Išjungti storį"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:384
-#, fuzzy
 msgid "Disable vias"
-msgstr "Projektavimo taisyklės"
+msgstr "Išjungti metalizuotas skyles"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:390
-#, fuzzy
 msgid "Disable holes"
-msgstr "Ovali skylė"
+msgstr "Išjungti skyles"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:406
-#, fuzzy
 msgid "OpenGL"
-msgstr "Atverti failą"
+msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:420
-#, fuzzy
 msgid "Raytracing Render Options"
-msgstr "Параметры трассировщика..."
+msgstr "\"Raytracing\" Renderinimo Nustatymai"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:431
 #, fuzzy
@@ -645,32 +599,29 @@ msgid "Procedural textures"
 msgstr "Procedūrinės tekstūros"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:438
-#, fuzzy
 msgid "Add floor"
-msgstr "Pridėti korpusą"
+msgstr "Pridėti grindis"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:452
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:262
 msgid "Post-processing"
-msgstr ""
+msgstr "Vėlesnis apdorojimas"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:473
-#, fuzzy
 msgid "Number of Samples"
-msgstr "Aikštelių skaičius"
+msgstr "Imčių kiekis"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:477
 msgid "Spread Factor %"
-msgstr ""
+msgstr "Sklaidymo Faktorius %"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:481
 msgid "Recursive Level"
-msgstr ""
+msgstr "Bandymų Gylis"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:488
-#, fuzzy
 msgid "Shadows"
-msgstr "Rodyti šešėlius"
+msgstr "Šešėliai"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:493
 msgid ""
@@ -725,26 +676,22 @@ msgid "Ambient Camera Light"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
-#, fuzzy
 msgid "Top Light"
-msgstr "Dešinėje"
+msgstr "Šviesa iš viršaus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:611
-#, fuzzy
 msgid "Bottom Light"
-msgstr "Iš apačios"
+msgstr "Šviesa iš apačios"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:635
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:652
-#, fuzzy
 msgid "Elevation (degrees)"
-msgstr "Вращение образа (градусы):"
+msgstr "Aukštis (°)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:639
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:656
-#, fuzzy
 msgid "Azimuth (degrees)"
-msgstr "Вращение образа (градусы):"
+msgstr "Azimutas (°)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:660
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
@@ -793,17 +740,15 @@ msgstr "6"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:51
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:110
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:171
-#, fuzzy
 msgid "3"
-msgstr "A"
+msgstr "3"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:734
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:114
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:175
-#, fuzzy
 msgid "7"
-msgstr "A7 (74×105 mm)"
+msgstr "7"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:747
 #: pcbnew/dialogs/dialog_create_array_base.cpp:258
@@ -823,27 +768,24 @@ msgid "8"
 msgstr "8"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:785
-#, fuzzy
 msgid "Reset to defaults"
-msgstr "Установить по умолчанию"
+msgstr "Atstatyti numatytuosius nustatymus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.h:179
 msgid "3D Display Options"
 msgstr "3D vaizdo tinkinimas"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:337
-#, fuzzy
 msgid "Background Color, Bottom"
-msgstr "Цвет фона, низ"
+msgstr "Fono spalva apačioje"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:343
 msgid "Background Color, Top"
 msgstr "Fono spalva viršuje"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:807
-#, fuzzy
 msgid "3D Image File Name"
-msgstr "Failo pavadinimas 3D vaizdui:"
+msgstr "Failo pavadinimas 3D vaizdui"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:828
 #, c-format
@@ -851,6 +793,8 @@ msgid ""
 "Insufficient permissions required to save file\n"
 "%s"
 msgstr ""
+"Neturite reikiamų teisių failo įrašymui\n"
+"%s"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:829 common/confirm.cpp:125
 #: common/confirm.cpp:257 common/dialogs/panel_setup_severities.cpp:40
@@ -860,22 +804,20 @@ msgid "Error"
 msgstr "Klaida"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:860
-#, fuzzy
 msgid "Failed to copy image to clipboard"
-msgstr "Не удалось скопировать изображение в буфер обмена"
+msgstr "Nepavyko nukopijuoti vaizdo"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:871
 msgid "Can't save file"
 msgstr "Negaliu išsaugoti failo"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:922
-#, fuzzy
 msgid "Silkscreen Color"
-msgstr "Šilkografikos spalva"
+msgstr "Šilkografijos spalva"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:954
 msgid "Solder Mask Color"
-msgstr "Lydmetalio šablono spalva"
+msgstr "Litavimo kaukės spalva"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:976
 msgid "Copper Color"
@@ -887,7 +829,7 @@ msgstr "Plokštės spalva"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1019
 msgid "Solder Paste Color"
-msgstr "Lydmetalio pastos spalva"
+msgstr "Litavimos pastos spalva"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:43
 #, fuzzy
@@ -899,39 +841,32 @@ msgid "Center pivot rotation (middle mouse click)"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:48
-#, fuzzy
 msgid "Rotate X Clockwise"
-msgstr "Повернуть по ч.с."
+msgstr "Pasukti X prieš laikr. rodyklę"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:53
-#, fuzzy
 msgid "Rotate X Counterclockwise"
-msgstr "Повернуть против ч.с."
+msgstr "Pasukti X  pagal laikr. rodyklę"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:58
-#, fuzzy
 msgid "Rotate Y Clockwise"
-msgstr "Повернуть по ч.с."
+msgstr "Pasukti Y pagal laikr. rodyklę"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:63
-#, fuzzy
 msgid "Rotate Y Counterclockwise"
-msgstr "Повернуть против ч.с."
+msgstr "Pasukti Y prieš laikr. rodyklę"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:68
-#, fuzzy
 msgid "Rotate Z Clockwise"
-msgstr "Повернуть по ч.с."
+msgstr "Pasukti Z pagal laikr. rodyklę"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:73
-#, fuzzy
 msgid "Rotate Z Counterclockwise"
-msgstr "Повернуть против ч.с."
+msgstr "Pasukti Z prieš laikr. rodyklę"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:79
-#, fuzzy
 msgid "Move board Left"
-msgstr "Переместить миру"
+msgstr "Pastumti plokštę kairėn"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:85
 msgid "Move board Right"
@@ -950,29 +885,24 @@ msgid "Home view"
 msgstr "Pradinis vaizdas"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:109
-#, fuzzy
 msgid "Reset view"
-msgstr "Установить размер"
+msgstr "Atstatyti vaizdą"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
-#, fuzzy
 msgid "Flip Board"
-msgstr "Atverti plokštės vaizdą"
+msgstr "Apversti plokštę"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
-#, fuzzy
 msgid "Flip the board view"
-msgstr "Atverti plokštės vaizdą"
+msgstr "Apversti plokštės vaizdavimą"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
-#, fuzzy
 msgid "Toggle orthographic projection"
-msgstr "Вкл/Выкл ортогональную проекцию"
+msgstr "Perjungti projekciją"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
-#, fuzzy
 msgid "Enable/disable orthographic projection"
-msgstr "Вкл/Выкл ортогональную проекцию"
+msgstr "Įj./Išj. ortografinę projekciją"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:126
 msgid "View Front"
@@ -1019,9 +949,8 @@ msgid "3D Grid 2.5mm"
 msgstr "3D tinklelis: 2.5 mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:181
-#, fuzzy
 msgid "3D Grid 1mm"
-msgstr "3D tinklelis:1 mm"
+msgstr "3D tinklelis: 1 mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:187
 #, fuzzy
