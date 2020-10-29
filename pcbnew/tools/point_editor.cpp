@@ -536,8 +536,15 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 break;
         }
 
+        else if( evt->Action() == TA_UNDO_REDO_POST )
+        {
+            break;
+        }
+
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     if( m_editPoints )
