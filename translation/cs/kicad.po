@@ -6,21 +6,22 @@
 # Michal Jahelka <michal.jahelka@pavelek.cz>, 2019
 # translation of kicad.po to
 # Radovan Blažek <blazra@gmail.com>, 2020.
+# Jan Vykydal <vvykys@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-23 22:26+0000\n"
-"Last-Translator: Radovan Blažek <blazra@gmail.com>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"PO-Revision-Date: 2020-10-29 19:39+0000\n"
+"Last-Translator: Jan Vykydal <vvykys@gmail.com>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.1\n"
+"X-Generator: Weblate 4.3.2-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -115,7 +116,6 @@ msgid "Offset"
 msgstr "Posun"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
-#, fuzzy
 msgid "Opacity"
 msgstr "Neprůhlednost:"
 
@@ -326,7 +326,7 @@ msgstr "Barva podkladu desky..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:187
 msgid "Get colors from physical stackup"
-msgstr ""
+msgstr "Získat barvy z fyzického složení"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:198
 msgid "3D Grid"
