@@ -144,7 +144,6 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
         // not return invalid data to the UI, since this invalid data can cause crashes.
         // This is different than the update locker, which locks the UI aspects only.
         wxWindowUpdateLocker updateLock( m_widget );
-        BeforeReset();
 
         // Even with the updateLock, wxWidgets sometimes ties its knickers in
         // a knot when trying to run a wxdataview_selection_changed_callback()
@@ -152,6 +151,7 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
         // https://bugs.launchpad.net/kicad/+bug/1756255
         m_widget->UnselectAll();
         Freeze();
+        BeforeReset();
 
         m_tree.ResetScore();
 
