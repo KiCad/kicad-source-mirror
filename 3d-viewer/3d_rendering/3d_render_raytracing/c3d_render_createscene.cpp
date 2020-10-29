@@ -370,6 +370,21 @@ void C3D_RENDER_RAYTRACING::createItemsFromContainer( const CBVHCONTAINER2D *aCo
             }
         }
 
+        if( !m_antioutlineBoard2dObjects->GetList().empty() )
+        {
+            CONST_LIST_OBJECT2D intersectionList;
+
+            m_antioutlineBoard2dObjects->GetListObjectsIntersects(
+                        object2d_A->GetBBox(), intersectionList );
+
+            if( !intersectionList.empty() )
+            {
+                for( const COBJECT2D *obj : intersectionList )
+                {
+                    object2d_B->push_back( obj );
+                }
+            }
+        }
 
         const MAP_CONTAINER_2D& mapLayers = m_boardAdapter.GetMapLayers();
 
@@ -440,6 +455,8 @@ void C3D_RENDER_RAYTRACING::createItemsFromContainer( const CBVHCONTAINER2D *aCo
     }
 }
 
+extern void buildBoardBoundingBoxPoly( const BOARD* aBoard, SHAPE_POLY_SET& aOutline );
+
 void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
                                     REPORTER* aWarningReporter,
                                     bool aOnlyLoadCopperAndShapes )
@@ -470,8 +487,10 @@ void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
     // /////////////////////////////////////////////////////////////////////////
 
     delete m_outlineBoard2dObjects;
+    delete m_antioutlineBoard2dObjects;
 
     m_outlineBoard2dObjects = new CCONTAINER2D;
+    m_antioutlineBoard2dObjects = new CBVHCONTAINER2D;
 
     if( !aOnlyLoadCopperAndShapes )
     {
@@ -488,6 +507,29 @@ void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
                     divFactor = m_boardAdapter.GetStats_Med_Hole_Diameter3DU() * 8.0f;
 
             SHAPE_POLY_SET boardPolyCopy = m_boardAdapter.GetBoardPoly();
+
+            // Calculate an antiboard outline
+
+            SHAPE_POLY_SET antiboardPoly;
+
+            buildBoardBoundingBoxPoly( m_boardAdapter.GetBoard(), antiboardPoly );
+
+            antiboardPoly.BooleanSubtract( boardPolyCopy, SHAPE_POLY_SET::PM_FAST );
+            antiboardPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+            for( int iOutlinePolyIdx = 0; iOutlinePolyIdx < antiboardPoly.OutlineCount(); iOutlinePolyIdx++ )
+            {
+                Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
+                        antiboardPoly,
+                        *m_antioutlineBoard2dObjects,
+                        m_boardAdapter.BiuTo3Dunits(),
+                        divFactor,
+                        *dynamic_cast<const BOARD_ITEM*>( m_boardAdapter.GetBoard() ),
+                        iOutlinePolyIdx );
+            }
+
+            m_antioutlineBoard2dObjects->BuildBVH();
+
             boardPolyCopy.Fracture( SHAPE_POLY_SET::PM_FAST );
 
             for( int iOutlinePolyIdx = 0; iOutlinePolyIdx < outlineCount; iOutlinePolyIdx++ )
@@ -537,6 +579,23 @@ void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
                         }
                     }
 
+                    if( !m_antioutlineBoard2dObjects->GetList().empty() )
+                    {
+                        CONST_LIST_OBJECT2D intersectionList;
+
+                        m_antioutlineBoard2dObjects->GetListObjectsIntersects(
+                                    object2d_A->GetBBox(),
+                                    intersectionList );
+
+                        if( !intersectionList.empty() )
+                        {
+                            for( const COBJECT2D *obj : intersectionList )
+                            {
+                                object2d_B->push_back( obj );
+                            }
+                        }
+                    }
+
                     if( object2d_B->empty() )
                     {
                         delete object2d_B;
@@ -545,14 +604,6 @@ void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
 
                     if( object2d_B == CSGITEM_EMPTY )
                     {
-            #if 0
-                        create_3d_object_from( m_object_container, object2d_A,
-                                               m_boardAdapter.GetLayerBottomZpos3DU( F_Cu ),
-                                               m_boardAdapter.GetLayerBottomZpos3DU( B_Cu ),
-                                               &m_materials.m_EpoxyBoard,
-                                               g_epoxyColor );
-            #else
-
                         CLAYERITEM *objPtr = new CLAYERITEM( object2d_A,
                                                              m_boardAdapter.GetLayerBottomZpos3DU( F_Cu ),
                                                              m_boardAdapter.GetLayerBottomZpos3DU( B_Cu ) );
@@ -560,7 +611,6 @@ void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
                         objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
                         objPtr->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BoardBodyColor ) );
                         m_object_container.Add( objPtr );
-            #endif
                     }
                     else
                     {
@@ -600,6 +650,21 @@ void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
                          ++hole )
                     {
                         const COBJECT2D *hole2d = static_cast<const COBJECT2D *>(*hole);
+
+                        if( !m_antioutlineBoard2dObjects->GetList().empty() )
+                        {
+                            CONST_LIST_OBJECT2D intersectionList;
+
+                            m_antioutlineBoard2dObjects->GetListObjectsIntersects(
+                                        hole2d->GetBBox(), intersectionList );
+
+                            if( !intersectionList.empty() )
+                            {
+                                // Do not add cylinder if it intersects the edge of the board
+
+                                continue;
+                            }
+                        }
 
                         switch( hole2d->GetObjectType() )
                         {
@@ -642,7 +707,7 @@ void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
         if( aOnlyLoadCopperAndShapes && !IsCopperLayer( layer_id ) )
             continue;
 
-        // Mask kayers are not processed here because they are a special case
+        // Mask layers are not processed here because they are a special case
         if( (layer_id == B_Mask) || (layer_id == F_Mask) )
             continue;
 
@@ -1099,6 +1164,8 @@ void C3D_RENDER_RAYTRACING::insert3DPadHole( const D_PAD* aPad )
     if( !hasHole )
         return;
 
+    CONST_LIST_OBJECT2D antiOutlineIntersectionList;
+
     const float topZ = m_boardAdapter.GetLayerBottomZpos3DU( F_Cu ) +
                        m_boardAdapter.GetCopperThickness3DU();
 
@@ -1112,6 +1179,7 @@ void C3D_RENDER_RAYTRACING::insert3DPadHole( const D_PAD* aPad )
 
         int innerRadius = drillsize.x / 2;
         int outerRadius = innerRadius + m_boardAdapter.GetHolePlatingThicknessBIU();
+
         CRING2D *ring = new CRING2D( center,
                                      innerRadius * m_boardAdapter.BiuTo3Dunits(),
                                      outerRadius * m_boardAdapter.BiuTo3Dunits(),
@@ -1120,6 +1188,40 @@ void C3D_RENDER_RAYTRACING::insert3DPadHole( const D_PAD* aPad )
         m_containerWithObjectsToDelete.Add( ring );
 
         object2d_A = ring;
+
+        // If the object (ring) is intersected by an antioutline board,
+        // it will use instease a CSG of two circles.
+        if( object2d_A && !m_antioutlineBoard2dObjects->GetList().empty() )
+        {
+
+            m_antioutlineBoard2dObjects->GetListObjectsIntersects(
+                        object2d_A->GetBBox(),
+                        antiOutlineIntersectionList );
+        }
+
+        if( !antiOutlineIntersectionList.empty() )
+        {
+            CFILLEDCIRCLE2D *innerCircle = new CFILLEDCIRCLE2D( center,
+                                                                innerRadius * m_boardAdapter.BiuTo3Dunits(),
+                                                                *aPad );
+
+            CFILLEDCIRCLE2D *outterCircle = new CFILLEDCIRCLE2D( center,
+                                                                 outerRadius * m_boardAdapter.BiuTo3Dunits(),
+                                                                 *aPad );
+            std::vector<const COBJECT2D *> *object2d_B = new std::vector<const COBJECT2D *>();
+            object2d_B->push_back( innerCircle );
+
+            CITEMLAYERCSG2D *itemCSG2d = new CITEMLAYERCSG2D( outterCircle,
+                                                              object2d_B,
+                                                              CSGITEM_FULL,
+                                                              *aPad );
+
+            m_containerWithObjectsToDelete.Add( itemCSG2d );
+            m_containerWithObjectsToDelete.Add( innerCircle );
+            m_containerWithObjectsToDelete.Add( outterCircle );
+
+            object2d_A = itemCSG2d;
+        }
     }
     else    // Oblong hole
     {
@@ -1173,6 +1275,14 @@ void C3D_RENDER_RAYTRACING::insert3DPadHole( const D_PAD* aPad )
         m_containerWithObjectsToDelete.Add( outerSeg );
 
         object2d_A = itemCSG2d;
+
+        if( object2d_A && !m_antioutlineBoard2dObjects->GetList().empty() )
+        {
+
+            m_antioutlineBoard2dObjects->GetListObjectsIntersects(
+                        object2d_A->GetBBox(),
+                        antiOutlineIntersectionList );
+        }
     }
 
 
@@ -1201,6 +1311,14 @@ void C3D_RENDER_RAYTRACING::insert3DPadHole( const D_PAD* aPad )
                     //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
                         object2d_B->push_back( hole2d );
                 }
+            }
+        }
+
+        if( !antiOutlineIntersectionList.empty() )
+        {
+            for( const COBJECT2D *obj : antiOutlineIntersectionList )
+            {
+                object2d_B->push_back( obj );
             }
         }
 

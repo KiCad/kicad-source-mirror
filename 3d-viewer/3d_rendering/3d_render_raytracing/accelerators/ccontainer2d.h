@@ -59,6 +59,11 @@ public:
         }
     }
 
+    const CBBOX2D &GetBBox() const
+    {
+        return m_bbox;
+    }
+
     void Clear();
 
     const LIST_OBJECT2D &GetList() const { return m_objects; }

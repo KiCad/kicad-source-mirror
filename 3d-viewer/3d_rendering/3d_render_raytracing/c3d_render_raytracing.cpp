@@ -61,6 +61,7 @@ C3D_RENDER_RAYTRACING::C3D_RENDER_RAYTRACING( BOARD_ADAPTER& aAdapter, CCAMERA& 
     m_oldWindowsSize.x = 0;
     m_oldWindowsSize.y = 0;
     m_outlineBoard2dObjects = NULL;
+    m_antioutlineBoard2dObjects = NULL;
     m_firstHitinfo = NULL;
     m_shaderBuffer = NULL;
     m_camera_light = NULL;
@@ -84,6 +85,9 @@ C3D_RENDER_RAYTRACING::~C3D_RENDER_RAYTRACING()
 
     delete m_outlineBoard2dObjects;
     m_outlineBoard2dObjects = NULL;
+
+    delete m_antioutlineBoard2dObjects;
+    m_antioutlineBoard2dObjects = NULL;
 
     delete[] m_shaderBuffer;
     m_shaderBuffer = NULL;

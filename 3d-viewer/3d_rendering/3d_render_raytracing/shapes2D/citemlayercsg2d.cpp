@@ -90,6 +90,7 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
     float currentRayDist;
     SFVEC2F currentRayPos;
     SFVEC2F currentNormal;
+    RAYSEG2D currentRay = aSegRay;
 
     if( m_objectA->IsPointInside( aSegRay.m_Start ) )
     {
@@ -103,18 +104,20 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
         if( !m_objectA->Intersect( aSegRay, &currentRayDist, &currentNormal ) )
             return false;
 
-        currentRayPos = aSegRay.atNormalized( NextFloatDown( currentRayDist ) );
+        currentRayPos = aSegRay.atNormalized( currentRayDist + 0.01f );
+
+        currentRay = RAYSEG2D( currentRayPos, aSegRay.m_End );
     }
+
+    currentRayDist = 0.0f;
 
     //wxASSERT( (currentRayDist >= 0.0f) && (currentRayDist <= 1.0f) );
 
 
     // move through the union of subtracted regions
-    bool hitSubRegion = false;
-
     if( m_objectB )
     {
-        while(1)
+        for( unsigned int l = 0; l < 4; ++l )
         {
             bool wasInsideSubVol = false;
 
@@ -123,60 +126,41 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
             {
                 if( ((const COBJECT2D *)(*m_objectB)[i])->IsPointInside( currentRayPos ) )
                 {
-                    hitSubRegion = true;
-
                     // ray point is inside a subtracted region,  so move it to the end of the
                     // subtracted region
                     float hitDist;
-                    if( !((const COBJECT2D *)(*m_objectB)[i])->Intersect( aSegRay,
+                    SFVEC2F tmpNormal;
+                    if( !((const COBJECT2D *)(*m_objectB)[i])->Intersect( currentRay,
                                                                           &hitDist,
-                                                                          &currentNormal ) )
+                                                                          &tmpNormal ) )
                         return false; // ray hit main object but did not leave subtracted volume
 
                     wxASSERT( hitDist <= 1.0f );
 
                     if( hitDist > currentRayDist )
-                        currentRayDist = hitDist;
-
-                    currentRayDist += 0.0001f;
-
-                    // ray has left this specific subtracted object volume
-                    currentRayPos = aSegRay.atNormalized( currentRayDist );
-
-                    if( m_objectA->IsPointInside( currentRayPos ) )
                     {
                         wasInsideSubVol = true;
 
-                        break;
+                        currentRayPos = currentRay.atNormalized( glm::min( hitDist + 0.0001f, 1.0f ) );
+
+                        currentRayDist = 0.0001f;
+
+                        currentRay = RAYSEG2D( currentRayPos, aSegRay.m_End );
+
+                        currentNormal = tmpNormal * -1.0f;
                     }
                 }
             }
 
             if( !wasInsideSubVol )
-                break; // ray has succesfully passed through all subtracted regions
-
-            if( currentRayDist >= 1.0f )
+            {
                 break;
+            }
         }
     }
 
-    //ray is not inside any of the specific subtracted regions
-
-    if( hitSubRegion )
-    {
-        //if( !m_objectA->IsPointInside( currentRayPos ) )
-        //    return false; // ray got right through the hole in the object!
-
-        currentNormal *= -1.0f;
-    }
-    else
-    {
-        //ray just hit the main object without hitting any holes
-    }
-
     *aNormalOut = currentNormal;
-    *aOutT      = currentRayDist;
-
+    *aOutT      = glm::min( glm::max( 1.0f - glm::length( currentRayPos - aSegRay.m_End ) / aSegRay.m_Length, 0.0f ), 1.0f );
     return true;
 }
 

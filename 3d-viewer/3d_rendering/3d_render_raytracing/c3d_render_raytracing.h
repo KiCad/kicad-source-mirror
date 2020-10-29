@@ -160,6 +160,7 @@ private:
     CCONTAINER2D m_containerWithObjectsToDelete;
 
     CCONTAINER2D *m_outlineBoard2dObjects;
+    CBVHCONTAINER2D *m_antioutlineBoard2dObjects;
 
     CGENERICACCELERATOR *m_accelerator;
 

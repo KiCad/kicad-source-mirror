@@ -207,7 +207,7 @@ bool CPOLYGONBLOCK2D::IsPointInside( const SFVEC2F &aPoint ) const
     // At this moment, the point is not inside a hole, so check if it is
     // inside the polygon
     for( unsigned int i = 0; i < m_outers_and_holes.m_Outers.size(); i++ )
-        if( !m_outers_and_holes.m_Outers.empty() )
+        if( !m_outers_and_holes.m_Outers[i].empty() )
             if( polygon_IsPointInside( m_outers_and_holes.m_Outers[i], aPoint ) )
                 return true;
 

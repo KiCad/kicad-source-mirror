@@ -170,7 +170,7 @@ class BOARD_ADAPTER
 
     /**
      * @brief GetEpoxyThickness3DU - Get the current epoxy thickness
-     * @return thickness in 3d unities
+     * @return thickness in 3d units
      */
     float GetEpoxyThickness3DU() const noexcept
     {
@@ -179,7 +179,7 @@ class BOARD_ADAPTER
 
     /**
      * @brief GetNonCopperLayerThickness3DU - Get the current non copper layers thickness
-     * @return thickness in 3d unities of non copperlayers
+     * @return thickness in 3d units of non copperlayers
      */
     float GetNonCopperLayerThickness3DU() const noexcept
     {
@@ -188,7 +188,7 @@ class BOARD_ADAPTER
 
     /**
      * @brief GetCopperThickness3DU - Get the current copper layer thickness
-     * @return thickness in 3d unities of copperlayers
+     * @return thickness in 3d units of copperlayers
      */
     float GetCopperThickness3DU() const noexcept
     {
@@ -197,13 +197,13 @@ class BOARD_ADAPTER
 
     /**
      * @brief GetCopperThicknessBIU - Get the current copper layer thickness
-     * @return thickness in board unities
+     * @return thickness in board units
      */
     int GetHolePlatingThicknessBIU() const noexcept;
 
     /**
      * @brief GetBoardSizeBIU - Get the board size
-     * @return size in BIU unities
+     * @return size in BIU units
      */
     wxSize GetBoardSizeBIU() const noexcept
     {
@@ -211,8 +211,8 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetBoardPosBIU - Get the board size
-     * @return size in BIU unities
+     * @brief GetBoardPosBIU - Get the board center
+     * @return position in BIU units
      */
     wxPoint GetBoardPosBIU() const noexcept
     {
@@ -336,7 +336,7 @@ class BOARD_ADAPTER
     /**
      * @brief GetLayerTopZpos3DU - Get the top z position
      * @param aLayerId: layer id
-     * @return position in 3D unities
+     * @return position in 3D units
      */
     float GetLayerTopZpos3DU( PCB_LAYER_ID aLayerId ) const noexcept
     {
@@ -346,7 +346,7 @@ class BOARD_ADAPTER
     /**
      * @brief GetLayerBottomZpos3DU - Get the bottom z position
      * @param aLayerId: layer id
-     * @return position in 3D unities
+     * @return position in 3D units
      */
     float GetLayerBottomZpos3DU( PCB_LAYER_ID aLayerId ) const noexcept
     {
