@@ -27,12 +27,6 @@ find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc R
 
 add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW -DDRC_PROTO -DTEST_APP_NO_MAIN)
 
-if( BUILD_GITHUB_PLUGIN )
-    set( GITHUB_PLUGIN_LIBRARIES github_plugin )
-endif()
-
-
-
 add_executable( drc_proto
     drc_proto_test.cpp
     drc_proto.cpp
@@ -66,7 +60,7 @@ add_executable( drc_proto
     ../../common/base_units.cpp
 )
 
-add_dependencies( drc_proto pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} ${GITHUB_PLUGIN_LIBRARIES} )
+add_dependencies( drc_proto pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} )
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
@@ -107,9 +101,8 @@ target_link_libraries( drc_proto
     unit_test_utils
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
-    ${GITHUB_PLUGIN_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
-    ${Boost_LIBRARIES}      # must follow GITHUB
+    ${Boost_LIBRARIES}
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 )

@@ -881,8 +881,6 @@ public:
      */
     void UpdateTitle();
 
-    void On3DShapeLibWizard( wxCommandEvent& event );
-
     /**
      * Allows Pcbnew to install its preferences panel into the preferences dialog.
      */

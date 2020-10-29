@@ -36,11 +36,6 @@
 #include <plugins/altium/altium_circuit_studio_plugin.h>
 #include <plugins/altium/altium_designer_plugin.h>
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
-
-#if defined(BUILD_GITHUB_PLUGIN)
- #include <github/github_plugin.h>
-#endif
-
 #include <wildcards_and_files_ext.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
@@ -150,24 +145,9 @@ IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath 
     // *.pretty/ with *.kicad_mod in there., and I don't want to return -1,
     // since we only claimed to be guessing.
     //
-    // However libraries on GitHub have names ending by .pretty
-    // so test also this is not a name starting by http (including https).
-    else if( fn.GetExt() == KiCadFootprintLibPathExtension &&
-             !aLibPath.StartsWith( wxT( "http" ) ) )
+    else if( fn.GetExt() == KiCadFootprintLibPathExtension )
     {
         ret = KICAD_SEXP;
-    }
-    else
-    {
-#if defined(BUILD_GITHUB_PLUGIN)
-        // There is no extension for a remote repo, so test the server name.
-        wxURI   uri( aLibPath );
-
-        if( uri.HasServer() && uri.GetServer() == wxT( "github.com" ) )
-        {
-            ret = GITHUB;
-        }
-#endif
     }
 
     return ret;
@@ -218,8 +198,5 @@ static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitMakerPlugin( IO_MGR::ALTIUM_
         []() -> PLUGIN* { return new ALTIUM_CIRCUIT_MAKER_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerCadstarArchivePlugin( IO_MGR::CADSTAR_PCB_ARCHIVE,
         wxT( "CADSTAR PCB Archive" ), []() -> PLUGIN* { return new CADSTAR_PCB_ARCHIVE_PLUGIN; } );
-#ifdef BUILD_GITHUB_PLUGIN
-static IO_MGR::REGISTER_PLUGIN registerGithubPlugin( IO_MGR::GITHUB, wxT("Github"), []() -> PLUGIN* { return new GITHUB_PLUGIN; } );
-#endif /* BUILD_GITHUB_PLUGIN */
 static IO_MGR::REGISTER_PLUGIN registerLegacyPlugin( IO_MGR::LEGACY, wxT("Legacy"), []() -> PLUGIN* { return new LEGACY_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerGPCBPlugin( IO_MGR::GEDA_PCB, wxT("GEDA/Pcb"), []() -> PLUGIN* { return new GPCB_PLUGIN; } );

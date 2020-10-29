@@ -1024,7 +1024,6 @@ bool FILENAME_RESOLVER::GetKicadPaths( std::list< wxString >& paths )
     {
         // filter out URLs, template directories, and known system paths
         if( mS->first == wxString( "KICAD_PTEMPLATES" )
-            || mS->first == wxString( "KIGITHUB" )
             || mS->first == wxString( "KISYSMOD" ) )
         {
             ++mS;

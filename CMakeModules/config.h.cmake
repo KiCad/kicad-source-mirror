@@ -69,9 +69,6 @@
 #define WXPYTHON_VERSION                "@WXPYTHON_VERSION@"
 #endif
 
-/// When defined, build the GITHUB_PLUGIN for pcbnew.
-#cmakedefine BUILD_GITHUB_PLUGIN
-
 /// A file extension with a leading '.' is a suffix, and this one is used on
 /// top level program modules which implement the KIFACE.
 #define KIFACE_SUFFIX                   "@KIFACE_SUFFIX@"

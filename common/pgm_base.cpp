@@ -259,26 +259,6 @@ bool PGM_BASE::InitPgm()
 
     SetLanguagePath();
 
-    wxString envVarName = wxT( "KIGITHUB" );
-    ENV_VAR_ITEM envVarItem;
-    wxString envValue;
-    wxFileName tmpFileName;
-
-    if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
-    {
-        tmpFileName.AssignDir( envValue );
-        envVarItem.SetDefinedExternally( true );
-        wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Found entry %s externally", envVarName );
-    }
-    else
-    {
-        envVarItem.SetValue( wxString( wxT( "https://github.com/KiCad" ) ) );
-        envVarItem.SetDefinedExternally( false );
-    }
-
-    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s", envVarName, envVarItem.GetValue() );
-    m_local_env_vars[ envVarName ] = envVarItem;
-
     wxFileName baseSharePath;
 #if defined( __WXMSW__ )
     // Make the paths relative to the executable dir as KiCad might be installed anywhere
@@ -296,7 +276,10 @@ bool PGM_BASE::InitPgm()
 #endif
 
     // KISYSMOD
-    envVarName = wxT( "KISYSMOD" );
+    wxString envVarName = wxT( "KISYSMOD" );
+    ENV_VAR_ITEM envVarItem;
+    wxString envValue;
+    wxFileName tmpFileName;
 
     if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
     {

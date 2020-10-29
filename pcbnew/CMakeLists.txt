@@ -27,14 +27,6 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     #message( STATUS "pcbnew INC_AFTER:${INC_AFTER}" )
 endif()
 
-
-if( BUILD_GITHUB_PLUGIN )
-    set( GITHUB_3DLIBRARIES_WIZARD
-        dialogs/wizard_3DShape_Libs_downloader_base.cpp
-        dialogs/wizard_3DShape_Libs_downloader.cpp
-        )
-endif()
-
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ./dialogs
@@ -180,7 +172,6 @@ set( PCBNEW_DIALOGS
     footprint_wizard.cpp
     footprint_wizard_frame.cpp
     footprint_wizard_frame_functions.cpp
-    ${GITHUB_3DLIBRARIES_WIZARD}
     )
 
 if( KICAD_SCRIPTING AND KICAD_SCRIPTING_ACTION_MENU )
@@ -513,11 +504,6 @@ if( KICAD_SCRIPTING )   # Generate pcbnew.py and pcbnew_wrap.cxx using swig
         )
 endif()
 
-
-if( BUILD_GITHUB_PLUGIN )
-    set( GITHUB_PLUGIN_LIBRARIES github_plugin )
-endif()
-
 if( UNIX AND NOT APPLE )
     list( APPEND PCBNEW_EXTRA_LIBS rt )
 endif()
@@ -623,13 +609,6 @@ add_subdirectory( plugins/cadstar )
 
 set( PCBNEW_IO_LIBRARIES pcad2kicadpcb altium2pcbnew cadstar2pcbnew CACHE INTERNAL "")
 
-if( BUILD_GITHUB_PLUGIN )
-    add_subdirectory( github )
-    # github_plugin depends on make_lexer outputs in common
-    add_dependencies( github_plugin pcbcommon )
-endif()
-
-
 # a very small program launcher for pcbnew_kiface
 add_executable( pcbnew WIN32 MACOSX_BUNDLE
     ${CMAKE_SOURCE_DIR}/common/single_top.cpp
@@ -726,10 +705,9 @@ set( PCBNEW_KIFACE_LIBRARIES
     markdown_lib
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
-    ${GITHUB_PLUGIN_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
-    ${Boost_LIBRARIES}      # must follow GITHUB
+    ${Boost_LIBRARIES}
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
     )
 

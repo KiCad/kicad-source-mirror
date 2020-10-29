@@ -380,7 +380,7 @@ protected:
     wxString        m_editor_name;
     wxSize          m_help_size;
 
-    /// Local environment variable expansion settings such as KIGITHUB, KISYSMOD, and KISYS3DMOD.
+    /// Local environment variable expansion settings such as KISYSMOD, and KISYS3DMOD.
     ENV_VAR_MAP     m_local_env_vars;
 
     /// Flag to indicate if the environment variable overwrite warning dialog should be shown.

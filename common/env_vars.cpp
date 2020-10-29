@@ -38,7 +38,6 @@ static const ENV_VAR_LIST predefined_env_vars = {
     "KICAD_SYMBOL_DIR",
     "KISYS3DMOD",
     "KISYSMOD",
-    "KIGITHUB",
     "KICAD_TEMPLATE_DIR",
     "KICAD_USER_TEMPLATE_DIR",
     "KICAD_PTEMPLATES",
@@ -74,9 +73,6 @@ void initialiseEnvVarHelp( STRING_MAP& aMap )
         _( "The base path of system footprint 3D shapes (.3Dshapes folders).");
     aMap["KICAD_SYMBOL_DIR"] =
         _( "The base path of the locally installed symbol libraries.");
-    aMap["KIGITHUB"] =
-        _( "Used by KiCad to define the URL of the repository "
-            "of the official KiCad footprint libraries.");
     aMap["KICAD_TEMPLATE_DIR"] =
         _( "A directory containing project templates installed with KiCad.");
     aMap["KICAD_USER_TEMPLATE_DIR"] =

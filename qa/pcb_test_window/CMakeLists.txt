@@ -27,11 +27,7 @@ find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc R
 
 add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW)
 
-if( BUILD_GITHUB_PLUGIN )
-    set( GITHUB_PLUGIN_LIBRARIES github_plugin )
-endif()
-
-add_dependencies( pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} ${GITHUB_PLUGIN_LIBRARIES} )
+add_dependencies( pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} )
 
 add_executable(test_window WIN32
   test.cpp
@@ -68,7 +64,6 @@ target_link_libraries( test_window
     gal
     common
     ${PCBNEW_IO_LIBRARIES}
-    ${GITHUB_PLUGIN_LIBRARIES}
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}

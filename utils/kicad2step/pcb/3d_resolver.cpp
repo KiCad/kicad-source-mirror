@@ -214,7 +214,6 @@ bool S3D_RESOLVER::createPathList( void )
     {
         // filter out URLs, template directories, and known system paths
         if( mS->first == wxString( "KICAD_PTEMPLATES" )
-            || mS->first == wxString( "KIGITHUB" )
             || mS->first == wxString( "KISYSMOD" ) )
         {
             ++mS;

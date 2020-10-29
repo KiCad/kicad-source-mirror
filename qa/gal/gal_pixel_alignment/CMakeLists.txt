@@ -27,11 +27,7 @@ find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc R
 
 add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW -DUSE_TOOL_MANAGER -DQA_TEST)
 
-if( BUILD_GITHUB_PLUGIN )
-    set( GITHUB_PLUGIN_LIBRARIES github_plugin )
-endif()
-
-add_dependencies( pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} ${GITHUB_PLUGIN_LIBRARIES} )
+add_dependencies( pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} )
 
 add_executable(test_gal_pixel_alignment WIN32
   test_gal_pixel_alignment.cpp
@@ -76,7 +72,6 @@ target_link_libraries( test_gal_pixel_alignment
     gal
     common
     ${PCBNEW_IO_LIBRARIES}
-    ${GITHUB_PLUGIN_LIBRARIES}
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}

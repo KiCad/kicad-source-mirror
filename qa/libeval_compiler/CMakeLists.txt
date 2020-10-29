@@ -26,11 +26,7 @@ find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc R
 
 add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW)
 
-if( BUILD_GITHUB_PLUGIN )
-    set( GITHUB_PLUGIN_LIBRARIES github_plugin )
-endif()
-
-add_dependencies( pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} ${GITHUB_PLUGIN_LIBRARIES} )
+add_dependencies( pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} )
 
 add_executable( libeval_compiler_test
     libeval_compiler_test.cpp
@@ -78,7 +74,6 @@ target_link_libraries( libeval_compiler_test
     common
     pcbcommon
     ${PCBNEW_IO_LIBRARIES}
-    ${GITHUB_PLUGIN_LIBRARIES}
     common
     pcbcommon
     ${Boost_FILESYSTEM_LIBRARY}

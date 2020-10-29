@@ -73,7 +73,6 @@ target_link_libraries( qa_pcbnew_utils PUBLIC
 #     unit_test_utils
 #     ${PCBNEW_IO_LIBRARIES}
 #     ${wxWidgets_LIBRARIES}
-#     ${GITHUB_PLUGIN_LIBRARIES}
 #     ${GDI_PLUS_LIBRARIES}
 #     ${PYTHON_LIBRARIES}
 #     ${Boost_LIBRARIES}      # must follow GITHUB

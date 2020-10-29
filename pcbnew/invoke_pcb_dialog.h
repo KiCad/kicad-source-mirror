@@ -72,15 +72,6 @@ class KIWAY;
  */
 void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller );
 
-/**
- * Function Invoke3DShapeLibsDownloaderWizard
- * Runs the downloader wizard for easy 3D shape libraries download from
- * the official Kicad Github repository of *.3Dshape libraries.
- *
- * @param aCaller is the wxWindow which is invoking the dialog.
- */
-void Invoke3DShapeLibsDownloaderWizard( wxWindow* aCaller );
-
 
 /**
  * Function InvokePluginOptionsEditor

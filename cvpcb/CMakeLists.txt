@@ -76,10 +76,6 @@ target_link_libraries( cvpcb_kiface
     ${GDI_PLUS_LIBRARIES}
     )
 
-if( BUILD_GITHUB_PLUGIN )
-    target_link_libraries( cvpcb_kiface github_plugin )
-endif()
-
 # Must follow github_plugin
 target_link_libraries( cvpcb_kiface ${Boost_LIBRARIES} )
 

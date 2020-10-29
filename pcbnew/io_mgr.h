@@ -62,11 +62,6 @@ public:
         ALTIUM_CIRCUIT_MAKER,
         CADSTAR_PCB_ARCHIVE,
         GEDA_PCB, ///< Geda PCB file formats.
-
-    //N.B. This needs to be commented out to ensure compile-type errors
-#if defined(BUILD_GITHUB_PLUGIN)
-        GITHUB, ///< Read only http://github.com repo holding pretty footprints
-#endif
         // add your type here.
 
         // etc.

@@ -45,13 +45,6 @@
 #include <project/project_local_settings.h>
 
 
-void PCB_EDIT_FRAME::On3DShapeLibWizard( wxCommandEvent& event )
-{
-#ifdef BUILD_GITHUB_PLUGIN
-    Invoke3DShapeLibsDownloaderWizard( this );
-#endif
-}
-
 
 void PCB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
                                          PANEL_HOTKEYS_EDITOR* aHotkeysPanel )

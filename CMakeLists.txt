@@ -93,10 +93,6 @@ option( KICAD_BUILD_QA_TESTS
     "Build software Quality assurance unit tests (default ON)"
     ON )
 
-option( BUILD_GITHUB_PLUGIN
-    "Build the GITHUB_PLUGIN for pcbnew."
-    ON )
-
 option( KICAD_SPICE
     "Build KiCad with internal Spice simulator."
     ON )

@@ -431,12 +431,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     prefsMenu->Add( ACTIONS::configurePaths );
     prefsMenu->Add( ACTIONS::showFootprintLibTable );
 
-#ifdef BUILD_GITHUB_PLUGIN
-    prefsMenu->Add( _( "Add &3D Shapes Libraries Wizard..." ),
-                    _( "Download 3D shape libraries from GitHub" ),
-                    ID_PCB_3DSHAPELIB_WIZARD,
-                    import3d_xpm );
-#endif
     prefsMenu->Add( _( "Preferences...\tCTRL+," ),
                     _( "Show preferences for all open tools" ),
                     wxID_PREFERENCES,

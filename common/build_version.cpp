@@ -231,13 +231,6 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << OFF;
 #endif
 
-    aMsg << indent4 << "BUILD_GITHUB_PLUGIN=";
-#ifdef BUILD_GITHUB_PLUGIN
-    aMsg << ON;
-#else
-    aMsg << OFF;
-#endif
-
 #ifdef KICAD_USE_OCE
     aMsg << indent4 << "KICAD_USE_OCE=" << ON;
 #endif
