@@ -43,18 +43,18 @@ class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxSplitterWindow* m_splitter1;
+		wxSplitterWindow* m_splitterMainWindow;
 		wxPanel* m_leftPanel;
 		wxCheckBox* m_groupComponentsBox;
 		wxBitmapButton* m_bRefresh;
 		wxDataViewListCtrl* m_fieldsCtrl;
 		wxButton* m_addFieldButton;
-		wxPanel* m_panel4;
+		wxPanel* m_rightPanel;
 		WX_GRID* m_grid;
-		wxButton* m_button1;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxButton* m_buttonApply;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }

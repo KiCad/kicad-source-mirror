@@ -732,23 +732,27 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     // Now that the fields are loaded we can set the initial location of the splitter
     // based on the list width.  Again, SetWidth( wxCOL_WIDTH_AUTOSIZE ) fails us on GTK.
     int nameColWidth = 0;
+    m_canonicalNameColWidth = 0;
 
     for( int row = 0; row < m_fieldsCtrl->GetItemCount(); ++row )
     {
         const wxString& fieldName = m_fieldsCtrl->GetTextValue( row, DISPLAY_NAME_COLUMN );
         nameColWidth = std::max( nameColWidth, KIUI::GetTextSize( fieldName, m_fieldsCtrl ).x );
         const wxString& canon_Name = m_fieldsCtrl->GetTextValue( row, CANONICAL_NAME_COLUMN );
-        m_canonicalNameColWidth = std::max( nameColWidth,
+        m_canonicalNameColWidth = std::max( m_canonicalNameColWidth,
                                             KIUI::GetTextSize( canon_Name, m_fieldsCtrl ).x );
     }
 
+    m_canonicalNameColWidth += COLUMN_MARGIN;
+
     int fieldsMinWidth = nameColWidth + m_canonicalNameColWidth +
-                         m_groupByColWidth + m_showColWidth + 40;
+                         m_groupByColWidth + m_showColWidth;
 
     m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( nameColWidth );
-    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetWidth( nameColWidth );
-    m_splitter1->SetSashPosition( fieldsMinWidth );
-    //m_splitter1->SetSashPosition( fieldsMinWidth );
+    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetWidth( m_canonicalNameColWidth );
+
+    m_splitterMainWindow->SetMinimumPaneSize( fieldsMinWidth );
+    m_splitterMainWindow->SetSashPosition( fieldsMinWidth + 40 );
 
     m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
     m_dataModel->Sort( 0, true );
@@ -829,7 +833,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     m_grid->SetGridCursor( 0, 1 );
     SetInitialFocus( m_grid );
 
-    m_sdbSizer1OK->SetDefault();
+    m_sdbSizerOK->SetDefault();
 
     FinishDialogSettings();
     SetSize( defaultDlgSize );
@@ -1185,14 +1189,15 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableItemContextMenu( wxGridEvent& event )
 
 void DIALOG_FIELDS_EDITOR_GLOBAL::OnSizeFieldList( wxSizeEvent& event )
 {
-    int nameColWidth = event.GetSize().GetX() - m_showColWidth - m_groupByColWidth - 8;
+    int nameColWidth = event.GetSize().GetX() - m_showColWidth
+                       - m_groupByColWidth - m_canonicalNameColWidth - 8;
 
     // GTK loses its head and messes these up when resizing the splitter bar:
     m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN )->SetWidth( m_showColWidth );
     m_fieldsCtrl->GetColumn( GROUP_BY_COLUMN )->SetWidth( m_groupByColWidth );
 
-    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetWidth( nameColWidth/2 );
-    m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( nameColWidth/2 );
+    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetWidth( m_canonicalNameColWidth );
+    m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( nameColWidth );
 
     event.Skip();
 }
