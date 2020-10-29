@@ -379,21 +379,23 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
         switch( aGalType )
         {
         case GAL_TYPE_OPENGL:
-            try
+        {
+            wxString errormsg = KIGFX::OPENGL_GAL::CheckFeatures( m_options );
+
+            if( errormsg.empty() )
             {
                 new_gal = new KIGFX::OPENGL_GAL( m_options, this, this, this );
-                break;
             }
-            catch( std::runtime_error& err )
+            else
             {
                 aGalType = GAL_TYPE_CAIRO;
                 DisplayInfoMessage( m_parent,
-                        _( "Could not use OpenGL, falling back to software rendering" ),
-                        wxString( err.what() ) );
+                        _( "Could not use OpenGL, falling back to software rendering" ), errormsg );
+                new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );
             }
 
-            new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );
             break;
+        }
 
         case GAL_TYPE_CAIRO:
             new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );

@@ -86,6 +86,13 @@ public:
 
     virtual ~OPENGL_GAL();
 
+    /**
+     * @brief Checks OpenGL features
+     * @param aOptions 
+     * @return wxEmptyString if OpenGL 2.1 or greater is available, otherwise returns error message
+     */
+    static wxString CheckFeatures( GAL_DISPLAY_OPTIONS& aOptions );
+
     virtual bool IsOpenGlEngine() override { return true; }
 
     /// @copydoc GAL::IsInitialized()
