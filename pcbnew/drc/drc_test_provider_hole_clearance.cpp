@@ -117,6 +117,8 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
     size_t       count = 0;
     size_t       ii = 0;
 
+    m_holeTree.clear();
+
     auto countItems =
             [&]( BOARD_ITEM* item ) -> bool
             {

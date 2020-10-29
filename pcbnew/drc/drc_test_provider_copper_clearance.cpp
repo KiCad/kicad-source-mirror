@@ -27,7 +27,6 @@
 #include <class_pad.h>
 #include <class_track.h>
 
-#include <geometry/shape_arc.h>
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_rect.h>
@@ -143,6 +142,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
     size_t delta = 50;
     size_t count = 0;
     size_t ii = 0;
+
+    m_copperTree.clear();
 
     auto countItems =
             [&]( BOARD_ITEM* item ) -> bool
