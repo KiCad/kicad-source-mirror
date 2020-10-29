@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-29 15:47+0000\n"
+"PO-Revision-Date: 2020-10-29 16:42+0000\n"
 "Last-Translator: Iñigo Figuero Sanz <news@imagedworld.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -7569,24 +7569,20 @@ msgid "Remove fields if not in new symbol"
 msgstr "Eliminar campos si no aparecen en el nuevo símbolo"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:124
-#, fuzzy
 msgid "Reset fields if empty in new symbol"
-msgstr "Crea una librería vacía"
+msgstr "Reiniciar campos si están vacíos en un símbolo nuevo"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:125
-#, fuzzy
 msgid "Update field visibilities"
-msgstr "Hacer el campo seleccionado visible"
+msgstr "Actualizar la visibilidad de los campos"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:126
-#, fuzzy
 msgid "Update field sizes and styles"
-msgstr "Actualizar valores de los campos"
+msgstr "Actualizar tamaños y estilos de los campos"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:127
-#, fuzzy
 msgid "Update field positions"
-msgstr "Posición personalizada"
+msgstr "Actualizar posición de los campos"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:145
 #: eeschema/dialogs/dialog_change_symbols.cpp:463
@@ -7606,9 +7602,9 @@ msgid "Update"
 msgstr "Actualizar"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s \"%s\" from \"%s\" to \"%s\""
-msgstr "Cambiar huella \"%s\" (de \"%s\") a \"%s\""
+msgstr "%s %s \"%s\" de \"%s\"a \"%s\""
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:464
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:31
@@ -7616,62 +7612,52 @@ msgid "symbol"
 msgstr "símbolo"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:464
-#, fuzzy
 msgid "symbols"
-msgstr "Símbolo"
+msgstr "símbolos"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:473
-#, fuzzy
 msgid "*** symbol not found ***"
-msgstr "no se ha encontrado la huella"
+msgstr "*** no se ha encontrado el símbolo***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:482
 msgid "*** new symbol has too few units ***"
-msgstr ""
+msgstr "*** el símbolo nuevo no tiene unidades suficientes ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
-#, fuzzy
 msgid "Update all symbols in schematic"
-msgstr "Insertar símbolo en el esquema"
+msgstr "Actualizar todos los símbolos en el esquema"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
-#, fuzzy
 msgid "Update selected symbol"
-msgstr "Seleccionar símbolo"
+msgstr "Actualizar el símbolo seleccionado"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
-#, fuzzy
 msgid "Update symbols matching reference designator:"
-msgstr "Referencia por defecto:"
+msgstr "Actualizar los símbolos con la referencia:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:39
-#, fuzzy
 msgid "Update symbols matching value:"
-msgstr "%s huellas con valor:"
+msgstr "Actualizar los símbolos con el valor:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:45
-#, fuzzy
 msgid "Update symbols matching library identifier:"
-msgstr "Identificador de librería de símbolos no válido"
+msgstr "Actualizar los símbolos con el identificador:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:72
-#, fuzzy
 msgid "New library identifier:"
-msgstr "Nuevo identificador de huella:"
+msgstr "Nuevo identificador de librería:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
-#, fuzzy
 msgid "Reset Fields"
-msgstr "  Campos"
+msgstr "Reinicializar campos"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:108
 msgid "Select None"
 msgstr "Eliminar selección"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:119
-#, fuzzy
 msgid "Remove fields if not in library symbol"
-msgstr "El archivo no es una biblioteca Eeschema"
+msgstr "Eliminar campos si no aparecen en el símbolo de la librería"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:120
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
