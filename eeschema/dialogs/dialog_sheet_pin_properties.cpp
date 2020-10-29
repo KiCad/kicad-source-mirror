@@ -25,7 +25,7 @@
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>
 #include <sch_validators.h>
-#include <dialog_edit_sheet_pin.h>
+#include <dialog_sheet_pin_properties.h>
 #include <dialogs/html_messagebox.h>
 #include <kicad_string.h>
 
@@ -40,8 +40,8 @@ static wxString sheetPinTypes[] =
 };
 
 
-DIALOG_EDIT_SHEET_PIN::DIALOG_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SCH_SHEET_PIN* aPin ) :
-    DIALOG_EDIT_SHEET_PIN_BASE( parent ),
+DIALOG_SHEET_PIN_PROPERTIES::DIALOG_SHEET_PIN_PROPERTIES( SCH_EDIT_FRAME* parent, SCH_SHEET_PIN* aPin ) :
+        DIALOG_SHEET_PIN_PROPERTIES_BASE( parent ),
     m_frame( parent ),
     m_sheetPin( aPin ),
     m_textSize( parent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
@@ -77,14 +77,14 @@ DIALOG_EDIT_SHEET_PIN::DIALOG_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SCH_SHEET_
 }
 
 
-DIALOG_EDIT_SHEET_PIN::~DIALOG_EDIT_SHEET_PIN()
+DIALOG_SHEET_PIN_PROPERTIES::~DIALOG_SHEET_PIN_PROPERTIES()
 {
     if( m_helpWindow )
         m_helpWindow->Destroy();
 }
 
 
-bool DIALOG_EDIT_SHEET_PIN::TransferDataToWindow()
+bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataToWindow()
 {
     SCH_SCREEN* screen = m_sheetPin->GetParent()->GetScreen();
 
@@ -104,7 +104,7 @@ bool DIALOG_EDIT_SHEET_PIN::TransferDataToWindow()
 }
 
 
-bool DIALOG_EDIT_SHEET_PIN::TransferDataFromWindow()
+bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataFromWindow()
 {
     if( !m_sheetPin->IsNew() )
     {
@@ -128,19 +128,19 @@ bool DIALOG_EDIT_SHEET_PIN::TransferDataFromWindow()
 }
 
 
-void DIALOG_EDIT_SHEET_PIN::onOKButton( wxCommandEvent& event )
+void DIALOG_SHEET_PIN_PROPERTIES::onOKButton( wxCommandEvent& event )
 {
     event.Skip();
 }
 
 
-void DIALOG_EDIT_SHEET_PIN::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
+void DIALOG_SHEET_PIN_PROPERTIES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
 {
     m_helpWindow = SCH_TEXT::ShowSyntaxHelp( this );
 }
 
 
-void DIALOG_EDIT_SHEET_PIN::onComboBox( wxCommandEvent& aEvent )
+void DIALOG_SHEET_PIN_PROPERTIES::onComboBox( wxCommandEvent& aEvent )
 {
     SCH_SCREEN* screen = m_sheetPin->GetParent()->GetScreen();
 

@@ -30,9 +30,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_EDIT_SHEET_PIN_BASE
+/// Class DIALOG_SHEET_PIN_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_EDIT_SHEET_PIN_BASE : public DIALOG_SHIM
+class DIALOG_SHEET_PIN_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -59,8 +59,8 @@ class DIALOG_EDIT_SHEET_PIN_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_EDIT_SHEET_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Sheet Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_EDIT_SHEET_PIN_BASE();
+		DIALOG_SHEET_PIN_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Sheet Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~DIALOG_SHEET_PIN_PROPERTIES_BASE();
 
 };
 

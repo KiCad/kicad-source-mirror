@@ -217,7 +217,9 @@ private:
 int InvokeDialogCreateBOM( SCH_EDIT_FRAME* aCaller )
 {
     DIALOG_BOM dlg( aCaller );
-    return dlg.ShowModal();
+
+    // QuasiModal so syntax help works
+    return dlg.ShowQuasiModal();
 }
 
 

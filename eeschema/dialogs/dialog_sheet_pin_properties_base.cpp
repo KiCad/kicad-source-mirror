@@ -5,11 +5,11 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_edit_sheet_pin_base.h"
+#include "dialog_sheet_pin_properties_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_EDIT_SHEET_PIN_BASE::DIALOG_EDIT_SHEET_PIN_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_SHEET_PIN_PROPERTIES_BASE::DIALOG_SHEET_PIN_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
@@ -101,16 +101,16 @@ DIALOG_EDIT_SHEET_PIN_BASE::DIALOG_EDIT_SHEET_PIN_BASE( wxWindow* parent, wxWind
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_comboName->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_EDIT_SHEET_PIN_BASE::onComboBox ), NULL, this );
-	m_hyperlink1->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_EDIT_SHEET_PIN_BASE::OnSyntaxHelp ), NULL, this );
-	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_SHEET_PIN_BASE::onOKButton ), NULL, this );
+	m_comboName->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SHEET_PIN_PROPERTIES_BASE::onComboBox ), NULL, this );
+	m_hyperlink1->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_SHEET_PIN_PROPERTIES_BASE::OnSyntaxHelp ), NULL, this );
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PIN_PROPERTIES_BASE::onOKButton ), NULL, this );
 }
 
-DIALOG_EDIT_SHEET_PIN_BASE::~DIALOG_EDIT_SHEET_PIN_BASE()
+DIALOG_SHEET_PIN_PROPERTIES_BASE::~DIALOG_SHEET_PIN_PROPERTIES_BASE()
 {
 	// Disconnect Events
-	m_comboName->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_EDIT_SHEET_PIN_BASE::onComboBox ), NULL, this );
-	m_hyperlink1->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_EDIT_SHEET_PIN_BASE::OnSyntaxHelp ), NULL, this );
-	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_SHEET_PIN_BASE::onOKButton ), NULL, this );
+	m_comboName->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SHEET_PIN_PROPERTIES_BASE::onComboBox ), NULL, this );
+	m_hyperlink1->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_SHEET_PIN_PROPERTIES_BASE::OnSyntaxHelp ), NULL, this );
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SHEET_PIN_PROPERTIES_BASE::onOKButton ), NULL, this );
 
 }

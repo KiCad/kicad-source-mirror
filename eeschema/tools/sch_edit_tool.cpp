@@ -56,7 +56,7 @@
 #include <dialogs/dialog_image_editor.h>
 #include <dialogs/dialog_edit_line_style.h>
 #include <dialogs/dialog_symbol_properties.h>
-#include <dialogs/dialog_edit_sheet_pin.h>
+#include <dialogs/dialog_sheet_pin_properties.h>
 #include <dialogs/dialog_edit_one_field.h>
 #include <dialogs/dialog_junction_props.h>
 #include "sch_drawing_tools.h"
@@ -1484,10 +1484,11 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_SHEET_PIN_T:
     {
-        SCH_SHEET_PIN*        pin = (SCH_SHEET_PIN*) item;
-        DIALOG_EDIT_SHEET_PIN dlg( m_frame, pin );
+        SCH_SHEET_PIN*              pin = (SCH_SHEET_PIN*) item;
+        DIALOG_SHEET_PIN_PROPERTIES dlg( m_frame, pin );
 
-        if( dlg.ShowModal() == wxID_OK )
+        // QuasiModal required for help dialog
+        if( dlg.ShowQuasiModal() == wxID_OK )
         {
             m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->OnModify();

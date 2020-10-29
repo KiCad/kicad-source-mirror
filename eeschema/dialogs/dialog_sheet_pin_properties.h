@@ -22,11 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_EDIT_SHEET_PIN_H
-#define DIALOG_EDIT_SHEET_PIN_H
+#ifndef DIALOG_SHEET_PIN_PROPERTIES_H
+#define DIALOG_SHEET_PIN_PROPERTIES_H
 
 
-#include <dialog_edit_sheet_pin_base.h>
+#include <dialog_sheet_pin_properties_base.h>
 #include <widgets/unit_binder.h>
 
 
@@ -34,7 +34,7 @@ class SCH_SHEET_PIN;
 class HTML_MESSAGE_BOX;
 
 
-class DIALOG_EDIT_SHEET_PIN : public DIALOG_EDIT_SHEET_PIN_BASE
+class DIALOG_SHEET_PIN_PROPERTIES : public DIALOG_SHEET_PIN_PROPERTIES_BASE
 {
     SCH_EDIT_FRAME*   m_frame;
     SCH_SHEET_PIN*    m_sheetPin;
@@ -44,8 +44,8 @@ class DIALOG_EDIT_SHEET_PIN : public DIALOG_EDIT_SHEET_PIN_BASE
     HTML_MESSAGE_BOX* m_helpWindow;
 
 public:
-    DIALOG_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SCH_SHEET_PIN* aPin );
-    ~DIALOG_EDIT_SHEET_PIN();
+    DIALOG_SHEET_PIN_PROPERTIES( SCH_EDIT_FRAME* parent, SCH_SHEET_PIN* aPin );
+    ~DIALOG_SHEET_PIN_PROPERTIES();
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -56,4 +56,4 @@ private:
     void onComboBox( wxCommandEvent& event ) override;
 };
 
-#endif // DIALOG_EDIT_SHEET_PIN_H
+#endif // DIALOG_SHEET_PIN_PROPERTIES_H
