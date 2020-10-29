@@ -903,6 +903,7 @@ bool LIB_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
     bool doSave = true;
     int dirtyCount = 0;
     bool applyToAll = false;
+    bool retv = true;
 
     for( const auto& libNickname : m_libMgr->GetLibraryNames() )
     {
@@ -937,6 +938,7 @@ bool LIB_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
                     msg.Printf( _( "Library \"%s\" is read only and must be saved as a "
                                    "different library." ), libNickname );
                     m_infoBar->ShowMessageFor( msg, 3000, wxICON_EXCLAMATION );
+                    retv = false;
                     continue;
                 }
 
@@ -944,10 +946,10 @@ bool LIB_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
                     continue;
 
                 if( !saveLibrary( libNickname, true ) )
-                    return false;
+                    retv = false;
             }
         }
     }
 
-    return true;
+    return retv;
 }
