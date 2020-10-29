@@ -130,7 +130,6 @@ class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
-		virtual void ModuleOrientEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void FootprintOrientEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOtherOrientation( wxCommandEvent& event ) { event.Skip(); }
 		virtual void UpdateFootprint( wxCommandEvent& event ) { event.Skip(); }

@@ -131,7 +131,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     m_cornerRadius( aParent, m_cornerRadiusLabel, m_tcCornerRadius, m_cornerRadiusUnits, true ),
     m_holeX( aParent, m_holeXLabel, m_holeXCtrl, m_holeXUnits, true ),
     m_holeY( aParent, m_holeYLabel, m_holeYCtrl, m_holeYUnits, true ),
-    m_OrientValidator( 1, &m_OrientValue ),
+    m_OrientValidator( 3, &m_OrientValue ),
     m_clearance( aParent, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits, true ),
     m_maskClearance( aParent, m_maskClearanceLabel, m_maskClearanceCtrl, m_maskClearanceUnits, true ),
     m_pasteClearance( aParent, m_pasteClearanceLabel, m_pasteClearanceCtrl, m_pasteClearanceUnits, true ),
@@ -470,12 +470,12 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
         if( footprint )
         {
-            msg.Printf( _("Footprint %s (%s), %s, rotated %.1f deg"),
+            msg.Printf( _("Footprint %s (%s), %s, rotated %g deg"),
                          footprint->Reference().GetShownText(),
                          footprint->Value().GetShownText(),
                          footprint->IsFlipped() ? _( "back side (mirrored)" )
                                                 : _( "front side" ),
-                         footprint->GetOrientation() / 10.0 );
+                         footprint->GetOrientationDegrees() );
         }
 
         m_parentInfo->SetLabel( msg );
