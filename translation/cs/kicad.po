@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
 "PO-Revision-Date: 2020-10-29 19:39+0000\n"
-"Last-Translator: Jan Vykydal <vvykys@gmail.com>\n"
+"Last-Translator: Radovan Blažek <blazra@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -670,9 +670,8 @@ msgid "Ambient Camera Light"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
-#, fuzzy
 msgid "Top Light"
-msgstr "Těsná"
+msgstr "Horní světlo"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:611
 msgid "Bottom Light"
