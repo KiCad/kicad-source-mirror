@@ -299,6 +299,12 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
     if( aEvent.IsAction( &PCB_ACTIONS::dragFreeAngle ) )
         mode |= PNS::DM_FREE_ANGLE;
 
+    // deal with locked items (override lock or abort the operation)
+    SELECTION_LOCK_FLAGS lockFlags = m_selectionTool->CheckLock();
+
+    if( lockFlags == SELECTION_LOCKED )
+        return 0;
+
     invokeInlineRouter( mode );
 
     return 0;
@@ -467,6 +473,12 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
             {
                 // Prepare to start dragging
 
+                // deal with locked items (override lock or abort the operation)
+                SELECTION_LOCK_FLAGS lockFlags = m_selectionTool->CheckLock();
+
+                if( lockFlags == SELECTION_LOCKED )
+                    break;
+
                 if( !( evt->IsAction( &PCB_ACTIONS::move )
                        || evt->IsAction( &PCB_ACTIONS::moveWithReference ) )
                     && isInteractiveDragEnabled() )
@@ -474,12 +486,6 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                     if( invokeInlineRouter( PNS::DM_ANY ) )
                         break;
                 }
-
-                // deal with locked items (override lock or abort the operation)
-                SELECTION_LOCK_FLAGS lockFlags = m_selectionTool->CheckLock();
-
-                if( lockFlags == SELECTION_LOCKED )
-                    break;
 
                 m_dragging = true;
 

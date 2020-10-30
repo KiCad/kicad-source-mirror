@@ -27,6 +27,7 @@
 #include <limits>
 #include <functional>
 using namespace std::placeholders;
+#include <core/kicad_algo.h>
 #include <class_board.h>
 #include <class_board_item.h>
 #include <class_track.h>
@@ -45,7 +46,7 @@ using namespace std::placeholders;
 #include <pcbnew_settings.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
-#include <router/router_tool.h>
+//#include <router/router_tool.h>
 #include <connectivity/connectivity_data.h>
 #include <footprint_viewer_frame.h>
 #include <id.h>
