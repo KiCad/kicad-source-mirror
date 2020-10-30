@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,13 +21,13 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_upperSizer->SetFlexibleDirection( wxBOTH );
 	m_upperSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_matchAll = new wxRadioButton( this, wxID_ANY, _("%s all footprints on board"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchAll = new wxRadioButton( this, wxID_ANY, _("Update all footprints on board"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_upperSizer->Add( m_matchAll, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxEXPAND|wxALL, 5 );
 
-	m_matchSelected = new wxRadioButton( this, wxID_ANY, _("%s selected footprint"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchSelected = new wxRadioButton( this, wxID_ANY, _("Update selected footprint"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_upperSizer->Add( m_matchSelected, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
-	m_matchSpecifiedRef = new wxRadioButton( this, wxID_ANY, _("%s footprints matching reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchSpecifiedRef = new wxRadioButton( this, wxID_ANY, _("Update footprints matching reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_upperSizer->Add( m_matchSpecifiedRef, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
 	m_specifiedRef = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
@@ -35,13 +35,13 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 
 	m_upperSizer->Add( m_specifiedRef, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxTOP|wxEXPAND, 5 );
 
-	m_matchSpecifiedValue = new wxRadioButton( this, wxID_ANY, _("%s footprints matching value:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchSpecifiedValue = new wxRadioButton( this, wxID_ANY, _("Update footprints matching value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_upperSizer->Add( m_matchSpecifiedValue, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALL, 5 );
 
 	m_specifiedValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_upperSizer->Add( m_specifiedValue, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_matchSpecifiedID = new wxRadioButton( this, wxID_ANY, _("%s footprints with library id:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchSpecifiedID = new wxRadioButton( this, wxID_ANY, _("Update footprints with library id:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_upperSizer->Add( m_matchSpecifiedID, wxGBPosition( 4, 0 ), wxGBSpan( 1, 2 ), wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 5 );
 
 
@@ -98,16 +98,16 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 
 	m_updateOptionsSizer->Add( m_removeExtraBox, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_resetTextItemLayers = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("%s text layers and visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetTextItemLayers = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset text layers and visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetTextItemLayers, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_resetTextItemEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("%s text sizes, styles and positions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetTextItemEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset text sizes, styles and positions"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetTextItemEffects, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_resetFabricationAttrs = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("%s fabrication attributes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetFabricationAttrs = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset fabrication attributes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetFabricationAttrs, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_reset3DModels = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("%s 3D models"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_reset3DModels = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset 3D models"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_reset3DModels, 0, wxBOTTOM|wxRIGHT, 5 );
 
 

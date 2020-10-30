@@ -65,17 +65,22 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
         m_currentFootprint( aFootprint ),
         m_updateMode( updateMode )
 {
-    wxString title = updateMode ? _( "Update Footprints from Library" ) : _( "Change Footprints" );
-    wxString verb  = updateMode ? _( "Update" )                         : _( "Change" );
-    wxString reset = updateMode ? _( "Reset" )                          : _( "Update" );
-    wxString label;
-
-    SetTitle( title );
+    if( !updateMode )
+    {
+        SetTitle( _( "Change Footprints" ) );
+        m_matchAll->SetLabel( _( "Change all footprints on board" ) );
+        m_matchSelected->SetLabel( _( "Change selected footprint" ) );
+        m_matchSpecifiedRef->SetLabel( _( "Change footprints matching reference designator:" ) );
+        m_matchSpecifiedValue->SetLabel( _( "Change footprints matching value:" ) );
+        m_matchSpecifiedID->SetLabel( _( "Change footprints with library id:" ) );
+        m_resetTextItemLayers->SetLabel( _( "Update text layers and visibilities" ) );
+        m_resetTextItemEffects->SetLabel( _( "Update text sizes, styles and positions" ) );
+        m_resetFabricationAttrs->SetLabel( _( "Update fabrications attributes" ) );
+        m_reset3DModels->SetLabel( _( "Update 3D models" ) );
+    }
 
     if( m_updateMode )
     {
-        label.Printf( m_matchAll->GetLabel(), verb );
-        m_matchAll->SetLabel( label );
         m_changeSizer->Show( false );
     }
     else
@@ -86,28 +91,17 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
 
     if( m_currentFootprint )
     {
-        label.Printf( m_matchSelected->GetLabel(), verb );
-        m_matchSelected->SetLabel( label );
         m_newID->AppendText( FROM_UTF8( m_currentFootprint->GetFPID().Format().c_str() ) );
     }
     else
         m_upperSizer->FindItem( m_matchSelected )->Show( false );
 
-    label.Printf( m_matchSpecifiedRef->GetLabel(), verb );
-    m_matchSpecifiedRef->SetLabel( label );
-
     // Use ChangeValue() instead of SetValue() so we don't generate events.
     if( m_currentFootprint )
         m_specifiedRef->ChangeValue( m_currentFootprint->GetReference() );
 
-    label.Printf( m_matchSpecifiedValue->GetLabel(), verb );
-    m_matchSpecifiedValue->SetLabel( label );
-
     if( m_currentFootprint )
         m_specifiedValue->ChangeValue( m_currentFootprint->GetValue() );
-
-    label.Printf( m_matchSpecifiedID->GetLabel(), verb );
-    m_matchSpecifiedID->SetLabel( label );
 
     if( m_currentFootprint )
         m_specifiedID->ChangeValue( FROM_UTF8( m_currentFootprint->GetFPID().Format().c_str() ) );
@@ -137,18 +131,6 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     default:                                                    break;
     }
 
-    label.Printf( m_resetTextItemLayers->GetLabel(), reset );
-    m_resetTextItemLayers->SetLabel( label );
-
-    label.Printf( m_resetTextItemEffects->GetLabel(), reset );
-    m_resetTextItemEffects->SetLabel( label );
-
-    label.Printf( m_resetFabricationAttrs->GetLabel(), reset );
-    m_resetFabricationAttrs->SetLabel( label );
-
-    label.Printf( m_reset3DModels->GetLabel(), reset );
-    m_reset3DModels->SetLabel( label );
-
     m_removeExtraBox->SetValue( g_removeExtraTextItems[ m_updateMode ? 0 : 1 ] );
     m_resetTextItemLayers->SetValue( g_resetTextItemLayers[ m_updateMode ? 0 : 1 ] );
     m_resetTextItemEffects->SetValue( g_resetTextItemEffects[ m_updateMode ? 0 : 1 ] );
@@ -164,7 +146,12 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     // Ensure m_closeButton (with id = wxID_CANCEL) has the right label
     // (to fix automatic renaming of button label )
     m_sdbSizerCancel->SetLabel( _( "Close" ) );
-    m_sdbSizerOK->SetLabel( verb );
+
+    if( m_updateMode )
+        m_sdbSizerOK->SetLabel( _( "Update" ) );
+    else
+        m_sdbSizerOK->SetLabel( _( "Change" ) );
+
     m_sdbSizerOK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
