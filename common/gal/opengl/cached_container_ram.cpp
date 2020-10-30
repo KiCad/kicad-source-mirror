@@ -51,7 +51,9 @@ CACHED_CONTAINER_RAM::CACHED_CONTAINER_RAM( unsigned int aSize ) :
 
 CACHED_CONTAINER_RAM::~CACHED_CONTAINER_RAM()
 {
-    glDeleteBuffers( 1, &m_verticesBuffer );
+    if( glDeleteBuffers )
+        glDeleteBuffers( 1, &m_verticesBuffer );
+
     free( m_vertices );
 }
 

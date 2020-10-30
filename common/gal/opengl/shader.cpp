@@ -59,20 +59,23 @@ SHADER::~SHADER()
 
     if( isProgramCreated )
     {
-        // Delete the shaders and the program
-        for( std::deque<GLuint>::iterator it = shaderNumbers.begin();
-                it != shaderNumbers.end(); ++it )
+        if( glIsShader )
         {
-            GLuint shader = *it;
-
-            if( glIsShader( shader ) )
+            // Delete the shaders and the program
+            for( std::deque<GLuint>::iterator it = shaderNumbers.begin(); it != shaderNumbers.end();
+                    ++it )
             {
-                glDetachShader( programNumber, shader );
-                glDeleteShader( shader );
-            }
-        }
+                GLuint shader = *it;
 
-        glDeleteProgram( programNumber );
+                if( glIsShader( shader ) )
+                {
+                    glDetachShader( programNumber, shader );
+                    glDeleteShader( shader );
+                }
+            }
+
+            glDeleteProgram( programNumber );
+        }
     }
 }
 

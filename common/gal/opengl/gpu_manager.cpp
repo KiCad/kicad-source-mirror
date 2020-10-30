@@ -85,8 +85,11 @@ GPU_CACHED_MANAGER::~GPU_CACHED_MANAGER()
 {
     if( m_buffersInitialized )
     {
-        glBindBuffer( GL_ARRAY_BUFFER, 0 );
-        glDeleteBuffers( 1, &m_indicesBuffer );
+        if( glBindBuffer )
+            glBindBuffer( GL_ARRAY_BUFFER, 0 );
+
+        if( glDeleteBuffers )
+            glDeleteBuffers( 1, &m_indicesBuffer );
     }
 }
 
