@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-30 20:48+0000\n"
+"PO-Revision-Date: 2020-10-31 18:15+0000\n"
 "Last-Translator: Hildo Guillardi Júnior <hildogjr@gmail.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
 "master-source/pt/>\n"
@@ -338,7 +338,7 @@ msgstr "Cor do Corpo da Placa…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:187
 msgid "Get colors from physical stackup"
-msgstr ""
+msgstr "Usar cores do stackup"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:198
 msgid "3D Grid"
@@ -433,7 +433,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:86
 msgid "Non plated pads copper as bare copper"
-msgstr ""
+msgstr "Pads não banhados como cobre nu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:87
 msgid ""
@@ -566,7 +566,7 @@ msgstr "Selecione a cor"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "While Moving"
-msgstr ""
+msgstr "Enquanto movendo"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:372
 msgid "Disable anti-aliasing"
@@ -617,7 +617,7 @@ msgstr "Fator de espalhamento %"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:481
 msgid "Recursive Level"
-msgstr ""
+msgstr "Nível recursivo"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:488
 msgid "Shadows"
@@ -633,7 +633,7 @@ msgstr "Número de raios de luz lançados para avaliar um ponto de sombra"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:520
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:543
 msgid "Random direction factor of the cast rays"
-msgstr ""
+msgstr "Fator de aleatoriedade de direção para os raios de luz"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:509
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
@@ -649,6 +649,9 @@ msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
+"Número de interações que um raio pode viajar através de objetos. (maior "
+"número de níveis melhoram os resultados, especialmente em placas com "
+"transparência)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:532
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:247
@@ -661,7 +664,7 @@ msgstr "Número de raios que serão lançados para avaliar um ponto de refraçã
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:548
 msgid "Number of bounces that a ray can hit reflective objects"
-msgstr ""
+msgstr "Número de saltos que um raio pode acertar objetos reflexivos"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:574
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:798
@@ -974,32 +977,27 @@ msgstr "Utilizar o estilo de cor do CAD baseado na cor difusa do material"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
 msgid "Toggle Through Hole 3D models"
-msgstr "Exibir/Ocultar 3D de componentes com furos passantes"
+msgstr "Exibir/Ocultar modelos 3D dos furos"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
-#, fuzzy
 msgid "Toggle 3D models with 'Through hole' attribute"
-msgstr "Trocar tipo de modelo 3D para PTH"
+msgstr "Exibir/Ocultar modelos 3D de componentes PTH"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
-#, fuzzy
 msgid "Toggle SMD 3D models"
-msgstr "Carregando modelos 3D"
+msgstr "Exibir/Ocultar modelos 3D de componentes SMD"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
-#, fuzzy
 msgid "Toggle 3D models with 'Surface mount' attribute"
-msgstr "Trocar tipo de modelo 3D para SMD"
+msgstr "Exibir/Ocultar modelos 3D de componestes SMD"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle Virtual 3D models"
-msgstr "Exibir modelos 3D virtuais"
+msgstr "Exibir/Ocultar modelos 3D virtuais"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle 3D models with 'Virtual' attribute"
-msgstr "Trocar tipo de modelo 3D para Virtual"
+msgstr "Exibir/Ocultar modelos 3D de componentes \"Virtual\""
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:227
 msgid "Show Model Bounding Boxes"
@@ -1026,18 +1024,12 @@ msgid "Adds a floor plane below the board (slow)"
 msgstr "Adiciona um plano de piso abaixo da placa (lento)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:247
-#, fuzzy
 msgid "Render materials with refractive properties on final render (slow)"
-msgstr ""
-"Renderizar materiais com propriedades de refração na renderização final "
-"(lento)"
+msgstr "Renderizar materiais com propriedades de refração ao final (lento)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
-#, fuzzy
 msgid "Render materials with reflective properties on final render (slow)"
-msgstr ""
-"Renderizar materiais com propriedades de reflexão na renderização final "
-"(lento)"
+msgstr "Renderizar materiais com propriedades de reflexão ao final (lento)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
 msgid "Render with improved quality on final render (slow)"
@@ -1067,9 +1059,8 @@ msgid "Show 3D Axis"
 msgstr "Exibir &Eixo 3D"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:283
-#, fuzzy
 msgid "Toggle zone display"
-msgstr "Alternar Exibição de Zona"
+msgstr "Exibir/Ocultar Zona"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:288
 #, fuzzy
@@ -1222,7 +1213,7 @@ msgstr "mm"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:752
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
 msgid "Inch"
-msgstr "Polegada"
+msgstr "polegada(s)"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:154
 msgid "DPI"
@@ -1255,7 +1246,7 @@ msgstr "Criar Arquivo de Logotipo"
 #: bitmap2component/bitmap2cmp_gui.cpp:858
 #, c-format
 msgid "File \"%s\" could not be created."
-msgstr "O arquivo \"%s\" não pôde ser criado."
+msgstr "O arquivo \"%s\" não pode ser criado."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:760
 #, fuzzy
@@ -1444,11 +1435,11 @@ msgstr "Conversor de Bitmap para Componente"
 
 #: common/base_units.cpp:480
 msgid "sq. mm"
-msgstr ""
+msgstr "mm^2"
 
 #: common/base_units.cpp:482
 msgid "cu. mm"
-msgstr ""
+msgstr "cu. mm"
 
 #: common/base_units.cpp:492 common/eda_draw_frame.cpp:496
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
@@ -1470,29 +1461,27 @@ msgstr ""
 #: pagelayout_editor/pl_editor_frame.cpp:728
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:143
 msgid "mils"
-msgstr "mils"
+msgstr "mil"
 
 #: common/base_units.cpp:494
-#, fuzzy
 msgid "sq. mils"
-msgstr "%.1f mils"
+msgstr "mil^2"
 
 #: common/base_units.cpp:496
-#, fuzzy
 msgid "cu. mils"
-msgstr "%.1f mils"
+msgstr "cu. mil"
 
 #: common/base_units.cpp:506
 msgid "in"
-msgstr "em"
+msgstr "in"
 
 #: common/base_units.cpp:508
 msgid "sq. in"
-msgstr ""
+msgstr "in^2"
 
 #: common/base_units.cpp:510
 msgid "cu. in"
-msgstr ""
+msgstr "cu. in"
 
 #: common/base_units.cpp:514
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:71
@@ -1527,7 +1516,7 @@ msgstr "Não foi possível tornar o caminho \"%s\" absoluto em relação a \"%s\
 #: common/common.cpp:314
 #, c-format
 msgid "Output directory \"%s\" created.\n"
-msgstr "Pasta de saída  \"%s\" criada.\n"
+msgstr "Pasta de saída \"%s\" criada.\n"
 
 #: common/common.cpp:323
 #, c-format
@@ -1668,23 +1657,20 @@ msgid "The complete KiCad EDA Suite is released under the"
 msgstr "O pacote KiCad EDA completo é lançado sob a licença"
 
 #: common/dialog_about/AboutDialog_main.cpp:181
-#, fuzzy
 msgid "GNU General Public License (GPL) version 3 or any later version"
-msgstr ""
-"GNU Affero General Public License (AGPL) versão 3 ou qualquer versão "
-"posterior"
+msgstr "GNU General Public License (GPL) versão 3 ou posterior"
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Team"
-msgstr ""
+msgstr "Time Chefe de Desenvolvimento"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Alumni"
-msgstr ""
+msgstr "Time Auxiliar de Desenvolvimento"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
-msgstr ""
+msgstr "Contribuições adicionais por"
 
 #: common/dialog_about/AboutDialog_main.cpp:599
 msgid "Others"
@@ -1692,23 +1678,23 @@ msgstr "Outros"
 
 #: common/dialog_about/AboutDialog_main.cpp:619
 msgid "KiCad Librarian Team"
-msgstr ""
+msgstr "Time KiCad para bibliotecas"
 
 #: common/dialog_about/AboutDialog_main.cpp:634
 msgid "3D models by"
-msgstr "Modelos 3D"
+msgstr "Modelos 3D por"
 
 #: common/dialog_about/AboutDialog_main.cpp:646
 msgid "Symbols by"
-msgstr "Símbolos"
+msgstr "Símbolos por"
 
 #: common/dialog_about/AboutDialog_main.cpp:653
 msgid "Footprints by"
-msgstr "Footprints"
+msgstr "Footprints por"
 
 #: common/dialog_about/AboutDialog_main.cpp:666
 msgid "Icons by"
-msgstr "Ícones"
+msgstr "Ícones por"
 
 #: common/dialog_about/dialog_about.cpp:90
 #, c-format
@@ -1867,9 +1853,8 @@ msgid "Opacity:"
 msgstr "Opacidade:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:185
-#, fuzzy
 msgid "Preview (old/new):"
-msgstr "Pré-visualização (antigo / novo):"
+msgstr "Pré-visualização (antigo/novo):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
 msgid "Reset to Default"
@@ -2265,11 +2250,11 @@ msgstr "&Sobre o KiCad"
 #: common/dialogs/dialog_migrate_settings.cpp:51
 #, c-format
 msgid "Welcome to KiCad %s!"
-msgstr ""
+msgstr "Bem vindo ao KiCad %s!"
 
 #: common/dialogs/dialog_migrate_settings.cpp:58
 msgid "Import settings from a previous version (none found)"
-msgstr ""
+msgstr "Importar configurações de versões anteriores (nada encontrado)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:118
 #, fuzzy
@@ -2278,7 +2263,7 @@ msgstr "Selecionar Caminho"
 
 #: common/dialogs/dialog_page_settings.cpp:62
 msgid "A5 148x210mm"
-msgstr ""
+msgstr "A5 148x210mm"
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "A4 210x297mm"
@@ -2395,8 +2380,8 @@ msgid ""
 "instead of\n"
 "\"%s\"?"
 msgstr ""
-"O nome do arquivo de descrição do layout de página foi mudado. Gostaria de "
-"usar o caminho relativo:\n"
+"O nome do arquivo de descrição do layout de página foi mudado.\n"
+"Gostaria de usar o caminho relativo:\n"
 "\"%s\"\n"
 "ao invés de\n"
 "\"%s\"?"
@@ -2798,7 +2783,7 @@ msgstr "Novo Símbolo…"
 
 #: common/dialogs/panel_color_settings.cpp:213
 msgid "(read-only)"
-msgstr ""
+msgstr "(somente leitura)"
 
 #: common/dialogs/panel_color_settings.cpp:282
 #, fuzzy
@@ -2824,17 +2809,19 @@ msgstr "Definir todas as teclas de atalho para o padrão do KiCad"
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:29
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:21
 msgid "Theme:"
-msgstr ""
+msgstr "Tema:"
 
 #: common/dialogs/panel_color_settings_base.cpp:33
 msgid "Override individual item colors"
-msgstr ""
+msgstr "Sobrescrever cores individuais dos itens"
 
 #: common/dialogs/panel_color_settings_base.cpp:34
 msgid ""
 "Show all items in their default color even if they have specific colors set "
 "in their properties."
 msgstr ""
+"Mostre todos os itens em sua cor padrão, mesmo os de cores específicas em "
+"suas propriedades."
 
 #: common/dialogs/panel_color_settings_base.cpp:41
 #, fuzzy
@@ -2843,7 +2830,7 @@ msgstr "Emissor aberto"
 
 #: common/dialogs/panel_color_settings_base.cpp:42
 msgid "Open the folder containing color themes"
-msgstr ""
+msgstr "Abrir pasta com temas de cores"
 
 #: common/dialogs/panel_common_settings.cpp:52
 msgid ""
@@ -2913,10 +2900,12 @@ msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
+"Arquivos de cache 3D mais antigos do que isso são excluídos.\n"
+"Se definido como 0, a deleção de cache será desativada."
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid "Days"
-msgstr ""
+msgstr "Dias"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
 msgid "Accelerated graphics:"
@@ -2961,7 +2950,7 @@ msgstr "Suavização de Alta Qualidade"
 
 #: common/dialogs/panel_common_settings_base.cpp:89
 msgid "3D cache file duration:"
-msgstr ""
+msgstr "Retenção dos arquivos de cache 3D:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
 msgid "Helper Applications"
@@ -3030,55 +3019,57 @@ msgstr ""
 "mesmo quando a ferramenta relacionada não tenha sido préviamente selecionada."
 
 #: common/dialogs/panel_common_settings_base.cpp:209
-#, fuzzy
 msgid "Project Backup"
-msgstr "Projeto: "
+msgstr "Backup do Projeto"
 
 #: common/dialogs/panel_common_settings_base.cpp:216
-#, fuzzy
 msgid "Automatically backup projects"
-msgstr "Trilhas roteadas automaticamente"
+msgstr "Habilitar backup automático do projeto"
 
 #: common/dialogs/panel_common_settings_base.cpp:217
 msgid ""
 "Automatically create backup archives of the current project when saving files"
-msgstr ""
+msgstr "Criar arquivos de backup do projeto atual ao salvá-lo"
 
 #: common/dialogs/panel_common_settings_base.cpp:221
 msgid "Create backups when auto save occurs"
-msgstr ""
+msgstr "Criar backup quando auto salvamento acontecer"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 msgid ""
 "Create backups when the auto save feature is enabled.  If not checked, "
 "backups will only be created when you manually save a file."
 msgstr ""
+"Criar backups quando o recurso de salvamento automático estiver ativado. Se "
+"não estiver marcado, os backups só serão criados se você salvar manualmente."
 
 #: common/dialogs/panel_common_settings_base.cpp:226
 msgid "Maximum backups to keep:"
-msgstr ""
+msgstr "Número máximo de backup a manter:"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
 msgid "How many backup files total to keep (set to 0 for no limit)"
-msgstr ""
+msgstr "Quantidade de arquivos de backup a manter (use 0 para sem limite)"
 
 #: common/dialogs/panel_common_settings_base.cpp:235
 msgid "Maximum backups per day:"
-msgstr ""
+msgstr "Número máximo de backups por dia:"
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "How many backup files to keep each day (set to 0 for no limit)"
-msgstr ""
+msgstr "Número máximo de backup a manter por dia (use 0 para sem limites)"
 
 #: common/dialogs/panel_common_settings_base.cpp:244
 msgid "Minimum time between backups:"
-msgstr ""
+msgstr "Tempo mínimo entre backups:"
 
 #: common/dialogs/panel_common_settings_base.cpp:246
 msgid ""
 "Number of minutes since the last backup before another will be created the "
 "next time you save (set to 0 for no minimum)"
 msgstr ""
+"Minutos desde o último backup antes que outro seja criado na próxima vez que "
+"você salvar (use 0 para no mínimo)"
 
 #: common/dialogs/panel_common_settings_base.cpp:257
 #, fuzzy
@@ -3090,26 +3081,28 @@ msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
+"Se o tamanho total dos arquivos de backup cresce acima deste limite, os "
+"backups antigos serão excluídos (use 0 para desabilitar)"
 
 #: common/dialogs/panel_common_settings_base.cpp:266
-#, fuzzy
 msgid "MB"
-msgstr "B"
+msgstr "MB"
 
 #: common/dialogs/panel_common_settings_base.cpp:277
-#, fuzzy
 msgid "Session"
-msgstr "Revisão:"
+msgstr "Sessão"
 
 #: common/dialogs/panel_common_settings_base.cpp:279
 msgid "Remember open files for next project launch"
-msgstr ""
+msgstr "Lembrar arquivos para próximo carregamento de projeto"
 
 #: common/dialogs/panel_common_settings_base.cpp:281
 msgid ""
 "If checked, launching a project will also launch tools such as eeschema and "
 "pcbnew with previously open files"
 msgstr ""
+"Se marcado, o lançamento de um projeto também iniciará Eeschema e PCBnew com "
+"arquivos abertos anteriormente"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:72
 msgid "Type filter text"
@@ -3171,44 +3164,40 @@ msgstr "&Ativar Aceleração"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:39
 msgid "Zoom faster when scrolling quickly"
-msgstr ""
+msgstr "Zoom rápido quando usar scrool do mouse"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:45
-#, fuzzy
 msgid "Zoom speed:"
-msgstr "Centralizar"
+msgstr "Velocidade do zoom:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:51
 msgid "How far to zoom in for each rotation of the mouse wheel"
-msgstr ""
+msgstr "Quão longe para aumentar o zoom para cada rotação da roda do mouse"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:58
-#, fuzzy
 msgid "Pick the zoom speed automatically"
-msgstr "Dispor Footprints Au&tomaticamente"
+msgstr "Selecionar velocidade do zoom automaticamente"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:67
-#, fuzzy
 msgid "Auto pan speed:"
-msgstr "Auto-posicionando %s"
+msgstr "Velocidade do Auto-posicionando:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:72
 msgid "How fast to pan when moving an object off the edge of the screen"
-msgstr ""
+msgstr "Quão rápido para se deslocar ao mover um objeto fora da borda da tela"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:89
 msgid "Mouse Buttons"
-msgstr ""
+msgstr "Botões do mouse"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:97
 msgid "Middle button drag:"
-msgstr ""
+msgstr "Arrastar com botão do meio:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:101
 #: common/dialogs/panel_mouse_settings_base.cpp:111
-#, fuzzy
 msgid "Pan"
-msgstr "Pino"
+msgstr "Arrastar"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:101
 #: common/dialogs/panel_mouse_settings_base.cpp:111
@@ -3239,38 +3228,36 @@ msgstr "Nenhum"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:107
 msgid "Right button drag:"
-msgstr ""
+msgstr "Botão direito para arrastar"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:124
 msgid "Mouse Wheel and Touchpad Scrolling"
-msgstr ""
+msgstr "Roda do mouse e Touchpad scrolling"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Behavior of vertical touchpad or scroll wheel:"
-msgstr ""
+msgstr "Comportamento da rolagem vertical do Touchpad ou mouse:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:135
-#, fuzzy
 msgid "While pressing:"
-msgstr "Faltando:"
+msgstr "Quando pressionado:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:143
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:147
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:151
-#, fuzzy
 msgid "Alt"
-msgstr "Al"
+msgstr "Alt"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:155
 #, fuzzy
 msgid "Zoom:"
-msgstr "Ampliação: "
+msgstr "Ampliação:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:171
 #, fuzzy
@@ -3469,7 +3456,7 @@ msgstr "Classes de Rede"
 #: common/dialogs/panel_setup_severities.cpp:40
 #: common/dialogs/panel_setup_severities.cpp:94
 msgid "Ignore"
-msgstr ""
+msgstr "Ignorar"
 
 #: common/dialogs/panel_setup_severities.cpp:94
 msgid "From Pin Conflicts Map"
@@ -3642,7 +3629,7 @@ msgstr "Comum"
 
 #: common/eda_base_frame.cpp:788
 msgid "Mouse and Touchpad"
-msgstr ""
+msgstr "Mouse e Touchpad"
 
 #: common/eda_base_frame.cpp:791
 msgid "Hotkeys"
@@ -3808,12 +3795,11 @@ msgstr "Dimensão"
 
 #: common/eda_item.cpp:273 pcbnew/class_dimension.cpp:968
 msgid "Leader"
-msgstr ""
+msgstr "Indicador"
 
 #: common/eda_item.cpp:274 pcbnew/class_pcb_target.cpp:121
-#, fuzzy
 msgid "Target"
-msgstr "Inclinação do alvo: "
+msgstr "Alvo"
 
 #: common/eda_item.cpp:275
 #, fuzzy
@@ -4521,152 +4507,131 @@ msgstr "Selecionar Idioma"
 
 #: common/layer_id.cpp:32
 msgid "F.Cu"
-msgstr ""
+msgstr "F.Cu"
 
 #: common/layer_id.cpp:33
 msgid "In1.Cu"
-msgstr ""
+msgstr "In1.Cu"
 
 #: common/layer_id.cpp:34
 msgid "In2.Cu"
-msgstr ""
+msgstr "In2.Cu"
 
 #: common/layer_id.cpp:35
 msgid "In3.Cu"
-msgstr ""
+msgstr "In3.Cu"
 
 #: common/layer_id.cpp:36
 msgid "In4.Cu"
-msgstr ""
+msgstr "In4.Cu"
 
 #: common/layer_id.cpp:37
 msgid "In5.Cu"
-msgstr ""
+msgstr "In5.Cu"
 
 #: common/layer_id.cpp:38
 msgid "In6.Cu"
-msgstr ""
+msgstr "In6.Cu"
 
 #: common/layer_id.cpp:39
 msgid "In7.Cu"
-msgstr ""
+msgstr "In7.Cu"
 
 #: common/layer_id.cpp:40
 msgid "In8.Cu"
-msgstr ""
+msgstr "In8.Cu"
 
 #: common/layer_id.cpp:41
 msgid "In9.Cu"
-msgstr ""
+msgstr "In9.Cu"
 
 #: common/layer_id.cpp:42
-#, fuzzy
 msgid "In10.Cu"
-msgstr "In10"
+msgstr "In10.Cu"
 
 #: common/layer_id.cpp:43
-#, fuzzy
 msgid "In11.Cu"
-msgstr "In11"
+msgstr "In11.Cu"
 
 #: common/layer_id.cpp:44
-#, fuzzy
 msgid "In12.Cu"
-msgstr "In12"
+msgstr "In12.Cu"
 
 #: common/layer_id.cpp:45
-#, fuzzy
 msgid "In13.Cu"
-msgstr "In13"
+msgstr "In13.Cu"
 
 #: common/layer_id.cpp:46
-#, fuzzy
 msgid "In14.Cu"
-msgstr "In14"
+msgstr "In14.Cu"
 
 #: common/layer_id.cpp:47
-#, fuzzy
 msgid "In15.Cu"
-msgstr "In15"
+msgstr "In15.Cu"
 
 #: common/layer_id.cpp:48
-#, fuzzy
 msgid "In16.Cu"
-msgstr "In16"
+msgstr "In16.Cu"
 
 #: common/layer_id.cpp:49
-#, fuzzy
 msgid "In17.Cu"
-msgstr "In17"
+msgstr "In17.Cu"
 
 #: common/layer_id.cpp:50
-#, fuzzy
 msgid "In18.Cu"
-msgstr "In18"
+msgstr "In18.Cu"
 
 #: common/layer_id.cpp:51
-#, fuzzy
 msgid "In19.Cu"
-msgstr "In19"
+msgstr "In19.Cu"
 
 #: common/layer_id.cpp:52
-#, fuzzy
 msgid "In20.Cu"
-msgstr "In20"
+msgstr "In20.Cu"
 
 #: common/layer_id.cpp:53
-#, fuzzy
 msgid "In21.Cu"
-msgstr "In21"
+msgstr "In21.Cu"
 
 #: common/layer_id.cpp:54
-#, fuzzy
 msgid "In22.Cu"
-msgstr "In22"
+msgstr "In22.Cu"
 
 #: common/layer_id.cpp:55
-#, fuzzy
 msgid "In23.Cu"
-msgstr "In23"
+msgstr "In23.Cu"
 
 #: common/layer_id.cpp:56
-#, fuzzy
 msgid "In24.Cu"
-msgstr "In24"
+msgstr "In24.Cu"
 
 #: common/layer_id.cpp:57
-#, fuzzy
 msgid "In25.Cu"
-msgstr "In25"
+msgstr "In25.Cu"
 
 #: common/layer_id.cpp:58
-#, fuzzy
 msgid "In26.Cu"
-msgstr "In26"
+msgstr "In26.Cu"
 
 #: common/layer_id.cpp:59
-#, fuzzy
 msgid "In27.Cu"
-msgstr "In27"
+msgstr "In27.Cu"
 
 #: common/layer_id.cpp:60
-#, fuzzy
 msgid "In28.Cu"
-msgstr "In28"
+msgstr "In28.Cu"
 
 #: common/layer_id.cpp:61
-#, fuzzy
 msgid "In29.Cu"
-msgstr "In29"
+msgstr "In29.Cu"
 
 #: common/layer_id.cpp:62
-#, fuzzy
 msgid "In30.Cu"
-msgstr "In30"
+msgstr "In30.Cu"
 
 #: common/layer_id.cpp:63
 msgid "B.Cu"
-msgstr ""
+msgstr "B.Cu"
 
 #: common/layer_id.cpp:66
 #, fuzzy
@@ -4689,22 +4654,20 @@ msgid "F.Paste"
 msgstr "Colar"
 
 #: common/layer_id.cpp:70
-#, fuzzy
 msgid "B.Silkscreen"
-msgstr "Serigrafia"
+msgstr "Serigrafia traseira"
 
 #: common/layer_id.cpp:71
-#, fuzzy
 msgid "F.Silkscreen"
-msgstr "Serigrafia"
+msgstr "Serigrafia frontal"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
-msgstr ""
+msgstr "Máscara traseira"
 
 #: common/layer_id.cpp:73
 msgid "F.Mask"
-msgstr ""
+msgstr "Máscara frontal"
 
 #: common/layer_id.cpp:76
 #, fuzzy
@@ -4712,9 +4675,8 @@ msgid "User.Drawings"
 msgstr "Desenhos"
 
 #: common/layer_id.cpp:77
-#, fuzzy
 msgid "User.Comments"
-msgstr "Comentário"
+msgstr "Comentários"
 
 #: common/layer_id.cpp:78
 #, fuzzy
@@ -4748,47 +4710,47 @@ msgstr "Pátios"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
-msgstr ""
+msgstr "Fabricação frontal"
 
 #: common/layer_id.cpp:87
 msgid "B.Fab"
-msgstr ""
+msgstr "Fabricação traseira"
 
 #: common/layer_id.cpp:90
 msgid "User.1"
-msgstr ""
+msgstr "Do usuário 1"
 
 #: common/layer_id.cpp:91
 msgid "User.2"
-msgstr ""
+msgstr "Do usuário 2"
 
 #: common/layer_id.cpp:92
 msgid "User.3"
-msgstr ""
+msgstr "Do usuário 3"
 
 #: common/layer_id.cpp:93
 msgid "User.4"
-msgstr ""
+msgstr "Do usuário 4"
 
 #: common/layer_id.cpp:94
 msgid "User.5"
-msgstr ""
+msgstr "Do usuário 5"
 
 #: common/layer_id.cpp:95
 msgid "User.6"
-msgstr ""
+msgstr "Do usuário 6"
 
 #: common/layer_id.cpp:96
 msgid "User.7"
-msgstr ""
+msgstr "Do usuário 7"
 
 #: common/layer_id.cpp:97
 msgid "User.8"
-msgstr ""
+msgstr "Do usuário 8"
 
 #: common/layer_id.cpp:98
 msgid "User.9"
-msgstr ""
+msgstr "Do usuário 9"
 
 #: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:664
 msgid "Rescue"
@@ -4914,7 +4876,7 @@ msgstr "Grade"
 
 #: common/layer_id.cpp:133
 msgid "Axes"
-msgstr ""
+msgstr "Eixos"
 
 #: common/layer_id.cpp:134 common/layer_id.cpp:171
 #: gerbview/gerbview_layer_widget.cpp:104
@@ -5043,7 +5005,7 @@ msgstr "Erros"
 
 #: common/layer_id.cpp:163 pcbnew/widgets/appearance_controls.cpp:351
 msgid "DRC Exclusions"
-msgstr ""
+msgstr "Exclusões"
 
 #: common/layer_id.cpp:164
 #, fuzzy
@@ -5132,7 +5094,7 @@ msgstr "O arquivo \"%s\" não foi lido completamente"
 #: common/page_layout/ws_data_model_io.cpp:101
 #: common/page_layout/ws_data_model_io.cpp:129
 msgid "Error writing page layout design file"
-msgstr "Erro gravando arquivo de de desenho de layout de página"
+msgstr "Erro gravando arquivo de desenho de layout de página"
 
 #: common/page_layout/ws_draw_item.cpp:114 eeschema/pin_type.cpp:79
 #: gerbview/gerber_draw_item.cpp:230 pcbnew/class_board_item.cpp:35
@@ -7079,8 +7041,9 @@ msgid ""
 "This may cause some unexpected behavior when loading components into a "
 "schematic."
 msgstr ""
-"Biblioteca \"%s\" tem um nome duplicado \"%s\". Isto pode causar "
-"comportamentos inesperados quando do carregamento de componentes no esquema."
+"Biblioteca \"%s\" tem um nome duplicado \"%s\".\n"
+"Isto pode causar comportamentos inesperados quando do carregamento de "
+"componentes no esquema."
 
 #: eeschema/class_library.cpp:495 eeschema/libedit/lib_edit_frame.cpp:833
 #: eeschema/symbol_tree_model_adapter.cpp:64
@@ -7096,7 +7059,9 @@ msgstr "Carregando "
 msgid ""
 "Symbol library \"%s\" failed to load. Error:\n"
 " %s"
-msgstr "Falha no carregamento da biblioteca de símbolo \"%s\". Erro: %s"
+msgstr ""
+"Falha no carregamento da biblioteca de símbolo \"%s\". Erro:\n"
+"%s"
 
 #: eeschema/class_library.cpp:580
 #, c-format
@@ -7141,12 +7106,11 @@ msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Valores diferentes para %s%d%s (%s) e %s%d%s (%s)"
 
 #: eeschema/connection_graph.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
-"%s e %s estão ambos ligados aos mesmos fios.  %s foi escolhido como o rótulo "
-"a ser usado no netlist."
+"%s e %s estão ambos ligados aos mesmos fios. %s foi escolhido como o rótulo."
 
 #: eeschema/connection_graph.cpp:2322
 #, fuzzy, c-format
@@ -7184,9 +7148,8 @@ msgid "Component %s not found"
 msgstr "O componente %s não foi encontrado"
 
 #: eeschema/cross-probing.cpp:313
-#, fuzzy
 msgid "Selected net:"
-msgstr "Rede selecionada: "
+msgstr "Rede selecionada:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:96
 msgid "Annotation Messages:"
@@ -7240,9 +7203,8 @@ msgid "Reset, but keep order of multi-unit parts"
 msgstr "Redefinir, porém mantendo a ordem de partes multi-unidade"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:87
-#, fuzzy
 msgid "Numbering"
-msgstr "Numeração:"
+msgstr "Numerando"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:94
 msgid "Use first free number after:"
