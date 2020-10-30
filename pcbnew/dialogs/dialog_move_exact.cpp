@@ -244,7 +244,7 @@ bool DIALOG_MOVE_EXACT::TransferDataFromWindow()
     bool ok = GetTranslationInIU( translation, m_polarCoords->IsChecked() );
     m_translation.x = KiROUND(translation.x);
     m_translation.y = KiROUND(translation.y);
-    m_rotation = m_rotate.GetValue();
+    m_rotation = m_rotate.GetDoubleValue();
     m_rotationAnchor = m_menuIDs[ m_anchorOptions->GetSelection() ];
 
     if( ok )

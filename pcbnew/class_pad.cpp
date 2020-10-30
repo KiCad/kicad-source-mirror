@@ -870,9 +870,9 @@ void D_PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
     pad_orient_degrees = NormalizeAngleDegrees( pad_orient_degrees, -180.0, +180.0 );
 
     if( module_orient_degrees != 0.0 )
-        msg.Printf( wxT( "%.2f(+ %.2f)" ), pad_orient_degrees, module_orient_degrees );
+        msg.Printf( wxT( "%.4g(+ %.4g)" ), pad_orient_degrees, module_orient_degrees );
     else
-        msg.Printf( wxT( "%.1f" ), GetOrientationDegrees() );
+        msg.Printf( wxT( "%.4g" ), GetOrientationDegrees() );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Rotation" ), msg, LIGHTBLUE ) );
 
