@@ -120,10 +120,10 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << eol << eol;
 
     if( !aBrief )
+    {
         aMsg << "Build Info:" << eol;
-
-    if( !aBrief )
         aMsg << indent4 << "Date: " << GetBuildDate() << eol;
+    }
 
     aMsg << indent4 << "wxWidgets: " << wxVERSION_NUM_DOT_STRING << " (";
     aMsg << __WX_BO_UNICODE __WX_BO_STL __WX_BO_WXWIN_COMPAT_2_8 ")";

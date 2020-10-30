@@ -1206,9 +1206,6 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
     netcodeList.sort();
     netcodeList.unique();
 
-    // auto select trivial connections segments which are launched from the pads
-    std::list<TRACK*> launchTracks;
-
     for( PAD* pad : padList )
         selectConnectedTracks( *pad, STOP_NEVER );
 
@@ -2255,7 +2252,6 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
 {
     std::set<BOARD_ITEM*> preferred;
     std::set<BOARD_ITEM*> rejected;
-    std::set<BOARD_ITEM*> forced;
     wxPoint               where( aWhere.x, aWhere.y );
 
     // footprints which are below this percentage of the largest footprint will be considered

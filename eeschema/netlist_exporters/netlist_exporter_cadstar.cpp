@@ -69,8 +69,6 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
-        std::vector<SCH_COMPONENT*> cmps;
-
         for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
             symbol = findNextSymbol( item, &sheetList[ i ] );

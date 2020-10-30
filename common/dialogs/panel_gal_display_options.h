@@ -30,7 +30,7 @@ class PAGED_DIALOG;
 class PANEL_GAL_DISPLAY_OPTIONS : public wxPanel
 {
 public:
-    PANEL_GAL_DISPLAY_OPTIONS( EDA_DRAW_FRAME* aParent, PAGED_DIALOG* aWindow );
+    PANEL_GAL_DISPLAY_OPTIONS( EDA_DRAW_FRAME* aFrame, PAGED_DIALOG* aParent );
 
 private:
     bool TransferDataToWindow() override;

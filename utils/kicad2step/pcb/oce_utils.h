@@ -99,7 +99,7 @@ class PCBMODEL
     std::list< KICADCURVE >     m_curves;
     std::vector< TopoDS_Shape > m_cutouts;
 
-    bool getModelLabel( const std::string aFileName, TRIPLET aScale, TDF_Label& aLabel );
+    bool getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_Label& aLabel );
 
     bool getModelLocation( bool aBottom, DOUBLET aPosition, double aRotation,
         TRIPLET aOffset, TRIPLET aOrientation, TopLoc_Location& aLocation );

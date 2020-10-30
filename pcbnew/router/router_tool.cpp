@@ -806,8 +806,6 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         viaType = VIATYPE::THROUGH;
     }
 
-    std::pair<PCB_LAYER_ID, PCB_LAYER_ID> layerPair;
-
     switch( viaType )
     {
     case VIATYPE::THROUGH:

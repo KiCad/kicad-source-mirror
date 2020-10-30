@@ -901,8 +901,6 @@ std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( ARC* aArc )
 
 std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( VIA* aVia )
 {
-    std::vector<std::unique_ptr<PNS::VIA>> retval;
-
     PCB_LAYER_ID top, bottom;
     aVia->LayerPair( &top, &bottom );
 

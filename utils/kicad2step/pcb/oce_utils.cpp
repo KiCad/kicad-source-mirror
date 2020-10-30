@@ -954,7 +954,7 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
 }
 
 
-bool PCBMODEL::getModelLabel( const std::string aFileName, TRIPLET aScale, TDF_Label& aLabel )
+bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_Label& aLabel )
 {
     std::string model_key = aFileName + "_" + std::to_string( aScale.x )
                             + "_" + std::to_string( aScale.y ) + "_" + std::to_string( aScale.z );

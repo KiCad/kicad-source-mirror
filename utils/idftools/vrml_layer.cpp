@@ -2013,8 +2013,6 @@ bool VRML_LAYER::Get2DTriangles( std::vector< double >& aVertexList,
     std::list< TRIPLET_3D >::const_iterator tbeg = triplets.begin();
     std::list< TRIPLET_3D >::const_iterator tend = triplets.end();
 
-    std::vector< int > aIndexBot;
-
     if( aTopPlane )
     {
         while( tbeg != tend )

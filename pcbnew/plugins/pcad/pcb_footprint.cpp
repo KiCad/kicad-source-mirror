@@ -421,10 +421,9 @@ void PCB_FOOTPRINT::Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
 
             tNode = tNode->GetNext();
         }
-    }
 
-    if( lNode )
-        lNode   = lNode->GetParent();
+        lNode = lNode->GetParent();
+    }
 
     if( lNode )
         lNode = FindNode( lNode, wxT( "layerContents" ) );

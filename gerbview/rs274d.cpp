@@ -381,7 +381,6 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
     // calculate polygon corners
     // when arc is counter-clockwise, dummyGbrItem arc goes from end to start
     // and we must always create a polygon from start to end.
-    wxPoint start_arc = start;
     for( int ii = 0; ii <= count; ii++ )
     {
         double rot;
@@ -397,8 +396,6 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
             end_arc = aClockwise ? end : start;
 
         aGbrItem->m_Polygon.Append( VECTOR2I( end_arc + center ) );
-
-        start_arc = end_arc;
     }
 }
 
