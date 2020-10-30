@@ -7,13 +7,14 @@
 # translation of kicad.po to
 # Radovan Blažek <blazra@gmail.com>, 2020.
 # Jan Vykydal <vvykys@gmail.com>, 2020.
+# Jan Straka <bach@email.cz>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-29 19:39+0000\n"
-"Last-Translator: Radovan Blažek <blazra@gmail.com>\n"
+"PO-Revision-Date: 2020-10-30 20:48+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -117,7 +118,7 @@ msgstr "Posun"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
 msgid "Opacity"
-msgstr "Neprůhlednost:"
+msgstr "Neprůhlednost"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:171
 #: common/dialogs/dialog_page_settings_base.cpp:118
@@ -137,7 +138,7 @@ msgstr "Znovu načíst desku a 3D modely"
 
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:333
 msgid "no such file"
-msgstr "[žádný soubor]"
+msgstr "žádný soubor"
 
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:364
 msgid "failed to open file"
@@ -152,13 +153,12 @@ msgid "Create layers"
 msgstr "Vytvořit vrstvy"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:475
-#, fuzzy
 msgid "Board outline is not closed:"
-msgstr "Obrys desky nevytváří uzavřený mnohoúhelník:"
+msgstr "Obrys desky není uzavřen:"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
-msgstr "Vytvořit spoje a průchodky"
+msgstr "Vytvořit spoje a prokovy"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:702
 msgid "Create zones"
@@ -178,7 +178,7 @@ msgstr "Vytvořit technologické vrstvy"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1065
 msgid "Build BVH for holes and vias"
-msgstr "Vytvořit BVH pro díry a průchodky"
+msgstr "Vytvořit BVH pro díry a prokovy"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:423
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
@@ -187,7 +187,7 @@ msgstr "Vaše verze OpenGL není podporovaná. Nejnižší podporovaná verze je
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
 msgid "Render time %.0f ms ( %.1f fps)"
-msgstr "Čas vykreslení %.0f ms ( %.1f fps)"
+msgstr "Čas rendrování %.0f ms ( %.1f fps)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:734
 #, fuzzy, c-format
@@ -206,7 +206,7 @@ msgstr "Načíst OpenGL: deska"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:522
 msgid "Load OpenGL: holes and vias"
-msgstr "Načíst OpenGL: díry a průchodky"
+msgstr "Načíst OpenGL: díry a prokovy"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:614
 msgid "Load OpenGL: layers"
@@ -236,16 +236,16 @@ msgstr "Načítání..."
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:358
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr "Čas vykreslení %.3f s"
+msgstr "Čas rendrování %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:413
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr "Vykreslení: %.0f %%"
+msgstr "Rendrování: %.0f %%"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:917
 msgid "Rendering: Post processing shader"
-msgstr "Vykreslení: stínování po zpracování"
+msgstr "Rendrování: následné zpracování stínů"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:49
 msgid "Export Current View as PNG..."
@@ -282,7 +282,7 @@ msgstr "Raytracing"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:28
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:568
 msgid "Render Options"
-msgstr "Možnosti vykreslení"
+msgstr "Možnosti rendrování"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:122
 msgid "Material Properties"
@@ -294,15 +294,15 @@ msgstr "Možnosti Raytracingu"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:153
 msgid "Choose Colors"
-msgstr "Zvolte barvy"
+msgstr "Vybrat barvu"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:156
 msgid "Background Top Color..."
-msgstr "Barva pozadí, nahoře..."
+msgstr "Barva pozadí nahoře..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:160
 msgid "Background Bottom Color..."
-msgstr "Barva pozadí, dole..."
+msgstr "Barva pozadí dole..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:164
 msgid "Silkscreen Color..."
@@ -318,7 +318,7 @@ msgstr "Barva pájecí pasty..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:176
 msgid "Copper/Surface Finish Color..."
-msgstr "Barva povrchové úpravy mědi a podkladu..."
+msgstr "Barva mědi/povrchové úpravy..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:180
 msgid "Board Body Color..."
@@ -341,9 +341,8 @@ msgstr "Návrat na výchozí hodnoty"
 #: gerbview/menubar.cpp:212 kicad/menubar.cpp:165
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:231
 #: pcbnew/menubar_pcb_editor.cpp:440
-#, fuzzy
 msgid "Preferences...\tCTRL+,"
-msgstr "Předvolby..."
+msgstr "Předvolby...\tCTRL+,"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:214 cvpcb/menubar.cpp:72
 #: eeschema/libedit/menubar_libedit.cpp:162 eeschema/menubar.cpp:265
@@ -393,7 +392,7 @@ msgstr "Kopírování 3D obrázku do schránky"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
 msgid "Set display options, and some layers visibility"
-msgstr "Nastavit možnosti zobrazení a viditelnost vrstev"
+msgstr "Nastavení možností zobrazení a viditelnosti vrstev"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Render current view using Raytracing"
@@ -401,7 +400,7 @@ msgstr "Vykreslit aktuální pohled pomocí Raytracingu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:41
 msgid "Realistic mode"
-msgstr "Realistické zobrazení"
+msgstr "Realistický mód"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:50
 msgid "Show board body"
@@ -414,7 +413,7 @@ msgstr "Zobrazit vyplněné oblasti v zónách"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
 msgid "Subtract soldermask from silkscreen"
-msgstr "Odstranit masku z vrstvy potisku"
+msgstr "Odečíst pájecí masku z potisku"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:77
 msgid "Clip silkscreen at via annulus"
@@ -25006,7 +25005,7 @@ msgstr "Vlastnosti plošky"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:353
 msgid "Pad Custom Shape Geometry Transform"
-msgstr "Transformace vlastního tvaru plošky plošky"
+msgstr "Transformace geometrie vlastního tvaru plošky"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:393
 msgid "Basic Shape Polygon"
