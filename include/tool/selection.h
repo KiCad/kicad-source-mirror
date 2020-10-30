@@ -33,7 +33,6 @@
 #include <eda_item.h>
 #include <view/view_group.h>
 
-
 class SELECTION : public KIGFX::VIEW_GROUP
 {
 public:
@@ -153,17 +152,12 @@ public:
         return static_cast<VECTOR2I>( GetBoundingBox().GetPosition() );
     }
 
-    EDA_RECT GetBoundingBox() const
+    virtual EDA_RECT GetBoundingBox() const
     {
         EDA_RECT bbox;
 
-        if( Front() )
-        {
-            bbox = Front()->GetBoundingBox();
-
-            for( auto i = m_items.begin() + 1; i != m_items.end(); ++i )
-                bbox.Merge( (*i)->GetBoundingBox() );
-        }
+        for( EDA_ITEM* item : m_items )
+            bbox.Merge( item->GetBoundingBox() );
 
         return bbox;
     }

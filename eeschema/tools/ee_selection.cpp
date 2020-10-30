@@ -23,8 +23,9 @@
  */
 
 #include <tools/ee_selection.h>
-
 #include <sch_item.h>
+#include <sch_component.h>
+#include <sch_sheet.h>
 
 
 EE_SELECTION::EE_SELECTION( SCH_SCREEN* aScreen ) :
@@ -55,6 +56,24 @@ EDA_ITEM* EE_SELECTION::GetTopLeftItem( bool onlyModules ) const
     }
 
     return topLeftItem;
+}
+
+
+EDA_RECT EE_SELECTION::GetBoundingBox() const
+{
+    EDA_RECT bbox;
+
+    for( EDA_ITEM* item : m_items )
+    {
+        if( item->Type() == SCH_COMPONENT_T )
+            bbox.Merge( static_cast<SCH_COMPONENT*>( item )->GetBoundingBox( false ) );
+        else if( item->Type() == SCH_SHEET_T )
+            bbox.Merge( static_cast<SCH_SHEET*>( item )->GetBodyBoundingBox() );
+        else
+            bbox.Merge( item->GetBoundingBox() );
+    }
+
+    return bbox;
 }
 
 
