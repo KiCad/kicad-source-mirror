@@ -65,13 +65,18 @@ CACHED_CONTAINER_GPU::~CACHED_CONTAINER_GPU()
     if( m_isMapped )
         Unmap();
 
-    glDeleteBuffers( 1, &m_glBufferHandle );
+    if( glDeleteBuffers )
+        glDeleteBuffers( 1, &m_glBufferHandle );
 }
 
 
 void CACHED_CONTAINER_GPU::Map()
 {
     wxCHECK( !IsMapped(), /*void*/ );
+
+    // OpenGL version might suddenly stop being available in Windows when an RDP session is started
+    if( !glBindBuffer )
+        throw std::runtime_error( "OpenGL no longer available!" );
 
     glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
     m_vertices = static_cast<VERTEX*>( glMapBuffer( GL_ARRAY_BUFFER, GL_READ_WRITE ) );

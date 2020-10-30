@@ -399,8 +399,11 @@ void OPENGL_COMPOSITOR::clean()
 
     m_buffers.clear();
 
-    glDeleteFramebuffersEXT( 1, &m_mainFbo );
-    glDeleteRenderbuffersEXT( 1, &m_depthBuffer );
+    if( glDeleteFramebuffersEXT )
+        glDeleteFramebuffersEXT( 1, &m_mainFbo );
+
+    if( glDeleteRenderbuffersEXT )
+        glDeleteRenderbuffersEXT( 1, &m_depthBuffer );
 
     m_initialized = false;
 }
