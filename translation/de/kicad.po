@@ -1,19 +1,20 @@
 # Christian Schlüter <chschlue@gmail.com>, 2020.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-21 18:39+0000\n"
-"Last-Translator: Christian Schlüter <chschlue@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2020-10-30 18:22+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.1\n"
+"X-Generator: Weblate 4.3.2-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -124,7 +125,7 @@ msgstr "Offset"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
 msgid "Opacity"
-msgstr "Opazität:"
+msgstr "Deckkraft"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:171
 #: common/dialogs/dialog_page_settings_base.cpp:118
@@ -411,7 +412,7 @@ msgstr "Realistischer Modus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:50
 msgid "Show board body"
-msgstr "Platinenkörper einblen&den"
+msgstr "Platinenkörper einblenden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:59
 msgid "Show filled areas in zones"
@@ -428,12 +429,14 @@ msgstr "Positionsdruck an Via-Restring abschneiden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:86
 msgid "Non plated pads copper as bare copper"
-msgstr ""
+msgstr "Nicht abgedeckte Kupferpads als reines Kupfer"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:87
 msgid ""
 "Display plated pads as plated but other copper as raw copper material. (Slow)"
 msgstr ""
+"Verzinnte Pads als verzinnt, anderes Kupfer aber als rohes Kupfermaterial "
+"anzeigen. (Langsam)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:98
 msgid "3D Model Visibility"
@@ -535,59 +538,53 @@ msgstr "Anti-Aliasing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "Disabled"
-msgstr ""
+msgstr "Deaktiviert"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "2x"
-msgstr "2"
+msgstr "2x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "4x"
-msgstr "4"
+msgstr "4x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "8x"
-msgstr "8"
+msgstr "8x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:341
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
+"3D-Viewer muss geschlossen und neu gestartet werden um diese Einstellung "
+"anzuwenden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:348
-#, fuzzy
 msgid "Selection color"
-msgstr "Auswahl kopiert."
+msgstr "Farbauswahl"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "While Moving"
-msgstr ""
+msgstr "Während des Bewegens"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:372
-#, fuzzy
 msgid "Disable anti-aliasing"
-msgstr "Ausgewogenes Anti-Aliasing"
+msgstr "Anti-Aliasing ausschalten"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:378
-#, fuzzy
 msgid "Disable thickness"
-msgstr "Linienstärke:"
+msgstr "Linienstärke ausschalten"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:384
 msgid "Disable vias"
-msgstr ""
+msgstr "Vias deaktivieren"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:390
-#, fuzzy
 msgid "Disable holes"
-msgstr "Bohrlöcher"
+msgstr "Bohrlöcher deaktivieren"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:406
-#, fuzzy
 msgid "OpenGL"
-msgstr "Öffnen"
+msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:420
 #, fuzzy
@@ -595,14 +592,12 @@ msgid "Raytracing Render Options"
 msgstr "Raytracing-Optionen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:431
-#, fuzzy
 msgid "Procedural textures"
-msgstr "Prozeduale Texturen"
+msgstr "Prozedurale Texturen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:438
-#, fuzzy
 msgid "Add floor"
-msgstr "Hinzufügen einer Ebene"
+msgstr "Ebene hinzufügen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:452
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:262
@@ -616,16 +611,15 @@ msgstr "Anzahl Punkte"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:477
 msgid "Spread Factor %"
-msgstr ""
+msgstr "Verteilungsfaktor in %"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:481
 msgid "Recursive Level"
-msgstr ""
+msgstr "Rekursive Ebene"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:488
-#, fuzzy
 msgid "Shadows"
-msgstr "Render Schatten"
+msgstr "Schatten"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:493
 msgid ""
@@ -637,7 +631,7 @@ msgstr ""
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:520
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:543
 msgid "Random direction factor of the cast rays"
-msgstr ""
+msgstr "Zufällige Streuung der Lichtstrahlen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:509
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
@@ -646,7 +640,7 @@ msgstr "Reflektionen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:514
 msgid "Number of rays that will be cast to evaluate a reflection point"
-msgstr ""
+msgstr "Anzahl der Lichtstrahlen zur Auswertung des Reflexionspunkts"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:525
 msgid ""
@@ -675,7 +669,7 @@ msgstr "Bestätigung"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:582
 msgid "Ambient Camera Light"
-msgstr ""
+msgstr "Umgebungslicht"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
 #, fuzzy
@@ -696,7 +690,7 @@ msgstr "Winkel in Grad:"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:639
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:656
 msgid "Azimuth (degrees)"
-msgstr ""
+msgstr "Azimut (Grad)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:660
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
@@ -1663,7 +1657,7 @@ msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Team"
-msgstr ""
+msgstr "Hauptentwickler Team"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Alumni"
@@ -1671,7 +1665,7 @@ msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
-msgstr ""
+msgstr "Weitere Beiträge von"
 
 #: common/dialog_about/AboutDialog_main.cpp:599
 msgid "Others"
@@ -1756,7 +1750,7 @@ msgstr "Kopiert ..."
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
-msgstr "App Title"
+msgstr "Anwendungstitel"
 
 #: common/dialog_about/dialog_about_base.cpp:37
 msgid "Copyright Info"
@@ -1851,9 +1845,8 @@ msgid "Opacity:"
 msgstr "Opazität:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:185
-#, fuzzy
 msgid "Preview (old/new):"
-msgstr "Vorschau (alt/neu)"
+msgstr "Vorschau (alt/neu):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
 msgid "Reset to Default"
@@ -2260,7 +2253,7 @@ msgstr "Auswahl Pfadeinstellungen"
 
 #: common/dialogs/dialog_page_settings.cpp:62
 msgid "A5 148x210mm"
-msgstr ""
+msgstr "A5 148x210mm"
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "A4 210x297mm"
@@ -2642,7 +2635,7 @@ msgid ""
 " Clamped to %f"
 msgstr ""
 "Warnung: Skalierungsfaktor ist auf einen sehr großen Wert gesetzt.\n"
-"  Gesetzt auf %f"
+" Gesetzt auf %f"
 
 #: common/dialogs/dialog_print_generic.cpp:122
 #, c-format
@@ -2651,7 +2644,7 @@ msgid ""
 " Clamped to %f"
 msgstr ""
 "Warnung: Skalierungsfaktor ist auf einen sehr kleinen Wert gesetzt\n"
-"  Gesetzt auf %f"
+" Gesetzt auf %f"
 
 #: common/dialogs/dialog_print_generic.cpp:191
 #: common/dialogs/dialog_print_generic.cpp:238
@@ -3126,18 +3119,16 @@ msgid "Pan and Zoom"
 msgstr "Bildschwenk und Zoom"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:25
-#, fuzzy
 msgid "Center and warp cursor on zoom"
-msgstr "Curs&or beim Zoomen nicht zentrieren und umpositionieren"
+msgstr "Zentriere und positioniere den Cursor neu beim Zoomen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:26
 msgid "Center the cursor on screen when zooming."
 msgstr "Hält beim Zoomen den Cursor an seiner aktuellen Position."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:33
-#, fuzzy
 msgid "Automatically pan while moving object"
-msgstr "Autoverschieben während ein &Objekt bewegt wird"
+msgstr "Autoverschieben während ein Objekt bewegt wird"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:34
 msgid ""
@@ -3158,9 +3149,8 @@ msgid "Zoom faster when scrolling quickly"
 msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:45
-#, fuzzy
 msgid "Zoom speed:"
-msgstr "Zentrieren"
+msgstr "Zoomgeschwindigkeit:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:51
 msgid "How far to zoom in for each rotation of the mouse wheel"
@@ -3369,14 +3359,12 @@ msgid "DP Gap"
 msgstr "Abstand dPair"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:49
-#, fuzzy
 msgid "Wire Thickness"
-msgstr "&Größe elektr. Verbindungen:"
+msgstr "Leiterbahnbreite"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:50
-#, fuzzy
 msgid "Bus Thickness"
-msgstr "Größe &Bus:"
+msgstr "Busbreite"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: eeschema/dialogs/dialog_edit_line_style_base.h:65 eeschema/sch_line.cpp:828
@@ -3486,15 +3474,13 @@ msgstr "Fehler: "
 
 #: common/dialogs/wx_html_report_panel.cpp:183
 #: common/dialogs/wx_html_report_panel.cpp:206
-#, fuzzy
 msgid "Warning:"
-msgstr "Warnung: "
+msgstr "Warnung:"
 
 #: common/dialogs/wx_html_report_panel.cpp:186
 #: common/dialogs/wx_html_report_panel.cpp:208
-#, fuzzy
 msgid "Info:"
-msgstr "Hinweis: "
+msgstr "Hinweis:"
 
 #: common/dialogs/wx_html_report_panel.cpp:322
 #: eeschema/dialogs/dialog_erc.cpp:658 pcbnew/dialogs/dialog_drc.cpp:574
@@ -3962,7 +3948,7 @@ msgstr "Element ziehen"
 #: common/eda_item.cpp:316 common/page_layout/ws_draw_item.cpp:131
 #: common/page_layout/ws_draw_item.cpp:440 eeschema/sch_bitmap.h:133
 msgid "Image"
-msgstr "Bil&d"
+msgstr "Bild"
 
 #: common/eda_text.cpp:495 eeschema/dialogs/dialog_edit_label_base.cpp:124
 #: eeschema/libedit/symbedit.cpp:230 eeschema/sch_text.cpp:650
@@ -5023,9 +5009,8 @@ msgid "DRC Exclusions"
 msgstr "Ausschlüsse"
 
 #: common/layer_id.cpp:164
-#, fuzzy
 msgid "DRC Marker Shadows"
-msgstr "Render Schatten"
+msgstr "DRC Marker Schatten"
 
 #: common/layer_id.cpp:165 pcbnew/widgets/appearance_controls.cpp:352
 msgid "Anchors"
@@ -5234,17 +5219,17 @@ msgstr ""
 #: common/plugins/cadstar/cadstar_archive_parser.h:41
 #, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr "Unbekanntes Vorkommnis '%s' in '%s'"
+msgstr "Unbekannter Knoten '%s' in '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:44
 #, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr ""
+msgstr "Fehlender Parameter '%s' in '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:47
 #, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr ""
+msgstr "Unbekannter Parameter '%s' in '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:50
 #, c-format
@@ -6319,14 +6304,12 @@ msgid "KiCad project files"
 msgstr "KiCad Projektdateien"
 
 #: common/wildcards_and_files_ext.cpp:211
-#, fuzzy
 msgid "KiCad legacy project files"
-msgstr "KiCad Projektdateien"
+msgstr "KiCad Projektdateien (ältere Versionen)"
 
 #: common/wildcards_and_files_ext.cpp:217
-#, fuzzy
 msgid "All KiCad project files"
-msgstr "KiCad Projektdateien"
+msgstr "Alle KiCad Projektdateien"
 
 #: common/wildcards_and_files_ext.cpp:223
 msgid "KiCad legacy schematic files"
@@ -6337,19 +6320,16 @@ msgid "KiCad s-expression schematic files"
 msgstr "KiCad S-Expression Schaltplandateien"
 
 #: common/wildcards_and_files_ext.cpp:235
-#, fuzzy
 msgid "Altium schematic files"
-msgstr "Eagle XML-Schaltplandateien"
+msgstr "Altium Schaltplandateien"
 
 #: common/wildcards_and_files_ext.cpp:241
-#, fuzzy
 msgid "CADSTAR Schematic Archive files"
-msgstr "Schaltplan Dateien"
+msgstr "CADSTAR Schaltplan Archiv"
 
 #: common/wildcards_and_files_ext.cpp:247
-#, fuzzy
 msgid "CADSTAR Archive files"
-msgstr "Archivdatei \"%s\""
+msgstr "CADSTAR Archiv"
 
 #: common/wildcards_and_files_ext.cpp:253
 msgid "Eagle XML schematic files"
@@ -6370,7 +6350,7 @@ msgstr "Gerber Dateien"
 #: common/wildcards_and_files_ext.cpp:277
 #: common/wildcards_and_files_ext.cpp:318
 msgid "KiCad printed circuit board files"
-msgstr "KiCad Dateien gedruckter Schaltungen"
+msgstr "KiCad PCB-Dateien"
 
 #: common/wildcards_and_files_ext.cpp:283
 msgid "Eagle ver. 6.x XML PCB files"
