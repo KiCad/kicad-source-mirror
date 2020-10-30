@@ -298,7 +298,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                             continue;
 
                         moveItem( item, delta );
-                        updateView( item );
+                        updateItem( item, false );
                     }
 
                     m_anchorPos = m_cursor;
@@ -355,7 +355,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     continue;
 
                 moveItem( item, delta );
-                updateView( item );
+                updateItem( item, false );
             }
 
             m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
@@ -456,26 +456,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     }
     else
     {
-        // Moving items changes the RTree box bounds.
+        // One last update after exiting loop (for slower stuff, such as updating SCREEN's RTree).
         for( auto item : selection )
-        {
-            switch( item->Type() )
-            {
-            // Moving sheet pins does not change the BBox.
-            case SCH_SHEET_PIN_T:
-                break;
-
-            // Moving fields should update the associated component
-            case SCH_FIELD_T:
-                if( item->GetParent() )
-                    m_frame->GetScreen()->Update( static_cast<SCH_ITEM*>( item->GetParent() ) );
-
-                break;
-
-            default:
-                m_frame->GetScreen()->Update( static_cast<SCH_ITEM*>( item ) );
-            }
-        }
+            updateItem( item, true );
 
         // If we move items away from a junction, we _may_ want to add a junction there
         // to denote the state.
@@ -802,7 +785,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                         append_undo = true;
 
                         moveItem( dritem, gridpt );
-                        updateView( dritem );
+                        updateItem( dritem, true );
                     }
                 }
 
@@ -845,7 +828,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                     append_undo = true;
 
                     moveItem( dritem, most_common );
-                    updateView( dritem );
+                    updateItem( dritem, true );
                 }
             }
         }

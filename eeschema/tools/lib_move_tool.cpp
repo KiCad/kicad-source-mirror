@@ -151,7 +151,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     for( EDA_ITEM* item : selection )
                     {
                         moveItem( item, delta );
-                        updateView( item );
+                        updateItem( item, false );
                     }
 
                     m_anchorPos = m_cursor;
@@ -191,7 +191,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             for( EDA_ITEM* item : selection )
             {
                 moveItem( item, delta );
-                updateView( item );
+                updateItem( item, false );
             }
 
             m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );

@@ -453,7 +453,7 @@ void LIB_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
     else
         aItem->SetUnit( m_frame->GetUnit() );
 
-    updateView( aItem );
+    updateItem( aItem, true );
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify( );
 
@@ -477,7 +477,7 @@ void LIB_EDIT_TOOL::editTextProperties( LIB_ITEM* aItem )
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    updateView( aItem );
+    updateItem( aItem, true );
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify( );
 }
@@ -524,7 +524,7 @@ void LIB_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     }
     else
     {
-        updateView( aField );
+        updateItem( aField, true );
         m_frame->GetCanvas()->Refresh();
         m_frame->OnModify();
         m_frame->DisplayCmpDoc();

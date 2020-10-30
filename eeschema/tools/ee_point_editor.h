@@ -61,7 +61,7 @@ public:
 
 private:
     ///> Updates item's points with edit points.
-    void updateItem() const;
+    void updateParentItem() const;
 
     ///> Updates edit points with item's points.
     void updatePoints();

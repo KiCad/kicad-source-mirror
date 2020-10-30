@@ -321,7 +321,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
             m_editedPoint->SetPosition( controls->GetCursorPosition( snap ) );
 
-            updateItem();
+            updateParentItem();
             updatePoints();
         }
 
@@ -464,7 +464,7 @@ static void pinEditedCorner( int aEditedPointIndex, int minWidth, int minHeight,
 }
 
 
-void EE_POINT_EDITOR::updateItem() const
+void EE_POINT_EDITOR::updateParentItem() const
 {
     EDA_ITEM* item = m_editPoints->GetParent();
 
@@ -637,7 +637,7 @@ void EE_POINT_EDITOR::updateItem() const
         break;
     }
 
-    updateView( item );
+    updateItem( item, true );
     m_frame->SetMsgPanel( item );
 }
 
@@ -831,7 +831,7 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
     polyLine->AddCorner( mapCoords( cursorPos ) );
 
-    updateView( polyLine );
+    updateItem( polyLine, true );
     updatePoints();
 
     return 0;
@@ -850,7 +850,7 @@ int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
     polyLine->RemoveCorner( getEditedPointIndex() );
 
-    updateView( polyLine );
+    updateItem( polyLine, true );
     updatePoints();
 
     return 0;

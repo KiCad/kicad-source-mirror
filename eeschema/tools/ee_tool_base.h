@@ -100,17 +100,38 @@ public:
     }
 
 protected:
-    ///> Similar to getView()->Update(), but handles items that are redrawn by their parents.
-    void updateView( EDA_ITEM* aItem ) const
+    /**
+     * Similar to getView()->Update(), but handles items that are redrawn by their parents
+     * and updating the SCH_SCREEN's RTree.
+     */
+    void updateItem( EDA_ITEM* aItem, bool aUpdateRTree ) const
     {
-        KICAD_T itemType = aItem->Type();
-
-        if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
+        switch( aItem->Type() )
+        {
+        case SCH_SHEET_PIN_T:
+            getView()->Update( aItem );
             getView()->Update( aItem->GetParent() );
 
-        getView()->Update( aItem );
-    }
+            // Moving sheet pins does not change the BBox.
+            break;
 
+        case SCH_PIN_T:
+        case SCH_FIELD_T:
+            getView()->Update( aItem );
+            getView()->Update( aItem->GetParent() );
+
+            if( aUpdateRTree )
+                m_frame->GetScreen()->Update( static_cast<SCH_ITEM*>( aItem->GetParent() ) );
+
+            break;
+
+        default:
+            getView()->Update( aItem );
+
+            if( aUpdateRTree )
+                m_frame->GetScreen()->Update( static_cast<SCH_ITEM*>( aItem ) );
+        }
+    }
 
     ///> Similar to m_frame->SaveCopyInUndoList(), but handles items that are owned by their
     ///> parents.

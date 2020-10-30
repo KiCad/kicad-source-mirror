@@ -1055,7 +1055,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             saveCopyInUndoList( item, UNDO_REDO::DELETED, appendToUndo );
             appendToUndo = true;
 
-            updateView( sch_item );
+            updateItem( sch_item, false );
 
             if( sch_item->Type() == SCH_SHEET_PIN_T )
             {
@@ -1282,8 +1282,7 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
         sheet->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
     }
 
-    m_frame->GetScreen()->Update( item );
-    updateView( item );
+    updateItem( item, true );
     m_frame->OnModify();
 
     if( selection.IsHover() )
@@ -1593,8 +1592,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         wxFAIL_MSG( wxString( "Cannot edit schematic item type " ) + item->GetClass() );
     }
 
-    m_frame->GetScreen()->Update( item );
-    updateView( item );
+    updateItem( item, true );
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
@@ -1741,8 +1739,7 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
 
     sheet->CleanupSheet();
 
-    m_frame->GetScreen()->Update( sheet );
-    updateView( sheet );
+    updateItem( sheet, true );
     m_frame->OnModify();
 
     if( selection.IsHover() )
