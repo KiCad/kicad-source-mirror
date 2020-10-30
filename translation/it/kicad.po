@@ -3,9 +3,10 @@
 # Michele Petrecca <michelinux@alice.it>, 2005, 2006.
 # Doriano Blengino <web@xonelectronics.it>, 06-2006
 # Marco Ciampa <ciampix@posteo.net>, 2014-2020.
+# Hildo Guillardi Júnior <hildogjr@gmail.com>, 2020.
 #
-#  db: Usare le maiuscole con moderazione: vanno usate per i nomi propri e all'inizio
-#  db: di una frase: negli altri casi può risultare molto inelegante
+# db: Usare le maiuscole con moderazione: vanno usate per i nomi propri e all'inizio
+# db: di una frase: negli altri casi può risultare molto inelegante
 #
 # mc: note linguistiche:
 # mc: - gli apici singoli non si usano in italiano, sostituiti con virgolette
@@ -15,7 +16,7 @@
 # mc: Note terminologiche:
 #
 # mc: - il termine component/componente è deprecato in quanto ambiguo
-# mc: - symbol -> simbolo, un simbolo dello schema elettrico 
+# mc: - symbol -> simbolo, un simbolo dello schema elettrico
 # mc: - footprint -> impronta, un simbolo del circuito stampato
 #
 # mc: - netlist = non si traduce perché termine tecnico = TT
@@ -57,8 +58,8 @@
 # mc: - Push & Shove (spingi e compatta) = sbroglio interattivo P&S
 # mc: - stub = spezzone
 # mc: - hotkey = comando da tastiera (tolto scorciatoia perché si
-#       confondeva con le scorciatoie per i menu, i tasti contrassegnati
-#       dal carattere & nella stringa di traduzione)
+# confondeva con le scorciatoie per i menu, i tasti contrassegnati
+# dal carattere & nella stringa di traduzione)
 # mc: - reference designator = (designatore di) riferimento
 # mc: - chamfer = smuss(o/amento)
 # mc: - fillet = stond(o/amento)
@@ -98,15 +99,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-09-23 10:28+0200\n"
-"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <tp@lists.linux.it>\n"
+"PO-Revision-Date: 2020-10-30 20:48+0000\n"
+"Last-Translator: Hildo Guillardi Júnior <hildogjr@gmail.com>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.2-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
-"X-Generator: Poedit 1.8.7.1\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
 "X-Poedit-SearchPath-1: pcbnew\n"
@@ -254,9 +257,8 @@ msgid "Create layers"
 msgstr "Crea strati"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:475
-#, fuzzy
 msgid "Board outline is not closed:"
-msgstr "Il contorno scheda non è chiuso: "
+msgstr "Il contorno scheda non è chiuso:"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
@@ -284,7 +286,7 @@ msgstr "Crea BVH (Buried Via Holes) per fori e via"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:423
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr ""
+msgstr "La tua versione OpenGL non è supportata. Il minimo richiesto è 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
@@ -292,15 +294,15 @@ msgid "Render time %.0f ms ( %.1f fps)"
 msgstr "Tempo di render %.0f ms (%.1f fps)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr "Parametri del gruppo di collegamenti"
+msgstr "Net %s\tClasse %s\tPad %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:761
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNetClass %s"
-msgstr "Netclass"
+msgstr "Net %s\tClasse %s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:497
 msgid "Load OpenGL: board"
@@ -343,7 +345,7 @@ msgstr "Tempo di rendering %.3f s"
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:413
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr "Rendering: %.0f %%"
+msgstr "Disegnando: %.0f %%"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:917
 msgid "Rendering: Post processing shader"
@@ -378,7 +380,7 @@ msgstr "Opzioni di visualizzazione"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:806
 msgid "Raytracing"
-msgstr "Raytracing"
+msgstr "Calcolare luce"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:28
