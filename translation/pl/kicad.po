@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
 "PO-Revision-Date: 2020-10-30 11:21+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Last-Translator: Mark Roszko <mark.roszko@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -5495,7 +5495,7 @@ msgstr "Kursor w lewo"
 
 #: common/tool/actions.cpp:342
 msgid "Cursor Right"
-msgstr "Kursor w prawo"
+msgstr "Dolny prawy"
 
 #: common/tool/actions.cpp:349
 msgid "Cursor Up Fast"
