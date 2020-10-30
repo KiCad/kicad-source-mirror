@@ -78,7 +78,6 @@ public:
                                bool aNeedMTV, VECTOR2I* aMTV ) const override;
 
     virtual int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB ) override;
-    //virtual int Clearance( int aNetCode ) const override;
     virtual int DpCoupledNet( int aNet ) override;
     virtual int DpNetPolarity( int aNet ) override;
     virtual bool DpNetPair( const PNS::ITEM* aItem, int& aNetP, int& aNetN ) override;
@@ -241,14 +240,17 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         {
         case PNS::ITEM::ARC_T:
             dummyArc.SetLayer( (PCB_LAYER_ID) aLayer );
+            dummyArc.SetNetCode( aItemA->Net() );
             parentA = &dummyArc;
             break;
         case PNS::ITEM::VIA_T:
             dummyVia.SetLayer( (PCB_LAYER_ID) aLayer );
+            dummyVia.SetNetCode( aItemA->Net() );
             parentA = &dummyVia;
             break;
         default:
             dummyTrack.SetLayer( (PCB_LAYER_ID) aLayer );
+            dummyTrack.SetNetCode( aItemA->Net() );
             parentA = &dummyTrack;
             break;
         }
@@ -287,7 +289,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
     bool ok = false;
     int rv = 0;
 
-    if( IsDiffPair( aA, aB ) )
+    if( aB && IsDiffPair( aA, aB ) )
     {
         // for diff pairs, we use the gap value for shoving/dragging
         if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, aA, aB, aA->Layer(),

@@ -84,7 +84,6 @@ public:
                                bool aNeedMTV, VECTOR2I* aMTV ) const = 0;
 
     virtual int Clearance( const ITEM* aA, const ITEM* aB ) = 0;
-    //virtual int Clearance( int aNetCode ) const = 0;
     virtual int DpCoupledNet( int aNet ) = 0;
     virtual int DpNetPolarity( int aNet ) = 0;
     virtual bool DpNetPair( const ITEM* aItem, int& aNetP, int& aNetN ) = 0;

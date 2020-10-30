@@ -330,7 +330,7 @@ void ROUTER::updateView( NODE* aNode, ITEM_SET& aCurrent, bool aDragging )
 
     for( auto item : added )
     {
-        int clearance = 0; //GetRuleResolver()->Clearance( item->Net() );
+        int clearance = GetRuleResolver()->Clearance( item, nullptr );
         m_iface->DisplayItem( item, -1, clearance, aDragging );
     }
 
@@ -364,7 +364,7 @@ void ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
             continue;
 
         const LINE* l = static_cast<const LINE*>( item );
-        int clearance = 0; //GetRuleResolver()->Clearance( item->Net() );
+        int clearance = GetRuleResolver()->Clearance( item, nullptr );
 
         m_iface->DisplayItem( l, -1, clearance );
 
