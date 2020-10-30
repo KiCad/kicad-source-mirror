@@ -376,7 +376,7 @@ install path. At the command prompt run the the following commands:
           -DCMAKE_INSTALL_PREFIX=/mingw64 \
           -DDEFAULT_INSTALL_PATH=/mingw64 \
           ../../
-    make install
+    make -j N install   # Where N is the number of concurrent threads that your system can handle
 
 For 32-bit builds, run `mingw32.exe` and change `x86_64` to `i686` in the package names and
 change the paths in the cmake configuration from `/mingw64` to `/mingw32`.
