@@ -336,7 +336,8 @@ void PANEL_SETUP_RULES::OnCompile( wxCommandEvent& event )
     }
     catch( PARSE_ERROR& pe )
     {
-        wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
+        wxString msg = wxString::Format( "%s <a href='%d:%d'>%s</a>%s",
+                                         _( "ERROR:" ),
                                          pe.lineNumber,
                                          pe.byteIndex,
                                          pe.ParseProblem(),
