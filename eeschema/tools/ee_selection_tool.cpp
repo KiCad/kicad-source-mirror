@@ -576,6 +576,9 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
     }
 
+    // Shutting down; clear the selection
+    m_selection.Clear();
+
     return 0;
 }
 
