@@ -101,7 +101,7 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
         m_infoBar->RemoveAllButtons();
         m_infoBar->AddButton( button );
-        m_infoBar->ShowMessage( _( "Annotation not complete.  ERC cannot be run." ) );
+        m_infoBar->ShowMessage( _( "Annotation not complete. ERC cannot be run." ) );
     }
 
     // Now all widgets have the size fixed, call FinishDialogSettings
@@ -270,8 +270,8 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
         m_notebook->ChangeSelection( 0 );   // Display the "Tests Running..." tab
 
         m_messages->Clear();
-        m_messages->Report( _( "Annotation not complete.  ERC cannot be run.  " )
-                            + wxT( "<a href='annotate'>" )
+        m_messages->Report( _( "Annotation not complete. ERC cannot be run." )
+                            + wxT( " <a href='annotate'>" )
                             + _( "Show Annotation dialog." )
                             + wxT( "</a>" ) );
 
@@ -341,8 +341,8 @@ void DIALOG_ERC::testErc()
 
     if( m_parent->CheckAnnotate( NULL_REPORTER::GetInstance(), false ) )
     {
-        Report( _( "Annotation not complete.  ERC cannot be run.  " )
-                    + wxT( "<a href='annotate'>" )
+        Report( _( "Annotation not complete. ERC cannot be run." )
+                    + wxT( " <a href='annotate'>" )
                     + _( "Show Annotation dialog." )
                     + wxT( "</a>" ) );
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -309,7 +309,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	fgSizer2->Add( m_widthAdjustLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_widthAdjustCtrl = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_widthAdjustCtrl->SetToolTip( _("Set global width correction for exact width PostScript output.\nThese width correction is intended to compensate tracks width and also pads and vias size errors.\nThe reasonable width correction value must be in a range of [-(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils.") );
+	m_widthAdjustCtrl->SetToolTip( _("Set global width correction for exact width PostScript output.\nThese width correction is intended to compensate tracks width and also pads and vias size errors.\nThe reasonable width correction value must be in a range of [-(MinTrackWidth-1), +(MinClearanceValue-1)].") );
 
 	fgSizer2->Add( m_widthAdjustCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
