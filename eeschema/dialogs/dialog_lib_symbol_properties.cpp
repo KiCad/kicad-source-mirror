@@ -49,7 +49,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT
 
 
 DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( LIB_EDIT_FRAME* aParent,
-                                                                    LIB_PART* aLibEntry ) :
+                                                            LIB_PART* aLibEntry ) :
     DIALOG_LIB_SYMBOL_PROPERTIES_BASE( aParent ),
     m_Parent( aParent ),
     m_libEntry( aLibEntry ),
@@ -757,14 +757,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::syncControlStates( bool aIsAlias )
 {
-    // Remove the not wanted notebook page.
-    // *Do not use* Hide(), it is suitable to hide a widget,
-    // but it is not suitable to hide a notebook page (that is not a widget)
-    if( aIsAlias )
-        m_NoteBook->RemovePage( 1 );
-
     bSizerLowerBasicPanel->Show( !aIsAlias );
-    // bButtonSize->Show( !aIsAlias );
 
 #ifdef KICAD_SPICE
     m_spiceFieldsButton->Show( !aIsAlias );

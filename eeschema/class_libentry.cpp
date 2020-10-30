@@ -121,7 +121,7 @@ LIB_PART::LIB_PART( const LIB_PART& aPart, PART_LIB* aLibrary ) :
 
     m_library             = aLibrary;
     m_name                = aPart.m_name;
-    m_FootprintList       = wxArrayString( aPart.m_FootprintList );
+    m_footprintFilters    = wxArrayString( aPart.m_footprintFilters );
     m_unitCount           = aPart.m_unitCount;
     m_unitsLocked         = aPart.m_unitsLocked;
     m_pinNameOffset       = aPart.m_pinNameOffset;
@@ -176,7 +176,7 @@ const LIB_PART& LIB_PART::operator=( const LIB_PART& aPart )
 
     m_library             = aPart.m_library;
     m_name                = aPart.m_name;
-    m_FootprintList       = wxArrayString( aPart.m_FootprintList );
+    m_footprintFilters    = wxArrayString( aPart.m_footprintFilters );
     m_unitCount           = aPart.m_unitCount;
     m_unitsLocked         = aPart.m_unitsLocked;
     m_pinNameOffset       = aPart.m_pinNameOffset;
@@ -258,12 +258,12 @@ int LIB_PART::Compare( const LIB_PART& aRhs ) const
         ++rhsItem;
     }
 
-    if( m_FootprintList.GetCount() != aRhs.m_FootprintList.GetCount() )
-        return m_FootprintList.GetCount() - aRhs.m_FootprintList.GetCount();
+    if( m_footprintFilters.GetCount() != aRhs.m_footprintFilters.GetCount() )
+        return m_footprintFilters.GetCount() - aRhs.m_footprintFilters.GetCount();
 
-    for( size_t i = 0; i < m_FootprintList.GetCount(); i++ )
+    for( size_t i = 0; i < m_footprintFilters.GetCount(); i++ )
     {
-        retv = m_FootprintList[i].Cmp( aRhs.m_FootprintList[i] );
+        retv = m_footprintFilters[i].Cmp( aRhs.m_footprintFilters[i] );
 
         if( retv )
             return retv;
@@ -384,6 +384,7 @@ std::unique_ptr< LIB_PART > LIB_PART::Flatten() const
 
         retv->SetKeyWords( m_keyWords );
         retv->SetDescription( m_description );
+        retv->SetFootprintFilters( m_footprintFilters );
     }
     else
     {

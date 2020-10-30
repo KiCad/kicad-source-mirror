@@ -110,13 +110,13 @@ class LIB_PART : public EDA_ITEM, public LIB_TREE_ITEM
     bool                m_showPinNumbers;   ///< Determines if part pin numbers are visible.
     bool                m_includeInBom;     ///< Determines if symbol should be included in
                                             ///< schematic BOM.
-    bool                m_includeOnBoard; ///< Determines if symbol should be excluded from
+    bool                m_includeOnBoard;   ///< Determines if symbol should be excluded from
                                             ///< netlist when updating board.
     timestamp_t         m_dateLastEdition;  ///< Date of the last modification.
     LIBRENTRYOPTIONS    m_options;          ///< Special part features such as POWER or NORMAL.)
     int                 m_unitCount;        ///< Number of units (parts) per package.
     LIB_ITEMS_CONTAINER m_drawings;         ///< Drawing items of this part.
-    wxArrayString       m_FootprintList;    /**< List of suitable footprint names for the
+    wxArrayString       m_footprintFilters; /**< List of suitable footprint names for the
                                                  part (wild card names accepted). */
     PART_LIB*           m_library;          ///< Library the part belongs to if any.
     wxString            m_name;             ///< Symbol name.
@@ -196,10 +196,10 @@ public:
 
     timestamp_t GetDateLastEdition() const { return m_dateLastEdition; }
 
-    wxArrayString GetFootprints() const { return m_FootprintList; }
+    wxArrayString GetFootprints() const { return m_footprintFilters; }
     void SetFootprintFilters( const wxArrayString& aFootprintFilters )
     {
-        m_FootprintList = aFootprintFilters;
+        m_footprintFilters = aFootprintFilters;
     }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
