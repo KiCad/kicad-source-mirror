@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-30 20:48+0000\n"
+"PO-Revision-Date: 2020-10-31 18:15+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -538,7 +538,7 @@ msgstr "Anti-Aliasing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "Disabled"
-msgstr "Deaktiviert"
+msgstr "Ausgeschaltet"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "2x"
@@ -555,12 +555,12 @@ msgstr "8x"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:341
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
-"3D-Viewer muss geschlossen und neu gestartet werden um diese Einstellung "
+"3D-Anzeige muss geschlossen und wieder geöffnet werden um diese Änderung "
 "anzuwenden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:348
 msgid "Selection color"
-msgstr "Farbauswahl"
+msgstr "Auswahlfarbe"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "While Moving"
@@ -568,7 +568,7 @@ msgstr "Während des Bewegens"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:372
 msgid "Disable anti-aliasing"
-msgstr "Anti-Aliasing ausschalten"
+msgstr "Kein Anti-Aliasing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:378
 msgid "Disable thickness"
@@ -576,11 +576,11 @@ msgstr "Linienstärke ausschalten"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:384
 msgid "Disable vias"
-msgstr "Vias deaktivieren"
+msgstr "Vias ausschalten"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:390
 msgid "Disable holes"
-msgstr "Bohrlöcher deaktivieren"
+msgstr "Löcher ausschalten"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:406
 msgid "OpenGL"
@@ -3500,9 +3500,8 @@ msgstr "Textersetzung"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:521
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:541
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:561
-#, fuzzy
 msgid "Error:"
-msgstr "Fehler: "
+msgstr "Fehler:"
 
 #: common/dialogs/wx_html_report_panel.cpp:183
 #: common/dialogs/wx_html_report_panel.cpp:206
@@ -3574,9 +3573,8 @@ msgstr ""
 "benutzt"
 
 #: common/draw_panel_gal.cpp:244 common/draw_panel_gal.cpp:429
-#, fuzzy
 msgid "Could not use OpenGL"
-msgstr "Konnte CvPcb nicht öffnen"
+msgstr "OpenGL kann nicht verwendet werden"
 
 #: common/dsnlexer.cpp:34
 msgid "clipboard"
@@ -3711,7 +3709,6 @@ msgid "Inches"
 msgstr "Zoll"
 
 #: common/eda_draw_frame.cpp:252
-#, fuzzy
 msgid "Edit User Grid..."
 msgstr "Benutzerdefiniertes Raster anpassen..."
 
@@ -3767,14 +3764,12 @@ msgid "Graphic Shape"
 msgstr "Grafische Darstellung"
 
 #: common/eda_item.cpp:264
-#, fuzzy
 msgid "Board Text"
-msgstr "Einstellungen Platine/Board"
+msgstr "Platinetext"
 
 #: common/eda_item.cpp:265 pcbnew/widgets/appearance_controls.cpp:343
-#, fuzzy
 msgid "Footprint Text"
-msgstr "Footprinttext Rückseite"
+msgstr "Footprinttext"
 
 #: common/eda_item.cpp:267 pcbnew/class_track.cpp:619
 msgid "Track"
@@ -3786,9 +3781,8 @@ msgid "Via"
 msgstr "Via"
 
 #: common/eda_item.cpp:269
-#, fuzzy
 msgid "Board Marker"
-msgstr "Platinenlagen:"
+msgstr "Platinenmarker:"
 
 #: common/eda_item.cpp:270
 #, fuzzy
@@ -3810,9 +3804,8 @@ msgid "Leader"
 msgstr "Führer"
 
 #: common/eda_item.cpp:274 pcbnew/class_pcb_target.cpp:121
-#, fuzzy
 msgid "Target"
-msgstr "Ziel Versatz: "
+msgstr "Ziel"
 
 #: common/eda_item.cpp:275
 #, fuzzy
@@ -14670,13 +14663,16 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Sie müssen die Simulation zuerst starten."
 
 #: eeschema/sim/sim_plot_frame.cpp:1524
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Simulation results:\n"
 "\n"
-msgstr "Einstellungen für Simulationen"
+msgstr ""
+"\n"
+"\n"
+"Simulationsergebnisse:\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1586
 msgid "Hide Signal"
@@ -16033,11 +16029,12 @@ msgid "Errors reported by Eeschema:\n"
 msgstr "Von Eeschema gemeldete Fehler:\n"
 
 #: eeschema/tools/reannotate.cpp:76
-#, fuzzy
 msgid ""
 "\n"
 "Annotation not performed!\n"
-msgstr "Eine Annotation ist noch notwendig!"
+msgstr ""
+"\n"
+"Eine Annotation ist noch notwendig!\n"
 
 #: eeschema/tools/sch_drawing_tools.cpp:397
 #: pagelayout_editor/pl_editor_frame.cpp:855
@@ -16098,11 +16095,8 @@ msgid "Reached end of sheet."
 msgstr "Ende des Blatts erreicht."
 
 #: eeschema/tools/sch_editor_control.cpp:462
-#, fuzzy
 msgid "Find again to wrap around to the start."
-msgstr ""
-"\n"
-"Erneut suchen um zum Anfang zurückzukehren."
+msgstr "Erneut suchen um zum Anfang zurückzukehren."
 
 #: eeschema/tools/sch_editor_control.cpp:842
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -20991,11 +20985,13 @@ msgid "PCB and schematic successfully reannotated"
 msgstr "Leiterplatte und Schaltplan erfolgreich neu notiert"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:299
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "%s footprints will be reannotated."
-msgstr "%s Footprints mit Bibliotheks-ID:"
+msgstr ""
+"\n"
+"%s Footprints werden neu annotiert."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:304
 #, c-format
@@ -21007,11 +21003,12 @@ msgstr ""
 "Referenztypen %s werden nicht mit Anmerkungen versehen."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:309
-#, fuzzy
 msgid ""
 "\n"
 "Locked footprints will not be annotated"
-msgstr "Footprint von aktueller Platine laden"
+msgstr ""
+"\n"
+"Gesperrte Footprints werden nicht mit Anmerkungen benotet"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:313
 #, c-format
@@ -21020,7 +21017,7 @@ msgid ""
 "Front footprints will start at %s"
 msgstr ""
 "\n"
-"Die vorderen Fußabdrücke beginnen bei %s."
+"Die vorderen Footprints beginnen bei %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:322
 #, c-format
@@ -21029,7 +21026,7 @@ msgid ""
 "Back footprints will start at %s."
 msgstr ""
 "\n"
-"Die Rückfußabdrücke beginnen bei %s."
+"Die Abseitefootprints beginnen bei %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:323
 #, fuzzy
@@ -21052,7 +21049,7 @@ msgid ""
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"Auf den vorderen Fußabdrücken wird '%s' als Präfix eingefügt."
+"Auf den vorderseitig Footprints wird '%s' als Präfix eingefügt."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:347
 #, c-format
@@ -21070,7 +21067,7 @@ msgid ""
 "Back footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"Auf den hinteren Fußabdrücken wird '%s' als Präfix eingefügt."
+"Auf den rückseitige Footprints wird '%s' als Präfix eingefügt."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:361
 #, c-format
@@ -21094,18 +21091,20 @@ msgid "reference designator location"
 msgstr "&Referenzbezeichner:"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:369
-#, fuzzy
 msgid ""
 "\n"
 "The schematic will be updated."
-msgstr "Neue Schaltplandatei nicht gespeichert."
+msgstr ""
+"\n"
+"Der Schaltplan wird aktualisiert."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:371
-#, fuzzy
 msgid ""
 "\n"
 "The schematic will not be updated."
-msgstr "Neue Schaltplandatei nicht gespeichert."
+msgstr ""
+"\n"
+"Der Schaltplan wird nicht aktualisiert."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:521
 #, c-format
@@ -21146,11 +21145,12 @@ msgid "will be ignored"
 msgstr "wird ignoriert"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:558
-#, fuzzy
 msgid ""
 "\n"
 "No footprints"
-msgstr "Keine Footprints."
+msgstr ""
+"\n"
+"Keine Footprints."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:564
 #, c-format
@@ -21172,11 +21172,13 @@ msgid "Reference Designator Coordinates"
 msgstr "Referenzbezeichner"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:568
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Sort Code %d"
-msgstr "Darstellungs-Code %d"
+msgstr ""
+"\n"
+"Darstellungs-Code %d"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:572
 #, c-format
@@ -21213,11 +21215,12 @@ msgid "Reannotate anyway?"
 msgstr "Trotzdem neu notieren?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:653
-#, fuzzy
 msgid ""
 "\n"
 "Reannotate failed!\n"
-msgstr "Kann Datei \"%s\" nicht erstellen.\n"
+msgstr ""
+"\n"
+"Reannotate ist gescheitert!\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:837
 #, fuzzy
@@ -21225,20 +21228,24 @@ msgid "Aborted: too many errors "
 msgstr "Abbruch durch Benutzer"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:872
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Front Modules"
-msgstr "Oberseite"
+msgstr ""
+"\n"
+"\n"
+"Oberseite Footprints"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:873
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Back Modules"
-msgstr "Rückseite"
+msgstr ""
+"\n"
+"\n"
+"Rückseite Footprints"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:937
 #, fuzzy
@@ -21414,7 +21421,7 @@ msgstr "Ink&lusive gesperrter Footprints"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:265
 msgid "Locked footprints will not be reannotated"
-msgstr "Gesperrte Fußabdrücke werden nicht erneut notiert"
+msgstr "Gesperrte Footprints werden nicht neu notiert"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:269
 #, fuzzy
@@ -30520,7 +30527,7 @@ msgid ""
 "Non-Copper Pad '%s' uses a complex pad stack (kind %d). This should not "
 "happen"
 msgstr ""
-"Nicht-Kupfer-Pad '%s' verwendet einen komplexen Padaufbau (Typ %d).  Dies "
+"Nicht-Kupfer-Pad '%s' verwendet einen komplexen Padaufbau (Typ %d). Dies "
 "sollte nicht passieren"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2167
