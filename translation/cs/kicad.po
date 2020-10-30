@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-30 20:48+0000\n"
+"PO-Revision-Date: 2020-10-31 18:15+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -429,9 +429,8 @@ msgid ""
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:98
-#, fuzzy
 msgid "3D Model Visibility"
-msgstr "Viditelnost 3D modelu:"
+msgstr "Viditelnost 3D modelu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:111
 msgid "Show 3D through hole models"
@@ -446,9 +445,8 @@ msgid "Show 3D virtual models"
 msgstr "Přepnout na 3D modely typu Virtual"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:148
-#, fuzzy
 msgid "Board Layers"
-msgstr "Vrstvy desky:"
+msgstr "Vrstvy desky"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:161
 msgid "Show silkscreen layers"
@@ -467,9 +465,8 @@ msgid "Show adhesive layers"
 msgstr "Zobrazit adhezní vrstvy"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:198
-#, fuzzy
 msgid "User Layers (not shown in realistic mode)"
-msgstr "Uživatelské vrstvy (nejsou v realistickém zobrazení):"
+msgstr "Uživatelské vrstvy (nezobrazují se v realistickém režimu)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "Show comments and drawings layers"
@@ -480,14 +477,12 @@ msgid "Show ECO layers"
 msgstr "Zobrazit ECO vrstvy"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:230
-#, fuzzy
 msgid "Camera Options"
-msgstr "Možnosti papíru:"
+msgstr "Možnosti kamery"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:235
-#, fuzzy
 msgid "Rotation Increment:"
-msgstr "Text přírůstku:"
+msgstr "Přírůstek rotace:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:243
 #: common/base_units.cpp:520 pcbnew/dialogs/dialog_copper_zones_base.cpp:298
@@ -497,7 +492,7 @@ msgstr "Text přírůstku:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:342
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1362
 msgid "deg"
-msgstr "stupňů"
+msgstr "st"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:253
 msgid "Enable animation"
@@ -508,9 +503,8 @@ msgid "Animation speed:"
 msgstr "Rychlost animace:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
-#, fuzzy
 msgid "OpenGL Render Options"
-msgstr "Možnosti vykreslení"
+msgstr "Možnosti OpenGL rendrování"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:304
 msgid "Show model bounding boxes"
@@ -521,9 +515,8 @@ msgid "Show copper thickness"
 msgstr "Zobrazit tloušťku mědi"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:323
-#, fuzzy
 msgid "Other Options"
-msgstr "Další možnosti:"
+msgstr "Další možnosti"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:333
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:445
@@ -532,9 +525,8 @@ msgid "Anti-aliasing"
 msgstr "Anti-aliasing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "Disabled"
-msgstr "Vypnuto"
+msgstr "Zakázáno"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "2x"
@@ -551,6 +543,7 @@ msgstr "8x"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:341
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
+"3D-prohlížeč musí být uzavřen a znovu otevřen pro použití tohoto nastavení"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:348
 msgid "Selection color"
@@ -558,35 +551,31 @@ msgstr "Barva označení"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "While Moving"
-msgstr ""
+msgstr "Při přesunu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:372
 msgid "Disable anti-aliasing"
-msgstr "Vypnout anti-aliasing"
+msgstr "Zakázat anti-aliasing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:378
-#, fuzzy
 msgid "Disable thickness"
-msgstr "Tloušťka čáry:"
+msgstr "Zakázat tloušťku"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:384
-#, fuzzy
 msgid "Disable vias"
-msgstr "Vyčistit průchodky"
+msgstr "Zakázat prokovy"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:390
-#, fuzzy
 msgid "Disable holes"
-msgstr "Definované díry"
+msgstr "Zakázat díry"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:406
 msgid "OpenGL"
 msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:420
-#, fuzzy
 msgid "Raytracing Render Options"
-msgstr "Možnosti Raytracingu"
+msgstr "Možnosti vykreslování raytracingu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:431
 #, fuzzy
@@ -594,9 +583,8 @@ msgid "Procedural textures"
 msgstr "Procedurální textury"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:438
-#, fuzzy
 msgid "Add floor"
-msgstr "Přidat podlahu"
+msgstr "Přidat referenční rovinu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:452
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:262
@@ -33879,9 +33867,8 @@ msgid "Select preset:"
 msgstr "Vybrat naznačené spoje"
 
 #: pcbnew/widgets/appearance_controls.cpp:2721
-#, fuzzy
 msgid "Open Preferences"
-msgstr "Předvolby"
+msgstr "Otevřít Předvolby"
 
 #: pcbnew/widgets/appearance_controls.cpp:2735
 msgid ""
@@ -33895,9 +33882,8 @@ msgid "Only %s"
 msgstr "Jen %s"
 
 #: pcbnew/zone_filler.cpp:105
-#, fuzzy
 msgid "Building zone fills..."
-msgstr "Kontroluji výplň zóny..."
+msgstr "Sestavování vyplnění zón..."
 
 #: pcbnew/zone_filler.cpp:305
 msgid "Removing insulated copper islands..."
