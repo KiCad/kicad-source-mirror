@@ -2,22 +2,24 @@
 # mentioned in every translation file „Language-Team” sections.
 # This file is distributed under GNU Free Documentation License.
 # http://www.gnu.org/licenses/fdl-1.3.html
+# Hildo Guillardi Júnior <hildogjr@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2019-09-03 07:44-0300\n"
-"Last-Translator: Francisco R. Pereira <frosch_bin@yahoo.com.br>\n"
-"Language-Team: kicad team\n"
-"Language: pt_BR\n"
+"PO-Revision-Date: 2020-10-30 20:48+0000\n"
+"Last-Translator: Hildo Guillardi Júnior <hildogjr@gmail.com>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
+"master-source/pt/>\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.3.2-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 2.2.3\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: 3d-viewer\n"
 "X-Poedit-SearchPath-1: bitmap2component\n"
@@ -37,12 +39,12 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:50
 msgid "All Files (*.*)|*.*"
-msgstr "Todos arquivos  (*.*)|*.*"
+msgstr "Todos arquivos (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "All supported files (%s)"
-msgstr "Todos os formatos suportados|"
+msgstr "Todos os formatos suportados (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
 #, fuzzy
@@ -127,9 +129,8 @@ msgid "Offset"
 msgstr "Deslocamento"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
-#, fuzzy
 msgid "Opacity"
-msgstr "Opacidade:"
+msgstr "Opacidade"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:171
 #: common/dialogs/dialog_page_settings_base.cpp:118
@@ -164,9 +165,8 @@ msgid "Create layers"
 msgstr "Cria camadas"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:475
-#, fuzzy
 msgid "Board outline is not closed:"
-msgstr "O contorno da placa não forma um polígono fechado"
+msgstr "O contorno da placa está aberto:"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
@@ -194,7 +194,7 @@ msgstr "Montar BVH para furos e vias"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:423
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr ""
+msgstr "Sua versão do OpenGL não é suportada. Requerido >= 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
@@ -202,15 +202,15 @@ msgid "Render time %.0f ms ( %.1f fps)"
 msgstr "Tempo de renderização %.0f ms ( %.1f fps)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr "Parâmetros da Classe de Rede"
+msgstr "Net %s\tClasse %s\tPad %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:761
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNetClass %s"
-msgstr "Classes de Rede"
+msgstr "Net %s\tClasse %s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:497
 msgid "Load OpenGL: board"
@@ -288,7 +288,7 @@ msgstr "Opções de Exibição"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:806
 msgid "Raytracing"
-msgstr "Raytracing"
+msgstr "Calcular iluminação"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:28
@@ -302,7 +302,7 @@ msgstr "Propriedades Materiais"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Raytracing Options"
-msgstr "Opções de Raytracing"
+msgstr "Opções de iluminação"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:153
 msgid "Choose Colors"
@@ -408,7 +408,7 @@ msgstr "Ajustar opções de visualização, e a visibilidade de algumas camadas"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Render current view using Raytracing"
-msgstr "Renderizar a tela atual utilizando Raytracing"
+msgstr "Renderizar a tela atual utilizando iluminação (Raytracing)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:41
 msgid "Realistic mode"
@@ -441,9 +441,8 @@ msgid ""
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:98
-#, fuzzy
 msgid "3D Model Visibility"
-msgstr "Visibilidade do modelo 3D:"
+msgstr "Visibilidade do modelo 3D"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:111
 msgid "Show 3D through hole models"
@@ -458,9 +457,8 @@ msgid "Show 3D virtual models"
 msgstr "Exibir modelos 3D virtuais"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:148
-#, fuzzy
 msgid "Board Layers"
-msgstr "Camadas da placa:"
+msgstr "Camadas da placa"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:161
 msgid "Show silkscreen layers"
@@ -479,9 +477,8 @@ msgid "Show adhesive layers"
 msgstr "Exibir camadas de adesivo"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:198
-#, fuzzy
 msgid "User Layers (not shown in realistic mode)"
-msgstr "Utilizar camadas (não exibido no modo realístico)"
+msgstr "Camadas do usuários (não exibido no modo realístico)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "Show comments and drawings layers"
@@ -509,17 +506,15 @@ msgstr "Repetir Incremento de Posição"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:342
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1362
 msgid "deg"
-msgstr "graus"
+msgstr "°"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:253
-#, fuzzy
 msgid "Enable animation"
-msgstr "&Ativar Aceleração"
+msgstr "Ativar animação"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:260
-#, fuzzy
 msgid "Animation speed:"
-msgstr "Anotação completa."
+msgstr "Velocidade de animação:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
 #, fuzzy
@@ -535,9 +530,8 @@ msgid "Show copper thickness"
 msgstr "Exibir espessura do cobre"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:323
-#, fuzzy
 msgid "Other Options"
-msgstr "Outras opções:"
+msgstr "Outras opções"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:333
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:445
@@ -547,62 +541,56 @@ msgstr "Anti Serrilhamento"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "Disabled"
-msgstr ""
+msgstr "Desabilitar"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "2x"
-msgstr "2"
+msgstr "2x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "4x"
-msgstr "4"
+msgstr "4x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "8x"
-msgstr "8"
+msgstr "8x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:341
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
+"Visualização 3D deve ser fechada e reaberta para aplicar essa configuração"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:348
-#, fuzzy
 msgid "Selection color"
-msgstr "Seleção copiada."
+msgstr "Selecione a cor"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "While Moving"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:372
-#, fuzzy
 msgid "Disable anti-aliasing"
-msgstr "Suavização Equilibrada"
+msgstr "Desabilitar anti serrilhamento da imagem"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:378
-#, fuzzy
 msgid "Disable thickness"
-msgstr "Espessura da linha:"
+msgstr "Desabilitar espessura"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:384
 msgid "Disable vias"
-msgstr ""
+msgstr "Desabilitar vias"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:390
 msgid "Disable holes"
-msgstr ""
+msgstr "Desabilitar furos"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:406
 msgid "OpenGL"
 msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:420
-#, fuzzy
 msgid "Raytracing Render Options"
-msgstr "Opções de Raytracing"
+msgstr "Opções de iluminação (Raytracing)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:431
 #, fuzzy
@@ -610,9 +598,8 @@ msgid "Procedural textures"
 msgstr "Texturas Procedurais"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:438
-#, fuzzy
 msgid "Add floor"
-msgstr "Adicionar Piso"
+msgstr "Adicionar piso"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:452
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:262
@@ -626,22 +613,21 @@ msgstr "Número de pontos"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:477
 msgid "Spread Factor %"
-msgstr ""
+msgstr "Fator de espalhamento %"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:481
 msgid "Recursive Level"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:488
-#, fuzzy
 msgid "Shadows"
-msgstr "Renderizar Sombras"
+msgstr "Renderizar sombras"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:493
 msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
-msgstr ""
+msgstr "Número de raios de luz lançados para avaliar um ponto de sombra"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:499
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:520
@@ -656,7 +642,7 @@ msgstr "Reflexões"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:514
 msgid "Number of rays that will be cast to evaluate a reflection point"
-msgstr ""
+msgstr "Número de raios que serão lançados para avaliar um ponto de reflexão"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:525
 msgid ""
@@ -671,7 +657,7 @@ msgstr "Refrações"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:537
 msgid "Number of rays that will be cast to evaluate a refraction point"
-msgstr ""
+msgstr "Número de raios que serão lançados para avaliar um ponto de refração"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:548
 msgid "Number of bounces that a ray can hit reflective objects"
@@ -679,34 +665,30 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:574
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:798
-#, fuzzy
 msgid "Lights configuration"
-msgstr "Confirmação"
+msgstr "Configuração de luz"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:582
 msgid "Ambient Camera Light"
-msgstr ""
+msgstr "Iluminação ambiente"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
-#, fuzzy
 msgid "Top Light"
-msgstr "Superior direito"
+msgstr "Luz superior"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:611
-#, fuzzy
 msgid "Bottom Light"
-msgstr "Inferior direito"
+msgstr "Luz inferior"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:635
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:652
-#, fuzzy
 msgid "Elevation (degrees)"
-msgstr "Ângulo em graus:"
+msgstr "Elevação (°)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:639
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:656
 msgid "Azimuth (degrees)"
-msgstr ""
+msgstr "Azimute (°)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:660
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
@@ -783,9 +765,8 @@ msgid "8"
 msgstr "8"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:785
-#, fuzzy
 msgid "Reset to defaults"
-msgstr "Restaurar Padrões"
+msgstr "Restaurar padrão"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.h:179
 msgid "3D Display Options"
@@ -793,23 +774,24 @@ msgstr "Opções de exibição 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:337
 msgid "Background Color, Bottom"
-msgstr "Cor de Fundo, Base"
+msgstr "Cor do fundo inferior"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:343
 msgid "Background Color, Top"
-msgstr "Cor de fundo, Topo"
+msgstr "Cor do fundo superior"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:807
 msgid "3D Image File Name"
 msgstr "Nome do Arquivo de Imagem 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:828
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Insufficient permissions required to save file\n"
 "%s"
 msgstr ""
-"Permissões de gravação são necessárias para salvar a biblioteca \"%s\"."
+"Permissões de gravação são necessárias para salvar a biblioteca\n"
+"\"%s\""
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:829 common/confirm.cpp:125
 #: common/confirm.cpp:257 common/dialogs/panel_setup_severities.cpp:40
@@ -858,35 +840,35 @@ msgstr "Centralizar pivô de rotação (Clique no botão do meio do mouse)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:48
 msgid "Rotate X Clockwise"
-msgstr "Girar X Sentido Horário"
+msgstr "Girar em X no Sentido Horário"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:53
 msgid "Rotate X Counterclockwise"
-msgstr "Girar X Sentido Anti-horário"
+msgstr "Girar em X no Sentido Anti-horário"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:58
 msgid "Rotate Y Clockwise"
-msgstr "Girar Y Sentido Horário"
+msgstr "Girar em Y no Sentido Horário"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:63
 msgid "Rotate Y Counterclockwise"
-msgstr "Girar Y Sentido Anti-horário"
+msgstr "Girar em Y no Sentido Anti-horário"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:68
 msgid "Rotate Z Clockwise"
-msgstr "Girar Z Sentido Horário"
+msgstr "Girar em Z no Sentido Horário"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:73
 msgid "Rotate Z Counterclockwise"
-msgstr "Girar Z Sentido Anti-horário"
+msgstr "Girar em Z no Sentido Anti-horário"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:79
 msgid "Move board Left"
-msgstr "Mover placa a Esquerda"
+msgstr "Mover placa à Esquerda"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:85
 msgid "Move board Right"
-msgstr "Mover placa a Direira"
+msgstr "Mover placa à Direira"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:91
 msgid "Move board Up"
@@ -894,7 +876,7 @@ msgstr "Mover placa para Cima"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:97
 msgid "Move board Down"
-msgstr "Mover para Baixo"
+msgstr "Mover placa para Baixo"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:103
 msgid "Home view"
@@ -910,17 +892,14 @@ msgid "Flip Board"
 msgstr "Inverter Visualização da Placa"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
-#, fuzzy
 msgid "Flip the board view"
-msgstr "Inverter (espelhar) visualização da placa"
+msgstr "Espelhar visualização da placa"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
-#, fuzzy
 msgid "Toggle orthographic projection"
 msgstr "Ativar/Desativar a projeção ortogonal"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
-#, fuzzy
 msgid "Enable/disable orthographic projection"
 msgstr "Ativar/Desativar a projeção ortogonal"
 
@@ -955,19 +934,19 @@ msgstr "Sem Grade 3D"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:166
 msgid "3D Grid 10mm"
-msgstr "Grade 3D 10mm"
+msgstr "Grade 3D de 10mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:171
 msgid "3D Grid 5mm"
-msgstr "Grade 3D 5mm"
+msgstr "Grade 3D de 5mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:176
 msgid "3D Grid 2.5mm"
-msgstr "Grade 3D 2,5mm"
+msgstr "Grade 3D de 2,5mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:181
 msgid "3D Grid 1mm"
-msgstr "Grade 3D 1mm"
+msgstr "Grade 3D de 1mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:187
 msgid "Use All Properties"
@@ -994,9 +973,8 @@ msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr "Utilizar o estilo de cor do CAD baseado na cor difusa do material"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
-#, fuzzy
 msgid "Toggle Through Hole 3D models"
-msgstr "Exibir modelos 3D de furo passante"
+msgstr "Exibir/Ocultar 3D de componentes com furos passantes"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
 #, fuzzy
