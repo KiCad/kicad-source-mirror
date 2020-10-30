@@ -321,8 +321,11 @@ void OPENGL_GAL::PostPaint( wxPaintEvent& aEvent )
 
 wxString OPENGL_GAL::CheckFeatures( GAL_DISPLAY_OPTIONS& aOptions )
 {
+    wxString retVal = wxEmptyString;
+
     wxFrame* testFrame = new wxFrame( NULL, wxID_ANY, wxT( "" ), wxDefaultPosition, wxSize( 1, 1 ),
-            wxFRAME_TOOL_WINDOW | wxNO_BORDER );
+                                      wxFRAME_TOOL_WINDOW | wxNO_BORDER );
+
     KIGFX::OPENGL_GAL* opengl_gal = new KIGFX::OPENGL_GAL( aOptions, testFrame );
 
     testFrame->Raise();
@@ -336,15 +339,13 @@ wxString OPENGL_GAL::CheckFeatures( GAL_DISPLAY_OPTIONS& aOptions )
     catch( std::runtime_error& err )
     {
         //Test failed
-        delete opengl_gal;
-        delete testFrame;
-        return wxString( err.what() );
+        retVal = wxString( err.what() );
     }
 
-    //Test passed
     delete opengl_gal;
     delete testFrame;
-    return wxEmptyString;
+
+    return retVal;
 }
 
 
