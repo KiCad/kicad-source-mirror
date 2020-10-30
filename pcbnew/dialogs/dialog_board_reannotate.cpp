@@ -869,8 +869,8 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aModule
 
     bool prefixpresent; //Prefix found
 
-    wxString logstring = ( aModules.front().Front ) ? _( "\n\nFront Modules" )
-                                                    : _( "\n\nBack Modules" );
+    wxString logstring = ( aModules.front().Front ) ? _( "\n\nFront Footprints" )
+                                                    : _( "\n\nBack Footprints" );
     LogModules( logstring, aModules );
 
     if( 0 != aStartRefDes ) //Initialize the change array if present
