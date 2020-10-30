@@ -58,6 +58,7 @@ DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent, FILENAME_RESO
     m_errorRow( -1 ),
     m_errorCol( -1 ),
     m_resolver( aResolver ),
+    m_gridWidth( 0 ),
     m_gridWidthsDirty( true ),
     m_helpDialog( nullptr )
 {
@@ -507,14 +508,6 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellRightClick( wxGridEvent& aEvent )
 }
 
 
-void DIALOG_CONFIGURE_PATHS::OnGridCellChange( wxGridEvent& aEvent )
-{
-    m_gridWidthsDirty = true;
-
-    aEvent.Skip();
-}
-
-
 void DIALOG_CONFIGURE_PATHS::OnUpdateUI( wxUpdateUIEvent& event )
 {
     if( m_gridWidthsDirty )
@@ -536,6 +529,7 @@ void DIALOG_CONFIGURE_PATHS::OnUpdateUI( wxUpdateUIEvent& event )
 
         m_SearchPaths->SetColSize( SP_DESC_COL, width - ( m_SearchPaths->GetColSize( SP_ALIAS_COL )
                                                           + m_SearchPaths->GetColSize( SP_PATH_COL ) ) );
+        m_gridWidth = m_EnvVars->GetSize().GetX();
         m_gridWidthsDirty = false;
     }
 
@@ -564,7 +558,8 @@ void DIALOG_CONFIGURE_PATHS::OnUpdateUI( wxUpdateUIEvent& event )
 
 void DIALOG_CONFIGURE_PATHS::OnGridSize( wxSizeEvent& event )
 {
-    m_gridWidthsDirty = true;
+    if( event.GetSize().GetX() != m_gridWidth )
+        m_gridWidthsDirty = true;
 
     event.Skip();
 }

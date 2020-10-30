@@ -48,7 +48,6 @@ public:
 protected:
     // Various button callbacks
     void OnGridCellRightClick( wxGridEvent& event ) override;
-    void OnGridCellChange( wxGridEvent& event ) override;
     void OnGridSize( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
@@ -73,6 +72,7 @@ private:
     wxString            m_curdir;
     wxTextValidator     m_aliasValidator;
 
+    int                 m_gridWidth;
     bool                m_gridWidthsDirty;
 
     HTML_MESSAGE_BOX*   m_helpDialog;

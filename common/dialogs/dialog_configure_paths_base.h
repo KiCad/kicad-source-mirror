@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -55,10 +55,10 @@ class DIALOG_CONFIGURE_PATHS_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void OnGridCellChange( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddEnvVar( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveEnvVar( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGridCellChange( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnGridCellRightClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnAddSearchPath( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSearchPathMoveUp( wxCommandEvent& event ) { event.Skip(); }
