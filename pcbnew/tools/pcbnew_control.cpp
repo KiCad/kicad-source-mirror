@@ -630,6 +630,10 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
     if( !clipItem )
         return 0;
 
+    // The viewer frames cannot paste
+    if( !frame()->IsType( FRAME_FOOTPRINT_EDITOR ) && !frame()->IsType( FRAME_PCB_EDITOR ) )
+        return 0;
+
     bool editModules = m_editModules || frame()->IsType( FRAME_FOOTPRINT_EDITOR );
 
     if( clipItem->Type() == PCB_T )

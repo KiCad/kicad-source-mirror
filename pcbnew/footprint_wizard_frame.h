@@ -33,6 +33,7 @@
 
 #include <wx/gdicmn.h>
 #include <footprint_wizard.h>
+#include <pcb_base_edit_frame.h>
 class wxSashLayoutWindow;
 class wxListBox;
 class WX_GRID;
@@ -50,7 +51,7 @@ enum WizardParameterColumnNames
 /**
  * FOOTPRINT_WIZARD_FRAME
  */
-class FOOTPRINT_WIZARD_FRAME : public PCB_BASE_FRAME
+class FOOTPRINT_WIZARD_FRAME : public PCB_BASE_EDIT_FRAME
 {
 private:
     wxPanel*        m_parametersPanel;      ///< Panel for the page list and parameter grid
@@ -217,12 +218,12 @@ private:
     void                Update3DView( bool aForceReload, const wxString* aTitle ) override;
 
     /*
-     * Virtual functions, not used here, but needed by PCB_BASE_FRAME
+     * Virtual functions, not used here, but needed by PCB_BASE_EDIT_FRAME
      * (virtual pure functions )
      */
     void SaveCopyInUndoList( EDA_ITEM*, UNDO_REDO, const wxPoint& ) override {}
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO, const wxPoint& ) override {}
-
+    void OnEditItemRequest( BOARD_ITEM* aItem ) override {}
 
     DECLARE_EVENT_TABLE()
 };

@@ -77,7 +77,7 @@ END_EVENT_TABLE()
 
 FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                                 FRAME_T aFrameType ) :
-        PCB_BASE_FRAME( aKiway, aParent, aFrameType, _( "Footprint Wizard" ),
+        PCB_BASE_EDIT_FRAME( aKiway, aParent, aFrameType, _( "Footprint Wizard" ),
                         wxDefaultPosition, wxDefaultSize,
                         aParent ? KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT
                                 : KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP,
@@ -96,13 +96,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     m_wizardName.Empty();
 
-    SetBoard( new BOARD() );
-
-    // Ensure all layers and items are visible:
-    GetBoard()->SetVisibleAlls();
-    SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
-    GetScreen()->m_Center = true;      // Center coordinate origins on screen.
-
     // Create the GAL canvas.
     // Must be created before calling LoadSettings() that needs a valid GAL canvas
     PCB_DRAW_PANEL_GAL* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ),
@@ -110,6 +103,13 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
                                                                 GetGalDisplayOptions(),
                                                                 EDA_DRAW_PANEL_GAL::GAL_FALLBACK );
     SetCanvas( gal_drawPanel );
+
+    SetBoard( new BOARD() );
+
+    // Ensure all layers and items are visible:
+    GetBoard()->SetVisibleAlls();
+    SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
+    GetScreen()->m_Center = true;      // Center coordinate origins on screen.
 
     LoadSettings( config() );
 
