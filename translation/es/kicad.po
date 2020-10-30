@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-29 16:42+0000\n"
+"PO-Revision-Date: 2020-10-30 18:22+0000\n"
 "Last-Translator: Iñigo Figuero Sanz <news@imagedworld.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -7667,27 +7667,24 @@ msgstr ""
 "biblioteca"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:124
-#, fuzzy
 msgid "Reset fields if empty in library symbol"
-msgstr "Crea una librería vacía"
+msgstr "Reiniciar campos si están vacíos en el símbolo de la librería"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 msgid "Reset field visibilities"
 msgstr "Restaurar la visibilidad de los campos"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
-#, fuzzy
 msgid "Reset field sizes and styles"
-msgstr "Crea una librería vacía"
+msgstr "Reiniciar tamaños y estilos del campo"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:136
 msgid "Reset field positions"
 msgstr "Restaurar las posiciones de los campos"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:96
-#, fuzzy
 msgid "Update Symbols from Library"
-msgstr "Actualizar huellas desde la librería..."
+msgstr "Actualizar símbolos desde la librería"
 
 #: eeschema/dialogs/dialog_choose_component.cpp:131
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:94
@@ -7957,9 +7954,8 @@ msgid "Text Editor"
 msgstr "Abrir el editor de texto"
 
 #: eeschema/dialogs/dialog_edit_line_style.cpp:54
-#, fuzzy
 msgid "Leave unchanged"
-msgstr "Deshacer cambios"
+msgstr "Mantener sin cambios"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:44
 #: eeschema/dialogs/dialog_junction_props_base.cpp:38
@@ -8006,24 +8002,20 @@ msgid "Sheet Pin Properties"
 msgstr "Propiedades de la hoja de pines"
 
 #: eeschema/dialogs/dialog_erc.cpp:78
-#, fuzzy
 msgid "Run ERC"
-msgstr "Ejecutar DRC..."
+msgstr "Ejecutar ERC"
 
 #: eeschema/dialogs/dialog_erc.cpp:91
-#, fuzzy
 msgid "Show Annotation dialog"
-msgstr "Numeración de componentes"
+msgstr "Mostrar el diálogo de anotación"
 
 #: eeschema/dialogs/dialog_erc.cpp:104
-#, fuzzy
 msgid "Annotation not complete.  ERC cannot be run."
-msgstr "Anotación completada."
+msgstr "Anotación no completa.  No puede ejecutarse el ERC."
 
 #: eeschema/dialogs/dialog_erc.cpp:192
-#, fuzzy
 msgid "Delete exclusions too?"
-msgstr "Eliminar selección"
+msgstr "¿Eliminar también las exclusiones?"
 
 #: eeschema/dialogs/dialog_erc.cpp:192 pcbnew/dialogs/dialog_drc.cpp:771
 #: pcbnew/dialogs/dialog_drc_base.cpp:200
@@ -8031,42 +8023,37 @@ msgid "Delete All Markers"
 msgstr "Borrar todos los marcadores"
 
 #: eeschema/dialogs/dialog_erc.cpp:194
-#, fuzzy
 msgid "Errors and Warnings Only"
-msgstr "Error: el pad no tiene capa asignada"
+msgstr "Errores y avisos únicamente"
 
 #: eeschema/dialogs/dialog_erc.cpp:194
 msgid "Errors, Warnings and Exclusions"
-msgstr ""
+msgstr "Errores, avisos y exclusiones"
 
 #: eeschema/dialogs/dialog_erc.cpp:273 eeschema/dialogs/dialog_erc.cpp:344
-#, fuzzy
 msgid "Annotation not complete.  ERC cannot be run.  "
-msgstr "Anotación completada."
+msgstr "Anotación no completa.  No puede ejecutarse el ERC.  "
 
 #: eeschema/dialogs/dialog_erc.cpp:275 eeschema/dialogs/dialog_erc.cpp:346
-#, fuzzy
 msgid "Show Annotation dialog."
-msgstr "Numeración de componentes"
+msgstr "Mostrar el diálogo de anotación."
 
 #: eeschema/dialogs/dialog_erc.cpp:300
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr ""
+msgstr "-------- ERC cancelado por el usuario.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:302 eeschema/dialogs/dialog_erc.cpp:432
 #: pcbnew/dialogs/dialog_drc.cpp:256
 msgid "Done.<br><br>"
-msgstr ""
+msgstr "Terminado.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:363
-#, fuzzy
 msgid "Checking sheet names..."
-msgstr "Comprobando relleno de zonas...\n"
+msgstr "Comprobando nombres de hojas..."
 
 #: eeschema/dialogs/dialog_erc.cpp:369
-#, fuzzy
 msgid "Checking bus conflicts..."
-msgstr "Comprobando relleno de zonas...\n"
+msgstr "Comprobando conflictos de bus..."
 
 #: eeschema/dialogs/dialog_erc.cpp:374
 #, fuzzy
