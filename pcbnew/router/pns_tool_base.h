@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -53,30 +53,31 @@ public:
 
 protected:
     bool checkSnap( ITEM* aItem );
+
     const VECTOR2I snapToItem( bool aEnabled, ITEM* aItem, VECTOR2I aP);
+
     virtual ITEM* pickSingleItem( const VECTOR2I& aWhere, int aNet = -1, int aLayer = -1,
-                                  bool aIgnorePads = false, const std::vector<ITEM*> aAvoidItems = {} );
+                                  bool aIgnorePads = false,
+                                  const std::vector<ITEM*> aAvoidItems = {} );
+
     virtual void highlightNet( bool aEnabled, int aNetcode = -1 );
+
     virtual void updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads = false );
     virtual void updateEndItem( const TOOL_EVENT& aEvent );
-    void deleteTraces( ITEM* aStartItem, bool aWholeTrack );
 
-    MSG_PANEL_ITEMS m_panelItems;
+    SIZES_SETTINGS   m_savedSizes;       // Stores sizes settings between router invocations
+    ITEM*            m_startItem;
+    VECTOR2I         m_startSnapPoint;
+    bool             m_startHighlight;   // Was net highlighted before routing?
 
-    SIZES_SETTINGS m_savedSizes;          ///< Stores sizes settings between router invocations
-    ITEM* m_startItem;
-    int m_startLayer;
-    VECTOR2I m_startSnapPoint;
-    bool m_startHighlight;                ///< Keeps track of whether the net was highlighted before routing
+    ITEM*            m_endItem;
+    VECTOR2I         m_endSnapPoint;
 
-    ITEM* m_endItem;
-    VECTOR2I m_endSnapPoint;
-
-    GRID_HELPER* m_gridHelper;
+    GRID_HELPER*     m_gridHelper;
     PNS_KICAD_IFACE* m_iface;
-    ROUTER* m_router;
+    ROUTER*          m_router;
 
-    bool m_cancelled;
+    bool             m_cancelled;
 };
 
 }

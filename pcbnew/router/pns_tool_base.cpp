@@ -60,7 +60,6 @@ TOOL_BASE::TOOL_BASE( const std::string& aToolName ) :
     m_cancelled = false;
 
     m_startItem = nullptr;
-    m_startLayer = 0;
     m_startHighlight = false;
 
     m_endItem = nullptr;
@@ -187,8 +186,7 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
 
     ITEM* rv = NULL;
 
-    bool highContrast = ( displayOptions().m_ContrastModeDisplay !=
-                          HIGH_CONTRAST_MODE::NORMAL );
+    bool highContrast = ( displayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
 
     for( int i = 0; i < candidateCount; i++ )
     {
@@ -221,8 +219,8 @@ void TOOL_BASE::highlightNet( bool aEnabled, int aNetcode )
     {
         // If the user has previously set the current net to be highlighted,
         // we assume they want to keep it highlighted after routing
-        m_startHighlight =
-                ( rs->IsHighlightEnabled() && rs->GetHighlightNetCodes().count( aNetcode ) );
+        m_startHighlight = ( rs->IsHighlightEnabled()
+                                && rs->GetHighlightNetCodes().count( aNetcode ) );
 
         rs->SetHighlight( true, aNetcode );
     }
@@ -338,7 +336,9 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
     {
         m_endItem = endItem;
         m_endSnapPoint = snapToItem( snapEnabled, endItem, mousePos );
-    } else {
+    }
+    else
+    {
         m_endItem = nullptr;
         m_endSnapPoint = m_gridHelper->Align( mousePos );
     }
@@ -347,32 +347,10 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 
     if( m_endItem )
     {
-        wxLogTrace( "PNS", "%s, layer : %d", m_endItem->KindStr().c_str(), m_endItem->Layers().Start() );
+        wxLogTrace( "PNS", "%s, layer : %d",
+                    m_endItem->KindStr().c_str(),
+                    m_endItem->Layers().Start() );
     }
-}
-
-
-void TOOL_BASE::deleteTraces( ITEM* aStartItem, bool aWholeTrack )
-{
-    NODE *node = m_router->GetWorld()->Branch();
-
-    if( !aStartItem )
-        return;
-
-    if( !aWholeTrack )
-    {
-        node->Remove( aStartItem );
-    }
-    else
-    {
-        TOPOLOGY topo( node );
-        ITEM_SET path = topo.AssembleTrivialPath( aStartItem );
-
-        for( const auto& ent : path.Items() )
-            node->Remove( ent.item );
-    }
-
-    m_router->CommitRouting( node );
 }
 
 
@@ -410,15 +388,25 @@ const VECTOR2I TOOL_BASE::snapToItem( bool aEnabled, ITEM* aItem, VECTOR2I aP)
         auto B = li->Anchor( 1 );
 
         if( ( aP - A ).EuclideanNorm() < w / 2 )
+        {
             anchor = A;
+        }
         else if( ( aP - B ).EuclideanNorm() < w / 2 )
+        {
             anchor = B;
+        }
         else // TODO(snh): Clean this up
+        {
             if( aItem->Kind() == ITEM::SEGMENT_T )
+            {
                 anchor = m_gridHelper->AlignToSegment( aP, static_cast<SEGMENT*>( li )->Seg() );
+            }
             else if( aItem->Kind() == ITEM::ARC_T )
+            {
                 anchor = m_gridHelper->AlignToArc( aP,
                         *static_cast<const SHAPE_ARC*>( static_cast<ARC*>( li )->Shape() ) );
+            }
+        }
 
         break;
     }
