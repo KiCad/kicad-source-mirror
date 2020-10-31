@@ -572,6 +572,10 @@ void EE_POINT_EDITOR::updateParentItem() const
         pinEditedCorner( getEditedPointIndex(), sheet->GetMinWidth(), sheet->GetMinHeight(),
                          topLeft, topRight, botLeft, botRight, grid_size );
 
+        // Pin positions are relative to origin.  Attempt to leave them where they
+        // are if the origin moves.
+        wxPoint originDelta = sheet->GetPosition() - (wxPoint) topLeft;
+
         sheet->SetPosition( (wxPoint) topLeft );
         sheet->SetSize( wxSize( botRight.x - topLeft.x, botRight.y - topLeft.y ) );
 
@@ -583,6 +587,8 @@ void EE_POINT_EDITOR::updateParentItem() const
         for( SCH_SHEET_PIN* pin : sheet->GetPins() )
         {
             wxPoint pos = pin->GetPosition();
+
+            pos += originDelta;
 
             switch( pin->GetEdge() )
             {
