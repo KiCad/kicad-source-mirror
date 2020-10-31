@@ -121,6 +121,11 @@ protected:
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     /**
+     * Determines the Canvas type to load (with prompt if required) and initializes m_canvasType
+     */
+    void ResolveCanvasType();
+
+    /**
      * Sets the common key-pair for exiting the application (Ctrl-Q) and ties it
      * to the wxID_EXIT event id.  This is useful in sub-applications to pass the event
      * up to a non-owning window

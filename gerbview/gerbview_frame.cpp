@@ -159,48 +159,9 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
     SetActiveLayer( 0, true );
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
 
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = LoadCanvasTypeSetting();
+    ResolveCanvasType();
 
-    // Nudge user to switch to OpenGL if they are on legacy or Cairo
-    if( m_firstRunDialogSetting < 1 )
-    {
-        if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
-        {
-            wxString msg = _( "KiCad can use your graphics card to give you a smoother "
-                              "and faster experience. This option is turned off by "
-                              "default since it is not compatible with all computers.\n\n"
-                              "Would you like to try enabling graphics acceleration?\n\n"
-                              "If you'd like to choose later, select Accelerated Graphics "
-                              "in the Preferences menu." );
-
-            wxMessageDialog dlg( this, msg, _( "Enable Graphics Acceleration" ), wxYES_NO );
-
-            dlg.SetYesNoLabels( _( "&Enable Acceleration" ), _( "&No Thanks" ) );
-
-            if( dlg.ShowModal() == wxID_YES )
-            {
-                // Save Cairo as default in case OpenGL crashes
-                saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
-
-                // Switch to OpenGL, which will save the new setting if successful
-                GetToolManager()->RunAction( ACTIONS::acceleratedGraphics, true );
-
-                // Switch back to Cairo if OpenGL is not supported
-                if( GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
-                    GetToolManager()->RunAction( ACTIONS::standardGraphics, true );
-            }
-            else
-            {
-                // If they were on legacy, switch to Cairo
-                GetToolManager()->RunAction( ACTIONS::standardGraphics, true );
-            }
-        }
-
-        m_firstRunDialogSetting = 1;
-        SaveSettings( config() );
-    }
-
-    SwitchCanvas( canvasType );
+    SwitchCanvas( m_canvasType );
 
     setupUnits( config() );
 
