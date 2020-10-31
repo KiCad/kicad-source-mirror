@@ -950,7 +950,7 @@ bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
         if( GetToolHolder() )
             GetToolHolder()->RefreshCanvas();
 
-#if defined( __WXMAC__ ) || defined( __WINDOWS__ )
+#if defined( __WXMAC__ )
         wxTheApp->ProcessPendingEvents(); // required for updating brightening behind a popup menu
 #endif
     }
