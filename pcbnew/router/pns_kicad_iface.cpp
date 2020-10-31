@@ -232,30 +232,44 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
             return false; // should not happen
     }
 
-    const BOARD_ITEM* parentA = aItemA ? aItemA->Parent() : nullptr;
-    const BOARD_ITEM* parentB = aItemB ? aItemB->Parent() : nullptr;
-    DRC_CONSTRAINT    hostConstraint;
+    BOARD_ITEM*    parentA = aItemA ? aItemA->Parent() : nullptr;
+    BOARD_ITEM*    parentB = aItemB ? aItemB->Parent() : nullptr;
+    DRC_CONSTRAINT hostConstraint;
 
     // A track being routed may not have a BOARD_ITEM associated yet.
     if( !parentA )
     {
         switch( aItemA->Kind() )
         {
-        case PNS::ITEM::ARC_T:
-            m_dummyArc.SetLayer( (PCB_LAYER_ID) aLayer );
-            m_dummyArc.SetNetCode( aItemA->Net() );
-            parentA = &m_dummyArc;
-            break;
-        case PNS::ITEM::VIA_T:
-            m_dummyVia.SetLayer( (PCB_LAYER_ID) aLayer );
-            m_dummyVia.SetNetCode( aItemA->Net() );
-            parentA = &m_dummyVia;
-            break;
-        default:
-            m_dummyTrack.SetLayer( (PCB_LAYER_ID) aLayer );
-            m_dummyTrack.SetNetCode( aItemA->Net() );
-            parentA = &m_dummyTrack;
-            break;
+        case PNS::ITEM::ARC_T:     parentA = &m_dummyArc;   break;
+        case PNS::ITEM::VIA_T:     parentA = &m_dummyVia;   break;
+        case PNS::ITEM::SEGMENT_T: parentA = &m_dummyTrack; break;
+        case PNS::ITEM::LINE_T:    parentA = &m_dummyTrack; break;
+        default: break;
+        }
+
+        if( parentA )
+        {
+            parentA->SetLayer( (PCB_LAYER_ID) aLayer );
+            static_cast<BOARD_CONNECTED_ITEM*>( parentA )->SetNetCode( aItemA->Net() );
+        }
+    }
+
+    if( aItemB && !parentB )
+    {
+        switch( aItemB->Kind() )
+        {
+        case PNS::ITEM::ARC_T:     parentB = &m_dummyArc;   break;
+        case PNS::ITEM::VIA_T:     parentB = &m_dummyVia;   break;
+        case PNS::ITEM::SEGMENT_T: parentB = &m_dummyTrack; break;
+        case PNS::ITEM::LINE_T:    parentB = &m_dummyTrack; break;
+        default: break;
+        }
+
+        if( parentB )
+        {
+            parentB->SetLayer( (PCB_LAYER_ID) aLayer );
+            static_cast<BOARD_CONNECTED_ITEM*>( parentB )->SetNetCode( aItemB->Net() );
         }
     }
 
