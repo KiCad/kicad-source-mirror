@@ -274,6 +274,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_auimgr.GetPane( "InfoBar" ).Hide();
     m_auimgr.Update();
 
+    ResolveCanvasType();
+    SwitchCanvas( m_canvasType );
+
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
 
     // This is used temporarily to fix a client size issue on GTK that causes zoom to fit
