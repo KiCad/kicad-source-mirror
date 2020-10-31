@@ -101,10 +101,8 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetIcon( icon );
 
     // Create GAL canvas
-    m_canvasType = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
-
     auto* drawPanel = new PL_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                             GetGalDisplayOptions(), m_canvasType );
+            GetGalDisplayOptions(), EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
     SetCanvas( drawPanel );
 
     LoadSettings( config() );
@@ -173,7 +171,6 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
-    ActivateGalCanvas();
 
     // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
     // hidding it.
@@ -182,6 +179,9 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // We don't want the infobar displayed right away
     m_auimgr.GetPane( "InfoBar" ).Hide();
     m_auimgr.Update();
+
+    ResolveCanvasType();
+    SwitchCanvas( m_canvasType );
 
     // Add the exit key handler
     InitExitKey();
@@ -262,6 +262,9 @@ void PL_EDITOR_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::millimetersUnits,  CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
     mgr->SetConditions( ACTIONS::inchesUnits,       CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
     mgr->SetConditions( ACTIONS::milsUnits,         CHECK( cond.Units( EDA_UNITS::MILS ) ) );
+
+    mgr->SetConditions( ACTIONS::acceleratedGraphics, CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
+    mgr->SetConditions( ACTIONS::standardGraphics,    CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
 
     mgr->SetConditions( ACTIONS::cut,               ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
     mgr->SetConditions( ACTIONS::copy,              ENABLE( SELECTION_CONDITIONS::NotEmpty ) );

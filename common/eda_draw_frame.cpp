@@ -698,7 +698,8 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
     {
         FRAME_SCH,
         FRAME_PCB_EDITOR, FRAME_FOOTPRINT_EDITOR,
-        FRAME_GERBER
+        FRAME_GERBER,
+        FRAME_PL_EDITOR
     };
 
     bool allow_save = false;

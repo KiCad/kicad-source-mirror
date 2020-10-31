@@ -139,11 +139,6 @@ bool PL_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 {
     bool rv = EDA_DRAW_PANEL_GAL::SwitchBackend( aGalType );
 
-    // The next onPaint event will call m_view->UpdateItems() that is very time consumming
-    // after switching to opengl. Clearing m_view and rebuild it is much faster
-    if( aGalType == GAL_TYPE_OPENGL )
-        m_view->Clear();
-
     setDefaultLayerDeps();
 
     GetGAL()->SetWorldUnitLength( 1.0/IU_PER_MM /* 10 nm */ / 25.4 /* 1 inch in mm */ );
