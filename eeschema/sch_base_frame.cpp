@@ -26,7 +26,7 @@
 #include <kiway.h>
 #include <pgm_base.h>
 #include <eeschema_settings.h>
-#include <symbol_editor_settings.h>
+#include <symbol_editor/symbol_editor_settings.h>
 #include <sch_draw_panel.h>
 #include <sch_view.h>
 #include <sch_painter.h>
