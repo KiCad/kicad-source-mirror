@@ -580,6 +580,12 @@ void SCH_EDIT_FRAME::HardRedraw()
 
 bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
+    // Exit interactive editing
+    // Note this this will commit *some* pending changes.  For instance, the EE_POINT_EDITOR
+    // will cancel any drag currently in progress, but commit all changes from previous drags.
+    if( m_toolManager )
+        m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
+
     // Shutdown blocks must be determined and vetoed as early as possible
     if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
             && Schematic().GetSheets().IsModified() )
@@ -636,7 +642,7 @@ void SCH_EDIT_FRAME::doCloseWindow()
 {
     SCH_SHEET_LIST sheetlist = Schematic().GetSheets();
 
-    // Shutdown all running tools ( and commit any pending change )
+    // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
 
