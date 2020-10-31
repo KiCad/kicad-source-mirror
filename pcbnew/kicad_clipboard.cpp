@@ -214,8 +214,10 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
                 copy = static_cast<BOARD_ITEM*>( item->Clone() );
             }
 
-            auto prepItem = [&]( BOARD_ITEM* titem ) {
-                                // locked means "locked in place"; copied items therefore can't be locked
+            auto prepItem = [&]( BOARD_ITEM* titem )
+                            {
+                                // locked means "locked in place"; copied items therefore can't
+                                // be locked
                                 if( MODULE* module = dyn_cast<MODULE*>( titem ) )
                                     module->SetLocked( false );
                                 else if( TRACK* track = dyn_cast<TRACK*>( titem ) )
@@ -234,9 +236,10 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
                 if( copy->Type() == PCB_GROUP_T )
                 {
                     static_cast<PCB_GROUP*>( copy )->RunOnDescendants( prepItem );
-                    static_cast<PCB_GROUP*>( copy )->RunOnDescendants( [&]( BOARD_ITEM* titem ) {
-                                                                       Format( titem, 1 );
-                                                                   } );
+                    static_cast<PCB_GROUP*>( copy )->RunOnDescendants( [&]( BOARD_ITEM* titem )
+                                                                       {
+                                                                           Format( titem, 1 );
+                                                                       } );
                 }
 
                 delete copy;
@@ -252,8 +255,8 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
     if( !clipboardLock || !clipboard->IsOpened() )
         return;
 
-    clipboard->SetData( new wxTextDataObject(
-                wxString( m_formatter.GetString().c_str(), wxConvUTF8 ) ) );
+    clipboard->SetData( new wxTextDataObject( wxString( m_formatter.GetString().c_str(),
+                                                        wxConvUTF8 ) ) );
 
     clipboard->Flush();
 

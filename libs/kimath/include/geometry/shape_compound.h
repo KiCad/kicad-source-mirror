@@ -35,7 +35,9 @@ class SHAPE_SIMPLE;
 class SHAPE_COMPOUND : public SHAPE
 {
 public:
-    SHAPE_COMPOUND() : SHAPE( SH_COMPOUND ), m_dirty( true )
+    SHAPE_COMPOUND() :
+            SHAPE( SH_COMPOUND ),
+            m_dirty( true )
     {
     }
 

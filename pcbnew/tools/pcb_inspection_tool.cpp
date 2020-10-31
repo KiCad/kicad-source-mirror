@@ -975,7 +975,7 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
 
         if( item->Type() == PCB_MODULE_T )
         {
-            for( auto pad : static_cast<MODULE*>( item )->Pads() )
+            for( D_PAD* pad : static_cast<MODULE*>( item )->Pads() )
             {
                 if( pad->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
                     items.push_back( pad );
@@ -985,7 +985,9 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
         {
             PCB_GROUP *group = static_cast<PCB_GROUP*>( item );
             group->RunOnDescendants( [ &queued_items ]( BOARD_ITEM *aItem )
-            {   queued_items.push_back( aItem );} );
+                                     {
+                                         queued_items.push_back( aItem );
+                                     } );
         }
         else if( BOARD_CONNECTED_ITEM* boardItem = dyn_cast<BOARD_CONNECTED_ITEM*>( item ) )
         {
@@ -994,10 +996,16 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
         }
     }
 
-    if( items.empty() || std::none_of( items.begin(), items.end(), []( const BOARD_ITEM* aItem )
-            { return( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_PAD_T ||
-                      aItem->Type() == PCB_ARC_T || aItem->Type() == PCB_ZONE_AREA_T ||
-                      aItem->Type() == PCB_MODULE_T || aItem->Type() == PCB_VIA_T ); } ) )
+    if( items.empty() || std::none_of( items.begin(), items.end(),
+                                       []( const BOARD_ITEM* aItem )
+                                       {
+                                           return( aItem->Type() == PCB_TRACE_T
+                                                    || aItem->Type() == PCB_PAD_T
+                                                    || aItem->Type() == PCB_ARC_T
+                                                    || aItem->Type() == PCB_ZONE_AREA_T
+                                                    || aItem->Type() == PCB_MODULE_T
+                                                    || aItem->Type() == PCB_VIA_T );
+                                       } ) )
     {
         return;
     }
