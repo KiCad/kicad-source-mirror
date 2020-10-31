@@ -98,13 +98,20 @@ private:
     int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet, wxString& aBaseDpName );
 
     PNS::ROUTER_IFACE* m_routerIface;
-    BOARD*       m_board;
+    BOARD*             m_board;
+    TRACK              m_dummyTrack;
+    ARC                m_dummyArc;
+    VIA                m_dummyVia;
 };
 
 
-PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER_IFACE* aRouterIface ) :
+PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard,
+                                                    PNS::ROUTER_IFACE* aRouterIface ) :
     m_routerIface( aRouterIface ),
-    m_board( aBoard )
+    m_board( aBoard ),
+    m_dummyTrack( aBoard ),
+    m_dummyArc( aBoard ),
+    m_dummyVia( aBoard )
 {
 }
 
@@ -225,33 +232,29 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
             return false; // should not happen
     }
 
-    // A track being routed may not have a BOARD_ITEM associated yet.
-    static TRACK dummyTrack( m_board );
-    static ARC   dummyArc( m_board );
-    static VIA   dummyVia( m_board );
-
     const BOARD_ITEM* parentA = aItemA ? aItemA->Parent() : nullptr;
     const BOARD_ITEM* parentB = aItemB ? aItemB->Parent() : nullptr;
     DRC_CONSTRAINT    hostConstraint;
 
+    // A track being routed may not have a BOARD_ITEM associated yet.
     if( !parentA )
     {
         switch( aItemA->Kind() )
         {
         case PNS::ITEM::ARC_T:
-            dummyArc.SetLayer( (PCB_LAYER_ID) aLayer );
-            dummyArc.SetNetCode( aItemA->Net() );
-            parentA = &dummyArc;
+            m_dummyArc.SetLayer( (PCB_LAYER_ID) aLayer );
+            m_dummyArc.SetNetCode( aItemA->Net() );
+            parentA = &m_dummyArc;
             break;
         case PNS::ITEM::VIA_T:
-            dummyVia.SetLayer( (PCB_LAYER_ID) aLayer );
-            dummyVia.SetNetCode( aItemA->Net() );
-            parentA = &dummyVia;
+            m_dummyVia.SetLayer( (PCB_LAYER_ID) aLayer );
+            m_dummyVia.SetNetCode( aItemA->Net() );
+            parentA = &m_dummyVia;
             break;
         default:
-            dummyTrack.SetLayer( (PCB_LAYER_ID) aLayer );
-            dummyTrack.SetNetCode( aItemA->Net() );
-            parentA = &dummyTrack;
+            m_dummyTrack.SetLayer( (PCB_LAYER_ID) aLayer );
+            m_dummyTrack.SetNetCode( aItemA->Net() );
+            parentA = &m_dummyTrack;
             break;
         }
     }
