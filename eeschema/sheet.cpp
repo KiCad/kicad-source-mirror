@@ -38,7 +38,6 @@
 #include <schematic.h>
 #include <symbol_lib_table.h>
 #include <dialogs/dialog_sheet_properties.h>
-#include <dialogs/dialog_sheet_pin_properties.h>
 #include <tool/actions.h>
 
 
@@ -473,63 +472,6 @@ bool SCH_EDIT_FRAME::EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHi
         return false;
 
     return true;
-}
-
-
-PINSHEETLABEL_SHAPE SCH_EDIT_FRAME::m_lastSheetPinType = PINSHEETLABEL_SHAPE::PS_INPUT;
-
-
-SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel )
-{
-    SCHEMATIC_SETTINGS& settings = aSheet->Schematic()->Settings();
-    wxString            text;
-    SCH_SHEET_PIN*      sheetPin;
-
-    if( aLabel )
-    {
-        text = aLabel->GetText();
-        m_lastSheetPinType = aLabel->GetShape();
-    }
-
-    sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), text );
-    sheetPin->SetFlags( IS_NEW );
-    sheetPin->SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
-    sheetPin->SetShape( m_lastSheetPinType );
-
-    if( !aLabel )
-    {
-        DIALOG_SHEET_PIN_PROPERTIES dlg( this, sheetPin );
-
-        if( dlg.ShowModal() != wxID_OK || sheetPin->GetText().IsEmpty()  )
-        {
-            delete sheetPin;
-            return nullptr;
-        }
-    }
-
-    m_lastSheetPinType = sheetPin->GetShape();
-
-    sheetPin->SetPosition( (wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition() );
-
-    return sheetPin;
-}
-
-
-SCH_HIERLABEL* SCH_EDIT_FRAME::ImportHierLabel( SCH_SHEET* aSheet )
-{
-    if( !aSheet->GetScreen() )
-        return nullptr;
-
-    for( auto item : aSheet->GetScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
-    {
-        auto label = static_cast<SCH_HIERLABEL*>( item );
-
-        /* A global label has been found: check if there a corresponding sheet label. */
-        if( !aSheet->HasPin( label->GetText() ) )
-            return label;
-    }
-
-    return nullptr;
 }
 
 

@@ -65,6 +65,10 @@ private:
      */
     SCH_TEXT* createNewText( const VECTOR2I& aPosition, int aType );
 
+    SCH_HIERLABEL* importHierLabel( SCH_SHEET* aSheet );
+
+    SCH_SHEET_PIN* createSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel );
+
     void sizeSheet( SCH_SHEET* aSheet, VECTOR2I aPos );
 
     ///> Sets up handlers for various events.
@@ -72,15 +76,16 @@ private:
 
 private:
 // History lists for PlaceComponent()
-    std::vector<COMPONENT_SELECTION>      m_symbolHistoryList;
-    std::vector<COMPONENT_SELECTION>      m_powerHistoryList;
+    std::vector<COMPONENT_SELECTION>   m_symbolHistoryList;
+    std::vector<COMPONENT_SELECTION>   m_powerHistoryList;
 
-    PINSHEETLABEL_SHAPE                   m_lastGlobalLabelShape;
-    LABEL_SPIN_STYLE                      m_lastTextOrientation;
-    bool                                  m_lastTextBold;
-    bool                                  m_lastTextItalic;
+    PINSHEETLABEL_SHAPE                m_lastSheetPinType;
+    PINSHEETLABEL_SHAPE                m_lastGlobalLabelShape;
+    LABEL_SPIN_STYLE                   m_lastTextOrientation;
+    bool                               m_lastTextBold;
+    bool                               m_lastTextItalic;
 
-    std::unique_ptr<STATUS_TEXT_POPUP>    m_statusPopup;
+    std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
 };
 
 #endif /* SCH_DRAWING_TOOLS_H */

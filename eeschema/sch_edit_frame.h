@@ -737,21 +737,6 @@ public:
                             const wxString& aFileName );
 
     /**
-     * Create a new SCH_SHEET_PIN object and add it to \a aSheet at the current cursor position.
-     *
-     * @param aSheet The sheet to add the new sheet pin to.
-     * @return The new sheet pin object created or NULL if the task was aborted by the user.
-     */
-    SCH_SHEET_PIN* CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel );
-
-    /**
-     * Import a hierarchical label with no attached sheet pin.
-     *
-     * @param aSheet The sheet to import the new sheet pin to.
-     */
-    SCH_HIERLABEL* ImportHierLabel( SCH_SHEET* aSheet );
-
-    /**
      * Removes a given junction and heals any wire segments under the junction
      *
      * @param aItem The junction to delete

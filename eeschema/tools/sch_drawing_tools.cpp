@@ -47,9 +47,11 @@
 #include <dialogs/dialog_edit_label.h>
 #include <dialogs/dialog_edit_line_style.h>
 #include <dialogs/dialog_junction_props.h>
+#include <dialogs/dialog_sheet_pin_properties.h>
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
+        m_lastSheetPinType( PINSHEETLABEL_SHAPE::PS_INPUT ),
         m_lastGlobalLabelShape( PINSHEETLABEL_SHAPE::PS_INPUT ),
         m_lastTextOrientation( LABEL_SPIN_STYLE::LEFT ),
         m_lastTextBold( false ),
@@ -722,6 +724,60 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
 }
 
 
+SCH_HIERLABEL* SCH_DRAWING_TOOLS::importHierLabel( SCH_SHEET* aSheet )
+{
+    if( !aSheet->GetScreen() )
+        return nullptr;
+
+    for( EDA_ITEM* item : aSheet->GetScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
+    {
+        SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
+
+        /* A global label has been found: check if there a corresponding sheet label. */
+        if( !aSheet->HasPin( label->GetText() ) )
+            return label;
+    }
+
+    return nullptr;
+}
+
+
+SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel )
+{
+    SCHEMATIC_SETTINGS& settings = aSheet->Schematic()->Settings();
+    wxString            text;
+    SCH_SHEET_PIN*      sheetPin;
+
+    if( aLabel )
+    {
+        text = aLabel->GetText();
+        m_lastSheetPinType = aLabel->GetShape();
+    }
+
+    sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), text );
+    sheetPin->SetFlags( IS_NEW );
+    sheetPin->SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
+    sheetPin->SetShape( m_lastSheetPinType );
+
+    if( !aLabel )
+    {
+        DIALOG_SHEET_PIN_PROPERTIES dlg( m_frame, sheetPin );
+
+        if( dlg.ShowModal() != wxID_OK || sheetPin->GetText().IsEmpty()  )
+        {
+            delete sheetPin;
+            return nullptr;
+        }
+    }
+
+    m_lastSheetPinType = sheetPin->GetShape();
+
+    sheetPin->SetPosition( (wxPoint) getViewControls()->GetCursorPosition() );
+
+    return sheetPin;
+}
+
+
 int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 {
     EDA_ITEM* item          = nullptr;
@@ -849,7 +905,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                     if( isImportMode )
                     {
-                        label = m_frame->ImportHierLabel( sheet );
+                        label = importHierLabel( sheet );
 
                         if( !label )
                         {
@@ -861,7 +917,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                         }
                     }
 
-                    item = m_frame->CreateSheetPin( sheet, label );
+                    item = createSheetPin( sheet, label );
                     break;
                 }
                 default:
