@@ -1851,6 +1851,9 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
     case PCB_ZONE_AREA_T:
     case PCB_FP_ZONE_AREA_T:
     {
+        if( !board()->IsElementVisible( LAYER_ZONES ) )
+            return false;
+
         const ZONE_CONTAINER* zone = static_cast<const ZONE_CONTAINER*>( aItem );
 
         // Check to see if this keepout is part of a footprint
