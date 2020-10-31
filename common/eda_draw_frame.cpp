@@ -993,12 +993,12 @@ void EDA_DRAW_FRAME::GetUnitPair( EDA_UNITS& aPrimaryUnit, EDA_UNITS& aSecondary
 
 void EDA_DRAW_FRAME::ResolveCanvasType()
 {
-    EDA_DRAW_PANEL_GAL::GAL_TYPE savedCanvasType = LoadCanvasTypeSetting();
+    m_canvasType = LoadCanvasTypeSetting();
 
     // Nudge user to switch to OpenGL if they are on legacy or Cairo
     if( m_firstRunDialogSetting < 1 )
     {
-        if( savedCanvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
+        if( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
         {
             wxString msg =
                     _( "KiCad can use your graphics card to give you a smoother "
@@ -1033,9 +1033,5 @@ void EDA_DRAW_FRAME::ResolveCanvasType()
 
         m_firstRunDialogSetting = 1;
         SaveSettings( config() );
-    }
-    else
-    {
-        m_canvasType = savedCanvasType;
     }
 }
