@@ -1357,29 +1357,26 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         {
             PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
 
-            if( m_editModules )
+            auto removeItem = [&]( BOARD_ITEM* bItem )
             {
-                MODULE* parent = static_cast<MODULE*>( item->GetParent() );
+                if( bItem->GetParent() && bItem->GetParent()->Type() == PCB_MODULE_T )
+                {
+                    m_commit->Modify( bItem->GetParent() );
+                    getView()->Remove( group );
+                    bItem->GetParent()->Remove( group );
+                }
+                else
+                {
+                    m_commit->Remove( item );
+                }
+            };
 
-                m_commit->Modify( parent );
-                getView()->Remove( group );
-                parent->Remove( group );
+            removeItem( group );
 
-                group->RunOnDescendants( [&]( BOARD_ITEM* bItem )
-                                         {
-                                             getView()->Remove( bItem );
-                                             parent->Remove( bItem );
-                                         });
-            }
-            else
-            {
-                m_commit->Remove( item );
-
-                group->RunOnDescendants( [&]( BOARD_ITEM* bItem )
-                                         {
-                                             m_commit->Remove( bItem );
-                                         });
-            }
+            group->RunOnDescendants( [&]( BOARD_ITEM* aDescendant )
+                                     {
+                                         removeItem( aDescendant );
+                                     });
         }
             break;
 
