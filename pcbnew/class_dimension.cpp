@@ -371,25 +371,16 @@ void DIMENSION::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
-std::vector<SHAPE*> DIMENSION::MakeEffectiveShapes() const
-{
-    std::vector<SHAPE*> effectiveShapes;
-
-    std::shared_ptr<SHAPE_COMPOUND> ets = Text().GetEffectiveTextShape();
-
-    for( const SHAPE* shape : ets->Shapes() )
-        effectiveShapes.emplace_back( shape->Clone() );
-
-    for( const std::shared_ptr<SHAPE>& shape : GetShapes() )
-        effectiveShapes.emplace_back( shape->Clone() );
-
-    return effectiveShapes;
-}
-
-
 std::shared_ptr<SHAPE> DIMENSION::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
-    return std::make_shared<SHAPE_COMPOUND>( MakeEffectiveShapes() );
+    std::shared_ptr<SHAPE_COMPOUND> effectiveShape = std::make_shared<SHAPE_COMPOUND>();
+
+    effectiveShape->AddShape( Text().GetEffectiveTextShape()->Clone() );
+
+    for( const std::shared_ptr<SHAPE>& shape : GetShapes() )
+        effectiveShape->AddShape( shape->Clone() );
+
+    return effectiveShape;
 }
 
 

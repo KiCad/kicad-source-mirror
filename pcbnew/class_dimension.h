@@ -224,12 +224,6 @@ public:
      */
     const std::vector<std::shared_ptr<SHAPE>>& GetShapes() const { return m_shapes; }
 
-    /**
-     * @return create a caller-owned list of *all* shapes (including any text).
-     * Used for collision calculations (DRC, PNS, etc.).
-     */
-    std::vector<SHAPE*> MakeEffectiveShapes() const;
-
     // BOARD_ITEM overrides
 
     void Move( const wxPoint& offset ) override;
