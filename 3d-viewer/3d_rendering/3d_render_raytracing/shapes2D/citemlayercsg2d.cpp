@@ -87,29 +87,21 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
     if( m_objectA->GetObjectType() == OBJECT2D_TYPE::DUMMYBLOCK )
         return false;
 
-    float currentRayDist;
-    SFVEC2F currentRayPos;
+    SFVEC2F currentRayPos = aSegRay.m_Start;
     SFVEC2F currentNormal;
     RAYSEG2D currentRay = aSegRay;
 
-    if( m_objectA->IsPointInside( aSegRay.m_Start ) )
-    {
-        // start ray point off where it is now (at the origin)
-        currentRayDist = 0.0f;
-        currentRayPos = aSegRay.m_Start;
-    }
-    else
+    if( !m_objectA->IsPointInside( aSegRay.m_Start ) )
     {
         //move ray point to start of main object
-        if( !m_objectA->Intersect( aSegRay, &currentRayDist, &currentNormal ) )
+        float tmpRayDist;
+        if( !m_objectA->Intersect( aSegRay, &tmpRayDist, &currentNormal ) )
             return false;
 
-        currentRayPos = aSegRay.atNormalized( currentRayDist + 0.01f );
+        currentRayPos = aSegRay.atNormalized( tmpRayDist + 0.003f );
 
         currentRay = RAYSEG2D( currentRayPos, aSegRay.m_End );
     }
-
-    currentRayDist = 0.0f;
 
     //wxASSERT( (currentRayDist >= 0.0f) && (currentRayDist <= 1.0f) );
 
@@ -117,9 +109,9 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
     // move through the union of subtracted regions
     if( m_objectB )
     {
-        for( unsigned int l = 0; l < 4; ++l )
+        for( unsigned int l = 0; l < ( m_objectB->size() * 2 ); ++l )
         {
-            bool wasInsideSubVol = false;
+            bool wasCrossedSubVol = false;
 
             //check against all subbed objects
             for( unsigned int i = 0; i < m_objectB->size(); ++i )
@@ -137,13 +129,11 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
 
                     wxASSERT( hitDist <= 1.0f );
 
-                    if( hitDist > currentRayDist )
+                    if( hitDist > FLT_EPSILON )
                     {
-                        wasInsideSubVol = true;
+                        wasCrossedSubVol = true;
 
                         currentRayPos = currentRay.atNormalized( glm::min( hitDist + 0.0001f, 1.0f ) );
-
-                        currentRayDist = 0.0001f;
 
                         currentRay = RAYSEG2D( currentRayPos, aSegRay.m_End );
 
@@ -152,15 +142,13 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
                 }
             }
 
-            if( !wasInsideSubVol )
-            {
+            if( !wasCrossedSubVol )
                 break;
-            }
         }
     }
 
     *aNormalOut = currentNormal;
-    *aOutT      = glm::min( glm::max( 1.0f - glm::length( currentRayPos - aSegRay.m_End ) / aSegRay.m_Length, 0.0f ), 1.0f );
+    *aOutT      = glm::min( glm::max( glm::length( currentRayPos - aSegRay.m_Start ) / aSegRay.m_Length, 0.0f ), 1.0f );
     return true;
 }
 

@@ -64,7 +64,7 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
     if( tBBoxStart >= aHitInfo.m_tHit )
         return false;
 
-    if( fabs(tBBoxStart - tBBoxEnd) < FLT_EPSILON )
+    if( fabs(tBBoxStart - tBBoxEnd) <= FLT_EPSILON )
         return false;
 
     const bool startedInside = m_bbox.Inside( aRay.m_Origin );
@@ -95,9 +95,6 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                 tTop = NextFloatDown( tTop );
             }
         }
-
-        tBBoxStart = NextFloatDown( tBBoxStart );
-        tBBoxEnd   = NextFloatUp( tBBoxEnd );
 
         SFVEC2F topHitPoint2d;
         SFVEC2F botHitPoint2d;
@@ -213,8 +210,6 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
         SFVEC3F boxHitPointEnd = aRay.at( tBBoxEnd );
 
         SFVEC2F boxHitPointStart2D( boxHitPointStart.x, boxHitPointStart.y );
-        //SFVEC2F boxHitPointStart2D( m_bbox.GetCenter().x, m_bbox.GetCenter().y );
-
         SFVEC2F boxHitPointEnd2D( boxHitPointEnd.x, boxHitPointEnd.y );
 
         float tOut;
@@ -223,11 +218,6 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 
         if( m_object2d->Intersect( raySeg, &tOut, &outNormal ) )
         {
-            if( tOut > 0.99f ) // Workarround for refraction artifacts on board sides
-            {
-                return false;
-            }
-
             // The hitT is a hit value for the segment length 'start' - 'end',
             // so it ranges from 0.0 - 1.0. We now convert it to a 3D hit position
             // and calculate the real hitT of the ray.

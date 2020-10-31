@@ -523,7 +523,7 @@ void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
                         antiboardPoly,
                         *m_antioutlineBoard2dObjects,
                         m_boardAdapter.BiuTo3Dunits(),
-                        divFactor,
+                        -1.0f,
                         *dynamic_cast<const BOARD_ITEM*>( m_boardAdapter.GetBoard() ),
                         iOutlinePolyIdx );
             }
@@ -1167,10 +1167,10 @@ void C3D_RENDER_RAYTRACING::insert3DPadHole( const D_PAD* aPad )
     CONST_LIST_OBJECT2D antiOutlineIntersectionList;
 
     const float topZ = m_boardAdapter.GetLayerBottomZpos3DU( F_Cu ) +
-                       m_boardAdapter.GetCopperThickness3DU();
+                       m_boardAdapter.GetCopperThickness3DU() * 0.99f;
 
     const float botZ = m_boardAdapter.GetLayerBottomZpos3DU( B_Cu ) -
-                       m_boardAdapter.GetCopperThickness3DU();
+                       m_boardAdapter.GetCopperThickness3DU() * 0.99f;
 
     if( drillsize.x == drillsize.y )    // usual round hole
     {

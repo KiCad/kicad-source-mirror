@@ -539,16 +539,25 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
                 glm::normalize( (normalAfterSeg * dotAfter ) + normalSeg );
     }
 
-    if( aDivFactor == 0.0f )
-        aDivFactor = medOfTheSquaresSegmentLength;
-
     SFVEC2UI grid_divisions;
-    grid_divisions.x = (unsigned int)( (bbox.GetExtent().x / aDivFactor) );
-    grid_divisions.y = (unsigned int)( (bbox.GetExtent().y / aDivFactor) );
 
-    grid_divisions = glm::clamp( grid_divisions ,
-                                 SFVEC2UI( 1, 1 ),
-                                 SFVEC2UI( MAX_NR_DIVISIONS, MAX_NR_DIVISIONS ) );
+    if( aDivFactor < 0.0f)
+    {
+        grid_divisions = SFVEC2UI( 1 );
+    }
+    else
+    {
+        if( aDivFactor <= FLT_EPSILON )
+            aDivFactor = medOfTheSquaresSegmentLength;
+
+
+        grid_divisions.x = (unsigned int)( (bbox.GetExtent().x / aDivFactor) );
+        grid_divisions.y = (unsigned int)( (bbox.GetExtent().y / aDivFactor) );
+
+        grid_divisions = glm::clamp( grid_divisions ,
+                                     SFVEC2UI( 1, 1 ),
+                                     SFVEC2UI( MAX_NR_DIVISIONS, MAX_NR_DIVISIONS ) );
+    }
 
     // Calculate the steps advance of the grid
     SFVEC2F blockAdvance;
