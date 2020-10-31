@@ -62,7 +62,7 @@ enum class UNDO_REDO {
     ROTATED,             // Rotated item (counterclockwise), undo by rotating it
     ROTATED_CLOCKWISE,   // Rotated item (clockwise), undo by rotating it
     FLIPPED,             // flipped (board items only), undo by flipping it
-    LIBEDIT,             // Specific to the component editor (libedit creates a full copy
+    LIBEDIT,             // Specific to the component editor (symbol_editor creates a full copy
                          // of the current component when changed)
     LIB_RENAME,          // As LIBEDIT, but old copy should be removed from library
     EXCHANGE_T,          // Use for changing the schematic text type where swapping

@@ -26,8 +26,8 @@
 #include <confirm.h>
 #include <dialog_text_entry.h>
 #include <kiway.h>
-#include <lib_edit_frame.h>
-#include <lib_manager.h>
+#include <symbol_edit_frame.h>
+#include <symbol_library_manager.h>
 #include <math/util.h> // for KiROUND
 #include <pgm_base.h>
 #include <sch_component.h>
@@ -40,7 +40,7 @@
 
 #include <dialog_lib_symbol_properties.h>
 #include <settings/settings_manager.h>
-#include <libedit_settings.h>
+#include <symbol_editor_settings.h>
 
 
 int DIALOG_LIB_SYMBOL_PROPERTIES::m_lastOpenedPage = 0;
@@ -48,7 +48,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT
     DIALOG_LIB_SYMBOL_PROPERTIES::m_lastLayout = DIALOG_LIB_SYMBOL_PROPERTIES::NONE;
 
 
-DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( LIB_EDIT_FRAME* aParent,
+DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* aParent,
                                                             LIB_PART* aLibEntry ) :
     DIALOG_LIB_SYMBOL_PROPERTIES_BASE( aParent ),
     m_Parent( aParent ),
@@ -68,7 +68,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( LIB_EDIT_FRAME* aPar
     m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this ) );
 
     // Show/hide columns according to the user's preference
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
     m_grid->ShowHideColumns( cfg->m_EditComponentVisibleColumns );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
@@ -121,7 +121,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::~DIALOG_LIB_SYMBOL_PROPERTIES()
 {
     m_lastOpenedPage = m_NoteBook->GetSelection( );
 
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
     cfg->m_EditComponentVisibleColumns = m_grid->GetShownColumns();
 
     // Prevents crash bug in wxGrid's d'tor
@@ -452,9 +452,9 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
-    int               fieldID = m_fields->size();
-    LIB_FIELD         newField( m_libEntry, fieldID );
+    auto*     settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    int       fieldID = m_fields->size();
+    LIB_FIELD newField( m_libEntry, fieldID );
 
     newField.SetTextSize( wxSize( Mils2iu( settings->m_Defaults.text_size ),
                                   Mils2iu( settings->m_Defaults.text_size ) ) );

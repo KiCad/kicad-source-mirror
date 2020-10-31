@@ -36,7 +36,7 @@ using namespace std::placeholders;
 #include <sch_line.h>
 #include <sch_bitmap.h>
 #include <sch_sheet.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <lib_arc.h>
 #include <lib_circle.h>
 #include <lib_rectangle.h>
@@ -866,7 +866,7 @@ int EE_POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
 
 void EE_POINT_EDITOR::saveItemsToUndo()
 {
-    if( m_isLibEdit )
+    if( m_isSymbolEditor )
     {
         saveCopyInUndoList( m_editPoints->GetParent()->GetParent(), UNDO_REDO::LIBEDIT );
     }
@@ -892,8 +892,8 @@ void EE_POINT_EDITOR::saveItemsToUndo()
 
 void EE_POINT_EDITOR::rollbackFromUndo()
 {
-    if( m_isLibEdit )
-        static_cast<LIB_EDIT_FRAME*>( m_frame )->RollbackPartFromUndo();
+    if( m_isSymbolEditor )
+        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->RollbackPartFromUndo();
     else
         static_cast<SCH_EDIT_FRAME*>( m_frame )->RollbackSchematicFromUndo();
 }

@@ -23,25 +23,25 @@
 #include <widgets/unit_binder.h>
 #include "panel_sym_editing_options_base.h"
 
-class LIB_EDIT_FRAME;
+class SYMBOL_EDIT_FRAME;
 
 
 class PANEL_SYM_EDITING_OPTIONS : public PANEL_SYM_EDITING_OPTIONS_BASE
 {
-    LIB_EDIT_FRAME* m_frame;
+    SYMBOL_EDIT_FRAME* m_frame;
 
-    UNIT_BINDER     m_lineWidth;
-    UNIT_BINDER     m_textSize;
+    UNIT_BINDER        m_lineWidth;
+    UNIT_BINDER        m_textSize;
 
-    UNIT_BINDER     m_pinLength;
-    UNIT_BINDER     m_pinNameSize;
-    UNIT_BINDER     m_pinNumberSize;
+    UNIT_BINDER        m_pinLength;
+    UNIT_BINDER        m_pinNameSize;
+    UNIT_BINDER        m_pinNumberSize;
 
-    UNIT_BINDER     m_hPitch;
-    UNIT_BINDER     m_vPitch;
+    UNIT_BINDER        m_hPitch;
+    UNIT_BINDER        m_vPitch;
 
 public:
-    PANEL_SYM_EDITING_OPTIONS( LIB_EDIT_FRAME* aFrame, wxWindow* aWindow );
+    PANEL_SYM_EDITING_OPTIONS( SYMBOL_EDIT_FRAME* aFrame, wxWindow* aWindow );
 
 private:
     bool TransferDataToWindow() override;

@@ -27,7 +27,6 @@
 #include <ee_actions.h>
 #include <bitmaps.h>
 #include <eda_item.h>
-#include <lib_edit_frame.h>
 #include "lib_move_tool.h"
 #include "lib_pin_tool.h"
 

@@ -29,7 +29,6 @@
 #include <eeschema_id.h>
 #include <general.h>
 #include <kiway.h>
-#include <lib_edit_frame.h>
 #include <lib_view_frame.h>
 #include <pgm_base.h>
 #include <sch_component.h>

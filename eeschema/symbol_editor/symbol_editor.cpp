@@ -28,13 +28,13 @@
 #include <widgets/infobar.h>
 #include <tools/ee_actions.h>
 #include <tools/lib_drawing_tools.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <class_libentry.h>
 #include <class_library.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
 #include <symbol_lib_table.h>
-#include <lib_manager.h>
+#include <symbol_library_manager.h>
 #include <symbol_tree_pane.h>
 #include <widgets/lib_tree.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
@@ -44,7 +44,7 @@
 #include <wx/clipbrd.h>
 
 
-void LIB_EDIT_FRAME::updateTitle()
+void SYMBOL_EDIT_FRAME::updateTitle()
 {
     wxString lib = GetCurLib();
     wxString title;
@@ -68,7 +68,7 @@ void LIB_EDIT_FRAME::updateTitle()
 }
 
 
-void LIB_EDIT_FRAME::SelectActiveLibrary( const wxString& aLibrary )
+void SYMBOL_EDIT_FRAME::SelectActiveLibrary( const wxString& aLibrary )
 {
     wxString selectedLib = aLibrary;
 
@@ -82,7 +82,7 @@ void LIB_EDIT_FRAME::SelectActiveLibrary( const wxString& aLibrary )
 }
 
 
-wxString LIB_EDIT_FRAME::SelectLibraryFromList()
+wxString SYMBOL_EDIT_FRAME::SelectLibraryFromList()
 {
     PROJECT& prj = Prj();
 
@@ -129,7 +129,7 @@ wxString LIB_EDIT_FRAME::SelectLibraryFromList()
 }
 
 
-bool LIB_EDIT_FRAME::saveCurrentPart()
+bool SYMBOL_EDIT_FRAME::saveCurrentPart()
 {
     if( GetCurPart() )
     {
@@ -148,7 +148,7 @@ bool LIB_EDIT_FRAME::saveCurrentPart()
 }
 
 
-bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( const LIB_ID& aLibId, int aUnit, int aConvert )
+bool SYMBOL_EDIT_FRAME::LoadComponentAndSelectLib( const LIB_ID& aLibId, int aUnit, int aConvert )
 {
     if( GetCurPart() && GetCurPart()->GetLibId() == aLibId
             && GetUnit() == aUnit && GetConvert() == aConvert )
@@ -171,8 +171,8 @@ bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( const LIB_ID& aLibId, int aUnit,
 }
 
 
-bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, int aUnit,
-                                                  int aConvert )
+bool SYMBOL_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, int aUnit,
+                                                     int aConvert )
 {
     LIB_PART* alias = nullptr;
 
@@ -207,8 +207,8 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
 }
 
 
-bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString& aLibrary,
-                                            int aUnit, int aConvert )
+bool SYMBOL_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString& aLibrary,
+                                               int aUnit, int aConvert )
 {
     wxString msg, rootName;
     bool rebuildMenuAndToolbar = false;
@@ -269,7 +269,168 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString& aL
 }
 
 
-void LIB_EDIT_FRAME::SaveAll()
+void SYMBOL_EDIT_FRAME::LoadOneSymbol()
+{
+    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+
+    // Exit if no library entry is selected or a command is in progress.
+    if( !m_my_part || !EE_CONDITIONS::Idle( selTool->GetSelection() ) )
+        return;
+
+    PROJECT&        prj = Prj();
+    SEARCH_STACK*   search = prj.SchSearchS();
+
+    wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
+
+    if( !default_path )
+        default_path = search->LastVisitedPath();
+
+    wxFileDialog dlg( this, _( "Import Symbol" ), default_path,
+                      wxEmptyString, SchematicSymbolFileWildcard(),
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxString filename = dlg.GetPath();
+
+    prj.SetRString( PROJECT::SCH_LIB_PATH, filename );
+
+    wxArrayString symbols;
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+
+    wxString msg;
+
+    try
+    {
+        pi->EnumerateSymbolLib( symbols, filename );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        msg.Printf( _( "Cannot import symbol library \"%s\"." ), filename );
+        DisplayErrorMessage( this, msg, ioe.What() );
+        return;
+    }
+
+    if( symbols.empty() )
+    {
+        msg.Printf( _( "Symbol library file \"%s\" is empty." ), filename );
+        DisplayError( this,  msg );
+        return;
+    }
+
+    if( symbols.GetCount() > 1 )
+    {
+        msg.Printf( _( "More than one symbol found in symbol file \"%s\"." ), filename );
+        wxMessageBox( msg, _( "Warning" ), wxOK | wxICON_EXCLAMATION, this );
+    }
+
+    LIB_PART* alias = nullptr;
+
+    try
+    {
+        alias = pi->LoadSymbol( filename, symbols[0] );
+    }
+    catch( const IO_ERROR& )
+    {
+        return;
+    }
+
+    wxCHECK_RET( alias, "Invalid symbol." );
+
+    SaveCopyInUndoList( m_my_part );
+
+    LIB_PART* first = alias;
+    LIB_ITEMS_CONTAINER& drawList = first->GetDrawItems();
+
+    for( LIB_ITEM& item : drawList )
+    {
+        if( item.Type() == LIB_FIELD_T )
+            continue;
+
+        if( item.GetUnit() )
+            item.SetUnit( m_unit );
+
+        if( item.GetConvert() )
+            item.SetConvert( m_convert );
+
+        item.SetFlags( IS_NEW | SELECTED );
+
+        LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
+
+        newItem->SetParent( m_my_part );
+        m_my_part->AddDrawItem( newItem );
+        item.ClearSelected();
+    }
+
+    m_my_part->RemoveDuplicateDrawItems();
+
+    OnModify();
+}
+
+
+void SYMBOL_EDIT_FRAME::SaveOneSymbol()
+{
+    wxCHECK( m_my_part, /* void */ );
+
+    // Export the current part as a symbol (.sym file)
+    // this is the current part without its aliases and doc file
+    // because a .sym file is used to import graphics in a part being edited
+    if( m_my_part->GetDrawItems().empty() )
+        return;
+
+    PROJECT&        prj = Prj();
+    SEARCH_STACK*   search = prj.SchSearchS();
+
+    wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
+
+    if( !default_path )
+        default_path = search->LastVisitedPath();
+
+    wxFileDialog dlg( this, _( "Export Symbol" ), default_path,
+                      m_my_part->GetName() + "." + SchematicSymbolFileExtension,
+                      SchematicSymbolFileWildcard(),
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxFileName fn = dlg.GetPath();
+
+    /* The GTK file chooser doesn't return the file extension added to
+     * file name so add it here. */
+    if( fn.GetExt().IsEmpty() )
+        fn.SetExt( SchematicSymbolFileExtension );
+
+    prj.SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
+
+    if( fn.FileExists() )
+        wxRemove( fn.GetFullPath() );
+
+    SetStatusText( wxString::Format( _( "Saving symbol in \"%s\"" ), fn.GetPath() ) );
+
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+
+    try
+    {
+        PROPERTIES nodoc_props;     // Doc file is useless for a .sym file
+        nodoc_props[ SCH_LEGACY_PLUGIN::PropNoDocFile ] = "";
+        plugin->CreateSymbolLib( fn.GetFullPath(), &nodoc_props );
+
+        // The part gets flattened by the LIB_PART copy constructor.
+        LIB_PART* saved_part = new LIB_PART( *m_my_part );
+        plugin->SaveSymbol( fn.GetFullPath(), saved_part, &nodoc_props );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxString msg = wxString::Format( _( "An error occurred saving symbol file \"%s\"" ),
+                                         fn.GetFullPath() );
+        DisplayErrorMessage( this, msg, ioe.What() );
+    }
+}
+
+
+void SYMBOL_EDIT_FRAME::SaveAll()
 {
     saveAllLibraries( false );
     m_treePane->GetLibTree()->RefreshLibTree();
@@ -277,7 +438,7 @@ void LIB_EDIT_FRAME::SaveAll()
 }
 
 
-void LIB_EDIT_FRAME::CreateNewPart()
+void SYMBOL_EDIT_FRAME::CreateNewPart()
 {
     m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
 
@@ -392,7 +553,7 @@ void LIB_EDIT_FRAME::CreateNewPart()
 }
 
 
-void LIB_EDIT_FRAME::Save()
+void SYMBOL_EDIT_FRAME::Save()
 {
     LIB_ID libId = getTargetLibId();
     const wxString& libName = libId.GetLibNickname();
@@ -419,7 +580,7 @@ void LIB_EDIT_FRAME::Save()
 }
 
 
-void LIB_EDIT_FRAME::SaveAs()
+void SYMBOL_EDIT_FRAME::SaveAs()
 {
     LIB_ID libId = getTargetLibId();
     const wxString& libName = libId.GetLibNickname();
@@ -435,7 +596,7 @@ void LIB_EDIT_FRAME::SaveAs()
 }
 
 
-void LIB_EDIT_FRAME::savePartAs()
+void SYMBOL_EDIT_FRAME::savePartAs()
 {
     LIB_ID old_lib_id = getTargetLibId();
     wxString old_name = old_lib_id.GetLibItemName();
@@ -538,7 +699,7 @@ void LIB_EDIT_FRAME::savePartAs()
 }
 
 
-void LIB_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
+void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
 {
     wxCHECK( m_my_part, /* void */ );
 
@@ -576,7 +737,7 @@ void LIB_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
 }
 
 
-void LIB_EDIT_FRAME::DeletePartFromLibrary()
+void SYMBOL_EDIT_FRAME::DeletePartFromLibrary()
 {
     LIB_ID libId = getTargetLibId();
 
@@ -618,7 +779,7 @@ void LIB_EDIT_FRAME::DeletePartFromLibrary()
 }
 
 
-void LIB_EDIT_FRAME::CopyPartToClipboard()
+void SYMBOL_EDIT_FRAME::CopyPartToClipboard()
 {
     int dummyUnit;
     LIB_ID libId = m_treePane->GetLibTree()->GetSelectedLibId( &dummyUnit );
@@ -644,7 +805,7 @@ void LIB_EDIT_FRAME::CopyPartToClipboard()
 }
 
 
-void LIB_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
+void SYMBOL_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
 {
     int dummyUnit;
     LIB_ID libId = m_treePane->GetLibTree()->GetSelectedLibId( &dummyUnit );
@@ -711,7 +872,7 @@ void LIB_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
 }
 
 
-void LIB_EDIT_FRAME::ensureUniqueName( LIB_PART* aPart, const wxString& aLibrary )
+void SYMBOL_EDIT_FRAME::ensureUniqueName( LIB_PART* aPart, const wxString& aLibrary )
 {
     wxCHECK( aPart, /* void */ );
 
@@ -726,7 +887,7 @@ void LIB_EDIT_FRAME::ensureUniqueName( LIB_PART* aPart, const wxString& aLibrary
 }
 
 
-void LIB_EDIT_FRAME::Revert( bool aConfirm )
+void SYMBOL_EDIT_FRAME::Revert( bool aConfirm )
 {
     LIB_ID libId = getTargetLibId();
     const wxString& libName = libId.GetLibNickname();
@@ -786,7 +947,7 @@ void LIB_EDIT_FRAME::Revert( bool aConfirm )
 }
 
 
-void LIB_EDIT_FRAME::RevertAll()
+void SYMBOL_EDIT_FRAME::RevertAll()
 {
     wxCHECK_RET( m_libMgr, "Library manager object not created." );
 
@@ -795,7 +956,7 @@ void LIB_EDIT_FRAME::RevertAll()
 }
 
 
-void LIB_EDIT_FRAME::LoadPart( const wxString& aAlias, const wxString& aLibrary, int aUnit )
+void SYMBOL_EDIT_FRAME::LoadPart( const wxString& aAlias, const wxString& aLibrary, int aUnit )
 {
     LIB_PART* part = m_libMgr->GetBufferedPart( aAlias, aLibrary );
 
@@ -818,7 +979,7 @@ void LIB_EDIT_FRAME::LoadPart( const wxString& aAlias, const wxString& aLibrary,
 }
 
 
-bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
+bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 {
     wxFileName fn;
     wxString   msg;
@@ -897,7 +1058,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 }
 
 
-bool LIB_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
+bool SYMBOL_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
 {
     wxString msg;
     bool doSave = true;
@@ -953,3 +1114,48 @@ bool LIB_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
 
     return retv;
 }
+
+
+void SYMBOL_EDIT_FRAME::DisplayCmpDoc()
+{
+    EDA_DRAW_FRAME::ClearMsgPanel();
+
+    if( !m_my_part )
+        return;
+
+    wxString msg = m_my_part->GetName();
+
+    AppendMsgPanel( _( "Name" ), msg, BLUE, 8 );
+
+    if( m_my_part->IsAlias() )
+    {
+        PART_SPTR parent = m_my_part->GetParent().lock();
+
+        msg = parent ? parent->GetName() : _( "Undefined!" );
+        AppendMsgPanel( _( "Parent" ), msg, BROWN, 8 );
+    }
+
+    static wxChar UnitLetter[] = wxT( "?ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
+    msg = UnitLetter[m_unit];
+
+    AppendMsgPanel( _( "Unit" ), msg, BROWN, 8 );
+
+    if( m_convert > 1 )
+        msg = _( "Convert" );
+    else
+        msg = _( "Normal" );
+
+    AppendMsgPanel( _( "Body" ), msg, GREEN, 8 );
+
+    if( m_my_part->IsPower() )
+        msg = _( "Power Symbol" );
+    else
+        msg = _( "Symbol" );
+
+    AppendMsgPanel( _( "Type" ), msg, MAGENTA, 8 );
+    AppendMsgPanel( _( "Description" ), m_my_part->GetDescription(), CYAN, 8 );
+    AppendMsgPanel( _( "Keywords" ), m_my_part->GetKeyWords(), DARKDARKGRAY );
+    AppendMsgPanel( _( "Datasheet" ), m_my_part->GetDatasheetField().GetText(), DARKDARKGRAY );
+}
+
+

@@ -30,7 +30,7 @@
 #include <dialog_lib_symbol_properties_base.h>
 
 
-class LIB_EDIT_FRAME;
+class SYMBOL_EDIT_FRAME;
 class LIB_PART;
 class WX_GRID;
 
@@ -48,26 +48,26 @@ class DIALOG_LIB_SYMBOL_PROPERTIES: public DIALOG_LIB_SYMBOL_PROPERTIES_BASE
     static LAST_LAYOUT m_lastLayout;
 
 public:
-    LIB_EDIT_FRAME* m_Parent;
-    LIB_PART*       m_libEntry;
+    SYMBOL_EDIT_FRAME* m_Parent;
+    LIB_PART*          m_libEntry;
 
     FIELDS_GRID_TABLE<LIB_FIELD>* m_fields;
 
-    UNIT_BINDER     m_pinNameOffset;
+    UNIT_BINDER        m_pinNameOffset;
 
-    wxControl*      m_delayedFocusCtrl;
-    WX_GRID*        m_delayedFocusGrid;
-    int             m_delayedFocusRow;
-    int             m_delayedFocusColumn;
-    int             m_delayedFocusPage;
-    wxString        m_delayedErrorMessage;
+    wxControl*         m_delayedFocusCtrl;
+    WX_GRID*           m_delayedFocusGrid;
+    int                m_delayedFocusRow;
+    int                m_delayedFocusColumn;
+    int                m_delayedFocusPage;
+    wxString           m_delayedErrorMessage;
 
-    wxString        m_shownColumns;
-    int             m_width;
+    wxString           m_shownColumns;
+    int                m_width;
 
 public:
     /// Constructors
-    DIALOG_LIB_SYMBOL_PROPERTIES( LIB_EDIT_FRAME* parent, LIB_PART* aLibEntry );
+    DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PART* aLibEntry );
     ~DIALOG_LIB_SYMBOL_PROPERTIES();
 
 protected:

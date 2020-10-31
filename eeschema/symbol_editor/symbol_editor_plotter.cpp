@@ -23,13 +23,13 @@
 
 
 #include <sch_painter.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <locale_io.h>
 #include <class_libentry.h>
 #include <class_library.h>
 #include <plotters_specific.h>
 
-void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
+void SYMBOL_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
 {
     KIGFX::SCH_RENDER_SETTINGS renderSettings;
     renderSettings.LoadColors( GetColorSettings() );
@@ -80,7 +80,7 @@ void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
 }
 
 
-void LIB_EDIT_FRAME::PrintPage( RENDER_SETTINGS* aSettings )
+void SYMBOL_EDIT_FRAME::PrintPage( RENDER_SETTINGS* aSettings )
 {
     if( !m_my_part )
         return;
@@ -88,7 +88,7 @@ void LIB_EDIT_FRAME::PrintPage( RENDER_SETTINGS* aSettings )
     wxSize pagesize = GetScreen()->GetPageSettings().GetSizeIU();
 
     /* Plot item centered to the page
-     * In libedit, the component is centered at 0,0 coordinates.
+     * In symbol_editor, the component is centered at 0,0 coordinates.
      * So we must plot it with an offset = pagesize/2.
      */
     wxPoint plot_offset;

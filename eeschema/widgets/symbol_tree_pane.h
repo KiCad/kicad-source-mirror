@@ -30,8 +30,8 @@
 #include <vector>
 
 class LIB_TREE;
-class LIB_EDIT_FRAME;
-class LIB_MANAGER;
+class SYMBOL_EDIT_FRAME;
+class SYMBOL_LIBRARY_MANAGER;
 class wxBoxSizer;
 
 /**
@@ -40,7 +40,7 @@ class wxBoxSizer;
 class SYMBOL_TREE_PANE : public wxPanel
 {
 public:
-    SYMBOL_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr );
+    SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_MANAGER* aLibMgr );
     ~SYMBOL_TREE_PANE();
 
     LIB_TREE* GetLibTree() const
@@ -51,9 +51,9 @@ public:
 protected:
     void onComponentSelected( wxCommandEvent& aEvent );
 
-    LIB_EDIT_FRAME* m_libEditFrame;
-    LIB_TREE* m_tree;             ///< component search tree widget
-    LIB_MANAGER* m_libMgr;
+    SYMBOL_EDIT_FRAME*      m_libEditFrame;
+    LIB_TREE*               m_tree;             ///< component search tree widget
+    SYMBOL_LIBRARY_MANAGER* m_libMgr;
 };
 
 #endif /* CMP_TREE_PANE_H */

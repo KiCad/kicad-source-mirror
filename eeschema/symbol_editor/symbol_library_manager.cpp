@@ -23,10 +23,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <lib_manager.h>
+#include <symbol_library_manager.h>
 #include <class_libentry.h>
 #include <class_library.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <env_paths.h>
 #include <pgm_base.h>
 #include <kiway.h>
@@ -37,7 +37,7 @@
 #include <list>
 
 
-LIB_MANAGER::LIB_MANAGER( LIB_EDIT_FRAME& aFrame ) :
+SYMBOL_LIBRARY_MANAGER::SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFrame ) :
         m_frame( aFrame ),
         m_syncHash( 0 )
 {
@@ -46,8 +46,8 @@ LIB_MANAGER::LIB_MANAGER( LIB_EDIT_FRAME& aFrame ) :
 }
 
 
-void LIB_MANAGER::Sync( bool aForce,
-                        std::function<void( int, int, const wxString& )> aProgressCallback )
+void SYMBOL_LIBRARY_MANAGER::Sync( bool aForce,
+                                   std::function<void( int, int, const wxString& )> aProgressCallback )
 {
     m_logger.Activate();
     {
@@ -63,7 +63,7 @@ void LIB_MANAGER::Sync( bool aForce,
 }
 
 
-bool LIB_MANAGER::HasModifications() const
+bool SYMBOL_LIBRARY_MANAGER::HasModifications() const
 {
     for( const auto& lib : m_libs )
     {
@@ -75,7 +75,7 @@ bool LIB_MANAGER::HasModifications() const
 }
 
 
-int LIB_MANAGER::GetHash() const
+int SYMBOL_LIBRARY_MANAGER::GetHash() const
 {
     int hash = symTable()->GetModifyHash();
 
@@ -86,7 +86,7 @@ int LIB_MANAGER::GetHash() const
 }
 
 
-int LIB_MANAGER::GetLibraryHash( const wxString& aLibrary ) const
+int SYMBOL_LIBRARY_MANAGER::GetLibraryHash( const wxString& aLibrary ) const
 {
     const auto libBufIt = m_libs.find( aLibrary );
 
@@ -101,7 +101,7 @@ int LIB_MANAGER::GetLibraryHash( const wxString& aLibrary ) const
 }
 
 
-wxArrayString LIB_MANAGER::GetLibraryNames() const
+wxArrayString SYMBOL_LIBRARY_MANAGER::GetLibraryNames() const
 {
     wxArrayString res;
 
@@ -112,7 +112,7 @@ wxArrayString LIB_MANAGER::GetLibraryNames() const
 }
 
 
-SYMBOL_LIB_TABLE_ROW* LIB_MANAGER::GetLibrary( const wxString& aLibrary ) const
+SYMBOL_LIB_TABLE_ROW* SYMBOL_LIBRARY_MANAGER::GetLibrary( const wxString& aLibrary ) const
 {
     SYMBOL_LIB_TABLE_ROW* row = nullptr;
 
@@ -130,8 +130,8 @@ SYMBOL_LIB_TABLE_ROW* LIB_MANAGER::GetLibrary( const wxString& aLibrary ) const
 }
 
 
-bool LIB_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileName,
-                               SCH_IO_MGR::SCH_FILE_T aFileType )
+bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileName,
+                                          SCH_IO_MGR::SCH_FILE_T aFileType )
 {
     wxCHECK( aFileType != SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY && LibraryExists( aLibrary ), false );
     wxFileName fn( aFileName );
@@ -224,14 +224,14 @@ bool LIB_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileNa
 }
 
 
-bool LIB_MANAGER::IsLibraryModified( const wxString& aLibrary ) const
+bool SYMBOL_LIBRARY_MANAGER::IsLibraryModified( const wxString& aLibrary ) const
 {
     auto it = m_libs.find( aLibrary );
     return it != m_libs.end() ? it->second.IsModified() : false;
 }
 
 
-bool LIB_MANAGER::IsPartModified( const wxString& aAlias, const wxString& aLibrary ) const
+bool SYMBOL_LIBRARY_MANAGER::IsPartModified( const wxString& aAlias, const wxString& aLibrary ) const
 {
     auto libIt = m_libs.find( aLibrary );
 
@@ -244,7 +244,7 @@ bool LIB_MANAGER::IsPartModified( const wxString& aAlias, const wxString& aLibra
 }
 
 
-bool LIB_MANAGER::ClearLibraryModified( const wxString& aLibrary ) const
+bool SYMBOL_LIBRARY_MANAGER::ClearLibraryModified( const wxString& aLibrary ) const
 {
     auto libIt = m_libs.find( aLibrary );
 
@@ -263,7 +263,7 @@ bool LIB_MANAGER::ClearLibraryModified( const wxString& aLibrary ) const
 }
 
 
-bool LIB_MANAGER::ClearPartModified( const wxString& aAlias, const wxString& aLibrary ) const
+bool SYMBOL_LIBRARY_MANAGER::ClearPartModified( const wxString& aAlias, const wxString& aLibrary ) const
 {
     auto libI = m_libs.find( aLibrary );
 
@@ -278,7 +278,7 @@ bool LIB_MANAGER::ClearPartModified( const wxString& aAlias, const wxString& aLi
 }
 
 
-bool LIB_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
+bool SYMBOL_LIBRARY_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
 {
     wxCHECK( LibraryExists( aLibrary ), true );
 
@@ -286,7 +286,7 @@ bool LIB_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
 }
 
 
-bool LIB_MANAGER::IsLibraryLoaded( const wxString& aLibrary ) const
+bool SYMBOL_LIBRARY_MANAGER::IsLibraryLoaded( const wxString& aLibrary ) const
 {
     wxCHECK( LibraryExists( aLibrary ), false );
 
@@ -294,7 +294,7 @@ bool LIB_MANAGER::IsLibraryLoaded( const wxString& aLibrary ) const
 }
 
 
-std::list<LIB_PART*> LIB_MANAGER::GetAliases( const wxString& aLibrary ) const
+std::list<LIB_PART*> SYMBOL_LIBRARY_MANAGER::GetAliases( const wxString& aLibrary ) const
 {
     std::list<LIB_PART*> ret;
     wxCHECK( LibraryExists( aLibrary ), ret );
@@ -328,7 +328,8 @@ std::list<LIB_PART*> LIB_MANAGER::GetAliases( const wxString& aLibrary ) const
 }
 
 
-LIB_PART* LIB_MANAGER::GetBufferedPart( const wxString& aAlias, const wxString& aLibrary )
+LIB_PART* SYMBOL_LIBRARY_MANAGER::GetBufferedPart( const wxString& aAlias,
+                                                   const wxString& aLibrary )
 {
     wxCHECK( LibraryExists( aLibrary ), nullptr );
 
@@ -385,7 +386,7 @@ LIB_PART* LIB_MANAGER::GetBufferedPart( const wxString& aAlias, const wxString& 
 }
 
 
-SCH_SCREEN* LIB_MANAGER::GetScreen( const wxString& aAlias, const wxString& aLibrary )
+SCH_SCREEN* SYMBOL_LIBRARY_MANAGER::GetScreen( const wxString& aAlias, const wxString& aLibrary )
 {
     wxCHECK( LibraryExists( aLibrary ), nullptr );
     wxCHECK( !aAlias.IsEmpty(), nullptr );
@@ -398,7 +399,7 @@ SCH_SCREEN* LIB_MANAGER::GetScreen( const wxString& aAlias, const wxString& aLib
 }
 
 
-bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary )
+bool SYMBOL_LIBRARY_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary )
 {
     wxCHECK( LibraryExists( aLibrary ), false );
     wxCHECK( aPart, false );
@@ -429,8 +430,8 @@ bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary )
 }
 
 
-bool LIB_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxString& aOldName,
-                                         const wxString& aLibrary )
+bool SYMBOL_LIBRARY_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxString& aOldName,
+                                                    const wxString& aLibrary )
 {
     LIB_BUFFER& libBuf = getLibraryBuffer( aLibrary );
     auto partBuf = libBuf.GetBuffer( aOldName );
@@ -445,7 +446,7 @@ bool LIB_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxString& aOldNa
 }
 
 
-bool LIB_MANAGER::FlushPart( const wxString& aAlias, const wxString& aLibrary )
+bool SYMBOL_LIBRARY_MANAGER::FlushPart( const wxString& aAlias, const wxString& aLibrary )
 {
     auto it = m_libs.find( aLibrary );
 
@@ -459,7 +460,7 @@ bool LIB_MANAGER::FlushPart( const wxString& aAlias, const wxString& aLibrary )
 }
 
 
-LIB_ID LIB_MANAGER::RevertPart( const wxString& aAlias, const wxString& aLibrary )
+LIB_ID SYMBOL_LIBRARY_MANAGER::RevertPart( const wxString& aAlias, const wxString& aLibrary )
 {
     auto it = m_libs.find( aLibrary );
 
@@ -484,7 +485,7 @@ LIB_ID LIB_MANAGER::RevertPart( const wxString& aAlias, const wxString& aLibrary
 }
 
 
-bool LIB_MANAGER::RevertLibrary( const wxString& aLibrary )
+bool SYMBOL_LIBRARY_MANAGER::RevertLibrary( const wxString& aLibrary )
 {
     auto it = m_libs.find( aLibrary );
 
@@ -498,7 +499,7 @@ bool LIB_MANAGER::RevertLibrary( const wxString& aLibrary )
 }
 
 
-bool LIB_MANAGER::RevertAll()
+bool SYMBOL_LIBRARY_MANAGER::RevertAll()
 {
     bool retv = true;
 
@@ -524,7 +525,7 @@ bool LIB_MANAGER::RevertAll()
 }
 
 
-bool LIB_MANAGER::RemovePart( const wxString& aAlias, const wxString& aLibrary )
+bool SYMBOL_LIBRARY_MANAGER::RemovePart( const wxString& aAlias, const wxString& aLibrary )
 {
     LIB_BUFFER& libBuf = getLibraryBuffer( aLibrary );
     auto partBuf = libBuf.GetBuffer( aAlias );
@@ -539,7 +540,8 @@ bool LIB_MANAGER::RemovePart( const wxString& aAlias, const wxString& aLibrary )
 }
 
 
-LIB_PART* LIB_MANAGER::GetAlias( const wxString& aAlias, const wxString& aLibrary ) const
+LIB_PART* SYMBOL_LIBRARY_MANAGER::GetAlias( const wxString& aAlias,
+                                            const wxString& aLibrary ) const
 {
     // Try the library buffers first
     auto libIt = m_libs.find( aLibrary );
@@ -569,7 +571,7 @@ LIB_PART* LIB_MANAGER::GetAlias( const wxString& aAlias, const wxString& aLibrar
 }
 
 
-bool LIB_MANAGER::PartExists( const wxString& aAlias, const wxString& aLibrary ) const
+bool SYMBOL_LIBRARY_MANAGER::PartExists( const wxString& aAlias, const wxString& aLibrary ) const
 {
     auto libBufIt = m_libs.find( aLibrary );
     LIB_PART* alias = nullptr;
@@ -590,7 +592,7 @@ bool LIB_MANAGER::PartExists( const wxString& aAlias, const wxString& aLibrary )
 }
 
 
-bool LIB_MANAGER::LibraryExists( const wxString& aLibrary, bool aCheckEnabled ) const
+bool SYMBOL_LIBRARY_MANAGER::LibraryExists( const wxString& aLibrary, bool aCheckEnabled ) const
 {
     if( aLibrary.IsEmpty() )
         return false;
@@ -602,7 +604,7 @@ bool LIB_MANAGER::LibraryExists( const wxString& aLibrary, bool aCheckEnabled ) 
 }
 
 
-wxString LIB_MANAGER::GetUniqueLibraryName() const
+wxString SYMBOL_LIBRARY_MANAGER::GetUniqueLibraryName() const
 {
     wxString name = "New_Library";
 
@@ -622,8 +624,8 @@ wxString LIB_MANAGER::GetUniqueLibraryName() const
 }
 
 
-void LIB_MANAGER::GetRootSymbolNames( const wxString& aLibraryName,
-                                      wxArrayString& aRootSymbolNames )
+void SYMBOL_LIBRARY_MANAGER::GetRootSymbolNames( const wxString& aLibraryName,
+                                                 wxArrayString& aRootSymbolNames )
 {
     LIB_BUFFER& libBuf = getLibraryBuffer( aLibraryName );
 
@@ -631,8 +633,8 @@ void LIB_MANAGER::GetRootSymbolNames( const wxString& aLibraryName,
 }
 
 
-bool LIB_MANAGER:: HasDerivedSymbols( const wxString& aSymbolName,
-                                      const wxString& aLibraryName )
+bool SYMBOL_LIBRARY_MANAGER:: HasDerivedSymbols( const wxString& aSymbolName,
+                                                 const wxString& aLibraryName )
 {
     LIB_BUFFER& libBuf = getLibraryBuffer( aLibraryName );
 
@@ -640,14 +642,15 @@ bool LIB_MANAGER:: HasDerivedSymbols( const wxString& aSymbolName,
 }
 
 
-wxString LIB_MANAGER::getLibraryName( const wxString& aFilePath )
+wxString SYMBOL_LIBRARY_MANAGER::getLibraryName( const wxString& aFilePath )
 {
     wxFileName fn( aFilePath );
     return fn.GetName();
 }
 
 
-bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LIB_TABLE* aTable )
+bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate,
+                                         SYMBOL_LIB_TABLE* aTable )
 {
     wxCHECK( aTable, false );
     wxString libName = getLibraryName( aFilePath );
@@ -685,13 +688,13 @@ bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LI
 }
 
 
-SYMBOL_LIB_TABLE* LIB_MANAGER::symTable() const
+SYMBOL_LIB_TABLE* SYMBOL_LIBRARY_MANAGER::symTable() const
 {
     return m_frame.Prj().SchSymbolLibTable();
 }
 
 
-std::set<LIB_PART*> LIB_MANAGER::getOriginalParts( const wxString& aLibrary )
+std::set<LIB_PART*> SYMBOL_LIBRARY_MANAGER::getOriginalParts( const wxString& aLibrary )
 {
     std::set<LIB_PART*> parts;
     wxCHECK( LibraryExists( aLibrary ), parts );
@@ -716,7 +719,7 @@ std::set<LIB_PART*> LIB_MANAGER::getOriginalParts( const wxString& aLibrary )
 }
 
 
-LIB_MANAGER::LIB_BUFFER& LIB_MANAGER::getLibraryBuffer( const wxString& aLibrary )
+SYMBOL_LIBRARY_MANAGER::LIB_BUFFER& SYMBOL_LIBRARY_MANAGER::getLibraryBuffer( const wxString& aLibrary )
 {
     auto it = m_libs.find( aLibrary );
 
@@ -761,7 +764,8 @@ LIB_MANAGER::LIB_BUFFER& LIB_MANAGER::getLibraryBuffer( const wxString& aLibrary
 }
 
 
-LIB_MANAGER::PART_BUFFER::PART_BUFFER( LIB_PART* aPart, std::unique_ptr<SCH_SCREEN> aScreen ) :
+SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PART_BUFFER( LIB_PART* aPart,
+                                                  std::unique_ptr<SCH_SCREEN> aScreen ) :
         m_screen( std::move( aScreen ) ),
         m_part( aPart )
 {
@@ -769,14 +773,14 @@ LIB_MANAGER::PART_BUFFER::PART_BUFFER( LIB_PART* aPart, std::unique_ptr<SCH_SCRE
 }
 
 
-LIB_MANAGER::PART_BUFFER::~PART_BUFFER()
+SYMBOL_LIBRARY_MANAGER::PART_BUFFER::~PART_BUFFER()
 {
     delete m_part;
     delete m_original;
 }
 
 
-void LIB_MANAGER::PART_BUFFER::SetPart( LIB_PART* aPart )
+void SYMBOL_LIBRARY_MANAGER::PART_BUFFER::SetPart( LIB_PART* aPart )
 {
     wxCHECK( m_part != aPart, /* void */ );
     wxASSERT( aPart );
@@ -792,7 +796,7 @@ void LIB_MANAGER::PART_BUFFER::SetPart( LIB_PART* aPart )
 }
 
 
-void LIB_MANAGER::PART_BUFFER::SetOriginal( LIB_PART* aPart )
+void SYMBOL_LIBRARY_MANAGER::PART_BUFFER::SetOriginal( LIB_PART* aPart )
 {
     wxCHECK( m_original != aPart, /* void */ );
     wxASSERT( aPart );
@@ -808,13 +812,13 @@ void LIB_MANAGER::PART_BUFFER::SetOriginal( LIB_PART* aPart )
 }
 
 
-bool LIB_MANAGER::PART_BUFFER::IsModified() const
+bool SYMBOL_LIBRARY_MANAGER::PART_BUFFER::IsModified() const
 {
     return m_screen && m_screen->IsModify();
 }
 
 
-LIB_PART* LIB_MANAGER::LIB_BUFFER::GetPart( const wxString& aAlias ) const
+LIB_PART* SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::GetPart( const wxString& aAlias ) const
 {
     auto buf = GetBuffer( aAlias );
 
@@ -829,7 +833,7 @@ LIB_PART* LIB_MANAGER::LIB_BUFFER::GetPart( const wxString& aAlias ) const
 }
 
 
-bool LIB_MANAGER::LIB_BUFFER::CreateBuffer( LIB_PART* aCopy, SCH_SCREEN* aScreen )
+bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::CreateBuffer( LIB_PART* aCopy, SCH_SCREEN* aScreen )
 {
     wxASSERT( aCopy );
     wxASSERT( aCopy->GetLib() == nullptr );
@@ -848,8 +852,8 @@ bool LIB_MANAGER::LIB_BUFFER::CreateBuffer( LIB_PART* aCopy, SCH_SCREEN* aScreen
 }
 
 
-bool LIB_MANAGER::LIB_BUFFER::UpdateBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf,
-                                            LIB_PART* aCopy )
+bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::UpdateBuffer( SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR aPartBuf,
+                                                       LIB_PART* aCopy )
 {
     wxCHECK( aCopy && aPartBuf, false );
 
@@ -864,7 +868,7 @@ bool LIB_MANAGER::LIB_BUFFER::UpdateBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartB
 }
 
 
-bool LIB_MANAGER::LIB_BUFFER::DeleteBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf )
+bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::DeleteBuffer( SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR aPartBuf )
 {
     auto partBufIt = std::find( m_parts.begin(), m_parts.end(), aPartBuf );
     wxCHECK( partBufIt != m_parts.end(), false );
@@ -886,8 +890,8 @@ bool LIB_MANAGER::LIB_BUFFER::DeleteBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartB
 }
 
 
-bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf,
-                                          SYMBOL_LIB_TABLE* aLibTable )
+bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR aPartBuf,
+                                                     SYMBOL_LIB_TABLE* aLibTable )
 {
     wxCHECK( aPartBuf, false );
     LIB_PART* part = aPartBuf->GetPart();
@@ -925,7 +929,7 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
             result = aLibTable->SaveSymbol( m_libName, newCachedPart );
             wxCHECK( result == SYMBOL_LIB_TABLE::SAVE_OK, false );
 
-            LIB_MANAGER::PART_BUFFER::PTR originalBufferedParent =
+            SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR originalBufferedParent =
                     GetBuffer( bufferedParent->GetName() );
             wxCHECK( originalBufferedParent, false );
             originalPart = new LIB_PART( *part );
@@ -951,7 +955,7 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
 
             for( auto entry : derivedSymbols )
             {
-                LIB_MANAGER::PART_BUFFER::PTR symbol = GetBuffer( entry );
+                SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR symbol = GetBuffer( entry );
                 LIB_PART* derivedSymbol = new LIB_PART( *symbol->GetPart() );
                 derivedSymbol->SetParent( parentSymbol );
                 result = aLibTable->SaveSymbol( m_libName, derivedSymbol );
@@ -965,8 +969,8 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
 }
 
 
-bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf,
-                                          SCH_PLUGIN* aPlugin, bool aBuffer )
+bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR aPartBuf,
+                                                     SCH_PLUGIN* aPlugin, bool aBuffer )
 {
     wxCHECK( aPartBuf, false );
     LIB_PART* part = aPartBuf->GetPart();
@@ -1042,7 +1046,7 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
                 return false;
             }
 
-            LIB_MANAGER::PART_BUFFER::PTR originalBufferedParent =
+            SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR originalBufferedParent =
                     GetBuffer( bufferedParent->GetName() );
             wxCHECK( originalBufferedParent, false );
             originalPart = new LIB_PART( *part );
@@ -1089,7 +1093,7 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
             // Save the derived symbols.
             for( auto entry : derivedSymbols )
             {
-                LIB_MANAGER::PART_BUFFER::PTR symbol = GetBuffer( entry );
+                SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR symbol = GetBuffer( entry );
                 LIB_PART* derivedSymbol = new LIB_PART( *symbol->GetPart() );
                 derivedSymbol->SetParent( parentSymbol );
 
@@ -1112,7 +1116,8 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
 }
 
 
-LIB_MANAGER::PART_BUFFER::PTR LIB_MANAGER::LIB_BUFFER::GetBuffer( const wxString& aAlias ) const
+SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR
+SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::GetBuffer( const wxString& aAlias ) const
 {
     for( auto entry : m_parts )
     {
@@ -1124,7 +1129,7 @@ LIB_MANAGER::PART_BUFFER::PTR LIB_MANAGER::LIB_BUFFER::GetBuffer( const wxString
 }
 
 
-bool LIB_MANAGER::LIB_BUFFER::HasDerivedSymbols( const wxString& aParentName ) const
+bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::HasDerivedSymbols( const wxString& aParentName ) const
 {
     for( auto entry : m_parts )
     {
@@ -1144,7 +1149,7 @@ bool LIB_MANAGER::LIB_BUFFER::HasDerivedSymbols( const wxString& aParentName ) c
 }
 
 
-void LIB_MANAGER::LIB_BUFFER::GetRootSymbolNames( wxArrayString& aRootSymbolNames )
+void SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::GetRootSymbolNames( wxArrayString& aRootSymbolNames )
 {
     for( auto entry : m_parts )
     {
@@ -1156,8 +1161,8 @@ void LIB_MANAGER::LIB_BUFFER::GetRootSymbolNames( wxArrayString& aRootSymbolName
 }
 
 
-size_t LIB_MANAGER::LIB_BUFFER::GetDerivedSymbolNames( const wxString& aSymbolName,
-                                                       wxArrayString& aList )
+size_t SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::GetDerivedSymbolNames( const wxString& aSymbolName,
+                                                                  wxArrayString& aList )
 {
     wxCHECK( !aSymbolName.IsEmpty(), 0 );
 
@@ -1179,12 +1184,12 @@ size_t LIB_MANAGER::LIB_BUFFER::GetDerivedSymbolNames( const wxString& aSymbolNa
 }
 
 
-int LIB_MANAGER::LIB_BUFFER::removeChildSymbols( LIB_MANAGER::PART_BUFFER::PTR aPartBuf )
+int SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::removeChildSymbols( SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR aPartBuf )
 {
     wxCHECK( aPartBuf && aPartBuf->GetPart()->IsRoot(), 0 );
 
     int cnt = 0;
-    std::deque< LIB_MANAGER::PART_BUFFER::PTR >::iterator it = m_parts.begin();
+    std::deque< SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR >::iterator it = m_parts.begin();
 
     while( it != m_parts.end() )
     {

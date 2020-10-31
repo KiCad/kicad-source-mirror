@@ -24,7 +24,7 @@
 
 #include <bitmaps.h>
 #include <sch_painter.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <class_libentry.h>
 #include <lib_pin.h>
 #include <dialog_pin_properties.h>
@@ -121,7 +121,7 @@ public:
 };
 
 
-DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( LIB_EDIT_FRAME* parent, LIB_PIN* aPin ) :
+DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN* aPin ) :
     DIALOG_PIN_PROPERTIES_BASE( parent ),
     m_frame( parent ),
     m_pin( aPin ),
@@ -327,7 +327,7 @@ void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     // Give a parent to m_dummyPin only from draw purpose.
     // In fact m_dummyPin should not have a parent, but draw functions need a parent
     // to know some options, about pin texts
-    LIB_EDIT_FRAME* libframe = (LIB_EDIT_FRAME*) GetParent();
+    SYMBOL_EDIT_FRAME* symbolEditor = (SYMBOL_EDIT_FRAME*) GetParent();
 
     // Calculate a suitable scale to fit the available draw area
     EDA_RECT bBox = m_dummyPin->GetBoundingBox( true );
@@ -343,7 +343,7 @@ void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     PART_DRAW_OPTIONS opts;
     opts.draw_hidden_fields = true;
 
-    RENDER_SETTINGS* renderSettings = libframe->GetRenderSettings();
+    RENDER_SETTINGS* renderSettings = symbolEditor->GetRenderSettings();
     renderSettings->SetPrintDC( &dc );
 
     m_dummyPin->Print( renderSettings, -bBox.Centre(), (void*) &opts, DefaultTransform );

@@ -24,21 +24,21 @@
  */
 
 #include <symbol_tree_synchronizing_adapter.h>
-#include <lib_manager.h>
+#include <symbol_library_manager.h>
 #include <symbol_lib_table.h>
 #include <class_libentry.h>
 #include <tools/lib_control.h>
 
 
-LIB_TREE_MODEL_ADAPTER::PTR SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( LIB_EDIT_FRAME* aParent,
-                                                                       LIB_MANAGER* aLibMgr )
+LIB_TREE_MODEL_ADAPTER::PTR SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( SYMBOL_EDIT_FRAME* aParent,
+                                                                       SYMBOL_LIBRARY_MANAGER* aLibMgr )
 {
     return PTR( new SYMBOL_TREE_SYNCHRONIZING_ADAPTER( aParent, aLibMgr ) );
 }
 
 
-SYMBOL_TREE_SYNCHRONIZING_ADAPTER::SYMBOL_TREE_SYNCHRONIZING_ADAPTER( LIB_EDIT_FRAME* aParent,
-                                                                      LIB_MANAGER* aLibMgr ) :
+SYMBOL_TREE_SYNCHRONIZING_ADAPTER::SYMBOL_TREE_SYNCHRONIZING_ADAPTER( SYMBOL_EDIT_FRAME* aParent,
+                                                                      SYMBOL_LIBRARY_MANAGER* aLibMgr ) :
         LIB_TREE_MODEL_ADAPTER( aParent, "pinned_symbol_libs" ),
         m_frame( aParent ),
         m_libMgr( aLibMgr ),
@@ -86,7 +86,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( bool aForce,
             nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
         }
 
-        // There is a bug in LIB_MANAGER::LibraryExists() that uses the buffered modified
+        // There is a bug in SYMBOL_LIBRARY_MANAGER::LibraryExists() that uses the buffered modified
         // libraries before the symbol library table which prevents the library from being
         // removed from the tree control.
         if( !m_libMgr->LibraryExists( name, true )

@@ -33,7 +33,7 @@
 #include <eeschema_config.h>
 #include <erc_settings.h>
 #include <kiway.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <panel_gal_display_options.h>
 #include <panel_hotkeys_editor.h>
 #include <pgm_base.h>
@@ -208,7 +208,7 @@ COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
 }
 
 
-// Color to draw items flagged invisible, in libedit (they are invisible in Eeschema)
+// Color to draw items flagged invisible, in symbol_editor (they are invisible in Eeschema)
 COLOR4D GetInvisibleItemColor()
 {
     return COLOR4D( DARKGRAY );
@@ -386,8 +386,8 @@ void SCH_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-void LIB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
-                                         PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
+void SYMBOL_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
+                                            PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
 {
     wxTreebook* book = aParent->GetTreebook();
 

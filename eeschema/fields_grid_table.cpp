@@ -53,13 +53,13 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
         m_parentType( SCH_COMPONENT_T ),
         m_mandatoryFieldCount( MANDATORY_FIELDS ),
         m_part( aPart ),
-        m_fieldNameValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_NAME ),
-        m_referenceValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), REFERENCE ),
-        m_valueValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), VALUE ),
+        m_fieldNameValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_NAME ),
+        m_referenceValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), REFERENCE ),
+        m_valueValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), VALUE ),
         m_libIdValidator( LIB_ID::ID_PCB ),
-        m_urlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_VALUE ),
-        m_nonUrlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_VALUE ),
-        m_filepathValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), SHEETFILENAME )
+        m_urlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
+        m_nonUrlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
+        m_filepathValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), SHEETFILENAME )
 {
     initGrid( aDialog );
 }
@@ -73,13 +73,13 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
         m_parentType( SCH_SHEET_T ),
         m_mandatoryFieldCount( SHEET_MANDATORY_FIELDS ),
         m_part( nullptr ),
-        m_fieldNameValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_NAME ),
-        m_referenceValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), SHEETNAME_V ),
-        m_valueValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), VALUE ),
+        m_fieldNameValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_NAME ),
+        m_referenceValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), SHEETNAME_V ),
+        m_valueValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), VALUE ),
         m_libIdValidator( LIB_ID::ID_PCB ),
-        m_urlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_VALUE ),
-        m_nonUrlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_VALUE ),
-        m_filepathValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), SHEETFILENAME_V )
+        m_urlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
+        m_nonUrlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
+        m_filepathValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), SHEETFILENAME_V )
 {
     initGrid( aDialog );
 }
@@ -271,7 +271,7 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         {
             // For power symbols, the value is not editable, because value and pin name must
             // be the same and can be edited only in library editor.
-            if( ( m_part && m_part->IsPower() && !m_frame->IsType( FRAME_SCH_LIB_EDITOR ) ) )
+            if( ( m_part && m_part->IsPower() && !m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) ) )
             {
                 tmp = m_readOnlyAttr->Clone();
                 tmp->SetReadOnly( true );

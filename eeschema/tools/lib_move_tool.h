@@ -26,13 +26,13 @@
 #define KICAD_LIB_MOVE_TOOL_H
 
 #include <tools/ee_tool_base.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 
-class LIB_EDIT_FRAME;
+class SYMBOL_EDIT_FRAME;
 class EE_SELECTION_TOOL;
 
 
-class LIB_MOVE_TOOL : public EE_TOOL_BASE<LIB_EDIT_FRAME>
+class LIB_MOVE_TOOL : public EE_TOOL_BASE<SYMBOL_EDIT_FRAME>
 {
 public:
     LIB_MOVE_TOOL();

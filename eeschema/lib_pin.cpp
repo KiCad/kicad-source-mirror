@@ -29,11 +29,11 @@
 #include <base_units.h>
 #include <widgets/msgpanel.h>
 #include <general.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <class_libentry.h>
 #include <lib_pin.h>
 #include <settings/settings_manager.h>
-#include <libedit/libedit_settings.h>
+#include <symbol_editor/symbol_editor_settings.h>
 #include <trigo.h>
 #include "sch_painter.h"
 
@@ -106,12 +106,12 @@ LIB_PIN::LIB_PIN( LIB_PART* aParent ) :
 
     if( pgm )
     {
-        LIBEDIT_SETTINGS* settings = pgm->GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+        auto* settings = pgm->GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
         m_length       = Mils2iu( settings->m_Defaults.pin_length );
         m_numTextSize  = Mils2iu( settings->m_Defaults.pin_num_size );
         m_nameTextSize = Mils2iu( settings->m_Defaults.pin_name_size );
     }
-    else    // Use hardcoded eeschema defaults: libedit settings are not existing.
+    else    // Use hardcoded eeschema defaults: symbol_editor settings are not existing.
     {
         m_length       = Mils2iu( DEFAULT_PIN_LENGTH );
         m_numTextSize  = Mils2iu( DEFAULT_PINNUM_SIZE );

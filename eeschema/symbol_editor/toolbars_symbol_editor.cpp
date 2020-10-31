@@ -24,13 +24,11 @@
  */
 
 #include <eeschema_id.h>
-//#include <general.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <sch_painter.h>
 #include <dialog_helpers.h>
 #include <bitmaps.h>
-#include <lib_manager.h>
-#include <class_libentry.h>
+#include <symbol_library_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
@@ -43,7 +41,7 @@
 #endif
 
 
-void LIB_EDIT_FRAME::ReCreateVToolbar()
+void SYMBOL_EDIT_FRAME::ReCreateVToolbar()
 {
     if( m_drawToolBar )
     {
@@ -82,7 +80,7 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
 }
 
 
-void LIB_EDIT_FRAME::ReCreateHToolbar()
+void SYMBOL_EDIT_FRAME::ReCreateHToolbar()
 {
     if( m_mainToolBar )
     {
@@ -145,7 +143,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 }
 
 
-void LIB_EDIT_FRAME::ReCreateOptToolbar()
+void SYMBOL_EDIT_FRAME::ReCreateOptToolbar()
 {
     if( m_optionsToolBar )
     {

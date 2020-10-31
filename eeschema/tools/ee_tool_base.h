@@ -33,7 +33,7 @@
 #include <tools/ee_selection_tool.h>
 #include <sch_view.h>
 #include <sch_edit_frame.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <undo_redo_container.h>
 
 
@@ -56,11 +56,11 @@ public:
      * Creates a tool with given name. The name must be unique.
      */
     EE_TOOL_BASE( const std::string& aName ) :
-        TOOL_INTERACTIVE ( aName ),
-        m_frame( nullptr ),
-        m_view( nullptr ),
-        m_selectionTool( nullptr ),
-        m_isLibEdit( false )
+            TOOL_INTERACTIVE ( aName ),
+            m_frame( nullptr ),
+            m_view( nullptr ),
+            m_selectionTool( nullptr ),
+            m_isSymbolEditor( false )
     {};
 
     ~EE_TOOL_BASE() override {};
@@ -70,7 +70,7 @@ public:
     {
         m_frame = getEditFrame<T>();
         m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-        m_isLibEdit = m_frame->IsType( FRAME_SCH_LIB_EDITOR );
+        m_isSymbolEditor = m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR );
 
         // A basic context manu.  Many (but not all) tools will choose to override this.
 
@@ -93,7 +93,7 @@ public:
         {
             // Init variables used by every drawing tool
             m_frame = getEditFrame<T>();
-            m_isLibEdit = dynamic_cast<LIB_EDIT_FRAME*>( m_frame ) != nullptr;
+            m_isSymbolEditor = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame ) != nullptr;
         }
 
         m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
@@ -145,9 +145,9 @@ protected:
         if( selected && aItem->HasFlag( TEMP_SELECTED ) )
             aItem->ClearSelected();
 
-        if( m_isLibEdit )
+        if( m_isSymbolEditor )
         {
-            LIB_EDIT_FRAME* editFrame = dynamic_cast<LIB_EDIT_FRAME*>( m_frame );
+            SYMBOL_EDIT_FRAME* editFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
             wxASSERT( editFrame );
 
             editFrame->SaveCopyInUndoList( static_cast<LIB_ITEM*>( aItem ), aType, aAppend );
@@ -179,7 +179,7 @@ protected:
     T*                 m_frame;
     KIGFX::SCH_VIEW*   m_view;
     EE_SELECTION_TOOL* m_selectionTool;
-    bool               m_isLibEdit;
+    bool               m_isSymbolEditor;
 };
 
 #endif

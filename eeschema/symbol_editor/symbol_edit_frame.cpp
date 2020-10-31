@@ -32,10 +32,10 @@
 #include <kiface_i.h>
 #include <kiplatform/app.h>
 #include <kiway_express.h>
-#include <lib_edit_frame.h>
-#include <lib_manager.h>
+#include <symbol_edit_frame.h>
+#include <symbol_library_manager.h>
 #include <lib_text.h>
-#include <libedit_settings.h>
+#include <symbol_editor_settings.h>
 #include <pgm_base.h>
 #include <sch_draw_panel.h>
 #include <sch_painter.h>
@@ -68,31 +68,31 @@
 #include <wildcards_and_files_ext.h>
 
 
-bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
+bool SYMBOL_EDIT_FRAME::          m_showDeMorgan    = false;
 
 
-BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
-    EVT_SIZE( LIB_EDIT_FRAME::OnSize )
+BEGIN_EVENT_TABLE( SYMBOL_EDIT_FRAME, EDA_DRAW_FRAME )
+    EVT_SIZE( SYMBOL_EDIT_FRAME::OnSize )
 
-    EVT_COMBOBOX( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnSelectUnit )
+    EVT_COMBOBOX( ID_LIBEDIT_SELECT_PART_NUMBER, SYMBOL_EDIT_FRAME::OnSelectUnit )
 
     // Right vertical toolbar.
-    EVT_TOOL( ID_LIBEDIT_IMPORT_BODY_BUTT, LIB_EDIT_FRAME::OnImportBody )
-    EVT_TOOL( ID_LIBEDIT_EXPORT_BODY_BUTT, LIB_EDIT_FRAME::OnExportBody )
+    EVT_TOOL( ID_LIBEDIT_IMPORT_BODY_BUTT, SYMBOL_EDIT_FRAME::OnImportBody )
+    EVT_TOOL( ID_LIBEDIT_EXPORT_BODY_BUTT, SYMBOL_EDIT_FRAME::OnExportBody )
 
     // menubar commands
-    EVT_MENU( wxID_EXIT, LIB_EDIT_FRAME::OnExitKiCad )
-    EVT_MENU( wxID_CLOSE, LIB_EDIT_FRAME::CloseWindow )
+    EVT_MENU( wxID_EXIT, SYMBOL_EDIT_FRAME::OnExitKiCad )
+    EVT_MENU( wxID_CLOSE, SYMBOL_EDIT_FRAME::CloseWindow )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
 
     // Update user interface elements.
-    EVT_UPDATE_UI( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnUpdatePartNumber )
+    EVT_UPDATE_UI( ID_LIBEDIT_SELECT_PART_NUMBER, SYMBOL_EDIT_FRAME::OnUpdatePartNumber )
 
 END_EVENT_TABLE()
 
 
-LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-        SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_LIB_EDITOR, _( "Library Editor" ),
+SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
+        SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_SYMBOL_EDITOR, _( "Library Editor" ),
                         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE,
                         LIB_EDIT_FRAME_NAME ),
         m_unitSelectBox( nullptr ),
@@ -112,7 +112,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     icon.CopyFromBitmap( KiBitmap( icon_libedit_xpm ) );
     SetIcon( icon );
 
-    m_settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    m_settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
     LoadSettings( m_settings );
 
     // Ensure axis are always drawn
@@ -130,7 +130,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupTools();
     setupUIConditions();
 
-    m_libMgr = new LIB_MANAGER( *this );
+    m_libMgr = new SYMBOL_LIBRARY_MANAGER( *this );
     SyncLibraries( true );
     m_treePane = new SYMBOL_TREE_PANE( this, m_libMgr );
 
@@ -215,7 +215,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 }
 
 
-LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
+SYMBOL_EDIT_FRAME::~SYMBOL_EDIT_FRAME()
 {
     // Shutdown all running tools
     if( m_toolManager )
@@ -233,16 +233,16 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
     // current screen is destroyed in EDA_DRAW_FRAME
     SetScreen( m_dummyScreen );
 
-    auto libedit = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    auto libedit = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
     Pgm().GetSettingsManager().Save( libedit );
 
     delete m_libMgr;
 }
 
 
-void LIB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
+void SYMBOL_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    wxCHECK_RET( m_settings, "Call to LIB_EDIT_FRAME::LoadSettings with null m_settings" );
+    wxCHECK_RET( m_settings, "Call to SYMBOL_EDIT_FRAME::LoadSettings with null m_settings" );
 
     SCH_BASE_FRAME::LoadSettings( GetSettings() );
 
@@ -255,9 +255,9 @@ void LIB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-void LIB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
+void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    wxCHECK_RET( m_settings, "Call to LIB_EDIT_FRAME::LoadSettings with null m_settings" );
+    wxCHECK_RET( m_settings, "Call to SYMBOL_EDIT_FRAME::LoadSettings with null m_settings" );
 
     SCH_BASE_FRAME::SaveSettings( GetSettings() );
 
@@ -266,7 +266,7 @@ void LIB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-COLOR_SETTINGS* LIB_EDIT_FRAME::GetColorSettings()
+COLOR_SETTINGS* SYMBOL_EDIT_FRAME::GetColorSettings()
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
@@ -277,7 +277,7 @@ COLOR_SETTINGS* LIB_EDIT_FRAME::GetColorSettings()
 }
 
 
-void LIB_EDIT_FRAME::setupTools()
+void SYMBOL_EDIT_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
@@ -308,7 +308,7 @@ void LIB_EDIT_FRAME::setupTools()
 }
 
 
-void LIB_EDIT_FRAME::setupUIConditions()
+void SYMBOL_EDIT_FRAME::setupUIConditions()
 {
     SCH_BASE_FRAME::setupUIConditions();
 
@@ -466,7 +466,7 @@ void LIB_EDIT_FRAME::setupUIConditions()
 }
 
 
-bool LIB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
+bool SYMBOL_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible
     if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
@@ -505,13 +505,13 @@ bool LIB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 }
 
 
-void LIB_EDIT_FRAME::doCloseWindow()
+void SYMBOL_EDIT_FRAME::doCloseWindow()
 {
     Destroy();
 }
 
 
-void LIB_EDIT_FRAME::RebuildSymbolUnitsList()
+void SYMBOL_EDIT_FRAME::RebuildSymbolUnitsList()
 {
     if( !m_unitSelectBox )
         return;
@@ -542,7 +542,7 @@ void LIB_EDIT_FRAME::RebuildSymbolUnitsList()
 }
 
 
-void LIB_EDIT_FRAME::OnToggleSearchTree( wxCommandEvent& event )
+void SYMBOL_EDIT_FRAME::OnToggleSearchTree( wxCommandEvent& event )
 {
     auto& treePane = m_auimgr.GetPane( m_treePane );
     treePane.Show( !IsSearchTreeShown() );
@@ -550,33 +550,33 @@ void LIB_EDIT_FRAME::OnToggleSearchTree( wxCommandEvent& event )
 }
 
 
-bool LIB_EDIT_FRAME::IsSearchTreeShown()
+bool SYMBOL_EDIT_FRAME::IsSearchTreeShown()
 {
     return m_auimgr.GetPane( m_treePane ).IsShown();
 }
 
 
-void LIB_EDIT_FRAME::FreezeSearchTree()
+void SYMBOL_EDIT_FRAME::FreezeSearchTree()
 {
     m_treePane->Freeze();
     m_libMgr->GetAdapter()->Freeze();
 }
 
 
-void LIB_EDIT_FRAME::ThawSearchTree()
+void SYMBOL_EDIT_FRAME::ThawSearchTree()
 {
     m_libMgr->GetAdapter()->Thaw();
     m_treePane->Thaw();
 }
 
 
-void LIB_EDIT_FRAME::OnExitKiCad( wxCommandEvent& event )
+void SYMBOL_EDIT_FRAME::OnExitKiCad( wxCommandEvent& event )
 {
     Kiway().OnKiCadExit();
 }
 
 
-void LIB_EDIT_FRAME::OnUpdatePartNumber( wxUpdateUIEvent& event )
+void SYMBOL_EDIT_FRAME::OnUpdatePartNumber( wxUpdateUIEvent& event )
 {
     if( !m_unitSelectBox )
         return;
@@ -587,7 +587,7 @@ void LIB_EDIT_FRAME::OnUpdatePartNumber( wxUpdateUIEvent& event )
 }
 
 
-void LIB_EDIT_FRAME::OnSelectUnit( wxCommandEvent& event )
+void SYMBOL_EDIT_FRAME::OnSelectUnit( wxCommandEvent& event )
 {
     int i = event.GetSelection();
 
@@ -604,7 +604,7 @@ void LIB_EDIT_FRAME::OnSelectUnit( wxCommandEvent& event )
 }
 
 
-wxString LIB_EDIT_FRAME::GetCurLib() const
+wxString SYMBOL_EDIT_FRAME::GetCurLib() const
 {
     wxString libNickname = Prj().GetRString( PROJECT::SCH_LIBEDIT_CUR_LIB );
 
@@ -621,7 +621,7 @@ wxString LIB_EDIT_FRAME::GetCurLib() const
 }
 
 
-wxString LIB_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
+wxString SYMBOL_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
 {
     wxString old = GetCurLib();
 
@@ -636,7 +636,7 @@ wxString LIB_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
 }
 
 
-void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
+void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
 {
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
@@ -678,14 +678,14 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
 }
 
 
-LIB_MANAGER& LIB_EDIT_FRAME::GetLibManager()
+SYMBOL_LIBRARY_MANAGER& SYMBOL_EDIT_FRAME::GetLibManager()
 {
     wxASSERT( m_libMgr );
     return *m_libMgr;
 }
 
 
-void LIB_EDIT_FRAME::OnImportBody( wxCommandEvent& aEvent )
+void SYMBOL_EDIT_FRAME::OnImportBody( wxCommandEvent& aEvent )
 {
     m_toolManager->DeactivateTool();
     LoadOneSymbol();
@@ -693,7 +693,7 @@ void LIB_EDIT_FRAME::OnImportBody( wxCommandEvent& aEvent )
 }
 
 
-void LIB_EDIT_FRAME::OnExportBody( wxCommandEvent& aEvent )
+void SYMBOL_EDIT_FRAME::OnExportBody( wxCommandEvent& aEvent )
 {
     m_toolManager->DeactivateTool();
     SaveOneSymbol();
@@ -701,7 +701,7 @@ void LIB_EDIT_FRAME::OnExportBody( wxCommandEvent& aEvent )
 }
 
 
-void LIB_EDIT_FRAME::OnModify()
+void SYMBOL_EDIT_FRAME::OnModify()
 {
     GetScreen()->SetModify();
     storeCurrentPart();
@@ -710,13 +710,13 @@ void LIB_EDIT_FRAME::OnModify()
 }
 
 
-bool LIB_EDIT_FRAME::SynchronizePins()
+bool SYMBOL_EDIT_FRAME::SynchronizePins()
 {
     return m_SyncPinEdit && m_my_part && m_my_part->IsMulti() && !m_my_part->UnitsLocked();
 }
 
 
-void LIB_EDIT_FRAME::refreshSchematic()
+void SYMBOL_EDIT_FRAME::refreshSchematic()
 {
     // There may be no parent window so use KIWAY message to refresh the schematic editor
     // in case any symbols have changed.
@@ -725,7 +725,7 @@ void LIB_EDIT_FRAME::refreshSchematic()
 }
 
 
-bool LIB_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
+bool SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 {
     wxFileName fn = m_libMgr->GetUniqueLibraryName();
 
@@ -778,13 +778,13 @@ bool LIB_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 }
 
 
-LIB_ID LIB_EDIT_FRAME::GetTreeLIBID( int* aUnit ) const
+LIB_ID SYMBOL_EDIT_FRAME::GetTreeLIBID( int* aUnit ) const
 {
     return m_treePane->GetLibTree()->GetSelectedLibId( aUnit );
 }
 
 
-LIB_PART* LIB_EDIT_FRAME::getTargetPart() const
+LIB_PART* SYMBOL_EDIT_FRAME::getTargetPart() const
 {
     LIB_ID libId = GetTreeLIBID();
 
@@ -798,7 +798,7 @@ LIB_PART* LIB_EDIT_FRAME::getTargetPart() const
 }
 
 
-LIB_ID LIB_EDIT_FRAME::getTargetLibId() const
+LIB_ID SYMBOL_EDIT_FRAME::getTargetLibId() const
 {
     LIB_ID id = GetTreeLIBID();
 
@@ -809,19 +809,19 @@ LIB_ID LIB_EDIT_FRAME::getTargetLibId() const
 }
 
 
-LIB_TREE_NODE* LIB_EDIT_FRAME::GetCurrentTreeNode() const
+LIB_TREE_NODE* SYMBOL_EDIT_FRAME::GetCurrentTreeNode() const
 {
     return m_treePane->GetLibTree()->GetCurrentTreeNode();
 }
 
 
-wxString LIB_EDIT_FRAME::getTargetLib() const
+wxString SYMBOL_EDIT_FRAME::getTargetLib() const
 {
     return getTargetLibId().GetLibNickname();
 }
 
 
-void LIB_EDIT_FRAME::SyncLibraries( bool aShowProgress )
+void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress )
 {
     LIB_ID selected;
 
@@ -880,7 +880,7 @@ void LIB_EDIT_FRAME::SyncLibraries( bool aShowProgress )
 }
 
 
-void LIB_EDIT_FRAME::RegenerateLibraryTree()
+void SYMBOL_EDIT_FRAME::RegenerateLibraryTree()
 {
     LIB_ID target = getTargetLibId();
 
@@ -891,7 +891,7 @@ void LIB_EDIT_FRAME::RegenerateLibraryTree()
 }
 
 
-SYMBOL_LIB_TABLE* LIB_EDIT_FRAME::selectSymLibTable( bool aOptional )
+SYMBOL_LIB_TABLE* SYMBOL_EDIT_FRAME::selectSymLibTable( bool aOptional )
 {
     // If no project is loaded, always work with the global table
     if( Prj().IsNullProject() )
@@ -935,7 +935,7 @@ SYMBOL_LIB_TABLE* LIB_EDIT_FRAME::selectSymLibTable( bool aOptional )
 }
 
 
-bool LIB_EDIT_FRAME::backupFile( const wxFileName& aOriginalFile, const wxString& aBackupExt )
+bool SYMBOL_EDIT_FRAME::backupFile( const wxFileName& aOriginalFile, const wxString& aBackupExt )
 {
     if( aOriginalFile.FileExists() )
     {
@@ -957,14 +957,14 @@ bool LIB_EDIT_FRAME::backupFile( const wxFileName& aOriginalFile, const wxString
 }
 
 
-void LIB_EDIT_FRAME::storeCurrentPart()
+void SYMBOL_EDIT_FRAME::storeCurrentPart()
 {
     if( m_my_part && !GetCurLib().IsEmpty() && GetScreen()->IsModify() )
         m_libMgr->UpdatePart( m_my_part, GetCurLib() ); // UpdatePart() makes a copy
 }
 
 
-bool LIB_EDIT_FRAME::isCurrentPart( const LIB_ID& aLibId ) const
+bool SYMBOL_EDIT_FRAME::isCurrentPart( const LIB_ID& aLibId ) const
 {
     // This will return the root part of any alias
     LIB_PART* part = m_libMgr->GetBufferedPart( aLibId.GetLibItemName(), aLibId.GetLibNickname() );
@@ -973,7 +973,7 @@ bool LIB_EDIT_FRAME::isCurrentPart( const LIB_ID& aLibId ) const
 }
 
 
-void LIB_EDIT_FRAME::emptyScreen()
+void SYMBOL_EDIT_FRAME::emptyScreen()
 {
     m_treePane->GetLibTree()->Unselect();
     SetCurLib( wxEmptyString );
@@ -985,7 +985,7 @@ void LIB_EDIT_FRAME::emptyScreen()
 }
 
 
-void LIB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void SYMBOL_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
     SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
@@ -1001,7 +1001,7 @@ void LIB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 }
 
 
-void LIB_EDIT_FRAME::ShowChangedLanguage()
+void SYMBOL_EDIT_FRAME::ShowChangedLanguage()
 {
     // call my base class
     SCH_BASE_FRAME::ShowChangedLanguage();
@@ -1014,13 +1014,13 @@ void LIB_EDIT_FRAME::ShowChangedLanguage()
 }
 
 
-void LIB_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
+void SYMBOL_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 {
     SCH_BASE_FRAME::SetScreen( aScreen );
 }
 
 
-void LIB_EDIT_FRAME::RebuildView()
+void SYMBOL_EDIT_FRAME::RebuildView()
 {
     GetRenderSettings()->m_ShowUnit = m_unit;
     GetRenderSettings()->m_ShowConvert = m_convert;
@@ -1033,7 +1033,7 @@ void LIB_EDIT_FRAME::RebuildView()
 }
 
 
-void LIB_EDIT_FRAME::HardRedraw()
+void SYMBOL_EDIT_FRAME::HardRedraw()
 {
     SyncLibraries( true );
 
@@ -1055,7 +1055,7 @@ void LIB_EDIT_FRAME::HardRedraw()
 }
 
 
-const BOX2I LIB_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
+const BOX2I SYMBOL_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
     if( !m_my_part )
     {
@@ -1071,7 +1071,7 @@ const BOX2I LIB_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 }
 
 
-void LIB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
     const std::string& payload = mail.GetPayload();
 
@@ -1125,7 +1125,7 @@ void LIB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 }
 
 
-void LIB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
+void SYMBOL_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 {
     // switches currently used canvas ( Cairo / OpenGL):
     SCH_BASE_FRAME::SwitchCanvas( aCanvasType );
@@ -1136,7 +1136,7 @@ void LIB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 }
 
 
-bool LIB_EDIT_FRAME::HasLibModifications() const
+bool SYMBOL_EDIT_FRAME::HasLibModifications() const
 {
     wxCHECK( m_libMgr, false );
 
@@ -1144,7 +1144,7 @@ bool LIB_EDIT_FRAME::HasLibModifications() const
 }
 
 
-bool LIB_EDIT_FRAME::IsContentModified()
+bool SYMBOL_EDIT_FRAME::IsContentModified()
 {
     wxCHECK( m_libMgr, false );
 
@@ -1164,7 +1164,7 @@ bool LIB_EDIT_FRAME::IsContentModified()
 }
 
 
-void LIB_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCount )
+void SYMBOL_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCount )
 {
     if( aItemCount == 0 )
         return;
@@ -1181,14 +1181,15 @@ void LIB_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCou
 }
 
 
-SELECTION& LIB_EDIT_FRAME::GetCurrentSelection()
+SELECTION& SYMBOL_EDIT_FRAME::GetCurrentSelection()
 {
     return m_toolManager->GetTool<EE_SELECTION_TOOL>()->GetSelection();
 }
 
 
-void LIB_EDIT_FRAME::LoadSymbolFromSchematic( const std::unique_ptr<LIB_PART>& aSymbol,
-        const wxString& aReference, int aUnit, int aConvert )
+void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( const std::unique_ptr<LIB_PART>& aSymbol,
+                                                 const wxString& aReference, int aUnit,
+                                                 int aConvert )
 {
     std::unique_ptr<LIB_PART> symbol = aSymbol->Flatten();
     wxCHECK( symbol, /* void */ );

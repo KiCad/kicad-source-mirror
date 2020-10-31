@@ -29,12 +29,12 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
-#include <lib_manager.h>
-#include "lib_edit_frame.h"
+#include <symbol_library_manager.h>
+#include "symbol_edit_frame.h"
 #include <widgets/wx_menubar.h>
 
 
-void LIB_EDIT_FRAME::ReCreateMenuBar()
+void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
 {
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means

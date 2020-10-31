@@ -26,15 +26,15 @@
 
 #include "panel_sym_color_settings_base.h"
 
-class LIB_EDIT_FRAME;
+class SYMBOL_EDIT_FRAME;
 
 
 class PANEL_SYM_COLOR_SETTINGS : public PANEL_SYM_COLOR_SETTINGS_BASE
 {
-    LIB_EDIT_FRAME* m_frame;
+    SYMBOL_EDIT_FRAME* m_frame;
 
 public:
-    PANEL_SYM_COLOR_SETTINGS( LIB_EDIT_FRAME* aFrame, wxWindow* aWindow );
+    PANEL_SYM_COLOR_SETTINGS( SYMBOL_EDIT_FRAME* aFrame, wxWindow* aWindow );
 
 protected:
     void OnUseEeschemaThemeChanged( wxCommandEvent& event ) override;

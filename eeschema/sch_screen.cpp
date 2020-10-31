@@ -72,7 +72,7 @@ SCH_SCREEN::SCH_SCREEN( EDA_ITEM* aParent ) :
 
     m_refCount = 0;
 
-    // Suitable for schematic only. For libedit and viewlib, must be set to true
+    // Suitable for schematic only. For symbol_editor and viewlib, must be set to true
     m_Center = false;
 
     InitDataPoints( m_paper.GetSizeIU() );

@@ -25,8 +25,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef LIB_EDIT_FRAME_H
-#define LIB_EDIT_FRAME_H
+#ifndef SYMBOL_EDIT_FRAME_H
+#define SYMBOL_EDIT_FRAME_H
 
 #include <sch_base_frame.h>
 #include <sch_screen.h>
@@ -42,22 +42,22 @@ class DIALOG_LIB_EDIT_TEXT;
 class SYMBOL_TREE_PANE;
 class LIB_TREE_NODE;
 class LIB_ID;
-class LIB_MANAGER;
-class LIBEDIT_SETTINGS;
+class SYMBOL_LIBRARY_MANAGER;
+class SYMBOL_EDITOR_SETTINGS;
 
 
 /**
  * The symbol library editor main window.
  */
-class LIB_EDIT_FRAME : public SCH_BASE_FRAME
+class SYMBOL_EDIT_FRAME : public SCH_BASE_FRAME
 {
-    LIB_PART*          m_my_part;           // a part I own, it is not in any library, but a copy
-                                            // could be.
-    wxComboBox*        m_unitSelectBox;     // a ComboBox to select a unit to edit (if the part
-                                            // has multiple units)
-    SYMBOL_TREE_PANE*  m_treePane;          // component search tree widget
-    LIB_MANAGER*       m_libMgr;            // manager taking care of temporary modifications
-    LIBEDIT_SETTINGS*  m_settings;          // Handle to the settings
+    LIB_PART*               m_my_part;           // a part I own, it is not in any library, but a
+                                                 // copy could be.
+    wxComboBox*             m_unitSelectBox;     // a ComboBox to select a unit to edit (if the
+                                                 // part has multiple units)
+    SYMBOL_TREE_PANE*       m_treePane;          // component search tree widget
+    SYMBOL_LIBRARY_MANAGER* m_libMgr;            // manager taking care of temporary modifications
+    SYMBOL_EDITOR_SETTINGS* m_settings;          // Handle to the settings
 
     // The unit number to edit and show
     int m_unit;
@@ -102,9 +102,9 @@ public:
     bool          m_SyncPinEdit;
 
 public:
-    LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
+    SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
-    ~LIB_EDIT_FRAME() override;
+    ~SYMBOL_EDIT_FRAME() override;
 
     /**
      * switches currently used canvas ( Cairo / OpenGL).
@@ -153,7 +153,7 @@ public:
      */
     void SetCurPart( LIB_PART* aPart );
 
-    LIB_MANAGER& GetLibManager();
+    SYMBOL_LIBRARY_MANAGER& GetLibManager();
 
     SELECTION& GetCurrentSelection() override;
 
@@ -233,7 +233,7 @@ public:
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    LIBEDIT_SETTINGS* GetSettings()
+    SYMBOL_EDITOR_SETTINGS* GetSettings()
     {
         return m_settings;
     }
@@ -243,7 +243,7 @@ public:
     /**
      * Trigger the wxCloseEvent, which is handled by the function given to EVT_CLOSE() macro:
      * <p>
-     * EVT_CLOSE( LIB_EDIT_FRAME::OnCloseWindow )
+     * EVT_CLOSE( SYMBOL_EDIT_FRAME::OnCloseWindow )
      * </p>
      */
     void CloseWindow( wxCommandEvent& event )
@@ -352,7 +352,7 @@ public:
      * Because a component in library editor does not have a lot of primitives,
      * the full data is duplicated. It is not worth to try to optimize this save function.
      */
-    void SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO undoType = UNDO_REDO::LIBEDIT,
+    void SaveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aUndoType = UNDO_REDO::LIBEDIT,
                              bool aAppend = false );
 
     void GetComponentFromUndoList();
@@ -512,4 +512,4 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#endif  // LIB_EDIT_FRAME_H
+#endif  // SYMBOL_EDIT_FRAME_H

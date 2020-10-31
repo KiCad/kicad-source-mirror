@@ -545,7 +545,7 @@ TOOL_ACTION ACTIONS::showSymbolBrowser( "common.Control.showSymbolBrowser",
 TOOL_ACTION ACTIONS::showSymbolEditor( "common.Control.showSymbolEditor",
         AS_GLOBAL, 0, "",
         _( "Symbol Editor" ), _( "Create, delete and edit symbols" ),
-        libedit_xpm, AF_NONE, (void*) FRAME_SCH_LIB_EDITOR );
+        libedit_xpm, AF_NONE, (void*) FRAME_SCH_SYMBOL_EDITOR );
 
 TOOL_ACTION ACTIONS::showFootprintBrowser( "common.Control.showFootprintBrowser",
         AS_GLOBAL, 0, "",

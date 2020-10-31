@@ -28,10 +28,10 @@
 #include <tools/ee_tool_base.h>
 
 
-class LIB_EDIT_FRAME;
+class SYMBOL_EDIT_FRAME;
 
 
-class LIB_EDIT_TOOL : public EE_TOOL_BASE<LIB_EDIT_FRAME>
+class LIB_EDIT_TOOL : public EE_TOOL_BASE<SYMBOL_EDIT_FRAME>
 {
 public:
     LIB_EDIT_TOOL();

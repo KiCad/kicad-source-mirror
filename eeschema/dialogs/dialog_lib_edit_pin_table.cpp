@@ -27,8 +27,8 @@
 #include "pin_number.h"
 #include <bitmaps.h>
 #include <confirm.h>
-#include <lib_edit_frame.h>
-#include <libedit_settings.h>
+#include <symbol_edit_frame.h>
+#include <symbol_editor_settings.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/wx_grid.h>
 #include <pgm_base.h>
@@ -383,7 +383,7 @@ public:
 };
 
 
-DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( LIB_EDIT_FRAME* parent, LIB_PART* aPart ) :
+DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent, LIB_PART* aPart ) :
         DIALOG_LIB_EDIT_PIN_TABLE_BASE( parent ),
         m_editFrame( parent ),
         m_part( aPart )
@@ -551,7 +551,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
 
         wxPoint pos = last->GetPosition();
 
-        LIBEDIT_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+        auto* cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
         if( last->GetOrientation() == PIN_LEFT || last->GetOrientation() == PIN_RIGHT )
             pos.y -= Mils2iu(cfg->m_Repeat.pin_step);

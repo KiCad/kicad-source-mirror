@@ -29,10 +29,10 @@
 #include <sch_base_frame.h>
 
 
-class LIB_EDIT_FRAME;
+class SYMBOL_EDIT_FRAME;
 
 
-class LIB_PIN_TOOL : public EE_TOOL_BASE<LIB_EDIT_FRAME>
+class LIB_PIN_TOOL : public EE_TOOL_BASE<SYMBOL_EDIT_FRAME>
 {
 public:
     LIB_PIN_TOOL();

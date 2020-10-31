@@ -29,22 +29,22 @@
 #include <dialog_lib_edit_text_base.h>
 #include <widgets/unit_binder.h>
 
-class LIB_EDIT_FRAME;
+class SYMBOL_EDIT_FRAME;
 class LIB_TEXT;
 
 
 class DIALOG_LIB_EDIT_TEXT : public DIALOG_LIB_EDIT_TEXT_BASE
 {
 private:
-    LIB_EDIT_FRAME* m_parent;
-    LIB_TEXT*       m_graphicText;
+    SYMBOL_EDIT_FRAME* m_parent;
+    LIB_TEXT*          m_graphicText;
 
-    UNIT_BINDER     m_posX;
-    UNIT_BINDER     m_posY;
-    UNIT_BINDER     m_textSize;
+    UNIT_BINDER        m_posX;
+    UNIT_BINDER        m_posY;
+    UNIT_BINDER        m_textSize;
 
 public:
-    DIALOG_LIB_EDIT_TEXT( LIB_EDIT_FRAME* aParent, LIB_TEXT* aText );
+    DIALOG_LIB_EDIT_TEXT( SYMBOL_EDIT_FRAME* aParent, LIB_TEXT* aText );
     ~DIALOG_LIB_EDIT_TEXT() override {};
 
 private:

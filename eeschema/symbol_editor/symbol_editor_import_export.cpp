@@ -25,15 +25,15 @@
 
 #include <confirm.h>
 #include <symbol_lib_table.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <class_libentry.h>
 #include <class_library.h>
 #include <wildcards_and_files_ext.h>
-#include <lib_manager.h>
+#include <symbol_library_manager.h>
 #include <wx/filename.h>
 
 
-void LIB_EDIT_FRAME::ImportPart()
+void SYMBOL_EDIT_FRAME::ImportPart()
 {
     wxString msg;
     wxString libName = getTargetLib();
@@ -103,7 +103,7 @@ void LIB_EDIT_FRAME::ImportPart()
 }
 
 
-void LIB_EDIT_FRAME::ExportPart()
+void SYMBOL_EDIT_FRAME::ExportPart()
 {
     wxString msg, title;
     LIB_PART* part = getTargetPart();

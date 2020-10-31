@@ -37,7 +37,7 @@
 #include <kiface_i.h>
 #include <kiplatform/app.h>
 #include <kiway.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <lib_view_frame.h>
 #include <pgm_base.h>
 #include <profile.h>
@@ -589,17 +589,19 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
     if( Kiface().IsSingle() )
     {
-        LIB_EDIT_FRAME* libeditFrame = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
-        if( libeditFrame && !libeditFrame->Close() )   // Can close component editor?
+        auto* symbolEditor = (SYMBOL_EDIT_FRAME*) Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, false );
+
+        if( symbolEditor && !symbolEditor->Close() )   // Can close component editor?
             return false;
 
-        LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
-        if( viewlibFrame && !viewlibFrame->Close() )   // Can close component viewer?
+        auto* symbolViewer = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
+
+        if( symbolViewer && !symbolViewer->Close() )   // Can close component viewer?
             return false;
 
-        viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, false );
+        symbolViewer = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, false );
 
-        if( viewlibFrame && !viewlibFrame->Close() )   // Can close modal component viewer?
+        if( symbolViewer && !symbolViewer->Close() )   // Can close modal component viewer?
             return false;
     }
 

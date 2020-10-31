@@ -23,7 +23,7 @@
  */
 
 #include <ee_actions.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <view/view_controls.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
@@ -38,7 +38,7 @@
 #include <lib_polyline.h>
 #include <lib_rectangle.h>
 #include <pgm_base.h>
-#include <libedit/libedit_settings.h>
+#include <symbol_editor/symbol_editor_settings.h>
 #include <settings/settings_manager.h>
 #include "ee_point_editor.h"
 
@@ -46,7 +46,7 @@ static void* g_lastPinWeakPtr;
 
 
 LIB_DRAWING_TOOLS::LIB_DRAWING_TOOLS() :
-        EE_TOOL_BASE<LIB_EDIT_FRAME>( "eeschema.SymbolDrawing" ),
+        EE_TOOL_BASE<SYMBOL_EDIT_FRAME>( "eeschema.SymbolDrawing" ),
         m_lastTextAngle( 0.0 ),
         m_lastFillStyle( FILL_TYPE::NO_FILL ),
         m_drawSpecificConvert( true ),
@@ -72,12 +72,12 @@ bool LIB_DRAWING_TOOLS::Init()
 
 int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 {
-    KICAD_T           type = aEvent.Parameter<KICAD_T>();
-    LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
-    LIB_PIN_TOOL*     pinTool = type == LIB_PIN_T ? m_toolMgr->GetTool<LIB_PIN_TOOL>() : nullptr;
-    VECTOR2I          cursorPos;
-    EDA_ITEM*         item   = nullptr;
-    bool              isText = aEvent.IsAction( &EE_ACTIONS::placeSymbolText );
+    KICAD_T        type = aEvent.Parameter<KICAD_T>();
+    auto*          settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    LIB_PIN_TOOL*  pinTool = type == LIB_PIN_T ? m_toolMgr->GetTool<LIB_PIN_TOOL>() : nullptr;
+    VECTOR2I       cursorPos;
+    EDA_ITEM*      item   = nullptr;
+    bool           isText = aEvent.IsAction( &EE_ACTIONS::placeSymbolText );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
@@ -257,7 +257,7 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
 int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
-    LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
     KICAD_T           type = aEvent.Parameter<KICAD_T>();
 
     // We might be running as the same shape in another co-routine.  Make sure that one

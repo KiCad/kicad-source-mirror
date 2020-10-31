@@ -27,7 +27,7 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/lib_control.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <lib_view_frame.h>
 #include <symbol_tree_model_adapter.h>
 #include <wildcards_and_files_ext.h>
@@ -39,12 +39,12 @@ bool LIB_CONTROL::Init()
 {
     m_frame = getEditFrame<SCH_BASE_FRAME>();
     m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    m_isLibEdit = m_frame->IsType( FRAME_SCH_LIB_EDITOR );
+    m_isSymbolEditor = m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR );
 
-    if( m_isLibEdit )
+    if( m_isSymbolEditor )
     {
         CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
-        LIB_EDIT_FRAME* editFrame = getEditFrame<LIB_EDIT_FRAME>();
+        SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
 
         auto libSelectedCondition = [ editFrame ] ( const SELECTION& aSel ) {
             LIB_ID sel = editFrame->GetTreeLIBID();
@@ -100,8 +100,8 @@ int LIB_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )
 {
     bool createNew = aEvent.IsAction( &ACTIONS::newLibrary );
 
-    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
-        static_cast<LIB_EDIT_FRAME*>( m_frame )->AddLibraryFile( createNew );
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
+        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->AddLibraryFile( createNew );
 
     return 0;
 }
@@ -109,11 +109,11 @@ int LIB_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )
 
 int LIB_CONTROL::EditSymbol( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
-        LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
-        int             unit = 0;
-        LIB_ID          partId = editFrame->GetTreeLIBID( &unit );
+        SYMBOL_EDIT_FRAME* editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+        int                unit = 0;
+        LIB_ID             partId = editFrame->GetTreeLIBID( &unit );
 
         editFrame->LoadPart( partId.GetLibItemName(), partId.GetLibNickname(), unit );
     }
@@ -124,9 +124,9 @@ int LIB_CONTROL::EditSymbol( const TOOL_EVENT& aEvent )
 
 int LIB_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
-        LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
+        SYMBOL_EDIT_FRAME* editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
 
         if( aEvent.IsAction( &EE_ACTIONS::newSymbol ) )
             editFrame->CreateNewPart();
@@ -140,9 +140,9 @@ int LIB_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
 
 int LIB_CONTROL::Save( const TOOL_EVENT& aEvt )
 {
-    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
-        LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
+        SYMBOL_EDIT_FRAME* editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
 
         if( aEvt.IsAction( &EE_ACTIONS::save ) )
             editFrame->Save();
@@ -158,8 +158,8 @@ int LIB_CONTROL::Save( const TOOL_EVENT& aEvt )
 
 int LIB_CONTROL::Revert( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
-        static_cast<LIB_EDIT_FRAME*>( m_frame )->Revert();
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
+        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->Revert();
 
     return 0;
 }
@@ -167,8 +167,8 @@ int LIB_CONTROL::Revert( const TOOL_EVENT& aEvent )
 
 int LIB_CONTROL::ExportSymbol( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
-        static_cast<LIB_EDIT_FRAME*>( m_frame )->ExportPart();
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
+        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->ExportPart();
 
     return 0;
 }
@@ -176,9 +176,9 @@ int LIB_CONTROL::ExportSymbol( const TOOL_EVENT& aEvent )
 
 int LIB_CONTROL::CutCopyDelete( const TOOL_EVENT& aEvt )
 {
-    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
-        LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
+        SYMBOL_EDIT_FRAME* editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
 
         if( aEvt.IsAction( &EE_ACTIONS::cutSymbol ) || aEvt.IsAction( &EE_ACTIONS::copySymbol ) )
             editFrame->CopyPartToClipboard();
@@ -193,9 +193,9 @@ int LIB_CONTROL::CutCopyDelete( const TOOL_EVENT& aEvt )
 
 int LIB_CONTROL::DuplicateSymbol( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
-        LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
+        SYMBOL_EDIT_FRAME* editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
         editFrame->DuplicatePart( aEvent.IsAction( &EE_ACTIONS::pasteSymbol ) );
     }
 
@@ -208,12 +208,12 @@ int LIB_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
     int convert = aEvent.IsAction( &EE_ACTIONS::showDeMorganStandard ) ?
             LIB_ITEM::LIB_CONVERT::BASE : LIB_ITEM::LIB_CONVERT::DEMORGAN;
 
-    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
         m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-        LIB_EDIT_FRAME* libEditFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
+        SYMBOL_EDIT_FRAME* libEditFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
         libEditFrame->SetConvert( convert );
 
         m_toolMgr->ResetTools( TOOL_BASE::MODEL_RELOAD );
@@ -231,9 +231,9 @@ int LIB_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
 
 int LIB_CONTROL::PinLibrary( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
-        LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
+        SYMBOL_EDIT_FRAME* editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
         LIB_TREE_NODE*  currentNode = editFrame->GetCurrentTreeNode();
 
         if( currentNode && !currentNode->m_Pinned )
@@ -249,9 +249,9 @@ int LIB_CONTROL::PinLibrary( const TOOL_EVENT& aEvent )
 
 int LIB_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
-        LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
+        SYMBOL_EDIT_FRAME* editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
         LIB_TREE_NODE*  currentNode = editFrame->GetCurrentTreeNode();
 
         if( currentNode && currentNode->m_Pinned )
@@ -267,10 +267,10 @@ int LIB_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
 
 int LIB_CONTROL::ShowComponentTree( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
         wxCommandEvent dummy;
-        static_cast<LIB_EDIT_FRAME*>( m_frame )->OnToggleSearchTree( dummy );
+        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->OnToggleSearchTree( dummy );
     }
 
     return 0;
@@ -292,10 +292,10 @@ int LIB_CONTROL::ShowElectricalTypes( const TOOL_EVENT& aEvent )
 
 int LIB_CONTROL::ToggleSyncedPinsMode( const TOOL_EVENT& aEvent )
 {
-    if( !m_isLibEdit )
+    if( !m_isSymbolEditor )
         return 0;
 
-    LIB_EDIT_FRAME* editFrame = getEditFrame<LIB_EDIT_FRAME>();
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
     editFrame->m_SyncPinEdit = !editFrame->m_SyncPinEdit;
 
     return 0;
@@ -304,11 +304,11 @@ int LIB_CONTROL::ToggleSyncedPinsMode( const TOOL_EVENT& aEvent )
 
 int LIB_CONTROL::ExportView( const TOOL_EVENT& aEvent )
 {
-    if( !m_isLibEdit )
+    if( !m_isSymbolEditor )
         return 0;
 
-    LIB_EDIT_FRAME* editFrame = getEditFrame<LIB_EDIT_FRAME>();
-    LIB_PART*       part = editFrame->GetCurPart();
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+    LIB_PART*          part = editFrame->GetCurPart();
 
     if( !part )
     {
@@ -344,11 +344,11 @@ int LIB_CONTROL::ExportView( const TOOL_EVENT& aEvent )
 
 int LIB_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
 {
-    if( !m_isLibEdit )
+    if( !m_isSymbolEditor )
         return 0;
 
-    LIB_EDIT_FRAME* editFrame = getEditFrame<LIB_EDIT_FRAME>();
-    LIB_PART*       part = editFrame->GetCurPart();
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+    LIB_PART*          part = editFrame->GetCurPart();
 
     if( !part )
     {
@@ -393,9 +393,9 @@ int LIB_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
     LIB_ID    libId;
     int       unit, convert;
 
-    if( m_isLibEdit )
+    if( m_isSymbolEditor )
     {
-        LIB_EDIT_FRAME* editFrame = getEditFrame<LIB_EDIT_FRAME>();
+        SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
 
         part = editFrame->GetCurPart();
         unit = editFrame->GetUnit();
@@ -456,9 +456,9 @@ int LIB_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
 
 int LIB_CONTROL::UpdateSymbolInSchematic( const TOOL_EVENT& aEvent )
 {
-    wxCHECK( m_isLibEdit, 0 );
+    wxCHECK( m_isSymbolEditor, 0 );
 
-    LIB_EDIT_FRAME* editFrame = getEditFrame<LIB_EDIT_FRAME>();
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
 
     wxCHECK( editFrame, 0 );
 

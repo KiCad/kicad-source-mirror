@@ -23,8 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef LIB_MANAGER_H
-#define LIB_MANAGER_H
+#ifndef SYMBOL_LIBRARY_MANAGER_H
+#define SYMBOL_LIBRARY_MANAGER_H
 
 #include <map>
 #include <list>
@@ -39,7 +39,7 @@
 class LIB_PART;
 class PART_LIB;
 class SCH_PLUGIN;
-class LIB_EDIT_FRAME;
+class SYMBOL_EDIT_FRAME;
 class SYMBOL_LIB_TABLE;
 class SYMBOL_LIB_TABLE_ROW;
 
@@ -96,13 +96,13 @@ private:
 /**
  * Class to handle modifications to the symbol libraries.
  */
-class LIB_MANAGER
+class SYMBOL_LIBRARY_MANAGER
 {
 public:
-    LIB_MANAGER( LIB_EDIT_FRAME& aFrame );
+    SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFrame );
 
     /**
-     * Updates the LIB_MANAGER data to synchronize with Symbol Library Table.
+     * Updates the SYMBOL_LIBRARY_MANAGER data to synchronize with Symbol Library Table.
      */
     void Sync( bool aForce = false, std::function<void(int, int, const wxString&)> aProgressCallback
             = [](int, int, const wxString&){} );
@@ -176,12 +176,12 @@ public:
 
     /**
      * Returns the part copy from the buffer. In case it does not exist yet, the copy is created.
-     * LIB_MANAGER retains the ownership.
+     * SYMBOL_LIBRARY_MANAGER retains the ownership.
      */
     LIB_PART* GetBufferedPart( const wxString& aAlias, const wxString& aLibrary );
 
     /**
-     * Returns the screen used to edit a specific part. LIB_MANAGER retains the ownership.
+     * Returns the screen used to edit a specific part. SYMBOL_LIBRARY_MANAGER retains the ownership.
      */
     SCH_SCREEN* GetScreen( const wxString& aAlias, const wxString& aLibrary );
 
@@ -464,7 +464,7 @@ private:
     ///> The library buffers
     std::map<wxString, LIB_BUFFER> m_libs;
 
-    LIB_EDIT_FRAME& m_frame;         // Parent frame
+    SYMBOL_EDIT_FRAME& m_frame;         // Parent frame
     LIB_LOGGER      m_logger;
     int             m_syncHash;      // Symbol Lib Table hash value from the last synchronization
 
@@ -478,4 +478,4 @@ private:
     }
 };
 
-#endif /* LIB_MANAGER_H */
+#endif /* SYMBOL_LIBRARY_MANAGER_H */

@@ -50,7 +50,7 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
     m_grid2Ctrl->Append( grids );
 
     if( m_parent->IsType( FRAME_SCH )
-        || m_parent->IsType( FRAME_SCH_LIB_EDITOR )
+        || m_parent->IsType( FRAME_SCH_SYMBOL_EDITOR )
         || m_parent->IsType( FRAME_SCH_VIEWER )
         || m_parent->IsType( FRAME_SCH_VIEWER_MODAL )
         || m_parent->IsType( FRAME_SIMULATOR ) )

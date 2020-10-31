@@ -24,7 +24,7 @@ include_directories(
     ./dialogs
     ./netlist_exporters
     ./widgets
-    ./libedit
+    symbol_editor
     ./libview
     ./tools
     ${CMAKE_SOURCE_DIR}/common
@@ -137,16 +137,15 @@ set( EESCHEMA_WIDGETS
 
 
 set ( EESCHEMA_LIBEDIT_SRCS
-    libedit/libedit.cpp
-    libedit/libedit_plot_component.cpp
-    libedit/libedit_settings.cpp
-    libedit/libedit_undo_redo.cpp
-    libedit/lib_edit_frame.cpp
-    libedit/menubar_libedit.cpp
-    libedit/symbedit.cpp
-    libedit/toolbars_libedit.cpp
-    libedit/lib_export.cpp
-    libedit/lib_manager.cpp
+    symbol_editor/symbol_editor.cpp
+    symbol_editor/symbol_editor_plotter.cpp
+    symbol_editor/symbol_editor_settings.cpp
+    symbol_editor/symbol_editor_undo_redo.cpp
+    symbol_editor/symbol_edit_frame.cpp
+    symbol_editor/menubar_symbol_editor.cpp
+    symbol_editor/toolbars_symbol_editor.cpp
+    symbol_editor/symbol_editor_import_export.cpp
+    symbol_editor/symbol_library_manager.cpp
 
 )
 set( EESCHEMA_SRCS

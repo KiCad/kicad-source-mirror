@@ -1591,7 +1591,7 @@ int SCH_EDITOR_CONTROL::EditWithLibEdit( const TOOL_EVENT& aEvent )
     EE_SELECTION&      selection = selTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
     SCH_SHEET_PATH&    currentSheet = m_frame->GetCurrentSheet();
     SCH_COMPONENT*     sym = nullptr;
-    LIB_EDIT_FRAME*    libEdit;
+    SYMBOL_EDIT_FRAME* symbolEditor;
 
     if( selection.GetSize() >= 1 )
         sym = (SCH_COMPONENT*) selection.Front();
@@ -1600,11 +1600,13 @@ int SCH_EDITOR_CONTROL::EditWithLibEdit( const TOOL_EVENT& aEvent )
         return 0;
 
     m_toolMgr->RunAction( ACTIONS::showSymbolEditor, true );
-    libEdit = (LIB_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
+    symbolEditor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, false );
 
-    if( libEdit )
-        libEdit->LoadSymbolFromSchematic( sym->GetPartRef(), sym->GetRef( &currentSheet ),
-                sym->GetUnit(), sym->GetConvert() );
+    if( symbolEditor )
+    {
+        symbolEditor->LoadSymbolFromSchematic( sym->GetPartRef(), sym->GetRef( &currentSheet ),
+                                               sym->GetUnit(), sym->GetConvert() );
+    }
 
     return 0;
 }

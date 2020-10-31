@@ -22,35 +22,33 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sch_draw_panel.h>
-
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <class_libentry.h>
-#include <lib_manager.h>
+#include <symbol_library_manager.h>
 #include <widgets/lib_tree.h>
 #include <symbol_tree_pane.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
 
-void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO undoType, bool aAppend )
+void SYMBOL_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aUndoType, bool aAppend )
 {
-    wxASSERT_MSG( !aAppend, "Append not needed/supported for LibEdit" );
+    wxASSERT_MSG( !aAppend, "Append not needed/supported for symbol editor" );
 
-    if( !ItemToCopy )
+    if( !aItem )
         return;
 
     LIB_PART*          copyItem;
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
 
-    copyItem = new LIB_PART( * (LIB_PART*) ItemToCopy );
+    copyItem = new LIB_PART( * (LIB_PART*) aItem );
 
     // Clear current flags (which can be temporary set by a current edit command).
     copyItem->ClearTempFlags();
     copyItem->ClearEditFlags();
     copyItem->SetFlags( UR_TRANSIENT );
 
-    ITEM_PICKER wrapper( GetScreen(), copyItem, undoType );
+    ITEM_PICKER wrapper( GetScreen(), copyItem, aUndoType );
     lastcmd->PushItem( wrapper );
     PushCommandToUndoList( lastcmd );
 
@@ -59,7 +57,7 @@ void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO undoTyp
 }
 
 
-void LIB_EDIT_FRAME::GetComponentFromRedoList()
+void SYMBOL_EDIT_FRAME::GetComponentFromRedoList()
 {
     if( GetRedoCommandCount() <= 0 )
         return;
@@ -107,7 +105,7 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList()
 }
 
 
-void LIB_EDIT_FRAME::GetComponentFromUndoList()
+void SYMBOL_EDIT_FRAME::GetComponentFromUndoList()
 {
     if( GetUndoCommandCount() <= 0 )
         return;
@@ -155,7 +153,7 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList()
 }
 
 
-void LIB_EDIT_FRAME::RollbackPartFromUndo()
+void SYMBOL_EDIT_FRAME::RollbackPartFromUndo()
 {
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 

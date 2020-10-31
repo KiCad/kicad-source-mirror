@@ -32,7 +32,7 @@
 #include <bitmaps.h>
 #include <confirm.h>
 #include <sch_view.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <dialogs/dialog_lib_edit_draw_item.h>
 #include <dialogs/dialog_lib_edit_text.h>
 #include <dialogs/dialog_edit_one_field.h>
@@ -63,7 +63,7 @@ bool LIB_EDIT_TOOL::Init()
     auto havePartCondition =
             [&]( const SELECTION& sel )
             {
-                return m_isLibEdit && static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
+                return m_isSymbolEditor && static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
             };
 
     // Add edit actions to the move tool menu

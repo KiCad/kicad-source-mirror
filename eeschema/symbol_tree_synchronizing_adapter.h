@@ -28,13 +28,13 @@
 #include <lib_tree_model_adapter.h>
 #include <map>
 
-class LIB_EDIT_FRAME;
-class LIB_MANAGER;
+class SYMBOL_EDIT_FRAME;
+class SYMBOL_LIBRARY_MANAGER;
 
 class SYMBOL_TREE_SYNCHRONIZING_ADAPTER : public LIB_TREE_MODEL_ADAPTER
 {
 public:
-    static PTR Create( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibs );
+    static PTR Create( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_MANAGER* aLibs );
 
     bool IsContainer( const wxDataViewItem& aItem ) const override;
 
@@ -55,16 +55,16 @@ protected:
     bool GetAttr( wxDataViewItem const& aItem, unsigned int aCol,
                   wxDataViewItemAttr& aAttr ) const override;
 
-    SYMBOL_TREE_SYNCHRONIZING_ADAPTER( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr );
+    SYMBOL_TREE_SYNCHRONIZING_ADAPTER( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_MANAGER* aLibMgr );
 
 protected:
-    LIB_EDIT_FRAME*         m_frame;
-    LIB_MANAGER*            m_libMgr;
+    SYMBOL_EDIT_FRAME*      m_frame;
+    SYMBOL_LIBRARY_MANAGER* m_libMgr;
 
     ///> Hashes to decide whether a library needs an update
     std::map<wxString, int> m_libHashes;
 
-    ///> LIB_MANAGER hash value returned in the last synchronization
+    ///> SYMBOL_LIBRARY_MANAGER hash value returned in the last synchronization
     int                     m_lastSyncHash;
 };
 

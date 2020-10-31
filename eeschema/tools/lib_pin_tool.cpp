@@ -24,12 +24,12 @@
 
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <confirm.h>
 #include <ee_actions.h>
 #include <dialogs/dialog_pin_properties.h>
 #include <settings/settings_manager.h>
-#include <libedit/libedit_settings.h>
+#include <symbol_editor/symbol_editor_settings.h>
 #include <pgm_base.h>
 #include "lib_pin_tool.h"
 
@@ -50,7 +50,7 @@ static int GetLastPinLength()
 {
     if( g_LastPinLength == -1 )
     {
-        LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+        auto* settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
         g_LastPinLength = Mils2iu( settings->m_Defaults.pin_length );
     }
 
@@ -61,7 +61,7 @@ static int GetLastPinNameSize()
 {
     if( g_LastPinNameSize == -1 )
     {
-        LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+        auto* settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
         g_LastPinNameSize = Mils2iu( settings->m_Defaults.pin_name_size );
     }
 
@@ -72,7 +72,7 @@ static int GetLastPinNumSize()
 {
     if( g_LastPinNumSize == -1 )
     {
-        LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+        auto* settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
         g_LastPinNumSize = Mils2iu( settings->m_Defaults.pin_num_size );
     }
 
@@ -84,7 +84,7 @@ extern void IncrementLabelMember( wxString& name, int aIncrement );
 
 
 LIB_PIN_TOOL::LIB_PIN_TOOL() :
-        EE_TOOL_BASE<LIB_EDIT_FRAME>( "eeschema.PinEditing" )
+        EE_TOOL_BASE<SYMBOL_EDIT_FRAME>( "eeschema.PinEditing" )
 {
 }
 
@@ -380,7 +380,7 @@ LIB_PIN* LIB_PIN_TOOL::RepeatPin( const LIB_PIN* aSourcePin )
     pin->ClearFlags();
     pin->SetFlags( IS_NEW );
 
-    LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    auto* settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
     switch( pin->GetOrientation() )
     {

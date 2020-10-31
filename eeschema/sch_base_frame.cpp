@@ -26,7 +26,7 @@
 #include <kiway.h>
 #include <pgm_base.h>
 #include <eeschema_settings.h>
-#include <libedit_settings.h>
+#include <symbol_editor_settings.h>
 #include <sch_draw_panel.h>
 #include <sch_view.h>
 #include <sch_painter.h>
@@ -108,9 +108,9 @@ EESCHEMA_SETTINGS* SCH_BASE_FRAME::eeconfig() const
 }
 
 
-LIBEDIT_SETTINGS* SCH_BASE_FRAME::libeditconfig() const
+SYMBOL_EDITOR_SETTINGS* SCH_BASE_FRAME::libeditconfig() const
 {
-    return dynamic_cast<LIBEDIT_SETTINGS*>( config() );
+    return dynamic_cast<SYMBOL_EDITOR_SETTINGS*>( config() );
 }
 
 

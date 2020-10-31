@@ -24,13 +24,13 @@
 
 #include "symbol_tree_pane.h"
 #include <widgets/lib_tree.h>
-#include <lib_manager.h>
-#include <lib_edit_frame.h>
+#include <symbol_library_manager.h>
+#include <symbol_edit_frame.h>
 #include <symbol_lib_table.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 
-SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
+SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_MANAGER* aLibMgr )
         : wxPanel( aParent ),
           m_libEditFrame( aParent ),
           m_tree( nullptr ),

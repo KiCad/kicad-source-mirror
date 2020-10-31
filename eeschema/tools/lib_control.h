@@ -29,7 +29,7 @@
 #include <sch_base_frame.h>
 #include <tools/ee_tool_base.h>
 
-class LIB_EDIT_FRAME;
+class SYMBOL_EDIT_FRAME;
 
 /**
  * Handle actions for the various symbol editor and viewers.

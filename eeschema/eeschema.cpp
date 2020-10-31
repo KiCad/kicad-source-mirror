@@ -30,10 +30,8 @@
 #include <eda_dde.h>
 #include <eeschema_settings.h>
 #include <sch_edit_frame.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <lib_view_frame.h>
-#include <general.h>
-#include <class_libentry.h>
 #include <transform.h>
 #include <symbol_lib_table.h>
 #include <dialogs/dialog_global_sym_lib_table_config.h>
@@ -140,9 +138,9 @@ static struct IFACE : public KIFACE_I
             return frame;
         }
 
-        case FRAME_SCH_LIB_EDITOR:
+        case FRAME_SCH_SYMBOL_EDITOR:
         {
-            LIB_EDIT_FRAME* frame = new LIB_EDIT_FRAME( aKiway, aParent );
+            SYMBOL_EDIT_FRAME* frame = new SYMBOL_EDIT_FRAME( aKiway, aParent );
             return frame;
         }
 

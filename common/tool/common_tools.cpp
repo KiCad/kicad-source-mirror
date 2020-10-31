@@ -336,7 +336,8 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
         {
             margin_scale_factor = 1.4;
         }
-        else if( frame->IsType( FRAME_SCH_LIB_EDITOR ) || frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
+        else if( frame->IsType( FRAME_SCH_SYMBOL_EDITOR )
+                || frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
         {
             margin_scale_factor = 2;
         }

@@ -35,7 +35,7 @@
 #include <dialog_pin_properties_base.h>
 #include <widgets/unit_binder.h>
 #include <lib_pin.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 
 
 enum COL_ORDER
@@ -54,7 +54,7 @@ class ALT_PIN_DATA_MODEL;
 /** Implementing DIALOG_LIB_EDIT_PIN_BASE */
 class DIALOG_PIN_PROPERTIES : public DIALOG_PIN_PROPERTIES_BASE
 {
-    LIB_EDIT_FRAME*     m_frame;
+    SYMBOL_EDIT_FRAME*  m_frame;
     LIB_PIN*            m_pin;
     LIB_PIN*            m_dummyPin;       // a working copy used to show changes
 
@@ -77,7 +77,7 @@ class DIALOG_PIN_PROPERTIES : public DIALOG_PIN_PROPERTIES_BASE
 
 public:
     /** Constructor */
-    DIALOG_PIN_PROPERTIES( LIB_EDIT_FRAME* parent, LIB_PIN* aPin );
+    DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN* aPin );
     ~DIALOG_PIN_PROPERTIES() override;
 
     bool TransferDataToWindow() override;

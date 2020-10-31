@@ -21,13 +21,13 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#ifndef _LIBEDIT_SETTINGS_H
-#define _LIBEDIT_SETTINGS_H
+#ifndef SYMBOL_EDITOR_SETTINGS_H
+#define SYMBOL_EDITOR_SETTINGS_H
 
 #include <settings/app_settings.h>
 
 
-class LIBEDIT_SETTINGS : public APP_SETTINGS_BASE
+class SYMBOL_EDITOR_SETTINGS : public APP_SETTINGS_BASE
 {
 public:
 
@@ -48,9 +48,9 @@ public:
         int y_step;
     };
 
-    LIBEDIT_SETTINGS();
+    SYMBOL_EDITOR_SETTINGS();
 
-    virtual ~LIBEDIT_SETTINGS() {}
+    virtual ~SYMBOL_EDITOR_SETTINGS() {}
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 

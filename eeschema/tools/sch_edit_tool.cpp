@@ -63,7 +63,7 @@
 #include <math/util.h>      // for KiROUND
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
-#include <libedit_settings.h>
+#include <symbol_editor_settings.h>
 #include <dialogs/dialog_edit_label.h>
 
 class SYMBOL_UNIT_MENU : public ACTION_MENU
@@ -939,9 +939,9 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     }
     else
     {
-        if( m_isLibEdit )
+        if( m_isSymbolEditor )
         {
-            LIBEDIT_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+            auto* cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
             if( dynamic_cast<SCH_TEXT*>( newItem ) )
             {
@@ -1411,7 +1411,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         }
         else if( retval == SYMBOL_PROPS_EDIT_SCHEMATIC_SYMBOL )
         {
-            auto editor = (LIB_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_LIB_EDITOR, true );
+            auto editor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, true );
 
             editor->LoadSymbolFromSchematic( component->GetPartRef(),
                                              component->GetRef( &m_frame->GetCurrentSheet() ),
@@ -1422,7 +1422,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         }
         else if( retval == SYMBOL_PROPS_EDIT_LIBRARY_SYMBOL )
         {
-            auto editor = (LIB_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_LIB_EDITOR, true );
+            auto editor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, true );
 
             editor->LoadComponentAndSelectLib( component->GetLibId(), component->GetUnit(),
                                                component->GetConvert() );

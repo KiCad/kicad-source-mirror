@@ -23,7 +23,7 @@
 
 #include <eeschema_settings.h>
 #include <layers_id_colors_and_visibility.h>
-#include <libedit_settings.h>
+#include <symbol_editor_settings.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
@@ -564,7 +564,7 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     // LibEdit settings were stored with eeschema.  If eeschema is the first app to run,
     // we need to migrate the LibEdit settings here
 
-    auto libedit = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>( false );
+    auto libedit = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>( false );
     libedit->MigrateFromLegacy( aCfg );
     libedit->Load();
 

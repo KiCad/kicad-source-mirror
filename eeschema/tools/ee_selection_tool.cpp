@@ -29,7 +29,7 @@
 #include <ee_collectors.h>
 #include <ee_selection_tool.h>
 #include <eeschema_id.h> // For MAX_SELECT_ITEM_IDS
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <lib_item.h>
 #include <lib_view_frame.h>
 #include <math/util.h>
@@ -52,7 +52,6 @@
 #include <trigo.h>
 #include <view/view.h>
 #include <view/view_controls.h>
-#include <view/view_group.h>
 
 
 SELECTION_CONDITION EE_CONDITIONS::SingleSymbol = [] (const SELECTION& aSel )
@@ -108,7 +107,7 @@ EE_SELECTION_TOOL::EE_SELECTION_TOOL() :
         m_exclusive_or( false ),
         m_multiple( false ),
         m_skip_heuristics( false ),
-        m_isLibEdit( false ),
+        m_isSymbolEditor( false ),
         m_isLibView( false ),
         m_unit( 0 ),
         m_convert( 0 )
@@ -130,18 +129,19 @@ bool EE_SELECTION_TOOL::Init()
 {
     m_frame = getEditFrame<SCH_BASE_FRAME>();
 
-    LIB_VIEW_FRAME* libViewFrame = dynamic_cast<LIB_VIEW_FRAME*>( m_frame );
-    LIB_EDIT_FRAME* libEditFrame = dynamic_cast<LIB_EDIT_FRAME*>( m_frame );
+    LIB_VIEW_FRAME*    libViewFrame = dynamic_cast<LIB_VIEW_FRAME*>( m_frame );
+    SYMBOL_EDIT_FRAME* symbolEditorFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
 
-    if( libEditFrame )
+    if( symbolEditorFrame )
     {
-        m_isLibEdit = true;
-        m_unit = libEditFrame->GetUnit();
-        m_convert = libEditFrame->GetConvert();
+        m_isSymbolEditor = true;
+        m_unit = symbolEditorFrame->GetUnit();
+        m_convert = symbolEditorFrame->GetConvert();
     }
     else
+    {
         m_isLibView = libViewFrame != nullptr;
-
+    }
 
     static KICAD_T wireOrBusTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
     static KICAD_T connectedTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T,
@@ -157,8 +157,7 @@ bool EE_SELECTION_TOOL::Init()
     auto schEditCondition =
             [this] ( const SELECTION& aSel )
             {
-
-                return !m_isLibEdit && !m_isLibView;
+                return !m_isSymbolEditor && !m_isLibView;
             };
 
     auto belowRootSheetCondition =
@@ -174,7 +173,7 @@ bool EE_SELECTION_TOOL::Init()
     auto havePartCondition =
             [&]( const SELECTION& sel )
             {
-                return m_isLibEdit && static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
+                return m_isSymbolEditor && static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
             };
 
     auto& menu = m_menu.GetMenu();
@@ -227,12 +226,12 @@ void EE_SELECTION_TOOL::Reset( RESET_REASON aReason )
         m_selection.Clear();
         getView()->GetPainter()->GetSettings()->SetHighlight( false );
 
-        LIB_EDIT_FRAME* libEditFrame = dynamic_cast<LIB_EDIT_FRAME*>( m_frame );
-        LIB_VIEW_FRAME* libViewFrame = dynamic_cast<LIB_VIEW_FRAME*>( m_frame );
+        SYMBOL_EDIT_FRAME* libEditFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+        LIB_VIEW_FRAME*    libViewFrame = dynamic_cast<LIB_VIEW_FRAME*>( m_frame );
 
         if( libEditFrame )
         {
-            m_isLibEdit = true;
+            m_isSymbolEditor = true;
             m_unit = libEditFrame->GetUnit();
             m_convert = libEditFrame->GetConvert();
         }
@@ -341,7 +340,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 narrowSelection( collector, evt->Position(), false );
 
-                if( collector.GetCount() == 1 && !m_isLibEdit && !modifier_enabled )
+                if( collector.GetCount() == 1 && !m_isSymbolEditor && !modifier_enabled )
                 {
                     // Check if we want to auto start wires
                     VECTOR2I snappedCursorPos = grid.BestSnapAnchor( evt->Position(), nullptr );
@@ -441,7 +440,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 // selection is empty? try to start dragging the item under the point where drag
                 // started
-                if( m_isLibEdit && m_selection.Empty() )
+                if( m_isSymbolEditor && m_selection.Empty() )
                     m_selection = RequestSelection( movableSymbolItems );
                 else if( m_selection.Empty() )
                     m_selection = RequestSelection( movableSchematicItems );
@@ -450,7 +449,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( selectionContains( evt->Position() ) )
                 {
                     // Yes -> run the move tool and wait till it finishes
-                    if( m_isLibEdit )
+                    if( m_isSymbolEditor )
                         m_toolMgr->InvokeTool( "eeschema.SymbolMoveTool" );
                     else
                         m_toolMgr->InvokeTool( "eeschema.InteractiveMove" );
@@ -500,7 +499,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             ClearSelection();
         }
 
-        else if( evt->IsMotion() && !m_isLibEdit && m_frame->ToolStackIsEmpty() )
+        else if( evt->IsMotion() && !m_isSymbolEditor && m_frame->ToolStackIsEmpty() )
         {
             EE_COLLECTOR collector;
 
@@ -594,9 +593,9 @@ bool EE_SELECTION_TOOL::collectHits( EE_COLLECTOR& aCollector, const VECTOR2I& a
 {
     aCollector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
 
-    if( m_isLibEdit )
+    if( m_isSymbolEditor )
     {
-        auto part = static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
+        LIB_PART* part = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
 
         if( !part )
             return false;
@@ -845,11 +844,15 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
             EE_GRID_HELPER grid( m_toolMgr );
             wxPoint        cursorPos = wxPoint( grid.BestSnapAnchor( aPos, nullptr ) );
 
-            if( !m_isLibEdit && m_frame->eeconfig()->m_Selection.select_pin_selects_symbol
-                    && !other->IsPointClickableAnchor( cursorPos ) )
+            if( !m_isSymbolEditor && m_frame->eeconfig()->m_Selection.select_pin_selects_symbol
+                && !other->IsPointClickableAnchor( cursorPos ) )
+            {
                 collector.Transfer( other );
+            }
             else
+            {
                 collector.Transfer( item );
+            }
         }
     }
 
@@ -960,7 +963,7 @@ void EE_SELECTION_TOOL::updateReferencePoint()
 
     if( m_selection.Size() > 0 )
     {
-        if( m_isLibEdit )
+        if( m_isSymbolEditor )
             refP = static_cast<LIB_ITEM*>( m_selection.GetTopLeftItem() )->GetPosition();
         else
             refP = static_cast<SCH_ITEM*>( m_selection.GetTopLeftItem() )->GetPosition();
@@ -1287,9 +1290,9 @@ void EE_SELECTION_TOOL::RebuildSelection()
 {
     m_selection.Clear();
 
-    if( m_isLibEdit )
+    if( m_isSymbolEditor )
     {
-        LIB_PART* start = static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
+        LIB_PART* start = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
 
         for( LIB_ITEM& item : start->GetDrawItems() )
         {
@@ -1500,7 +1503,7 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
 bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityOnly ) const
 {
     // NOTE: in the future this is where Eeschema layer/itemtype visibility will be handled
-    LIB_EDIT_FRAME* symbeditFrame = dynamic_cast< LIB_EDIT_FRAME* >( m_frame );
+    SYMBOL_EDIT_FRAME* symbeditFrame = dynamic_cast< SYMBOL_EDIT_FRAME* >( m_frame );
 
     switch( aItem->Type() )
     {
@@ -1509,7 +1512,7 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityO
             return false;
         break;
 
-    case LIB_PART_T:    // In libedit we do not want to select the symbol itself.
+    case LIB_PART_T:    // In symbol_editor we do not want to select the symbol itself.
         return false;
 
     case LIB_FIELD_T:   // LIB_FIELD object can always be edited.

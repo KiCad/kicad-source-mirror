@@ -27,7 +27,7 @@
 
 
 class LIB_ITEM;
-class LIB_EDIT_FRAME;
+class SYMBOL_EDIT_FRAME;
 
 
 #include <dialog_lib_edit_draw_item_base.h>
@@ -40,7 +40,7 @@ class DIALOG_LIB_EDIT_DRAW_ITEM : public DIALOG_LIB_EDIT_DRAW_ITEM_BASE
 {
 public:
     /** Constructor */
-    DIALOG_LIB_EDIT_DRAW_ITEM( LIB_EDIT_FRAME* parent, LIB_ITEM* aItem );
+    DIALOG_LIB_EDIT_DRAW_ITEM( SYMBOL_EDIT_FRAME* parent, LIB_ITEM* aItem );
 
     bool TransferDataToWindow() override;
 
@@ -50,9 +50,9 @@ public:
     int GetFillStyle();
 
 private:
-    LIB_EDIT_FRAME* m_frame;
-    LIB_ITEM*       m_item;
-    UNIT_BINDER     m_lineWidth;
+    SYMBOL_EDIT_FRAME* m_frame;
+    LIB_ITEM*          m_item;
+    UNIT_BINDER        m_lineWidth;
 };
 
 #endif // __dialog_lib_edit_draw_item__

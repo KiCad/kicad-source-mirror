@@ -28,7 +28,7 @@
 #include <tools/ee_tool_base.h>
 
 
-class LIB_EDIT_FRAME;
+class SYMBOL_EDIT_FRAME;
 
 
 /**
@@ -37,7 +37,7 @@ class LIB_EDIT_FRAME;
  * Tool responsible for drawing/placing items (body outlines, pins, etc.)
  */
 
-class LIB_DRAWING_TOOLS : public EE_TOOL_BASE<LIB_EDIT_FRAME>
+class LIB_DRAWING_TOOLS : public EE_TOOL_BASE<SYMBOL_EDIT_FRAME>
 {
 public:
     LIB_DRAWING_TOOLS();

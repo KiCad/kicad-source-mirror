@@ -231,7 +231,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
     case TREE_FILE_TYPE::SEXPR_SYMBOL_LIB_FILE:
         toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSymbols, true );
         packet = fullFileName.ToStdString();
-        kiway.ExpressMail( FRAME_SCH_LIB_EDITOR, MAIL_LIB_EDIT, packet );
+        kiway.ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_LIB_EDIT, packet );
         break;
 
     default:

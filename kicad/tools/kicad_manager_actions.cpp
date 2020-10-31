@@ -69,7 +69,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editSymbols( "kicad.Control.editSymbols",
         AS_GLOBAL,
         MD_CTRL + 'L', LEGACY_HK_NAME( "Run LibEdit" ),
         _( "Edit Schematic Symbols" ), _( "Edit Schematic Symbols" ),
-        libedit_xpm, AF_NONE, (void*) FRAME_SCH_LIB_EDITOR );
+        libedit_xpm, AF_NONE, (void*) FRAME_SCH_SYMBOL_EDITOR );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editPCB( "kicad.Control.editPCB",
         AS_GLOBAL,

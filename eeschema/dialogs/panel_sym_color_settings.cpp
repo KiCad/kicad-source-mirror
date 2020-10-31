@@ -22,8 +22,8 @@
 */
 
 #include <eeschema_settings.h>
-#include <lib_edit_frame.h>
-#include <libedit_settings.h>
+#include <symbol_edit_frame.h>
+#include <symbol_editor_settings.h>
 #include <pgm_base.h>
 #include <sch_painter.h>
 #include <settings/settings_manager.h>
@@ -32,8 +32,8 @@
 #include "panel_sym_color_settings.h"
 
 
-PANEL_SYM_COLOR_SETTINGS::PANEL_SYM_COLOR_SETTINGS( LIB_EDIT_FRAME* aFrame,
-                                                            wxWindow* aWindow )
+PANEL_SYM_COLOR_SETTINGS::PANEL_SYM_COLOR_SETTINGS( SYMBOL_EDIT_FRAME* aFrame,
+                                                    wxWindow* aWindow )
         : PANEL_SYM_COLOR_SETTINGS_BASE( aWindow ), m_frame( aFrame )
 {
 }
@@ -41,7 +41,7 @@ PANEL_SYM_COLOR_SETTINGS::PANEL_SYM_COLOR_SETTINGS( LIB_EDIT_FRAME* aFrame,
 
 bool PANEL_SYM_COLOR_SETTINGS::TransferDataToWindow()
 {
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
     m_useEeschemaTheme->SetValue( cfg->m_UseEeschemaColorSettings );
 
@@ -82,7 +82,7 @@ bool PANEL_SYM_COLOR_SETTINGS::TransferDataFromWindow()
     auto selected = static_cast<COLOR_SETTINGS*>(
             m_themeSelection->GetClientData( m_themeSelection->GetSelection() ) );
 
-    LIBEDIT_SETTINGS* cfg = mgr.GetAppSettings<LIBEDIT_SETTINGS>();
+    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
     cfg->m_UseEeschemaColorSettings = m_useEeschemaTheme->GetValue();
 

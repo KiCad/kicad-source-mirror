@@ -268,7 +268,7 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     wxASSERT( plotter != NULL );
 
     EDA_RECT bBox = GetBoundingBox();
-    // convert coordinates from draw Y axis to libedit Y axis
+    // convert coordinates from draw Y axis to symbol_editor Y axis
     bBox.RevertYAxis();
     wxPoint txtpos = bBox.Centre();
 
@@ -334,7 +334,7 @@ void LIB_TEXT::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* 
     */
     EDA_RECT bBox = GetBoundingBox();
 
-    // convert coordinates from draw Y axis to libedit Y axis:
+    // convert coordinates from draw Y axis to symbol_editor Y axis:
     bBox.RevertYAxis();
     wxPoint txtpos = bBox.Centre();
 

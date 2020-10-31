@@ -79,15 +79,15 @@ DIALOG_EDIT_ONE_FIELD::~DIALOG_EDIT_ONE_FIELD()
 void DIALOG_EDIT_ONE_FIELD::init()
 {
     SCH_BASE_FRAME* parent = GetParent();
-    bool libedit = parent->IsType( FRAME_SCH_LIB_EDITOR );
+    bool isSymbolEditor = parent->IsType( FRAME_SCH_SYMBOL_EDITOR );
 
-    m_TextCtrl->SetValidator( SCH_FIELD_VALIDATOR( libedit, m_fieldId, &m_text ) );
+    m_TextCtrl->SetValidator( SCH_FIELD_VALIDATOR( isSymbolEditor, m_fieldId, &m_text ) );
 
     // Disable options for graphic text editing which are not needed for fields.
     m_CommonConvert->Show( false );
     m_CommonUnit->Show( false );
 
-    if( !libedit && ( m_fieldId == REFERENCE || m_fieldId == VALUE ) )
+    if( !isSymbolEditor && ( m_fieldId == REFERENCE || m_fieldId == VALUE ) )
     {
         m_StyledTextCtrl->Show( false );
         SetInitialFocus( m_TextCtrl );

@@ -51,14 +51,14 @@ namespace KIGFX
 class PAGE_INFO;
 class TITLE_BLOCK;
 class LIB_VIEW_FRAME;
-class LIB_EDIT_FRAME;
+class SYMBOL_EDIT_FRAME;
 class LIB_PART;
 class PART_LIB;
 class SCHLIB_FILTER;
 class LIB_ID;
 class SYMBOL_LIB_TABLE;
 class EESCHEMA_SETTINGS;
-class LIBEDIT_SETTINGS;
+class SYMBOL_EDITOR_SETTINGS;
 
 /**
  * Load symbol from symbol library table.
@@ -80,7 +80,7 @@ LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
 
 /**
  * A shim class between EDA_DRAW_FRAME and several derived classes:
- * LIB_EDIT_FRAME, LIB_VIEW_FRAME, and SCH_EDIT_FRAME, and it brings in a
+ * SYMBOL_EDIT_FRAME, LIB_VIEW_FRAME, and SCH_EDIT_FRAME, and it brings in a
  * common way of handling the provided virtual functions for the derived classes.
  *
  * The motivation here is to switch onto GetScreen() for the underlying data model.
@@ -90,7 +90,7 @@ LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
 class SCH_BASE_FRAME : public EDA_DRAW_FRAME
 {
 protected:
-    /// These are only used by libedit.  Eeschema should be using the one inside the SCHEMATIC.
+    /// These are only used by symbol_editor.  Eeschema should be using the one inside the SCHEMATIC.
     SCHEMATIC_SETTINGS  m_base_frame_defaults;
 
     SCHEMATIC_SETTINGS* m_defaults;
@@ -111,7 +111,7 @@ public:
 
     EESCHEMA_SETTINGS* eeconfig() const;
 
-    LIBEDIT_SETTINGS* libeditconfig() const;
+    SYMBOL_EDITOR_SETTINGS* libeditconfig() const;
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
@@ -152,7 +152,7 @@ public:
      *
      * aAllowFields chooses whether or not features that permit the user to edit
      * fields (e.g. footprint selection) should be enabled. This should be false
-     * when they would have no effect, for example loading a part into libedit.
+     * when they would have no effect, for example loading a part into symbol_editor.
      *
      * @param aFilter is a SCHLIB_FILTER filter to pass the allowed library names
      *  and/or the library name to load the component from and/or some other filter

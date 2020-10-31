@@ -22,16 +22,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <sch_painter.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
-#include <libedit/libedit_settings.h>
+#include <symbol_editor/symbol_editor_settings.h>
 
 #include "panel_sym_editing_options.h"
 
 
-PANEL_SYM_EDITING_OPTIONS::PANEL_SYM_EDITING_OPTIONS( LIB_EDIT_FRAME* aFrame, wxWindow* aWindow ) :
+PANEL_SYM_EDITING_OPTIONS::PANEL_SYM_EDITING_OPTIONS( SYMBOL_EDIT_FRAME* aFrame,
+                                                      wxWindow* aWindow ) :
         PANEL_SYM_EDITING_OPTIONS_BASE( aWindow ),
         m_frame( aFrame ),
         m_lineWidth( aFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
@@ -46,7 +47,7 @@ PANEL_SYM_EDITING_OPTIONS::PANEL_SYM_EDITING_OPTIONS( LIB_EDIT_FRAME* aFrame, wx
 
 bool PANEL_SYM_EDITING_OPTIONS::TransferDataToWindow()
 {
-    LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    auto* settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
     m_lineWidth.SetValue( Mils2iu( settings->m_Defaults.line_width ) );
     m_textSize.SetValue( Mils2iu( settings->m_Defaults.text_size ) );
@@ -66,7 +67,7 @@ bool PANEL_SYM_EDITING_OPTIONS::TransferDataToWindow()
 
 bool PANEL_SYM_EDITING_OPTIONS::TransferDataFromWindow()
 {
-    LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    auto* settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
     settings->m_Defaults.line_width = Iu2Mils( (int) m_lineWidth.GetValue() );
     settings->m_Defaults.text_size = Iu2Mils( (int) m_textSize.GetValue() );

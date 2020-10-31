@@ -22,16 +22,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <lib_text.h>
 #include <settings/settings_manager.h>
 #include <dialog_lib_edit_text.h>
-#include <libedit/libedit_settings.h>
+#include <symbol_editor/symbol_editor_settings.h>
 #include <pgm_base.h>
 #include <tools/lib_drawing_tools.h>
 
 
-DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( LIB_EDIT_FRAME* aParent, LIB_TEXT* aText ) :
+DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( SYMBOL_EDIT_FRAME* aParent, LIB_TEXT* aText ) :
     DIALOG_LIB_EDIT_TEXT_BASE( aParent ),
     m_posX( aParent, m_xPosLabel, m_xPosCtrl, m_xPosUnits, true ),
     m_posY( aParent, m_yPosLabel, m_yPosCtrl, m_yPosUnits, true ),
@@ -90,7 +90,7 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataToWindow()
     }
     else
     {
-        LIBEDIT_SETTINGS*  cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+        auto* cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
         LIB_DRAWING_TOOLS* tools = m_parent->GetToolManager()->GetTool<LIB_DRAWING_TOOLS>();
 
         m_textSize.SetValue( Mils2iu( cfg->m_Defaults.text_size ) );

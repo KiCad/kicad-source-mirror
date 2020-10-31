@@ -24,7 +24,7 @@
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
-#include "libedit_settings.h"
+#include "symbol_editor_settings.h"
 #include <default_values.h>
 
 
@@ -32,8 +32,12 @@
 const int libeditSchemaVersion = 0;
 
 
-LIBEDIT_SETTINGS::LIBEDIT_SETTINGS() : APP_SETTINGS_BASE( "libedit", libeditSchemaVersion ),
-        m_Defaults(), m_Repeat(), m_ShowPinElectricalType( true ), m_LibWidth(),
+SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
+        APP_SETTINGS_BASE( "symbol_editor", libeditSchemaVersion ),
+        m_Defaults(),
+        m_Repeat(),
+        m_ShowPinElectricalType( true ),
+        m_LibWidth(),
         m_EditComponentVisibleColumns()
 {
     // Make Coverity happy
@@ -81,7 +85,7 @@ LIBEDIT_SETTINGS::LIBEDIT_SETTINGS() : APP_SETTINGS_BASE( "libedit", libeditSche
 }
 
 
-bool LIBEDIT_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
+bool SYMBOL_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 {
     bool ret = APP_SETTINGS_BASE::MigrateFromLegacy( aCfg );
 

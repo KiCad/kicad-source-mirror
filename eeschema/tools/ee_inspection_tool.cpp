@@ -35,7 +35,7 @@
 #include <search_stack.h>
 #include <sim/sim_plot_frame.h>
 #include <sch_edit_frame.h>
-#include <lib_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <lib_view_frame.h>
 #include <eda_doc.h>
 #include <invoke_sch_dialog.h>
@@ -69,9 +69,9 @@ bool EE_INSPECTION_TOOL::Init()
 
 int EE_INSPECTION_TOOL::RunERC( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
-        checkPart( static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart() );
+        checkPart( static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart() );
     }
     else if( m_frame->IsType( FRAME_SCH ) )
     {
@@ -310,9 +310,9 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 {
     wxString datasheet;
 
-    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
-        LIB_PART* part = static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
+        LIB_PART* part = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
 
         if( !part )
             return 0;
