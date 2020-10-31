@@ -375,7 +375,9 @@ std::vector<SHAPE*> DIMENSION::MakeEffectiveShapes() const
 {
     std::vector<SHAPE*> effectiveShapes;
 
-    for( SHAPE* shape : Text().GetEffectiveTextShape()->Shapes() )
+    std::shared_ptr<SHAPE_COMPOUND> ets = Text().GetEffectiveTextShape();
+
+    for( const SHAPE* shape : ets->Shapes() )
         effectiveShapes.emplace_back( shape->Clone() );
 
     for( const std::shared_ptr<SHAPE>& shape : GetShapes() )
