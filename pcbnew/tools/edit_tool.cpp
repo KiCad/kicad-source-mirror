@@ -1367,7 +1367,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    m_commit->Remove( item );
+                    m_commit->Remove( bItem );
                 }
             };
 
