@@ -302,11 +302,9 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_libraryIDLabel->Wrap( -1 );
 	bLibLink->Add( m_libraryIDLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
-	m_tcLibraryID->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-	m_tcLibraryID->SetToolTip( _("The library ID and footprint ID currently assigned.  Use \"Change Footprint...\" to assign a different footprint.") );
-
-	bLibLink->Add( m_tcLibraryID, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_tcLibraryID = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_END );
+	m_tcLibraryID->Wrap( -1 );
+	bLibLink->Add( m_tcLibraryID, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizerBottom->Add( bLibLink, 1, wxEXPAND|wxLEFT, 10 );

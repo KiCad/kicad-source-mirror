@@ -32,7 +32,6 @@ class WX_GRID;
 #include <wx/gbsizer.h>
 #include <wx/panel.h>
 #include <wx/notebook.h>
-#include <wx/textctrl.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -71,7 +70,7 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxPanel* m_pinTablePage;
 		WX_GRID* m_pinGrid;
 		wxStaticText* m_libraryIDLabel;
-		wxTextCtrl* m_tcLibraryID;
+		wxStaticText* m_tcLibraryID;
 		wxButton* m_spiceFieldsButton;
 		wxStdDialogButtonSizer* m_stdDialogButtonSizer;
 		wxButton* m_stdDialogButtonSizerOK;

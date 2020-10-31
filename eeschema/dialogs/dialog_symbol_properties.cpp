@@ -343,13 +343,6 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
 
     m_pinGrid->PushEventHandler( new GRID_TRICKS( m_pinGrid ) );
 
-    // Set font size for items showing long strings:
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-
-    m_libraryIDLabel->SetFont( infoFont );
-    m_tcLibraryID->SetFont( infoFont );
-
     wxToolTip::Enable( true );
     m_stdDialogButtonSizerOK->SetDefault();
 
@@ -494,7 +487,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_ShowPinNameButt->SetValue( m_part->ShowPinNames() );
 
     // Set the component's library name.
-    m_tcLibraryID->SetValue( m_comp->GetLibId().Format() );
+    m_tcLibraryID->SetLabelText( m_comp->GetLibId().Format() );
 
     Layout();
 
