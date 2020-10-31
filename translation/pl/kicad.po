@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
 "PO-Revision-Date: 2020-10-31 18:15+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Last-Translator: Mark Roszko <mark.roszko@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -3286,9 +3286,7 @@ msgstr "Szerokość ścieżki"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1440
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:191
 msgid "Via Size"
-msgstr ""
-"Rozmiar\n"
-"przelotki"
+msgstr "Rozmiar przelotki"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:44
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:192
