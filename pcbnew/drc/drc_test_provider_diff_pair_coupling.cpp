@@ -317,7 +317,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
     auto addToTree =
             [&copperTree]( BOARD_ITEM *item ) -> bool
             {
-                copperTree.insert( item );
+                copperTree.Insert( item );
                 return true;
             };
 

@@ -195,7 +195,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     forEachGeometryItem( s_allBasicItemsButZones, LSET::AllCuMask(), queryBoardGeometryItems );
 
     for( const std::unique_ptr<PCB_SHAPE>& edge : edges )
-        edgesTree.insert( edge.get(), m_largestClearance );
+        edgesTree.Insert( edge.get(), m_largestClearance );
 
     wxString val;
     wxGetEnv( "WXTRACE", &val );

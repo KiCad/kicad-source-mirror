@@ -84,7 +84,7 @@ public:
      * Function Insert()
      * Inserts an item into the tree.
      */
-    void insert( BOARD_ITEM* aItem, int aWorstClearance = 0, int aLayer = UNDEFINED_LAYER )
+    void Insert( BOARD_ITEM* aItem, int aWorstClearance = 0, int aLayer = UNDEFINED_LAYER )
     {
         std::vector<SHAPE*> subshapes;
 

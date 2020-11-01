@@ -164,7 +164,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
                 if( item->Type() == PCB_FP_TEXT_T && !static_cast<FP_TEXT*>( item )->IsVisible() )
                     return true;
 
-                m_copperTree.insert( item, m_largestClearance );
+                m_copperTree.Insert( item, m_largestClearance );
                 return true;
             };
 
@@ -198,7 +198,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
         for( int layer : zone->GetLayerSet().Seq() )
         {
             if( IsCopperLayer( layer ) )
-                m_zoneTrees[ zone ]->insert( zone, layer );
+                m_zoneTrees[ zone ]->Insert( zone, layer );
         }
 
     }

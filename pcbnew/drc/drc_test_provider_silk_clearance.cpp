@@ -116,7 +116,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     auto addToSilkTree =
             [&silkTree]( BOARD_ITEM* item ) -> bool
             {
-                silkTree.insert( item );
+                silkTree.Insert( item );
                 return true;
             };
 
@@ -133,7 +133,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 if( !reportProgress( ii++, targets, delta ) )
                     return false;
 
-                targetTree.insert( item );
+                targetTree.Insert( item );
                 return true;
             };
 

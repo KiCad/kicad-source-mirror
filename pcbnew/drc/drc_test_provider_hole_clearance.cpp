@@ -144,7 +144,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
                     // Check for round hole
                     if( pad->GetDrillSize().x && pad->GetDrillSize().x == pad->GetDrillSize().y )
-                        m_holeTree.insert( item, m_largestClearance, F_Cu );
+                        m_holeTree.Insert( item, m_largestClearance, F_Cu );
                 }
                 else if( item->Type() == PCB_VIA_T )
                 {
@@ -152,7 +152,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
                     // Check for drilled hole
                     if( via->GetViaType() == VIATYPE::THROUGH )
-                        m_holeTree.insert( item, m_largestClearance, F_Cu );
+                        m_holeTree.Insert( item, m_largestClearance, F_Cu );
                 }
 
                 return true;

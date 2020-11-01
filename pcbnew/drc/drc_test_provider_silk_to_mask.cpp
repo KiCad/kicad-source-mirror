@@ -108,14 +108,14 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
     auto addMaskToTree =
             [&maskTree]( BOARD_ITEM *item ) -> bool
             {
-                maskTree.insert( item );
+                maskTree.Insert( item );
                 return true;
             };
 
     auto addSilkToTree =
             [&silkTree]( BOARD_ITEM *item ) -> bool
             {
-                silkTree.insert( item );
+                silkTree.Insert( item );
                 return true;
             };
 

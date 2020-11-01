@@ -263,7 +263,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
     for( TRACK* track : m_brd->Tracks() )
     {
         track->ClearFlags( IS_DELETED | SKIP_STRUCT );
-        rtree.insert( track );
+        rtree.Insert( track );
     }
 
     std::set<BOARD_ITEM*> toRemove;
