@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -165,6 +165,10 @@ void PCB_SHAPE::Scale( double aScale )
         scalePt( m_BezierC2 );
         break;
 
+    case S_ARC:
+        scalePt( m_ThirdPoint );
+        break;
+
     case S_CIRCLE:          //  ring or circle
         m_End.x = m_Start.x + KiROUND( radius * aScale );
         m_End.y = m_Start.y;
@@ -261,6 +265,11 @@ void PCB_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     switch ( m_Shape )
     {
     case S_ARC:
+        if( aFlipLeftRight )
+            m_ThirdPoint.x   = aCentre.x - ( m_ThirdPoint.x - aCentre.x );
+        else
+            m_ThirdPoint.y   = aCentre.y - ( m_ThirdPoint.y - aCentre.y );
+
         m_Angle = -m_Angle;
         break;
 
