@@ -194,7 +194,13 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
         zone->CacheBoundingBox();
         m_zoneTrees[ zone ] = std::make_unique<DRC_RTREE>();
-        m_zoneTrees[ zone ]->insert( zone );
+
+        for( int layer : zone->GetLayerSet().Seq() )
+        {
+            if( IsCopperLayer( layer ) )
+                m_zoneTrees[ zone ]->insert( zone, layer );
+        }
+
     }
 
     reportAux( "Testing %d copper items and %d zones...", count, m_zones.size() );
