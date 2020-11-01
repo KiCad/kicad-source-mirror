@@ -170,12 +170,12 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
     return true;
 }
 
-bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, int aLayer )
+bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, int aLayer )
 {
     if( Settings().CanViolateDRC() && Settings().Mode() == RM_MarkObstacles )
         return true;
 
-    auto candidates = QueryHoverItems( aWhere );
+    ITEM_SET candidates = QueryHoverItems( aWhere );
 
     for( ITEM* item : candidates.Items() )
     {
@@ -183,12 +183,27 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, int aLayer )
             return false;
     }
 
+    if( m_mode == PNS_MODE_ROUTE_SINGLE )
+    {
+        VECTOR2I startPoint = aStartItem->Anchor( 0 );
+        SEGMENT  dummyStartSeg( SEG( startPoint, startPoint ), aStartItem->Net() );
+
+        dummyStartSeg.SetWidth( m_sizes.TrackWidth() );
+
+        if( m_world->CheckColliding( &dummyStartSeg, ITEM::ANY_T ) )
+            return false;
+    }
+    else if( m_mode == PNS_MODE_ROUTE_DIFF_PAIR )
+    {
+        // TODO
+    }
+
     return true;
 }
 
 bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
 {   
-    if( ! isStartingPointRoutable( aP, aLayer ) )
+    if( ! isStartingPointRoutable( aP, aStartItem, aLayer ) )
     {
         SetFailureReason( _( "The routing start point violates DRC." ) );
         return false;

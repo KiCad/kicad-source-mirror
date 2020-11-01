@@ -231,11 +231,12 @@ public:
                         bool         aDifferentNetsOnly = true,
                         int          aForceClearance = -1 );
 
-    int QueryJoints( const BOX2I& aBox, std::vector<JOINT*> & aJoints, int aLayerMask = -1, int aKindMask = ITEM::ANY_T);
+    int QueryJoints( const BOX2I&         aBox,
+                     std::vector<JOINT*>& aJoints,
+                     int                  aLayerMask = -1,
+                     int                  aKindMask = ITEM::ANY_T);
 
-    int QueryColliding( const ITEM* aItem,
-                         OBSTACLE_VISITOR& aVisitor
-                      );
+    int QueryColliding( const ITEM* aItem, OBSTACLE_VISITOR& aVisitor );
 
     /**
      * Function NearestObstacle()

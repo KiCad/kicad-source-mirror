@@ -152,8 +152,6 @@ public:
     void CommitRouting();
     void StopRouting();
 
-    int GetClearance( const ITEM* aA, const ITEM* aB ) const;
-
     NODE* GetWorld() const
     {
         return m_world.get();
@@ -161,8 +159,6 @@ public:
 
     void FlipPosture();
 
-    void DisplayItem( const ITEM* aItem, int aColor = -1, int aClearance = -1, bool aEdit = false );
-    void DeleteTraces( ITEM* aStartItem, bool aWholeTrack );
     void SwitchLayer( int layer );
 
     void ToggleViaPlacement();
@@ -262,7 +258,7 @@ private:
     void highlightCurrent( bool enabled );
 
     void markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR& aRemoved );
-    bool isStartingPointRoutable( const VECTOR2I& aWhere, int aLayer );
+    bool isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aItem, int aLayer );
 
     VECTOR2I m_currentEnd;
     RouterState m_state;
