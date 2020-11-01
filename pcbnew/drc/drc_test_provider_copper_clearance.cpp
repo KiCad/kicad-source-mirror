@@ -53,7 +53,8 @@ class DRC_TEST_PROVIDER_COPPER_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BA
 {
 public:
     DRC_TEST_PROVIDER_COPPER_CLEARANCE () :
-            DRC_TEST_PROVIDER_CLEARANCE_BASE()
+            DRC_TEST_PROVIDER_CLEARANCE_BASE(),
+            m_drcEpsilon( 0 )
     {
     }
 
