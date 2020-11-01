@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-11-01 11:35+0000\n"
+"PO-Revision-Date: 2020-11-01 14:23+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -190,9 +190,9 @@ msgid "Render time %.0f ms ( %.1f fps)"
 msgstr "Čas rendrování %.0f ms ( %.1f fps)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr "Nové jméno třídy sítě:"
+msgstr "Síť %s\tTřídasítí %s Názevplošky %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:761
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:775
@@ -417,7 +417,7 @@ msgstr "Odečíst pájecí masku z potisku"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:77
 msgid "Clip silkscreen at via annulus"
-msgstr ""
+msgstr "Zkrátit potisk na prstenec prokovu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:86
 msgid "Non plated pads copper as bare copper"
@@ -596,7 +596,7 @@ msgstr "Počet vzorků"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:477
 msgid "Spread Factor %"
-msgstr ""
+msgstr "Faktor rozložení %"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:481
 msgid "Recursive Level"
@@ -941,7 +941,7 @@ msgstr "Použít pouze difúzní"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:193
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr "Použít pouze vlastnosti difúzní barvy z 3D modelu "
+msgstr "Použít pouze vlastnosti difúzní barvy ze souboru 3D modelu"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:199
 msgid "CAD Color Style"
@@ -964,19 +964,16 @@ msgid "Toggle SMD 3D models"
 msgstr "Přepnout 3D modely SMD"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
-#, fuzzy
 msgid "Toggle 3D models with 'Surface mount' attribute"
-msgstr "Přepnout na 3D modely typu SMD"
+msgstr "Přepnout na 3D modely s atributem 'Surface mount'"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle Virtual 3D models"
-msgstr "Přepnout na 3D modely typu Virtual"
+msgstr "Přepnout virtuální 3D modely"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle 3D models with 'Virtual' attribute"
-msgstr "Přepnout na 3D modely typu Virtual"
+msgstr "Přepnout 3D modely s atributem 'Virtual'"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:227
 msgid "Show Model Bounding Boxes"
@@ -1000,19 +997,17 @@ msgstr "Přidat podlahu"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:242
 msgid "Adds a floor plane below the board (slow)"
-msgstr "Přidat podlažní rovinu  pod desku (pomalé)"
+msgstr "Přidat referenční rovinu pod desku (pomalé)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:247
-#, fuzzy
 msgid "Render materials with refractive properties on final render (slow)"
 msgstr ""
-"Vykreslit materiál včetně vlivu rozptylových vlastností na výsledek (pomalé)"
+"Rendrovat materiály s jejich lomovými vlastnostmi pro konečné vykreslení "
+"(pomalé)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
-#, fuzzy
 msgid "Render materials with reflective properties on final render (slow)"
-msgstr ""
-"Vykreslit materiál včetně vlivu odrazných vlastností na výsledek (pomalé)"
+msgstr "Rendrovat materiály s reflexními vlastnostmi na finální render (pomalé)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
 msgid "Render with improved quality on final render (slow)"
@@ -1027,83 +1022,68 @@ msgstr ""
 "(pomalé)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:268
-#, fuzzy
 msgid "Toggle realistic mode"
-msgstr "Realistické zobrazení"
+msgstr "Přepnout realistický režim"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:273
-#, fuzzy
 msgid "Toggle board body display"
-msgstr "Zobrazit podklad desky"
+msgstr "Přepnout zobrazení těla desky"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:278
-#, fuzzy
 msgid "Show 3D Axis"
-msgstr "Zobrazit 3D &Osy"
+msgstr "Zobrazit 3D Osy"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:283
-#, fuzzy
 msgid "Toggle zone display"
-msgstr "Zobrazení obrysu:"
+msgstr "Přepnout zobrazení zóny"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:288
-#, fuzzy
 msgid "Toggle adhesive display"
-msgstr "Zobrazit adhezní vrstvy"
+msgstr "Přepnout zobrazení vrstev lepidla"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:288
-#, fuzzy
 msgid "Toggle display of adhesive layers"
-msgstr "Zobrazit adhezní vrstvy"
+msgstr "Přepnout zobrazení na vrstvy lepidla"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:293
-#, fuzzy
 msgid "Toggle silkscreen display"
-msgstr "Zobrazit vrstvy potisku"
+msgstr "Přepnout zobrazení vrstvy potisku"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:293
-#, fuzzy
 msgid "Toggle display of silkscreen layers"
-msgstr "Zobrazit vrstvy potisku"
+msgstr "Přepnout zobrazení na vrstvu potisku"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:298
-#, fuzzy
 msgid "Toggle solder mask display"
-msgstr "Zobrazit vrstvy pájecí masky"
+msgstr "Přepnout zobrazení pájecí masky"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:298
-#, fuzzy
 msgid "Toggle display of solder mask layers"
-msgstr "Zobrazit vrstvy pájecí masky"
+msgstr "Přepnout zobrazení na vrstvu pájecí masky"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:303
-#, fuzzy
 msgid "Toggle solder paste display"
-msgstr "Zobrazit vrstvy pájecí pasty"
+msgstr "Přepnout zobrazení pájecí pasty"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:303
-#, fuzzy
 msgid "Toggle display of solder paste layers"
-msgstr "Zobrazit vrstvy pájecí pasty"
+msgstr "Přepnout zobrazení na vrstvu pájecí pasty"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:308
-#, fuzzy
 msgid "Toggle comments display"
-msgstr "Režim zobrazení normální kontrast"
+msgstr "Přepnout zobrazení komentářů"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:308
-#, fuzzy
 msgid "Toggle display of comments and drawings layers"
-msgstr "Zobrazit komentáře a kreslicí vrstvy"
+msgstr "Přepnout zobrazení na vrstvy komentářů a kreseb"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:313
 msgid "Toggle ECO display"
-msgstr ""
+msgstr "Přepnout zobrazení ECO"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:313
-#, fuzzy
 msgid "Toggle display of ECO layers"
-msgstr "Vždy zobrazit kurzor"
+msgstr "Přepnout zobrazení na vrstvy ECO"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:154 common/base_units.cpp:478
 #: common/dialogs/dialog_grid_settings_base.cpp:41
@@ -1212,14 +1192,12 @@ msgstr "Vyberte obrázek"
 #: bitmap2component/bitmap2cmp_gui.cpp:331
 #: eeschema/tools/sch_drawing_tools.cpp:382
 #: pagelayout_editor/pl_editor_frame.cpp:846
-#, fuzzy
 msgid "Image Files"
-msgstr "Soubory obrázků "
+msgstr "Soubory obrázků"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:687
-#, fuzzy
 msgid "Unable to export to the Clipboard"
-msgstr "Vloží položky ze schránky"
+msgstr "Nelze exportovat do schránky"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:722
 msgid "Create Logo File"
@@ -1234,13 +1212,12 @@ msgid "File \"%s\" could not be created."
 msgstr "Soubor \"%s\" nelze vytvořit."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:760
-#, fuzzy
 msgid "Create PostScript File"
-msgstr "Vytvořit Postscript (.ps soubor)"
+msgstr "Vytvořit soubor Postscript"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:800
 msgid "Create Symbol Library"
-msgstr "Vytvořit knihovnu součástek"
+msgstr "Vytvořit knihovnu symbolů"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:839
 msgid "Create Footprint Library"
@@ -1276,9 +1253,8 @@ msgid "Bitmap Info:"
 msgstr "Informace o bitmapě:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:50
-#, fuzzy
 msgid "Bitmap size:"
-msgstr "Informace o bitmapě:"
+msgstr "Velikost bitmapy:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:54
 #: bitmap2component/bitmap2cmp_gui_base.cpp:58
@@ -1294,12 +1270,11 @@ msgstr "body"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:66
 msgid "Bitmap PPI:"
-msgstr ""
+msgstr "PPI Bitmapy:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:78
-#, fuzzy
 msgid "PPI"
-msgstr "PI"
+msgstr "PPI"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:82
 msgid "BPP:"
@@ -1310,9 +1285,8 @@ msgid "bits"
 msgstr "bity"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:104
-#, fuzzy
 msgid "Output Parameters:"
-msgstr "Parametry:"
+msgstr "Výstupní parametry:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
@@ -1334,9 +1308,8 @@ msgid "Load Bitmap"
 msgstr "Načíst bitmapu"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:152
-#, fuzzy
 msgid "Export to File"
-msgstr "Exportovat SVG soubor"
+msgstr "Exportovat do souboru"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:155
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:178
@@ -1352,9 +1325,8 @@ msgid "Pcbnew (.kicad_mod file)"
 msgstr "Pcbnew (.kicad_mod soubor)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "PostScript (.ps file)"
-msgstr "Postscript (.ps soubor)"
+msgstr "PostScript (.ps soubor)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Logo for title block (.kicad_wks file)"
@@ -1403,17 +1375,17 @@ msgstr "Uživatelská vrstva Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
 msgid "Board Layer for Outline:"
-msgstr "Vrstva obrysů desky:"
+msgstr "Vrstva desky pro obrys:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
-#, fuzzy
 msgid ""
 "Choose the board layer to place the outline.\n"
 "The reference designator and value are always placed on the silk screen "
 "layer (but will be marked invisible)."
 msgstr ""
 "Zvolte vrstvu desky k umístění obrysu.\n"
-"2 neviditelné odkazy na pole a hodnoty jsou vždy umístěny na vrstvu potisku."
+"Označení reference a hodnoty jsou vždy umístěny na vrstvě potisku.(ale bude "
+"označen jako neviditelný)."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 msgid "Bitmap to Component Converter"
@@ -1421,11 +1393,11 @@ msgstr "Převaděč bitmap na součástky"
 
 #: common/base_units.cpp:480
 msgid "sq. mm"
-msgstr ""
+msgstr "mm^2"
 
 #: common/base_units.cpp:482
 msgid "cu. mm"
-msgstr ""
+msgstr "mm^3"
 
 #: common/base_units.cpp:492 common/eda_draw_frame.cpp:496
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
@@ -1447,29 +1419,27 @@ msgstr ""
 #: pagelayout_editor/pl_editor_frame.cpp:728
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:143
 msgid "mils"
-msgstr "mils"
+msgstr "milů"
 
 #: common/base_units.cpp:494
-#, fuzzy
 msgid "sq. mils"
-msgstr " mils"
+msgstr "milů^2"
 
 #: common/base_units.cpp:496
-#, fuzzy
 msgid "cu. mils"
-msgstr " mils"
+msgstr "milů^3"
 
 #: common/base_units.cpp:506
 msgid "in"
-msgstr "v"
+msgstr "pal"
 
 #: common/base_units.cpp:508
 msgid "sq. in"
-msgstr ""
+msgstr "pal^2"
 
 #: common/base_units.cpp:510
 msgid "cu. in"
-msgstr ""
+msgstr "pal^3"
 
 #: common/base_units.cpp:514
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:71
@@ -1541,11 +1511,11 @@ msgstr "Pokud neuložíte, budou vaše změny nenávratně ztraceny."
 #: eeschema/libedit/libedit.cpp:465 eeschema/widgets/tuner_slider_base.cpp:66
 #: pcbnew/footprint_libraries_utils.cpp:894
 msgid "Save"
-msgstr "&Uložit"
+msgstr "Uložit"
 
 #: common/confirm.cpp:156 common/confirm.cpp:183
 msgid "Discard Changes"
-msgstr "Zahodit změny?"
+msgstr "Zahodit změny"
 
 #: common/confirm.cpp:159 common/confirm.cpp:227
 msgid "Apply to all"
@@ -1557,7 +1527,7 @@ msgstr "Vaše budou změny nenávratně ztraceny."
 
 #: common/confirm.cpp:196 common/tool/actions.cpp:89
 msgid "Revert"
-msgstr "Navrátit"
+msgstr "Vrátit zpět"
 
 #: common/confirm.cpp:196 common/tool/actions.cpp:120
 #: eeschema/dialogs/dialog_erc.cpp:292
@@ -1602,8 +1572,8 @@ msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
 msgstr ""
-"Souprava KiCad EDA je sada aplikací s otevřeným kódem pro vytváření "
-"elektrických schémat a návrhu desek plošných spojů."
+"KiCad EDA Suite je sada aplikací s otevřeným kódem pro vytváření "
+"elektrických schémat a návrh desek plošných spojů."
 
 #: common/dialog_about/AboutDialog_main.cpp:126
 msgid "KiCad on the web"
@@ -1611,12 +1581,11 @@ msgstr "KiCad na webu"
 
 #: common/dialog_about/AboutDialog_main.cpp:132
 msgid "The official KiCad website - "
-msgstr "Oficiální stránka KiCadu "
+msgstr "Oficiální stránka KiCadu - "
 
 #: common/dialog_about/AboutDialog_main.cpp:136
-#, fuzzy
 msgid "Developer website - "
-msgstr "Vývojářská stránka na Launchpadu - "
+msgstr "Web vývojářů - "
 
 #: common/dialog_about/AboutDialog_main.cpp:141
 msgid "Official KiCad library repositories - "
@@ -1628,12 +1597,11 @@ msgstr "Sledování chyb"
 
 #: common/dialog_about/AboutDialog_main.cpp:154
 msgid "Report or examine bugs - "
-msgstr "Hlásit nebo vyšetřit chyby - "
+msgstr "Hlásit nebo přezkoumat chyby - "
 
 #: common/dialog_about/AboutDialog_main.cpp:160
-#, fuzzy
 msgid "KiCad users group and community"
-msgstr "Skupina a komunita uživatelů KiCadu"
+msgstr "KiCad skupina uživatelů a komunita"
 
 #: common/dialog_about/AboutDialog_main.cpp:165
 msgid "KiCad forum - "
@@ -1641,15 +1609,15 @@ msgstr "Fórum KiCadu - "
 
 #: common/dialog_about/AboutDialog_main.cpp:179
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr "Kompletní sada KiCad EDA je uvolněna pod"
+msgstr "Kompletní KiCad EDA Suite je vydána pod"
 
 #: common/dialog_about/AboutDialog_main.cpp:181
 msgid "GNU General Public License (GPL) version 3 or any later version"
-msgstr "GNU General Public License (GPL) verze 3 nebo pozdější"
+msgstr "GNU General Public License (GPL) verze 3 nebo jakoukoli novější verzi"
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Team"
-msgstr ""
+msgstr "Hlavní vývojový tým"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Alumni"
@@ -1657,7 +1625,7 @@ msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
-msgstr ""
+msgstr "Další příspěvky od"
 
 #: common/dialog_about/AboutDialog_main.cpp:599
 msgid "Others"
@@ -1665,7 +1633,7 @@ msgstr "Jiné"
 
 #: common/dialog_about/AboutDialog_main.cpp:619
 msgid "KiCad Librarian Team"
-msgstr ""
+msgstr "Tým knihoven KiCadu"
 
 #: common/dialog_about/AboutDialog_main.cpp:634
 msgid "3D models by"
@@ -1673,7 +1641,7 @@ msgstr "3D modely od"
 
 #: common/dialog_about/AboutDialog_main.cpp:646
 msgid "Symbols by"
-msgstr "Součástky podle"
+msgstr "Symboly od"
 
 #: common/dialog_about/AboutDialog_main.cpp:653
 msgid "Footprints by"
@@ -1684,36 +1652,34 @@ msgid "Icons by"
 msgstr "Ikony od"
 
 #: common/dialog_about/dialog_about.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "About %s"
-msgstr "O aplikaci KiCad"
+msgstr "O aplikaci %s"
 
 #: common/dialog_about/dialog_about.cpp:118
 #: common/dialog_about/dialog_about_base.h:56
 msgid "About"
-msgstr "O aplikaci KiCad"
+msgstr "O aplikaci"
 
 #: common/dialog_about/dialog_about.cpp:123
-#, fuzzy
 msgid "Version"
-msgstr "Informace o verzi"
+msgstr "Verze"
 
 #: common/dialog_about/dialog_about.cpp:125
 msgid "Developers"
-msgstr "Vývojáří"
+msgstr "Vývojáři"
 
 #: common/dialog_about/dialog_about.cpp:127
 msgid "Doc Writers"
-msgstr "Pisatelé dokumentace"
+msgstr "Dokumentace"
 
 #: common/dialog_about/dialog_about.cpp:130
-#, fuzzy
 msgid "Librarians"
 msgstr "Knihovny"
 
 #: common/dialog_about/dialog_about.cpp:133
 msgid "Artists"
-msgstr "Umělci"
+msgstr "Grafika"
 
 #: common/dialog_about/dialog_about.cpp:135
 msgid "Translators"
@@ -1721,7 +1687,7 @@ msgstr "Překladatelé"
 
 #: common/dialog_about/dialog_about.cpp:137
 msgid "Packagers"
-msgstr "Autoři balíčků"
+msgstr "Balíčky"
 
 #: common/dialog_about/dialog_about.cpp:140
 msgid "License"
@@ -1756,37 +1722,32 @@ msgid "Lib Version Info"
 msgstr "Informace o verzích knihoven"
 
 #: common/dialog_about/dialog_about_base.cpp:58
-#, fuzzy
 msgid "&Copy Version Info"
-msgstr "Kopírovat informaci o verzi"
+msgstr "&Kopírovat informaci o verzi"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
-msgstr "Kopírovat verzi KiCadu do schránky"
+msgstr "Kopírovat info o verzi KiCadu do schránky"
 
 #: common/dialog_about/dialog_about_base.cpp:63
-#, fuzzy
 msgid "&Report Bug"
-msgstr "Vytvořit soubor hlášení"
+msgstr "Vytvořit soubor &hlášení"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:626
-#, fuzzy
 msgid "Report a problem with KiCad"
-msgstr "Zapojte se do KiCadu"
+msgstr "Nahlásit problém s KiCadem"
 
 #: common/dialog_about/dialog_about_base.cpp:89
 msgid "&OK"
 msgstr "&OK"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:46
-#, fuzzy
 msgid "Report"
-msgstr "Zpráva ERC"
+msgstr "Zpráva"
 
 #: common/dialogs/dialog_color_picker.cpp:94
-#, fuzzy
 msgid "Clear Color"
-msgstr "Barva mědi"
+msgstr "Vyčistit barvu"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -1839,13 +1800,12 @@ msgid "Opacity:"
 msgstr "Neprůhlednost:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:185
-#, fuzzy
 msgid "Preview (old/new):"
-msgstr "Náhled (starý / nový):"
+msgstr "Náhled (starý/nový):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
 msgid "Reset to Default"
-msgstr "Návrat na výchozí hodnoty"
+msgstr "Obnovit na výchozí"
 
 #: common/dialogs/dialog_configure_paths.cpp:248
 #: common/dialogs/dialog_configure_paths.cpp:318
@@ -1892,16 +1852,16 @@ msgstr ""
 #: common/dialogs/dialog_configure_paths.cpp:357
 #, c-format
 msgid "The name %s is reserved, and cannot be used here"
-msgstr ""
+msgstr "Název %s je vyhrazen a nelze jej zde použít"
 
 #: common/dialogs/dialog_configure_paths.cpp:493
 msgid "File Browser..."
-msgstr "Prohlížeč souborů ..."
+msgstr "Prohlížeč souborů..."
 
 #: common/dialogs/dialog_configure_paths.cpp:496
 #: common/widgets/grid_text_button_helpers.cpp:378
 msgid "Select Path"
-msgstr "Vyberte cestu"
+msgstr "Vybrat cestu"
 
 #: common/dialogs/dialog_configure_paths.cpp:575
 msgid ""
@@ -1914,7 +1874,7 @@ msgstr ""
 "Zadejte název a hodnotu každé proměnné prostředí.  Šedé záznamy jsou názvy, "
 "které byly definovány externě na systémové nebo uživatelské úrovni.  "
 "Proměnné prostředí, definované na systémové nebo uživatelské úrovni mají "
-"přednost předproměnnými, definovanými v této tabulce.  To znamená, že "
+"přednost před proměnnými definovanými v této tabulce.  To znamená, že "
 "hodnoty v této tabulce budou ignorovány."
 
 #: common/dialogs/dialog_configure_paths.cpp:581
@@ -1993,7 +1953,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr "Kopírovat výchozí globální %s tabulku knihoven součástek (doporučeno)"
+msgstr "Kopírovat výchozí globální %s tabulku knihoven (doporučeno)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
@@ -2001,26 +1961,26 @@ msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
 msgstr ""
-"Tuto možnost vyberte, pokud si nejste jisti konfigurací tabulky globálních "
-"%s knihoven součástek"
+"Tuto možnost vyberte, pokud si nejste jisti konfigurací globální tabulky "
+"knihoven %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
 #, c-format
 msgid "Copy custom global %s library table"
-msgstr "Kopírovat tabulku vlastních globálních %s knihoven součástek"
+msgstr "Kopírovat tabulku vlastních globálních knihoven %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr ""
-"Tuto možnost vyberte, chcete-li zkopírovat jiný soubor tabulky knihovny "
-"součástek %s než výchozí"
+"Tuto možnost vyberte, pokud chcete zkopírovat soubor tabulky knihovny %s "
+"jiný než výchozí"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr "Vytvořit prázdnou tabulku globální %s knihovny symbolů"
+msgstr "Vytvořit prázdnou tabulku globální knihovny %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
@@ -2147,9 +2107,8 @@ msgid "a page"
 msgstr "stránka"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:67
-#, fuzzy
 msgid "Current Grid"
-msgstr "Proud"
+msgstr "Aktuální mřížka"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:83
 msgid "User Defined Grid"
@@ -2197,14 +2156,14 @@ msgid "Incorrect scale number"
 msgstr "Nesprávné číslo měřítka"
 
 #: common/dialogs/dialog_image_editor.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This scale results in an image which is too small (%.2f mm or %.1f mil)."
 msgstr ""
-"Tato stupnice dává příliš malou velikost obrázku (%.2f mm nebo %.1f mil)"
+"Tato stupnice dává příliš malou velikost obrázku (%.2f mm nebo %.1f mil)."
 
 #: common/dialogs/dialog_image_editor.cpp:93
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
@@ -2234,14 +2193,12 @@ msgid "Welcome to KiCad %s!"
 msgstr "Vítejte v KiCadu %s!"
 
 #: common/dialogs/dialog_migrate_settings.cpp:58
-#, fuzzy
 msgid "Import settings from a previous version (none found)"
-msgstr "Importovat nastavení z předchozí verze (žádná nenalezena)"
+msgstr "Importovat nastavení z předchozí verze (nenalezeno)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:118
-#, fuzzy
 msgid "Select Settings Path"
-msgstr "Vyberte cestu"
+msgstr "Vybrat cestu nastavení"
 
 #: common/dialogs/dialog_page_settings.cpp:62
 msgid "A5 148x210mm"
@@ -2289,29 +2246,27 @@ msgstr "E 34x44in"
 
 #: common/dialogs/dialog_page_settings.cpp:73
 msgid "USLetter 8.5x11in"
-msgstr "USLetter 8.5x11in"
+msgstr "USLetter 8.5x11pal"
 
 #: common/dialogs/dialog_page_settings.cpp:74
 msgid "USLegal 8.5x14in"
-msgstr "USLegal 8.5x14in"
+msgstr "USLegal 8.5x14pal"
 
 #: common/dialogs/dialog_page_settings.cpp:75
 msgid "USLedger 11x17in"
-msgstr "USLedger 11x17in"
+msgstr "USLedger 11x17pal"
 
 #: common/dialogs/dialog_page_settings.cpp:76
 msgid "User (Custom)"
 msgstr "Vlastní"
 
 #: common/dialogs/dialog_page_settings.cpp:104
-#, fuzzy
 msgid "Preview Settings"
-msgstr "Nastavení stránky"
+msgstr "Nastavení náhledu"
 
 #: common/dialogs/dialog_page_settings.cpp:105
-#, fuzzy
 msgid "Preview Paper"
-msgstr "Náhled"
+msgstr "Náhled velikosti papíru"
 
 #: common/dialogs/dialog_page_settings.cpp:106
 #, fuzzy
@@ -2389,7 +2344,7 @@ msgstr "Orientace:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:55
 msgid "Custom paper size:"
-msgstr "Uživatelská velikost papíru."
+msgstr "Uživatelská velikost papíru:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:67
 #: pcbnew/dialogs/dialog_board_statistics.cpp:98
