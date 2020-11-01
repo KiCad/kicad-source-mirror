@@ -541,7 +541,7 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
 
     SFVEC2UI grid_divisions;
 
-    if( aDivFactor < 0.0f)
+    if( aDivFactor < 0.0f )
     {
         grid_divisions = SFVEC2UI( 1 );
     }
@@ -551,8 +551,8 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
             aDivFactor = medOfTheSquaresSegmentLength;
 
 
-        grid_divisions.x = (unsigned int)( (bbox.GetExtent().x / aDivFactor) );
-        grid_divisions.y = (unsigned int)( (bbox.GetExtent().y / aDivFactor) );
+        grid_divisions.x = (unsigned int)( ( bbox.GetExtent().x / aDivFactor ) );
+        grid_divisions.y = (unsigned int)( ( bbox.GetExtent().y / aDivFactor ) );
 
         grid_divisions = glm::clamp( grid_divisions ,
                                      SFVEC2UI( 1, 1 ),

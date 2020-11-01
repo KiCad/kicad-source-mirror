@@ -64,7 +64,7 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
     if( tBBoxStart >= aHitInfo.m_tHit )
         return false;
 
-    if( fabs(tBBoxStart - tBBoxEnd) <= FLT_EPSILON )
+    if( fabs( tBBoxStart - tBBoxEnd ) <= FLT_EPSILON )
         return false;
 
     const bool startedInside = m_bbox.Inside( aRay.m_Origin );

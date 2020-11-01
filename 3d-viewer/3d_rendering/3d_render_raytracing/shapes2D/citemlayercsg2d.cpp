@@ -116,15 +116,15 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
             //check against all subbed objects
             for( unsigned int i = 0; i < m_objectB->size(); ++i )
             {
-                if( ((const COBJECT2D *)(*m_objectB)[i])->IsPointInside( currentRayPos ) )
+                if( ( (const COBJECT2D *)( *m_objectB)[i] )->IsPointInside( currentRayPos ) )
                 {
                     // ray point is inside a subtracted region,  so move it to the end of the
                     // subtracted region
                     float hitDist;
                     SFVEC2F tmpNormal;
-                    if( !((const COBJECT2D *)(*m_objectB)[i])->Intersect( currentRay,
-                                                                          &hitDist,
-                                                                          &tmpNormal ) )
+                    if( !( (const COBJECT2D *)( *m_objectB)[i] )->Intersect( currentRay,
+                                                                             &hitDist,
+                                                                             &tmpNormal ) )
                         return false; // ray hit main object but did not leave subtracted volume
 
                     wxASSERT( hitDist <= 1.0f );
