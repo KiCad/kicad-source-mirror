@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-31 18:15+0000\n"
+"PO-Revision-Date: 2020-11-01 11:35+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -196,9 +196,9 @@ msgstr "Nové jméno třídy sítě:"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:761
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNetClass %s"
-msgstr "Třídy sítí"
+msgstr "Síť %s\tTřídasítí %s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:497
 msgid "Load OpenGL: board"
@@ -214,7 +214,7 @@ msgstr "Načíst OpenGL: vrstvy"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:655
 msgid "Loading 3D models"
-msgstr "Načíst 3D modely"
+msgstr "Načítání 3D modelů"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:665
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:1036
@@ -263,7 +263,7 @@ msgstr "3D prohlížeč"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:68
 msgid "Copy 3D Image"
-msgstr "Kopírování 3D obrázku"
+msgstr "Kopírovat 3D obrázek"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:106
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:282
@@ -396,7 +396,7 @@ msgstr "Nastavení možností zobrazení a viditelnosti vrstev"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Render current view using Raytracing"
-msgstr "Vykreslit aktuální pohled pomocí Raytracingu"
+msgstr "Rendrování aktuálního pohledu pomocí Raytracingu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:41
 msgid "Realistic mode"
@@ -578,7 +578,6 @@ msgid "Raytracing Render Options"
 msgstr "Možnosti vykreslování raytracingu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:431
-#, fuzzy
 msgid "Procedural textures"
 msgstr "Procedurální textury"
 
@@ -601,7 +600,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:481
 msgid "Recursive Level"
-msgstr ""
+msgstr "Rekurzivní úroveň"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:488
 msgid "Shadows"
@@ -749,9 +748,8 @@ msgid "8"
 msgstr "8"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:785
-#, fuzzy
 msgid "Reset to defaults"
-msgstr "Nastavit výchozí hodnoty"
+msgstr "Reset na výchozí"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.h:179
 msgid "3D Display Options"
@@ -814,18 +812,16 @@ msgid "Solder Paste Color"
 msgstr "Barva pájecí pasty"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:43
-#, fuzzy
 msgid "Center pivot rotation"
-msgstr "Otáčet kolem středu (prostřední tlačítko)"
+msgstr "Otáčet kolem středu"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:43
-#, fuzzy
 msgid "Center pivot rotation (middle mouse click)"
-msgstr "Otáčet kolem středu (prostřední tlačítko)"
+msgstr "Otáčet kolem středu (prostřední kliknutí myší)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:48
 msgid "Rotate X Clockwise"
-msgstr "Otočit X po směru hodinových ručiček"
+msgstr "Otočit X ve směru hodinových ručiček"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:53
 msgid "Rotate X Counterclockwise"
@@ -833,7 +829,7 @@ msgstr "Otočit X proti směru hodinových ručiček"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:58
 msgid "Rotate Y Clockwise"
-msgstr "Otočit Y po směru hodinových ručiček"
+msgstr "Otočit Y ve směru hodinových ručiček"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:63
 msgid "Rotate Y Counterclockwise"
@@ -841,7 +837,7 @@ msgstr "Otočit Y proti směru hodinových ručiček"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:68
 msgid "Rotate Z Clockwise"
-msgstr "Otočit Z po směru hodinových ručiček"
+msgstr "Otočit Z ve směru hodinových ručiček"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:73
 msgid "Rotate Z Counterclockwise"
@@ -849,11 +845,11 @@ msgstr "Otočit Z proti směru hodinových ručiček"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:79
 msgid "Move board Left"
-msgstr "Posunout desku vlevo"
+msgstr "Přesunout desku vlevo"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:85
 msgid "Move board Right"
-msgstr "Posunout desku  vpravo"
+msgstr "Přesunout desku vpravo"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:91
 msgid "Move board Up"
@@ -865,30 +861,27 @@ msgstr "Přesunout desku dolů"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:103
 msgid "Home view"
-msgstr "Po&hled"
+msgstr "Výchozí pohled"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:109
 msgid "Reset view"
-msgstr "Nulovat"
+msgstr "Obnovit zobrazení"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
-#, fuzzy
 msgid "Flip Board"
+msgstr "Obrátit desku"
+
+#: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
+msgid "Flip the board view"
 msgstr "Převrátit pohled na desku"
 
-#: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
-#, fuzzy
-msgid "Flip the board view"
-msgstr "Překlopit (zrcadlit) pohled na desku"
-
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
-#, fuzzy
 msgid "Toggle orthographic projection"
-msgstr "Povolit/Zakázat ortogonální projekci"
+msgstr "Přepnout ortografickou projekci"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
 msgid "Enable/disable orthographic projection"
-msgstr "Povolit/Zakázat ortogonální projekci"
+msgstr "Povolit/zakázat ortografickou projekci"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:126
 msgid "View Front"
@@ -911,33 +904,28 @@ msgid "View Top"
 msgstr "Pohled shora"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:156
-#, fuzzy
 msgid "View Bottom"
-msgstr "Pohled zespodu"
+msgstr "Pohled zespoda"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:161
 msgid "No 3D Grid"
 msgstr "Bez 3D mřížky"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:166
-#, fuzzy
 msgid "3D Grid 10mm"
-msgstr "3D mřížka 10 mm"
+msgstr "3D mřížka 10mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:171
-#, fuzzy
 msgid "3D Grid 5mm"
-msgstr "3D mřížka 5 mm"
+msgstr "3D mřížka 5mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:176
-#, fuzzy
 msgid "3D Grid 2.5mm"
-msgstr "3D mřížka 2,5 mm"
+msgstr "3D mřížka 2.5mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:181
-#, fuzzy
 msgid "3D Grid 1mm"
-msgstr "3D mřížka 1 mm"
+msgstr "3D mřížka 1mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:187
 msgid "Use All Properties"
@@ -964,19 +952,16 @@ msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr "Použít styl barev CAD na základě difúzní barvy materiálu"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
-#, fuzzy
 msgid "Toggle Through Hole 3D models"
-msgstr "Zobrazit 3D modely s vývody"
+msgstr "Přepnout 3D modely s vývody"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
-#, fuzzy
 msgid "Toggle 3D models with 'Through hole' attribute"
-msgstr "Přepnout na 3D modely s vývody"
+msgstr "Přepnout 3D modely s atributem 'Through hole'"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
-#, fuzzy
 msgid "Toggle SMD 3D models"
-msgstr "Načíst 3D modely"
+msgstr "Přepnout 3D modely SMD"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
 #, fuzzy
