@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-31 18:15+0000\n"
+"PO-Revision-Date: 2020-11-01 14:23+0000\n"
 "Last-Translator: Hildo Guillardi Júnior <hildogjr@gmail.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
 "master-source/pt/>\n"
@@ -429,7 +429,7 @@ msgstr "Remover máscara de solda de serigrafias"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:77
 msgid "Clip silkscreen at via annulus"
-msgstr ""
+msgstr "Fixa o silk ao anel da via"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:86
 msgid "Non plated pads copper as bare copper"
@@ -1054,9 +1054,8 @@ msgid "Toggle board body display"
 msgstr "Alternar Exibição de Zona"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:278
-#, fuzzy
 msgid "Show 3D Axis"
-msgstr "Exibir &Eixo 3D"
+msgstr "Mostrar eixos"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:283
 msgid "Toggle zone display"
@@ -1073,19 +1072,16 @@ msgid "Toggle display of adhesive layers"
 msgstr "Exibir camadas de adesivo"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:293
-#, fuzzy
 msgid "Toggle silkscreen display"
-msgstr "Alternar Exibição de Zona"
+msgstr "Exibir/Ocultar serigrafia"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:293
-#, fuzzy
 msgid "Toggle display of silkscreen layers"
-msgstr "Exibir camadas de serigrafia"
+msgstr "Exibir/Ocultar camadas de serigrafia"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:298
-#, fuzzy
 msgid "Toggle solder mask display"
-msgstr "Alternar Exibição de Zona"
+msgstr "Exibir/Ocultar máscara de solda"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:298
 #, fuzzy
@@ -1093,9 +1089,8 @@ msgid "Toggle display of solder mask layers"
 msgstr "Exibir camadas de máscara de solda"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:303
-#, fuzzy
 msgid "Toggle solder paste display"
-msgstr "Exibir camadas de pasta de solda"
+msgstr "Exibir/Ocultar pasta de solda"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:303
 #, fuzzy
@@ -1103,23 +1098,20 @@ msgid "Toggle display of solder paste layers"
 msgstr "Exibir camadas de pasta de solda"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:308
-#, fuzzy
 msgid "Toggle comments display"
-msgstr "Alternar Exibição de Zona"
+msgstr "Exibir/Ocultar comentários"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:308
-#, fuzzy
 msgid "Toggle display of comments and drawings layers"
-msgstr "Exibir camadas de comentários e desenhos"
+msgstr "Exibir/Ocultar camadas de comentários e desenhos"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:313
-#, fuzzy
 msgid "Toggle ECO display"
-msgstr "Alternar Exibição de Zona"
+msgstr "Exibir/Ocultar ECO"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:313
 msgid "Toggle display of ECO layers"
-msgstr ""
+msgstr "Exibir/Ocultar camadas de ECO"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:154 common/base_units.cpp:478
 #: common/dialogs/dialog_grid_settings_base.cpp:41
@@ -1435,11 +1427,11 @@ msgstr "Conversor de Bitmap para Componente"
 
 #: common/base_units.cpp:480
 msgid "sq. mm"
-msgstr "mm^2"
+msgstr "mm²"
 
 #: common/base_units.cpp:482
 msgid "cu. mm"
-msgstr "cu. mm"
+msgstr "mm³"
 
 #: common/base_units.cpp:492 common/eda_draw_frame.cpp:496
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
@@ -1465,11 +1457,11 @@ msgstr "mil"
 
 #: common/base_units.cpp:494
 msgid "sq. mils"
-msgstr "mil^2"
+msgstr "mil²"
 
 #: common/base_units.cpp:496
 msgid "cu. mils"
-msgstr "cu. mil"
+msgstr "mil³"
 
 #: common/base_units.cpp:506
 msgid "in"
@@ -1477,11 +1469,11 @@ msgstr "in"
 
 #: common/base_units.cpp:508
 msgid "sq. in"
-msgstr "in^2"
+msgstr "in²"
 
 #: common/base_units.cpp:510
 msgid "cu. in"
-msgstr "cu. in"
+msgstr "in³"
 
 #: common/base_units.cpp:514
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:71
@@ -2753,7 +2745,7 @@ msgstr "Itens:"
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
 msgid "View Preset Switcher"
-msgstr ""
+msgstr "Visualizar predefinições"
 
 #: common/dialogs/panel_color_settings.cpp:49
 #, fuzzy
@@ -3271,12 +3263,12 @@ msgstr "Deslocar a Esquerda/Direita"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:206
 msgid "Pan left/right with horizontal touchpad or scroll wheel movement"
-msgstr ""
+msgstr "Movimentação horizontal com movimento do Touchpad ou mouse"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:207
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
-msgstr ""
+msgstr "Movimenta área esquerda para direita com mesmo movimento no Touchpad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:82
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
@@ -3351,12 +3343,12 @@ msgstr "Furo da Via"
 #: common/dialogs/panel_setup_netclasses_base.cpp:45
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:193
 msgid "uVia Size"
-msgstr "Tamanho da uVia"
+msgstr "Tamanho da microvia"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:194
 msgid "uVia Drill"
-msgstr "Furo da µVia"
+msgstr "Furo da microvia"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 #, fuzzy
@@ -3460,7 +3452,7 @@ msgstr "Ignorar"
 
 #: common/dialogs/panel_setup_severities.cpp:94
 msgid "From Pin Conflicts Map"
-msgstr ""
+msgstr "Do mapa de conflito de pinos"
 
 #: common/dialogs/panel_text_variables.cpp:114
 #: common/dialogs/panel_text_variables.cpp:142
@@ -3474,30 +3466,26 @@ msgid "Variable Name"
 msgstr "Nome da Tabela"
 
 #: common/dialogs/panel_text_variables_base.cpp:38
-#, fuzzy
 msgid "Text Substitution"
-msgstr "Substituições de Locais de Arquivos:"
+msgstr "Substituição de texto"
 
 #: common/dialogs/wx_html_report_panel.cpp:179
 #: common/dialogs/wx_html_report_panel.cpp:204
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:521
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:541
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:561
-#, fuzzy
 msgid "Error:"
-msgstr "Erro: "
+msgstr "Erro:"
 
 #: common/dialogs/wx_html_report_panel.cpp:183
 #: common/dialogs/wx_html_report_panel.cpp:206
-#, fuzzy
 msgid "Warning:"
-msgstr "Atenção: "
+msgstr "Atenção:"
 
 #: common/dialogs/wx_html_report_panel.cpp:186
 #: common/dialogs/wx_html_report_panel.cpp:208
-#, fuzzy
 msgid "Info:"
-msgstr "Informação: "
+msgstr "Informação:"
 
 #: common/dialogs/wx_html_report_panel.cpp:322
 #: eeschema/dialogs/dialog_erc.cpp:658 pcbnew/dialogs/dialog_drc.cpp:574
@@ -3812,9 +3800,8 @@ msgid "Item List"
 msgstr "Itens"
 
 #: common/eda_item.cpp:277
-#, fuzzy
 msgid "Net Info"
-msgstr "Id de Rede"
+msgstr "Informações da rede"
 
 #: common/eda_item.cpp:278 pcbnew/class_pcb_group.cpp:307
 #: pcbnew/tools/pcb_actions.cpp:653
@@ -4136,14 +4123,12 @@ msgid "Height"
 msgstr "Altura"
 
 #: common/eda_text.cpp:671
-#, fuzzy
 msgid "Horizontal Justification"
-msgstr "Espaçamento horizontal:"
+msgstr "Justifica horizontalmente"
 
 #: common/eda_text.cpp:673
-#, fuzzy
 msgid "Vertical Justification"
-msgstr "Justificação:"
+msgstr "Justifica verticalmente"
 
 #: common/env_vars.cpp:71
 msgid ""
@@ -4420,11 +4405,8 @@ msgid "Ignore Other Snaps"
 msgstr "Ignorar Outros Alinhametos"
 
 #: common/hotkey_store.cpp:66
-#, fuzzy
 msgid "Project Manager"
-msgstr ""
-"Nome do projeto:\n"
-"%s\n"
+msgstr "Gestor do projeto"
 
 #: common/hotkey_store.cpp:67 eeschema/eeschema_config.cpp:223
 #: eeschema/menubar.cpp:127 eeschema/sch_edit_frame.cpp:1177
@@ -4440,7 +4422,7 @@ msgstr "Pcbnew"
 #: pagelayout_editor/pl_editor_frame.cpp:456
 #: pagelayout_editor/pl_editor_frame.cpp:544
 msgid "Page Layout Editor"
-msgstr "Page Layout Editor"
+msgstr "Editor do layout de página"
 
 #: common/hotkey_store.cpp:135
 msgid "Gestures"
@@ -4490,11 +4472,8 @@ msgstr ""
 "'"
 
 #: common/kiway.cpp:383 common/kiway.cpp:387 common/kiway.cpp:391
-#, fuzzy
 msgid "Error loading editor"
-msgstr ""
-"Erro carregando netlist.\n"
-"%s"
+msgstr "Erro carregando editor"
 
 #: common/kiway.cpp:476
 #, fuzzy, c-format
@@ -5204,22 +5183,22 @@ msgstr "Não é possível copiar o arquivo \"%s\"."
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2035
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2041
 msgid "The selected file is not valid or might be corrupt!"
-msgstr ""
+msgstr "O arquivo selecionado é inválido ou pode estar corrompido!"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2139
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr ""
+msgstr "Esperado certo número de pontos em '%s': encontrado %d mas esperado %d."
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:38
 #, c-format
 msgid "Missing node '%s' in '%s'"
-msgstr ""
+msgstr "Faltando nó '%s' em '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:41
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr "Token desconhecido \"%s\""
+msgstr "Nó desconhecido '%s' em '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:44
 #, c-format
