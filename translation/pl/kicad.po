@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-11-01 11:35+0000\n"
+"PO-Revision-Date: 2020-11-01 14:22+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -1820,12 +1820,12 @@ msgstr "Resetuj do domyślnych"
 #: common/dialogs/dialog_configure_paths.cpp:248
 #: common/dialogs/dialog_configure_paths.cpp:318
 msgid "Environment variable name cannot be empty."
-msgstr "Nazwa zmiennej środowiskowej nie może być pusta."
+msgstr "Nazwa zmiennej nie może być pusta."
 
 #: common/dialogs/dialog_configure_paths.cpp:256
 #: common/dialogs/dialog_configure_paths.cpp:320
 msgid "Environment variable path cannot be empty."
-msgstr "Nazwa zmiennej środowiskowej nie może być pusta."
+msgstr "Nazwa zmiennej nie może być pusta."
 
 #: common/dialogs/dialog_configure_paths.cpp:283
 #: common/dialogs/dialog_configure_paths.cpp:325
@@ -3406,11 +3406,11 @@ msgstr "Z mapy konfliktów pinów"
 #: common/dialogs/panel_text_variables.cpp:114
 #: common/dialogs/panel_text_variables.cpp:142
 msgid "Variable name cannot be empty."
-msgstr "Nazwa zmiennej środowiskowej nie może być pusta."
+msgstr "Nazwa zmiennej nie może być pusta."
 
 #: common/dialogs/panel_text_variables_base.cpp:37
 msgid "Variable Name"
-msgstr "Nazwa zmiennej środowiskowej"
+msgstr "Nazwa zmiennej"
 
 #: common/dialogs/panel_text_variables_base.cpp:38
 msgid "Text Substitution"
@@ -29524,30 +29524,40 @@ msgid ""
 "Track Keepout on Altium layer %d has no KiCad equivalent. Put it on "
 "Eco1_User instead"
 msgstr ""
+"Ścieżka ograniczeń na warstwie Altium %d nie ma odpowiednika w programie "
+"KiCad. Zamiast tego umieszczono ją na Eco1_User"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2185
 #, c-format
 msgid ""
 "Track on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead"
 msgstr ""
+"Ścieżka na warstwie Altium %d nie ma odpowiednika w programie KiCad. Zamiast "
+"tego umieszczono ją na Eco1_User"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2233
 #, c-format
 msgid ""
 "Ignore Barcode on Altium layer %d because it is not supported right now."
 msgstr ""
+"Ignoruję kod kreskowy na warstwie Altium %d ponieważ nie jest on obecnie "
+"wspierany."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2320
 #, c-format
 msgid ""
 "Text on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead"
 msgstr ""
+"Tekst na warstwie Altium %d nie ma odpowiednika w programie KiCad. Zamiast "
+"tego umieszczono go na Eco1_User"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2421
 #, c-format
 msgid ""
 "Fill on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead"
 msgstr ""
+"Wypełnienie na warstwie Altium %d nie ma odpowiednika w programie KiCad. "
+"Zamiast tego umieszczono go na Eco1_User"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:78
 msgid ""
@@ -29594,16 +29604,18 @@ msgid ""
 "The selected file is not valid or might be corrupt: The layer stack refers "
 "to layer ID '%s' which does not exist in the layer definitions."
 msgstr ""
+"Wybrany plik jest nieprawidłowy lub może być uszkodzony: Stos warstw odnosi "
+"się do identyfikatora warstwy '%s', który nie istnieje w definicjach warstw."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:211
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
-msgstr ""
+msgstr "Niespodziewana warstwa '%s' w stosie warstw."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:567
 #, c-format
 msgid "Design rule %s was not found. This was ignored."
-msgstr ""
+msgstr "Reguła projektowa %s nie została znaleziona. Została zignorowana."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:592
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:596
@@ -29612,6 +29624,9 @@ msgid ""
 "design rules were imported. It is recommended that you review the design "
 "rules that have been applied."
 msgstr ""
+"Zasady projektowe programu KiCad różnią się od zasad CADSTAR. Zaimportowano "
+"tylko zgodne zasady projektowe. Zaleca się zapoznanie się z zastosowanymi "
+"zasadami projektowymi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:693
 #, c-format
@@ -29620,6 +29635,9 @@ msgid ""
 "equivalent. The area is neither a via orroute keepout area. The area was not "
 "imported. "
 msgstr ""
+"Obszar '%s' programu CADSTAR w komponencie biblioteki '%s' nie ma "
+"odpowiednika w programie KiCad. Obszar ten nie jest obszarem chronionym lub "
+"przelotką. Obszar nie został zaimportowany. "
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:927
 #, c-format
@@ -29627,6 +29645,8 @@ msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
 msgstr ""
+"Definicja pola CADSTAR '%s' ma kształt otworu poza kształtem pola. Otwór "
+"został przeniesiony na środek pola."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:988
 #, c-format
@@ -29634,6 +29654,8 @@ msgid ""
 "The file appears to be corrupt. Unable to find group ID %s in the group "
 "definitions."
 msgstr ""
+"Plik wygląda na uszkodzony. Nie można znaleźć identyfikatora grupy %s w "
+"definicjach grup."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:995
 #, c-format
@@ -29641,12 +29663,16 @@ msgid ""
 "The file appears to be corrupt. Unable to find sub group %s in the group map "
 "(parent group ID=%s, Name=%s)."
 msgstr ""
+"Plik wygląda na uszkodzony. Nie można znaleźć identyfikatora podgrupy %s w "
+"mapie definicji grup (ID grupy nadrzędnej=%s, Nazwa=%s)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1114
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1124
 #, c-format
 msgid "Dimension ID %s has no KiCad equivalent. This was not imported"
 msgstr ""
+"Rozmiar o identyfikatorze %s nie ma odpowiednika w programie KiCad. Nie "
+"został zaimportowany"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1163
 #, c-format
@@ -29655,6 +29681,9 @@ msgid ""
 "areas are not supported in KiCad. Only the supported elements for the area "
 "were imported."
 msgstr ""
+"Obszar CADSTAR '%s' jest oznaczony jako obszar lokowania w CADSTAR. Obszary "
+"lokowania nie są obsługiwane w programie KiCad. Zaimportowano tylko "
+"obsługiwane elementy dla tego obszaru."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1171
 #, c-format
@@ -29662,16 +29691,18 @@ msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
 msgstr ""
+"Obszar CADSTAR '%s' nie ma odpowiednika programu KiCad. Obszary czystego "
+"lokowania nie są obsługiwane."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1195
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
-msgstr ""
+msgstr "Nie można odnaleźć komponentu '%s' w bibliotece (Symdef ID: '%s')"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1277
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
-msgstr ""
+msgstr "Nie można znaleźć dokumentacji symbolu w bibliotece (Symdef ID: '%s')"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1343
 #, c-format
@@ -29679,6 +29710,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"Szablon CADSTAR '%s' ma włączone ustawienie 'Allow in No Routing Areas'. To "
+"ustawienie nie ma odpowiednika w programie KiCad, więc zostało zignorowane."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1349
 #, c-format
@@ -29686,6 +29719,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins'enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"Szablon CADSTAR '%s' ma włączone ustawienie 'Box Isolated Pins'. To "
+"ustawienie nie ma odpowiednika w programie KiCad, więc zostało zignorowane."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1355
 #, c-format
@@ -29693,6 +29728,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour'enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"Szablon CADSTAR '%s' ma włączone ustawienie 'Automatic Repour'. To "
+"ustawienie nie ma odpowiednika w programie KiCad, więc zostało zignorowane."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1364
 #, c-format
@@ -29701,6 +29738,9 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
+"Szablon CADSTAR '%s' ma nie zerową wartość zdefiniowaną dla 'Sliver Width'. "
+"To ustawienie nie ma odpowiednika w programie KiCad, więc zostało "
+"zignorowane."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1372
 #, c-format
@@ -29710,6 +29750,10 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
+"Szablon CADSTAR '%s' ma różne ustawienia dla 'Retain Poured Copper - "
+"Disjoint' i 'Retain Poured Copper - Isolated'. KiCad nie rozróżnia tych "
+"dwóch ustawień. Ustawienie dla rozłącznej miedzi zostało zastosowane jako "
+"minimalny izolowany obszar strefy KiCad."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1403
 #, c-format
@@ -29718,6 +29762,9 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
+"Szablon CADSTAR '%s' ma różne ustawienia dla łącza termicznego na polach i "
+"przelotkach. KiCad obsługuje tylko jedno ustawienie dla obu. Zastosowano "
+"ustawienie dla padów."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1443
 #, c-format
@@ -29726,6 +29773,9 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
+"Warstwa CADSTAR '%s' jest zdefiniowana jako warstwa zasilająca. Jednakże nie "
+"istnieje sieć o takiej nazwie. Warstwa została załadowana, ale nie utworzono "
+"strefy."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1488
 msgid ""
@@ -29734,6 +29784,11 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
+"Projekt CADSTAR zawiera elementy COPPER, które nie mają bezpośredniego "
+"odpowiednika w programie KiCad. Zostały one zaimportowane jako strefa "
+"programu KiCad, jeśli wypełniona jest bryła lub kreskowanie; lub jako "
+"ścieżka KiCad, jeśli kształt był niewypełnionym konturem (otwartym lub "
+"zamkniętym)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1585
 #, c-format
@@ -29741,6 +29796,8 @@ msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored,"
 msgstr ""
+"Sieć '%s' odwołuje się do identyfikatora składnika '%s', który nie istnieje. "
+"Zostało to zignorowane,"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1592
 #, c-format
@@ -29748,6 +29805,8 @@ msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
 msgstr ""
+"Sieć '%s' odwołuje się do nieistniejącego indeksu wypełnienia '%d' w "
+"składniku '%s'. Zostało to zignorowane."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1684
 #, c-format
@@ -29756,6 +29815,9 @@ msgid ""
 "only supports circular vias so this via type has been changed to be a via "
 "with circular shape of %.2f mm diameter."
 msgstr ""
+"CADSTAR poprzez kod '%s' ma inny kształt niż zdefiniowany okrąg. KiCad "
+"obsługuje tylko przelotki okrągłe, więc ten typ przelotu został zmieniony na "
+"przelotkę o okrągłym kształcie o średnicy %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1883
 #, c-format
@@ -29763,6 +29825,8 @@ msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
 msgstr ""
+"Kształt '%s' to wypełnienie kreskowane w programie CADSTAR, który nie ma "
+"odpowiednika w programie KiCad. Zamiast tego użyto pełnego wypełnienia."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2580
 #, c-format
@@ -29771,6 +29835,9 @@ msgid ""
 "hatches (crosshatching) 90 degrees apart. The imported hatching is "
 "crosshatched."
 msgstr ""
+"Kod kreskowania CADSTAR '%s' ma zdefiniowane %d kreskowanie. KiCad obsługuje "
+"tylko 2 kreskowania (kreskowanie) pod kątem 90 stopni. Zaimportowane "
+"kreskowanie jest kreskowane prosto."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2590
 #, c-format
@@ -29779,6 +29846,10 @@ msgid ""
 "KiCad only supports one width for the haching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
+"Kod kreskowania CADSTAR '%s' ma różne szerokości linii dla każdego "
+"kreskowania. KiCad obsługuje tylko jedną szerokość. Importowane kreskowanie "
+"wykorzystuje szerokość zdefiniowaną w pierwszej definicji kreskowania, "
+"tj.%.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2602
 #, c-format
@@ -29787,6 +29858,10 @@ msgid ""
 "KiCad only supports one step size for the haching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
+"Kod kreskowania CADSTAR '%s' ma różne rozmiary stopni dla każdego "
+"kreskowania. KiCad obsługuje tylko jeden rozmiar kroku kreskowania. "
+"Zaimportowane kreskowanie wykorzystuje rozmiar kroku zdefiniowany w "
+"pierwszej definicji kreskowania, tj. %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2615
 #, c-format
@@ -29796,6 +29871,10 @@ msgid ""
 "hatching has two hatches 90 degrees apart, oriented %.1f degrees from "
 "horizontal."
 msgstr ""
+"Kreskowanie CADSTAR o kodzie kreskowania '%s' mają różnicę kątów wynoszącą "
+"%.1f stopni. KiCad obsługuje tylko kreskowanie co 90 stopni. Zaimportowane "
+"kreskowanie ma dwa kreskowania pod kątem 90 stopni, zorientowane względem "
+"%.1f stopni od poziomu."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2699
 msgid ""
@@ -29804,6 +29883,10 @@ msgid ""
 "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's 'Net "
 "Route Code' (which has been imported for all nets)."
 msgstr ""
+"Projekt CADSTAR zawiera sieci z przypisanymi klasami sieci. KiCad nie ma "
+"odpowiednika klas sieci CADSTAR, więc te elementy nie zostały zaimportowane. "
+"Uwaga: Wersja klas sieci programu KiCad jest bliższa 'Net Route Code' z "
+"programu CADSTAR (które zostały zaimportowane dla wszystkich sieci)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2710
 msgid ""
@@ -29812,6 +29895,10 @@ msgid ""
 "imported. Please review the design rules as copper pours will affected by "
 "this."
 msgstr ""
+"Projekt CADSTAR zawiera sieci z przypisaną 'Spacing Class'. Program KiCad "
+"nie ma odpowiednika tych klas programu CADSTAR, więc te elementy nie zostały "
+"zaimportowane. Prosimy o zapoznanie się z regułami projektowymi, ponieważ "
+"wpłynie to na sposób wypełniania."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:953
 #, c-format
@@ -29914,10 +30001,14 @@ msgid ""
 "\n"
 "Save anyway?"
 msgstr ""
+"Prosimy o zgłoszenie tego błędu. Błąd podczas sprawdzania struktury grupy: %"
+"s\n"
+"\n"
+"Zapisać mimo to?"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:336
 msgid "Internal group data structure corrupt"
-msgstr ""
+msgstr "Uszkodzona wewnętrzna struktura danych grup"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:338
 msgid "Save Anyway"
@@ -30193,7 +30284,7 @@ msgstr "Nieznana warstwa %u PCad"
 
 #: pcbnew/plugins/pcad/pcb.cpp:754
 msgid "KiCad only supports 32 signal layers"
-msgstr ""
+msgstr "KiCad obsługuje tylko 32 warstwy sygnałowe"
 
 #: pcbnew/router/length_tuner_tool.cpp:57
 msgid "New Track"
@@ -30332,7 +30423,7 @@ msgstr "?"
 #: pcbnew/router/pns_kicad_iface.cpp:940
 #, c-format
 msgid "%s is malformed."
-msgstr ""
+msgstr "%s jest zdeformowany."
 
 #: pcbnew/router/pns_kicad_iface.cpp:943
 msgid ""
@@ -30466,7 +30557,7 @@ msgstr "Zmienia sposób załamania bieżąco prowadzonej ścieżki."
 
 #: pcbnew/router/router_tool.cpp:152
 msgid "Switch Corner Rounding"
-msgstr ""
+msgstr "Przełącz zaokrąglenia narożników"
 
 #: pcbnew/router/router_tool.cpp:153
 msgid "Switches the corner type of the currently routed track."
@@ -30549,12 +30640,12 @@ msgstr "Szerokość %s, odstęp między przelotkami %s"
 #: pcbnew/router/router_tool.cpp:356
 #, c-format
 msgid "Width %s, gap %s"
-msgstr ""
+msgstr "Szerokość %s, przerwa %s"
 
 #: pcbnew/router/router_tool.cpp:362
 #, c-format
 msgid "Width %s, gap %s, via gap %s "
-msgstr ""
+msgstr "Szerokość %s, przerwa %s, odstęp przelotek %s "
 
 #: pcbnew/router/router_tool.cpp:746 pcbnew/router/router_tool.cpp:767
 msgid "Show board setup"
@@ -30763,15 +30854,15 @@ msgstr "Konwersja..."
 
 #: pcbnew/tools/convert_tool.cpp:199
 msgid "Convert shapes to polygon"
-msgstr ""
+msgstr "Konwertuj kształty na wielokąty"
 
 #: pcbnew/tools/convert_tool.cpp:231
 msgid "Convert shapes to zone"
-msgstr ""
+msgstr "Konwertuj kształty na strefy"
 
 #: pcbnew/tools/convert_tool.cpp:554
 msgid "Convert polygons to lines"
-msgstr ""
+msgstr "Konwertuj kształty na linie"
 
 #: pcbnew/tools/convert_tool.cpp:642
 msgid "Create arc from line segment"
@@ -30839,7 +30930,7 @@ msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:146
 msgid "Special Tools..."
-msgstr ""
+msgstr "Narzędzia specjalne..."
 
 #: pcbnew/tools/edit_tool.cpp:372
 msgid "Select reference point for move..."
@@ -30851,7 +30942,7 @@ msgstr "Edycja szerokości ścieżki/rozmiaru przelotki"
 
 #: pcbnew/tools/edit_tool.cpp:725
 msgid "A minimum of two straight track segments must be selected."
-msgstr ""
+msgstr "Należy wybrać co najmniej dwa proste odcinki ścieżek."
 
 #: pcbnew/tools/edit_tool.cpp:732
 msgid "Enter fillet radius:"
@@ -30867,10 +30958,12 @@ msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
 msgstr ""
+"Wprowadzono promień o wartości zero.\n"
+"Operacja zaokrąglenia nie została wykonana."
 
 #: pcbnew/tools/edit_tool.cpp:869
 msgid "Unable to fillet the selected track segments."
-msgstr ""
+msgstr "Nie można zaokrąglić wybranych segmentów ścieżki."
 
 #: pcbnew/tools/edit_tool.cpp:876
 msgid "Some of the track segments could not be filleted."
@@ -30915,7 +31008,7 @@ msgstr "_kopia"
 
 #: pcbnew/tools/group_tool.cpp:115
 msgid "Modified group"
-msgstr ""
+msgstr "Grupa zmodyfikowana"
 
 #: pcbnew/tools/group_tool.cpp:175
 msgid "Grouping"
@@ -30923,11 +31016,11 @@ msgstr "Grupowanie"
 
 #: pcbnew/tools/group_tool.cpp:197
 msgid "Group is in inconsistent state:"
-msgstr ""
+msgstr "Grupa jest w stanie niespójnym:"
 
 #: pcbnew/tools/group_tool.cpp:280
 msgid "Click on new member..."
-msgstr ""
+msgstr "Kliknij na nowego członka..."
 
 #: pcbnew/tools/pad_tool.cpp:126
 msgid "Paste Pad Properties"
@@ -30957,12 +31050,12 @@ msgstr "Umieść pole lutownicze"
 #: pcbnew/tools/pad_tool.cpp:540
 #, c-format
 msgid "Pad Edit Mode.  Press %s again to exit."
-msgstr ""
+msgstr "Tryb edycji pól.  Wciśnij %s ponownie by wyjść."
 
 #: pcbnew/tools/pad_tool.cpp:543
 #, c-format
 msgid "Pad Edit Mode.  Press %s to exit."
-msgstr ""
+msgstr "Tryb edycji pól.  Wciśnij %s by wyjść."
 
 #: pcbnew/tools/pad_tool.cpp:608
 msgid "Edit pad shapes"
@@ -30990,7 +31083,7 @@ msgstr "Tworzy strefę miedzi z zaznaczenia"
 
 #: pcbnew/tools/pcb_actions.cpp:66
 msgid "Convert to Rule Area"
-msgstr ""
+msgstr "Skonwertuj na strefę z regułami"
 
 #: pcbnew/tools/pcb_actions.cpp:67
 msgid "Creates a rule area from the selection"
@@ -31010,7 +31103,7 @@ msgstr "Konwertuj na łuk"
 
 #: pcbnew/tools/pcb_actions.cpp:74
 msgid "Converts selected line segment to an arc"
-msgstr ""
+msgstr "Dokonuje konwersji zaznaczonych segmentów linii na łuk"
 
 #: pcbnew/tools/pcb_actions.cpp:78
 msgid "Convert to Tracks"
@@ -31258,7 +31351,7 @@ msgstr "Uaktualnia rozmiary wybranych ścieżek i przelotek"
 
 #: pcbnew/tools/pcb_actions.cpp:302
 msgid "Adds arcs tangent to the selected straight track segments"
-msgstr ""
+msgstr "Dodaje łuki styczne do wybranych odcinków ścieżek prostych"
 
 #: pcbnew/tools/pcb_actions.cpp:307
 msgid "Delete Full Track"
@@ -31413,7 +31506,7 @@ msgstr "Oczyść ścieżki i przelotki..."
 
 #: pcbnew/tools/pcb_actions.cpp:441
 msgid "Cleanup redundant items, shorting items, etc."
-msgstr ""
+msgstr "Czyszczenie elementów niepotrzebnych, elementów zwierających, itp."
 
 #: pcbnew/tools/pcb_actions.cpp:446
 msgid "Cleanup Graphics..."
@@ -31421,7 +31514,7 @@ msgstr "Oczyszczanie grafiki..."
 
 #: pcbnew/tools/pcb_actions.cpp:447
 msgid "Cleanup redundant items, etc."
-msgstr ""
+msgstr "Czyszczenie elementów niepotrzebnych, itp."
 
 #: pcbnew/tools/pcb_actions.cpp:454
 msgid "Add Microwave Gap"
@@ -31520,6 +31613,7 @@ msgstr "Zakończ edycję pola"
 #: pcbnew/tools/pcb_actions.cpp:519
 msgid "Regroups all touching graphic shapes into the edited pad"
 msgstr ""
+"Przegrupowuje wszystkie dotykające się kształty graficzne do edytowanego pola"
 
 #: pcbnew/tools/pcb_actions.cpp:524
 msgid "Default Pad Properties..."
@@ -31881,11 +31975,13 @@ msgstr "Pokaż wypełnione obszary stref jako zarys"
 
 #: pcbnew/tools/pcb_actions.cpp:819
 msgid "Toggle Zone Display"
-msgstr ""
+msgstr "Przełącz wyświetlanie stref"
 
 #: pcbnew/tools/pcb_actions.cpp:820
 msgid "Cycle between showing filled zones, wireframed zones and sketched zones"
 msgstr ""
+"Przełącza pomiędzy pokazywaniem stref wypełnionych, ramek stref oraz zarysów "
+"stref"
 
 #: pcbnew/tools/pcb_actions.cpp:828
 msgid "Switch to Component (F.Cu) layer"
@@ -32013,7 +32109,7 @@ msgstr "Przełącz na warstwę wewnętrzną 30"
 
 #: pcbnew/tools/pcb_actions.cpp:990
 msgid "Switch to Copper (B.Cu) layer"
-msgstr ""
+msgstr "Przełącz na warstwę miedzi (B.Cu)"
 
 #: pcbnew/tools/pcb_actions.cpp:996
 msgid "Switch to Next Layer"
@@ -32060,6 +32156,8 @@ msgstr "Rozdzielczość prześwitu..."
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr ""
+"Pokaż rozdzielczość prześwitu dla aktywnej warstwy między dwoma wybranymi "
+"obiektami"
 
 #: pcbnew/tools/pcb_actions.cpp:1042
 msgid "Constraints Resolution..."
@@ -32067,15 +32165,15 @@ msgstr "Rozdzielczość ograniczeń..."
 
 #: pcbnew/tools/pcb_actions.cpp:1043
 msgid "Show constraints resolution for the selected object"
-msgstr ""
+msgstr "Pokaż rozdzielczość ograniczeń dla wybranego obiektu"
 
 #: pcbnew/tools/pcb_actions.cpp:1049
 msgid "Geographical Reannotate..."
-msgstr ""
+msgstr "Kierunek numeracji..."
 
 #: pcbnew/tools/pcb_actions.cpp:1049
 msgid "Reannotate PCB in geographical order"
-msgstr ""
+msgstr "Ponownie numeruje PCB według wybranego zestawu kierunków"
 
 #: pcbnew/tools/pcb_actions.cpp:1054
 msgid "Repair Board"
@@ -32084,6 +32182,7 @@ msgstr "Napraw płytkę"
 #: pcbnew/tools/pcb_actions.cpp:1055
 msgid "Run various diagnostics and attempt to repair board"
 msgstr ""
+"Uruchamia procedury diagnostyczne oraz próbuje tym samym naprawić płytkę"
 
 #: pcbnew/tools/pcb_actions.cpp:1063
 msgid "Align to Top"
@@ -32168,6 +32267,8 @@ msgid ""
 "Selects a connection or expands an existing selection to junctions, pads, or "
 "entire connections"
 msgstr ""
+"Wybiera połączenie lub rozszerza istniejący wybór na węzły, pola lub całe "
+"połączenia"
 
 #: pcbnew/tools/pcb_actions.cpp:1172
 msgid "Select All Tracks in Net"
@@ -32285,19 +32386,19 @@ msgstr "Otwórz ustawienia rozmiarów par różnicowych"
 
 #: pcbnew/tools/pcb_actions.cpp:1268
 msgid "Router Highlight Mode"
-msgstr "Trasowanie w trybie podświetlenia"
+msgstr "Trasowanie w trybie podświetlenia kolizji"
 
 #: pcbnew/tools/pcb_actions.cpp:1268
 msgid "Switch router to highlight mode"
-msgstr ""
+msgstr "Przełącza trasowanie na tryb podświetlenia kolizji"
 
 #: pcbnew/tools/pcb_actions.cpp:1273
 msgid "Router Shove Mode"
-msgstr ""
+msgstr "Trasowanie w trybie ropychania"
 
 #: pcbnew/tools/pcb_actions.cpp:1273
 msgid "Switch router to shove mode"
-msgstr ""
+msgstr "Przełącza router w tryb rozpychania ścieżek i przelotek"
 
 #: pcbnew/tools/pcb_actions.cpp:1278
 msgid "Router Walkaround Mode"
@@ -32305,7 +32406,7 @@ msgstr "Trasowanie w trybie omijania"
 
 #: pcbnew/tools/pcb_actions.cpp:1278
 msgid "Switch router to walkaround mode"
-msgstr ""
+msgstr "Przełącza router w tryb omijania przeszkód"
 
 #: pcbnew/tools/pcb_actions.cpp:1283
 msgid "Set Layer Pair..."
@@ -32349,7 +32450,7 @@ msgstr "Plik Specctra DSN"
 #: pcbnew/tools/pcb_editor_control.cpp:404
 #, c-format
 msgid "Orphaned net %s re-parented.\n"
-msgstr ""
+msgstr "Osierocona sieć %s została ponownie przejęta przez jej rodzica.\n"
 
 #: pcbnew/tools/pcb_editor_control.cpp:461
 #, c-format
@@ -32359,7 +32460,7 @@ msgstr "%d powielonych ID zostało zamienionych.\n"
 #: pcbnew/tools/pcb_editor_control.cpp:476
 #, c-format
 msgid "%d potential problems repaired."
-msgstr ""
+msgstr "%d potencjalnych problemów zostało naprawionych."
 
 #: pcbnew/tools/pcb_editor_control.cpp:481
 msgid "No board problems found."
@@ -32399,12 +32500,12 @@ msgstr "Typ połączenia ze strefą: %s."
 #: pcbnew/tools/pcb_inspection_tool.cpp:125
 #, c-format
 msgid "Overridden by %s; connection type: %s."
-msgstr ""
+msgstr "Zastąpiony przez %s; typ połączenia: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:140
 #, c-format
 msgid "Pad is not a PTH pad; connection will be: %s."
-msgstr ""
+msgstr "Pole nie jest polem PTH; połączone będzie: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:152
 #, c-format
@@ -32414,7 +32515,7 @@ msgstr "Połączenia termiczne ze strefą: %s."
 #: pcbnew/tools/pcb_inspection_tool.cpp:159
 #, c-format
 msgid "Overridden by %s; thermal relief: %s."
-msgstr ""
+msgstr "Zastąpiony przez %s; łącze termiczne: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:168
 #, c-format
@@ -32424,7 +32525,7 @@ msgstr "Prześwit pomiędzy strefami: %s."
 #: pcbnew/tools/pcb_inspection_tool.cpp:177
 #, c-format
 msgid "Overridden by larger thermal relief from %s;clearance: %s."
-msgstr ""
+msgstr "Zastąpiony przez większe połączenie termiczne %s; prześwit: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:186
 #, c-format
@@ -32438,7 +32539,7 @@ msgstr "Prześwit: %s."
 #: pcbnew/tools/pcb_inspection_tool.cpp:535
 #: pcbnew/tools/pcb_inspection_tool.cpp:564
 msgid "Report incomplete: could not compile design rules.  "
-msgstr ""
+msgstr "Raport niekompletny: nie można skompilować reguł projektowych.  "
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:230
 #, c-format
@@ -32447,7 +32548,7 @@ msgstr "Prześwit pola lutowniczego: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:242
 msgid "Select two items for a clearance resolution report."
-msgstr ""
+msgstr "Wybierz dwa elementy by utworzyć raport o rozdzielczości prześwitu."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:249
 msgid "Clearance Report"
@@ -32466,7 +32567,7 @@ msgstr "Rozdzielczość prześwitu warstwy opisowej dla:"
 #: pcbnew/tools/pcb_inspection_tool.cpp:322
 #, c-format
 msgid "%s not present on layer %s.  No clearance defined."
-msgstr ""
+msgstr "%s nie występuj na warstwie %s.  Nie zdefiniowano prześwitu."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:328
 msgid "Clearance resolution for:"
@@ -32474,11 +32575,11 @@ msgstr "Rozdzielczość prześwitu dla:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:350
 msgid "Items belong to the same net. Clearance is 0."
-msgstr ""
+msgstr "Elementy należą do tej samej sieci. Prześwit wynosi 0."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:375
 msgid "Select an item for a constraints resolution report."
-msgstr ""
+msgstr "Wybierz element by utworzyć raport o rozdzielczości prześwitu."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:382
 msgid "Constraints Report"
@@ -32501,7 +32602,7 @@ msgstr "niezdefiniowany"
 #: pcbnew/tools/pcb_inspection_tool.cpp:444
 #, c-format
 msgid "Width constraints: min %s max %s."
-msgstr ""
+msgstr "Ograniczenia szerokości: min %s maks %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:454
 msgid "Via Diameter"
@@ -32514,7 +32615,7 @@ msgstr "Rozdzielczość szerokości przelotek dla:"
 #: pcbnew/tools/pcb_inspection_tool.cpp:481
 #, c-format
 msgid "Diameter constraints: min %s max %s."
-msgstr ""
+msgstr "Ograniczenia rozmiaru: min %s maks %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:488
 msgid "Via Annular Width"
@@ -32527,7 +32628,7 @@ msgstr "Rozdzielczość szerokości okręgu przelotki dla:"
 #: pcbnew/tools/pcb_inspection_tool.cpp:515
 #, c-format
 msgid "Annular width constraints: min %s max %s."
-msgstr ""
+msgstr "Ograniczenia szerokości pierścienia: min %s maks %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:526
 msgid "Hole Size"
@@ -32535,12 +32636,12 @@ msgstr "Rozmiar otworu"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:528
 msgid "Hole diameter resolution for:"
-msgstr ""
+msgstr "Rozdzielczość rozmiaru otworu dla:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:549
 #, c-format
 msgid "Hole constraint: min %s."
-msgstr ""
+msgstr "Ograniczenia otworu: min %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:555
 msgid "Keepouts"
@@ -32552,11 +32653,11 @@ msgstr "Rozdzielczość keepout-u dla:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:575
 msgid "Item <b>disallowed</b> at current location."
-msgstr ""
+msgstr "Element <b>niedozwolony</b> w bieżącej lokalizacji."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:577
 msgid "Item allowed at current location."
-msgstr ""
+msgstr "Element dozwolony w bieżącej lokalizacji."
 
 #: pcbnew/tools/pcbnew_control.cpp:733
 msgid "Invalid clipboard contents"
@@ -32679,7 +32780,7 @@ msgstr "Pokaż reguły DRC"
 
 #: pcbnew/tools/zone_filler_tool.cpp:122
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
-msgstr ""
+msgstr "Wypełnienie strefy może być niedokładne.  Reguły DRC zawierają błędy."
 
 #: pcbnew/tools/zone_filler_tool.cpp:129
 msgid "Fill All Zones"
@@ -32768,7 +32869,7 @@ msgstr "Naruszenia DRC z poziomem Błąd"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "DRC violations which have been individually excluded"
-msgstr ""
+msgstr "Naruszenia DRC, które zostały indywidualnie wykluczone"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show footprint and text origins as a cross"
@@ -32852,19 +32953,22 @@ msgstr "Kolory sieci:"
 
 #: pcbnew/widgets/appearance_controls.cpp:643
 msgid "Choose when to show net and netclass colors"
-msgstr ""
+msgstr "Wybierz kiedy mają być wyświetlane kolory sieci i klasy sieci"
 
 #: pcbnew/widgets/appearance_controls.cpp:651
 msgid "Net and netclass colors are shown on all copper items"
 msgstr ""
+"Kolory sieci i klasy sieci są pokazywane na wszystkich elementach "
+"łączeniowych"
 
 #: pcbnew/widgets/appearance_controls.cpp:658
 msgid "Net and netclass colors are shown on the ratsnest only"
 msgstr ""
+"Kolory sieci i klasy sieci są pokazywane tylko na nitkach wspomagających"
 
 #: pcbnew/widgets/appearance_controls.cpp:664
 msgid "Net and netclass colors are not shown"
-msgstr ""
+msgstr "Kolory sieci i klasy sieci nie są w ogóle pokazywane"
 
 #: pcbnew/widgets/appearance_controls.cpp:672
 msgid "Ratsnest display:"
@@ -32914,12 +33018,12 @@ msgstr "Ukryj wszystkie pozostałe sieci"
 #: pcbnew/widgets/appearance_controls.cpp:880
 #, c-format
 msgid "Click to hide ratsnest for %s"
-msgstr ""
+msgstr "Kliknij by ukryć nitki wspomagające dla %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:881
 #, c-format
 msgid "Click to show ratsnest for %s"
-msgstr ""
+msgstr "Kliknij by pokazać nitki wspomagające dla %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:1313
 msgid "Double click or middle click for color change, right click for menu"
