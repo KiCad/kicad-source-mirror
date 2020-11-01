@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-11-01 14:23+0000\n"
+"PO-Revision-Date: 2020-11-02 21:02+0000\n"
 "Last-Translator: Hildo Guillardi Júnior <hildogjr@gmail.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
 "master-source/pt/>\n"
@@ -438,7 +438,7 @@ msgstr "Pads não banhados como cobre nu"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:87
 msgid ""
 "Display plated pads as plated but other copper as raw copper material. (Slow)"
-msgstr ""
+msgstr "Mostrar acabamento das ilhas metalizadas mantendo cobre nu. (Lento)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:98
 msgid "3D Model Visibility"
@@ -1296,7 +1296,7 @@ msgstr "0000"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:62
 msgid "pixels"
-msgstr "pixels"
+msgstr "pontos"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:66
 msgid "Bitmap PPI:"
@@ -2763,9 +2763,8 @@ msgid "Add Color Theme"
 msgstr "Estilo de Cor do CAD"
 
 #: common/dialogs/panel_color_settings.cpp:142
-#, fuzzy
 msgid "Theme already exists!"
-msgstr "\"%s\" já existe."
+msgstr "O tema já existe!"
 
 #: common/dialogs/panel_color_settings.cpp:203
 #: common/dialogs/panel_color_settings.cpp:225
@@ -4235,9 +4234,8 @@ msgid "Alias: "
 msgstr "Alias: "
 
 #: common/filename_resolver.cpp:485
-#, fuzzy
 msgid "This path:"
-msgstr "Este caminho: "
+msgstr "Este caminho:"
 
 #: common/filename_resolver.cpp:488
 #, fuzzy
@@ -5035,35 +5033,35 @@ msgstr "Sistema numérico não reconhecido: %d"
 
 #: common/libeval_compiler/libeval_compiler.cpp:817
 msgid "Unknown parent of function parameters"
-msgstr ""
+msgstr "Desconhecido parente dos parâmetros da função"
 
 #: common/libeval_compiler/libeval_compiler.cpp:831
 msgid "Unknown parent of property"
-msgstr ""
+msgstr "Desconhecido parente da propriedade"
 
 #: common/libeval_compiler/libeval_compiler.cpp:848
 #: common/libeval_compiler/libeval_compiler.cpp:876
 #: common/libeval_compiler/libeval_compiler.cpp:949
 #: common/libeval_compiler/libeval_compiler.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'"
-msgstr "Itens desconectados"
+msgstr "Item '%s' desconhecido"
 
 #: common/libeval_compiler/libeval_compiler.cpp:853
 #: common/libeval_compiler/libeval_compiler.cpp:953
 #, c-format
 msgid "Unrecognized property '%s'"
-msgstr ""
+msgstr "Propriedade desconhecida '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:888
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized function '%s'"
-msgstr "Sistema numérico não reconhecido: %d"
+msgstr "Função '%s' desconhecida"
 
 #: common/libeval_compiler/libeval_compiler.cpp:983
-#, fuzzy, c-format
+#, c-format
 msgid "Missing units for '%s'| (%s)"
-msgstr "Footprint faltando"
+msgstr "Faltando unidades para '%s'| (%s)"
 
 #: common/page_layout/page_layout_reader.cpp:853
 #, c-format
@@ -5164,18 +5162,18 @@ msgstr "%s já está rodando. Continuar?"
 
 #: common/pgm_base.cpp:612
 msgid "This language is not supported by the operating system."
-msgstr ""
+msgstr "Essa linguagem não é suportada pelo sistema operacional."
 
 #: common/pgm_base.cpp:674
 msgid "The KiCad language file for this language is not installed."
-msgstr ""
+msgstr "O arquivo KiCad para essa linguagem não está instalado."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:1979
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:238
 #: pcbnew/plugins/altium/altium_pcb.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file '%s'"
-msgstr "Não é possível copiar o arquivo \"%s\"."
+msgstr "Não é possível abrir o arquivo \"%s\"."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:1995
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2013
@@ -5203,19 +5201,17 @@ msgstr "Nó desconhecido '%s' em '%s'"
 #: common/plugins/cadstar/cadstar_archive_parser.h:44
 #, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr ""
+msgstr "Faltando parâmetro '%s' em '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:47
 #, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr ""
+msgstr "Parâmetro desconhecido '%s' em '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:50
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr ""
-"Não foi possível analisar a URL:\n"
-"\"%s\""
+msgstr "Impossível interpretar '%s' em '%s'"
 
 #: common/plugins/eagle/eagle_parser.cpp:115
 #, c-format
@@ -5232,49 +5228,45 @@ msgid "Error loading project footprint library table"
 msgstr "Erro ao carregar a tabela de biblioteca de footprint do projeto"
 
 #: common/project/project_archiver.cpp:89
-#, fuzzy
 msgid "Could not open archive file\n"
-msgstr "Não foi possível abrir o arquivo de biblioteca."
+msgstr "Não foi possível abrir o arquivo de biblioteca\n"
 
 #: common/project/project_archiver.cpp:98
 msgid "Invalid archive file format\n"
-msgstr ""
+msgstr "Impossível arquivar o formado de arquivo\n"
 
 #: common/project/project_archiver.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file \"%s\"\n"
-msgstr "Extrair arquivo \"%s\""
+msgstr "Extraing arquivo \"%s\"\n"
 
 #: common/project/project_archiver.cpp:145
-#, fuzzy
 msgid "Error extracting file!\n"
-msgstr "Erro ao gravar no arquivo \"%s\""
+msgstr "Erro ao gravar no arquivo \"%s\"!\n"
 
 #: common/project/project_archiver.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create archive file \"%s\"\n"
-msgstr "Não foi possível criar o arquivo zip \"%s\""
+msgstr "Não foi possível criar o arquivo zip \"%s\"\n"
 
 #: common/project/project_archiver.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Archive file \"%s\"\n"
-msgstr "Arquivo \"%s\""
+msgstr "Arquivo \"%s\"\n"
 
 #: common/project/project_archiver.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Archive file \"%s\": Failed!\n"
-msgstr "Arquivo \"%s\""
+msgstr "Arquivo \"%s\": Falha!\n"
 
 #: common/project/project_archiver.cpp:270
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive \"%s\" created (%s uncompressed, %s compressed)\n"
-msgstr ""
-"\n"
-"Arquivo zip \"%s\" criado (%d bytes)"
+msgstr "Arquivo zip \"%s\" criado (%s descompactado, %s compactado)\n"
 
 #: common/rc_item.cpp:322
 msgid "Excluded "
-msgstr ""
+msgstr "Excluído "
 
 #: common/rc_item.cpp:326
 msgid "Error: "
@@ -5662,14 +5654,12 @@ msgid "Performs left mouse button double-click"
 msgstr "Executar a ação do botão-direito-do-mouse"
 
 #: common/tool/actions.cpp:387
-#, fuzzy
 msgid "Pin Library"
-msgstr "Biblioteca"
+msgstr "Fixar Biblioteca"
 
 #: common/tool/actions.cpp:392
-#, fuzzy
 msgid "Unpin Library"
-msgstr "Biblioteca"
+msgstr "Desafixar Biblioteca"
 
 #: common/tool/actions.cpp:398
 msgid "Pan Up"
@@ -5724,21 +5714,19 @@ msgid "Set grid dimensions"
 msgstr "Definir dimensões da grade"
 
 #: common/tool/actions.cpp:465
-#, fuzzy
 msgid "Use inches"
-msgstr "polegadas"
+msgstr "Usar polegadas"
 
 #: common/tool/actions.cpp:470
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
 msgid "Mils"
-msgstr "Mils"
+msgstr "mil"
 
 #: common/tool/actions.cpp:470
-#, fuzzy
 msgid "Use mils"
-msgstr "Utilizar milímetros"
+msgstr "Usar milímetros"
 
 #: common/tool/actions.cpp:475
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5798,15 +5786,15 @@ msgstr "Classificar Camadas se em Modo X2"
 
 #: common/tool/actions.cpp:512
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr ""
+msgstr "Alterar camadas inativas entre normal e opaco"
 
 #: common/tool/actions.cpp:516
 msgid "Single Layer View Mode (3-state)"
-msgstr ""
+msgstr "Modo de visualização de única camada (3-estados)"
 
 #: common/tool/actions.cpp:517
 msgid "Toggle inactive layers between normal, dimmed, and hidden"
-msgstr ""
+msgstr "Alternar camadas inativas entre: normal, opaca e oculta"
 
 #: common/tool/actions.cpp:521
 msgid "Select item(s)"
@@ -6110,7 +6098,7 @@ msgstr "Sempre"
 
 #: common/widgets/gal_options_panel.cpp:139
 msgid "When grid shown"
-msgstr ""
+msgstr "Quando grade aparente"
 
 #: common/widgets/gal_options_panel.cpp:139
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:349
@@ -6356,19 +6344,19 @@ msgstr "Arquivos de PCI em ASCII do P-Cad 200x"
 
 #: common/wildcards_and_files_ext.cpp:298
 msgid "Altium Designer PCB files"
-msgstr ""
+msgstr "Arquivo de design do Altium"
 
 #: common/wildcards_and_files_ext.cpp:303
 msgid "Altium Circuit Studio PCB files"
-msgstr ""
+msgstr "Arquivo circuito estúdio do Altium"
 
 #: common/wildcards_and_files_ext.cpp:308
 msgid "Altium Circuit Maker PCB files"
-msgstr ""
+msgstr "Arquivo maker do Altium"
 
 #: common/wildcards_and_files_ext.cpp:313
 msgid "Fabmaster PCB files"
-msgstr ""
+msgstr "Arquivos Fabmaster"
 
 #: common/wildcards_and_files_ext.cpp:324
 msgid "KiCad footprint files"
