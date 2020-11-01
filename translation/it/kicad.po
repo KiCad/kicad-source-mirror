@@ -99,7 +99,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-30 20:48+0000\n"
+"PO-Revision-Date: 2020-11-01 14:23+0000\n"
 "Last-Translator: Hildo Guillardi Júnior <hildogjr@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
@@ -1182,7 +1182,7 @@ msgstr "Commuta la visualizzazione degli strati maschera di saldatura"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:303
 msgid "Toggle solder paste display"
-msgstr "Commuta pasta salda "
+msgstr "Commuta pasta salda"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:303
 msgid "Toggle display of solder paste layers"
@@ -1332,9 +1332,8 @@ msgid "File \"%s\" could not be created."
 msgstr "Il file \"%s\" non può essere creato."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:760
-#, fuzzy
 msgid "Create PostScript File"
-msgstr "Crea file Postscript "
+msgstr "Crea file Postscript"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:800
 msgid "Create Symbol Library"
@@ -1403,7 +1402,7 @@ msgstr "BPP:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:90
 msgid "bits"
-msgstr "Bits"
+msgstr "bits"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:104
 msgid "Output Parameters:"
