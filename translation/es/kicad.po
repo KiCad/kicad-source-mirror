@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-11-01 14:23+0000\n"
+"PO-Revision-Date: 2020-11-02 21:02+0000\n"
 "Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -13202,6 +13202,8 @@ msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
 msgstr ""
+"El símbolo de documentación '%s' se refiere a la ID de definición de símbolo "
+"'%s' que no existe en la biblioteca. El símbolo no se ha cargado."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:975
 #, c-format
@@ -13209,6 +13211,8 @@ msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
 msgstr ""
+"El símbolo '%s' hace referencia a la hoja con la ID '%s' que no existe en el "
+"diseño. El símbolo no se ha cargado."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1058
 #, c-format
@@ -13216,6 +13220,8 @@ msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
 msgstr ""
+"La red %s hace referencia al elemento de red desconocido %s. La red no se "
+"cargó correctamente y puede requerir ajustes manuales."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1275
 #, c-format
@@ -13223,6 +13229,8 @@ msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
 "but has no Figure defined."
 msgstr ""
+"El esquema CADSTAR puede estar dañado: el Bloque %s hace referencia a una "
+"hoja secundaria, pero no tiene ninguna figura definida."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:409
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:334
@@ -13656,18 +13664,22 @@ msgid "Setting schematic symbol '%s %s' library identifier to '%s'. "
 msgstr "Identificador de librería de símbolos no válido"
 
 #: eeschema/sch_screen.cpp:604
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid.  Unable to "
 "link library symbol."
 msgstr ""
+"El identificador de referencia en la biblioteca '%s' de símbolo esquemático "
+"no es válido. No se pudo vincular el símbolo de la biblioteca."
 
 #: eeschema/sch_screen.cpp:620
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
+"Biblioteca de símbolos '%s' no encontrada y no hay una biblioteca de reserva "
+"disponible.  No se puede enlazar el símbolo de la biblioteca."
 
 #: eeschema/sch_screen.cpp:639
 #, fuzzy, c-format
