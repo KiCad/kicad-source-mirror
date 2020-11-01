@@ -938,7 +938,7 @@ bool ROUTER_TOOL::prepareInteractive()
 
     if( !m_router->StartRouting( m_startSnapPoint, m_startItem, routingLayer ) )
     {
-        DisplayError( frame(), m_router->FailureReason() );
+        frame()->ShowInfoBarError( m_router->FailureReason() );
         highlightNet( false );
         controls()->SetAutoPan( false );
         return false;

@@ -677,14 +677,14 @@ void EDA_BASE_FRAME::PrintMsg( const wxString& text )
 void EDA_BASE_FRAME::ShowInfoBarError( const wxString& aErrorMsg )
 {
     m_infoBar->RemoveAllButtons();
-    GetInfoBar()->ShowMessageFor( aErrorMsg, 5000, wxICON_ERROR );
+    GetInfoBar()->ShowMessageFor( aErrorMsg, 8000, wxICON_ERROR );
 }
 
 
 void EDA_BASE_FRAME::ShowInfoBarWarning( const wxString& aWarningMsg )
 {
     m_infoBar->RemoveAllButtons();
-    GetInfoBar()->ShowMessageFor( aWarningMsg, 5000, wxICON_WARNING );
+    GetInfoBar()->ShowMessageFor( aWarningMsg, 8000, wxICON_WARNING );
 }
 
 

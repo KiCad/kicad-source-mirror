@@ -191,7 +191,7 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
 
     if( ! isStartingPointRoutable( aP, aLayer ) )
     {
-        SetFailureReason( _("Cannot start routing inside a keepout area or board outline." ) );
+        SetFailureReason( _( "The routing start point violates DRC." ) );
         return false;
     }
 
