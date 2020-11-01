@@ -92,6 +92,7 @@ public:
                 [&]( PCB_LAYER_ID layer )
                 {
                     std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( layer );
+                    subshapes.clear();
 
                     if( shape->HasIndexableSubshapes() )
                         shape->GetIndexableSubshapes( subshapes );
