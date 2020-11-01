@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -72,7 +72,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_global_panel->SetSizer( m_global_sizer );
 	m_global_panel->Layout();
 	m_global_sizer->Fit( m_global_panel );
-	m_notebook->AddPage( m_global_panel, _("a page"), false );
+	m_notebook->AddPage( m_global_panel, _("Global Libraries"), true );
 	m_project_panel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_project_sizer;
 	m_project_sizer = new wxBoxSizer( wxVERTICAL );
@@ -124,7 +124,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_project_panel->SetSizer( m_project_sizer );
 	m_project_panel->Layout();
 	m_project_sizer->Fit( m_project_panel );
-	m_notebook->AddPage( m_project_panel, _("a page"), true );
+	m_notebook->AddPage( m_project_panel, _("Project Specific Libraries"), false );
 
 	m_top_sizer->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 

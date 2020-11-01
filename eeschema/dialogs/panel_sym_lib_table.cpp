@@ -287,9 +287,6 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     setupGrid( m_global_grid );
 
-    m_notebook->SetPageText( 0, _( "Global Libraries" ) );
-    m_notebook->SetPageText( 1, _( "Project Specific Libraries" ) );
-
     if( aProject )
     {
         m_PrjTableFilename->SetLabel( aProjectTablePath );

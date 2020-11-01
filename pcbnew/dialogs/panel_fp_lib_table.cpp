@@ -436,9 +436,6 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     populateEnvironReadOnlyTable();
 
-    m_notebook->SetPageText( 0, _( "Global Libraries" ) );
-    m_notebook->SetPageText( 1, _( "Project Specific Libraries" ) );
-
     if( aProject )
     {
         m_PrjTableFilename->SetLabel( aProjectTblPath );

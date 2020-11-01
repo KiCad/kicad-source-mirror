@@ -128,8 +128,8 @@
                                 <event name="OnNotebookPageChanged">pageChangedHandler</event>
                                 <object class="notebookpage" expanded="1">
                                     <property name="bitmap"></property>
-                                    <property name="label">a page</property>
-                                    <property name="select">0</property>
+                                    <property name="label">Global Libraries</property>
+                                    <property name="select">1</property>
                                     <object class="wxPanel" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -419,8 +419,8 @@
                                 </object>
                                 <object class="notebookpage" expanded="1">
                                     <property name="bitmap"></property>
-                                    <property name="label">a page</property>
-                                    <property name="select">1</property>
+                                    <property name="label">Project Specific Libraries</property>
+                                    <property name="select">0</property>
                                     <object class="wxPanel" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
