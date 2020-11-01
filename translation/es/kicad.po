@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-30 18:22+0000\n"
-"Last-Translator: Iñigo Figuero Sanz <news@imagedworld.com>\n"
+"PO-Revision-Date: 2020-11-01 14:23+0000\n"
+"Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -6682,7 +6682,7 @@ msgstr ""
 msgid ""
 "Component \"%s\" footprint \"%s\" was <b>not found</b> in any library.\n"
 msgstr ""
-"Para el componente \"%s\" <b>no se ha encontrado<b> la huella \"%s\" en "
+"Para el componente \"%s\" <b>no se ha encontrado</b> la huella \"%s\" en "
 "ninguna librería.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:155
@@ -6690,7 +6690,7 @@ msgstr ""
 msgid ""
 "Component \"%s\" footprint \"%s\" was found in <b>multiple</b> libraries.\n"
 msgstr ""
-"Para el componente \"%s\" se ha encontrado la huella \"%s\" en <b>varias<b> "
+"Para el componente \"%s\" se ha encontrado la huella \"%s\" en <b>varias</b> "
 "librerías.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:168
@@ -8028,7 +8028,7 @@ msgstr "Errores y avisos únicamente"
 
 #: eeschema/dialogs/dialog_erc.cpp:194
 msgid "Errors, Warnings and Exclusions"
-msgstr "Errores, avisos y exclusiones"
+msgstr "Errores, Advertencias y Exclusiones"
 
 #: eeschema/dialogs/dialog_erc.cpp:273 eeschema/dialogs/dialog_erc.cpp:344
 msgid "Annotation not complete.  ERC cannot be run.  "
@@ -8056,39 +8056,32 @@ msgid "Checking bus conflicts..."
 msgstr "Comprobando conflictos de bus..."
 
 #: eeschema/dialogs/dialog_erc.cpp:374
-#, fuzzy
 msgid "Checking conflicts..."
-msgstr "Comprobando relleno de zonas...\n"
-
-#: eeschema/dialogs/dialog_erc.cpp:381
-#, fuzzy
-msgid "Checking footprints..."
-msgstr "Comprobar huellas"
-
-#: eeschema/dialogs/dialog_erc.cpp:385
-#, fuzzy
-msgid "Checking pins..."
-msgstr "Comprobando relleno de zonas...\n"
-
-#: eeschema/dialogs/dialog_erc.cpp:398
-#, fuzzy
-msgid "Checking labels..."
-msgstr "Comprobando relleno de zonas...\n"
-
-#: eeschema/dialogs/dialog_erc.cpp:404
-#, fuzzy
-msgid "Checking for unresolved variables..."
-msgstr "Comprobando relleno de zonas...\n"
-
-#: eeschema/dialogs/dialog_erc.cpp:410
-#, fuzzy
-msgid "Checking no connect pins for connections..."
 msgstr "Comprobando relleno de zonas..."
 
+#: eeschema/dialogs/dialog_erc.cpp:381
+msgid "Checking footprints..."
+msgstr "Comprobando huellas..."
+
+#: eeschema/dialogs/dialog_erc.cpp:385
+msgid "Checking pins..."
+msgstr "Comprobando pines..."
+
+#: eeschema/dialogs/dialog_erc.cpp:398
+msgid "Checking labels..."
+msgstr "Comprobando etiquetas..."
+
+#: eeschema/dialogs/dialog_erc.cpp:404
+msgid "Checking for unresolved variables..."
+msgstr "Comprobando variables no resueltas..."
+
+#: eeschema/dialogs/dialog_erc.cpp:410
+msgid "Checking no connect pins for connections..."
+msgstr "Comprobando que los pines de \"no conexión\" no están conectados..."
+
 #: eeschema/dialogs/dialog_erc.cpp:416
-#, fuzzy
 msgid "Checking for library symbol issues..."
-msgstr "Símbolo de librería:"
+msgstr "Comprobando problemas con los símbolos de la biblioteca..."
 
 #: eeschema/dialogs/dialog_erc.cpp:494 pcbnew/dialogs/dialog_drc.cpp:387
 msgid "errors"
@@ -8217,7 +8210,7 @@ msgstr "Haga clic en los elementos para resaltarlos en la placa."
 #: eeschema/dialogs/dialog_erc_base.cpp:57
 #, fuzzy
 msgid "Violations"
-msgstr "Opciones de vía:"
+msgstr "Infracciones"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:86
 #: pcbnew/dialogs/dialog_drc_base.cpp:174
@@ -8316,9 +8309,8 @@ msgstr "El nombre de campo \"%s\" está en uso."
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:1221
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:700
-#, fuzzy
 msgid "Save changes?"
-msgstr "Deshacer cambios"
+msgstr "¿Guardar cambios?"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:31
 msgid "Group symbols"
@@ -8825,8 +8817,9 @@ msgid "Fields must have a name."
 msgstr "Los campos deben tener un nombre."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:260
+#, fuzzy
 msgid "Aliased symbol must have a parent selected"
-msgstr ""
+msgstr "El símbolo con alias debe tener un padre seleccionado"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:268
 msgid "Delete extra units from symbol?"
@@ -9213,15 +9206,20 @@ msgid "External simulator command:"
 msgstr "Comando del simulador:"
 
 #: eeschema/dialogs/dialog_netlist.cpp:376
+#, fuzzy
 msgid ""
 "Enter the command line to run spice\n"
 "Usually <path to spice binary> %I\n"
 "%I will be replaced by the actual spice netlist name"
 msgstr ""
+"Introduzca la línea de comandos para ejecutar spice\n"
+"Por lo general, <ruta al binario de spice> %I\n"
+"%I será reemplazado por el nombre de la lista de redes de spice"
 
 #: eeschema/dialogs/dialog_netlist.cpp:390
+#, fuzzy
 msgid "Create Netlist and Run Simulator Command"
-msgstr ""
+msgstr "Crear Netlist y Ejecutar el Comando del Simulador"
 
 #: eeschema/dialogs/dialog_netlist.cpp:441
 msgid "Netlist command:"
@@ -9627,8 +9625,9 @@ msgstr "Imprimir color de fondo"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:35
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:209
+#, fuzzy
 msgid "Use a different color theme for printing:"
-msgstr ""
+msgstr "Utilizar un tema de color diferente para imprimir:"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:104
 msgid ""
@@ -9868,14 +9867,16 @@ msgstr "Variables de texto"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:86
 #: pcbnew/dialogs/dialog_board_setup.cpp:98
 msgid "Project is missing or read-only. Changes will not be saved."
-msgstr ""
+msgstr "Falta el proyecto o es de solo lectura. Los cambios no se guardarán."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:148
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded"
 msgstr ""
+"Error al importar la configuración del proyecto:\n"
+"No se pudo cargar el archivo de proyecto %s"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:254
 msgid "A sheet must have a valid file name."
@@ -10254,22 +10255,29 @@ msgid ""
 "Check the symbol and use \"Alternate node sequence\" to reorder the pins, if "
 "necessary"
 msgstr ""
+"La numeración de los pines de los símbolos no siempre coincide con el orden "
+"requerido de los pines SPICE\n"
+"Verifique el símbolo y use \"Secuencia de nodo alternativa\" para reordenar "
+"los pines, si es necesario"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:449
 msgid "For a Diode, pin order is anode, cathode"
-msgstr ""
+msgstr "Para un diodo, el orden de los pines es ánodo, cátodo"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:453
 msgid "For a BJT, pin order is collector, base, emitter, substrate (optional)"
 msgstr ""
+"Para un BJT, el orden de los pines es colector, base, emisor, sustrato "
+"(opcional)"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:457
 msgid "For a MOSFET, pin order is drain, grid, source"
-msgstr ""
+msgstr "Para un MOSFET, el orden de los pines es drenaje, rejilla, origen"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:461
+#, fuzzy
 msgid "For a JFET, pin order is drain, grid, source"
-msgstr ""
+msgstr "Para un JFET, el orden de los pines es drenaje, rejilla, fuente"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1010
 msgid "Select library"
@@ -10299,15 +10307,16 @@ msgstr "Altura máxima:"
 #: eeschema/dialogs/dialog_spice_model.cpp:1084
 #: eeschema/dialogs/dialog_spice_model.cpp:1089
 msgid "Mean:"
-msgstr ""
+msgstr "Media:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1095
+#, fuzzy
 msgid "Lambda:"
-msgstr ""
+msgstr "Lambda:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1100
 msgid "type of random generator for source is invalid"
-msgstr ""
+msgstr "el tipo de generador aleatorio para la fuente no es válido"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
 #: eeschema/dialogs/dialog_spice_model_base.cpp:233
@@ -10364,7 +10373,7 @@ msgstr "Modelo:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:244
 msgid "note"
-msgstr ""
+msgstr "nota"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:293
 msgid "Model"
@@ -10583,7 +10592,7 @@ msgstr "Ruido transitorio"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:859
 msgid "Uniform"
-msgstr ""
+msgstr "Uniforme"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:859
 #, fuzzy
@@ -10591,8 +10600,9 @@ msgid "Gaussian"
 msgstr "Pусский"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:859
+#, fuzzy
 msgid "Poisson"
-msgstr ""
+msgstr "Poisson"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:868
 #, fuzzy
@@ -10796,10 +10806,13 @@ msgid "Library link:"
 msgstr "Librería:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:307
+#, fuzzy
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
+"El ID de la biblioteca y el ID de huella asignados actualmente. Utilice "
+"\"Cambiar huella ...\" para asignar una huella diferente."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:317
 #, fuzzy
@@ -10959,6 +10972,9 @@ msgid ""
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
 msgstr ""
+"Normalmente, las huellas están vinculadas a sus símbolos a través de sus ID "
+"únicos. Seleccione esta opción solo si desea restablecer los vínculos de "
+"huellas en función de sus designadores de referencia."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
@@ -11077,7 +11093,7 @@ msgstr "Post-procesado"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:80
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
 msgid "Center view on cross-probed items"
-msgstr ""
+msgstr "Centrar la vista en los elementos de sondeo cruzado"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:84
 #: pcbnew/dialogs/panel_display_options_base.cpp:80
@@ -11093,7 +11109,7 @@ msgstr "Resaltar red"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr ""
+msgstr "Resaltar redes cuando estén resaltadas en el editor de PCB"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "&Restrict buses and wires to H and V orientation"
@@ -11118,6 +11134,8 @@ msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
 msgstr ""
+"Cuando está activado, puede iniciar el cableado haciendo clic en los pines "
+"desconectados incluso cuando la herramienta para añadir líneas no está activa"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:41
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -11278,8 +11296,11 @@ msgid "Text offset ratio:"
 msgstr "Cualquier orientación"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:64
+#, fuzzy
 msgid "Percentage of the text size to offset text above or below wire or bus"
 msgstr ""
+"Porcentaje del tamaño del texto para desplazar el texto por encima o por "
+"debajo del cable o bus"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:90
 msgid "Default line thickness:"
@@ -11315,7 +11336,7 @@ msgstr "Standard"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:163
 msgid "Abbreviated (1..3)"
-msgstr ""
+msgstr "Abreviado (1..3)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:172
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:128
@@ -11325,16 +11346,16 @@ msgstr "Prefijo del nombre del pad:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:176
 msgid "["
-msgstr ""
+msgstr "["
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:179
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:153
 msgid "Suffix:"
-msgstr ""
+msgstr "Sufijo:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:183
 msgid "]"
-msgstr ""
+msgstr "]"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:159
 msgid "No error or warning"
@@ -11350,7 +11371,7 @@ msgstr "Generar error"
 
 #: eeschema/dialogs/panel_setup_pinmap_base.cpp:21
 msgid "Pin to Pin Connections"
-msgstr "Conexiones pin a pin"
+msgstr "Conexiones Pin a Pin"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:22
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:18
@@ -11632,7 +11653,7 @@ msgstr "Sin conectar"
 
 #: eeschema/erc.cpp:263
 msgid "Unresolved text variable in worksheet."
-msgstr ""
+msgstr "Variable de texto sin resolver en la hoja de trabajo."
 
 #: eeschema/erc.cpp:294
 #, fuzzy, c-format
@@ -11747,7 +11768,7 @@ msgstr "Conexión no válida entre el bus y los elementos de red"
 
 #: eeschema/erc_item.cpp:118 pcbnew/drc/drc_item.cpp:166
 msgid "Unresolved text variable"
-msgstr ""
+msgstr "Variable de texto sin resolver"
 
 #: eeschema/erc_item.cpp:122
 #, fuzzy
@@ -11864,6 +11885,11 @@ msgid ""
 "\n"
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
+"Las bibliotecas de símbolos definidas en la lista de bibliotecas de símbolos "
+"del archivo de proyecto ya no son compatibles y se eliminarán.\n"
+"\n"
+"Esto puede causar enlaces rotos a la biblioteca de símbolos bajo ciertas "
+"condiciones."
 
 #: eeschema/files-io.cpp:457 eeschema/files-io.cpp:489
 msgid "Do not show this dialog again."
@@ -11872,6 +11898,7 @@ msgstr "No mostrar este diálogo de nuevo."
 #: eeschema/files-io.cpp:482
 msgid "The schematic file will be converted to the new file format on save."
 msgstr ""
+"El archivo de esquema se convertirá al nuevo formato de archivo al guardar."
 
 #: eeschema/files-io.cpp:486
 msgid ""
@@ -11880,6 +11907,11 @@ msgid ""
 "\n"
 "The new file format cannot be opened with previous versions of KiCad."
 msgstr ""
+"Este esquema se guardó en el formato de archivo antiguo que ya no es "
+"compatible y se guardará con el nuevo formato de archivo.\n"
+"\n"
+"El nuevo formato de archivo no se puede abrir con versiones anteriores de "
+"KiCad."
 
 #: eeschema/files-io.cpp:580
 msgid "Append Schematic"
@@ -11914,6 +11946,8 @@ msgstr "No se puede escribir en la carpeta \"%s\"."
 msgid ""
 "Saving the project to the new file format will overwrite existing files."
 msgstr ""
+"Guardar el proyecto en el nuevo formato de archivo sobrescribirá los "
+"archivos existentes."
 
 #: eeschema/files-io.cpp:758
 #, fuzzy
@@ -12196,6 +12230,8 @@ msgstr "Unidad %s"
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr ""
+"Editando el símbolo %s desde el esquema.  Guardar sólo actualizará el "
+"esquema."
 
 #: eeschema/libedit/lib_edit_frame.cpp:745
 #, c-format
@@ -12815,8 +12851,9 @@ msgid "Power symbol"
 msgstr "Símbolo de alimentación"
 
 #: eeschema/sch_component.cpp:1339
+#, fuzzy
 msgid "flags"
-msgstr ""
+msgstr "flags"
 
 #: eeschema/sch_component.cpp:1348
 msgid "Missing parent"
@@ -12980,7 +13017,7 @@ msgstr "Longitud objetivo:"
 #: eeschema/sch_line.cpp:672
 #, c-format
 msgid "Bus, length %s"
-msgstr ""
+msgstr "Bus, longitud %s"
 
 #: eeschema/sch_line.cpp:673
 #, fuzzy, c-format
@@ -13063,6 +13100,11 @@ msgid ""
 "Current Design size: %.2f, %.2f millimeters. \n"
 "Maximum permitted design size: %.2f, %.2f millimeters.\n"
 msgstr ""
+"El diseño es demasiado grande y no se puede importar a KiCad.\n"
+"Reduzca el tamaño máximo de diseño en CADSTAR navegando a:\n"
+"Ficha Design -> Properties -> Design Options -> Maximum Design Size.\n"
+"Tamaño de diseño actual: %.2f, %.2f milímetros.\n"
+"Tamaño máximo de diseño permitido: %.2f, %.2f milímetros.\n"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:95
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:111
@@ -13070,12 +13112,17 @@ msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. All "
 "components have been loaded on top of each other. "
 msgstr ""
+"El diseño de CADSTAR contiene variantes (\"variants\") que no tienen "
+"equivalente en KiCad. Todos los componentes han sido cargados uno encima del "
+"otro. "
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:102
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
 msgstr ""
+"El diseño CADSTAR contiene elementos agrupados que no tienen equivalente de "
+"KiCad. Todos los elementos agrupados se han desagrupado."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:109
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:118
@@ -13083,6 +13130,9 @@ msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
 msgstr ""
+"El diseño CADSTAR contiene bloques de reutilización (\"re-use blocks\") que "
+"no tienen equivalente de KiCad. La información de los bloques de "
+"reutilización se descartó durante la importación."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:166
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:123
@@ -13090,10 +13140,13 @@ msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
 msgstr ""
+"El diseño de CADSTAR ha sido importado con éxito.\n"
+"Por favor, revise los errores de importación y las advertencias (si "
+"corresponde)."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:216
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
-msgstr ""
+msgstr "El esquema CADSTAR puede estar dañado: no hay hoja raíz."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:292
 #, c-format
@@ -13102,6 +13155,9 @@ msgid ""
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
 msgstr ""
+"La definición del componente '%s' hace referencia al símbolo '%s' (alterno "
+"'%s') que no se pudo encontrar en la biblioteca de símbolos. El componente "
+"no se ha cargado en la biblioteca de KiCad."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:324
 #, c-format
@@ -13109,6 +13165,8 @@ msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
 msgstr ""
+"El símbolo '%s' hace referencia al componente '%s' que no se pudo encontrar "
+"en la biblioteca. El símbolo no se ha cargado"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:347
 #, c-format
@@ -13116,6 +13174,8 @@ msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
 msgstr ""
+"El símbolo ID '%s' hace referencia a un símbolo de biblioteca '%s' que no se "
+"pudo encontrar. ¿Exportaste todos los elementos del diseño?"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:357
 #, c-format
@@ -13123,6 +13183,9 @@ msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
 msgstr ""
+"El símbolo ID '%s' es una referencia de señal (\"signal ref.\") o una señal "
+"global (\"global ref.\") pero tiene demasiados pines. El número requerido de "
+"pines es 1, pero se encontraron %d."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:438
 #, c-format
@@ -13130,6 +13193,8 @@ msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a component or a net "
 "power / symbol. The symbol was not loaded."
 msgstr ""
+"El símbolo ID '%s' es de un tipo desconocido. No es ni un componente ni un "
+"símbolo de alimentación. El símbolo no se ha cargado."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:693
 #, c-format
@@ -23368,8 +23433,8 @@ msgstr "Generar archivo Map"
 #: pcbnew/dialogs/dialog_gendrill.cpp:303
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
-"¡No puede crearse una ruta relativa (el volumen de destino difiere del del "
-"archivo)!"
+"¡No puede crearse una ruta relativa (el volumen de destino es diferente del "
+"volumen del archivo)!"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:373
 #, c-format
@@ -24590,7 +24655,7 @@ msgid ""
 "Note: IPC norm gives a max value = 0.25mm."
 msgstr ""
 "Radio de redondeo.\n"
-"No puede ser mayor que la mitad la la anchura del pad.\n"
+"No puede ser mayor que la mitad de la anchura del pad.\n"
 "La anchura es el menor valor entre la dimensión X y la dimensión Y.\n"
 "Nota: la norma IPC da un valor máximo de 0,25 mm."
 
@@ -29965,7 +30030,7 @@ msgstr ""
 # Pendiente de contexto
 #: pcbnew/plugin.cpp:150
 msgid "Regular expression <b>footprint name</b> filter."
-msgstr "Filtro por expresión regular <b>nombre de huella<b>."
+msgstr "Filtro por expresión regular <b>nombre de huella</b>."
 
 #: pcbnew/plugin.cpp:171
 msgid ""
