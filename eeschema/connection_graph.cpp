@@ -2088,24 +2088,35 @@ int CONNECTION_GRAPH::RunERC()
          * format due to their TestDanglingEnds() implementation.
          */
 
-        if( settings.IsTestEnabled( ERCE_DRIVER_CONFLICT ) && !subgraph->ResolveDrivers( true ) )
-            error_count++;
+        if( settings.IsTestEnabled( ERCE_DRIVER_CONFLICT ) )
+        {
+            if( !subgraph->ResolveDrivers( true ) )
+                error_count++;
+        }
 
-        if( settings.IsTestEnabled( ERCE_BUS_TO_NET_CONFLICT )
-                && !ercCheckBusToNetConflicts( subgraph ) )
-            error_count++;
+        if( settings.IsTestEnabled( ERCE_BUS_TO_NET_CONFLICT ) )
+        {
+            if( !ercCheckBusToNetConflicts( subgraph ) )
+                error_count++;
+        }
 
-        if( settings.IsTestEnabled( ERCE_BUS_ENTRY_CONFLICT )
-                && !ercCheckBusToBusEntryConflicts( subgraph ) )
-            error_count++;
+        if( settings.IsTestEnabled( ERCE_BUS_ENTRY_CONFLICT ) )
+        {
+            if( !ercCheckBusToBusEntryConflicts( subgraph ) )
+                error_count++;
+        }
 
-        if( settings.IsTestEnabled( ERCE_BUS_TO_BUS_CONFLICT )
-                && !ercCheckBusToBusConflicts( subgraph ) )
-            error_count++;
+        if( settings.IsTestEnabled( ERCE_BUS_TO_BUS_CONFLICT ) )
+        {
+            if( !ercCheckBusToBusConflicts( subgraph ) )
+                error_count++;
+        }
 
-        if( settings.IsTestEnabled( ERCE_WIRE_DANGLING )
-            && !ercCheckFloatingWires( subgraph ) )
-            error_count++;
+        if( settings.IsTestEnabled( ERCE_WIRE_DANGLING ) )
+        {
+            if( !ercCheckFloatingWires( subgraph ) )
+                error_count++;
+        }
 
         // The following checks are always performed since they don't currently
         // have an option exposed to the user
@@ -2113,9 +2124,12 @@ int CONNECTION_GRAPH::RunERC()
         if( !ercCheckNoConnects( subgraph ) )
             error_count++;
 
-        if( ( settings.IsTestEnabled( ERCE_LABEL_NOT_CONNECTED )
-                || settings.IsTestEnabled( ERCE_GLOBLABEL ) ) && !ercCheckLabels( subgraph ) )
-            error_count++;
+        if( settings.IsTestEnabled( ERCE_LABEL_NOT_CONNECTED )
+                || settings.IsTestEnabled( ERCE_GLOBLABEL ) )
+        {
+            if( !ercCheckLabels( subgraph ) )
+                error_count++;
+        }
     }
 
     // Hierarchical sheet checking is done at the schematic level
@@ -2340,7 +2354,8 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 // TODO(JE) Check sheet pins here too?
 bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph )
 {
-    wxString msg;
+    ERC_SETTINGS&         settings = m_schematic->ErcSettings();
+    wxString              msg;
     const SCH_SHEET_PATH& sheet  = aSubgraph->m_sheet;
     SCH_SCREEN*           screen = sheet.LastScreen();
     bool                  ok     = true;
@@ -2390,7 +2405,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             }
         }
 
-        if( pin && has_invalid_items )
+        if( pin && has_invalid_items && settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_CONNECTED );
             ercItem->SetItems( pin );
@@ -2401,7 +2416,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             ok = false;
         }
 
-        if( !has_other_items )
+        if( !has_other_items && settings.IsTestEnabled(ERCE_NOCONNECT_NOT_CONNECTED ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_NOT_CONNECTED );
             ercItem->SetItems( aSubgraph->m_no_connect );
@@ -2465,7 +2480,9 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         }
 
         // Only one pin, and it's not a no-connect pin
-        if( pin && !has_other_connections && pin->GetType() != ELECTRICAL_PINTYPE::PT_NC )
+        if( pin && !has_other_connections
+                && pin->GetType() != ELECTRICAL_PINTYPE::PT_NC
+                && settings.IsTestEnabled( ERCE_PIN_NOT_CONNECTED ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
             ercItem->SetItems( pin );
@@ -2486,8 +2503,9 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
                 // We only apply this test to power symbols, because other symbols have invisible
                 // pins that are meant to be dangling, but the KiCad standard library power symbols
                 // have invisible pins that are *not* meant to be dangling.
-                if( testPin->GetLibPin()->GetParent()->IsPower() &&
-                    testPin->ConnectedItems( sheet ).empty() )
+                if( testPin->GetLibPin()->GetParent()->IsPower()
+                        && testPin->ConnectedItems( sheet ).empty()
+                        && settings.IsTestEnabled( ERCE_PIN_NOT_CONNECTED ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
                     ercItem->SetItems( testPin );
@@ -2553,10 +2571,11 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     if( aSubgraph->m_no_connect )
         return true;
 
-    bool      ok                  = true;
-    SCH_TEXT* text                = nullptr;
-    bool      hasOtherConnections = false;
-    int       pinCount            = 0;
+    ERC_SETTINGS& settings            = m_schematic->ErcSettings();
+    bool          ok                  = true;
+    SCH_TEXT*     text                = nullptr;
+    bool          hasOtherConnections = false;
+    int           pinCount            = 0;
 
     for( auto item : aSubgraph->m_items )
     {
@@ -2572,7 +2591,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
             // we want to error if an individual label in the subgraph is floating, even if it's
             // connected to other valid things by way of another label on the same sheet.
 
-            if( text->IsDangling() )
+            if( text->IsDangling() && settings.IsTestEnabled( ERCE_LABEL_NOT_CONNECTED ) )
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LABEL_NOT_CONNECTED );
                 ercItem->SetItems( text );
@@ -2600,12 +2619,9 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
         return true;
 
     bool isGlobal = text->Type() == SCH_GLOBAL_LABEL_T;
+    int  errCode = isGlobal ? ERCE_GLOBLABEL : ERCE_LABEL_NOT_CONNECTED;
 
     wxCHECK_MSG( m_schematic, true, "Null m_schematic in CONNECTION_GRAPH::ercCheckLabels" );
-
-    // Global label check can be disabled independently
-    if( !m_schematic->ErcSettings().IsTestEnabled( ERCE_GLOBLABEL ) && isGlobal )
-        return true;
 
     wxString name = EscapeString( text->GetShownText(), CTX_NETNAME );
 
@@ -2642,10 +2658,9 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
             hasOtherConnections = true;
     }
 
-    if( !hasOtherConnections )
+    if( !hasOtherConnections && settings.IsTestEnabled( errCode ) )
     {
-        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( isGlobal ? ERCE_GLOBLABEL
-                                                                       : ERCE_LABEL_NOT_CONNECTED );
+        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( errCode );
         ercItem->SetItems( text );
 
         SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
