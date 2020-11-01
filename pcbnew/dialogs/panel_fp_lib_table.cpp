@@ -436,6 +436,9 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     populateEnvironReadOnlyTable();
 
+    m_notebook->SetPageText( 0, _( "Global Libraries" ) );
+    m_notebook->SetPageText( 1, _( "Project Specific Libraries" ) );
+
     if( aProject )
     {
         m_PrjTableFilename->SetLabel( aProjectTblPath );
@@ -445,7 +448,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     else
     {
         m_pageNdx = 0;
-        m_auinotebook->DeletePage( 1 );
+        m_notebook->DeletePage( 1 );
         m_project_grid = nullptr;
     }
 
@@ -453,7 +456,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     m_path_subs_grid->SetColLabelValue( 1, _( "Value" ) );
 
     // select the last selected page
-    m_auinotebook->SetSelection( m_pageNdx );
+    m_notebook->SetSelection( m_pageNdx );
     m_cur_grid = ( m_pageNdx == 0 ) ? m_global_grid : m_project_grid;
 
     // for ALT+A handling, we want the initial focus to be on the first selected grid.
@@ -540,7 +543,7 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
 
                 // show the tabbed panel holding the grid we have flunked:
                 if( model != cur_model() )
-                    m_auinotebook->SetSelection( model == global_model() ? 0 : 1 );
+                    m_notebook->SetSelection( model == global_model() ? 0 : 1 );
 
                 m_cur_grid->MakeCellVisible( r, 0 );
                 m_cur_grid->SetGridCursor( r, 1 );
@@ -579,7 +582,7 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
 
                     // show the tabbed panel holding the grid we have flunked:
                     if( model != cur_model() )
-                        m_auinotebook->SetSelection( model == global_model() ? 0 : 1 );
+                        m_notebook->SetSelection( model == global_model() ? 0 : 1 );
 
                     // go to the lower of the two rows, it is technically the duplicate:
                     m_cur_grid->MakeCellVisible( r2, 0 );
@@ -599,9 +602,9 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
 
 //-----<event handlers>----------------------------------
 
-void PANEL_FP_LIB_TABLE::pageChangedHandler( wxAuiNotebookEvent& event )
+void PANEL_FP_LIB_TABLE::pageChangedHandler( wxNotebookEvent& event )
 {
-    m_pageNdx = (unsigned) std::max( 0, m_auinotebook->GetSelection() );
+    m_pageNdx = (unsigned) std::max( 0, m_notebook->GetSelection() );
     m_cur_grid = m_pageNdx == 0 ? m_global_grid : m_project_grid;
 }
 

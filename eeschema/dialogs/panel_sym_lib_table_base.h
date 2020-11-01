@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,7 @@ class WX_GRID;
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/aui/auibook.h>
+#include <wx/notebook.h>
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/statbox.h>
@@ -40,7 +40,7 @@ class PANEL_SYM_LIB_TABLE_BASE : public wxPanel
 	private:
 
 	protected:
-		wxAuiNotebook* m_auinotebook;
+		wxNotebook* m_notebook;
 		wxPanel* m_global_panel;
 		wxStaticText* m_staticText3;
 		wxStaticText* m_GblTableFilename;
@@ -57,7 +57,7 @@ class PANEL_SYM_LIB_TABLE_BASE : public wxPanel
 		WX_GRID* m_path_subs_grid;
 
 		// Virtual event handlers, overide them in your derived class
-		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) { event.Skip(); }
+		virtual void pageChangedHandler( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void appendRowHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void browseLibrariesHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void moveUpHandler( wxCommandEvent& event ) { event.Skip(); }

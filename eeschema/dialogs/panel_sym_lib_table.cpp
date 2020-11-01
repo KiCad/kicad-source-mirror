@@ -287,6 +287,9 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     setupGrid( m_global_grid );
 
+    m_notebook->SetPageText( 0, _( "Global Libraries" ) );
+    m_notebook->SetPageText( 1, _( "Project Specific Libraries" ) );
+
     if( aProject )
     {
         m_PrjTableFilename->SetLabel( aProjectTablePath );
@@ -296,7 +299,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     else
     {
         m_pageNdx = 0;
-        m_auinotebook->DeletePage( 1 );
+        m_notebook->DeletePage( 1 );
         m_project_grid = nullptr;
     }
 
@@ -306,7 +309,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     populateEnvironReadOnlyTable();
 
     // select the last selected page
-    m_auinotebook->SetSelection( m_pageNdx );
+    m_notebook->SetSelection( m_pageNdx );
     m_cur_grid = ( m_pageNdx == 0 ) ? m_global_grid : m_project_grid;
 
     m_path_subs_grid->SetColLabelValue( 0, _( "Name" ) );
@@ -371,7 +374,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
 
                 // show the tabbed panel holding the grid we have flunked:
                 if( model != cur_model() )
-                    m_auinotebook->SetSelection( model == global_model() ? 0 : 1 );
+                    m_notebook->SetSelection( model == global_model() ? 0 : 1 );
 
                 m_cur_grid->MakeCellVisible( r, 0 );
                 m_cur_grid->SetGridCursor( r, 1 );
@@ -410,7 +413,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
 
                     // show the tabbed panel holding the grid we have flunked:
                     if( model != cur_model() )
-                        m_auinotebook->SetSelection( model == global_model() ? 0 : 1 );
+                        m_notebook->SetSelection( model == global_model() ? 0 : 1 );
 
                     // go to the lower of the two rows, it is technically the duplicate:
                     m_cur_grid->MakeCellVisible( r2, 0 );
@@ -465,9 +468,9 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
 }
 
 
-void PANEL_SYM_LIB_TABLE::pageChangedHandler( wxAuiNotebookEvent& event )
+void PANEL_SYM_LIB_TABLE::pageChangedHandler( wxNotebookEvent& event )
 {
-    m_pageNdx = (unsigned) std::max( 0, m_auinotebook->GetSelection() );
+    m_pageNdx = (unsigned) std::max( 0, m_notebook->GetSelection() );
     m_cur_grid = m_pageNdx == 0 ? m_global_grid : m_project_grid;
 }
 
@@ -479,7 +482,8 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
                             + "|" + LegacySymbolLibFileWildcard();
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
-    wxFileDialog dlg( this, _( "Select Library" ), cfg->m_lastSymbolLibDir, wxEmptyString, wildcards,
+    wxFileDialog dlg( this, _( "Select Library" ),
+                      cfg->m_lastSymbolLibDir, wxEmptyString, wildcards,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
     auto result = dlg.ShowModal();
@@ -511,7 +515,8 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             if( !applyToAll )
             {
                 // The cancel button adds the library to the table anyway
-                addDuplicates = ( OKOrCancelDialog( this, warning, wxString::Format( msg, nickname ),
+                addDuplicates = ( OKOrCancelDialog( this, warning,
+                                                    wxString::Format( msg, nickname ),
                         detailedMsg, _( "Skip" ), _( "Add Anyway" ), &applyToAll ) == wxID_CANCEL );
             }
 
