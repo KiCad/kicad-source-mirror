@@ -507,6 +507,8 @@ const std::vector<int> ROUTER::GetCurrentNets() const
 {
     if( m_placer )
         return m_placer->CurrentNets();
+    else if( m_dragger )
+        return m_dragger->CurrentNets();
 
     return std::vector<int>();
 }

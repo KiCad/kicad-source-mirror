@@ -43,13 +43,14 @@ class DRAG_ALGO : public ALGO_BASE
 {
 public:
     DRAG_ALGO( ROUTER* aRouter ) :
-        ALGO_BASE( aRouter ), m_world( nullptr )
+        ALGO_BASE( aRouter ),
+        m_world( nullptr )
     {
     }
 
-   ~DRAG_ALGO()
-   {
-   }
+    ~DRAG_ALGO()
+    {
+    }
 
     /**
      * Function SetWorld()
@@ -61,51 +62,52 @@ public:
         m_world = aWorld;
     }
 
+    /**
+     * Function Start()
+     *
+     * Starts routing a single track at point aP, taking item aStartItem as anchor
+     * (unless NULL). Returns true if a dragging operation has started.
+     */
+    virtual bool Start( const VECTOR2I& aP, ITEM_SET& aPrimitives ) = 0;
 
-       /**
-        * Function Start()
-        *
-        * Starts routing a single track at point aP, taking item aStartItem as anchor
-        * (unless NULL). Returns true if a dragging operation has started.
-        */
-       virtual bool Start( const VECTOR2I& aP, ITEM_SET& aPrimitives ) = 0;
+    /**
+     * Function Drag()
+     *
+     * Drags the current segment/corner/via to the point aP.
+     * @return true, if dragging finished with success.
+     */
+    virtual bool Drag( const VECTOR2I& aP ) = 0;
 
-       /**
-        * Function Drag()
-        *
-        * Drags the current segment/corner/via to the point aP.
-        * @return true, if dragging finished with success.
-        */
-       virtual bool Drag( const VECTOR2I& aP ) = 0;
+    /**
+     * Function FixRoute()
+     *
+     * Checks if the result of current dragging operation is correct
+     * and eventually commits it to the world.
+     * @return true, if dragging finished with success.
+     */
+    virtual bool FixRoute() = 0;
 
-       /**
-        * Function FixRoute()
-        *
-        * Checks if the result of current dragging operation is correct
-        * and eventually commits it to the world.
-        * @return true, if dragging finished with success.
-        */
-       virtual bool FixRoute() = 0;
+    /**
+     * Function CurrentNode()
+     *
+     * Returns the most recent world state, including all
+     * items changed due to dragging operation.
+     */
+    virtual NODE* CurrentNode() const = 0;
 
-       /**
-        * Function CurrentNode()
-        *
-        * Returns the most recent world state, including all
-        * items changed due to dragging operation.
-        */
-       virtual NODE* CurrentNode() const = 0;
+    virtual const std::vector<int> CurrentNets() const = 0;
 
-       /**
-        * Function Traces()
-        *
-        * Returns the set of dragged items.
-        */
-       virtual const ITEM_SET Traces() = 0;
+    /**
+     * Function Traces()
+     *
+     * Returns the set of dragged items.
+     */
+    virtual const ITEM_SET Traces() = 0;
 
-       virtual void SetMode( int aDragMode ) {};
+    virtual void SetMode( int aDragMode ) {};
 
 protected:
-        NODE*   m_world;
+    NODE*   m_world;
 
 };
 

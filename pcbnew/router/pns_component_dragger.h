@@ -79,6 +79,11 @@ public:
      */
     NODE* CurrentNode() const override;
 
+    const std::vector<int> CurrentNets() const override
+    {
+        return std::vector<int>();
+    }
+
     /**
      * Function Traces()
      *

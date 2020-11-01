@@ -83,6 +83,11 @@ public:
      */
     NODE* CurrentNode() const override;
 
+    const std::vector<int> CurrentNets() const override
+    {
+        return std::vector<int>( 1, m_draggedLine.Net() );
+    }
+
     /**
      * Function Traces()
      *
@@ -107,25 +112,22 @@ private:
     void optimizeAndUpdateDraggedLine( LINE& dragged, SEG& aDraggedSeg, const VECTOR2I& aP );
 
 
-    VIA_HANDLE m_initialVia;
-    VIA_HANDLE m_draggedVia;
+    VIA_HANDLE             m_initialVia;
+    VIA_HANDLE             m_draggedVia;
 
-    NODE*    m_lastNode;
-    int      m_mode;
-    LINE     m_draggedLine;
-    //VIA*     m_draggedVia;
-    //LINE     m_lastValidDraggedLine;
+    NODE*                  m_lastNode;
+    int                    m_mode;
+    LINE                   m_draggedLine;
     std::unique_ptr<SHOVE> m_shove;
-    int      m_draggedSegmentIndex;
-    bool     m_dragStatus;
-    PNS_MODE m_currentMode;
-    ITEM_SET m_origViaConnections;
+    int                    m_draggedSegmentIndex;
+    bool                   m_dragStatus;
+    PNS_MODE               m_currentMode;
 
     ///< Contains the list of items that are currently modified by the dragger
-    ITEM_SET m_draggedItems;
+    ITEM_SET               m_draggedItems;
 
     ///< If true, moves the connection lines without maintaining 45° corners
-    bool     m_freeAngleMode;
+    bool                   m_freeAngleMode;
 };
 
 }
