@@ -157,7 +157,9 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
     m_dragger->SetDebugDecorator ( m_iface->GetDebugDecorator () );
 
     if( m_dragger->Start ( aP, aStartItems ) )
+    {
         m_state = DRAG_SEGMENT;
+    }
     else
     {
         m_dragger.reset();
@@ -177,10 +179,8 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, int aLayer )
 
     for( ITEM* item : candidates.Items() )
     {
-        if( ! item->IsRoutable() && item->Layers().Overlaps( aLayer ) )
-        {
+        if( !item->IsRoutable() && item->Layers().Overlaps( aLayer ) )
             return false;
-        }
     }
 
     return true;
@@ -188,7 +188,6 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, int aLayer )
 
 bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
 {   
-
     if( ! isStartingPointRoutable( aP, aLayer ) )
     {
         SetFailureReason( _( "The routing start point violates DRC." ) );
@@ -219,16 +218,13 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
             return false;
     }
 
-    m_placer->UpdateSizes ( m_sizes );
+    m_placer->UpdateSizes( m_sizes );
     m_placer->SetLayer( aLayer );
-    m_placer->SetDebugDecorator ( m_iface->GetDebugDecorator () );
+    m_placer->SetDebugDecorator( m_iface->GetDebugDecorator () );
     m_placer->SetLogger( m_logger );
 
     if( m_logger )
-    {
         m_logger->Log( LOGGER::EVT_START_ROUTE, aP, aStartItem );
-    }
-
 
     bool rv = m_placer->Start( aP, aStartItem );
 
@@ -241,21 +237,12 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
 }
 
 
-void ROUTER::DisplayItems( const ITEM_SET& aItems )
-{
-    for( const ITEM* item : aItems.CItems() )
-        m_iface->DisplayItem( item );
-}
-
-
 void ROUTER::Move( const VECTOR2I& aP, ITEM* endItem )
 {
     m_currentEnd = aP;
 
     if( m_logger )
-    {
         m_logger->Log( LOGGER::EVT_MOVE, aP, endItem );
-    }
 
     switch( m_state )
     {

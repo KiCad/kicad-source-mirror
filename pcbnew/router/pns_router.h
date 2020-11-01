@@ -162,7 +162,6 @@ public:
     void FlipPosture();
 
     void DisplayItem( const ITEM* aItem, int aColor = -1, int aClearance = -1, bool aEdit = false );
-    void DisplayItems( const ITEM_SET& aItems );
     void DeleteTraces( ITEM* aStartItem, bool aWholeTrack );
     void SwitchLayer( int layer );
 
