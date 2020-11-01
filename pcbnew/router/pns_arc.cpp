@@ -39,6 +39,10 @@ ARC* ARC::Clone() const
 {
     ARC* a = new ARC( m_arc, m_net );
 
+    a->m_layers = m_layers;
+    a->m_marker = m_marker;
+    a->m_rank = m_rank;
+
     return a;
 }
 

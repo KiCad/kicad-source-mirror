@@ -43,7 +43,8 @@ public:
     {}
 
     SEGMENT( const SEG& aSeg, int aNet ) :
-        LINKED_ITEM( SEGMENT_T ), m_seg( aSeg, 0 )
+        LINKED_ITEM( SEGMENT_T ),
+        m_seg( aSeg, 0 )
     {
         m_net = aNet;
     }

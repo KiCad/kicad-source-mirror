@@ -37,17 +37,20 @@ class NODE;
 class ARC : public LINKED_ITEM
 {
 public:
-    ARC() : LINKED_ITEM( ARC_T )
+    ARC() :
+        LINKED_ITEM( ARC_T )
     {}
 
-    ARC( const SHAPE_ARC& aArc, int aNet ) : LINKED_ITEM( ARC_T ), m_arc( aArc )
+    ARC( const SHAPE_ARC& aArc, int aNet ) :
+        LINKED_ITEM( ARC_T ),
+        m_arc( aArc )
     {
         m_net = aNet;
     }
 
-    ARC( const ARC& aParentArc, const SHAPE_ARC& aArc )
-            : LINKED_ITEM( ARC_T ),
-              m_arc( aArc )
+    ARC( const ARC& aParentArc, const SHAPE_ARC& aArc ) :
+        LINKED_ITEM( ARC_T ),
+        m_arc( aArc )
     {
         m_net = aParentArc.Net();
         m_layers = aParentArc.Layers();
