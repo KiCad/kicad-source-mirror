@@ -183,17 +183,18 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
             return false;
     }
 
-    if( m_mode == PNS_MODE_ROUTE_SINGLE )
+    if( m_mode == PNS_MODE_ROUTE_SINGLE && aStartItem )
     {
         VECTOR2I startPoint = aStartItem->Anchor( 0 );
         SEGMENT  dummyStartSeg( SEG( startPoint, startPoint ), aStartItem->Net() );
 
         dummyStartSeg.SetWidth( m_sizes.TrackWidth() );
+        dummyStartSeg.SetLayer( aLayer );
 
         if( m_world->CheckColliding( &dummyStartSeg, ITEM::ANY_T ) )
             return false;
     }
-    else if( m_mode == PNS_MODE_ROUTE_DIFF_PAIR )
+    else if( m_mode == PNS_MODE_ROUTE_DIFF_PAIR && aStartItem )
     {
         // TODO
     }
