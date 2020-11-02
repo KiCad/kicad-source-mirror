@@ -227,8 +227,11 @@ KIID_PATH SCH_SHEET_PATH::PathWithoutRootUuid() const
 wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName ) const
 {
     wxString s;
+    wxString fileName;
 
-    wxString    fileName = at( 0 )->GetScreen()->GetFileName();
+    if( !empty() && at( 0 )->GetScreen() )
+        fileName = at( 0 )->GetScreen()->GetFileName();
+
     wxFileName  fn = fileName;
 
     if( aUseShortRootName )
