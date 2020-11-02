@@ -627,7 +627,11 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         {
             int numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ),
                                     pad_min_seg_per_circle_count );
-            int clearance = aClearanceValue + GetCircleToPolyCorrection( aError );
+            int clearance = aClearanceValue;
+
+            if( aErrorLoc == ERROR_OUTSIDE )
+                clearance += GetCircleToPolyCorrection( aError );
+
             outline.Inflate( clearance, numSegs );
         }
 

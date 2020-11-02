@@ -604,6 +604,10 @@ void SHAPE_POLY_SET::Inflate( int aAmount, int aCircleSegmentsCount,
     if( aCircleSegmentsCount < 6 ) // avoid incorrect aCircleSegmentsCount values
         aCircleSegmentsCount = 6;
 
+    // Clipper has a bug where round-off error is accumulated into the last segment.  Increasing
+    // the segment count by one probably accounts for this, but we increment by 2 to be safe.
+    aCircleSegmentsCount += 2;
+
     double coeff;
 
     if( aCircleSegmentsCount > SEG_CNT_MAX || arc_tolerance_factor[aCircleSegmentsCount] == 0 )

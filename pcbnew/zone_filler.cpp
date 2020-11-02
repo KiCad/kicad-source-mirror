@@ -753,6 +753,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                     else
                         gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aPad, aLayer );
 
+                    gap += extra_margin;
+
                     addKnockout( aPad, aLayer, gap, aHoles );
                 }
             };
