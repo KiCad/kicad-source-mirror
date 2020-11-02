@@ -39,6 +39,9 @@ enum ERCE_T
     ERCE_DUPLICATE_SHEET_NAME = ERCE_FIRST,  ///< Duplicate sheet names within a given sheet.
     ERCE_PIN_NOT_CONNECTED,       ///< Pin not connected and not no connect symbol.
     ERCE_PIN_NOT_DRIVEN,          ///< Pin connected to some others pins but no pin to drive it.
+                                  ///< pins to drive it can be output, passive, 3sttae, I/O
+    ERCE_POWERPIN_NOT_DRIVEN,     ///< Power input pin connected to some others pins but no
+                                  ///< power out pin to drive it.
     ERCE_HIERACHICAL_LABEL,       ///< Mismatch between hierarchical labels and pins sheets.
     ERCE_NOCONNECT_CONNECTED,     ///< A no connect symbol is connected to more than 1 pin.
     ERCE_NOCONNECT_NOT_CONNECTED, ///< A no connect symbol is not connected to anything.

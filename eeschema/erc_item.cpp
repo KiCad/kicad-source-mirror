@@ -50,6 +50,10 @@ ERC_ITEM ERC_ITEM::pinNotDriven( ERCE_PIN_NOT_DRIVEN,
         _( "Input pin not driven by any Output pins" ),
         wxT( "pin_not_driven" ) );
 
+ERC_ITEM ERC_ITEM::powerpinNotDriven( ERCE_POWERPIN_NOT_DRIVEN,
+        _( "Input Power pin not driven by any Output Power pins" ),
+        wxT( "power_pin_not_driven" ) );
+
 ERC_ITEM ERC_ITEM::pinTableWarning( ERCE_PIN_TO_PIN_WARNING,
         _( "Conflict problem between pins" ),
         wxT( "pin_to_pin" ) );
@@ -130,6 +134,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::duplicateSheetName,
                  ERC_ITEM::pinNotConnected,
                  ERC_ITEM::pinNotDriven,
+                 ERC_ITEM::powerpinNotDriven,
                  ERC_ITEM::pinTableWarning,
                  ERC_ITEM::hierLabelMismatch,
                  ERC_ITEM::noConnectConnected,
@@ -159,6 +164,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_DUPLICATE_SHEET_NAME:    return std::make_shared<ERC_ITEM>( duplicateSheetName );
     case ERCE_PIN_NOT_CONNECTED:       return std::make_shared<ERC_ITEM>( pinNotConnected );
     case ERCE_PIN_NOT_DRIVEN:          return std::make_shared<ERC_ITEM>( pinNotDriven );
+    case ERCE_POWERPIN_NOT_DRIVEN:     return std::make_shared<ERC_ITEM>( powerpinNotDriven );
     case ERCE_PIN_TO_PIN_WARNING:      return std::make_shared<ERC_ITEM>( pinTableWarning );
     case ERCE_PIN_TO_PIN_ERROR:        return std::make_shared<ERC_ITEM>( pinTableError );
     case ERCE_HIERACHICAL_LABEL:       return std::make_shared<ERC_ITEM>( hierLabelMismatch );

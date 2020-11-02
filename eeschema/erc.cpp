@@ -100,10 +100,23 @@ const wxString CommentERC_V[] =
 };
 
 
-// List of pin types that are considered drivers
+// List of pin types that are considered drivers for usual input pins
+// i.e. pin type = ELECTRICAL_PINTYPE::PT_INPUT, but not PT_POWER_IN
+// that need only a PT_POWER_OUT pin type to be driven
 const std::set<ELECTRICAL_PINTYPE> DrivingPinTypes =
         {
             ELECTRICAL_PINTYPE::PT_OUTPUT,
+            ELECTRICAL_PINTYPE::PT_POWER_OUT,
+            ELECTRICAL_PINTYPE::PT_PASSIVE,
+            ELECTRICAL_PINTYPE::PT_TRISTATE,
+            ELECTRICAL_PINTYPE::PT_BIDI
+        };
+
+// List of pin types that are considered drivers for power pins
+// In fact only a ELECTRICAL_PINTYPE::PT_POWER_OUT pin type can drive
+// power input pins
+const std::set<ELECTRICAL_PINTYPE> DrivingPowerPinTypes =
+        {
             ELECTRICAL_PINTYPE::PT_POWER_OUT
         };
 
@@ -455,6 +468,20 @@ int ERC_TESTER::TestPinToPin()
         SCH_PIN* needsDriver = nullptr;
         bool     hasDriver   = false;
 
+        // We need different drivers for power nets and normal nets.
+        // A power net has at least one pin having the ELECTRICAL_PINTYPE::PT_POWER_IN
+        // and power nets can be driven only by ELECTRICAL_PINTYPE::PT_POWER_OUT pins
+        bool     ispowerNet  = false;
+
+        for( SCH_PIN* refPin : pins )
+        {
+            if( refPin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN )
+            {
+                ispowerNet = true;
+                break;
+            }
+        }
+
         for( SCH_PIN* refPin : pins )
         {
             ELECTRICAL_PINTYPE refType = refPin->GetType();
@@ -469,7 +496,10 @@ int ERC_TESTER::TestPinToPin()
                     needsDriver = refPin;
             }
 
-            hasDriver |= ( DrivingPinTypes.count( refType ) != 0 );
+            if( ispowerNet )
+                hasDriver |= ( DrivingPowerPinTypes.count( refType ) != 0 );
+            else
+                hasDriver |= ( DrivingPinTypes.count( refType ) != 0 );
 
             for( SCH_PIN* testPin : pins )
             {
@@ -487,7 +517,10 @@ int ERC_TESTER::TestPinToPin()
 
                 ELECTRICAL_PINTYPE testType = testPin->GetType();
 
-                hasDriver |= ( DrivingPinTypes.count( testType ) != 0 );
+                if( ispowerNet )
+                    hasDriver |= ( DrivingPowerPinTypes.count( testType ) != 0 );
+                else
+                    hasDriver |= ( DrivingPinTypes.count( testType ) != 0 );
 
                 PIN_ERROR erc = settings.GetPinMapValue( refType, testType );
 
@@ -513,7 +546,9 @@ int ERC_TESTER::TestPinToPin()
 
         if( needsDriver && !hasDriver )
         {
-            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_DRIVEN );
+            int err_code = ispowerNet ? ERCE_POWERPIN_NOT_DRIVEN : ERCE_PIN_NOT_DRIVEN;
+            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( err_code );
+
             ercItem->SetItems( needsDriver );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, needsDriver->GetTransformedPosition() );
