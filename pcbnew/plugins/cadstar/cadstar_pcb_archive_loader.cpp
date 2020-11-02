@@ -97,7 +97,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
     loadCoppers();
     loadNets();
 
-    
+
     if( Layout.Trunks.size() > 0 )
     {
         wxLogWarning(
@@ -188,7 +188,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
                                "stack refers to layer ID '%s' which does not exist in the layer "
                                "definitions." ) );
         }
-        
+
         LAYER curLayer = cpaLayers.at( *it );
 
         if( prevWasDielectric && ( curLayer.Type != LAYER_TYPE::CONSTRUCTION ) )
@@ -805,7 +805,7 @@ D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* 
                                         + (long long) csPadcode.Shape.LeftLength
                                         + (long long) csPadcode.Shape.RightLength ),
                 getKiCadLength( csPadcode.Shape.Size ) } );
-        
+
         padOffset.x = getKiCadLength( ( (long long) csPadcode.Shape.LeftLength / 2 ) -
                                       ( (long long) csPadcode.Shape.RightLength / 2 ) );
         break;
@@ -836,7 +836,7 @@ D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* 
                                         + (long long) csPadcode.Shape.LeftLength
                                         + (long long) csPadcode.Shape.RightLength ),
                 getKiCadLength( csPadcode.Shape.Size ) } );
-        
+
         padOffset.x = getKiCadLength( ( (long long) csPadcode.Shape.LeftLength / 2 ) -
                                       ( (long long) csPadcode.Shape.RightLength / 2 ) );
         break;
@@ -864,7 +864,7 @@ D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* 
         if( csPadcode.SlotLength != UNDEFINED_VALUE )
         {
             pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_OBLONG );
-            pad->SetDrillSize( { getKiCadLength( (long long) csPadcode.SlotLength + 
+            pad->SetDrillSize( { getKiCadLength( (long long) csPadcode.SlotLength +
                                                  (long long) csPadcode.DrillDiameter ),
                                  getKiCadLength( csPadcode.DrillDiameter ) } );
         }
@@ -879,7 +879,7 @@ D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* 
         drillOffset.y = getKiCadLength( csPadcode.DrillYoffset );
     }
 
-    
+
     if( csPadcode.SlotOrientation != 0 )
     {
         LSET lset = pad->GetLayerSet();
@@ -907,7 +907,7 @@ D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* 
             SHAPE_POLY_SET editedPadOutline = padShape->GetPolyShape();
 
             if( editedPadOutline.Contains( { 0, 0 } ) )
-            { 
+            {
                 pad->SetAnchorPadShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
                 pad->SetSize( wxSize( { 4, 4 } ) );
                 pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_CUSTOM );
@@ -1227,7 +1227,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
 
                 //Find the pad in the module definition
                 D_PAD* kiPad = m->Pads().at( padEx.ID - (long) 1 );
-                
+
                 if( kiPad )
                     delete kiPad;
 
@@ -1583,7 +1583,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
             {
                 wxLogWarning( wxString::Format(
                         _( "The net '%s' references component ID '%s' which does not exist. "
-                           "This has been ignored," ),
+                           "This has been ignored." ),
                         netnameForErrorReporting, pin.ComponentID ) );
             }
             else if( ( pin.PadID - (long) 1 ) > m->Pads().size() )

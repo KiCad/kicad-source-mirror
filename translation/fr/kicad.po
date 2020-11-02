@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-02 12:46+0100\n"
-"PO-Revision-Date: 2020-11-02 12:57+0100\n"
+"POT-Creation-Date: 2020-11-02 20:09+0100\n"
+"PO-Revision-Date: 2020-11-02 20:21+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -619,7 +619,7 @@ msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
 msgstr ""
-"Nombre de rayons qui seront lacés, dans la direction de la lumière, pour "
+"Nombre de rayons qui seront lancés, dans la direction de la lumière, pour "
 "évaluer un point d’ombre"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:499
@@ -3882,7 +3882,7 @@ msgstr "Symbole"
 #: gerbview/gerber_draw_item.cpp:233 pcbnew/class_board_item.cpp:37
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:112
 #: pcbnew/dialogs/dialog_pad_properties.cpp:710
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2040 pcbnew/pcb_shape.cpp:488
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2047 pcbnew/pcb_shape.cpp:488
 msgid "Arc"
 msgstr "Arc"
 
@@ -3913,7 +3913,7 @@ msgstr "PolyLigne"
 #: common/eda_item.cpp:310 eeschema/lib_bezier.h:54
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:99
 #: pcbnew/dialogs/dialog_pad_properties.cpp:704
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2040
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2047
 msgid "Bezier"
 msgstr "Bézier"
 
@@ -13369,10 +13369,6 @@ msgstr "Feuille Hiérarchique %s"
 msgid "(Deleted Item)"
 msgstr "(Élément Supprimé)"
 
-#: eeschema/sch_sheet_path.cpp:233
-msgid "<root_sheet>"
-msgstr "<feuille_maitre>"
-
 #: eeschema/sch_sheet_pin.cpp:286
 #, c-format
 msgid "Hierarchical Sheet Pin %s"
@@ -14810,10 +14806,8 @@ msgid "Save In Schematic"
 msgstr "Sauver dans Schématique"
 
 #: eeschema/tools/ee_actions.cpp:190
-#, fuzzy
-#| msgid "Paste clipboard into schematic"
 msgid "Save the current symbol in the schematic"
-msgstr "Coller le contenu du presse-papiers dans le schéma"
+msgstr "Enregistrer le symbole actuel dans le schéma"
 
 #: eeschema/tools/ee_actions.cpp:199
 msgid "Add Pin"
@@ -15125,10 +15119,8 @@ msgid "Assign Netclass..."
 msgstr "Assigner NetClasse..."
 
 #: eeschema/tools/ee_actions.cpp:425
-#, fuzzy
-#| msgid "Add a sheet pin to the selected sheet"
 msgid "Assign a netclass to the net of the selected wire"
-msgstr "Ajouter une pin de feuille de hierarchie à la feuille sélectionnée"
+msgstr "Attribuer une netclasse au net du fil sélectionné"
 
 #: eeschema/tools/ee_actions.cpp:430
 msgid "DeMorgan Conversion"
@@ -19645,7 +19637,7 @@ msgstr "Rect"
 msgid "Bezier Curve"
 msgstr "Courbe de Bézier"
 
-#: pcbnew/class_board_item.cpp:40 pcbnew/dialogs/dialog_pad_properties.cpp:2041
+#: pcbnew/class_board_item.cpp:40 pcbnew/dialogs/dialog_pad_properties.cpp:2048
 #: pcbnew/pcb_shape.cpp:504
 msgid "Polygon"
 msgstr "Polygone"
@@ -20094,10 +20086,9 @@ msgid "Blind/Buried Via"
 msgstr "Via Aveugle/Enterrée"
 
 #: pcbnew/class_track.cpp:714
-#, fuzzy, c-format
-#| msgid "Min Width: %s"
+#, c-format
 msgid "Min Annular Width: %s"
-msgstr "Largeur Min: %s"
+msgstr "Largeur Minimale d'Anneau: %s"
 
 #: pcbnew/class_track.cpp:755
 msgid "NetCode"
@@ -20544,16 +20535,14 @@ msgstr ""
 "**********************************************************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:535
-#, fuzzy, c-format
-#| msgid ""
-#| " from reannotation\n"
-#| "\n"
+#, c-format
 msgid ""
 "\n"
 "Excluding: %s from reannotation\n"
 "\n"
 msgstr ""
-" de renumérotation\n"
+"\n"
+"Exclusion : %s de la renumérotation\n"
 "\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:538
@@ -20749,10 +20738,8 @@ msgid "Update schematic"
 msgstr "Mise à jour de la schématique"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
-#, fuzzy
-#| msgid "Footprint references"
 msgid "Front reference start:"
-msgstr "Références des empreintes"
+msgstr "Début de référence pour le dessus :"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:210
 #, fuzzy
@@ -20765,10 +20752,8 @@ msgid "Default is 1"
 msgstr "Défaut est 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:220
-#, fuzzy
-#| msgid "reference %s"
 msgid "Back reference start:"
-msgstr "référence %s"
+msgstr "Début de référence pour le dessous :"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:222
 msgid ""
@@ -23854,10 +23839,8 @@ msgid "<<"
 msgstr "<<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:73
-#, fuzzy
-#| msgid "Replace all matches"
 msgid "Remove all matched layers."
-msgstr "Remplacer toutes les correspondances"
+msgstr "Supprimez toutes les couches appairées."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:81
 msgid "Matched Layers"
@@ -24082,7 +24065,7 @@ msgstr "Propriétés des Zones sur Couches non Cuivre"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:82
 #: pcbnew/dialogs/dialog_pad_properties.cpp:698
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2040 pcbnew/pcb_shape.cpp:522
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2047 pcbnew/pcb_shape.cpp:522
 msgid "Segment"
 msgstr "Segment"
 
@@ -24198,56 +24181,54 @@ msgstr "%s et %s"
 msgid "Pad size must be greater than zero"
 msgstr "La taille de la pastille doit être plus grande que zéro"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1184
-msgid "Warning: Pad drill bigger than pad size or shapes do not overlap"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1187
+msgid ""
+"Warning: Pad drill bigger than pad size or drill shape andpad shape do not "
+"overlap"
 msgstr ""
-"Avertissement : Le perçage du pad est plus grand que la taille du pad ou les "
-"formes de pad ne couvrent pas le trou"
+"Avertissement : Le perçage du pad est plus grand que la taille du pad ou la "
+"forme du trou et la forme du pad ne se recouvrent pas"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1191
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1197
 msgid "Pad local clearance must be zero or greater than zero"
 msgstr "La marge locale d'isolation doit être nulle ou plus grande que zéro"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1202
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1209
 msgid "Pad local solder mask clearance must be zero or greater than zero"
 msgstr ""
 "La marge locale de masque de soudure doit être nulle ou plus grande que zéro"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1210
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1218
 #, c-format
 msgid "Pad local solder mask clearance must be greater than %s"
 msgstr ""
 "La marge locale de masque de soudure du pad doit être plus grande que %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1225
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1233
 msgid "Error: pad has no layer"
 msgstr "Erreur: le pad n'est sur aucune couche"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1233
-#, fuzzy
-#| msgid ""
-#| "Exported board does not have enough copper layers to handle selected "
-#| "inner layers"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1240
 msgid ""
 "Warning: plated through holes should normally have a copper pad on at least "
 "one layer"
 msgstr ""
-"Le circuit exporté n'a pas assez de couches cuivre pour gérer les couches "
-"internes sélectionnées"
+"Avertissement : les pads traversants devrait normalement avoir une pastille "
+"de cuivre sur au moins une couche"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1250
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1257
 msgid "Incorrect value for pad offset"
 msgstr "Valeur incorrecte pour offset du pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1255
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1262
 msgid "Too large value for pad delta size"
 msgstr "Valeur trop grande pour delta du pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1263
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1270
 msgid "Error: Through hole pad: drill diameter set to 0"
 msgstr "Erreur: pad à trou traversant: diamètre de perçage mis à 0"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1268
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1275
 msgid ""
 "Error: Connector pads are not on the solder paste layer\n"
 "Use SMD pads instead"
@@ -24255,65 +24236,65 @@ msgstr ""
 "Erreur: les pads de connecteurs ne sont pas sur la couche de pâte à souder\n"
 "Utiliser les pads CMS à la place"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1278
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1285
 msgid "Warning: The pad has been defined in an inner layer only."
 msgstr ""
 "Avertissement : Le pad a été défini dans une couche interne uniquement."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1285
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1292
 msgid "Property cannot be set for NPTH"
 msgstr "La propriété ne peut être utilisée pour des pads non métallisés"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1289
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1296
 msgid "Castellated property can be set only for PTH"
 msgstr ""
 "La propriété \"Castellated\" peut être utilisé uniquement pour pad "
 "traversants."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1293
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1300
 msgid "BGA property can be set only for SMD pads"
 msgstr "La propriété BGA ne peut être utilisée que pour les pads CMS"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1303
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1310
 msgid "Incorrect corner size value"
 msgstr "Valeur incorrecte pour la taille du coin"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1307
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1314
 msgid "Incorrect (negative) corner size value"
 msgstr "Valeur incorrecte (négative) pour la taille du coin"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1309
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1316
 msgid "Corner size value must be smaller than 50%"
 msgstr "La taille des coins doit être inférieure à 50%"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1320
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1327
 msgid "Incorrect pad shape: the shape must be equivalent to only one polygon"
 msgstr ""
 "Forme de pad incorrecte: la forme doit être équivalente à un seul polygone"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1326
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1333
 msgid "Pad setup errors list"
 msgstr "Erreurs sur Paramètres du Pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1562
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1569
 msgid "Modify pad"
 msgstr "Modifier pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1951
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2089
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2123
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1958
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2096
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2130
 msgid "No shape selected"
 msgstr "Pas de forme sélectionnée"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2041
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2048
 msgid "Ring/Circle"
 msgstr "Anneau/Cercle"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2043
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2050
 msgid "Shape type:"
 msgstr "Type de forme:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2043
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2050
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:810
 msgid "Add Primitive"
 msgstr "Ajouter Primitive"
@@ -24536,17 +24517,6 @@ msgid "Fabrication Property:"
 msgstr "Propriétés de Fabrication:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
-#, fuzzy
-#| msgid ""
-#| "Optional property to specify a special purpose or constraint in "
-#| "fabrication files:\n"
-#| "BGA attribute is for pads in BGA footprints\n"
-#| "Fiducial local is a fiducial for the parent footprint\n"
-#| "Fiducial global is a fiducial for the whole board\n"
-#| "Test pad is useful to specify test points in Gerber files\n"
-#| "Heatsink pad  specify a thermal pad\n"
-#| "Castellated specify castellated through hole pads on a board edge\n"
-#| "This property is specified in Gerber X2  files."
 msgid ""
 "Optional property to specify a special purpose or constraint in fabrication "
 "files:\n"
@@ -24558,7 +24528,7 @@ msgid ""
 "Castellated specify castellated through hole pads on a board edge\n"
 "These properties are specified in Gerber X2  files."
 msgstr ""
-"Propriété optionelle pour spécifier un but ou une contrainte spécial dans "
+"Propriété optionnelle pour spécifier un but ou une contrainte spécial dans "
 "les fichiers de fabrication :\n"
 "L'attribut BGA est pour les pads dans les empreintes BGA\n"
 "Fiducial local est un fiducial pour l'empreinte parente\n"
@@ -24566,7 +24536,7 @@ msgstr ""
 "Le test pad est utile pour spécifier les points de test dans les fichiers "
 "Gerber\n"
 "Le pad Heatsink spécifie un pad thermique\n"
-"Castellated spécifie un pad traversant castellé sur un bord de circuit\n"
+"Castellated spécifie un pad traversant \"castellé\" sur un bord de circuit\n"
 "Cette propriété est spécifiée dans les fichiers Gerber X2."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
@@ -25591,10 +25561,10 @@ msgstr "Nom de zone:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:90
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:95
-#, fuzzy
-#| msgid "A unique name for this zone to identify it for DRC"
 msgid "A unique name for this rule area for use in DRC rules"
-msgstr "Un nom unique pour cette zone pour l’identifier pour le test DRC"
+msgstr ""
+"Un nom unique pour cette zone de règles pour l'utiliser dans les règles de "
+"DRC"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:66
 msgid "Rule Area Properties"
@@ -27213,6 +27183,7 @@ msgstr "Garder le texte aligné"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:121
 msgid "When checked, dimension text will be kept aligned with dimension lines"
 msgstr ""
+"Lorsque coché, le texte de la cote est maintenu aligné sur les lignes de cote"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:133
 msgid "How many digits of precision to show"
@@ -27331,120 +27302,120 @@ msgstr "zone interdite"
 msgid "keepout area '%s'"
 msgstr "zone interdite \"%s\""
 
-#: pcbnew/drc/drc_engine.cpp:726 pcbnew/drc/drc_engine.cpp:736
+#: pcbnew/drc/drc_engine.cpp:725 pcbnew/drc/drc_engine.cpp:735
 #, fuzzy, c-format
 #| msgid "zone clearance"
 msgid "Local override on %s; clearance: %s."
 msgstr "isolation de zone"
 
-#: pcbnew/drc/drc_engine.cpp:759
+#: pcbnew/drc/drc_engine.cpp:758
 #, fuzzy, c-format
 #| msgid "zone clearance"
 msgid "Checking %s; clearance: %s."
 msgstr "isolation de zone"
 
-#: pcbnew/drc/drc_engine.cpp:766
+#: pcbnew/drc/drc_engine.cpp:765
 #, fuzzy, c-format
 #| msgid "zone clearance"
 msgid "Checking %s; courtyard clearance: %s."
 msgstr "isolation de zone"
 
-#: pcbnew/drc/drc_engine.cpp:773
+#: pcbnew/drc/drc_engine.cpp:772
 #, fuzzy, c-format
 #| msgid "zone clearance"
 msgid "Checking %s; silk clearance: %s."
 msgstr "isolation de zone"
 
-#: pcbnew/drc/drc_engine.cpp:780
+#: pcbnew/drc/drc_engine.cpp:779
 #, fuzzy, c-format
 #| msgid "zone clearance"
 msgid "Checking %s; hole clearance: %s."
 msgstr "isolation de zone"
 
-#: pcbnew/drc/drc_engine.cpp:787
+#: pcbnew/drc/drc_engine.cpp:786
 #, fuzzy, c-format
 #| msgid "zone clearance"
 msgid "Checking %s; edge clearance: %s."
 msgstr "isolation de zone"
 
-#: pcbnew/drc/drc_engine.cpp:793
+#: pcbnew/drc/drc_engine.cpp:792
 #, c-format
 msgid "Checking %s."
 msgstr "Vérification de %s."
 
-#: pcbnew/drc/drc_engine.cpp:800
+#: pcbnew/drc/drc_engine.cpp:799
 msgid "Board and netclass clearances not applied to keepout zones"
 msgstr "Isolations du CI et des netcalsses non appliquées aux zones interdites"
 
-#: pcbnew/drc/drc_engine.cpp:843
+#: pcbnew/drc/drc_engine.cpp:842
 #, fuzzy
 #| msgid "No constraint"
 msgid "Keepout constraint not met."
 msgstr "Aucune contrainte"
 
-#: pcbnew/drc/drc_engine.cpp:845
+#: pcbnew/drc/drc_engine.cpp:844
 #, fuzzy
 #| msgid "X scale constrained."
 msgid "Disallow constraint not met."
 msgstr "Échelle X limitée."
 
-#: pcbnew/drc/drc_engine.cpp:854
+#: pcbnew/drc/drc_engine.cpp:853
 #, fuzzy
 #| msgid "Rule \"%s\" not found."
 msgid "Keepout layer(s) not matched."
 msgstr "Règle \"%s\" non trouvée."
 
-#: pcbnew/drc/drc_engine.cpp:858 pcbnew/drc/drc_engine.cpp:880
+#: pcbnew/drc/drc_engine.cpp:857 pcbnew/drc/drc_engine.cpp:879
 #, fuzzy, c-format
 #| msgid "Rule \"%s\" not found."
 msgid "Rule layer \"%s\" not matched."
 msgstr "Règle \"%s\" non trouvée."
 
-#: pcbnew/drc/drc_engine.cpp:864 pcbnew/drc/drc_engine.cpp:886
+#: pcbnew/drc/drc_engine.cpp:863 pcbnew/drc/drc_engine.cpp:885
 #, fuzzy
 #| msgid "Rule \"%s\" not found."
 msgid "Rule layer not matched."
 msgstr "Règle \"%s\" non trouvée."
 
-#: pcbnew/drc/drc_engine.cpp:895
+#: pcbnew/drc/drc_engine.cpp:894
 #, fuzzy
 #| msgid "No constraint"
 msgid "Unconditional constraint applied."
 msgstr "Aucune contrainte"
 
-#: pcbnew/drc/drc_engine.cpp:896
+#: pcbnew/drc/drc_engine.cpp:895
 #, fuzzy
 #| msgid "No constraint"
 msgid "Unconditional rule applied."
 msgstr "Aucune contrainte"
 
-#: pcbnew/drc/drc_engine.cpp:909
+#: pcbnew/drc/drc_engine.cpp:908
 #, fuzzy, c-format
 #| msgid "Checking connections...\n"
 msgid "Checking rule condition \"%s\"."
 msgstr "Vérification des connexions...\n"
 
-#: pcbnew/drc/drc_engine.cpp:915
+#: pcbnew/drc/drc_engine.cpp:914
 msgid "Constraint applied."
 msgstr "Contrainte appliquée."
 
-#: pcbnew/drc/drc_engine.cpp:916
+#: pcbnew/drc/drc_engine.cpp:915
 msgid "Rule applied; overrides previous constraints."
 msgstr "Règle appliquée; remplace les contraintes précédentes."
 
-#: pcbnew/drc/drc_engine.cpp:923
+#: pcbnew/drc/drc_engine.cpp:922
 #, fuzzy
 #| msgid "Condition not satisfied; rule not applied."
 msgid "Membership not satisfied; constraint ignored."
 msgstr "Condition non remplie; règle non appliquée."
 
-#: pcbnew/drc/drc_engine.cpp:924
+#: pcbnew/drc/drc_engine.cpp:923
 #, fuzzy
 #| msgid "Condition not satisfied; rule not applied."
 msgid "Condition not satisfied; rule ignored."
 msgstr "Condition non remplie; règle non appliquée."
 
-#: pcbnew/drc/drc_engine.cpp:967 pcbnew/drc/drc_engine.cpp:978
+#: pcbnew/drc/drc_engine.cpp:966 pcbnew/drc/drc_engine.cpp:977
 #, fuzzy, c-format
 #| msgid "zone clearance"
 msgid "Local clearance on %s; clearance: %s."
@@ -27614,7 +27585,7 @@ msgstr "La distance de la paire différentielle ne peut pas être négative."
 msgid "Differential uncoupled length too long"
 msgstr "Ajustage de la Longueur de Paire"
 
-#: pcbnew/drc/drc_rule.h:134
+#: pcbnew/drc/drc_rule.h:133
 #, c-format
 msgid "rule %s"
 msgstr "règle %s"
@@ -27707,22 +27678,16 @@ msgid "Missing constraint type.|  Expected %s."
 msgstr "Empreinte manquante"
 
 #: pcbnew/drc/drc_rule_parser.cpp:352
-#, fuzzy
-#| msgid "Missing parent"
 msgid "Missing min value."
-msgstr "Parent manquant"
+msgstr "Valeur min manquante."
 
 #: pcbnew/drc/drc_rule_parser.cpp:373
-#, fuzzy
-#| msgid "Missing parent"
 msgid "Missing max value."
-msgstr "Parent manquant"
+msgstr "Valeur max manquante."
 
 #: pcbnew/drc/drc_rule_parser.cpp:394
-#, fuzzy
-#| msgid "Missing parent"
 msgid "Missing opt value."
-msgstr "Parent manquant"
+msgstr "Valeur optionnelle manquante."
 
 #: pcbnew/drc/drc_rule_parser.cpp:473
 msgid "Missing layer name or type."
@@ -27733,7 +27698,7 @@ msgstr "Nom ou type de couche manquant."
 msgid "Unrecognized layer '%s'."
 msgstr "Couche non reconnue '%s'."
 
-#: pcbnew/drc/drc_test_provider_annulus.cpp:79
+#: pcbnew/drc/drc_test_provider_annulus.cpp:80
 #, fuzzy
 #| msgid "Diameter of pad surrounding via (annular ring)"
 msgid "Checking via annular rings..."
@@ -27761,45 +27726,45 @@ msgstr "Vérification des conflits...\n"
 msgid "Checking net connections..."
 msgstr "Vérification des connexions..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:171
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:170
 msgid "Gathering copper items..."
 msgstr "Collecte des éléments sur cuivre..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:183
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:182
 msgid "Tessellating copper zones..."
 msgstr "Découpage des zone de cuivre..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:208
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:207
 msgid "Checking track & via clearances..."
 msgstr "Vérification des isolations pistes et vias..."
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:213
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:212
 #, fuzzy
 #| msgid "Zone to zone clearances...\n"
 msgid "Checking pad clearances..."
 msgstr "Isolations zone à zone...\n"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:218
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:217
 #, fuzzy
 #| msgid "Zone to zone clearances...\n"
 msgid "Checking copper zone clearances..."
 msgstr "Isolations zone à zone...\n"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:290
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:339
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:462
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:289
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:338
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:463
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:493
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:722
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:724
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:103
-#: pcbnew/drc/drc_test_provider_hole_clearance.cpp:257
-#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:188
-#: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:152
+#: pcbnew/drc/drc_test_provider_hole_clearance.cpp:258
+#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:184
+#: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:148
 #, fuzzy, c-format
 #| msgid " (%s clearance %s; actual %s)"
 msgid "(%s clearance %s; actual %s)"
 msgstr " (%s isolation %s; réel %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:434
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:435
 #, c-format
 msgid "(nets %s and %s)"
 msgstr " (nets %s et  %s)"
@@ -27854,13 +27819,13 @@ msgstr "réel: %s)"
 msgid "Checking keepouts & disallow constraints..."
 msgstr "Changer Empreintes"
 
-#: pcbnew/drc/drc_test_provider_edge_clearance.cpp:135
+#: pcbnew/drc/drc_test_provider_edge_clearance.cpp:132
 #, fuzzy
 #| msgid "Pad clearances...\n"
 msgid "Checking board edge clearances..."
 msgstr "Isolations pads...\n"
 
-#: pcbnew/drc/drc_test_provider_hole_clearance.cpp:161
+#: pcbnew/drc/drc_test_provider_hole_clearance.cpp:159
 #, fuzzy
 #| msgid "Hole to hole clearance:"
 msgid "Checking hole to hole clearances..."
@@ -27916,47 +27881,43 @@ msgstr "Test  des empreintes par rapport à la schématique...\n"
 msgid "No netlist provided, skipping LVS."
 msgstr "Aucune netliste  fournie, ne fait pas le LVS."
 
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:127
+#, fuzzy, c-format
+#| msgid " (%s minimum %s; actual %s)"
+msgid "(%s min length: %s; actual: %s)"
+msgstr " (%s minimum %s; réel %s)"
+
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:134
 #, fuzzy, c-format
 #| msgid " (%s minimum %s; actual %s)"
-msgid "minimum length: %s; actual: %s)"
+msgid "(%s max length: %s; actual: %s)"
 msgstr " (%s minimum %s; réel %s)"
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:140
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:169
 #, fuzzy, c-format
-#| msgid " (%s minimum %s; actual %s)"
-msgid "maximum length: %s; actual: %s)"
-msgstr " (%s minimum %s; réel %s)"
-
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:178
-#, c-format
-msgid ""
-"maximum skew: %s; actual skew: %s; average net length: %s; actual net "
-"length: %s)"
+#| msgid ""
+#| "maximum skew: %s; actual skew: %s; average net length: %s; actual net "
+#| "length: %s)"
+msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
 msgstr ""
 "biais maximal : %s; biais réel: %s; longueur net moyenne : %s; longueur net "
 "réelle : %s)"
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:209
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:198
 #, fuzzy, c-format
 #| msgid " (%s %s; actual %s)"
-msgid "max vias: %d; actual: %d"
+msgid "(%s max count: %d; actual: %d)"
 msgstr " (%s %s; réel %s)"
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:238
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:229
 #, fuzzy
 #| msgid "Checking conflicts...\n"
 msgid "Gathering length-constrained connections..."
 msgstr "Vérification des conflits...\n"
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:329
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:321
 msgid "<unconstrained>"
 msgstr "<non contraint>"
-
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:351
-#, c-format
-msgid "Length-constrained traces for rule '%s':"
-msgstr "Longueur de pistes contrainte pour la règle '%s':"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:110
 msgid "(self-intersecting)"
@@ -27976,43 +27937,42 @@ msgid "Checking disabled layers..."
 msgstr "Vérifications couches inactives..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:222
-#| msgid "Text Variables"
 msgid "Checking text variables..."
 msgstr "Vérification variables texte..."
 
-#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:108
+#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:104
 msgid "Checking silkscreen for overlapping items..."
 msgstr "Vérification de la sérigraphie pour le recouvrement d'éléments.."
 
-#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:212
+#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:208
 #, fuzzy, c-format
 #| msgid "Testing %d silkscreen features."
 msgid "Testing %d silkscreen features against %d board items."
 msgstr "Test des %d fonctions de sérigraphie."
 
-#: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:103
+#: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:99
 msgid "Checking silkscreen for potential soldermask clipping..."
 msgstr ""
 "Vérification de la sérigraphie pour le recouvrement potentiel de masque de "
 "soudure.."
 
-#: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:172
+#: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:168
 #, fuzzy, c-format
 #| msgid "Testing %d silkscreen features."
 msgid "Testing %d mask apertures against %d silkscreen features."
 msgstr "Test des %d fonctions de sérigraphie."
 
-#: pcbnew/drc/drc_test_provider_track_width.cpp:77
+#: pcbnew/drc/drc_test_provider_track_width.cpp:76
 msgid "Checking track widths..."
 msgstr "Vérification des largeurs de pistes ..."
 
-#: pcbnew/drc/drc_test_provider_track_width.cpp:128
+#: pcbnew/drc/drc_test_provider_track_width.cpp:126
 #, fuzzy, c-format
 #| msgid " (%s %s; actual %s)"
 msgid "(%s min width %s; actual %s)"
 msgstr " (%s %s; réel %s)"
 
-#: pcbnew/drc/drc_test_provider_track_width.cpp:135
+#: pcbnew/drc/drc_test_provider_track_width.cpp:133
 #, fuzzy, c-format
 #| msgid " (%s %s; actual %s)"
 msgid "(%s max width %s; actual %s)"
@@ -28024,13 +27984,13 @@ msgstr " (%s %s; réel %s)"
 msgid "Checking via diameters..."
 msgstr "Vérification des noms de feuilles...\n"
 
-#: pcbnew/drc/drc_test_provider_via_diameter.cpp:111
+#: pcbnew/drc/drc_test_provider_via_diameter.cpp:110
 #, fuzzy, c-format
 #| msgid " (%s %s; actual %s)"
 msgid "(%s min diameter %s; actual %s)"
 msgstr " (%s %s; réel %s)"
 
-#: pcbnew/drc/drc_test_provider_via_diameter.cpp:118
+#: pcbnew/drc/drc_test_provider_via_diameter.cpp:117
 #, fuzzy, c-format
 #| msgid " (%s %s; actual %s)"
 msgid "(%s max diameter %s; actual %s)"
@@ -29936,11 +29896,16 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1585
-#, c-format
+#, fuzzy, c-format
+#| msgid ""
+#| "The net '%s' references component ID '%s' which does not exist. This has "
+#| "been ignored,"
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
-"been ignored,"
+"been ignored."
 msgstr ""
+"Le net '%s' fait référence à l’ID de composant '%s ' qui n’existe pas. Cela "
+"a été ignoré."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1592
 #, c-format
@@ -29948,6 +29913,8 @@ msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
 msgstr ""
+"Le net '%s' fait référence à l’indice de pad inexistant '%d' dans le "
+"composant '%s'. Cela a été ignoré."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1684
 #, c-format
@@ -29956,6 +29923,9 @@ msgid ""
 "only supports circular vias so this via type has been changed to be a via "
 "with circular shape of %.2f mm diameter."
 msgstr ""
+"Le CADSTAR via code '%s' a une forme différente d’un cercle. KiCad ne prend "
+"en charge que les vias circulaires de sorte que ce type via a été changé "
+"pour être une via circulaire de %.2f mm de diamètre."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1883
 #, c-format
@@ -30540,12 +30510,12 @@ msgstr "Ajusté: "
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_kicad_iface.cpp:959
+#: pcbnew/router/pns_kicad_iface.cpp:946
 #, c-format
 msgid "%s is malformed."
 msgstr "%s est mal formé."
 
-#: pcbnew/router/pns_kicad_iface.cpp:962
+#: pcbnew/router/pns_kicad_iface.cpp:949
 #, fuzzy
 #| msgid ""
 #| "%s\n"
@@ -30559,7 +30529,7 @@ msgstr ""
 "Cette zone ne peut pas être gérée par l'outil de tracé de piste.\n"
 "SVP vérifiez que ce n'est pas un polygone avec cotés se croisant."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1493 pcbnew/router/router_tool.cpp:421
+#: pcbnew/router/pns_kicad_iface.cpp:1480 pcbnew/router/router_tool.cpp:421
 msgid "Interactive Router"
 msgstr "Routeur Interactif"
 
@@ -30591,7 +30561,7 @@ msgstr "Ajusté: décalage "
 
 #: pcbnew/router/pns_router.cpp:209
 msgid "The routing start point violates DRC."
-msgstr ""
+msgstr "Le point de départ du routage viole le DRC."
 
 #: pcbnew/router/router_tool.cpp:85
 msgid "Undo last segment"
@@ -31085,10 +31055,8 @@ msgstr "Entrer rayon de l'arrondi:"
 
 #: pcbnew/tools/edit_tool.cpp:738 pcbnew/tools/edit_tool.cpp:864
 #: pcbnew/tools/pcb_actions.cpp:302
-#, fuzzy
-#| msgid "Fillet radius:"
 msgid "Fillet Tracks"
-msgstr "Rayon de l'arrondi:"
+msgstr "Arrondir Pistes"
 
 #: pcbnew/tools/edit_tool.cpp:748
 msgid ""
@@ -31227,10 +31195,8 @@ msgid "Creates a copper zone from the selection"
 msgstr "Créer une zone de cuivre à partir de la sélection"
 
 #: pcbnew/tools/pcb_actions.cpp:66
-#, fuzzy
-#| msgid "Convert to Arc"
 msgid "Convert to Rule Area"
-msgstr "Convertir en Arc"
+msgstr "Convertir en Zones avec Règles"
 
 #: pcbnew/tools/pcb_actions.cpp:67
 #, fuzzy
@@ -31259,10 +31225,8 @@ msgid "Converts selected line segment to an arc"
 msgstr "Supprimer la sélection et la copier dans le Presse papier"
 
 #: pcbnew/tools/pcb_actions.cpp:78
-#, fuzzy
-#| msgid "Connected Tracks"
 msgid "Convert to Tracks"
-msgstr "Pistes Connectées"
+msgstr "Convertir en Pistes"
 
 #: pcbnew/tools/pcb_actions.cpp:79
 #, fuzzy
@@ -31363,16 +31327,12 @@ msgid "Add free-standing vias"
 msgstr "Ajout de vias libres"
 
 #: pcbnew/tools/pcb_actions.cpp:160
-#, fuzzy
-#| msgid "Add Cutout Area"
 msgid "Add Rule Area"
-msgstr "Addition d'une Découpe"
+msgstr "Addition Zone à Règles"
 
 #: pcbnew/tools/pcb_actions.cpp:160
-#, fuzzy
-#| msgid "Add keepout"
 msgid "Add a rule area (keepout)"
-msgstr "Ajout zone interdite"
+msgstr "Ajout zone à règles (zone interdite)"
 
 #: pcbnew/tools/pcb_actions.cpp:166
 msgid "Add a Zone Cutout"
@@ -32845,10 +32805,8 @@ msgid "Diameter constraints: min %s max %s."
 msgstr "Contraintes de diamètre : min %s max %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:488
-#, fuzzy
-#| msgid "Annular width"
 msgid "Via Annular Width"
-msgstr "Largeur des anneaux"
+msgstr "Largeur Anneaux de Vias"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:490
 #, fuzzy
@@ -33201,10 +33159,8 @@ msgid "Net Display Options"
 msgstr "Options d'Affichage des Nets"
 
 #: pcbnew/widgets/appearance_controls.cpp:640
-#, fuzzy
-#| msgid "Line color:"
 msgid "Net colors:"
-msgstr "Couleur de ligne:"
+msgstr "Couleur de nets:"
 
 #: pcbnew/widgets/appearance_controls.cpp:643
 msgid "Choose when to show net and netclass colors"
@@ -33567,6 +33523,18 @@ msgstr "Modifier les propriétés de la zone"
 #, c-format
 msgid "Refill %d Zones"
 msgstr "Remplissage %d Zones"
+
+#~ msgid "<root_sheet>"
+#~ msgstr "<feuille_maitre>"
+
+#, fuzzy, c-format
+#~| msgid " (%s %s; actual %s)"
+#~ msgid "max vias: %d; actual: %d"
+#~ msgstr " (%s %s; réel %s)"
+
+#, c-format
+#~ msgid "Length-constrained traces for rule '%s':"
+#~ msgstr "Longueur de pistes contrainte pour la règle '%s':"
 
 #~ msgid "Cannot start routing inside a keepout area or board outline."
 #~ msgstr ""
