@@ -193,7 +193,7 @@ std::vector<MARKER_PCB*> BOARD::ResolveDRCExclusions()
         }
     }
 
-    std::vector<MARKER_PCB*> markers;
+    std::vector<MARKER_PCB*> newMarkers;
 
     for( const wxString& exclusionData : m_designSettings->m_DrcExclusions )
     {
@@ -202,13 +202,13 @@ std::vector<MARKER_PCB*> BOARD::ResolveDRCExclusions()
         if( marker )
         {
             marker->SetExcluded( true );
-            markers.push_back( marker );
+            newMarkers.push_back( marker );
         }
     }
 
     m_designSettings->m_DrcExclusions.clear();
 
-    return markers;
+    return newMarkers;
 }
 
 

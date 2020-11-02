@@ -732,9 +732,18 @@ void PCB_EDIT_FRAME::ResolveDRCExclusions()
     BOARD_COMMIT commit( this );
 
     for( MARKER_PCB* marker : GetBoard()->ResolveDRCExclusions() )
-            commit.Add( marker );
+        commit.Add( marker );
 
     commit.Push( wxEmptyString, false, false );
+
+    for( MARKER_PCB* marker : GetBoard()->Markers() )
+    {
+        if( marker->IsExcluded() )
+        {
+            GetCanvas()->GetView()->Remove( marker );
+            GetCanvas()->GetView()->Add( marker );
+        }
+    }
 }
 
 
