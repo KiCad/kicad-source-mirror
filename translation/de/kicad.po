@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-31 18:15+0000\n"
+"PO-Revision-Date: 2020-11-02 21:02+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -12510,9 +12510,8 @@ msgid "Loading library \"%s\""
 msgstr "Lade Bibliothek \"%s\""
 
 #: eeschema/libedit/lib_edit_frame.cpp:903
-#, fuzzy
 msgid "Add the library to the global library table?"
-msgstr "Erstellt eine leere globale %s Bibliothekstabelle"
+msgstr "Die Bibliothek in die globale Bibliothekstabelle aufnehmen?"
 
 #: eeschema/libedit/lib_edit_frame.cpp:904
 #, fuzzy
@@ -28966,7 +28965,7 @@ msgid "Recovery file \"%s\" not found."
 msgstr "Wiederherstellungsdatei \"%s\" wurde nicht gefunden."
 
 #: pcbnew/files.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "OK to load recovery file \"%s\""
 msgstr "Soll die Wiederherstellungsdatei \"%s\" geladen werden?"
 
