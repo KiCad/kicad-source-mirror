@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-11-01 14:22+0000\n"
+"PO-Revision-Date: 2020-11-02 21:02+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -1631,7 +1631,7 @@ msgstr "Grupa twórców wiodących"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Alumni"
-msgstr "Grupa twórców aspirujących"
+msgstr "Absolwenci twórców wiodących"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
@@ -1651,11 +1651,11 @@ msgstr "Modele 3D"
 
 #: common/dialog_about/AboutDialog_main.cpp:646
 msgid "Symbols by"
-msgstr "Według symboli"
+msgstr "Symbole"
 
 #: common/dialog_about/AboutDialog_main.cpp:653
 msgid "Footprints by"
-msgstr "Według footprintów"
+msgstr "Footprinty"
 
 #: common/dialog_about/AboutDialog_main.cpp:666
 msgid "Icons by"
@@ -3561,7 +3561,7 @@ msgstr "Wspólne"
 
 #: common/eda_base_frame.cpp:788
 msgid "Mouse and Touchpad"
-msgstr "Mysz i Płytka dotykowa"
+msgstr "Mysz i płytka dotykowa"
 
 #: common/eda_base_frame.cpp:791
 msgid "Hotkeys"
@@ -6107,7 +6107,7 @@ msgstr "Polecenie"
 
 #: common/widgets/widget_hotkey_list.cpp:456
 msgid "(double-click to edit)"
-msgstr "(kliknij dwukrotnie by edytować)"
+msgstr "(kliknij dwukrotnie by zmienić)"
 
 #: common/widgets/widget_hotkey_list.cpp:459
 msgid "Hotkey"
@@ -8145,7 +8145,7 @@ msgstr "Otwiera okno dialogowe Ustawienia schematu..."
 #: eeschema/dialogs/dialog_erc.cpp:601
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
 msgid "Pin Conflicts Map"
-msgstr "Przypnij mapę konfliktów"
+msgstr "Mapa konfliktów pinów"
 
 #: eeschema/dialogs/dialog_erc.cpp:605
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
@@ -9726,7 +9726,7 @@ msgstr "Wzorce nazw pól"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Pin conflict map"
-msgstr "Przypnij mapę konfliktów pinów"
+msgstr "Mapa konfliktów pinów"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:66
@@ -16805,7 +16805,7 @@ msgstr "Archiwizuje wszystkie potrzebne pliki projektu w jedno archiwum ZIP"
 
 #: kicad/menubar.cpp:111
 msgid "&Unarchive Project..."
-msgstr "Zdearchiwizuj projekt..."
+msgstr "Rozpakuj projekt..."
 
 #: kicad/menubar.cpp:112 kicad/menubar.cpp:215
 msgid "Unarchive project files from zip archive"
@@ -16858,7 +16858,7 @@ msgstr "Nie można utworzyć folderu \"%s\"."
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "New Project..."
-msgstr "Utwórz nowy projekt..."
+msgstr "Nowy projekt..."
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "Create new blank project"
