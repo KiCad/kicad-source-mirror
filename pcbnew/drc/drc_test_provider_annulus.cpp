@@ -28,7 +28,8 @@
 #include <drc/drc_test_provider.h>
 
 /*
-    Via/pad annular ring width test. Checks if there's sufficient copper ring around PTH/NPTH holes (vias/pads)
+    Via/pad annular ring width test. Checks if there's sufficient copper ring around
+    PTH/NPTH holes (vias/pads)
     Errors generated:
     - DRCE_ANNULUS
 
@@ -70,7 +71,7 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
 {
     const int delta = 250;  // This is the number of tests between 2 calls to the progress bar
 
-    if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH ) )
+    if( !m_drcEngine->HasRulesForConstraintType( ANNULAR_WIDTH_CONSTRAINT ) )
     {
         reportAux( "No annulus constraints found. Skipping check." );
         return false;
@@ -93,8 +94,7 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                 if( !via )
                     return true;
 
-                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH,
-                                                                  via );
+                auto constraint = m_drcEngine->EvalRulesForItems( ANNULAR_WIDTH_CONSTRAINT, via );
                 int  annulus = ( via->GetWidth() - via->GetDrillValue() ) / 2;
                 bool fail_min = false;
                 bool fail_max = false;
@@ -118,18 +118,18 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ANNULAR_WIDTH );
 
                     if( fail_min )
-                        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s min annular width %s; actual %s)" ),
+                        m_msg.Printf( _( "(%s min annular width %s; actual %s)" ),
                                       constraint.GetName(),
                                       MessageTextFromValue( userUnits(), v_min ),
                                       MessageTextFromValue( userUnits(), annulus ) );
 
                     if( fail_max )
-                        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s max annular width %s; actual %s)" ),
+                        m_msg.Printf( _( "(%s max annular width %s; actual %s)" ),
                                       constraint.GetName(),
                                       MessageTextFromValue( userUnits(), v_max ),
                                       MessageTextFromValue( userUnits(), annulus ) );
 
-                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
@@ -165,7 +165,7 @@ int DRC_TEST_PROVIDER_ANNULUS::GetNumPhases() const
 
 std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_ANNULUS::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH };
+    return { ANNULAR_WIDTH_CONSTRAINT };
 }
 
 

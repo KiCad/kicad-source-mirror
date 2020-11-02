@@ -280,16 +280,18 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
             if( via->GetStart() != via->GetEnd() )
                 via->SetEnd( via->GetStart() );
 
-            rtree.QueryColliding( via, via->GetLayer(), via->GetLayer(), nullptr,
+            rtree.QueryColliding( via, via->GetLayer(), via->GetLayer(),
+                    // Filter:
                     [&]( BOARD_ITEM* aItem ) -> bool
                     {
-                        if( aItem->Type() != PCB_VIA_T )
-                            return true;
-
+                        return aItem->Type() == PCB_VIA_T
+                                  && !aItem->HasFlag( SKIP_STRUCT )
+                                  && !aItem->HasFlag( IS_DELETED );
+                    },
+                    // Visitor:
+                    [&]( BOARD_ITEM* aItem ) -> bool
+                    {
                         VIA* other = static_cast<VIA*>( aItem );
-
-                        if( other->HasFlag( SKIP_STRUCT ) || other->HasFlag( IS_DELETED ) )
-                            return true;
 
                         if( via->GetPosition() == other->GetPosition()
                                 && via->GetViaType() == other->GetViaType()
@@ -342,16 +344,18 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
 
         if( aDeleteDuplicateSegments && track->Type() == PCB_TRACE_T )
         {
-            rtree.QueryColliding( track, track->GetLayer(), track->GetLayer(), nullptr,
+            rtree.QueryColliding( track, track->GetLayer(), track->GetLayer(),
+                    // Filter:
                     [&]( BOARD_ITEM* aItem ) -> bool
                     {
-                        if( aItem->Type() != PCB_TRACE_T )
-                            return true;
-
+                        return aItem->Type() == PCB_TRACE_T
+                                  && !aItem->HasFlag( SKIP_STRUCT )
+                                  && !aItem->HasFlag( IS_DELETED );
+                    },
+                    // Visitor:
+                    [&]( BOARD_ITEM* aItem ) -> bool
+                    {
                         TRACK* other = static_cast<TRACK*>( aItem );
-
-                        if( other->HasFlag( SKIP_STRUCT )|| other->HasFlag( IS_DELETED ) )
-                            return true;
 
                         if( track->IsPointOnEnds( other->GetStart() )
                                 && track->IsPointOnEnds( other->GetEnd() )

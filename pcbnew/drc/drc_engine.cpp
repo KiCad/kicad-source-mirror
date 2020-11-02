@@ -123,45 +123,45 @@ void DRC_ENGINE::loadImplicitRules()
 
     DRC_RULE* rule = createImplicitRule( _( "board setup constraints" ) );
 
-    DRC_CONSTRAINT clearanceConstraint( DRC_CONSTRAINT_TYPE_CLEARANCE );
+    DRC_CONSTRAINT clearanceConstraint( CLEARANCE_CONSTRAINT );
     clearanceConstraint.Value().SetMin( bds.m_MinClearance );
     rule->AddConstraint( clearanceConstraint );
 
-    DRC_CONSTRAINT widthConstraint( DRC_CONSTRAINT_TYPE_TRACK_WIDTH );
+    DRC_CONSTRAINT widthConstraint( TRACK_WIDTH_CONSTRAINT );
     widthConstraint.Value().SetMin( bds.m_TrackMinWidth );
     rule->AddConstraint( widthConstraint );
 
-    DRC_CONSTRAINT drillConstraint( DRC_CONSTRAINT_TYPE_HOLE_SIZE );
+    DRC_CONSTRAINT drillConstraint( HOLE_SIZE_CONSTRAINT );
     drillConstraint.Value().SetMin( bds.m_MinThroughDrill );
     rule->AddConstraint( drillConstraint );
 
-    DRC_CONSTRAINT annulusConstraint( DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH );
+    DRC_CONSTRAINT annulusConstraint( ANNULAR_WIDTH_CONSTRAINT );
     annulusConstraint.Value().SetMin( bds.m_ViasMinAnnulus );
     rule->AddConstraint( annulusConstraint );
 
-    DRC_CONSTRAINT diameterConstraint( DRC_CONSTRAINT_TYPE_VIA_DIAMETER );
+    DRC_CONSTRAINT diameterConstraint( VIA_DIAMETER_CONSTRAINT );
     diameterConstraint.Value().SetMin( bds.m_ViasMinSize );
     rule->AddConstraint( diameterConstraint );
 
-    DRC_CONSTRAINT edgeClearanceConstraint( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE );
+    DRC_CONSTRAINT edgeClearanceConstraint( EDGE_CLEARANCE_CONSTRAINT );
     edgeClearanceConstraint.Value().SetMin( bds.m_CopperEdgeClearance );
     rule->AddConstraint( edgeClearanceConstraint );
 
-    DRC_CONSTRAINT holeClearanceConstraint( DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE );
+    DRC_CONSTRAINT holeClearanceConstraint( HOLE_CLEARANCE_CONSTRAINT );
     holeClearanceConstraint.Value().SetMin( bds.m_HoleToHoleMin );
     rule->AddConstraint( holeClearanceConstraint );
 
-    DRC_CONSTRAINT courtyardClearanceConstraint( DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE );
+    DRC_CONSTRAINT courtyardClearanceConstraint( COURTYARD_CLEARANCE_CONSTRAINT );
     holeClearanceConstraint.Value().SetMin( 0 );
     rule->AddConstraint( courtyardClearanceConstraint );
 
-    DRC_CONSTRAINT diffPairGapConstraint( DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP );
+    DRC_CONSTRAINT diffPairGapConstraint( DIFF_PAIR_GAP_CONSTRAINT );
     diffPairGapConstraint.Value().SetMin( bds.GetDefault()->GetClearance() );
     rule->AddConstraint( diffPairGapConstraint );
 
     rule = createImplicitRule( _( "board setup constraints" ) );
     rule->m_LayerCondition = LSET( 2, F_SilkS, B_SilkS );
-    DRC_CONSTRAINT silkClearanceConstraint( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE );
+    DRC_CONSTRAINT silkClearanceConstraint( SILK_CLEARANCE_CONSTRAINT );
     silkClearanceConstraint.Value().SetMin( bds.m_SilkClearance );
     rule->AddConstraint( silkClearanceConstraint );
 
@@ -172,17 +172,17 @@ void DRC_ENGINE::loadImplicitRules()
 
     uViaRule->m_Condition = new DRC_RULE_CONDITION( "A.Via_Type == 'Micro'" );
 
-    DRC_CONSTRAINT uViaDrillConstraint( DRC_CONSTRAINT_TYPE_HOLE_SIZE );
+    DRC_CONSTRAINT uViaDrillConstraint( HOLE_SIZE_CONSTRAINT );
     uViaDrillConstraint.Value().SetMin( bds.m_MicroViasMinDrill );
     uViaRule->AddConstraint( uViaDrillConstraint );
 
-    DRC_CONSTRAINT uViaDiameterConstraint( DRC_CONSTRAINT_TYPE_VIA_DIAMETER );
+    DRC_CONSTRAINT uViaDiameterConstraint( VIA_DIAMETER_CONSTRAINT );
     uViaDiameterConstraint.Value().SetMin( bds.m_MicroViasMinSize );
     uViaRule->AddConstraint( uViaDiameterConstraint );
 
     if( !bds.m_MicroViasAllowed )
     {
-        DRC_CONSTRAINT disallowConstraint( DRC_CONSTRAINT_TYPE_DISALLOW );
+        DRC_CONSTRAINT disallowConstraint( DISALLOW_CONSTRAINT );
         disallowConstraint.m_DisallowFlags = DRC_DISALLOW_MICRO_VIAS;
         uViaRule->AddConstraint( disallowConstraint );
     }
@@ -193,7 +193,7 @@ void DRC_ENGINE::loadImplicitRules()
 
         bbViaRule->m_Condition = new DRC_RULE_CONDITION( "A.Via_Type == 'Blind/buried'" );
 
-        DRC_CONSTRAINT disallowConstraint( DRC_CONSTRAINT_TYPE_DISALLOW );
+        DRC_CONSTRAINT disallowConstraint( DISALLOW_CONSTRAINT );
         disallowConstraint.m_DisallowFlags = DRC_DISALLOW_BB_VIAS;
         bbViaRule->AddConstraint( disallowConstraint );
     }
@@ -224,14 +224,14 @@ void DRC_ENGINE::loadImplicitRules()
 
                     if( nc->GetClearance() )
                     {
-                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_CLEARANCE );
+                        DRC_CONSTRAINT constraint( CLEARANCE_CONSTRAINT );
                         constraint.Value().SetMin( std::max( bds.m_MinClearance, nc->GetClearance() ) );
                         rule->AddConstraint( constraint );
                     }
 
                     if( nc->GetTrackWidth() )
                     {
-                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_TRACK_WIDTH );
+                        DRC_CONSTRAINT constraint( TRACK_WIDTH_CONSTRAINT );
                         constraint.Value().SetMin( bds.m_TrackMinWidth );
                         constraint.Value().SetOpt( nc->GetTrackWidth() );
                         rule->AddConstraint( constraint );
@@ -251,7 +251,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     if( nc->GetDiffPairWidth() )
                     {
-                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_TRACK_WIDTH );
+                        DRC_CONSTRAINT constraint( TRACK_WIDTH_CONSTRAINT );
                         constraint.Value().SetMin( bds.m_TrackMinWidth );
                         constraint.Value().SetOpt( nc->GetDiffPairWidth() );
                         rule->AddConstraint( constraint );
@@ -259,7 +259,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     if( nc->GetDiffPairGap() )
                     {
-                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP );
+                        DRC_CONSTRAINT constraint( DIFF_PAIR_GAP_CONSTRAINT );
                         constraint.Value().SetMin( std::max( bds.m_MinClearance, nc->GetClearance() ) );
                         constraint.Value().SetOpt( nc->GetDiffPairGap() );
                         rule->AddConstraint( constraint );
@@ -279,7 +279,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     if( nc->GetViaDiameter() )
                     {
-                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_VIA_DIAMETER );
+                        DRC_CONSTRAINT constraint( VIA_DIAMETER_CONSTRAINT );
                         constraint.Value().SetMin( bds.m_ViasMinSize );
                         constraint.Value().SetOpt( nc->GetViaDiameter() );
                         rule->AddConstraint( constraint );
@@ -287,7 +287,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     if( nc->GetViaDrill() )
                     {
-                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_HOLE_SIZE );
+                        DRC_CONSTRAINT constraint( HOLE_SIZE_CONSTRAINT );
                         constraint.Value().SetMin( bds.m_MinThroughDrill );
                         constraint.Value().SetOpt( nc->GetViaDrill() );
                         rule->AddConstraint( constraint );
@@ -307,7 +307,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     if( nc->GetuViaDiameter() )
                     {
-                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_VIA_DIAMETER );
+                        DRC_CONSTRAINT constraint( VIA_DIAMETER_CONSTRAINT );
                         constraint.Value().SetMin( bds.m_MicroViasMinSize );
                         constraint.Value().SetMin( nc->GetuViaDiameter() );
                         rule->AddConstraint( constraint );
@@ -315,7 +315,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     if( nc->GetuViaDrill() )
                     {
-                        DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_HOLE_SIZE );
+                        DRC_CONSTRAINT constraint( HOLE_SIZE_CONSTRAINT );
                         constraint.Value().SetMin( bds.m_MicroViasMinDrill );
                         constraint.Value().SetOpt( nc->GetuViaDrill() );
                         rule->AddConstraint( constraint );
@@ -352,7 +352,7 @@ void DRC_ENGINE::loadImplicitRules()
     auto addKeepoutConstraint =
             [&rule]( int aConstraint )
             {
-                DRC_CONSTRAINT disallowConstraint( DRC_CONSTRAINT_TYPE_DISALLOW );
+                DRC_CONSTRAINT disallowConstraint( DISALLOW_CONSTRAINT );
                 disallowConstraint.m_DisallowFlags = aConstraint;
                 rule->AddConstraint( disallowConstraint );
             };
@@ -440,20 +440,19 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
 
     std::vector<Formatter> formats =
     {
-        { DRC_CONSTRAINT_TYPE_UNKNOWN,             "unknown",             nullptr },
-        { DRC_CONSTRAINT_TYPE_CLEARANCE,           "clearance",           formatMinMax },
-        { DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,      "hole_clearance",      formatMinMax },
-        { DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,      "edge_clearance",      formatMinMax },
-        { DRC_CONSTRAINT_TYPE_HOLE_SIZE,           "hole_size",           formatMinMax },
-        { DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE, "courtyard_clearance", formatMinMax },
-        { DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,      "silk_clearance",      formatMinMax },
-        { DRC_CONSTRAINT_TYPE_TRACK_WIDTH,         "track_width",         formatMinMax },
-        { DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH,       "annular_width",       formatMinMax },
-        { DRC_CONSTRAINT_TYPE_DISALLOW,            "disallow",            nullptr },
-        { DRC_CONSTRAINT_TYPE_VIA_DIAMETER,        "via_diameter",        formatMinMax },
-        { DRC_CONSTRAINT_TYPE_LENGTH,              "length",              formatMinMax },
-        { DRC_CONSTRAINT_TYPE_SKEW,                "skew",                formatMinMax },
-        { DRC_CONSTRAINT_TYPE_VIA_COUNT,           "via_count",           formatMinMax }
+        { CLEARANCE_CONSTRAINT,           "clearance",           formatMinMax },
+        { HOLE_CLEARANCE_CONSTRAINT,      "hole_clearance",      formatMinMax },
+        { EDGE_CLEARANCE_CONSTRAINT,      "edge_clearance",      formatMinMax },
+        { HOLE_SIZE_CONSTRAINT,           "hole_size",           formatMinMax },
+        { COURTYARD_CLEARANCE_CONSTRAINT, "courtyard_clearance", formatMinMax },
+        { SILK_CLEARANCE_CONSTRAINT,      "silk_clearance",      formatMinMax },
+        { TRACK_WIDTH_CONSTRAINT,         "track_width",         formatMinMax },
+        { ANNULAR_WIDTH_CONSTRAINT,       "annular_width",       formatMinMax },
+        { DISALLOW_CONSTRAINT,            "disallow",            nullptr },
+        { VIA_DIAMETER_CONSTRAINT,        "via_diameter",        formatMinMax },
+        { LENGTH_CONSTRAINT,              "length",              formatMinMax },
+        { SKEW_CONSTRAINT,                "skew",                formatMinMax },
+        { VIA_COUNT_CONSTRAINT,           "via_count",           formatMinMax }
     };
 
     for( auto& fmt : formats )
@@ -694,7 +693,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
      * kills performance when running bulk DRC tests (where aReporter is nullptr).
      */
 
-    if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
+    if( aConstraintId == CLEARANCE_CONSTRAINT )
     {
         // A PTH pad has a plated cylinder around the hole so copper clearances apply
         // whether or not there's a flashed pad.  Not true for NPTHs.
@@ -703,7 +702,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
             const D_PAD* pad = static_cast<const D_PAD*>( a );
 
             if( pad->GetAttribute() == PAD_ATTRIB_NPTH && !pad->FlashLayer( aLayer ) )
-                aConstraintId = DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE;
+                aConstraintId = HOLE_CLEARANCE_CONSTRAINT;
         }
     }
 
@@ -713,7 +712,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
     bool                        implicit = false;
 
     // Local overrides take precedence
-    if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
+    if( aConstraintId == CLEARANCE_CONSTRAINT )
     {
         int overrideA = 0;
         int overrideB = 0;
@@ -740,7 +739,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
         if( overrideA || overrideB )
         {
-            DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_CLEARANCE, m_msg );
+            DRC_CONSTRAINT constraint( CLEARANCE_CONSTRAINT, m_msg );
             constraint.m_Value.SetMin( std::max( overrideA, overrideB ) );
             return constraint;
         }
@@ -753,35 +752,35 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
                 REPORT( "" )
 
-                if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
+                if( aConstraintId == CLEARANCE_CONSTRAINT )
                 {
                     int clearance = c->constraint.m_Value.Min();
                     REPORT( wxString::Format( _( "Checking %s; clearance: %s." ),
                                               c->constraint.GetName(),
                                               MessageTextFromValue( UNITS, clearance ) ) )
                 }
-                else if( aConstraintId == DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE )
+                else if( aConstraintId == COURTYARD_CLEARANCE_CONSTRAINT )
                 {
                     int clearance = c->constraint.m_Value.Min();
                     REPORT( wxString::Format( _( "Checking %s; courtyard clearance: %s." ),
                                               c->constraint.GetName(),
                                               MessageTextFromValue( UNITS, clearance ) ) )
                 }
-                else if( aConstraintId == DRC_CONSTRAINT_TYPE_SILK_CLEARANCE )
+                else if( aConstraintId == SILK_CLEARANCE_CONSTRAINT )
                 {
                     int clearance = c->constraint.m_Value.Min();
                     REPORT( wxString::Format( _( "Checking %s; silk clearance: %s." ),
                                               c->constraint.GetName(),
                                               MessageTextFromValue( UNITS, clearance ) ) )
                 }
-                else if( aConstraintId == DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE )
+                else if( aConstraintId == HOLE_CLEARANCE_CONSTRAINT )
                 {
                     int clearance = c->constraint.m_Value.Min();
                     REPORT( wxString::Format( _( "Checking %s; hole clearance: %s." ),
                                               c->constraint.GetName(),
                                               MessageTextFromValue( UNITS, clearance ) ) )
                 }
-                else if( aConstraintId == DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE )
+                else if( aConstraintId == EDGE_CLEARANCE_CONSTRAINT )
                 {
                     int clearance = c->constraint.m_Value.Min();
                     REPORT( wxString::Format( _( "Checking %s; edge clearance: %s." ),
@@ -793,7 +792,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                     REPORT( wxString::Format( _( "Checking %s." ), c->constraint.GetName() ) )
                 }
 
-                if( aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE )
+                if( aConstraintId == CLEARANCE_CONSTRAINT )
                 {
                     if( implicit && ( isKeepoutZone( a ) || isKeepoutZone( b ) ) )
                     {
@@ -801,7 +800,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                         return true;
                     }
                 }
-                else if( aConstraintId == DRC_CONSTRAINT_TYPE_DISALLOW )
+                else if( aConstraintId == DISALLOW_CONSTRAINT )
                 {
                     int mask;
 
@@ -954,7 +953,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
     // Unfortunately implicit rules don't work for local clearances (such as zones) because
     // they have to be max'ed with netclass values (which are already implicit rules), and our
     // rule selection paradigm is "winner takes all".
-    if( constraintRef && aConstraintId == DRC_CONSTRAINT_TYPE_CLEARANCE && implicit )
+    if( constraintRef && aConstraintId == CLEARANCE_CONSTRAINT && implicit )
     {
         int global = constraintRef->m_Value.Min();
         int localA = connectedA ? connectedA->GetLocalClearance( nullptr ) : 0;
@@ -985,7 +984,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
         if( localA > global || localB > global )
         {
-            DRC_CONSTRAINT constraint( DRC_CONSTRAINT_TYPE_CLEARANCE, m_msg );
+            DRC_CONSTRAINT constraint( CLEARANCE_CONSTRAINT, m_msg );
             constraint.m_Value.SetMin( clearance );
             return constraint;
         }
@@ -993,7 +992,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
     // fixme: return optional<drc_constraint>, let the particular test decide what to do if no matching constraint
     // is found
-    static DRC_CONSTRAINT nullConstraint( DRC_CONSTRAINT_TYPE_NULL );
+    static DRC_CONSTRAINT nullConstraint( NULL_CONSTRAINT );
     nullConstraint.m_DisallowFlags = 0;
 
     return constraintRef ? *constraintRef : nullConstraint;
@@ -1114,31 +1113,25 @@ bool DRC_ENGINE::HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T constraintID )
 
 
 bool DRC_ENGINE::QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T aConstraintId,
-                                       DRC_CONSTRAINT& aConstraint,
-                                       DRC_CONSTRAINT_QUERY_T aQueryType )
+                                       DRC_CONSTRAINT& aConstraint )
 {
-    if( aQueryType == DRCCQ_LARGEST_MINIMUM )
+    int worst = 0;
+
+    for( const DRC_CONSTRAINT& constraint : QueryConstraintsById( aConstraintId ) )
     {
-        int worst = 0;
-
-        for( const DRC_CONSTRAINT& constraint : QueryConstraintsById( aConstraintId ) )
+        if( constraint.GetValue().HasMin() )
         {
-            if( constraint.GetValue().HasMin() )
-            {
-                int current = constraint.GetValue().Min();
+            int current = constraint.GetValue().Min();
 
-                if( current > worst )
-                {
-                    worst = current;
-                    aConstraint = constraint;
-                }
+            if( current > worst )
+            {
+                worst = current;
+                aConstraint = constraint;
             }
         }
-
-        return worst > 0;
     }
 
-    return false;
+    return worst > 0;
 }
 
 

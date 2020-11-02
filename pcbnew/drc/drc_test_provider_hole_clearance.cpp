@@ -26,7 +26,6 @@
 #include <class_track.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
-#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>
@@ -100,8 +99,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
     DRC_CONSTRAINT worstClearanceConstraint;
 
-    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
-                                           worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
+    if( m_drcEngine->QueryWorstConstraint( HOLE_CLEARANCE_CONSTRAINT, worstClearanceConstraint ) )
     {
         m_largestClearance = worstClearanceConstraint.GetValue().Min();
         reportAux( "Worst hole clearance : %d nm", m_largestClearance );
@@ -180,6 +178,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
         std::shared_ptr<SHAPE_CIRCLE> holeShape = getDrilledHoleShape( via );
 
         m_holeTree.QueryColliding( via, F_Cu, F_Cu,
+                // Filter:
                 [&]( BOARD_ITEM* other ) -> bool
                 {
                     if( other->HasFlag( SKIP_STRUCT ) )
@@ -187,6 +186,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
                     return true;
                 },
+                // Visitor:
                 [&]( BOARD_ITEM* other ) -> bool
                 {
                     return testHoleAgainstHole( via, holeShape.get(), other );
@@ -206,6 +206,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
             std::shared_ptr<SHAPE_CIRCLE> holeShape = getDrilledHoleShape( pad );
 
             m_holeTree.QueryColliding( pad, F_Cu, F_Cu,
+                    // Filter:
                     [&]( BOARD_ITEM* other ) -> bool
                     {
                         if( other->HasFlag( SKIP_STRUCT ) )
@@ -213,6 +214,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
                         return true;
                     },
+                    // Visitor:
                     [&]( BOARD_ITEM* other ) -> bool
                     {
                         return testHoleAgainstHole( pad, holeShape.get(), other );
@@ -244,8 +246,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoleAgainstHole( BOARD_ITEM* aItem, S
     int actual = ( aHole->GetCenter() - otherHole->GetCenter() ).EuclideanNorm();
     actual = std::max( 0, actual - aHole->GetRadius() - otherHole->GetRadius() );
 
-    auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
-                                                      aItem, aOther );
+    auto constraint = m_drcEngine->EvalRulesForItems( HOLE_CLEARANCE_CONSTRAINT, aItem, aOther );
     int  minClearance = constraint.GetValue().Min();
 
     accountCheck( constraint.GetParentRule() );
@@ -278,7 +279,7 @@ int DRC_TEST_PROVIDER_HOLE_CLEARANCE::GetNumPhases() const
 
 std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_HOLE_CLEARANCE::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE };
+    return { HOLE_CLEARANCE_CONSTRAINT };
 }
 
 

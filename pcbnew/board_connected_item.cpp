@@ -85,8 +85,8 @@ int BOARD_CONNECTED_ITEM::GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSourc
     {
         BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
 
-        constraint = bds.m_DRCEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, this,
-                                                         nullptr, aLayer );
+        constraint = bds.m_DRCEngine->EvalRulesForItems( CLEARANCE_CONSTRAINT, this, nullptr,
+                                                         aLayer );
     }
 
     if( constraint.Value().HasMin() )

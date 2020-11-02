@@ -211,10 +211,10 @@ void PCB_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_TYPE_T aClearanceType,
 
     int clearance = 0;
 
-    if( aClearanceType == DRC_CONSTRAINT_TYPE_CLEARANCE )
+    if( aClearanceType == CLEARANCE_CONSTRAINT )
     {
-        auto edgeConstraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
-                                                           aA, aB, aLayer, r );
+        auto edgeConstraint = drcEngine.EvalRulesForItems( EDGE_CLEARANCE_CONSTRAINT, aA, aB,
+                                                           aLayer, r );
 
         clearance = edgeConstraint.m_Value.HasMin() ? edgeConstraint.m_Value.Min() : 0;
     }
@@ -309,7 +309,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                                      getItemDescription( a ),
                                      getItemDescription( b ) ) );
 
-        reportClearance( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE, layer, a, b, r );
+        reportClearance( SILK_CLEARANCE_CONSTRAINT, layer, a, b, r );
     }
     else if( !( a->GetLayerSet() & LSET( 2, layer, Edge_Cuts ) ).any() )
     {
@@ -353,7 +353,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         else
         {
             // Different nets (or one or both unconnected)....
-            reportClearance( DRC_CONSTRAINT_TYPE_CLEARANCE, layer, a, b, r );
+            reportClearance( CLEARANCE_CONSTRAINT, layer, a, b, r );
         }
     }
 
@@ -428,8 +428,8 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         }
         else
         {
-            auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_TRACK_WIDTH, item,
-                                                           nullptr, UNDEFINED_LAYER, r );
+            auto constraint = drcEngine.EvalRulesForItems( TRACK_WIDTH_CONSTRAINT, item, nullptr,
+                                                           UNDEFINED_LAYER, r );
 
             wxString min = _( "undefined" );
             wxString max = _( "undefined" );
@@ -465,8 +465,8 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         }
         else
         {
-            auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_VIA_DIAMETER,
-                                                           item, nullptr, UNDEFINED_LAYER, r );
+            auto constraint = drcEngine.EvalRulesForItems( VIA_DIAMETER_CONSTRAINT, item, nullptr,
+                                                           UNDEFINED_LAYER, r );
 
             wxString min = _( "undefined" );
             wxString max = _( "undefined" );
@@ -499,8 +499,8 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         }
         else
         {
-            auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH,
-                                                           item, nullptr, UNDEFINED_LAYER, r );
+            auto constraint = drcEngine.EvalRulesForItems( ANNULAR_WIDTH_CONSTRAINT, item, nullptr,
+                                                           UNDEFINED_LAYER, r );
 
             wxString min = _( "undefined" );
             wxString max = _( "undefined" );
@@ -537,8 +537,8 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         }
         else
         {
-            auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_SIZE, item,
-                                                           nullptr, UNDEFINED_LAYER, r );
+            auto constraint = drcEngine.EvalRulesForItems( HOLE_SIZE_CONSTRAINT, item, nullptr,
+                                                           UNDEFINED_LAYER, r );
 
             wxString min = _( "undefined" );
 
@@ -566,8 +566,8 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     }
     else
     {
-        auto constraint = drcEngine.EvalRulesForItems( DRC_CONSTRAINT_TYPE_DISALLOW, item,
-                                                       nullptr, UNDEFINED_LAYER, r );
+        auto constraint = drcEngine.EvalRulesForItems( DISALLOW_CONSTRAINT, item, nullptr,
+                                                       UNDEFINED_LAYER, r );
 
         r->Report( "" );
 

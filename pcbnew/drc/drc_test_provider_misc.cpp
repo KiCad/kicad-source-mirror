@@ -95,9 +95,9 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
     {
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
 
-        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(not a closed shape)" ) );
+        m_msg.Printf( _( "(not a closed shape)" ) );
 
-        drcItem->SetErrorMessage( m_msg );
+        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
         drcItem->SetItems( m_board );
 
         reportViolation( drcItem, pt );
@@ -107,9 +107,9 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
     {
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
 
-        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(self-intersecting)" ) );
+        m_msg.Printf( _( "(self-intersecting)" ) );
 
-        drcItem->SetErrorMessage( m_msg );
+        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
         drcItem->SetItems( m_board );
 
         reportViolation( drcItem, pt );
@@ -133,10 +133,10 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                 {
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
 
-                    m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(layer %s)" ),
+                    m_msg.Printf( _( "(layer %s)" ),
                                   item->GetLayerName() );
 
-                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
                     drcItem->SetItems( item );
 
                     reportViolation( drcItem, item->GetPosition());

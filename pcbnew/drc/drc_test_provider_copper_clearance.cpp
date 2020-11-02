@@ -107,8 +107,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
     m_board = m_drcEngine->GetBoard();
     DRC_CONSTRAINT worstClearanceConstraint;
 
-    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                           worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
+    if( m_drcEngine->QueryWorstConstraint( CLEARANCE_CONSTRAINT, worstClearanceConstraint ) )
     {
         m_largestClearance = worstClearanceConstraint.GetValue().Min();
     }
@@ -256,8 +255,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( TRACK* track, SHA
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
         return false;
 
-    auto     constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                                          track, other, layer );
+    auto     constraint = m_drcEngine->EvalRulesForItems( CLEARANCE_CONSTRAINT, track, other,
+                                                          layer );
     int      minClearance = constraint.GetValue().Min();
     int      actual;
     VECTOR2I pos;
@@ -325,8 +324,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem
 
         if( aItem->GetBoundingBox().Intersects( zone->GetCachedBoundingBox() ) )
         {
-            auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                                              aItem, zone, aLayer );
+            auto constraint = m_drcEngine->EvalRulesForItems( CLEARANCE_CONSTRAINT, aItem, zone,
+                                                              aLayer );
             int        clearance = constraint.GetValue().Min();
             int        actual;
             VECTOR2I   pos;
@@ -370,6 +369,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
             std::shared_ptr<SHAPE> trackShape = track->GetEffectiveShape( layer );
 
             m_copperTree.QueryColliding( track, layer, layer,
+                    // Filter:
                     [&]( BOARD_ITEM* other ) -> bool
                     {
                         if( other->HasFlag( SKIP_STRUCT ) )
@@ -382,6 +382,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 
                         return true;
                     },
+                    // Visitor:
                     [&]( BOARD_ITEM* other ) -> bool
                     {
                         return testTrackAgainstItem( track, trackShape.get(), layer, other );
@@ -449,8 +450,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( D_PAD* pad, SHAPE* 
             if( ( pad->FlashLayer( layer ) && otherPad->GetDrillSize().x )
              || ( pad->GetDrillSize().x && otherPad->FlashLayer( layer ) ) )
             {
-                constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE,
-                                                             pad, otherPad );
+                constraint = m_drcEngine->EvalRulesForItems( HOLE_CLEARANCE_CONSTRAINT, pad,
+                                                             otherPad );
                 clearance = constraint.GetValue().Min();
 
                 accountCheck( constraint.GetParentRule() );
@@ -480,8 +481,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( D_PAD* pad, SHAPE* 
 
     if( testClearance )
     {
-        constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                                     pad, other, layer );
+        constraint = m_drcEngine->EvalRulesForItems( CLEARANCE_CONSTRAINT, pad, other, layer );
         clearance = constraint.GetValue().Min();
 
         accountCheck( constraint );
@@ -532,6 +532,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                 std::shared_ptr<SHAPE> padShape = getShape( pad, layer );
 
                 m_copperTree.QueryColliding( pad, layer, layer,
+                        // Filter:
                         [&]( BOARD_ITEM* other ) -> bool
                         {
                             if( other->HasFlag( SKIP_STRUCT ) )
@@ -539,6 +540,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 
                             return true;
                         },
+                        // Visitor
                         [&]( BOARD_ITEM* other ) -> bool
                         {
                             return testPadAgainstItem( pad, padShape.get(), layer, other );
@@ -619,8 +621,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
                 // Examine a candidate zone: compare zoneToTest to zoneRef
 
                 // Get clearance used in zone to zone test.
-                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE,
-                                                                  zoneRef, zoneToTest );
+                auto constraint = m_drcEngine->EvalRulesForItems( CLEARANCE_CONSTRAINT, zoneRef,
+                                                                  zoneToTest );
                 int  zone2zoneClearance = constraint.GetValue().Min();
 
                 accountCheck( constraint );
@@ -746,7 +748,7 @@ int DRC_TEST_PROVIDER_COPPER_CLEARANCE::GetNumPhases() const
 
 std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_COPPER_CLEARANCE::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_CLEARANCE };
+    return { CLEARANCE_CONSTRAINT };
 }
 
 

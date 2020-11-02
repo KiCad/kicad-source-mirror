@@ -206,30 +206,17 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     if( !drcEngine )
         return false;
 
-    DRC_CONSTRAINT_TYPE_T hostRuleType;
+    DRC_CONSTRAINT_TYPE_T hostType;
 
     switch ( aType )
     {
-        case PNS::CONSTRAINT_TYPE::CT_CLEARANCE:
-            hostRuleType = DRC_CONSTRAINT_TYPE_CLEARANCE;
-            break;
-        case PNS::CONSTRAINT_TYPE::CT_WIDTH:
-            hostRuleType = DRC_CONSTRAINT_TYPE_TRACK_WIDTH;
-            break;
-        case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP:
-            hostRuleType = DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP;
-            break;
-        case PNS::CONSTRAINT_TYPE::CT_LENGTH:
-            hostRuleType = DRC_CONSTRAINT_TYPE_LENGTH;
-            break;
-        case PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER:
-            hostRuleType = DRC_CONSTRAINT_TYPE_VIA_DIAMETER;
-            break;
-        case PNS::CONSTRAINT_TYPE::CT_VIA_HOLE:
-            hostRuleType = DRC_CONSTRAINT_TYPE_HOLE_SIZE;
-            break;
-        default:
-            return false; // should not happen
+        case PNS::CONSTRAINT_TYPE::CT_CLEARANCE:     hostType = CLEARANCE_CONSTRAINT;     break;
+        case PNS::CONSTRAINT_TYPE::CT_WIDTH:         hostType = TRACK_WIDTH_CONSTRAINT;   break;
+        case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP: hostType = DIFF_PAIR_GAP_CONSTRAINT; break;
+        case PNS::CONSTRAINT_TYPE::CT_LENGTH:        hostType = LENGTH_CONSTRAINT;        break;
+        case PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER:  hostType = VIA_DIAMETER_CONSTRAINT;  break;
+        case PNS::CONSTRAINT_TYPE::CT_VIA_HOLE:      hostType = HOLE_SIZE_CONSTRAINT;     break;
+        default:                                     return false; // should not happen
     }
 
     BOARD_ITEM*    parentA = aItemA ? aItemA->Parent() : nullptr;
@@ -275,7 +262,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
     if( parentA )
     {
-        hostConstraint = drcEngine->EvalRulesForItems( hostRuleType, parentA, parentB,
+        hostConstraint = drcEngine->EvalRulesForItems( hostType, parentA, parentB,
                                                        (PCB_LAYER_ID) aLayer );
     }
 

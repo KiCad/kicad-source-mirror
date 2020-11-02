@@ -66,7 +66,7 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
 {
     const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
 
-    if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_VIA_DIAMETER ) )
+    if( !m_drcEngine->HasRulesForConstraintType( VIA_DIAMETER_CONSTRAINT ) )
     {
         reportAux( "No diameter constraints found. Skipping check." );
         return false;
@@ -87,8 +87,7 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                 if( !via )
                     return true;
 
-                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_VIA_DIAMETER,
-                                                                  item );
+                auto constraint = m_drcEngine->EvalRulesForItems( VIA_DIAMETER_CONSTRAINT, item );
                 bool fail_min = false;
                 bool fail_max = false;
                 int  constraintDiameter = 0;
@@ -108,14 +107,14 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
 
                 if( fail_min )
                 {
-                    m_msg.Printf( wxS( " " ) + _( "(%s min diameter %s; actual %s)" ),
+                    m_msg.Printf( _( "(%s min diameter %s; actual %s)" ),
                                   constraint.GetName(),
                                   MessageTextFromValue( userUnits(), constraintDiameter ),
                                   MessageTextFromValue( userUnits(), actual ) );
                 }
                 else if( fail_max )
                 {
-                    m_msg.Printf( wxS( " " ) + _( "(%s max diameter %s; actual %s)" ),
+                    m_msg.Printf( _( "(%s max diameter %s; actual %s)" ),
                                   constraint.GetName(),
                                   MessageTextFromValue( userUnits(), constraintDiameter ),
                                   MessageTextFromValue( userUnits(), actual ) );
@@ -125,7 +124,7 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_VIA_DIAMETER );
 
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + m_msg );
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
@@ -160,7 +159,7 @@ int DRC_TEST_PROVIDER_VIA_DIAMETER::GetNumPhases() const
 
 std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_VIA_DIAMETER::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_VIA_DIAMETER };
+    return { VIA_DIAMETER_CONSTRAINT };
 }
 
 

@@ -271,20 +271,20 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
     switch( token )
     {
-    case T_clearance:           constraint.m_Type = DRC_CONSTRAINT_TYPE_CLEARANCE;           break;
-    case T_hole_clearance:      constraint.m_Type = DRC_CONSTRAINT_TYPE_HOLE_CLEARANCE;      break;
-    case T_edge_clearance:      constraint.m_Type = DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE;      break;
-    case T_hole:                constraint.m_Type = DRC_CONSTRAINT_TYPE_HOLE_SIZE;           break;
-    case T_courtyard_clearance: constraint.m_Type = DRC_CONSTRAINT_TYPE_COURTYARD_CLEARANCE; break;
-    case T_silk_clearance:      constraint.m_Type = DRC_CONSTRAINT_TYPE_SILK_CLEARANCE;      break;
-    case T_track_width:         constraint.m_Type = DRC_CONSTRAINT_TYPE_TRACK_WIDTH;         break;
-    case T_annular_width:       constraint.m_Type = DRC_CONSTRAINT_TYPE_ANNULAR_WIDTH;       break;
-    case T_disallow:            constraint.m_Type = DRC_CONSTRAINT_TYPE_DISALLOW;            break;
-    case T_length:              constraint.m_Type = DRC_CONSTRAINT_TYPE_LENGTH;              break;
-    case T_skew:                constraint.m_Type = DRC_CONSTRAINT_TYPE_SKEW;                break;
-    case T_via_count:           constraint.m_Type = DRC_CONSTRAINT_TYPE_VIA_COUNT;           break;
-    case T_diff_pair_gap:       constraint.m_Type = DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP;       break;
-    case T_diff_pair_uncoupled: constraint.m_Type = DRC_CONSTRAINT_TYPE_DIFF_PAIR_MAX_UNCOUPLED;  break;
+    case T_clearance:           constraint.m_Type = CLEARANCE_CONSTRAINT;                break;
+    case T_hole_clearance:      constraint.m_Type = HOLE_CLEARANCE_CONSTRAINT;           break;
+    case T_edge_clearance:      constraint.m_Type = EDGE_CLEARANCE_CONSTRAINT;           break;
+    case T_hole:                constraint.m_Type = HOLE_SIZE_CONSTRAINT;                break;
+    case T_courtyard_clearance: constraint.m_Type = COURTYARD_CLEARANCE_CONSTRAINT;      break;
+    case T_silk_clearance:      constraint.m_Type = SILK_CLEARANCE_CONSTRAINT;           break;
+    case T_track_width:         constraint.m_Type = TRACK_WIDTH_CONSTRAINT;              break;
+    case T_annular_width:       constraint.m_Type = ANNULAR_WIDTH_CONSTRAINT;            break;
+    case T_disallow:            constraint.m_Type = DISALLOW_CONSTRAINT;                 break;
+    case T_length:              constraint.m_Type = LENGTH_CONSTRAINT;                   break;
+    case T_skew:                constraint.m_Type = SKEW_CONSTRAINT;                     break;
+    case T_via_count:           constraint.m_Type = VIA_COUNT_CONSTRAINT;                break;
+    case T_diff_pair_gap:       constraint.m_Type = DIFF_PAIR_GAP_CONSTRAINT;            break;
+    case T_diff_pair_uncoupled: constraint.m_Type = DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT;  break;
     default:
     // fixme: message
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
@@ -294,7 +294,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
         reportError( msg );
     }
 
-    if( constraint.m_Type == DRC_CONSTRAINT_TYPE_DISALLOW )
+    if( constraint.m_Type == DISALLOW_CONSTRAINT )
     {
         for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
         {

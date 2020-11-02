@@ -749,14 +749,9 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                     // for pads having the same netcode as the zone, the net clearance has no
                     // meaning so use the greater of the zone clearance and the thermal relief
                     if( aPad->GetNetCode() > 0 && aPad->GetNetCode() == aZone->GetNetCode() )
-                    {
                         gap = std::max( zone_clearance, aZone->GetThermalReliefGap( aPad ) );
-                    }
                     else
-                    {
-                        gap = evalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aZone, aPad,
-                                                 aLayer );
-                    }
+                        gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aPad, aLayer );
 
                     addKnockout( aPad, aLayer, gap, aHoles );
                 }
@@ -793,8 +788,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
             {
                 if( aTrack->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
-                    int gap = evalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aZone, aTrack,
-                                                 aLayer );
+                    int gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aTrack, aLayer );
 
                     gap += extra_margin;
 
@@ -848,13 +842,12 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
                 if( aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
-                    int gap = evalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aZone, aItem,
-                                                 aLayer );
+                    int gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aItem, aLayer );
 
                     if( aItem->IsOnLayer( Edge_Cuts ) )
                     {
-                        gap = std::max( gap, evalRulesForItems( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
-                                                                aZone, aItem, Edge_Cuts ) );
+                        gap = std::max( gap, evalRulesForItems( EDGE_CLEARANCE_CONSTRAINT, aZone,
+                                                                aItem, Edge_Cuts ) );
                     }
 
                     addKnockout( aItem, aLayer, gap, aItem->IsOnLayer( Edge_Cuts ), aHoles );
@@ -902,16 +895,16 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                     else if( bds.m_ZoneFillVersion == 5 )
                     {
                         // 5.x used outline with clearance
-                        int gap = evalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aZone,
-                                                     aKnockout, aLayer );
+                        int gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aKnockout,
+                                                     aLayer );
 
                         aKnockout->TransformSmoothedOutlineToPolygon( aHoles, gap, nullptr );
                     }
                     else
                     {
                         // 6.0 uses filled areas with clearance
-                        int gap = evalRulesForItems( DRC_CONSTRAINT_TYPE_CLEARANCE, aZone,
-                                                     aKnockout, aLayer );
+                        int gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aKnockout,
+                                                     aLayer );
 
                         SHAPE_POLY_SET poly;
                         aKnockout->TransformShapeWithClearanceToPolygon( poly, aLayer, gap,

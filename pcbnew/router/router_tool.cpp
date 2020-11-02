@@ -877,12 +877,12 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
 
         DRC_CONSTRAINT constraint;
 
-        constraint = bds.m_DRCEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_VIA_DIAMETER,
-                                                         &dummyVia, nullptr, currentLayer );
+        constraint = bds.m_DRCEngine->EvalRulesForItems( VIA_DIAMETER_CONSTRAINT, &dummyVia,
+                                                         nullptr, currentLayer );
         sizes.SetViaDiameter( constraint.m_Value.OptThenMin() );
 
-        constraint = bds.m_DRCEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_SIZE,
-                                                         &dummyVia, nullptr, currentLayer );
+        constraint = bds.m_DRCEngine->EvalRulesForItems( HOLE_SIZE_CONSTRAINT, &dummyVia, nullptr,
+                                                         currentLayer );
         sizes.SetViaDrill( constraint.m_Value.OptThenMin() );
     }
     else

@@ -61,11 +61,6 @@ class DRC_ITEM;
 class DRC_RULE;
 class DRC_CONSTRAINT;
 
-enum DRC_CONSTRAINT_QUERY_T
-{
-    DRCCQ_LARGEST_MINIMUM = 0
-    // fixme: more to come I guess...
-};
 
 typedef
 std::function<void( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )> DRC_VIOLATION_HANDLER;
@@ -166,8 +161,7 @@ public:
     bool ReportPhase( const wxString& aMessage );
     void ReportAux( const wxString& aStr );
 
-    bool QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T aRuleId, DRC_CONSTRAINT& aConstraint,
-                               DRC_CONSTRAINT_QUERY_T aQueryType );
+    bool QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T aRuleId, DRC_CONSTRAINT& aConstraint );
 
     std::vector<DRC_TEST_PROVIDER* > GetTestProviders() const { return m_testProviders; };
 

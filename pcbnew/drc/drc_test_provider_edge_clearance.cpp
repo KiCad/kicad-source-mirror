@@ -124,11 +124,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
     DRC_CONSTRAINT worstClearanceConstraint;
 
-    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
-                                           worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
-    {
+    if( m_drcEngine->QueryWorstConstraint( EDGE_CLEARANCE_CONSTRAINT, worstClearanceConstraint ) )
         m_largestClearance = worstClearanceConstraint.GetValue().Min();
-    }
 
     reportAux( "Worst clearance : %d nm", m_largestClearance );
 
@@ -226,7 +223,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                     [&]( BOARD_ITEM* edge ) -> bool
                     {
                         return testAgainstEdge( item, itemShape.get(), edge,
-                                                DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE,
+                                                EDGE_CLEARANCE_CONSTRAINT,
                                                 DRCE_COPPER_EDGE_CLEARANCE );
                     },
                     m_largestClearance );
@@ -238,7 +235,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                     [&]( BOARD_ITEM* edge ) -> bool
                     {
                         return testAgainstEdge( item, itemShape.get(), edge,
-                                                DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,
+                                                SILK_CLEARANCE_CONSTRAINT,
                                                 DRCE_SILK_MASK_CLEARANCE );
                     },
                     m_largestClearance );
@@ -259,7 +256,7 @@ int DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetNumPhases() const
 
 std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_EDGE_CLEARANCE, DRC_CONSTRAINT_TYPE_SILK_CLEARANCE };
+    return { EDGE_CLEARANCE_CONSTRAINT, SILK_CLEARANCE_CONSTRAINT };
 }
 
 

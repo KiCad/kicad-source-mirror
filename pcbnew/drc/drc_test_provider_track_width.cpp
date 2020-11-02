@@ -23,7 +23,6 @@
 
 //#include <common.h>
 #include <class_track.h>
-#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
@@ -68,7 +67,7 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 {
     const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
 
-    if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T::DRC_CONSTRAINT_TYPE_TRACK_WIDTH ) )
+    if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T::TRACK_WIDTH_CONSTRAINT ) )
     {
         reportAux( "No track width constraints found. Skipping check." );
         return false;
@@ -101,8 +100,7 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                     return true;
                 }
 
-                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_TRACK_WIDTH,
-                                                                  item );
+                auto constraint = m_drcEngine->EvalRulesForItems( TRACK_WIDTH_CONSTRAINT, item );
                 bool fail_min = false;
                 bool fail_max = false;
                 int  constraintWidth;
@@ -173,7 +171,7 @@ int DRC_TEST_PROVIDER_TRACK_WIDTH::GetNumPhases() const
 
 std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_TRACK_WIDTH::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_TRACK_WIDTH };
+    return { TRACK_WIDTH_CONSTRAINT };
 }
 
 

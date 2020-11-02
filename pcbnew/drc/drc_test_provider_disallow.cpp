@@ -64,7 +64,7 @@ public:
 
 bool DRC_TEST_PROVIDER_DISALLOW::Run()
 {
-    if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_DISALLOW ) )
+    if( !m_drcEngine->HasRulesForConstraintType( DISALLOW_CONSTRAINT ) )
     {
         reportAux( "No disallow constraints found. Skipping check." );
         return false;
@@ -76,8 +76,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     auto doCheckItem =
             [&]( BOARD_ITEM* item )
             {
-                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_DISALLOW,
-                                                                  item );
+                auto constraint = m_drcEngine->EvalRulesForItems( DISALLOW_CONSTRAINT, item );
                 if( constraint.m_DisallowFlags )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
@@ -127,7 +126,7 @@ int DRC_TEST_PROVIDER_DISALLOW::GetNumPhases() const
 
 std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_DISALLOW::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_DISALLOW };
+    return { DISALLOW_CONSTRAINT };
 }
 
 

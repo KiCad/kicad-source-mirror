@@ -28,7 +28,6 @@
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>
 
-#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>
@@ -97,11 +96,8 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
         return true;
     }
 
-    if( m_drcEngine->QueryWorstConstraint( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,
-                                           worstClearanceConstraint, DRCCQ_LARGEST_MINIMUM ) )
-    {
+    if( m_drcEngine->QueryWorstConstraint( SILK_CLEARANCE_CONSTRAINT, worstClearanceConstraint ) )
         m_largestClearance = worstClearanceConstraint.m_Value.Min();
-    }
 
     reportAux( "Worst clearance : %d nm", m_largestClearance );
 
@@ -150,7 +146,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 if ( isInvisibleText( aTestItem->parent ) )
                     return true;
 
-                auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_SILK_CLEARANCE,
+                auto constraint = m_drcEngine->EvalRulesForItems( SILK_CLEARANCE_CONSTRAINT,
                                                                   aRefItem->parent,
                                                                   aTestItem->parent,
                                                                   aLayers.second );
@@ -185,12 +181,12 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
                 if( minClearance > 0 )
                 {
-                    m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s clearance %s; actual %s)" ),
+                    m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
                                   constraint.GetParentRule()->m_Name,
                                   MessageTextFromValue( userUnits(), minClearance ),
                                   MessageTextFromValue( userUnits(), actual ) );
 
-                    drcItem->SetErrorMessage( m_msg );
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
                 }
 
                 drcItem->SetItems( aRefItem->parent, aTestItem->parent );
@@ -247,7 +243,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
 std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_SILK_CLEARANCE::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_SILK_CLEARANCE };
+    return { SILK_CLEARANCE_CONSTRAINT };
 }
 
 

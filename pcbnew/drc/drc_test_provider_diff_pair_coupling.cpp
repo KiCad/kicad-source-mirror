@@ -277,8 +277,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                     drc_dbg( 10, "eval dp %p\n", item );
 
                     const DRC_CONSTRAINT_TYPE_T constraintsToCheck[] = {
-                        DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP,
-                        DRC_CONSTRAINT_TYPE_DIFF_PAIR_MAX_UNCOUPLED
+                            DIFF_PAIR_GAP_CONSTRAINT,
+                            DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT
                     };
 
                     for( int i = 0; i < 2; i++ )
@@ -348,8 +348,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
         drc_dbg(10, "       coupled prims : %d\n", (int) it.second.coupled.size() );
 
-        OPT<DRC_CONSTRAINT> gapConstraint = it.first.parentRule->FindConstraint( DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP );
-        OPT<DRC_CONSTRAINT> maxUncoupledConstraint = it.first.parentRule->FindConstraint( DRC_CONSTRAINT_TYPE_DIFF_PAIR_MAX_UNCOUPLED );
+        OPT<DRC_CONSTRAINT> gapConstraint = it.first.parentRule->FindConstraint( DIFF_PAIR_GAP_CONSTRAINT );
+        OPT<DRC_CONSTRAINT> maxUncoupledConstraint = it.first.parentRule->FindConstraint( DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT );
 
         for( auto& item : it.second.itemsN )
         {
@@ -495,7 +495,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
 std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_DIFF_PAIR_GAP, DRC_CONSTRAINT_TYPE_DIFF_PAIR_MAX_UNCOUPLED };
+    return { DIFF_PAIR_GAP_CONSTRAINT, DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT };
 }
 
 

@@ -131,7 +131,7 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( D_PAD* aPad )
     if( holeSize == 0 )
         return;
 
-    auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_SIZE, aPad );
+    auto constraint = m_drcEngine->EvalRulesForItems( HOLE_SIZE_CONSTRAINT, aPad );
     int  minHole = constraint.GetValue().Min();
 
     accountCheck( constraint );
@@ -140,12 +140,12 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( D_PAD* aPad )
     {
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_DRILL );
 
-        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s %s; actual %s)" ),
+        m_msg.Printf( _( "(%s %s; actual %s)" ),
                       constraint.GetName(),
                       MessageTextFromValue( userUnits(), minHole ),
                       MessageTextFromValue( userUnits(), holeSize ) );
 
-        drcItem->SetErrorMessage( m_msg );
+        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
         drcItem->SetItems( aPad );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
@@ -173,7 +173,7 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via, bool aExceedMicro, bool aE
         errorCode = DRCE_TOO_SMALL_DRILL;
     }
 
-    auto constraint = m_drcEngine->EvalRulesForItems( DRC_CONSTRAINT_TYPE_HOLE_SIZE, via );
+    auto constraint = m_drcEngine->EvalRulesForItems( HOLE_SIZE_CONSTRAINT, via );
     int  minHole = constraint.GetValue().Min();
 
     accountCheck( constraint );
@@ -182,12 +182,12 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via, bool aExceedMicro, bool aE
     {
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( errorCode );
 
-        m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(%s %s; actual %s)" ),
+        m_msg.Printf( _( "(%s %s; actual %s)" ),
                       constraint.GetName(),
                       MessageTextFromValue( userUnits(), minHole ),
                       MessageTextFromValue( userUnits(), via->GetDrillValue() ) );
 
-        drcItem->SetErrorMessage( m_msg );
+        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
         drcItem->SetItems( via );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
@@ -204,7 +204,7 @@ int DRC_TEST_PROVIDER_HOLE_SIZE::GetNumPhases() const
 
 std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_HOLE_SIZE::GetConstraintTypes() const
 {
-    return { DRC_CONSTRAINT_TYPE_HOLE_SIZE };
+    return { HOLE_SIZE_CONSTRAINT };
 }
 
 
