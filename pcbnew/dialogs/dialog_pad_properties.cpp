@@ -1163,27 +1163,33 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     }
 
     // Test hole size against pad size
-    LSET lset = m_dummyPad->GetLayerSet() & LSET::AllCuMask();
-    PCB_LAYER_ID   layer    = lset.Seq().at( 0 );
-    int            maxError = m_board->GetDesignSettings().m_MaxError;
-    SHAPE_POLY_SET padOutline, drillOutline;
-
-    m_dummyPad->TransformShapeWithClearanceToPolygon( padOutline, layer, 0, maxError,
-                                                       ERROR_LOC::ERROR_INSIDE );
-
-    const SHAPE_SEGMENT* drillShape = m_dummyPad->GetEffectiveHoleShape();
-    const SEG            drillSeg   = drillShape->GetSeg();
-
-    TransformOvalToPolygon( drillOutline, (wxPoint) drillSeg.A, (wxPoint) drillSeg.B,
-                            drillShape->GetWidth(), maxError, ERROR_LOC::ERROR_INSIDE );
-
-    drillOutline.BooleanSubtract( padOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
-
-    if( ( drillOutline.BBox().GetWidth() > 0 ) || ( drillOutline.BBox().GetHeight() > 0 ) )
+    if( m_dummyPad->GetAttribute() != PAD_ATTRIB_NPTH )
     {
-        warning_msgs.Add( _( "Warning: Pad drill bigger than pad size or shapes do not overlap" ) );
-        skip_tstoffset = true;  // offset prm will be not tested because if the drill value
-                                // is incorrect the offset prm is always seen as incorrect, even if it is 0
+        LSET           lset = m_dummyPad->GetLayerSet() & LSET::AllCuMask();
+        PCB_LAYER_ID   layer = lset.Seq().at( 0 );
+        int            maxError = m_board->GetDesignSettings().m_MaxError;
+        SHAPE_POLY_SET padOutline;
+
+        m_dummyPad->TransformShapeWithClearanceToPolygon( padOutline, layer, 0, maxError,
+                                                          ERROR_LOC::ERROR_INSIDE );
+
+        const SHAPE_SEGMENT* drillShape = m_dummyPad->GetEffectiveHoleShape();
+        const SEG            drillSeg   = drillShape->GetSeg();
+        SHAPE_POLY_SET       drillOutline;
+
+        TransformOvalToPolygon( drillOutline, (wxPoint) drillSeg.A, (wxPoint) drillSeg.B,
+                                drillShape->GetWidth(), maxError, ERROR_LOC::ERROR_INSIDE );
+
+        drillOutline.BooleanSubtract( padOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+
+        if( ( drillOutline.BBox().GetWidth() > 0 ) || ( drillOutline.BBox().GetHeight() > 0 ) )
+        {
+            warning_msgs.Add( _( "Warning: Pad drill bigger than pad size or drill shape and"
+                                 "pad shape do not overlap" ) );
+            skip_tstoffset = true;  // offset parameter will be not tested because if the drill
+                                    // value is incorrect the offset parameter is always seen as
+                                    // incorrect, even if it is 0
+        }
     }
 
     if( m_dummyPad->GetLocalClearance() < 0 )
@@ -1199,7 +1205,9 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     if( m_dummyPad->GetLocalSolderMaskMargin() < 0 )
     {
         if( m_dummyPad->GetShape() == PAD_SHAPE_CUSTOM )
+        {
             error_msgs.Add( _( "Pad local solder mask clearance must be zero or greater than zero" ) );
+        }
         else
         {
             int min_smClearance = -std::min( m_dummyPad->GetSize().x, m_dummyPad->GetSize().y )/2;
@@ -1229,7 +1237,6 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         if( ( m_dummyPad->GetDrillSize().x || m_dummyPad->GetDrillSize().y )
                 && m_dummyPad->GetAttribute() != PAD_ATTRIB_NPTH )
         {
-            // Note: he message is shown in an HTML window
             msg = _( "Warning: plated through holes should normally have a copper pad on at least one layer" );
             warning_msgs.Add( msg );
         }
