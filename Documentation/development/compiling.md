@@ -125,7 +125,7 @@ option is disabled.
 
 [Open CASCSADE Technology (OCC)][libocc] should also work as an alternative to OCE. Selection of
 library Cascade library can be specified at build time.  See the [STEP/IGES support](#oce_opt)
-section.
+section.  When building OCC using the option BUILD_MODULE_Draw=OFF make building more easy
 
 ## Ngspice Library ## {#ngspice}
 
@@ -325,7 +325,7 @@ CMAKE_INSTALL_PREFIX option to specify a different install path.
 # Building KiCad on Windows # {#build_windows}
 
 The preferred Windows build environment is currently [MSYS2][].
-[Visual Studio][] with [vcpkg][] is also a supported build environment 
+[Visual Studio][] with [vcpkg][] is also a supported build environment
 but does not yet fully support all KiCad features.
 
 
@@ -479,7 +479,7 @@ If you did not set the **VCPKG_DEFAULT_TRIPLET** environment variable, you will 
 Contained in the build root is a `CMakeSettings.json.sample`, copy and rename this file to `CMakeSettings.json`
 Edit `CMakeSettings.json` update the VcPkgDir environment variable up top to match the location of your vcpkg clone.
 ```
-{ "VcPkgDir": "D:/vcpkg/" }, 
+{ "VcPkgDir": "D:/vcpkg/" },
 ```
 
 #### 3. "Open Folder" in Visual Studio
