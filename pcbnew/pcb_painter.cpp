@@ -604,7 +604,6 @@ void PCB_PAINTER::draw( const ARC* aArc, int aLayer )
 void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 {
     VECTOR2D center( aVia->GetStart() );
-    double   radius = 0.0;
 
     // Draw description layer
     if( IsNetnameLayer( aLayer ) )
@@ -668,24 +667,10 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
         return;
     }
-    else if( aLayer == LAYER_VIAS_HOLES )
-    {
-        radius = getDrillSize( aVia ) / 2.0;
-    }
-    else if(   ( aLayer == LAYER_VIA_THROUGH && aVia->GetViaType() == VIATYPE::THROUGH )
-            || ( aLayer == LAYER_VIA_BBLIND && aVia->GetViaType() == VIATYPE::BLIND_BURIED )
-            || ( aLayer == LAYER_VIA_MICROVIA && aVia->GetViaType() == VIATYPE::MICROVIA ) )
-    {
-        radius = aVia->GetWidth() / 2.0;
-    }
-    else
-    {
-        return;
-    }
 
-    /// Vias not connected to copper are optionally not drawn
-    /// We draw instead the hole size to ensure we show the proper clearance
-    if( IsCopperLayer( aLayer ) && !aVia->FlashLayer( aLayer ) )
+    double radius = aVia->GetWidth() / 2.0;
+
+    if( aLayer == LAYER_VIAS_HOLES || ( IsCopperLayer( aLayer ) && !aVia->FlashLayer( aLayer ) ) )
         radius = getDrillSize( aVia ) / 2.0 ;
 
     bool sketchMode = false;
