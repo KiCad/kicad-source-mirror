@@ -1162,7 +1162,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     // of the bounding box center) to avoid moving the item anchor
     if( selection.GetSize() == 1 )
     {
-        if( selection.HasReferencePoint() )
+        if( m_dragging && selection.HasReferencePoint() )
             modPoint = selection.GetReferencePoint();
         else
             modPoint = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) )->GetPosition();

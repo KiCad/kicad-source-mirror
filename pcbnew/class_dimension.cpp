@@ -65,18 +65,6 @@ void DIMENSION::SetParent( EDA_ITEM* aParent )
 }
 
 
-void DIMENSION::SetPosition( const wxPoint& aPos )
-{
-    m_text.SetTextPos( aPos );
-}
-
-
-wxPoint DIMENSION::GetPosition() const
-{
-    return m_text.GetTextPos();
-}
-
-
 void DIMENSION::updateText()
 {
     wxString text = m_overrideTextEnabled ? m_valueString : GetValueText();
@@ -271,7 +259,6 @@ void DIMENSION::Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight )
     wxPoint newPos = m_text.GetTextPos();
 
 #define INVERT( pos ) ( ( pos ) = axis - ( ( pos ) - axis ) )
-
     if( aMirrorLeftRight )
         INVERT( newPos.x );
     else
@@ -292,6 +279,8 @@ void DIMENSION::Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight )
         INVERT( m_start.y );
         INVERT( m_end.y );
     }
+
+    m_text.SetMirrored( !m_text.IsMirrored() );
 
     Update();
 }

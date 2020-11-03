@@ -30,12 +30,12 @@
 #include <class_pad.h>
 #include <class_track.h>
 #include <class_marker_pcb.h>
+#include <class_dimension.h>
 #include <class_zone.h>
 #include <pcb_shape.h>
 #include <class_pcb_group.h>
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
-
 
 /* This module contains out of line member functions for classes given in
  * collectors.h.  Those classes augment the functionality of class PCB_EDIT_FRAME.
@@ -196,6 +196,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     MARKER_PCB*     marker      = nullptr;
     ZONE_CONTAINER* zone        = nullptr;
     PCB_SHAPE*      shape       = nullptr;
+    DIMENSION*      dimension   = nullptr;
 
 #if 0   // debugging
     static int  breakhere = 0;
@@ -324,6 +325,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     case PCB_DIM_CENTER_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
+        dimension = static_cast<DIMENSION*>( item );
         break;
 
     case PCB_TARGET_T:
@@ -493,7 +495,17 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     {
                         if( shape->HitTest( m_refPos, accuracy ) )
                         {
-                            Append( item );
+                            Append( shape );
+                            goto exit;
+                        }
+                    }
+                    else if( dimension )
+                    {
+                        // Dimensions feels particularly hard to select, probably due to their
+                        // noisy shape making it feel like they should have a larger bounary.
+                        if( dimension->HitTest( m_refPos, KiROUND( accuracy * 1.5 ) ) )
+                        {
+                            Append( dimension );
                             goto exit;
                         }
                     }
@@ -557,7 +569,17 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     {
                         if( shape->HitTest( m_refPos, accuracy ) )
                         {
-                            Append( item );
+                            Append( shape );
+                            goto exit;
+                        }
+                    }
+                    else if( dimension )
+                    {
+                        // Dimensions feels particularly hard to select, probably due to their
+                        // noisy shape making it feel like they should have a larger bounary.
+                        if( dimension->HitTest( m_refPos, KiROUND( accuracy * 1.5 ) ) )
+                        {
+                            Append( dimension );
                             goto exit;
                         }
                     }

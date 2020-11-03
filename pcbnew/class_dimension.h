@@ -129,9 +129,8 @@ public:
     virtual const wxPoint& GetEnd() const { return m_end; }
     virtual void SetEnd( const wxPoint& aPoint );
 
-    // These deal with the text position
-    wxPoint GetPosition() const override;
-    void SetPosition( const wxPoint& aPos ) override;
+    wxPoint GetPosition() const override { return m_start; }
+    void SetPosition( const wxPoint& aPos ) override { m_start = aPos; }
 
     bool GetOverrideTextEnabled() const { return m_overrideTextEnabled; }
     void SetOverrideTextEnabled( bool aOverride ) { m_overrideTextEnabled = aOverride; }
