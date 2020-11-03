@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-11-02 21:02+0000\n"
+"PO-Revision-Date: 2020-11-03 18:14+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -587,9 +587,8 @@ msgid "OpenGL"
 msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:420
-#, fuzzy
 msgid "Raytracing Render Options"
-msgstr "Raytracing-Optionen"
+msgstr "Raytracing Optionen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:431
 msgid "Procedural textures"
@@ -605,9 +604,8 @@ msgid "Post-processing"
 msgstr "Nachbearbeitung"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:473
-#, fuzzy
 msgid "Number of Samples"
-msgstr "Anzahl Punkte"
+msgstr "Anzahl der Punkte"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:477
 msgid "Spread Factor %"
@@ -669,34 +667,30 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:574
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:798
-#, fuzzy
 msgid "Lights configuration"
-msgstr "Bestätigung"
+msgstr "Beleuchtungseinstellungen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:582
 msgid "Ambient Camera Light"
 msgstr "Umgebungslicht"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
-#, fuzzy
 msgid "Top Light"
-msgstr "Oben rechts"
+msgstr "Licht von oben"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:611
-#, fuzzy
 msgid "Bottom Light"
-msgstr "Unten rechts"
+msgstr "Licht von unten"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:635
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:652
-#, fuzzy
 msgid "Elevation (degrees)"
-msgstr "Winkel in Grad:"
+msgstr "Vertikalwinkel in Grad"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:639
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:656
 msgid "Azimuth (degrees)"
-msgstr "Azimut (Grad)"
+msgstr "Azimut in Grad"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:660
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
@@ -899,9 +893,8 @@ msgid "Flip Board"
 msgstr "Platinenansicht wenden"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
-#, fuzzy
 msgid "Flip the board view"
-msgstr "Wenden (spiegeln) der Platinenansicht"
+msgstr "Platinenansicht spiegeln"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
 msgid "Toggle orthographic projection"
@@ -1642,9 +1635,8 @@ msgid "Report or examine bugs - "
 msgstr "Melde oder prüfe Fehler - "
 
 #: common/dialog_about/AboutDialog_main.cpp:160
-#, fuzzy
 msgid "KiCad users group and community"
-msgstr "KiCad-Benutzergruppen und Community"
+msgstr "KiCad Benutzergruppen und Community"
 
 #: common/dialog_about/AboutDialog_main.cpp:165
 msgid "KiCad forum - "
@@ -1655,11 +1647,8 @@ msgid "The complete KiCad EDA Suite is released under the"
 msgstr "Die gesamte KiCad EDA Suite ist veröffentlicht unter der"
 
 #: common/dialog_about/AboutDialog_main.cpp:181
-#, fuzzy
 msgid "GNU General Public License (GPL) version 3 or any later version"
-msgstr ""
-"GNU Affero General Public License (AGPL) Version 3 oder jeder nachfolgenden "
-"Version"
+msgstr "GNU General Public License (GPL) Version 3 oder neuer"
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Team"
@@ -1720,9 +1709,8 @@ msgid "Doc Writers"
 msgstr "Dokumentation"
 
 #: common/dialog_about/dialog_about.cpp:130
-#, fuzzy
 msgid "Librarians"
-msgstr "Bibliotheken"
+msgstr "Biblithekare"
 
 #: common/dialog_about/dialog_about.cpp:133
 msgid "Artists"
@@ -1791,14 +1779,12 @@ msgid "&OK"
 msgstr "&OK"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:46
-#, fuzzy
 msgid "Report"
-msgstr "ERC-Bericht"
+msgstr "Bericht"
 
 #: common/dialogs/dialog_color_picker.cpp:94
-#, fuzzy
 msgid "Clear Color"
-msgstr "Farbe der Kupferlage"
+msgstr "Farbe zurücksetzen"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -2764,20 +2750,17 @@ msgid "New theme name:"
 msgstr "Themenname:"
 
 #: common/dialogs/panel_color_settings.cpp:130
-#, fuzzy
 msgid "Add Color Theme"
-msgstr "Farbthema"
+msgstr "Farbthema hinzufügen"
 
 #: common/dialogs/panel_color_settings.cpp:142
-#, fuzzy
 msgid "Theme already exists!"
-msgstr "Datei existiert bereits!"
+msgstr "Thema mit gleichem Namen existiert bereits!"
 
 #: common/dialogs/panel_color_settings.cpp:203
 #: common/dialogs/panel_color_settings.cpp:225
-#, fuzzy
 msgid "New Theme..."
-msgstr "Neues Bauteil"
+msgstr "Neues Thema..."
 
 #: common/dialogs/panel_color_settings.cpp:213
 msgid "(read-only)"
@@ -3016,14 +2999,12 @@ msgstr ""
 "wurde."
 
 #: common/dialogs/panel_common_settings_base.cpp:209
-#, fuzzy
 msgid "Project Backup"
-msgstr "Projekt"
+msgstr "Projekt Sicherungskopien"
 
 #: common/dialogs/panel_common_settings_base.cpp:216
-#, fuzzy
 msgid "Automatically backup projects"
-msgstr "Autogeroutete Leiterbahnen"
+msgstr "Projekt-Sicherungskopien automatisch speichern"
 
 #: common/dialogs/panel_common_settings_base.cpp:217
 msgid ""
@@ -3078,9 +3059,8 @@ msgstr ""
 "nächsten Speichern erstellt (für mindestens kein Wert auf 0 gesetzt)"
 
 #: common/dialogs/panel_common_settings_base.cpp:257
-#, fuzzy
 msgid "Maximum total backup size:"
-msgstr "Mindestgröße DuKo:"
+msgstr "Maximale Größe der Sicherungskopien:"
 
 #: common/dialogs/panel_common_settings_base.cpp:259
 msgid ""
@@ -3102,8 +3082,7 @@ msgstr "Version"
 
 #: common/dialogs/panel_common_settings_base.cpp:279
 msgid "Remember open files for next project launch"
-msgstr ""
-"Denken Sie daran, offene Dateien für den nächsten Projektstart zu öffnen"
+msgstr "Offene Dateien bei nächstem Projektstart wiederherstellen"
 
 #: common/dialogs/panel_common_settings_base.cpp:281
 msgid ""
@@ -3119,7 +3098,7 @@ msgstr "Eingabe Filtertext"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:116
 msgid "Undo All Changes"
-msgstr "Änderungen verwerfen"
+msgstr "Alle Änderungen verwerfen"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:117
 msgid "Undo all changes made so far in this dialog"
@@ -4429,11 +4408,8 @@ msgid "Ignore Other Snaps"
 msgstr "Ignoriert andere Raster"
 
 #: common/hotkey_store.cpp:66
-#, fuzzy
 msgid "Project Manager"
-msgstr ""
-"Projektdatei:\n"
-"%s\n"
+msgstr "Projektmanager"
 
 #: common/hotkey_store.cpp:67 eeschema/eeschema_config.cpp:223
 #: eeschema/menubar.cpp:127 eeschema/sch_edit_frame.cpp:1177
@@ -5278,38 +5254,36 @@ msgstr ""
 "Projektes zu laden ist ein Fehler aufgetreten."
 
 #: common/project/project_archiver.cpp:89
-#, fuzzy
 msgid "Could not open archive file\n"
-msgstr "Konnte die Bibliotheksdatei nicht öffnen."
+msgstr "Die Archivdatei kann nicht geöffnet werden\n"
 
 #: common/project/project_archiver.cpp:98
 msgid "Invalid archive file format\n"
 msgstr "Ungültiges Archivdateiformat\n"
 
 #: common/project/project_archiver.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file \"%s\"\n"
-msgstr "Entpacke Datei \"%s\""
+msgstr "Entpacke Datei \"%s\"\n"
 
 #: common/project/project_archiver.cpp:145
-#, fuzzy
 msgid "Error extracting file!\n"
-msgstr "Es ist ein Fehler ist beim Schreiben von Datei \"%s\" aufgetreten."
+msgstr "Es ist ein Fehler beim Datei \"%s\" Extrahieren.\n"
 
 #: common/project/project_archiver.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create archive file \"%s\"\n"
-msgstr "Kann Zip-Archiv \"%s\" nicht erstellen"
+msgstr "Kann Archivdatei \"%s\" nicht erstellen\n"
 
 #: common/project/project_archiver.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Archive file \"%s\"\n"
-msgstr "Archivdatei \"%s\""
+msgstr "Archivdatei \"%s\"\n"
 
 #: common/project/project_archiver.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Archive file \"%s\": Failed!\n"
-msgstr "Archivdatei \"%s\""
+msgstr "Archiv-Datei \"%s\": Gescheitert!\n"
 
 #: common/project/project_archiver.cpp:270
 #, c-format
@@ -8292,49 +8266,40 @@ msgid "Done.<br><br>"
 msgstr "Fertig. <br> <br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:363
-#, fuzzy
 msgid "Checking sheet names..."
-msgstr "Prüfe Blattnamen...\n"
+msgstr "Prüfe Blattnamen..."
 
 #: eeschema/dialogs/dialog_erc.cpp:369
-#, fuzzy
 msgid "Checking bus conflicts..."
-msgstr "Prüfe Buskonflikte...\n"
+msgstr "Prüfe Buskonflikte..."
 
 #: eeschema/dialogs/dialog_erc.cpp:374
-#, fuzzy
 msgid "Checking conflicts..."
-msgstr "Prüfe Konflikte...\n"
+msgstr "Prüfe Konflikte..."
 
 #: eeschema/dialogs/dialog_erc.cpp:381
-#, fuzzy
 msgid "Checking footprints..."
-msgstr "Prüfe Footprints...\n"
+msgstr "Prüfe Footprints..."
 
 #: eeschema/dialogs/dialog_erc.cpp:385
-#, fuzzy
 msgid "Checking pins..."
-msgstr "Prüfe Footprints...\n"
+msgstr "Prüfe Pins..."
 
 #: eeschema/dialogs/dialog_erc.cpp:398
-#, fuzzy
 msgid "Checking labels..."
-msgstr "Prüfung der Bezeichner...\n"
+msgstr "Prüfe Bezeichner..."
 
 #: eeschema/dialogs/dialog_erc.cpp:404
-#, fuzzy
 msgid "Checking for unresolved variables..."
-msgstr "Prüfung der Kupferflächen...\n"
+msgstr "Prüfe nicht aufgelöste Variablen..."
 
 #: eeschema/dialogs/dialog_erc.cpp:410
-#, fuzzy
 msgid "Checking no connect pins for connections..."
-msgstr "Prüfung der Verbindungen...\n"
+msgstr "Prüfe 'Keine-Verbindung' Pins nicht verbunden sind..."
 
 #: eeschema/dialogs/dialog_erc.cpp:416
-#, fuzzy
 msgid "Checking for library symbol issues..."
-msgstr "Prüfung der Bezeichner...\n"
+msgstr "Prüfe Bibliothekssymbolprobleme..."
 
 #: eeschema/dialogs/dialog_erc.cpp:494 pcbnew/dialogs/dialog_drc.cpp:387
 msgid "errors"
