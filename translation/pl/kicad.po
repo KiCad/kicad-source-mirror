@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-11-02 21:02+0000\n"
+"PO-Revision-Date: 2020-11-03 18:15+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -5345,7 +5345,7 @@ msgstr "Wklej element(y) ze schowka"
 #: pcbnew/dialogs/dialog_import_settings.cpp:98
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:78
 msgid "Select All"
-msgstr "Wybierz wszystkie"
+msgstr "Wybierz wszystko"
 
 #: common/tool/actions.cpp:170
 msgid "Select all items on screen"
@@ -8213,7 +8213,7 @@ msgstr "Usuń znaczniki"
 
 #: eeschema/dialogs/dialog_erc_base.h:87 eeschema/tools/ee_actions.cpp:45
 msgid "Electrical Rules Checker"
-msgstr "Sprawdź poprawność elektryczną (ERC)"
+msgstr "Sprawdzanie poprawności elektrycznej (ERC)"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:84
 #: eeschema/fields_grid_table.cpp:575
@@ -9821,7 +9821,7 @@ msgstr "Wzorce nazw pól"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:70
 msgid "Electrical Rules"
-msgstr "Poprawność elektryczna ERC"
+msgstr "Reguły ERC"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:74
 #: eeschema/libedit/lib_edit_frame.cpp:915
@@ -19402,7 +19402,7 @@ msgstr "Wykończenie płytki"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:145
 msgid "Has castellated pads"
-msgstr "Posiada pola połówkowe"
+msgstr "Posiada pola z kastelacją"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:148
 msgid "Plated board edge"
@@ -19674,7 +19674,7 @@ msgstr "Dolna (Odwrócona)"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:174
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
 msgid "Front"
-msgstr "Na stronie górnej"
+msgstr "Górna"
 
 #: pcbnew/class_module.cpp:763
 msgid "locked"
@@ -19801,7 +19801,7 @@ msgstr "Radiator"
 
 #: pcbnew/class_pad.cpp:848
 msgid "Castellated"
-msgstr "Połówkowe"
+msgstr "Kastelacja"
 
 #: pcbnew/class_pad.cpp:857 pcbnew/class_track.cpp:695
 #: pcbnew/class_track.cpp:1101
@@ -19932,7 +19932,7 @@ msgstr "Pole radiatora"
 
 #: pcbnew/class_pad.cpp:1368
 msgid "Castellated pad"
-msgstr "Pole połówkowe"
+msgstr "Pole z kastelacją"
 
 #: pcbnew/class_pad.cpp:1374
 msgid "Pad Type"
@@ -20101,7 +20101,7 @@ msgstr "strefa"
 
 #: pcbnew/class_zone.cpp:528
 msgid "Rule Area"
-msgstr "Strefa zasad"
+msgstr "Strefa z regułami"
 
 #: pcbnew/class_zone.cpp:530
 msgid "Copper Zone"
@@ -20176,7 +20176,7 @@ msgstr "(Obszar odcięty)"
 
 #: pcbnew/class_zone.cpp:860
 msgid "(Rule Area)"
-msgstr "(Strefa zasad)"
+msgstr "(Strefa z regułami)"
 
 #: pcbnew/class_zone.cpp:878
 #, c-format
@@ -21913,7 +21913,7 @@ msgstr "Uruchom DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:218
 msgid "DRC incomplete: could not compile design rules.  "
-msgstr "DRC jest niekompletne: nie można skompilować zasad projektowania.  "
+msgstr "DRC jest niekompletne: nie można skompilować reguł projektowych.  "
 
 #: pcbnew/dialogs/dialog_drc.cpp:220 pcbnew/tools/pcb_inspection_tool.cpp:208
 #: pcbnew/tools/pcb_inspection_tool.cpp:427
@@ -22115,7 +22115,7 @@ msgstr "Przesuwanie i rozmieszczanie"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:141
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:204
 msgid "Auto-placement Rules"
-msgstr "Zasady autorozmieszczania"
+msgstr "Reguły autorozmieszczania"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:145
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:208
@@ -24131,7 +24131,7 @@ msgstr "Właściwość nie może zostać użyta dla pól NPTH"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1289
 msgid "Castellated property can be set only for PTH"
-msgstr "Właściwość Pola połówkowe może być użyta tylko dla pól PTH"
+msgstr "Właściwość Pola z kastelacją może być użyta tylko dla pól PTH"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1293
 msgid "BGA property can be set only for SMD pads"
@@ -24417,14 +24417,14 @@ msgstr ""
 "Lokalny fiducial jest fiducialem dla footprintu nadrzędnego\n"
 "Globalny fiducial to fiducial dla całej płytki\n"
 "Pole testowe  przydaje się do określania punktów testowych w plikach Gerber\n"
-"Pole radiatorowe określa pole termiczne\n"
-"Pola połówkowe określa ścięte pola z otworami znajdującymi się na krawędzi "
-"płytki\n"
+"Pole radiatorowe określa pole termiczne do odprowadzania ciepła\n"
+"Pole z kastelacją określa ścięte pola z otworami znajdującymi się na "
+"krawędzi płytki\n"
 "Te właściwości są określone w plikach Gerber X2."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 msgid "Castellated pad (through hole only)"
-msgstr "Pole połówkowe (tylko z otworem na wylot)"
+msgstr "Pole z kastelacją (tylko z otworem na wylot)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:583
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -25439,11 +25439,12 @@ msgstr "Nazwa obszaru:"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:90
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:95
 msgid "A unique name for this rule area for use in DRC rules"
-msgstr "Unikalna nazwa dla obszaru z regułami do użytku w regułach DRC"
+msgstr ""
+"Unikalna nazwa dla obszaru z regułami do użytku w regułach projektowych DRC"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:66
 msgid "Rule Area Properties"
-msgstr "Właściwości obszaru poddanego zasadom"
+msgstr "Właściwości obszaru z regułami"
 
 #: pcbnew/dialogs/dialog_scripting_base.cpp:24
 msgid "&Run"
@@ -27283,7 +27284,7 @@ msgstr "Zastosowano bezwarunkowe ograniczenie."
 
 #: pcbnew/drc/drc_engine.cpp:899
 msgid "Unconditional rule applied."
-msgstr "Zastosowano bezwarunkową zasadę."
+msgstr "Zastosowano bezwarunkową regułę."
 
 #: pcbnew/drc/drc_engine.cpp:912
 #, c-format
@@ -27304,7 +27305,7 @@ msgstr "Przynależność jest nieodpowiednia; ograniczenie zignorowane."
 
 #: pcbnew/drc/drc_engine.cpp:927
 msgid "Condition not satisfied; rule ignored."
-msgstr "Warunek jest nieodpowiedni; reguła zignorowana."
+msgstr "Warunek nie spełniony; reguła zignorowana."
 
 #: pcbnew/drc/drc_engine.cpp:970 pcbnew/drc/drc_engine.cpp:981
 #, c-format
@@ -29624,9 +29625,9 @@ msgid ""
 "design rules were imported. It is recommended that you review the design "
 "rules that have been applied."
 msgstr ""
-"Zasady projektowe programu KiCad różnią się od zasad CADSTAR. Zaimportowano "
-"tylko zgodne zasady projektowe. Zaleca się zapoznanie się z zastosowanymi "
-"zasadami projektowymi."
+"Reguły projektowe programu KiCad różnią się od zasad CADSTAR. Zaimportowano "
+"tylko zgodne reguły projektowe. Zaleca się zapoznanie się z zastosowanymi "
+"regułami projektowymi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:693
 #, c-format
@@ -31083,11 +31084,11 @@ msgstr "Tworzy strefę miedzi z zaznaczenia"
 
 #: pcbnew/tools/pcb_actions.cpp:66
 msgid "Convert to Rule Area"
-msgstr "Skonwertuj na strefę z regułami"
+msgstr "Przekształć w strefę z regułami"
 
 #: pcbnew/tools/pcb_actions.cpp:67
 msgid "Creates a rule area from the selection"
-msgstr "Tworzy strefę reguł z zaznaczenia"
+msgstr "Tworzy strefę z regułami na podstawie zaznaczenia"
 
 #: pcbnew/tools/pcb_actions.cpp:70
 msgid "Convert to Lines"
@@ -31191,7 +31192,7 @@ msgstr "Dodaj samodzielne przelotki"
 
 #: pcbnew/tools/pcb_actions.cpp:160
 msgid "Add Rule Area"
-msgstr "Dodaj obszar reguł projektowych"
+msgstr "Dodaj obszar z regułami"
 
 #: pcbnew/tools/pcb_actions.cpp:160
 msgid "Add a rule area (keepout)"
@@ -31267,7 +31268,7 @@ msgstr "Sprawdzenie reguł projektowych (DRC)"
 
 #: pcbnew/tools/pcb_actions.cpp:218
 msgid "Show the design rules checker window"
-msgstr "Pokazuje okno z kontrolą reguł projektowych PCB"
+msgstr "Pokazuje okno narzędzia do kontroli reguł projektowych PCB"
 
 #: pcbnew/tools/pcb_actions.cpp:227
 msgid "Open in Footprint Editor"
