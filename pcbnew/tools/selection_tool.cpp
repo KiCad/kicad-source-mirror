@@ -1772,6 +1772,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
     // These are not selectable
     case NOT_USED:
     case TYPE_NOT_INIT:
+    case PCB_NETINFO_T:
         return false;
 
     default:    // Suppress warnings
