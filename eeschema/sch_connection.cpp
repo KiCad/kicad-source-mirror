@@ -223,7 +223,7 @@ void SCH_CONNECTION::Clone( SCH_CONNECTION& aOther )
 {
     m_graph = aOther.m_graph;
     m_type = aOther.Type();
-    m_lastDriver = aOther.GetLastDriver();
+    // Note: m_lastDriver is not cloned as it needs to be the last driver of *this* connection
     m_driver = aOther.Driver();
     m_sheet = aOther.Sheet();
     m_name = aOther.m_name;
