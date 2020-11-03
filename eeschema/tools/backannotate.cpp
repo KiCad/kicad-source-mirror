@@ -370,7 +370,18 @@ void BACK_ANNOTATE::applyChangelist()
                 const wxString& pinNumber = entry.first;
                 const wxString& shortNetName = entry.second;
                 SCH_PIN*        pin = comp->GetPin( pinNumber );
-                SCH_CONNECTION* conn = pin ? pin->Connection( &ref.GetSheetPath() ) : nullptr;
+
+                if( !pin )
+                {
+                    msg.Printf( _( "Cannot find \"%s\" pin \"%s\"." ),
+                                ref.GetFullRef(),
+                                pinNumber );
+                    m_reporter.ReportHead( msg, RPT_SEVERITY_ERROR );
+
+                    continue;
+                }
+
+                SCH_CONNECTION* conn = pin->Connection( &ref.GetSheetPath() );
 
                 wxString key = shortNetName + ref.GetSheetPath().PathAsString();
 
