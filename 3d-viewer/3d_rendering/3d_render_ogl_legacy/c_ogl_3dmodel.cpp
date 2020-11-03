@@ -400,6 +400,10 @@ void C_OGL_3DMODEL::Draw(bool aTransparent, float aOpacity, bool aUseSelectedMat
     if( aOpacity <= FLT_EPSILON )
         return;
 
+    
+    if( !glBindBuffer )
+        throw std::runtime_error( "The OpenGL context no longer exists: unable to draw" );
+
     glBindBuffer( GL_ARRAY_BUFFER, m_vertex_buffer );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_index_buffer );
 
@@ -457,15 +461,21 @@ void C_OGL_3DMODEL::Draw(bool aTransparent, float aOpacity, bool aUseSelectedMat
 
 C_OGL_3DMODEL::~C_OGL_3DMODEL()
 {
-    glDeleteBuffers( 1, &m_vertex_buffer );
-    glDeleteBuffers( 1, &m_index_buffer );
-    glDeleteBuffers( 1, &m_bbox_vertex_buffer );
-    glDeleteBuffers( 1, &m_bbox_index_buffer );
+    if( glDeleteBuffers )
+    {
+        glDeleteBuffers( 1, &m_vertex_buffer );
+        glDeleteBuffers( 1, &m_index_buffer );
+        glDeleteBuffers( 1, &m_bbox_vertex_buffer );
+        glDeleteBuffers( 1, &m_bbox_index_buffer );
+    }
 }
 
 
 void C_OGL_3DMODEL::Draw_bbox() const
 {
+    if( !glBindBuffer )
+        throw std::runtime_error( "The OpenGL context no longer exists: unable to draw bbox" );
+
     glBindBuffer( GL_ARRAY_BUFFER, m_bbox_vertex_buffer );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_bbox_index_buffer );
 
@@ -482,6 +492,9 @@ void C_OGL_3DMODEL::Draw_bbox() const
 
 void C_OGL_3DMODEL::Draw_bboxes() const
 {
+    if( !glBindBuffer )
+        throw std::runtime_error( "The OpenGL context no longer exists: unable to draw bboxes" );
+
     glBindBuffer( GL_ARRAY_BUFFER, m_bbox_vertex_buffer );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_bbox_index_buffer );
 

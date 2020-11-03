@@ -25,7 +25,7 @@
 #ifndef EDA_3D_CANVAS_H
 #define EDA_3D_CANVAS_H
 
-
+#include <atomic>
 #include "board_adapter.h"
 #include "3d_rendering/3d_render_raytracing/accelerators/caccelerator.h"
 #include "3d_rendering/c3d_render_base.h"
@@ -249,6 +249,7 @@ private:
     wxTimer                m_editing_timeout_timer;   // Expires after some time signalling that
                                                       // the mouse / keyboard movements are over
     wxTimer                m_redraw_trigger_timer;    // Used to schedule a redraw event
+    std::atomic_flag       m_is_currently_painting;   // Avoid drawing twice at the same time
 
     bool                   m_mouse_is_moving;         // Mouse activity is in progress
     bool                   m_mouse_was_moved;

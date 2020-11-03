@@ -212,6 +212,9 @@ void OGL_DrawBackground( const SFVEC3F &aTopColor, const SFVEC3F &aBotColor )
 
 void OGL_ResetTextureStateDefaults()
 {
+    if( !glActiveTexture || !glClientActiveTexture )
+        throw std::runtime_error( "The OpenGL context no longer exists: unable to Reset Textures" );
+
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, 0 );
     glClientActiveTexture( GL_TEXTURE0 );

@@ -48,6 +48,7 @@
 #include <settings/settings_manager.h>
 #include <tool/tool_dispatcher.h>
 
+#include <confirm.h>
 #include <widgets/wx_busy_indicator.h>
 
 
@@ -133,6 +134,8 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* 
              wxTimerEventHandler( EDA_3D_CANVAS::OnTimerTimeout_Redraw ),
              NULL,
              this );
+
+    m_is_currently_painting.clear();
 
     m_3d_render_raytracing = new C3D_RENDER_RAYTRACING( m_boardAdapter, m_camera );
     m_3d_render_ogl_legacy = new C3D_RENDER_OGL_LEGACY( m_boardAdapter, m_camera );
@@ -361,10 +364,15 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent& aEvent )
 
 void EDA_3D_CANVAS::DoRePaint()
 {
+    if( m_is_currently_painting.test_and_set() )
+        return;
+
+
     // SwapBuffer requires the window to be shown before calling
     if( !IsShownOnScreen() )
     {
         wxLogTrace( m_logTrace, "EDA_3D_CANVAS::DoRePaint !IsShown" );
+        m_is_currently_painting.clear();
         return;
     }
 
@@ -414,6 +422,7 @@ void EDA_3D_CANVAS::DoRePaint()
         if( !initializeOpenGL() )
         {
             GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
+            m_is_currently_painting.clear();
 
             return;
         }
@@ -435,6 +444,7 @@ void EDA_3D_CANVAS::DoRePaint()
         SwapBuffers();
 
         GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
+        m_is_currently_painting.clear();
 
         return;
     }
@@ -493,19 +503,32 @@ void EDA_3D_CANVAS::DoRePaint()
 
     if( m_3d_render )
     {
-        m_3d_render->SetCurWindowSize( clientSize );
+        try
+        {
+            m_3d_render->SetCurWindowSize( clientSize );
 
-        bool reloadRaytracingForIntersectionCalculations = false;
+            bool reloadRaytracingForIntersectionCalculations = false;
 
-        if( ( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY ) &&
-            m_3d_render_ogl_legacy->IsReloadRequestPending() )
-            reloadRaytracingForIntersectionCalculations = true;
+            if( ( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+                    && m_3d_render_ogl_legacy->IsReloadRequestPending() )
+                reloadRaytracingForIntersectionCalculations = true;
 
-        requested_redraw = m_3d_render->Redraw( m_mouse_was_moved || m_camera_is_moving,
-                                                &activityReporter, &warningReporter );
+            requested_redraw = m_3d_render->Redraw(
+                    m_mouse_was_moved || m_camera_is_moving, &activityReporter, &warningReporter );
 
-        if( reloadRaytracingForIntersectionCalculations )
-            m_3d_render_raytracing->Reload( nullptr, nullptr, true );
+            if( reloadRaytracingForIntersectionCalculations )
+                m_3d_render_raytracing->Reload( nullptr, nullptr, true );
+        }
+        catch( std::runtime_error& err )
+        {
+            DisplayInfoMessage( m_parent, _( "Unable to use OpenGL" ), wxString( err.what() ) );
+            m_is_opengl_version_supported = false;
+            m_opengl_supports_raytracing  = false;
+            m_is_opengl_initialized       = false;
+            GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
+            m_is_currently_painting.clear();
+            return;
+        }
     }
 
     if( m_render_pivot )
@@ -546,6 +569,8 @@ void EDA_3D_CANVAS::DoRePaint()
         m_mouse_was_moved = false;
         Request_refresh( false );
     }
+
+    m_is_currently_painting.clear();
 }
 
 
@@ -872,7 +897,8 @@ void EDA_3D_CANVAS::stop_editingTimeOut_Timer()
 
 void EDA_3D_CANVAS::restart_editingTimeOut_Timer()
 {
-    m_editing_timeout_timer.Start( m_3d_render->GetWaitForEditingTimeOut() , wxTIMER_ONE_SHOT );
+    if( m_3d_render )
+        m_editing_timeout_timer.Start( m_3d_render->GetWaitForEditingTimeOut(), wxTIMER_ONE_SHOT );
 }
 
 
