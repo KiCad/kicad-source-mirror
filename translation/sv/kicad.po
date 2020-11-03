@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-10-29 15:47+0000\n"
+"PO-Revision-Date: 2020-11-03 18:15+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -150,9 +150,8 @@ msgid "Create layers"
 msgstr "Skapa lager"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:475
-#, fuzzy
 msgid "Board outline is not closed:"
-msgstr "Lägg till linje"
+msgstr "Krets layouten är ej sluten:"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
@@ -172,7 +171,7 @@ msgstr "Förenkla hålkonturerna"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:880
 msgid "Build Tech layers"
-msgstr "Bygg Tekniska Lager"
+msgstr "Bygg tekniska lager"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1065
 msgid "Build BVH for holes and vias"
@@ -180,7 +179,7 @@ msgstr "Bygg begränsande volymhierarki för hål och via"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:423
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr "Din OpenGL-version stöds inte. Minsta krävs är 1,5"
+msgstr "Din OpenGL-version stöds inte. Minsta krav är 1,5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
@@ -295,14 +294,12 @@ msgid "Choose Colors"
 msgstr "Välj Färger"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:156
-#, fuzzy
 msgid "Background Top Color..."
-msgstr "Bakgrundsfärg:"
+msgstr "Bakgrundsfärg, topp..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:160
-#, fuzzy
 msgid "Background Bottom Color..."
-msgstr "Bakgrundsfärg:"
+msgstr "Bakgrundsfärg, botten..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:164
 msgid "Silkscreen Color..."
@@ -321,9 +318,8 @@ msgid "Copper/Surface Finish Color..."
 msgstr "Färg för Finish för Koppar/Yta..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:180
-#, fuzzy
 msgid "Board Body Color..."
-msgstr "Bakgrundsfärg:"
+msgstr "Bakgrundsfärg, mönsterkort..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:187
 msgid "Get colors from physical stackup"
@@ -343,9 +339,8 @@ msgstr "Återställ Standardinställningar"
 #: gerbview/menubar.cpp:212 kicad/menubar.cpp:165
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:231
 #: pcbnew/menubar_pcb_editor.cpp:440
-#, fuzzy
 msgid "Preferences...\tCTRL+,"
-msgstr "&Inställningar"
+msgstr "Inställningar... CTRL+,"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:214 cvpcb/menubar.cpp:72
 #: eeschema/libedit/menubar_libedit.cpp:162 eeschema/menubar.cpp:265
@@ -435,9 +430,8 @@ msgstr ""
 "(Långsam)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:98
-#, fuzzy
 msgid "3D Model Visibility"
-msgstr "Välj nät"
+msgstr "3D modell synlighet"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:111
 msgid "Show 3D through hole models"
@@ -452,28 +446,24 @@ msgid "Show 3D virtual models"
 msgstr "Visa virtuella 3D-modeller"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:148
-#, fuzzy
 msgid "Board Layers"
-msgstr "&Spara lager"
+msgstr "Kretskort Lager"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:161
 msgid "Show silkscreen layers"
 msgstr "Visa silkskiktslager"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:170
-#, fuzzy
 msgid "Show solder mask layers"
-msgstr "Rensa alla lager"
+msgstr "Visa alla lödmask lager"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:179
-#, fuzzy
 msgid "Show solder paste layers"
-msgstr "Rensa alla lager"
+msgstr "Visa alla lödpasta lager"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:188
-#, fuzzy
 msgid "Show adhesive layers"
-msgstr "&Spara lager"
+msgstr "Visa bindemedels lager"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:198
 msgid "User Layers (not shown in realistic mode)"
@@ -488,14 +478,12 @@ msgid "Show ECO layers"
 msgstr "Visa ECO-lager"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:230
-#, fuzzy
 msgid "Camera Options"
-msgstr "Linjeegenskaper"
+msgstr "Kamera Alternativ"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:235
-#, fuzzy
 msgid "Rotation Increment:"
-msgstr "Radera text"
+msgstr "Rotationsinkrement:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:243
 #: common/base_units.cpp:520 pcbnew/dialogs/dialog_copper_zones_base.cpp:298
@@ -508,40 +496,34 @@ msgid "deg"
 msgstr "grader"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:253
-#, fuzzy
 msgid "Enable animation"
-msgstr "&Kör simulator"
+msgstr "Aktivera animering"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:260
-#, fuzzy
 msgid "Animation speed:"
-msgstr "Annotera schema komponenter"
+msgstr "Animations hastighet:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
-#, fuzzy
 msgid "OpenGL Render Options"
-msgstr "Allmäna inställningar"
+msgstr "OpenGL Renderings Alternativ"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:304
 msgid "Show model bounding boxes"
 msgstr "Visa modellgränsrutor"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:313
-#, fuzzy
 msgid "Show copper thickness"
-msgstr "Visa pinnar"
+msgstr "Visa koppar tjocklek"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:323
-#, fuzzy
 msgid "Other Options"
-msgstr "Spara inställningar"
+msgstr "Andra Alternativ"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:333
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:445
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
-#, fuzzy
 msgid "Anti-aliasing"
-msgstr "Italienska"
+msgstr "Anti-aliasing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "Disabled"
@@ -565,42 +547,36 @@ msgstr ""
 "3D-Viewer måste stängas och öppnas igen för att tillämpa denna inställning"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:348
-#, fuzzy
 msgid "Selection color"
-msgstr "Markera föremål"
+msgstr "Urvalsfärg"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "While Moving"
 msgstr "Medan du rör dig"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:372
-#, fuzzy
 msgid "Disable anti-aliasing"
-msgstr "Italienska"
+msgstr "Inaktivera anti-aliasing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:378
-#, fuzzy
 msgid "Disable thickness"
-msgstr "Linjeegenskaper"
+msgstr "Inaktivera tjockleken"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:384
-#, fuzzy
 msgid "Disable vias"
-msgstr "Design regler"
+msgstr "Inaktivera vias"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:390
 msgid "Disable holes"
 msgstr "Inaktivera hål"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:406
-#, fuzzy
 msgid "OpenGL"
-msgstr "&Öppna"
+msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:420
-#, fuzzy
 msgid "Raytracing Render Options"
-msgstr "Linjeegenskaper"
+msgstr "Raytracing Render Alternativ"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:431
 msgid "Procedural textures"
@@ -613,14 +589,12 @@ msgstr "Lägg till fält"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:452
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:262
-#, fuzzy
 msgid "Post-processing"
-msgstr "E&fterbehandling"
+msgstr "Efter-behandling"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:473
-#, fuzzy
 msgid "Number of Samples"
-msgstr "Antal lager:"
+msgstr "Antal Urval"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:477
 msgid "Spread Factor %"
@@ -650,9 +624,8 @@ msgstr "Slumpmässig riktningsfaktor för gjutna strålar"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:509
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
-#, fuzzy
 msgid "Reflections"
-msgstr "Markering"
+msgstr "Avspeglingar"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:514
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -669,9 +642,8 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:532
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:247
-#, fuzzy
 msgid "Refractions"
-msgstr "Information"
+msgstr "Brytningar"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:537
 msgid "Number of rays that will be cast to evaluate a refraction point"
@@ -683,18 +655,16 @@ msgstr "Antal studsar som en stråle kan träffa reflekterande föremål"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:574
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:798
-#, fuzzy
 msgid "Lights configuration"
-msgstr "&Konfiguration"
+msgstr "Ljus konfiguration"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:582
 msgid "Ambient Camera Light"
 msgstr "Omgivande kameraljus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
-#, fuzzy
 msgid "Top Light"
-msgstr "Höger"
+msgstr "Topp Belysning"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:611
 msgid "Bottom Light"
@@ -702,15 +672,13 @@ msgstr "Bottenljus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:635
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:652
-#, fuzzy
 msgid "Elevation (degrees)"
-msgstr "Orientera (0.1 grader)"
+msgstr "Elevation (grader)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:639
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:656
-#, fuzzy
 msgid "Azimuth (degrees)"
-msgstr "Orientera (0.1 grader)"
+msgstr "Azimut (grader)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:660
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
@@ -759,17 +727,15 @@ msgstr "6"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:51
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:110
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:171
-#, fuzzy
 msgid "3"
-msgstr "&3"
+msgstr "3"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:734
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:114
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:175
-#, fuzzy
 msgid "7"
-msgstr "&7"
+msgstr "7"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:747
 #: pcbnew/dialogs/dialog_create_array_base.cpp:258
@@ -789,29 +755,24 @@ msgid "8"
 msgstr "8"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:785
-#, fuzzy
 msgid "Reset to defaults"
-msgstr "Standard"
+msgstr "Återställ till standardvärden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.h:179
-#, fuzzy
 msgid "3D Display Options"
-msgstr "Visningsalternativ"
+msgstr "3D Visnings Alternativ"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:337
-#, fuzzy
 msgid "Background Color, Bottom"
-msgstr "Bakgrundsfärg:"
+msgstr "Bakgrunds Färg, Botten"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:343
-#, fuzzy
 msgid "Background Color, Top"
-msgstr "Bakgrundsfärg:"
+msgstr "Bakgrunds Färg, Topp"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:807
-#, fuzzy
 msgid "3D Image File Name"
-msgstr "%Filnamn:"
+msgstr "3D-Bild Fil Namn"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:828
 #, c-format
@@ -830,14 +791,12 @@ msgid "Error"
 msgstr "Fel"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:860
-#, fuzzy
 msgid "Failed to copy image to clipboard"
-msgstr "Kopiera 3D bild till urklipp"
+msgstr "Misslyckad kopiering av bild till urklipp"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:871
-#, fuzzy
 msgid "Can't save file"
-msgstr "Kan inte spara fil <%s>"
+msgstr "Kan inte spara fil"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:922
 msgid "Silkscreen Color"
@@ -848,14 +807,12 @@ msgid "Solder Mask Color"
 msgstr "Lödmaskfärg"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:976
-#, fuzzy
 msgid "Copper Color"
-msgstr "Kopparlager"
+msgstr "Koppar Färglager"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1000
-#, fuzzy
 msgid "Board Body Color"
-msgstr "Bakgrundsfärg:"
+msgstr "Kretskortets Bakgrunds Färg"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1019
 msgid "Solder Paste Color"
@@ -870,70 +827,60 @@ msgid "Center pivot rotation (middle mouse click)"
 msgstr "Centrera pivotrotation (mitt musklick)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:48
-#, fuzzy
 msgid "Rotate X Clockwise"
-msgstr "Rotera block"
+msgstr "Rotera X Medurs"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:53
 msgid "Rotate X Counterclockwise"
 msgstr "Rotera motsols"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:58
-#, fuzzy
 msgid "Rotate Y Clockwise"
-msgstr "Rotera block"
+msgstr "Rotera Y Medurs"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:63
 msgid "Rotate Y Counterclockwise"
 msgstr "Rotera motsols"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:68
-#, fuzzy
 msgid "Rotate Z Clockwise"
-msgstr "Rotera block"
+msgstr "Rotera Z Medurs"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:73
 msgid "Rotate Z Counterclockwise"
 msgstr "Rotera motsols"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:79
-#, fuzzy
 msgid "Move board Left"
-msgstr "Spara kretskort"
+msgstr "Flytta mönsterkortet åt Vänster"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:85
-#, fuzzy
 msgid "Move board Right"
-msgstr "Flytta höger ->"
+msgstr "Flytta mönsterkortet åt Höger"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:91
-#, fuzzy
 msgid "Move board Up"
-msgstr "Spara kretskort"
+msgstr "Flytta kretskort uppåt"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:97
-#, fuzzy
 msgid "Move board Down"
-msgstr "Flytta ner"
+msgstr "Flytta kretskort neråt"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:103
-#, fuzzy
 msgid "Home view"
-msgstr "Förhandsgranskning"
+msgstr "Hem vy"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:109
 msgid "Reset view"
 msgstr "Återställ vy"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
-#, fuzzy
 msgid "Flip Board"
-msgstr "urklipp"
+msgstr "Vänd Kretskortet"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
-#, fuzzy
 msgid "Flip the board view"
-msgstr "Välj bibliotek att bläddra i"
+msgstr "Vänd kretskorts vyn"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
 msgid "Toggle orthographic projection"
@@ -952,54 +899,44 @@ msgid "View Back"
 msgstr "Visa tillbaka"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:138
-#, fuzzy
 msgid "View Left"
-msgstr "Vänster"
+msgstr "Vänster Vy"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:144
-#, fuzzy
 msgid "View Right"
-msgstr "Höger"
+msgstr "Höger Vy"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:150
-#, fuzzy
 msgid "View Top"
-msgstr "&Visa"
+msgstr "Visa Topp"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:156
-#, fuzzy
 msgid "View Bottom"
-msgstr "&Visa"
+msgstr "Visa Botten"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:161
-#, fuzzy
 msgid "No 3D Grid"
-msgstr "Visa rutnät"
+msgstr "Inget 3D Rutnät"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:166
-#, fuzzy
 msgid "3D Grid 10mm"
-msgstr "Rutnät"
+msgstr "3D Rutnät 10mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:171
-#, fuzzy
 msgid "3D Grid 5mm"
-msgstr "Rutnät"
+msgstr "3D Rutnät 5mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:176
-#, fuzzy
 msgid "3D Grid 2.5mm"
-msgstr "Rutnät"
+msgstr "3D Rutnät 2,5mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:181
-#, fuzzy
 msgid "3D Grid 1mm"
-msgstr "Rutnät"
+msgstr "3D Rutnät 1mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:187
-#, fuzzy
 msgid "Use All Properties"
-msgstr "Egenskaper"
+msgstr "Använd Alla Egenskaper"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:187
 msgid "Use all material properties from each 3D model file"
@@ -1062,9 +999,8 @@ msgid "Apply procedural textures to materials (slow)"
 msgstr "Applicera procedurstrukturer på material (långsam)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:242
-#, fuzzy
 msgid "Add Floor"
-msgstr "Lägg till fält"
+msgstr "Lägg Till Fält"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:242
 msgid "Adds a floor plane below the board (slow)"
@@ -1100,23 +1036,20 @@ msgid "Toggle board body display"
 msgstr "Växla brädans kroppsvisning"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:278
-#, fuzzy
 msgid "Show 3D Axis"
-msgstr "Visa pinnar"
+msgstr "Visa 3D-axel"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:283
 msgid "Toggle zone display"
 msgstr "Växla zonvisning"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:288
-#, fuzzy
 msgid "Toggle adhesive display"
-msgstr "&Spara lager"
+msgstr "Växla bindlager visning"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:288
-#, fuzzy
 msgid "Toggle display of adhesive layers"
-msgstr "&Spara lager"
+msgstr "Växla visning av limskikt lager"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:293
 msgid "Toggle silkscreen display"
@@ -1127,24 +1060,20 @@ msgid "Toggle display of silkscreen layers"
 msgstr "Växla visning av silkskiktslager"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:298
-#, fuzzy
 msgid "Toggle solder mask display"
-msgstr "Rensa alla lager"
+msgstr "Växla lödmask visning"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:298
-#, fuzzy
 msgid "Toggle display of solder mask layers"
-msgstr "Rensa alla lager"
+msgstr "Växla visning av lödmask lager"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:303
-#, fuzzy
 msgid "Toggle solder paste display"
-msgstr "Rensa alla lager"
+msgstr "Växla visning av lödpasta"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:303
-#, fuzzy
 msgid "Toggle display of solder paste layers"
-msgstr "Rensa alla lager"
+msgstr "Växla visning av lödpasta lager"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:308
 msgid "Toggle comments display"
@@ -1269,42 +1198,36 @@ msgstr "Välj bild"
 #: bitmap2component/bitmap2cmp_gui.cpp:331
 #: eeschema/tools/sch_drawing_tools.cpp:382
 #: pagelayout_editor/pl_editor_frame.cpp:846
-#, fuzzy
 msgid "Image Files"
-msgstr "%Filnamn:"
+msgstr "Bild Filer"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:687
-#, fuzzy
 msgid "Unable to export to the Clipboard"
-msgstr "Kopiera 3D bild till urklipp"
+msgstr "Det gick inte att exportera till Urklipp"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:722
-#, fuzzy
 msgid "Create Logo File"
-msgstr "Skapa &fil"
+msgstr "Skapa Logo Fil"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:740
 #: bitmap2component/bitmap2cmp_gui.cpp:780
 #: bitmap2component/bitmap2cmp_gui.cpp:819
 #: bitmap2component/bitmap2cmp_gui.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" could not be created."
-msgstr "Hjälpfilen '%s' kunde inte hittas."
+msgstr "Filen \"%s\" kunde inte skapas."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:760
-#, fuzzy
 msgid "Create PostScript File"
-msgstr "Skapa &fil"
+msgstr "Skapa PostScript Fil"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:800
-#, fuzzy
 msgid "Create Symbol Library"
-msgstr "&Nuvarande bilbiotek"
+msgstr "Skapa Symbol Bibliotek"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:839
-#, fuzzy
 msgid "Create Footprint Library"
-msgstr "&Nuvarande bilbiotek"
+msgstr "Skapa Fotavtrycks Bibliotek"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:881
 msgid "Error allocating memory for potrace bitmap"
@@ -1330,16 +1253,15 @@ msgstr "Bild i gråskala"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:32
 msgid "Black&&White Picture"
-msgstr "Svart && vit bild"
+msgstr "Svart/Vit Bild"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:41
 msgid "Bitmap Info:"
 msgstr "Bitmappsinformation:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:50
-#, fuzzy
 msgid "Bitmap size:"
-msgstr "Storlek på rutnät:"
+msgstr "Storlek på bitmappen:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:54
 #: bitmap2component/bitmap2cmp_gui_base.cpp:58
@@ -1370,9 +1292,8 @@ msgid "bits"
 msgstr "bitar"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:104
-#, fuzzy
 msgid "Output Parameters:"
-msgstr "Parameter"
+msgstr "Utgångs Parametrar:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
@@ -1394,15 +1315,13 @@ msgid "Load Bitmap"
 msgstr "Ladda bitmapp"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:152
-#, fuzzy
 msgid "Export to File"
-msgstr "Exportera SV&G"
+msgstr "Exportera till Fil"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:155
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:178
-#, fuzzy
 msgid "Export to Clipboard"
-msgstr "Exportera kretskort"
+msgstr "Exportera till Urklipp"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Eeschema (.lib file)"
@@ -1413,28 +1332,24 @@ msgid "Pcbnew (.kicad_mod file)"
 msgstr "Pcbnew (.kicad_mod-fil)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "PostScript (.ps file)"
-msgstr "Beskrivning"
+msgstr "PostScript (.ps fil)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Logo for title block (.kicad_wks file)"
 msgstr "Logotyp för titelblock (fil .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
-#, fuzzy
 msgid "Format:"
-msgstr "Normal"
+msgstr "Format:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:165
-#, fuzzy
 msgid "Image Options:"
-msgstr "Linjeegenskaper"
+msgstr "Bild Alternativ:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:167
-#, fuzzy
 msgid "Black / White Threshold:"
-msgstr "Svartvitt"
+msgstr "Svart/Vit Tröskel:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:172
 msgid ""
@@ -1480,9 +1395,8 @@ msgstr ""
 "kommer att markeras som osynligt)."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
-#, fuzzy
 msgid "Bitmap to Component Converter"
-msgstr "Redigera komponentegenskaper"
+msgstr "Bitmapp till Komponent Konverter"
 
 #: common/base_units.cpp:480
 msgid "sq. mm"
@@ -1574,20 +1488,17 @@ msgid "Cannot create output directory \"%s\".\n"
 msgstr "Det går inte att skapa utdatakatalogen \"%s\".\n"
 
 #: common/confirm.cpp:56
-#, fuzzy
 msgid "Do not show again"
-msgstr "Dölj zoner"
+msgstr "Visa inte igen"
 
 #: common/confirm.cpp:122
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:250
-#, fuzzy
 msgid "Message"
-msgstr "Meddelanden:"
+msgstr "Meddelanden"
 
 #: common/confirm.cpp:123
-#, fuzzy
 msgid "Question"
-msgstr "Beskrivning"
+msgstr "Fråga"
 
 #: common/confirm.cpp:124 common/confirm.cpp:245
 #: common/dialogs/panel_setup_severities.cpp:40
@@ -1606,14 +1517,12 @@ msgstr "Om du inte sparar förloras alla dina ändringar permanent."
 #: common/confirm.cpp:156 common/confirm.cpp:183 common/tool/actions.cpp:65
 #: eeschema/libedit/libedit.cpp:465 eeschema/widgets/tuner_slider_base.cpp:66
 #: pcbnew/footprint_libraries_utils.cpp:894
-#, fuzzy
 msgid "Save"
-msgstr "&Spara"
+msgstr "Spara"
 
 #: common/confirm.cpp:156 common/confirm.cpp:183
-#, fuzzy
 msgid "Discard Changes"
-msgstr "Ånga senaste"
+msgstr "Ignorera Ändringar"
 
 #: common/confirm.cpp:159 common/confirm.cpp:227
 msgid "Apply to all"
@@ -1624,9 +1533,8 @@ msgid "Your current changes will be permanently lost."
 msgstr "Dina nuvarande ändringar kommer att förloras permanent."
 
 #: common/confirm.cpp:196 common/tool/actions.cpp:89
-#, fuzzy
 msgid "Revert"
-msgstr "Aldrig"
+msgstr "Återställ"
 
 #: common/confirm.cpp:196 common/tool/actions.cpp:120
 #: eeschema/dialogs/dialog_erc.cpp:292
@@ -1683,9 +1591,8 @@ msgid "The official KiCad website - "
 msgstr "Den officiella KiCad-webbplatsen - "
 
 #: common/dialog_about/AboutDialog_main.cpp:136
-#, fuzzy
 msgid "Developer website - "
-msgstr "Projektet på Launchpad"
+msgstr "Webbplats för utvecklare - "
 
 #: common/dialog_about/AboutDialog_main.cpp:141
 msgid "Official KiCad library repositories - "
@@ -1758,14 +1665,12 @@ msgstr "Om %s"
 
 #: common/dialog_about/dialog_about.cpp:118
 #: common/dialog_about/dialog_about_base.h:56
-#, fuzzy
 msgid "About"
-msgstr "&Om"
+msgstr "Om"
 
 #: common/dialog_about/dialog_about.cpp:123
-#, fuzzy
 msgid "Version"
-msgstr "Kopiera &versions information"
+msgstr "Version"
 
 #: common/dialog_about/dialog_about.cpp:125
 msgid "Developers"
@@ -1776,9 +1681,8 @@ msgid "Doc Writers"
 msgstr "Doc Writers"
 
 #: common/dialog_about/dialog_about.cpp:130
-#, fuzzy
 msgid "Librarians"
-msgstr "Bibliotek"
+msgstr "Bibliotekarier"
 
 #: common/dialog_about/dialog_about.cpp:133
 msgid "Artists"
@@ -1825,38 +1729,32 @@ msgid "Lib Version Info"
 msgstr "Lib Version Info"
 
 #: common/dialog_about/dialog_about_base.cpp:58
-#, fuzzy
 msgid "&Copy Version Info"
-msgstr "Kopiera &versions information"
+msgstr "Kopiera Versions Information"
 
 #: common/dialog_about/dialog_about_base.cpp:59
-#, fuzzy
 msgid "Copy KiCad version info to the clipboard"
-msgstr "Versions information (kopierad till urklipp)"
+msgstr "Kopiera KiCad versions information till Urklipp"
 
 #: common/dialog_about/dialog_about_base.cpp:63
-#, fuzzy
 msgid "&Report Bug"
-msgstr "Importera filer"
+msgstr "Rapportera Fel"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:626
-#, fuzzy
 msgid "Report a problem with KiCad"
-msgstr "Kom igång med KiCad"
+msgstr "Rapportera problem med KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:89
 msgid "&OK"
 msgstr "&OK"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:46
-#, fuzzy
 msgid "Report"
-msgstr "Importera filer"
+msgstr "Rapportera"
 
 #: common/dialogs/dialog_color_picker.cpp:94
-#, fuzzy
 msgid "Clear Color"
-msgstr "Kopparlager"
+msgstr "Klar färg"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -1867,9 +1765,8 @@ msgid "Red:"
 msgstr "Röd:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:50
-#, fuzzy
 msgid "Green:"
-msgstr "Grekiska"
+msgstr "Grön:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:54
 msgid "Blue:"
@@ -1884,9 +1781,8 @@ msgid "Hue:"
 msgstr "Nyans:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:95
-#, fuzzy
 msgid "Saturation:"
-msgstr "&Kör simulator"
+msgstr "Mättnad:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:114
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45
@@ -1899,14 +1795,12 @@ msgstr "Värde:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:134
 #: common/dialogs/dialog_color_picker_base.h:96
-#, fuzzy
 msgid "Color Picker"
-msgstr "Färger"
+msgstr "Färg Väljare"
 
 #: common/dialogs/dialog_color_picker_base.cpp:154
-#, fuzzy
 msgid "Defined Colors"
-msgstr "Färger"
+msgstr "Fastställda Färger"
 
 #: common/dialogs/dialog_color_picker_base.cpp:163
 msgid "Opacity:"
@@ -1917,9 +1811,8 @@ msgid "Preview (old/new):"
 msgstr "Förhandsgranska (gammalt / nytt):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
-#, fuzzy
 msgid "Reset to Default"
-msgstr "Standard"
+msgstr "Återställ till standard"
 
 #: common/dialogs/dialog_configure_paths.cpp:248
 #: common/dialogs/dialog_configure_paths.cpp:318
@@ -1970,15 +1863,13 @@ msgid "The name %s is reserved, and cannot be used here"
 msgstr "Namnet %s är reserverat och kan inte användas här"
 
 #: common/dialogs/dialog_configure_paths.cpp:493
-#, fuzzy
 msgid "File Browser..."
-msgstr "Pdfväljare"
+msgstr "Fil Hanterare..."
 
 #: common/dialogs/dialog_configure_paths.cpp:496
 #: common/widgets/grid_text_button_helpers.cpp:378
-#, fuzzy
 msgid "Select Path"
-msgstr "Välj nät"
+msgstr "Välj Sökväg"
 
 #: common/dialogs/dialog_configure_paths.cpp:575
 msgid ""
@@ -2041,9 +1932,8 @@ msgid "Path"
 msgstr "Sökväg"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:74
-#, fuzzy
 msgid "3D Search Paths"
-msgstr "Konfiguration"
+msgstr "3D Sökvägar"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:92 common/eda_item.cpp:304
 msgid "Alias"
@@ -2190,20 +2080,17 @@ msgid "dummy"
 msgstr "dummy"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
-#, fuzzy
 msgid "Select a file"
-msgstr "Markera föremål"
+msgstr "Välj fil"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:56
-#, fuzzy
 msgid "Configure Global Library Table"
-msgstr "Välj bibliotek"
+msgstr "Konfigurera Global Biblioteks Tabell"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:26 common/tool/actions.cpp:442
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
-#, fuzzy
 msgid "Grid Origin"
-msgstr "Rutnäts origo"
+msgstr "Rutnäts Origo"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:63
 #: common/dialogs/dialog_grid_settings_base.cpp:78
@@ -2231,9 +2118,8 @@ msgid "a page"
 msgstr "en sida"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:67
-#, fuzzy
 msgid "Current Grid"
-msgstr "Nuvarande"
+msgstr "Nuvarande Rutnät"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:83
 msgid "User Defined Grid"
@@ -2257,9 +2143,8 @@ msgstr "Rutnät 1:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:142
 #: common/dialogs/dialog_grid_settings_base.cpp:157
-#, fuzzy
 msgid "(hotkey)"
-msgstr "Snabbtangent"
+msgstr "(Snabbtangent)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:146
 msgid "Grid 2:"
@@ -2270,14 +2155,12 @@ msgid "Reset Grid Origin"
 msgstr "Återställ rutnätets ursprung"
 
 #: common/dialogs/dialog_grid_settings_base.h:79
-#, fuzzy
 msgid "Grid Settings"
-msgstr "Sidinställningar"
+msgstr "Rutnäts Inställningar"
 
 #: common/dialogs/dialog_hotkey_list.cpp:34
-#, fuzzy
 msgid "Hotkey List"
-msgstr "Snabbtangenter"
+msgstr "Snabbtangent Lista"
 
 #: common/dialogs/dialog_image_editor.cpp:72
 msgid "Incorrect scale number"
@@ -2325,9 +2208,8 @@ msgid "Import settings from a previous version (none found)"
 msgstr "Importera inställningar från en tidigare version (ingen hittades)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:118
-#, fuzzy
 msgid "Select Settings Path"
-msgstr "Välj nät"
+msgstr "Välj Inställningssökväg"
 
 #: common/dialogs/dialog_page_settings.cpp:62
 msgid "A5 148x210mm"
@@ -2390,14 +2272,12 @@ msgid "User (Custom)"
 msgstr "Användare (anpassad)"
 
 #: common/dialogs/dialog_page_settings.cpp:104
-#, fuzzy
 msgid "Preview Settings"
-msgstr "Sidinställningar"
+msgstr "Förvisning av Inställningar"
 
 #: common/dialogs/dialog_page_settings.cpp:105
-#, fuzzy
 msgid "Preview Paper"
-msgstr "Förhandsgranskning"
+msgstr "Förhandsgranska Papper"
 
 #: common/dialogs/dialog_page_settings.cpp:106
 msgid "Preview Title Block Data"
@@ -2414,9 +2294,8 @@ msgid "Paper"
 msgstr "Papper"
 
 #: common/dialogs/dialog_page_settings.cpp:112
-#, fuzzy
 msgid "Title Block"
-msgstr "Placera block"
+msgstr "Titel Block"
 
 #: common/dialogs/dialog_page_settings.cpp:305
 #: common/dialogs/dialog_page_settings.cpp:801
@@ -2425,9 +2304,9 @@ msgid "Portrait"
 msgstr "Porträtt"
 
 #: common/dialogs/dialog_page_settings.cpp:520
-#, fuzzy, c-format
+#, c-format
 msgid "Page layout description file \"%s\" not found."
-msgstr "Hjälpfilen %s kunde inte hittas"
+msgstr "Sidlayoutbeskrivningsfilen \"%s\" hittades inte."
 
 #: common/dialogs/dialog_page_settings.cpp:592
 msgid "the translation for paper size must preserve original spellings"
@@ -2473,9 +2352,8 @@ msgid "Orientation:"
 msgstr "Orientering:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:55
-#, fuzzy
 msgid "Custom paper size:"
-msgstr "Storlek på rutnät:"
+msgstr "Anpassad pappersstorlek:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:67
 #: pcbnew/dialogs/dialog_board_statistics.cpp:98
@@ -2612,9 +2490,8 @@ msgid "<<<"
 msgstr "<<<"
 
 #: common/dialogs/dialog_page_settings_base.cpp:188
-#, fuzzy
 msgid "Revision:"
-msgstr "Precision"
+msgstr "Revision:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:200
 #: eeschema/dialogs/dialog_netlist.cpp:431
@@ -2626,7 +2503,6 @@ msgid "Company:"
 msgstr "Företag:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:224
-#, fuzzy
 msgid "Comment1:"
 msgstr "Kommentar1:"
 
@@ -2643,29 +2519,24 @@ msgid "Comment4:"
 msgstr "Kommentar4:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:272
-#, fuzzy
 msgid "Comment5:"
-msgstr "Kommentar1:"
+msgstr "Kommentar5:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:284
-#, fuzzy
 msgid "Comment6:"
-msgstr "Kommentar1:"
+msgstr "Kommentar6:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:296
-#, fuzzy
 msgid "Comment7:"
-msgstr "Kommentar1:"
+msgstr "Kommentar7:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:308
-#, fuzzy
 msgid "Comment8:"
-msgstr "Kommentar1:"
+msgstr "Kommentar8:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:320
-#, fuzzy
 msgid "Comment9:"
-msgstr "Kommentar1:"
+msgstr "Kommentar9:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:338
 msgid "Page layout description file"
@@ -2735,9 +2606,8 @@ msgstr ""
 
 #: common/dialogs/dialog_print_generic.cpp:191
 #: common/dialogs/dialog_print_generic.cpp:238
-#, fuzzy
 msgid "Nothing to print"
-msgstr "Ingenting hittat"
+msgstr "Ingenting att skrivas ut"
 
 #: common/dialogs/dialog_print_generic.cpp:229
 #: eeschema/dialogs/dialog_print_using_printer.cpp:312
@@ -2745,9 +2615,8 @@ msgid "Previous print job not yet complete."
 msgstr "Tidigare utskriftsjobb ännu inte slutfört."
 
 #: common/dialogs/dialog_print_generic.cpp:253
-#, fuzzy
 msgid "There was a problem printing."
-msgstr "Ett problem uppstod vid utskrift"
+msgstr "Ett problem uppstod vid utskrift."
 
 #: common/dialogs/dialog_print_generic.cpp:300
 msgid "An error occurred initializing the printer information."
@@ -2770,9 +2639,8 @@ msgstr "Inställningar"
 
 #: common/dialogs/dialog_print_generic_base.cpp:31
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:72
-#, fuzzy
 msgid "Output mode:"
-msgstr "Importera modul:"
+msgstr "Utmatnings Läge:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
@@ -2792,9 +2660,8 @@ msgid "Print border and title block"
 msgstr "Skriv ut ram och titelblock"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
-#, fuzzy
 msgid "Print Frame references."
-msgstr "Spara inställningar"
+msgstr "Skriv ut Ramreferenser."
 
 #: common/dialogs/dialog_print_generic_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:129
@@ -2806,9 +2673,8 @@ msgid "Fit to page"
 msgstr "Anpassa till sida"
 
 #: common/dialogs/dialog_print_generic_base.cpp:70
-#, fuzzy
 msgid "Custom:"
-msgstr "Ändra muspekare"
+msgstr "Anpassning:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:74
 msgid "Set X scale adjust for exact scale plotting"
@@ -2816,22 +2682,19 @@ msgstr "Ställ in X-skala för att justera exakt skala"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
-#, fuzzy
 msgid "Page Setup..."
-msgstr "Sidinställningar"
+msgstr "Sidinställningar..."
 
 #: common/dialogs/dialog_text_entry_base.cpp:22
 #: common/dialogs/dialog_unit_entry_base.cpp:22
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1540
-#, fuzzy
 msgid "MyLabel"
-msgstr "Etikett"
+msgstr "MyLabel"
 
 #: common/dialogs/eda_list_dialog.cpp:46 common/widgets/lib_tree.cpp:118
 #: pcbnew/footprint_viewer_frame.cpp:141 pcbnew/footprint_viewer_frame.cpp:156
-#, fuzzy
 msgid "Filter"
-msgstr "Nät filter"
+msgstr "Filtrera"
 
 #: common/dialogs/eda_list_dialog_base.cpp:22
 msgid "Items:"
@@ -2847,14 +2710,12 @@ msgid "Reveal Themes in Finder"
 msgstr "Avslöja teman i Finder"
 
 #: common/dialogs/panel_color_settings.cpp:130
-#, fuzzy
 msgid "New theme name:"
-msgstr "Filnamn"
+msgstr "Nytt tema namn:"
 
 #: common/dialogs/panel_color_settings.cpp:130
-#, fuzzy
 msgid "Add Color Theme"
-msgstr "Ställ in färgschema"
+msgstr "Lägg till Färg Tema"
 
 #: common/dialogs/panel_color_settings.cpp:142
 msgid "Theme already exists!"
@@ -2870,14 +2731,12 @@ msgid "(read-only)"
 msgstr "(skrivskyddad)"
 
 #: common/dialogs/panel_color_settings.cpp:282
-#, fuzzy
 msgid "Copy color"
-msgstr "Kopparlager"
+msgstr "Kopiera färg"
 
 #: common/dialogs/panel_color_settings.cpp:285
-#, fuzzy
 msgid "Paste color"
-msgstr "Spara inställningar"
+msgstr "Klistra in färg"
 
 #: common/dialogs/panel_color_settings.cpp:288
 msgid "Revert to saved color"
@@ -2906,9 +2765,8 @@ msgstr ""
 "egenskaper."
 
 #: common/dialogs/panel_color_settings_base.cpp:41
-#, fuzzy
 msgid "Open Theme Folder"
-msgstr "Välj bibliotek att bläddra i"
+msgstr "Öppna Tema Mappen"
 
 #: common/dialogs/panel_color_settings_base.cpp:42
 msgid "Open the folder containing color themes"
@@ -2951,12 +2809,10 @@ msgid "Executable files ("
 msgstr "Körbara filer ("
 
 #: common/dialogs/panel_common_settings.cpp:286
-#, fuzzy
 msgid "Select Preferred PDF Browser"
-msgstr "Förvald Pdf-läsare"
+msgstr "Välj Önskad PDF Läsare"
 
 #: common/dialogs/panel_common_settings_base.cpp:26
-#, fuzzy
 msgid "&Auto save:"
 msgstr "Autosparning (minuter):"
 
