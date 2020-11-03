@@ -181,8 +181,6 @@ enum main_id
     ID_EDA_SOCKET_EVENT_SERV,
     ID_EDA_SOCKET_EVENT,
 
-    ID_DIALOG_ERC,      ///< eeschema ERC modeless dialog ID
-
     // IDs specifics to a sub-application (Eeschema, Kicad manager....) start here
     //
     // We reserve here Ids for each sub-application, to avoid duplicate IDs

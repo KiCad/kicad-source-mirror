@@ -32,6 +32,7 @@
 
 class EE_SELECTION_TOOL;
 class SCH_BASE_FRAME;
+class DIALOG_ERC;
 
 
 class EE_INSPECTION_TOOL : public EE_TOOL_BASE<SCH_BASE_FRAME>
@@ -42,6 +43,8 @@ public:
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
+
+    void Reset( RESET_REASON aReason ) override;
 
     int RunERC( const TOOL_EVENT& aEvent );
     int RunSimulation( const TOOL_EVENT& aEvent );
@@ -55,6 +58,9 @@ private:
 
     ///> @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
+
+private:
+    DIALOG_ERC*  m_ercDialog;
 };
 
 #endif /* EE_INSPECTION_TOOL_H */

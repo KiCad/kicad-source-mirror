@@ -58,6 +58,7 @@
 #include <wildcards_and_files_ext.h>
 #include <page_layout/ws_data_model.h>
 #include <wx/stdpaths.h>
+#include <tools/ee_inspection_tool.h>
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
 {
@@ -278,6 +279,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // unload current project file before loading new
     {
         SetScreen( nullptr );
+        m_toolManager->GetTool<EE_INSPECTION_TOOL>()->Reset( TOOL_BASE::MODEL_RELOAD );
         CreateScreens();
     }
 

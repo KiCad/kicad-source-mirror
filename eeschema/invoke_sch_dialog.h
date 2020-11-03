@@ -70,10 +70,6 @@ class SCH_EDIT_FRAME;
 int InvokeDialogRescueEach( wxWindow* aParent, RESCUER& aRescuer, SCH_SHEET_PATH* aCurrentSheet,
                             EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType, bool aAskShowAgain );
 
-/// Create the modeless DIALOG_ERC and show it, return something to
-/// destroy or close it.  The dialog will have ID_DIALOG_ERC from id.h
-wxDialog* InvokeDialogERC( SCH_EDIT_FRAME* aCaller );
-
 /// Create and show DIALOG_PRINT_USING_PRINTER and return whatever
 /// DIALOG_PRINT_USING_PRINTER::ShowModal() returns.
 int InvokeDialogPrintUsingPrinter( SCH_EDIT_FRAME* aCaller );

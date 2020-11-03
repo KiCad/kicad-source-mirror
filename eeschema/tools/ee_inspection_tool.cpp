@@ -41,11 +41,13 @@
 #include <invoke_sch_dialog.h>
 #include <project.h>
 #include <dialogs/dialog_display_info_HTML_base.h>
+#include <dialogs/dialog_erc.h>
 #include <math/util.h>      // for KiROUND
 
 
-EE_INSPECTION_TOOL::EE_INSPECTION_TOOL()
-    : EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.InspectionTool" )
+EE_INSPECTION_TOOL::EE_INSPECTION_TOOL() :
+    EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.InspectionTool" ),
+    m_ercDialog( nullptr )
 {
 }
 
@@ -67,6 +69,20 @@ bool EE_INSPECTION_TOOL::Init()
 }
 
 
+void EE_INSPECTION_TOOL::Reset( RESET_REASON aReason )
+{
+    EE_TOOL_BASE::Reset( aReason );
+
+    if( aReason == MODEL_RELOAD )
+    {
+        if( m_ercDialog )
+            m_ercDialog->Destroy();
+
+        m_ercDialog = nullptr;
+    }
+}
+
+
 int EE_INSPECTION_TOOL::RunERC( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
@@ -75,17 +91,20 @@ int EE_INSPECTION_TOOL::RunERC( const TOOL_EVENT& aEvent )
     }
     else if( m_frame->IsType( FRAME_SCH ) )
     {
-        wxWindow* erc = wxWindow::FindWindowById( ID_DIALOG_ERC, m_frame );
-
-        if( erc )
+        if( m_ercDialog )
         {
             // Needed at least on Windows. Raise() is not enough
-            erc->Show( true );
+            m_ercDialog->Show( true );
             // Bring it to the top if already open.  Dual monitor users need this.
-            erc->Raise();
+            m_ercDialog->Raise();
         }
         else
-            InvokeDialogERC( static_cast<SCH_EDIT_FRAME*>( m_frame ) );
+        {
+            // This is a modeless dialog, so new it rather than instantiating on stack.
+            m_ercDialog = new DIALOG_ERC( static_cast<SCH_EDIT_FRAME*>( m_frame ) );
+
+            m_ercDialog->Show( true );
+        }
     }
 
     return 0;

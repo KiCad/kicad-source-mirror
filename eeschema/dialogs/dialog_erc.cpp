@@ -52,7 +52,7 @@
 #include <kiplatform/ui.h>
 
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
-        DIALOG_ERC_BASE( parent, ID_DIALOG_ERC ),  // parent looks for this ID explicitly
+        DIALOG_ERC_BASE( parent ),
         PROGRESS_REPORTER( 1 ),
         m_parent( parent ),
         m_running( false ),
@@ -745,12 +745,3 @@ bool DIALOG_ERC::writeReport( const wxString& aFullFileName )
 }
 
 
-wxDialog* InvokeDialogERC( SCH_EDIT_FRAME* aCaller )
-{
-    // This is a modeless dialog, so new it rather than instantiating on stack.
-    DIALOG_ERC* dlg = new DIALOG_ERC( aCaller );
-
-    dlg->Show( true );
-
-    return dlg;     // wxDialog is information hiding about DIALOG_ERC.
-}
