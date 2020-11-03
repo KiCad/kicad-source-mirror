@@ -232,10 +232,6 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     if( item && item->Type() == PCB_ZONE_AREA_T && IsZoneLayer( aLayer ) )
         aLayer = aLayer - LAYER_ZONE_START;
 
-    // Make items invisible in "other layers hidden" contrast mode
-    if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN && m_highContrastLayers.count( aLayer ) == 0 )
-        return COLOR4D::CLEAR;
-
     // Hide net names in "dimmed" contrast mode
     if( m_hiContrastEnabled && IsNetnameLayer( aLayer ) && m_highContrastLayers.count( aLayer ) == 0 )
         return COLOR4D::CLEAR;
@@ -276,9 +272,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     if( conItem )
         netCode = conItem->GetNetCode();
 
-    bool dimmedMode  = m_contrastModeDisplay == HIGH_CONTRAST_MODE::DIMMED;
     bool highlighted = m_highlightEnabled && m_highlightNetcodes.count( netCode );
-    bool activeLayer = m_highContrastLayers.count( aLayer );
     bool selected    = item->IsSelected();
 
     // Apply net color overrides
@@ -326,32 +320,21 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     }
 
     // Apply high-contrast dimming
-    if( dimmedMode && !activeLayer && !highlighted && !selected )
-        color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );
+    bool isActiveLayer = m_highContrastLayers.count( aLayer );
 
-    // For vias, some layers depend on other layers in high contrast mode
-    if( m_hiContrastEnabled && !selected && item->Type() == PCB_VIA_T &&
-        ( aLayer == LAYER_VIAS_HOLES   ||
-          aLayer == LAYER_VIA_THROUGH  ||
-          aLayer == LAYER_VIA_MICROVIA ||
-          aLayer == LAYER_VIA_BBLIND ||
-          aLayer == LAYER_VIAS_NETNAMES ) )
+    if( item->Type() == PCB_VIA_T )
     {
-        const VIA*   via = static_cast<const VIA*>( item );
-        const BOARD* pcb = static_cast<const BOARD*>( item->GetParent() );
-        bool         viaActiveLayer = false;
-
+        // Via layers depend on the via crossing a high-contrast layer
         for( int layer : m_highContrastLayers )
-        {
-            auto lay_id = static_cast<PCB_LAYER_ID>( layer );
-            viaActiveLayer |= via->IsOnLayer( lay_id ) && pcb->IsLayerVisible( lay_id );
-        }
+            isActiveLayer |= static_cast<const VIA*>( item )->IsOnLayer( ToLAYER_ID( layer ) );
+    }
 
-        if( !viaActiveLayer && m_contrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN )
-            return COLOR4D::CLEAR;
-
-        if( !viaActiveLayer )
-            color.Darken( 1.0 - m_highlightFactor );
+    if( m_hiContrastEnabled && !isActiveLayer && !highlighted && !selected )
+    {
+        if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN )
+            color = COLOR4D::CLEAR;
+        else
+            color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );
     }
 
     // Apply per-type opacity overrides
@@ -604,6 +587,7 @@ void PCB_PAINTER::draw( const ARC* aArc, int aLayer )
 void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 {
     VECTOR2D center( aVia->GetStart() );
+    double   radius = 0.0;
 
     // Draw description layer
     if( IsNetnameLayer( aLayer ) )
@@ -667,10 +651,24 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
         return;
     }
+    else if( aLayer == LAYER_VIAS_HOLES )
+    {
+        radius = getDrillSize( aVia ) / 2.0;
+    }
+    else if(   ( aLayer == LAYER_VIA_THROUGH && aVia->GetViaType() == VIATYPE::THROUGH )
+            || ( aLayer == LAYER_VIA_BBLIND && aVia->GetViaType() == VIATYPE::BLIND_BURIED )
+            || ( aLayer == LAYER_VIA_MICROVIA && aVia->GetViaType() == VIATYPE::MICROVIA ) )
+    {
+        radius = aVia->GetWidth() / 2.0;
+    }
+    else
+    {
+        return;
+    }
 
-    double radius = aVia->GetWidth() / 2.0;
-
-    if( aLayer == LAYER_VIAS_HOLES || ( IsCopperLayer( aLayer ) && !aVia->FlashLayer( aLayer ) ) )
+    /// Vias not connected to copper are optionally not drawn
+    /// We draw instead the hole size to ensure we show the proper clearance
+    if( IsCopperLayer( aLayer ) && !aVia->FlashLayer( aLayer ) )
         radius = getDrillSize( aVia ) / 2.0 ;
 
     bool sketchMode = false;
@@ -725,17 +723,22 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         if( !sketchMode )
             m_gal->SetLineWidth( ( aVia->GetWidth() - aVia->GetDrillValue() ) / 2.0 );
 
-        if( aLayer == layerTop )
-            m_gal->DrawArc( center, radius, 0.0, M_PI / 2.0 );
+        m_gal->DrawArc( center, radius, M_PI / 2.0, M_PI );
+        m_gal->DrawArc( center, radius, 3.0 * M_PI / 2.0, 2.0 * M_PI );
 
-        else if( aLayer == layerBottom )
-            m_gal->DrawArc( center, radius, M_PI, 3.0 * M_PI / 2.0 );
+        if( sketchMode )
+            m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerTop ) );
+        else
+            m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerTop ) );
 
-        else if( aLayer == LAYER_VIA_BBLIND || aLayer == LAYER_VIA_MICROVIA )
-        {
-            m_gal->DrawArc( center, radius, M_PI / 2.0, M_PI );
-            m_gal->DrawArc( center, radius, 3.0 * M_PI / 2.0, 2.0 * M_PI );
-        }
+        m_gal->DrawArc( center, radius, 0.0, M_PI / 2.0 );
+
+        if( sketchMode )
+            m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
+        else
+            m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
+
+        m_gal->DrawArc( center, radius, M_PI, 3.0 * M_PI / 2.0 );
     }
     else
     {

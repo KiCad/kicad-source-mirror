@@ -547,28 +547,10 @@ void VIA::ViewGetLayers( int aLayers[], int& aCount ) const
     // Just show it on common via & via holes layers
     switch( GetViaType() )
     {
-    case VIATYPE::THROUGH:
-        aLayers[2] = LAYER_VIA_THROUGH;
-        break;
-
-    case VIATYPE::BLIND_BURIED:
-        aLayers[2] = LAYER_VIA_BBLIND;
-        aLayers[3] = m_Layer;
-        aLayers[4] = m_BottomLayer;
-        aCount += 2;
-        break;
-
-    case VIATYPE::MICROVIA:
-        aLayers[2] = LAYER_VIA_MICROVIA;
-        aLayers[3] = m_Layer;
-        aLayers[4] = m_BottomLayer;
-        aCount += 2;
-        break;
-
-    default:
-        aLayers[2] = LAYER_GP_OVERLAY;
-        wxASSERT( false );
-        break;
+    case VIATYPE::THROUGH:      aLayers[2] = LAYER_VIA_THROUGH;  break;
+    case VIATYPE::BLIND_BURIED: aLayers[2] = LAYER_VIA_BBLIND;   break;
+    case VIATYPE::MICROVIA:     aLayers[2] = LAYER_VIA_MICROVIA; break;
+    default:                    aLayers[2] = LAYER_GP_OVERLAY;   break;
     }
 }
 
