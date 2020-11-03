@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-11-02 21:02+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"PO-Revision-Date: 2020-11-03 18:15+0000\n"
+"Last-Translator: Jan Vykydal <vvykys@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -3067,9 +3067,8 @@ msgid "Zoom faster when scrolling quickly"
 msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:45
-#, fuzzy
 msgid "Zoom speed:"
-msgstr "Vystředit pohled"
+msgstr "Rychlost zvětšování:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:51
 msgid "How far to zoom in for each rotation of the mouse wheel"
@@ -4264,9 +4263,8 @@ msgid "Add to Selection"
 msgstr "Přidat do výběru"
 
 #: common/hotkey_store.cpp:48
-#, fuzzy
 msgid "Toggle Selection State"
-msgstr "Výběr modulu:"
+msgstr "Přepnout stav výběru"
 
 #: common/hotkey_store.cpp:49
 #, fuzzy
@@ -4337,6 +4335,7 @@ msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
 msgstr "Pravděpodobně chybí sdílení knihovna (.dll or .so).\n"
 
 #: common/kiway.cpp:278
+#, fuzzy
 msgid ""
 "From command line: argv[0]:\n"
 "'"
@@ -5453,9 +5452,8 @@ msgid "Find Next Marker"
 msgstr "Najít další DRC značku"
 
 #: common/tool/actions.cpp:228
-#, fuzzy
 msgid "Replace and Find Next"
-msgstr " nahrazena v "
+msgstr "Nahradit a najít další"
 
 #: common/tool/actions.cpp:228
 msgid "Replace current match and find next"
@@ -5653,9 +5651,8 @@ msgid "Mils"
 msgstr "Mils"
 
 #: common/tool/actions.cpp:470
-#, fuzzy
 msgid "Use mils"
-msgstr " mils"
+msgstr "Použít mils"
 
 #: common/tool/actions.cpp:475
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -8988,9 +8985,8 @@ msgstr ""
 "zaměnitelné"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
-#, fuzzy
 msgid "Pin Text Options"
-msgstr " Možnosti textu:"
+msgstr "Nastavení popisku pinu"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:216
 msgid "Show pin number"
@@ -11118,9 +11114,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:41
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
-#, fuzzy
 msgid "Defaults for New Objects"
-msgstr " Výchozí hodnoty nových grafických prvků"
+msgstr "Výchozí nastavení pro nové objekty"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:46
 #, fuzzy
@@ -11277,9 +11272,8 @@ msgid "Default line thickness:"
 msgstr "Výchozí tloušťka čar"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:101
-#, fuzzy
 msgid "Pin symbol size:"
-msgstr " v symbolu %c"
+msgstr "Velikost pinu symbolu:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:119
 #, fuzzy
@@ -11783,7 +11777,7 @@ msgstr "Zápis do souboru selhal."
 #: eeschema/files-io.cpp:252 eeschema/files-io.cpp:910
 #, c-format
 msgid "Schematic file \"%s\" is already open."
-msgstr " Soubor schématu \"%s\" je již otevřený."
+msgstr "Soubor schématu \"%s\" je již otevřený."
 
 #: eeschema/files-io.cpp:271
 #, c-format
@@ -12879,15 +12873,13 @@ msgid "Could not open CvPcb"
 msgstr "Nelze otevřít CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1176
-#, fuzzy
 msgid "[no file]"
-msgstr " [žádný soubor]"
+msgstr "[žádný soubor]"
 
 #: eeschema/sch_edit_frame.cpp:1191 kicad/kicad_manager_frame.cpp:604
 #: pcbnew/footprint_edit_frame.cpp:733 pcbnew/pcb_edit_frame.cpp:1191
-#, fuzzy
 msgid "[Read Only]"
-msgstr " [Pouze pro čtení] "
+msgstr "[Pouze pro čtení]"
 
 #: eeschema/sch_edit_frame.cpp:1440
 #, fuzzy, c-format
@@ -16265,9 +16257,8 @@ msgid "GerbView"
 msgstr "Gerbview"
 
 #: gerbview/gerbview_frame.cpp:667
-#, fuzzy
 msgid "(with X2 attributes)"
-msgstr " (s atributy X2)"
+msgstr "(s atributy X2)"
 
 #: gerbview/gerbview_frame.cpp:675
 #, c-format
@@ -19693,9 +19684,8 @@ msgid "all copper layers"
 msgstr "Všechny vrstvy mědi"
 
 #: pcbnew/class_board_item.cpp:93
-#, fuzzy
 msgid "and others"
-msgstr " a další"
+msgstr "a další"
 
 #: pcbnew/class_board_item.cpp:101
 msgid "no layers"
@@ -22145,9 +22135,8 @@ msgid "Delete exclusions"
 msgstr "Smazat výběr"
 
 #: pcbnew/dialogs/dialog_drc.cpp:811
-#, fuzzy
 msgid "not run"
-msgstr " nenalezeno"
+msgstr "nelze spustit"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 #, fuzzy
@@ -26283,7 +26272,7 @@ msgstr "Ponechat odkaz a/nebo hodnotu prázdnou pro použití jména pouzdra."
 #: pcbnew/dialogs/panel_modedit_defaults_base.cpp:100
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
 msgid "Default properties for new graphic items:"
-msgstr " Výchozí hodnoty nových grafických prvků:"
+msgstr "Výchozí hodnoty nových grafických prvků:"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:36
 msgid "Icon"
@@ -27268,9 +27257,8 @@ msgid "Check rule syntax"
 msgstr "Zkontrolovat modul"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:74
-#, fuzzy
 msgid "Default properties for new dimension objects:"
-msgstr " Výchozí hodnoty nových grafických prvků:"
+msgstr "Výchozí hodnoty nových grafických prvků:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:91
 msgid ""
@@ -27918,9 +27906,9 @@ msgid "(%s clearance %s; actual %s)"
 msgstr "Místní hodnoty izolační mezery mask"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:695
-#, fuzzy, c-format
+#, c-format
 msgid "(nets %s and %s)"
-msgstr " v jednotkách %c a %c"
+msgstr "(spoje %s a %s)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:81
 #, fuzzy
@@ -28337,7 +28325,7 @@ msgstr "Místní izolační mezery a nastavení"
 #: pcbnew/files.cpp:542
 #, c-format
 msgid "PCB file \"%s\" is already open."
-msgstr " Soubor DPS \"%s\" je již otevřený."
+msgstr "Soubor DPS \"%s\" je již otevřený."
 
 #: pcbnew/files.cpp:549
 msgid "The current PCB has been modified.  Save changes?"
@@ -28888,7 +28876,7 @@ msgstr "Počátek DXF na mřížce DPS, souřadnice Y"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:105
 msgid "Select PCB grid units"
-msgstr " Zvolit jednotky mřížky DPS"
+msgstr "Zvolit jednotky mřížky DPS"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:122
 msgid "Import parameters:"
