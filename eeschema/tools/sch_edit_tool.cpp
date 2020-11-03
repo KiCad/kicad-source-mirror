@@ -277,8 +277,6 @@ bool SCH_EDIT_TOOL::Init()
     auto entryCondition = E_C::MoreThan( 0 ) && E_C::OnlyTypes( entryTypes );
 
     auto singleComponentCondition = E_C::Count( 1 )    && E_C::OnlyType( SCH_COMPONENT_T );
-    auto wireSelectionCondition =   E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_LINE_LOCATE_WIRE_T );
-    auto busSelectionCondition =    E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_LINE_LOCATE_BUS_T );
     auto singleSheetCondition =     E_C::Count( 1 )    && E_C::OnlyType( SCH_SHEET_T );
     //
     // Add edit actions to the move tool menu

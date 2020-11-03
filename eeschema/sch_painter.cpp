@@ -280,7 +280,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
     }
     else if( aItem->Type() == SCH_JUNCTION_T )
     {
-        COLOR4D junctionColor = static_cast<const SCH_JUNCTION*>( aItem )->GetColor();
+        COLOR4D junctionColor = static_cast<const SCH_JUNCTION*>( aItem )->GetJunctionColor();
 
         if( junctionColor != COLOR4D::UNSPECIFIED )
             color = junctionColor;

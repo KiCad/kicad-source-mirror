@@ -28,6 +28,7 @@
 #include <sch_connection.h>
 #include <sch_edit_frame.h>
 #include <sch_line.h>
+#include <sch_junction.h>
 #include <sch_sheet.h>
 #include <schematic.h>
 #include <advanced_config.h>
@@ -109,6 +110,11 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_
 
     m_lineStyle->Append( DEFAULT_STYLE );
     m_lineStyle->Append( INDETERMINATE_ACTION );
+
+    m_colorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
+    m_colorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+    m_bgColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
+    m_bgColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
     m_sdbSizerButtonsOK->SetDefault();
 
@@ -216,9 +222,9 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::OnUpdateUI( wxUpdateUIEvent&  )
 void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aSheetPath,
                                                         SCH_ITEM* aItem )
 {
-    auto eda_text = dynamic_cast<EDA_TEXT*>( aItem );
-    auto sch_text = dynamic_cast<SCH_TEXT*>( aItem );
-    auto lineItem = dynamic_cast<SCH_LINE*>( aItem );
+    EDA_TEXT* eda_text = dynamic_cast<EDA_TEXT*>( aItem );
+    SCH_TEXT* sch_text = dynamic_cast<SCH_TEXT*>( aItem );
+    SCH_LINE* lineItem = dynamic_cast<SCH_LINE*>( aItem );
 
     m_parent->SaveCopyInUndoList( aSheetPath.LastScreen(), aItem, UNDO_REDO::CHANGED, m_hasChange );
 
@@ -415,6 +421,32 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
             {
                 sheet->SetBackgroundColor( m_bgColorSwatch->GetSwatchColor() );
                 m_hasChange = true;
+            }
+        }
+    }
+    else if( aItem->Type() == SCH_JUNCTION_T )
+    {
+        SCH_JUNCTION* junction = static_cast<SCH_JUNCTION*>( aItem );
+
+        for( SCH_ITEM* item : junction->ConnectedItems( aSheetPath ) )
+        {
+            if( item->GetLayer() == LAYER_BUS )
+            {
+                if( m_buses->GetValue() && m_setColor->GetValue() )
+                {
+                    junction->SetColor( m_colorSwatch->GetSwatchColor() );
+                    m_hasChange = true;
+                }
+                break;
+            }
+            else if( item->GetLayer() == LAYER_WIRE )
+            {
+                if( m_wires->GetValue() && m_setColor->GetValue() )
+                {
+                    junction->SetColor( m_colorSwatch->GetSwatchColor() );
+                    m_hasChange = true;
+                }
+                break;
             }
         }
     }

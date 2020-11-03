@@ -96,7 +96,7 @@ const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
 void SCH_JUNCTION::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*   DC    = aSettings->GetPrintDC();
-    COLOR4D color = GetColor();
+    COLOR4D color = GetJunctionColor();
 
     if( color == COLOR4D::UNSPECIFIED )
         color = aSettings->GetLayerColor( GetLayer() );
@@ -155,7 +155,7 @@ void SCH_JUNCTION::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-COLOR4D SCH_JUNCTION::GetColor() const
+COLOR4D SCH_JUNCTION::GetJunctionColor() const
 {
     if( m_color != COLOR4D::UNSPECIFIED )
         return m_color;
@@ -226,7 +226,7 @@ bool SCH_JUNCTION::doIsConnected( const wxPoint& aPosition ) const
 void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
 {
     auto*   settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
-    COLOR4D color = GetColor();
+    COLOR4D color = GetJunctionColor();
 
     if( color == COLOR4D::UNSPECIFIED )
         color = settings->GetLayerColor( GetLayer() );
