@@ -85,6 +85,7 @@ private:
     MAP_OGL_DISP_LISTS      m_ogl_disp_lists_layers_holes_outer;
     MAP_OGL_DISP_LISTS      m_ogl_disp_lists_layers_holes_inner;
     CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_board;
+    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_board_with_holes;
     CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_anti_board;
     CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_outer;
 
@@ -113,6 +114,8 @@ private:
     MAP_3DMODEL m_3dmodel_map;
 
     BOARD_ITEM* m_currentIntersectedBoardItem;
+
+    SHAPE_POLY_SET m_anti_board_poly; ///< negative polygon representation of the board outline
 
 private:
     CLAYERS_OGL_DISP_LISTS *generate_holes_display_list( const LIST_OBJECT2D &aListHolesObject2d,

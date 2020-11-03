@@ -64,7 +64,6 @@ C3D_RENDER_OGL_LEGACY::C3D_RENDER_OGL_LEGACY( BOARD_ADAPTER& aAdapter, CCAMERA& 
     m_ogl_disp_lists_platedPads_F_Cu = nullptr;
     m_ogl_disp_lists_platedPads_B_Cu = nullptr;
 
-    m_ogl_disp_list_through_holes_outer_with_npth = NULL;
     m_ogl_disp_list_through_holes_outer = NULL;
     m_ogl_disp_list_through_holes_outer_ring = NULL;
     m_ogl_disp_list_through_holes_vias_outer = NULL;
@@ -528,33 +527,26 @@ void C3D_RENDER_OGL_LEGACY::unsetDepthOffset()
 
 void C3D_RENDER_OGL_LEGACY::render_board_body( bool aSkipRenderHoles )
 {
-    if( m_ogl_disp_list_board )
+    m_materials.m_EpoxyBoard.m_Diffuse   = m_boardAdapter.m_BoardBodyColor;
+    m_materials.m_EpoxyBoard.m_Transparency = 1.0f - m_boardAdapter.m_BoardBodyColor.a; // opacity to transparency
+
+    OGL_SetMaterial( m_materials.m_EpoxyBoard, 1.0f );
+
+    CLAYERS_OGL_DISP_LISTS* ogl_disp_list = nullptr;
+
+    if( aSkipRenderHoles )
+        ogl_disp_list = m_ogl_disp_list_board;
+    else
+        ogl_disp_list = m_ogl_disp_list_board_with_holes;
+
+    if( ogl_disp_list )
     {
-        m_ogl_disp_list_board->ApplyScalePosition( -m_boardAdapter.GetEpoxyThickness3DU() / 2.0f,
-                                                   m_boardAdapter.GetEpoxyThickness3DU() );
+        ogl_disp_list->ApplyScalePosition( -m_boardAdapter.GetEpoxyThickness3DU() / 2.0f,
+                                            m_boardAdapter.GetEpoxyThickness3DU() );
 
+        ogl_disp_list->SetItIsTransparent( true );
 
-        m_materials.m_EpoxyBoard.m_Diffuse   = m_boardAdapter.m_BoardBodyColor;
-        m_materials.m_EpoxyBoard.m_Transparency = 1.0f - m_boardAdapter.m_BoardBodyColor.a; // opacity to transparency
-
-        OGL_SetMaterial( m_materials.m_EpoxyBoard, 1.0f );
-
-        m_ogl_disp_list_board->SetItIsTransparent( true );
-
-        if( (m_ogl_disp_list_through_holes_outer_with_npth) && (!aSkipRenderHoles) )
-        {
-            m_ogl_disp_list_through_holes_outer_with_npth->ApplyScalePosition(
-                        -m_boardAdapter.GetEpoxyThickness3DU() / 2.0f,
-                        m_boardAdapter.GetEpoxyThickness3DU() );
-
-            m_ogl_disp_list_board->DrawAllCameraCulledSubtractLayer(
-                        true,
-                        m_ogl_disp_list_through_holes_outer_with_npth );
-        }
-        else
-        {
-            m_ogl_disp_list_board->DrawAll();
-        }
+        ogl_disp_list->DrawAll();
     }
 }
 
@@ -767,6 +759,12 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                                 pLayerDispList->GetZBot(),
                                 pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
 
+                if( m_ogl_disp_list_anti_board )
+                {
+                    m_ogl_disp_list_anti_board->ApplyScalePosition( pLayerDispList->GetZBot(),
+                            pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
+                }
+
                 if( m_ogl_disp_lists_layers_holes_outer.find( layer_id ) !=
                     m_ogl_disp_lists_layers_holes_outer.end() )
                 {
@@ -780,7 +778,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                         pLayerDispList->DrawAllCameraCulledSubtractLayer(
                                     drawMiddleSegments,
                                     m_ogl_disp_list_through_holes_outer,
-                                    viasHolesLayer );
+                                    viasHolesLayer,
+                                    m_ogl_disp_list_anti_board );
 
                         // Draw copper plated pads
 
@@ -793,14 +792,16 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                             m_ogl_disp_lists_platedPads_F_Cu->DrawAllCameraCulledSubtractLayer(
                                                                 drawMiddleSegments,
                                                                 m_ogl_disp_list_through_holes_outer,
-                                                                viasHolesLayer );
+                                                                viasHolesLayer,
+                                                                m_ogl_disp_list_anti_board );
                         }
                         else if( ( layer_id == B_Cu ) && m_ogl_disp_lists_platedPads_B_Cu )
                         {
                             m_ogl_disp_lists_platedPads_B_Cu->DrawAllCameraCulledSubtractLayer(
                                                                 drawMiddleSegments,
                                                                 m_ogl_disp_list_through_holes_outer,
-                                                                viasHolesLayer );
+                                                                viasHolesLayer,
+                                                                m_ogl_disp_list_anti_board );
                         }
 
                         unsetDepthOffset();
@@ -810,7 +811,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                 {
                     pLayerDispList->DrawAllCameraCulledSubtractLayer(
                                 drawMiddleSegments,
-                                m_ogl_disp_list_through_holes_outer );
+                                m_ogl_disp_list_through_holes_outer,
+                                m_ogl_disp_list_anti_board );
 
                     // Draw copper plated pads
 
@@ -824,13 +826,15 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                     {
                         m_ogl_disp_lists_platedPads_F_Cu->DrawAllCameraCulledSubtractLayer(
                                                             drawMiddleSegments,
-                                                            m_ogl_disp_list_through_holes_outer );
+                                                            m_ogl_disp_list_through_holes_outer,
+                                                            m_ogl_disp_list_anti_board );
                     }
                     else if( ( layer_id == B_Cu ) && m_ogl_disp_lists_platedPads_B_Cu )
                     {
                         m_ogl_disp_lists_platedPads_B_Cu->DrawAllCameraCulledSubtractLayer(
                                                             drawMiddleSegments,
-                                                            m_ogl_disp_list_through_holes_outer );
+                                                            m_ogl_disp_list_through_holes_outer,
+                                                            m_ogl_disp_list_anti_board );
                     }
 
                     unsetDepthOffset();
@@ -1154,9 +1158,6 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
 
     delete m_ogl_disp_list_anti_board;
     m_ogl_disp_list_anti_board = nullptr;
-
-    delete m_ogl_disp_list_through_holes_outer_with_npth;
-    m_ogl_disp_list_through_holes_outer_with_npth = nullptr;
 
     delete m_ogl_disp_list_through_holes_outer;
     m_ogl_disp_list_through_holes_outer = nullptr;

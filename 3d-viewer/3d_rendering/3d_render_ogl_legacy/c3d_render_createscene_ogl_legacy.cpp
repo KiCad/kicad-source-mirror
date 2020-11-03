@@ -455,11 +455,9 @@ CLAYERS_OGL_DISP_LISTS* C3D_RENDER_OGL_LEGACY::createBoard( const SHAPE_POLY_SET
                                   layer_z_bot );
         }
 
-        const SHAPE_POLY_SET &boardPoly = m_boardAdapter.GetBoardPoly();
-
-        if( boardPoly.OutlineCount() > 0 )
+        if( aBoardPoly.OutlineCount() > 0 )
         {
-            layerTriangles->AddToMiddleContourns( boardPoly,
+            layerTriangles->AddToMiddleContourns( aBoardPoly,
                                                   layer_z_bot,
                                                   layer_z_top,
                                                   m_boardAdapter.BiuTo3Dunits(),
@@ -501,16 +499,22 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
 
     m_ogl_disp_list_board = createBoard( m_boardAdapter.GetBoardPoly() );
 
-    SHAPE_POLY_SET anti_board;
-    anti_board.NewOutline();
-    anti_board.Append( VECTOR2I( -INT_MAX/2, -INT_MAX/2 ) );
-    anti_board.Append( VECTOR2I(  INT_MAX/2, -INT_MAX/2 ) );
-    anti_board.Append( VECTOR2I(  INT_MAX/2,  INT_MAX/2 ) );
-    anti_board.Append( VECTOR2I( -INT_MAX/2,  INT_MAX/2 ) );
-    anti_board.Outline( 0 ).SetClosed( true );
+    m_anti_board_poly.RemoveAllContours();
+    m_anti_board_poly.NewOutline();
+    m_anti_board_poly.Append( VECTOR2I( -INT_MAX/2, -INT_MAX/2 ) );
+    m_anti_board_poly.Append( VECTOR2I(  INT_MAX/2, -INT_MAX/2 ) );
+    m_anti_board_poly.Append( VECTOR2I(  INT_MAX/2,  INT_MAX/2 ) );
+    m_anti_board_poly.Append( VECTOR2I( -INT_MAX/2,  INT_MAX/2 ) );
+    m_anti_board_poly.Outline( 0 ).SetClosed( true );
 
-    anti_board.BooleanSubtract( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_FAST );
-    m_ogl_disp_list_anti_board = createBoard( anti_board );
+    m_anti_board_poly.BooleanSubtract( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    m_ogl_disp_list_anti_board = createBoard( m_anti_board_poly );
+
+    SHAPE_POLY_SET board_poly_with_holes = m_boardAdapter.GetBoardPoly();
+    board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly(), SHAPE_POLY_SET::PM_FAST );
+    board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly_NPTH(), SHAPE_POLY_SET::PM_FAST );
+
+    m_ogl_disp_list_board_with_holes = createBoard( board_poly_with_holes );
 
     if( m_ogl_disp_list_anti_board )
         m_ogl_disp_list_anti_board->SetItIsTransparent( true );
@@ -521,21 +525,12 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
     if( aStatusReporter )
         aStatusReporter->Report( _( "Load OpenGL: holes and vias" ) );
 
+    SHAPE_POLY_SET outerPolyTHT = m_boardAdapter.GetThroughHole_Outer_poly();
+    outerPolyTHT.BooleanIntersection( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
     m_ogl_disp_list_through_holes_outer = generate_holes_display_list(
             m_boardAdapter.GetThroughHole_Outer().GetList(),
-            m_boardAdapter.GetThroughHole_Outer_poly(),
-            1.0f,
-            0.0f,
-            false );
-
-    SHAPE_POLY_SET bodyHoles = m_boardAdapter.GetThroughHole_Outer_poly();
-
-    bodyHoles.BooleanAdd( m_boardAdapter.GetThroughHole_Outer_poly_NPTH(),
-                          SHAPE_POLY_SET::PM_FAST );
-
-    m_ogl_disp_list_through_holes_outer_with_npth = generate_holes_display_list(
-            m_boardAdapter.GetThroughHole_Outer().GetList(),
-            bodyHoles,
+            outerPolyTHT,
             1.0f,
             0.0f,
             false );
@@ -634,7 +629,19 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
             aPolyList = map_poly.at( layer_id );
         }
 
-        CLAYERS_OGL_DISP_LISTS* oglList = generateLayerListFromContainer( container2d, aPolyList, layer_id );
+        SHAPE_POLY_SET polyListSubtracted;
+        polyListSubtracted = *aPolyList;
+
+        polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_FAST );
+
+        if( ( layer_id != B_Mask ) &&
+            ( layer_id != F_Mask ) )
+        {
+            polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly(), SHAPE_POLY_SET::PM_FAST );
+            polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly_NPTH(), SHAPE_POLY_SET::PM_FAST );
+        }
+
+        CLAYERS_OGL_DISP_LISTS* oglList = generateLayerListFromContainer( container2d, &polyListSubtracted, layer_id );
 
         if( oglList != nullptr )
             m_ogl_disp_lists_layers[layer_id] = oglList;
@@ -834,7 +841,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
 
         // Subtract the holes
         tht_outer_holes_poly.BooleanSubtract( tht_inner_holes_poly, SHAPE_POLY_SET::PM_FAST );
-
+        tht_outer_holes_poly.BooleanSubtract( m_anti_board_poly, SHAPE_POLY_SET::PM_FAST );
 
         CCONTAINER2D holesContainer;
 

@@ -524,7 +524,8 @@ void CLAYERS_OGL_DISP_LISTS::DrawAllCameraCulled(float zCameraPos, bool aDrawMid
 void CLAYERS_OGL_DISP_LISTS::DrawAllCameraCulledSubtractLayer( bool aDrawMiddle,
                                         const CLAYERS_OGL_DISP_LISTS *aLayerToSubtractA,
                                         const CLAYERS_OGL_DISP_LISTS *aLayerToSubtractB,
-                                        const CLAYERS_OGL_DISP_LISTS *aLayerToSubtractC ) const
+                                        const CLAYERS_OGL_DISP_LISTS *aLayerToSubtractC,
+                                        const CLAYERS_OGL_DISP_LISTS *aLayerToSubtractD ) const
 {
     glClearStencil( 0x00 );
     glClear( GL_STENCIL_BUFFER_BIT );
@@ -548,6 +549,8 @@ void CLAYERS_OGL_DISP_LISTS::DrawAllCameraCulledSubtractLayer( bool aDrawMiddle,
     if( aLayerToSubtractC )
         aLayerToSubtractC->DrawBot();
 
+    if( aLayerToSubtractD )
+        aLayerToSubtractD->DrawBot();
 
     //if( !m_draw_it_transparent )
     {
@@ -575,6 +578,9 @@ void CLAYERS_OGL_DISP_LISTS::DrawAllCameraCulledSubtractLayer( bool aDrawMiddle,
 
     if( aLayerToSubtractC )
         aLayerToSubtractC->DrawTop();
+
+    if( aLayerToSubtractD )
+        aLayerToSubtractD->DrawTop();
 
     //if( !m_draw_it_transparent )
     {

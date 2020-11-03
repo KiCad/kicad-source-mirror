@@ -256,7 +256,8 @@ public:
     void DrawAllCameraCulledSubtractLayer( bool aDrawMiddle,
                                const CLAYERS_OGL_DISP_LISTS* aLayerToSubtractA = nullptr,
                                const CLAYERS_OGL_DISP_LISTS* aLayerToSubtractB = nullptr,
-                               const CLAYERS_OGL_DISP_LISTS* aLayerToSubtractC = nullptr ) const;
+                               const CLAYERS_OGL_DISP_LISTS* aLayerToSubtractC = nullptr,
+                               const CLAYERS_OGL_DISP_LISTS* aLayerToSubtractD = nullptr ) const;
 
     void ApplyScalePosition( float aZposition, float aZscale );
 
