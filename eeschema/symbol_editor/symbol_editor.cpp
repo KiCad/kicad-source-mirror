@@ -222,6 +222,8 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString&
         return false;
     }
 
+    m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
+
     // Symbols from the schematic are edited in place and not managed by the library manager.
     if( IsSymbolFromSchematic() )
     {
