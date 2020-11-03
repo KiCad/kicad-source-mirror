@@ -457,6 +457,8 @@ void SYMBOL_EDIT_FRAME::CreateNewPart()
 
     m_libMgr->GetRootSymbolNames( lib, rootSymbols );
 
+    rootSymbols.Sort();
+
     DIALOG_LIB_NEW_COMPONENT dlg( this, &rootSymbols );
     dlg.SetMinSize( dlg.GetSize() );
 
