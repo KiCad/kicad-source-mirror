@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -642,8 +642,11 @@ bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
     if( !m_locale->IsLoaded( dictionaryName ) )
         m_locale->AddCatalog( dictionaryName );
 
-    // Verify the dictionary was loaded properly
-    if( !m_locale->IsLoaded( dictionaryName ) )
+    // Verify the Kicad dictionary was loaded properly
+    // However, for the English language, the dictionnary is not mandatory, as
+    // all messages are already in English, just restricted to ASCII7 chars,
+    // the verification is skipped.
+    if( !m_locale->IsLoaded( dictionaryName ) && m_language_id != wxLANGUAGE_ENGLISH )
     {
         wxLogTrace( traceLocale, "Unable to load dictionary %s.mo in %s",
                     dictionaryName, m_locale->GetName() );
