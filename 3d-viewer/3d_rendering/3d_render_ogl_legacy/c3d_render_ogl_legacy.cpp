@@ -516,7 +516,7 @@ void C3D_RENDER_OGL_LEGACY::setCopperMaterial()
 void C3D_RENDER_OGL_LEGACY::setPlatedCopperAndDepthOffset( PCB_LAYER_ID aLayer_id )
 {
     glEnable( GL_POLYGON_OFFSET_FILL );
-    glPolygonOffset( 0.0f, -2.0f );
+    glPolygonOffset(-0.1f, -2.0f );
     set_layer_material( aLayer_id );
 }
 
