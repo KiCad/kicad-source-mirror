@@ -226,8 +226,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_DrawTriangulationOutlines = false;
     m_PluginAltiumSch           = false;
 
-    m_ExtraClearance            = 0.0005;
-    m_DRCEpsilon                = 0.0005;   // 500nm is small enough not to materially violate
+    m_ExtraClearance            = 0.0001;
+    m_DRCEpsilon                = 0.0001;   // 0.1um is small enough not to materially violate
                                             // any constraints.
 
     m_HoleWallThickness         = 0.020;    // IPC-6012 says 15-18um; Cadence says at least
