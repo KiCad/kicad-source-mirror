@@ -33,6 +33,7 @@
 #include <board_commit.h>
 #include <class_board.h>
 #include <class_board_item.h>
+#include <class_dimension.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
@@ -861,15 +862,37 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
         {
             const_cast<KIID&>( item->m_Uuid ) = KIID();
 
-            if( item->Type() == PCB_MODULE_T )
+            if( selectionTool->GetEnteredGroup() && !item->GetParentGroup() )
+                selectionTool->GetEnteredGroup()->AddItem( item );
+        }
+
+        // Update item attributes if needed
+        switch( item->Type() )
+        {
+        case PCB_DIMENSION_T:
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_ORTHOGONAL_T:
+        case PCB_DIM_LEADER_T:
             {
-                static_cast<MODULE*>( item )->SetPath( KIID_PATH() );
+            // Dimensions need to have their units updated if they are automatic
+            DIMENSION* dim = static_cast<DIMENSION*>( item );
+
+            if( dim->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
+                dim->SetUnits( frame()->GetUserUnits() );
+
+            break;
             }
 
-            if( selectionTool->GetEnteredGroup() && !item->GetParentGroup() )
-            {
-                selectionTool->GetEnteredGroup()->AddItem( item );
-            }
+        case PCB_MODULE_T:
+            // Update the module path with the new KIID path if the module is new
+            if( aIsNew )
+                static_cast<MODULE*>( item )->SetPath( KIID_PATH() );
+
+            break;
+
+        default:
+            break;
         }
 
         // Add or just select items for the move/place command

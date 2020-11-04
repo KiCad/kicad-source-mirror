@@ -149,7 +149,8 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         ShowTextPropertiesDialog( aItem );
         break;
 
-    case PCB_SHAPE_T:ShowGraphicItemPropertiesDialog( aItem );
+    case PCB_SHAPE_T:
+        ShowGraphicItemPropertiesDialog( aItem );
         break;
 
     case PCB_ZONE_AREA_T:
