@@ -316,26 +316,25 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     }
 
     // Apply high-contrast dimming
-    bool isActiveLayer = m_highContrastLayers.count( aLayer );
+    bool isActive = m_highContrastLayers.count( aLayer );
 
+    // Items drawn on synthetic layers depend on crossing the active layer to determine
+    // active state
     if( item->Type() == PCB_VIA_T )
     {
-        // Via layers depend on the via crossing a high-contrast layer
-        for( int layer : m_highContrastLayers )
-            isActiveLayer |= static_cast<const VIA*>( item )->IsOnLayer( ToLAYER_ID( layer ) );
+        isActive = static_cast<const VIA*>( item )->IsOnLayer( GetPrimaryHighContrastLayer() );
     }
     else if( item->Type() == PCB_PAD_T )
     {
-        for( int layer : m_highContrastLayers )
-            isActiveLayer |= static_cast<const D_PAD*>( item )->IsOnLayer( ToLAYER_ID( layer ) );
+        isActive = static_cast<const D_PAD*>( item )->IsOnLayer( GetPrimaryHighContrastLayer() );
     }
     else if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
     {
-        for( int layer : m_highContrastLayers )
-            isActiveLayer |= static_cast<const TRACK*>( item )->IsOnLayer( ToLAYER_ID( layer ) );
+        // Track itself isn't on a synthetic layer, but its netname annotations are.
+        isActive = static_cast<const TRACK*>( item )->IsOnLayer( GetPrimaryHighContrastLayer() );
     }
 
-    if( m_hiContrastEnabled && !isActiveLayer && !highlighted && !selected )
+    if( m_hiContrastEnabled && !isActive && !highlighted && !selected )
     {
         if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN || IsNetnameLayer( aLayer ) )
             color = COLOR4D::CLEAR;
