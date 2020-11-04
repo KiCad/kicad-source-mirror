@@ -595,17 +595,10 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
 
     glViewport( 0, 0, m_windowSize.x, m_windowSize.y );
 
-    if( m_boardAdapter.GetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE ) )
-    {
-        if( !aIsMoving )
-        {
-            glEnable( GL_MULTISAMPLE );
-        }
-        else
-        {
-            glDisable( GL_MULTISAMPLE );
-        }
-    }
+    if( m_boardAdapter.GetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE ) && aIsMoving )
+        glDisable( GL_MULTISAMPLE );
+    else
+        glEnable( GL_MULTISAMPLE );
 
     // clear color and depth buffers
     // /////////////////////////////////////////////////////////////////////////
