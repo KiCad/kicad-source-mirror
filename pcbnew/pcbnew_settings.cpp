@@ -204,7 +204,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_Cleanup.cleanup_tracks_in_pad, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "drc_dialog.refill_zones",
-            &m_DrcDialog.refill_zones, false ) );
+            &m_DrcDialog.refill_zones, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "drc_dialog.test_all_track_errors",
             &m_DrcDialog.test_all_track_errors, false ) );
