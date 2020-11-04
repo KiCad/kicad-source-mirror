@@ -103,8 +103,8 @@ private:
     void onDeleteNet( wxCommandEvent& event ) override;
     void onReport( wxCommandEvent& event ) override;
 
-    std::unique_ptr<LIST_ITEM> buildNewItem(
-            NETINFO_ITEM* aNet, unsigned int aPadCount, const std::vector<CN_ITEM*>& aCNItems );
+    std::unique_ptr<LIST_ITEM> buildNewItem( NETINFO_ITEM* aNet, unsigned int aPadCount,
+                                             const std::vector<CN_ITEM*>& aCNItems );
 
     void buildNetsList();
     void adjustListColumns();
