@@ -68,7 +68,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     prefsMenu->Add( ACTIONS::configurePaths );
     prefsMenu->Add( ACTIONS::showFootprintLibTable );
-    prefsMenu->Add( _( "Preferences...\tCTRL+," ),
+    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
                     _( "Show preferences for all open tools" ),
                     wxID_PREFERENCES,
                     preference_xpm );

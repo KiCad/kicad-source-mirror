@@ -209,7 +209,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     //
     ACTION_MENU* preferencesMenu = new ACTION_MENU( false, selTool );
 
-    preferencesMenu->Add( _( "Preferences...\tCTRL+," ),
+    preferencesMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
                           _( "Show preferences for all open tools" ),
                           wxID_PREFERENCES,
                           preference_xpm );

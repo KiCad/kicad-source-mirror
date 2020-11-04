@@ -202,8 +202,8 @@ wxMenuItem* ACTION_MENU::Add( ACTION_MENU* aMenu )
 
 void ACTION_MENU::AddClose( wxString aAppname )
 {
-    Add( _( "Close\tCTRL+W" ),
-         wxString::Format( "Close %s", aAppname ),
+    Add( _( "Close" ) + "\tCtrl+W",
+         wxString::Format( _( "Close %s" ), aAppname ),
          wxID_CLOSE,
          exit_xpm );
 }
@@ -216,7 +216,7 @@ void ACTION_MENU::AddQuitOrClose( KIFACE_I* aKiface, wxString aAppname )
         // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via
         // wxID_EXIT
         Add( _( "Quit" ),
-             wxString::Format( "Quit %s", aAppname ),
+             wxString::Format( _( "Quit %s" ), aAppname ),
              wxID_EXIT,
              exit_xpm );
     }

@@ -237,10 +237,10 @@ void GRID_TRICKS::onGridLabelRightClick( wxGridEvent&  )
 
 void GRID_TRICKS::showPopupMenu( wxMenu& menu )
 {
-    menu.Append( GRIDTRICKS_ID_CUT,    _( "Cut\tCTRL+X" ),         _( "Clear selected cells placing original contents on clipboard" ) );
-    menu.Append( GRIDTRICKS_ID_COPY,   _( "Copy\tCTRL+C" ),        _( "Copy selected cells to clipboard" ) );
-    menu.Append( GRIDTRICKS_ID_PASTE,  _( "Paste\tCTRL+V" ),       _( "Paste clipboard cells to matrix at current cell" ) );
-    menu.Append( GRIDTRICKS_ID_SELECT, _( "Select All\tCTRL+A" ),  _( "Select all cells" ) );
+    menu.Append( GRIDTRICKS_ID_CUT,    _( "Cut" ) + "\tCtrl+X",         _( "Clear selected cells placing original contents on clipboard" ) );
+    menu.Append( GRIDTRICKS_ID_COPY,   _( "Copy" ) + "\tCtrl+C",        _( "Copy selected cells to clipboard" ) );
+    menu.Append( GRIDTRICKS_ID_PASTE,  _( "Paste" ) + "\tCtrl+V",       _( "Paste clipboard cells to matrix at current cell" ) );
+    menu.Append( GRIDTRICKS_ID_SELECT, _( "Select All" ) + "\tCtrl+A",  _( "Select all cells" ) );
 
     getSelectedArea();
 

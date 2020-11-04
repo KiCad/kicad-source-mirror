@@ -210,7 +210,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
     prefsMenu->Add( _( "Reset to Default Settings" ), ID_MENU3D_RESET_DEFAULTS, tools_xpm );
 
 #ifdef __APPLE__    // Note: will get moved to Apple menu by wxWidgets
-    prefsMenu->Add( _( "Preferences...\tCTRL+," ),
+    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
                     _( "Show preferences for all open tools" ),
                     wxID_PREFERENCES,
                     preference_xpm );

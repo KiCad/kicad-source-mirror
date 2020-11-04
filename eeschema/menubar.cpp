@@ -261,7 +261,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     prefsMenu->Add( ACTIONS::configurePaths );
     prefsMenu->Add( ACTIONS::showSymbolLibTable );
-    prefsMenu->Add( _( "Preferences...\tCTRL+," ),
+    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
                     _( "Show preferences for all open tools" ),
                     wxID_PREFERENCES,
                     preference_xpm );
