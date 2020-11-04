@@ -2443,7 +2443,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
             const_cast<KIID&>( dimension->Text().m_Uuid ) = dimension->m_Uuid;
 
             // Fetch other dimension properties out of the text item
-            dimension->SetPosition( text->GetTextPos() );
+            dimension->Text().SetTextPos( text->GetTextPos() );
 
             if( isLegacyDimension )
             {
