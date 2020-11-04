@@ -22,20 +22,19 @@
  */
 
 #include <preview_items/two_point_assistant.h>
-
 #include <preview_items/draw_context.h>
 #include <preview_items/preview_utils.h>
-
 #include <view/view.h>
-
 #include <common.h>
-#include <pcb_painter.h>
 
 using namespace KIGFX::PREVIEW;
 
-TWO_POINT_ASSISTANT::TWO_POINT_ASSISTANT(
-        const TWO_POINT_GEOMETRY_MANAGER& aManager, EDA_UNITS aUnits, GEOM_SHAPE aShape )
-        : EDA_ITEM( NOT_USED ), m_constructMan( aManager ), m_units( aUnits ), m_shape( aShape )
+TWO_POINT_ASSISTANT::TWO_POINT_ASSISTANT( const TWO_POINT_GEOMETRY_MANAGER& aManager,
+                                          EDA_UNITS aUnits, GEOM_SHAPE aShape ) :
+        EDA_ITEM( NOT_USED ),
+        m_constructMan( aManager ),
+        m_units( aUnits ),
+        m_shape( aShape )
 {
 }
 
@@ -94,6 +93,5 @@ void TWO_POINT_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     }
 
     // place the text next to cursor, on opposite side from drawing
-    DrawTextNextToCursor( aView, end, origin - end, cursorStrings,
-                          aLayer == LAYER_SELECT_OVERLAY );
+    DrawTextNextToCursor( aView, end, origin - end, cursorStrings, aLayer == LAYER_SELECT_OVERLAY );
 }

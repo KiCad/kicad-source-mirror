@@ -33,60 +33,61 @@ namespace KIGFX
 namespace PREVIEW
 {
 
-    // TODO: required until PCB_SHAPE_TYPE_T is moved into commons or a better approach is found
-    enum class GEOM_SHAPE
+// TODO: required until PCB_SHAPE_TYPE_T is moved into commons or a better approach is found
+enum class GEOM_SHAPE
+{
+    SEGMENT = 0,
+    RECT,
+    ARC,
+    CIRCLE,
+    POLYGON,
+    CURVE
+};
+
+/**
+ * Represents an assistant draw when interactively drawing a line or circle on a canvas.
+ */
+class TWO_POINT_ASSISTANT : public EDA_ITEM
+{
+public:
+    TWO_POINT_ASSISTANT( const TWO_POINT_GEOMETRY_MANAGER& aManager, EDA_UNITS aUnits,
+                         GEOM_SHAPE aShape );
+
+    const BOX2I ViewBBox() const override;
+
+    void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
-        SEGMENT = 0,
-        RECT,
-        ARC,
-        CIRCLE,
-        POLYGON,
-        CURVE
-    };
+        aLayers[0] = LAYER_SELECT_OVERLAY;  // Assitant graphics
+        aLayers[1] = LAYER_GP_OVERLAY;      // Drop shadows
+        aCount = 2;
+    }
 
     /**
-     * Represents an assistant draw when interactively drawing a line or circle on a canvas.
+     * Draw the assistance (with reference to the contstruction manager
      */
-    class TWO_POINT_ASSISTANT : public EDA_ITEM
-    {
-    public:
-        TWO_POINT_ASSISTANT(
-                const TWO_POINT_GEOMETRY_MANAGER& aManager, EDA_UNITS aUnits, GEOM_SHAPE aShape );
-
-        const BOX2I ViewBBox() const override;
-
-        void ViewGetLayers( int aLayers[], int& aCount ) const override
-        {
-            aLayers[0] = LAYER_SELECT_OVERLAY;  // Assitant graphics
-            aLayers[1] = LAYER_GP_OVERLAY;      // Drop shadows
-            aCount = 2;
-        }
-
-        /**
-         * Draw the assistance (with reference to the contstruction manager
-         */
-        void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
+    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
 
 #if defined( DEBUG )
-        void Show( int x, std::ostream& st ) const override
-        {
-        }
+    void Show( int x, std::ostream& st ) const override
+    {
+    }
 #endif
 
-        /**
-         * Get class name
-         * @return  string "TWO_POINT_ASSISTANT"
-         */
-        wxString GetClass() const override
-        {
-            return "TWO_POINT_ASSISTANT";
-        }
+    /**
+     * Get class name
+     * @return  string "TWO_POINT_ASSISTANT"
+     */
+    wxString GetClass() const override
+    {
+        return "TWO_POINT_ASSISTANT";
+    }
 
-    private:
-        const TWO_POINT_GEOMETRY_MANAGER& m_constructMan;
-        EDA_UNITS                         m_units;
-        GEOM_SHAPE                        m_shape;
-    };
+private:
+    const TWO_POINT_GEOMETRY_MANAGER& m_constructMan;
+    EDA_UNITS                         m_units;
+    GEOM_SHAPE                        m_shape;
+};
+
 } // namespace PREVIEW
 } // namespace KIGFX
 
