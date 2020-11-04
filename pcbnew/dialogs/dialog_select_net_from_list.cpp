@@ -67,14 +67,14 @@ struct DIALOG_SELECT_NET_FROM_LIST::COLUMN_DESC
     const DIALOG_SELECT_NET_FROM_LIST::COLUMN_DESC DIALOG_SELECT_NET_FROM_LIST::c = { num, name, \
         csv_name, COLUMN_DESC::csv_flags }
 
-def_col( COLUMN_NET, 0, _( "Net" ), _( "Net Id" ), CSV_NONE );
-def_col( COLUMN_NAME, 1, _( "Name" ), _( "Net name" ), CSV_QUOTE );
-def_col( COLUMN_PAD_COUNT, 2, _( "Pad Count" ), _( "Pad count" ), CSV_NONE );
-def_col( COLUMN_VIA_COUNT, 3, _( "Via Count" ), _( "Via count" ), CSV_NONE );
-def_col( COLUMN_VIA_LENGTH, 4, _( "Via Length" ), _( "Via length" ), CSV_NONE );
-def_col( COLUMN_BOARD_LENGTH, 5, _( "Board Length" ), _( "Board length" ), CSV_NONE );
-def_col( COLUMN_CHIP_LENGTH, 6, _( "Die Length" ), _( "Die length" ), CSV_NONE );
-def_col( COLUMN_TOTAL_LENGTH, 7, _( "Total Length" ), _( "Net length" ), CSV_NONE );
+def_col( COLUMN_NET,          0, _( "Net" ),          _( "Net Code" ),     CSV_NONE );
+def_col( COLUMN_NAME,         1, _( "Name" ),         _( "Net Name" ),     CSV_QUOTE );
+def_col( COLUMN_PAD_COUNT,    2, _( "Pad Count" ),    _( "Pad Count" ),    CSV_NONE );
+def_col( COLUMN_VIA_COUNT,    3, _( "Via Count" ),    _( "Via Count" ),    CSV_NONE );
+def_col( COLUMN_VIA_LENGTH,   4, _( "Via Length" ),   _( "Via Length" ),   CSV_NONE );
+def_col( COLUMN_BOARD_LENGTH, 5, _( "Board Length" ), _( "Board Length" ), CSV_NONE );
+def_col( COLUMN_CHIP_LENGTH,  6, _( "Die Length" ),   _( "Die Length" ),   CSV_NONE );
+def_col( COLUMN_TOTAL_LENGTH, 7, _( "Total Length" ), _( "Net Length" ),   CSV_NONE );
 
 #undef def_col
 
