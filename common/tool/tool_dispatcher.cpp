@@ -432,8 +432,16 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     {
         wxWindow* window = dynamic_cast<wxWindow*>( m_toolMgr->GetToolHolder() );
 
+#if defined( _WIN32 )
+        // Mouse events may trigger regardless of window status (windows feature)
+        // However we need to avoid focus fighting (especially modals)
+        if( window && window->GetHWND() == GetForegroundWindow() )
+#else
         if( window )
+#endif
+        {
             window->SetFocus();
+        }
     }
 
     // Mouse handling
