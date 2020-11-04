@@ -256,7 +256,6 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-
         else if( evt->IsActivate() )
         {
             if( originSet )
@@ -273,7 +272,6 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-
         // click or drag starts
         else if( !originSet && ( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
         {
@@ -285,7 +283,6 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
 
             originSet = true;
         }
-
         // second click or mouse up after drag ends
         else if( originSet && ( evt->IsClick( BUT_LEFT ) || evt->IsMouseUp( BUT_LEFT ) ) )
         {
@@ -294,7 +291,6 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
             controls.SetAutoPan( false );
             controls.CaptureCursor( false );
         }
-
         // move or drag when origin set updates rules
         else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
@@ -304,9 +300,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
             view.SetVisible( &ruler, true );
             view.Update( &ruler, KIGFX::GEOMETRY );
         }
-
-        else if( evt->IsAction( &ACTIONS::toggleUnits )
-                 || evt->IsAction( &ACTIONS::updateUnits ) )
+        else if( evt->IsAction( &ACTIONS::updateUnits ) )
         {
             if( frame()->GetUserUnits() != units )
             {
@@ -315,15 +309,16 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
                 view.Update( &ruler, KIGFX::GEOMETRY );
                 canvas()->Refresh();
             }
+            evt->SetPassEvent();
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu();
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     view.SetVisible( &ruler, false );

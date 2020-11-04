@@ -1168,7 +1168,8 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( m_frame->IsGridVisible() );
-        VECTOR2I    cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), LSET::AllLayersMask() );
+        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(),
+                                                  LSET::AllLayersMask() );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsClick( BUT_LEFT ) )
@@ -1208,10 +1209,10 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
 
 /**
- * Update an PCB_SHAPE from the current state of an Two POINT Geometry Manager
+ * Update an PCB_SHAPE from the current state of a TWO_POINT_GEOMETRY_MANAGER
  */
-static void updateSegmentFromConstructionMgr(
-        const KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER& aMgr, PCB_SHAPE* aGraphic )
+static void updateSegmentFromGeometryMgr( const KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER& aMgr,
+                                          PCB_SHAPE* aGraphic )
 {
     auto vec = aMgr.GetOrigin();
 
@@ -1238,8 +1239,8 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
     // drawing assistant overlay
     // TODO: workaround because PCB_SHAPE_TYPE_T is not visible from commons.
     KIGFX::PREVIEW::GEOM_SHAPE geomShape( static_cast<KIGFX::PREVIEW::GEOM_SHAPE>( aShape ) );
-    KIGFX::PREVIEW::TWO_POINT_ASSISTANT twoPointAsst(
-            twoPointManager, m_frame->GetUserUnits(), geomShape );
+    KIGFX::PREVIEW::TWO_POINT_ASSISTANT twoPointAsst( twoPointManager, m_frame->GetUserUnits(),
+                                                      geomShape );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     PCBNEW_SELECTION preview;
@@ -1383,7 +1384,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
 
-                updateSegmentFromConstructionMgr( twoPointManager, graphic );
+                updateSegmentFromGeometryMgr( twoPointManager, graphic );
 
                 started = true;
             }
@@ -1440,7 +1441,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
                 twoPointManager.SetAngleSnap( false );
             }
 
-            updateSegmentFromConstructionMgr( twoPointManager, graphic );
+            updateSegmentFromGeometryMgr( twoPointManager, graphic );
             m_view->Update( &preview );
             m_view->Update( &twoPointAsst );
         }
@@ -1461,6 +1462,12 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
         else if( evt->IsAction( &ACTIONS::resetLocalCoords ) )
         {
             isLocalOriginSet = true;
+            evt->SetPassEvent();
+        }
+        else if( evt->IsAction( &ACTIONS::updateUnits ) )
+        {
+            twoPointAsst.SetUnits( frame()->GetUserUnits() );
+            m_view->Update( &twoPointAsst );
             evt->SetPassEvent();
         }
         else
@@ -1665,6 +1672,12 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
         else if( evt->IsAction( &PCB_ACTIONS::arcPosture ) )
         {
             arcManager.ToggleClockwise();
+        }
+        else if( evt->IsAction( &ACTIONS::updateUnits ) )
+        {
+            arcAsst.SetUnits( frame()->GetUserUnits() );
+            m_view->Update( &arcAsst );
+            evt->SetPassEvent();
         }
         else
         {
@@ -1889,7 +1902,6 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 m_controls->SetAutoPan( false );
                 m_controls->CaptureCursor( false );
             }
-
             // adding a corner
             else if( polyGeomMgr.AddPoint( cursorPos ) )
             {
@@ -1942,6 +1954,14 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 zoneTool.OnGeometryChange( polyGeomMgr );
                 frame()->SetMsgPanel( zoneTool.GetZone() );
             }
+        }
+        else if( evt->IsAction( &ACTIONS::updateUnits ) )
+        {
+            // If we ever have an assistant here that reports dimensions, we'll want to
+            // update its units here....
+            // zoneAsst.SetUnits( frame()->GetUserUnits() );
+            // m_view->Update( &zoneAsst );
+            evt->SetPassEvent();
         }
         else
         {

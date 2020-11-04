@@ -65,6 +65,8 @@ namespace PREVIEW
             return "ARC_ASSISTANT";
         }
 
+        void SetUnits( EDA_UNITS aUnits ) { m_units = aUnits; }
+
     private:
         const ARC_GEOM_MANAGER& m_constructMan;
         EDA_UNITS               m_units;

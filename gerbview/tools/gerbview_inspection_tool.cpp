@@ -246,7 +246,6 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-
         else if( evt->IsActivate() )
         {
             if( originSet )
@@ -263,7 +262,6 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-
         // click or drag starts
         else if( !originSet && ( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
         {
@@ -275,7 +273,6 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
             originSet = true;
         }
-
         // second click or mouse up after drag ends
         else if( originSet && ( evt->IsClick( BUT_LEFT ) || evt->IsMouseUp( BUT_LEFT ) ) )
         {
@@ -284,7 +281,6 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
             controls.SetAutoPan( false );
             controls.CaptureCursor( false );
         }
-
         // move or drag when origin set updates rules
         else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
@@ -294,9 +290,7 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
             view.SetVisible( &ruler, true );
             view.Update( &ruler, KIGFX::GEOMETRY );
         }
-
-        else if( evt->IsAction( &ACTIONS::toggleUnits )
-                 || evt->IsAction( &ACTIONS::updateUnits ) )
+        else if( evt->IsAction( &ACTIONS::updateUnits ) )
         {
             if( m_frame->GetUserUnits() != units )
             {
@@ -304,15 +298,16 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
                 ruler.SwitchUnits( units );
                 view.Update( &ruler, KIGFX::GEOMETRY );
             }
+            evt->SetPassEvent();
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu( m_frame->GetCurrentSelection() );
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     view.SetVisible( &ruler, false );

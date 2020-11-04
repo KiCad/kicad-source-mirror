@@ -82,6 +82,8 @@ public:
         return "TWO_POINT_ASSISTANT";
     }
 
+    void SetUnits( EDA_UNITS aUnits ) { m_units = aUnits; }
+
 private:
     const TWO_POINT_GEOMETRY_MANAGER& m_constructMan;
     EDA_UNITS                         m_units;
