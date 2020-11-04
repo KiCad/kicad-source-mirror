@@ -813,7 +813,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m_gal->SetFontItalic( false );
             m_gal->SetFontUnderlined( false );
             m_gal->SetTextMirrored( false );
-            m_gal->SetStrokeColor( m_pcbSettings.GetColor( NULL, aLayer ) );
+            m_gal->SetStrokeColor( m_pcbSettings.GetColor( aPad, aLayer ) );
             m_gal->SetIsStroke( true );
             m_gal->SetIsFill( false );
 
