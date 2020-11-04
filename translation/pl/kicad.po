@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-28 11:53-0700\n"
-"PO-Revision-Date: 2020-11-03 18:15+0000\n"
+"PO-Revision-Date: 2020-11-05 03:07+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -2649,7 +2649,7 @@ msgstr "Tryb wyjściowy:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:95
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:101
 msgid "Color"
-msgstr "Kolorowy"
+msgstr "Kolor"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:101
@@ -5391,7 +5391,7 @@ msgstr "Zmień metodę edycji"
 
 #: common/tool/actions.cpp:199
 msgid "Change edit method constraints"
-msgstr "Zmienia ograniczenia metody edycji"
+msgstr "Zmienia restrykcje metod edycji"
 
 #: common/tool/actions.cpp:204 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
@@ -17339,7 +17339,7 @@ msgstr "Maksymalna szerokość:"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:169
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:181
 msgid "Set to 0 to disable this constraint"
-msgstr "Ustaw 0 by wyłączyć to ograniczenie"
+msgstr "Ustaw 0 by wyłączyć tą restrykcję"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:179
 msgid "Maximum height:"
@@ -19370,7 +19370,7 @@ msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:125
 msgid "No constraint"
-msgstr "Brak ograniczeń"
+msgstr "Brak restrykcji"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:125
 msgid "Impedance controlled"
@@ -19386,7 +19386,7 @@ msgid ""
 "Loss tangent and EpsilonR will be added to constraints."
 msgstr ""
 "Jeśli ustawiona jest opcja kontrolowania impedancji,\n"
-"Loss Tg i EpsilonR zostaną dodane do ograniczeń."
+"Loss Tg i EpsilonR zostaną dodane do restrykcji."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:133
 msgid "Add Dielectric Layer"
@@ -20822,7 +20822,7 @@ msgstr "Reguły projektowe"
 #: pcbnew/dialogs/dialog_board_setup.cpp:82 pcbnew/router/router_tool.cpp:751
 #: pcbnew/router/router_tool.cpp:772
 msgid "Constraints"
-msgstr "Ograniczenia"
+msgstr "Restrykcje"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:83
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:50
@@ -21123,7 +21123,7 @@ msgstr "Oczyść ścieżki i przelotki"
 
 #: pcbnew/dialogs/dialog_constraints_reporter_base.h:41
 msgid "Constraints Resolution Report"
-msgstr "Raport o ograniczeniach rozdzielczości"
+msgstr "Raport z analizą restrykcji"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:282
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:163
@@ -24412,7 +24412,7 @@ msgid ""
 "These properties are specified in Gerber X2  files."
 msgstr ""
 "Opcjonalna właściwość służąca do określenia specjalnego przeznaczenia lub "
-"ograniczenia w plikach produkcyjnych:\n"
+"restrykcji w plikach produkcyjnych:\n"
 "Atrybut BGA dotyczy pól w footprintach BGA\n"
 "Lokalny fiducial jest fiducialem dla footprintu nadrzędnego\n"
 "Globalny fiducial to fiducial dla całej płytki\n"
@@ -24778,8 +24778,8 @@ msgstr ""
 msgid ""
 "expect 0 and use their constraints, especially for solder mask min width."
 msgstr ""
-"spodziewa się wartości 0 i użyje własnych zasad, zwłaszcza dla minimalnej "
-"szerokości soldermaski."
+"spodziewa się wartości 0 i użyje własnych restrykcji, zwłaszcza dla "
+"minimalnej szerokości soldermaski."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:185
 msgid "Board setup"
@@ -25067,7 +25067,7 @@ msgstr "Dostrój do:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:54
 msgid "Constraint:"
-msgstr "Ograniczenie:"
+msgstr "Restrykcja:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:58
 msgid "From Design Rules"
@@ -26106,7 +26106,7 @@ msgstr "Wybiera kierunek na ekranie, w którym oś Y rośnie."
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:20
 msgid "Allowed features"
-msgstr "Dopuszczalna funkcjonalność"
+msgstr "Dopuszczone funkcje"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:32
 msgid "Allow blind/buried vias"
@@ -27196,11 +27196,11 @@ msgstr "Kreator pobierania plików modeli 3D"
 #: pcbnew/drc/drc_engine.cpp:125 pcbnew/drc/drc_engine.cpp:163
 #: pcbnew/drc/drc_engine.cpp:193
 msgid "board setup constraints"
-msgstr "ograniczenia konfiguracji płytki"
+msgstr "restrykcje w konfiguracji płytki"
 
 #: pcbnew/drc/drc_engine.cpp:172
 msgid "board setup micro-via constraints"
-msgstr "ograniczenia konfiguracji mikroprzelotek płytki"
+msgstr "restrykcje w konfiguracji mikroprzelotek płytki"
 
 #: pcbnew/drc/drc_engine.cpp:218 pcbnew/drc/drc_engine.cpp:245
 #: pcbnew/drc/drc_engine.cpp:273 pcbnew/drc/drc_engine.cpp:301
@@ -27259,11 +27259,11 @@ msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:846
 msgid "Keepout constraint not met."
-msgstr "Niespełnione warunki strefy chronionej."
+msgstr "Niespełniona restrykcja w strefie chronionej."
 
 #: pcbnew/drc/drc_engine.cpp:848
 msgid "Disallow constraint not met."
-msgstr "Nie zezwalaj niespełnienie ograniczeń."
+msgstr "Nie zezwalaj niespełnienie restrykcji."
 
 #: pcbnew/drc/drc_engine.cpp:857
 msgid "Keepout layer(s) not matched."
@@ -27280,7 +27280,7 @@ msgstr "Warstwa reguł nie została dopasowana."
 
 #: pcbnew/drc/drc_engine.cpp:898
 msgid "Unconditional constraint applied."
-msgstr "Zastosowano bezwarunkowe ograniczenie."
+msgstr "Zastosowano bezwarunkową restrykcję."
 
 #: pcbnew/drc/drc_engine.cpp:899
 msgid "Unconditional rule applied."
@@ -27293,15 +27293,15 @@ msgstr "Sprawdzam warunek reguły \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:918
 msgid "Constraint applied."
-msgstr "Ograniczenie zostało zastosowane."
+msgstr "Została zastosowana restrykcja."
 
 #: pcbnew/drc/drc_engine.cpp:919
 msgid "Rule applied; overrides previous constraints."
-msgstr "Zastosowano regułę; pokrywa ona poprzednie ograniczenia."
+msgstr "Zastosowano regułę; pokrywa ona poprzednie restrykcje."
 
 #: pcbnew/drc/drc_engine.cpp:926
 msgid "Membership not satisfied; constraint ignored."
-msgstr "Przynależność jest nieodpowiednia; ograniczenie zignorowane."
+msgstr "Przynależność jest nieodpowiednia; restrykcja zignorowana."
 
 #: pcbnew/drc/drc_engine.cpp:927
 msgid "Condition not satisfied; rule ignored."
@@ -27544,7 +27544,7 @@ msgstr "Brakuje ')'."
 #: pcbnew/drc/drc_rule_parser.cpp:266
 #, c-format
 msgid "Missing constraint type.|  Expected %s."
-msgstr "Brak typu ograniczenia.|  Spodziewano się %s."
+msgstr "Brak typu restrykcji.|  Spodziewano się %s."
 
 #: pcbnew/drc/drc_rule_parser.cpp:352
 msgid "Missing min value."
@@ -27667,7 +27667,7 @@ msgstr "obecnie: %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:73
 msgid "Checking keepouts & disallow constraints..."
-msgstr "Sprawdzam strefy wykluczone i wyłączone ograniczenia..."
+msgstr "Sprawdzam strefy wykluczone i niedozwolone restrykcje..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:90
 msgid "Checking board edge clearances..."
@@ -30658,14 +30658,14 @@ msgid ""
 "Constraints."
 msgstr ""
 "Przelotki ślepe/zagrzebane muszą być najpierw włączone w Ustawienia płytki > "
-"Reguły projektowe > Ograniczenia."
+"Reguły projektowe > Restrykcje."
 
 #: pcbnew/router/router_tool.cpp:778
 msgid ""
 "Microvias have to be enabled in Board Setup > Design Rules > Constraints."
 msgstr ""
 "Mikroprzelotki muszą być najpierw włączone w Ustawienia płytki > Reguły "
-"projektowe > Ograniczenia."
+"projektowe > Restrykcje."
 
 #: pcbnew/router/router_tool.cpp:787
 msgid "Only through vias are allowed on 2 layer boards."
@@ -32151,22 +32151,21 @@ msgstr "Pokazuje okno ze danymi statystycznymi płytki"
 
 #: pcbnew/tools/pcb_actions.cpp:1036
 msgid "Clearance Resolution..."
-msgstr "Rozdzielczość prześwitu..."
+msgstr "Analiza prześwitu..."
 
 #: pcbnew/tools/pcb_actions.cpp:1037
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr ""
-"Pokaż rozdzielczość prześwitu dla aktywnej warstwy między dwoma wybranymi "
-"obiektami"
+"Pokaż analizę prześwitu dla aktywnej warstwy między dwoma wybranymi obiektami"
 
 #: pcbnew/tools/pcb_actions.cpp:1042
 msgid "Constraints Resolution..."
-msgstr "Rozdzielczość ograniczeń..."
+msgstr "Analiza restrykcji..."
 
 #: pcbnew/tools/pcb_actions.cpp:1043
 msgid "Show constraints resolution for the selected object"
-msgstr "Pokaż rozdzielczość ograniczeń dla wybranego obiektu"
+msgstr "Pokaż analizę restrykcji dla wybranego obiektu"
 
 #: pcbnew/tools/pcb_actions.cpp:1049
 msgid "Geographical Reannotate..."
@@ -32549,7 +32548,7 @@ msgstr "Prześwit pola lutowniczego: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:242
 msgid "Select two items for a clearance resolution report."
-msgstr "Wybierz dwa elementy by utworzyć raport o rozdzielczości prześwitu."
+msgstr "Wybierz dwa elementy by utworzyć raport z analizą prześwitu."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:249
 msgid "Clearance Report"
@@ -32562,7 +32561,7 @@ msgstr "[klasa sieci %s]"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:304
 msgid "Silkscreen clearance resolution for:"
-msgstr "Rozdzielczość prześwitu warstwy opisowej dla:"
+msgstr "Analiza prześwitu warstwy opisowej dla:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:316
 #: pcbnew/tools/pcb_inspection_tool.cpp:322
@@ -32572,7 +32571,7 @@ msgstr "%s nie występuj na warstwie %s.  Nie zdefiniowano prześwitu."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:328
 msgid "Clearance resolution for:"
-msgstr "Rozdzielczość prześwitu dla:"
+msgstr "Analiza prześwitu dla:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:350
 msgid "Items belong to the same net. Clearance is 0."
@@ -32580,15 +32579,15 @@ msgstr "Elementy należą do tej samej sieci. Prześwit wynosi 0."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:375
 msgid "Select an item for a constraints resolution report."
-msgstr "Wybierz element by utworzyć raport o rozdzielczości prześwitu."
+msgstr "Wybierz element dla raportu z analizą prześwitu."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:382
 msgid "Constraints Report"
-msgstr "Raport o ograniczeniach"
+msgstr "Raport o restrykcjach"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:419
 msgid "Track width resolution for:"
-msgstr "Rozdzielczość szerokości ścieżki dla:"
+msgstr "Analiza szerokości ścieżki dla:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:434
 #: pcbnew/tools/pcb_inspection_tool.cpp:435
@@ -32603,7 +32602,7 @@ msgstr "niezdefiniowany"
 #: pcbnew/tools/pcb_inspection_tool.cpp:444
 #, c-format
 msgid "Width constraints: min %s max %s."
-msgstr "Ograniczenia szerokości: min %s maks %s."
+msgstr "Restrykcje szerokości: min %s maks %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:454
 msgid "Via Diameter"
@@ -32611,12 +32610,12 @@ msgstr "Średnica przelotki"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:456
 msgid "Via diameter resolution for:"
-msgstr "Rozdzielczość szerokości przelotek dla:"
+msgstr "Analiza szerokości przelotek dla:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:481
 #, c-format
 msgid "Diameter constraints: min %s max %s."
-msgstr "Ograniczenia rozmiaru: min %s maks %s."
+msgstr "Restrykcje rozmiaru: min %s maks %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:488
 msgid "Via Annular Width"
@@ -32624,12 +32623,12 @@ msgstr "Szerokość impulsu"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:490
 msgid "Via annular width resolution for:"
-msgstr "Rozdzielczość szerokości okręgu przelotki dla:"
+msgstr "Analiza szerokości pierścieni przelotki dla:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:515
 #, c-format
 msgid "Annular width constraints: min %s max %s."
-msgstr "Ograniczenia szerokości pierścienia: min %s maks %s."
+msgstr "Restrykcje w szerokości pierścienia: min %s maks %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:526
 msgid "Hole Size"
@@ -32637,12 +32636,12 @@ msgstr "Rozmiar otworu"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:528
 msgid "Hole diameter resolution for:"
-msgstr "Rozdzielczość rozmiaru otworu dla:"
+msgstr "Analiza rozmiaru otworu dla:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:549
 #, c-format
 msgid "Hole constraint: min %s."
-msgstr "Ograniczenia otworu: min %s."
+msgstr "Restrykcja otworu: min %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:555
 msgid "Keepouts"
@@ -32650,7 +32649,7 @@ msgstr "Strefy chronione"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:557
 msgid "Keepout resolution for:"
-msgstr "Rozdzielczość keepout-u dla:"
+msgstr "Analiza strefy chronionej dla:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:575
 msgid "Item <b>disallowed</b> at current location."
