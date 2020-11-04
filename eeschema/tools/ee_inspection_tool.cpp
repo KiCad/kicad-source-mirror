@@ -75,10 +75,7 @@ void EE_INSPECTION_TOOL::Reset( RESET_REASON aReason )
 
     if( aReason == MODEL_RELOAD )
     {
-        if( m_ercDialog )
-            m_ercDialog->Destroy();
-
-        m_ercDialog = nullptr;
+        DestroyERCDialog();
     }
 }
 
@@ -108,6 +105,15 @@ int EE_INSPECTION_TOOL::RunERC( const TOOL_EVENT& aEvent )
     }
 
     return 0;
+}
+
+
+void EE_INSPECTION_TOOL::DestroyERCDialog()
+{
+    if( m_ercDialog )
+        m_ercDialog->Destroy();
+
+    m_ercDialog = nullptr;
 }
 
 

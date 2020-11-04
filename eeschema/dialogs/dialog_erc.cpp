@@ -37,6 +37,7 @@
 #include <sch_marker.h>
 #include <connection_graph.h>
 #include <tools/ee_actions.h>
+#include <tools/ee_inspection_tool.h>
 #include <tool/tool_manager.h>
 #include <dialog_erc.h>
 #include <erc.h>
@@ -228,7 +229,7 @@ void DIALOG_ERC::OnCloseErcDialog( wxCloseEvent& event )
 {
     m_parent->FocusOnItem( nullptr );
 
-    Destroy();
+    m_parent->GetToolManager()->GetTool<EE_INSPECTION_TOOL>()->DestroyERCDialog();
 }
 
 

@@ -47,6 +47,8 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     int RunERC( const TOOL_EVENT& aEvent );
+    void DestroyERCDialog();
+
     int RunSimulation( const TOOL_EVENT& aEvent );
 
     int ShowDatasheet( const TOOL_EVENT& aEvent );
