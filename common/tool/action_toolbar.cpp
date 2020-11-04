@@ -199,12 +199,12 @@ ACTION_TOOLBAR::~ACTION_TOOLBAR()
 
 void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry, bool aIsCancellable )
 {
+    wxASSERT( GetParent() );
     wxASSERT_MSG( !( aIsCancellable && !aIsToggleEntry ), "aIsCancellable requires aIsToggleEntry" );
 
-    wxWindow* parent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
     int       toolId = aAction.GetUIId();
 
-    AddTool( toolId, wxEmptyString, KiScaledBitmap( aAction.GetIcon(), parent ),
+    AddTool( toolId, wxEmptyString, KiScaledBitmap( aAction.GetIcon(), GetParent() ),
              aAction.GetDescription(), aIsToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL );
 
     m_toolKinds[ toolId ]       = aIsToggleEntry;
@@ -215,10 +215,9 @@ void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry, bool 
 
 void ACTION_TOOLBAR::AddButton( const TOOL_ACTION& aAction )
 {
-    wxWindow* parent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
     int       toolId = aAction.GetUIId();
 
-    AddTool( toolId, wxEmptyString, KiScaledBitmap( aAction.GetIcon(), parent ),
+    AddTool( toolId, wxEmptyString, KiScaledBitmap( aAction.GetIcon(), GetParent() ),
              aAction.GetName(), wxITEM_NORMAL );
 
     m_toolKinds[ toolId ] = false;
@@ -256,8 +255,8 @@ void ACTION_TOOLBAR::AddGroup( ACTION_GROUP* aGroup, bool aIsToggleEntry )
 {
     int                groupId       = aGroup->GetUIId();
     const TOOL_ACTION* defaultAction = aGroup->GetDefaultAction();
-    wxWindow*          parent        = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
 
+    wxASSERT( GetParent() );
     wxASSERT( defaultAction );
 
     m_toolKinds[ groupId ]    = aIsToggleEntry;
@@ -265,7 +264,7 @@ void ACTION_TOOLBAR::AddGroup( ACTION_GROUP* aGroup, bool aIsToggleEntry )
     m_actionGroups[ groupId ] = aGroup;
 
     // Add the main toolbar item representing the group
-    AddTool( groupId, wxEmptyString, KiScaledBitmap( defaultAction->GetIcon(), parent ),
+    AddTool( groupId, wxEmptyString, KiScaledBitmap( defaultAction->GetIcon(), GetParent() ),
              wxEmptyString, aIsToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL );
 
     // Select the default action
@@ -289,17 +288,18 @@ void ACTION_TOOLBAR::SelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aAct
 
 void ACTION_TOOLBAR::doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aAction )
 {
+    wxASSERT( GetParent() );
+
     int groupId = aGroup->GetUIId();
 
     wxAuiToolBarItem* item   = FindTool( groupId );
-    wxWindow*         parent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
 
     if( !item )
         return;
 
     // Update the item information
     item->SetShortHelp( aAction.GetDescription() );
-    item->SetBitmap( KiScaledBitmap( aAction.GetIcon(), parent ) );
+    item->SetBitmap( KiScaledBitmap( aAction.GetIcon(), GetParent() ) );
     item->SetDisabledBitmap( item->GetBitmap().ConvertToDisabled() );
 
     // Register a new handler with the new UI conditions
@@ -550,10 +550,11 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
     // Clear all popup conditions
     m_paletteTimer->Stop();
 
-    wxWindow* parent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
+    wxWindow* toolParent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
 
+    wxASSERT( GetParent() );
     wxASSERT( m_auiManager );
-    wxASSERT( parent );
+    wxASSERT( toolParent );
 
     // Ensure the item we are using for the palette has a group associated with it.
     const auto it = m_actionGroups.find( aItem->GetId() );
@@ -617,7 +618,7 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
             break;
     }
 
-    m_palette = new ACTION_TOOLBAR_PALETTE( parent, dir );
+    m_palette = new ACTION_TOOLBAR_PALETTE( GetParent(), dir );
 
     // We handle the button events in the toolbar class, so connect the right handler
     m_palette->SetGroup( group );
@@ -631,7 +632,7 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
     {
         wxUpdateUIEvent evt( action->GetUIId() );
 
-        parent->ProcessWindowEvent( evt );
+        toolParent->ProcessWindowEvent( evt );
 
         m_palette->AddAction( *action );
 
