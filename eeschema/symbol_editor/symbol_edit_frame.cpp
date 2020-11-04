@@ -152,10 +152,12 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
+    m_auimgr.AddPane( m_optionsToolBar,
+                      EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
     m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "ComponentTree" ).Left().Layer(2)
                       .Caption( _( "Libraries" ) ).MinSize( 250, -1 ).BestSize( 250, -1 ) );
-    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(2) );
+    m_auimgr.AddPane( m_drawToolBar,
+                      EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(2) );
     m_auimgr.AddPane( m_infoBar,
                       EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
 
@@ -326,6 +328,12 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
             return m_my_part;
         };
 
+    auto haveRootSymbolCond =
+        [this] ( const SELECTION& )
+        {
+            return m_my_part && m_my_part->IsRoot();
+        };
+
     auto libMgrModifiedCond =
         [this] ( const SELECTION& )
         {
@@ -350,32 +358,52 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return ( !readOnly && m_libMgr->IsPartModified( partName, libName ) );
         };
 
-    mgr->SetConditions( ACTIONS::saveAll,             ENABLE( libMgrModifiedCond ) );
-    mgr->SetConditions( ACTIONS::save,                ENABLE( haveSymbolCond && modifiedDocumentCondition ) );
+    mgr->SetConditions( ACTIONS::saveAll,
+                        ENABLE( libMgrModifiedCond ) );
+    mgr->SetConditions( ACTIONS::save,
+                        ENABLE( haveSymbolCond && modifiedDocumentCondition ) );
     mgr->SetConditions( EE_ACTIONS::saveInSchematic,  ENABLE( libMgrModifiedCond ) );
-    mgr->SetConditions( ACTIONS::undo,                ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
-    mgr->SetConditions( ACTIONS::redo,                ENABLE( haveSymbolCond && cond.RedoAvailable() ) );
-    mgr->SetConditions( ACTIONS::revert,              ENABLE( haveSymbolCond && modifiedDocumentCondition ) );
+    mgr->SetConditions( ACTIONS::undo,
+                        ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::redo,
+                        ENABLE( haveSymbolCond && cond.RedoAvailable() ) );
+    mgr->SetConditions( ACTIONS::revert,
+                        ENABLE( haveSymbolCond && modifiedDocumentCondition ) );
 
-    mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
-    mgr->SetConditions( ACTIONS::toggleCursorStyle,   CHECK( cond.FullscreenCursor() ) );
-    mgr->SetConditions( ACTIONS::millimetersUnits,    CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
-    mgr->SetConditions( ACTIONS::inchesUnits,         CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
-    mgr->SetConditions( ACTIONS::milsUnits,           CHECK( cond.Units( EDA_UNITS::MILS ) ) );
-    mgr->SetConditions( ACTIONS::acceleratedGraphics, CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
-    mgr->SetConditions( ACTIONS::standardGraphics,    CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
+    mgr->SetConditions( ACTIONS::toggleGrid,
+                        CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle,
+                        CHECK( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::millimetersUnits,
+                        CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::inchesUnits,
+                        CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
+    mgr->SetConditions( ACTIONS::milsUnits,
+                        CHECK( cond.Units( EDA_UNITS::MILS ) ) );
+    mgr->SetConditions( ACTIONS::acceleratedGraphics,
+                        CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
+    mgr->SetConditions( ACTIONS::standardGraphics,
+                        CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
 
-    mgr->SetConditions( ACTIONS::cut,                 ENABLE( haveSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
-    mgr->SetConditions( ACTIONS::copy,                ENABLE( haveSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
-    mgr->SetConditions( ACTIONS::paste,               ENABLE( haveSymbolCond && SELECTION_CONDITIONS::Idle ) );
-    mgr->SetConditions( ACTIONS::doDelete,            ENABLE( haveSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
-    mgr->SetConditions( ACTIONS::duplicate,           ENABLE( haveSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
-    mgr->SetConditions( ACTIONS::selectAll,           ENABLE( haveSymbolCond ) );
+    mgr->SetConditions( ACTIONS::cut,
+                        ENABLE( haveRootSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::copy,
+                        ENABLE( haveRootSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::paste,
+                        ENABLE( haveRootSymbolCond && SELECTION_CONDITIONS::Idle ) );
+    mgr->SetConditions( ACTIONS::doDelete,
+                        ENABLE( haveRootSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::duplicate,
+                        ENABLE( haveRootSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::selectAll,
+                        ENABLE( haveRootSymbolCond ) );
 
-    mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
-    mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::zoomTool,
+                        CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,
+                        CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
 
-    auto pinTypeCond =
+     auto pinTypeCond =
         [this] ( const SELECTION& )
         {
             return GetRenderSettings()->m_ShowPinsElectricalType;
@@ -451,11 +479,14 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::deleteTool,             EDIT_TOOL( ACTIONS::deleteTool ) );
     mgr->SetConditions( EE_ACTIONS::placeSymbolPin,      EDIT_TOOL( EE_ACTIONS::placeSymbolPin ) );
     mgr->SetConditions( EE_ACTIONS::placeSymbolText,     EDIT_TOOL( EE_ACTIONS::placeSymbolText ) );
-    mgr->SetConditions( EE_ACTIONS::drawSymbolRectangle, EDIT_TOOL( EE_ACTIONS::drawSymbolRectangle ) );
-    mgr->SetConditions( EE_ACTIONS::drawSymbolCircle,    EDIT_TOOL( EE_ACTIONS::drawSymbolCircle ) );
+    mgr->SetConditions( EE_ACTIONS::drawSymbolRectangle,
+                        EDIT_TOOL( EE_ACTIONS::drawSymbolRectangle ) );
+    mgr->SetConditions( EE_ACTIONS::drawSymbolCircle,
+                        EDIT_TOOL( EE_ACTIONS::drawSymbolCircle ) );
     mgr->SetConditions( EE_ACTIONS::drawSymbolArc,       EDIT_TOOL( EE_ACTIONS::drawSymbolArc ) );
     mgr->SetConditions( EE_ACTIONS::drawSymbolLines,     EDIT_TOOL( EE_ACTIONS::drawSymbolLines ) );
-    mgr->SetConditions( EE_ACTIONS::placeSymbolAnchor,   EDIT_TOOL( EE_ACTIONS::placeSymbolAnchor ) );
+    mgr->SetConditions( EE_ACTIONS::placeSymbolAnchor,
+                        EDIT_TOOL( EE_ACTIONS::placeSymbolAnchor ) );
 
     RegisterUIUpdateHandler( ID_LIBEDIT_IMPORT_BODY_BUTT, ENABLE( isEditableCond ) );
     RegisterUIUpdateHandler( ID_LIBEDIT_EXPORT_BODY_BUTT, ENABLE( isEditableCond ) );
