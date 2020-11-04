@@ -5459,6 +5459,10 @@ void ClipperOffset::DoRound( int j, int k )
     }
 
     m_destPoly.push_back( IntPoint(
+                    Round( m_srcPoly[j].X + X * m_delta ),
+                    Round( m_srcPoly[j].Y + Y * m_delta ) ) );
+
+    m_destPoly.push_back( IntPoint(
                     Round( m_srcPoly[j].X + m_normals[j].X * m_delta ),
                     Round( m_srcPoly[j].Y + m_normals[j].Y * m_delta ) ) );
 }
