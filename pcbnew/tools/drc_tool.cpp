@@ -162,12 +162,6 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
 
         zoneFiller->FillAllZones( m_drcDialog, aProgressReporter );
     }
-    else
-    {
-        aProgressReporter->AdvancePhase( _( "Checking zone fills..." ) );
-
-        zoneFiller->CheckAllZones( m_drcDialog, aProgressReporter );
-    }
 
     m_drcEngine->SetWorksheet( m_editFrame->GetCanvas()->GetWorksheet() );
 
