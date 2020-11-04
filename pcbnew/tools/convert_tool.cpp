@@ -107,7 +107,7 @@ bool CONVERT_TOOL::Init()
     for( std::shared_ptr<ACTION_MENU>& subMenu : m_selectionTool->GetToolMenu().GetSubMenus() )
     {
         if( dynamic_cast<SPECIAL_TOOLS_CONTEXT_MENU*>( subMenu.get() ) )
-            static_cast<CONDITIONAL_MENU*>( subMenu.get() )->AddMenu( m_menu, SELECTION_CONDITIONS::ShowAlways );
+            static_cast<CONDITIONAL_MENU*>( subMenu.get() )->AddMenu( m_menu, showConvert );
     }
 
     return true;
