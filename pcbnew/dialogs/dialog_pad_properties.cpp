@@ -267,7 +267,7 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     m_padPreviewGAL = new PCB_DRAW_PANEL_GAL( m_boardViewPanel, -1, wxDefaultPosition,
                                               wxDefaultSize,
                                               m_parent->GetGalDisplayOptions(),
-                                              EDA_DRAW_PANEL_GAL::GAL_FALLBACK );
+                                              m_parent->GetCanvas()->GetBackend() );
 
     m_padPreviewSizer->Add( m_padPreviewGAL, 12, wxEXPAND | wxALL, 5 );
 
