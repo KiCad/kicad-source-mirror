@@ -134,9 +134,6 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
                                  float *aOutT,
                                  SFVEC2F *aNormalOut ) const
 {
-    wxASSERT( aOutT );
-    wxASSERT( aNormalOut );
-
     const bool start_is_inside = IsPointInside( aSegRay.m_Start );
     const bool end_is_inside = IsPointInside( aSegRay.m_End );
 
@@ -274,16 +271,22 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
     {
         if( !start_is_inside )
         {
-            *aOutT = closerHitT;
+            if( aOutT )
+                *aOutT = closerHitT;
             //wxASSERT( (closerHitT > 0.0f) && (closerHitT <= 1.0f) );
-            *aNormalOut = closerHitNormal;
+
+            if( aNormalOut )
+                *aNormalOut = closerHitNormal;
         }
         else
         {
             wxASSERT( (farHitT >= 0.0f) && (farHitT <= 1.0f) );
 
-            *aOutT = farHitT;
-            *aNormalOut = -farHitNormal; // the normal started inside, so invert it
+            if( aOutT )
+                *aOutT = farHitT;
+
+            if( aNormalOut )
+                *aNormalOut = -farHitNormal; // the normal started inside, so invert it
         }
     }
 

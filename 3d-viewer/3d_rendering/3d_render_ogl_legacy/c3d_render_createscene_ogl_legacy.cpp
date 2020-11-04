@@ -272,7 +272,8 @@ CLAYERS_OGL_DISP_LISTS *C3D_RENDER_OGL_LEGACY::generate_holes_display_list(
         const SHAPE_POLY_SET &aPoly,
         float aZtop,
         float aZbot,
-        bool aInvertFaces )
+        bool aInvertFaces,
+        const CBVHCONTAINER2D *aThroughHoles )
 {
     CLAYERS_OGL_DISP_LISTS *ret = NULL;
 
@@ -319,7 +320,8 @@ CLAYERS_OGL_DISP_LISTS *C3D_RENDER_OGL_LEGACY::generate_holes_display_list(
                                                   aZbot,
                                                   aZtop,
                                                   m_boardAdapter.BiuTo3Dunits(),
-                                                  aInvertFaces );
+                                                  aInvertFaces,
+                                                  aThroughHoles );
         }
 
         ret = new CLAYERS_OGL_DISP_LISTS( *layerTriangles,
@@ -336,7 +338,8 @@ CLAYERS_OGL_DISP_LISTS *C3D_RENDER_OGL_LEGACY::generate_holes_display_list(
 
 CLAYERS_OGL_DISP_LISTS* C3D_RENDER_OGL_LEGACY::generateLayerListFromContainer( const CBVHCONTAINER2D *aContainer,
                                                                                const SHAPE_POLY_SET *aPolyList,
-                                                                               PCB_LAYER_ID aLayerId )
+                                                                               PCB_LAYER_ID aLayerId,
+                                                                               const CBVHCONTAINER2D *aThroughHoles )
 {
     if( aContainer == nullptr )
         return nullptr;
@@ -402,7 +405,8 @@ CLAYERS_OGL_DISP_LISTS* C3D_RENDER_OGL_LEGACY::generateLayerListFromContainer( c
     if( aPolyList )
         if( aPolyList->OutlineCount() > 0 )
             layerTriangles->AddToMiddleContourns( *aPolyList, layer_z_bot, layer_z_top,
-                                                  m_boardAdapter.BiuTo3Dunits(), false );
+                                                  m_boardAdapter.BiuTo3Dunits(), false,
+                                                  aThroughHoles );
     // Create display list
     // /////////////////////////////////////////////////////////////////////
     return new CLAYERS_OGL_DISP_LISTS( *layerTriangles, m_ogl_circle_texture,
@@ -410,7 +414,7 @@ CLAYERS_OGL_DISP_LISTS* C3D_RENDER_OGL_LEGACY::generateLayerListFromContainer( c
 }
 
 
-CLAYERS_OGL_DISP_LISTS* C3D_RENDER_OGL_LEGACY::createBoard( const SHAPE_POLY_SET& aBoardPoly )
+CLAYERS_OGL_DISP_LISTS* C3D_RENDER_OGL_LEGACY::createBoard( const SHAPE_POLY_SET& aBoardPoly, const CBVHCONTAINER2D *aThroughHoles )
 {
     CLAYERS_OGL_DISP_LISTS* dispLists = nullptr;
     CCONTAINER2D boardContainer;
@@ -461,7 +465,8 @@ CLAYERS_OGL_DISP_LISTS* C3D_RENDER_OGL_LEGACY::createBoard( const SHAPE_POLY_SET
                                                   layer_z_bot,
                                                   layer_z_top,
                                                   m_boardAdapter.BiuTo3Dunits(),
-                                                  false );
+                                                  false,
+                                                  aThroughHoles );
 
             dispLists = new CLAYERS_OGL_DISP_LISTS( *layerTriangles,
                                                     m_ogl_circle_texture,
@@ -497,7 +502,7 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
     // Create Board
     // /////////////////////////////////////////////////////////////////////////
 
-    m_ogl_disp_list_board = createBoard( m_boardAdapter.GetBoardPoly() );
+    m_ogl_disp_list_board = createBoard( m_boardAdapter.GetBoardPoly(), &m_boardAdapter.GetThroughHole_Inner() );
 
     m_anti_board_poly.RemoveAllContours();
     m_anti_board_poly.NewOutline();
@@ -533,7 +538,8 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
             outerPolyTHT,
             1.0f,
             0.0f,
-            false );
+            false,
+            &m_boardAdapter.GetThroughHole_Inner() );
 
     m_ogl_disp_list_through_holes_vias_outer = generate_holes_display_list(
             m_boardAdapter.GetThroughHole_Vias_Outer().GetList(),
@@ -632,16 +638,31 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
         SHAPE_POLY_SET polyListSubtracted;
         polyListSubtracted = *aPolyList;
 
-        polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_FAST );
-
-        if( ( layer_id != B_Mask ) &&
-            ( layer_id != F_Mask ) )
+        if( ( layer_id != B_Paste ) && ( layer_id != F_Paste ) )
         {
-            polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly(), SHAPE_POLY_SET::PM_FAST );
-            polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly_NPTH(), SHAPE_POLY_SET::PM_FAST );
+            polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_FAST );
+
+            if( ( layer_id != B_Mask ) && ( layer_id != F_Mask ) )
+            {
+                polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly(), SHAPE_POLY_SET::PM_FAST );
+                polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly_NPTH(), SHAPE_POLY_SET::PM_FAST );
+            }
+
+            if( m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) )
+            {
+                if( ( ( layer_id == B_SilkS ) && ( map_poly.find( B_Mask ) != map_poly.end() ) ) )
+                    polyListSubtracted.BooleanSubtract( *map_poly.at( B_Mask ), SHAPE_POLY_SET::PM_FAST );
+                else
+                    if( ( ( layer_id == F_SilkS ) && ( map_poly.find( F_Mask ) != map_poly.end() ) ) )
+                        polyListSubtracted.BooleanSubtract( *map_poly.at( F_Mask ), SHAPE_POLY_SET::PM_FAST );
+
+            }
         }
 
-        CLAYERS_OGL_DISP_LISTS* oglList = generateLayerListFromContainer( container2d, &polyListSubtracted, layer_id );
+        CLAYERS_OGL_DISP_LISTS* oglList = generateLayerListFromContainer( container2d,
+                                                                          &polyListSubtracted,
+                                                                          layer_id,
+                                                                          &m_boardAdapter.GetThroughHole_Inner() );
 
         if( oglList != nullptr )
             m_ogl_disp_lists_layers[layer_id] = oglList;

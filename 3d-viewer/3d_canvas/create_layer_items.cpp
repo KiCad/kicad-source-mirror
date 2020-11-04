@@ -565,6 +565,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             AddPadsShapesWithClearanceToContainer( module, m_platedpads_container2D_B_Cu, B_Cu, 0,
                                                    true, false, true );
         }
+
+        m_platedpads_container2D_F_Cu->BuildBVH();
+        m_platedpads_container2D_B_Cu->BuildBVH();
     }
 
     // Add footprints PADs poly contourns (vertical outlines)

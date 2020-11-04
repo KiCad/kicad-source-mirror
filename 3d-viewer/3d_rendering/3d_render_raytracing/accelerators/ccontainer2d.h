@@ -76,6 +76,13 @@ public:
     virtual void GetListObjectsIntersects( const CBBOX2D & aBBox,
                                            CONST_LIST_OBJECT2D &aOutList ) const = 0;
 
+    /**
+     * @brief IntersectAny - Intersect and check if a segment ray hits a object or is inside it
+     * @param aSegRay - a segment to intersect with objects
+     * @return true - if it hits any of the objects or is inside any object
+     */
+    virtual bool IntersectAny( const RAYSEG2D &aSegRay ) const = 0;
+
 private:
     std::mutex m_lock;
 };
@@ -89,6 +96,8 @@ public:
     // Imported from CGENERICCONTAINER2D
     void GetListObjectsIntersects( const CBBOX2D & aBBox,
                                    CONST_LIST_OBJECT2D &aOutList ) const override;
+
+    bool IntersectAny( const RAYSEG2D &aSegRay ) const override;
 };
 
 
@@ -120,12 +129,16 @@ private:
     void recursiveGetListObjectsIntersects( const BVH_CONTAINER_NODE_2D *aNode,
                                             const CBBOX2D & aBBox,
                                             CONST_LIST_OBJECT2D &aOutList ) const;
+    bool recursiveIntersectAny( const BVH_CONTAINER_NODE_2D *aNode,
+                                const RAYSEG2D &aSegRay ) const;
 
 public:
 
     // Imported from CGENERICCONTAINER2D
     void GetListObjectsIntersects( const CBBOX2D & aBBox,
                                    CONST_LIST_OBJECT2D &aOutList ) const override;
+
+    bool IntersectAny( const RAYSEG2D &aSegRay ) const override;
 };
 
 #endif // _CCONTAINER2D_H_

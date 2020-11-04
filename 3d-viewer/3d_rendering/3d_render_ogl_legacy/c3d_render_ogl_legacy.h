@@ -73,7 +73,7 @@ public:
 
 private:
     bool initializeOpenGL();
-    CLAYERS_OGL_DISP_LISTS* createBoard( const SHAPE_POLY_SET& aBoardPoly );
+    CLAYERS_OGL_DISP_LISTS* createBoard( const SHAPE_POLY_SET& aBoardPoly, const CBVHCONTAINER2D *aThroughHoles = nullptr );
     void reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
 
     void ogl_set_arrow_material();
@@ -122,11 +122,13 @@ private:
                                                          const SHAPE_POLY_SET &aPoly,
                                                          float aZtop,
                                                          float aZbot,
-                                                         bool aInvertFaces );
+                                                         bool aInvertFaces,
+                                                         const CBVHCONTAINER2D *aThroughHoles = nullptr );
 
-    CLAYERS_OGL_DISP_LISTS* generateLayerListFromContainer( const CBVHCONTAINER2D *aContainer,
+    CLAYERS_OGL_DISP_LISTS*  generateLayerListFromContainer( const CBVHCONTAINER2D *aContainer,
                                                             const SHAPE_POLY_SET *aPolyList,
-                                                            PCB_LAYER_ID aLayerId );
+                                                            PCB_LAYER_ID aLayerId,
+                                                            const CBVHCONTAINER2D *aThroughHoles = nullptr );
 
     void add_triangle_top_bot( CLAYER_TRIANGLES *aDst,
                                const SFVEC2F &v0,

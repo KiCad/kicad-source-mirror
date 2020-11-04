@@ -81,9 +81,6 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
                                  float *aOutT,
                                  SFVEC2F *aNormalOut ) const
 {
-    wxASSERT( aOutT );
-    wxASSERT( aNormalOut );
-
     if( m_objectA->GetObjectType() == OBJECT2D_TYPE::DUMMYBLOCK )
         return false;
 
@@ -147,8 +144,12 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
         }
     }
 
-    *aNormalOut = currentNormal;
-    *aOutT      = glm::min( glm::max( glm::length( currentRayPos - aSegRay.m_Start ) / aSegRay.m_Length, 0.0f ), 1.0f );
+    if( aNormalOut )
+        *aNormalOut = currentNormal;
+
+    if( aOutT )
+        *aOutT      = glm::min( glm::max( glm::length( currentRayPos - aSegRay.m_Start ) / aSegRay.m_Length, 0.0f ), 1.0f );
+
     return true;
 }
 

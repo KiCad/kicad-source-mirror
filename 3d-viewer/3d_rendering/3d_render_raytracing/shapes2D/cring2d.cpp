@@ -101,8 +101,11 @@ bool CRING2D::Intersect( const RAYSEG2D &aSegRay,
 
     if( (t > FLT_EPSILON) && (t < aSegRay.m_Length) )
     {
-        SFVEC2F hitPoint = aSegRay.at( t );
-        *aNormalOut = (hitPoint - m_center) / m_outer_radius;
+        if( aNormalOut )
+        {
+            SFVEC2F hitPoint = aSegRay.at( t );
+            *aNormalOut = (hitPoint - m_center) / m_outer_radius;
+        }
     }
     else
     {
@@ -118,9 +121,12 @@ bool CRING2D::Intersect( const RAYSEG2D &aSegRay,
             {
                 t = t2_inner;
 
-                const SFVEC2F hitPoint = aSegRay.at( t2_inner );
+                if( aNormalOut )
+                {
+                    const SFVEC2F hitPoint = aSegRay.at( t2_inner );
 
-                *aNormalOut = (m_center - hitPoint) / m_inner_radius;
+                    *aNormalOut = (m_center - hitPoint) / m_inner_radius;
+                }
             }
             else
                 return false;
@@ -132,7 +138,8 @@ bool CRING2D::Intersect( const RAYSEG2D &aSegRay,
     wxASSERT( (t > 0.0f) && (t <= aSegRay.m_Length) );
 
     // Convert the intersection to a normalized 0.0 .. 1.0
-    *aOutT = t / aSegRay.m_Length;
+    if( aOutT )
+        *aOutT = t / aSegRay.m_Length;
 
     return true;
 }

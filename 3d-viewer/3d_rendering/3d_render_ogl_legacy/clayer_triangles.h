@@ -34,6 +34,7 @@
 #include <plugins/3dapi/xv3d_types.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
+#include <3d_render_raytracing/accelerators/ccontainer2d.h>
 #include <vector>
 #include <mutex>
 
@@ -162,18 +163,21 @@ public:
                                float zBot,
                                float zTop,
                                double aBiuTo3Du,
-                               bool aInvertFaceDirection );
+                               bool aInvertFaceDirection,
+                               const CBVHCONTAINER2D *aThroughHoles = nullptr );
 
     void AddToMiddleContourns( const SHAPE_POLY_SET &aPolySet,
                                float zBot,
                                float zTop,
                                double aBiuTo3Du,
-                               bool aInvertFaceDirection );
+                               bool aInvertFaceDirection,
+                               const CBVHCONTAINER2D *aThroughHoles = nullptr );
 
     void AddToMiddleContourns( const std::vector< SFVEC2F > &aContournPoints,
                                float zBot,
                                float zTop,
-                               bool aInvertFaceDirection );
+                               bool aInvertFaceDirection,
+                               const CBVHCONTAINER2D *aThroughHoles = nullptr );
 
     std::mutex m_middle_layer_lock;
 

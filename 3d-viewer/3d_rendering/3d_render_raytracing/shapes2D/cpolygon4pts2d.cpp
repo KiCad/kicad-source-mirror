@@ -136,9 +136,6 @@ bool CPOLYGON4PTS2D::Intersect( const RAYSEG2D &aSegRay,
                                 float *aOutT,
                                 SFVEC2F *aNormalOut ) const
 {
-    wxASSERT( aOutT );
-    wxASSERT( aNormalOut );
-
     bool  hited = false;
     unsigned int hitIndex;
     float bestHitT;
@@ -160,8 +157,11 @@ bool CPOLYGON4PTS2D::Intersect( const RAYSEG2D &aSegRay,
     {
         wxASSERT( (bestHitT >= 0.0f) && (bestHitT <= 1.0f) );
 
-        *aOutT = bestHitT;
-        *aNormalOut = m_seg_normal[hitIndex];
+        if( aOutT )
+            *aOutT = bestHitT;
+
+        if( aNormalOut )
+            *aNormalOut = m_seg_normal[hitIndex];
 
         return true;
     }

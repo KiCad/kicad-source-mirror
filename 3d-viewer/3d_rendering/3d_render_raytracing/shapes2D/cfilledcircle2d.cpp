@@ -68,9 +68,6 @@ bool CFILLEDCIRCLE2D::Intersect( const RAYSEG2D &aSegRay,
                                  float *aOutT,
                                  SFVEC2F *aNormalOut ) const
 {
-    wxASSERT( aOutT );
-    wxASSERT( aNormalOut );
-
     // This code used directly from Steve Marschner's CS667 framework
     // http://cs665pd.googlecode.com/svn/trunk/photon/sphere.cpp
 
@@ -111,11 +108,13 @@ bool CFILLEDCIRCLE2D::Intersect( const RAYSEG2D &aSegRay,
     wxASSERT( (t > 0.0f) && (t <= aSegRay.m_Length) );
 
     // Convert the intersection to a normalized 0.0 .. 1.0
-    *aOutT = t / aSegRay.m_Length;
+    if( aOutT )
+        *aOutT = t / aSegRay.m_Length;
 
     const SFVEC2F hitPoint = aSegRay.at( t );
 
-    *aNormalOut = (hitPoint - m_center) / m_radius;
+    if( aNormalOut )
+        *aNormalOut = (hitPoint - m_center) / m_radius;
 
     return true;
 }

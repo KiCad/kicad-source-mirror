@@ -857,9 +857,14 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                         pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
             }
 
-            if( m_ogl_disp_list_anti_board )
+            CLAYERS_OGL_DISP_LISTS* ogl_disp_list_anti_board = m_ogl_disp_list_anti_board;
+
+            if( ( layer_id == B_Paste ) || ( layer_id == F_Paste ) )
+                ogl_disp_list_anti_board = nullptr;
+
+            if( ogl_disp_list_anti_board )
             {
-                m_ogl_disp_list_anti_board->ApplyScalePosition( pLayerDispList->GetZBot(),
+                ogl_disp_list_anti_board->ApplyScalePosition( pLayerDispList->GetZBot(),
                         pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
             }
 
@@ -878,7 +883,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                         drawMiddleSegments,
                         pLayerDispListMask,
                         dispListThroughHolesOuter,
-                        m_ogl_disp_list_anti_board );
+                        ogl_disp_list_anti_board );
             }
             else
             {
@@ -889,7 +894,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                             drawMiddleSegments,
                             nullptr,
                             dispListThroughHolesOuter,
-                            m_ogl_disp_list_anti_board );
+                            ogl_disp_list_anti_board );
                 }
                 else
                 {
@@ -899,7 +904,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                     {
                         pLayerDispList->DrawAllCameraCulledSubtractLayer(
                                 drawMiddleSegments,
-                                m_ogl_disp_list_anti_board );
+                                ogl_disp_list_anti_board );
                     }
                 }
             }

@@ -148,7 +148,8 @@ CLAYER_TRIANGLES::~CLAYER_TRIANGLES()
 void CLAYER_TRIANGLES::AddToMiddleContourns( const std::vector< SFVEC2F > &aContournPoints,
                                              float zBot,
                                              float zTop,
-                                             bool aInvertFaceDirection )
+                                             bool aInvertFaceDirection,
+                                             const CBVHCONTAINER2D *aThroughHoles )
 {
     if( aContournPoints.size() >= 4 )
     {
@@ -220,6 +221,10 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const std::vector< SFVEC2F > &aCont
             const SFVEC2F &v0 = aContournPoints[i + 0];
             const SFVEC2F &v1 = aContournPoints[i + 1];
 
+            if( aThroughHoles && aThroughHoles->IntersectAny( RAYSEG2D( v0, v1 ) ) )
+                continue;
+            else
+            //if( aThroughHoles && aThroughHoles->IntersectAny( RAYSEG2D( v0, v1 ) ) )
             {
                 std::lock_guard<std::mutex> lock( m_middle_layer_lock );
                 m_layer_middle_contourns_quads->AddQuad( SFVEC3F( v0.x, v0.y, zTop ),
@@ -238,7 +243,8 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const SHAPE_LINE_CHAIN &outlinePath
                                              float zBot,
                                              float zTop,
                                              double aBiuTo3Du,
-                                             bool aInvertFaceDirection )
+                                             bool aInvertFaceDirection,
+                                             const CBVHCONTAINER2D *aThroughHoles )
 {
     std::vector< SFVEC2F >contournPoints;
 
@@ -270,7 +276,7 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const SHAPE_LINE_CHAIN &outlinePath
     if( lastV != contournPoints[0] )
         contournPoints.push_back( contournPoints[0] );
 
-    AddToMiddleContourns( contournPoints, zBot, zTop, aInvertFaceDirection );
+    AddToMiddleContourns( contournPoints, zBot, zTop, aInvertFaceDirection, aThroughHoles );
 }
 
 
@@ -278,7 +284,8 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const SHAPE_POLY_SET &aPolySet,
                                              float zBot,
                                              float zTop,
                                              double aBiuTo3Du,
-                                             bool aInvertFaceDirection )
+                                             bool aInvertFaceDirection,
+                                             const CBVHCONTAINER2D *aThroughHoles )
 {
     if( aPolySet.OutlineCount() == 0 )
         return;
@@ -309,13 +316,13 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const SHAPE_POLY_SET &aPolySet,
         // Add outline
         const SHAPE_LINE_CHAIN& pathOutline = aPolySet.COutline( i );
 
-        AddToMiddleContourns( pathOutline, zBot, zTop, aBiuTo3Du, aInvertFaceDirection );
+        AddToMiddleContourns( pathOutline, zBot, zTop, aBiuTo3Du, aInvertFaceDirection, aThroughHoles );
 
         // Add holes for this outline
         for( int h = 0; h < aPolySet.HoleCount( i ); ++h )
         {
             const SHAPE_LINE_CHAIN &hole = aPolySet.CHole( i, h );
-            AddToMiddleContourns( hole, zBot, zTop, aBiuTo3Du, aInvertFaceDirection );
+            AddToMiddleContourns( hole, zBot, zTop, aBiuTo3Du, aInvertFaceDirection, aThroughHoles );
         }
     }
 }

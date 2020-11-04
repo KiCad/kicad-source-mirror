@@ -172,11 +172,14 @@ bool CPOLYGONBLOCK2D::Intersect( const RAYSEG2D &aSegRay,
     {
         wxASSERT( (tMin >= 0.0f) && (tMin <= 1.0f) );
 
-        *aOutT = tMin;
-        *aNormalOut = glm::normalize(
-                            m_open_segments[hitIndex].m_Normals.m_Start * hitU +
-                            m_open_segments[hitIndex].m_Normals.m_End *
-                            (1.0f - hitU) );
+        if( aOutT )
+            *aOutT = tMin;
+
+        if( aNormalOut )
+            *aNormalOut = glm::normalize(
+                                m_open_segments[hitIndex].m_Normals.m_Start * hitU +
+                                m_open_segments[hitIndex].m_Normals.m_End *
+                                (1.0f - hitU) );
 
         return true;
     }

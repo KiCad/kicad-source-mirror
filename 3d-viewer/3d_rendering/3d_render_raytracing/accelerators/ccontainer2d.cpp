@@ -154,6 +154,12 @@ void CCONTAINER2D::GetListObjectsIntersects( const CBBOX2D & aBBox,
 }
 
 
+bool CCONTAINER2D::IntersectAny( const RAYSEG2D &aSegRay ) const
+{
+    // !TODO:
+    return false;
+}
+
 
 
 // /////////////////////////////////////////////////////////////////////////////
@@ -387,6 +393,56 @@ void CBVHCONTAINER2D::recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D *aNodeP
     }
 }
 
+
+bool CBVHCONTAINER2D::IntersectAny( const RAYSEG2D &aSegRay ) const
+{
+    wxASSERT( m_isInitialized == true );
+
+    if( m_Tree )
+        return recursiveIntersectAny( m_Tree, aSegRay );
+
+    return false;
+}
+
+
+bool CBVHCONTAINER2D::recursiveIntersectAny( const BVH_CONTAINER_NODE_2D *aNode,
+                                             const RAYSEG2D &aSegRay ) const
+{
+    wxASSERT( aNode != NULL );
+
+    if( aNode->m_BBox.Inside( aSegRay.m_Start ) ||
+        aNode->m_BBox.Inside( aSegRay.m_End ) ||
+        aNode->m_BBox.Intersect( aSegRay ) )
+    {
+        if( !aNode->m_LeafList.empty() )
+        {
+            wxASSERT( aNode->m_Children[0] == NULL );
+            wxASSERT( aNode->m_Children[1] == NULL );
+
+            // Leaf
+            for( const COBJECT2D *obj : aNode->m_LeafList )
+            {
+                if( obj->IsPointInside( aSegRay.m_Start ) ||
+                    obj->IsPointInside( aSegRay.m_End ) ||
+                    obj->Intersect( aSegRay, nullptr, nullptr ) )
+                    return true;
+            }
+        }
+        else
+        {
+            wxASSERT( aNode->m_Children[0] != NULL );
+            wxASSERT( aNode->m_Children[1] != NULL );
+
+            // Node
+            if( recursiveIntersectAny( aNode->m_Children[0], aSegRay ) )
+                return true;
+            if( recursiveIntersectAny( aNode->m_Children[1], aSegRay ) )
+                return true;
+        }
+    }
+
+    return false;
+}
 
 void CBVHCONTAINER2D::GetListObjectsIntersects( const CBBOX2D &aBBox,
                                                 CONST_LIST_OBJECT2D &aOutList ) const
