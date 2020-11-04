@@ -93,9 +93,15 @@ static const LSET std_pad_layers[] =
     D_PAD::SMDMask(),           // PAD_ATTRIB_SMD:
     D_PAD::ConnSMDMask(),       // PAD_ATTRIB_CONN:
     D_PAD::UnplatedHoleMask(),  // PAD_ATTRIB_NPTH:
-    D_PAD::ApertureMask()
+    D_PAD::ApertureMask()       // Similar to SMD, but not on a copper layer
 };
 
+// Thse define have the same value as the m_PadType wxChoice GetSelected() return value
+#define PTH_DLG_TYPE 0
+#define SMD_DLG_TYPE 1
+#define CONN_DLG_TYPE 2
+#define NPTH_DLG_TYPE 3
+#define APERTURE_DLG_TYPE 4
 
 void PCB_BASE_FRAME::ShowPadPropertiesDialog( D_PAD* aPad )
 {
@@ -615,16 +621,16 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     if( aperture )
     {
-        m_PadType->SetSelection( 4 );
+        m_PadType->SetSelection( APERTURE_DLG_TYPE );
     }
     else
     {
         switch( m_dummyPad->GetAttribute() )
         {
-        case PAD_ATTRIB_PTH:    m_PadType->SetSelection( 0 ); break;
-        case PAD_ATTRIB_SMD:    m_PadType->SetSelection( 1 ); break;
-        case PAD_ATTRIB_CONN:   m_PadType->SetSelection( 2 ); break;
-        case PAD_ATTRIB_NPTH:   m_PadType->SetSelection( 3 ); break;
+        case PAD_ATTRIB_PTH:    m_PadType->SetSelection( PTH_DLG_TYPE ); break;
+        case PAD_ATTRIB_SMD:    m_PadType->SetSelection( SMD_DLG_TYPE ); break;
+        case PAD_ATTRIB_CONN:   m_PadType->SetSelection( CONN_DLG_TYPE ); break;
+        case PAD_ATTRIB_NPTH:   m_PadType->SetSelection( APERTURE_DLG_TYPE ); break;
         }
     }
 
@@ -892,7 +898,7 @@ void DIALOG_PAD_PROPERTIES::UpdateLayersDropdown()
 {
     m_rbCopperLayersSel->Clear();
 
-    if( m_PadType->GetSelection() == 0 )
+    if( m_PadType->GetSelection() == PTH_DLG_TYPE )
     {
         m_rbCopperLayersSel->Append( _( "All copper layers" ) );
         m_rbCopperLayersSel->Append( wxString::Format( _( "%s, %s and connected layers" ),
@@ -901,7 +907,7 @@ void DIALOG_PAD_PROPERTIES::UpdateLayersDropdown()
         m_rbCopperLayersSel->Append( _( "Connected layers only" ) );
         m_rbCopperLayersSel->Append( _( "None" ) );
     }
-    else if( m_PadType->GetSelection() == 3 )
+    else if( m_PadType->GetSelection() == NPTH_DLG_TYPE )
     {
         m_rbCopperLayersSel->Append( wxString::Format( _( "%s and %s" ),
                                                        m_board->GetLayerName( F_Cu ),
@@ -930,13 +936,14 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
     switch( ii )
     {
     default:
-    case 0: /* PTH */      hasHole = true;  hasConnection = true;  hasProperty = true;  break;
-    case 1: /* SMD */      hasHole = false; hasConnection = true;  hasProperty = true;  break;
-    case 2: /* CONN */     hasHole = false; hasConnection = true;  hasProperty = true;  break;
-    case 3: /* NPTH */     hasHole = true;  hasConnection = false; hasProperty = false; break;
-    case 4: /* Aperture */ hasHole = false; hasConnection = false; hasProperty = true;  break;
+    case PTH_DLG_TYPE: /* PTH */      hasHole = true;  hasConnection = true;  hasProperty = true;  break;
+    case SMD_DLG_TYPE: /* SMD */      hasHole = false; hasConnection = true;  hasProperty = true;  break;
+    case CONN_DLG_TYPE: /* CONN */     hasHole = false; hasConnection = true;  hasProperty = true;  break;
+    case NPTH_DLG_TYPE: /* NPTH */     hasHole = true;  hasConnection = false; hasProperty = false; break;
+    case APERTURE_DLG_TYPE: /* Aperture */ hasHole = false; hasConnection = false; hasProperty = true;  break;
     }
 
+    // Update Layers dropdown list and selects the "best" layer set for the new pad type:
     setPadLayersList( std_pad_layers[ii], m_dummyPad->GetRemoveUnconnected(),
                       m_dummyPad->GetKeepTopBottom() );
 
@@ -968,8 +975,6 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 
     m_choiceFabProperty->Enable( hasProperty );
 
-    UpdateLayersDropdown();
-
     transferDataToPad( m_dummyPad );
 
     redraw();
@@ -988,11 +993,11 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     switch( ii )
     {
     default:
-    case 0: /* PTH */      hasHole = true;  hasConnection = true;  break;
-    case 1: /* SMD */      hasHole = false; hasConnection = true;  break;
-    case 2: /* CONN */     hasHole = false; hasConnection = true;  break;
-    case 3: /* NPTH */     hasHole = true;  hasConnection = false; break;
-    case 4: /* Aperture */ hasHole = false; hasConnection = false; break;
+    case PTH_DLG_TYPE: /* PTH */      hasHole = true;  hasConnection = true;  break;
+    case SMD_DLG_TYPE: /* SMD */      hasHole = false; hasConnection = true;  break;
+    case CONN_DLG_TYPE: /* CONN */     hasHole = false; hasConnection = true;  break;
+    case NPTH_DLG_TYPE: /* NPTH */     hasHole = true;  hasConnection = false; break;
+    case APERTURE_DLG_TYPE: /* Aperture */ hasHole = false; hasConnection = false; break;
     }
 
     // Enable/disable hole controls
@@ -1021,7 +1026,7 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 
     LSET cu_set = m_dummyPad->GetLayerSet() & LSET::AllCuMask();
 
-    if( m_PadType->GetSelection() == 0 )
+    if( m_PadType->GetSelection() == PTH_DLG_TYPE )
     {
         if( !cu_set.any() )
             m_stackupImagesBook->SetSelection( 3 );
@@ -1032,7 +1037,7 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         else
             m_stackupImagesBook->SetSelection( 2 );
     }
-    else if( m_PadType->GetSelection() == 3 )
+    else if( m_PadType->GetSelection() == NPTH_DLG_TYPE )
     {
         if( cu_set.test( F_Cu ) && cu_set.test( B_Cu ) )
             m_stackupImagesBook->SetSelection( 4 );
@@ -1043,7 +1048,7 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         else
             m_stackupImagesBook->SetSelection( 7 );
     }
-    else
+    else    // SMD, CONN, APERTURE
     {
         m_stackupImagesBook->SetSelection( 3 );
     }
@@ -1057,7 +1062,7 @@ void DIALOG_PAD_PROPERTIES::setPadLayersList( LSET layer_mask, bool remove_uncon
 
     LSET cu_set = layer_mask & LSET::AllCuMask();
 
-    if( m_PadType->GetSelection() == 0 )
+    if( m_PadType->GetSelection() == PTH_DLG_TYPE )     // PTH pad
     {
         if( !cu_set.any() )
             m_rbCopperLayersSel->SetSelection( 3 );
@@ -1068,7 +1073,7 @@ void DIALOG_PAD_PROPERTIES::setPadLayersList( LSET layer_mask, bool remove_uncon
         else
             m_rbCopperLayersSel->SetSelection( 2 );
     }
-    else if( m_PadType->GetSelection() == 3 )
+    else if( m_PadType->GetSelection() == NPTH_DLG_TYPE )   // NPTH pad
     {
         if( cu_set.test( F_Cu ) && cu_set.test( B_Cu ) )
             m_rbCopperLayersSel->SetSelection( 0 );
@@ -1163,7 +1168,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     }
 
     // Test hole size against pad size
-    if( m_dummyPad->GetAttribute() != PAD_ATTRIB_NPTH )
+    if( m_dummyPad->IsOnCopperLayer() )
     {
         LSET           lset = m_dummyPad->GetLayerSet() & LSET::AllCuMask();
         PCB_LAYER_ID   layer = lset.Seq().at( 0 );
@@ -1823,7 +1828,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     aPad->SetRemoveUnconnected( false );
     aPad->SetKeepTopBottom( false );
 
-    if( m_PadType->GetSelection() == 0 )
+    if( m_PadType->GetSelection() == PTH_DLG_TYPE )
     {
         switch( copperLayersChoice )
         {
@@ -1850,7 +1855,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
             break;
         }
     }
-    else if( m_PadType->GetSelection() == 3 )
+    else if( m_PadType->GetSelection() == NPTH_DLG_TYPE )
     {
         switch( copperLayersChoice )
         {
