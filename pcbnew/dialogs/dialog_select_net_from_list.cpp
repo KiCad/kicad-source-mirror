@@ -182,7 +182,7 @@ public:
         if( m_parent )                                                              \
             m_parent->set( m_parent->get() - mvar + aValue );                       \
                                                                                     \
-        static_assert( chg_bit < decltype( m_column_changed )().size() );           \
+        static_assert( chg_bit < decltype( m_column_changed )().size(), "" );       \
         m_column_changed[chg_bit] = m_column_changed[chg_bit] | ( mvar != aValue ); \
         mvar                      = aValue;                                         \
     }                                                                               \
@@ -192,7 +192,7 @@ public:
         if( m_parent )                                                              \
             m_parent->add( aValue );                                                \
                                                                                     \
-        static_assert( chg_bit < decltype( m_column_changed )().size() );           \
+        static_assert( chg_bit < decltype( m_column_changed )().size(), "" );       \
         m_column_changed[chg_bit] = m_column_changed[chg_bit] | ( aValue != 0 );    \
         mvar += aValue;                                                             \
     }                                                                               \
@@ -202,7 +202,7 @@ public:
         if( m_parent )                                                              \
             m_parent->sub( aValue );                                                \
                                                                                     \
-        static_assert( chg_bit < decltype( m_column_changed )().size() );           \
+        static_assert( chg_bit < decltype( m_column_changed )().size(), "" );       \
         m_column_changed[chg_bit] = m_column_changed[chg_bit] | ( aValue != 0 );    \
         mvar -= aValue;                                                             \
     }
