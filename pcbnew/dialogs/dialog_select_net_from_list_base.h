@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Oct  9 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,6 +20,7 @@
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
+#include <wx/combobox.h>
 #include <wx/dataview.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
@@ -43,7 +44,14 @@ class DIALOG_SELECT_NET_FROM_LIST_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextFilter;
 		wxTextCtrl* m_textCtrlFilter;
 		wxCheckBox* m_cbShowZeroPad;
-		wxDataViewListCtrl* m_netsList;
+		wxCheckBox* m_groupBy;
+		wxComboBox* m_groupByKind;
+		wxTextCtrl* m_groupByText;
+		wxCheckBox* m_groupsFirst;
+		wxStaticText* m_staticTextFilter1;
+		wxComboBox* m_viaLengthType;
+		wxTextCtrl* m_constViaLength;
+		wxDataViewCtrl* m_netsList;
 		wxBitmapButton* m_addNet;
 		wxBitmapButton* m_renameNet;
 		wxBitmapButton* m_deleteNet;
@@ -51,10 +59,12 @@ class DIALOG_SELECT_NET_FROM_LIST_BASE : public DIALOG_SHIM
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
-		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void onFilterChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onGroupsFirstChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onViaLengthChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSortingChanged( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void onSelChanged( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void onListSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void onAddNet( wxCommandEvent& event ) { event.Skip(); }

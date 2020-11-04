@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Oct  9 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,12 +34,63 @@ DIALOG_SELECT_NET_FROM_LIST_BASE::DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* pa
 	bTopSizer->Add( m_cbShowZeroPad, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerMain->Add( bTopSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerMain->Add( bTopSizer, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
-	m_netsList = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_HORIZ_RULES|wxDV_VERT_RULES );
+	wxBoxSizer* bMidSizer;
+	bMidSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_groupBy = new wxCheckBox( this, wxID_ANY, _("Group By"), wxDefaultPosition, wxDefaultSize, 0 );
+	bMidSizer->Add( m_groupBy, 0, wxALIGN_CENTER|wxALL, 5 );
+
+	m_groupByKind = new wxComboBox( this, wxID_ANY, _("Wildcard"), wxDefaultPosition, wxSize( -1,-1 ), 0, NULL, wxCB_DROPDOWN|wxCB_READONLY|wxCB_SIMPLE );
+	m_groupByKind->Append( _("Wildcard") );
+	m_groupByKind->Append( _("RegEx") );
+	m_groupByKind->Append( _("Wildcard Substr") );
+	m_groupByKind->Append( _("RegEx Substr") );
+	m_groupByKind->SetSelection( 0 );
+	bMidSizer->Add( m_groupByKind, 0, wxALIGN_CENTER|wxALL|wxFIXED_MINSIZE, 5 );
+
+	m_groupByText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bMidSizer->Add( m_groupByText, 1, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
+
+
+	bMidSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+
+	m_groupsFirst = new wxCheckBox( this, wxID_ANY, _("Sort groups first"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_groupsFirst->SetValue(true);
+	bMidSizer->Add( m_groupsFirst, 0, wxALIGN_CENTER|wxALL, 5 );
+
+
+	bSizerMain->Add( bMidSizer, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	wxBoxSizer* bMidSizer1;
+	bMidSizer1 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticTextFilter1 = new wxStaticText( this, wxID_ANY, _("Via Length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextFilter1->Wrap( -1 );
+	bMidSizer1->Add( m_staticTextFilter1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_viaLengthType = new wxComboBox( this, wxID_ANY, _("Constant"), wxDefaultPosition, wxSize( -1,-1 ), 0, NULL, wxCB_DROPDOWN|wxCB_READONLY|wxCB_SIMPLE );
+	m_viaLengthType->Append( _("Constant") );
+	m_viaLengthType->Append( _("From Stackup") );
+	m_viaLengthType->SetSelection( 0 );
+	bMidSizer1->Add( m_viaLengthType, 0, wxALIGN_CENTER|wxALL|wxFIXED_MINSIZE, 5 );
+
+	m_constViaLength = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 96,-1 ), 0 );
+	m_constViaLength->SetMaxSize( wxSize( 96,-1 ) );
+
+	bMidSizer1->Add( m_constViaLength, 1, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
+
+
+	bMidSizer1->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+
+
+	bSizerMain->Add( bMidSizer1, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	m_netsList = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_HORIZ_RULES|wxDV_MULTIPLE|wxDV_VERT_RULES );
 	m_netsList->SetMinSize( wxSize( 500,300 ) );
 
-	bSizerMain->Add( m_netsList, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bSizerMain->Add( m_netsList, 1, wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
 	wxBoxSizer* bSizerListButtons;
 	bSizerListButtons = new wxBoxSizer( wxHORIZONTAL );
@@ -74,8 +125,6 @@ DIALOG_SELECT_NET_FROM_LIST_BASE::DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* pa
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
-	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
 	bSizerBottom->Add( m_sdbSizer, 1, wxALL|wxEXPAND, 5 );
@@ -93,6 +142,13 @@ DIALOG_SELECT_NET_FROM_LIST_BASE::DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* pa
 	// Connect Events
 	m_textCtrlFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
 	m_cbShowZeroPad->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
+	m_groupBy->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
+	m_groupByKind->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
+	m_groupByText->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
+	m_groupsFirst->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onGroupsFirstChanged ), NULL, this );
+	m_viaLengthType->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onViaLengthChange ), NULL, this );
+	m_constViaLength->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onViaLengthChange ), NULL, this );
+	m_netsList->Connect( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, wxDataViewEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onSortingChanged ), NULL, this );
 	m_netsList->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onSelChanged ), NULL, this );
 	m_netsList->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onListSize ), NULL, this );
 	m_addNet->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onAddNet ), NULL, this );
@@ -106,6 +162,13 @@ DIALOG_SELECT_NET_FROM_LIST_BASE::~DIALOG_SELECT_NET_FROM_LIST_BASE()
 	// Disconnect Events
 	m_textCtrlFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
 	m_cbShowZeroPad->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
+	m_groupBy->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
+	m_groupByKind->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
+	m_groupByText->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onFilterChange ), NULL, this );
+	m_groupsFirst->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onGroupsFirstChanged ), NULL, this );
+	m_viaLengthType->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onViaLengthChange ), NULL, this );
+	m_constViaLength->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onViaLengthChange ), NULL, this );
+	m_netsList->Disconnect( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, wxDataViewEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onSortingChanged ), NULL, this );
 	m_netsList->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onSelChanged ), NULL, this );
 	m_netsList->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onListSize ), NULL, this );
 	m_addNet->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST_BASE::onAddNet ), NULL, this );

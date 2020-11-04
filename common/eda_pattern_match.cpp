@@ -40,11 +40,14 @@ wxString const& EDA_PATTERN_MATCH_SUBSTR::GetPattern() const
 }
 
 
-int EDA_PATTERN_MATCH_SUBSTR::Find( const wxString& aCandidate ) const
+EDA_PATTERN_MATCH::FIND_RESULT EDA_PATTERN_MATCH_SUBSTR::Find( const wxString& aCandidate ) const
 {
     int loc = aCandidate.Find( m_pattern );
 
-    return ( loc == wxNOT_FOUND ) ? EDA_PATTERN_NOT_FOUND : loc;
+    if( loc == wxNOT_FOUND )
+        return {};
+    else
+        return { loc, static_cast<int>( m_pattern.size() ) };
 }
 
 
@@ -87,7 +90,7 @@ wxString const& EDA_PATTERN_MATCH_REGEX::GetPattern() const
 }
 
 
-int EDA_PATTERN_MATCH_REGEX::Find( const wxString& aCandidate ) const
+EDA_PATTERN_MATCH::FIND_RESULT EDA_PATTERN_MATCH_REGEX::Find( const wxString& aCandidate ) const
 {
     if( m_regex.IsValid() )
     {
@@ -95,17 +98,23 @@ int EDA_PATTERN_MATCH_REGEX::Find( const wxString& aCandidate ) const
         {
             size_t start, len;
             m_regex.GetMatch( &start, &len, 0 );
-            return ( start > INT_MAX ) ? INT_MAX : start;
+
+            return { static_cast<int>( std::min( start, static_cast<size_t>( INT_MAX ) ) ),
+                static_cast<int>( std::min( len, static_cast<size_t>( INT_MAX ) ) ) };
         }
         else
         {
-            return EDA_PATTERN_NOT_FOUND;
+            return {};
         }
     }
     else
     {
         int loc = aCandidate.Find( m_pattern );
-        return ( loc == wxNOT_FOUND ) ? EDA_PATTERN_NOT_FOUND : loc;
+
+        if( loc == wxNOT_FOUND )
+            return {};
+        else
+            return { loc, static_cast<int>( m_pattern.size() ) };
     }
 }
 
@@ -152,7 +161,7 @@ wxString const& EDA_PATTERN_MATCH_WILDCARD::GetPattern() const
 }
 
 
-int EDA_PATTERN_MATCH_WILDCARD::Find( const wxString& aCandidate ) const
+EDA_PATTERN_MATCH::FIND_RESULT EDA_PATTERN_MATCH_WILDCARD::Find( const wxString& aCandidate ) const
 {
     return EDA_PATTERN_MATCH_REGEX::Find( aCandidate );
 }
@@ -253,7 +262,8 @@ wxString const& EDA_PATTERN_MATCH_RELATIONAL::GetPattern() const
 }
 
 
-int EDA_PATTERN_MATCH_RELATIONAL::Find( const wxString& aCandidate ) const
+EDA_PATTERN_MATCH::FIND_RESULT EDA_PATTERN_MATCH_RELATIONAL::Find(
+        const wxString& aCandidate ) const
 {
     wxStringTokenizer tokenizer( aCandidate );
     size_t lastpos = 0;
@@ -266,13 +276,13 @@ int EDA_PATTERN_MATCH_RELATIONAL::Find( const wxString& aCandidate ) const
         if( found_delta != EDA_PATTERN_NOT_FOUND )
         {
             size_t found = (size_t) found_delta + lastpos;
-            return ( found > INT_MAX ) ? INT_MAX : (int) found;
+            return { static_cast<int>( std::min( found, static_cast<size_t>( INT_MAX ) ) ), 0 };
         }
 
         lastpos = tokenizer.GetPosition();
     }
 
-    return EDA_PATTERN_NOT_FOUND;
+    return {};
 }
 
 
@@ -357,15 +367,15 @@ bool EDA_COMBINED_MATCHER::Find( const wxString& aTerm, int& aMatchersTriggered,
 
     for( auto const& matcher : m_matchers )
     {
-        int local_find = matcher->Find( aTerm );
+        EDA_PATTERN_MATCH::FIND_RESULT local_find = matcher->Find( aTerm );
 
-        if ( local_find != EDA_PATTERN_NOT_FOUND )
+        if( local_find )
         {
             aMatchersTriggered += 1;
 
-            if ( local_find < aPosition || aPosition == EDA_PATTERN_NOT_FOUND )
+            if( local_find.start < aPosition || aPosition == EDA_PATTERN_NOT_FOUND )
             {
-                aPosition = local_find;
+                aPosition = local_find.start;
             }
         }
     }

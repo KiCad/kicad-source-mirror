@@ -248,7 +248,7 @@ public:
 
     ~BOARD_STACKUP() { RemoveAll(); }
 
-    std::vector<BOARD_STACKUP_ITEM*>& GetList() { return m_list; }
+    const std::vector<BOARD_STACKUP_ITEM*>& GetList() const { return m_list; }
 
     /// @return a reference to the layer aIndex, or nullptr if not exists
     BOARD_STACKUP_ITEM* GetStackupLayer( int aIndex );

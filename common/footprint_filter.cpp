@@ -144,7 +144,7 @@ bool FOOTPRINT_FILTER_IT::FootprintFilterMatch( FOOTPRINT_INFO& aItem )
 
         name += aItem.GetFootprintName().Lower();
 
-        if( each_filter->Find( name ) != EDA_PATTERN_NOT_FOUND )
+        if( each_filter->Find( name ) )
         {
             return true;
         }

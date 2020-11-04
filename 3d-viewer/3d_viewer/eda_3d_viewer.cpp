@@ -709,9 +709,9 @@ void EDA_3D_VIEWER::SynchroniseColoursWithBoard()
     wxColour               color;
     if( brd )
     {
-        BOARD_STACKUP stckp = brd->GetDesignSettings().GetStackupDescriptor();
+        const BOARD_STACKUP& stckp = brd->GetDesignSettings().GetStackupDescriptor();
 
-        for( BOARD_STACKUP_ITEM* stckpItem : stckp.GetList() )
+        for( const BOARD_STACKUP_ITEM* stckpItem : stckp.GetList() )
         {
             wxString colorName = stckpItem->GetColor();
 

@@ -44,6 +44,22 @@ static const int EDA_PATTERN_NOT_FOUND = wxNOT_FOUND;
 class EDA_PATTERN_MATCH
 {
 public:
+    struct FIND_RESULT
+    {
+        int start  = EDA_PATTERN_NOT_FOUND;
+        int length = 0;
+
+        bool valid() const
+        {
+            return start != EDA_PATTERN_NOT_FOUND;
+        }
+
+        explicit operator bool() const
+        {
+            return valid();
+        }
+    };
+
     virtual ~EDA_PATTERN_MATCH() {}
 
     /**
@@ -58,10 +74,11 @@ public:
     virtual wxString const& GetPattern() const = 0;
 
     /**
-     * Return the location of a match iff a given candidate string matches the set pattern.
-     * Otherwise, return EDA_PATTERN_NOT_FOUND.
+     * Return the location and possibly length of a match iff a given candidate
+     * string matches the set pattern.
+     * Otherwise, return an invalid FIND_RESULT.
      */
-    virtual int Find( const wxString& aCandidate ) const = 0;
+    virtual FIND_RESULT Find( const wxString& aCandidate ) const = 0;
 };
 
 
@@ -73,7 +90,7 @@ class EDA_PATTERN_MATCH_SUBSTR : public EDA_PATTERN_MATCH
 public:
     virtual bool SetPattern( const wxString& aPattern ) override;
     virtual wxString const& GetPattern() const override;
-    virtual int Find( const wxString& aCandidate ) const override;
+    virtual FIND_RESULT     Find( const wxString& aCandidate ) const override;
 
 protected:
     wxString m_pattern;
@@ -88,7 +105,7 @@ class EDA_PATTERN_MATCH_REGEX : public EDA_PATTERN_MATCH
 public:
     virtual bool SetPattern( const wxString& aPattern ) override;
     virtual wxString const& GetPattern() const override;
-    virtual int Find( const wxString& aCandidate ) const override;
+    virtual FIND_RESULT     Find( const wxString& aCandidate ) const override;
 
 protected:
     wxString m_pattern;
@@ -101,7 +118,7 @@ class EDA_PATTERN_MATCH_WILDCARD : public EDA_PATTERN_MATCH_REGEX
 public:
     virtual bool SetPattern( const wxString& aPattern ) override;
     virtual wxString const& GetPattern() const override;
-    virtual int Find( const wxString& aCandidate ) const override;
+    virtual FIND_RESULT     Find( const wxString& aCandidate ) const override;
 
 protected:
     wxString m_wildcard_pattern;
@@ -133,7 +150,7 @@ class EDA_PATTERN_MATCH_RELATIONAL : public EDA_PATTERN_MATCH
 public:
     virtual bool SetPattern( const wxString& aPattern ) override;
     virtual wxString const& GetPattern() const override;
-    virtual int Find( const wxString& aCandidate ) const override;
+    virtual FIND_RESULT     Find( const wxString& aCandidate ) const override;
     int FindOne( const wxString& aCandidate ) const;
 
 protected:
