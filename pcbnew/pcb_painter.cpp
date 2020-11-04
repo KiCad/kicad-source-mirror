@@ -232,10 +232,6 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     if( item && item->Type() == PCB_ZONE_AREA_T && IsZoneLayer( aLayer ) )
         aLayer = aLayer - LAYER_ZONE_START;
 
-    // Hide net names in "dimmed" contrast mode
-    if( m_hiContrastEnabled && IsNetnameLayer( aLayer ) && m_highContrastLayers.count( aLayer ) == 0 )
-        return COLOR4D::CLEAR;
-
     // Marker shadows
     if( aLayer == LAYER_MARKER_SHADOWS )
     {
@@ -328,10 +324,20 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         for( int layer : m_highContrastLayers )
             isActiveLayer |= static_cast<const VIA*>( item )->IsOnLayer( ToLAYER_ID( layer ) );
     }
+    else if( item->Type() == PCB_PAD_T )
+    {
+        for( int layer : m_highContrastLayers )
+            isActiveLayer |= static_cast<const D_PAD*>( item )->IsOnLayer( ToLAYER_ID( layer ) );
+    }
+    else if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
+    {
+        for( int layer : m_highContrastLayers )
+            isActiveLayer |= static_cast<const TRACK*>( item )->IsOnLayer( ToLAYER_ID( layer ) );
+    }
 
     if( m_hiContrastEnabled && !isActiveLayer && !highlighted && !selected )
     {
-        if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN )
+        if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN || IsNetnameLayer( aLayer ) )
             color = COLOR4D::CLEAR;
         else
             color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );
@@ -501,7 +507,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
 
             m_gal->SetIsStroke( true );
             m_gal->SetIsFill( false );
-            m_gal->SetStrokeColor( m_pcbSettings.GetColor( NULL, aLayer ) );
+            m_gal->SetStrokeColor( m_pcbSettings.GetColor( aTrack, aLayer ) );
             m_gal->SetLineWidth( width / 10.0 );
             m_gal->SetFontBold( false );
             m_gal->SetFontItalic( false );
@@ -679,21 +685,10 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
     switch( aVia->GetViaType() )
     {
-    case VIATYPE::THROUGH:
-        sketchMode = m_pcbSettings.m_sketchMode[LAYER_VIA_THROUGH];
-        break;
-
-    case VIATYPE::BLIND_BURIED:
-        sketchMode = m_pcbSettings.m_sketchMode[LAYER_VIA_BBLIND];
-        break;
-
-    case VIATYPE::MICROVIA:
-        sketchMode = m_pcbSettings.m_sketchMode[LAYER_VIA_MICROVIA];
-        break;
-
-    default:
-        wxASSERT( false );
-        break;
+    case VIATYPE::THROUGH:      sketchMode = m_pcbSettings.m_sketchMode[LAYER_VIA_THROUGH];  break;
+    case VIATYPE::BLIND_BURIED: sketchMode = m_pcbSettings.m_sketchMode[LAYER_VIA_BBLIND];   break;
+    case VIATYPE::MICROVIA:     sketchMode = m_pcbSettings.m_sketchMode[LAYER_VIA_MICROVIA]; break;
+    default:                    wxASSERT( false );                                           break;
     }
 
     m_gal->SetIsFill( !sketchMode );

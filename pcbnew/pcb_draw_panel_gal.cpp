@@ -275,8 +275,7 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
         LAYER_NUM layers[] = {
                 GetNetnameLayer( aLayer ),
                 ZONE_LAYER_FOR( aLayer ),
-                LAYER_VIA_THROUGH, LAYER_VIAS_HOLES, LAYER_VIAS_NETNAMES,
-                LAYER_PADS_TH, LAYER_PADS_PLATEDHOLES, LAYER_PADS_NETNAMES, LAYER_NON_PLATEDHOLES,
+                LAYER_PADS_TH, LAYER_PADS_PLATEDHOLES, LAYER_NON_PLATEDHOLES,
                 LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION, LAYER_MARKER_SHADOWS,
                 LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY,
                 LAYER_RATSNEST, LAYER_CURSOR, LAYER_ANCHOR
@@ -290,13 +289,11 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
         {
             rSettings->SetLayerIsHighContrast( LAYER_PAD_BK );
             rSettings->SetLayerIsHighContrast( LAYER_MOD_BK );
-            rSettings->SetLayerIsHighContrast( LAYER_PAD_BK_NETNAMES );
         }
         else if( aLayer == F_Cu )
         {
             rSettings->SetLayerIsHighContrast( LAYER_PAD_FR );
             rSettings->SetLayerIsHighContrast( LAYER_MOD_FR );
-            rSettings->SetLayerIsHighContrast( LAYER_PAD_FR_NETNAMES );
         }
     }
 
