@@ -5444,11 +5444,12 @@ void ClipperOffset::DoRound( int j, int k )
 {
     double a = std::atan2( m_sinA,
             m_normals[k].X * m_normals[j].X + m_normals[k].Y * m_normals[j].Y );
-    int steps = std::max( (int) Round( m_StepsPerRad * std::fabs( a ) ), 1 );
+    double steps = m_StepsPerRad * std::fabs( a );
+    int    takenSteps = std::max((int) std::floor( steps ), 1 );
 
     double X = m_normals[k].X, Y = m_normals[k].Y, X2;
 
-    for( int i = 0; i < steps; ++i )
+    for( int i = 0; i < takenSteps; ++i )
     {
         m_destPoly.push_back( IntPoint(
                         Round( m_srcPoly[j].X + X * m_delta ),
@@ -5458,9 +5459,14 @@ void ClipperOffset::DoRound( int j, int k )
         Y   = X2 * m_sin + Y * m_cos;
     }
 
-    m_destPoly.push_back( IntPoint(
-                    Round( m_srcPoly[j].X + X * m_delta ),
-                    Round( m_srcPoly[j].Y + Y * m_delta ) ) );
+    // A 10% error on chord length won't make much error difference, and it keeps us
+    // from generating geometrically noisy solutions.
+    if( steps > takenSteps + 0.1 )
+    {
+        m_destPoly.push_back( IntPoint(
+                        Round( m_srcPoly[j].X + X * m_delta ),
+                        Round( m_srcPoly[j].Y + Y * m_delta ) ) );
+    }
 
     m_destPoly.push_back( IntPoint(
                     Round( m_srcPoly[j].X + m_normals[j].X * m_delta ),
