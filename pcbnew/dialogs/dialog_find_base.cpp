@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,12 +25,12 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
 
-	searchStringLabel = new wxStaticText( this, wxID_ANY, wxT("Search for:"), wxDefaultPosition, wxDefaultSize, 0 );
+	searchStringLabel = new wxStaticText( this, wxID_ANY, _("Search for:"), wxDefaultPosition, wxDefaultSize, 0 );
 	searchStringLabel->Wrap( -1 );
 	bSizer8->Add( searchStringLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_searchCombo = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxTE_PROCESS_ENTER );
-	m_searchCombo->SetToolTip( wxT("Text with optional wildcards") );
+	m_searchCombo->SetToolTip( _("Text with optional wildcards") );
 
 	bSizer8->Add( m_searchCombo, 1, wxALL|wxEXPAND, 5 );
 
@@ -40,16 +40,16 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* sizerOptions;
 	sizerOptions = new wxBoxSizer( wxHORIZONTAL );
 
-	m_matchCase = new wxCheckBox( this, wxID_ANY, wxT("Match case"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchCase = new wxCheckBox( this, wxID_ANY, _("Match case"), wxDefaultPosition, wxDefaultSize, 0 );
 	sizerOptions->Add( m_matchCase, 0, wxALL, 5 );
 
-	m_matchWords = new wxCheckBox( this, wxID_ANY, wxT("Words"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchWords = new wxCheckBox( this, wxID_ANY, _("Words"), wxDefaultPosition, wxDefaultSize, 0 );
 	sizerOptions->Add( m_matchWords, 0, wxALL, 5 );
 
-	m_wildcards = new wxCheckBox( this, wxID_ANY, wxT("Wildcards"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_wildcards = new wxCheckBox( this, wxID_ANY, _("Wildcards"), wxDefaultPosition, wxDefaultSize, 0 );
 	sizerOptions->Add( m_wildcards, 0, wxALL, 5 );
 
-	m_wrap = new wxCheckBox( this, wxID_ANY, wxT("Wrap"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_wrap = new wxCheckBox( this, wxID_ANY, _("Wrap"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_wrap->SetValue(true);
 	sizerOptions->Add( m_wrap, 0, wxALL, 5 );
 
@@ -59,23 +59,23 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* sizerInclude;
 	sizerInclude = new wxBoxSizer( wxVERTICAL );
 
-	m_includeReferences = new wxCheckBox( this, wxID_ANY, wxT("Search footprint reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeReferences = new wxCheckBox( this, wxID_ANY, _("Search footprint reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeReferences->SetValue(true);
 	sizerInclude->Add( m_includeReferences, 0, wxALL, 5 );
 
-	m_includeValues = new wxCheckBox( this, wxID_ANY, wxT("Search footprint values"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeValues = new wxCheckBox( this, wxID_ANY, _("Search footprint values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeValues->SetValue(true);
 	sizerInclude->Add( m_includeValues, 0, wxALL, 5 );
 
-	m_includeTexts = new wxCheckBox( this, wxID_ANY, wxT("Search other text items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeTexts = new wxCheckBox( this, wxID_ANY, _("Search other text items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeTexts->SetValue(true);
 	sizerInclude->Add( m_includeTexts, 0, wxALL, 5 );
 
-	m_includeMarkers = new wxCheckBox( this, wxID_ANY, wxT("Search DRC markers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeMarkers = new wxCheckBox( this, wxID_ANY, _("Search DRC markers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeMarkers->SetValue(true);
 	sizerInclude->Add( m_includeMarkers, 0, wxALL, 5 );
 
-	m_includeVias = new wxCheckBox( this, wxID_ANY, wxT("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeVias = new wxCheckBox( this, wxID_ANY, _("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeVias->SetValue(true);
 	m_includeVias->Hide();
 
@@ -90,18 +90,18 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* buttonSizer;
 	buttonSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_findNext = new wxButton( this, wxID_ANY, wxT("Find Next"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_findNext = new wxButton( this, wxID_ANY, _("Find Next"), wxDefaultPosition, wxDefaultSize, 0 );
 
 	m_findNext->SetDefault();
 	buttonSizer->Add( m_findNext, 0, wxALIGN_TOP|wxALL|wxEXPAND, 5 );
 
-	m_findPrevious = new wxButton( this, wxID_ANY, wxT("Find Previous"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_findPrevious = new wxButton( this, wxID_ANY, _("Find Previous"), wxDefaultPosition, wxDefaultSize, 0 );
 	buttonSizer->Add( m_findPrevious, 0, wxALIGN_LEFT|wxALL|wxEXPAND, 5 );
 
-	m_searchAgain = new wxButton( this, wxID_ANY, wxT("Restart Search"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_searchAgain = new wxButton( this, wxID_ANY, _("Restart Search"), wxDefaultPosition, wxDefaultSize, 0 );
 	buttonSizer->Add( m_searchAgain, 0, wxALL|wxEXPAND, 5 );
 
-	m_closeButton = new wxButton( this, wxID_CANCEL, wxT("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_closeButton = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	buttonSizer->Add( m_closeButton, 0, wxALL|wxEXPAND, 5 );
 
 
@@ -110,14 +110,14 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	bSizer10->Add( topSizer, 0, wxEXPAND, 5 );
 
-	wxStaticLine* staticline1;
-	staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer10->Add( staticline1, 0, wxEXPAND | wxALL, 5 );
+	wxStaticLine* staticline;
+	staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer10->Add( staticline, 0, wxEXPAND | wxALL, 5 );
 
 	wxBoxSizer* sizerStatus;
 	sizerStatus = new wxBoxSizer( wxHORIZONTAL );
 
-	m_status = new wxStaticText( this, wxID_ANY, wxT("Status"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_status = new wxStaticText( this, wxID_ANY, _("Status"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_status->Wrap( -1 );
 	sizerStatus->Add( m_status, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
