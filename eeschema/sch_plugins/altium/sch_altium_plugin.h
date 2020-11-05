@@ -136,7 +136,6 @@ private:
 private:
     SCH_SHEET* m_rootSheet;      // The root sheet of the schematic being loaded..
     SCH_SHEET* m_currentSheet;   // The current sheet of the schematic being loaded..
-    wxFileName m_filename;
     SCHEMATIC* m_schematic;      // Passed to Load(), the schematic object being loaded
     wxString   m_libName;        // Library name to save symbols
 

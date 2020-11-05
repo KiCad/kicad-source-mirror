@@ -712,7 +712,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     ReplaceIllegalFileNameChars( &filename );
     replace( filename.begin(), filename.end(), ' ', '_' );
 
-    wxString fn = wxString( filename + ".sch" );
+    wxString fn = wxString( filename + ".kicad_sch" );
     filenameField.SetText( fn );
     wxFileName fileName( fn );
     m_currentSheet->GetScreen()->SetFileName( fileName.GetFullPath() );

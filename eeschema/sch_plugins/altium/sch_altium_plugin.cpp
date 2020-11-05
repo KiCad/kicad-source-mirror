@@ -156,7 +156,8 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
 {
     wxASSERT( !aFileName || aSchematic != NULL );
 
-    m_filename  = aFileName;
+    wxFileName fileName( aFileName );
+    fileName.SetExt( ".kicad_sch" );
     m_schematic = aSchematic;
 
     // Delete on exception, if I own m_rootSheet, according to aAppendToMe
