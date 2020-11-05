@@ -25,6 +25,7 @@
 #include <eda_pattern_match.h>
 #include <wx/log.h>
 #include <wx/tokenzr.h>
+#include <algorithm>
 #include <climits>
 
 bool EDA_PATTERN_MATCH_SUBSTR::SetPattern( const wxString& aPattern )
