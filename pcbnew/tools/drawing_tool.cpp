@@ -1666,11 +1666,20 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
         }
         else if( evt->IsAction( &PCB_ACTIONS::properties ) )
         {
-            if( firstPoint )
+            if( arcManager.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::SET_START )
+            {
+                graphic->SetAngle( 900, true );
+                frame()->OnEditItemRequest( graphic );
+                m_view->Update( &preview );
+                frame()->SetMsgPanel( graphic );
+                break;
+            }
+            else if( arcManager.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::SET_ANGLE )
             {
                 frame()->OnEditItemRequest( graphic );
                 m_view->Update( &preview );
                 frame()->SetMsgPanel( graphic );
+                break;
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
