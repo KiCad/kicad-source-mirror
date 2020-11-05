@@ -316,30 +316,37 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     }
 
     // Apply high-contrast dimming
-    bool isActive = m_highContrastLayers.count( aLayer );
+    if( m_hiContrastEnabled && !highlighted && !selected )
+    {
+        PCB_LAYER_ID primary = GetPrimaryHighContrastLayer();
+        bool         isActive = m_highContrastLayers.count( aLayer );
 
-    // Items drawn on synthetic layers depend on crossing the active layer to determine
-    // active state
-    if( item->Type() == PCB_VIA_T )
-    {
-        isActive = static_cast<const VIA*>( item )->IsOnLayer( GetPrimaryHighContrastLayer() );
-    }
-    else if( item->Type() == PCB_PAD_T )
-    {
-        isActive = static_cast<const D_PAD*>( item )->IsOnLayer( GetPrimaryHighContrastLayer() );
-    }
-    else if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
-    {
-        // Track itself isn't on a synthetic layer, but its netname annotations are.
-        isActive = static_cast<const TRACK*>( item )->IsOnLayer( GetPrimaryHighContrastLayer() );
-    }
+        // Items drawn on synthetic layers depend on crossing the primary layer for active
+        // state determination
+        if( primary != UNDEFINED_LAYER )
+        {
+            if( item->Type() == PCB_VIA_T )
+            {
+                isActive = static_cast<const VIA*>( item )->IsOnLayer( primary );
+            }
+            else if( item->Type() == PCB_PAD_T )
+            {
+                isActive = static_cast<const D_PAD*>( item )->IsOnLayer( primary );
+            }
+            else if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
+            {
+                // Track itself isn't on a synthetic layer, but its netname annotations are.
+                isActive = static_cast<const TRACK*>( item )->IsOnLayer( primary );
+            }
+        }
 
-    if( m_hiContrastEnabled && !isActive && !highlighted && !selected )
-    {
-        if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN || IsNetnameLayer( aLayer ) )
-            color = COLOR4D::CLEAR;
-        else
-            color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );
+        if( !isActive )
+        {
+            if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN || IsNetnameLayer( aLayer ) )
+                color = COLOR4D::CLEAR;
+            else
+                color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );
+        }
     }
 
     // Apply per-type opacity overrides
