@@ -97,11 +97,11 @@ private:
     void enablePrimitivePage( bool aEnable );   ///< enable (or disable) the primitive page editor
 
     /**
-     * Function setPadLayersList
-     * updates the CheckBox states in pad layers list,
-     * @param layer_mask = pad layer mask (ORed layers bit mask)
+     * Function updatePadLayersList
+     * updates the CheckBox states in pad layers list, based on the layer_mask (if non-empty)
+     * or the default layers for the current pad type
      */
-    void setPadLayersList( LSET layer_mask, bool remove_unconnected, bool keep_top_bottom );
+    void updatePadLayersList( LSET layer_mask, bool remove_unconnected, bool keep_top_bottom );
 
     /// Copy values from dialog field to aPad's members
     bool transferDataToPad( D_PAD* aPad );
