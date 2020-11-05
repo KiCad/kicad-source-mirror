@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-28 11:53-0700\n"
+"POT-Creation-Date: 2020-11-04 19:09-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -200,8 +200,8 @@ msgstr "3D Grid"
 msgid "Reset to Default Settings"
 msgstr "Reset to Default Settings"
 
-msgid "Preferences...\tCTRL+,"
-msgstr "Preferences...\tCTRL+,"
+msgid "Preferences..."
+msgstr "Preferences..."
 
 msgid "Show preferences for all open tools"
 msgstr "Show preferences for all open tools"
@@ -2259,6 +2259,34 @@ msgstr "Select Library"
 msgid "New Library"
 msgstr "New Library"
 
+msgid ""
+"KiCad can use your graphics card to give you a smoother and faster "
+"experience. This option is turned off by default since it is not compatible "
+"with all computers.\n"
+"\n"
+"Would you like to try enabling graphics acceleration?\n"
+"\n"
+"If you'd like to choose later, select Accelerated Graphics in the "
+"Preferences menu."
+msgstr ""
+"KiCad can use your graphics card to give you a smoother and faster "
+"experience. This option is turned off by default since it is not compatible "
+"with all computers.\n"
+"\n"
+"Would you like to try enabling graphics acceleration?\n"
+"\n"
+"If you'd like to choose later, select Accelerated Graphics in the "
+"Preferences menu."
+
+msgid "Enable Graphics Acceleration"
+msgstr "Enable Graphics Acceleration"
+
+msgid "&Enable Acceleration"
+msgstr "&Enable Acceleration"
+
+msgid "&No Thanks"
+msgstr "&No Thanks"
+
 msgid "Screen"
 msgstr "Screen"
 
@@ -2461,13 +2489,6 @@ msgstr "The base path of system footprint 3D shapes (.3Dshapes folders)."
 msgid "The base path of the locally installed symbol libraries."
 msgstr "The base path of the locally installed symbol libraries."
 
-msgid ""
-"Used by KiCad to define the URL of the repository of the official KiCad "
-"footprint libraries."
-msgstr ""
-"Used by KiCad to define the URL of the repository of the official KiCad "
-"footprint libraries."
-
 msgid "A directory containing project templates installed with KiCad."
 msgstr "A directory containing project templates installed with KiCad."
 
@@ -2606,26 +2627,26 @@ msgstr ""
 msgid "Cannot copy file \"%s\"."
 msgstr "Cannot copy file “%s”."
 
-msgid "Cut\tCTRL+X"
-msgstr "Cut\tCTRL+X"
+msgid "Cut"
+msgstr "Cut"
 
 msgid "Clear selected cells placing original contents on clipboard"
 msgstr "Clear selected cells placing original contents on clipboard"
 
-msgid "Copy\tCTRL+C"
-msgstr "Copy\tCTRL+C"
+msgid "Copy"
+msgstr "Copy"
 
 msgid "Copy selected cells to clipboard"
 msgstr "Copy selected cells to clipboard"
 
-msgid "Paste\tCTRL+V"
-msgstr "Paste\tCTRL+V"
+msgid "Paste"
+msgstr "Paste"
 
 msgid "Paste clipboard cells to matrix at current cell"
 msgstr "Paste clipboard cells to matrix at current cell"
 
-msgid "Select All\tCTRL+A"
-msgstr "Select All\tCTRL+A"
+msgid "Select All"
+msgstr "Select All"
 
 msgid "Select all cells"
 msgstr "Select all cells"
@@ -3284,11 +3305,16 @@ msgstr "KiCad Classic"
 msgid "Field%d"
 msgstr "Field%d"
 
-msgid "Close\tCTRL+W"
-msgstr "Close\tCTRL+W"
+#, c-format
+msgid "Close %s"
+msgstr "Close %s"
 
 msgid "Quit"
 msgstr "Quit"
+
+#, c-format
+msgid "Quit %s"
+msgstr "Quit %s"
 
 msgid "New..."
 msgstr "New..."
@@ -3377,26 +3403,14 @@ msgstr "Redo"
 msgid "Redo last edit"
 msgstr "Redo last edit"
 
-msgid "Cut"
-msgstr "Cut"
-
 msgid "Cut selected item(s) to clipboard"
 msgstr "Cut selected item(s) to clipboard"
-
-msgid "Copy"
-msgstr "Copy"
 
 msgid "Copy selected item(s) to clipboard"
 msgstr "Copy selected item(s) to clipboard"
 
-msgid "Paste"
-msgstr "Paste"
-
 msgid "Paste items(s) from clipboard"
 msgstr "Paste items(s) from clipboard"
-
-msgid "Select All"
-msgstr "Select All"
 
 msgid "Select all items on screen"
 msgstr "Select all items on screen"
@@ -5370,26 +5384,14 @@ msgstr "Illegal reference designator value!"
 msgid "Value may not be empty."
 msgstr "Value may not be empty."
 
-msgid "Name:"
-msgstr "Name:"
-
-msgid "Text size:"
-msgstr "Text size:"
-
-msgid "Connection type:"
-msgstr "Connection type:"
-
-msgid "Sheet Pin Properties"
-msgstr "Sheet Pin Properties"
-
 msgid "Run ERC"
 msgstr "Run ERC"
 
 msgid "Show Annotation dialog"
 msgstr "Show Annotation dialog"
 
-msgid "Annotation not complete.  ERC cannot be run."
-msgstr "Annotation not complete.  ERC cannot be run."
+msgid "Annotation not complete. ERC cannot be run."
+msgstr "Annotation not complete. ERC cannot be run."
 
 msgid "Delete exclusions too?"
 msgstr "Delete exclusions too?"
@@ -5402,9 +5404,6 @@ msgstr "Errors and Warnings Only"
 
 msgid "Errors, Warnings and Exclusions"
 msgstr "Errors, Warnings and Exclusions"
-
-msgid "Annotation not complete.  ERC cannot be run.  "
-msgstr "Annotation not complete.  ERC cannot be run.  "
 
 msgid "Show Annotation dialog."
 msgstr "Show Annotation dialog."
@@ -5664,6 +5663,9 @@ msgstr "Filter items by net:"
 
 msgid "Set To"
 msgstr "Set To"
+
+msgid "Text size:"
+msgstr "Text size:"
 
 msgid "..."
 msgstr "…"
@@ -6199,6 +6201,9 @@ msgstr "Add Generator..."
 msgid "Remove Generator"
 msgstr "Remove Generator"
 
+msgid "Name:"
+msgstr "Name:"
+
 msgid "Command line to run the generator:"
 msgstr "Command line to run the generator:"
 
@@ -6624,6 +6629,12 @@ msgid ""
 msgstr ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded"
+
+msgid "Connection type:"
+msgstr "Connection type:"
+
+msgid "Sheet Pin Properties"
+msgstr "Sheet Pin Properties"
 
 msgid "A sheet must have a valid file name."
 msgstr "A sheet must have a valid file name."
@@ -7228,13 +7239,6 @@ msgstr "Alternate Pin Assignments"
 msgid "Library link:"
 msgstr "Library link:"
 
-msgid ""
-"The library ID and footprint ID currently assigned.  Use \"Change "
-"Footprint...\" to assign a different footprint."
-msgstr ""
-"The library ID and footprint ID currently assigned.  Use \"Change "
-"Footprint...\" to assign a different footprint."
-
 msgid "Spice Model..."
 msgstr "Spice Model..."
 
@@ -7563,8 +7567,20 @@ msgstr "Pin symbol size:"
 msgid "Connections"
 msgstr "Connections"
 
-msgid "Junction size:"
-msgstr "Junction size:"
+msgid "Junction dot size:"
+msgstr "Junction dot size:"
+
+msgid "Smallest"
+msgstr "Smallest"
+
+msgid "Small"
+msgstr "Small"
+
+msgid "Large"
+msgstr "Large"
+
+msgid "Largest"
+msgstr "Largest"
 
 msgid "Inter-sheet References"
 msgstr "Inter-sheet References"
@@ -7818,6 +7834,9 @@ msgstr "Pin not connected"
 
 msgid "Input pin not driven by any Output pins"
 msgstr "Input pin not driven by any Output pins"
+
+msgid "Input Power pin not driven by any Output Power pins"
+msgstr "Input Power pin not driven by any Output Power pins"
 
 msgid "Conflict problem between pins"
 msgstr "Conflict problem between pins"
@@ -8186,300 +8205,6 @@ msgstr "Errors occurred creating symbol library %s."
 msgid "Failed to save symbol library file \"%s\""
 msgstr "Failed to save symbol library file “%s”"
 
-msgid "Library Editor"
-msgstr "Library Editor"
-
-msgid "Libraries"
-msgstr "Libraries"
-
-msgid "Library changes are unsaved"
-msgstr "Library changes are unsaved"
-
-msgid "Save changes to schematic before closing?"
-msgstr "Save changes to schematic before closing?"
-
-#, c-format
-msgid "Unit %s"
-msgstr "Unit %s"
-
-#, c-format
-msgid ""
-"Editing symbol %s from schematic.  Saving will update the schematic only."
-msgstr ""
-"Editing symbol %s from schematic.  Saving will update the schematic only."
-
-#, c-format
-msgid "Library \"%s\" already exists"
-msgstr "Library “%s” already exists"
-
-#, c-format
-msgid ""
-"Could not create the library file '%s'.\n"
-"Check write permission."
-msgstr ""
-"Could not create the library file '%s'.\n"
-"Check write permission."
-
-msgid "Could not open the library file."
-msgstr "Could not open the library file."
-
-#, c-format
-msgid "Loading library \"%s\""
-msgstr "Loading library “%s”"
-
-msgid "Add the library to the global library table?"
-msgstr "Add the library to the global library table?"
-
-msgid "Add To Global Library Table"
-msgstr "Add To Global Library Table"
-
-msgid "Global"
-msgstr "Global"
-
-msgid "Choose the Library Table to add the library to:"
-msgstr "Choose the Library Table to add the library to:"
-
-msgid "Add To Library Table"
-msgstr "Add To Library Table"
-
-#, c-format
-msgid "Failed to save backup to \"%s\""
-msgstr "Failed to save backup to \"%s\""
-
-#, c-format
-msgid ""
-"The current configuration does not include the symbol library\n"
-"\"%s\".\n"
-"Use Manage Symbol Libraries to edit the configuration."
-msgstr ""
-"The current configuration does not include the symbol library\n"
-"“%s”.\n"
-"Use Manage Symbol Libraries to edit the configuration."
-
-msgid "Library not found in symbol library table."
-msgstr "Library not found in symbol library table."
-
-msgid "Import Symbol"
-msgstr "Import Symbol"
-
-#, c-format
-msgid "Cannot import symbol library \"%s\"."
-msgstr "Cannot import symbol library “%s”."
-
-#, c-format
-msgid "Symbol library file \"%s\" is empty."
-msgstr "Symbol library file “%s” is empty."
-
-#, c-format
-msgid "Symbol \"%s\" already exists in library \"%s\"."
-msgstr "Symbol “%s” already exists in library “%s”."
-
-msgid "There is no symbol selected to save."
-msgstr "There is no symbol selected to save."
-
-msgid "Export Symbol"
-msgstr "Export Symbol"
-
-#, c-format
-msgid "Error occurred attempting to load symbol library file \"%s\""
-msgstr "Error occurred attempting to load symbol library file “%s”"
-
-#, c-format
-msgid "Symbol \"%s\" already exists in \"%s\"."
-msgstr "Symbol “%s” already exists in “%s”."
-
-msgid "Overwrite"
-msgstr "Overwrite"
-
-#, c-format
-msgid "Write permissions are required to save library \"%s\"."
-msgstr "Write permissions are required to save library “%s”."
-
-#, c-format
-msgid "Failed to create symbol library file \"%s\""
-msgstr "Failed to create symbol library file “%s”"
-
-#, c-format
-msgid "Error creating symbol library \"%s\""
-msgstr "Error creating symbol library “%s”"
-
-#, c-format
-msgid "Symbol \"%s\" saved in library \"%s\""
-msgstr "Symbol “%s” saved in library “%s”"
-
-#, c-format
-msgid "Cannot find library \"%s\" in the Symbol Library Table (%s)"
-msgstr "Cannot find library \"%s\" in the Symbol Library Table (%s)"
-
-msgid "Symbol not found."
-msgstr "Symbol not found."
-
-#, c-format
-msgid "Error loading symbol \"%s\" from library \"%s\". (%s)"
-msgstr "Error loading symbol \"%s\" from library \"%s\". (%s)"
-
-#, c-format
-msgid "Cannot load symbol \"%s\" from library \"%s\" (%s)"
-msgstr "Cannot load symbol \"%s\" from library \"%s\" (%s)"
-
-#, c-format
-msgid "Cannot enumerate library \"%s\" (%s)"
-msgstr "Cannot enumerate library \"%s\" (%s)"
-
-#, c-format
-msgid "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\""
-msgstr "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\""
-
-msgid ""
-"Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
-"Libraries dialog to adjust paths and add or remove libraries."
-msgstr ""
-"Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
-"Libraries dialog to adjust paths and add or remove libraries."
-
-#, c-format
-msgid "%s from schematic"
-msgstr "%s from schematic"
-
-msgid "[Read Only Library]"
-msgstr "[Read Only Library]"
-
-msgid "No symbol libraries are loaded."
-msgstr "No symbol libraries are loaded."
-
-msgid "Select Symbol Library"
-msgstr "Select Symbol Library"
-
-msgid "The current symbol has been modified.  Save changes?"
-msgstr "The current symbol has been modified.  Save changes?"
-
-#, c-format
-msgid "Error occurred loading symbol \"%s\" from library \"%s\"."
-msgstr "Error occurred loading symbol “%s” from library “%s”."
-
-msgid "This new symbol has no name and cannot be created."
-msgstr "This new symbol has no name and cannot be created."
-
-#, c-format
-msgid "Symbol \"%s\" already exists in library \"%s\""
-msgstr "Symbol “%s” already exists in library “%s”"
-
-msgid "Nickname"
-msgstr "Nickname"
-
-msgid "Save Copy of Symbol"
-msgstr "Save Copy of Symbol"
-
-msgid "Save in library:"
-msgstr "Save in library:"
-
-msgid "No library specified.  Symbol could not be saved."
-msgstr "No library specified.  Symbol could not be saved."
-
-msgid ""
-"Derived symbols must be save in the same library\n"
-"that the parent symbol exists."
-msgstr ""
-"Derived symbols must be save in the same library\n"
-"that the parent symbol exists."
-
-#, c-format
-msgid ""
-"The symbol \"%s\" is used to derive other symbols.\n"
-"Deleting this symbol will delete all of the symbols derived from it.\n"
-"\n"
-"Do you wish to delete this symbol and all of it's derivatives?"
-msgstr ""
-"The symbol \"%s\" is used to derive other symbols.\n"
-"Deleting this symbol will delete all of the symbols derived from it.\n"
-"\n"
-"Do you wish to delete this symbol and all of it's derivatives?"
-
-msgid "Delete Symbol"
-msgstr "Delete Symbol"
-
-msgid "Keep Symbol"
-msgstr "Keep Symbol"
-
-#, c-format
-msgid "Revert \"%s\" to last version saved?"
-msgstr "Revert “%s” to last version saved?"
-
-#, c-format
-msgid "Symbol name \"%s\" not found in library \"%s\""
-msgstr "Symbol name “%s” not found in library “%s”"
-
-msgid "No library specified."
-msgstr "No library specified."
-
-#, c-format
-msgid "Save Library \"%s\" As..."
-msgstr "Save Library “%s” As…"
-
-#, c-format
-msgid "Failed to save changes to symbol library file \"%s\""
-msgstr "Failed to save changes to symbol library file “%s”"
-
-msgid "Error saving library"
-msgstr "Error saving library"
-
-#, c-format
-msgid "Symbol library file \"%s\" saved"
-msgstr "Symbol library file “%s” saved"
-
-#, c-format
-msgid "Save changes to \"%s\" before closing?"
-msgstr "Save changes to “%s” before closing?"
-
-#, c-format
-msgid "Library \"%s\" is read only and must be saved as a different library."
-msgstr "Library \"%s\" is read only and must be saved as a different library."
-
-msgid "Export"
-msgstr "Export"
-
-msgid "&Units"
-msgstr "&Units"
-
-msgid "&Place"
-msgstr "&Place"
-
-msgid "&Inspect"
-msgstr "&Inspect"
-
-msgid "P&references"
-msgstr "P&references"
-
-#, c-format
-msgid "More than one symbol found in symbol file \"%s\"."
-msgstr "More than one symbol found in symbol file “%s”."
-
-#, c-format
-msgid "Saving symbol in \"%s\""
-msgstr "Saving symbol in “%s”"
-
-#, c-format
-msgid "An error occurred saving symbol file \"%s\""
-msgstr "An error occurred saving symbol file “%s”"
-
-msgid "Undefined!"
-msgstr "Undefined!"
-
-msgid "Convert"
-msgstr "Convert"
-
-msgid "Body"
-msgstr "Body"
-
-msgid "Power Symbol"
-msgstr "Power Symbol"
-
-msgid "Import existing drawings"
-msgstr "Import existing drawings"
-
-msgid "Export current drawing"
-msgstr "Export current drawing"
-
 msgid "Open Recent"
 msgstr "Open Recent"
 
@@ -8502,8 +8227,23 @@ msgid ""
 msgstr ""
 "Replace current schematic sheet with one imported from another application"
 
+msgid "Export"
+msgstr "Export"
+
+msgid "&Units"
+msgstr "&Units"
+
+msgid "&Place"
+msgstr "&Place"
+
+msgid "&Inspect"
+msgstr "&Inspect"
+
 msgid "&Tools"
 msgstr "&Tools"
+
+msgid "P&references"
+msgstr "P&references"
 
 #, c-format
 msgid "Failed to create file \"%s\""
@@ -8614,6 +8354,10 @@ msgid "No symbols were rescued."
 msgstr "No symbols were rescued."
 
 #, c-format
+msgid "Failed to create symbol library file \"%s\""
+msgstr "Failed to create symbol library file “%s”"
+
+#, c-format
 msgid "Failed to save rescue library %s."
 msgstr "Failed to save rescue library %s."
 
@@ -8693,6 +8437,10 @@ msgstr "The following libraries were not found:"
 
 msgid "New schematic file is unsaved"
 msgstr "New schematic file is unsaved"
+
+#, c-format
+msgid "Save changes to \"%s\" before closing?"
+msgstr "Save changes to “%s” before closing?"
 
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
@@ -9346,9 +9094,6 @@ msgstr "Hierarchical Sheet %s"
 
 msgid "(Deleted Item)"
 msgstr "(Deleted Item)"
-
-msgid "<root_sheet>"
-msgstr "<root_sheet>"
 
 #, c-format
 msgid "Hierarchical Sheet Pin %s"
@@ -10058,6 +9803,277 @@ msgstr "Please, fill required fields"
 msgid "\"%s\" is not a valid Spice value"
 msgstr "“%s” is not a valid Spice value"
 
+msgid "Library Editor"
+msgstr "Library Editor"
+
+msgid "Libraries"
+msgstr "Libraries"
+
+msgid "Library changes are unsaved"
+msgstr "Library changes are unsaved"
+
+msgid "Save changes to schematic before closing?"
+msgstr "Save changes to schematic before closing?"
+
+#, c-format
+msgid "Unit %s"
+msgstr "Unit %s"
+
+#, c-format
+msgid ""
+"Editing symbol %s from schematic.  Saving will update the schematic only."
+msgstr ""
+"Editing symbol %s from schematic.  Saving will update the schematic only."
+
+#, c-format
+msgid "Library \"%s\" already exists"
+msgstr "Library “%s” already exists"
+
+#, c-format
+msgid ""
+"Could not create the library file '%s'.\n"
+"Check write permission."
+msgstr ""
+"Could not create the library file '%s'.\n"
+"Check write permission."
+
+msgid "Could not open the library file."
+msgstr "Could not open the library file."
+
+#, c-format
+msgid "Loading library \"%s\""
+msgstr "Loading library “%s”"
+
+msgid "Add the library to the global library table?"
+msgstr "Add the library to the global library table?"
+
+msgid "Add To Global Library Table"
+msgstr "Add To Global Library Table"
+
+msgid "Global"
+msgstr "Global"
+
+msgid "Choose the Library Table to add the library to:"
+msgstr "Choose the Library Table to add the library to:"
+
+msgid "Add To Library Table"
+msgstr "Add To Library Table"
+
+#, c-format
+msgid "Failed to save backup to \"%s\""
+msgstr "Failed to save backup to \"%s\""
+
+#, c-format
+msgid ""
+"The current configuration does not include the symbol library\n"
+"\"%s\".\n"
+"Use Manage Symbol Libraries to edit the configuration."
+msgstr ""
+"The current configuration does not include the symbol library\n"
+"“%s”.\n"
+"Use Manage Symbol Libraries to edit the configuration."
+
+msgid "Library not found in symbol library table."
+msgstr "Library not found in symbol library table."
+
+#, c-format
+msgid "%s from schematic"
+msgstr "%s from schematic"
+
+msgid "[Read Only Library]"
+msgstr "[Read Only Library]"
+
+msgid "No symbol libraries are loaded."
+msgstr "No symbol libraries are loaded."
+
+msgid "Select Symbol Library"
+msgstr "Select Symbol Library"
+
+msgid "The current symbol has been modified.  Save changes?"
+msgstr "The current symbol has been modified.  Save changes?"
+
+#, c-format
+msgid "Error occurred loading symbol \"%s\" from library \"%s\"."
+msgstr "Error occurred loading symbol “%s” from library “%s”."
+
+msgid "Import Symbol"
+msgstr "Import Symbol"
+
+#, c-format
+msgid "Cannot import symbol library \"%s\"."
+msgstr "Cannot import symbol library “%s”."
+
+#, c-format
+msgid "Symbol library file \"%s\" is empty."
+msgstr "Symbol library file “%s” is empty."
+
+#, c-format
+msgid "More than one symbol found in symbol file \"%s\"."
+msgstr "More than one symbol found in symbol file “%s”."
+
+msgid "Export Symbol"
+msgstr "Export Symbol"
+
+#, c-format
+msgid "Saving symbol in \"%s\""
+msgstr "Saving symbol in “%s”"
+
+#, c-format
+msgid "An error occurred saving symbol file \"%s\""
+msgstr "An error occurred saving symbol file “%s”"
+
+msgid "This new symbol has no name and cannot be created."
+msgstr "This new symbol has no name and cannot be created."
+
+#, c-format
+msgid "Symbol \"%s\" already exists in library \"%s\""
+msgstr "Symbol “%s” already exists in library “%s”"
+
+msgid "Nickname"
+msgstr "Nickname"
+
+msgid "Save Copy of Symbol"
+msgstr "Save Copy of Symbol"
+
+msgid "Save in library:"
+msgstr "Save in library:"
+
+msgid "No library specified.  Symbol could not be saved."
+msgstr "No library specified.  Symbol could not be saved."
+
+msgid ""
+"Derived symbols must be save in the same library\n"
+"that the parent symbol exists."
+msgstr ""
+"Derived symbols must be save in the same library\n"
+"that the parent symbol exists."
+
+#, c-format
+msgid ""
+"The symbol \"%s\" is used to derive other symbols.\n"
+"Deleting this symbol will delete all of the symbols derived from it.\n"
+"\n"
+"Do you wish to delete this symbol and all of it's derivatives?"
+msgstr ""
+"The symbol \"%s\" is used to derive other symbols.\n"
+"Deleting this symbol will delete all of the symbols derived from it.\n"
+"\n"
+"Do you wish to delete this symbol and all of it's derivatives?"
+
+msgid "Delete Symbol"
+msgstr "Delete Symbol"
+
+msgid "Keep Symbol"
+msgstr "Keep Symbol"
+
+#, c-format
+msgid "Revert \"%s\" to last version saved?"
+msgstr "Revert “%s” to last version saved?"
+
+#, c-format
+msgid "Symbol name \"%s\" not found in library \"%s\""
+msgstr "Symbol name “%s” not found in library “%s”"
+
+msgid "No library specified."
+msgstr "No library specified."
+
+#, c-format
+msgid "Save Library \"%s\" As..."
+msgstr "Save Library “%s” As…"
+
+#, c-format
+msgid "Failed to save changes to symbol library file \"%s\""
+msgstr "Failed to save changes to symbol library file “%s”"
+
+msgid "Error saving library"
+msgstr "Error saving library"
+
+#, c-format
+msgid "Symbol library file \"%s\" saved"
+msgstr "Symbol library file “%s” saved"
+
+#, c-format
+msgid "Library \"%s\" is read only and must be saved as a different library."
+msgstr "Library \"%s\" is read only and must be saved as a different library."
+
+msgid "Undefined!"
+msgstr "Undefined!"
+
+msgid "Convert"
+msgstr "Convert"
+
+msgid "Body"
+msgstr "Body"
+
+msgid "Power Symbol"
+msgstr "Power Symbol"
+
+#, c-format
+msgid "Symbol \"%s\" already exists in library \"%s\"."
+msgstr "Symbol “%s” already exists in library “%s”."
+
+msgid "There is no symbol selected to save."
+msgstr "There is no symbol selected to save."
+
+#, c-format
+msgid "Error occurred attempting to load symbol library file \"%s\""
+msgstr "Error occurred attempting to load symbol library file “%s”"
+
+#, c-format
+msgid "Symbol \"%s\" already exists in \"%s\"."
+msgstr "Symbol “%s” already exists in “%s”."
+
+msgid "Overwrite"
+msgstr "Overwrite"
+
+#, c-format
+msgid "Write permissions are required to save library \"%s\"."
+msgstr "Write permissions are required to save library “%s”."
+
+#, c-format
+msgid "Error creating symbol library \"%s\""
+msgstr "Error creating symbol library “%s”"
+
+#, c-format
+msgid "Symbol \"%s\" saved in library \"%s\""
+msgstr "Symbol “%s” saved in library “%s”"
+
+#, c-format
+msgid "Cannot find library \"%s\" in the Symbol Library Table (%s)"
+msgstr "Cannot find library \"%s\" in the Symbol Library Table (%s)"
+
+msgid "Symbol not found."
+msgstr "Symbol not found."
+
+#, c-format
+msgid "Error loading symbol \"%s\" from library \"%s\". (%s)"
+msgstr "Error loading symbol \"%s\" from library \"%s\". (%s)"
+
+#, c-format
+msgid "Cannot load symbol \"%s\" from library \"%s\" (%s)"
+msgstr "Cannot load symbol \"%s\" from library \"%s\" (%s)"
+
+#, c-format
+msgid "Cannot enumerate library \"%s\" (%s)"
+msgstr "Cannot enumerate library \"%s\" (%s)"
+
+#, c-format
+msgid "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\""
+msgstr "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\""
+
+msgid ""
+"Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
+"Libraries dialog to adjust paths and add or remove libraries."
+msgstr ""
+"Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
+"Libraries dialog to adjust paths and add or remove libraries."
+
+msgid "Import existing drawings"
+msgstr "Import existing drawings"
+
+msgid "Export current drawing"
+msgstr "Export current drawing"
+
 #, c-format
 msgid ""
 "Duplicate library nickname \"%s\" found in symbol library table file line %d"
@@ -10148,6 +10164,10 @@ msgstr "Change %s footprint from “%s” to “%s”."
 #, c-format
 msgid "Change %s value from \"%s\" to \"%s\"."
 msgstr "Change %s value from \"%s\" to \"%s\"."
+
+#, c-format
+msgid "Cannot find \"%s\" pin \"%s\"."
+msgstr "Cannot find \"%s\" pin \"%s\"."
 
 #, c-format
 msgid "Change \"%s\" labels to \"%s\"."
@@ -10483,8 +10503,8 @@ msgstr "Displays footprint field dialog"
 msgid "Autoplace Fields"
 msgstr "Autoplace Fields"
 
-msgid "Runs the automatic placement algorithm on the symbol's fields"
-msgstr "Runs the automatic placement algorithm on the symbol's fields"
+msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
+msgstr "Runs the automatic placement algorithm on the symbol or sheet's fields"
 
 msgid "Change Symbols..."
 msgstr "Change Symbols..."
@@ -11353,34 +11373,6 @@ msgstr "Clear Recent Job Files"
 
 msgid "Layers Manager"
 msgstr "Layers Manager"
-
-msgid ""
-"KiCad can use your graphics card to give you a smoother and faster "
-"experience. This option is turned off by default since it is not compatible "
-"with all computers.\n"
-"\n"
-"Would you like to try enabling graphics acceleration?\n"
-"\n"
-"If you'd like to choose later, select Accelerated Graphics in the "
-"Preferences menu."
-msgstr ""
-"KiCad can use your graphics card to give you a smoother and faster "
-"experience. This option is turned off by default since it is not compatible "
-"with all computers.\n"
-"\n"
-"Would you like to try enabling graphics acceleration?\n"
-"\n"
-"If you'd like to choose later, select Accelerated Graphics in the "
-"Preferences menu."
-
-msgid "Enable Graphics Acceleration"
-msgstr "Enable Graphics Acceleration"
-
-msgid "&Enable Acceleration"
-msgstr "&Enable Acceleration"
-
-msgid "&No Thanks"
-msgstr "&No Thanks"
 
 #, c-format
 msgid "Drawing layer %d not in use"
@@ -13151,79 +13143,64 @@ msgstr "Board Classes"
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
-#, c-format
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
-"equally spaced in a logarithmic scale.  Although E-series are used for\n"
-"Zener diodes, inductors and other components, this calculator is mainly\n"
-"intended for resistors.\n"
+"equally spaced in a logarithmic scale.\n"
 "\n"
 "\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
 "\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
 "\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
 "\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
-"If your design requires any resistor value which is not readily available,\n"
-"this calculator will find a combination of standard E-series components to\n"
-"create it.  You can enter the required resistance from 0,0025 to 4000 "
-"kOhm. \n"
-"Solutions using 3 or 4 resistors are given if a better match can be found. \n"
-"The 4R checkbox option will take longer to process is considered for the "
-"E12\n"
-"series only.  Optionally it is possible to exclude up to two additional\n"
-"values from the solution for the reason of being not available.  If a\n"
-"E-series value is entered to the required input field, it is always "
-"excluded\n"
-"from any solution as it is assumed that this value is unavailable.\n"
+"\n"
+"This calculator finds combinations of standard E-series components to\n"
+"create arbitrary values.  You can enter the required resistance from 0,0025 "
+"to 4000 kOhm. \n"
+"Solutions using up to 3 components are given.  \n"
+"\n"
+"If a closer solutions is needed, the 4R checkbox option will give "
+"solutions \n"
+"using 4 components for the E12 series only.  This option\n"
+"may take longer to compute.  \n"
+"\n"
+"It is also possible to specify up to two values to exclude from the solution "
+"if these\n"
+"component values are not available\n"
 "\n"
 "Solutions are given in the following formats:\n"
 "\n"
 "\tR1 + R2 +...+ Rn\tresistors in series\n"
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
-"__Example:__ Voltage dividers, commonly used for 1:10 range selection\n"
-"require resistor ratio values 1:9.  Unfortunately the \"9\" is a value, "
-"what\n"
-"is not even in the E192 series available.  Deviation of 1% and more is yet\n"
-"unacceptable for 8 bit accuracy.  For a required resistor value of 9 kOhm,\n"
-"the calculator suggests the E6 values 2k2 + 6k8 in series as a possible\n"
-"exact solution.\n"
 msgstr ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
-"equally spaced in a logarithmic scale.  Although E-series are used for\n"
-"Zener diodes, inductors and other components, this calculator is mainly\n"
-"intended for resistors.\n"
+"equally spaced in a logarithmic scale.\n"
 "\n"
 "\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
 "\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
 "\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
 "\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
-"If your design requires any resistor value which is not readily available,\n"
-"this calculator will find a combination of standard E-series components to\n"
-"create it.  You can enter the required resistance from 0,0025 to 4000 "
-"kOhm. \n"
-"Solutions using 3 or 4 resistors are given if a better match can be found. \n"
-"The 4R checkbox option will take longer to process is considered for the "
-"E12\n"
-"series only.  Optionally it is possible to exclude up to two additional\n"
-"values from the solution for the reason of being not available.  If a\n"
-"E-series value is entered to the required input field, it is always "
-"excluded\n"
-"from any solution as it is assumed that this value is unavailable.\n"
+"\n"
+"This calculator finds combinations of standard E-series components to\n"
+"create arbitrary values.  You can enter the required resistance from 0,0025 "
+"to 4000 kOhm. \n"
+"Solutions using up to 3 components are given.  \n"
+"\n"
+"If a closer solutions is needed, the 4R checkbox option will give "
+"solutions \n"
+"using 4 components for the E12 series only.  This option\n"
+"may take longer to compute.  \n"
+"\n"
+"It is also possible to specify up to two values to exclude from the solution "
+"if these\n"
+"component values are not available\n"
 "\n"
 "Solutions are given in the following formats:\n"
 "\n"
 "\tR1 + R2 +...+ Rn\tresistors in series\n"
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
-"__Example:__ Voltage dividers, commonly used for 1:10 range selection\n"
-"require resistor ratio values 1:9.  Unfortunately the \"9\" is a value, "
-"what\n"
-"is not even in the E192 series available.  Deviation of 1% and more is yet\n"
-"unacceptable for 8 bit accuracy.  For a required resistor value of 9 kOhm,\n"
-"the calculator suggests the E6 values 2k2 + 6k8 in series as a possible\n"
-"exact solution.\n"
 
 msgid ""
 "Data modified, and no data filename to save modifications\n"
@@ -14597,20 +14574,20 @@ msgstr "Aborted: too many errors "
 msgid ""
 "\n"
 "\n"
-"Front Modules"
+"Front Footprints"
 msgstr ""
 "\n"
 "\n"
-"Front Modules"
+"Front Footprints"
 
 msgid ""
 "\n"
 "\n"
-"Back Modules"
+"Back Footprints"
 msgstr ""
 "\n"
 "\n"
-"Back Modules"
+"Back Footprints"
 
 msgid "Footprint not found in changelist"
 msgstr "Footprint not found in changelist"
@@ -15560,6 +15537,9 @@ msgstr "Delete exclusions"
 msgid "not run"
 msgstr "not run"
 
+msgid "Refill all zones before performing DRC"
+msgstr "Refill all zones before performing DRC"
+
 msgid "Report all errors for each track"
 msgstr "Report all errors for each track"
 
@@ -15575,23 +15555,6 @@ msgstr ""
 "\n"
 "If unselected, only the first DRC violation will be reported for each track "
 "connection."
-
-msgid "Test tracks against zone fills (slow)"
-msgstr "Test tracks against zone fills (slow)"
-
-msgid ""
-"If selected, tracks will be tested against copper zones. \n"
-"If copper zones are up to date, this test should be not needed.\n"
-"\n"
-"This test can be *very slow* for complicated designs."
-msgstr ""
-"If selected, tracks will be tested against copper zones. \n"
-"If copper zones are up to date, this test should be not needed.\n"
-"\n"
-"This test can be *very slow* for complicated designs."
-
-msgid "Refill all zones before performing DRC"
-msgstr "Refill all zones before performing DRC"
 
 msgid "Test for parity between PCB and schematic"
 msgstr "Test for parity between PCB and schematic"
@@ -15836,11 +15799,35 @@ msgstr "First pad number:"
 msgid "Pad Enumeration Settings"
 msgstr "Pad Enumeration Settings"
 
-msgid "Update Footprints from Library"
-msgstr "Update Footprints from Library"
-
 msgid "Change Footprints"
 msgstr "Change Footprints"
+
+msgid "Change all footprints on board"
+msgstr "Change all footprints on board"
+
+msgid "Change selected footprint"
+msgstr "Change selected footprint"
+
+msgid "Change footprints matching reference designator:"
+msgstr "Change footprints matching reference designator:"
+
+msgid "Change footprints matching value:"
+msgstr "Change footprints matching value:"
+
+msgid "Change footprints with library id:"
+msgstr "Change footprints with library id:"
+
+msgid "Update text layers and visibilities"
+msgstr "Update text layers and visibilities"
+
+msgid "Update text sizes, styles and positions"
+msgstr "Update text sizes, styles and positions"
+
+msgid "Update fabrications attributes"
+msgstr "Update fabrications attributes"
+
+msgid "Update 3D models"
+msgstr "Update 3D models"
 
 #, c-format
 msgid "%s footprint \"%s\" (from \"%s\") to \"%s\""
@@ -15849,25 +15836,20 @@ msgstr "%s footprint “%s” (from “%s”) to “%s”"
 msgid "*** footprint not found ***"
 msgstr "*** footprint not found ***"
 
-#, c-format
-msgid "%s all footprints on board"
-msgstr "%s all footprints on board"
+msgid "Update all footprints on board"
+msgstr "Update all footprints on board"
 
-#, c-format
-msgid "%s selected footprint"
-msgstr "%s selected footprint"
+msgid "Update selected footprint"
+msgstr "Update selected footprint"
 
-#, c-format
-msgid "%s footprints matching reference designator:"
-msgstr "%s footprints matching reference designator:"
+msgid "Update footprints matching reference designator:"
+msgstr "Update footprints matching reference designator:"
 
-#, c-format
-msgid "%s footprints matching value:"
-msgstr "%s footprints matching value:"
+msgid "Update footprints matching value:"
+msgstr "Update footprints matching value:"
 
-#, c-format
-msgid "%s footprints with library id:"
-msgstr "%s footprints with library id:"
+msgid "Update footprints with library id:"
+msgstr "Update footprints with library id:"
 
 msgid "New footprint library id:"
 msgstr "New footprint library id:"
@@ -15878,25 +15860,20 @@ msgstr "Update Options"
 msgid "Remove text items which are not in library footprint"
 msgstr "Remove text items which are not in library footprint"
 
-#, c-format
-msgid "%s text layers and visibilities"
-msgstr "%s text layers and visibilities"
+msgid "Reset text layers and visibilities"
+msgstr "Reset text layers and visibilities"
 
-#, c-format
-msgid "%s text sizes, styles and positions"
-msgstr "%s text sizes, styles and positions"
+msgid "Reset text sizes, styles and positions"
+msgstr "Reset text sizes, styles and positions"
 
-#, c-format
-msgid "%s fabrication attributes"
-msgstr "%s fabrication attributes"
+msgid "Reset fabrication attributes"
+msgstr "Reset fabrication attributes"
 
-#, c-format
-msgid "%s 3D models"
-msgstr "%s 3D models"
+msgid "Reset 3D models"
+msgstr "Reset 3D models"
 
-#, c-format
-msgid "%s"
-msgstr "%s"
+msgid "Update Footprints from Library"
+msgstr "Update Footprints from Library"
 
 #, c-format
 msgid "File %s already exists."
@@ -17032,8 +17009,8 @@ msgid "Select a corner to delete."
 msgstr "Select a corner to delete."
 
 #, c-format
-msgid "Footprint %s (%s), %s, rotated %.1f deg"
-msgstr "Footprint %s (%s), %s, rotated %.1f deg"
+msgid "Footprint %s (%s), %s, rotated %g deg"
+msgstr "Footprint %s (%s), %s, rotated %g deg"
 
 msgid "back side (mirrored)"
 msgstr "back side (mirrored)"
@@ -17089,8 +17066,12 @@ msgstr "%s and %s"
 msgid "Pad size must be greater than zero"
 msgstr "Pad size must be greater than zero"
 
-msgid "Warning: Pad drill bigger than pad size or shapes do not overlap"
-msgstr "Warning: Pad drill bigger than pad size or shapes do not overlap"
+msgid ""
+"Warning: Pad drill bigger than pad size or drill shape and pad shape do not "
+"overlap"
+msgstr ""
+"Warning: Pad drill bigger than pad size or drill shape and pad shape do not "
+"overlap"
 
 msgid "Pad local clearance must be zero or greater than zero"
 msgstr "Pad local clearance must be zero or greater than zero"
@@ -17570,9 +17551,6 @@ msgstr ""
 msgid "Drill marks:"
 msgstr "Drill marks:"
 
-msgid "Small"
-msgstr "Small"
-
 msgid "Actual size"
 msgstr "Actual size"
 
@@ -17718,13 +17696,13 @@ msgid ""
 "These width correction is intended to compensate tracks width and also pads "
 "and vias size errors.\n"
 "The reasonable width correction value must be in a range of [-"
-"(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils."
+"(MinTrackWidth-1), +(MinClearanceValue-1)]."
 msgstr ""
 "Set global width correction for exact width PostScript output.\n"
 "These width correction is intended to compensate tracks width and also pads "
 "and vias size errors.\n"
 "The reasonable width correction value must be in a range of [-"
-"(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils."
+"(MinTrackWidth-1), +(MinClearanceValue-1)]."
 
 msgid "Force A4 output"
 msgstr "Force A4 output"
@@ -18139,17 +18117,29 @@ msgstr "&Run"
 msgid "Scripting Test Window"
 msgstr "Scripting Test Window"
 
+msgid "Net Name"
+msgstr "Net Name"
+
 msgid "Pad Count"
 msgstr "Pad Count"
 
 msgid "Via Count"
 msgstr "Via Count"
 
+msgid "Via Length"
+msgstr "Via Length"
+
 msgid "Board Length"
 msgstr "Board Length"
 
 msgid "Die Length"
 msgstr "Die Length"
+
+msgid "Total Length"
+msgstr "Total Length"
+
+msgid "Net Length"
+msgstr "Net Length"
 
 msgid "New Net"
 msgstr "New Net"
@@ -18164,32 +18154,43 @@ msgstr "Rename Net"
 msgid "Net name cannot be empty."
 msgstr "Net name cannot be empty."
 
-msgid "Net is in use.  Delete anyway?"
-msgstr "Net is in use.  Delete anyway?"
+#, c-format
+msgid "Net '%s' is in use.  Delete anyway?"
+msgstr "Net '%s' is in use.  Delete anyway?"
+
+#, c-format
+msgid "Delete all nets in group '%s'?"
+msgstr "Delete all nets in group '%s'?"
 
 msgid "Report file"
 msgstr "Report file"
 
-msgid "Net Id"
-msgstr "Net Id"
-
-msgid "Pad count"
-msgstr "Pad count"
-
-msgid "Via count"
-msgstr "Via count"
-
-msgid "Board length"
-msgstr "Board length"
-
-msgid "Die length"
-msgstr "Die length"
-
-msgid "Net length"
-msgstr "Net length"
-
 msgid "Show zero pad nets"
 msgstr "Show zero pad nets"
+
+msgid "Wildcard"
+msgstr "Wildcard"
+
+msgid "RegEx"
+msgstr "RegEx"
+
+msgid "Wildcard Substr"
+msgstr "Wildcard Substr"
+
+msgid "RegEx Substr"
+msgstr "RegEx Substr"
+
+msgid "Sort groups first"
+msgstr "Sort groups first"
+
+msgid "Via Length:"
+msgstr "Via Length:"
+
+msgid "Constant"
+msgstr "Constant"
+
+msgid "From Stackup"
+msgstr "From Stackup"
 
 msgid "Create Report..."
 msgstr "Create Report…"
@@ -18226,6 +18227,10 @@ msgstr "Footprint Text Properties"
 
 msgid "Reference:"
 msgstr "Reference:"
+
+#, c-format
+msgid "Footprint %s (%s), %s, rotated %.1f deg"
+msgstr "Footprint %s (%s), %s, rotated %.1f deg"
 
 msgid ""
 "The text thickness is too large for the text size.\n"
@@ -19162,9 +19167,8 @@ msgstr ""
 msgid "DRC rules"
 msgstr "DRC rules"
 
-#, c-format
-msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr "ERROR: <a href='%d:%d'>%s</a>%s"
+msgid "ERROR:"
+msgstr "ERROR:"
 
 msgid "Design rules cannot be added without a project"
 msgstr "Design rules cannot be added without a project"
@@ -19253,61 +19257,6 @@ msgstr "Gap"
 
 msgid "Via Gap"
 msgstr "Via Gap"
-
-msgid "New"
-msgstr "New"
-
-msgid "Choose a folder to save the downloaded libraries"
-msgstr "Choose a folder to save the downloaded libraries"
-
-msgid "KISYS3DMOD path not defined , or not existing"
-msgstr "KISYS3DMOD path not defined , or not existing"
-
-msgid "Downloading 3D libraries"
-msgstr "Downloading 3D libraries"
-
-msgid "Aborted by user"
-msgstr "Aborted by user"
-
-msgid "Welcome to the 3D shape Libraries downloader Wizard!"
-msgstr "Welcome to the 3D shape Libraries downloader Wizard!"
-
-msgid "Please select the URL for the 3D libraries to download"
-msgstr "Please select the URL for the 3D libraries to download"
-
-msgid "https://github.com/KiCad/packages3d"
-msgstr "https://github.com/KiCad/packages3d"
-
-msgid "3D shape local folder:"
-msgstr "3D shape local folder:"
-
-msgid "Default 3D Path"
-msgstr "Default 3D Path"
-
-msgid ""
-"It is not possible to write in the selected directory.\n"
-"Please choose another one."
-msgstr ""
-"It is not possible to write in the selected directory.\n"
-"Please choose another one."
-
-msgid "Visit our official Kicad repository on Github and get more libraries"
-msgstr "Visit our official Kicad repository on Github and get more libraries"
-
-msgid "Select Github libraries to add:"
-msgstr "Select Github libraries to add:"
-
-msgid "Unselect all"
-msgstr "Unselect all"
-
-msgid "Local library folder:"
-msgstr "Local library folder:"
-
-msgid "3D shape libraries to be downloaded:"
-msgstr "3D shape libraries to be downloaded:"
-
-msgid "Add 3D Shape Libraries Wizard"
-msgstr "Add 3D Shape Libraries Wizard"
 
 msgid "board setup constraints"
 msgstr "board setup constraints"
@@ -19520,8 +19469,9 @@ msgstr "rule %s"
 msgid "ERROR in expression."
 msgstr "ERROR in expression."
 
-msgid "ERROR:"
-msgstr "ERROR:"
+#, c-format
+msgid "ERROR: <a href='%d:%d'>%s</a>%s"
+msgstr "ERROR: <a href='%d:%d'>%s</a>%s"
 
 #, c-format
 msgid "ERROR: %s%s"
@@ -19604,14 +19554,17 @@ msgstr "Checking pad, via and zone connections..."
 msgid "Checking net connections..."
 msgstr "Checking net connections..."
 
-msgid "Checking pad clearances..."
-msgstr "Checking pad clearances..."
+msgid "Gathering copper items..."
+msgstr "Gathering copper items..."
+
+msgid "Tessellating copper zones..."
+msgstr "Tessellating copper zones..."
 
 msgid "Checking track & via clearances..."
 msgstr "Checking track & via clearances..."
 
-msgid "Checking copper graphic & text clearances..."
-msgstr "Checking copper graphic & text clearances..."
+msgid "Checking pad clearances..."
+msgstr "Checking pad clearances..."
 
 msgid "Checking copper zone clearances..."
 msgstr "Checking copper zone clearances..."
@@ -19658,12 +19611,6 @@ msgstr "Checking keepouts & disallow constraints..."
 msgid "Checking board edge clearances..."
 msgstr "Checking board edge clearances..."
 
-msgid "Checking silkscreen to board edge clearances..."
-msgstr "Checking silkscreen to board edge clearances..."
-
-msgid "Checking hole to pad clearances..."
-msgstr "Checking hole to pad clearances..."
-
 msgid "Checking hole to hole clearances..."
 msgstr "Checking hole to hole clearances..."
 
@@ -19703,34 +19650,26 @@ msgid "No netlist provided, skipping LVS."
 msgstr "No netlist provided, skipping LVS."
 
 #, c-format
-msgid "minimum length: %s; actual: %s)"
-msgstr "minimum length: %s; actual: %s)"
+msgid "(%s min length: %s; actual: %s)"
+msgstr "(%s min length: %s; actual: %s)"
 
 #, c-format
-msgid "maximum length: %s; actual: %s)"
-msgstr "maximum length: %s; actual: %s)"
+msgid "(%s max length: %s; actual: %s)"
+msgstr "(%s max length: %s; actual: %s)"
 
 #, c-format
-msgid ""
-"maximum skew: %s; actual skew: %s; average net length: %s; actual net "
-"length: %s)"
-msgstr ""
-"maximum skew: %s; actual skew: %s; average net length: %s; actual net "
-"length: %s)"
+msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
+msgstr "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
 
 #, c-format
-msgid "max vias: %d; actual: %d"
-msgstr "max vias: %d; actual: %d"
+msgid "(%s max count: %d; actual: %d)"
+msgstr "(%s max count: %d; actual: %d)"
 
 msgid "Gathering length-constrained connections..."
 msgstr "Gathering length-constrained connections..."
 
 msgid "<unconstrained>"
 msgstr "<unconstrained>"
-
-#, c-format
-msgid "Length-constrained traces for rule '%s':"
-msgstr "Length-constrained traces for rule '%s':"
 
 msgid "(self-intersecting)"
 msgstr "(self-intersecting)"
@@ -20274,85 +20213,6 @@ msgstr ""
 "\n"
 "%s"
 
-#, c-format
-msgid ""
-"malformed URL:\n"
-"\"%s\""
-msgstr ""
-"malformed URL:\n"
-"“%s”"
-
-#, c-format
-msgid ""
-"Error fetching JSON data from URL \"%s\".\n"
-"Reason: \"%s\""
-msgstr ""
-"Error fetching JSON data from URL “%s”.\n"
-"Reason: “%s”"
-
-#, c-format
-msgid ""
-"Footprint\n"
-"\"%s\"\n"
-"is not in the writable portion of this Github library\n"
-"\"%s\""
-msgstr ""
-"Footprint\n"
-"“%s”\n"
-"is not in the writable portion of this Github library\n"
-"“%s”"
-
-msgid ""
-"Set this property to a directory where footprints are to be written as "
-"pretty footprints when saving to this library. Anything saved will take "
-"precedence over footprints by the same name in the github repo.  These saved "
-"footprints can then be sent to the library maintainer as updates. <p>The "
-"directory <b>must</b> have a <b>.pretty</b> file extension because the "
-"format of the save is pretty.</p>"
-msgstr ""
-"Set this property to a directory where footprints are to be written as "
-"pretty footprints when saving to this library. Anything saved will take "
-"precedence over footprints by the same name in the github repo.  These saved "
-"footprints can then be sent to the library maintainer as updates. <p>The "
-"directory <b>must</b> have a <b>.pretty</b> file extension because the "
-"format of the save is pretty.</p>"
-
-#, c-format
-msgid ""
-"option \"%s\" for Github library \"%s\" must point to a writable directory "
-"ending with '.pretty'."
-msgstr ""
-"option “%s” for Github library “%s” must point to a writable directory "
-"ending with '.pretty'."
-
-#, c-format
-msgid ""
-"Unable to parse URL:\n"
-"\"%s\""
-msgstr ""
-"Unable to parse URL:\n"
-"“%s”"
-
-#, c-format
-msgid ""
-"%s\n"
-"Cannot get/download Zip archive: \"%s\"\n"
-"for library path: \"%s\".\n"
-"Reason: \"%s\""
-msgstr ""
-"%s\n"
-"Cannot get/download Zip archive: “%s”\n"
-"for library path: “%s”.\n"
-"Reason: “%s”"
-
-#, c-format
-msgid ""
-"Cannot download library \"%s\".\n"
-"The library does not exist on the server"
-msgstr ""
-"Cannot download library “%s”.\n"
-"The library does not exist on the server"
-
 msgid "Open File"
 msgstr "Open File"
 
@@ -20587,12 +20447,6 @@ msgstr "Reveals the plugins folder in a Finder window"
 msgid "Open Plugin Directory"
 msgstr "Open Plugin Directory"
 
-msgid "Add &3D Shapes Libraries Wizard..."
-msgstr "Add &3D Shapes Libraries Wizard…"
-
-msgid "Download 3D shape libraries from GitHub"
-msgstr "Download 3D shape libraries from GitHub"
-
 msgid "Ro&ute"
 msgstr "Ro&ute"
 
@@ -20661,12 +20515,6 @@ msgstr "Shape has no points!"
 
 msgid "Place microwave feature"
 msgstr "Place microwave feature"
-
-msgid "Net Name"
-msgstr "Net Name"
-
-msgid "Net Length"
-msgstr "Net Length"
 
 msgid "On Board"
 msgstr "On Board"
@@ -21331,10 +21179,10 @@ msgstr ""
 #, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
-"been ignored,"
+"been ignored."
 msgstr ""
 "The net '%s' references component ID '%s' which does not exist. This has "
-"been ignored,"
+"been ignored."
 
 #, c-format
 msgid ""
@@ -21856,8 +21704,8 @@ msgstr "Too short: skew "
 msgid "Tuned: skew "
 msgstr "Tuned: skew "
 
-msgid "Cannot start routing inside a keepout area or board outline."
-msgstr "Cannot start routing inside a keepout area or board outline."
+msgid "The routing start point violates DRC."
+msgstr "The routing start point violates DRC."
 
 msgid "Undo last segment"
 msgstr "Undo last segment"
@@ -23972,6 +23820,407 @@ msgstr "Refill %d Zones"
 
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] load failed: input line too long\n"
+
+#~ msgid "Preferences...\tCTRL+,"
+#~ msgstr "Preferences...\tCTRL+,"
+
+#~ msgid ""
+#~ "Used by KiCad to define the URL of the repository of the official KiCad "
+#~ "footprint libraries."
+#~ msgstr ""
+#~ "Used by KiCad to define the URL of the repository of the official KiCad "
+#~ "footprint libraries."
+
+#~ msgid "Cut\tCTRL+X"
+#~ msgstr "Cut\tCTRL+X"
+
+#~ msgid "Copy\tCTRL+C"
+#~ msgstr "Copy\tCTRL+C"
+
+#~ msgid "Paste\tCTRL+V"
+#~ msgstr "Paste\tCTRL+V"
+
+#~ msgid "Select All\tCTRL+A"
+#~ msgstr "Select All\tCTRL+A"
+
+#~ msgid "Close\tCTRL+W"
+#~ msgstr "Close\tCTRL+W"
+
+#~ msgid "Annotation not complete.  ERC cannot be run."
+#~ msgstr "Annotation not complete.  ERC cannot be run."
+
+#~ msgid "Annotation not complete.  ERC cannot be run.  "
+#~ msgstr "Annotation not complete.  ERC cannot be run.  "
+
+#~ msgid ""
+#~ "The library ID and footprint ID currently assigned.  Use \"Change "
+#~ "Footprint...\" to assign a different footprint."
+#~ msgstr ""
+#~ "The library ID and footprint ID currently assigned.  Use \"Change "
+#~ "Footprint...\" to assign a different footprint."
+
+#~ msgid "Junction size:"
+#~ msgstr "Junction size:"
+
+#~ msgid "<root_sheet>"
+#~ msgstr "<root_sheet>"
+
+#~ msgid "Runs the automatic placement algorithm on the symbol's fields"
+#~ msgstr "Runs the automatic placement algorithm on the symbol's fields"
+
+#~ msgid ""
+#~ "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
+#~ "numbers for electronic components.  Available values are approximately\n"
+#~ "equally spaced in a logarithmic scale.  Although E-series are used for\n"
+#~ "Zener diodes, inductors and other components, this calculator is mainly\n"
+#~ "intended for resistors.\n"
+#~ "\n"
+#~ "\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
+#~ "\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
+#~ "\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
+#~ "\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+#~ "If your design requires any resistor value which is not readily "
+#~ "available,\n"
+#~ "this calculator will find a combination of standard E-series components "
+#~ "to\n"
+#~ "create it.  You can enter the required resistance from 0,0025 to 4000 "
+#~ "kOhm. \n"
+#~ "Solutions using 3 or 4 resistors are given if a better match can be "
+#~ "found. \n"
+#~ "The 4R checkbox option will take longer to process is considered for the "
+#~ "E12\n"
+#~ "series only.  Optionally it is possible to exclude up to two additional\n"
+#~ "values from the solution for the reason of being not available.  If a\n"
+#~ "E-series value is entered to the required input field, it is always "
+#~ "excluded\n"
+#~ "from any solution as it is assumed that this value is unavailable.\n"
+#~ "\n"
+#~ "Solutions are given in the following formats:\n"
+#~ "\n"
+#~ "\tR1 + R2 +...+ Rn\tresistors in series\n"
+#~ "\tR1 | R2 |...| Rn\tresistors in parallel\n"
+#~ "\tR1 + (R2|R3)...\t\tany combination of the above\n"
+#~ "__Example:__ Voltage dividers, commonly used for 1:10 range selection\n"
+#~ "require resistor ratio values 1:9.  Unfortunately the \"9\" is a value, "
+#~ "what\n"
+#~ "is not even in the E192 series available.  Deviation of 1% and more is "
+#~ "yet\n"
+#~ "unacceptable for 8 bit accuracy.  For a required resistor value of 9 "
+#~ "kOhm,\n"
+#~ "the calculator suggests the E6 values 2k2 + 6k8 in series as a possible\n"
+#~ "exact solution.\n"
+#~ msgstr ""
+#~ "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
+#~ "numbers for electronic components.  Available values are approximately\n"
+#~ "equally spaced in a logarithmic scale.  Although E-series are used for\n"
+#~ "Zener diodes, inductors and other components, this calculator is mainly\n"
+#~ "intended for resistors.\n"
+#~ "\n"
+#~ "\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
+#~ "\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
+#~ "\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
+#~ "\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+#~ "If your design requires any resistor value which is not readily "
+#~ "available,\n"
+#~ "this calculator will find a combination of standard E-series components "
+#~ "to\n"
+#~ "create it.  You can enter the required resistance from 0,0025 to 4000 "
+#~ "kOhm. \n"
+#~ "Solutions using 3 or 4 resistors are given if a better match can be "
+#~ "found. \n"
+#~ "The 4R checkbox option will take longer to process is considered for the "
+#~ "E12\n"
+#~ "series only.  Optionally it is possible to exclude up to two additional\n"
+#~ "values from the solution for the reason of being not available.  If a\n"
+#~ "E-series value is entered to the required input field, it is always "
+#~ "excluded\n"
+#~ "from any solution as it is assumed that this value is unavailable.\n"
+#~ "\n"
+#~ "Solutions are given in the following formats:\n"
+#~ "\n"
+#~ "\tR1 + R2 +...+ Rn\tresistors in series\n"
+#~ "\tR1 | R2 |...| Rn\tresistors in parallel\n"
+#~ "\tR1 + (R2|R3)...\t\tany combination of the above\n"
+#~ "__Example:__ Voltage dividers, commonly used for 1:10 range selection\n"
+#~ "require resistor ratio values 1:9.  Unfortunately the \"9\" is a value, "
+#~ "what\n"
+#~ "is not even in the E192 series available.  Deviation of 1% and more is "
+#~ "yet\n"
+#~ "unacceptable for 8 bit accuracy.  For a required resistor value of 9 "
+#~ "kOhm,\n"
+#~ "the calculator suggests the E6 values 2k2 + 6k8 in series as a possible\n"
+#~ "exact solution.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Front Modules"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Front Modules"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Back Modules"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Back Modules"
+
+#~ msgid "Test tracks against zone fills (slow)"
+#~ msgstr "Test tracks against zone fills (slow)"
+
+#~ msgid ""
+#~ "If selected, tracks will be tested against copper zones. \n"
+#~ "If copper zones are up to date, this test should be not needed.\n"
+#~ "\n"
+#~ "This test can be *very slow* for complicated designs."
+#~ msgstr ""
+#~ "If selected, tracks will be tested against copper zones. \n"
+#~ "If copper zones are up to date, this test should be not needed.\n"
+#~ "\n"
+#~ "This test can be *very slow* for complicated designs."
+
+#~ msgid "%s all footprints on board"
+#~ msgstr "%s all footprints on board"
+
+#~ msgid "%s selected footprint"
+#~ msgstr "%s selected footprint"
+
+#~ msgid "%s footprints matching reference designator:"
+#~ msgstr "%s footprints matching reference designator:"
+
+#~ msgid "%s footprints matching value:"
+#~ msgstr "%s footprints matching value:"
+
+#~ msgid "%s footprints with library id:"
+#~ msgstr "%s footprints with library id:"
+
+#~ msgid "%s text layers and visibilities"
+#~ msgstr "%s text layers and visibilities"
+
+#~ msgid "%s text sizes, styles and positions"
+#~ msgstr "%s text sizes, styles and positions"
+
+#~ msgid "%s fabrication attributes"
+#~ msgstr "%s fabrication attributes"
+
+#~ msgid "%s 3D models"
+#~ msgstr "%s 3D models"
+
+#~ msgid "%s"
+#~ msgstr "%s"
+
+#~ msgid "Warning: Pad drill bigger than pad size or shapes do not overlap"
+#~ msgstr "Warning: Pad drill bigger than pad size or shapes do not overlap"
+
+#~ msgid ""
+#~ "Set global width correction for exact width PostScript output.\n"
+#~ "These width correction is intended to compensate tracks width and also "
+#~ "pads and vias size errors.\n"
+#~ "The reasonable width correction value must be in a range of [-"
+#~ "(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils."
+#~ msgstr ""
+#~ "Set global width correction for exact width PostScript output.\n"
+#~ "These width correction is intended to compensate tracks width and also "
+#~ "pads and vias size errors.\n"
+#~ "The reasonable width correction value must be in a range of [-"
+#~ "(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils."
+
+#~ msgid "Net is in use.  Delete anyway?"
+#~ msgstr "Net is in use.  Delete anyway?"
+
+#~ msgid "Net Id"
+#~ msgstr "Net Id"
+
+#~ msgid "Pad count"
+#~ msgstr "Pad count"
+
+#~ msgid "Via count"
+#~ msgstr "Via count"
+
+#~ msgid "Board length"
+#~ msgstr "Board length"
+
+#~ msgid "Die length"
+#~ msgstr "Die length"
+
+#~ msgid "Net length"
+#~ msgstr "Net length"
+
+#~ msgid "New"
+#~ msgstr "New"
+
+#~ msgid "Choose a folder to save the downloaded libraries"
+#~ msgstr "Choose a folder to save the downloaded libraries"
+
+#~ msgid "KISYS3DMOD path not defined , or not existing"
+#~ msgstr "KISYS3DMOD path not defined , or not existing"
+
+#~ msgid "Downloading 3D libraries"
+#~ msgstr "Downloading 3D libraries"
+
+#~ msgid "Aborted by user"
+#~ msgstr "Aborted by user"
+
+#~ msgid "Welcome to the 3D shape Libraries downloader Wizard!"
+#~ msgstr "Welcome to the 3D shape Libraries downloader Wizard!"
+
+#~ msgid "Please select the URL for the 3D libraries to download"
+#~ msgstr "Please select the URL for the 3D libraries to download"
+
+#~ msgid "https://github.com/KiCad/packages3d"
+#~ msgstr "https://github.com/KiCad/packages3d"
+
+#~ msgid "3D shape local folder:"
+#~ msgstr "3D shape local folder:"
+
+#~ msgid "Default 3D Path"
+#~ msgstr "Default 3D Path"
+
+#~ msgid ""
+#~ "It is not possible to write in the selected directory.\n"
+#~ "Please choose another one."
+#~ msgstr ""
+#~ "It is not possible to write in the selected directory.\n"
+#~ "Please choose another one."
+
+#~ msgid "Visit our official Kicad repository on Github and get more libraries"
+#~ msgstr ""
+#~ "Visit our official Kicad repository on Github and get more libraries"
+
+#~ msgid "Select Github libraries to add:"
+#~ msgstr "Select Github libraries to add:"
+
+#~ msgid "Unselect all"
+#~ msgstr "Unselect all"
+
+#~ msgid "Local library folder:"
+#~ msgstr "Local library folder:"
+
+#~ msgid "3D shape libraries to be downloaded:"
+#~ msgstr "3D shape libraries to be downloaded:"
+
+#~ msgid "Add 3D Shape Libraries Wizard"
+#~ msgstr "Add 3D Shape Libraries Wizard"
+
+#~ msgid "Checking copper graphic & text clearances..."
+#~ msgstr "Checking copper graphic & text clearances..."
+
+#~ msgid "Checking silkscreen to board edge clearances..."
+#~ msgstr "Checking silkscreen to board edge clearances..."
+
+#~ msgid "Checking hole to pad clearances..."
+#~ msgstr "Checking hole to pad clearances..."
+
+#~ msgid "minimum length: %s; actual: %s)"
+#~ msgstr "minimum length: %s; actual: %s)"
+
+#~ msgid "maximum length: %s; actual: %s)"
+#~ msgstr "maximum length: %s; actual: %s)"
+
+#~ msgid ""
+#~ "maximum skew: %s; actual skew: %s; average net length: %s; actual net "
+#~ "length: %s)"
+#~ msgstr ""
+#~ "maximum skew: %s; actual skew: %s; average net length: %s; actual net "
+#~ "length: %s)"
+
+#~ msgid "max vias: %d; actual: %d"
+#~ msgstr "max vias: %d; actual: %d"
+
+#~ msgid "Length-constrained traces for rule '%s':"
+#~ msgstr "Length-constrained traces for rule '%s':"
+
+#~ msgid ""
+#~ "malformed URL:\n"
+#~ "\"%s\""
+#~ msgstr ""
+#~ "malformed URL:\n"
+#~ "“%s”"
+
+#~ msgid ""
+#~ "Error fetching JSON data from URL \"%s\".\n"
+#~ "Reason: \"%s\""
+#~ msgstr ""
+#~ "Error fetching JSON data from URL “%s”.\n"
+#~ "Reason: “%s”"
+
+#~ msgid ""
+#~ "Footprint\n"
+#~ "\"%s\"\n"
+#~ "is not in the writable portion of this Github library\n"
+#~ "\"%s\""
+#~ msgstr ""
+#~ "Footprint\n"
+#~ "“%s”\n"
+#~ "is not in the writable portion of this Github library\n"
+#~ "“%s”"
+
+#~ msgid ""
+#~ "Set this property to a directory where footprints are to be written as "
+#~ "pretty footprints when saving to this library. Anything saved will take "
+#~ "precedence over footprints by the same name in the github repo.  These "
+#~ "saved footprints can then be sent to the library maintainer as updates. "
+#~ "<p>The directory <b>must</b> have a <b>.pretty</b> file extension because "
+#~ "the format of the save is pretty.</p>"
+#~ msgstr ""
+#~ "Set this property to a directory where footprints are to be written as "
+#~ "pretty footprints when saving to this library. Anything saved will take "
+#~ "precedence over footprints by the same name in the github repo.  These "
+#~ "saved footprints can then be sent to the library maintainer as updates. "
+#~ "<p>The directory <b>must</b> have a <b>.pretty</b> file extension because "
+#~ "the format of the save is pretty.</p>"
+
+#~ msgid ""
+#~ "option \"%s\" for Github library \"%s\" must point to a writable "
+#~ "directory ending with '.pretty'."
+#~ msgstr ""
+#~ "option “%s” for Github library “%s” must point to a writable directory "
+#~ "ending with '.pretty'."
+
+#~ msgid ""
+#~ "Unable to parse URL:\n"
+#~ "\"%s\""
+#~ msgstr ""
+#~ "Unable to parse URL:\n"
+#~ "“%s”"
+
+#~ msgid ""
+#~ "%s\n"
+#~ "Cannot get/download Zip archive: \"%s\"\n"
+#~ "for library path: \"%s\".\n"
+#~ "Reason: \"%s\""
+#~ msgstr ""
+#~ "%s\n"
+#~ "Cannot get/download Zip archive: “%s”\n"
+#~ "for library path: “%s”.\n"
+#~ "Reason: “%s”"
+
+#~ msgid ""
+#~ "Cannot download library \"%s\".\n"
+#~ "The library does not exist on the server"
+#~ msgstr ""
+#~ "Cannot download library “%s”.\n"
+#~ "The library does not exist on the server"
+
+#~ msgid "Add &3D Shapes Libraries Wizard..."
+#~ msgstr "Add &3D Shapes Libraries Wizard…"
+
+#~ msgid "Download 3D shape libraries from GitHub"
+#~ msgstr "Download 3D shape libraries from GitHub"
+
+#~ msgid ""
+#~ "The net '%s' references component ID '%s' which does not exist. This has "
+#~ "been ignored,"
+#~ msgstr ""
+#~ "The net '%s' references component ID '%s' which does not exist. This has "
+#~ "been ignored,"
+
+#~ msgid "Cannot start routing inside a keepout area or board outline."
+#~ msgstr "Cannot start routing inside a keepout area or board outline."
 
 #~ msgid "Developer website on Launchpad - "
 #~ msgstr "Developer website on Launchpad - "
@@ -28620,12 +28869,6 @@ msgstr "[INFO] load failed: input line too long\n"
 
 #~ msgid "New footprint identifier:"
 #~ msgstr "New footprint identifier:"
-
-#~ msgid "Reset text layers and visibilities"
-#~ msgstr "Reset text layers and visibilities"
-
-#~ msgid "Reset text sizes, styles and positions"
-#~ msgstr "Reset text sizes, styles and positions"
 
 #~ msgid "Executing '%s'"
 #~ msgstr "Executing ‘%s’"

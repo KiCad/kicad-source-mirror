@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-04 18:12+0100\n"
+"POT-Creation-Date: 2020-11-04 19:09-0800\n"
 "PO-Revision-Date: 2020-11-04 18:19+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -3061,7 +3061,6 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:266
 #, fuzzy
-#| msgid "B"
 msgid "MB"
 msgstr "B"
 
@@ -6591,7 +6590,7 @@ msgstr "Fichiers Association Symboles/Empreintes (*.equ)"
 #: eeschema/dialogs/dialog_bus_manager.cpp:77
 #: eeschema/dialogs/dialog_bus_manager.cpp:111
 #: eeschema/dialogs/dialog_spice_model_base.cpp:651
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:923
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:954
 msgid "Add"
 msgstr "Ajouter"
 
@@ -6925,7 +6924,7 @@ msgstr ""
 "dans une schématique."
 
 #: eeschema/class_library.cpp:495
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:833
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:864
 #: eeschema/symbol_tree_model_adapter.cpp:64
 msgid "Loading Symbol Libraries"
 msgstr "Chargement des Librairies de Symboles"
@@ -7003,9 +7002,6 @@ msgstr ""
 
 #: eeschema/connection_graph.cpp:2708
 #, fuzzy, c-format
-#| msgid ""
-#| "Place hierarchical sheet pin corresponding to a hierarchical label in the "
-#| "sheet"
 msgid "Sheet port %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "Placer une pin hiérarchique, importée à partir du label hiérarchique "
@@ -9897,7 +9893,7 @@ msgid "Electrical Rules"
 msgstr "Règles Electriques"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:74
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:915
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:946
 #: pcbnew/dialogs/dialog_board_setup.cpp:86
 #: pcbnew/dialogs/dialog_board_statistics.cpp:647
 #: pcbnew/footprint_libraries_utils.cpp:501
@@ -10641,7 +10637,6 @@ msgstr "Poisson"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:868
 #, fuzzy
-#| msgid "Initial value:"
 msgid "Individual value duration:"
 msgstr "Valeur initiale:"
 
@@ -10689,7 +10684,6 @@ msgstr "Editeur de Modèle Spice"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:135
 #, fuzzy
-#| msgid "Table Name"
 msgid "Base Name"
 msgstr "Nom Table"
 
@@ -10817,7 +10811,6 @@ msgstr "Numéro de Pin"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:265
 #, fuzzy
-#| msgid "Pin Name"
 msgid "Base Pin Name"
 msgstr "Nom Pin"
 
@@ -11463,7 +11456,7 @@ msgstr ""
 "SVP changer le nom logique de la librarie après l’ajout de cette librarie."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:517
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:922
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:953
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:860
 msgid "Skip"
 msgstr "Passer"
@@ -11874,11 +11867,6 @@ msgstr "Avertissement de Chargement du Projet"
 
 #: eeschema/files-io.cpp:456
 #, fuzzy
-#| msgid ""
-#| "Symbol libraries defined in the project file symbol library list are no "
-#| "longer supported and will be\n"
-#| "removed.  This may cause broken symbol library links under certain "
-#| "conditions."
 msgid ""
 "Symbol libraries defined in the project file symbol library list are no "
 "longer supported and will be removed.\n"
@@ -11902,11 +11890,6 @@ msgstr ""
 
 #: eeschema/files-io.cpp:488
 #, fuzzy
-#| msgid ""
-#| "This schematic was saved in the legacy file format which is no longer "
-#| "supported and will be saved\n"
-#| "using the new file format.  The new file format cannot be opened with "
-#| "previous versions of KiCad."
 msgid ""
 "This schematic was saved in the legacy file format which is no longer "
 "supported and will be saved using the new file format.\n"
@@ -12158,7 +12141,7 @@ msgid "Symbol library not found."
 msgstr "Librairie de symboles non trouvée."
 
 #: eeschema/lib_view_frame.cpp:392
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1103
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1134
 #, c-format
 msgid ""
 "The library with the nickname \"%s\" is not enabled\n"
@@ -12171,7 +12154,7 @@ msgstr ""
 " Utilisez gérer les bibliothèques de symboles pour modifier la configuration."
 
 #: eeschema/lib_view_frame.cpp:395
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1106
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1137
 msgid "Symbol library not enabled."
 msgstr "Librairie de symboles non activée."
 
@@ -12751,9 +12734,6 @@ msgstr ""
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:95
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:111
 #, fuzzy
-#| msgid ""
-#| "The CADSTAR design contains variants which has no KiCad equivalent. All "
-#| "components have been loaded on top of each other. "
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. All "
 "components have been loaded on top of each other. "
@@ -12763,9 +12743,6 @@ msgstr ""
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:102
 #, fuzzy
-#| msgid ""
-#| "The CADSTAR design contains variants which has no KiCad equivalent. All "
-#| "components have been loaded on top of each other. "
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
@@ -12776,9 +12753,6 @@ msgstr ""
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:109
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:118
 #, fuzzy
-#| msgid ""
-#| "The CADSTAR design contains variants which has no KiCad equivalent. All "
-#| "components have been loaded on top of each other. "
 msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
@@ -14145,26 +14119,26 @@ msgstr "\"%s\" n’est pas une valeur valide pour Spice"
 msgid "Library Editor"
 msgstr "Éditeur de Librairies"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:157
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:158
 #: pcbnew/footprint_edit_frame.cpp:216 pcbnew/footprint_edit_frame.cpp:682
 msgid "Libraries"
 msgstr "Librairies"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:211
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:213
 msgid "Library changes are unsaved"
 msgstr "Les modifications de la librairie ne sont pas sauvées."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:483
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:514
 msgid "Save changes to schematic before closing?"
 msgstr "Sauver les changements en schématique avant de fermer?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:532
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:563
 #: eeschema/tools/sch_edit_tool.cpp:113
 #, c-format
 msgid "Unit %s"
 msgstr "Unité %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:669
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:700
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
@@ -14172,12 +14146,12 @@ msgstr ""
 "Modification du symbole %s à partir du schéma.  L’enregistrement mettra à "
 "jour le schéma uniquement."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:745
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:776
 #, c-format
 msgid "Library \"%s\" already exists"
 msgstr "La librairie \"%s\" existe déjà"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:759
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:790
 #, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -14186,45 +14160,45 @@ msgstr ""
 "Impossible de créer le fichier librairie \"%s\".\n"
 "Vérifier l’autorisation d’écriture."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:769
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:800
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:203
 msgid "Could not open the library file."
 msgstr "Le fichier librairie n'a pas pu être ouvert."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:838
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:869
 #: eeschema/symbol_tree_model_adapter.cpp:74
 #, c-format
 msgid "Loading library \"%s\""
 msgstr "Chargement librairie  \"%s\""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:903
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:934
 msgid "Add the library to the global library table?"
 msgstr "Ajouter la librairie à la table de librairie globale ?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:904
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:935
 msgid "Add To Global Library Table"
 msgstr "Ajouter à Table Globale des Librairies"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:914
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:945
 #: pcbnew/footprint_libraries_utils.cpp:500
 msgid "Global"
 msgstr "Global"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:917
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:948
 #: pcbnew/footprint_libraries_utils.cpp:504
 msgid "Choose the Library Table to add the library to:"
 msgstr "Choisissez la Table des Librairies où ajouter la librairie:"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:918
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:949
 msgid "Add To Library Table"
 msgstr "Ajouter à Table des Librairies"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:950
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:981
 #, c-format
 msgid "Failed to save backup to \"%s\""
 msgstr "Échec de l’enregistrement de la sauvegarde \"%s\""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1092
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1123
 #, c-format
 msgid ""
 "The current configuration does not include the symbol library\n"
@@ -14235,7 +14209,7 @@ msgstr ""
 "\" %s\".\n"
 "Utilisez Gérer les Librairies de symboles pour modifier la configuration."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1095
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1126
 msgid "Library not found in symbol library table."
 msgstr "Librairie non trouvée dans la table des librairies de symboles."
 
@@ -15341,7 +15315,6 @@ msgstr "Trouver les anciens composants du projet et les renommer/sauver"
 
 #: eeschema/tools/ee_actions.cpp:577
 #, fuzzy
-#| msgid "Library Symbol:"
 msgid "Remap Legacy Library Symbols..."
 msgstr "Symbole en Librairie:"
 
@@ -15444,7 +15417,6 @@ msgstr "Montrer le Navigateur de Hiérarchie"
 
 #: eeschema/tools/ee_actions.cpp:647
 #, fuzzy
-#| msgid "Fit to page"
 msgid "Navigate to page"
 msgstr "Ajustage à la  page"
 
@@ -17292,6 +17264,11 @@ msgstr "Erreur sur les  permissions d'accès ?"
 #, c-format
 msgid "Failed to delete '%s'"
 msgstr "Impossible de supprimer \"%s\""
+
+#: libs/kiplatform/msw/environment.cpp:46
+#, fuzzy, c-format
+msgid "Error code: %d"
+msgstr "Erreur: "
 
 #: pagelayout_editor/design_inspector.cpp:223
 msgid "Layout"
@@ -20256,8 +20233,7 @@ msgstr "Longueur Frein Thermique"
 msgid "Thermal Spoke Width"
 msgstr "Largeur Connexion Frein Thermique"
 
-#: pcbnew/cleanup_item.cpp:46 pcbnew/tools/drc_tool.cpp:167
-#: pcbnew/zone_filler.cpp:104
+#: pcbnew/cleanup_item.cpp:46 pcbnew/zone_filler.cpp:104
 msgid "Checking zone fills..."
 msgstr "Verification du remplissage de zones..."
 
@@ -20572,7 +20548,6 @@ msgstr "Coordonnées Référence Schématique"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:568
 #, fuzzy, c-format
-#| msgid "Color Code"
 msgid ""
 "\n"
 "Sort Code %d"
@@ -20694,7 +20669,6 @@ msgstr "Références Schématique"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:138
 #, fuzzy
-#| msgid "Run Simulation"
 msgid "Round locations to:"
 msgstr "Lancer la Simulation"
 
@@ -21671,13 +21645,11 @@ msgstr "Modifie les propriétés de la cote"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:20
 #, fuzzy
-#| msgid "Zeros Format"
 msgid "Leader Format"
 msgstr "Format des Zéros"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:37
 #, fuzzy
-#| msgid "Net name:"
 msgid "Text frame:"
 msgstr "Net Name:"
 
@@ -21739,7 +21711,6 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:130
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:135
 #, fuzzy
-#| msgid "Default properties for new dimension objects:"
 msgid "Text to print before the dimension value"
 msgstr "Propritétés par défaut pour les nouveaux élements type cote:"
 
@@ -21771,7 +21742,6 @@ msgstr "1234 (mm)"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:155
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:160
 #, fuzzy
-#| msgid "Default properties for new dimension objects:"
 msgid "Text to print after the dimension value"
 msgstr "Propritétés par défaut pour les nouveaux élements type cote:"
 
@@ -21909,7 +21879,6 @@ msgstr "Justification:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:321
 #, fuzzy
-#| msgid "Position offset:"
 msgid "Position mode:"
 msgstr "Offset de position:"
 
@@ -21996,7 +21965,6 @@ msgstr "Impossible de créer le fichier rapport \"%s\"<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:766
 #, fuzzy
-#| msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgid "Do you wish to delete excluded markers as well?"
 msgstr ""
 "Souhaitez-vous supprimer les pin de feuille non référencées de cette feuille?"
@@ -22033,7 +22001,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 #, fuzzy
-#| msgid "Test footprints against schematic"
 msgid "Test for parity between PCB and schematic"
 msgstr "Tester les empreintes par rapport à la schématique"
 
@@ -22414,7 +22381,6 @@ msgstr "Changer empreinte sélectionnée"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:73
 #, fuzzy
-#| msgid "%s footprints matching reference designator:"
 msgid "Change footprints matching reference designator:"
 msgstr "%s empreintes en accord avec la référence schématique:"
 
@@ -22890,9 +22856,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:309
 #, fuzzy
-#| msgid ""
-#| "Component can be freely moved and auto placed, but its pads cannot be "
-#| "selected or edited."
 msgid ""
 "Component can be freely moved and auto placed, but its pads cannot be edited."
 msgstr ""
@@ -23114,7 +23077,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:76
 #, fuzzy
-#| msgid "Delete footprints with no symbols"
 msgid "Exclude all footprints with through hole pads"
 msgstr "Supprimer les empreintes sans symbole associé"
 
@@ -23794,7 +23756,6 @@ msgstr "<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:67
 #, fuzzy
-#| msgid "Remove the selected symbol from its library"
 msgid "Remove selected layers from matched layers list."
 msgstr "Supprimer le symbole sélectionné de sa  librairie"
 
@@ -24147,9 +24108,6 @@ msgstr "La taille de la pastille doit être plus grande que zéro"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1192
 #, fuzzy
-#| msgid ""
-#| "Warning: Pad drill bigger than pad size or drill shape andpad shape do "
-#| "not overlap"
 msgid ""
 "Warning: Pad drill bigger than pad size or drill shape and pad shape do not "
 "overlap"
@@ -24974,12 +24932,6 @@ msgstr "Correction de largeur de piste:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:312
 #, fuzzy
-#| msgid ""
-#| "Set global width correction for exact width PostScript output.\n"
-#| "These width correction is intended to compensate tracks width and also "
-#| "pads and vias size errors.\n"
-#| "The reasonable width correction value must be in a range of [-"
-#| "(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils."
 msgid ""
 "Set global width correction for exact width PostScript output.\n"
 "These width correction is intended to compensate tracks width and also pads "
@@ -25598,7 +25550,6 @@ msgstr "Le net %s est utilisé.  Supprimer de toute façon?"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:1956
 #, fuzzy, c-format
-#| msgid "Selected net: %s"
 msgid "Delete all nets in group '%s'?"
 msgstr "Net sélectionné: %s"
 
@@ -25614,7 +25565,6 @@ msgstr "Montrer nets avec zéro pad"
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:45
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:46
 #, fuzzy
-#| msgid "Wildcards"
 msgid "Wildcard"
 msgstr "Caractères joker"
 
@@ -25624,7 +25574,6 @@ msgstr "RegEx"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:48
 #, fuzzy
-#| msgid "Wildcards"
 msgid "Wildcard Substr"
 msgstr "Caractères joker"
 
@@ -25642,7 +25591,6 @@ msgstr "Longueur de Via:"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:73
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:74
-#| msgid "Constraints"
 msgid "Constant"
 msgstr "Constant"
 
@@ -25846,7 +25794,6 @@ msgstr "Taille des Pistes et Vias"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:155
 #, fuzzy
-#| msgid "Push Pad Properties"
 msgid "Set Unused Pad Properties"
 msgstr "Exporter Propriétés du Pad"
 
@@ -26205,7 +26152,6 @@ msgstr "Origine d'Affichage"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:27
 #, fuzzy
-#| msgid "Select which units are displayed"
 msgid "Select which origin is used for X,Y coordinate display."
 msgstr "Sélection des unités à afficher"
 
@@ -27262,8 +27208,6 @@ msgstr "Espacement via"
 #: pcbnew/drc/drc_engine.cpp:124 pcbnew/drc/drc_engine.cpp:162
 #: pcbnew/drc/drc_engine.cpp:192
 #, fuzzy
-#| msgid ""
-#| "Microvias have to be enabled in Board Setup > Design Rules > Constraints."
 msgid "board setup constraints"
 msgstr ""
 "Les microvias doivent être activées dans Config. CI > Règles de Conception > "
@@ -27271,8 +27215,6 @@ msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:171
 #, fuzzy
-#| msgid ""
-#| "Microvias have to be enabled in Board Setup > Design Rules > Constraints."
 msgid "board setup micro-via constraints"
 msgstr ""
 "Les microvias doivent être activées dans Config. CI > Règles de Conception > "
@@ -27295,37 +27237,31 @@ msgstr "zone interdite \"%s\""
 
 #: pcbnew/drc/drc_engine.cpp:725 pcbnew/drc/drc_engine.cpp:735
 #, fuzzy, c-format
-#| msgid "zone clearance"
 msgid "Local override on %s; clearance: %s."
 msgstr "isolation de zone"
 
 #: pcbnew/drc/drc_engine.cpp:758
 #, fuzzy, c-format
-#| msgid "zone clearance"
 msgid "Checking %s; clearance: %s."
 msgstr "isolation de zone"
 
 #: pcbnew/drc/drc_engine.cpp:765
 #, fuzzy, c-format
-#| msgid "zone clearance"
 msgid "Checking %s; courtyard clearance: %s."
 msgstr "isolation de zone"
 
 #: pcbnew/drc/drc_engine.cpp:772
 #, fuzzy, c-format
-#| msgid "zone clearance"
 msgid "Checking %s; silk clearance: %s."
 msgstr "isolation de zone"
 
 #: pcbnew/drc/drc_engine.cpp:779
 #, fuzzy, c-format
-#| msgid "zone clearance"
 msgid "Checking %s; hole clearance: %s."
 msgstr "isolation de zone"
 
 #: pcbnew/drc/drc_engine.cpp:786
 #, fuzzy, c-format
-#| msgid "zone clearance"
 msgid "Checking %s; edge clearance: %s."
 msgstr "isolation de zone"
 
@@ -27340,43 +27276,36 @@ msgstr "Isolations du CI et des netcalsses non appliquées aux zones interdites"
 
 #: pcbnew/drc/drc_engine.cpp:842
 #, fuzzy
-#| msgid "No constraint"
 msgid "Keepout constraint not met."
 msgstr "Aucune contrainte"
 
 #: pcbnew/drc/drc_engine.cpp:844
 #, fuzzy
-#| msgid "X scale constrained."
 msgid "Disallow constraint not met."
 msgstr "Échelle X limitée."
 
 #: pcbnew/drc/drc_engine.cpp:853
 #, fuzzy
-#| msgid "Rule \"%s\" not found."
 msgid "Keepout layer(s) not matched."
 msgstr "Règle \"%s\" non trouvée."
 
 #: pcbnew/drc/drc_engine.cpp:857 pcbnew/drc/drc_engine.cpp:879
 #, fuzzy, c-format
-#| msgid "Rule \"%s\" not found."
 msgid "Rule layer \"%s\" not matched."
 msgstr "Règle \"%s\" non trouvée."
 
 #: pcbnew/drc/drc_engine.cpp:863 pcbnew/drc/drc_engine.cpp:885
 #, fuzzy
-#| msgid "Rule \"%s\" not found."
 msgid "Rule layer not matched."
 msgstr "Règle \"%s\" non trouvée."
 
 #: pcbnew/drc/drc_engine.cpp:894
 #, fuzzy
-#| msgid "No constraint"
 msgid "Unconditional constraint applied."
 msgstr "Aucune contrainte"
 
 #: pcbnew/drc/drc_engine.cpp:895
 #, fuzzy
-#| msgid "No constraint"
 msgid "Unconditional rule applied."
 msgstr "Aucune contrainte"
 
@@ -27395,7 +27324,6 @@ msgstr "Règle appliquée; remplace les contraintes précédentes."
 
 #: pcbnew/drc/drc_engine.cpp:922
 #, fuzzy
-#| msgid "Condition not satisfied; rule not applied."
 msgid "Membership not satisfied; constraint ignored."
 msgstr "Condition non remplie; règle non appliquée."
 
@@ -27405,7 +27333,6 @@ msgstr "Condition non remplie; règle non appliquée."
 
 #: pcbnew/drc/drc_engine.cpp:966 pcbnew/drc/drc_engine.cpp:977
 #, fuzzy, c-format
-#| msgid "zone clearance"
 msgid "Local clearance on %s; clearance: %s."
 msgstr "isolation de zone"
 
@@ -27531,13 +27458,11 @@ msgstr "Empreinte supplémentaire"
 
 #: pcbnew/drc/drc_item.cpp:162
 #, fuzzy
-#| msgid "Load directives from schematic"
 msgid "Pad net doesn't match schematic"
 msgstr "Charger les directives a partir du schéma"
 
 #: pcbnew/drc/drc_item.cpp:170
 #, fuzzy
-#| msgid "Silkscreen on board's back"
 msgid "Silkscreen clipped by solder mask"
 msgstr "Sérigraphie sur le dessous du circuit imprimé"
 
@@ -27547,7 +27472,6 @@ msgstr "Recouvrement de sérigraphie"
 
 #: pcbnew/drc/drc_item.cpp:178
 #, fuzzy
-#| msgid "Trace Length Tuning"
 msgid "Trace length out of range"
 msgstr "Ajustage de Longueur de Piste"
 
@@ -27565,7 +27489,6 @@ msgstr "Distance de paire différentielle hors de plage."
 
 #: pcbnew/drc/drc_item.cpp:194
 #, fuzzy
-#| msgid "Differential Pair Length Tuning"
 msgid "Differential uncoupled length too long"
 msgstr "Ajustage de la Longueur de Paire"
 
@@ -27596,7 +27519,6 @@ msgstr "Manquant '('."
 
 #: pcbnew/drc/drc_rule_parser.cpp:113
 #, fuzzy
-#| msgid "Missing parent"
 msgid "Missing version statement."
 msgstr "Parent manquant"
 
@@ -27638,7 +27560,6 @@ msgstr "Nom de règle manquant."
 
 #: pcbnew/drc/drc_rule_parser.cpp:205
 #, fuzzy
-#| msgid "Missing footprint"
 msgid "Missing condition expression."
 msgstr "Empreinte manquante"
 
@@ -27654,7 +27575,6 @@ msgstr "Manquant ')'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:266
 #, fuzzy, c-format
-#| msgid "Missing footprint"
 msgid "Missing constraint type.|  Expected %s."
 msgstr "Empreinte manquante"
 
@@ -27685,19 +27605,16 @@ msgstr "Vérification des anneaux de vias..."
 
 #: pcbnew/drc/drc_test_provider_annulus.cpp:121
 #, fuzzy, c-format
-#| msgid " (%s %s; actual %s)"
 msgid "(%s min annular width %s; actual %s)"
 msgstr " (%s %s; réel %s)"
 
 #: pcbnew/drc/drc_test_provider_annulus.cpp:127
 #, fuzzy, c-format
-#| msgid " (%s %s; actual %s)"
 msgid "(%s max annular width %s; actual %s)"
 msgstr " (%s %s; réel %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:74
 #, fuzzy
-#| msgid "Checking conflicts...\n"
 msgid "Checking pad, via and zone connections..."
 msgstr "Vérification des conflits...\n"
 
@@ -27735,7 +27652,6 @@ msgstr "Vérification des isolations des zones de cuivre..."
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:184
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:148
 #, fuzzy, c-format
-#| msgid " (%s clearance %s; actual %s)"
 msgid "(%s clearance %s; actual %s)"
 msgstr " (%s isolation %s; réel %s)"
 
@@ -27746,7 +27662,6 @@ msgstr " (nets %s et  %s)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:80
 #, fuzzy
-#| msgid "Footprint has no courtyard defined"
 msgid "Checking footprint courtyard definitions..."
 msgstr "Empreinte n’a aucune zone d'occupation définie"
 
@@ -27757,19 +27672,16 @@ msgstr " (n'est pas une forme fermée)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:126
 #, fuzzy
-#| msgid "Footprint courtyards on board's back"
 msgid "Checking footprints for overlapping courtyards..."
 msgstr "Zone d'occupation des empreintes sur le dessous du circuit imprimé"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:328
 #, fuzzy
-#| msgid "Pulsed value:"
 msgid "DPs evaluated:"
 msgstr "Valeur de l'impulsion:"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:433
 #, fuzzy, c-format
-#| msgid " (%s %s; actual %s)"
 msgid "(%s maximum uncoupled length: %s; actual: %s)"
 msgstr " (%s %s; réel %s)"
 
@@ -27790,19 +27702,16 @@ msgstr "réel: %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:73
 #, fuzzy
-#| msgid "Change Footprints"
 msgid "Checking keepouts & disallow constraints..."
 msgstr "Changer Empreintes"
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:132
 #, fuzzy
-#| msgid "Pad clearances...\n"
 msgid "Checking board edge clearances..."
 msgstr "Isolations pads...\n"
 
 #: pcbnew/drc/drc_test_provider_hole_clearance.cpp:159
 #, fuzzy
-#| msgid "Hole to hole clearance:"
 msgid "Checking hole to hole clearances..."
 msgstr "Isolation trou à trou:"
 
@@ -27847,7 +27756,6 @@ msgstr "Aucun pad trouvé pour la pin %s du schéma."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:214
 #, fuzzy
-#| msgid "Checking footprints against schematic...\n"
 msgid "Checking PCB to schematic parity..."
 msgstr "Test  des empreintes par rapport à la schématique...\n"
 
@@ -27867,9 +27775,6 @@ msgstr "(%s longueur max: %s; réelle: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:169
 #, fuzzy, c-format
-#| msgid ""
-#| "maximum skew: %s; actual skew: %s; average net length: %s; actual net "
-#| "length: %s)"
 msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
 msgstr ""
 "biais maximal : %s; biais réel: %s; longueur net moyenne : %s; longueur net "
@@ -27877,13 +27782,11 @@ msgstr ""
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:198
 #, fuzzy, c-format
-#| msgid " (%s %s; actual %s)"
 msgid "(%s max count: %d; actual: %d)"
 msgstr " (%s %s; réel %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:229
 #, fuzzy
-#| msgid "Checking conflicts...\n"
 msgid "Gathering length-constrained connections..."
 msgstr "Vérification des conflits...\n"
 
@@ -27918,7 +27821,6 @@ msgstr "Vérification de la sérigraphie pour le recouvrement d'éléments.."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:208
 #, fuzzy, c-format
-#| msgid "Testing %d silkscreen features."
 msgid "Testing %d silkscreen features against %d board items."
 msgstr "Test des %d fonctions de sérigraphie."
 
@@ -27930,7 +27832,6 @@ msgstr ""
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:168
 #, fuzzy, c-format
-#| msgid "Testing %d silkscreen features."
 msgid "Testing %d mask apertures against %d silkscreen features."
 msgstr "Test des %d fonctions de sérigraphie."
 
@@ -28575,7 +28476,6 @@ msgstr "Valeur '%s' de %s"
 
 #: pcbnew/fp_text.cpp:342
 #, fuzzy, c-format
-#| msgid "Footprint %s on %s"
 msgid "Footprint Text '%s' of %s"
 msgstr "Empreinte %s sur %s"
 
@@ -29349,7 +29249,6 @@ msgstr "Couche non reconnue '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:255
 #, fuzzy
-#| msgid "Footprint has incorrect courtyard (not a closed shape)"
 msgid "Footprint's courtyard is not a single, closed shape."
 msgstr ""
 "Empreinte a une zone d'occupation incorrecte (n'est pas une forme fermée)"
@@ -29619,9 +29518,6 @@ msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:104
 #, fuzzy
-#| msgid ""
-#| "The CADSTAR design contains variants which has no KiCad equivalent. All "
-#| "components have been loaded on top of each other. "
 msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
@@ -29718,9 +29614,6 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1114
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1124
 #, fuzzy, c-format
-#| msgid ""
-#| "Dimension on Altium layer %d has no KiCad equivalent. Put it on Eco1_User "
-#| "instead"
 msgid "Dimension ID %s has no KiCad equivalent. This was not imported"
 msgstr ""
 "Cote sur couche Altium %d n'a pas d'équivalent dans Kicad. Placée sur couche "
@@ -29728,10 +29621,6 @@ msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1163
 #, fuzzy, c-format
-#| msgid ""
-#| "The CADSTAR area '%s' is defined as a placement and/or routing area in "
-#| "CADSTAR, in addition to Keepout. Placement or Routing areas are not "
-#| "supported in KiCad. Only the supported elements were imported."
 msgid ""
 "The CADSTAR area '%s' is marked as a placement area in CADSTAR. Placement "
 "areas are not supported in KiCad. Only the supported elements for the area "
@@ -29744,9 +29633,6 @@ msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1171
 #, fuzzy, c-format
-#| msgid ""
-#| "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement or "
-#| "Routing areas are not supported."
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
@@ -29836,9 +29722,6 @@ msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1585
 #, fuzzy, c-format
-#| msgid ""
-#| "The net '%s' references component ID '%s' which does not exist. This has "
-#| "been ignored,"
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored."
@@ -30119,9 +30002,6 @@ msgstr "Mot clé \"%s\" inconnu"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:654
 #, fuzzy
-#| msgid ""
-#| "Items found on undefined layers.  Do you wish to\n"
-#| "rescue them to the Cmts.User layer?"
 msgid ""
 "Items found on undefined layers.  Do you wish to\n"
 "rescue them to the User.Comments layer?"
@@ -30250,7 +30130,6 @@ msgstr "Forme de pad '%c=0x%02x' inconnue ligne: %d, empreinte:\"%s\""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1646
 #, fuzzy, c-format
-#| msgid "Unknown EDGE_MODULE type:'%c=0x%02x' on line:%d of footprint:\"%s\""
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line:%d of footprint:\"%s\""
 msgstr "Type EDGE_MODULE inconnu:'%c=0x%02x'  ligne:%d de l'empreinte:\"%s\""
 
@@ -30456,10 +30335,6 @@ msgstr "%s est mal formé."
 
 #: pcbnew/router/pns_kicad_iface.cpp:949
 #, fuzzy
-#| msgid ""
-#| "%s\n"
-#| "This zone cannot be handled by the track layout tool.\n"
-#| "Please verify it is not a self-intersecting polygon."
 msgid ""
 "This zone cannot be handled by the track layout tool.\n"
 "Please verify it is not a self-intersecting polygon."
@@ -30667,7 +30542,6 @@ msgstr "Largeur %s"
 
 #: pcbnew/router/router_tool.cpp:347
 #, fuzzy, c-format
-#| msgid ", via gap "
 msgid "Width %s, via gap %s"
 msgstr ", écart via "
 
@@ -30683,7 +30557,6 @@ msgstr "Largeur %s, écart %s, écart pour vias %s"
 
 #: pcbnew/router/router_tool.cpp:746 pcbnew/router/router_tool.cpp:767
 #, fuzzy
-#| msgid "Show board ratsnest"
 msgid "Show board setup"
 msgstr "Montrer le chevelu général"
 
@@ -30863,7 +30736,6 @@ msgstr ""
 
 #: pcbnew/toolbars_pcb_editor.cpp:593
 #, fuzzy
-#| msgid "Track netclass width"
 msgid "Track: use netclass width"
 msgstr "Largeur de piste de net classe"
 
@@ -30878,7 +30750,6 @@ msgstr "Editer Tailles Pré-définies..."
 
 #: pcbnew/toolbars_pcb_editor.cpp:645
 #, fuzzy
-#| msgid "Use net class sizes"
 msgid "Via: use netclass sizes"
 msgstr "Utiliser la taille de la net classe"
 
@@ -30963,7 +30834,7 @@ msgstr "Place via"
 msgid "Refilling all zones..."
 msgstr "Remplissage de toutes les zones..."
 
-#: pcbnew/tools/drc_tool.cpp:221
+#: pcbnew/tools/drc_tool.cpp:215
 msgid "DRC"
 msgstr "DRC"
 
@@ -31003,13 +30874,11 @@ msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:875
 #, fuzzy
-#| msgid "Unable to drag this segment: two collinear segments"
 msgid "Unable to fillet the selected track segments."
 msgstr "Impossible de dragger ce segment: 2 segments alignés"
 
 #: pcbnew/tools/edit_tool.cpp:882
 #, fuzzy
-#| msgid "Some of the project files could not be backed up."
 msgid "Some of the track segments could not be filleted."
 msgstr "Certains des fichiers du projet n'ont pas être sauvegardés."
 
@@ -31060,7 +30929,6 @@ msgstr "Groupage"
 
 #: pcbnew/tools/group_tool.cpp:197
 #, fuzzy
-#| msgid "Group is in inconsistent state: "
 msgid "Group is in inconsistent state:"
 msgstr "Groupe est dans un état incohérent: "
 
@@ -31149,7 +31017,6 @@ msgstr "Convertir en Arc"
 
 #: pcbnew/tools/pcb_actions.cpp:74
 #, fuzzy
-#| msgid "Cut selected content to clipboard"
 msgid "Converts selected line segment to an arc"
 msgstr "Supprimer la sélection et la copier dans le Presse papier"
 
@@ -31159,7 +31026,6 @@ msgstr "Convertir en Pistes"
 
 #: pcbnew/tools/pcb_actions.cpp:79
 #, fuzzy
-#| msgid "Clear the selected graphic layer"
 msgid "Converts selected graphic lines to tracks"
 msgstr "Effacer la couche graphique sélectionnée"
 
@@ -31197,7 +31063,6 @@ msgstr "Ajout  Cote Alignée"
 
 #: pcbnew/tools/pcb_actions.cpp:122
 #, fuzzy
-#| msgid "Set grid dimensions"
 msgid "Add an aligned linear dimension"
 msgstr "Ajuster dimensions de grille"
 
@@ -31207,31 +31072,26 @@ msgstr "Ajout  Cote Centrée"
 
 #: pcbnew/tools/pcb_actions.cpp:127
 #, fuzzy
-#| msgid "Add a dimension"
 msgid "Add a center dimension"
 msgstr "Ajouter une cote"
 
 #: pcbnew/tools/pcb_actions.cpp:132
 #, fuzzy
-#| msgid "Add Dimension"
 msgid "Add Orthogonal Dimension"
 msgstr "Ajout  Cote"
 
 #: pcbnew/tools/pcb_actions.cpp:132
 #, fuzzy
-#| msgid "Add a dimension"
 msgid "Add an orthogonal dimension"
 msgstr "Ajouter une cote"
 
 #: pcbnew/tools/pcb_actions.cpp:137
 #, fuzzy
-#| msgid "Add Label"
 msgid "Add Leader"
 msgstr "Ajout Label"
 
 #: pcbnew/tools/pcb_actions.cpp:137
 #, fuzzy
-#| msgid "Add a dimension"
 msgid "Add a leader dimension"
 msgstr "Ajouter une cote"
 
@@ -32240,7 +32100,6 @@ msgstr "Résolution de Contraintes..."
 
 #: pcbnew/tools/pcb_actions.cpp:1043
 #, fuzzy
-#| msgid "Show the ratsnest for the selected net"
 msgid "Show constraints resolution for the selected object"
 msgstr "Montrer le chevelu pour le net sélectionné"
 
@@ -32364,7 +32223,6 @@ msgstr "Désélection de toutes les pistes et vias appartenant au même net."
 
 #: pcbnew/tools/pcb_actions.cpp:1185
 #, fuzzy
-#| msgid "Selects all modules and tracks in the schematic sheet"
 msgid "Selects all footprints and tracks in the schematic sheet"
 msgstr ""
 "Sélectionner tous les modules et les pistes  de la même feuille schématique"
@@ -32375,7 +32233,6 @@ msgstr "Eléments de la même Feuille Hiérarchique"
 
 #: pcbnew/tools/pcb_actions.cpp:1191
 #, fuzzy
-#| msgid "Selects all modules and tracks in the same schematic sheet"
 msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr ""
 "Sélectionne tous les modules et les pistes  de la même feuille schématique"
@@ -32625,7 +32482,6 @@ msgstr "DRC incomplet: impossible de compiler les règles de conception.  "
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:230
 #, fuzzy, c-format
-#| msgid "zone clearance"
 msgid "Resolved clearance: %s."
 msgstr "isolation de zone"
 
@@ -32644,7 +32500,6 @@ msgstr "[netclasse %s]"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:304
 #, fuzzy
-#| msgid "Clearance violation"
 msgid "Silkscreen clearance resolution for:"
 msgstr "Violation d'isolation"
 
@@ -32672,7 +32527,6 @@ msgstr "Rapport sur Contraintes"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:419
 #, fuzzy
-#| msgid "Clearance violation"
 msgid "Track width resolution for:"
 msgstr "Violation d'isolation"
 
@@ -32697,7 +32551,6 @@ msgstr "Diamètre Via"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:456
 #, fuzzy
-#| msgid "Clearance violation"
 msgid "Via diameter resolution for:"
 msgstr "Violation d'isolation"
 
@@ -32712,7 +32565,6 @@ msgstr "Largeur Anneaux de Vias"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:490
 #, fuzzy
-#| msgid "Clearance violation"
 msgid "Via annular width resolution for:"
 msgstr "Violation d'isolation"
 
@@ -32727,7 +32579,6 @@ msgstr "Taille Trou"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:528
 #, fuzzy
-#| msgid "Clearance violation"
 msgid "Hole diameter resolution for:"
 msgstr "Violation d'isolation"
 
@@ -32965,7 +32816,6 @@ msgstr "Violations de DRC avec gravité Erreur"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 #, fuzzy
-#| msgid "DRC violations with a Warning severity"
 msgid "DRC violations which have been individually excluded"
 msgstr "Violations de DRC avec gravité Warning"
 
@@ -32995,7 +32845,6 @@ msgstr "Couches de Dessus"
 
 #: pcbnew/widgets/appearance_controls.cpp:386
 #, fuzzy
-#| msgid "Front View\tY"
 msgid "Front Assembly View"
 msgstr "Vue de Face\tY"
 
@@ -33063,13 +32912,11 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:658
 #, fuzzy
-#| msgid "Create a new color theme based on the current one"
 msgid "Net and netclass colors are shown on the ratsnest only"
 msgstr "Créer un nouveau thème de couleur basé sur le thème actuel"
 
 #: pcbnew/widgets/appearance_controls.cpp:664
 #, fuzzy
-#| msgid "Selected net: "
 msgid "Net and netclass colors are not shown"
 msgstr "Net sélectionné: "
 
@@ -33092,7 +32939,6 @@ msgstr "Couches visibles"
 
 #: pcbnew/widgets/appearance_controls.cpp:690
 #, fuzzy
-#| msgid "Include &items on invisible layers"
 msgid "Ratsnest lines are shown to items on visible layers"
 msgstr "Inclure éléments sur couches &invisibles"
 
@@ -33310,7 +33156,6 @@ msgstr "Montrer ou non le chevelu pour les nets dans %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2062
 #, fuzzy
-#| msgid "Selected net: "
 msgid "Set netclass color"
 msgstr "Net sélectionné: "
 
@@ -33337,13 +33182,11 @@ msgstr "Supprimer préréglage..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2217
 #, fuzzy
-#| msgid "New theme name:"
 msgid "Layer preset name:"
 msgstr "Nouveau nom du thème:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2217
 #, fuzzy
-#| msgid "Set Layer Pair..."
 msgid "Save Layer Preset"
 msgstr "Sélection Paire de Couches..."
 
@@ -33409,6 +33252,10 @@ msgstr "Modifier les propriétés de la zone"
 msgid "Refill %d Zones"
 msgstr "Remplissage %d Zones"
 
+#: plugins/3d/vrml/vrml.cpp:219
+msgid "[INFO] load failed: input line too long\n"
+msgstr ""
+
 #~ msgid "Preferences...\tCTRL+,"
 #~ msgstr "Préférences...\tCtrl+,"
 
@@ -33448,12 +33295,11 @@ msgstr "Remplissage %d Zones"
 #~ msgid "<root_sheet>"
 #~ msgstr "<feuille_maitre>"
 
-#, fuzzy, c-format
+#, fuzzy
 #~| msgid " (%s %s; actual %s)"
 #~ msgid "max vias: %d; actual: %d"
 #~ msgstr " (%s %s; réel %s)"
 
-#, c-format
 #~ msgid "Length-constrained traces for rule '%s':"
 #~ msgstr "Longueur de pistes contrainte pour la règle '%s':"
 
@@ -33523,11 +33369,9 @@ msgstr "Remplissage %d Zones"
 #~ "\n"
 #~ "Empreintes Dessous"
 
-#, c-format
 #~ msgid "%s selected footprint"
 #~ msgstr "%s empreinte sélectionnée"
 
-#, c-format
 #~ msgid "%s"
 #~ msgstr "%s"
 
@@ -33602,7 +33446,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Add 3D Shape Libraries Wizard"
 #~ msgstr "Assistant d'Ajout de Librairies de Formes 3D"
 
-#, c-format
 #~ msgid ""
 #~ "malformed URL:\n"
 #~ "\"%s\""
@@ -33610,7 +33453,6 @@ msgstr "Remplissage %d Zones"
 #~ "URL malformée :\n"
 #~ "\"%s\""
 
-#, c-format
 #~ msgid ""
 #~ "Error fetching JSON data from URL \"%s\".\n"
 #~ "Reason: \"%s\""
@@ -33618,7 +33460,6 @@ msgstr "Remplissage %d Zones"
 #~ "Erreur de récupération des données JSON depuis l'URL \"%s\".\n"
 #~ "Raison: \"%s\""
 
-#, c-format
 #~ msgid ""
 #~ "Footprint\n"
 #~ "\"%s\"\n"
@@ -33646,7 +33487,6 @@ msgstr "Remplissage %d Zones"
 #~ "<b>doit</b> avoir <b>.pretty</b> comme extension parce que  le format de "
 #~ "sauvegarde est pretty.</p>"
 
-#, c-format
 #~ msgid ""
 #~ "option \"%s\" for Github library \"%s\" must point to a writable "
 #~ "directory ending with '.pretty'."
@@ -33654,7 +33494,6 @@ msgstr "Remplissage %d Zones"
 #~ "l'option \"%s\" pour la librairie Github \"%s\" doit pointer un "
 #~ "répertoire inscriptible dont le nom finit par  '.pretty'."
 
-#, c-format
 #~ msgid ""
 #~ "Unable to parse URL:\n"
 #~ "\"%s\""
@@ -33662,7 +33501,6 @@ msgstr "Remplissage %d Zones"
 #~ "Impossible d'analyser l'URL:\n"
 #~ "\"%s\""
 
-#, c-format
 #~ msgid ""
 #~ "%s\n"
 #~ "Cannot get/download Zip archive: \"%s\"\n"
@@ -33674,7 +33512,6 @@ msgstr "Remplissage %d Zones"
 #~ "à partir du chemin librairie: \"%s\".\n"
 #~ "Raison: \"%s\""
 
-#, c-format
 #~ msgid ""
 #~ "Cannot download library \"%s\".\n"
 #~ "The library does not exist on the server"
@@ -33711,7 +33548,7 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Scope:"
 #~ msgstr "Sélection:"
 
-#, fuzzy, c-format
+#, fuzzy
 #~| msgid " in symbol %c"
 #~ msgid "in symbol %c"
 #~ msgstr " en symbole  %c"
@@ -33868,7 +33705,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "File: "
 #~ msgstr "Fichier: "
 
-#, c-format
 #~ msgid " in units %c and %c"
 #~ msgstr " en unités %c et %c"
 
@@ -33963,7 +33799,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Unable to create "
 #~ msgstr "Impossible de créer "
 
-#, c-format
 #~ msgid " (%s)"
 #~ msgstr " (%s)"
 
@@ -33976,7 +33811,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid " [Unsaved]"
 #~ msgstr " [Non sauvé]"
 
-#, c-format
 #~ msgid "Malformed keep-out zone at (%d, %d)"
 #~ msgstr "Zone d'interdiction mal formée à (%d, %d)"
 
@@ -33990,15 +33824,12 @@ msgstr "Remplissage %d Zones"
 #~ "Affiche sélections couche active\n"
 #~ "et sélection paire de couches pour routage et placement via"
 
-#, c-format
 #~ msgid "%s / %s"
 #~ msgstr "%s / %s"
 
-#, c-format
 #~ msgid "<ul><li>%s</li></ul>"
 #~ msgstr "<ul><li>%s</li></ul>"
 
-#, c-format
 #~ msgid "Key Words: %s"
 #~ msgstr "Mots Clé: %s"
 
@@ -34012,7 +33843,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "new"
 #~ msgstr "nouveau"
 
-#, c-format
 #~ msgid "%s all symbols in schematic"
 #~ msgstr "%s tous les symboles dans le schéma"
 
@@ -34047,11 +33877,9 @@ msgstr "Remplissage %d Zones"
 #~ "Mise à jour à partir de la librairie de symboles à l’aide de "
 #~ "l’identificateur de librairie"
 
-#, c-format
 #~ msgid "'%s' is not a valid library indentifier."
 #~ msgstr "\"%s\" n'est pas un identificateur de librairie valide."
 
-#, c-format
 #~ msgid "Symbol '%s' not found in symbol library '%s'."
 #~ msgstr "Symbole \"%s\" non trouvée en librairie de symboles \"%s\"."
 
@@ -34089,15 +33917,12 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Metric"
 #~ msgstr "Métrique"
 
-#, c-format
 #~ msgid "Grid: %.4f mm (%.2f mils)"
 #~ msgstr "Grille: %.4f mm (%.2f mils)"
 
-#, c-format
 #~ msgid "Grid: %.2f mils (%.4f mm)"
 #~ msgstr "Grille: %.2f mils (%.4f mm)"
 
-#, c-format
 #~ msgid "User grid: %.4f mm (%.2f mils)"
 #~ msgstr "Grille utilisateur: %.4f mm (%.2f mils)"
 
@@ -34128,7 +33953,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Show/hide the layers manager toolbar"
 #~ msgstr "Afficher/cacher le gestionnaire de couches"
 
-#, c-format
 #~ msgid "'%s' netclass"
 #~ msgstr "netclasse \"%s\""
 
@@ -34142,12 +33966,11 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Set units used to display dimensions and positions."
 #~ msgstr "Sélection des unités pour afficher les dimensions et positions."
 
-#, fuzzy, c-format
+#, fuzzy
 #~| msgid "Checking rule %s;"
 #~ msgid "Checking rule %s; clearance: %s."
 #~ msgstr "Vérification règle %s;"
 
-#, c-format
 #~ msgid "Checking rule %s."
 #~ msgstr "Vérification règle %s."
 
@@ -34159,27 +33982,21 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Silkscreen clearance"
 #~ msgstr "Isolation minimum"
 
-#, c-format
 #~ msgid "Track: %.3f mm (%.2f mils)"
 #~ msgstr "Piste: %.3f mm (%.2f mils)"
 
-#, c-format
 #~ msgid "Track: %.2f mils (%.3f mm)"
 #~ msgstr "Piste: %.2f mils (%.3f mm)"
 
-#, c-format
 #~ msgid "%.2f / %.2f mm"
 #~ msgstr "%.2f / %.2f mm"
 
-#, c-format
 #~ msgid "%.2f mm"
 #~ msgstr "%.2f mm"
 
-#, c-format
 #~ msgid "%.1f / %.1f mils"
 #~ msgstr "%.1f / %.1f mils"
 
-#, c-format
 #~ msgid "%.1f mils"
 #~ msgstr "%.1f mils"
 
@@ -34191,21 +34008,19 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Clearance is 0."
 #~ msgstr "L'isolation est 0."
 
-#, c-format
 #~ msgid "<ul><li>Layer %s</li><li>%s</li><li>%s</li></ul>"
 #~ msgstr "<ul><li>Couche %s</li><li>%s</li><li>%s</li></ul>"
 
-#, fuzzy, c-format
+#, fuzzy
 #~| msgid "%s pad %s not found in %s."
 #~ msgid "Group %s not found in board"
 #~ msgstr "%s pad %s non trouvé en %s."
 
-#, fuzzy, c-format
+#, fuzzy
 #~| msgid "A wire_via references a missing padstack \"%s\""
 #~ msgid "Group %s references missing item %s"
 #~ msgstr "Une 'wire_via'  a une référence vers un  pad \"%s\" manquant"
 
-#, c-format
 #~ msgid ""
 #~ "Error in group structure in file: %s\n"
 #~ "\n"
@@ -34319,11 +34134,9 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Delete again to remove locked items"
 #~ msgstr "Supprimer à nouveau pour supprimer les éléments verrouillés"
 
-#, c-format
 #~ msgid "%s by reference:"
 #~ msgstr "%s par référence:"
 
-#, c-format
 #~ msgid "%s by value:"
 #~ msgstr "%s par valeur:"
 
@@ -34356,20 +34169,17 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Group Items"
 #~ msgstr "Grouper symboles"
 
-#, c-format
 #~ msgid "Two groups of identical name: %s"
 #~ msgstr "Deux groupes de nom identique : %s"
 
-#, c-format
 #~ msgid "Group %s contains deleted item %s"
 #~ msgstr "Le groupe %s contient l’élément supprimé %s"
 
-#, c-format
 #~ msgid "Uuid %s maps to 2 different BOARD_ITEMS: %s %p %s and %p %s"
 #~ msgstr ""
 #~ "L'Uuid %s est identique pour 2 différents BOARD_ITEMS: %s %p %s et %p %s"
 
-#, fuzzy, c-format
+#, fuzzy
 #~| msgid "Polygon must have at least 3 corners"
 #~ msgid "Group must have at least one member: %s"
 #~ msgstr "Le polygone doit avoir au moins 3 sommets"
@@ -34401,7 +34211,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "B.CrtYd"
 #~ msgstr "B.CrtYd"
 
-#, c-format
 #~ msgid "Min Annulus: %s"
 #~ msgstr "Anneau minimum: %s"
 
@@ -34495,67 +34304,52 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Add a keepout area"
 #~ msgstr "Ajouter une zone interdite"
 
-#, c-format
 #~ msgid "Text %s at (%s, %s)"
 #~ msgstr "Texte \"%s\" à  (%s %s)"
 
-#, c-format
 #~ msgid "Imported shape at (%s, %s)"
 #~ msgstr "Forme importée à (%s %s)"
 
-#, c-format
 #~ msgid "Rectangle from (%s, %s) to (%s, %s)"
 #~ msgstr "Rectangle de (%s,%s) à (%s,%s)"
 
-#, c-format
 #~ msgid "Line from (%s, %s) to (%s, %s)"
 #~ msgstr "Ligne de (%s %s) à (%s %s)"
 
-#, c-format
 #~ msgid "Image at (%s, %s)"
 #~ msgstr "Image à (%s %s)"
 
-#, c-format
 #~ msgid "Arc center (%s, %s), radius %s"
 #~ msgstr "Centre arc (%s, %s), rayon %s"
 
-#, c-format
 #~ msgid "Field %s (%s)"
 #~ msgstr "Champ %s (%s)"
 
-#, c-format
 #~ msgid "%s Graphic Line from (%s, %s) to (%s, %s)"
 #~ msgstr "Ligne Graphique %s de (%s,%s) à (%s,%s)"
 
-#, c-format
 #~ msgid "%s Wire from (%s, %s) to (%s, %s)"
 #~ msgstr "Fil %s de (%s,%s) à (%s,%s)"
 
-#, c-format
 #~ msgid "%s Bus from (%s, %s) to (%s, %s)"
 #~ msgstr "Bus %s de  (%s,%s) à (%s,%s)"
 
-#, c-format
 #~ msgid "%s Line on Unknown Layer from (%s, %s) to (%s, %s)"
 #~ msgstr "Ligne %s sur Couche Inconnue de (%s,%s) à (%s,%s)"
 
-#, c-format
 #~ msgid "Pcb Graphic %s on %s"
 #~ msgstr "Graphique PCB %s sur %s"
 
-#, c-format
 #~ msgid "Graphic %s of %s on %s"
 #~ msgstr "Graphique %s  de %s sur %s"
 
-#, c-format
 #~ msgid "Target size %s"
 #~ msgstr "Mire taille %s"
 
-#, c-format
 #~ msgid "Text \"%s\" of %s on %s"
 #~ msgstr "Texte \"%s\" de %s sur %s"
 
-#, fuzzy, c-format
+#, fuzzy
 #~| msgid "Via %s %s on %s - %s"
 #~ msgid "%s %s %s on %s - %s"
 #~ msgstr "Via %s %s sur %s - %s"
@@ -34596,18 +34390,16 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Enter the minimum acceptable diameter for a micro via"
 #~ msgstr "Entrer le diamètre minimal acceptable pour une micro via"
 
-#, c-format
 #~ msgid "Violations / Markers (%d)"
 #~ msgstr "Problèmes / Marqueurs (%d)"
 
-#, c-format
 #~ msgid "Footprint Warnings (%d)"
 #~ msgstr "Avertissements sur Empreintes (%d)"
 
 #~ msgid "Stroked outlines (legacy)"
 #~ msgstr "Contour épais (ancien algo)"
 
-#, fuzzy, c-format
+#, fuzzy
 #~| msgid "Clearance: %s."
 #~ msgid "clearance: %s."
 #~ msgstr "Isolation %s."
@@ -34651,7 +34443,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "board edge"
 #~ msgstr "contour du CI."
 
-#, c-format
 #~ msgid "'%s' rule"
 #~ msgstr "règle '%s'"
 
@@ -34693,15 +34484,12 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Track clearances"
 #~ msgstr "Isolations pistes"
 
-#, c-format
 #~ msgid "layer %s"
 #~ msgstr "couche %s"
 
-#, c-format
 #~ msgid " (board minimum %s; actual %s)"
 #~ msgstr " (C.I. minimum %s; réel %s)"
 
-#, c-format
 #~ msgid " (diameter %s; drill %s)"
 #~ msgstr " (diamètre %s; perçage %s)"
 
@@ -34714,11 +34502,9 @@ msgstr "Remplissage %d Zones"
 #~ "Vias aveugles/enterrées non autorisées (contraintes de règle de "
 #~ "conception du CI)"
 
-#, c-format
 #~ msgid "Microvia through too many layers (%s and %s not adjacent)"
 #~ msgstr "Microvia tranversant trop de couches (%s et %s non adjacent)"
 
-#, c-format
 #~ msgid "Via annulus too small (%s %s; actual %s)"
 #~ msgstr "Anneau de via trop petit (%s %s; réel %s)"
 
@@ -34788,7 +34574,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Committing changes..."
 #~ msgstr "Validation des modifications..."
 
-#, c-format
 #~ msgid "Unrecognized layer '%s' "
 #~ msgstr "Couche non reconnue '%s'"
 
@@ -34814,11 +34599,9 @@ msgstr "Remplissage %d Zones"
 #~ msgid "0.0001mm / 0.01 mil"
 #~ msgstr "0,0001mm / 0,01 mil"
 
-#, c-format
 #~ msgid "Footprint %s (%s),"
 #~ msgstr "Empreinte %s (%s),"
 
-#, c-format
 #~ msgid "%s, rotated %.1f deg"
 #~ msgstr "%s, rotation %.1f deg"
 
@@ -34860,11 +34643,9 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Examples"
 #~ msgstr "Exemples"
 
-#, c-format
 #~ msgid "Symbol Library Browser -- %s"
 #~ msgstr "Éditeur de Librairies de Symbole -- %s"
 
-#, c-format
 #~ msgid ""
 #~ "\"%s\" and \"%s\" use the same schematic symbol.\n"
 #~ "They cannot have different footprints or values."
@@ -34872,7 +34653,6 @@ msgstr "Remplissage %d Zones"
 #~ "\"%s\" et \"%s\" utilisent le même symbole schématique.\n"
 #~ "Ils ne peuvent pas avoir des empreintes ou des valeurs différentes."
 
-#, c-format
 #~ msgid ""
 #~ "Unable to change \"%s\" footprint or value because associated symbol is "
 #~ "reused in the another project"
@@ -34886,7 +34666,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Library reference is not valid."
 #~ msgstr "L'identificateur de librairie n'est pas valide."
 
-#, c-format
 #~ msgid "Symbol \"%s\" not found in library \"%s\"."
 #~ msgstr "Composant \"%s\" non trouvée en librairie \"%s\"."
 
@@ -34940,7 +34719,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "No symbol name specified.  Symbol could not be saved."
 #~ msgstr "Aucun nom de symbole spécifié. Le symbole ne peut être sauvé."
 
-#, c-format
 #~ msgid "Net count = %d"
 #~ msgstr "Nombre nets = %d"
 
@@ -35001,18 +34779,15 @@ msgstr "Remplissage %d Zones"
 #~ "du trou,\n"
 #~ "si vous ne voulez pas que ce pad soit généré dans les fichiers Gerber"
 
-#, c-format
 #~ msgid "footprint %s (not set as SMD) forced in list"
 #~ msgstr "empreinte %s (non identifié comme SMD) forcé dans la liste"
 
-#, c-format
 #~ msgid "Library \"%s\" is read only, not writable"
 #~ msgstr "La librairie \"%s\" est en lecture seule, non inscriptible"
 
 #~ msgid "Footprint already exists on board."
 #~ msgstr "L'empreinte %s existe déjà sur le CI."
 
-#, c-format
 #~ msgid ""
 #~ "There is a zone that belongs to a not existing net\n"
 #~ "\"%s\"\n"
@@ -35027,7 +34802,7 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Enter"
 #~ msgstr "Centrer"
 
-#, fuzzy, c-format
+#, fuzzy
 #~| msgid "The name '%s' is already in use."
 #~ msgid "Item %s is already in group for merge"
 #~ msgstr "Le nom \"%s\" est déjà utilisé."
@@ -35125,7 +34900,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Drags tracks and vias without breaking connections"
 #~ msgstr "Fait glisser les pistes et vias sans casser les connexions"
 
-#, c-format
 #~ msgid "Select %s"
 #~ msgstr "Sélection %s"
 
@@ -35139,7 +34913,7 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Delete this layer preset "
 #~ msgstr "Tout effacer sur la couche %s?"
 
-#, fuzzy, c-format
+#, fuzzy
 #~| msgid "Symbol not found in %s!"
 #~ msgid "Group %s not found in groups list"
 #~ msgstr "Symbole non trouvé en \"%s\"!"
@@ -35157,7 +34931,7 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Place a layer alignment target"
 #~ msgstr "Placer une mire d'alignement"
 
-#, fuzzy, c-format
+#, fuzzy
 #~| msgid "Highlighted net: %s"
 #~ msgid "highlight() of %s %p"
 #~ msgstr "Net en Surbrillance: %s"
@@ -35254,7 +35028,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Standard Options"
 #~ msgstr "Écart type:"
 
-#, c-format
 #~ msgid ""
 #~ "Item not currently visible.\n"
 #~ "Show the '%s' layer?"
@@ -35274,11 +35047,9 @@ msgstr "Remplissage %d Zones"
 #~ "soudure à 0,\n"
 #~ "sauf si votre fabricant de circuit imprimé demande une valeur spécifique"
 
-#, c-format
 #~ msgid "Unrecognized item '%s'.|  Expected %s."
 #~ msgstr "Élément non reconnu '%s'.| Attendu %s."
 
-#, c-format
 #~ msgid ""
 #~ "Unrecognized item '%s'.|  Expected 'track', 'via', 'micro_via', "
 #~ "'blind_via', 'pad', 'zone', 'text', 'graphic' or 'hole'."
@@ -35336,7 +35107,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "b"
 #~ msgstr "b:"
 
-#, c-format
 #~ msgid "Unrecognized token '%s'"
 #~ msgstr "Mot clé non reconnu '%s'"
 
@@ -35395,7 +35165,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Export Symbol..."
 #~ msgstr "Exporter Symbole..."
 
-#, c-format
 #~ msgid "Layer \"%s\" not found."
 #~ msgstr "Couche \"%s\" non trouvée."
 
@@ -35495,28 +35264,24 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Back annotate"
 #~ msgstr "Import numérotation"
 
-#, c-format
 #~ msgid "Schematic is back-annotated. %d changes applied."
 #~ msgstr "La schématique est rétro-annotée. %d modifications appliquées."
 
 #~ msgid "No errors during dry run. Ready to go."
 #~ msgstr "Aucune erreur pendant le test. Prêt à exécuter."
 
-#, c-format
 #~ msgid "Found %d errors. Fix them and run back annotation."
 #~ msgstr "%d erreurs trouvées. Fixez les et réexécutez l'importation."
 
 #~ msgid "Please open Pcbnew and run back annotation again"
 #~ msgstr "SVP lancer Pcbnew et exécuter l'importation à nouveau"
 
-#, c-format
 #~ msgid "%d symbols left unchanged"
 #~ msgstr "%d symboles laissés inchangés"
 
 #~ msgid " OK\n"
 #~ msgstr " OK\n"
 
-#, c-format
 #~ msgid "(%lu bytes, compressed %d bytes)\n"
 #~ msgstr "(%lu octets, compressé %d octets)\n"
 
@@ -35535,27 +35300,22 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Predefined Track and Via dimensions"
 #~ msgstr "Dimensions pre-defined de Pistes et Vias"
 
-#, c-format
 #~ msgid "Clearance less than minimum clearance (%s)."
 #~ msgstr "Isolation inférieure à l'isolation minimale (%s)."
 
-#, c-format
 #~ msgid "Differential pair width less than minimum track width (%s)."
 #~ msgstr ""
 #~ "La largeur de la paire différentielle est inférieure à la largeur de "
 #~ "piste minimale (%s)."
 
-#, c-format
 #~ msgid "Via diameter and drill leave via annulus less than minimum (%s)."
 #~ msgstr ""
 #~ "Le diamètre et le perçage de via laissent un anneau plus mince que le "
 #~ "minimum (%s)."
 
-#, c-format
 #~ msgid "Via drill less than minimum via drill (%s)."
 #~ msgstr "Perçage de via inférieur au perçage de via minimum  ( %s)."
 
-#, c-format
 #~ msgid "Microvia diameter less than minimum microvia diameter (%s)."
 #~ msgstr "Diamètre microvia inférieur au diamètre microvia minimum (%s)."
 
@@ -35564,7 +35324,6 @@ msgstr "Remplissage %d Zones"
 #~ "Le diamètre de perçage doit être plus petit que le diamètre de la "
 #~ "microvia."
 
-#, c-format
 #~ msgid "Microvia drill less than minimum microvia drill (%s)."
 #~ msgstr "Perçage microvia inférieur au perçage microvia minimum (%s)."
 
@@ -35577,32 +35336,26 @@ msgstr "Remplissage %d Zones"
 #~ msgid "<max struct type>"
 #~ msgstr "<max struct type>"
 
-#, c-format
 #~ msgid "Via annulus too small  (%s %s; actual %s)"
 #~ msgstr "Anneau de via trop petit (%s %s; réel %s)"
 
-#, c-format
 #~ msgid "Could not create backup file \"%s\""
 #~ msgstr "Impossible de sauver le fichier backup \"%s\""
 
-#, c-format
 #~ msgid "Unable to find \"%s\" template config file."
 #~ msgstr "Impossible de trouver le fichier modèle de config \"%s\"."
 
 #~ msgid "Error copying project file template"
 #~ msgstr "Erreur lors de la copie du fichier projet du modèle"
 
-#, c-format
 #~ msgid "Cannot create prj file \"%s\" (Directory not writable)"
 #~ msgstr ""
 #~ "Ne peut pas créer de fichier prj \"%s\" (Répertoire non autorisé en "
 #~ "écriture)"
 
-#, c-format
 #~ msgid "Project file \"%s\" is not writable"
 #~ msgstr "Fichier de projet \"%s\" non inscriptible"
 
-#, c-format
 #~ msgid "Unable to load project's \"%s\" file"
 #~ msgstr "Impossible de charger le fichier projet \"%s\""
 
@@ -35612,14 +35365,12 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Unknown ERC violation"
 #~ msgstr "Violations de ERC inconnue"
 
-#, c-format
 #~ msgid "Could not save backup of file \"%s\""
 #~ msgstr "Impossible de sauver le fichier backup \"%s\""
 
 #~ msgid "NETCLASS VIOLATIONS: Aborting DRC\n"
 #~ msgstr "NETCLASS VIOLATIONS: Arrêt du test DRC\n"
 
-#, c-format
 #~ msgid " (%s and %s not adjacent)"
 #~ msgstr " (%s et %s non adjacents)"
 
@@ -35740,19 +35491,15 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Unknown DRC violation"
 #~ msgstr "Violations de DRC inconnue"
 
-#, c-format
 #~ msgid " (board minimum %s; %s netclass %s)"
 #~ msgstr " (C.I. minimum %s; %s netclasse %s)"
 
-#, c-format
 #~ msgid " (board min through hole %s; %s netclass %s)"
 #~ msgstr " (C.I. perçage minimum %s; %s netclasse %s)"
 
-#, c-format
 #~ msgid "Warning: unable to create backup file \"%s\""
 #~ msgstr "Attention: impossible de créer le  fichier backup \"%s\""
 
-#, c-format
 #~ msgid "Backup file: \"%s\""
 #~ msgstr "Fichier backup: \"%s\""
 
@@ -35933,7 +35680,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Yellow 4"
 #~ msgstr "Jaune 4"
 
-#, c-format
 #~ msgid "Failed to save \"%s\""
 #~ msgstr "Impossible de sauver \"%s\""
 
@@ -35986,7 +35732,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Auto-zoom"
 #~ msgstr "Zoom-auto"
 
-#, c-format
 #~ msgid "'%s' rule clearance"
 #~ msgstr "règle d'isolation '%s'"
 
@@ -36024,11 +35769,9 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Background color (sheets only):"
 #~ msgstr "Couleur de fond (feilles seulement)"
 
-#, c-format
 #~ msgid "Symbol library documentation file \"%s\" saved"
 #~ msgstr "Fichier de documentation de composant \"%s\" sauvé"
 
-#, c-format
 #~ msgid "%s footprint"
 #~ msgstr "empreinte %s"
 
@@ -36112,18 +35855,15 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Schematic text size:"
 #~ msgstr "Taille du texte schématique :"
 
-#, c-format
 #~ msgid "'%s' netclass clearance"
 #~ msgstr "Isolation net classe '%s'"
 
 #~ msgid "No 3D shape"
 #~ msgstr "Pas de forme 3D"
 
-#, c-format
 #~ msgid "pad %s clearance"
 #~ msgstr "Isolation pad %s"
 
-#, c-format
 #~ msgid "%s footprint clearance"
 #~ msgstr "isolation empreinte %s"
 
@@ -36172,7 +35912,7 @@ msgstr "Remplissage %d Zones"
 #~ msgid "dPair Width"
 #~ msgstr "Largeur Paire Diff"
 
-#, fuzzy, c-format
+#, fuzzy
 #~| msgid " (%s %s; actual %s)"
 #~ msgid " (%s min hole %s; actual %s)"
 #~ msgstr " (%s %s; réel %s)"
@@ -36180,16 +35920,14 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Color Options"
 #~ msgstr "Options Couleur"
 
-#, c-format
 #~ msgid "%s netclass clearance"
 #~ msgstr "Isolation net classe %s"
 
-#, fuzzy, c-format
+#, fuzzy
 #~| msgid " (board minimum %s; actual %s)"
 #~ msgid " (board min through hole %s; actual %s)"
 #~ msgstr " (C.I. minimum %s; réel %s)"
 
-#, c-format
 #~ msgid "Symbol '%s' not found in library '%s'."
 #~ msgstr "Symbole \"%s\" non trouvée en librairie \"%s\"."
 
@@ -36238,7 +35976,6 @@ msgstr "Remplissage %d Zones"
 #~ "<br><i>field_value</i></td>   </tr>   <tr>      <td>&nbsp;<br>${R3:VALUE}"
 #~ "</td>      <td></td>      <td>&nbsp;<br>150K</td>   </tr></table>"
 
-#, c-format
 #~ msgid "Failed to parse bus group %s"
 #~ msgstr "Échec de l’analyse du groupe de bus %s"
 
@@ -36288,7 +36025,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Board outline does not form a closed polygon"
 #~ msgstr "Le contour du circuit imprimé ne forme pas un polygone fermé"
 
-#, c-format
 #~ msgid "OK to delete footprint \"%s\" in library \"%s\""
 #~ msgstr "Ok pour effacer l'empreinte \"%s\" en librairie \"%s\""
 
@@ -36298,7 +36034,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "UniqueID:"
 #~ msgstr "Unique ID:"
 
-#, c-format
 #~ msgid ""
 #~ "Empty symbol name in\n"
 #~ "file: \"%s\"\n"
@@ -36336,36 +36071,30 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Line width for, e.g., sheet references."
 #~ msgstr "Épaisseur de ligne pour, par ex., cartouche."
 
-#, c-format
 #~ msgid "NETCLASS: \"%s\" has Clearance:%s which is less than global:%s"
 #~ msgstr ""
 #~ "NETCLASS: \"%s\" a une isolation:%s qui est moins que la valeur globale:%s"
 
-#, c-format
 #~ msgid "NETCLASS: \"%s\" has TrackWidth:%s which is less than global:%s"
 #~ msgstr ""
 #~ "NETCLASS: '\"%s\" a une largeur de piste: %s plus petite que la valeur "
 #~ "globale:%s"
 
-#, c-format
 #~ msgid "NETCLASS: \"%s\" has Via Dia:%s which is less than global:%s"
 #~ msgstr ""
 #~ "NETCLASS: \"%s\" a un diamètre de via: %s qui est plus petit que la "
 #~ "valeur globale: %s"
 
-#, c-format
 #~ msgid "NETCLASS: \"%s\" has Via Drill:%s which is less than global:%s"
 #~ msgstr ""
 #~ "NETCLASS: \"%s\" a un perçage de via: %s qui est plus petit que la valeur "
 #~ "globale: %s"
 
-#, c-format
 #~ msgid "NETCLASS: \"%s\" has uVia Dia:%s which is less than global:%s"
 #~ msgstr ""
 #~ "NETCLASS: \"%s\" a un diamètre de microvia: %s qui est plus petit que la "
 #~ "valeur globale: %s"
 
-#, c-format
 #~ msgid "NETCLASS: \"%s\" has uVia Drill:%s which is less than global:%s"
 #~ msgstr ""
 #~ "NETCLASS: \"%s\" a un perçage de microvia: %s qui est plus petit que la "
@@ -36383,7 +36112,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "NetClass Via Drill < global limit"
 #~ msgstr "Perçage de via en netclass < limite globale"
 
-#, c-format
 #~ msgid "Your BOARD has a bad layer number for footprint %s"
 #~ msgstr "Votre PCB a un mauvais numéro de couche  pour l'empreint %s"
 
@@ -36393,15 +36121,12 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Render options"
 #~ msgstr "Options de rendu"
 
-#, c-format
 #~ msgid "%s has '%s' assigned"
 #~ msgstr "%s a '%s' assigné"
 
-#, c-format
 #~ msgid "Pin %s of component %s."
 #~ msgstr "Pin \"%s\" du composant \"%s\"."
 
-#, c-format
 #~ msgid "Pin %s (%s) of component %s."
 #~ msgstr "Pin %s (%s) du composant %s."
 
@@ -36495,7 +36220,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "sch files"
 #~ msgstr "fichiers sch"
 
-#, c-format
 #~ msgid "Netcode with id %d does not exist. Only %d nets are known"
 #~ msgstr "Netcode avec id %d n’existe pas. Seuls les nets %d sont connus"
 
@@ -36575,7 +36299,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Default schematic text size:"
 #~ msgstr "Taille  par défaut des textes:"
 
-#, c-format
 #~ msgid ""
 #~ "An attempt was made to remove the %s field from component %s in library "
 #~ "%s."
@@ -36583,7 +36306,6 @@ msgstr "Remplissage %d Zones"
 #~ "Une tentative a été faite pour supprimer le champ %s du composant %s en "
 #~ "librairie %s."
 
-#, c-format
 #~ msgid "Field %s"
 #~ msgstr "Champ %s"
 
@@ -36702,7 +36424,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Marker Info"
 #~ msgstr "Info Marqueur"
 
-#, c-format
 #~ msgid ""
 #~ "%s and %s are graphically connected but cannot electrically connect "
 #~ "because one is a bus and the other is a net."
@@ -36710,12 +36431,10 @@ msgstr "Remplissage %d Zones"
 #~ "%s et %s sont graphiquement connectés mais ne peuvent pas se connecter "
 #~ "électriquement car l’un est un bus et l’autre est une équipotentielle."
 
-#, c-format
 #~ msgid "Pin %s of component %s has a no-connect marker but is connected"
 #~ msgstr ""
 #~ "Pin %s du composant %s  a un marqueur de non connexion mais est connectée"
 
-#, c-format
 #~ msgid "%s %s is not connected anywhere else in the schematic."
 #~ msgstr "%s %s n’est pas connecté ailleurs dans le schéma."
 
@@ -36753,27 +36472,21 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Duplicate sheet name"
 #~ msgstr "Nom de feuille en double"
 
-#, c-format
 #~ msgid "Unit %s has '%s' assigned, whereas unit %s has '%s' assigned"
 #~ msgstr "L'unité %s a '%s' assigné, tandis que  l'unité %s a '%s' assigné"
 
-#, c-format
 #~ msgid "Pin %s (%s) of component %s is not driven (Net %d)."
 #~ msgstr "Pin %s (%s) du composant %s non pilotée (Net %d)."
 
-#, c-format
 #~ msgid "Pin %s (%s) of component %s is connected to "
 #~ msgstr "Pin %s (%s) du composant %s  connectée à "
 
-#, c-format
 #~ msgid "Global label '%s' (sheet '%s') looks like:"
 #~ msgstr "Label global \"%s\" (feuille \"%s\") ressemble à:"
 
-#, c-format
 #~ msgid "Local label '%s' (sheet '%s') looks like:"
 #~ msgstr "Label local \"%s\" (feuille \"%s\") ressemble à:"
 
-#, c-format
 #~ msgid "Global label \"%s\" (sheet \"%s\")"
 #~ msgstr "Label global \"%s\"  (feuille \"%s\")"
 
@@ -36919,11 +36632,9 @@ msgstr "Remplissage %d Zones"
 #~ msgid "&Show Version Info"
 #~ msgstr "&Afficher Infos de Version"
 
-#, c-format
 #~ msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 #~ msgstr "Signature temporelle dupliquée (%s) pour %s%d et %s%d"
 
-#, c-format
 #~ msgid "A sheet named \"%s\" already exists."
 #~ msgstr "Une feuille nommée \" %s\" existe déjà."
 
@@ -36933,7 +36644,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Time Stamp"
 #~ msgstr "Signature Temporelle"
 
-#, c-format
 #~ msgid "%8.8lX/"
 #~ msgstr "%8.8lX/"
 
@@ -36943,14 +36653,12 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Magnetic Loss Tangent"
 #~ msgstr "Tangente de Pertes Magnétiques"
 
-#, c-format
 #~ msgid "ErrType (%d)- %s:"
 #~ msgstr "ErrType (%d)- %s:"
 
 #~ msgid "Netlist Path"
 #~ msgstr "Chemin Netliste"
 
-#, c-format
 #~ msgid "Report file \"%s\" created"
 #~ msgstr "Fichier rapport \"%s\" créé"
 
@@ -36984,23 +36692,19 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Prohibit overlapping courtyards"
 #~ msgstr "Interdire les courtyards chevauchantes"
 
-#, c-format
 #~ msgid "Unknown DRC error code %d"
 #~ msgstr "Code d'erreur DRC inconnu %d"
 
-#, c-format
 #~ msgid "Change symbol path \"%s:%s\" to \"%s\"."
 #~ msgstr "Change le chemin du symbole \"%s:%s\" en \"%s\"."
 
 #~ msgid "Added a track"
 #~ msgstr "Ajouté une piste"
 
-#, c-format
 #~ msgid "Session file has 'reference' to non-existent symbol \"%s\""
 #~ msgstr ""
 #~ "Le fichier Session a une 'référence' à un composant non existant \"%s\""
 
-#, c-format
 #~ msgid "sym-lib-table files contain no library with nickname \"%s\""
 #~ msgstr ""
 #~ "Les tables de librairie ne contiennent pas de librairie de  nom logique  "
@@ -37033,11 +36737,9 @@ msgstr "Remplissage %d Zones"
 #~ msgid "Alias can not have same name as symbol."
 #~ msgstr "Un alias ne peut pas avoir le même nom que le symbole."
 
-#, c-format
 #~ msgid "Alias \"%s\" already exists."
 #~ msgstr "L'alias \"%s\" existe déjà."
 
-#, c-format
 #~ msgid "Symbol name \"%s\" already exists in library \"%s\"."
 #~ msgstr "Le nom du symbole \"%s\" existe déjà en librairie \"%s\"."
 
