@@ -126,7 +126,5 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
 
     GetScreen()->InitDataPoints( GetPageSizeIU() );
 
-    Zoom_Automatique( false );
-
     return true;
 }

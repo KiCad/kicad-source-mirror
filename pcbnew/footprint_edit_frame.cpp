@@ -757,7 +757,6 @@ void FOOTPRINT_EDIT_FRAME::updateView()
     GetCanvas()->UpdateColors();
     GetCanvas()->DisplayBoard( GetBoard() );
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     updateTitle();
 }
 

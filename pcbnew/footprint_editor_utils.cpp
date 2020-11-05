@@ -98,7 +98,8 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
         }
     }
 
-    Zoom_Automatique( false );
+    if( m_zoomSelectBox->GetSelection() == 0 )
+        Zoom_Automatique( false );
 
     Update3DView( true );
 
