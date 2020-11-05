@@ -291,8 +291,10 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
     msg.Printf( wxT("%.3f"), aItem->m_IncrementVector.y );
     m_textCtrlStepY->SetValue( msg );
 
-    // The number of widgets was modified
+    // The number of widgets was modified, so recalculate sizers
     m_swItemProperties->Layout();
+    // send a size event to be sure scroolbars will be added/removed as needed
+    m_swItemProperties->PostSizeEvent();
     m_swItemProperties->Refresh();
 }
 
