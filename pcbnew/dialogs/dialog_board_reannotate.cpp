@@ -359,7 +359,7 @@ void DIALOG_BOARD_REANNOTATE::MakeSampleText( wxString& aMessage )
     bool moduleLocation = m_locationChoice->GetSelection() == 0;
 
     aMessage += wxString::Format( _( "\nPrior to sorting by %s, the coordinates of which will be "
-                                     "rounded to a %s, %s grid. " ),
+                                     "rounded to a %s, %s grid." ),
                                   moduleLocation ? _( "footprint location" )
                                                  : _( "reference designator location" ),
                                   MessageTextFromValue( m_Units, m_SortGridx ),
@@ -834,7 +834,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
 
                     if( errorcount++ > MAXERROR )
                     {
-                        ShowReport( _( "Aborted: too many errors " ), RPT_SEVERITY_ERROR );
+                        ShowReport( _( "Aborted: too many errors" ), RPT_SEVERITY_ERROR );
                         break;
                     }
                 }
