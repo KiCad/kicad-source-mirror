@@ -537,30 +537,6 @@ void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
         break;
     }
 
-    if( m_Shape == S_POLYGON )
-    {
-        VECTOR2I point0 = GetPolyShape().Outline(0).CPoint(0);
-        VECTOR2I coord0 = originTransforms.ToDisplayAbs( point0 );
-        wxString origin = wxString::Format( "@(%s, %s)",
-                                           MessageTextFromValue( units, coord0.x ),
-                                           MessageTextFromValue( units, coord0.y ) );
-
-        aList.emplace_back( _( "Origin" ), origin, DARKGREEN );
-    }
-    else
-    {
-        wxPoint startCoord = originTransforms.ToDisplayAbs( GetStart() );
-        wxString start = wxString::Format( "@(%s, %s)",
-                                           MessageTextFromValue( units, startCoord.x ),
-                                           MessageTextFromValue( units, startCoord.y ) );
-        wxPoint endCoord = originTransforms.ToDisplayAbs( GetEnd() );
-        wxString end   = wxString::Format( "@(%s, %s)",
-                                           MessageTextFromValue( units, endCoord.x ),
-                                           MessageTextFromValue( units, endCoord.y ) );
-
-        aList.emplace_back( start, end, DARKGREEN );
-    }
-
     aList.emplace_back( _( "Layer" ), GetLayerName(), DARKBROWN );
 
     msg = MessageTextFromValue( units, m_Width );
@@ -600,15 +576,16 @@ const EDA_RECT PCB_SHAPE::GetBoundingBox() const
         break;
 
     case S_POLYGON:
+    {
         if( m_Poly.IsEmpty() )
             break;
-    {
+
         MODULE* module = GetParentModule();
         bbox = EDA_RECT();  // re-init for merging
 
         for( auto iter = m_Poly.CIterate(); iter; iter++ )
         {
-            wxPoint pt ( iter->x, iter->y );
+            wxPoint pt( iter->x, iter->y );
 
             if( module ) // Transform, if we belong to a module
             {

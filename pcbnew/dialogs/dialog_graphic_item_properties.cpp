@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -26,13 +26,11 @@
  * Edit properties of Lines, Circles, Arcs and Polygons for PCBNew and ModEdit
  */
 
-#include <confirm.h>
 #include <pcb_base_edit_frame.h>
 #include <wx/valnum.h>
 #include <board_commit.h>
 #include <pcb_layer_box_selector.h>
 #include <dialogs/html_messagebox.h>
-#include <class_board.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
 #include <widgets/unit_binder.h>
@@ -171,8 +169,11 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
     case S_CIRCLE:
         SetTitle( _( "Circle Properties" ) );
         m_startPointLabel->SetLabel( _( "Center" ) );
+
         m_endPointLabel->SetLabel( _( "Radius" ) );
-        m_endY.SetCoordType( ORIGIN_TRANSFORMS::NOT_A_COORD );
+        m_endXLabel->Show( false );
+        m_endX.SetCoordType( ORIGIN_TRANSFORMS::NOT_A_COORD );
+
         m_endY.Show( false );
         break;
 
@@ -247,12 +248,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
 
     m_thickness.SetValue( m_item->GetWidth() );
 
-    if( m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() ) < 0 )
-    {
-        wxMessageBox( _( "This item was on a non-existing or forbidden layer.\n"
-                         "It has been moved to the first allowed layer. Please fix it." ) );
-        m_LayerSelectionCtrl->SetSelection( 0 );
-    }
+    m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
 
     return DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::TransferDataToWindow();
 }
@@ -364,13 +360,13 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
     case S_CIRCLE:
         // Check radius.
         if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
-            error_msgs.Add( _( "The radius must be greater than zero." ) );
+            error_msgs.Add( _( "The radius cannot be zero." ) );
         break;
 
     case S_RECT:
         // Check for null rect.
         if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
-            error_msgs.Add( _( "The rectangle can not be empty." ) );
+            error_msgs.Add( _( "The rectangle cannot be empty." ) );
         break;
 
     case S_POLYGON:

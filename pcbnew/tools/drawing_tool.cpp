@@ -241,6 +241,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::LINE );
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
 
+    line->SetShape( S_SEGMENT );
     line->SetFlags( IS_NEW );
 
     if( aEvent.HasPosition() )
@@ -250,7 +251,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    while( drawSegment( tool, S_SEGMENT, &line, startingPoint ) )
+    while( drawSegment( tool, &line, startingPoint ) )
     {
         if( line )
         {
@@ -267,6 +268,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
         }
 
         line = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
+        line->SetShape( S_SEGMENT );
         line->SetFlags( IS_NEW );
     }
 
@@ -285,6 +287,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::RECTANGLE );
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
 
+    rect->SetShape( S_RECT );
     rect->SetFlags(IS_NEW );
 
     if( aEvent.HasPosition() )
@@ -294,7 +297,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    while( drawSegment( tool, S_RECT, &rect, startingPoint ) )
+    while( drawSegment( tool, &rect, startingPoint ) )
     {
         if( rect )
         {
@@ -308,6 +311,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
         }
 
         rect = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
+        rect->SetShape( S_RECT );
         rect->SetFlags(IS_NEW );
         startingPoint = NULLOPT;
     }
@@ -327,6 +331,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::CIRCLE );
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
 
+    circle->SetShape( S_CIRCLE );
     circle->SetFlags( IS_NEW );
 
     if( aEvent.HasPosition() )
@@ -336,7 +341,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    while( drawSegment( tool, S_CIRCLE, &circle, startingPoint ) )
+    while( drawSegment( tool, &circle, startingPoint ) )
     {
         if( circle )
         {
@@ -350,6 +355,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
         }
 
         circle = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
+        circle->SetShape( S_CIRCLE );
         circle->SetFlags( IS_NEW );
         startingPoint = NULLOPT;
     }
@@ -369,6 +375,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ARC );
     bool             immediateMode = aEvent.HasPosition();
 
+    arc->SetShape( S_ARC );
     arc->SetFlags( IS_NEW );
 
     std::string tool = aEvent.GetCommandStr().get();
@@ -389,6 +396,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         }
 
         arc = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
+        arc->SetShape( S_ARC );
         arc->SetFlags( IS_NEW );
         immediateMode = false;
     }
@@ -667,12 +675,15 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        if( step > SET_ORIGIN )
+            frame()->SetMsgPanel( dimension );
+
         setCursor();
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( m_frame->IsGridVisible() );
-        VECTOR2I cursorPos = grid.BestSnapAnchor(
-                evt->IsPrime() ? evt->Position() : m_controls->GetMousePosition(), nullptr );
+        VECTOR2I cursorPos = evt->IsPrime() ? evt->Position() : m_controls->GetMousePosition();
+        cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         auto cleanup = [&]()
@@ -801,6 +812,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->SetEnd( (wxPoint) cursorPos );
 
                 preview.Add( dimension );
+                frame()->SetMsgPanel( dimension );
 
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
@@ -1214,22 +1226,24 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 static void updateSegmentFromGeometryMgr( const KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER& aMgr,
                                           PCB_SHAPE* aGraphic )
 {
-    auto vec = aMgr.GetOrigin();
-
-    aGraphic->SetStart( { vec.x, vec.y } );
-
-    vec = aMgr.GetEnd();
-    aGraphic->SetEnd( { vec.x, vec.y } );
+    if( !aMgr.IsReset() )
+    {
+        aGraphic->SetStart( (wxPoint) aMgr.GetOrigin() );
+        aGraphic->SetEnd( (wxPoint) aMgr.GetEnd() );
+    }
 }
 
 
-bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE** aGraphic,
+bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                                 OPT<VECTOR2D> aStartingPoint )
 {
+    int shape = (*aGraphic)->GetShape();
     // Only three shapes are currently supported
-    assert( aShape == S_SEGMENT || aShape == S_CIRCLE || aShape == S_RECT );
-    GRID_HELPER   grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
-    PCB_SHAPE*&   graphic = *aGraphic;
+    assert( shape == S_SEGMENT || shape == S_CIRCLE || shape == S_RECT );
+
+    EDA_UNITS    userUnits = m_frame->GetUserUnits();
+    GRID_HELPER  grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    PCB_SHAPE*&  graphic = *aGraphic;
 
     m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
 
@@ -1238,9 +1252,8 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
 
     // drawing assistant overlay
     // TODO: workaround because PCB_SHAPE_TYPE_T is not visible from commons.
-    KIGFX::PREVIEW::GEOM_SHAPE geomShape( static_cast<KIGFX::PREVIEW::GEOM_SHAPE>( aShape ) );
-    KIGFX::PREVIEW::TWO_POINT_ASSISTANT twoPointAsst( twoPointManager, m_frame->GetUserUnits(),
-                                                      geomShape );
+    KIGFX::PREVIEW::GEOM_SHAPE geomShape( static_cast<KIGFX::PREVIEW::GEOM_SHAPE>( shape ) );
+    KIGFX::PREVIEW::TWO_POINT_ASSISTANT twoPointAsst( twoPointManager, userUnits, geomShape );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     PCBNEW_SELECTION preview;
@@ -1260,8 +1273,6 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
     if( aStartingPoint )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
-    frame()->SetMsgPanel( graphic );
-
     auto setCursor =
             [&]()
             {
@@ -1275,7 +1286,9 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
-        m_frame->SetMsgPanel( graphic );
+
+        if( started )
+            m_frame->SetMsgPanel( graphic );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( m_frame->IsGridVisible() );
@@ -1368,7 +1381,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
                 m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
 
                 // Init the new item attributes
-                graphic->SetShape( (PCB_SHAPE_TYPE_T) aShape );
+                graphic->SetShape( (PCB_SHAPE_TYPE_T) shape );
                 graphic->SetWidth( m_lineWidth );
                 graphic->SetLayer( m_frame->GetActiveLayer() );
                 grid.SetSkipPoint( cursorPos );
@@ -1380,7 +1393,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
                     m_frame->GetScreen()->m_LocalOrigin = cursorPos;
 
                 preview.Add( graphic );
-                frame()->SetMsgPanel( board() );
+                frame()->SetMsgPanel( graphic );
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
 
@@ -1393,7 +1406,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
                 PCB_SHAPE* snapItem = dyn_cast<PCB_SHAPE*>( grid.GetSnapped() );
 
                 if( twoPointManager.GetOrigin() == twoPointManager.GetEnd()
-                        || ( evt->IsDblClick( BUT_LEFT ) && aShape == S_SEGMENT ) || snapItem )
+                    || ( evt->IsDblClick( BUT_LEFT ) && shape == S_SEGMENT ) || snapItem )
                 // User has clicked twice in the same spot
                 //  or clicked on the end of an existing segment (closing a path)
                 {
@@ -1401,7 +1414,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
 
                     // If the user clicks on an existing snap point from a drawsegment
                     //  we finish the segment as they are likely closing a path
-                    if( snapItem && (  aShape == S_RECT || graphic->GetLength() > 0.0 ) )
+                    if( snapItem && ( shape == S_RECT || graphic->GetLength() > 0.0 ) )
                     {
                         commit.Add( graphic );
                         commit.Push( _( "Draw a line segment" ) );
@@ -1416,6 +1429,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
                 }
 
                 preview.Clear();
+                twoPointManager.Reset();
                 break;
             }
 
@@ -1424,13 +1438,13 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
         else if( evt->IsMotion() )
         {
             // 45 degree lines
-            if( started && ( ( limit45 && aShape == S_SEGMENT )
-                             || ( evt->Modifier( MD_CTRL ) && aShape == S_RECT ) ) )
+            if( started && ( ( limit45 && shape == S_SEGMENT )
+                             || ( evt->Modifier( MD_CTRL ) && shape == S_RECT ) ) )
             {
                 const VECTOR2I lineVector( cursorPos - VECTOR2I( twoPointManager.GetOrigin() ) );
 
                 // get a restricted 45/H/V line from the last fixed point to the cursor
-                auto newEnd = GetVectorSnapped45( lineVector, ( aShape == S_RECT ) );
+                auto newEnd = GetVectorSnapped45( lineVector, ( shape == S_RECT ) );
                 m_controls->ForceCursorPosition( true, VECTOR2I( twoPointManager.GetEnd() ) );
                 twoPointManager.SetEnd( twoPointManager.GetOrigin() + (wxPoint) newEnd );
                 twoPointManager.SetAngleSnap( true );
@@ -1466,8 +1480,12 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, PCB_SHAPE*
         }
         else if( evt->IsAction( &ACTIONS::updateUnits ) )
         {
-            twoPointAsst.SetUnits( frame()->GetUserUnits() );
-            m_view->Update( &twoPointAsst );
+            if( frame()->GetUserUnits() != userUnits )
+            {
+                userUnits = frame()->GetUserUnits();
+                twoPointAsst.SetUnits( userUnits );
+                m_view->Update( &twoPointAsst );
+            }
             evt->SetPassEvent();
         }
         else
@@ -1551,6 +1569,9 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        if( firstPoint )
+            m_frame->SetMsgPanel( graphic );
+
         setCursor();
 
         PCB_LAYER_ID layer = m_frame->GetActiveLayer();
@@ -1617,6 +1638,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
                 graphic->SetWidth( m_lineWidth );
 
                 preview.Add( graphic );
+                frame()->SetMsgPanel( graphic );
                 firstPoint = true;
             }
 
