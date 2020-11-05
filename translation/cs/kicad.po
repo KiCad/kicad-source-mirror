@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-04 19:09-0800\n"
 "PO-Revision-Date: 2020-11-05 15:45+0000\n"
-"Last-Translator: Jan Vykydal <vvykys@gmail.com>\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -342,9 +342,8 @@ msgstr "Návrat na výchozí hodnoty"
 #: gerbview/menubar.cpp:212 kicad/menubar.cpp:165
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:231
 #: pcbnew/menubar_pcb_editor.cpp:434
-#, fuzzy
 msgid "Preferences..."
-msgstr "&Nastavení..."
+msgstr "Předvolby..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:214 cvpcb/menubar.cpp:72
 #: eeschema/menubar.cpp:265
