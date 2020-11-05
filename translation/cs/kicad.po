@@ -2598,7 +2598,7 @@ msgid ""
 " Clamped to %f"
 msgstr ""
 "Varování: Měřítko je nastaveno na příliš malou hodnotu.\n"
-"Měřítko je %f"
+"Upnuto na %f"
 
 #: common/dialogs/dialog_print_generic.cpp:191
 #: common/dialogs/dialog_print_generic.cpp:238
