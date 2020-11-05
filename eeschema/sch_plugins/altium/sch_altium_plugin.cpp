@@ -56,7 +56,6 @@
 #include <kicad_string.h>
 #include <sch_edit_frame.h>
 #include <wildcards_and_files_ext.h>
-#include <wx/textfile.h>
 
 
 const wxPoint GetRelativePosition( const wxPoint& aPosition, const SCH_COMPONENT* aComponent )
@@ -151,8 +150,9 @@ wxFileName SCH_ALTIUM_PLUGIN::getLibFileName()
     return fn;
 }
 
+
 SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-        SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
+                                    SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
 {
     wxASSERT( !aFileName || aSchematic != NULL );
 
@@ -195,12 +195,12 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
         wxString libTableUri = "${KIPRJMOD}/" + getLibFileName().GetFullName();
 
         // Add the new library to the project symbol library table.
-        libTable->InsertRow(
-                new SYMBOL_LIB_TABLE_ROW( getLibName(), libTableUri, wxString( "KiCad" ) ) );
+        libTable->InsertRow( new SYMBOL_LIB_TABLE_ROW( getLibName(), libTableUri,
+                                                       wxString( "KiCad" ) ) );
 
         // Save project symbol library table.
         wxFileName fn( m_schematic->Prj().GetProjectPath(),
-                SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+                       SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
 
         // So output formatter goes out of scope and closes the file before reloading.
         {
@@ -233,6 +233,7 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
 {
     // Open file
     FILE* fp = wxFopen( aFileName, "rb" );
+
     if( fp == nullptr )
     {
         wxLogError( wxString::Format( _( "Cannot open file '%s'" ), aFileName ) );
@@ -241,6 +242,7 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
 
     fseek( fp, 0, SEEK_END );
     long len = ftell( fp );
+
     if( len < 0 )
     {
         fclose( fp );
@@ -252,10 +254,9 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
 
     size_t bytesRead = fread( buffer.get(), sizeof( unsigned char ), len, fp );
     fclose( fp );
+
     if( static_cast<size_t>( len ) != bytesRead )
-    {
         THROW_IO_ERROR( "Reading error" );
-    }
 
     try
     {
@@ -272,10 +273,9 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
 void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
 {
     const CFB::COMPOUND_FILE_ENTRY* file = FindStream( aReader, "FileHeader" );
+
     if( file == nullptr )
-    {
         THROW_IO_ERROR( "FileHeader not found" );
-    }
 
     ALTIUM_PARSER reader( aReader, file );
 
@@ -291,9 +291,7 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
         ALTIUM_SCH_RECORD record   = static_cast<ALTIUM_SCH_RECORD>( recordId );
 
         if( record != ALTIUM_SCH_RECORD::HEADER )
-        {
             THROW_IO_ERROR( "Header expected" );
-        }
     }
 
     // Prepare some local variables
@@ -437,26 +435,21 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
     }
 
     if( reader.HasParsingError() )
-    {
         THROW_IO_ERROR( "stream was not parsed correctly!" );
-    }
 
     if( reader.GetRemainingBytes() != 0 )
-    {
         THROW_IO_ERROR( "stream is not fully parsed" );
-    }
 
     // assign LIB_PART -> COMPONENT
     for( auto component : m_components )
     {
         auto kpart = m_symbols.find( component.first );
+
         if( kpart == m_symbols.end() )
-        {
             THROW_IO_ERROR( "every component should have a symbol attached" );
-        }
 
         m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_PART( *( kpart->second ) ),
-                m_properties.get() );
+                          m_properties.get() );
 
         component.second->SetLibSymbol( kpart->second );
     }
@@ -467,9 +460,8 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
 
     // Handle Ports
     for( const ASCH_PORT& port : m_altiumPortsCurrentSheet )
-    {
         ParsePort( port );
-    }
+
     m_altiumPortsCurrentSheet.clear();
 
     m_components.clear();
@@ -483,6 +475,7 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
 bool SCH_ALTIUM_PLUGIN::IsComponentPartVisible( int aOwnerindex, int aOwnerpartdisplaymode ) const
 {
     const auto& component = m_altiumComponents.find( aOwnerindex );
+
     if( component == m_altiumComponents.end() )
         return false;
 
@@ -490,15 +483,17 @@ bool SCH_ALTIUM_PLUGIN::IsComponentPartVisible( int aOwnerindex, int aOwnerpartd
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseComponent(
-        int aIndex, const std::map<wxString, wxString>& aProperties )
+void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
+                                        const std::map<wxString, wxString>& aProperties )
 {
     auto pair = m_altiumComponents.insert( { aIndex, ASCH_COMPONENT( aProperties ) } );
     const ASCH_COMPONENT& elem = pair.first->second;
 
     // TODO: this is a hack until we correctly apply all transformations to every element
-    wxString name = wxString::Format(
-            "%d%s_%s", elem.orientation, elem.isMirrored ? "_mirrored" : "", elem.libreference );
+    wxString name = wxString::Format( "%d%s_%s",
+                                      elem.orientation,
+                                      elem.isMirrored ? "_mirrored" : "",
+                                      elem.libreference );
     LIB_ID libId = AltiumToKiCadLibID( LIB_ID::ID_SCH, getLibName(), name );
 
     LIB_PART* kpart = new LIB_PART( wxEmptyString );
@@ -528,12 +523,12 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
     ASCH_PIN elem( aProperties );
 
     const auto& symbol = m_symbols.find( elem.ownerindex );
+
     if( symbol == m_symbols.end() )
     {
         // TODO: e.g. can depend on Template (RECORD=39
-        wxLogWarning( wxString::Format(
-                "Pin tries to access symbol with ownerindex %d which does not exist",
-                elem.ownerindex ) );
+        wxLogWarning( wxString::Format( "Pin has non-existent ownerindex %d",
+                                        elem.ownerindex ) );
         return;
     }
 
@@ -552,6 +547,7 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
     pin->SetLength( elem.pinlength );
 
     wxPoint pinLocation = elem.location; // the location given is not the connection point!
+
     switch( elem.orientation )
     {
     case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
@@ -721,6 +717,7 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
         SetEdaTextJustification( text, elem.justification );
 
         size_t fontId = static_cast<int>( elem.fontId );
+
         if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
         {
             const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
@@ -735,12 +732,12 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
     else
     {
         const auto& symbol = m_symbols.find( elem.ownerindex );
+
         if( symbol == m_symbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
-            wxLogWarning( wxString::Format(
-                    "Label tries to access symbol with ownerindex %d which does not exist",
-                    elem.ownerindex ) );
+            wxLogWarning( wxString::Format( "Label has non-existent ownerindex %d",
+                                            elem.ownerindex ) );
             return;
         }
 
@@ -757,6 +754,7 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
         SetEdaTextJustification( text, elem.justification );
 
         size_t fontId = static_cast<int>( elem.fontId );
+
         if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
         {
             const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
@@ -775,7 +773,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
     if( elem.points.size() < 2 )
     {
         wxLogWarning( wxString::Format( "Bezier has %d control points. At least 2 are expected.",
-                static_cast<int>( elem.points.size() ) ) );
+                                        static_cast<int>( elem.points.size() ) ) );
         return;
     }
 
@@ -786,8 +784,9 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
             if( i + 2 == elem.points.size() )
             {
                 // special case: single line
-                SCH_LINE* line = new SCH_LINE(
-                        elem.points.at( i ) + m_sheetOffset, SCH_LAYER_ID::LAYER_NOTES );
+                SCH_LINE* line = new SCH_LINE( elem.points.at( i ) + m_sheetOffset,
+                                               SCH_LAYER_ID::LAYER_NOTES );
+
                 line->SetEndPoint( elem.points.at( i + 1 ) + m_sheetOffset );
                 line->SetLineWidth( elem.lineWidth );
                 line->SetLineStyle( PLOT_DASH_TYPE::SOLID );
@@ -810,8 +809,9 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
 
                 for( size_t k = 0; k + 1 < polyPoints.size(); k++ )
                 {
-                    SCH_LINE* line = new SCH_LINE(
-                            polyPoints.at( k ) + m_sheetOffset, SCH_LAYER_ID::LAYER_NOTES );
+                    SCH_LINE* line = new SCH_LINE( polyPoints.at( k ) + m_sheetOffset,
+                                                   SCH_LAYER_ID::LAYER_NOTES );
+
                     line->SetEndPoint( polyPoints.at( k + 1 ) + m_sheetOffset );
                     line->SetLineWidth( elem.lineWidth );
 
@@ -824,12 +824,12 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
     else
     {
         const auto& symbol = m_symbols.find( elem.ownerindex );
+
         if( symbol == m_symbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
-            wxLogWarning( wxString::Format(
-                    "Bezier tries to access symbol with ownerindex %d which does not exist",
-                    elem.ownerindex ) );
+            wxLogWarning( wxString::Format( "Bezier has non-existent ownerindex %d",
+                                            elem.ownerindex ) );
             return;
         }
 
@@ -850,8 +850,8 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
 
                 for( size_t j = i; j < elem.points.size() && j < i + 2; j++ )
                 {
-                    line->AddPoint(
-                            GetRelativePosition( elem.points.at( j ) + m_sheetOffset, component ) );
+                    line->AddPoint( GetRelativePosition( elem.points.at( j ) + m_sheetOffset,
+                                                         component ) );
                 }
 
                 line->SetWidth( elem.lineWidth );
@@ -866,8 +866,8 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
 
                 for( size_t j = i; j < elem.points.size() && j < i + 4; j++ )
                 {
-                    bezier->AddPoint(
-                            GetRelativePosition( elem.points.at( j ) + m_sheetOffset, component ) );
+                    bezier->AddPoint( GetRelativePosition( elem.points.at( j ) + m_sheetOffset,
+                                      component ) );
                 }
 
                 bezier->SetWidth( elem.lineWidth );
@@ -887,24 +887,17 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
         switch( elem.linestyle )
         {
         default:
-        case ASCH_POLYLINE_LINESTYLE::SOLID:
-            dashType = PLOT_DASH_TYPE::SOLID;
-            break;
-        case ASCH_POLYLINE_LINESTYLE::DASHED:
-            dashType = PLOT_DASH_TYPE::DASH;
-            break;
-        case ASCH_POLYLINE_LINESTYLE::DOTTED:
-            dashType = PLOT_DASH_TYPE::DOT;
-            break;
-        case ASCH_POLYLINE_LINESTYLE::DASH_DOTTED:
-            dashType = PLOT_DASH_TYPE::DASHDOT;
-            break;
+        case ASCH_POLYLINE_LINESTYLE::SOLID:       dashType = PLOT_DASH_TYPE::SOLID;   break;
+        case ASCH_POLYLINE_LINESTYLE::DASHED:      dashType = PLOT_DASH_TYPE::DASH;    break;
+        case ASCH_POLYLINE_LINESTYLE::DOTTED:      dashType = PLOT_DASH_TYPE::DOT;     break;
+        case ASCH_POLYLINE_LINESTYLE::DASH_DOTTED: dashType = PLOT_DASH_TYPE::DASHDOT; break;
         }
 
         for( size_t i = 0; i + 1 < elem.points.size(); i++ )
         {
-            SCH_LINE* line =
-                    new SCH_LINE( elem.points.at( i ) + m_sheetOffset, SCH_LAYER_ID::LAYER_NOTES );
+            SCH_LINE* line = new SCH_LINE( elem.points.at( i ) + m_sheetOffset,
+                                           SCH_LAYER_ID::LAYER_NOTES );
+
             line->SetEndPoint( elem.points.at( i + 1 ) + m_sheetOffset );
             line->SetLineWidth( elem.lineWidth );
             line->SetLineStyle( dashType );
@@ -919,9 +912,8 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
         if( symbol == m_symbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
-            wxLogWarning( wxString::Format(
-                    "Polyline tries to access symbol with ownerindex %d which does not exist",
-                    elem.ownerindex ) );
+            wxLogWarning( wxString::Format( "Polyline has non-existent ownerindex %d",
+                                            elem.ownerindex ) );
             return;
         }
 
@@ -977,12 +969,12 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
     else
     {
         const auto& symbol = m_symbols.find( elem.ownerindex );
+
         if( symbol == m_symbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
-            wxLogWarning( wxString::Format(
-                    "Polygon tries to access symbol with ownerindex %d which does not exist",
-                    elem.ownerindex ) );
+            wxLogWarning( wxString::Format( "Polygon has non-existent ownerindex %d",
+                                            elem.ownerindex ) );
             return;
         }
 
@@ -997,9 +989,8 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
         line->SetUnit( elem.ownerpartid );
 
         for( wxPoint& point : elem.points )
-        {
             line->AddPoint( GetRelativePosition( point + m_sheetOffset, component ) );
-        }
+
         line->AddPoint( GetRelativePosition( elem.points.front() + m_sheetOffset, component ) );
 
         line->SetWidth( elem.lineWidth );
@@ -1059,12 +1050,12 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
     else
     {
         const auto& symbol = m_symbols.find( elem.ownerindex );
+
         if( symbol == m_symbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
-            wxLogWarning( wxString::Format(
-                    "Rounded Rectangle tries to access symbol with ownerindex %d which does not exist",
-                    elem.ownerindex ) );
+            wxLogWarning( wxString::Format( "Rounded Rectangle has non-existent ownerindex %d",
+                                            elem.ownerindex ) );
             return;
         }
 
@@ -1107,9 +1098,8 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
         if( symbol == m_symbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
-            wxLogWarning( wxString::Format(
-                    "Arc tries to access symbol with ownerindex %d which does not exist",
-                    elem.ownerindex ) );
+            wxLogWarning( wxString::Format( "Arc has non-existent ownerindex %d",
+                                            elem.ownerindex ) );
             return;
         }
 
@@ -1164,12 +1154,12 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
     else
     {
         const auto& symbol = m_symbols.find( elem.ownerindex );
+
         if( symbol == m_symbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
-            wxLogWarning( wxString::Format(
-                    "Line tries to access symbol with ownerindex %d which does not exist",
-                    elem.ownerindex ) );
+            wxLogWarning( wxString::Format( "Line has non-existent ownerindex %d",
+                                            elem.ownerindex ) );
             return;
         }
 
@@ -1235,12 +1225,12 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
     else
     {
         const auto& symbol = m_symbols.find( elem.ownerindex );
+
         if( symbol == m_symbols.end() )
         {
             // TODO: e.g. can depend on Template (RECORD=39
-            wxLogWarning( wxString::Format(
-                    "Rectangle tries to access symbol with ownerindex %d which does not exist",
-                    elem.ownerindex ) );
+            wxLogWarning( wxString::Format( "Rectangle has non-existent ownerindex %d",
+                                            elem.ownerindex ) );
             return;
         }
 
@@ -1298,9 +1288,8 @@ void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aPr
     const auto& sheet = m_sheets.find( elem.ownerindex );
     if( sheet == m_sheets.end() )
     {
-        wxLogError( wxString::Format(
-                "Sheet Entry tries to access sheet with ownerindex %d which does not exist",
-                elem.ownerindex ) );
+        wxLogError( wxString::Format( "Sheet Entry has non-existent ownerindex %d",
+                                      elem.ownerindex ) );
         return;
     }
 
@@ -1582,8 +1571,8 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
         kpart->GetReferenceField().SetText( "#PWR" );
         kpart->GetValueField().SetText( elem.text );
         kpart->GetValueField().SetVisible( true ); // TODO: why does this not work?
-        kpart->SetDescription( wxString::Format(
-                "Power symbol creates a global label with name \"%s\"", elem.text ) );
+        kpart->SetDescription( wxString::Format( _( "Power symbol creates a global label with name '%s'" ),
+                                                 elem.text ) );
         kpart->SetKeyWords( "power-flag" );
         kpart->SetLibId( libId );
 
@@ -1691,11 +1680,16 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
 
     // check if any of the points is a terminal point
     // TODO: there seems a problem to detect approximated connections towards component pins?
-    bool connectionFound =
-            startIsWireTerminal || startIsBusTerminal || endIsWireTerminal || endIsBusTerminal;
+    bool connectionFound = startIsWireTerminal
+                            || startIsBusTerminal
+                            || endIsWireTerminal
+                            || endIsBusTerminal;
+
     if( !connectionFound )
-        wxLogError( wxString::Format(
-                "There is a Port for \"%s\", but no connections towards it?", aElem.name ) );
+    {
+        wxLogError( wxString::Format( "There is a Port for \"%s\", but no connections towards it?",
+                                      aElem.name ) );
+    }
 
     // Select label position. In case both match, we will add a line later.
     wxPoint position = ( startIsWireTerminal || startIsBusTerminal ) ? start : end;
@@ -1955,9 +1949,8 @@ void SCH_ALTIUM_PLUGIN::ParseSheetName( const std::map<wxString, wxString>& aPro
     const auto& sheet = m_sheets.find( elem.ownerindex );
     if( sheet == m_sheets.end() )
     {
-        wxLogError( wxString::Format(
-                "Sheet Name tries to access sheet with ownerindex %d which does not exist",
-                elem.ownerindex ) );
+        wxLogError( wxString::Format( "Sheet Name has non-existent ownerindex %d",
+                                      elem.ownerindex ) );
         return;
     }
 
@@ -1981,9 +1974,8 @@ void SCH_ALTIUM_PLUGIN::ParseFileName( const std::map<wxString, wxString>& aProp
     const auto& sheet = m_sheets.find( elem.ownerindex );
     if( sheet == m_sheets.end() )
     {
-        wxLogError( wxString::Format(
-                "File Name tries to access sheet with ownerindex %d which does not exist",
-                elem.ownerindex ) );
+        wxLogError( wxString::Format( "File Name has non-existent ownerindex %d",
+                                      elem.ownerindex ) );
         return;
     }
 
@@ -2008,9 +2000,8 @@ void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aPr
     if( symbol == m_symbols.end() )
     {
         // TODO: e.g. can depend on Template (RECORD=39
-        wxLogWarning( wxString::Format(
-                "Designator tries to access symbol with ownerindex %d which does not exist",
-                elem.ownerindex ) );
+        wxLogWarning( wxString::Format( "Designator has non-existent ownerindex %d",
+                                        elem.ownerindex ) );
         return;
     }
 

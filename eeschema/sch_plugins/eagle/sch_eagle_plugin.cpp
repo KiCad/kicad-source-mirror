@@ -405,8 +405,10 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     m_schematic = aSchematic;
 
     if( !xmlDocument.Load( m_filename.GetFullPath() ) )
-        THROW_IO_ERROR(
-                wxString::Format( _( "Unable to read file \"%s\"" ), m_filename.GetFullPath() ) );
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Unable to read file \"%s\"" ),
+                                          m_filename.GetFullPath() ) );
+    }
 
     // Delete on exception, if I own m_rootSheet, according to aAppendToMe
     unique_ptr<SCH_SHEET> deleter( aAppendToMe ? nullptr : m_rootSheet );
@@ -434,7 +436,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     wxCHECK_MSG( libTable, NULL, "Could not load symbol lib table." );
 
     m_pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-    m_properties                                        = std::make_unique<PROPERTIES>();
+    m_properties = std::make_unique<PROPERTIES>();
     ( *m_properties )[SCH_LEGACY_PLUGIN::PropBuffering] = "";
 
     /// @note No check is being done here to see if the existing symbol library exists so this

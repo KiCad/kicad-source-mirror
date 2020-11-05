@@ -62,7 +62,8 @@ public:
     int GetModifyHash() const override;
 
     SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-            SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL ) override;
+                     SCH_SHEET* aAppendToMe = nullptr,
+                     const PROPERTIES* aProperties = nullptr ) override;
 
     bool CheckHeader( const wxString& aFileName ) override;
 
@@ -133,28 +134,28 @@ private:
     void ParseParameter( const std::map<wxString, wxString>& aProperties );
 
 private:
-    SCH_SHEET* m_rootSheet;    ///< The root sheet of the schematic being loaded..
-    SCH_SHEET* m_currentSheet; ///< The current sheet of the schematic being loaded..
+    SCH_SHEET* m_rootSheet;      // The root sheet of the schematic being loaded..
+    SCH_SHEET* m_currentSheet;   // The current sheet of the schematic being loaded..
     wxFileName m_filename;
-    SCHEMATIC* m_schematic; ///< Passed to Load(), the schematic object being loaded
-    wxString   m_libName;   ///< Library name to save symbols
+    SCHEMATIC* m_schematic;      // Passed to Load(), the schematic object being loaded
+    wxString   m_libName;        // Library name to save symbols
 
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER m_pi;         ///< Plugin to create the KiCad symbol library.
-    std::unique_ptr<PROPERTIES>     m_properties; ///< Library plugin properties.
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER m_pi;                // Plugin to create KiCad symbol library.
+    std::unique_ptr<PROPERTIES>     m_properties;        // Library plugin properties.
 
-    std::unique_ptr<TITLE_BLOCK>
-            m_currentTitleBlock; /// Will be assigned at the end of parsing a sheet
+    std::unique_ptr<TITLE_BLOCK>    m_currentTitleBlock; // Will be assigned at the end of parsing
+                                                         // a sheet
 
-    wxPoint                       m_sheetOffset;
-    std::unique_ptr<ASCH_SHEET>   m_altiumSheet;
-    std::map<int, SCH_COMPONENT*> m_components;
-    std::map<int, SCH_SHEET*>     m_sheets;
-    std::map<int, LIB_PART*>      m_symbols; // for the start, every component has its unique symbol
+    wxPoint                         m_sheetOffset;
+    std::unique_ptr<ASCH_SHEET>     m_altiumSheet;
+    std::map<int, SCH_COMPONENT*>   m_components;
+    std::map<int, SCH_SHEET*>       m_sheets;
+    std::map<int, LIB_PART*>        m_symbols;           // every component has its unique symbol
 
-    std::map<wxString, LIB_PART*> m_powerSymbols;
+    std::map<wxString, LIB_PART*>   m_powerSymbols;
 
-    std::map<int, ASCH_COMPONENT> m_altiumComponents;
-    std::vector<ASCH_PORT>        m_altiumPortsCurrentSheet; // we require all connections first
+    std::map<int, ASCH_COMPONENT>   m_altiumComponents;
+    std::vector<ASCH_PORT>          m_altiumPortsCurrentSheet; // we require all connections first
 };
 
 #endif // _SCH_ALTIUM_PLUGIN_H_

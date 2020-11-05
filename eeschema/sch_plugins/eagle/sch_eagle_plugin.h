@@ -92,7 +92,8 @@ public:
     int GetModifyHash() const override;
 
     SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                     SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL ) override;
+                     SCH_SHEET* aAppendToMe = nullptr,
+                     const PROPERTIES* aProperties = nullptr ) override;
 
     bool CheckHeader( const wxString& aFileName ) override;
 
