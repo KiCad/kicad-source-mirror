@@ -299,6 +299,16 @@ static bool isKeyModifierOnly( int aKeyCode )
     return isInList;
 }
 
+
+static bool isMouseClick( wxEventType type )
+{
+    return type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP || type == wxEVT_MIDDLE_DOWN
+           || type == wxEVT_MIDDLE_UP || type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP
+           || type == wxEVT_LEFT_DCLICK || type == wxEVT_MIDDLE_DCLICK
+           || type == wxEVT_RIGHT_DCLICK;
+}
+
+
 /* A helper class that convert some special key codes to an equivalent.
  *  WXK_NUMPAD_UP to WXK_UP,
  *  WXK_NUMPAD_DOWN to WXK_DOWN,
@@ -422,7 +432,9 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     // Or else we may stall them out entirely and never get them during actions like rapid mouse moves
     KIPLATFORM::APP::ForceTimerMessagesToBeCreatedIfNecessary();
 
-    int type = aEvent.GetEventType();
+    wxEventType type = aEvent.GetEventType();
+
+    wxWindow* holderWindow = dynamic_cast<wxWindow*>( m_toolMgr->GetToolHolder() );
 
     // Sometimes there is no window that has the focus (it happens when another PCB_BASE_FRAME
     // is opened and is iconized on Windows).
@@ -430,18 +442,23 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     // focus when iconized for some obscure reason)
     if( focus == nullptr )
     {
-        wxWindow* window = dynamic_cast<wxWindow*>( m_toolMgr->GetToolHolder() );
 
 #if defined( _WIN32 )
         // Mouse events may trigger regardless of window status (windows feature)
         // However we need to avoid focus fighting (especially modals)
-        if( window && window->GetHWND() == GetForegroundWindow() )
+        if( holderWindow && holderWindow->GetHWND() == GetForegroundWindow() )
 #else
-        if( window )
+        if( holderWindow )
 #endif
         {
-            window->SetFocus();
+            holderWindow->SetFocus();
         }
+    }
+
+    if( isMouseClick( type ) )
+    {
+        if( holderWindow )
+            holderWindow->SetFocus();
     }
 
     // Mouse handling
@@ -450,10 +467,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 #if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
         type == wxEVT_MAGNIFY ||
 #endif
-        type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP ||
-        type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP ||
-        type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP ||
-        type == wxEVT_LEFT_DCLICK || type == wxEVT_MIDDLE_DCLICK || type == wxEVT_RIGHT_DCLICK ||
+        isMouseClick( type ) ||
         // Event issued when mouse retains position in screen coordinates,
         // but changes in world coordinates (e.g. autopanning)
         type == KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )

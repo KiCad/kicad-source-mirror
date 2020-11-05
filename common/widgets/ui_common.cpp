@@ -18,6 +18,8 @@
  */
 
 #include <wx/wx.h>
+#include <wx/dataview.h>
+#include <wx/stc/stc.h>
 #include <widgets/ui_common.h>
 
 #include <algorithm>
@@ -124,4 +126,16 @@ void KIUI::SelectReferenceNumber( wxTextEntry* aTextEntry )
         if( num.IsEmpty() )
             aTextEntry->SetSelection( -1, -1 );
     }
+}
+
+
+bool KIUI::IsInputControlFocused()
+{
+    wxWindow*         focus        = wxWindow::FindFocus();
+    wxTextEntry*      textEntry    = dynamic_cast<wxTextEntry*>( focus );
+    wxStyledTextCtrl* styledText   = dynamic_cast<wxStyledTextCtrl*>( focus );
+    wxListBox*        listBox      = dynamic_cast<wxListBox*>( focus );
+    wxDataViewCtrl*   dataViewCtrl = dynamic_cast<wxDataViewCtrl*>( focus );
+
+    return ( textEntry || styledText || listBox || dataViewCtrl );
 }

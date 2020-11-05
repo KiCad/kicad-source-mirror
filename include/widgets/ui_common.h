@@ -69,6 +69,11 @@ bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString = NULL );
  */
 void SelectReferenceNumber( wxTextEntry* aTextEntry );
 
+/**
+ * Checks if a input control has focus
+ */
+bool IsInputControlFocused();
+
 }
 
 // Note: On windows, SEVERITY_ERROR collides with a system declaration,

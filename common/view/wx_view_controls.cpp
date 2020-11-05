@@ -35,6 +35,7 @@
 #include <trace_helpers.h>
 #include <settings/common_settings.h>
 #include <math/util.h>      // for KiROUND
+#include <widgets/ui_common.h>
 
 
 using namespace KIGFX;
@@ -331,6 +332,14 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& aEvent )
 {
+    // Avoid stealing focus from text controls
+    // This is particularly important for users using On-Screen-Keyboards
+    // They may move the mouse over the canvas to reach the keyboard
+    if( KIUI::IsInputControlFocused() )
+    {
+        return;
+    }
+
 #if defined( _WIN32 )
     // Win32 transmits mouse move and wheel events to all controls below the mouse regardless of focus
     // Forcing the focus here will cause the EDA FRAMES to immediately become the top level active window
