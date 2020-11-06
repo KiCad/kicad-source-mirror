@@ -866,6 +866,9 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         break;
     }
 
+    sizes.SetViaDiameter( bds.m_ViasMinSize );
+    sizes.SetViaDrill( bds.m_MinThroughDrill );
+
     if( bds.UseNetClassVia() || viaType == VIATYPE::MICROVIA )
     {
         class VIA dummyVia( board() );
@@ -879,11 +882,15 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
 
         constraint = bds.m_DRCEngine->EvalRulesForItems( VIA_DIAMETER_CONSTRAINT, &dummyVia,
                                                          nullptr, currentLayer );
-        sizes.SetViaDiameter( constraint.m_Value.OptThenMin() );
+
+        if( !constraint.IsNull() )
+            sizes.SetViaDiameter( constraint.m_Value.OptThenMin() );
 
         constraint = bds.m_DRCEngine->EvalRulesForItems( HOLE_SIZE_CONSTRAINT, &dummyVia, nullptr,
                                                          currentLayer );
-        sizes.SetViaDrill( constraint.m_Value.OptThenMin() );
+
+        if( !constraint.IsNull() )
+            sizes.SetViaDrill( constraint.m_Value.OptThenMin() );
     }
     else
     {

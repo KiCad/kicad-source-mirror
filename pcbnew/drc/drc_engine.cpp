@@ -990,8 +990,6 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         }
     }
 
-    // fixme: return optional<drc_constraint>, let the particular test decide what to do if no matching constraint
-    // is found
     static DRC_CONSTRAINT nullConstraint( NULL_CONSTRAINT );
     nullConstraint.m_DisallowFlags = 0;
 
