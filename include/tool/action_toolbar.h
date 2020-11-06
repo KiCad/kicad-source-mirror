@@ -276,9 +276,7 @@ public:
      *
      * The standard Realize() draws both horizontal and vertical to determine sizing
      * However with many icons, potato PCs, etc, you can actually see that double draw
-     * We don't actually need to determine the opposite sizing if we are doing fixed orientation
-     *
-     * This function handles the fixed orientation sizing and passes off to the original Realize() otherwise
+     * This custom function avoids the double draw if the HORIZONTAL or VERTICAL toolbar properties are set.
      */
     bool KiRealize();
 
