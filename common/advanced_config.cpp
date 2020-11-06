@@ -139,6 +139,8 @@ static const wxChar MinPlotPenWidth[] = wxT( "MinPlotPenWidth" );
 
 static const wxChar DebugZoneFiller[] = wxT( "DebugZoneFiller" );
 
+static const wxChar DebugPDFWriter[] = wxT( "DebugPDFWriter" );
+
 static const wxChar SkipBoundingBoxFpLoad[] = wxT( "SkipBoundingBoxFpLoad" );
 
 } // namespace KEYS
@@ -237,6 +239,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_MinPlotPenWidth           = 0.0212;   // 1 pixel at 1200dpi.
 
     m_DebugZoneFiller           = false;
+    m_DebugPDFWriter            = false;
 
     m_SkipBoundingBoxOnFpLoad   = false;
 
@@ -316,6 +319,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::DebugZoneFiller,
                                                 &m_DebugZoneFiller, false ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::DebugPDFWriter,
+                                                &m_DebugPDFWriter, false ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::SkipBoundingBoxFpLoad,
                                                 &m_SkipBoundingBoxOnFpLoad, false ) );

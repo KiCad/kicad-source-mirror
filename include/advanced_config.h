@@ -143,6 +143,11 @@ public:
     bool m_DebugZoneFiller;
 
     /**
+     * A mode that writes PDF's without compression.
+     */
+    bool m_DebugPDFWriter;
+
+    /**
      * Skip bounding box calculation when loading footprints
      */
     bool m_SkipBoundingBoxOnFpLoad;

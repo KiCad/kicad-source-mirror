@@ -28,15 +28,15 @@
  */
 
 #include <trigo.h>
-#include <eda_base_frame.h>
-#include <eda_item.h>
+#include <algorithm>
+//#include <eda_base_frame.h>
+//#include <eda_item.h>
 #include <wx/zstream.h>
 #include <wx/mstream.h>
-#include <macros.h>
-#include <math/util.h>      // for KiROUND
+//#include <macros.h>
+//#include <math/util.h>      // for KiROUND
 #include <render_settings.h>
-
-#include <algorithm>
+#include <advanced_config.h>
 
 #include "plotters_pslike.h"
 
@@ -552,9 +552,19 @@ int PDF_PLOTTER::startPdfStream(int handle)
     // This is guaranteed to be handle+1 but needs to be allocated since
     // you could allocate more object during stream preparation
     streamLengthHandle = allocPdfObject();
-    fprintf( outputFile,
-             "<< /Length %d 0 R /Filter /FlateDecode >>\n" // Length is deferred
-             "stream\n", handle + 1 );
+
+    if( ADVANCED_CFG::GetCfg().m_DebugPDFWriter )
+    {
+        fprintf( outputFile,
+                 "<< /Length %d 0 R >>\n" // Length is deferred
+                 "stream\n", handle + 1 );
+    }
+    else
+    {
+        fprintf( outputFile,
+                 "<< /Length %d 0 R /Filter /FlateDecode >>\n" // Length is deferred
+                 "stream\n", handle + 1 );
+    }
 
     // Open a temporary file to accumulate the stream
     workFilename = wxFileName::CreateTempFileName( "" );
@@ -592,30 +602,39 @@ void PDF_PLOTTER::closePdfStream()
     workFile = 0;
     ::wxRemoveFile( workFilename );
 
-    // NULL means memos owns the memory, but provide a hint on optimum size needed.
-    wxMemoryOutputStream    memos( NULL, std::max( 2000l, stream_len ) ) ;
+    unsigned out_count;
 
+    if( ADVANCED_CFG::GetCfg().m_DebugPDFWriter )
     {
-        /* Somewhat standard parameters to compress in DEFLATE. The PDF spec is
-         * misleading, it says it wants a DEFLATE stream but it really want a ZLIB
-         * stream! (a DEFLATE stream would be generated with -15 instead of 15)
-         * rc = deflateInit2( &zstrm, Z_BEST_COMPRESSION, Z_DEFLATED, 15,
-         *                    8, Z_DEFAULT_STRATEGY );
-         */
+        out_count = stream_len;
+        fwrite( inbuf, out_count, 1, outputFile );
+    }
+    else
+    {
+        // NULL means memos owns the memory, but provide a hint on optimum size needed.
+        wxMemoryOutputStream    memos( NULL, std::max( 2000l, stream_len ) ) ;
 
-        wxZlibOutputStream      zos( memos, wxZ_BEST_COMPRESSION, wxZLIB_ZLIB );
+        {
+            /* Somewhat standard parameters to compress in DEFLATE. The PDF spec is
+             * misleading, it says it wants a DEFLATE stream but it really want a ZLIB
+             * stream! (a DEFLATE stream would be generated with -15 instead of 15)
+             * rc = deflateInit2( &zstrm, Z_BEST_COMPRESSION, Z_DEFLATED, 15,
+             *                    8, Z_DEFAULT_STRATEGY );
+             */
 
-        zos.Write( inbuf, stream_len );
+            wxZlibOutputStream      zos( memos, wxZ_BEST_COMPRESSION, wxZLIB_ZLIB );
 
-        delete[] inbuf;
+            zos.Write( inbuf, stream_len );
 
-    }   // flush the zip stream using zos destructor
+            delete[] inbuf;
 
-    wxStreamBuffer* sb = memos.GetOutputStreamBuffer();
+        }   // flush the zip stream using zos destructor
 
-    unsigned out_count = sb->Tell();
+        wxStreamBuffer* sb = memos.GetOutputStreamBuffer();
 
-    fwrite( sb->GetBufferStart(), 1, out_count, outputFile );
+        out_count = sb->Tell();
+        fwrite( sb->GetBufferStart(), 1, out_count, outputFile );
+    }
 
     fputs( "endstream\n", outputFile );
     closePdfObject();
