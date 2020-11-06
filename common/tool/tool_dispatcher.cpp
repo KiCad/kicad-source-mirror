@@ -434,14 +434,13 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     wxEventType type = aEvent.GetEventType();
 
-    wxWindow* holderWindow = dynamic_cast<wxWindow*>( m_toolMgr->GetToolHolder() );
-
     // Sometimes there is no window that has the focus (it happens when another PCB_BASE_FRAME
     // is opened and is iconized on Windows).
     // In this case, give the focus to the parent frame (GAL canvas itself does not accept the
     // focus when iconized for some obscure reason)
     if( focus == nullptr )
     {
+        wxWindow* holderWindow = dynamic_cast<wxWindow*>( m_toolMgr->GetToolHolder() );
 
 #if defined( _WIN32 )
         // Mouse events may trigger regardless of window status (windows feature)
