@@ -457,8 +457,8 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     if( isMouseClick( type ) )
     {
-        if( holderWindow )
-            holderWindow->SetFocus();
+        if( m_toolMgr->GetToolHolder() && m_toolMgr->GetToolHolder()->GetToolCanvas() )
+            m_toolMgr->GetToolHolder()->GetToolCanvas()->SetFocus();
     }
 
     // Mouse handling
@@ -497,16 +497,6 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
                 evt->SetMousePosition( pos );
             }
         }
-
-#ifdef __APPLE__
-        // TODO That's a big ugly workaround, somehow DRAWPANEL_GAL loses focus
-        // after second LMB click and currently I have no means to do better debugging
-        if( type == wxEVT_LEFT_UP )
-        {
-            if( m_toolMgr->GetToolHolder() && m_toolMgr->GetToolHolder()->GetToolCanvas() )
-                m_toolMgr->GetToolHolder()->GetToolCanvas()->SetFocus();
-        }
-#endif /* __APPLE__ */
     }
     else if( type == wxEVT_CHAR_HOOK || type == wxEVT_CHAR )
     {
