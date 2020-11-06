@@ -171,7 +171,7 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
     else
     {
         m_rootSheet = new SCH_SHEET( aSchematic );
-        m_rootSheet->SetFileName( aFileName );
+        m_rootSheet->SetFileName( fileName.GetFullPath() );
     }
 
     if( !m_rootSheet->GetScreen() )

@@ -413,6 +413,9 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     // Delete on exception, if I own m_rootSheet, according to aAppendToMe
     unique_ptr<SCH_SHEET> deleter( aAppendToMe ? nullptr : m_rootSheet );
 
+    wxFileName newFilename( m_filename );
+    newFilename.SetExt( "kicad_sch" );
+
     if( aAppendToMe )
     {
         wxCHECK_MSG( aSchematic->IsValid(), nullptr, "Can't append to a schematic with no root!" );
@@ -421,13 +424,13 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     else
     {
         m_rootSheet = new SCH_SHEET( aSchematic );
-        m_rootSheet->SetFileName( aFileName );
+        m_rootSheet->SetFileName( newFilename.GetFullPath() );
     }
 
     if( !m_rootSheet->GetScreen() )
     {
         SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
-        screen->SetFileName( aFileName );
+        screen->SetFileName( newFilename.GetFullPath() );
         m_rootSheet->SetScreen( screen );
     }
 
