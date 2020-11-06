@@ -46,7 +46,9 @@
 #include <tools/pad_tool.h>
 #include <pad_naming.h>
 #include <view/view_controls.h>
+#include <connectivity/connectivity_algo.h>
 #include <connectivity/connectivity_data.h>
+#include <connectivity/connectivity_items.h>
 #include <confirm.h>
 #include <bitmaps.h>
 #include <cassert>
@@ -262,7 +264,7 @@ bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
         return false;
     }
 
-	// make sure we don't accidentally invoke inline routing mode while the router is already active!
+    // make sure we don't accidentally invoke inline routing mode while the router is already active!
     if( theRouter->IsToolActive() )
         return false;
 
@@ -747,112 +749,150 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    bool operationPerformedOnAtLeastOne = false;
-    bool didOneAttemptFail  = false;
 
-    std::vector<BOARD_ITEM*> itemsToAddToSelection;
+    struct FILLET_OP
+    {
+        TRACK* t1;
+        TRACK* t2;
+        //If true, start point of track is modified after ARC is added, otherwise the end point:
+        bool   t1Start = true; 
+        bool   t2Start = true;
+    };
+
+    std::vector<FILLET_OP> filletOperations;
+    KICAD_T                track_types[] = { PCB_PAD_T, PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T, EOT };
+    bool                   operationPerformedOnAtLeastOne = false;
+    bool                   didOneAttemptFail              = false;
+    std::set<TRACK*>       processedTracks;
 
     for( auto it = selection.begin(); it != selection.end(); it++ )
     {
-        TRACK* track1 = dyn_cast<TRACK*>( *it );
+        TRACK* track = dyn_cast<TRACK*>( *it );
 
-        if( !track1 || track1->Type() != PCB_TRACE_T || track1->IsLocked()
-                || track1->GetLength() == 0 )
+        if( !track || track->Type() != PCB_TRACE_T || track->IsLocked()
+                || track->GetLength() == 0 )
         {
             continue;
-        }
+        }        
 
-        for( auto it2 = it + 1; it2 != selection.end(); it2++ )
-        {
-            TRACK* track2 = dyn_cast<TRACK*>( *it2 );
-
-            if( !track2 || track2->Type() != PCB_TRACE_T || track2->IsLocked()
-                    || track2->GetLength() == 0 )
+        auto processFilletOp = 
+            [&]( bool aStartPoint ) 
             {
+                wxPoint anchor = ( aStartPoint ) ? track->GetStart() : track->GetEnd();
+
+                std::vector<BOARD_CONNECTED_ITEM*> itemsOnAnchor =
+                    board()->GetConnectivity()->GetConnectedItemsAtAnchor( track, VECTOR2I( anchor ),
+                                                                   track_types );
+
+                if( itemsOnAnchor.size() > 0 && selection.Contains( itemsOnAnchor.at( 0 ) )
+                        && itemsOnAnchor.at( 0 )->Type() == PCB_TRACE_T )
+                {
+                    TRACK* trackOther = dyn_cast<TRACK*>( itemsOnAnchor.at( 0 ) );
+
+                    // Make sure we don't fillet the same pair of tracks twice
+                    if( processedTracks.find( trackOther ) == processedTracks.end() )
+                    {
+                        if( itemsOnAnchor.size() == 1 )
+                        {
+                            FILLET_OP filletOp;
+                            filletOp.t1      = track;
+                            filletOp.t2      = trackOther;
+                            filletOp.t1Start = aStartPoint;
+                            filletOp.t2Start = track->IsPointOnEnds( filletOp.t2->GetStart() );
+                            filletOperations.push_back( filletOp );
+                        }
+                        else
+                        {
+                            // User requested to fillet these two tracks but not possible as there are other
+                            // elements connected at that point
+                            didOneAttemptFail = true;
+                        }
+                    }
+                }
+            };
+        
+        processFilletOp( true ); // on the start point of track
+        processFilletOp( false ); // on the end point of track
+        
+        processedTracks.insert( track );
+    }
+
+    std::vector<BOARD_ITEM*> itemsToAddToSelection;
+
+    for( FILLET_OP filletOp : filletOperations )
+    {
+        TRACK* track1 = filletOp.t1;
+        TRACK* track2 = filletOp.t2;
+
+        bool trackOnStart = track1->IsPointOnEnds( track2->GetStart() );
+        bool trackOnEnd   = track1->IsPointOnEnds( track2->GetEnd() );
+
+        if( trackOnStart && trackOnEnd )
+            continue; // Ignore duplicate tracks
+
+        if( ( trackOnStart || trackOnEnd ) && track1->GetLayer() == track2->GetLayer() )
+        {
+            SEG t1Seg( track1->GetStart(), track1->GetEnd() );
+            SEG t2Seg( track2->GetStart(), track2->GetEnd() );
+
+            if( t1Seg.ApproxCollinear( t2Seg ) )
+                continue;
+
+            SHAPE_ARC sArc( t1Seg, t2Seg, filletRadiusIU );
+
+            wxPoint t1newPoint, t2newPoint;
+
+            auto setIfPointOnSeg = []( wxPoint& aPointToSet, SEG aSegment, VECTOR2I aVecToTest ) 
+                                   {
+                                       VECTOR2I segToVec = aSegment.NearestPoint( aVecToTest ) - aVecToTest;
+
+                                       // Find out if we are on the segment (minimum precision)
+                                       if( segToVec.EuclideanNorm() < SHAPE_ARC::MIN_PRECISION_IU )
+                                       {
+                                           aPointToSet.x = aVecToTest.x;
+                                           aPointToSet.y = aVecToTest.y;
+                                           return true;
+                                       }
+
+                                       return false;
+                                   };
+
+            //Do not draw a fillet if the end points of the arc are not within the track segments
+            if( !setIfPointOnSeg( t1newPoint, t1Seg, sArc.GetP0() )
+                    && !setIfPointOnSeg( t2newPoint, t2Seg, sArc.GetP0() ) )
+            {
+                didOneAttemptFail = true;
                 continue;
             }
 
-            bool trackOnStart = track1->IsPointOnEnds( track2->GetStart() );
-            bool trackOnEnd   = track1->IsPointOnEnds( track2->GetEnd() );
-
-            if( trackOnStart && trackOnEnd )
-                continue; // Ignore duplicate tracks
-
-            if( ( trackOnStart || trackOnEnd ) && track1->GetLayer() == track2->GetLayer() )
+            if( !setIfPointOnSeg( t1newPoint, t1Seg, sArc.GetP1() )
+                    && !setIfPointOnSeg( t2newPoint, t2Seg, sArc.GetP1() ) )
             {
-                SEG t1Seg( track1->GetStart(), track1->GetEnd() );
-                SEG t2Seg( track2->GetStart(), track2->GetEnd() );
-
-                if( t1Seg.ApproxCollinear( t2Seg ) )
-                    continue;
-
-                SHAPE_ARC sArc( t1Seg, t2Seg, filletRadiusIU );
-
-                wxPoint t1newPoint, t2newPoint;
-
-                auto setIfPointOnSeg =
-                        []( wxPoint& aPointToSet, SEG aSegment, VECTOR2I aVecToTest )
-                        {
-                            // Find out if we are within the segment
-                            if( ( aSegment.NearestPoint( aVecToTest ) - aVecToTest ).EuclideanNorm()
-                                  < SHAPE_ARC::MIN_PRECISION_IU )
-                            {
-                                aPointToSet.x = aVecToTest.x;
-                                aPointToSet.y = aVecToTest.y;
-                                return true;
-                            }
-
-                            return false;
-                        };
-
-                //Do not draw a fillet if the end points of the arc are not within the track segments
-                if( !setIfPointOnSeg( t1newPoint, t1Seg, sArc.GetP0() )
-                        && !setIfPointOnSeg( t2newPoint, t2Seg, sArc.GetP0() ) )
-                {
-                    didOneAttemptFail = true;
-                    continue;
-                }
-
-                if( !setIfPointOnSeg( t1newPoint, t1Seg, sArc.GetP1() )
-                        && !setIfPointOnSeg( t2newPoint, t2Seg, sArc.GetP1() ) )
-                {
-                    didOneAttemptFail = true;
-                    continue;
-                }
-
-                ARC* tArc = new ARC( frame()->GetBoard(), &sArc );
-                tArc->SetLayer( track1->GetLayer() );
-                tArc->SetWidth( track1->GetWidth() );
-                tArc->SetNet( track1->GetNet() );
-                m_commit->Add( tArc );
-                itemsToAddToSelection.push_back( tArc );
-
-                m_commit->Modify( track1 );
-                m_commit->Modify( track2 );
-
-                if( track1->GetStart() == track2->GetStart() )
-                {
-                    track1->SetStart( t1newPoint );
-                    track2->SetStart( t2newPoint );
-                }
-                else if( track1->GetStart() == track2->GetEnd() )
-                {
-                    track1->SetStart( t1newPoint );
-                    track2->SetEnd( t2newPoint );
-                }
-                else if( track1->GetEnd() == track2->GetEnd() )
-                {
-                    track1->SetEnd( t1newPoint );
-                    track2->SetEnd( t2newPoint );
-                }
-                else
-                {
-                    track1->SetEnd( t1newPoint );
-                    track2->SetStart( t2newPoint );
-                }
-
-                operationPerformedOnAtLeastOne = true;
+                didOneAttemptFail = true;
+                continue;
             }
+
+            ARC* tArc = new ARC( frame()->GetBoard(), &sArc );
+            tArc->SetLayer( track1->GetLayer() );
+            tArc->SetWidth( track1->GetWidth() );
+            tArc->SetNet( track1->GetNet() );
+            m_commit->Add( tArc );
+            itemsToAddToSelection.push_back( tArc );
+
+            m_commit->Modify( track1 );
+            m_commit->Modify( track2 );
+
+            if( filletOp.t1Start )
+                track1->SetStart( t1newPoint );
+            else
+                track1->SetEnd( t1newPoint );
+            
+            if( filletOp.t2Start )
+                track2->SetStart( t2newPoint );
+            else
+                track2->SetEnd( t2newPoint );
+
+            operationPerformedOnAtLeastOne = true;
         }
     }
 
