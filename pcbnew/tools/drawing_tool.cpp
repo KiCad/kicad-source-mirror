@@ -602,6 +602,10 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 m_view->Update( &selection() );
                 frame()->SetMsgPanel( text );
             }
+            else
+            {
+                evt->SetPassEvent();
+            }
         }
         else
         {
@@ -817,7 +821,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
             }
-            break;
+                break;
 
             case SET_END:
             {
@@ -839,11 +843,12 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     KI_FALLTHROUGH;
                 }
                 else
+                {
                     break;
+                }
             }
 
             case SET_HEIGHT:
-            {
                 if( dimension->Type() == PCB_DIM_LEADER_T )
                 {
                     assert( dimension->GetStart() != dimension->GetEnd() );
@@ -871,7 +876,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 }
 
                 break;
-            }
             }
 
             if( ++step == FINISHED )
@@ -946,11 +950,16 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &PCB_ACTIONS::properties ) )
         {
-            if( step != SET_ORIGIN )
+            if( step == SET_END || step == SET_HEIGHT )
             {
                 frame()->OnEditItemRequest( dimension );
                 dimension->Update();
                 frame()->SetMsgPanel( dimension );
+                break;
+            }
+            else
+            {
+                evt->SetPassEvent();
             }
         }
         else
@@ -1360,6 +1369,11 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                 frame()->OnEditItemRequest( graphic );
                 m_view->Update( &preview );
                 frame()->SetMsgPanel( graphic );
+                break;
+            }
+            else
+            {
+                evt->SetPassEvent();
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -1681,6 +1695,10 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
                 frame()->SetMsgPanel( graphic );
                 break;
             }
+            else
+            {
+                evt->SetPassEvent();
+            }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -1984,6 +2002,10 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 frame()->OnEditItemRequest( zoneTool.GetZone() );
                 zoneTool.OnGeometryChange( polyGeomMgr );
                 frame()->SetMsgPanel( zoneTool.GetZone() );
+            }
+            else
+            {
+                evt->SetPassEvent();
             }
         }
         else if( evt->IsAction( &ACTIONS::updateUnits ) )
