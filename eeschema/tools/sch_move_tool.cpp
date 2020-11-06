@@ -756,6 +756,23 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
     EE_SELECTION& selection = m_selectionTool->RequestSelection( movableItems );
     bool append_undo = false;
 
+    for( SCH_ITEM* it : m_frame->GetScreen()->Items() )
+    {
+        if( !it->IsSelected() )
+            it->ClearFlags( STARTPOINT | ENDPOINT );
+
+        if( !selection.IsHover() && it->IsSelected() )
+            it->SetFlags( STARTPOINT | ENDPOINT );
+
+        it->SetStoredPos( it->GetPosition() );
+
+        if( it->Type() == SCH_SHEET_T )
+        {
+            for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( it )->GetPins() )
+                pin->SetStoredPos( pin->GetPosition() );
+        }
+    }
+
     for( EDA_ITEM* item : selection )
     {
         if( item->Type() == SCH_LINE_T )
@@ -788,7 +805,6 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                         updateItem( dritem, true );
                     }
                 }
-
             }
         }
         else
@@ -797,14 +813,14 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
             EDA_ITEMS drag_items{ item };
             connections = static_cast<SCH_ITEM*>( item )->GetConnectionPoints();
 
-            for( wxPoint point : connections )
+            for( const wxPoint& point : connections )
                 getConnectedDragItems( static_cast<SCH_ITEM*>( item ), point, drag_items );
 
             std::map<VECTOR2I, int> shifts;
             VECTOR2I most_common( 0, 0 );
             int max_count = 0;
 
-            for( auto& conn : connections )
+            for( const wxPoint& conn : connections )
             {
                 VECTOR2I gridpt = grid.AlignGrid( conn ) - conn;
 
@@ -819,7 +835,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 
             if( most_common != VECTOR2I( 0, 0 ) )
             {
-                for( auto dritem : drag_items )
+                for( EDA_ITEM* dritem : drag_items )
                 {
                     if( dritem->GetParent() && dritem->GetParent()->IsSelected() )
                         continue;
@@ -833,7 +849,6 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
             }
         }
     }
-
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
     m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selection );
