@@ -529,47 +529,6 @@ bool hasThermalConnection( D_PAD* pad, const ZONE_CONTAINER* aZone )
 
 
 /**
- * Setup aDummyPad to have the same size and shape of aPad's hole.  This allows us to create
- * thermal reliefs and clearances for holes using the pad code.
- */
-static void setupDummyPadForHole( const D_PAD* aPad, D_PAD& aDummyPad )
-{
-    // People may author clearance rules that look at a bunch of different stuff so we need
-    // to copy over pretty much everything except the shape info, which we fill from the drill
-    // info.
-    aDummyPad.SetLayerSet( aPad->GetLayerSet() );
-    aDummyPad.SetAttribute( aPad->GetAttribute() );
-    aDummyPad.SetProperty( aPad->GetProperty() );
-
-    aDummyPad.SetNetCode( aPad->GetNetCode() );
-    aDummyPad.SetLocalClearance( aPad->GetLocalClearance() );
-    aDummyPad.SetLocalSolderMaskMargin( aPad->GetLocalSolderMaskMargin() );
-    aDummyPad.SetLocalSolderPasteMargin( aPad->GetLocalSolderPasteMargin() );
-    aDummyPad.SetLocalSolderPasteMarginRatio( aPad->GetLocalSolderPasteMarginRatio() );
-
-    aDummyPad.SetZoneConnection( aPad->GetEffectiveZoneConnection() );
-    aDummyPad.SetThermalSpokeWidth( aPad->GetEffectiveThermalSpokeWidth() );
-    aDummyPad.SetThermalGap( aPad->GetEffectiveThermalGap() );
-
-    aDummyPad.SetCustomShapeInZoneOpt( aPad->GetCustomShapeInZoneOpt() );
-
-    // Note: drill size represents finish size, which means the actual holes size is the
-    // plating thickness larger.
-    int platingThickness = 0;
-
-    if( aPad->GetAttribute() == PAD_ATTRIB_PTH )
-        platingThickness = aPad->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
-
-    aDummyPad.SetOffset( wxPoint( 0, 0 ) );
-    aDummyPad.SetSize( aPad->GetDrillSize() + wxSize( platingThickness, platingThickness ) );
-    aDummyPad.SetShape( aPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ? PAD_SHAPE_OVAL
-                                                                        : PAD_SHAPE_CIRCLE );
-    aDummyPad.SetOrientation( aPad->GetOrientation() );
-    aDummyPad.SetPosition( aPad->GetPosition() );
-}
-
-
-/**
  * Add a knockout for a pad.  The knockout is 'aGap' larger than the pad (which might be
  * either the thermal clearance or the electrical clearance).
  */
@@ -656,32 +615,33 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE_CONTAINER* aZone, PCB_LAYER
 {
     SHAPE_POLY_SET holes;
 
-    // Use a dummy pad to calculate relief when a pad has a hole but is not on the zone's
-    // copper layer.  The dummy pad has the size and shape of the original pad's hole. We have
-    // to give it a parent because some functions expect a non-null parent to find clearance
-    // data, etc.
-    MODULE  dummymodule( m_board );
-    D_PAD   dummypad( &dummymodule );
-
-    for( auto module : m_board->Modules() )
+    for( MODULE* module : m_board->Modules() )
     {
-        for( auto pad : module->Pads() )
+        for( D_PAD* pad : module->Pads() )
         {
             if( !hasThermalConnection( pad, aZone ) )
                 continue;
 
+            int gap = aZone->GetThermalReliefGap( pad );
+
             // If the pad isn't on the current layer but has a hole, knock out a thermal relief
             // for the hole.
-            if( !pad->IsOnLayer( aLayer ) )
+            if( !pad->FlashLayer( aLayer ) )
             {
                 if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
                     continue;
 
-                setupDummyPadForHole( pad, dummypad );
-                pad = &dummypad;
-            }
+                // Note: drill size represents finish size, which means the actual holes size is
+                // the plating thickness larger.
+                if( pad->GetAttribute() == PAD_ATTRIB_PTH )
+                    gap += pad->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
 
-            addKnockout( pad, aLayer, aZone->GetThermalReliefGap( pad ), holes );
+                pad->TransformHoleWithClearanceToPolygon( holes, gap, m_maxError, ERROR_OUTSIDE );
+            }
+            else
+            {
+                addKnockout( pad, aLayer, gap, holes );
+            }
         }
     }
 
@@ -721,32 +681,25 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
     // largest clearance value found in the netclasses and rules
     zone_boundingbox.Inflate( m_worstClearance + extra_margin );
 
-    // Use a dummy pad to calculate hole clearance when a pad has a hole but is not on the
-    // zone's copper layer.  The dummy pad has the size and shape of the original pad's hole.
-    // We have to give it a parent because some functions expect a non-null parent to find
-    // clearance data, etc.
-    MODULE  dummymodule( m_board );
-    D_PAD   dummypad( &dummymodule );
-
     auto evalRulesForItems =
-            [&]( DRC_CONSTRAINT_TYPE_T aConstraint, const BOARD_ITEM* a, const BOARD_ITEM* b,
-                 PCB_LAYER_ID aCtLayer ) -> int
+            [&bds]( DRC_CONSTRAINT_TYPE_T aConstraint, const BOARD_ITEM* a, const BOARD_ITEM* b,
+                    PCB_LAYER_ID aLayer ) -> int
             {
-                DRC_CONSTRAINT c = bds.m_DRCEngine->EvalRulesForItems( aConstraint, a, b, aCtLayer );
+                DRC_CONSTRAINT c = bds.m_DRCEngine->EvalRulesForItems( aConstraint, a, b, aLayer );
                 return c.Value().HasMin() ? c.Value().Min() : 0;
             };
 
     // Add non-connected pad clearances
     //
-    auto knockoutPad =
+    auto knockoutPadClearance =
             [&]( D_PAD* aPad )
             {
                 if( aPad->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
                     int gap;
 
-                    // for pads having the same netcode as the zone, the net clearance has no
-                    // meaning so use the greater of the zone clearance and the thermal relief
+                    // For pads having the same netcode as the zone, the net clearance has no
+                    // meaning so use the greater of the zone clearance and the thermal relief.
                     if( aPad->GetNetCode() > 0 && aPad->GetNetCode() == aZone->GetNetCode() )
                         gap = std::max( zone_clearance, aZone->GetThermalReliefGap( aPad ) );
                     else
@@ -754,7 +707,25 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
                     gap += extra_margin;
 
-                    addKnockout( aPad, aLayer, gap, aHoles );
+                    // If the pad isn't on the current layer but has a hole, knock out the
+                    // hole.
+                    if( !aPad->FlashLayer( aLayer ) )
+                    {
+                        if( aPad->GetDrillSize().x == 0 && aPad->GetDrillSize().y == 0 )
+                            return;
+
+                        // Note: drill size represents finish size, which means the actual hole
+                        // size is the plating thickness larger.
+                        if( aPad->GetAttribute() == PAD_ATTRIB_PTH )
+                            gap += aPad->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
+
+                        aPad->TransformHoleWithClearanceToPolygon( aHoles, gap, m_maxError,
+                                                                   ERROR_OUTSIDE );
+                    }
+                    else
+                    {
+                        addKnockout( aPad, aLayer, gap, aHoles );
+                    }
                 }
             };
 
@@ -765,26 +736,18 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
             if( checkForCancel( m_progressReporter ) )
                 return;
 
-            if( !pad->FlashLayer( aLayer ) )
-            {
-                if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
-                    continue;
-
-                setupDummyPadForHole( pad, dummypad );
-                pad = &dummypad;
-            }
-
-            if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0
+            if( pad->GetNetCode() != aZone->GetNetCode()
+                    || pad->GetNetCode() <= 0
                     || aZone->GetPadConnection( pad ) == ZONE_CONNECTION::NONE )
             {
-                knockoutPad( pad );
+                knockoutPadClearance( pad );
             }
         }
     }
 
     // Add non-connected track clearances
     //
-    auto knockoutTrack =
+    auto knockoutTrackClearance =
             [&]( TRACK* aTrack )
             {
                 if( aTrack->GetBoundingBox().Intersects( zone_boundingbox ) )
@@ -828,13 +791,13 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
         if( checkForCancel( m_progressReporter ) )
             return;
 
-        knockoutTrack( track );
+        knockoutTrackClearance( track );
     }
 
     // Add graphic item clearances.  They are by definition unconnected, and have no clearance
     // definitions of their own.
     //
-    auto knockoutGraphic =
+    auto knockoutGraphicClearance =
             [&]( BOARD_ITEM* aItem )
             {
                 // A item on the Edge_Cuts is always seen as on any layer:
@@ -857,15 +820,15 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
     for( MODULE* module : m_board->Modules() )
     {
-        knockoutGraphic( &module->Reference() );
-        knockoutGraphic( &module->Value() );
+        knockoutGraphicClearance( &module->Reference() );
+        knockoutGraphicClearance( &module->Value() );
 
         for( BOARD_ITEM* item : module->GraphicalItems() )
         {
             if( checkForCancel( m_progressReporter ) )
                 return;
 
-            knockoutGraphic( item );
+            knockoutGraphicClearance( item );
         }
     }
 
@@ -874,12 +837,12 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
         if( checkForCancel( m_progressReporter ) )
             return;
 
-        knockoutGraphic( item );
+        knockoutGraphicClearance( item );
     }
 
     // Add non-connected zone clearances
     //
-    auto knockoutZone =
+    auto knockoutZoneClearance =
             [&]( ZONE_CONTAINER* aKnockout )
             {
                 // If the zones share no common layers
@@ -924,11 +887,11 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
         if( otherZone->GetNetCode() != aZone->GetNetCode()
                 && otherZone->GetPriority() > aZone->GetPriority() )
         {
-            knockoutZone( otherZone );
+            knockoutZoneClearance( otherZone );
         }
         else if( otherZone->GetIsRuleArea() && otherZone->GetDoNotAllowCopperPour() )
         {
-            knockoutZone( otherZone );
+            knockoutZoneClearance( otherZone );
         }
     }
 
@@ -942,11 +905,11 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
             if( otherZone->GetNetCode() != aZone->GetNetCode()
                     && otherZone->GetPriority() > aZone->GetPriority() )
             {
-                knockoutZone( otherZone );
+                knockoutZoneClearance( otherZone );
             }
             else if( otherZone->GetIsRuleArea() && otherZone->GetDoNotAllowCopperPour() )
             {
-                knockoutZone( otherZone );
+                knockoutZoneClearance( otherZone );
             }
         }
     }
@@ -962,7 +925,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 void ZONE_FILLER::subtractHigherPriorityZones( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
                                                SHAPE_POLY_SET& aRawFill )
 {
-    auto knockoutZone =
+    auto knockoutZoneOutline =
             [&]( ZONE_CONTAINER* aKnockout )
             {
                 // If the zones share no common layers
@@ -980,7 +943,7 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE_CONTAINER* aZone, PCB_
         if( otherZone->GetNetCode() == aZone->GetNetCode()
                 && otherZone->GetPriority() > aZone->GetPriority() )
         {
-            knockoutZone( otherZone );
+            knockoutZoneOutline( otherZone );
         }
     }
 
@@ -991,7 +954,7 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE_CONTAINER* aZone, PCB_
             if( otherZone->GetNetCode() == aZone->GetNetCode()
                     && otherZone->GetPriority() > aZone->GetPriority() )
             {
-                knockoutZone( otherZone );
+                knockoutZoneOutline( otherZone );
             }
         }
     }
