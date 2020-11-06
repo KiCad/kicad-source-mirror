@@ -50,7 +50,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar()
     else
     {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
@@ -88,7 +88,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddControl( m_TextInfo );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
-    m_mainToolBar->Realize();
+    m_mainToolBar->KiRealize();
 }
 
 
@@ -211,7 +211,7 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     item->SetMinSize( m_zoomSelectBox->GetBestSize() );
 
     // after adding the buttons to the toolbar, must call Realize()
-    m_auxiliaryToolBar->Realize();
+    m_auxiliaryToolBar->KiRealize();
 }
 
 
@@ -261,7 +261,7 @@ void GERBVIEW_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleLayerManager,      ACTION_TOOLBAR::TOGGLE );
 
-    m_optionsToolBar->Realize();
+    m_optionsToolBar->KiRealize();
 }
 
 

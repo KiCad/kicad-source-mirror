@@ -35,7 +35,7 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
     else
     {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
@@ -118,7 +118,7 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
 
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
-    m_mainToolBar->Realize();
+    m_mainToolBar->KiRealize();
 }
 
 
@@ -147,7 +147,7 @@ void PL_EDITOR_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddScaledSeparator( this );
     m_drawToolBar->Add( ACTIONS::deleteTool,                 ACTION_TOOLBAR::TOGGLE );
 
-    m_drawToolBar->Realize();
+    m_drawToolBar->KiRealize();
 }
 
 

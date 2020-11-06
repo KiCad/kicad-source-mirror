@@ -44,7 +44,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR,
                                             wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
@@ -85,7 +85,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( EE_ACTIONS::addSymbolToSchematic );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
-    m_mainToolBar->Realize();
+    m_mainToolBar->KiRealize();
 
     m_mainToolBar->Refresh();
 }

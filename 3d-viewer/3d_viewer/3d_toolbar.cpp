@@ -48,7 +48,7 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
     else
     {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
@@ -101,5 +101,5 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EDA_3D_ACTIONS::toggleOrtho, ACTION_TOOLBAR::TOGGLE );
 
-    m_mainToolBar->Realize();
+    m_mainToolBar->KiRealize();
 }

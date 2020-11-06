@@ -223,7 +223,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     else
     {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
         m_mainToolBar->SetAuiManager( &m_auimgr );
 
         // The layer indicator is special, so we register a callback directly that will regenerate the
@@ -308,7 +308,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
 #endif
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
-    m_mainToolBar->Realize();
+    m_mainToolBar->KiRealize();
 }
 
 
@@ -367,7 +367,7 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
     gridMenu->Add( ACTIONS::gridProperties );
     m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
 
-    m_optionsToolBar->Realize();
+    m_optionsToolBar->KiRealize();
 }
 
 
@@ -468,7 +468,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     zoneMenu->Add( PCB_ACTIONS::zoneUnfillAll );
     m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::drawZone, std::move( zoneMenu ) );
 
-    m_drawToolBar->Realize();
+    m_drawToolBar->KiRealize();
 }
 
 
@@ -488,7 +488,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
         item = m_auxiliaryToolBar->FindTool( ID_AUX_TOOLBAR_PCB_VIA_SIZE );
         item->SetMinSize( m_SelViaSizeBox->GetBestSize() );
 
-        m_auxiliaryToolBar->Realize();
+        m_auxiliaryToolBar->KiRealize();
         m_auimgr.Update();
         return;
     }
@@ -546,7 +546,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
 
     // after adding the buttons to the toolbar, must call Realize()
-    m_auxiliaryToolBar->Realize();
+    m_auxiliaryToolBar->KiRealize();
 }
 
 

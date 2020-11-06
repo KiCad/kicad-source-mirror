@@ -48,7 +48,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     else
     {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL);
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
@@ -138,7 +138,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddControl( m_selLayerBox );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
-    m_mainToolBar->Realize();
+    m_mainToolBar->KiRealize();
 }
 
 
@@ -173,7 +173,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( PCB_ACTIONS::gridSetOrigin,   ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( ACTIONS::measureTool,         ACTION_TOOLBAR::TOGGLE );
 
-    m_drawToolBar->Realize();
+    m_drawToolBar->KiRealize();
 }
 
 
@@ -211,7 +211,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
     gridMenu->Add( ACTIONS::gridProperties );
     m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
 
-    m_optionsToolBar->Realize();
+    m_optionsToolBar->KiRealize();
 }
 
 

@@ -699,3 +699,54 @@ void ACTION_TOOLBAR::OnCustomRender(wxDC& aDc, const wxAuiToolBarItem& aItem,
 
     aDc.DrawPolygon( &points );
 }
+
+
+bool ACTION_TOOLBAR::KiRealize()
+{
+    wxClientDC dc( this );
+    if( !dc.IsOk() )
+        return false;
+
+    // calculate hint sizes for both horizontal and vertical
+    // in the order that leaves toolbar in correct final state
+
+    // however, skip calculating alternate orientations if we dont need them due to window style
+    bool retval = true;
+    if( m_orientation == wxHORIZONTAL )
+    {
+        if( !( GetWindowStyle() & wxAUI_TB_HORIZONTAL ) )
+        {
+            m_vertHintSize = GetSize();
+            retval         = RealizeHelper( dc, false );
+        }
+
+        if( retval && RealizeHelper( dc, true ) )
+        {
+            m_horzHintSize = GetSize();
+        }
+        else
+        {
+            retval = false;
+        }
+    }
+    else
+    {
+        if( !( GetWindowStyle() & wxAUI_TB_VERTICAL ) )
+        {
+            m_horzHintSize = GetSize();
+            retval         = RealizeHelper( dc, true );
+        }
+
+        if( retval && RealizeHelper( dc, false ) )
+        {
+            m_vertHintSize = GetSize();
+        }
+        else
+        {
+            retval = false;
+        }
+    }
+
+    Refresh( false );
+    return retval;
+}

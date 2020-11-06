@@ -46,7 +46,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR,
                                             wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
@@ -106,7 +106,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( EE_ACTIONS::showPcbNew );
 
     // after adding the tools to the toolbar, must call Realize() to reflect the changes
-    m_mainToolBar->Realize();
+    m_mainToolBar->KiRealize();
 }
 
 
@@ -149,7 +149,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( EE_ACTIONS::placeImage,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( ACTIONS::deleteTool,                ACTION_TOOLBAR::TOGGLE );
 
-    m_drawToolBar->Realize();
+    m_drawToolBar->KiRealize();
 }
 
 
@@ -182,5 +182,5 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
     gridMenu->Add( ACTIONS::gridProperties );
     m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
 
-    m_optionsToolBar->Realize();
+    m_optionsToolBar->KiRealize();
 }

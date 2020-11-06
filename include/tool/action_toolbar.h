@@ -271,6 +271,17 @@ public:
 
     void Toggle( const TOOL_ACTION& aAction, bool aEnabled, bool aChecked );
 
+    /**
+     * Use this over Realize() to avoid a rendering glitch with fixed orientation toolbars
+     *
+     * The standard Realize() draws both horizontal and vertical to determine sizing
+     * However with many icons, potato PCs, etc, you can actually see that double draw
+     * We don't actually need to determine the opposite sizing if we are doing fixed orientation
+     *
+     * This function handles the fixed orientation sizing and passes off to the original Realize() otherwise
+     */
+    bool KiRealize();
+
     static constexpr bool TOGGLE = true;
     static constexpr bool CANCEL = true;
 
