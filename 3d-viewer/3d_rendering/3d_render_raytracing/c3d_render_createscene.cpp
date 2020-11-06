@@ -93,11 +93,13 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
 
         m_solder_mask_normal_perturbator = CSOLDERMASKNORMAL( &m_board_normal_perturbator );
 
-        m_plastic_normal_perturbator = CPLASTICNORMAL( 0.15f * mmTo3Dunits );
+        m_plastic_normal_perturbator = CPLASTICNORMAL( 0.05f * mmTo3Dunits );
 
-        m_plastic_shine_normal_perturbator = CPLASTICSHINENORMAL( 1.0f * mmTo3Dunits );
+        m_plastic_shine_normal_perturbator = CPLASTICSHINENORMAL( 0.1f * mmTo3Dunits );
 
-        m_brushed_metal_normal_perturbator = CMETALBRUSHEDNORMAL( 1.0f * mmTo3Dunits );
+        m_brushed_metal_normal_perturbator = CMETALBRUSHEDNORMAL( 0.05f * mmTo3Dunits );
+
+        m_silkscreen_normal_perturbator = CSILKSCREENNORMAL( 0.25f * mmTo3Dunits );
     }
 
     // http://devernay.free.fr/cours/opengl/materials.html
@@ -149,6 +151,9 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
             0.078125f * 128.0f,         // shiness
             0.0f,                       // transparency
             0.0f );
+
+    if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
+        m_materials.m_SilkS.SetNormalPerturbator( &m_silkscreen_normal_perturbator );
 
     // Assume that SolderMaskTop == SolderMaskBot
     const float solderMask_gray =
@@ -1562,11 +1567,7 @@ MODEL_MATERIALS *C3D_RENDER_RAYTRACING::get_3D_model_material( const S3DMODEL *a
                           ( glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) < 0.15f ) ) )
                     {
                         // This may be a black plastic..
-
-                        if( material.m_Shininess < 0.26f )
-                            blinnMaterial.SetNormalPerturbator( &m_plastic_normal_perturbator );
-                        else
-                            blinnMaterial.SetNormalPerturbator( &m_plastic_shine_normal_perturbator );
+                        blinnMaterial.SetNormalPerturbator( &m_plastic_normal_perturbator );
                     }
                     else
                     {

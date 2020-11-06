@@ -124,6 +124,7 @@ private:
     CPLASTICNORMAL      m_plastic_normal_perturbator;
     CPLASTICSHINENORMAL m_plastic_shine_normal_perturbator;
     CMETALBRUSHEDNORMAL m_brushed_metal_normal_perturbator;
+    CSILKSCREENNORMAL   m_silkscreen_normal_perturbator;
 
     bool m_isPreview;
 

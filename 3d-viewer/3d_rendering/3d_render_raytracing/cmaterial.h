@@ -211,6 +211,26 @@ private:
     float                       m_scale;
 };
 
+class  CSILKSCREENNORMAL : public CPROCEDURALGENERATOR
+{
+public:
+    CSILKSCREENNORMAL() : CPROCEDURALGENERATOR()
+    {
+        m_scale = 1.0f;
+    }
+
+    CSILKSCREENNORMAL( float aScale );
+
+    virtual ~CSILKSCREENNORMAL()
+    {
+    }
+
+    // Imported from CPROCEDURALGENERATOR
+    SFVEC3F Generate( const RAY &aRay,
+                      const HITINFO &aHitInfo ) const override;
+private:
+    float                       m_scale;
+};
 
 /// A base material class that can be used to derive a material implementation
 class  CMATERIAL

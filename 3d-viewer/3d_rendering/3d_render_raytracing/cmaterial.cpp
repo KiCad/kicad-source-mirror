@@ -177,7 +177,7 @@ SFVEC3F CBOARDNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) const
 
     const float noise1 = s_perlinNoise.noise( hitPos.x * 1.0f, hitPos.y * 0.7f ) - 0.5f;
     const float noise2 = s_perlinNoise.noise( hitPos.x * 0.7f, hitPos.y * 1.0f ) - 0.5f;
-    const float noise3 = s_perlinNoise.noise( hitPos.x * 0.3f, hitPos.y * 0.3f ) - 0.5f;
+    const float noise3 = s_perlinNoise.noise( hitPos.x * 0.3f, hitPos.z * 1.0f ) - 0.5f;
 
     return ( SFVEC3F( noise1, noise2, -( noise3 ) ) * 0.3f + SFVEC3F( x, y, z ) );
 }
@@ -254,20 +254,20 @@ SFVEC3F CPLASTICNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) con
         const SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
 
         const float noise1 = s_perlinNoise.noise( hitPos.x * 1.0f,
+                                                  hitPos.y * 1.1f,
+                                                  hitPos.z * 1.2f ) - 0.5f;
+
+        const float noise2 = s_perlinNoise.noise( hitPos.x * 1.3f,
                                                   hitPos.y * 1.0f,
-                                                  hitPos.z * 1.0f ) - 0.5f;
+                                                  hitPos.z * 1.5f ) - 0.5f;
 
-        const float noise2 = s_perlinNoise.noise( hitPos.x * 1.5f,
-                                                  hitPos.y * 1.5f,
-                                                  hitPos.z * 2.0f ) - 0.5f;
+        const float noise3 = s_perlinNoise.noise( hitPos.x * 1.0f,
+                                                  hitPos.y * 1.0f,
+                                                  hitPos.z * 1.8f ) - 0.5f;
 
-        const float noise3 = s_perlinNoise.noise( hitPos.x * 2.0f,
-                                                  hitPos.y * 2.0f,
-                                                  hitPos.z * 2.0f ) - 0.5f;
+        const float distanceReduction = 1.0f / ( aHitInfo.m_tHit + 0.5f );
 
-        return SFVEC3F( noise1 * noise2 * noise3 * 4.00f,
-                        noise1 * expf(noise2) * noise3 * 4.00f,
-                        noise3 * noise3 * 1.00f );
+        return SFVEC3F( noise1, noise2, noise3 ) * SFVEC3F( distanceReduction );
 }
 
 
@@ -281,19 +281,20 @@ SFVEC3F CPLASTICSHINENORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo 
 {
     const SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
 
-    const float noise1 = s_perlinNoise.noise( hitPos.x * 0.05f,
-                                              hitPos.y * 0.05f,
-                                              hitPos.z * 0.05f ) - 0.5f;
+    const float noise1 = s_perlinNoise.noise( hitPos.x * 0.01f,
+                                              hitPos.y * 0.01f,
+                                              hitPos.z * 0.01f ) - 0.5f;
 
-    const float noise2 = s_perlinNoise.noise( hitPos.x * 0.2f,
-                                              hitPos.y * 0.2f,
-                                              hitPos.z * 0.2f ) - 0.5f;
+    const float noise2 = s_perlinNoise.noise( hitPos.x * 1.0f,
+                                              hitPos.y * 1.0f,
+                                              hitPos.z * 1.6f ) - 0.5f;
 
-    const float noise3 = s_perlinNoise.noise( hitPos.x * 0.5f,
-                                              hitPos.y * 0.5f,
-                                              hitPos.z * 0.5f ) - 0.5f;
+    float noise3 = s_perlinNoise.noise( hitPos.x * 1.5f,
+                                        hitPos.y * 1.5f,
+                                        hitPos.z * 1.0f ) - 0.5f;
+    noise3 = noise3 * noise3 * noise3;
 
-    return SFVEC3F( noise1 * 0.5f, noise2 * 0.5f, noise3 * 0.5f );
+    return SFVEC3F( noise1, noise2, noise3 ) * SFVEC3F( 0.1f, 0.2f, 1.0f );
 }
 
 
@@ -307,43 +308,44 @@ SFVEC3F CMETALBRUSHEDNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo 
 {
     const SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
 
-    const SFVEC3F hitPosRelative = hitPos - glm::floor( hitPos );
+    const float noise1 = s_perlinNoise.noise( hitPos.x * 1.0f,
+                                              hitPos.y * 1.1f,
+                                              hitPos.z * 1.2f ) - 0.5f;
 
-    const float noiseX = (s_perlinNoise.noise( hitPos.x * (60.0f),
-                                               hitPos.y * 1.0f,
-                                               hitPos.z * 1.0f ) - 0.5f);
+    const float noise2 = s_perlinNoise.noise( hitPos.x * 1.3f,
+                                              hitPos.y * 1.4f,
+                                              hitPos.z * 1.5f ) - 0.5f;
 
-    const float noiseY = (s_perlinNoise.noise( hitPos.x * 1.0f,
-                                               hitPos.y * (60.0f),
-                                               hitPos.z * 1.0f ) - 0.5f);
+    const float noise3 = s_perlinNoise.noise( hitPos.x * 0.1f,
+                                              hitPos.y * 0.1f,
+                                              hitPos.z * 1.0f ) - 0.5f;
 
-    const float noise2 = (s_perlinNoise.noise( hitPos.x * 1.0f,
-                                               hitPos.y * 1.0f,
-                                               hitPos.z * 1.0f ) - 0.5f);
+    return SFVEC3F( noise1 * 0.15f + noise3 * 0.35f,
+                    noise2 * 0.25f,
+                    noise1 * noise2 * noise3 );
+}
 
-    const float noise3X = (s_perlinNoise.noise( hitPos.x * (80.0f + noise2 * 0.5f),
-                                                hitPos.y * 0.5f,
-                                                hitPos.z * 0.5f ) - 0.5f );
 
-    const float noise3Y = (s_perlinNoise.noise( hitPos.x * 0.5f,
-                                                hitPos.y * (80.0f + noise2 * 0.5f),
-                                                hitPos.z * 0.5f ) - 0.5f );
+CSILKSCREENNORMAL::CSILKSCREENNORMAL( float aScale )
+{
+    m_scale = 1.0f / aScale;
+}
 
-    // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoKHgtZmxvb3IoeCkpK3Npbih4KSleMyIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi02LjcxNDAwMDAxOTAzMDA3NyIsIjcuMjQ0NjQzNjkyOTY5NzM5IiwiLTMuMTU1NTUyNjAxNDUyNTg4IiwiNS40MzQzODE5OTA1NDczMDY1Il0sInNpemUiOls2NDQsMzk0XX1d
-    // ((x - floor(x))+sin(x))^3
 
-    float sawX = (hitPosRelative.x + glm::sin( 10.0f * hitPos.x + 5.0f * noise2 + Fast_RandFloat() ) );
-          sawX = sawX * sawX * sawX;
+SFVEC3F CSILKSCREENNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) const
+{
+    const SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
 
-    float sawY = (hitPosRelative.y + glm::sin( 10.0f * hitPos.y + 5.0f * noise2 + Fast_RandFloat() ) );
-          sawY = sawY * sawY * sawY;
+    const float noise1 = s_perlinNoise.noise( hitPos.x * 2.7f,
+                                              hitPos.y * 2.6f,
+                                              hitPos.z );
 
-    float xOut = sawX * noise3X * 0.17f + noiseX * 0.25f + noise3X * 0.57f;
-    float yOut = sawY * noise3Y * 0.17f + noiseY * 0.25f + noise3Y * 0.57f;
+    const float noise2 = s_perlinNoise.noise( hitPos.x * 1.1f,
+                                              hitPos.y * 1.2f,
+                                              hitPos.z );
 
-    const float outLowFreqNoise = noise2 * 0.05f;
+    SFVEC3F t = glm::abs( ( 1.8f / ( SFVEC3F( noise1, noise2, hitPos.z ) + 0.4f ) ) - 1.5f ) - 0.25f;
+    t = t * t * t * 0.1f;
 
-    return SFVEC3F( xOut + outLowFreqNoise,
-                    yOut + outLowFreqNoise,
-                    0.0f + outLowFreqNoise );
+    return t;
 }
