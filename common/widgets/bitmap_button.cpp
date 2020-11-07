@@ -101,12 +101,12 @@ void BITMAP_BUTTON::OnLeftButtonUp( wxMouseEvent& aEvent )
         wxASSERT( pEventHandler );
 
         pEventHandler->CallAfter(
-            [=]()
-            {
-                wxCommandEvent evt( wxEVT_BUTTON, this->GetId() );
-                evt.SetEventObject( this );
-                GetEventHandler()->ProcessEvent( evt );
-            } );
+                [=]()
+                {
+                    wxCommandEvent evt( wxEVT_BUTTON, this->GetId() );
+                    evt.SetEventObject( this );
+                    GetEventHandler()->ProcessEvent( evt );
+                } );
     }
 
     clearFlag( wxCONTROL_PRESSED );

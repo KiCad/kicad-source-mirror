@@ -100,16 +100,9 @@ void FOOTPRINT_PREVIEW_WIDGET::OnStatusChange( FOOTPRINT_STATUS aStatus )
 {
     switch( aStatus )
     {
-    case FPS_NOT_FOUND:
-        SetStatusText( _( "Footprint not found" ) );
-        break;
-
-    case FPS_LOADING:
-        SetStatusText( _( "Loading..." ) );
-        break;
-
-    case FPS_READY:
-        ClearStatus();
+    case FPS_NOT_FOUND: SetStatusText( _( "Footprint not found" ) ); break;
+    case FPS_LOADING:   SetStatusText( _( "Loading..." ) );          break;
+    case FPS_READY:     ClearStatus();                               break;
     }
 
     Refresh();

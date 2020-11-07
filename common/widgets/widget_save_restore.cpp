@@ -82,7 +82,7 @@ void WIDGET_SAVE_RESTORE::Add( wxNotebook& ctrl, long& dest )
 
 void WIDGET_SAVE_RESTORE::ReadConfigFromControls()
 {
-    for( auto& ctrl : m_ctrls )
+    for( WIDGET_SAVE_RESTORE::WIDGET_CTRL_T& ctrl : m_ctrls )
     {
         switch( ctrl.m_type )
         {
@@ -129,7 +129,7 @@ void WIDGET_SAVE_RESTORE::RestoreConfigToControls()
     if( !m_valid )
         return;
 
-    for( auto& ctrl : m_ctrls )
+    for( WIDGET_SAVE_RESTORE::WIDGET_CTRL_T& ctrl : m_ctrls )
     {
         switch( ctrl.m_type )
         {

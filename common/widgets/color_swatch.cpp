@@ -59,7 +59,6 @@ wxBitmap COLOR_SWATCH::MakeBitmap( COLOR4D aColor, COLOR4D aBackground, wxSize a
         COLOR4D black;
         bool    rowCycle;
 
-
         if( aCheckerboardBackground.GetBrightness() > 0.4 )
         {
             white = COLOR4D::WHITE;
@@ -214,9 +213,9 @@ void COLOR_SWATCH::setupEvents()
 }
 
 
-void COLOR_SWATCH::rePostEvent( wxEvent& aEvt )
+void COLOR_SWATCH::rePostEvent( wxEvent& aEvent )
 {
-    wxPostEvent( this, aEvt );
+    wxPostEvent( this, aEvent );
 }
 
 
@@ -232,14 +231,14 @@ static void sendSwatchChangeEvent( COLOR_SWATCH& aSender )
 }
 
 
-void COLOR_SWATCH::SetSwatchColor( COLOR4D aColor, bool sendEvent )
+void COLOR_SWATCH::SetSwatchColor( COLOR4D aColor, bool aSendEvent )
 {
     m_color = aColor;
 
     wxBitmap bm = MakeBitmap( m_color, m_background, m_size, m_checkerboardSize, m_checkerboardBg );
     m_swatch->SetBitmap( bm );
 
-    if( sendEvent )
+    if( aSendEvent )
         sendSwatchChangeEvent( *this );
 }
 

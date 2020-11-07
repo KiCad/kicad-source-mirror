@@ -28,10 +28,10 @@ wxDEFINE_EVENT( EVT_INTERACTIVE_CHOICE, wxCommandEvent );
 wxColour FOOTPRINT_CHOICE::m_grey( 0x808080 );
 
 
-FOOTPRINT_CHOICE::FOOTPRINT_CHOICE( wxWindow* aParent, int aId )
-        : wxOwnerDrawnComboBox( aParent, aId, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                  /* n */ 0, /* choices */ nullptr, wxCB_READONLY ),
-          m_last_selection( 0 )
+FOOTPRINT_CHOICE::FOOTPRINT_CHOICE( wxWindow* aParent, int aId ) :
+        wxOwnerDrawnComboBox( aParent, aId, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                              /* n */ 0, /* choices */ nullptr, wxCB_READONLY ),
+        m_last_selection( 0 )
 {
 }
 
@@ -73,7 +73,7 @@ void FOOTPRINT_CHOICE::OnDrawItem( wxDC& aDC, wxRect const& aRect, int aItem, in
 
         aDC.SetPen( pen );
         aDC.DrawLine( aRect.x, aRect.y + aRect.height / 2, aRect.x + aRect.width,
-                aRect.y + aRect.height / 2 );
+                      aRect.y + aRect.height / 2 );
     }
     else
     {
@@ -200,7 +200,9 @@ void FOOTPRINT_CHOICE::TryVetoSelect( wxCommandEvent& aEvent, bool aInner )
         wxString text = SafeGetString( sel );
 
         if( text == "" )
+        {
             SetSelectionEither( aInner, m_last_selection );
+        }
         else
         {
             m_last_selection = sel;

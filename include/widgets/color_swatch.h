@@ -77,7 +77,7 @@ public:
     /**
      * Set the current swatch color directly.
      */
-    void SetSwatchColor( KIGFX::COLOR4D aColor, bool sendEvent );
+    void SetSwatchColor( KIGFX::COLOR4D aColor, bool aSendEvent );
 
     /**
      * Sets the color that will be chosen with the "Reset to Default" button in the chooser
@@ -116,7 +116,7 @@ private:
     /**
      * Pass unwanted events on to listeners of this object
      */
-    void rePostEvent( wxEvent& aEvt );
+    void rePostEvent( wxEvent& aEvent );
 
     KIGFX::COLOR4D  m_color;
     KIGFX::COLOR4D  m_background;

@@ -26,20 +26,13 @@ BEGIN_EVENT_TABLE( STEPPED_SLIDER, wxSlider )
 END_EVENT_TABLE()
 
 
-STEPPED_SLIDER::STEPPED_SLIDER(
-        wxWindow* aParent,
-        wxWindowID aId,
-        int aValue,
-        int aMinValue,
-        int aMaxValue,
-        const wxPoint& aPos,
-        const wxSize& aSize,
-        long aStyle,
-        const wxValidator& aValidator,
-        const wxString& aName )
-    :wxSlider( aParent, aId, aValue, aMinValue, aMaxValue,
-               aPos, aSize, aStyle, aValidator, aName ),
-    m_step( 1 )
+STEPPED_SLIDER::STEPPED_SLIDER( wxWindow* aParent, wxWindowID aId, int aValue, int aMinValue,
+                                int aMaxValue, const wxPoint& aPos, const wxSize& aSize,
+                                long aStyle, const wxValidator& aValidator,
+                                const wxString& aName ) :
+        wxSlider( aParent, aId, aValue, aMinValue, aMaxValue, aPos, aSize, aStyle, aValidator,
+                  aName ),
+        m_step( 1 )
 {}
 
 

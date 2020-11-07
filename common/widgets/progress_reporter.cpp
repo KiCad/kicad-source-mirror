@@ -144,7 +144,8 @@ WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& a
                       ( aCanAbort ? wxPD_CAN_ABORT : 0 ) |
                       wxPD_ELAPSED_TIME )
 #if wxCHECK_VERSION( 3, 1, 0 )
-                      ,m_appProgressIndicator( aParent )
+    ,
+    m_appProgressIndicator( aParent )
 #endif
 {
 #if wxCHECK_VERSION( 3, 1, 0 )
@@ -181,8 +182,8 @@ bool WX_PROGRESS_REPORTER::updateUI()
 
 GAUGE_PROGRESS_REPORTER::GAUGE_PROGRESS_REPORTER( wxWindow* aParent, int aNumPhases ) :
         PROGRESS_REPORTER( aNumPhases ),
-        wxGauge( aParent, wxID_ANY, 1000, wxDefaultPosition, wxDefaultSize,
-                 wxGA_HORIZONTAL, wxDefaultValidator, wxGaugeNameStr )
+        wxGauge( aParent, wxID_ANY, 1000, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL,
+                 wxDefaultValidator, wxGaugeNameStr )
 {
 }
 

@@ -35,9 +35,8 @@
 
 wxDEFINE_EVENT( DELAY_FOCUS, wxCommandEvent );
 
-UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
-                          wxStaticText* aLabel, wxWindow* aValue, wxStaticText* aUnitLabel,
-                          bool allowEval ) :
+UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindow* aValue,
+                          wxStaticText* aUnitLabel, bool allowEval ) :
         m_frame( aParent ),
         m_label( aLabel ),
         m_value( aValue ),
@@ -315,9 +314,13 @@ double UNIT_BINDER::GetDoubleValue()
             value = textEntry->GetValue();
     }
     else if( staticText )
+    {
         value = staticText->GetLabel();
+    }
     else
+    {
         return 0.0;
+    }
 
     double displayValue = DoubleValueFromString( m_units, value, m_dataType );
     return m_originTransforms.FromDisplay( displayValue, m_coordType );

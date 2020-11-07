@@ -31,9 +31,9 @@
 
 
 SPLIT_BUTTON::SPLIT_BUTTON( wxWindow* aParent, wxWindowID aId, const wxString& aLabel,
-        const wxPoint& aPos, const wxSize& aSize )
-        : wxPanel( aParent, aId, aPos, aSize, wxBORDER_NONE | wxTAB_TRAVERSAL, "DropDownButton" ),
-          m_label( aLabel )
+                            const wxPoint& aPos, const wxSize& aSize ) :
+        wxPanel( aParent, aId, aPos, aSize, wxBORDER_NONE | wxTAB_TRAVERSAL, "DropDownButton" ),
+        m_label( aLabel )
 {
     m_colorNormal   = GetForegroundColour();
     m_colorDisabled = GetForegroundColour().MakeDisabled();
@@ -67,7 +67,8 @@ SPLIT_BUTTON::~SPLIT_BUTTON()
 void SPLIT_BUTTON::SetMinSize( const wxSize& aSize )
 {
     m_unadjustedMinSize = aSize;
-    wxPanel::SetMinSize( wxSize( aSize.GetWidth() + m_arrowButtonWidth + m_widthPadding, aSize.GetHeight() ) );
+    wxPanel::SetMinSize( wxSize( aSize.GetWidth() + m_arrowButtonWidth + m_widthPadding,
+                                 aSize.GetHeight() ) );
 }
 
 
@@ -138,11 +139,13 @@ void SPLIT_BUTTON::OnLeftButtonUp( wxMouseEvent& aEvent )
         wxEvtHandler* pEventHandler = GetEventHandler();
         wxASSERT( pEventHandler );
 
-        pEventHandler->CallAfter( [=]() {
-            wxCommandEvent evt( wxEVT_BUTTON, this->GetId() );
-            evt.SetEventObject( this );
-            GetEventHandler()->ProcessEvent( evt );
-        } );
+        pEventHandler->CallAfter(
+                [=]()
+                {
+                    wxCommandEvent evt( wxEVT_BUTTON, this->GetId() );
+                    evt.SetEventObject( this );
+                    GetEventHandler()->ProcessEvent( evt );
+                } );
     }
 
     m_bLButtonDown = false;
@@ -207,8 +210,10 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
         wxMemoryDC mdc( m_bitmap );
 
         r1.x = ( width - m_bitmap.GetWidth() ) / 2;
+
         if( r1.x < 0 )
             r1.x = 0;
+
         r1.y += ( size.GetHeight() - m_bitmap.GetHeight() ) / 2;
 
         dc.Blit( wxPoint( r1.x, r1.y ), m_bitmap.GetSize(), &mdc, wxPoint( 0, 0 ), wxCOPY, true );
