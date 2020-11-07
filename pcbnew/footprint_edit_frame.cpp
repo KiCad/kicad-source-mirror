@@ -889,15 +889,15 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new GROUP_TOOL );
     m_toolManager->RegisterTool( new CONVERT_TOOL );
 
-    m_toolManager->GetTool<SELECTION_TOOL>()->SetEditModules( true );
-    m_toolManager->GetTool<EDIT_TOOL>()->SetEditModules( true );
-    m_toolManager->GetTool<PAD_TOOL>()->SetEditModules( true );
-    m_toolManager->GetTool<DRAWING_TOOL>()->SetEditModules( true );
-    m_toolManager->GetTool<POINT_EDITOR>()->SetEditModules( true );
-    m_toolManager->GetTool<PCBNEW_CONTROL>()->SetEditModules( true );
-    m_toolManager->GetTool<PCBNEW_PICKER_TOOL>()->SetEditModules( true );
-    m_toolManager->GetTool<POSITION_RELATIVE_TOOL>()->SetEditModules( true );
-    m_toolManager->GetTool<GROUP_TOOL>()->SetEditModules( true );
+    m_toolManager->GetTool<SELECTION_TOOL>()->SetIsFootprintEditor( true );
+    m_toolManager->GetTool<EDIT_TOOL>()->SetIsFootprintEditor( true );
+    m_toolManager->GetTool<PAD_TOOL>()->SetIsFootprintEditor( true );
+    m_toolManager->GetTool<DRAWING_TOOL>()->SetIsFootprintEditor( true );
+    m_toolManager->GetTool<POINT_EDITOR>()->SetIsFootprintEditor( true );
+    m_toolManager->GetTool<PCBNEW_CONTROL>()->SetIsFootprintEditor( true );
+    m_toolManager->GetTool<PCBNEW_PICKER_TOOL>()->SetIsFootprintEditor( true );
+    m_toolManager->GetTool<POSITION_RELATIVE_TOOL>()->SetIsFootprintEditor( true );
+    m_toolManager->GetTool<GROUP_TOOL>()->SetIsFootprintEditor( true );
 
     m_toolManager->GetTool<PCB_VIEWER_TOOLS>()->SetFootprintFrame( true );
     m_toolManager->InitTools();

@@ -232,11 +232,11 @@ DRAWING_TOOL::MODE DRAWING_TOOL::GetDrawingMode() const
 
 int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 {
-    if( m_editModules && !m_frame->GetModel() )
+    if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
-    MODULE*          module = dynamic_cast<MODULE*>( m_frame->GetModel() );
-    PCB_SHAPE*       line = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
+    MODULE*          parentFootprint = dynamic_cast<MODULE*>( m_frame->GetModel() );
+    PCB_SHAPE*       line = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::LINE );
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
@@ -255,7 +255,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     {
         if( line )
         {
-            if( m_editModules )
+            if( m_isFootprintEditor )
                 static_cast<FP_SHAPE*>( line )->SetLocalCoord();
 
             commit.Add( line );
@@ -267,7 +267,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
             startingPoint = NULLOPT;
         }
 
-        line = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
+        line = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
         line->SetShape( S_SEGMENT );
         line->SetFlags( IS_NEW );
     }
@@ -278,11 +278,11 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
 {
-    if( m_editModules && !m_frame->GetModel() )
+    if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
-    MODULE*          module = dynamic_cast<MODULE*>( m_frame->GetModel() );
-    PCB_SHAPE*       rect = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
+    MODULE*          parentFootprint = dynamic_cast<MODULE*>( m_frame->GetModel() );
+    PCB_SHAPE*       rect = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::RECTANGLE );
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
@@ -301,7 +301,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     {
         if( rect )
         {
-            if( m_editModules )
+            if( m_isFootprintEditor )
                 static_cast<FP_SHAPE*>( rect )->SetLocalCoord();
 
             commit.Add( rect );
@@ -310,7 +310,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, rect );
         }
 
-        rect = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
+        rect = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
         rect->SetShape( S_RECT );
         rect->SetFlags(IS_NEW );
         startingPoint = NULLOPT;
@@ -322,11 +322,11 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 {
-    if( m_editModules && !m_frame->GetModel() )
+    if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
-    MODULE*          module = dynamic_cast<MODULE*>( m_frame->GetModel() );
-    PCB_SHAPE*       circle = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
+    MODULE*          parentFootprint = dynamic_cast<MODULE*>( m_frame->GetModel() );
+    PCB_SHAPE*       circle = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::CIRCLE );
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
@@ -345,7 +345,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     {
         if( circle )
         {
-            if( m_editModules )
+            if( m_isFootprintEditor )
                 static_cast<FP_SHAPE*>( circle )->SetLocalCoord();
 
             commit.Add( circle );
@@ -354,7 +354,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, circle );
         }
 
-        circle = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
+        circle = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
         circle->SetShape( S_CIRCLE );
         circle->SetFlags( IS_NEW );
         startingPoint = NULLOPT;
@@ -366,11 +366,11 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 {
-    if( m_editModules && !m_frame->GetModel() )
+    if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
-    MODULE*          module = dynamic_cast<MODULE*>( m_frame->GetModel() );
-    PCB_SHAPE*       arc = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
+    MODULE*          parentFootprint = dynamic_cast<MODULE*>( m_frame->GetModel() );
+    PCB_SHAPE*       arc = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ARC );
     bool             immediateMode = aEvent.HasPosition();
@@ -386,7 +386,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     {
         if( arc )
         {
-            if( m_editModules )
+            if( m_isFootprintEditor )
                 static_cast<FP_SHAPE*>( arc )->SetLocalCoord();
 
             commit.Add( arc );
@@ -395,7 +395,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, arc );
         }
 
-        arc = m_editModules ? new FP_SHAPE( module ) : new PCB_SHAPE;
+        arc = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
         arc->SetShape( S_ARC );
         arc->SetFlags( IS_NEW );
         immediateMode = false;
@@ -407,7 +407,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 {
-    if( m_editModules && !m_frame->GetModel() )
+    if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
     BOARD_ITEM* text = NULL;
@@ -497,7 +497,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 PCB_LAYER_ID layer = m_frame->GetActiveLayer();
 
                 // Init the new item attributes
-                if( m_editModules )
+                if( m_isFootprintEditor )
                 {
                     FP_TEXT* fpText = new FP_TEXT( (MODULE*) m_frame->GetModel() );
 
@@ -628,7 +628,7 @@ void DRAWING_TOOL::constrainDimension( DIMENSION* aDim )
 
 int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 {
-    if( m_editModules && !m_frame->GetModel() )
+    if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
     TOOL_EVENT    originalEvent = aEvent;
@@ -988,7 +988,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     // Note: PlaceImportedGraphics() will convert PCB_SHAPE_T and PCB_TEXT_T to footprint
     // items if needed
-    DIALOG_IMPORT_GFX dlg( m_frame, m_editModules );
+    DIALOG_IMPORT_GFX dlg( m_frame, m_isFootprintEditor );
     int dlgResult = dlg.ShowModal();
 
     std::list<std::unique_ptr<EDA_ITEM>>& list = dlg.GetImportedItems();
@@ -1012,7 +1012,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     if( dlg.ShouldGroupItems() )
     {
-        if( m_editModules )
+        if( m_isFootprintEditor )
             grp = new PCB_GROUP( m_frame->GetBoard()->GetFirstModule() );
         else
             grp = new PCB_GROUP( m_frame->GetBoard() );
@@ -1023,7 +1023,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     {
         EDA_ITEM* item = ptr.get();
 
-        if( m_editModules )
+        if( m_isFootprintEditor )
             wxASSERT( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_FP_TEXT_T );
         else
             wxASSERT( item->Type() == PCB_SHAPE_T || item->Type() == PCB_TEXT_T );
@@ -1157,7 +1157,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 {
-    wxASSERT( m_editModules );
+    wxASSERT( m_isFootprintEditor );
 
     if( !m_frame->GetModel() )
         return 0;
@@ -1798,7 +1798,7 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER** aZo
 
 int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 {
-    if( m_editModules && !m_frame->GetModel() )
+    if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
     ZONE_MODE zoneMode = aEvent.Parameter<ZONE_MODE>();

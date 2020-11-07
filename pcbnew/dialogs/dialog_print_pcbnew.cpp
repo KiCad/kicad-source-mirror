@@ -446,7 +446,7 @@ int PCBNEW_CONTROL::Print( const TOOL_EVENT& aEvent )
     PCBNEW_PRINTOUT_SETTINGS settings( m_frame->GetPageSettings() );
     DIALOG_PRINT_PCBNEW dlg( (PCB_BASE_EDIT_FRAME*) m_frame, &settings );
 
-    if( m_editModules )
+    if( m_isFootprintEditor )
         dlg.ForcePrintBorder( false );
 
     dlg.ShowModal();

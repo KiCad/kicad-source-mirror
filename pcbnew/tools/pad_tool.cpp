@@ -89,7 +89,7 @@ bool PAD_TOOL::Init()
 
         menu.AddSeparator( 400 );
 
-        if( m_editModules )
+        if( m_isFootprintEditor )
         {
             menu.AddItem( PCB_ACTIONS::enumeratePads,      SELECTION_CONDITIONS::ShowAlways, 400 );
             menu.AddItem( PCB_ACTIONS::recombinePad,       recombineCondition, 400 );

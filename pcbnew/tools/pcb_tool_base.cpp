@@ -24,7 +24,6 @@
 #include "pcb_tool_base.h"
 
 #include <view/view_controls.h>
-#include <view/view.h>
 #include <tool/tool_manager.h>
 #include <board_commit.h>
 #include <class_module.h>
@@ -59,25 +58,26 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
     aPlacer->m_frame = frame();
     aPlacer->m_modifiers = 0;
 
-    auto makeNewItem = [&] ( VECTOR2I aPosition )
-    {
-        if( frame()->GetModel() )
-            newItem = aPlacer->CreateItem();
-
-        if( newItem )
-        {
-            newItem->SetPosition( (wxPoint) aPosition );
-            preview.Add( newItem.get() );
-
-            if( newItem->Type() == PCB_MODULE_T )
+    auto makeNewItem =
+            [&]( VECTOR2I aPosition )
             {
-                auto module = dyn_cast<MODULE*>( newItem.get() );
+                if( frame()->GetModel() )
+                    newItem = aPlacer->CreateItem();
 
-                // footprints have more drawable parts
-                module->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add, &preview, _1 ) );
-            }
-        }
-    };
+                if( newItem )
+                {
+                    newItem->SetPosition( (wxPoint) aPosition );
+                    preview.Add( newItem.get() );
+
+                    if( newItem->Type() == PCB_MODULE_T )
+                    {
+                        auto module = dyn_cast<MODULE*>( newItem.get() );
+
+                        // footprints have more drawable parts
+                        module->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add, &preview, _1 ) );
+                    }
+                }
+            };
 
     if( aOptions & IPO_SINGLE_CLICK )
         makeNewItem( controls()->GetCursorPosition() );
@@ -102,15 +102,16 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
         VECTOR2I cursorPos = controls()->GetCursorPosition();
         aPlacer->m_modifiers = evt->Modifier();
 
-        auto cleanup = [&] ()
-        {
-            newItem = nullptr;
-            preview.Clear();
-            view()->Update( &preview );
-            controls()->SetAutoPan( false );
-            controls()->CaptureCursor( false );
-            controls()->ShowCursor( true );
-        };
+        auto cleanup =
+                [&] ()
+                {
+                    newItem = nullptr;
+                    preview.Clear();
+                    view()->Update( &preview );
+                    controls()->SetAutoPan( false );
+                    controls()->CaptureCursor( false );
+                    controls()->ShowCursor( true );
+                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -230,7 +231,6 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
                 view()->Update( &preview );
             }
         }
-
         else if( newItem && evt->IsMotion() )
         {
             // track the cursor
@@ -240,9 +240,10 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
             // Show a preview of the item
             view()->Update( &preview );
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     view()->Remove( &preview );
@@ -252,8 +253,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
 bool PCB_TOOL_BASE::Init()
 {
     // A basic context manu.  Many (but not all) tools will choose to override this.
-
-    auto& ctxMenu = m_menu.GetMenu();
+    CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
 
     // cancel current tool goes in main context menu at the top if present
     ctxMenu.AddItem( ACTIONS::cancelInteractive, SELECTION_CONDITIONS::ShowAlways, 1 );
@@ -289,17 +289,17 @@ PCB_DRAW_PANEL_GAL* PCB_TOOL_BASE::canvas() const
 
 const PCBNEW_SELECTION& PCB_TOOL_BASE::selection() const
 {
-    auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const auto& selection = selTool->GetSelection();
-    return selection;
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+
+    return selTool->GetSelection();
 }
 
 
 PCBNEW_SELECTION& PCB_TOOL_BASE::selection()
 {
-    auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    auto& selection = selTool->GetSelection();
-    return selection;
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+
+    return selTool->GetSelection();
 }
 
 

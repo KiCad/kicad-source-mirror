@@ -409,7 +409,7 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
     }
     else
     {
-        if( m_editModules && !getEditFrame<PCB_BASE_EDIT_FRAME>()->GetModel() )
+        if( m_isFootprintEditor && !getEditFrame<PCB_BASE_EDIT_FRAME>()->GetModel() )
             return 0;
 
         std::string         tool = aEvent.GetCommandStr().get();
@@ -446,7 +446,7 @@ int PCBNEW_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
-    if( m_editModules && !m_frame->GetBoard()->GetFirstModule() )
+    if( m_isFootprintEditor && !m_frame->GetBoard()->GetFirstModule() )
         return 0;
 
     std::string         tool = aEvent.GetCommandStr().get();
@@ -493,7 +493,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
             GENERAL_COLLECTOR collector;
             collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
 
-            if( m_editModules )
+            if( m_isFootprintEditor )
                 collector.Collect( board, GENERAL_COLLECTOR::ModuleItems, (wxPoint) aPos, guide );
             else
                 collector.Collect( board, GENERAL_COLLECTOR::BoardLevelItems, (wxPoint) aPos, guide );
@@ -635,7 +635,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
     if( !frame()->IsType( FRAME_FOOTPRINT_EDITOR ) && !frame()->IsType( FRAME_PCB_EDITOR ) )
         return 0;
 
-    bool editModules = m_editModules || frame()->IsType( FRAME_FOOTPRINT_EDITOR );
+    bool editModules = m_isFootprintEditor || frame()->IsType( FRAME_FOOTPRINT_EDITOR );
 
     if( clipItem->Type() == PCB_T )
     {

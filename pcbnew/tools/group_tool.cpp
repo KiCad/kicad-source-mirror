@@ -353,7 +353,7 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
 
-    if( m_editModules )
+    if( m_isFootprintEditor )
     {
         MODULE* module = board->GetFirstModule();
 
@@ -411,7 +411,7 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
 
         if( group )
         {
-            if( m_editModules )
+            if( m_isFootprintEditor )
             {
                 MODULE* module = board->GetFirstModule();
 

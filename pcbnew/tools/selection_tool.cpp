@@ -534,8 +534,8 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
             ExitGroup();
     }
 
-    collector.Collect( board(), m_editModules ? GENERAL_COLLECTOR::ModuleItems
-                                              : GENERAL_COLLECTOR::AllBoardItems,
+    collector.Collect( board(), m_isFootprintEditor ? GENERAL_COLLECTOR::ModuleItems
+                                                    : GENERAL_COLLECTOR::AllBoardItems,
                        (wxPoint) aWhere, guide );
 
     // Remove unselectable items
@@ -769,7 +769,7 @@ bool SELECTION_TOOL::selectMultiple()
 
 SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
 {
-    if( !m_locked || m_editModules )
+    if( !m_locked || m_isFootprintEditor )
         return SELECTION_UNLOCKED;
 
     bool containsLocked = false;
@@ -1632,8 +1632,8 @@ void SELECTION_TOOL::RebuildSelection()
         return SEARCH_RESULT::CONTINUE;
     };
 
-    board()->Visit( inspector, nullptr,  m_editModules ? GENERAL_COLLECTOR::ModuleItems
-                                                       : GENERAL_COLLECTOR::AllBoardItems );
+    board()->Visit( inspector, nullptr, m_isFootprintEditor ? GENERAL_COLLECTOR::ModuleItems
+                                                            : GENERAL_COLLECTOR::AllBoardItems );
 }
 
 
@@ -1860,7 +1860,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         // If it is, and we are not editing the footprint, it should not be selectable
         bool zoneInFootprint = zone->GetParent() && zone->GetParent()->Type() == PCB_MODULE_T;
 
-        if( zoneInFootprint && !m_editModules && !checkVisibilityOnly )
+        if( zoneInFootprint && !m_isFootprintEditor && !checkVisibilityOnly )
             return false;
 
         // zones can exist on multiple layers!
@@ -1888,7 +1888,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
     case PCB_MODULE_T:
     {
         // In modedit, we do not want to select the module itself.
-        if( m_editModules )
+        if( m_isFootprintEditor )
             return false;
 
         // Allow selection of footprints if some part of the footprint is visible.
@@ -1920,20 +1920,20 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         // Multiple selection is only allowed in modedit mode.  In pcbnew, you have to select
         // module subparts one by one, rather than with a drag selection.  This is so you can
         // pick up items under an (unlocked) module without also moving the module's sub-parts.
-        if( !m_editModules && !checkVisibilityOnly )
+        if( !m_isFootprintEditor && !checkVisibilityOnly )
         {
             if( m_multiple && !settings->GetHighContrast() )
                 return false;
         }
 
-        if( !m_editModules && !view()->IsVisible( aItem ) )
+        if( !m_isFootprintEditor && !view()->IsVisible( aItem ) )
             return false;
 
         break;
 
     case PCB_FP_SHAPE_T:
         // Module edge selections are only allowed in modedit mode.
-        if( !m_editModules && !checkVisibilityOnly )
+        if( !m_isFootprintEditor && !checkVisibilityOnly )
             return false;
 
         break;
@@ -1943,7 +1943,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         // Multiple selection is only allowed in modedit mode.  In pcbnew, you have to select
         // module subparts one by one, rather than with a drag selection.  This is so you can
         // pick up items under an (unlocked) module without also moving the module's sub-parts.
-        if( !m_editModules && !checkVisibilityOnly )
+        if( !m_isFootprintEditor && !checkVisibilityOnly )
         {
             if( m_multiple )
                 return false;

@@ -158,13 +158,13 @@ bool EDIT_TOOL::Init()
     m_selectionTool = static_cast<SELECTION_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveSelection" ) );
     wxASSERT_MSG( m_selectionTool, "pcbnew.InteractiveSelection tool is not available" );
 
-    auto editingModuleCondition =
+    auto inFootprintEditor =
             [ this ] ( const SELECTION& aSelection )
             {
-                return m_editModules;
+                return m_isFootprintEditor;
             };
 
-    auto singleModuleCondition = SELECTION_CONDITIONS::OnlyType( PCB_MODULE_T )
+    auto singleFootprintCondition = SELECTION_CONDITIONS::OnlyType( PCB_MODULE_T )
                                     && SELECTION_CONDITIONS::Count( 1 );
 
     auto noActiveToolCondition =
@@ -198,7 +198,7 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::rotateCcw, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::mirror, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::mirror, inFootprintEditor && SELECTION_CONDITIONS::NotEmpty );
 
     menu.AddItem( ACTIONS::doDelete, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 )
@@ -222,9 +222,9 @@ bool EDIT_TOOL::Init()
 
     // Footprint actions
     menu.AddSeparator( 150 );
-    menu.AddItem( PCB_ACTIONS::editFpInFpEditor, singleModuleCondition, 150 );
-    menu.AddItem( PCB_ACTIONS::updateFootprint, singleModuleCondition, 150 );
-    menu.AddItem( PCB_ACTIONS::changeFootprint, singleModuleCondition, 150 );
+    menu.AddItem( PCB_ACTIONS::editFpInFpEditor, singleFootprintCondition, 150 );
+    menu.AddItem( PCB_ACTIONS::updateFootprint, singleFootprintCondition, 150 );
+    menu.AddItem( PCB_ACTIONS::changeFootprint, singleFootprintCondition, 150 );
 
     return true;
 }
@@ -490,7 +490,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                 m_dragging = true;
 
                 // When editing footprints, all items have the same parent
-                if( EditingModules() )
+                if( IsFootprintEditor() )
                 {
                     m_commit->Modify( selection.Front() );
                 }
@@ -960,12 +960,12 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     const int rotateAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *editFrame, aEvent );
 
     // When editing footprints, all items have the same parent
-    if( EditingModules() )
+    if( IsFootprintEditor() )
         m_commit->Modify( selection.Front() );
 
     for( auto item : selection )
     {
-        if( !item->IsNew() && !EditingModules() )
+        if( !item->IsNew() && !IsFootprintEditor() )
         {
             m_commit->Modify( item );
 
@@ -1060,7 +1060,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     wxPoint mirrorPoint( refPoint.x, refPoint.y );
 
     // When editing footprints, all items have the same parent
-    if( EditingModules() )
+    if( IsFootprintEditor() )
         m_commit->Modify( selection.Front() );
 
     for( EDA_ITEM* item : selection )
@@ -1073,7 +1073,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         case PCB_FP_ZONE_AREA_T:
         case PCB_PAD_T:
             // Only create undo entry for items on the board
-            if( !item->IsNew() && !EditingModules() )
+            if( !item->IsNew() && !IsFootprintEditor() )
                 m_commit->Modify( item );
 
             break;
@@ -1156,7 +1156,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     updateModificationPoint( selection );
 
     // Flip around the anchor for footprints, and the bounding box center for board items
-    VECTOR2I modPoint = EditingModules() ? VECTOR2I( 0, 0 ) : selection.GetCenter();
+    VECTOR2I modPoint = IsFootprintEditor() ? VECTOR2I( 0, 0 ) : selection.GetCenter();
 
     // If only one item selected, flip around the selection or item anchor point (instead
     // of the bounding box center) to avoid moving the item anchor
@@ -1171,12 +1171,12 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     bool leftRight = frame()->Settings().m_FlipLeftRight;
 
     // When editing footprints, all items have the same parent
-    if( EditingModules() )
+    if( IsFootprintEditor() )
         m_commit->Modify( selection.Front() );
 
     for( EDA_ITEM* item : selection )
     {
-        if( !item->IsNew() && !EditingModules() )
+        if( !item->IsNew() && !IsFootprintEditor() )
             m_commit->Modify( item );
 
         if( item->Type() == PCB_GROUP_T )
@@ -1467,14 +1467,14 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         selCenter += translation;
 
         // When editing footprints, all items have the same parent
-        if( EditingModules() )
+        if( IsFootprintEditor() )
             m_commit->Modify( selection.Front() );
 
         for( EDA_ITEM* selItem : selection )
         {
             BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selItem );
 
-            if( !item->IsNew() && !EditingModules() )
+            if( !item->IsNew() && !IsFootprintEditor() )
             {
                 m_commit->Modify( item );
 
@@ -1563,7 +1563,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         BOARD_ITEM* dupe_item = nullptr;
         BOARD_ITEM* orig_item = static_cast<BOARD_ITEM*>( item );
 
-        if( m_editModules )
+        if( m_isFootprintEditor )
         {
             MODULE* editModule = editFrame->GetBoard()->GetFirstModule();
             dupe_item = editModule->DuplicateItem( orig_item );
@@ -1679,7 +1679,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 
     // we have a selection to work on now, so start the tool process
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
-    ARRAY_CREATOR   array_creator( *editFrame, m_editModules, selection );
+    ARRAY_CREATOR   array_creator( *editFrame, m_isFootprintEditor, selection );
     array_creator.Invoke();
 
     return 0;
@@ -1852,7 +1852,7 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
         selection.SetReferencePoint( refPoint );
 
         io.SetBoard( board() );
-        io.SaveSelection( selection, m_editModules );
+        io.SaveSelection( selection, m_isFootprintEditor );
         frame()->SetStatusText( _( "Selection copied" ) );
     }
 

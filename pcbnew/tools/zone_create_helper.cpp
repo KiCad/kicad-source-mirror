@@ -102,9 +102,9 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
 
     // The new zone is a ZONE_CONTAINER if created in the board editor
     // and a MODULE_ZONE_CONTAINER if created in the footprint editor
-    wxASSERT( !m_tool.m_editModules || ( parent->Type() == PCB_MODULE_T ) );
+    wxASSERT( !m_tool.m_isFootprintEditor || ( parent->Type() == PCB_MODULE_T ) );
 
-    std::unique_ptr<ZONE_CONTAINER> newZone = m_tool.m_editModules ?
+    std::unique_ptr<ZONE_CONTAINER> newZone = m_tool.m_isFootprintEditor ?
                                         std::make_unique<MODULE_ZONE_CONTAINER>( parent ) :
                                         std::make_unique<ZONE_CONTAINER>( parent );
 
@@ -235,8 +235,8 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
 
             if( graphicPolygonsLayers.Contains( m_params.m_layer ) )
             {
-                auto poly = m_tool.m_editModules ? new FP_SHAPE((MODULE *) parent )
-                                                 : new PCB_SHAPE();
+                auto poly = m_tool.m_isFootprintEditor ? new FP_SHAPE((MODULE *) parent )
+                                                       : new PCB_SHAPE();
                 poly->SetShape ( S_POLYGON );
                 poly->SetLayer( m_params.m_layer );
                 poly->SetPolyShape ( *aZone->Outline() );
@@ -249,8 +249,8 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
 
                 for( auto seg = outline->CIterateSegments( 0 ); seg; seg++ )
                 {
-                    PCB_SHAPE* new_seg = m_tool.m_editModules ? new FP_SHAPE( (MODULE *) parent )
-                                                              : new PCB_SHAPE();
+                    auto* new_seg = m_tool.m_isFootprintEditor ? new FP_SHAPE((MODULE *) parent )
+                                                               : new PCB_SHAPE();
                     new_seg->SetShape( S_SEGMENT );
                     new_seg->SetLayer( m_params.m_layer );
                     new_seg->SetStart( wxPoint( seg.Get().A.x, seg.Get().A.y ) );

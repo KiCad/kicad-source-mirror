@@ -41,7 +41,7 @@ using namespace std::placeholders;
 BOARD_COMMIT::BOARD_COMMIT( PCB_TOOL_BASE* aTool )
 {
     m_toolMgr = aTool->GetManager();
-    m_editModules = aTool->EditingModules();
+    m_editModules = aTool->IsFootprintEditor();
 }
 
 

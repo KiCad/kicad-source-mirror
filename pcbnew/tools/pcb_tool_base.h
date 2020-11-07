@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -56,12 +57,14 @@ struct INTERACTIVE_PLACER_BASE
     }
 
     virtual std::unique_ptr<BOARD_ITEM> CreateItem() = 0;
+
     virtual void SnapItem( BOARD_ITEM *aItem );
+
     virtual bool PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommit );
 
     PCB_BASE_EDIT_FRAME* m_frame;
-    BOARD* m_board;
-    int m_modifiers;
+    BOARD*               m_board;
+    int                  m_modifiers;
 };
 
 
@@ -73,8 +76,8 @@ public:
      *
      * Creates a tool with given id & name. The name must be unique. */
     PCB_TOOL_BASE( TOOL_ID aId, const std::string& aName ) :
-        TOOL_INTERACTIVE ( aId, aName ),
-        m_editModules( false )
+            TOOL_INTERACTIVE ( aId, aName ),
+            m_isFootprintEditor( false )
     {};
 
     /**
@@ -82,8 +85,8 @@ public:
      *
      * Creates a tool with given name. The name must be unique. */
     PCB_TOOL_BASE( const std::string& aName ) :
-        TOOL_INTERACTIVE ( aName ),
-        m_editModules( false )
+            TOOL_INTERACTIVE ( aName ),
+            m_isFootprintEditor( false )
     {};
 
     virtual ~PCB_TOOL_BASE() {};
@@ -92,24 +95,16 @@ public:
     virtual void Reset( RESET_REASON aReason ) override;
 
     /**
-     * Function SetEditModules()
+     * Function SetIsFootprintEditor()
      *
      * Toggles edit module mode. When enabled, one may select parts of footprints individually
      * (graphics, pads, etc.), so they can be modified.
      * @param aEnabled decides if the mode should be enabled.
      */
-    void SetEditModules( bool aEnabled )
-    {
-        m_editModules = aEnabled;
-    }
-
-    bool EditingModules() const
-    {
-        return m_editModules;
-    }
+    void SetIsFootprintEditor( bool aEnabled ) { m_isFootprintEditor = aEnabled; }
+    bool IsFootprintEditor() const { return m_isFootprintEditor; }
 
 protected:
-
     /**
      * Options for placing items interactively.
      */
@@ -127,7 +122,6 @@ protected:
         /// Allow repeat placement of the item
         IPO_REPEAT       = 0x08
     };
-
 
     /**
      * Helper function for performing a common interactive idiom:
@@ -171,11 +165,15 @@ protected:
     }
 
     const PCB_DISPLAY_OPTIONS& displayOptions() const;
+
     PCB_DRAW_PANEL_GAL* canvas() const;
+
     const PCBNEW_SELECTION& selection() const;
+
     PCBNEW_SELECTION& selection();
 
-    bool m_editModules;
+protected:
+    bool m_isFootprintEditor;
 };
 
 #endif
