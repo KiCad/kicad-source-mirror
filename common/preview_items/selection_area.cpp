@@ -84,10 +84,11 @@ const BOX2I SELECTION_AREA::ViewBBox() const
 
 void SELECTION_AREA::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
-    auto& gal = *aView->GetGAL();
-    auto rs = aView->GetPainter()->GetSettings();
+    KIGFX::GAL&      gal = *aView->GetGAL();
+    RENDER_SETTINGS* settings = aView->GetPainter()->GetSettings();
 
-    const auto& scheme =  rs->IsBackgroundDark() ? selectionColorScheme[0] : selectionColorScheme[1];
+    const SELECTION_COLORS& scheme = settings->IsBackgroundDark() ? selectionColorScheme[0]
+                                                                  : selectionColorScheme[1];
 
     // Set the fill of the selection rectangle
     // based on the selection mode

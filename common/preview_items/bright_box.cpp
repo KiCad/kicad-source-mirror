@@ -44,7 +44,7 @@ void BRIGHT_BOX::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     if( !m_item )
         return;
 
-    auto gal = aView->GetGAL();
+    KIGFX::GAL* gal = aView->GetGAL();
 
     gal->SetIsStroke( true );
     gal->SetIsFill( false );

@@ -35,8 +35,10 @@
 
 using namespace KIGFX::PREVIEW;
 
-ARC_ASSISTANT::ARC_ASSISTANT( const ARC_GEOM_MANAGER& aManager, EDA_UNITS aUnits )
-        : EDA_ITEM( NOT_USED ), m_constructMan( aManager ), m_units( aUnits )
+ARC_ASSISTANT::ARC_ASSISTANT( const ARC_GEOM_MANAGER& aManager, EDA_UNITS aUnits ) :
+        EDA_ITEM( NOT_USED ),
+        m_constructMan( aManager ),
+        m_units( aUnits )
 {
 }
 
@@ -79,7 +81,7 @@ double getNormDeciDegFromRad( double aRadians )
 
 void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
-    auto& gal = *aView->GetGAL();
+    KIGFX::GAL& gal = *aView->GetGAL();
 
     // not in a position to draw anything
     if( m_constructMan.IsReset() )
@@ -87,15 +89,15 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     gal.ResetTextAttributes();
 
-    const auto origin = m_constructMan.GetOrigin();
+    const VECTOR2I origin = m_constructMan.GetOrigin();
 
     KIGFX::PREVIEW::DRAW_CONTEXT preview_ctx( *aView );
 
     // draw first radius line
     bool dimFirstLine = m_constructMan.GetStep() > ARC_GEOM_MANAGER::SET_START;
 
-    preview_ctx.DrawLineWithAngleHighlight(
-            origin, m_constructMan.GetStartRadiusEnd(), dimFirstLine );
+    preview_ctx.DrawLineWithAngleHighlight( origin, m_constructMan.GetStartRadiusEnd(),
+                                            dimFirstLine );
 
     std::vector<wxString> cursorStrings;
 
@@ -134,6 +136,6 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     // place the text next to cursor, on opposite side from radius
     DrawTextNextToCursor( aView, m_constructMan.GetLastPoint(),
-                          origin - m_constructMan.GetLastPoint(),
-                          cursorStrings, aLayer == LAYER_SELECT_OVERLAY );
+                          origin - m_constructMan.GetLastPoint(), cursorStrings,
+                          aLayer == LAYER_SELECT_OVERLAY );
 }

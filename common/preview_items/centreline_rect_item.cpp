@@ -22,9 +22,7 @@
  */
 
 #include <preview_items/centreline_rect_item.h>
-
 #include <preview_items/two_point_geom_manager.h>
-
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view.h>
 
@@ -74,20 +72,17 @@ static SHAPE_POLY_SET getRectangleAlongCentreLine( const VECTOR2D& aClStart,
 }
 
 
-CENTRELINE_RECT_ITEM::CENTRELINE_RECT_ITEM(
-        const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr,
-        double aAspect ):
-    m_geomMgr( aGeomMgr ),
-    m_aspect( aAspect )
+CENTRELINE_RECT_ITEM::CENTRELINE_RECT_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr,
+                                            double aAspect ) :
+        m_geomMgr( aGeomMgr ),
+        m_aspect( aAspect )
 {
 }
 
 
 SHAPE_POLY_SET CENTRELINE_RECT_ITEM::getOutline() const
 {
-    return getRectangleAlongCentreLine( m_geomMgr.GetOrigin(),
-                                        m_geomMgr.GetEnd(),
-                                        m_aspect );
+    return getRectangleAlongCentreLine( m_geomMgr.GetOrigin(), m_geomMgr.GetEnd(), m_aspect );
 }
 
 
@@ -99,7 +94,7 @@ const BOX2I CENTRELINE_RECT_ITEM::ViewBBox() const
 
 void CENTRELINE_RECT_ITEM::drawPreviewShape( KIGFX::VIEW* aView ) const
 {
-    auto& gal = *aView->GetGAL();
+    KIGFX::GAL& gal = *aView->GetGAL();
 
     gal.DrawLine( m_geomMgr.GetOrigin(), m_geomMgr.GetEnd() );
     gal.DrawPolygon( getOutline() );

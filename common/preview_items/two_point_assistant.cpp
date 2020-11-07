@@ -56,15 +56,15 @@ const BOX2I TWO_POINT_ASSISTANT::ViewBBox() const
 
 void TWO_POINT_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
-    auto& gal = *aView->GetGAL();
+    KIGFX::GAL& gal = *aView->GetGAL();
 
     // not in a position to draw anything
     if( m_constructMan.IsReset() )
         return;
 
-    const auto origin = m_constructMan.GetOrigin();
-    const auto end    = m_constructMan.GetEnd();
-    const auto radVec = end - origin;
+    const VECTOR2I origin = m_constructMan.GetOrigin();
+    const VECTOR2I end    = m_constructMan.GetEnd();
+    const VECTOR2I radVec = end - origin;
 
     if( radVec.x == 0 && radVec.y == 0 )
     {

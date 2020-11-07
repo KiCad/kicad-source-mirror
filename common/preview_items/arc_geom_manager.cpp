@@ -39,14 +39,10 @@ bool ARC_GEOM_MANAGER::acceptPoint( const VECTOR2I& aPt )
 {
     switch( getStep() )
     {
-    case SET_ORIGIN:
-        return setOrigin( aPt );
-    case SET_START:
-        return setStart( aPt );
-    case SET_ANGLE:
-        return setEnd( aPt );
-    case COMPLETE:
-        break;
+    case SET_ORIGIN: return setOrigin( aPt );
+    case SET_START:  return setStart( aPt );
+    case SET_ANGLE:  return setEnd( aPt );
+    case COMPLETE:   return false;
     }
 
     return false;
@@ -130,7 +126,7 @@ bool ARC_GEOM_MANAGER::setOrigin( const VECTOR2I& aOrigin )
 
 bool ARC_GEOM_MANAGER::setStart( const VECTOR2I& aEnd )
 {
-    const auto radVec = aEnd - m_origin;
+    const VECTOR2I radVec = aEnd - m_origin;
 
     m_radius = radVec.EuclideanNorm();
     m_startAngle = radVec.Angle();
@@ -150,7 +146,7 @@ bool ARC_GEOM_MANAGER::setStart( const VECTOR2I& aEnd )
 
 bool ARC_GEOM_MANAGER::setEnd( const VECTOR2I& aCursor )
 {
-    const auto radVec = aCursor - m_origin;
+    const VECTOR2I radVec = aCursor - m_origin;
 
     m_endAngle = radVec.Angle();
 

@@ -88,8 +88,10 @@ bool POLYGON_GEOM_MANAGER::IsSelfIntersecting( bool aIncludeLeaderPts ) const
     if( aIncludeLeaderPts )
     {
         for( int i = 0; i < m_leaderPts.PointCount(); ++i )
+        {
             if( m_leaderPts.CPoint( i ) != pts.CPoint( 0 ) )
                 pts.Append( m_leaderPts.CPoint( i ) );
+        }
     }
 
     // line chain needs to be set as closed for proper checks
@@ -120,16 +122,12 @@ bool POLYGON_GEOM_MANAGER::NewPointClosesOutline( const VECTOR2I& aPt ) const
 void POLYGON_GEOM_MANAGER::DeleteLastCorner()
 {
     if( m_lockedPoints.PointCount() > 0 )
-    {
         m_lockedPoints.Remove( m_lockedPoints.PointCount() - 1 );
-    }
 
     // update the new last segment (was previously
     // locked in), reusing last constraints
     if( m_lockedPoints.PointCount() > 0 )
-    {
         updateLeaderPoints( m_leaderPts.CLastPoint() );
-    }
 
     m_client.OnGeometryChange( *this );
 }

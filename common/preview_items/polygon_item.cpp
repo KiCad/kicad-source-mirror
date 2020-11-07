@@ -29,7 +29,7 @@ using namespace KIGFX::PREVIEW;
 
 const double POLYGON_ITEM::POLY_LINE_WIDTH = 1;
 
-POLYGON_ITEM::POLYGON_ITEM():
+POLYGON_ITEM::POLYGON_ITEM() :
         SIMPLE_OVERLAY_ITEM()
 {
 }
@@ -54,8 +54,8 @@ void POLYGON_ITEM::SetPoints( const SHAPE_LINE_CHAIN& aLockedInPts,
 
 void POLYGON_ITEM::drawPreviewShape( KIGFX::VIEW* aView ) const
 {
-    auto& gal = *aView->GetGAL();
-    auto rs = aView->GetPainter()->GetSettings();
+    KIGFX::GAL&      gal = *aView->GetGAL();
+    RENDER_SETTINGS* renderSettings = aView->GetPainter()->GetSettings();
 
     if( m_lockedChain.PointCount() >= 2 )
     {
@@ -66,7 +66,7 @@ void POLYGON_ITEM::drawPreviewShape( KIGFX::VIEW* aView ) const
     // draw the leader line in a different color
     if( m_leaderChain.PointCount() >= 2 )
     {
-        gal.SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
+        gal.SetStrokeColor( renderSettings->GetLayerColor( LAYER_AUX_ITEMS ) );
         gal.DrawPolyline( m_leaderChain );
     }
 

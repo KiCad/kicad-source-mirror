@@ -22,15 +22,12 @@
  */
 
 #include <preview_items/ruler_item.h>
-
 #include <preview_items/preview_utils.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <layers_id_colors_and_visibility.h>
 #include <painter.h>
 #include <view/view.h>
 #include <trigo.h>
-
-#include <common.h>
 
 using namespace KIGFX::PREVIEW;
 
@@ -181,7 +178,7 @@ void drawTicksAlongLine( KIGFX::GAL* aGal, const VECTOR2D& aOrigin, const VECTOR
 
     for( int i = 0; i < numTicks; ++i )
     {
-        const auto tickPos = aOrigin + aLine.Resize( tickSpace * i );
+        const VECTOR2D tickPos = aOrigin + aLine.Resize( tickSpace * i );
 
         double length = aMinorTickLen;
         bool drawLabel = false;
