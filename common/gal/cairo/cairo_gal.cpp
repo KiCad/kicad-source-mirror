@@ -1471,7 +1471,7 @@ void CAIRO_GAL::allocateBitmaps()
     bitmapBuffer = new unsigned char[bufferSize * 4];
 
     wxASSERT( wxOutput == nullptr );
-    wxOutput            = new unsigned char[wxBufferWidth * 3 * screenSize.y];
+    wxOutput = new unsigned char[wxBufferWidth * 3 * screenSize.y];
 }
 
 
