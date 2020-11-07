@@ -729,7 +729,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         if( (layer_id >= F_Cu) && (layer_id <= B_Cu) )
         {
             if( !m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) ||
-                !m_boardAdapter.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) )
+                !( m_boardAdapter.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) &&
+                   m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) ) )
                 set_layer_material( layer_id );
             else
                 setCopperMaterial();
@@ -848,7 +849,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             set_layer_material( layer_id );
 
             CLAYERS_OGL_DISP_LISTS* dispListThroughHolesOuter =
-                    ( m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS )
+                    ( m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) &&
+                      m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE )
                             && ( ( layer_id == B_SilkS ) || ( layer_id == F_SilkS ) ) ) ?
                             m_ogl_disp_list_through_holes_outer_ring :
                             m_ogl_disp_list_through_holes_outer;
@@ -872,6 +874,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
             if( (!skipRenderHoles) &&
                 m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) &&
+                m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) &&
                 ( ( ( layer_id == B_SilkS ) &&
                     ( m_ogl_disp_lists_layers.find( B_Mask ) != m_ogl_disp_lists_layers.end() ) ) ||
                   ( ( layer_id == F_SilkS ) &&

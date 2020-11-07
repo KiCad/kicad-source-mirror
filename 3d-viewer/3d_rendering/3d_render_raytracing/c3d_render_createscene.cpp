@@ -342,7 +342,8 @@ void C3D_RENDER_RAYTRACING::createItemsFromContainer( const CBVHCONTAINER2D *aCo
             // clip the silk screening at the outer edge of the annular ring, rather
             // than the at the outer edge of the copper plating.
             const CBVHCONTAINER2D& throughHoleOuter =
-                    ( m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS )
+                    ( m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) &&
+                      m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE )
                             && ( ( aLayer_id == B_SilkS ) || ( aLayer_id == F_SilkS ) ) ) ?
                             m_boardAdapter.GetThroughHole_Outer_Ring() :
                             m_boardAdapter.GetThroughHole_Outer();
@@ -389,6 +390,7 @@ void C3D_RENDER_RAYTRACING::createItemsFromContainer( const CBVHCONTAINER2D *aCo
         const MAP_CONTAINER_2D& mapLayers = m_boardAdapter.GetMapLayers();
 
         if( m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) &&
+            m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) &&
             ( ( ( aLayer_id == B_SilkS ) &&
                 ( mapLayers.find( B_Mask ) != mapLayers.end() ) ) ||
               ( ( aLayer_id == F_SilkS ) &&
@@ -779,7 +781,8 @@ void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
     }// for each layer on map
 
     // Create plated copper
-    if( m_boardAdapter.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) )
+    if( m_boardAdapter.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) &&
+        m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
     {
         SFVEC3F layerColor_F_Cu = m_boardAdapter.GetLayerColor( F_Cu );
         SFVEC3F layerColor_B_Cu = m_boardAdapter.GetLayerColor( B_Cu );

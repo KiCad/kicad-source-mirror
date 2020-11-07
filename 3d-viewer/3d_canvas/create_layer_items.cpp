@@ -208,7 +208,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-    if( GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) )
+    if( GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) &&
+        GetFlag( FL_USE_REALISTIC_MODE ) )
     {
         m_F_Cu_PlatedPads_poly = new SHAPE_POLY_SET;
         m_B_Cu_PlatedPads_poly = new SHAPE_POLY_SET;
@@ -316,7 +317,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                                      hole_inner_radius + thickness,
                                                      *track ) );
 
-                    if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
+                    if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) &&
+                        GetFlag( FL_USE_REALISTIC_MODE ) )
                     {
                         m_through_holes_outer_ring.Add( new CFILLEDCIRCLE2D( via_center,
                                                                              ring_radius,
@@ -413,7 +415,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     TransformCircleToPolygon( m_through_outer_holes_vias_poly, via->GetStart(),
                                               hole_outer_radius, ARC_HIGH_DEF, ERROR_INSIDE );
 
-                    if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
+                    if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) &&
+                        GetFlag( FL_USE_REALISTIC_MODE ) )
                     {
                         TransformCircleToPolygon( m_through_outer_ring_holes_poly,
                                                   via->GetStart(), hole_outer_ring_radius,
@@ -479,7 +482,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             m_through_holes_outer.Add( createNewPadDrill( pad, inflate ) );
 
-            if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
+            if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) &&
+                GetFlag( FL_USE_REALISTIC_MODE ) )
             {
                 m_through_holes_outer_ring.Add( createNewPadDrill( pad, inflate ) );
             }
@@ -507,7 +511,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             if( pad->GetAttribute () != PAD_ATTRIB_NPTH )
             {
-                if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
+                if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) &&
+                    GetFlag( FL_USE_REALISTIC_MODE ) )
                 {
                     pad->TransformHoleWithClearanceToPolygon( m_through_outer_ring_holes_poly,
                                                               inflate,
@@ -520,7 +525,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             else
             {
                 // If not plated, no copper.
-                if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) )
+                if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) &&
+                    GetFlag( FL_USE_REALISTIC_MODE ) )
                 {
                     pad->TransformHoleWithClearanceToPolygon( m_through_outer_ring_holes_poly, 0,
                                                               ARC_HIGH_DEF, ERROR_INSIDE );
@@ -532,7 +538,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-    const bool renderPlatedPadsAsPlated = GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED );
+    const bool renderPlatedPadsAsPlated = GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) &&
+                                          GetFlag( FL_USE_REALISTIC_MODE );
 
     // Add footprints PADs objects to containers
     for( PCB_LAYER_ID curr_layer_id : layer_id )
@@ -777,7 +784,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
-        if( GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) )
+        if( GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) &&
+            GetFlag( FL_USE_REALISTIC_MODE ) )
         {
             if( m_F_Cu_PlatedPads_poly && ( m_layers_poly.find( F_Cu ) != m_layers_poly.end() ) )
             {
@@ -799,7 +807,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         std::vector< PCB_LAYER_ID > &selected_layer_id = layer_id;
         std::vector< PCB_LAYER_ID > layer_id_without_F_and_B;
 
-        if( GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) )
+        if( GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) &&
+            GetFlag( FL_USE_REALISTIC_MODE ) )
         {
             layer_id_without_F_and_B.clear();
             layer_id_without_F_and_B.reserve( layer_id.size() );
