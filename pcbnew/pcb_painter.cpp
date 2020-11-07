@@ -1195,10 +1195,10 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
         m_gal->Save();
 
-        if( MODULE* module = aShape->GetParentModule() )
+        if( MODULE* parentFootprint = aShape->GetParentFootprint() )
         {
-            m_gal->Translate( module->GetPosition() );
-            m_gal->Rotate( -module->GetOrientationRadians() );
+            m_gal->Translate( parentFootprint->GetPosition() );
+            m_gal->Rotate( -parentFootprint->GetOrientationRadians() );
         }
 
         m_gal->SetLineWidth( thickness );

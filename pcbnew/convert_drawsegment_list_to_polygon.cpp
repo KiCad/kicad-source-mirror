@@ -304,9 +304,14 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
         case S_POLYGON:
             {
                 const SHAPE_POLY_SET poly = graphic->GetPolyShape();
-                MODULE*              module = aSegList[0]->GetParentModule();
-                double               orientation = module ? module->GetOrientation() : 0.0;
-                VECTOR2I             offset = module ? module->GetPosition() : VECTOR2I( 0, 0 );
+                double               orientation = 0.0;
+                VECTOR2I             offset = VECTOR2I( 0, 0 );
+
+                if( aSegList[0]->GetParentFootprint() )
+                {
+                    orientation = aSegList[0]->GetParentFootprint()->GetOrientation();
+                    offset = aSegList[0]->GetParentFootprint()->GetPosition();
+                }
 
                 for( auto iter = poly.CIterate(); iter; iter++ )
                 {
@@ -358,15 +363,20 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
     }
     else if( graphic->GetShape() == S_POLYGON )
     {
-        MODULE* module = graphic->GetParentModule();     // NULL for items not in footprints
-        double orientation = module ? module->GetOrientation() : 0.0;
-        VECTOR2I offset = module ? module->GetPosition() : VECTOR2I( 0, 0 );
+        double   orientation = 0.0;
+        VECTOR2I offset = VECTOR2I( 0, 0 );
+
+        if( graphic->GetParentFootprint() )
+        {
+            orientation = graphic->GetParentFootprint()->GetOrientation();
+            offset = graphic->GetParentFootprint()->GetPosition();
+        }
 
         aPolygons.NewOutline();
 
         for( auto it = graphic->GetPolyShape().CIterate( 0 ); it; it++ )
         {
-            auto pt = *it;
+            VECTOR2I pt = *it;
             RotatePoint( pt, orientation );
             pt += offset;
             aPolygons.Append( pt );
@@ -542,13 +552,18 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
         // do not connect to other elements, so we process them independently
         if( graphic->GetShape() == S_POLYGON )
         {
-            MODULE* module = graphic->GetParentModule();     // NULL for items not in footprints
-            double orientation = module ? module->GetOrientation() : 0.0;
-            VECTOR2I offset = module ? module->GetPosition() : VECTOR2I( 0, 0 );
+            double   orientation = 0.0;
+            VECTOR2I offset = VECTOR2I( 0, 0 );
+
+            if( graphic->GetParentFootprint() )
+            {
+                orientation = graphic->GetParentFootprint()->GetOrientation();
+                offset = graphic->GetParentFootprint()->GetPosition();
+            }
 
             for( auto it = graphic->GetPolyShape().CIterate(); it; it++ )
             {
-                auto val = *it;
+                VECTOR2I val = *it;
                 RotatePoint( val, orientation );
                 val += offset;
 

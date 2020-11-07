@@ -233,14 +233,14 @@ bool EDIT_TOOL::Init()
 int EDIT_TOOL::GetAndPlace( const TOOL_EVENT& aEvent )
 {
     SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    MODULE*         module = getEditFrame<PCB_BASE_FRAME>()->GetFootprintFromBoardByReference();
+    MODULE*         fp = getEditFrame<PCB_BASE_FRAME>()->GetFootprintFromBoardByReference();
 
-    if( module )
+    if( fp )
     {
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, (void*) module );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, (void*) fp );
 
-        selectionTool->GetSelection().SetReferencePoint( module->GetPosition() );
+        selectionTool->GetSelection().SetReferencePoint( fp->GetPosition() );
         m_toolMgr->RunAction( PCB_ACTIONS::move, false );
     }
 
@@ -390,14 +390,14 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     for( EDA_ITEM* item : selection )
     {
         BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
-        MODULE*     module    = dynamic_cast<MODULE*>( item );
+        MODULE*     footprint = dynamic_cast<MODULE*>( item );
 
         if( boardItem )
             sel_items.push_back( boardItem );
 
-        if( module )
+        if( footprint )
         {
-            for( D_PAD* pad : module->Pads() )
+            for( D_PAD* pad : footprint->Pads() )
                 sel_items.push_back( pad );
         }
     }

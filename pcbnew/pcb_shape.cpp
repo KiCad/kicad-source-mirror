@@ -454,7 +454,7 @@ void PCB_SHAPE::SetAngle( double aAngle, bool aUpdateEnd )
 }
 
 
-MODULE* PCB_SHAPE::GetParentModule() const
+MODULE* PCB_SHAPE::GetParentFootprint() const
 {
     if( !m_Parent || m_Parent->Type() != PCB_MODULE_T )
         return NULL;
@@ -580,7 +580,7 @@ const EDA_RECT PCB_SHAPE::GetBoundingBox() const
         if( m_Poly.IsEmpty() )
             break;
 
-        MODULE* module = GetParentModule();
+        MODULE* module = GetParentFootprint();
         bbox = EDA_RECT();  // re-init for merging
 
         for( auto iter = m_Poly.CIterate(); iter; iter++ )
@@ -942,7 +942,7 @@ const BOX2I PCB_SHAPE::ViewBBox() const
 std::vector<wxPoint> PCB_SHAPE::GetRectCorners() const
 {
     std::vector<wxPoint> pts;
-    MODULE* module = GetParentModule();
+    MODULE* module = GetParentFootprint();
     wxPoint topLeft = GetStart();
     wxPoint botRight = GetEnd();
 

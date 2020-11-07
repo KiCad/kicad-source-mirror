@@ -218,12 +218,12 @@ public:
     }
 
     /**
-     * Function GetParentModule
+     * Function GetParentFootprint
      * returns a pointer to the parent module, or NULL if PCB_SHAPE does not
      * belong to a module.
      * @return MODULE* - pointer to the parent module or NULL.
      */
-    MODULE* GetParentModule() const;
+    MODULE* GetParentFootprint() const;
 
     // Accessors:
     const std::vector<wxPoint>& GetBezierPoints() const { return m_BezierPoints; }
@@ -235,7 +235,8 @@ public:
      */
     const std::vector<wxPoint> BuildPolyPointsList() const;
 
-    /** @return the number of corners of the polygonal shape
+    /**
+     * @return the number of corners of the polygonal shape
      */
     int GetPointCount() const;
 

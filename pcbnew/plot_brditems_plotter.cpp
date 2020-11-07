@@ -604,9 +604,14 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
 
         // when startAngle == endAngle ThickArc() doesn't know whether it's 0 deg and 360 deg
         if( std::abs( aShape->GetAngle() ) == 3600.0 )
+        {
             m_plotter->ThickCircle( pos, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
+        }
         else
-            m_plotter->ThickArc( pos, -endAngle, -startAngle, radius, thickness, GetPlotMode(), &gbr_metadata );
+        {
+            m_plotter->ThickArc( pos, -endAngle, -startAngle, radius, thickness, GetPlotMode(),
+                                 &gbr_metadata );
+        }
     }
         break;
 
@@ -615,9 +620,9 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
         {
             const std::vector<wxPoint> &polyPoints = aShape->BuildPolyPointsList();
 
-            // We must compute true coordinates from m_PolyList
-            // which are relative to module position, orientation 0
-            MODULE *module = aShape->GetParentModule();
+            // We must compute board coordinates from m_PolyList which are relative to the parent
+            // position at orientation 0
+            MODULE *module = aShape->GetParentFootprint();
 
             std::vector<wxPoint> cornerList;
 

@@ -454,12 +454,12 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
         {
             // The polygon is expected to be a simple polygon
             // not self intersecting, no hole.
-            MODULE* module = GetParentModule();     // NULL for items not in footprints
-            double orientation = module ? module->GetOrientation() : 0.0;
+            MODULE* footprint = GetParentFootprint();     // NULL for items not in footprints
+            double  orientation = footprint ? footprint->GetOrientation() : 0.0;
             wxPoint offset;
 
-            if( module )
-                offset = module->GetPosition();
+            if( footprint )
+                offset = footprint->GetPosition();
 
             // Build the polygon with the actual position and orientation:
             std::vector< wxPoint> poly;

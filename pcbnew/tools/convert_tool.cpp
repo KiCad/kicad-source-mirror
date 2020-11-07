@@ -44,8 +44,10 @@
 
 
 CONVERT_TOOL::CONVERT_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.Convert" ), m_selectionTool( NULL ),
-    m_menu( NULL ), m_frame( NULL )
+    TOOL_INTERACTIVE( "pcbnew.Convert" ),
+    m_selectionTool( NULL ),
+    m_menu( NULL ),
+    m_frame( NULL )
 {
 }
 
@@ -116,44 +118,43 @@ bool CONVERT_TOOL::Init()
 
 int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
 {
-    MODULE* mod = nullptr;
+    MODULE* parentFootprint = nullptr;
 
     auto& selection = m_selectionTool->RequestSelection(
-        []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
-        {
-            EditToolSelectionFilter( aCollector,
-                                     EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS, sTool );
-
-            for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                BOARD_ITEM* item = aCollector[i];
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS, sTool );
 
-                switch( item->Type() )
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
                 {
-                case PCB_SHAPE_T:
-                case PCB_FP_SHAPE_T:
-                    switch( static_cast<PCB_SHAPE*>( item )->GetShape() )
+                    BOARD_ITEM* item = aCollector[i];
+
+                    switch( item->Type() )
                     {
-                    case S_SEGMENT:
-                    case S_RECT:
+                    case PCB_SHAPE_T:
+                    case PCB_FP_SHAPE_T:
+                        switch( static_cast<PCB_SHAPE*>( item )->GetShape() )
+                        {
+                        case S_SEGMENT:
+                        case S_RECT:
                         // case S_ARC: // Not yet
+                            break;
+
+                        default:
+                            aCollector.Remove( item );
+                        }
+
+                        break;
+
+                    case PCB_TRACE_T:
+                    // case PCB_ARC_T: // Not yet
                         break;
 
                     default:
                         aCollector.Remove( item );
                     }
-
-                    break;
-
-                case PCB_TRACE_T:
-                // case PCB_ARC_T: // Not yet
-                    break;
-
-                default:
-                    aCollector.Remove( item );
                 }
-            }
-        } );
+            } );
 
     if( selection.Empty() )
         return 0;
@@ -173,7 +174,7 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
     bool isFootprint = m_frame->IsType( FRAME_FOOTPRINT_EDITOR );
 
     if( FP_SHAPE* graphic = dynamic_cast<FP_SHAPE*>( selection.Front() ) )
-        mod = graphic->GetParentModule();
+        parentFootprint = graphic->GetParentFootprint();
 
     BOARD_COMMIT commit( m_frame );
 
@@ -187,7 +188,7 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
     {
         for( const SHAPE_POLY_SET& poly : polys )
         {
-            PCB_SHAPE* graphic = isFootprint ? new FP_SHAPE( mod ) : new PCB_SHAPE;
+            PCB_SHAPE* graphic = isFootprint ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
 
             graphic->SetShape( S_POLYGON );
             graphic->SetLayer( destLayer );
@@ -363,42 +364,42 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromRects( const std::deque<EDA_ITEM*>& aI
 int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
 {
     auto& selection = m_selectionTool->RequestSelection(
-        []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
-        {
-            EditToolSelectionFilter( aCollector,
-                                     EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS, sTool );
-
-            for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                BOARD_ITEM* item = aCollector[i];
+                EditToolSelectionFilter( aCollector,
+                                         EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS, sTool );
 
-                switch( item->Type() )
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
                 {
-                case PCB_SHAPE_T:
-                case PCB_FP_SHAPE_T:
-                    switch( static_cast<PCB_SHAPE*>( item )->GetShape() )
+                    BOARD_ITEM* item = aCollector[i];
+
+                    switch( item->Type() )
                     {
-                    case S_POLYGON:
+                    case PCB_SHAPE_T:
+                    case PCB_FP_SHAPE_T:
+                        switch( static_cast<PCB_SHAPE*>( item )->GetShape() )
+                        {
+                        case S_POLYGON:
+                            break;
+
+                        case S_RECT:
+                            break;
+
+                        default:
+                            aCollector.Remove( item );
+                        }
+
                         break;
 
-                    case S_RECT:
+                    case PCB_ZONE_AREA_T:
+                    case PCB_FP_ZONE_AREA_T:
                         break;
 
                     default:
                         aCollector.Remove( item );
                     }
-
-                    break;
-
-                case PCB_ZONE_AREA_T:
-                case PCB_FP_ZONE_AREA_T:
-                    break;
-
-                default:
-                    aCollector.Remove( item );
                 }
-            }
-        } );
+            } );
 
     if( selection.Empty() )
         return 0;
@@ -572,7 +573,9 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
                     if( !( item->Type() == PCB_SHAPE_T ||
                            item->Type() == PCB_TRACE_T ||
                            item->Type() == PCB_FP_SHAPE_T ) )
+                    {
                         aCollector.Remove( item );
+                    }
                 }
             } );
 
