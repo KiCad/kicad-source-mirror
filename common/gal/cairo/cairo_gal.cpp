@@ -1218,6 +1218,9 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
     validCompositor     = false;
     SetTarget( TARGET_NONCACHED );
 
+    bitmapBuffer  = nullptr;
+    wxOutput      = nullptr;
+
     parentWindow  = aParent;
     mouseListener = aMouseListener;
     paintListener = aPaintListener;
@@ -1464,7 +1467,10 @@ void CAIRO_GAL::allocateBitmaps()
     stride     = cairo_format_stride_for_width( GAL_FORMAT, wxBufferWidth );
     bufferSize = stride * screenSize.y;
 
-    bitmapBuffer        = new unsigned char[bufferSize * 4];
+    wxASSERT( bitmapBuffer == nullptr );
+    bitmapBuffer = new unsigned char[bufferSize * 4];
+
+    wxASSERT( wxOutput == nullptr );
     wxOutput            = new unsigned char[wxBufferWidth * 3 * screenSize.y];
 }
 
@@ -1472,7 +1478,10 @@ void CAIRO_GAL::allocateBitmaps()
 void CAIRO_GAL::deleteBitmaps()
 {
     delete[] bitmapBuffer;
+    bitmapBuffer = nullptr;
+
     delete[] wxOutput;
+    wxOutput = nullptr;
 }
 
 
