@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-06 19:52+0100\n"
-"PO-Revision-Date: 2020-11-06 20:58+0100\n"
+"PO-Revision-Date: 2020-11-07 08:16+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -6285,7 +6285,7 @@ msgstr "Chemin des librairies d'empreintes KiCad"
 
 #: common/wildcards_and_files_ext.cpp:336
 msgid "Legacy footprint library files"
-msgstr "Fichiers librairie modules anciens"
+msgstr "Fichiers librairie empreintes anciens"
 
 #: common/wildcards_and_files_ext.cpp:342
 msgid "Eagle ver. 6.x XML library files"
@@ -6434,7 +6434,8 @@ msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
 msgstr ""
-"Composant %s: Module %s non trouvé dans les librairies de modules du projet."
+"Composant %s: Empreinte %s non trouvée dans les librairies d'empreintes du "
+"projet."
 
 #: cvpcb/auto_associate.cpp:303
 msgid "CvPcb Warning"
@@ -6550,7 +6551,7 @@ msgstr "Emplacement de la librairie : inconnu"
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
-"Aucune librairie de modules PCB listée dans la table de librairie courante."
+"Aucune librairie d'empreintes PCB listée dans la table de librairie courante."
 
 #: cvpcb/cvpcb_mainframe.cpp:786
 msgid "Configuration Error"
@@ -6705,7 +6706,7 @@ msgstr "Empreinte \"%s\" non trouvée."
 #: cvpcb/display_footprints_frame.cpp:459 pcbnew/class_module.cpp:782
 #, c-format
 msgid "Footprint: %s"
-msgstr "Module: %s"
+msgstr "Empreinte: %s"
 
 #: cvpcb/display_footprints_frame.cpp:470
 #, c-format
@@ -6859,7 +6860,7 @@ msgstr "Filtrerpar le nombre de pads"
 
 #: cvpcb/tools/cvpcb_actions.cpp:144
 msgid "Filter footprint list by pin count"
-msgstr "Filtrer la liste par le nombre de pad des modules"
+msgstr "Filtrer la liste par le nombre de pad des empreintes"
 
 #: cvpcb/tools/cvpcb_actions.cpp:150
 msgid "Filter by library"
@@ -8902,7 +8903,7 @@ msgstr "Les %d premiers champs sont obligatoires."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:603
 msgid "Add Footprint Filter"
-msgstr "Ajouter Filtre Modules"
+msgstr "Ajouter Filtre Empreintes"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:642
 msgid "Edit Footprint Filter"
@@ -9158,7 +9159,7 @@ msgstr "Supprimer le filtre d'empreinte"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:320
 msgid "Footprint Filters"
-msgstr "Filtre des Modules"
+msgstr "Filtre des Empreintes"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:333
 msgid "Edit Spice Model..."
@@ -14551,7 +14552,7 @@ msgstr "Cacher tous les champs empreinte"
 
 #: eeschema/tools/assign_footprints.cpp:219
 msgid "Select the footprint field visibility setting."
-msgstr "Sélection de la visibilité du champ module."
+msgstr "Sélection de la visibilité du champ empreinte."
 
 #: eeschema/tools/assign_footprints.cpp:220
 msgid "Change Visibility"
@@ -23130,7 +23131,7 @@ msgid ""
 "Creates only one file containing all footprints to place\n"
 msgstr ""
 "Crée 2 fichiers: un pour chaque coté du circuit ou\n"
-"Crée un fichier seulement contenant tous les modules à placer\n"
+"Crée un fichier seulement contenant toutes les empreintes à placer\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:76
 msgid "Exclude all footprints with through hole pads"
@@ -23389,7 +23390,7 @@ msgstr "Disponible:"
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.h:56
 #: pcbnew/tools/pcb_actions.cpp:234
 msgid "Get and Move Footprint"
-msgstr "Sel. et Dépl. module"
+msgstr "Sel. et Dépl. empreinte"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:105
 msgid "Are you sure you want to delete the entire board?"
@@ -23420,7 +23421,7 @@ msgstr "Dessins"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
 msgid "Footprints"
-msgstr "Modules"
+msgstr "Empreintes"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 msgid "Markers"
@@ -24518,8 +24519,8 @@ msgstr "Castellated pad (pad traversant seulement)"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:583
 msgid "Set values to 0 to use parent footprint or netclass values."
 msgstr ""
-"Mettre ces vaeurs à 0 pour utiliser les valeurs du module parent ou les "
-"valeurs de la netclasse."
+"Mettre ces vaeurs à 0 pour utiliser les valeurs de l'empreinte parente ou "
+"les valeurs de la netclasse."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:609
 msgid ""
@@ -24548,7 +24549,8 @@ msgid ""
 "A negative value means a smaller mask size than pad size."
 msgstr ""
 "Ceci est la marge locale entre ce pad et le masque de pâte à souder.\n"
-"Si 0, la valeur locale du module ou la valeur en Netclasse sera utilisée.\n"
+"Si 0, la valeur locale de l'empreinte ou la valeur en Netclasse sera "
+"utilisée.\n"
 "La valeur finale de l'isolation est la somme de cette valeur et du rapport "
 "de la valeur d'isolation.\n"
 "Une valeur négative signifie que le masque est plus petit que le pad."
@@ -24742,7 +24744,7 @@ msgstr "Postscript"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:82
 msgid "Plot footprint values"
-msgstr "Tracer les valeurs des modules"
+msgstr "Tracer les valeurs des empreintes"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:86
 msgid "Plot reference designators"
@@ -28850,7 +28852,7 @@ msgstr "Valeur du Rayon du Stub Arc:"
 #: pcbnew/microwave/microwave_footprint.cpp:77
 #: pcbnew/microwave/microwave_footprint.cpp:92
 msgid "Create microwave module"
-msgstr "Créer Module MicroOnde"
+msgstr "Créer module microonde"
 
 #: pcbnew/microwave/microwave_footprint.cpp:91
 msgid "Angle in degrees:"
@@ -32255,7 +32257,7 @@ msgstr "Désélection de toutes les pistes et vias appartenant au même net."
 #: pcbnew/tools/pcb_actions.cpp:1185
 msgid "Selects all footprints and tracks in the schematic sheet"
 msgstr ""
-"Sélectionner tous les modules et les pistes dans la feuille schématique"
+"Sélectionner toutes les empreintes et les pistes dans la feuille schématique"
 
 #: pcbnew/tools/pcb_actions.cpp:1190
 msgid "Items in Same Hierarchical Sheet"
@@ -32264,7 +32266,8 @@ msgstr "Eléments de la même Feuille Hiérarchique"
 #: pcbnew/tools/pcb_actions.cpp:1191
 msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr ""
-"Sélectionne tous les modules et les pistes de la même feuille schématique"
+"Sélectionne toutes les empreintes et les pistes de la même feuille "
+"schématique"
 
 #: pcbnew/tools/pcb_actions.cpp:1196
 msgid "Filter Selection..."
@@ -32788,11 +32791,11 @@ msgstr "Montrer les zones cuivre"
 
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show footprints that are on board's front"
-msgstr "Afficher les modules situés sur le dessus du circuit imprimé"
+msgstr "Afficher les empreintes situées sur le dessus du circuit imprimé"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Show footprints that are on board's back"
-msgstr "Afficher les modules situés sur le dessous du circuit imprimé"
+msgstr "Afficher les empreintes situées sur le dessous du circuit imprimé"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Through-hole Pads"
@@ -32820,7 +32823,7 @@ msgstr "Afficher tous les textes d'empreintes"
 
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Show footprint text marked as invisible"
-msgstr "Afficher les textes sur modules marqués comme invisibles"
+msgstr "Afficher les textes sur empreintes marqués comme invisibles"
 
 #: pcbnew/widgets/appearance_controls.cpp:347
 msgid "Show unconnected nets as a ratsnest"
@@ -32844,7 +32847,7 @@ msgstr "Violations de DRC qui ont été individuellement exclues"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show footprint and text origins as a cross"
-msgstr "Afficher origines des textes et modules par une croix"
+msgstr "Afficher origines des textes et empreintes par une croix"
 
 #: pcbnew/widgets/appearance_controls.cpp:373
 msgid "No Layers"
