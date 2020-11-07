@@ -48,7 +48,6 @@
 #include <settings/settings_manager.h>
 #include <tool/tool_dispatcher.h>
 
-#include <confirm.h>
 #include <widgets/wx_busy_indicator.h>
 
 
@@ -521,7 +520,6 @@ void EDA_3D_CANVAS::DoRePaint()
         }
         catch( std::runtime_error& err )
         {
-            DisplayInfoMessage( m_parent, _( "Unable to use OpenGL" ), wxString( err.what() ) );
             m_is_opengl_version_supported = false;
             m_opengl_supports_raytracing  = false;
             m_is_opengl_initialized       = false;
