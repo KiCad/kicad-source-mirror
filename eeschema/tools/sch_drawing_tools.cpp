@@ -79,9 +79,9 @@ bool SCH_DRAWING_TOOLS::Init()
 
 int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
 {
-    SCH_COMPONENT*                    component = aEvent.Parameter<SCH_COMPONENT*>();
-    SCHLIB_FILTER                     filter;
-    std::vector<COMPONENT_SELECTION>* historyList = nullptr;
+    SCH_COMPONENT*              component = aEvent.Parameter<SCH_COMPONENT*>();
+    SCHLIB_FILTER               filter;
+    std::vector<PICKED_SYMBOL>* historyList = nullptr;
 
     if( aEvent.IsAction( &EE_ACTIONS::placeSymbol ) )
         historyList = &m_symbolHistoryList;
@@ -173,9 +173,8 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
 
                 // Pick the module to be placed
                 bool footprintPreviews = m_frame->eeconfig()->m_Appearance.footprint_preview;
-                COMPONENT_SELECTION sel = m_frame->SelectCompFromLibTree( &filter, *historyList,
-                                                                          true, 1, 1,
-                                                                          footprintPreviews );
+                PICKED_SYMBOL sel = m_frame->PickSymbolFromLibTree( &filter, *historyList, true,
+                                                                    1, 1, footprintPreviews );
 
                 // Restore cursor after dialog
                 getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );

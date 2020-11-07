@@ -812,11 +812,10 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 
     // Container doing search-as-you-type.
     SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
-    auto adapterPtr( SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs ) );
-    auto adapter = static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapterPtr.get() );
+    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> adapter = SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs );
 
     const auto libNicknames = libs->GetLogicalLibs();
-    adapter->AddLibraries( libNicknames, this );
+    static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapter.get() )->AddLibraries( libNicknames, this );
 
     LIB_PART* current = GetSelectedSymbol();
     LIB_ID id;
@@ -831,7 +830,7 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
     wxString dialogTitle;
     dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetItemCount() );
 
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapterPtr, m_convert, false, false, false );
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, m_convert, false, false, false );
 
     if( dlg.ShowQuasiModal() == wxID_CANCEL )
         return;

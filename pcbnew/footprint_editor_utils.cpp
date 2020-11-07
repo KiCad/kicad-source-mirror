@@ -54,7 +54,7 @@ using namespace std::placeholders;
 
 void FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard( wxCommandEvent& event )
 {
-    Load_Module_From_BOARD( NULL );
+    LoadFootprintFromBoard( NULL );
 }
 
 

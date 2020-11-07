@@ -33,7 +33,8 @@ class FOOTPRINT_EDIT_FRAME;
 class FP_TREE_SYNCHRONIZING_ADAPTER : public FP_TREE_MODEL_ADAPTER
 {
 public:
-    static PTR Create( FOOTPRINT_EDIT_FRAME* aFrame, FP_LIB_TABLE* aLibs );
+    static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( FOOTPRINT_EDIT_FRAME* aFrame,
+                                                           FP_LIB_TABLE* aLibs );
 
     bool IsContainer( const wxDataViewItem& aItem ) const override;
 

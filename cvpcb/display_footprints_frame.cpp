@@ -206,10 +206,10 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
 
 
     auto autoZoomCond =
-        [this] ( const SELECTION& aSel )
-        {
-            return GetAutoZoom();
-        };
+            [this] ( const SELECTION& aSel )
+            {
+                return GetAutoZoom();
+            };
 
     mgr->SetConditions( PCB_ACTIONS::zoomFootprintAutomatically, CHECK( autoZoomCond ) );
     mgr->SetConditions( PCB_ACTIONS::showPadNumbers,             CHECK( cond.PadNumbersDisplay() ) );
@@ -241,7 +241,8 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
     }
     else
     {
-        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition,
+                                               wxDefaultSize,
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
         m_optionsToolBar->SetAuiManager( &m_auimgr );
     }
@@ -301,8 +302,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
 
     // Grid selection choice box.
     if( !m_gridSelectBox )
-        m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT,
-                                        wxDefaultPosition, wxDefaultSize, 0, NULL );
+        m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT );
 
     UpdateGridSelectBox();
     m_mainToolBar->AddControl( m_gridSelectBox );
@@ -311,8 +311,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
 
     // Zoom selection choice box.
     if( !m_zoomSelectBox )
-        m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT,
-                                        wxDefaultPosition, wxDefaultSize, 0, NULL );
+        m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT );
 
     UpdateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );
@@ -339,7 +338,7 @@ void DISPLAY_FOOTPRINTS_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
 void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    auto cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
+    CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
     wxCHECK( cfg, /* void */ );
 
     PCB_BASE_FRAME::SaveSettings( cfg );
@@ -352,7 +351,7 @@ void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 WINDOW_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
-    auto cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
+    CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
     wxCHECK( cfg, nullptr );
     return &cfg->m_FootprintViewer;
 }
@@ -360,7 +359,7 @@ WINDOW_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetWindowSettings( APP_SETTINGS_BASE*
 
 MAGNETIC_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetMagneticItemsSettings()
 {
-    auto cfg = dynamic_cast<CVPCB_SETTINGS*>( Kiface().KifaceSettings() );
+    CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( Kiface().KifaceSettings() );
     wxCHECK( cfg, nullptr );
     return &cfg->m_FootprintViewerMagneticSettings;
 }
@@ -372,11 +371,11 @@ COLOR4D DISPLAY_FOOTPRINTS_FRAME::GetGridColor()
 }
 
 
-MODULE* DISPLAY_FOOTPRINTS_FRAME::GetModule( const wxString& aFootprintName, REPORTER& aReporter )
+MODULE* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintName,
+                                                REPORTER& aReporter )
 {
     MODULE* footprint = NULL;
-
-    LIB_ID fpid;
+    LIB_ID  fpid;
 
     if( fpid.Parse( aFootprintName, LIB_ID::ID_PCB ) >= 0 )
     {
@@ -435,8 +434,8 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::GetModule( const wxString& aFootprintName, REP
 void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 {
     CVPCB_MAINFRAME*      parentframe = (CVPCB_MAINFRAME *) GetParent();
-    MODULE*               module = nullptr;
-    const FOOTPRINT_INFO* module_info = nullptr;
+    MODULE*               footprint = nullptr;
+    const FOOTPRINT_INFO* fpInfo = nullptr;
 
     GetBoard()->DeleteAllModules();
     GetCanvas()->GetView()->Clear();
@@ -458,16 +457,16 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
     {
         SetTitle( wxString::Format( _( "Footprint: %s" ), footprintName ) );
 
-        module = GetModule( footprintName, infoReporter );
+        footprint = GetFootprint( footprintName, infoReporter );
 
-        module_info = parentframe->m_FootprintsList->GetModuleInfo( footprintName );
+        fpInfo = parentframe->m_FootprintsList->GetFootprintInfo( footprintName );
     }
 
-    if( module )
-        GetBoard()->Add( module );
+    if( footprint )
+        GetBoard()->Add( footprint );
 
-    if( module_info )
-        SetStatusText( wxString::Format( _( "Lib: %s" ), module_info->GetLibNickname() ), 0 );
+    if( fpInfo )
+        SetStatusText( wxString::Format( _( "Lib: %s" ), fpInfo->GetLibNickname() ), 0 );
     else
         SetStatusText( wxEmptyString, 0 );
 

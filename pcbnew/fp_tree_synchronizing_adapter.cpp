@@ -34,10 +34,11 @@
 #include <tools/footprint_editor_tools.h>
 
 
-LIB_TREE_MODEL_ADAPTER::PTR FP_TREE_SYNCHRONIZING_ADAPTER::Create( FOOTPRINT_EDIT_FRAME* aFrame,
-                                                                   FP_LIB_TABLE* aLibs )
+wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
+FP_TREE_SYNCHRONIZING_ADAPTER::Create( FOOTPRINT_EDIT_FRAME* aFrame, FP_LIB_TABLE* aLibs )
 {
-    return PTR( new FP_TREE_SYNCHRONIZING_ADAPTER( aFrame, aLibs ) );
+    auto* adapter = new FP_TREE_SYNCHRONIZING_ADAPTER( aFrame, aLibs );
+    return wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>( adapter );
 }
 
 

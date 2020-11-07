@@ -43,7 +43,7 @@
 
 DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
                                                   const wxString& aTitle,
-                                                  FP_TREE_MODEL_ADAPTER::PTR& aAdapter )
+                                                  wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter )
         : DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize,
                        wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
           m_browser_button( nullptr ),

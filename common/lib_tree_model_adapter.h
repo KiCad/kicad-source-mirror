@@ -97,12 +97,6 @@ class EDA_BASE_FRAME;
 class LIB_TREE_MODEL_ADAPTER: public wxDataViewModel
 {
 public:
-
-    /**
-     * Reference-counting container for a pointer to CMP_TREE_MODEL_ADAPTER_BASE.
-     */
-    typedef wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> PTR;
-
     /**
      * Destructor. Do NOT delete this class manually; it is reference-counted
      * by wxObject.

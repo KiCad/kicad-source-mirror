@@ -41,7 +41,8 @@ class FOOTPRINT_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
     friend struct PCB::IFACE;
 
     FOOTPRINT_TREE_PANE*        m_treePane;
-    LIB_TREE_MODEL_ADAPTER::PTR m_adapter;
+
+    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
 
     std::unique_ptr<MODULE>     m_revertModule;
     wxString                    m_footprintNameWhenLoaded;
@@ -169,7 +170,7 @@ public:
     /**
      * Returns the adapter object that provides the stored data.
      */
-    LIB_TREE_MODEL_ADAPTER::PTR& GetLibTreeAdapter() { return m_adapter; }
+    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& GetLibTreeAdapter() { return m_adapter; }
 
     /**
      * Save in an existing library a given footprint.
@@ -239,10 +240,10 @@ public:
     /**
      * Load in Modedit a footprint from the main board.
      *
-     * @param Module = the module to load. If NULL, a module reference will we asked to user
+     * @param aFootprint = the module to load. If NULL, a module reference will we asked to user
      * @return true if a module isloaded, false otherwise.
      */
-    bool Load_Module_From_BOARD( MODULE* Module );
+    bool LoadFootprintFromBoard( MODULE* aFootprint );
 
     /**
      * Display the list of footprints currently existing on the BOARD.

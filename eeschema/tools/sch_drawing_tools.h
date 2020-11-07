@@ -76,14 +76,14 @@ private:
 
 private:
 // History lists for PlaceComponent()
-    std::vector<COMPONENT_SELECTION>   m_symbolHistoryList;
-    std::vector<COMPONENT_SELECTION>   m_powerHistoryList;
+    std::vector<PICKED_SYMBOL> m_symbolHistoryList;
+    std::vector<PICKED_SYMBOL> m_powerHistoryList;
 
-    PINSHEETLABEL_SHAPE                m_lastSheetPinType;
-    PINSHEETLABEL_SHAPE                m_lastGlobalLabelShape;
-    LABEL_SPIN_STYLE                   m_lastTextOrientation;
-    bool                               m_lastTextBold;
-    bool                               m_lastTextItalic;
+    PINSHEETLABEL_SHAPE        m_lastSheetPinType;
+    PINSHEETLABEL_SHAPE        m_lastGlobalLabelShape;
+    LABEL_SPIN_STYLE           m_lastTextOrientation;
+    bool                       m_lastTextBold;
+    bool                       m_lastTextItalic;
 
     std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
 };

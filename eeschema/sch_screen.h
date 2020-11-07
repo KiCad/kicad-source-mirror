@@ -77,7 +77,7 @@ enum SCH_LINE_TEST_T
 /// Max number of sheets in a hierarchy project
 #define NB_MAX_SHEET    500
 
-struct COMPONENT_SELECTION
+struct PICKED_SYMBOL
 {
     LIB_ID LibId;
     int    Unit;
@@ -85,7 +85,7 @@ struct COMPONENT_SELECTION
 
     std::vector<std::pair<int, wxString>> Fields;
 
-    COMPONENT_SELECTION() : Unit( 1 ), Convert( 1 )
+    PICKED_SYMBOL() : Unit( 1 ), Convert( 1 )
     {
     }
 };

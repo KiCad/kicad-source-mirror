@@ -1532,7 +1532,7 @@ void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( MODULE* aFootprint )
     {
         auto editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, true );
 
-        editor->Load_Module_From_BOARD( aFootprint );
+        editor->LoadFootprintFromBoard( aFootprint );
 
         editor->Show( true );
         editor->Raise();        // Iconize( false );

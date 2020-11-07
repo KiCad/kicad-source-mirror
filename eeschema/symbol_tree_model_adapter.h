@@ -40,7 +40,8 @@ public:
      *
      * @param aLibs library set from which parts will be loaded
      */
-    static PTR Create( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs );
+    static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( EDA_BASE_FRAME* aParent,
+                                                           LIB_TABLE* aLibs );
 
     /**
      * Add all the libraries in a SYMBOL_LIB_TABLE to the model.

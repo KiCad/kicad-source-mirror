@@ -669,8 +669,8 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::setLibIdByBrowser( int aRow )
 #if 0
     // Use dialog symbol selector to choose a symbol
     SCH_BASE_FRAME::HISTORY_LIST dummy;
-    SCH_BASE_FRAME::COMPONENT_SELECTION sel =
-                m_frame->SelectComponentFromLibrary( NULL, dummy, true, 0, 0, false );
+    SCH_BASE_FRAME::PICKED_SYMBOL sel = m_frame->SelectComponentFromLibrary( NULL, dummy, true,
+                                                                             0, 0, false );
 #else
     // Use library viewer to choose a symbol
     LIB_ID aPreselectedLibid;
@@ -682,8 +682,8 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::setLibIdByBrowser( int aRow )
     if( !current.IsEmpty() )
         aPreselectedLibid.Parse( current, LIB_ID::ID_SCH, true );
 
-    COMPONENT_SELECTION sel =
-            GetParent()->SelectComponentFromLibBrowser( this, NULL, aPreselectedLibid, 0, 0 );
+    PICKED_SYMBOL sel = GetParent()->PickSymbolFromLibBrowser( this, NULL, aPreselectedLibid,
+                                                               0, 0 );
 #endif
 
     if( sel.LibId.empty() )     // command aborted

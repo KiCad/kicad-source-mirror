@@ -32,7 +32,8 @@
 #include <tool/tool_manager.h>
 
 
-LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAPTER::PTR& aAdapter,
+LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
+                    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter,
                     WIDGETS aWidgets, wxHtmlWindow* aDetails )
     : wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                wxWANTS_CHARS | wxTAB_TRAVERSAL | wxNO_BORDER ),

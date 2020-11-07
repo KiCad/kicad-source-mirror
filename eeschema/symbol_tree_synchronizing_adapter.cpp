@@ -30,10 +30,12 @@
 #include <tools/lib_control.h>
 
 
-LIB_TREE_MODEL_ADAPTER::PTR SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( SYMBOL_EDIT_FRAME* aParent,
-                                                                       SYMBOL_LIBRARY_MANAGER* aLibMgr )
+wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
+SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( SYMBOL_EDIT_FRAME* aParent,
+                                           SYMBOL_LIBRARY_MANAGER* aLibMgr )
 {
-    return PTR( new SYMBOL_TREE_SYNCHRONIZING_ADAPTER( aParent, aLibMgr ) );
+    auto* adapter = new SYMBOL_TREE_SYNCHRONIZING_ADAPTER( aParent, aLibMgr );
+    return wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>( adapter );
 }
 
 

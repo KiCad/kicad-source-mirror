@@ -280,25 +280,23 @@ void CVPCB_MAINFRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::undo,                   ENABLE( cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,                   ENABLE( cond.RedoAvailable() ) );
 
-    #define filterActive( filter ) ( m_filteringOptions & filter )
-
     auto compFilter =
-        [this] ( const SELECTION& )
-        {
-            return m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_FP_FILTERS;
-        };
+            [this] ( const SELECTION& )
+            {
+                return m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_FP_FILTERS;
+            };
 
     auto libFilter =
-        [this] ( const SELECTION& )
-        {
-            return m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY;
-        };
+            [this] ( const SELECTION& )
+            {
+                return m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY;
+            };
 
     auto pinFilter =
-        [this] ( const SELECTION& )
-        {
-            return m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT;
-        };
+            [this] ( const SELECTION& )
+            {
+                return m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT;
+            };
 
     mgr->SetConditions( CVPCB_ACTIONS::FilterFPbyFPFilters, CHECK( compFilter ) );
     mgr->SetConditions( CVPCB_ACTIONS::FilterFPbyLibrary,   CHECK( libFilter ) );
@@ -363,10 +361,10 @@ void CVPCB_MAINFRAME::setupEventHandlers()
 
     // Just skip the resize events
     Bind( wxEVT_SIZE,
-        []( wxSizeEvent& aEvent )
-        {
-            aEvent.Skip();
-        } );
+          []( wxSizeEvent& aEvent )
+          {
+              aEvent.Skip();
+          } );
 
     // Attach the events to the tool dispatcher
     Bind( wxEVT_TOOL, &TOOL_DISPATCHER::DispatchWxCommand, m_toolDispatcher );
@@ -388,7 +386,10 @@ bool CVPCB_MAINFRAME::canCloseWindow( wxCloseEvent& aEvent )
 
         if( !HandleUnsavedChanges( this, _( "Symbol to Footprint links have been modified. "
                                             "Save changes?" ),
-                                   [&]()->bool { return SaveFootprintAssociation( false ); } ) )
+                                   [&]() -> bool
+                                   {
+                                       return SaveFootprintAssociation( false );
+                                   } ) )
         {
             return false;
         }
@@ -400,7 +401,6 @@ bool CVPCB_MAINFRAME::canCloseWindow( wxCloseEvent& aEvent )
 
 void CVPCB_MAINFRAME::doCloseWindow()
 {
-    // Close module display frame
     if( GetFootprintViewerFrame() )
         GetFootprintViewerFrame()->Close( true );
 
@@ -447,7 +447,7 @@ void CVPCB_MAINFRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
-    auto cfg = static_cast<CVPCB_SETTINGS*>( aCfg );
+    CVPCB_SETTINGS* cfg = static_cast<CVPCB_SETTINGS*>( aCfg );
 
     m_filteringOptions = cfg->m_FilterFootprint;
 }
@@ -457,7 +457,7 @@ void CVPCB_MAINFRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::SaveSettings( aCfg );
 
-    auto cfg = static_cast<CVPCB_SETTINGS*>( aCfg );
+    CVPCB_SETTINGS* cfg = static_cast<CVPCB_SETTINGS*>( aCfg );
     cfg->m_FilterFootprint = m_filteringOptions;
 
     cfg->m_LibrariesWidth = m_libListBox->GetSize().x;
@@ -496,6 +496,7 @@ void CVPCB_MAINFRAME::RedoAssociation()
 
     // Iterate over the entries to undo
     bool firstAssoc = true;
+
     for( const auto& assoc : curEntry )
     {
         AssociateFootprint( assoc, firstAssoc );
@@ -564,16 +565,19 @@ void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation,
     {
         // Create a new entry for this association
         CVPCB_UNDO_REDO_ENTRIES newEntry;
-        newEntry.emplace_back(  CVPCB_ASSOCIATION( aAssociation.GetComponentIndex(), oldFpid,
-                                                   aAssociation.GetNewFootprint() ) );
+        newEntry.emplace_back( CVPCB_ASSOCIATION( aAssociation.GetComponentIndex(), oldFpid,
+                                                  aAssociation.GetNewFootprint() ) );
         m_undoList.emplace_back( newEntry );
 
         // Clear the redo list
         m_redoList.clear();
     }
     else
+    {
         m_undoList.back().emplace_back( CVPCB_ASSOCIATION( aAssociation.GetComponentIndex(),
-                                                           oldFpid, aAssociation.GetNewFootprint() ) );
+                                                           oldFpid,
+                                                           aAssociation.GetNewFootprint() ) );
+    }
 
 }
 
@@ -588,8 +592,7 @@ void CVPCB_MAINFRAME::refreshAfterComponentSearch( COMPONENT* component )
 {
     // Tell AuiMgr that objects are changed !
     if( m_auimgr.GetManagedWindow() )   // Be sure Aui Manager is initialized
-                                        // (could be not the case when starting CvPcb
-        m_auimgr.Update();
+        m_auimgr.Update();              // (could be not the case when starting CvPcb)
 
     if( component == NULL )
     {
@@ -604,19 +607,19 @@ void CVPCB_MAINFRAME::refreshAfterComponentSearch( COMPONENT* component )
     // selected footprint.
     if( FindFocus() == m_compListBox || FindFocus() == m_libListBox )
     {
-        wxString module = FROM_UTF8( component->GetFPID().Format().c_str() );
+        wxString footprintName = FROM_UTF8( component->GetFPID().Format().c_str() );
 
         m_footprintListBox->SetSelection( m_footprintListBox->GetSelection(), false );
 
         for( int ii = 0; ii < m_footprintListBox->GetCount(); ii++ )
         {
-            wxString footprintName;
+            wxString candidateName;
             wxString msg = m_footprintListBox->OnGetItemText( ii, 0 );
             msg.Trim( true );
             msg.Trim( false );
-            footprintName = msg.AfterFirst( wxChar( ' ' ) );
+            candidateName = msg.AfterFirst( wxChar( ' ' ) );
 
-            if( module.Cmp( footprintName ) == 0 )
+            if( footprintName.Cmp( candidateName ) == 0 )
             {
                 m_footprintListBox->SetSelection( ii, true );
                 break;
@@ -731,13 +734,13 @@ void CVPCB_MAINFRAME::DisplayStatus()
     msg.Empty();
     wxString footprintName = GetSelectedFootprint();
 
-    FOOTPRINT_INFO* module = m_FootprintsList->GetModuleInfo( footprintName );
+    FOOTPRINT_INFO* fp = m_FootprintsList->GetFootprintInfo( footprintName );
 
-    if( module )    // can be NULL if no netlist loaded
+    if( fp )    // can be NULL if no netlist loaded
     {
         msg = wxString::Format( _( "Description: %s;  Keywords: %s" ),
-                                module->GetDescription(),
-                                module->GetKeywords() );
+                                fp->GetDescription(),
+                                fp->GetKeywords() );
     }
 
     SetStatusText( msg, 1 );
@@ -746,10 +749,10 @@ void CVPCB_MAINFRAME::DisplayStatus()
     wxString lib;
 
     // Choose the footprint to get the information on
-    if( module )
+    if( fp )
     {
         // Use the footprint in the footprint viewer
-        lib = module->GetLibNickname();
+        lib = fp->GetLibNickname();
     }
     else if( GetFocusedControl() == CVPCB_MAINFRAME::CONTROL_COMPONENT )
     {
@@ -882,8 +885,8 @@ void CVPCB_MAINFRAME::BuildFOOTPRINTS_LISTBOX()
                                              wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL ) );
     }
 
-    m_footprintListBox->SetFootprints( *m_FootprintsList, wxEmptyString, NULL,
-            wxEmptyString, FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
+    m_footprintListBox->SetFootprints( *m_FootprintsList, wxEmptyString, NULL, wxEmptyString,
+                                       FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
     DisplayStatus();
 }
 
@@ -986,6 +989,7 @@ std::vector<unsigned int> CVPCB_MAINFRAME::GetComponentIndices(
         CVPCB_MAINFRAME::CRITERIA aCriteria )
 {
     std::vector<unsigned int> idx;
+    int                       lastIdx;
 
     // Make sure a netlist has been loaded and the box has contents
     if( m_netlist.IsEmpty() || m_compListBox->GetCount() == 0 )
@@ -999,13 +1003,12 @@ std::vector<unsigned int> CVPCB_MAINFRAME::GetComponentIndices(
         break;
 
     case CVPCB_MAINFRAME::SEL_COMPONENTS:
-    {
         // Check to see if anything is selected
         if( m_compListBox->GetSelectedItemCount() < 1 )
             break;
 
         // Get the components
-        int lastIdx = m_compListBox->GetFirstSelected();
+        lastIdx = m_compListBox->GetFirstSelected();
         idx.emplace_back( lastIdx );
 
         lastIdx = m_compListBox->GetNextSelected( lastIdx );
@@ -1015,7 +1018,7 @@ std::vector<unsigned int> CVPCB_MAINFRAME::GetComponentIndices(
             lastIdx = m_compListBox->GetNextSelected( lastIdx );
         }
         break;
-    }
+
     case CVPCB_MAINFRAME::NA_COMPONENTS:
         for( unsigned int i = 0; i < m_netlist.GetCount(); i++ )
         {
@@ -1043,8 +1046,8 @@ std::vector<unsigned int> CVPCB_MAINFRAME::GetComponentIndices(
 DISPLAY_FOOTPRINTS_FRAME* CVPCB_MAINFRAME::GetFootprintViewerFrame() const
 {
     // returns the Footprint Viewer frame, if exists, or NULL
-    return dynamic_cast<DISPLAY_FOOTPRINTS_FRAME*>
-            ( wxWindow::FindWindowByName( FOOTPRINTVIEWER_FRAME_NAME ) );
+    wxWindow* window = wxWindow::FindWindowByName( FOOTPRINTVIEWER_FRAME_NAME );
+    return dynamic_cast<DISPLAY_FOOTPRINTS_FRAME*>( window );
 }
 
 

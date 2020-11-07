@@ -55,7 +55,8 @@ public:
      * @param aDetails if not null, a custom wxHtmlWindow to hold symbol details. If null this
      *                 will be created inside the LIB_TREE.
      */
-    LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAPTER::PTR& aAdapter,
+    LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
+              wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter,
               WIDGETS aWidgets = ALL, wxHtmlWindow *aDetails = nullptr );
 
     ~LIB_TREE() override;
@@ -166,12 +167,13 @@ protected:
     void onContextMenu( wxDataViewEvent& aEvent );
 
 protected:
-    LIB_TABLE*                  m_lib_table;
-    LIB_TREE_MODEL_ADAPTER::PTR m_adapter;
+    LIB_TABLE*       m_lib_table;
 
-    wxTextCtrl*                 m_query_ctrl;
-    wxDataViewCtrl*             m_tree_ctrl;
-    wxHtmlWindow*               m_details_ctrl;
+    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
+
+    wxTextCtrl*      m_query_ctrl;
+    wxDataViewCtrl*  m_tree_ctrl;
+    wxHtmlWindow*    m_details_ctrl;
 };
 
 ///> Custom event sent when a new component is preselected

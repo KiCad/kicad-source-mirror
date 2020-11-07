@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2011 Jean-Pierre Charras, <jp.charras@wanadoo.fr>
  * Copyright (C) 2013-2016 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,35 +31,31 @@
 #include <footprint_info.h>
 #include <fp_lib_table.h>
 #include <dialogs/html_messagebox.h>
-#include <io_mgr.h>
 #include <kicad_string.h>
 #include <kiface_ids.h>
 #include <kiway.h>
 #include <lib_id.h>
-#include <pgm_base.h>
 #include <thread>
 #include <utility>
-#include <wildcards_and_files_ext.h>
-#include <wx/textfile.h>
 
 
-FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aLibNickname,
-                                               const wxString& aFootprintName )
+FOOTPRINT_INFO* FOOTPRINT_LIST::GetFootprintInfo( const wxString& aLibNickname,
+                                                  const wxString& aFootprintName )
 {
     if( aFootprintName.IsEmpty() )
         return NULL;
 
-    for( auto& fp : m_list )
+    for( std::unique_ptr<FOOTPRINT_INFO>& fp : m_list )
     {
         if( aLibNickname == fp->GetLibNickname() && aFootprintName == fp->GetFootprintName() )
-            return &*fp;
+            return fp.get();
     }
 
     return NULL;
 }
 
 
-FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
+FOOTPRINT_INFO* FOOTPRINT_LIST::GetFootprintInfo( const wxString& aFootprintName )
 {
     if( aFootprintName.IsEmpty() )
         return NULL;
@@ -69,7 +65,7 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
     wxCHECK_MSG( fpid.Parse( aFootprintName, LIB_ID::ID_PCB ) < 0, NULL,
                  wxString::Format( wxT( "\"%s\" is not a valid LIB_ID." ), aFootprintName ) );
 
-    return GetModuleInfo( fpid.GetLibNickname(), fpid.GetLibItemName() );
+    return GetFootprintInfo( fpid.GetLibNickname(), fpid.GetLibItemName());
 }
 
 
@@ -79,9 +75,6 @@ bool FOOTPRINT_INFO::InLibrary( const wxString& aLibrary ) const
 }
 
 
-/**
- * Less than operator implementation for FOOTPRINT_INFO
- */
 bool operator<( const FOOTPRINT_INFO& lhs, const FOOTPRINT_INFO& rhs )
 {
     int retv = StrNumCmp( lhs.m_nickname, rhs.m_nickname, false );
@@ -110,7 +103,7 @@ void FOOTPRINT_LIST::DisplayErrors( wxTopLevelWindow* aWindow )
 
     wxString msg;
 
-    while( auto error = PopError() )
+    while( const std::unique_ptr<IO_ERROR>& error = PopError() )
     {
         wxString tmp = error->Problem();
 
@@ -180,8 +173,8 @@ void FOOTPRINT_ASYNC_LOADER::SetList( FOOTPRINT_LIST* aList )
 }
 
 
-void FOOTPRINT_ASYNC_LOADER::Start(
-        FP_LIB_TABLE* aTable, wxString const* aNickname, unsigned aNThreads )
+void FOOTPRINT_ASYNC_LOADER::Start( FP_LIB_TABLE* aTable, wxString const* aNickname,
+                                    unsigned aNThreads )
 {
     // Capture the FP_LIB_TABLE into m_last_table. Formatting it as a string instead of storing the
     // raw data avoids having to pull in the FP-specific parts.

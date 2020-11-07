@@ -145,7 +145,7 @@ public:
     void UpdateStatusBar() override;
 
     /**
-     * Function SelectComponentFromLib
+     * Function PickSymbolFromLibTree
      * Calls the library viewer to select component to import into schematic.
      * if the library viewer is currently running, it is closed and reopened
      * in modal mode.
@@ -168,15 +168,14 @@ public:
      *
      * @return the selected component
      */
-    COMPONENT_SELECTION SelectCompFromLibTree(
-            const SCHLIB_FILTER* aFilter,
-            std::vector<COMPONENT_SELECTION>& aHistoryList,
-            bool aUseLibBrowser,
-            int aUnit,
-            int aConvert,
-            bool aShowFootprints,
-            const LIB_ID* aHighlight = nullptr,
-            bool aAllowFields = true );
+    PICKED_SYMBOL PickSymbolFromLibTree( const SCHLIB_FILTER* aFilter,
+                                         std::vector<PICKED_SYMBOL>& aHistoryList,
+                                         bool aUseLibBrowser,
+                                         int aUnit,
+                                         int aConvert,
+                                         bool aShowFootprints,
+                                         const LIB_ID* aHighlight = nullptr,
+                                         bool aAllowFields = true );
 
     /**
      * Load symbol from symbol library table.
@@ -193,7 +192,7 @@ public:
     LIB_PART* GetFlattenedLibPart( const LIB_ID& aLibId, bool aShowErrorMsg = false );
 
     /**
-     * Function SelectComponentFromLibBrowser
+     * Function PickSymbolFromLibBrowser
      * Calls the library viewer to select component to import into schematic.
      * if the library viewer is currently running, it is closed and reopened
      * in modal mode.
@@ -205,10 +204,10 @@ public:
      * @param aConvert          preselected deMorgan conversion
      * @return the selected component
      */
-    COMPONENT_SELECTION SelectComponentFromLibBrowser( wxTopLevelWindow* aParent,
-                                                       const SCHLIB_FILTER* aFilter,
-                                                       const LIB_ID& aPreselectedLibid,
-                                                       int aUnit, int aConvert );
+    PICKED_SYMBOL PickSymbolFromLibBrowser( wxTopLevelWindow* aParent,
+                                            const SCHLIB_FILTER* aFilter,
+                                            const LIB_ID& aPreselectedLibId,
+                                            int aUnit, int aConvert );
 
     virtual void RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer );
 

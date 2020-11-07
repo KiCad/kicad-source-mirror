@@ -34,7 +34,8 @@ class SYMBOL_LIBRARY_MANAGER;
 class SYMBOL_TREE_SYNCHRONIZING_ADAPTER : public LIB_TREE_MODEL_ADAPTER
 {
 public:
-    static PTR Create( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_MANAGER* aLibs );
+    static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( SYMBOL_EDIT_FRAME* aParent,
+                                                           SYMBOL_LIBRARY_MANAGER* aLibs );
 
     bool IsContainer( const wxDataViewItem& aItem ) const override;
 

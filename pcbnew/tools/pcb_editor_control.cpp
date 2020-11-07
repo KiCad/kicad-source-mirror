@@ -1264,7 +1264,7 @@ int PCB_EDITOR_CONTROL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
 
     auto editor = (FOOTPRINT_EDIT_FRAME*) editFrame->Kiway().Player( FRAME_FOOTPRINT_EDITOR, true );
 
-    editor->Load_Module_From_BOARD( fp );
+    editor->LoadFootprintFromBoard( fp );
 
     editor->Show( true );
     editor->Raise();        // Iconize( false );

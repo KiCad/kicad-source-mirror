@@ -76,7 +76,8 @@ bool sortListbyCmpValue( const FOOTPRINT_EQUIVALENCE& ref, const FOOTPRINT_EQUIV
 
 
 // read the .equ files and populate the list of equivalents
-int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wxString * aErrorMessages )
+int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList,
+                                           wxString* aErrorMessages )
 {
     char        line[1024];
     int         error_count = 0;
@@ -89,7 +90,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wx
 
     // Find equivalences in all available files, and populates the
     // equiv_List with all equivalences found in .equ files
-    for( const auto& equfile : project.m_EquivalenceFiles )
+    for( const wxString& equfile : project.m_EquivalenceFiles )
     {
         fn =  wxExpandEnvVars( equfile );
 
@@ -103,7 +104,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wx
             {
                 error_msg.Printf( _( "Equivalence file \"%s\" could not be found in the "
                                      "default search paths." ),
-                        fn.GetFullName() );
+                                  fn.GetFullName() );
 
                 if( ! aErrorMessages->IsEmpty() )
                     *aErrorMessages << wxT("\n\n");
@@ -166,26 +167,25 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wx
 
 void CVPCB_MAINFRAME::AutomaticFootprintMatching()
 {
-    FOOTPRINT_EQUIVALENCE_LIST equiv_List;
-    wxString             msg, error_msg;
+    FOOTPRINT_EQUIVALENCE_LIST equivList;
+    wxString                   msg;
+    wxString                   error_msg;
 
     if( m_netlist.IsEmpty() )
         return;
 
-    if( buildEquivalenceList( equiv_List, &error_msg ) )
-        wxMessageBox( error_msg, _( "Equivalence File Load Error" ), wxOK |  wxICON_WARNING, this );
+    if( buildEquivalenceList( equivList, &error_msg ) )
+        wxMessageBox( error_msg, _( "Equivalence File Load Error" ), wxOK | wxICON_WARNING, this );
 
-    // Sort the association list by component value.
-    // When sorted, find duplicate definitions (i.e. 2 or more items
-    // having the same component value) is more easy.
-    std::sort( equiv_List.begin(), equiv_List.end(), sortListbyCmpValue );
+    // Sort the association list by symbol value.  When sorted, finding duplicate definitions
+    // (i.e. 2 or more items having the same symbol value) is easier.
+    std::sort( equivList.begin(), equivList.end(), sortListbyCmpValue );
 
-    // Display the number of footprint/component equivalences.
-    msg.Printf( _( "%lu footprint/cmp equivalences found." ), (unsigned long)equiv_List.size() );
+    // Display the number of footprint/symbol equivalences.
+    msg.Printf( _( "%lu footprint/symbol equivalences found." ), (unsigned long)equivList.size() );
     SetStatusText( msg, 0 );
 
-    // Now, associate each free component with a footprint, when the association
-    // is found in list
+    // Now, associate each free component with a footprint
     m_skipComponentSelect = true;
     error_msg.Empty();
 
@@ -201,36 +201,40 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
 
         // Here a first attempt is made. We can have multiple equivItem of the same value.
         // When happens, using the footprint filter of components can remove the ambiguity by
-        // filtering equivItem so one can use multiple equiv_List (for polar and
-        // non-polar caps for example)
+        // filtering equivItem so one can use multiple equivList (for polar and non-polar caps
+        // for example)
         wxString fpid_candidate;
 
-        for( unsigned idx = 0; idx < equiv_List.size(); idx++ )
+        for( unsigned idx = 0; idx < equivList.size(); idx++ )
         {
-            FOOTPRINT_EQUIVALENCE& equivItem = equiv_List[idx];
+            FOOTPRINT_EQUIVALENCE& equivItem = equivList[idx];
 
             if( equivItem.m_ComponentValue.CmpNoCase( component->GetValue() ) != 0 )
                 continue;
 
-            const FOOTPRINT_INFO *module = m_FootprintsList->GetModuleInfo( equivItem.m_FootprintFPID );
+            const FOOTPRINT_INFO *fp = m_FootprintsList->GetFootprintInfo( equivItem.m_FootprintFPID );
 
             bool equ_is_unique = true;
             unsigned next = idx+1;
             int  previous = idx-1;
 
-            if( next < equiv_List.size() &&
-                equivItem.m_ComponentValue == equiv_List[next].m_ComponentValue )
+            if( next < equivList.size()
+                    && equivItem.m_ComponentValue == equivList[next].m_ComponentValue )
+            {
                 equ_is_unique = false;
+            }
 
-            if( previous >= 0 &&
-                equivItem.m_ComponentValue == equiv_List[previous].m_ComponentValue )
+            if( previous >= 0
+                    && equivItem.m_ComponentValue == equivList[previous].m_ComponentValue )
+            {
                 equ_is_unique = false;
+            }
 
             // If the equivalence is unique, no ambiguity: use the association
-            if( module && equ_is_unique )
+            if( fp && equ_is_unique )
             {
                 AssociateFootprint( CVPCB_ASSOCIATION( kk, equivItem.m_FootprintFPID ),
-                        firstAssoc );
+                                    firstAssoc );
                 firstAssoc = false;
                 found = true;
                 break;
@@ -238,27 +242,25 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
 
             // Store the first candidate found in list, when equivalence is not unique
             // We use it later.
-            if( module && fpid_candidate.IsEmpty() )
+            if( fp && fpid_candidate.IsEmpty() )
                 fpid_candidate = equivItem.m_FootprintFPID;
 
             // The equivalence is not unique: use the footprint filter to try to remove
             // ambiguity
             // if the footprint filter does not remove ambiguity, we will use fpid_candidate
-            if( module )
+            if( fp )
             {
                 size_t filtercount = component->GetFootprintFilters().GetCount();
                 found = ( 0 == filtercount ); // if no entries, do not filter
 
                 for( size_t jj = 0; jj < filtercount && !found; jj++ )
-                {
-                    found = module->GetFootprintName().Matches( component->GetFootprintFilters()[jj] );
-                }
+                    found = fp->GetFootprintName().Matches( component->GetFootprintFilters()[jj] );
             }
             else
             {
                 msg.Printf( _( "Component %s: footprint %s not found in any of the project "
                                "footprint libraries." ),
-                        component->GetReference(), equivItem.m_FootprintFPID );
+                            component->GetReference(), equivItem.m_FootprintFPID );
 
                 if( ! error_msg.IsEmpty() )
                     error_msg << wxT("\n\n");
@@ -268,14 +270,17 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
 
             if( found )
             {
-                AssociateFootprint( CVPCB_ASSOCIATION( kk, equivItem.m_FootprintFPID ), firstAssoc );
+                AssociateFootprint( CVPCB_ASSOCIATION( kk, equivItem.m_FootprintFPID ),
+                                    firstAssoc );
                 firstAssoc = false;
                 break;
             }
         }
 
         if( found )
+        {
             continue;
+        }
         else if( !fpid_candidate.IsEmpty() )
         {
             AssociateFootprint( CVPCB_ASSOCIATION( kk, fpid_candidate ), firstAssoc );
@@ -288,12 +293,10 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
         {
             // we do not need to analyze wildcards: single footprint do not
             // contain them and if there are wildcards it just will not match any
-            const FOOTPRINT_INFO* module = m_FootprintsList->GetModuleInfo( component->GetFootprintFilters()[0] );
-
-            if( module )
+            if( m_FootprintsList->GetFootprintInfo( component->GetFootprintFilters()[0] ) )
             {
                 AssociateFootprint( CVPCB_ASSOCIATION( kk, component->GetFootprintFilters()[0] ),
-                        firstAssoc );
+                                    firstAssoc );
                 firstAssoc = false;
             }
         }

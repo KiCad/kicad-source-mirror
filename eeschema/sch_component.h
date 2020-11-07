@@ -51,7 +51,7 @@
 #include <symbol_lib_table.h>
 #include <transform.h>
 
-struct COMPONENT_SELECTION;
+struct PICKED_SYMBOL;
 class SCH_SCREEN;
 class LIB_ITEM;
 class LIB_PIN;
@@ -137,7 +137,7 @@ public:
                    int unit = 0, int convert = 0,
                    const wxPoint& pos = wxPoint( 0, 0 )  );
 
-    SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet, COMPONENT_SELECTION& aSel,
+    SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet, PICKED_SYMBOL& aSel,
                    const wxPoint& pos = wxPoint( 0, 0 ) );
     /**
      * Clones \a aComponent into a new schematic symbol object.

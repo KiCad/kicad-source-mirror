@@ -55,89 +55,87 @@ using namespace std::placeholders;
 #include "fp_tree_model_adapter.h"
 
 
-static wxArrayString s_ModuleHistoryList;
-static unsigned      s_ModuleHistoryMaxCount = 8;
+static wxArrayString s_FootprintHistoryList;
+static unsigned      s_FootprintHistoryMaxCount = 8;
 
-static void AddModuleToHistory( const wxString& aName )
+static void AddFootprintToHistory( const wxString& aName )
 {
     // Remove duplicates
-    for( int ii = s_ModuleHistoryList.GetCount() - 1; ii >= 0; --ii )
+    for( int ii = s_FootprintHistoryList.GetCount() - 1; ii >= 0; --ii )
     {
-        if( s_ModuleHistoryList[ ii ] == aName )
-            s_ModuleHistoryList.RemoveAt( (size_t) ii );
+        if( s_FootprintHistoryList[ ii ] == aName )
+            s_FootprintHistoryList.RemoveAt((size_t) ii );
     }
 
     // Add the new name at the beginning of the history list
-    s_ModuleHistoryList.Insert( aName, 0 );
+    s_FootprintHistoryList.Insert( aName, 0 );
 
     // Remove extra names
-    while( s_ModuleHistoryList.GetCount() >= s_ModuleHistoryMaxCount )
-        s_ModuleHistoryList.RemoveAt( s_ModuleHistoryList.GetCount() - 1 );
+    while( s_FootprintHistoryList.GetCount() >= s_FootprintHistoryMaxCount )
+        s_FootprintHistoryList.RemoveAt( s_FootprintHistoryList.GetCount() - 1 );
 }
 
-
-static void clearModuleItemFlags( BOARD_ITEM* aItem )
-{
-    aItem->ClearFlags();
-}
 
 #include <bitmaps.h>
-bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
+bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( MODULE* aFootprint )
 {
     bool is_last_fp_from_brd = IsCurrentFPFromBoard();
 
-    MODULE* newModule;
+    MODULE*         newFootprint = nullptr;
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
     if( frame == NULL )     // happens if no board editor opened
         return false;
 
-    if( aModule == NULL )
+    if( aFootprint == NULL )
     {
         if( !frame->GetBoard() || !frame->GetBoard()->GetFirstModule() )
             return false;
 
-        aModule = SelectFootprintFromBoard( frame->GetBoard() );
+        aFootprint = SelectFootprintFromBoard( frame->GetBoard() );
     }
 
-    if( aModule == NULL )
+    if( aFootprint == NULL )
         return false;
 
     if( !Clear_Pcb( true ) )
         return false;
 
-    newModule = (MODULE*) aModule->Duplicate();
-    newModule->SetParent( GetBoard() );
-    newModule->SetLink( aModule->m_Uuid );
+    newFootprint = (MODULE*) aFootprint->Duplicate();
+    newFootprint->SetParent( GetBoard() );
+    newFootprint->SetLink( aFootprint->m_Uuid );
 
-    newModule->ClearFlags();
-    newModule->RunOnChildren( std::bind( &clearModuleItemFlags, _1 ) );
+    newFootprint->ClearFlags();
+    newFootprint->RunOnChildren( []( BOARD_ITEM* aItem )
+                                 {
+                                     aItem->ClearFlags();
+                                 } );
 
-    AddModuleToBoard( newModule );
+    AddModuleToBoard( newFootprint );
 
     // Clear references to any net info, because the footprint editor
     // does know any thing about nets handled by the current edited board.
     // Morever we do not want to save any reference to an unknown net when
     // saving the footprint in lib cache
     // so we force the ORPHANED dummy net info for all pads
-    newModule->ClearAllNets();
+    newFootprint->ClearAllNets();
 
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-    PlaceModule( newModule );
-    newModule->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
+    PlaceModule( newFootprint );
+    newFootprint->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
 
     // Put it on FRONT layer,
     // because this is the default in ModEdit, and in libs
-    if( newModule->GetLayer() != F_Cu )
-        newModule->Flip( newModule->GetPosition(), frame->Settings().m_FlipLeftRight );
+    if( newFootprint->GetLayer() != F_Cu )
+        newFootprint->Flip( newFootprint->GetPosition(), frame->Settings().m_FlipLeftRight );
 
     // Put it in orientation 0,
     // because this is the default orientation in ModEdit, and in libs
-    newModule->SetOrientation( 0 );
+    newFootprint->SetOrientation( 0 );
 
     Zoom_Automatique( false );
 
-    m_adapter->SetPreselectNode( newModule->GetFPID(), 0 );
+    m_adapter->SetPreselectNode( newFootprint->GetFPID(), 0 );
 
     ClearUndoRedoList();
     GetScreen()->ClrModify();
@@ -196,9 +194,9 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
 MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
 {
     FP_LIB_TABLE*   fpTable = Prj().PcbFootprintLibs();
-    wxString        moduleName;
+    wxString        footprintName;
     LIB_ID          fpid;
-    MODULE*         module = NULL;
+    MODULE*         footprint = nullptr;
 
     static wxString lastComponentName;
 
@@ -215,14 +213,14 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
     if( GFootprintList.GetErrorCount() )
         GFootprintList.DisplayErrors( this );
 
-    auto adapterPtr( FP_TREE_MODEL_ADAPTER::Create( this, fpTable ) );
-    auto adapter = static_cast<FP_TREE_MODEL_ADAPTER*>( adapterPtr.get() );
+    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> ptr = FP_TREE_MODEL_ADAPTER::Create( this, fpTable );
+    FP_TREE_MODEL_ADAPTER* adapter = static_cast<FP_TREE_MODEL_ADAPTER*>( ptr.get() );
 
     std::vector<LIB_TREE_ITEM*> historyInfos;
 
-    for( auto const& item : s_ModuleHistoryList )
+    for( const wxString& item : s_FootprintHistoryList )
     {
-        LIB_TREE_ITEM* fp_info = GFootprintList.GetModuleInfo( item );
+        LIB_TREE_ITEM* fp_info = GFootprintList.GetFootprintInfo( item );
 
         // this can be null, for example, if the footprint has been deleted from a library.
         if( fp_info != nullptr )
@@ -241,7 +239,7 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
     wxString title;
     title.Printf( _( "Choose Footprint (%d items loaded)" ), adapter->GetItemCount() );
 
-    DIALOG_CHOOSE_FOOTPRINT dialog( this, title, adapterPtr );
+    DIALOG_CHOOSE_FOOTPRINT dialog( this, title, ptr );
 
     if( dialog.ShowQuasiModal() == wxID_CANCEL )
         return NULL;
@@ -250,12 +248,12 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
     {
         // SelectFootprintFromLibBrowser() returns the "full" footprint name, i.e.
         // <lib_name>/<footprint name> or LIB_ID format "lib_name:fp_name:rev#"
-        moduleName = SelectFootprintFromLibBrowser();
+        footprintName = SelectFootprintFromLibBrowser();
 
-        if( moduleName.IsEmpty() )  // Cancel command
+        if( footprintName.IsEmpty() )  // Cancel command
             return NULL;
         else
-            fpid.Parse( moduleName, LIB_ID::ID_PCB );
+            fpid.Parse( footprintName, LIB_ID::ID_PCB );
     }
     else
     {
@@ -264,24 +262,24 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
         if( !fpid.IsValid() )
             return NULL;
         else
-            moduleName = fpid.Format();
+            footprintName = fpid.Format();
     }
 
     try
     {
-        module = loadFootprint( fpid );
+        footprint = loadFootprint( fpid );
     }
     catch( const IO_ERROR& )
     {
     }
 
-    if( module )
+    if( footprint )
     {
-        lastComponentName = moduleName;
-        AddModuleToHistory( moduleName );
+        lastComponentName = footprintName;
+        AddFootprintToHistory( footprintName );
     }
 
-    return module;
+    return footprint;
 }
 
 

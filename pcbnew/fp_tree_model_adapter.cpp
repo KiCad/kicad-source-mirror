@@ -27,10 +27,11 @@
 
 #include "fp_tree_model_adapter.h"
 
-FP_TREE_MODEL_ADAPTER::PTR FP_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent,
-                                                          LIB_TABLE* aLibs )
+wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
+FP_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs )
 {
-    return PTR( new FP_TREE_MODEL_ADAPTER( aParent, aLibs ) );
+    auto* adapter = new FP_TREE_MODEL_ADAPTER( aParent, aLibs );
+    return wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>( adapter );
 }
 
 
@@ -42,7 +43,7 @@ FP_TREE_MODEL_ADAPTER::FP_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE
 
 void FP_TREE_MODEL_ADAPTER::AddLibraries()
 {
-    for( const auto& libName : m_libs->GetLogicalLibs() )
+    for( const wxString& libName : m_libs->GetLogicalLibs() )
     {
         const FP_LIB_TABLE_ROW* library = m_libs->FindRow( libName );
 
@@ -63,10 +64,11 @@ std::vector<LIB_TREE_ITEM*> FP_TREE_MODEL_ADAPTER::getFootprints( const wxString
 
     // List is sorted, so use a binary search to find the range of footnotes for our library
     auto libBounds = std::equal_range( fullListStart, fullListEnd, dummy,
-        []( const std::unique_ptr<FOOTPRINT_INFO>& a, const std::unique_ptr<FOOTPRINT_INFO>& b )
-        {
-            return StrNumCmp( a->GetLibNickname(), b->GetLibNickname(), false ) < 0;
-        } );
+            []( const std::unique_ptr<FOOTPRINT_INFO>& a,
+                const std::unique_ptr<FOOTPRINT_INFO>& b )
+            {
+                return StrNumCmp( a->GetLibNickname(), b->GetLibNickname(), false ) < 0;
+            } );
 
     for( auto i = libBounds.first; i != libBounds.second; ++i )
         libList.push_back( i->get() );

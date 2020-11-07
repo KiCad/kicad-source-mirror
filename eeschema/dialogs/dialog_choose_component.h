@@ -104,8 +104,9 @@ public:
      * @param aAllowBrowser     show a Select with Browser button
      */
     DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                             SYMBOL_TREE_MODEL_ADAPTER::PTR& aAdapter, int aDeMorganConvert,
-                             bool aAllowFieldEdits, bool aShowFootprints, bool aAllowBrowser );
+                             wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter,
+                             int aDeMorganConvert, bool aAllowFieldEdits, bool aShowFootprints,
+                             bool aAllowBrowser );
 
     ~DIALOG_CHOOSE_COMPONENT();
 

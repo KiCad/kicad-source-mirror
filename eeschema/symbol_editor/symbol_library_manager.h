@@ -273,7 +273,7 @@ public:
     /**
      * Returns the adapter object that provides the stored data.
      */
-    LIB_TREE_MODEL_ADAPTER::PTR& GetAdapter() { return m_adapter; }
+    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& GetAdapter() { return m_adapter; }
 
     /**
      * Returns the currently modified library name.
@@ -314,6 +314,11 @@ private:
 
     ///> Returns the current Symbol Library Table
     SYMBOL_LIB_TABLE* symTable() const;
+
+    SYMBOL_TREE_SYNCHRONIZING_ADAPTER* getAdapter()
+    {
+        return static_cast<SYMBOL_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
+    }
 
     ///> Class to store a working copy of a LIB_PART object and editor context.
     class PART_BUFFER
@@ -454,28 +459,29 @@ private:
         int                          m_hash;
     };
 
-    ///> Returns a set of LIB_PART objects belonging to the original library
+    /**
+     * Returns a set of LIB_PART objects belonging to the original library
+     */
     std::set<LIB_PART*> getOriginalParts( const wxString& aLibrary );
 
-    ///> Returns an existing library buffer or creates one to using
-    ///> Symbol Library Table to get the original data.
+    /**
+     * Returns an existing library buffer or creates one to using Symbol Library Table to get
+     * the original data.
+     */
     LIB_BUFFER& getLibraryBuffer( const wxString& aLibrary );
 
     ///> The library buffers
     std::map<wxString, LIB_BUFFER> m_libs;
 
-    SYMBOL_EDIT_FRAME& m_frame;         // Parent frame
-    LIB_LOGGER      m_logger;
-    int             m_syncHash;      // Symbol Lib Table hash value from the last synchronization
+    SYMBOL_EDIT_FRAME& m_frame;        ///< Parent frame
+    LIB_LOGGER         m_logger;
+    int                m_syncHash;     ///< Symbol lib table hash value from last synchronization
 
-    wxString        m_currentLib;    // Currently modified part
-    wxString        m_currentPart;   // Currently modified library
+    wxString           m_currentLib;   ///< Currently modified part
+    wxString           m_currentPart;  ///< Currently modified library
 
-    SYMBOL_TREE_SYNCHRONIZING_ADAPTER::PTR m_adapter;
-    SYMBOL_TREE_SYNCHRONIZING_ADAPTER* getAdapter()
-    {
-        return static_cast<SYMBOL_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
-    }
+    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
+
 };
 
 #endif /* SYMBOL_LIBRARY_MANAGER_H */

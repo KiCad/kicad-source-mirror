@@ -40,8 +40,10 @@
 #include <dialog_choose_component.h>
 #include <symbol_tree_model_adapter.h>
 
-COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowser( wxTopLevelWindow* aParent,
-        const SCHLIB_FILTER* aFilter, const LIB_ID& aPreselectedLibId, int aUnit, int aConvert )
+PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibBrowser( wxTopLevelWindow* aParent,
+                                                        const SCHLIB_FILTER* aFilter,
+                                                        const LIB_ID& aPreselectedLibId,
+                                                        int aUnit, int aConvert )
 {
     // Close any open non-modal Lib browser, and open a new one, in "modal" mode:
     LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
@@ -64,8 +66,8 @@ COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowser( wxTopLevelWin
 
     viewlibFrame->Refresh();
 
-    COMPONENT_SELECTION sel;
-    wxString            symbol;
+    PICKED_SYMBOL sel;
+    wxString      symbol;
 
     if( viewlibFrame->ShowModal( &symbol, aParent ) )
     {
@@ -84,9 +86,13 @@ COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowser( wxTopLevelWin
 }
 
 
-COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree( const SCHLIB_FILTER* aFilter,
-        std::vector<COMPONENT_SELECTION>& aHistoryList, bool aUseLibBrowser, int aUnit,
-        int aConvert, bool aShowFootprints, const LIB_ID* aHighlight, bool aAllowFields )
+PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilter,
+                                                     std::vector<PICKED_SYMBOL>& aHistoryList,
+                                                     bool aUseLibBrowser,
+                                                     int aUnit, int aConvert,
+                                                     bool aShowFootprints,
+                                                     const LIB_ID* aHighlight,
+                                                     bool aAllowFields )
 {
     std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_COMPONENT::g_Mutex, std::defer_lock );
     wxString                     dialogTitle;
@@ -94,10 +100,9 @@ COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree( const SCHLIB_FILTER* 
 
     // One CHOOSE_COMPONENT dialog at a time.  User probaby can't handle more anyway.
     if( !dialogLock.try_lock() )
-        return COMPONENT_SELECTION();
+        return PICKED_SYMBOL();
 
-    auto adapterPtr( SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs ) );
-    auto adapter = static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapterPtr.get() );
+    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> adapter = SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs );
     bool loaded = false;
 
     if( aFilter )
@@ -109,7 +114,7 @@ COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree( const SCHLIB_FILTER* 
             if( libs->HasLibrary( liblist[ii], true ) )
             {
                 loaded = true;
-                adapter->AddLibrary( liblist[ii] );
+                static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapter.get() )->AddLibrary( liblist[ii] );
             }
         }
 
@@ -121,7 +126,7 @@ COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree( const SCHLIB_FILTER* 
 
     std::vector< LIB_TREE_ITEM* > history_list;
 
-    for( auto const& i : aHistoryList )
+    for( const PICKED_SYMBOL& i : aHistoryList )
     {
         LIB_PART* symbol = GetLibPart( i.LibId );
 
@@ -130,8 +135,7 @@ COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree( const SCHLIB_FILTER* 
             history_list.push_back( symbol );
     }
 
-    adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, history_list,
-                           true );
+    adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, history_list, true );
 
     if( !aHistoryList.empty() )
         adapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );
@@ -139,7 +143,7 @@ COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree( const SCHLIB_FILTER* 
     const std::vector< wxString > libNicknames = libs->GetLogicalLibs();
 
     if( !loaded )
-        adapter->AddLibraries( libNicknames, this );
+        static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapter.get() )->AddLibraries( libNicknames, this );
 
     if( aHighlight && aHighlight->IsValid() )
         adapter->SetPreselectNode( *aHighlight, /* aUnit */ 0 );
@@ -149,25 +153,25 @@ COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree( const SCHLIB_FILTER* 
     else
         dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetItemCount() );
 
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapterPtr, aConvert,
-                                 aAllowFields, aShowFootprints, aUseLibBrowser );
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, aConvert, aAllowFields,
+                                 aShowFootprints, aUseLibBrowser );
 
     if( dlg.ShowModal() == wxID_CANCEL )
-        return COMPONENT_SELECTION();
+        return PICKED_SYMBOL();
 
-    COMPONENT_SELECTION sel;
+    PICKED_SYMBOL sel;
     LIB_ID id = dlg.GetSelectedLibId( &sel.Unit );
 
     if( dlg.IsExternalBrowserSelected() )   // User requested component browser.
     {
-        sel = SelectComponentFromLibBrowser( this, aFilter, id, sel.Unit, sel.Convert );
+        sel = PickSymbolFromLibBrowser( this, aFilter, id, sel.Unit, sel.Convert );
         id = sel.LibId;
     }
 
     if( !id.IsValid() )     // Dialog closed by OK button,
                             // or the selection by lib browser was requested,
                             // but no symbol selected
-        return COMPONENT_SELECTION();
+        return PICKED_SYMBOL();
 
     if( sel.Unit == 0 )
         sel.Unit = 1;
@@ -178,7 +182,7 @@ COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree( const SCHLIB_FILTER* 
     if( sel.LibId.IsValid() )
     {
         aHistoryList.erase( std::remove_if( aHistoryList.begin(), aHistoryList.end(),
-                                            [ &sel ]( COMPONENT_SELECTION const& i )
+                                            [ &sel ]( PICKED_SYMBOL const& i )
                                             {
                                                 return i.LibId == sel.LibId;
                                             } ),

@@ -48,7 +48,7 @@ std::mutex DIALOG_CHOOSE_COMPONENT::g_Mutex;
 
 
 DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                                                  SYMBOL_TREE_MODEL_ADAPTER::PTR& aAdapter,
+                                                  wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter,
                                                   int aDeMorganConvert, bool aAllowFieldEdits,
                                                   bool aShowFootprints, bool aAllowBrowser )
         : DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize,

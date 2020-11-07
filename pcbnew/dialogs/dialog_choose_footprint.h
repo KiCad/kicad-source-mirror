@@ -94,7 +94,7 @@ public:
      *                  for documentation.
      */
     DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent, const wxString& aTitle,
-                             FP_TREE_MODEL_ADAPTER::PTR& aAdapter );
+                             wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter );
 
     ~DIALOG_CHOOSE_FOOTPRINT();
 

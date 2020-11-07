@@ -155,15 +155,15 @@ protected:
 
     FOOTPRINT_LIST* m_owner; ///< provides access to FP_LIB_TABLE
 
-    bool m_loaded;
+    bool            m_loaded;
 
-    wxString m_nickname;         ///< library as known in FP_LIB_TABLE
-    wxString m_fpname;           ///< Module name.
-    int      m_num;              ///< Order number in the display list.
-    unsigned m_pad_count;        ///< Number of pads
-    unsigned m_unique_pad_count; ///< Number of unique pads
-    wxString m_doc;              ///< Footprint description.
-    wxString m_keywords;         ///< Footprint keywords.
+    wxString        m_nickname;         ///< library as known in FP_LIB_TABLE
+    wxString        m_fpname;           ///< Module name.
+    int             m_num;              ///< Order number in the display list.
+    unsigned        m_pad_count;        ///< Number of pads
+    unsigned        m_unique_pad_count; ///< Number of unique pads
+    wxString        m_doc;              ///< Footprint description.
+    wxString        m_keywords;         ///< Footprint keywords.
 };
 
 
@@ -216,12 +216,13 @@ public:
     /**
      * Get info for a module by id.
      */
-    FOOTPRINT_INFO* GetModuleInfo( const wxString& aFootprintId );
+    FOOTPRINT_INFO* GetFootprintInfo( const wxString& aFootprintName );
 
     /**
      * Get info for a module by libNickname/footprintName
      */
-    FOOTPRINT_INFO* GetModuleInfo( const wxString& aLibNickname, const wxString& aFootprintName );
+    FOOTPRINT_INFO* GetFootprintInfo( const wxString& aLibNickname,
+                                      const wxString& aFootprintName );
 
     /**
      * Get info for a module by index.
@@ -333,7 +334,7 @@ public:
      * @param aNThreads is the number of worker threads.
      */
     void Start( FP_LIB_TABLE* aTable, wxString const* aNickname = nullptr,
-            unsigned aNThreads = DEFAULT_THREADS );
+                unsigned aNThreads = DEFAULT_THREADS );
 
     /**
      * Wait until the worker threads are finished, and then perform any required
