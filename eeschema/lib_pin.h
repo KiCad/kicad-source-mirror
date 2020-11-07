@@ -86,13 +86,13 @@ protected:
     /**
      * Put the pin number and pin text info, given the pin line coordinates.
      * The line must be vertical or horizontal.
-     * If DrawPinName == false the pin name is not printed.
-     * If DrawPinNum = false the pin number is not printed.
-     * If TextInside then the text is been put inside,otherwise all is drawn outside.
+     * If aDrawPinName == false the pin name is not printed.
+     * If aDrawPinNum = false the pin number is not printed.
+     * If aTextInside then the text is been put inside,otherwise all is drawn outside.
      * Pin Name:    substring between '~' is negated
      */
-    void printPinTexts( RENDER_SETTINGS* aSettings, wxPoint& aPosition, int aOrientation,
-                        int TextInside, bool DrawPinNum, bool DrawPinName );
+    void printPinTexts( RENDER_SETTINGS* aSettings, wxPoint& aPinPos, int aPinOrient,
+                        int aTextInside, bool aDrawPinNum, bool aDrawPinName );
 
     /**
      * Draw the electrical type text of the pin (only for the footprint editor)
@@ -246,14 +246,14 @@ public:
      * If TextInside then the text is been put inside (moving from x1, y1 in
      * the opposite direction to x2,y2), otherwise all is drawn outside.
      */
-    void PlotPinTexts( PLOTTER *aPlotter, wxPoint& aPosition, int aOrientation,
+    void PlotPinTexts( PLOTTER *aPlotter, wxPoint& aPinPos, int aPinOrient,
                        int aTextInside, bool aDrawPinNum, bool aDrawPinName );
 
     void PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation );
 
     void Offset( const wxPoint& aOffset ) override;
 
-    void MoveTo( const wxPoint& aPosition ) override;
+    void MoveTo( const wxPoint& aNewPosition ) override;
 
     wxPoint GetPosition() const override { return m_position; }
     void SetPosition( const wxPoint& aPos ) override { m_position = aPos; }
@@ -262,7 +262,7 @@ public:
     void MirrorVertical( const wxPoint& aCenter ) override;
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
-    void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+    void Plot( PLOTTER* aPlotter, const wxPoint& aPffset, bool aFill,
                const TRANSFORM& aTransform ) override;
 
     // Get/SetWidth() not used for pins.  Use GetPenWidth() for drawing.
