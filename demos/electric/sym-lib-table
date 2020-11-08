@@ -1,3 +1,3 @@
 (sym_lib_table
-  (lib (name elec-unifil)(type Legacy)(uri ${KIPRJMOD}/elec-unifil.lib)(options "")(descr ""))
+  (lib (name "elec-unifil")(type "KiCad")(uri "${KIPRJMOD}/elec-unifil.kicad_sym")(options "")(descr ""))
 )
