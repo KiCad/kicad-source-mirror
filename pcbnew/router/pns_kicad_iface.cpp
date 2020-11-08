@@ -1129,32 +1129,18 @@ bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem ) const
     if( !m_view || !aItem->Parent() )
         return true;
 
-    BOARD_ITEM* item = aItem->Parent();
-    bool        isOnVisibleLayer = true;
+    BOARD_ITEM*      item = aItem->Parent();
+    bool             isOnVisibleLayer = true;
+    RENDER_SETTINGS* settings = m_view->GetPainter()->GetSettings();
 
-    if( m_view->GetPainter()->GetSettings()->GetHighContrast() )
-    {
-        int  layers[KIGFX::VIEW::VIEW_MAX_LAYERS];
-        int  layers_count;
-        auto activeLayers = m_view->GetPainter()->GetSettings()->GetHighContrastLayers();
-
-        isOnVisibleLayer = false;
-        item->ViewGetLayers( layers, layers_count );
-
-        for( int i = 0; i < layers_count; ++i )
-        {
-            // Item is on at least one of the active layers
-            if( activeLayers.count( layers[i] ) > 0 )
-            {
-                isOnVisibleLayer = true;
-                break;
-            }
-        }
-    }
+    if( settings->GetHighContrast() )
+        isOnVisibleLayer = item->IsOnLayer( settings->GetPrimaryHighContrastLayer() );
 
     if( m_view->IsVisible( item ) && isOnVisibleLayer
             && item->ViewGetLOD( item->GetLayer(), m_view ) < m_view->GetScale() )
+    {
         return true;
+    }
 
     // Items hidden in the router are not hidden on the board
     if( m_hiddenItems.find( item ) != m_hiddenItems.end() )

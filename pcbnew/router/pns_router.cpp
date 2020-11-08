@@ -521,6 +521,9 @@ int ROUTER::GetCurrentLayer() const
 {
     if( m_placer )
         return m_placer->CurrentLayer();
+    else if( m_dragger )
+        return m_dragger->CurrentLayer();
+
     return -1;
 }
 

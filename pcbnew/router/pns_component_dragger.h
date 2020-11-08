@@ -79,9 +79,26 @@ public:
      */
     NODE* CurrentNode() const override;
 
+    /**
+     * Function CurrentNets()
+     *
+     * Returns the net code(s) of currently dragged item(s).
+     * Currently unused for component dragging.
+     */
     const std::vector<int> CurrentNets() const override
     {
         return std::vector<int>();
+    }
+
+    /**
+     * Function CurrentLayer()
+     *
+     * Returns the layer of currently dragged item(s).
+     * Currently unused for component dragging.
+     */
+    virtual int CurrentLayer() const override
+    {
+        return UNDEFINED_LAYER;
     }
 
     /**

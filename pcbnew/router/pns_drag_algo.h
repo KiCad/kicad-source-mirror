@@ -95,7 +95,19 @@ public:
      */
     virtual NODE* CurrentNode() const = 0;
 
+    /**
+     * Function CurrentNets()
+     *
+     * Returns the net code(s) of currently dragged item(s).
+     */
     virtual const std::vector<int> CurrentNets() const = 0;
+
+    /**
+     * Function CurrentLayer()
+     *
+     * Returns the layer of currently dragged item(s).
+     */
+    virtual int CurrentLayer() const = 0;
 
     /**
      * Function Traces()
