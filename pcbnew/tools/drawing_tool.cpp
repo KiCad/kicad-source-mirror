@@ -493,6 +493,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
             if( !text )
             {
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
                 m_controls->ForceCursorPosition( true, m_controls->GetCursorPosition() );
                 PCB_LAYER_ID layer = m_frame->GetActiveLayer();
 
