@@ -1,8 +1,0 @@
-EESchema-DOCLIB  Version 2.0
-#
-$CMP CP
-D Polarised capacitor
-K cap capacitor
-$ENDCMP
-#
-#End Doc Library
