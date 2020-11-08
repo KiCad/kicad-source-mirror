@@ -147,6 +147,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
             item->Move( block->GetMoveVector() );
             item->SetFlags( IS_MOVED );
             GetCanvas()->GetView()->Update( item, KIGFX::GEOMETRY );
+            item->ClearFlags();
         }
         break;
 
@@ -176,7 +177,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     TestDanglingEnds();
     OnModify();
 
-    // clear dome flags and pointers
+    // clear some flags and pointers
     GetScreen()->ClearDrawingState();
     GetScreen()->ClearBlockCommand();
     GetScreen()->SetCurItem( NULL );
