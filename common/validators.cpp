@@ -317,13 +317,22 @@ bool LIB_ID_VALIDATOR::Validate( wxWindow *aParent )
 
 
 NETNAME_VALIDATOR::NETNAME_VALIDATOR( wxString *aVal ) :
-         wxTextValidator()
+         wxTextValidator(),
+         m_allowSpaces( false )
 {
 }
 
 
 NETNAME_VALIDATOR::NETNAME_VALIDATOR( const NETNAME_VALIDATOR& aValidator ) :
-        wxTextValidator( aValidator )
+        wxTextValidator( aValidator ),
+        m_allowSpaces( aValidator.m_allowSpaces )
+{
+}
+
+
+NETNAME_VALIDATOR::NETNAME_VALIDATOR( bool aAllowSpaces ) :
+        wxTextValidator(),
+        m_allowSpaces( aAllowSpaces )
 {
 }
 
@@ -357,7 +366,7 @@ wxString NETNAME_VALIDATOR::IsValid( const wxString& str ) const
     if( str.Contains( '\r' ) || str.Contains( '\n' ) )
         return _( "Signal names cannot contain CR or LF characters" );
 
-    if( str.Contains( ' ' ) || str.Contains( '\t' ) )
+    if( !m_allowSpaces && ( str.Contains( ' ' ) || str.Contains( '\t' ) ) )
         return _( "Signal names cannot contain spaces" );
 
     return wxString();
