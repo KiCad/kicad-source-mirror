@@ -195,7 +195,17 @@ public:
 
     void GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem, std::set<PAD*>* pads ) const;
 
-    const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aAnchor, KICAD_T aTypes[] );
+    /**
+     * Function GetConnectedItemsAtAnchor()
+     * Returns a list of items connected to a source item aItem at position aAnchor
+     * @param aItem is the reference item to find other connected items.
+     * @param aAnchor is the position to find connected items on.
+     * @param aTypes allows one to filter by item types.
+     * @return 
+     */
+    const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItemsAtAnchor( const BOARD_CONNECTED_ITEM* aItem,
+                                                                        const VECTOR2I& aAnchor, 
+                                                                        const KICAD_T aTypes[] ) const;
 
     void GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges ) const;
 

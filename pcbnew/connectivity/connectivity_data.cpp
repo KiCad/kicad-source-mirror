@@ -613,25 +613,30 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( TRACK* aTrack, wxPoint* aPos 
 }
 
 
-const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
-        const BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aAnchor, KICAD_T aTypes[] )
+const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItemsAtAnchor(
+        const BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aAnchor, const KICAD_T aTypes[] ) const
 {
     auto& entry = m_connAlgo->ItemEntry( aItem );
     std::vector<BOARD_CONNECTED_ITEM* > rv;
 
     for( auto cnItem : entry.GetItems() )
     {
-        for( auto anchor : cnItem->Anchors() )
+        for( auto connected : cnItem->ConnectedItems() )
         {
-            if( anchor->Pos() == aAnchor )
+            for( auto anchor : connected->Anchors() )
             {
-                for( int i = 0; aTypes[i] > 0; i++ )
+                if( anchor->Pos() == aAnchor )
                 {
-                    if( cnItem->Valid() && cnItem->Parent()->Type() == aTypes[i] )
+                    for( int i = 0; aTypes[i] > 0; i++ )
                     {
-                        rv.push_back( cnItem->Parent() );
-                        break;
+                        if( connected->Valid() && connected->Parent()->Type() == aTypes[i] )
+                        {
+                            rv.push_back( connected->Parent() );
+                            break;
+                        }
                     }
+
+                    break;
                 }
             }
         }
