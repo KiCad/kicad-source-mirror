@@ -252,7 +252,7 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 
 int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 {
-    if( !board()->GetFirstModule() || board()->GetFirstModule()->Pads().empty() )
+    if( !board()->GetFirstFootprint() || board()->GetFirstFootprint()->Pads().empty() )
         return 0;
 
     DIALOG_ENUM_PADS settingsDlg( frame() );
@@ -437,7 +437,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
         statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
     }
 
-    for( auto p : board()->GetFirstModule()->Pads() )
+    for( D_PAD* p : board()->GetFirstFootprint()->Pads() )
     {
         p->ClearSelected();
         view->Update( p );
@@ -450,7 +450,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
 int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 {
-    if( !board()->GetFirstModule() )
+    if( !board()->GetFirstFootprint() )
         return 0;
 
     struct PAD_PLACER : public INTERACTIVE_PLACER_BASE
@@ -466,14 +466,14 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 
         std::unique_ptr<BOARD_ITEM> CreateItem() override
         {
-            D_PAD* pad = new D_PAD( m_board->GetFirstModule() );
+            D_PAD* pad = new D_PAD( m_board->GetFirstFootprint() );
 
             pad->ImportSettingsFrom( m_frame->GetDesignSettings().m_Pad_Master );
 
             if( PAD_NAMING::PadCanHaveName( *pad ) )
             {
                 wxString padName = m_padTool->GetLastPadName();
-                padName = m_board->GetFirstModule()->GetNextPadName( padName );
+                padName = m_board->GetFirstFootprint()->GetNextPadName( padName );
                 pad->SetName( padName );
                 m_padTool->SetLastPadName( padName );
             }
@@ -582,7 +582,7 @@ PCB_LAYER_ID PAD_TOOL::explodePad( D_PAD* aPad )
 
         for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives() )
         {
-            FP_SHAPE* shape = new FP_SHAPE( board()->GetFirstModule() );
+            FP_SHAPE* shape = new FP_SHAPE( board()->GetFirstFootprint() );
 
             shape->SetShape( primitive->GetShape() );
             shape->SetWidth( primitive->GetWidth() );
@@ -622,7 +622,7 @@ void PAD_TOOL::recombinePad( D_PAD* aPad )
                 aPad->TransformShapeWithClearanceToPolygon( padPoly, aLayer, 0, maxError,
                                                             ERROR_INSIDE );
 
-                for( BOARD_ITEM* item : board()->GetFirstModule()->GraphicalItems() )
+                for( BOARD_ITEM* item : board()->GetFirstFootprint()->GraphicalItems() )
                 {
                     PCB_SHAPE* draw = dynamic_cast<PCB_SHAPE*>( item );
 

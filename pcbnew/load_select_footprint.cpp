@@ -89,7 +89,7 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( MODULE* aFootprint )
 
     if( aFootprint == NULL )
     {
-        if( !frame->GetBoard() || !frame->GetBoard()->GetFirstModule() )
+        if( !frame->GetBoard() || !frame->GetBoard()->GetFirstFootprint() )
             return false;
 
         aFootprint = SelectFootprintFromBoard( frame->GetBoard() );

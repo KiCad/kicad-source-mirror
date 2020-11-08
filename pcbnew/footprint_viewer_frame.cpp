@@ -719,7 +719,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
             DismissModal( false );
         }
     }
-    else if( GetBoard()->GetFirstModule() )
+    else if( GetBoard()->GetFirstFootprint() )
     {
         PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
@@ -733,7 +733,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         BOARD_COMMIT commit( pcbframe );
 
         // Create the "new" footprint
-        MODULE* newFootprint = (MODULE*) GetBoard()->GetFirstModule()->Duplicate();
+        MODULE* newFootprint = (MODULE*) GetBoard()->GetFirstFootprint()->Duplicate();
         newFootprint->SetParent( pcbframe->GetBoard() );
         newFootprint->SetLink( 0 );
 
@@ -890,7 +890,7 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
 
 void FOOTPRINT_VIEWER_FRAME::OnUpdateFootprintButton( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( GetBoard()->GetFirstModule() != nullptr );
+    aEvent.Enable( GetBoard()->GetFirstFootprint() != nullptr );
 }
 
 
@@ -1076,6 +1076,6 @@ void FOOTPRINT_VIEWER_FRAME::CloseFootprintViewer( wxCommandEvent& event )
 
 BOARD_ITEM_CONTAINER* FOOTPRINT_VIEWER_FRAME::GetModel() const
 {
-    return GetBoard()->GetFirstModule();
+    return GetBoard()->GetFirstFootprint();
 }
 

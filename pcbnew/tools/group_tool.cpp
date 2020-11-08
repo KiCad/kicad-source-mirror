@@ -355,12 +355,12 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 
     if( m_isFootprintEditor )
     {
-        MODULE* module = board->GetFirstModule();
+        MODULE* parentFootprint = board->GetFirstFootprint();
 
-        m_frame->SaveCopyInUndoList( module, UNDO_REDO::CHANGED );
+        m_frame->SaveCopyInUndoList( parentFootprint, UNDO_REDO::CHANGED );
 
-        group = new PCB_GROUP( module );
-        module->Add( group );
+        group = new PCB_GROUP( parentFootprint );
+        parentFootprint->Add( group );
 
         for( EDA_ITEM* item : selection )
             group->AddItem( static_cast<BOARD_ITEM*>( item ) );
@@ -413,12 +413,12 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
         {
             if( m_isFootprintEditor )
             {
-                MODULE* module = board->GetFirstModule();
+                MODULE* parentFootprint = board->GetFirstFootprint();
 
-                m_frame->SaveCopyInUndoList( module, UNDO_REDO::CHANGED );
+                m_frame->SaveCopyInUndoList( parentFootprint, UNDO_REDO::CHANGED );
 
                 group->RemoveAll();
-                module->Remove( group );
+                parentFootprint->Remove( group );
             }
             else
             {

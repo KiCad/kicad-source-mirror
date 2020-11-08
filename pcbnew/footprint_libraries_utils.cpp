@@ -612,7 +612,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromLibrary( const LIB_ID& aFPID, bool aC
 void PCB_EDIT_FRAME::HarvestFootprintsToLibrary( bool aStoreInNewLib, const wxString& aLibName,
                                                  wxString* aLibPath )
 {
-    if( GetBoard()->GetFirstModule() == NULL )
+    if( GetBoard()->GetFirstFootprint() == NULL )
     {
         DisplayInfoMessage( this, _( "No footprints to harvest!" ) );
         return;
@@ -698,16 +698,16 @@ void PCB_EDIT_FRAME::HarvestFootprintsToLibrary( bool aStoreInNewLib, const wxSt
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
+bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aFootprint )
 {
-    if( !aModule )      // Happen if no footprint loaded
+    if( !aFootprint )      // Happen if no footprint loaded
         return false;
 
-    wxString libraryName = aModule->GetFPID().GetLibNickname();
-    wxString footprintName = aModule->GetFPID().GetLibItemName();
-    bool nameChanged = m_footprintNameWhenLoaded != footprintName;
+    wxString libraryName = aFootprint->GetFPID().GetLibNickname();
+    wxString footprintName = aFootprint->GetFPID().GetLibItemName();
+    bool     nameChanged = m_footprintNameWhenLoaded != footprintName;
 
-    if( aModule->GetLink() != niluuid )
+    if( aFootprint->GetLink() != niluuid )
     {
         if( SaveFootprintToBoard( false ) )
         {
@@ -719,7 +719,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
     }
     else if( libraryName.IsEmpty() || footprintName.IsEmpty() )
     {
-        if( SaveFootprintAs( aModule ) )
+        if( SaveFootprintAs( aFootprint ) )
         {
             m_footprintNameWhenLoaded = footprintName;
             SyncLibraryTree( true );
@@ -747,7 +747,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
         DeleteModuleFromLibrary( oldFPID, false );
     }
 
-    if( !SaveFootprintInLibrary( aModule, libraryName ) )
+    if( !SaveFootprintInLibrary( aFootprint, libraryName ) )
         return false;
 
     if( nameChanged )
@@ -795,7 +795,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 
     BOARD*  mainpcb  = pcbframe->GetBoard();
     MODULE* source_module  = NULL;
-    MODULE* module_in_edit = GetBoard()->GetFirstModule();
+    MODULE* module_in_edit = GetBoard()->GetFirstFootprint();
 
     // Search the old module (source) if exists
     // Because this source could be deleted when editing the main board...
@@ -1018,62 +1018,62 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
 }
 
 
-MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
+MODULE* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName )
 {
-    wxString moduleName = aModuleName;
+    wxString footprintName = aFootprintName;
 
     // Ask for the new module name
-    if( moduleName.IsEmpty() )
+    if( footprintName.IsEmpty() )
     {
         WX_TEXT_ENTRY_DIALOG dlg( this, _( "Enter footprint name:" ), _( "New Footprint" ),
-                                  moduleName );
-        dlg.SetTextValidator( MODULE_NAME_CHAR_VALIDATOR( &moduleName ) );
+                                  footprintName );
+        dlg.SetTextValidator( MODULE_NAME_CHAR_VALIDATOR( &footprintName ) );
 
         if( dlg.ShowModal() != wxID_OK )
             return NULL;    //Aborted by user
     }
 
-    moduleName.Trim( true );
-    moduleName.Trim( false );
+    footprintName.Trim( true );
+    footprintName.Trim( false );
 
-    if( moduleName.IsEmpty() )
+    if( footprintName.IsEmpty() )
     {
         DisplayInfoMessage( this, _( "No footprint name defined." ) );
         return NULL;
     }
 
-    // Creates the new module and add it to the head of the linked list of footprints
-    MODULE* module = new MODULE( GetBoard() );
+    // Creates the new footprint and add it to the head of the linked list of footprints
+    MODULE* footprint = new MODULE( GetBoard() );
 
     // Update parameters: timestamp ...
-    module->SetLastEditTime();
+    footprint->SetLastEditTime();
 
     // Update its name in lib
-    module->SetFPID( LIB_ID( wxEmptyString, moduleName ) );
+    footprint->SetFPID( LIB_ID( wxEmptyString, footprintName ) );
 
     PCB_LAYER_ID txt_layer;
     wxPoint default_pos;
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
 
-    module->Reference().SetText( settings.m_DefaultFPTextItems[0].m_Text );
-    module->Reference().SetVisible( settings.m_DefaultFPTextItems[0].m_Visible );
+    footprint->Reference().SetText( settings.m_DefaultFPTextItems[0].m_Text );
+    footprint->Reference().SetVisible( settings.m_DefaultFPTextItems[0].m_Visible );
     txt_layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[0].m_Layer;
-    module->Reference().SetLayer( txt_layer );
+    footprint->Reference().SetLayer( txt_layer );
     default_pos.y -= settings.GetTextSize( txt_layer ).y / 2;
-    module->Reference().SetPosition( default_pos );
+    footprint->Reference().SetPosition( default_pos );
     default_pos.y += settings.GetTextSize( txt_layer ).y;
 
-    module->Value().SetText( settings.m_DefaultFPTextItems[1].m_Text );
-    module->Value().SetVisible( settings.m_DefaultFPTextItems[1].m_Visible );
+    footprint->Value().SetText( settings.m_DefaultFPTextItems[1].m_Text );
+    footprint->Value().SetVisible( settings.m_DefaultFPTextItems[1].m_Visible );
     txt_layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[1].m_Layer;
-    module->Value().SetLayer( txt_layer );
+    footprint->Value().SetLayer( txt_layer );
     default_pos.y += settings.GetTextSize( txt_layer ).y / 2;
-    module->Value().SetPosition( default_pos );
+    footprint->Value().SetPosition( default_pos );
     default_pos.y += settings.GetTextSize( txt_layer ).y;
 
     for( size_t i = 2; i < settings.m_DefaultFPTextItems.size(); ++i )
     {
-        FP_TEXT* textItem = new FP_TEXT( module );
+        FP_TEXT* textItem = new FP_TEXT( footprint );
         textItem->SetText( settings.m_DefaultFPTextItems[i].m_Text );
         textItem->SetVisible( settings.m_DefaultFPTextItems[i].m_Visible );
         txt_layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[i].m_Layer;
@@ -1081,16 +1081,16 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
         default_pos.y += settings.GetTextSize( txt_layer ).y / 2;
         textItem->SetPosition( default_pos );
         default_pos.y += settings.GetTextSize( txt_layer ).y;
-        module->GraphicalItems().push_back( textItem );
+        footprint->GraphicalItems().push_back( textItem );
     }
 
-    if( module->GetReference().IsEmpty() )
-        module->SetReference( moduleName );
+    if( footprint->GetReference().IsEmpty() )
+        footprint->SetReference( footprintName );
 
-    if( module->GetValue().IsEmpty() )
-        module->SetValue( moduleName );
+    if( footprint->GetValue().IsEmpty() )
+        footprint->SetValue( footprintName );
 
-    module->RunOnChildren(
+    footprint->RunOnChildren(
             [&] ( BOARD_ITEM* aChild )
             {
                 if( aChild->Type() == PCB_FP_TEXT_T )
@@ -1105,8 +1105,8 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
                 }
             } );
 
-    SetMsgPanel( module );
-    return module;
+    SetMsgPanel( footprint );
+    return footprint;
 }
 
 

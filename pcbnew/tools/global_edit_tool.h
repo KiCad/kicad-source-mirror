@@ -64,7 +64,7 @@ public:
     int RemoveUnusedPads( const TOOL_EVENT& aEvent );
 
 private:
-    bool swapBoardItem( BOARD_ITEM* aItem, PCB_LAYER_ID* new_layer );
+    bool swapBoardItem( BOARD_ITEM* aItem, PCB_LAYER_ID* aLayerMap );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

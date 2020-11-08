@@ -477,7 +477,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
     MODULE* footprint = nullptr;
 
     if( fpEditor )
-        footprint = fpEditor->GetBoard()->GetFirstModule();
+        footprint = fpEditor->GetBoard()->GetFirstFootprint();
 
     for( EDA_ITEM* item : selection )
     {

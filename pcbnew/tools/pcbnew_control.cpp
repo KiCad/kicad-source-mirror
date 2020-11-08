@@ -446,7 +446,7 @@ int PCBNEW_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
-    if( m_isFootprintEditor && !m_frame->GetBoard()->GetFirstModule() )
+    if( m_isFootprintEditor && !m_frame->GetBoard()->GetFirstFootprint() )
         return 0;
 
     std::string         tool = aEvent.GetCommandStr().get();
@@ -539,22 +539,22 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 }
 
 
-void pasteModuleItemsToModEdit( MODULE* aClipModule, BOARD* aBoard,
-                                std::vector<BOARD_ITEM*>& aPastedItems )
+void pasteFootprintItemsToFootprintEditor( MODULE* aClipFootprint, BOARD* aBoard,
+                                           std::vector<BOARD_ITEM*>& aPastedItems )
 {
-    MODULE* editModule = aBoard->GetFirstModule();
+    MODULE* editorFootprint = aBoard->GetFirstFootprint();
 
-    aClipModule->SetParent( aBoard );
+    aClipFootprint->SetParent( aBoard );
 
-    for( D_PAD* pad : aClipModule->Pads() )
+    for( D_PAD* pad : aClipFootprint->Pads() )
     {
-        pad->SetParent( editModule );
+        pad->SetParent( editorFootprint );
         aPastedItems.push_back( pad );
     }
 
-    aClipModule->Pads().clear();
+    aClipFootprint->Pads().clear();
 
-    for( BOARD_ITEM* item : aClipModule->GraphicalItems() )
+    for( BOARD_ITEM* item : aClipFootprint->GraphicalItems() )
     {
         if( item->Type() == PCB_FP_SHAPE_T )
         {
@@ -571,53 +571,53 @@ void pasteModuleItemsToModEdit( MODULE* aClipModule, BOARD* aBoard,
                 text->SetType( FP_TEXT::TEXT_is_DIVERS );
 
             if( text->GetText() == "${VALUE}" )
-                text->SetText( aClipModule->GetValue() );
+                text->SetText( aClipFootprint->GetValue() );
             else if( text->GetText() == "${REFERENCE}" )
-                text->SetText( aClipModule->GetReference() );
+                text->SetText( aClipFootprint->GetReference() );
 
-            text->SetTextAngle( aClipModule->GetOrientation() );
+            text->SetTextAngle( aClipFootprint->GetOrientation() );
 
             text->SetParent( nullptr );
             text->SetLocalCoord();
         }
 
-        item->SetParent( editModule );
+        item->SetParent( editorFootprint );
         aPastedItems.push_back( item );
     }
 
-    aClipModule->GraphicalItems().clear();
+    aClipFootprint->GraphicalItems().clear();
 
-    for( PCB_GROUP* group : aClipModule->Groups() )
+    for( PCB_GROUP* group : aClipFootprint->Groups() )
     {
-        group->SetParent( editModule );
+        group->SetParent( editorFootprint );
         aPastedItems.push_back( group );
     }
 
-    aClipModule->Groups().clear();
+    aClipFootprint->Groups().clear();
 
-    if( !aClipModule->GetReference().IsEmpty() )
+    if( !aClipFootprint->GetReference().IsEmpty() )
     {
-        FP_TEXT* text = new FP_TEXT( aClipModule->Reference() );
+        FP_TEXT* text = new FP_TEXT( aClipFootprint->Reference() );
         text->SetType( FP_TEXT::TEXT_is_DIVERS );
-        text->SetTextAngle( aClipModule->GetOrientation() );
+        text->SetTextAngle( aClipFootprint->GetOrientation() );
 
         text->SetParent( nullptr );
         text->SetLocalCoord();
 
-        text->SetParent( editModule );
+        text->SetParent( editorFootprint );
         aPastedItems.push_back( text );
     }
 
-    if( !aClipModule->GetValue().IsEmpty() )
+    if( !aClipFootprint->GetValue().IsEmpty() )
     {
-        FP_TEXT* text = new FP_TEXT( aClipModule->Value() );
+        FP_TEXT* text = new FP_TEXT( aClipFootprint->Value() );
         text->SetType( FP_TEXT::TEXT_is_DIVERS );
-        text->SetTextAngle( aClipModule->GetOrientation() );
+        text->SetTextAngle( aClipFootprint->GetOrientation() );
 
         text->SetParent( nullptr );
         text->SetLocalCoord();
 
-        text->SetParent( editModule );
+        text->SetParent( editorFootprint );
         aPastedItems.push_back( text );
     }
 }
@@ -635,23 +635,25 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
     if( !frame()->IsType( FRAME_FOOTPRINT_EDITOR ) && !frame()->IsType( FRAME_PCB_EDITOR ) )
         return 0;
 
-    bool editModules = m_isFootprintEditor || frame()->IsType( FRAME_FOOTPRINT_EDITOR );
+    bool isFootprintEditor = m_isFootprintEditor || frame()->IsType( FRAME_FOOTPRINT_EDITOR );
 
     if( clipItem->Type() == PCB_T )
     {
-        if( editModules )
+        if( isFootprintEditor )
         {
             for( BOARD_CONNECTED_ITEM* item : static_cast<BOARD*>( clipItem )->AllConnectedItems() )
                 item->SetNet( NETINFO_LIST::OrphanedItem() );
         }
         else
+        {
             static_cast<BOARD*>( clipItem )->MapNets( m_frame->GetBoard() );
+        }
     }
 
     // The clipboard can contain two different things, an entire kicad_pcb
     // or a single module
 
-    if( editModules && ( !board() || !module() ) )
+    if( isFootprintEditor && ( !board() || !module() ) )
     {
         return 0;
     }
@@ -662,13 +664,13 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
         {
             BOARD* clipBoard = static_cast<BOARD*>( clipItem );
 
-            if( editModules )
+            if( isFootprintEditor )
             {
-                MODULE* editModule = board()->GetFirstModule();
+                MODULE* editorFootprint = board()->GetFirstFootprint();
                 std::vector<BOARD_ITEM*> pastedItems;
 
-                for( MODULE* clipModule : clipBoard->Modules() )
-                    pasteModuleItemsToModEdit( clipModule, board(), pastedItems );
+                for( MODULE* clipFootprint : clipBoard->Modules() )
+                    pasteFootprintItemsToFootprintEditor( clipFootprint, board(), pastedItems );
 
                 for( BOARD_ITEM* clipDrawItem : clipBoard->Drawings() )
                 {
@@ -677,12 +679,12 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
                         PCB_SHAPE* clipShape = static_cast<PCB_SHAPE*>( clipDrawItem );
 
                         // Convert to PCB_FP_SHAPE_T
-                        FP_SHAPE* pastedShape = new FP_SHAPE( editModule );
+                        FP_SHAPE* pastedShape = new FP_SHAPE( editorFootprint );
                         static_cast<PCB_SHAPE*>( pastedShape )->SwapData( clipShape );
                         pastedShape->SetLocalCoord();
 
                         // Replace parent nuked by above call to SwapData()
-                        pastedShape->SetParent( editModule );
+                        pastedShape->SetParent( editorFootprint );
                         pastedItems.push_back( pastedShape );
                     }
                     else if( clipDrawItem->Type() == PCB_TEXT_T )
@@ -690,11 +692,11 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
                         PCB_TEXT* clipTextItem = static_cast<PCB_TEXT*>( clipDrawItem );
 
                         // Convert to PCB_FP_TEXT_T
-                        FP_TEXT* pastedTextItem = new FP_TEXT( editModule );
+                        FP_TEXT* pastedTextItem = new FP_TEXT( editorFootprint );
                         static_cast<EDA_TEXT*>( pastedTextItem )->SwapText( *clipTextItem );
                         static_cast<EDA_TEXT*>( pastedTextItem )->SwapEffects( *clipTextItem );
 
-                        pastedTextItem->SetParent( editModule );
+                        pastedTextItem->SetParent( editorFootprint );
                         pastedItems.push_back( pastedTextItem );
                     }
                 }
@@ -716,18 +718,18 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
         case PCB_MODULE_T:
         {
-            MODULE* clipModule = static_cast<MODULE*>( clipItem );
+            MODULE* clipFootprint = static_cast<MODULE*>( clipItem );
             std::vector<BOARD_ITEM*> pastedItems;
 
-            if( editModules )
+            if( isFootprintEditor )
             {
-                pasteModuleItemsToModEdit( clipModule, board(), pastedItems );
-                delete clipModule;
+                pasteFootprintItemsToFootprintEditor( clipFootprint, board(), pastedItems );
+                delete clipFootprint;
             }
             else
             {
-                clipModule->SetParent( board() );
-                pastedItems.push_back( clipModule );
+                clipFootprint->SetParent( board() );
+                pastedItems.push_back( clipFootprint );
             }
 
             placeBoardItems( pastedItems, true, true );

@@ -1015,7 +1015,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     if( dlg.ShouldGroupItems() )
     {
         if( m_isFootprintEditor )
-            grp = new PCB_GROUP( m_frame->GetBoard()->GetFirstModule() );
+            grp = new PCB_GROUP( m_frame->GetBoard()->GetFirstFootprint() );
         else
             grp = new PCB_GROUP( m_frame->GetBoard() );
     }

@@ -1565,25 +1565,25 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         if( m_isFootprintEditor )
         {
-            MODULE* editModule = editFrame->GetBoard()->GetFirstModule();
-            dupe_item = editModule->DuplicateItem( orig_item );
+            MODULE* parentFootprint = editFrame->GetBoard()->GetFirstFootprint();
+            dupe_item = parentFootprint->DuplicateItem( orig_item );
 
             if( increment && item->Type() == PCB_PAD_T
-                && PAD_NAMING::PadCanHaveName( *static_cast<D_PAD*>( dupe_item ) ) )
+                    && PAD_NAMING::PadCanHaveName( *static_cast<D_PAD*>( dupe_item ) ) )
             {
                 PAD_TOOL* padTool = m_toolMgr->GetTool<PAD_TOOL>();
                 wxString padName = padTool->GetLastPadName();
-                padName = editModule->GetNextPadName( padName );
+                padName = parentFootprint->GetNextPadName( padName );
                 padTool->SetLastPadName( padName );
                 static_cast<D_PAD*>( dupe_item )->SetName( padName );
             }
         }
         else if( orig_item->GetParent() && orig_item->GetParent()->Type() == PCB_MODULE_T )
         {
-            MODULE* parent = static_cast<MODULE*>( orig_item->GetParent() );
+            MODULE* parentFootprint = static_cast<MODULE*>( orig_item->GetParent() );
 
-            m_commit->Modify( parent );
-            dupe_item = parent->DuplicateItem( orig_item, true /* add to parent */ );
+            m_commit->Modify( parentFootprint );
+            dupe_item = parentFootprint->DuplicateItem( orig_item, true /* add to parent */ );
         }
         else
         {
@@ -1617,10 +1617,11 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         {
             if( dupe_item->Type() == PCB_GROUP_T )
             {
-                static_cast<PCB_GROUP*>( dupe_item )->RunOnDescendants( [&]( BOARD_ITEM* bItem )
-                                                                        {
-                                                                            m_commit->Add( bItem );
-                                                                        });
+                static_cast<PCB_GROUP*>( dupe_item )->RunOnDescendants(
+                        [&]( BOARD_ITEM* bItem )
+                        {
+                            m_commit->Add( bItem );
+                        });
             }
 
             // Clear the selection flag here, otherwise the SELECTION_TOOL

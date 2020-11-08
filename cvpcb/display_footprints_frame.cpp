@@ -500,7 +500,7 @@ void DISPLAY_FOOTPRINTS_FRAME::updateView()
 
 void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 {
-    MODULE*         footprint = GetBoard()->GetFirstModule();
+    MODULE*         footprint = GetBoard()->GetFirstFootprint();
     MSG_PANEL_ITEMS items;
 
     if( footprint )
@@ -523,7 +523,7 @@ COLOR_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetColorSettings()
 
 BOARD_ITEM_CONTAINER* DISPLAY_FOOTPRINTS_FRAME::GetModel() const
 {
-    return GetBoard()->GetFirstModule();
+    return GetBoard()->GetFirstFootprint();
 }
 
 

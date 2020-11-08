@@ -29,10 +29,11 @@
 #include <pcb_base_frame.h>
 
 
-DIALOG_CLEANUP_GRAPHICS::DIALOG_CLEANUP_GRAPHICS( PCB_BASE_FRAME* aParent, bool isModEdit ) :
+DIALOG_CLEANUP_GRAPHICS::DIALOG_CLEANUP_GRAPHICS( PCB_BASE_FRAME* aParent,
+                                                  bool aIsFootprintEditor ) :
         DIALOG_CLEANUP_GRAPHICS_BASE( aParent ),
         m_parentFrame( aParent ),
-        m_isModEdit( isModEdit )
+        m_isFootprintEditor( aIsFootprintEditor )
 {
     m_changesTreeModel = new RC_TREE_MODEL( m_parentFrame, m_changesDataView );
     m_changesDataView->AssociateModel( m_changesTreeModel );
@@ -41,7 +42,7 @@ DIALOG_CLEANUP_GRAPHICS::DIALOG_CLEANUP_GRAPHICS( PCB_BASE_FRAME* aParent, bool 
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.
-    m_sdbSizerOK->SetLabel( isModEdit ? _( "Update Footprint" ) : _( "Update PCB" ) );
+    m_sdbSizerOK->SetLabel( aIsFootprintEditor ? _( "Update Footprint" ) : _( "Update PCB" ) );
 
     m_sdbSizerOK->SetDefault();
     GetSizer()->SetSizeHints(this);
@@ -83,7 +84,7 @@ void DIALOG_CLEANUP_GRAPHICS::doCleanup( bool aDryRun )
 
     BOARD_COMMIT     commit( m_parentFrame );
     BOARD*           board = m_parentFrame->GetBoard();
-    MODULE*          fp = m_isModEdit ? board->GetFirstModule() : nullptr;
+    MODULE*          fp = m_isFootprintEditor ? board->GetFirstFootprint() : nullptr;
     GRAPHICS_CLEANER cleaner( fp ? fp->GraphicalItems() : board->Drawings(), fp, commit );
 
     if( !aDryRun )

@@ -50,8 +50,7 @@ void GLOBAL_EDIT_TOOL::Reset( RESET_REASON aReason )
 bool GLOBAL_EDIT_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
-    m_selectionTool = static_cast<SELECTION_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveSelection" ) );
-    wxASSERT_MSG( m_selectionTool, "pcbnew.InteractiveSelection tool is not available" );
+    m_selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
 
     return true;
 }
@@ -60,7 +59,7 @@ bool GLOBAL_EDIT_TOOL::Init()
 int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 {
     PCBNEW_SELECTION& selection = m_selectionTool->GetSelection();
-    MODULE*           mod = nullptr;
+    MODULE*           footprint = nullptr;
     bool              updateMode = false;
     bool              currentMode = false;
 
@@ -68,7 +67,7 @@ int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
         selection = m_selectionTool->RequestSelection( EDIT_TOOL::FootprintFilter );
 
     if( !selection.Empty() )
-        mod = selection.FirstOfKind<MODULE>();
+        footprint = selection.FirstOfKind<MODULE>();
 
     if( aEvent.IsAction( &PCB_ACTIONS::updateFootprint ) )
     {
@@ -100,7 +99,7 @@ int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
     // invoke the exchange dialog process
     {
         PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-        DIALOG_EXCHANGE_FOOTPRINTS dialog( editFrame, mod, updateMode, currentMode );
+        DIALOG_EXCHANGE_FOOTPRINTS dialog( editFrame, footprint, updateMode, currentMode );
         dialog.ShowQuasiModal();
     }
 
@@ -108,12 +107,12 @@ int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 }
 
 
-bool GLOBAL_EDIT_TOOL::swapBoardItem( BOARD_ITEM* aItem, PCB_LAYER_ID* new_layer )
+bool GLOBAL_EDIT_TOOL::swapBoardItem( BOARD_ITEM* aItem, PCB_LAYER_ID* aLayerMap )
 {
-    if( new_layer[ aItem->GetLayer() ] != aItem->GetLayer() )
+    if( aLayerMap[ aItem->GetLayer() ] != aItem->GetLayer() )
     {
         m_commit->Modify( aItem );
-        aItem->SetLayer( new_layer[ aItem->GetLayer() ] );
+        aItem->SetLayer( aLayerMap[ aItem->GetLayer() ] );
         frame()->GetCanvas()->GetView()->Update( aItem, KIGFX::GEOMETRY );
         return true;
     }
@@ -124,9 +123,9 @@ bool GLOBAL_EDIT_TOOL::swapBoardItem( BOARD_ITEM* aItem, PCB_LAYER_ID* new_layer
 
 int GLOBAL_EDIT_TOOL::SwapLayers( const TOOL_EVENT& aEvent )
 {
-    PCB_LAYER_ID new_layer[PCB_LAYER_ID_COUNT];
+    PCB_LAYER_ID layerMap[PCB_LAYER_ID_COUNT];
 
-    DIALOG_SWAP_LAYERS dlg( frame(), new_layer );
+    DIALOG_SWAP_LAYERS dlg( frame(), layerMap );
 
     if( dlg.ShowModal() != wxID_OK )
         return 0;
@@ -134,7 +133,7 @@ int GLOBAL_EDIT_TOOL::SwapLayers( const TOOL_EVENT& aEvent )
     bool hasChanges = false;
 
     // Change tracks.
-    for( auto segm : frame()->GetBoard()->Tracks() )
+    for( TRACK* segm : frame()->GetBoard()->Tracks() )
     {
         if( segm->Type() == PCB_VIA_T )
         {
@@ -146,25 +145,25 @@ int GLOBAL_EDIT_TOOL::SwapLayers( const TOOL_EVENT& aEvent )
 
             via->LayerPair( &top_layer, &bottom_layer );
 
-            if( new_layer[bottom_layer] != bottom_layer || new_layer[top_layer] != top_layer )
+            if( layerMap[bottom_layer] != bottom_layer || layerMap[top_layer] != top_layer )
             {
                 m_commit->Modify( via );
-                via->SetLayerPair( new_layer[top_layer], new_layer[bottom_layer] );
+                via->SetLayerPair( layerMap[top_layer], layerMap[bottom_layer] );
                 frame()->GetCanvas()->GetView()->Update( via, KIGFX::GEOMETRY );
                 hasChanges = true;
             }
         }
         else
         {
-            hasChanges |= swapBoardItem( segm, new_layer );
+            hasChanges |= swapBoardItem( segm, layerMap );
         }
     }
 
     for( BOARD_ITEM* zone : frame()->GetBoard()->Zones() )
-        hasChanges |= swapBoardItem( zone, new_layer );
+        hasChanges |= swapBoardItem( zone, layerMap );
 
     for( BOARD_ITEM* drawing : frame()->GetBoard()->Drawings() )
-        hasChanges |= swapBoardItem( drawing, new_layer );
+        hasChanges |= swapBoardItem( drawing, layerMap );
 
     if( hasChanges )
     {

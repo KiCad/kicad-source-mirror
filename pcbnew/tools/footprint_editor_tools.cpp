@@ -62,22 +62,30 @@ bool FOOTPRINT_EDITOR_TOOLS::Init()
     //
     CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
 
-    auto libSelectedCondition = [ this ] ( const SELECTION& aSel ) {
-        LIB_ID sel = m_frame->GetTreeFPID();
-        return !sel.GetLibNickname().empty() && sel.GetLibItemName().empty();
-    };
-    auto pinnedLibSelectedCondition = [ this ] ( const SELECTION& aSel ) {
-        LIB_TREE_NODE* current = m_frame->GetCurrentTreeNode();
-        return current && current->m_Type == LIB_TREE_NODE::LIB && current->m_Pinned;
-    };
-    auto unpinnedLibSelectedCondition = [ this ] (const SELECTION& aSel ) {
-        LIB_TREE_NODE* current = m_frame->GetCurrentTreeNode();
-        return current && current->m_Type == LIB_TREE_NODE::LIB && !current->m_Pinned;
-    };
-    auto fpSelectedCondition = [ this ] ( const SELECTION& aSel ) {
-        LIB_ID sel = m_frame->GetTreeFPID();
-        return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
-    };
+    auto libSelectedCondition =
+            [ this ]( const SELECTION& aSel )
+            {
+                LIB_ID sel = m_frame->GetTreeFPID();
+                return !sel.GetLibNickname().empty() && sel.GetLibItemName().empty();
+            };
+    auto pinnedLibSelectedCondition =
+            [ this ]( const SELECTION& aSel )
+            {
+                LIB_TREE_NODE* current = m_frame->GetCurrentTreeNode();
+                return current && current->m_Type == LIB_TREE_NODE::LIB && current->m_Pinned;
+            };
+    auto unpinnedLibSelectedCondition =
+            [ this ](const SELECTION& aSel )
+            {
+                LIB_TREE_NODE* current = m_frame->GetCurrentTreeNode();
+                return current && current->m_Type == LIB_TREE_NODE::LIB && !current->m_Pinned;
+            };
+    auto fpSelectedCondition =
+            [ this ]( const SELECTION& aSel )
+            {
+                LIB_ID sel = m_frame->GetTreeFPID();
+                return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
+            };
 
     ctxMenu.AddItem( ACTIONS::pinLibrary,            unpinnedLibSelectedCondition );
     ctxMenu.AddItem( ACTIONS::unpinLibrary,          pinnedLibSelectedCondition );
@@ -159,9 +167,9 @@ int FOOTPRINT_EDITOR_TOOLS::CutCopyFootprint( const TOOL_EVENT& aEvent )
     LIB_ID fpID = m_frame->GetTreeFPID();
 
     if( fpID == m_frame->GetLoadedFPID() )
-        m_copiedModule.reset( new MODULE( *m_frame->GetBoard()->GetFirstModule() ) );
+        m_copiedFootprint.reset( new MODULE( *m_frame->GetBoard()->GetFirstFootprint() ) );
     else
-        m_copiedModule.reset( m_frame->LoadFootprint( fpID ) );
+        m_copiedFootprint.reset( m_frame->LoadFootprint( fpID ) );
 
     if( aEvent.IsAction( &PCB_ACTIONS::cutFootprint ) )
         DeleteFootprint(aEvent );
@@ -172,20 +180,19 @@ int FOOTPRINT_EDITOR_TOOLS::CutCopyFootprint( const TOOL_EVENT& aEvent )
 
 int FOOTPRINT_EDITOR_TOOLS::PasteFootprint( const TOOL_EVENT& aEvent )
 {
-    if( m_copiedModule && !m_frame->GetTreeFPID().GetLibNickname().empty() )
+    if( m_copiedFootprint && !m_frame->GetTreeFPID().GetLibNickname().empty() )
     {
         wxString newLib = m_frame->GetTreeFPID().GetLibNickname();
-        MODULE*  newModule( m_copiedModule.get() );
-        wxString newName = newModule->GetFPID().GetLibItemName();
+        wxString newName = m_copiedFootprint->GetFPID().GetLibItemName();
 
         while( m_frame->Prj().PcbFootprintLibs()->FootprintExists( newLib, newName ) )
             newName += _( "_copy" );
 
-        newModule->SetFPID( LIB_ID( newLib, newName ) );
-        m_frame->SaveFootprintInLibrary( newModule, newLib );
+        m_copiedFootprint->SetFPID( LIB_ID( newLib, newName ) );
+        m_frame->SaveFootprintInLibrary( m_copiedFootprint.get(), newLib );
 
         m_frame->SyncLibraryTree( true );
-        m_frame->FocusOnLibID( newModule->GetFPID() );
+        m_frame->FocusOnLibID( m_copiedFootprint->GetFPID() );
     }
 
     return 0;
@@ -216,8 +223,8 @@ int FOOTPRINT_EDITOR_TOOLS::ImportFootprint( const TOOL_EVENT& aEvent )
     getViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     m_frame->Import_Module();
 
-    if( m_frame->GetBoard()->GetFirstModule() )
-        m_frame->GetBoard()->GetFirstModule()->ClearFlags();
+    if( m_frame->GetBoard()->GetFirstFootprint() )
+        m_frame->GetBoard()->GetFirstFootprint()->ClearFlags();
 
     frame()->ClearUndoRedoList();
 
@@ -233,7 +240,7 @@ int FOOTPRINT_EDITOR_TOOLS::ExportFootprint( const TOOL_EVENT& aEvent )
     MODULE* fp;
 
     if( !fpID.IsValid() )
-        fp = m_frame->GetBoard()->GetFirstModule();
+        fp = m_frame->GetBoard()->GetFirstFootprint();
     else
         fp = m_frame->LoadFootprint( fpID );
 
@@ -286,7 +293,7 @@ int FOOTPRINT_EDITOR_TOOLS::ToggleFootprintTree( const TOOL_EVENT& aEvent )
 
 int FOOTPRINT_EDITOR_TOOLS::Properties( const TOOL_EVENT& aEvent )
 {
-    MODULE* footprint = m_frame->GetBoard()->GetFirstModule();
+    MODULE* footprint = m_frame->GetBoard()->GetFirstFootprint();
 
     if( footprint )
     {

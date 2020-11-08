@@ -57,9 +57,11 @@ public:
     bool         HasRemoveEntry( EDA_ITEM* aItem );
 
 private:
-    TOOL_MANAGER* m_toolMgr;
-    bool m_editModules;
     virtual EDA_ITEM* parentObject( EDA_ITEM* aItem ) const override;
+
+private:
+    TOOL_MANAGER* m_toolMgr;
+    bool          m_isFootprintEditor;
 };
 
 #endif

@@ -175,10 +175,10 @@ public:
     /**
      * Save in an existing library a given footprint.
      *
-     * @param aModule = the given footprint
+     * @param aFootprint = the given footprint
      * @return : true if OK, false if abort
      */
-    bool SaveFootprint( MODULE* aModule );
+    bool SaveFootprint( MODULE* aFootprint );
     bool SaveFootprintAs( MODULE* aModule );
     bool SaveFootprintToBoard( bool aAddNew );
     bool SaveFootprintInLibrary( MODULE* aModule, const wxString& aLibraryName );

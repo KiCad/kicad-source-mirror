@@ -161,7 +161,7 @@ protected:
 
     MODULE* module() const
     {
-        return board()->GetFirstModule();
+        return board()->GetFirstFootprint();
     }
 
     const PCB_DISPLAY_OPTIONS& displayOptions() const;

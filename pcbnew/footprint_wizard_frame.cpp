@@ -301,7 +301,7 @@ void FOOTPRINT_WIZARD_FRAME::updateView()
 
 void FOOTPRINT_WIZARD_FRAME::UpdateMsgPanel()
 {
-    BOARD_ITEM* footprint = GetBoard()->GetFirstModule();
+    BOARD_ITEM* footprint = GetBoard()->GetFirstFootprint();
 
     if( footprint )
     {
@@ -631,7 +631,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
 
 BOARD_ITEM_CONTAINER* FOOTPRINT_WIZARD_FRAME::GetModel() const
 {
-    return GetBoard()->GetFirstModule();
+    return GetBoard()->GetFirstFootprint();
 }
 
 

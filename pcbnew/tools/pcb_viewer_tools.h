@@ -112,7 +112,7 @@ protected:
 
     MODULE* module() const
     {
-        return board()->GetFirstModule();
+        return board()->GetFirstFootprint();
     }
 };
 

@@ -289,17 +289,16 @@ public:
     // footprints (footprints)
 
     /**
-     * Function CreateNewModule
-     * Creates a new module or footprint, at position 0,0
-     * The new module contains only 2 texts: a reference and a value:
+     * Function CreateNewFootprint
+     * Creates a new footprint, at position 0,0
+     * The new footprint contains only 2 texts: a reference and a value:
      *  Reference = REF**
      *  Value = "VAL**" or Footprint name in lib
      * Note: they are dummy texts, which will be replaced by the actual texts
      * when the fooprint is placed on a board and a netlist is read
-     * @param aModuleName = name of the new footprint in library
-     * @return a reference to the new module
+     * @param aFootprintName = name of the new footprint in library
      */
-    MODULE* CreateNewModule( const wxString& aModuleName );
+    MODULE* CreateNewFootprint( const wxString& aFootprintName );
 
     /**
      * Function PlaceModule

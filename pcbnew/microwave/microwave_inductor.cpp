@@ -414,52 +414,52 @@ MODULE* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aIn
     if( ( cmpdlg.ShowModal() != wxID_OK ) || msg.IsEmpty() )
         return nullptr;    //  Aborted by user
 
-    MODULE* module = editFrame.CreateNewModule( msg );
+    MODULE* footprint = editFrame.CreateNewFootprint( msg );
 
-    module->SetFPID( LIB_ID( wxEmptyString, wxT( "mw_inductor" ) ) );
-    module->SetAttributes( MOD_EXCLUDE_FROM_POS_FILES | MOD_EXCLUDE_FROM_BOM );
-    module->ClearFlags();
-    module->SetPosition( aInductorPattern.m_End );
+    footprint->SetFPID( LIB_ID( wxEmptyString, wxT( "mw_inductor" ) ) );
+    footprint->SetAttributes( MOD_EXCLUDE_FROM_POS_FILES | MOD_EXCLUDE_FROM_BOM );
+    footprint->ClearFlags();
+    footprint->SetPosition( aInductorPattern.m_End );
 
     // Generate segments
     for( unsigned jj = 1; jj < buffer.size(); jj++ )
     {
         FP_SHAPE* seg;
-        seg = new FP_SHAPE( module );
+        seg = new FP_SHAPE( footprint );
         seg->SetStart( buffer[jj - 1] );
         seg->SetEnd( buffer[jj] );
         seg->SetWidth( aInductorPattern.m_Width );
-        seg->SetLayer( module->GetLayer() );
+        seg->SetLayer( footprint->GetLayer() );
         seg->SetShape( S_SEGMENT );
-        seg->SetStart0( seg->GetStart() - module->GetPosition() );
-        seg->SetEnd0( seg->GetEnd() - module->GetPosition() );
-        module->Add( seg );
+        seg->SetStart0( seg->GetStart() - footprint->GetPosition() );
+        seg->SetEnd0( seg->GetEnd() - footprint->GetPosition() );
+        footprint->Add( seg );
     }
 
     // Place a pad on each end of coil.
-    pad = new D_PAD( module );
+    pad = new D_PAD( footprint );
 
-    module->Add( pad );
+    footprint->Add( pad );
 
     pad->SetName( "1" );
     pad->SetPosition( aInductorPattern.m_End );
-    pad->SetPos0( pad->GetPosition() - module->GetPosition() );
+    pad->SetPos0( pad->GetPosition() - footprint->GetPosition() );
 
     pad->SetSize( wxSize( aInductorPattern.m_Width, aInductorPattern.m_Width ) );
 
-    pad->SetLayerSet( LSET( module->GetLayer() ) );
+    pad->SetLayerSet( LSET( footprint->GetLayer() ) );
     pad->SetAttribute( PAD_ATTRIB_SMD );
     pad->SetShape( PAD_SHAPE_CIRCLE );
 
     D_PAD* newpad = new D_PAD( *pad );
     const_cast<KIID&>( newpad->m_Uuid ) = KIID();
 
-    module->Add( newpad );
+    footprint->Add( newpad );
 
     pad = newpad;
     pad->SetName( "2" );
     pad->SetPosition( aInductorPattern.m_Start );
-    pad->SetPos0( pad->GetPosition() - module->GetPosition() );
+    pad->SetPos0( pad->GetPosition() - footprint->GetPosition() );
 
     // Modify text positions.
     wxPoint refPos( ( aInductorPattern.m_Start.x + aInductorPattern.m_End.x ) / 2,
@@ -467,11 +467,11 @@ MODULE* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aIn
 
     wxPoint valPos = refPos;
 
-    refPos.y -= module->Reference().GetTextSize().y;
-    module->Reference().SetPosition( refPos );
-    valPos.y += module->Value().GetTextSize().y;
-    module->Value().SetPosition( valPos );
+    refPos.y -= footprint->Reference().GetTextSize().y;
+    footprint->Reference().SetPosition( refPos );
+    valPos.y += footprint->Value().GetTextSize().y;
+    footprint->Value().SetPosition( valPos );
 
-    module->CalculateBoundingBox();
-    return module;
+    footprint->CalculateBoundingBox();
+    return footprint;
 }

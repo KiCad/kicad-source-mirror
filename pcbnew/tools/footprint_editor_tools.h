@@ -82,7 +82,7 @@ private:
     FOOTPRINT_EDIT_FRAME*   m_frame;
 
     // A private clipboard for cut/copy/past of an entire footprint
-    std::unique_ptr<MODULE> m_copiedModule;
+    std::unique_ptr<MODULE> m_copiedFootprint;
 };
 
 #endif

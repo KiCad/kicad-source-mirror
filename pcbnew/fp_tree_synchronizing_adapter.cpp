@@ -189,7 +189,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
 
     case 1:
         if( node->m_LibId == m_frame->GetLoadedFPID() && !m_frame->IsCurrentFPFromBoard() )
-            node->m_Desc = m_frame->GetBoard()->GetFirstModule()->GetDescription();
+            node->m_Desc = m_frame->GetBoard()->GetFirstFootprint()->GetDescription();
 
         aVariant = node->m_Desc;
         break;

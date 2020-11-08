@@ -1021,12 +1021,10 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
                                     std::vector<wxPoint>* aIntersections )
 {
     PCB_TYPE_COLLECTOR  items;
+    SHAPE_POLY_SET      outlines;
 
-    SHAPE_POLY_SET outlines;
-
-    // Get all the DRAWSEGMENTS and module graphics into 'items',
-    // then keep only those on layer == Edge_Cuts.
-    static const KICAD_T  scan_graphics[] = { PCB_SHAPE_T, PCB_FP_SHAPE_T, EOT };
+    // Get all the SHAPEs into 'items', then keep only those on layer == Edge_Cuts.
+    static const KICAD_T scan_graphics[] = { PCB_SHAPE_T, PCB_FP_SHAPE_T, EOT };
     items.Collect( aBoard, scan_graphics );
 
     // Make a working copy of aSegList, because the list is modified during calculations
@@ -1041,12 +1039,12 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
     bool success = ConvertOutlineToPolygon( segList, outlines, aTolerance, aErrorText,
                                             aDiscontinuities, aIntersections );
 
-    MODULE* boardMod = aBoard->GetFirstModule();
+    MODULE* footprint = aBoard->GetFirstFootprint();
 
-    // No module loaded
-    if( !boardMod )
+    // No footprint loaded
+    if( !footprint )
     {
-        wxLogTrace( traceBoardOutline, "No module found on board" );
+        wxLogTrace( traceBoardOutline, "No footprint found on board" );
 
         if( aErrorText )
             *aErrorText = _( "No footprint loaded" );
@@ -1060,7 +1058,7 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
         wxLogTrace( traceBoardOutline, "Closed outline found" );
 
         // If copper is outside a closed polygon, treat it as a hole
-        if( isCopperOutside( boardMod, outlines ) )
+        if( isCopperOutside( footprint, outlines ) )
         {
             wxLogTrace( traceBoardOutline, "Treating outline as a hole" );
 
@@ -1315,7 +1313,7 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
         poly2.NewOutline();
         poly2.Append( lower );
 
-        if( isCopperOutside( boardMod, poly1 ) )
+        if( isCopperOutside( footprint, poly1 ) )
         {
             wxLogTrace( traceBoardOutline, "Using lower shape" );
             aOutlines = poly2;

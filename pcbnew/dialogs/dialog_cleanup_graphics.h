@@ -34,10 +34,11 @@ class PCB_BASE_FRAME;
 
 class DIALOG_CLEANUP_GRAPHICS: public DIALOG_CLEANUP_GRAPHICS_BASE
 {
-    PCB_BASE_FRAME*            m_parentFrame;
-    bool                       m_isModEdit;
+    PCB_BASE_FRAME* m_parentFrame;
+    bool            m_isFootprintEditor;
+    RC_TREE_MODEL*  m_changesTreeModel;
+
     std::vector<std::shared_ptr<CLEANUP_ITEM> > m_items;
-    RC_TREE_MODEL*             m_changesTreeModel;
 
     void doCleanup( bool aDryRun );
 
@@ -49,7 +50,7 @@ class DIALOG_CLEANUP_GRAPHICS: public DIALOG_CLEANUP_GRAPHICS_BASE
     bool TransferDataFromWindow() override;
 
 public:
-    DIALOG_CLEANUP_GRAPHICS( PCB_BASE_FRAME* aParent, bool isModEdit );
+    DIALOG_CLEANUP_GRAPHICS( PCB_BASE_FRAME* aParent, bool aIsFootprintEditor );
     ~DIALOG_CLEANUP_GRAPHICS();
 };
 

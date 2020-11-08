@@ -341,10 +341,11 @@ public:
     void Remove( BOARD_ITEM* aBoardItem ) override;
 
     /**
-     * Gets the first module in the list (used in footprint viewer/editor) or NULL if none
+     * Gets the first footprint on the board or nullptr.
+     * This is used primarily by the footprint editor which knows there is only one.
      * @return first module or null pointer
      */
-    MODULE* GetFirstModule() const
+    MODULE* GetFirstFootprint() const
     {
         return m_modules.empty() ? nullptr : m_modules.front();
     }

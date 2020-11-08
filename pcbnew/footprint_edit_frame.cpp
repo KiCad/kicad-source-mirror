@@ -299,7 +299,7 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 
 bool FOOTPRINT_EDIT_FRAME::IsContentModified()
 {
-    return GetScreen() && GetScreen()->IsModify() && GetBoard() && GetBoard()->GetFirstModule();
+    return GetScreen() && GetScreen()->IsModify() && GetBoard() && GetBoard()->GetFirstFootprint();
 }
 
 
@@ -346,7 +346,7 @@ bool FOOTPRINT_EDIT_FRAME::IsSearchTreeShown()
 
 BOARD_ITEM_CONTAINER* FOOTPRINT_EDIT_FRAME::GetModel() const
 {
-    return GetBoard()->GetFirstModule();
+    return GetBoard()->GetFirstFootprint();
 }
 
 
@@ -375,7 +375,7 @@ LIB_ID FOOTPRINT_EDIT_FRAME::GetTargetFPID() const
 
 LIB_ID FOOTPRINT_EDIT_FRAME::GetLoadedFPID() const
 {
-    MODULE* footprint = GetBoard()->GetFirstModule();
+    MODULE* footprint = GetBoard()->GetFirstFootprint();
 
     if( footprint )
         return LIB_ID( footprint->GetFPID().GetLibNickname(), m_footprintNameWhenLoaded );
@@ -386,7 +386,7 @@ LIB_ID FOOTPRINT_EDIT_FRAME::GetLoadedFPID() const
 
 bool FOOTPRINT_EDIT_FRAME::IsCurrentFPFromBoard() const
 {
-    MODULE* footprint = GetBoard()->GetFirstModule();
+    MODULE* footprint = GetBoard()->GetFirstFootprint();
 
     return ( footprint && footprint->GetLink() != niluuid );
 }
@@ -534,7 +534,7 @@ MAGNETIC_SETTINGS* FOOTPRINT_EDIT_FRAME::GetMagneticItemsSettings()
 
 const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
-    MODULE* footprint = GetBoard()->GetFirstModule();
+    MODULE* footprint = GetBoard()->GetFirstFootprint();
 
     if( footprint )
     {
@@ -579,13 +579,13 @@ bool FOOTPRINT_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
             return false;
         }
 
-        wxString footprintName = GetBoard()->GetFirstModule()->GetFPID().GetLibItemName();
+        wxString footprintName = GetBoard()->GetFirstFootprint()->GetFPID().GetLibItemName();
         wxString msg = _( "Save changes to \"%s\" before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, footprintName ),
                                    [&]() -> bool
                                    {
-                                       return SaveFootprint( GetBoard()->GetFirstModule() );
+                                       return SaveFootprint( GetBoard()->GetFirstFootprint() );
                                    } ) )
         {
             aEvent.Veto();
@@ -629,7 +629,7 @@ void FOOTPRINT_EDIT_FRAME::CloseModuleEditor( wxCommandEvent& Event )
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( GetBoard()->GetFirstModule() != NULL );
+    aEvent.Enable( GetBoard()->GetFirstFootprint() != NULL );
 }
 
 
@@ -637,7 +637,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent 
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
-    aEvent.Enable( frame && frame->GetBoard()->GetFirstModule() != NULL );
+    aEvent.Enable( frame && frame->GetBoard()->GetFirstFootprint() != NULL );
 }
 
 
@@ -645,7 +645,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent 
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
-    MODULE* editorFootprint = GetBoard()->GetFirstModule();
+    MODULE* editorFootprint = GetBoard()->GetFirstFootprint();
     bool canInsert = frame && editorFootprint && editorFootprint->GetLink() == niluuid;
 
     // If the source was deleted, the footprint can inserted but not updated in the board.
@@ -708,13 +708,15 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
 {
     wxString title;
     LIB_ID   fpid = GetLoadedFPID();
+    MODULE*  footprint = GetBoard()->GetFirstFootprint();
     bool     writable = true;
 
     if( IsCurrentFPFromBoard() )
     {
         title += wxString::Format( _( "%s [from %s.%s]" ) + wxT( " \u2014 " ),
-                GetBoard()->GetFirstModule()->GetReference(), Prj().GetProjectName(),
-                PcbFileExtension );
+                                   footprint->GetReference(),
+                                   Prj().GetProjectName(),
+                                   PcbFileExtension );
     }
     else if( fpid.IsValid() )
     {
@@ -729,15 +731,16 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
 
         // Note: don't used GetLoadedFPID(); footprint name may have been edited
         title += wxString::Format( wxT( "%s %s\u2014 " ),
-                FROM_UTF8( GetBoard()->GetFirstModule()->GetFPID().Format().c_str() ),
-                writable ? wxString( wxEmptyString ) : _( "[Read Only]" ) + wxS( "" ) + wxS( " " ));
+                                   FROM_UTF8( footprint->GetFPID().Format().c_str() ),
+                                   writable ? wxString( wxEmptyString )
+                                            : _( "[Read Only]" ) + wxS( " " ) );
     }
     else if( !fpid.GetLibItemName().empty() )
     {
         // Note: don't used GetLoadedFPID(); footprint name may have been edited
         title += wxString::Format( wxT( "%s %s \u2014 " ),
-                FROM_UTF8( GetBoard()->GetFirstModule()->GetFPID().GetLibItemName().c_str() ),
-                _( "[Unsaved]" ) );
+                                   FROM_UTF8( footprint->GetFPID().GetLibItemName().c_str() ),
+                                   _( "[Unsaved]" ) );
     }
 
     title += _( "Footprint Editor" );
@@ -919,16 +922,16 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
     auto haveFootprintCond =
-        [this]( const SELECTION& )
-        {
-            return GetBoard()->GetFirstModule() != nullptr;
-        };
+            [this]( const SELECTION& )
+            {
+                return GetBoard()->GetFirstFootprint() != nullptr;
+            };
 
     auto footprintTargettedCond =
-        [this] ( const SELECTION& )
-        {
-            return !GetTargetFPID().GetLibItemName().empty();
-        };
+            [this] ( const SELECTION& )
+            {
+                return !GetTargetFPID().GetLibItemName().empty();
+            };
 
     mgr->SetConditions( ACTIONS::saveAs,                 ENABLE( footprintTargettedCond ) );
     mgr->SetConditions( ACTIONS::revert,                 ENABLE( cond.ContentModified() ) );
@@ -963,16 +966,16 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
 
 
     auto highContrastCond =
-        [this] ( const SELECTION& )
-        {
-            return GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
-        };
+            [this] ( const SELECTION& )
+            {
+                return GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
+            };
 
     auto footprintTreeCond =
-        [this] (const SELECTION& )
-        {
-            return IsSearchTreeShown();
-        };
+            [this] (const SELECTION& )
+            {
+                return IsSearchTreeShown();
+            };
 
     mgr->SetConditions( ACTIONS::highContrastMode,         CHECK( highContrastCond ) );
     mgr->SetConditions( PCB_ACTIONS::toggleFootprintTree,  CHECK( footprintTreeCond ) );

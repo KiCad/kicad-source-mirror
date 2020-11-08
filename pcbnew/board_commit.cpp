@@ -41,14 +41,14 @@ using namespace std::placeholders;
 BOARD_COMMIT::BOARD_COMMIT( PCB_TOOL_BASE* aTool )
 {
     m_toolMgr = aTool->GetManager();
-    m_editModules = aTool->IsFootprintEditor();
+    m_isFootprintEditor = aTool->IsFootprintEditor();
 }
 
 
 BOARD_COMMIT::BOARD_COMMIT( EDA_DRAW_FRAME* aFrame )
 {
     m_toolMgr = aFrame->GetToolManager();
-    m_editModules = aFrame->IsType( FRAME_FOOTPRINT_EDITOR );
+    m_isFootprintEditor = aFrame->IsType( FRAME_FOOTPRINT_EDITOR );
 }
 
 
@@ -103,7 +103,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
 
         // Module items need to be saved in the undo buffer before modification
-        if( m_editModules )
+        if( m_isFootprintEditor )
         {
             // Be sure that we are storing a module
             if( ent.m_item->Type() != PCB_MODULE_T )
@@ -138,7 +138,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
         {
             case CHT_ADD:
             {
-                if( m_editModules )
+                if( m_isFootprintEditor )
                 {
                     // footprints inside footprints are not supported yet
                     wxASSERT( boardItem->Type() != PCB_MODULE_T );
@@ -172,7 +172,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
             case CHT_REMOVE:
             {
-                if( !m_editModules && aCreateUndoEntry )
+                if( !m_isFootprintEditor && aCreateUndoEntry )
                     undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::DELETED ) );
 
                 if( boardItem->IsSelected() )
@@ -189,7 +189,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_FP_TEXT_T:
                 case PCB_FP_ZONE_AREA_T:
                     // This level can only handle module items when editing footprints
-                    wxASSERT( m_editModules );
+                    wxASSERT( m_isFootprintEditor );
 
                     if( boardItem->Type() == PCB_FP_TEXT_T )
                     {
@@ -234,7 +234,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_MODULE_T:
                 {
                     // There are no footprints inside a module yet
-                    wxASSERT( !m_editModules );
+                    wxASSERT( !m_isFootprintEditor );
 
                     MODULE* module = static_cast<MODULE*>( boardItem );
                     view->Remove( module );
@@ -248,8 +248,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_GROUP_T:
                     if( !( changeFlags & CHT_DONE ) )
                     {
-                        if( m_editModules )
-                            board->GetFirstModule()->Remove( boardItem );
+                        if( m_isFootprintEditor )
+                            board->GetFirstFootprint()->Remove( boardItem );
                         else
                             board->Remove( boardItem );
                     }
@@ -270,7 +270,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
             case CHT_MODIFY:
             {
-                if( !m_editModules && aCreateUndoEntry )
+                if( !m_isFootprintEditor && aCreateUndoEntry )
                 {
                     ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::CHANGED );
                     wxASSERT( ent.m_copy );
@@ -284,7 +284,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 connectivity->Update( boardItem );
                 view->Update( boardItem );
 
-                if( m_editModules )
+                if( m_isFootprintEditor )
                 {
                     static_cast<MODULE*>( boardItem )->RunOnChildren( [&]( BOARD_ITEM* aChild )
                                                                       {
@@ -307,7 +307,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
         }
     }
 
-    if ( !m_editModules )
+    if ( !m_isFootprintEditor )
     {
         size_t num_changes = m_changes.size();
 
@@ -343,7 +343,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
         }
     }
 
-    if( !m_editModules && aCreateUndoEntry )
+    if( !m_isFootprintEditor && aCreateUndoEntry )
         frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED );
 
     m_toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
@@ -439,7 +439,7 @@ void BOARD_COMMIT::Revert()
         }
     }
 
-    if ( !m_editModules )
+    if ( !m_isFootprintEditor )
         connectivity->RecalculateRatsnest();
 
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();

@@ -186,14 +186,14 @@ MODULE* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
 {
     PCB_EDIT_FRAME& editFrame = *getEditFrame<PCB_EDIT_FRAME>();
 
-    MODULE* module = editFrame.CreateNewModule( aValue );
+    MODULE* footprint = editFrame.CreateNewFootprint( aValue );
 
     if( aTextSize > 0 )
     {
-        module->Reference().SetTextSize( wxSize( aTextSize, aTextSize ) );
-        module->Reference().SetTextThickness( aTextSize / 5 );
-        module->Value().SetTextSize( wxSize( aTextSize, aTextSize ) );
-        module->Value().SetTextThickness( aTextSize / 5 );
+        footprint->Reference().SetTextSize( wxSize( aTextSize, aTextSize ) );
+        footprint->Reference().SetTextThickness( aTextSize / 5 );
+        footprint->Value().SetTextSize( wxSize( aTextSize, aTextSize ) );
+        footprint->Value().SetTextThickness( aTextSize / 5 );
     }
 
     // Create 2 pads used in gaps and stubs.  The gap is between these 2 pads
@@ -203,14 +203,14 @@ MODULE* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
 
     while( aPadCount-- )
     {
-        D_PAD* pad = new D_PAD( module );
+        D_PAD* pad = new D_PAD( footprint );
 
-        module->Add( pad, ADD_MODE::INSERT );
+        footprint->Add( pad, ADD_MODE::INSERT );
 
         int tw = editFrame.GetDesignSettings().GetCurrentTrackWidth();
         pad->SetSize( wxSize( tw, tw ) );
 
-        pad->SetPosition( module->GetPosition() );
+        pad->SetPosition( footprint->GetPosition() );
         pad->SetShape( PAD_SHAPE_RECT );
         pad->SetAttribute( PAD_ATTRIB_SMD );
         pad->SetLayerSet( F_Cu );
@@ -220,5 +220,5 @@ MODULE* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
         pad_num++;
     }
 
-    return module;
+    return footprint;
 }

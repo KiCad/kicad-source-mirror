@@ -52,7 +52,7 @@ void ARRAY_CREATOR::Invoke()
     if( m_selection.Size() == 0 )
         return;
 
-    MODULE* const module = m_editModules ? m_parent.GetBoard()->GetFirstModule() : nullptr;
+    MODULE* const module = m_editModules ? m_parent.GetBoard()->GetFirstFootprint() : nullptr;
 
     const bool enableArrayNumbering = m_editModules;
     const wxPoint rotPoint = (wxPoint) m_selection.GetCenter();
