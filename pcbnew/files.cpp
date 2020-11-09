@@ -1067,7 +1067,7 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             // Extract a footprint library from the design and add it to the fp-lib-table
             wxString newLibPath;
-            HarvestFootprintsToLibrary( true, newfilename.GetName(), &newLibPath );
+            ExportFootprintsToLibrary( true, newfilename.GetName(), &newLibPath );
 
             if( newLibPath.Length() > 0 )
             {

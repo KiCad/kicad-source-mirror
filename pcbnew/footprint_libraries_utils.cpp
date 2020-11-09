@@ -609,12 +609,12 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromLibrary( const LIB_ID& aFPID, bool aC
 }
 
 
-void PCB_EDIT_FRAME::HarvestFootprintsToLibrary( bool aStoreInNewLib, const wxString& aLibName,
-                                                 wxString* aLibPath )
+void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxString& aLibName,
+                                                wxString* aLibPath )
 {
     if( GetBoard()->GetFirstFootprint() == NULL )
     {
-        DisplayInfoMessage( this, _( "No footprints to harvest!" ) );
+        DisplayInfoMessage( this, _( "No footprints to export!" ) );
         return;
     }
 

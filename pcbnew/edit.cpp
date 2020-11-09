@@ -61,12 +61,12 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             GetCanvas()->Refresh();
         break;
 
-    case ID_MENU_HARVEST_FOOTPRINTS_TO_LIBRARY:
-        HarvestFootprintsToLibrary( false );
+    case ID_MENU_EXPORT_FOOTPRINTS_TO_LIBRARY:
+        ExportFootprintsToLibrary( false );
         break;
 
-    case ID_MENU_HARVEST_FOOTPRINTS_TO_NEW_LIBRARY:
-        HarvestFootprintsToLibrary( true );
+    case ID_MENU_EXPORT_FOOTPRINTS_TO_NEW_LIBRARY:
+        ExportFootprintsToLibrary( true );
         break;
 
     default:

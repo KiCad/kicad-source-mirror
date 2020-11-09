@@ -149,6 +149,17 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->Add( _( "Hyperlynx..." ), "",
                         ID_GEN_EXPORT_FILE_HYPERLYNX, export_step_xpm );
 
+    submenuExport->AppendSeparator();
+    submenuExport->Add( _( "Export Footprints to Library..." ),
+                        _( "Add footprints used on board to an existing footprint library\n"
+                           "(does not remove other footprints from this library)" ),
+                        ID_MENU_EXPORT_FOOTPRINTS_TO_LIBRARY, library_archive_xpm );
+
+    submenuExport->Add( _( "Export Footprints to New Library..." ),
+                        _( "Create a new footprint library containing the footprints used on board\n"
+                           "(if the library already exists it will be replaced)" ),
+                        ID_MENU_EXPORT_FOOTPRINTS_TO_NEW_LIBRARY, library_archive_as_xpm );
+
     fileMenu->Add( submenuExport );
 
     // Fabrication Outputs submenu
@@ -376,17 +387,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     toolsMenu->Add( PCB_ACTIONS::boardReannotate );
     toolsMenu->Add( PCB_ACTIONS::removeUnusedPads );
     toolsMenu->Add( PCB_ACTIONS::repairBoard );
-
-    toolsMenu->AppendSeparator();
-    toolsMenu->Add( _( "&Harvest Footprints to Library..." ),
-                    _( "Add footprints used on board to an existing footprint library\n"
-                       "(does not remove other footprints from this library)" ),
-                    ID_MENU_HARVEST_FOOTPRINTS_TO_LIBRARY, library_archive_xpm );
-
-    toolsMenu->Add( _( "&Harvest Footprints to New Library..." ),
-                    _( "Create a new footprint library containing the footprints used on board\n"
-                       "(if the library already exists it will be replaced)" ),
-                    ID_MENU_HARVEST_FOOTPRINTS_TO_NEW_LIBRARY, library_archive_as_xpm );
 
 #if defined(KICAD_SCRIPTING_WXPYTHON)
     toolsMenu->AppendSeparator();
