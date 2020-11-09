@@ -6,16 +6,16 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-04 19:09-0800\n"
-"PO-Revision-Date: 2020-11-05 03:07+0000\n"
+"PO-Revision-Date: 2020-11-10 06:08+0000\n"
 "Last-Translator: Iñigo Figuero Sanz <news@imagedworld.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -338,9 +338,8 @@ msgstr "Restablecer los ajustes predeterminados"
 #: gerbview/menubar.cpp:212 kicad/menubar.cpp:165
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:231
 #: pcbnew/menubar_pcb_editor.cpp:434
-#, fuzzy
 msgid "Preferences..."
-msgstr "&Preferencias"
+msgstr "Preferencias..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:214 cvpcb/menubar.cpp:72
 #: eeschema/menubar.cpp:265
@@ -3691,7 +3690,6 @@ msgid "New Library"
 msgstr "Nueva librería"
 
 #: common/eda_draw_frame.cpp:1005
-#, fuzzy
 msgid ""
 "KiCad can use your graphics card to give you a smoother and faster "
 "experience. This option is turned off by default since it is not compatible "
@@ -3708,8 +3706,8 @@ msgstr ""
 "\n"
 "¿Desea intentar activar la aceleración gráfica?\n"
 "\n"
-"Si desea intentarlo más tarde, seleccione Herramientas modernas (acelerado) "
-"en el menú Preferencias."
+"Si desea intentarlo más tarde, seleccione Gráficos acelerados en el menú "
+"Preferencias."
 
 #: common/eda_draw_frame.cpp:1012
 msgid "Enable Graphics Acceleration"
@@ -5253,18 +5251,18 @@ msgid "Field%d"
 msgstr "Campo%d"
 
 #: common/tool/action_menu.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Close %s"
-msgstr "Cerrar"
+msgstr "Cerrar %s"
 
 #: common/tool/action_menu.cpp:218 common/tool/actions.cpp:113
 msgid "Quit"
 msgstr "Salir"
 
 #: common/tool/action_menu.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "Quit %s"
-msgstr "Salir"
+msgstr "Cerrar %s"
 
 #: common/tool/actions.cpp:41
 msgid "New..."
@@ -8015,7 +8013,6 @@ msgstr "Mostrar el diálogo de anotación"
 
 #: eeschema/dialogs/dialog_erc.cpp:105 eeschema/dialogs/dialog_erc.cpp:274
 #: eeschema/dialogs/dialog_erc.cpp:345
-#, fuzzy
 msgid "Annotation not complete. ERC cannot be run."
 msgstr "Anotación no completa.  No puede ejecutarse el ERC."
 
@@ -11247,14 +11244,12 @@ msgid "Connections"
 msgstr "Conexiones"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:124
-#, fuzzy
 msgid "Junction dot size:"
-msgstr "Tamaño de unión:"
+msgstr "Tamaño del punto de unión:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
-#, fuzzy
 msgid "Smallest"
-msgstr "Pequeñas"
+msgstr "La menor"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
 #: pcbnew/dialogs/dialog_plot_base.cpp:119
@@ -11262,14 +11257,12 @@ msgid "Small"
 msgstr "Pequeñas"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
-#, fuzzy
 msgid "Large"
-msgstr "Mira de centrado"
+msgstr "Grande"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
-#, fuzzy
 msgid "Largest"
-msgstr "Mira de centrado"
+msgstr "La mayor"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:147
 msgid "Inter-sheet References"
@@ -11638,9 +11631,8 @@ msgid "Input pin not driven by any Output pins"
 msgstr "Pin de entrada no conectado a pin de salida"
 
 #: eeschema/erc_item.cpp:54
-#, fuzzy
 msgid "Input Power pin not driven by any Output Power pins"
-msgstr "Pin de entrada no conectado a pin de salida"
+msgstr "Pin de entrada de alimentación no conectado a ningún pin de salida"
 
 #: eeschema/erc_item.cpp:58 eeschema/erc_item.cpp:62
 msgid "Conflict problem between pins"
@@ -12854,27 +12846,27 @@ msgstr ""
 "posición: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid library identifier in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"ID de red no válido en\n"
+"Identificador de librería no válido en\n"
 "archivo: \"%s\"\n"
 "línea: %d\n"
 "posición: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:212
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid symbol extends name in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"ID de red no válido en\n"
+"Nombre de símbolo extendido inválido en\n"
 "archivo: \"%s\"\n"
 "línea: %d\n"
 "posición: %d"
