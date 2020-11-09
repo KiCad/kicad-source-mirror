@@ -1159,11 +1159,10 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     ctls->ShowCursor( true );
     ctls->ForceCursorPosition( false );
     m_cancelled = false;
-    m_startSnapPoint = ctls->GetCursorPosition();
 
     // Prime the pump
     if( aEvent.HasPosition() )
-        m_toolMgr->PrimeTool( m_startSnapPoint );
+        m_toolMgr->PrimeTool( ctls->GetCursorPosition( false ) );
 
     auto setCursor =
             [&]()
