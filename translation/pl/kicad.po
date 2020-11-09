@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-04 19:09-0800\n"
-"PO-Revision-Date: 2020-11-05 03:07+0000\n"
+"PO-Revision-Date: 2020-11-05 15:45+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -338,9 +338,8 @@ msgstr "Resetuj do ustawień domyślnych"
 #: gerbview/menubar.cpp:212 kicad/menubar.cpp:165
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:231
 #: pcbnew/menubar_pcb_editor.cpp:434
-#, fuzzy
 msgid "Preferences..."
-msgstr "Preferencje"
+msgstr "Preferencje..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:214 cvpcb/menubar.cpp:72
 #: eeschema/menubar.cpp:265
@@ -5229,18 +5228,18 @@ msgid "Field%d"
 msgstr "Pole%d"
 
 #: common/tool/action_menu.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Close %s"
-msgstr "Zamknij"
+msgstr "Zamknij %s"
 
 #: common/tool/action_menu.cpp:218 common/tool/actions.cpp:113
 msgid "Quit"
 msgstr "Zakończ"
 
 #: common/tool/action_menu.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "Quit %s"
-msgstr "Zakończ"
+msgstr "Zakończ %s"
 
 #: common/tool/actions.cpp:41
 msgid "New..."
@@ -8004,9 +8003,8 @@ msgstr "Pokazuje okno dialogowe numeracji"
 
 #: eeschema/dialogs/dialog_erc.cpp:105 eeschema/dialogs/dialog_erc.cpp:274
 #: eeschema/dialogs/dialog_erc.cpp:345
-#, fuzzy
 msgid "Annotation not complete. ERC cannot be run."
-msgstr "Numeracja nie jest kompletna.  Nie można uruchomić ERC."
+msgstr "Numeracja nie jest kompletna. Nie można uruchomić ERC."
 
 #: eeschema/dialogs/dialog_erc.cpp:193
 msgid "Delete exclusions too?"
@@ -11222,14 +11220,12 @@ msgid "Connections"
 msgstr "Podłączenia"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:124
-#, fuzzy
 msgid "Junction dot size:"
-msgstr "Rozmiar węzła:"
+msgstr "Rozmiar punktu węzła:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
-#, fuzzy
 msgid "Smallest"
-msgstr "Mały"
+msgstr "Najmniejszy"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
 #: pcbnew/dialogs/dialog_plot_base.cpp:119
@@ -11237,14 +11233,12 @@ msgid "Small"
 msgstr "Mały"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
-#, fuzzy
 msgid "Large"
-msgstr "Cel"
+msgstr "Duży"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
-#, fuzzy
 msgid "Largest"
-msgstr "Cel"
+msgstr "Największy"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:147
 msgid "Inter-sheet References"
@@ -11610,9 +11604,10 @@ msgid "Input pin not driven by any Output pins"
 msgstr "Pin wejściowy nie jest sterowany przez żaden pin wyjściowy"
 
 #: eeschema/erc_item.cpp:54
-#, fuzzy
 msgid "Input Power pin not driven by any Output Power pins"
-msgstr "Pin wejściowy nie jest sterowany przez żaden pin wyjściowy"
+msgstr ""
+"Pin wejściowy zasilania nie jest sterowany przez żadne inne piny wyjściowe "
+"zasilania"
 
 #: eeschema/erc_item.cpp:58 eeschema/erc_item.cpp:62
 msgid "Conflict problem between pins"
@@ -14590,9 +14585,9 @@ msgid "Change %s value from \"%s\" to \"%s\"."
 msgstr "Zmieniam wartość \"%s\" z \"%s\" na \"%s\"."
 
 #: eeschema/tools/backannotate.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find \"%s\" pin \"%s\"."
-msgstr "Nie można otworzyć pliku listy sieci \"%s\"."
+msgstr "Nie można znaleźć \"%s\" pin \"%s\"."
 
 #: eeschema/tools/backannotate.cpp:503
 #, c-format
@@ -15042,10 +15037,8 @@ msgid "Autoplace Fields"
 msgstr "Automatycznie rozłóż pola"
 
 #: eeschema/tools/ee_actions.cpp:396
-#, fuzzy
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
-msgstr ""
-"Uruchamia algorytm automatycznego rozmieszczania pól symbolu wokół niego"
+msgstr "Uruchamia algorytm automatycznego umieszczania pól symbolu lub arkusza"
 
 #: eeschema/tools/ee_actions.cpp:401
 msgid "Change Symbols..."
@@ -18633,7 +18626,6 @@ msgid "PCB Calculator"
 msgstr "Kalkulator PCB"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -18666,44 +18658,31 @@ msgid ""
 msgstr ""
 "Seria E zdefiniowana w normie IEC 60063 to powszechnie akceptowany system\n"
 "preferowanych wartości dla elementów elektronicznych.  Dostępne wartości\n"
-"są w przybliżeniu równomiernie rozłożone na skali logarytmicznej.  Chociaż "
-"seria E\n"
-"jest używana do diod Zenera, cewek indukcyjnych i innych komponentów,\n"
-"ten kalkulator jest przeznaczony głównie dla rezystorów.\n"
+"są w przybliżeniu równomiernie rozłożone na skali logarytmicznej.\n"
 "\n"
 "\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
 "\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
 "\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
 "\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
-"Jeśli Twój projekt wymaga wartości rezystora, która nie jest łatwo "
-"dostępna,\n"
-"ten kalkulator znajdzie kombinację standardowych rezystancji z serii E by "
+"\n"
+"Ten kalkulator znajduje kombinację standardowych rezystancji z serii E by "
 "ją\n"
-"utworzyć. Możesz wprowadzić wymaganą rezystancję od 0,0025 do 4000 kOhm. \n"
-"Jeśli można znaleźć lepsze dopasowanie, podane są rozwiązania "
-"wykorzystujące\n"
+"utworzyć.  Można wprowadzić wymaganą rezystancję od 0,0025 do 4000 kOhm. \n"
+"Podane rozwiązania wykorzystują maksymalnie 3 składniki.  \n"
+"\n"
+"Jeśli można znaleźć lepsze dopasowanie, podane są rozwiązania wykorzystujące "
+"\n"
 "3 lub 4 rezystory. Wybór opcji 4R będzie skutkował dłuższym czasem obliczeń\n"
-"bo stosowane będą tylko wartości z szeregu E12.  Opcjonalnie można "
-"wykluczyć\n"
-"do dwóch dodatkowych wartości z rozwiązania z powodu ich niedostępności.\n"
-"Jeśli wartość z serii E zostanie wprowadzana w wymaganym polu wejściowym,\n"
-"zostanie zawsze wykluczona z dowolnego rozwiązania, ponieważ zakłada się,\n"
-"że ta wartość jest niedostępna.\n"
+"bo stosowane będą tylko wartości z szeregu E12.  \n"
+"\n"
+"Opcjonalnie można wykluczyć do dwóch dodatkowych wartości z rozwiązania \n"
+"z powodu ich niedostępności.\n"
 "\n"
 "Rozwiązania podane są w następujących formatach:\n"
 "\n"
 "\tR1 + R2 +...+ Rn\trezystory szeregowo\n"
-"\tR1 | R2 |...| Rn\trezystory rónolegle\n"
+"\tR1 | R2 |...| Rn\trezystory równolegle\n"
 "\tR1 + (R2|R3)...\t\tdowolna kombinacja powyższych\n"
-"__Przykład: __ Dzielniki napięcia, powszechnie używane przy wyborze zakresu "
-"1:10\n"
-"wymagają wartości współczynnika rezystora 1:9.  Niestety „9” to wartość, "
-"której\n"
-"nie ma dostępnej nawet w serii E192.  Odchylenie 1% i więcej jest również\n"
-"niedopuszczalne dla 8-bitowej dokładności.  Dla wymaganej wartości "
-"rezystora \n"
-"9k, kalkulator sugeruje wartości z szeregu E6 2k2 + 6k8 połączone szeregowo\n"
-"jako możliwe dokładne rozwiązanie.\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:125
 msgid ""
@@ -20599,22 +20578,24 @@ msgid "Aborted: too many errors "
 msgstr "Przerwano: zbyt dużo błędów "
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:872
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Front Footprints"
 msgstr ""
 "\n"
-"Brak footprintów"
+"\n"
+"Footprinty na stronie górnej"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:873
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Back Footprints"
-msgstr "Footprinty"
+msgstr ""
+"\n"
+"\n"
+"Footprinty na stronie dolnej"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:937
 msgid "Footprint not found in changelist"
@@ -22369,49 +22350,40 @@ msgid "Change Footprints"
 msgstr "Zamień footprinty"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:71
-#, fuzzy
 msgid "Change all footprints on board"
-msgstr "%s wszystkich footprintów na płytce"
+msgstr "Zamienia wszystkie footprinty na płytce"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:72
-#, fuzzy
 msgid "Change selected footprint"
-msgstr "Pokaż zaznaczony footprint"
+msgstr "Zamień zaznaczony footprint"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:73
-#, fuzzy
 msgid "Change footprints matching reference designator:"
-msgstr "%s footprintów pasujących do odnośnika:"
+msgstr "Zmień footprinty pasujące do odnośnika:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
-#, fuzzy
 msgid "Change footprints matching value:"
-msgstr "%s footprintów z wartością:"
+msgstr "Zmień footprinty z pasującą wartością:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
-#, fuzzy
 msgid "Change footprints with library id:"
-msgstr "%s footprintów z identyfikatorem:"
+msgstr "Zmień footprinty z identyfikatorem biblioteki:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
-#, fuzzy
 msgid "Update text layers and visibilities"
-msgstr "%s warstwy tekstu oraz widoczność"
+msgstr "Uaktualnij warstwy z tekstem oraz widoczność"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
-#, fuzzy
 msgid "Update text sizes, styles and positions"
-msgstr "%s rozmiarów tekstu, stylów oraz pozycji"
+msgstr "Uaktualnij rozmiary tekstu, style oraz pozycje"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
-#, fuzzy
 msgid "Update fabrications attributes"
-msgstr "%s atrybuty fabrykacji"
+msgstr "Uaktualnij atrybuty fabrykacji"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
-#, fuzzy
 msgid "Update 3D models"
-msgstr "%s modeli 3D"
+msgstr "Uaktualnij modele 3D"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:360
 #, c-format
@@ -22423,29 +22395,24 @@ msgid "*** footprint not found ***"
 msgstr "*** footprintu nie odnaleziono ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
-#, fuzzy
 msgid "Update all footprints on board"
-msgstr "Uaktualnij footprint na płytce"
+msgstr "Uaktualnij wszystkie footprinty na płytce"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:27
-#, fuzzy
 msgid "Update selected footprint"
-msgstr "Pokaż zaznaczony footprint"
+msgstr "Uaktualnij zaznaczony footprint"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
-#, fuzzy
 msgid "Update footprints matching reference designator:"
-msgstr "%s footprintów pasujących do odnośnika:"
+msgstr "Uaktualnij footprinty pasujące do odnośnika:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:38
-#, fuzzy
 msgid "Update footprints matching value:"
-msgstr "%s footprintów z wartością:"
+msgstr "Uaktualnij footprinty z pasującą wartością:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:44
-#, fuzzy
 msgid "Update footprints with library id:"
-msgstr "%s footprintów z identyfikatorem:"
+msgstr "Uaktualnij footprinty z identyfikatorem biblioteki:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
 msgid "New footprint library id:"
@@ -22460,24 +22427,20 @@ msgid "Remove text items which are not in library footprint"
 msgstr "Usuń elementy tekstowe które nie znajdują się w bibliotece footprintu"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:101
-#, fuzzy
 msgid "Reset text layers and visibilities"
-msgstr "%s warstwy tekstu oraz widoczność"
+msgstr "Zresetuj warstwy z tekstem oraz widoczność"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:104
-#, fuzzy
 msgid "Reset text sizes, styles and positions"
-msgstr "%s rozmiarów tekstu, stylów oraz pozycji"
+msgstr "Zresetuj rozmiary tekstu, style oraz pozycje"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Reset fabrication attributes"
-msgstr "%s atrybuty fabrykacji"
+msgstr "Zresetuj atrybuty fabrykacji"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:110
-#, fuzzy
 msgid "Reset 3D models"
-msgstr "%s modeli 3D"
+msgstr "Zresetuj modele 3D"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:86
 msgid "Update Footprints from Library"
@@ -24026,9 +23989,9 @@ msgid "Select a corner to delete."
 msgstr "Wybierz narożnik do usunięcia."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:479
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
-msgstr "Footprint %s (%s), %s, orientacja %.1f st"
+msgstr "Footprint %s (%s), %s, orientacja %g st"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:482
 #: pcbnew/dialogs/dialog_text_properties.cpp:260
@@ -24106,13 +24069,12 @@ msgid "Pad size must be greater than zero"
 msgstr "Rozmiar pola musi być większa niż zero"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1192
-#, fuzzy
 msgid ""
 "Warning: Pad drill bigger than pad size or drill shape and pad shape do not "
 "overlap"
 msgstr ""
-"Ostrzeżenie: Otwór pola jest większy niż samo pole lub kształty nie nachodzą "
-"na siebie"
+"Ostrzeżenie: Rozmiar wiercenia pola lutowniczego większy niż rozmiar lub "
+"kształt pola, lub kształt wiercenia oraz kształt pola nie zachodzą na siebie"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1202
 msgid "Pad local clearance must be zero or greater than zero"
@@ -24937,7 +24899,6 @@ msgid "Track width correction:"
 msgstr "Korekcja szerokości ścieżek:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:312
-#, fuzzy
 msgid ""
 "Set global width correction for exact width PostScript output.\n"
 "These width correction is intended to compensate tracks width and also pads "
@@ -24947,10 +24908,10 @@ msgid ""
 msgstr ""
 "Ustaw globalną korekcję szerokości by uzyskać dokładną szerokość w plikach "
 "PostScript.\n"
-"Korekcja szerokości ma na celu skompensowanie szerokości ścieżek, a także "
-"błędów wielkości pól i przelotek.\n"
-"Rozsądna wartość korekty szerokości musi mieścić się w zakresie [-"
-"(MinTrackWidth-1), +(MinClearanceValue-1)] w dziesiętnych milsów."
+"Korekcja ta ma na celu skompensowanie szerokości ścieżek, a także błędów "
+"wielkości pól i przelotek.\n"
+"Rozsądna wartość korekty szerokości musi mieścić się w zakresie "
+"[-(MinTrackWidth-1), +(MinClearanceValue-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "Force A4 output"
@@ -25504,9 +25465,8 @@ msgid "Via Count"
 msgstr "Ilość przelotek"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:74
-#, fuzzy
 msgid "Via Length"
-msgstr "Długość przelotki:"
+msgstr "Długość przelotki"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:75
 msgid "Board Length"
@@ -25517,9 +25477,8 @@ msgid "Die Length"
 msgstr "Długość rdzenia"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:77
-#, fuzzy
 msgid "Total Length"
-msgstr "Długość przewodu"
+msgstr "Długość ogółem"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:77
 #: pcbnew/netinfo_item.cpp:128
@@ -25545,14 +25504,14 @@ msgid "Net name cannot be empty."
 msgstr "Nazwa sieci nie może być pusta."
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:1939
-#, fuzzy, c-format
+#, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
-msgstr "Sieć jest w użyciu.  Usunąć mimo to?"
+msgstr "Sieć '%s' jest w użyciu.  Usunąć mimo to?"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:1956
 #, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr ""
+msgstr "Usunąć wszystkie sieci w grupie '%s'?"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:1977
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:1978
@@ -25565,42 +25524,37 @@ msgstr "Pokaż sieci niepodłączone"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:45
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:46
-#, fuzzy
 msgid "Wildcard"
-msgstr "Znaki wieloznaczne"
+msgstr "Znak wieloznaczny"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:47
 msgid "RegEx"
-msgstr ""
+msgstr "Wyrażenie regularne"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:48
-#, fuzzy
 msgid "Wildcard Substr"
-msgstr "Znaki wieloznaczne"
+msgstr "Podciąg znaków wieloznacznych"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:49
 msgid "RegEx Substr"
-msgstr ""
+msgstr "Podciąg wyrażenia regularnego"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:59
 msgid "Sort groups first"
-msgstr ""
+msgstr "Najpierw posortuj grupy"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:69
-#, fuzzy
 msgid "Via Length:"
 msgstr "Długość przelotki:"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:73
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:74
-#, fuzzy
 msgid "Constant"
-msgstr "Restrykcje"
+msgstr "Stała"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:75
-#, fuzzy
 msgid "From Stackup"
-msgstr "Stos warstw płytki"
+msgstr "Ze stosu warstw"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:113
 msgid "Create Report..."
@@ -27597,14 +27551,12 @@ msgid "Checking net connections..."
 msgstr "Sprawdzenie połączeń poszczególnych sieci..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:170
-#, fuzzy
 msgid "Gathering copper items..."
-msgstr "Właściwości siatki..."
+msgstr "Zbieranie elementów na warstwach miedzi..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:182
-#, fuzzy
 msgid "Tessellating copper zones..."
-msgstr "Sprawdzam prześwit pomiędzy strefami..."
+msgstr "Teselacja stref miedzi..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:207
 msgid "Checking track & via clearances..."
@@ -27732,26 +27684,26 @@ msgid "No netlist provided, skipping LVS."
 msgstr "Nie dostarczono listy sieci, pomijam LVS."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min length: %s; actual: %s)"
-msgstr "minimalna długość: %s; obecna: %s)"
+msgstr "(%s minimalna długość: %s; obecna: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max length: %s; actual: %s)"
-msgstr "maksymalna długość: %s; obecna: %s)"
+msgstr "(%s maksymalna długość: %s; obecna: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
 msgstr ""
-"maksymalne nachylenie: %s; obecne nachylenie: %s; średnia długość sieci: %s; "
-"obecna długość sieci: %s)"
+"(%s maksymalne nachylenie: %s; obecne nachylenie: %s; średnia długość sieci: "
+"%s; obecna długość sieci: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max count: %d; actual: %d)"
-msgstr "(%s maks. szerokość %s; obecnie %s)"
+msgstr "(%s maks. ilość %d; obecnie %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:229
 msgid "Gathering length-constrained connections..."
@@ -29681,13 +29633,13 @@ msgstr ""
 "zamkniętym)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1585
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored."
 msgstr ""
 "Sieć '%s' odwołuje się do identyfikatora składnika '%s', który nie istnieje. "
-"Zostało to zignorowane,"
+"Zostało to zignorowane."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1592
 #, c-format
@@ -30355,7 +30307,7 @@ msgstr "Dostrojono: odchyłka "
 
 #: pcbnew/router/pns_router.cpp:209
 msgid "The routing start point violates DRC."
-msgstr ""
+msgstr "Punkt rozpoczęcia trasowania narusza DRC."
 
 #: pcbnew/router/router_tool.cpp:85
 msgid "Undo last segment"
