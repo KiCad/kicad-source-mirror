@@ -37,7 +37,6 @@
 #include <dialogs/dialog_grid_settings.h>
 #include <widgets/appearance_controls.h>
 #include <dialogs/eda_view_switcher.h>
-#include <layer_widget.h>
 #include <class_dimension.h>
 #include <wildcards_and_files_ext.h>
 

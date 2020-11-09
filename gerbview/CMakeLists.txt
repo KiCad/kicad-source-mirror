@@ -8,7 +8,6 @@ add_definitions(-DGERBVIEW)
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
-    ${CMAKE_SOURCE_DIR}/pcbnew
     dialogs
     ${CMAKE_SOURCE_DIR}/common
     ${CMAKE_SOURCE_DIR}/3d-viewer
@@ -49,6 +48,7 @@ set( GERBVIEW_SRCS
     gerbview_settings.cpp
     gerbview_frame.cpp
     job_file_reader.cpp
+    layer_widget.cpp
     menubar.cpp
     readgerb.cpp
     rs274_read_XY_and_IJ_coordinates.cpp
@@ -73,7 +73,6 @@ set( GERBVIEW_EXTRA_SRCS
     ${CMAKE_SOURCE_DIR}/common/eda_text.cpp
     ${CMAKE_SOURCE_DIR}/common/widgets/layer_box_selector.cpp
     ${CMAKE_SOURCE_DIR}/common/lset.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/layer_widget.cpp
     ${CMAKE_SOURCE_DIR}/common/page_info.cpp
 )
 

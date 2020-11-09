@@ -437,7 +437,7 @@ public:
     /**
      * Function SetActiveLayer
      * will change the currently active layer to \a aLayer and also
-     * update the PCB_LAYER_WIDGET.
+     * update the APPEARANCE_CONTROLS.
      */
     void SetActiveLayer( PCB_LAYER_ID aLayer ) override;
 
