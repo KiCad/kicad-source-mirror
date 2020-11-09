@@ -254,11 +254,11 @@ double FP_TEXT::GetDrawRotation() const
 
     if( m_keepUpright )
     {
-        // Keep angle between -90 .. 90 deg. Otherwise the text is not easy to read
+        // Keep angle between 0 .. 90 deg. Otherwise the text is not easy to read
         while( rotation > 900 )
             rotation -= 1800;
 
-        while( rotation < -900 )
+        while( rotation < 0 )
             rotation += 1800;
     }
     else

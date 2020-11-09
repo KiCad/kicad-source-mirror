@@ -972,10 +972,11 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             // If rotating a group, record position of all the descendants for undo
             if( item->Type() == PCB_GROUP_T )
             {
-                static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem )
-                                                                   {
-                                                                       m_commit->Modify( bItem );
-                                                                   });
+                static_cast<PCB_GROUP*>( item )->RunOnDescendants(
+                        [&]( BOARD_ITEM* bItem )
+                        {
+                            m_commit->Modify( bItem );
+                        });
             }
         }
 
