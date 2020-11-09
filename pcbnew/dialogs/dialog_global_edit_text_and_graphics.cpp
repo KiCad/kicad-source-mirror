@@ -28,6 +28,7 @@
 #include <pcb_layer_box_selector.h>
 #include <class_board.h>
 #include <class_module.h>
+#include <class_dimension.h>
 #include <fp_shape.h>
 #include <pcb_text.h>
 #include <widgets/unit_binder.h>
@@ -270,8 +271,12 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
     aCommit.Modify( aItem );
 
     EDA_TEXT*  textItem = dynamic_cast<EDA_TEXT*>( aItem );
-    PCB_SHAPE* drawItem = dynamic_cast<PCB_SHAPE*>( aItem );
     FP_TEXT*   fpTextItem = dynamic_cast<FP_TEXT*>( aItem );
+    PCB_SHAPE* drawItem = dynamic_cast<PCB_SHAPE*>( aItem );
+    DIMENSION* dimension = dynamic_cast<DIMENSION*>( aItem );
+
+    if( dimension )
+        textItem = &dimension->Text();
 
     if( m_setToSpecifiedValues->GetValue() )
     {
@@ -296,8 +301,14 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
         if( m_keepUpright->Get3StateValue() != wxCHK_UNDETERMINED && fpTextItem )
             fpTextItem->SetKeepUpright( m_keepUpright->GetValue() );
 
-        if( !m_lineWidth.IsIndeterminate() && drawItem )
-            drawItem->SetWidth( m_lineWidth.GetValue() );
+        if( !m_lineWidth.IsIndeterminate() )
+        {
+            if( drawItem )
+                drawItem->SetWidth( m_lineWidth.GetValue() );
+
+            if( dimension )
+                dimension->SetLineThickness( m_lineWidth.GetValue() );
+        }
     }
     else
     {
@@ -315,6 +326,9 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
 
         if( drawItem )
             drawItem->SetWidth( m_brdSettings->GetLineThickness( layer ) );
+
+        if( dimension )
+            dimension->SetLineThickness( m_brdSettings->GetLineThickness( layer ) );
     }
 }
 
@@ -399,12 +413,14 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
     // Go through the PCB text & graphic items
     for( BOARD_ITEM* boardItem : m_parent->GetBoard()->Drawings() )
     {
-        if( boardItem->Type() == PCB_TEXT_T )
+        KICAD_T itemType = boardItem->Type();
+
+        if( itemType == PCB_TEXT_T )
         {
             if( m_boardText->GetValue() )
                 visitItem( commit, boardItem );
         }
-        else if( boardItem->Type() == PCB_SHAPE_T )
+        else if( itemType == PCB_SHAPE_T || BaseType( itemType ) == PCB_DIMENSION_T )
         {
             if( m_boardGraphics->GetValue() )
                 visitItem( commit, boardItem );

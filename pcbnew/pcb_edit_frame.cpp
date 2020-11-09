@@ -1381,19 +1381,27 @@ void PCB_EDIT_FRAME::DoUpdatePCBFromNetlist( NETLIST& aNetlist, bool aUseTimesta
 void PCB_EDIT_FRAME::RunEeschema()
 {
     wxString   msg;
-    wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(),
-                      KiCadSchematicFileExtension );
+    wxFileName schematic( Prj().GetProjectPath(), Prj().GetProjectName(), "kicad_sch" );
 
-    if( !schfn.FileExists() )
+    if( !schematic.FileExists() )
     {
-        msg.Printf( _( "Schematic file \"%s\" not found." ), schfn.GetFullPath() );
-        wxMessageBox( msg, _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
-        return;
+        wxFileName legacySchematic( Prj().GetProjectPath(), Prj().GetProjectName(), "sch" );
+
+        if( legacySchematic.FileExists() )
+        {
+            schematic = legacySchematic;
+        }
+        else
+        {
+            msg.Printf( _( "Schematic file \"%s\" not found." ), schematic.GetFullPath() );
+            wxMessageBox( msg, _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
+            return;
+        }
     }
 
     if( Kiface().IsSingle() )
     {
-        wxString filename = wxT( "\"" ) + schfn.GetFullPath( wxPATH_NATIVE ) + wxT( "\"" );
+        wxString filename = wxT( "\"" ) + schematic.GetFullPath( wxPATH_NATIVE ) + wxT( "\"" );
         ExecuteFile( this, EESCHEMA_EXE, filename );
     }
     else
@@ -1425,7 +1433,7 @@ void PCB_EDIT_FRAME::RunEeschema()
         if( !frame->IsShown() ) // the frame exists, (created by the dialog field editor)
                                 // but no project loaded.
         {
-            frame->OpenProjectFiles( std::vector<wxString>( 1, schfn.GetFullPath() ) );
+            frame->OpenProjectFiles( std::vector<wxString>( 1, schematic.GetFullPath() ) );
             frame->Show( true );
         }
 
