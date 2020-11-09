@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-04 19:09-0800\n"
-"PO-Revision-Date: 2020-11-05 15:45+0000\n"
+"PO-Revision-Date: 2020-11-10 06:08+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.2-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -640,7 +640,7 @@ msgstr ""
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:532
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:247
 msgid "Refractions"
-msgstr "Lom"
+msgstr "Lomy"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:537
 msgid "Number of rays that will be cast to evaluate a refraction point"
@@ -657,7 +657,7 @@ msgstr "Nastavení světel"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:582
 msgid "Ambient Camera Light"
-msgstr ""
+msgstr "Okolní světlo kamery"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
 msgid "Top Light"
@@ -1738,7 +1738,7 @@ msgstr "Kopírovat info o verzi KiCadu do schránky"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr "Vytvořit soubor &hlášení"
+msgstr "&Nahlásit chybu"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:626
 msgid "Report a problem with KiCad"
@@ -2585,11 +2585,13 @@ msgid "Warning: Bad scale number"
 msgstr "Varování: Špatné číslo stupnice"
 
 #: common/dialogs/dialog_print_generic.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: Scale option set to a very large value.\n"
 " Clamped to %f"
-msgstr "Upozornění: Zvětšení je nastaveno na velmi velkou hodnotu"
+msgstr ""
+"Varování: Měřítko je nastaveno na velmi velkou hodnotu.\n"
+"Upnuto na %f"
 
 #: common/dialogs/dialog_print_generic.cpp:122
 #, c-format
@@ -2700,11 +2702,11 @@ msgstr "Položky:"
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
 msgid "View Preset Switcher"
-msgstr ""
+msgstr "Zobrazit předvolbu přepínače"
 
 #: common/dialogs/panel_color_settings.cpp:49
 msgid "Reveal Themes in Finder"
-msgstr ""
+msgstr "Odhalit motivy ve vyhledávači"
 
 #: common/dialogs/panel_color_settings.cpp:130
 msgid "New theme name:"
@@ -2751,13 +2753,15 @@ msgstr "Motiv:"
 
 #: common/dialogs/panel_color_settings_base.cpp:33
 msgid "Override individual item colors"
-msgstr ""
+msgstr "Přepsat jednotlivé barvy prvků"
 
 #: common/dialogs/panel_color_settings_base.cpp:34
 msgid ""
 "Show all items in their default color even if they have specific colors set "
 "in their properties."
 msgstr ""
+"Zobrazit všechny položky v jejich výchozí barvě, i když mají ve svých "
+"vlastnostech definované konkrétní barvy."
 
 #: common/dialogs/panel_color_settings_base.cpp:41
 msgid "Open Theme Folder"
@@ -2821,6 +2825,8 @@ msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
+"Soubory 3D mezipaměti starší než tyto jsou odstraněny. \n"
+"Pokud nastavíte 0, vymazání mezipaměti je zakázáno"
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid "Days"
@@ -2923,7 +2929,7 @@ msgstr "Upřednostnit výběr pro tažení"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
 msgid "Warp mouse to origin of moved object"
-msgstr ""
+msgstr "Umístit kurzor myši na počátek přesunutého objektu"
 
 #: common/dialogs/panel_common_settings_base.cpp:200
 msgid "First hotkey selects tool"
@@ -2961,7 +2967,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:226
 msgid "Maximum backups to keep:"
-msgstr ""
+msgstr "Maximální počet záloh, které je třeba zachovat:"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
 msgid "How many backup files total to keep (set to 0 for no limit)"
@@ -3099,11 +3105,11 @@ msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:89
 msgid "Mouse Buttons"
-msgstr ""
+msgstr "Tlačítko myši"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:97
 msgid "Middle button drag:"
-msgstr ""
+msgstr "Přetáhnout prostředním tlačítkem:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:101
 #: common/dialogs/panel_mouse_settings_base.cpp:111
@@ -3145,11 +3151,11 @@ msgstr "Tažení pravým tlačítkem:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:124
 msgid "Mouse Wheel and Touchpad Scrolling"
-msgstr ""
+msgstr "Rolování myší a posouvání touchpadu"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Behavior of vertical touchpad or scroll wheel:"
-msgstr ""
+msgstr "Chování vertikálního touchpadu nebo rolovacího kolečka:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:135
 msgid "While pressing:"
@@ -3367,7 +3373,7 @@ msgstr "Ignorovat"
 
 #: common/dialogs/panel_setup_severities.cpp:94
 msgid "From Pin Conflicts Map"
-msgstr ""
+msgstr "Z mapy konfliktů vývodů"
 
 #: common/dialogs/panel_text_variables.cpp:114
 #: common/dialogs/panel_text_variables.cpp:142
@@ -3599,9 +3605,9 @@ msgid "Zoom Auto"
 msgstr "Auto zvětšení"
 
 #: common/eda_draw_frame.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Zoom %.2f"
-msgstr "Přiblížit: %.2f"
+msgstr "Přiblížení: %.2f"
 
 #: common/eda_draw_frame.cpp:495 pagelayout_editor/pl_editor_frame.cpp:730
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:143
@@ -3657,9 +3663,8 @@ msgid "&No Thanks"
 msgstr "&Ne, díky"
 
 #: common/eda_item.cpp:259
-#, fuzzy
 msgid "Screen"
-msgstr "Potisk"
+msgstr "Obrazovka"
 
 #: common/eda_item.cpp:261 eeschema/dialogs/dialog_fields_editor_global.cpp:986
 #: eeschema/sch_component.cpp:1373 pcbnew/class_pad.cpp:818
@@ -3695,9 +3700,8 @@ msgid "Via"
 msgstr "Prokov"
 
 #: common/eda_item.cpp:269
-#, fuzzy
 msgid "Board Marker"
-msgstr "Vrstvy desky:"
+msgstr "Značka desky"
 
 #: common/eda_item.cpp:270
 #, fuzzy
@@ -3716,7 +3720,7 @@ msgstr "Smazat rozměr"
 
 #: common/eda_item.cpp:273 pcbnew/class_dimension.cpp:950
 msgid "Leader"
-msgstr ""
+msgstr "Vedoucí"
 
 #: common/eda_item.cpp:274 pcbnew/class_pcb_target.cpp:121
 msgid "Target"
@@ -3740,9 +3744,8 @@ msgid "Group"
 msgstr "Skupina"
 
 #: common/eda_item.cpp:280
-#, fuzzy
 msgid "Schematic Marker"
-msgstr "Schéma uloženo"
+msgstr "Značka schématu"
 
 #: common/eda_item.cpp:281 common/layer_id.cpp:108 eeschema/sch_junction.h:90
 msgid "Junction"
@@ -3754,14 +3757,12 @@ msgid "No-Connect Flag"
 msgstr "Bez propojení"
 
 #: common/eda_item.cpp:283
-#, fuzzy
 msgid "Wire Entry"
-msgstr "Přidat spoj do sběrnice"
+msgstr "Vstup drátu"
 
 #: common/eda_item.cpp:284
-#, fuzzy
 msgid "Bus Entry"
-msgstr "Přidat sběrnici do sběrnice"
+msgstr "Vstup do sběrnice"
 
 #: common/eda_item.cpp:285
 #, fuzzy
@@ -3806,9 +3807,8 @@ msgid "Sheet"
 msgstr "List"
 
 #: common/eda_item.cpp:301
-#, fuzzy
 msgid "SCH Screen"
-msgstr "Potisk"
+msgstr "Obrazovka SCH"
 
 #: common/eda_item.cpp:303
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:166
@@ -3834,9 +3834,8 @@ msgid "Circle"
 msgstr "Kružnice"
 
 #: common/eda_item.cpp:307
-#, fuzzy
 msgid "Symbol Text"
-msgstr "Název součástky"
+msgstr "Text symbolu"
 
 #: common/eda_item.cpp:308 common/page_layout/ws_draw_item.cpp:118
 #: eeschema/lib_rectangle.h:54 pcbnew/class_pad.cpp:1358
@@ -5576,7 +5575,7 @@ msgstr "Tvar kurzoru"
 
 #: common/tool/actions.cpp:373
 msgid "Click"
-msgstr ""
+msgstr "Kliknutí"
 
 #: common/tool/actions.cpp:373
 #, fuzzy
@@ -5675,7 +5674,7 @@ msgstr "palce"
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
 msgid "Mils"
-msgstr "Mils"
+msgstr "Milů"
 
 #: common/tool/actions.cpp:470
 msgid "Use mils"
@@ -7950,7 +7949,7 @@ msgstr "Styl:"
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:68
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:46
 msgid "Combo!"
-msgstr ""
+msgstr "Kombo!"
 
 #: eeschema/dialogs/dialog_edit_one_field.cpp:216
 #, fuzzy
@@ -8191,7 +8190,7 @@ msgstr "Možnosti průchodky:"
 #: eeschema/dialogs/dialog_erc_base.cpp:86
 #: pcbnew/dialogs/dialog_drc_base.cpp:169
 msgid "Exclusions"
-msgstr ""
+msgstr "Vyloučení"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:109
 msgid "Delete Markers"
@@ -10392,7 +10391,7 @@ msgstr "Model:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:244
 msgid "note"
-msgstr ""
+msgstr "Poznámka"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:293
 msgid "Model"
