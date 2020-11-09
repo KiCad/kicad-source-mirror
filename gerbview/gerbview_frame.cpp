@@ -222,6 +222,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     }
     else
     {
+        UseGalCanvas( false );
         m_colorsSettings->SetLegacyMode( true );
         m_canvas->Refresh();
     }
