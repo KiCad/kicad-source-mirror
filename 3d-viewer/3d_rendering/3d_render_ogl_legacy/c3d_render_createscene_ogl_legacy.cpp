@@ -628,12 +628,11 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
         const CBVHCONTAINER2D *container2d = static_cast<const CBVHCONTAINER2D *>(ii->second);
 
         // Load the vertical (Z axis) component of shapes
-        const SHAPE_POLY_SET *aPolyList = nullptr;
 
-        if( map_poly.find( layer_id ) != map_poly.end() )
-        {
-            aPolyList = map_poly.at( layer_id );
-        }
+        if( map_poly.find( layer_id ) == map_poly.end() )
+            continue;
+
+        const SHAPE_POLY_SET *aPolyList = map_poly.at( layer_id );
 
         SHAPE_POLY_SET polyListSubtracted;
         polyListSubtracted = *aPolyList;
