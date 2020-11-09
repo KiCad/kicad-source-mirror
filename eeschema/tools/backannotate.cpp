@@ -38,8 +38,7 @@
 
 BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
                               bool aProcessFootprints, bool aProcessValues,
-                              bool aProcessReferences, bool aProcessNetNames,
-                              bool aDryRun ) :
+                              bool aProcessReferences, bool aProcessNetNames, bool aDryRun ) :
         m_reporter( aReporter ),
         m_matchByReference( aRelinkFootprints ),
         m_processFootprints( aProcessFootprints ),
@@ -157,7 +156,8 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
 
             if( path == "" )
             {
-                msg.Printf( _( "Footprint \"%s\" has no symbol associated." ), ref );
+                msg.Printf( _( "Footprint '%s' has no associated symbol." ),
+                            ref );
                 m_reporter.ReportHead( msg, RPT_SEVERITY_WARNING );
                 continue;
             }
@@ -180,7 +180,7 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
         }
         catch( ... )
         {
-            wxLogWarning( "Cannot parse PCB netlist for back-annotation" );
+            wxLogWarning( "Cannot parse PCB netlist for back-annotation." );
         }
 
         // Use lower_bound for not to iterate over map twice
@@ -189,8 +189,9 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
         if( nearestItem != m_pcbModules.end() && nearestItem->first == path )
         {
             // Module with this path already exists - generate error
-            msg.Printf( _( "Pcb footprints \"%s\" and \"%s\" linked to same symbol" ),
-                        nearestItem->second->m_ref, ref );
+            msg.Printf( _( "Pcb footprints '%s' and '%s' linked to same symbol." ),
+                        nearestItem->second->m_ref,
+                        ref );
             m_reporter.ReportHead( msg, RPT_SEVERITY_ERROR );
         }
         else
@@ -253,8 +254,8 @@ void BACK_ANNOTATE::getChangeList()
         else
         {
             // Haven't found linked symbol in multiunits or common refs. Generate error
-            wxString msg;
-            msg.Printf( _( "Cannot find symbol for \"%s\" footprint" ), pcbData->m_ref );
+            wxString msg = wxString::Format( _( "Cannot find symbol for footprint '%s'." ),
+                                             pcbData->m_ref );
             m_reporter.ReportTail( msg, RPT_SEVERITY_ERROR );
         }
     }
@@ -272,14 +273,14 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
 
     size_t i = 0;
 
-    for( auto& item : m_changelist )
+    for( const std::pair<SCH_REFERENCE, std::shared_ptr<PCB_MODULE_DATA>>& item : m_changelist )
     {
         // Refs and changelist are both sorted by paths, so we just go over m_refs and
         // generate errors before we will find m_refs member to which item linked
         while( i < m_refs.GetCount() && m_refs[i].GetPath() != item.first.GetPath() )
         {
-            wxString msg;
-            msg.Printf( _( "Cannot find footprint for \"%s\" symbol" ), m_refs[i++].GetFullRef() );
+            wxString msg = wxString::Format( _( "Cannot find footprint for symbol '%s'." ),
+                                             m_refs[i++].GetFullRef() );
             m_reporter.ReportTail( msg, RPT_SEVERITY_ERROR );
         }
 
@@ -288,7 +289,8 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
 
     if( m_matchByReference && !m_frame->ReadyToNetlist() )
     {
-        m_reporter.ReportTail( _( "Cannot relink footprints because schematic is not fully annotated" ),
+        m_reporter.ReportTail( _( "Cannot relink footprints because schematic is not fully "
+                                  "annotated." ),
                                RPT_SEVERITY_ERROR );
     }
 }
@@ -415,8 +417,8 @@ static LABEL_SPIN_STYLE orientLabel( SCH_PIN* aPin )
     {
     case PIN_UP:    spin = LABEL_SPIN_STYLE::BOTTOM; break;
     case PIN_DOWN:  spin = LABEL_SPIN_STYLE::UP;     break;
-    case PIN_LEFT:  spin = LABEL_SPIN_STYLE::LEFT;   break;
-    case PIN_RIGHT: spin = LABEL_SPIN_STYLE::RIGHT;  break;
+    case PIN_LEFT:  spin = LABEL_SPIN_STYLE::RIGHT;  break;
+    case PIN_RIGHT: spin = LABEL_SPIN_STYLE::LEFT;   break;
     }
 
     // Reorient based on the actual component orientation now
@@ -473,6 +475,7 @@ static LABEL_SPIN_STYLE orientLabel( SCH_PIN* aPin )
     return spin;
 }
 
+
 void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString& aOldName,
                                           const wxString& aNewName )
 {
@@ -489,7 +492,8 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
 
                     if( EscapeString( label->GetShownText(), CTX_NETNAME ) == oldName )
                     {
-                        m_frame->SaveCopyInUndoList( aScreen, label, UNDO_REDO::CHANGED, m_appendUndo );
+                        m_frame->SaveCopyInUndoList( aScreen, label, UNDO_REDO::CHANGED,
+                                                     m_appendUndo );
                         m_appendUndo = true;
                         static_cast<SCH_TEXT*>( label )->SetText( newName );
                     }
