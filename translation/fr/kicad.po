@@ -1,21 +1,19 @@
-# Julien FAUCHER <suzizecat@free.fr>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-04 19:09-0800\n"
-"PO-Revision-Date: 2020-11-05 15:45+0000\n"
-"Last-Translator: Julien FAUCHER <suzizecat@free.fr>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/kicad/"
-"master-source/fr/>\n"
-"Language: fr\n"
+"POT-Creation-Date: 2020-11-08 20:33+0100\n"
+"PO-Revision-Date: 2020-11-08 20:33+0100\n"
+"Last-Translator: \n"
+"Language-Team: jp-charras\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3.2-dev\n"
 "X-Poedit-Basepath: f:/kicad-launchpad/git_testing\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
+"X-Generator: Poedit 2.4.1\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
 "X-Poedit-SearchPath-1: eeschema\n"
@@ -163,91 +161,91 @@ msgstr "Le contour du CI n'est pas fermé:"
 msgid "Create tracks and vias"
 msgstr "Création des pistes et vias"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:702
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:705
 msgid "Create zones"
 msgstr "Création des zones"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:772
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:775
 msgid "Simplifying copper layers polygons"
 msgstr "Simplification des polygones sur couche cuivre"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:851
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:854
 msgid "Simplify holes contours"
 msgstr "Simplification des contours de trous"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:880
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:883
 msgid "Build Tech layers"
 msgstr "Construction des couches Tech"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1065
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1068
 msgid "Build BVH for holes and vias"
 msgstr "Construit BVH pour les trous et les vias"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:423
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:431
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
 msgstr ""
 "Votre version OpenGL n’est pas prise en charge. Le minimum requis est de 1,5"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:552
 #, c-format
 msgid "Render time %.0f ms ( %.1f fps)"
 msgstr "Temps de rendu %.0f ms ( %.1f fps)"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:734
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:757
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
 msgstr "Net %s\tNetClasse %s\tNom Pad %s"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:761
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:775
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:784
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:798
 #, c-format
 msgid "Net %s\tNetClass %s"
 msgstr "Net %s\tNetClasse %s"
 
-#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:497
+#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:500
 msgid "Load OpenGL: board"
 msgstr "Chargement OpenGL: circuit"
 
-#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:522
+#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:531
 msgid "Load OpenGL: holes and vias"
 msgstr "Chargement OpenGL: trous et vias"
 
-#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:614
+#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:615
 msgid "Load OpenGL: layers"
 msgstr "Chargement OpenGL: couches"
 
-#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:655
+#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:700
 msgid "Loading 3D models"
 msgstr "Chargement modèles 3D"
 
-#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:665
-#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:1036
+#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:710
+#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:1101
 #, c-format
 msgid "Reload time %.3f s"
 msgstr "Temps de rechargement %.3fs"
 
-#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:923
+#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:968
 #, c-format
 msgid "Loading %s"
 msgstr "Chargement  %s"
 
-#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.cpp:576
-#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:178
-#: common/widgets/footprint_preview_widget.cpp:108
+#: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.cpp:568
+#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:182
+#: common/widgets/footprint_preview_widget.cpp:104
 msgid "Loading..."
 msgstr "Chargement..."
 
-#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:358
+#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:362
 #, c-format
 msgid "Rendering time %.3f s"
 msgstr "Temps de rendu %.3f s"
 
-#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:413
+#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:417
 #, c-format
 msgid "Rendering: %.0f %%"
 msgstr "Rendu: %.0f %%"
 
-#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:917
+#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:921
 msgid "Rendering: Post processing shader"
 msgstr "Rendu: shader de post traitement"
 
@@ -1207,13 +1205,13 @@ msgid "DPI"
 msgstr "DPI"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:330
-#: eeschema/tools/sch_drawing_tools.cpp:383
+#: eeschema/tools/sch_drawing_tools.cpp:382
 #: pagelayout_editor/pl_editor_frame.cpp:848
 msgid "Choose Image"
 msgstr "Sélection Image"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:331
-#: eeschema/tools/sch_drawing_tools.cpp:384
+#: eeschema/tools/sch_drawing_tools.cpp:383
 #: pagelayout_editor/pl_editor_frame.cpp:849
 msgid "Image Files"
 msgstr "Fichiers Image"
@@ -1576,8 +1574,8 @@ msgstr "Infos"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:355
 #: pcbnew/footprint_libraries_utils.cpp:443
-#: pcbnew/footprint_libraries_utils.cpp:966 pcbnew/router/router_tool.cpp:1285
-#: pcbnew/router/router_tool.cpp:1474 pcbnew/router/router_tool.cpp:1654
+#: pcbnew/footprint_libraries_utils.cpp:966 pcbnew/router/router_tool.cpp:1292
+#: pcbnew/router/router_tool.cpp:1481 pcbnew/router/router_tool.cpp:1661
 #: pcbnew/zone_filler.cpp:419
 msgid "Confirmation"
 msgstr "Confirmation"
@@ -1939,7 +1937,7 @@ msgstr "Variables d'Environnement"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:53
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:43
 #: eeschema/dialogs/panel_sym_lib_table.cpp:312
-#: eeschema/fields_grid_table.cpp:194 eeschema/lib_pin.cpp:1003
+#: eeschema/fields_grid_table.cpp:194 eeschema/lib_pin.cpp:981
 #: eeschema/lib_view_frame.cpp:359 eeschema/sch_component.cpp:1344
 #: eeschema/sch_component.cpp:1386 eeschema/sch_pin.cpp:178
 #: eeschema/symbol_editor/symbol_editor.cpp:1132
@@ -2721,7 +2719,7 @@ msgstr "Options Page..."
 msgid "MyLabel"
 msgstr "MyLabel"
 
-#: common/dialogs/eda_list_dialog.cpp:46 common/widgets/lib_tree.cpp:118
+#: common/dialogs/eda_list_dialog.cpp:46 common/widgets/lib_tree.cpp:119
 #: pcbnew/footprint_viewer_frame.cpp:141 pcbnew/footprint_viewer_frame.cpp:156
 msgid "Filter"
 msgstr "Filtre"
@@ -3739,7 +3737,7 @@ msgstr "Ecran"
 #: common/eda_item.cpp:261 eeschema/dialogs/dialog_fields_editor_global.cpp:986
 #: eeschema/sch_component.cpp:1373 pcbnew/class_pad.cpp:818
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:132 pcbnew/fp_shape.cpp:124
-#: pcbnew/fp_text.cpp:289 pcbnew/load_select_footprint.cpp:345
+#: pcbnew/fp_text.cpp:289 pcbnew/load_select_footprint.cpp:343
 msgid "Footprint"
 msgstr "Empreinte"
 
@@ -4076,7 +4074,7 @@ msgstr "Miroir"
 
 #: common/eda_text.cpp:665 eeschema/dialogs/dialog_lib_edit_text_base.cpp:84
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:44
-#: eeschema/lib_pin.cpp:1011 eeschema/sch_pin.cpp:186
+#: eeschema/lib_pin.cpp:989 eeschema/sch_pin.cpp:186
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:130
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:93
 msgid "Visible"
@@ -4241,11 +4239,11 @@ msgstr "Impossible d'ouvrir le fichier de config"
 msgid "Problems writing configuration file"
 msgstr "Problèmes d'écriture du fichier de configuration"
 
-#: common/footprint_info.cpp:107 cvpcb/cvpcb_mainframe.cpp:855
+#: common/footprint_info.cpp:100 cvpcb/cvpcb_mainframe.cpp:858
 msgid "Load Error"
 msgstr "Erreur de Chargement"
 
-#: common/footprint_info.cpp:109
+#: common/footprint_info.cpp:102
 msgid "Errors were encountered loading footprints:"
 msgstr "Erreurs trouvées lors du chargement des empreintes:"
 
@@ -5743,7 +5741,7 @@ msgid "Show 3D viewer window"
 msgstr "Afficher Visualisateur 3D"
 
 #: common/tool/actions.cpp:542 eeschema/lib_view_frame.cpp:102
-#: eeschema/lib_view_frame.cpp:897
+#: eeschema/lib_view_frame.cpp:896
 msgid "Symbol Library Browser"
 msgstr "Examinateur de Librairies de Symboles"
 
@@ -5946,15 +5944,15 @@ msgstr "\"%s\" n'est pas un identificateur de librairie valide."
 msgid "Library Identifier Validation Error"
 msgstr "Erreur de Validation d'Identificateur de Librairie"
 
-#: common/validators.cpp:347
+#: common/validators.cpp:356
 msgid "Invalid signal name"
 msgstr "Nom de signal invalide"
 
-#: common/validators.cpp:358
+#: common/validators.cpp:367
 msgid "Signal names cannot contain CR or LF characters"
 msgstr "Les noms de signaux ne peuvent pas contenir les caractères CR ou LF"
 
-#: common/validators.cpp:361
+#: common/validators.cpp:370
 msgid "Signal names cannot contain spaces"
 msgstr "Les noms de signaux ne peuvent pas contenir d'espace"
 
@@ -5962,12 +5960,12 @@ msgstr "Les noms de signaux ne peuvent pas contenir d'espace"
 msgid "Mirroring for Y axis is not supported yet"
 msgstr "Mise en miroir pour l’axe des Y n'est pas encore supporté"
 
-#: common/widgets/footprint_preview_widget.cpp:104
+#: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found"
 msgstr "Empreinte non trouvée"
 
-#: common/widgets/footprint_select_widget.cpp:80 cvpcb/cvpcb_mainframe.cpp:790
-#: pcbnew/footprint_edit_frame.cpp:768 pcbnew/load_select_footprint.cpp:207
+#: common/widgets/footprint_select_widget.cpp:80 cvpcb/cvpcb_mainframe.cpp:793
+#: pcbnew/footprint_edit_frame.cpp:768 pcbnew/load_select_footprint.cpp:205
 msgid "Loading Footprint Libraries"
 msgstr "Chargement Librairies d'Empreintes"
 
@@ -6109,12 +6107,12 @@ msgstr "Filtre:"
 msgid "Reset to Defaults"
 msgstr "Réinitialiser aux Défauts"
 
-#: common/widgets/unit_binder.cpp:195
+#: common/widgets/unit_binder.cpp:194
 #, c-format
 msgid "%s must be at least %s."
 msgstr "%s doit être au moins %s."
 
-#: common/widgets/unit_binder.cpp:209
+#: common/widgets/unit_binder.cpp:208
 #, c-format
 msgid "%s must be less than %s."
 msgstr "%s doit être inférieur à %s."
@@ -6409,28 +6407,28 @@ msgstr "Fichiers PNG"
 msgid "Jpeg file"
 msgstr "Fichier Jpeg"
 
-#: cvpcb/auto_associate.cpp:104
+#: cvpcb/auto_associate.cpp:105
 #, c-format
 msgid "Equivalence file \"%s\" could not be found in the default search paths."
 msgstr ""
 "Le fichier d'équivalence \"%s\" n'a pas pu être trouvé dans les chemins de "
 "recherche par défaut."
 
-#: cvpcb/auto_associate.cpp:125
+#: cvpcb/auto_associate.cpp:126
 #, c-format
 msgid "Error opening equivalence file \"%s\"."
 msgstr "Erreur lors de l'ouverture du fichier d'équivalence \"%s\"."
 
-#: cvpcb/auto_associate.cpp:176
+#: cvpcb/auto_associate.cpp:178
 msgid "Equivalence File Load Error"
 msgstr "Erreur de chargement de fichier équivalence"
 
-#: cvpcb/auto_associate.cpp:184
+#: cvpcb/auto_associate.cpp:185
 #, c-format
-msgid "%lu footprint/cmp equivalences found."
-msgstr "%lu empr/cmp équivalences trouvées."
+msgid "%lu footprint/symbol equivalences found."
+msgstr "%lu équivalences empreintes/symboles trouvées."
 
-#: cvpcb/auto_associate.cpp:259
+#: cvpcb/auto_associate.cpp:261
 #, c-format
 msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
@@ -6439,7 +6437,7 @@ msgstr ""
 "Composant %s: Empreinte %s non trouvée dans les librairies d'empreintes du "
 "projet."
 
-#: cvpcb/auto_associate.cpp:303
+#: cvpcb/auto_associate.cpp:306
 msgid "CvPcb Warning"
 msgstr "Avertissement CvPcb"
 
@@ -6494,72 +6492,72 @@ msgstr "Appliquer, Sauver Schematique && Continuer"
 msgid "Symbol to footprint changes are unsaved"
 msgstr "Les association symboles/empreintes ne sont pas sauvées"
 
-#: cvpcb/cvpcb_mainframe.cpp:389
+#: cvpcb/cvpcb_mainframe.cpp:387
 msgid "Symbol to Footprint links have been modified. Save changes?"
 msgstr ""
 "Les liens symboles/empreintes ont été modifiés. Sauver les changements?"
 
-#: cvpcb/cvpcb_mainframe.cpp:524 cvpcb/tools/cvpcb_association_tool.cpp:218
+#: cvpcb/cvpcb_mainframe.cpp:525 cvpcb/tools/cvpcb_association_tool.cpp:218
 #, c-format
 msgid "\"%s\" is not a valid footprint."
 msgstr "\"%s\" n’est pas une empreinte valide."
 
-#: cvpcb/cvpcb_mainframe.cpp:676 eeschema/generate_alias_info.cpp:39
+#: cvpcb/cvpcb_mainframe.cpp:679 eeschema/generate_alias_info.cpp:39
 #: eeschema/lib_view_frame.cpp:362 eeschema/sch_component.cpp:1378
 #: eeschema/symbol_editor/symbol_editor.cpp:1161
 #: pcbnew/generate_footprint_info.cpp:36
 msgid "Keywords"
 msgstr "Mots Clés"
 
-#: cvpcb/cvpcb_mainframe.cpp:692
+#: cvpcb/cvpcb_mainframe.cpp:695
 msgid "Pin Count"
 msgstr "Nombre de Pin"
 
-#: cvpcb/cvpcb_mainframe.cpp:705 eeschema/sch_component.cpp:1359
+#: cvpcb/cvpcb_mainframe.cpp:708 eeschema/sch_component.cpp:1359
 #: eeschema/sch_component.cpp:1364 eeschema/sch_component.cpp:1392
 #: eeschema/sch_component.cpp:1397 eeschema/symbol_editor/symbol_editor.cpp:97
 #: pcbnew/tools/pcbnew_control.cpp:1086
 msgid "Library"
 msgstr "Librairie"
 
-#: cvpcb/cvpcb_mainframe.cpp:718
+#: cvpcb/cvpcb_mainframe.cpp:721
 msgid "Search Text"
 msgstr "Rechercher Texte"
 
-#: cvpcb/cvpcb_mainframe.cpp:722
+#: cvpcb/cvpcb_mainframe.cpp:725
 msgid "No Filtering"
 msgstr "Pas de Filtrage"
 
-#: cvpcb/cvpcb_mainframe.cpp:724
+#: cvpcb/cvpcb_mainframe.cpp:727
 #, c-format
 msgid "Filtered by %s"
 msgstr "Filtré par %s"
 
-#: cvpcb/cvpcb_mainframe.cpp:738
+#: cvpcb/cvpcb_mainframe.cpp:741
 #, c-format
 msgid "Description: %s;  Keywords: %s"
 msgstr "Description: %s; Mots Clé: %s"
 
-#: cvpcb/cvpcb_mainframe.cpp:770
+#: cvpcb/cvpcb_mainframe.cpp:773
 #, c-format
 msgid "Library location: %s"
 msgstr "Emplacement librairie: %s"
 
-#: cvpcb/cvpcb_mainframe.cpp:772
+#: cvpcb/cvpcb_mainframe.cpp:775
 msgid "Library location: unknown"
 msgstr "Emplacement de la librairie : inconnu"
 
-#: cvpcb/cvpcb_mainframe.cpp:785
+#: cvpcb/cvpcb_mainframe.cpp:788
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
 "Aucune librairie d'empreintes PCB listée dans la table de librairie courante."
 
-#: cvpcb/cvpcb_mainframe.cpp:786
+#: cvpcb/cvpcb_mainframe.cpp:789
 msgid "Configuration Error"
 msgstr "Erreur de Configuration"
 
-#: cvpcb/cvpcb_mainframe.cpp:853
+#: cvpcb/cvpcb_mainframe.cpp:856
 #, c-format
 msgid ""
 "Error loading schematic.\n"
@@ -6688,29 +6686,29 @@ msgstr "Conflits Attribution Empreinte"
 msgid "Footprint Viewer"
 msgstr "Visualisateur d'Empreintes"
 
-#: cvpcb/display_footprints_frame.cpp:383
+#: cvpcb/display_footprints_frame.cpp:382
 #, c-format
 msgid "Footprint ID \"%s\" is not valid."
 msgstr "Identificateur d'empreinte \"%s\" non valide."
 
-#: cvpcb/display_footprints_frame.cpp:398
+#: cvpcb/display_footprints_frame.cpp:397
 #, c-format
 msgid "Library \"%s\" is not in the footprint library table."
 msgstr ""
 "La librairie \"%s\" n'est pas dans la table des librairies d'empreintes."
 
-#: cvpcb/display_footprints_frame.cpp:407
-#: cvpcb/display_footprints_frame.cpp:429
+#: cvpcb/display_footprints_frame.cpp:406
+#: cvpcb/display_footprints_frame.cpp:428
 #, c-format
 msgid "Footprint \"%s\" not found."
 msgstr "Empreinte \"%s\" non trouvée."
 
-#: cvpcb/display_footprints_frame.cpp:459 pcbnew/class_module.cpp:782
+#: cvpcb/display_footprints_frame.cpp:458 pcbnew/class_module.cpp:782
 #, c-format
 msgid "Footprint: %s"
 msgstr "Empreinte: %s"
 
-#: cvpcb/display_footprints_frame.cpp:470
+#: cvpcb/display_footprints_frame.cpp:469
 #, c-format
 msgid "Lib: %s"
 msgstr "Lib: %s"
@@ -6929,7 +6927,7 @@ msgstr ""
 
 #: eeschema/class_library.cpp:495
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:864
-#: eeschema/symbol_tree_model_adapter.cpp:64
+#: eeschema/symbol_tree_model_adapter.cpp:65
 msgid "Loading Symbol Libraries"
 msgstr "Chargement des Librairies de Symboles"
 
@@ -7957,7 +7955,7 @@ msgstr "Bas"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:58
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
-#: eeschema/fields_grid_table.cpp:202 eeschema/lib_pin.cpp:1018
+#: eeschema/fields_grid_table.cpp:202 eeschema/lib_pin.cpp:996
 #: eeschema/sch_pin.cpp:193 eeschema/sch_text.cpp:648
 #: pcbnew/class_module.cpp:1835 pcbnew/class_pad.cpp:1388
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:60
@@ -7973,8 +7971,8 @@ msgstr "Gras +  italique"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:126
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:115
-#: eeschema/lib_field.cpp:433 eeschema/lib_pin.cpp:1008
-#: eeschema/sch_pin.cpp:183 eeschema/sch_text.cpp:659
+#: eeschema/lib_field.cpp:433 eeschema/lib_pin.cpp:986 eeschema/sch_pin.cpp:183
+#: eeschema/sch_text.cpp:659
 msgid "Style"
 msgstr "Style"
 
@@ -8613,7 +8611,7 @@ msgstr "Propriétés de l'Élément Graphique"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:62
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:44
-#: eeschema/dialogs/dialog_symbol_properties.cpp:134 eeschema/lib_pin.cpp:1004
+#: eeschema/dialogs/dialog_symbol_properties.cpp:134 eeschema/lib_pin.cpp:982
 #: eeschema/sch_pin.cpp:179
 msgid "Number"
 msgstr "Numéro"
@@ -8648,8 +8646,8 @@ msgstr "Taille Texte Nom"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:69
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:51
-#: eeschema/lib_pin.cpp:1015 eeschema/sch_pin.cpp:190
-#: pcbnew/class_track.cpp:627 pcbnew/pcb_shape.cpp:500 pcbnew/pcb_shape.cpp:525
+#: eeschema/lib_pin.cpp:993 eeschema/sch_pin.cpp:190 pcbnew/class_track.cpp:627
+#: pcbnew/pcb_shape.cpp:500 pcbnew/pcb_shape.cpp:525
 msgid "Length"
 msgstr "Longueur"
 
@@ -11987,21 +11985,21 @@ msgstr "Alias de"
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: eeschema/getpart.cpp:133 pcbnew/load_select_footprint.cpp:232
+#: eeschema/getpart.cpp:138 pcbnew/load_select_footprint.cpp:230
 msgid "Recently Used"
 msgstr "Récemment Utilisés"
 
-#: eeschema/getpart.cpp:148
+#: eeschema/getpart.cpp:152
 #, c-format
 msgid "Choose Power Symbol (%d items loaded)"
 msgstr "Sélection Symbole d'Alimentation (%d items chargés)"
 
-#: eeschema/getpart.cpp:150 eeschema/lib_view_frame.cpp:832
+#: eeschema/getpart.cpp:154 eeschema/lib_view_frame.cpp:831
 #, c-format
 msgid "Choose Symbol (%d items loaded)"
 msgstr "Sélection Composant (%d items chargés)"
 
-#: eeschema/getpart.cpp:244
+#: eeschema/getpart.cpp:248
 #, c-format
 msgid "No alternate body style found for symbol \"%s\" in library \"%s\"."
 msgstr ""
@@ -12048,7 +12046,7 @@ msgstr "Rayon"
 msgid "Circle, radius %s"
 msgstr "Cercle, rayon %s"
 
-#: eeschema/lib_item.cpp:54 eeschema/lib_pin.cpp:1005 eeschema/sch_pin.cpp:160
+#: eeschema/lib_item.cpp:54 eeschema/lib_pin.cpp:983 eeschema/sch_pin.cpp:160
 #: eeschema/sch_pin.cpp:180 eeschema/sch_text.cpp:665
 #: eeschema/symbol_editor/symbol_editor.cpp:1159
 #: gerbview/gerber_draw_item.cpp:667
@@ -12073,35 +12071,35 @@ msgstr "oui"
 msgid "Converted"
 msgstr "Converti"
 
-#: eeschema/lib_pin.cpp:1010 eeschema/sch_pin.cpp:185
+#: eeschema/lib_pin.cpp:988 eeschema/sch_pin.cpp:185
 #: gerbview/gerber_draw_item.cpp:709 gerbview/gerber_draw_item.cpp:710
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:164
 #: pcbnew/fp_text.cpp:300 pcbnew/fp_text.cpp:308 pcbnew/pcb_text.cpp:119
 msgid "Yes"
 msgstr "Oui"
 
-#: eeschema/lib_pin.cpp:1010 eeschema/sch_pin.cpp:185
+#: eeschema/lib_pin.cpp:988 eeschema/sch_pin.cpp:185
 #: gerbview/gerber_draw_item.cpp:709 gerbview/gerber_draw_item.cpp:710
 #: pcbnew/fp_text.cpp:298 pcbnew/fp_text.cpp:310 pcbnew/pcb_text.cpp:117
 msgid "No"
 msgstr "Non"
 
-#: eeschema/lib_pin.cpp:1025 eeschema/sch_pin.cpp:196
+#: eeschema/lib_pin.cpp:1003 eeschema/sch_pin.cpp:196
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1465
 msgid "Pos X"
 msgstr "Pos X"
 
-#: eeschema/lib_pin.cpp:1028 eeschema/sch_pin.cpp:199
+#: eeschema/lib_pin.cpp:1006 eeschema/sch_pin.cpp:199
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1466
 msgid "Pos Y"
 msgstr "Pos Y"
 
-#: eeschema/lib_pin.cpp:1161
+#: eeschema/lib_pin.cpp:1139
 #, c-format
 msgid "Pin %s [%s, %s, %s]"
 msgstr "Pin %s [%s, %s, %s]"
 
-#: eeschema/lib_pin.cpp:1169
+#: eeschema/lib_pin.cpp:1147
 #, c-format
 msgid "Pin %s [%s, %s]"
 msgstr "Pin %s [%s, %s]"
@@ -12167,7 +12165,7 @@ msgstr "Librairie de symboles non activée."
 msgid "Unit %c"
 msgstr "Unité %c"
 
-#: eeschema/lib_view_frame.cpp:898 pcbnew/footprint_viewer_frame.cpp:985
+#: eeschema/lib_view_frame.cpp:897 pcbnew/footprint_viewer_frame.cpp:985
 msgid "no library selected"
 msgstr "pas de librairie sélectionnée"
 
@@ -14173,7 +14171,7 @@ msgid "Could not open the library file."
 msgstr "Le fichier librairie n'a pas pu être ouvert."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:869
-#: eeschema/symbol_tree_model_adapter.cpp:74
+#: eeschema/symbol_tree_model_adapter.cpp:75
 #, c-format
 msgid "Loading library \"%s\""
 msgstr "Chargement librairie  \"%s\""
@@ -14509,7 +14507,7 @@ msgstr ""
 "Nom logique de librairie dupliqué \"%s\" dans la table des librairies de "
 "symboles ligne %d"
 
-#: eeschema/symbol_tree_model_adapter.cpp:105
+#: eeschema/symbol_tree_model_adapter.cpp:106
 #, c-format
 msgid ""
 "Error loading symbol library %s.\n"
@@ -14520,7 +14518,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/symbol_tree_synchronizing_adapter.cpp:249
+#: eeschema/symbol_tree_synchronizing_adapter.cpp:251
 msgid "(failed to load)"
 msgstr "(erreur de chargement) "
 
@@ -15661,18 +15659,18 @@ msgstr ""
 "\n"
 "Numérotation non réalisée!\n"
 
-#: eeschema/tools/sch_drawing_tools.cpp:399
+#: eeschema/tools/sch_drawing_tools.cpp:398
 #: pagelayout_editor/pl_editor_frame.cpp:858
 #: pagelayout_editor/pl_editor_frame.cpp:866
 #, c-format
 msgid "Couldn't load image from \"%s\""
 msgstr "Impossible de charger l’image depuis \"%s\""
 
-#: eeschema/tools/sch_drawing_tools.cpp:900
+#: eeschema/tools/sch_drawing_tools.cpp:899
 msgid "Click over a sheet."
 msgstr "Cliquez sur une feuille."
 
-#: eeschema/tools/sch_drawing_tools.cpp:913
+#: eeschema/tools/sch_drawing_tools.cpp:912
 msgid "No new hierarchical labels found."
 msgstr "Pas de nouveau label hiérarchique trouvé."
 
@@ -20319,17 +20317,17 @@ msgstr "Convertir les lignes en rectangle"
 msgid "Unknown cleanup action"
 msgstr "Action de nettoyage inconnue"
 
-#: pcbnew/convert_drawsegment_list_to_polygon.cpp:514
-#: pcbnew/convert_drawsegment_list_to_polygon.cpp:721
+#: pcbnew/convert_drawsegment_list_to_polygon.cpp:524
+#: pcbnew/convert_drawsegment_list_to_polygon.cpp:736
 #, c-format
 msgid "Unable to find edge with an endpoint of (%s, %s)."
 msgstr "Impossible de trouver un contour avec un point terminal à (%s, %s)."
 
-#: pcbnew/convert_drawsegment_list_to_polygon.cpp:811
+#: pcbnew/convert_drawsegment_list_to_polygon.cpp:826
 msgid "No edges found on Edge.Cuts layer."
 msgstr "Aucun contour trouvé sur couche Contour"
 
-#: pcbnew/convert_drawsegment_list_to_polygon.cpp:1037
+#: pcbnew/convert_drawsegment_list_to_polygon.cpp:1052
 msgid "No footprint loaded"
 msgstr "Aucune empreinte chargée"
 
@@ -28637,22 +28635,22 @@ msgstr "Activer ceci pour activer la visibilité"
 msgid "Left double click or middle click for color change"
 msgstr "Double-clic gauche ou clic milieu pour changer les couleurs"
 
-#: pcbnew/load_select_footprint.cpp:242
+#: pcbnew/load_select_footprint.cpp:240
 #, c-format
 msgid "Choose Footprint (%d items loaded)"
 msgstr "Sélection Empreinte (%d items chargés)"
 
-#: pcbnew/load_select_footprint.cpp:341
+#: pcbnew/load_select_footprint.cpp:339
 #, c-format
 msgid "Footprints [%u items]"
 msgstr "Empreintes [%u items]"
 
-#: pcbnew/load_select_footprint.cpp:405
+#: pcbnew/load_select_footprint.cpp:403
 #, c-format
 msgid "Footprint \"%s\" saved"
 msgstr "Empreinte \"%s\" sauvée"
 
-#: pcbnew/load_select_footprint.cpp:415
+#: pcbnew/load_select_footprint.cpp:413
 #, c-format
 msgid "Footprint library \"%s\" saved as \"%s\"."
 msgstr "Librairie d'empreintes \"%s\" sauvée sous \"%s\"."
@@ -30394,7 +30392,7 @@ msgstr ""
 "Cette zone ne peut pas être gérée par l'outil de tracé de piste.\n"
 "SVP vérifiez que ce n'est pas un polygone avec cotés se croisant."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1480 pcbnew/router/router_tool.cpp:421
+#: pcbnew/router/pns_kicad_iface.cpp:1466 pcbnew/router/router_tool.cpp:421
 msgid "Interactive Router"
 msgstr "Routeur Interactif"
 
@@ -30637,20 +30635,20 @@ msgstr ""
 "Les microvias peuvent être placées seulement entre une couche extérieure (F."
 "Cu/B.Cu) et celle adjacente."
 
-#: pcbnew/router/router_tool.cpp:917
+#: pcbnew/router/router_tool.cpp:924
 msgid "Tracks on Copper layers only"
 msgstr "Pistes sur Couches Cuivre seulement"
 
-#: pcbnew/router/router_tool.cpp:1285 pcbnew/router/router_tool.cpp:1474
-#: pcbnew/router/router_tool.cpp:1654
+#: pcbnew/router/router_tool.cpp:1292 pcbnew/router/router_tool.cpp:1481
+#: pcbnew/router/router_tool.cpp:1661
 msgid "The selected item is locked."
 msgstr "L'élément sélectionné est verrouillé."
 
-#: pcbnew/router/router_tool.cpp:1287 pcbnew/router/router_tool.cpp:1476
+#: pcbnew/router/router_tool.cpp:1294 pcbnew/router/router_tool.cpp:1483
 msgid "Drag Anyway"
 msgstr "Dragger de Toute Façon"
 
-#: pcbnew/router/router_tool.cpp:1656 pcbnew/tools/pcb_actions.cpp:1312
+#: pcbnew/router/router_tool.cpp:1663 pcbnew/tools/pcb_actions.cpp:1312
 #: pcbnew/tools/pcb_actions.cpp:1318
 msgid "Break Track"
 msgstr "Briser Piste"
@@ -30806,23 +30804,23 @@ msgstr "Via: utiliser la taille des netclasses"
 msgid "Via: %s (%s)"
 msgstr "Via: %s (%s)"
 
-#: pcbnew/tools/convert_tool.cpp:70
+#: pcbnew/tools/convert_tool.cpp:72
 msgid "Convert..."
 msgstr "Convertir..."
 
-#: pcbnew/tools/convert_tool.cpp:199
+#: pcbnew/tools/convert_tool.cpp:200
 msgid "Convert shapes to polygon"
 msgstr "Convertir les formes en zone"
 
-#: pcbnew/tools/convert_tool.cpp:231
+#: pcbnew/tools/convert_tool.cpp:232
 msgid "Convert shapes to zone"
 msgstr "Convertir les formes en zone"
 
-#: pcbnew/tools/convert_tool.cpp:554
+#: pcbnew/tools/convert_tool.cpp:555
 msgid "Convert polygons to lines"
 msgstr "Convertir les polygones en lignes"
 
-#: pcbnew/tools/convert_tool.cpp:642
+#: pcbnew/tools/convert_tool.cpp:645
 msgid "Create arc from line segment"
 msgstr "Créer arc à partir du segment"
 
@@ -30830,7 +30828,7 @@ msgstr "Créer arc à partir du segment"
 msgid "Select Via Size"
 msgstr "Sélectionner Taille Via"
 
-#: pcbnew/tools/drawing_tool.cpp:262 pcbnew/tools/drawing_tool.cpp:1434
+#: pcbnew/tools/drawing_tool.cpp:262 pcbnew/tools/drawing_tool.cpp:1436
 msgid "Draw a line segment"
 msgstr "Tracer une ligne"
 
@@ -30846,35 +30844,35 @@ msgstr "Tracer un cercle"
 msgid "Draw an arc"
 msgstr "Tracer un arc"
 
-#: pcbnew/tools/drawing_tool.cpp:579
+#: pcbnew/tools/drawing_tool.cpp:581
 msgid "Place a text"
 msgstr "Placer un texte"
 
-#: pcbnew/tools/drawing_tool.cpp:860
+#: pcbnew/tools/drawing_tool.cpp:862
 msgid "Draw a leader"
 msgstr "Tracer un guide"
 
-#: pcbnew/tools/drawing_tool.cpp:873
+#: pcbnew/tools/drawing_tool.cpp:875
 msgid "Draw a dimension"
 msgstr "Tracer une cote"
 
-#: pcbnew/tools/drawing_tool.cpp:1002
+#: pcbnew/tools/drawing_tool.cpp:1004
 msgid "No graphic items found in file to import"
 msgstr "Pas d'éléments graphiques trouvés dans le fichier à importer"
 
-#: pcbnew/tools/drawing_tool.cpp:1049 pcbnew/tools/drawing_tool.cpp:1142
+#: pcbnew/tools/drawing_tool.cpp:1051 pcbnew/tools/drawing_tool.cpp:1144
 msgid "Place a DXF_SVG drawing"
 msgstr "Placer un dessin DXF_SVG"
 
-#: pcbnew/tools/drawing_tool.cpp:1206
+#: pcbnew/tools/drawing_tool.cpp:1208
 msgid "Move the footprint reference anchor"
 msgstr "Déplacer l'ancre de référence de l'empreinte"
 
-#: pcbnew/tools/drawing_tool.cpp:1854
+#: pcbnew/tools/drawing_tool.cpp:1856
 msgid "Self-intersecting polygons are not allowed"
 msgstr "Les polygones auto intersectants ne sont pas autorisés"
 
-#: pcbnew/tools/drawing_tool.cpp:2348
+#: pcbnew/tools/drawing_tool.cpp:2350
 msgid "Place via"
 msgstr "Place via"
 
