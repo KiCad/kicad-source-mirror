@@ -276,12 +276,13 @@ void CBVHCONTAINER2D::BuildBVH()
     if( m_isInitialized )
         destroy();
 
+    m_isInitialized = true;
+
     if( m_objects.empty() )
     {
         return;
     }
 
-    m_isInitialized = true;
     m_Tree = new BVH_CONTAINER_NODE_2D;
 
     m_elements_to_delete.push_back( m_Tree );

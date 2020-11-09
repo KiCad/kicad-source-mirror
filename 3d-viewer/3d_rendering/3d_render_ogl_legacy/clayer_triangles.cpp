@@ -224,7 +224,6 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const std::vector< SFVEC2F > &aCont
             if( aThroughHoles && aThroughHoles->IntersectAny( RAYSEG2D( v0, v1 ) ) )
                 continue;
             else
-            //if( aThroughHoles && aThroughHoles->IntersectAny( RAYSEG2D( v0, v1 ) ) )
             {
                 std::lock_guard<std::mutex> lock( m_middle_layer_lock );
                 m_layer_middle_contourns_quads->AddQuad( SFVEC3F( v0.x, v0.y, zTop ),
