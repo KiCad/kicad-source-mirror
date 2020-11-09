@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-04 19:09-0800\n"
 "PO-Revision-Date: 2020-11-10 06:08+0000\n"
-"Last-Translator: Iñigo Figuero Sanz <news@imagedworld.com>\n"
+"Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -17500,7 +17500,7 @@ msgstr "Diseño de PCB"
 #: pagelayout_editor/design_inspector.cpp:227
 #, c-format
 msgid "Size: %.1fx%.1fmm"
-msgstr ""
+msgstr "Tamaño: %.1fx%.1fmm"
 
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:230
@@ -17956,6 +17956,7 @@ msgid "Attenuation more than %f dB"
 msgstr "Atenuación mayor de %f dB"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
+#, fuzzy
 msgid ""
 "### Bridged tee attenuator:\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -17967,6 +17968,15 @@ msgid ""
 "* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 msgstr ""
+"### Atenuador en T con puente:\n"
+"__Zin__ impedancia de entrada deseada en &#x2126;<br>\n"
+"__Zout__ impedancia de salida deseada<br>\n"
+"__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
+"\n"
+"* __a__ atenuación en dB\n"
+"* __L = 10 <sup> a / 20 </sup> __ (la pérdida)<br><br>\n"
+"* ___R1 = Z<sub>0</sub> \\ * (L - 1) ___\n"
+"* ___R2 = Z<sub>0</sub> / (L - 1) ___"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
 msgid ""
