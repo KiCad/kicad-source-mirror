@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-04 19:09-0800\n"
-"PO-Revision-Date: 2020-11-10 06:08+0000\n"
+"PO-Revision-Date: 2020-11-10 23:04+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -2940,6 +2940,8 @@ msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
 msgstr ""
+"Pokud není vybráno, klávesové zkratky okamžitě provedou akci, i když "
+"příslušný nástroj nebyl dříve vybrán."
 
 #: common/dialogs/panel_common_settings_base.cpp:209
 msgid "Project Backup"
@@ -2964,6 +2966,8 @@ msgid ""
 "Create backups when the auto save feature is enabled.  If not checked, "
 "backups will only be created when you manually save a file."
 msgstr ""
+"Když je povolena funkce automatického ukládání, vytvářejte zálohy.  Pokud "
+"nejsou zaškrtnuty, zálohy se vytvoří, až když ručně uložíte soubor."
 
 #: common/dialogs/panel_common_settings_base.cpp:226
 msgid "Maximum backups to keep:"
@@ -2971,11 +2975,11 @@ msgstr "Maximální počet záloh, které je třeba zachovat:"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
 msgid "How many backup files total to keep (set to 0 for no limit)"
-msgstr ""
+msgstr "Kolik záložních souborů si ponechat (nastaveno na 0 bez omezení)"
 
 #: common/dialogs/panel_common_settings_base.cpp:235
 msgid "Maximum backups per day:"
-msgstr "Max. počet záloh za den:"
+msgstr "Maximální počet záloh za den:"
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "How many backup files to keep each day (set to 0 for no limit)"
