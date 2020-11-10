@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -359,7 +359,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_holeShapeLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Hole shape:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_holeShapeLabel->Wrap( -1 );
-	gbSizerHole->Add( m_holeShapeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxLEFT, 5 );
+	gbSizerHole->Add( m_holeShapeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	wxString m_holeShapeCtrlChoices[] = { _("Circular"), _("Oval") };
 	int m_holeShapeCtrlNChoices = sizeof( m_holeShapeCtrlChoices ) / sizeof( wxString );
@@ -452,7 +452,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizer34 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_padToDieOpt = new wxCheckBox( m_panelGeneral, wxID_ANY, _("Specify pad to die length"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer34->Add( m_padToDieOpt, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
+	bSizer34->Add( m_padToDieOpt, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_padToDieLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _(":"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_padToDieLabel->Wrap( -1 );
@@ -462,11 +462,11 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizerPadToDie->Add( bSizer34, 0, wxEXPAND|wxRIGHT, 5 );
 
 	m_padToDieCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerPadToDie->Add( m_padToDieCtrl, 0, wxEXPAND|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxTOP, 5 );
+	fgSizerPadToDie->Add( m_padToDieCtrl, 0, wxEXPAND|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 	m_padToDieUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_padToDieUnits->Wrap( -1 );
-	fgSizerPadToDie->Add( m_padToDieUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT|wxTOP, 5 );
+	fgSizerPadToDie->Add( m_padToDieUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT, 5 );
 
 
 	m_LeftBoxSizer->Add( fgSizerPadToDie, 0, wxEXPAND, 5 );

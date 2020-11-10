@@ -14,6 +14,7 @@
         <property name="file">dialog_pad_properties_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_pad_properties_base</property>
@@ -25,6 +26,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">1</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -4221,7 +4223,7 @@
                                                                 <property name="border">5</property>
                                                                 <property name="colspan">1</property>
                                                                 <property name="column">0</property>
-                                                                <property name="flag">wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
                                                                 <property name="row">0</property>
                                                                 <property name="rowspan">1</property>
                                                                 <object class="wxStaticText" expanded="0">
@@ -5367,7 +5369,7 @@
                                                                     <property name="permission">none</property>
                                                                     <object class="sizeritem" expanded="0">
                                                                         <property name="border">5</property>
-                                                                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT</property>
+                                                                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
                                                                         <property name="proportion">0</property>
                                                                         <object class="wxCheckBox" expanded="0">
                                                                             <property name="BottomDockable">1</property>
@@ -5495,7 +5497,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxTOP</property>
+                                                                <property name="flag">wxEXPAND|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxTextCtrl" expanded="0">
                                                                     <property name="BottomDockable">1</property>
@@ -5559,7 +5561,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT|wxTOP</property>
+                                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN|wxRIGHT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxStaticText" expanded="0">
                                                                     <property name="BottomDockable">1</property>
@@ -9227,6 +9229,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -9300,6 +9303,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -9373,6 +9377,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -9446,6 +9451,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -9529,6 +9535,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -14448,6 +14455,7 @@
                                                 <property name="aui_name"></property>
                                                 <property name="aui_position"></property>
                                                 <property name="aui_row"></property>
+                                                <property name="auth_needed">0</property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="bitmap"></property>
@@ -14531,6 +14539,7 @@
                                                 <property name="aui_name"></property>
                                                 <property name="aui_position"></property>
                                                 <property name="aui_row"></property>
+                                                <property name="auth_needed">0</property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="bitmap"></property>
