@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,7 +18,7 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 
 	wxString m_modeChoices[] = { _("Highlight collisions"), _("Shove"), _("Walk around") };
 	int m_modeNChoices = sizeof( m_modeChoices ) / sizeof( wxString );
-	m_mode = new wxRadioBox( this, wxID_ANY, _("Mode:"), wxDefaultPosition, wxDefaultSize, m_modeNChoices, m_modeChoices, 1, wxRA_SPECIFY_COLS );
+	m_mode = new wxRadioBox( this, wxID_ANY, _("Mode"), wxDefaultPosition, wxDefaultSize, m_modeNChoices, m_modeChoices, 1, wxRA_SPECIFY_COLS );
 	m_mode->SetSelection( 0 );
 	bMainSizer->Add( m_mode, 0, wxALL|wxEXPAND, 5 );
 
@@ -84,7 +84,7 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bOptions->Add( m_suggestEnding, 0, wxALL, 5 );
 
 	m_optimizeDraggedTrack = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Optimize track being dragged"), wxDefaultPosition, wxDefaultSize, 0 );
-	bOptions->Add( m_optimizeDraggedTrack, 0, wxALL, 5 );
+	bOptions->Add( m_optimizeDraggedTrack, 0, wxLEFT|wxRIGHT, 5 );
 
 	m_staticline1 = new wxStaticLine( bOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bOptions->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
