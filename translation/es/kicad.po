@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-04 19:09-0800\n"
-"PO-Revision-Date: 2020-11-10 06:08+0000\n"
+"PO-Revision-Date: 2020-11-10 23:04+0000\n"
 "Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -17992,6 +17992,17 @@ msgid ""
 "* ___R1 = 1/( A/Zin - 1/R2 )___\n"
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 msgstr ""
+"### Atenuador Pi:\n"
+"__Zin__ impedancia de entrada deseada en &#x2126;<br>\n"
+"__Zout__ impedancia de salida deseada<br>\n"
+"__Zin = Zout__<br><br>\n"
+"\n"
+"* __a__ atenuación en dB\n"
+"* __L = 10<sup>a/20</sup> __ (la pérdida)\n"
+"* __A = (L + 1)/(L - 1)__<br><br>\n"
+"* ___R2 = (L- 1)/2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
+"* ___R1 = 1/( A/Zin - 1/R2 )___\n"
+"* ___R3 = 1/ (A/Zout - 1/R2 )___"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
 msgid ""
@@ -18003,6 +18014,13 @@ msgid ""
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 msgstr ""
+"### Atenuador Dividido\n"
+"### La atenuación es de 6dB\n"
+"___Z<sub>in</sub>___ impedancia de entrada deseada en &#x2126;<br>\n"
+"___Z<sub>out</sub>___ impedancia de salida deseada &#x2126;<br>\n"
+"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"\n"
+"___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
 msgid ""
@@ -18018,6 +18036,17 @@ msgid ""
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 msgstr ""
+"### Atenuador en T:\n"
+"__Zin__ impedancia de entrada deseada en &#x2126;<br>\n"
+"__Zout__ impedancia de salida deseada<br>\n"
+"__Zin = Zout__<br><br>\n"
+"\n"
+"* __a__atenuación en dB \n"
+"* __L = 10<sup>a/20</sup>__ (la pérdida)\n"
+"* ___A = (L + 1)/(L - 1)___<br><br>\n"
+"* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> )/(L - 1)___\n"
+"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
+"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 
 #: pcb_calculator/datafile_read_write.cpp:73
 msgid "Data file error."
@@ -18081,7 +18110,7 @@ msgstr "R1:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:487
 #: pcb_calculator/widgets/unit_selector.cpp:155
 msgid "kOhm"
-msgstr ""
+msgstr "kΩ"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:104
 msgid "R2:"
@@ -18256,7 +18285,7 @@ msgstr "Atenuadores RF"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:431
 msgid "E-Series Resistor Calculator"
-msgstr ""
+msgstr "Calculadora de resistencias de series E"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:450
 #, fuzzy
@@ -18325,7 +18354,7 @@ msgstr "Resolución:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:609
 msgid "E-Series"
-msgstr ""
+msgstr "Series E"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:614
 msgid "10% / 5%"
@@ -18516,6 +18545,8 @@ msgstr "Longitud de pin:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1150
 msgid "Via length is the board thickness for through hole vias"
 msgstr ""
+"La longitud de la vía es el grosor de la placa para las vías del orificio "
+"pasante"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1162
 #, fuzzy
@@ -18524,7 +18555,7 @@ msgstr "Diámetro de vía:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1164
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr ""
+msgstr "Diámetro del pad que rodea la vía (anillo anular)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1176
 #, fuzzy
@@ -18533,7 +18564,7 @@ msgstr "Taladro de vía > diámetro"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1178
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr ""
+msgstr "Diámetro del orificio de separación en los planos de tierra"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1190
 msgid "Z0:"
@@ -18546,7 +18577,7 @@ msgstr "Impedancia característica"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1204
 msgid "Applied current:"
-msgstr ""
+msgstr "Corriente aplicada:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1215
 #, fuzzy
@@ -18565,7 +18596,7 @@ msgstr "Aumento de temperatura:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1241
 msgid "Maximum acceptable rise in temperature"
-msgstr ""
+msgstr "Aumento de temperatura máximo aceptable"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1248
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1477
@@ -18579,7 +18610,7 @@ msgstr "Tiempo de subida:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1254
 msgid "Pulse rise time to calculate reactance"
-msgstr ""
+msgstr "Tiempo de subida del impulso para calcular la reactancia"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1261
 #, fuzzy
@@ -18635,7 +18666,7 @@ msgstr "Márgen térmico:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1331
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
-msgstr ""
+msgstr "Usando el valor de conductividad térmica 401 Watts / (metro-Kelvin)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1339
 #, fuzzy
@@ -18644,7 +18675,7 @@ msgstr "grados C"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1343
 msgid "Estimated ampacity:"
-msgstr ""
+msgstr "Amperaje estimado:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1345
 #, fuzzy
@@ -18663,7 +18694,7 @@ msgstr "p"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1367
 msgid "pico-Farad"
-msgstr ""
+msgstr "picofaradio"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1371
 #, fuzzy
@@ -18673,6 +18704,7 @@ msgstr "Constante de tiempo de subida:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1373
 msgid "Rise time degradation for given Z0 and calculated capacitance"
 msgstr ""
+"Degradación del tiempo de subida para un dado Z0 y una capacitancia calculada"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1381
 #, fuzzy
@@ -18696,7 +18728,7 @@ msgstr "n"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1397
 msgid "nano-Henry"
-msgstr ""
+msgstr "nanohenrio"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1401
 #, fuzzy
@@ -18706,6 +18738,8 @@ msgstr "Resistencia:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1403
 msgid "Inductive reactance for given rise time and calculated inductance"
 msgstr ""
+"Reactancia inductiva para un tiempo de subida dado y una inductancia "
+"calculada"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1421
 msgid ""
@@ -18714,6 +18748,10 @@ msgid ""
 "Some parameters cannot be calculated for a via\n"
 "inside a copper zone."
 msgstr ""
+"Advertencia:\n"
+"Diámetro del pad de la vía >= Orificio de separación.\n"
+"Algunos parámetros no se pueden calcular para una vía\n"
+"dentro de una zona de cobre."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1457
 msgid "Current:"
@@ -18951,6 +18989,36 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
+"Las series E definidas en IEC 60063 es un sistema ampliamente aceptado de\n"
+"números para componentes electrónicos. Los valores disponibles son "
+"aproximadamente\n"
+"igualmente espaciados en una escala logarítmica.\n"
+"\n"
+"E12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
+"E6: 1,0 - 1,5 - 2,2 - 3,3 - 4,7 - 6,8 -\n"
+"E3: 1,0 - - - 2,2 - - - 4,7 - - -\n"
+"E1: 1,0 - - - - - - - - - - -\n"
+"\n"
+"Esta calculadora encuentra combinaciones de componentes con valores de las "
+"series E para\n"
+"crear valores arbitrarios. La resistencia requerida puede ser entre 0,0025 y "
+"4000 kOhm.\n"
+"Se proporcionan soluciones que utilizan hasta 3 componentes.\n"
+"\n"
+"Si se necesita una solución más cercana, la opción de casilla de "
+"verificación 4R dará soluciones\n"
+"utilizando 4 componentes sólo para la serie E12. Esta opción\n"
+"puede tardar más tiempo en calcularse.\n"
+"\n"
+"También es posible especificar hasta dos valores para excluir de la solución "
+"si estos\n"
+"valores no están disponibles\n"
+"\n"
+"Las soluciones se dan en los siguientes formatos:\n"
+"\n"
+"\tR1 + R2 +...+ Rn\t\tresistencias en serie\n"
+"\tR1 | R2 |...| Rn \t\tresistencias en paralelo\n"
+"\tR1 + (R2 | R3)...\t\tcualquier combinación de los anteriores\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:125
 msgid ""
@@ -19034,6 +19102,26 @@ msgid ""
 "__W,H__ = width and thickness in mils  \n"
 "__K__ = 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
+"Si especifica la corriente máxima, se calculará el grosor de pista adecuado."
+"\n"
+"\n"
+"Si especifica uno  de los grosores de pista, se calculará la corriente "
+"máxima que puede manejar. A continuación se calculará el grosor de la otra "
+"pista para que pueda manejar también esta corriente.\n"
+"\n"
+"El valor de control se muestra en negrita.\n"
+"\n"
+"Los cálculos son válidos para corrientes de hasta 35 A (pistas externas) o "
+"17,5 A (pistas internas), aumentos de temperatura de hasta 100 ºC y grosores "
+"de hasta 400 mil (10 mm).\n"
+"\n"
+"La fórmula, de IPC 2221, es\n"
+"<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
+"dónde:\n"
+"__I__ = corriente máxima en amperios\n"
+"__dt__ = aumento de temperatura por encima de la temperatura ambiente en ºC\n"
+"__W, H__ = ancho y espesor en mils\n"
+"__K__ = 0.024 para pistas internas ó 0.048 para pistas externas\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:126 pcb_calculator/via.cpp:68
 msgid "Relative Dielectric Constants"
@@ -19349,7 +19437,7 @@ msgstr "Longitud del cable"
 
 #: pcb_calculator/via.cpp:82
 msgid "Electrical Resistivity in Ohm*m"
-msgstr ""
+msgstr "Resistividad eléctrica en Ω*m"
 
 #: pcb_calculator/widgets/unit_selector.cpp:35
 #: pcb_calculator/widgets/unit_selector.cpp:67
@@ -19416,7 +19504,7 @@ msgstr "Emplazamiento automático de %s"
 #: pcbnew/autorouter/autoplace_tool.cpp:68
 #, c-format
 msgid "Board edges must be defined on the %s layer."
-msgstr ""
+msgstr "Los bordes de la placa deben definirse en la capa %s."
 
 #: pcbnew/autorouter/autoplace_tool.cpp:89
 msgid "Autoplace Components"
@@ -19496,12 +19584,12 @@ msgstr "Lista de materiales"
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:95
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:101
 msgid "Epsilon R"
-msgstr ""
+msgstr "Épsilon R"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:96
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:107
 msgid "Loss Tg"
-msgstr ""
+msgstr "Tg Pérdida"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:22
 #, fuzzy
@@ -19510,11 +19598,11 @@ msgstr "Parámetros eléctricos:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
 msgid "Epsilon R:"
-msgstr ""
+msgstr "Épsilon R:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:43
 msgid "Loss Tg:"
-msgstr ""
+msgstr "Tg Pérdida:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:62
 #, fuzzy
@@ -19528,16 +19616,17 @@ msgstr "Pérdidas dieléctricas:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:110
 msgid "Core"
-msgstr ""
+msgstr "Núcleo"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:111
+#, fuzzy
 msgid "PrePreg"
-msgstr ""
+msgstr "PrePreg"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:173
 #, c-format
 msgid "Layer \"%s\" (sublayer %d/%d)"
-msgstr ""
+msgstr "Capa \"%s\" (subcapa %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:185
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:234
@@ -19555,15 +19644,19 @@ msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
 msgstr ""
+"Valor incorrecto de Épsilon R (Épsilon R debe ser positivo o nulo si no es "
+"utilizado)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:955
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
 msgstr ""
+"Valor incorrecto para Tg Pérdida (Tg Pérdida debe ser positivo o nulo si no "
+"es utilizado)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1002
 msgid "A layer thickness is < 0. Fix it"
-msgstr ""
+msgstr "El grosor de una capa es <0. Arréglalo"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1046
 #, c-format
@@ -19571,18 +19664,24 @@ msgid ""
 "Board thickness %s differs from stackup thickness %s\n"
 "Allowed max error %s"
 msgstr ""
+"El grosor de la placa %s difiere del grosor del apilado %s\n"
+"Máximo error permitido %s"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1203
 msgid ""
 "A locked dielectric thickness is < 0\n"
 "Unlock it or change its thickness"
 msgstr ""
+"Un grosor dieléctrico bloqueado es < 0\n"
+"Desbloquealo o cambia su grosor"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1214
 msgid ""
 "Cannot calculate dielectric thickness\n"
 "At least one dielectric layer must be not locked"
 msgstr ""
+"No se puede calcular el espesor del dieléctrico\n"
+"Al menos una capa dieléctrica no debe ser bloqueada"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1223
 msgid ""
