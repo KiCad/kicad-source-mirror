@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -177,7 +177,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizerDate->Add( m_ApplyDate, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_PickDate = new wxDatePickerCtrl( this, wxID_ANY, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize, wxDP_DEFAULT );
-	bSizerDate->Add( m_PickDate, 2, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerDate->Add( m_PickDate, 2, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	fgSizer2->Add( bSizerDate, 0, wxEXPAND, 5 );
