@@ -42,7 +42,8 @@ bool DescendingFirst;
 bool DescendingSecond;
 
 //
-// This converts the index into a sort code. Note that Back sort code will have left and right swapped.
+// This converts the index into a sort code. Note that Back sort code will have left and
+// right swapped.
 //
 int FrontDirectionsArray[] = {
     SORTYFIRST + ASCENDINGFIRST + ASCENDINGSECOND,   //"Top to bottom, left to right",  //  100
@@ -117,6 +118,7 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
 
     m_sdbSizerOK->SetLabel( _( "Reannotate PCB" ) );
     m_sdbSizerCancel->SetLabel( _( "Close" ) );
+    m_sdbSizer->Layout();
 
     m_Settings = aParentFrame->config();
     wxArrayString gridslist;
@@ -162,8 +164,9 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
     m_ExcludeList->SetToolTip( m_ExcludeListText->GetToolTipText() );
     m_GridChoice->SetToolTip( m_SortGridText->GetToolTipText() );
 
+    // Set the reporter window filename to something sensible
     if( m_MessageWindow->GetFileName().empty() )
-    { //Set the reporter window filename to something sensible
+    {
         wxFileName fn = m_frame->GetBoard()->GetFileName();
         fn.SetName( "annotationreport" );
         fn.SetExt( "txt " );
@@ -171,7 +174,7 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
         m_MessageWindow->SetFileName( fullname );
     }
 
-    m_MessageWindow->SetPrintInfo( false ); //Suppress the "Info: " prefix
+    m_MessageWindow->SetPrintInfo( false ); // Suppress the "Info: " prefix
 }
 
 
@@ -197,6 +200,7 @@ DIALOG_BOARD_REANNOTATE::~DIALOG_BOARD_REANNOTATE()
     cfg->m_Reannotate.exclude_list            = m_ExcludeList->GetValue();
     cfg->m_Reannotate.report_file_name        = m_MessageWindow->GetFileName();
 }
+
 
 ///  Copy saved app settings to the dialog
 void DIALOG_BOARD_REANNOTATE::InitValues( void )
@@ -581,6 +585,7 @@ void DIALOG_BOARD_REANNOTATE::LogModules( wxString& aMessage, std::vector<RefDes
     ShowReport( message, RPT_SEVERITY_INFO );
 }
 
+
 //
 /// Actually reannotate the board
 /// @return false if fail, true if success
@@ -924,6 +929,7 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aModule
     }
 }
 
+
 //
 /// @returns the new refdes for this module
 RefDesChange* DIALOG_BOARD_REANNOTATE::GetNewRefDes( MODULE* aMod )
@@ -934,6 +940,8 @@ RefDesChange* DIALOG_BOARD_REANNOTATE::GetNewRefDes( MODULE* aMod )
         if( aMod->m_Uuid == m_ChangeArray[i].Uuid )
             return ( &m_ChangeArray[i] );
 
-    ShowReport( _( "Footprint not found in changelist" ) + wxS( " " )+ aMod->GetReference(), RPT_SEVERITY_ERROR );
+    ShowReport( _( "Footprint not found in changelist" ) + wxS( " " ) + aMod->GetReference(),
+                RPT_SEVERITY_ERROR );
+
     return nullptr; //Should never happen
 }

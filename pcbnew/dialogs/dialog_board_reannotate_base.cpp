@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -127,7 +127,7 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 
 	m_staticText9 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Based on location of:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
-	fgSizer11->Add( m_staticText9, 0, wxALL, 5 );
+	fgSizer11->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxString m_locationChoiceChoices[] = { _("Footprint"), _("Reference Designator") };
 	int m_locationChoiceNChoices = sizeof( m_locationChoiceChoices ) / sizeof( wxString );
@@ -139,7 +139,7 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	m_SortGridText->Wrap( -1 );
 	m_SortGridText->SetToolTip( _("Component position will be rounded\nto this grid before sorting.\nThis helps with misaligned parts.") );
 
-	fgSizer11->Add( m_SortGridText, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	fgSizer11->Add( m_SortGridText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_GridChoiceChoices;
 	m_GridChoice = new wxChoice( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_GridChoiceChoices, 0 );
@@ -194,7 +194,7 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	m_StandardOptions->SetSizer( bSizer4 );
 	m_StandardOptions->Layout();
 	bSizer4->Fit( m_StandardOptions );
-	m_notebook->AddPage( m_StandardOptions, _("Options"), true );
+	m_notebook->AddPage( m_StandardOptions, _("Options"), false );
 	m_Advanced = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
@@ -287,7 +287,7 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	m_Advanced->SetSizer( bSizer5 );
 	m_Advanced->Layout();
 	bSizer5->Fit( m_Advanced );
-	m_notebook->AddPage( m_Advanced, _("Reference Designators"), false );
+	m_notebook->AddPage( m_Advanced, _("Reference Designators"), true );
 
 	bupperSizer->Add( m_notebook, 0, wxALL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
@@ -323,6 +323,7 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 
 	this->SetSizer( bmainSizer );
 	this->Layout();
+	bmainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_BOARD_REANNOTATE_BASE::OnClose ) );
