@@ -1,13 +1,13 @@
 /**
  * @file PDF_plotter.cpp
- * @brief Kicad: specialized plotter for PDF files format
+ * @brief KiCad: specialized plotter for PDF files format
  */
 
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2012 Lorenzo Marcantonio, l.marcantonio@logossrl.com
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,12 +29,8 @@
 
 #include <trigo.h>
 #include <algorithm>
-//#include <eda_base_frame.h>
-//#include <eda_item.h>
 #include <wx/zstream.h>
 #include <wx/mstream.h>
-//#include <macros.h>
-//#include <math/util.h>      // for KiROUND
 #include <render_settings.h>
 #include <advanced_config.h>
 
@@ -44,10 +40,10 @@
 
 std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
 {
-// returns a string compatible with PDF string convention from a unicode string.
-// if the initial text is only ASCII7, return the text between ( and ) for a good readability
-// if the initial text is no ASCII7, return the text between < and >
-// and encoded using 16 bits hexa (4 digits) by wide char (unicode 16)
+    // returns a string compatible with PDF string convention from a unicode string.
+    // if the initial text is only ASCII7, return the text between ( and ) for a good readability
+    // if the initial text is no ASCII7, return the text between < and >
+    // and encoded using 16 bits hexa (4 digits) by wide char (unicode 16)
     std::string result;
 
     // Is aText only ASCII7 ?
@@ -107,12 +103,6 @@ std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
 }
 
 
-/*
- * Open or create the plot file aFullFilename
- * return true if success, false if the file cannot be created/opened
- *
- * Opens the PDF file in binary mode
- */
 bool PDF_PLOTTER::OpenFile( const wxString& aFullFilename )
 {
     filename = aFullFilename;
@@ -137,22 +127,14 @@ void PDF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     plotScale = aScale;
     m_IUsPerDecimil = aIusPerDecimil;
 
-    // The CTM is set to 1 user unit per decimil
+    // The CTM is set to 1 user unit per decimal
     iuPerDeviceUnit = 1.0 / aIusPerDecimil;
 
-    /* The paper size in this engined is handled page by page
+    /* The paper size in this engine is handled page by page
        Look in the StartPage function */
 }
 
 
-/**
- * Pen width setting for PDF. Since the specs *explicitly* says that a 0
- * width is a bad thing to use (since it results in 1 pixel traces), we
- * convert such requests to the minimal width (like 1)
- * Note pen width = 0 is used in plot polygons to plot filled polygons with
- * no outline thickness
- * use in this case pen width = 1 does not actally change the polygon
- */
 void PDF_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 {
     wxASSERT( workFile );
@@ -174,15 +156,6 @@ void PDF_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 }
 
 
-/**
- * PDF supports colors fully. It actually has distinct fill and pen colors,
- * but we set both at the same time.
- *
- * XXX Keeping them divided could result in a minor optimization in
- * eeschema filled shapes, but would propagate to all the other plot
- * engines. Also arcs are filled as pies but only the arc is stroked so
- * it would be difficult to handle anyway.
- */
 void PDF_PLOTTER::emitSetRGBColor( double r, double g, double b )
 {
     wxASSERT( workFile );
@@ -190,9 +163,7 @@ void PDF_PLOTTER::emitSetRGBColor( double r, double g, double b )
              r, g, b, r, g, b );
 }
 
-/**
- * PDF supports dashed lines
- */
+
 void PDF_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 {
     wxASSERT( workFile );
@@ -217,9 +188,6 @@ void PDF_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 }
 
 
-/**
- * Rectangles in PDF. Supported by the native operator
- */
 void PDF_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, int width )
 {
     wxASSERT( workFile );
@@ -232,9 +200,6 @@ void PDF_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, in
 }
 
 
-/**
- * Circle drawing for PDF. They're approximated by curves, but fill is supported
- */
 void PDF_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_TYPE aFill, int width )
 {
     wxASSERT( workFile );
@@ -288,14 +253,11 @@ void PDF_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_TYPE aFill, int
 }
 
 
-/**
- * The PDF engine can't directly plot arcs, it uses the base emulation.
- * So no filled arcs (not a great loss... )
- */
 void PDF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
                       FILL_TYPE fill, int width )
 {
     wxASSERT( workFile );
+
     if( radius <= 0 )
     {
         Circle( centre, width, FILL_TYPE::FILLED_SHAPE, 0 );
@@ -344,13 +306,11 @@ void PDF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 }
 
 
-/**
- * Polygon plotting for PDF. Everything is supported
- */
 void PDF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_TYPE aFill, int aWidth, void * aData )
 {
     wxASSERT( workFile );
+
     if( aCornerList.size() <= 1 )
         return;
 
@@ -373,6 +333,7 @@ void PDF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
 void PDF_PLOTTER::PenTo( const wxPoint& pos, char plume )
 {
     wxASSERT( workFile );
+
     if( plume == 'Z' )
     {
         if( penState != 'Z' )
@@ -382,6 +343,7 @@ void PDF_PLOTTER::PenTo( const wxPoint& pos, char plume )
             penLastpos.x = -1;
             penLastpos.y = -1;
         }
+
         return;
     }
 
@@ -392,13 +354,12 @@ void PDF_PLOTTER::PenTo( const wxPoint& pos, char plume )
                  pos_dev.x, pos_dev.y,
                  ( plume=='D' ) ? 'l' : 'm' );
     }
+
     penState   = plume;
     penLastpos = pos;
 }
 
-/**
- * PDF images are handles as inline, not XObject streams...
- */
+
 void PDF_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
                             double aScaleFactor )
 {
@@ -468,7 +429,8 @@ void PDF_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
 
             if( aImage.HasMask() )
             {
-                if( r == aImage.GetMaskRed() && g == aImage.GetMaskGreen() && b == aImage.GetMaskBlue() )
+                if( r == aImage.GetMaskRed() && g == aImage.GetMaskGreen()
+                  && b == aImage.GetMaskBlue() )
                 {
                     r = 0xFF;
                     g = 0xFF;
@@ -496,11 +458,6 @@ void PDF_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
 }
 
 
-/**
- * Allocate a new handle in the table of the PDF object. The
- * handle must be completed using startPdfObject. It's an in-RAM operation
- * only, no output is done.
- */
 int PDF_PLOTTER::allocPdfObject()
 {
     xrefTable.push_back( 0 );
@@ -508,10 +465,6 @@ int PDF_PLOTTER::allocPdfObject()
 }
 
 
-/**
- * Open a new PDF object and returns the handle if the parameter is -1.
- * Otherwise fill in the xref entry for the passed object
- */
 int PDF_PLOTTER::startPdfObject(int handle)
 {
     wxASSERT( outputFile );
@@ -526,9 +479,6 @@ int PDF_PLOTTER::startPdfObject(int handle)
 }
 
 
-/**
- * Close the current PDF object
- */
 void PDF_PLOTTER::closePdfObject()
 {
     wxASSERT( outputFile );
@@ -537,13 +487,7 @@ void PDF_PLOTTER::closePdfObject()
 }
 
 
-/**
- * Starts a PDF stream (for the page). Returns the object handle opened
- * Pass -1 (default) for a fresh object. Especially from PDF 1.5 streams
- * can contain a lot of things, but for the moment we only handle page
- * content.
- */
-int PDF_PLOTTER::startPdfStream(int handle)
+int PDF_PLOTTER::startPdfStream( int handle )
 {
     wxASSERT( outputFile );
     wxASSERT( !workFile );
@@ -568,15 +512,12 @@ int PDF_PLOTTER::startPdfStream(int handle)
 
     // Open a temporary file to accumulate the stream
     workFilename = wxFileName::CreateTempFileName( "" );
-    workFile = wxFopen( workFilename, wxT( "w+b" ));
+    workFile = wxFopen( workFilename, wxT( "w+b" ) );
     wxASSERT( workFile );
     return handle;
 }
 
 
-/**
- * Finish the current PDF stream (writes the deferred length, too)
- */
 void PDF_PLOTTER::closePdfStream()
 {
     wxASSERT( workFile );
@@ -625,9 +566,6 @@ void PDF_PLOTTER::closePdfStream()
             wxZlibOutputStream      zos( memos, wxZ_BEST_COMPRESSION, wxZLIB_ZLIB );
 
             zos.Write( inbuf, stream_len );
-
-            delete[] inbuf;
-
         }   // flush the zip stream using zos destructor
 
         wxStreamBuffer* sb = memos.GetOutputStreamBuffer();
@@ -636,6 +574,7 @@ void PDF_PLOTTER::closePdfStream()
         fwrite( sb->GetBufferStart(), 1, out_count, outputFile );
     }
 
+    delete[] inbuf;
     fputs( "endstream\n", outputFile );
     closePdfObject();
 
@@ -645,9 +584,7 @@ void PDF_PLOTTER::closePdfStream()
     closePdfObject();
 }
 
-/**
- * Starts a new page in the PDF document
- */
+
 void PDF_PLOTTER::StartPage()
 {
     wxASSERT( outputFile );
@@ -671,9 +608,7 @@ void PDF_PLOTTER::StartPage()
              userToDeviceSize( m_renderSettings->GetDefaultPenWidth() ) );
 }
 
-/**
- * Close the current page in the PDF document (and emit its compressed stream)
- */
+
 void PDF_PLOTTER::ClosePage()
 {
     wxASSERT( workFile );
@@ -714,11 +649,7 @@ void PDF_PLOTTER::ClosePage()
     pageStreamHandle = 0;
 }
 
-/**
- * The PDF engine supports multiple pages; the first one is opened
- * 'for free' the following are to be closed and reopened. Between
- * each page parameters can be set
- */
+
 bool PDF_PLOTTER::StartPlot()
 {
     wxASSERT( outputFile );
@@ -791,11 +722,13 @@ bool PDF_PLOTTER::EndPlot()
     // Named font dictionary (was allocated, now we emit it)
     startPdfObject( fontResDictHandle );
     fputs( "<<\n", outputFile );
+
     for( int i = 0; i < 4; i++ )
     {
         fprintf( outputFile, "    %s %d 0 R\n",
                 fontdefs[i].rsname, fontdefs[i].font_handle );
     }
+
     fputs( ">>\n", outputFile );
     closePdfObject();
 
@@ -826,7 +759,7 @@ bool PDF_PLOTTER::EndPlot()
 
     if( title.IsEmpty() )
     {
-        // Windows uses '\' and other platforms ue '/' as sepatator
+        // Windows uses '\' and other platforms ue '/' as separator
         title = filename.AfterLast('\\');
         title = title.AfterLast('/');
     }
@@ -865,6 +798,7 @@ bool PDF_PLOTTER::EndPlot()
              "xref\n"
              "0 %ld\n"
              "0000000000 65535 f \n", (long) xrefTable.size() );
+
     for( unsigned i = 1; i < xrefTable.size(); i++ )
     {
         fprintf( outputFile, "%010ld 00000 n \n", xrefTable[i] );
@@ -884,6 +818,7 @@ bool PDF_PLOTTER::EndPlot()
 
     return true;
 }
+
 
 void PDF_PLOTTER::Text( const wxPoint&              aPos,
                         const COLOR4D               aColor,
@@ -909,7 +844,7 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
     const char *fontname = aItalic ? ( aBold ? "/KicadFontBI" : "/KicadFontI" )
                                    : ( aBold ? "/KicadFontB"  : "/KicadFont"  );
 
-    // Compute the copious transformation parameters of the Curent Transform Matrix
+    // Compute the copious transformation parameters of the Current Transform Matrix
     double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
     double wideningFactor, heightFactor;
 

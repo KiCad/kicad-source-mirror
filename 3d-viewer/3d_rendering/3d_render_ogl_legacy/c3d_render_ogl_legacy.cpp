@@ -45,7 +45,7 @@
 #include <base_units.h>
 
 /**
-  * Scale convertion from 3d model units to pcb units
+  * Scale conversion from 3d model units to pcb units
   */
 #define UNITS3D_TO_UNITSPCB (IU_PER_MM)
 
@@ -76,6 +76,8 @@ C3D_RENDER_OGL_LEGACY::C3D_RENDER_OGL_LEGACY( BOARD_ADAPTER& aAdapter, CCAMERA& 
     m_ogl_disp_list_grid = 0;
     m_last_grid_type     = GRID3D_TYPE::NONE;
     m_currentIntersectedBoardItem = nullptr;
+    m_ogl_disp_list_board_with_holes = nullptr;
+    m_ogl_disp_list_through_holes_outer_with_npth = nullptr;
 
     m_3dmodel_map.clear();
 }
@@ -460,6 +462,7 @@ SFVEC4F C3D_RENDER_OGL_LEGACY::get_layer_color( PCB_LAYER_ID aLayerID )
     return layerColor;
 }
 
+
 void init_lights(void)
 {
     // Setup light
@@ -508,10 +511,12 @@ void init_lights(void)
     glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE );
 }
 
+
 void C3D_RENDER_OGL_LEGACY::setCopperMaterial()
 {
     OGL_SetMaterial( m_materials.m_NonPlatedCopper, 1.0f );
 }
+
 
 void C3D_RENDER_OGL_LEGACY::setPlatedCopperAndDepthOffset( PCB_LAYER_ID aLayer_id )
 {
@@ -520,10 +525,12 @@ void C3D_RENDER_OGL_LEGACY::setPlatedCopperAndDepthOffset( PCB_LAYER_ID aLayer_i
     set_layer_material( aLayer_id );
 }
 
+
 void C3D_RENDER_OGL_LEGACY::unsetDepthOffset()
 {
     glDisable( GL_POLYGON_OFFSET_FILL );
 }
+
 
 void C3D_RENDER_OGL_LEGACY::render_board_body( bool aSkipRenderHoles )
 {
@@ -550,10 +557,11 @@ void C3D_RENDER_OGL_LEGACY::render_board_body( bool aSkipRenderHoles )
     }
 }
 
-bool C3D_RENDER_OGL_LEGACY::Redraw(
-        bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter )
+
+bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
+                                    REPORTER* aWarningReporter )
 {
-    // Initialize openGL
+    // Initialize OpenGL
     if( !m_is_opengl_initialized )
     {
         if( !initializeOpenGL() )
@@ -590,8 +598,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
     // /////////////////////////////////////////////////////////////////////////
     glDepthFunc( GL_LESS );
     glEnable( GL_CULL_FACE );
-    glFrontFace( GL_CCW );    // This is the openGL default
-    glEnable( GL_NORMALIZE ); // This allow openGL to normalize the normals after transformations
+    glFrontFace( GL_CCW );    // This is the OpenGL default
+    glEnable( GL_NORMALIZE ); // This allow OpenGL to normalize the normals after transformations
 
     glViewport( 0, 0, m_windowSize.x, m_windowSize.y );
 
@@ -639,7 +647,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
     {
         const SFVEC3F &cameraPos = m_camera.GetPos();
 
-        // Place the light at a minimun Z so the diffuse factor will not drop
+        // Place the light at a minimum Z so the diffuse factor will not drop
         // and the board will still look with good light.
         float zpos;
 
@@ -689,7 +697,6 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
         m_ogl_disp_list_pads_holes->DrawAll();
     }
 
-
     // Display copper and tech layers
     // /////////////////////////////////////////////////////////////////////////
     for( MAP_OGL_DISP_LISTS::const_iterator ii = m_ogl_disp_lists_layers.begin();
@@ -738,10 +745,12 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
                     setPlatedCopperAndDepthOffset( layer_id );
 
                 if( ( layer_id == F_Cu ) && m_ogl_disp_lists_platedPads_F_Cu )
-                    m_ogl_disp_lists_platedPads_F_Cu->DrawAllCameraCulled( m_camera.GetPos().z, drawMiddleSegments );
+                    m_ogl_disp_lists_platedPads_F_Cu->DrawAllCameraCulled( m_camera.GetPos().z,
+                                                                           drawMiddleSegments );
                 else
                     if( ( layer_id == B_Cu ) && m_ogl_disp_lists_platedPads_B_Cu )
-                        m_ogl_disp_lists_platedPads_B_Cu->DrawAllCameraCulled( m_camera.GetPos().z, drawMiddleSegments );
+                        m_ogl_disp_lists_platedPads_B_Cu->DrawAllCameraCulled( m_camera.GetPos().z,
+                                                                               drawMiddleSegments );
 
                 unsetDepthOffset();
             }
@@ -1249,7 +1258,10 @@ void C3D_RENDER_OGL_LEGACY::render_solder_mask_layer(PCB_LAYER_ID aLayerID,
     }
 }
 
-void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot, bool aRenderTransparentOnly, bool aRenderSelectedOnly )
+
+void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot,
+                                                       bool aRenderTransparentOnly,
+                                                       bool aRenderSelectedOnly )
 {
 
     C_OGL_3DMODEL::BeginDrawMulti( !aRenderSelectedOnly );
@@ -1290,6 +1302,7 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot, boo
 
     C_OGL_3DMODEL::EndDrawMulti();
 }
+
 
 void C3D_RENDER_OGL_LEGACY::render_3D_models( bool aRenderTopOrBot,
                                               bool aRenderTransparentOnly )
@@ -1401,7 +1414,7 @@ void C3D_RENDER_OGL_LEGACY::render_3D_module( const MODULE* module,
 }
 
 
-// create a 3D grid to an openGL display list: an horizontal grid (XY plane and Z = 0,
+// create a 3D grid to an OpenGL display list: an horizontal grid (XY plane and Z = 0,
 // and a vertical grid (XZ plane and Y = 0)
 void C3D_RENDER_OGL_LEGACY::generate_new_3DGrid( GRID3D_TYPE aGridType )
 {

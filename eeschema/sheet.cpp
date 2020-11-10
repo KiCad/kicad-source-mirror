@@ -416,6 +416,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
                 // symbol library table.
                 const SYMBOL_LIB_TABLE_ROW* row = table.FindRow( libName );
 
+                wxCHECK( row, false );
+
                 SYMBOL_LIB_TABLE_ROW* newRow = new SYMBOL_LIB_TABLE_ROW( libName, uri,
                                                                          row->GetType(),
                                                                          row->GetOptions(),

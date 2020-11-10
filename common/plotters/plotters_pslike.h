@@ -83,7 +83,8 @@ public:
     virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
                             double aOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
 
-    /** The SetColor implementation is split with the subclasses:
+    /**
+     * The SetColor implementation is split with the subclasses:
      * The PSLIKE computes the rgb values, the subclass emits the
      * operator to actually do it
      */
@@ -191,6 +192,7 @@ protected:
     virtual void emitSetRGBColor( double r, double g, double b ) override;
 };
 
+
 class PDF_PLOTTER : public PSLIKE_PLOTTER
 {
 public:
@@ -215,32 +217,77 @@ public:
 
     /**
      * Open or create the plot file aFullFilename
-     * @param aFullFilename = the full file name of the file to create
-     * @return true if success, false if the file cannot be created/opened
      *
      * The base class open the file in text mode, so we should have this
      * function overlaid for PDF files, which are binary files
+     *
+     * @param aFullFilename = the full file name of the file to create
+     * @return true if success, false if the file cannot be created/opened
      */
     virtual bool OpenFile( const wxString& aFullFilename ) override;
 
+    /**
+     * The PDF engine supports multiple pages; the first one is opened
+     * 'for free' the following are to be closed and reopened. Between
+     * each page parameters can be set
+     */
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
+
+    /**
+     * Starts a new page in the PDF document
+     */
     virtual void StartPage();
+
+    /**
+     * Close the current page in the PDF document (and emit its compressed stream)
+     */
     virtual void ClosePage();
+
+    /**
+     * Pen width setting for PDF.
+     *
+     * Since the specs *explicitly* says that a 0 width is a bad thing to use (since it
+     * results in 1 pixel traces), we convert such requests to the minimal width (like 1)
+     * Note pen width = 0 is used in plot polygons to plot filled polygons with no outline
+     * thickness.  Use in this case pen width = 1 does not actually change the polygon.
+     */
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
+
+    /**
+     * PDF supports dashed lines
+     */
     virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
 
-    /** PDF can have multiple pages, so SetPageSettings can be called
-     * with the outputFile open (but not inside a page stream!) */
+    /**
+     * PDF can have multiple pages, so SetPageSettings can be called
+     * with the outputFile open (but not inside a page stream!)
+     */
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror ) override;
+
+    /**
+     * Rectangles in PDF. Supported by the native operator
+     */
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
+
+    /**
+     * Circle drawing for PDF. They're approximated by curves, but fill is supported
+     */
     virtual void Circle( const wxPoint& pos, int diametre, FILL_TYPE fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
+
+    /**
+     * The PDF engine can't directly plot arcs, it uses the base emulation.
+     * So no filled arcs (not a great loss... )
+     */
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int rayon, FILL_TYPE fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
 
+    /**
+     * Polygon plotting for PDF. Everything is supported
+     */
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
                            void * aData = NULL ) override;
@@ -259,7 +306,9 @@ public:
                        bool                        aBold,
                        bool                        aMultilineAllowed = false,
                        void* aData = NULL ) override;
-
+    /**
+     * PDF images are handles as inline, not XObject streams...
+     */
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
                             double aScaleFactor ) override;
 
@@ -269,21 +318,58 @@ protected:
     /// string PDF format (convert special chars and non ascii7 chars)
     std::string encodeStringForPlotter( const wxString& aUnicode ) override;
 
+    /**
+     * PDF supports colors fully. It actually has distinct fill and pen colors,
+     * but we set both at the same time.
+     *
+     * XXX Keeping them divided could result in a minor optimization in
+     * Eeschema filled shapes, but would propagate to all the other plot
+     * engines. Also arcs are filled as pies but only the arc is stroked so
+     * it would be difficult to handle anyway.
+     */
     virtual void emitSetRGBColor( double r, double g, double b ) override;
+
+    /**
+     * Allocate a new handle in the table of the PDF object. The
+     * handle must be completed using startPdfObject. It's an in-RAM operation
+     * only, no output is done.
+     */
     int allocPdfObject();
+
+    /**
+     * Open a new PDF object and returns the handle if the parameter is -1.
+     * Otherwise fill in the xref entry for the passed object
+     */
     int startPdfObject(int handle = -1);
+
+    /**
+     * Close the current PDF object
+     */
     void closePdfObject();
+
+    /**
+     * Starts a PDF stream (for the page). Returns the object handle opened
+     * Pass -1 (default) for a fresh object. Especially from PDF 1.5 streams
+     * can contain a lot of things, but for the moment we only handle page
+     * content.
+     */
     int startPdfStream(int handle = -1);
+
+    /**
+     * Finish the current PDF stream (writes the deferred length, too)
+     */
     void closePdfStream();
+
     int pageTreeHandle;		 /// Handle to the root of the page tree object
     int fontResDictHandle;	 /// Font resource dictionary
     std::vector<int> pageHandles;/// Handles to the page objects
     int pageStreamHandle;	 /// Handle of the page content object
     int streamLengthHandle;      /// Handle to the deferred stream length
     wxString workFilename;
-    FILE* workFile;  	         /// Temporary file to costruct the stream before zipping
+    FILE* workFile;  	         /// Temporary file to construct the stream before zipping
     std::vector<long> xrefTable; /// The PDF xref offset table
 };
+
 
 class SVG_PLOTTER : public PSLIKE_PLOTTER
 {
@@ -330,27 +416,27 @@ public:
     virtual void PenTo( const wxPoint& pos, char plume ) override;
 
     /**
-     * Function SetSvgCoordinatesFormat
-     * selection of SVG step size (number of digits needed for 1 mm or 1 inch )
+     * Select SVG step size (number of digits needed for 1 mm or 1 inch )
+     *
+     * Should be called only after SetViewport() is called
+     *
      * @param aResolution = number of digits in mantissa of coordinate
      *                      use a value from 3-6
      *                      do not use value > 6 to avoid overflow in PCBNEW
      *                      do not use value > 4 to avoid overflow for other parts
      * @param aUseInches = true to use inches, false to use mm (default)
-     *
-     * Should be called only after SetViewport() is called
      */
     virtual void SetSvgCoordinatesFormat( unsigned aResolution, bool aUseInches = false ) override;
 
     /**
-     * calling this function allows one to define the beginning of a group
+     * Calling this function allows one to define the beginning of a group
      * of drawing items (used in SVG format to separate components)
-     * @param aData should be a string for the SVG ID tage
+     * @param aData should be a string for the SVG ID tag
      */
     virtual void StartBlock( void* aData ) override;
 
     /**
-     * calling this function allows one to define the end of a group of drawing
+     * Calling this function allows one to define the end of a group of drawing
      * items the group is started by StartBlock()
      * @param aData should be null
      */
@@ -370,36 +456,34 @@ public:
                        void* aData = NULL ) override;
 
 protected:
-    FILL_TYPE        m_fillMode;           // true if the current contour
+    FILL_TYPE      m_fillMode;          // true if the current contour
                                         // rect, arc, circle, polygon must be filled
-    long          m_pen_rgb_color;      // current rgb color value: each color has
+    long           m_pen_rgb_color;     // current rgb color value: each color has
                                         // a value 0 ... 255, and the 3 colors are
                                         // grouped in a 3x8 bits value
                                         // (written in hex to svg files)
     long           m_brush_rgb_color;   // same as m_pen_rgb_color, used to fill
                                         // some contours.
     bool           m_graphics_changed;  // true if a pen/brush parameter is modified
-                                        // color, pen size, fil mode ...
+                                        // color, pen size, fill mode ...
                                         // the new SVG stype must be output on file
     PLOT_DASH_TYPE m_dashed;            // plot line style
     bool           m_useInch;           // is 0 if the step size is 10**-n*mm
                                         // is 1 if the step size is 10**-n*inch
                                         // Where n is given from m_precision
     unsigned       m_precision;         // How fine the step size is
-                                        // Use 3-6 (3 means um precision, 6 nm precision) in pcbnew
-                                        // 3-4 in other moduls (avoid values >4 to avoid overflow)
+                                        // Use 3-6 (3 means um precision, 6 nm precision) in PcbNew
+                                        // 3-4 in other modules (avoid values >4 to avoid overflow)
                                         // see also comment for m_useInch.
 
     /**
-     * function emitSetRGBColor()
-     * initialize m_pen_rgb_color from reduced values r, g ,b
+     * Initialize m_pen_rgb_color from reduced values r, g ,b
      * ( reduced values are 0.0 to 1.0 )
      */
     virtual void emitSetRGBColor( double r, double g, double b ) override;
 
     /**
-     * function setSVGPlotStyle()
-     * output the string which define pen and brush color, shape, transparency
+     * Output the string which define pen and brush color, shape, transparency
      *
      * @param aIsGroup If false, do not form a new group for the style.
      * @param aExtraStyle If given, the string will be added into the style string before closing
@@ -407,8 +491,7 @@ protected:
     void setSVGPlotStyle( bool aIsGroup = true, const std::string& aExtraStyle = {} );
 
     /**
-     * function setFillMode()
-     * prepare parameters for setSVGPlotStyle()
+     * Prepare parameters for setSVGPlotStyle()
      */
     void setFillMode( FILL_TYPE fill );
 };

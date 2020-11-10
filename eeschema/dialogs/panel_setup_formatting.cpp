@@ -37,7 +37,8 @@ PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAM
         m_frame( aFrame ),
         m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
         m_lineWidth( aFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
-        m_pinSymbolSize( aFrame, m_pinSymbolSizeLabel, m_pinSymbolSizeCtrl, m_pinSymbolSizeUnits, true )
+        m_pinSymbolSize( aFrame, m_pinSymbolSizeLabel, m_pinSymbolSizeCtrl, m_pinSymbolSizeUnits,
+                         true )
 {
 }
 
@@ -110,7 +111,7 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     settings.m_DefaultTextSize = (int) m_textSize.GetValue();
     settings.m_DefaultLineWidth = (int) m_lineWidth.GetValue();
     settings.m_PinSymbolSize = (int) m_pinSymbolSize.GetValue();
-    
+
     // Get the current working size in case of problem with wxChoice widget results
     int currJunctionDotSize = settings.m_JunctionSize;
     // See if user has made a junction dot size selection
@@ -120,6 +121,8 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     {
         EESCHEMA_SETTINGS* projSettings =
                 dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
+        wxCHECK( projSettings, false );
 
         if( currDotSizeIndex )
         {
@@ -139,6 +142,7 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
 
         settings.m_JunctionSizeChoice = currDotSizeIndex; // Store to set pulldown next time
     }
+
     settings.m_JunctionSize = currJunctionDotSize;
 
     settings.m_IntersheetsRefShow        = m_showIntersheetsReferences->GetValue();
@@ -179,5 +183,3 @@ void PANEL_SETUP_FORMATTING::ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings )
     wxString offsetRatio = wxString::Format( "%f", aSettings.m_TextOffsetRatio * 100.0 );
     m_textOffsetRatioCtrl->SetValue( offsetRatio );
 }
-
-

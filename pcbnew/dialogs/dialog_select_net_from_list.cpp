@@ -960,11 +960,13 @@ DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParen
 
 #undef connect_event
 
-    // if the dialog is opened while something is highlighted on the board ...
-    OnBoardHighlightNetChanged( *m_brd );
-
     if( m_brd != nullptr )
+    {
+        // if the dialog is opened while something is highlighted on the board ...
+        OnBoardHighlightNetChanged( *m_brd );
+
         m_brd->AddListener( this );
+    }
 }
 
 
@@ -1452,6 +1454,8 @@ std::unique_ptr<DIALOG_SELECT_NET_FROM_LIST::LIST_ITEM> DIALOG_SELECT_NET_FROM_L
 
 void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
 {
+    wxCHECK( m_brd, /* void */ );
+
     m_in_build_nets_list = true;
 
     // when rebuilding the netlist, try to keep the row selection

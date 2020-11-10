@@ -55,7 +55,7 @@ struct ShapeCompoundCollisionFixture
 
         shapesB.push_back( new SHAPE_CIRCLE( VECTOR2I( 0, 80 ), 100 ) );
         shapesB.push_back( new SHAPE_CIRCLE( VECTOR2I( 80, 80 ), 100 ) );
-        
+
         shapesC.push_back( new SHAPE_CIRCLE( VECTOR2I( 0, 280 ), 100 ) );
         shapesC.push_back( new SHAPE_CIRCLE( VECTOR2I( 80, 280 ), 100 ) );
 
@@ -66,13 +66,18 @@ struct ShapeCompoundCollisionFixture
 
     ~ShapeCompoundCollisionFixture()
     {
+        delete compoundA;
+        delete compoundB;
+        delete compoundC;
     }
 };
+
 
 /**
  * Declares the CollisionFixture as the boost test suite fixture.
  */
 BOOST_FIXTURE_TEST_SUITE( SCompoundCollision, ShapeCompoundCollisionFixture )
+
 
 /**
  * This test checks basic behaviour of PointOnEdge, testing if points on corners, outline edges
@@ -120,5 +125,6 @@ BOOST_AUTO_TEST_CASE( ShapeCompoundCollide )
     BOOST_CHECK( compoundA->Collide( shapesC[1], 100, &actual ) );
     BOOST_CHECK( actual == 80 );
 }
+
 
 BOOST_AUTO_TEST_SUITE_END()

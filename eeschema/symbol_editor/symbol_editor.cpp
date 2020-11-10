@@ -381,6 +381,7 @@ void SYMBOL_EDIT_FRAME::SaveOneSymbol()
     if( m_my_part->GetDrawItems().empty() )
         return;
 
+    wxString        msg;
     PROJECT&        prj = Prj();
     SEARCH_STACK*   search = prj.SchSearchS();
 
@@ -406,8 +407,8 @@ void SYMBOL_EDIT_FRAME::SaveOneSymbol()
 
     prj.SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
 
-    if( fn.FileExists() )
-        wxRemove( fn.GetFullPath() );
+    if( fn.FileExists() && !wxRemoveFile( fn.GetFullPath() ) )
+        return;
 
     SetStatusText( wxString::Format( _( "Saving symbol in \"%s\"" ), fn.GetPath() ) );
 
@@ -425,8 +426,7 @@ void SYMBOL_EDIT_FRAME::SaveOneSymbol()
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg = wxString::Format( _( "An error occurred saving symbol file \"%s\"" ),
-                                         fn.GetFullPath() );
+        msg.Printf( _( "An error occurred saving symbol file \"%s\"" ), fn.GetFullPath() );
         DisplayErrorMessage( this, msg, ioe.What() );
     }
 }
