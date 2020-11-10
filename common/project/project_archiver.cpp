@@ -46,9 +46,9 @@ static bool CopyStreamData( wxInputStream& inputStream, wxOutputStream& outputSt
     int readSize = 128 * 1024;
     wxFileOffset copiedData = 0;
 
-    for (;;)
+    for( ; ; )
     {
-        if (size != -1 && copiedData + readSize > size)
+        if(size != -1 && copiedData + readSize > size )
             readSize = size - copiedData;
 
         inputStream.Read( buf, readSize );
@@ -62,9 +62,9 @@ static bool CopyStreamData( wxInputStream& inputStream, wxOutputStream& outputSt
             //return false;
         }
 
-        if (size == -1)
+        if( size == -1 )
         {
-            if (inputStream.Eof())
+            if( inputStream.Eof() )
                 break;
         }
         else
@@ -84,7 +84,7 @@ bool PROJECT_ARCHIVER::Unarchive( const wxString& aSrcFile, const wxString& aDes
 {
     wxFileInputStream stream( aSrcFile );
 
-    if (!stream.IsOk())
+    if( !stream.IsOk() )
     {
         aReporter.Report( _( "Could not open archive file\n" ), RPT_SEVERITY_ERROR );
         return false;

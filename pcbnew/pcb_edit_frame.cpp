@@ -1550,7 +1550,7 @@ void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( MODULE* aFootprint )
     {
         auto editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, true );
 
-        editor->LoadModuleFromLibrary( aFootprint->GetFPID() );
+        editor->LoadFootprintFromLibrary( aFootprint->GetFPID() );
 
         editor->Show( true );
         editor->Raise();        // Iconize( false );

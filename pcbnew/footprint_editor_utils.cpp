@@ -46,7 +46,7 @@ void FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( wxCommandEvent& event )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
+void FOOTPRINT_EDIT_FRAME::LoadFootprintFromLibrary( LIB_ID aFPID)
 {
     bool is_last_fp_from_brd = IsCurrentFPFromBoard();
 
@@ -59,7 +59,7 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
         return;
 
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-    AddModuleToBoard( footprint );
+    AddFootprintToBoard( footprint );
 
     footprint->ClearFlags();
 
@@ -239,7 +239,7 @@ bool FOOTPRINT_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileS
         return false;                  // //this command is aborted
 
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-    Import_Module( aFileSet[0] );
+    ImportFootprint( aFileSet[ 0 ] );
 
     if( GetBoard()->GetFirstFootprint() )
         GetBoard()->GetFirstFootprint()->ClearFlags();

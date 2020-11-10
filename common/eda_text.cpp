@@ -234,7 +234,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
         if( strings.GetCount() )     // GetCount() == 0 for void strings
         {
-            if( aLine >= 0 && (aLine < (int)strings.GetCount()) )
+            if( aLine >= 0 && ( aLine < (int)strings.GetCount() ) )
                 text = strings.Item( aLine );
             else
                 text = strings.Item( 0 );
@@ -408,7 +408,7 @@ void EDA_TEXT::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, COLOR4
 
         positions.reserve( strings.Count() );
 
-        GetLinePositions( positions, strings.Count());
+        GetLinePositions( positions, strings.Count() );
 
         for( unsigned ii = 0; ii < strings.Count(); ii++ )
             printOneLineOfText( aSettings, aOffset, aColor, aFillMode, strings[ii], positions[ii] );
@@ -598,7 +598,7 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
         wxStringSplit( GetShownText(), strings_list, wxChar('\n') );
         std::vector<wxPoint> positions;
         positions.reserve( strings_list.Count() );
-        GetLinePositions( positions, strings_list.Count());
+        GetLinePositions( positions, strings_list.Count() );
 
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {

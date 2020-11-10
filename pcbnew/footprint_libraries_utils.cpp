@@ -222,7 +222,7 @@ MODULE* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T aFil
 }
 
 
-MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
+MODULE* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 {
     wxString lastOpenedPathForLoading = m_mruPath;
     FOOTPRINT_EDITOR_SETTINGS* cfg    = GetSettings();
@@ -291,7 +291,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
     module->SetFPID( LIB_ID( wxEmptyString, moduleName ) );
 
     // Insert footprint in list
-    AddModuleToBoard( module );
+    AddFootprintToBoard( module );
 
     // Display info :
     SetMsgPanel( module );
@@ -306,15 +306,15 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
+void FOOTPRINT_EDIT_FRAME::ExportFootprint( MODULE* aFootprint )
 {
     wxFileName fn;
     FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
 
-    if( !aModule )
+    if( !aFootprint )
         return;
 
-    fn.SetName( aModule->GetFPID().GetLibItemName() );
+    fn.SetName( aFootprint->GetFPID().GetLibItemName() );
 
     wxString    wildcard = KiCadFootprintLibFileWildcard();
 
@@ -348,7 +348,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
             module->SetOrientation( 0 );
         */
 
-        pcb_io.Format( aModule );
+        pcb_io.Format( aFootprint );
 
         FILE* fp = wxFopen( dlg.GetPath(), wxT( "wt" ) );
 
@@ -556,7 +556,7 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromLibrary( const LIB_ID& aFPID, bool aConfirm )
+bool FOOTPRINT_EDIT_FRAME::DeleteFootprintFromLibrary( const LIB_ID& aFPID, bool aConfirm )
 {
     if( !aFPID.IsValid() )
         return false;
@@ -744,7 +744,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aFootprint )
     if( nameChanged )
     {
         LIB_ID oldFPID( libraryName, m_footprintNameWhenLoaded );
-        DeleteModuleFromLibrary( oldFPID, false );
+        DeleteFootprintFromLibrary( oldFPID, false );
     }
 
     if( !SaveFootprintInLibrary( aFootprint, libraryName ) )
@@ -760,22 +760,23 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aFootprint )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( MODULE* aModule, const wxString& aLibraryName )
+bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( MODULE* aFootprint,
+                                                   const wxString& aLibraryName )
 {
     try
     {
-        aModule->SetFPID( LIB_ID( wxEmptyString, aModule->GetFPID().GetLibItemName() ) );
+        aFootprint->SetFPID( LIB_ID( wxEmptyString, aFootprint->GetFPID().GetLibItemName() ) );
 
-        Prj().PcbFootprintLibs()->FootprintSave( aLibraryName, aModule );
+        Prj().PcbFootprintLibs()->FootprintSave( aLibraryName, aFootprint );
 
-        aModule->SetFPID( LIB_ID( aLibraryName, aModule->GetFPID().GetLibItemName() ) );
+        aFootprint->SetFPID( LIB_ID( aLibraryName, aFootprint->GetFPID().GetLibItemName() ) );
         return true;
     }
     catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.What() );
 
-        aModule->SetFPID( LIB_ID( aLibraryName, aModule->GetFPID().GetLibItemName() ) );
+        aFootprint->SetFPID( LIB_ID( aLibraryName, aFootprint->GetFPID().GetLibItemName() ) );
         return false;
     }
 }
@@ -861,18 +862,18 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
+bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aFootprint )
 {
-    if( aModule == NULL )
+    if( aFootprint == NULL )
         return false;
 
     FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
 
-    SetMsgPanel( aModule );
+    SetMsgPanel( aFootprint );
 
-    wxString libraryName = aModule->GetFPID().GetLibNickname();
-    wxString footprintName = aModule->GetFPID().GetLibItemName();
-    bool updateValue = ( aModule->GetValue() == footprintName );
+    wxString libraryName = aFootprint->GetFPID().GetLibNickname();
+    wxString footprintName = aFootprint->GetFPID().GetLibItemName();
+    bool     updateValue = aFootprint->GetValue() == footprintName;
 
     wxArrayString              headers;
     std::vector<wxArrayString> itemsToDisplay;
@@ -940,10 +941,10 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
         return false;
     }
 
-    aModule->SetFPID( LIB_ID( libraryName, footprintName ) );
+    aFootprint->SetFPID( LIB_ID( libraryName, footprintName ) );
 
     if( updateValue )
-        aModule->SetValue( footprintName );
+        aFootprint->SetValue( footprintName );
 
     // Legacy libraries are readable, but modifying legacy format is not allowed
     // So prompt the user if he try to add/replace a footprint in a legacy lib
@@ -970,11 +971,11 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
             return false;
     }
 
-    if( !SaveFootprintInLibrary( aModule, libraryName ) )
+    if( !SaveFootprintInLibrary( aFootprint, libraryName ) )
         return false;
 
     // Once saved-as a board footprint is no longer a board footprint
-    aModule->SetLink( niluuid );
+    aFootprint->SetLink( niluuid );
 
     wxString fmt = module_exists ? _( "Component \"%s\" replaced in \"%s\"" ) :
                                    _( "Component \"%s\" added in  \"%s\"" );
@@ -998,7 +999,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
         if( ConfirmRevertDialog( this, msg ) )
         {
             Clear_Pcb( false );
-            AddModuleToBoard( (MODULE*) m_revertModule->Clone() );
+            AddFootprintToBoard( (MODULE*) m_revertModule->Clone());
 
             Zoom_Automatique( false );
 

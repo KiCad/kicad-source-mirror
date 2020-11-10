@@ -79,7 +79,7 @@
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
-    EVT_MENU( wxID_CLOSE, FOOTPRINT_EDIT_FRAME::CloseModuleEditor )
+    EVT_MENU( wxID_CLOSE, FOOTPRINT_EDIT_FRAME::CloseFootprintEditor )
     EVT_MENU( wxID_EXIT, FOOTPRINT_EDIT_FRAME::OnExitKiCad )
 
     EVT_SIZE( FOOTPRINT_EDIT_FRAME::OnSize )
@@ -98,9 +98,9 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
 
     // UI update events.
     EVT_UPDATE_UI( ID_LOAD_FOOTPRINT_FROM_BOARD,
-                   FOOTPRINT_EDIT_FRAME::OnUpdateLoadModuleFromBoard )
+                   FOOTPRINT_EDIT_FRAME::OnUpdateLoadFootprintFromBoard )
     EVT_UPDATE_UI( ID_ADD_FOOTPRINT_TO_BOARD,
-                   FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard )
+                   FOOTPRINT_EDIT_FRAME::OnUpdateSaveFootprintToBoard )
     EVT_UPDATE_UI( ID_TOOLBARH_PCB_SELECT_LAYER, FOOTPRINT_EDIT_FRAME::OnUpdateLayerSelectBox )
     EVT_UPDATE_UI( ID_GEN_IMPORT_GRAPHICS_FILE, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
 
@@ -426,12 +426,12 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
         MODULE* footprint = loadFootprint( id );
 
         if( footprint )
-            AddModuleToBoard( footprint );
+            AddFootprintToBoard( footprint );
     }
 }
 
 
-void FOOTPRINT_EDIT_FRAME::AddModuleToBoard( MODULE* aFootprint )
+void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( MODULE* aFootprint )
 {
     m_revertModule.reset( (MODULE*) aFootprint->Clone() );
 
@@ -440,7 +440,7 @@ void FOOTPRINT_EDIT_FRAME::AddModuleToBoard( MODULE* aFootprint )
     // Pads are always editable in Footprint Editor
     aFootprint->SetPadsLocked( false );
 
-    PCB_BASE_EDIT_FRAME::AddModuleToBoard( aFootprint );
+    PCB_BASE_EDIT_FRAME::AddFootprintToBoard( aFootprint );
 
     if( IsCurrentFPFromBoard() )
     {
@@ -629,7 +629,7 @@ void FOOTPRINT_EDIT_FRAME::OnExitKiCad( wxCommandEvent& event )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::CloseModuleEditor( wxCommandEvent& Event )
+void FOOTPRINT_EDIT_FRAME::CloseFootprintEditor( wxCommandEvent& Event )
 {
     Close();
 }
@@ -641,7 +641,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected( wxUpdateUIEvent& aEvent )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent )
+void FOOTPRINT_EDIT_FRAME::OnUpdateLoadFootprintFromBoard( wxUpdateUIEvent& aEvent )
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
@@ -649,7 +649,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent 
 }
 
 
-void FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent )
+void FOOTPRINT_EDIT_FRAME::OnUpdateSaveFootprintToBoard( wxUpdateUIEvent& aEvent )
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 

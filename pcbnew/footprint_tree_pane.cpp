@@ -55,7 +55,7 @@ FOOTPRINT_TREE_PANE::~FOOTPRINT_TREE_PANE()
 
 void FOOTPRINT_TREE_PANE::onComponentSelected( wxCommandEvent& aEvent )
 {
-    m_frame->LoadModuleFromLibrary( GetLibTree()->GetSelectedLibId() );
+    m_frame->LoadFootprintFromLibrary( GetLibTree()->GetSelectedLibId() );
     // Make sure current-part highlighting doesn't get lost in seleciton highlighting
     m_tree->Unselect();
 }

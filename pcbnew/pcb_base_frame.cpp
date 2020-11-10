@@ -152,7 +152,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 }
 
 
-void PCB_BASE_FRAME::AddModuleToBoard( MODULE* module )
+void PCB_BASE_FRAME::AddFootprintToBoard( MODULE* module )
 {
     if( module )
     {

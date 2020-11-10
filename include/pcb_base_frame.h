@@ -325,7 +325,7 @@ public:
      * @param module
      * @param aDC (can be NULL ) = the current Device Context, to draw the new footprint
      */
-    virtual void AddModuleToBoard( MODULE* module );
+    virtual void AddFootprintToBoard( MODULE* module );
 
     /**
      * Function SelectFootprintFromLibBrowser

@@ -917,7 +917,7 @@ void PCB_IO::format( FP_SHAPE* aModuleDrawing, int aNestLevel ) const
 
     default:
         wxFAIL_MSG( "PCB_IO::format cannot format unknown FP_SHAPE shape:"
-                    + PCB_SHAPE_TYPE_T_asString( aModuleDrawing->GetShape()) );
+                    + PCB_SHAPE_TYPE_T_asString( aModuleDrawing->GetShape() ) );
         return;
     };
 

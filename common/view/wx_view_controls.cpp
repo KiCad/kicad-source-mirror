@@ -635,7 +635,7 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
     VECTOR2I p( aEvent.GetX(), aEvent.GetY() );
     VECTOR2I pKey( m_view->ToScreen(m_settings.m_lastKeyboardCursorPosition ) );
 
-    if( m_cursorWarped || (m_settings.m_lastKeyboardCursorPositionValid && (p == pKey)) )
+    if( m_cursorWarped || ( m_settings.m_lastKeyboardCursorPositionValid && p == pKey ) )
     {
         // last cursor move event came from keyboard cursor control. If auto-panning is enabled and
         // the next position is inside the autopan zone, check if it really came from a mouse event, otherwise

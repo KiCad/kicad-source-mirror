@@ -136,7 +136,7 @@ int FOOTPRINT_EDITOR_TOOLS::NewFootprint( const TOOL_EVENT& aEvent )
         return 0;
 
     canvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-    m_frame->AddModuleToBoard( newFootprint );
+    m_frame->AddFootprintToBoard( newFootprint );
 
     // Initialize data relative to nets and netclasses (for a new
     // module the defaults are used)
@@ -197,7 +197,7 @@ int FOOTPRINT_EDITOR_TOOLS::CreateFootprint( const TOOL_EVENT& aEvent )
 
             canvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
             //  Add the new object to board
-            m_frame->AddModuleToBoard( newFootprint );
+            m_frame->AddFootprintToBoard( newFootprint );
 
             // Initialize data relative to nets and netclasses (for a new
             // module the defaults are used)
@@ -338,7 +338,7 @@ int FOOTPRINT_EDITOR_TOOLS::DeleteFootprint( const TOOL_EVENT& aEvent )
 {
     FOOTPRINT_EDIT_FRAME* frame = getEditFrame<FOOTPRINT_EDIT_FRAME>();
 
-    if( frame->DeleteModuleFromLibrary( frame->GetTargetFPID(), true ) )
+    if( frame->DeleteFootprintFromLibrary( frame->GetTargetFPID(), true ) )
     {
         if( frame->GetTargetFPID() == frame->GetLoadedFPID() )
             frame->Clear_Pcb( false );
@@ -356,7 +356,7 @@ int FOOTPRINT_EDITOR_TOOLS::ImportFootprint( const TOOL_EVENT& aEvent )
         return -1;                  // this command is aborted
 
     getViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-    m_frame->Import_Module();
+    m_frame->ImportFootprint();
 
     if( m_frame->GetBoard()->GetFirstFootprint() )
         m_frame->GetBoard()->GetFirstFootprint()->ClearFlags();
@@ -379,14 +379,14 @@ int FOOTPRINT_EDITOR_TOOLS::ExportFootprint( const TOOL_EVENT& aEvent )
     else
         fp = m_frame->LoadFootprint( fpID );
 
-    m_frame->Export_Module( fp );
+    m_frame->ExportFootprint( fp );
     return 0;
 }
 
 
 int FOOTPRINT_EDITOR_TOOLS::EditFootprint( const TOOL_EVENT& aEvent )
 {
-    m_frame->LoadModuleFromLibrary( m_frame->GetTreeFPID() );
+    m_frame->LoadFootprintFromLibrary( m_frame->GetTreeFPID());
     return 0;
 }
 

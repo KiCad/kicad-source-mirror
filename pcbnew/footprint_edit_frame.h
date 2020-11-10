@@ -91,7 +91,7 @@ public:
 
     bool canCloseWindow( wxCloseEvent& Event ) override;
     void doCloseWindow() override;
-    void CloseModuleEditor( wxCommandEvent& Event );
+    void CloseFootprintEditor( wxCommandEvent& Event );
     void OnExitKiCad( wxCommandEvent& aEvent );
 
     /**
@@ -120,7 +120,7 @@ public:
     void ReCreateOptToolbar() override;
 
     /**
-     * @brief (Re)Create the menubar for the module editor frame
+     * @brief (Re)Create the menubar for the Footprint Editor frame
      */
     void ReCreateMenuBar() override;
 
@@ -154,8 +154,8 @@ public:
     bool SaveLibraryAs( const wxString& aLibraryPath );
 
     void OnUpdateModuleSelected( wxUpdateUIEvent& aEvent );
-    void OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent );
-    void OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent );
+    void OnUpdateLoadFootprintFromBoard( wxUpdateUIEvent& aEvent );
+    void OnUpdateSaveFootprintToBoard( wxUpdateUIEvent& aEvent );
 
     ///> @copydoc PCB_BASE_EDIT_FRAME::OnEditItemRequest()
     void OnEditItemRequest( BOARD_ITEM* aItem ) override;
@@ -167,7 +167,7 @@ public:
 
     void SaveFootprintToBoard( wxCommandEvent& event );
 
-    void LoadModuleFromLibrary( LIB_ID aFPID );
+    void LoadFootprintFromLibrary( LIB_ID aFPID );
 
     /**
      * Returns the adapter object that provides the stored data.
@@ -181,9 +181,9 @@ public:
      * @return : true if OK, false if abort
      */
     bool SaveFootprint( MODULE* aFootprint );
-    bool SaveFootprintAs( MODULE* aModule );
+    bool SaveFootprintAs( MODULE* aFootprint );
     bool SaveFootprintToBoard( bool aAddNew );
-    bool SaveFootprintInLibrary( MODULE* aModule, const wxString& aLibraryName );
+    bool SaveFootprintInLibrary( MODULE* aFootprint, const wxString& aLibraryName );
     bool RevertFootprint();
 
     /**
@@ -220,49 +220,37 @@ public:
     // importing / exporting Footprint
     /**
      * Create a file containing only one footprint.
-     *
-     * Used to export a footprint
-     * Exported files  have the standard ext .emp
-     * This is the same format as .mod files but restricted to only one footprint
-     * So Create a new lib (which will contains one module) and export a footprint
-     * is basically the same thing
-     * @param aModule = the module to export
      */
-    void Export_Module( MODULE* aModule );
+    void ExportFootprint( MODULE* aFootprint );
 
     /**
      * Read a file containing only one footprint.
      *
-     * Used to import (after exporting) a footprint
-     * Exported files  have the standard ext .emp
-     * This is the same format as .mod files but restricted to only one footprint
-     * The import function can also read gpcb footprint file, in Newlib format
+     * The import function can also read gpcb footprint file, in Newlib format.
      * (One footprint per file, Newlib files have no special ext.)
      */
-    MODULE* Import_Module( const wxString& aName = wxT("") );
+    MODULE* ImportFootprint( const wxString& aName = wxT( "") );
 
     /**
-     * Load in Modedit a footprint from the main board.
+     * Load a footprint from the main board into the Footprint Editor.
      *
-     * @param aFootprint = the module to load. If NULL, a module reference will we asked to user
-     * @return true if a module isloaded, false otherwise.
+     * @param aFootprint = the footprint to load. If NULL, the user will be asked for a
+     *                     footprint reference.
+     * @return true if a footprint is loaded.
      */
     bool LoadFootprintFromBoard( MODULE* aFootprint );
 
     /**
      * Display the list of footprints currently existing on the BOARD.
      *
-     * @return a pointer to a module if this module is selected or NULL otherwise
-     * @param aPcb = the board from footprints can be loaded
+     * @return the selected footprint or nullptr
      */
     MODULE* SelectFootprintFromBoard( BOARD* aPcb );
 
-    // functions to edit footprint edges
-
     /**
-     * Delete the given module from its library.
+     * Delete the given footprint from its library.
      */
-    bool DeleteModuleFromLibrary( const LIB_ID& aFPID, bool aConfirm );
+    bool DeleteFootprintFromLibrary( const LIB_ID& aFPID, bool aConfirm );
 
     /**
      * @return the color of the grid
@@ -290,10 +278,10 @@ public:
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
     /**
-     * Override from PCB_BASE_EDIT_FRAME which adds a module to the editor's dummy board,
+     * Override from PCB_BASE_EDIT_FRAME which adds a footprint to the editor's dummy board,
      * NOT to the user's PCB.
      */
-    void AddModuleToBoard( MODULE* module ) override;
+    void AddFootprintToBoard( MODULE* aFootprint ) override;
 
     /**
      * Allows Modedit to install its preferences panel into the preferences dialog.

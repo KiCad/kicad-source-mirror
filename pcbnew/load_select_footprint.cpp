@@ -111,7 +111,7 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( MODULE* aFootprint )
                                      aItem->ClearFlags();
                                  } );
 
-    AddModuleToBoard( newFootprint );
+    AddFootprintToBoard( newFootprint );
 
     // Clear references to any net info, because the footprint editor
     // does know any thing about nets handled by the current edited board.
