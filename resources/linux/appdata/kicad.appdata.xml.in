@@ -12,6 +12,7 @@
   <summary xml:lang="de">EDA Lösung</summary>
   <summary xml:lang="it">Suite EDA</summary>
   <summary xml:lang="sv">EDA Programpaket</summary>
+  <summary xml:lang="zh_CN">EDA 工具箱</summary>
 
   <provides>
     <binary>kicad</binary>
@@ -55,6 +56,10 @@
       design automatisering. KiCad innehåller program för utveckling och redigering
       av kretsscheman och tryckta kretskort samt för export av kretskort,
       t.ex. med Gerber-format.
+    </p>
+    <p xml:lang="zh_CN">
+       一款跨平台的开源电子设计自动化工具箱。
+       该程序处理原理图设计、和 PCB 布局与 Gerber 输出。
     </p>
   </description>
 
