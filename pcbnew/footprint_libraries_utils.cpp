@@ -629,7 +629,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
     if( !aStoreInNewLib )
     {
         // The footprints are saved in an existing .pretty library in the fp lib table
-        PROJECT&        prj = Prj();
+        PROJECT& prj = Prj();
         wxString last_nickname = prj.GetRString( PROJECT::PCB_LIB_NICKNAME );
         wxString nickname = SelectLibrary( last_nickname );
 
@@ -669,11 +669,11 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
         if( libPath.IsEmpty() )     // Aborted
             return;
 
+        if( aLibPath )
+            *aLibPath = libPath;
 
-        if( aLibPath ) *aLibPath = libPath;
-
-        IO_MGR::PCB_FILE_T  piType = IO_MGR::KICAD_SEXP;
-        PLUGIN::RELEASER  pi( IO_MGR::PluginFind( piType ) );
+        IO_MGR::PCB_FILE_T piType = IO_MGR::KICAD_SEXP;
+        PLUGIN::RELEASER   pi( IO_MGR::PluginFind( piType ) );
 
         for( MODULE* footprint : GetBoard()->Modules() )
         {
