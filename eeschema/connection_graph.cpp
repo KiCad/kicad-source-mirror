@@ -2093,6 +2093,8 @@ int CONNECTION_GRAPH::RunERC()
             if( !subgraph->ResolveDrivers( true ) )
                 error_count++;
         }
+        else
+            subgraph->ResolveDrivers( false );
 
         if( settings.IsTestEnabled( ERCE_BUS_TO_NET_CONFLICT ) )
         {
