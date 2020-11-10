@@ -80,25 +80,25 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
 
     if( aSelected.Size() == 1 && aSelected.Front()->Type() == PCB_MODULE_T )
     {
-        // make the module safe to transfer to other pcbs
-        const MODULE* mod = static_cast<MODULE*>( aSelected.Front() );
+        // make the footprint safe to transfer to other pcbs
+        const MODULE* footprint = static_cast<MODULE*>( aSelected.Front() );
         // Do not modify existing board
-        MODULE newModule( *mod );
+        MODULE newFootprint( *footprint );
 
-        for( D_PAD* pad : newModule.Pads() )
+        for( D_PAD* pad : newFootprint.Pads() )
             pad->SetNetCode( 0 );
 
         // locked means "locked in place"; copied items therefore can't be locked
-        newModule.SetLocked( false );
+        newFootprint.SetLocked( false );
 
         // locate the reference point at (0, 0) in the copied items
-        newModule.Move( wxPoint( -refPoint.x, -refPoint.y ) );
+        newFootprint.Move( wxPoint( -refPoint.x, -refPoint.y ) );
 
-        Format( static_cast<BOARD_ITEM*>( &newModule ) );
+        Format( static_cast<BOARD_ITEM*>( &newFootprint ) );
     }
     else if( isModEdit )
     {
-        MODULE partialModule( m_board );
+        MODULE partialFootprint( m_board );
 
         for( const EDA_ITEM* item : aSelected )
         {
@@ -114,19 +114,20 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
             if( FP_TEXT* text = dyn_cast<FP_TEXT*>( clone ) )
                 text->SetType( FP_TEXT::TEXT_is_DIVERS );
 
-            // If it is only a module, clear the nets from the pads
+            // If it is only a footprint, clear the nets from the pads
             if( D_PAD* pad = dyn_cast<D_PAD*>( clone ) )
                pad->SetNetCode( 0 );
 
-            // Add the pad to the new module before moving to ensure the local coords are correct
-            partialModule.Add( clone );
+            // Add the pad to the new footprint before moving to ensure the local coords are
+            // correct
+            partialFootprint.Add( clone );
 
             if( group )
             {
                 static_cast<PCB_GROUP*>( clone )->RunOnDescendants(
                         [&]( BOARD_ITEM* descendant )
                         {
-                            partialModule.Add( descendant );
+                            partialFootprint.Add( descendant );
                         } );
             }
 
@@ -135,12 +136,12 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
         }
 
         // Set the new relative internal local coordinates of copied items
-        MODULE* editedModule = m_board->Modules().front();
-        wxPoint moveVector = partialModule.GetPosition() + editedModule->GetPosition();
+        MODULE* editedFootprint = m_board->Modules().front();
+        wxPoint moveVector = partialFootprint.GetPosition() + editedFootprint->GetPosition();
 
-        partialModule.MoveAnchorPosition( moveVector );
+        partialFootprint.MoveAnchorPosition( moveVector );
 
-        Format( &partialModule, 0 );
+        Format( &partialFootprint, 0 );
     }
     else
     {
@@ -172,14 +173,14 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
             else if( item->Type() == PCB_FP_TEXT_T )
             {
                 // Convert to PCB_TEXT_T
-                MODULE*   mod = static_cast<MODULE*>( item->GetParent() );
+                MODULE*   footprint = static_cast<MODULE*>( item->GetParent() );
                 FP_TEXT*  fp_text = static_cast<FP_TEXT*>( item );
                 PCB_TEXT* pcb_text = new PCB_TEXT( m_board );
 
                 if( fp_text->GetText() == "${VALUE}" )
-                    pcb_text->SetText( mod->GetValue() );
+                    pcb_text->SetText( footprint->GetValue() );
                 else if( fp_text->GetText() == "${REFERENCE}" )
-                    pcb_text->SetText( mod->GetReference() );
+                    pcb_text->SetText( footprint->GetReference() );
                 else
                     pcb_text->CopyText( *fp_text );
 
@@ -190,13 +191,13 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
             else if( item->Type() == PCB_PAD_T )
             {
                 // Create a parent to own the copied pad
-                MODULE* mod = new MODULE( m_board );
+                MODULE* footprint = new MODULE( m_board );
                 D_PAD*  pad = (D_PAD*) item->Clone();
 
-                mod->SetPosition( pad->GetPosition() );
+                footprint->SetPosition( pad->GetPosition() );
                 pad->SetPos0( wxPoint() );
-                mod->Add( pad );
-                copy = mod;
+                footprint->Add( pad );
+                copy = footprint;
             }
             else if( item->Type() == PCB_FP_ZONE_AREA_T )
             {
@@ -218,8 +219,8 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
                             {
                                 // locked means "locked in place"; copied items therefore can't
                                 // be locked
-                                if( MODULE* module = dyn_cast<MODULE*>( titem ) )
-                                    module->SetLocked( false );
+                                if( MODULE* footprint = dyn_cast<MODULE*>( titem ) )
+                                    footprint->SetLocked( false );
                                 else if( TRACK* track = dyn_cast<TRACK*>( titem ) )
                                     track->SetLocked( false );
                             };

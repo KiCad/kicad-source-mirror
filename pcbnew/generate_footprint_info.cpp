@@ -49,14 +49,14 @@ class FOOTPRINT_INFO_GENERATOR
     wxString      m_html;
     FP_LIB_TABLE* m_fp_lib_table;
     LIB_ID const  m_lib_id;
-    MODULE*       m_module;
+    MODULE*       m_footprint;
 
 public:
     FOOTPRINT_INFO_GENERATOR( FP_LIB_TABLE* aFpLibTable, LIB_ID const& aLibId )
         : m_html( DescriptionFormat ),
           m_fp_lib_table( aFpLibTable ),
           m_lib_id( aLibId ),
-          m_module( nullptr )
+          m_footprint( nullptr )
     { }
 
     /**
@@ -71,8 +71,8 @@ public:
 
         try
         {
-            m_module = m_fp_lib_table->FootprintLoad( m_lib_id.GetLibNickname(),
-                                                      m_lib_id.GetLibItemName() );
+            m_footprint = m_fp_lib_table->FootprintLoad( m_lib_id.GetLibNickname(),
+                                                         m_lib_id.GetLibItemName() );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -83,11 +83,11 @@ public:
             return;
         }
 
-        if( m_module )
+        if( m_footprint )
         {
             wxString name = m_lib_id.GetLibItemName();
-            wxString desc = m_module->GetDescription();
-            wxString keywords = m_module->GetKeywords();
+            wxString desc = m_footprint->GetDescription();
+            wxString keywords = m_footprint->GetKeywords();
             wxString doc;
 
             // It is currently common practice to store a documentation link in the description.

@@ -305,10 +305,9 @@ public:
      * places \a aModule at the current cursor position and updates module coordinates
      * with the new position.
      *
-     * @param aModule A MODULE object point of the module to be placed.
      * @param aRecreateRatsnest A bool true redraws the module rats nest.
      */
-    void PlaceModule( MODULE* aModule, bool aRecreateRatsnest = true );
+    void PlaceFootprint( MODULE* aFootprint, bool aRecreateRatsnest = true );
 
     void ShowPadPropertiesDialog( D_PAD* aPad );
 

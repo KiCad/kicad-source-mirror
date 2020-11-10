@@ -245,7 +245,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent,
 {
     wxString msg;
 
-    // Create a copy only if the module has not been added during this update
+    // Create a copy only if the footprint has not been added during this update
     MODULE* copy = m_commit.GetStatus( aPcbComponent ) ? nullptr : (MODULE*) aPcbComponent->Clone();
     bool changed = false;
 
@@ -350,7 +350,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
 {
     wxString msg;
 
-    // Create a copy only if the module has not been added during this update
+    // Create a copy only if the footprint has not been added during this update
     MODULE* copy = m_commit.GetStatus( aPcbComponent ) ? nullptr : (MODULE*) aPcbComponent->Clone();
     bool changed = false;
 
@@ -624,30 +624,30 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
     wxString msg;
     const COMPONENT* component;
 
-    for( MODULE* module : m_board->Modules() )
+    for( MODULE* footprint : m_board->Modules() )
     {
-        if( ( module->GetAttributes() & MOD_BOARD_ONLY ) > 0 )
+        if(( footprint->GetAttributes() & MOD_BOARD_ONLY ) > 0 )
             continue;
 
         if( m_lookupByTimestamp )
-            component = aNetlist.GetComponentByPath( module->GetPath() );
+            component = aNetlist.GetComponentByPath( footprint->GetPath() );
         else
-            component = aNetlist.GetComponentByReference( module->GetReference() );
+            component = aNetlist.GetComponentByReference( footprint->GetReference() );
 
         if( component == NULL || component->GetProperties().count( "exclude_from_board" ) )
         {
-            if( module->IsLocked() )
+            if( footprint->IsLocked() )
             {
-                msg.Printf( _( "Cannot remove unused footprint %s (locked)." ), module->GetReference() );
+                msg.Printf( _( "Cannot remove unused footprint %s (locked)." ), footprint->GetReference() );
                 m_reporter->Report( msg, RPT_SEVERITY_WARNING );
                 continue;
             }
 
-            msg.Printf( _( "Remove unused footprint %s." ), module->GetReference() );
+            msg.Printf( _( "Remove unused footprint %s." ), footprint->GetReference() );
             m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
             if( !m_isDryRun )
-                m_commit.Remove( module );
+                m_commit.Remove( footprint );
         }
     }
 

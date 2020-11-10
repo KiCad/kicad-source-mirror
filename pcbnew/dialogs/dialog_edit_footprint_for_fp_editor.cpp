@@ -112,7 +112,7 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
 
     bLowerSizer3D->Add( m_PreviewPane, 1, wxEXPAND, 5 );
 
-    m_FootprintNameCtrl->SetValidator( MODULE_NAME_CHAR_VALIDATOR() );
+    m_FootprintNameCtrl->SetValidator( FOOTPRINT_NAME_VALIDATOR() );
 
     // Set font sizes
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );

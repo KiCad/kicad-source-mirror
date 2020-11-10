@@ -474,7 +474,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( MODULE* aExisting, MODULE* aNew, BOARD_C
 
     aNew->SetParent( GetBoard() );
 
-    PlaceModule( aNew, false );
+    PlaceFootprint( aNew, false );
 
     // PlaceModule will move the footprint to the cursor position, which we don't want.  Copy
     // the original position across.

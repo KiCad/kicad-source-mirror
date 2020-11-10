@@ -68,7 +68,7 @@ void GRID_CELL_TEXT_EDITOR::StartingKey( wxKeyEvent& event )
 }
 
 
-MODULE_NAME_CHAR_VALIDATOR::MODULE_NAME_CHAR_VALIDATOR( wxString* aValue ) :
+FOOTPRINT_NAME_VALIDATOR::FOOTPRINT_NAME_VALIDATOR( wxString* aValue ) :
     wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
 {
     // This list of characters follows the string from class_module.cpp

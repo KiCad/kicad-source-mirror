@@ -742,7 +742,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
 
         commit.Add( newFootprint );
         viewControls->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-        pcbframe->PlaceModule( newFootprint );
+        pcbframe->PlaceFootprint( newFootprint );
         newFootprint->SetPosition( wxPoint( 0, 0 ) );
         viewControls->SetCrossHairCursorPosition( cursorPos, false );
         commit.Push( wxT( "Insert footprint" ) );

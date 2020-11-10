@@ -409,7 +409,7 @@ MODULE* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aIn
     // Generate footprint. the value is also used as footprint name.
     msg = "L";
     WX_TEXT_ENTRY_DIALOG cmpdlg( &editFrame, _( "Component Value:" ), wxEmptyString, msg );
-    cmpdlg.SetTextValidator( MODULE_NAME_CHAR_VALIDATOR( &msg ) );
+    cmpdlg.SetTextValidator( FOOTPRINT_NAME_VALIDATOR( &msg ) );
 
     if( ( cmpdlg.ShowModal() != wxID_OK ) || msg.IsEmpty() )
         return nullptr;    //  Aborted by user

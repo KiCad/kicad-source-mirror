@@ -200,25 +200,25 @@ static MODULE* parse_module_kicad( const wxFileName& aFileName )
 MODULE* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T aFileType,
         const wxString& aName )
 {
-    MODULE* module;
+    MODULE* footprint;
 
     switch( aFileType )
     {
     case IO_MGR::GEDA_PCB:
     case IO_MGR::LEGACY:
-        module = parse_module_with_plugin( aFileName, aFileType, aName );
+        footprint = parse_module_with_plugin( aFileName, aFileType, aName );
         break;
 
     case IO_MGR::KICAD_SEXP:
-        module = parse_module_kicad( aFileName );
+        footprint = parse_module_kicad( aFileName );
         break;
 
     default:
         wxFAIL_MSG( wxT( "unexpected IO_MGR::PCB_FILE_T" ) );
-        module = NULL;
+        footprint = NULL;
     }
 
-    return module;
+    return footprint;
 }
 
 
@@ -251,8 +251,8 @@ MODULE* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 
     cfg->m_LastImportExportPath = lastOpenedPathForLoading;
 
-    wxString moduleName;
-    IO_MGR::PCB_FILE_T fileType = detect_file_type( fp, fn.GetFullPath(), &moduleName );
+    wxString footprintName;
+    IO_MGR::PCB_FILE_T fileType = detect_file_type( fp, fn.GetFullPath(), &footprintName );
 
     if( fileType == IO_MGR::FILE_TYPE_NONE )
     {
@@ -260,16 +260,16 @@ MODULE* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
         return NULL;
     }
 
-    MODULE* module = NULL;
+    MODULE* footprint = NULL;
 
     try
     {
-        module = try_load_footprint( fn, fileType, moduleName );
+        footprint = try_load_footprint( fn, fileType, footprintName );
 
-        if( !module )
+        if( !footprint )
         {
             wxString msg = wxString::Format( _( "Unable to load footprint '%s' from '%s'" ),
-                                             moduleName,
+                                             footprintName,
                                              fn.GetFullPath() );
             DisplayError( this, msg );
             return NULL;
@@ -284,25 +284,25 @@ MODULE* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
         // a fp library is a set of separate files, and the error(s) are not necessary when
         // reading the selected file
 
-        if( !module )
+        if( !footprint )
             return NULL;
     }
 
-    module->SetFPID( LIB_ID( wxEmptyString, moduleName ) );
+    footprint->SetFPID( LIB_ID( wxEmptyString, footprintName ) );
 
     // Insert footprint in list
-    AddFootprintToBoard( module );
+    AddFootprintToBoard( footprint );
 
     // Display info :
-    SetMsgPanel( module );
-    PlaceModule( module );
+    SetMsgPanel( footprint );
+    PlaceFootprint( footprint );
 
-    module->SetPosition( wxPoint( 0, 0 ) );
+    footprint->SetPosition( wxPoint( 0, 0 ) );
 
     GetBoard()->BuildListOfNets();
     UpdateView();
 
-    return module;
+    return footprint;
 }
 
 
@@ -341,11 +341,11 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( MODULE* aFootprint )
 
         PCB_IO  pcb_io( CTL_FOR_LIBRARY );
 
-        /*  This module should *already* be "normalized" in a way such that
-            orientation is zero, etc., since it came from module editor.
+        /*  This footprint should *already* be "normalized" in a way such that
+            orientation is zero, etc., since it came from the Footprint Editor.
 
-            module->SetParent( 0 );
-            module->SetOrientation( 0 );
+            aFootprint->SetParent( 0 );
+            aFootprint->SetOrientation( 0 );
         */
 
         pcb_io.Format( aFootprint );
@@ -795,26 +795,26 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     }
 
     BOARD*  mainpcb  = pcbframe->GetBoard();
-    MODULE* source_module  = NULL;
-    MODULE* module_in_edit = GetBoard()->GetFirstFootprint();
+    MODULE* sourceFootprint  = NULL;
+    MODULE* editorFootprint = GetBoard()->GetFirstFootprint();
 
-    // Search the old module (source) if exists
+    // Search the old footprint (source) if exists
     // Because this source could be deleted when editing the main board...
-    if( module_in_edit->GetLink() != niluuid )        // this is not a new module ...
+    if( editorFootprint->GetLink() != niluuid )        // this is not a new footprint ...
     {
-        source_module = nullptr;
+        sourceFootprint = nullptr;
 
-        for( MODULE* mod : mainpcb->Modules() )
+        for( MODULE* candidate : mainpcb->Modules() )
         {
-            if( module_in_edit->GetLink() == mod->m_Uuid )
+            if( editorFootprint->GetLink() == candidate->m_Uuid )
             {
-                source_module = mod;
+                sourceFootprint = candidate;
                 break;
             }
         }
     }
 
-    if( !aAddNew && source_module == NULL ) // source not found
+    if( !aAddNew && sourceFootprint == NULL ) // source not found
     {
         DisplayError( this, _( "Unable to find the footprint on the main board.\nCannot save." ) );
         return false;
@@ -825,18 +825,19 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     BOARD_COMMIT commit( pcbframe );
 
     // Create the "new" module
-    MODULE* newmodule = new MODULE( *module_in_edit );
-    const_cast<KIID&>( newmodule->m_Uuid ) = KIID();
+    MODULE* newFootprint = new MODULE( *editorFootprint );
+    const_cast<KIID&>( newFootprint->m_Uuid ) = KIID();
 
-    newmodule->SetParent( mainpcb );
-    newmodule->SetLink( niluuid );
+    newFootprint->SetParent( mainpcb );
+    newFootprint->SetLink( niluuid );
 
-    if( source_module )         // this is an update command
+    if( sourceFootprint )         // this is an update command
     {
-        // In the main board the new module replaces the old module (pos, orient, ref, value,
-        // connections and properties are kept) and the source_module (old module) is deleted
-        pcbframe->ExchangeFootprint( source_module, newmodule, commit );
-        const_cast<KIID&>( newmodule->m_Uuid ) = module_in_edit->GetLink();
+        // In the main board the new footprint replaces the old one (pos, orient, ref, value,
+        // connections and properties are kept) and the sourceFootprint (old footprint) is
+        // deleted
+        pcbframe->ExchangeFootprint( sourceFootprint, newFootprint, commit );
+        const_cast<KIID&>( newFootprint->m_Uuid ) = editorFootprint->GetLink();
         commit.Push( wxT( "Update module" ) );
     }
     else        // This is an insert command
@@ -844,19 +845,19 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         KIGFX::VIEW_CONTROLS* viewControls = pcbframe->GetCanvas()->GetViewControls();
         VECTOR2D              cursorPos = viewControls->GetCursorPosition();
 
-        commit.Add( newmodule );
+        commit.Add( newFootprint );
         viewControls->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-        pcbframe->PlaceModule( newmodule );
-        newmodule->SetPosition( wxPoint( 0, 0 ) );
+        pcbframe->PlaceFootprint( newFootprint );
+        newFootprint->SetPosition( wxPoint( 0, 0 ) );
         viewControls->SetCrossHairCursorPosition( cursorPos, false );
-        const_cast<KIID&>( newmodule->m_Uuid ) = KIID();
+        const_cast<KIID&>( newFootprint->m_Uuid ) = KIID();
         commit.Push( wxT( "Insert module" ) );
 
         pcbframe->Raise();
-        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::placeModule, true, newmodule );
+        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::placeModule, true, newFootprint );
     }
 
-    newmodule->ClearFlags();
+    newFootprint->ClearFlags();
 
     return true;
 }
@@ -957,9 +958,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aFootprint )
         return false;
     }
 
-    bool module_exists = tbl->FootprintExists( libraryName, footprintName );
+    bool footprintExists = tbl->FootprintExists( libraryName, footprintName );
 
-    if( module_exists )
+    if( footprintExists )
     {
         wxString msg = wxString::Format( _( "Footprint %s already exists in %s." ),
                                          footprintName,
@@ -977,8 +978,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aFootprint )
     // Once saved-as a board footprint is no longer a board footprint
     aFootprint->SetLink( niluuid );
 
-    wxString fmt = module_exists ? _( "Component \"%s\" replaced in \"%s\"" ) :
-                                   _( "Component \"%s\" added in  \"%s\"" );
+    wxString fmt = footprintExists ? _( "Component \"%s\" replaced in \"%s\"" )
+                                   : _( "Component \"%s\" added in \"%s\"" );
 
     wxString msg = wxString::Format( fmt, footprintName.GetData(), libraryName.GetData() );
     SetStatusText( msg );
@@ -994,7 +995,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
     if( GetScreen()->IsModify() && m_revertModule )
     {
         wxString msg = wxString::Format( _( "Revert \"%s\" to last version saved?" ),
-                GetLoadedFPID().GetLibItemName().wx_str() );
+                                         GetLoadedFPID().GetLibItemName().wx_str() );
 
         if( ConfirmRevertDialog( this, msg ) )
         {
@@ -1023,12 +1024,12 @@ MODULE* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName )
 {
     wxString footprintName = aFootprintName;
 
-    // Ask for the new module name
+    // Ask for the new footprint name
     if( footprintName.IsEmpty() )
     {
         WX_TEXT_ENTRY_DIALOG dlg( this, _( "Enter footprint name:" ), _( "New Footprint" ),
                                   footprintName );
-        dlg.SetTextValidator( MODULE_NAME_CHAR_VALIDATOR( &footprintName ) );
+        dlg.SetTextValidator( FOOTPRINT_NAME_VALIDATOR( &footprintName ) );
 
         if( dlg.ShowModal() != wxID_OK )
             return NULL;    //Aborted by user

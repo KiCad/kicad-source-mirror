@@ -126,7 +126,7 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
         if( !saveCurrentTheme( false ) )
             return;
 
-        MODULE_NAME_CHAR_VALIDATOR themeNameValidator;
+        FOOTPRINT_NAME_VALIDATOR themeNameValidator;
         wxTextEntryDialog dlg( this, _( "New theme name:" ), _( "Add Color Theme" ) );
         dlg.SetTextValidator( themeNameValidator );
 

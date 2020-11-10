@@ -121,7 +121,7 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( MODULE* aFootprint )
     newFootprint->ClearAllNets();
 
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-    PlaceModule( newFootprint );
+    PlaceFootprint( newFootprint );
     newFootprint->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
 
     // Put it on FRONT layer,
@@ -285,17 +285,17 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
 
 MODULE* PCB_BASE_FRAME::LoadFootprint( const LIB_ID& aFootprintId )
 {
-    MODULE* module = NULL;
+    MODULE* footprint = NULL;
 
     try
     {
-        module = loadFootprint( aFootprintId );
+        footprint = loadFootprint( aFootprintId );
     }
     catch( const IO_ERROR& )
     {
     }
 
-    return module;
+    return footprint;
 }
 
 
@@ -305,36 +305,34 @@ MODULE* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
 
     wxCHECK_MSG( fptbl, NULL, wxT( "Cannot look up LIB_ID in NULL FP_LIB_TABLE." ) );
 
-    MODULE *module = nullptr;
+    MODULE *footprint = nullptr;
     try
     {
-        module = fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
+        footprint = fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
     }
     catch( const IO_ERROR& )
     {
     }
 
-    // If the module is found, clear all net info,
-    // to be sure there is no broken links
-    // to any netinfo list (should be not needed, but it can be edited from
-    // the footprint editor )
-    if( module )
-        module->ClearAllNets();
+    // If the footprint is found, clear all net info to be sure there are no broken links to
+    // any netinfo list (should be not needed, but it can be edited from the footprint editor )
+    if( footprint )
+        footprint->ClearAllNets();
 
-    return module;
+    return footprint;
 }
 
 
 MODULE* FOOTPRINT_EDIT_FRAME::SelectFootprintFromBoard( BOARD* aPcb )
 {
-    static wxString oldName;       // Save name of last module selected.
+    static wxString oldName;       // Save name of last footprint selected.
 
     wxString        fpname;
     wxString        msg;
     wxArrayString   listnames;
 
-    for( auto module : aPcb->Modules() )
-        listnames.Add( module->GetReference() );
+    for( MODULE* footprint : aPcb->Modules() )
+        listnames.Add( footprint->GetReference() );
 
     msg.Printf( _( "Footprints [%u items]" ), (unsigned) listnames.GetCount() );
 
@@ -421,15 +419,15 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
 }
 
 
-static MODULE*           s_ModuleInitialCopy = NULL;   // Copy of module for abort/undo command
+static MODULE* s_FootprintInitialCopy = NULL;       // Copy of footprint for abort/undo command
 
-static PICKED_ITEMS_LIST s_PickedList;                 // a pick-list to save initial module
-//   and dragged tracks
+static PICKED_ITEMS_LIST s_PickedList;              // A pick-list to save initial footprint
+                                                    //   and dragged tracks
 
 
 MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
 {
-    wxString        moduleName;
+    wxString        footprintName;
     wxArrayString   fplist;
 
     // Build list of available fp references, to display them in dialog
@@ -443,15 +441,15 @@ MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
     if( dlg.ShowModal() != wxID_OK )    //Aborted by user
         return NULL;
 
-    moduleName = dlg.GetValue();
-    moduleName.Trim( true );
-    moduleName.Trim( false );
+    footprintName = dlg.GetValue();
+    footprintName.Trim( true );
+    footprintName.Trim( false );
 
-    if( !moduleName.IsEmpty() )
+    if( !footprintName.IsEmpty() )
     {
         for( auto mod : GetBoard()->Modules() )
         {
-            if( mod->GetReference().CmpNoCase( moduleName ) == 0 )
+            if( mod->GetReference().CmpNoCase( footprintName ) == 0 )
                 return mod;
         }
     }
@@ -460,23 +458,23 @@ MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
 }
 
 
-void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, bool aRecreateRatsnest )
+void PCB_BASE_FRAME::PlaceFootprint( MODULE* aFootprint, bool aRecreateRatsnest )
 {
-    if( aModule == 0 )
+    if( aFootprint == 0 )
         return;
 
     OnModify();
 
-    if( aModule->IsNew() )
+    if( aFootprint->IsNew() )
     {
-        SaveCopyInUndoList( aModule, UNDO_REDO::NEWITEM );
+        SaveCopyInUndoList( aFootprint, UNDO_REDO::NEWITEM );
     }
-    else if( aModule->IsMoving() )
+    else if( aFootprint->IsMoving() )
     {
-        ITEM_PICKER picker( nullptr, aModule, UNDO_REDO::CHANGED );
-        picker.SetLink( s_ModuleInitialCopy );
+        ITEM_PICKER picker( nullptr, aFootprint, UNDO_REDO::CHANGED );
+        picker.SetLink( s_FootprintInitialCopy );
         s_PickedList.PushItem( picker );
-        s_ModuleInitialCopy = NULL;     // the picker is now owner of s_ModuleInitialCopy.
+        s_FootprintInitialCopy = NULL;     // the picker is now owner of s_ModuleInitialCopy.
     }
 
     if( s_PickedList.GetCount() )
@@ -488,19 +486,19 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, bool aRecreateRatsnest )
         s_PickedList.ClearItemsList();
     }
 
-    aModule->SetPosition( (wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition() );
-    aModule->ClearFlags();
+    aFootprint->SetPosition((wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition() );
+    aFootprint->ClearFlags();
 
-    delete s_ModuleInitialCopy;
-    s_ModuleInitialCopy = NULL;
+    delete s_FootprintInitialCopy;
+    s_FootprintInitialCopy = NULL;
 
     if( aRecreateRatsnest )
-        m_pcb->GetConnectivity()->Update( aModule );
+        m_pcb->GetConnectivity()->Update( aFootprint );
 
     if( aRecreateRatsnest )
         Compile_Ratsnest( true );
 
-    SetMsgPanel( aModule );
+    SetMsgPanel( aFootprint );
 }
 
 
