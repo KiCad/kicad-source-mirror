@@ -32,13 +32,12 @@
 #include <plotter.h>
 #include <bitmaps.h>
 #include <macros.h>
-
+#include <geometry/shape_rect.h>
 #include <sch_painter.h>
 #include <sch_junction.h>
 #include <sch_connection.h>
 #include <schematic.h>
 #include <settings/color_settings.h>
-
 
 SCH_JUNCTION::SCH_JUNCTION( const wxPoint& aPosition, int aDiameter, SCH_LAYER_ID aLayer ) :
     SCH_ITEM( NULL, SCH_JUNCTION_T )
@@ -76,18 +75,35 @@ void SCH_JUNCTION::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
+SHAPE_CIRCLE SCH_JUNCTION::getEffectiveShape() const
+{
+    int diameter;
+
+    if( m_diameter != 0 )
+        diameter = m_diameter;
+    else if( Schematic() )
+        diameter = Schematic()->Settings().m_JunctionSize;
+    else
+        diameter = Mils2iu( DEFAULT_JUNCTION_DIAM );
+
+    if( diameter != 1 )  // Diameter 1 means users doesn't want to draw junction dots
+    {
+        NETCLASSPTR netclass = NetClass();
+
+        if( netclass )
+            diameter = std::max( diameter, KiROUND( netclass->GetWireWidth() * 1.7 ) );
+    }
+
+    return SHAPE_CIRCLE( m_pos, std::max( diameter / 2, 1 ) );
+}
+
+
 const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
 {
     EDA_RECT rect;
 
-    int size = Schematic() ? Schematic()->Settings().m_JunctionSize
-                           : Mils2iu( DEFAULT_JUNCTION_DIAM );
-
-    if( m_diameter != 0 )
-        size = m_diameter;
-
     rect.SetOrigin( m_pos );
-    rect.Inflate( ( GetPenWidth() + size ) / 2 );
+    rect.Inflate( getEffectiveShape().GetRadius() );
 
     return rect;
 }
@@ -101,14 +117,9 @@ void SCH_JUNCTION::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
     if( color == COLOR4D::UNSPECIFIED )
         color = aSettings->GetLayerColor( GetLayer() );
 
-    int diameter = Schematic() ? Schematic()->Settings().m_JunctionSize
-                               : Mils2iu( DEFAULT_JUNCTION_DIAM );
+    SHAPE_CIRCLE circle = getEffectiveShape();
 
-    if( m_diameter != 0 )
-        diameter = m_diameter;
-
-    GRFilledCircle( nullptr, DC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, diameter / 2, 0,
-                    color, color );
+    GRFilledCircle( NULL, DC, (wxPoint) circle.GetCenter() + aOffset, circle.GetRadius(), color );
 }
 
 
@@ -171,34 +182,13 @@ COLOR4D SCH_JUNCTION::GetJunctionColor() const
 
 int SCH_JUNCTION::GetDiameter() const
 {
-    int diameter = m_diameter;
-
-    if( diameter == 0 )
-    {
-        // Careful; preview items don't have schematics...
-        if( Schematic() )
-            diameter = Schematic()->Settings().m_JunctionSize;
-        else
-            diameter = DEFAULT_JUNCTION_DIAM * IU_PER_MILS;
-    }
-
-    NETCLASSPTR netclass = NetClass();
-
-    // Diameter 1 means users doesn't want to draw junction dots
-    if( netclass && ( diameter != 1 ) )
-        diameter = std::max( diameter, KiROUND( netclass->GetWireWidth() * 1.7 ) );
-
-    return std::max( diameter, 1 );
+    return getEffectiveShape().GetRadius() * 2;
 }
 
 
 bool SCH_JUNCTION::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    EDA_RECT rect = GetBoundingBox();
-
-    rect.Inflate( aAccuracy );
-
-    return rect.Contains( aPosition );
+    return getEffectiveShape().Collide( SEG( aPosition, aPosition ), aAccuracy );
 }
 
 
@@ -207,14 +197,21 @@ bool SCH_JUNCTION::HitTest( const EDA_RECT& aRect, bool aContained, int aAccurac
     if( m_Flags & STRUCT_DELETED || m_Flags & SKIP_STRUCT )
         return false;
 
-    EDA_RECT rect = aRect;
-
-    rect.Inflate( aAccuracy );
-
     if( aContained )
-        return rect.Contains( GetBoundingBox() );
+    {
+        EDA_RECT selRect = aRect;
 
-    return rect.Intersects( GetBoundingBox() );
+        selRect.Inflate( aAccuracy );
+
+        return selRect.Contains( GetBoundingBox() );
+    }
+    else
+    {
+        SHAPE_CIRCLE junction = getEffectiveShape();
+        SHAPE_RECT   selRect( aRect.GetPosition(), aRect.GetWidth(), aRect.GetHeight() );
+
+        return selRect.Collide( &junction, aAccuracy );
+    }
 }
 
 
@@ -234,13 +231,7 @@ void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
 
     aPlotter->SetColor( color );
 
-    int diameter = Schematic() ? Schematic()->Settings().m_JunctionSize
-                               : Mils2iu( DEFAULT_JUNCTION_DIAM );
-
-    if( m_diameter != 0 )
-        diameter = m_diameter;
-
-    aPlotter->Circle( m_pos, diameter, FILL_TYPE::FILLED_SHAPE );
+    aPlotter->Circle( m_pos, GetDiameter(), FILL_TYPE::FILLED_SHAPE );
 }
 
 

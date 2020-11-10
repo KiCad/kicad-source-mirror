@@ -28,6 +28,7 @@
 
 #include <sch_item.h>
 #include <gal/color4d.h>
+#include <geometry/shape_circle.h>
 
 class NETLIST_OBJECT_LIST;
 
@@ -120,6 +121,8 @@ public:
 
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override;
+
+    SHAPE_CIRCLE getEffectiveShape() const;
 };
 
 
