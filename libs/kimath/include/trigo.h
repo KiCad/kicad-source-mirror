@@ -169,15 +169,13 @@ inline double DistanceLinePoint( const wxPoint &linePointA,
 //! @param pointB Second point
 //! @param threshold The maximum distance
 //! @return True or false
-inline bool HitTestPoints( const wxPoint &pointA, const wxPoint &pointB,
-                           double threshold )
+inline bool HitTestPoints( const wxPoint &pointA, const wxPoint &pointB, double threshold )
 {
     wxPoint vectorAB = pointB - pointA;
 
     // Compare the distances squared. The double is needed to avoid
     // overflow during int multiplication
-    double sqdistance = (double)vectorAB.x * vectorAB.x +
-                        (double)vectorAB.y * vectorAB.y;
+    double sqdistance = (double)vectorAB.x * vectorAB.x + (double)vectorAB.y * vectorAB.y;
 
     return sqdistance < threshold * threshold;
 }
@@ -199,8 +197,7 @@ inline double CrossProduct( const wxPoint &vectorA, const wxPoint &vectorB )
  * @param aEnd is the second end-point of the line segment
  * @param aDist = maximum distance for hit
 */
-bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart,
-                     wxPoint aEnd, int aDist );
+bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist );
 
 /**
  * Return the length of a line segment defined by \a aPointA and \a aPointB.
