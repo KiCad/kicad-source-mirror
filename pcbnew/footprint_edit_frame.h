@@ -106,8 +106,6 @@ public:
      */
     void UpdateUserInterface();
 
-    void Process_Special_Functions( wxCommandEvent& event );
-
     /**
      * Refresh the library tree and redraw the window
      */
@@ -137,6 +135,8 @@ public:
 
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
 
+    void SelectLayer( wxCommandEvent& event );
+
     // The Tool Framework initalization, for GAL mode
     void setupTools();
 
@@ -163,7 +163,9 @@ public:
     /**
      * Called from the main toolbar to load a footprint from board mainly to edit it.
      */
-    void LoadModuleFromBoard( wxCommandEvent& event );
+    void LoadFootprintFromBoard( wxCommandEvent& event );
+
+    void SaveFootprintToBoard( wxCommandEvent& event );
 
     void LoadModuleFromLibrary( LIB_ID aFPID );
 
@@ -212,6 +214,8 @@ public:
     /// Return the LIB_ID of the part selected in the footprint tree, or the loaded part if
     /// there is no selection in the tree.
     LIB_ID GetTargetFPID() const;
+
+    void ClearModify();
 
     // importing / exporting Footprint
     /**
@@ -319,6 +323,11 @@ public:
      */
     void RegenerateLibraryTree();
 
+    void RefreshLibraryTree();
+
+    /// Reloads displayed items and sets view.
+    void UpdateView();
+
     void FocusOnLibID( const LIB_ID& aLibID );
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
@@ -343,9 +352,6 @@ protected:
      * Updates window title according to getLibNickName().
      */
     void updateTitle();
-
-    /// Reloads displayed items and sets view.
-    void updateView();
 
     void restoreLastFootprint();
     void retainLastFootprint();

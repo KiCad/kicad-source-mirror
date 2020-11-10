@@ -300,7 +300,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
     module->SetPosition( wxPoint( 0, 0 ) );
 
     GetBoard()->BuildListOfNets();
-    updateView();
+    UpdateView();
 
     return module;
 }
@@ -1007,7 +1007,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
             ClearUndoRedoList();
             GetScreen()->ClrModify();
 
-            updateView();
+            UpdateView();
             GetCanvas()->Refresh();
 
             return true;

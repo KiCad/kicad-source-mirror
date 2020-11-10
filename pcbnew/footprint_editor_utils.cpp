@@ -21,38 +21,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <3d_viewer/eda_3d_viewer.h>
-#include <board_commit.h>
-#include <class_board.h>
-#include <fp_shape.h>
-#include <class_module.h>
 #include <confirm.h>
-#include <dialog_create_array.h>
 #include <dialog_edit_footprint_for_fp_editor.h>
 #include <footprint_edit_frame.h>
 #include <footprint_tree_pane.h>
-#include <footprint_viewer_frame.h>
-#include <footprint_wizard_frame.h>
 #include <fp_lib_table.h>
 #include <functional>
-#include <gestfich.h>
-#include <kiway.h>
 #include <kiway_express.h>
 #include <pcb_layer_box_selector.h>
 #include <pcbnew_id.h>
 #include <ratsnest/ratsnest_data.h>
-#include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <trigo.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/lib_tree.h>
 
 using namespace std::placeholders;
 
 
-void FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard( wxCommandEvent& event )
+void FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( wxCommandEvent& event )
 {
     LoadFootprintFromBoard( NULL );
 }
@@ -100,7 +88,7 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
 
     GetScreen()->ClrModify();
 
-    updateView();
+    UpdateView();
     GetCanvas()->Refresh();
 
     // Update the save items if needed.
@@ -116,202 +104,18 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
 }
 
 
-void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
+void FOOTPRINT_EDIT_FRAME::SelectLayer( wxCommandEvent& event )
 {
-    int        id = event.GetId();
-    wxPoint    pos;
+    SetActiveLayer( ToLAYER_ID( m_selLayerBox->GetLayerSelection() ) );
 
-    wxGetMousePosition( &pos.x, &pos.y );
-    pos.y += 20;
+    if( GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL )
+        GetCanvas()->Refresh();
+}
 
-    switch( id )
-    {
-    case ID_MODEDIT_NEW_MODULE:
-        {
-            LIB_ID selected = m_treePane->GetLibTree()->GetSelectedLibId();
-            MODULE* module = CreateNewFootprint( wxEmptyString );
 
-            if( !module )
-                break;
-
-            if( !Clear_Pcb( true ) )
-                break;
-
-            GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-            AddModuleToBoard( module );
-
-            // Initialize data relative to nets and netclasses (for a new
-            // module the defaults are used)
-            // This is mandatory to handle and draw pads
-            GetBoard()->BuildListOfNets();
-            module->SetPosition( wxPoint( 0, 0 ) );
-
-            if( GetBoard()->GetFirstFootprint() )
-                GetBoard()->GetFirstFootprint()->ClearFlags();
-
-            Zoom_Automatique( false );
-            GetScreen()->SetModify();
-
-            // If selected from the library tree then go ahead and save it there
-            if( !selected.GetLibNickname().empty() )
-            {
-                LIB_ID fpid = module->GetFPID();
-                fpid.SetLibNickname( selected.GetLibNickname() );
-                module->SetFPID( fpid );
-                SaveFootprint( module );
-                GetScreen()->ClrModify();
-            }
-
-            updateView();
-            GetCanvas()->Refresh();
-            Update3DView( true );
-
-            SyncLibraryTree( false );
-        }
-        break;
-
-    case ID_MODEDIT_NEW_MODULE_FROM_WIZARD:
-        {
-            LIB_ID selected = m_treePane->GetLibTree()->GetSelectedLibId();
-
-            if( IsContentModified() )
-            {
-                if( !HandleUnsavedChanges( this, _( "The current footprint has been modified.  "
-                                                    "Save changes?" ),
-                                           [&]() -> bool
-                                           {
-                                               return SaveFootprint( GetBoard()->GetFirstFootprint() );
-                                           } ) )
-                {
-                    break;
-                }
-            }
-
-            FOOTPRINT_WIZARD_FRAME* wizard =
-                (FOOTPRINT_WIZARD_FRAME*) Kiway().Player( FRAME_FOOTPRINT_WIZARD, true, this );
-
-            if( wizard->ShowModal( NULL, this ) )
-            {
-                // Creates the new footprint from python script wizard
-                MODULE* module = wizard->GetBuiltFootprint();
-
-                if( module )    // i.e. if create module command is OK
-                {
-                    Clear_Pcb( false );
-
-                    GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-                    //  Add the new object to board
-                    AddModuleToBoard( module );
-
-                    // Initialize data relative to nets and netclasses (for a new
-                    // module the defaults are used)
-                    // This is mandatory to handle and draw pads
-                    GetBoard()->BuildListOfNets();
-                    module->SetPosition( wxPoint( 0, 0 ) );
-                    module->ClearFlags();
-
-                    Zoom_Automatique( false );
-                    GetScreen()->SetModify();
-
-                    // If selected from the library tree then go ahead and save it there
-                    if( !selected.GetLibNickname().empty() )
-                    {
-                        LIB_ID fpid = module->GetFPID();
-                        fpid.SetLibNickname( selected.GetLibNickname() );
-                        module->SetFPID( fpid );
-                        SaveFootprint( module );
-                        GetScreen()->ClrModify();
-                    }
-
-                    updateView();
-                    GetCanvas()->Refresh();
-                    Update3DView( true );
-
-                    SyncLibraryTree( false );
-                }
-            }
-
-            wizard->Destroy();
-        }
-        break;
-
-    case ID_MODEDIT_SAVE:
-        if( !GetBoard()->GetFirstFootprint() )     // no loaded footprint
-            break;
-
-        if( GetTargetFPID() == GetLoadedFPID() )
-        {
-            if( SaveFootprint( GetBoard()->GetFirstFootprint() ) )
-            {
-                m_toolManager->GetView()->Update( GetBoard()->GetFirstFootprint() );
-
-                GetCanvas()->ForceRefresh();
-                GetScreen()->ClrModify();
-            }
-        }
-
-        m_treePane->GetLibTree()->RefreshLibTree();
-        break;
-
-    case ID_MODEDIT_SAVE_AS:
-        if( GetTargetFPID().GetLibItemName().empty() )
-        {
-            // Save Library As
-            const wxString& src_libNickname = GetTargetFPID().GetLibNickname();
-            wxString src_libFullName = Prj().PcbFootprintLibs()->GetFullURI( src_libNickname );
-
-            if( SaveLibraryAs( src_libFullName ) )
-                SyncLibraryTree( true );
-        }
-        else if( GetTargetFPID() == GetLoadedFPID() )
-        {
-            // Save Board Footprint As
-            MODULE* footprint = GetBoard()->GetFirstFootprint();
-
-            if( footprint && SaveFootprintAs( footprint ) )
-            {
-                m_footprintNameWhenLoaded = footprint->GetFPID().GetLibItemName();
-                m_toolManager->GetView()->Update( footprint );
-                GetScreen()->ClrModify();
-
-                GetCanvas()->ForceRefresh();
-                SyncLibraryTree( true );
-            }
-        }
-        else
-        {
-            // Save Selected Footprint As
-            MODULE* footprint = LoadFootprint( GetTargetFPID() );
-
-            if( footprint && SaveFootprintAs( footprint ) )
-                SyncLibraryTree( true );
-        }
-
-        m_treePane->GetLibTree()->RefreshLibTree();
-        break;
-
-    case ID_ADD_FOOTPRINT_TO_BOARD:
-        SaveFootprintToBoard( true );
-        break;
-
-    case ID_TOOLBARH_PCB_SELECT_LAYER:
-        SetActiveLayer( ToLAYER_ID( m_selLayerBox->GetLayerSelection() ) );
-
-        if( GetDisplayOptions().m_ContrastModeDisplay !=
-            HIGH_CONTRAST_MODE::NORMAL )
-        {
-            GetCanvas()->Refresh();
-        }
-        break;
-
-    case ID_MODEDIT_CHECK:
-        // Currently: not implemented
-        break;
-
-    default:
-        wxFAIL_MSG( "FOOTPRINT_EDIT_FRAME::Process_Special_Functions error" );
-        break;
-    }
+void FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( wxCommandEvent& event )
+{
+    SaveFootprintToBoard( true );
 }
 
 

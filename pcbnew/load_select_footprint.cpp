@@ -151,7 +151,7 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( MODULE* aFootprint )
     }
 
     Update3DView( true );
-    updateView();
+    UpdateView();
     GetCanvas()->Refresh();
     m_treePane->GetLibTree()->RefreshLibTree();    // update any previously-highlighted items
 

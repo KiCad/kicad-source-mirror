@@ -36,7 +36,8 @@
 #include <project.h>
 #include <fp_lib_table.h>
 #include <dialogs/dialog_cleanup_graphics.h>
-
+#include <footprint_wizard_frame.h>
+#include <kiway.h>
 
 FOOTPRINT_EDITOR_TOOLS::FOOTPRINT_EDITOR_TOOLS() :
     PCB_TOOL_BASE( "pcbnew.ModuleEditor" ),
@@ -125,32 +126,166 @@ bool FOOTPRINT_EDITOR_TOOLS::Init()
 
 int FOOTPRINT_EDITOR_TOOLS::NewFootprint( const TOOL_EVENT& aEvent )
 {
-    wxCommandEvent evt( wxEVT_NULL, ID_MODEDIT_NEW_MODULE );
-    getEditFrame<FOOTPRINT_EDIT_FRAME>()->Process_Special_Functions( evt );
+    LIB_ID selected = m_frame->GetTreeFPID();
+    MODULE* newFootprint = m_frame->CreateNewFootprint( wxEmptyString );
+
+    if( !newFootprint )
+        return 0;
+
+    if( !m_frame->Clear_Pcb( true ) )
+        return 0;
+
+    canvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
+    m_frame->AddModuleToBoard( newFootprint );
+
+    // Initialize data relative to nets and netclasses (for a new
+    // module the defaults are used)
+    // This is mandatory to handle and draw pads
+    board()->BuildListOfNets();
+    newFootprint->SetPosition( wxPoint( 0, 0 ) );
+    newFootprint->ClearFlags();
+
+    m_frame->Zoom_Automatique( false );
+    m_frame->GetScreen()->SetModify();
+
+    // If selected from the library tree then go ahead and save it there
+    if( !selected.GetLibNickname().empty() )
+    {
+        LIB_ID fpid = newFootprint->GetFPID();
+        fpid.SetLibNickname( selected.GetLibNickname() );
+        newFootprint->SetFPID( fpid );
+        m_frame->SaveFootprint( newFootprint );
+        m_frame->ClearModify();
+    }
+
+    m_frame->UpdateView();
+    m_frame->Update3DView( true );
+
+    m_frame->SyncLibraryTree( false );
     return 0;
 }
 
 
 int FOOTPRINT_EDITOR_TOOLS::CreateFootprint( const TOOL_EVENT& aEvent )
 {
-    wxCommandEvent evt( wxEVT_NULL, ID_MODEDIT_NEW_MODULE_FROM_WIZARD );
-    getEditFrame<FOOTPRINT_EDIT_FRAME>()->Process_Special_Functions( evt );
+    LIB_ID selected = m_frame->GetTreeFPID();
+
+    if( m_frame->IsContentModified() )
+    {
+        if( !HandleUnsavedChanges( m_frame, _( "The current footprint has been modified.  "
+                                               "Save changes?" ),
+                                   [&]() -> bool
+                                   {
+                                       return m_frame->SaveFootprint( footprint() );
+                                   } ) )
+        {
+            return 0;
+        }
+    }
+
+    auto* wizard = (FOOTPRINT_WIZARD_FRAME*) m_frame->Kiway().Player( FRAME_FOOTPRINT_WIZARD,
+                                                                      true, m_frame );
+
+    if( wizard->ShowModal( NULL, m_frame ) )
+    {
+        // Creates the new footprint from python script wizard
+        MODULE* newFootprint = wizard->GetBuiltFootprint();
+
+        if( newFootprint )    // i.e. if create module command is OK
+        {
+            m_frame->Clear_Pcb( false );
+
+            canvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
+            //  Add the new object to board
+            m_frame->AddModuleToBoard( newFootprint );
+
+            // Initialize data relative to nets and netclasses (for a new
+            // module the defaults are used)
+            // This is mandatory to handle and draw pads
+            board()->BuildListOfNets();
+            newFootprint->SetPosition( wxPoint( 0, 0 ) );
+            newFootprint->ClearFlags();
+
+            m_frame->Zoom_Automatique( false );
+            m_frame->GetScreen()->SetModify();
+
+            // If selected from the library tree then go ahead and save it there
+            if( !selected.GetLibNickname().empty() )
+            {
+                LIB_ID fpid = newFootprint->GetFPID();
+                fpid.SetLibNickname( selected.GetLibNickname() );
+                newFootprint->SetFPID( fpid );
+                m_frame->SaveFootprint( newFootprint );
+                m_frame->ClearModify();
+            }
+
+            m_frame->UpdateView();
+            canvas()->Refresh();
+            m_frame->Update3DView( true );
+
+            m_frame->SyncLibraryTree( false );
+        }
+    }
+
+    wizard->Destroy();
     return 0;
 }
 
 
 int FOOTPRINT_EDITOR_TOOLS::Save( const TOOL_EVENT& aEvent )
 {
-    wxCommandEvent evt( wxEVT_NULL, ID_MODEDIT_SAVE );
-    getEditFrame<FOOTPRINT_EDIT_FRAME>()->Process_Special_Functions( evt );
+    if( !footprint() )     // no loaded footprint
+        return 0;
+
+    if( m_frame->GetTargetFPID() == m_frame->GetLoadedFPID() )
+    {
+        if( m_frame->SaveFootprint( footprint() ) )
+        {
+            view()->Update( footprint() );
+
+            canvas()->ForceRefresh();
+            m_frame->ClearModify();
+        }
+    }
+
+    m_frame->RefreshLibraryTree();
     return 0;
 }
 
 
 int FOOTPRINT_EDITOR_TOOLS::SaveAs( const TOOL_EVENT& aEvent )
 {
-    wxCommandEvent evt( wxEVT_NULL, ID_MODEDIT_SAVE_AS );
-    getEditFrame<FOOTPRINT_EDIT_FRAME>()->Process_Special_Functions( evt );
+    if( m_frame->GetTargetFPID().GetLibItemName().empty() )
+    {
+        // Save Library As
+        const wxString& src_libNickname = m_frame->GetTargetFPID().GetLibNickname();
+        wxString src_libFullName = m_frame->Prj().PcbFootprintLibs()->GetFullURI( src_libNickname );
+
+        if( m_frame->SaveLibraryAs( src_libFullName ) )
+            m_frame->SyncLibraryTree( true );
+    }
+    else if( m_frame->GetTargetFPID() == m_frame->GetLoadedFPID() )
+    {
+        // Save Board Footprint As
+        if( footprint() && m_frame->SaveFootprintAs( footprint() ) )
+        {
+            view()->Update( footprint() );
+            m_frame->ClearModify();
+
+            canvas()->ForceRefresh();
+            m_frame->SyncLibraryTree( true );
+        }
+    }
+    else
+    {
+        // Save Selected Footprint As
+        MODULE* footprint = m_frame->LoadFootprint( m_frame->GetTargetFPID() );
+
+        if( footprint && m_frame->SaveFootprintAs( footprint ) )
+            m_frame->SyncLibraryTree( true );
+    }
+
+    m_frame->RefreshLibraryTree();
     return 0;
 }
 

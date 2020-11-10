@@ -159,7 +159,7 @@ protected:
 
     BOARD* board() const { return getModel<BOARD>(); }
 
-    MODULE* module() const
+    MODULE* footprint() const
     {
         return board()->GetFirstFootprint();
     }

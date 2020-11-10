@@ -87,18 +87,17 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, FOOTPRINT_EDIT_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, FOOTPRINT_EDIT_FRAME::OnSelectGrid )
 
-    EVT_TOOL( ID_MODEDIT_SAVE_PNG, FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng )
+    EVT_TOOL( ID_FPEDIT_SAVE_PNG, FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng )
 
-    EVT_TOOL( ID_MODEDIT_CHECK, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard )
-    EVT_TOOL( ID_ADD_FOOTPRINT_TO_BOARD, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_LOAD_FOOTPRINT_FROM_BOARD, FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard )
+    EVT_TOOL( ID_ADD_FOOTPRINT_TO_BOARD, FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard )
 
     // Horizontal toolbar
     EVT_MENU( ID_GRID_SETTINGS, FOOTPRINT_EDIT_FRAME::OnGridSettings )
-    EVT_COMBOBOX( ID_TOOLBARH_PCB_SELECT_LAYER, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_COMBOBOX( ID_TOOLBARH_PCB_SELECT_LAYER, FOOTPRINT_EDIT_FRAME::SelectLayer )
 
     // UI update events.
-    EVT_UPDATE_UI( ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
+    EVT_UPDATE_UI( ID_LOAD_FOOTPRINT_FROM_BOARD,
                    FOOTPRINT_EDIT_FRAME::OnUpdateLoadModuleFromBoard )
     EVT_UPDATE_UI( ID_ADD_FOOTPRINT_TO_BOARD,
                    FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard )
@@ -381,6 +380,15 @@ LIB_ID FOOTPRINT_EDIT_FRAME::GetLoadedFPID() const
         return LIB_ID( footprint->GetFPID().GetLibNickname(), m_footprintNameWhenLoaded );
     else
         return LIB_ID();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::ClearModify()
+{
+    if( GetBoard()->GetFirstFootprint() )
+        m_footprintNameWhenLoaded = GetBoard()->GetFirstFootprint()->GetFPID().GetLibItemName();
+
+    GetScreen()->ClrModify();
 }
 
 
@@ -755,7 +763,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateUserInterface()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::updateView()
+void FOOTPRINT_EDIT_FRAME::UpdateView()
 {
     GetCanvas()->UpdateColors();
     GetCanvas()->DisplayBoard( GetBoard() );
@@ -834,6 +842,12 @@ void FOOTPRINT_EDIT_FRAME::RegenerateLibraryTree()
 
     if( target.IsValid() )
         m_treePane->GetLibTree()->CenterLibId( target );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::RefreshLibraryTree()
+{
+    m_treePane->GetLibTree()->RefreshLibTree();
 }
 
 
@@ -1016,7 +1030,7 @@ void FOOTPRINT_EDIT_FRAME::ActivateGalCanvas()
     // Be sure the axis are enabled
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
 
-    updateView();
+    UpdateView();
 
     // Ensure the m_Layers settings are using the canvas type:
     UpdateUserInterface();

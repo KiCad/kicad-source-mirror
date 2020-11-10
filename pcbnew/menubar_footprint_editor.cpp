@@ -88,7 +88,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->Add( PCB_ACTIONS::exportFootprint );
     submenuExport->Add( _( "Export View as &PNG..." ),
                         _( "Create a PNG file from the current view" ),
-                        ID_MODEDIT_SAVE_PNG,
+                        ID_FPEDIT_SAVE_PNG,
                         plot_xpm );
 
     fileMenu->Add( submenuExport );
@@ -213,7 +213,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     toolsMenu->Add( _( "&Load Footprint from PCB..." ),
                     _( "Load a footprint from the current board into the editor" ),
-                    ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
+                    ID_LOAD_FOOTPRINT_FROM_BOARD,
                     load_module_board_xpm );
 
     toolsMenu->Add( _( "&Insert Footprint on PCB" ),

@@ -653,7 +653,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
     // The clipboard can contain two different things, an entire kicad_pcb
     // or a single module
 
-    if( isFootprintEditor && ( !board() || !module() ) )
+    if( isFootprintEditor && ( !board() || !footprint() ) )
     {
         return 0;
     }

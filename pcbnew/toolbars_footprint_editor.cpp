@@ -84,20 +84,13 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( PCB_ACTIONS::defaultPadProperties );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->AddTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, wxEmptyString,
+    m_mainToolBar->AddTool( ID_LOAD_FOOTPRINT_FROM_BOARD, wxEmptyString,
                             KiScaledBitmap( load_module_board_xpm, this ),
                             _( "Load footprint from current board" ) );
 
     m_mainToolBar->AddTool( ID_ADD_FOOTPRINT_TO_BOARD, wxEmptyString,
                             KiScaledBitmap( export_xpm, this ),
                             _( "Insert footprint into current board" ) );
-
-#if 0       // Currently there is no check footprint function defined, so do not show this tool
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->AddTool( ID_MODEDIT_CHECK, wxEmptyString,
-                            KiScaledBitmap( module_check_xpm, this ),
-                            _( "Check footprint" ) );
-#endif
 
     m_mainToolBar->AddScaledSeparator( this );
 
