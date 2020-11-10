@@ -1601,29 +1601,6 @@ void PCB_EDIT_FRAME::ProjectChanged()
 }
 
 
-void PCB_EDIT_FRAME::LockModule( MODULE* aModule, bool aLocked )
-{
-    const wxString ModulesMaskSelection = wxT( "*" );
-    if( aModule )
-    {
-        aModule->SetLocked( aLocked );
-        SetMsgPanel( aModule );
-        OnModify();
-    }
-    else
-    {
-        for( auto mod : GetBoard()->Modules() )
-        {
-            if( WildCompareString( ModulesMaskSelection, mod->GetReference() ) )
-            {
-                mod->SetLocked( aLocked );
-                OnModify();
-            }
-        }
-    }
-}
-
-
 bool ExportBoardToHyperlynx( BOARD* aBoard, const wxFileName& aPath );
 
 

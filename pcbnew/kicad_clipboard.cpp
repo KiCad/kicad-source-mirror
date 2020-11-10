@@ -215,14 +215,9 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
                 copy = static_cast<BOARD_ITEM*>( item->Clone() );
             }
 
-            auto prepItem = [&]( BOARD_ITEM* titem )
+            auto prepItem = [&]( BOARD_ITEM* aItem )
                             {
-                                // locked means "locked in place"; copied items therefore can't
-                                // be locked
-                                if( MODULE* footprint = dyn_cast<MODULE*>( titem ) )
-                                    footprint->SetLocked( false );
-                                else if( TRACK* track = dyn_cast<TRACK*>( titem ) )
-                                    track->SetLocked( false );
+                                aItem->SetLocked( false );
                             };
 
             if( copy )

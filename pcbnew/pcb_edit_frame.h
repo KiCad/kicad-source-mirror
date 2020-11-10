@@ -850,8 +850,6 @@ public:
     void ScriptingConsoleEnableDisable();
 #endif
 
-    void LockModule( MODULE* aModule, bool aLocked );
-
     /**
      * Function SendMessageToEESCHEMA
      * sends a message to the schematic editor so that it may move its cursor

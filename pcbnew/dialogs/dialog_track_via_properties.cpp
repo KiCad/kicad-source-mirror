@@ -433,7 +433,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
     bool changeLock = m_lockedCbox->Get3StateValue() != wxCHK_UNDETERMINED;
     bool setLock = m_lockedCbox->Get3StateValue() == wxCHK_CHECKED;
 
-    for( auto item : m_items )
+    for( EDA_ITEM* item : m_items )
     {
         m_commit.Modify( item );
 
