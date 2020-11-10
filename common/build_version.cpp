@@ -239,6 +239,10 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << indent4 << "KICAD_USE_OCC=" << ON;
 #endif
 
+#ifdef KICAD_USE_EGL
+    aMsg << indent4 << "KICAD_USE_EGL=" << ON;
+#endif
+
     aMsg << indent4 << "KICAD_SPICE=";
 #ifdef KICAD_SPICE
     aMsg << ON;

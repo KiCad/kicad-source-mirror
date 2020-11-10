@@ -27,7 +27,7 @@
  * @brief Implementation of a 3d canvas
  */
 
-#include <GL/glew.h>    // Must be included first
+#include <gal/opengl/kiglew.h>    // Must be included first
 #include <gl_utils.h>
 #include <wx/tokenzr.h>
 

@@ -24,11 +24,11 @@
 #ifndef GL_UTILS_H
 #define GL_UTILS_H
 
-#ifdef __linux__
-#include <GL/glxew.h>
-#endif
+#include <gal/opengl/kiglew.h>    // Must be included first
 
 #include <limits>
+
+#include <wx/setup.h>
 
 class GL_UTILS
 {
@@ -40,9 +40,9 @@ public:
      */
     static int SetSwapInterval( int aVal )
     {
-        /// This routine is written for Linux only.  The equivalent functions under Windows would
+        /// This routine is written for Linux using X11 only.  The equivalent functions under Windows would
         /// include <wglext.h> and call wglSwapIntervalEXT
-    #ifdef __linux__
+    #if defined( __linux__ ) && !defined( KICAD_USE_EGL )
         Display *dpy = glXGetCurrentDisplay();
         GLXDrawable drawable = glXGetCurrentDrawable();
 

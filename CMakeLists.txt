@@ -34,6 +34,7 @@ endif()
 project( kicad )
 
 include( GNUInstallDirs )
+include( CMakeDependentOption )
 
 # Path to local CMake modules.
 set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
@@ -124,6 +125,15 @@ option( KICAD_NETLIST_QA
 
 option( KICAD_WIN32_DPI_AWARE
     "Turn on DPI awareness for Windows builds only"
+    OFF )
+
+option( KICAD_USE_EGL
+    "Build KiCad with EGL backend support for Wayland."
+    OFF )
+
+cmake_dependent_option( KICAD_USE_BUNDLED_GLEW
+    "Use the bundled version of GLEW - only available when KICAD_USE_EGL is set"
+    ON "KICAD_USE_EGL"
     OFF )
 
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
@@ -447,6 +457,12 @@ if( KICAD_USE_OCC )
     unset( KICAD_USE_OCE CACHE )
 endif()
 
+if( KICAD_USE_EGL AND UNIX AND NOT APPLE )
+    message( STATUS "Configuring KiCad for the wxGLCanvas EGL backend" )
+    add_definitions( -DKICAD_USE_EGL )
+elseif( KICAD_USE_EGL )
+    message( STATUS "Ignoring KICAD_USE_EGL since not on Linux" )
+endif()
 
 # KIFACE_SUFFIX is the file extension used for top level program modules which
 # implement the KIFACE interface.  A valid suffix starts with a period '.'.
@@ -599,7 +615,25 @@ find_package( OpenGL REQUIRED )
 #
 # Find GLEW library, required
 #
-if( NOT GLEW_FOUND )
+# The EGL canvas on GTK requires the use of a GLEW version compiled with an EGL flag.
+# The one built in the thirdparty directory has the flag for EGL set, so we use it unless told
+# otherwise. Then we search for the system GLEW version and use that instead.
+#
+if( KICAD_USE_EGL AND KICAD_USE_BUNDLED_GLEW AND UNIX AND NOT APPLE )
+    if( OpenGL_EGL_FOUND )
+        message( STATUS "Found OpenGL EGL library: ${OPENGL_egl_LIBRARY}" )
+    else()
+        message( FATAL_ERROR "OpenGL EGL library not found" )
+    endif()
+
+    # Add the custom GLEW target
+    add_subdirectory( thirdparty/glew )
+
+    # Set the standard package variables to point to our custom target to mimic the system version.
+    set( GLEW_LIBRARIES glew )
+    set( GLEW_FOUND TRUE )
+    include_directories( SYSTEM $<TARGET_PROPERTY:glew,PRIVATE_INCLUDE_DIRECTORIES> )
+else()
     find_package( GLEW REQUIRED )
     check_find_package_result( GLEW_FOUND "GLEW" )
     include_directories( SYSTEM ${GLEW_INCLUDE_DIR} )

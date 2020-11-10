@@ -28,7 +28,8 @@
  * @brief
  */
 
-#include <GL/glew.h>
+#include <gal/opengl/kiglew.h>    // Must be included first
+
 #include "c_ogl_3dmodel.h"
 #include "ogl_legacy_utils.h"
 #include "../common_ogl/ogl_utils.h"
@@ -400,7 +401,7 @@ void C_OGL_3DMODEL::Draw(bool aTransparent, float aOpacity, bool aUseSelectedMat
     if( aOpacity <= FLT_EPSILON )
         return;
 
-    
+
     if( !glBindBuffer )
         throw std::runtime_error( "The OpenGL context no longer exists: unable to draw" );
 

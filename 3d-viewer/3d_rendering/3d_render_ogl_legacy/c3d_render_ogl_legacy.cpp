@@ -27,11 +27,7 @@
  * @brief
  */
 
-// Apple, in their infinite wisdom, has decided to mark OpenGL as deprecated.
-// Luckily we can silence warnings about its deprecation. This is needed on the GLEW
-// includes since they seem to transitively include the OpenGL headers.
-#define GL_SILENCE_DEPRECATION 1
-#include <GL/glew.h>
+#include <gal/opengl/kiglew.h>    // Must be included first
 
 #include "c3d_render_ogl_legacy.h"
 #include "ogl_legacy_utils.h"

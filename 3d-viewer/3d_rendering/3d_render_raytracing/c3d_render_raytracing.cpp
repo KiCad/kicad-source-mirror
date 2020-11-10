@@ -27,7 +27,8 @@
  * @brief
  */
 
-#include <GL/glew.h>
+#include <gal/opengl/kiglew.h>    // Must be included first
+
 #include <algorithm>
 #include <atomic>
 #include <chrono>

@@ -21,6 +21,8 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
 
+# Note: The glew folder isn't added here because it is added inside the main CMakeLists.txt
+
 add_subdirectory( clipper )
 add_subdirectory( compoundfilereader )
 add_subdirectory( delaunator )

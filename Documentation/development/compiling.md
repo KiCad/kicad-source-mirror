@@ -198,6 +198,17 @@ passed via the OCE_DIR flag.  This option is enabled by default.
 Alternatively KICAD_USE_OCC can be used instead of OCE. Both options are not supposed to be enabled
 at the same time.
 
+## Wayland EGL support ## {#egl_opt}
+
+The KICAD_USE_EGL option switches the OpenGL backend from using X11 bindings to Wayland EGL bindings.
+This option is only relevant on Linux when running wxWidgets 3.1.5+ with the EGL backend of
+the wxGLCanvas (which is the default option, but can be disabled in the wxWidgets build).
+
+By default, setting KICAD_USE_EGL will use a in-tree version of the GLEW library (that is compiled with
+the additional flags needed to run on an EGL canvas) staticly linked into KiCad. If the system
+version of GLEW supports EGL (it must be compiled with the GLEW_EGL flag), then it can be used instead
+by setting KICAD_USE_BUNDLED_GLEW to OFF.
+
 ## Development Analysis Tools ## {#dev_tools}
 
 KiCad can be compiled with support for several features to aid in the catching and debugging of

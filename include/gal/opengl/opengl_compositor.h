@@ -31,10 +31,11 @@
 #ifndef OPENGL_COMPOSITOR_H_
 #define OPENGL_COMPOSITOR_H_
 
+#include <gal/opengl/kiglew.h>    // Must be included first
+
 #include <gal/compositor.h>
 #include <gal/opengl/antialiasing.h>
 #include <gal/gal_display_options.h>
-#include <GL/glew.h>
 #include <deque>
 
 namespace KIGFX

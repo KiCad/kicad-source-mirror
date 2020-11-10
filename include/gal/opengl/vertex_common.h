@@ -30,8 +30,9 @@
 #ifndef VERTEX_COMMON_H_
 #define VERTEX_COMMON_H_
 
+#include <gal/opengl/kiglew.h>    // Must be included first
+
 #include <math/vector2d.h>
-#include <GL/glew.h>
 
 #include <cstddef>
 
