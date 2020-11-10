@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-04 19:09-0800\n"
 "PO-Revision-Date: 2020-11-10 06:08+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -340,9 +340,8 @@ msgstr "重置为默认值"
 #: gerbview/menubar.cpp:212 kicad/menubar.cpp:165
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:231
 #: pcbnew/menubar_pcb_editor.cpp:434
-#, fuzzy
 msgid "Preferences..."
-msgstr "首选项"
+msgstr "首选项..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:214 cvpcb/menubar.cpp:72
 #: eeschema/menubar.cpp:265
@@ -5153,18 +5152,18 @@ msgid "Field%d"
 msgstr "字段 %d"
 
 #: common/tool/action_menu.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Close %s"
-msgstr "关闭"
+msgstr "关闭 %s"
 
 #: common/tool/action_menu.cpp:218 common/tool/actions.cpp:113
 msgid "Quit"
 msgstr "退出"
 
 #: common/tool/action_menu.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "Quit %s"
-msgstr "退出"
+msgstr "退出 %s"
 
 #: common/tool/actions.cpp:41
 msgid "New..."
@@ -7844,9 +7843,8 @@ msgstr "显示标注对话框"
 
 #: eeschema/dialogs/dialog_erc.cpp:105 eeschema/dialogs/dialog_erc.cpp:274
 #: eeschema/dialogs/dialog_erc.cpp:345
-#, fuzzy
 msgid "Annotation not complete. ERC cannot be run."
-msgstr "标注未完成。  无法运行 ERC。"
+msgstr "标注未完成。无法运行 ERC。"
 
 #: eeschema/dialogs/dialog_erc.cpp:193
 msgid "Delete exclusions too?"
@@ -11012,14 +11010,12 @@ msgid "Connections"
 msgstr "连接"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:124
-#, fuzzy
 msgid "Junction dot size:"
-msgstr "连接点尺寸："
+msgstr "连接点大小："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
-#, fuzzy
 msgid "Smallest"
-msgstr "小"
+msgstr "最小"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
 #: pcbnew/dialogs/dialog_plot_base.cpp:119
@@ -11027,14 +11023,12 @@ msgid "Small"
 msgstr "小"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
-#, fuzzy
 msgid "Large"
-msgstr "目标"
+msgstr "较大"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
-#, fuzzy
 msgid "Largest"
-msgstr "目标"
+msgstr "最大"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:147
 msgid "Inter-sheet References"
@@ -11397,9 +11391,8 @@ msgid "Input pin not driven by any Output pins"
 msgstr "输入引脚不受任何输出引脚驱动"
 
 #: eeschema/erc_item.cpp:54
-#, fuzzy
 msgid "Input Power pin not driven by any Output Power pins"
-msgstr "输入引脚不受任何输出引脚驱动"
+msgstr "输入电源引脚不受任何输出电源引脚驱动"
 
 #: eeschema/erc_item.cpp:58 eeschema/erc_item.cpp:62
 msgid "Conflict problem between pins"
@@ -14287,9 +14280,9 @@ msgid "Change %s value from \"%s\" to \"%s\"."
 msgstr "将 %s 值从 \"%s\" 更改为 \"%s\"。"
 
 #: eeschema/tools/backannotate.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find \"%s\" pin \"%s\"."
-msgstr "不能打开网表 \"%s\"."
+msgstr "找不到 \"%s\" 引脚 \"%s\"。"
 
 # 可能会出现语序问题。待测试。
 #: eeschema/tools/backannotate.cpp:503
@@ -14737,9 +14730,8 @@ msgid "Autoplace Fields"
 msgstr "自动放置字段"
 
 #: eeschema/tools/ee_actions.cpp:396
-#, fuzzy
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
-msgstr "在符号的字段上运行自动放置算法"
+msgstr "在符号或图框的字段上运行自动放置算法"
 
 #: eeschema/tools/ee_actions.cpp:401
 msgid "Change Symbols..."
@@ -15010,7 +15002,7 @@ msgstr "切换到 PCB 编辑器"
 
 #: eeschema/tools/ee_actions.cpp:593
 msgid "Open PCB in Pcbnew"
-msgstr "打开 Pcbnew 中的 PCB"
+msgstr "在 Pcbnew 中打开 PCB 文件"
 
 #: eeschema/tools/ee_actions.cpp:598
 msgid "Export Netlist..."
@@ -18288,7 +18280,6 @@ msgid "PCB Calculator"
 msgstr "PCB 计算器"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -18319,37 +18310,31 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"% a% a在 IEC (国际电工委员会) 60063 中定义的 E 系列是一种被\n"
+"在 IEC (国际电工委员会) 60063 中定义的 E 系列是一种被\n"
 "广泛接受的电子元器件首选编号系统。  可用值在对数刻度\n"
-"中的间距大致相等。  虽然 E 系列用于\n"
-"齐纳二极管、电感和其他元件，但此计算器\n"
-"主要用于电阻。\n"
+"中的间距大致相等。\n"
 "\n"
 "\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
 "\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
 "\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
 "\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
-"如果您的设计需要任何不易获得的电阻值，\n"
-"此计算器将找到标准 E 系列元件的组合\n"
-"来创建它。  您可以输入 0,0025 到 4000 KOhm 所需的电阻。\n"
-"如果找到更好的匹配，将给出使用 3 或 4 个电阻的解决方案。\n"
-"仅对 E12 系列考虑 4R 复选框选项需要更长的\n"
-"处理时间。  也可以由于不可用的原因从解决方案\n"
-"中最多排除两个附加值。  如果\n"
-"在必填输入字段中输入了 E 系列值，则始终会\n"
-"将其排除在任何解决方案之外，因为假定此值不可用。\n"
 "\n"
-"解决方案以以下格式提供：\n"
+"此计算器可查找标准 E 系列元件的组合。\n"
+"创建任意值。您可以输入所需的电阻，范围从0,0025 到 4000 kΩ。\n"
+"给出了使用多达 3 个元件的解决方案。\n"
+"\n"
+"如果需要更接近的解决方案，4R 复选框选项将提供解决方案。\n"
+"仅对 E12 系列使用 4 个元件。此选项。\n"
+"可能需要更长的计算时间。\n"
+"\n"
+"如果满足以下条件，还可以指定最多两个要从解决方案中排除的值。\n"
+"元件值不可用\n"
+"\n"
+"以下格式提供了解决方案：\n"
 "\n"
 "\tR1 + R2 +...+ Rn\t串联电阻\n"
 "\tR1 | R2 |...| Rn\t并联电阻\n"
-"\tR1 + (R2 | R3)...\t\t以上任意组合\n"
-"__例如：__ 通常用于 1：10 范围选择的分压器\n"
-"要求电阻比值为 1：9。  可惜 “9” 是一个值，\n"
-"甚至在 E192 系列中都没有。  对于 8 位精度而言，\n"
-"1% 或更大的偏差仍然是不可接受的。  对于所需的电阻值为 9 KOhm，\n"
-"计算器建议串联 E6 值 2k2 + 6k8 \n"
-"作为可能的精确解。\n"
+"\tR1 + (R2 | R3)...\t以上任意组合\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:125
 msgid ""
@@ -20234,22 +20219,24 @@ msgid "Aborted: too many errors "
 msgstr "中止：错误太多 "
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:872
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Front Footprints"
 msgstr ""
 "\n"
-"没有封装"
+"\n"
+"顶层封装"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:873
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Back Footprints"
-msgstr "封装"
+msgstr ""
+"\n"
+"\n"
+"底层封装"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:937
 msgid "Footprint not found in changelist"
@@ -21961,49 +21948,40 @@ msgid "Change Footprints"
 msgstr "修改封装"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:71
-#, fuzzy
 msgid "Change all footprints on board"
-msgstr "%s 在板上的所有封装"
+msgstr "更改电路板上的所有封装"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:72
-#, fuzzy
 msgid "Change selected footprint"
-msgstr "查看选择封装"
+msgstr "更改选择的封装"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:73
-#, fuzzy
 msgid "Change footprints matching reference designator:"
-msgstr "%s 封装匹配的位号："
+msgstr "更改封装匹配的位号："
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
-#, fuzzy
 msgid "Change footprints matching value:"
-msgstr "%s 封装匹配值："
+msgstr "更改封装匹配值："
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
-#, fuzzy
 msgid "Change footprints with library id:"
-msgstr "库 ID 为 %s 封装："
+msgstr "使用库 ID 更改封装："
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
-#, fuzzy
 msgid "Update text layers and visibilities"
-msgstr "%s 文本层和可见性"
+msgstr "更新文本层和可见性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
-#, fuzzy
 msgid "Update text sizes, styles and positions"
-msgstr "%s 文本尺寸，样式和位置"
+msgstr "更新文本尺寸，样式和位置"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
-#, fuzzy
 msgid "Update fabrications attributes"
-msgstr "%s 制造属性"
+msgstr "更新制造属性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
-#, fuzzy
 msgid "Update 3D models"
-msgstr "%s 3D 模型设计"
+msgstr "更新 3D 模型"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:360
 #, c-format
@@ -22015,29 +21993,24 @@ msgid "*** footprint not found ***"
 msgstr "***封装没有找到***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
-#, fuzzy
 msgid "Update all footprints on board"
-msgstr "更新在板上的封装"
+msgstr "更新电路板上的所有封装"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:27
-#, fuzzy
 msgid "Update selected footprint"
-msgstr "查看选择封装"
+msgstr "更新选择的封装"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
-#, fuzzy
 msgid "Update footprints matching reference designator:"
-msgstr "%s 封装匹配的位号："
+msgstr "更新封装匹配的位号："
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:38
-#, fuzzy
 msgid "Update footprints matching value:"
-msgstr "%s 封装匹配值："
+msgstr "更新封装匹配值："
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:44
-#, fuzzy
 msgid "Update footprints with library id:"
-msgstr "库 ID 为 %s 封装："
+msgstr "使用库 ID 更新封装："
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
 msgid "New footprint library id:"
@@ -22052,24 +22025,20 @@ msgid "Remove text items which are not in library footprint"
 msgstr "删除不在库封装中的文本项目"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:101
-#, fuzzy
 msgid "Reset text layers and visibilities"
-msgstr "%s 文本层和可见性"
+msgstr "重置文本层和可见性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:104
-#, fuzzy
 msgid "Reset text sizes, styles and positions"
-msgstr "%s 文本尺寸，样式和位置"
+msgstr "重置文本尺寸，样式和位置"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Reset fabrication attributes"
-msgstr "%s 制造属性"
+msgstr "重置制造属性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:110
-#, fuzzy
 msgid "Reset 3D models"
-msgstr "%s 3D 模型设计"
+msgstr "重置 3D 模型"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:86
 msgid "Update Footprints from Library"
@@ -23571,9 +23540,9 @@ msgid "Select a corner to delete."
 msgstr "选择要删除的拐角。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:479
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
-msgstr "封装 %s (%s), %s, 旋转 %.1f°"
+msgstr "封装 %s (%s), %s, 旋转 %g°"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:482
 #: pcbnew/dialogs/dialog_text_properties.cpp:260
@@ -23651,11 +23620,10 @@ msgid "Pad size must be greater than zero"
 msgstr "焊盘尺寸必须大于 0"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1192
-#, fuzzy
 msgid ""
 "Warning: Pad drill bigger than pad size or drill shape and pad shape do not "
 "overlap"
-msgstr "警告：焊盘钻孔大于焊盘大小或形状不重叠"
+msgstr "警告：焊盘钻头大于焊盘尺寸或钻头形状和焊盘形状不重叠"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1202
 msgid "Pad local clearance must be zero or greater than zero"
@@ -24446,7 +24414,6 @@ msgid "Track width correction:"
 msgstr "布线宽度修正："
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:312
-#, fuzzy
 msgid ""
 "Set global width correction for exact width PostScript output.\n"
 "These width correction is intended to compensate tracks width and also pads "
@@ -24456,7 +24423,7 @@ msgid ""
 msgstr ""
 "为精确宽度 PostScript 输出设置全局宽度校正。\n"
 "这些宽度校正旨在补偿布线宽度以及焊盘和通孔尺寸误差。\n"
-"合理的宽度校正值必须在小数 [-(最小布线宽度 - 1),+(最小间隙值 - 1)] 范围内。"
+"合理的宽度校正值必须在 [-(最小布线宽度 - 1),+(最小间隙值 - 1)] 范围内。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "Force A4 output"
@@ -24995,9 +24962,8 @@ msgid "Via Count"
 msgstr "过孔计数"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:74
-#, fuzzy
 msgid "Via Length"
-msgstr "过孔长度："
+msgstr "过孔长度"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:75
 msgid "Board Length"
@@ -25009,9 +24975,8 @@ msgid "Die Length"
 msgstr "裸芯片长度"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:77
-#, fuzzy
 msgid "Total Length"
-msgstr "电缆长度"
+msgstr "总长度"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:77
 #: pcbnew/netinfo_item.cpp:128
@@ -25037,14 +25002,14 @@ msgid "Net name cannot be empty."
 msgstr "网络名称变量名不能为空。"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:1939
-#, fuzzy, c-format
+#, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
-msgstr "网络正在使用中。仍要删除吗？"
+msgstr "网络 '%s' 正在使用中。仍要删除吗？"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:1956
 #, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr ""
+msgstr "是否删除组 '%s' 中的所有网络？"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:1977
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:1978
@@ -25057,42 +25022,37 @@ msgstr "显示 0 焊盘网络"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:45
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:46
-#, fuzzy
 msgid "Wildcard"
 msgstr "通配符"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:47
 msgid "RegEx"
-msgstr ""
+msgstr "正则表达式"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:48
-#, fuzzy
 msgid "Wildcard Substr"
-msgstr "通配符"
+msgstr "通配符子串"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:49
 msgid "RegEx Substr"
-msgstr ""
+msgstr "正则表达式子字符串"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:59
 msgid "Sort groups first"
-msgstr ""
+msgstr "首先对组进行排序"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:69
-#, fuzzy
 msgid "Via Length:"
 msgstr "过孔长度："
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:73
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:74
-#, fuzzy
 msgid "Constant"
-msgstr "约束"
+msgstr "常量"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:75
-#, fuzzy
 msgid "From Stackup"
-msgstr "电路板堆叠"
+msgstr "从堆叠"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:113
 msgid "Create Report..."
@@ -27035,14 +26995,12 @@ msgid "Checking net connections..."
 msgstr "正在检查网络连接..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:170
-#, fuzzy
 msgid "Gathering copper items..."
-msgstr "网格属性..."
+msgstr "正在收集铜项目..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:182
-#, fuzzy
 msgid "Tessellating copper zones..."
-msgstr "正在检查铜区间隙..."
+msgstr "镶嵌铜区..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:207
 msgid "Checking track & via clearances..."
@@ -27170,24 +27128,24 @@ msgid "No netlist provided, skipping LVS."
 msgstr "没有提供网表， 跳过 LVS。"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min length: %s; actual: %s)"
-msgstr "最小长度：%s; 实际：%s)"
+msgstr "(%s 最小长度：%s; 实际：%s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max length: %s; actual: %s)"
-msgstr "最大长度：%s; 实际：%s)"
+msgstr "(%s 最大长度：%s; 实际：%s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
-msgstr "最大偏斜：%s; 实际偏斜：%s; 平均网络长度：%s; 实际网络长度：%s)"
+msgstr "(%s 最大偏斜：%s; 实际偏斜：%s; 平均网络长度：%s; 实际长度：%s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max count: %d; actual: %d)"
-msgstr "(%s 最大宽度 %s; 实际 %s)"
+msgstr "(%s 最大计数：%d; 实际：%d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:229
 msgid "Gathering length-constrained connections..."
@@ -29025,11 +28983,11 @@ msgstr ""
 "KiCad 布线。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1585
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored."
-msgstr "网络 '%s' 引用了不存在的元件 ID '%s'。这一点已经被忽略了,"
+msgstr "网络 '%s' 引用了不存在的元件 ID '%s'。这一点已经被忽略了。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1592
 #, c-format
@@ -29667,7 +29625,7 @@ msgstr "调整：歪斜 "
 
 #: pcbnew/router/pns_router.cpp:209
 msgid "The routing start point violates DRC."
-msgstr ""
+msgstr "布线起点违反 DRC。"
 
 #: pcbnew/router/router_tool.cpp:85
 msgid "Undo last segment"
