@@ -110,10 +110,7 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
 ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, bool aIgnorePads,
 								 const std::vector<ITEM*> aAvoidItems )
 {
-    int tl = getView()->GetTopLayer();
-
-    if( aLayer > 0 )
-        tl = aLayer;
+    int tl = aLayer > 0 ? aLayer : getView()->GetTopLayer();
 
     static const int candidateCount = 5;
     ITEM* prioritized[candidateCount];
@@ -152,25 +149,37 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
                 if( item->OfKind( ITEM::SOLID_T ) && aIgnorePads )
                     continue;
 
-                SEG::ecoord itemDist = ( item->Shape()->Centre() - aWhere ).SquaredEuclideanNorm();
+                SEG::ecoord d = ( item->Shape()->Centre() - aWhere ).SquaredEuclideanNorm();
 
-                if( !prioritized[2] || itemDist < dist[2] )
+                if( d < dist[2] )
                 {
                     prioritized[2] = item;
-                    dist[2] = itemDist;
+                    dist[2] = d;
                 }
-                if( item->Layers().Overlaps( tl ) &&  itemDist < dist[0] )
+
+                if( item->Layers().Overlaps( tl ) && d < dist[0] )
                 {
                     prioritized[0] = item;
-                    dist[0] = itemDist;
+                    dist[0] = d;
                 }
             }
-            else
+            else    // ITEM::SEGMENT_T | ITEM::ARC_T
             {
-                if( !prioritized[3] )
+                LINKED_ITEM* li = static_cast<LINKED_ITEM*>( item );
+                SEG::ecoord  d = std::min( ( li->Anchor( 0 ) - aWhere ).SquaredEuclideanNorm(),
+                                           ( li->Anchor( 1 ) - aWhere ).SquaredEuclideanNorm() );
+
+                if( d < dist[3] )
+                {
                     prioritized[3] = item;
-                if( item->Layers().Overlaps( tl ) )
+                    dist[3] = d;
+                }
+
+                if( item->Layers().Overlaps( tl ) && d < dist[1] )
+                {
                     prioritized[1] = item;
+                    dist[1] = d;
+                }
             }
         }
         // Allow unconnected items as last resort in RM_MarkObstacles mode
@@ -383,17 +392,15 @@ const VECTOR2I TOOL_BASE::snapToItem( bool aEnabled, ITEM* aItem, VECTOR2I aP)
     case ITEM::ARC_T:
     {
         LINKED_ITEM* li = static_cast<LINKED_ITEM*>( aItem );
-        int w = li->Width();
-        auto A = li->Anchor( 0 );
-        auto B = li->Anchor( 1 );
+        VECTOR2I     A = li->Anchor( 0 );
+        VECTOR2I     B = li->Anchor( 1 );
+        SEG::ecoord  w_sq = SEG::Square( li->Width() / 2 );
+        SEG::ecoord  distA_sq = ( aP - A ).SquaredEuclideanNorm();
+        SEG::ecoord  distB_sq = ( aP - B ).SquaredEuclideanNorm();
 
-        if( ( aP - A ).EuclideanNorm() < w / 2 )
+        if( distA_sq < w_sq || distB_sq < w_sq )
         {
-            anchor = A;
-        }
-        else if( ( aP - B ).EuclideanNorm() < w / 2 )
-        {
-            anchor = B;
+            anchor = distA_sq < distB_sq ? A : B;
         }
         else // TODO(snh): Clean this up
         {
