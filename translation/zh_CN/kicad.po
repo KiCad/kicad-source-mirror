@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-04 19:09-0800\n"
-"PO-Revision-Date: 2020-11-10 06:08+0000\n"
+"PO-Revision-Date: 2020-11-10 23:04+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -25009,7 +25009,7 @@ msgstr "网络 '%s' 正在使用中。仍要删除吗？"
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:1956
 #, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr "是否删除组 '%s' 中的所有网络？"
+msgstr "删除组 '%s' 中的所有网？"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:1977
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:1978
@@ -25031,7 +25031,7 @@ msgstr "正则表达式"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:48
 msgid "Wildcard Substr"
-msgstr "通配符子串"
+msgstr "通配符子字符串"
 
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:49
 msgid "RegEx Substr"
@@ -27659,7 +27659,7 @@ msgstr "封装 \"%s\" 删除来自库 '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:617
 msgid "No footprints to harvest!"
-msgstr "没有封装到获取！"
+msgstr "没有可获取的封装！"
 
 #: pcbnew/footprint_libraries_utils.cpp:792
 #: pcbnew/footprint_viewer_frame.cpp:728
