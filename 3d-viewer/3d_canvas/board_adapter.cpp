@@ -278,9 +278,31 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 {
     wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::InitSettings" ) );
 
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Build board outline" ) );
+
+    wxString msg;
+
+    const bool succeedToGetBoardPolygon = createBoardPolygon( &msg );
+
+    if( aWarningReporter )
+    {
+        if( !succeedToGetBoardPolygon )
+            aWarningReporter->Report( msg, RPT_SEVERITY_WARNING );
+        else
+            aWarningReporter->Report( wxEmptyString );
+    }
+
     // Calculates the board bounding box (board outlines + items)
     // to ensure any item, even outside the board outlines can be seen
-    EDA_RECT bbbox = m_board->ComputeBoundingBox( false );
+
+    bool boardEdgesOnly = true;
+
+    if( m_board->IsFootprintHolder() || !GetFlag( FL_USE_REALISTIC_MODE )
+            || !succeedToGetBoardPolygon )
+        boardEdgesOnly = false;
+
+    EDA_RECT bbbox = m_board->ComputeBoundingBox( boardEdgesOnly );
 
     // Gives a non null size to avoid issues in zoom / scale calculations
     if( ( bbbox.GetWidth() == 0 ) && ( bbbox.GetHeight() == 0 ) )
@@ -421,19 +443,6 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_startCreateBoardPolyTime = GetRunningMicroSecs();
 #endif
-
-    if( aStatusReporter )
-        aStatusReporter->Report( _( "Build board body" ) );
-
-    wxString msg;
-
-    if( aWarningReporter )
-    {
-        if( !createBoardPolygon( &msg ) )
-            aWarningReporter->Report( msg, RPT_SEVERITY_WARNING );
-        else
-            aWarningReporter->Report( wxEmptyString );
-    }
 
     if( aStatusReporter )
         aStatusReporter->Report( _( "Create layers" ) );

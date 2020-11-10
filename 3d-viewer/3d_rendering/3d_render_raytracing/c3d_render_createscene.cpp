@@ -485,6 +485,9 @@ void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
 
     setupMaterials();
 
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Load Raytracing: board" ) );
+
     // Create and add the outline board
     // /////////////////////////////////////////////////////////////////////////
 
@@ -696,6 +699,8 @@ void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
         }
     }
 
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Load Raytracing: layers" ) );
 
     // Add layers maps (except B_Mask and F_Mask)
     // /////////////////////////////////////////////////////////////////////////
@@ -952,6 +957,8 @@ void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
     unsigned stats_startLoad3DmodelsTime = stats_endConvertTime;
 #endif
 
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Loading 3D models" ) );
 
     load_3D_models( m_object_container, aOnlyLoadCopperAndShapes );
 
