@@ -51,7 +51,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	fgGridSolderMaskSizer->Add( m_MaskMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_MaskMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_MaskMarginCtrl->SetToolTip( _("Positive clearance means area bigger than the pad (usual for mask clearance).") );
+	m_MaskMarginCtrl->SetToolTip( _("Positive clearance means area bigger than the pad (usual for solder mask clearance).") );
 
 	fgGridSolderMaskSizer->Add( m_MaskMarginCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
@@ -66,8 +66,6 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	fgGridSolderMaskSizer->Add( m_MaskMinWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_MaskMinWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_MaskMinWidthCtrl->SetToolTip( _("Negative clearance means area smaller than the pad (usual for paste clearance).") );
-
 	fgGridSolderMaskSizer->Add( m_MaskMinWidthCtrl, 0, wxEXPAND|wxALL, 5 );
 
 	m_MaskMinWidthUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -90,6 +88,8 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	fgGridSolderMaskSizer->Add( m_PasteMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_PasteMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_PasteMarginCtrl->SetToolTip( _("Negative clearance means area smaller than the pad (usual for solder paste clearance).") );
+
 	fgGridSolderMaskSizer->Add( m_PasteMarginCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_PasteMarginUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
