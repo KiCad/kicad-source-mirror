@@ -762,7 +762,7 @@ void WX_VIEW_CONTROLS::UpdateScrollbars()
 
 #if !defined( __APPLE__ ) && !defined( WIN32 )
         // Trigger a mouse refresh to get the canvas update in GTK (re-draws the scrollbars).
-        // Note that this causes an infinite loop on OSX as it generates a paint event.
+        // Note that this causes an infinite loop on OSX and Windows (in certain cases) as it generates a paint event.
         refreshMouse();
 #endif
     }
