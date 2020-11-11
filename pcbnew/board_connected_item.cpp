@@ -33,7 +33,8 @@
 using namespace std::placeholders;
 
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
-    BOARD_ITEM( aParent, idtype ), m_netinfo( NETINFO_LIST::OrphanedItem() )
+    BOARD_ITEM( aParent, idtype ),
+    m_netinfo( NETINFO_LIST::OrphanedItem() )
 {
     m_localRatsnestVisible = true;
 }
@@ -67,7 +68,7 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetEffectiveNetclass() const
 {
     // NB: we must check the net first, as when it is 0 GetNetClass() will return the
     // orphaned net netclass, not the default netclass.
-    if( m_netinfo->GetNet() == 0 )
+    if( !m_netinfo || m_netinfo->GetNet() == 0 )
         return GetBoard()->GetDesignSettings().GetDefault();
     else
         return GetNetClass();
@@ -105,10 +106,8 @@ int BOARD_CONNECTED_ITEM::GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSourc
 // std::shared_ptr stuff shows up large in performance profiling.
 NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
 {
-    NETCLASS* netclass = m_netinfo->GetNetClass();
-
-    if( netclass )
-        return netclass;
+    if( m_netinfo && m_netinfo->GetNetClass() )
+        return m_netinfo->GetNetClass();
     else
         return GetBoard()->GetDesignSettings().GetDefault();
 }
@@ -116,7 +115,10 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
 
 wxString BOARD_CONNECTED_ITEM::GetNetClassName() const
 {
-    return m_netinfo->GetClassName();
+    if( m_netinfo )
+        return m_netinfo->GetClassName();
+    else
+        return wxEmptyString;
 }
 
 
