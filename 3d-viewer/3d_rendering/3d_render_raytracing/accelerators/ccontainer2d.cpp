@@ -55,7 +55,6 @@ void CGENERICCONTAINER2D::Clear()
          ++ii )
     {
         delete *ii;
-        *ii = NULL;
     }
 
     m_objects.clear();
@@ -247,6 +246,12 @@ bool CBVHCONTAINER2D::IsPointInside( const SFVEC2F &aPoint ) const
 }
 */
 
+void CBVHCONTAINER2D::Clear()
+{
+    CGENERICCONTAINER2D::Clear();
+    destroy();
+}
+
 void CBVHCONTAINER2D::destroy()
 {
     for( std::list<BVH_CONTAINER_NODE_2D *>::iterator ii = m_elements_to_delete.begin();
@@ -254,10 +259,9 @@ void CBVHCONTAINER2D::destroy()
          ++ii )
     {
         delete *ii;
-        *ii = NULL;
     }
     m_elements_to_delete.clear();
-
+    m_Tree = nullptr;
     m_isInitialized = false;
 }
 
@@ -385,6 +389,8 @@ void CBVHCONTAINER2D::recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D *aNodeP
 
         recursiveBuild_MIDDLE_SPLIT( leftNode );
         recursiveBuild_MIDDLE_SPLIT( rightNode );
+
+        wxASSERT( aNodeParent->m_LeafList.size() == 0 );
     }
     else
     {
@@ -392,6 +398,9 @@ void CBVHCONTAINER2D::recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D *aNodeP
         aNodeParent->m_Children[0] = NULL;
         aNodeParent->m_Children[1] = NULL;
     }
+
+    wxASSERT( aNodeParent != NULL );
+    wxASSERT( aNodeParent->m_BBox.IsInitialized() == true );
 }
 
 

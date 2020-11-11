@@ -64,7 +64,7 @@ public:
         return m_bbox;
     }
 
-    void Clear();
+    virtual void Clear();
 
     const LIST_OBJECT2D &GetList() const { return m_objects; }
 
@@ -119,6 +119,7 @@ public:
 
     void BuildBVH();
 
+    void Clear();
 private:
     bool m_isInitialized;
     std::list<BVH_CONTAINER_NODE_2D *> m_elements_to_delete;
