@@ -41,6 +41,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_TextOffsetRatio( 0.08 ),
         m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 ),
         m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS ),
+        m_JunctionSizeChoice( 3 ),
         m_IntersheetsRefShow( false ),
         m_IntersheetsRefFormatShort( false ),
         m_IntersheetsRefPrefix( DEFAULT_IREF_PREFIX ),
@@ -62,7 +63,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     int defaultJunctionSize =
             appSettings ? appSettings->m_Drawing.default_junction_size : DEFAULT_JUNCTION_DIAM;
     int defaultJunctionSizeChoice =
-            appSettings ? appSettings->m_Drawing.junction_size_choice : 3; 
+            appSettings ? appSettings->m_Drawing.junction_size_choice : 3;
     bool defaultIntersheetsRefShow =
             appSettings ? appSettings->m_Drawing.intersheets_ref_show : false;
     bool defaultIntersheetsRefFormatShort =
@@ -114,7 +115,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             &m_JunctionSize,
             Mils2iu( defaultJunctionSize ), Mils2iu( 5 ), Mils2iu( 1000 ), 1 / IU_PER_MILS ) );
 
-    // User choice for junction dot size ( e.g. none = 0, smallest = 1, small = 2, etc ) 
+    // User choice for junction dot size ( e.g. none = 0, smallest = 1, small = 2, etc )
     m_params.emplace_back(new PARAM<int>("drawing.junction_size_choice",
            &m_JunctionSizeChoice,
            defaultJunctionSizeChoice) );

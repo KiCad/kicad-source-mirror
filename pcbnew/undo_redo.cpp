@@ -503,7 +503,9 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             break;
 
         case UNDO_REDO::UNGROUP:
-            group->AddItem( static_cast<BOARD_ITEM*>( eda_item ) );
+            if( group )
+                group->AddItem( static_cast<BOARD_ITEM*>( eda_item ) );
+
             break;
 
         case UNDO_REDO::MOVED:

@@ -224,7 +224,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     DRC_CONSTRAINT hostConstraint;
 
     // A track being routed may not have a BOARD_ITEM associated yet.
-    if( !parentA )
+    if( aItemA && !parentA )
     {
         switch( aItemA->Kind() )
         {

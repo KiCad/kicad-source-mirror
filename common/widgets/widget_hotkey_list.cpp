@@ -136,7 +136,32 @@ public:
     }
 
 
-    void OnCharHook( wxKeyEvent& aEvent )
+    /**
+     * End the dialog whether modal or quasimodal
+     */
+    void EndFlexible( int aRtnCode )
+    {
+        if( IsQuasiModal() )
+            EndQuasiModal( aRtnCode );
+        else
+            EndModal( aRtnCode );
+    }
+
+
+    static wxKeyEvent PromptForKey( wxWindow* aParent, const wxString& aName,
+            const wxString& aCurrentKey )
+    {
+        HK_PROMPT_DIALOG dialog( aParent, wxID_ANY, _( "Set Hotkey" ), aName, aCurrentKey );
+
+        if( dialog.ShowModal() == wxID_OK )
+            return dialog.m_event;
+        else
+            return wxKeyEvent();
+    }
+
+
+protected:
+    void OnCharHook( wxKeyEvent& aEvent ) override
     {
         // On certain platforms, EVT_CHAR_HOOK is the only handler that receives
         // certain "special" keys. However, it doesn't always receive "normal"
@@ -183,30 +208,6 @@ public:
     {
         m_event = aEvent;
         EndFlexible( wxID_OK );
-    }
-
-
-    /**
-     * End the dialog whether modal or quasimodal
-     */
-    void EndFlexible( int aRtnCode )
-    {
-        if( IsQuasiModal() )
-            EndQuasiModal( aRtnCode );
-        else
-            EndModal( aRtnCode );
-    }
-
-
-    static wxKeyEvent PromptForKey( wxWindow* aParent, const wxString& aName,
-            const wxString& aCurrentKey )
-    {
-        HK_PROMPT_DIALOG dialog( aParent, wxID_ANY, _( "Set Hotkey" ), aName, aCurrentKey );
-
-        if( dialog.ShowModal() == wxID_OK )
-            return dialog.m_event;
-        else
-            return wxKeyEvent();
     }
 };
 

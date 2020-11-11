@@ -1454,7 +1454,9 @@ std::unique_ptr<DIALOG_SELECT_NET_FROM_LIST::LIST_ITEM> DIALOG_SELECT_NET_FROM_L
 
 void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
 {
-    wxCHECK( m_brd, /* void */ );
+    // Only build the list of nets if there is a board present
+    if( !m_brd )
+        return;
 
     m_in_build_nets_list = true;
 
