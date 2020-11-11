@@ -28,8 +28,6 @@
 
 #include <limits>
 
-#include <wx/setup.h>
-
 class GL_UTILS
 {
 public:

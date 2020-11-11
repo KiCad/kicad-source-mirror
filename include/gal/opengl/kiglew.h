@@ -29,7 +29,7 @@
 #define KIGLEW_H_
 
 // Pull in the configuration options for wxWidgets
-#include <wx/setup.h>
+#include <wx/platform.h>
 
 // Apple, in their infinite wisdom, has decided to mark OpenGL as deprecated.
 // Luckily we can silence warnings about its deprecation. This is needed on the GLEW
