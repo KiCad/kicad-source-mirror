@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -58,7 +58,8 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aUse
     m_treebook = new wxTreebook( this, wxID_ANY );
     mainSizer->Add( m_treebook, 1, wxEXPAND|wxLEFT|wxTOP, 10 );
 
-    auto line = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+    auto line = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                  wxLI_HORIZONTAL );
     mainSizer->Add( line, 0, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 10 );
 
     auto buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -66,13 +67,13 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aUse
     if( aUseReset )
     {
         m_resetButton = new wxButton( this, wxID_ANY, _( "Reset to Defaults" ) );
-        buttonsSizer->Add( m_resetButton, 0, wxALL, 5 );
+        buttonsSizer->Add( m_resetButton, 0, wxRIGHT|wxLEFT, 5 );
     }
 
     if( !aAuxiliaryAction.IsEmpty() )
     {
         m_auxiliaryButton = new wxButton( this, wxID_ANY, aAuxiliaryAction );
-        buttonsSizer->Add( m_auxiliaryButton, 0, wxALL, 5 );
+        buttonsSizer->Add( m_auxiliaryButton, 0, wxRIGHT|wxLEFT, 5 );
     }
 
     buttonsSizer->AddStretchSpacer();
@@ -95,12 +96,17 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aUse
     m_hash_key = aTitle;
 
     if( m_auxiliaryButton )
-        m_auxiliaryButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PAGED_DIALOG::OnAuxiliaryAction ), nullptr, this );
+        m_auxiliaryButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
+                                    wxCommandEventHandler( PAGED_DIALOG::OnAuxiliaryAction ),
+                                    nullptr, this );
 
     if( m_resetButton )
-        m_resetButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PAGED_DIALOG::OnResetButton ), nullptr, this );
+        m_resetButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
+                                wxCommandEventHandler( PAGED_DIALOG::OnResetButton ),
+                                nullptr, this );
 
-    m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED, wxBookCtrlEventHandler( PAGED_DIALOG::OnPageChange ), NULL, this );
+    m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,
+                         wxBookCtrlEventHandler( PAGED_DIALOG::OnPageChange ), NULL, this );
     Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PAGED_DIALOG::OnUpdateUI ), nullptr, this );
 }
 
@@ -158,13 +164,19 @@ PAGED_DIALOG::~PAGED_DIALOG()
     g_lastParentPage[ m_title ] = lastParentPage;
 
     if( m_auxiliaryButton )
-        m_auxiliaryButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PAGED_DIALOG::OnAuxiliaryAction ), nullptr, this );
+        m_auxiliaryButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
+                                       wxCommandEventHandler( PAGED_DIALOG::OnAuxiliaryAction ),
+                                       nullptr, this );
 
     if( m_resetButton )
-        m_resetButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PAGED_DIALOG::OnResetButton ), nullptr, this );
+        m_resetButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
+                                   wxCommandEventHandler( PAGED_DIALOG::OnResetButton ),
+                                   nullptr, this );
 
-    m_treebook->Disconnect( wxEVT_TREEBOOK_PAGE_CHANGED, wxBookCtrlEventHandler( PAGED_DIALOG::OnPageChange ), NULL, this );
-    Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PAGED_DIALOG::OnUpdateUI ), nullptr, this );
+    m_treebook->Disconnect( wxEVT_TREEBOOK_PAGE_CHANGED,
+                            wxBookCtrlEventHandler( PAGED_DIALOG::OnPageChange ), NULL, this );
+    Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PAGED_DIALOG::OnUpdateUI ),
+                nullptr, this );
 }
 
 
