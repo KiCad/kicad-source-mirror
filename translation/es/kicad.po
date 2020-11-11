@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-04 19:09-0800\n"
-"PO-Revision-Date: 2020-11-10 23:04+0000\n"
+"PO-Revision-Date: 2020-11-11 10:33+0000\n"
 "Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -19680,46 +19680,50 @@ msgid ""
 "Cannot calculate dielectric thickness\n"
 "At least one dielectric layer must be not locked"
 msgstr ""
-"No se puede calcular el espesor del dieléctrico\n"
-"Al menos una capa dieléctrica no debe ser bloqueada"
+"No se puede calcular el grosor del dieléctrico\n"
+"Al menos una de las capas dieléctricas debe estar desbloqueada"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1223
+#, fuzzy
 msgid ""
 "Cannot calculate dielectric thickness\n"
 "Fixed thickness too big or board thickness too small"
 msgstr ""
+"No se puede calcular el grosor del dieléctrico\n"
+"Grosor bloqueado demasiado grande o grosor de la placa pequeño"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1554
 msgid "Physical stackup has not been updated to match layer count."
 msgstr ""
+"El apilado físico no se ha actualizado para coincidir con el número de capas."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1555
 msgid "Update Physical Stackup"
-msgstr ""
+msgstr "Actualizar Apilado Físico"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1557
 msgid "Update dielectric thickness from board thickness"
-msgstr ""
+msgstr "Actualizar el grosor dieléctrico a partir del grosor de la placa"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:20
-#, fuzzy
 msgid "Board thickness:"
 msgstr "Grosor de la placa:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:30
 msgid "Current thickness from stackup:"
-msgstr ""
+msgstr "Grosor actual del apilado:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:40
-#, fuzzy
 msgid "Set Dielectric Thickness"
-msgstr "Grosor de la tira"
+msgstr "Establecer el Grosor del Dieléctrico"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:41
 msgid ""
 "Set thickness of all not locked dielectric layers.\n"
 "The thickness will be the same for all not locked dielectric layers."
 msgstr ""
+"Establecer el grosor de todas las capas dieléctricas no bloqueadas.\n"
+"El espesor será el mismo para todas las capas dieléctricas no bloqueadas."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:68
 #: pcbnew/build_BOM_from_board.cpp:108
@@ -19746,6 +19750,8 @@ msgid ""
 "If Impedance Controlled option is set,\n"
 "Loss tangent and EpsilonR will be added to constraints."
 msgstr ""
+"Si se selecciona la opción de Impedancia Controlada,\n"
+"la tangente de pérdida y ÉpsilonR se añadirán a los requerimientos."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:133
 #, fuzzy
@@ -19784,7 +19790,7 @@ msgstr "Conexiones de pad:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:164
 msgid "Yes, bevelled"
-msgstr ""
+msgstr "Sí, biselado"
 
 # Pendiente contexto
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:168
@@ -19794,23 +19800,23 @@ msgstr "Optimizar conexiones de pads"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:45
 msgid "ENIG"
-msgstr ""
+msgstr "ENIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "ENEPIG"
-msgstr ""
+msgstr "ENEPIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:47
 msgid "HAL SnPb"
-msgstr ""
+msgstr "HAL SnPb"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:48
 msgid "HAL lead-free"
-msgstr ""
+msgstr "HAL sin plomo"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:49
 msgid "Hard gold"
-msgstr ""
+msgstr "Oro duro"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:50
 #, fuzzy
@@ -19819,11 +19825,11 @@ msgstr "Información de la versión"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:51
 msgid "Immersion nickel"
-msgstr ""
+msgstr "Níquel por inmersión"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:52
 msgid "Immersion silver"
-msgstr ""
+msgstr "Plata por inmersión"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:53
 #, fuzzy
@@ -19832,11 +19838,11 @@ msgstr "Información de la versión"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:54
 msgid "HT_OSP"
-msgstr ""
+msgstr "HT_OSP"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:55
 msgid "OSP"
-msgstr ""
+msgstr "OSP"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:57
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:76
@@ -20079,7 +20085,7 @@ msgstr "Excluir pads de la serigrafía"
 
 #: pcbnew/class_module.cpp:775
 msgid "exclude from BOM"
-msgstr ""
+msgstr "excluir de la lista de materiales"
 
 #: pcbnew/class_module.cpp:777
 #, fuzzy
@@ -20138,7 +20144,7 @@ msgstr "Margen de la pasta de soldadura:"
 
 #: pcbnew/class_module.cpp:1844 pcbnew/class_pad.cpp:1412
 msgid "Local Solderpaste Margin Ratio"
-msgstr ""
+msgstr "Relación Local del Margen de la Pasta de Soldadura"
 
 #: pcbnew/class_module.cpp:1846
 #, fuzzy
@@ -20177,15 +20183,15 @@ msgstr "Nombre de Pin"
 
 #: pcbnew/class_pad.cpp:847
 msgid "BGA"
-msgstr ""
+msgstr "BGA"
 
 #: pcbnew/class_pad.cpp:848
 msgid "Fiducial global"
-msgstr ""
+msgstr "Fiduciario global"
 
 #: pcbnew/class_pad.cpp:849
 msgid "Fiducial local"
-msgstr ""
+msgstr "Fiduciario local"
 
 #: pcbnew/class_pad.cpp:850
 #, fuzzy
@@ -20260,7 +20266,7 @@ msgstr "Forma personalizada"
 
 #: pcbnew/class_pad.cpp:1051 pcbnew/dialogs/dialog_board_statistics.cpp:477
 msgid "PTH"
-msgstr ""
+msgstr "PTH"
 
 #: pcbnew/class_pad.cpp:1052 pcbnew/class_pad.cpp:1352
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:187
@@ -20275,7 +20281,7 @@ msgstr "Conn"
 
 #: pcbnew/class_pad.cpp:1054 pcbnew/dialogs/dialog_board_statistics.cpp:477
 msgid "NPTH"
-msgstr ""
+msgstr "NPTH"
 
 #: pcbnew/class_pad.cpp:1064
 #, c-format
@@ -20323,7 +20329,7 @@ msgstr "Añadir pad"
 
 #: pcbnew/class_pad.cpp:1368 pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 msgid "Fiducial, global to board"
-msgstr ""
+msgstr "Fiducial, global para abordar"
 
 #: pcbnew/class_pad.cpp:1369 pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 #, fuzzy
@@ -20337,7 +20343,7 @@ msgstr "Imprimir Isletas (Pads) siempre"
 
 #: pcbnew/class_pad.cpp:1371 pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 msgid "Heatsink pad"
-msgstr ""
+msgstr "Pad disipador térmico"
 
 #: pcbnew/class_pad.cpp:1372
 #, fuzzy
@@ -20404,12 +20410,12 @@ msgstr "Ejecutar simulación"
 #: pcbnew/class_pcb_group.cpp:289
 #, c-format
 msgid "Anonymous Group, %zu members"
-msgstr ""
+msgstr "Grupo anónimo, %zu miembros"
 
 #: pcbnew/class_pcb_group.cpp:293
 #, c-format
 msgid "Group \"%s\", %zu members"
-msgstr ""
+msgstr "Grupo \"%s\", %zu miembros"
 
 #: pcbnew/class_pcb_group.cpp:307
 msgid "Anonymous"
@@ -20437,7 +20443,7 @@ msgstr "Valor %s de %s"
 
 #: pcbnew/class_track.cpp:143
 msgid "removed annular ring"
-msgstr ""
+msgstr "anillo anular eliminado"
 
 #: pcbnew/class_track.cpp:635
 msgid "Full Length"
@@ -20455,7 +20461,7 @@ msgstr "Vía ciega/enterrada"
 #: pcbnew/class_track.cpp:696
 #, c-format
 msgid "Min Annular Width: %s"
-msgstr ""
+msgstr "Ancho anular mínimo: %s"
 
 #: pcbnew/class_track.cpp:737
 msgid "NetCode"
@@ -20529,7 +20535,7 @@ msgstr "Añadir zonas"
 
 #: pcbnew/class_zone.cpp:528
 msgid "Rule Area"
-msgstr ""
+msgstr "Área de Reglas"
 
 #: pcbnew/class_zone.cpp:530
 #, fuzzy
@@ -20580,7 +20586,7 @@ msgstr "Prioridad"
 #: pcbnew/class_zone.cpp:607 pcbnew/class_zone.cpp:876
 #, c-format
 msgid "%s and %d more"
-msgstr ""
+msgstr "%s y %d más"
 
 #: pcbnew/class_zone.cpp:617 pcbnew/dialogs/dialog_copper_zones_base.cpp:144
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:58
@@ -20612,7 +20618,7 @@ msgstr "(Corte)"
 
 #: pcbnew/class_zone.cpp:860
 msgid "(Rule Area)"
-msgstr ""
+msgstr "(Área de reglas)"
 
 #: pcbnew/class_zone.cpp:878
 #, c-format
@@ -20621,7 +20627,7 @@ msgstr "Contorno de zona %s en %s"
 
 #: pcbnew/class_zone.cpp:1381
 msgid "Inherited"
-msgstr ""
+msgstr "Heredado"
 
 #: pcbnew/class_zone.cpp:1383 pcbnew/dialogs/dialog_copper_zones_base.cpp:233
 msgid "Thermal reliefs"
@@ -20683,11 +20689,11 @@ msgstr "Vía cerca de pista"
 
 #: pcbnew/cleanup_item.cpp:52
 msgid "Remove track not connected at both ends"
-msgstr ""
+msgstr "Eliminar pista no conectada en ambos extremos"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove via connected on fewer than two layers"
-msgstr ""
+msgstr "Eliminar vía conectada en menos de dos capas"
 
 #: pcbnew/cleanup_item.cpp:54
 #, fuzzy
@@ -20762,11 +20768,12 @@ msgstr "Seleccionando todo de la hoja \"%s\""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:83
 msgid "Only front"
-msgstr ""
+msgstr "Sólo frontal"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:84
+#, fuzzy
 msgid "Only back"
-msgstr ""
+msgstr "Sólo trasera"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:85
 #, fuzzy
@@ -20795,11 +20802,11 @@ msgstr "Rotar pin"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:273
 msgid "No PCB to reannotate!"
-msgstr ""
+msgstr "¡No hay placa para re-anotar!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:284
 msgid "PCB and schematic successfully reannotated"
-msgstr ""
+msgstr "Placa y esquema re-anotados con éxito"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:299
 #, fuzzy, c-format
@@ -20814,6 +20821,8 @@ msgid ""
 "\n"
 "Any reference types %s will not be annotated."
 msgstr ""
+"\n"
+"No se anotarán los tipos de referencia %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:309
 #, fuzzy
@@ -21024,35 +21033,35 @@ msgstr "Capa de huellas"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:42
 msgid "Horizontally: top left to bottom right"
-msgstr ""
+msgstr "Horizontalmente: de arriba a la izquierda a abajo a la derecha"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:53
 msgid "Horizontally: top right to bottom left"
-msgstr ""
+msgstr "Horizontalmente: de arriba a la derecha a abajo a la izquierda"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:64
 msgid "Horizontally: bottom left to top right"
-msgstr ""
+msgstr "Horizontalmente: de abajo a la izquierda a arriba a la derecha"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:75
 msgid "Horizontally:: bottom right to top left"
-msgstr ""
+msgstr "Horizontalmente: de abajo a la derecha a arriba a la izquierda"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:83
 msgid "Vertically: top left to bottom right"
-msgstr ""
+msgstr "Verticalmente: de arriba a la izquierda a abajo a la derecha"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:94
 msgid "Vertically: top right to bottom left"
-msgstr ""
+msgstr "Verticalmente: de arriba a la derecha a abajo a la izquierda"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:105
 msgid "Vertically: bottom left to top right"
-msgstr ""
+msgstr "Verticalmente: de abajo a la izquierda a arriba a la derecha"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:116
 msgid "Vertically: bottom right to top left"
-msgstr ""
+msgstr "Verticalmente: de abajo a la derecha a arriba a la izquierda"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:128
 #, fuzzy
@@ -21076,6 +21085,9 @@ msgid ""
 "to this grid before sorting.\n"
 "This helps with misaligned parts."
 msgstr ""
+"La posición del componente se redondeará\n"
+"a esta cuadrícula antes de ordenar.\n"
+"Esto ayuda con los componentes desalineados."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:159
 #, fuzzy
@@ -21117,12 +21129,16 @@ msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
 msgstr ""
+"Blanco continúa desde el frontal o introduzca un número mayor que la "
+"designación de referencia más alta en el frontal."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:227
 msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
 msgstr ""
+"Déjelo en blanco o cero, o introduzca un número mayor que la designación de "
+"referencia más alta en el frontal."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:232
 #, fuzzy
@@ -21134,6 +21150,8 @@ msgid ""
 "If checked will remove the front side prefix\n"
 "in the front prefix box if present"
 msgstr ""
+"Si se ha marcado, eliminará el prefijo del lado frontal\n"
+"en el cuadro de prefijo frontal si está presente"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:237
 #, fuzzy
