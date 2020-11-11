@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -93,6 +93,7 @@ DIALOG_DIELECTRIC_MATERIAL_BASE::DIALOG_DIELECTRIC_MATERIAL_BASE( wxWindow* pare
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
 

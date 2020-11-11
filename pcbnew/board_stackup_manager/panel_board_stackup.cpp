@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -182,7 +182,8 @@ void PANEL_SETUP_BOARD_STACKUP::onAddDielectricLayer( wxCommandEvent& event )
     }
 
     // Show list
-    int index = wxGetSingleChoiceIndex( wxEmptyString, _("Dielectric Layers List"),
+    int index = wxGetSingleChoiceIndex( _( "Select dielectric layer to add to board stack up." ),
+                                        _("Dielectric Layers List"),
                                         d_list);
 
     if( index < 0 )
@@ -231,7 +232,8 @@ void PANEL_SETUP_BOARD_STACKUP::onRemoveDielectricLayer( wxCommandEvent& event )
     }
 
     // Show choice list
-    int index = wxGetSingleChoiceIndex( wxEmptyString, _("Dielectric Layers List"),
+    int index = wxGetSingleChoiceIndex( _( "Select dielectric layer to remove from board stack up." ),
+                                        _( "Dielectric Layers" ),
                                         d_list );
 
     if( index < 0 )
@@ -539,8 +541,8 @@ void PANEL_SETUP_BOARD_STACKUP::addMaterialChooser( wxWindowID aId,
 	bSizerMat->Add( m_buttonMat, 0, wxALIGN_CENTER_VERTICAL, 2 );
 
     m_buttonMat->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-                       wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP::onMaterialChange ),
-                       NULL, this );
+                          wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP::onMaterialChange ),
+                          NULL, this );
     m_controlItemsList.push_back( m_buttonMat );
 
     aUiRowItem.m_MaterialCtrl = textCtrl;
@@ -807,7 +809,7 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel( bool aCreatedInitialStacku
     if( aCreatedInitialStackup )
     {
         // Creates a full BOARD_STACKUP with 32 copper layers.
-        // extra layers will be hiden later.
+        // extra layers will be hidden later.
         // but if the number of layer is changed in the dialog, the corresponding
         // widgets will be available with their previous values.
         m_stackup.BuildDefaultStackupList( nullptr, m_brdSettings->GetCopperLayerCount() );
@@ -867,7 +869,6 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel( bool aCreatedInitialStacku
     updateIconColor();
     m_scGridWin->Layout();
 }
-
 
 
 // Transfer current UI settings to m_stackup but not to the board
@@ -950,8 +951,10 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
             else
             {
                 success = false;
+
                 if( !error_msg.IsEmpty() )
                     error_msg << "\n";
+
                 error_msg << _( "Incorrect value for Loss tg (Loss tg must be positive or null if not used)" );
             }
         }
@@ -1205,7 +1208,7 @@ void PANEL_SETUP_BOARD_STACKUP::onCalculateDielectricThickness( wxCommandEvent& 
         return;
     }
 
-    // the number of adjustable dielectric layers must obvioulsly be > 0
+    // the number of adjustable dielectric layers must obviously be > 0
     // So verify the user has at least one dielectric layer free
     int adjustableDielectricCount = dielectricCount - fixed_thickness_cnt;
 
@@ -1241,7 +1244,8 @@ void PANEL_SETUP_BOARD_STACKUP::onCalculateDielectricThickness( wxCommandEvent& 
             {
                 item->SetThickness( dielectric_thickness, sublayer_idx );
                 wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>( ui_item.m_ThicknessCtrl );
-                textCtrl->SetValue( StringFromValue( m_units, item->GetThickness( sublayer_idx ) ) );
+                textCtrl->SetValue( StringFromValue( m_units,
+                                                     item->GetThickness( sublayer_idx ) ) );
             }
         }
     }
@@ -1443,7 +1447,7 @@ void PANEL_SETUP_BOARD_STACKUP::updateIconColor( int aRow )
     {
         wxStaticBitmap* st_bitmap = m_rowUiItemsList[aRow].m_Icon;
         // explicit depth important under MSW
-        wxBitmap bmp(m_colorIconsSize.x, m_colorIconsSize.y / 2, 24);
+        wxBitmap bmp( m_colorIconsSize.x, m_colorIconsSize.y / 2, 24 );
         drawBitmap( bmp, getColorIconItem( aRow ) );
         st_bitmap->SetBitmap( bmp );
         return;
@@ -1520,7 +1524,7 @@ wxBitmapComboBox* PANEL_SETUP_BOARD_STACKUP::createBmComboBox( BOARD_STACKUP_ITE
 void drawBitmap( wxBitmap& aBitmap, wxColor aColor )
 {
     wxNativePixelData data( aBitmap );
-    wxNativePixelData::Iterator p(data);
+    wxNativePixelData::Iterator p( data );
 
     for( int yy = 0; yy < data.GetHeight(); yy++ )
     {

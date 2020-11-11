@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -55,7 +55,7 @@ class DIALOG_DIELECTRIC_MATERIAL_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_DIELECTRIC_MATERIAL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dielectric Materials"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 581,353 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_DIELECTRIC_MATERIAL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dielectric Materials"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DIELECTRIC_MATERIAL_BASE();
 
 };
