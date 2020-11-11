@@ -177,11 +177,6 @@ menu.  This option is enabled by default, but will be disabled if
 experimental and can cause Pcbnew to crash if Python scripts create an invalid object state
 within Pcbnew.
 
-## GitHub Plugin ## {#github_opt}
-
-The BUILD_GITHUB_PLUGIN option is used to control if the GitHub plug in is built.  This option is
-enabled by default.
-
 ## Integrated Spice simulator ## {#spice_opt}
 
 The KICAD_SPICE option is used to control if the Spice simulator interface for Eeschema is
@@ -208,6 +203,11 @@ By default, setting KICAD_USE_EGL will use a in-tree version of the GLEW library
 the additional flags needed to run on an EGL canvas) staticly linked into KiCad. If the system
 version of GLEW supports EGL (it must be compiled with the GLEW_EGL flag), then it can be used instead
 by setting KICAD_USE_BUNDLED_GLEW to OFF.
+
+## Windows HiDPI Support ## {#msw_hidpi_opt}
+
+The KICAD_WIN32_DPI_AWARE option makes the Windows manifest file for KiCad use a DPI aware version, which
+tells Windows that KiCad wants Per Monitor V2 DPI awareness (requires Windows 10 version 1607 and later).
 
 ## Development Analysis Tools ## {#dev_tools}
 

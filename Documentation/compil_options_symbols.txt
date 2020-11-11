@@ -44,10 +44,6 @@ KICAD_BUILD_QA_TESTS
     Build software Quality assurance unit tests.
     Default ON.
 
-BUILD_GITHUB_PLUGIN
-    Build the GITHUB_PLUGIN for pcbnew to allow downloading libraries from Github repo.
-    Default ON.
-
 KICAD_SPICE
     Build KiCad with internal Spice simulator.
     Default ON.
