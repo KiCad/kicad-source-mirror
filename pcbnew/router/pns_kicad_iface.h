@@ -46,13 +46,11 @@ namespace KIGFX
     class VIEW;
 }
 
-class PNS_KICAD_IFACE_BASE : public PNS::ROUTER_IFACE {
+class PNS_KICAD_IFACE_BASE : public PNS::ROUTER_IFACE
+{
 public:
     PNS_KICAD_IFACE_BASE();
     ~PNS_KICAD_IFACE_BASE();
-
-    void SetHostTool( PCB_TOOL_BASE* aTool );
-    void SetDisplayOptions( const PCB_DISPLAY_OPTIONS* aDispOptions );
 
     void EraseView() override {};
     void SetBoard( BOARD* aBoard );
@@ -61,7 +59,8 @@ public:
     bool IsOnLayer( const PNS::ITEM* aItem, int aLayer ) const override { return true; };
     bool IsItemVisible( const PNS::ITEM* aItem ) const override { return true; }
     void HideItem( PNS::ITEM* aItem ) override {}
-    void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0, bool aEdit = false ) override {}
+    void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0,
+                      bool aEdit = false ) override {}
     void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aColor = -1 ) override {}
     void AddItem( PNS::ITEM* aItem ) override;
     void RemoveItem( PNS::ITEM* aItem ) override;
@@ -98,12 +97,13 @@ protected:
     bool syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone, SHAPE_POLY_SET* aBoardOutline );
     bool inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedWidth );
 
-
+protected:
     PNS::NODE* m_world;
-    BOARD* m_board;
+    BOARD*     m_board;
 };
 
-class PNS_KICAD_IFACE : public PNS_KICAD_IFACE_BASE {
+class PNS_KICAD_IFACE : public PNS_KICAD_IFACE_BASE
+{
 public:
     PNS_KICAD_IFACE();
     ~PNS_KICAD_IFACE();
@@ -117,7 +117,8 @@ public:
     bool IsItemVisible( const PNS::ITEM* aItem ) const override;
     bool IsOnLayer( const PNS::ITEM* aItem, int aLayer ) const override;
     void HideItem( PNS::ITEM* aItem ) override;
-    void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0, bool aEdit = false ) override;
+    void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0,
+                      bool aEdit = false ) override;
     void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aColor = -1 ) override;
     void Commit() override;
     void AddItem( PNS::ITEM* aItem ) override;

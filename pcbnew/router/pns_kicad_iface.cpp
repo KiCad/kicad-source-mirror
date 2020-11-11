@@ -87,21 +87,19 @@ public:
     virtual wxString NetName( int aNet ) override;
 
 private:
-    struct CLEARANCE_ENT
-    {
-        int coupledNet;
-        int dpClearance;
-        int clearance;
-    };
-
     int holeRadius( const PNS::ITEM* aItem ) const;
     int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet, wxString& aBaseDpName );
 
+private:
     PNS::ROUTER_IFACE* m_routerIface;
     BOARD*             m_board;
     TRACK              m_dummyTrack;
     ARC                m_dummyArc;
     VIA                m_dummyVia;
+
+    // NB: this clearance cache is never cleared.  It DEPENDS on PNS_PCBNEW_RULE_RESOLVER
+    // being created in syncWorld() before each routing session.
+    std::map<std::pair<const PNS::ITEM*, const PNS::ITEM*>, int> m_clearanceCache;
 };
 
 
@@ -289,6 +287,15 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
 int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB )
 {
+    // NB: this clearance cache is never cleared.  It DEPENDS on PNS_PCBNEW_RULE_RESOLVER
+    // being created in syncWorld() before each routing session.
+
+    std::pair<const PNS::ITEM*, const PNS::ITEM*> key( aA, aB );
+    auto it = m_clearanceCache.find( key );
+
+    if( it != m_clearanceCache.end() )
+        return it->second;
+
     PNS::CONSTRAINT constraint;
     bool ok = false;
     int rv = 0;
@@ -316,9 +323,9 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
 
     // still no valid clearance rule? fall back to global minimum.
     if( !ok )
-    {
         rv = m_board->GetDesignSettings().m_MinClearance;
-    }
+
+    m_clearanceCache[ key ] = rv;
 
     return rv;
 }
