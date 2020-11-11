@@ -4,6 +4,7 @@
 # Doriano Blengino <web@xonelectronics.it>, 06-2006
 # Marco Ciampa <ciampix@posteo.net>, 2014-2020.
 # Hildo Guillardi Júnior <hildogjr@gmail.com>, 2020.
+# ZbeeGin <zbeegin@op.pl>, 2020.
 #
 # db: Usare le maiuscole con moderazione: vanno usate per i nomi propri e all'inizio
 # db: di una frase: negli altri casi può risultare molto inelegante
@@ -100,7 +101,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-04 19:09-0800\n"
 "PO-Revision-Date: 2020-11-11 10:33+0000\n"
-"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
 "master-source/it/>\n"
 "Language: it\n"
@@ -5753,7 +5754,7 @@ msgstr "Commuta unità"
 
 #: common/tool/actions.cpp:484
 msgid "Switch between imperial and metric units"
-msgstr "Commuta tra unità in pollici e  millimetri"
+msgstr "Commuta tra unità in pollici e millimetri"
 
 #: common/tool/actions.cpp:489
 msgid "Polar Coordinates"
