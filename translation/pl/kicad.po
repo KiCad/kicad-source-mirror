@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-04 19:09-0800\n"
-"PO-Revision-Date: 2020-11-10 06:09+0000\n"
+"PO-Revision-Date: 2020-11-13 16:57+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -1405,11 +1405,11 @@ msgstr "Konwerter map bitowych na symbole"
 
 #: common/base_units.cpp:480
 msgid "sq. mm"
-msgstr "mm kw."
+msgstr "mm²"
 
 #: common/base_units.cpp:482
 msgid "cu. mm"
-msgstr "mm cu."
+msgstr "mm³"
 
 #: common/base_units.cpp:492 common/eda_draw_frame.cpp:496
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
@@ -1434,11 +1434,11 @@ msgstr "milsy"
 
 #: common/base_units.cpp:494
 msgid "sq. mils"
-msgstr "milsów kw."
+msgstr "mils²"
 
 #: common/base_units.cpp:496
 msgid "cu. mils"
-msgstr "milsów cu."
+msgstr "mils³"
 
 #: common/base_units.cpp:506
 msgid "in"
@@ -1446,11 +1446,11 @@ msgstr "w"
 
 #: common/base_units.cpp:508
 msgid "sq. in"
-msgstr "cali kw."
+msgstr "cali²"
 
 #: common/base_units.cpp:510
 msgid "cu. in"
-msgstr "cali cu."
+msgstr "cali³"
 
 #: common/base_units.cpp:514
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:71
@@ -21244,7 +21244,7 @@ msgstr "Ścięty"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:157
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:79
 msgid "Fillet"
-msgstr "Wypełniony"
+msgstr "Zaokrąglony"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:187
 msgid "Electrical Properties"
@@ -30792,7 +30792,7 @@ msgstr "Wprowadź promień zaokrąglenia:"
 #: pcbnew/tools/edit_tool.cpp:738 pcbnew/tools/edit_tool.cpp:864
 #: pcbnew/tools/pcb_actions.cpp:302
 msgid "Fillet Tracks"
-msgstr "Ścieżki wstęgowe"
+msgstr "Zaokrąglone ścieżki"
 
 #: pcbnew/tools/edit_tool.cpp:748
 msgid ""
