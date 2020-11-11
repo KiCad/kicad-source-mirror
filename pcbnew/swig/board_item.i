@@ -62,7 +62,8 @@ class EDGE_MODULE;
 class D_PAD;
 class TRACK;
 class VIA;
-class ZONE_CONTAINER;
+class ZONE;
+class FP_ZONE;
 class PCB_TARGET;
 
 // Anthing targeted to the %wrapper section is extern "C" whereas code targeted
@@ -86,7 +87,8 @@ static FP_SHAPE*             Cast_to_FP_SHAPE( BOARD_ITEM* );
 static D_PAD*                Cast_to_D_PAD( BOARD_ITEM* );
 static TRACK*                Cast_to_TRACK( BOARD_ITEM* );
 static VIA*                  Cast_to_VIA( BOARD_ITEM* );
-static ZONE_CONTAINER*       Cast_to_ZONE_CONTAINER( BOARD_ITEM* );
+static ZONE*                 Cast_to_ZONE( BOARD_ITEM* );
+static FP_ZONE*              Cast_to_FP_ZONE( BOARD_ITEM* );
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
 
 #ifdef __cplusplus
@@ -110,7 +112,8 @@ static FP_SHAPE*             Cast_to_FP_SHAPE( BOARD_ITEM* );
 static D_PAD*                Cast_to_D_PAD( BOARD_ITEM* );
 static TRACK*                Cast_to_TRACK( BOARD_ITEM* );
 static VIA*                  Cast_to_VIA( BOARD_ITEM* );
-static ZONE_CONTAINER*       Cast_to_ZONE_CONTAINER( BOARD_ITEM* );
+static ZONE*                 Cast_to_ZONE( BOARD_ITEM* );
+static FP_ZONE*              Cast_to_FP_ZONE( BOARD_ITEM* );
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
 
 
@@ -152,8 +155,8 @@ static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
             return Cast_to_TRACK(self)
         elif ct=="PCB_TARGET":
             return Cast_to_PCB_TARGET(self)
-        elif ct=="ZONE_CONTAINER":
-            return Cast_to_ZONE_CONTAINER(self)
+        elif ct=="ZONE":
+            return Cast_to_ZONE(self)
         else:
             raise TypeError("Unsupported drawing class: %s" % ct)
 
@@ -197,6 +200,7 @@ static FP_SHAPE*             Cast_to_FP_SHAPE( BOARD_ITEM* self )             { 
 static D_PAD*                Cast_to_D_PAD( BOARD_ITEM* self )                { return dynamic_cast<D_PAD*>(self);                }
 static TRACK*                Cast_to_TRACK( BOARD_ITEM* self )                { return dynamic_cast<TRACK*>(self);                }
 static VIA*                  Cast_to_VIA( BOARD_ITEM* self )                  { return dynamic_cast<VIA*>(self);                  }
-static ZONE_CONTAINER*       Cast_to_ZONE_CONTAINER( BOARD_ITEM* self )       { return dynamic_cast<ZONE_CONTAINER*>(self);       }
+static ZONE*                 Cast_to_ZONE( BOARD_ITEM* self )                 { return dynamic_cast<ZONE*>( self);                }
+static FP_ZONE*              Cast_to_FP_ZONE( BOARD_ITEM* self )              { return dynamic_cast<FP_ZONE*>( self);             }
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* self )           { return dynamic_cast<PCB_TARGET*>(self);           }
 %}

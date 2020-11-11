@@ -39,7 +39,7 @@
 #include <class_module.h>
 #include <class_pad.h>
 #include <class_track.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <kicad_string.h>
 
 #include "pcb_netlist.h"
@@ -483,7 +483,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
 
 void BOARD_NETLIST_UPDATER::cacheCopperZoneConnections()
 {
-    for( ZONE_CONTAINER* zone : m_board->Zones() )
+    for( ZONE* zone : m_board->Zones() )
     {
         if( !zone->IsOnCopperLayer() || zone->GetIsRuleArea() )
             continue;
@@ -556,7 +556,7 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
     }
 
     // Test copper zones to detect "dead" nets (nets without any pad):
-    for( ZONE_CONTAINER* zone : m_board->Zones() )
+    for( ZONE* zone : m_board->Zones() )
     {
         if( !zone->IsOnCopperLayer() || zone->GetIsRuleArea() )
             continue;
@@ -686,7 +686,7 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
                 // First, see if we have a copper zone attached to this pad.
                 // If so, this is not really a single pad net
 
-                for( ZONE_CONTAINER* zone : m_board->Zones() )
+                for( ZONE* zone : m_board->Zones() )
                 {
                     if( !zone->IsOnCopperLayer() )
                         continue;

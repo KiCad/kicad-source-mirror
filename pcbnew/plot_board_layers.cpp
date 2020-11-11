@@ -40,10 +40,10 @@
 #include <class_track.h>
 #include <fp_shape.h>
 #include <pcb_text.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <pcb_shape.h>
-#include <class_pcb_target.h>
-#include <class_dimension.h>
+#include <pcb_target.h>
+#include <dimension.h>
 
 #include <pcbplot.h>
 #include <pcb_painter.h>
@@ -487,7 +487,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     NETINFO_ITEM nonet( aBoard );
 
-    for( ZONE_CONTAINER* zone : aBoard->Zones() )
+    for( ZONE* zone : aBoard->Zones() )
     {
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
@@ -510,7 +510,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
             if( !islands.IsEmpty() )
             {
-                ZONE_CONTAINER dummy( *zone );
+                ZONE dummy( *zone );
                 dummy.SetNet( &nonet );
                 itemplotter.PlotFilledAreas( &dummy, islands );
             }
@@ -809,7 +809,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         int zone_margin = 0;
 #endif
 
-        for( ZONE_CONTAINER* zone : aBoard->Zones() )
+        for( ZONE* zone : aBoard->Zones() )
         {
             if( zone->GetLayer() != layer )
                 continue;
@@ -829,12 +829,12 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     }
 
 #if !NEW_ALGO
-    // To avoid a lot of code, use a ZONE_CONTAINER to handle and plot polygons, because our
-    // polygons look exactly like filled areas in zones.
+    // To avoid a lot of code, use a ZONE to handle and plot polygons, because our polygons look
+    // exactly like filled areas in zones.
     // Note, also this code is not optimized: it creates a lot of copy/duplicate data.
     // However it is not complex, and fast enough for plot purposes (copy/convert data is only a
     // very small calculation time for these calculations).
-    ZONE_CONTAINER zone( aBoard );
+    ZONE zone( aBoard );
     zone.SetMinThickness( 0 );      // trace polygons only
     zone.SetLayer( layer );
     // Combine the current areas to initial areas. This is mandatory because inflate/deflate

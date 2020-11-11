@@ -27,7 +27,7 @@
 #include <plugins/altium/altium_parser_utils.h>
 
 #include <class_board.h>
-#include <class_dimension.h>
+#include <dimension.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <class_track.h>
@@ -1226,7 +1226,7 @@ void ALTIUM_PCB::ParsePolygons6Data(
             continue;
         }
 
-        ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
+        ZONE* zone = new ZONE( m_board );
         m_board->Add( zone, ADD_MODE::APPEND );
         m_polygons.emplace_back( zone );
 
@@ -1313,7 +1313,7 @@ void ALTIUM_PCB::ParsePolygons6Data(
         }
 
         zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
-                                     ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+                                     ZONE::GetDefaultHatchPitch(), true );
     }
 
     if( reader.GetRemainingBytes() != 0 )
@@ -1391,7 +1391,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
                 continue;
             }
 
-            ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
+            ZONE* zone = new ZONE( m_board );
             m_board->Add( zone, ADD_MODE::APPEND );
 
             zone->SetIsRuleArea( true );
@@ -1423,7 +1423,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
             }
 
             zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
-                                         ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+                                         ZONE::GetDefaultHatchPitch(), true );
         }
         else if( elem.kind == ALTIUM_REGION_KIND::COPPER )
         {
@@ -1477,12 +1477,10 @@ void ALTIUM_PCB::ParseRegions6Data(
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
-    for( ZONE_CONTAINER* zone : m_polygons )
+    for( ZONE* zone : m_polygons )
     {
-        if( zone != nullptr )
-        {
+        if( zone )
             zone->UnFill(); // just to be sure
-        }
     }
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
@@ -1499,7 +1497,7 @@ void ALTIUM_PCB::ParseRegions6Data(
                         elem.subpolyindex, m_polygons.size() ) );
             }
 
-            ZONE_CONTAINER *zone = m_polygons.at(elem.subpolyindex);
+            ZONE *zone = m_polygons.at( elem.subpolyindex );
 
             if( zone == nullptr )
             {
@@ -1571,7 +1569,7 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
                 shape.SetArcStart( elem.center + arcStartOffset );
             }
 
-            ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
+            ZONE* zone = new ZONE( m_board );
             m_board->Add( zone, ADD_MODE::APPEND );
 
             zone->SetIsRuleArea( true );
@@ -1604,7 +1602,7 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
             zone->Outline()->Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); // the outline is not a single polygon!
 
             zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
-                                         ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+                                         ZONE::GetDefaultHatchPitch(), true );
             continue;
         }
 
@@ -2143,7 +2141,7 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
             shape.SetEnd( elem.end );
             shape.SetWidth( elem.width );
 
-            ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
+            ZONE* zone = new ZONE( m_board );
             m_board->Add( zone, ADD_MODE::APPEND );
 
             zone->SetIsRuleArea( true );
@@ -2175,7 +2173,7 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
                                                         ERROR_INSIDE );
 
             zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
-                                         ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+                                         ZONE::GetDefaultHatchPitch(), true );
             continue;
         }
 
@@ -2425,7 +2423,7 @@ void ALTIUM_PCB::ParseFills6Data(
 
         if( elem.is_keepout || elem.net != ALTIUM_NET_UNCONNECTED )
         {
-            ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
+            ZONE* zone = new ZONE( m_board );
             m_board->Add( zone, ADD_MODE::APPEND );
 
             zone->SetNetCode( GetNetCode( elem.net ) );
@@ -2457,7 +2455,7 @@ void ALTIUM_PCB::ParseFills6Data(
                 zone->Rotate( center, elem.rotation * 10 );
 
             zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
-                                         ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+                                         ZONE::GetDefaultHatchPitch(), true );
         }
         else
         {

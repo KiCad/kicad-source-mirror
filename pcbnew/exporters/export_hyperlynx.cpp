@@ -27,7 +27,7 @@
 #include <class_board_item.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <cstdio>
 #include <vector>
 #include <ki_exception.h>
@@ -473,7 +473,7 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
                     iu2hyp( track->GetEnd().x ), iu2hyp( track->GetEnd().y ),
                     iu2hyp( track->GetWidth() ), (const char*) layerName.c_str() );
         }
-        else if( ZONE_CONTAINER* zone = dyn_cast<ZONE_CONTAINER*>( item ) )
+        else if( ZONE* zone = dyn_cast<ZONE*>( item ) )
         {
             for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
             {
@@ -561,7 +561,7 @@ const std::vector<BOARD_ITEM*> HYPERLYNX_EXPORTER::collectNetObjects( int netcod
             rv.push_back( item );
     }
 
-    for( ZONE_CONTAINER* zone : m_board->Zones() )
+    for( ZONE* zone : m_board->Zones() )
     {
         if( check( zone ) )
             rv.push_back( zone );

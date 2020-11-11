@@ -321,7 +321,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                 return true;
             };
 
-    forEachGeometryItem( { PCB_TRACE_T, PCB_VIA_T, PCB_PAD_T, PCB_ZONE_AREA_T, PCB_ARC_T },
+    forEachGeometryItem( { PCB_TRACE_T, PCB_VIA_T, PCB_PAD_T, PCB_ZONE_T, PCB_ARC_T },
                          LSET::AllCuMask(), addToTree );
 
 

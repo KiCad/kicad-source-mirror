@@ -31,9 +31,9 @@ using namespace std::placeholders;
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_track.h>
-#include <class_pcb_target.h>
+#include <pcb_target.h>
 #include <class_module.h>
-#include <class_dimension.h>
+#include <dimension.h>
 #include <origin_viewitem.h>
 #include <connectivity/connectivity_data.h>
 #include <pcbnew_settings.h>
@@ -130,7 +130,7 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
             return true;
     }
 
-    for( ZONE_CONTAINER* item : aPcb->Zones() )
+    for( ZONE* item : aPcb->Zones() )
     {
         if( aItem == static_cast<BOARD_ITEM*>( item ) )
             return true;
@@ -440,7 +440,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             deep_reBuild_ratsnest = true;   // Pointers on pads can be invalid
             KI_FALLTHROUGH;
 
-        case PCB_ZONE_AREA_T:
+        case PCB_ZONE_T:
         case PCB_TRACE_T:
         case PCB_ARC_T:
         case PCB_VIA_T:

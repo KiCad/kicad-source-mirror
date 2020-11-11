@@ -43,8 +43,8 @@
 #include <class_board.h>
 #include <fp_shape.h>
 #include <pcb_text.h>
-#include <class_dimension.h>
-#include <class_zone.h>
+#include <dimension.h>
+#include <zone.h>
 #include <class_module.h>
 
 #include <preview_items/two_point_assistant.h>
@@ -620,7 +620,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 }
 
 
-void DRAWING_TOOL::constrainDimension( DIMENSION* aDim )
+void DRAWING_TOOL::constrainDimension( DIMENSION_BASE* aDim )
 {
     const VECTOR2I lineVector{ aDim->GetEnd() - aDim->GetStart() };
 
@@ -633,10 +633,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
-    TOOL_EVENT    originalEvent = aEvent;
-    DIMENSION*    dimension     = nullptr;
-    BOARD_COMMIT  commit( m_frame );
-    GRID_HELPER   grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    TOOL_EVENT      originalEvent = aEvent;
+    DIMENSION_BASE* dimension     = nullptr;
+    BOARD_COMMIT    commit( m_frame );
+    GRID_HELPER     grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     const BOARD_DESIGN_SETTINGS& boardSettings = m_board->GetDesignSettings();
 
@@ -770,7 +770,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                 // Init the new item attributes
                 auto setMeasurementAttributes =
-                        [&]( DIMENSION* aDim )
+                        [&]( DIMENSION_BASE* aDim )
                         {
                             aDim->SetUnitsMode( boardSettings.m_DimensionUnitsMode );
                             aDim->SetUnitsFormat( boardSettings.m_DimensionUnitsFormat );
@@ -1764,7 +1764,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
 }
 
 
-bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER** aZone )
+bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE** aZone )
 {
     bool clearSelection = false;
     *aZone = nullptr;
@@ -1784,7 +1784,7 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER** aZo
 
     // we want a single zone
     if( selection.Size() == 1 )
-        *aZone = dyn_cast<ZONE_CONTAINER*>( selection[0] );
+        *aZone = dyn_cast<ZONE*>( selection[0] );
 
     // expected a zone, but didn't get one
     if( !*aZone )
@@ -1817,7 +1817,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     // get a source zone, if we need one. We need it for:
     // ZONE_MODE::CUTOUT (adding a hole to the source zone)
     // ZONE_MODE::SIMILAR (creating a new zone using settings of source zone
-    ZONE_CONTAINER* sourceZone = nullptr;
+    ZONE* sourceZone = nullptr;
 
     if( !getSourceZoneForAction( zoneMode, &sourceZone ) )
         return 0;
@@ -2182,9 +2182,9 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 }
             }
 
-            std::vector<ZONE_CONTAINER*> foundZones;
+            std::vector<ZONE*> foundZones;
 
-            for( ZONE_CONTAINER* zone : m_board->Zones() )
+            for( ZONE* zone : m_board->Zones() )
             {
                 for( PCB_LAYER_ID layer : LSET( zone->GetLayerSet() & lset ).Seq() )
                 {
@@ -2194,20 +2194,20 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             }
 
             std::sort( foundZones.begin(), foundZones.end(),
-                [] ( const ZONE_CONTAINER* a, const ZONE_CONTAINER* b )
-                {
-                    return a->GetLayer() < b->GetLayer();
-                } );
+                    [] ( const ZONE* a, const ZONE* b )
+                    {
+                        return a->GetLayer() < b->GetLayer();
+                    } );
 
             // first take the net of the active layer
-            for( ZONE_CONTAINER* z : foundZones )
+            for( ZONE* z : foundZones )
             {
                 if( m_frame->GetActiveLayer() == z->GetLayer() )
                     return z->GetNetCode();
             }
 
             // none? take the topmost visible layer
-            for( ZONE_CONTAINER* z : foundZones )
+            for( ZONE* z : foundZones )
             {
                 if( m_board->IsLayerVisible( z->GetLayer() ) )
                     return z->GetNetCode();

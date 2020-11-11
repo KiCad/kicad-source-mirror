@@ -38,7 +38,7 @@
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>
-#include <class_dimension.h>
+#include <dimension.h>
 
 /*
     Copper clearance test. Checks all copper items (pads, vias, tracks, drawings, zones) for their electrical clearance.
@@ -96,8 +96,8 @@ private:
     DRC_RTREE m_copperTree;
     int       m_drcEpsilon;
 
-    std::vector<ZONE_CONTAINER*>                          m_zones;
-    std::map<ZONE_CONTAINER*, std::unique_ptr<DRC_RTREE>> m_zoneTrees;
+    std::vector<ZONE*>                          m_zones;
+    std::map<ZONE*, std::unique_ptr<DRC_RTREE>> m_zoneTrees;
 
 };
 
@@ -121,7 +121,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
     m_zones.clear();
 
-    for( ZONE_CONTAINER* zone : m_board->Zones() )
+    for( ZONE* zone : m_board->Zones() )
     {
         if( !zone->GetIsRuleArea() )
             m_zones.push_back( zone );
@@ -129,7 +129,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
     for( MODULE* footprint : m_board->Modules() )
     {
-        for( ZONE_CONTAINER* zone : footprint->Zones() )
+        for( ZONE* zone : footprint->Zones() )
         {
             if( !zone->GetIsRuleArea() )
                 m_zones.push_back( zone );
@@ -186,7 +186,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
     ii = 0;
     m_zoneTrees.clear();
 
-    for( ZONE_CONTAINER* zone : m_zones )
+    for( ZONE* zone : m_zones )
     {
         if( !reportProgress( ii++, m_zones.size(), delta ) )
             break;
@@ -308,7 +308,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( TRACK* track, SHA
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem,
                                                                PCB_LAYER_ID aLayer )
 {
-    for( ZONE_CONTAINER* zone : m_zones )
+    for( ZONE* zone : m_zones )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
             break;
@@ -588,7 +588,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
             if( !reportProgress( layer_id * m_zones.size() + ia, B_Cu * m_zones.size(), delta ) )
                 break;
 
-            ZONE_CONTAINER* zoneRef = m_zones[ia];
+            ZONE* zoneRef = m_zones[ia];
 
             if( !zoneRef->IsOnLayer( layer ) )
                 continue;
@@ -597,7 +597,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
             // Otherwise, we have already tested the zone combination
             for( size_t ia2 = ia + 1; ia2 < m_zones.size(); ia2++ )
             {
-                ZONE_CONTAINER* zoneToTest = m_zones[ia2];
+                ZONE* zoneToTest = m_zones[ia2];
 
                 if( zoneRef == zoneToTest )
                     continue;

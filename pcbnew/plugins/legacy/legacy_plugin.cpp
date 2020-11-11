@@ -76,10 +76,10 @@
 #include <class_module.h>
 #include <class_track.h>
 #include <pcb_text.h>
-#include <class_zone.h>
-#include <class_dimension.h>
+#include <zone.h>
+#include <dimension.h>
 #include <pcb_shape.h>
-#include <class_pcb_target.h>
+#include <pcb_target.h>
 #include <fp_shape.h>
 #include <3d_cache/3d_info.h>
 #include <pcb_plot_params.h>
@@ -2434,7 +2434,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
 
 void LEGACY_PLUGIN::loadZONE_CONTAINER()
 {
-    std::unique_ptr<ZONE_CONTAINER> zc = std::make_unique<ZONE_CONTAINER>( m_board );
+    std::unique_ptr<ZONE> zc = std::make_unique<ZONE>( m_board );
 
     ZONE_BORDER_DISPLAY_STYLE outline_hatch = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;
     bool    endContour = false;
@@ -2712,8 +2712,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
                 // HatchBorder here, after outlines corners are read
                 // Set hatch here, after outlines corners are read
-                zc->SetBorderDisplayStyle( outline_hatch, ZONE_CONTAINER::GetDefaultHatchPitch(),
-                                           true );
+                zc->SetBorderDisplayStyle( outline_hatch, ZONE::GetDefaultHatchPitch(), true );
 
                 m_board->Add( zc.release() );
             }

@@ -68,9 +68,9 @@ Load() TODO's
 #include <class_module.h>
 #include <class_track.h>
 #include <fp_shape.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <pcb_text.h>
-#include <class_dimension.h>
+#include <dimension.h>
 
 #include <plugins/eagle/eagle_plugin.h>
 
@@ -174,7 +174,7 @@ static wxString interpret_text( const wxString& aText )
 }
 
 
-static void setKeepoutSettingsToZone( ZONE_CONTAINER* aZone, LAYER_NUM aLayer )
+static void setKeepoutSettingsToZone( ZONE* aZone, LAYER_NUM aLayer )
 {
     if( aLayer == EAGLE_LAYER::TRESTRICT || aLayer == EAGLE_LAYER::BRESTRICT )
     {
@@ -734,7 +734,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             if( c.layer == EAGLE_LAYER::TRESTRICT || c.layer == EAGLE_LAYER::BRESTRICT
                     || c.layer == EAGLE_LAYER::VRESTRICT )
             {
-                ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
+                ZONE* zone = new ZONE( m_board );
                 m_board->Add( zone, ADD_MODE::APPEND );
 
                 setKeepoutSettingsToZone( zone, c.layer );
@@ -762,7 +762,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 }
 
                 zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
-                                             ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+                                             ZONE::GetDefaultHatchPitch(), true );
             }
             else
             {
@@ -801,7 +801,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             if( IsCopperLayer( layer ) )
             {
                 // use a "netcode = 0" type ZONE:
-                ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
+                ZONE* zone = new ZONE( m_board );
                 m_board->Add( zone, ADD_MODE::APPEND );
 
                 zone->SetLayer( layer );
@@ -819,7 +819,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     zone->Rotate( zone->GetPosition(), r.rot->degrees * 10 );
 
                 // this is not my fault:
-                zone->SetBorderDisplayStyle( outline_hatch, ZONE_CONTAINER::GetDefaultHatchPitch(),
+                zone->SetBorderDisplayStyle( outline_hatch, ZONE::GetDefaultHatchPitch(),
                                              true );
             }
 
@@ -1236,20 +1236,20 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 }
 
 
-ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
+ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
 {
-    EPOLYGON p( aPolyNode );
+    EPOLYGON     p( aPolyNode );
     PCB_LAYER_ID layer = kicad_layer( p.layer );
-    ZONE_CONTAINER* zone = nullptr;
-    bool keepout = ( p.layer == EAGLE_LAYER::TRESTRICT
-                  || p.layer == EAGLE_LAYER::BRESTRICT
-                  || p.layer == EAGLE_LAYER::VRESTRICT );
+    ZONE*        zone = nullptr;
+    bool         keepout = ( p.layer == EAGLE_LAYER::TRESTRICT
+                          || p.layer == EAGLE_LAYER::BRESTRICT
+                          || p.layer == EAGLE_LAYER::VRESTRICT );
 
     if( !IsCopperLayer( layer ) && !keepout )
         return nullptr;
 
     // use a "netcode = 0" type ZONE:
-    zone = new ZONE_CONTAINER( m_board );
+    zone = new ZONE( m_board );
     m_board->Add( zone, ADD_MODE::APPEND );
 
     if( !keepout )
@@ -1854,7 +1854,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     if( r.layer == EAGLE_LAYER::TRESTRICT || r.layer == EAGLE_LAYER::BRESTRICT
             || r.layer == EAGLE_LAYER::VRESTRICT )
     {
-        MODULE_ZONE_CONTAINER* zone = new MODULE_ZONE_CONTAINER( aModule );
+        FP_ZONE* zone = new FP_ZONE( aModule );
         aModule->Add( zone, ADD_MODE::APPEND );
 
         setKeepoutSettingsToZone( zone, r.layer );
@@ -1873,7 +1873,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
         }
 
         zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
-                                     ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+                                     ZONE::GetDefaultHatchPitch(), true );
     }
     else
     {
@@ -1968,7 +1968,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
      || p.layer == EAGLE_LAYER::BRESTRICT
      || p.layer == EAGLE_LAYER::VRESTRICT )
     {
-        MODULE_ZONE_CONTAINER* zone = new MODULE_ZONE_CONTAINER( aModule );
+        FP_ZONE* zone = new FP_ZONE( aModule );
         aModule->Add( zone, ADD_MODE::APPEND );
 
         setKeepoutSettingsToZone( zone, p.layer );
@@ -1978,7 +1978,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
         zone->Outline()->AddOutline( outline );
 
         zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
-                                     ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+                                     ZONE::GetDefaultHatchPitch(), true );
     }
     else
     {
@@ -2010,7 +2010,7 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
      || e.layer == EAGLE_LAYER::BRESTRICT
      || e.layer == EAGLE_LAYER::VRESTRICT )
     {
-        MODULE_ZONE_CONTAINER* zone = new MODULE_ZONE_CONTAINER( aModule );
+        FP_ZONE* zone = new FP_ZONE( aModule );
         aModule->Add( zone, ADD_MODE::APPEND );
 
         setKeepoutSettingsToZone( zone, e.layer );
@@ -2038,7 +2038,7 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
         }
 
         zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
-                                     ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+                                     ZONE::GetDefaultHatchPitch(), true );
     }
     else
     {
@@ -2436,7 +2436,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
         {
             // KiCad does not support an unconnected zone with its own non-zero netcode,
             // but only when assigned netcode = 0 w/o a name...
-            for( ZONE_CONTAINER* zone : zones )
+            for( ZONE* zone : zones )
                 zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
             // therefore omit this signal/net.

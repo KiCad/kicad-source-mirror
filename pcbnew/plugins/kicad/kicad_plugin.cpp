@@ -30,11 +30,11 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <pcb_text.h>
-#include <class_dimension.h>
+#include <dimension.h>
 #include <class_track.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <pcb_shape.h>
-#include <class_pcb_target.h>
+#include <pcb_target.h>
 #include <fp_shape.h>
 #include <confirm.h>
 #include <locale_io.h>
@@ -396,7 +396,7 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
     case PCB_DIM_CENTER_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-        format( static_cast<DIMENSION*>( aItem ), aNestLevel );
+        format( static_cast<DIMENSION_BASE*>( aItem ), aNestLevel );
         break;
 
     case PCB_SHAPE_T:
@@ -437,9 +437,9 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
         format( static_cast<TRACK*>( aItem ), aNestLevel );
         break;
 
-    case PCB_FP_ZONE_AREA_T:
-    case PCB_ZONE_AREA_T:
-        format( static_cast<ZONE_CONTAINER*>( aItem ), aNestLevel );
+    case PCB_FP_ZONE_T:
+    case PCB_ZONE_T:
+        format( static_cast<ZONE*>( aItem ), aNestLevel );
         break;
 
     default:
@@ -665,7 +665,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
+void PCB_IO::format( DIMENSION_BASE* aDimension, int aNestLevel ) const
 {
     ALIGNED_DIMENSION*    aligned = dynamic_cast<ALIGNED_DIMENSION*>( aDimension );
     ORTHOGONAL_DIMENSION* ortho   = dynamic_cast<ORTHOGONAL_DIMENSION*>( aDimension );
@@ -1730,10 +1730,10 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
+void PCB_IO::format( ZONE* aZone, int aNestLevel ) const
 {
     // Save the NET info; For keepout zones, net code and net name are irrelevant
-    // so be sure a dummy value is stored, just for ZONE_CONTAINER compatibility
+    // so be sure a dummy value is stored, just for ZONE compatibility
     // (perhaps netcode and netname should be not stored)
     m_out->Print( aNestLevel, "(zone (net %d) (net_name %s)",
                   aZone->GetIsRuleArea() ? 0 : m_mapping->Translate( aZone->GetNetCode() ),

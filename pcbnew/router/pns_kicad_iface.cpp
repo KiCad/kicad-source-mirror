@@ -25,7 +25,7 @@
 #include <fp_text.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <board_commit.h>
@@ -923,8 +923,7 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( VIA* aVia )
 }
 
 
-bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone,
-                                     SHAPE_POLY_SET* aBoardOutline )
+bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_SET* aBoardOutline )
 {
     SHAPE_POLY_SET poly;
 
@@ -1182,7 +1181,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
     if( m_board->GetBoardPolygonOutlines( buffer ) )
         boardOutline = &buffer;
 
-    for( ZONE_CONTAINER* zone : m_board->Zones() )
+    for( ZONE* zone : m_board->Zones() )
     {
         syncZone( aWorld, zone, boardOutline );
     }
@@ -1200,7 +1199,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         syncTextItem( aWorld, &module->Reference(), module->Reference().GetLayer() );
         syncTextItem( aWorld, &module->Value(), module->Value().GetLayer() );
 
-        for( MODULE_ZONE_CONTAINER* zone : module->Zones() )
+        for( FP_ZONE* zone : module->Zones() )
             syncZone( aWorld, zone, boardOutline );
 
         if( module->IsNetTie() )

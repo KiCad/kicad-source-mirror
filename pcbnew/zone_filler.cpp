@@ -29,12 +29,12 @@
 
 #include <advanced_config.h>
 #include <class_board.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <class_module.h>
 #include <fp_shape.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
-#include <class_pcb_target.h>
+#include <pcb_target.h>
 #include <class_track.h>
 #include <connectivity/connectivity_data.h>
 #include <convert_basic_shapes_to_polygon.h>
@@ -84,9 +84,9 @@ void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 }
 
 
-bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWindow* aParent )
+bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aParent )
 {
-    std::vector<std::pair<ZONE_CONTAINER*, PCB_LAYER_ID>> toFill;
+    std::vector<std::pair<ZONE*, PCB_LAYER_ID>> toFill;
     std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> islandsList;
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
@@ -113,7 +113,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
 
     // Update and cache zone bounding boxes and pad effective shapes so that we don't have to
     // make them thread-safe.
-    for( ZONE_CONTAINER* zone : m_board->Zones() )
+    for( ZONE* zone : m_board->Zones() )
     {
         zone->CacheBoundingBox();
         m_worstClearance = std::max( m_worstClearance, zone->GetLocalClearance() );
@@ -127,7 +127,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
                 pad->BuildEffectiveShapes( UNDEFINED_LAYER );
         }
 
-        for( ZONE_CONTAINER* zone : module->Zones() )
+        for( ZONE* zone : module->Zones() )
         {
             zone->CacheBoundingBox();
             m_worstClearance = std::max( m_worstClearance, zone->GetLocalClearance() );
@@ -136,12 +136,12 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
 
     // Sort by priority to reduce deferrals waiting on higher priority zones.
     std::sort( aZones.begin(), aZones.end(),
-               []( const ZONE_CONTAINER* lhs, const ZONE_CONTAINER* rhs )
+               []( const ZONE* lhs, const ZONE* rhs )
                {
                    return lhs->GetPriority() > rhs->GetPriority();
                } );
 
-    for( ZONE_CONTAINER* zone : aZones )
+    for( ZONE* zone : aZones )
     {
         // Rule areas are not filled
         if( zone->GetIsRuleArea() )
@@ -173,7 +173,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
     std::atomic<size_t> nextItem;
 
     auto check_fill_dependency =
-            [&]( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer, ZONE_CONTAINER* aOtherZone ) -> bool
+            [&]( ZONE* aZone, PCB_LAYER_ID aLayer, ZONE* aOtherZone ) -> bool
             {
                 // Check to see if we have to knock-out the filled areas of a higher-priority
                 // zone.  If so we have to wait until said zone is filled before we can fill.
@@ -213,13 +213,13 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
 
                 for( size_t i = nextItem++; i < toFill.size(); i = nextItem++ )
                 {
-                    PCB_LAYER_ID    layer = toFill[i].second;
-                    ZONE_CONTAINER* zone = toFill[i].first;
-                    bool            canFill = true;
+                    PCB_LAYER_ID layer = toFill[i].second;
+                    ZONE*        zone = toFill[i].first;
+                    bool         canFill = true;
 
                     // Check for any fill dependencies.  If our zone needs to be clipped by
                     // another zone then we can't fill until that zone is filled.
-                    for( ZONE_CONTAINER* otherZone : aZones )
+                    for( ZONE* otherZone : aZones )
                     {
                         if( otherZone == zone )
                             continue;
@@ -285,7 +285,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
         }
 
         toFill.erase( std::remove_if( toFill.begin(), toFill.end(),
-                      [&] ( const std::pair<ZONE_CONTAINER*, PCB_LAYER_ID> pair ) -> bool
+                      [&] ( const std::pair<ZONE*, PCB_LAYER_ID> pair ) -> bool
                       {
                           return pair.first->GetFillFlag( pair.second );
                       } ),
@@ -313,7 +313,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
-    for( ZONE_CONTAINER* zone : aZones )
+    for( ZONE* zone : aZones )
     {
         // Keepout zones are not filled
         if( zone->GetIsRuleArea() )
@@ -364,7 +364,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
     }
 
     // Now remove islands outside the board edge
-    for( ZONE_CONTAINER* zone : aZones )
+    for( ZONE* zone : aZones )
     {
         LSET zoneCopperLayers = zone->GetLayerSet() & LSET::AllCuMask( MAX_CU_LAYERS );
 
@@ -395,7 +395,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
     {
         bool outOfDate = false;
 
-        for( ZONE_CONTAINER* zone : aZones )
+        for( ZONE* zone : aZones )
         {
             // Keepout zones are not filled
             if( zone->GetIsRuleArea() )
@@ -502,7 +502,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck, wxWin
 /**
  * Return true if the given pad has a thermal connection with the given zone.
  */
-bool hasThermalConnection( D_PAD* pad, const ZONE_CONTAINER* aZone )
+bool hasThermalConnection( D_PAD* pad, const ZONE* aZone )
 {
     // Rejects non-standard pads with tht-only thermal reliefs
     if( aZone->GetPadConnection( pad ) == ZONE_CONNECTION::THT_THERMAL
@@ -610,7 +610,7 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
  * Removes thermal reliefs from the shape for any pads connected to the zone.  Does NOT add
  * in spokes, which must be done later.
  */
-void ZONE_FILLER::knockoutThermalReliefs( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                           SHAPE_POLY_SET& aFill )
 {
     SHAPE_POLY_SET holes;
@@ -653,7 +653,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE_CONTAINER* aZone, PCB_LAYER
  * Removes clearance from the shape for copper items which share the zone's layer but are
  * not connected to it.
  */
-void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                              SHAPE_POLY_SET& aHoles )
 {
     long ticker = 0;
@@ -843,7 +843,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
     // Add non-connected zone clearances
     //
     auto knockoutZoneClearance =
-            [&]( ZONE_CONTAINER* aKnockout )
+            [&]( ZONE* aKnockout )
             {
                 // If the zones share no common layers
                 if( !aKnockout->GetLayerSet().test( aLayer ) )
@@ -879,7 +879,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
                 }
             };
 
-    for( ZONE_CONTAINER* otherZone : m_board->Zones() )
+    for( ZONE* otherZone : m_board->Zones() )
     {
         if( checkForCancel( m_progressReporter ) )
             return;
@@ -897,7 +897,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
 
     for( MODULE* module : m_board->Modules() )
     {
-        for( ZONE_CONTAINER* otherZone : module->Zones() )
+        for( ZONE* otherZone : module->Zones() )
         {
             if( checkForCancel( m_progressReporter ) )
                 return;
@@ -922,11 +922,11 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LA
  * Removes the outlines of higher-proirity zones with the same net.  These zones should be
  * in charge of the fill parameters within their own outlines.
  */
-void ZONE_FILLER::subtractHigherPriorityZones( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                                SHAPE_POLY_SET& aRawFill )
 {
     auto knockoutZoneOutline =
-            [&]( ZONE_CONTAINER* aKnockout )
+            [&]( ZONE* aKnockout )
             {
                 // If the zones share no common layers
                 if( !aKnockout->GetLayerSet().test( aLayer ) )
@@ -938,7 +938,7 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE_CONTAINER* aZone, PCB_
                 }
             };
 
-    for( ZONE_CONTAINER* otherZone : m_board->Zones() )
+    for( ZONE* otherZone : m_board->Zones() )
     {
         if( otherZone->GetNetCode() == aZone->GetNetCode()
                 && otherZone->GetPriority() > aZone->GetPriority() )
@@ -949,7 +949,7 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE_CONTAINER* aZone, PCB_
 
     for( MODULE* module : m_board->Modules() )
     {
-        for( ZONE_CONTAINER* otherZone : module->Zones() )
+        for( ZONE* otherZone : module->Zones() )
         {
             if( otherZone->GetNetCode() == aZone->GetNetCode()
                     && otherZone->GetPriority() > aZone->GetPriority() )
@@ -985,7 +985,7 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE_CONTAINER* aZone, PCB_
  * 5 - Removes unconnected copper islands, deleting any affected spokes
  * 6 - Adds in the remaining spokes
  */
-bool ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
+bool ZONE_FILLER::computeRawFilledArea( const ZONE* aZone,
                                         PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
                                         const SHAPE_POLY_SET& aSmoothedOutline,
                                         const SHAPE_POLY_SET& aMaxExtents,
@@ -1163,8 +1163,8 @@ bool ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
  * The solid areas can be more than one on copper layers, and do not have holes
  * ( holes are linked by overlapping segments to the main outline)
  */
-bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
-                                  SHAPE_POLY_SET& aRawPolys, SHAPE_POLY_SET& aFinalPolys )
+bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aRawPolys,
+                                  SHAPE_POLY_SET& aFinalPolys )
 {
     SHAPE_POLY_SET* boardOutline = m_brdOutlinesValid ? &m_boardOutline : nullptr;
     SHAPE_POLY_SET  maxExtents;
@@ -1235,7 +1235,7 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
 /**
  * Function buildThermalSpokes
  */
-void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                       std::deque<SHAPE_LINE_CHAIN>& aSpokesList )
 {
     auto zoneBB = aZone->GetCachedBoundingBox();
@@ -1351,7 +1351,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone, PCB_LAYER_ID 
 }
 
 
-bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                           PCB_LAYER_ID aDebugLayer, SHAPE_POLY_SET& aRawPolys )
 {
     // Build grid:

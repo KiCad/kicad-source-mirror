@@ -74,13 +74,11 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
         m_itemList.SetDirty( true );
         break;
 
-    case PCB_ZONE_AREA_T:
-    {
+    case PCB_ZONE_T:
         m_itemMap[aItem].MarkItemsAsInvalid();
         m_itemMap.erase ( aItem );
         m_itemList.SetDirty( true );
         break;
-    }
 
     default:
         return false;
@@ -174,9 +172,9 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 
         break;
 
-    case PCB_ZONE_AREA_T:
+    case PCB_ZONE_T:
     {
-        auto zone = static_cast<ZONE_CONTAINER*>( aItem );
+        ZONE* zone = static_cast<ZONE*>( aItem );
 
         if( m_itemMap.find( aItem ) != m_itemMap.end() )
             return false;
@@ -184,8 +182,10 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
         m_itemMap[zone] = ITEM_MAP_ENTRY();
 
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
-            for( auto zitem : m_itemList.Add( zone, layer ) )
+        {
+            for( CN_ITEM* zitem : m_itemList.Add( zone, layer ) )
                 m_itemMap[zone].Link( zitem );
+        }
 
         break;
     }
@@ -298,7 +298,7 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
 const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode )
 {
-    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_AREA_T,
+    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_T,
                                   PCB_MODULE_T, EOT };
     constexpr KICAD_T no_zones[] = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T,
                                      PCB_MODULE_T, EOT };
@@ -438,7 +438,7 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 
     size *= 2;      // Our caller us gets the other half of the progress bar
 
-    for( ZONE_CONTAINER* zone : aBoard->Zones() )
+    for( ZONE* zone : aBoard->Zones() )
     {
         Add( zone );
         reportProgress( aReporter, ii++, size, delta );
@@ -550,8 +550,7 @@ void CN_CONNECTIVITY_ALGO::PropagateNets( BOARD_COMMIT* aCommit )
 }
 
 
-void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE_CONTAINER* aZone,
-                                                      PCB_LAYER_ID aLayer,
+void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE* aZone, PCB_LAYER_ID aLayer,
                                                       std::vector<int>& aIslands )
 {
     if( aZone->GetFilledPolysList( aLayer ).IsEmpty() )
@@ -676,8 +675,8 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
 
 void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LAYER* aZoneLayerB )
 {
-    const auto zoneA = static_cast<const ZONE_CONTAINER*>( aZoneLayerA->Parent() );
-    const auto zoneB = static_cast<const ZONE_CONTAINER*>( aZoneLayerB->Parent() );
+    const ZONE* zoneA = static_cast<const ZONE*>( aZoneLayerA->Parent() );
+    const ZONE* zoneB = static_cast<const ZONE*>( aZoneLayerB->Parent() );
 
     if( aZoneLayerA->Layer() != aZoneLayerB->Layer() )
         return;
@@ -754,20 +753,20 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
         return true;
 
     // We should handle zone-zone connection separately
-    if ( parentA->Type() == PCB_ZONE_AREA_T && parentB->Type() == PCB_ZONE_AREA_T )
+    if ( parentA->Type() == PCB_ZONE_T && parentB->Type() == PCB_ZONE_T )
     {
         checkZoneZoneConnection( static_cast<CN_ZONE_LAYER*>( m_item ),
                                  static_cast<CN_ZONE_LAYER*>( aCandidate ) );
         return true;
     }
 
-    if( parentA->Type() == PCB_ZONE_AREA_T )
+    if( parentA->Type() == PCB_ZONE_T )
     {
         checkZoneItemConnection( static_cast<CN_ZONE_LAYER*>( aCandidate ), m_item );
         return true;
     }
 
-    if( parentB->Type() == PCB_ZONE_AREA_T )
+    if( parentB->Type() == PCB_ZONE_T )
     {
         checkZoneItemConnection( static_cast<CN_ZONE_LAYER*>( m_item ), aCandidate );
         return true;

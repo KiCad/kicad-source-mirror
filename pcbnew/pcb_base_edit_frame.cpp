@@ -37,7 +37,7 @@
 #include <dialogs/dialog_grid_settings.h>
 #include <widgets/appearance_controls.h>
 #include <dialogs/eda_view_switcher.h>
-#include <class_dimension.h>
+#include <dimension.h>
 #include <wildcards_and_files_ext.h>
 
 
@@ -175,7 +175,7 @@ void PCB_BASE_EDIT_FRAME::unitsChangeRefresh()
         INSPECTOR_FUNC inspector =
                 [units, view]( EDA_ITEM* aItem, void* aTestData )
                 {
-                    DIMENSION* dimension = static_cast<DIMENSION*>( aItem );
+                    DIMENSION_BASE* dimension = static_cast<DIMENSION_BASE*>( aItem );
 
                     if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
                     {

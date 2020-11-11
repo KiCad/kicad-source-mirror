@@ -156,12 +156,12 @@ private:
     BOARD*          m_board;
     REPORTER*       m_reporter;
 
-    std::map< ZONE_CONTAINER*, std::vector<D_PAD*> > m_zoneConnectionsCache;
-    std::map< wxString, wxString> m_oldToNewNets;
-    std::map< D_PAD*, wxString > m_padNets;
-    std::map< D_PAD*, wxString > m_padPinFunctions;
-    std::vector<MODULE*> m_addedComponents;
-    std::map<wxString, NETINFO_ITEM*> m_addedNets;
+    std::map<ZONE*, std::vector<D_PAD*>> m_zoneConnectionsCache;
+    std::map<wxString, wxString>         m_oldToNewNets;
+    std::map<D_PAD*, wxString>           m_padNets;
+    std::map<D_PAD*, wxString>           m_padPinFunctions;
+    std::vector<MODULE*>                 m_addedComponents;
+    std::map<wxString, NETINFO_ITEM*>    m_addedNets;
 
     bool m_deleteSinglePadNets;
     bool m_deleteUnusedComponents;

@@ -33,7 +33,7 @@ using namespace std::placeholders;
 #include <class_track.h>
 #include <class_module.h>
 #include <pcb_shape.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <collectors.h>
 #include <confirm.h>
 #include <dialog_find.h>
@@ -786,7 +786,7 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
 
         case PCB_FP_SHAPE_T:
         case PCB_FP_TEXT_T:
-        case PCB_FP_ZONE_AREA_T:
+        case PCB_FP_ZONE_T:
             if( static_cast<MODULE*>( item->GetParent() )->IsLocked() )
                 containsLocked = true;
             break;
@@ -1423,7 +1423,7 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
             include = aFilterOptions.includeVias;
             break;
         }
-        case PCB_ZONE_AREA_T:
+        case PCB_ZONE_T:
         {
             include = aFilterOptions.includeZones;
             break;
@@ -1544,9 +1544,9 @@ bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
 
         break;
 
-    case PCB_ZONE_AREA_T:
+    case PCB_ZONE_T:
     {
-        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( aItem );
+        ZONE* zone = static_cast<ZONE*>( aItem );
 
         if( ( !m_filter.zones && !zone->GetIsRuleArea() )
             || ( !m_filter.keepouts && zone->GetIsRuleArea() ) )
@@ -1848,13 +1848,13 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
     switch( aItem->Type() )
     {
-    case PCB_ZONE_AREA_T:
-    case PCB_FP_ZONE_AREA_T:
+    case PCB_ZONE_T:
+    case PCB_FP_ZONE_T:
     {
         if( !board()->IsElementVisible( LAYER_ZONES ) )
             return false;
 
-        const ZONE_CONTAINER* zone = static_cast<const ZONE_CONTAINER*>( aItem );
+        const ZONE* zone = static_cast<const ZONE*>( aItem );
 
         // Check to see if this keepout is part of a footprint
         // If it is, and we are not editing the footprint, it should not be selectable
@@ -1907,7 +1907,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
                 return true;
         }
 
-        for( ZONE_CONTAINER* zone : module->Zones() )
+        for( ZONE* zone : module->Zones() )
         {
             if( Selectable( zone, true ) )
                 return true;
@@ -2313,13 +2313,13 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
     }
 
     // Zone edges are very specific; zone fills much less so.
-    if( aCollector.CountType( PCB_ZONE_AREA_T ) > 0 )
+    if( aCollector.CountType( PCB_ZONE_T ) > 0 )
     {
         for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
         {
-            if( aCollector[i]->Type() == PCB_ZONE_AREA_T )
+            if( aCollector[i]->Type() == PCB_ZONE_T )
             {
-                auto zone = static_cast<ZONE_CONTAINER*>( aCollector[i] );
+                ZONE* zone = static_cast<ZONE*>( aCollector[i] );
 
                 if( zone->HitTestForEdge( where, 5 * aCollector.GetGuide()->OnePixelInIU() ) )
                     preferred.insert( zone );
@@ -2460,7 +2460,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
 
         // MODULE::CoverageRatio() doesn't take zone handles & borders into account so just
         // use a more aggressive cutoff point if zones are involved.
-        if(  aCollector.CountType( PCB_ZONE_AREA_T ) )
+        if(  aCollector.CountType( PCB_ZONE_T ) )
             maxCoverRatio /= 2;
 
         for( int i = 0; i < aCollector.GetCount(); ++i )

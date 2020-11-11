@@ -25,7 +25,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <menus_helpers.h>
 #include <pcbnew_settings.h>
 #include <python_scripting.h>
@@ -231,7 +231,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     }
 
     // Append zones outlines
-    for( ZONE_CONTAINER* zone : currentPcb->Zones() )
+    for( ZONE* zone : currentPcb->Zones() )
     {
         ITEM_PICKER picker( nullptr, zone, UNDO_REDO::CHANGED );
         itemsList.PushItem( picker );
@@ -282,7 +282,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         currItemList.insert( item );
 
     // Append zones outlines
-    for( ZONE_CONTAINER* zone : currentPcb->Zones() )
+    for( ZONE* zone : currentPcb->Zones() )
         currItemList.insert( zone );
 
     // Found deleted footprints
@@ -331,7 +331,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         }
     }
 
-    for( ZONE_CONTAINER* zone : currentPcb->Zones() )
+    for( ZONE* zone : currentPcb->Zones() )
     {
         if( !oldBuffer->ContainsItem( zone ) )
         {

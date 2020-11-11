@@ -788,9 +788,9 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
                 }
                 break;
 
-                case PCB_ZONE_AREA_T:
+                case PCB_ZONE_T:
                 {
-                    ZONE_CONTAINER* item = dynamic_cast<ZONE_CONTAINER *>( intersectedBoardItem );
+                    ZONE* item = dynamic_cast<ZONE*>( intersectedBoardItem );
 
                     if( item )
                     {

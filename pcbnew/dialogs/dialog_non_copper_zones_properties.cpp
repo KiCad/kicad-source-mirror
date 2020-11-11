@@ -31,7 +31,6 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <widgets/unit_binder.h>
-#include <class_zone.h>
 #include <zones.h>
 
 #include <dialog_non_copper_zones_properties_base.h>

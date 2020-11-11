@@ -33,9 +33,9 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_zone.h>
-#include <class_pcb_target.h>
-#include <class_dimension.h>
+#include <zone.h>
+#include <pcb_target.h>
+#include <dimension.h>
 #include <pcb_layer_box_selector.h>
 #include <dialog_drc.h>
 #include <connectivity/connectivity_data.h>
@@ -142,7 +142,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     case PCB_DIM_CENTER_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-        ShowDimensionPropertiesDialog( static_cast<DIMENSION*>( aItem ) );
+        ShowDimensionPropertiesDialog( static_cast<DIMENSION_BASE*>( aItem ) );
         break;
 
     case PCB_FP_TEXT_T:
@@ -153,8 +153,8 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         ShowGraphicItemPropertiesDialog( aItem );
         break;
 
-    case PCB_ZONE_AREA_T:
-        Edit_Zone_Params( static_cast<ZONE_CONTAINER*>( aItem ) );
+    case PCB_ZONE_T:
+        Edit_Zone_Params( static_cast<ZONE*>( aItem ) );
         break;
 
     case PCB_GROUP_T:
@@ -167,7 +167,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 }
 
 
-void PCB_EDIT_FRAME::ShowDimensionPropertiesDialog( DIMENSION* aDimension )
+void PCB_EDIT_FRAME::ShowDimensionPropertiesDialog( DIMENSION_BASE* aDimension )
 {
     if( aDimension == NULL )
         return;

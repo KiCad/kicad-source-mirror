@@ -166,8 +166,8 @@ int CN_ZONE_LAYER::AnchorCount() const
     if( !Valid() )
         return 0;
 
-    const auto  zone    = static_cast<const ZONE_CONTAINER*>( Parent() );
-    const auto& outline = zone->GetFilledPolysList( m_layer ).COutline( m_subpolyIndex );
+    const ZONE*             zone    = static_cast<const ZONE*>( Parent() );
+    const SHAPE_LINE_CHAIN& outline = zone->GetFilledPolysList( m_layer ).COutline( m_subpolyIndex );
 
     return outline.PointCount() ? 1 : 0;
 }
@@ -178,8 +178,8 @@ const VECTOR2I CN_ZONE_LAYER::GetAnchor( int n ) const
     if( !Valid() )
         return VECTOR2I();
 
-    const auto  zone    = static_cast<const ZONE_CONTAINER*>( Parent() );
-    const auto& outline = zone->GetFilledPolysList( m_layer ).COutline( m_subpolyIndex );
+    const ZONE*             zone    = static_cast<const ZONE*>( Parent() );
+    const SHAPE_LINE_CHAIN& outline = zone->GetFilledPolysList( m_layer ).COutline( m_subpolyIndex );
 
     return outline.CPoint( 0 );
 }
@@ -271,7 +271,7 @@ CN_ITEM* CN_LIST::Add( ARC* aArc )
      return item;
  }
 
- const std::vector<CN_ITEM*> CN_LIST::Add( ZONE_CONTAINER* zone, PCB_LAYER_ID aLayer )
+ const std::vector<CN_ITEM*> CN_LIST::Add( ZONE* zone, PCB_LAYER_ID aLayer )
  {
      const auto& polys = zone->GetFilledPolysList( aLayer );
 
@@ -367,9 +367,9 @@ bool CN_ANCHOR::IsDangling() const
     connected_count = 0;
     for( auto item : m_item->ConnectedItems() )
     {
-        if( item->Parent()->Type() == PCB_ZONE_AREA_T )
+        if( item->Parent()->Type() == PCB_ZONE_T )
         {
-            ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item->Parent() );
+            ZONE* zone = static_cast<ZONE*>( item->Parent() );
 
             if( zone->HitTestFilledArea( static_cast<PCB_LAYER_ID>( item->Layer() ),
                                          wxPoint( Pos() ), accuracy ) )
@@ -390,17 +390,17 @@ int CN_ANCHOR::ConnectedItemsCount() const
 
     int connected_count = 0;
 
-    for( auto item : m_item->ConnectedItems() )
+    for( CN_ITEM* item : m_item->ConnectedItems() )
     {
-        if( item->Parent()->Type() == PCB_ZONE_AREA_T )
+        if( item->Parent()->Type() == PCB_ZONE_T )
         {
-            ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item->Parent() );
+            ZONE* zone = static_cast<ZONE*>( item->Parent() );
 
             if( zone->HitTestFilledArea( static_cast<PCB_LAYER_ID>( item->Layer() ),
-                                         wxPoint( Pos().x, Pos().y ) ) )
+                                         (wxPoint) Pos() ) )
                 connected_count++;
         }
-        else if( item->Parent()->HitTest( wxPoint( Pos().x, Pos().y ) ) )
+        else if( item->Parent()->HitTest( (wxPoint) Pos() ) )
             connected_count++;
     }
 

@@ -28,7 +28,6 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <footprint_edit_frame.h>
-#include <class_zone.h>
 #include <zones.h>
 #include <zone_settings.h>
 #include <dialog_rule_area_properties_base.h>

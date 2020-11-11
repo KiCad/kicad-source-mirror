@@ -35,10 +35,9 @@ class VIEW;
 }
 
 /**
- * This class is an adjuct helper to the DRAWING_TOOL interactive
- * tool, which handles incoming geometry changes from a
- * POLYGON_GEOM_MANAGER and translates that into a ZONE_CONTAINER
- * based on given parameters
+ * This class is an adjuct helper to the DRAWING_TOOL interactive tool, which handles incoming
+ * geometry changes from a POLYGON_GEOM_MANAGER and translates that into a ZONE based on given
+ * parameters
  */
 class ZONE_CREATE_HELPER : public POLYGON_GEOM_MANAGER::CLIENT
 {
@@ -59,7 +58,7 @@ public:
         ZONE_MODE m_mode;
 
         ///> Zone settings source (for similar and cutout zones)
-        ZONE_CONTAINER* m_sourceZone;
+        ZONE* m_sourceZone;
 
         ///> Zone leader mode
         POLYGON_GEOM_MANAGER::LEADER_MODE m_leaderMode;
@@ -73,7 +72,7 @@ public:
 
     virtual ~ZONE_CREATE_HELPER();
 
-    ZONE_CONTAINER* GetZone() const { return m_zone.get(); }
+    ZONE* GetZone() const { return m_zone.get(); }
 
     /*
      * Interface for receiving POLYGON_GEOM_MANAGER update
@@ -94,7 +93,7 @@ public:
      * @param aKeepout should the zone be a keepout
      * @return the new zone, can be null if the user aborted
      */
-    std::unique_ptr<ZONE_CONTAINER> createNewZone( bool aKeepout );
+    std::unique_ptr<ZONE> createNewZone( bool aKeepout );
 
     /**
      * Function createZoneFromExisting
@@ -104,7 +103,7 @@ public:
      * @param aSrcZone the zone to copy settings from
      * @return the new zone
      */
-    std::unique_ptr<ZONE_CONTAINER> createZoneFromExisting( const ZONE_CONTAINER& aSrcZone );
+    std::unique_ptr<ZONE> createZoneFromExisting( const ZONE& aSrcZone );
 
     /**
      * Function performZoneCutout()
@@ -115,7 +114,7 @@ public:
      * @param aZone the zone to removed area from
      * @param aCutout the area to remove
      */
-    void performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINER& aCutout );
+    void performZoneCutout( ZONE& aZone, ZONE& aCutout );
 
     /**
      * Commit the current zone-in-progress to the BOARD. This might
@@ -124,7 +123,7 @@ public:
      *
      * @param aZone - the drawn zone outline to commit
      */
-    void commitZone( std::unique_ptr<ZONE_CONTAINER> aZone );
+    void commitZone( std::unique_ptr<ZONE> aZone );
 
 private:
 
@@ -140,7 +139,7 @@ private:
     KIGFX::VIEW& m_parentView;
 
     ///> The zone-in-progress
-    std::unique_ptr<ZONE_CONTAINER> m_zone;
+    std::unique_ptr<ZONE> m_zone;
 };
 
 #endif /* __DRAWING_TOOL_H */

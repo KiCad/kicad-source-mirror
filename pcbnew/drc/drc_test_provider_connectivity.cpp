@@ -117,7 +117,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
     }
 
     /* test starved zones */
-    for( ZONE_CONTAINER* zone : board->Zones() )
+    for( ZONE* zone : board->Zones() )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_ZONE_HAS_EMPTY_NET ) )
             break;

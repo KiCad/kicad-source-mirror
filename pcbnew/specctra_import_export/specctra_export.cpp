@@ -46,7 +46,7 @@
 #include <class_module.h>
 #include <fp_shape.h>
 #include <class_track.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <base_units.h>
 #include <collectors.h>
 #include <geometry/shape_poly_set.h>
@@ -1073,12 +1073,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     {
         int netlessZones = 0;
 
-        static const KICAD_T scanZONEs[] = { PCB_ZONE_AREA_T, EOT };
+        static const KICAD_T scanZONEs[] = { PCB_ZONE_T, EOT };
         items.Collect( aBoard, scanZONEs );
 
         for( int i = 0; i<items.GetCount(); ++i )
         {
-            ZONE_CONTAINER* item = (ZONE_CONTAINER*) items[i];
+            ZONE* item = (ZONE*) items[i];
 
             if( item->GetIsRuleArea() )
                 continue;
@@ -1191,12 +1191,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<zone containers flagged keepout areas become keepout>--------------------------------
     {
-        static const KICAD_T  scanZONEs[] = { PCB_ZONE_AREA_T, EOT };
+        static const KICAD_T  scanZONEs[] = { PCB_ZONE_T, EOT };
         items.Collect( aBoard, scanZONEs );
 
         for( int i=0;  i<items.GetCount();  ++i )
         {
-            ZONE_CONTAINER* item = (ZONE_CONTAINER*) items[i];
+            ZONE* item = (ZONE*) items[i];
 
             if( !item->GetIsRuleArea() )
                 continue;

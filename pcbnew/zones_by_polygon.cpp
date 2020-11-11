@@ -30,7 +30,7 @@
 #include <board_commit.h>
 #include <view/view.h>
 #include <class_board.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <pcbnew.h>
 #include <zones.h>
 #include <zones_functions_for_undo_redo.h>
@@ -43,7 +43,7 @@
 static PICKED_ITEMS_LIST s_PickedList;    // a picked list to save zones for undo/redo command
 static PICKED_ITEMS_LIST s_AuxiliaryList; // a picked list to store zones that are deleted or added when combined
 
-void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE_CONTAINER* aZone )
+void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 {
     int           dialogResult;
     ZONE_SETTINGS zoneInfo = GetZoneSettings();
@@ -96,7 +96,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE_CONTAINER* aZone )
     wxBusyCursor dummy;
 
     // Undraw old zone outlines
-    for( ZONE_CONTAINER* zone : GetBoard()->Zones() )
+    for( ZONE* zone : GetBoard()->Zones() )
         GetCanvas()->GetView()->Update( zone );
 
     zoneInfo.ExportSetting( *aZone );
@@ -112,11 +112,11 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE_CONTAINER* aZone )
     UpdateCopyOfZonesList( s_PickedList, s_AuxiliaryList, GetBoard() );
 
     // refill zones with the new properties applied
-    std::vector<ZONE_CONTAINER*> zones_to_refill;
+    std::vector<ZONE*> zones_to_refill;
 
     for( unsigned i = 0; i < s_PickedList.GetCount(); ++i )
     {
-        ZONE_CONTAINER* zone = dyn_cast<ZONE_CONTAINER*>( s_PickedList.GetPickedItem( i ) );
+        ZONE* zone = dyn_cast<ZONE*>( s_PickedList.GetPickedItem( i ) );
 
         if( zone == nullptr )
         {

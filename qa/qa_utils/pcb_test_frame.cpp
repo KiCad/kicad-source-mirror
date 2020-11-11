@@ -47,7 +47,6 @@
 #include <class_module.h>
 #include <class_board.h>
 #include <class_track.h>
-#include <class_zone.h>
 
 #include <pcb_painter.h>
 #include <pcb_edit_frame.h>

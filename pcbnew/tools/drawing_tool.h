@@ -211,14 +211,14 @@ private:
      * @return true if a suitable zone was found, or the action doesn't
      * need a zone. False if the action needs a zone but none was found.
      */
-    bool getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER** aZone );
+    bool getSourceZoneForAction( ZONE_MODE aMode, ZONE** aZone );
 
     /**
      * Function constrainDimension()
      * Forces the dimension lime to be drawn on multiple of 45 degrees
      * @param aDimension is the dimension element currently being drawn
      */
-    void constrainDimension( DIMENSION* aDim );
+    void constrainDimension( DIMENSION_BASE* aDim );
 
     ///> Returns the appropriate width for a segment depending on the settings.
     int getSegmentWidth( PCB_LAYER_ID aLayer ) const;

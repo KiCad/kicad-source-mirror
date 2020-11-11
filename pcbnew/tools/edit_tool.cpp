@@ -73,7 +73,7 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags,
         {
             aCollector.Remove( item );
         }
-        else if( item->Type() == PCB_FP_ZONE_AREA_T )
+        else if( item->Type() == PCB_FP_ZONE_T )
         {
             MODULE* mod = static_cast<MODULE*>( item->GetParent() );
 
@@ -1071,7 +1071,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         {
         case PCB_FP_SHAPE_T:
         case PCB_FP_TEXT_T:
-        case PCB_FP_ZONE_AREA_T:
+        case PCB_FP_ZONE_T:
         case PCB_PAD_T:
             // Only create undo entry for items on the board
             if( !item->IsNew() && !IsFootprintEditor() )
@@ -1092,9 +1092,9 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             break;
         }
 
-        case PCB_FP_ZONE_AREA_T:
+        case PCB_FP_ZONE_T:
         {
-            MODULE_ZONE_CONTAINER* zone = static_cast<MODULE_ZONE_CONTAINER*>( item );
+            FP_ZONE* zone = static_cast<FP_ZONE*>( item );
             zone->Mirror( mirrorPoint, false );
             break;
         }
@@ -1301,10 +1301,10 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
             }
             break;
 
-        case PCB_FP_ZONE_AREA_T:
+        case PCB_FP_ZONE_T:
             {
-                MODULE_ZONE_CONTAINER* zone = static_cast<MODULE_ZONE_CONTAINER*>( item );
-                MODULE*                parent = static_cast<MODULE*>( item->GetParent() );
+                FP_ZONE* zone = static_cast<FP_ZONE*>( item );
+                MODULE*  parent = static_cast<MODULE*>( item->GetParent() );
 
                 m_commit->Modify( parent );
                 getView()->Remove( zone );
@@ -1312,15 +1312,15 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
             }
             break;
 
-        case PCB_ZONE_AREA_T:
+        case PCB_ZONE_T:
             // We process the zones special so that cutouts can be deleted when the delete tool
             // is called from inside a cutout when the zone is selected.
             {
                 // Only interact with cutouts when deleting and a single item is selected
                 if( !isCut && selectionCopy.GetSize() == 1 )
                 {
-                    VECTOR2I        curPos = getViewControls()->GetCursorPosition();
-                    ZONE_CONTAINER* zone   = static_cast<ZONE_CONTAINER*>( item );
+                    VECTOR2I curPos = getViewControls()->GetCursorPosition();
+                    ZONE*    zone   = static_cast<ZONE*>( item );
 
                     int outlineIdx, holeIdx;
 
@@ -1330,7 +1330,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                         m_commit->Modify( zone );
                         zone->RemoveCutout( outlineIdx, holeIdx );
 
-                        std::vector<ZONE_CONTAINER*> toFill;
+                        std::vector<ZONE*> toFill;
                         toFill.emplace_back( zone );
 
                         // Fill the modified zone
@@ -1595,7 +1595,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             case PCB_SHAPE_T:
             case PCB_TRACE_T:
             case PCB_VIA_T:
-            case PCB_ZONE_AREA_T:
+            case PCB_ZONE_T:
             case PCB_TARGET_T:
             case PCB_DIM_ALIGNED_T:
             case PCB_DIM_CENTER_T:

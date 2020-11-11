@@ -40,8 +40,8 @@ using namespace std::placeholders;
 #include <status_popup.h>
 #include <pcb_edit_frame.h>
 #include <fp_shape.h>
-#include <class_dimension.h>
-#include <class_zone.h>
+#include <dimension.h>
+#include <zone.h>
 #include <connectivity/connectivity_data.h>
 #include <widgets/progress_reporter.h>
 
@@ -239,10 +239,10 @@ public:
         }
             break;
 
-        case PCB_FP_ZONE_AREA_T:
-        case PCB_ZONE_AREA_T:
+        case PCB_FP_ZONE_T:
+        case PCB_ZONE_T:
         {
-            auto zone = static_cast<const ZONE_CONTAINER*>( aItem );
+            const ZONE* zone = static_cast<const ZONE*>( aItem );
             buildForPolyOutline( points, zone->Outline(), aGal );
         }
             break;
@@ -1296,10 +1296,10 @@ void POINT_EDITOR::updateItem() const
     }
         break;
 
-    case PCB_FP_ZONE_AREA_T:
-    case PCB_ZONE_AREA_T:
+    case PCB_FP_ZONE_T:
+    case PCB_ZONE_T:
     {
-        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
+        ZONE* zone = static_cast<ZONE*>( item );
         zone->ClearFilledPolysList();
         SHAPE_POLY_SET& outline = *zone->Outline();
 
@@ -1482,9 +1482,9 @@ void POINT_EDITOR::finishItem()
     if( !item )
         return;
 
-    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T )
+    if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
     {
-        auto zone = static_cast<ZONE_CONTAINER*>( item );
+        ZONE* zone = static_cast<ZONE*>( item );
 
         if( zone->IsFilled() && m_refill && zone->NeedRefill() )
             m_toolMgr->RunAction( PCB_ACTIONS::zoneFill, true, zone );
@@ -1662,10 +1662,10 @@ void POINT_EDITOR::updatePoints()
     }
         break;
 
-    case PCB_FP_ZONE_AREA_T:
-    case PCB_ZONE_AREA_T:
+    case PCB_FP_ZONE_T:
+    case PCB_ZONE_T:
     {
-        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
+        ZONE*                 zone = static_cast<ZONE*>( item );
         const SHAPE_POLY_SET* outline = zone->Outline();
 
         if( m_editPoints->PointsSize() != (unsigned) outline->TotalVertices() )
@@ -1753,8 +1753,8 @@ void POINT_EDITOR::setAltConstraint( bool aEnabled )
         EDIT_LINE* line = dynamic_cast<EDIT_LINE*>( m_editedPoint );
         bool isPoly = false;
 
-        if( m_editPoints->GetParent()->Type() == PCB_ZONE_AREA_T
-                || m_editPoints->GetParent()->Type() == PCB_FP_ZONE_AREA_T )
+        if( m_editPoints->GetParent()->Type() == PCB_ZONE_T
+                || m_editPoints->GetParent()->Type() == PCB_FP_ZONE_T )
         {
             isPoly = true;
         }
@@ -1844,7 +1844,7 @@ bool POINT_EDITOR::canAddCorner( const EDA_ITEM& aItem )
     const auto type = aItem.Type();
 
     // Works only for zones and line segments
-    if( type == PCB_ZONE_AREA_T || type == PCB_FP_ZONE_AREA_T )
+    if( type == PCB_ZONE_T || type == PCB_FP_ZONE_T )
         return true;
 
     if( type == PCB_SHAPE_T || type == PCB_FP_SHAPE_T )
@@ -1894,15 +1894,15 @@ bool POINT_EDITOR::removeCornerCondition( const SELECTION& )
     if( !item )
         return false;
 
-    if( !( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T
-        || ( ( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_SHAPE_T ) &&
+    if( !( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T
+           || ( ( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_SHAPE_T ) &&
              static_cast<PCB_SHAPE*>( item )->GetShape() == S_POLYGON ) ) )
         return false;
 
     SHAPE_POLY_SET *polyset;
 
-    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T )
-        polyset = static_cast<ZONE_CONTAINER*>( item )->Outline();
+    if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+        polyset = static_cast<ZONE*>( item )->Outline();
     else
         polyset = &static_cast<PCB_SHAPE*>( item )->GetPolyShape();
 
@@ -1944,8 +1944,8 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     PCB_SHAPE* graphicItem = dynamic_cast<PCB_SHAPE*>( item );
     BOARD_COMMIT commit( frame );
 
-    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T ||
-        ( graphicItem && graphicItem->GetShape() == S_POLYGON ) )
+    if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T
+            || ( graphicItem && graphicItem->GetShape() == S_POLYGON ) )
     {
         unsigned int nearestIdx = 0;
         unsigned int nextNearestIdx = 0;
@@ -1953,9 +1953,9 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         unsigned int firstPointInContour = 0;
         SHAPE_POLY_SET* zoneOutline;
 
-        if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T )
+        if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
         {
-            ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
+            ZONE* zone = static_cast<ZONE*>( item );
             zoneOutline = zone->Outline();
             zone->SetNeedRefill( true );
         }
@@ -2009,8 +2009,8 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         zoneOutline->InsertVertex( nextNearestIdx, nearestPoint );
 
         // We re-hatch the filled zones but not polygons
-        if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T )
-            static_cast<ZONE_CONTAINER*>( item )->HatchBorder();
+        if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+            static_cast<ZONE*>( item )->HatchBorder();
 
 
         commit.Push( _( "Add a zone corner" ) );
@@ -2071,9 +2071,9 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
     SHAPE_POLY_SET* polygon = nullptr;
 
-    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T )
+    if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
     {
-        auto zone = static_cast<ZONE_CONTAINER*>( item );
+        ZONE* zone = static_cast<ZONE*>( item );
         polygon = zone->Outline();
         zone->SetNeedRefill( true );
     }
@@ -2125,8 +2125,8 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
         commit.Push( _( "Remove a zone/polygon corner" ) );
 
         // Refresh zone hatching
-        if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T )
-            static_cast<ZONE_CONTAINER*>( item )->HatchBorder();
+        if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+            static_cast<ZONE*>( item )->HatchBorder();
 
         updatePoints();
     }

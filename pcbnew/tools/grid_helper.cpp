@@ -27,11 +27,11 @@
 using namespace std::placeholders;
 
 #include <class_board.h>
-#include <class_dimension.h>
+#include <dimension.h>
 #include <fp_shape.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
@@ -658,9 +658,9 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
             break;
         }
 
-        case PCB_ZONE_AREA_T:
+        case PCB_ZONE_T:
         {
-            const SHAPE_POLY_SET* outline = static_cast<const ZONE_CONTAINER*>( aItem )->Outline();
+            const SHAPE_POLY_SET* outline = static_cast<const ZONE*>( aItem )->Outline();
 
             SHAPE_LINE_CHAIN lc;
             lc.SetClosed( true );

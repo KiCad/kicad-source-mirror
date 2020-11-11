@@ -30,7 +30,7 @@
 #include <zones.h>
 #include <bitmaps.h>
 #include <widgets/unit_binder.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <class_board.h>
 #include <trigo.h>
 
@@ -503,7 +503,7 @@ void DIALOG_COPPER_ZONE::ExportSetupToOtherCopperZones( wxCommandEvent& event )
     // Export settings ( but layer and netcode ) to others copper zones
     BOARD* pcb = m_Parent->GetBoard();
 
-    for( ZONE_CONTAINER* zone : pcb->Zones() )
+    for( ZONE* zone : pcb->Zones() )
     {
         // Cannot export settings from a copper zone
         // to a zone keepout:

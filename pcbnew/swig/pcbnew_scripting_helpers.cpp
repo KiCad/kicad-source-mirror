@@ -351,7 +351,7 @@ bool IsActionRunning()
 
 
 bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
-                     bool aTestTracksAgainstZones, bool aReportAllTrackErrors )
+                     bool aReportAllTrackErrors )
 {
     wxCHECK( aBoard, false );
 

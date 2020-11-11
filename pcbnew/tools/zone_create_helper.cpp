@@ -23,7 +23,7 @@
 
 #include <tools/zone_create_helper.h>
 #include <tool/tool_manager.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
 #include <board_commit.h>
@@ -49,7 +49,7 @@ ZONE_CREATE_HELPER::~ZONE_CREATE_HELPER()
 }
 
 
-std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
+std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
 {
     PCB_BASE_EDIT_FRAME*  frame = m_tool.getEditFrame<PCB_BASE_EDIT_FRAME>();
     BOARD*                board = frame->GetBoard();
@@ -100,13 +100,13 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
         controls->WarpCursor( controls->GetCursorPosition(), true );
     }
 
-    // The new zone is a ZONE_CONTAINER if created in the board editor
-    // and a MODULE_ZONE_CONTAINER if created in the footprint editor
+    // The new zone is a ZONE if created in the board editor and a FP_ZONE if created in the
+    // footprint editor
     wxASSERT( !m_tool.m_isFootprintEditor || ( parent->Type() == PCB_MODULE_T ) );
 
-    std::unique_ptr<ZONE_CONTAINER> newZone = m_tool.m_isFootprintEditor ?
-                                        std::make_unique<MODULE_ZONE_CONTAINER>( parent ) :
-                                        std::make_unique<ZONE_CONTAINER>( parent );
+    std::unique_ptr<ZONE> newZone = m_tool.m_isFootprintEditor ?
+                                                std::make_unique<FP_ZONE>( parent ) :
+                                                std::make_unique<ZONE>( parent );
 
     // Apply the selected settings
     zoneInfo.ExportSetting( *newZone );
@@ -115,12 +115,11 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
 }
 
 
-std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createZoneFromExisting(
-        const ZONE_CONTAINER& aSrcZone )
+std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createZoneFromExisting( const ZONE& aSrcZone )
 {
-    auto& board = *m_tool.getModel<BOARD>();
+    BOARD* board = m_tool.getModel<BOARD>();
 
-    auto newZone = std::make_unique<ZONE_CONTAINER>( &board );
+    std::unique_ptr<ZONE> newZone = std::make_unique<ZONE>( board );
 
     ZONE_SETTINGS zoneSettings;
     zoneSettings << aSrcZone;
@@ -131,11 +130,11 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createZoneFromExisting(
 }
 
 
-void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINER& aCutout )
+void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, ZONE& aCutout )
 {
     BOARD_COMMIT commit( &m_tool );
     BOARD* board = m_tool.getModel<BOARD>();
-    std::vector<ZONE_CONTAINER*> newZones;
+    std::vector<ZONE*> newZones;
 
     // Clear the selection before removing the old zone
     auto toolMgr = m_tool.GetManager();
@@ -157,7 +156,7 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINE
         for (int hole = 0; hole < originalOutline.HoleCount( outline ) ; hole++ )
             newZoneOutline->AddHole( originalOutline.CHole( outline, hole ) );
 
-        auto newZone = new ZONE_CONTAINER( aZone );
+        auto newZone = new ZONE( aZone );
         newZone->SetOutline( newZoneOutline );
         newZone->SetLocalFlags( 1 );
         newZone->HatchBorder();
@@ -191,7 +190,7 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINE
 }
 
 
-void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
+void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
 {
     switch ( m_params.m_mode )
     {
@@ -211,7 +210,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
             if( !m_params.m_keepout )
             {
                 ZONE_FILLER filler( m_tool.getModel<BOARD>(), &bCommit );
-                std::vector<ZONE_CONTAINER*> toFill = { aZone.get() };
+                std::vector<ZONE*> toFill = { aZone.get() };
 
                 if( !filler.Fill( toFill ) )
                 {

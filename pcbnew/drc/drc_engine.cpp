@@ -85,9 +85,9 @@ DRC_ENGINE::~DRC_ENGINE()
 
 static bool isKeepoutZone( const BOARD_ITEM* aItem )
 {
-    if( aItem && ( aItem->Type() == PCB_ZONE_AREA_T || aItem->Type() == PCB_FP_ZONE_AREA_T ) )
+    if( aItem && ( aItem->Type() == PCB_ZONE_T || aItem->Type() == PCB_FP_ZONE_T ) )
     {
-        const ZONE_CONTAINER* zone = static_cast<const ZONE_CONTAINER*>( aItem );
+        const ZONE* zone = static_cast<const ZONE*>( aItem );
 
         return zone->GetIsRuleArea() && (    zone->GetDoNotAllowTracks()
                                           || zone->GetDoNotAllowVias()
@@ -357,9 +357,9 @@ void DRC_ENGINE::loadImplicitRules()
                 rule->AddConstraint( disallowConstraint );
             };
 
-    std::vector<ZONE_CONTAINER*> keepoutZones;
+    std::vector<ZONE*> keepoutZones;
 
-    for( ZONE_CONTAINER* zone : m_board->Zones() )
+    for( ZONE* zone : m_board->Zones() )
     {
         if( isKeepoutZone( zone ) )
             keepoutZones.push_back( zone );
@@ -367,14 +367,14 @@ void DRC_ENGINE::loadImplicitRules()
 
     for( MODULE* footprint : m_board->Modules() )
     {
-        for( ZONE_CONTAINER* zone : footprint->Zones() )
+        for( ZONE* zone : footprint->Zones() )
         {
             if( isKeepoutZone( zone ) )
                 keepoutZones.push_back( zone );
         }
     }
 
-    for( ZONE_CONTAINER* zone : keepoutZones )
+    for( ZONE* zone : keepoutZones )
     {
         wxString name = zone->GetZoneName();
 
@@ -656,12 +656,12 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
             m_errorLimits[ ii ] = INT_MAX;
     }
 
-    for( ZONE_CONTAINER* zone : m_board->Zones() )
+    for( ZONE* zone : m_board->Zones() )
         zone->CacheBoundingBox();
 
     for( MODULE* module : m_board->Modules() )
     {
-        for( ZONE_CONTAINER* zone : module->Zones() )
+        for( ZONE* zone : module->Zones() )
             zone->CacheBoundingBox();
 
         module->BuildPolyCourtyards();
@@ -829,8 +829,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                         case PCB_FP_SHAPE_T:     mask = DRC_DISALLOW_GRAPHICS;   break;
                         case PCB_TEXT_T:         mask = DRC_DISALLOW_TEXTS;      break;
                         case PCB_FP_TEXT_T:      mask = DRC_DISALLOW_TEXTS;      break;
-                        case PCB_ZONE_AREA_T:    mask = DRC_DISALLOW_ZONES;      break;
-                        case PCB_FP_ZONE_AREA_T: mask = DRC_DISALLOW_ZONES;      break;
+                        case PCB_ZONE_T:         mask = DRC_DISALLOW_ZONES;      break;
+                        case PCB_FP_ZONE_T:      mask = DRC_DISALLOW_ZONES;      break;
                         case PCB_LOCATE_HOLE_T:  mask = DRC_DISALLOW_HOLES;      break;
                         default:                 mask = 0;                       break;
                         }

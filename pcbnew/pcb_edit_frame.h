@@ -42,10 +42,10 @@ class VIA;
 class D_PAD;
 class PCB_TARGET;
 class PCB_GROUP;
-class DIMENSION;
+class DIMENSION_BASE;
 class DRC;
 class DIALOG_PLOT;
-class ZONE_CONTAINER;
+class ZONE;
 class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
 class SELECTION;
@@ -785,12 +785,11 @@ public:
      * Function Edit_Zone_Params
      * Edit params (layer, clearance, ...) for a zone outline
      */
-    void Edit_Zone_Params( ZONE_CONTAINER* zone_container );
+    void Edit_Zone_Params( ZONE* zone_container );
 
     // Properties dialogs
     void ShowTargetOptionsDialog( PCB_TARGET* aTarget );
-    void ShowDimensionPropertiesDialog( DIMENSION* aDimension );
-    void ShowGroupPropertiesDialog( PCB_GROUP* aGroup );
+    void ShowDimensionPropertiesDialog( DIMENSION_BASE* aDimension );
     void InstallNetlistFrame();
 
     /**

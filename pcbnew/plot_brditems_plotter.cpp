@@ -53,16 +53,16 @@
 
 #include <class_board.h>
 #include <class_board_item.h>                 // for BOARD_ITEM, S_CIRCLE
-#include <class_dimension.h>
+#include <dimension.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
 #include <class_module.h>
 #include <fp_text.h>                          // for FP_TEXT
 #include <class_track.h>
 #include <class_pad.h>                        // for D_PAD
-#include <class_pcb_target.h>
+#include <pcb_target.h>
 #include <pcb_text.h>
-#include <class_zone.h>
+#include <zone.h>
 
 #include <wx/debug.h>                         // for wxASSERT_MSG
 #include <wx/wx.h>                            // for wxPoint, wxSize, wxArra...
@@ -357,7 +357,7 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
         case PCB_DIM_ORTHOGONAL_T:
         case PCB_DIM_LEADER_T:
             if( item->GetLayer() != Edge_Cuts )
-                PlotDimension( (DIMENSION*) item );
+                PlotDimension( (DIMENSION_BASE*) item );
 
             break;
 
@@ -406,7 +406,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( FP_TEXT* aTextMod, COLOR4D aColor 
 }
 
 
-void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
+void BRDITEMS_PLOTTER::PlotDimension( DIMENSION_BASE* aDim )
 {
     if( !m_layerMask[aDim->GetLayer()] )
         return;
@@ -746,7 +746,7 @@ void BRDITEMS_PLOTTER::PlotPcbText( PCB_TEXT* aText )
 }
 
 
-void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& polysList )
+void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE* aZone, SHAPE_POLY_SET& polysList )
 {
     if( polysList.IsEmpty() )
         return;

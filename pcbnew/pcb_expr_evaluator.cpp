@@ -218,7 +218,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
 
     auto insideZone =
-            [&]( ZONE_CONTAINER* zone ) -> bool
+            [&]( ZONE* zone ) -> bool
             {
                 if( !zone )
                     return false;
@@ -297,19 +297,19 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
     if( arg->AsString() == "A" )
     {
-        if( insideZone( dynamic_cast<ZONE_CONTAINER*>( context->GetItem( 0 ) ) ) )
+        if( insideZone( dynamic_cast<ZONE*>( context->GetItem( 0 ) ) ) )
             result->Set( 1.0 );
     }
     else if( arg->AsString() == "B" )
     {
-        if( insideZone( dynamic_cast<ZONE_CONTAINER*>( context->GetItem( 1 ) ) ) )
+        if( insideZone( dynamic_cast<ZONE*>( context->GetItem( 1 ) ) ) )
             result->Set( 1.0 );
     }
     else if( KIID::SniffTest( arg->AsString() ) )
     {
         KIID target( arg->AsString() );
 
-        for( ZONE_CONTAINER* candidate : item->GetBoard()->Zones() )
+        for( ZONE* candidate : item->GetBoard()->Zones() )
         {
             // Only a single zone can match the UUID; exit once we find a match whether
             // "inside" or not
@@ -324,7 +324,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
         for( MODULE* module : item->GetBoard()->Modules() )
         {
-            for( ZONE_CONTAINER* candidate : module->Zones() )
+            for( ZONE* candidate : module->Zones() )
             {
                 // Only a single zone can match the UUID; exit once we find a match whether
                 // "inside" or not
@@ -340,7 +340,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
     }
     else  // Match on zone name
     {
-        for( ZONE_CONTAINER* candidate : item->GetBoard()->Zones() )
+        for( ZONE* candidate : item->GetBoard()->Zones() )
         {
             if( candidate->GetZoneName().Matches( arg->AsString() ) )
             {
@@ -355,7 +355,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
         for( MODULE* module : item->GetBoard()->Modules() )
         {
-            for( ZONE_CONTAINER* candidate : module->Zones() )
+            for( ZONE* candidate : module->Zones() )
             {
                 // Many zones can match the name; exit only when we find an "inside"
                 if( candidate->GetZoneName().Matches( arg->AsString() ) )

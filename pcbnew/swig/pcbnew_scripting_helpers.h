@@ -151,12 +151,11 @@ bool IsActionRunning();
  * @param aBoard is a valid loaded board
  * @param aFileName is the full path and name of the report file to write
  * @param aUnits is the units to use in the report
- * @param aTestTracksAgainstZones controls whether full track/zone checking is done (slow)
  * @param aReportAllTrackErrors controls whether all errors or just the first error is reported
  *                              for each track
  * @return true if successful, false if not
  */
 bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
-                     bool aTestTracksAgainstZones, bool aReportAllTrackErrors );
+                     bool aReportAllTrackErrors );
 
 #endif      // __PCBNEW_SCRIPTING_HELPERS_H

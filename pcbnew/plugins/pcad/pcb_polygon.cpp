@@ -190,7 +190,7 @@ void PCB_POLYGON::AddToBoard()
 
     if( m_outline.GetCount() > 0 )
     {
-        ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
+        ZONE* zone = new ZONE( m_board );
         m_board->Add( zone, ADD_MODE::APPEND );
 
         zone->SetLayer( m_KiCadLayer );

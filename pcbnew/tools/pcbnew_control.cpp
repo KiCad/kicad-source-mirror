@@ -33,10 +33,10 @@
 #include <board_commit.h>
 #include <class_board.h>
 #include <class_board_item.h>
-#include <class_dimension.h>
+#include <dimension.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <fp_shape.h>
 #include <confirm.h>
 #include <connectivity/connectivity_data.h>
@@ -201,7 +201,7 @@ int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 
     m_frame->SetDisplayOptions( opts );
 
-    for( ZONE_CONTAINER* zone : board()->Zones() )
+    for( ZONE* zone : board()->Zones() )
         view()->Update( zone, KIGFX::GEOMETRY );
 
     canvas()->Refresh();
@@ -787,8 +787,7 @@ static void moveUnflaggedItems( std::deque<T>& aList, std::vector<BOARD_ITEM*>& 
 }
 
 
-static void moveUnflaggedItems( ZONE_CONTAINERS& aList, std::vector<BOARD_ITEM*>& aTarget,
-                                bool aIsNew )
+static void moveUnflaggedItems( ZONES& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
 {
     if( aList.size() == 0 )
         return;
@@ -878,7 +877,7 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
         case PCB_DIM_LEADER_T:
             {
             // Dimensions need to have their units updated if they are automatic
-            DIMENSION* dim = static_cast<DIMENSION*>( item );
+            DIMENSION_BASE* dim = static_cast<DIMENSION_BASE*>( item );
 
             if( dim->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
                 dim->SetUnits( frame()->GetUserUnits() );

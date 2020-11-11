@@ -84,7 +84,7 @@ enum class ALTIUM_PCB_DIR
 class BOARD;
 class PCB_SHAPE;
 class MODULE;
-class ZONE_CONTAINER;
+class ZONE;
 
 
 /**
@@ -184,13 +184,13 @@ private:
 
     BOARD*                               m_board;
     std::vector<MODULE*>                 m_components;
-    std::vector<ZONE_CONTAINER*>         m_polygons;
+    std::vector<ZONE*>                   m_polygons;
     std::map<wxString, wxString>         m_models;
     size_t                               m_num_nets;
     std::map<ALTIUM_LAYER, PCB_LAYER_ID> m_layermap; // used to correctly map copper layers
     std::map<ALTIUM_RULE_KIND, std::vector<ARULE6>> m_rules;
 
-    std::map<ALTIUM_LAYER, ZONE_CONTAINER*> m_outer_plane;
+    std::map<ALTIUM_LAYER, ZONE*>        m_outer_plane;
 
     /// Altium stores pour order across all layers
     int m_highest_pour_index;

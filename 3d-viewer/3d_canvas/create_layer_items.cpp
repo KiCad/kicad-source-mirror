@@ -40,7 +40,7 @@
 #include <class_pad.h>
 #include <pcb_text.h>
 #include <fp_shape.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
 #include <vector>
@@ -653,8 +653,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             case PCB_DIM_CENTER_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
-                AddShapeWithClearanceToContainer( (DIMENSION*) item, layerContainer, curr_layer_id,
-                                                  0 );
+                AddShapeWithClearanceToContainer( (DIMENSION_BASE*) item, layerContainer,
+                                                  curr_layer_id, 0 );
             break;
 
             default:
@@ -711,9 +711,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         if( aStatusReporter )
             aStatusReporter->Report( _( "Create zones" ) );
 
-        std::vector<std::pair<const ZONE_CONTAINER*, PCB_LAYER_ID>> zones;
+        std::vector<std::pair<const ZONE*, PCB_LAYER_ID>> zones;
 
-        for( ZONE_CONTAINER* zone : m_board->Zones() )
+        for( ZONE* zone : m_board->Zones() )
         {
             for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
                 zones.emplace_back( std::make_pair( zone, layer ) );
@@ -733,7 +733,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                             areaId < zones.size();
                             areaId = nextZone.fetch_add( 1 ) )
                 {
-                    const ZONE_CONTAINER* zone = zones[areaId].first;
+                    const ZONE* zone = zones[areaId].first;
 
                     if( zone == nullptr )
                         break;
@@ -761,7 +761,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
         // Add copper zones
-        for( ZONE_CONTAINER* zone : m_board->Zones() )
+        for( ZONE* zone : m_board->Zones() )
         {
             if( zone == nullptr )
                 break;
@@ -953,7 +953,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             case PCB_DIM_CENTER_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
-                AddShapeWithClearanceToContainer( (DIMENSION*) item,
+                AddShapeWithClearanceToContainer( (DIMENSION_BASE*) item,
                                                   layerContainer,
                                                   curr_layer_id,
                                                   0 );
@@ -1053,13 +1053,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         // Draw non copper zones
         if( GetFlag( FL_ZONE ) )
         {
-            for( ZONE_CONTAINER* zone : m_board->Zones() )
+            for( ZONE* zone : m_board->Zones() )
             {
                 if( zone->IsOnLayer( curr_layer_id ) )
                     AddSolidAreasShapesToContainer( zone, layerContainer, curr_layer_id );
             }
 
-            for( ZONE_CONTAINER* zone : m_board->Zones() )
+            for( ZONE* zone : m_board->Zones() )
             {
                 if( zone->IsOnLayer( curr_layer_id ) )
                     zone->TransformSolidAreasShapesToPolygon( curr_layer_id, *layerPoly );

@@ -36,7 +36,6 @@ class DRC_TEST_PROVIDER;
 class PCB_EDIT_FRAME;
 class BOARD_ITEM;
 class BOARD;
-class ZONE_CONTAINER;
 class MARKER_PCB;
 class NETCLASS;
 class NETLIST;

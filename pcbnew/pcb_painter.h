@@ -44,10 +44,10 @@ class D_PAD;
 class PCB_SHAPE;
 class PCB_GROUP;
 class MODULE;
-class ZONE_CONTAINER;
+class ZONE;
 class PCB_TEXT;
 class FP_TEXT;
-class DIMENSION;
+class DIMENSION_BASE;
 class PCB_TARGET;
 class MARKER_PCB;
 class NET_SETTINGS;
@@ -290,8 +290,8 @@ protected:
     void draw( const FP_TEXT* aText, int aLayer );
     void draw( const MODULE* aModule, int aLayer );
     void draw( const PCB_GROUP* aGroup, int aLayer );
-    void draw( const ZONE_CONTAINER* aZone, int aLayer );
-    void draw( const DIMENSION* aDimension, int aLayer );
+    void draw( const ZONE* aZone, int aLayer );
+    void draw( const DIMENSION_BASE* aDimension, int aLayer );
     void draw( const PCB_TARGET* aTarget );
     void draw( const MARKER_PCB* aMarker, int aLayer );
 

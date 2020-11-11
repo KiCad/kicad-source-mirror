@@ -36,7 +36,7 @@
 
 #include <math/vector2d.h>
 #include <geometry/shape_poly_set.h>
-#include <class_zone.h>
+#include <zone.h>
 
 class FROM_TO_CACHE;
 class CN_CLUSTER;
@@ -46,7 +46,7 @@ class BOARD;
 class BOARD_COMMIT;
 class BOARD_CONNECTED_ITEM;
 class BOARD_ITEM;
-class ZONE_CONTAINER;
+class ZONE;
 class RN_DATA;
 class RN_NET;
 class TRACK;
@@ -66,11 +66,11 @@ struct CN_DISJOINT_NET_ENTRY
  */
 struct CN_ZONE_ISOLATED_ISLAND_LIST
 {
-    CN_ZONE_ISOLATED_ISLAND_LIST( ZONE_CONTAINER* aZone ) :
+    CN_ZONE_ISOLATED_ISLAND_LIST( ZONE* aZone ) :
             m_zone( aZone )
     {}
 
-    ZONE_CONTAINER* m_zone;
+    ZONE* m_zone;
 
     std::map<PCB_LAYER_ID, std::vector<int>> m_islands;
 };
@@ -167,7 +167,7 @@ public:
      * @param aZone zone to test
      * @param aIslands list of islands that have no connections (outline indices in the polygon set)
      */
-    void FindIsolatedCopperIslands( ZONE_CONTAINER* aZone, std::vector<int>& aIslands );
+    void FindIsolatedCopperIslands( ZONE* aZone, std::vector<int>& aIslands );
     void FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones );
 
     /**

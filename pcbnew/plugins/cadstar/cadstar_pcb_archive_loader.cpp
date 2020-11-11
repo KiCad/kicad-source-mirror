@@ -27,13 +27,13 @@
 
 #include <board_stackup_manager/stackup_predefined_prms.h> // KEY_COPPER, KEY_CORE, KEY_PREPREG
 #include <class_board.h>
-#include <class_dimension.h>
+#include <dimension.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
 #include <class_module.h>
 #include <pcb_text.h>
 #include <class_track.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
 
@@ -662,8 +662,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryAreas( const SYMDEF_PCB& aComponent,
 
         if( area.NoVias || area.NoTracks )
         {
-            ZONE_CONTAINER* zone = getZoneFromCadstarShape(
-                    area.Shape, getLineThickness( area.LineCodeID ), aModule );
+            ZONE* zone = getZoneFromCadstarShape( area.Shape, getLineThickness( area.LineCodeID ),
+                                                  aModule );
 
             aModule->Add( zone, ADD_MODE::APPEND );
 
@@ -1137,8 +1137,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadAreas()
 
         if( area.NoVias || area.NoTracks || area.Keepout || area.Routing )
         {
-            ZONE_CONTAINER* zone = getZoneFromCadstarShape(
-                    area.Shape, getLineThickness( area.LineCodeID ), mBoard );
+            ZONE* zone = getZoneFromCadstarShape( area.Shape, getLineThickness( area.LineCodeID ),
+                                                  mBoard );
 
             mBoard->Add( zone, ADD_MODE::APPEND );
 
@@ -1327,8 +1327,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
     {
         TEMPLATE& csTemplate = tempPair.second;
 
-        ZONE_CONTAINER* zone = getZoneFromCadstarShape(
-                csTemplate.Shape, getLineThickness( csTemplate.LineCodeID ), mBoard );
+        ZONE* zone = getZoneFromCadstarShape( csTemplate.Shape,
+                                              getLineThickness( csTemplate.LineCodeID ), mBoard );
 
         mBoard->Add( zone, ADD_MODE::APPEND );
 
@@ -1450,11 +1450,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
             for( std::pair<BOARD_ID, BOARD> boardPair : Layout.Boards )
             {
                 //create a zone in each board shape
+                BOARD_DESIGN_SETTINGS& bds = mBoard->GetDesignSettings();
                 BOARD& board = boardPair.second;
-                int    defaultLineThicknesss =
-                        mBoard->GetDesignSettings().GetLineThickness( PCB_LAYER_ID::Edge_Cuts );
-                ZONE_CONTAINER* zone =
-                        getZoneFromCadstarShape( board.Shape, defaultLineThicknesss, mBoard );
+                int    defaultLineThicknesss = bds.GetLineThickness( PCB_LAYER_ID::Edge_Cuts );
+                ZONE*  zone = getZoneFromCadstarShape( board.Shape, defaultLineThicknesss, mBoard );
 
                 mBoard->Add( zone, ADD_MODE::APPEND );
 
@@ -1523,8 +1522,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
         }
         else
         {
-            ZONE_CONTAINER* zone = getZoneFromCadstarShape( csCopper.Shape,
-                    getKiCadLength( getCopperCode( csCopper.CopperCodeID ).CopperWidth ), mBoard );
+            ZONE* zone = getZoneFromCadstarShape( csCopper.Shape,
+                                                  getKiCadLength( getCopperCode( csCopper.CopperCodeID ).CopperWidth ),
+                                                  mBoard );
 
             mBoard->Add( zone, ADD_MODE::APPEND );
 
@@ -2077,10 +2077,11 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& aC
 }
 
 
-ZONE_CONTAINER* CADSTAR_PCB_ARCHIVE_LOADER::getZoneFromCadstarShape( const SHAPE& aCadstarShape,
-        const int& aLineThickness, BOARD_ITEM_CONTAINER* aParentContainer )
+ZONE* CADSTAR_PCB_ARCHIVE_LOADER::getZoneFromCadstarShape( const SHAPE& aCadstarShape,
+                                                           const int& aLineThickness,
+                                                           BOARD_ITEM_CONTAINER* aParentContainer )
 {
-    ZONE_CONTAINER* zone = new ZONE_CONTAINER( aParentContainer, isModule( aParentContainer ) );
+    ZONE* zone = new ZONE( aParentContainer, isModule( aParentContainer ) );
 
     if( aCadstarShape.Type == SHAPE_TYPE::HATCHED )
     {

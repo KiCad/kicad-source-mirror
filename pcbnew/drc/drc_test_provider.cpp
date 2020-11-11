@@ -27,7 +27,7 @@
 #include <class_track.h>
 #include <class_module.h>
 #include <class_pad.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <pcb_text.h>
 
 
@@ -140,7 +140,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
             {
                 s_allBasicItems.push_back( (KICAD_T) i );
 
-                if( i != PCB_ZONE_AREA_T && i != PCB_FP_ZONE_AREA_T )
+                if( i != PCB_ZONE_T && i != PCB_FP_ZONE_T )
                     s_allBasicItemsButZones.push_back( (KICAD_T) i );
             }
         }
@@ -214,9 +214,9 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
         }
     }
 
-    if( typeMask[ PCB_ZONE_AREA_T ] )
+    if( typeMask[ PCB_ZONE_T ] )
     {
-        for( ZONE_CONTAINER* item : brd->Zones() )
+        for( ZONE* item : brd->Zones() )
         {
             if( (item->GetLayerSet() & aLayers).any() )
             {
@@ -284,9 +284,9 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
             }
         }
 
-        if( typeMask[ PCB_FP_ZONE_AREA_T ] )
+        if( typeMask[ PCB_FP_ZONE_T ] )
         {
-            for( ZONE_CONTAINER* zone : mod->Zones() )
+            for( ZONE* zone : mod->Zones() )
             {
                 if( (zone->GetLayerSet() & aLayers).any() )
                 {

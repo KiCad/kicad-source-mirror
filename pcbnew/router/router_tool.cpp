@@ -1565,7 +1565,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 view()->AddToPreview( previewItem );
                 view()->Hide( &module->Value() );
 
-                for( ZONE_CONTAINER* zone : module->Zones() )
+                for( ZONE* zone : module->Zones() )
                 {
                     previewItem = static_cast<BOARD_ITEM*>( zone->Clone() );
                     previewItem->Move( offset );
@@ -1601,7 +1601,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         view()->Hide( &module->Reference(), false );
         view()->Hide( &module->Value(), false );
 
-        for( ZONE_CONTAINER* zone : module->Zones() )
+        for( ZONE* zone : module->Zones() )
             view()->Hide( zone, false );
 
         view()->ClearPreview();

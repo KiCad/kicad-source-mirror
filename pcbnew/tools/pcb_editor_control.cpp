@@ -34,9 +34,9 @@
 #include <class_board.h>
 #include <class_pcb_group.h>
 #include <class_module.h>
-#include <class_pcb_target.h>
+#include <pcb_target.h>
 #include <class_track.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <class_marker_pcb.h>
 #include <collectors.h>
 #include <confirm.h>
@@ -197,7 +197,7 @@ bool PCB_EDITOR_CONTROL::Init()
 
         menu.AddMenu( lockMenu.get(), SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::LockableItems ), 100 );
 
-        menu.AddMenu( zoneMenu.get(), SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ), 200 );
+        menu.AddMenu( zoneMenu.get(), SELECTION_CONDITIONS::OnlyType( PCB_ZONE_T ), 200 );
     }
 
     DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<DRAWING_TOOL>();
@@ -436,7 +436,7 @@ int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
         for( BOARD_ITEM* item : footprint->GraphicalItems() )
             processItem( item );
 
-        for( ZONE_CONTAINER* zone : footprint->Zones() )
+        for( ZONE* zone : footprint->Zones() )
             processItem( zone );
 
         for( PCB_GROUP* group : footprint->Groups() )
@@ -446,7 +446,7 @@ int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
     for( BOARD_ITEM* drawing : board()->Drawings() )
         processItem( drawing );
 
-    for( ZONE_CONTAINER* zone : board()->Zones() )
+    for( ZONE* zone : board()->Zones() )
         processItem( zone );
 
     for( MARKER_PCB* marker : board()->Markers() )
@@ -1101,8 +1101,8 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 }
 
 
-static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& aOriginZones,
-        std::vector<ZONE_CONTAINER *>& aMergedZones )
+static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE*>& aOriginZones,
+                        std::vector<ZONE*>& aMergedZones )
 {
     for( unsigned int i = 1; i < aOriginZones.size(); i++ )
     {
@@ -1118,7 +1118,7 @@ static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& aO
     // but we should never have more than 2 polys
     if( aOriginZones[0]->Outline()->OutlineCount() > 1 )
     {
-        wxLogMessage( "BOARD::CombineAreas error: more than 2 polys after merging" );
+        wxLogMessage( "BOARD::mergeZones error: more than 2 polys after merging" );
         return false;
     }
 
@@ -1149,12 +1149,12 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 
     int netcode = -1;
 
-    ZONE_CONTAINER* firstZone = nullptr;
-    std::vector<ZONE_CONTAINER*> toMerge, merged;
+    ZONE* firstZone = nullptr;
+    std::vector<ZONE*> toMerge, merged;
 
     for( auto item : selection )
     {
-        auto curr_area = dynamic_cast<ZONE_CONTAINER*>( item );
+        ZONE* curr_area = dynamic_cast<ZONE*>( item );
 
         if( !curr_area )
             continue;
@@ -1176,7 +1176,7 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
         if( curr_area->GetLayer() != firstZone->GetLayer() )
             continue;
 
-        if( !board->TestAreaIntersection( curr_area, firstZone ) )
+        if( !board->TestZoneIntersection( curr_area, firstZone ) )
             continue;
 
         toMerge.push_back( curr_area );
@@ -1206,7 +1206,7 @@ int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
     if( selection.Size() != 1 )
         return 0;
 
-    auto oldZone = dyn_cast<ZONE_CONTAINER*>( selection[0] );
+    ZONE* oldZone = dyn_cast<ZONE*>( selection[0] );
 
     if( !oldZone )
         return 0;
@@ -1228,7 +1228,7 @@ int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
     // duplicate the zone
     BOARD_COMMIT commit( m_frame );
 
-    auto newZone = std::make_unique<ZONE_CONTAINER>( *oldZone );
+    std::unique_ptr<ZONE> newZone = std::make_unique<ZONE>( *oldZone );
     newZone->ClearSelected();
     newZone->UnFill();
     zoneSettings.ExportSetting( *newZone );

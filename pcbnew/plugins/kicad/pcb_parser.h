@@ -45,7 +45,7 @@ class BOARD_ITEM;
 class BOARD_ITEM_CONTAINER;
 class D_PAD;
 class BOARD_DESIGN_SETTINGS;
-class DIMENSION;
+class DIMENSION_BASE;
 class PCB_SHAPE;
 class EDA_TEXT;
 class FP_SHAPE;
@@ -56,7 +56,7 @@ class MODULE;
 class PCB_GROUP;
 class PCB_TARGET;
 class VIA;
-class ZONE_CONTAINER;
+class ZONE;
 class MARKER_PCB;
 class MODULE_3D_SETTINGS;
 struct LAYER;
@@ -164,7 +164,7 @@ class PCB_PARSER : public PCB_LEXER
      */
     PCB_SHAPE*      parsePCB_SHAPE( bool aAllowZeroWidth = false );
     PCB_TEXT*       parsePCB_TEXT();
-    DIMENSION*      parseDIMENSION();
+    DIMENSION_BASE* parseDIMENSION();
 
     /**
      * Function parseMODULE_unchecked
@@ -179,7 +179,7 @@ class PCB_PARSER : public PCB_LEXER
     ARC*            parseARC();
     TRACK*          parseTRACK();
     VIA*            parseVIA();
-    ZONE_CONTAINER* parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent );
+    ZONE*           parseZONE( BOARD_ITEM_CONTAINER* aParent );
     PCB_TARGET*     parsePCB_TARGET();
     MARKER_PCB*     parseMARKER( BOARD_ITEM_CONTAINER* aParent );
     BOARD*          parseBOARD();

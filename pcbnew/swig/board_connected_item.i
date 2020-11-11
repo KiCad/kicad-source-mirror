@@ -54,9 +54,9 @@
                                       0 | 0 );
             break;
 
-        case PCB_ZONE_AREA_T:
+        case PCB_ZONE_T:
             obj = SWIG_NewPointerObj( SWIG_as_voidptr(aItem),
-                                      SWIGTYPE_p_ZONE_CONTAINER,
+                                      SWIGTYPE_p_ZONE,
                                       0 | 0 );
             break;
 

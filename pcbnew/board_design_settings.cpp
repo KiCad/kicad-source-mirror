@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <class_dimension.h>
+#include <dimension.h>
 #include <class_track.h>
 #include <layers_id_colors_and_visibility.h>
 #include <kiface_i.h>

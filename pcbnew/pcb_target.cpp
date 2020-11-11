@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,14 +24,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_pcb_target.cpp
- * PCB_TARGET class definition - targets for photo plots, formerly called MIRE (from French 'mire optique')
- */
-
 #include <bitmaps.h>
 #include <class_board.h>
-#include <class_pcb_target.h>
+#include <pcb_target.h>
 #include <base_units.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>

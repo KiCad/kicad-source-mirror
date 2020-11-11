@@ -82,7 +82,7 @@ bool PCB_INSPECTION_TOOL::Init()
     netSubMenu->SetTool( this );
 
     static KICAD_T connectedTypes[] = { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T, PCB_PAD_T,
-                                        PCB_ZONE_AREA_T, EOT };
+                                        PCB_ZONE_T, EOT };
 
     CONDITIONAL_MENU& menu = selectionTool->GetToolMenu().GetMenu();
 
@@ -109,7 +109,7 @@ int PCB_INSPECTION_TOOL::ShowStatisticsDialog( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_INSPECTION_TOOL::reportZoneConnection( ZONE_CONTAINER* aZone, D_PAD* aPad, REPORTER* r )
+void PCB_INSPECTION_TOOL::reportZoneConnection( ZONE* aZone, D_PAD* aPad, REPORTER* r )
 {
     ENUM_MAP<ZONE_CONNECTION> connectionEnum = ENUM_MAP<ZONE_CONNECTION>::Instance();
     wxString                  source;
@@ -283,7 +283,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             layer = B_Cu;
     }
 
-    if( a->Type() != PCB_ZONE_AREA_T && b->Type() == PCB_ZONE_AREA_T )
+    if( a->Type() != PCB_ZONE_T && b->Type() == PCB_ZONE_T )
         std::swap( a, b );
     else if( !a->IsConnected() && b->IsConnected() )
         std::swap( a, b );
@@ -340,10 +340,9 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         {
             // Same nets....
 
-            if( ac->Type() == PCB_ZONE_AREA_T && bc->Type() == PCB_PAD_T )
+            if( ac->Type() == PCB_ZONE_T && bc->Type() == PCB_PAD_T )
             {
-                reportZoneConnection( static_cast<ZONE_CONTAINER*>( ac ),
-                                      static_cast<D_PAD*>( bc ), r );
+                reportZoneConnection( static_cast<ZONE*>( ac ), static_cast<D_PAD*>( bc ), r );
             }
             else
             {
@@ -401,12 +400,12 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         compileError = true;
     }
 
-    for( ZONE_CONTAINER* zone : m_frame->GetBoard()->Zones() )
+    for( ZONE* zone : m_frame->GetBoard()->Zones() )
         zone->CacheBoundingBox();
 
     for( MODULE* module : m_frame->GetBoard()->Modules() )
     {
-        for( ZONE_CONTAINER* zone : module->Zones() )
+        for( ZONE* zone : module->Zones() )
             zone->CacheBoundingBox();
 
         module->BuildPolyCourtyards();
@@ -1002,7 +1001,7 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
                                            return( aItem->Type() == PCB_TRACE_T
                                                     || aItem->Type() == PCB_PAD_T
                                                     || aItem->Type() == PCB_ARC_T
-                                                    || aItem->Type() == PCB_ZONE_AREA_T
+                                                    || aItem->Type() == PCB_ZONE_T
                                                     || aItem->Type() == PCB_MODULE_T
                                                     || aItem->Type() == PCB_VIA_T );
                                        } ) )

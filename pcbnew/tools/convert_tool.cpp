@@ -28,7 +28,7 @@
 #include <pcb_shape.h>
 #include <fp_shape.h>
 #include <class_track.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <collectors.h>
 #include <confirm.h>
 #include <menus_helpers.h>
@@ -72,7 +72,7 @@ bool CONVERT_TOOL::Init()
     m_menu->SetTitle( _( "Convert..." ) );
 
     static KICAD_T convertableTracks[] = { PCB_TRACE_T, PCB_ARC_T, EOT };
-    static KICAD_T convertableZones[]  = { PCB_ZONE_AREA_T, PCB_FP_ZONE_AREA_T, EOT };
+    static KICAD_T convertableZones[]  = { PCB_ZONE_T, PCB_FP_ZONE_T, EOT };
 
     auto graphicLines = P_S_C::OnlyGraphicShapeTypes( { S_SEGMENT, S_RECT } ) && P_S_C::SameLayer();
 
@@ -218,8 +218,7 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
 
         for( const SHAPE_POLY_SET& poly : polys )
         {
-            ZONE_CONTAINER* zone = isFootprint ? new MODULE_ZONE_CONTAINER( parent )
-                                               : new ZONE_CONTAINER( parent );
+            ZONE* zone = isFootprint ? new FP_ZONE( parent ) : new ZONE( parent );
 
             *zone->Outline() = poly;
             zone->HatchBorder();
@@ -391,8 +390,8 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
 
                         break;
 
-                    case PCB_ZONE_AREA_T:
-                    case PCB_FP_ZONE_AREA_T:
+                    case PCB_ZONE_T:
+                    case PCB_FP_ZONE_T:
                         break;
 
                     default:
@@ -411,9 +410,9 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
 
                 switch( aItem->Type() )
                 {
-                case PCB_ZONE_AREA_T:
-                case PCB_FP_ZONE_AREA_T:
-                    set = *static_cast<ZONE_CONTAINER*>( aItem )->Outline();
+                case PCB_ZONE_T:
+                case PCB_FP_ZONE_T:
+                    set = *static_cast<ZONE*>( aItem )->Outline();
                     break;
 
                 case PCB_SHAPE_T:

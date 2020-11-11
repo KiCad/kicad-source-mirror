@@ -41,7 +41,7 @@ class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;
 class PICKED_ITEMS_LIST;
 class BOARD;
-class ZONE_CONTAINER;
+class ZONE;
 class TRACK;
 class D_PAD;
 class MARKER_PCB;
@@ -165,7 +165,7 @@ public:
 
 
 DECL_VEC_FOR_SWIG( MARKERS, MARKER_PCB* )
-DECL_VEC_FOR_SWIG( ZONE_CONTAINERS, ZONE_CONTAINER* )
+DECL_VEC_FOR_SWIG( ZONES, ZONE* )
 DECL_DEQ_FOR_SWIG( TRACKS, TRACK* )
 // Dequeue rather than Vector just so we can use moveUnflaggedItems in pcbnew_control.cpp
 DECL_DEQ_FOR_SWIG( GROUPS, PCB_GROUP* )
@@ -189,31 +189,31 @@ class BOARD : public BOARD_ITEM_CONTAINER
 
 private:
     /// What is this board being used for
-    BOARD_USE               m_boardUse;
+    BOARD_USE           m_boardUse;
 
-    wxString                m_fileName;
-    MARKERS                 m_markers;
-    DRAWINGS                m_drawings;
-    MODULES                 m_modules;
-    TRACKS                  m_tracks;
-    GROUPS                  m_groups;
-    ZONE_CONTAINERS         m_zones;
+    wxString            m_fileName;
+    MARKERS             m_markers;
+    DRAWINGS            m_drawings;
+    MODULES             m_modules;
+    TRACKS              m_tracks;
+    GROUPS              m_groups;
+    ZONES               m_zones;
 
-    LAYER                   m_Layer[PCB_LAYER_ID_COUNT];
+    LAYER               m_Layer[PCB_LAYER_ID_COUNT];
 
                                                         // if true m_highLight_NetCode is used
-    HIGH_LIGHT_INFO         m_highLight;                // current high light data
-    HIGH_LIGHT_INFO         m_highLightPrevious;        // a previously stored high light data
+    HIGH_LIGHT_INFO     m_highLight;                // current high light data
+    HIGH_LIGHT_INFO     m_highLightPrevious;        // a previously stored high light data
 
-    int                     m_fileFormatVersionAtLoad;  // the version loaded from the file
+    int                 m_fileFormatVersionAtLoad;  // the version loaded from the file
 
     std::map<wxString, wxString>        m_properties;
     std::shared_ptr<CONNECTIVITY_DATA>  m_connectivity;
 
-    PAGE_INFO               m_paper;
-    TITLE_BLOCK             m_titles;               // text in lower right of screen and plots
-    PCB_PLOT_PARAMS         m_plotOptions;
-    PROJECT*                m_project;              // project this board is a part of
+    PAGE_INFO           m_paper;
+    TITLE_BLOCK         m_titles;               // text in lower right of screen and plots
+    PCB_PLOT_PARAMS     m_plotOptions;
+    PROJECT*            m_project;              // project this board is a part of
 
     /**
      * All of the board design settings are stored as a JSON object inside the project file.  The
@@ -227,7 +227,7 @@ private:
      */
     std::unique_ptr<BOARD_DESIGN_SETTINGS> m_designSettings;
 
-    NETINFO_LIST            m_NetInfo;              // net info list (name, design constraints ..
+    NETINFO_LIST        m_NetInfo;              // net info list (name, design constraints ..
 
     std::vector<BOARD_LISTENER*> m_listeners;
 
@@ -287,8 +287,8 @@ public:
     DRAWINGS& Drawings() { return m_drawings; }
     const DRAWINGS& Drawings() const { return m_drawings; }
 
-    ZONE_CONTAINERS& Zones() { return m_zones; }
-    const ZONE_CONTAINERS& Zones() const { return m_zones; }
+    ZONES& Zones() { return m_zones; }
+    const ZONES& Zones() const { return m_zones; }
 
     MARKERS& Markers() { return m_markers; }
 
@@ -877,10 +877,10 @@ public:
     /**
      * Return the Area (Zone Container) at a given index.
      *
-     * @param index The array type index into a collection of ZONE_CONTAINER *.
-     * @return ZONE_CONTAINER* - a pointer to the Area or NULL if index out of range.
+     * @param index The array type index into a collection of ZONE *.
+     * @return ZONE* - a pointer to the Area or NULL if index out of range.
      */
-    ZONE_CONTAINER* GetArea( int index ) const
+    ZONE* GetArea( int index ) const
     {
         if( (unsigned) index < m_zones.size() )
             return m_zones[index];
@@ -891,10 +891,10 @@ public:
     /**
      * @return a std::list of pointers to all board zones (possibly including zones in footprints)
      */
-    std::list<ZONE_CONTAINER*> GetZoneList( bool aIncludeZonesInFootprints = false );
+    std::list<ZONE*> GetZoneList( bool aIncludeZonesInFootprints = false );
 
     /**
-     * @return The number of Areas or ZONE_CONTAINER.
+     * @return The number of copper pour areas or ZONEs.
      */
     int GetAreaCount() const
     {
@@ -914,8 +914,8 @@ public:
      * @param aHatch = hatch option
      * @return a reference to the new area
      */
-    ZONE_CONTAINER* AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_ID aLayer,
-                             wxPoint aStartPointPosition, ZONE_BORDER_DISPLAY_STYLE aHatch );
+    ZONE* AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_ID aLayer,
+                   wxPoint aStartPointPosition, ZONE_BORDER_DISPLAY_STYLE aHatch );
 
     /**
      * Process an area that has been modified, by normalizing its polygon against itself.
@@ -925,7 +925,7 @@ public:
      * @param aCurrArea = the zone to process
      * @return true if changes are made
      */
-    bool NormalizeAreaPolygon( PICKED_ITEMS_LIST* aNewZonesList, ZONE_CONTAINER* aCurrArea );
+    bool NormalizeAreaPolygon( PICKED_ITEMS_LIST* aNewZonesList, ZONE* aCurrArea );
 
     /**
      * Process an area that has been modified, by normalizing its polygon
@@ -936,8 +936,7 @@ public:
      * @param modified_area = area to test
      * @return true if some areas modified
     */
-    bool OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
-                                ZONE_CONTAINER*    modified_area );
+    bool OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList, ZONE* modified_area );
 
     /**
      * Check all copper areas in net for intersections, combining them if found.
@@ -949,7 +948,7 @@ public:
      * Sets local flag = 1 for any areas modified
      * @return true if some areas modified
      */
-    bool CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList,
+    bool CombineAllZonesInNet( PICKED_ITEMS_LIST* aDeletedList,
                                int                aNetCode,
                                bool               aUseLocalFlags );
 
@@ -958,37 +957,33 @@ public:
      *
      * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful
      * in undo commands can be NULL
-     * @param  area_to_remove = area to delete or put in deleted list
+     * @param  aZone = area to delete or put in deleted list
      */
-    void RemoveArea( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_to_remove );
+    void RemoveZone( PICKED_ITEMS_LIST* aDeletedList, ZONE* aZone );
 
     /**
      * Check for intersection of a given copper area with other areas in same net
-     * @param area_to_test = area to compare to all other areas in the same net
+     * @param aZone = area to compare to all other areas in the same net
      */
-    bool TestAreaIntersections( ZONE_CONTAINER* area_to_test );
+    bool TestZoneIntersections( ZONE* aZone );
 
     /**
      * Test for intersection of 2 copper areas
-     * @param area_ref = area reference
-     * @param area_to_test = area to compare for intersection calculations
+     * @param aZone1 = area reference
+     * @param aZone2 = area to compare for intersection calculations
      * @return : false if no intersection, true if intersection
      */
-    bool TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_test );
+    bool TestZoneIntersection( ZONE* aZone1, ZONE* aZone2 );
 
     /**
      * If possible, combine 2 copper areas
-     * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas
-     *                      (useful for undo).
-     * @param area_ref = the main area (zone)
-     * @param area_to_combine = the zone that can be merged with area_ref
-     * area_ref must be BEFORE area_to_combine
-     * area_to_combine will be deleted, if areas are combined
-     * @return : true if area_to_combine is combined with area_ref (and therefore be deleted)
+     * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (for undo).
+     * @param aRefZone = the main area (zone)
+     * @param aZoneToCombine = the zone that can be merged with aRefZone; will be deleted if the
+     *                         combine is successful
+     * @return : true if aZoneToCombine is combined with aRefZone (and therefore be deleted)
      */
-    bool CombineAreas( PICKED_ITEMS_LIST* aDeletedList,
-                       ZONE_CONTAINER*    area_ref,
-                       ZONE_CONTAINER*    area_to_combine );
+    bool CombineZones( PICKED_ITEMS_LIST* aDeletedList, ZONE* aRefZone, ZONE* aZoneToCombine );
 
     /**
      * Find a pad \a aPosition on \a aLayer.

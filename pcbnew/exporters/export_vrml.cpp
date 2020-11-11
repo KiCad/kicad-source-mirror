@@ -37,7 +37,7 @@
 #include "class_module.h"
 #include "pcb_text.h"
 #include "class_track.h"
-#include "class_zone.h"
+#include "zone.h"
 #include "convert_to_biu.h"
 #include <filename_resolver.h>
 #include "plugins/3dapi/ifsg_all.h"
@@ -1002,7 +1002,7 @@ static void export_vrml_tracks( MODEL_VRML& aModel, BOARD* pcb )
 
 static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb, COMMIT* aCommit )
 {
-    for( ZONE_CONTAINER* zone : aPcb->Zones() )
+    for( ZONE* zone : aPcb->Zones() )
     {
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
@@ -1017,7 +1017,7 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb, COMMIT* aCommit 
                 zone->SetFillMode( ZONE_FILL_MODE::POLYGONS ); // use filled polygons
 
                 // If the zone fill failed, don't try adding it to the export
-                std::vector<ZONE_CONTAINER*> toFill = { zone };
+                std::vector<ZONE*> toFill = { zone };
 
                 if( !filler.Fill( toFill ) )
                     continue;

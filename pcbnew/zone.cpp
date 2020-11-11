@@ -30,7 +30,7 @@
 #include <pcb_edit_frame.h>
 #include <pcb_screen.h>
 #include <class_board.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <kicad_string.h>
 #include <math_for_graphics.h>
 #include <settings/color_settings.h>
@@ -38,9 +38,9 @@
 #include <trigo.h>
 #include <i18n_utility.h>
 
-ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInFP )
-        : BOARD_CONNECTED_ITEM( aParent, aInFP ? PCB_FP_ZONE_AREA_T : PCB_ZONE_AREA_T ),
-          m_area( 0.0 )
+ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent, bool aInFP ) :
+        BOARD_CONNECTED_ITEM( aParent, aInFP ? PCB_FP_ZONE_T : PCB_ZONE_T ),
+        m_area( 0.0 )
 {
     m_CornerSelection = nullptr;                // no corner is selected
     m_isFilled = false;                         // fill status : true when the zone is filled
@@ -75,7 +75,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInFP )
 }
 
 
-ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone )
+ZONE::ZONE( const ZONE& aZone )
         : BOARD_CONNECTED_ITEM( aZone ),
         m_Poly( nullptr ),
         m_CornerSelection( nullptr )
@@ -84,7 +84,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone )
 }
 
 
-ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
+ZONE& ZONE::operator=( const ZONE& aOther )
 {
     BOARD_CONNECTED_ITEM::operator=( aOther );
 
@@ -94,14 +94,14 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
 }
 
 
-ZONE_CONTAINER::~ZONE_CONTAINER()
+ZONE::~ZONE()
 {
     delete m_Poly;
     delete m_CornerSelection;
 }
 
 
-void ZONE_CONTAINER::InitDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
+void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
 {
     // members are expected non initialize in this.
     // InitDataFromSrcInCopyCtor() is expected to be called
@@ -176,13 +176,13 @@ void ZONE_CONTAINER::InitDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
 }
 
 
-EDA_ITEM* ZONE_CONTAINER::Clone() const
+EDA_ITEM* ZONE::Clone() const
 {
-    return new ZONE_CONTAINER( *this );
+    return new ZONE( *this );
 }
 
 
-bool ZONE_CONTAINER::UnFill()
+bool ZONE::UnFill()
 {
     bool change = false;
 
@@ -205,25 +205,25 @@ bool ZONE_CONTAINER::UnFill()
 }
 
 
-wxPoint ZONE_CONTAINER::GetPosition() const
+wxPoint ZONE::GetPosition() const
 {
     return (wxPoint) GetCornerPosition( 0 );
 }
 
 
-PCB_LAYER_ID ZONE_CONTAINER::GetLayer() const
+PCB_LAYER_ID ZONE::GetLayer() const
 {
     return BOARD_ITEM::GetLayer();
 }
 
 
-bool ZONE_CONTAINER::IsOnCopperLayer() const
+bool ZONE::IsOnCopperLayer() const
 {
     return ( m_layerSet & LSET::AllCuMask() ).count() > 0;
 }
 
 
-bool ZONE_CONTAINER::CommonLayerExists( const LSET aLayerSet ) const
+bool ZONE::CommonLayerExists( const LSET aLayerSet ) const
 {
     LSET common = GetLayerSet() & aLayerSet;
 
@@ -231,7 +231,7 @@ bool ZONE_CONTAINER::CommonLayerExists( const LSET aLayerSet ) const
 }
 
 
-void ZONE_CONTAINER::SetLayer( PCB_LAYER_ID aLayer )
+void ZONE::SetLayer( PCB_LAYER_ID aLayer )
 {
     SetLayerSet( LSET( aLayer ) );
 
@@ -239,7 +239,7 @@ void ZONE_CONTAINER::SetLayer( PCB_LAYER_ID aLayer )
 }
 
 
-void ZONE_CONTAINER::SetLayerSet( LSET aLayerSet )
+void ZONE::SetLayerSet( LSET aLayerSet )
 {
     if( GetIsRuleArea() )
     {
@@ -284,13 +284,13 @@ void ZONE_CONTAINER::SetLayerSet( LSET aLayerSet )
 }
 
 
-LSET ZONE_CONTAINER::GetLayerSet() const
+LSET ZONE::GetLayerSet() const
 {
     return m_layerSet;
 }
 
 
-void ZONE_CONTAINER::ViewGetLayers( int aLayers[], int& aCount ) const
+void ZONE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     LSEQ layers = m_layerSet.Seq();
 
@@ -301,7 +301,7 @@ void ZONE_CONTAINER::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-double ZONE_CONTAINER::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double ZONE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     constexpr double HIDE = std::numeric_limits<double>::max();
 
@@ -309,13 +309,13 @@ double ZONE_CONTAINER::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-bool ZONE_CONTAINER::IsOnLayer( PCB_LAYER_ID aLayer ) const
+bool ZONE::IsOnLayer( PCB_LAYER_ID aLayer ) const
 {
     return m_layerSet.test( aLayer );
 }
 
 
-const EDA_RECT ZONE_CONTAINER::GetBoundingBox() const
+const EDA_RECT ZONE::GetBoundingBox() const
 {
     auto bb = m_Poly->BBox();
 
@@ -325,7 +325,7 @@ const EDA_RECT ZONE_CONTAINER::GetBoundingBox() const
 }
 
 
-int ZONE_CONTAINER::GetThermalReliefGap( D_PAD* aPad, wxString* aSource ) const
+int ZONE::GetThermalReliefGap( D_PAD* aPad, wxString* aSource ) const
 {
     if( aPad->GetEffectiveThermalGap() == 0 )
     {
@@ -340,7 +340,7 @@ int ZONE_CONTAINER::GetThermalReliefGap( D_PAD* aPad, wxString* aSource ) const
 }
 
 
-int ZONE_CONTAINER::GetThermalReliefSpokeWidth( D_PAD* aPad, wxString* aSource ) const
+int ZONE::GetThermalReliefSpokeWidth( D_PAD* aPad, wxString* aSource ) const
 {
     if( aPad->GetEffectiveThermalSpokeWidth() == 0 )
     {
@@ -354,7 +354,7 @@ int ZONE_CONTAINER::GetThermalReliefSpokeWidth( D_PAD* aPad, wxString* aSource )
 }
 
 
-void ZONE_CONTAINER::SetCornerRadius( unsigned int aRadius )
+void ZONE::SetCornerRadius( unsigned int aRadius )
 {
     if( m_cornerRadius != aRadius )
         SetNeedRefill( true );
@@ -363,7 +363,7 @@ void ZONE_CONTAINER::SetCornerRadius( unsigned int aRadius )
 }
 
 
-bool ZONE_CONTAINER::GetFilledPolysUseThickness( PCB_LAYER_ID aLayer ) const
+bool ZONE::GetFilledPolysUseThickness( PCB_LAYER_ID aLayer ) const
 {
     if( ADVANCED_CFG::GetCfg().m_DebugZoneFiller && LSET::InternalCuMask().Contains( aLayer ) )
         return false;
@@ -372,7 +372,7 @@ bool ZONE_CONTAINER::GetFilledPolysUseThickness( PCB_LAYER_ID aLayer ) const
 }
 
 
-bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool ZONE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     // Normally accuracy is zoom-relative, but for the generic HitTest we just use
     // a fixed (small) value.
@@ -382,7 +382,7 @@ bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
-void ZONE_CONTAINER::SetSelectedCorner( const wxPoint& aPosition, int aAccuracy )
+void ZONE::SetSelectedCorner( const wxPoint& aPosition, int aAccuracy )
 {
     SHAPE_POLY_SET::VERTEX_INDEX corner;
 
@@ -397,35 +397,35 @@ void ZONE_CONTAINER::SetSelectedCorner( const wxPoint& aPosition, int aAccuracy 
     }
 }
 
-bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos, int aAccuracy,
-                                       SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const
+bool ZONE::HitTestForCorner( const wxPoint& refPos, int aAccuracy,
+                             SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const
 {
     return m_Poly->CollideVertex( VECTOR2I( refPos ), aCornerHit, aAccuracy );
 }
 
 
-bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos, int aAccuracy ) const
+bool ZONE::HitTestForCorner( const wxPoint& refPos, int aAccuracy ) const
 {
     SHAPE_POLY_SET::VERTEX_INDEX dummy;
     return HitTestForCorner( refPos, aAccuracy, dummy );
 }
 
 
-bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos, int aAccuracy,
-                                     SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const
+bool ZONE::HitTestForEdge( const wxPoint& refPos, int aAccuracy,
+                           SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const
 {
     return m_Poly->CollideEdge( VECTOR2I( refPos ), aCornerHit, aAccuracy );
 }
 
 
-bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos, int aAccuracy ) const
+bool ZONE::HitTestForEdge( const wxPoint& refPos, int aAccuracy ) const
 {
     SHAPE_POLY_SET::VERTEX_INDEX dummy;
     return HitTestForEdge( refPos, aAccuracy, dummy );
 }
 
 
-bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool ZONE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     // Calculate bounding box for zone
     EDA_RECT bbox = GetBoundingBox();
@@ -466,7 +466,7 @@ bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 }
 
 
-int ZONE_CONTAINER::GetLocalClearance( wxString* aSource ) const
+int ZONE::GetLocalClearance( wxString* aSource ) const
 {
     if( m_isRuleArea )
         return 0;
@@ -478,8 +478,7 @@ int ZONE_CONTAINER::GetLocalClearance( wxString* aSource ) const
 }
 
 
-bool ZONE_CONTAINER::HitTestFilledArea( PCB_LAYER_ID aLayer, const wxPoint &aRefPos,
-                                        int aAccuracy ) const
+bool ZONE::HitTestFilledArea( PCB_LAYER_ID aLayer, const wxPoint &aRefPos, int aAccuracy ) const
 {
     // Rule areas have no filled area, but it's generally nice to treat their interior as if it were
     // filled so that people don't have to select them by their outline (which is min-width)
@@ -494,7 +493,7 @@ bool ZONE_CONTAINER::HitTestFilledArea( PCB_LAYER_ID aLayer, const wxPoint &aRef
 }
 
 
-bool ZONE_CONTAINER::HitTestCutout( const VECTOR2I& aRefPos, int* aOutlineIdx, int* aHoleIdx ) const
+bool ZONE::HitTestCutout( const VECTOR2I& aRefPos, int* aOutlineIdx, int* aHoleIdx ) const
 {
     // Iterate over each outline polygon in the zone and then iterate over
     // each hole it has to see if the point is in it.
@@ -519,7 +518,7 @@ bool ZONE_CONTAINER::HitTestCutout( const VECTOR2I& aRefPos, int* aOutlineIdx, i
 }
 
 
-void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     EDA_UNITS units = aFrame->GetUserUnits();
     wxString  msg, msg2;
@@ -663,7 +662,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 
 /* Geometric transforms: */
 
-void ZONE_CONTAINER::Move( const wxPoint& offset )
+void ZONE::Move( const wxPoint& offset )
 {
     /* move outlines */
     m_Poly->Move( offset );
@@ -684,7 +683,7 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
 }
 
 
-void ZONE_CONTAINER::MoveEdge( const wxPoint& offset, int aEdge )
+void ZONE::MoveEdge( const wxPoint& offset, int aEdge )
 {
     int next_corner;
 
@@ -699,7 +698,7 @@ void ZONE_CONTAINER::MoveEdge( const wxPoint& offset, int aEdge )
 }
 
 
-void ZONE_CONTAINER::Rotate( const wxPoint& aCentre, double aAngle )
+void ZONE::Rotate( const wxPoint& aCentre, double aAngle )
 {
     aAngle = -DECIDEG2RAD( aAngle );
 
@@ -725,7 +724,7 @@ void ZONE_CONTAINER::Rotate( const wxPoint& aCentre, double aAngle )
 }
 
 
-void ZONE_CONTAINER::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void ZONE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     Mirror( aCentre, aFlipLeftRight );
     int copperLayerCount = GetBoard()->GetCopperLayerCount();
@@ -737,9 +736,9 @@ void ZONE_CONTAINER::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 }
 
 
-void ZONE_CONTAINER::Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight )
+void ZONE::Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight )
 {
-    // ZONE_CONTAINERs mirror about the x-axis (why?!?)
+    // ZONEs mirror about the x-axis (why?!?)
     m_Poly->Mirror( aMirrorLeftRight, !aMirrorLeftRight, VECTOR2I( aMirrorRef ) );
 
     HatchBorder();
@@ -766,7 +765,7 @@ void ZONE_CONTAINER::Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight )
 }
 
 
-ZONE_CONNECTION ZONE_CONTAINER::GetPadConnection( D_PAD* aPad, wxString* aSource ) const
+ZONE_CONNECTION ZONE::GetPadConnection( D_PAD* aPad, wxString* aSource ) const
 {
     if( aPad == NULL || aPad->GetEffectiveZoneConnection() == ZONE_CONNECTION::INHERITED )
     {
@@ -782,7 +781,7 @@ ZONE_CONNECTION ZONE_CONTAINER::GetPadConnection( D_PAD* aPad, wxString* aSource
 }
 
 
-void ZONE_CONTAINER::RemoveCutout( int aOutlineIdx, int aHoleIdx )
+void ZONE::RemoveCutout( int aOutlineIdx, int aHoleIdx )
 {
     // Ensure the requested cutout is valid
     if( m_Poly->OutlineCount() < aOutlineIdx || m_Poly->HoleCount( aOutlineIdx ) < aHoleIdx )
@@ -797,7 +796,7 @@ void ZONE_CONTAINER::RemoveCutout( int aOutlineIdx, int aHoleIdx )
 }
 
 
-void ZONE_CONTAINER::AddPolygon( const SHAPE_LINE_CHAIN& aPolygon )
+void ZONE::AddPolygon( const SHAPE_LINE_CHAIN& aPolygon )
 {
     wxASSERT( aPolygon.IsClosed() );
 
@@ -811,7 +810,7 @@ void ZONE_CONTAINER::AddPolygon( const SHAPE_LINE_CHAIN& aPolygon )
 }
 
 
-void ZONE_CONTAINER::AddPolygon( std::vector< wxPoint >& aPolygon )
+void ZONE::AddPolygon( std::vector< wxPoint >& aPolygon )
 {
     if( aPolygon.empty() )
         return;
@@ -828,7 +827,7 @@ void ZONE_CONTAINER::AddPolygon( std::vector< wxPoint >& aPolygon )
 }
 
 
-bool ZONE_CONTAINER::AppendCorner( wxPoint aPosition, int aHoleIdx, bool aAllowDuplication )
+bool ZONE::AppendCorner( wxPoint aPosition, int aHoleIdx, bool aAllowDuplication )
 {
     // Ensure the main outline exists:
     if( m_Poly->OutlineCount() == 0 )
@@ -848,7 +847,7 @@ bool ZONE_CONTAINER::AppendCorner( wxPoint aPosition, int aHoleIdx, bool aAllowD
 }
 
 
-wxString ZONE_CONTAINER::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString ZONE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     wxString text;
 
@@ -879,14 +878,14 @@ wxString ZONE_CONTAINER::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-int ZONE_CONTAINER::GetBorderHatchPitch() const
+int ZONE::GetBorderHatchPitch() const
 {
     return m_borderHatchPitch;
 }
 
 
-void ZONE_CONTAINER::SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aHatchStyle, int aHatchPitch,
-                                            bool aRebuildHatch )
+void ZONE::SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aHatchStyle, int aHatchPitch,
+                                  bool aRebuildHatch )
 {
     SetHatchPitch( aHatchPitch );
     m_borderStyle = aHatchStyle;
@@ -896,13 +895,13 @@ void ZONE_CONTAINER::SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aHatchStyl
 }
 
 
-void ZONE_CONTAINER::SetHatchPitch( int aPitch )
+void ZONE::SetHatchPitch( int aPitch )
 {
     m_borderHatchPitch = aPitch;
 }
 
 
-void ZONE_CONTAINER::UnHatchBorder()
+void ZONE::UnHatchBorder()
 {
     m_borderHatchLines.clear();
 }
@@ -916,7 +915,7 @@ bool sortEndsByDescendingX( const VECTOR2I& ref, const VECTOR2I& tst )
 }
 
 
-void ZONE_CONTAINER::HatchBorder()
+void ZONE::HatchBorder()
 {
     UnHatchBorder();
 
@@ -1083,27 +1082,27 @@ void ZONE_CONTAINER::HatchBorder()
 }
 
 
-int ZONE_CONTAINER::GetDefaultHatchPitch()
+int ZONE::GetDefaultHatchPitch()
 {
     return Mils2iu( 20 );
 }
 
 
-BITMAP_DEF ZONE_CONTAINER::GetMenuImage() const
+BITMAP_DEF ZONE::GetMenuImage() const
 {
     return add_zone_xpm;
 }
 
 
-void ZONE_CONTAINER::SwapData( BOARD_ITEM* aImage )
+void ZONE::SwapData( BOARD_ITEM* aImage )
 {
-    assert( aImage->Type() == PCB_ZONE_AREA_T );
+    assert( aImage->Type() == PCB_ZONE_T );
 
-    std::swap( *((ZONE_CONTAINER*) this), *((ZONE_CONTAINER*) aImage) );
+    std::swap( *((ZONE*) this), *((ZONE*) aImage) );
 }
 
 
-void ZONE_CONTAINER::CacheTriangulation( PCB_LAYER_ID aLayer )
+void ZONE::CacheTriangulation( PCB_LAYER_ID aLayer )
 {
     if( aLayer == UNDEFINED_LAYER )
     {
@@ -1118,7 +1117,7 @@ void ZONE_CONTAINER::CacheTriangulation( PCB_LAYER_ID aLayer )
 }
 
 
-bool ZONE_CONTAINER::IsIsland( PCB_LAYER_ID aLayer, int aPolyIdx )
+bool ZONE::IsIsland( PCB_LAYER_ID aLayer, int aPolyIdx )
 {
     if( GetNetCode() < 1 )
         return true;
@@ -1130,12 +1129,11 @@ bool ZONE_CONTAINER::IsIsland( PCB_LAYER_ID aLayer, int aPolyIdx )
 }
 
 
-void ZONE_CONTAINER::GetInteractingZones( PCB_LAYER_ID aLayer,
-                                          std::vector<ZONE_CONTAINER*>* aZones ) const
+void ZONE::GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aZones ) const
 {
     int epsilon = Millimeter2iu( 0.001 );
 
-    for( ZONE_CONTAINER* candidate : GetBoard()->Zones() )
+    for( ZONE* candidate : GetBoard()->Zones() )
     {
         if( candidate == this )
             continue;
@@ -1161,9 +1159,9 @@ void ZONE_CONTAINER::GetInteractingZones( PCB_LAYER_ID aLayer,
 }
 
 
-bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer,
-                                        SHAPE_POLY_SET* aBoardOutline,
-                                        SHAPE_POLY_SET* aSmoothedPolyWithApron ) const
+bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer,
+                              SHAPE_POLY_SET* aBoardOutline,
+                              SHAPE_POLY_SET* aSmoothedPolyWithApron ) const
 {
     if( GetNumCorners() <= 2 )  // malformed zone. polygon calculations will not like it ...
         return false;
@@ -1204,7 +1202,7 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER
                       }
                   };
 
-    std::vector<ZONE_CONTAINER*> interactingZones;
+    std::vector<ZONE*> interactingZones;
     GetInteractingZones( aLayer, &interactingZones );
 
     SHAPE_POLY_SET* maxExtents = m_Poly;
@@ -1223,7 +1221,7 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER
         maxExtents = &withFillets;
     }
 
-    for( ZONE_CONTAINER* zone : interactingZones )
+    for( ZONE* zone : interactingZones )
         aSmoothedPoly.BooleanAdd( *zone->Outline(), SHAPE_POLY_SET::PM_FAST );
 
     if( !GetIsRuleArea() && aBoardOutline )
@@ -1245,7 +1243,7 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER
 }
 
 
-double ZONE_CONTAINER::CalculateFilledArea()
+double ZONE::CalculateFilledArea()
 {
     m_area = 0.0;
 
@@ -1273,9 +1271,8 @@ double ZONE_CONTAINER::CalculateFilledArea()
  * Convert the smoothed outline to polygons (optionally inflated by \a aClearance) and copy them
  * into \a aCornerBuffer.
  */
-void ZONE_CONTAINER::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                        int aClearance,
-                                                        SHAPE_POLY_SET* aBoardOutline ) const
+void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearance,
+                                              SHAPE_POLY_SET* aBoardOutline ) const
 {
     // Creates the zone outline polygon (with holes if any)
     SHAPE_POLY_SET polybuffer;
@@ -1301,10 +1298,10 @@ void ZONE_CONTAINER::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerB
 
 
 //
-/********* MODULE_ZONE_CONTAINER **************/
+/********* FP_ZONE **************/
 //
-MODULE_ZONE_CONTAINER::MODULE_ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent ) :
-                        ZONE_CONTAINER( aParent, true )
+FP_ZONE::FP_ZONE( BOARD_ITEM_CONTAINER* aParent ) :
+        ZONE( aParent, true )
 {
     // in a footprint, net classes are not managed.
     // so set the net to NETINFO_LIST::ORPHANED_ITEM
@@ -1312,27 +1309,27 @@ MODULE_ZONE_CONTAINER::MODULE_ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent ) :
 }
 
 
-MODULE_ZONE_CONTAINER::MODULE_ZONE_CONTAINER( const MODULE_ZONE_CONTAINER& aZone )
-        : ZONE_CONTAINER( aZone.GetParent(), true )
+FP_ZONE::FP_ZONE( const FP_ZONE& aZone ) :
+        ZONE( aZone.GetParent(), true )
 {
     InitDataFromSrcInCopyCtor( aZone );
 }
 
 
-MODULE_ZONE_CONTAINER& MODULE_ZONE_CONTAINER::operator=( const MODULE_ZONE_CONTAINER& aOther )
+FP_ZONE& FP_ZONE::operator=( const FP_ZONE& aOther )
 {
-    ZONE_CONTAINER::operator=( aOther );
+    ZONE::operator=( aOther );
     return *this;
 }
 
 
-EDA_ITEM* MODULE_ZONE_CONTAINER::Clone() const
+EDA_ITEM* FP_ZONE::Clone() const
 {
-    return new MODULE_ZONE_CONTAINER( *this );
+    return new FP_ZONE( *this );
 }
 
 
-double MODULE_ZONE_CONTAINER::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double FP_ZONE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     constexpr double HIDE = (double)std::numeric_limits<double>::max();
 
@@ -1356,7 +1353,7 @@ double MODULE_ZONE_CONTAINER::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-std::shared_ptr<SHAPE> ZONE_CONTAINER::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> ZONE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
     std::shared_ptr<SHAPE> shape;
 
@@ -1373,9 +1370,9 @@ std::shared_ptr<SHAPE> ZONE_CONTAINER::GetEffectiveShape( PCB_LAYER_ID aLayer ) 
 }
 
 
-static struct ZONE_CONTAINER_DESC
+static struct ZONE_DESC
 {
-    ZONE_CONTAINER_DESC()
+    ZONE_DESC()
     {
         ENUM_MAP<ZONE_CONNECTION>::Instance()
                 .Map( ZONE_CONNECTION::INHERITED,   _HKI( "Inherited" ) )
@@ -1385,29 +1382,29 @@ static struct ZONE_CONTAINER_DESC
                 .Map( ZONE_CONNECTION::THT_THERMAL, _HKI( "Reliefs for PTH" ) );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        REGISTER_TYPE( ZONE_CONTAINER );
-        propMgr.InheritsAfter( TYPE_HASH( ZONE_CONTAINER ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
-        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, unsigned>( _HKI( "Priority" ),
-                    &ZONE_CONTAINER::SetPriority, &ZONE_CONTAINER::GetPriority ) );
-        //propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, bool>( "Filled",
-                    //&ZONE_CONTAINER::SetIsFilled, &ZONE_CONTAINER::IsFilled ) );
-        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, wxString>( _HKI( "Name" ),
-                    &ZONE_CONTAINER::SetZoneName, &ZONE_CONTAINER::GetZoneName ) );
-        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _HKI( "Clearance" ),
-                    &ZONE_CONTAINER::SetLocalClearance, &ZONE_CONTAINER::GetLocalClearance,
+        REGISTER_TYPE( ZONE );
+        propMgr.InheritsAfter( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
+        propMgr.AddProperty( new PROPERTY<ZONE, unsigned>( _HKI( "Priority" ),
+                    &ZONE::SetPriority, &ZONE::GetPriority ) );
+        //propMgr.AddProperty( new PROPERTY<ZONE, bool>( "Filled",
+                    //&ZONE::SetIsFilled, &ZONE::IsFilled ) );
+        propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Name" ),
+                    &ZONE::SetZoneName, &ZONE::GetZoneName ) );
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Clearance" ),
+                    &ZONE::SetLocalClearance, &ZONE::GetLocalClearance,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _HKI( "Min Width" ),
-                    &ZONE_CONTAINER::SetMinThickness, &ZONE_CONTAINER::GetMinThickness,
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Min Width" ),
+                    &ZONE::SetMinThickness, &ZONE::GetMinThickness,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY_ENUM<ZONE_CONTAINER, ZONE_CONNECTION>( _HKI( "Pad Connections" ),
-                    &ZONE_CONTAINER::SetPadConnection, &ZONE_CONTAINER::GetPadConnection ) );
-        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _HKI( "Thermal Clearance" ),
-                    &ZONE_CONTAINER::SetThermalReliefGap, &ZONE_CONTAINER::GetThermalReliefGap,
+        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ZONE_CONNECTION>( _HKI( "Pad Connections" ),
+                    &ZONE::SetPadConnection, &ZONE::GetPadConnection ) );
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thermal Clearance" ),
+                    &ZONE::SetThermalReliefGap, &ZONE::GetThermalReliefGap,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _HKI( "Thermal Spoke Width" ),
-                    &ZONE_CONTAINER::SetThermalReliefSpokeWidth, &ZONE_CONTAINER::GetThermalReliefSpokeWidth,
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thermal Spoke Width" ),
+                    &ZONE::SetThermalReliefSpokeWidth, &ZONE::GetThermalReliefSpokeWidth,
                     PROPERTY_DISPLAY::DISTANCE ) );
     }
-} _ZONE_CONTAINER_DESC;
+} _ZONE_DESC;
 
 ENUM_TO_WXANY( ZONE_CONNECTION );

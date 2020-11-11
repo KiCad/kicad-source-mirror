@@ -39,7 +39,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_zone.h>
+#include <zone.h>
 
 #include <board_stackup_manager/stackup_predefined_prms.h>
 #include <gbr_metadata.h>
@@ -514,7 +514,7 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
     minclearanceOuter = INT_MAX;
     minclearanceInner = INT_MAX;
 
-    for( ZONE_CONTAINER* zone : m_pcb->Zones() )
+    for( ZONE* zone : m_pcb->Zones() )
     {
         if( zone->GetIsRuleArea() || !zone->IsOnCopperLayer() )
             continue;

@@ -27,7 +27,7 @@
 #define __ZONE_FILLER_H
 
 #include <vector>
-#include <class_zone.h>
+#include <zone.h>
 
 class WX_PROGRESS_REPORTER;
 class BOARD;
@@ -44,8 +44,7 @@ public:
 
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
     void InstallNewProgressReporter( wxWindow* aParent, const wxString& aTitle, int aNumPhases );
-    bool Fill( std::vector<ZONE_CONTAINER*>& aZones, bool aCheck = false,
-               wxWindow* aParent = nullptr );
+    bool Fill( std::vector<ZONE*>& aZones, bool aCheck = false, wxWindow* aParent = nullptr );
 
     bool IsDebug() const { return m_debugZoneFiller; }
 
@@ -56,13 +55,12 @@ private:
     void addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap, bool aIgnoreLineWidth,
                       SHAPE_POLY_SET& aHoles );
 
-    void knockoutThermalReliefs( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
-                                 SHAPE_POLY_SET& aFill );
+    void knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aFill );
 
-    void buildCopperItemClearances( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+    void buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                     SHAPE_POLY_SET& aHoles );
 
-    void subtractHigherPriorityZones( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+    void subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                       SHAPE_POLY_SET& aRawFill );
 
     /**
@@ -76,17 +74,15 @@ private:
      *  filled copper area polygon (without clearance areas
      * @param aPcb: the current board
      */
-    bool computeRawFilledArea( const ZONE_CONTAINER* aZone,
-                               PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
+    bool computeRawFilledArea( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
                                const SHAPE_POLY_SET& aSmoothedOutline,
-                               const SHAPE_POLY_SET& aMaxExtents,
-                               SHAPE_POLY_SET& aRawPolys );
+                               const SHAPE_POLY_SET& aMaxExtents, SHAPE_POLY_SET& aRawPolys );
 
     /**
      * Function buildThermalSpokes
      * Constructs a list of all thermal spokes for the given zone.
      */
-    void buildThermalSpokes( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
+    void buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                              std::deque<SHAPE_LINE_CHAIN>& aSpokes );
 
     /**
@@ -103,7 +99,7 @@ private:
      * by aZone->GetMinThickness() / 2 to be drawn with a outline thickness = aZone->GetMinThickness()
      * aFinalPolys are polygons that will be drawn on screen and plotted
      */
-    bool fillSingleZone( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aRawPolys,
+    bool fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aRawPolys,
                          SHAPE_POLY_SET& aFinalPolys );
 
     /**
@@ -113,8 +109,8 @@ private:
      * @param aRawPolys: A reference to a SHAPE_POLY_SET buffer containing the initial
      * filled areas, and after adding the grid pattern, the modified filled areas with holes
      */
-    bool addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
-                                 PCB_LAYER_ID aDebugLayer, SHAPE_POLY_SET& aRawPolys );
+    bool addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
+                                 SHAPE_POLY_SET& aRawPolys );
 
     BOARD*                m_board;
     SHAPE_POLY_SET        m_boardOutline;       // the board outlines, if exists

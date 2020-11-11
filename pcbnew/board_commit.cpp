@@ -150,7 +150,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 }
                 else if( boardItem->Type() == PCB_FP_TEXT_T ||
                          boardItem->Type() == PCB_FP_SHAPE_T ||
-                         boardItem->Type() == PCB_FP_ZONE_AREA_T )
+                         boardItem->Type() == PCB_FP_ZONE_T )
                 {
                     wxASSERT( boardItem->GetParent() &&
                               boardItem->GetParent()->Type() == PCB_MODULE_T );
@@ -187,7 +187,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_PAD_T:
                 case PCB_FP_SHAPE_T:
                 case PCB_FP_TEXT_T:
-                case PCB_FP_ZONE_AREA_T:
+                case PCB_FP_ZONE_T:
                     // This level can only handle module items when editing footprints
                     wxASSERT( m_isFootprintEditor );
 
@@ -223,7 +223,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_DIM_LEADER_T:          // a leader dimension
                 case PCB_TARGET_T:              // a target (graphic item)
                 case PCB_MARKER_T:              // a marker used to show something
-                case PCB_ZONE_AREA_T:
+                case PCB_ZONE_T:
                     view->Remove( boardItem );
 
                     if( !( changeFlags & CHT_DONE ) )
@@ -369,10 +369,10 @@ EDA_ITEM* BOARD_COMMIT::parentObject( EDA_ITEM* aItem ) const
         case PCB_PAD_T:
         case PCB_FP_SHAPE_T:
         case PCB_FP_TEXT_T:
-        case PCB_FP_ZONE_AREA_T:
+        case PCB_FP_ZONE_T:
             return aItem->GetParent();
 
-        case PCB_ZONE_AREA_T:
+        case PCB_ZONE_T:
             wxASSERT( !dynamic_cast<MODULE*>( aItem->GetParent() ) );
             return aItem;
 

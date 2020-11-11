@@ -32,7 +32,7 @@
 #include <class_board.h>
 #include <class_pad.h>
 #include <class_module.h>
-#include <class_zone.h>
+#include <zone.h>
 
 #include <geometry/shape_poly_set.h>
 #include <geometry/poly_grid_partition.h>
@@ -53,7 +53,7 @@ class CN_RATSNEST_NODES;
 class BOARD;
 class BOARD_CONNECTED_ITEM;
 class BOARD_ITEM;
-class ZONE_CONTAINER;
+class ZONE;
 class PROGRESS_REPORTER;
 
 class CN_EDGE
@@ -224,25 +224,25 @@ public:
         return m_dirtyNets.size();
     }
 
-    void    Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr );
-    void    Build( const std::vector<BOARD_ITEM*>& aItems );
+    void Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr );
+    void Build( const std::vector<BOARD_ITEM*>& aItems );
 
     void Clear();
 
-    bool    Remove( BOARD_ITEM* aItem );
-    bool    Add( BOARD_ITEM* aItem );
+    bool Remove( BOARD_ITEM* aItem );
+    bool Add( BOARD_ITEM* aItem );
 
-    const CLUSTERS  SearchClusters( CLUSTER_SEARCH_MODE aMode, const KICAD_T aTypes[], int aSingleNet );
-    const CLUSTERS  SearchClusters( CLUSTER_SEARCH_MODE aMode );
+    const CLUSTERS SearchClusters( CLUSTER_SEARCH_MODE aMode, const KICAD_T aTypes[],
+                                   int aSingleNet );
+    const CLUSTERS SearchClusters( CLUSTER_SEARCH_MODE aMode );
 
     /**
      * Propagates nets from pads to other items in clusters
      * @param aCommit is used to store undo information for items modified by the call
      */
-    void    PropagateNets( BOARD_COMMIT* aCommit = nullptr );
+    void PropagateNets( BOARD_COMMIT* aCommit = nullptr );
 
-    void    FindIsolatedCopperIslands( ZONE_CONTAINER* aZone, PCB_LAYER_ID aLayer,
-                                       std::vector<int>& aIslands );
+    void FindIsolatedCopperIslands( ZONE* aZone, PCB_LAYER_ID aLayer, std::vector<int>& aIslands );
 
     /**
      * Finds the copper islands that are not connected to a net.  These are added to
@@ -250,7 +250,7 @@ public:
      * N.B. This must be called after aZones has been refreshed.
      * @param: aZones The set of zones to search for islands
      */
-    void    FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones );
+    void FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones );
 
     const CLUSTERS& GetClusters();
 

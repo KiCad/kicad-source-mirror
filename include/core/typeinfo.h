@@ -92,18 +92,18 @@ enum KICAD_T
     PCB_TEXT_T,             ///< class PCB_TEXT, text on a layer
     PCB_FP_TEXT_T,          ///< class FP_TEXT, text in a footprint
     PCB_FP_SHAPE_T,         ///< class FP_SHAPE, a footprint edge
-    PCB_FP_ZONE_AREA_T,     ///< class ZONE_CONTAINER, managed by a footprint
+    PCB_FP_ZONE_T,          ///< class ZONE, managed by a footprint
     PCB_TRACE_T,            ///< class TRACK, a track segment (segment on a copper layer)
     PCB_VIA_T,              ///< class VIA, a via (like a track segment on a copper layer)
     PCB_ARC_T,              ///< class ARC, an arc track segment on a copper layer
     PCB_MARKER_T,           ///< class MARKER_PCB, a marker used to show something
-    PCB_DIMENSION_T,        ///< class DIMENSION: abstract dimension meta-type
+    PCB_DIMENSION_T,        ///< class DIMENSION_BASE: abstract dimension meta-type
     PCB_DIM_ALIGNED_T,      ///< class ALIGNED_DIMENSION, a linear dimension (graphic item)
     PCB_DIM_LEADER_T,       ///< class LEADER, a leader dimension (graphic item)
     PCB_DIM_CENTER_T,       ///< class CENTER_DIMENSION, a center point marking (graphic item)
     PCB_DIM_ORTHOGONAL_T,   ///< class ORTHOGONAL_DIMENSION, a linear dimension constrained to x/y
     PCB_TARGET_T,           ///< class PCB_TARGET, a target (graphic item)
-    PCB_ZONE_AREA_T,        ///< class ZONE_CONTAINER, a zone area
+    PCB_ZONE_T,             ///< class ZONE, a copper pour area
     PCB_ITEM_LIST_T,        ///< class BOARD_ITEM_LIST, a list of board items
     PCB_NETINFO_T,          ///< class NETINFO_ITEM, a description of a net
     PCB_GROUP_T,            ///< class PCB_GROUP, a set of BOARD_ITEMs

@@ -22,12 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_zone.h
- */
-
-#ifndef CLASS_ZONE_H_
-#define CLASS_ZONE_H_
+#ifndef ZONE_H
+#define ZONE_H
 
 
 #include <mutex>
@@ -44,48 +40,47 @@ class EDA_RECT;
 class LINE_READER;
 class PCB_EDIT_FRAME;
 class BOARD;
-class ZONE_CONTAINER;
+class ZONE;
 class MSG_PANEL_ITEM;
 
 typedef std::vector<SEG> ZONE_SEGMENT_FILL;
 
 /**
- * ZONE_CONTAINER
+ * ZONE
  * handles a list of polygons defining a copper zone.
  * A zone is described by a main polygon, a time stamp, a layer or a lyer set, and a net name.
  * Other polygons inside the main polygon are holes in the zone.
  *
- * a item ZONE_CONTAINER is living in a board
- * a variant MODULE_ZONE_CONTAINER is living in a footprint
+ * a item ZONE is living in a board
+ * a variant FP_ZONE is living in a footprint
  */
-class ZONE_CONTAINER : public BOARD_CONNECTED_ITEM
+class ZONE : public BOARD_CONNECTED_ITEM
 {
 public:
 
     /**
-     * The ctor to build ZONE_CONTAINER, but comaptible with MODULE_ZONE_CONTAINER
-     * requirement.
-     * if aInFP is true, a MODULE_ZONE_CONTAINER is actually built
+     * The ctor to build ZONE, but comaptible with FP_ZONE requirement.
+     * if aInFP is true, a FP_ZONE is actually built
      * (same item, but with a specific type id:
-     * The type is PCB_ZONE_AREA_T for a ZONE_CONTAINER
-     * The type is PCB_FP_ZONE_AREA_T for a MODULE_ZONE_CONTAINER
+     * The type is PCB_ZONE_T for a ZONE
+     * The type is PCB_FP_ZONE_T for a FP_ZONE
      */
-    ZONE_CONTAINER( BOARD_ITEM_CONTAINER* parent, bool aInFP = false );
+    ZONE( BOARD_ITEM_CONTAINER* parent, bool aInFP = false );
 
-    ZONE_CONTAINER( const ZONE_CONTAINER& aZone );
-    ZONE_CONTAINER& operator=( const ZONE_CONTAINER &aOther );
+    ZONE( const ZONE& aZone );
+    ZONE& operator=( const ZONE &aOther );
 
-    ~ZONE_CONTAINER();
+    ~ZONE();
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
-        return aItem && aItem->Type() == PCB_ZONE_AREA_T;
+        return aItem && aItem->Type() == PCB_ZONE_T;
     }
 
     /**
      * Copy aZone data to me
      */
-    void InitDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone );
+    void InitDataFromSrcInCopyCtor( const ZONE& aZone );
 
     /**
      * @return a wxPoint, position of the first point of the outline
@@ -345,7 +340,7 @@ public:
      * merged due to other parameters such as fillet radius.  The copper pour will end up
      * effectively merged though, so we need to do some calculations with them in mind.
      */
-    void GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE_CONTAINER*>* aZones ) const;
+    void GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aZones ) const;
 
     /**
      * Function TransformSolidAreasShapesToPolygon
@@ -498,7 +493,7 @@ public:
      */
     wxString GetClass() const override
     {
-        return wxT( "ZONE_CONTAINER" );
+        return wxT( "ZONE" );
     }
 
     /** Access to m_Poly parameters
@@ -601,7 +596,7 @@ public:
      * info, filling is not taken into account
      * @param aZoneToCompare = zone to compare with "this"
      */
-    bool IsSame( const ZONE_CONTAINER &aZoneToCompare );
+    bool IsSame( const ZONE &aZoneToCompare );
 
    /**
      * Function ClearFilledPolysList
@@ -822,8 +817,6 @@ public:
         m_filledPolysHash[aLayer] = m_FilledPolysList.at( aLayer ).GetHash();
     }
 
-
-
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
@@ -938,9 +931,9 @@ protected:
     /// For each layer, a set of insulated islands that were not removed
     std::map<PCB_LAYER_ID, std::set<int>> m_insulatedIslands;
 
-    bool                  m_hv45;           // constrain edges to horizontal, vertical or 45º
+    bool                      m_hv45;              // constrain edges to horiz, vert or 45º
 
-    double                m_area;           // The filled zone area
+    double                    m_area;              // The filled zone area
 
     /// Lock used for multi-threaded filling on multi-layer zones
     std::mutex m_lock;
@@ -948,23 +941,18 @@ protected:
 
 
 /**
- * MODULE_ZONE_CONTAINER is the same item as ZONE_CONTAINER, but with a specific type id
- * ZONE_CONTAINER is living in a board
- * MODULE_ZONE_CONTAINER is living in a footprint
- * althougt the are similar, these items need a specific type to be easily managed
- * in many functions using the type id in switches
- * A few virtual methods are different
+ * FP_ZONE is a specialization of ZONE for use in footprints.
  */
-class MODULE_ZONE_CONTAINER : public ZONE_CONTAINER
+class FP_ZONE : public ZONE
 {
 public:
-    MODULE_ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent );
-    MODULE_ZONE_CONTAINER( const MODULE_ZONE_CONTAINER& aZone );
-    MODULE_ZONE_CONTAINER& operator=( const MODULE_ZONE_CONTAINER &aOther );
+    FP_ZONE( BOARD_ITEM_CONTAINER* aParent );
+    FP_ZONE( const FP_ZONE& aZone );
+    FP_ZONE& operator=( const FP_ZONE &aOther );
 
     EDA_ITEM* Clone() const override;
 
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 };
 
-#endif  // CLASS_ZONE_H_
+#endif  // ZONE_H

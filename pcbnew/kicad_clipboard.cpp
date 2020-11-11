@@ -199,11 +199,11 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
                 footprint->Add( pad );
                 copy = footprint;
             }
-            else if( item->Type() == PCB_FP_ZONE_AREA_T )
+            else if( item->Type() == PCB_FP_ZONE_T )
             {
-                // Convert to PCB_ZONE_AREA_T
-                ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
-                zone->InitDataFromSrcInCopyCtor( *static_cast<ZONE_CONTAINER*>( item ) );
+                // Convert to PCB_ZONE_T
+                ZONE* zone = new ZONE( m_board );
+                zone->InitDataFromSrcInCopyCtor( *static_cast<ZONE*>( item ) );
                 copy = zone;
             }
             else if( item->Type() == PCB_GROUP_T )

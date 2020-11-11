@@ -207,7 +207,7 @@ struct TEXT_ITEM_INFO
 // forward declaration from class_track.h
 enum class VIATYPE : int;
 
-// forward declarations from class_dimension.h
+// forward declarations from dimension.h
 enum class DIM_UNITS_FORMAT : int;
 enum class DIM_TEXT_POSITION : int;
 enum class DIM_UNITS_MODE : int;

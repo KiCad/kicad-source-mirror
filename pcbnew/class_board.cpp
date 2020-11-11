@@ -34,9 +34,9 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <class_marker_pcb.h>
-#include <class_pcb_target.h>
+#include <pcb_target.h>
 #include <core/kicad_algo.h>
 #include <connectivity/connectivity_data.h>
 #include <kicad_string.h>
@@ -102,7 +102,7 @@ BOARD::~BOARD()
     // Clean up the owned elements
     DeleteMARKERs();
 
-    for( ZONE_CONTAINER* zone : m_zones )
+    for( ZONE* zone : m_zones )
         delete zone;
 
     m_zones.clear();
@@ -251,8 +251,10 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
         PCB_ARC_T,
         //        PCB_PAD_T,            Can't be at board level
         //        PCB_FP_TEXT_T,        Can't be at board level
+        //        PCB_FP_SHAPE_T,       Can't be at board level
+        //        PCB_FP_ZONE_T,        Can't be at board level
         PCB_MODULE_T,
-        PCB_ZONE_AREA_T,
+        PCB_ZONE_T,
         EOT
     };
 
@@ -518,7 +520,7 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID aLayer, bool isEnabled )
                 pad->SetLocalRatsnestVisible( isEnabled );
         }
 
-        for( ZONE_CONTAINER* zone : Zones() )
+        for( ZONE* zone : Zones() )
             zone->SetLocalRatsnestVisible( isEnabled );
 
         break;
@@ -572,8 +574,8 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
         break;
 
     // this one uses a vector
-    case PCB_ZONE_AREA_T:
-        m_zones.push_back( (ZONE_CONTAINER*) aBoardItem );
+    case PCB_ZONE_T:
+        m_zones.push_back( (ZONE*) aBoardItem );
         break;
 
     case PCB_TRACE_T:
@@ -666,7 +668,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
                                         } ) );
         break;
 
-    case PCB_ZONE_AREA_T:
+    case PCB_ZONE_T:
         m_zones.erase( std::remove_if( m_zones.begin(), m_zones.end(),
                                        [aBoardItem]( BOARD_ITEM* aItem )
                                        {
@@ -802,7 +804,7 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
         }
     }
 
-    for( ZONE_CONTAINER* zone : Zones() )
+    for( ZONE* zone : Zones() )
     {
         if( zone->m_Uuid == aID )
             return zone;
@@ -856,7 +858,7 @@ void BOARD::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
             aMap[ drawing->m_Uuid ] = drawing;
     }
 
-    for( ZONE_CONTAINER* zone : Zones() )
+    for( ZONE* zone : Zones() )
         aMap[ zone->m_Uuid ] = zone;
 
     for( BOARD_ITEM* drawing : Drawings() )
@@ -1039,7 +1041,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         }
 
         // Check zones
-        for( ZONE_CONTAINER* aZone : m_zones )
+        for( ZONE* aZone : m_zones )
         {
             if( ( aZone->GetLayerSet() & visible ).any() )
                 area.Merge( aZone->GetBoundingBox() );
@@ -1118,7 +1120,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
         case PCB_PAD_T:
         case PCB_FP_TEXT_T:
         case PCB_FP_SHAPE_T:
-        case PCB_FP_ZONE_AREA_T:
+        case PCB_FP_ZONE_T:
 
             // this calls MODULE::Visit() on each module.
             result = IterateForward<MODULE*>( m_modules, inspector, testData, p );
@@ -1132,7 +1134,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
                 case PCB_PAD_T:
                 case PCB_FP_TEXT_T:
                 case PCB_FP_SHAPE_T:
-                case PCB_FP_ZONE_AREA_T:
+                case PCB_FP_ZONE_T:
                     continue;
 
                 default:
@@ -1199,8 +1201,8 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             ++p;
             break;
 
-        case PCB_ZONE_AREA_T:
-            for( ZONE_CONTAINER* zone : m_zones)
+        case PCB_ZONE_T:
+            for( ZONE* zone : m_zones)
             {
                 result = zone->Visit( inspector, testData, p );
 
@@ -1411,7 +1413,7 @@ int BOARD::SetAreasNetCodesFromNetNames()
 {
     int error_count = 0;
 
-    for( ZONE_CONTAINER* zone : Zones() )
+    for( ZONE* zone : Zones() )
     {
         if( !zone->IsOnCopperLayer() )
         {
@@ -1729,18 +1731,18 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer
 }
 
 
-std::list<ZONE_CONTAINER*> BOARD::GetZoneList( bool aIncludeZonesInFootprints )
+std::list<ZONE*> BOARD::GetZoneList( bool aIncludeZonesInFootprints )
 {
-    std::list<ZONE_CONTAINER*> zones;
+    std::list<ZONE*> zones;
 
-    for( ZONE_CONTAINER* zone : Zones() )
+    for( ZONE* zone : Zones() )
         zones.push_back( zone );
 
     if( aIncludeZonesInFootprints )
     {
         for( MODULE* footprint : m_modules )
         {
-            for( MODULE_ZONE_CONTAINER* zone : footprint->Zones() )
+            for( FP_ZONE* zone : footprint->Zones() )
                 zones.push_back( zone );
         }
     }
@@ -1749,10 +1751,10 @@ std::list<ZONE_CONTAINER*> BOARD::GetZoneList( bool aIncludeZonesInFootprints )
 }
 
 
-ZONE_CONTAINER* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_ID aLayer,
-                                wxPoint aStartPointPosition, ZONE_BORDER_DISPLAY_STYLE aHatch )
+ZONE* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_ID aLayer,
+                      wxPoint aStartPointPosition, ZONE_BORDER_DISPLAY_STYLE aHatch )
 {
-    ZONE_CONTAINER* new_area = new ZONE_CONTAINER( this );
+    ZONE* new_area = new ZONE( this );
 
     new_area->SetNetCode( aNetcode );
     new_area->SetLayer( aLayer );
@@ -1774,28 +1776,28 @@ ZONE_CONTAINER* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, 
 }
 
 
-void BOARD::RemoveArea( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_to_remove )
+void BOARD::RemoveZone( PICKED_ITEMS_LIST* aDeletedList, ZONE* aZone )
 {
-    if( area_to_remove == NULL )
+    if( aZone == NULL )
         return;
 
     if( aDeletedList )
     {
-        ITEM_PICKER picker( nullptr, area_to_remove, UNDO_REDO::DELETED );
+        ITEM_PICKER picker( nullptr, aZone, UNDO_REDO::DELETED );
         aDeletedList->PushItem( picker );
-        Remove( area_to_remove );   // remove from zone list, but does not delete it
+        Remove( aZone );   // remove from zone list, but does not delete it
     }
     else
     {
-        Delete( area_to_remove );
+        Delete( aZone );
     }
 }
 
 
-bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAINER* aCurrArea )
+bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE* aCurrArea )
 {
     // mark all areas as unmodified except this one, if modified
-    for( ZONE_CONTAINER* zone : m_zones )
+    for( ZONE* zone : m_zones )
         zone->SetLocalFlags( 0 );
 
     aCurrArea->SetLocalFlags( 1 );
@@ -1810,7 +1812,7 @@ bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAI
         // If clipping has created some polygons, we must add these new copper areas.
         if( n_poly > 1 )
         {
-            ZONE_CONTAINER* NewArea;
+            ZONE* NewArea;
 
             // Move the newly created polygons to new areas, removing them from the current area
             for( int ip = 1; ip < n_poly; ip++ )
@@ -1892,7 +1894,7 @@ const std::vector<BOARD_CONNECTED_ITEM*> BOARD::AllConnectedItems()
             items.push_back( pad );
     }
 
-    for( ZONE_CONTAINER* zone : Zones() )
+    for( ZONE* zone : Zones() )
         items.push_back( zone );
 
     return items;

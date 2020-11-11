@@ -38,7 +38,6 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_zone.h>
 
 namespace PCAD2KICAD {
 

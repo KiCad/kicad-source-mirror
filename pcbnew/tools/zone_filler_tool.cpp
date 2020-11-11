@@ -24,7 +24,7 @@
  */
 #include <cstdint>
 #include <thread>
-#include <class_zone.h>
+#include <zone.h>
 #include <connectivity/connectivity_data.h>
 #include <board_commit.h>
 #include <widgets/progress_reporter.h>
@@ -58,7 +58,7 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
     if( !getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty )
         return;
 
-    std::vector<ZONE_CONTAINER*> toFill;
+    std::vector<ZONE*> toFill;
 
     for( auto zone : board()->Zones() )
         toFill.push_back(zone);
@@ -95,11 +95,11 @@ void ZONE_FILLER_TOOL::singleShotRefocus( wxIdleEvent& )
 
 void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter )
 {
-    std::vector<ZONE_CONTAINER*> toFill;
+    std::vector<ZONE*> toFill;
 
     BOARD_COMMIT commit( this );
 
-    for( ZONE_CONTAINER* zone : board()->Zones() )
+    for( ZONE* zone : board()->Zones() )
         toFill.push_back( zone );
 
     ZONE_FILLER filler( board(), &commit );
@@ -151,20 +151,19 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
 
 int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
 {
-    std::vector<ZONE_CONTAINER*> toFill;
+    std::vector<ZONE*> toFill;
 
     BOARD_COMMIT commit( this );
 
-    if( auto passedZone = aEvent.Parameter<ZONE_CONTAINER*>() )
+    if( ZONE* passedZone = aEvent.Parameter<ZONE*>() )
     {
-        if( passedZone->Type() == PCB_ZONE_AREA_T )
-            toFill.push_back( passedZone );
+        toFill.push_back( passedZone );
     }
     else
     {
-        for( auto item : selection() )
+        for( EDA_ITEM* item : selection() )
         {
-            if( auto zone = dyn_cast<ZONE_CONTAINER*>( item ) )
+            if( ZONE* zone = dynamic_cast<ZONE*>( item ) )
                 toFill.push_back( zone );
         }
     }
@@ -195,9 +194,9 @@ int ZONE_FILLER_TOOL::ZoneUnfill( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection() )
     {
-        assert( item->Type() == PCB_ZONE_AREA_T );
+        assert( item->Type() == PCB_ZONE_T );
 
-        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
+        ZONE* zone = static_cast<ZONE*>( item );
 
         commit.Modify( zone );
 
@@ -216,7 +215,7 @@ int ZONE_FILLER_TOOL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
 {
     BOARD_COMMIT commit( this );
 
-    for( ZONE_CONTAINER* zone : board()->Zones() )
+    for( ZONE* zone : board()->Zones() )
     {
         commit.Modify( zone );
 

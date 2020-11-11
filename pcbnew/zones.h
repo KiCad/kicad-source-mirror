@@ -25,7 +25,7 @@
 #ifndef ZONES_H_
 #define ZONES_H_
 
-// Default values in mils for parameters in ZONE_CONTAINER
+// Default values in mils for parameters in ZONE
 #define ZONE_THERMAL_RELIEF_GAP_MIL 20     // default value for ZONE_SETTINGS::m_ThermalReliefGap
 #define ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL 20 // default value for ZONE_SETTINGS::m_ThermalReliefCopperBridge
 #define ZONE_THICKNESS_MIL 10               // default value for ZONE_SETTINGS::m_ZoneMinThickness
@@ -47,7 +47,7 @@ enum class ZONE_CONNECTION
     THT_THERMAL ///< Thermal relief only for THT pads
 };
 
-class ZONE_CONTAINER;
+class ZONE;
 class ZONE_SETTINGS;
 class PCB_BASE_FRAME;
 

@@ -36,16 +36,16 @@
 
 #include <advanced_config.h>
 #include <class_board.h>
-#include <class_dimension.h>
+#include <dimension.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
 #include <class_pcb_group.h>
-#include <class_pcb_target.h>
+#include <pcb_target.h>
 #include <class_module.h>
 #include <netclass.h>
 #include <class_pad.h>
 #include <class_track.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <plugins/kicad/kicad_plugin.h>
 #include <pcb_plot_params_parser.h>
 #include <pcb_plot_params.h>
@@ -635,7 +635,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             break;
 
         case T_zone:
-            m_board->Add( parseZONE_CONTAINER( m_board ), ADD_MODE::APPEND );
+            m_board->Add( parseZONE( m_board ), ADD_MODE::APPEND );
             break;
 
         case T_target:
@@ -2360,14 +2360,14 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
 }
 
 
-DIMENSION* PCB_PARSER::parseDIMENSION()
+DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
 {
     wxCHECK_MSG( CurTok() == T_dimension, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as DIMENSION." ) );
 
     T token;
 
-    std::unique_ptr<DIMENSION> dimension;
+    std::unique_ptr<DIMENSION_BASE> dimension;
 
     // skip value that used to be saved
     if( NextTok() != T_LEFT )
@@ -3056,7 +3056,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
         case T_zone:
         {
-            ZONE_CONTAINER* zone = parseZONE_CONTAINER( module.get() );
+            ZONE* zone = parseZONE( module.get() );
             module->Add( zone, ADD_MODE::APPEND );
         }
             break;
@@ -4260,35 +4260,35 @@ VIA* PCB_PARSER::parseVIA()
 }
 
 
-ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
+ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 {
     wxCHECK_MSG( CurTok() == T_zone, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
-                 wxT( " as ZONE_CONTAINER." ) );
+                 wxT( " as ZONE." ) );
 
     ZONE_BORDER_DISPLAY_STYLE hatchStyle = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;
 
-    int     hatchPitch = ZONE_CONTAINER::GetDefaultHatchPitch();
-    wxPoint pt;
-    T       token;
-    int     tmp;
-    wxString    netnameFromfile;    // the zone net name find in file
+    int      hatchPitch = ZONE::GetDefaultHatchPitch();
+    wxPoint  pt;
+    T        token;
+    int      tmp;
+    wxString netnameFromfile;    // the zone net name find in file
 
     // bigger scope since each filled_polygon is concatenated in here
     std::map<PCB_LAYER_ID, SHAPE_POLY_SET> pts;
-    bool inModule = false;
+    bool         inModule = false;
     PCB_LAYER_ID filledLayer;
-    bool addedFilledPolygons = false;
+    bool         addedFilledPolygons = false;
 
     if( dynamic_cast<MODULE*>( aParent ) )      // The zone belongs a footprint
         inModule = true;
 
-    std::unique_ptr<ZONE_CONTAINER> zone;
+    std::unique_ptr<ZONE> zone;
 
     if( inModule )
-        zone = std::make_unique<MODULE_ZONE_CONTAINER>( aParent );
+        zone = std::make_unique<FP_ZONE>( aParent );
     else
-        zone = std::make_unique<ZONE_CONTAINER>( aParent );
+        zone = std::make_unique<ZONE>( aParent );
 
     zone->SetPriority( 0 );
 

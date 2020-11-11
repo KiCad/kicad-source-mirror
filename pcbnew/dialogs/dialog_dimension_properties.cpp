@@ -19,7 +19,7 @@
  */
 
 #include <class_board.h>
-#include <class_dimension.h>
+#include <dimension.h>
 #include <pcb_base_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <widgets/unit_binder.h>
@@ -48,8 +48,8 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
                            m_lblExtensionOffsetUnits )
 {
     wxASSERT( BaseType( aItem->Type() ) == PCB_DIMENSION_T );
-    m_dimension = static_cast<DIMENSION*>( aItem );
-    m_previewDimension = static_cast<DIMENSION*>( m_dimension->Clone() );
+    m_dimension = static_cast<DIMENSION_BASE*>( aItem );
+    m_previewDimension = static_cast<DIMENSION_BASE*>( m_dimension->Clone() );
     m_previewDimension->SetParent( m_frame->GetBoard() );
 
     switch( m_dimension->Type() )
@@ -284,7 +284,7 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataFromWindow()
 }
 
 
-void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( DIMENSION* aTarget )
+void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( DIMENSION_BASE* aTarget )
 {
     BOARD* board = m_frame->GetBoard();
 

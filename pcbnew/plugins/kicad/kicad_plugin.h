@@ -35,7 +35,7 @@ class FP_CACHE;
 class PCB_PARSER;
 class NETINFO_MAPPING;
 class BOARD_DESIGN_SETTINGS;
-class DIMENSION;
+class DIMENSION_BASE;
 class FP_SHAPE;
 class PCB_SHAPE;
 class PCB_TARGET;
@@ -43,7 +43,7 @@ class D_PAD;
 class FP_TEXT;
 class PCB_GROUP;
 class TRACK;
-class ZONE_CONTAINER;
+class ZONE;
 class PCB_TEXT;
 
 
@@ -258,7 +258,7 @@ protected:
 private:
     void format( BOARD* aBoard, int aNestLevel = 0 ) const;
 
-    void format( DIMENSION* aDimension, int aNestLevel = 0 ) const;
+    void format( DIMENSION_BASE* aDimension, int aNestLevel = 0 ) const;
 
     void format( FP_SHAPE* aModuleDrawing, int aNestLevel = 0 ) const;
 
@@ -278,7 +278,7 @@ private:
 
     void format( TRACK* aTrack, int aNestLevel = 0 ) const;
 
-    void format( ZONE_CONTAINER* aZone, int aNestLevel = 0 ) const;
+    void format( ZONE* aZone, int aNestLevel = 0 ) const;
 
     void formatLayer( const BOARD_ITEM* aItem ) const;
 

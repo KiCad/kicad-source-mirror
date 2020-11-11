@@ -36,7 +36,7 @@
 #include <settings/color_settings.h>
 #include <zones.h>
 
-#include <class_zone.h>
+#include <zone.h>
 #include <wx/dataview.h>
 #include <widgets/color_swatch.h>
 
@@ -87,7 +87,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
 }
 
 
-ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
+ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
 {
     m_ZonePriority                = aSource.GetPriority();
     m_FillMode                    = aSource.GetFillMode();
@@ -124,7 +124,7 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
 }
 
 
-void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) const
+void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
 {
     aTarget.SetFillMode( m_FillMode );
     aTarget.SetLocalClearance( m_ZoneClearance );

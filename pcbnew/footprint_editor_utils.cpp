@@ -177,13 +177,13 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     case PCB_FP_SHAPE_T :ShowGraphicItemPropertiesDialog( aItem );
         break;
 
-    case PCB_FP_ZONE_AREA_T:
+    case PCB_FP_ZONE_T:
     {
-        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( aItem );
-        bool            success = false;
-        ZONE_SETTINGS   zoneSettings;
+        ZONE*         zone = static_cast<ZONE*>( aItem );
+        bool          success = false;
+        ZONE_SETTINGS zoneSettings;
 
-        zoneSettings << *static_cast<ZONE_CONTAINER*>( aItem );
+        zoneSettings << *static_cast<ZONE*>( aItem );
 
         if( zone->GetIsRuleArea() )
         {
@@ -203,7 +203,7 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
             BOARD_COMMIT commit( this );
             commit.Modify( zone );
             commit.Push( _( "Edit Zone" ) );
-            zoneSettings.ExportSetting( *static_cast<ZONE_CONTAINER*>( aItem ) );
+            zoneSettings.ExportSetting( *static_cast<ZONE*>( aItem ) );
         }
     }
     break;

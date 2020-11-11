@@ -32,7 +32,6 @@ using namespace std::placeholders;
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_zone.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/global_edit_tool.h>

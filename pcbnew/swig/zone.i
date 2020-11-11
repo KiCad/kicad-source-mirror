@@ -1,11 +1,11 @@
 // Do not permit default ZONE_FILLER ctor since commits are not supported from Python
 %ignore ZONE_FILLER::ZONE_FILLER(BOARD*, COMMIT*);
 
-%include class_zone.h
+%include zone.h
 %include zones.h
 
 %{
-#include <class_zone.h>
+#include <zone.h>
 #include <zones.h>
 #include <zone_filler.h>
 %}

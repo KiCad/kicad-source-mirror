@@ -32,7 +32,6 @@
 #include <qa_utils/utility_registry.h>
 
 #include <class_board.h>
-#include <class_zone.h>
 #include <profile.h>
 
 #include <atomic>

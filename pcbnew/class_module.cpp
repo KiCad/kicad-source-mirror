@@ -107,9 +107,9 @@ MODULE::MODULE( const MODULE& aFootprint ) :
     }
 
     // Copy zones
-    for( MODULE_ZONE_CONTAINER* zone : aFootprint.Zones() )
+    for( FP_ZONE* zone : aFootprint.Zones() )
     {
-        MODULE_ZONE_CONTAINER* newZone = static_cast<MODULE_ZONE_CONTAINER*>( zone->Clone() );
+        FP_ZONE* newZone = static_cast<FP_ZONE*>( zone->Clone() );
         ptrMap[ zone ] = newZone;
         Add( newZone );
 
@@ -183,7 +183,7 @@ MODULE::~MODULE()
 
     m_pads.clear();
 
-    for( MODULE_ZONE_CONTAINER* zone : m_fp_zones )
+    for( FP_ZONE* zone : m_fp_zones )
         delete zone;
 
     m_fp_zones.clear();
@@ -242,7 +242,7 @@ MODULE& MODULE::operator=( MODULE&& aOther )
     // Move the zones
     m_fp_zones.clear();
 
-    for( MODULE_ZONE_CONTAINER* item : aOther.Zones() )
+    for( FP_ZONE* item : aOther.Zones() )
     {
         Add( item );
 
@@ -340,9 +340,9 @@ MODULE& MODULE::operator=( const MODULE& aOther )
     // Copy zones
     m_fp_zones.clear();
 
-    for( MODULE_ZONE_CONTAINER* zone : aOther.Zones() )
+    for( FP_ZONE* zone : aOther.Zones() )
     {
-        MODULE_ZONE_CONTAINER* newZone = static_cast<MODULE_ZONE_CONTAINER*>( zone->Clone() );
+        FP_ZONE* newZone = static_cast<FP_ZONE*>( zone->Clone() );
         ptrMap[ zone ] = newZone;
         Add( newZone );
 
@@ -461,11 +461,11 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
             m_pads.push_front( static_cast<D_PAD*>( aBoardItem ) );
         break;
 
-    case PCB_FP_ZONE_AREA_T:
+    case PCB_FP_ZONE_T:
         if( aMode == ADD_MODE::APPEND )
-            m_fp_zones.push_back( static_cast<MODULE_ZONE_CONTAINER*>( aBoardItem ) );
+            m_fp_zones.push_back( static_cast<FP_ZONE*>( aBoardItem ) );
         else
-            m_fp_zones.insert( m_fp_zones.begin(), static_cast<MODULE_ZONE_CONTAINER*>( aBoardItem ) );
+            m_fp_zones.insert( m_fp_zones.begin(), static_cast<FP_ZONE*>( aBoardItem ) );
         break;
 
     case PCB_GROUP_T:
@@ -526,10 +526,10 @@ void MODULE::Remove( BOARD_ITEM* aBoardItem )
 
         break;
 
-    case PCB_FP_ZONE_AREA_T:
+    case PCB_FP_ZONE_T:
         for( auto it = m_fp_zones.begin(); it != m_fp_zones.end(); ++it )
         {
-            if( *it == static_cast<MODULE_ZONE_CONTAINER*>( aBoardItem ) )
+            if( *it == static_cast<FP_ZONE*>( aBoardItem ) )
             {
                 m_fp_zones.erase( it );
                 break;
@@ -592,7 +592,7 @@ EDA_RECT MODULE::GetFootprintRect() const
     for( D_PAD* pad : m_pads )
         area.Merge( pad->GetBoundingBox() );
 
-    for( MODULE_ZONE_CONTAINER* zone : m_fp_zones )
+    for( FP_ZONE* zone : m_fp_zones )
         area.Merge( zone->GetBoundingBox() );
 
     // Groups do not contribute to the rect, only their members
@@ -823,7 +823,7 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
                 return true;
         }
 
-        for( MODULE_ZONE_CONTAINER* zone : m_fp_zones )
+        for( FP_ZONE* zone : m_fp_zones )
         {
             if( zone->HitTest( arect, false, 0 ) )
                 return true;
@@ -982,8 +982,8 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
             ++p;
             break;
 
-        case PCB_FP_ZONE_AREA_T:
-            result = IterateForward<MODULE_ZONE_CONTAINER*>( m_fp_zones, inspector, testData, p );
+        case PCB_FP_ZONE_T:
+            result = IterateForward<FP_ZONE*>( m_fp_zones, inspector, testData, p );
             ++p;
             break;
 
@@ -1070,8 +1070,8 @@ void MODULE::RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction )
         for( D_PAD* pad : m_pads )
             aFunction( static_cast<BOARD_ITEM*>( pad ) );
 
-        for( MODULE_ZONE_CONTAINER* zone : m_fp_zones )
-            aFunction( static_cast<MODULE_ZONE_CONTAINER*>( zone ) );
+        for( FP_ZONE* zone : m_fp_zones )
+            aFunction( static_cast<FP_ZONE*>( zone ) );
 
         for( PCB_GROUP* group : m_fp_groups )
             aFunction( static_cast<PCB_GROUP*>( group ) );
@@ -1287,7 +1287,7 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         pad->Flip( m_Pos, false );
 
     // Mirror zones to other side of board.
-    for( ZONE_CONTAINER* zone : m_fp_zones )
+    for( ZONE* zone : m_fp_zones )
         zone->Flip( m_Pos, aFlipLeftRight );
 
     // Mirror reference and value.
@@ -1333,7 +1333,7 @@ void MODULE::SetPosition( const wxPoint& aPos )
     for( D_PAD* pad : m_pads )
         pad->SetPosition( pad->GetPosition() + delta );
 
-    for( ZONE_CONTAINER* zone : m_fp_zones )
+    for( ZONE* zone : m_fp_zones )
         zone->Move( delta );
 
     for( BOARD_ITEM* item : m_drawings )
@@ -1435,7 +1435,7 @@ void MODULE::SetOrientation( double aNewAngle )
         pad->SetDrawCoord();
     }
 
-    for( ZONE_CONTAINER* zone : m_fp_zones )
+    for( ZONE* zone : m_fp_zones )
     {
         zone->Rotate( GetPosition(), angleChange );
     }
@@ -1476,7 +1476,7 @@ BOARD_ITEM* MODULE::Duplicate() const
 BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
 {
     BOARD_ITEM* new_item = NULL;
-    MODULE_ZONE_CONTAINER* new_zone = NULL;
+    FP_ZONE* new_zone = NULL;
 
     switch( aItem->Type() )
     {
@@ -1492,9 +1492,9 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
         break;
     }
 
-    case PCB_FP_ZONE_AREA_T:
+    case PCB_FP_ZONE_T:
     {
-        new_zone = new MODULE_ZONE_CONTAINER( *static_cast<const MODULE_ZONE_CONTAINER*>( aItem ) );
+        new_zone = new FP_ZONE( *static_cast<const FP_ZONE*>( aItem ) );
         const_cast<KIID&>( new_zone->m_Uuid ) = KIID();
 
         if( aAddToModule )

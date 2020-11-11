@@ -22,13 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_pcb_target.h
- * @brief PCB_TARGET class definition.  (targets for photo plots).
- */
-
-#ifndef PCB_TARGET_H_
-#define PCB_TARGET_H_
+#ifndef PCB_TARGET_H
+#define PCB_TARGET_H
 
 #include <class_board_item.h>
 

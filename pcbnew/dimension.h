@@ -22,13 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_dimension.h
- * @brief DIMENSION class definition.
- */
-
-#ifndef DIMENSION_H_
-#define DIMENSION_H_
+#ifndef DIMENSION_H
+#define DIMENSION_H
 
 
 #include <class_board_item.h>
@@ -97,10 +92,10 @@ enum class DIM_TEXT_FRAME
  * - "crossbar" refers to the perpendicular line (usually with arrows at each end) between feature
  *   lines on linear dimensions
  */
-class DIMENSION : public BOARD_ITEM
+class DIMENSION_BASE : public BOARD_ITEM
 {
 public:
-    DIMENSION( BOARD_ITEM* aParent, KICAD_T aType = PCB_DIMENSION_T );
+    DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType = PCB_DIMENSION_T );
 
     bool IsType( const KICAD_T aScanTypes[] ) const override
     {
@@ -160,11 +155,7 @@ public:
     wxString GetSuffix() const { return m_suffix; }
     void SetSuffix( const wxString& aSuffix );
 
-    void GetUnits( EDA_UNITS& aUnits ) const
-    {
-        aUnits = m_units;
-    }
-
+    void GetUnits( EDA_UNITS& aUnits ) const { aUnits = m_units; }
     void SetUnits( EDA_UNITS aUnits );
 
     DIM_UNITS_MODE GetUnitsMode() const;
@@ -335,7 +326,7 @@ protected:
  * The height (distance from features to crossbar) can be set directly, or set by manipulating the
  * crossbar start or end point (with the point editor).
  */
-class ALIGNED_DIMENSION : public DIMENSION
+class ALIGNED_DIMENSION : public DIMENSION_BASE
 {
 protected:
     // Geometry
@@ -476,7 +467,7 @@ protected:
  * Point (a) is m_start, point (b) is m_end, point (c) is the end of the "text line"
  * The b-c line is drawn from b to the text center, and clipped on the text bounding box.
  */
-class LEADER : public DIMENSION
+class LEADER : public DIMENSION_BASE
 {
     DIM_TEXT_FRAME m_textFrame;
 
@@ -515,7 +506,7 @@ protected:
  * The size and orientation of the cross is adjustable.
  * m_start always marks the center being measured; m_end marks the end of one leg of the cross.
  */
-class CENTER_DIMENSION : public DIMENSION
+class CENTER_DIMENSION : public DIMENSION_BASE
 {
 
 public:
@@ -546,4 +537,4 @@ protected:
     void updateGeometry() override;
 };
 
-#endif    // DIMENSION_H_
+#endif    // DIMENSION_H

@@ -94,7 +94,7 @@ protected:
     std::unique_ptr<PNS::VIA> syncVia( VIA* aVia );
     bool syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB_LAYER_ID aLayer );
     bool syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aItem );
-    bool syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone, SHAPE_POLY_SET* aBoardOutline );
+    bool syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_SET* aBoardOutline );
     bool inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedWidth );
 
 protected:

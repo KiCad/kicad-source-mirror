@@ -30,8 +30,8 @@
 #include <class_pad.h>
 #include <class_track.h>
 #include <class_marker_pcb.h>
-#include <class_dimension.h>
-#include <class_zone.h>
+#include <dimension.h>
+#include <zone.h>
 #include <pcb_shape.h>
 #include <class_pcb_group.h>
 #include <macros.h>
@@ -46,22 +46,22 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     // there are some restrictions on the order of items in the general case.
     // all items in m_Drawings for instance should be contiguous.
     //  *** all items in a same list (shown here) must be contiguous ****
-    PCB_MARKER_T,                // in m_markers
-    PCB_TEXT_T,                  // in m_drawings
-    PCB_SHAPE_T,                 // in m_drawings
-    PCB_DIM_ALIGNED_T,           // in m_drawings
-    PCB_DIM_CENTER_T,            // in m_drawings
-    PCB_DIM_ORTHOGONAL_T,        // in m_drawings
-    PCB_DIM_LEADER_T,            // in m_drawings
-    PCB_TARGET_T,                // in m_drawings
-    PCB_VIA_T,                   // in m_tracks
-    PCB_TRACE_T,                 // in m_tracks
-    PCB_ARC_T,                   // in m_tracks
-    PCB_PAD_T,                   // in footprints
-    PCB_FP_TEXT_T,               // in footprints
-    PCB_MODULE_T,                // in m_footprints
-    PCB_GROUP_T,                 // in m_groups
-    PCB_ZONE_AREA_T,             // in m_zones
+    PCB_MARKER_T,           // in m_markers
+    PCB_TEXT_T,             // in m_drawings
+    PCB_SHAPE_T,            // in m_drawings
+    PCB_DIM_ALIGNED_T,      // in m_drawings
+    PCB_DIM_CENTER_T,       // in m_drawings
+    PCB_DIM_ORTHOGONAL_T,   // in m_drawings
+    PCB_DIM_LEADER_T,       // in m_drawings
+    PCB_TARGET_T,           // in m_drawings
+    PCB_VIA_T,              // in m_tracks
+    PCB_TRACE_T,            // in m_tracks
+    PCB_ARC_T,              // in m_tracks
+    PCB_PAD_T,              // in footprints
+    PCB_FP_TEXT_T,          // in footprints
+    PCB_MODULE_T,           // in m_footprints
+    PCB_GROUP_T,            // in m_groups
+    PCB_ZONE_T,             // in m_zones
     EOT
 };
 
@@ -80,7 +80,7 @@ const KICAD_T GENERAL_COLLECTOR::BoardLevelItems[] = {
     PCB_TRACE_T,
     PCB_MODULE_T,
     PCB_GROUP_T,
-    PCB_ZONE_AREA_T,
+    PCB_ZONE_T,
     EOT
 };
 
@@ -101,7 +101,7 @@ const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
     PCB_FP_TEXT_T,
     PCB_MODULE_T,
     PCB_GROUP_T,
-    PCB_ZONE_AREA_T,         // if it is visible on screen, it should be selectable
+    PCB_ZONE_T,         // if it is visible on screen, it should be selectable
     EOT
 };
 
@@ -133,7 +133,7 @@ const KICAD_T GENERAL_COLLECTOR::ModulesAndTheirItems[] = {
     PCB_FP_TEXT_T,
     PCB_FP_SHAPE_T,
     PCB_PAD_T,
-    PCB_FP_ZONE_AREA_T,
+    PCB_FP_ZONE_T,
     PCB_GROUP_T,
     EOT
     };
@@ -143,7 +143,7 @@ const KICAD_T GENERAL_COLLECTOR::ModuleItems[] = {
     PCB_FP_TEXT_T,
     PCB_FP_SHAPE_T,
     PCB_PAD_T,
-    PCB_FP_ZONE_AREA_T,
+    PCB_FP_ZONE_T,
     PCB_GROUP_T,
     EOT
     };
@@ -168,8 +168,8 @@ const KICAD_T GENERAL_COLLECTOR::LockableItems[] = {
 
 
 const KICAD_T GENERAL_COLLECTOR::Zones[] = {
-    PCB_ZONE_AREA_T,
-    PCB_FP_ZONE_AREA_T,
+    PCB_ZONE_T,
+    PCB_FP_ZONE_T,
     EOT
 };
 
@@ -194,9 +194,9 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     bool            pad_through = false;
     VIA*            via         = nullptr;
     MARKER_PCB*     marker      = nullptr;
-    ZONE_CONTAINER* zone        = nullptr;
+    ZONE*           zone        = nullptr;
     PCB_SHAPE*      shape       = nullptr;
-    DIMENSION*      dimension   = nullptr;
+    DIMENSION_BASE* dimension   = nullptr;
 
 #if 0   // debugging
     static int  breakhere = 0;
@@ -304,14 +304,14 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             goto exit;
         break;
 
-    case PCB_FP_ZONE_AREA_T:
+    case PCB_FP_ZONE_T:
         module = static_cast<MODULE*>( item->GetParent() );
 
         // Fallthrough to get the zone as well
         KI_FALLTHROUGH;
 
-    case PCB_ZONE_AREA_T:
-        zone = static_cast<ZONE_CONTAINER*>( item );
+    case PCB_ZONE_T:
+        zone = static_cast<ZONE*>( item );
         break;
 
     case PCB_TEXT_T:
@@ -325,7 +325,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     case PCB_DIM_CENTER_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-        dimension = static_cast<DIMENSION*>( item );
+        dimension = static_cast<DIMENSION_BASE*>( item );
         break;
 
     case PCB_TARGET_T:

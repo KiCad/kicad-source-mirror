@@ -145,7 +145,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
             };
 
     // fixme: what about graphical items?
-    forEachGeometryItem( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_ZONE_AREA_T, PCB_PAD_T },
+    forEachGeometryItem( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_ZONE_T, PCB_PAD_T },
                            LSET::AllLayersMask(), checkDisabledLayers );
 }
 

@@ -31,7 +31,7 @@
 #include <kicad_string.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <class_module.h>
 #include <fp_shape.h>
 #include <convert_basic_shapes_to_polygon.h>
@@ -88,7 +88,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
     }
 
     // convert copper zones
-    for( ZONE_CONTAINER* zone : Zones() )
+    for( ZONE* zone : Zones() )
     {
         if( zone->GetLayerSet().test( aLayer ) )
             zone->TransformSolidAreasShapesToPolygon( aLayer, aOutlines );
@@ -283,9 +283,8 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( SHAPE_POLY_SET& aC
 }
 
 
-void ZONE_CONTAINER::TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer,
-                                                         SHAPE_POLY_SET& aCornerBuffer,
-                                                         int aError ) const
+void ZONE::TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aCornerBuffer,
+                                               int aError ) const
 {
     if( !m_FilledPolysList.count( aLayer ) || m_FilledPolysList.at( aLayer ).IsEmpty() )
         return;
@@ -711,10 +710,9 @@ bool D_PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, 
 }
 
 
-void ZONE_CONTAINER::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                           PCB_LAYER_ID aLayer, int aClearance,
-                                                           int aError, ERROR_LOC aErrorLoc,
-                                                           bool ignoreLineWidth ) const
+void ZONE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                 PCB_LAYER_ID aLayer, int aClearance, int aError,
+                                                 ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const
 {
     wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for zones." );
 

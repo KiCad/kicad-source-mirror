@@ -266,10 +266,10 @@ private:
      * @param aCadstarShape 
      * @param aLineThickness Thickness of line to draw with
      * @param aParentContainer Parent object (e.g. mBoard or a MODULE pointer)
-     * @return Pointer to ZONE_CONTAINER. Caller owns the object.
+     * @return Pointer to ZONE. Caller owns the object.
      */
-    ZONE_CONTAINER* getZoneFromCadstarShape( const SHAPE& aCadstarShape, const int& aLineThickness,
-            BOARD_ITEM_CONTAINER* aParentContainer );
+    ZONE* getZoneFromCadstarShape( const SHAPE& aCadstarShape, const int& aLineThickness,
+                                   BOARD_ITEM_CONTAINER* aParentContainer );
 
     /**
      * @brief Returns a SHAPE_POLY_SET object from a Cadstar SHAPE

@@ -25,7 +25,7 @@
 #include <class_module.h>
 #include <class_pad.h>
 #include <class_track.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <netinfo.h>
 
 
@@ -210,7 +210,7 @@ void NETINFO_MAPPING::Update()
     nets.insert( 0 );
 
     // Zones
-    for( ZONE_CONTAINER* zone : m_board->Zones() )
+    for( ZONE* zone : m_board->Zones() )
         nets.insert( zone->GetNetCode() );
 
     // Tracks

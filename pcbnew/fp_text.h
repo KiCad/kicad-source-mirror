@@ -25,10 +25,8 @@
 #ifndef FP_TEXT_H
 #define FP_TEXT_H
 
-
 #include <eda_text.h>
 #include <class_board_item.h>
-
 
 class LINE_READER;
 class EDA_RECT;
@@ -36,8 +34,6 @@ class MODULE;
 class MSG_PANEL_ITEM;
 class PCB_BASE_FRAME;
 class SHAPE;
-
-#define UMBILICAL_COLOR   LIGHTBLUE
 
 
 class FP_TEXT : public BOARD_ITEM, public EDA_TEXT

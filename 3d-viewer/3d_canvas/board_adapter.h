@@ -42,8 +42,8 @@
 #include <pcb_base_frame.h>
 #include <pcb_text.h>
 #include <pcb_shape.h>
-#include <class_dimension.h>
-#include <class_zone.h>
+#include <dimension.h>
+#include <zone.h>
 #include <class_module.h>
 #include <reporter.h>
 
@@ -570,12 +570,12 @@ class BOARD_ADAPTER
                                            PCB_LAYER_ID aLayerId,
                                            int aClearanceValue );
 
-    void AddShapeWithClearanceToContainer( const DIMENSION *aDimension,
+    void AddShapeWithClearanceToContainer( const DIMENSION_BASE *aDimension,
                                            CGENERICCONTAINER2D *aDstContainer,
                                            PCB_LAYER_ID aLayerId,
                                            int aClearanceValue );
 
-    void AddSolidAreasShapesToContainer( const ZONE_CONTAINER *aZoneContainer,
+    void AddSolidAreasShapesToContainer( const ZONE *aZoneContainer,
                                          CGENERICCONTAINER2D *aDstContainer,
                                          PCB_LAYER_ID aLayerId );
 

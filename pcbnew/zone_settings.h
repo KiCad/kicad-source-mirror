@@ -128,12 +128,12 @@ public:
     ZONE_SETTINGS();
 
     /**
-     * operator << ( const ZONE_CONTAINER& )
+     * operator << ( const ZONE& )
      * was Function ImportSetting
      * copies settings from a given zone into this object.
      * @param aSource: the given zone
      */
-    ZONE_SETTINGS& operator << ( const ZONE_CONTAINER& aSource );
+    ZONE_SETTINGS& operator << ( const ZONE& aSource );
 
     /**
      * A helper routine for the various zone dialogs (copper, non-copper, keepout).
@@ -154,7 +154,7 @@ public:
      *   Currently:
      *      m_NetcodeSelection
      */
-    void ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport = true ) const;
+    void ExportSetting( ZONE& aTarget, bool aFullExport = true ) const;
 
     void SetCornerSmoothingType( int aType) { m_cornerSmoothingType = aType; }
 

@@ -40,7 +40,6 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_zone.h>
 #include <connectivity/connectivity_data.h>
 #include <view/view.h>
 #include "specctra.h"

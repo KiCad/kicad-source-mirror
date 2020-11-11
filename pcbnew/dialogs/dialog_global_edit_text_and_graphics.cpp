@@ -28,7 +28,7 @@
 #include <pcb_layer_box_selector.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <class_dimension.h>
+#include <dimension.h>
 #include <fp_shape.h>
 #include <pcb_text.h>
 #include <widgets/unit_binder.h>
@@ -270,10 +270,10 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
 {
     aCommit.Modify( aItem );
 
-    EDA_TEXT*  textItem = dynamic_cast<EDA_TEXT*>( aItem );
-    FP_TEXT*   fpTextItem = dynamic_cast<FP_TEXT*>( aItem );
-    PCB_SHAPE* drawItem = dynamic_cast<PCB_SHAPE*>( aItem );
-    DIMENSION* dimension = dynamic_cast<DIMENSION*>( aItem );
+    EDA_TEXT*       textItem = dynamic_cast<EDA_TEXT*>( aItem );
+    FP_TEXT*        fpTextItem = dynamic_cast<FP_TEXT*>( aItem );
+    PCB_SHAPE*      drawItem = dynamic_cast<PCB_SHAPE*>( aItem );
+    DIMENSION_BASE* dimension = dynamic_cast<DIMENSION_BASE*>( aItem );
 
     if( dimension )
         textItem = &dimension->Text();

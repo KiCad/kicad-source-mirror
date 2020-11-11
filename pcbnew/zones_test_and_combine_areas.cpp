@@ -1,9 +1,3 @@
-/**
- * @file zones_test_and_combine_areas.cpp
- * @brief Functions to test, merge and cut polygons used as copper areas outlines
- *        some pieces of code come from FreePCB.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -31,35 +25,34 @@
  */
 
 #include <class_board.h>
-#include <class_zone.h>
+#include <zone.h>
 
 
-bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
-                                   ZONE_CONTAINER* modified_area )
+bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList, ZONE* modified_area )
 {
     // clip polygon against itself
     bool modified = NormalizeAreaPolygon( aModifiedZonesList, modified_area );
 
     // now see if we need to clip against other areas
-    if( TestAreaIntersections( modified_area ) )
+    if( TestZoneIntersections( modified_area ) )
     {
         modified = true;
-        CombineAllAreasInNet( aModifiedZonesList, modified_area->GetNetCode(), true );
+        CombineAllZonesInNet( aModifiedZonesList, modified_area->GetNetCode(), true );
     }
 
     // Test for bad areas: all zones must have more than 2 corners:
     // Note: should not happen, but just in case.
-    for( ZONE_CONTAINER* zone : m_zones )
+    for( ZONE* zone : m_zones )
     {
         if( zone->GetNumCorners() < 3 )
-            RemoveArea( aModifiedZonesList, zone );
+            RemoveZone( aModifiedZonesList, zone );
     }
 
     return modified;
 }
 
 
-bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
+bool BOARD::CombineAllZonesInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
                                   bool aUseLocalFlags )
 {
     if( m_zones.size() <= 1 )
@@ -70,43 +63,42 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
     // Loop through all combinations
     for( unsigned ia1 = 0; ia1 < m_zones.size() - 1; ia1++ )
     {
-        ZONE_CONTAINER* curr_area = m_zones[ia1];
+        ZONE* refZone = m_zones[ia1];
 
-        if( curr_area->GetNetCode() != aNetCode )
+        if( refZone->GetNetCode() != aNetCode )
             continue;
 
         // legal polygon
-        BOX2I b1 = curr_area->Outline()->BBox();
+        BOX2I b1 = refZone->Outline()->BBox();
         bool  mod_ia1 = false;
 
         for( unsigned ia2 = m_zones.size() - 1; ia2 > ia1; ia2-- )
         {
-            ZONE_CONTAINER* area2 = m_zones[ia2];
+            ZONE* otherZone = m_zones[ia2];
 
-            if( area2->GetNetCode() != aNetCode )
+            if( otherZone->GetNetCode() != aNetCode )
                 continue;
 
-            if( curr_area->GetPriority() != area2->GetPriority() )
+            if( refZone->GetPriority() != otherZone->GetPriority() )
                 continue;
 
-            if( curr_area->GetIsRuleArea() != area2->GetIsRuleArea() )
+            if( refZone->GetIsRuleArea() != otherZone->GetIsRuleArea() )
                 continue;
 
-            if( curr_area->GetLayerSet() != area2->GetLayerSet() )
+            if( refZone->GetLayerSet() != otherZone->GetLayerSet() )
                 continue;
 
-            BOX2I b2 = area2->Outline()->BBox();
+            BOX2I b2 = otherZone->Outline()->BBox();
 
             if( b1.Intersects( b2 ) )
             {
-                // check area2 against curr_area
-                if( curr_area->GetLocalFlags() || area2->GetLocalFlags()
-                    || aUseLocalFlags == false )
+                // check otherZone against refZone
+                if( refZone->GetLocalFlags() || otherZone->GetLocalFlags() || !aUseLocalFlags )
                 {
-                    bool ret = TestAreaIntersection( curr_area, area2 );
+                    bool ret = TestZoneIntersection( refZone, otherZone );
 
                     if( ret )
-                        ret = CombineAreas( aDeletedList, curr_area, area2 );
+                        ret = CombineZones( aDeletedList, refZone, otherZone );
 
                     if( ret )
                     {
@@ -125,75 +117,75 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
 }
 
 
-bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
+bool BOARD::TestZoneIntersections( ZONE* aZone )
 {
-    for( ZONE_CONTAINER* area2 : m_zones)
+    for( ZONE* otherZone : m_zones )
     {
-        if( area_to_test->GetNetCode() != area2->GetNetCode() )
+        if( aZone->GetNetCode() != otherZone->GetNetCode() )
             continue;
 
-        if( area_to_test == area2 )
+        if( aZone == otherZone )
             continue;
 
         // see if areas are on same layers
-        if( area_to_test->GetLayerSet() != area2->GetLayerSet() )
+        if( aZone->GetLayerSet() != otherZone->GetLayerSet() )
             continue;
 
         // test for different priorities
-        if( area_to_test->GetPriority() != area2->GetPriority() )
+        if( aZone->GetPriority() != otherZone->GetPriority() )
             continue;
 
         // test for different types
-        if( area_to_test->GetIsRuleArea() != area2->GetIsRuleArea() )
+        if( aZone->GetIsRuleArea() != otherZone->GetIsRuleArea() )
             continue;
 
         // Keepout area-specific tests
-        if( area_to_test->GetIsRuleArea() )
+        if( aZone->GetIsRuleArea() )
         {
-            if( area_to_test->GetDoNotAllowCopperPour() != area2->GetDoNotAllowCopperPour() )
+            if( aZone->GetDoNotAllowCopperPour() != otherZone->GetDoNotAllowCopperPour() )
                 continue;
 
-            if( area_to_test->GetDoNotAllowTracks() != area2->GetDoNotAllowTracks() )
+            if( aZone->GetDoNotAllowTracks() != otherZone->GetDoNotAllowTracks() )
                 continue;
 
-            if( area_to_test->GetDoNotAllowVias() != area2->GetDoNotAllowVias() )
+            if( aZone->GetDoNotAllowVias() != otherZone->GetDoNotAllowVias() )
                 continue;
 
-            if( area_to_test->GetDoNotAllowPads() != area2->GetDoNotAllowPads() )
+            if( aZone->GetDoNotAllowPads() != otherZone->GetDoNotAllowPads() )
                 continue;
 
-            if( area_to_test->GetDoNotAllowFootprints() != area2->GetDoNotAllowFootprints() )
+            if( aZone->GetDoNotAllowFootprints() != otherZone->GetDoNotAllowFootprints() )
                 continue;
         }
         // Filled zone specific tests
         else
         {
-            if( area_to_test->GetLocalClearance() != area2->GetLocalClearance() )
+            if( aZone->GetLocalClearance() != otherZone->GetLocalClearance() )
                 continue;
 
-            if( area_to_test->GetThermalReliefGap() != area2->GetThermalReliefGap() )
+            if( aZone->GetThermalReliefGap() != otherZone->GetThermalReliefGap() )
                 continue;
 
-            if( area_to_test->GetThermalReliefSpokeWidth() != area2->GetThermalReliefSpokeWidth() )
+            if( aZone->GetThermalReliefSpokeWidth() != otherZone->GetThermalReliefSpokeWidth() )
                 continue;
 
-            if( area_to_test->GetLocalClearance() != area2->GetLocalClearance() )
+            if( aZone->GetLocalClearance() != otherZone->GetLocalClearance() )
                 continue;
 
-            if( area_to_test->GetPadConnection() != area2->GetPadConnection() )
+            if( aZone->GetPadConnection() != otherZone->GetPadConnection() )
                 continue;
 
-            if( area_to_test->GetMinThickness() != area2->GetMinThickness() )
+            if( aZone->GetMinThickness() != otherZone->GetMinThickness() )
                 continue;
 
-            if( area_to_test->GetCornerSmoothingType() != area2->GetCornerSmoothingType() )
+            if( aZone->GetCornerSmoothingType() != otherZone->GetCornerSmoothingType() )
                 continue;
 
-            if( area_to_test->GetCornerRadius() != area2->GetCornerRadius() )
+            if( aZone->GetCornerRadius() != otherZone->GetCornerRadius() )
                 continue;
         }
 
-        if( TestAreaIntersection( area_to_test, area2 ) )
+        if( TestZoneIntersection( aZone, otherZone ) )
             return true;
     }
 
@@ -201,14 +193,14 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
 }
 
 
-bool BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_test )
+bool BOARD::TestZoneIntersection( ZONE* aZone1, ZONE* aZone2 )
 {
     // see if areas are on same layer
-    if( area_ref->GetLayer() != area_to_test->GetLayer() )
+    if( aZone1->GetLayer() != aZone2->GetLayer() )
         return false;
 
-    SHAPE_POLY_SET* poly1 = area_ref->Outline();
-    SHAPE_POLY_SET* poly2 = area_to_test->Outline();
+    SHAPE_POLY_SET* poly1 = aZone1->Outline();
+    SHAPE_POLY_SET* poly2 = aZone2->Outline();
 
     // test bounding rects
     BOX2I b1 = poly1->BBox();
@@ -252,17 +244,16 @@ bool BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area
 }
 
 
-bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_ref,
-                          ZONE_CONTAINER* area_to_combine )
+bool BOARD::CombineZones( PICKED_ITEMS_LIST* aDeletedList, ZONE* aRefZone, ZONE* aZoneToCombine )
 {
-    if( area_ref == area_to_combine )
+    if( aRefZone == aZoneToCombine )
     {
         wxASSERT( 0 );
         return false;
     }
 
-    SHAPE_POLY_SET mergedOutlines = *area_ref->Outline();
-    SHAPE_POLY_SET areaToMergePoly = *area_to_combine->Outline();
+    SHAPE_POLY_SET mergedOutlines = *aRefZone->Outline();
+    SHAPE_POLY_SET areaToMergePoly = *aZoneToCombine->Outline();
 
     mergedOutlines.BooleanAdd( areaToMergePoly, SHAPE_POLY_SET::PM_FAST  );
     mergedOutlines.Simplify( SHAPE_POLY_SET::PM_FAST );
@@ -273,7 +264,7 @@ bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_
     // but we should never have more than 2 polys
     if( mergedOutlines.OutlineCount() > 2 )
     {
-        wxLogMessage( "BOARD::CombineAreas error: more than 2 polys after merging" );
+        wxLogMessage( "BOARD::CombineZones error: more than 2 polys after merging" );
         return false;
     }
 
@@ -281,13 +272,13 @@ bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_
         return false;
 
     // Update the area with the new merged outline
-    delete area_ref->Outline();
-    area_ref->SetOutline( new SHAPE_POLY_SET( mergedOutlines ) );
+    delete aRefZone->Outline();
+    aRefZone->SetOutline( new SHAPE_POLY_SET( mergedOutlines ) );
 
-    RemoveArea( aDeletedList, area_to_combine );
+    RemoveZone( aDeletedList, aZoneToCombine );
 
-    area_ref->SetLocalFlags( 1 );
-    area_ref->HatchBorder();
+    aRefZone->SetLocalFlags( 1 );
+    aRefZone->HatchBorder();
 
     return true;
 }

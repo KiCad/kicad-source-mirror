@@ -45,7 +45,7 @@
 #include <pcb_edit_frame.h>
 
 #include <class_board.h>
-#include <class_zone.h>
+#include <zone.h>
 
 #include <pcbnew.h>
 #include <zones.h>
@@ -58,7 +58,7 @@
  * info relative to filling is not take in account
  * @param aZoneToCompare = zone to compare with "this"
  */
-bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
+bool ZONE::IsSame( const ZONE& aZoneToCompare )
 {
     // compare basic parameters:
     if( GetLayerSet() != aZoneToCompare.GetLayerSet() )
@@ -149,7 +149,7 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, LA
 
     for( unsigned ii = 0; ; ii++ )
     {
-        ZONE_CONTAINER* zone = aPcb->GetArea( ii );
+        ZONE* zone = aPcb->GetArea( ii );
 
         if( zone == NULL )      // End of list
             break;
@@ -160,7 +160,7 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, LA
         if( aLayer >= 0 && !zone->GetLayerSet().test( aLayer ) )
             continue;
 
-        ZONE_CONTAINER* zoneDup = new ZONE_CONTAINER( *zone );
+        ZONE* zoneDup = new ZONE( *zone );
         zoneDup->SetParent( aPcb );
         ITEM_PICKER picker( nullptr, zone, UNDO_REDO::CHANGED );
         picker.SetLink( zoneDup );
@@ -215,11 +215,11 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
     {
         UNDO_REDO status = aPickList.GetPickedItemStatus( kk );
 
-        ZONE_CONTAINER* ref = (ZONE_CONTAINER*) aPickList.GetPickedItem( kk );
+        ZONE* ref = (ZONE*) aPickList.GetPickedItem( kk );
 
         for( unsigned ii = 0; ; ii++ )  // analyse the main picked list
         {
-            ZONE_CONTAINER* zone = aPcb->GetArea( ii );
+            ZONE* zone = aPcb->GetArea( ii );
 
             if( zone == NULL )
             {
@@ -238,7 +238,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                 }
                 else
                 {
-                    ZONE_CONTAINER* zcopy = (ZONE_CONTAINER*) aPickList.GetPickedItemLink( kk );
+                    ZONE* zcopy = (ZONE*) aPickList.GetPickedItemLink( kk );
                     aPickList.SetPickedItemStatus( UNDO_REDO::DELETED, kk );
 
                     wxASSERT_MSG( zcopy != NULL,
@@ -280,7 +280,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
             {
                 if( aPickList.GetPickedItemStatus( kk ) != UNDO_REDO::NEWITEM )
                 {
-                    ZONE_CONTAINER* zcopy = (ZONE_CONTAINER*) aPickList.GetPickedItemLink( kk );
+                    ZONE* zcopy = (ZONE*) aPickList.GetPickedItemLink( kk );
 
                     if( zone->IsSame( *zcopy ) )    // Remove picked, because no changes
                     {

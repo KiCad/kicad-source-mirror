@@ -37,7 +37,7 @@
 
 #include "zones.h"
 #include <fp_text.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <functional>
 
 class LINE_READER;
@@ -100,7 +100,7 @@ public:
 
 DECL_DEQ_FOR_SWIG( PADS, D_PAD* )
 DECL_DEQ_FOR_SWIG( DRAWINGS, BOARD_ITEM* )
-DECL_VEC_FOR_SWIG( MODULE_ZONE_CONTAINERS, MODULE_ZONE_CONTAINER* )
+DECL_VEC_FOR_SWIG( FP_ZONES, FP_ZONE* )
 DECL_VEC_FOR_SWIG( MODULE_GROUPS, PCB_GROUP* )
 DECL_DEQ_FOR_SWIG( MODULES, MODULE* )
 
@@ -176,19 +176,18 @@ public:
 
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
-
     const EDA_RECT GetBoundingBox( bool aIncludeInvisibleText ) const;
 
-    PADS& Pads() { return m_pads; }
+    PADS& Pads()             { return m_pads; }
     const PADS& Pads() const { return m_pads; }
 
-    DRAWINGS& GraphicalItems() { return m_drawings; }
+    DRAWINGS& GraphicalItems()             { return m_drawings; }
     const DRAWINGS& GraphicalItems() const { return m_drawings; }
 
-    MODULE_ZONE_CONTAINERS& Zones()  { return m_fp_zones; }
-    const MODULE_ZONE_CONTAINERS& Zones() const { return m_fp_zones; }
+    FP_ZONES& Zones()             { return m_fp_zones; }
+    const FP_ZONES& Zones() const { return m_fp_zones; }
 
-    MODULE_GROUPS& Groups() { return m_fp_groups; }
+    MODULE_GROUPS& Groups()             { return m_fp_groups; }
     const MODULE_GROUPS& Groups() const { return m_fp_groups; }
 
     bool HasThroughHolePads() const;
@@ -197,11 +196,9 @@ public:
     const std::list<MODULE_3D_SETTINGS>& Models() const { return m_3D_Drawings; }
 
     void SetPosition( const wxPoint& aPos ) override;
-
     wxPoint GetPosition() const override { return m_Pos; }
 
     void SetOrientation( double aNewAngle );
-
     void SetOrientationDegrees( double aOrientation ) { SetOrientation( aOrientation * 10.0 ); }
     double GetOrientation() const { return m_Orient; }
     double GetOrientationDegrees() const { return m_Orient / 10.0; }
@@ -696,7 +693,7 @@ public:
 private:
     DRAWINGS               m_drawings;  // BOARD_ITEMs for drawings on the board, owned by pointer.
     PADS                   m_pads;      // D_PAD items, owned by pointer
-    MODULE_ZONE_CONTAINERS m_fp_zones;  // MODULE_ZONE_CONTAINER items, owned by pointer
+    FP_ZONES               m_fp_zones;  // FP_ZONE items, owned by pointer
     MODULE_GROUPS          m_fp_groups; // PCB_GROUP items, owned by pointer
 
     double         m_Orient;            // Orientation in tenths of a degree, 900=90.0 degrees.

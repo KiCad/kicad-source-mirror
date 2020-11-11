@@ -40,7 +40,7 @@
 #include <class_pad.h>
 #include <pcb_text.h>
 #include <fp_shape.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <kicad_string.h>
 #include <fp_text.h>
 #include <convert_basic_shapes_to_polygon.h>
@@ -130,10 +130,9 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_TEXT* aText,
 }
 
 
-void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DIMENSION* aDimension,
+void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DIMENSION_BASE* aDimension,
                                                       CGENERICCONTAINER2D *aDstContainer,
-                                                      PCB_LAYER_ID aLayerId,
-                                                      int aClearanceValue )
+                                                      PCB_LAYER_ID aLayerId, int aClearanceValue )
 {
     AddShapeWithClearanceToContainer(&aDimension->Text(), aDstContainer, aLayerId, aClearanceValue);
 
@@ -762,7 +761,7 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_SHAPE* aDrawSegm
 // Based on
 // TransformSolidAreasShapesToPolygonSet
 // board_items_to_polygon_shape_transform.cpp
-void BOARD_ADAPTER::AddSolidAreasShapesToContainer( const ZONE_CONTAINER* aZoneContainer,
+void BOARD_ADAPTER::AddSolidAreasShapesToContainer( const ZONE* aZoneContainer,
                                                     CGENERICCONTAINER2D *aDstContainer,
                                                     PCB_LAYER_ID aLayerId )
 {

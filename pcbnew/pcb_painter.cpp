@@ -30,11 +30,11 @@
 #include <class_pad.h>
 #include <pcb_shape.h>
 #include <kicad_string.h>
-#include <class_zone.h>
+#include <zone.h>
 #include <pcb_text.h>
 #include <class_marker_pcb.h>
-#include <class_dimension.h>
-#include <class_pcb_target.h>
+#include <dimension.h>
+#include <pcb_target.h>
 
 #include <layers_id_colors_and_visibility.h>
 #include <pcb_painter.h>
@@ -229,7 +229,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     const BOARD_CONNECTED_ITEM* conItem = dynamic_cast<const BOARD_CONNECTED_ITEM*> ( aItem );
 
     // Zones should pull from the copper layer
-    if( item && item->Type() == PCB_ZONE_AREA_T && IsZoneLayer( aLayer ) )
+    if( item && item->Type() == PCB_ZONE_T && IsZoneLayer( aLayer ) )
         aLayer = aLayer - LAYER_ZONE_START;
 
     // Marker shadows
@@ -356,7 +356,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         color.a *= m_viaOpacity;
     else if( item->Type() == PCB_PAD_T )
         color.a *= m_padOpacity;
-    else if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_FP_ZONE_AREA_T )
+    else if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
         color.a *= m_zoneOpacity;
 
     // No special modificators enabled
@@ -447,19 +447,19 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         draw( static_cast<const PCB_GROUP*>( item ), aLayer );
         break;
 
-    case PCB_ZONE_AREA_T:
-        draw( static_cast<const ZONE_CONTAINER*>( item ), aLayer );
+    case PCB_ZONE_T:
+        draw( static_cast<const ZONE*>( item ), aLayer );
         break;
 
-    case PCB_FP_ZONE_AREA_T:
-        draw( static_cast<const ZONE_CONTAINER*>( item ), aLayer );
+    case PCB_FP_ZONE_T:
+        draw( static_cast<const ZONE*>( item ), aLayer );
         break;
 
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_CENTER_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-        draw( static_cast<const DIMENSION*>( item ), aLayer );
+        draw( static_cast<const DIMENSION_BASE*>( item ), aLayer );
         break;
 
     case PCB_TARGET_T:
@@ -1381,7 +1381,7 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
+void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
 {
     /**
      * aLayer will be the virtual zone layer (LAYER_ZONE_START, ... in GAL_LAYER_ID)
@@ -1465,7 +1465,7 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
+void PCB_PAINTER::draw( const DIMENSION_BASE* aDimension, int aLayer )
 {
     const COLOR4D& strokeColor = m_pcbSettings.GetColor( aDimension, aLayer );
 

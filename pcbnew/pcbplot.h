@@ -41,12 +41,12 @@ class PLOTTER;
 class PCB_TEXT;
 class D_PAD;
 class PCB_SHAPE;
-class DIMENSION;
+class DIMENSION_BASE;
 class MODULE;
 class FP_SHAPE;
 class PCB_TARGET;
 class FP_TEXT;
-class ZONE_CONTAINER;
+class ZONE;
 class BOARD;
 class REPORTER;
 class wxFileName;
@@ -100,9 +100,9 @@ public:
      */
     void PlotFootprintTextItems( MODULE* aModule );
 
-    void PlotDimension( DIMENSION* Dimension );
+    void PlotDimension( DIMENSION_BASE* Dimension );
     void PlotPcbTarget( PCB_TARGET* PtMire );
-    void PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aPolysList );
+    void PlotFilledAreas( ZONE* aZone, SHAPE_POLY_SET& aPolysList );
     void PlotPcbText( PCB_TEXT* aText );
     void PlotPcbShape( PCB_SHAPE* aShape );
 
