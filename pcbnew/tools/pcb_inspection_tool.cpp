@@ -1029,7 +1029,7 @@ int PCB_INSPECTION_TOOL::ListNets( const TOOL_EVENT& aEvent )
     if( m_listNetsDialog == nullptr )
     {
         m_listNetsDialog =
-                std::make_unique<DIALOG_SELECT_NET_FROM_LIST>( m_frame, m_listNetsDialogSettings );
+                std::make_unique<DIALOG_NET_INSPECTOR>( m_frame, m_listNetsDialogSettings );
 
         m_listNetsDialog->Connect( wxEVT_CLOSE_WINDOW,
                 wxCommandEventHandler( PCB_INSPECTION_TOOL::onListNetsDialogClosed ), nullptr,

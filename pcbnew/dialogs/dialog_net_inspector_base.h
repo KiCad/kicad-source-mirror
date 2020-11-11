@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Oct  9 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,8 +18,8 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/checkbox.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/combobox.h>
 #include <wx/dataview.h>
 #include <wx/bmpbuttn.h>
@@ -34,9 +34,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_SELECT_NET_FROM_LIST_BASE
+/// Class DIALOG_NET_INSPECTOR_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_SELECT_NET_FROM_LIST_BASE : public DIALOG_SHIM
+class DIALOG_NET_INSPECTOR_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -45,12 +45,8 @@ class DIALOG_SELECT_NET_FROM_LIST_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textCtrlFilter;
 		wxCheckBox* m_cbShowZeroPad;
 		wxCheckBox* m_groupBy;
-		wxComboBox* m_groupByKind;
 		wxTextCtrl* m_groupByText;
-		wxCheckBox* m_groupsFirst;
-		wxStaticText* m_staticTextFilter1;
-		wxComboBox* m_viaLengthType;
-		wxTextCtrl* m_constViaLength;
+		wxComboBox* m_groupByKind;
 		wxDataViewCtrl* m_netsList;
 		wxBitmapButton* m_addNet;
 		wxBitmapButton* m_renameNet;
@@ -62,8 +58,6 @@ class DIALOG_SELECT_NET_FROM_LIST_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void onFilterChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onGroupsFirstChanged( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onViaLengthChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSortingChanged( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void onSelChanged( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void onListSize( wxSizeEvent& event ) { event.Skip(); }
@@ -75,8 +69,8 @@ class DIALOG_SELECT_NET_FROM_LIST_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Net Inspector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_SELECT_NET_FROM_LIST_BASE();
+		DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Net Inspector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~DIALOG_NET_INSPECTOR_BASE();
 
 };
 

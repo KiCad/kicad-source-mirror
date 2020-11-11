@@ -26,7 +26,7 @@
 #pragma once
 
 #include <core/optional.h>
-#include <dialog_select_net_from_list_base.h>
+#include <dialog_net_inspector_base.h>
 
 class PCB_EDIT_FRAME;
 class NETINFO_ITEM;
@@ -34,7 +34,7 @@ class BOARD;
 class CN_ITEM;
 class EDA_PATTERN_MATCH;
 
-class DIALOG_SELECT_NET_FROM_LIST : public DIALOG_SELECT_NET_FROM_LIST_BASE, public BOARD_LISTENER
+class DIALOG_NET_INSPECTOR : public DIALOG_NET_INSPECTOR_BASE, public BOARD_LISTENER
 {
 public:
     struct SETTINGS
@@ -44,17 +44,14 @@ public:
         bool     group_by           = false;
         int      group_by_kind      = 0;
         wxString group_by_text;
-        int      sorting_column = -1;
-        bool     sort_order_asc = true;
+        int      sorting_column     = -1;
+        bool     sort_order_asc     = true;
 
         std::vector<int> column_order;
-
-        unsigned int const_via_length = 0;
-        int          via_length_type  = 0;
     };
 
-    DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParent, const SETTINGS& aSettings );
-    ~DIALOG_SELECT_NET_FROM_LIST();
+    DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent, const SETTINGS& aSettings );
+    ~DIALOG_NET_INSPECTOR();
 
     SETTINGS Settings() const;
 
@@ -91,12 +88,10 @@ private:
     void                  updateNet( NETINFO_ITEM* aNet );
     unsigned int          calculateViaLength( const TRACK* ) const;
 
-    void onGroupsFirstChanged( wxCommandEvent& event ) override;
     void onSelChanged( wxDataViewEvent& event ) override;
     void onSelChanged();
     void onSortingChanged( wxDataViewEvent& event ) override;
     void onFilterChange( wxCommandEvent& event ) override;
-    void onViaLengthChange( wxCommandEvent& event ) override;
     void onListSize( wxSizeEvent& event ) override;
     void onAddNet( wxCommandEvent& event ) override;
     void onRenameNet( wxCommandEvent& event ) override;
@@ -127,7 +122,6 @@ private:
     PCB_EDIT_FRAME* m_frame;
     bool            m_in_build_nets_list = false;
     bool            m_filter_change_no_rebuild = false;
-    unsigned int    m_constViaLengthValue      = 0;
 
     class DATA_MODEL;
     wxObjectDataPtr<DATA_MODEL> m_data_model;

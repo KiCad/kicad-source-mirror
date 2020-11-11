@@ -111,6 +111,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_layer_selection_base.cpp
     dialogs/dialog_move_exact.cpp
     dialogs/dialog_move_exact_base.cpp
+    dialogs/dialog_net_inspector.cpp
+    dialogs/dialog_net_inspector_base.cpp
     dialogs/dialog_netlist.cpp
     dialogs/dialog_netlist_base.cpp
     dialogs/dialog_non_copper_zones_properties.cpp
@@ -129,8 +131,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_position_relative.cpp
     dialogs/dialog_position_relative_base.cpp
     dialogs/dialog_print_pcbnew.cpp
-    dialogs/dialog_select_net_from_list.cpp
-    dialogs/dialog_select_net_from_list_base.cpp
     dialogs/dialog_swap_layers.cpp
     dialogs/dialog_swap_layers_base.cpp
     dialogs/dialog_target_properties.cpp

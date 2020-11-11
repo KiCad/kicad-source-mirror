@@ -24,13 +24,11 @@
  */
 
 #include <kicad_string.h>
-#include <pcbnew.h>
 #include <tools/pcb_inspection_tool.h>
 #include <class_board.h>
 #include <class_track.h>
-#include <dialog_select_net_from_list.h>
+#include <dialog_net_inspector.h>
 #include <eda_pattern_match.h>
-#include <kicad_string.h>
 #include <wildcards_and_files_ext.h>
 #include <view/view.h>
 #include <view/view_controls.h>
@@ -43,7 +41,7 @@
 #include <wx/tokenzr.h>
 #include <bitset>
 
-struct DIALOG_SELECT_NET_FROM_LIST::COLUMN_DESC
+struct DIALOG_NET_INSPECTOR::COLUMN_DESC
 {
     enum
     {
@@ -63,9 +61,11 @@ struct DIALOG_SELECT_NET_FROM_LIST::COLUMN_DESC
 };
 
 
-#define def_col( c, num, name, csv_name, csv_flags )                                             \
-    const DIALOG_SELECT_NET_FROM_LIST::COLUMN_DESC DIALOG_SELECT_NET_FROM_LIST::c = { num, name, \
-        csv_name, COLUMN_DESC::csv_flags }
+#define def_col( c, num, name, csv_name, csv_flags ) \
+    const DIALOG_NET_INSPECTOR::COLUMN_DESC DIALOG_NET_INSPECTOR::c = { num, \
+                                                                        name, \
+                                                                        csv_name, \
+                                                                        COLUMN_DESC::csv_flags }
 
 def_col( COLUMN_NET,          0, _( "Net" ),          _( "Net Code" ),     CSV_NONE );
 def_col( COLUMN_NAME,         1, _( "Name" ),         _( "Net Name" ),     CSV_QUOTE );
@@ -79,7 +79,7 @@ def_col( COLUMN_TOTAL_LENGTH, 7, _( "Total Length" ), _( "Net Length" ),   CSV_N
 #undef def_col
 
 
-class DIALOG_SELECT_NET_FROM_LIST::LIST_ITEM
+class DIALOG_NET_INSPECTOR::LIST_ITEM
 {
 private:
     // an item can be the child of only one parent at a time.
@@ -104,64 +104,38 @@ private:
     wxString m_net_name;
 
 public:
-    LIST_ITEM( unsigned int aGroupNumber, const wxString& aGroupName )
-            : m_is_group( true ), m_group_number( aGroupNumber ), m_net_name( aGroupName )
+    LIST_ITEM( unsigned int aGroupNumber, const wxString& aGroupName ) :
+            m_is_group( true ),
+            m_group_number( aGroupNumber ),
+            m_net_name( aGroupName )
     {
     }
 
-    LIST_ITEM( NETINFO_ITEM* aNet ) : m_net( aNet )
+    LIST_ITEM( NETINFO_ITEM* aNet ) :
+            m_net( aNet )
     {
         m_net_name = UnescapeString( aNet->GetNetname() );
     }
 
     LIST_ITEM& operator=( const LIST_ITEM& ) = delete;
 
-    bool isGroup() const
+    bool GetIsGroup() const { return m_is_group; }
+
+    auto ChildrenBegin() const { return m_children.begin(); }
+    auto ChildrenEnd() const { return m_children.end(); }
+    unsigned int ChildrenCount() const { return m_children.size(); }
+
+    NETINFO_ITEM* GetNet() const { return m_net; }
+
+    int GetNetCode() const
     {
-        return m_is_group;
+        return GetIsGroup() ? ( 0 - int( m_group_number ) - 1 ) : m_net->GetNet();
     }
 
-    unsigned int groupNumber() const
-    {
-        return m_group_number;
-    }
+    const wxString& GetNetName() const { return m_net_name; }
+    const wxString& GetGroupName() const { return m_net_name; }
 
-    auto childrenBegin() const
-    {
-        return m_children.begin();
-    }
-
-    auto childrenEnd() const
-    {
-        return m_children.end();
-    }
-
-    unsigned int childrenCount() const
-    {
-        return m_children.size();
-    }
-
-    NETINFO_ITEM* net() const
-    {
-        return m_net;
-    }
-
-    int netCode() const
-    {
-        return isGroup() ? ( 0 - int( m_group_number ) - 1 ) : m_net->GetNet();
-    }
-
-    const wxString& netName() const
-    {
-        return m_net_name;
-    }
-
-    const wxString& groupName() const
-    {
-        return m_net_name;
-    }
-
-    void resetColumnChangedBits()
+    void ResetColumnChangedBits()
     {
         m_column_changed.reset();
     }
@@ -207,44 +181,44 @@ public:
         mvar -= aValue;                                                             \
     }
 
-    gen( m_pad_count, 0, padCount, setPadCount, addPadCount, subPadCount, padCountChanged );
-    gen( m_via_count, 1, viaCount, setViaCount, addViaCount, subViaCount, viaCountChanged );
-    gen( m_via_length, 2, viaLength, setViaLength, addViaLength, subViaLength, viaLengthChanged );
-    gen( m_board_wire_length, 3, boardWireLength, setBoardWireLength, addBoardWireLength,
-            subBoardWireLength, boardWireLengthChanged );
-    gen( m_chip_wire_length, 4, chipWireLength, setChipWireLength, addChipWireLength,
-            subChipWireLength, chipWireLengthChanged );
+    gen( m_pad_count, 0, GetPadCount, SetPadCount, AddPadCount, SubPadCount, PadCountChanged );
+    gen( m_via_count, 1, GetViaCount, SetViaCount, AddViaCount, SubViaCount, ViaCountChanged );
+    gen( m_via_length, 2, GetViaLength, SetViaLength, AddViaLength, SubViaLength, ViaLengthChanged );
+    gen( m_board_wire_length, 3, GetBoardWireLength, SetBoardWireLength, AddBoardWireLength,
+            SubBoardWireLength, BoardWireLengthChanged );
+    gen( m_chip_wire_length, 4, GetChipWireLength, SetChipWireLength, AddChipWireLength,
+            SubChipWireLength, ChipWireLengthChanged );
 
 #undef gen
 
     // the total length column is always computed, never stored.
-    auto totalLength() const
+    auto GetTotalLength() const
     {
-        return boardWireLength() + viaLength() + chipWireLength();
+        return GetBoardWireLength() + GetViaLength() + GetChipWireLength();
     }
 
-    bool totalLengthChanged() const
+    bool TotalLengthChanged() const
     {
-        return boardWireLengthChanged() | viaLengthChanged() | chipWireLengthChanged();
+        return BoardWireLengthChanged() | ViaLengthChanged() | ChipWireLengthChanged();
     }
 
-    LIST_ITEM* parent() const
+    LIST_ITEM* Parent() const
     {
         return m_parent;
     }
 
-    void setParent( LIST_ITEM* aParent )
+    void SetParent( LIST_ITEM* aParent )
     {
         if( m_parent == aParent )
             return;
 
         if( m_parent != nullptr )
         {
-            m_parent->subPadCount( padCount() );
-            m_parent->subViaCount( viaCount() );
-            m_parent->subViaLength( viaLength() );
-            m_parent->subBoardWireLength( boardWireLength() );
-            m_parent->subChipWireLength( chipWireLength() );
+            m_parent->SubPadCount( GetPadCount() );
+            m_parent->SubViaCount( GetViaCount() );
+            m_parent->SubViaLength( GetViaLength() );
+            m_parent->SubBoardWireLength( GetBoardWireLength() );
+            m_parent->SubChipWireLength( GetChipWireLength() );
 
             m_parent->m_children.erase( std::find( m_parent->m_children.begin(),
                                                    m_parent->m_children.end(), this ) );
@@ -254,11 +228,11 @@ public:
 
         if( m_parent != nullptr )
         {
-            m_parent->addPadCount( padCount() );
-            m_parent->addViaCount( viaCount() );
-            m_parent->addViaLength( viaLength() );
-            m_parent->addBoardWireLength( boardWireLength() );
-            m_parent->addChipWireLength( chipWireLength() );
+            m_parent->AddPadCount( GetPadCount() );
+            m_parent->AddViaCount( GetViaCount() );
+            m_parent->AddViaLength( GetViaLength() );
+            m_parent->AddBoardWireLength( GetBoardWireLength() );
+            m_parent->AddChipWireLength( GetChipWireLength() );
 
             m_parent->m_children.push_back( this );
         }
@@ -266,32 +240,32 @@ public:
 };
 
 
-struct DIALOG_SELECT_NET_FROM_LIST::LIST_ITEM_NETCODE_CMP_LESS
+struct DIALOG_NET_INSPECTOR::LIST_ITEM_NETCODE_CMP_LESS
 {
     template <typename T>
     bool operator()( const T& a, const T& b ) const
     {
-        return a->netCode() < b->netCode();
+        return a->GetNetCode() < b->GetNetCode();
     }
 
     template <typename T>
     bool operator()( const T& a, int b ) const
     {
-        return a->netCode() < b;
+        return a->GetNetCode() < b;
     }
 
     template <typename T>
     bool operator()( int a, const T& b ) const
     {
-        return a < b->netCode();
+        return a < b->GetNetCode();
     }
 };
 
 
-class DIALOG_SELECT_NET_FROM_LIST::DATA_MODEL : public wxDataViewModel
+class DIALOG_NET_INSPECTOR::DATA_MODEL : public wxDataViewModel
 {
 private:
-    DIALOG_SELECT_NET_FROM_LIST& m_parent;
+    DIALOG_NET_INSPECTOR& m_parent;
 
     // primary container, sorted by netcode number.
     // groups have netcode < 0, so they always come first, in the order
@@ -299,20 +273,24 @@ private:
     // in order of occurance (group mode 2, 3).
     std::vector<std::unique_ptr<LIST_ITEM>> m_items;
 
-    bool m_sort_groups_first = false;
-
 public:
     static const auto& columnDesc()
     {
-        static const std::array<COLUMN_DESC, 8> r = { { COLUMN_NET, COLUMN_NAME, COLUMN_PAD_COUNT,
-                COLUMN_VIA_COUNT, COLUMN_VIA_LENGTH, COLUMN_BOARD_LENGTH, COLUMN_CHIP_LENGTH,
-                COLUMN_TOTAL_LENGTH } };
+        static const std::array<COLUMN_DESC, 8> r =
+                { { COLUMN_NET,
+                    COLUMN_NAME,
+                    COLUMN_PAD_COUNT,
+                    COLUMN_VIA_COUNT,
+                    COLUMN_VIA_LENGTH,
+                    COLUMN_BOARD_LENGTH,
+                    COLUMN_CHIP_LENGTH,
+                    COLUMN_TOTAL_LENGTH } };
 
         return r;
     }
 
 
-    DATA_MODEL( DIALOG_SELECT_NET_FROM_LIST& parent ) : m_parent( parent )
+    DATA_MODEL( DIALOG_NET_INSPECTOR& parent ) : m_parent( parent )
     {
     }
 
@@ -348,7 +326,7 @@ public:
         auto i = std::lower_bound(
                 m_items.begin(), m_items.end(), aNetCode, LIST_ITEM_NETCODE_CMP_LESS() );
 
-        if( i == m_items.end() || ( *i )->netCode() != aNetCode )
+        if( i == m_items.end() || ( *i )->GetNetCode() != aNetCode )
             return {};
 
         return { i };
@@ -374,7 +352,7 @@ public:
         // however, if we've got filtering enabled, we might not have all the nets in
         // our list, so do a sorted insertion.
 
-        auto new_i = std::lower_bound( m_items.begin(), m_items.end(), aItem->netCode(),
+        auto new_i = std::lower_bound( m_items.begin(), m_items.end(), aItem->GetNetCode(),
                                        LIST_ITEM_NETCODE_CMP_LESS() );
 
         new_i = m_items.insert( new_i, std::move( aItem ) );
@@ -385,9 +363,9 @@ public:
         {
             for( unsigned int j = 0; j < m_parent.m_groupFilter.size(); ++j )
             {
-                if( m_parent.m_groupFilter[j]->Find( ( *new_i )->netName() ) )
+                if( m_parent.m_groupFilter[j]->Find(( *new_i )->GetNetName() ) )
                 {
-                    ( *new_i )->setParent( &*m_items[j] );
+                    ( *new_i )->SetParent( &*m_items[j] );
                     break;
                 }
             }
@@ -400,21 +378,21 @@ public:
             auto groups_end   = std::find_if_not( m_items.begin(), m_items.end(),
                                                   []( const std::unique_ptr<LIST_ITEM>& x )
                                                   {
-                                                      return x->isGroup();
+                                                      return x->GetIsGroup();
                                                   } );
 
             for( std::unique_ptr<EDA_PATTERN_MATCH>& f : m_parent.m_groupFilter )
             {
-                EDA_PATTERN_MATCH::FIND_RESULT match = f->Find( ( *new_i )->netName() );
+                EDA_PATTERN_MATCH::FIND_RESULT match = f->Find(( *new_i )->GetNetName() );
 
                 if( match )
                 {
-                    wxString match_str = ( *new_i )->netName().substr( match.start, match.length );
+                    wxString match_str = ( *new_i )->GetNetName().substr( match.start, match.length );
 
                     auto group = std::find_if( groups_begin, groups_end,
                                                [&]( const std::unique_ptr<LIST_ITEM>& x )
                                                {
-                                                   return x->netName() == match_str;
+                                                   return x->GetNetName() == match_str;
                                                } );
 
                     if( group == groups_end )
@@ -425,17 +403,17 @@ public:
 
                         groups_end = group + 1;
 
-                        ItemAdded( wxDataViewItem( ( *group )->parent() ),
+                        ItemAdded( wxDataViewItem(( *group )->Parent() ),
                                    wxDataViewItem( &**group ) );
                     }
 
-                    ( *new_i )->setParent( &**group );
+                    ( *new_i )->SetParent( &**group );
                     break;
                 }
             }
         }
 
-        ItemAdded( wxDataViewItem( ( *new_i )->parent() ), wxDataViewItem( &**new_i ) );
+        ItemAdded( wxDataViewItem(( *new_i )->Parent() ), wxDataViewItem( &**new_i ) );
 
         return { new_i };
     }
@@ -458,9 +436,9 @@ public:
                 {
                     for( unsigned int j = 0; j < m_parent.m_groupFilter.size(); ++j )
                     {
-                        if( m_parent.m_groupFilter[j]->Find( m_items[i]->netName() ) )
+                        if( m_parent.m_groupFilter[j]->Find( m_items[ i ]->GetNetName() ) )
                         {
-                            m_items[i]->setParent( &*m_items[j] );
+                            m_items[i]->SetParent( &*m_items[j] );
                             break;
                         }
                     }
@@ -479,16 +457,16 @@ public:
                 {
                     for( std::unique_ptr<EDA_PATTERN_MATCH>& f : m_parent.m_groupFilter )
                     {
-                        EDA_PATTERN_MATCH::FIND_RESULT match = f->Find( i->netName() );
+                        EDA_PATTERN_MATCH::FIND_RESULT match = f->Find( i->GetNetName() );
 
                         if( match )
                         {
-                            wxString match_str = i->netName().substr( match.start, match.length );
+                            wxString match_str = i->GetNetName().substr( match.start, match.length );
 
                             auto group = std::find_if( groups.begin(), groups.end(),
                                                        [&]( const std::unique_ptr<LIST_ITEM>& x )
                                                        {
-                                                           return x->netName() == match_str;
+                                                           return x->GetNetName() == match_str;
                                                        } );
 
                             if( group == groups.end() )
@@ -498,7 +476,7 @@ public:
                                 group = groups.end() - 1;
                             }
 
-                            i->setParent( &**group );
+                            i->SetParent( &**group );
                             break;
                         }
                     }
@@ -512,7 +490,7 @@ public:
             }
 
             for( std::unique_ptr<LIST_ITEM>& i : m_items )
-                ItemAdded( wxDataViewItem( i->parent() ), wxDataViewItem( &*i ) );
+                ItemAdded( wxDataViewItem( i->Parent() ), wxDataViewItem( &*i ) );
         }
         else
         {
@@ -532,8 +510,8 @@ public:
         std::unique_ptr<LIST_ITEM> i = std::move( **aRow );
 
         // if the row has a parent, detach it first
-        LIST_ITEM* parent = i->parent();
-        i->setParent( nullptr );
+        LIST_ITEM* parent = i->Parent();
+        i->SetParent( nullptr );
 
         m_items.erase( *aRow );
 
@@ -544,7 +522,7 @@ public:
         // for grouping type 2,3 a group item might disappear if it becomes empty.
         if( ( m_parent.m_groupByKind->GetSelection() == 2
                     || m_parent.m_groupByKind->GetSelection() == 3 )
-                && parent != nullptr && parent->childrenCount() == 0 )
+                && parent != nullptr && parent->ChildrenCount() == 0 )
         {
             auto p = std::find_if( m_items.begin(), m_items.end(),
                                    [&]( std::unique_ptr<LIST_ITEM>& x )
@@ -555,7 +533,7 @@ public:
             wxASSERT( p != m_items.end() );
             m_items.erase( p );
 
-            ItemDeleted( wxDataViewItem( parent->parent() ), wxDataViewItem( parent ) );
+            ItemDeleted( wxDataViewItem( parent->Parent() ), wxDataViewItem( parent ) );
         }
         else
             resortIfChanged( parent );
@@ -576,8 +554,8 @@ public:
         if( !aRow )
             return;
 
-        if( ( **aRow )->parent() )
-            ItemChanged( wxDataViewItem( ( **aRow )->parent() ) );
+        if(( **aRow )->Parent() )
+            ItemChanged( wxDataViewItem(( **aRow )->Parent() ) );
 
         ItemChanged( wxDataViewItem( &***aRow ) );
         resortIfChanged( &***aRow );
@@ -597,11 +575,11 @@ public:
         {
             bool changed = false;
 
-            for( const LIST_ITEM* i = aItem; i != nullptr; i = i->parent() )
+            for( const LIST_ITEM* i = aItem; i != nullptr; i = i->Parent() )
                 changed |= itemColumnChanged( i, column->GetModelColumn() );
 
-            for( LIST_ITEM* i = aItem; i != nullptr; i = i->parent() )
-                i->resetColumnChangedBits();
+            for( LIST_ITEM* i = aItem; i != nullptr; i = i->Parent() )
+                i->ResetColumnChangedBits();
 
             if( changed )
                 Resort();
@@ -615,43 +593,26 @@ public:
             return false;
 
         if( aCol == COLUMN_PAD_COUNT )
-            return aItem->padCountChanged();
+            return aItem->PadCountChanged();
 
         else if( aCol == COLUMN_VIA_COUNT )
-            return aItem->viaCountChanged();
+            return aItem->ViaCountChanged();
 
         else if( aCol == COLUMN_VIA_LENGTH )
-            return aItem->viaLengthChanged();
+            return aItem->ViaLengthChanged();
 
         else if( aCol == COLUMN_BOARD_LENGTH )
-            return aItem->boardWireLengthChanged();
+            return aItem->BoardWireLengthChanged();
 
         else if( aCol == COLUMN_CHIP_LENGTH )
-            return aItem->chipWireLengthChanged();
+            return aItem->ChipWireLengthChanged();
 
         else if( aCol == COLUMN_TOTAL_LENGTH )
-            return aItem->totalLengthChanged();
+            return aItem->TotalLengthChanged();
 
         return false;
     }
 
-
-    void setSortGroupsFirst( bool aValue )
-    {
-        if( aValue == m_sort_groups_first )
-            return;
-
-        m_sort_groups_first = aValue;
-
-        if( m_parent.m_netsList->GetSortingColumn() )
-            Resort();
-    }
-
-
-    bool isSortGroupsFirst() const
-    {
-        return m_sort_groups_first;
-    }
 
     // implementation of wxDataViewModel interface
     // these are used to query the data model by the GUI view implementation.
@@ -670,32 +631,32 @@ protected:
     {
         if( LIST_ITEM* i = static_cast<LIST_ITEM*>( aItem.GetID() ) )
         {
-            if( aCol == COLUMN_NET && !i->isGroup() )
-                aOutValue = m_parent.formatNetCode( i->net() );
+            if( aCol == COLUMN_NET && !i->GetIsGroup() )
+                aOutValue = m_parent.formatNetCode( i->GetNet() );
 
-            else if( aCol == COLUMN_NET && i->isGroup() )
+            else if( aCol == COLUMN_NET && i->GetIsGroup() )
                 aOutValue = "";
 
             else if( aCol == COLUMN_NAME )
-                aOutValue = i->netName();
+                aOutValue = i->GetNetName();
 
             else if( aCol == COLUMN_PAD_COUNT )
-                aOutValue = m_parent.formatCount( i->padCount() );
+                aOutValue = m_parent.formatCount( i->GetPadCount() );
 
             else if( aCol == COLUMN_VIA_COUNT )
-                aOutValue = m_parent.formatCount( i->viaCount() );
+                aOutValue = m_parent.formatCount( i->GetViaCount() );
 
             else if( aCol == COLUMN_VIA_LENGTH )
-                aOutValue = m_parent.formatLength( i->viaLength() );
+                aOutValue = m_parent.formatLength( i->GetViaLength() );
 
             else if( aCol == COLUMN_BOARD_LENGTH )
-                aOutValue = m_parent.formatLength( i->boardWireLength() );
+                aOutValue = m_parent.formatLength( i->GetBoardWireLength() );
 
             else if( aCol == COLUMN_CHIP_LENGTH )
-                aOutValue = m_parent.formatLength( i->chipWireLength() );
+                aOutValue = m_parent.formatLength( i->GetChipWireLength() );
 
             else if( aCol == COLUMN_TOTAL_LENGTH )
-                aOutValue = m_parent.formatLength( i->totalLength() );
+                aOutValue = m_parent.formatLength( i->GetTotalLength() );
         }
     }
 
@@ -715,22 +676,20 @@ protected:
         const LIST_ITEM& i1 = *static_cast<const LIST_ITEM*>( aItem1.GetID() );
         const LIST_ITEM& i2 = *static_cast<const LIST_ITEM*>( aItem2.GetID() );
 
-        if( isSortGroupsFirst() )
-        {
-            if( i1.isGroup() && !i2.isGroup() )
-                return -1;
-            if( i2.isGroup() && !i1.isGroup() )
-                return 1;
-        }
+        if( i1.GetIsGroup() && !i2.GetIsGroup() )
+            return -1;
 
-        if( aCol == COLUMN_NET && i1.netCode() != i2.netCode() )
+        if( i2.GetIsGroup() && !i1.GetIsGroup() )
+            return 1;
+
+        if( aCol == COLUMN_NET && i1.GetNetCode() != i2.GetNetCode() )
         {
-            return aAsc ? ( i2.netCode() - i1.netCode() ) : ( i1.netCode() - i2.netCode() );
+            return aAsc ? ( i2.GetNetCode() - i1.GetNetCode() ) : ( i1.GetNetCode() - i2.GetNetCode() );
         }
         else if( aCol == COLUMN_NAME )
         {
-            const wxString& s1 = i1.netName();
-            const wxString& s2 = i2.netName();
+            const wxString& s1 = i1.GetNetName();
+            const wxString& s2 = i2.GetNetName();
 
             int res = aAsc ? s1.Cmp( s2 ) : s2.Cmp( s1 );
 
@@ -738,23 +697,23 @@ protected:
                 return res;
         }
 
-        else if( aCol == COLUMN_PAD_COUNT && i1.padCount() != i2.padCount() )
-            return compareUInt( i1.padCount(), i2.padCount(), aAsc );
+        else if( aCol == COLUMN_PAD_COUNT && i1.GetPadCount() != i2.GetPadCount() )
+            return compareUInt( i1.GetPadCount(), i2.GetPadCount(), aAsc );
 
-        else if( aCol == COLUMN_VIA_COUNT && i1.viaCount() != i2.viaCount() )
-            return compareUInt( i1.viaCount(), i2.viaCount(), aAsc );
+        else if( aCol == COLUMN_VIA_COUNT && i1.GetViaCount() != i2.GetViaCount() )
+            return compareUInt( i1.GetViaCount(), i2.GetViaCount(), aAsc );
 
-        else if( aCol == COLUMN_VIA_LENGTH && i1.viaLength() != i2.viaLength() )
-            return compareUInt( i1.viaLength(), i2.viaLength(), aAsc );
+        else if( aCol == COLUMN_VIA_LENGTH && i1.GetViaLength() != i2.GetViaLength() )
+            return compareUInt( i1.GetViaLength(), i2.GetViaLength(), aAsc );
 
-        else if( aCol == COLUMN_BOARD_LENGTH && i1.boardWireLength() != i2.boardWireLength() )
-            return compareUInt( i1.boardWireLength(), i2.boardWireLength(), aAsc );
+        else if( aCol == COLUMN_BOARD_LENGTH && i1.GetBoardWireLength() != i2.GetBoardWireLength() )
+            return compareUInt( i1.GetBoardWireLength(), i2.GetBoardWireLength(), aAsc );
 
-        else if( aCol == COLUMN_CHIP_LENGTH && i1.chipWireLength() != i2.chipWireLength() )
-            return compareUInt( i1.chipWireLength(), i2.chipWireLength(), aAsc );
+        else if( aCol == COLUMN_CHIP_LENGTH && i1.GetChipWireLength() != i2.GetChipWireLength() )
+            return compareUInt( i1.GetChipWireLength(), i2.GetChipWireLength(), aAsc );
 
-        else if( aCol == COLUMN_TOTAL_LENGTH && i1.totalLength() != i2.totalLength() )
-            return compareUInt( i1.totalLength(), i2.totalLength(), aAsc );
+        else if( aCol == COLUMN_TOTAL_LENGTH && i1.GetTotalLength() != i2.GetTotalLength() )
+            return compareUInt( i1.GetTotalLength(), i2.GetTotalLength(), aAsc );
 
         // when the item values compare equal resort to pointer comparison.
         wxUIntPtr id1 = wxPtrToUInt( aItem1.GetID() );
@@ -776,7 +735,7 @@ protected:
         if( !aItem.IsOk() )
             return wxDataViewItem();
 
-        return wxDataViewItem( static_cast<const LIST_ITEM*>( aItem.GetID() )->parent() );
+        return wxDataViewItem( static_cast<const LIST_ITEM*>( aItem.GetID())->Parent() );
     }
 
 
@@ -785,7 +744,7 @@ protected:
         if( !aItem.IsOk() )
             return true;
 
-        return static_cast<const LIST_ITEM*>( aItem.GetID() )->isGroup();
+        return static_cast<const LIST_ITEM*>( aItem.GetID())->GetIsGroup();
     }
 
 
@@ -806,22 +765,22 @@ protected:
 
             for( const std::unique_ptr<LIST_ITEM>& i : m_items )
             {
-                if( i->parent() == nullptr )
+                if( i->Parent() == nullptr )
                     aChildren.Add( wxDataViewItem( &*i ) );
             }
 
             return aChildren.GetCount();
         }
-        else if( p->isGroup() )
+        else if( p->GetIsGroup() )
         {
-            const int count = p->childrenCount();
+            const int count = p->ChildrenCount();
 
             if( count == 0 )
                 return 0;
 
             aChildren.Alloc( count );
 
-            for( auto i = p->childrenBegin(), end = p->childrenEnd(); i != end; ++i )
+            for( auto i = p->ChildrenBegin(), end = p->ChildrenEnd(); i != end; ++i )
                 aChildren.Add( wxDataViewItem( *i ) );
 
             return aChildren.GetCount();
@@ -838,9 +797,9 @@ protected:
 };
 
 
-DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParent,
-                                                          const SETTINGS& aSettings ) :
-        DIALOG_SELECT_NET_FROM_LIST_BASE( aParent ),
+DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent,
+                                            const SETTINGS& aSettings ) :
+        DIALOG_NET_INSPECTOR_BASE( aParent ),
         m_frame( aParent )
 {
     m_brd = aParent->GetBoard();
@@ -924,9 +883,6 @@ DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParen
     m_groupBy->SetValue( aSettings.group_by );
     m_groupByKind->SetSelection( aSettings.group_by_kind );
     m_groupByText->SetValue( aSettings.group_by_text );
-    m_viaLengthType->SetSelection( aSettings.via_length_type );
-    m_constViaLengthValue = aSettings.const_via_length;
-    m_constViaLength->SetValue( formatLength( m_constViaLengthValue ) );
 
     m_filter_change_no_rebuild = false;
     buildNetsList();
@@ -941,18 +897,16 @@ DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParen
     m_renameNet->Disable();
     m_deleteNet->Disable();
 
-    m_data_model->setSortGroupsFirst( m_groupsFirst->IsChecked() );
-
     if( aSettings.sorting_column != -1 )
     {
-        if( auto* c = m_netsList->GetColumn( aSettings.sorting_column ) )
+        if( wxDataViewColumn* c = m_netsList->GetColumn( aSettings.sorting_column ) )
             c->SetSortOrder( aSettings.sort_order_asc );
     }
 
     FinishDialogSettings();
 
 #define connect_event( e, f ) \
-    m_frame->Connect( e, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST::f ), nullptr, this )
+    m_frame->Connect( e, wxCommandEventHandler( DIALOG_NET_INSPECTOR::f ), nullptr, this )
 
     connect_event( wxEVT_CLOSE_WINDOW, onParentWindowClosed );
     connect_event( UNITS_CHANGED, onUnitsChanged );
@@ -970,7 +924,7 @@ DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParen
 }
 
 
-DIALOG_SELECT_NET_FROM_LIST::~DIALOG_SELECT_NET_FROM_LIST()
+DIALOG_NET_INSPECTOR::~DIALOG_NET_INSPECTOR()
 {
     // the displayed list elements are going to be deleted before the list view itself.
     // in some cases it might still do queries on the data model, which would crash
@@ -978,7 +932,7 @@ DIALOG_SELECT_NET_FROM_LIST::~DIALOG_SELECT_NET_FROM_LIST()
     m_netsList->AssociateModel( nullptr );
 
 #define disconnect_event( e, f ) \
-    m_frame->Disconnect( e, wxCommandEventHandler( DIALOG_SELECT_NET_FROM_LIST::f ), nullptr, this )
+    m_frame->Disconnect( e, wxCommandEventHandler( DIALOG_NET_INSPECTOR::f ), nullptr, this )
 
     disconnect_event( wxEVT_CLOSE_WINDOW, onParentWindowClosed );
     disconnect_event( UNITS_CHANGED, onUnitsChanged );
@@ -993,7 +947,7 @@ DIALOG_SELECT_NET_FROM_LIST::~DIALOG_SELECT_NET_FROM_LIST()
 }
 
 
-DIALOG_SELECT_NET_FROM_LIST::SETTINGS DIALOG_SELECT_NET_FROM_LIST::Settings() const
+DIALOG_NET_INSPECTOR::SETTINGS DIALOG_NET_INSPECTOR::Settings() const
 {
     std::vector<int> column_order( m_data_model->columnCount() );
 
@@ -1008,28 +962,24 @@ DIALOG_SELECT_NET_FROM_LIST::SETTINGS DIALOG_SELECT_NET_FROM_LIST::Settings() co
     r.group_by           = m_groupBy->IsChecked();
     r.group_by_kind      = m_groupByKind->GetSelection();
     r.group_by_text      = m_groupByText->GetValue();
-    r.sorting_column   = sorting_column ? static_cast<int>( sorting_column->GetModelColumn() ) : -1;
-    r.sort_order_asc   = sorting_column ? sorting_column->IsSortOrderAscending() : true;
-    r.column_order     = column_order;
-    r.const_via_length = m_constViaLengthValue;
-    r.via_length_type  = m_viaLengthType->GetSelection();
+    r.sorting_column     = sorting_column ? static_cast<int>( sorting_column->GetModelColumn() ) : -1;
+    r.sort_order_asc     = sorting_column ? sorting_column->IsSortOrderAscending() : true;
+    r.column_order       = column_order;
 
     return r;
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::onParentWindowClosed( wxCommandEvent& event )
+void DIALOG_NET_INSPECTOR::onParentWindowClosed( wxCommandEvent& event )
 {
     Close();
     event.Skip();
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::onUnitsChanged( wxCommandEvent& event )
+void DIALOG_NET_INSPECTOR::onUnitsChanged( wxCommandEvent& event )
 {
     this->m_units = m_frame->GetUserUnits();
-
-    m_constViaLength->SetValue( formatLength( m_constViaLengthValue ) );
 
     m_data_model->updateAllItems();
 
@@ -1037,7 +987,7 @@ void DIALOG_SELECT_NET_FROM_LIST::onUnitsChanged( wxCommandEvent& event )
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::onBoardChanged( wxCommandEvent& event )
+void DIALOG_NET_INSPECTOR::onBoardChanged( wxCommandEvent& event )
 {
     if( m_brd != nullptr )
         m_brd->RemoveListener( this );
@@ -1054,7 +1004,7 @@ void DIALOG_SELECT_NET_FROM_LIST::onBoardChanged( wxCommandEvent& event )
 }
 
 
-bool DIALOG_SELECT_NET_FROM_LIST::netFilterMatches( NETINFO_ITEM* aNet ) const
+bool DIALOG_NET_INSPECTOR::netFilterMatches( NETINFO_ITEM* aNet ) const
 {
     // Note: the filtering is case insensitive.
 
@@ -1092,7 +1042,7 @@ struct NETCODE_CMP_LESS
 };
 
 
-std::vector<CN_ITEM*> DIALOG_SELECT_NET_FROM_LIST::relevantConnectivityItems() const
+std::vector<CN_ITEM*> DIALOG_NET_INSPECTOR::relevantConnectivityItems() const
 {
     // pre-filter the connectivity items and sort them by netcode.
     // this avoids quadratic runtime when building the whole net list and
@@ -1118,7 +1068,7 @@ std::vector<CN_ITEM*> DIALOG_SELECT_NET_FROM_LIST::relevantConnectivityItems() c
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::updateDisplayedRowValues( const OPT<LIST_ITEM_ITER>& aRow )
+void DIALOG_NET_INSPECTOR::updateDisplayedRowValues( const OPT<LIST_ITEM_ITER>& aRow )
 {
     if( !aRow )
         return;
@@ -1136,31 +1086,31 @@ void DIALOG_SELECT_NET_FROM_LIST::updateDisplayedRowValues( const OPT<LIST_ITEM_
 }
 
 
-wxString DIALOG_SELECT_NET_FROM_LIST::formatNetCode( const NETINFO_ITEM* aNet ) const
+wxString DIALOG_NET_INSPECTOR::formatNetCode( const NETINFO_ITEM* aNet ) const
 {
     return wxString::Format( "%.3d", aNet->GetNet() );
 }
 
 
-wxString DIALOG_SELECT_NET_FROM_LIST::formatNetName( const NETINFO_ITEM* aNet ) const
+wxString DIALOG_NET_INSPECTOR::formatNetName( const NETINFO_ITEM* aNet ) const
 {
     return UnescapeString( aNet->GetNetname() );
 }
 
 
-wxString DIALOG_SELECT_NET_FROM_LIST::formatCount( unsigned int aValue ) const
+wxString DIALOG_NET_INSPECTOR::formatCount( unsigned int aValue ) const
 {
     return wxString::Format( "%u", aValue );
 }
 
 
-wxString DIALOG_SELECT_NET_FROM_LIST::formatLength( int64_t aValue ) const
+wxString DIALOG_NET_INSPECTOR::formatLength( int64_t aValue ) const
 {
     return MessageTextFromValue( GetUserUnits(), static_cast<long long int>( aValue ) );
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem )
+void DIALOG_NET_INSPECTOR::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
     if( NETINFO_ITEM* net = dynamic_cast<NETINFO_ITEM*>( aBoardItem ) )
     {
@@ -1172,7 +1122,7 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* a
             std::unique_ptr<LIST_ITEM> new_item = std::make_unique<LIST_ITEM>( net );
 
             // the new net could have some pads already assigned, count them.
-            new_item->setPadCount( m_brd->GetNodesCount( net->GetNet() ) );
+            new_item->SetPadCount( m_brd->GetNodesCount( net->GetNet() ) );
 
             m_data_model->addItem( std::move( new_item ) );
         }
@@ -1187,12 +1137,12 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* a
             if( TRACK* track = dynamic_cast<TRACK*>( i ) )
             {
                 int len = track->GetLength();
-                ( **r )->addBoardWireLength( len );
+                ( **r )->AddBoardWireLength( len );
 
                 if( track->Type() == PCB_VIA_T )
                 {
-                    ( **r )->addViaCount( 1 );
-                    ( **r )->addViaLength( calculateViaLength( track ) );
+                    ( **r )->AddViaCount( 1 );
+                    ( **r )->AddViaLength( calculateViaLength( track ) );
                 }
 
                 updateDisplayedRowValues( r );
@@ -1223,10 +1173,10 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* a
             if( r )
             {
                 int len = pad->GetPadToDieLength();
-                ( **r )->addPadCount( 1 );
-                ( **r )->addChipWireLength( len );
+                ( **r )->AddPadCount( 1 );
+                ( **r )->AddChipWireLength( len );
 
-                if( ( **r )->padCount() == 0 && !m_cbShowZeroPad->IsChecked() )
+                if( ( **r )->GetPadCount() == 0 && !m_cbShowZeroPad->IsChecked() )
                     m_data_model->deleteItem( r );
                 else
                     updateDisplayedRowValues( r );
@@ -1236,7 +1186,7 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* a
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem )
+void DIALOG_NET_INSPECTOR::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
     if( NETINFO_ITEM* net = dynamic_cast<NETINFO_ITEM*>( aBoardItem ) )
     {
@@ -1251,10 +1201,10 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM*
             if( r )
             {
                 int len = pad->GetPadToDieLength();
-                ( **r )->subPadCount( 1 );
-                ( **r )->subChipWireLength( len );
+                ( **r )->SubPadCount( 1 );
+                ( **r )->SubChipWireLength( len );
 
-                if( ( **r )->padCount() == 0 && !m_cbShowZeroPad->IsChecked() )
+                if( ( **r )->GetPadCount() == 0 && !m_cbShowZeroPad->IsChecked() )
                     m_data_model->deleteItem( r );
                 else
                     updateDisplayedRowValues( r );
@@ -1271,12 +1221,12 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM*
             if( TRACK* track = dynamic_cast<TRACK*>( i ) )
             {
                 int len = track->GetLength();
-                ( **r )->subBoardWireLength( len );
+                ( **r )->SubBoardWireLength( len );
 
                 if( track->Type() == PCB_VIA_T )
                 {
-                    ( **r )->subViaCount( 1 );
-                    ( **r )->subViaLength( calculateViaLength( track ) );
+                    ( **r )->SubViaCount( 1 );
+                    ( **r )->SubViaLength( calculateViaLength( track ) );
                 }
 
                 updateDisplayedRowValues( r );
@@ -1290,7 +1240,7 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM*
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem )
+void DIALOG_NET_INSPECTOR::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
     if( dynamic_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) != nullptr
             || dynamic_cast<MODULE*>( aBoardItem ) != nullptr )
@@ -1301,7 +1251,7 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM*
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::OnBoardHighlightNetChanged( BOARD& aBoard )
+void DIALOG_NET_INSPECTOR::OnBoardHighlightNetChanged( BOARD& aBoard )
 {
     if( !m_brd->IsHighLightNetON() )
         m_netsList->UnselectAll();
@@ -1326,14 +1276,14 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardHighlightNetChanged( BOARD& aBoard )
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::OnBoardNetSettingsChanged( BOARD& aBoard )
+void DIALOG_NET_INSPECTOR::OnBoardNetSettingsChanged( BOARD& aBoard )
 {
     buildNetsList();
     m_netsList->Refresh();
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::updateNet( NETINFO_ITEM* aNet )
+void DIALOG_NET_INSPECTOR::updateNet( NETINFO_ITEM* aNet )
 {
     // something for the specified net has changed, update that row.
     // ignore nets that are not in our list because the filter doesn't match.
@@ -1363,7 +1313,7 @@ void DIALOG_SELECT_NET_FROM_LIST::updateNet( NETINFO_ITEM* aNet )
     if( !cur_net_row )
         m_data_model->addItem( std::move( list_item ) );
 
-    else if( ( **cur_net_row )->netName() != list_item->netName() )
+    else if(( **cur_net_row )->GetNetName() != list_item->GetNetName() )
     {
         // if the name has changed, it might require re-grouping.
         // it's easier to remove and re-insert it
@@ -1373,58 +1323,49 @@ void DIALOG_SELECT_NET_FROM_LIST::updateNet( NETINFO_ITEM* aNet )
     else
     {
         // update fields only
-        ( **cur_net_row )->setPadCount( list_item->padCount() );
-        ( **cur_net_row )->setViaCount( list_item->viaCount() );
-        ( **cur_net_row )->setBoardWireLength( list_item->boardWireLength() );
-        ( **cur_net_row )->setChipWireLength( list_item->chipWireLength() );
+        ( **cur_net_row )->SetPadCount( list_item->GetPadCount() );
+        ( **cur_net_row )->SetViaCount( list_item->GetViaCount() );
+        ( **cur_net_row )->SetBoardWireLength( list_item->GetBoardWireLength() );
+        ( **cur_net_row )->SetChipWireLength( list_item->GetChipWireLength() );
 
         updateDisplayedRowValues( cur_net_row );
     }
 }
 
 
-unsigned int DIALOG_SELECT_NET_FROM_LIST::calculateViaLength( const TRACK* aTrack ) const
+unsigned int DIALOG_NET_INSPECTOR::calculateViaLength( const TRACK* aTrack ) const
 {
     const VIA& via = dynamic_cast<const VIA&>( *aTrack );
 
-    if( m_viaLengthType->GetSelection() == 0 )
-    {
-        return m_constViaLengthValue;
-    }
-    else if( m_viaLengthType->GetSelection() == 1 )
-    {
-        // calculate the via length individually from the board stackup and
-        // via's start and end layer.
-        const BOARD_STACKUP& stackup = m_brd->GetDesignSettings().GetStackupDescriptor();
+    // calculate the via length individually from the board stackup and
+    // via's start and end layer.
+    const BOARD_STACKUP& stackup = m_brd->GetDesignSettings().GetStackupDescriptor();
 
-        std::pair<PCB_LAYER_ID, int> layer_dist[2] = { std::make_pair( via.TopLayer(), 0 ),
-                                                       std::make_pair( via.BottomLayer(), 0 ) };
+    std::pair<PCB_LAYER_ID, int> layer_dist[2] = { std::make_pair( via.TopLayer(), 0 ),
+                                                   std::make_pair( via.BottomLayer(), 0 ) };
 
-        for( const BOARD_STACKUP_ITEM* i : stackup.GetList() )
+    for( const BOARD_STACKUP_ITEM* i : stackup.GetList() )
+    {
+        for( std::pair<PCB_LAYER_ID, int>& j : layer_dist )
         {
-            for( std::pair<PCB_LAYER_ID, int>& j : layer_dist )
-            {
-                if( j.first != UNDEFINED_LAYER )
-                    j.second += i->GetThickness();
+            if( j.first != UNDEFINED_LAYER )
+                j.second += i->GetThickness();
 
-                if( j.first == i->GetBrdLayerId() )
-                    j.first = UNDEFINED_LAYER;
-            }
+            if( j.first == i->GetBrdLayerId() )
+                j.first = UNDEFINED_LAYER;
         }
-
-        return std::abs( layer_dist[0].second - layer_dist[1].second );
     }
-    else
-        return 0;
+
+    return std::abs( layer_dist[0].second - layer_dist[1].second );
 }
 
 
-std::unique_ptr<DIALOG_SELECT_NET_FROM_LIST::LIST_ITEM> DIALOG_SELECT_NET_FROM_LIST::buildNewItem(
+std::unique_ptr<DIALOG_NET_INSPECTOR::LIST_ITEM> DIALOG_NET_INSPECTOR::buildNewItem(
         NETINFO_ITEM* aNet, unsigned int aPadCount, const std::vector<CN_ITEM*>& aCNItems )
 {
     std::unique_ptr<LIST_ITEM> new_item = std::make_unique<LIST_ITEM>( aNet );
 
-    new_item->setPadCount( aPadCount );
+    new_item->SetPadCount( aPadCount );
 
     const auto cn_items = std::equal_range( aCNItems.begin(), aCNItems.end(), aNet->GetNet(),
                                             NETCODE_CMP_LESS() );
@@ -1434,16 +1375,16 @@ std::unique_ptr<DIALOG_SELECT_NET_FROM_LIST::LIST_ITEM> DIALOG_SELECT_NET_FROM_L
         BOARD_CONNECTED_ITEM* item = ( *i )->Parent();
 
         if( item->Type() == PCB_PAD_T )
-            new_item->addChipWireLength( static_cast<D_PAD*>( item )->GetPadToDieLength() );
+            new_item->AddChipWireLength( static_cast<D_PAD*>( item )->GetPadToDieLength() );
 
         else if( TRACK* track = dynamic_cast<TRACK*>( item ) )
         {
-            new_item->addBoardWireLength( track->GetLength() );
+            new_item->AddBoardWireLength( track->GetLength() );
 
             if( item->Type() == PCB_VIA_T )
             {
-                new_item->addViaCount( 1 );
-                new_item->addViaLength( calculateViaLength( track ) );
+                new_item->AddViaCount( 1 );
+                new_item->AddViaLength( calculateViaLength( track ) );
             }
         }
     }
@@ -1452,7 +1393,7 @@ std::unique_ptr<DIALOG_SELECT_NET_FROM_LIST::LIST_ITEM> DIALOG_SELECT_NET_FROM_L
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
+void DIALOG_NET_INSPECTOR::buildNetsList()
 {
     // Only build the list of nets if there is a board present
     if( !m_brd )
@@ -1470,7 +1411,7 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
 
     for( unsigned int i = 0; i < sel.GetCount(); ++i )
         prev_selected_netcodes.push_back(
-                static_cast<const LIST_ITEM*>( sel.Item( i ).GetID() )->netCode() );
+                static_cast<const LIST_ITEM*>( sel.Item( i ).GetID())->GetNetCode() );
 
     m_data_model->deleteAllItems();
 
@@ -1587,7 +1528,7 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::onFilterChange( wxCommandEvent& aEvent )
+void DIALOG_NET_INSPECTOR::onFilterChange( wxCommandEvent& aEvent )
 {
     wxStringTokenizer filters( m_textCtrlFilter->GetValue().Upper(), "," );
     m_netFilter.clear();
@@ -1640,31 +1581,13 @@ void DIALOG_SELECT_NET_FROM_LIST::onFilterChange( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::onViaLengthChange( wxCommandEvent& event )
-{
-    m_constViaLengthValue = ValueFromString( GetUserUnits(), m_constViaLength->GetValue() );
-
-    // allow editing of the constant via length value only when in constant via length mode.
-    m_constViaLength->Enable( m_viaLengthType->GetSelection() == 0 );
-
-    if( !m_filter_change_no_rebuild )
-        buildNetsList();
-}
-
-
-void DIALOG_SELECT_NET_FROM_LIST::onGroupsFirstChanged( wxCommandEvent& event )
-{
-    m_data_model->setSortGroupsFirst( m_groupsFirst->IsChecked() );
-}
-
-
-void DIALOG_SELECT_NET_FROM_LIST::onSelChanged( wxDataViewEvent&  )
+void DIALOG_NET_INSPECTOR::onSelChanged( wxDataViewEvent&  )
 {
     onSelChanged();
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::onSelChanged()
+void DIALOG_NET_INSPECTOR::onSelChanged()
 {
     // ignore selection changes while the whole list is being rebuilt.
     if( m_in_build_nets_list )
@@ -1689,15 +1612,15 @@ void DIALOG_SELECT_NET_FROM_LIST::onSelChanged()
         {
             const LIST_ITEM* ii = static_cast<const LIST_ITEM*>( sel.Item( i ).GetID() );
 
-            if( ii->isGroup() )
+            if( ii->GetIsGroup() )
             {
                 enable_rename_button = false;
 
-                for( auto c = ii->childrenBegin(), end = ii->childrenEnd(); c != end; ++c )
-                    ps->SetHighlight( true, ( *c )->netCode(), true );
+                for( auto c = ii->ChildrenBegin(), end = ii->ChildrenEnd(); c != end; ++c )
+                    ps->SetHighlight( true, ( *c )->GetNetCode(), true );
             }
             else
-                ps->SetHighlight( true, ii->netCode(), true );
+                ps->SetHighlight( true, ii->GetNetCode(), true );
         }
     }
     else
@@ -1711,7 +1634,7 @@ void DIALOG_SELECT_NET_FROM_LIST::onSelChanged()
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::onSortingChanged( wxDataViewEvent& aEvent )
+void DIALOG_NET_INSPECTOR::onSortingChanged( wxDataViewEvent& aEvent )
 {
     // FIXME: Whenever the sort criteria changes (sorting column)
     // the visible row-numers of the selection get preserved, not the actual
@@ -1726,7 +1649,7 @@ void DIALOG_SELECT_NET_FROM_LIST::onSortingChanged( wxDataViewEvent& aEvent )
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::adjustListColumns()
+void DIALOG_NET_INSPECTOR::adjustListColumns()
 {
     /**
      * Calculating optimal width of the first (Net) and the last (Pad Count) columns.
@@ -1796,14 +1719,14 @@ void DIALOG_SELECT_NET_FROM_LIST::adjustListColumns()
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::onListSize( wxSizeEvent& aEvent )
+void DIALOG_NET_INSPECTOR::onListSize( wxSizeEvent& aEvent )
 {
     aEvent.Skip();
     adjustListColumns();
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::onAddNet( wxCommandEvent& aEvent )
+void DIALOG_NET_INSPECTOR::onAddNet( wxCommandEvent& aEvent )
 {
     wxString          newNetName;
     NETNAME_VALIDATOR validator( &newNetName );
@@ -1839,16 +1762,16 @@ void DIALOG_SELECT_NET_FROM_LIST::onAddNet( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::onRenameNet( wxCommandEvent& aEvent )
+void DIALOG_NET_INSPECTOR::onRenameNet( wxCommandEvent& aEvent )
 {
     if( m_netsList->GetSelectedItemsCount() == 1 )
     {
         const LIST_ITEM* sel = static_cast<const LIST_ITEM*>( m_netsList->GetSelection().GetID() );
 
-        if( sel->isGroup() )
+        if( sel->GetIsGroup() )
             return;
 
-        NETINFO_ITEM* net         = sel->net();
+        NETINFO_ITEM* net         = sel->GetNet();
         wxString      fullNetName = net->GetNetname();
         wxString      netPath;
         wxString      shortNetName;
@@ -1908,10 +1831,10 @@ void DIALOG_SELECT_NET_FROM_LIST::onRenameNet( wxCommandEvent& aEvent )
         if( netFilterMatches( net ) )
         {
             std::unique_ptr<LIST_ITEM> new_item = std::make_unique<LIST_ITEM>( net );
-            new_item->setPadCount( removed_item->padCount() );
-            new_item->setViaCount( removed_item->viaCount() );
-            new_item->setBoardWireLength( removed_item->boardWireLength() );
-            new_item->setChipWireLength( removed_item->chipWireLength() );
+            new_item->SetPadCount( removed_item->GetPadCount() );
+            new_item->SetViaCount( removed_item->GetViaCount() );
+            new_item->SetBoardWireLength( removed_item->GetBoardWireLength() );
+            new_item->SetChipWireLength( removed_item->GetChipWireLength() );
 
             OPT<LIST_ITEM_ITER> added_row = m_data_model->addItem( std::move( new_item ) );
 
@@ -1930,7 +1853,7 @@ void DIALOG_SELECT_NET_FROM_LIST::onRenameNet( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::onDeleteNet( wxCommandEvent& aEvent )
+void DIALOG_NET_INSPECTOR::onDeleteNet( wxCommandEvent& aEvent )
 {
     if( !m_netsList->HasSelection() )
         return;
@@ -1941,11 +1864,11 @@ void DIALOG_SELECT_NET_FROM_LIST::onDeleteNet( wxCommandEvent& aEvent )
     auto delete_one =
             [this]( const LIST_ITEM* i )
             {
-                if( i->padCount() == 0
+                if( i->GetPadCount() == 0
                         || IsOK( this, wxString::Format( _( "Net '%s' is in use.  Delete anyway?" ),
-                                                         i->netName() ) ) )
+                                                         i->GetNetName() ) ) )
                 {
-                    m_brd->Remove( i->net() );
+                    m_brd->Remove( i->GetNet() );
                     m_frame->OnModify();
 
                     // We'll get an OnBoardItemRemoved callback from this to update our listbox
@@ -1956,29 +1879,31 @@ void DIALOG_SELECT_NET_FROM_LIST::onDeleteNet( wxCommandEvent& aEvent )
     {
         const LIST_ITEM* ii = static_cast<const LIST_ITEM*>( sel.Item( i ).GetID() );
 
-        if( ii->isGroup() )
+        if( ii->GetIsGroup() )
         {
-            if( ii->childrenCount() != 0
+            if( ii->ChildrenCount() != 0
                     && IsOK( this, wxString::Format( _( "Delete all nets in group '%s'?" ),
-                                                     ii->groupName() ) ) )
+                                                     ii->GetGroupName() ) ) )
             {
                 // we can't be iterating the children container and deleting items from
                 // it at the same time.  thus take a copy of it first.
                 std::vector<const LIST_ITEM*> children;
-                children.reserve( ii->childrenCount() );
-                std::copy( ii->childrenBegin(), ii->childrenEnd(), std::back_inserter( children ) );
+                children.reserve( ii->ChildrenCount() );
+                std::copy( ii->ChildrenBegin(), ii->ChildrenEnd(), std::back_inserter( children ) );
 
                 for( const LIST_ITEM* c : children )
                     delete_one( c );
             }
         }
         else
+        {
             delete_one( ii );
+        }
     }
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::onReport( wxCommandEvent& aEvent )
+void DIALOG_NET_INSPECTOR::onReport( wxCommandEvent& aEvent )
 {
     wxFileDialog dlg( this, _( "Report file" ), "", "",
                       _( "Report file" ) + AddFileExtListToFilter( { "csv" } ),
@@ -2006,7 +1931,7 @@ void DIALOG_SELECT_NET_FROM_LIST::onReport( wxCommandEvent& aEvent )
     {
         auto& i = m_data_model->itemAt( row );
 
-        if( i.isGroup() || i.netCode() == 0 )
+        if( i.GetIsGroup() || i.GetNetCode() == 0 )
             continue;
 
         txt = "";

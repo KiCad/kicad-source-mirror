@@ -25,7 +25,7 @@
 #define __BOARD_STATISTICS_TOOL_H
 
 #include <dialogs/dialog_board_statistics.h>
-#include <dialogs/dialog_select_net_from_list.h>
+#include <dialogs/dialog_net_inspector.h>
 #include <dialogs/dialog_HTML_reporter_base.h>
 #include <dialogs/dialog_constraints_reporter.h>
 #include <pcb_edit_frame.h>
@@ -143,8 +143,8 @@ private:
 
     CONNECTIVITY_DATA* m_dynamicData;      // Cached connectivity data from the selection
 
-    std::unique_ptr<DIALOG_SELECT_NET_FROM_LIST> m_listNetsDialog;
-    DIALOG_SELECT_NET_FROM_LIST::SETTINGS        m_listNetsDialogSettings;
+    std::unique_ptr<DIALOG_NET_INSPECTOR> m_listNetsDialog;
+    DIALOG_NET_INSPECTOR::SETTINGS        m_listNetsDialogSettings;
 
     std::unique_ptr<DIALOG_INSPECTION_REPORTER>  m_inspectClearanceDialog;
     std::unique_ptr<DIALOG_CONSTRAINTS_REPORTER> m_inspectConstraintsDialog;
