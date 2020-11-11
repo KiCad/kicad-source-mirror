@@ -544,8 +544,24 @@ void SYMBOL_EDIT_FRAME::CreateNewPart()
 
             *field = *parentField;
 
-            if( id == VALUE )
+            switch( id )
+            {
+            case REFERENCE:
+                // parent's reference already copied
+                break;
+
+            case VALUE:
                 field->SetText( name );
+                break;
+
+            case FOOTPRINT:
+            case DATASHEET:
+                // - footprint might be the same as parent, but might not
+                // - datasheet is most likely different
+                // - probably best to play it safe and copy neither
+                field->SetText( wxEmptyString );
+                break;
+            }
 
             field->SetParent( &new_part );
         }
