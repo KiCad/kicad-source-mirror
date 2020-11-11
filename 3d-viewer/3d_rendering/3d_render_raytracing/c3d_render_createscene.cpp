@@ -776,10 +776,15 @@ void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
             break;
 
             default:
-                layerColor = m_boardAdapter.GetLayerColor( layer_id );
-
                 if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
-                    layerColor = SFVEC3F( 184.0f / 255.0f, 115.0f / 255.0f,  50.0f / 255.0f );
+                {
+                    if( m_boardAdapter.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) )
+                        layerColor = SFVEC3F( 184.0f / 255.0f, 115.0f / 255.0f, 50.0f / 255.0f );
+                    else
+                        layerColor = m_boardAdapter.m_CopperColor;
+                }
+                else
+                    layerColor = m_boardAdapter.GetLayerColor( layer_id );
 
                 materialLayer = &m_materials.m_NonPlatedCopper;
             break;
@@ -794,17 +799,11 @@ void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
     if( m_boardAdapter.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) &&
         m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
     {
-        SFVEC3F layerColor_F_Cu = m_boardAdapter.GetLayerColor( F_Cu );
-        SFVEC3F layerColor_B_Cu = m_boardAdapter.GetLayerColor( B_Cu );
+        createItemsFromContainer( m_boardAdapter.GetPlatedPads_Front(), F_Cu, &m_materials.m_Copper,
+                                  m_boardAdapter.m_CopperColor, +m_boardAdapter.GetCopperThickness3DU() * 0.1f );
 
-        if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
-        {
-            layerColor_F_Cu = m_boardAdapter.m_CopperColor;
-            layerColor_B_Cu = layerColor_F_Cu;
-        }
-
-        createItemsFromContainer( m_boardAdapter.GetPlatedPads_Front(), F_Cu, &m_materials.m_Copper, layerColor_F_Cu, +m_boardAdapter.GetCopperThickness3DU() * 0.1f );
-        createItemsFromContainer( m_boardAdapter.GetPlatedPads_Back(), B_Cu, &m_materials.m_Copper, layerColor_B_Cu, -m_boardAdapter.GetCopperThickness3DU() * 0.1f );
+        createItemsFromContainer( m_boardAdapter.GetPlatedPads_Back(), B_Cu, &m_materials.m_Copper,
+                                  m_boardAdapter.m_CopperColor, -m_boardAdapter.GetCopperThickness3DU() * 0.1f );
     }
 
     if( !aOnlyLoadCopperAndShapes )
