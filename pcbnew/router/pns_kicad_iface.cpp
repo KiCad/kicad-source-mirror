@@ -97,8 +97,6 @@ private:
     ARC                m_dummyArc;
     VIA                m_dummyVia;
 
-    // NB: this clearance cache is never cleared.  It DEPENDS on PNS_PCBNEW_RULE_RESOLVER
-    // being created in syncWorld() before each routing session.
     std::map<std::pair<const PNS::ITEM*, const PNS::ITEM*>, int> m_clearanceCache;
 };
 
@@ -287,9 +285,6 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
 int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB )
 {
-    // NB: this clearance cache is never cleared.  It DEPENDS on PNS_PCBNEW_RULE_RESOLVER
-    // being created in syncWorld() before each routing session.
-
     std::pair<const PNS::ITEM*, const PNS::ITEM*> key( aA, aB );
     auto it = m_clearanceCache.find( key );
 
@@ -1247,6 +1242,8 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
 
     int worstRuleClearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
 
+    // NB: if this were ever to become a long-lived object we would need to dirty its
+    // clearance cache here....
     delete m_ruleResolver;
     m_ruleResolver = new PNS_PCBNEW_RULE_RESOLVER( m_board, this );
 
