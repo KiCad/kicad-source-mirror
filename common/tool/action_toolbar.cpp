@@ -606,7 +606,7 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
             dir = false;                                           // Buttons are horizontal in the palette
             pos = ClientToScreen( toolRect.GetTopRight() );
             pos += wxPoint( m_rightPadding,                        // Shift right to move away from the toolbar
-                            -( PALETTE_BORDER + BUTTON_BORDER ) ); // Shift up to align the button tops
+                            -( PALETTE_BORDER ) );                 // Shift up to align the button tops
             break;
 
         case wxAUI_DOCK_RIGHT:
@@ -614,7 +614,7 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
             dir = false;                                           // Buttons are horizontal in the palette
             pos = ClientToScreen( toolRect.GetTopLeft() );
             pos += wxPoint( -( paletteLongDim + m_leftPadding ),   // Shift left by the entire length of the palette
-                            -( PALETTE_BORDER + BUTTON_BORDER ) ); // Shift up to align the button
+                            -( PALETTE_BORDER  ) );                // Shift up to align the button
             break;
     }
 
@@ -627,7 +627,8 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
                         NULL, this );
 
 
-    // Add the actions in the group to the palette and update their state
+    // Add the actions in the group to the palette and update their enabled state
+    // We purposely don't check items in the palette
     for( const TOOL_ACTION* action : group->m_actions )
     {
         wxUpdateUIEvent evt( action->GetUIId() );
@@ -635,9 +636,6 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
         toolParent->ProcessWindowEvent( evt );
 
         m_palette->AddAction( *action );
-
-        if( evt.GetSetChecked() )
-            m_palette->CheckAction( *action, evt.GetChecked() );
 
         if( evt.GetSetEnabled() )
             m_palette->EnableAction( *action, evt.GetEnabled() );
