@@ -1583,9 +1583,6 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     GetAppearancePanel()->OnColorThemeChanged();
 
-    if( aTextVarsChanged )
-        GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
-
     // Update the environment variables in the Python interpreter
     if( aEnvVarsChanged )
         PythonSyncEnvironmentVariables();

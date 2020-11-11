@@ -698,6 +698,7 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( GetColorSettings() );
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
 
     RecreateToolbars();
 
