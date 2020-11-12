@@ -1289,6 +1289,8 @@ int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
                 else
                 {
                     iref = gLabel->GetIref();
+
+                    wxCHECK2( iref, continue );
                 }
 
                 iref->GetRefTable().clear();
@@ -1319,6 +1321,8 @@ int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
         wxString text, tmp;
 
         iref = item->GetIref();
+
+        wxCHECK2( iref, continue );
 
         std::sort( iref->GetRefTable().begin(), iref->GetRefTable().end() );
         iref->GetRefTable().erase( std::unique( iref->GetRefTable().begin(),

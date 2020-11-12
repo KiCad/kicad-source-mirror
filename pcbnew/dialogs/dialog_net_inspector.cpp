@@ -800,6 +800,7 @@ protected:
 DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent,
                                             const SETTINGS& aSettings ) :
         DIALOG_NET_INSPECTOR_BASE( aParent ),
+        m_zero_netitem( nullptr ),
         m_frame( aParent )
 {
     m_brd = aParent->GetBoard();

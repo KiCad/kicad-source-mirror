@@ -106,7 +106,10 @@ void GRID_CELL_LAYER_SELECTOR::Create( wxWindow* aParent, wxWindowID aId,
 
 wxString GRID_CELL_LAYER_SELECTOR::GetValue() const
 {
-    return m_frame->GetBoard()->GetLayerName( ToLAYER_ID( LayerBox()->GetLayerSelection() ) );
+    if( LayerBox()->GetLayerSelection() != UNDEFINED_LAYER )
+        return m_frame->GetBoard()->GetLayerName( ToLAYER_ID( LayerBox()->GetLayerSelection() ) );
+
+    return wxEmptyString;
 }
 
 
