@@ -23,7 +23,7 @@
 
 #include <bitmaps.h>
 #include <pcb_edit_frame.h>
-#include <class_board.h>
+#include <board.h>
 #include <wildcards_and_files_ext.h>
 #include <confirm.h>
 

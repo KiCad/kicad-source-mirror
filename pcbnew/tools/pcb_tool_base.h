@@ -31,7 +31,7 @@
 #include <tool/tool_event.h>
 #include <tool/tool_interactive.h>
 #include <pcb_edit_frame.h>
-#include <class_board.h>
+#include <board.h>
 #include <view/view_group.h>
 #include <pcb_view.h>
 #include <pcb_draw_panel_gal.h>

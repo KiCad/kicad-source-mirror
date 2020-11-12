@@ -32,7 +32,7 @@
 
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew/drc/drc_engine.h>
-#include <pcbnew/class_board.h>
+#include <pcbnew/board.h>
 #include <pcbnew/drc/drc_rule_parser.h>
 #include <pcbnew/drc/drc_test_provider.h>
 #include <pcbnew/pcb_expr_evaluator.h>

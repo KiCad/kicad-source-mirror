@@ -27,7 +27,7 @@
 #include <dialog_helpers.h>
 #include <base_units.h>
 #include <board_commit.h>
-#include <class_board.h>
+#include <board.h>
 #include <pcb_target.h>
 #include <dialog_target_properties_base.h>
 #include <widgets/unit_binder.h>

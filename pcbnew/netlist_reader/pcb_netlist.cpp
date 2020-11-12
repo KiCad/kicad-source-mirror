@@ -26,7 +26,7 @@
 
 #include <refdes_utils.h>
 #include "pcb_netlist.h"
-#include <class_module.h>
+#include <footprint.h>
 
 
 int COMPONENT_NET::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )

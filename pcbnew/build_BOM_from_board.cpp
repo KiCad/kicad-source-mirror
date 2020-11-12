@@ -30,8 +30,8 @@
 #include <pcb_edit_frame.h>
 #include <project.h>
 #include <wildcards_and_files_ext.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <wx/listimpl.cpp>
 
 /* creates a BOM list rom board

@@ -25,9 +25,9 @@
 
 #include <base_units.h>
 #include <board_commit.h>
-#include <class_pad.h>
+#include <pad.h>
 #include <fp_shape.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <confirm.h>
 #include <dialog_text_entry.h>
 #include <geometry/geometry_utils.h>

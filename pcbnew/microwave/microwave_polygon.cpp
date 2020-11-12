@@ -36,8 +36,8 @@
 #include <base_units.h>
 #include <validators.h>
 #include <dialog_text_entry.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <fp_shape.h>
 #include <microwave/microwave_tool.h>
 #include <pcbnew.h>

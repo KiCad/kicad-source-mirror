@@ -26,8 +26,8 @@
 #include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
 
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>

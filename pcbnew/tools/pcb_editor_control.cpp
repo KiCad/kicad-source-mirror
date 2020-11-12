@@ -31,11 +31,11 @@
 #include "tool/tool_event.h"
 #include <bitmaps.h>
 #include <board_commit.h>
-#include <class_board.h>
-#include <class_pcb_group.h>
-#include <class_module.h>
+#include <board.h>
+#include <pcb_group.h>
+#include <footprint.h>
 #include <pcb_target.h>
-#include <class_track.h>
+#include <track.h>
 #include <zone.h>
 #include <class_marker_pcb.h>
 #include <collectors.h>

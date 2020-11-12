@@ -29,10 +29,10 @@
 using namespace std::placeholders;
 #include <macros.h>
 #include <pcb_edit_frame.h>
-#include <class_board.h>
-#include <class_track.h>
+#include <board.h>
+#include <track.h>
 #include <pcb_target.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <dimension.h>
 #include <origin_viewitem.h>
 #include <connectivity/connectivity_data.h>

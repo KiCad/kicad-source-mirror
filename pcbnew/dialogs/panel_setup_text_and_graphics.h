@@ -25,7 +25,7 @@
 #ifndef PANEL_SETUP_TEXT_AND_GRAPHICS_H
 #define PANEL_SETUP_TEXT_AND_GRAPHICS_H
 
-#include <class_board.h>
+#include <board.h>
 #include <widgets/unit_binder.h>
 #include <widgets/paged_dialog.h>
 

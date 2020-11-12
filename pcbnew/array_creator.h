@@ -27,8 +27,8 @@
 
 #include <dialogs/dialog_create_array.h>
 
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <class_board_item.h>
 #include <tools/pcbnew_selection.h>
 

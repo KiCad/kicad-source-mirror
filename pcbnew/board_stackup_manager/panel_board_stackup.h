@@ -26,7 +26,7 @@
 #define PANEL_SETUP_BOARD_STACKUP_H
 
 
-#include <class_board.h>
+#include <board.h>
 #include <widgets/unit_binder.h>
 
 #include "panel_board_stackup_base.h"

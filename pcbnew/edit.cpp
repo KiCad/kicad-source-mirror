@@ -30,9 +30,9 @@
 #include <gestfich.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
-#include <class_board.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <board.h>
+#include <footprint.h>
+#include <track.h>
 #include <zone.h>
 #include <pcb_target.h>
 #include <dimension.h>

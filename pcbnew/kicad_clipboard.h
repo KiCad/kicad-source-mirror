@@ -32,7 +32,7 @@
 
 #include <plugins/kicad/kicad_plugin.h>
 #include <class_board_item.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <plugins/kicad/pcb_parser.h>
 #include <memory.h>
 #include <tools/pcbnew_selection.h>

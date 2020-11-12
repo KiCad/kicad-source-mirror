@@ -24,8 +24,8 @@
  */
 
 #include <bitmaps.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <common.h>
 #include <confirm.h>
 #include <cvpcb_settings.h>

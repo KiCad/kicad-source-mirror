@@ -28,8 +28,8 @@
 
 
 #include <base_units.h>
-#include <class_board.h>
-#include <class_track.h>
+#include <board.h>
+#include <track.h>
 #include <confirm.h>
 #include <dialog_board_statistics_base.h>
 #include <pad_shapes.h>

@@ -42,10 +42,10 @@
 #include <set>                  // std::set
 #include <map>                  // std::map
 
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <fp_shape.h>
-#include <class_track.h>
+#include <track.h>
 #include <zone.h>
 #include <base_units.h>
 #include <collectors.h>

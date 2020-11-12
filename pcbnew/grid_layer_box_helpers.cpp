@@ -23,7 +23,7 @@
 
 #include <grid_layer_box_helpers.h>
 
-#include <class_board.h>
+#include <board.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <settings/color_settings.h>

@@ -33,7 +33,7 @@
 
 #include "pcb_netlist.h"
 #include "netlist_reader.h"
-#include <class_module.h>
+#include <footprint.h>
 
 #include <wx/regex.h>
 

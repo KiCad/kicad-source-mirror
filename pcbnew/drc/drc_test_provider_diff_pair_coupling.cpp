@@ -19,8 +19,8 @@
 
 
 #include <common.h>
-#include <class_board.h>
-#include <class_track.h>
+#include <board.h>
+#include <track.h>
 
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>

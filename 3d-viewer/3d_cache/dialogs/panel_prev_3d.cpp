@@ -32,7 +32,7 @@
 #include <tools/3d_controller.h>
 #include <base_units.h>
 #include <bitmaps.h>
-#include <class_board.h>
+#include <board.h>
 #include <common_ogl/cogl_att_list.h>
 #include <gal/dpi_scaling.h>
 #include <pgm_base.h>

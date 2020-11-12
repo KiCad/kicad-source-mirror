@@ -25,8 +25,8 @@
 #include <wx/clipbrd.h>
 
 #include <build_version.h>
-#include <class_board.h>
-#include <class_track.h>
+#include <board.h>
+#include <track.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <fp_text.h>

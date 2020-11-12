@@ -29,7 +29,7 @@
 #include <tool/tool_manager.h>
 #include <bitmaps.h>
 #include <class_board_item.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <fp_shape.h>
 #include <board_commit.h>
 #include <dialogs/dialog_push_pad_properties.h>

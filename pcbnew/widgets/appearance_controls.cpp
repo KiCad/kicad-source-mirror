@@ -21,7 +21,7 @@
 #include <widgets/appearance_controls.h>
 
 #include <bitmaps.h>
-#include <class_board.h>
+#include <board.h>
 #include <dialog_helpers.h>
 #include <footprint_edit_frame.h>
 #include <menus_helpers.h>

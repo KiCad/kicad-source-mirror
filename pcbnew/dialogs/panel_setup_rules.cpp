@@ -25,7 +25,7 @@
 #include <widgets/paged_dialog.h>
 #include <pcb_edit_frame.h>
 #include <pcb_expr_evaluator.h>
-#include <class_board.h>
+#include <board.h>
 #include <board_design_settings.h>
 #include <project.h>
 #include <kicad_string.h>

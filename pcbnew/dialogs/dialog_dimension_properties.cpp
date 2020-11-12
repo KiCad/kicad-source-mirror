@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <class_board.h>
+#include <board.h>
 #include <dimension.h>
 #include <pcb_base_edit_frame.h>
 #include <pcb_layer_box_selector.h>

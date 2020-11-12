@@ -28,7 +28,7 @@
 #include <vector>
 #include <text_mod_grid_table.h>
 #include <widgets/unit_binder.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <dialog_edit_footprint_for_fp_editor_base.h>
 
 

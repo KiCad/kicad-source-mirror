@@ -22,7 +22,7 @@
 #include <core/optional.h>
 
 #include "class_draw_panel_gal.h"
-#include "class_board.h"
+#include "board.h"
 
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>

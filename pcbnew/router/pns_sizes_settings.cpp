@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <class_board.h>
+#include <board.h>
 
 #include "pns_item.h"
 #include "pns_via.h"

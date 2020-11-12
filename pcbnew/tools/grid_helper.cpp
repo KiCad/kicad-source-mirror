@@ -26,11 +26,11 @@
 #include <functional>
 using namespace std::placeholders;
 
-#include <class_board.h>
+#include <board.h>
 #include <dimension.h>
 #include <fp_shape.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <footprint.h>
+#include <track.h>
 #include <zone.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>

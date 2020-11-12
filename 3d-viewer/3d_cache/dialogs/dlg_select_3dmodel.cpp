@@ -33,7 +33,7 @@
 #include <3d_model_viewer/c3d_model_viewer.h>
 #include <common_ogl/cogl_att_list.h>
 #include <filename_resolver.h>
-#include <pcbnew/class_module.h>
+#include <pcbnew/footprint.h>
 
 #include <wx/filedlg.h>
 

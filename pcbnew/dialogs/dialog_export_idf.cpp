@@ -23,7 +23,7 @@
  */
 
 #include <pcb_edit_frame.h>
-#include <class_board.h>
+#include <board.h>
 #include <widgets/text_ctrl_eval.h>
 #include <dialog_export_idf_base.h>
 #include <pcbnew_settings.h>

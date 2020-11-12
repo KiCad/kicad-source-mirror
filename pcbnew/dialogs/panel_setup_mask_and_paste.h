@@ -25,7 +25,7 @@
 #ifndef PANEL_SETUP_DEFAULT_CLEARANCES_H
 #define PANEL_SETUP_DEFAULT_CLEARANCES_H
 
-#include <class_board.h>
+#include <board.h>
 #include <widgets/unit_binder.h>
 #include <widgets/paged_dialog.h>
 #include <dialogs/panel_setup_mask_and_paste_base.h>

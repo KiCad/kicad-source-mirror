@@ -26,8 +26,8 @@
 
 #include <pcb_base_frame.h>
 #include <connectivity/connectivity_data.h>
-#include <class_board.h>
-#include <class_track.h>
+#include <board.h>
+#include <track.h>
 #include <base_units.h>
 #include <bitmaps.h>
 #include <kicad_string.h>

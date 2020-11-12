@@ -28,10 +28,10 @@
 #include <functional>
 using namespace std::placeholders;
 #include <core/kicad_algo.h>
-#include <class_board.h>
+#include <board.h>
 #include <class_board_item.h>
-#include <class_track.h>
-#include <class_module.h>
+#include <track.h>
+#include <footprint.h>
 #include <pcb_shape.h>
 #include <zone.h>
 #include <collectors.h>

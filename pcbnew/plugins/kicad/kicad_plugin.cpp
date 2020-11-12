@@ -27,11 +27,11 @@
 #include <advanced_config.h>
 #include <base_units.h>
 #include <trace_helpers.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <pcb_text.h>
 #include <dimension.h>
-#include <class_track.h>
+#include <track.h>
 #include <zone.h>
 #include <pcb_shape.h>
 #include <pcb_target.h>

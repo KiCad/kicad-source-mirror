@@ -35,9 +35,9 @@
 #include "../3d_rendering/3d_render_raytracing/shapes2D/cfilledcircle2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes3D/ccylinder.h"
 
-#include <class_board.h>
-#include <class_module.h>
-#include <class_pad.h>
+#include <board.h>
+#include <footprint.h>
+#include <pad.h>
 #include <pcb_text.h>
 #include <fp_shape.h>
 #include <zone.h>

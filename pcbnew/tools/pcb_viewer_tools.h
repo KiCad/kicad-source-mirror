@@ -24,7 +24,7 @@
 #ifndef PCB_VIEWER_TOOLS_H_
 #define PCB_VIEWER_TOOLS_H_
 
-#include <class_board.h>
+#include <board.h>
 #include <tool/tool_interactive.h>
 
 class PCB_BASE_FRAME;

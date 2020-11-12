@@ -29,7 +29,7 @@
 #include <advanced_config.h>
 #include <pcb_edit_frame.h>
 #include <pcb_screen.h>
-#include <class_board.h>
+#include <board.h>
 #include <zone.h>
 #include <kicad_string.h>
 #include <math_for_graphics.h>

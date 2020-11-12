@@ -25,7 +25,7 @@
 
 #include "graphics_importer_pcbnew.h"
 
-#include <class_board.h>
+#include <board.h>
 #include <fp_shape.h>
 #include <pcb_text.h>
 #include <fp_text.h>

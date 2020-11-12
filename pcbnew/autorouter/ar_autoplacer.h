@@ -31,8 +31,8 @@
 
 #include "ar_matrix.h"
 
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 
 #include <connectivity/connectivity_data.h>
 

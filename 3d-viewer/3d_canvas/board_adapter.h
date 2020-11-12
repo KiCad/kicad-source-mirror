@@ -36,15 +36,15 @@
 #include "../common_ogl/cogl_att_list.h"
 
 #include <layers_id_colors_and_visibility.h>
-#include <class_pad.h>
-#include <class_track.h>
+#include <pad.h>
+#include <track.h>
 #include <wx/gdicmn.h>
 #include <pcb_base_frame.h>
 #include <pcb_text.h>
 #include <pcb_shape.h>
 #include <dimension.h>
 #include <zone.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <reporter.h>
 
 class COLOR_SETTINGS;

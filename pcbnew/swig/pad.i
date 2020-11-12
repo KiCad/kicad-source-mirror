@@ -1,11 +1,11 @@
 
 
 %include pad_shapes.h
-%include class_pad.h
+%include pad.h
 
 %rename(Get) operator   D_PAD*;
 %{
-#include <class_pad.h>
+#include <pad.h>
 %}
 
 %extend D_PAD

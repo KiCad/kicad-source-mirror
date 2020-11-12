@@ -45,7 +45,7 @@
 #include <trigo.h>
 
 #include <pcbplot.h>
-#include <class_board.h>
+#include <board.h>
 #include <gendrill_Excellon_writer.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>

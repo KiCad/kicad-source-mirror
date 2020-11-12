@@ -25,8 +25,8 @@
 #define DRC_TOOL_H
 
 #include <board_commit.h>
-#include <class_board.h>
-#include <class_track.h>
+#include <board.h>
+#include <track.h>
 #include <class_marker_pcb.h>
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>

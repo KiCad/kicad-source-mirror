@@ -26,8 +26,8 @@
 #include <functional>
 using namespace std::placeholders;
 
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <confirm.h>
 #include <connectivity/connectivity_data.h>
 #include <dialog_choose_footprint.h>

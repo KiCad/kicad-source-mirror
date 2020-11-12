@@ -42,8 +42,8 @@
 #include "3d_fastmath.h"
 #include "3d_math.h"
 
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 
 #include <base_units.h>
 #include <profile.h>        // To use GetRunningMicroSecs or another profiling utility

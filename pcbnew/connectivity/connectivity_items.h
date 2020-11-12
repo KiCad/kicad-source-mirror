@@ -29,10 +29,10 @@
 #ifndef PCBNEW_CONNECTIVITY_CONNECTIVITY_ITEMS_H_
 #define PCBNEW_CONNECTIVITY_CONNECTIVITY_ITEMS_H_
 
-#include <class_board.h>
-#include <class_pad.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <board.h>
+#include <pad.h>
+#include <footprint.h>
+#include <track.h>
 #include <zone.h>
 
 #include <geometry/shape_poly_set.h>

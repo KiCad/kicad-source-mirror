@@ -30,7 +30,7 @@
 #include "kiface_i.h"
 #include "confirm.h"
 #include "reporter.h"
-#include "class_board.h"
+#include "board.h"
 #include "dialog_export_step_base.h"
 #include <locale_io.h>
 #include <pcbnew_settings.h>

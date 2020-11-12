@@ -29,9 +29,9 @@ using namespace std::placeholders;
 #include <pcb_edit_frame.h>
 #include <ratsnest/ratsnest_data.h>
 #include <board_commit.h>
-#include <class_board.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <board.h>
+#include <footprint.h>
+#include <track.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/global_edit_tool.h>

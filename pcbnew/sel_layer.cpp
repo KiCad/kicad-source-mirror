@@ -26,7 +26,7 @@
 #include <confirm.h>
 #include <pcb_base_frame.h>
 #include <widgets/layer_box_selector.h>
-#include <class_board.h>
+#include <board.h>
 #include <dialogs/dialog_layer_selection_base.h>
 #include <router/router_tool.h>
 #include <settings/color_settings.h>

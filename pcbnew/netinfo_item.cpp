@@ -31,8 +31,8 @@
 #include <kicad_string.h>
 #include <widgets/msgpanel.h>
 #include <base_units.h>
-#include <class_board.h>
-#include <class_track.h>
+#include <board.h>
+#include <track.h>
 
 
 /*********************************************************/

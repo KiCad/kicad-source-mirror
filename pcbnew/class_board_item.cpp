@@ -25,7 +25,7 @@
 
 #include <wx/debug.h>
 #include <i18n_utility.h>
-#include <class_board.h>
+#include <board.h>
 #include <string>
 
 wxString BOARD_ITEM::ShowShape( PCB_SHAPE_TYPE_T aShape )

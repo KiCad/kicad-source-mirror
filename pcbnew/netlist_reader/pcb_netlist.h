@@ -30,7 +30,7 @@
 #include <wx/arrstr.h>
 
 #include <lib_id.h>
-#include <class_module.h>
+#include <footprint.h>
 
 
 class REPORTER;

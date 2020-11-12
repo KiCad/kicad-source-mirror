@@ -24,10 +24,10 @@
 
 #include <bitmaps.h>
 #include <board_commit.h>
-#include <class_board.h>
+#include <board.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
-#include <class_track.h>
+#include <track.h>
 #include <zone.h>
 #include <collectors.h>
 #include <confirm.h>

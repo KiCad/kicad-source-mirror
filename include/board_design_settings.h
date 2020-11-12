@@ -25,7 +25,7 @@
 #ifndef BOARD_DESIGN_SETTINGS_H_
 #define BOARD_DESIGN_SETTINGS_H_
 
-#include <class_pad.h>
+#include <pad.h>
 #include <netclass.h>
 #include <config_params.h>
 #include <board_stackup_manager/class_board_stackup.h>

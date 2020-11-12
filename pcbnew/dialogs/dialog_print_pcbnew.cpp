@@ -29,7 +29,7 @@
 #include <base_units.h>
 #include <pcbnew_settings.h>
 #include <pcbplot.h>
-#include <class_board.h>
+#include <board.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcbnew_control.h>

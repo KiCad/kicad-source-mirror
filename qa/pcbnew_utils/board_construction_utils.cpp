@@ -24,7 +24,7 @@
 #include <pcbnew_utils/board_construction_utils.h>
 
 #include <fp_shape.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <geometry/seg.h>
 #include <math/vector2d.h>
 

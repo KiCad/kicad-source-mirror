@@ -32,7 +32,7 @@
 #include <base_units.h>
 #include <locale_io.h>
 #include <reporter.h>
-#include <class_board.h>
+#include <board.h>
 #include <plotcontroller.h>
 #include <pcb_plot_params.h>
 #include <wx/ffile.h>

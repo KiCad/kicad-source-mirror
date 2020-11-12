@@ -22,10 +22,10 @@
  */
 
 #include <common.h>
-#include <class_board.h>
+#include <board.h>
 #include <pcb_shape.h>
-#include <class_pad.h>
-#include <class_track.h>
+#include <pad.h>
+#include <track.h>
 
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>

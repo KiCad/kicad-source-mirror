@@ -32,7 +32,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <settings/color_settings.h>
 
-#include <class_board.h>
+#include <board.h>
 #include <pcb_layer_box_selector.h>
 #include <tools/pcb_actions.h>
 

@@ -26,7 +26,7 @@
 #include "wx/html/m_templ.h"
 #include "wx/html/styleparams.h"
 #include <drc/drc_item.h>
-#include <class_board.h>
+#include <board.h>
 
 
 // These, being statically-defined, require specialized I18N handling.  We continue to

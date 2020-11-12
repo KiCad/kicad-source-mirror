@@ -30,7 +30,7 @@
 #include "pns_diff_pair.h"
 #include "pns_topology.h"
 
-#include <class_board.h>
+#include <board.h>
 
 namespace PNS {
 

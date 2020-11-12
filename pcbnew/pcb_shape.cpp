@@ -28,8 +28,8 @@
 #include <pcb_screen.h>
 #include <bitmaps.h>
 #include <pcb_edit_frame.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <pcb_shape.h>
 #include <base_units.h>
 #include <geometry/shape_simple.h>

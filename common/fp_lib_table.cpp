@@ -33,7 +33,7 @@
 #include <settings/settings_manager.h>
 #include <systemdirsappend.h>
 #include <fp_lib_table.h>
-#include <class_module.h>
+#include <footprint.h>
 
 #include <wx/hash.h>
 

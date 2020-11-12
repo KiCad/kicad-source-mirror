@@ -30,7 +30,7 @@
 #include <dialog_footprint_properties_base.h>
 #include <wx/valnum.h>
 #include <text_mod_grid_table.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <widgets/unit_binder.h>
 
 

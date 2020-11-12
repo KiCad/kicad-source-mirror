@@ -44,7 +44,7 @@
 #include <pgm_base.h>
 #include <pcb_edit_frame.h>
 
-#include <class_board.h>
+#include <board.h>
 #include <zone.h>
 
 #include <pcbnew.h>

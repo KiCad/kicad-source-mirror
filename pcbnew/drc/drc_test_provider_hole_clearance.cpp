@@ -22,8 +22,8 @@
  */
 
 #include <common.h>
-#include <class_pad.h>
-#include <class_track.h>
+#include <pad.h>
+#include <track.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
 #include <drc/drc_item.h>

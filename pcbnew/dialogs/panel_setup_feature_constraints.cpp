@@ -22,7 +22,7 @@
  */
 
 #include <board_design_settings.h>
-#include <class_board.h>                           // for BOARD
+#include <board.h>                           // for BOARD
 #include <convert_to_biu.h>                        // for IU_PER_MM
 #include <math/util.h>
 #include <panel_setup_feature_constraints.h>

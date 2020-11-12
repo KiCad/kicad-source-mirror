@@ -22,7 +22,7 @@
  */
 
 #include <bitmaps.h>
-#include <class_pcb_group.h>
+#include <pcb_group.h>
 #include <tool/tool_manager.h>
 #include <tools/selection_tool.h>
 #include <tools/pcbnew_picker_tool.h>

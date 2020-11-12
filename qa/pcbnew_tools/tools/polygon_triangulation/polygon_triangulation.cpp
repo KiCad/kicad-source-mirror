@@ -31,7 +31,7 @@
 
 #include <qa_utils/utility_registry.h>
 
-#include <class_board.h>
+#include <board.h>
 #include <profile.h>
 
 #include <atomic>

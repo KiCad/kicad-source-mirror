@@ -37,9 +37,9 @@
 #include <wildcards_and_files_ext.h>
 #include <locale_io.h>
 #include <pcbnew.h>
-#include <class_board.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <board.h>
+#include <footprint.h>
+#include <track.h>
 #include <vector>
 #include <cctype>
 #include <math/util.h>      // for KiROUND

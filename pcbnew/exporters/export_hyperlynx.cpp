@@ -23,10 +23,10 @@
 
 #include <kiface_i.h>
 #include <pcb_edit_frame.h>
-#include <class_board.h>
+#include <board.h>
 #include <class_board_item.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <footprint.h>
+#include <track.h>
 #include <zone.h>
 #include <cstdio>
 #include <vector>

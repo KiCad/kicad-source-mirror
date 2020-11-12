@@ -25,7 +25,7 @@
 #ifndef PAD_NAMING_H
 #define PAD_NAMING_H
 
-#include <class_pad.h>
+#include <pad.h>
 
 /**
  * The PAD_NAMING namespace contains helper functions for common operations

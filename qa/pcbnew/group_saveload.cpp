@@ -26,8 +26,8 @@
 #include <string>
 
 #include <boost/filesystem.hpp>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <pcb_text.h>
 #include <common.h>
 #include <pcbnew_utils/board_construction_utils.h>

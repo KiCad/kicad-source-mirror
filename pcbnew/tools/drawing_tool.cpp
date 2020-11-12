@@ -40,12 +40,12 @@
 #include <dialogs/dialog_text_properties.h>
 #include <preview_items/arc_assistant.h>
 
-#include <class_board.h>
+#include <board.h>
 #include <fp_shape.h>
 #include <pcb_text.h>
 #include <dimension.h>
 #include <zone.h>
-#include <class_module.h>
+#include <footprint.h>
 
 #include <preview_items/two_point_assistant.h>
 #include <preview_items/two_point_geom_manager.h>

@@ -28,7 +28,7 @@
 #include <core/kicad_algo.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
-#include <class_board.h>
+#include <board.h>
 #include <collectors.h>
 #include <panel_setup_layers.h>
 

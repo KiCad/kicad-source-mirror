@@ -20,7 +20,7 @@
 
 #include <regex>
 
-#include <class_board.h>
+#include <board.h>
 #include <gal/gal_display_options.h>
 #include <layers_id_colors_and_visibility.h>
 #include <panel_pcbnew_color_settings.h>
@@ -32,7 +32,7 @@
 #include <widgets/appearance_controls.h>
 #include <page_layout/ws_proxy_view_item.h>
 #include <pcb_painter.h>
-#include <class_track.h>
+#include <track.h>
 #include <plugins/kicad/kicad_plugin.h>
 
 

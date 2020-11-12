@@ -23,11 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <class_board.h>
-#include <class_track.h>
-#include <class_pcb_group.h>
-#include <class_module.h>
-#include <class_pad.h>
+#include <board.h>
+#include <track.h>
+#include <pcb_group.h>
+#include <footprint.h>
+#include <pad.h>
 #include <pcb_shape.h>
 #include <kicad_string.h>
 #include <zone.h>

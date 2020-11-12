@@ -27,7 +27,7 @@
 #include <pcb_edit_frame.h>
 #include <base_units.h>
 #include <bitmaps.h>
-#include <class_board.h>
+#include <board.h>
 #include <pcb_text.h>
 #include <pcb_painter.h>
 #include <trigo.h>

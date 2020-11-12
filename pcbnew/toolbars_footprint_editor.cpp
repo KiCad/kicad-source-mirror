@@ -21,7 +21,7 @@
  */
 
 #include <tool/actions.h>
-#include <class_board.h>
+#include <board.h>
 #include <footprint_edit_frame.h>
 #include <dialog_helpers.h>
 #include <pcbnew_id.h>

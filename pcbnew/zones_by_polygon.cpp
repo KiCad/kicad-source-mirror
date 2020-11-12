@@ -29,7 +29,7 @@
 #include <pcb_edit_frame.h>
 #include <board_commit.h>
 #include <view/view.h>
-#include <class_board.h>
+#include <board.h>
 #include <zone.h>
 #include <pcbnew.h>
 #include <zones.h>

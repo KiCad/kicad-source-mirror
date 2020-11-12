@@ -36,7 +36,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
-#include <class_board.h>
+#include <board.h>
 #include <kiface_i.h>
 
 using namespace std::placeholders;

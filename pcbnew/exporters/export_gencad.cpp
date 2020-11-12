@@ -30,10 +30,10 @@
  */
 
 #include <build_version.h>
-#include <class_board.h>
+#include <board.h>
 #include <fp_shape.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <footprint.h>
+#include <track.h>
 #include <confirm.h>
 #include <dialogs/dialog_gencad_export_options.h>
 #include <locale_io.h>

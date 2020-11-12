@@ -20,7 +20,7 @@
 
 #include <generate_footprint_info.h>
 #include <kicad_string.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <fp_lib_table.h>
 
 

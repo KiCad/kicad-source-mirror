@@ -27,8 +27,8 @@
 #include <base_units.h>
 #include <bitmaps.h>
 #include <board_commit.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <confirm.h>
 #include <convert_basic_shapes_to_polygon.h> // for enum RECT_CHAMFER_POSITIONS definition
 #include <geometry/shape_segment.h>

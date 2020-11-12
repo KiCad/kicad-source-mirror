@@ -23,7 +23,7 @@
 
 #include <vector>
 
-#include <class_board.h>
+#include <board.h>
 #include <gal/color4d.h>
 #include <layers_id_colors_and_visibility.h>
 #include <project/board_project_settings.h>

@@ -34,7 +34,7 @@
 
 #include <math/vector2d.h>
 #include <pcb_shape.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <base_units.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_poly_set.h>
@@ -788,7 +788,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
     return !selfIntersecting;
 }
 
-#include <class_board.h>
+#include <board.h>
 #include <collectors.h>
 
 /* This function is used to extract a board outlines (3D view, automatic zones build ...)

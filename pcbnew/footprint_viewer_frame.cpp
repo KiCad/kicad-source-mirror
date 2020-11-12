@@ -26,8 +26,8 @@
 #include <3d_viewer/eda_3d_viewer.h>
 #include <bitmaps.h>
 #include <board_commit.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <confirm.h>
 #include <dialog_helpers.h>
 #include <eda_pattern_match.h>

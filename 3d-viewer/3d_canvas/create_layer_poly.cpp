@@ -31,7 +31,7 @@
 #include "board_adapter.h"
 #include <convert_basic_shapes_to_polygon.h>
 #include <fp_shape.h>
-#include <class_module.h>
+#include <footprint.h>
 
 
 void BOARD_ADAPTER::buildPadShapeThickOutlineAsPolygon( const D_PAD* aPad,

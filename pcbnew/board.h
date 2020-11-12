@@ -27,8 +27,8 @@
 
 #include <board_design_settings.h>
 #include <board_item_container.h>
-#include <class_pcb_group.h>
-#include <class_module.h>
+#include <pcb_group.h>
+#include <footprint.h>
 #include <common.h> // Needed for stl hash extensions
 #include <layers_id_colors_and_visibility.h>
 #include <netinfo.h>

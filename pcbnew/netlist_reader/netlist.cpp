@@ -37,8 +37,8 @@ using namespace std::placeholders;
 #include <reporter.h>
 #include <lib_id.h>
 #include <fp_lib_table.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <ratsnest/ratsnest_data.h>
 #include <io_mgr.h>
 #include "board_netlist_updater.h"

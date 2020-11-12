@@ -31,7 +31,7 @@
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <class_board.h>
+#include <board.h>
 #include <tools/selection_tool.h>
 #include <widgets/wx_menubar.h>
 

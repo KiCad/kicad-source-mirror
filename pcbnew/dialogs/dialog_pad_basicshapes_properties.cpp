@@ -34,7 +34,7 @@
 #include <pcb_base_frame.h>
 #include <base_units.h>
 #include <widgets/wx_grid.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <math/util.h>      // for KiROUND
 
 #include <dialog_pad_properties.h>

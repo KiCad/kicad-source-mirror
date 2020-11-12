@@ -32,11 +32,11 @@
 
 #include "3d_cache/3d_cache.h"
 #include "3d_cache/3d_info.h"
-#include "class_board.h"
+#include "board.h"
 #include "fp_shape.h"
-#include "class_module.h"
+#include "footprint.h"
 #include "pcb_text.h"
-#include "class_track.h"
+#include "track.h"
 #include "zone.h"
 #include "convert_to_biu.h"
 #include <filename_resolver.h>

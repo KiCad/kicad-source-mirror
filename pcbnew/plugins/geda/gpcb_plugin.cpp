@@ -32,8 +32,8 @@
 #include <trace_helpers.h>
 #include <math/util.h>      // for KiROUND
 
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <locale_io.h>
 #include <pcb_text.h>
 #include <pcb_shape.h>

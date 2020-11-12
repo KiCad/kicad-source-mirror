@@ -31,7 +31,7 @@
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <grid_tricks.h>
-#include <class_board.h>
+#include <board.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <pcbnew_id.h>

@@ -28,7 +28,7 @@
  */
 #include <wx/dir.h>
 
-#include <class_board.h>
+#include <board.h>
 #include <confirm.h>
 #include <kiface_i.h>
 #include <pcb_edit_frame.h>

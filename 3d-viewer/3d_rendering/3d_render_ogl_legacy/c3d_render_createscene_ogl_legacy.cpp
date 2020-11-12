@@ -29,8 +29,8 @@
 
 #include "c3d_render_ogl_legacy.h"
 #include "ogl_legacy_utils.h"
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include "../../3d_math.h"
 #include "../../3d_fastmath.h"
 #include <trigo.h>

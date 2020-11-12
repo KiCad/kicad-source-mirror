@@ -31,7 +31,7 @@
 #include <bitmaps.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <class_board.h>
+#include <board.h>
 #include <connectivity/connectivity_data.h>
 #include <wildcards_and_files_ext.h>
 #include <netlist_reader/pcb_netlist.h>

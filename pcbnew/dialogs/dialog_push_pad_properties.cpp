@@ -24,7 +24,7 @@
 
 #include <dialog_push_pad_properties.h>
 
-#include <class_pad.h>
+#include <pad.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 

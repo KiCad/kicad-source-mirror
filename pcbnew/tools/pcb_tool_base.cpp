@@ -26,7 +26,7 @@
 #include <view/view_controls.h>
 #include <tool/tool_manager.h>
 #include <board_commit.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcbnew_settings.h>
 #include "selection_tool.h"

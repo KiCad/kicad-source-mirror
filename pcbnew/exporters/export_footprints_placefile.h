@@ -25,8 +25,8 @@
 #define EXPORT_FOOTPRINTS_PLACEFILE_H
 
 
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 
 /**
  * The ASCII format of the kicad place file is:

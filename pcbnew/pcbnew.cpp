@@ -45,7 +45,7 @@
 #include <pcbnew.h>
 #include <pcbnew_settings.h>
 #include <settings/settings_manager.h>
-#include <class_board.h>
+#include <board.h>
 #include <class_draw_panel_gal.h>
 #include <fp_lib_table.h>
 #include <footprint_edit_frame.h>

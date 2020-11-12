@@ -24,7 +24,7 @@
 #include <base_units.h>
 #include <layers_id_colors_and_visibility.h>
 #include <board_design_settings.h>
-#include <class_board.h>
+#include <board.h>
 #include <i18n_utility.h>       // For _HKI definition
 #include "stackup_predefined_prms.h"
 

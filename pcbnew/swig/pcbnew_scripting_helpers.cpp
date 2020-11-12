@@ -31,7 +31,7 @@
 #undef HAVE_CLOCK_GETTIME  // macro is defined in Python.h and causes redefine warning
 
 #include <action_plugin.h>
-#include <class_board.h>
+#include <board.h>
 #include <class_marker_pcb.h>
 #include <cstdlib>
 #include <drc/drc_engine.h>

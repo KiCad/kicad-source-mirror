@@ -1,8 +1,8 @@
 #include <wx/wx.h>
 #include <cstdio>
 
-#include "class_board.h"
-#include "class_track.h"
+#include "board.h"
+#include "track.h"
 
 #include <pcb_expr_evaluator.h>
 

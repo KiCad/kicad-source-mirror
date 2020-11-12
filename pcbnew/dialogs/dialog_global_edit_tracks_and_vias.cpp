@@ -23,8 +23,8 @@
  */
 
 #include <pcb_edit_frame.h>
-#include <class_board.h>
-#include <class_track.h>
+#include <board.h>
+#include <track.h>
 #include <connectivity/connectivity_data.h>
 #include <pcb_layer_box_selector.h>
 #include <tool/tool_manager.h>

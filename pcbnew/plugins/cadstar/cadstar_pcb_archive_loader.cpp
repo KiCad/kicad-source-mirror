@@ -26,13 +26,13 @@
 #include <cadstar_pcb_archive_loader.h>
 
 #include <board_stackup_manager/stackup_predefined_prms.h> // KEY_COPPER, KEY_CORE, KEY_PREPREG
-#include <class_board.h>
+#include <board.h>
 #include <dimension.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <pcb_text.h>
-#include <class_track.h>
+#include <track.h>
 #include <zone.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>

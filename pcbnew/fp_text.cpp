@@ -26,8 +26,8 @@
 #include <pcb_edit_frame.h>
 #include <base_units.h>
 #include <bitmaps.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <settings/settings_manager.h>
 #include <trigo.h>
 

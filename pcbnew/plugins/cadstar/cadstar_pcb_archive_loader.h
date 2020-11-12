@@ -28,7 +28,7 @@
 
 #include <cadstar_pcb_archive_parser.h>
 #include <cadstar_pcb_archive_plugin.h>
-#include <class_board.h>
+#include <board.h>
 #include <set>
 
 class BOARD;

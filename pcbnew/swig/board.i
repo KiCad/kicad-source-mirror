@@ -69,9 +69,9 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 // Do not permit default BOARD ctor since it won't initialize the project
 %ignore BOARD::BOARD();
 
-%include class_board.h
+%include board.h
 %{
-#include <class_board.h>
+#include <board.h>
 %}
 
 %extend std::deque<BOARD_ITEM *>

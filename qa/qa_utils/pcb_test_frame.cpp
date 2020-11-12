@@ -43,10 +43,10 @@
 #include <view/wx_view_controls.h>
 #include <pcb_painter.h>
 
-#include <class_pad.h>
-#include <class_module.h>
-#include <class_board.h>
-#include <class_track.h>
+#include <pad.h>
+#include <footprint.h>
+#include <board.h>
+#include <track.h>
 
 #include <pcb_painter.h>
 #include <pcb_edit_frame.h>

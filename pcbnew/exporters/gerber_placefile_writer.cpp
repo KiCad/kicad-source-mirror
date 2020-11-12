@@ -33,13 +33,13 @@
 #include <pcb_edit_frame.h>
 #include <pgm_base.h>
 
-#include <class_board.h>
+#include <board.h>
 
 #include <pcbplot.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
 #include <gbr_metadata.h>
-#include <class_module.h>
+#include <footprint.h>
 
 
 PLACEFILE_GERBER_WRITER::PLACEFILE_GERBER_WRITER( BOARD* aPcb )

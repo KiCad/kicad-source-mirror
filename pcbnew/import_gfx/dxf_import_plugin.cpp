@@ -35,7 +35,7 @@
 
 #include <trigo.h>
 #include <macros.h>
-#include <class_board.h>
+#include <board.h>
 #include "common.h"
 
 

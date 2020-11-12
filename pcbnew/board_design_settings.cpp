@@ -22,7 +22,7 @@
  */
 
 #include <dimension.h>
-#include <class_track.h>
+#include <track.h>
 #include <layers_id_colors_and_visibility.h>
 #include <kiface_i.h>
 #include <board_design_settings.h>

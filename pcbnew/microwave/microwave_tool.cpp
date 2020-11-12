@@ -25,7 +25,7 @@
 #include <board_commit.h>
 #include <class_board_item.h>
 #include <class_draw_panel_gal.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <confirm.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <microwave/microwave_tool.h>

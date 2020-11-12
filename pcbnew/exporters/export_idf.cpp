@@ -30,8 +30,8 @@
 #include <locale_io.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <fp_shape.h>
 #include <idf_parser.h>
 #include <3d_cache/3d_info.h>

@@ -28,14 +28,14 @@
 #include <future>
 
 #include <advanced_config.h>
-#include <class_board.h>
+#include <board.h>
 #include <zone.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <fp_shape.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_target.h>
-#include <class_track.h>
+#include <track.h>
 #include <connectivity/connectivity_data.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <board_commit.h>

@@ -24,8 +24,8 @@
 #include <utility>
 
 #include "pcbnew_settings.h"
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <eda_draw_frame.h>
 #include <footprint_preview_panel.h>
 #include <fp_lib_table.h>

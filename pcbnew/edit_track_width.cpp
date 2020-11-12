@@ -25,7 +25,7 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
 #include <board_design_settings.h>
-#include <class_track.h>
+#include <track.h>
 #include <tools/pcb_actions.h>
 #include <tool/tool_manager.h>
 

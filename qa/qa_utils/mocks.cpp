@@ -29,11 +29,11 @@
 #include <wx/file.h>
 #include <wx/snglinst.h>
 #include <wx/app.h>
-#include <class_board.h>
+#include <board.h>
 #include <fp_lib_table.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_wizard_frame.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <tools/pcb_actions.h>
 #include <router/router_tool.h>
 #include <dialog_find.h>

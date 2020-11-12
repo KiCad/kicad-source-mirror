@@ -27,8 +27,8 @@
 
 #include <widgets/text_ctrl_eval.h>
 
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <pcb_edit_frame.h>
 
 #include <boost/algorithm/string/join.hpp>

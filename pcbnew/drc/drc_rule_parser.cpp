@@ -22,7 +22,7 @@
  */
 
 
-#include <class_board.h>
+#include <board.h>
 #include <drc/drc_rule_parser.h>
 #include <drc/drc_rule_condition.h>
 #include <drc_rules_lexer.h>

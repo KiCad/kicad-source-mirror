@@ -34,7 +34,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <locale_io.h>
 #include <bitmaps.h>
-#include <class_board.h>
+#include <board.h>
 #include <dialog_plot.h>
 #include <dialog_gendrill.h>
 #include <wx_html_report_panel.h>

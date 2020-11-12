@@ -38,8 +38,8 @@
 #include <dialog_board_setup.h>
 #include <convert_to_biu.h>
 #include <invoke_pcb_dialog.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <page_layout/ws_proxy_view_item.h>
 #include <connectivity/connectivity_data.h>
 #include <wildcards_and_files_ext.h>

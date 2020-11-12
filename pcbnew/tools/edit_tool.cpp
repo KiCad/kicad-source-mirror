@@ -25,8 +25,8 @@
  */
 
 #include <limits>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <fp_shape.h>
 #include <collectors.h>
 #include <pcb_edit_frame.h>

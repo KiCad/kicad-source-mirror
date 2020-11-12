@@ -28,8 +28,8 @@
 #include <layers_id_colors_and_visibility.h>
 #include <pcbnew/pcb_expr_evaluator.h>
 
-#include <pcbnew/class_board.h>
-#include <pcbnew/class_track.h>
+#include <pcbnew/board.h>
+#include <pcbnew/track.h>
 
 BOOST_AUTO_TEST_SUITE( Libeval_Compiler )
 

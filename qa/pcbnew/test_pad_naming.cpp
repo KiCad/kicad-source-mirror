@@ -23,8 +23,8 @@
 
 #include <unit_test_utils/unit_test_utils.h>
 
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <pad_naming.h>
 
 struct PAD_FIXTURE

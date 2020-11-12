@@ -27,7 +27,7 @@
 
 #include <eda_rect.h>
 #include <class_board_item.h>
-#include <class_track.h>
+#include <track.h>
 #include <unordered_set>
 #include <set>
 #include <vector>

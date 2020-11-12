@@ -22,7 +22,7 @@
 
 #include <footprint_info_impl.h>
 
-#include <class_module.h>
+#include <footprint.h>
 #include <footprint_info.h>
 #include <fp_lib_table.h>
 #include <dialogs/html_messagebox.h>

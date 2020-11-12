@@ -20,7 +20,7 @@
 
 #include <regex>
 
-#include <class_board.h>
+#include <board.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <gal/gal_display_options.h>

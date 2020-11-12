@@ -29,7 +29,7 @@
 #include <memory>
 #include <vector>
 
-#include <class_module.h>
+#include <footprint.h>
 #include <wx/gdicmn.h>
 
 // tthis constant specifies an unconnected net

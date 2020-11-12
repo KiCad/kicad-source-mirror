@@ -31,11 +31,11 @@
 #include <3d_viewer/eda_3d_viewer.h>
 #include <bitmaps.h>
 #include <board_commit.h>
-#include <class_board.h>
+#include <board.h>
 #include <class_board_item.h>
 #include <dimension.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <footprint.h>
+#include <track.h>
 #include <zone.h>
 #include <fp_shape.h>
 #include <confirm.h>

@@ -27,7 +27,7 @@
 #include "dialog_gencad_export_options.h"
 
 #include <pcb_edit_frame.h>
-#include <class_board.h>
+#include <board.h>
 #include <project.h>
 #include <confirm.h>
 #include <wildcards_and_files_ext.h>

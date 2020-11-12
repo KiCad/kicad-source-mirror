@@ -25,7 +25,7 @@
 
 #include <geometry/shape_rect.h>
 #include <geometry/shape_simple.h>
-#include "class_track.h"
+#include "track.h"
 #include <pcb_painter.h>
 
 #include "router_preview_item.h"

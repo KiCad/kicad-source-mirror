@@ -25,15 +25,15 @@
 #include <collectors.h>
 #include <class_board_item.h>             // class BOARD_ITEM
 
-#include <class_module.h>
+#include <footprint.h>
 #include <fp_shape.h>
-#include <class_pad.h>
-#include <class_track.h>
+#include <pad.h>
+#include <track.h>
 #include <class_marker_pcb.h>
 #include <dimension.h>
 #include <zone.h>
 #include <pcb_shape.h>
-#include <class_pcb_group.h>
+#include <pcb_group.h>
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
 

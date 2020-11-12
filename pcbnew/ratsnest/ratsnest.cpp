@@ -24,9 +24,9 @@
 
 #include <pcb_edit_frame.h>
 #include <macros.h>
-#include <class_board.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <board.h>
+#include <footprint.h>
+#include <track.h>
 #include <pcbnew.h>
 #include <ratsnest/ratsnest_data.h>
 

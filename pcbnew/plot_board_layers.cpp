@@ -35,9 +35,9 @@
 #include <pcb_base_frame.h>
 #include <math/util.h>      // for KiROUND
 
-#include <class_board.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <board.h>
+#include <footprint.h>
+#include <track.h>
 #include <fp_shape.h>
 #include <pcb_text.h>
 #include <zone.h>

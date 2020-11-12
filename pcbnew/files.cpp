@@ -39,7 +39,7 @@
 #include <io_mgr.h>
 #include <wildcards_and_files_ext.h>
 #include <tool/tool_manager.h>
-#include <class_board.h>
+#include <board.h>
 #include <wx/stdpaths.h>
 #include <ratsnest/ratsnest_data.h>
 #include <kiplatform/app.h>

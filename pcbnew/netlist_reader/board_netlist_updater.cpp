@@ -34,11 +34,11 @@
 
 #include <common.h>                         // for PAGE_INFO
 
-#include <class_board.h>
+#include <board.h>
 #include <netinfo.h>
-#include <class_module.h>
-#include <class_pad.h>
-#include <class_track.h>
+#include <footprint.h>
+#include <pad.h>
+#include <track.h>
 #include <zone.h>
 #include <kicad_string.h>
 

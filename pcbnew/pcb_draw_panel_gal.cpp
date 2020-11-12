@@ -29,9 +29,9 @@
 #include <page_layout/ws_proxy_view_item.h>
 #include <connectivity/connectivity_data.h>
 
-#include <class_board.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <board.h>
+#include <footprint.h>
+#include <track.h>
 #include <class_marker_pcb.h>
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>

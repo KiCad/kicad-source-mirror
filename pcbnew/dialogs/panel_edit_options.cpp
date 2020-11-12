@@ -23,7 +23,7 @@
  */
 
 #include <board_design_settings.h>
-#include <class_board.h>
+#include <board.h>
 #include <panel_edit_options.h>
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>

@@ -36,9 +36,9 @@
 #include <pcb_edit_frame.h>
 #include <plotter.h>
 
-#include <class_board.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <board.h>
+#include <footprint.h>
+#include <track.h>
 #include <zone.h>
 
 #include <board_stackup_manager/stackup_predefined_prms.h>

@@ -24,8 +24,8 @@
 #ifndef KICAD_TRACKS_CLEANER_H
 #define KICAD_TRACKS_CLEANER_H
 
-#include <class_track.h>
-#include <class_board.h>
+#include <track.h>
+#include <board.h>
 
 class BOARD_COMMIT;
 class CLEANUP_ITEM;

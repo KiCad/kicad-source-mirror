@@ -32,7 +32,7 @@
 #include <project/net_settings.h>
 #include <project/project_file.h>
 
-#include <class_board.h>
+#include <board.h>
 
 #include <pcbnew.h>
 #include <footprint_edit_frame.h>

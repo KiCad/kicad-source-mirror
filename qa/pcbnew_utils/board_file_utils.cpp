@@ -28,7 +28,7 @@
 #include <plugins/kicad/pcb_parser.h>
 #include <richio.h>
 
-#include <class_board.h>
+#include <board.h>
 
 #include <qa_utils/stdstream_line_reader.h>
 

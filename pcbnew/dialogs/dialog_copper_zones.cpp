@@ -31,7 +31,7 @@
 #include <bitmaps.h>
 #include <widgets/unit_binder.h>
 #include <zone.h>
-#include <class_board.h>
+#include <board.h>
 #include <trigo.h>
 
 #include <dialog_copper_zones_base.h>

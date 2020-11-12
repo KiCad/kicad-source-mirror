@@ -29,11 +29,11 @@
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <widgets/msgpanel.h>
-#include <class_board.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <board.h>
+#include <footprint.h>
+#include <track.h>
 #include <pcb_shape.h>
-#include <class_pad.h>
+#include <pad.h>
 #include <board_commit.h>
 #include <connectivity/connectivity_data.h>
 #include <widgets/progress_reporter.h>

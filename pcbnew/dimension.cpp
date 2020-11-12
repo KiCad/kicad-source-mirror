@@ -27,7 +27,7 @@
 #include <bitmaps.h>
 #include <pcb_edit_frame.h>
 #include <base_units.h>
-#include <class_board.h>
+#include <board.h>
 #include <dimension.h>
 #include <pcb_text.h>
 #include <geometry/shape_circle.h>

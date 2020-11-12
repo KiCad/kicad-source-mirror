@@ -35,8 +35,8 @@
 #include <bitmaps.h>
 #include <reporter.h>
 #include <tools/pcb_editor_control.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <wildcards_and_files_ext.h>
 #include <kiface_i.h>
 #include <wx_html_report_panel.h>

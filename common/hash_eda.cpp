@@ -25,10 +25,10 @@
 
 #include <hash_eda.h>
 
-#include <class_module.h>
+#include <footprint.h>
 #include <fp_text.h>
 #include <fp_shape.h>
-#include <class_pad.h>
+#include <pad.h>
 
 #include <functional>
 

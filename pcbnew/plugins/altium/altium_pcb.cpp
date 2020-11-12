@@ -26,11 +26,11 @@
 #include "plugins/altium/altium_parser.h"
 #include <plugins/altium/altium_parser_utils.h>
 
-#include <class_board.h>
+#include <board.h>
 #include <dimension.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
-#include <class_track.h>
+#include <track.h>
 #include <kicad_string.h>
 
 #include <fp_shape.h>

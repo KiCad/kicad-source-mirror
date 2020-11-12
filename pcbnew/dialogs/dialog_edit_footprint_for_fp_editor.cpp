@@ -35,7 +35,7 @@
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
 #include <widgets/text_ctrl_eval.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <dialog_edit_footprint_for_fp_editor.h>

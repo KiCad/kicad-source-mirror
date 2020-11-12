@@ -32,7 +32,7 @@
 #include <convert_to_biu.h>
 #include <pcbnew.h>
 #include <pcb_base_frame.h>
-#include <class_board.h>
+#include <board.h>
 #include <settings/color_settings.h>
 #include <zones.h>
 

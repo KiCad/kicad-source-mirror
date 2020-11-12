@@ -31,7 +31,7 @@
 #include <trigo.h>
 
 #include <pcb_shape.h>
-#include <class_pad.h>
+#include <pad.h>
 
 AR_MATRIX::AR_MATRIX()
 {

@@ -25,7 +25,7 @@
 #ifndef DRC_PROVIDER__H
 #define DRC_PROVIDER__H
 
-#include <class_board.h>
+#include <board.h>
 #include <class_marker_pcb.h>
 #include <pcb_base_frame.h>
 #include <drc/drc_item.h>

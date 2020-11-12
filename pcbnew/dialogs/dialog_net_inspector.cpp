@@ -25,8 +25,8 @@
 
 #include <kicad_string.h>
 #include <tools/pcb_inspection_tool.h>
-#include <class_board.h>
-#include <class_track.h>
+#include <board.h>
+#include <track.h>
 #include <dialog_net_inspector.h>
 #include <eda_pattern_match.h>
 #include <wildcards_and_files_ext.h>

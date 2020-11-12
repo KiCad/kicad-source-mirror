@@ -24,9 +24,9 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
-#include <class_track.h>
-#include <class_module.h>
-#include <class_pad.h>
+#include <track.h>
+#include <footprint.h>
+#include <pad.h>
 #include <zone.h>
 #include <pcb_text.h>
 

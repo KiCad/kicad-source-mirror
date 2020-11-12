@@ -33,7 +33,7 @@
 
 
 #include <eda_item.h>
-#include <class_board.h>
+#include <board.h>
 #include <eda_draw_frame.h>
 #include <outline_mode.h>
 #include <lib_id.h>

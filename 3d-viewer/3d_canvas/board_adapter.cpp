@@ -30,7 +30,7 @@
 #include "../3d_rendering/ccamera.h"
 #include "board_adapter.h"
 #include <3d_rendering/3d_render_raytracing/shapes2D/cpolygon2d.h>
-#include <class_board.h>
+#include <board.h>
 #include <3d_math.h>
 #include "3d_fastmath.h"
 #include <geometry/geometry_utils.h>

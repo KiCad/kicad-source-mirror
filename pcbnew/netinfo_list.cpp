@@ -21,10 +21,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <class_board.h>
-#include <class_module.h>
-#include <class_pad.h>
-#include <class_track.h>
+#include <board.h>
+#include <footprint.h>
+#include <pad.h>
+#include <track.h>
 #include <zone.h>
 #include <netinfo.h>
 

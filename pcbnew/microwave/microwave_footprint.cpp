@@ -22,7 +22,7 @@
  */
 
 
-#include <class_module.h>
+#include <footprint.h>
 #include <confirm.h>
 #include <dialog_text_entry.h>
 #include <microwave/microwave_tool.h>

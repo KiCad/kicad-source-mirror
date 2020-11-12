@@ -26,8 +26,8 @@
 #include <confirm.h>
 #include <widgets/unit_binder.h>
 #include <board_commit.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <pcb_text.h>
 #include <fp_text.h>
 #include <pcb_edit_frame.h>

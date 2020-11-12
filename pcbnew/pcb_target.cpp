@@ -25,7 +25,7 @@
  */
 
 #include <bitmaps.h>
-#include <class_board.h>
+#include <board.h>
 #include <pcb_target.h>
 #include <base_units.h>
 #include <settings/color_settings.h>

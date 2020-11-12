@@ -31,7 +31,7 @@
 #include <tool/tool_manager.h>
 
 #include <pcb_edit_frame.h>
-#include <class_board.h>
+#include <board.h>
 #include <board_commit.h>
 #include <bitmaps.h>
 

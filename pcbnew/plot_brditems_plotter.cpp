@@ -51,15 +51,15 @@
 #include <pcbplot.h>
 #include <pcb_plot_params.h>                  // for PCB_PLOT_PARAMS, PCB_PL...
 
-#include <class_board.h>
+#include <board.h>
 #include <class_board_item.h>                 // for BOARD_ITEM, S_CIRCLE
 #include <dimension.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <fp_text.h>                          // for FP_TEXT
-#include <class_track.h>
-#include <class_pad.h>                        // for D_PAD
+#include <track.h>
+#include <pad.h>                        // for D_PAD
 #include <pcb_target.h>
 #include <pcb_text.h>
 #include <zone.h>

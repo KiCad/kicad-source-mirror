@@ -26,7 +26,7 @@
 
 #include <cadstar_pcb_archive_loader.h>
 #include <cadstar_pcb_archive_plugin.h>
-#include <class_board.h>
+#include <board.h>
 #include <properties.h>
 
 

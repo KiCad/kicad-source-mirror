@@ -26,8 +26,8 @@
 
 #include <bitmaps.h>
 #include <board_commit.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <dialog_exchange_footprints.h>
 #include <kicad_string.h>
 #include <kiway.h>

@@ -27,10 +27,10 @@
  * D_PAD functions specific to custom shaped pads.
  */
 
-#include <class_board.h>
+#include <board.h>
 #include <class_board_item.h>
 #include <pcb_shape.h>
-#include <class_pad.h>
+#include <pad.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_rect.h>
 

@@ -26,8 +26,8 @@
 
 #include <bitmaps.h>
 #include <board_commit.h>
-#include <class_track.h>
-#include <class_pad.h>
+#include <track.h>
+#include <pad.h>
 #include <pcb_edit_frame.h>
 #include <tools/selection_tool.h>
 

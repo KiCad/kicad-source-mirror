@@ -29,8 +29,8 @@
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <pcb_edit_frame.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <fp_shape.h>
 #include <view/view.h>
 

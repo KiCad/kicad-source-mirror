@@ -35,8 +35,8 @@
 #include <footprint_editor_settings.h>
 #include <fp_lib_table.h>
 #include <pcbnew_id.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <collectors.h>
 #include <pcb_draw_panel_gal.h>
 #include <math/vector2d.h>

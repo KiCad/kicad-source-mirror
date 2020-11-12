@@ -35,16 +35,16 @@
 #include <trigo.h>
 
 #include <advanced_config.h>
-#include <class_board.h>
+#include <board.h>
 #include <dimension.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
-#include <class_pcb_group.h>
+#include <pcb_group.h>
 #include <pcb_target.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <netclass.h>
-#include <class_pad.h>
-#include <class_track.h>
+#include <pad.h>
+#include <track.h>
 #include <zone.h>
 #include <plugins/kicad/kicad_plugin.h>
 #include <pcb_plot_params_parser.h>

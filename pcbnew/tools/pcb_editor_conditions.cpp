@@ -23,7 +23,7 @@
  */
 
 
-#include <class_board.h>
+#include <board.h>
 #include <pcb_base_frame.h>
 #include <tool/selection.h>
 #include <tools/pcb_editor_conditions.h>

@@ -40,8 +40,8 @@
 #include <kicad_string.h>
 #include <i18n_utility.h>
 #include <view/view.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <pcb_shape.h>
 #include <connectivity/connectivity_data.h>
 #include <convert_to_biu.h>

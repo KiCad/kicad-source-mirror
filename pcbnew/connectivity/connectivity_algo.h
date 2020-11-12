@@ -29,9 +29,9 @@
 #ifndef __CONNECTIVITY_ALGO_H
 #define __CONNECTIVITY_ALGO_H
 
-#include <class_board.h>
-#include <class_pad.h>
-#include <class_module.h>
+#include <board.h>
+#include <pad.h>
+#include <footprint.h>
 #include <zone.h>
 
 #include <geometry/shape_poly_set.h>

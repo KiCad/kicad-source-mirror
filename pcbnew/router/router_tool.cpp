@@ -22,11 +22,11 @@
 #include <wx/hyperlink.h>
 #include <functional>
 using namespace std::placeholders;
-#include <class_board.h>
+#include <board.h>
 #include <class_board_item.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <fp_shape.h>
-#include <class_pad.h>
+#include <pad.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
 #include <dialogs/dialog_pns_settings.h>

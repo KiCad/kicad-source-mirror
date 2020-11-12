@@ -31,9 +31,9 @@
  * Note: these ports must be enabled for firewall protection
  */
 
-#include <class_board.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <board.h>
+#include <footprint.h>
+#include <track.h>
 #include <collectors.h>
 #include <eda_dde.h>
 #include <kiface_i.h>

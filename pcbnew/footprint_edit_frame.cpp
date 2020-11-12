@@ -33,8 +33,8 @@
 #include "tools/selection_tool.h"
 #include <3d_viewer/eda_3d_viewer.h>
 #include <bitmaps.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <confirm.h>
 #include <dialogs/panel_modedit_color_settings.h>
 #include <dialogs/panel_modedit_defaults.h>

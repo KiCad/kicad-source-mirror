@@ -22,7 +22,7 @@
  */
 
 #include <common.h>
-#include <class_board.h>
+#include <board.h>
 
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>

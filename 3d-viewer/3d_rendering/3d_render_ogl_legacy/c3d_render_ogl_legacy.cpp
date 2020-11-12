@@ -33,8 +33,8 @@
 #include "ogl_legacy_utils.h"
 #include "common_ogl/ogl_utils.h"
 #include "../cimage.h"
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <3d_math.h>
 #include <math/util.h>      // for KiROUND
 

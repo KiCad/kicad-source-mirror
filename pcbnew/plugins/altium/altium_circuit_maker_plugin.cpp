@@ -33,7 +33,7 @@
 #include <altium_circuit_maker_plugin.h>
 #include <altium_pcb.h>
 
-#include <class_board.h>
+#include <board.h>
 
 #include <compoundfilereader.h>
 #include <utf.h>

@@ -30,9 +30,9 @@
 #include <unordered_set>
 #include <kicad_string.h>
 #include <pcb_edit_frame.h>
-#include <class_board.h>
+#include <board.h>
 #include <fp_shape.h>
-#include <class_module.h>
+#include <footprint.h>
 #include <view/view.h>
 #include <geometry/shape_null.h>
 #include <i18n_utility.h>

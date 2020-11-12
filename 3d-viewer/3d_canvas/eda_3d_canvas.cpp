@@ -38,7 +38,7 @@
 #include <3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.h>
 #include <3d_rendering/3d_render_raytracing/accelerators/cbvh_pbrt.h>
 #include <3d_viewer_id.h>
-#include <class_board.h>
+#include <board.h>
 #include <reporter.h>
 #include <gl_context_mgr.h>
 #include <profile.h>        // To use GetRunningMicroSecs or another profiling utility

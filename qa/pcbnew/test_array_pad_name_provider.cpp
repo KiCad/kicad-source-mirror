@@ -32,8 +32,8 @@
 
 #include <common.h> // make_unique
 
-#include <class_module.h>
-#include <class_pad.h>
+#include <footprint.h>
+#include <pad.h>
 
 /**
  * Make a module with a given list of named pads

@@ -24,7 +24,7 @@
 #ifndef KICAD_GRAPHICS_CLEANER_H
 #define KICAD_GRAPHICS_CLEANER_H
 
-#include <class_board.h>
+#include <board.h>
 
 class MODULE;
 class BOARD_COMMIT;

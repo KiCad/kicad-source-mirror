@@ -20,11 +20,11 @@
  */
 
 #include <undo_redo_container.h>
-#include <class_board.h>
+#include <board.h>
 #include <board_connected_item.h>
 #include <fp_text.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <footprint.h>
+#include <track.h>
 #include <zone.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>

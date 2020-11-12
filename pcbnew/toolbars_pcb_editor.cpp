@@ -27,7 +27,7 @@
 #include <memory>
 
 #include <bitmaps.h>
-#include <class_board.h>
+#include <board.h>
 #include <dialog_helpers.h>
 #include <kiface_i.h>
 #include <pcb_edit_frame.h>

@@ -26,7 +26,7 @@
 
 
 #include <array_options.h>
-#include <class_module.h>
+#include <footprint.h>
 
 /**
  * Simple class that sequentially provides names from an #ARRAY_OPTIONS

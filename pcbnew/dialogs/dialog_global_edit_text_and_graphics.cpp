@@ -26,8 +26,8 @@
 #include <board_commit.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
-#include <class_board.h>
-#include <class_module.h>
+#include <board.h>
+#include <footprint.h>
 #include <dimension.h>
 #include <fp_shape.h>
 #include <pcb_text.h>
