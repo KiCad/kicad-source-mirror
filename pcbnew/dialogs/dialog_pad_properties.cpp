@@ -314,12 +314,12 @@ void DIALOG_PAD_PROPERTIES::updateRoundRectCornerValues()
     {
         wxString ratio = wxString::Format( "%.1f", m_dummyPad->GetRoundRectRadiusRatio() * 100 );
         m_tcCornerSizeRatio->ChangeValue( ratio );
-        m_tcCornerSizeRatio1->ChangeValue( ratio );
+        m_tcMixedCornerSizeRatio->ChangeValue( ratio );
         m_cornerRadius.ChangeValue( m_dummyPad->GetRoundRectCornerRadius() );
 
         ratio = wxString::Format( "%.1f", m_dummyPad->GetChamferRectRatio() * 100 );
         m_tcChamferRatio->ChangeValue( ratio );
-        m_tcChamferRatio1->ChangeValue( ratio );
+        m_tcMixedChamferRatio->ChangeValue( ratio );
     }
 }
 
@@ -343,7 +343,7 @@ void DIALOG_PAD_PROPERTIES::onCornerRadiusChange( wxCommandEvent& event )
 
     auto ratio = wxString::Format( "%.1f", m_dummyPad->GetRoundRectRadiusRatio() * 100 );
     m_tcCornerSizeRatio->ChangeValue( ratio );
-    m_tcCornerSizeRatio1->ChangeValue( ratio );
+    m_tcMixedCornerSizeRatio->ChangeValue( ratio );
 
     redraw();
 }
@@ -361,7 +361,7 @@ void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
     wxString  value = event.GetString();
     bool      changed = false;
 
-    if( ctrl == m_tcCornerSizeRatio || ctrl == m_tcCornerSizeRatio1 )
+    if( ctrl == m_tcCornerSizeRatio || ctrl == m_tcMixedCornerSizeRatio )
     {
         double ratioPercent;
 
@@ -373,7 +373,7 @@ void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
                 ratioPercent = 0.0;
                 value.Printf( "%.1f", ratioPercent );
                 m_tcCornerSizeRatio->ChangeValue( value );
-                m_tcCornerSizeRatio1->ChangeValue( value );
+                m_tcMixedCornerSizeRatio->ChangeValue( value );
             }
 
             if( ratioPercent > 50.0 )
@@ -381,18 +381,18 @@ void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
                 ratioPercent = 0.5;
                 value.Printf( "%.1f", ratioPercent*100.0 );
                 m_tcCornerSizeRatio->ChangeValue( value );
-                m_tcCornerSizeRatio1->ChangeValue( value );
+                m_tcMixedCornerSizeRatio->ChangeValue( value );
             }
 
             if( ctrl == m_tcCornerSizeRatio )
-                m_tcCornerSizeRatio1->ChangeValue( value );
+                m_tcMixedCornerSizeRatio->ChangeValue( value );
             else
                 m_tcCornerSizeRatio->ChangeValue( value );
 
             changed = true;
         }
     }
-    else if( ctrl == m_tcChamferRatio || ctrl == m_tcChamferRatio1 )
+    else if( ctrl == m_tcChamferRatio || ctrl == m_tcMixedChamferRatio )
     {
         double ratioPercent;
 
@@ -404,7 +404,7 @@ void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
                 ratioPercent = 0.0;
                 value.Printf( "%.1f", ratioPercent );
                 m_tcChamferRatio->ChangeValue( value );
-                m_tcChamferRatio1->ChangeValue( value );
+                m_tcMixedChamferRatio->ChangeValue( value );
             }
 
             if( ratioPercent > 50.0 )
@@ -412,11 +412,11 @@ void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
                 ratioPercent = 0.5;
                 value.Printf( "%.1f", ratioPercent*100.0 );
                 m_tcChamferRatio->ChangeValue( value );
-                m_tcChamferRatio1->ChangeValue( value );
+                m_tcMixedChamferRatio->ChangeValue( value );
             }
 
             if( ctrl == m_tcChamferRatio )
-                m_tcChamferRatio1->ChangeValue( value );
+                m_tcMixedChamferRatio->ChangeValue( value );
             else
                 m_tcChamferRatio->ChangeValue( value );
 
@@ -572,24 +572,24 @@ void DIALOG_PAD_PROPERTIES::initValues()
     switch( m_dummyPad->GetShape() )
     {
     default:
-    case PAD_SHAPE_CIRCLE:    m_PadShape->SetSelection( CHOICE_SHAPE_CIRCLE );    break;
-    case PAD_SHAPE_OVAL:      m_PadShape->SetSelection( CHOICE_SHAPE_OVAL );      break;
-    case PAD_SHAPE_RECT:      m_PadShape->SetSelection( CHOICE_SHAPE_RECT );      break;
-    case PAD_SHAPE_TRAPEZOID: m_PadShape->SetSelection( CHOICE_SHAPE_TRAPEZOID ); break;
-    case PAD_SHAPE_ROUNDRECT: m_PadShape->SetSelection( CHOICE_SHAPE_ROUNDRECT ); break;
+    case PAD_SHAPE_CIRCLE:    m_PadShapeSelector->SetSelection( CHOICE_SHAPE_CIRCLE );    break;
+    case PAD_SHAPE_OVAL:      m_PadShapeSelector->SetSelection( CHOICE_SHAPE_OVAL );      break;
+    case PAD_SHAPE_RECT:      m_PadShapeSelector->SetSelection( CHOICE_SHAPE_RECT );      break;
+    case PAD_SHAPE_TRAPEZOID: m_PadShapeSelector->SetSelection( CHOICE_SHAPE_TRAPEZOID ); break;
+    case PAD_SHAPE_ROUNDRECT: m_PadShapeSelector->SetSelection( CHOICE_SHAPE_ROUNDRECT ); break;
 
     case PAD_SHAPE_CHAMFERED_RECT:
         if( m_dummyPad->GetRoundRectRadiusRatio() > 0.0 )
-            m_PadShape->SetSelection( CHOICE_SHAPE_CHAMFERED_ROUNDED_RECT );
+            m_PadShapeSelector->SetSelection( CHOICE_SHAPE_CHAMFERED_ROUNDED_RECT );
         else
-            m_PadShape->SetSelection( CHOICE_SHAPE_CHAMFERED_RECT );
+            m_PadShapeSelector->SetSelection( CHOICE_SHAPE_CHAMFERED_RECT );
         break;
 
     case PAD_SHAPE_CUSTOM:
         if( m_dummyPad->GetAnchorPadShape() == PAD_SHAPE_RECT )
-            m_PadShape->SetSelection( CHOICE_SHAPE_CUSTOM_RECT_ANCHOR );
+            m_PadShapeSelector->SetSelection( CHOICE_SHAPE_CUSTOM_RECT_ANCHOR );
         else
-            m_PadShape->SetSelection( CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR );
+            m_PadShapeSelector->SetSelection( CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR );
         break;
     }
 
@@ -774,7 +774,7 @@ void DIALOG_PAD_PROPERTIES::onChangePadMode( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 {
-    switch( m_PadShape->GetSelection() )
+    switch( m_PadShapeSelector->GetSelection() )
     {
     case CHOICE_SHAPE_CIRCLE:
     case CHOICE_SHAPE_OVAL:
@@ -799,28 +799,44 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     case CHOICE_SHAPE_CHAMFERED_RECT:
         m_shapePropsBook->SetSelection( 3 );
 
-        // A reasonable default is all corners chamfered.
+        // Reasonable default
+        if( m_dummyPad->GetChamferRectRatio() == 0.0 )
+            m_dummyPad->SetChamferRectRatio( 0.2 );
+
+        // Ensure the displayed value is up to date:
+        m_tcChamferRatio->ChangeValue( wxString::Format( "%.1f",
+                                       m_dummyPad->GetChamferRectRatio() * 100 ) );
+
+        // A reasonable default is one corner chamfered (usual for some SMD pads).
         if( !m_cbTopLeft->GetValue() && !m_cbTopRight->GetValue()
                 && !m_cbBottomLeft->GetValue() && !m_cbBottomRight->GetValue() )
         {
             m_cbTopLeft->SetValue( true );
-            m_cbTopRight->SetValue( true );
-            m_cbBottomLeft->SetValue( true );
-            m_cbBottomRight->SetValue( true );
+            m_cbTopRight->SetValue( false );
+            m_cbBottomLeft->SetValue( false );
+            m_cbBottomRight->SetValue( false );
         }
         break;
 
     case CHOICE_SHAPE_CHAMFERED_ROUNDED_RECT:
-    {
         m_shapePropsBook->SetSelection( 4 );
 
         // Reasonable defaults (corner radius from  IPC-7351C)
-        if( m_dummyPad->GetRoundRectRadiusRatio() == 0.0 )
-            m_tcCornerSizeRatio->ChangeValue( "25" );
+        if( m_dummyPad->GetRoundRectRadiusRatio() == 0.0
+                && m_dummyPad->GetChamferRectRatio() == 0.0 )
+        {
+            if( m_dummyPad->GetRoundRectRadiusRatio() == 0.0 )
+                m_dummyPad->SetRoundRectRadiusRatio( 0.25 );
 
-        if( m_dummyPad->GetChamferRectRatio() == 0.0 )
-            m_tcChamferRatio1->ChangeValue( "20" );
-    }
+            if( m_dummyPad->GetChamferRectRatio() == 0.0 )
+                m_dummyPad->SetChamferRectRatio( 0.2 );
+        }
+
+        // Ensure the displayed values are up to date:
+        m_tcMixedChamferRatio->ChangeValue( wxString::Format( "%.1f",
+                                            m_dummyPad->GetChamferRectRatio() * 100 ) );
+        m_tcMixedCornerSizeRatio->ChangeValue( wxString::Format( "%.1f",
+                                               m_dummyPad->GetRoundRectRadiusRatio() * 100 ) );
         break;
 
     case CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR:     // PAD_SHAPE_CUSTOM, circular anchor
@@ -834,12 +850,12 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     size.y = m_shapePropsBook->GetPage( m_shapePropsBook->GetSelection() )->GetBestSize().y;
     m_shapePropsBook->SetMaxSize( size );
 
-    m_sizeY.Enable( m_PadShape->GetSelection() != CHOICE_SHAPE_CIRCLE
-                    && m_PadShape->GetSelection() != CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR );
+    m_sizeY.Enable( m_PadShapeSelector->GetSelection() != CHOICE_SHAPE_CIRCLE
+                    && m_PadShapeSelector->GetSelection() != CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR );
 
-    m_offsetShapeOpt->Enable( m_PadShape->GetSelection() != CHOICE_SHAPE_CIRCLE
-                              && m_PadShape->GetSelection() != CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR
-                              && m_PadShape->GetSelection() != CHOICE_SHAPE_CUSTOM_RECT_ANCHOR );
+    m_offsetShapeOpt->Enable( m_PadShapeSelector->GetSelection() != CHOICE_SHAPE_CIRCLE
+                              && m_PadShapeSelector->GetSelection() != CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR
+                              && m_PadShapeSelector->GetSelection() != CHOICE_SHAPE_CUSTOM_RECT_ANCHOR );
 
     if( !m_offsetShapeOpt->IsEnabled() )
         m_offsetShapeOpt->SetValue( false );
@@ -848,8 +864,8 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     m_offsetCtrls->Show( m_offsetShapeOpt->GetValue() );
     m_offsetShapeOptLabel->Show( m_offsetShapeOpt->GetValue() );
 
-    bool is_custom = m_PadShape->GetSelection() == CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR
-                  || m_PadShape->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR;
+    bool is_custom = m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR
+                  || m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR;
 
     enablePrimitivePage( is_custom );
     m_staticTextcps->Enable( is_custom );
@@ -1330,7 +1346,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     if( m_dummyPad->GetShape() == PAD_SHAPE_ROUNDRECT ||
         m_dummyPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT )
     {
-        wxASSERT( m_tcCornerSizeRatio->GetValue() == m_tcCornerSizeRatio1->GetValue() );
+        wxASSERT( m_tcCornerSizeRatio->GetValue() == m_tcMixedCornerSizeRatio->GetValue() );
         wxString value = m_tcCornerSizeRatio->GetValue();
         double rrRadiusRatioPercent;
 
@@ -1635,8 +1651,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     m_OrientValidator.TransferFromWindow();
 
     aPad->SetAttribute( code_type[m_PadType->GetSelection()] );
-    aPad->SetShape( code_shape[m_PadShape->GetSelection()] );
-    aPad->SetAnchorPadShape( m_PadShape->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR ?
+    aPad->SetShape( code_shape[m_PadShapeSelector->GetSelection()] );
+    aPad->SetAnchorPadShape( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR ?
                                 PAD_SHAPE_RECT : PAD_SHAPE_CIRCLE );
 
     if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
@@ -1746,7 +1762,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 
     int chamfers = 0;
 
-    if( m_PadShape->GetSelection() == CHOICE_SHAPE_CHAMFERED_RECT )
+    if( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CHAMFERED_RECT )
     {
         if( m_cbTopLeft->GetValue() )
             chamfers |= RECT_CHAMFER_TOP_LEFT;
@@ -1760,7 +1776,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
         if( m_cbBottomRight->GetValue() )
             chamfers |= RECT_CHAMFER_BOTTOM_RIGHT;
     }
-    else if( m_PadShape->GetSelection() == CHOICE_SHAPE_CHAMFERED_ROUNDED_RECT )
+    else if( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CHAMFERED_ROUNDED_RECT )
     {
         if( m_cbTopLeft1->GetValue() )
             chamfers |= RECT_CHAMFER_TOP_LEFT;
@@ -1826,21 +1842,27 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
         m_tcCornerSizeRatio->GetValue().ToDouble( &ratioPercent );
         aPad->SetRoundRectRadiusRatio( ratioPercent / 100.0 );
     }
-    else if( aPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT
-            && m_PadShape->GetSelection() == CHOICE_SHAPE_CHAMFERED_ROUNDED_RECT )
-    {
-        double ratioPercent;
-
-        m_tcCornerSizeRatio1->GetValue().ToDouble( &ratioPercent );
-        aPad->SetRoundRectRadiusRatio( ratioPercent / 100.0 );
-    }
 
     if( aPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT )
     {
-        double ratioPercent;
+        if( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CHAMFERED_ROUNDED_RECT )
+        {
+            double ratioPercent;
 
-        m_tcChamferRatio->GetValue().ToDouble( &ratioPercent );
-        aPad->SetChamferRectRatio( ratioPercent / 100.0 );
+            m_tcMixedCornerSizeRatio->GetValue().ToDouble( &ratioPercent );
+            aPad->SetRoundRectRadiusRatio( ratioPercent / 100.0 );
+
+            m_tcMixedChamferRatio->GetValue().ToDouble( &ratioPercent );
+            aPad->SetChamferRectRatio( ratioPercent / 100.0 );
+        }
+        else    // Choice is CHOICE_SHAPE_CHAMFERED_RECT, no rounded corner
+        {
+            double ratioPercent;
+
+            m_tcChamferRatio->GetValue().ToDouble( &ratioPercent );
+            aPad->SetChamferRectRatio( ratioPercent / 100.0 );
+            aPad->SetRoundRectRadiusRatio( 0 );
+        }
     }
 
     aPad->SetProperty( getSelectedProperty() );

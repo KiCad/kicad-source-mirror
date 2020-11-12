@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,10 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
 class TEXT_CTRL_EVAL;
 class WX_GRID;
-class wxListView;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -79,7 +77,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_posYUnits;
 		wxStaticLine* m_staticline5;
 		wxStaticText* m_shapeLabel;
-		wxChoice* m_PadShape;
+		wxChoice* m_PadShapeSelector;
 		wxSimplebook* m_shapePropsBook;
 		wxPanel* m_emptyProps;
 		wxPanel* m_trapProps;
@@ -107,17 +105,17 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbBottomLeft;
 		wxCheckBox* m_cbBottomRight;
 		wxPanel* m_mixedProps;
-		wxStaticText* m_staticTextChamferRatio1;
-		TEXT_CTRL_EVAL* m_tcChamferRatio1;
-		wxStaticText* m_staticTextChamferRatioUnit1;
+		wxStaticText* m_stMixedChamferRatio;
+		TEXT_CTRL_EVAL* m_tcMixedChamferRatio;
+		wxStaticText* m_stMixedChamferRatioUnit;
 		wxStaticText* m_staticTextChamferCorner1;
 		wxCheckBox* m_cbTopLeft1;
 		wxCheckBox* m_cbTopRight1;
 		wxCheckBox* m_cbBottomLeft1;
 		wxCheckBox* m_cbBottomRight1;
-		wxStaticText* m_staticTextCornerSizeRatio1;
-		TEXT_CTRL_EVAL* m_tcCornerSizeRatio1;
-		wxStaticText* m_staticTextCornerSizeRatioUnit1;
+		wxStaticText* m_stMixedCornerSizeRatio;
+		TEXT_CTRL_EVAL* m_tcMixedCornerSizeRatio;
+		wxStaticText* m_stMixedCornerSizeRatioUnit;
 		wxStaticText* m_sizeXLabel;
 		wxTextCtrl* m_sizeXCtrl;
 		wxStaticText* m_sizeXUnits;
