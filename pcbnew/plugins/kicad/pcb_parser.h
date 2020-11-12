@@ -158,10 +158,11 @@ class PCB_PARSER : public PCB_LEXER
     void parseNETCLASS();
 
     /** Read a PCB_SHAPE description.
-     * @param aAllowCirclesZeroWidth = true to allow items with 0 width
-     * Only used in custom pad shapes for filled circles.
+     * @param aAllowZeroWidth = true to allow items with line width = 0
+     * (in this case, the are filled shapes)
+     * Mainly used in custom pad shapes for filled circles.
      */
-    PCB_SHAPE*      parsePCB_SHAPE( bool aAllowCirclesZeroWidth = false );
+    PCB_SHAPE*      parsePCB_SHAPE( bool aAllowZeroWidth = false );
     PCB_TEXT*       parsePCB_TEXT();
     DIMENSION*      parseDIMENSION();
 

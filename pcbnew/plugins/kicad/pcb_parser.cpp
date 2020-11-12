@@ -594,12 +594,16 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             break;
 
         case T_gr_arc:
-        case T_gr_circle:
         case T_gr_curve:
-        case T_gr_rect:
         case T_gr_line:
-        case T_gr_poly:
             m_board->Add( parsePCB_SHAPE(), ADD_MODE::APPEND );
+            break;
+
+        case T_gr_poly:
+        case T_gr_circle:
+        case T_gr_rect:
+            // these filled shapes are allowed and are filled if the line width = 0
+            m_board->Add( parsePCB_SHAPE( true ), ADD_MODE::APPEND );
             break;
 
         case T_gr_text:
@@ -2088,7 +2092,7 @@ void PCB_PARSER::parseNETCLASS()
 }
 
 
-PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( bool aAllowCirclesZeroWidth )
+PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( bool aAllowZeroWidth )
 {
     wxCHECK_MSG( CurTok() == T_gr_arc || CurTok() == T_gr_circle || CurTok() == T_gr_curve ||
                  CurTok() == T_gr_rect || CurTok() == T_gr_line || CurTok() == T_gr_poly, NULL,
@@ -2275,12 +2279,10 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( bool aAllowCirclesZeroWidth )
         NeedRIGHT();
     }
 
-    // Only filled polygons may have a zero-line width
-    // This is not permitted in KiCad but some external tools generate invalid
-    // files.
-    // However in custom pad shapes, zero-line width is allowed for filled circles
-    if( shape->GetShape() != S_POLYGON && shape->GetWidth() == 0 &&
-        !( shape->GetShape() == S_CIRCLE && aAllowCirclesZeroWidth ) )
+    // Only filled polygons, circles and rect may have a zero-line width
+    // This is not permitted in KiCad for other shapes but some external tools can
+    // generate invalid files.
+    if( shape->GetWidth() < 0 || ( shape->GetWidth() == 0 && !aAllowZeroWidth ) )
     {
         shape->SetWidth( Millimeter2iu( DEFAULT_LINE_WIDTH ) );
     }
@@ -3794,7 +3796,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
                 if( token == T_LEFT )
                     token = NextTok();
 
-                // Currently, I am using parseDRAWSEGMENT() to read basic shapes parameters,
+                // Currently, I am using parsePCB_SHAPE() to read basic shapes parameters,
                 // because they are the same as a PCB_SHAPE.
                 // However it could be better to write a specific parser, to avoid possible issues
                 // if the PCB_SHAPE parser is modified.
@@ -3815,21 +3817,22 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
                     break;
 
                 case T_gr_circle:
-                    dummysegm = parsePCB_SHAPE( true );   // Circles with 0 thickness are allowed
-                                                            // ( filled circles )
+                    dummysegm = parsePCB_SHAPE( true ); // Circles with 0 thickness are allowed
+                                                        // ( filled circles )
                     pad->AddPrimitiveCircle( dummysegm->GetCenter(), dummysegm->GetRadius(),
                                              dummysegm->GetWidth() );
                     break;
 
                 case T_gr_rect:
-                    dummysegm = parsePCB_SHAPE( true );
+                    dummysegm = parsePCB_SHAPE( true ); // rect with 0 thickness are allowed
+                                                        // ( filled rects )
                     pad->AddPrimitiveRect( dummysegm->GetStart(), dummysegm->GetEnd(),
                                            dummysegm->GetWidth() );
                     break;
 
 
                 case T_gr_poly:
-                    dummysegm = parsePCB_SHAPE();
+                    dummysegm = parsePCB_SHAPE( true );
                     pad->AddPrimitivePoly( dummysegm->BuildPolyPointsList(),
                                            dummysegm->GetWidth() );
                     break;

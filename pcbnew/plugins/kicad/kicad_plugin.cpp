@@ -1513,7 +1513,8 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
                     }
                 }
 
-                m_out->Print( 0, ") (width %s))", FormatInternalUnits( primitive->GetWidth() ).c_str() );
+                m_out->Print( newLine ? 0 : nested_level, ") (width %s))",
+                              FormatInternalUnits( primitive->GetWidth() ).c_str() );
                 }
                 break;
 
