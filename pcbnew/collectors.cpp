@@ -334,13 +334,13 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     case PCB_FP_TEXT_T:
         {
             FP_TEXT *text = static_cast<FP_TEXT*>( item );
-            if( m_Guide->IgnoreMTextsMarkedNoShow() && !text->IsVisible() )
+            if( m_Guide->IgnoreHiddenFPText() && !text->IsVisible() )
                 goto exit;
 
-            if( m_Guide->IgnoreMTextsOnBack() && IsBackLayer( text->GetLayer() ) )
+            if( m_Guide->IgnoreFPTextOnBack() && IsBackLayer( text->GetLayer() ) )
                 goto exit;
 
-            if( m_Guide->IgnoreMTextsOnFront() && IsFrontLayer( text->GetLayer() ) )
+            if( m_Guide->IgnoreFPTextOnFront() && IsFrontLayer( text->GetLayer() ) )
                 goto exit;
 
             /* The three text types have different criteria: reference
@@ -352,12 +352,12 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             switch( text->GetType() )
             {
             case FP_TEXT::TEXT_is_REFERENCE:
-                if( m_Guide->IgnoreModulesRefs() )
+                if( m_Guide->IgnoreFPReferences() )
                     goto exit;
                 break;
 
             case FP_TEXT::TEXT_is_VALUE:
-                if( m_Guide->IgnoreModulesVals() )
+                if( m_Guide->IgnoreFPValues() )
                     goto exit;
                 break;
 
@@ -397,10 +397,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
     if( module )    // true from case PCB_PAD_T, PCB_FP_TEXT_T, or PCB_MODULE_T
     {
-        if( m_Guide->IgnoreModulesOnBack() && (module->GetLayer() == B_Cu) )
+        if( m_Guide->IgnoreFootprintsOnBack() && ( module->GetLayer() == B_Cu) )
             goto exit;
 
-        if( m_Guide->IgnoreModulesOnFront() && (module->GetLayer() == F_Cu) )
+        if( m_Guide->IgnoreFootprintsOnFront() && ( module->GetLayer() == F_Cu) )
             goto exit;
     }
 

@@ -107,29 +107,29 @@ public:
     virtual     bool IncludeSecondary() const = 0;
 
     /**
-     * @return bool - true if MTexts marked as "no show" should be ignored.
+     * @return bool - true if footprint texts marked as "no show" should be ignored.
      */
-    virtual     bool IgnoreMTextsMarkedNoShow() const = 0;
+    virtual     bool IgnoreHiddenFPText() const = 0;
 
     /**
-     * @return bool - true if should ignore MTexts on back layers
+     * @return bool - true if should ignore footprint text on back layers
      */
-    virtual     bool IgnoreMTextsOnBack() const = 0;
+    virtual     bool IgnoreFPTextOnBack() const = 0;
 
     /**
-     * @return bool - true if should ignore MTexts on front layers.
+     * @return bool - true if should ignore footprint text on front layers.
      */
-    virtual     bool IgnoreMTextsOnFront() const = 0;
+    virtual     bool IgnoreFPTextOnFront() const = 0;
 
     /**
-     * @return bool - true if should ignore MODULEs on Back Side.
+     * @return bool - true if should ignore FOOTPRINTs on Back Side.
      */
-    virtual     bool IgnoreModulesOnBack() const = 0;
+    virtual     bool IgnoreFootprintsOnBack() const = 0;
 
     /**
-     * @return bool - ture if should ignore MODULEs on Front Side.
+     * @return bool - ture if should ignore FOOTPRINTs on Front Side.
      */
-    virtual     bool IgnoreModulesOnFront() const = 0;
+    virtual     bool IgnoreFootprintsOnFront() const = 0;
 
     /**
      * @return bool - true if should ignore Pads on Back Side.
@@ -155,14 +155,14 @@ public:
     }
 
     /**
-     * @return bool - true if should ignore footprints values.
+     * @return bool - true if should ignore footprint values.
      */
-    virtual     bool IgnoreModulesVals() const = 0;
+    virtual     bool IgnoreFPValues() const = 0;
 
     /**
-     * @return bool - true if should ignore module references.
+     * @return bool - true if should ignore footprint references.
      */
-    virtual     bool IgnoreModulesRefs() const = 0;
+    virtual     bool IgnoreFPReferences() const = 0;
 
     /**
      * @return true if should ignore through-hole vias
@@ -393,35 +393,35 @@ private:
     // the storage architecture here is not important, since this is only
     // a carrier object and its functions are what is used, and data only indirectly.
 
-    PCB_LAYER_ID m_PreferredLayer;
-    bool    m_IgnorePreferredLayer;
+    PCB_LAYER_ID m_preferredLayer;
+    bool    m_ignorePreferredLayer;
 
-    LSET    m_LayerLocked;                  ///< bit-mapped layer locked bits
-    bool    m_IgnoreLockedLayers;
+    LSET    m_lockedLayers;                  ///< bit-mapped layer locked bits
+    bool    m_ignoreLockedLayers;
 
-    LSET    m_LayerVisible;                 ///< bit-mapped layer visible bits
-    bool    m_IgnoreNonVisibleLayers;
+    LSET    m_visibleLayers;                 ///< bit-mapped layer visible bits
+    bool    m_ignoreNonVisibleLayers;
 
-    bool    m_IgnoreLockedItems;
-    bool    m_IncludeSecondary;
+    bool    m_ignoreLockedItems;
+    bool    m_includeSecondary;
 
-    bool    m_IgnoreMTextsMarkedNoShow;
-    bool    m_IgnoreMTextsOnBack;
-    bool    m_IgnoreMTextsOnFront;
-    bool    m_IgnoreModulesOnBack;
-    bool    m_IgnoreModulesOnFront;
-    bool    m_IgnorePadsOnFront;
-    bool    m_IgnorePadsOnBack;
-    bool    m_IgnoreThroughHolePads;
-    bool    m_IgnoreModulesVals;
-    bool    m_IgnoreModulesRefs;
-    bool    m_IgnoreThroughVias;
-    bool    m_IgnoreBlindBuriedVias;
-    bool    m_IgnoreMicroVias;
-    bool    m_IgnoreTracks;
-    bool    m_IgnoreZoneFills;
+    bool    m_ignoreHiddenFPText;
+    bool    m_ignoreFPTextOnBack;
+    bool    m_ignoreFPTextOnFront;
+    bool    m_ignoreFootprintsOnBack;
+    bool    m_ignoreFootprintsOnFront;
+    bool    m_ignorePadsOnFront;
+    bool    m_ignorePadsOnBack;
+    bool    m_ignoreThroughHolePads;
+    bool    m_ignoreFPValues;
+    bool    m_ignoreFPReferences;
+    bool    m_ignoreThroughVias;
+    bool    m_ignoreBlindBuriedVias;
+    bool    m_ignoreMicroVias;
+    bool    m_ignoreTracks;
+    bool    m_ignoreZoneFills;
 
-    double  m_OnePixelInIU;
+    double  m_onePixelInIU;
 
 public:
 
@@ -438,39 +438,39 @@ public:
     {
         VECTOR2I one( 1, 1 );
 
-        m_PreferredLayer            = aPreferredLayer;
-        m_IgnorePreferredLayer      = false;
-        m_LayerVisible              = aVisibleLayerMask;
-        m_IgnoreLockedLayers        = true;
-        m_IgnoreNonVisibleLayers    = true;
-        m_IgnoreLockedItems         = false;
+        m_preferredLayer            = aPreferredLayer;
+        m_ignorePreferredLayer      = false;
+        m_visibleLayers              = aVisibleLayerMask;
+        m_ignoreLockedLayers        = true;
+        m_ignoreNonVisibleLayers    = true;
+        m_ignoreLockedItems         = false;
 
 #if defined(USE_MATCH_LAYER)
         m_IncludeSecondary          = false;
 #else
-        m_IncludeSecondary          = true;
+        m_includeSecondary          = true;
 #endif
 
-        m_IgnoreMTextsMarkedNoShow  = true; // g_ModuleTextNOVColor;
-        m_IgnoreMTextsOnBack        = true;
-        m_IgnoreMTextsOnFront       = false;
-        m_IgnoreModulesOnBack       = true; // !Show_footprints_Cmp;
-        m_IgnoreModulesOnFront      = false;
+        m_ignoreHiddenFPText  = true; // g_ModuleTextNOVColor;
+        m_ignoreFPTextOnBack        = true;
+        m_ignoreFPTextOnFront       = false;
+        m_ignoreFootprintsOnBack       = true; // !Show_footprints_Cmp;
+        m_ignoreFootprintsOnFront      = false;
 
-        m_IgnorePadsOnFront         = false;
-        m_IgnorePadsOnBack          = false;
-        m_IgnoreThroughHolePads     = false;
+        m_ignorePadsOnFront         = false;
+        m_ignorePadsOnBack          = false;
+        m_ignoreThroughHolePads     = false;
 
-        m_IgnoreModulesVals         = false;
-        m_IgnoreModulesRefs         = false;
+        m_ignoreFPValues         = false;
+        m_ignoreFPReferences         = false;
 
-        m_IgnoreThroughVias         = false;
-        m_IgnoreBlindBuriedVias     = false;
-        m_IgnoreMicroVias           = false;
-        m_IgnoreTracks              = false;
-        m_IgnoreZoneFills           = true;
+        m_ignoreThroughVias         = false;
+        m_ignoreBlindBuriedVias     = false;
+        m_ignoreMicroVias           = false;
+        m_ignoreTracks              = false;
+        m_ignoreZoneFills           = true;
 
-        m_OnePixelInIU              = abs( aView->ToWorld( one, false ).x );
+        m_onePixelInIU              = abs( aView->ToWorld( one, false ).x );
     }
 
     /**
@@ -478,12 +478,12 @@ public:
      */
     bool IsLayerLocked( PCB_LAYER_ID aLayerId ) const override
     {
-        return m_LayerLocked[aLayerId];
+        return m_lockedLayers[aLayerId];
     }
 
     void SetLayerLocked( PCB_LAYER_ID aLayerId, bool isLocked )
     {
-        m_LayerLocked.set( aLayerId, isLocked );
+        m_lockedLayers.set( aLayerId, isLocked );
     }
 
     /**
@@ -491,130 +491,130 @@ public:
      */
     bool IsLayerVisible( PCB_LAYER_ID aLayerId ) const override
     {
-        return m_LayerVisible[aLayerId];
+        return m_visibleLayers[aLayerId];
     }
     void SetLayerVisible( PCB_LAYER_ID aLayerId, bool isVisible )
     {
-        m_LayerVisible.set( aLayerId, isVisible );
+        m_visibleLayers.set( aLayerId, isVisible );
     }
-    void SetLayerVisibleBits( LSET aLayerBits ) { m_LayerVisible = aLayerBits; }
+    void SetLayerVisibleBits( LSET aLayerBits ) { m_visibleLayers = aLayerBits; }
 
     /**
      * @return bool - true if should ignore locked layers, else false.
      */
-    bool IgnoreLockedLayers() const override        { return m_IgnoreLockedLayers; }
-    void SetIgnoreLockedLayers( bool ignore )       { m_IgnoreLockedLayers = ignore; }
+    bool IgnoreLockedLayers() const override        { return m_ignoreLockedLayers; }
+    void SetIgnoreLockedLayers( bool ignore )       { m_ignoreLockedLayers = ignore; }
 
     /**
      * @return bool - true if should ignore non-visible layers, else false.
      */
-    bool IgnoreNonVisibleLayers() const override    { return m_IgnoreNonVisibleLayers; }
-    void SetIgnoreNonVisibleLayers( bool ignore )   { m_IgnoreLockedLayers = ignore; }
+    bool IgnoreNonVisibleLayers() const override    { return m_ignoreNonVisibleLayers; }
+    void SetIgnoreNonVisibleLayers( bool ignore )   { m_ignoreLockedLayers = ignore; }
 
     /**
      * @return int - the preferred layer for HitTest()ing.
      */
-    PCB_LAYER_ID GetPreferredLayer() const override    { return m_PreferredLayer; }
-    void SetPreferredLayer( PCB_LAYER_ID aLayer )      { m_PreferredLayer = aLayer; }
+    PCB_LAYER_ID GetPreferredLayer() const override    { return m_preferredLayer; }
+    void SetPreferredLayer( PCB_LAYER_ID aLayer )      { m_preferredLayer = aLayer; }
 
     /**
      * Provide wildcard behavior regarding the preferred layer.
      *
      * @return bool - true if should ignore preferred layer, else false.
      */
-    bool IgnorePreferredLayer() const override      { return  m_IgnorePreferredLayer; }
-    void SetIgnorePreferredLayer( bool ignore )     { m_IgnorePreferredLayer = ignore; }
+    bool IgnorePreferredLayer() const override      { return  m_ignorePreferredLayer; }
+    void SetIgnorePreferredLayer( bool ignore )     { m_ignorePreferredLayer = ignore; }
 
     /**
      * @return bool - true if should ignore locked items, else false.
      */
-    bool IgnoreLockedItems() const override         { return m_IgnoreLockedItems; }
-    void SetIgnoreLockedItems( bool ignore )        { m_IgnoreLockedItems = ignore; }
+    bool IgnoreLockedItems() const override         { return m_ignoreLockedItems; }
+    void SetIgnoreLockedItems( bool ignore )        { m_ignoreLockedItems = ignore; }
 
     /**
      * Determine if the secondary criteria, or 2nd choice items should be included.
      *
      * @return bool - true if should include, else false.
      */
-    bool IncludeSecondary() const override { return m_IncludeSecondary; }
-    void SetIncludeSecondary( bool include ) { m_IncludeSecondary = include; }
+    bool IncludeSecondary() const override { return m_includeSecondary; }
+    void SetIncludeSecondary( bool include ) { m_includeSecondary = include; }
 
     /**
      * @return bool - true if MTexts marked as "no show" should be ignored.
      */
-    bool IgnoreMTextsMarkedNoShow() const override { return m_IgnoreMTextsMarkedNoShow; }
-    void SetIgnoreMTextsMarkedNoShow( bool ignore ) { m_IgnoreMTextsMarkedNoShow = ignore; }
+    bool IgnoreHiddenFPText() const override { return m_ignoreHiddenFPText; }
+    void SetIgnoreMTextsMarkedNoShow( bool ignore ) { m_ignoreHiddenFPText = ignore; }
 
     /**
      * @return bool - true if should ignore MTexts on back layers
      */
-    bool IgnoreMTextsOnBack() const override { return m_IgnoreMTextsOnBack; }
-    void SetIgnoreMTextsOnBack( bool ignore ) { m_IgnoreMTextsOnBack = ignore; }
+    bool IgnoreFPTextOnBack() const override { return m_ignoreFPTextOnBack; }
+    void SetIgnoreMTextsOnBack( bool ignore ) { m_ignoreFPTextOnBack = ignore; }
 
     /**
      * @return bool - true if should ignore MTexts on front layers
      */
-    bool IgnoreMTextsOnFront() const override { return m_IgnoreMTextsOnFront; }
-    void SetIgnoreMTextsOnFront( bool ignore ) { m_IgnoreMTextsOnFront = ignore; }
+    bool IgnoreFPTextOnFront() const override { return m_ignoreFPTextOnFront; }
+    void SetIgnoreMTextsOnFront( bool ignore ) { m_ignoreFPTextOnFront = ignore; }
 
     /**
      * @return bool - true if should ignore MODULEs on the back side
      */
-    bool IgnoreModulesOnBack() const override { return m_IgnoreModulesOnBack; }
-    void SetIgnoreModulesOnBack( bool ignore ) { m_IgnoreModulesOnBack = ignore; }
+    bool IgnoreFootprintsOnBack() const override { return m_ignoreFootprintsOnBack; }
+    void SetIgnoreModulesOnBack( bool ignore ) { m_ignoreFootprintsOnBack = ignore; }
 
     /**
      * @return bool - true if should ignore MODULEs on component layer.
      */
-    bool IgnoreModulesOnFront() const override { return m_IgnoreModulesOnFront; }
-    void SetIgnoreModulesOnFront( bool ignore ) { m_IgnoreModulesOnFront = ignore; }
+    bool IgnoreFootprintsOnFront() const override { return m_ignoreFootprintsOnFront; }
+    void SetIgnoreModulesOnFront( bool ignore ) { m_ignoreFootprintsOnFront = ignore; }
 
     /**
      * @return bool - true if should ignore Pads on Back Side.
      */
-    bool IgnorePadsOnBack() const override { return m_IgnorePadsOnBack; }
-    void SetIgnorePadsOnBack(bool ignore) { m_IgnorePadsOnBack = ignore; }
+    bool IgnorePadsOnBack() const override { return m_ignorePadsOnBack; }
+    void SetIgnorePadsOnBack(bool ignore) { m_ignorePadsOnBack = ignore; }
 
     /**
      * @return bool - true if should ignore PADSs on Front Side.
      */
-    bool IgnorePadsOnFront() const override { return m_IgnorePadsOnFront; }
-    void SetIgnorePadsOnFront(bool ignore) { m_IgnorePadsOnFront = ignore; }
+    bool IgnorePadsOnFront() const override { return m_ignorePadsOnFront; }
+    void SetIgnorePadsOnFront(bool ignore) { m_ignorePadsOnFront = ignore; }
 
     /**
      * @return bool - true if should ignore through-hole PADSs.
      */
-    bool IgnoreThroughHolePads() const override { return m_IgnoreThroughHolePads; }
-    void SetIgnoreThroughHolePads(bool ignore) { m_IgnoreThroughHolePads = ignore; }
+    bool IgnoreThroughHolePads() const override { return m_ignoreThroughHolePads; }
+    void SetIgnoreThroughHolePads(bool ignore) { m_ignoreThroughHolePads = ignore; }
 
     /**
      * @return bool - true if should ignore footprints values.
      */
-    bool IgnoreModulesVals() const override { return m_IgnoreModulesVals; }
-    void SetIgnoreModulesVals(bool ignore) { m_IgnoreModulesVals = ignore; }
+    bool IgnoreFPValues() const override { return m_ignoreFPValues; }
+    void SetIgnoreModulesVals(bool ignore) { m_ignoreFPValues = ignore; }
 
     /**
      * @return bool - true if should ignore footprints references.
      */
-    bool IgnoreModulesRefs() const override { return m_IgnoreModulesRefs; }
-    void SetIgnoreModulesRefs(bool ignore) { m_IgnoreModulesRefs = ignore; }
+    bool IgnoreFPReferences() const override { return m_ignoreFPReferences; }
+    void SetIgnoreModulesRefs(bool ignore) { m_ignoreFPReferences = ignore; }
 
-    bool IgnoreThroughVias() const override { return m_IgnoreThroughVias; }
-    void SetIgnoreThroughVias( bool ignore ) { m_IgnoreThroughVias = ignore; }
+    bool IgnoreThroughVias() const override { return m_ignoreThroughVias; }
+    void SetIgnoreThroughVias( bool ignore ) { m_ignoreThroughVias = ignore; }
 
-    bool IgnoreBlindBuriedVias() const override { return m_IgnoreBlindBuriedVias; }
-    void SetIgnoreBlindBuriedVias( bool ignore ) { m_IgnoreBlindBuriedVias = ignore; }
+    bool IgnoreBlindBuriedVias() const override { return m_ignoreBlindBuriedVias; }
+    void SetIgnoreBlindBuriedVias( bool ignore ) { m_ignoreBlindBuriedVias = ignore; }
 
-    bool IgnoreMicroVias() const override { return m_IgnoreMicroVias; }
-    void SetIgnoreMicroVias( bool ignore ) { m_IgnoreMicroVias = ignore; }
+    bool IgnoreMicroVias() const override { return m_ignoreMicroVias; }
+    void SetIgnoreMicroVias( bool ignore ) { m_ignoreMicroVias = ignore; }
 
-    bool IgnoreTracks() const override { return m_IgnoreTracks; }
-    void SetIgnoreTracks( bool ignore ) { m_IgnoreTracks = ignore; }
+    bool IgnoreTracks() const override { return m_ignoreTracks; }
+    void SetIgnoreTracks( bool ignore ) { m_ignoreTracks = ignore; }
 
-    bool IgnoreZoneFills() const override { return m_IgnoreZoneFills; }
-    void SetIgnoreZoneFills( bool ignore ) { m_IgnoreZoneFills = ignore; }
+    bool IgnoreZoneFills() const override { return m_ignoreZoneFills; }
+    void SetIgnoreZoneFills( bool ignore ) { m_ignoreZoneFills = ignore; }
 
-    double OnePixelInIU() const override { return m_OnePixelInIU; }
+    double OnePixelInIU() const override { return m_onePixelInIU; }
 };
 
 
